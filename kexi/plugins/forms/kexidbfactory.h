@@ -64,7 +64,7 @@ class KexiDBLineEdit : public KLineEdit
 		//! \return the name of the data source for this widget
 		QString dataSource() const { return m_dataSource; }
 		void setDataSource(const QString &ds) { m_dataSource = ds; }
-	
+
 	protected:
 		QString m_dataSource;
 };
@@ -79,7 +79,7 @@ class KexiDBFactory : public KFormDesigner::WidgetFactory
 		virtual ~KexiDBFactory();
 
 //		virtual QString	name();
-		virtual QWidget *create(const QString &, QWidget *, const char *, KFormDesigner::Container *);
+		virtual QWidget *create(const QCString &, QWidget *, const char *, KFormDesigner::Container *);
 
 		virtual bool createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu,
 		   KFormDesigner::Container *container, QValueVector<int> *menuIds);

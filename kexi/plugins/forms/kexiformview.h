@@ -26,18 +26,19 @@
 
 #include <kexiviewbase.h>
 
+#include "kexiscrollview.h"
 #include "kexiformpart.h"
 
 class KexiFormPart;
 class KexiMainWindow;
 class KexiDBForm;
-class QColor;
+/*class QColor;
 class QFont;
-class KexiRecordNavigator;
-
+class KexiRecordNavigator;*/
+/*
 //! The scrollview which inlcudes KexiDBForm
 /*! It allows to resize its m_widget, following snapToGrid setting. 
- Its contents is resized so the widget can always be resized. */
+ Its contents is resized so the widget can always be resized. 
 class KexiFormScrollView : public QScrollView
 {
 	Q_OBJECT
@@ -56,10 +57,10 @@ class KexiFormScrollView : public QScrollView
 		void updateNavPanelGeometry();
 
 	public slots:
-		/*! Make sure there is a 300px margin around the form contents to allow resizing. */
+		/*! Make sure there is a 300px margin around the form contents to allow resizing. 
 		void refreshContentsSize();
 
-		/*! Reimplemented to update resize policy. */
+		/*! Reimplemented to update resize policy. 
 		virtual void show();
 
 	protected:
@@ -86,6 +87,29 @@ class KexiFormScrollView : public QScrollView
 		bool m_smodeSet : 1;
 		KexiRecordNavigator* m_navPanel;
 };
+*/
+
+class KexiFormScrollView : public KexiScrollView
+{
+	Q_OBJECT
+
+	public:
+		KexiFormScrollView(QWidget *parent, bool preview);
+		virtual ~KexiFormScrollView();
+
+		void setForm(KFormDesigner::Form *form) { m_form = form; }
+
+	public slots:
+		/*! Reimplemented to update resize policy. */
+		virtual void show();
+
+	protected slots:
+		void slotResizingStarted();
+
+	private:
+		KFormDesigner::Form *m_form;
+};
+
 
 //! The FormPart's view
 /*! This class presents a siungle view used inside KexiDialogBase.
@@ -105,7 +129,7 @@ class KexiFormView : public KexiViewBase
 			NoResize = 2 /*! @todo */
 		};
 
-		KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, bool preview, KexiDB::Connection *conn);
+		KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, KexiDB::Connection *conn);
 		virtual ~KexiFormView();
 
 		KexiDB::Connection* connection() { return m_conn; }

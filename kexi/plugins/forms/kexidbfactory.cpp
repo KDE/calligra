@@ -32,6 +32,7 @@
 #include <objecttree.h>
 #include <kexidb/utils.h>
 #include <kexidb/connection.h>
+#include <kexipart.h>
 
 #include "kexidbform.h"
 #include "kexiformview.h"
@@ -143,7 +144,7 @@ KexiDBFactory::name()
 }*/
 
 QWidget*
-KexiDBFactory::create(const QString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
+KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
 {
 	kexipluginsdbg << "KexiDBFactory::create() " << this << endl;
 
@@ -178,8 +179,8 @@ KexiDBFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner:
 	m_container = container;
 	if(classname == "KexiDBLineEdit")
 	{
-//! @todo this code should not be copied here but 
-//! just inherited StdWidgetFactory::clearWidgetContent() should be called 
+//! @todo this code should not be copied here but
+//! just inherited StdWidgetFactory::clearWidgetContent() should be called
 		KLineEdit *lineedit = static_cast<KLineEdit*>(w);
 		createEditor(lineedit->text(), lineedit, container, lineedit->geometry(), lineedit->alignment(), true);
 	}
@@ -188,8 +189,8 @@ KexiDBFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner:
 void
 KexiDBFactory::clearWidgetContent(const QString &classname, QWidget *w)
 {
-//! @todo this code should not be copied here but 
-//! just inherited StdWidgetFactory::clearWidgetContent() should be called 
+//! @todo this code should not be copied here but
+//! just inherited StdWidgetFactory::clearWidgetContent() should be called
 	if(classname == "KexiDBLineEdit")
 		static_cast<KLineEdit*>(w)->clear();
 }

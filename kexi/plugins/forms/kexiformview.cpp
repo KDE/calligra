@@ -17,15 +17,6 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
-#include <qlayout.h>
-#include <qcursor.h>
-#include <qobjectlist.h>
-#include <qpainter.h>
-
-#include <kdebug.h>
-#include <kstaticdeleter.h>
-
 #include <form.h>
 #include <formIO.h>
 #include <formmanager.h>
@@ -38,13 +29,11 @@
 #include <kexidb/fieldlist.h>
 #include <kexidb/connection.h>
 
-#include <kexirecordnavigator.h>
-
 #include "kexidbform.h"
 #include "kexiformview.h"
 
 #define NO_DSWIZARD
-
+/*
 // @todo warning: not reentrant!
 static KStaticDeleter<QPixmap> KexiFormScrollView_bufferPm_deleter;
 QPixmap* KexiFormScrollView_bufferPm = 0;
@@ -87,15 +76,24 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
 		m_navPanel = new KexiRecordNavigator(this, leftMargin(), "nav");
 		m_navPanel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
 	}
+}*/
+
+KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
+ : KexiScrollView(parent, preview)
+{
+	if(preview)
+		setRecordNavigatorVisible(true);
+	connect(this, SIGNAL(resizingStarted()), this, SLOT(slotResizingStarted()));
 }
 
 KexiFormScrollView::~KexiFormScrollView()
 {
 }
 
-void KexiFormScrollView::show()
+void
+KexiFormScrollView::show()
 {
-	QScrollView::show();
+	KexiScrollView::show();
 
 	//now get resize mode settings for entire form
 	if (m_preview) {
@@ -106,6 +104,16 @@ void KexiFormScrollView::show()
 	}
 }
 
+void
+KexiFormScrollView::slotResizingStarted()
+{
+	if(m_form && m_form->manager())
+		setSnapToGrid(m_form->manager()->snapWidgetsToGrid(), m_form->gridX(), m_form->gridY());
+	else
+		setSnapToGrid(false);
+}
+
+/*
 void
 KexiFormScrollView::setFormWidget(KexiDBForm *w)
 {
@@ -209,7 +217,7 @@ KexiFormScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 			tmpy = contentsY();
 
 		// we look for the max widget right() (or bottom()), which would be the limit for form resizing (not to hide widgets)
-		QObjectList *list = m_widget->queryList("QWidget", 0, true, false /* not recursive*/);
+		QObjectList *list = m_widget->queryList("QWidget", 0, true, false  not recursive);
 		for(QObject *o = list->first(); o; o = list->next())
 		{
 			QWidget *w = (QWidget*)o;
@@ -322,7 +330,6 @@ void KexiFormScrollView::leaveEvent( QEvent *e )
 
 void KexiFormScrollView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h )
 {
-/*todo*/
 	kdDebug(44021)<<"KexiTableView::setHBarGeometry"<<endl;
 	if (m_navPanel && m_navPanel->isVisible()) {
 		m_navPanel->setHBarGeometry( hbar, x, y, w, h );
@@ -330,13 +337,13 @@ void KexiFormScrollView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w
 	else {
 		hbar.setGeometry( x, y, w, h );
 	}
-}
+}*/
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
 KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, 
-	bool preview, KexiDB::Connection *conn)
+	KexiDB::Connection *conn)
  : KexiViewBase(win, parent, name), m_buffer(0), m_conn(conn)
  , m_resizeMode(KexiFormView::ResizeDefault)
 {
@@ -349,7 +356,7 @@ KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *nam
 
 	m_dbform = new KexiDBForm(m_scrollView->viewport(), name/*, conn*/);
 //	m_dbform->resize(QSize(400, 300));
-	m_scrollView->setFormWidget(m_dbform);
+	m_scrollView->setWidget(m_dbform);
 	m_scrollView->setResizingEnabled(viewMode()!=Kexi::DataViewMode);
 
 //	initForm();
@@ -540,7 +547,7 @@ KexiFormView::afterSwitchFrom(int mode)
 		// The form may have been modified, so we must recreate the preview
 		delete m_dbform; // also deletes form()
 		m_dbform = new KexiDBForm(m_scrollView->viewport());
-		m_scrollView->setFormWidget(m_dbform);
+		m_scrollView->setWidget(m_dbform);
 
 		initForm();
 		slotNoFormSelected();
