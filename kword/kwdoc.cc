@@ -1848,9 +1848,7 @@ bool KWDocument::completeLoading( KoStore *_store )
 
     emit newContentsSize();
     repaintAllViews( true );     // in case any view exists already
-
-    startBackgroundSpellCheck();
-
+    reactivateBgSpellChecking();
     return TRUE;
 }
 
@@ -3763,11 +3761,15 @@ void KWDocument::reactivateBgSpellChecking()
     }
 
     KWTextFrameSet *frm;
+    kdDebug()<<" reactivateBgSpellChecking()********************\n";
     for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
         frm->textObject()->setNeedSpellCheck(true);
+        kdDebug()<< "frm :"<<frm<<endl;
     }
     repaintAllViews();
+    kdDebug()<<" **********************************\n";
     startBackgroundSpellCheck();
+    kdDebug()<<" sortie !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
 }
 
 KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
