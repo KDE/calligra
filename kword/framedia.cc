@@ -136,18 +136,23 @@ KWFrameDia::KWFrameDia( QWidget *parent, QPtrList<KWFrame> listOfFrames) : KDial
     KWFrameSet *fs = f->frameSet()->getGroupManager();
     if(fs==0L) fs=f->frameSet();
     frameType = fs->type();
+    bool frameTypeUnset=true;
     doc = fs->kWordDocument();
 
-    if(doc->processingType() != KWDocument::WP || doc->frameSet(0) != fs) // don't include the main fs.
+    if( !fs->isMainFrameset() ) { // don't include the main fs.
         allFrames.append(f);
+        frameTypeUnset=false;
+    }
     f=listOfFrames.next();
-
     while(f) {
         fs = f->frameSet()->getGroupManager();
         if(fs==0L) fs=f->frameSet();
         if(doc->processingType() != KWDocument::WP || doc->frameSet(0) != fs) { // don't include the main fs.
-            if(frameType != fs->type()) frameType= FT_TEXT;
-
+            if(!frameTypeUnset && frameType != fs->type()) frameType= FT_TEXT;
+            if(frameTypeUnset) {
+                frameType = fs->type();
+                frameTypeUnset = false;
+            } else if(frameType != fs->type()) frameType= FT_TEXT;
             allFrames.append(f);
         }
         f=listOfFrames.next();
@@ -871,7 +876,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
 
     grid4->addMultiCellWidget( grp1, row, (++row), 0,1 );
 
-    if(frame && frameType == FT_TEXT) {
+    if(frame && (frameType == FT_TEXT || frameType == FT_TABLE)) {
         QGroupBox *grp2 = new QGroupBox( i18n("Margins in %1").arg(doc->getUnitName()), tab4 );
         mGrid = new QGridLayout( grp2, 6, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
