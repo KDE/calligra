@@ -1771,10 +1771,12 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
 
     QColorGroup cg = QApplication::palette().active();
 
-    QRegion emptyRegion( rect );
-    drawBorders( &painter, rect, emptyRegion, viewMode );
     if (!transparent)
+    {
+        QRegion emptyRegion( rect );
+        createEmptyRegion( emptyRegion, viewMode );
         eraseEmptySpace( &painter, emptyRegion, cg.brush( QColorGroup::Base ) );
+    }
 
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -1787,8 +1789,19 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
     delete viewMode;
 }
 
-void KWDocument::drawBorders( QPainter *painter, const QRect & crect, QRegion & emptyRegion,
-                              KWViewMode * viewMode )
+void KWDocument::createEmptyRegion( QRegion & emptyRegion, KWViewMode * viewMode )
+{
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWFrameSet *frameset = fit.current();
+        if ( frameset->isVisible() )
+            frameset->createEmptyRegion( emptyRegion, viewMode );
+    }
+}
+
+#if 0
+void KWDocument::drawBorders( QPainter *painter, const QRect & crect, KWViewMode * viewMode )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -1796,10 +1809,11 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, QRegion & 
         KWFrameSet *frameset = fit.current();
         if ( frameset->isVisible() )
         {
-            frameset->drawBorders( painter, crect, emptyRegion, viewMode );
+            frameset->drawBorders( painter, crect, viewMode );
         }
     }
 }
+#endif
 
 void KWDocument::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush )
 {

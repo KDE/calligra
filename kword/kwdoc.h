@@ -131,12 +131,10 @@ public:
      */
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
     /**
-     * Draw the borders of the frames.
-     * @param painter
-     * @param crect the area to be repainted, in contents coordinates
-     * @param emptyRegion returns the space not occupied by any frame
+     * @param emptyRegion The region is modified to subtract the areas painted, thus
+     *                    allowing the caller to determine which areas remain to be painted.
      */
-    void drawBorders( QPainter *painter, const QRect & crect, QRegion & emptyRegion, KWViewMode * viewMode );
+    void createEmptyRegion( QRegion & emptyRegion, KWViewMode * viewMode );
     /**
      * Erase the empty space defined by @p emptySpaceRegion.
      * Usually used to clear the space where there is no frame (e.g. page margins).

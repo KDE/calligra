@@ -299,13 +299,19 @@ public:
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * ) { return 0L; }
 
     /**
-     * Paint the borders for this frameset.
-     * @param painter The painter in which to draw the contents of the frameset
-     * @param crect The rectangle (in "contents coordinates") to be painted
-     * @param region The region is modified to subtract the areas painted, thus
-     *               allowing the caller to detrmine which areas remain to be painted.
+     * @param emptyRegion The region is modified to subtract the areas painted, thus
+     *                    allowing the caller to determine which areas remain to be painted.
      */
-    virtual void drawBorders( QPainter *painter, const QRect &crect, QRegion &region, KWViewMode *viewMode );
+    virtual void createEmptyRegion( QRegion & emptyRegion, KWViewMode *viewMode );
+
+    /**
+     * Paint the borders for one frame of this frameset.
+     * @param painter The painter in which to draw the contents of the frameset
+     * @param frame The frame
+     * @param crect The rectangle (in "contents coordinates") to be painted
+     * @param viewMode The current view mode ( for coord transformation )
+     */
+    virtual void drawFrameBorder( QPainter *painter, KWFrame *frame, const QRect &crect, KWViewMode *viewMode );
 
     /**
      * Paint this frameset

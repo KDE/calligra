@@ -1790,10 +1790,7 @@ void KWView::extraCreateTemplate()
     painter.begin( &pix );
     QRect pageRect( 0, 0, doc->paperWidth(), doc->paperHeight() );
 
-    // Draw frame borders
-    QRegion reg;
     KWViewModeNormal * viewMode = new KWViewModeNormal( 0L );
-    doc->drawBorders( &painter, pageRect, reg, viewMode );
     QColorGroup cg = QApplication::palette().active();
 
     // Draw all framesets contents

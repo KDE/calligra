@@ -188,12 +188,6 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
 {
     //kdDebug(32002) << "KWCanvas::drawDocument crect: " << DEBUGRECT( crect ) << endl;
 
-    // Not sure in which order to do things here.
-
-    // Draw frames borders and erase empty space between frames (e.g. page margins)
-    QRegion emptySpaceRegion( crect );
-    doc->drawBorders( painter, crect, emptySpaceRegion, m_viewMode );
-
     // Draw all framesets contents
     QListIterator<KWFrameSet> fit = doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -205,7 +199,11 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
 
     // Draw the outside of the pages (shadow, gray area)
     if ( painter->device()->devType() != QInternal::Printer ) // except when printing
+    {
+        QRegion emptySpaceRegion( crect );
+        doc->createEmptyRegion( emptySpaceRegion, m_viewMode );
         m_viewMode->drawPageBorders( painter, crect, emptySpaceRegion );
+    }
 }
 
 void KWCanvas::drawFrameSet( KWFrameSet * frameset, QPainter * painter,

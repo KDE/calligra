@@ -275,51 +275,55 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
     //    updateAnchors();
 }
 
-void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &region, KWViewMode *viewMode )
+void KWFrameSet::createEmptyRegion( QRegion & emptyRegion, KWViewMode *viewMode )
 {
-    painter->save();
-
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
-        KWFrame *frame = frameIt.current();
-        QRect frameRect( viewMode->normalToView( m_doc->zoomRect(  *frame ) ) );
-        QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
-        //kdDebug(32002) << "KWFrameSet::drawBorders frameRect: " << DEBUGRECT( frameRect ) << endl;
-        //kdDebug(32002) << "KWFrameSet::drawBorders outerRect: " << DEBUGRECT( outerRect ) << endl;
-
-        if ( !crect.intersects( outerRect ) )
-        {
-            //kdDebug() << "KWFrameSet::drawBorders no intersection with " << DEBUGRECT(crect) << endl;
-            continue;
-        }
-
-        region = region.subtract( outerRect );
-
-        // Header/Footer : set background color and borders from the main frameset (why?)
-        if ( isAHeader() || isAFooter() )
-            frame = getFrame( 0 );
-        QBrush bgBrush( frame->getBackgroundColor() );
-	bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
-        painter->setBrush( bgBrush );
-
-        // Draw default borders using view settings except when printing, or disabled.
-        QPen viewSetting( lightGray ); // TODO use qcolorgroup
-        if ( ( painter->device()->devType() == QInternal::Printer ) ||
-            !m_doc->getViewFrameBorders() )
-        {
-            viewSetting.setColor( bgBrush.color() );
-        }
-
-        // Draw borders either as the user defined them, or using the view settings.
-        // Borders should be drawn _outside_ of the frame area
-        // otherwise the frames will erase the border when painting themselves.
-
-        Border::drawBorders( *painter, m_doc, frameRect,
-                             frame->getLeftBorder(), frame->getRightBorder(),
-                             frame->getTopBorder(), frame->getBottomBorder(),
-                             1, viewSetting );
+        QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect() ) );
+        emptyRegion = emptyRegion.subtract( outerRect );
     }
+}
+
+void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, const QRect &crect, KWViewMode *viewMode )
+{
+    QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
+    //kdDebug(32002) << "KWFrameSet::drawFrameBorder frameRect: " << DEBUGRECT( frameRect ) << endl;
+    //kdDebug(32002) << "KWFrameSet::drawFrameBorder outerRect: " << DEBUGRECT( outerRect ) << endl;
+
+    if ( !crect.intersects( outerRect ) )
+    {
+        //kdDebug() << "KWFrameSet::drawFrameBorder no intersection with " << DEBUGRECT(crect) << endl;
+        return;
+    }
+
+    QRect frameRect( viewMode->normalToView( m_doc->zoomRect(  *frame ) ) );
+
+    // Header/Footer : set background color and borders from the main frameset (why?)
+    if ( isAHeader() || isAFooter() )
+        frame = getFrame( 0 );
+
+    painter->save();
+    QBrush bgBrush( frame->getBackgroundColor() );
+    bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
+    painter->setBrush( bgBrush );
+
+    // Draw default borders using view settings except when printing, or disabled.
+    QPen viewSetting( lightGray ); // TODO use qcolorgroup
+    if ( ( painter->device()->devType() == QInternal::Printer ) ||
+         !m_doc->getViewFrameBorders() )
+    {
+        viewSetting.setColor( bgBrush.color() );
+    }
+
+    // Draw borders either as the user defined them, or using the view settings.
+    // Borders should be drawn _outside_ of the frame area
+    // otherwise the frames will erase the border when painting themselves.
+
+    Border::drawBorders( *painter, m_doc, frameRect,
+                         frame->getLeftBorder(), frame->getRightBorder(),
+                         frame->getTopBorder(), frame->getBottomBorder(),
+                         1, viewSetting );
     painter->restore();
 }
 
@@ -610,6 +614,9 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                 drawFrame( frame, p, icrect, cg, onlyChanged, resetChanged, edit );
 
                 p->restore();
+
+                // Now draw the frame border
+                drawFrameBorder( p, frame, crect, viewMode );
             }
         }
         if ( frame->getNewFrameBehaviour() != Copy )

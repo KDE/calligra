@@ -1349,7 +1349,17 @@ bool KWTableFrameSet::contains( double mx, double my ) {
     return false;
 }
 
-void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &region, KWViewMode *viewMode )
+void KWTableFrameSet::createEmptyRegion( QRegion & emptyRegion, KWViewMode *viewMode )
+{
+    QListIterator<KWFrame> frameIt = frameIterator();
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect() ) );
+        emptyRegion = emptyRegion.subtract( outerRect );
+    }
+}
+
+void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, KWViewMode *viewMode )
 {
     painter->save();
 
@@ -1357,14 +1367,12 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
-        QRect frameRect( viewMode->normalToView( m_doc->zoomRect( *frame ) ) );
         QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
 
         if ( !crect.intersects( outerRect ) )
             continue;
 
-        region = region.subtract( outerRect );
-
+        QRect frameRect( viewMode->normalToView( m_doc->zoomRect( *frame ) ) );
         // Set the background color.
         QBrush bgBrush( frame->getBackgroundColor() );
 	bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
@@ -1473,8 +1481,7 @@ void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
                                     QColorGroup & cg, bool onlyChanged, bool resetChanged,
                                     KWFrameSetEdit * edit, KWViewMode * viewMode )
 {
-    QRegion reg;
-    drawBorders( painter, crect, reg, viewMode );
+    drawBorders( painter, crect, viewMode );
     for (unsigned int i=0; i < m_cells.count() ; i++)
     {
         if (edit)
