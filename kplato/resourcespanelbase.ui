@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>ResourcesPanelBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,18 +8,18 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>680</width>
-            <height>442</height>
+            <width>679</width>
+            <height>445</height>
         </rect>
     </property>
     <property name="caption">
         <string>ResourcesPanelBase</string>
     </property>
-    <hbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="QLayoutWidget" row="0" column="0">
             <property name="name">
                 <cstring>layout11</cstring>
             </property>
@@ -73,7 +73,7 @@
                 </widget>
             </vbox>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QGroupBox" row="0" column="1">
             <property name="name">
                 <cstring>groupBox3</cstring>
             </property>
@@ -92,94 +92,37 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget" row="2" column="0" rowspan="1" colspan="2">
+                <widget class="QLayoutWidget" row="0" column="0">
                     <property name="name">
-                        <cstring>layout16</cstring>
+                        <cstring>layout51</cstring>
                     </property>
-                    <hbox>
+                    <vbox>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLabel">
+                        <widget class="QLineEdit">
                             <property name="name">
-                                <cstring>lStart</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Resource available from:</string>
+                                <cstring>resourceName</cstring>
                             </property>
                         </widget>
-                        <widget class="QTimeEdit">
+                        <widget class="QListBox">
                             <property name="name">
-                                <cstring>startTime</cstring>
+                                <cstring>listOfResources</cstring>
                             </property>
-                            <property name="time">
-                                <time>
-                                    <hour>8</hour>
-                                    <minute>0</minute>
-                                    <second>0</second>
-                                </time>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>7</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
                             </property>
                         </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>lEnd</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Until:</string>
-                            </property>
-                        </widget>
-                        <widget class="QTimeEdit">
-                            <property name="name">
-                                <cstring>endTime</cstring>
-                            </property>
-                            <property name="time">
-                                <time>
-                                    <hour>18</hour>
-                                    <minute>0</minute>
-                                    <second>0</second>
-                                </time>
-                            </property>
-                        </widget>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer10</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>20</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </hbox>
+                    </vbox>
                 </widget>
-                <widget class="QListBox" row="1" column="0">
+                <widget class="QLayoutWidget" row="0" column="1">
                     <property name="name">
-                        <cstring>listOfResources</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>7</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="0" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>resourceName</cstring>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget" row="1" column="1">
-                    <property name="name">
-                        <cstring>layout19</cstring>
+                        <cstring>layout52</cstring>
                     </property>
                     <vbox>
                         <property name="name">
@@ -187,10 +130,26 @@
                         </property>
                         <widget class="QPushButton">
                             <property name="name">
-                                <cstring>bAddResouce</cstring>
+                                <cstring>bChooseResource</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Choose...</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>bAddResource</cstring>
                             </property>
                             <property name="text">
                                 <string>Add</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>bEditResource</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Edit...</string>
                             </property>
                         </widget>
                         <widget class="QPushButton">
@@ -214,7 +173,7 @@
                             <property name="sizeHint">
                                 <size>
                                     <width>20</width>
-                                    <height>294</height>
+                                    <height>238</height>
                                 </size>
                             </property>
                         </spacer>
@@ -222,10 +181,7 @@
                 </widget>
             </grid>
         </widget>
-    </hbox>
+    </grid>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>qwidget.h</includehint>
-</includehints>
 </UI>

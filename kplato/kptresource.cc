@@ -20,6 +20,8 @@
 #include "kptproject.h"
 #include "kpttask.h"
 
+#include <qdatetime.h>
+
 #include <kdebug.h>
 
 KPTResourceGroup::KPTResourceGroup(KPTProject *project) {
@@ -108,6 +110,23 @@ void KPTResourceGroup::saveAppointments(QDomElement &element) const {
     }
 }
 
+QPtrList<KPTAppointment> KPTResourceGroup::appointments(const KPTNode *node) const {
+    //kdDebug()<<k_funcinfo<<endl;
+    QPtrList<KPTAppointment> a;
+    QPtrListIterator<KPTResource> rit(m_resources);
+    for ( ; rit.current(); ++rit ) {
+        // hmmm, isn't it a better way?
+        QPtrList<KPTAppointment> list = rit.current()->appointments(node);
+        QPtrListIterator<KPTAppointment> it(list);
+        for (; it.current(); ++it) {
+            //kdDebug()<<k_funcinfo<<"Adding appointment"<<endl;
+            a.append(it.current());
+        }
+    }
+    //kdDebug()<<k_funcinfo<<"Now have: "<<a.count()<<" appointments"<<endl;
+    return a;
+}
+
 void KPTResourceGroup::clearAppointments() {
     QPtrListIterator<KPTResource> it(m_resources);
     for (; it.current(); ++it) {
@@ -122,32 +141,43 @@ void KPTResourceGroup::clearAppointments() {
 }
 
 void KPTResourceGroup::makeAppointments() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if (m_resources.count() == 0) {
         // TODO: Notify all nodes of resource shortage
-        kdDebug()<<k_funcinfo<<"No resources in this group: '"<<m_name<<"'"<<endl;
+        //kdDebug()<<k_funcinfo<<"No resources in this group: '"<<m_name<<"'"<<endl;
         return;
     }
-    KPTResourceRequest *request;
+    KPTResourceGroupRequest *request;
     QPtrListIterator<KPTNode> nodes(m_nodes);
+    kdDebug()<<k_funcinfo<<"No of nodes: "<<nodes.count()<<endl;
     for (; nodes.current(); ++nodes) {
         KPTTask *task = dynamic_cast<KPTTask *>(nodes.current());
         if (!task) {
             kdError()<<k_funcinfo<<"Node is not a task: '"<<nodes.current()->name()<<"'"<<endl;
             continue;
         }
-        if ((request = task->resourceRequest(this))) {
-            for (int i = 0; i < request->numResources(); ++i) {
+        if ((request = task->resourceGroupRequest(this))) {
+            // treat requests for specific resources first
+            QPtrListIterator<KPTResourceRequest> reqs(request->resourceRequests());
+            for (; reqs.current(); ++reqs) {
+                if (!reqs.current()->resource()->isAvailable(task)) {
+                    reqs.current()->resource()->setOverbooked(true);
+                    task->setResourceOverbooked(true);
+                }
+                //kdDebug()<<k_funcinfo<<"Make app: "<<reqs.current()->resource()->name()<<" to "<<task->name()<<endl;
+                reqs.current()->resource()->makeAppointment(task);
+            }
+            // Now the unspecified
+            for (int i = 0; i < request->units(); ++i) { //FIXME: may not be in whole units in future
                 bool madeIt = false;
                 QPtrListIterator<KPTResource> rit(m_resources);
                 for (; rit.current(); ++rit) {
                     if (rit.current()->isAvailable(task)) {
                         rit.current()->makeAppointment(task); // make appointment to task
                         madeIt = true;
-                        kdDebug()<<k_funcinfo<<"'"<<rit.current()->name()<<"' made appointment"<<endl;
+                        //kdDebug()<<k_funcinfo<<"'"<<rit.current()->name()<<"' made appointment"<<endl;
                         break;
                     }
-
                 }
                 if (!madeIt) {
                     // No resource available, so... We book anyway and mark overbooked
@@ -169,18 +199,60 @@ void KPTResourceGroup::makeAppointments() {
 }
 
 KPTResource::KPTResource(KPTProject *project) : m_project(project), m_appointments(), m_workingHours(), m_overbooked(false) {
-    m_availableFrom.set(project->startTime());
-    m_availableUntil.set(project->endTime());
+    m_availableFrom = QTime(8,0,0);
+    m_availableUntil = QTime(18,0,0);
     m_id = -1;
+    m_type = Type_Work;
+    m_units = 100; // %
+
+    cost.normalRate = 100;
+    cost.overtimeRate = 200;
+    cost.fixed = 0;
 }
 
 KPTResource::~KPTResource() {
 }
 
-void KPTResource::addWorkingHour(KPTDuration from, KPTDuration until) {
-    kdDebug()<<k_funcinfo<<endl;
-    m_workingHours.append(new KPTDuration(from));
-    m_workingHours.append(new KPTDuration(until));
+void KPTResource::setType(const QString &type) {
+    if (type == "Work")
+        m_type = Type_Work;
+    else if (type == "Material")
+        m_type = Type_Material;
+}
+
+QString KPTResource::typeToString() const {
+    if (m_type == Type_Work)
+        return QString("Work");
+    else if (m_type == Type_Material)
+        return QString("Material");
+
+    return QString();
+}
+
+void KPTResource::copy(KPTResource *resource) {
+    m_project = resource->project();
+    //m_appointments = resource->appointments(); // Note
+    m_id = resource->id();
+    m_name = resource->name();
+    m_availableFrom = resource->availableFrom();
+    m_availableUntil = resource->availableUntil();
+    m_workingHours.clear();
+    m_workingHours = resource->workingHours();
+
+    m_units = resource->units(); // avalable units in percent
+    m_overbooked = resource->isOverbooked();
+
+    m_type = resource->type();
+
+    cost.normalRate = resource->normalRate();
+    cost.overtimeRate = resource->overtimeRate();
+    cost.fixed = resource->fixedCost();
+}
+
+void KPTResource::addWorkingHour(QTime from, QTime until) {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_workingHours.append(new QTime(from));
+    m_workingHours.append(new QTime(until));
 }
 
 KPTDuration *KPTResource::getFirstAvailableTime(KPTDuration /*after*/) {
@@ -232,6 +304,19 @@ bool KPTResource::isAvailable(KPTTask *task) {
     return !busy;
 }
 
+QPtrList<KPTAppointment> KPTResource::appointments(const KPTNode *node) const {
+    //kdDebug()<<k_funcinfo<<endl;
+    QPtrList<KPTAppointment> a;
+    QPtrListIterator<KPTAppointment> it(m_appointments);
+    for ( ; it.current(); ++it ) {
+        if (it.current()->task() == node) {
+            a.append(it.current());
+            //kdDebug()<<k_funcinfo<<"Appointment added, resource="<<name()<<" node="<<node->name()<<endl;
+        }
+    }
+    return a;
+}
+
 
 void KPTResource::addAppointment(KPTAppointment *a) {
     m_appointments.append(a);
@@ -279,7 +364,7 @@ bool KPTAppointment::isBusy(const KPTDuration &start, const KPTDuration &end) {
 }
 
 bool KPTAppointment::load(QDomElement &element, KPTProject &project) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     int id  = element.attribute("resource-id").toInt();
     if (!(m_resource = project.resource(id))) {
         kdError()<<k_funcinfo<<"The referenced resource does not exists: resource id="<<id<<endl;
@@ -316,22 +401,92 @@ KPTRisk::KPTRisk(KPTNode *n, KPTResource *r, RiskType rt) {
 KPTRisk::~KPTRisk() {
 }
 
+KPTResourceRequest::KPTResourceRequest(KPTResource *resource, int units)
+    : m_resource(resource),
+    m_units(units) {
+    kdDebug()<<k_funcinfo<<"Request to: "<<(resource ? resource->name() : QString("None"))<<endl;
+}
+
+KPTResourceRequest::~KPTResourceRequest() {
+    //kdDebug()<<k_funcinfo<<"resource: "<<m_resource->name()<<endl;
+}
+
 bool KPTResourceRequest::load(QDomElement &element, KPTProject *project) {
-    kdDebug()<<k_funcinfo<<endl;
-    int id  = element.attribute("group-id").toInt();
-    if (!(m_group = project->group(id))) {
-        kdDebug()<<k_funcinfo<<"The referenced resource group does not exist: group id="<<id<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
+    int id  = element.attribute("resource-id").toInt();
+    if (!(m_resource = project->resource(id))) {
+        kdDebug()<<k_funcinfo<<"The referenced resource does not exist: resource id="<<id<<endl;
         return false;
     }
-    m_numResources  = element.attribute("limit").toInt();
+    m_units  = element.attribute("units").toInt();
     return true;
 }
 
 void KPTResourceRequest::save(QDomElement &element) {
     QDomElement me = element.ownerDocument().createElement("resource-request");
     element.appendChild(me);
+    me.setAttribute("resource-id", m_resource->id());
+    me.setAttribute("units", m_units);
+}
+
+KPTResourceGroupRequest::KPTResourceGroupRequest(KPTResourceGroup *group, int numResources)
+    : m_group(group), m_units(numResources) {
+
+    kdDebug()<<k_funcinfo<<"Request to: "<<(group ? group->name() : QString("None"))<<endl;
+    m_resourceRequests.setAutoDelete(true);
+}
+
+KPTResourceGroupRequest::~KPTResourceGroupRequest() {
+    //kdDebug()<<k_funcinfo<<"Group: "<<m_group->name()<<endl;
+    m_resourceRequests.clear();
+}
+
+KPTResourceRequest *KPTResourceGroupRequest::find(KPTResource *resource) const {
+    QPtrListIterator<KPTResourceRequest> it(m_resourceRequests);
+    for (; it.current(); ++it)
+        if (it.current()->resource() == resource)
+            return it.current();
+
+    return 0;
+}
+
+bool KPTResourceGroupRequest::load(QDomElement &element, KPTProject *project) {
+    //kdDebug()<<k_funcinfo<<endl;
+    int id  = element.attribute("group-id").toInt();
+    if (!(m_group = project->group(id))) {
+        kdDebug()<<k_funcinfo<<"The referenced resource group does not exist: group id="<<id<<endl;
+        return false;
+    }
+    m_units  = element.attribute("units").toInt();
+
+    QDomNodeList list = element.childNodes();
+    for (unsigned int i=0; i<list.count(); ++i) {
+	    if (list.item(i).isElement()) {
+            QDomElement e = list.item(i).toElement();
+            if (e.tagName() == "resource-request") {
+                KPTResourceRequest *r = new KPTResourceRequest();
+                if (r->load(e, project))
+                    addResourceRequest(r);
+                else {
+                    kdError()<<k_funcinfo<<"Failed to load resource request"<<endl;
+                    delete r;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+void KPTResourceGroupRequest::save(QDomElement &element) {
+    if (numResources() == 0)
+        return;
+    QDomElement me = element.ownerDocument().createElement("resourcegroup-request");
+    element.appendChild(me);
     me.setAttribute("group-id", m_group->id());
-    me.setAttribute("limit", m_numResources);
+    me.setAttribute("units", m_units);
+    QPtrListIterator<KPTResourceRequest> it(m_resourceRequests);
+    for (; it.current(); ++it)
+        it.current()->save(me);
 }
 
 #ifndef NDEBUG
@@ -360,6 +515,20 @@ void KPTAppointment::printDebug(QString indent)
     indent += "  !";
     kdDebug()<<indent<<"      From: "<<m_startTime.dateTime().toString()<<endl;
     kdDebug()<<indent<<"  Duration: "<<m_duration.dateTime().toString()<<endl;
+}
 
+void KPTResourceGroupRequest::printDebug(QString indent)
+{
+    kdDebug()<<indent<<"  + Request to group: "<<(m_group ? m_group->name() : "None")<<" units="<<m_units<<endl;
+    indent += "  !";
+    QPtrListIterator<KPTResourceRequest> it(m_resourceRequests);
+    for (; it.current(); ++it) {
+        it.current()->printDebug(indent);
+    }
+}
+
+void KPTResourceRequest::printDebug(QString indent)
+{
+    kdDebug()<<indent<<"  + Request to resource: "<<(m_resource ? m_resource->name() : "None")<<" units="<<m_units<<endl;
 }
 #endif

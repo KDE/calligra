@@ -18,6 +18,7 @@
 */
 
 #include "kpttaskdialog.h"
+#include "kptrequestresourcespanel.h"
 #include "kpttask.h"
 
 #include <qlayout.h>
@@ -25,6 +26,10 @@
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <klocale.h>
+#include <kdatepicker.h>
+#include <kabc/addressee.h>
+#include <kabc/addresseedialog.h>
+
 #include <qtextedit.h>
 #include <qdatetimeedit.h>
 #include <qdatetime.h>
@@ -33,143 +38,141 @@
 #include <qradiobutton.h>
 #include <qcombobox.h>
 #include <qlistbox.h>
+#include <qtabwidget.h>
 #include <qtable.h>
+#include <qtextbrowser.h>
+#include <qpushbutton.h>
 #include <kdebug.h>
 
-KPTTaskDialog::KPTTaskDialog(KPTTask &t, QPtrList<KPTResourceGroup> &resourceGroups, QWidget *p, const char *n)
-    : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p,
-		  n, true, true), task(t), m_resourceGroups(resourceGroups)
+KPTTaskDialog::KPTTaskDialog(KPTTask &task, QPtrList<KPTResourceGroup> &resourceGroups, QWidget *p, const char *n)
+    : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p, n, true, true),
+      task(task)
 {
-    // For now the setup is pretty trivial. It's planned to be able to control
-    // the children here too.
-    QWidget *settings = addPage(i18n("Settings"));
-    QGridLayout *layout = new QGridLayout(settings, 11, 2, marginHint(),
-					 spacingHint());
+    dia = new KPTTaskDialogImpl(this);
+    resourcesTab = new KPTRequestResourcesPanel(dia, task, resourceGroups);
+    dia->daTabs->insertTab(resourcesTab, i18n("Resources"), 1);
+    setMainWidget(dia);
+    enableButtonOK(false);
 
-    // First line: Name of the task
-    layout->addWidget(new QLabel(i18n("Task name:"), settings), 0, 0);
-    layout->addWidget(namefield=new KLineEdit(task.name(), settings), 0, 1);
+	dia->namefield->setText(task.name());
+	dia->leaderfield->setText(task.leader());
 
-    // Second line: Name of responsible person
-    layout->addWidget(new QLabel(i18n("Responsible:"), settings), 1, 0);
-    layout->addWidget(leaderfield = new KLineEdit(task.leader(), settings), 1, 1);
+    dia->setScheduling(task.constraint());
+    if (task.constraintTime() == KPTDuration::zeroDuration)
+        dia->setSchedulerDateTime(QDateTime::currentDateTime());
+    else
+        dia->setSchedulerDateTime(task.constraintTime().dateTime());
 
-    layout->addWidget(new QLabel(i18n("Effort (hours):"), settings), 2, 0);
-    effort=new QSpinBox(1,365*24,1,settings);
-    effort->setValue(task.effort()->expected().duration()/3600);
-    layout->addWidget(effort, 2, 1);
+    connect(dia, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOK(bool) ));
+    connect(dia, SIGNAL( schedulingTypeChanged(int) ), this, SLOT( slotSchedulingChanged(int) ));
 
+    slotSchedulingChanged(task.constraint());
+    dia->namefield->setFocus();
 
-    layout->addMultiCellWidget(constraints = new QButtonGroup(0, Qt::Vertical, i18n("Scheduling"), settings), 3, 7, 0, 1);
-    constraints->layout()->setSpacing(KDialog::spacingHint());
-    constraints->layout()->setMargin(KDialog::marginHint());
-    QGridLayout *constraintsLayout = new QGridLayout(constraints->layout(), 5, 2);
+    connect(resourcesTab, SIGNAL( changed() ), dia, SLOT( slotCheckAllFieldsFilled() ));
 
-    QRadioButton *b = new QRadioButton(i18n("ASAP"), constraints);
-    constraintsLayout->addWidget(b, 1, 0);
-    b = new QRadioButton(i18n("ALAP"), constraints);
-    constraintsLayout->addWidget(b, 2, 0);
-    b = new QRadioButton(i18n("Start not earlier than"), constraints);
-    constraintsLayout->addWidget(b, 3, 0);
-    b = new QRadioButton(i18n("Finish not later than"), constraints);
-    constraintsLayout->addWidget(b, 4, 0);
-    b = new QRadioButton(i18n("Must start on"), constraints);
-    constraintsLayout->addWidget(b, 5, 0);
-
-    constraints->setButton(task.constraint());
-
-    constraintsLayout->addWidget(sneTime=new QDateTimeEdit(task.startNotEarlier().dateTime(), constraints), 3, 1);
-    constraintsLayout->addWidget(fnlTime=new QDateTimeEdit(task.finishNotLater().dateTime(), constraints), 4, 1);
-    constraintsLayout->addWidget(msoTime=new QDateTimeEdit(task.mustStartOn().dateTime(), constraints), 5, 1);
-
-
-    // Resources
-    QWidget *res = addPage(i18n("Resources"));
-    QGridLayout *resLayout = new QGridLayout(res, 6, 2, marginHint(), spacingHint());
-
-    uint noRes = m_resourceGroups.count();
-    table = new QTable(noRes,3,res);
-    resLayout->addWidget(table, 0, 0);
-    //table->verticalHeader()->hide();
-    table->horizontalHeader()->setLabel(0,"Resource");
-    table->horizontalHeader()->setLabel(1,"Use");
-    table->horizontalHeader()->setLabel(2,"Limit");
-
-    for (uint i=0; i<noRes; ++i) {
-        KPTResourceItem *item = new KPTResourceItem(m_resourceGroups.at(i), table, QTableItem::Never);
-        table->setItem(i, 0, item);
-
-        QCheckTableItem *c = new QCheckTableItem(table,"");
-        QTableItem *ti = new QTableItem(table,QTableItem::OnTyping,"1");
-        QPtrListIterator<KPTResourceRequest> it(task.resourceRequests());
-        for (; it.current(); ++it) {
-            kdDebug()<<k_funcinfo<<" group="<<item->m_resourceGroup<<"  request group="<<it.current()->group()<<endl;
-            if (it.current()->group() == item->m_resourceGroup) {
-                c->setChecked(true);
-                kdDebug()<<k_funcinfo<<"numResources: "<<it.current()->numResources()<<" -> "<<QString("%1").arg(it.current()->numResources())<<endl;
-                ti->setText(QString("%1").arg(it.current()->numResources()));
-            }
-        }
-        table->setItem(i, 1, c);
-        table->setItem(i, 2, ti);
-    }
-
-    // Description
-    QWidget *notes = addPage(i18n("Notes"));
-    QGridLayout *notesLayout = new QGridLayout(notes, 6, 2, marginHint(), spacingHint());
-    notesLayout->addWidget(new QLabel(i18n("Description:"), notes), 0, 0);
-    descriptionfield = new QTextEdit(notes);
-    descriptionfield->setText(task.description());
-    notesLayout->addMultiCellWidget(descriptionfield, 1, 5, 0, 1);
-    
+    resize(643,480); //FIXME: design ui so we don't need this
 
 }
 
 
 void KPTTaskDialog::slotOk() {
-    if (namefield->text() == "" || leaderfield->text() == "") {
-	KMessageBox::sorry(this, i18n("You have to set a name and responsible for "
-			   "the task"));
-	return;
-    }
     KPTDuration dt = KPTDuration();
-    QButton *b = constraints->selected();
-    if ( b == 0 ) {
-        KMessageBox::sorry(this, i18n("You have to select a constraint"));
-	    return;
-    }
-    
-    task.setConstraint((KPTNode::ConstraintType)constraints->id(b));
-    dt.set(sneTime->dateTime());
-    task.setStartNotEarlier(dt);
-    dt.set(fnlTime->dateTime());
-    task.setFinishNotLater(dt);
-    dt.set(msoTime->dateTime());
-    task.setMustStartOn(dt);
 
-    task.setName(namefield->text());
-    task.setLeader(leaderfield->text());
-    task.setDescription(descriptionfield->text());
+    task.setName(dia->namefield->text());
+    task.setLeader(dia->leaderfield->text());
+    task.setDescription(dia->descriptionfield->text());
 
-    task.effort()->set( (effort->value()*3600) );
+    KPTNode::ConstraintType c = (KPTNode::ConstraintType)dia->scheduling();
+    task.setConstraint(c);
+    if (c == KPTNode::FinishNotLater || c == KPTNode::StartNotEarlier || c == KPTNode::MustStartOn)
+        task.setConstraintTime(dia->schedulerDateTime());
 
-    //resources
-    task.clearResourceRequests();
-    for (int i = 0; i < table->numRows(); ++i) {
-        QCheckTableItem *cti = dynamic_cast<QCheckTableItem *>(table->item(i, 1));
-        if (cti->isChecked()) {
-            KPTResourceItem *item = dynamic_cast<KPTResourceItem *>(table->item(i, 0));
-            bool ok = false;
-            int num = table->item(i,2)->text().toInt(&ok);
-            if (!ok)
-                num = 0;
-            task.addResourceRequest(item->m_resourceGroup, num);
-            kdDebug()<<k_funcinfo<<"Checked: '"<<item->m_resourceGroup->name()<<"' numResources="<<num<<endl;
-        }
-    }
-                            
+    resourcesTab->slotOk();
     accept();
 }
 
+void KPTTaskDialog::slotSchedulingChanged(int activated) {
+    bool needDate = activated >= 2;
+    dia->schedulerTime->setEnabled(needDate);
+    dia->schedulerDate->setEnabled(needDate);
+
+    QString label = QString("<p><font size=\"4\" color=\"#7797BC\"><b>%1</b></font></p><p>%2</p>");
+    switch(activated) {
+        // TODO please provide nice explenations on this.
+        case KPTNode::ASAP: // ASAP
+            label = label.arg(i18n("As Soon As Possible"));
+            label = label.arg(i18n("Place all events at the earliest possible moment permitted in the schedule"));
+            break;
+        case KPTNode::ALAP: // ALAP
+            label = label.arg(i18n("As Late As Possible"));
+            label = label.arg(i18n("Place all events at the last possible moment permitted in the schedule"));
+            break;
+        case KPTNode::StartNotEarlier: // Start not earlier than
+            label = label.arg(i18n("Start not Earlier than"));
+            label = label.arg(i18n("The task can not be sceduled to start earlier than this date."));
+            break;
+        case KPTNode::FinishNotLater: // Finish not later than
+            label = label.arg(i18n("Finish not Later than"));
+            label = label.arg(i18n("The task can not be sceduled to finish later than this date."));
+            break;
+        case KPTNode::MustStartOn: // Must start on
+            label = label.arg(i18n("Must Start on"));
+            label = label.arg(i18n("The task must be sceduled to start on this date."));
+            break;
+        default: // error ...
+            dia->lSchedulingExplain->setText("");
+            return;
+    }
+    dia->lSchedulingExplain->setText(label);
+}
+
+
+//////////////////////////////////////////
+
+KPTTaskDialogImpl::KPTTaskDialogImpl (QWidget *parent) : KPTTaskDialogBase(parent) {
+    connect (namefield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect (leaderfield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
+    connect (schedulerType, SIGNAL(activated( int )), this, SLOT(slotSchedulingChanged( int )) );
+	connect (chooseLeader, SIGNAL(pressed()), SLOT(slotChooseLeader()));
+}
+
+void KPTTaskDialogImpl::slotCheckAllFieldsFilled() {
+    emit obligatedFieldsFilled( !(namefield->text().isEmpty() || leaderfield->text().isEmpty()));
+}
+
+void KPTTaskDialogImpl::slotSchedulingChanged(int activated) {
+    emit schedulingTypeChanged(activated);
+    slotCheckAllFieldsFilled();
+}
+
+void KPTTaskDialogImpl::slotChooseLeader()
+{
+  KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
+  if (!a.isEmpty()) {
+	  leaderfield->setText(a.fullEmail());
+  }
+}
+
+int KPTTaskDialogImpl::scheduling() const
+{
+    return schedulerType->currentItem();
+}
+
+void KPTTaskDialogImpl::setScheduling(int type)
+{
+    schedulerType->setCurrentItem(type);
+}
+
+QDateTime KPTTaskDialogImpl::schedulerDateTime() const
+{
+    return QDateTime(schedulerDate->getDate(), schedulerTime->time());
+}
+
+void KPTTaskDialogImpl::setSchedulerDateTime(QDateTime dt)
+{
+    schedulerDate->setDate(dt.date());
+    schedulerTime->setTime(dt.time());
+}
 
 #include "kpttaskdialog.moc"

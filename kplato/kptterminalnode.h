@@ -36,7 +36,7 @@ public:
      */
     KPTTerminalNode(KPTNode* owner) { m_parent = owner; }
 
-    virtual int type() { return KPTNode::Type_TerminalNode; }
+    virtual int type() const { return KPTNode::Type_TerminalNode; }
 
 
     /* make concrete versions of abstract functions */

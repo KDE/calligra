@@ -84,6 +84,8 @@ protected slots:
 	void slotChanged();
 	void slotUpdate(bool calculate);
 
+    void slotEditResource();
+
 #ifndef NDEBUG
     void slotPrintDebug();
 #endif

@@ -40,7 +40,7 @@ public:
     KPTTask(KPTNode *parent = 0);
     ~KPTTask();
 
-    virtual int type();
+    virtual int type() const;
 
     /**
      * The expected Duration is the expected time to complete a Task, Project,
@@ -63,13 +63,13 @@ public:
     /**
       * setStartTime() calculates and sets @see m_startTime
       * based on @see m_earliestStart and constraints.
-      * Set also for all children.
+      * if this task is a summary task time is set also for all children.
       */
     void setStartTime();
     /**
       * setEndTime() calculates and sets @see m_endTime
-      * based on @see m_startTime and @see m_duration.
-      * Set also for all children.
+      * based on @see m_endTime and @see m_duration.
+      * if this task is a summary task time is set also for all children.
       */
     void setEndTime();
 
@@ -99,17 +99,17 @@ public:
     void removeResource(KPTResourceGroup *resource);
     void removeResource(int number);
 
-    const QPtrList<KPTResourceRequest> &resourceRequests() const { return m_requests; }
+    const QPtrList<KPTResourceGroupRequest> &resourceGroupRequests() const { return m_requests; }
     /**
      * Return the resource request made to @group
      * (There should be only one)
      */
-    KPTResourceRequest *resourceRequest(KPTResourceGroup *group) const;
+    KPTResourceGroupRequest *resourceGroupRequest(KPTResourceGroup *group) const;
     void clearResourceRequests();
     void addResourceRequest(KPTResourceGroup *group, int numResources);
-    void addResourceRequest(KPTResourceRequest *request);
-    int numResources();
-    int numWorkResources();
+    void addResourceRequest(KPTResourceGroupRequest *request);
+    int numResources() const;
+    int numWorkResources() const;
     void requestResources() const;
 
 
@@ -121,12 +121,27 @@ public:
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element);
 
-    virtual bool openDialog(QPtrList<KPTResourceGroup> &resourceGroups);
-
 //    virtual void drawPert(KPTPertCanvas *view, KPTNode *parent = 0);
 
     void calculateStartEndTime();
     void calculateStartEndTime(const KPTDuration &start);
+
+    /**
+     * Returns the total planned cost for this task (or subtasks)
+     */
+    virtual double plannedCost();
+    /**
+     * Returns the planned cost for this task (or subtasks) upto date @dt
+     */
+    virtual double plannedCost(QDateTime &dt);
+    /**
+     * Returns the actaually reported cost for this task (or subtasks)
+     */
+    virtual double actualCost();
+
+    int plannedWork();
+    int plannedWork(QDateTime &dt);
+    int actualWork();
 
 private:
 
@@ -134,8 +149,7 @@ private:
 
     QPtrList<KPTResourceGroup> m_resource;
 
-    QPtrList<KPTResourceRequest> m_requests;
-
+    QPtrList<KPTResourceGroupRequest> m_requests;
 
 #ifndef NDEBUG
 public:

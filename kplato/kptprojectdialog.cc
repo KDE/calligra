@@ -70,7 +70,7 @@ void KPTProjectDialog::slotOk() {
     QDateTime endTime = QDateTime(dia->schedulerDate->date(), dia->schedulerTime->time());
     dt.set(endTime);
     project.setStartTime(dt);
-    project.setMustStartOn(dt);
+    project.setConstraintTime(dt);
 
     project.setName(dia->namefield->text());
     project.setLeader(dia->leaderfield->text());

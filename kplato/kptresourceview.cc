@@ -23,80 +23,168 @@
 #include "kptview.h"
 #include "kptproject.h"
 #include "kpttask.h"
+#include "kptresource.h"
 
+#include <KDGanttView.h>
 #include <KDGanttViewSummaryItem.h>
 #include <KDGanttViewTaskItem.h>
 #include <qlistview.h>
+#include <qtabwidget.h>
+#include <qpopupmenu.h>
+
+
+#include <klocale.h>
+#include <kglobal.h>
 
 #include <kdebug.h>
 
+class ResourceItemPrivate : public QListViewItem {
+public:
+    ResourceItemPrivate(KPTResource *r, QListViewItem *parent)
+        : QListViewItem(parent, r->name()),
+        resource(r) {}
 
-KPTResourceView::KPTResourceView( KPTView *view, QWidget *parent )
-    : KDGanttView( parent, "Resource gantt view" ),
-    m_mainview( view )
+    KPTResource *resource;
+};
+
+KPTResourceView::KPTResourceView(KPTView *view, QWidget *parent)
+    : QSplitter(parent, "Resource view"),
+    m_mainview(view),
+    m_selectedItem(0)
 {
-    setScale(KDGanttView::Day);
-    addColumn("Start");
-    addColumn("End");
-	draw(view->getPart()->getProject());
+    setOrientation(QSplitter::Vertical);
 
+    resList = new QListView(this, "Resource list");
+    resList->setRootIsDecorated(true);
+    resList->addColumn(i18n("Name"));
+    resList->addColumn(i18n("Type"));
+    resList->setColumnAlignment(1, AlignHCenter);
+    resList->addColumn(i18n("Normal rate"));
+    resList->setColumnAlignment(2, AlignRight);
+    resList->addColumn(i18n("Overtime rate"));
+    resList->setColumnAlignment(3, AlignRight);
+    resList->addColumn(i18n("Fixed cost"));
+    resList->setColumnAlignment(4, AlignRight);
+
+    draw(view->getPart()->getProject());
+
+    QTabWidget *app = new QTabWidget(this);
+
+    appList = new QListView(app, "Appointments view");
+    appList->addColumn(i18n("Task"));
+    appList->addColumn(i18n("Responsible"));
+    appList->addColumn(i18n("Start date"));
+    appList->addColumn(i18n("End date"));
+    appList->addColumn(i18n("Duration"));
+    appList->setColumnAlignment(4, AlignRight);
+
+    app->addTab(appList, i18n("Appointments"));
+
+    connect(resList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(resSelectionChanged(QListViewItem*)));
+    connect(resList, SIGNAL(rightButtonPressed(QListViewItem*, const QPoint&, int)), SLOT(popupMenuRequested(QListViewItem*, const QPoint&, int)));
 }
 
 void KPTResourceView::zoom(double zoom)
 {
 }
 
+KPTResource *KPTResourceView::currentResource() {
+    if (m_selectedItem)
+        return m_selectedItem->resource;
+    return 0;
+}
+
 void KPTResourceView::draw(KPTProject &project)
 {
-    kdDebug()<<k_funcinfo<<endl;
-	setUpdateEnabled(false);
-	clear();
+    //kdDebug()<<k_funcinfo<<endl;
+	resList->clear();
+    m_selectedItem = 0;
 
     QPtrListIterator<KPTResourceGroup> it(project.resourceGroups());
     for (; it.current(); ++it) {
-        KDGanttViewSummaryItem *item = new KDGanttViewSummaryItem(this, it.current()->name());
-        item->setStartTime(project.startTime().dateTime());
-        item->setEndTime(project.endTime().dateTime());
-        item->setListViewText(1, item->startTime().toString());
-        item->setListViewText(2, item->endTime().toString());
+        QListViewItem *item = new QListViewItem(resList, it.current()->name());
 	    item->setOpen(true);
         drawResources(item, it.current());
     }
-	setUpdateEnabled(true);
+    if (m_selectedItem) {
+        resList->setSelected(m_selectedItem, true);
+    }
 }
 
 
-void KPTResourceView::drawResources(KDGanttViewItem *parent, KPTResourceGroup *group)
+void KPTResourceView::drawResources(QListViewItem *parent, KPTResourceGroup *group)
 {
-    kdDebug()<<k_funcinfo<<"group: "<<group->name()<<endl;
+    //kdDebug()<<k_funcinfo<<"group: "<<group->name()<<" ("<<group<<")"<<endl;
     QPtrListIterator<KPTResource> it(group->resources());
     for (; it.current(); ++it) {
         KPTResource *r = it.current();
-        KDGanttViewSummaryItem *item = new KDGanttViewSummaryItem(parent, r->name());
-        item->setStartTime(r->availableFrom().dateTime());
-        item->setEndTime(r->availableUntil().dateTime());
-        item->setListViewText(1, item->startTime().toString());
-        item->setListViewText(2, item->endTime().toString());
-	    item->setOpen(true);
-        drawAppointments(item, r);
+        ResourceItemPrivate *item = new ResourceItemPrivate(r, parent);
+        switch (r->type()) {
+            case KPTResource::Type_Work:
+                item->setText(1, i18n("Work"));
+                break;
+            case KPTResource::Type_Material:
+                item->setText(1, i18n("Material"));
+                break;
+            default:
+                item->setText(1, i18n("Undefined"));
+                break;
+        }
+        item->setText(2, KGlobal::locale()->formatMoney(r->normalRate()));
+        item->setText(3, KGlobal::locale()->formatMoney(r->overtimeRate()));
+        item->setText(4, KGlobal::locale()->formatMoney(r->fixedCost()));
+        if (!m_selectedItem) {
+            m_selectedItem = item;
+        }
     }
 }
 
-void KPTResourceView::drawAppointments(KDGanttViewItem *parent, KPTResource *resource)
+
+void KPTResourceView::resSelectionChanged(QListViewItem *item) {
+    //kdDebug()<<k_funcinfo<<endl;
+    if (item == 0)
+        return;
+
+    appList->clear();
+    ResourceItemPrivate *ritem = dynamic_cast<ResourceItemPrivate *>(item);
+    if (ritem) {
+        m_selectedItem = ritem;
+        drawAppointments(ritem->resource);
+    }
+}
+
+void KPTResourceView::drawAppointments(KPTResource *resource)
 {
-    kdDebug()<<k_funcinfo<<"Appointmnets for resource: "<<resource->name()<<endl;
+    //kdDebug()<<k_funcinfo<<"Appointments for resource: "<<resource->name()<<endl;
     QPtrListIterator<KPTAppointment> it(resource->appointments());
     for (; it.current(); ++it) {
-        KPTAppointment *a = it.current();
-        KDGanttViewTaskItem *item = new KDGanttViewTaskItem(parent, a->task()->name());
-        KPTDuration time(a->startTime().dateTime());
-    	item->setStartTime(time.dateTime());
-	    time.add(a->duration());
-	    item->setEndTime(time.dateTime());
-        item->setListViewText(1, item->startTime().toString());
-        item->setListViewText(2, item->endTime().toString());
+        KPTTask *t = it.current()->task();
+        if (t) {
+            KPTDuration *dur = t->getExpectedDuration();
+            QListViewItem *item = new QListViewItem(appList,
+                    t->name(), t->leader(),
+                    t->startTime().date().toString(), t->endTime().date().toString(),
+                    dur->toString(0));
+            delete dur;
+        }
     }
 }
 
+void KPTResourceView::popupMenuRequested(QListViewItem * item, const QPoint & pos, int)
+{
+    ResourceItemPrivate *ritem = dynamic_cast<ResourceItemPrivate *>(item);
+    if (ritem) {
+        if (ritem != m_selectedItem)
+            resSelectionChanged(ritem);
+        QPopupMenu *menu = m_mainview->popupMenu("resource_popup");
+        if (menu)
+        {
+            int id = menu->exec(pos);
+            //kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+        }
+        else
+            kdDebug()<<k_funcinfo<<"No menu!"<<endl;
+    }
+}
 
 #include "kptresourceview.moc"

@@ -28,75 +28,7 @@
 class KPTProject;
 class KPTGroupItem;
 class KPTResourceItem;
-
-class KPTGroupItem {
-public:
-    enum State {NONE, MODIFIED, NEW};
-
-    KPTGroupItem(KPTResourceGroup *item, State state = NONE)
-        { m_group = item; m_name = item->name(); m_state = state; }
-    ~KPTGroupItem() { if (m_state == NEW) delete m_group; }
-
-    void setState(State s);
-
-    void setName(const QString &newName);
-
-    void deleteResource(KPTResourceItem *item);
-
-    KPTResourceGroup *m_group;
-    QString m_name;
-    QPtrList<KPTResourceItem> m_resourceItems;
-    QPtrList<KPTResourceItem> m_deletedItems;
-    State m_state;
-};
-
-class KPTGroupLBItem : public QListBoxText {
-public:
-    KPTGroupLBItem(KPTGroupItem *item) {m_group = item; setText(item->m_name); }
-
-    void setName(const QString &newName) {
-        setText(newName);
-        m_group->setName(newName);
-    }
-
-    KPTGroupItem *m_group;
-};
-
-class KPTResourceItem {
-public:
-    enum State {NONE, MODIFIED, NEW};
-
-    KPTResourceItem(KPTResource *item, State state = NONE)
-        { m_resource = item; m_name = item->name(); m_state = state; }
-    ~KPTResourceItem() { if (m_state == NEW) delete m_resource; }
-
-    void setState(State s);
-
-    void setName(const QString &newName) {
-        m_name = newName;
-        if (m_state == NEW)
-            m_resource->setName(newName);
-        if (m_state == NONE)
-            m_state = MODIFIED;
-    }
-
-    KPTResource *m_resource;
-    QDateTime m_availabeFrom, m_availableUntil;
-    QString m_name;
-    State m_state;
-};
-
-class KPTResourceLBItem : public QListBoxText {
-public:
-    KPTResourceLBItem(KPTResourceItem *item) { m_resource = item; setText(item->m_name); }
-
-    void setName(const QString &newName) {
-        setText(newName);
-        m_resource->setName(newName);
-    }
-
-    KPTResourceItem *m_resource;
-};
+class KPTGroupLBItem;
 
 class KPTResourcesPanel : public ResourcesPanelBase {
     Q_OBJECT
@@ -105,17 +37,21 @@ public:
 
 	void ok();
 
+    void sendChanged();
+
 protected slots:
     void slotAddGroup();
     void slotDeleteGroup();
+
+    void slotChooseResource();
     void slotAddResource();
+    void slotEditResource();
     void slotDeleteResource();
 
     void slotGroupChanged(QListBoxItem * item);
     void slotGroupRename( const QString &newName);
     void slotResourceRename(const QString &newName);
     void slotResourceChanged( QListBoxItem*);
-
 signals:
 	void changed();
 
@@ -125,6 +61,8 @@ private:
 
     QPtrList<KPTGroupItem> m_groupItems;
     QPtrList<KPTGroupItem> m_deletedGroupItems;
+
+    bool m_blockResourceRename;
 };
 
 #endif // KPTPRESOURCESPANEL_H

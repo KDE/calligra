@@ -20,12 +20,15 @@
 #ifndef KPTTASKDIALOG_H
 #define KPTTASKDIALOG_H
 
+#include "kpttaskdialogbase.h"
+
 #include <kdialogbase.h>
 
 #include <kptresource.h>
 
 #include <qtable.h>
 
+class KPTRequestResourcesPanel;
 class KPTTask;
 class KLineEdit;
 class QTextEdit;
@@ -34,13 +37,26 @@ class QSpinBox;
 class QButtonGroup;
 class QListBox;
 class QTable;
+class QDateTime;
 
-class KPTResourceItem : public QTableItem {
+class KPTTaskDialogImpl : public KPTTaskDialogBase {
+    Q_OBJECT
 public:
-    KPTResourceItem(KPTResourceGroup *group, QTable * table, EditType et)
-    : QTableItem (table, et, group->name()), m_resourceGroup(group) {}
+    KPTTaskDialogImpl (QWidget *parent);
 
-    KPTResourceGroup *m_resourceGroup;
+    int scheduling() const;
+    void setScheduling(int type);
+    QDateTime schedulerDateTime() const;
+    void setSchedulerDateTime(QDateTime dt);
+
+private slots:
+    void slotCheckAllFieldsFilled();
+    void slotSchedulingChanged(int activated);
+	void slotChooseLeader();
+
+signals:
+    void obligatedFieldsFilled(bool yes);
+    void schedulingTypeChanged(int activated);
 };
 
 class KPTTaskDialog : public KDialogBase {
@@ -50,20 +66,16 @@ public:
 
 protected slots:
     void slotOk();
+    void slotSchedulingChanged(int activated);
 
 private:
     KPTTask &task;
     KLineEdit *namefield;
     KLineEdit *leaderfield;
     QTextEdit *descriptionfield;
-    
-    QDateTimeEdit *sneTime, *fnlTime, *msoTime;
-    QSpinBox *effort;
 
-    QButtonGroup *constraints;
-
-    QTable *table;
-    QPtrList<KPTResourceGroup> &m_resourceGroups;
+    KPTRequestResourcesPanel *resourcesTab;
+    KPTTaskDialogImpl *dia;
 
     // TODO: Duration and risk fields
 };

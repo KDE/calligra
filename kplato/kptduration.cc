@@ -39,7 +39,7 @@ KPTDuration::KPTDuration(int h, int m, int s, int ms) {
     m_theTime = QDateTime(QDate(0,1,1));
     int dur = h*3600+m*60+s;
     m_theTime = m_theTime.addSecs(dur);
-    kdDebug()<<k_funcinfo<<m_theTime.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<m_theTime.toString()<<endl;
 }
 
 KPTDuration::KPTDuration(const QTime time) {

@@ -21,6 +21,7 @@
 #include "kptcanvasitem.h"
 #include "kptrelation.h"
 #include "kptpertcanvas.h"
+#include "kpttask.h"
 
 #include <qpainter.h>
 #include <qpointarray.h>
@@ -646,26 +647,26 @@ KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNod
 ////////////////////   KPTGanttViewTaskItem   //////////////////////////
 
 
-KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttView *parent, KPTNode &node)
-    : KDGanttViewTaskItem(parent, node.name()),
-	m_node(node)
+KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttView *parent, KPTTask *task)
+    : KDGanttViewTaskItem(parent, task->name()),
+	m_task(task)
 {}
 
-KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTNode &node)
-    : KDGanttViewTaskItem(parent, node.name()),
-	m_node(node)
+KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTTask *task)
+    : KDGanttViewTaskItem(parent, task->name()),
+	m_task(task)
 {}
 
 ////////////////////   KPTGanttViewEventItem   //////////////////////////
 
 
-KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttView *parent, KPTNode &node)
-    : KDGanttViewEventItem(parent, node.name()),
-	m_node(node)
+KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttView *parent, KPTTask *task)
+    : KDGanttViewEventItem(parent, task->name()),
+	m_task(task)
 {}
 
-KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttViewItem *parent, KPTNode &node)
-    : KDGanttViewEventItem(parent, node.name()),
-	m_node(node)
+KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttViewItem *parent, KPTTask *task)
+    : KDGanttViewEventItem(parent, task->name()),
+	m_task(task)
 {}
 

@@ -30,6 +30,7 @@
 #include <qcanvas.h>
 #include <qrect.h>
 
+class KPTTask;
 class KPTRelation;
 class KPTPertCanvas;
 class QPainter;
@@ -194,13 +195,13 @@ protected:
 class KPTGanttViewTaskItem : public KDGanttViewTaskItem
 {
 public:
-    KPTGanttViewTaskItem(KDGanttView *parent, KPTNode &node);
-    KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTNode &node);
+    KPTGanttViewTaskItem(KDGanttView *parent, KPTTask *task);
+    KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTTask *task);
 	
-	KPTNode &getNode() { return m_node; }
+	KPTTask *getTask() { return m_task; }
 	
 protected:
-    KPTNode & m_node;
+    KPTTask *m_task;
 };
 
 /////////////////   KPTGanttViewEventItem   ////////////////////
@@ -208,13 +209,13 @@ protected:
 class KPTGanttViewEventItem : public KDGanttViewEventItem
 {
 public:
-    KPTGanttViewEventItem(KDGanttView *parent, KPTNode &node);
-    KPTGanttViewEventItem(KDGanttViewItem *parent, KPTNode &node);
+    KPTGanttViewEventItem(KDGanttView *parent, KPTTask *task);
+    KPTGanttViewEventItem(KDGanttViewItem *parent, KPTTask *task);
 	
-	KPTNode &getNode() { return m_node; }
-	
+	KPTTask *getTask() { return m_task; }
+
 protected:
-    KPTNode & m_node;
+    KPTTask *m_task;
 };
 
 #endif

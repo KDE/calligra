@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 The Koffice Team <koffice@kde.org>
+   Copyright (C) 2002 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,8 +25,10 @@
 #include "kptpart.h"
 #include "kptproject.h"
 #include "kpttask.h"
+#include "kptresource.h"
 //#include "kptmilestone.h"
 
+#include "KDGanttView.h"
 #include "KDGanttViewItem.h"
 #include "KDGanttViewTaskItem.h"
 #include "KDGanttViewSummaryItem.h"
@@ -40,21 +42,163 @@
 #include <qlistview.h>
 #include <qheader.h>
 #include <qpopupmenu.h>
+#include <qtabwidget.h>
+#include <qptrlist.h>
+#include <qlineedit.h>
+#include <qwidget.h>
+#include <qlabel.h>
+#include <qspinbox.h>
+#include <qvaluelist.h>
 
-KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent )
-    : KDGanttView( parent, "Gantt view" ),
-    m_mainview( view ),
-	m_currentItem(0)
+#include <klocale.h>
+#include <kglobal.h>
+
+KPTTaskAppointmentsView::KPTTaskAppointmentsView(QWidget *parent, const char* name)
+    : QWidget(parent, name),
+    appList(0),
+    m_taskName(0),
+    m_responsible(0),
+    m_costToDate(0),
+    m_totalCost(0),
+    m_workToDate(0),
+    m_totalWork(0),
+    m_completion(0),
+    m_deviationCost(0),
+    m_deviationWork(0)
 {
-    setScale(KDGanttView::Day);
+    QGridLayout *layout = new QGridLayout(this, 4, 11, 8, 2);
+    layout->setRowStretch(0, 0);
+    layout->setRowStretch(1, 0);
+    layout->setRowStretch(2, 0);
+    layout->setRowStretch(3, 0);
+    layout->setColSpacing(2,10);
+    layout->setColSpacing(5,10);
+
+    layout->addWidget(new QLabel(i18n("Task name: "), this), 0, 0);
+    m_taskName = new QLineEdit(this);
+    layout->addMultiCellWidget(m_taskName, 0, 0, 1, 4);
+    layout->addWidget(new QLabel(i18n("Responsible: "), this), 0, 6);
+    m_responsible = new QLineEdit(this);
+    layout->addMultiCellWidget(m_responsible, 0, 0, 7, 10);
+
+    layout->addWidget(new QLabel(i18n("Cost to date: "), this), 1, 0);
+    m_costToDate = new QLineEdit(this);
+    layout->addWidget(m_costToDate, 1, 1);
+    layout->addWidget(new QLabel(i18n("Deviation: "), this), 1, 3);
+    m_deviationCost = new QLineEdit(this);
+    layout->addWidget(m_deviationCost, 1, 4);
+    layout->addWidget(new QLabel(i18n("Total planned cost: "), this), 1, 6);
+    m_totalCost = new QLineEdit(this);
+    layout->addWidget(m_totalCost, 1, 7);
+
+    layout->addWidget(new QLabel(i18n("Work to date: "), this), 2, 0);
+    m_workToDate = new QLineEdit(this);
+    layout->addWidget(m_workToDate, 2, 1);
+    layout->addWidget(new QLabel(i18n("Deviation: "), this), 2, 3);
+    m_deviationWork = new QLineEdit(this);
+    layout->addWidget(m_deviationWork, 2, 4);
+    layout->addWidget(new QLabel(i18n("Total planned work: "), this), 2, 6);
+    m_totalWork = new QLineEdit(this);
+    layout->addWidget(m_totalWork, 2, 7);
+
+    layout->addWidget(new QLabel(i18n("Completion: "), this), 2, 9);
+    QSpinBox *m_completion = new QSpinBox(this);
+    m_completion->setSuffix(i18n("%"));
+    m_completion->setDisabled(true);
+    layout->addWidget(m_completion, 2, 10);
+
+    QTabWidget *resTab = new QTabWidget(this);
+    layout->addMultiCellWidget(resTab, 3, 4, 0, 10);
+    appList = new QListView(resTab, "Appointments view");
+    appList->addColumn(i18n("Resource"));
+    appList->addColumn(i18n("Type"));
+    appList->setColumnAlignment(1, AlignHCenter);
+    appList->addColumn(i18n("Start date"));
+    appList->addColumn(i18n("Duration"));
+    appList->setColumnAlignment(3, AlignRight);
+    appList->addColumn(i18n("Normal rate"));
+    appList->setColumnAlignment(4, AlignRight);
+    appList->addColumn(i18n("Overtime rate"));
+    appList->setColumnAlignment(5, AlignRight);
+    appList->addColumn(i18n("Fixed cost"));
+    appList->setColumnAlignment(6, AlignRight);
+
+    resTab->addTab(appList, i18n("Appointments"));
+
+}
+
+void KPTTaskAppointmentsView::clear()
+{
+    if (appList) appList->clear();
+    if (m_taskName) m_taskName->clear();
+    if (m_responsible) m_responsible->clear();
+    if (m_costToDate) m_costToDate->clear();
+    if (m_totalCost) m_totalCost->clear();
+    if (m_workToDate) m_workToDate->clear();
+    if (m_totalWork) m_totalWork->clear();
+}
+
+void KPTTaskAppointmentsView::draw(KPTTask *task)
+{
+    kdDebug()<<k_funcinfo<<endl;
+    clear();
+    if (!task)
+        return;
+    m_taskName->setText(task->name());
+    m_responsible->setText(task->leader());
+    QDateTime dt = QDateTime::currentDateTime();
+    m_costToDate->setText(KGlobal::locale()->formatMoney(task->plannedCost(dt)));
+    m_totalCost->setText(KGlobal::locale()->formatMoney(task->plannedCost()));
+    m_workToDate->setText(QString("%1").arg(task->plannedWork(dt)));
+    m_totalWork->setText(QString("%1").arg(task->plannedWork()));
+
+    KPTProject *p = dynamic_cast<KPTProject *>(task->projectNode());
+    if (!p) {
+        kdError()<<k_funcinfo<<"Task: '"<<task->name()<<"' has no project"<<endl;
+        return;
+    }
+    QPtrListIterator<KPTResourceGroup> it(p->resourceGroups());
+    for (; it.current(); ++it) {
+        QPtrListIterator<KPTResource> rit(it.current()->resources());
+        for (; rit.current(); ++rit) {
+            KPTResource *r = rit.current();
+            QPtrListIterator<KPTAppointment> ait(rit.current()->appointments());
+            for (; ait.current(); ++ait) {
+                if (ait.current()->task() == task) {
+                    QListViewItem *item = new QListViewItem(appList, r->name());
+                    item->setText(1, r->typeToString());
+                    item->setText(2, ait.current()->startTime().date().toString());
+                    item->setText(3, ait.current()->duration().toString(0));
+                    item->setText(4, KGlobal::locale()->formatMoney(r->normalRate()));
+                    item->setText(5, KGlobal::locale()->formatMoney(r->overtimeRate()));
+                    item->setText(6, KGlobal::locale()->formatMoney(r->fixedCost()));
+                }
+            }
+        }
+    }
+}
+
+KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
+    : QSplitter(parent, name),
+    m_mainview( view ),
+	m_currentItem(0),
+    m_taskView(0)
+{
+
+    setOrientation(QSplitter::Vertical);
+
+    m_gantt = new KDGanttView(this, "Gantt view");
+    m_gantt->setScale(KDGanttView::Day);
+    m_taskView = new KPTTaskAppointmentsView(this, "Task widget");
 	draw(view->getPart()->getProject());
 
-	connect(this, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )),
+
+	connect(m_gantt, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )),
 	             this, SLOT (popupMenuRequested(KDGanttViewItem *, const QPoint &, int)));
 
-	connect(this, SIGNAL(lvCurrentChanged(KDGanttViewItem*)), this, SLOT (currentItemChanged(KDGanttViewItem*)));
+	connect(m_gantt, SIGNAL(lvCurrentChanged(KDGanttViewItem*)), this, SLOT (currentItemChanged(KDGanttViewItem*)));
 
-	connect(this, SIGNAL(itemDoubleClicked(KDGanttViewItem*)), this, SLOT (slotItemDoubleClicked(KDGanttViewItem*)));
+	connect(m_gantt, SIGNAL(itemDoubleClicked(KDGanttViewItem*)), this, SLOT (slotItemDoubleClicked(KDGanttViewItem*)));
 
 }
 
@@ -69,19 +213,20 @@ void KPTGanttView::clear()
 	{
 		nit.current()->setGanttItem(0);
 	}
-	KDGanttView::clear();
+	m_gantt->clear();
+    m_taskView->clear();
 }
 
 void KPTGanttView::draw(KPTProject &project)
 {
     kdDebug()<<k_funcinfo<<endl;
-	setUpdateEnabled(false);
+	m_gantt->setUpdateEnabled(false);
 	clear();
 	KPTDuration *time;
 	KPTDuration *dur;
 
 	/* The root node is supposed to be hidden.
-	KDGanttViewSummaryItem *item = new KPTGanttViewSummaryItem(this, project);
+	KDGanttViewSummaryItem *item = new KPTGanttViewSummaryItem(m_gantt, project);
 	time = project.getStartTime();
 	dur = project.getExpectedDuration();
 	item->setStartTime(time->dateTime());
@@ -97,7 +242,7 @@ void KPTGanttView::draw(KPTProject &project)
 	// Relations
 	drawRelations(project);
 
-	setUpdateEnabled(true);
+	m_gantt->setUpdateEnabled(true);
 }
 
 
@@ -111,10 +256,13 @@ void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &par
 	        drawProject(parentItem, *n);
 		else if (n->type() == KPTNode::Type_Subproject)
 		    drawSubProject(parentItem, *n);
-		else if (n->type() == KPTNode::Type_Task)
-		    drawTask(parentItem, *n);
-		else if (n->type() == KPTNode::Type_Milestone)
-			drawMilestone(parentItem, *n);
+		else if (n->type() == KPTNode::Type_Task) {
+            KPTTask *t = dynamic_cast<KPTTask *>(n);
+		    drawTask(parentItem, t);
+        } else if (n->type() == KPTNode::Type_Milestone) {
+            KPTTask *t = dynamic_cast<KPTTask *>(n);
+			drawMilestone(parentItem, t);
+        }
 		else
 		    kdDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
 
@@ -131,7 +279,7 @@ void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode &node
 	}
 	else {
 		// we are on the top level
-		item = new KPTGanttViewSummaryItem(this, node);
+		item = new KPTGanttViewSummaryItem(m_gantt, node);
 	}
 
 	item->setStartTime(time->dateTime());
@@ -156,7 +304,7 @@ void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode &n
 	}
 	else {
 		// we are on the top level
-		item = new KPTGanttViewSummaryItem(this, node);
+		item = new KPTGanttViewSummaryItem(m_gantt, node);
 	}
 	item->setStartTime(time->dateTime());
 	time->add(dur);
@@ -170,49 +318,49 @@ void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode &n
 	delete dur;
 }
 
-void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTNode &node)
+void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 {
-	KPTDuration *time = node.getStartTime();
-	KPTDuration *dur = node.getExpectedDuration();
+	KPTDuration *time = task->getStartTime();
+	KPTDuration *dur = task->getExpectedDuration();
 	// display task item
 	KPTGanttViewTaskItem *item;
 	if ( parentItem ) {
-		item = new KPTGanttViewTaskItem(parentItem, node);
+		item = new KPTGanttViewTaskItem(parentItem, task);
 	}
 	else {
 		// we are on the top level
-		item = new KPTGanttViewTaskItem(this, node);
+		item = new KPTGanttViewTaskItem(m_gantt, task);
 	}
 	item->setStartTime(time->dateTime());
 	time->add(dur);
 	item->setEndTime(time->dateTime());
 	item->setOpen(true);
-    if (node.resourceOverbooked() || !node.resourceConflict().isEmpty()) {
+    if (task->resourceOverbooked() || task->resourceError()) {
         QColor c(yellow);
         item->setColors(c,c,c);
-        kdDebug()<<k_funcinfo<<"Task: "<<node.name()<<" has resource conflict: "<<node.resourceConflict()<<endl;
+        //kdDebug()<<k_funcinfo<<"Task: "<<task->name()<<" resourceError="<<task->resourceError()<<endl;
     }
-	node.setGanttItem(item);
+	task->setGanttItem(item);
 
 	delete time;
 	delete dur;
 }
 
-void KPTGanttView::drawMilestone(KDGanttViewSummaryItem *parentItem, KPTNode &node)
+void KPTGanttView::drawMilestone(KDGanttViewSummaryItem *parentItem, KPTTask *task)
 {
-	KPTDuration *time = node.getStartTime();
+	KPTDuration *time = task->getStartTime();
 	KPTGanttViewEventItem *item;
 	if ( parentItem ) {
-		item = new KPTGanttViewEventItem(parentItem, node);
+		item = new KPTGanttViewEventItem(parentItem, task);
 	}
 	else {
 		// we are on the top level
-		item = new KPTGanttViewEventItem(this, node);
+		item = new KPTGanttViewEventItem(m_gantt, task);
 	}
 	item->setStartTime(time->dateTime());
 	item->setLeadTime(time->dateTime().addDays(1));
 	item->setOpen(true);
-	node.setGanttItem(item);
+	task->setGanttItem(item);
 	delete time;
 }
 
@@ -225,7 +373,8 @@ void KPTGanttView::drawRelations(KPTNode &node)
 		if (node.ganttItem() && rel->child()->ganttItem())
 		{
 			kdDebug()<<k_funcinfo<<"Relations for node="<<node.name()<<" to "<<rel->child()->name()<<endl;
-			//KDGanttViewTaskLink *link = new KDGanttViewTaskLink(rel->child()->ganttItem(), node.ganttItem());
+			//FIXME: This doesn't work. Maybe bug in KDGantt, maybe wrong use
+            //KDGanttViewTaskLink *link = new KDGanttViewTaskLink(rel->child()->ganttItem(), node.ganttItem());
 		}
 	}
     // Then my children
@@ -234,12 +383,21 @@ void KPTGanttView::drawRelations(KPTNode &node)
 	{
 		drawRelations(*(nit.current()));
 	}
-	setShowTaskLinks(true);
+	m_gantt->setShowTaskLinks(true);
 }
 
 void KPTGanttView::currentItemChanged(KDGanttViewItem* item)
 {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_taskView->clear();
     m_currentItem = item;
+    KPTGanttViewTaskItem *taskItem = dynamic_cast<KPTGanttViewTaskItem *>(item);
+    if (taskItem)
+        m_taskView->draw(taskItem->getTask());
+
+    KPTGanttViewEventItem *msItem = dynamic_cast<KPTGanttViewEventItem *>(item);
+    if (msItem)
+        m_taskView->draw(msItem->getTask());
 }
 
 KPTNode *KPTGanttView::currentNode()
@@ -254,20 +412,20 @@ KPTNode *KPTGanttView::currentNode()
 	if (curr->type() == KDGanttViewItem::Summary)
 	{
 	    KPTGanttViewSummaryItem *item = (KPTGanttViewSummaryItem *)curr;
-		kdDebug()<<k_funcinfo<<"Summary item="<<item<<endl;
+		//kdDebug()<<k_funcinfo<<"Summary item="<<item<<endl;
 		return &(item->getNode());
 	}
 	else if (curr->type() == KDGanttViewItem::Task)
 	{
 		KPTGanttViewTaskItem *item = (KPTGanttViewTaskItem *)curr;
-		kdDebug()<<k_funcinfo<<"Task item="<<item<<endl;
-		return &(item->getNode());
+		//kdDebug()<<k_funcinfo<<"Task item="<<item<<endl;
+		return item->getTask();
 	}
 	else if (curr->type() == KDGanttViewItem::Event)
 	{
 		KPTGanttViewEventItem *item = (KPTGanttViewEventItem *)curr;
-		kdDebug()<<k_funcinfo<<"Event item="<<item<<endl;
-		return &(item->getNode());
+		//kdDebug()<<k_funcinfo<<"Event item="<<item<<endl;
+		return item->getTask();
 	}
 	kdDebug()<<k_funcinfo<<"No item="<<endl;
 	return 0;
@@ -279,7 +437,7 @@ void KPTGanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos
 	if (menu)
 	{
 		int id = menu->exec(pos);
-		kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+		//kdDebug()<<k_funcinfo<<"id="<<id<<endl;
 	}
 	else
 		kdDebug()<<k_funcinfo<<"No menu!"<<endl;
@@ -288,4 +446,5 @@ void KPTGanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos
 void KPTGanttView::slotItemDoubleClicked(KDGanttViewItem* item)
 {
 }
+
 #include "kptganttview.moc"

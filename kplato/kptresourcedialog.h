@@ -17,56 +17,51 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPTRESOURCEVIEW_H
-#define KPTRESOURCEVIEW_H
+#ifndef KPTRESOURCEDIALOG_H
+#define KPTRESOURCEDIALOG_H
 
-#include <qsplitter.h>
+#include "resourcedialogbase.h"
 
-class KPTView;
+#include <kdialogbase.h>
+
 class KPTProject;
 class KPTResource;
-class QLayout;
-class KDGanttView;
-class KDGanttViewItem;
-class QPoint;
-class QListView;
-class QListViewItem;
+class QTime;
+class QString;
 
-class KPTResourceGroup;
-class KPTResource;
-class ResourceItemPrivate;
-
- class KPTResourceView : public QSplitter
-{
+class KPTResourceDialogImpl : public ResourceDialogBase {
     Q_OBJECT
-
- public:
-
-    KPTResourceView( KPTView *view, QWidget *parent );
-
-    //~KPTResourceView();
-
-	void zoom(double zoom);
-
-    void draw(KPTProject &project);
-    KPTView *mainView();
-
-    KPTResource *currentResource();
+public:
+    KPTResourceDialogImpl (QWidget *parent);
 
 public slots:
-    void resSelectionChanged(QListViewItem *item);
-    void popupMenuRequested(QListViewItem * item, const QPoint & pos, int);
+    void slotChanged(const QString&);
+    void slotChanged(const QTime&);
+    void slotChanged(int);
+    void slotCalculationNeeded(const QString&);
+    void slotChooseResource();
+
+signals:
+    void changed();
+    void calculate();
+};
+
+class KPTResourceDialog : public KDialogBase {
+    Q_OBJECT
+public:
+    KPTResourceDialog(KPTResource &resource, QWidget *parent=0, const char *name=0);
+
+    bool calculationNeeded() {  return m_calculationNeeded; }
+
+protected slots:
+    void enableButtonOk();
+    void slotCalculationNeeded();
+    void slotOk();
 
 private:
-    void drawResources(QListViewItem *parent, KPTResourceGroup *group);
-    void drawAppointments(KPTResource *resource);
-
-	KPTView *m_mainview;
-    int m_defaultFontSize;
-
-    ResourceItemPrivate *m_selectedItem;
-    QListView *resList;
-    QListView *appList;
-
+    KPTResource &m_resource;
+    KPTResourceDialogImpl *dia;
+    bool m_calculationNeeded;
 };
- #endif
+
+#endif

@@ -20,6 +20,8 @@
 #ifndef kptduration_h
 #define kptduration_h
 
+#include <math.h>
+
 #include <qdatetime.h>
 
 class KPTDuration;
@@ -40,12 +42,16 @@ class KPTDuration {
 
         void add(KPTDuration time);
         void add(KPTDuration *time);
+        void addSecs(int secs) { m_theTime = m_theTime.addSecs(secs); }
+        void addDays(int days) { m_theTime = m_theTime.addDays(days); }
+        void addMonths(int months) { m_theTime = m_theTime.addMonths(months); }
+        void addYears(int years) { m_theTime = m_theTime.addYears(years); }
         void subtract(KPTDuration time);
         void subtract(KPTDuration *time);
         void const set(KPTDuration newTime);
         void const set(QDateTime newTime);
 
-        int duration() const { return zero.secsTo(m_theTime); }
+        int duration() const { return zero.secsTo(m_theTime); } // Note: this defies the use of QDateTime. We could just have used an int!
 
         bool   operator==( const KPTDuration &d ) const { return m_theTime == d.m_theTime; }
         bool   operator!=( const KPTDuration &d ) const { return m_theTime != d.m_theTime; }
@@ -56,10 +62,20 @@ class KPTDuration {
         KPTDuration &operator = ( const KPTDuration &d ) { set(d); return *this;}
 
         QString toString() const { return m_theTime.toString(); }
+        QString toString(int format) const { return QString("%1h").arg(hours()); } //FIXME
 
         QDateTime dateTime() const { return m_theTime; }
         QDate date() const { return m_theTime.date(); }
         QTime time() const { return m_theTime.time(); }
+
+        QTime timeDuration() const { return QTime(m_theTime.time().hour()-zero.time().hour(),
+                                                                 m_theTime.time().minute()-zero.time().minute(),
+                                                                 m_theTime.time().second()-zero.time().second());
+        }
+
+        int days() const { return zero.daysTo(m_theTime); }
+        int hours() const { return zero.secsTo(m_theTime) / 3600; }
+        int hoursTo(const QDateTime &dt) const { return m_theTime.secsTo(dt) / 3600; }
 
     /**
      * This is useful for occasions where we need a zero duration.
@@ -69,4 +85,5 @@ class KPTDuration {
     private:
         QDateTime zero, m_theTime;
 };
+
 #endif

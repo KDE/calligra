@@ -37,6 +37,11 @@ class KPTProject;
 class KPTTimeScale;
 class KPTPertCanvas;
 class KPTPertNodeItem;
+class KPTAppointment;
+
+class KPTResourceGroup;
+class KPTResource;
+class KPTResourceGroupRequest;
 
 class KDGanttViewItem;
 
@@ -79,10 +84,11 @@ public:
 	  Type_Task = 3,
 	  Type_Milestone = 4,
 	  Type_Periodic = 5,
-	  Type_TerminalNode = 6 // what do we need this for?
+	  Type_TerminalNode = 6, // what do we need this for?
+      Type_Summarytask = 7
     };
 
-    virtual int type() = 0;
+    virtual int type() const = 0;
 
     virtual KPTNode *projectNode();
 
@@ -90,8 +96,6 @@ public:
     virtual bool load(QDomElement &element) = 0;
     virtual void save(QDomElement &element)  = 0;
     virtual void saveRelations(QDomElement &element);
-
-    virtual bool openDialog(QPtrList<KPTResourceGroup> &) {return false;}
 
     // simple child node management
     // Child nodes are things like subtasks, basically a task can exists of
@@ -154,7 +158,6 @@ public:
 	int getRow(KPTNode *parent = 0);
 	int getColumn(KPTNode *parent = 0);
 
-    // These are calculated, or set manually if node is MustStartOn
     void setStartTime(KPTDuration startTime) { m_startTime=startTime; }
     const KPTDuration &startTime() const { return m_startTime; }
     void setEndTime(KPTDuration endTime) { m_endTime=endTime; }
@@ -174,7 +177,7 @@ public:
     const KPTDuration &actualEndTime() const { return m_actualEndTime; }
 
     void setEffort(KPTEffort* e) { m_effort = e; }
-    KPTEffort* effort() { return m_effort; }
+    KPTEffort* effort() const { return m_effort; }
 
      /**
      * Used for calculation of a project
@@ -238,26 +241,37 @@ public:
     void setDescription(const QString &d) { m_description = d; }
 
     virtual void setConstraint(KPTNode::ConstraintType type) { m_constraint = type; }
-    int constraint() { return m_constraint; }
+    void setConstraint(QString &type);
+    int constraint() const { return m_constraint; }
+    QString constraintToString() const;
 
     const KPTDuration& optimisticDuration(const KPTDuration &start);
     const KPTDuration& pessimisticDuration(const KPTDuration &start);
+    /**
+     * Calculates and returns the duration.
+     */
     virtual const KPTDuration& expectedDuration(const KPTDuration &start);
+    /**
+     * Returns the (previously) calculated duration.
+     * @see m_duration
+     */
+    const KPTDuration& expectedDuration() const;
 
 //    virtual void drawPert(KPTPertCanvas * /*view */, KPTNode * /*parent*/ = 0) {;}
 //    virtual void drawPertRelations(KPTPertCanvas* view);
 
-    virtual void setStartNotEarlier(KPTDuration time) { sneTime = time; }
-    virtual KPTDuration &startNotEarlier() { return sneTime; }
-    virtual void setFinishNotLater(KPTDuration time) { fnlTime = time; }
-    virtual KPTDuration &finishNotLater() { return fnlTime; }
-    virtual void setMustStartOn(KPTDuration time) { msoTime = time; }
-    virtual KPTDuration &mustStartOn() { return msoTime; }
+    virtual void setConstraintTime(KPTDuration time) { m_constraintTime = time; }
+    virtual void setConstraintTime(QDateTime time) { m_constraintTime = KPTDuration(time); }
+
+    virtual KPTDuration &constraintTime() { return m_constraintTime; }
+    virtual KPTDuration &startNotEarlier() { return m_constraintTime; }
+    virtual KPTDuration &finishNotLater() { return m_constraintTime; }
+    virtual KPTDuration &mustStartOn() { return m_constraintTime; }
 
     virtual void calculateStartEndTime() {}
     virtual void calculateStartEndTime(const KPTDuration &start) {}
 
-    virtual KPTResourceRequest *resourceRequest(KPTResourceGroup *group) const { return 0; }
+    virtual KPTResourceGroupRequest *resourceRequest(KPTResourceGroup *group) const { return 0; }
     virtual void makeAppointments() {}
     virtual void requestResources() const {}
 
@@ -276,7 +290,7 @@ public:
     int width();
 	bool allParentsDrawn();
 
-    QString &resourceConflict() { return m_resourceConflict; }
+    bool resourceError() { return m_resourceError; }
 
     virtual void setResourceOverbooked(bool on) { m_resourceOverbooked = on; }
     virtual bool resourceOverbooked() { return m_resourceOverbooked; }
@@ -284,6 +298,27 @@ public:
     void setId(int id) { m_id = id; }
     virtual int mapNode(KPTNode *node);
     virtual int mapNode(int id, KPTNode *node);
+
+    /**
+     * Planned cost is the sum total of all resources and other costs
+     * planned for this node.
+     */
+    virtual double plannedCost() { return 0; }
+    /**
+     * Planned cost to date is the sum of all resources and other costs
+     * planned for this node up to the date @dt
+     */
+    virtual double plannedCost(QDateTime &/*dt*/) { return 0; }
+    /**
+     * Actual cost is the sum total of the reported costs actually used
+     * for this node.
+     */
+    virtual double actualCost() { return 0; }
+    virtual int plannedWork() { return 0; }
+    virtual int plannedWork(QDateTime &/*dt*/) { return 0; }
+    virtual int actualWork() { return 0; }
+
+    virtual QPtrList<KPTAppointment> appointments(const KPTNode *node);
 
 protected:
     /**
@@ -397,17 +432,10 @@ protected:
     void calcDuration(const KPTDuration &start, const KPTDuration &effort);
 
     /**
-      * sneTime is entered by user if constraint StartNotEarlier is selected
+      * @m_constraintTime is used if any of the constraints
+      * StartNotEarlier, FinishNotLater or MustStartOn is selected
       */
-    KPTDuration sneTime;
-    /**
-      * fnTime is entered by user if constraint FinishNotLater is selected
-      */
-    KPTDuration fnlTime;
-    /**
-      * msoTime is entered by user if constraint MustStartOn is selected
-      */
-    KPTDuration msoTime;
+    KPTDuration m_constraintTime;
 
     /**  m_startTime is the calculated start time.
       *  It depends on constraints (i.e. ASAP/ALAP)
@@ -433,8 +461,7 @@ protected:
 	bool m_drawn;
 	KPTPertNodeItem *m_pertItem;
 
-    QString m_resourceConflict;
-
+    bool m_resourceError;
 
     int m_id; // unique id
 
@@ -443,6 +470,7 @@ protected:
     void init();
 
     bool m_resourceOverbooked;
+
 
 #ifndef NDEBUG
 public:
@@ -466,16 +494,46 @@ public:
     KPTEffort ( double e, double p = 0, double o = 0);
     ~KPTEffort();
 
-    const KPTDuration& optimistic() {return m_optimisticEffort;}
-    const KPTDuration& pessimistic() {return m_pessimisticEffort;}
-    const KPTDuration& expected() {return m_expectedEffort;}
+    enum Type { Type_WorkBased = 0,        // Changing amount of resources changes the task duration
+                          Type_FixedDuration = 1     // Changing amount of resources will not change the tasks duration
+     };
+     Type type() const { return m_type; }
+     void setType(Type type) { m_type = type; }
+     void setType(QString type);
+     QString typeToString() const;
+
+    const KPTDuration& optimistic() const {return m_optimisticEffort;}
+    const KPTDuration& pessimistic() const {return m_pessimisticEffort;}
+    const KPTDuration& expected() const {return m_expectedEffort;}
 
     void set( KPTDuration e, KPTDuration p = 0, KPTDuration o = 0 );
-
     void set( int e, int p = -1, int o = -1 );
+    void set(int weeks, int days, int hours, int minutes);
+    void expectedEffort(int *weeks, int *days, int *hours, int *minutes);
 
     bool load(QDomElement &element);
     void save(QDomElement &element) const;
+
+    /**
+     * Set the optimistic duration
+     * @percent should be a negativ value.
+     */
+    void setOptimistic(int percent) {}
+    /**
+     * Return the @optimistic duaration as deviation from @expected in percent.
+     * This should be a negativ value.
+     */
+    int optimisticRatio() { return -10; } // FIXME
+    /**
+     * Set the pessimistic duration
+     * @percent should be a positive value.
+     */
+    void setPessimistic() {}
+    /**
+     * Return the @pessimistic duaration as the deviation from @expected in percent.
+     * This should be a positive value.
+     */
+    int pessimisticRatio() { return 20; }  // FIXME
 
     /**
      * No effort.
@@ -486,6 +544,8 @@ private:
     KPTDuration m_optimisticEffort;
     KPTDuration m_pessimisticEffort;
     KPTDuration m_expectedEffort;
+
+    Type m_type;
 
 #ifndef NDEBUG
 public:

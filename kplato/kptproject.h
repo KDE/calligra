@@ -35,7 +35,7 @@
 class KPTPertCanvas;
 class QCanvas;
 
-#define DEBUGPERT
+//#define DEBUGPERT
 /**
  * KPTProject is the main node in a project, it contains child nodes and
  * possibly sub-projects. A sub-project is just another instantion of this
@@ -46,7 +46,7 @@ public:
     KPTProject(KPTNode *parent = 0);
     ~KPTProject();
 
-    virtual int type();
+    virtual int type() const;
 
     /**
      * Calculate the whole project
@@ -96,8 +96,6 @@ public:
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element) ;
 
-    virtual bool openDialog();
-
 //    virtual void drawPert(KPTPertCanvas *view, KPTNode *parent=0);
 
     KPTDuration getEarliestStart() const { return startNode.earliestStart; }
@@ -108,6 +106,8 @@ public:
     virtual void insertResourceGroup(unsigned int index, KPTResourceGroup *resource);
     void removeResourceGroup(KPTResourceGroup *resource);
     void removeResourceGroup(int number);
+
+    QPtrList<KPTAppointment> appointments(const KPTTask *task);
 
 	void addTask( KPTNode* task, KPTNode* position );
 	void addSubTask( KPTNode* task, KPTNode* position );
@@ -126,6 +126,21 @@ public:
 
     KPTResource *resource(int id);
     int resourceId() { return ++m_maxResourceId; }
+
+    /**
+     * Returns the total planned cost for this project
+     */
+    virtual double plannedCost();
+    /**
+     * Returns the planned cost for this project upto date @dt
+     */
+    virtual double plannedCost(QDateTime &dt);
+    /**
+     * Returns the actually reported cost for this project
+     */
+    virtual double actualCost();
+
+    QPtrList<KPTAppointment> appointments(const KPTNode *node);
 
 protected:
     /**

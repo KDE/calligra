@@ -60,4 +60,10 @@
         <Action name="move_task_up"/>
         <Action name="move_task_down"/>
     </Menu>
+    <Menu name="resource_popup">
+        <Action name="edit_resource"/>
+        <Action name="edit_cut"/>
+        <Action name="edit_copy"/>
+        <Action name="edit_paste"/>
+    </Menu>
 </kpartgui>

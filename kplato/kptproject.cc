@@ -31,6 +31,7 @@
 #include <qdatetime.h>
 #include <qbrush.h>
 #include <qcanvas.h>
+#include <qptrlist.h>
 
 #include <kdebug.h>
 
@@ -64,10 +65,10 @@ KPTProject::~KPTProject() {
     m_resourceGroups.clear();
 }
 
-int KPTProject::type() { return KPTNode::Type_Project; }
+int KPTProject::type() const { return KPTNode::Type_Project; }
 
 void KPTProject::calculate() {
-    kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_startTime.dateTime().toString()<<endl;
+    //kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_startTime.dateTime().toString()<<endl;
     // clear all resource appointments
     QPtrListIterator<KPTResourceGroup> git(m_resourceGroups);
     for ( ; git.current(); ++git ) {
@@ -100,10 +101,10 @@ void KPTProject::calculate() {
 }
 
 KPTDuration *KPTProject::getExpectedDuration() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     KPTDuration *ed = new KPTDuration(end_node()->getLatestFinish());
     ed->subtract(start_node()->getEarliestStart());
-    kdDebug()<<k_funcinfo<<"Project="<<name()<<" Duration="<<ed->dateTime().toString()<<endl;
+    //kdDebug()<<k_funcinfo<<"Project="<<name()<<" Duration="<<ed->dateTime().toString()<<endl;
     return ed;
 }
 
@@ -415,14 +416,6 @@ void KPTProject::save(QDomElement &element)  {
 }
 
 
-bool KPTProject::openDialog() {
-    kdDebug()<<k_funcinfo<<endl;
-    KPTProjectDialog *dialog = new KPTProjectDialog(*this);
-    bool ret = dialog->exec();
-    delete dialog;
-    return ret;
-}
-
 void KPTProject::pert_cpm() {
     std::list<KPTNode*> nodelist;
     /* Set initial time for nodes to project start */
@@ -450,35 +443,6 @@ void KPTProject::setStartTime(KPTDuration startTime) {
 }
 
 
-/*void KPTProject::drawPert(KPTPertCanvas *view, KPTNode *parent) {
-    kdDebug()<<k_funcinfo<<endl;
-	if (!m_drawn) {
-	    if (numDependChildNodes() == 0 &&
-		    numDependParentNodes() == 0)
-		{
-			int col = view->summaryColumn();
-			m_pertItem = new KPTPertProjectItem(view, *this, 0, col);
-			m_pertItem->show();
-			m_drawn = true;
-			kdDebug()<<k_funcinfo<<" draw project("<<0<<","<<col<<"): "<<m_name<<endl;
-			return;
-		}
-		if (!allParentsDrawn()) {
-			return;
-		}
-		int col = getColumn(parent);
-		int row = view->row(getRow(parent), col);
-		m_pertItem = new KPTPertTaskItem(view, *this, row, col);
-		m_pertItem->show();
-		m_drawn = true;
-		//kdDebug()<<k_funcinfo<<" draw ("<<row<<","<<col<<"): "<<m_name<<endl;
-	}
-	QPtrListIterator<KPTRelation> cit(m_dependChildNodes);
-	for ( ; cit.current(); ++cit ) {
-		cit.current()->child()->drawPert(view);
-	}
-}
-*/
 void KPTProject::addResourceGroup(KPTResourceGroup * group) {
     m_resourceGroups.append(group);
 }
@@ -734,6 +698,52 @@ KPTResource *KPTProject::resource(int id) {
     return 0;
 }
 
+double KPTProject::plannedCost() {
+    //kdDebug()<<k_funcinfo<<endl;
+    double c = 0;
+    QPtrListIterator<KPTNode> it(childNodeIterator());
+    for (; it.current(); ++it) {
+        c += it.current()->plannedCost();
+    }
+    return c;
+}
+
+double KPTProject::plannedCost(QDateTime &dt) {
+    //kdDebug()<<k_funcinfo<<endl;
+    double c = 0;
+    QPtrListIterator<KPTNode> it(childNodeIterator());
+    for (; it.current(); ++it) {
+        c += it.current()->plannedCost(dt);
+    }
+    return c;
+}
+
+double KPTProject::actualCost() {
+    //kdDebug()<<k_funcinfo<<endl;
+    double c = 0;
+    QPtrListIterator<KPTNode> it(childNodeIterator());
+    for (; it.current(); ++it) {
+        c += it.current()->actualCost();
+    }
+    return c;
+}
+
+QPtrList<KPTAppointment> KPTProject::appointments(const KPTNode *node) {
+    //kdDebug()<<k_funcinfo<<endl;
+    QPtrList<KPTAppointment> a;
+    QPtrListIterator<KPTResourceGroup> rit(m_resourceGroups);
+    for(; rit.current(); ++rit) {
+        // hmmm, isn't it a better way?
+        QPtrList<KPTAppointment> list = rit.current()->appointments(node);
+        QPtrListIterator<KPTAppointment> it(list);
+        for (; it.current(); ++it) {
+            //kdDebug()<<k_funcinfo<<"Adding appointment"<<endl;
+            a.append(it.current());
+        }
+    }
+    return a;
+}
+
 #ifndef NDEBUG
 void KPTProject::printDebug(bool children, QCString indent) {
 
@@ -748,5 +758,23 @@ void KPTProject::printDebug(bool children, QCString indent) {
         it.current()->printDebug(indent);
 
     KPTNode::printDebug(children, indent);
+
+/*    kdDebug()<<"--------------"<<endl;
+    KPTDateTime curr(QDateTime::currentDateTime());
+    KPTDateTime dt(QDateTime::currentDateTime());
+    kdDebug()<<indent<<"+ Test KPTDateTime: zero duration="<<KPTDuration::zeroDuration.toString()<<endl;
+    kdDebug()<<indent<<"+ Test KPTDateTime: current="<<dt.toString()<<endl;
+    KPTDuration dur(26,30);
+    dt.add(dur);
+    KPTDateTime kk(dt);
+    kdDebug()<<indent<<"+ Test KPTDateTime: current+26 timer, 30 min="<<dt.toString()<<endl;
+    KPTDuration aa(curr.duration(kk));
+    KPTDuration bb(kk.duration(curr)); // negativ
+    kdDebug()<<indent<<"+ Test KPTDateTime: duration="<<aa.toString()<<" ): days="<<(KPTDuration::zeroDuration.dateTime().daysTo(aa.dateTime()))<<" mins="<<(KPTDuration::zeroDuration.dateTime().secsTo(aa.dateTime())/60)<<" duration(secs)="<<aa.duration()<<endl;
+    kdDebug()<<indent<<"+ Test KPTDateTime: negativ="<<bb.toString()<<" ): days="<<(KPTDuration::zeroDuration.dateTime().daysTo(aa.dateTime()))<<" mins="<<(KPTDuration::zeroDuration.dateTime().secsTo(bb.dateTime())/60)<<" duration(secs)="<<bb.duration()<<endl;
+    dt.subtract(dur);
+    kdDebug()<<indent<<"+ Test KPTDateTime: træk fra igen="<<dt.toString()<<endl;
+
+    kdDebug()<<indent<<"+ Test KPTDateTime: 95400 sec="<<KPTDuration(95400).toString()<<" from zero="<<(KPTDuration::zeroDuration.dateTime().secsTo(KPTDuration(95400).dateTime()))<<endl;*/
 }
 #endif

@@ -21,12 +21,15 @@
 #include "kptfactory.h"
 #include "kptpart.h"
 #include "kptproject.h"
+#include "kptprojectdialog.h"
 #include "kpttask.h"
-//#include "kptmilestone.h"
+#include "kpttaskdialog.h"
 #include "kptganttview.h"
 #include "kptpertview.h"
 
 #include "kptresourceview.h"
+#include "kptresourcedialog.h"
+#include "kptresource.h"
 
 #include "kptcanvasitem.h"
 
@@ -142,6 +145,9 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     new KAction(i18n("Delete Task"), "delete_task", 0, this,
 		SLOT(slotDeleteTask()), actionCollection(), "delete_task");
 
+    new KAction(i18n("Edit resource"), "edit_resource", 0, this,
+		SLOT(slotEditResource()), actionCollection(), "edit_resource");
+
 
     // ------------------- Actions with a key binding and no GUI item
 #ifndef NDEBUG
@@ -207,8 +213,11 @@ void KPTView::slotViewResources() {
 }
 
 void KPTView::slotProjectEdit() {
-    if (getPart()->getProject().openDialog())
+    KPTProjectDialog *dia = new KPTProjectDialog(getPart()->getProject());
+    if (dia->exec())
 	    slotUpdate(true);
+
+    delete dia;
 }
 
 void KPTView::slotProjectCalculate() {
@@ -223,7 +232,8 @@ void KPTView::slotAddSubTask() {
 	// do is to add a first project. We will silently accept the challenge
 	// and will not complain.
     KPTTask* node = new KPTTask(currentTask());
-    if (node->openDialog(getProject().resourceGroups())) {
+    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().resourceGroups());
+    if (dia->exec()) {
 		KPTNode *currNode = currentTask();
 		if (currNode)
         {
@@ -236,12 +246,14 @@ void KPTView::slotAddSubTask() {
 		    kdDebug()<<k_funcinfo<<"Cannot insert new project. Hmm, no current node!?"<<endl;
 	}
     delete node;
+    delete dia;
 }
 
 
 void KPTView::slotAddTask() {
     KPTTask *node = new KPTTask(currentTask());
-    if (node->openDialog(getProject().resourceGroups())) {
+    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().resourceGroups());
+    if (dia->exec()) {
 		KPTNode* currNode = currentTask();
 		if (currNode)
         {
@@ -254,6 +266,7 @@ void KPTView::slotAddTask() {
 		    kdDebug()<<k_funcinfo<<"Cannot insert new task. Hmm, no current node!?"<<endl;
 	}
     delete node;
+    delete dia;
 }
 
 void KPTView::slotAddMilestone() {
@@ -264,7 +277,8 @@ void KPTView::slotAddMilestone() {
     //KPTMilestone *node = new KPTMilestone(currentTask());
     node->setName(i18n("Milestone"));
 
-    if (node->openDialog(getProject().resourceGroups())) {
+    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().resourceGroups());
+    if (dia->exec()) {
 		KPTNode *currNode = currentTask();
 		if (currNode)
         {
@@ -276,6 +290,7 @@ void KPTView::slotAddMilestone() {
 		    kdDebug()<<k_funcinfo<<"Cannot insert new milestone. Hmm, no current node!?"<<endl;
 	}
     delete node;
+    delete dia;
 }
 
  void KPTView::slotConfigure() {
@@ -299,23 +314,54 @@ KPTNode *KPTView::currentTask()
 
 void KPTView::slotOpenNode() {
     //kdDebug()<<k_funcinfo<<endl;
-	if (m_tab->visibleWidget() == m_ganttview)
-	{
-        KPTNode *node = m_ganttview->currentNode();
-        if (node) {
-		    if ( node->openDialog(getProject().resourceGroups()) ) {
-				slotUpdate(true);
-			}
-		}
-		return;
+    KPTNode *node = 0;
+	if (m_tab->visibleWidget() == m_ganttview) {
+        node = m_ganttview->currentNode();
+	} else if (m_tab->visibleWidget() == m_pertview) {
+	    node = m_pertview->currentNode();
 	}
-	if (m_tab->visibleWidget() == m_pertview)
-	{
-	    if ( m_pertview->currentNode()->openDialog(getProject().resourceGroups()) ) {
-			slotUpdate(true);
-		}
-		return;
-	}
+    if (!node)
+        return;
+
+    switch (node->type()) {
+        case KPTNode::Type_Project: {
+            KPTProject *project = dynamic_cast<KPTProject *>(node);
+            KPTProjectDialog *dia = new KPTProjectDialog(*project);
+            if (dia->exec())
+                slotUpdate(true);
+            delete dia;
+            break;
+        }
+        case KPTNode::Type_Subproject:
+            //TODO
+            break;
+        case KPTNode::Type_Task: {
+            KPTTask *task = dynamic_cast<KPTTask *>(node);
+            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().resourceGroups());
+            if (dia->exec())
+                slotUpdate(true);
+            delete dia;
+            break;
+        }
+        case KPTNode::Type_Milestone: {
+            // Use the normal task dialog for now.
+            // Maybe milestone should have it's own dialog, but we need to be able to
+            // enter a duration in case we accidentally set a tasks duration to zero
+            // and hence, create a milestone
+            KPTTask *task = dynamic_cast<KPTTask *>(node);
+            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().resourceGroups());
+            if (dia->exec())
+                slotUpdate(true);
+            delete dia;
+            break;
+        }
+        case KPTNode::Type_Summarytask: {
+            // TODO
+            break;
+        }
+        default:
+            break; // avoid warnings
+    }
 }
 
 void KPTView::slotDeleteTask()
@@ -401,7 +447,16 @@ void KPTView::slotMoveTaskDown()
 	slotUpdate(true);
 }
 
-
+void KPTView::slotEditResource() {
+    //kdDebug()<<k_funcinfo<<endl;
+    KPTResource *r = m_resourceview->currentResource();
+    if (!r)
+        return;
+    KPTResourceDialog *dia = new KPTResourceDialog(*r);
+    if (dia->exec())
+        slotUpdate(true); //FIXME: just refresh the view
+    delete dia;
+}
 
 void KPTView::updateReadWrite(bool /*readwrite*/) {
 }

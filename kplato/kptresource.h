@@ -20,9 +20,10 @@
 #ifndef KPTRESOURCE_H
 #define KPTRESOURCE_H
 
+#include "kptduration.h"
+
 #include <qdom.h>
 #include <qstring.h>
-#include "kptduration.h"
 #include <qptrlist.h>
 #include "defs.h"
 
@@ -33,6 +34,7 @@ class KPTTask;
 class KPTNode;
 class KPTResource;
 class KPTProject;
+class QTime;
 
 /**
   * This class represents a group of similar resources to be assigned to a task
@@ -42,7 +44,7 @@ class KPTProject;
 /* IDEA; lets create a resourceGroup that has the intelligence to import PIM schedules
  *  from the kroupware project and use the schedules to use the factory pattern to build
  *  KPTResources (probably a derived class) which returns values on getFirstAvailableTime
- *  and friends based on the schedules we got from the PIM projects. 
+ *  and friends based on the schedules we got from the PIM projects.
  *  (Thomas Zander mrt-2003 by suggestion of Shaheed)
  */
 class KPTResourceGroup {
@@ -53,7 +55,7 @@ class KPTResourceGroup {
           int id() { return m_id; }
 	      void setName(QString n) {m_name=n;}
 	      const QString &name() const {return m_name;}
-	
+
 	      /** Manage the resources in this list
 	        * <p>At some point we will have to look at not mixing types of resources
 	        * (e.g. you can't add a person to a list of computers
@@ -92,11 +94,16 @@ class KPTResourceGroup {
 	        */
 	      void removeRequiredResource(int);
 
+          int numResources() const { return m_resources.count(); }
           QPtrList<KPTResource> &resources() { return m_resources; }
 
           bool load(QDomElement &element);
           void save(QDomElement &element);
 
+        /**
+         * Return a list of appointments made for the @task
+         */
+          QPtrList<KPTAppointment> appointments(const KPTNode *node) const;
           void clearAppointments();
           void makeAppointments();
           void saveAppointments(QDomElement &element) const;
@@ -132,19 +139,30 @@ class KPTResource {
     public:
 
         KPTResource(KPTProject *project);
+        KPTResource(KPTResource *resource) { copy(resource); }
         ~KPTResource();
 
         int id() { return m_id; }
 
-	   void setName(QString n) {m_name=n;}
-	   const QString &name() const {return m_name;}
+        enum Type { Type_Work, Type_Material };
+        void setType(Type type) { m_type = type; }
+        void setType(const QString &type);
+        Type type() const { return m_type; }
+        QString typeToString() const;
 
-        void setAvailableFrom(KPTDuration af) {m_availableFrom=af;}
-        const KPTDuration &availableFrom() const {return m_availableFrom;}
-        void setAvailableUntil(KPTDuration au) {m_availableUntil=au;}
-        const KPTDuration &availableUntil() const {return m_availableUntil;}
+	    void setName(QString n) {m_name=n;}
+	    const QString &name() const {return m_name;}
 
-        void addWorkingHour(KPTDuration from, KPTDuration until);
+        void copy(KPTResource *resource);
+
+        //TODO: calendar stuff
+        void setAvailableFrom(QTime af) {m_availableFrom=af;}
+        const QTime &availableFrom() const {return m_availableFrom;}
+        void setAvailableUntil(QTime au) {m_availableUntil=au;}
+        const QTime &availableUntil() const {return m_availableUntil;}
+
+        void addWorkingHour(QTime from, QTime until);
+        QPtrList<QTime> workingHours() { return m_workingHours; }
 
         KPTDuration *getFirstAvailableTime(KPTDuration after = KPTDuration());
         KPTDuration *getBestAvailableTime(KPTDuration duration);
@@ -154,6 +172,10 @@ class KPTResource {
         void save(QDomElement &element);
 
         QPtrList<KPTAppointment> &appointments() { return m_appointments; }
+        /**
+         * Return a list of appointments made for the @task
+         */
+        QPtrList<KPTAppointment> appointments(const KPTNode *node) const;
 
         bool isAvailable(KPTTask *task);
         void addAppointment(KPTAppointment *a);
@@ -164,19 +186,48 @@ class KPTResource {
         void setOverbooked(bool on) { m_overbooked = on; }
         bool isOverbooked() { return m_overbooked; }
 
+        double normalRate() const { return cost.normalRate; }
+        void setNormalRate(double rate) { cost.normalRate = rate; }
+        double overtimeRate() const { return cost.overtimeRate; }
+        void setOvertimeRate(double rate) { cost.overtimeRate = rate; }
+        double fixedCost() const { return cost.fixed; }
+        void setFixedCost(double value) { cost.fixed = value; }
+
+        /**
+         * Return availbale units in percent
+         */
+        int units() const { return m_units; }
+        /**
+         * Set availbale units in percent
+         */
+        void setUnits(int units) { m_units = units; }
+
+        KPTProject *project() { return m_project; }
+
+    private:
+        KPTProject *m_project;
+        QPtrList<KPTAppointment> m_appointments; // TODO: Move appointments to KPTProject ????
+        int m_id; // unique id
+        QString m_name;
+        QTime m_availableFrom;
+        QTime m_availableUntil;
+        QPtrList<QTime> m_workingHours;
+
+        int m_units; // avalable units in percent
+        bool m_overbooked;
+
+        Type m_type;
+
+        struct Cost {
+            double normalRate;
+            double overtimeRate;
+            double fixed;
+        } cost;
+
+public:
 #ifndef NDEBUG
         void printDebug(QString ident);
 #endif
-    private:
-        KPTProject *m_project;
-        QPtrList<KPTAppointment> m_appointments;
-        int m_id; // unique id
-        QString m_name;
-        KPTDuration m_availableFrom;
-        KPTDuration m_availableUntil;
-        QPtrList<KPTDuration> m_workingHours;
-
-        bool m_overbooked;
 };
 
 /**
@@ -196,13 +247,16 @@ class KPTAppointment {
         const KPTDuration &duration() const { return m_duration; }
         void setDuration(KPTDuration d) { m_duration=d; }
 
-        KPTTask *task() { return m_task; }
+        KPTTask *task() const { return m_task; }
         void setTask(KPTTask *t) { m_task = t; }
+
+        KPTResource *resource() const { return m_resource; }
+        void setResource(KPTResource *r) { m_resource = r; }
 
         const KPTDuration &repeatInterval() const {return m_repeatInterval;}
         void setRepeatInterval(KPTDuration ri) {m_repeatInterval=ri;}
 
-        int repeatCount() { return m_repeatCount; }
+        int repeatCount() const { return m_repeatCount; }
         void setRepeatCount(int rc) { m_repeatCount=rc; }
 
         void deleteAppointmentFromRepeatList(KPTDuration time);
@@ -260,19 +314,53 @@ class KPTRisk {
 
 class KPTResourceRequest {
     public:
-        KPTResourceRequest(KPTResourceGroup *group=0, int numResources=0)
-        : m_group(group),
-          m_numResources(numResources) {}
+        KPTResourceRequest(KPTResource *resource=0, int units = 1);
+
+        ~KPTResourceRequest();
+
+        KPTResource *resource() { return m_resource; }
+        int units() const { return m_units; }
+
+        bool load(QDomElement &element, KPTProject *project);
+        void save(QDomElement &element);
+
+    private:
+        KPTResource *m_resource;
+        int m_units;
+
+#ifndef NDEBUG
+public:
+        void printDebug(QString ident);
+#endif
+};
+
+class KPTResourceGroupRequest {
+    public:
+        KPTResourceGroupRequest(KPTResourceGroup *group=0, int numResources=0);
+        ~KPTResourceGroupRequest();
 
         KPTResourceGroup *group() { return m_group; }
-        int numResources() { return m_numResources; }
+        QPtrList<KPTResourceRequest> &resourceRequests() { return m_resourceRequests; }
+        int units() { return m_units; }
+        int numResources() { return m_units + m_resourceRequests.count(); }
+        void addResourceRequest(KPTResourceRequest *request) { m_resourceRequests.append(request); }
+        void removeResourceRequest(KPTResourceRequest *request) { m_resourceRequests.remove(request); }
+        KPTResourceRequest *find(KPTResource *resource) const;
 
-        virtual bool load(QDomElement &element, KPTProject *project);
-        virtual void save(QDomElement &element);
+        bool load(QDomElement &element, KPTProject *project);
+        void save(QDomElement &element);
 
     private:
         KPTResourceGroup *m_group;
-        int m_numResources;
+        int m_units;
+
+        QPtrList<KPTResourceRequest> m_resourceRequests;
+
+
+#ifndef NDEBUG
+public:
+        void printDebug(QString ident);
+#endif
 };
 
 #endif
