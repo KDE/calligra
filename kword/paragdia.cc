@@ -1362,7 +1362,7 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, double fram
     grid->addWidget( lTab, 0, 0 );
 
     eTabPos = new QLineEdit( this );
-    QString lenght;
+    QString length;
     if(frameWidth==-1)
     {
         frameWidth=9999;
@@ -1370,14 +1370,13 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, double fram
     else
     {
         frameWidth=KWUnit::userValue(frameWidth,m_unit);
-        lenght=i18n("\nFrame width : %1").arg(frameWidth);
-
+        length=i18n("\nFrame width : %1").arg(frameWidth);
     }
     eTabPos->setValidator( new KFloatValidator( 0,frameWidth,eTabPos ) );
     grid->addWidget( eTabPos, 1, 0 );
 
     QString unitDescription = KWUnit::unitDescription( m_unit );
-    lTab->setText(i18n( "1 is a unit name", "Tabulator positions are given in %1").arg(unitDescription)+lenght);
+    lTab->setText(i18n( "1 is a unit name", "Tabulator positions are given in %1").arg(unitDescription)+length);
 
     KButtonBox * bbTabs = new KButtonBox( this );
     bAdd = bbTabs->addButton( i18n( "Add" ), false );
