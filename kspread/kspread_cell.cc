@@ -769,7 +769,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         double max_width = dblWidth( _col );
         bool ende = false;
         int c;
-        m_pQML->setWidth( &_painter, max_width );
+        m_pQML->setWidth( &_painter, (int)max_width );
         for( c = _col + 1; !ende && c <= _col + 10; ++c )
         {
             KSpreadCell *cell = m_pTable->cellAt( c, _row );
@@ -1183,7 +1183,7 @@ void KSpreadCell::setOutputText()
   // Turn the stored value in a string
   //
 
-  if ( isFormula() && m_pTable->getShowFormula() 
+  if ( isFormula() && m_pTable->getShowFormula()
        && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) )
   {
     m_strOutText = m_strText;
@@ -1569,14 +1569,14 @@ void KSpreadCell::textSize( QPainter &_paint )
     // Rotated text ?
     else if( tmpAngle!= 0 )
     {
-        m_dOutTextHeight = m_pTable->doc()->unzoomItY( cos( tmpAngle * M_PI / 180 ) *
-                                                          ( fm.ascent() + fm.descent() ) +
-                                                       abs( (int)( fm.width( m_strOutText ) *
-                                                          sin( tmpAngle * M_PI / 180 ) ) ) );
-        m_dOutTextWidth = m_pTable->doc()->unzoomItX( abs( (int)( sin( tmpAngle * M_PI / 180 ) *
-                                                         ( fm.ascent() + fm.descent() ) ) ) +
-                                                      fm.width( m_strOutText ) *
-                                                      cos ( tmpAngle * M_PI / 180 ) );
+        m_dOutTextHeight = m_pTable->doc()->unzoomItY( int( cos( tmpAngle * M_PI / 180 ) *
+                                                            ( fm.ascent() + fm.descent() ) +
+                                                       abs( int( ( fm.width( m_strOutText ) *
+                                                          sin( tmpAngle * M_PI / 180 ) ) ) ) ) );
+        m_dOutTextWidth = m_pTable->doc()->unzoomItX( int( abs( int( ( sin( tmpAngle * M_PI / 180 ) *
+                                                                     ( fm.ascent() + fm.descent() ) ) ) ) +
+                                                           fm.width( m_strOutText ) *
+                                                           cos ( tmpAngle * M_PI / 180 ) ) );
         //kdDebug(36001)<<"m_dOutTextWidth"<<m_dOutTextWidth<<"m_dOutTextHeight"<<m_dOutTextHeight<<endl;
     }
     // Vertical text ?
@@ -1597,8 +1597,8 @@ void KSpreadCell::applyZoomedFont( QPainter &painter, int _col, int _row )
     KSpreadConditional condition;
 
     QFont tmpFont;
-    if ( m_conditions && m_conditions->currentCondition( condition ) 
-         && !(m_pTable->getShowFormula() 
+    if ( m_conditions && m_conditions->currentCondition( condition )
+         && !(m_pTable->getShowFormula()
               && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) ) )
     {
         if ( condition.fontcond )
@@ -2010,21 +2010,23 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
   /**
    * QML ?
    */
-    if ( m_pQML 
+    if ( m_pQML
          && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(), cellRef.y() ) )
          && !( m_pTable->isProtected() && isHideAll( cellRef.x(), cellRef.y() ) ) )
     {
+      KSpreadDoc* doc = table()->doc();
       painter.save();
-      m_pQML->draw( &painter, cellRect.x(), cellRect.y(),
-                    QRegion( QRect( cellRect.x(),     cellRect.y(),
-                                    cellRect.width(), cellRect.height() ) ),
+      m_pQML->draw( &painter,
+                    doc->zoomItX( cellRect.x() ), doc->zoomItY( cellRect.y() ),
+                    QRegion( doc->zoomRect( KoRect( cellRect.x(),     cellRect.y(),
+                                                    cellRect.width(), cellRect.height() ) ) ),
                     QApplication::palette().active(), 0 );
       painter.restore();
     }
     /**
      * Usual Text
      */
-    else if ( !m_strOutText.isEmpty() 
+    else if ( !m_strOutText.isEmpty()
               && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(), cellRef.y() ) )
               && !( m_pTable->isProtected() && isHideAll( cellRef.x(), cellRef.y() ) ) )
     {
@@ -2077,8 +2079,7 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
         painter.save();
 
         obscuringCell->paintCell( rect, painter, view,
-                                  corner, obscuringCellRef,
-                                  paintBorderRight, paintBorderBottom );
+                                  corner, obscuringCellRef, true, true );
         painter.restore();
       }
     }
@@ -2414,7 +2415,7 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
 void KSpreadCell::paintCommentIndicator( QPainter& painter,
                                          const KoRect &cellRect,
-                                         const QPoint &cellRef,
+                                         const QPoint &/*cellRef*/,
                                          QColor &backgroundColor )
 {
   KSpreadDoc * doc = table()->doc();
@@ -2423,7 +2424,7 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
   // to this cell.
   if ( ( m_mask & (uint) PComment )
        && cellRect.width() > 10.0
-       && cellRect.height() > 10.0 
+       && cellRect.height() > 10.0
        && ( table()->print()->printCommentIndicator()
             || ( !painter.device()->isExtDev() && doc->getShowCommentIndicator() ) ) )
   {
@@ -2550,8 +2551,8 @@ void KSpreadCell::paintText( QPainter& painter,
   //Check for red font color for negativ values
   if ( !m_conditions || !m_conditions->currentCondition( condition ) )
   {
-    if ( m_value.isNumber() 
-         && !( m_pTable->getShowFormula() 
+    if ( m_value.isNumber()
+         && !( m_pTable->getShowFormula()
                && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) ) )
     {
       double v = m_value.asFloat() * factor(column(),row());
@@ -2898,7 +2899,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     {
       painter.drawLine( QMAX( doc->zoomItX( rect.left() ), doc->zoomItX( cellRect.right() ) ),
                         QMAX( doc->zoomItY( rect.top() ), doc->zoomItY( cellRect.y() ) - top ),
-                        QMIN( doc->zoomItX( rect.right() ), doc->zoomItX( cellRect.right() ) ), 
+                        QMIN( doc->zoomItX( rect.right() ), doc->zoomItX( cellRect.right() ) ),
                         QMIN( doc->zoomItY( rect.bottom() ), doc->zoomItY( cellRect.bottom() ) + bottom ) );
     }
     else
@@ -2938,7 +2939,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() )
     {
-      painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.x() ) ), 
+      painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.x() ) ),
                         doc->zoomItY( QMAX( rect.top(),    cellRect.bottom() ) ),
                         doc->zoomItX( QMIN( rect.right(),  cellRect.right() ) ),
                         doc->zoomItY( QMIN( rect.bottom(), cellRect.bottom() ) ) );
@@ -3252,7 +3253,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
          }
        }
      }
-     if ( m_pTable->doc()->unzoomItX( fm.width( localizedNumber ) ) < w 
+     if ( m_pTable->doc()->unzoomItX( fm.width( localizedNumber ) ) < w
           && !( m_pTable->getShowFormula() && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) ) )
      {
        return localizedNumber;
@@ -3552,12 +3553,12 @@ void KSpreadCell::setDate( QString const & dateString )
 {
   clearAllErrors();
   clearFormula();
-  
+
   delete m_pQML;
   m_pQML = 0L;
   m_content = Text;
   QString str( dateString );
-  
+
   if ( tryParseDate( dateString ) )
   {
     FormatType tmpFormat = formatType();
@@ -3579,7 +3580,7 @@ void KSpreadCell::setDate( QString const & dateString )
     if (m_pTable->getFirstLetterUpper() && !m_strText.isEmpty())
     {
         str = m_value.asString();
-        m_value.setValue( KSpreadValue( str[0].upper() 
+        m_value.setValue( KSpreadValue( str[0].upper()
                                         + str.right( str.length() - 1 ) ) );
     }
   }
@@ -3594,11 +3595,11 @@ void KSpreadCell::setDate( QDate const & date )
 {
   clearAllErrors();
   clearFormula();
-  
+
   delete m_pQML;
   m_pQML = 0L;
   m_content = Text;
-  
+
   m_value.setValue( KSpreadValue( date ) );
   m_strText = locale()->formatDate( date, true );
   setFlag( Flag_LayoutDirty );
@@ -3611,11 +3612,11 @@ void KSpreadCell::setNumber( double number )
 {
   clearAllErrors();
   clearFormula();
-  
+
   delete m_pQML;
   m_pQML = 0L;
   m_content = Text;
-  
+
   m_value.setValue( KSpreadValue( number ) );
   m_strText.setNum( number );
   setFlag( Flag_LayoutDirty );
@@ -3639,7 +3640,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool as
 
       delete m_pQML;
       m_pQML = 0L;
-      
+
       m_strOutText = ctext;
       m_strText    = ctext;
       m_value.setValue( KSpreadValue( ctext ) );
@@ -3963,7 +3964,7 @@ bool KSpreadCell::isDate() const
 {
   FormatType ft = formatType();
   // workaround, since date/time is stored as floating-point
-  return m_value.isNumber() 
+  return m_value.isNumber()
     &&  ( ft == ShortDate || ft == TextDate || ( (ft >= date_format1) && (ft <= date_format26) ) );
 }
 
@@ -3972,7 +3973,7 @@ bool KSpreadCell::isTime() const
   FormatType ft = formatType();
 
   // workaround, since date/time is stored as floating-point
-  return m_value.isNumber() 
+  return m_value.isNumber()
     && ( ( (ft >= Time) && (ft <= Time_format8) ) );
 }
 
@@ -4383,7 +4384,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
     if ( m_conditions )
     {
       QDomElement conditionElement = m_conditions->saveConditions( doc );
-      
+
       if ( !conditionElement.isNull() )
         cell.appendChild( conditionElement );
     }
@@ -4540,7 +4541,7 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
   return true; /* really isn't much of a way for this function to fail */
 }
 
-bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift, 
+bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
                         PasteMode pm, Operation op, bool paste )
 {
     bool ok;
@@ -4740,7 +4741,7 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
 
         if ( result.hasAttribute( "dataType" ) )
           dataType = result.attribute( "dataType" );
-        if ( result.hasAttribute( "outStr" ) ) 
+        if ( result.hasAttribute( "outStr" ) )
         {
           m_strOutText = result.attribute( "outStr" );
           if ( !m_strOutText.isEmpty() )
@@ -4771,7 +4772,7 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
         {
           bool ok = false;
           double d = t.toDouble( &ok );
-          if ( ok )          
+          if ( ok )
             m_value.setValue ( d );
           else
           {
@@ -4791,7 +4792,7 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
         {
           bool ok = false;
           double d = t.toDouble( &ok );
-          if ( ok )          
+          if ( ok )
             m_value.setValue( d );
           else
           {
@@ -4956,7 +4957,7 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
         if ( valueDate().isValid() ) // Should always be the case for new docs
           m_strText = locale()->formatDate( valueDate(), true );
         else // This happens with old docs, when format is set wrongly to date
-        { 
+        {
           m_strText = pasteOperation( t, m_strText, op );
           checkTextInput();
         }
