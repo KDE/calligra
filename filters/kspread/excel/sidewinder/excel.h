@@ -529,7 +529,13 @@ public:
   unsigned xfIndex() const;
   
   unsigned width() const;
+  
+  bool hidden() const;
 
+  bool collapsed() const;
+  
+  unsigned outlineLevel() const;
+  
   /**
    \reimpl
    */

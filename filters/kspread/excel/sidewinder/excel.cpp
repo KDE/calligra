@@ -966,6 +966,9 @@ class ColInfoRecord::Private
 public:
   unsigned width;
   unsigned xfIndex;
+  bool hidden;
+  bool collapsed;
+  unsigned outlineLevel;
 };
 
 ColInfoRecord::ColInfoRecord():
@@ -989,6 +992,21 @@ unsigned ColInfoRecord::xfIndex() const
   return d->xfIndex;
 }
 
+bool ColInfoRecord::hidden() const
+{
+  return d->hidden;
+}
+
+bool ColInfoRecord::collapsed() const
+{
+  return d->collapsed;
+}
+
+unsigned ColInfoRecord::outlineLevel() const
+{
+  return d->outlineLevel;
+}
+
 void ColInfoRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 10 ) return;
@@ -997,6 +1015,11 @@ void ColInfoRecord::setData( unsigned size, const unsigned char* data )
   setLastColumn( readU16( data+2 ) );
   d->width = readU16( data+4 );
   d->xfIndex = readU16( data+6 );
+  
+  unsigned options = readU16( data+8 );
+  d->hidden = ( options & 1 );
+  d->collapsed = ( options & 0x1000 );
+  d->outlineLevel = ( options >> 8 ) & 7;
 }
 
 void ColInfoRecord::dump( std::ostream& out ) const
