@@ -22,12 +22,21 @@ public:
 	// draw the object while it is edited:
 	void drawTemporaryObject();
 
+protected:
+	void setCursor( const QPoint & ) const;
+
 private:
 	enum { normal, moving, scaling, rotating } m_state;
+
+	double m_s1;
+	double m_s2;
+	KoPoint m_sp;
 
 	// input (mouse coordinates):
 	KoPoint m_fp;
 	KoPoint m_lp;
+
+	VHandleNode m_activeNode;
 
 	bool m_isDragging;
 };
