@@ -1569,9 +1569,12 @@ void RTFImport::addLayout( DomNode &node, QCString &name, RTFLayout &layout, boo
 	for (uint i=0; i < layout.tablist.count(); i++)
 	{
 	    RTFTab &tab = layout.tablist[i];
+	    int l = (int)tab.leader;
 	    node.addNode( "TABULATOR" );
 	      node.setAttribute( "type", tab.type );
 	      node.setAttribute( "ptpos", .05*tab.position );
+	      node.setAttribute( "filling", (l < 2) ? l : ((l == 2) ? 1 : 2) );
+	      node.setAttribute( "width", (l == 4) ? 1. : 0.5 );
 	    node.closeNode( "TABULATOR" );
 	}
     }
