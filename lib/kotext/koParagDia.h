@@ -198,13 +198,11 @@ private:
     KoBorderPreview *prev3;
 };
 
-/**
- * The widget for editing counters (bullets & numbering) (tab 4)
- */
-class KoParagCounterWidget : public KoParagLayoutWidget
+class KoCounterStyleWidget : public QWidget
 {
     Q_OBJECT
 public:
+    KoCounterStyleWidget( bool displayDepth= true, QWidget* parent = 0, const char* name = 0 );
 
     class StyleRepresenter {
         public:
@@ -223,6 +221,50 @@ public:
             bool m_bullet;
     };
 
+    static void makeCounterRepresenterList( QPtrList<StyleRepresenter>& stylesList );
+    void fillStyleCombo(KoParagCounter::Numbering type = KoParagCounter::NUM_LIST);
+    void display( const KoParagLayout & lay );
+    void changeKWSpinboxType(KoParagCounter::Style st);
+public slots:
+    void numTypeChanged( int nType );
+signals:
+    void sig_startChanged( int );
+    void sig_depthChanged(int);
+    void sig_suffixChanged(const QString &);
+    void sig_prefixChanged(const QString &);
+    void sig_numTypeChanged( int );
+    void changeCustomBullet( const QString & , QChar );
+    void changeStyle( KoParagCounter::Style );
+protected slots:
+    void startChanged(int i) {emit sig_startChanged(i);}
+    void depthChanged(int i) {emit sig_depthChanged(i);}
+    void suffixChanged(const QString & txt) {emit sig_suffixChanged(txt); }
+    void prefixChanged(const QString & txt) {emit sig_prefixChanged(txt); }
+    void numStyleChanged();
+    void selectCustomBullet();
+private:
+    QGroupBox *gStyle;
+    QPtrList <StyleRepresenter> stylesList;
+    QListBox *lstStyle;
+    KoParagCounter m_counter;
+    QLineEdit *sSuffix, *sPrefix;
+    QPushButton *bCustom;
+    KoSpinBox *spnStart;
+    QSpinBox *spnDepth;
+    QLabel *lStart;
+    QLabel *lCustom;
+    unsigned int styleBuffer;
+    bool noSignals;
+};
+
+/**
+ * The widget for editing counters (bullets & numbering) (tab 4)
+ */
+class KoParagCounterWidget : public KoParagLayoutWidget
+{
+    Q_OBJECT
+public:
+
     KoParagCounterWidget( QWidget * parent, const char * name = 0 );
     virtual ~KoParagCounterWidget() {}
 
@@ -233,36 +275,25 @@ public:
 
     const KoParagCounter & counter() const { return m_counter; }
 
-    static void makeCounterRepresenterList( QPtrList<StyleRepresenter>& stylesList );
-
 protected slots:
-    void selectCustomBullet();
-    void numStyleChanged(); // selected another style from the combobox
+    //void selectCustomBullet();
+    //void numStyleChanged(); // selected another style from the combobox
     void numTypeChanged( int );  // selected another type radiobutton.
 
-    void changeKWSpinboxType();
     void suffixChanged(const QString & txt) {m_counter.setSuffix(txt); updatePreview(); }
     void prefixChanged(const QString & txt) {m_counter.setPrefix(txt);  updatePreview();}
     void startChanged(int i) {m_counter.setStartNumber(i);  updatePreview();}
     void depthChanged(int i) {m_counter.setDepth(i);  updatePreview();}
+    void slotChangeCustomBullet( const QString & f, QChar c);
+    void styleChanged (KoParagCounter::Style st );
 
 private:
     void updatePreview();
-    QPtrList <StyleRepresenter> stylesList;
-    void fillStyleCombo(KoParagCounter::Numbering type = KoParagCounter::NUM_LIST);
 
-    QGroupBox *gStyle;
     QButtonGroup *gNumbering;
-    QListBox *lstStyle;
     KoParagCounter m_counter;
-    QLineEdit *sSuffix, *sPrefix;
-    QPushButton *bCustom;
-    KoSpinBox *spnStart;
-    QSpinBox *spnDepth;
-    QLabel *lStart;
-    QLabel *lCustom;
     KoStylePreview *preview;
-
+    KoCounterStyleWidget *m_styleWidget;
     unsigned int styleBuffer;
     bool noSignals;
 };

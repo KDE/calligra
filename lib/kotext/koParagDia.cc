@@ -38,6 +38,238 @@
 #include <knumvalidator.h>
 #include <kozoomhandler.h>
 #include <koGlobal.h>
+#include <qgroupbox.h>
+
+KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, QWidget * parent, const char* name  )
+    :QWidget( parent, name ),
+    stylesList()
+{
+    QVBoxLayout *vbox = new QVBoxLayout( this,KDialog::marginHint(), KDialog::spacingHint() );
+    gStyle = new QGroupBox( this, "styleLayout" );
+    gStyle->setTitle( i18n( "Style" ) );
+    vbox->addWidget( gStyle);
+    QGridLayout * grid = new QGridLayout(gStyle, 12, 5, 2*KDialog::marginHint(), 2*KDialog::spacingHint());
+
+    makeCounterRepresenterList( stylesList );
+
+    lstStyle = new QListBox( gStyle, "styleListBox" );
+    grid->addMultiCellWidget( lstStyle, 0, 11, 0, 0);
+    fillStyleCombo();
+    connect( lstStyle, SIGNAL( selectionChanged() ), this, SLOT( numStyleChanged() ) );
+
+
+    QLabel *lPrefix = new QLabel( gStyle, "lPrefix" );
+    lPrefix->setText( i18n( "Prefix Text" ) );
+    grid->addWidget( lPrefix, 0, 1);
+
+    sPrefix = new QLineEdit( gStyle, "sPrefix" );
+    grid->addWidget( sPrefix, 0, 2);
+
+    QLabel *lSuffix = new QLabel( gStyle, "lSuffix" );
+    lSuffix->setText( i18n( "Suffix Text" ) );
+    grid->addWidget( lSuffix, 0, 3);
+
+    sSuffix = new QLineEdit( gStyle, "sSuffix" );
+    grid->addWidget( sSuffix, 0, 4);
+
+    bCustom = new QPushButton( gStyle, "bCustom" );
+    bCustom->setText("");
+    grid->addWidget( bCustom, 3, 2);
+    connect( bCustom, SIGNAL( clicked() ), this, SLOT( selectCustomBullet() ) );
+
+    lStart = new QLabel( gStyle, "lStart" );
+    lStart->setText( i18n( "Start at" ) );
+    grid->addWidget( lStart, 1, 1);
+
+
+    spnDepth = new QSpinBox( 0, 15, 1, gStyle );
+    grid->addWidget( spnDepth, 1, 2);
+
+    if ( ! displayDepth )
+        spnDepth->hide();
+    lCustom = new QLabel( gStyle, "lCustom" );
+    lCustom->setText( i18n( "Custom character" ) );
+    grid->addWidget( lCustom, 3, 1);
+
+    spnStart = new KoSpinBox( gStyle );
+    spnStart->setMinValue ( 1);
+    grid->addWidget( spnStart, 1, 2);
+
+    QLabel *lDepth = new QLabel( gStyle, "lDepth" );
+    lDepth->setText( i18n( "Depth" ) );
+    grid->addWidget( lDepth, 2, 1);
+
+    connect( sSuffix, SIGNAL( textChanged (const QString &) ), this, SLOT( suffixChanged(const QString &) ) );
+    connect( sPrefix, SIGNAL( textChanged (const QString &) ), this, SLOT( prefixChanged(const QString &) ) );
+    connect( spnStart, SIGNAL( valueChanged (int) ), this, SLOT( startChanged(int) ) );
+    connect( spnDepth, SIGNAL( valueChanged (int) ), this, SLOT( depthChanged(int) ) );
+    noSignals = false;
+}
+
+void KoCounterStyleWidget::changeKWSpinboxType(KoParagCounter::Style st) {
+    switch(st)
+    {
+        case KoParagCounter::STYLE_NONE:
+            spnStart->setCounterType(KoSpinBox::NONE);
+            break;
+        case KoParagCounter::STYLE_NUM:
+            spnStart->setCounterType(KoSpinBox::NUM);
+            break;
+        case KoParagCounter::STYLE_ALPHAB_L:
+            spnStart->setCounterType(KoSpinBox::ALPHAB_L);
+            break;
+        case KoParagCounter::STYLE_ALPHAB_U:
+            spnStart->setCounterType(KoSpinBox::ALPHAB_U);
+            break;
+        case KoParagCounter::STYLE_ROM_NUM_L:
+            spnStart->setCounterType(KoSpinBox::ROM_NUM_L);
+            break;
+        case KoParagCounter::STYLE_ROM_NUM_U:
+            spnStart->setCounterType(KoSpinBox::ROM_NUM_U);
+            break;
+        default:
+            spnStart->setCounterType(KoSpinBox::NONE);
+    }
+}
+
+
+void KoCounterStyleWidget::fillStyleCombo(KoParagCounter::Numbering type) {
+    if(lstStyle==NULL) return;
+    noSignals=true;
+    unsigned int cur = lstStyle->currentItem();
+    lstStyle->clear();
+    QPtrListIterator<StyleRepresenter> style( stylesList );
+    while ( style.current() ) {
+        if(style.current()->style() == KoParagCounter::STYLE_NONE) {
+            if(type == KoParagCounter::NUM_NONE)
+                lstStyle->insertItem( style.current()->name() );
+        }
+        else if(type == KoParagCounter::NUM_LIST || !style.current()->isBullet())
+            if(type != KoParagCounter::NUM_NONE)
+                lstStyle->insertItem( style.current()->name() );
+        ++style;
+    }
+
+    if(styleBuffer <= lstStyle->count())
+        lstStyle->setCurrentItem(styleBuffer);
+    else
+        if(cur <= lstStyle->count())
+            lstStyle->setCurrentItem(cur);
+
+    if(cur > lstStyle->count()) {
+        styleBuffer = cur;
+    }
+    noSignals=false;
+}
+
+void KoCounterStyleWidget::display( const KoParagLayout & lay ) {
+    KoParagCounter::Style style = KoParagCounter::STYLE_NONE;
+    if ( lay.counter )
+    {
+        style=lay.counter->style();
+        m_counter = *lay.counter;
+    }
+    else
+    {
+        m_counter = KoParagCounter();
+    }
+
+    styleBuffer = 999;
+
+    numTypeChanged( m_counter.numbering() );
+    emit sig_numTypeChanged( m_counter.numbering() );
+
+    unsigned int i;
+    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != style; i++);
+    lstStyle->setCurrentItem(i);
+    bCustom->setText( m_counter.customBulletCharacter() );
+    if ( !m_counter.customBulletFont().isEmpty() )
+        bCustom->setFont( QFont( m_counter.customBulletFont() ) );
+
+    sPrefix->setText( m_counter.prefix() );
+    sSuffix->setText( m_counter.suffix() );
+
+    spnDepth->setValue( m_counter.depth() );
+    spnStart->setValue( m_counter.startNumber() );
+}
+
+
+void KoCounterStyleWidget::numTypeChanged( int nType ) {
+    m_counter.setNumbering( static_cast<KoParagCounter::Numbering>( nType ) );
+    gStyle->setEnabled( m_counter.numbering() != KoParagCounter::NUM_NONE );
+    fillStyleCombo(m_counter.numbering());
+    bool state=m_counter.numbering()==KoParagCounter::NUM_LIST;
+    bCustom->setEnabled(state);
+    lCustom->setEnabled(state);
+}
+
+
+void KoCounterStyleWidget::makeCounterRepresenterList( QPtrList<StyleRepresenter>& stylesList )
+{
+    stylesList.setAutoDelete( true );
+    stylesList.append( new StyleRepresenter(i18n( "Arabic Numbers" )
+            ,  KoParagCounter::STYLE_NUM));
+    stylesList.append( new StyleRepresenter(i18n( "Lower Alphabetical" )
+            ,  KoParagCounter::STYLE_ALPHAB_L ));
+    stylesList.append( new StyleRepresenter(i18n( "Upper Alphabetical" )
+            ,  KoParagCounter::STYLE_ALPHAB_U ));
+    stylesList.append( new StyleRepresenter(i18n( "Lower Roman Numbers" )
+            ,  KoParagCounter::STYLE_ROM_NUM_L ));
+    stylesList.append( new StyleRepresenter(i18n( "Upper Roman Numbers" )
+            ,  KoParagCounter::STYLE_ROM_NUM_U ));
+    stylesList.append( new StyleRepresenter(i18n( "Disc Bullet" )
+            ,  KoParagCounter::STYLE_DISCBULLET , true));
+    stylesList.append( new StyleRepresenter(i18n( "Square Bullet" )
+            ,  KoParagCounter::STYLE_SQUAREBULLET , true));
+    stylesList.append( new StyleRepresenter(i18n( "Box Bullet" )
+            ,  KoParagCounter::STYLE_BOXBULLET , true));
+    stylesList.append( new StyleRepresenter(i18n( "Circle Bullet" )
+            ,  KoParagCounter::STYLE_CIRCLEBULLET , true));
+    stylesList.append( new StyleRepresenter(i18n( "Custom Bullet" )
+            ,  KoParagCounter::STYLE_CUSTOMBULLET , true));
+
+    stylesList.append( new StyleRepresenter(i18n( "None" ), KoParagCounter::STYLE_NONE));
+}
+
+
+void KoCounterStyleWidget::selectCustomBullet() {
+    unsigned int i;
+    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != KoParagCounter::STYLE_CUSTOMBULLET; i++);
+    lstStyle->setCurrentItem(i);
+
+    QString f = m_counter.customBulletFont();
+    if ( f.isEmpty() )
+        f = "symbol";
+    QChar c = m_counter.customBulletCharacter();
+
+    if ( KoCharSelectDia::selectChar( f, c ) ) {
+        emit changeCustomBullet( f, c );
+        bCustom->setText( c );
+        if ( !f.isEmpty() )
+            bCustom->setFont( QFont( m_counter.customBulletFont() ) );
+    }
+}
+
+void KoCounterStyleWidget::numStyleChanged() {
+    // We selected another style from the list box.
+    styleBuffer = 999;
+    StyleRepresenter *sr = stylesList.at(lstStyle->currentItem());
+    emit changeStyle( sr->style() );
+
+    bool hasStart = !sr->isBullet() && !sr->style() == KoParagCounter::STYLE_NONE;
+    lStart->setEnabled( hasStart );
+    spnStart->setEnabled( hasStart );
+    if ( sr->isBullet() ) // we selected a bullet -> erase prefix/suffix.
+                           // due to default value of suffix='.', it's too easy to end up
+                           // with a bullet + a dot.
+    {
+        sSuffix->setText( QString::null );
+        sPrefix->setText( QString::null );
+    }
+    changeKWSpinboxType(sr->style() );
+}
+
+
 
 KoSpinBox::KoSpinBox( QWidget * parent, const char * name )
     : QSpinBox(parent,name)
@@ -1089,7 +1321,7 @@ QString KoParagBorderWidget::tabName()
 
 
 KoParagCounterWidget::KoParagCounterWidget( QWidget * parent, const char * name )
-    : KoParagLayoutWidget( KoParagDia::PD_NUMBERING, parent, name ), stylesList()
+    : KoParagLayoutWidget( KoParagDia::PD_NUMBERING, parent, name )
 {
 
     QVBoxLayout *Form1Layout = new QVBoxLayout( this );
@@ -1125,235 +1357,48 @@ KoParagCounterWidget::KoParagCounterWidget( QWidget * parent, const char * name 
     Form1Layout->addWidget( gNumbering );
     connect( gNumbering, SIGNAL( clicked( int ) ), this, SLOT( numTypeChanged( int ) ) );
 
-    gStyle = new QGroupBox( this, "styleLayout" );
-    gStyle->setTitle( i18n( "Style" ) );
-    gStyle->setColumnLayout(0, Qt::Vertical );
-    gStyle->layout()->setSpacing( 0 );
-    gStyle->layout()->setMargin( 0 );
+    m_styleWidget = new KoCounterStyleWidget( true, this );
 
-    QHBoxLayout *layout8 = new QHBoxLayout( gStyle->layout() );
-    layout8->setSpacing( 6 );
-    layout8->setMargin( 11 );
+    connect( m_styleWidget, SIGNAL( sig_suffixChanged (const QString &) ), this, SLOT( suffixChanged(const QString &) ) );
+    connect( m_styleWidget, SIGNAL( sig_prefixChanged (const QString &) ), this, SLOT( prefixChanged(const QString &) ) );
+    connect( m_styleWidget, SIGNAL(sig_startChanged(int) ), this, SLOT( startChanged(int) ) );
+    connect( m_styleWidget, SIGNAL( sig_depthChanged (int) ), this, SLOT( depthChanged(int) ) );
+    connect( m_styleWidget, SIGNAL( changeCustomBullet( const QString & , QChar ) ), this, SLOT( slotChangeCustomBullet( const QString & , QChar ) ) );
 
-    makeCounterRepresenterList( stylesList );
+    connect( m_styleWidget, SIGNAL( sig_numTypeChanged( int ) ), this, SLOT( numTypeChanged(int ) ) );
+    connect( m_styleWidget, SIGNAL( changeStyle( KoParagCounter::Style ) ), this, SLOT( styleChanged (KoParagCounter::Style ) ) );
 
-    lstStyle = new QListBox( gStyle, "styleListBox" );
-    fillStyleCombo();
-    layout8->addWidget( lstStyle );
-    layout8->activate();
-    connect( lstStyle, SIGNAL( selectionChanged() ), this, SLOT( numStyleChanged() ) );
+    Form1Layout->addWidget( m_styleWidget );
 
-    QVBoxLayout *styleLayoutLayout = new QVBoxLayout(layout8 );
-    styleLayoutLayout->setAlignment( Qt::AlignTop );
-    styleLayoutLayout->setSpacing( 6 );
-    styleLayoutLayout->setMargin( 11 );
-
-    QHBoxLayout *Layout2 = new QHBoxLayout;
-    Layout2->setSpacing( 6 );
-    Layout2->setMargin( 0 );
-
-    QLabel *lPrefix = new QLabel( gStyle, "lPrefix" );
-    lPrefix->setText( i18n( "Prefix Text" ) );
-    Layout2->addWidget( lPrefix );
-
-    sPrefix = new QLineEdit( gStyle, "sPrefix" );
-    Layout2->addWidget( sPrefix );
-
-    QLabel *lSuffix = new QLabel( gStyle, "lSuffix" );
-    lSuffix->setText( i18n( "Suffix Text" ) );
-    Layout2->addWidget( lSuffix );
-
-    sSuffix = new QLineEdit( gStyle, "sSuffix" );
-    Layout2->addWidget( sSuffix );
-    styleLayoutLayout->addLayout( Layout2 );
-
-    QGridLayout *Layout7 = new QGridLayout;
-    Layout7->setSpacing( 6 );
-    Layout7->setMargin( 0 );
-
-    bCustom = new QPushButton( gStyle, "bCustom" );
-    bCustom->setText("");
-
-    Layout7->addWidget( bCustom, 2, 1 );
-    connect( bCustom, SIGNAL( clicked() ), this, SLOT( selectCustomBullet() ) );
-
-    lStart = new QLabel( gStyle, "lStart" );
-    lStart->setText( i18n( "Start at" ) );
-
-    Layout7->addWidget( lStart, 0, 0 );
-
-    spnDepth = new QSpinBox( 0, 15, 1, gStyle );
-
-    Layout7->addWidget( spnDepth, 1, 1 );
-
-    lCustom = new QLabel( gStyle, "lCustom" );
-    lCustom->setText( i18n( "Custom character" ) );
-
-    Layout7->addWidget( lCustom, 2, 0 );
-
-    spnStart = new KoSpinBox( gStyle );
-    spnStart->setMinValue ( 1);
-
-    Layout7->addWidget( spnStart, 0, 1 );
-    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    Layout7->addItem( spacer, 1, 2 );
-
-    QLabel *lDepth = new QLabel( gStyle, "lDepth" );
-    lDepth->setText( i18n( "Depth" ) );
-
-    Layout7->addWidget( lDepth, 1, 0 );
-    styleLayoutLayout->addLayout( Layout7 );
-    styleLayoutLayout->addItem(new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding ));
-    Form1Layout->addWidget( gStyle );
 
     preview = new KoStylePreview( i18n( "Preview" ), i18n("Normal paragraph text"), this, "counter preview" );
     Form1Layout->addWidget( preview );
 
-    connect( sSuffix, SIGNAL( textChanged (const QString &) ), this, SLOT( suffixChanged(const QString &) ) );
-    connect( sPrefix, SIGNAL( textChanged (const QString &) ), this, SLOT( prefixChanged(const QString &) ) );
-    connect( spnStart, SIGNAL( valueChanged (int) ), this, SLOT( startChanged(int) ) );
-    connect( spnDepth, SIGNAL( valueChanged (int) ), this, SLOT( depthChanged(int) ) );
 }
 
-void KoParagCounterWidget::makeCounterRepresenterList( QPtrList<StyleRepresenter>& stylesList )
+void KoParagCounterWidget::styleChanged (KoParagCounter::Style st )
 {
-    stylesList.setAutoDelete( true );
-    stylesList.append( new StyleRepresenter(i18n( "Arabic Numbers" )
-            ,  KoParagCounter::STYLE_NUM));
-    stylesList.append( new StyleRepresenter(i18n( "Lower Alphabetical" )
-            ,  KoParagCounter::STYLE_ALPHAB_L ));
-    stylesList.append( new StyleRepresenter(i18n( "Upper Alphabetical" )
-            ,  KoParagCounter::STYLE_ALPHAB_U ));
-    stylesList.append( new StyleRepresenter(i18n( "Lower Roman Numbers" )
-            ,  KoParagCounter::STYLE_ROM_NUM_L ));
-    stylesList.append( new StyleRepresenter(i18n( "Upper Roman Numbers" )
-            ,  KoParagCounter::STYLE_ROM_NUM_U ));
-    stylesList.append( new StyleRepresenter(i18n( "Disc Bullet" )
-            ,  KoParagCounter::STYLE_DISCBULLET , true));
-    stylesList.append( new StyleRepresenter(i18n( "Square Bullet" )
-            ,  KoParagCounter::STYLE_SQUAREBULLET , true));
-    stylesList.append( new StyleRepresenter(i18n( "Box Bullet" )
-            ,  KoParagCounter::STYLE_BOXBULLET , true));
-    stylesList.append( new StyleRepresenter(i18n( "Circle Bullet" )
-            ,  KoParagCounter::STYLE_CIRCLEBULLET , true));
-    stylesList.append( new StyleRepresenter(i18n( "Custom Bullet" )
-            ,  KoParagCounter::STYLE_CUSTOMBULLET , true));
-
-    stylesList.append( new StyleRepresenter(i18n( "None" ), KoParagCounter::STYLE_NONE));
+    m_counter.setStyle( st );
 }
 
-void KoParagCounterWidget::fillStyleCombo(KoParagCounter::Numbering type) {
-    if(lstStyle==NULL) return;
-    noSignals=true;
-    unsigned int cur = lstStyle->currentItem();
-
-    lstStyle->clear();
-
-    QPtrListIterator<StyleRepresenter> style( stylesList );
-    while ( style.current() ) {
-        if(style.current()->style() == KoParagCounter::STYLE_NONE) {
-            if(type == KoParagCounter::NUM_NONE)
-                lstStyle->insertItem( style.current()->name() );
-        }
-        else if(type == KoParagCounter::NUM_LIST || !style.current()->isBullet())
-            if(type != KoParagCounter::NUM_NONE)
-                lstStyle->insertItem( style.current()->name() );
-        ++style;
-    }
-
-    if(styleBuffer <= lstStyle->count())
-        lstStyle->setCurrentItem(styleBuffer);
-    else
-        if(cur <= lstStyle->count())
-            lstStyle->setCurrentItem(cur);
-
-    if(cur > lstStyle->count()) {
-        styleBuffer = cur;
-    }
-    noSignals=false;
+void KoParagCounterWidget::slotChangeCustomBullet( const QString & f, QChar c)
+{
+    m_counter.setCustomBulletFont( f );
+    m_counter.setCustomBulletCharacter( c );
+    preview->setCounter( m_counter );
 }
 
 QString KoParagCounterWidget::tabName() {
     return i18n( "Bullets/Numbers" );
 }
 
-void KoParagCounterWidget::selectCustomBullet() {
-    unsigned int i;
-    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != KoParagCounter::STYLE_CUSTOMBULLET; i++);
-    lstStyle->setCurrentItem(i);
-
-    QString f = m_counter.customBulletFont();
-    if ( f.isEmpty() )
-        f = "symbol";
-    QChar c = m_counter.customBulletCharacter();
-
-    if ( KoCharSelectDia::selectChar( f, c ) ) {
-        m_counter.setCustomBulletFont( f );
-        m_counter.setCustomBulletCharacter( c );
-        bCustom->setText( c );
-        if ( !f.isEmpty() )
-            bCustom->setFont( QFont( m_counter.customBulletFont() ) );
-        preview->setCounter( m_counter );
-    }
-}
-
-void KoParagCounterWidget::numStyleChanged() {
-    // We selected another style from the list box.
-    styleBuffer = 999;
-    StyleRepresenter *sr = stylesList.at(lstStyle->currentItem());
-    m_counter.setStyle(sr->style());
-
-    bool hasStart = !sr->isBullet() && !sr->style() == KoParagCounter::STYLE_NONE;
-    lStart->setEnabled( hasStart );
-    spnStart->setEnabled( hasStart );
-    if ( sr->isBullet() ) // we selected a bullet -> erase prefix/suffix.
-                           // due to default value of suffix='.', it's too easy to end up
-                           // with a bullet + a dot.
-    {
-        sSuffix->setText( QString::null );
-        sPrefix->setText( QString::null );
-    }
-    changeKWSpinboxType();
-    updatePreview();
-}
-
-void KoParagCounterWidget::changeKWSpinboxType() {
-    switch(m_counter.style())
-    {
-        case KoParagCounter::STYLE_NONE:
-            spnStart->setCounterType(KoSpinBox::NONE);
-            break;
-        case KoParagCounter::STYLE_NUM:
-            spnStart->setCounterType(KoSpinBox::NUM);
-            break;
-        case KoParagCounter::STYLE_ALPHAB_L:
-            spnStart->setCounterType(KoSpinBox::ALPHAB_L);
-            break;
-        case KoParagCounter::STYLE_ALPHAB_U:
-            spnStart->setCounterType(KoSpinBox::ALPHAB_U);
-            break;
-        case KoParagCounter::STYLE_ROM_NUM_L:
-            spnStart->setCounterType(KoSpinBox::ROM_NUM_L);
-            break;
-        case KoParagCounter::STYLE_ROM_NUM_U:
-            spnStart->setCounterType(KoSpinBox::ROM_NUM_U);
-            break;
-        default:
-            spnStart->setCounterType(KoSpinBox::NONE);
-    }
-}
-
 void KoParagCounterWidget::numTypeChanged( int nType ) {
     // radio buttons pressed to change numbering type
     m_counter.setNumbering( static_cast<KoParagCounter::Numbering>( nType ) );
-
     preview->setEnabled( m_counter.numbering() != KoParagCounter::NUM_NONE );
-    gStyle->setEnabled( m_counter.numbering() != KoParagCounter::NUM_NONE );
+    m_styleWidget->numTypeChanged( nType );
 
-    fillStyleCombo(m_counter.numbering());
-    bool state=m_counter.numbering()==KoParagCounter::NUM_LIST;
-    bCustom->setEnabled(state);
-    lCustom->setEnabled(state);
+    updatePreview();
 }
 
 void KoParagCounterWidget::display( const KoParagLayout & lay ) {
@@ -1367,25 +1412,10 @@ void KoParagCounterWidget::display( const KoParagLayout & lay ) {
     {
         m_counter = KoParagCounter();
     }
+    gNumbering->setButton( m_counter.numbering() );
     preview->setStyle( lay.style );
     preview->setCounter( m_counter );
-    styleBuffer = 999;
-
-    gNumbering->setButton( m_counter.numbering() );
-    numTypeChanged( m_counter.numbering() );
-
-    unsigned int i;
-    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != style; i++);
-    lstStyle->setCurrentItem(i);
-    bCustom->setText( m_counter.customBulletCharacter() );
-    if ( !m_counter.customBulletFont().isEmpty() )
-        bCustom->setFont( QFont( m_counter.customBulletFont() ) );
-
-    sPrefix->setText( m_counter.prefix() );
-    sSuffix->setText( m_counter.suffix() );
-
-    spnDepth->setValue( m_counter.depth() );
-    spnStart->setValue( m_counter.startNumber() );
+    m_styleWidget->display( lay );
 }
 
 void KoParagCounterWidget::updatePreview() {
