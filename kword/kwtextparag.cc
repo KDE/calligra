@@ -38,8 +38,6 @@ KWTextParag::KWTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool
 {
     //qDebug("KWTextParag::KWTextParag %p", this);
     m_item = 0L;
-    m_itemCounter = 0L;
-    m_itemBorder = 0L;
     m_leftBorder.ptWidth = 0;
     m_rightBorder.ptWidth = 0;
     m_topBorder.ptWidth = 0;
@@ -50,15 +48,11 @@ KWTextParag::KWTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool
 KWTextParag::~KWTextParag()
 {
     delete m_item;
-    delete m_itemCounter;
-    delete m_itemBorder;
     delete m_counter;
 }
 
-// There are three QStyleSheetItems per paragraph, created on demand,
-// m_item handles the margins and linespacing (and more if we want)
-// m_itemCounter handles the counter stuff (so that removing/adding counter doesn't affect the other params)
-// m_itemBorder handles the top/bottom margins for borders
+// There is one QStyleSheetItems per paragraph, created on demand,
+// in order to set the DisplayMode for counters.
 void KWTextParag::checkItem( QStyleSheetItem * & item, const char * name )
 {
     if ( !item )
@@ -74,77 +68,43 @@ void KWTextParag::checkItem( QStyleSheetItem * & item, const char * name )
 
 void KWTextParag::setMargin( QStyleSheetItem::Margin m, KWUnit _i )
 {
-    checkItem( m_item, "item" );
     kdDebug() << "KWTextParag::setMargin " << m << " margin " << _i.pt() << endl;
     m_margins[m] = _i;
-    m_item->setMargin( m, _i.pt() /* TODO the right thing */ );
     if ( m == QStyleSheetItem::MarginTop && prev() )
-        prev()->invalidate(0); // for top margin
+        prev()->invalidate(0);     // for top margin
     invalidate(0);
 }
 
 void KWTextParag::setMargins( const KWUnit * margins )
 {
-    checkItem( m_item, "item" );
     for ( int i = 0 ; i < 5 ; ++i )
-    {
         m_margins[i] = margins[i];
-        m_item->setMargin( (QStyleSheetItem::Margin)i, margins[i].pt() /* TODO */ );
-    }
     if ( prev() )
-        prev()->invalidate(0); // for top margin
+        prev()->invalidate(0);     // for top margin
     invalidate(0);
 }
 
 
 void KWTextParag::setLineSpacing( KWUnit _i )
 {
-    checkItem( m_item, "item" );
     m_lineSpacing = _i;
-    m_item->setLineSpacing( _i.pt() ); // Unit thing to be checked
     invalidate(0);
 }
 
 void KWTextParag::setTopBorder( const Border & _brd )
 {
     m_topBorder = _brd;
-    // Top/bottom borders need a paragraph margin to appear
-    checkItem( m_itemBorder, "itemBorder" );
-    m_itemBorder->setMargin( QStyleSheetItem::MarginTop, _brd.ptWidth /* TODO zoom */ );
+    invalidate(0);
 }
 
 void KWTextParag::setBottomBorder( const Border & _brd )
 {
     m_bottomBorder = _brd;
-    // Top/bottom borders need a paragraph margin to appear
-    checkItem( m_itemBorder, "itemBorder" );
-    m_itemBorder->setMargin( QStyleSheetItem::MarginBottom, _brd.ptWidth /* TODO zoom */ );
+    invalidate(0);
 }
 
 void KWTextParag::setNoCounter()
 {
-    if ( m_itemCounter )
-    {
-        QVector<QStyleSheetItem> vec = styleSheetItems();
-        int pos = vec.find( m_itemCounter );
-        kdDebug() << "Found m_itemCounter at position " << pos << endl;
-        if ( pos > -1 )
-        {
-            if ( vec.remove( pos ) )
-            {
-                for ( int i = pos; i < (int)vec.size() - 1; ++i )
-                    vec.insert( i, vec[ i + 1 ] );
-                vec.resize( vec.size() - 1 ); // remove last one
-                setStyleSheetItems( vec );
-                delete m_itemCounter;
-                m_itemCounter = 0L;
-            }
-            else
-                kdDebug() << "KWTextParag::setNoCounter NOT FOUND !" << endl;
-        }
-        else
-            kdDebug() << "KWTextParag::setNoCounter m_itemCounter NOT FOUND !" << endl;
-    }
     delete m_counter;
     m_counter = 0L;
     invalidateCounters();
@@ -162,10 +122,10 @@ void KWTextParag::setCounter( const Counter & counter )
         delete m_counter;
         m_counter = new Counter( counter );
 
-        checkItem( m_itemCounter, "itemCounter" );
+        checkItem( m_item, "m_item" );
         // Set the display mode (in order for drawLabel to get called by QTextParag)
-        m_itemCounter->setDisplayMode( QStyleSheetItem::DisplayListItem );
-        m_itemCounter->setSelfNesting( FALSE ); // Not sure why this is necessary.. to be investigated
+        m_item->setDisplayMode( QStyleSheetItem::DisplayListItem );
+        //m_item->setSelfNesting( FALSE ); // Not sure why this is necessary.. to be investigated
 
         int counterMargin = 16;
 	QString tmpCounter;
@@ -177,26 +137,22 @@ void KWTextParag::setCounter( const Counter & counter )
              counter.counterType == Counter::CT_NUM ||
 	     counter.counterType == Counter::CT_CUSTOMBULLET )
 	  {
-	    //            counterMargin = paragFormat()->width( '1' ) +
-	    //                paragFormat()->width( '2' ) +
-	    //paragFormat()->width( '3' ) + that's a bit too much imho
-	    //                paragFormat()->width( '.' );
-	    tmpCounter=m_counter->counterLeftText +'.' + m_counter->counterRightText + ' ';
-	    for(unsigned int i=0;i<tmpCounter.length();i++)
+	    tmpCounter = m_counter->counterLeftText +'.' + m_counter->counterRightText + ' ';
+	    for (unsigned int i=0;i<tmpCounter.length();i++)
 	      counterMargin +=paragFormat()->width(tmpCounter,i);
-	    if(counter.counterType == Counter::CT_ALPHAB_L)
+	    if (counter.counterType == Counter::CT_ALPHAB_L)
 	      counterMargin+=paragFormat()->width( 'a' )*m_counter->counterDepth;
-	    else if(counter.counterType == Counter::CT_ALPHAB_U)
+	    else if (counter.counterType == Counter::CT_ALPHAB_U)
 	      counterMargin+=paragFormat()->width( 'A' )*m_counter->counterDepth;
-	    else if(counter.counterType == Counter::CT_ROM_NUM_L)
+	    else if (counter.counterType == Counter::CT_ROM_NUM_L)
 	      counterMargin+=paragFormat()->width( 'i' )*m_counter->counterDepth;
-	    else if(counter.counterType == Counter::CT_ROM_NUM_U)
+	    else if (counter.counterType == Counter::CT_ROM_NUM_U)
 	      counterMargin+=paragFormat()->width( 'I' )*m_counter->counterDepth;
-	    else if(counter.counterType == Counter::CT_NUM)
+	    else if (counter.counterType == Counter::CT_NUM)
 	      counterMargin+=paragFormat()->width( '1' )*m_counter->counterDepth;
 
 	  }
-        m_itemCounter->setMargin(QStyleSheetItem::MarginLeft, counterMargin);
+        m_counter->counterMargin = counterMargin;
         invalidateCounters();
     }
 }
@@ -377,6 +333,41 @@ QString KWTextParag::paragraphCounterText( int n ) const
             break;
     }
     return l;
+}
+
+int KWTextParag::topMargin() const
+{
+    return static_cast<int>(m_margins[ QStyleSheetItem::MarginTop ].pt()
+                            + m_topBorder.ptWidth); // TODO zoom
+}
+
+int KWTextParag::bottomMargin() const
+{
+    return static_cast<int>(m_margins[ QStyleSheetItem::MarginBottom ].pt()
+                            + (int)m_bottomBorder.ptWidth);
+}
+
+int KWTextParag::leftMargin() const
+{
+    return static_cast<int>(m_margins[ QStyleSheetItem::MarginLeft ].pt()
+                            + (int)m_leftBorder.ptWidth
+                            + ( m_counter ? m_counter->counterMargin : 0 ));
+}
+
+int KWTextParag::rightMargin() const
+{
+    return static_cast<int>(m_margins[ QStyleSheetItem::MarginRight ].pt()
+                            + (int)m_rightBorder.ptWidth);
+}
+
+int KWTextParag::firstLineMargin() const
+{
+    return static_cast<int>(m_margins[ QStyleSheetItem::MarginFirstLine ].pt());
+}
+
+int KWTextParag::lineSpacing() const
+{
+    return static_cast<int>(m_lineSpacing.pt());
 }
 
 // Reimplemented from QTextParag

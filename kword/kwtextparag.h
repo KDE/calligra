@@ -71,6 +71,7 @@ struct Counter
     // Cached data
 
     int numSubParag;
+    int counterMargin;
 
     bool operator== ( const Counter & c2 ) const
     {
@@ -188,6 +189,15 @@ public:
     //bool hasSpecialTabs() const { return m_specialTabs; }
 
 protected:
+    // This is public in QTextParag but it should be internal to KWTextParag,
+    // because it's in pixels.
+    virtual int topMargin() const;
+    virtual int bottomMargin() const;
+    virtual int leftMargin() const;
+    virtual int firstLineMargin() const;
+    virtual int rightMargin() const;
+    virtual int lineSpacing() const;
+
     virtual void paint( QPainter &painter, const QColorGroup &cg, QTextCursor *cusror = 0, bool drawSelections = FALSE,
 			int clipx = -1, int clipy = -1, int clipw = -1, int cliph = -1 );
 
@@ -199,8 +209,6 @@ protected:
 
 private:
     QStyleSheetItem * m_item;
-    QStyleSheetItem * m_itemCounter;
-    QStyleSheetItem * m_itemBorder;
     KWUnit m_margins[5]; // left, right, top, bottom, first line
     KWUnit m_lineSpacing;
     Border m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;

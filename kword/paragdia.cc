@@ -1392,13 +1392,16 @@ void KWParagDia::changeBullet()
   rBullets->setChecked(true);
   typeChanged( g1->id(rBullets) );//activate CT_CUSTOMBULLET
   QString f = m_counter.bulletFont;
+  if ( f.isEmpty() )
+    f = "symbol";
   QChar c = m_counter.counterBullet;
 
   if ( KCharSelectDia::selectChar( f, c ) ) {
     m_counter.bulletFont = f;
     m_counter.counterBullet = c;
     bBullets->setText( c );
-    bBullets->setFont( QFont( m_counter.bulletFont ) );
+    if ( !f.isEmpty() )
+      bBullets->setFont( QFont( m_counter.bulletFont ) );
     prev4->setCounter( m_counter );
   }
 }
@@ -1518,7 +1521,8 @@ void KWParagDia::setCounter( Counter _counter )
     eCustomNum->setText( m_counter.customCounterDef );
 
     bBullets->setText( m_counter.counterBullet );
-    bBullets->setFont( QFont( m_counter.bulletFont ) );
+    if ( !m_counter.bulletFont.isEmpty() )
+        bBullets->setFont( QFont( m_counter.bulletFont ) );
 
     ecLeft->setText( m_counter.counterLeftText );
     ecRight->setText( m_counter.counterRightText );

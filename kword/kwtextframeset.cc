@@ -39,7 +39,8 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc )
     text = new KWTextDocument( this, 0 );
     text->setFormatter( new QTextFormatterBreakWords );
     text->setFlow( this );
-    text->setVerticalBreak( TRUE );
+    text->setVerticalBreak( true );              // get QTextFlow methods to be called
+    text->setAddMargins( true );                 // top margin and bottom are added, not max'ed
 
     /* if ( QFile::exists( "bidi.txt" ) ) {
        QFile fl( "bidi.txt" );
