@@ -6980,22 +6980,28 @@ void KSpreadSheet::saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const
     QString footerCenter= print()->footMid();
     QString footerRight = print()->footRight();
 
-
+    kdDebug()<<"headerLeft :"<<headerLeft<<" headerCenter :"<<headerCenter<<" headerRight :"<<headerRight<<" footRight :"<<footerRight<<" footerCenter :"<<footerCenter<<" footerRight :"<<footerRight<<endl;
     xmlWriter.startElement( "style:header");
     if ( ( !headerLeft.isEmpty() )
          || ( !headerCenter.isEmpty() )
          || ( !headerRight.isEmpty() ) )
     {
         xmlWriter.startElement( "style:region-left" );
-        //convertpart
+        xmlWriter.startElement( "text:p" );
+        convertPart( headerLeft, xmlWriter );
+        xmlWriter.endElement();
         xmlWriter.endElement();
 
         xmlWriter.startElement( "style:region-center" );
-        //convertpart
+        xmlWriter.startElement( "text:p" );
+        convertPart( headerCenter, xmlWriter );
+        xmlWriter.endElement();
         xmlWriter.endElement();
 
         xmlWriter.startElement( "style:region-right" );
-        //convertpart
+        xmlWriter.startElement( "text:p" );
+        convertPart( headerRight, xmlWriter );
+        xmlWriter.endElement();
         xmlWriter.endElement();
     }
     else
@@ -7016,15 +7022,21 @@ void KSpreadSheet::saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const
          || ( !footerRight.isEmpty() ) )
     {
         xmlWriter.startElement( "style:region-left" );
-        //convertpart
+        xmlWriter.startElement( "text:p" );
+        convertPart( footerLeft, xmlWriter );
         xmlWriter.endElement();
+        xmlWriter.endElement(); //style:region-left
 
         xmlWriter.startElement( "style:region-center" );
-        //convertpart
+        xmlWriter.startElement( "text:p" );
+        convertPart( footerCenter, xmlWriter );
+        xmlWriter.endElement();
         xmlWriter.endElement();
 
         xmlWriter.startElement( "style:region-right" );
-        //convertpart
+        xmlWriter.startElement( "text:p" );
+        convertPart( footerLeft, xmlWriter );
+        xmlWriter.endElement();
         xmlWriter.endElement();
     }
     else
@@ -7041,6 +7053,134 @@ void KSpreadSheet::saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const
 
 
 }
+
+void KSpreadSheet::addText( const QString & text, KoXmlWriter & writer ) const
+{
+    if ( !text.isEmpty() )
+        writer.addTextNode( text );
+}
+
+void KSpreadSheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) const
+{
+    QString text;
+    QString var;
+
+    bool inVar = false;
+    uint i = 0;
+    uint l = part.length();
+    while ( i < l )
+    {
+        if ( inVar || part[i] == '<' )
+        {
+            inVar = true;
+            var += part[i];
+            if ( part[i] == '>' )
+            {
+                inVar = false;
+                if ( var == "<page>" )
+                {
+                    addText( text, xmlWriter );
+                    xmlWriter.startElement( "text:page-number" );
+                    xmlWriter.addTextNode( "1" );
+                    xmlWriter.endElement();
+                }
+                else if ( var == "<pages>" )
+                {
+                    addText( text, xmlWriter );
+                    xmlWriter.startElement( "text:page-count" );
+                    xmlWriter.addTextNode( "99" );
+                    xmlWriter.endElement();
+                }
+                else if ( var == "<date>" )
+                {
+                    addText( text, xmlWriter );
+#if 0 //FIXME
+                    QDomElement t = doc.createElement( "text:date" );
+                    t.setAttribute( "text:date-value", "0-00-00" );
+                    // todo: "style:data-style-name", "N2"
+                    t.appendChild( doc.createTextNode( QDate::currentDate().toString() ) );
+                    parent.appendChild( t );
+#endif
+                }
+                else if ( var == "<time>" )
+                {
+                    addText( text, xmlWriter );
+
+                    xmlWriter.startElement( "text:time" );
+                    xmlWriter.addTextNode( QTime::currentTime().toString() );
+                    xmlWriter.endElement();
+                }
+                else if ( var == "<file>" ) // filepath + name
+                {
+                    addText( text, xmlWriter );
+                    xmlWriter.startElement( "text:file-name" );
+                    xmlWriter.addAttribute( "text:display", "full" );
+                    xmlWriter.addTextNode( "???" );
+                    xmlWriter.endElement();
+                }
+                else if ( var == "<name>" ) // filename
+                {
+                    addText( text, xmlWriter );
+
+                    xmlWriter.startElement( "text:title" );
+                    xmlWriter.addTextNode( "???" );
+                    xmlWriter.endElement();
+                }
+                else if ( var == "<author>" )
+                {
+                    KoDocumentInfo       * docInfo    = m_pDoc->documentInfo();
+                    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
+
+                    text += authorPage->fullName();
+
+                    addText( text, xmlWriter );
+                }
+                else if ( var == "<email>" )
+                {
+                    KoDocumentInfo       * docInfo    = m_pDoc->documentInfo();
+                    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
+
+                    text += authorPage->email();
+                    addText( text, xmlWriter );
+
+                }
+                else if ( var == "<org>" )
+                {
+                    KoDocumentInfo       * docInfo    = m_pDoc->documentInfo();
+                    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
+
+                    text += authorPage->company();
+                    addText( text, xmlWriter );
+
+                }
+                else if ( var == "<sheet>" )
+                {
+                    addText( text, xmlWriter );
+
+                    xmlWriter.startElement( "text:sheet-name" );
+                    xmlWriter.addTextNode( "???" );
+                    xmlWriter.endElement();
+                }
+                else
+                {
+                    // no known variable:
+                    text += var;
+                    addText( text, xmlWriter );
+                }
+
+                text = "";
+                var  = "";
+            }
+        }
+        else
+        {
+            text += part[i];
+        }
+        ++i;
+    }
+}
+
+
 
 bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, KSpreadGenValidationStyles &valStyle )
 {

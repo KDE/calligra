@@ -1180,6 +1180,8 @@ protected:
     QString saveOasisTableStyleName( KoGenStyles &mainStyles );
     void saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int maxCols, int maxRows, KSpreadGenValidationStyles &valStyle );
     void saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols, KSpreadGenValidationStyles &valStyle );
+    void convertPart( const QString & part, KoXmlWriter & writer ) const;
+    void addText( const QString & text, KoXmlWriter & writer ) const;
 
     void maxRowCols( int & maxCols, int & maxRows );
 
