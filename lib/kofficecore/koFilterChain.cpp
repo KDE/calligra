@@ -67,7 +67,7 @@ KoFilterChain::KoFilterChain( const KoFilterManager* manager ) :
     m_manager( manager ), m_state( Beginning ), m_inputStorage( 0 ),
     m_inputStorageDevice( 0 ), m_outputStorage( 0 ), m_outputStorageDevice( 0 ),
     m_inputDocument( 0 ), m_outputDocument( 0 ), m_inputTempFile( 0 ),
-    m_outputTempFile( 0 ), m_inputQueried( false ), m_outputQueried( false ), d( 0 )
+    m_outputTempFile( 0 ), m_inputQueried( Nil ), m_outputQueried( Nil ), d( 0 )
 {
     // We "own" our chain links, the filter entries are implicitly shared
     m_chainLinks.setAutoDelete( true );
@@ -132,11 +132,13 @@ QString KoFilterChain::chainOutput() const
 
 QString KoFilterChain::inputFile()
 {
-    if ( m_inputQueried ) {
-        kdWarning( 30500 ) << "You already asked for some source." << endl;
+    if ( m_inputQueried == File )
+        return m_inputFile;
+    else if ( m_inputQueried != Nil ) {
+        kdWarning( 30500 ) << "You already asked for some different source." << endl;
         return QString::null;
     }
-    m_inputQueried = true;
+    m_inputQueried = File;
 
     if ( m_state & Beginning ) {
         if ( static_cast<KoFilterManager::Direction>( filterManagerDirection() ) ==
@@ -154,11 +156,13 @@ QString KoFilterChain::inputFile()
 
 QString KoFilterChain::outputFile()
 {
-    if ( m_outputQueried ) {
-        kdWarning( 30500 ) << "You already asked for some destination." << endl;
+    if ( m_outputQueried == File )
+        return m_outputFile;
+    else if ( m_outputQueried != Nil ) {
+        kdWarning( 30500 ) << "You already asked for some different destination." << endl;
         return QString::null;
     }
-    m_outputQueried = true;
+    m_outputQueried = File;
 
     if ( m_state & End ) {
         if ( static_cast<KoFilterManager::Direction>( filterManagerDirection() ) ==
@@ -175,47 +179,51 @@ QString KoFilterChain::outputFile()
 
 KoStoreDevice* KoFilterChain::storageFile( const QString& name, KoStore::Mode mode )
 {
-    if ( m_inputQueried && mode == KoStore::Read &&
+    if ( m_inputQueried == Storage && mode == KoStore::Read &&
          m_inputStorage && m_inputStorage->mode() == KoStore::Read )
         return storageNewStreamHelper( &m_inputStorage, &m_inputStorageDevice, name );
-    else if ( m_outputQueried && mode == KoStore::Write &&
+    else if ( m_outputQueried == Storage && mode == KoStore::Write &&
               m_outputStorage && m_outputStorage->mode() == KoStore::Write )
         return storageNewStreamHelper( &m_outputStorage, &m_outputStorageDevice, name );
-    else if ( !m_inputQueried && mode == KoStore::Read )
+    else if ( m_inputQueried == Nil && mode == KoStore::Read )
         return storageHelper( inputFile(), name, KoStore::Read,
                               &m_inputStorage, &m_inputStorageDevice );
-    else if ( !m_outputQueried && mode == KoStore::Write )
+    else if ( m_outputQueried == Nil && mode == KoStore::Write )
         return storageHelper( outputFile(), name, KoStore::Write,
                               &m_outputStorage, &m_outputStorageDevice );
     else {
-        kdWarning( 30500 ) << "Oooops, how did we get here?" << endl;
+        kdWarning( 30500 ) << "Oooops, how did we get here? You already asked for a"
+                           << " different source/destination?" << endl;
         return 0;
     }
 }
 
 KoDocument* KoFilterChain::inputDocument()
 {
-    if ( m_inputQueried ) {
-        kdWarning( 30500 ) << "You already asked for some source." << endl;
+    if ( m_inputQueried == Document )
+        return m_inputDocument;
+    else if ( m_inputQueried != Nil ) {
+        kdWarning( 30500 ) << "You already asked for some different source." << endl;
         return 0;
     }
 
     if ( ( m_state & Beginning ) &&
          static_cast<KoFilterManager::Direction>( filterManagerDirection() ) == KoFilterManager::Export &&
-         filterManagerKoDocument() ) {
-        m_inputQueried = true;
+         filterManagerKoDocument() )
         m_inputDocument = filterManagerKoDocument();
-    }
     else if ( !m_inputDocument )
         m_inputDocument = createDocument( inputFile() );
 
+    m_inputQueried = Document;
     return m_inputDocument;
 }
 
 KoDocument* KoFilterChain::outputDocument()
 {
-    if ( m_outputQueried ) {
-        kdWarning( 30500 ) << "You already asked for some destination." << endl;
+    if ( m_outputQueried == Document )
+        return m_outputDocument;
+    else if ( m_outputQueried != Nil ) {
+        kdWarning( 30500 ) << "You already asked for some different destination." << endl;
         return 0;
     }
 
@@ -226,7 +234,7 @@ KoDocument* KoFilterChain::outputDocument()
     else
         m_outputDocument = createDocument( m_chainLinks.current()->to() );
 
-    m_outputQueried = true;
+    m_outputQueried = Document;
     return m_outputDocument;
 }
 
@@ -261,8 +269,8 @@ int KoFilterChain::filterManagerDirection() const
 
 void KoFilterChain::manageIO()
 {
-    m_inputQueried = false;
-    m_outputQueried = false;
+    m_inputQueried = Nil;
+    m_outputQueried = Nil;
 
     delete m_inputStorageDevice;
     m_inputStorageDevice = 0;
@@ -400,6 +408,15 @@ KoStoreDevice* KoFilterChain::storageHelper( const QString& file, const QString&
 
     if ( ( *storage )->bad() )
         return storageCleanupHelper( storage );
+
+    // Seems that we got a valid storage, at least. Even if we can't open
+    // the stream the "user" asked us to open, we nontheless change the
+    // IOState from File to Storage, as it might be possible to open other streams
+    if ( mode == KoStore::Read )
+        m_inputQueried = Storage;
+    else // KoStore::Write
+        m_outputQueried = Storage;
+
     if ( !( *storage )->open( streamName ) )
         return storageCleanupHelper( storage );
 

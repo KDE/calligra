@@ -32,47 +32,83 @@ class KTempFile;
 class KoFilterManager;
 class KoDocument;
 
-// This class represents a chain of plain filters. Instances of
-// it are created by the KOffice::Graph class -- and noone else ;)
-// The links can be freely appended and prepended and we don't
-// check whether the order of the links makes sense. Take care.
+namespace KOffice {
+    class Graph;
+}
+
+/**
+ * This class represents a chain of plain @ref KoFilter instances.
+ *
+ * Instances of this class are shared, so please just hold
+ * @ref KoFilterChain::Ptr pointers to it.
+ *
+ * @author Werner Trobin <trobin@kde.org>
+ */
 class KoFilterChain : public KShared
 {
+    // Only KOffice::Graph is allowed to construct instances and
+    // add chain links.
+    friend class KOffice::Graph;
 
 public:
     typedef KSharedPtr<KoFilterChain> Ptr;
 
-    KoFilterChain( const KoFilterManager* manager );
     virtual ~KoFilterChain();
 
+    /**
+     * The filter manager returned may be 0!
+     */
     const KoFilterManager* manager() const { return m_manager; }
 
-    // Append a link to this filter chain
-    void appendChainLink( KoFilterEntry::Ptr filterEntry, const QCString& from, const QCString& to );
-    // Prepend a link to this filter chain
-    void prependChainLink( KoFilterEntry::Ptr filterEntry, const QCString& from, const QCString& to );
-
-    // Starts the filtering process
+    /**
+     * Starts the filtering process.
+     * @return The return status of the conversion. KoFilter::OK
+     * if everything is allright.
+     */
     KoFilter::ConversionStatus invokeChain();
-    // Tells KoFilterManager the output file of the filter chain
-    // in case of an import operation. If it's QString::null we
-    // directly manipulated the document.
+
+    /**
+     * Tells the @ref KoFilterManager the output file of the
+     * filter chain in case of an import operation. If it's
+     * QString::null we directly manipulated the document.
+     */
     QString chainOutput() const;
 
-
-    // #### "API" for the filter. Here it get hold of files, storages,...
-    // Note: Call that only once for your filter
-    // Get the current file to read from
+    /**
+     * Get the current file to read from. This part of the API
+     * is for the filters in our chain.
+     * Note: Call that only once for your filter
+     */
     QString inputFile();
-    // Get the current file to write to
+    /**
+     * Get the current file to write to. This part of the API
+     * is for the filters in our chain.
+     * Note: Call that only once for your filter
+     */
     QString outputFile();
 
-    // Get a file from a storage. May return 0!
+    /**
+     * Get a file from a storage. May return 0!
+     * This part of the API is for the filters in our chain.
+     * @param name The name of the stream inside the storage
+     * @param mode Whether we want to read or write from/to the stream
+     * @return The storage device to access the stream. May be 0!
+     */
     KoStoreDevice* storageFile( const QString& name = "root", KoStore::Mode mode = KoStore::Read );
 
-    // "Experimental" mode... may return 0!
+    /**
+     * This method allows your filter to work directly on the
+     * @ref KoDocument of the application.
+     * This part of the API is for the filters in our chain.
+     * @return The document containing the data. May return 0 on error.
+     */
     KoDocument* inputDocument();
-    // "Experimental" mode... may return 0!
+    /**
+     * This method allows your filter to work directly on the
+     * @ref KoDocument of the application.
+     * This part of the API is for the filters in our chain.
+     * @return The document you have to write to. May return 0 on error.
+     */
     KoDocument* outputDocument();
 
 
@@ -80,6 +116,15 @@ public:
     void dump() const;
 
 private:
+    // ### API for KOffice::Graph:
+    // Construct a filter chain belonging to some KoFilterManager.
+    // The parent filter manager may be 0.
+    KoFilterChain( const KoFilterManager* manager );
+
+    void appendChainLink( KoFilterEntry::Ptr filterEntry, const QCString& from, const QCString& to );
+    void prependChainLink( KoFilterEntry::Ptr filterEntry, const QCString& from, const QCString& to );
+
+
     // These methods are friends of KoFilterManager and provide access
     // to a private part of its API. As I don't want to include
     // koFilterManager.h in this header the direction is "int" here.
@@ -88,8 +133,9 @@ private:
     KoDocument* filterManagerKoDocument() const;
     int filterManagerDirection() const;
 
-    // Helper method which keeps track of all the temp files, documents,
-    // storages,... and properly deletes them as soon as they are not
+
+    // Helper methods which keep track of all the temp files, documents,
+    // storages,... and properly delete them as soon as they are not
     // needed anymore.
     void manageIO();
     void finalizeIO();
@@ -140,7 +186,7 @@ private:
     KoFilterChain( const KoFilterChain& rhs );
     KoFilterChain& operator=( const KoFilterChain& rhs );
 
-    const KoFilterManager* m_manager;
+    const KoFilterManager* const m_manager;
     QPtrList<ChainLink> m_chainLinks;
 
     // stuff needed for bookkeeping
@@ -160,7 +206,10 @@ private:
     KTempFile* m_inputTempFile;
     KTempFile* m_outputTempFile;
 
-    bool m_inputQueried, m_outputQueried;
+    // These two flags keep track of the input/output the
+    // filter (=user) asked for
+    enum IOState { Nil, File, Storage, Document };
+    IOState m_inputQueried, m_outputQueried;
 
     class Private;
     Private* d;
@@ -173,6 +222,7 @@ namespace KOffice
     class Vertex;
     template<class T> class PriorityQueue;
 
+    // An internal class representing a filter (=edge) in the filter graph.
     class Edge
     {
 
@@ -207,6 +257,7 @@ namespace KOffice
     };
 
 
+    // An internal class representing a mime type (=node, vertex) in the filter graph.
     class Vertex
     {
 
@@ -216,9 +267,9 @@ namespace KOffice
 
         QCString mimeType() const { return m_mimeType; }
 
-        // current "weight" of the vertex - will be "relaxed" when
+        // Current "weight" of the vertex - will be "relaxed" when
         // running the shortest path algorithm. Returns true if it
-        // really was "relaxed"
+        // really has been "relaxed"
         bool setKey( unsigned int key );
         unsigned int key() const { return m_weight; }
         // Can be used to set the key back to "Infinity" (UINT_MAX)
@@ -237,6 +288,7 @@ namespace KOffice
         // Adds an outgoing edge to the vertex, transfers ownership
         void addEdge( const Edge* edge );
         // Finds the lightest(!) edge pointing to the given vertex, if any (0 if not found)
+        // This means it will always search the whole list of edges
         const Edge* findEdge( const Vertex* vertex ) const;
 
         // This method is called when we need to relax all "our" edges.
@@ -261,6 +313,8 @@ namespace KOffice
     };
 
 
+    // The main worker behind the scenes. Manages the creation of the graph,
+    // processing the information in it, and creating the filter chains.
     class Graph
     {
 
@@ -277,6 +331,7 @@ namespace KOffice
         // If the "to" mimetype isEmpty() then we try to find the
         // closest KOffice mimetype and use that as destination.
         // After such a search "to" will contain the dest. mimetype (return value)
+        // if the search was successfull. Might return 0!
         KoFilterChain::Ptr chain( const KoFilterManager* manager, QCString& to ) const;
 
         // debugging
