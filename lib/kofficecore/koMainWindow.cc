@@ -383,8 +383,9 @@ bool KoMainWindow::saveDocument( bool saveas )
                                                nativeFormatName(), true);
         KURL newURL;
 
-        bool bOk = true;
+        bool bOk;
         do {
+            bOk=true;
             if(dialog->exec()==QDialog::Accepted)
                 newURL=dialog->selectedURL();
             else
