@@ -2758,40 +2758,13 @@ void KSpreadView::setupPrinter( KPrinter &prt )
 void KSpreadView::print( KPrinter &prt )
 {
     prt.setFullPage( TRUE );
+    prt.setResolution ( 72 );
     QPainter painter;
 
     painter.begin( &prt );
     // Print the table and tell that m_pDoc is NOT embedded.
     m_pTable->print( painter, &prt );
     painter.end();
-
-
-/* Will correct soon, Philipp   
-    QPaintDeviceMetrics metrics( &prt );
-
-    bool doZoom = false;
-
-    int dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
-    int dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
-
-kdDebug(36001) << "  dpiX " << dpiX << endl;
-kdDebug(36001) << "  dpiy " << dpiY << endl;
-
-    painter.begin( &prt );
-
-    painter.scale( (double)metrics.logicalDpiX() / (double)dpiX,
-                   (double)metrics.logicalDpiY() / (double)dpiY );
-
-kdDebug(36001) << "  metrics.logicalDpiX() " << metrics.logicalDpiX() << endl;
-kdDebug(36001) << "  metrics.logicalDpiY() " << metrics.logicalDpiY() << endl;
-
-    // Print the table and tell that m_pDoc is NOT embedded.
-    m_pTable->print( painter, &prt );
-
-    painter.setBrush ( blue );
-    painter.drawRect(1,1, 2000, 200);
-    painter.end();
-*/
 }
 
 void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
