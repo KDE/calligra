@@ -4904,22 +4904,22 @@ void KSpreadView::refreshView()
   int heightHScrollbar = d->horzScrollBar->sizeHint().height();
 
   int left = 0;
-  if ( table->isRightToLeft() && d->doc->getShowVerticalScrollBar() )
+  if ( table->isRightToLeft() && d->doc->showVerticalScrollBar() )
     left = widthVScrollbar;
     
-  if (!d->doc->getShowHorizontalScrollBar())
+  if (!d->doc->showHorizontalScrollBar())
     d->tabBar->setGeometry( left, height() - heightHScrollbar,
                             width(), heightHScrollbar );
   else
     d->tabBar->setGeometry( left, height() - heightHScrollbar,
                             width() / 2, heightHScrollbar );
-  if ( d->doc->getShowTabBar() )
+  if ( d->doc->showTabBar() )
     d->tabBar->show();
   else
     d->tabBar->hide();
 
   // David's suggestion: move the scrollbars to KSpreadCanvas, but keep those resize statements
-  if ( d->doc->getShowHorizontalScrollBar() )
+  if ( d->doc->showHorizontalScrollBar() )
     d->horzScrollBar->show();
   else
     d->horzScrollBar->hide();
@@ -4928,7 +4928,7 @@ void KSpreadView::refreshView()
   if ( !activeTable()->isRightToLeft() )
     left = width() - widthVScrollbar;
 
-  if ( !d->doc->getShowTabBar() && !d->doc->getShowHorizontalScrollBar())
+  if ( !d->doc->showTabBar() && !d->doc->showHorizontalScrollBar())
     d->vertScrollBar->setGeometry( left,
                                    top,
                                    widthVScrollbar,
@@ -4940,7 +4940,7 @@ void KSpreadView::refreshView()
                                    height() - heightHScrollbar - top );
   d->vertScrollBar->setSteps( 20 /*linestep*/, d->vertScrollBar->height() /*pagestep*/);
 
-  if ( d->doc->getShowVerticalScrollBar() )
+  if ( d->doc->showVerticalScrollBar() )
     d->vertScrollBar->show();
   else
   {
@@ -4949,7 +4949,7 @@ void KSpreadView::refreshView()
   }
 
   int widthRowHeader = int( d->canvas->doc()->zoomItX( YBORDER_WIDTH ) );
-  if ( d->doc->getShowRowHeader() )
+  if ( d->doc->showRowHeader() )
     d->vBorderWidget->show();
   else
   {
@@ -4958,7 +4958,7 @@ void KSpreadView::refreshView()
   }
 
   int heightColHeader = int( d->canvas->doc()->zoomItY( KSpreadFormat::globalRowHeight() + 2 ) );
-  if ( d->doc->getShowColHeader() )
+  if ( d->doc->showColumnHeader() )
     d->hBorderWidget->show();
   else
   {
@@ -4976,7 +4976,7 @@ void KSpreadView::refreshView()
 
   if ( table->isRightToLeft() )
   {
-    if ( !d->doc->getShowTabBar() && !d->doc->getShowHorizontalScrollBar() )
+    if ( !d->doc->showTabBar() && !d->doc->showHorizontalScrollBar() )
       d->frame->setGeometry( widthVScrollbar, top, width() - widthVScrollbar, height() - top - heightHScrollbar);
     else
       d->frame->setGeometry( widthVScrollbar, top, width() - widthVScrollbar,
@@ -4990,7 +4990,7 @@ void KSpreadView::refreshView()
   }
   else
   {
-    if ( !d->doc->getShowTabBar() && !d->doc->getShowHorizontalScrollBar() )
+    if ( !d->doc->showTabBar() && !d->doc->showHorizontalScrollBar() )
       d->frame->setGeometry( 0, top, width() - widthVScrollbar, height() - top - heightHScrollbar);
     else
       d->frame->setGeometry( 0, top, width() - widthVScrollbar,
