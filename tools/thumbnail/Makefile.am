@@ -1,4 +1,4 @@
-INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) -I../../kword/ -I../../kpresenter -I../../lib/kotext
+INCLUDES = $(KOFFICE_INCLUDES) -I../../kword/ -I../../kpresenter -I../../lib/kotext $(all_includes)
 LDFLAGS = $(all_libraries) $(KDE_RPATH)
 METASOURCES = AUTO
 
