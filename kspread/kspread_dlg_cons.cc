@@ -29,8 +29,6 @@
 #include <klocale.h>
 #include <qmessagebox.h>
 
-#include <list>
-
 KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
 	: QDialog( 0L, name )
 {

@@ -718,6 +718,14 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   }
 }
 
+void KSpreadCanvas::focusInEvent( QFocusEvent*)
+{
+}
+
+void KSpreadCanvas::focusOutEvent( QFocusEvent*)
+{
+}
+
 void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
 {
   if ( m_pDoc->isLoading() )
@@ -733,7 +741,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   painter.begin( this );
   painter.save();
 
-  // printf("PAINT CANVAS %i/%i %i/%i\n",_ev->rect().left(),_ev->rect().top(),_ev->rect().right(),_ev->rect().bottom());
+  printf("PAINT CANVAS %i/%i %i/%i\n",_ev->rect().left(),_ev->rect().top(),_ev->rect().right(),_ev->rect().bottom());
 
   int xpos;
   int ypos;

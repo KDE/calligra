@@ -35,9 +35,6 @@ class KoDocumentEntry;
 class QWidget;
 class QPainter;
 
-#include <iostream.h>
-#include <komlParser.h>
-#include <komlMime.h>
 #include <koDocument.h>
 
 #include <kscript_context.h>
@@ -48,6 +45,7 @@ class QPainter;
 #include <qarray.h>
 #include <qrect.h>
 #include <qpalette.h>
+#include <qdom.h>
 
 #define MM_TO_POINT 2.83465
 #define POINT_TO_MM 0.3527772388
@@ -162,8 +160,8 @@ public:
   void update();
   
   virtual bool loadDocument( KOStore::Store_ptr _store, const char *_format );
-  virtual bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
-  virtual bool save( ostream& out );
+  virtual bool load( const QDOM::Element& );
+  virtual QDOM::Element save( QDOM::Document& );
   
 protected:
   ChartBinding *m_pBinding;
@@ -228,8 +226,8 @@ public:
     char* tableName() { return CORBA::string_dup( m_strName.data() ); }
 
     // C++
-    virtual bool save( ostream& );
-    virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
+    virtual QDOM::Element save( QDOM::Document& );
+    virtual bool loadXML( const QDOM::Element& table );
     virtual bool loadChildren( KOStore::Store_ptr _store );
  
     virtual void makeChildList( KOffice::Document_ptr _doc, const char *_path );
@@ -454,7 +452,7 @@ public:
     /**
      * @see #paste
      */
-    bool loadSelection( istream& _in, int _xshift, int _yshift );
+    bool loadSelection( const QDOM::Document&, int _xshift, int _yshift );
     
     /**
      * Deletes all cells in the given rectangle.
@@ -544,7 +542,7 @@ protected:
      */
     void fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell>& _destList, QList<AutoFillSequence>& _seqList );
 
-    bool saveCellRect( ostream&, const QRect& );
+    bool saveCellRect( QIODevice*, const QRect& );
 
     /**
      * Initialized @ref #m_module and @ref #m_context.

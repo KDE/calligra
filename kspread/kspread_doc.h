@@ -33,8 +33,8 @@ class KSpreadInterpreter;
 #include <qrect.h>
 #include <qstring.h>
 #include <qpainter.h>
-// #include <qprinter.h>
 #include <qpen.h>
+#include <qdom.h>
 
 #include "kspread.h"
 #include "kspread_undo.h"
@@ -44,8 +44,7 @@ class KSpreadInterpreter;
 
 #include <koPageLayoutDia.h>
 
-#define MIME_TYPE "application/x-kspread"
-#define EDITOR "IDL:KSpread/Document:1.0"
+class QIODevice;
 
 /**
  * This class holds the data that makes up a spreadsheet.
@@ -62,11 +61,11 @@ public:
   ~KSpreadDoc();
 
   // C++
-  virtual bool save( ostream&, const char *_format );
+  virtual bool save( QIODevice*, KOStore::Store_ptr, const char *_format );
 
   // C++
-  virtual bool loadChildren( KOStore::Store_ptr _store ) { return m_pMap->loadChildren( _store ); }
-  virtual bool loadXML( KOMLParser&, KOStore::Store_ptr _store );
+  virtual bool loadChildren( KOStore::Store_ptr _store );
+  virtual bool loadXML( const QDOM::Document&, KOStore::Store_ptr );
   
   virtual void cleanUp();
 
@@ -87,7 +86,7 @@ public:
   
   virtual void viewList( OpenParts::Document::ViewList*& _list );
   
-  virtual char* mimeType() { return CORBA::string_dup( MIME_TYPE ); }
+  virtual char* mimeType() { return CORBA::string_dup( "application/x-kspread" ); }
   
   virtual CORBA::Boolean isModified() { return m_bModified; }
 
@@ -177,28 +176,28 @@ public:
   void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
 		       const char* _paper, const char* _orientation );
   
-  QString headLeft( int _p, const char *_t  ) { if ( m_headLeft.isNull() ) return "";
-  return completeHeading( m_headLeft.data(), _p, _t ); }
-  QString headMid( int _p, const char *_t ) { if ( m_headMid.isNull() ) return "";
-  return completeHeading( m_headMid.data(), _p, _t ); }
-  QString headRight( int _p, const char *_t ) { if ( m_headRight.isNull() ) return "";
-  return completeHeading( m_headRight.data(), _p, _t ); }
-  QString footLeft( int _p, const char *_t ) { if ( m_footLeft.isNull() ) return "";
-  return completeHeading( m_footLeft.data(), _p, _t ); }
-  QString footMid( int _p, const char *_t ) { if ( m_footMid.isNull() ) return "";
-  return completeHeading( m_footMid.data(), _p, _t ); }
-  QString footRight( int _p, const char *_t ) { if ( m_footRight.isNull() ) return "";
-  return completeHeading( m_footRight.data(), _p, _t ); }
+  QString headLeft( int _p, const QString& _t  ) { if ( m_headLeft.isEmpty() ) return QString::null;
+    return completeHeading( m_headLeft, _p, _t ); }
+  QString headMid( int _p, const QString& _t ) { if ( m_headMid.isEmpty() ) return QString::null;
+    return completeHeading( m_headMid, _p, _t ); }
+  QString headRight( int _p, const char *_t ) { if ( m_headRight.isEmpty() ) return QString::null;
+    return completeHeading( m_headRight, _p, _t ); }
+  QString footLeft( int _p, const char *_t ) { if ( m_footLeft.isEmpty() ) return QString::null;
+    return completeHeading( m_footLeft, _p, _t ); }
+  QString footMid( int _p, const char *_t ) { if ( m_footMid.isEmpty() ) return QString::null;
+    return completeHeading( m_footMid, _p, _t ); }
+  QString footRight( int _p, const char *_t ) { if ( m_footRight.isEmpty() ) return QString::null;
+    return completeHeading( m_footRight, _p, _t ); }
   
-  QString headLeft() { if ( m_headLeft.isNull() ) return ""; return m_headLeft.data(); }
-  QString headMid() { if ( m_headMid.isNull() ) return ""; return m_headMid.data(); }
-  QString headRight() { if ( m_headRight.isNull() ) return ""; return m_headRight.data(); }
-  QString footLeft() { if ( m_footLeft.isNull() ) return ""; return m_footLeft.data(); }
-  QString footMid() { if ( m_footMid.isNull() ) return ""; return m_footMid.data(); }
-  QString footRight() { if ( m_footRight.isNull() ) return ""; return m_footRight.data(); }
+  QString headLeft() { return m_headLeft; }
+  QString headMid() { return m_headMid; }
+  QString headRight() { return m_headRight; }
+  QString footLeft() { return m_footLeft; }
+  QString footMid() { return m_footMid; }
+  QString footRight() { return m_footRight; }
   
-  void setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
-			const char *_footl, const char *_footm, const char *_footr );
+  void setHeadFootLine( const QString& _headl, const QString& _headm, const QString& _headr,
+			const QString& _footl, const QString& _footm, const QString& _footr );
     
   /**
    * @return the KScript Interpreter used by this document.

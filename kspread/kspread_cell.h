@@ -31,7 +31,6 @@ class QSimpleRichText;
 class KSParseNode;
 
 #include <iostream.h>
-#include <komlParser.h>
 
 #include <qstring.h>
 #include <qpen.h>
@@ -41,6 +40,7 @@ class KSParseNode;
 #include <qlist.h>
 #include <qstrlist.h>
 #include <qobject.h>
+#include <qdom.h>
 
 #include "kspread_layout.h"
 
@@ -101,9 +101,9 @@ public:
     KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text = 0L );
     ~KSpreadCell();
 
-    virtual bool save( ostream&, int _x_offset = 0, int _y_offset = 0 );
-    virtual bool load( KOMLParser& _parser, vector<KOMLAttrib>& _attrib ) { return load( _parser, _attrib, 0, 0 ); }
-    virtual bool load( KOMLParser&, vector<KOMLAttrib>&, int _xshift, int _yshift );
+    virtual QDOM::Element save( QDOM::Document&, int _x_offset = 0, int _y_offset = 0 );
+    virtual bool load( const QDOM::Element& e ) { return load( e, 0, 0 ); }
+    virtual bool load( const QDOM::Element&, int _xshift, int _yshift );
 
     /**
      * Copyies the layout from the cell at the position (_column|_row).
