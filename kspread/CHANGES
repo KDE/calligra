@@ -33,7 +33,7 @@ Until beta2:
   Min, Max, Product, Standard Deviation, Variance.
 - fixed some functions to be Excel-compatibel (FIND, REPLACE,LEFT,
   RIGHT,MID,REPT)
-- now it's "Sheet" everywhere, not more "Table" :-)
+- now it's "Sheet" everywhere, not more "Table"
 - added formula indicator (small blue rectangle on the corner,
   when the cell holds a formula). idea from Quattro Pro
 - added Greek to EURO() function
@@ -54,7 +54,7 @@ new functions added:
 Until beta1:
 ------------
 
-- bug fixes :-)
+- bug fixes
 - performance enhancements
 - support up to 2^15 columns and rows, formerly it was 676 columns and 10000
   rows
