@@ -259,16 +259,22 @@ void DefineCustomSlideShow::init()
   connect( m_removeSlide, SIGNAL(clicked()), this, SLOT(slotMoveRemoveSlide()) );
   connect( m_moveUpSlide, SIGNAL(clicked()), this, SLOT( slotMoveUpSlide() ) );
   connect( m_moveDownSlide, SIGNAL(clicked()), this, SLOT(slotMoveDownSlide()) );
-
+  connect(  m_name, SIGNAL( textChanged ( const QString & ) ), this, SLOT( slideNameChanged( const QString & ) ) );
 
   m_insertSlide->setIconSet( SmallIconSet( ( QApplication::reverseLayout()? "back" : "forward" ) ) );
   m_removeSlide->setIconSet( SmallIconSet( (QApplication::reverseLayout()? "forward" : "back") ) );
   m_moveUpSlide->setIconSet( SmallIconSet( "up" ) );
   m_moveDownSlide->setIconSet( SmallIconSet( "down" ) );
 
+  slideNameChanged( m_name->text() );
   updateButton();
   resize( 600, 250 );
 
+}
+
+void DefineCustomSlideShow::slideNameChanged( const QString & _name)
+{
+     enableButtonOK( !_name.isEmpty() );
 }
 
 void DefineCustomSlideShow::updateButton()

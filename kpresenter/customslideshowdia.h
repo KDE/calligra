@@ -77,7 +77,7 @@ void slotMoveUpSlide();
     void slotMoveDownSlide();
     void slotMoveRemoveSlide();
     void slotMoveInsertSlide();
-
+    void slideNameChanged( const QString & _name);
 
 protected:
     void init();
