@@ -463,7 +463,7 @@ void XFIGImport::parsePolyline (istream& fin, GDocument* doc) {
     break;
   default:
     // doesn't occur
-    cout << "unknown subtype: " << sub_type << endl;
+    kdDebug() << "unknown subtype: " << sub_type << endl;
     break;
   }
 
