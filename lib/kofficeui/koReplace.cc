@@ -117,7 +117,7 @@ KoReplace::~KoReplace()
         if ( !m_replacements )
             KMessageBox::information(parentWidget(), i18n("No text was replaced."));
         else
-            KMessageBox::information(parentWidget(), i18n("1 replacement done.\n", "%n replacements done.\n", m_replacements ) );
+            KMessageBox::information(parentWidget(), i18n("1 replacement done.", "%n replacements done.", m_replacements ) );
 
     }
     setDisplayFinalDialog( false ); // don't display the KoFind dialog :)

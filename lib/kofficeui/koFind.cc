@@ -632,9 +632,10 @@ bool KoFind::shouldRestart( bool forceAsking ) const
         return false;
     QString message;
     if ( numMatches() )
-        message = i18n("1 match found.\n", "%n matches found.\n", numMatches() );
+        message = i18n("1 match found.", "%n matches found.", numMatches() );
     else
-        message = i18n("No matches found.\n");
+        message = i18n("No matches found.");
+    message += "\n"; // can't be in the i18n() because of the plural form.
     // Hope this word puzzle is ok, it's a different sentence
     message += i18n("Do you want to restart search at the beginning?");
 
