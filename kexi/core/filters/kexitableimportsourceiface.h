@@ -39,7 +39,7 @@ public:
 	virtual bool pageChanging(QWidget* from, QWidget *to) {return false;}
 	virtual QPtrList<QWidget> sourceWidgets(QWidget *parent) {};
 
-	virtual KexiDB::Table tableStructure()=0;
+	virtual KexiDB::TableSchema tableStructure()=0;
 
 	virtual bool firstTableRow()=0;
 	virtual bool nextTableRow()=0;
