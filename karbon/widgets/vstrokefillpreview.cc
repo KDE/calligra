@@ -73,7 +73,7 @@ VStrokeFillPreview::~VStrokeFillPreview()
 void
 VStrokeFillPreview::paintEvent( QPaintEvent* event )
 {
-	bitBlt( this, 0, 0, &m_pixmap, 0, 0, 50, 50 );
+	bitBlt( this, ( width() - 50 ) / 2, 0, &m_pixmap, 0, 0, 50, 50 );
 	QFrame::paintEvent( event );
 }
 
