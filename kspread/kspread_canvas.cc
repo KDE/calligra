@@ -3556,7 +3556,8 @@ void KSpreadCanvas::paintChildren( QPainter& painter, QWMatrix& matrix )
     {
       // #### todo: paint only if child is visible inside rect
       painter.save();
-      m_pDoc->paintChild( itChild.current(), painter, m_pView );
+      m_pDoc->paintChild( itChild.current(), painter, m_pView,
+        m_pDoc->zoomedResolutionX(), m_pDoc->zoomedResolutionY() );
       painter.restore();
     }
   }

@@ -789,15 +789,11 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
 {
   //  ElapsedTime et( "KSpreadDoc::paintContent1" );
     //kdDebug(36001) << "KSpreadDoc::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
-    int oldZoom = m_zoom;
-    setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
-    if ( m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY )
-    {
-        setResolution( zoomX, zoomY );
-        bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
-        newZoomAndResolution( false, forPrint );
-    }
 
+    // save current zoom
+    int oldZoom = m_zoom;
+
+    // choose sheet: the first or the active
     KSpreadSheet* table = 0L;
     if ( !m_activeTable )
         table = m_pMap->firstTable();
@@ -806,13 +802,28 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     if ( !table )
         return;
 
+    // only one zoom is supported
+    double d_zoom = 1.0;
+    setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    if ( m_zoomedResolutionX != zoomX )
+        d_zoom *= ( zoomX / m_zoomedResolutionX );
+
+    // KSpread support zoom, therefore no need to scale with worldMatrix
+    QWMatrix matrix = painter.worldMatrix();
+    matrix.setMatrix( 1, 0, 0, 1, matrix.dx(), matrix.dy() );
+    QRect prect = rect;
+    prect.setWidth( prect.width() * painter.worldMatrix().m11() );
+    prect.setHeight( prect.height() * painter.worldMatrix().m22() );
+    setZoomAndResolution( d_zoom * 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+
+    // paint the content, now zoom is correctly set
     kdDebug(36001)<<"paintContent-------------------------------------\n";
     painter.save();
-
-    // painter.scale(zoomX, zoomY);
-    paintContent( painter, rect, transparent, table, false );
-
+    painter.setWorldMatrix( matrix );
+    paintContent( painter, prect, transparent, table, false );
     painter.restore();
+
+    // restore zoom
     m_zoom = oldZoom;
     setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
 }
