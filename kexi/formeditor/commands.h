@@ -40,7 +40,7 @@ namespace KFormDesigner {
 class Container;
 class Form;
 
-class PropertyCommand : public KCommand
+class KFORMEDITOR_EXPORT PropertyCommand : public KCommand
 {
 	public:
 		PropertyCommand(ObjectPropertyBuffer *buf, const QString &name, const QVariant &oldValue, const QVariant &value, const QCString &property);
@@ -60,7 +60,7 @@ class PropertyCommand : public KCommand
 		QCString    m_property;
 };
 
-class GeometryPropertyCommand : public KCommand
+class KFORMEDITOR_EXPORT GeometryPropertyCommand : public KCommand
 {
 	public:
 		GeometryPropertyCommand(ObjectPropertyBuffer *buf, const QStringList &names, QPoint oldPos);
@@ -78,7 +78,7 @@ class GeometryPropertyCommand : public KCommand
 		QPoint m_pos;
 };
 
-class LayoutPropertyCommand : public PropertyCommand
+class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 {
 	public:
 		LayoutPropertyCommand(ObjectPropertyBuffer *buf, const QString &name, const QVariant &oldValue, const QVariant &value);
@@ -93,7 +93,7 @@ class LayoutPropertyCommand : public PropertyCommand
 };
 
 
-class InsertWidgetCommand : public KCommand
+class KFORMEDITOR_EXPORT InsertWidgetCommand : public KCommand
 {
 	public:
 		InsertWidgetCommand(Container *container, QPoint point);
@@ -111,7 +111,7 @@ class InsertWidgetCommand : public KCommand
 		QRect  m_insertRect;
 };
 
-class PasteWidgetCommand : public KCommand
+class KFORMEDITOR_EXPORT PasteWidgetCommand : public KCommand
 {
 	public:
 		PasteWidgetCommand(QDomDocument &domDoc, Container *container, QPoint p = QPoint());
@@ -128,7 +128,7 @@ class PasteWidgetCommand : public KCommand
 		QStringList m_names;
 };
 
-class DeleteWidgetCommand : public KCommand
+class KFORMEDITOR_EXPORT DeleteWidgetCommand : public KCommand
 {
 	public:
 		DeleteWidgetCommand(::WidgetList &list, Form *form);
@@ -144,7 +144,7 @@ class DeleteWidgetCommand : public KCommand
 		QMap<QString, QString>  m_parents;
 };
 
-class CutWidgetCommand : public DeleteWidgetCommand
+class KFORMEDITOR_EXPORT CutWidgetCommand : public DeleteWidgetCommand
 {
 	public:
 		CutWidgetCommand(WidgetList &list, Form *form);

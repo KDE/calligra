@@ -194,6 +194,8 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 
 		if(QString(meta->name()) == "name")
 			(*this)["name"]->setAutoSync(0);
+		if (!m_manager->activeForm() || !m_manager->activeForm()->objectTree())
+			return;
 		ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(widg->name());
 		if(!tree)  return;
 		if(tree->modifProp()->contains(meta->name()))
@@ -327,7 +329,8 @@ ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
 				list.append(w->name());
 
 			m_lastgeocom = new GeometryPropertyCommand(this, list, static_cast<QMoveEvent*>(ev)->oldPos());
-			m_manager->activeForm()->addCommand(m_lastgeocom, false);
+			if (m_manager->activeForm())
+				m_manager->activeForm()->addCommand(m_lastgeocom, false);
 		}
 	}
 	return false;
@@ -425,6 +428,8 @@ ObjectPropertyBuffer::addValueDescription(const char *value, const QString &desc
 void
 ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QObject *obj)
 {
+	if (!m_manager->activeForm() || !m_manager->activeForm()->objectTree())
+		return;
 	QStringList list;
 	QString value;
 	QStringList keys = QStringList::fromStrList( meta->valueToKeys(obj->property("alignment").toInt()) );
@@ -492,6 +497,8 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QObject *ob
 void
 ObjectPropertyBuffer::saveAlignProperty()
 {
+	if (!m_manager->activeForm())
+		return;
 	QStrList list;
 	list.append( (*this)["hAlign"]->value().toString().latin1() );
 	list.append( (*this)["vAlign"]->value().toString().latin1() );
@@ -516,6 +523,8 @@ ObjectPropertyBuffer::saveAlignProperty()
 void
 ObjectPropertyBuffer::createLayoutProperty(Container *container)
 {
+	if (!m_manager->activeForm() || !m_manager->activeForm()->objectTree())
+		return;
 	QStringList list;
 	QString value;
 
@@ -562,8 +571,9 @@ void
 ObjectPropertyBuffer::saveLayoutProperty(const QString &value)
 {
 	Container *cont=0;
-	if(m_manager->activeForm())
+	if(m_manager->activeForm() && m_manager->activeForm()->objectTree()) {
 		cont = m_manager->activeForm()->objectTree()->lookup(m_object->name())->container();
+	}
 	else
 	{
 		kdDebug() << "ERROR NO CONTAINER" << endl;

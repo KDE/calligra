@@ -101,7 +101,7 @@ Form::setCurrentWidget(QWidget *w)
 	}*/
 
 	m_resizeHandles.clear();
-	if(w != m_toplevel->widget() && w)
+	if(m_toplevel && w != m_toplevel->widget() && w)
 		m_resizeHandles.insert(w->name(), new ResizeHandleSet(w));
 
 }

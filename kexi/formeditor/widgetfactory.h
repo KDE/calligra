@@ -91,7 +91,7 @@ class KFORMEDITOR_EXPORT Widget
 
 typedef QPtrList<Widget> WidgetList;
 
-void  installRecursiveEventFilter(QObject *object, QObject *container);
+void KFORMEDITOR_EXPORT installRecursiveEventFilter(QObject *object, QObject *container);
 /**
  * this is a poor virtual class, used for making widgets
  * avaible to the WidgetLibrary.

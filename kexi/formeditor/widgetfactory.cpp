@@ -116,7 +116,7 @@ WidgetFactory::editList(QWidget *w, QStringList &list)
 bool
 WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 {
-	QWidget *w = m_editor ? m_editor : m_widget;
+	QWidget *w = m_editor ? m_editor : (QWidget *)m_widget;
 
 	if(obj != (QObject *)w)
 		return false;
