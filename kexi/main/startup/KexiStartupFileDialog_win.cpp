@@ -25,9 +25,12 @@
 #include "KexiStartupFileDialog.h"
 
 #include <kiconloader.h>
+#include <kdebug.h>
 
 #include <qobjectlist.h>
 #include <qlineedit.h>
+
+#include <win/win32_utils.h>
 
 class KexiStartupFileDialogBasePrivate
 {
@@ -45,7 +48,15 @@ KexiStartupFileDialogBase::KexiStartupFileDialogBase(
  : QFileDialog( dirName, filter, parent, name, modal )
  , d(new KexiStartupFileDialogBasePrivate())
 {
-	init(dirName, filter, parent);
+	QString _dirName = dirName;
+	//make default 'My Documents' folder
+//TODO: store changes in the app's config file?
+	if (_dirName.isEmpty()) {
+		_dirName = getRegistryValue(HKEY_CURRENT_USER, 
+			"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders", "Personal");
+	}
+
+	init(_dirName, filter, parent);
 
 	//find "OK" button
 	QObjectList *l = queryList( "QPushButton", "OK", false );
@@ -72,6 +83,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 //TODO    d->operationMode = Opening;
     setMode(KFile::File | KFile::ExistingOnly); //(js) default: open action
     setIcon( KGlobal::iconLoader()->loadIcon("fileopen", KIcon::Desktop) );
+		setDir(QDir(startDir));
 //TODO    d->hasDefaultFilter = false;
 //TODO    d->hasView = false;
 //(js)    d->mainWidget = new QWidget( this, "KFileDialog::mainWidget");
