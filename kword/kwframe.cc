@@ -1066,7 +1066,7 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
         painter->setClipRegion( reg );
         //painter->fillRect( reg.boundingRect(), cg.base() );
         painter->fillRect( crect, cg.base() );
-        formula->draw( *painter );
+        formula->draw( *painter, crect );
         painter->restore();
     }
 }
@@ -1141,7 +1141,7 @@ void KWFormulaFrameSet::deactivate()
 /*================================================================*/
 void KWFormulaFrameSet::create( QWidget */*parent*/ )
 {
-    if (formula != 0) {
+    if ( formula != 0 ) {
         updateFrames();
         return;
     }
@@ -1165,8 +1165,8 @@ void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
     //kdDebug(32001) << "KWFormulaFrameSet::slotFormulaChanged" << endl;
 
     // zooming!!!
-    frames.first()->setWidth(width);
-    frames.first()->setHeight(height);
+    frames.first()->setWidth( width );
+    frames.first()->setHeight( height );
 
     updateFrames();
     emit repaintChanged( this );
@@ -1231,14 +1231,21 @@ void KWFormulaFrameSet::load(QDomElement& attributes)
     }
 }
 
+void KWFormulaFrameSet::zoom()
+{
+    //kWordDocument()
+}
 
 /*================================================================*/
 KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* canvas)
         : KWFrameSetEdit(fs, canvas)
 {
     kdDebug(32001) << "KWFormulaFrameSetEdit::KWFormulaFrameSetEdit" << endl;
-    formulaView = new KFormulaView(fs->getFormula(), canvas->viewport());
+    formulaView = new KFormulaView(fs->getFormula());
     formulaView->setSmallCursor(true);
+
+    connect( formulaView, SIGNAL( cursorChanged( bool, bool ) ),
+             this, SLOT( cursorChanged( bool, bool ) ) );
 
     m_canvas->gui()->getView()->showFormulaToolbar(true);
     focusInEvent();
@@ -1332,6 +1339,17 @@ void KWFormulaFrameSetEdit::selectAll()
     formulaView->slotSelectAll();
 }
 
+void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )
+{
+    if ( visible ) {
+        int x = formulaView->getCursorPoint().x();
+        int y = formulaView->getCursorPoint().y();
+        m_canvas->ensureVisible( x, y );
+    }
+    QRect dirty = formulaView->getDirtyArea();
+    dirty.moveBy( -m_canvas->contentsX(), -m_canvas->contentsY() );
+    m_canvas->viewport()->update( dirty );
+}
 
 
 /*================================================================*/

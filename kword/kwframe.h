@@ -546,6 +546,9 @@ public:
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &attributes );
 
+    /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
+    virtual void zoom();
+
     KFormulaContainer* getFormula() const { return formula; }
 
 protected slots:
@@ -592,6 +595,13 @@ public:
     virtual void cut();
     virtual void paste();
     virtual void selectAll();
+
+protected slots:
+
+    /**
+     * Make sure the cursor can be seen at its new position.
+     */
+    void cursorChanged( bool visible, bool selecting );
 
 private:
     KFormulaView* formulaView;
