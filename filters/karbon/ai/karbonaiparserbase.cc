@@ -41,7 +41,7 @@ KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_ptt (PTT_Output)
 
   m_fm = FM_NonZero;
 
-  m_curKarbonPath = new VPath();
+  m_curKarbonPath = new VPath( 0L );
 
   m_document = new VDocument();
   m_layer = NULL;
@@ -264,7 +264,7 @@ void KarbonAIParserBase::gotWindingOrder (int val)
 void KarbonAIParserBase::gotBeginGroup (bool /*clipping*/)
 {
 //  qDebug ("start begin group");
-  VGroup *group = new VGroup();
+  VGroup *group = new VGroup( 0L );
   m_groupStack.push (group);
 //  qDebug ("end begin group");
 
@@ -330,7 +330,7 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
 {
   if (!m_layer)
   {
-    m_layer = new VLayer();
+    m_layer = new VLayer( 0L );
     m_document->insertLayer (m_layer);
   }
 
@@ -362,7 +362,7 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
     else
       m_combination->combine (*m_curKarbonPath);
 
-    m_curKarbonPath = new VPath();
+    m_curKarbonPath = new VPath( 0L );
 
     return;
   }
@@ -376,7 +376,7 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
     m_groupStack.top()->append( m_curKarbonPath );
   }
 
-  m_curKarbonPath = new VPath();
+  m_curKarbonPath = new VPath( 0L );
 }
 
 bool KarbonAIParserBase::parse (QIODevice& fin, QDomDocument &doc)
