@@ -75,7 +75,7 @@
 #include "BlendCmd.h"
 #include "BlendDialog.h"
 #include "OptionDialog.h"
-
+#include "DocumentInfo.h"
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kapp.h>
@@ -119,6 +119,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
   Canvas::initZoomFactors (zFactors);
 
   cout << "connect doc" << endl;
+  /*
   QObject::connect (m_pDoc,
 		    SIGNAL (partInserted (KIllustratorChild *, GPart *)),
 		    this,
@@ -126,6 +127,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
   QObject::connect (m_pDoc,
 		    SIGNAL (childGeometryChanged (KIllustratorChild *)),
 		   this, SLOT(changeChildGeometrySlot (KIllustratorChild *)));
+  */
   createGUI ();
 }
 
@@ -176,7 +178,7 @@ void KIllustratorView::createGUI()
     // Layout menu
     m_page = new KAction( i18n("Page ..."), 0, this, SLOT( slotPage() ), actionCollection(), "page" );
     m_grid = new KAction( i18n("Grid ..."), 0, this, SLOT( slotGrid() ), actionCollection(), "grid" );
-    m_helplines = new KAction( i18n("Helplines ..."), 0, this, SLOT( slotHelplined() ), actionCollection(), "helplines" );
+    m_helplines = new KAction( i18n("Helplines ..."), 0, this, SLOT( slotHelplines() ), actionCollection(), "helplines" );
     m_alignToGrid = new KToggleAction( i18n("Align To Grid"), 0, actionCollection(), "alignToGrid" );
     connect( m_alignToGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToGrid( bool ) ) );
     m_alignToHelplines = new KToggleAction( i18n("Align To Helplines"), 0, actionCollection(), "alignToHelplines" );
@@ -350,8 +352,8 @@ void KIllustratorView::setupCanvas()
 			     selTool = new SelectionTool (&cmdHistory));
   QObject::connect (selTool, SIGNAL(modeSelected(const char*)),
 		    this, SLOT(showCurrentMode(const char*)));
-  QObject::connect (selTool, SIGNAL(partSelected(GObject*)),
-		    this, SLOT(activatePart(GObject*)));
+  //  QObject::connect (selTool, SIGNAL(partSelected(GObject*)),
+  //		    this, SLOT(activatePart(GObject*)));
   tcontroller->registerTool (ID_TOOL_EDITPOINT,
 			     editPointTool = new EditPointTool (&cmdHistory));
   QObject::connect (editPointTool, SIGNAL(modeSelected(const char*)),
@@ -410,11 +412,9 @@ void KIllustratorView::setupCanvas()
   mainWidget = w;
 }
 
-/*
 void KIllustratorView::showCurrentMode (const char* ) {
     //  statusbar->changeItem (msg, 2);
 }
-*/
 /*
 void KIllustratorView::newView ()
 {
@@ -1133,6 +1133,10 @@ void KIllustratorView::slotLayers()
 	layerDialog = new LayerDialog ();
     layerDialog->manageDocument (m_pDoc->gdoc());
     layerDialog->show ();
+}
+
+void KIllustratorView::slotDocumentInfo () {
+  DocumentInfo::showInfo (m_pDoc->gdoc ());
 }
 
 #include "KIllustrator_view.moc"

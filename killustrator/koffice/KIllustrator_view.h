@@ -185,6 +185,7 @@ protected slots:
     void resetTools();
     QString getExportFileName (FilterManager *filterMgr);
     
+  void showCurrentMode (const char* msg);
     /* protected slots:
   void editCutSlot ();
   void editCopySlot ();
@@ -197,7 +198,6 @@ protected slots:
 
   void popupForSelection (int x, int y);
   void setUndoStatus(bool undoPossible, bool redoPossible);
-  void showCurrentMode (const char* msg);
   void resetTools ();
 
   void insertPartSlot (KIllustratorChild *child, GPart *part);
@@ -262,6 +262,7 @@ private slots:
     void slotDeleteNode( bool );
     void slotSplitLine( bool );
     void slotLayers();
+    void slotDocumentInfo();
     
 protected:
   KIllustratorDocument *m_pDoc;
