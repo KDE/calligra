@@ -93,6 +93,8 @@ protected:
     QString formatLine(QString l);
     QStringList sortQStringList(QStringList list);
 
+    QString m_no_match;
+
     int m_history_pos;
     
     bool m_replacement;        // does this dialog offer a replace button etc.?

@@ -24,8 +24,6 @@
 
 /*
 TODO:
--update user doc
--more documentation in the source code
 -back/forward buttons: use icons
 -Be more verbose if the result is empty
 -See the TODO's in the source below
@@ -67,6 +65,8 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
         KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok);
     m_dialog->setHelp(QString::null, "thesaurus");
     m_dialog->resize(500, 400);
+
+    m_no_match = i18n("(No match)");
     
     m_replacement = false;
     m_history_pos = 1;
@@ -117,9 +117,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     (void) new QLabel(i18n("More specific words"), vbox_hypo);
     m_thes_hypo = new QListBox(vbox_hypo);
 
-    //
-    // single click -- keep display unambiguous and remove other selections:
-    //
+    // single click -- keep display unambiguous by removing other selections:
     
     connect(m_thes_syn, SIGNAL(clicked(QListBoxItem *)), m_thes_hyper, SLOT(clearSelection()));
     connect(m_thes_syn, SIGNAL(clicked(QListBoxItem *)), m_thes_hypo, SLOT(clearSelection()));
@@ -163,9 +161,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     connect(m_resultbox, SIGNAL(linkClicked(const QString &)),
         this, SLOT(slotFindTerm(const QString &)));
 
-    //
     // Connect for the history box
-    //
     m_edit->setTrapReturnKey(true);        // Do not use Return as default key...
     connect(m_edit, SIGNAL(returnPressed(const QString&)), this, SLOT(slotFindTerm(const QString&)));
     connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotGotoHistory(int)));
@@ -269,7 +265,7 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
         slotFindTerm(buffer);
     }
 
-    if( m_dialog->exec() == QDialog::Accepted ) {    // Replace
+    if( m_dialog->exec() == QDialog::Accepted ) {    // "Replace"
         *((QString*)data) = m_replace->text();
     }
 
@@ -277,6 +273,7 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
 }
 
 
+// Enbale or disable back and forward button
 void Thesaurus::slotUpdateNavButtons()
 {
     if( m_history_pos <= 1 ) {    // 1 = first position
@@ -291,13 +288,14 @@ void Thesaurus::slotUpdateNavButtons()
     }
 }
 
+// Go to an item from the editbale combo box.
 void Thesaurus::slotGotoHistory(int index)
 {
     m_history_pos = m_edit->count() - index;
     slotFindTerm(m_edit->text(index), false);
 }
 
-// Back button
+// Triggered when the back button is clicked.
 void Thesaurus::slotBack()
 {
     m_history_pos--;
@@ -306,7 +304,7 @@ void Thesaurus::slotBack()
     slotFindTerm(m_edit->text(pos), false);
 }
 
-// Forward button
+// Triggered when the forward button is clicked.
 void Thesaurus::slotForward()
 {
     m_history_pos++;
@@ -315,10 +313,10 @@ void Thesaurus::slotForward()
     slotFindTerm(m_edit->text(pos), false);
 }
 
-// Triggered when a word is selected.
+// Triggered when a word is selected in the list box.
 void Thesaurus::slotSetReplaceTerm(const QString &term)
 {
-    if( m_replacement ) {
+    if( m_replacement && term != m_no_match ) {
         m_replace->setText(term);
     }
 }
@@ -363,7 +361,7 @@ void Thesaurus::findTermThesaurus(const QString &term)
     m_thesproc_stdout = "";
     m_thesproc_stderr = "";
     
-    // Find oly whole words. Looks clumsy, but this way we don't have to rely on
+    // Find only whole words. Looks clumsy, but this way we don't have to rely on
     // features that might only be in certain versions of grep:
     QString term_tmp = ";" + term.stripWhiteSpace() + ";";
     m_thesproc->clearArguments();
@@ -378,6 +376,8 @@ void Thesaurus::findTermThesaurus(const QString &term)
     }
 }
 
+// The external process has ended, so we parse its result and put it in 
+// the list box.
 void Thesaurus::thesExited(KProcess *)
 {
 
@@ -438,7 +438,7 @@ void Thesaurus::thesExited(KProcess *)
         m_thes_syn->insertStringList(syn);
         m_thes_syn->setEnabled(true);
     } else {
-        m_thes_syn->insertItem(i18n("(No match)"));
+        m_thes_syn->insertItem(m_no_match);
         m_thes_syn->setEnabled(false);
     }
     
@@ -448,7 +448,7 @@ void Thesaurus::thesExited(KProcess *)
         m_thes_hyper->insertStringList(hyper);
         m_thes_hyper->setEnabled(true);
     } else {
-        m_thes_hyper->insertItem(i18n("(No match)"));
+        m_thes_hyper->insertItem(m_no_match);
         m_thes_hyper->setEnabled(false);
     }
 
@@ -458,7 +458,7 @@ void Thesaurus::thesExited(KProcess *)
         m_thes_hypo->insertStringList(hypo);
         m_thes_hypo->setEnabled(true);
     } else {
-        m_thes_hypo->insertItem(i18n("(No match)"));
+        m_thes_hypo->insertItem(m_no_match);
         m_thes_hypo->setEnabled(false);
     }
 
@@ -596,6 +596,7 @@ void Thesaurus::findTermWordnet(const QString &term)
 
 }
 
+// The process has ended, so parse its result and display it as Qt richtext.
 void Thesaurus::wnExited(KProcess *)
 {
     
@@ -666,7 +667,7 @@ void Thesaurus::receivedWnStderr(KProcess *, char *result, int len)
 // Tools
 //
 
-/** Format lines using Qt's simple richtext. */
+// Format lines using Qt's simple richtext.
 QString Thesaurus::formatLine(QString l)
 {
     
