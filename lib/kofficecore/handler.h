@@ -61,11 +61,12 @@ class PartResizeHandler : public EventHandler
 {
     Q_OBJECT
 public:
-    PartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoChild* child,
+    PartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
 		       KoChild::Gadget gadget, const QPoint& point );
     ~PartResizeHandler();
 
 protected:
+    void repaint(QRegion &rgn);
     bool eventFilter( QObject*, QEvent* );
 
 private:
@@ -80,7 +81,7 @@ class PartMoveHandler : public EventHandler
 {
     Q_OBJECT
 public:
-    PartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoChild* child,
+    PartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
 		     const QPoint& point );
     ~PartMoveHandler();
 

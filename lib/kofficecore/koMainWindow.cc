@@ -60,6 +60,21 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+class KoPartManager : public KParts::PartManager
+{
+public:
+  KoPartManager( QWidget * parent, const char * name = 0L )
+    : KParts::PartManager( parent, name ) {}
+  KoPartManager( QWidget *topLevel, QObject *parent, const char *name = 0L )
+    : KParts::PartManager( topLevel, parent, name ) {}    
+  virtual bool eventFilter( QObject *obj, QEvent *ev )
+  {
+    if ( !obj->isWidgetType() || obj->inherits( "KoFrame" ) )
+      return false;
+    return PartManager::eventFilter( obj, ev );
+  }
+};
+
 class KoMainWindowPrivate
 {
 public:
@@ -114,7 +129,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 {
     d = new KoMainWindowPrivate;
 
-    d->m_manager = new KParts::PartManager( this );
+    d->m_manager = new KoPartManager( this );
     d->m_manager->setSelectionPolicy( KParts::PartManager::TriState );
     d->m_manager->setAllowNestedParts( true );
     d->m_manager->setIgnoreScrollBars( true );

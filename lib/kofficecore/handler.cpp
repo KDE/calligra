@@ -44,9 +44,9 @@ QObject* EventHandler::target()
 
 class PartResizeHandlerPrivate {
 public:
-    PartResizeHandlerPrivate( const QWMatrix& matrix, KoChild* child,
+    PartResizeHandlerPrivate( const QWMatrix& matrix, KoView *view, KoChild* child,
 			      KoChild::Gadget gadget, const QPoint& point ) :
-	m_gadget(gadget), m_child(child), m_parentMatrix(matrix) {
+	m_gadget(gadget), m_view(view), m_child(child), m_parentMatrix(matrix) {
 	
 	m_geometryStart = child->geometry();
 	m_matrix = child->matrix() * matrix;
@@ -62,6 +62,7 @@ public:
     KoChild::Gadget m_gadget;
     QPoint m_mouseStart;
     QRect m_geometryStart;
+    KoView* m_view;
     KoChild* m_child;
     QWMatrix m_invert;
     QWMatrix m_matrix;
@@ -69,12 +70,12 @@ public:
     QWMatrix m_invertParentMatrix;
 };
 
-PartResizeHandler::PartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoChild* child,
+PartResizeHandler::PartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
 				      KoChild::Gadget gadget, const QPoint& point )
     : EventHandler( widget )
 {
     child->lock();
-    d=new PartResizeHandlerPrivate(matrix, child, gadget, point);
+    d=new PartResizeHandlerPrivate(matrix, view, child, gadget, point);
 }
 
 PartResizeHandler::~PartResizeHandler()
@@ -82,6 +83,13 @@ PartResizeHandler::~PartResizeHandler()
     d->m_child->unlock();
     delete d;
     d=0L;
+}
+
+void PartResizeHandler::repaint(QRegion &rgn)
+{
+  rgn = rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, true ) );
+  rgn.translate(- d->m_view->canvasXOffset(), - d->m_view->canvasYOffset());
+  ((QWidget*)target())->repaint( rgn );
 }
 
 bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
@@ -94,7 +102,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
     else if ( ev->type() == QEvent::MouseMove )
     {
 	QMouseEvent* e = (QMouseEvent*)ev;
-	QPoint p = d->m_invert.map( d->m_invertParentMatrix.map( e->pos() ) );
+	QPoint p = d->m_invert.map( d->m_invertParentMatrix.map( e->pos() + QPoint(d->m_view->canvasXOffset(), d->m_view->canvasYOffset()) ) );
 	QRegion rgn( d->m_child->frameRegion( d->m_parentMatrix, true ) );
 
 	double x1_x, x1_y, x2_x, x2_y;
@@ -121,7 +129,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 
 		d->m_child->setGeometry( QRect( d->m_geometryStart.x() + x, d->m_geometryStart.y() + y,
 					     d->m_geometryStart.width() - x, d->m_geometryStart.height() - y ) );
-		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, true ) ) );
+		repaint(rgn);
 	    }
 	    break;
 	case KoChild::TopMid:
@@ -130,7 +138,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 
 		d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y() + y,
 					     d->m_geometryStart.width(), d->m_geometryStart.height() - y ) );
-		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, true ) ) );
+		repaint(rgn);
 	    }
 	    break;
 	case KoChild::TopRight:
@@ -140,7 +148,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 
 		d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y() + y,
 					     d->m_geometryStart.width() + x, d->m_geometryStart.height() - y ) );
-		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, true ) ) );
+		repaint(rgn);
 	    }
 	    break;
 	case KoChild::MidLeft:
@@ -149,7 +157,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 		
 		d->m_child->setGeometry( QRect( d->m_geometryStart.x() + x, d->m_geometryStart.y(),
 					     d->m_geometryStart.width() - x, d->m_geometryStart.height() ) );
-		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, true ) ) );
+		repaint(rgn);
 	    }
 	    break;
 	case KoChild::MidRight:
@@ -158,7 +166,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 
 		d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y(),
 					     d->m_geometryStart.width() + x, d->m_geometryStart.height() ) );
-		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, true ) ) );
+		repaint(rgn);
 	    }
 	    break;
 	case KoChild::BottomLeft:
@@ -168,7 +176,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 
 		d->m_child->setGeometry( QRect( d->m_geometryStart.x() + x, d->m_geometryStart.y(),
 					     d->m_geometryStart.width() - x, d->m_geometryStart.height() + y ) );
-		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, true ) ) );
+		repaint(rgn);
 	    }
 	    break;
 	case KoChild::BottomMid:
@@ -177,7 +185,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 
 		d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y(),
 					     d->m_geometryStart.width(), d->m_geometryStart.height() + y ) );
-		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, true ) ) );
+		repaint(rgn);
 	    }
 	    break;
 	case KoChild::BottomRight:
@@ -187,7 +195,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 
 		d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y(),
 					     d->m_geometryStart.width() + x, d->m_geometryStart.height() + y ) );
-		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, true ) ) );
+		repaint(rgn);
 	    }
 	    break;
 	default:
@@ -202,8 +210,8 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 
 class PartMoveHandlerPrivate {
 public:
-    PartMoveHandlerPrivate( const QWMatrix& matrix, KoChild* child,
-			    const QPoint& point) : m_dragChild(child),
+    PartMoveHandlerPrivate( const QWMatrix& matrix, KoView* view, KoChild* child,
+			    const QPoint& point) : m_view(view), m_dragChild(child),
 						   m_parentMatrix(matrix) {					
 	m_invertParentMatrix = matrix.invert();
 	m_mouseDragStart = m_invertParentMatrix.map( point );
@@ -212,6 +220,7 @@ public:
     }
     ~PartMoveHandlerPrivate() {}
 
+    KoView* m_view;
     KoChild* m_dragChild;
     QPoint m_mouseDragStart;
     QRect m_geometryDragStart;
@@ -220,12 +229,12 @@ public:
     QWMatrix m_parentMatrix;
 };
 
-PartMoveHandler::PartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoChild* child,
+PartMoveHandler::PartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
 				  const QPoint& point )
     : EventHandler( widget )
 {
     child->lock();
-    d=new PartMoveHandlerPrivate(matrix, child, point);
+    d=new PartMoveHandlerPrivate(matrix, view, child, point);
 }
 
 PartMoveHandler::~PartMoveHandler()
@@ -247,13 +256,15 @@ bool PartMoveHandler::eventFilter( QObject*, QEvent* ev )
 	QMouseEvent* e = (QMouseEvent*)ev;
 	
 	QRegion bound = d->m_dragChild->frameRegion( d->m_parentMatrix, true );
-	QPoint pos = d->m_invertParentMatrix.map( e->pos() );
+	QPoint pos = d->m_invertParentMatrix.map( e->pos()  + QPoint(d->m_view->canvasXOffset(), d->m_view->canvasYOffset()) );
 	d->m_dragChild->setGeometry( QRect( d->m_geometryDragStart.x() + pos.x() - d->m_mouseDragStart.x(),
 					     d->m_geometryDragStart.y() + pos.y() - d->m_mouseDragStart.y(),
 					     d->m_geometryDragStart.width(), d->m_geometryDragStart.height() ) );
 	d->m_dragChild->setRotationPoint( QPoint( d->m_rotationDragStart.x() + pos.x() - d->m_mouseDragStart.x(),
 					       d->m_rotationDragStart.y() + pos.y() - d->m_mouseDragStart.y() ) );
-	((QWidget*)target())->repaint( bound.unite( d->m_dragChild->frameRegion( d->m_parentMatrix, false ) ) );
+        bound = bound.unite( d->m_dragChild->frameRegion( d->m_parentMatrix, false ) );
+	bound.translate(- d->m_view->canvasXOffset(), - d->m_view->canvasYOffset());
+	((QWidget*)target())->repaint( bound );
 
 	return true;
     }
@@ -278,6 +289,7 @@ bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
     if ( ev->type() == QEvent::MouseButtonPress )
     {
 	QMouseEvent* e = (QMouseEvent*)ev;
+        QPoint pos = e->pos() + QPoint(m_view->canvasXOffset(), m_view->canvasYOffset());
 
 	KoChild *child = 0;
 	KoChild::Gadget gadget = KoChild::NoGadget;
@@ -291,7 +303,7 @@ bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
 	    else
 	      child = docChild;
 	
-	    gadget = child->gadgetHitTest( e->pos(), m_view->matrix() );
+	    gadget = child->gadgetHitTest( pos, m_view->matrix() );
 	}
 	if ( gadget == KoChild::NoGadget )
         {
@@ -305,18 +317,18 @@ bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
 		else
 		  child = docChild;
 		
-  		gadget = child->gadgetHitTest( e->pos(), m_view->matrix() );
+  		gadget = child->gadgetHitTest( pos, m_view->matrix() );
 	    }
 	}
 	
 	if ( e->button() == LeftButton && gadget == KoChild::Move )
         {
-	    (void)new PartMoveHandler( (QWidget*)target(), m_view->matrix(), child, e->pos() );
+	    (void)new PartMoveHandler( (QWidget*)target(), m_view->matrix(), m_view, child, pos );
 	    return true;
 	}
 	else if ( e->button() == LeftButton && gadget != KoChild::NoGadget )
         {
-	    (void)new PartResizeHandler( (QWidget*)target(), m_view->matrix(), child, gadget, e->pos() );
+	    (void)new PartResizeHandler( (QWidget*)target(), m_view->matrix(), m_view, child, gadget, pos );
 	    return true;
 	}
 
@@ -326,6 +338,7 @@ bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
     {
         QWidget *targetWidget = static_cast<QWidget *>( target() );
 	QMouseEvent* e = (QMouseEvent*)ev;
+        QPoint pos = e->pos() + QPoint(m_view->canvasXOffset(), m_view->canvasYOffset());
 	
 	bool retval = true;
 
@@ -341,7 +354,7 @@ bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
 	    else
 	      child = docChild;
 	
-	    gadget = child->gadgetHitTest( e->pos(), m_view->matrix() );
+	    gadget = child->gadgetHitTest( pos, m_view->matrix() );
 	}
 	if ( gadget == KoChild::NoGadget )
         {
@@ -355,7 +368,7 @@ bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
 	      else
 	        child = docChild;
 		
-	      gadget = child->gadgetHitTest( e->pos(), m_view->matrix() );
+	      gadget = child->gadgetHitTest( pos, m_view->matrix() );
 	    }
 	    retval = false;
 	}

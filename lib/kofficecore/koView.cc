@@ -280,12 +280,16 @@ void KoView::partSelectEvent( KParts::PartSelectEvent *event )
 
     if ( child && event->selected() )
     {
-      emit regionInvalidated( child->frameRegion( matrix() ), true );
+      QRegion &r = child->frameRegion( matrix() );
+      r.translate( - canvasXOffset(), - canvasYOffset() );
+      emit regionInvalidated( r, true );
       emit childSelected( child );
     }
     else if ( child )
     {
-      emit regionInvalidated( child->frameRegion( matrix() ), true );
+      QRegion &r = child->frameRegion( matrix() );
+      r.translate( - canvasXOffset(), - canvasYOffset() );
+      emit regionInvalidated( r, true );
       emit childUnselected( child );
     }
     else
