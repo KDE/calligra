@@ -61,6 +61,7 @@ public:
     
     virtual QString text();
     virtual QString value() const;
+    virtual void recalc();
  private:
     KWDocument *m_doc;
 };

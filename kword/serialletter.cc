@@ -240,12 +240,12 @@ bool KWSerialLetterDataBase::askUserForConfirmationAndConfig(KWSerialLetterDataS
 		}
 		else
 		{
-			tmpPlugin=0;
 			delete tmpPlugin;
+			tmpPlugin=0;
 			return false;
 		}
 	}
-#warning "Message from JoWenn to JoWenn: enable tmpPlugin->rename(\"SerialLetterPlugin\");, when the dcopobject patch is applied on next friday"
+	tmpPlugin->setObjId(QCString(objId()+".SerialLetterPlugin"));
 	return true;
 }
 
@@ -400,8 +400,11 @@ void KWSerialLetterConfigDialog::slotCreateClicked()
 void KWSerialLetterConfigDialog::doNewActions()
 {
 	KWSerialLetterDataSource *tmpPlugin=db_->openPluginFor(db_->action);
-	db_->askUserForConfirmationAndConfig(tmpPlugin,true,this);
-	enableDisableEdit();
+	if (tmpPlugin)
+	{
+		db_->askUserForConfirmationAndConfig(tmpPlugin,true,this);
+		enableDisableEdit();
+	}
 }
 
 

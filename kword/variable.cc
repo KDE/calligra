@@ -87,3 +87,8 @@ QString KWSerialLetterVariable::text()
         return "<" + v + ">";
     return v;
 }
+
+void KWSerialLetterVariable::recalc()
+{
+    resize();
+}

@@ -1109,6 +1109,7 @@ void KWView::print( KPrinter &prt )
         {
             for ( int i = 0; i < m_doc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
                 m_doc->setSerialLetterRecord( i );
+		m_doc->getVariableCollection()->recalcVariables(VT_SERIALLETTER);
                 m_gui->canvasWidget()->print( &painter, &prt );
                 if ( i < m_doc->getSerialLetterDataBase()->getNumRecords() - 1 )
                     prt.newPage();

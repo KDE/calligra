@@ -55,9 +55,17 @@ class KWQTSQLSerialDataSource: public KWQTSQLSerialDataSourceBase
  *
  ******************************************************************/
 
-class KWQTSQLDataSourceEditor: public QTSQLDataSourceEditor
+class KWQTSQLDataSourceEditor : public KDialogBase
 {
+    Q_OBJECT
 
+public:
+    KWQTSQLDataSourceEditor( QWidget *parent, KWQTSQLSerialDataSource *db_ );
+    ~KWQTSQLDataSourceEditor(){;}
+private:
+  KWQTSQLSerialDataSource *db;
+  QTSQLDataSourceEditor *widget;
 };
+
 
 #endif

@@ -18,7 +18,9 @@
 */
 
 #include "serialletter_qtsqlplugin.h"
-//#include "serialletter_qtsqlplugin.moc"
+#include "serialletter_qtsqlplugin.moc"
+
+#include <qlayout.h>
 
 #define KWQTSQLBarIcon( x ) BarIcon( x, db->KWInstance() )
 
@@ -98,10 +100,12 @@ void KWQTSQLSerialDataSource::load( QDomElement& parentElem )
 
 bool KWQTSQLSerialDataSource::showConfigDialog(QWidget *par,int action)
 {
-	bool ret;
+	bool ret=false;
 	if (action==KWSLEdit)
 	{
-		ret=true;
+		KWQTSQLDataSourceEditor *dia=new KWQTSQLDataSourceEditor(par,this);
+		ret=dia->exec();
+		delete dia;
 	}
 	else ret=KWQTSQLSerialDataSourceBase::showConfigDialog(par,action);
 
@@ -109,6 +113,13 @@ bool KWQTSQLSerialDataSource::showConfigDialog(QWidget *par,int action)
 }
 
 
+KWQTSQLDataSourceEditor::KWQTSQLDataSourceEditor( QWidget *parent, KWQTSQLSerialDataSource *db_ )
+        :KDialogBase( Plain, i18n( "Serial Letter - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
+{
+        (new QVBoxLayout(plainPage()))->setAutoAdd(true);
+        setMainWidget(widget=new QTSQLDataSourceEditor(plainPage()));
+//        connect(this,SIGNAL(okClicked()),this,SLOT(slotSetQuery()));
+}
 
 extern "C" {
         KWSerialLetterDataSource *create_kwserialletter_qtsqldb(KInstance *inst,QObject *parent)
