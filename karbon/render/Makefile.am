@@ -15,6 +15,7 @@ noinst_HEADERS = \
 	vpainter.h \
 	vpainterfactory.h \
 	vqpainter.h \
+	art_render_pattern.h \
 	art_rgb_svp.h \
 	art_rgb.h \
 	vkopainter.h
@@ -22,6 +23,7 @@ noinst_HEADERS = \
 libvpainter_la_SOURCES = \
 	vpainterfactory.cc \
 	vqpainter.cc \
+	art_render_pattern.c \
 	art_rgb_svp.c \
 	art_rgb.c \
 	vkopainter.cc

@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* This file is part of the KDE project:50-8
    Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 */
@@ -9,6 +9,7 @@
 #include "vstroke.h"
 #include "vfill.h"
 #include "vcolor.h"
+#include "vpattern.h"
 
 #include <qpaintdevice.h>
 #include <qpixmap.h>
@@ -23,14 +24,16 @@
 #include <libart_lgpl/art_svp.h>
 #include <libart_lgpl/art_svp_ops.h>
 #include <libart_lgpl/art_affine.h>
-#include "art_rgb_svp.h"
-#include <libart_lgpl/art_rect_svp.h>
 #include <libart_lgpl/art_svp_intersect.h>
+#include <libart_lgpl/art_rect_svp.h>
 #include <libart_lgpl/art_pathcode.h>
 #include <libart_lgpl/art_vpath_dash.h>
 #include <libart_lgpl/art_rgb_affine.h>
 #include <libart_lgpl/art_render_gradient.h>
 #include <libart_lgpl/art_render_svp.h>
+
+#include "art_rgb_svp.h"
+#include "art_render_pattern.h"
 
 #include <X11/Xlib.h>
 
@@ -494,7 +497,18 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 	if( gradient.type() == VGradient::linear )
 	{
-		ArtGradientLinear *linear = new ArtGradientLinear();
+		VPattern pat("pics/hi22-action-14_star.png");
+		ArtPattern *pattern = new ArtPattern;
+
+		double dx = ( gradient.vector().x() - gradient.origin().x() ) * m_zoomFactor;
+		double dy = ( gradient.vector().y() - gradient.origin().y() ) * m_zoomFactor;
+
+		pattern->twidth = pat.tileWidth();
+		pattern->theight = pat.tileHeight();
+		pattern->buffer = pat.pixels();
+		pattern->angle = atan2( dy, dx );
+
+		/*ArtGradientLinear *linear = new ArtGradientLinear();
 
 		// TODO : make variable
 		if( gradient.repeatMethod() == VGradient::none )
@@ -506,8 +520,6 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 		//kdDebug() << "x1 : " << x1 << ", x0 " << x0 << endl;
 		//kdDebug() << "y1 : " << y1 << ", y0 " << y0 << endl;
-		double dx = ( gradient.vector().x() - gradient.origin().x() ) * m_zoomFactor;
-		double dy = ( gradient.vector().y() - gradient.origin().y() ) * m_zoomFactor;
 		double scale = 1.0 / ( dx * dx + dy * dy );
 
 		linear->a = dx * scale;
@@ -521,13 +533,14 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		// get stop array
 		int offsets = -1;
 		linear->stops = buildStopArray( gradient, offsets );
-		linear->n_stops = offsets;
+		linear->n_stops = offsets;*/
 
 		if( x0 != x1 && y0 != y1 )
 		{
-			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
+			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
 			art_render_svp( render, svp );
-			art_render_gradient_linear( render, linear, ART_FILTER_HYPER );
+			//art_render_gradient_linear( render, linear, ART_FILTER_HYPER );
+			art_render_pattern( render, pattern, ART_FILTER_HYPER );
 		}
 	}
 	else if( gradient.type() == VGradient::radial )
@@ -568,7 +581,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 		if( x0 != x1 && y0 != y1 )
 		{
-			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * x0 + m_width * 4 * y0, m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
+			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * x0 + m_width * 4 * y0, m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
 			art_render_svp( render, svp );
 			art_render_gradient_radial( render, radial, ART_FILTER_HYPER );
 		}

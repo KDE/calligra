@@ -17,6 +17,7 @@ struct _ArtBpath;
 struct _ArtSVP;
 struct _ArtGradientStop;
 class VGradient;
+class VPattern;
 
 class VKoPainter : public VPainter
 {
