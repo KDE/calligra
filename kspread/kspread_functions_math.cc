@@ -2072,7 +2072,7 @@ Lucas' formula for the nth Fibonacci number F(n) is given by
 */
   double n = args[0]->doubleValue();
 
-  double s = sqrt(5);
+  double s = sqrt(5.0);
   double result = ( pow((1+s)/2,n) - pow((1-s)/2,n) ) / s;
 
   context.setValue( new KSValue( result ) );
