@@ -530,7 +530,7 @@ public:
     void sortByRow( int ref_row, SortingOrder, bool cpLayout = false );
     void sortByColumn( int ref_column, SortingOrder, bool cpLayout = false );
     void swapCells( int x1, int y1, int x2, int y2, bool cpLayout );
-    void setSeries( const QPoint &_marker,int start,int end,int step,Series mode,Series type );
+    void setSeries( const QPoint &_marker, double start, double end, double step, Series mode, Series type );
 
     /**
      * Moves all cells of the row _marker.y() which are in

@@ -35,7 +35,7 @@
 
 
 KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const QPoint &_marker)
-        : KDialogBase( parent, name,TRUE,i18n("Series"),Ok|Cancel )
+  : KDialogBase( parent, name,TRUE,i18n("Series"),Ok|Cancel )
 {
   m_pView = parent;
   marker=_marker;
@@ -80,7 +80,7 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   start=new QLineEdit(gb);
   start->resize( start->sizeHint() );
   grid2->addWidget(start,1,0);
-  start->setValidator( new KIntValidator( start ) );
+  start->setValidator( new KFloatValidator( 0, 0, true, start ) );
 
   tmplabel = new QLabel( i18n( "End value" ), gb );
   tmplabel->resize( tmplabel->sizeHint() );
@@ -89,7 +89,7 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   end=new QLineEdit(gb);
   end->resize( end->sizeHint() );
   grid2->addWidget(end,1,1);
-  end->setValidator( new KIntValidator( end ) );
+  end->setValidator( new KFloatValidator( 0, 0, true, end ) );
 
   tmplabel = new QLabel( i18n( "Step" ), gb );
   tmplabel->resize( tmplabel->sizeHint() );
@@ -98,7 +98,7 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   step=new QLineEdit(gb);
   step->resize( step->sizeHint() );
   grid2->addWidget(step,1,2);
-  step->setValidator( new KIntValidator( step ) );
+  step->setValidator( new KFloatValidator( 0, 0, true, step ) );
 
   grid2->setColStretch(0,20);
   grid2->activate();
@@ -123,62 +123,119 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
 void KSpreadSeriesDlg::slotOk()
 {
 
-Series mode=Column;
-Series type=Linear;
-QString tmp;
-KSpreadTable *m_pTable;
-m_pTable=m_pView->activeTable();
+  Series mode=Column;
+  Series type=Linear;
+  QString tmp;
+  double dstep, dend, dstart;
+  KSpreadTable * m_pTable;
+  m_pTable = m_pView->activeTable();
 
-if(column->isChecked())
-        mode=Column;
-else if(row->isChecked())
-        mode=Row;
+  if(column->isChecked())
+    mode = Column;
+  else if(row->isChecked())
+    mode = Row;
 
-if(linear->isChecked())
-        type=Linear;
-else if(geometric->isChecked())
-        type=Geometric;
+  if (linear->isChecked())
+    type = Linear;
+  else if (geometric->isChecked())
+    type = Geometric;
 
-if(step->text().isEmpty()||start->text().isEmpty()||end->text().isEmpty())
-        {
-        KMessageBox::error( this, i18n("Area text is empty!") );
-        }
-else
-        {
-        if(step->text().toInt()>=0)
-                {
-                if(linear->isChecked() &&step->text().toInt() ==0)
-                {
-                KMessageBox::error( this, i18n("The step value must be greater than zero. "
-                "Otherwise the linear series is infinite!") );
-                step->setFocus();
-                }
-                else if(geometric->isChecked() &&step->text().toInt() <=1)
-                {
-                KMessageBox::error( this, i18n("The step value must be greater than one. "
-                "Otherwise the geometric series is infinite!") );
-                step->setFocus();
-                }
-                else
-                {
-                        int val_end=QMAX(end->text().toInt(),start->text().toInt());
-                        int val_start=QMIN(end->text().toInt(),start->text().toInt());
-                        m_pTable->setSeries( marker,val_start,val_end,step->text().toInt(),mode,type );
+  if (step->text().isEmpty() || start->text().isEmpty() || end->text().isEmpty())
+  {
+    KMessageBox::error( this, i18n("Area text is empty!") );
+    return;
+  }
+  else
+  {
+    bool ok;
+    dstart = KGlobal::locale()->readNumber(start->text(), &ok);
+    if (!ok)
+    {
+      KMessageBox::error(this, i18n("The start value is no valid number!"));
+      start->setFocus();
+      return;
+    }
 
-                        KSpreadCell *cell = m_pTable->cellAt( marker.x(),marker.y() );
-                        if ( cell->text() != 0L )
-                                m_pView->editWidget()->setText( cell->text() );
-                        else
-                                m_pView->editWidget()->setText( "" );
-                        accept();
-                }
+    dend   = KGlobal::locale()->readNumber(end->text(),   &ok);
+    if (!ok)
+    {
+      KMessageBox::error(this, i18n("The end value is no valid number!"));
+      end->setFocus();
+      return;
+    }
 
-                }
-        else
-                {
-                KMessageBox::error( this, i18n("Step is negative!") );
-                }
-        }
+    dstep  = KGlobal::locale()->readNumber(step->text(),  &ok);
+    if (!ok)
+    {
+      KMessageBox::error(this, i18n("The step value is no valid number!"));
+      step->setFocus();
+      return;
+    }
+
+    if ( type == Geometric )
+    {
+      if  ( dstart < 0 || dend < 0 )
+      {
+        KMessageBox::error( this, i18n("End and start value must be positive!") );
+        return;
+      }
+      if ( dstart > dend )
+      {
+        KMessageBox::error( this, i18n("End value must be greater than the start value!") );
+        return;
+      }
+    }
+
+    if (dstep >= 0)
+    {
+      if (linear->isChecked() && dstep == 0)
+      {
+        KMessageBox::error( this, i18n("The step value must be greater than zero. "
+                                       "Otherwise the linear series is infinite!") );
+        step->setFocus();
+        return;
+      }
+      else if (geometric->isChecked() && dstep <= 1)
+      {
+        KMessageBox::error( this, i18n("The step value must be greater than one. "
+                                       "Otherwise the geometric series is infinite!") );
+        step->setFocus();
+        return;
+      }
+      else if ( type == Linear && dend < dstart )
+      {
+        KMessageBox::error( this, 
+                            i18n("If the start value is greater than the end value the step must be less than zero!") );
+        return;
+      }
+    }
+    else if (type != Linear)      
+    {
+      KMessageBox::error( this, i18n("Step is negative!") );
+      return;
+    }
+    else
+    {
+      if (dstart <= dend)
+      {
+        KMessageBox::error( this, 
+                            i18n("If the step is negative, the start value must be greater then the end value!") );
+        return;        
+      }
+    } 
+  }
+
+  //        double val_end = QMAX(dend, dstart);
+  //        double val_start = QMIN(dend, dstart);
+  m_pTable->setSeries( marker, dstart, dend, dstep, mode, type );
+  
+  KSpreadCell * cell = m_pTable->cellAt( marker.x(), marker.y() );
+  if ( cell->text() != 0L )
+    m_pView->editWidget()->setText( cell->text() );
+  else
+    m_pView->editWidget()->setText( "" );
+  
+  accept();
 }
 
 

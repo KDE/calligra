@@ -1444,7 +1444,7 @@ void KSpreadTable::setSelectionBorderColor( const QPoint &_marker, const QColor 
 }
 
 
-void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,Series mode,Series type)
+void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, double step, Series mode, Series type)
 {
   doc()->emitBeginOperation();
 
@@ -1455,136 +1455,197 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
   /* the actual number of columns or rows that the series will span.
      i.e. this will count 3 cells for a single cell that spans three rows
   */
-  int numberOfCells = (end - start)/step + 1; /* initialize for linear */
+  int numberOfCells;
+  if (end > start)
+    numberOfCells = (int) ((end - start) / step + 1); /* initialize for linear */
+  else
+    numberOfCells = (int) ((start - end) / step + 1); /* initialize for linear */
 
-    if (type == Geometric)
-    {
-      /* basically, A(n) = start ^ n
-       * so when does end = start ^ n ??
-       * when n = ln(end) / ln(start)
-       */
-      numberOfCells = (int)( (log((double)end) / log((double)start)) +
+  if (type == Geometric)
+  {
+    /* basically, A(n) = start ^ n
+     * so when does end = start ^ n ??
+     * when n = ln(end) / ln(start)
+     */
+    numberOfCells = (int)( (log((double)end) / log((double)start)) +
 			     DBL_EPSILON) + 1;
-    }
-
-    KSpreadCell *cell = NULL;
-
-    /* markers for the top-left corner of the undo region.  It'll probably
-     * be the top left corner of where the series is, but if something in front
-     * is obscuring the cell, then it needs to be part of the undo region */
-    QRect undoRegion;
-
-    undoRegion.setLeft(_marker.x());
-    undoRegion.setTop(_marker.y());
-
-    /* this whole block is used to find the correct size for the undo region.
-       We're checking for two different things (in these examples,
+  }
+  
+  KSpreadCell *cell = NULL;
+  
+  /* markers for the top-left corner of the undo region.  It'll probably
+   * be the top left corner of where the series is, but if something in front
+   * is obscuring the cell, then it needs to be part of the undo region */
+  QRect undoRegion;
+  
+  undoRegion.setLeft(_marker.x());
+  undoRegion.setTop(_marker.y());
+  
+  /* this whole block is used to find the correct size for the undo region.
+     We're checking for two different things (in these examples,
        mode==column):
-
+       
        1.  cells are vertically merged.  This means that one value in the
-         series will span multiple cells.
-
+       series will span multiple cells.
+       
        2.  a cell in the column is merged to a cell to its left.  In this case
-         the cell value will be stored in the left most cell so we need to
-	 extend the undo range to include that column.
-    */
-    if(mode==Column)
+       the cell value will be stored in the left most cell so we need to
+       extend the undo range to include that column.
+  */
+  if(mode == Column)
+  {
+    for ( y = _marker.y(); y <= (_marker.y() + numberOfCells - 1); y++ )
     {
-        for ( y = _marker.y(); y <= (_marker.y() + numberOfCells - 1); y++ )
-        {
-	  cell = cellAt( _marker.x(), y );
-
-	  if ( cell->isObscuringForced() )
-	  {
-	    /* case 2. */
-	    undoRegion.setLeft(QMIN(undoRegion.left(),
-				    cell->obscuringCellsColumn()));
-	    cell = cellAt( cell->obscuringCellsColumn(),
-			   cell->obscuringCellsRow() );
-	  }
-	  /* case 1.  Add the extra space to numberOfCells and then skip
+      cell = cellAt( _marker.x(), y );
+      
+      if ( cell->isObscuringForced() )
+      {
+        /* case 2. */
+        undoRegion.setLeft(QMIN(undoRegion.left(),
+                                cell->obscuringCellsColumn()));
+        cell = cellAt( cell->obscuringCellsColumn(),
+                       cell->obscuringCellsRow() );
+      }
+      /* case 1.  Add the extra space to numberOfCells and then skip
 	     over the region.  Note that because of the above if block 'cell'
 	     points to the correct cell in the case where both case 1 and 2
 	     are true
-	  */
-	  numberOfCells += cell->extraYCells();
-	  y += cell->extraYCells();
-        }
-	undoRegion.setRight( _marker.x() );
-	undoRegion.setBottom( y - 1 );
+      */
+      numberOfCells += cell->extraYCells();
+      y += cell->extraYCells();
     }
-    else if(mode==Row)
+    undoRegion.setRight( _marker.x() );
+    undoRegion.setBottom( y - 1 );
+  }
+  else if(mode == Row)
+  {
+    for ( x = _marker.x(); x <=(_marker.x() + numberOfCells - 1); x++ )
     {
-        for ( x = _marker.x(); x <=(_marker.x() + numberOfCells - 1); x++ )
+      /* see the code above for a column series for a description of
+         what is going on here. */
+      cell = cellAt( x,_marker.y() );
+      
+      if ( cell->isObscuringForced() )
+      {
+        undoRegion.setTop(QMIN(undoRegion.top(),
+                               cell->obscuringCellsRow()));
+        cell = cellAt( cell->obscuringCellsColumn(),
+                       cell->obscuringCellsRow() );
+      }
+      numberOfCells += cell->extraXCells();
+      x += cell->extraXCells();
+    }
+    undoRegion.setBottom( _marker.y() );
+    undoRegion.setRight( x - 1 );
+  }
+  
+  if ( !m_pDoc->undoBuffer()->isLocked() )
+  {
+    KSpreadUndoChangeAreaTextCell *undo = new
+      KSpreadUndoChangeAreaTextCell( m_pDoc, this, undoRegion );
+    m_pDoc->undoBuffer()->appendUndo( undo );
+  }
+  
+  
+  x = _marker.x();
+  y = _marker.y();
+  
+  /* now we're going to actually loop through and set the values */
+  double incr;
+
+  if (step >= 0)
+  {
+    for ( incr = start; incr <= end; )
+    {
+      cell = nonDefaultCell( x, y );
+      
+      if (cell->isObscuringForced())
+      {
+        cell = cellAt( cell->obscuringCellsColumn(),
+                       cell->obscuringCellsRow());
+      }
+    
+      cell->setCellText(cellText.setNum( incr ));
+      if (mode == Column)
+      {
+        ++y;
+        if (cell->isForceExtraCells())
         {
-	  /* see the code above for a column series for a description of
-	     what is going on here. */
-	  cell = cellAt( x,_marker.y() );
-
-	  if ( cell->isObscuringForced() )
-	  {
-	    undoRegion.setTop(QMIN(undoRegion.top(),
-				   cell->obscuringCellsRow()));
-	    cell = cellAt( cell->obscuringCellsColumn(),
-				    cell->obscuringCellsRow() );
-	  }
-	  numberOfCells += cell->extraXCells();
-	  x += cell->extraXCells();
+          y += cell->extraYCells();
         }
-	undoRegion.setBottom( _marker.y() );
-	undoRegion.setRight( x - 1 );
-    }
-
-    if ( !m_pDoc->undoBuffer()->isLocked() )
-    {
-        KSpreadUndoChangeAreaTextCell *undo = new
-	  KSpreadUndoChangeAreaTextCell( m_pDoc, this, undoRegion );
-        m_pDoc->undoBuffer()->appendUndo( undo );
-    }
-
-
-    x = _marker.x();
-    y = _marker.y();
-
-    /* now we're going to actually loop through and set the values */
-    for ( int incr=start; incr <= end; )
-    {
-        KSpreadCell *cell = nonDefaultCell( x, y );
-
-        if(cell->isObscuringForced())
+      }
+      else if (mode == Row)
+      {
+        ++x;
+        if (cell->isForceExtraCells())
         {
-            cell = cellAt( cell->obscuringCellsColumn(),
-			   cell->obscuringCellsRow() );
+          x += cell->extraXCells();
         }
-
-        cell->setCellText(cellText.setNum(incr));
-        if(mode==Column)
-	{
-	  y++;
-	  if(cell->isForceExtraCells())
-	  {
-	    y += cell->extraYCells();
-	  }
-	}
-        else if(mode==Row)
-	{
-	  x++;
-	  if(cell->isForceExtraCells())
-	  {
-	    x += cell->extraXCells();
-	  }
-	}
-        else
-            kdDebug(36001) << "Error in Series::mode" << endl;
-
-        if(type==Linear)
-            incr=incr+step;
-        else if(type==Geometric)
-            incr=incr*step;
-        else
-            kdDebug(36001) << "Error in Series::type" << endl;
+      }
+      else
+      {
+        kdDebug(36001) << "Error in Series::mode" << endl;
+        return;
+      }
+    
+      if (type == Linear)
+        incr = incr + step;
+      else if (type == Geometric)
+        incr = incr * step;
+      else
+      {
+        kdDebug(36001) << "Error in Series::type" << endl;
+        return;
+      }
     }
-    doc()->emitEndOperation();
+  }
+  else
+  {
+    for ( incr = start; incr >= end; )
+    {
+      cell = nonDefaultCell( x, y );
+    
+      if (cell->isObscuringForced())
+      {
+        cell = cellAt( cell->obscuringCellsColumn(),
+                       cell->obscuringCellsRow());
+      }
+    
+      cell->setCellText(cellText.setNum( incr ));
+      if (mode == Column)
+      {
+        ++y;
+        if (cell->isForceExtraCells())
+        {
+          y += cell->extraYCells();
+        }
+      }
+      else if (mode == Row)
+      {
+        ++x;
+        if (cell->isForceExtraCells())
+        {
+          x += cell->extraXCells();
+        }
+      }
+      else
+      {
+        kdDebug(36001) << "Error in Series::mode" << endl;
+        return;
+      }
+    
+      if (type == Linear)
+        incr = incr + step;
+      else if (type == Geometric)
+        incr = incr * step;
+      else
+      {
+        kdDebug(36001) << "Error in Series::type" << endl;
+        return;
+      }
+    }
+  }
+  doc()->emitEndOperation();
 
 }
 
