@@ -47,7 +47,10 @@ Before release of KOffice 1.4
 
 * Data editor
   + Make table size handling work.
-  + Make Apply button work.
+      - Make it grow when spinbox values increase.			done
+      - Make it shrink (with safety checks!) when spinbox values
+	are decreased.
+  + Make Apply button work.						DONE
   + Smaller column widths?						DONE
 
 * Config dialog

@@ -41,6 +41,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
    QWhatsThis::add(m_rowsLA, rowwhatsthis);
    m_rowsSB = new QSpinBox( page );
    m_rowsSB->resize( m_rowsSB->sizeHint() );
+   m_rowsSB->setMinValue(1);
    QToolTip::add(m_rowsSB, i18n("Number of active data rows"));
    QWhatsThis::add(m_rowsSB, rowwhatsthis);
   
@@ -49,6 +50,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
    QWhatsThis::add(m_colsLA, colwhatsthis);
    m_colsSB = new QSpinBox( page );
    m_colsSB->resize( m_colsSB->sizeHint() );
+   m_colsSB->setMinValue(1);
    QToolTip::add(m_colsSB, i18n("Number of active data columns"));
    QWhatsThis::add(m_colsSB, colwhatsthis);
 
@@ -76,7 +78,10 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     setMinimumSize(size());
 #endif
 
-    connect(this, SIGNAL(applyClicked()), this, SLOT(apply()));
+    connect(m_rowsSB, SIGNAL(valueChanged(int)), 
+	    this,     SLOT(setRows(int)));
+    connect(m_colsSB, SIGNAL(valueChanged(int)), 
+	    this,     SLOT(setCols(int)));
 }
 
 // Set the data in the data editor.
@@ -373,8 +378,66 @@ void kchartDataEditor::getXLabel( KChartParams* params )
 
 
 // ================================================================
+//                              Slots
 
 
+void kchartDataEditor::setRows(int rows)
+{
+    kdDebug(35001) << "setRows called: rows = " << rows << endl;;
+
+    // Sanity check.  This should never happen since the spinbox has a
+    // minvalue of 1, but just to be sure...
+    if (rows < 1) {
+	m_rowsSB->setValue(1);
+	return;
+    }
+
+    int  oldNumRows = m_table->numRows();
+    if (rows + 1 > m_table->numRows()) {
+	m_table->setNumRows(rows + 1);
+
+	    // Set the numerical label for the new rows.
+	for (int row = oldNumRows; row < rows + 1; row++) {
+	    m_table->verticalHeader()->setLabel(row, 
+						QString("%1").arg(row));
+	}
+    }
+    else if (rows + 1 < m_table->numRows()) {
+	// NYI: Shrinking of the table
+    }
+}
+
+
+void kchartDataEditor::setCols(int cols)
+{
+    kdDebug(35001) << "setCols called: cols = " << cols << endl;;
+
+    // Sanity check.  This should never happen since the spinbox has a
+    // minvalue of 1, but just to be sure...
+    if (cols < 1) {
+	m_colsSB->setValue(1);
+	return;
+    }
+
+    int  oldNumCols = m_table->numCols();
+    if (cols + 1 > m_table->numCols()) {
+	m_table->setNumCols(cols + 1);
+
+	// Set the width and numerical label for the new columns.
+	for (int col = oldNumCols; col < cols + 1; col++) {
+	    m_table->setColumnWidth(col, COLUMNWIDTH);
+	    m_table->horizontalHeader()->setLabel(col, 
+						  QString("%1").arg(col));
+	}
+    }
+    else if (cols + 1 < m_table->numCols()) {
+	// NYI: Shrinking of the table
+    }
+}
+
+
+// This is a reimplementation of a slot defined in KDialogBase.
+//
 void kchartDataEditor::slotApply()
 {
     emit applyClicked(this);

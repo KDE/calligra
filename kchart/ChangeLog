@@ -1,5 +1,15 @@
 2005-03-09  Inge Wallin  <inge@lysator.liu.se>
 
+	Make the table in the data editor grow when number of rows/cols
+	are increased in the spinboxes.
+	* kchartDataEditor.{h,cc} (setRows, setCols): new methods
+	(constructor): connect spinboxes with new methods.
+	
+	Sanity checks:
+	kchartDataEditor (constructor): make spinboxes have a min value of 1.
+
+	----------------------------------------------------------------
+
 	Make apply button in the data editor work.
 	* kchartDataEditor.{h,cc} (applyClicked): new signal
 	(slotApply): emit applyClicked with a parameter.

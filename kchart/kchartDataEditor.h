@@ -40,8 +40,9 @@ signals:
     void applyClicked(kchartDataEditor *ed);
 
 protected slots:
-    void slotApply();
-
+    void  slotApply();
+    void  setRows(int rows);
+    void  setCols(int cols);
 
 private:
     // Data Editor, Old version
