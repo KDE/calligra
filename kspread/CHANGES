@@ -661,3 +661,5 @@ qdom remove all '\n'
 -Now multirow work when you choose "Middle","Bottom"
 -Add new icon lo16-action-series.png created by j.martin
 <jpmartin@iroise.com> thanks
+-Now commentLabel works but I can't reload comment
+bug in qdom (qdom removes '\n')

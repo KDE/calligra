@@ -1935,7 +1935,9 @@ QPainter painter;
   painter.begin( this );
 
   len = painter.fontMetrics().width(tmp.mid(start,index));
-  int hei =painter.fontMetrics().height()*line;
+  //remove '\n' at the end
+  tmp=tmp.mid(0,tmp.length()-1);
+  int hei =painter.fontMetrics().height()*(line);
   painter.end();
 
   labelComment=new QLabel(this);
@@ -1946,8 +1948,8 @@ QPainter painter;
   int xpos = activeTable()->columnPos( col, this );
   int ypos = activeTable()->rowPos( row, this );
   int w = cell->width( col, this );
-  labelComment->setAlignment(Qt::AlignVCenter);
-  labelComment->setGeometry(xpos +w +10, ypos + 10,len+10, hei+10 ) ;
+  //labelComment->setAlignment(Qt::AlignVCenter);
+  labelComment->setGeometry(xpos +w +10, ypos + 10,len, hei ) ;
   labelComment->setText(tmp);
   labelComment->show();
 }
