@@ -2694,5 +2694,10 @@ KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)
     return 0L;
 }
 
+void KPresenterDoc::changeBackGroundSpellCheckTextObject(KPTextObject *obj)
+{
+    m_bgSpellCheck->objectForSpell(obj);
+}
+
 
 #include <kpresenter_doc.moc>

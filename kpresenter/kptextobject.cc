@@ -1050,7 +1050,9 @@ KPTextView::KPTextView( KPTextObject * txtObj,KPrCanvas *_canvas )
 
     //activate new bg spell
     txtObj->textObject()->setNeedSpellCheck(true);
-    m_kptextobj->kPresenterDocument()->startBackgroundSpellCheck();
+    m_kptextobj->kPresenterDocument()->changeBackGroundSpellCheckTextObject(txtObj);
+
+    //m_kptextobj->kPresenterDocument()->startBackgroundSpellCheck();
 
 }
 
