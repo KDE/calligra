@@ -45,6 +45,12 @@ class KEXI_DB_EXPORT Object
 		/*! Sends errorMsg() to debug output. */
 		void debugError();
 
+		/*! Clears error flag. 
+		 Also calls drv_clearServerResult().
+		 You can reimplement this method in subclasses to clear even more members,
+		 but remember to also call Object::clearError(). */
+		virtual void clearError();
+
 		/*! KexiDB library offers detailed error numbers using errorNum()
 		 and detailed error i18n'd messages using errorMsg() -
 		 these informations are not engine-dependent (almost).
@@ -103,13 +109,7 @@ class KEXI_DB_EXPORT Object
 		
 		/*! Copies the (localized) error message and code from other KexiDB::Object. */
 		virtual void setError( KexiDB::Object *obj );
-
-		/*! Clears error flag. 
-		 Also calls drv_clearServerResult().
-		 You can reimplement this method in subclasses to clear even more members,
-		 but remember to also call Object::clearError(). */
-		virtual void clearError();
-
+		
 		/*! Clears number of last server operation's result stored
 		 as a single integer. Formally, this integer should be set to value 
 		 that means "NO ERRORS" or "OK". This method is called by clearError().
@@ -124,7 +124,7 @@ class KEXI_DB_EXPORT Object
 		QString m_errMsg;
 
 		class Private;
-		Private *d_object; //!< for future extensions
+		Private *d; //!< for future extensions
 };
 
 } //namespace KexiDB

@@ -226,7 +226,7 @@ bool Connection::drv_databaseExists( const QString &dbName, bool ignoreErrors )
 
 	if (list.find( dbName )==list.end()) {
 		if (!ignoreErrors)
-			setError(ERR_OBJECT_NOT_EXISTING, i18n("The database '%1' does not exist.").arg(dbName));
+			setError(ERR_OBJECT_NOT_EXISTING, i18n("The database \"%1\" does not exist.").arg(dbName));
 		return false;
 	}
 
@@ -246,17 +246,17 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 		QFileInfo file(dbName);
 		if (!file.exists() || ( !file.isFile() && !file.isSymLink()) ) {
 			if (!ignoreErrors)
-				setError(ERR_OBJECT_NOT_EXISTING, i18n("Database file '%1' does not exist.").arg(m_data.fileName()) );
+				setError(ERR_OBJECT_NOT_EXISTING, i18n("Database file \"%1\" does not exist.").arg(m_data.fileName()) );
 			return false;
 		}
 		if (!file.isReadable()) {
 			if (!ignoreErrors)
-				setError(ERR_ACCESS_RIGHTS, i18n("Database file '%1' is not readable.").arg(m_data.fileName()) );
+				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not readable.").arg(m_data.fileName()) );
 			return false;
 		}
 		if (!file.isWritable()) {
 			if (!ignoreErrors)
-				setError(ERR_ACCESS_RIGHTS, i18n("Database file '%1' is not writable.").arg(m_data.fileName()) );
+				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not writable.").arg(m_data.fileName()) );
 			return false;
 		}
 		return true;
@@ -282,7 +282,7 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 
 #define createDatabase_CLOSE \
 	{ if (!closeDatabase()) { \
-		setError(i18n("Database '%1' created but could not be closed after creation.").arg(dbName) ); \
+		setError(i18n("Database \"%1\" created but could not be closed after creation.").arg(dbName) ); \
 		return false; \
 	} }
 
@@ -298,7 +298,7 @@ bool Connection::createDatabase( const QString &dbName )
 		return false;
 
 	if (databaseExists( dbName )) {
-		setError(ERR_OBJECT_EXISTS, i18n("Database '%1' already exists.").arg(dbName) );
+		setError(ERR_OBJECT_EXISTS, i18n("Database \"%1\" already exists.").arg(dbName) );
 		return false;
 	}
 	if (m_driver->isSystemDatabaseName( dbName )) {
@@ -317,7 +317,7 @@ bool Connection::createDatabase( const QString &dbName )
 	
 	//low-level create
 	if (!drv_createDatabase( dbName )) {
-		setError(i18n("Error creating database '%1' on the server.").arg(dbName) );
+		setError(i18n("Error creating database \"%1\" on the server.").arg(dbName) );
 		closeDatabase();//sanity
 		return false;
 	}
@@ -331,7 +331,7 @@ bool Connection::createDatabase( const QString &dbName )
 	if (!tmpdbName.isEmpty() || !m_driver->m_isDBOpenedAfterCreate) {
 		//db need to be opened
 		if (!useDatabase( dbName )) {
-			setError(i18n("Database '%1' created but could not be opened.").arg(dbName) );
+			setError(i18n("Database \"%1\" created but could not be opened.").arg(dbName) );
 			return false;
 		}
 	}
@@ -1329,7 +1329,7 @@ KexiDB::TableSchema* Connection::setupTableSchema( const KexiDB::RecordData &dat
 	}*/
 	
 	KexiDB::Cursor *cursor;
-	if (!(cursor = executeQuery( QString("select * from kexi__fields where t_id='%1' order by f_order").arg(t->m_id) )))
+	if (!(cursor = executeQuery( QString("select * from kexi__fields where t_id=%1 order by f_order").arg(t->m_id) )))
 		return 0;
 	if (!cursor->moveFirst()) {
 		deleteCursor(cursor);

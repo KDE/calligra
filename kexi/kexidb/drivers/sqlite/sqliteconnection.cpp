@@ -133,7 +133,7 @@ bool SQLiteConnection::drv_closeDatabase()
 bool SQLiteConnection::drv_dropDatabase( const QString &dbName )
 {
 	if (!QDir().remove(dbName)) {
-		setError(ERR_ACCESS_RIGHTS, i18n("Can't remove '%1'").arg(dbName) );
+		setError(ERR_ACCESS_RIGHTS, i18n("Could not remove file \"%1\".").arg(dbName) );
 		return false;
 	}
 	return true;

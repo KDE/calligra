@@ -136,26 +136,27 @@ Driver* DriverManagerInternal::driver(const QString& name)
 		return drv; //cached
 
 	if (!m_services_lcase.contains(name.lower())) {
-		setError(ERR_DRIVERMANAGER, i18n("Could not find database driver '%1'.").arg(name) );
+		setError(ERR_DRIVERMANAGER, i18n("Could not find database driver \"%1\".").arg(name) );
 		return 0;
 	}
 
 //	KLibLoader *libLoader = KLibLoader::self();
 
 	KService::Ptr ptr= *(m_services_lcase.find(name.lower()));
+	QString srv_name = ptr->property("X-Kexi-DriverName").toString();
 
 	KexiDBDbg << "KexiDBInterfaceManager::load(): library: "<<ptr->library()<<endl;
 	drv = KParts::ComponentFactory::createInstanceFromService<KexiDB::Driver>(ptr,
-		this, 0, QStringList());
+		this, srv_name.latin1(), QStringList());
 
 	if (!drv) {
-		setError(ERR_DRIVERMANAGER, i18n("Could not load database driver '%1'.").arg(name) );
+		setError(ERR_DRIVERMANAGER, i18n("Could not load database driver \"%1\".").arg(name) );
 		return 0;
 	}
 	KexiDBDbg << "KexiDBInterfaceManager::load(): loading succeed: " << name <<endl;
+	KexiDBDbg << "drv="<<(long)drv <<endl;
 
-	QString srv_name = ptr->property("X-Kexi-DriverName").toString();
-	drv->setName(srv_name.latin1());
+//	drv->setName(srv_name.latin1());
 	drv->m_service = ptr; //store info
 	drv->m_fileDBDriverMime = ptr->property("X-Kexi-FileDBDriverMime").toString();
 	m_drivers.insert(name.lower(), drv); //cache it
@@ -268,7 +269,7 @@ KService::Ptr DriverManager::serviceInfo(const QString &name)
 	if (d_int->m_services_lcase.contains(name.lower())) {
 		return *d_int->m_services_lcase.find(name.lower());
 	} else {
-		setError(ERR_DRIVERMANAGER, i18n("No such driver service: '%1'.").arg(name) );
+		setError(ERR_DRIVERMANAGER, i18n("No such driver service: \"%1\".").arg(name) );
 		return 0;
 	}
 }

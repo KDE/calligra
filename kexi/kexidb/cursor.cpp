@@ -164,8 +164,12 @@ bool Cursor::moveFirst()
 //	if (!m_beforeFirst) { //cursor isn't @ first record now: reopen
 	if (!m_readAhead) {
 		if (m_options & Buffered) {
-			if (m_records_in_buf==0 && m_buffering_completed)
+			if (m_records_in_buf==0 && m_buffering_completed) {
+				//eof and bof should now return true:
+				m_afterLast = true;
+				m_at = 0;
 				return false; //buffering completed and there is no records!
+			}
 			if (m_records_in_buf>0) {
 				//set state as we would be before first rec:
 				m_at_buffer = false;

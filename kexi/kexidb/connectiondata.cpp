@@ -47,7 +47,9 @@ ConnectionData::ConnectionData()
 
 ConnectionData::ConnectionData(const ConnectionData& cd)
 {
-	*this = cd;//copy data members
+	if (&cd != this) {
+		*this = cd;//copy data members
+	}
 	d = new ConnectionData::Private();
 //todo: copy d contents if not empty	*d = *cd.d;
 }

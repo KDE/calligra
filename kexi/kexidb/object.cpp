@@ -27,6 +27,7 @@ using namespace KexiDB;
 
 
 Object::Object()
+: d(0) //empty
 {
 	clearError();
 }
