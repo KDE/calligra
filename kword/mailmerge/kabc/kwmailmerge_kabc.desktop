@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+ServiceTypes=KWord/MailMergePlugin
+
+Name=KDE Addressbook Plugin
+Comment=This datasource type lets you use your KDE Address Book entries.
+
+X-KDE-Library=kwmailmerge_kabc
+X-KDE-Capabilities=open
+X-KDE-InternalName=KABC
