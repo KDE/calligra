@@ -81,7 +81,8 @@ bool WMLHandler::startElement( const QString&, const QString&,
     m_inBlock = TRUE;
     if( m_currentFormat.bold || 
         m_currentFormat.italic ||
-        m_currentFormat.underline )
+        m_currentFormat.underline ||
+        (m_currentFormat.fontsize != WMLFormat::Normal) )
       m_formatList.append( m_currentFormat );
 
     QString align = attr.value("align").lower();
@@ -112,6 +113,22 @@ bool WMLHandler::startElement( const QString&, const QString&,
   if( tag == "u" )
   {
     m_currentFormat.underline = TRUE;
+    m_currentFormat.pos = m_text.length();
+    m_formatList.append( m_currentFormat );
+    return TRUE;
+  }
+
+  if( tag == "big" )
+  {
+    m_currentFormat.fontsize = WMLFormat::Big;
+    m_currentFormat.pos = m_text.length();
+    m_formatList.append( m_currentFormat );
+    return TRUE;
+  }
+
+  if( tag == "small" ) 
+  {
+    m_currentFormat.fontsize = WMLFormat::Small;
     m_currentFormat.pos = m_text.length();
     m_formatList.append( m_currentFormat );
     return TRUE;
@@ -168,6 +185,22 @@ bool WMLHandler::endElement( const QString&, const QString&,
     return TRUE;
   }
 
+  if( tag == "big" )
+  {
+    m_currentFormat.fontsize = WMLFormat::Normal;
+    m_currentFormat.pos = m_text.length();
+    m_formatList.append( m_currentFormat );
+    return TRUE;
+  }
+
+  if( tag == "small" )
+  {
+    m_currentFormat.fontsize = WMLFormat::Normal;
+    m_currentFormat.pos = m_text.length();
+    m_formatList.append( m_currentFormat );
+    return TRUE;
+  }
+
   // unhandled
   return TRUE;
 }
@@ -213,6 +246,7 @@ bool WMLHandler::flushParagraph()
 WMLFormat::WMLFormat()
 {
   pos = len = 0;
+  fontsize = Normal;
   bold = italic = underline = FALSE;
 }
 
@@ -223,6 +257,7 @@ void WMLFormat::assign( const WMLFormat& f )
   bold = f.bold;
   italic = f.italic;
   underline = f.underline;
+  fontsize = f.fontsize;
 }
 
 WMLFormat::WMLFormat( const WMLFormat& f )

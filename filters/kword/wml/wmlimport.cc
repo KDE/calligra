@@ -71,6 +71,12 @@ static QString WMLFormatAsXML( WMLFormat format )
   if( format.italic ) result.append( "<ITALIC value=\"1\" />\n" );
   if( format.underline ) result.append( "<UNDERLINE value=\"1\" />\n" );
 
+  // hard-code font size
+  int fontsize = 11;
+  if( format.fontsize == WMLFormat::Big ) fontsize = 14;
+  if( format.fontsize == WMLFormat::Small ) fontsize = 8;
+  result.append( "<SIZE value=\"" + QString::number(fontsize) + "\" />\n" );
+
   result.prepend("<FORMAT id=\"1\" pos=\"" + QString::number(format.pos) +
     "\" len=\"" + QString::number(format.len) + "\">\n");
   result.append( "</FORMAT>\n" );

@@ -28,6 +28,7 @@ class WMLFormat
   public:
     int pos, len;
     bool bold, italic, underline;
+    enum { Normal, Big, Small } fontsize;
     WMLFormat();
     WMLFormat( const WMLFormat& );
     WMLFormat& operator= ( const WMLFormat& );
