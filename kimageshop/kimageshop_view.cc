@@ -340,16 +340,17 @@ void KImageShopView::setupRulers()
 
 void KImageShopView::setRanges()
 {
-  m_pVRuler->setRange(0, m_pDoc->height());
-  m_pHRuler->setRange(0, m_pDoc->width());
-
   int docHeight = m_pDoc->height();
   int docWidth = m_pDoc->width();
+
+  m_pVRuler->setRange(0, docHeight);
+  m_pHRuler->setRange(0, docWidth);
 
   if(docHeight <= height() - 20)
     {
       m_pVert->hide();
       m_pVert->setValue(0);
+      m_pVRuler->setOffset(-(m_pCanvasView->height() - docHeight)/2);
     }
   else
     {
@@ -361,7 +362,8 @@ void KImageShopView::setRanges()
     {
       m_pHorz->hide();
       m_pHorz->setValue(0);
-    }
+      m_pHRuler->setOffset(-(m_pCanvasView->width() -  docWidth)/2);
+      }
   else
     {
       m_pHorz->setRange(0, docWidth - width() + 36);
@@ -372,11 +374,13 @@ void KImageShopView::setRanges()
 void KImageShopView::scrollH(int )
 {
   slotCVPaint(0L);
+  m_pHRuler->setOffset(m_pHorz->value());
 }
 
 void KImageShopView::scrollV(int )
 {
   slotCVPaint(0L);
+  m_pVRuler->setOffset(m_pVert->value());
 }
 
 void KImageShopView::newView()
