@@ -54,7 +54,7 @@ parser:
 	flex -Pdep lex.dep.l
 	bison -p dep -b dep -d yacc.dep.y 
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths -I../lib/kofficecore -I../lib/store -I$(idldir)
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I../lib/kofficecore -I../lib/store -I../lib/interfaces -I$(idldir)
 
 install-exec-local:
 	$(INSTALL_SCRIPT) kspread $(bindir)/kspread
@@ -66,7 +66,7 @@ kspread.h: kspread.idl
 	$(IDL) $(IDL_FLAGS) kspread.idl
 
 chart.h: ../lib/interfaces/chart.idl
-	$(IDL) $(IDL_FLAGS) chart.idl
+	$(IDL) $(IDL_FLAGS) ../lib/interfaces/chart.idl
 
 kspread.cc: kspread.h
 kspread_dlg_cons.cc: kspread_dlg_cons.moc
