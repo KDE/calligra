@@ -158,6 +158,12 @@ public:
     int         textPosition; //Normal (0), subscript(1), superscript (2)
 };
 
+class StackItemStack : public QStack<StackItem>
+{
+public:
+	StackItemStack(void) { }
+	virtual ~StackItemStack(void) { }
+};
 
 class StructureParser : public QXmlDefaultHandler
 {
@@ -183,10 +189,14 @@ public:
     virtual bool startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes);
     virtual bool endElement( const QString&, const QString& , const QString& qName);
     virtual bool characters ( const QString & ch );
+protected:
+	bool clearStackUntilParagraph(StackItemStack& auxilaryStack);
+	void unclearStack(StackItemStack& auxilaryStack);
+	bool complexForcedBreak(StackItem* stackItem, const bool pageBreak);
 private:
     void createMainFramesetElement(void);
     QString indent; //DEBUG
-    QStack<StackItem> structureStack;
+    StackItemStack structureStack;
     QDomDocument mainDocument;
     QDomElement mainFramesetElement;     // The main <FRAMESET> where the body text will be under.
 };
@@ -535,27 +545,21 @@ bool EndElementP (StackItem* stackItem)
 }
 
 // <br> (forced line break)
+// <cbr> (forced column break, not supported)
+// <pbr> (forced page break)
 static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
                            QDomDocument& mainDocument,
-                           QDomElement& mainFramesetElement)
+                           QDomElement& mainFramesetElement, const bool pageBreak)
+// pageBreak:
+//  true, if we should make a forced page break,
+//  false, if we should make a forced line break
 {
     // We are simulating a line break by starting a new paragraph!
     // TODO: when KWord has learnt what line breaks are, change to them.
 
-    if (stackCurrent->elementType==ElementTypeContent)
-    {
-        // TODO: this can happen in an AbiWord file, so we must support it!
-        kdWarning(30506) << "Forced line break in <c> element! Ignoring! (Not supported)" <<endl;
-        return true; // It is only a warning, so continue parsing!
-    }
-    if (stackCurrent->elementType!=ElementTypeParagraph)
-    {
-        kdError(30506) << "Forced line break found out of turn! Aborting! (in StartElementBR)" <<endl;
-        return false;
-    }
-    // Now we are sure to be the child of a <p> element
+    // We are sure to be the child of a <p> element
 
-    // The following code is similar to StartElementP
+    // The following code is similar to the one in StartElementP
     // We use mainFramesetElement here not to be dependant that <section> has happened before
     QDomElement paragraphElementOut=mainDocument.createElement("PARAGRAPH");
     mainFramesetElement.appendChild(paragraphElementOut);
@@ -583,9 +587,27 @@ static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
     }
     paragraphElementOut.appendChild(newNode);
 
-    // NOTE: The following code is similar to StartElementP but we are working on stackCurrent!
+    if (pageBreak)
+    {
+        // We need a page break!
+        QDomElement oldLayoutElement=nodeList.item(0).toElement();
+        if (oldLayoutElement.isNull())
+        {
+            kdError(30506) << "Cannot find old <LAYOUT> element! Aborting! (in StartElementBR)" <<endl;
+            return false;
+        }
+        // We have now to add a element <PAGEBREAKING>
+        // TODO/FIXME: what if there is already one?
+        QDomElement pagebreakingElement=mainDocument.createElement("PAGEBREAKING");
+        pagebreakingElement.setAttribute("linesTogether","false");
+        pagebreakingElement.setAttribute("hardFrameBreak","false");
+        pagebreakingElement.setAttribute("hardFrameBreakAfter","true");
+        oldLayoutElement.appendChild(pagebreakingElement);
+    }
+
     // Now that we have done with the old paragraph,
     //  we can write stackCurrent with the data of the new one!
+    // NOTE: The following code is similar to the one in StartElementP but we are working on stackCurrent!
     stackCurrent->elementType=ElementTypeParagraph;
     stackCurrent->stackElementParagraph=paragraphElementOut; // <PARAGRAPH>
     stackCurrent->stackElementText=textElementOut; // <TEXT>
@@ -818,6 +840,29 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
     return true;
 }
 
+
+bool StructureParser::complexForcedBreak(StackItem* stackItem, const bool pageBreak)
+{
+    // We are not a child of a <p> element, so we cannot use StartElementBR directly
+
+    StackItemStack auxilaryStack;
+
+    if (!clearStackUntilParagraph(auxilaryStack))
+        return false;
+
+    // Now we are a child of a <p> element!
+
+    bool success=StartElementBR(stackItem,structureStack.current(),mainDocument,mainFramesetElement,pageBreak);
+
+    // Now restore the stack
+    unclearStack(auxilaryStack);
+
+    // At the end, set the position to 0
+    structureStack.current()->pos=0;
+
+    return success;
+}
+
 // Parser for SAX2
 
 bool StructureParser :: startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes)
@@ -861,14 +906,64 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     else if (name=="br") // NOTE: Not sure if it only exists in lower case!
     {
         // We have a forced line break
-        // NOTE: this is an empty element!
         stackItem->elementType=ElementTypeEmpty;
-        stackItem->stackElementText=structureStack.current()->stackElementText; // TODO: reason?
-        success=StartElementBR(stackItem,structureStack.current(),mainDocument,mainFramesetElement);
+        StackItem* stackCurrent=structureStack.current();
+        if (stackCurrent->elementType==ElementTypeContent)
+        {
+            success=complexForcedBreak(stackItem,false);
+        }
+        else if (stackCurrent->elementType==ElementTypeParagraph)
+        {
+            success=StartElementBR(stackItem,stackCurrent,mainDocument,mainFramesetElement,false);
+        }
+        else
+        {
+            kdError(30506) << "Forced line break found out of turn! Aborting!" <<endl;
+            success=false;
+        }
+    }
+    else if (name=="cbr") // NOTE: Not sure if it only exists in lower case!
+    {
+        // We have a forced column break (not supported by KWord)
+        stackItem->elementType=ElementTypeEmpty;
+        StackItem* stackCurrent=structureStack.current();
+        if (stackCurrent->elementType==ElementTypeContent)
+        {
+            kdWarning(30506) << "Forced column break found! Transforming to forced page break" << endl;
+            success=complexForcedBreak(stackItem,true);
+        }
+        else if (stackCurrent->elementType==ElementTypeParagraph)
+        {
+            kdWarning(30506) << "Forced column break found! Transforming to forced page break" << endl;
+            success=StartElementBR(stackItem,stackCurrent,mainDocument,mainFramesetElement,true);
+        }
+        else
+        {
+            kdError(30506) << "Forced column break found out of turn! Aborting!" <<endl;
+            success=false;
+        }
+    }
+    else if (name=="pbr") // NOTE: Not sure if it only exists in lower case!
+    {
+        // We have a forced page break
+        stackItem->elementType=ElementTypeEmpty;
+        StackItem* stackCurrent=structureStack.current();
+        if (stackCurrent->elementType==ElementTypeContent)
+        {
+            success=complexForcedBreak(stackItem,true);
+        }
+        else if (stackCurrent->elementType==ElementTypeParagraph)
+        {
+            success=StartElementBR(stackItem,stackCurrent,mainDocument,mainFramesetElement,true);
+        }
+        else
+        {
+            kdError(30506) << "Forced page break found out of turn! Aborting!" <<endl;
+            success=false;
+        }
     }
     else if (name=="pagesize")
         // Does only exists as lower case tag!
-        // NOTE: this is an empty element!
     {
         stackItem->elementType=ElementTypeEmpty;
         stackItem->stackElementText=structureStack.current()->stackElementText; // TODO: reason?
@@ -991,6 +1086,43 @@ void StructureParser :: createMainFramesetElement(void)
     frameElementOut.setAttribute("runaround",1);
     mainFramesetElement.appendChild(frameElementOut);
 
+}
+
+bool StructureParser::clearStackUntilParagraph(StackItemStack& auxilaryStack)
+{
+    for (;;)
+    {
+        StackItem* item=structureStack.pop();
+        switch (item->elementType)
+        {
+        case ElementTypeContent:
+            {
+                // Push the item on the auxilary stack
+                auxilaryStack.push(item);
+                break;
+            }
+        case ElementTypeParagraph:
+            {
+                // Push back the item on this stack and then stop loop
+                structureStack.push(item);
+                return true;
+            }
+        default:
+            {
+                // Something has gone wrong!
+                kdError(30506) << "Cannot clear this element!" << endl;
+                return false;
+            }
+        }
+    }
+}
+
+void StructureParser::unclearStack(StackItemStack& auxilaryStack)
+{
+    while (auxilaryStack.count()>0)
+    {
+        structureStack.push(auxilaryStack.pop());
+    }
 }
 
 ABIWORDImport::ABIWORDImport(KoFilter *parent, const char *name) :
