@@ -5292,7 +5292,6 @@ void KPresenterView::newRightIndent( double _rightIndent)
 void KPresenterView::slotUpdateRuler()
 {
     // Set the "frame start" in the ruler (tabs are relative to that position)
-    KPTextView *edit=m_canvas->currentTextObjectView();
     bool isText=!m_canvas->applicableTextObjects().isEmpty();
     if ( isText )
     {
@@ -5603,6 +5602,7 @@ void KPresenterView::setZoomRect( const QRect & rect, bool drawRubber )
         double width = zoomHandler()->resolutionX() * zoomHandler()->unzoomItY( rect.width() );
         zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
                          qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
+        m_canvas->scrollCanvas( zoomHandler()->unzoomRect( rect) );
     }
     else
     {
@@ -6154,6 +6154,7 @@ void KPresenterView::zoomSelectedObject()
         viewZoom( QString::number(zoom ) );
 
         m_canvas->setToolEditMode( TEM_MOUSE );
+        m_canvas->scrollCanvas( rect );
     }
 }
 

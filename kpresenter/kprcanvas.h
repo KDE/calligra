@@ -240,6 +240,8 @@ public:
 
     KoRect objectSelectedBoundingRect() const;
 
+    void scrollCanvas(const KoRect& oldPos);
+
 public slots:
     void exitEditMode();
 
@@ -384,7 +386,6 @@ protected:
 #endif
 
     KPrPage *stickyPage() const;
-    void scrollCanvas(const KoRect& oldPos);
 
     void moveHelpLine(const QPoint & pos);
     void tmpMoveHelpLine( const QPoint & newPos);
