@@ -196,7 +196,8 @@ VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	connect (m_Y, SIGNAL( valueChanged( double ) ), this, SLOT( yChanged ( double ) ) );                                                                                    
 	connect (m_Width, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged ( double ) ) );
 	connect (m_Height, SIGNAL( valueChanged( double ) ), this, SLOT( heightChanged ( double ) ) );
-	connect( m_setLineWidth, SIGNAL( valueChanged( value() ) ), this, SLOT( lineWidthChanged( double ) ) );
+	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( lineWidthChanged( double ) ) );
+	connect (m_Rotation, SIGNAL( valueChanged( double ) ), this, SLOT( rotationChanged ( double ) ) );
 	
 	setWidget( mainLayout );
 	setFixedSize( baseSize() );
@@ -226,25 +227,19 @@ VObjectDlg::reset() //Show default values
 	m_Width->setValue( 0.00 );
 	m_Height->setValue( 0.00 );
 	m_setLineWidth->setValue( 0.0 );
+	m_Rotation->setValue( 0.00 );
 }
 
 void
 VObjectDlg::update( KarbonPart* part )
 {
-	if( part->document().selection()->objects().count() > 0 ) // there is a selection, so take the stroke of first selected object
+	if( part->document().selection()->objects().count() > 0 )
 	{
 		m_X->setValue ( 0.00 );
 		m_Y->setValue ( 0.00 );
-		m_Width->setValue ( part->document().selection()->objects().getFirst()->boundingBox().width() );
-		m_Height->setValue ( part->document().selection()->objects().getFirst()->boundingBox().height() );
-		
-		m_stroke.setType ( part->document().selection()->objects().getFirst()->stroke()->type() );
-		m_stroke.setColor ( part->document().selection()->objects().getFirst()->stroke()->color() );
-		m_stroke.setLineWidth ( part->document().selection()->objects().getFirst()->stroke()->lineWidth() );
-		m_stroke.setLineCap ( part->document().selection()->objects().getFirst()->stroke()->lineCap() );   
-		m_stroke.setLineJoin ( part->document().selection()->objects().getFirst()->stroke()->lineJoin() );
-		m_stroke.setMiterLimit ( part->document().selection()->objects().getFirst()->stroke()->miterLimit() );
-		m_setLineWidth->setValue( m_stroke.lineWidth() );
+		m_Width->setValue ( part->document().selection()->boundingBox().width() );
+		m_Height->setValue ( part->document().selection()->boundingBox().height() );
+		m_setLineWidth->setValue( part->document().selection()->objects().getFirst()->stroke()->lineWidth() );
 	}
 }
 
@@ -268,8 +263,8 @@ void
 VObjectDlg::widthChanged( double width )
 {
 	double height = m_Height->value();
-	KoPoint current = KoPoint ( m_part->document().selection()->objects().getFirst()->boundingBox().left(), 
-		m_part->document().selection()->objects().getFirst()->boundingBox().top() );
+	KoRect rect = m_part->document().selection()->boundingBox();
+	KoPoint current = rect.topLeft();
 	if( m_part && m_part->document().selection()->objects().count() > 0 )
 		m_part->addCommand( new VScaleCmd( &m_part->document(), current , width, height ), true );
 }
@@ -278,8 +273,8 @@ void
 VObjectDlg::heightChanged( double height )
 {
 	double width = m_Width->value();
-	KoPoint current = KoPoint ( m_part->document().selection()->objects().getFirst()->boundingBox().left(), 
-		m_part->document().selection()->objects().getFirst()->boundingBox().top() );
+	KoRect rect = m_part->document().selection()->boundingBox();
+	KoPoint current = rect.topLeft();
 	if( m_part && m_part->document().selection()->objects().count() > 0 )
 		m_part->addCommand( new VScaleCmd( &m_part->document(), current , width, height ), true );
 }
@@ -287,7 +282,17 @@ VObjectDlg::heightChanged( double height )
 void
 VObjectDlg::lineWidthChanged ( double width )
 {
-	m_part->addCommand( new VStrokeLineWidthCmd( &m_part->document(), m_setLineWidth->value() ), true );
+	m_part->addCommand( new VStrokeLineWidthCmd( &m_part->document(), width ), true );
+}
+
+void
+VObjectDlg::rotationChanged ( double angle )
+{
+	KoRect rect = m_part->document().selection()->boundingBox();
+	KoPoint current = rect.center();
+	if( m_part && m_part->document().selection()->objects().count() > 0 )
+		m_part->addCommand( new VRotateCmd( &m_part->document(), current , angle ), true );
+	m_Rotation->setValue( 0.00 );
 }
 #include "vobjectdlg.moc"
 

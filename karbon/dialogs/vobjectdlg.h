@@ -29,7 +29,6 @@ class KDoubleNumInput;
 
 class KarbonPart;
 class TKUFloatSpinBox;
-class VStroke;
 
 // Small panel displaying selected object(s) geometry. Can be used for quick numerical modifications of objects
 class VObjectDlg : public QDockWindow
@@ -53,7 +52,6 @@ private:
 	KDoubleNumInput *m_Height;
 	KDoubleNumInput *m_Rotation;
 	TKUFloatSpinBox *m_setLineWidth;
-	VStroke m_stroke;
 	
 private slots:
 	void xChanged( double x );
@@ -61,6 +59,7 @@ private slots:
 	void widthChanged( double width );
 	void heightChanged( double height );
 	void lineWidthChanged( double width );
+	void rotationChanged( double angle );
 };
 
 #endif
