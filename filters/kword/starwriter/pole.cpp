@@ -1,5 +1,5 @@
 /* POLE - Portable library to access OLE Storage
-   Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,11 +18,206 @@
 */
 
 #include <fstream>
+#include <string>
+#include <list>
+#include <iostream>
+#include <vector>
 
-#include <stdio.h>
+#include "pole.h"
 
-#include <polestorage.h>
-#include <polestorageio.h>
+namespace POLE
+{
+
+class Entry
+{
+  public:
+    Entry* parent;
+    std::string name;
+    unsigned long size;
+    unsigned start;
+    bool dir;
+    std::vector<Entry*> children;
+    Entry();
+    ~Entry();
+  private:
+    Entry( const Entry& );
+    Entry& operator=( const Entry& );
+};
+
+class AllocTable
+{
+  public:
+
+    AllocTable();
+
+    ~AllocTable();
+
+    bool dirty;
+
+    void clear();
+
+    unsigned long size();
+
+    void resize( unsigned long newsize );
+
+    void set( unsigned long index, unsigned long val );
+
+    std::vector<unsigned long> follow( unsigned long start );
+
+    unsigned long operator[](unsigned long index );
+
+  private:
+
+    std::vector<unsigned long> data;
+
+    AllocTable( const AllocTable& );
+
+    AllocTable& operator=( const AllocTable& );
+};
+
+class StorageIO
+{
+  public:
+
+    // result of operation
+    int result;
+
+    // owner of this object
+    Storage* doc;
+
+    // filename (possible required)
+    std::string filename;
+
+    // working mode: ReadOnly, WriteOnly, or ReadWrite
+    int mode;
+
+    // working file
+    std::fstream file;
+
+    // size of the file
+    unsigned long filesize;
+
+    // header (first 512 byte)
+    unsigned char header[512];
+
+    // magic id, first 8 bytes of header
+    unsigned char magic[8];
+
+    // switch from small to big file (usually 4K)
+    unsigned threshold;
+
+    // size of big block (should be 512 bytes)
+    unsigned bb_size;
+
+    //  size of small block (should be 64 bytes )
+    unsigned sb_size;
+
+    // allocation table for big blocks
+    AllocTable bb;
+    
+    // allocation table for small blocks
+    AllocTable sb;
+
+    // starting block index to store small-BAT
+    unsigned sbat_start;
+
+    // blocks where to find data for "small" files
+    std::vector<unsigned long> sb_blocks;
+
+    // starting block to store meta BAT
+    unsigned mbat_start;
+    
+    // starting block index to store directory info
+    unsigned dirent_start;
+
+    // root directory entry
+    Entry* root;
+    
+    // current directory entry
+    Entry* current_dir;
+
+    // constructor
+    StorageIO( Storage* storage, const char* fileName, int mode );
+
+    // destructor
+    ~StorageIO();
+
+    void flush();
+
+    unsigned long loadBigBlocks( std::vector<unsigned long> blocks, unsigned char* buffer, unsigned long maxlen );
+
+    unsigned long loadBigBlock( unsigned long block, unsigned char* buffer, unsigned long maxlen );
+
+    unsigned long loadSmallBlocks( std::vector<unsigned long> blocks, unsigned char* buffer, unsigned long maxlen );
+
+    unsigned long loadSmallBlock( unsigned long block, unsigned char* buffer, unsigned long maxlen );
+
+    // construct directory tree
+    Entry* buildTree( Entry* parent, int index, const unsigned char* dirent );
+
+    std::string fullName( Entry* e );
+
+    // given a fullname (e.g "/ObjectPool/_1020961869"), find the entry
+    Entry* entry( const std::string& name );
+
+
+  private:
+
+    void load();
+
+    void create();
+
+    // no copy or assign
+    StorageIO( const StorageIO& );
+    StorageIO& operator=( const StorageIO& );
+
+};
+
+class StreamIO
+{
+  public:
+
+    StreamIO( StorageIO* io, Entry* entry );
+
+    ~StreamIO();
+
+    unsigned long size();
+
+    void seek( unsigned long pos );
+
+    unsigned long tell();
+
+    int getch();
+
+    unsigned long read( unsigned char* data, unsigned long maxlen );
+
+    unsigned long read( unsigned long pos, unsigned char* data, unsigned long maxlen );
+
+    StorageIO* io;
+
+    Entry* entry;
+
+
+  private:
+
+    std::vector<unsigned long> blocks;
+
+    // no copy or assign
+    StreamIO( const StreamIO& );
+    StreamIO& operator=( const StreamIO& );
+
+    // pointer for read
+    unsigned long m_pos;
+
+    // simple cache system to speed-up getch()
+    unsigned char* cache_data;
+    unsigned long cache_size;
+    unsigned long cache_pos;
+    void updateCache();
+
+};
+
+}; // namespace POLE
 
 using namespace POLE;
 
@@ -52,7 +247,7 @@ static inline void writeU32( unsigned char* ptr, unsigned long data )
 
 static const unsigned char pole_magic[] = 
  { 0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1 };
-
+ 
 Entry::Entry()
 {
   name = "Unnamed";
@@ -120,6 +315,8 @@ std::vector<unsigned long> AllocTable::follow( unsigned long start )
   return chain;
 }
 
+// =========== StorageIO ==========
+
 StorageIO::StorageIO( Storage* storage, const char* fname, int m ):
   doc( storage ), filename( fname), mode( m )
 {
@@ -132,11 +329,12 @@ StorageIO::StorageIO( Storage* storage, const char* fname, int m ):
   threshold = 4096;
 
   // prepare input stream
-  int om = ios::in;
+  int om = std::ios::in;
   if( mode == Storage::WriteOnly ) om = std::ios::out;
   if( mode == Storage::ReadWrite) om = std::ios::app;
   om |= std::ios::binary;
-  file.open( filename.c_str(), om );
+  //file.open( filename.c_str(), om );
+  file.open( filename.c_str(), std::ios::binary | std::ios::in );
 
   // check for error
   if( !file.good() )
@@ -169,15 +367,13 @@ void StorageIO::load()
   unsigned num_sbat;  // blocks for small-BAT
   unsigned num_mbat;  // blocks for meta-BAT
 
-  // std::cout << "loading " << filename << "\n" ;
-
   // find size of input file
   file.seekg( 0, std::ios::end );
   filesize = file.tellg();
 
   // load header
   file.seekg( 0 ); 
-  file.read( header, sizeof( header ) );
+  file.read( (char*)header, sizeof( header ) );
   if( file.gcount() != sizeof( header ) )
   {
     result = Storage::NotOLE;
@@ -345,7 +541,7 @@ unsigned long StorageIO::loadBigBlocks( std::vector<unsigned long> blocks,
     unsigned long p = (bb_size < maxlen-bytes) ? bb_size : maxlen-bytes;
     if( pos + p > filesize ) p = filesize - pos;
     file.seekg( pos );
-    file.read( data + bytes, p );
+    file.read( (char*)data + bytes, p );
     bytes += p;
   }
 
@@ -538,3 +734,293 @@ Entry* StorageIO::entry( const std::string& name )
 
    return entry;
 }
+
+// =========== StreamIO ==========
+
+StreamIO::StreamIO( StorageIO* _io, Entry* _entry ):
+  io( _io ), entry( _entry ), m_pos( 0 ),
+  cache_data( 0 ), cache_size( 0 ), cache_pos( 0 )
+{
+  blocks = ( entry->size >= io->threshold ) ? io->bb.follow( entry->start ) :
+     io->sb.follow( entry->start );
+
+  // prepare cache
+  cache_size = 4096; // optimal ?
+  cache_data = new unsigned char[cache_size];
+  updateCache();
+}
+
+// FIXME tell parent we're gone
+StreamIO::~StreamIO()
+{
+  delete[] cache_data;  
+}
+
+void StreamIO::seek( unsigned long pos )
+{
+  m_pos = pos;
+}
+
+unsigned long StreamIO::tell()
+{
+  return m_pos;
+}
+
+int StreamIO::getch()
+{
+  // past end-of-file ?
+  if( m_pos > entry->size ) return -1;
+
+  // need to update cache ?
+  if( !cache_size || ( m_pos < cache_pos ) ||
+    ( m_pos >= cache_pos + cache_size ) )
+      updateCache();
+
+  // something bad if we don't get good cache
+  if( !cache_size ) return -1;
+
+  int data = cache_data[m_pos - cache_pos];
+  m_pos++;
+
+  return data;
+}
+
+unsigned long StreamIO::read( unsigned long pos, unsigned char* data, unsigned long maxlen )
+{
+  // sanity checks
+  if( !data ) return 0;
+  if( maxlen == 0 ) return 0;
+
+  unsigned long totalbytes = 0;
+  
+  if ( entry->size < io->threshold )
+  {
+    // small file
+    unsigned long index = pos / io->sb_size;
+
+    if( index >= blocks.size() ) return 0;
+
+    unsigned char buf[ io->sb_size ];
+    unsigned long offset = pos % io->sb_size;
+    while( totalbytes < maxlen )
+    {
+      if( index >= blocks.size() ) break;
+      io->loadSmallBlock( blocks[index], buf, io->bb_size );
+      unsigned long count = io->sb_size - offset;
+      if( count > maxlen-totalbytes ) count = maxlen-totalbytes;
+      memcpy( data+totalbytes, buf + offset, count );
+      totalbytes += count;
+      offset = 0;
+      index++;
+    }
+
+  }
+  else
+  {
+    // big file
+    unsigned long index = pos / io->bb_size;
+    
+    if( index >= blocks.size() ) return 0;
+    
+    unsigned char buf[ io->bb_size ];
+    unsigned long offset = pos % io->bb_size;
+    while( totalbytes < maxlen )
+    {
+      if( index >= blocks.size() ) break;
+      io->loadBigBlock( blocks[index], buf, io->bb_size );
+      unsigned long count = io->bb_size - offset;
+      if( count > maxlen-totalbytes ) count = maxlen-totalbytes;
+      memcpy( data+totalbytes, buf + offset, count );
+      totalbytes += count;
+      index++;
+      offset = 0;
+    }
+
+  }
+
+  return totalbytes;
+}
+
+unsigned long StreamIO::read( unsigned char* data, unsigned long maxlen )
+{
+  unsigned long bytes = read( tell(), data, maxlen );
+  m_pos += bytes;
+  return bytes;
+}
+
+void StreamIO::updateCache()
+{
+  // sanity check
+  if( !cache_data ) return;
+
+  cache_pos = m_pos - ( m_pos % cache_size );
+  unsigned long bytes = cache_size;
+  if( cache_pos + bytes > entry->size ) bytes = entry->size - cache_pos;
+  cache_size = read( cache_pos, cache_data, bytes );
+}
+
+
+// =========== Storage ==========
+
+Storage::Storage()
+{
+  io = (StorageIO*) 0L;
+  result = Storage::Ok;
+}
+
+Storage::~Storage()
+{
+  close();
+  delete io;
+}
+
+bool Storage::open( const char* fileName, int m )
+{
+  // only a few modes accepted
+  if( ( m != ReadOnly ) && ( m != WriteOnly ) && ( m != ReadWrite ) )
+  {
+    result = UnknownError;
+    return false;
+  }
+
+  io = new StorageIO( this, fileName, m );
+
+  result = io->result;
+  
+  return result == Storage::Ok;
+}
+
+void Storage::flush()
+{
+  if( io ) io->flush();
+}
+
+void Storage::close()
+{
+  flush();
+}
+
+// list all files and subdirs in current path
+std::list<std::string> Storage::listDirectory()
+{
+  std::list<std::string> entries;
+
+  // sanity check
+  if( !io ) return entries;
+  if( !io->current_dir ) return entries;
+
+  // sentinel: do nothing if not a directory
+  if( !io->current_dir->dir ) return entries;
+
+  // find all children belongs to this directory
+  for( unsigned i = 0; i<io->current_dir->children.size(); i++ )
+  {
+    Entry* e = io->current_dir->children[i];
+    if( e ) entries.push_back( e->name );
+  }
+
+  return entries;
+}
+
+// enters a sub-directory, returns false if not a directory or not found
+bool Storage::enterDirectory( const std::string& directory )
+{
+  // sanity check
+  if( !io ) return false;
+  if( !io->current_dir ) return false;
+
+  // look for the specified sub-dir
+  for( unsigned i = 0; i<io->current_dir->children.size(); i++ )
+  {
+    Entry* e = io->current_dir->children[i];
+    if( e ) if( e->name == directory ) 
+      if ( e->dir )
+      {
+        io->current_dir = e;
+        return true;
+      }
+  }
+
+  return false;
+}
+
+// goes up one level (like cd ..)
+void Storage::leaveDirectory()
+{
+  // sanity check
+  if( !io ) return;
+  if( !io->current_dir ) return;
+
+  Entry* parent = io->current_dir->parent;
+  if( parent ) if( parent->dir ) 
+    io->current_dir = parent;
+}
+
+// note: without trailing "/"
+std::string Storage::path()
+{
+  // sanity check
+  if( !io ) return std::string();
+  if( !io->current_dir ) return std::string();
+
+  return io->fullName( io->current_dir );
+}
+
+Stream* Storage::stream( const std::string& name )
+{
+  // sanity check
+  if( !name.length() ) return (Stream*) 0L;
+  if( !io ) return (Stream*) 0L;
+
+  // make absolute if necesary
+  std::string fullName = name;
+  if( name[0] != '/' ) fullName.insert( 0, path() + "/" );
+
+  // find to which entry this stream associates
+  Entry* entry =  io->entry( name );
+  if( !entry ) return (Stream*) 0L;
+
+  StreamIO* sio = new StreamIO( io, entry );
+  Stream* s = new Stream( sio );
+
+  return s;
+}
+
+// =========== Stream ==========
+
+Stream::Stream( StreamIO* _io ):
+  io( _io )
+{
+}
+
+// FIXME tell parent we're gone
+Stream::~Stream()
+{
+  delete io;
+}
+
+unsigned long Stream::tell()
+{
+  return io ? io->tell() : 0;
+}
+
+void Stream::seek( unsigned long newpos )
+{
+  if( io ) io->seek( newpos );
+}
+
+unsigned long Stream::size()
+{
+  return io ? io->entry->size : 0;
+}
+
+int Stream::getch()
+{
+  return io ? io->getch() : -1;
+}
+
+unsigned long Stream::read( unsigned char* data, unsigned long maxlen )
+{
+  return io ? io->read( data, maxlen ) : 0;
+}
+

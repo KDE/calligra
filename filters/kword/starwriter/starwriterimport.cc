@@ -28,8 +28,7 @@
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
 
-#include <polestorage.h>
-#include <polestream.h>
+#include "pole.h"
 
 typedef KGenericFactory<StarWriterImport, KoFilter> StarWriterImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libstarwriterimport, StarWriterImportFactory("starwriterimport"));

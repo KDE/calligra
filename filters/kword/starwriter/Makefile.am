@@ -6,7 +6,7 @@ INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
 
 kde_module_LTLIBRARIES = libstarwriterimport.la
 
-libstarwriterimport_la_SOURCES = starwriterimport.cc polestorage.cc polestorageio.cc polestream.cc polestreamio.cc
+libstarwriterimport_la_SOURCES = pole.cpp starwriterimport.cc
 libstarwriterimport_la_LDFLAGS	= -module $(KDE_PLUGIN)
 libstarwriterimport_la_LIBADD = $(KOFFICE_LIBS)
 

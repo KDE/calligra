@@ -1,5 +1,5 @@
 /* POLE - Portable library to access OLE Storage 
-   Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, US
 */
 
-#ifndef POLE_STORAGE_H
-#define POLE_STORAGE_H
+#ifndef POLE_H
+#define POLE_H
 
 #include <string>
 #include <list>
@@ -34,7 +34,8 @@ class Storage
 
 public:
 
-  enum { Ok, OpenFailed, NotOLE, BadOLE, UnknownError, StupidWorkaroundForBrokenCompiler=255 };
+  enum { Ok, OpenFailed, NotOLE, BadOLE, UnknownError, 
+    StupidWorkaroundForBrokenCompiler=255 };
 
   enum { ReadOnly, WriteOnly, ReadWrite };
 
@@ -45,7 +46,7 @@ public:
   /**
    * Opens the specified file, using the mode m.
    *
-   * @return true if successful, otherwise false.
+   * @return true if succesful, otherwise false.
    */
   bool open( const char* filename, int m = ReadOnly );
 
@@ -93,7 +94,36 @@ private:
 
 };
 
+class StreamIO;
+
+class Stream
+{
+  public:
+
+    Stream( StreamIO* io );
+
+    ~Stream();
+
+    unsigned long size();
+
+    unsigned long tell();
+
+    void seek( unsigned long pos ); 
+
+    int getch();
+
+    unsigned long read( unsigned char* data, unsigned long maxlen );
+
+  private:
+
+    StreamIO* io;
+
+    // no copy or assign
+    Stream( const Stream& );
+    Stream& operator=( const Stream& );
+};
+
 
 }
 
-#endif // POLE_STORAGE_H
+#endif // POLE_H
