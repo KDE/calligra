@@ -53,6 +53,11 @@
             <widget class="QComboBox">
                 <item>
                     <property name="text">
+                        <string>Locale</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
                         <string>hh:mm</string>
                     </property>
                 </item>

@@ -45,6 +45,7 @@ void TimeFormatWidget::slotPersonalizeChanged(bool b)
     TextLabel1->setEnabled(b);
     combo1->setEnabled(b);
     ComboBox3->setEnabled(!b);
+    updateLabel();
 
 }
 
@@ -87,7 +88,15 @@ void TimeFormatWidget::updateLabel()
         label->setText(ct.toString(combo1->currentText()));
     }
     else
+    {
+
+        if(ComboBox3->currentText().lower()==i18n("Locale").lower())
+        {
+            label->setText(KGlobal::locale()->formatTime( ct ));
+            return;
+        }
         label->setText(ct.toString(ComboBox3->currentText()));
+    }
 }
 
 QString TimeFormatWidget::resultString()
