@@ -137,21 +137,14 @@ public:
         addTextNode( cstr.data() );
     }
     /**
-     * Adds a text node as a child of the current element.
+     * @brief Adds a text node as a child of the current element.
+     *
      * This is appends the litteral content of @p str to the contents of the element.
      * E.g. addTextNode( "foo" ) inside a \<p\> element gives \<p\>foo\</p\>,
      * and startElement( "b" ); endElement( "b" ); addTextNode( "foo" ) gives \<p\>\<b/\>foo\</p\>
      */
     void addTextNode( const char* cstr );
     
-    /**
-     * @brief Adds a text span as nods of the current element.
-     *
-     * Unlike KoXmlWriter::addTextNode it is careful about leading, trailing and multiple spaces.
-     * (Multiple spaces according OASIS specification.)
-     */
-    void addTextSpan( const QString& strText );
-
     /**
      * This is quite a special-purpose method, not for everyday use.
      * It adds a complete element (with its attributes and child elements)
