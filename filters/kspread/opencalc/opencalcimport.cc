@@ -236,7 +236,7 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
     if ( height != -1 )
     {
       kdDebug(30518) << "Setting row height to " << height << endl;
-      rowL->setMMHeight( height );
+      rowL->setHeight( height );
     }
 
     // if ( insertPageBreak ) TODO:
