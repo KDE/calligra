@@ -4,6 +4,7 @@
    This file is part of the KDE project
    Copuright 2001 Michael Johnson <mikej@xnet.com>
    Copyright 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright 2002 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -165,13 +166,25 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
     QImage img( image );
     if( !img.isNull() )
     {
+        // check resolution, assume 2835 dpm (72 dpi) if not available
+        int resx = img.dotsPerMeterX();
+        int resy = img.dotsPerMeterY();
+        if( resx <= 0 ) resx = 2835;
+        if( resy <= 0 ) resy = 2835;
+
         // 1 pt = 2834.65, 1 twip = 20 pt 
-        origWidth =  long(img.width() * 2834.65 * 20 / img.dotsPerMeterX());
-        origHeight = long(img.height() * 2834.65 * 20 / img.dotsPerMeterY());
+        origWidth =  long(img.width() * 2834.65 * 20 / resx);
+        origHeight = long(img.height() * 2834.65 * 20 / resy);
     }
 
-    kdDebug(30503) << " original size: " << origWidth << " x " << origHeight << endl;
+    // calculate scaling factor (in percentage)
+    int scaleX = width * 100 / origWidth;
+    int scaleY = height * 100 / origHeight;
 
+    m_textBody += "\\picscalex";
+    m_textBody += QString::number(scaleX, 10);
+    m_textBody += "\\picscaley";
+    m_textBody += QString::number(scaleY, 10);
     m_textBody += "\\picwgoal";
     m_textBody += QString::number(origWidth, 10);
     m_textBody += "\\pichgoal";
