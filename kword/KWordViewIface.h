@@ -90,6 +90,8 @@ k_dcop:
     bool unSelectAllFrames();
 
     void editFootEndNote();
+    void savePicture();
+    void saveClipart();
 
 private:
     KWView *view;

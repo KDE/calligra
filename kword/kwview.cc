@@ -4750,33 +4750,36 @@ void KWView::changeClipart()
 void KWView::savePicture()
 {
     KWFrame * frame = m_doc->getFirstSelectedFrame();
-    KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-    QString oldFile=frameset->image().getKey().filename();
-
-    QStringList mimetypes;
-    mimetypes = KImageIO::mimeTypes( KImageIO::Reading );
-    KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
-    fd.setMimeFilter( mimetypes );
-    fd.setCaption(i18n("Save Image"));
-    KURL url;
-    if ( fd.exec() == QDialog::Accepted )
+    if ( frame )//test for dcop call
     {
-        url = fd.selectedURL();
-        if( url.isEmpty() )
+        KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
+        QString oldFile=frameset->image().getKey().filename();
+
+        QStringList mimetypes;
+        mimetypes = KImageIO::mimeTypes( KImageIO::Reading );
+        KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
+        fd.setMimeFilter( mimetypes );
+        fd.setCaption(i18n("Save Image"));
+        KURL url;
+        if ( fd.exec() == QDialog::Accepted )
         {
-            KMessageBox::sorry( this,
-                                i18n("File name is empty"),
-                                i18n("Save Picture"));
-            return;
-        }
-        QFile file( url.path() );
-        if ( file.open( IO_ReadWrite ) ) {
-            frameset->image().save( &file );
-            file.close();
-        } else {
-            KMessageBox::error(this,
-                               i18n("Error during saving"),
-                               i18n("Save Picture"));
+            url = fd.selectedURL();
+            if( url.isEmpty() )
+            {
+                KMessageBox::sorry( this,
+                                    i18n("File name is empty"),
+                                    i18n("Save Picture"));
+                return;
+            }
+            QFile file( url.path() );
+            if ( file.open( IO_ReadWrite ) ) {
+                frameset->image().save( &file );
+                file.close();
+            } else {
+                KMessageBox::error(this,
+                                   i18n("Error during saving"),
+                                   i18n("Save Picture"));
+            }
         }
     }
 }
@@ -4784,36 +4787,37 @@ void KWView::savePicture()
 void KWView::saveClipart()
 {
     KWFrame * frame = m_doc->getFirstSelectedFrame();
-
-    KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->frameSet());
-    QString oldFile=frameset->key().filename();
-    QStringList mimetypes;
-    mimetypes = KoPictureFilePreview::clipartMimeTypes();
-    KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
-    fd.setMimeFilter( mimetypes );
-    fd.setCaption(i18n("Save Clipart"));
-    KURL url;
-    if ( fd.exec() == QDialog::Accepted )
+    if ( frame ) //test for dcop call
     {
-        url = fd.selectedURL();
-        if( url.isEmpty() )
+        KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->frameSet());
+        QString oldFile=frameset->key().filename();
+        QStringList mimetypes;
+        mimetypes = KoPictureFilePreview::clipartMimeTypes();
+        KFileDialog fd( oldFile, QString::null, 0, 0, TRUE );
+        fd.setMimeFilter( mimetypes );
+        fd.setCaption(i18n("Save Clipart"));
+        KURL url;
+        if ( fd.exec() == QDialog::Accepted )
         {
-            KMessageBox::sorry( this,
-                                i18n("File name is empty"),
-                                i18n("Save Clipart"));
-            return;
-        }
-        QFile file( url.path() );
-        if ( file.open( IO_ReadWrite ) ) {
-            frameset->clipart().save( &file );
-            file.close();
-        } else {
-            KMessageBox::error(this,
-                               i18n("Error during saving"),
-                               i18n("Save Clipart"));
+            url = fd.selectedURL();
+            if( url.isEmpty() )
+            {
+                KMessageBox::sorry( this,
+                                    i18n("File name is empty"),
+                                    i18n("Save Clipart"));
+                return;
+            }
+            QFile file( url.path() );
+            if ( file.open( IO_ReadWrite ) ) {
+                frameset->clipart().save( &file );
+                file.close();
+            } else {
+                KMessageBox::error(this,
+                                   i18n("Error during saving"),
+                                   i18n("Save Clipart"));
+            }
         }
     }
-
 }
 
 void KWView::configureHeaderFooter()

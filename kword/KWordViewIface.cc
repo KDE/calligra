@@ -276,3 +276,13 @@ void KWordViewIface::editFootEndNote()
 {
     view->editFootEndNote();
 }
+
+void KWordViewIface::savePicture()
+{
+    view->savePicture();
+}
+
+void KWordViewIface::saveClipart()
+{
+    view->saveClipart();
+}
