@@ -46,8 +46,7 @@ public:
 	void deselectAllObjects();  // unselect all vobjects from all vlayers.
 	void selectObject( VObject& object, bool exclusive = false );
 	void deselectObject( VObject& object );
-	void selectObjectsWithinRect( const KoRect& rect,
-								  const double zoomFactor, bool exclusive = false );
+	void selectObjectsWithinRect( const KoRect& rect, bool exclusive = false );
 
 	// move up/down within layer
 	void moveSelectionToTop();

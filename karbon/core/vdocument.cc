@@ -154,8 +154,7 @@ VDocument::selectAllObjects()
 }
 
 void
-VDocument::selectObjectsWithinRect( const KoRect& rect,
-	const double zoomFactor, bool exclusive )
+VDocument::selectObjectsWithinRect( const KoRect& rect, bool exclusive )
 {
 	if( exclusive )
 		deselectAllObjects();
