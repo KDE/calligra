@@ -5,13 +5,13 @@ Written by Kalle Dalheimer <kalle@kde.org> with (obviously) input from KWord's
 author Reginald Stadlbauer <reggie@kde.org>.
 
 Kword DTD version 2 has been created by Thomas Zander, but only small adjustments from
-the original version ware made.
+the original version were made.
 
 
 About the version
 -----------------
 
-Current dtd version is 2, look at the kword-version?.dtd file for the old 
+Current dtd version is 2, look at the kword-v1.dtd file for the old 
 (obsolete) fileformat.
 Kword will read all file-formats but this is considered the most complete format,
 we heighly encourage you to use this format.
@@ -45,7 +45,7 @@ integer and fractional parts).
 - Some special characters ('<', '>') are "escaped" ('&lt;', '&gt;')
 
 - Please launch Kword and save an empty file - it is much easier to follow
-this documentation if you wade trough an (almost empty) example document.
+this documentation if you wade through an (almost empty) example document.
 
 - The XML begins with a special tag like this:
 
@@ -367,7 +367,7 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT STYLES
     (STYLE*)>
 <!ELEMENT STYLE
-    (NAME|FOLLOWING|FLOW|INDENTS|COUNTER|LINESPACING|LEFTBORDER|
+    (NAME|FOLLOWING|FLOW|INDENTS|OFFSETS|COUNTER|LINESPACE|LEFTBORDER|
         RIGHTBORDER|TOPBORDER|BOTTOMBORDER|FORMAT)*>
 
 <!--    An anchor describes an object which is anchored.
@@ -396,7 +396,7 @@ don't put a </?xml...> at the end of the file!).
     blue CDATA #REQUIRED>
 
 <!--
-        name is the family name. Dont include fontsizes or bold, that is put in another tag
+        name is the family name. Don't include fontsizes or bold, that is put in another tag.
 -->
 <!ELEMENT FONT
     EMPTY>
@@ -412,13 +412,14 @@ don't put a </?xml...> at the end of the file!).
     value CDATA #REQUIRED>
 
 <!-- WEIGHT
-        Wheight of a font is it's Boldness. Look at the QFont weight description for presice
-        numbers. Use normal=50, bord=75;
+        Weight of a font is it's Boldness. Look at the QFont weight description for precise
+        numbers. Use normal=50, bold=75.
 -->
 <!ELEMENT WEIGHT
     EMPTY>
 <!ATTLIST WEIGHT
     value CDATA #REQUIRED>
+
 <!-- ITALIC
         Value is either 0 or 1 with 1=true and 0=false
 -->
@@ -445,18 +446,27 @@ don't put a </?xml...> at the end of the file!).
     EMPTY>
 <!ATTLIST VERTALIGN
     value CDATA #REQUIRED>
+
+<!-- LAYOUT
+        A layout holds all the attributes related to a paragraph,
+        other than its text and formatting.
+-->
 <!ELEMENT LAYOUT
-    (FLOW|INDENTS|LINESPACING|LEFTBORDER|COUNTER
+    (FLOW|INDENTS|OFFSETS|LINESPACE|LEFTBORDER|COUNTER
         RIGHTBORDER|TOPBORDER|BOTTOMBORDER|FORMAT|TABULATOR|COUNTERSTART)*>
 
 <!-- COUNTERSTART
         Initialises this paragraph to a specific counter start.
+        ##### What is the difference with COUNTER.start ? (DF)
 -->
 <!ELEMENT COUNTERSTART
     EMPTY>
 <!ATTLIST COUNTERSTART
     value CDATA #REQUIRED>
 
+<!-- NAME
+        The name of a style
+-->
 <!ELEMENT NAME
     EMPTY>
 <!ATTLIST NAME
@@ -477,8 +487,8 @@ don't put a </?xml...> at the end of the file!).
     name CDATA #REQUIRED>
 
 <!-- FLOW
-        Align is a style tag.
-        value is one of: 'left', 'right', 'center', 'justify'
+        FLOW is a paragraph and style tag, that determines the alignment of the text.
+        align's value is one of: 'left', 'right', 'center', 'justify'
 -->
 <!ELEMENT FLOW
     EMPTY>
@@ -486,14 +496,26 @@ don't put a </?xml...> at the end of the file!).
     align CDATA #REQUIRED>
         
 <!-- INDENTS
-        First is the indent (mm) from the left border (of the frame) of the first line of a paragraph
-        left is the indent that is used for the other lines in a paragraph.
+        first: indent (mm) from the left border (of the frame) of the first line of a paragraph
+        left: indent (mm) that is used for the other lines in a paragraph.
+        right: indent (mm) on the right of all lines in the paragraph
 -->
 <!ELEMENT INDENTS
     EMPTY>
 <!ATTLIST INDENTS
     first CDATA #REQUIRED
-    left CDATA #REQUIRED>
+    left CDATA #REQUIRED
+    right CDATA #REQUIRED>
+
+<!-- OFFSETS
+        before: space before the paragraph, or "head offset" (KWord-1), aka "top margin" (mm)
+        after: space after the paragraph, or "foot offset" (KWord-1), aka "bottom margin" (mm)
+-->
+<!ELEMENT OFFSETS
+    EMPTY>
+<!ATTLIST OFFSETS
+    head CDATA #REQUIRED
+    foot CDATA #REQUIRED>
 
 <!-- 
         A paragraph and a style can have counter data.
@@ -542,9 +564,9 @@ don't put a </?xml...> at the end of the file!).
 <!-- 
         value in points 
 -->
-<!ELEMENT LINESPACING
+<!ELEMENT LINESPACE
     EMPTY>
-<!ATTLIST LINESPACING
+<!ATTLIST LINESPACE
     value CDATA #REQUIRED>
 
 <!--
@@ -589,6 +611,7 @@ don't put a </?xml...> at the end of the file!).
     blue CDATA #REQUIRED
     style CDATA #REQUIRED
     width CDATA #REQUIRED>
+
 <!ELEMENT TABULATOR
     EMPTY>
 <!ATTLIST TABULATOR
