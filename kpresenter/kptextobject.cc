@@ -234,6 +234,7 @@ void KPTextObject::loadOasis(const QDomElement &element,  const KoStyleStack &st
 
 KoTextParag * KPTextObject::loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph )
 {
+    kdDebug()<<" KPTextObject::loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph ) -----------------------------\n";
     return textDocument()->loadOasisText( bodyElem, context, lastParagraph, m_doc->styleCollection() );
 }
 
