@@ -34,7 +34,8 @@
 #include <qvbox.h>
 #include <qlabel.h>
 #include <kconfig.h>
-
+#include <kcolorbutton.h>
+#include <qgrid.h>
 
 KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
 	: KDialogBase(KDialogBase::IconList,
@@ -56,6 +57,8 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   page=addVBoxPage(i18n("Misc"), QString::null,BarIcon("misc",KIcon::SizeMedium) );
   _miscParameter = new  miscParameters(parent,page );
 
+  page=addVBoxPage(i18n("Color"), QString::null,BarIcon("misc",KIcon::SizeMedium) );
+  _colorParameter=new colorParameters(parent,page );
 }
 
 void KSpreadpreference::slotApply()
@@ -63,6 +66,7 @@ void KSpreadpreference::slotApply()
 _preferenceConfig->apply();
 _configure->apply();
 _miscParameter->apply();
+_colorParameter->apply();
 m_pView->doc()->refreshInterface();
 }
 
@@ -70,6 +74,7 @@ void KSpreadpreference::slotDefault()
 {
 _configure->slotDefault();
 _miscParameter->slotDefault();
+_colorParameter->slotDefault();
 }
 
  preference::preference( KSpreadView* _view,QWidget *parent , char *name )
@@ -161,22 +166,22 @@ parameterLocale::parameterLocale( KSpreadView* _view,QWidget *parent , char *nam
   lay1->setMargin( 20 );
   lay1->setSpacing( 10 );
   QLabel *label=new QLabel( tmpQGroupBox,"label");
-  label->setText( i18n("Language : %1").arg( _view->doc()->locale()->language() ));
+  label->setText( i18n("Language: %1").arg( _view->doc()->locale()->language() ));
   lay1->addWidget(label);
   label=new QLabel( tmpQGroupBox,"label6");
-  label->setText( i18n("Number : %1").arg( _view->doc()->locale()->formatNumber(12.55) ));
+  label->setText( i18n("Number: %1").arg( _view->doc()->locale()->formatNumber(12.55) ));
   lay1->addWidget(label);
   label=new QLabel( tmpQGroupBox,"label1");
-  label->setText( i18n("Date : %1").arg( _view->doc()->locale()->formatDate(QDate(2000,10,23)) ));
+  label->setText( i18n("Date: %1").arg( _view->doc()->locale()->formatDate(QDate(2000,10,23)) ));
   lay1->addWidget(label);
   label=new QLabel( tmpQGroupBox,"label5");
-  label->setText( i18n("Short date : %1").arg( _view->doc()->locale()->formatDate(QDate(2000,10,23),true) ));
+  label->setText( i18n("Short date: %1").arg( _view->doc()->locale()->formatDate(QDate(2000,10,23),true) ));
   lay1->addWidget(label);
   label=new QLabel( tmpQGroupBox,"label2");
-  label->setText( i18n("Time : %1").arg( _view->doc()->locale()->formatTime(QTime(15,10,53)) ));
+  label->setText( i18n("Time: %1").arg( _view->doc()->locale()->formatTime(QTime(15,10,53)) ));
   lay1->addWidget(label);
   label=new QLabel( tmpQGroupBox,"label3");
-  label->setText( i18n("Money : %1").arg( _view->doc()->locale()->formatMoney(12.55) ));
+  label->setText( i18n("Money: %1").arg( _view->doc()->locale()->formatMoney(12.55) ));
   lay1->addWidget(label);
   box->addWidget( tmpQGroupBox);
 }
@@ -215,7 +220,7 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
 
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
   nbPage->setRange(1, 10, 1);
-  nbPage->setLabel(i18n("Number of pages open at the beginning :"));
+  nbPage->setLabel(i18n("Number of pages open at the beginning:"));
   lay1->addWidget(nbPage);
 
   showVScrollBar=new QCheckBox(i18n("Show vertical scrollbar"),tmpQGroupBox);
@@ -336,7 +341,7 @@ miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name 
         }
 
   QLabel *label=new QLabel(tmpQGroupBox);
-  label->setText(i18n("Completion mode :"));
+  label->setText(i18n("Completion mode:"));
   lay1->addWidget(label);
 
   typeCompletion=new QComboBox( tmpQGroupBox);
@@ -353,7 +358,7 @@ miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name 
 
   valIndent=new KIntNumInput(_indent, tmpQGroupBox , 10);
   valIndent->setRange(1, 100, 1);
-  valIndent->setLabel(i18n("Value of indent :"));
+  valIndent->setLabel(i18n("Value of indent:"));
   lay1->addWidget(valIndent);
 
   label=new QLabel(tmpQGroupBox);
@@ -561,5 +566,57 @@ if(msgError->isChecked()!=m_pView->doc()->getShowMessageError())
         config->writeEntry( "Msg error" ,(int)msgError->isChecked()) ;
         }
 }
+
+
+
+colorParameters::colorParameters( KSpreadView* _view,QWidget *parent , char *name )
+ :QWidget ( parent,name)
+{
+  m_pView = _view;
+  config = KSpreadFactory::global()->config();
+
+  QColor _gridColor(Qt::lightGray);
+  if( config->hasGroup("Parameters" ))
+        {
+        config->setGroup( "Parameters" );
+	_gridColor= config->readColorEntry("GridColor",&_gridColor);
+	}
+
+  QVBoxLayout *box = new QVBoxLayout( this );
+  box->setMargin( 5 );
+  box->setSpacing( 10 );
+
+  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  tmpQGroupBox->setTitle(i18n("Color"));
+  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,5,1,15,7);
+  QLabel *lab=new QLabel( tmpQGroupBox,"label20");
+  lab->setText( i18n("Grid Color:"));
+  grid1->addWidget(lab,0,0);
+
+  gridColor=new KColorButton(tmpQGroupBox);
+  gridColor->setColor(_gridColor);
+  grid1->addWidget(gridColor,1,0);
+
+  box->addWidget( tmpQGroupBox);
+}
+
+void colorParameters::apply()
+{
+    QColor _col=gridColor->color();
+   
+    if(m_pView->doc()->defaultGridPen().color()!=_col)
+        {
+	 m_pView->doc()->changeDefaultGridPenColor( _col);
+	 config->setGroup( "Parameters" );
+	 config->writeEntry("GridColor",_col);
+	}
+
+}
+
+void colorParameters::slotDefault()
+{
+    gridColor->setColor(lightGray);
+}
+
 
 #include "kspread_dlg_preference.moc"

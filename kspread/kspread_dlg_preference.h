@@ -28,6 +28,7 @@
 #include <kdialogbase.h>
 #include <knuminput.h>
 #include <kconfig.h>
+#include <kcolorbutton.h>
 
 class KSpreadView;
 class KSpreadTable;
@@ -91,11 +92,24 @@ protected:
   KIntNumInput  *valIndent;
   KConfig* config;
   QComboBox *typeCompletion;
-  QComboBox *typeCalc
-;
+  QComboBox *typeCalc;
   QComboBox *typeOfMove;
   QCheckBox *msgError;
 } ;
+
+class colorParameters : public QWidget
+{
+  Q_OBJECT
+public:
+  colorParameters( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  void apply();
+  void slotDefault();
+protected:
+  KSpreadView* m_pView;
+  KColorButton* gridColor;
+  KConfig* config;
+} ;
+
 
 class KSpreadpreference : public KDialogBase
 {
@@ -110,6 +124,7 @@ private :
   preference *_preferenceConfig;
   configure * _configure;
   miscParameters *_miscParameter;
+  colorParameters *_colorParameter;
 };
 
 

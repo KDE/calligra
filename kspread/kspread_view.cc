@@ -482,6 +482,10 @@ if( config->hasGroup("Parameters" ))
         m_pDoc->setIndentValue(config->readNumEntry( "Indent",10 ) );
         m_pDoc->setTypeOfCalc((MethodOfCalc)config->readNumEntry("Method of Calc",(int)(Sum)));
 	m_pDoc->setShowTabBar(config->readBoolEntry("Tabbar",true));
+
+	QColor _col(Qt::lightGray);
+	_col= config->readColorEntry("GridColor",&_col);
+	m_pDoc->changeDefaultGridPenColor(_col);
 	}
 }
 

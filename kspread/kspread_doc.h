@@ -312,6 +312,8 @@ public:
    */
   void setShowTabBar(bool _tabbar) {  m_bShowTabBar=_tabbar;}
   bool getShowTabBar() { return  m_bShowTabBar;}
+  
+  void changeDefaultGridPenColor( QColor &_col){m_defaultGridPen.setColor(_col);}
 
 public slots:
   /**
