@@ -655,7 +655,7 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 		return false;
 
 	QString msg, desc;
-	bool current = (item == d->pCurrentItem);
+//	bool current = (item == d->pCurrentItem);
 	if (!m_data->deleteRow(*item, true /*repaint*/)) {
 		//error
 		if (m_data->result()->desc.isEmpty())
@@ -770,9 +770,9 @@ void KexiTableView::slotRowInserted(KexiTableItem *item, bool repaint)
 	slotRowInserted( item, row, repaint );
 }
 
-void KexiTableView::slotRowInserted(KexiTableItem *item, uint row, bool repaint)
+void KexiTableView::slotRowInserted(KexiTableItem * /*item*/, uint row, bool repaint)
 {
-	if (repaint && row >= 0 && (int)row<rows()) {
+	if (repaint && (int)row<rows()) {
 		QSize s(tableSize());
 		resizeContents(s.width(),s.height());
 
@@ -2371,7 +2371,7 @@ void KexiTableView::focusOutEvent(QFocusEvent*)
 	updateCell(d->curRow, d->curCol);
 }
 
-bool KexiTableView::focusNextPrevChild(bool next)
+bool KexiTableView::focusNextPrevChild(bool /*next*/)
 {
 	return false; //special Tab/BackTab meaning
 /*	if (d->pEditor)
