@@ -34,6 +34,7 @@
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qwhatsthis.h>
+#include <knuminput.h>
 
 
 KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const QPoint &_marker)
@@ -47,7 +48,7 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   QBoxLayout *grid1 = new QHBoxLayout(page);
   grid1->setSpacing( spacingHint() );
 
-  QButtonGroup* gb1 = new QButtonGroup( 2, Qt::Vertical, 
+  QButtonGroup* gb1 = new QButtonGroup( 2, Qt::Vertical,
     i18n("Insert Values"), page );
   column = new QRadioButton( i18n("Vertical"), gb1 );
   QWhatsThis::add(column, i18n("Insert the series vertically, one below the other") );
@@ -56,7 +57,7 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
 
   column->setChecked(true);
 
-  QButtonGroup* gb2 = new QButtonGroup( 2, Qt::Vertical, 
+  QButtonGroup* gb2 = new QButtonGroup( 2, Qt::Vertical,
     i18n("Type"), page );
   linear = new QRadioButton( i18n("Linear (2,4,6,...)"), gb2 );
   QWhatsThis::add(linear, i18n("Generate a series from 'start' to 'end' and for each step add "
@@ -77,16 +78,19 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
   params_layout->setAutoAdd( true );
 
   new QLabel( i18n( "Start value:" ), params );
-  start=new QLineEdit( params );
-  start->setValidator( new KFloatValidator( 0, 0, true, start ) );
+  start=new KDoubleNumInput(params);
+  start->setValue( 0.0);
+  start->setMinValue(-9999);
 
   new QLabel( i18n( "Stop value:" ), params );
-  end=new QLineEdit( params );
-  end->setValidator( new KFloatValidator( 0, 0, true, end ) );
+  end=new KDoubleNumInput(params);
+  end->setValue( 0.0 );
+  end->setMinValue(-9999);
 
   new QLabel( i18n( "Step value:" ), params );
-  step=new QLineEdit( params );
-  step->setValidator( new KFloatValidator( 0, 0, true, step ) );
+  step=new KDoubleNumInput(params);
+  step->setValue( 0.0 );
+  step->setMinValue(-9999);
 
   grid1->addWidget(gb);
 
@@ -119,102 +123,72 @@ void KSpreadSeriesDlg::slotOk()
   else if (geometric->isChecked())
     type = Geometric;
 
-  if (step->text().isEmpty() || start->text().isEmpty() || end->text().isEmpty())
+  dstart = start->value();
+  dend= end->value();
+  dstep = step->value();
+  if ( type == Geometric )
   {
-    KMessageBox::error( this, i18n("Area text is empty!") );
-    return;
-  }
-  else
-  {
-    bool ok;
-    dstart = KGlobal::locale()->readNumber(start->text(), &ok);
-    if (!ok)
-    {
-      KMessageBox::error(this, i18n("The start value is not a valid number!"));
-      start->setFocus();
-      return;
-    }
-
-    dend   = KGlobal::locale()->readNumber(end->text(),   &ok);
-    if (!ok)
-    {
-      KMessageBox::error(this, i18n("The end value is not a valid number!"));
-      end->setFocus();
-      return;
-    }
-
-    dstep  = KGlobal::locale()->readNumber(step->text(),  &ok);
-    if (!ok)
-    {
-      KMessageBox::error(this, i18n("The step value is not a valid number!"));
-      step->setFocus();
-      return;
-    }
-
-    if ( type == Geometric )
-    {
       if  ( dstart < 0 || dend < 0 )
       {
-        KMessageBox::error( this, i18n("End and start value must be positive!") );
-        return;
+          KMessageBox::error( this, i18n("End and start value must be positive!") );
+          return;
       }
       if ( dstart > dend && dstep >= 1)
       {
         KMessageBox::error( this, i18n("End value must be greater than the start value or the step must be less than '1'!") );
         return;
       }
-    }
+  }
 
-    if (dstep >= 0)
-    {
+  if (dstep >= 0)
+  {
       if (linear->isChecked() && dstep == 0)
       {
-        KMessageBox::error( this, i18n("The step value must be greater than zero. "
-                                       "Otherwise the linear series is infinite!") );
-        step->setFocus();
-        return;
+          KMessageBox::error( this, i18n("The step value must be greater than zero. "
+                                         "Otherwise the linear series is infinite!") );
+          step->setFocus();
+          return;
       }
       /*      else if (geometric->isChecked() && dstep <= 1)
-      {
-        KMessageBox::error( this, i18n("The step value must be greater than one. "
+              {
+              KMessageBox::error( this, i18n("The step value must be greater than one. "
                                        "Otherwise the geometric series is infinite!") );
-        step->setFocus();
-        return;
-      }
+                                       step->setFocus();
+                                       return;
+                                       }
       */
       else if ( type == Linear && dend < dstart )
       {
-        KMessageBox::error( this, 
-                            i18n("If the start value is greater than the end value the step must be less than zero!") );
-        return;
+          KMessageBox::error( this,
+                              i18n("If the start value is greater than the end value the step must be less than zero!") );
+          return;
       }
-    }
-    else if (type != Linear)      
-    {
+  }
+  else if (type != Linear)
+  {
       KMessageBox::error( this, i18n("Step is negative!") );
       return;
-    }
-    else
-    {
+  }
+  else
+  {
       if (dstart <= dend)
       {
-        KMessageBox::error( this, 
+        KMessageBox::error( this,
                             i18n("If the step is negative, the start value must be greater then the end value!") );
-        return;        
+        return;
       }
-    } 
   }
 
   //        double val_end = QMAX(dend, dstart);
   //        double val_start = QMIN(dend, dstart);
   m_pTable->setSeries( marker, dstart, dend, dstep, mode, type );
-  
+
   KSpreadCell * cell = m_pTable->cellAt( marker.x(), marker.y() );
   if ( cell->text() != 0L )
     m_pView->editWidget()->setText( cell->text() );
   else
     m_pView->editWidget()->setText( "" );
-  
+
   accept();
 }
 
