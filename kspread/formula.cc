@@ -18,6 +18,8 @@
 */
 
 #include "formula.h"
+
+#include "kspread_sheet.h"
 #include "kspread_value.h"
 
 #if 0
@@ -1077,7 +1079,7 @@ void Formula::compile( const Tokens& tokens ) const
   }
 }
 
-RangeList Formula::getDependencies () const
+RangeList Formula::getDependencies (KSpreadSheet *sheet) const
 {
   RangeList rl;
   
@@ -1097,14 +1099,14 @@ RangeList Formula::getDependencies () const
     if (tokenType == Token::Cell)
     {
       QString text = token.text();
-      KSpreadPoint cell (text);
+      KSpreadPoint cell (text, sheet->map(), sheet);
       if (cell.isValid())
         rl.cells.push_back (cell);
     }
     else if (tokenType == Token::Range)
     {
       QString text = token.text();
-      KSpreadRange range (text);
+      KSpreadRange range (text, sheet->map(), sheet);
       if (range.isValid())
         rl.ranges.push_back (range);
     }

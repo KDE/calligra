@@ -282,8 +282,9 @@ class Formula
      */     
     static Tokens scan( const QString& expr );
 
-    /** return dependencies of this expression */
-    RangeList getDependencies () const;
+    /** return dependencies of this expression
+    @param sheet  default sheet of references with no sheet information */
+    RangeList getDependencies (KSpreadSheet *sheet) const;
     
     /**
      * Returns an assembler dump of the formula.

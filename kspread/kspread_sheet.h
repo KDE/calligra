@@ -44,6 +44,10 @@ class QWidget;
 class QPainter;
 class QDomElement;
 
+namespace KSpread {
+  class DependencyManager;
+};
+
 class DCOPObject;
 class KPrinter;
 class KoOasisSettings;
@@ -1164,7 +1168,9 @@ public:
 
   KSpreadSheetPrint * print() const;
 
-
+  /** returns a pointer to the dependency manager */
+  KSpread::DependencyManager *dependencies ();
+  
 signals:
     void sig_refreshView();
     void sig_updateView( KSpreadSheet *_table );

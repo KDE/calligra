@@ -98,12 +98,22 @@ void DependencyManager::rangeListChanged (const RangeList &rangeList)
 void DependencyManager::addDependency (const KSpreadPoint &cell1,
     const KSpreadPoint &cell2)
 {
+  //cell2 can be in another sheet (inter-sheet dependency)
+  KSpreadSheet *sh = cell2.table;
+  if (!sh)
+    sh = sheet;
+
   deps->dependencies[cell1].cells.push_back (cell2);
-  deps->cellDeps[cell2].push_back (cell1);
+  sh->dependencies()->deps->cellDeps[cell2].push_back (cell1);
 }
 
 void DependencyManager::addRangeDependency (const RangeDependency &rd)
 {
+  //target range can be in another sheet (inter-sheet dependency)
+  KSpreadSheet *sh = rd.range.table;
+  if (!sh)
+    sh = sheet;
+  
   KSpreadPoint cell;
   cell.table = sheet;
   cell.setRow (rd.cellrow);
@@ -113,7 +123,7 @@ void DependencyManager::addRangeDependency (const RangeDependency &rd)
   QValueList<KSpreadPoint> leadings = leadingCells (rd.range);
   QValueList<KSpreadPoint>::iterator it;
   for (it = leadings.begin(); it != leadings.end(); ++it)
-    deps->rangeDeps[*it].push_back (rd);
+    sh->dependencies()->deps->rangeDeps[*it].push_back (rd);
 }
 
 void DependencyManager::removeDependencies (const KSpreadPoint &cell)
@@ -128,12 +138,17 @@ void DependencyManager::removeDependencies (const KSpreadPoint &cell)
   for (it1 = cells.begin();
       it1 != cells.end(); ++it1)
   {
-    if (!deps->cellDeps.contains (*it1))
+    //get sheet-pointer - needed to handle inter-sheet dependencies correctly
+    KSpreadSheet *sh = (*it1).table;
+    if (!sh)
+      sh = sheet;
+    
+    if (!sh->dependencies()->deps->cellDeps.contains (*it1))
       continue;  //this should never happen
     
     //we no longer depend on this cell
     //ASSUMPTION: each cell is contained no more than once
-    QValueList<KSpreadPoint> cells = deps->cellDeps[*it1];
+    QValueList<KSpreadPoint> cells = sh->dependencies()->deps->cellDeps[*it1];
     QValueList<KSpreadPoint>::iterator cit = cells.find (cell);
     if (cit != cells.end())
       cells.erase (cit);
@@ -153,10 +168,17 @@ void DependencyManager::removeDependencies (const KSpreadPoint &cell)
         leads.push_back (*it1);
   }
   for (it1 = leads.begin(); it1 != leads.end(); ++it1)
-    if (deps->rangeDeps.contains (*it1))
+  {
+    //get sheet-pointer - needed to handle inter-sheet dependencies correctly
+    KSpreadSheet *sh = (*it1).table;
+    if (!sh)
+      sh = sheet;
+
+    if (sh->dependencies()->deps->rangeDeps.contains (*it1))
     {
       QValueList<RangeDependency>::iterator it3;
-      QValueList<RangeDependency> rdeps = deps->rangeDeps[*it1];
+      QValueList<RangeDependency> rdeps =
+          sh->dependencies()->deps->rangeDeps[*it1];
       it3 = rdeps.begin();
       //erase all range dependencies of this cell in this cell-chunk
       while (it3 != rdeps.end())
@@ -167,8 +189,9 @@ void DependencyManager::removeDependencies (const KSpreadPoint &cell)
           ++it3;
       //erase the list if we no longer need it
       if (rdeps.empty())
-        deps->rangeDeps.erase (*it1);
+        sh->dependencies()->deps->rangeDeps.erase (*it1);
     }
+  }
   
   //finally, remove the entry about this cell
   deps->dependencies[cell].cells.clear();
@@ -373,12 +396,14 @@ QValueList<KSpreadPoint> DependencyManager::leadingCells (const KSpreadRange &ra
 {
   QValueList<KSpreadPoint> cells;
   KSpreadPoint cell1, cell2, cell;
-  cell1.table = cell2.table = sheet;
   
   cell1.setRow (range.startRow());
   cell1.setColumn (range.startCol());
   cell2.setRow (range.endRow());
   cell2.setColumn (range.endCol());
+  cell1.table = range.table;
+  cell2.table = range.table;
+  
   cell1 = leadingCell (cell1);
   cell2 = leadingCell (cell2);
   for (int row = cell1.row(); row <= cell2.row(); row += CELLCHUNK_ROWS)
@@ -387,6 +412,7 @@ QValueList<KSpreadPoint> DependencyManager::leadingCells (const KSpreadRange &ra
     {
       cell.setRow (row);
       cell.setColumn (col);
+      cell.table = range.table;
       cells.push_back (cell);
     }
   return cells;
@@ -405,7 +431,7 @@ RangeList DependencyManager::getDependencies (const KSpreadPoint &cell) const
   formula.setExpression (c->text());
   
   //now that we have the formula, we ask it to give us the dependencies
-  rl = formula.getDependencies ();
+  rl = formula.getDependencies (sheet);
   return rl;
 }
 

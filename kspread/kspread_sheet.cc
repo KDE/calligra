@@ -679,6 +679,11 @@ const QColor& KSpreadSheet::emptyColor() const
   return d->emptyColor;
 }
 
+KSpread::DependencyManager *KSpreadSheet::dependencies ()
+{
+  return d->dependencies;
+}
+
 int KSpreadSheet::leftColumn( double _xpos, double &_left,
                               const KSpreadCanvas *_canvas ) const
 {
