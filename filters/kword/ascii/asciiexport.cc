@@ -84,11 +84,7 @@ public:
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
 
-    virtual bool doHeader(const HeaderData& header);
-    virtual bool doFooter(const FooterData& footer);
-
-    virtual bool doFullParagraphList(const QValueList<ParaData>& paraList,
-                                     const int printSeparator = 0);
+    virtual bool doFullParagraphList(const QValueList<ParaData>& paraList);
     virtual bool doFullParagraph(const ParaData& para);
     virtual bool doFullParagraph(const QString& paraText,
         const LayoutData& layout,
@@ -177,48 +173,14 @@ bool ASCIIWorker::doCloseDocument(void)
     return true;
 }
 
-static bool isParaListEmpty(const QValueList<ParaData>& para)
+bool ASCIIWorker::doFullParagraphList(const QValueList<ParaData>& paraList)
 {
-    if (para.count() == 1)
-    {
-        if (para.first().text.isEmpty())
-            return true;
-    }
-
-    return false;
-}
-
-bool ASCIIWorker::doHeader(const HeaderData& header)
-{
-    if (isParaListEmpty(header.para))
-        return true;
-
-    return doFullParagraphList(header.para, +1);
-}
-
-bool ASCIIWorker::doFooter(const FooterData& footer)
-{
-    if (isParaListEmpty(footer.para))
-        return true;
-
-    return doFullParagraphList(footer.para, +1);
-}
-
-bool ASCIIWorker::doFullParagraphList(const QValueList<ParaData>& paraList,
-                                      const int printSeparator)
-{
-    if (printSeparator == -1)
-        *m_streamOut << "--" << m_eol;
-
     for (QValueList<ParaData>::ConstIterator it = paraList.begin();
          it != paraList.end();
          it++)
     {
         if (!doFullParagraph(*it)) return false;
     }
-
-    if (printSeparator == +1)
-        *m_streamOut << "--" << m_eol;
 
     return true;
 }
@@ -446,7 +408,7 @@ bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
                         kdWarning(30502) << "Unsupported frame anchor type: "
                             << (*paraFormatDataIt).frameAnchor.type << endl;
                     }
-                    
+
                     lastSegmentWasText = false;
                     break;
                 }
