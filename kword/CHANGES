@@ -1351,3 +1351,8 @@ Reggie, 29.6.1999:
 ------------------
 - Fixed some redraw bugs I found in KL.
 - Removed some focus hacks
+
+Reggie, 1.7.1999:
+-----------------
+- Improved image handling => Fixed also loosing 
+  inlined saved pictures in some cases
