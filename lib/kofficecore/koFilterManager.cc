@@ -428,10 +428,9 @@ const QString KoFilterManager::prepareExport( const QString & file, const char *
 	    tmpFileNeeded=true;
 	else if(vec[i].implemented.lower()=="kodocument") {
 	    ok=filter->E_filter(QCString(file), document, QCString(_native_format), QCString(mimeType), config);
-	    if(ok)
-		document->changedByFilter();
+	    // if(ok)
+	    //	document->changedByFilter();
 	}
-	
         delete filter;
         ++i;
     }
@@ -486,7 +485,7 @@ PreviewStack::~PreviewStack() {
 void PreviewStack::showPreview(const KURL &url) {
 
     QString tmp=url.url();
-    unsigned short k=0, id;
+    unsigned short k=0;
     unsigned int foo=tmp.length();
 
     // try to find the extension
@@ -497,11 +496,11 @@ void PreviewStack::showPreview(const KURL &url) {
 }
 
 void PreviewStack::filterChanged(const QString &filter) {
-    change(filter.mid(1));    
+    change(filter.mid(1));
 }
 
 void PreviewStack::change(const QString &ext) {
-    
+
     if(ext.isNull() || ext[0]!='.') {
 	if(!hidden) {
             hide();

@@ -183,8 +183,9 @@ bool KoDocument::saveFile()
 	    ret = KoFilterManager::self()->export_();
     } else {
       // How can this happen ? m_changed = true ?
-      kdDebug(30003) << "Document changed !??!?!?!!?" << endl;
-      ret = false;
+      // No -> nativeFile==m_file :) (Werner)
+      // kdDebug(30003) << "Document changed !??!?!?!!?" << endl;
+      ret = true;
     }
   } else {
     // Native format => normal save
