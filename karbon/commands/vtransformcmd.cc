@@ -18,9 +18,13 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include <klocale.h>
 
+#include "vpath.h"
+#include "vsegment.h"
 #include "vselection.h"
+#include "vtext.h"
 #include "vtransformcmd.h"
 
 
@@ -70,6 +74,27 @@ VTransformCmd::unexecute()
 
 	setSuccess( false );
 }
+
+void
+VTransformCmd::visitVPath( VPath& path )
+{
+	VSegment* segment = path.first();
+
+	while( segment )
+	{
+		segment->transform( m_mat );
+
+		segment = segment->next();
+	}
+
+	path.invalidateBoundingBox();
+}
+
+void
+VTransformCmd::visitVText( VText& /*text*/ )
+{
+}
+
 
 VTranslateCmd::VTranslateCmd( VDocument *doc, double d1, double d2 )
 		: VTransformCmd( doc, i18n( "Translate Objects" ), "14_select" )

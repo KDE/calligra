@@ -40,6 +40,9 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
+	virtual void visitVPath( VPath& path );
+	virtual void visitVText( VText& text );
+
 protected:
 	VTransformCmd( VDocument *doc, const QString& name, const QString& icon );
 
@@ -48,11 +51,13 @@ protected:
 	QWMatrix m_mat;
 };
 
+
 class VTranslateCmd : public VTransformCmd
 {
 public:
 	VTranslateCmd( VDocument *doc, double d1, double d2 );
 };
+
 
 class VScaleCmd : public VTransformCmd
 {
@@ -60,17 +65,20 @@ public:
 	VScaleCmd( VDocument *doc, const KoPoint& p, double s1, double s2 );
 };
 
+
 class VShearCmd : public VTransformCmd
 {
 public:
 	VShearCmd( VDocument *doc, const KoPoint& p, double s1, double s2 );
 };
 
+
 class VRotateCmd : public VTransformCmd
 {
 public:
 	VRotateCmd( VDocument *doc, const KoPoint& p, double angle );
 };
+
 
 #endif
 

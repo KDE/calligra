@@ -125,12 +125,7 @@ VRotateTool::recalc()
 				first().y() - m_center.y(),
 				first().x() - m_center.x() ) );
 
-	// Build affine matrix:
-	QWMatrix mat;
-	mat.translate( m_center.x(), m_center.y() );
-	mat.rotate( m_angle );
-	mat.translate( -m_center.x(), -m_center.y() );
-
+	VRotateCmd cmd( &view()->part()->document(), m_center, m_angle );
 
 	// Copy selected objects and transform:
 	m_objects.clear();
@@ -142,7 +137,9 @@ VRotateTool::recalc()
 		if( itr.current()->state() != VObject::deleted )
 		{
 			copy = itr.current()->clone();
-			copy->transform( mat );
+
+			cmd.visit( *copy );
+
 			copy->setState( VObject::edit );
 
 			m_objects.append( copy );
