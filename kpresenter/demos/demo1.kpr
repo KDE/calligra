@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <DOC author="Reginald Stadlbauer" email="reggie@kde.org" editor="KPresenter" mime="application/x-kpresenter">
  <PAPER format="5" ptWidth="680" ptHeight="510" mmWidth ="240" mmHeight="180" inchWidth ="9.44882" inchHeight="7.08661" orientation="0" unit="0">
   <PAPERBORDERS mmLeft="0" mmTop="0" mmRight="0" mmBottom="0" ptLeft="0" ptTop="0" ptRight="0" ptBottom="0" inchLeft="0" inchTop="0" inchRight="0" inchBottom="0"/>
@@ -100,56 +100,56 @@
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="This"/>
+       <TEXT>This</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="is"/>
+       <TEXT>is</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="a"/>
+       <TEXT>a</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="255" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="demonstration"/>
+       <TEXT>demonstration</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="255" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -191,14 +191,14 @@
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="of"/>
+       <TEXT>of</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -240,28 +240,28 @@
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value="KPresenter's"/>
+       <TEXT>KPresenter's</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value="Screenpresentations"/>
+       <TEXT>Screenpresentations</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -340,42 +340,42 @@
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="Come"/>
+       <TEXT>Come</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="from"/>
+       <TEXT>from</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="bottom"/>
+       <TEXT>bottom</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -430,42 +430,42 @@
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="Come"/>
+       <TEXT>Come</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="from"/>
+       <TEXT>from</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="top"/>
+       <TEXT>top</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -520,42 +520,42 @@
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="Come"/>
+       <TEXT>Come</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="from"/>
+       <TEXT>from</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="left/bottom"/>
+       <TEXT>left/bottom</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -597,70 +597,70 @@
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="Here"/>
+       <TEXT>Here</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="are"/>
+       <TEXT>are</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="lists"/>
+       <TEXT>lists</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="with"/>
+       <TEXT>with</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="1" underline="0"/>
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="effects"/>
+       <TEXT>effects</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="40" bold="1" italic="1" underline="0"/>
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -702,28 +702,28 @@
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="1."/>
+       <TEXT>1.</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="Line"/>
+       <TEXT>Line</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -734,28 +734,28 @@
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="2."/>
+       <TEXT>2.</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="Line"/>
+       <TEXT>Line</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -766,28 +766,28 @@
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value="3."/>
+       <TEXT>3.</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value="Line"/>
+       <TEXT>Line</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -798,28 +798,28 @@
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="4."/>
+       <TEXT>4.</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="Line"/>
+       <TEXT>Line</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -830,42 +830,42 @@
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value="last"/>
+       <TEXT>last</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value="L"/>
+       <TEXT>L</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value="in"/>
+       <TEXT>in</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value="e"/>
+       <TEXT>e</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -907,28 +907,28 @@
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="1."/>
+       <TEXT>1.</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="Line"/>
+       <TEXT>Line</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -939,28 +939,28 @@
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="2."/>
+       <TEXT>2.</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="Line"/>
+       <TEXT>Line</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -971,28 +971,28 @@
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value="3."/>
+       <TEXT>3.</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value="Line"/>
+       <TEXT>Line</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -1003,28 +1003,28 @@
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="4."/>
+       <TEXT>4.</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value="Line"/>
+       <TEXT>Line</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="0" green="0" blue="0"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>
@@ -1035,28 +1035,28 @@
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value="last"/>
+       <TEXT>last</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="0"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value="Line"/>
+       <TEXT>Line</TEXT>
       </OBJ>
       <OBJ>
        <TYPE value="1"/>
        <FONT family="utopia" pointSize="30" bold="1" italic="0" underline="0"/>
        <COLOR red="255" green="255" blue="255"/>
        <VERTALIGN value="1"/>
-       <TEXT value=" "/>
+       <TEXT> </TEXT>
       </OBJ>
      </LINE>
     </PARAGRAPH>

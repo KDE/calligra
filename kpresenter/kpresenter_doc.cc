@@ -186,7 +186,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 {
   KPObject *kpobject = 0L;
 
-  out << "<?xml version=\"1.0\"?>" << endl;
+  out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
   out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
       << "\" mime=\"" << "application/x-kpresenter" << "\">" << endl;
 

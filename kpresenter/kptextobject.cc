@@ -604,7 +604,7 @@ void KPTextObject::saveKTextObject(ostream& out)
 	      out << indent << "<COLOR red=\"" << txtObj->color().red() << "\" green=\""
 		  << txtObj->color().green() << "\" blue=\"" << txtObj->color().blue() << "\"/>" << endl;
 	      out << indent << "<VERTALIGN value=\"" << static_cast<int>(txtObj->vertAlign()) << "\"/>" << endl;
-	      out << indent << "<TEXT value=\"" << decode(txtObj->text()) << "\"/>" << endl;
+	      out << indent << "<TEXT>" << decode(txtObj->text()).utf8() << "</TEXT>" << endl;
 	      out << etag << "</OBJ>" << endl;
 	    }
 
@@ -624,7 +624,8 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string tag;
   string name;
-
+  bool utf8 = false;
+  
   KTextObject::EnumListType elt;
   KTextObject::UnsortListType ult = ktextobject.unsortListType();
 
@@ -820,15 +821,32 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 			      // text
 			      else if (name == "TEXT")
 				{
+				  QString tmp2;
+				  string tmp;
+				  
 				  KOMLParser::parseTag(tag.c_str(),name,lst);
 				  vector<KOMLAttrib>::const_iterator it = lst.begin();
 				  for(;it != lst.end();it++)
 				    {
 				      if ((*it).m_strName == "value")
-					objPtr->append((*it).m_strValue.c_str());
+					tmp2 = (*it).m_strValue.c_str();
 				    }
-				}
 
+				  if (parser.readText(tmp))
+				    {
+				      QString s = tmp.c_str();
+				      if (s.simplifyWhiteSpace().length() > 0 || utf8)
+					{
+					  tmp2 = tmp.c_str();
+					  utf8 = true;
+					}
+				    }
+
+				  tmp2 = QString::fromUtf8(tmp2.ascii());
+
+				  objPtr->append(tmp2);
+				}
+				
 			      else
 				cerr << "Unknown tag '" << tag << "' in OBJ" << endl;
 			
@@ -892,14 +910,14 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 QString KPTextObject::decode(const QString &_str)
 {
   QString str(_str);
-  
+
   // HACK
   str.append("_");
-  
+
   str.replace(QRegExp("<"),"&lt;");
   str.replace(QRegExp(">"),"&gt;");
-  
+
   str.remove(str.length() - 1,1);
-  
+
   return QString(str);
 }

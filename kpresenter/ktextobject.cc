@@ -4655,17 +4655,20 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 	  } break;
 	default:
 	  {
-	    if (e->ascii() && e->ascii() > 31)
+	    if (!e->text().isEmpty())
 	      {
 		_modified = true;
-		if (insertChar(e->ascii()))
-		  drawBelow = true;
-		else
+		for (unsigned int i = 0;i < e->text().length();i++)
 		  {
-		    drawBelow = false;
-		    drawFullPara = true;
+		    if (insertChar(e->text()[i]))
+		      drawBelow = true;
+		    else
+		      {
+			drawBelow = false;
+			drawFullPara = true;
+		      }
+		    cursorChanged = true;
 		  }
-		cursorChanged = true;
 	      }
 	  };
 	}
@@ -5284,7 +5287,7 @@ bool KTextObject::kdelete(bool _recalc=true)
 }
 
 /*========================= insert char ==========================*/
-bool KTextObject::insertChar(char c)
+bool KTextObject::insertChar(QChar c)
 {
   unsigned int i,objPos,w = 0;
   unsigned int para = txtCursor->positionParagraph();

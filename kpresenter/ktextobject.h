@@ -371,7 +371,7 @@ public:
   /**
    * Inserts the char <i>c</i> at the position <i>index</i>.
    */
-  void insert(unsigned int index,char c) {objText.insert(index,&c);}
+  void insert(unsigned int index,QChar c) {objText.insert(index,c);}
 
   /**
    * Appends the string <i>text</i>.
@@ -381,7 +381,7 @@ public:
   /**
    * Appends the char <i>c</i>.
    */
-  void append(char c) {objText.append(&c);}
+  void append(QChar c) {objText.insert(0,c);}
 
   /**
    * Delete the character at the position <i>i</i>.
@@ -1919,7 +1919,7 @@ signals:
   void horzAlignChanged(TxtParagraph::HorzAlign);
 
   void giveMeFocus();
-  
+
 protected:
 
   //**************** types *****************
@@ -1980,7 +1980,7 @@ protected:
   bool kbackspace();
   bool kdelete(bool _recalc=true);
 
-  bool insertChar(char);
+  bool insertChar(QChar);
 
   bool sameEffects(TxtObj *to)
     {return (currFont == to->font() && currColor == to->color());}

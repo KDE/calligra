@@ -103,3 +103,8 @@ Reggie, 12.4.1999:
 Reggie, 13.4.1999:
 ------------------
 - Fixes
+
+Reggie, 21.4.1999:
+------------------
+- Unicoded KPresenter and KTextObject (also load and save)
+- Fixes in keycompression of KTextObject
