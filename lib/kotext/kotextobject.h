@@ -260,7 +260,7 @@ public:
 
     void changeCaseOfText(QTextCursor *cursor,KoChangeCaseDia::TypeOfCase _type);
     QString textChangedCase(const QString _text,KoChangeCaseDia::TypeOfCase _type);	
-    KCommand *KoTextObject::changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,QTextCursor *cursor, KoTextParag *parag);
+    KCommand *changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,QTextCursor *cursor, KoTextParag *parag);
 
 signals:
     /** Emitted by availableHeight() when the available height hasn't been
