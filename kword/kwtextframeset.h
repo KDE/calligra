@@ -254,6 +254,8 @@ public:
     void drawCursor( bool b );
     void insertPicture( const QString & file );
 
+    void insertSpecialChar(QChar _c);
+
     void setBold(bool on);
     void setItalic(bool on);
     void setUnderline(bool on);

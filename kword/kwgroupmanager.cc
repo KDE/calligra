@@ -1158,18 +1158,24 @@ void KWGroupManager::validate()
     for(unsigned int row=0; row < getRows(); row++) {
         for(unsigned int col=0; col <getCols(); col++) {
             bool found=false;
-            for ( unsigned int i = 0; i < cells.count(); i++ ) {
+            kdDebug()<<" cells.count() :"<<cells.count()<<endl;
+            for ( unsigned int i = 0; i < cells.count(); i++ )
+            {
                 if ( cells.at( i )->row <= row &&
-                        cells.at( i )->col <= col &&
-                        cells.at( i )->row+cells.at( i )->rows > row &&
-                        cells.at( i )->col+cells.at( i )->cols > col ) {
-                    if(found==true) {
+                     cells.at( i )->col <= col &&
+                     cells.at( i )->row+cells.at( i )->rows > row &&
+                     cells.at( i )->col+cells.at( i )->cols > col )
+                {
+                    if(found==true)
+                    {
                         kdWarning() << "Found duplicate cell, (" << cells.at(i)->row << ", " << cells.at(i)->col << ") moving one out of the way" << endl;
                         misplacedCells.append(cells.take(i--));
                     }
                     found=true;
+                    kdDebug()<<"found :"<<found<<endl;
                 }
             }
+             kdDebug()<<"found sortie :"<<found<<endl;
             if(! found) {
                 kdWarning() << "Missing cell, creating a new one; ("<< row << "," << col<<")" << endl;
                 Cell *cell = new Cell;
@@ -1207,7 +1213,7 @@ void KWGroupManager::validate()
                 }
 #endif
                 doc->addFrameSet(_frameSet);
-
+                kdDebug()<<"addFrameSet(_frameSet); \n";
                 cell->frameSet = _frameSet;
                 cell->row = row;
                 cell->col = col;
@@ -1216,7 +1222,7 @@ void KWGroupManager::validate()
 
                 unsigned int i;
                 for (i = 0; i < cells.count() && (cells.at(i)->row < row ||
-                    cells.at(i)->row == row  && cells.at(i)->col < col) ; i++ );
+                                                  cells.at(i)->row == row  && cells.at(i)->col < col) ; i++ );
                 cells.insert(i, cell );
             }
         }
@@ -1227,8 +1233,8 @@ void KWGroupManager::validate()
         Cell *cell = misplacedCells.take(0);
         cell->frameSet->getFrame(0)->setWidth(getBoundingRect().width());
         cell->frameSet->getFrame(0)->moveBy( getBoundingRect().left() -
-            cell->frameSet->getFrame(0)->left(),
-            bottom - cell->frameSet->getFrame(0)->top() - tableCellSpacing);
+                                             cell->frameSet->getFrame(0)->left(),
+                                             bottom - cell->frameSet->getFrame(0)->top() - tableCellSpacing);
         cell->row=rows++;
         cell->col=0;
         cell->cols=cols;

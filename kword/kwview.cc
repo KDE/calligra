@@ -1278,11 +1278,7 @@ void KWView::insertSpecialChar()
     QString f = font().family();
     QChar c=' ';
     if ( KCharSelectDia::selectChar( f, c, false ) )
-        {
-             KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (edit->textFrameSet()) ;
-             QTextFormat *format = (dynamic_cast<KWTextParag*> (tmpParag->textDocument()->lastParag()))->paragFormat();
-            edit->textFrameSet()->insert( edit->getCursor(), format, c );
-        }
+            edit->insertSpecialChar(c);
 }
 
 /*===============================================================*/

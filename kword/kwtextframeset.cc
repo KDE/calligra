@@ -2152,6 +2152,14 @@ void KWTextFrameSetEdit::setTextSuperScript(bool on)
     textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::VAlign );
 }
 
+/*===============================================================*/
+void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
+{
+    QTextFormat format( *currentFormat );
+    textFrameSet()->insert( cursor, &format, _c );
+}
+
+/*===============================================================*/
 void KWTextFrameSetEdit::insertPicture( const QString & file )
 {
     //TODO
