@@ -28,6 +28,8 @@ OpenCalcStyles::OpenCalcStyles()
   m_numberStyles.setAutoDelete( true );
   m_rowStyles.setAutoDelete( true );
   m_tableStyles.setAutoDelete( true );
+
+  m_fontList.setAutoDelete( true );
 }
 
 OpenCalcStyles::~OpenCalcStyles()
@@ -43,8 +45,45 @@ void OpenCalcStyles::writeStyles( QDomDocument & doc, QDomElement & autoStyles )
   addCellStyles( doc, autoStyles );
 }
 
+void OpenCalcStyles::writeFontDecl( QDomDocument & doc, QDomElement & fontDecls )
+{
+  QFont * f = m_fontList.first();
+  while ( f )
+  {  
+    QDomElement fontDecl = doc.createElement( "style:font-decl" );
+
+    fontDecl.setAttribute( "style:name", f->family() );
+    fontDecl.setAttribute( "fo:font-family", f->family() );
+    fontDecl.setAttribute( "style:font-pitch", ( f->fixedPitch() ? "fixed" : "variable" ) );
+
+    // missing:
+    // style:font-charset="x-symbol" style:font-family-generic="swiss" 
+    // style:font-style-name= "Bold/Standard/Regular"
+    
+    fontDecls.appendChild( fontDecl );
+
+    f = m_fontList.next();
+  }  
+}
+
+void OpenCalcStyles::addFont( QFont const & font )
+{
+  QFont * f = m_fontList.first();
+  while ( f )
+  {
+    if ( f->family() == font.family() )
+      return;
+
+    f = m_fontList.next();
+  }
+
+  f = new QFont( font );
+  m_fontList.append( f );
+}
+
 QString OpenCalcStyles::cellStyle( CellStyle const & cs )
 {
+  return "";
 }
 
 QString OpenCalcStyles::columnStyle( ColumnStyle const & cs )
@@ -70,6 +109,7 @@ QString OpenCalcStyles::columnStyle( ColumnStyle const & cs )
 
 QString OpenCalcStyles::numberStyle( NumberStyle const & ns )
 {
+  return "";
 }
 
 QString OpenCalcStyles::rowStyle( RowStyle const & rs )
@@ -187,6 +227,14 @@ void OpenCalcStyles::addTableStyles( QDomDocument & doc, QDomElement & autoStyle
 bool TableStyle::isEqual( TableStyle const * const t1, TableStyle const & t2 )
 {
   if ( t1->visible == t2.visible )
+    return true;
+
+  return false;
+}
+
+bool NumberStyle::isEqual( NumberStyle const * const t1, NumberStyle const & t2 )
+{
+  if ( ( t1->type == t2.type ) && ( t1->pattern == t2.pattern ) )
     return true;
 
   return false;

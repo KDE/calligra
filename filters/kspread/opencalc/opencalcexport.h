@@ -60,12 +60,16 @@ class OpenCalcExport : public KoFilter
                     KSpreadSheet const * const sheet, int maxCols, int maxRows );
   void exportCells( QDomDocument & doc, QDomElement & rowElem, 
                     KSpreadSheet const * const sheet, int row, int maxCols );
+  void exportDefaultCellStyle( QDomDocument & doc, QDomElement & officeStyles );
+  void exportPageAutoStyles( QDomDocument & doc, QDomElement & autoStyles,
+                             KSpreadDoc const * const ksdoc );
+  void exportMasterStyles( QDomDocument & doc, QDomElement & masterStyles );
 
   bool writeMetaFile( KoStore * store, uint filesWritten );
 
   void maxRowCols( KSpreadSheet const * const sheet, 
                    int & maxCols, int & maxRows );
-
+  void createDefaultStyles();
 };
 
 #endif

@@ -21,6 +21,7 @@
 #ifndef OPENCALCSTYLEEXPORT_H
 #define OPENCALCSTYLEEXPORT_H
 
+#include <qfont.h>
 #include <qptrlist.h>
 #include <qstring.h>
 
@@ -66,8 +67,13 @@ class NumberStyle
  public:
   NumberStyle() {}
 
+  void copyData( NumberStyle const & ts ) { type = ts.type; }
+  static bool isEqual( NumberStyle const * const t1, NumberStyle const & t2 );
+
   QString     name;
   NumberType  type;
+
+  QString     pattern;
 };
 
 class ColumnStyle : public Style 
@@ -95,6 +101,9 @@ class OpenCalcStyles
   ~OpenCalcStyles();
 
   void writeStyles( QDomDocument & doc, QDomElement & autoStyles );
+  void writeFontDecl( QDomDocument & doc, QDomElement & content );
+
+  void    addFont( QFont const & font );
 
   QString cellStyle( CellStyle const & cs );
   QString columnStyle( ColumnStyle const & cs );
@@ -108,6 +117,7 @@ class OpenCalcStyles
   QPtrList<NumberStyle> m_numberStyles;
   QPtrList<RowStyle>    m_rowStyles;
   QPtrList<TableStyle>  m_tableStyles;
+  QPtrList<QFont>       m_fontList;
 
   void addCellStyles( QDomDocument & doc, QDomElement & autoStyles );
   void addColumnStyles( QDomDocument & doc, QDomElement & autoStyles );

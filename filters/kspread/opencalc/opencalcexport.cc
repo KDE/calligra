@@ -18,6 +18,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <float.h>
+#include <math.h>
+
 #include <opencalcexport.h>
 
 #include <qdom.h>
@@ -28,6 +31,7 @@
 #include <kgenericfactory.h>
 #include <koDocumentInfo.h>
 #include <koFilterChain.h>
+#include <koGlobal.h>
 
 #include <kspread_aboutdata.h>
 #include <kspread_cell.h>
@@ -47,8 +51,8 @@ K_EXPORT_COMPONENT_FACTORY( libopencalcexport,
     return false; \
   } while(0)
 
-OpenCalcExport::OpenCalcExport(KoFilter *, const char *, const QStringList&) :
-                     KoFilter() 
+OpenCalcExport::OpenCalcExport( KoFilter *, const char *, const QStringList & ) 
+  : KoFilter() 
 {
 }
 
@@ -126,14 +130,12 @@ bool OpenCalcExport::writeFile( KSpreadDoc const * const ksdoc )
     filesWritten |= metaXML;
 
   kdDebug() << "Document Info exported" << endl;
-  /*
   if ( !exportStyles( store, ksdoc ) )
     STOPEXPORT;
   else
     filesWritten |= stylesXML;
 
   kdDebug() << "Styles exported" << endl;
-  */
 
   if ( !writeMetaFile( store, filesWritten ) )
     STOPEXPORT;
@@ -226,6 +228,8 @@ bool OpenCalcExport::exportContent( KoStore * store, KSpreadDoc const * const ks
   if ( !store->open( "content.xml" ) )
     return false;
 
+  createDefaultStyles();
+
   QDomDocument doc;
   doc.appendChild( doc.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
 
@@ -277,14 +281,14 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
 
   QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
 
-  for( ; it.current(); ++it )
+  for( it.toFirst(); it.current(); ++it )
   {
     TableStyle ts;
     int maxCols         = 0;
     int maxRows         = 0;
     KSpreadSheet * sheet = it.current();
 
-    ts.visible = sheet->isHidden();
+    ts.visible = !sheet->isHidden();
 
     QDomElement tabElem = doc.createElement( "table:table" );
     tabElem.setAttribute( "table:style-name", m_styles.tableStyle( ts ) );
@@ -298,6 +302,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
   }
 
   m_styles.writeStyles( doc, autoStyles );
+  m_styles.writeFontDecl( doc, fontDecls );
 
   content.appendChild( fontDecls );
   content.appendChild( autoStyles );
@@ -355,6 +360,9 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
     QDomElement cellElem = doc.createElement( "table:table-cell" );
 
     KSpreadValue const value( cell->value() );
+
+    QFont font = cell->font();
+    m_styles.addFont( font );
 
     if ( value.isBoolean() )
     {
@@ -418,17 +426,189 @@ void OpenCalcExport::maxRowCols( KSpreadSheet const * const sheet,
 
 bool OpenCalcExport::exportStyles( KoStore * store, KSpreadDoc const * const ksdoc )
 {
-  return false;
-
+  kdDebug() << "exportStyles() begin" << endl;
   if ( !store->open( "styles.xml" ) )
     return false;
 
-  // TODO
+  QDomDocument doc;
+  doc.appendChild( doc.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
+
+  QDomElement content = doc.createElement( "office:document-styles" );
+  content.setAttribute( "xmlns:office", "http://openoffice.org/2000/office" );
+  content.setAttribute( "xmlns:style", "http://openoffice.org/2000/style" );
+  content.setAttribute( "xmlns:text", "http://openoffice.org/2000/text" );
+  content.setAttribute( "xmlns:table", "http://openoffice.org/2000/table" );
+  content.setAttribute( "xmlns:draw", "http://openoffice.org/2000/drawing" );
+  content.setAttribute( "xmlns:fo", "http://www.w3.org/1999/XSL/Format" );
+  content.setAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
+  content.setAttribute( "xmlns:number", "http://openoffice.org/2000/datastyle" );
+  content.setAttribute( "xmlns:svg", "http://www.w3.org/2000/svg" );
+  content.setAttribute( "xmlns:chart", "http://openoffice.org/2000/chart" );
+  content.setAttribute( "xmlns:dr3d", "http://openoffice.org/2000/dr3d" );
+  content.setAttribute( "xmlns:math", "http://www.w3.org/1998/Math/MathML" );
+  content.setAttribute( "xmlns:form", "http://openoffice.org/2000/form" );
+  content.setAttribute( "xmlns:script", "http://openoffice.org/2000/script" );
+  content.setAttribute( "office:version", "1.0" );
+
+  // order important here!
+  QDomElement officeStyles = doc.createElement( "office:styles" );
+  exportDefaultCellStyle( doc, officeStyles );
+
+  QDomElement fontDecls = doc.createElement( "office:font-decls" );  
+  m_styles.writeFontDecl( doc, fontDecls );
+
+  // TODO: needs in new number/date/time parser...
+  //  exportDefaultNumberStyles( doc, officeStyles );
+  
+  QDomElement defaultStyle = doc.createElement( "style:style" );
+  defaultStyle.setAttribute( "style:name", "Default" );
+  defaultStyle.setAttribute( "style:family", "table-cell" );
+  officeStyles.appendChild( defaultStyle );
+
+  QDomElement autoStyles = doc.createElement( "office:automatic-styles" );
+  exportPageAutoStyles( doc, autoStyles, ksdoc );
+  
+  QDomElement masterStyles = doc.createElement( "office:master-styles" );
+  exportMasterStyles( doc, masterStyles );
+
+  content.appendChild( fontDecls );
+  content.appendChild( officeStyles );
+  content.appendChild( autoStyles );
+  content.appendChild( masterStyles );
+
+  doc.appendChild( content );
+
+  QCString f( doc.toCString() );
+  kdDebug() << "Content: " << (char const * ) f << endl;
+
+  store->write( f, f.length() );
 
   if ( !store->close() )
     return false;
 
-  return false;
+  kdDebug() << "exit exportStyles()" << endl;
+
+  return true;
+}
+
+void OpenCalcExport::exportDefaultCellStyle( QDomDocument & doc, QDomElement & officeStyles )
+{
+  QDomElement defStyle = doc.createElement( "style:default-style" );
+  defStyle.setAttribute( "style:family", "table-cell" );
+
+  KoDocument * document = m_chain->inputDocument();
+  KSpreadDoc * ksdoc    = static_cast<KSpreadDoc *>(document);
+
+  KSpreadFormat * format = new KSpreadFormat( 0 );
+  KLocale const * const locale = ksdoc->locale();
+  QString language;
+  QString country;
+  QString charSet;
+
+  QString l( locale->language() );
+  KLocale::splitLocale( l, language, country, charSet );
+  QFont font( format->font() );
+
+  QDomElement style = doc.createElement( "style:properties" );
+  style.setAttribute( "style:font-name", font.family() );
+  style.setAttribute( "style:decimal-places", QString::number( locale->fracDigits() ) );
+  style.setAttribute( "fo:language", language );
+  style.setAttribute( "fo:country", country );
+  style.setAttribute( "style:font-name-asian", "HG Mincho Light J" );
+  style.setAttribute( "style:language-asian", "none" );
+  style.setAttribute( "style:country-asian", "none" );
+  style.setAttribute( "style:font-name-complex", "Arial Unicode MS" );
+  style.setAttribute( "style:language-complex", "none" );
+  style.setAttribute( "style:country-complex", "none" );
+  style.setAttribute( "style:tab-stop-distance", "1.25cm" );
+                                   
+  defStyle.appendChild( style );
+  officeStyles.appendChild( defStyle );
+  delete format;
+}
+
+void OpenCalcExport::createDefaultStyles()
+{
+  // TODO: default number styles, currency styles,...
+}
+
+void OpenCalcExport::exportPageAutoStyles( QDomDocument & doc, QDomElement & autoStyles,
+                                           KSpreadDoc const * const ksdoc )
+{
+  QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
+  KSpreadSheet const * const sheet = it.toFirst();
+  float width  = 20.999;
+  float height = 29.699;
+  if ( sheet )
+  {
+    width  = sheet->paperWidth() / 10;
+    height = sheet->paperHeight() / 10;
+  }
+  QString sWidth  = QString( "%1cm" ).arg( width  );
+  QString sHeight = QString( "%1cm" ).arg( height );
+  
+  QDomElement pageMaster = doc.createElement( "style:page-master" );
+  pageMaster.setAttribute( "style:name", "pm1" );
+
+  QDomElement properties = doc.createElement( "style:properties" );
+  properties.setAttribute( "fo:page-width",  sWidth  );
+  properties.setAttribute( "fo:page-height", sHeight ); 
+  properties.setAttribute( "fo:border", "0.002cm solid #000000" );
+  properties.setAttribute( "fo:padding", "0cm" );
+  properties.setAttribute( "fo:background-color", "transparent" );
+
+  pageMaster.appendChild( properties );
+
+  QDomElement header = doc.createElement( "style:header-style" );
+  properties = doc.createElement( "style:properties" );
+  properties.setAttribute( "fo:min-height", "0.75cm" );
+  properties.setAttribute( "fo:margin-left", "0cm" );
+  properties.setAttribute( "fo:margin-right", "0cm" );
+  properties.setAttribute( "fo:margin-bottom", "0.25cm" );
+
+  header.appendChild( properties );
+
+  QDomElement footer = doc.createElement( "style:header-style" );
+  properties = doc.createElement( "style:properties" );
+  properties.setAttribute( "fo:min-height", "0.75cm" );
+  properties.setAttribute( "fo:margin-left", "0cm" );
+  properties.setAttribute( "fo:margin-right", "0cm" );
+  properties.setAttribute( "fo:margin-bottom", "0.25cm" );
+
+  footer.appendChild( properties );
+
+  pageMaster.appendChild( header );
+  pageMaster.appendChild( footer );
+
+  autoStyles.appendChild( pageMaster );
+}
+
+void OpenCalcExport::exportMasterStyles( QDomDocument & doc, QDomElement & masterStyles )
+{
+  QDomElement masterPage = doc.createElement( "style:master-page" );
+  masterPage.setAttribute( "style:name", "Default" );
+  masterPage.setAttribute( "style:page-master-name", "pm1" );
+
+  QDomElement header = doc.createElement( "style:header" );
+  QDomElement text   = doc.createElement( "text:p" );
+  QDomElement name   = doc.createElement( "text:sheet-name" );
+  name.appendChild( doc.createTextNode( "???" ) );
+  text.appendChild( name );
+  header.appendChild( text );
+
+  masterPage.appendChild( header );
+
+  QDomElement footer = doc.createElement( "style:footer" );
+  text               = doc.createElement( "text:p" );
+  text.appendChild( doc.createTextNode( i18n( "Page " ) ) );
+  QDomElement number = doc.createElement( "text:page-number" );
+  number.appendChild( doc.createTextNode( "1" ) );
+  text.appendChild( number );
+  footer.appendChild( text );
+
+  masterPage.appendChild( footer );
+
+  masterStyles.appendChild( masterPage );       
 }
 
 bool OpenCalcExport::writeMetaFile( KoStore * store, uint filesWritten )
