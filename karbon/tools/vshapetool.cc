@@ -185,7 +185,7 @@ VShapeTool::mouseDragCtrlReleased()
 void
 VShapeTool::cancel()
 {
-		// Erase old object:
+	// Erase old object:
 	if ( isDragging() )
 	{
 		draw();

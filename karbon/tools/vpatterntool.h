@@ -33,56 +33,57 @@ class KoIconChooser;
 
 class VPatternWidget : public QFrame
 {
-	Q_OBJECT
+Q_OBJECT
 
-	public:
-		VPatternWidget( QPtrList<KoIconItem>* patterns, VTool* tool, QWidget* parent = 0L );
-		~VPatternWidget();
+public:
+	VPatternWidget( QPtrList<KoIconItem>* patterns, VTool* tool, QWidget* parent = 0L );
+	~VPatternWidget();
 
-		VPattern* selectedPattern();
+	VPattern* selectedPattern();
 
-	public slots:
-		void importPattern();
-		void deletePattern();
+public slots:
+	void importPattern();
+	void deletePattern();
 
-		void slotButtonClicked( int id );
-		void patternSelected( KoIconItem* );
+	void slotButtonClicked( int id );
+	void patternSelected( KoIconItem* );
 
-	private:
-		KoIconChooser*        m_patternChooser;
-		QHButtonGroup*        m_buttonGroup;
-		QToolButton*          m_importPatternButton;
-		QToolButton*          m_deletePatternButton;
-		VTool*                m_tool;
-		VPattern*             m_pattern;
+private:
+	KoIconChooser*        m_patternChooser;
+	QHButtonGroup*        m_buttonGroup;
+	QToolButton*          m_importPatternButton;
+	QToolButton*          m_deletePatternButton;
+	VTool*                m_tool;
+	VPattern*             m_pattern;
 }; // VPatternWidget
 
 
 class VPatternTool : public VTool
 {
-	public:
-		VPatternTool( KarbonView* view );
-		virtual ~VPatternTool();
+public:
+	VPatternTool( KarbonView* view );
+	virtual ~VPatternTool();
 
-		virtual void activate();
+	virtual void activate();
 
-		virtual QString name() { return i18n( "Pattern tool" ); }
-		virtual QString contextHelp();
-		virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	virtual QString name() { return i18n( "Pattern tool" ); }
+	virtual QString contextHelp();
+	virtual QWidget* optionsWidget() { return m_optionsWidget; }
 
-	protected:
-		virtual void draw();
+protected:
+	virtual void draw();
 
-		virtual void mouseButtonRelease();
-		virtual void mouseButtonPress();
-		virtual void mouseDragRelease();
-		virtual void mouseDrag();
-		/*virtual void mouseDragShiftPressed(); // To use to scale the pattern.
-		virtual void mouseDragShiftReleased(); */
+	virtual void mouseButtonRelease();
+	virtual void mouseButtonPress();
+	virtual void mouseDragRelease();
+	virtual void mouseDrag();
+	/*virtual void mouseDragShiftPressed(); // To use to scale the pattern.
+	virtual void mouseDragShiftReleased(); */
+	virtual void cancel();
 
-	private:
-		KoPoint              m_current;
-		VPatternWidget*      m_optionsWidget;
+private:
+	KoPoint			m_current;
+	VPatternWidget*	m_optionsWidget;
 }; // VPatternTool
 
 #endif /* __VPATTERNTOOL_H__ */

@@ -231,5 +231,12 @@ VPatternTool::mouseDragRelease()
 	view()->selectionChanged();
 } // VPatternTool::mouseDragRelease
 
+void
+VPatternTool::cancel()
+{
+	// Erase old object:
+	if( isDragging() )
+		draw();
+}
 
 #include "vpatterntool.moc"
