@@ -26,5 +26,5 @@ ExportDialog.h ExportDialogUI.h
 
 METASOURCES = AUTO
 
-service_DATA = kword_html_import.desktop kword_html_export.desktop
+service_DATA = kword_html_import.desktop kword_html_export.desktop kword_html_export_dia.desktop
 servicedir = $(kde_servicesdir)
