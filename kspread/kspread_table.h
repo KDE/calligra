@@ -1006,6 +1006,39 @@ protected:
     int m_iScrollPosX;
     int m_iScrollPosY;
 
+    // see kspread_table.cc for an explanation of this
+    // this is for type B and also for type A (better use CellWorkerTypeA for that)
+    struct CellWorker {
+	const bool create_if_default;
+	const bool emit_signal;
+	const bool type_B;
+
+	CellWorker( bool cid=true, bool es=true, bool tb=true ) : create_if_default( cid ), emit_signal( es ), type_B( tb ) { }
+	virtual ~CellWorker() { }
+
+	virtual class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) =0;
+
+	// these are only needed for type A
+	virtual bool testCondition( RowLayout* ) { return false; }
+	virtual void doWork( RowLayout* ) { }
+	virtual void doWork( ColumnLayout* ) { }
+	virtual void prepareCell( KSpreadCell* ) { }
+
+	// these are needed in all CellWorkers
+	virtual bool testCondition( KSpreadCell* cell ) =0;
+	virtual void doWork( KSpreadCell* cell, bool cellRegion, int x, int y ) =0;
+    };
+
+    // this is for type A (surprise :))
+    struct CellWorkerTypeA : public CellWorker {
+	CellWorkerTypeA( ) : CellWorker( true, true, false ) { }
+	virtual QString getUndoTitle( ) =0;
+	class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r );
+    };
+
+    typedef enum { CompleteRows, CompleteColumns, CellRegion } SelectionType;
+
+    SelectionType workOnCells( const QPoint& _marker, CellWorker& worker );
 };
 
 #endif
