@@ -3606,7 +3606,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     row++;
     if ( row > KS_rowMax )
       row = KS_rowMax;
-    if ( ( ev_PosY >= y + h - 1 ) &&
+    if ( ( ev_PosY >= y + h - 2 ) &&
          ( ev_PosY <= y + h + 1 ) &&
          !( table->rowFormat( row )->isHide() && row == 1 ) )
       m_bResize = TRUE;
@@ -3960,7 +3960,7 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
       double h = table->rowFormat( tmpRow )->dblHeight();
       //if col is hide and it's the first column
       //you mustn't resize it.
-      if ( ev_PosY >= y + h - unzoomedPixel &&
+      if ( ev_PosY >= y + h - 2 * unzoomedPixel &&
            ev_PosY <= y + h + unzoomedPixel &&
            !( table->rowFormat( tmpRow )->isHide() && tmpRow == 1 ) )
       {

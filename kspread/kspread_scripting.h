@@ -54,8 +54,8 @@ class KSpreadScripter
   virtual void setAction( KSpreadScripting::Action /* action*/, QString const & /*data*/ ) {}
   virtual void setAction( KSpreadScripting::Action /* action*/, int /*data*/ ) {}
   
-  virtual QStringList functions() const { return QStringList(); }
-  virtual bool evaluate( QString const & /*functionName*/ ) const { return false; }
+  virtual QStringList functions() { return QStringList(); }
+  virtual bool evaluate( QString const & /*functionName*/ ) { return false; }
 };
 
 #endif

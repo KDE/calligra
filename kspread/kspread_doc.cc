@@ -363,6 +363,11 @@ QDomDocument KSpreadDoc::saveXML()
       ++iter;
     }
 
+    QDomElement defaults = doc.createElement( "defaults" );
+    defaults.setAttribute( "row-height", KSpreadFormat::globalRowHeight() );
+    defaults.setAttribute( "col-width", KSpreadFormat::globalColWidth() );
+    spread.appendChild( defaults );
+
     KSpreadPlugin * plugin = m_plugins.first();
     for ( ; plugin != 0; plugin = m_plugins.next() )
     {
@@ -425,6 +430,23 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
       m_locale.load( locale );
 
   emit sigProgress( 5 );
+
+  QDomElement defaults = spread.namedItem( "defaults" ).toElement();
+  if ( !defaults.isNull() )
+  {
+    bool ok = false;
+    double d = defaults.attribute( "row-height" ).toDouble( &ok );
+    if ( !ok )
+      return false;
+    KSpreadFormat::setGlobalRowHeight( d );
+
+    d = defaults.attribute( "col-width" ).toDouble( &ok );
+
+    if ( !ok )
+      return false;
+
+    KSpreadFormat::setGlobalColWidth( d );
+  }
 
   m_refs.clear();
   //<areaname >
