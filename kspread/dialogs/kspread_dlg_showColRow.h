@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999, 2000 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Montel Laurent <montel@kde.org>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either

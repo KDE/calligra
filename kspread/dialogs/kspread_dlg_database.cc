@@ -596,7 +596,7 @@ void KSpreadDatabaseDlg::accept()
 
   if ( ( queryStr.find("DELETE", 0, false) != -1 )
        || ( queryStr.find("INSERT", 0, false) != -1 )
-       || ( queryStr.find("UPDATE", 0, false) != -1 ) 
+       || ( queryStr.find("UPDATE", 0, false) != -1 )
        || ( queryStr.find("SELECT", 0, false) == -1 ) )
   {
     KMessageBox::error( this, i18n("You are not allowed to change data in the database!") );

@@ -23,9 +23,6 @@
 #include <kdialogbase.h>
 #include <koPageLayoutDia.h>
 
-#include <qcombobox.h>
-#include <qlayout.h>
-
 class KSpreadSheet;
 class QCheckBox;
 class QComboBox;
