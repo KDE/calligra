@@ -73,11 +73,19 @@ void LayerView::init( KImageShopDoc* doc )
     m_linkRect = QRect( QPoint( 25,( cellHeight() - m_linkIcon->height() ) / 2 ), m_linkIcon->size() );
   }
 
+  QPopupMenu *submenu = new QPopupMenu();
+ 
+  submenu->insertItem( i18n( "Upper" ), 21 );
+  submenu->insertItem( i18n( "Lower" ), 22 );
+  submenu->insertItem( i18n( "Most front" ), 23 );
+  submenu->insertItem( i18n( "Most back" ), 24 );
+
   m_contextmenu = new QPopupMenu();
 
   m_contextmenu->setCheckable(TRUE);
 
   m_contextmenu->insertItem( i18n( "Visible" ), 1 );
+  m_contextmenu->insertItem( i18n( "Level" ), submenu );
   m_contextmenu->insertItem( i18n( "Linked"), 2 );
   m_contextmenu->insertItem( i18n( "Opacity"), 3 );
   m_contextmenu->insertItem( i18n( "Rename"), 4 );
@@ -90,6 +98,7 @@ void LayerView::init( KImageShopDoc* doc )
   m_contextmenu->insertItem( i18n( "Remove Mask"), 14 );
 
   connect( m_contextmenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
+  connect( submenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
 }
 
 void LayerView::paintCell( QPainter* _painter, int _row, int )
@@ -146,7 +155,7 @@ void LayerView::selectLayer( int _index )
   updateCell( m_selected, 0 );
 }
 
-void LayerView::inverseVisibility( int _index )
+void LayerView::slotInverseVisibility( int _index )
 {
   m_doc->layerList().at( _index )->setVisible( !m_doc->layerList().at( _index )->isVisible() );
   updateCell( _index, 0 );
@@ -154,13 +163,13 @@ void LayerView::inverseVisibility( int _index )
   m_doc->slotUpdateViews( m_doc->layerList().at( _index )->imageExtents() );
 }
 
-void LayerView::inverseLinking( int _index )
+void LayerView::slotInverseLinking( int _index )
 {
   m_doc->layerList().at( _index )->setLinked( !m_doc->layerList().at( _index )->isLinked() );
   updateCell( _index, 0 );
 }
 
-void LayerView::renameLayer( int _index )
+void LayerView::slotRenameLayer( int _index )
 {
   QString layername = m_doc->layerList().at( _index )->name();
 
@@ -173,37 +182,33 @@ void LayerView::renameLayer( int _index )
   updateCell( _index, 0 );
 }
 
-void LayerView::addLayer( int _index )
-{
-  cerr << "Michael : Add Layer" << endl;
-}
-
-void LayerView::removeLayer( int _index )
-{
-  cerr << "Michael : Remove Layer" << endl;
-}
-
 void LayerView::slotMenuAction( int _id )
 {
   switch( _id )
   {
     case 1:
-      inverseVisibility( m_selected );
+      slotInverseVisibility( m_selected );
       break;
     case 2:
-      inverseLinking( m_selected );
+      slotInverseLinking( m_selected );
       break;
     case 3:
       cerr << "Michael : Opacity" << endl;
       break;
     case 4:
-      renameLayer( m_selected );
+      slotRenameLayer( m_selected );
       break;
     case 11:
-      addLayer( m_selected );
+      slotAddLayer();
       break;
     case 12:
-      removeLayer( m_selected );
+      slotRemoveLayer();
+      break;
+    case 21:
+      slotUpperLayer();
+      break;
+    case 22:
+      slotLowerLayer();
       break;
     default:
       cerr << "Michael : unknown context menu action" << endl;
@@ -225,11 +230,11 @@ void LayerView::mousePressEvent( QMouseEvent* _event )
   {
     if( m_eyeRect.contains( localPoint ) )
     {
-      inverseVisibility( row );
+      slotInverseVisibility( row );
     }
     else if( m_linkRect.contains( localPoint ) )
     {
-      inverseLinking( row );
+      slotInverseLinking( row );
     }
     else if( row != -1 )
     {
@@ -254,6 +259,24 @@ void LayerView::slotRemoveLayer()
 {
 }
 
+void LayerView::swapLayers( int a, int b )
+{
+  if( ( m_doc->layerList().at( a )->isVisible() ) &&
+      ( m_doc->layerList().at( b )->isVisible() ) )
+  {
+    QRect l1 = m_doc->layerList().at( a )->imageExtents();
+    QRect l2 = m_doc->layerList().at( b )->imageExtents();
+
+    if( l1.intersects( l2 ) )
+    {
+      QRect rect = l1.intersect( l2 );
+ 
+      m_doc->compositeImage( rect );
+      m_doc->slotUpdateViews( rect );
+    }
+  }
+}
+
 void LayerView::slotUpperLayer()
 {
   int newpos = m_selected > 0 ? m_selected - 1 : 0;
@@ -263,16 +286,7 @@ void LayerView::slotUpperLayer()
 
   if( m_selected != newpos )
   {
-    QRect l1 = m_doc->layerList().at( m_selected )->imageExtents();
-    QRect l2 = m_doc->layerList().at( newpos )->imageExtents();
- 
-    if( l1.intersects( l2 ) )
-    {
-      QRect rect = l1.intersect( l2 );
- 
-      m_doc->compositeImage( rect );
-      m_doc->slotUpdateViews( rect );
-    }
+    swapLayers( m_selected, newpos );
   }
 }
 
@@ -285,16 +299,7 @@ void LayerView::slotLowerLayer()
 
   if( m_selected != newpos )
   {
-    QRect l1 = m_doc->layerList().at( m_selected )->imageExtents();
-    QRect l2 = m_doc->layerList().at( newpos )->imageExtents();
-
-    if( l1.intersects( l2 ) )
-    {
-      QRect rect = l1.intersect( l2 );
-
-      m_doc->compositeImage( rect );
-      m_doc->slotUpdateViews( rect );
-    }
+    swapLayers( m_selected, newpos );
   }
 }
 

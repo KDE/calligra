@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstddirs.h>
+#include <kstdaccel.h>
 #include <kiconloader.h>
 #include <klineeditdlg.h>
 #include <kruler.h>
@@ -194,11 +195,11 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   OpenPartsUI::Pixmap_var pix;
   
   // move tool
-  text = Q2C(i18n("Move layers and selections."));
+  text = Q2C( i18n( "Move layers and selections." ) );
   pix = OPUIUtils::convertPixmap(*KPixmapCache::toolbarPixmap("move.xpm"));
-  m_vToolBarTools->insertButton2(pix, TBTOOLS_MOVETOOL, SIGNAL(clicked()), this, "slotActivateMoveTool", true, text, -1);
-  m_vToolBarTools->setToggle(TBTOOLS_MOVETOOL, true);
-  m_vToolBarTools->toggleButton(TBTOOLS_MOVETOOL);
+  m_vToolBarTools->insertButton2(pix, TBTOOLS_MOVETOOL, SIGNAL( clicked() ), this, "slotActivateMoveTool", true, text, -1 );
+  m_vToolBarTools->setToggle( TBTOOLS_MOVETOOL, true );
+  m_vToolBarTools->toggleButton( TBTOOLS_MOVETOOL );
 
   // zoom tool
   text = Q2C(i18n("Zoom in/out."));
@@ -231,27 +232,35 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
     m_vMenuOptions = 0L;
     return true;
   }
-  
+ 
+  KStdAccel stdAccel;
+ 
   // don't use Q2C directly in arguments to avoid memory leaks!
   CORBA::WString_var text;
+  OpenPartsUI::Pixmap_var pix;
 
   // edit menu
   text = Q2C( i18n( "&Edit" ) );
   menubar->insertMenu( text , m_vMenuEdit, -1, -1 );
 
   text = Q2C( i18n( "&Undo" ) );
-  m_idMenuEdit_Undo = m_vMenuEdit->insertItem( text, this, "editUndo", 0 );
+  pix = OPUIUtils::convertPixmap( ICON( "undo.xpm" ) );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem3( pix, text, this, "editUndo", stdAccel.undo() );
+  m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
 
   text = Q2C( i18n( "&Redo" ) );
-  m_idMenuEdit_Redo = m_vMenuEdit->insertItem( text, this, "editRedo", 0 );
+  pix = OPUIUtils::convertPixmap( ICON( "redo.xpm" ) );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem3( pix, text, this, "editRedo", stdAccel.redo() );
+  m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
 
   // view menu
   text = Q2C( i18n( "&View" ) );
   menubar->insertMenu( text , m_vMenuView, -1, -1 );
-m_vMenuView->setCheckable( true );
+  m_vMenuView->setCheckable( true );
 
   text = Q2C( i18n( "&Layer dialog" ) );
   m_idMenuView_LayerDialog = m_vMenuView->insertItem( text, this, "viewLayerDialog", 0 );
+  m_vMenuEdit->setItemChecked( m_idMenuView_LayerDialog, false );
 
   // transform menu
   text = Q2C( i18n( "&Transform" ) );

@@ -29,12 +29,11 @@ public:
   void updateList();
   void update_contextmenu( int _index );
 
+  void swapLayers( int a, int b );
   void selectLayer( int _index );
-  void inverseVisibility( int _index );
-  void inverseLinking( int _index );
-  void renameLayer( int _index );
-  void addLayer( int _index );
-  void removeLayer( int _index );
+  void slotInverseVisibility( int _index );
+  void slotInverseLinking( int _index );
+  void slotRenameLayer( int _index );
 
   virtual QSize sizeHint() const;
 
