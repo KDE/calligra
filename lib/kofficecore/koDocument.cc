@@ -47,9 +47,9 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kdeversion.h>
+#include <kfileitem.h>
 #if ! KDE_IS_VERSION(3,1,90)
 #include <kdebugclasses.h>
-#include <kfileitem.h>
 #endif
 
 #include <qfile.h>
@@ -382,11 +382,11 @@ bool KoDocument::saveFile()
             else
                 backup = d->m_backupPath +"/"+url().fileName();
             backup.setPath( backup.path() + QString::fromLatin1("~") );
-#if KDE_IS_VERSION(3,1,90)
-            KIO::NetAccess::file_copy( url(), backup, -1, true /*overwrite*/, false /*resume*/, shells().current() );
-#else
             KFileItem item( entry, url() );
             Q_ASSERT( item.name() == url().fileName() );
+#if KDE_IS_VERSION(3,1,90)
+            KIO::NetAccess::file_copy( url(), backup, item.permissions(), true /*overwrite*/, false /*resume*/, shells().current() );
+#else
             KIO::NetAccess::del( backup ); // Copy does not remove existing destination file
             KIO::NetAccess::copy( url(), backup );
             // Not network transparent.
