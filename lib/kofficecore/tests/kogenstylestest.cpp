@@ -72,11 +72,11 @@ int main( int, char** ) {
 
     TEST_BEGIN( 0, 0 );
     first.writeStyle( &writer, "style:style", firstName, "style:paragraph-properties" );
-    TEST_END( "XML for first/second style", "<!DOCTYPE r>\n<r>\n <style:style style:name=\"A1\" style:family=\"paragraph\" style:master-page-name=\"Standard\">\n  <style:paragraph-properties style:page-number=\"0\"/>\n </style:style>\n</r>\n" );
+    TEST_END( "XML for first/second style", "<r>\n <style:style style:name=\"A1\" style:family=\"paragraph\" style:master-page-name=\"Standard\">\n  <style:paragraph-properties style:page-number=\"0\"/>\n </style:style>\n</r>\n" );
 
     TEST_BEGIN( 0, 0 );
     third.writeStyle( &writer, "style:style", thirdName, "style:paragraph-properties" );
-    TEST_END( "XML for third style", "<!DOCTYPE r>\n<r>\n <style:style style:name=\"P1\" style:parent-style-name=\"A1\" style:family=\"paragraph\">\n  <style:paragraph-properties style:margin-left=\"1.249cm\"/>\n </style:style>\n</r>\n" );
+    TEST_END( "XML for third style", "<r>\n <style:style style:name=\"P1\" style:parent-style-name=\"A1\" style:family=\"paragraph\">\n  <style:paragraph-properties style:margin-left=\"1.249cm\"/>\n </style:style>\n</r>\n" );
 
 
     fprintf( stderr, "OK\n" );
