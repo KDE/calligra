@@ -570,6 +570,9 @@ public:
      */
     void setURL( const KURL& url ) { m_url = url; }
 
+    QString &file() { return m_file; }
+    void setFile( const QString &file ) { m_file = file; }
+
 signals:
     /**
      * This signal is emitted, if a direct or indirect child document changes

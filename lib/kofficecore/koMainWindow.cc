@@ -681,8 +681,14 @@ bool KoMainWindow::saveDocument( bool saveas )
                 if (res == KMessageBox::Cancel )
                     return false;
             }
+            KURL oldURL = pDoc->url();
+            QString oldFile = pDoc->file();
             ret = pDoc->saveAs( newURL );
-            if (!ret) pDoc->setOutputMimeType( oldOutputFormat, oldSpecialOutputFlag );
+            if (!ret) {
+                pDoc->setOutputMimeType( oldOutputFormat, oldSpecialOutputFlag );
+                pDoc->setURL( oldURL );
+                pDoc->setFile( oldFile );
+            }
             pDoc->setTitleModified();
         }
         else

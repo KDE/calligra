@@ -342,6 +342,11 @@ bool KoDocument::saveFile()
         // setting it to nothing otherwise anything that depends on the URL
         // being correct will not work (i.e. the document will be called
         // "Untitled" which may not be true)
+        //
+        // Update: now the URL is restored in KoMainWindow but really, this
+        // should still be fixed in KoDocument/KParts (ditto for m_file).
+        // We still resetURL() here since we may or may not have been called
+        // by KoMainWindow - Clarence
         resetURL();
     }
 
