@@ -7041,11 +7041,16 @@ void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mai
         if ( row->isHide() )
             xmlWriter.addAttribute( "table:visibility", "collapse" );
 
-        //exportCells( doc, rowElem, sheet, i, maxCols );
+        saveOasisCells(  xmlWriter, mainStyles, i, maxCols );
+
         xmlWriter.endElement();
     }
 }
 
+void KSpreadSheet::saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols )
+{
+    //todo
+}
 
 bool KSpreadSheet::loadXML( const QDomElement& table )
 {
