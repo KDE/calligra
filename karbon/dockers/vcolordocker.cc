@@ -126,7 +126,6 @@ void VColorDocker::updateRGB()
 
 	m_Color->setColorSpace( VColor::rgb, false );
 	m_Color->set( r, g, b );
-	updateCanvas();
 }
 
 void VColorDocker::updateCMYK()
@@ -138,13 +137,17 @@ void VColorDocker::updateCMYK()
 
 	m_Color->setColorSpace( VColor::cmyk, false );
 	m_Color->set( c, m, y, k );
-	updateCanvas();
 }
 
 void VColorDocker::updateOpacity()
 {
 	float op = mOpacity->value() / 100.0;
 	m_Color->setOpacity( op );
+}
+
+void
+VColorDocker::mouseReleaseEvent( QMouseEvent *e )
+{
 	updateCanvas();
 }
 

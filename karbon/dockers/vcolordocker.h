@@ -46,6 +46,7 @@ public slots:
 	virtual void setColor( VColor *);
 
 private:
+	virtual void mouseReleaseEvent( QMouseEvent *e );
 	QWidget *mainWidget;
 	QTabWidget *mTabWidget;
 	QWidget *mRGBWidget;
