@@ -1,6 +1,7 @@
-SUBDIRS = ui kiviosdk tools pics tiles stencils .
+SUBDIRS = ui tools pics tiles stencils .
 
 INCLUDES = -I$(srcdir)/ui\
+	-Iui \
 	-I$(srcdir)/kiviosdk\
 	-I$(srcdir)/tools\
 	$(KOFFICE_INCLUDES)\
