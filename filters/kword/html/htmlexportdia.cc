@@ -49,13 +49,15 @@ HTMLExportDia::HTMLExportDia(QWidget *parent, const char *name) :
     box1->setButton(0);
     bl1->activate();
 //    ml->addStretch(5);
-    box2=new QVButtonGroup(i18n("Flavor"),this);
+    box2=new QVButtonGroup(i18n("Mode"),this);
     ml->addWidget(box2);
     QBoxLayout *bl2=new QVBoxLayout(box2);
     ra1=new QRadioButton(i18n("Spartan (Only document structure, no formatting!)"), box2);
     bl2->addWidget(ra1);
-    ra2=new QRadioButton(i18n("Direct (Formatting coded directly, no style sheets)"), box2);
+    ra2=new QRadioButton(i18n("Direct (Formatting coded using HTML, no style sheets)"), box2);
     bl2->addWidget(ra2);
+    ra3=new QRadioButton(i18n("Style (Formatting coded using CSS2, no style sheets)"), box2);
+    bl2->addWidget(ra3);
     box2->setExclusive(true);
     box2->setButton(1);
     bl2->activate();
@@ -80,8 +82,10 @@ QString HTMLExportDia::state()
         result += "SPARTAN";
     else if(ra2==box2->selected())
         result += "TRANSITIONAL";
+    else if(ra3==box2->selected())
+        result += "STYLE";
     else
-        result += "TRANSITIONAL"; // TODO: best is CSS2 in fact!
+        result += "STYLE"; // TODO: best is CSS2 in fact!
 
     return result;
 }

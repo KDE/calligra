@@ -57,7 +57,7 @@ public:
 private:
     QVButtonGroup *box1, *box2;
     QRadioButton *r1, *r2;  // Document Type
-    QRadioButton *ra1, *ra2; // Flavour
+    QRadioButton *ra1, *ra2, *ra3; // Mode
 };
 #endif
 #endif // HTMLEXPORTDIA_H

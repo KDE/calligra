@@ -560,6 +560,7 @@ class ClassExportFilterBase
         virtual QString getHtmlOpeningTagExtraAttributes(void) const = 0;
         virtual QString getBodyOpeningTagExtraAttributes(void) const = 0;
         virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText) = 0;
+        virtual QString getStyleElement(void) {return QString::null;} //Default is no style
     protected:
         QDomDocument qDomDocumentIn;
 };
@@ -682,6 +683,163 @@ static void ProcessParagraphDataTransitional ( QString &paraText, QValueList<For
             }
             // <font> is always set, so close it unconditionaly
             outputText+="</font>";
+       }
+
+    }
+}
+
+static void ProcessParagraphDataStyle ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText,
+                                                 ClassExportFilterBase* exportFilter)
+{
+    if (! paraText.isEmpty() )
+    {
+
+        QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
+
+        QString partialText;
+
+        for ( paraFormatDataIt = paraFormatDataList.begin ();
+              paraFormatDataIt != paraFormatDataList.end ();
+              paraFormatDataIt++ )
+        {
+            //Retrieve text
+            partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
+
+            // TODO: first and last characters of partialText should not be a space (white space problems!)
+            // TODO: replace multiples spaces in non-breaking spaces!
+            // Opening elements
+            outputText+="<span style=\"";
+
+            // Font name
+            outputText+="font-family: ";
+            outputText+=(*paraFormatDataIt).fontName; // TODO: add alternative font names
+            outputText+="; ";
+
+            // Font style
+            outputText+="font-style: ";
+            if ( (*paraFormatDataIt).italic )
+            {
+                outputText+="italic";
+            }
+            else
+            {
+                outputText+="normal";
+            }
+            outputText+="; ";
+
+            outputText+="font-weight: ";
+            if ( (*paraFormatDataIt).weight >= 75 )
+            {
+                outputText+="bold";
+            }
+            else
+            {
+                outputText+="normal";
+            }
+            outputText+="; ";
+
+            outputText+="font-size: ";
+            // Give the font size relatively (be kind with people with impered vision)
+            // TODO: option to give absolute font sizes
+            int size=(*paraFormatDataIt).fontSize;
+            // 12pt is considered the normal size // TODO: relative to layout!
+            if (size>0)
+            {
+                size /= 4;
+                size -= 3;
+                if (!size)
+                {
+                    outputText+="medium";
+                }
+                else if (1==size)
+                {
+                    outputText+="large";
+                }
+                else if (-1==size)
+                {
+                    outputText+="small";
+                }
+                else if (2==size)
+                {
+                    outputText+="x-large";
+                }
+                else if (-2==size)
+                {
+                    outputText+="x-small";
+                }
+                else if (size>=3)
+                {
+                    outputText+="xx-large";
+                }
+                else if (size<=-3)
+                {
+                    outputText+="xx-small";
+                }
+                else
+                {// Should not happen!
+                    outputText+="medium";
+                }
+            }
+            else
+            {// No font size set, so assume medium font size.
+                    outputText+="medium";
+            }
+            outputText+="; ";
+
+            // Give colour
+            outputText+="color: #";
+            //We must have two hex digits for each colour channel!
+            outputText+=QString::number(((*paraFormatDataIt).colourRed&0xf0)>>4,16);
+            outputText+=QString::number((*paraFormatDataIt).colourRed&0x0f,16);
+
+            outputText+=QString::number(((*paraFormatDataIt).colourGreen&0xf0)>>4,16);
+            outputText+=QString::number((*paraFormatDataIt).colourGreen&0x0f,16);
+
+            outputText+=QString::number(((*paraFormatDataIt).colourBlue&0xf0)>>4,16);
+            outputText+=QString::number((*paraFormatDataIt).colourBlue&0x0f,16);
+            outputText+="; ";
+
+            outputText+="text-decoration: ";
+            if ( (*paraFormatDataIt).underline )
+            {
+                outputText+="underline";
+            }
+            else
+            {
+                outputText+="none";
+            }
+            //outputText+="; ";
+            outputText+="\">"; // close span opening tag
+            if ( 1==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="<sub>"; //Subscript
+            }
+            if ( 2==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="<sup>"; //Superscript
+            }
+
+            // The text
+            if (outputText==" ")
+            {//Just a space as text. Therefore we must use a non-breaking space.
+                outputText += "&nbsp;";
+            }
+            else
+            {
+                //Code all possible predefined HTML entities
+                outputText += exportFilter->escapeText(partialText);
+            }
+            // Closing elements
+
+            if ( 2==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="</sup>"; //Superscript
+            }
+            if ( 1==(*paraFormatDataIt).verticalAlignment )
+            {
+                outputText+="</sub>"; //Subscript
+            }
+            outputText+="</span>";
        }
 
     }
@@ -917,6 +1075,8 @@ const bool ClassExportFilterBase::filter(const QString  &filenameIn, const QStri
 
     //TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 
+    streamOut << getStyleElement(); //Includes an end of line at the end if it is not empty.
+
     streamOut << "</head>" << endl;
 
     streamOut << "<body" << getBodyOpeningTagExtraAttributes() << ">" << endl;
@@ -965,42 +1125,6 @@ void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText
     ProcessParagraphDataTransitional(paraText,paraFormatDataList,outputText,this);
 }
 
-// ClassExportFilterHtmlSpartan (HTML 4.01 Strict, only document structure, no (HTML-)deprecated formattings)
-
-class ClassExportFilterHtmlSpartan : public ClassExportFilterHtmlTransitional
-{
-    public:
-        ClassExportFilterHtmlSpartan (void) {}
-        virtual ~ClassExportFilterHtmlSpartan (void) {}
-    public: //virtual
-        virtual QString getDocType(void) const;
-        virtual QString getHtmlOpeningTagExtraAttributes(void) const;
-        virtual QString getBodyOpeningTagExtraAttributes(void) const;
-        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
-};
-
-QString ClassExportFilterHtmlSpartan::getDocType(void) const
-{
-    // We are STRICT
-    return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">";
-}
-
-QString ClassExportFilterHtmlSpartan::getHtmlOpeningTagExtraAttributes(void) const
-{
-    return QString::null;
-}
-
-QString ClassExportFilterHtmlSpartan::getBodyOpeningTagExtraAttributes(void) const
-{
-    // Define the background colour as white!
-    return QString::null;
-}
-
-void ClassExportFilterHtmlSpartan::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &, QString &outputText)
-{
-    outputText += escapeText(paraText); //TODO: do the real implementation
-}
-
 // ClassExportFilterHtmlTransitional (normal XHTML 1.0 Transitional)
 
 class ClassExportFilterXHtmlTransitional : public ClassExportFilterBase
@@ -1040,6 +1164,42 @@ void ClassExportFilterXHtmlTransitional::ProcessParagraphData ( QString &paraTex
     ProcessParagraphDataTransitional(paraText,paraFormatDataList,outputText,this);
 }
 
+// ClassExportFilterHtmlSpartan (HTML 4.01 Strict, only document structure, no (HTML-)deprecated formattings)
+
+class ClassExportFilterHtmlSpartan : public ClassExportFilterHtmlTransitional
+{
+    public:
+        ClassExportFilterHtmlSpartan (void) {}
+        virtual ~ClassExportFilterHtmlSpartan (void) {}
+    public: //virtual
+        virtual QString getDocType(void) const;
+        virtual QString getHtmlOpeningTagExtraAttributes(void) const;
+        virtual QString getBodyOpeningTagExtraAttributes(void) const;
+        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
+};
+
+QString ClassExportFilterHtmlSpartan::getDocType(void) const
+{
+    // We are STRICT
+    return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">";
+}
+
+QString ClassExportFilterHtmlSpartan::getHtmlOpeningTagExtraAttributes(void) const
+{
+    return QString::null;
+}
+
+QString ClassExportFilterHtmlSpartan::getBodyOpeningTagExtraAttributes(void) const
+{
+    // Define the background colour as white!
+    return QString::null;
+}
+
+void ClassExportFilterHtmlSpartan::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &, QString &outputText)
+{
+    outputText += escapeText(paraText); //TODO: do the real implementation
+}
+
 // ClassExportFilterXHtmlSpartan (HTML 4.01 Strict, only document structure, no (HTML-)deprecated formattings)
 
 class ClassExportFilterXHtmlSpartan : public ClassExportFilterHtmlTransitional
@@ -1077,7 +1237,62 @@ void ClassExportFilterXHtmlSpartan::ProcessParagraphData ( QString &paraText, QV
     outputText += escapeText(paraText); //TODO: do the real implementation
 }
 
+// ClassExportFilterHtmlStyle (HTML 4.01 Strict, style using CSS2, no style sheets)
+class ClassExportFilterHtmlStyle : public ClassExportFilterHtmlSpartan
+{
+    public:
+        ClassExportFilterHtmlStyle (void) {}
+        virtual ~ClassExportFilterHtmlStyle (void) {}
+    public: //virtual
+        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
+        virtual QString getStyleElement(void);
+};
+
+void ClassExportFilterHtmlStyle::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText)
+{
+    ProcessParagraphDataStyle(paraText,paraFormatDataList,outputText,this);
+}
+
+QString ClassExportFilterHtmlStyle::getStyleElement()
+{
+    QString str;
+    str="<style type=\"text/css\">\n";
+    str+="<!--\n"; //Put the style under comments to increase the compatibility with old browsers
+    str+="BODY { background-color: #FFFFFF }\n";
+    str+="-->\n";
+    str+="</style>\n";
+    return str;
+}
+
+// ClassExportFilterXHtmlStyle (HTML 4.01 Strict, style using CSS2, no style sheets)
+class ClassExportFilterXHtmlStyle : public ClassExportFilterXHtmlSpartan
+{
+    public:
+        ClassExportFilterXHtmlStyle (void) {}
+        virtual ~ClassExportFilterXHtmlStyle (void) {}
+    public: //virtual
+        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
+        virtual QString getStyleElement(void);
+};
+
+void ClassExportFilterXHtmlStyle::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText)
+{
+    ProcessParagraphDataStyle(paraText,paraFormatDataList,outputText,this);
+}
+
+QString ClassExportFilterXHtmlStyle::getStyleElement()
+{
+    //NOTE: in XHTML 1.0, you cannot put the style definition into HTML comments
+    QString str;
+    str="<style type=\"text/css\">\n";
+    str+="BODY { background-color: #FFFFFF }\n"; //BODY in upper case or in lower case?
+    str+="</style>\n";
+    return str;
+}
+
+//
 // HTMLExport
+//
 HTMLExport::HTMLExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
 }
@@ -1114,14 +1329,24 @@ const bool HTMLExport::filter(const QString  &filenameIn,
         exportFilter=new ClassExportFilterHtmlSpartan;
     }
     else if (param=="XHTML-TRANSITIONAL")
-    { // spartan XHTML 1.0
+    { // transitional XHTML 1.0
         kdDebug(30503) << "Transitional XHTML option" << endl;
         exportFilter=new ClassExportFilterXHtmlTransitional;
     }
     else if (param=="HTML-TRANSITIONAL")
-    { // spartan HTML 4.01
+    { // transitional HTML 4.01
         kdDebug(30503) << "Transitional HTML option" << endl;
         exportFilter=new ClassExportFilterHtmlTransitional;
+    }
+    else if (param=="XHTML-STYLE")
+    { // Style XHTML 1.0
+        kdDebug(30503) << "Style XHTML option" << endl;
+        exportFilter=new ClassExportFilterXHtmlStyle;
+    }
+    else if (param=="HTML-STYLE")
+    { // Style HTML 4.01
+        kdDebug(30503) << "Style HTML option" << endl;
+        exportFilter=new ClassExportFilterHtmlStyle;
     }
     else if (param.contains("XHTML",false)>0)
     { //XHTML 1.0 Transitional
