@@ -2582,7 +2582,7 @@ void KPresenterView::setupActions()
     actionEditDelete = new KAction( i18n( "&Delete" ), "editdelete", CTRL + Key_Delete,
 				    this, SLOT( editDelete() ),
 				    actionCollection(), "edit_delete" );
-     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
+    actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     actionEditDeSelectAll= KStdAction::deselect( this, SLOT( editDeSelectAll()), actionCollection(), "edit_deselectall");
     /*actionEditCopyPage = */new KAction( i18n( "Copy Page" ), "editcopy",
                                           0, this, SLOT( editCopyPage() ),
@@ -2964,7 +2964,7 @@ void KPresenterView::setupActions()
 				      this, SLOT( extraWebPres() ),
 				      actionCollection(), "extra_webpres" );
 
-    actionExtraCreateTemplate = new KAction( i18n( "Create Template From Current Slide..." ), 0,
+    actionExtraCreateTemplate = new KAction( i18n( "Template Manager..." ), 0,
 					     this, SLOT( extraCreateTemplate() ),
 					     actionCollection(), "extra_template" );
 
