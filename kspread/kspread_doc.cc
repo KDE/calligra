@@ -677,10 +677,8 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     //<config:config-item-map-indexed config:name="Views">
     settingsWriter.startElement("config:config-item-map-indexed" );
     settingsWriter.addAttribute("config:name", "Views" );
-
-    KoUnit::saveOasis(&settingsWriter, unit());
-
     settingsWriter.startElement("config:config-item-map-entry" );
+    KoUnit::saveOasis(&settingsWriter, unit());
     saveOasisSettings( settingsWriter );
     settingsWriter.endElement();
 
@@ -707,11 +705,12 @@ void KSpreadDoc::loadOasisSettings( const QDomDocument&settingsDoc )
         return ; //not a error some file doesn't have settings.xml
     KoOasisSettings settings( settingsDoc );
     bool tmp = settings.selectItemSet( "view-settings" );
-    kdDebug()<<" settings : view-settings :"<<tmp<<endl;
+    //kdDebug()<<" settings : view-settings :"<<tmp<<endl;
 
     if ( tmp )
     {
         tmp = settings.selectItemMap( "Views" );
+        setUnit(KoUnit::unit(settings.parseConfigItemString("unit")));
         if (  tmp )
             d->workbook->loadOasisSettings( settings );
     }
