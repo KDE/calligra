@@ -142,11 +142,11 @@ KexiTablePartProxy::slotOpen(const QString& identifier)
 		return false;
 	if (w) {
 		if (w->isA("KexiDataTable")) { //just activate data table window
-			m_view->activateWindow(identifier);
+			m_view->activateWindow(item->title());
 			return true;
 		}
 		else if (w->isA("KexiAlterTable")) {
-			m_view->activateWindow(identifier);
+			m_view->activateWindow(item->title());
 			if (KMessageBox::questionYesNo( 0, i18n(
 				"Project of \"%1\" table is altered now.\n"
 				"Do you want to stop altering this table and display its data?" ).arg(item->title()) )==KMessageBox::No)
@@ -166,7 +166,7 @@ KexiTablePartProxy::slotOpen(const QString& identifier)
 	kdDebug() << "KexiTablePartProxy::slotOpen(): kexiView = " << kexiView() << endl;
 
 	//trying to get data
-	KexiDB::Cursor *data = m_tablePart->records(kexiView(), identifier,KexiDataProvider::Parameters());
+	KexiDB::Cursor *data = m_tablePart->records(kexiView(), item->title() ,KexiDataProvider::Parameters());
 	if (!data)
 	{
 		 kdDebug() <<"KexitablePartProxy::slotOpen(): error while retrieving data, aborting"<<endl;
