@@ -44,9 +44,13 @@ VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ),
 	QLabel *mOldText = new QLabel(i18n("Old:"), groupbox);
 	QLabel *mNewText = new QLabel(i18n("New:"), groupbox);
 	mOldColor = new KColorPatch(groupbox);
-	mOldColor->setColor(QColor( "black" ) );
 	mColorPreview = new KColorPatch(groupbox);
-	mColorPreview->setColor(QColor( "black" ) );
+	QColor color( "black" );
+	if( part->selection().count() > 0 ) // there is a selection, so take the color of first selected object
+		color = part->selection().getFirst()->fill().color().toQColor();
+
+	mOldColor->setColor( color );
+	mColorPreview->setColor( color );
 	mainLayout->addWidget( groupbox, 0, 2);
 
 	//Components
@@ -57,8 +61,11 @@ VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ),
 	QLabel *mGreenText = new QLabel(i18n("G:"), cgroupbox);
 	QLabel *mBlueText = new QLabel(i18n("B:"), cgroupbox);
 	mRed = new QSpinBox( 0, 255, 1, cgroupbox);
+	mRed->setValue( color.red() );
 	mGreen = new QSpinBox( 0, 255, 1, cgroupbox);
+	mGreen->setValue( color.green() );
 	mBlue = new QSpinBox( 0, 255, 1, cgroupbox);
+	mBlue->setValue( color.blue() );
 	connect( mRed, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mGreen, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mBlue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );

@@ -9,6 +9,7 @@
 #include <qstring.h>
 
 class QDomElement;
+class QColor;
 
 
 class VColor
@@ -38,6 +39,8 @@ public:
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
+
+	QColor toQColor() const;
 
 private:
 	void convertToColorSpace( const VColorSpace colorSpace,

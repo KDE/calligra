@@ -4,6 +4,7 @@
 */
 
 #include <qdom.h>
+#include <qcolor.h>
 
 #include "vcolor.h"
 
@@ -265,6 +266,17 @@ VColor::load( const QDomElement& element )
 		m_value[2] = 0.0;
 	if( m_value[3] < 0.0 || m_value[3] > 1.0 )
 		m_value[3] = 0.0;
+}
+
+QColor
+VColor::toQColor() const
+{
+	if( m_colorSpace == rgb )
+	{
+		return QColor( 255 * m_value[0], 255 * m_value[1], 255 * m_value[2]);
+	}
+	else
+		return QColor();
 }
 
 
