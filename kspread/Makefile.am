@@ -83,8 +83,12 @@ libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkspreadpart_la_LIBADD  = libkspreadcommon.la
 libkspreadpart_la_SOURCES = dummy.cpp
 
-dummy.cpp:
-	echo > dummy.cpp
+dummy.cpp: $(srcdir)/Makefile.am
+	echo 'extern "C" void* init_libkspread();' > $@
+	echo 'extern "C" void* init_libkspreadpart() { return init_libkspread(); } ' >> $@
+
+
+
 
 METASOURCES = AUTO
 

@@ -26,7 +26,7 @@
 
 extern "C"
 {
-    void* init_libkspreadpart()
+    void* init_libkspread()
     {
 	return new KSpreadFactory;
     }
