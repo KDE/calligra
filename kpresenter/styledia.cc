@@ -135,7 +135,7 @@ StyleDia::StyleDia( QWidget* parent, const char* name, int flags_ )
 	updateBrushConfiguration();
 
     setCancelButton( i18n( "&Close" ) );
-    setOKButton( i18n( "&OK" ) );
+    setOkButton( i18n( "&OK" ) );
     setApplyButton( i18n( "&Apply" ) );
 
     connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( styleDone() ) );
