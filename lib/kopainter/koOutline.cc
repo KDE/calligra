@@ -21,7 +21,7 @@
 
 KoOutline::KoOutline()
 {
-  mColor = KoColor::white();
+  mColor = KoColor::black();
   mOpacity = 255;
   mWidth = 1.0;
   mDashOffset = 0.0;
@@ -67,4 +67,16 @@ void KoOutline::join(Join j)
 void KoOutline::cap(Cap c)
 {
   mCap = c;
+}
+
+KoOutline &KoOutline::operator=(const KoOutline &o)
+{
+  mColor = o.mColor;
+  mOpacity = o.mOpacity;
+  mWidth = o.mWidth;
+  mDashOffset = o.mDashOffset;
+  mDashes = o.mDashes;
+  mJoin = o.mJoin;
+  mCap = o.mCap;
+  return *this;
 }

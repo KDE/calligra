@@ -26,6 +26,7 @@
 #include <support/art_vpath_dash.h>
 #include <support/art_svp_vpath_stroke.h>
 
+#include <qwidget.h>
 #include <qimage.h>
 
 #include <kdebug.h>
@@ -33,13 +34,19 @@
 #include "koVectorPath.h"
 #include "koOutline.h"
 
-KoPainter::KoPainter(int w, int h)
+#include <support/xlibrgb.h>
+#include <X11/Xlib.h>
+
+KoPainter::KoPainter(QWidget *aWidget, int w, int h)
 {
+  mWidget = aWidget;
   mOutline = 0L;
   mFill = 0L;
   mBuffer = new QImage(w, h, 32);
   mWidth = w;
   mHeight = h;
+  xlib_rgb_init_with_depth(mWidget->x11Display(), XScreenOfDisplay(mWidget->x11Display(), mWidget->x11Screen()), mWidget->x11Depth());
+  gc = XCreateGC(mWidget->x11Display(), mWidget->handle(), 0, 0);
 }
 
 KoPainter::~KoPainter()
@@ -60,20 +67,50 @@ void KoPainter::fill(KoFill *aFill)
 void KoPainter::resize(const int w, const int h)
 {
   mBuffer->create(w, h, 32);
+  mWidth = w;
+  mHeight = h;
 }
 
 void KoPainter::resize(const QSize &size)
 {
+  kdDebug() << "ooooooooWIDTH = " << size.width() << endl;
+  kdDebug() << "ooooooooHEIGHT = " << size.height() << endl;
   mBuffer->create(size, 32);
+  mWidth = size.width();
+  mHeight = size.height();
 }
 
 void KoPainter::fillAreaRGB(const QRect &r, const KoColor &c)
 {
   QRgb a = c.color().rgb();
-  for(int y = r.bottom(); y >= r.top(); y--)
+  int b = r.bottom();
+  if(b < 0)
+    return;
+  if(b >= mHeight)
+    b = mHeight - 1;
+  int t = r.top();
+  if(t >= mHeight)
+    return;
+  if(t < 0)
+    t = 0;
+  int l = r.left();
+  if(l >= mWidth)
+    return;
+  if(l < 0)
+    l = 0;
+  int ri = r.right();
+  if(ri < 0)
+    return;
+  if(ri >= mWidth)
+    ri = mWidth - 1;
+  kdDebug() << "LEFT = " << l << endl;
+  kdDebug() << "RIGHT = " << ri << endl;
+  kdDebug() << "TOP = " << t << endl;
+  kdDebug() << "BOTTOM = " << b << endl;
+  for(int y = t; y <= b; y++)
   {
     QRgb *ptr = reinterpret_cast<QRgb *>(mBuffer->scanLine(y));
-    for(int x = r.right(); x >= r.left(); x--)
+    for(int x = l; x <= ri; x++)
       *(ptr + x) = a;
   }
 }
@@ -133,148 +170,15 @@ void KoPainter::drawLine(double x1, double y1, double x2, double y2)
   delete vec;
 }
 
-void KoPainter::drawRect(double x, double y, double w, double h, double rx, double ry)
-{
-/*  if((int) rx != 0 && (int) ry != 0)
-	{
-		ArtVpath *res;
-		ArtBpath *vec = art_new(ArtBpath, 10);
-
-		int i = 0;
-
-		if(rx > w / 2)
-			rx = w / 2;
-
-		if(ry > h / 2)
-			ry = h / 2;
-
-		vec[i].code = ART_MOVETO_OPEN;
-		vec[i].x3 = x + rx;
-		vec[i].y3 = y;
-
-		i++;
-
-		vec[i].code = ART_CURVETO;
-		vec[i].x1 = x + rx * (1 - 0.552);
-		vec[i].y1 = y;
-		vec[i].x2 = x;
-		vec[i].y2 = y + ry * (1 - 0.552);
-		vec[i].x3 = x;
-		vec[i].y3 = y + ry;
-
-		i++;
-
-		if(ry < h / 2)
-		{
-			vec[i].code = ART_LINETO;
-			vec[i].x3 = x;
-			vec[i].y3 = y + h - ry;
-
-			i++;
-		}
-
-		vec[i].code = ART_CURVETO;
-		vec[i].x1 = x;
-		vec[i].y1 = y + h - ry * (1 - 0.552);
-		vec[i].x2 = x + rx * (1 - 0.552);
-		vec[i].y2 = y + h;
-		vec[i].x3 = x + rx;
-		vec[i].y3 = y + h;
-
-		i++;
-
-		if(rx < w / 2)
-		{
-			vec[i].code = ART_LINETO;
-			vec[i].x3 = x + w - rx;
-			vec[i].y3 = y + h;
-
-			i++;
-		}
-
-		vec[i].code = ART_CURVETO;
-		vec[i].x1 = x + w - rx * (1 - 0.552);
-		vec[i].y1 = y + h;
-		vec[i].x2 = x + w;
-		vec[i].y2 = y + h - ry * (1 - 0.552);
-		vec[i].x3 = x + w;
-
-		vec[i].y3 = y + h - ry;
-
-		i++;
-
-		if(ry < h / 2)
-		{
-			vec[i].code = ART_LINETO;
-			vec[i].x3 = x + w;
-			vec[i].y3 = y + ry;
-
-			i++;
-		}
-
-		vec[i].code = ART_CURVETO;
-		vec[i].x1 = x + w;
-		vec[i].y1 = y + ry * (1 - 0.552);
-		vec[i].x2 = x + w - rx * (1 - 0.552);
-		vec[i].y2 = y;
-		vec[i].x3 = x + w - rx;
-		vec[i].y3 = y;
-
-		i++;
-
-		if(rx < w / 2)
-		{
-			vec[i].code = ART_LINETO;
-			vec[i].x3 = x + rx;
-			vec[i].y3 = y;
-
-			i++;
-		}
-
-		vec[i].code = ART_END;
-
-		res = art_bez_path_to_vec(vec, 0.25);
-		drawVPath(res);
-	}
-	else
-	{
-		ArtVpath *vec = art_new(ArtVpath, 6);
-
-		vec[0].code = ART_MOVETO;
-		vec[0].x = x;
-		vec[0].y = y;
-
-		vec[1].code = ART_LINETO;
-		vec[1].x = x;
-		vec[1].y = y + h;
-
-		vec[2].code = ART_LINETO;
-		vec[2].x = x + w;
-		vec[2].y = y + h;
-
-		vec[3].code = ART_LINETO;
-		vec[3].x = x + w;
-		vec[3].y = y;
-
-		vec[4].code = ART_LINETO;
-		vec[4].x = x;
-		vec[4].y = y;
-
-		vec[5].code = ART_END;
-
-		drawVPath(vec);
-	}
-*/
-}
-
 void KoPainter::drawVectorPath(KoVectorPath *vp)
 {
   drawVPath(vp->data());
 }
 
-void KoPainter::blit(QWidget *w)
+void KoPainter::blit()
 {
-  bitBlt((QPaintDevice *)w, 0, 0, mBuffer, 0, 0, 800, 600);
+//  xlib_draw_rgb_image(mWidget->handle(), gc, 0, 0, mWidth, mHeight, XLIB_RGB_DITHER_NONE, mBuffer->bits(), mWidth * 3);
+  xlib_draw_rgb_32_image(mWidget->handle(), gc, 0, 0, mWidth, mHeight, XLIB_RGB_DITHER_NONE, mBuffer->bits(), mWidth * 4);
 }
 
 void KoPainter::memset(QRgb *p, int n, QRgb c)

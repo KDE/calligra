@@ -199,104 +199,24 @@ KoVectorPath *KoVectorPath::rectangle(double x, double y, double w, double h, do
   KoVectorPath *vec = new KoVectorPath;
   if(static_cast<int>(rx) != 0 && static_cast<int>(ry) != 0)
   {
-/*		ArtVpath *res;
-		ArtBpath *vec = art_new(ArtBpath, 10);
-
-		int i = 0;
-
-		if(rx > w / 2)
-			rx = w / 2;
-
-		if(ry > h / 2)
-			ry = h / 2;
-
-		vec[i].code = ART_MOVETO_OPEN;
-		vec[i].x3 = x + rx;
-		vec[i].y3 = y;
-
-		i++;
-
-		vec[i].code = ART_CURVETO;
-		vec[i].x1 = x + rx * (1 - 0.552);
-		vec[i].y1 = y;
-		vec[i].x2 = x;
-		vec[i].y2 = y + ry * (1 - 0.552);
-		vec[i].x3 = x;
-		vec[i].y3 = y + ry;
-
-		i++;
-
-		if(ry < h / 2)
-		{
-			vec[i].code = ART_LINETO;
-			vec[i].x3 = x;
-			vec[i].y3 = y + h - ry;
-
-			i++;
-		}
-
-		vec[i].code = ART_CURVETO;
-		vec[i].x1 = x;
-		vec[i].y1 = y + h - ry * (1 - 0.552);
-		vec[i].x2 = x + rx * (1 - 0.552);
-		vec[i].y2 = y + h;
-		vec[i].x3 = x + rx;
-		vec[i].y3 = y + h;
-
-		i++;
-
-		if(rx < w / 2)
-		{
-			vec[i].code = ART_LINETO;
-			vec[i].x3 = x + w - rx;
-			vec[i].y3 = y + h;
-
-			i++;
-		}
-
-		vec[i].code = ART_CURVETO;
-		vec[i].x1 = x + w - rx * (1 - 0.552);
-		vec[i].y1 = y + h;
-		vec[i].x2 = x + w;
-		vec[i].y2 = y + h - ry * (1 - 0.552);
-		vec[i].x3 = x + w;
-
-		vec[i].y3 = y + h - ry;
-
-		i++;
-
-		if(ry < h / 2)
-		{
-			vec[i].code = ART_LINETO;
-			vec[i].x3 = x + w;
-			vec[i].y3 = y + ry;
-
-			i++;
-		}
-
-		vec[i].code = ART_CURVETO;
-		vec[i].x1 = x + w;
-		vec[i].y1 = y + ry * (1 - 0.552);
-		vec[i].x2 = x + w - rx * (1 - 0.552);
-		vec[i].y2 = y;
-		vec[i].x3 = x + w - rx;
-		vec[i].y3 = y;
-
-		i++;
-
-		if(rx < w / 2)
-		{
-			vec[i].code = ART_LINETO;
-			vec[i].x3 = x + rx;
-			vec[i].y3 = y;
-
-			i++;
-		}
-
-		vec[i].code = ART_END;
-
-		res = art_bez_path_to_vec(vec, 0.25);
-*/
+    if(rx > w / 2)
+      rx = w / 2;
+    if(ry > h / 2)
+      ry = h / 2;
+    vec->moveTo(x + rx, y);
+    vec->bezierTo(x, y + ry, x + rx * (1 - 0.552), y, x, y + ry * (1 - 0.552));
+    if(ry < h / 2)
+      vec->lineTo(x, y + h - ry);
+    vec->bezierTo(x + rx, y + h, x, y + h - ry * (1 - 0.552), x + rx * (1 - 0.552), y + h);
+    if(rx < w / 2)
+      vec->lineTo(x + w - rx, y + h);
+    vec->bezierTo(x + w, y + h - ry, x + w - rx * (1 - 0.552), y + h, x + w, y + h - ry * (1 - 0.552));
+    if(ry < h / 2)
+      vec->lineTo(x + w, y + ry);
+    vec->bezierTo(x + w - rx, y, x + w, y + ry * (1 - 0.552), x + w - rx * (1 - 0.552), y);
+    if(rx < w / 2)
+      vec->lineTo(x + rx, y);
+    vec->end();
   }
   else
   {

@@ -23,6 +23,7 @@
 #include <qimage.h>
 #include <qdatetime.h>
 #include <qwmatrix.h>
+#include <qmemarray.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -35,8 +36,33 @@
 KoPainterTest::KoPainterTest(QWidget *widget, const char *name):
 QWidget( widget, name )
 {
+  QMemArray<int> a1;
+  a1.resize(1000000);
+  int a2[1000000];
+  QTime ttt;
+  ttt.start();
+  for(int i=0;i<1000000;i++)
+  {
+    a1[i] = 10034;
+  }
+  kdDebug() << "time1 = " << ttt.elapsed() << endl;
+  ttt.start();
+  int k;
+  for(int i=0;i<1000000;i++)
+  {
+    a2[i] = 10034;
+    k++;
+  }
+  kdDebug() << "time2 = " << ttt.elapsed() << endl;
+  ttt.start();
+  int *ppp = a2;
+  for(;ppp < a2 + 1000000;ppp++)
+  {
+    *ppp = 10034;
+  }
+  kdDebug() << "time3 = " << ttt.elapsed() << endl;
   setFixedSize(800,600);
-  p = new KoPainter(800, 600);
+  p = new KoPainter(this, 800, 600);
   QTime t;
   t.start();
   p->fillAreaRGB(QRect(0,0,800,600), KoColor::white());
@@ -63,8 +89,7 @@ QWidget( widget, name )
   o->opacity(150);
   o->width(3.0);
   o->color(KoColor::red());
-  p->drawRect(100,120,200,200,20,30);
-  KoVectorPath *vv = KoVectorPath::rectangle(530,320,200,200,0,0);
+  KoVectorPath *vv = KoVectorPath::rectangle(530,320,200,200,20,30);
   QWMatrix m1,m2,m3;
   m1 = m1.translate(-630, -420);
   m2 = m2.rotate(40);
@@ -101,9 +126,9 @@ KoPainterTest::~KoPainterTest()
 
 void KoPainterTest::paintEvent(QPaintEvent *)
 {
-//  p->blit(this);
   QTime t;
   t.start();
+//  p->blit();
   bitBlt((QPaintDevice *)this, 0, 0, p->image(), 0, 0, 800, 600);
   kdDebug() << "Blit time = " << t.elapsed() << endl;
 }

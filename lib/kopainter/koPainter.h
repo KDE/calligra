@@ -25,6 +25,7 @@
 #include <koColor.h>
 #include <support/art_vpath.h>
 
+class QWidget;
 class KoVectorPath;
 class KoOutline;
 class KoFill;
@@ -32,7 +33,7 @@ class KoFill;
 class KoPainter
 {
 public:
-  KoPainter(int w, int h);
+  KoPainter(QWidget *aWidget, int w, int h);
   ~KoPainter();
 
   QImage *image() const {return mBuffer; }
@@ -49,19 +50,20 @@ public:
   void drawVertLineRGB(const int x, const int y1, const int y2, const KoColor &c);
 
   void drawLine(double x1, double y1, double x2, double y2);
-  void drawRect(double x, double y, double w, double h, double rx, double ry);
   void drawVectorPath(KoVectorPath *vp);
 
-  void blit(QWidget *w);
+  void blit();
 
 private:
   void memset(QRgb *p, int n, QRgb c);
   void drawVPath(ArtVpath *vec);
 
 private:
+  QWidget *mWidget;
   QImage *mBuffer;
   int mWidth;
   int mHeight;
+  GC gc;
 
   KoOutline *mOutline;
   KoFill *mFill;

@@ -52,6 +52,8 @@ public:
   Cap cap() const {return mCap; }
   void cap(Cap c);
 
+  KoOutline &operator=(const KoOutline &o);
+
 private:
   KoColor mColor;
   int mOpacity;
