@@ -358,7 +358,7 @@ int KoTextFormat::height() const
     return d->m_refHeight;
 }
 
-QString KoTextFormat::displayedString( QString str )const
+QString KoTextFormat::displayedString( const QString& str )const
 {
     if ( m_attributeFont== ATT_NONE)
         return str;

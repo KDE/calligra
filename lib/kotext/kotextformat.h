@@ -195,7 +195,7 @@ public:
     static QString attributeFontToString( KoTextFormat::AttributeStyle _attr );
     static AttributeStyle stringToAttributeFont( const QString & _str );
 
-    QString displayedString( QString c )const;
+    QString displayedString( const QString& c )const;
 #ifndef NDEBUG
     void printDebug();
 #endif
