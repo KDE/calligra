@@ -69,7 +69,7 @@ bool WellListener :: doStartElement(const QString& tagName, const HtmlAttributes
 
     for (it=attributes.begin() ; it!=attributes.end() ; it++)
     {
-        // FIXME: problem if it.data(9 contains a quote!
+        // FIXME: problem if it.data() contains a quote!
         m_streamOut << " " << it.key() << '=' << '"' << it.data() << '"';
     }
 
