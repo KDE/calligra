@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KImageShop">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KImageShop" version="1">
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
   <Action name="undo"/>

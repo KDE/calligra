@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KIllustrator">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KIllustrator" version="1">
 <MenuBar>
  <Menu name="file"><text>File</text>
   <Action name="import"/>
