@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Peter Simonsson <psn@linux.se>
+   Copyright (C) 2003 Peter Simonsson <psn@linux.se>,
+   theKompany.com & Dave Marotti
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +26,7 @@
 #include <kdebug.h>
 #include <ktoolbar.h>
 #include <ktoolbarbutton.h>
+#include <kiconloader.h>
 
 #include <qfile.h>
 #include <qdir.h>
@@ -101,7 +103,8 @@ int KivioStencilSetAction::plug( QWidget* widget, int index)
     if ( hasIconSet() )
       id = menu->insertItem( iconSet(), text(), popupMenu(), -1, index );
     else
-      id = menu->insertItem( text(), popupMenu(), -1, index );
+      id = menu->insertItem( kapp->iconLoader()->loadIcon(icon(), KIcon::Small),
+        text(), popupMenu(), -1, index );
 
     if ( !isEnabled() )
       menu->setItemEnabled( id, false );

@@ -185,8 +185,9 @@ void ZoomTool::activate()
 
 void ZoomTool::deactivate()
 {
-   kdDebug() << "ZoomTool DeActivate" << endl;
-  m_pView->shell()->showToolbar("ZoomToolBar",false);
+  kdDebug() << "ZoomTool DeActivate" << endl;
+  // Users think the comming and going of the zoom toolbar is annoying!
+  //m_pView->shell()->showToolbar("ZoomToolBar",false);
 
   m_pCurrent = 0L;
 
