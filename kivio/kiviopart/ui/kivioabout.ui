@@ -398,13 +398,6 @@
 &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
 Welcome to &lt;b&gt;Kivio&lt;/b&gt; - an Open Source flowcharting tool brought to your desktop by &lt;a href="http://www.thekompany.com"&gt;The_Kompany.com: "Where Open Source is at Home (TM)"&lt;/a&gt;</string>
                         </property>
-                        <property>
-                            <name>alignment</name>
-                            <string>AlignVCenter|AlignLeft</string>
-                        </property>
-                        <property>
-                            <name>vAlign</name>
-                        </property>
                     </widget>
                 </vbox>
             </widget>
