@@ -1302,8 +1302,11 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
     	while (parentFrameset->isFloating()) {
 		parentFrameset=parentFrameset->anchorFrameset();
 		parentFrame=parentFrameset->frameAtPos(parentFrame->x(), parentFrame->y());
-		QRect r = painter->xForm( viewMode->normalToView( parentFrame->outerRect() ) );
-		reg &= r;
+                if( parentFrame)
+                {
+                    QRect r = painter->xForm( viewMode->normalToView( parentFrame->outerRect() ) );
+                    reg &= r;
+                }
     	}
 
 
