@@ -66,6 +66,27 @@ KWTableStyle* KWTableStyleCollection::findTableStyle( const QString & _name )
     return 0L;
 }
 
+KWTableStyle* KWTableStyleCollection::findTranslatedTableStyle( const QString & _name )
+{
+    // Caching, to speed things up
+    if ( m_lastStyle && m_lastStyle->displayName() == _name )
+        return m_lastStyle;
+
+    QPtrListIterator<KWTableStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        if ( styleIt.current()->displayName() == _name ) {
+            m_lastStyle = styleIt.current();
+            return m_lastStyle;
+        }
+    }
+
+    if ( ( _name == "Plain" ) || _name == i18n( "Style name", "Plain" ) )
+        return m_styleList.at(0); // fallback..
+
+    return 0L;
+}
+
 KWTableStyle* KWTableStyleCollection::findStyleShortCut( const QString & _shortCut )
 {
     // Caching, to speed things up

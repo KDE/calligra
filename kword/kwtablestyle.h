@@ -42,7 +42,14 @@ public:
     ~KWTableStyleCollection();
     const QPtrList<KWTableStyle> & tableStyleList() const { return m_styleList; }
 
+    /**
+     * find table style based on the untranslated name @p name
+     */
     KWTableStyle* findTableStyle( const QString & name );
+    /**
+     * find table style based on the translated name @p name
+     */
+    KWTableStyle* findTranslatedTableStyle( const QString & name );
     KWTableStyle* findStyleShortCut( const QString & _shortCut );
 
     /**
