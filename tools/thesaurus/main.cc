@@ -122,17 +122,17 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     
     connect(m_thes_syn, SIGNAL(clicked(QListBoxItem *)), m_thes_hyper, SLOT(clearSelection()));
     connect(m_thes_syn, SIGNAL(clicked(QListBoxItem *)), m_thes_hypo, SLOT(clearSelection()));
-    connect(m_thes_syn, SIGNAL(highlighted(const QString &)),
+    connect(m_thes_syn, SIGNAL(clicked(const QString &)),
         this, SLOT(slotSetReplaceTerm(const QString &)));
 
     connect(m_thes_hyper, SIGNAL(clicked(QListBoxItem *)), m_thes_syn, SLOT(clearSelection()));
     connect(m_thes_hyper, SIGNAL(clicked(QListBoxItem *)), m_thes_hypo, SLOT(clearSelection()));
-    connect(m_thes_hyper, SIGNAL(highlighted(const QString &)),
+    connect(m_thes_hyper, SIGNAL(clicked(const QString &)),
         this, SLOT(slotSetReplaceTerm(const QString &)));
 
     connect(m_thes_hypo, SIGNAL(clicked(QListBoxItem *)), m_thes_syn, SLOT(clearSelection()));
     connect(m_thes_hypo, SIGNAL(clicked(QListBoxItem *)), m_thes_hyper, SLOT(clearSelection()));
-    connect(m_thes_hypo, SIGNAL(highlighted(const QString &)),
+    connect(m_thes_hypo, SIGNAL(clicked(const QString &)),
         this, SLOT(slotSetReplaceTerm(const QString &)));
 
     // double click:
