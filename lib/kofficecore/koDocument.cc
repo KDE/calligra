@@ -306,7 +306,10 @@ bool KoDocument::saveFile()
   QApplication::restoreOverrideCursor();
   if ( !ret )
   {
-    KMessageBox::error( 0L, i18n( "Could not save\n%1" ).arg( m_file ) );
+      if ( d->lastErrorMessage.isEmpty() )
+          KMessageBox::error( 0L, i18n( "Could not save\n%1" ).arg( m_file ) );
+      else if ( d->lastErrorMessage != "USER_CANCELED" )
+          KMessageBox::error( 0L, i18n( "Could not save\n%1\nReason: %2" ).arg( m_file ).arg( d->lastErrorMessage ) );
   }
   return ret;
 }
@@ -845,7 +848,7 @@ bool KoDocument::openFile()
       ok = false;
       if ( d->lastErrorMessage.isEmpty() )
           KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
-      else
+      else if ( d->lastErrorMessage != "USER_CANCELED" )
           KMessageBox::error( 0L, i18n( "Could not open\n%1\nReason: %2" ).arg( url().prettyURL() ).arg( d->lastErrorMessage ) );
     }
   }
