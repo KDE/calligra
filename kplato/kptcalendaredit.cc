@@ -22,7 +22,7 @@
 #include "kptcalendar.h"
 #include "kptcalendarpanel.h"
 #include "kptmap.h"
-#include "intervaledit.h"
+#include "intervalitem.h"
 
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
