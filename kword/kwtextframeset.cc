@@ -1195,7 +1195,11 @@ void KWTextFrameSet::formatMore()
 
                         if ( theFrame->getFrameSet()->isAFooter() )
                         {
-                            theFrame->setTop( theFrame->top() + difference );
+                            theFrame->setTop( theFrame->top() - difference );
+
+                            m_doc->recalcFrames();
+                            m_doc->frameChanged( theFrame );
+
                             updateFrames();
                             break;
                         }
@@ -1205,11 +1209,16 @@ void KWTextFrameSet::formatMore()
                         pageBottom -= m_doc->ptBottomBorder();
                         double newPosition = QMIN(wantedPosition, pageBottom );
                         theFrame->setBottom(newPosition);
+                        if(theFrame->getFrameSet()->getFrameInfo() != FI_BODY)
+                        {
+                            m_doc->recalcFrames();
+                        }
 
                         if(newPosition < wantedPosition && theFrame->getNewFrameBehaviour() == Reconnect) {
                             wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
                             // fall through to AutoCreateNewFrame
                         } else {
+                            m_doc->frameChanged( theFrame );
                             updateFrames();
                             break;
                         }
