@@ -2863,7 +2863,7 @@ KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
 void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool transparent, double zoomX, double zoomY )
 {
     //kdDebug(32001) << "KWDocument::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
-    m_zoom = 100;
+    setZoom( 100 );
     if ( m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY )
     {
         setResolution( zoomX, zoomY );
@@ -2903,13 +2903,15 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
 QPixmap KWDocument::generatePreview( const QSize& size )
 {
     int oldZoom = m_zoom;
-    double oldZoomX = m_zoomedResolutionX;
-    double oldZoomY = m_zoomedResolutionY;
+    double oldResolutionX = resolutionX();
+    double oldResolutionY = resolutionY();
+    double oldZoomX = zoomedResolutionX();
+    double oldZoomY = zoomedResolutionY();
 
     QPixmap pix = KoDocument::generatePreview(size);
 
-    m_zoom = oldZoom;
-    setResolution( oldZoomX, oldZoomY );
+    setResolution( oldResolutionX, oldResolutionY );
+    setZoom( oldZoom );
     newZoomAndResolution( false, false );
 
     if ( KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document() ) {

@@ -403,7 +403,7 @@ void KPresenterDoc::initConfig()
 
     // Apply configuration, without creating an undo/redo command
     replaceObjs( false );
-    zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    zoomHandler()->setZoom( zoom );
     newZoomAndResolution(false,false);
 }
 
@@ -2490,7 +2490,7 @@ KoView* KPresenterDoc::createViewInstance( QWidget* parent, const char* name )
 void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect,
                                   bool /*transparent*/, double zoomX, double zoomY )
 {
-    m_zoomHandler->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    m_zoomHandler->setZoom( 100 );
     if ( zoomHandler()->zoomedResolutionX() != zoomX || zoomHandler()->zoomedResolutionY() != zoomY )
     {
         zoomHandler()->setResolution( zoomX, zoomY );
@@ -2519,12 +2519,13 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect,
 QPixmap KPresenterDoc::generatePreview( const QSize& size )
 {
     int oldZoom = zoomHandler()->zoom();
-    double oldResX = zoomHandler()->resolutionX();
-    double oldResY = zoomHandler()->resolutionY();
+    double oldResolutionX = zoomHandler()->resolutionX();
+    double oldResolutionY = zoomHandler()->resolutionY();
 
     QPixmap pix = KoDocument::generatePreview(size);
 
-    zoomHandler()->setZoomAndResolution(oldZoom, int(oldResX * 72), int(oldResY * 72));
+    zoomHandler()->setResolution( oldResolutionX, oldResolutionY );
+    zoomHandler()->setZoom(oldZoom);
     newZoomAndResolution( false, false );
 
     return pix;
