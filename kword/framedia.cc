@@ -24,30 +24,38 @@
 /******************************************************************/
 
 /*================================================================*/
-KWFrameDia::KWFrameDia(QWidget* parent,const char* name,KWFrameSet *_frameset,KWFrame *_frame,KWordDocument *_doc,KWPage *_page,int _flags)
+KWFrameDia::KWFrameDia(QWidget* parent,const char* name,KWFrame *_frame,KWordDocument *_doc,KWPage *_page,int _flags)
   : QTabDialog(parent,name,true)
 {
-  frameset = _frameset;
   frame = _frame;
-  KRect r = frame->normalize();
-  frame->setRect(r.x(),r.y(),r.width(),r.height());
+  if (frame)
+    {
+      KRect r = frame->normalize();
+      frame->setRect(r.x(),r.y(),r.width(),r.height());
+    }
+
   flags = _flags;
   doc = _doc;
   page = _page;
   
-  if (flags & FD_FRAME_CONNECT && doc)
+  if ((flags & FD_FRAME_CONNECT) && doc)
     setupTab3ConnectTextFrames();
 
-  if ((flags & FD_FRAME_SET) && frameset && frameset->getFrameType() == FT_TEXT)
+  if ((flags & FD_FRAME_SET) && doc)
     setupTab1TextFrameSet();
   
-  if ((flags & FD_FRAME && frame && (!frameset || frameset && frameset->getFrameType() == FT_TEXT)))
+  if ((flags & FD_FRAME) && doc)
     setupTab2TextFrame();
     
+  if ((flags & FD_GEOMETRY) && doc)
+    setupTab4Geometry();
+
   setCancelButton(i18n("Cancel"));
   setOkButton(i18n("OK"));
 
   connect(this,SIGNAL(applyButtonPressed()),this,SLOT(applyChanges()));
+
+  resize(minimumSize());
 }
 
 /*================================================================*/
@@ -92,8 +100,8 @@ void KWFrameDia::setupTab1TextFrameSet()
 
   addTab(tab1,i18n("Frameset"));
 
-  rAppendFrame->setChecked(dynamic_cast<KWTextFrameSet*>(frameset)->getAutoCreateNewFrame());
-  rResizeFrame->setChecked(!dynamic_cast<KWTextFrameSet*>(frameset)->getAutoCreateNewFrame());
+  rAppendFrame->setChecked(doc->getAutoCreateNewFrame());
+  rResizeFrame->setChecked(!doc->getAutoCreateNewFrame());
 }
 
 /*================================================================*/
@@ -162,7 +170,7 @@ void KWFrameDia::setupTab2TextFrame()
 
   lRGap = new QLabel(i18n("Runaround Gap: (in mm)"),tab2);
   lRGap->resize(lRGap->sizeHint());
-  lRGap->setAlignment(AlignRight);
+  lRGap->setAlignment(AlignRight | AlignVCenter);
   grid2->addWidget(lRGap,1,0);
 
   eRGap = new KRestrictedLine(tab2,"","1234567890");
@@ -187,7 +195,7 @@ void KWFrameDia::setupTab2TextFrame()
   addTab(tab2,i18n("Text Frame"));
 
   uncheckAllRuns();
-  switch (frame->getRunAround())
+  switch (frame ? frame->getRunAround() : doc->getRunAround())
     {
     case RA_NO: rRunNo->setChecked(true);
       break;
@@ -197,7 +205,7 @@ void KWFrameDia::setupTab2TextFrame()
       break;
     }
   QString str;
-  str.sprintf("%d",frame->getRunAroundGap());
+  str.sprintf("%d",frame ? frame->getRunAroundGap() : doc->getRunAroundGap());
   eRGap->setText(str.data());
 }
 
@@ -243,6 +251,181 @@ void KWFrameDia::setupTab3ConnectTextFrames()
 }
 
 /*================================================================*/
+void KWFrameDia::setupTab4Geometry()
+{
+  tab4 = new QWidget(this);
+  grid4 = new QGridLayout(tab4,3,1,15,7);
+
+  grp1 = new QGroupBox(i18n("Position in pt"),tab4);
+  pGrid = new QGridLayout(grp1,5,2,7,7); 
+
+  lx = new QLabel(i18n("Left:"),grp1);
+  lx->resize(lx->sizeHint());
+  pGrid->addWidget(lx,1,0);
+
+  sx = new QSpinBox(0,INT_MAX,1,grp1);
+  sx->resize(sx->sizeHint());
+  pGrid->addWidget(sx,2,0);
+
+  ly = new QLabel(i18n("Top:"),grp1);
+  ly->resize(ly->sizeHint());
+  pGrid->addWidget(ly,1,1);
+
+  sy = new QSpinBox(0,INT_MAX,1,grp1);
+  sy->resize(sy->sizeHint());
+  pGrid->addWidget(sy,2,1);
+
+  lw = new QLabel(i18n("Width:"),grp1);
+  lw->resize(lw->sizeHint());
+  pGrid->addWidget(lw,3,0);
+
+  sw = new QSpinBox(0,INT_MAX,1,grp1);
+  sw->resize(sw->sizeHint());
+  pGrid->addWidget(sw,4,0);
+
+  lh = new QLabel(i18n("Height:"),grp1);
+  lh->resize(lh->sizeHint());
+  pGrid->addWidget(lh,3,1);
+
+  sh = new QSpinBox(0,INT_MAX,1,grp1);
+  sh->resize(sh->sizeHint());
+  pGrid->addWidget(sh,4,1);
+
+  
+  pGrid->addRowSpacing(0,7);
+  pGrid->addRowSpacing(1,lx->height());
+  pGrid->addRowSpacing(1,ly->height());
+  pGrid->addRowSpacing(2,sx->height());
+  pGrid->addRowSpacing(2,sy->height());
+  pGrid->addRowSpacing(3,lw->height());
+  pGrid->addRowSpacing(3,lh->height());
+  pGrid->addRowSpacing(4,sw->height());
+  pGrid->addRowSpacing(4,sh->height());
+  pGrid->setRowStretch(0,0);
+  pGrid->setRowStretch(1,0);
+  pGrid->setRowStretch(2,0);
+  pGrid->setRowStretch(3,0);
+  pGrid->setRowStretch(4,0);
+
+  pGrid->addColSpacing(0,lx->width());
+  pGrid->addColSpacing(0,sx->width());
+  pGrid->addColSpacing(0,lw->width());
+  pGrid->addColSpacing(0,sw->width());
+  pGrid->addColSpacing(1,ly->width());
+  pGrid->addColSpacing(1,sy->width());
+  pGrid->addColSpacing(1,lh->width());
+  pGrid->addColSpacing(1,sh->width());
+  pGrid->setColStretch(0,1);
+  pGrid->setColStretch(1,1);
+
+  pGrid->activate();
+  grid4->addWidget(grp1,0,0);
+
+  grp2 = new QGroupBox(i18n("Margins in pt"),tab4);
+  mGrid = new QGridLayout(grp2,5,2,7,7); 
+
+  lml = new QLabel(i18n("Left:"),grp2);
+  lml->resize(lml->sizeHint());
+  mGrid->addWidget(lml,1,0);
+
+  sml = new QSpinBox(0,10,1,grp2);
+  sml->resize(sml->sizeHint());
+  mGrid->addWidget(sml,2,0);
+
+  lmr = new QLabel(i18n("Right:"),grp2);
+  lmr->resize(lmr->sizeHint());
+  mGrid->addWidget(lmr,1,1);
+
+  smr = new QSpinBox(0,10,1,grp2);
+  smr->resize(smr->sizeHint());
+  mGrid->addWidget(smr,2,1);
+
+  lmt = new QLabel(i18n("Top:"),grp2);
+  lmt->resize(lmt->sizeHint());
+  mGrid->addWidget(lmt,3,0);
+
+  smt = new QSpinBox(0,10,1,grp2);
+  smt->resize(smt->sizeHint());
+  mGrid->addWidget(smt,4,0);
+
+  lmb = new QLabel(i18n("Bottom:"),grp2);
+  lmb->resize(lmb->sizeHint());
+  mGrid->addWidget(lmb,3,1);
+
+  smb = new QSpinBox(0,10,1,grp2);
+  smb->resize(smb->sizeHint());
+  mGrid->addWidget(smb,4,1);
+
+  
+  mGrid->addRowSpacing(0,7);
+  mGrid->addRowSpacing(1,lml->height());
+  mGrid->addRowSpacing(1,lmr->height());
+  mGrid->addRowSpacing(2,sml->height());
+  mGrid->addRowSpacing(2,smr->height());
+  mGrid->addRowSpacing(3,lmt->height());
+  mGrid->addRowSpacing(3,lmb->height());
+  mGrid->addRowSpacing(4,smt->height());
+  mGrid->addRowSpacing(4,smb->height());
+  mGrid->setRowStretch(0,0);
+  mGrid->setRowStretch(1,0);
+  mGrid->setRowStretch(2,0);
+  mGrid->setRowStretch(3,0);
+  mGrid->setRowStretch(4,0);
+
+  mGrid->addColSpacing(0,lml->width());
+  mGrid->addColSpacing(0,sml->width());
+  mGrid->addColSpacing(0,lmt->width());
+  mGrid->addColSpacing(0,smt->width());
+  mGrid->addColSpacing(1,lmr->width());
+  mGrid->addColSpacing(1,smr->width());
+  mGrid->addColSpacing(1,lmb->width());
+  mGrid->addColSpacing(1,smb->width());
+  mGrid->setColStretch(0,1);
+  mGrid->setColStretch(1,1);
+
+  mGrid->activate();
+  grid4->addWidget(grp2,1,0);
+
+  grid4->addRowSpacing(0,grp1->height());
+  grid4->addRowSpacing(1,grp2->height());
+  grid4->setRowStretch(0,0);
+  grid4->setRowStretch(1,0);
+  grid4->setRowStretch(2,1);
+
+  grid4->addColSpacing(0,grp1->width());
+  grid4->addColSpacing(0,grp2->width());
+  grid4->setColStretch(0,1);
+
+  grid4->activate();
+
+  addTab(tab4,i18n("Geometry"));
+
+  unsigned int l,r,t,b;
+  doc->getFrameMargins(l,r,t,b);
+  sml->setValue(l);
+  smr->setValue(r);
+  smt->setValue(t);
+  smb->setValue(b);
+
+  if (doc->isOnlyOneFrameSelected())
+    {
+      unsigned int x,y,w,h;
+      doc->getFrameCoords(x,y,w,h);
+      sx->setValue(x);
+      sy->setValue(y);
+      sw->setValue(w);
+      sh->setValue(h);
+    }
+  else
+    {
+      sx->setEnabled(false);
+      sy->setEnabled(false);
+      sw->setEnabled(false);
+      sh->setEnabled(false);
+    }
+}
+
+/*================================================================*/
 void KWFrameDia::uncheckAllRuns()
 {
   rRunNo->setChecked(false);
@@ -274,18 +457,31 @@ void KWFrameDia::runConturClicked()
 /*================================================================*/
 void KWFrameDia::applyChanges()
 {
-  if ((flags & FD_FRAME_SET) && frameset && frameset->getFrameType() == FT_TEXT)
-    dynamic_cast<KWTextFrameSet*>(frameset)->setAutoCreateNewFrame(rAppendFrame->isChecked());
+  if ((flags & FD_FRAME_SET) && doc)
+    doc->setAutoCreateNewFrame(rAppendFrame->isChecked());
 
-  if ((flags & FD_FRAME && frame && (!frameset || frameset && frameset->getFrameType() == FT_TEXT)))
+  if ((flags & FD_FRAME) && doc)
     {
-      if (rRunNo->isChecked())
-	frame->setRunAround(RA_NO);
-      else if (rRunBounding->isChecked())
-	frame->setRunAround(RA_BOUNDINGRECT);
-      else if (rRunContur->isChecked())
-	frame->setRunAround(RA_CONTUR);
-      frame->setRunAroundGap(atoi(eRGap->text()));
+      if (frame)
+	{
+	  if (rRunNo->isChecked())
+	    frame->setRunAround(RA_NO);
+	  else if (rRunBounding->isChecked())
+	    frame->setRunAround(RA_BOUNDINGRECT);
+	  else if (rRunContur->isChecked())
+	    frame->setRunAround(RA_CONTUR);
+	  frame->setRunAroundGap(atoi(eRGap->text()));
+	}
+      else
+	{
+	  if (rRunNo->isChecked())
+	    doc->setRunAround(RA_NO);
+	  else if (rRunBounding->isChecked())
+	    doc->setRunAround(RA_BOUNDINGRECT);
+	  else if (rRunContur->isChecked())
+	    doc->setRunAround(RA_CONTUR);
+	  doc->setRunAroundGap(atoi(eRGap->text()));
+	}
     }
 
   if (flags & FD_FRAME_CONNECT && doc)
@@ -301,6 +497,13 @@ void KWFrameDia::applyChanges()
 	  _frameSet->addFrame(frame);
 	  doc->addFrameSet(_frameSet);
 	}
+    }
+
+  if (flags && FD_GEOMETRY && doc)
+    {
+      if (doc->isOnlyOneFrameSelected())
+	doc->setFrameCoords(sx->value(),sy->value(),sw->value(),sh->value());
+      doc->setFrameMargins(sml->value(),smr->value(),smt->value(),smb->value());
     }
 }
 

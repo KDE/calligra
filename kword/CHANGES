@@ -736,3 +736,12 @@ Reggie, 26.1.1999:
 - Frame-Margins work now (only the dialog for setting them is missing :-)
 - Fixed some memory leak producing code (I haaaaaate destructors)
 - Some fixes with drawing borders of frames, but this is still not correct
+
+Reggie, 27.1.1999:
+------------------
+- Improved drawing frame borders again (now the PS output looks ok too)
+- More error checking when inserting tables
+- Now multiple frames/framesets can be configured using the dialog at the same time
+- Added tab in the frame/frameset settings dialog for geometry (fram coordinates + frame margins)
+- It's possible to set and modify frame coordinates and margins using the dialog now
+- Tables have a default margin of 2 pts.

@@ -1787,6 +1787,15 @@ void KWordDocument::printBorders(QPainter &_painter,int xOffset,int yOffset,int 
 	continue;
       for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 	{
+	  bool isRight = true,isBottom = true;
+	  if (frameset->getGroupManager())
+	    {
+	      unsigned int r,c;
+	      frameset->getGroupManager()->getFrameSet(frameset,r,c);
+	      if (r < frameset->getGroupManager()->getRows() - 1) isBottom = false;
+	      if (c < frameset->getGroupManager()->getCols() - 1) isRight = false;
+	    }
+
 	  tmp = frameset->getFrame(j);
 	  frame = KRect(tmp->x() - xOffset - 1,tmp->y() - yOffset - 1,tmp->width() + 2,tmp->height() + 2);
 
@@ -1800,28 +1809,34 @@ void KWordDocument::printBorders(QPainter &_painter,int xOffset,int yOffset,int 
  	      QPen p(setBorderPen(tmp->getLeftBorder()));
  	      _painter.setPen(p);
  	      _painter.drawLine(frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.y(),
- 				frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.bottom() + 1); 
+ 				frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.bottom() + (isBottom ? 0 : 1)); 
 	    }
 	  if (tmp->getRightBorder().ptWidth > 0 && tmp->getRightBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(setBorderPen(tmp->getRightBorder()));
  	      _painter.setPen(p);
-	      _painter.drawLine(frame.right() - tmp->getRightBorder().ptWidth / 2,frame.y(),
-				frame.right() - tmp->getRightBorder().ptWidth / 2,frame.bottom() + 1); 
+	      int w = tmp->getRightBorder().ptWidth;
+	      if ((w / 2) * 2 == w) w--;
+	      w /= 2;
+	      _painter.drawLine(frame.right() - w,frame.y(),
+				frame.right() - w,frame.bottom() + (isBottom ? 0 : 1)); 
 	    }
 	  if (tmp->getTopBorder().ptWidth > 0 && tmp->getTopBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(setBorderPen(tmp->getTopBorder()));
  	      _painter.setPen(p);
 	      _painter.drawLine(frame.x(),frame.y() + tmp->getTopBorder().ptWidth / 2,
-				frame.right() + 1,frame.y() + tmp->getTopBorder().ptWidth / 2);
+				frame.right() + (isRight ? 0 : 1),frame.y() + tmp->getTopBorder().ptWidth / 2);
 	    }
 	  if (tmp->getBottomBorder().ptWidth > 0 && tmp->getBottomBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(setBorderPen(tmp->getBottomBorder()));
  	      _painter.setPen(p);
-	      _painter.drawLine(frame.x(),frame.bottom() - tmp->getBottomBorder().ptWidth / 2,
-				frame.right() + 1,frame.bottom() - tmp->getBottomBorder().ptWidth / 2);
+	      int w = tmp->getBottomBorder().ptWidth;
+	      if ((w / 2) * 2 == w) w--;
+	      w /= 2;
+	      _painter.drawLine(frame.x(),frame.bottom() - w,
+				frame.right() + (isRight ? 0 : 1),frame.bottom() - w);
 	    }
 	}
     }
@@ -2572,6 +2587,18 @@ KWFrame *KWordDocument::getFirstSelectedFrame(int &_frameset)
 }
 
 /*================================================================*/
+KWFrameSet *KWordDocument::getFirstSelectedFrameSet()
+{
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      if (getFrameSet(i)->hasSelectedFrame())
+	return getFrameSet(i);
+    }
+
+  return 0L;
+}
+
+/*================================================================*/
 void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,float top_margin)
 {
   QList<KWFormatContext> fcList;
@@ -2901,3 +2928,182 @@ bool KWordDocument::canResize(KWFrameSet *frameset,KWFrame *frame,int page,int d
   
   return false;
 }
+
+/*================================================================*/
+bool KWordDocument::getAutoCreateNewFrame()
+{
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      if (getFrameSet(i)->hasSelectedFrame() && getFrameSet(i)->getFrameType() == FT_TEXT)
+	return dynamic_cast<KWTextFrameSet*>(getFrameSet(i))->getAutoCreateNewFrame();
+    }
+
+  return false;
+}
+
+/*================================================================*/
+RunAround KWordDocument::getRunAround()
+{
+  KWFrame *frame = getFirstSelectedFrame();
+
+  if (frame) return frame->getRunAround();
+
+  return RA_NO;
+}
+
+/*================================================================*/
+int KWordDocument::getRunAroundGap()
+{
+  KWFrame *frame = getFirstSelectedFrame();
+
+  if (frame) return frame->getRunAroundGap();
+
+  return false;
+}
+
+/*================================================================*/
+void KWordDocument::setAutoCreateNewFrame(bool _auto)
+{
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      if (getFrameSet(i)->hasSelectedFrame() && getFrameSet(i)->getFrameType() == FT_TEXT)
+	dynamic_cast<KWTextFrameSet*>(getFrameSet(i))->setAutoCreateNewFrame(_auto);
+    }
+}
+
+/*================================================================*/
+void KWordDocument::setRunAround(RunAround _ra)
+{
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      if (getFrameSet(i)->hasSelectedFrame())
+	{
+	  for (unsigned int j = 0;j < getFrameSet(i)->getNumFrames();j++)
+	    {
+	      if (getFrameSet(i)->getFrame(j)->isSelected())
+		getFrameSet(i)->getFrame(j)->setRunAround(_ra);
+	    }
+	}
+    }
+}
+
+/*================================================================*/
+void KWordDocument::setRunAroundGap(int _gap)
+{
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      if (getFrameSet(i)->hasSelectedFrame())
+	{
+	  for (unsigned int j = 0;j < getFrameSet(i)->getNumFrames();j++)
+	    {
+	      if (getFrameSet(i)->getFrame(j)->isSelected())
+		getFrameSet(i)->getFrame(j)->setRunAroundGap(_gap);
+	    }
+	}
+    }
+}
+/*================================================================*/
+void KWordDocument::getFrameMargins(unsigned int &l,unsigned int &r,unsigned int &t,unsigned int &b)
+{
+  l = r = t = b = 0;
+
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      if (getFrameSet(i)->hasSelectedFrame())
+	{
+	  for (unsigned int j = 0;j < getFrameSet(i)->getNumFrames();j++)
+	    {
+	      if (getFrameSet(i)->getFrame(j)->isSelected())
+		{
+		  l = getFrameSet(i)->getFrame(j)->getBLeft();
+		  r = getFrameSet(i)->getFrame(j)->getBRight();
+		  t = getFrameSet(i)->getFrame(j)->getBTop();
+		  b = getFrameSet(i)->getFrame(j)->getBBottom();
+		  return;
+		}
+	    }
+	}
+    }  
+}
+
+/*================================================================*/
+bool KWordDocument::isOnlyOneFrameSelected()
+{
+  int _selected = 0;
+
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      if (getFrameSet(i)->hasSelectedFrame())
+	{
+	  for (unsigned int j = 0;j < getFrameSet(i)->getNumFrames();j++)
+	    {
+	      if (getFrameSet(i)->getFrame(j)->isSelected())
+		_selected++;
+	    }
+	}
+    }
+
+  return _selected == 1;
+}
+
+/*================================================================*/
+void KWordDocument::getFrameCoords(unsigned int &x,unsigned int &y,unsigned int &w,unsigned int &h)
+{
+  x = y = w = h = 0;
+
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      if (getFrameSet(i)->hasSelectedFrame())
+	{
+	  for (unsigned int j = 0;j < getFrameSet(i)->getNumFrames();j++)
+	    {
+	      if (getFrameSet(i)->getFrame(j)->isSelected())
+		{
+		  x = getFrameSet(i)->getFrame(j)->x();
+		  y = getFrameSet(i)->getFrame(j)->y();
+		  w = getFrameSet(i)->getFrame(j)->width();
+		  h = getFrameSet(i)->getFrame(j)->height();
+		  return;
+		}
+	    }
+	}
+    }  
+}
+
+/*================================================================*/
+void KWordDocument::setFrameMargins(unsigned int l,unsigned int r,unsigned int t,unsigned int b)
+{
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      if (getFrameSet(i)->hasSelectedFrame())
+	{
+	  for (unsigned int j = 0;j < getFrameSet(i)->getNumFrames();j++)
+	    {
+	      if (getFrameSet(i)->getFrame(j)->isSelected())
+		{
+		  getFrameSet(i)->getFrame(j)->setBLeft(l);
+		  getFrameSet(i)->getFrame(j)->setBRight(r);
+		  getFrameSet(i)->getFrame(j)->setBTop(t);
+		  getFrameSet(i)->getFrame(j)->setBBottom(b);
+		}
+	    }
+	}
+    }
+}
+
+/*================================================================*/
+void KWordDocument::setFrameCoords(unsigned int x,unsigned int y,unsigned int w,unsigned int h)
+{
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      if (getFrameSet(i)->hasSelectedFrame())
+	{
+	  for (unsigned int j = 0;j < getFrameSet(i)->getNumFrames();j++)
+	    {
+	      if (getFrameSet(i)->getFrame(j)->isSelected() && x + w < getPTPaperWidth() && y + h < pages * getPTPaperHeight())
+		getFrameSet(i)->getFrame(j)->setRect(x,y,w,h);
+	    }
+	}
+    }
+}
+

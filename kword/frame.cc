@@ -505,6 +505,18 @@ int KWFrameSet::getNext(KRect _rect)
   return -1;
 }
 
+/*================================================================*/
+bool KWFrameSet::hasSelectedFrame()
+{
+  for (unsigned int i = 0;i < frames.count();i++)
+    {
+      if (frames.at(i)->isSelected())
+	return true;
+    }
+  
+  return false;
+}
+
 /******************************************************************/
 /* Class: KWTextFrameSet                                          */
 /******************************************************************/
@@ -1368,6 +1380,10 @@ void KWGroupManager::init(unsigned int x,unsigned int y,unsigned int width,unsig
       for (unsigned int j = 0;j < cols;j++)
 	{
 	  frame = getFrameSet(i,j)->getFrame(0);
+	  frame->setBLeft(2);
+	  frame->setBRight(2);
+	  frame->setBTop(2);
+	  frame->setBBottom(2);
  	  _wid = wid;
  	  _wid += frame->getBLeft() + frame->getBRight();
  	  _hei = hei;
@@ -1632,7 +1648,14 @@ void KWGroupManager::insertRow(unsigned int _idx,QPainter &_painter)
   rows = ++_rows;
 
   for (i = 0;i < nCells.count();i++)
-    doc->addFrameSet(nCells.at(i));
+    {
+      doc->addFrameSet(nCells.at(i));
+      KWFrame *frame = nCells.at(i)->getFrame(0);
+      frame->setBLeft(2);
+      frame->setBRight(2);
+      frame->setBTop(2);
+      frame->setBBottom(2);
+    }
 
   recalcRows(_painter);
 }
@@ -1672,7 +1695,14 @@ void KWGroupManager::insertCol(unsigned int _idx)
   cols = ++_cols;
 
   for (i = 0;i < nCells.count();i++)
-    doc->addFrameSet(nCells.at(i));
+    {
+      doc->addFrameSet(nCells.at(i));
+      KWFrame *frame = nCells.at(i)->getFrame(0);
+      frame->setBLeft(2);
+      frame->setBRight(2);
+      frame->setBTop(2);
+      frame->setBBottom(2);
+    }
 
   recalcCols();
 }

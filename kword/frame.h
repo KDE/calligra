@@ -202,6 +202,8 @@ public:
   void setGroupManager(KWGroupManager *gm) { grpMgr = gm; }
   KWGroupManager *getGroupManager() { return grpMgr; }
 
+  bool hasSelectedFrame();
+
 protected:
   virtual void init()
     {;}

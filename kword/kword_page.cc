@@ -774,9 +774,9 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 		{
 		  oldMx = mx;
 		  oldMy = my;
-		  doc->deSelectAllFrames();
-		  doc->selectFrame(mx,my);
-		  repaint(false);
+		  if (doc->selectFrame(mx,my) == 1 && !(e->state() & ControlButton || e->state() & ShiftButton)) doc->deSelectAllFrames();
+ 		  doc->selectFrame(mx,my);
+ 		  repaint(false);
 		  KPoint pnt(QCursor::pos());
 		  frame_edit_menu->popup(pnt);
 		} break;
@@ -870,7 +870,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 		frameDia = 0;
 	      }
 	    
-	    frameDia = new KWFrameDia(0,"",0L,frame,doc,this,FD_FRAME_CONNECT | FD_FRAME | FD_PLUS_NEW_FRAME);
+	    frameDia = new KWFrameDia(0,"",frame,doc,this,FD_FRAME_CONNECT | FD_FRAME | FD_PLUS_NEW_FRAME | FD_BORDERS);
 	    connect(frameDia,SIGNAL(frameDiaClosed()),this,SLOT(frameDiaClosed()));
 	    connect(frameDia,SIGNAL(applyButtonPressed()),this,SLOT(frameDiaClosed()));
 	    connect(frameDia,SIGNAL(cancelButtonPressed()),this,SLOT(frameDiaClosed()));
@@ -916,28 +916,33 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	insRect = insRect.normalize();
 	if (insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY())
 	  {
-	    KWGroupManager *grpMgr = new KWGroupManager(doc);
-	    QString _name;
-	    _name.sprintf("grpmgr_%d",doc->getNumGroupManagers());
-	    grpMgr->setName(_name);
-	    doc->addGroupManager(grpMgr);
-	    for (unsigned int i = 0;i < trows;i++)
+	    if (tcols * 70 + insRect.x() > doc->getPTPaperWidth())
+	      QMessageBox::critical(0L,i18n("Error"),i18n("There is not enough space to insert this table!"),i18n("OK"));
+	    else
 	      {
-		for (unsigned int j = 0;j < tcols;j++)
-		  { 
-		    KWFrame *frame = new KWFrame(insRect.x() + xOffset,insRect.y() + yOffset,insRect.width(),insRect.height());
-		    KWTextFrameSet *_frameSet = new KWTextFrameSet(doc);
-		    _frameSet->addFrame(frame);
-		    _frameSet->setAutoCreateNewFrame(false);
-		    _frameSet->setGroupManager(grpMgr);
-		    grpMgr->addFrameSet(_frameSet,i,j);
+		KWGroupManager *grpMgr = new KWGroupManager(doc);
+		QString _name;
+		_name.sprintf("grpmgr_%d",doc->getNumGroupManagers());
+		grpMgr->setName(_name);
+		doc->addGroupManager(grpMgr);
+		for (unsigned int i = 0;i < trows;i++)
+		  {
+		    for (unsigned int j = 0;j < tcols;j++)
+		      { 
+			KWFrame *frame = new KWFrame(insRect.x() + xOffset,insRect.y() + yOffset,insRect.width(),insRect.height());
+			KWTextFrameSet *_frameSet = new KWTextFrameSet(doc);
+			_frameSet->addFrame(frame);
+			_frameSet->setAutoCreateNewFrame(false);
+			_frameSet->setGroupManager(grpMgr);
+			grpMgr->addFrameSet(_frameSet,i,j);
+		      }
 		  }
+		grpMgr->init(insRect.x() + xOffset,insRect.y() + yOffset,insRect.width(),insRect.height());
+		QPainter p;
+		p.begin(this);
+		grpMgr->recalcRows(p);
+		p.end();
 	      }
-	    grpMgr->init(insRect.x() + xOffset,insRect.y() + yOffset,insRect.width(),insRect.height());
-	    QPainter p;
-	    p.begin(this);
-	    grpMgr->recalcRows(p);
-	    p.end();
 	    buffer.fill(white);
 	    repaint(false);
 	  }
@@ -2617,32 +2622,36 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
  	      QPen p(doc->setBorderPen(tmp->getLeftBorder()));
  	      _painter.setPen(p);
  	      _painter.drawLine(frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.y(),
- 				frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.bottom() + 
-				((tmp->getLeftBorder().ptWidth / 2) * 2 == tmp->getLeftBorder().ptWidth ? 0 : 1)); 
+ 				frame.x() + tmp->getLeftBorder().ptWidth / 2,frame.bottom() + 1);
 	    }
 	  if (tmp->getRightBorder().ptWidth > 0 && tmp->getRightBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(doc->setBorderPen(tmp->getRightBorder()));
  	      _painter.setPen(p);
-	      _painter.drawLine(frame.right() - tmp->getRightBorder().ptWidth / 2,frame.y(),
-				frame.right() - tmp->getRightBorder().ptWidth / 2,frame.bottom() + 
-				((tmp->getRightBorder().ptWidth / 2) * 2 == tmp->getRightBorder().ptWidth ? 0 : 1)); 
+	      int w = tmp->getRightBorder().ptWidth;
+	      if ((w / 2) * 2 == w) w--;
+	      w /= 2;
+	      _painter.drawLine(frame.right() - w,frame.y(),
+				frame.right() - w,frame.bottom() + 1);
 	    }
 	  if (tmp->getTopBorder().ptWidth > 0 && tmp->getTopBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(doc->setBorderPen(tmp->getTopBorder()));
  	      _painter.setPen(p);
 	      _painter.drawLine(frame.x(),frame.y() + tmp->getTopBorder().ptWidth / 2,
-				frame.right() + ((tmp->getTopBorder().ptWidth / 2) * 2 == tmp->getTopBorder().ptWidth ? 0 : 1),
+				frame.right() + 1,
 				frame.y() + tmp->getTopBorder().ptWidth / 2);
 	    }
 	  if (tmp->getBottomBorder().ptWidth > 0 && tmp->getBottomBorder().color != tmp->getBackgroundColor().color())
 	    {
+	      int w = tmp->getBottomBorder().ptWidth;
+	      if ((w / 2) * 2 == w) w--;
+	      w /= 2;
  	      QPen p(doc->setBorderPen(tmp->getBottomBorder()));
  	      _painter.setPen(p);
-	      _painter.drawLine(frame.x(),frame.bottom() - tmp->getBottomBorder().ptWidth / 2,
-				frame.right() + ((tmp->getBottomBorder().ptWidth / 2) * 2 == tmp->getBottomBorder().ptWidth ? 0 : 1),
-				frame.bottom() - tmp->getBottomBorder().ptWidth / 2);
+	      _painter.drawLine(frame.x(),frame.bottom() - w,
+				frame.right() + 1,
+				frame.bottom() - w);
 	    }
 	}
     }
@@ -2878,8 +2887,8 @@ int KWPage::getPageOfRect(KRect _rect)
 /*================================================================*/
 void KWPage::femProps()
 {
-  int mx = oldMx;
-  int my = oldMy;
+//   int mx = oldMx;
+//   int my = oldMy;
 
   if (frameDia)
     {
@@ -2892,10 +2901,9 @@ void KWPage::femProps()
       frameDia = 0;
     }
 
-  hiliteFrameSet = doc->getFrameSet(mx,my);
+  //hiliteFrameSet = doc->getFrameSet(mx,my);
   repaint(false);
-  frameDia = new KWFrameDia(0,"",doc->getFrameSet(doc->getFrameSet(mx,my)),doc->getFirstSelectedFrame(),
-			    doc,this,FD_FRAME_SET | FD_FRAME);
+  frameDia = new KWFrameDia(0,"",0L,doc,this,FD_FRAME_SET | FD_FRAME | FD_GEOMETRY | FD_BORDERS);
   connect(frameDia,SIGNAL(frameDiaClosed()),this,SLOT(frameDiaClosed()));
   connect(frameDia,SIGNAL(applyButtonPressed()),this,SLOT(frameDiaClosed()));
   connect(frameDia,SIGNAL(cancelButtonPressed()),this,SLOT(frameDiaClosed()));

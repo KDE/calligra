@@ -321,6 +321,7 @@ public:
   KWFrame *getFirstSelectedFrame();
   KWFrame *getFirstSelectedFrame(int &_frameset);
   int getFrameSetNum(KWFrameSet* fs) { return frames.findRef(fs); }
+  KWFrameSet *getFirstSelectedFrameSet();
 
   void print(QPainter *painter,QPrinter *printer,float left_margin,float top_margin);
   
@@ -361,6 +362,21 @@ public:
 
   QPen setBorderPen(KWParagLayout::Border _brd);
   void enableEmbeddedParts(bool f);
+
+  bool getAutoCreateNewFrame();
+  RunAround getRunAround();
+  int getRunAroundGap();
+
+  void setAutoCreateNewFrame(bool _auto);
+  void setRunAround(RunAround _ra);
+  void setRunAroundGap(int _gap);
+
+  void getFrameMargins(unsigned int &l,unsigned int &r,unsigned int &t,unsigned int &b);
+  bool isOnlyOneFrameSelected();
+  void getFrameCoords(unsigned int &x,unsigned int &y,unsigned int &w,unsigned int &h);
+
+  void setFrameMargins(unsigned int l,unsigned int r,unsigned int t,unsigned int b);
+  void setFrameCoords(unsigned int x,unsigned int y,unsigned int w,unsigned int h);
 
 signals:
   void sig_imageModified();
