@@ -27,7 +27,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 qwmf.h wmfstruct.h metafuncs.h version.h \
 		 ToolButton.h Arrow.h Painter.h LineStyle.h \
 		 TransformationDialog.h koPageLayoutDia.h \
-		 MainView.h FilterManager.h PStateManager.h
+		 MainView.h PStateManager.h
 
 libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  GOval.cc GClipart.cc GBezier.cc \
@@ -56,7 +56,7 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  Ruler.cc AboutDialog.cc qwmf.cc \
 			  ToolButton.cc Arrow.cc Painter.cc LineStyle.cc \
 			  TransformationDialog.cc koPageLayoutDia.cc \
-			  FilterManager.cc PStateManager.cc
+			  PStateManager.cc
 
 # just to make sure, automake makes them 
 BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
