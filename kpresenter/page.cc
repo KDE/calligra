@@ -288,6 +288,10 @@ void Page::mousePressEvent( QMouseEvent *e )
     if(!view->koDocument()->isReadWrite())
         return;
 
+    //disallow selecting objects outside the "page"
+    if ( !view->kPresenterDoc()->getPageRect( view->getCurrPgNum()-1, view->getDiffX(), view->getDiffY(), _presFakt ).contains(e->pos()))
+        return;
+
     if ( e->state() & ControlButton )
         keepRatio = true;
 
@@ -1003,8 +1007,12 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 /*==================== mouse double click ========================*/
 void Page::mouseDoubleClickEvent( QMouseEvent *e )
 {
- if(!view->koDocument()->isReadWrite())
-    return;
+    if(!view->koDocument()->isReadWrite())
+        return;
+
+    //disallow activating objects outside the "page"
+    if ( !view->kPresenterDoc()->getPageRect( view->getCurrPgNum()-1, view->getDiffX(), view->getDiffY(), _presFakt ).contains(e->pos()))
+        return;
 
     if ( toolEditMode != TEM_MOUSE || !editMode ) return;
 
@@ -3371,6 +3379,10 @@ void Page::dragMoveEvent( QDragMoveEvent *e )
 /*================================================================*/
 void Page::dropEvent( QDropEvent *e )
 {
+    //disallow dropping objects outside the "page"
+    if ( !view->kPresenterDoc()->getPageRect( view->getCurrPgNum()-1, view->getDiffX(), view->getDiffY(), _presFakt ).contains(e->pos()))
+        return;
+
     KPresenterDoc *doc = view->kPresenterDoc();
 
     if ( QImageDrag::canDecode( e ) ) {
