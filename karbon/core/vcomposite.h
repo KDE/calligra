@@ -208,7 +208,7 @@ public:
 	void saveSvgPath( QString & ) const;
 
 protected:
-	void writeTransform( QDomElement & ) const;
+	QString buildSvgTransform() const;
 
 	/// For svg path data parsing.
 	virtual void svgMoveTo( double x1, double y1, bool abs = true );

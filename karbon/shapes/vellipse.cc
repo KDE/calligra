@@ -143,7 +143,9 @@ VEllipse::save( QDomElement& element ) const
 		else
 			me.setAttribute( "kind", "full" );
 
-		writeTransform( me );
+		QString transform = buildSvgTransform();
+		if( !transform.isEmpty() )
+			me.setAttribute( "transform", transform );
 	}
 }
 
@@ -175,6 +177,10 @@ VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainSt
 
 	VObject::saveOasis( store, docWriter, mainStyles );
 
+	QString transform = buildSvgTransform();
+	if( !transform.isEmpty() )
+		docWriter->addAttribute( "draw:transform", transform );
+
 	docWriter->endElement();
 }
 
@@ -202,6 +208,10 @@ VEllipse::loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles )
 		m_type = full;
 
 	init();
+
+	QString trafo = element.attribute( "draw:transform" );
+	if( !trafo.isEmpty() )
+		transform( trafo );
 
 	return true;
 }

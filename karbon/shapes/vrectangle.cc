@@ -123,7 +123,9 @@ VRectangle::save( QDomElement& element ) const
 		me.setAttribute( "rx", m_rx );
 		me.setAttribute( "ry", m_ry );
 
-		writeTransform( me );
+		QString transform = buildSvgTransform();
+		if( !transform.isEmpty() )
+			me.setAttribute( "transform", transform );
 	}
 }
 
@@ -147,6 +149,10 @@ VRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &main
 
 	VObject::saveOasis( store, docWriter, mainStyles );
 
+	QString transform = buildSvgTransform();
+	if( !transform.isEmpty() )
+		docWriter->addAttribute( "draw:transform", transform );
+
 	docWriter->endElement();
 }
 
@@ -165,6 +171,10 @@ VRectangle::loadOasis( const QDomElement &element, KoOasisStyles & )
 	m_ry  = KoUnit::parseValue( element.attribute( "svg:ry" ) );
 
 	init();
+
+	QString trafo = element.attribute( "draw:transform" );
+	if( !trafo.isEmpty() )
+		transform( trafo );
 
 	return true;
 }

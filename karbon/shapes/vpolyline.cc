@@ -92,7 +92,9 @@ VPolyline::save( QDomElement& element ) const
 
 		me.setAttribute( "points", m_points );
 
-		writeTransform( me );
+		QString transform = buildSvgTransform();
+		if( !transform.isEmpty() )
+			me.setAttribute( "transform", transform );
 	}
 }
 

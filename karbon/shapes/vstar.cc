@@ -297,7 +297,9 @@ VStar::save( QDomElement& element ) const
 
 		me.setAttribute( "type", m_type );
 
-		writeTransform( me );
+		QString transform = buildSvgTransform();
+		if( !transform.isEmpty() )
+			me.setAttribute( "transform", transform );
 	}
 }
 

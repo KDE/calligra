@@ -160,7 +160,9 @@ VSinus::save( QDomElement& element ) const
 
 		me.setAttribute( "periods", m_periods );
 
-		writeTransform( me );
+		QString transform = buildSvgTransform();
+		if( !transform.isEmpty() )
+			me.setAttribute( "transform", transform );
 	}
 }
 

@@ -142,8 +142,12 @@ VObject::load( const QDomElement& element )
 }
 
 bool
-VObject::loadOasis( const QDomElement &, KoOasisStyles & )
+VObject::loadOasis( const QDomElement &object, KoOasisStyles &styles )
 {
+	/*if( object.hasAttribute( "draw:style-name" ) )
+	{
+		const QDomElement *style = styles.styles()[ object.attribute( "draw:style-name" ) ];
+	}*/
 }
 
 VDocument *

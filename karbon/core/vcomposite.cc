@@ -374,6 +374,12 @@ VPath::loadOasis( const QDomElement &element, KoOasisStyles &oasisStyles )
 	{
 		loadSvgPath( data );
 	}
+
+	QString trafo = element.attribute( "draw:transform" );
+	if( !trafo.isEmpty() )
+		transform( trafo );
+
+	return true;
 }
 
 void
@@ -537,18 +543,19 @@ VPath::parseTransform( const QString &transform )
 	return result;
 }
 
-void
-VPath::writeTransform( QDomElement &me ) const
+QString
+VPath::buildSvgTransform() const
 {
+	QString transform;
 	if( !m_matrix.isIdentity() )
 	{
-		QString transform = QString("matrix(%1, %2, %3, %4, %5, %6)").arg( m_matrix.m11() )
-																	.arg( m_matrix.m12() )
-																	.arg( m_matrix.m21() )
-																	.arg( m_matrix.m22() )
-																	.arg( m_matrix.dx() )
-																	.arg( m_matrix.dy() );
-		me.setAttribute( "transform", transform );
+		transform = QString(  "matrix(%1, %2, %3, %4, %5, %6)" ).arg( m_matrix.m11() )
+																.arg( m_matrix.m12() )
+																.arg( m_matrix.m21() )
+																.arg( m_matrix.m22() )
+																.arg( m_matrix.dx() )
+																.arg( m_matrix.dy() );
 	}
+	return transform;
 }
 
