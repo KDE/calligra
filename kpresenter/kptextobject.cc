@@ -477,29 +477,34 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
         element.setAttribute(attrBold, tmpBold);
     if(tmpItalic)
         element.setAttribute(attrItalic, tmpItalic);
-    if(lastFormat->doubleUnderline())
-        element.setAttribute(attrUnderline, "double");
-    else if(tmpUnderline)
-        element.setAttribute(attrUnderline, tmpUnderline);
-    QString strLineType=lineStyleToString( lastFormat->underlineLineStyle() );
-    element.setAttribute( "underlinestyleline", strLineType );
-    if ( lastFormat->textUnderlineColor().isValid() )
+    if ( lastFormat->underlineNbLineType()!= KoTextFormat::NONE )
     {
-        element.setAttribute( "underlinecolor", lastFormat->textUnderlineColor().name() );
+        if(lastFormat->doubleUnderline())
+            element.setAttribute(attrUnderline, "double");
+        else if(tmpUnderline)
+            element.setAttribute(attrUnderline, tmpUnderline);
+        QString strLineType=lineStyleToString( lastFormat->underlineLineStyle() );
+        element.setAttribute( "underlinestyleline", strLineType );
+        if ( lastFormat->textUnderlineColor().isValid() )
+        {
+            element.setAttribute( "underlinecolor", lastFormat->textUnderlineColor().name() );
+        }
     }
-    if ( lastFormat->doubleStrikeOut() )
+    if ( lastFormat->strikeOutNbLineType()!= KoTextFormat::NONE )
     {
-        element.setAttribute(attrStrikeOut, "double");
-        QString strLineType=lineStyleToString( lastFormat->strikeOutLineStyle() );
-        element.setAttribute( "strikeoutstyleline", strLineType );
+        if ( lastFormat->doubleStrikeOut() )
+        {
+            element.setAttribute(attrStrikeOut, "double");
+            QString strLineType=lineStyleToString( lastFormat->strikeOutLineStyle() );
+            element.setAttribute( "strikeoutstyleline", strLineType );
+        }
+        else if(tmpStrikeOut)
+        {
+            element.setAttribute(attrStrikeOut, tmpStrikeOut);
+            QString strLineType=lineStyleToString( lastFormat->strikeOutLineStyle() );
+            element.setAttribute( "strikeoutstyleline", strLineType );
+        }
     }
-    else if(tmpStrikeOut)
-    {
-        element.setAttribute(attrStrikeOut, tmpStrikeOut);
-        QString strLineType=lineStyleToString( lastFormat->strikeOutLineStyle() );
-        element.setAttribute( "strikeoutstyleline", strLineType );
-    }
-
     element.setAttribute(attrColor, tmpColor);
 
     if(!tmpTextBackColor.isEmpty())
