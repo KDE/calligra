@@ -161,7 +161,6 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
 
     double dist;
-    int j = 0;
     int totalw = qRound( zoomIt(layout.ptWidth) );
     QString str;
     QFont font = QFont( "helvetica", 8 ); // Ugh... hardcoded (Werner)
@@ -198,6 +197,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
         break;
     }
 
+    int j = 0;
     int maxwidth = 0;
     for ( double i = 0.0;i <= (double)totalw;i += dist ) {
         str=QString::number(j++);
@@ -484,8 +484,8 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
             tab.ptPos = unZoomIt( static_cast<double>( e->x() + diffx - frameStart ) );
 
             KoTabulatorList::Iterator it=d->tabList.begin();
-            for( ; (it!=d->tabList.end() && tab > (*it)); ++it);   // DON'T remove that trailing ';'  :-)
-            // You know, a while() would clearer (DF) :)
+            while ( it!=d->tabList.end() && tab > (*it) )
+		++it;
 
             d->removeTab=d->tabList.insert(it, tab);
 
@@ -497,10 +497,8 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
         }
         else if ( d->flags & F_HELPLINES )
         {
-            if( orientation == Qt::Horizontal)
-                setCursor( Qt::sizeVerCursor );
-            else
-                setCursor( Qt::sizeHorCursor );
+	    setCursor( orientation == Qt::Horizontal ?
+		       Qt::sizeVerCursor : Qt::sizeHorCursor );
             d->action=A_HELPLINES;
         }
     }
@@ -902,22 +900,31 @@ void KoRuler::setTabList( const KoTabulatorList & _tabList )
 
 double KoRuler::makeIntern( double _v )
 {
-    return KoUnit::fromUserValue( QString::number(_v), m_unit );
+    return KoUnit::ptFromUnit( _v, m_unit );
 }
 
 void KoRuler::setupMenu()
 {
     d->rb_menu = new QPopupMenu();
     Q_CHECK_PTR( d->rb_menu );
-    d->mMM = d->rb_menu->insertItem( i18n( "Millimeters (mm)" ), this, SLOT( rbMM() ) );
-    d->mPT = d->rb_menu->insertItem( i18n( "Points (pt)" ), this, SLOT( rbPT() ) );
-    d->mINCH = d->rb_menu->insertItem( i18n( "Inches (inch)" ), this, SLOT( rbINCH() ) );
+    d->mMM = d->rb_menu->insertItem( KoUnit::unitDescription( KoUnit::U_MM ),
+				     this, SLOT( rbMM() ) );
+    d->mPT = d->rb_menu->insertItem( KoUnit::unitDescription( KoUnit::U_PT ),
+				     this, SLOT( rbPT() ) );
+    d->mINCH = d->rb_menu->insertItem( KoUnit::unitDescription( KoUnit::U_INCH ),
+				       this, SLOT( rbINCH() ) );
     d->rb_menu->insertSeparator();
     d->rb_menu->insertItem(i18n("Page Layout..."), this, SLOT(pageLayoutDia()));
     d->rb_menu->insertSeparator();
     d->mRemoveTab=d->rb_menu->insertItem(i18n("Remove Tabulator"), this, SLOT(rbRemoveTab()));
-    d->rb_menu->setCheckable( false );
-    d->rb_menu->setItemChecked( d->mMM, true );
+    int uid;
+    if ( m_unit == KoUnit::U_MM )
+	uid = d->mMM;
+    else if ( m_unit == KoUnit::U_PT )
+	uid = d->mPT;
+    else
+	uid = d->mINCH;
+    d->rb_menu->setItemChecked( uid, true );
     d->rb_menu->setItemEnabled( d->mRemoveTab, false );
 }
 
