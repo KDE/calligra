@@ -6341,11 +6341,13 @@ void KPresenterView::duplicateObj()
     if (m_canvas->currentTextObjectView() )
         return;
 
-    KPrDuplicatObjDia *dlg= new KPrDuplicatObjDia(this);
+    KPrDuplicatObjDia *dlg= new KPrDuplicatObjDia(this,  m_pKPresenterDoc);
     if ( dlg->exec())
     {
         int nbCopy= dlg->nbCopy();
         double angle = dlg->angle();
+        double increaseX = dlg->increaseX();
+        double increaseY = dlg->increaseY();
         m_canvas->copyObjs();
         m_canvas->setToolEditMode( TEM_MOUSE );
         m_canvas->deSelectAllObj();
@@ -6353,7 +6355,7 @@ void KPresenterView::duplicateObj()
         QString clip_str = QString::fromUtf8( data->encodedData("application/x-kpresenter-selection") );
         if ( data->provides( "application/x-kpresenter-selection" ) )
         {
-            m_canvas->activePage()->pasteObjs( data->encodedData("application/x-kpresenter-selection"), nbCopy, angle );
+            m_canvas->activePage()->pasteObjs( data->encodedData("application/x-kpresenter-selection"), nbCopy, angle, increaseX,increaseY );
 
             m_canvas->setMouseSelectedObject(true);
             emit objectSelectedChanged();

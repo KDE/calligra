@@ -25,20 +25,26 @@
 
 class KIntNumInput;
 class KDoubleNumInput;
+class KPresenterDoc;
 
 class KPrDuplicatObjDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KPrDuplicatObjDia( QWidget *parent,const char *name=0L);
+    KPrDuplicatObjDia( QWidget *parent, KPresenterDoc * _doc, const char *name=0L);
     int nbCopy() const;
     double angle() const;
+    double increaseX() const;
+    double increaseY() const;
 
 protected slots:
     void slotReset();
 protected:
     KIntNumInput *m_nbCopy;
     KDoubleNumInput *m_rotation;
+    KDoubleNumInput *m_increaseX, *m_increaseY;
+    KPresenterDoc *m_doc;
+
 };
 
 

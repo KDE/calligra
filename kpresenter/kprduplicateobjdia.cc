@@ -25,11 +25,16 @@
 
 #include "kprduplicateobjdia.h"
 #include <knuminput.h>
+#include <qlineedit.h>
+#include <koUnit.h>
+#include <knumvalidator.h>
+#include "kpresenter_doc.h"
 
-
-KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent,const char *name)
+KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent,KPresenterDoc * _doc,const char *name)
     : KDialogBase( parent, name , true, "", Ok | Cancel | User1, Ok, true )
 {
+    m_doc=_doc;
+
     setButtonText( KDialogBase::User1, i18n("Reset") );
     setCaption( i18n("Duplicate Object") );
 
@@ -43,6 +48,12 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent,const char *name)
 
     m_rotation = new KDoubleNumInput( page, "customInput" );
 
+    lab=new QLabel(i18n("Increase X(%1):").arg(m_doc->getUnitName()), page);
+    m_increaseX= new KDoubleNumInput( page );
+
+    lab=new QLabel(i18n("Increase Y(%1):").arg(m_doc->getUnitName()), page);
+    m_increaseY= new KDoubleNumInput( page );
+
     connect( this, SIGNAL( user1Clicked() ), this ,SLOT( slotReset() ));
     resize( 200,100 );
 }
@@ -51,6 +62,8 @@ void KPrDuplicatObjDia::slotReset()
 {
     m_nbCopy->setValue( 1 );
     m_rotation->setValue( 0.0 );
+    m_increaseX->setValue( 0.0 );
+    m_increaseY->setValue( 0.0 );
 }
 
 int KPrDuplicatObjDia::nbCopy() const
@@ -62,5 +75,16 @@ double KPrDuplicatObjDia::angle() const
 {
     return m_rotation->value();
 }
+
+double KPrDuplicatObjDia::increaseX() const
+{
+    return QMAX(0, KoUnit::ptFromUnit( m_increaseX->value(), m_doc->getUnit() ));
+}
+
+double KPrDuplicatObjDia::increaseY() const
+{
+    return QMAX(0, KoUnit::ptFromUnit( m_increaseY->value(), m_doc->getUnit() ));
+}
+
 
 #include "kprduplicateobjdia.moc"

@@ -168,7 +168,7 @@ void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter)
     }
 }
 
-void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle )
+void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, double increaseX, double increaseY )
 {
     m_doc->deSelectAllObj();
     int num = m_objectList.count();
@@ -191,7 +191,7 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle )
     for (_tempObj = m_objectList.at(num); _tempObj; _tempObj = m_objectList.next()) {
       _tempObj->moveBy( 20,20 );
       _tempObj->setSelected( true );
-      if ( angle == 0.0 )
+      if ( angle == 0.0 || increaseY != 0.0 || increaseX != 0.0)
           m_doc->repaint(_tempObj);
     }
 
@@ -200,6 +200,22 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle )
         KCommand *cmd = rotateObj(angle, true);
         if (cmd )
             macro->addCommand( cmd );
+    }
+    if ( increaseX != 0.0 || increaseY != 0.0 )
+    {
+        QPtrListIterator<KPObject> it( m_objectList );
+        for ( ; it.current() ; ++it )
+        {
+            if(it.current()->isSelected())
+            {
+                KCommand *cmd =new ResizeCmd( i18n("Resize"), KoPoint(0, 0), KoSize(increaseX, increaseY), it.current(), m_doc );
+                if ( cmd )
+                {
+                    cmd->execute();
+                    macro->addCommand( cmd );
+                }
+            }
+        }
     }
 
     if (createMacro)
