@@ -22,6 +22,7 @@
 #include "asciiimport.h"
 
 #include <kinstance.h>
+#include <kdebug.h>
 
 extern "C"
 {
@@ -48,7 +49,7 @@ QObject* ASCIIImportFactory::create( QObject* parent, const char* name, const ch
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
-	    qDebug("ASCIIImportFactory: parent does not inherit KoFilter");
+	    kdDebug(30502) << "ASCIIImportFactory: parent does not inherit KoFilter" << endl;
 	    return 0L;
     }
     ASCIIImport *f = new ASCIIImport( (KoFilter*)parent, name );

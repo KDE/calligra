@@ -58,7 +58,7 @@ const bool CSVExport::E_filter(const QCString &file, const KoDocument * const do
 			       const QCString &from, const QCString &to,
 			       const QString &config) {
 
-    kdDebug(30003) << "here we go... " << document->className() << endl;
+    kdDebug(30501) << "here we go... " << document->className() << endl;
 
     if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
     {
@@ -72,7 +72,7 @@ const bool CSVExport::E_filter(const QCString &file, const KoDocument * const do
     }
 
 
-    kdDebug(30003) << "...still here..." << endl;
+    kdDebug(30501) << "...still here..." << endl;
 
     const KSpreadDoc * const ksdoc=(const KSpreadDoc* const)document;
 
@@ -155,7 +155,7 @@ const bool CSVExport::E_filter(const QCString &file, const KoDocument * const do
 
     QFile out(file);
     if(!out.open(IO_WriteOnly)) {
-        kDebugError( 31502, "Unable to open output file!");
+        kdError(30501) << "Unable to open output file!" << endl;
         out.close();
         return false;
     }
@@ -250,7 +250,7 @@ const bool CSVExport::filter(const QCString &fileIn, const QCString &fileOut,
 
     QFile out(fileOut);
     if(!out.open(IO_WriteOnly)) {
-        kDebugError( 31502, "Unable to open output file!");
+        kdError(30501) << "Unable to open output file!" << endl;
         in.close();
         out.close();
         return false;

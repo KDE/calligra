@@ -22,6 +22,7 @@
 #include "htmlimport.h"
 
 #include <kinstance.h>
+#include <kdebug.h>
 
 extern "C"
 {
@@ -48,7 +49,7 @@ QObject* HTMLImportFactory::create( QObject* parent, const char* name, const cha
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
-	    qDebug("HTMLImportFactory: parent does not inherit KoFilter");
+	    kdDebug(30503) << "HTMLImportFactory: parent does not inherit KoFilter" << endl;
 	    return 0L;
     }
     HTMLImport *f = new HTMLImport( (KoFilter*)parent, name );

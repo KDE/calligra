@@ -129,7 +129,7 @@ const bool CSVExport::filter(const QCString &fileIn, const QCString &fileOut,
 
     QFile out(fileOut);
     if(!out.open(IO_WriteOnly)) {
-        kDebugError( 31502, "Unable to open output file!");
+        kdError(30502) << "Unable to open output file!" << endl;
         in.close();
         out.close();
         return false;

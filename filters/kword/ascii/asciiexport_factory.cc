@@ -22,6 +22,7 @@
 #include "asciiexport.h"
 
 #include <kinstance.h>
+#include <kdebug.h>
 
 extern "C"
 {
@@ -48,7 +49,7 @@ QObject* ASCIIExportFactory::create( QObject* parent, const char* name, const ch
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
-	    qDebug("ASCIIExportFactory: parent does not inherit KoFilter");
+	    kdDebug(30502) << "ASCIIExportFactory: parent does not inherit KoFilter" << endl;
 	    return 0L;
     }
     ASCIIExport *f = new ASCIIExport( (KoFilter*)parent, name );

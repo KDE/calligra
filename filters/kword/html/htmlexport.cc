@@ -36,7 +36,7 @@ const bool HTMLExport::filter(const QCString &fileIn, const QCString &fileOut,
 
     KoTarStore in=KoTarStore(QString(fileIn), KoStore::Read);
     if(!in.open("root", "")) {
-        kDebugError( 31503, "Unable to open input file!");
+        kdError(30503) << "Unable to open input file!" << endl;
         in.close();
         return false;
     }
@@ -63,7 +63,7 @@ const bool HTMLExport::filter(const QCString &fileIn, const QCString &fileOut,
 
     QFile out(fileOut);
     if(!out.open(IO_WriteOnly)) {
-        kDebugError( 31503, "Unable to open output file!");
+        kdError(30503) << "Unable to open output file!" << endl;
         in.close();
         out.close();
         return false;

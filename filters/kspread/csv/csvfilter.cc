@@ -37,7 +37,7 @@ const bool CSVFilter::I_filter(const QCString &file, const QCString &from,
 
     QFile in(file);
     if(!in.open(IO_ReadOnly)) {
-        //kDebugError( 31501, "Unable to open input file!");
+        //kdError(30501) << "Unable to open input file!" << endl;
         KMessageBox::sorry( 0L, i18n("CSV filter can't open input file - please report.") );
         in.close();
         return 0;
@@ -50,8 +50,8 @@ const bool CSVFilter::I_filter(const QCString &file, const QCString &from,
 
     // is there a config info or do we have to use a dialog box?
     if(config!=QString::null) {
-        kDebugInfo(30003, "CSVFilter::CSVFilter(): config found");
-        kDebugInfo(30003, config);
+        kdDebug(30501) << "CSVFilter::CSVFilter(): config found" << endl;
+        kdDebug(30501) << config << endl;
         csv_delimiter=QChar(config[0]);
     }
     else {
@@ -126,24 +126,24 @@ const bool CSVFilter::I_filter(const QCString &file, const QCString &from,
         }
     }
 
-    //for debuggging only
+    //for debugging only
 #if 0
-    kdDebug(31501) << "XXYYYYYYZZ" << endl;
+    kdDebug(30501) << "XXYYYYYYZZ" << endl;
     QString tmp=tree.part();
-    kdDebug(31501) << "Size: " << tmp.length() << endl
+    kdDebug(30501) << "Size: " << tmp.length() << endl
     		   << "String: " << tmp << endl;
-    kdDebug(31501) << "XXYYYYYYZZ" << endl;
+    kdDebug(30501) << "XXYYYYYYZZ" << endl;
 
 #if 0
     KoTarStore out=KoTarStore("/tmp/debug_csvfilter.tgz", KoStore::Write);
     if(!out.open("root", "")) {
-        kDebugError( 31501, "Unable to open output file!");
+        kdError(30501) << "Unable to open output file!" << endl;
         in.close();
         out.close();
         return false;
     }
     out.write((const char*)tmp, tmp.length());
-    kDebugInfo( 31501, "%s", tmp.data());
+    kdDebug(30501) << tmp.data() << endl;
     out.close();
 #endif
 #endif

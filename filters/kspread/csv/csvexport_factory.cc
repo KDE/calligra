@@ -22,6 +22,7 @@
 #include "csvexport.h"
 
 #include <kinstance.h>
+#include <kdebug.h>
 
 extern "C"
 {
@@ -48,7 +49,7 @@ QObject* CSVExportFactory::create( QObject* parent, const char* name, const char
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
-	    qDebug("CSVExportFactory: parent does not inherit KoFilter");
+ 	    kdDebug(30501) << "CSVExportFactory: parent does not inherit KoFilter" << endl;
 	    return 0L;
     }
     CSVExport *f = new CSVExport( (KoFilter*)parent, name );

@@ -34,7 +34,7 @@ const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
 
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
-        kDebugError( 31502, "Unable to open input file!");
+        kdError(30502) << "Unable to open input file!" << endl;
         in.close();
         return false;
     }
@@ -84,7 +84,7 @@ const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
 
     KoTarStore out=KoTarStore(QString(fileOut), KoStore::Write);
     if(!out.open("root", "")) {
-        kDebugError( 31502, "Unable to open output file!");
+        kdError(30502) << "Unable to open output file!" << endl;
         in.close();
         out.close();
         delete [] buffer;

@@ -34,7 +34,7 @@ const bool HTMLImport::filter(const QCString &fileIn, const QCString &fileOut,
 
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
-        kDebugError( 31503, "Unable to open input file!");
+        kdError(30503) << "Unable to open input file!" << endl;
         in.close();
         return false;
     }
@@ -57,8 +57,8 @@ const bool HTMLImport::filter(const QCString &fileIn, const QCString &fileOut,
     int buflen=in.size();
     char * buffer = new char[buflen];
     in.readBlock(buffer, buflen);
-    bool add = true;    
-        
+    bool add = true;
+
     for ( int i = 0 ;i < buflen ; ++i )
     {
         QChar c = buffer[ i ];
@@ -88,7 +88,7 @@ const bool HTMLImport::filter(const QCString &fileIn, const QCString &fileOut,
 
     KoTarStore out=KoTarStore(QString(fileOut), KoStore::Write);
     if(!out.open("root", "")) {
-        kDebugError( 31503, "Unable to open output file!");
+        kdError(30503) << "Unable to open output file!" << endl;
         in.close();
         out.close();
         delete [] buffer;

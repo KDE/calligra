@@ -53,7 +53,7 @@ const bool OLEFilter::filter(const QCString &fileIn, const QCString &fileOut,
 
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
-        kDebugError(31000, "OLEFilter::filter(): Unable to open input file!");
+        kdError(30510) << "OLEFilter::filter(): Unable to open input file!" << endl;
         in.close();
         return false;
     }
@@ -67,7 +67,7 @@ const bool OLEFilter::filter(const QCString &fileIn, const QCString &fileOut,
 
     docfile=new KLaola(olefile);
     if(!docfile->isOk()) {
-        kDebugError(31000, "OLEFilter::filter(): Unable to read input file correctly!");
+        kdError(30510) << "OLEFilter::filter(): Unable to read input file correctly!" << endl;
         delete [] olefile.data;
         olefile.data=0L;
         return false;
@@ -75,7 +75,7 @@ const bool OLEFilter::filter(const QCString &fileIn, const QCString &fileOut,
 
     store=new KoTarStore(fileOut, KoStore::Write);
     if(store->bad()) {
-        kDebugError(31000, "OLEFilter::filter(): Unable to open output file!");
+        kdError(30510) << "OLEFilter::filter(): Unable to open output file!" << endl;
         delete [] olefile.data;
         olefile.data=0L;
         delete store;
@@ -188,7 +188,7 @@ void OLEFilter::convert(const QString &dirname) {
                 QArray<int> tmp;
 
                 // WinWord
-                // kDebugInfo(31000, "OLEFilter::convert(): WinWord");
+                // kdDebug(30510) << "OLEFilter::convert(): WinWord" << endl;
 
                 main.data=0L;
                 table0.data=0L;
@@ -216,7 +216,7 @@ void OLEFilter::convert(const QString &dirname) {
             }
             else if(node->name=="Workbook") {
                 // Excel
-                // kDebugInfo(31000, "OLEFilter::convert(): Excel");
+                // kdDebug(30510) << "OLEFilter::convert(): Excel" << endl;
 
                 myFile workbook;
                 workbook.data=0L;
@@ -227,7 +227,7 @@ void OLEFilter::convert(const QString &dirname) {
             }
             else if(node->name=="PowerPoint Document") {
                 // PowerPoint
-                // kDebugInfo(31000, "OLEFilter::convert(): Power Point");
+                // kdDebug(30510) << "OLEFilter::convert(): Power Point" << endl;
                 myFilter=new PowerPointFilter();
                 // connect SIGNALs&SLOTs
                 connectCommon(&myFilter);
@@ -238,7 +238,7 @@ void OLEFilter::convert(const QString &dirname) {
 
         if(myFilter==0L) {
             // unknown type
-            kDebugInfo(31000, "OLEFilter::convert(): superunknown -> black hole sun ;)");
+            kdDebug(30510) << "OLEFilter::convert(): superunknown -> black hole sun ;)" << endl;
             myFilter=new FilterBase();
             // connect SIGNALs&SLOTs
             connectCommon(&myFilter);
@@ -258,7 +258,7 @@ void OLEFilter::convert(const QString &dirname) {
         slotPart(dirname, &tmp);
         if(!store->open(tmp, "")) {
             success=false;
-            kDebugError(31000, "OLEFilter::convert(): Could not open KoTarStore!");
+            kdError(30510) << "OLEFilter::convert(): Could not open KoTarStore!" << endl;
             return;
         }
         // Write it to the gzipped tar file

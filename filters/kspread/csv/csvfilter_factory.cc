@@ -22,6 +22,7 @@
 #include "csvfilter.h"
 
 #include <kinstance.h>
+#include <kdebug.h>
 
 extern "C"
 {
@@ -48,7 +49,7 @@ QObject* CSVFilterFactory::create( QObject* parent, const char* name, const char
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
-	    qDebug("CSVFilterFactory: parent does not inherit KoFilter");
+	    kdDebug(30501) << "CSVFilterFactory: parent does not inherit KoFilter" << endl;
 	    return 0L;
     }
     CSVFilter *f = new CSVFilter( (KoFilter*)parent, name );

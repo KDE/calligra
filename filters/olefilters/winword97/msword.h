@@ -1,17 +1,17 @@
 /*
     Copyright (C) 2000, S.R.Haque <shaheedhaque@hotmail.com>.
     This file is part of the KDE project
- 
+
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
     License as published by the Free Software Foundation; either
     version 2 of the License, or (at your option) any later version.
- 
+
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Library General Public License for more details.
- 
+
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -19,7 +19,7 @@
 
 DESCRIPTION
 
-    This file impements an abstraction of the on-disk format of Microsoft 
+    This file impements an abstraction of the on-disk format of Microsoft
     Word documents. The public interface implements iterators that allow
     convenient traversal of the types of data in a document.
 
@@ -80,7 +80,7 @@ public:
         // UPEs have been generated
         U16 fHasUpe:1;
 
-        // std has been mass-copied; if unused at save time, style should be 
+        // std has been mass-copied; if unused at save time, style should be
         // deleted
         U16 fMassCopy:1;
 
@@ -111,7 +111,7 @@ public:
         // sub-names are separated by chDelimStyle
         QString xstzName;
 
-        // 
+        //
         const U8 *grupx;
     } __attribute__ ((packed)) STD;
     static unsigned read(const U8 *in, STD *out, unsigned count=1);
@@ -121,7 +121,7 @@ public:
 protected:
 
     // Iterator for text by paragraph. The callback gotParagraph() returns
-    // the text fetched. TBD: This is a crappy iterator design. 
+    // the text fetched. TBD: This is a crappy iterator design.
 
     void getParagraphs();
     virtual void gotParagraph(const QString &text);
@@ -161,7 +161,7 @@ protected:
         // take the data within the plex. Unfortunately, egcs-2.91-66 does not
         // support taking the address of bound pointer-to-member.
 	//
-        // Plex(bool (*callback)(unsigned start, unsigned end, const <T>& 
+        // Plex(bool (*callback)(unsigned start, unsigned end, const <T>&
 
 	Plex(MsWord *client, const U8 *plex, const U32 byteCount);
 
@@ -198,7 +198,7 @@ protected:
         // take the data within the plex. Unfortunately, egcs-2.91-66 does not
         // support taking the address of bound pointer-to-member.
 	//
-        // Fkp(bool (*callback)(unsigned start, unsigned end, const <T>& 
+        // Fkp(bool (*callback)(unsigned start, unsigned end, const <T>&
 
 	Fkp(MsWord *client, const U8 *fkp);
 
@@ -226,7 +226,7 @@ private:
     // Error handling and reporting support.
 
     QString m_error;
-    static const int area = 31000;
+    static const int area = 30513;
 
     Plex<PCD> *m_pcd;
     void error(unsigned line, const char *reason);

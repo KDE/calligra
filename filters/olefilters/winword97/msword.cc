@@ -1,12 +1,12 @@
 /*
     Copyright (C) 2000, S.R.Haque <shaheedhaque@hotmail.com>.
     This file is part of the KDE project
- 
+
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
     License as published by the Free Software Foundation; either
     version 2 of the License, or (at your option) any later version.
- 
+
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -123,7 +123,7 @@ MsWord::~MsWord()
 void MsWord::error(unsigned line, const char *reason)
 {
     m_error.sprintf("[" __FILE__ ":%u] %s", line, reason);
-    kDebugError(area, m_error);
+    kdError(30513) << m_error << endl;
 }
 
 void MsWord::getParagraphs()
@@ -172,8 +172,8 @@ void MsWord::getParagraphs()
 
 void MsWord::gotParagraph(const QString &text)
 {
-    kDebugInfo(area, QString("MsWord::gotParagraph: ") + text);
-};
+    kdDebug(area) << "MsWord::gotParagraph: " << text << endl;
+}
 
 void MsWord::getStyles()
 {
@@ -206,13 +206,13 @@ void MsWord::getStyles()
         if (cbStd)
         {
             read(ptr, &std);
-            kDebugInfo(area, QString("MsWord::getStyles: got ") + std.xstzName);
+            kdDebug(area) << "MsWord::getStyles: got " << std.xstzName << endl;
             m_styles[i] = new STD;
             *m_styles[i] = std;
         }
         else
         {
-            kDebugInfo(area, "MsWord::getStyles: style %u: is unused", i);
+            kdDebug(area) << "MsWord::getStyles: style " << i << " is unused" << endl;
 
             // Set the style to be the same as stiNormal. This is a purely
             // defensive thing...and relies on a viable 0th entry.
@@ -230,7 +230,7 @@ void MsWord::getPAPXFKP(const U8 *textStartFc, U32 textLength, bool unicode)
 
     Plex<BTE> btes = Plex<BTE>(
                        this,
-                       m_tableStream + m_fib.fcPlcfbtePapx,                    
+                       m_tableStream + m_fib.fcPlcfbtePapx,
                        m_fib.lcbPlcfbtePapx);
     U32 startFc;
     U32 endFc;
@@ -323,7 +323,7 @@ MsWord::Fkp<T1, T2>::Fkp(MsWord *client, const U8 *fkp) :
     // Get the number of entries in the FKP.
 
     MsWordGenerated::read(m_fkp + 511, &m_crun);
-    kDebugError(area, "MsWord::Fkp::Fkp: crun: %u", (unsigned)m_crun);
+    kdError(area) << "MsWord::Fkp::Fkp: crun: " << (unsigned)m_crun << endl;
 };
 
 template <class T1, class T2>
@@ -369,17 +369,12 @@ bool MsWord::Fkp<T1, T2>::getNext(
 
     if (!(*rgb))
     {
-        kDebugInfo(
-            area,
-            "MsWord::Fkp::getNext: %u:%u: default PAPX/CHPX, rgb: %u",
-            *startFc,
-            *endFc,
-            *rgb);
+        kdDebug(area) << "MsWord::Fkp::getNext: " << *startFc << ":" << endFc
+		      << ": default PAPX/CHPX, rgb: " << *rgb << endl;
     }
     else
     {
         // Get the second piece of data.
-
         MsWord::read(m_fkp + (2 * (*rgb)), data2);
     }
     return (m_i++ < m_crun);
@@ -396,7 +391,7 @@ MsWord::Plex<T>::Plex(MsWord *client, const U8 *plex, const U32 byteCount) :
     // Calculate the number of entries in the plex.
 
     m_crun = (m_byteCount - sizeof(startFc)) / (sizeof(T) + sizeof(startFc));
-    kDebugError(area, "MsWord::Plex::Plex");
+    kdError(area) << "MsWord::Plex::Plex" << endl;
 };
 
 template <class T>
@@ -430,7 +425,7 @@ unsigned MsWord::read(const U8 *in, QString *out, unsigned count, bool unicode)
     U16 char16;
     U8 char8;
     unsigned bytes = 0;
- 
+
     *out = QString("");
     if (unicode)
     {
@@ -448,7 +443,7 @@ unsigned MsWord::read(const U8 *in, QString *out, unsigned count, bool unicode)
            *out += QChar(char2unicode(char8));
         }
     }
-    kDebugError(area, QString("MsWord::read: ") + *out);
+    kdError(area) << "MsWord::read: " << *out << endl;
     return bytes;
 }
 
@@ -477,7 +472,7 @@ unsigned MsWord::read(const U8 *in, PAPXFKP *out, unsigned count)
         bytes += out->grpprlBytes;
         out++;
     }
-    kDebugError(area, "MsWord::read: PAPXFKP grpprl bytes %u", out->grpprl);
+    kdError(area) << "MsWord::read: PAPXFKP grpprl bytes " << out->grpprl << endl;
     return bytes;
 }
 
@@ -530,7 +525,7 @@ unsigned MsWord::read(const U8 *in, FIB *out, unsigned count)
         else
         if (out->nFib > 100)
         {
-            // We will convert the FIB into the same form as for Winword 
+            // We will convert the FIB into the same form as for Winword
 
             out->csw = 14;
             out->wMagicCreated = 0;
@@ -590,16 +585,11 @@ unsigned MsWord::read(const U8 *in, FIB *out, unsigned count)
         {
             // We don't support this.
 
-            kDebugError(
-                area,
-                "unsupported version of Word (nFib=%hu)",
-                out->nFib);
+            kdError(area) << "unsupported version of Word (nFib=" 
+			  << out->nFib << ")" << endl;
             break;
         }
         out++;
     }
     return bytes;
 } // FIB
-
-
-

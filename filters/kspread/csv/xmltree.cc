@@ -70,7 +70,7 @@ XMLTree::~XMLTree()
 
 //  QTime tmr;
 //  tmr.start();
-//  kdDebug(31501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+//  kdDebug(30501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 
 //  root.save(t);  // Why does this take sooooo long (approx. 8s on my Athlon 500 with a
                  // quite small file :( )
@@ -81,8 +81,8 @@ XMLTree::~XMLTree()
 //
 // And this looks related to the UTF 8 encoding ...
 
-//  kdDebug(31501) << (const char*)QString::number((int)tmr.elapsed()) << endl;
-//  kdDebug(31501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+//  kdDebug(30501) << (const char*)QString::number((int)tmr.elapsed()) << endl;
+//  kdDebug(30501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 
 //  t << '\0';
 
@@ -97,7 +97,7 @@ bool XMLTree::cell( const QString & contents )
 
   e.setAttribute("row", row);
   e.setAttribute("column", column++);
-  
+
   QDomElement format=root.createElement("format");
   format.setAttribute("float", "3");
   format.setAttribute("alignY", "2");

@@ -22,6 +22,7 @@
 #include "olefilter.h"
 
 #include <kinstance.h>
+#include <kdebug.h>
 
 extern "C"
 {
@@ -48,7 +49,7 @@ QObject* OLEFilterFactory::create( QObject* parent, const char* name, const char
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
-	    qDebug("OLEFilterFactory: parent does not inherit KoFilter");
+	    kdDebug(30510) << "OLEFilterFactory: parent does not inherit KoFilter" << endl;
 	    return 0L;
     }
     OLEFilter *f = new OLEFilter( (KoFilter*)parent, name );

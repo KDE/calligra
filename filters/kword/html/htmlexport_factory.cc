@@ -22,6 +22,7 @@
 #include "htmlexport.h"
 
 #include <kinstance.h>
+#include <kdebug.h>
 
 extern "C"
 {
@@ -48,7 +49,7 @@ QObject* HTMLExportFactory::create( QObject* parent, const char* name, const cha
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
-	    qDebug("HTMLExportFactory: parent does not inherit KoFilter");
+	    kdDebug(30503) << "HTMLExportFactory: parent does not inherit KoFilter" << endl;
 	    return 0L;
     }
     HTMLExport *f = new HTMLExport( (KoFilter*)parent, name );

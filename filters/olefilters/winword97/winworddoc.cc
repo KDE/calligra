@@ -24,7 +24,7 @@ WinWordDoc::WinWordDoc(
     const myFile &mainStream,
     const myFile &table0Stream,
     const myFile &table1Stream,
-    const myFile &dataStream) : 
+    const myFile &dataStream) :
 	MsWord(
             mainStream.data,
             table0Stream.data,
@@ -226,7 +226,7 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
                               const unsigned char * const stream) {
 
     if(lcb==0) {
-        //kDebugInfo(31000, "WinWordDoc::sttbf(): empty STTBF");
+        //kdDebug(30513) << "WinWordDoc::sttbf(): empty STTBF" << endl;
         sttbf.ok=false;
         return;
     }
@@ -239,7 +239,7 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
     sttbf.extraDataLen=read16(stream+fc+2);
 
     if(numStrings==0xffff) {
-        kDebugInfo(31000, "WinWordDoc::sttbf(): extended...");
+        kdDebug(30513) << "WinWordDoc::sttbf(): extended..." << endl;
         unicode=true;
         base=fc+6;
         numStrings=sttbf.extraDataLen;
@@ -253,7 +253,7 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
             base+=2;
             if(len==0) {
                 sttbf.stringList.append(QString(""));
-                //kDebugInfo(31000, "WinWordDoc::sttbf(): empty string");
+                //kdDebug(30513) << "WinWordDoc::sttbf(): empty string" << endl;
             }
             else {
                 str="";
@@ -262,19 +262,19 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
                     str+=QChar(read16(stream+base+j));
 
                 sttbf.stringList.append(str);
-                kDebugInfo(31000, str);
+                kdDebug(30513) << str << endl;
                 base+=j;
 
                 if(sttbf.extraDataLen!=0) {
-                    kDebugInfo(31000, "WinWordDoc::sttbf(): extra data");
+                    kdDebug(30513) << "WinWordDoc::sttbf(): extra data" << endl;
                     unsigned char *tmpArray=new unsigned char[sttbf.extraDataLen];
-                    kDebugInfo(31000, "STILL ALIVE 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    kDebugInfo(31000, (const char*)QString::number((long)sttbf.extraDataLen));
+                    kdDebug(30513) << "STILL ALIVE 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+                    kdDebug(30513) << QString::number((long)sttbf.extraDataLen) << endl;
                     for(j=0; j<sttbf.extraDataLen; ++base)
                         tmpArray[j]=*(stream+base);
-                    kDebugInfo(31000, "STILL ALIVE 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    kdDebug(30513) << "STILL ALIVE 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
                     sttbf.extraData.append(&tmpArray);
-                    kDebugInfo(31000, "STILL ALIVE 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    kdDebug(30513) << "STILL ALIVE 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
                 }
             }
         }
@@ -285,7 +285,7 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
             ++base;
             if(len==0) {
                 sttbf.stringList.append(QString(""));
-                //kDebugInfo(31000, "WinWordDoc::sttbf(): empty string");
+                //kdDebug(30513) << "WinWordDoc::sttbf(): empty string" << endl;
             }
             else {
                 str="";
@@ -294,19 +294,19 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
                     str+=QChar(char2uni(*(stream+base+j)));
 
                 sttbf.stringList.append(str);
-                kDebugInfo(31000, str);
+                kdDebug(30513) << str << endl;
                 base+=j;
-                
+
                 if(sttbf.extraDataLen!=0) {
-                    kDebugInfo(31000, "WinWordDoc::sttbf(): extra data");
+                    kdDebug(30513) << "WinWordDoc::sttbf(): extra data" << endl;
                     unsigned char *tmpArray=new unsigned char[sttbf.extraDataLen];
-                    kDebugInfo(31000, "STILL ALIVE 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    kDebugInfo(31000, (const char*)QString::number((long)sttbf.extraDataLen));
+                    kdDebug(30513) << "STILL ALIVE 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+                    kdDebug(30513) << QString::number((long)sttbf.extraDataLen) << endl;
                     for(j=0; j<sttbf.extraDataLen; ++base)
                         tmpArray[j]=*(stream+base);
-                    kDebugInfo(31000, "STILL ALIVE 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    kdDebug(30513) << "STILL ALIVE 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
                     sttbf.extraData.append(&tmpArray);
-                    kDebugInfo(31000, "STILL ALIVE 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    kdDebug(30513) << "STILL ALIVE 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
                 }
             }
         }
@@ -316,42 +316,42 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
 
 void WinWordDoc::FIBInfo() {
 
-    kDebugInfo(31000, "WinWordDoc::FIBInfo() - start -----------------");
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.wIdent))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.nFib))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.nProduct))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.lid))));
-    kDebugInfo(31000, "some bits -----------------");
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fDot))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fGlsy))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fComplex))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fHasPic))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.cQuickSaves))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fEncrypted))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fWhichTblStm))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fReadOnlyRecommended))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fWriteReservation))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fExtChar))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fLoadOverride))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fFarEast))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fCrypto))));
-    kDebugInfo(31000, "--------------------------");
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.nFibBack))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.lKey))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.envr))));
-    kDebugInfo(31000, "bits - bits - bits -------");
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fMac))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fEmptySpecial))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fLoadOverridePage))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fFutureSavedUndo))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fWord97Saved))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fSpare0))));
-    kDebugInfo(31000, "--------------------------");
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.chs))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.chsTables))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fcMin))));
-    kDebugInfo(31000, static_cast<const char*>(QString::number(static_cast<long>(m_fib.fcMac))));
-    kDebugInfo(31000, "--------------------------");
+    kdDebug(30513) << "WinWordDoc::FIBInfo() - start -----------------" << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.wIdent)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.nFib)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.nProduct)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.lid)) << endl;
+    kdDebug(30513) << "some bits -----------------" << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fDot)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fGlsy)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fComplex)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fHasPic)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.cQuickSaves)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fEncrypted)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fWhichTblStm)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fReadOnlyRecommended)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fWriteReservation)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fExtChar)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fLoadOverride)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fFarEast)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fCrypto)) << endl;
+    kdDebug(30513) << "--------------------------" << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.nFibBack)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.lKey)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.envr)) << endl;
+    kdDebug(30513) << "bits - bits - bits -------" << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fMac)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fEmptySpecial)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fLoadOverridePage)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fFutureSavedUndo)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fWord97Saved)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fSpare0)) << endl;
+    kdDebug(30513) << "--------------------------" << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.chs)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.chsTables)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fcMin)) << endl;
+    kdDebug(30513) << QString::number(static_cast<long>(m_fib.fcMac)) << endl;
+    kdDebug(30513) << "--------------------------" << endl;
 }
 
 void WinWordDoc::locateATRD() {
@@ -385,7 +385,7 @@ const bool WinWordDoc::checkBinTables() {
        m_fib.pnFbpLvcFirst==0xfffff)
         notCompressed=true;
     else {
-        kDebugInfo(31000, "WinWordDoc::checkBinTables(): Sigh! It's compressed...");
+        kdDebug(30513) << "WinWordDoc::checkBinTables(): Sigh! It's compressed..." << endl;
         m_success=false;
     }
     return notCompressed;

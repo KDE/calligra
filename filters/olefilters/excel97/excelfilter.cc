@@ -23,7 +23,7 @@
 #include <records.h>
 #include <excelfilter.h>
 
-ExcelFilter::ExcelFilter(const myFile &mainStream):FilterBase() 
+ExcelFilter::ExcelFilter(const myFile &mainStream):FilterBase()
 {
   QByteArray a;
   a.setRawData((char*) mainStream.data, (int) mainStream.length);
@@ -34,7 +34,7 @@ ExcelFilter::ExcelFilter(const myFile &mainStream):FilterBase()
   tree = new XMLTree();
 }
 
-ExcelFilter::~ExcelFilter() 
+ExcelFilter::~ExcelFilter()
 {
   delete s;
   s=0L;
@@ -54,8 +54,8 @@ const bool ExcelFilter::filter()
     *s >> opcode;
     if (opcode == 0) break;
      *s >> size;
-    if (size > MAX_RECORD_SIZE) 
-      fatal("ExcelFilter: Record larger than MAX_RECORD_SIZE!");
+    if (size > MAX_RECORD_SIZE)
+      kdError(30511) << "ExcelFilter: Record larger than MAX_RECORD_SIZE!" << endl;
     s->readRawBytes(buffer, size);
     rec.setRawData(buffer,size);
 
@@ -68,7 +68,7 @@ const bool ExcelFilter::filter()
       m_success = (tree->*(biff[i].func))(size, *body);
     }
     else {
-      debug("ExcelFilter: Oops, unknown opcode %x.", opcode);
+      kdDebug(30511) << "ExcelFilter: Oops, unknown opcode " << opcode << endl;
     }
     delete body;
     rec.resetRawData(buffer, size);

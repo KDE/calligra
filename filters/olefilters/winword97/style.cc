@@ -259,7 +259,7 @@ CStyle::~CStyle() {
                 if(tmp<255)
                     size=tmp+1;
                 else {
-                    kDebugInfo(31000, "Sigh - don't know the length of that sprm! Guessing :)");
+                    kdDebug(30513) << "Sigh - don't know the length of that sprm! Guessing :)" << endl;
                     size=3;  // don't know really, but the algorithm should be quite ok >:)
                     tmp=*(_main.data+fcGrpprl+offset+3);
                     tmp*=4;

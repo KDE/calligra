@@ -24,6 +24,7 @@
 #include "csvfilterdia.h"
 
 #include <kinstance.h>
+#include <kdebug.h>
 
 extern "C"
 {
@@ -50,7 +51,7 @@ QObject* CSVFilterDiaFactory::create( QObject* parent, const char* name, const c
 {
     if ( parent && !parent->inherits("KoFilterDialog") )
     {
-	    qDebug("CSVFilterDiaFactory: parent does not inherit KoFilterDialog");
+	    kdDebug(30501) << "CSVFilterDiaFactory: parent does not inherit KoFilterDialog" << endl;
 	    return 0L;
     }
     CSVFilterDia *f = new CSVFilterDia( (KoFilterDialog*)parent, name );
