@@ -125,6 +125,8 @@ public:
     virtual void setLeftBorderPen( const QPen& _p ) { m_leftBorderPen = _p; m_iLeftBorderWidth = _p.width(); }
     virtual void setTopBorderPen( const QPen& _p ) { m_topBorderPen = _p; m_iTopBorderWidth = _p.width(); }
 
+    KSpreadTable* table() { return m_pTable; }
+  
 protected:
     /**
      * Tells wether text may be broken into multiple lines.

@@ -302,7 +302,7 @@ public:
     const char *name() { return m_strName.data(); }
   
     QRect& selectionRect() { return m_rctSelection; }
-    void setSelection( const QRect &_rect );
+    void setSelection( const QRect &_rect, KSpreadView *_view = 0L );
       
     void setSelectionFont( const QPoint &_marker, const char *_font = 0L, int _size = -1,
 			   signed char _bold = -1, signed char _italic = -1 );

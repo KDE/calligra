@@ -645,7 +645,7 @@ void KSpreadTable::unselect()
     emit sig_unselect( this, r );
 }
 
-void KSpreadTable::setSelection( const QRect &_sel )
+void KSpreadTable::setSelection( const QRect &_sel, KSpreadView *_view )
 {
   if ( _sel == m_rctSelection )
     return;
@@ -660,7 +660,7 @@ void KSpreadTable::setSelection( const QRect &_sel )
     // Take care: One cell may obscure other cells ( extra size! ).
     if ( m_rctSelection.left() + cell->extraXCells() == m_rctSelection.right() &&
 	 m_rctSelection.top() + cell->extraYCells() == m_rctSelection.bottom() )
-      cell->clicked();
+      cell->clicked( _view );
   }
 
   QRect old( m_rctSelection );

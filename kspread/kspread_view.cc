@@ -299,7 +299,7 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::typeKeyPressed& _event )
 	    selection.setBottom( m_iMarkerRow );
 
 	if ( make_select )
-	  m_pTable->setSelection( selection );
+	  m_pTable->setSelection( selection, this );
 	
 	showMarker();
 
@@ -338,7 +338,7 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::typeKeyPressed& _event )
 	    selection.setBottom( m_iMarkerRow );
 
 	if ( make_select )
-	  m_pTable->setSelection( selection );
+	  m_pTable->setSelection( selection, this );
 
 	showMarker();
 
@@ -377,7 +377,7 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::typeKeyPressed& _event )
 	    selection.setRight( m_iMarkerColumn );
 
 	if ( make_select )
-	  m_pTable->setSelection( selection );
+	  m_pTable->setSelection( selection, this );
 
 	showMarker();
 
@@ -422,7 +422,7 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::typeKeyPressed& _event )
 	    selection.setLeft( m_iMarkerColumn );
 
 	if ( make_select )
-	  m_pTable->setSelection( selection );
+	  m_pTable->setSelection( selection, this );
 
 	showMarker();
 
@@ -2329,7 +2329,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   // Set the new lower right corner of the selection
   selection.setRight( col );
   selection.setBottom( row );
-  table->setSelection( selection );
+  table->setSelection( selection, m_pView );
   
   // Scroll the table if neccessary
   if ( _ev->pos().x() < 0 )
@@ -2447,7 +2447,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
 			   selection.bottom() - selection.top() );
 	
     selection.setCoords( 0, 0, 0, 0 );
-    table->setSelection( selection );
+    table->setSelection( selection, m_pView );
     m_pView->doc()->setModified( TRUE );
   }
   else if ( m_eMouseAction == AutoFill )
@@ -2460,7 +2460,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
 	
     m_pView->doc()->setModified( TRUE );
     selection.setCoords( 0, 0, 0, 0 );
-    table->setSelection( selection );
+    table->setSelection( selection, m_pView );
   }
   // The user started the drag in the middle of a cell ?
   else if ( m_eMouseAction == Mark )
@@ -2474,7 +2474,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
     {
       // Delete the selection
       selection.setCoords( 0, 0, 0, 0 );
-      table->setSelection( selection );
+      table->setSelection( selection, m_pView );
     }
   }
     
@@ -2587,7 +2587,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
       m_iMouseStartRow = m_pView->markerRow();
     }
 
-    table->setSelection( selection );
+    table->setSelection( selection, m_pView );
     return;
   }
 
@@ -2620,7 +2620,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 			 m_pView->markerRow() + cell->extraYCells() );
 
     // if ( old_selection.left() != 0 || cell->extraXCells() != 0 || cell->extraYCells() != 0 )
-    table->setSelection( selection );
+    table->setSelection( selection, m_pView );
     m_iMouseStartColumn = m_pView->markerColumn();
     m_iMouseStartRow = m_pView->markerRow();
   }
@@ -2953,7 +2953,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     QRect selection( table->selectionRect() );
     selection.setCoords( 1, hit_row, 0x7FFF, hit_row );
     m_pView->vBorderWidget()->update();
-    table->setSelection( selection );
+    table->setSelection( selection, m_pView );
   }
 }
 
@@ -3023,7 +3023,7 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
       selection.setBottom( row );
       selection.setTop( m_iSelectionAnchor );
     }
-    table->setSelection( selection );
+    table->setSelection( selection, m_pView );
     
     if ( _ev->pos().y() < 0 )
       m_pView->vertScrollBar()->setValue( m_pView->yOffset() + y );
@@ -3176,7 +3176,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     m_iSelectionAnchor = hit_col;	
     QRect r;
     r.setCoords( hit_col, 1, hit_col, 0x7FFF );
-    table->setSelection( r );
+    table->setSelection( r, m_pView );
   }
 }
 
@@ -3244,7 +3244,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
       r.setRight( col );
       r.setLeft( m_iSelectionAnchor );
     }
-    table->setSelection( r );    
+    table->setSelection( r, m_pView );
 
     if ( _ev->pos().x() < 0 )
       m_pView->horzScrollBar()->setValue( m_pView->xOffset() + x );

@@ -15,6 +15,7 @@ class KSpreadView;
 #include <qrect.h>
 #include <qlist.h>
 #include <qstrlist.h>
+#include <qobject.h>
 
 #include "kspread_layout.h"
 
@@ -33,24 +34,41 @@ struct KSpreadDepend
   int m_iRow2;
 };
 
-class KSpreadCellPrivate
+class KSpreadCellPrivate : public QObject
 {
+  Q_OBJECT
 public:
+  KSpreadCellPrivate( KSpreadCell* _cell ) { m_pCell = _cell; }
   virtual ~KSpreadCellPrivate() { }
+
+protected:
+  KSpreadCell* m_pCell;
 };
 
 class SelectPrivate : public KSpreadCellPrivate
 {
+  Q_OBJECT
 public:
+  SelectPrivate( KSpreadCell* _cell ) : KSpreadCellPrivate( _cell ) { m_iIndex = -1; }  
   virtual ~SelectPrivate() { }
+
+  const char* text();
+  
+  void parse( const char* _text );
   
   QStrList m_lstItems;
+  int m_iIndex;
+
+public slots:
+   void slotItemSelected( int _id );
 };
 
 /**
  */
 class KSpreadCell : public KSpreadLayout
 {
+  friend SelectPrivate;
+  
 public:    
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
   
@@ -177,7 +195,7 @@ public:
 
     void setMultiRow( bool _b ) { m_bMultiRow = _b; m_bLayoutDirtyFlag = TRUE; }
 
-    void setStyle( Style _s ) { m_style = _s; m_bLayoutDirtyFlag = true; }
+    void setStyle( Style _s );
     void setAction( const char* _action ) { m_strAction = _action; }
   
     /**
@@ -239,7 +257,7 @@ public:
      * Called if the user clicks on a cell. If the cell is for example a button, then
      * @ref #m_strAction is executed.
      */
-    void clicked();
+    void clicked( KSpreadView *_view );
   
     /**
      * Starts calculating.

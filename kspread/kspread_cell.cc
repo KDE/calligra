@@ -184,11 +184,38 @@ void KSpreadCell::unobscure()
   m_bLayoutDirtyFlag= TRUE;
 }
 
-void KSpreadCell::clicked()
+void KSpreadCell::clicked( KSpreadView *_view )
 {
   cerr << "CELL CLICKED" << endl;
   if ( m_style == KSpreadCell::ST_Normal )
     return;
+  else if ( m_style == KSpreadCell::ST_Select )
+  { 
+    // We do only show a menu if the user himself clicked
+    // on the cell.
+    if ( !_view )
+      return;
+    
+    QPopupMenu *popup = new QPopupMenu;
+    SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+    QObject::connect( popup, SIGNAL( activated( int ) ),
+		      s, SLOT( slotItemSelected( int ) ) );
+    const char *t;
+    for( t = s->m_lstItems.first(); t != 0L; t = s->m_lstItems.next() )
+      popup->insertItem( t );
+    RowLayout *rl = m_pTable->rowLayout( row() );
+    int tx = m_pTable->columnPos( column(), _view );
+    int ty = m_pTable->rowPos( row(), _view );
+    int h = rl->height( _view );
+    if ( m_iExtraYCells )
+      h = (int)( (float)m_iExtraHeight * _view->zoom() );
+    ty += h;
+    
+    QPoint p( tx, ty );
+    QPoint p2 = _view->mapToGlobal( p );
+    popup->popup( p2 );
+    return;
+  }
   
   if ( m_strAction.isEmpty() )
     return;
@@ -417,6 +444,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   const char *ptext;
   if ( m_bFormular )
     ptext = m_strFormularOut.data();
+  // If this is a select box, find out about the selected item
+  // in the KSpreadPrivate data struct
+  else if ( m_style == ST_Select )
+  {
+    SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+    ptext = s->text();
+  }
   else
     ptext = m_strText.data();
 
@@ -997,6 +1031,9 @@ const char* KSpreadCell::valueString()
 {
   if ( m_bFormular )
     return m_strFormularOut;
+  
+  if ( m_style == ST_Select )
+    return ((SelectPrivate*)m_pPrivate)->text();
   
   return m_strText;
 }
@@ -1596,16 +1633,27 @@ void KSpreadCell::setText( const char *_text )
   m_strText = _text;
 
   m_lstDepends.clear();
-    
+
   /**
-   *  Special handling for loading time
+   *  Special handling for selection boxes
    */
+  if ( m_style == ST_Select )
+  {
+    if ( m_bFormular )
+      clearFormular();
+    
+    SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+    s->parse( m_strText );
+    checkValue();
+    m_bLayoutDirtyFlag = true;
+    m_bFormular = false;
+  }
 
   if ( !m_strText.isEmpty() && m_strText[0] == '=' )
   {
-    m_bCalcDirtyFlag = TRUE;
-    m_bLayoutDirtyFlag= TRUE;
-    m_bFormular = TRUE;
+    m_bCalcDirtyFlag = true;
+    m_bLayoutDirtyFlag= true;
+    m_bFormular = true;
     
     if ( !makeFormular() )
       printf("ERROR: Syntax ERROR\n");
@@ -1620,10 +1668,10 @@ void KSpreadCell::setText( const char *_text )
     
     checkValue();
 		
-    m_bLayoutDirtyFlag= TRUE;
-    m_bFormular = FALSE;
+    m_bLayoutDirtyFlag = true;
+    m_bFormular = false;
   }
-
+  
   // Do not update formulars and stuff here
   if ( !m_pTable->doc()->isLoading() )
     update();      
@@ -1633,7 +1681,7 @@ void KSpreadCell::setValue( double _d )
 {
   m_bValue = true;
   m_dValue = _d;
-  m_bLayoutDirtyFlag= TRUE;
+  m_bLayoutDirtyFlag = true;
   m_bFormular = FALSE;
 
   m_lstDepends.clear();
@@ -1719,6 +1767,8 @@ void KSpreadCell::checkValue()
     const char *p = m_strText.data();	   
     if ( m_bFormular )
       p = m_strFormularOut.data();
+    else if ( m_style == ST_Select )
+      p = ((SelectPrivate*)m_pPrivate)->text();
     const char *ptext = p;
     
     if ( p == 0L )
@@ -2074,9 +2124,92 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
   return true;
 }
 
+void KSpreadCell::setStyle( Style _s )
+{
+  if ( m_style == _s )
+    return;
+  
+  m_style = _s;
+  m_bLayoutDirtyFlag = true;
+
+  if ( m_pPrivate )
+    delete m_pPrivate;
+  if ( _s == ST_Select )
+    m_pPrivate = new SelectPrivate( this );
+
+  if ( m_bFormular )
+    clearFormular();
+    
+  SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+  s->parse( m_strText );
+  checkValue();
+  m_bLayoutDirtyFlag = true;
+  update();
+}
+
 KSpreadCell::~KSpreadCell()
 {
   if ( m_pPrivate )
     delete m_pPrivate;
 }
 
+/***************************************************
+ *
+ * SelectPrivate
+ *
+ ***************************************************/
+
+void SelectPrivate::parse( const char* _text )
+{
+  m_lstItems.clear();
+
+  if ( !_text )
+    return;
+  
+  char *p = new char[ strlen( _text ) + 1 ];
+  strcpy( p, _text );
+  char *str = p;
+  
+  char *s;
+  while ( ( s = strchr( str, '/' ) ) != 0L )
+  {
+    *s++ = 0;
+    if ( strlen( str ) > 0 )
+      m_lstItems.append( str );
+    str = s;
+  }
+
+  if ( strlen( str ) > 0 )
+    m_lstItems.append( str );
+  
+  if ( m_lstItems.count() > 0 )
+    m_iIndex = 0;
+  else
+    m_iIndex = -1;
+  
+  delete[] p;
+}
+
+void SelectPrivate::slotItemSelected( int _id )
+{
+  m_iIndex = _id;
+  m_pCell->setLayoutDirtyFlag();
+  m_pCell->checkValue();
+  m_pCell->update();
+
+  m_pCell->table()->emit_updateCell( m_pCell, m_pCell->column(), m_pCell->row() );
+}
+
+const char* SelectPrivate::text()
+{
+  if ( m_iIndex == -1 )
+    return "";
+
+  const char* p = m_lstItems.at( m_iIndex );
+  if ( p == 0L )
+    return "";
+  
+  return p;
+}
+
+#include "kspread_cell.moc"

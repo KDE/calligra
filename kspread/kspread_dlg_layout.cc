@@ -191,7 +191,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 	    if ( postfix != obj->postfix() )
 		postfix = 0L;
 	    if ( precision != obj->precision() )
-		precision = -1;
+		precision = -2;
 	    if ( floatFormat != obj->floatFormat() )
 		bFloatFormat = FALSE;
 	    if ( floatColor != obj->floatColor() )
@@ -389,7 +389,11 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     precision->raise();
     precision->setGeometry( 70, 110, 100, 30 );
     char buffer[ 100 ];
-    if ( dlg->precision != -1 )
+    if ( dlg->precision == -1 )
+    {
+      precision->setText( i18n("variable") );
+    }
+    else if ( dlg->precision != -2 )
     {
 	sprintf( buffer, "%i", dlg->precision );
 	precision->setText( buffer );
@@ -446,11 +450,15 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
     if ( strcmp( prefix->text(), dlg->prefix.data() ) != 0 )
 	if ( strcmp( prefix->text(), "########" ) != 0 )
 	    _obj->setPrefix( prefix->text() );
-    if ( dlg->precision != atoi( precision->text() ) )
-	if ( precision->text() != 0L )
-	    if ( precision->text()[0] != 0 )
-		_obj->setPrecision( atoi( precision->text() ) );
-
+    if ( precision->text() && precision->text()[0] != '#' )
+    {
+      int prec = -1;
+      if ( precision->text()[0] >= '0' && precision->text()[0] <= '9' )
+	prec = atoi( precision->text() );
+      if ( dlg->precision != prec )
+	_obj->setPrecision( prec );
+    }
+    
     switch( format->currentItem() )
     {
     case 0:
