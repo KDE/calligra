@@ -1256,7 +1256,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
 
 
     int pos = 0;
-    for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling(), pos++ )
+    for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
     {
         dp = drawPage.toElement();
         if ( dp.tagName()== "draw:page"  ) // don't try to parse "</draw:page>" as page
@@ -1271,23 +1271,27 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
                 newpage=new KPrPage(this);
                 m_pageList.insert( pos,newpage);
             }
-            else //we create a first page into ::KPresenterDoc()
+            else //we create a first page into KPresenterDoc()
             {
                 newpage = m_pageList.at(pos);
             }
-            m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
+            ++pos;
+            //m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
+            newpage->insertManualTitle(dp.attribute( "draw:name" ));
             context.styleStack().setTypeProperties( "drawing-page" );
             if ( context.styleStack().hasAttribute( "draw:fill" )
                  || context.styleStack().hasAttribute( "presentation:transition-style" ) )
             {
                 kdDebug()<<" fill or presentation-style found \n";
-                m_pageList.at(pos)->background()->loadOasis( context );
+                //m_pageList.at(pos)->background()->loadOasis( context );
+                newpage->background()->loadOasis( context );
             }
             else if ( !context.styleStack().hasAttribute( "draw:fill" ) && backgroundStyle)
             {
                 context.styleStack().save();
                 context.addStyles( backgroundStyle );
-                m_pageList.at( pos )->background()->loadOasis(context);
+                //m_pageList.at( pos )->background()->loadOasis(context);
+                newpage->background()->loadOasis(context);
                 context.styleStack().restore();
                 kdDebug()<<" load standard background \n";
             }
