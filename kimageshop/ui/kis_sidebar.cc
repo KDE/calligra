@@ -346,7 +346,7 @@ TopColorFrame::TopColorFrame( QWidget* parent, const char* name )
     m_pHideButton = new KisFrameButton(i18n("(*)"), this);
     m_pLABButton = new KisFrameButton(i18n("LAB"), this);    
     m_pCMYKButton = new KisFrameButton(i18n("CMYK"), this);
-    m_pHSBButton = new KisFrameButton(i18n("HSB"), this);    
+    m_pHSBButton = new KisFrameButton(i18n("HSV"), this);    
     m_pGreyButton = new KisFrameButton(i18n("Grey"), this);
     m_pRGBButton = new KisFrameButton(i18n("RGB"), this);
 

@@ -919,10 +919,13 @@ void KisView::slotRefreshPainter()
     if(img)
     {
         KisLayer *lay = img->getCurrentLayer();
-        QRect extents(lay->imageExtents());
+        if(lay)
+        {
+            QRect extents(lay->imageExtents());
 
-        m_pPainter->resize(extents.left() + extents.width(), 
-            extents.top() + extents.height());
+            m_pPainter->resize(extents.left() + extents.width(), 
+                extents.top() + extents.height());
+        }        
         m_pPainter->clearAll();
     }    
 }

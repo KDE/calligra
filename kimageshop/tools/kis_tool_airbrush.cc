@@ -91,10 +91,13 @@ void AirBrushTool::mousePress(QMouseEvent *e)
     KisImage * img = m_pDoc->current();
     if (!img) return;
 
-    if (e->button() != QMouseEvent::LeftButton)
+    if(!img->getCurrentLayer())
+        return;
+        
+    if(!img->getCurrentLayer()->visible())
         return;
 
-    if(!img->getCurrentLayer()->visible())
+    if (e->button() != QMouseEvent::LeftButton)
         return;
 
     m_dragging = true;
@@ -187,8 +190,7 @@ bool AirBrushTool::paint(QPoint pos, bool timeout)
             // this makes image too dark and grany, eventually -
             // that effect is good with the regular brush tool,
             // but not with an airbrush or with the pen tool
-            if(timeout && (brushArray[brushWidth * (y-sy) 
-            + (x-sx) ] > 0))
+            if(timeout && (brushArray[brushWidth * (y-sy) + (x-sx) ] > 0))
             {    
                 paintPoint = false;
             }    

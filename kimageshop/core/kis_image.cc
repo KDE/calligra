@@ -59,7 +59,8 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
 
     // jwc - need to update tile extents when a new layer is
     // added larger than the first (or largest) layer - done!
-    QRect tileExtents = KisUtil::findTileExtents( QRect(0, 0, m_width, m_height) );
+    QRect tileExtents 
+        = KisUtil::findTileExtents( QRect(0, 0, m_width, m_height) );
   
     m_xTiles = tileExtents.width() / TILE_SIZE;	
     m_yTiles = tileExtents.height() / TILE_SIZE;
@@ -67,6 +68,7 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
     // setup dirty flag array
     m_dirty.resize (m_xTiles * m_yTiles);
     
+    // no tiles are marked dirty to start
     for(int y = 0; y < m_yTiles; y++)
         for(int x = 0; x < m_xTiles; x++)
 	        m_dirty[y * m_xTiles + x] = false;
@@ -76,6 +78,7 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
 
     m_ptiles = new QPixmap* [m_xTiles*m_yTiles];
 
+    // allocate the pixmaps for the tiles 
     for( int y = 0; y < m_yTiles; y++)
         for( int x = 0; x < m_xTiles; x++) 
         {
@@ -94,24 +97,33 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
     m_pBGLay->allocateRect( QRect( 0, 0, TILE_SIZE, TILE_SIZE ) );
 
     // FIXME: make it work with non-RGB color spaces
+    // make it work with BigEndian! - john
     
-    uchar* ptr0 = m_pBGLay->channelMem(0, 0, 0, 0); // red
-    uchar* ptr1 = m_pBGLay->channelMem(1, 0, 0, 0); // green
-    uchar* ptr2 = m_pBGLay->channelMem(2, 0, 0, 0); // blue
-    uchar* ptr3 =0;                                 // alpha    
+    uchar* ptrRed   = m_pBGLay->channelMem(0, 0, 0, 0); // red
+    uchar* ptrGreen = m_pBGLay->channelMem(1, 0, 0, 0); // green
+    uchar* ptrBlue  = m_pBGLay->channelMem(2, 0, 0, 0); // blue
+    uchar* ptrAlpha = 0;                                // alpha    
 
     if (m_cMode == cm_RGBA)
-	    ptr3 = m_pBGLay->channelMem(3, 0, 0, 0);
+	    ptrAlpha = m_pBGLay->channelMem(3, 0, 0, 0);
 
+    /* fill in background layer - draw a checkerboard pattern of alternating 
+    dark and light gray tiles in 16x16 squares on the background layer - 
+    if the image background is white, this is not seen until its first 
+    layer is moved. Note:  This "background" layer is deceptive.  It is 
+    not the same thing as the background layer that shows up in the layerview
+    which can either be transparent like this underlying one or white
+    or some other solid color. */
+      
     for( int y = 0; y < TILE_SIZE; y++)
         for(int x = 0; x < TILE_SIZE; x++)
 	    {
-	        uchar v = 128+63*((x/16+y/16)%2);
-	        *(ptr0 + (y * TILE_SIZE + x)) = v;
-	        *(ptr1 + (y * TILE_SIZE + x)) = v;
-	        *(ptr2 + (y * TILE_SIZE + x)) = v;
+	        uchar v = 128+63*((x/16 + y/16)%2);
+	        *(ptrRed + (y * TILE_SIZE + x)) = v;
+	        *(ptrGreen + (y * TILE_SIZE + x)) = v;
+	        *(ptrBlue + (y * TILE_SIZE + x)) = v;
 	        if (m_cMode == cm_RGBA)
-		        *(ptr3 + (y * TILE_SIZE + x)) = 255;
+		        *(ptrAlpha + (y * TILE_SIZE + x)) = 255;
 	    }
 
     compositeImage(QRect()); 
@@ -235,8 +247,15 @@ void KisImage::setUpVisual()
         mBigEndianByteOrder = true;                        
     }
     
-    mBigEndian = (mBigEndianBitOrder || mBigEndianByteOrder);
+    //mBigEndian = (mBigEndianBitOrder || mBigEndianByteOrder);
+    mBigEndian = (mBigEndianBitOrder | mBigEndianByteOrder);
     
+    bool first = true;
+    bool second = true;
+    bool third = (first || second);
+    
+    kdDebug() << "setUpVisual(): third " << third << endl;
+
     if(trueColour)
         kdDebug()<<"setUpVisual() trueColour is true"<<endl;
     else
@@ -246,7 +265,7 @@ void KisImage::setUpVisual()
     visual = unknown;
 
     // do they have a worthy display - doesn't work with big endian
-    if (true && trueColour && !mBigEndian) 
+    if (/* true && trueColour && !mBigEndian */ false) 
     { 
         uint red_mask  =(uint)vis->red_mask;
         uint green_mask=(uint)vis->green_mask;
@@ -534,17 +553,39 @@ void KisImage::compositeTile(int x, int y, KisLayer *dstLay, int dstTile)
 void KisImage::compositeImage(QRect r)
 {
     //KisTimer::start();
+    
     for(int y = 0; y < m_yTiles; y++)
+    {
         for(int x = 0; x < m_xTiles; x++)
-            if (r.isNull() || r.intersects(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE)))
+        {
+            // if rectangle is null do all tiles, covering entire image
+            // this is always done at first when creating background layer
+            if (r.isNull() 
+            || r.intersects(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE)))
 	        {
-                // set the alpha channel to opaque            
+                // set the alpha channel to opaque in the compose layer 
+                // if this is not done the colors from the different layers
+                // won't show up
 		        if (m_cMode == cm_RGBA) 
-			        memset(m_pComposeLay->channelMem(3, 0, 0, 0),255, TILE_SIZE*TILE_SIZE);
-		        compositeTile(x,y, m_pComposeLay, 0);
-		        convertTileToPixmap(m_pComposeLay, 0, m_ptiles[y*m_xTiles+x]);
+                {
+			        memset(m_pComposeLay->channelMem(3, 0, 0, 0),
+                        255, TILE_SIZE*TILE_SIZE);
+                }                        
+                // for this tile, get all the tiles from different layers
+                // which correspond and add them in (if they are visible, etc.)
+                // to the compose layer - only this layer is used to draw
+                // the image on canvas, after converting it to pixmaps
+                // There is one pixmap for each tile
+		        compositeTile(x, y, m_pComposeLay, 0);
+                
+                // convert only this tile to a pixmap for purposes of
+                // drawing the pixmap on the canvas
+		        convertTileToPixmap(m_pComposeLay, 0, 
+                    m_ptiles[y * m_xTiles + x]);
 	        }
-
+        }
+    }
+    
     //KisTimer::stop("compositeImage");
     emit updated(r);
 }
@@ -888,29 +929,68 @@ void KisImage::convertTileToPixmap(KisLayer *lay, int tileNo, QPixmap *pix)
     to render directly into a QImage probably due to the CPU cache, 
     it's also useless wrt (writing?) to other colour spaces  */
     
-    /*  This is the ***ONLY*** place where there could be problems 
-    with big endian machines in rendering the image to the view. 
-    There is an easy way to vary it for big endian architectures, 
-    if necessary, as Qt does for32 bit images (note that m_img, 
-    a QImage, is always 32 bit in krayon).  convertImageToPixmap() 
-    now uses the standard Qt method if big endian architecture
-    is detected, so there can be no problem with that conversion
-    any longer. It did use an optimized visual method that was 
-    suspicious especially if the user has a 16 bit display. */ 
-    
+// too confusing - easier to use variables with color names
+#if 0
     uchar *ptr0 = lay->channelMem(2, tileNo, 0, 0); // blue
     uchar *ptr1 = lay->channelMem(1, tileNo, 0, 0); // green
     uchar *ptr2 = lay->channelMem(0, tileNo, 0, 0); // red
+#endif
 
+    uchar *ptrBlue  = lay->channelMem(2, tileNo, 0, 0); // blue
+    uchar *ptrGreen = lay->channelMem(1, tileNo, 0, 0); // green
+    uchar *ptrRed   = lay->channelMem(0, tileNo, 0, 0); // red
+    uchar *ptrAlpha = 0;
+    
+    if (m_cMode == cm_RGBA)    
+         ptrAlpha = lay->channelMem(3, tileNo, 0, 0); // alpha
+        
     for(int y = 0; y < TILE_SIZE; y++)
     {
+// this directly equates what is in each channel to a QImage scanline
+// offset backwards to front which hardcodes it to littlendian architecture
+#if 0
         uchar *ptr = m_img.scanLine(y);
 	    for(int x = TILE_SIZE; x; x--)
 	    {
-	        *ptr++ = *ptr0++; // red
+	        *ptr++ = *ptr0++; // blue
 	        *ptr++ = *ptr1++; // green
-	        *ptr++ = *ptr2++; // blue
-	        ptr++;
+	        *ptr++ = *ptr2++; // red
+	        ptr++;  // alpha - ptr incremented, but value not used here
+	    }
+#endif
+
+// this may be somewhat more inefficient for littlendian systems but 
+// should also work with bigendian. It lets Qt determine the color values
+// for each channel which automatically takes into account endianness for
+// 32 bit images like these.  The intermediate variable can be removed
+// later with the pointer increment taking place inside the qRgb( )
+// phrase, I think, achieving the same performance.
+
+        uchar iblue, ired, igreen, ialpha;
+        
+        uint *ptr = (uint *)m_img.scanLine(y);
+	    for(int x = TILE_SIZE; x; x--)
+	    {
+            iblue   = *ptrBlue++;
+            igreen  = *ptrGreen++;
+            ired    = *ptrRed++;
+                       
+            if (m_cMode == cm_RGBA)
+            {
+                ialpha  = *ptrAlpha++;          
+
+                // note - to duplicate (sortof) bigendian bug on littleendian
+                // system, comment out next line and uncomment out the
+                // one after - for testing only - john
+                *ptr = qRgba(ired, igreen, iblue, ialpha);
+                //*ptr = qRgb(ired, igreen, 255 - ialpha);
+            }    
+            else
+            {    
+                *ptr = qRgb(ired, igreen, iblue);
+            }    
+                
+            ptr++; 
 	    }
     }
 

@@ -41,7 +41,7 @@ KisChannel::~KisChannel()
 {
     for(uint y = 0; y < yTiles(); y++)
         for(uint x = 0; x < xTiles(); x++)
-	    delete m_tiles[y * xTiles() + x];
+	        delete m_tiles[y * xTiles() + x];
 }
 
 
@@ -60,7 +60,9 @@ void KisChannel::setPixel(uint x, uint y, uchar pixel)
     if (m_tiles[tileNo] == 0) return;
   
     // get a pointer to the points tile data
-    uchar *ptr = m_tiles[tileNo] + ((y % TILE_SIZE) * TILE_SIZE + x % TILE_SIZE);
+    uchar *ptr 
+        = m_tiles[tileNo] + ((y % TILE_SIZE) * TILE_SIZE + x % TILE_SIZE);
+
     *ptr = pixel;
 }
 
@@ -76,12 +78,13 @@ uchar KisChannel::pixel(uint x, uint y)
     int tileNo = (y / TILE_SIZE) * m_xTiles + x / TILE_SIZE;
 
     // does the tile exist?
-    if (m_tiles[tileNo] == 0)
-        return(0); 
+    if (m_tiles[tileNo] == 0)  return(0); 
     // FIXME: fix this return some sort of undef (or bg) via KisColor
   
     // get a pointer to the points tile data
-    uchar *ptr = m_tiles[tileNo] + ((y % TILE_SIZE) * TILE_SIZE + x % TILE_SIZE);
+    uchar *ptr 
+        = m_tiles[tileNo] + ((y % TILE_SIZE) * TILE_SIZE + x % TILE_SIZE);
+
     return *ptr;
 }
 
@@ -89,14 +92,17 @@ uchar KisChannel::pixel(uint x, uint y)
 uint KisChannel::lastTileOffsetX()
 {
 
-    uint lastTileXOffset = TILE_SIZE - ( m_tileRect.right() - m_imgRect.right());
+    uint lastTileXOffset 
+        = TILE_SIZE - ( m_tileRect.right() - m_imgRect.right());
     return((lastTileXOffset) ? lastTileXOffset :  TILE_SIZE);
 }
 
 
 uint KisChannel::lastTileOffsetY()
 {
-    uint lastTileYOffset = TILE_SIZE - (m_tileRect.bottom() - m_imgRect.bottom());
+    uint lastTileYOffset 
+        = TILE_SIZE - (m_tileRect.bottom() - m_imgRect.bottom());
+        
     return((lastTileYOffset) ? lastTileYOffset :  TILE_SIZE);
 }
 
@@ -112,6 +118,7 @@ void KisChannel::moveTo(int x, int y)
 {
     int dx = x - m_imgRect.x();
     int dy = y - m_imgRect.y();
+
     m_imgRect.moveTopLeft(QPoint(x, y));
     m_tileRect.moveBy(dx,dy);
 }
@@ -121,15 +128,17 @@ QRect KisChannel::tileRect(int tileNo)
 {
     int xTile = tileNo % m_xTiles;
     int yTile = tileNo / m_xTiles;
+
     QRect tr(xTile * TILE_SIZE, yTile * TILE_SIZE, TILE_SIZE, TILE_SIZE);
     tr.moveBy(m_tileRect.x(), m_tileRect.y());
+
     return(tr);
 }
 
 
 /* 
-    Resize the channel so that it includes the rectangle newRect (canvasCoords)
-    and allocates space for all the pixels in newRect
+    Resize the channel so that it includes the rectangle 
+    newRect (canvasCoords) and allocates space for all the pixels in newRect
 */    
 
 void KisChannel::allocateRect(QRect newRect)
@@ -156,13 +165,19 @@ void KisChannel::allocateRect(QRect newRect)
     newTileExtents = newTileExtents.unite(newRect);
 
     if (newTileExtents.left() < m_tileRect.left())
-	newTileExtents.setLeft(m_tileRect.left() - ((m_tileRect.left() - newTileExtents.left()
-												 + TILE_SIZE - 1) / TILE_SIZE) * TILE_SIZE);
+	newTileExtents.setLeft(m_tileRect.left() 
+        - ((m_tileRect.left() - newTileExtents.left()
+        + TILE_SIZE - 1) / TILE_SIZE) * TILE_SIZE);
+
     if (newTileExtents.top() < m_tileRect.top())
-	newTileExtents.setTop(m_tileRect.top() - ((m_tileRect.top() - newTileExtents.top()
-											   + TILE_SIZE - 1) / TILE_SIZE) * TILE_SIZE);
-    newTileExtents.setWidth(((newTileExtents.width() + TILE_SIZE - 1) / TILE_SIZE) * TILE_SIZE);
-    newTileExtents.setHeight(((newTileExtents.height() + TILE_SIZE - 1) / TILE_SIZE) * TILE_SIZE);
+	newTileExtents.setTop(m_tileRect.top() 
+        - ((m_tileRect.top() - newTileExtents.top()
+        + TILE_SIZE - 1) / TILE_SIZE) * TILE_SIZE);
+        
+    newTileExtents.setWidth(((newTileExtents.width() 
+        + TILE_SIZE - 1) / TILE_SIZE) * TILE_SIZE);
+    newTileExtents.setHeight(((newTileExtents.height() 
+        + TILE_SIZE - 1) / TILE_SIZE) * TILE_SIZE);
   
     // calculate new tile counts
     int newXTiles = newTileExtents.width() / TILE_SIZE;
@@ -186,8 +201,9 @@ void KisChannel::allocateRect(QRect newRect)
   
     // copy the old tile pointers into the new array
     for(uint y = 0; y < m_yTiles; y++)
-	for(uint x = 0; x < m_xTiles; x++)
-	    newData[(y + oldYTilePos) * newXTiles + (x + oldXTilePos)] = m_tiles[y * m_xTiles + x];
+	    for(uint x = 0; x < m_xTiles; x++)
+	        newData[(y + oldYTilePos) * newXTiles + (x + oldXTilePos)] 
+                = m_tiles[y * m_xTiles + x];
   
     // delete old tile pointers
     delete m_tiles;
@@ -212,12 +228,16 @@ void KisChannel::allocateRect(QRect newRect)
         for(int x = minXTile; x <= maxXTile; x++)
             if (m_tiles[(y * m_xTiles) + x] == 0)
 	        {
-	            m_tiles[(y * m_xTiles) + x] = new uchar [TILE_SIZE * TILE_SIZE];
-                
-		        if (m_id == ci_Alpha) // FIXME: set good init values for all cId's
-		            memset(m_tiles[(y * m_xTiles) + x], 0, TILE_SIZE * TILE_SIZE);
+	            m_tiles[(y * m_xTiles) + x] 
+                    = new uchar [TILE_SIZE * TILE_SIZE];
+                    
+                // FIXME: set good init values for all cId's
+		        if (m_id == ci_Alpha) 
+		            memset(m_tiles[(y * m_xTiles) + x], 0, 
+                        TILE_SIZE * TILE_SIZE);
 		        else
-		            memset(m_tiles[(y * m_xTiles) + x], 255, TILE_SIZE * TILE_SIZE);
+		            memset(m_tiles[(y * m_xTiles) + x], 255, 
+                        TILE_SIZE * TILE_SIZE);
             }
 }
 

@@ -25,7 +25,7 @@
 
 #include <koApplication.h>
 
-static const char *description=I18N_NOOP("A KDE Image Processor");
+static const char *description=I18N_NOOP("A Koffice Bitmapped Image & Painting Program");
 
 static const KCmdLineOptions options[] =
 {

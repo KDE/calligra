@@ -275,23 +275,29 @@ void KisLayer::clear(const KisColor& c, bool transparent )
 	        if (alpha)
 	        {
 		        if (transparent)
-	                memset(channelMem(3, y * xTiles() + x, 0, 0), 0 , TILE_SIZE*TILE_SIZE);
+                {
+	                memset(channelMem(3, y * xTiles() + x, 0, 0), 
+                        0 , TILE_SIZE*TILE_SIZE);
+                }
 		        else
-		            memset(channelMem(3, y * xTiles() + x, 0, 0), 255 , TILE_SIZE*TILE_SIZE);
+                {
+		            memset(channelMem(3, y * xTiles() + x, 0, 0), 
+                        255 , TILE_SIZE*TILE_SIZE);
+                }
 	        }
 
-	        uchar* ptr0 = channelMem(0, y * xTiles() + x, 0, 0);
-	        uchar* ptr1 = channelMem(1, y * xTiles() + x, 0, 0);
-	        uchar* ptr2 = channelMem(2, y * xTiles() + x, 0, 0);
+	        uchar* ptrRed   = channelMem(0, y * xTiles() + x, 0, 0);
+	        uchar* ptrGreen = channelMem(1, y * xTiles() + x, 0, 0);
+	        uchar* ptrBlue  = channelMem(2, y * xTiles() + x, 0, 0);
 	
 	        // set data channels to color
 	        for(int y = 0; y < TILE_SIZE; y++)
             {
 		        for(int x = 0; x < TILE_SIZE; x++)
 		        {
-		            *(ptr0 + (y * TILE_SIZE + x)) = r;
-		            *(ptr1 + (y * TILE_SIZE + x)) = g;
-		            *(ptr2 + (y * TILE_SIZE + x)) = b;
+		            *(ptrRed    + (y * TILE_SIZE + x)) = r;
+		            *(ptrGreen  + (y * TILE_SIZE + x)) = g;
+		            *(ptrBlue   + (y * TILE_SIZE + x)) = b;
 		        }
             }
         }

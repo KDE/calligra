@@ -88,10 +88,13 @@ void BrushTool::mousePress(QMouseEvent *e)
     KisImage * img = m_pDoc->current();
     if (!img) return;
 
-    if (e->button() != QMouseEvent::LeftButton)
+    if(!img->getCurrentLayer())
+        return;
+        
+    if(!img->getCurrentLayer()->visible())
         return;
 
-    if( !img->getCurrentLayer()->visible() )
+    if (e->button() != QMouseEvent::LeftButton)
         return;
 
     red = m_pView->fgColor().R();

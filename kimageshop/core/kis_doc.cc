@@ -72,7 +72,8 @@
     KisDoc - constructor ko virtual method implemented
 */
 
-KisDoc::KisDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
+KisDoc::KisDoc( QWidget *parentWidget, const char *widgetName, 
+    QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ) 
     , m_commands()
 {
@@ -912,10 +913,10 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
             if (alpha)
 	        {
                 /* We need to get alpha value from qimg and this
-                will not work with 16 bit images correctly, so must
-                first convert to 32 bit above */
+                will not work with 16 bit images correctly, but we
+                have already converted to 32 bit above */
                 
-                a = (*p) >> 24;                 
+                a = qAlpha(*p);                 
 		        lay->setPixel(3, startx + x, starty + y, a);
 	        }
 	    } 

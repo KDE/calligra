@@ -212,7 +212,7 @@ RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent)
     m_pSLabel = new QLabel("S", this);
     m_pSLabel->setFixedWidth(16);
     m_pSLabel->setFixedHeight(lh);
-    m_pVLabel = new QLabel("B", this);
+    m_pVLabel = new QLabel("V", this);
     m_pVLabel->setFixedWidth(16);
     m_pVLabel->setFixedHeight(lh);
 
