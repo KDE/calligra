@@ -93,7 +93,7 @@ void KImageShell::setDocument( KImageDoc *_doc )
 
   m_pDoc = _doc;
   m_pDoc->_ref();
-  m_pView = _doc->createImageView( getFrame() );
+  m_pView = _doc->createImageView( frame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
@@ -131,7 +131,7 @@ bool KImageShell::newDocument()
     return false;
   }
 
-  m_pView = m_pDoc->createImageView( getFrame() );
+  m_pView = m_pDoc->createImageView( frame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   kdebug( KDEBUG_INFO, 0, "*1) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
@@ -176,7 +176,7 @@ bool KImageShell::openDocument( const char *_url, const char *_format )
   if ( !m_pDoc->loadFromURL( _url, _format ) )
     return false;
 
-  m_pView = m_pDoc->createImageView( getFrame() );
+  m_pView = m_pDoc->createImageView( frame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
