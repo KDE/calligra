@@ -766,9 +766,12 @@ QDomElement GPath::writeToXml(QDomDocument &document)
 void GPath::draw(QPainter &p, bool withBasePoints, bool outline, bool withEditMarks)
 {
   p.save();
+  p.setWorldMatrix(tmpMatrix, true);
   setPen(&p);
   setBrush(&p);
-  
+  setPen(&p);
+  setBrush(&p);
+
   for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
   {
     GSegment *s = *seg;
@@ -823,8 +826,7 @@ void GPath::calcBoundingBox()
     KoRect rr = (*seg)->boundingBox();
     r = r.unite(rr);
   }
-  box = r;
-//  box = r.transform(tmpMatrix);
+  box = r.transform(tmpMatrix);
 }
 
 GPath *GPath::convertToPath() const

@@ -39,6 +39,7 @@ class Canvas;
 class Ruler;
 class TabBar;
 class QSplitter;
+class QLabel;
 class QHBoxLayout;
 class PluginManager;
 class ToolController;
@@ -67,14 +68,16 @@ public:
   GDocument *activeDocument() const {return mDoc->document(); }
 
   Canvas *canvas() const {return mCanvas; }
-  
+
   ToolController *toolController() const {return tcontroller; }
-  
+
   MeasurementUnit unit() const {return mUnit; }
   void unit(MeasurementUnit u);
-  
+
   QColor workSpaceColor() const {return mWorkSpaceColor; }
   void workSpaceColor(QColor c);
+
+  void setStatus(QString s);
 
 protected:
     virtual void updateReadWrite( bool readwrite );
@@ -169,6 +172,10 @@ private:
 
   KPopupMenu *objMenu;
   KPopupMenu *rulerMenu;
+
+  /* Status bar */
+  
+  QLabel *mSBState;
   
   /* Panels */
   LayerPanel *mLayerPanel;

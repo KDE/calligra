@@ -270,6 +270,20 @@ void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool pe
       (*it)->ttransform(m, true);
     }
   }
+  
+  MeasurementUnit unit = toolController()->view()->unit();
+  QString u = unitToString(unit);
+  double xval, yval;
+  xval = cvtPtToUnit(unit, dx);
+  yval = cvtPtToUnit(unit, dy);
+
+  QString msgbuf = i18n("Translate");
+  msgbuf += " [";
+  msgbuf += QString::number(xval, 'f', 3);
+  msgbuf += QString(" ") + u + QString(", ");
+  msgbuf += QString::number(yval, 'f', 3);
+  msgbuf += QString(" ") + u + QString("]");
+  toolController()->view()->setStatus(msgbuf);
 }
 
 #include "SelectTool.moc"

@@ -43,6 +43,7 @@
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kparts/event.h>
+#include <kstatusbar.h>
 #include <koColorChooser.h>
 
 #include "kontour_global.h"
@@ -96,6 +97,7 @@ KontourView::~KontourView()
   // Delete GUI
   delete hRuler;
   delete vRuler;
+  delete mSBState;
 }
 
 void KontourView::unit(MeasurementUnit u)
@@ -282,6 +284,15 @@ void KontourView::setupCanvas()
   layout->addMultiCellWidget(vBar, 0, 1, 2, 2);
   layout->addMultiCellLayout(tabLayout, 2, 2, 0, 1);
 
+  KStatusBar * sb = statusBar();
+  mSBState = 0L;
+  if(sb)
+  {
+    mSBState = new KStatusBarLabel(QString::null, 0, sb);
+    mSBState->setMinimumWidth(300);
+    addStatusBarItem(mSBState, 0);
+  }
+
   connect(mCanvas, SIGNAL(rmbAtSelection(int,int)), this, SLOT(popupForSelection()));
   connect(mCanvas, SIGNAL(mousePositionChanged(int, int)), hRuler, SLOT(updatePointer(int, int)));
   connect(mCanvas, SIGNAL(mousePositionChanged(int, int)), vRuler, SLOT(updatePointer(int, int)));
@@ -456,6 +467,12 @@ void KontourView::workSpaceColor(QColor c)
   mWorkSpaceColor = c;
 }
 
+void KontourView::setStatus(QString s)
+{
+  if(mSBState)
+    mSBState->setText(s);
+}
+
 void KontourView::updateStyles()
 {
   QStringList *styles = activeDocument()->styles()->stringList();
@@ -468,7 +485,12 @@ void KontourView::customEvent(QCustomEvent *e)
 {
   if(KParts::GUIActivateEvent::test(e))
     if(((KParts::GUIActivateEvent*)e)->activated())
+    {
       setupTools();
+      KStatusBar * sb = statusBar();
+      if(sb)
+        sb->show();
+    }
   KoView::customEvent(e);
 }
 
