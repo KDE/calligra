@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -44,26 +44,26 @@ public:
     virtual bool doCloseHead(void); // HTML's </head>
     virtual bool doOpenBody(void); // HTML's <body>
     virtual bool doCloseBody(void); // HTML's </body>
-    virtual bool doOpenStyles(void); // HTML's <style>
-    virtual bool doCloseStyles(void); // HTML's </style>
-    virtual bool doFullDefineStyle(LayoutData& layout);
+protected:
+    virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)=0;
+    virtual void openParagraph(const QString& strTag, const LayoutData& layout)=0;
+    virtual void closeParagraph(const QString& strTag, const LayoutData& layout)=0;
+    virtual void openSpan(const FormatData& format)=0;
+    virtual void closeSpan(const FormatData& format)=0;
 public:
     inline bool isXML  (void) const { return m_xml; }
     inline void setXML (const bool flag ) { m_xml=flag; }
     inline QTextCodec* getCodec(void) const { return m_codec; }
     inline void setCodec(QTextCodec* codec) { m_codec=codec; }
-private:
+protected:
     QString escapeHtmlText(const QString& strText) const;
-    QString escapeCssIdentifier(const QString& strText) const;
-    QString textFormatToCss(const TextFormatting& formatData) const;
-    QString layoutToCss(const LayoutData& layout) const;
+private:
     void ProcessParagraphData ( const QString& strTag, const QString &paraText,
-     const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
-    QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
-    QString getFormatTextParagraph(const QString& strText, const FormatData& format);
+        const LayoutData& layout, const ValueListFormatData &paraFormatDataList);
+    void formatTextParagraph(const QString& strText, const FormatData& format);
     bool makeTable(const FrameAnchor& anchor);
     bool makeImage(const FrameAnchor& anchor);
-private:
+protected:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
     QTextCodec* m_codec; // QTextCodec in which the file will be written

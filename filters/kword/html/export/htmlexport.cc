@@ -42,6 +42,8 @@
 
 #include "ExportDialog.h"
 #include "ExportFilter.h"
+#include "ExportCss.h"
+#include "ExportDocStruct.h"
 
 #include <htmlexport.h>
 #include <htmlexport.moc>
@@ -78,14 +80,13 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
         return KoFilter::StupidError;
     }
 
-    HtmlWorker* worker=new HtmlWorker();
+    HtmlWorker* worker;
 
-    if (!worker)
-    {
-        delete dialog;
-        kdError(30503) << "Cannot create Worker! Aborting!" << endl;
-        return KoFilter::StupidError;
-    }
+    const int workerMode=dialog->getMode();
+    if (10==workerMode)
+        worker=new HtmlDocStructWorker();
+    else
+        worker=new HtmlCssWorker();
 
     worker->setXML(dialog->isXHtml());
     worker->setCodec(dialog->getCodec());

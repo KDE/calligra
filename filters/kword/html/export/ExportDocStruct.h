@@ -20,34 +20,24 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef EXPORT_DIALOG_H
-#define EXPORT_DIALOG_H
+#ifndef EXPORTDOCSTRUCT_H
+#define EXPORTDOCSTRUCT_H
 
-#include <qwidget.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qradiobutton.h>
-#include <qvbuttongroup.h>
-#include <qcombobox.h>
+#include <KWEFBaseWorker.h>
+#include "ExportFilter.h"
 
-#include <kdialogbase.h>
-
-class ExportDialogUI;
-
-class HtmlExportDialog : public KDialogBase
+class HtmlDocStructWorker : public HtmlWorker
 {
-    Q_OBJECT
 public:
-
-    HtmlExportDialog(QWidget* parent=NULL);
-    ~HtmlExportDialog(void);
-    bool isXHtml(void) const;
-    QTextCodec* getCodec(void) const;
-    int getMode(void) const;
-private:
-    ExportDialogUI* m_dialog;
-private slots:
-    void comboBoxEncodingActivated(int);
+    HtmlDocStructWorker(void) { }
+    virtual ~HtmlDocStructWorker(void) { }
+public:
+protected:
+    virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
+    virtual void openParagraph(const QString& strTag, const LayoutData& layout);
+    virtual void closeParagraph(const QString& strTag, const LayoutData& layout);
+    virtual void openSpan(const FormatData& format);
+    virtual void closeSpan(const FormatData& format);
 };
 
-#endif /* EXPORT_DIALOG_H */
+#endif /* EXPORTDOCSTRUCT_H */

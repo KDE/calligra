@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -92,7 +92,7 @@ QTextCodec* HtmlExportDialog::getCodec(void) const
             codec=KGlobal::charsets()->codecForName(strCodec);
         }
     }
-    
+
     if (!codec)
     {
         // Default: UTF-8
@@ -106,6 +106,20 @@ QTextCodec* HtmlExportDialog::getCodec(void) const
 void HtmlExportDialog::comboBoxEncodingActivated(int)
 {
     m_dialog->buttonGroupEncoding->setButton(2); // Select the "other" button
+}
+
+int HtmlExportDialog::getMode(void) const
+{
+    if (m_dialog->radioModeCss==m_dialog->buttonGroupMode->selected())
+    {
+        return 0;
+    }
+    else if (m_dialog->radioModeDocStruct==m_dialog->buttonGroupMode->selected())
+    {
+        return 10;
+    }
+
+    return 0;
 }
 
 
