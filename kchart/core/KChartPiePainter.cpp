@@ -11,6 +11,10 @@
 #include <math.h>
 #include <stdio.h>
 
+#ifndef PI
+#define PI M_PI
+#endif
+
 KChartPiePainter::KChartPiePainter( KChart* chart ) :
   KChartPainter( chart )
 {
