@@ -1816,7 +1816,11 @@ void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement co
     else if ( s == "justify" ) // TODO in KSpread!
       layout->setAlign( KSpreadFormat::Center );
   }
-
+  if (  property.hasAttribute( "fo:margin-left" ) )
+  {
+      kdDebug()<<"margin-left :"<<KoUnit::parseValue( property.attribute( "fo:margin-left" ),0.0 )<<endl;
+      layout->setIndent( KoUnit::parseValue( property.attribute( "fo:margin-left" ),0.0 ) );
+  }
   if ( property.hasAttribute( "fo:background-color" ) )
     layout->setBgColor( QColor( property.attribute( "fo:background-color" ) ) );
 
