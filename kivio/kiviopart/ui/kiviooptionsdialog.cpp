@@ -252,7 +252,9 @@ void KivioOptionsDialog::initGuides()
     loadIcon("filenew", KIcon::Small, 16), i18n("Add"), managerTab);
   KPushButton* delBtn = new KPushButton(kapp->iconLoader()->
     loadIcon("editdelete", KIcon::Small, 16), i18n("Remove"), managerTab);
-  m_propertiesGrp = new QGroupBox(i18n("Guide Line Properties"), managerTab);
+  m_propertiesGrp = new QGroupBox( 0, Qt::Vertical, i18n("Guide Line Properties"), managerTab);
+  m_propertiesGrp->layout()->setSpacing(KDialog::spacingHint());
+  m_propertiesGrp->layout()->setMargin(KDialog::marginHint());
   m_propertiesGrp->setEnabled(false);
   m_orientHorizRBtn = new QRadioButton(i18n("&Horizontal"), m_propertiesGrp);
   m_orientHorizRBtn->setChecked(true);
@@ -266,7 +268,7 @@ void KivioOptionsDialog::initGuides()
   m_posUSpin = new KoUnitDoubleSpinBox(m_propertiesGrp, 0.0, 0.0, 0.0, unit);
   posLbl->setBuddy(m_posUSpin);
 
-  QGridLayout* pgl = new QGridLayout(m_propertiesGrp);
+  QGridLayout* pgl = new QGridLayout(m_propertiesGrp->layout());
   pgl->setSpacing(KDialog::spacingHint());
   pgl->setMargin(KDialog::marginHint());
   pgl->addMultiCellWidget(m_orientHorizRBtn, 0, 0, 0, 1);
