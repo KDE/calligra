@@ -236,7 +236,7 @@ class KivioView : public KoView
     void addSpawnerToStackBar( KivioStencilSpawnerSet * );
     void addStencilSet( const QString& );
 
-    void setRulerMousePos( int mx, int my );
+    void setMousePos( int mx, int my );
     void setRulerUnit(KoUnit::Unit);
     void setRulerHOffset(int h);
     void setRulerVOffset(int v);

@@ -449,7 +449,7 @@ void KivioCanvas::enterEvent( QEvent* )
 
 void KivioCanvas::leaveEvent( QEvent* )
 {
-  m_pView->setRulerMousePos(-1, -1);
+  m_pView->setMousePos(-1, -1);
 }
 
 void KivioCanvas::mousePressEvent(QMouseEvent* e)
@@ -520,7 +520,7 @@ void KivioCanvas::mouseMoveEvent(QMouseEvent* e)
     
   if(m_pView->isShowGuides())
   {
-    m_pView->setRulerMousePos(e->pos().x(),e->pos().y());
+    m_pView->setMousePos(e->pos().x(),e->pos().y());
 
     KivioGuideLines* gl = activePage()->guideLines();
 

@@ -54,6 +54,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
+#include <kstatusbar.h>
 
 #include <dcopclient.h>
 #include <dcopref.h>
@@ -126,6 +127,7 @@
 
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
+#define MOUSEPOS_TEXT 1000
 
 using namespace Kivio;
 
@@ -139,6 +141,16 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   m_pActivePage = 0;
   dcop = 0;
   dcopObject(); // build it
+
+  KStatusBar* sb = statusBar();
+
+  if(sb) {
+    QString unit = KoUnit::unitName(m_pDoc->units());
+    KoPoint xy(0, 0);
+    QString text = i18n("X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
+      .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
+    sb->insertItem(text, MOUSEPOS_TEXT, 0, true);
+  }
 
   bool isModified = doc->isModified();
   m_pTools = new ToolController(this);
@@ -423,7 +435,7 @@ void KivioView::setupActions()
   QWidget* lineWidthWidget = new QWidget(this, "kde toolbar widget");
   QLabel* lineWidthLbl = new QLabel(lineWidthWidget, "kde toolbar widget");
   lineWidthLbl->setPixmap(kapp->iconLoader()->loadIcon("linewidth", KIcon::Toolbar, 22));
-  m_setLineWidth = new KoUnitDoubleSpinBox(lineWidthWidget, 0.0, 1000.0, 1.0, 1.0, m_pDoc->units(), 2, "kde toolbar widget");
+  m_setLineWidth = new KoUnitDoubleSpinBox(lineWidthWidget, 0.0, 1000.0, 0.1, 1.0, m_pDoc->units(), 2, "kde toolbar widget");
   QHBoxLayout* lwl = new QHBoxLayout(lineWidthWidget);
   lwl->addWidget(lineWidthLbl);
   lwl->addWidget(m_setLineWidth);
@@ -470,12 +482,13 @@ void KivioView::setupActions()
   connect(m_viewZoom, SIGNAL(activated(const QString&)), SLOT(viewZoom(const QString&)));
   changeZoomMenu();
 
+  // FIXME: Port to KOffice!
   m_setEndArrow = new LineEndsAction( false, actionCollection(), "endArrowHead" );
   m_setStartArrow = new LineEndsAction( true, actionCollection(), "startArrowHead" );
 
   connect( m_setEndArrow, SIGNAL(activated(int)), SLOT(slotSetEndArrow(int)));
   connect( m_setStartArrow, SIGNAL(activated(int)), SLOT(slotSetStartArrow(int)));
-  
+
   m_setEndArrowSize = new TKSizeAction(actionCollection(), "endArrowSize");
   m_setStartArrowSize = new TKSizeAction(actionCollection(), "startArrowSize");
 
@@ -1245,7 +1258,7 @@ void KivioView::updateToolBars()
     pStencil = m_pActivePage->selectedStencils()->first();
     if( !pStencil )
     {
-	m_setFontFamily->setFont( KoGlobal::defaultFont().family() );
+        m_setFontFamily->setFont( KoGlobal::defaultFont().family() );
         m_setFontSize->setFontSize( 12 );
         m_setBold->setChecked( false );
         m_setItalics->setChecked( false );
@@ -1782,10 +1795,19 @@ void KivioView::updateProtectPanelCheckBox()
     }
 }
 
-void KivioView::setRulerMousePos( int mx, int my )
+void KivioView::setMousePos( int mx, int my )
 {
   vRuler->setMousePos(mx, my);
   hRuler->setMousePos(mx, my);
+  KStatusBar* sb = statusBar();
+
+  if(sb && (mx >= 0) && (my >= 0)) {
+    QString unit = KoUnit::unitName(m_pDoc->units());
+    KoPoint xy = m_pCanvas->mapFromScreen(QPoint(mx, my));
+    QString text = i18n("X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
+      .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
+    sb->changeItem(text, MOUSEPOS_TEXT);
+  }
 }
 
 void KivioView::setRulerUnit(KoUnit::Unit u)
