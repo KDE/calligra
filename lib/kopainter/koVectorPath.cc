@@ -45,6 +45,8 @@ void KoVectorPath::moveTo(double x, double y)
   segments[n].code = ART_MOVETO;
   segments[n].x = x;
   segments[n].y = y;
+  xe = x;
+  ye = y;
 }
 
 void KoVectorPath::moveToOpen(double x, double y)
@@ -54,6 +56,8 @@ void KoVectorPath::moveToOpen(double x, double y)
   segments[n].code = ART_MOVETO_OPEN;
   segments[n].x = x;
   segments[n].y = y;
+  xe = x;
+  ye = y;
 }
 
 void KoVectorPath::lineTo(double x, double y)
@@ -192,10 +196,10 @@ void KoVectorPath::end()
 
 void KoVectorPath::transform(const QWMatrix &m)
 {
+  double x;
+  double y;
   for(int i = 0; i < segments.size() - 1; i++)
   {
-    double x;
-    double y;
     m.map(segments[i].x, segments[i].y, &x, &y);
     segments[i].x = x;
     segments[i].y = y;
@@ -212,13 +216,7 @@ KoVectorPath *KoVectorPath::rectangle(double x, double y, double w, double h, do
     if(ry > h / 2)
       ry = h / 2;
     vec->moveTo(x + rx, y);
-    //problem:
-    kdDebug() << "point 1 :  x=" << x + rx << " y=" << y << endl;
-    kdDebug() << "control 1 :  x=" << x + rx * (1 - 0.552) << " y=" << y << endl;
-    kdDebug() << "control 2 :  x=" << x << " y=" << y + ry * (1 - 0.552) << endl;
-    kdDebug() << "point 2 :  x=" << x << " y=" << y + ry << endl;
     vec->bezierTo(x, y + ry, x + rx * (1 - 0.552), y, x, y + ry * (1 - 0.552));
-//    vec->lineTo(x, y + ry);
     if(ry < h / 2)
       vec->lineTo(x, y + h - ry);
     vec->bezierTo(x + rx, y + h, x, y + h - ry * (1 - 0.552), x + rx * (1 - 0.552), y + h);
@@ -263,30 +261,13 @@ KoVectorPath *KoVectorPath::rectangle(double x, double y, double w, double h, do
 KoVectorPath *KoVectorPath::ellipse(double cx, double cy, double rx, double ry)
 {
   KoVectorPath *vec = new KoVectorPath;
-  double x0, y0, x1, y1, x2, y2, x3, y3, len, s, e;
-  vec->moveTo(cos(0), sin(0));
-  for(s = 0; s < 2 * M_PI; s += M_PI_2)
-  {
-    e = s + M_PI_2;
-    if(e > 2 * M_PI)
-      e = 2 * M_PI;
-    len = 0.552 * (e - s) / M_PI_2;
-    x0 = cos(s);
-    y0 = sin(s);
-    x1 = x0 + len * cos(s + M_PI_2);
-    y1 = y0 + len * sin(s + M_PI_2);
-    x3 = cos(e);
-    y3 = sin(e);
-    x2 = x3 + len * cos(e - M_PI_2);
-    y2 = y3 + len * sin(e - M_PI_2);
-
-    vec->bezierTo(x3, y3, x1, y1, x2, y2);
-  }
+  double srx = rx * 0.5522847498;
+  double sry = ry * 0.5522847498;
+  vec->moveTo(cx, cy - ry);
+  vec->bezierTo(cx + rx, cy, cx + srx, cy - ry, cx + rx, cy  - sry);
+  vec->bezierTo(cx, cy + ry, cx + rx, cy  + sry, cx + srx, cy + ry);
+  vec->bezierTo(cx - rx, cy, cx - srx, cy + ry, cx - rx, cy  + sry);
+  vec->bezierTo(cx, cy - ry, cx - rx, cy - sry, cx - srx, cy - ry);
   vec->end();
-  
-QWMatrix m1, m2;
-  m1 = m1.scale(rx, ry);
-  m2 = m2.translate(cx, cy);
-  vec->transform(m1*m2);
   return vec;
 }
