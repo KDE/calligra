@@ -83,9 +83,14 @@ void Ruler::initMarker (int w, int h) {
 }
 
 void Ruler::recalculateSize (QResizeEvent *e) {
-  if (buffer != 0L)
+  if (buffer != 0L) {
     delete buffer;
-  
+    buffer = 0L;
+  }
+
+  if (! isVisible ())
+    return;
+
   int w, h;
   
   int maxsize = (int)(1000.0 * zoom);
@@ -123,6 +128,9 @@ void Ruler::setZoomFactor (float zf) {
 }
 
 void Ruler::updatePointer (int x, int y) {
+  if (! buffer)
+    return;
+
   if (orientation == Horizontal) {
     if (currentPosition != -1)
       bitBlt (buffer, currentPosition * zoom - MARKER_WIDTH / 2, 1, bg, 
@@ -155,8 +163,11 @@ void Ruler::updateVisibleArea (int xpos, int ypos) {
 }
 
 void Ruler::paintEvent (QPaintEvent *e) {
+  if (! buffer)
+    return;
+
   const QRect& rect = e->rect ();
-  
+
   if (orientation == Horizontal)
     bitBlt (this, rect.x (), rect.y (), buffer, 
 	    rect.x () + firstVisible, rect.y (), 
@@ -170,6 +181,9 @@ void Ruler::paintEvent (QPaintEvent *e) {
 void Ruler::drawRuler () {
   Painter p;
   char buf[10];
+
+  if (! isVisible ())
+    return;
 
   int step = (int) (10.0 * zoom);
   int step1 = (int) (100.0 * zoom);
@@ -230,4 +244,24 @@ void Ruler::drawRuler () {
 
 void Ruler::resizeEvent (QResizeEvent *e) {
   recalculateSize (e);
+}
+
+void Ruler::show () {
+  if (orientation == Horizontal) {
+    setFixedHeight (30);
+    initMarker (MARKER_WIDTH, MARKER_HEIGHT);
+  }
+  else {
+    setFixedWidth (30);
+    initMarker (MARKER_HEIGHT, MARKER_WIDTH);
+  }
+  QWidget::show ();
+}
+
+void Ruler::hide () {
+  QWidget::hide ();
+  if (orientation == Horizontal)
+    setFixedHeight (0);
+  else
+    setFixedWidth (0);
 }

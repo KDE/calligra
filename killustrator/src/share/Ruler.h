@@ -45,6 +45,9 @@ public slots:
   void updatePointer (int x, int y);
   void updateVisibleArea (int xpos, int ypos);
 
+  void hide ();
+  void show ();
+
 protected:
   void paintEvent (QPaintEvent *e);
   void resizeEvent (QResizeEvent *e);
