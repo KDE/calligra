@@ -134,7 +134,7 @@
                         <cstring>radioEndOfLineLF</cstring>
                     </property>
                     <property name="text">
-                        <string>*&amp;nix-like (Recommended; Line Feed Only)</string>
+                        <string>*&amp;NIX style (recommended; line feed only)</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -145,7 +145,7 @@
                         <cstring>radioEndOfLineCRLF</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Win-like (Line Feed And Carriage Return)</string>
+                        <string>&amp;Windows style (line feed and carriage return)</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -156,7 +156,7 @@
                         <cstring>radioEndOfLineCR</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Mac-like (Carriage Return Only)</string>
+                        <string>&amp;MacOS style (carriage return only)</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
