@@ -1,16 +1,13 @@
 [Desktop Entry]
 Name=Legal
-Name[af]=wettig
-Name[az]=Qanuni
-Name[eu]=Legala
-Name[fo]=US Legal (216×356 mm, amerikansk pappírsstødd)
-Name[it]=US legal
-Name[nb]=Lovlig
-Name[tr]=Yasal
-Name[ven]=Zwa milayo
-Name[vi]=Legal 
-Name[wa]=Legal US
-Name[xh]=Esemthethweni
-Name[xx]=xx
-Name[zu]=Okusemthethweni
+Name[af/messages/koffice/desktop_koffice.po]=wettig
+Name[az/messages/koffice/desktop_koffice.po]=Qanuni
+Name[fo/messages/koffice/desktop_koffice.po]=US Legal (216×356 mm, amerikansk pappírsstødd)
+Name[it/messages/koffice/desktop_koffice.po]=US legal
+Name[nb/messages/koffice/desktop_koffice.po]=Lovlig
+Name[ven/messages/koffice/desktop_koffice.po]=Zwa milayo
+Name[wa/messages/koffice/desktop_koffice.po]=Legal US
+Name[xh/messages/koffice/desktop_koffice.po]=Esemthethweni
+Name[xx/messages/koffice/desktop_koffice.po]=xx
+Name[zu/messages/koffice/desktop_koffice.po]=Okusemthethweni
 X-KDE-DefaultTab=true
