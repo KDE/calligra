@@ -25,8 +25,8 @@
             <Action name="view_gantt_showTaskLinks"/>
             <Action name="view_gantt_showProgress"/>
             <Action name="view_gantt_showFloat"/>
-            <!--<Action name="view_gantt_showCriticalTasks"/> -->
             <Action name="view_gantt_showCriticalPath"/>
+            <Action name="view_gantt_showCriticalTasks"/>
             <Separator/>
             <Separator/>
             <Action name="view_pert"/>
