@@ -6,7 +6,7 @@ LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
 
 kexicqlinterface_la_METASOURCES = AUTO
 
-kexicqlinterface_la_SOURCES = cqldb.cpp 
+kexicqlinterface_la_SOURCES = cqldb.cpp cqlrecord.cpp 
 
 kexicqlinterface_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) ../../../libkexidb.la ../cql/sql/libcql.la
 

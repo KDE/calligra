@@ -43,8 +43,8 @@ class CqlDB : public KexiDB
 		QString		error();
 
 		bool		query(QString statement);
+		KexiDBRecord*	queryRecord(QString query, bool buffer=false);
 
-		
 		bool alterField(const QString& table, const QString& field, const QString& newFieldName,
 			KexiDBField::ColumnType dtype, int length, int precision, KexiDBField::ColumnConstraints constraints,
 			bool binary, bool unsignedType, const QString& defaultVal);

@@ -27,6 +27,7 @@ Boston, MA 02111-1307, USA.
 #include <kexidberror.h>
 
 #include "cqldb.h"
+#include "cqlrecord.h"
 
 K_EXPORT_COMPONENT_FACTORY(kexicqlinterface, KGenericFactory<CqlDB>( "kexicqlinterface" ));
 
@@ -37,7 +38,7 @@ CqlDB::CqlDB(QObject *parent, const char *name, const QStringList &)
 
 	try
 	{
-		m_db = new SqlHandle;
+		m_db = new SqlHandle();
 	}
 	catch(CqlException& ex)
 	{
@@ -59,6 +60,8 @@ CqlDB::load(QString file)
 
 	if(!m_db)
 		return false;
+	
+	kdDebug() << "CqlDB::load(): proceeding" << endl;
 
 	try
 	{
@@ -78,8 +81,35 @@ CqlDB::tables()
 }
 
 bool
-CqlDB::query(QString)
+CqlDB::query(QString statement)
 {
+	kdDebug() << "CqlDB::query()" << endl;
+	
+	if(!m_db)
+		return false;
+
+	QString rs(statement + ";");
+
+	kdDebug() << "CqlDB::query() query:" << rs << endl;
+
+	m_db->declareCursor(rs.latin1());
+
+	Cursor *cursor = new Cursor(*m_db);
+	cursor->open();
+	kdDebug() << "CqlDB::query(): cursor created" << endl;
+
+	return true;
+}
+
+KexiDBRecord*
+CqlDB::queryRecord(QString statement, bool buffer)
+{
+	kdDebug() << "CqlDB::queryRecord()" << endl;
+	query(statement);
+	CqlRecord *record = new CqlRecord(m_db);
+
+	kdDebug() << "CqlDB::queryRecord(): record created" << endl;
+	return record;
 }
 
 bool
