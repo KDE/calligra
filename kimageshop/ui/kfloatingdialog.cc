@@ -154,6 +154,8 @@ void KFloatingDialog::setBaseWidget(QWidget *w)
 void KFloatingDialog::slotClose()
 {
   hide();
+
+  emit sigClosed();
 }
 
 void KFloatingDialog::slotDock()

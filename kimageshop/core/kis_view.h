@@ -101,6 +101,7 @@ class kisView : public ContainerView
   void dialog_brush();
   void dialog_gradient();
   void dialog_gradienteditor();
+  void updateToolbarButtons();
 
   // layer action slots
   void layer_rotate180();

@@ -26,6 +26,7 @@
 #include <qscrollbar.h>
 #include <qstringlist.h>
 
+#include <kdebug.h>
 #include <kaction.h>
 #include <kruler.h>
 #include <klocale.h>
@@ -205,6 +206,7 @@ void kisView::setupDialogs()
   m_pColorDialog->show();
   m_dialog_color->setChecked(true);
   //addDialog(m_pColorDialog);
+  connect( m_pColorDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   connect(m_pColorDialog, SIGNAL(fgColorChanged(const KColor&)), this, SLOT(slotSetFGColor(const KColor&)));
   connect(m_pColorDialog, SIGNAL(bgColorChanged(const KColor&)), this, SLOT(slotSetBGColor(const KColor&)));
@@ -217,6 +219,7 @@ void kisView::setupDialogs()
   m_pLayerDialog->setFocus();
   m_dialog_layer->setChecked(true);
   //addDialog(m_pLayerDialog);
+  connect( m_pLayerDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   // brush dialog
   m_pBrushDialog = new BrushDialog(this);
@@ -224,6 +227,7 @@ void kisView::setupDialogs()
   m_pBrushDialog->move(523, 220);
   m_pBrushDialog->show();
   //addDialog(m_pBrushDialog);
+  connect( m_pBrushDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   // brush
   m_pBrushChooser = m_pBrushDialog->brushChooser();
@@ -236,6 +240,7 @@ void kisView::setupDialogs()
   m_pGradientDialog->move( 200, 290 );
   m_pGradientDialog->hide();
   //addDialog(m_pGradientDialog);
+  connect( m_pGradientDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   // gradient editor dialog
   m_pGradientEditorDialog = new GradientEditorDialog( m_pDoc, this );
@@ -243,6 +248,7 @@ void kisView::setupDialogs()
   m_pGradientEditorDialog->move( 100, 190 );
   m_pGradientEditorDialog->hide();
   //addDialog(m_pGradientEditorDialog);
+  connect( m_pGradientEditorDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 }
 
 void kisView::setupActions()
@@ -673,6 +679,17 @@ void kisView::dialog_gradienteditor()
     m_pGradientEditorDialog->show();
   else
     m_pGradientEditorDialog->hide();
+}
+
+void kisView::updateToolbarButtons()
+{
+  kdebug( KDEBUG_INFO, 0, "kisView::updateToolvarButtons" );
+  
+  m_dialog_layer->setChecked( m_pLayerDialog->isVisible() );
+  m_dialog_color->setChecked( m_pColorDialog->isVisible() );
+  m_dialog_brush->setChecked( m_pBrushDialog->isVisible() );
+  m_dialog_gradient->setChecked( m_pGradientDialog->isVisible() );
+  m_dialog_gradienteditor->setChecked( m_pGradientEditorDialog->isVisible() );
 }
 
 /*

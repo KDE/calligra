@@ -58,6 +58,9 @@ class KFloatingDialog : public QFrame
   bool shaded() { return m_shaded; }
   bool docked() { return m_docked; }
 
+ signals:
+  void sigClosed();
+
  public slots:
   void slotClose();
   void slotMinimize();
@@ -97,7 +100,7 @@ class KFloatingDialog : public QFrame
   KPixmap  m_activeShadePm, m_inactiveShadePm;
   QPixmap  *m_pActivePm, *m_pInactivePm;
 
-  TitleLook                               m_titleLook;
+  TitleLook m_titleLook;
   KPixmapEffect::GradientType m_gradientType;
 
   QPoint   m_pos;
