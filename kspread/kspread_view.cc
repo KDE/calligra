@@ -3760,7 +3760,7 @@ void KSpreadView::setupPrinter( KPrinter &prt )
         prt.setOrientation( KPrinter::Portrait );
 
     prt.setFullPage( TRUE );
-    prt.setResolution ( 72 );
+    prt.setResolution ( 600 );
 }
 
 void KSpreadView::print( KPrinter &prt )
@@ -3772,30 +3772,19 @@ void KSpreadView::print( KPrinter &prt )
       m_pCanvas->deleteEditor( true ); // save changes
     }
 
-    // ### HACK: disable zooming-when-printing if embedded parts are used.
-    // No koffice app supports zooming in paintContent currently.
-    // Disable in ALL cases now
-    bool doZoom = false;
-    /*QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
-    for ( ; fit.current() && doZoom ; ++fit )
-        if ( fit.current()->type() == FT_PART )
-            doZoom = false;*/
-
     int oldZoom = m_pDoc->zoom();
 
-    // We don't get valid metrics from the printer - and we want a better resolution
-    // anyway (it's the PS driver that takes care of the printer resolution).
+    //Comment from KWord
+    //   We don't get valid metrics from the printer - and we want a better resolution
+    //   anyway (it's the PS driver that takes care of the printer resolution).
+    //But KSpread uses fixed 300 dpis, so we can use it.
+
     QPaintDeviceMetrics metrics( &prt );
 
-    //int dpiX = metrics.logicalDpiX();
-    //int dpiY = metrics.logicalDpiY();
-    int dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
-    int dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
-    ///////// Changing the dpiX/dpiY is very wrong nowadays. This has no effect on the font size
-    ///////// that we give Qt, anymore, so it leads to minuscule fonts in the printout => doZoom==false.
+    int dpiX = metrics.logicalDpiX();
+    int dpiY = metrics.logicalDpiY();
 
     m_pDoc->setZoomAndResolution( 100, dpiX, dpiY );
-    m_pDoc->newZoomAndResolution( false, true /* for printing*/ );
 
     //store the current setting in a temporary variable
     KoOrientation _orient = print->orientation();
@@ -3814,16 +3803,12 @@ void KSpreadView::print( KPrinter &prt )
         print->setPaperOrientation( PG_PORTRAIT );
     }
 
-    painter.scale( (double)metrics.logicalDpiX() / (double)dpiX,
-                   (double)metrics.logicalDpiY() / (double)dpiY );
-
-    // Print the table and tell that m_pDoc is NOT embedded.
     print->print( painter, &prt );
+
+    painter.end();
 
     m_pDoc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     m_pDoc->newZoomAndResolution( false, false );
-
-    painter.end();
 
     //Restore original orientation
     print->setPaperOrientation( _orient );

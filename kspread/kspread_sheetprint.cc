@@ -226,7 +226,6 @@ void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
             page_range.setBottom( row - 1 );
 
             right = page_range.right();
-            left = page_range.right() + 1;
             bottom = page_range.bottom();
 
             //
@@ -241,12 +240,6 @@ void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
                         empty = FALSE;
 
             // Look for children
-            KoRect view = KoRect( KoPoint( m_pSheet->dblColumnPos( page_range.left() ),
-                                           m_pSheet->dblRowPos( page_range.top() ) ),
-                                  KoPoint( m_pSheet->dblColumnPos( col-1 ) +
-                                           m_pSheet->columnFormat( col-1 )->dblWidth(),
-                                           m_pSheet->dblRowPos( row-1 ) +
-                                           m_pSheet->rowFormat( row-1 )->dblHeight() ) );
             QRect intView = QRect( QPoint( m_pDoc->zoomItX( m_pSheet->dblColumnPos( page_range.left() ) ),
                                            m_pDoc->zoomItY( m_pSheet->dblRowPos( page_range.top() ) ) ),
                                    QPoint( m_pDoc->zoomItX( m_pSheet->dblColumnPos( col-1 ) +
@@ -261,12 +254,21 @@ void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
                     empty = FALSE;
             }
 
+            //Append page when there is something to print
             if ( !empty )
             {
+                KoRect view = KoRect( KoPoint( m_pSheet->dblColumnPos( page_range.left() ),
+                                               m_pSheet->dblRowPos( page_range.top() ) ),
+                                      KoPoint( m_pSheet->dblColumnPos( col-1 ) +
+                                               m_pSheet->columnFormat( col-1 )->dblWidth(),
+                                               m_pSheet->dblRowPos( row-1 ) +
+                                               m_pSheet->rowFormat( row-1 )->dblHeight() ) );
                 page_list.append( page_range );
                 page_frame_list.append( view );
                 page_frame_list_offset.append( KoPoint( currentOffsetX, currentOffsetY ) );
             }
+
+            left = right + 1;
         }
 
         top = bottom + 1;
@@ -315,14 +317,14 @@ void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
         w = fm.width( headMid( pagenr, m_pSheet->tableName() ) );
         if ( w > 0 )
             painter.drawText( m_pDoc->zoomItX( MM_TO_POINT ( leftBorder() ) +
-                                                      ( MM_TO_POINT ( printableWidth() ) -
-                                                        (float)w ) / 2.0 ),
+                                               ( MM_TO_POINT ( printableWidth() ) -
+                                                (float)w ) / 2.0 ),
                               m_pDoc->zoomItY( MM_TO_POINT ( 10.0 )),
                               headMid( pagenr, m_pSheet->tableName() ) );
         w = fm.width( headRight( pagenr, m_pSheet->tableName() ) );
         if ( w > 0 )
             painter.drawText( m_pDoc->zoomItX( MM_TO_POINT ( leftBorder() ) +
-                                                        MM_TO_POINT ( printableWidth()) - (float)w ),
+                                               MM_TO_POINT ( printableWidth()) - (float)w ),
                               m_pDoc->zoomItY( MM_TO_POINT ( 10.0 )),
                               headRight( pagenr, m_pSheet->tableName() ) );
 
@@ -335,15 +337,15 @@ void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
         w = fm.width( footMid( pagenr, m_pSheet->tableName() ) );
         if ( w > 0 )
             painter.drawText( m_pDoc->zoomItX( MM_TO_POINT ( leftBorder() )+
-                                                       ( MM_TO_POINT ( printableWidth() ) -
-                                                       (float)w ) / 2.0 ),
+                                               ( MM_TO_POINT ( printableWidth() ) -
+                                                (float)w ) / 2.0 ),
                               m_pDoc->zoomItY( MM_TO_POINT  ( paperHeight() - 10.0 ) ),
                               footMid( pagenr, m_pSheet->tableName() ) );
         w = fm.width( footRight( pagenr, m_pSheet->tableName() ) );
         if ( w > 0 )
             painter.drawText( m_pDoc->zoomItX( MM_TO_POINT ( leftBorder() ) +
-                                                        MM_TO_POINT ( printableWidth() ) -
-                                                        (float)w ),
+                                                MM_TO_POINT ( printableWidth() ) -
+                                                (float)w ),
                               m_pDoc->zoomItY( MM_TO_POINT ( paperHeight() - 10.0 ) ),
                               footRight( pagenr, m_pSheet->tableName() ) );
 
@@ -370,15 +372,15 @@ void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
 
 void KSpreadSheetPrint::printPage( QPainter &_painter, const QRect& page_range, const KoRect& view, const KoPoint _childOffset )
 {
-//      kdDebug(36001) << "Rect x=" << page_range.left() << " y=" << page_range.top() << ", w="
-//      << page_range.width() << " h="  << page_range.height() << "  offsetx: "<< _childOffset.x()
-//      << "  offsety: " << _childOffset.y() << endl;
+      /*kdDebug(36001) << "Rect x=" << page_range.left() << " y=" << page_range.top() << ", w="
+      << page_range.width() << " h="  << page_range.height() << "  offsetx: "<< _childOffset.x()
+      << "  offsety: " << _childOffset.y() <<"  view-x: "<<view.x()<< endl;*/
 
     //Don't paint on the page borders
-    QRegion clipRegion( 0/*doc()->zoomItX( MM_TO_POINT ( leftBorder() ) )*/,
-                        0/*doc()->zoomItY( MM_TO_POINT ( topBorder() ) )*/,
-                        m_pDoc->zoomItX( _childOffset.x() + view.width() ),
-                        m_pDoc->zoomItY( _childOffset.y() + view.height() ) );
+    QRegion clipRegion( m_pDoc->zoomItX( MM_TO_POINT ( leftBorder() ) ),
+                        m_pDoc->zoomItY( MM_TO_POINT ( leftBorder() ) ),
+                        m_pDoc->zoomItX( view.width() ),
+                        m_pDoc->zoomItY( view.height() ) );
     _painter.setClipRegion( clipRegion );
 
     //
