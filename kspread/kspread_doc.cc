@@ -60,8 +60,8 @@ class DocPrivate
 {
 public:
 
-  // the map that holds all the tables.
-  KSpreadMap *map;
+  // the workbook that holds all the sheets
+  KSpreadMap *workbook;
 
   // the manager of the styles
   KSpreadStyleManager * styleManager;
@@ -122,7 +122,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 {
   d = new DocPrivate;
   
-  d->map = 0;
+  d->workbook = 0;
   d->styleManager = new KSpreadStyleManager();
   d->pageBorderColor = Qt::red;
   
@@ -161,7 +161,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   initInterpreter();
 
-  d->map = new KSpreadMap( this, "Map" );
+  d->workbook = new KSpreadMap( this, "Map" );
 
   d->undoBuffer = new KSpreadUndo( this );
 
@@ -227,7 +227,7 @@ bool KSpreadDoc::initDoc()
 	for( int i=0; i<_page; i++ )
 	{
 		KSpreadSheet *t = createTable();
-		d->map->addTable( t );
+		d->workbook->addTable( t );
 	}
 
 	resetURL();
@@ -299,7 +299,7 @@ void KSpreadDoc::initConfig()
 
 KSpreadMap* KSpreadDoc::map() const
 {
-  return d->map;
+  return d->workbook;
 }
 
 KSpreadStyleManager* KSpreadDoc::styleManager()
@@ -356,7 +356,7 @@ KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
 
 bool KSpreadDoc::saveChildren( KoStore* _store )
 {
-  return d->map->saveChildren( _store );
+  return d->workbook->saveChildren( _store );
 }
 
 QDomDocument KSpreadDoc::saveXML()
@@ -386,7 +386,7 @@ QDomDocument KSpreadDoc::saveXML()
        for the whole map as the map paper layout. */
     if ( specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
     {
-        KSpreadSheetPrint* printObject = d->map->firstTable()->print();
+        KSpreadSheetPrint* printObject = d->workbook->firstTable()->print();
 
         QDomElement paper = doc.createElement( "paper" );
         paper.setAttribute( "format", printObject->paperFormatString() );
@@ -486,7 +486,7 @@ QDomDocument KSpreadDoc::saveXML()
     QDomElement s = d->styleManager->save( doc );
     spread.appendChild( s );
 
-    QDomElement e = d->map->save( doc );
+    QDomElement e = d->workbook->save( doc );
     spread.appendChild( e );
 
     setModified( false );
@@ -496,7 +496,7 @@ QDomDocument KSpreadDoc::saveXML()
 
 bool KSpreadDoc::loadChildren( KoStore* _store )
 {
-    return d->map->loadChildren( _store );
+    return d->workbook->loadChildren( _store );
 }
 
 bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
@@ -579,7 +579,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
   emit sigProgress( 40 );
   // In case of reload (e.g. from konqueror)
-  d->map->tableList().clear(); // it's set to autoDelete
+  d->workbook->tableList().clear(); // it's set to autoDelete
 
   QDomElement styles = spread.namedItem( "styles" ).toElement();
   if ( !styles.isNull() )
@@ -600,7 +600,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
       d->isLoading = false;
       return false;
   }
-  if ( !d->map->loadXML( mymap ) )
+  if ( !d->workbook->loadXML( mymap ) )
   {
       d->isLoading = false;
       return false;
@@ -659,7 +659,7 @@ void KSpreadDoc::loadPaper( QDomElement const & paper )
     float bottom = borders.attribute( "bottom" ).toFloat();
 
     //apply to all tables
-    QPtrListIterator<KSpreadSheet> it ( d->map->tableList() );
+    QPtrListIterator<KSpreadSheet> it ( d->workbook->tableList() );
     for( ; it.current(); ++it )
     {
       it.current()->print()->setPaperLayout( left, top, right, bottom,
@@ -705,7 +705,7 @@ void KSpreadDoc::loadPaper( QDomElement const & paper )
   fcenter = fcenter.replace( "<table>", "<sheet>" );
   fright  = fright.replace(  "<table>", "<sheet>" );
 
-  QPtrListIterator<KSpreadSheet> it ( d->map->tableList() );
+  QPtrListIterator<KSpreadSheet> it ( d->workbook->tableList() );
   for( ; it.current(); ++it )
   {
     it.current()->print()->setHeadFootLine( hleft, hcenter, hright,
@@ -719,7 +719,7 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
 
   d->isLoading = false;
 
-  //  d->map->update();
+  //  d->workbook->update();
 
   kdDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
 
@@ -758,8 +758,8 @@ KSpreadSheet* KSpreadDoc::createTable()
 {
   QString s( i18n("Sheet%1") );
   s = s.arg( d->tableId++ );
-  //KSpreadSheet *t = new KSpreadSheet( d->map, s.latin1() );
-  KSpreadSheet *t = new KSpreadSheet( d->map, s,s.utf8() );
+  //KSpreadSheet *t = new KSpreadSheet( d->workbook, s.latin1() );
+  KSpreadSheet *t = new KSpreadSheet( d->workbook, s,s.utf8() );
   t->setTableName( s, TRUE ); // huh? (Werner)
   return t;
 }
@@ -772,7 +772,7 @@ void KSpreadDoc::resetInterpreter()
   // Update the cell content
   // TODO
   /* KSpreadSheet *t;
-  for ( t = d->map->firstTable(); t != 0L; t = d->map->nextTable() )
+  for ( t = d->workbook->firstTable(); t != 0L; t = d->workbook->nextTable() )
   t->initInterpreter(); */
 
   // Perhaps something changed. Lets repaint
@@ -782,7 +782,7 @@ void KSpreadDoc::resetInterpreter()
 
 void KSpreadDoc::addTable( KSpreadSheet *_table )
 {
-  d->map->addTable( _table );
+  d->workbook->addTable( _table );
 
   setModified( TRUE );
 
@@ -893,7 +893,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     // choose sheet: the first or the active
     KSpreadSheet* table = 0L;
     if ( !m_activeTable )
-        table = d->map->firstTable();
+        table = d->workbook->firstTable();
     else
         table = m_activeTable;
     if ( !table )
@@ -969,8 +969,8 @@ void KSpreadDoc::paintUpdates()
     view->paintUpdates();
   }
 
-  for (table = d->map->firstTable(); table != NULL;
-       table = d->map->nextTable())
+  for (table = d->workbook->firstTable(); table != NULL;
+       table = d->workbook->nextTable())
   {
     table->clearPaintDirtyData();
   }
@@ -1375,7 +1375,7 @@ KSpreadDoc::~KSpreadDoc()
   delete m_dcop;
   s_docs->removeRef(this);
   kdDebug(36001) << "alive 1" << endl;
-  delete d->map;
+  delete d->workbook;
   delete d->styleManager;
   delete m_pKSpellConfig;
   
@@ -1569,7 +1569,7 @@ void KSpreadDoc::emitEndOperation()
    {
      m_numOperations = 0;
      m_bDelayCalculation = false;
-     for ( t = d->map->firstTable(); t != NULL; t = d->map->nextTable() )
+     for ( t = d->workbook->firstTable(); t != NULL; t = d->workbook->nextTable() )
      {
        //       ElapsedTime etm( "Updating table..." );
        t->update();
