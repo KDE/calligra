@@ -48,7 +48,7 @@
 #include "kimageshop_shell.h"
 #include "canvas.h"
 #include "brush.h"
-#include "layerlist.h"
+#include "layerdlg.h"
 
 #define CHECK_DOCUMENT \
 	if( m_pDoc->isEmpty() ) \
@@ -81,7 +81,7 @@ KImageShopView::KImageShopView( QWidget* _parent, const char* _name, KImageShopD
 
   m_pDoc = _doc;
   m_pCanvasView = 0L;
-  m_pLayerList = 0L;
+  m_pLayerDialog = 0L;
   m_pHorz = 0L;
   m_pVert = 0L;
   m_pHRuler = 0L;
@@ -144,7 +144,7 @@ void KImageShopView::cleanUp()
   delete m_pHRuler;
   delete m_pVRuler;
   delete m_pCanvasView;
-  delete m_pLayerList;
+  delete m_pLayerDialog;
   
   KoViewIf::cleanUp();
 }
@@ -232,9 +232,9 @@ void KImageShopView::createGUI()
   m_pDoc->canvas_()->addView(m_pCanvasView);
   
   // layerlist
-  m_pLayerList  = new layerList(m_pDoc->canvas_());
-  m_pLayerList->show();
-  m_pLayerList->resize(150,200);
+  m_pLayerDialog = new LayerDialog( m_pDoc->canvas_() );
+  m_pLayerDialog->show();
+  m_pLayerDialog->resize(150,200);
 
   
   // setup GUI

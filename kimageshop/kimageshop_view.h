@@ -36,7 +36,7 @@
 #include "kimageshop.h"
 
 class CanvasView;
-class layerList;
+class LayerDialog;
 class KImageShopDoc;
 class QScrollBar;
 class KRuler;
@@ -90,7 +90,7 @@ protected:
 private:
   KImageShopDoc *m_pDoc; 
   CanvasView    *m_pCanvasView;
-  layerList     *m_pLayerList;
+  LayerDialog   *m_pLayerDialog;
   QScrollBar    *m_pHorz, *m_pVert;
   KRuler        *m_pHRuler, *m_pVRuler;
 };

@@ -7,27 +7,42 @@
 //
 //   For more information see at the file COPYING in this package
 
+#ifndef __layerlist_h__
+#define __layerlist_h__
+
 #include <qtableview.h>
 #include <qrect.h>
+
 #include "canvas.h"
 
-class layerList : public QTableView
+class LayerList : public QTableView
 {
- public:
-	layerList(QWidget * parent=0, const char * name=0, WFlags f=0);
-	layerList(Canvas *c, QWidget *parent=0, const char *name=0, WFlags f=0);
+  Q_OBJECT
 
-	void updateTable();
+public:
 
- protected:
-	virtual void paintCell( QPainter *, int row, int col );
-	virtual void mousePressEvent(QMouseEvent *e);
+  LayerList(QWidget* _parent = 0, const char* _name = 0 );
+  LayerList(Canvas* _canvas, QWidget* _parent = 0, const char* name = 0 );
 
- private:
-	void init(Canvas *c);
+  void updateTable();
+  void updateList();
 
-	Canvas *can;
-	int items, selected;
-	static QPixmap *eyeIcon, *linkIcon;
-	static QRect eyeRect, linkRect;
+  virtual QSize sizeHint() const;
+
+protected:
+
+  virtual void paintCell( QPainter*, int _row, int _col );
+  virtual void mousePressEvent( QMouseEvent* _event );
+
+private:
+
+  void init( Canvas* _canvas );
+
+  Canvas* m_canvas;
+  int m_items, m_selected;
+  static QPixmap *m_eyeIcon, *m_linkIcon;
+  static QRect m_eyeRect, m_linkRect;
 };
+
+#endif // __layerlist_h__
+

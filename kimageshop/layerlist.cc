@@ -9,116 +9,142 @@
 //
 //   For more information see at the file COPYING in this package
 
-#include "layerlist.h"
+// only for debug
+#include <iostream.h>
+
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qmessagebox.h>
-#include "misc.h"
 
 #include <kstddirs.h>
 #include <kglobal.h>
+#include <klocale.h>
 
-QPixmap *layerList::eyeIcon, *layerList::linkIcon;
-QRect layerList::eyeRect, layerList::linkRect;
+#include "misc.h"
+#include "layerlist.h"
 
-layerList::layerList(QWidget * parent, const char * name, WFlags f)
-	: QTableView(parent, name, f)
+#define WIDTH   150
+#define HEIGHT  40
+#define MAXROWS 8
+
+QPixmap *LayerList::m_eyeIcon, *LayerList::m_linkIcon;
+QRect LayerList::m_eyeRect, LayerList::m_linkRect;
+
+LayerList::LayerList( QWidget* _parent, const char* _name )
+  : QTableView( _parent, _name )
 {
-	init(0);
+  init( 0 );
 }
 
-layerList::layerList(Canvas *c, QWidget *parent, const char *name,
-										 WFlags f=0)
-	: QTableView(parent, name, f)
+LayerList::LayerList( Canvas* _canvas, QWidget* _parent, const char* _name )
+  : QTableView( _parent, _name )
 {
-	init(c);
+  init( _canvas );
 }
 
-void
-layerList::init(Canvas *c)
+void LayerList::init( Canvas* _canvas )
 {
-	setTableFlags(Tbl_autoVScrollBar);
-	can=c;
-	updateTable();
+  setTableFlags( Tbl_autoHScrollBar | Tbl_autoVScrollBar );
 
-	setCellWidth(150);
-	setCellHeight(40);
-	selected=c->layerList().count()-1;
-	if (!eyeIcon)
-	  {
-	    QString _icon = locate("data", "kimageshop/pics/eye.xpm");
-	    eyeIcon=new QPixmap;
-	    if (!eyeIcon->load(_icon))
-	      QMessageBox::critical( this, "Canvas","Can't find eye.xpm");
-	    eyeRect=QRect(QPoint(5,(cellHeight()-eyeIcon->height())/2),eyeIcon->size());
-	  }
-	if (!linkIcon)
-	  {
-	    QString _icon = locate("data", "kimageshop/pics/link.xpm");
-	    linkIcon=new QPixmap;
-	    if (!linkIcon->load(_icon))
-	      QMessageBox::critical( this, "Canvas","Can't find link.xpm");
-	    linkRect=QRect(QPoint(25,(cellHeight()-linkIcon->height())/2), linkIcon->size());
-	}
+  m_canvas = _canvas;
+
+  setBackgroundColor( white );
+  updateTable();
+
+  setCellWidth( WIDTH );
+  setCellHeight( HEIGHT );
+  m_selected = m_canvas->layerList().count() - 1;
+  if( !m_eyeIcon )
+  {
+    QString _icon = locate( "data", "kimageshop/pics/eye.xpm" );
+    m_eyeIcon = new QPixmap;
+    if( !m_eyeIcon->load( _icon ) )
+      QMessageBox::critical( this, "Canvas", "Can't find eye.xpm" );
+    m_eyeRect = QRect( QPoint( 5,( cellHeight() - m_eyeIcon->height() ) / 2 ), m_eyeIcon->size() );
+  }
+  if( !m_linkIcon )
+  {
+    QString _icon = locate( "data", "kimageshop/pics/link.xpm" );
+    m_linkIcon = new QPixmap;
+    if( !m_linkIcon->load( _icon ) )
+      QMessageBox::critical( this, "Canvas", "Can't find link.xpm" );
+    m_linkRect = QRect( QPoint( 25,( cellHeight() - m_linkIcon->height() ) / 2 ), m_linkIcon->size() );
+  }
 }
 
-void
-layerList::paintCell(QPainter *p, int row, int )
+void LayerList::paintCell( QPainter* p, int _row, int )
 {
-	if (row==selected) {
-		p->fillRect(0,0, cellWidth()-1, cellHeight()-1, QColor(15,175,50));
-	}
-	if (can->layerList().at(row)->isVisible())
-		p->drawPixmap(eyeRect.topLeft(), *eyeIcon);
-	if (can->layerList().at(row)->isLinked())
-		p->drawPixmap(linkRect.topLeft(), *linkIcon);
+  if( _row == m_selected )
+  {
+    p->fillRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1, QColor( 15, 175, 50 ) );
+  }
+  if( m_canvas->layerList().at( _row )->isVisible() )
+    p->drawPixmap( m_eyeRect.topLeft(), *m_eyeIcon );
+  if( m_canvas->layerList().at( _row )->isLinked() )
+    p->drawPixmap( m_linkRect.topLeft(), *m_linkIcon );
 
-	p->drawRect(0,0, cellWidth()-1, cellHeight()-1);
-	p->drawText(80,20, can->layerList().at(row)->name());
+  p->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
+  p->drawText( 80, 20, m_canvas->layerList().at( _row )->name() );
 }
 
-void
-layerList::updateTable()
+void LayerList::updateList()
 {
-	if (can) {
-		items=can->layerList().count();
-		setNumRows(items);
-		setNumCols(1);
-	} else {
-		items=0;
-		setNumRows(0);
-		setNumCols(0);
-	}
 }
 
-void 
-layerList::mousePressEvent(QMouseEvent *e)
+void LayerList::updateTable()
 {
-	QPoint localPoint(e->pos().x()%cellWidth(),
-										e->pos().y()%cellHeight());
-
-	SHOW_POINT(localPoint);
-
-	int r=findRow(e->pos().y());
-
-	if (eyeRect.contains(localPoint)) {
-		can->layerList().at(r)->setVisible(!can->layerList().at(r)->isVisible());
-		updateCell(r,0);
-		can->compositeImage(can->layerList().at(r)->imageExtents());
-		can->repaint(can->layerList().at(r)->imageExtents(), false);
-		return;
-	}
-	if (linkRect.contains(localPoint)) {
-		can->layerList().at(r)->setLinked(!can->layerList().at(r)->isLinked());
-		updateCell(r,0);
-		return;
-	}
-	if (r!=-1) {
-		int currentSel=selected;
-		selected=-1;
-		updateCell(currentSel,0);
-		selected=r;
-		can->setCurrentLayer(selected);
-		updateCell(selected,0);
-	}
+  if( m_canvas )
+  {
+    m_items = m_canvas->layerList().count();
+    setNumRows( m_items );
+    setNumCols( 1 );
+  }
+  else
+  {
+    m_items = 0;
+    setNumRows( 0 );
+    setNumCols( 0 );
+  }
+  resize( sizeHint() );
 }
+
+QSize LayerList::sizeHint() const
+{
+  return QSize( WIDTH, HEIGHT * MAXROWS );
+}
+
+void LayerList::mousePressEvent( QMouseEvent* _event )
+{
+  QPoint localPoint( _event->pos().x() % cellWidth(), _event->pos().y() % cellHeight() );
+
+//SHOW_POINT( localPoint );
+
+  int row = findRow( _event->pos().y() );
+
+  if( m_eyeRect.contains( localPoint ) )
+  {
+    m_canvas->layerList().at( row )->setVisible( !m_canvas->layerList().at( row )->isVisible() );
+    updateCell( row, 0 );
+    m_canvas->compositeImage( m_canvas->layerList().at( row )->imageExtents() );
+    m_canvas->repaint( m_canvas->layerList().at( row )->imageExtents(), false );
+    return;
+  }
+  if( m_linkRect.contains( localPoint ) )
+  {
+    m_canvas->layerList().at( row )->setLinked( !m_canvas->layerList().at( row )->isLinked() );
+    updateCell( row, 0 );
+    return;
+  }
+  if( row != -1 )
+  {
+    int currentSel = m_selected;
+    m_selected = -1;
+    updateCell( currentSel, 0 );
+    m_selected = row;
+    m_canvas->setCurrentLayer( m_selected );
+    updateCell( m_selected, 0 );
+  }
+}
+
+#include "layerlist.moc"
+

@@ -9,48 +9,21 @@ SUBDIRS   = pics data
 
 bin_PROGRAMS = kimageshop
 
-kimageshop_SOURCES = \
- kimageshop.idl \
- kimageshop_main.cc \
- kimageshop_shell.cc \
- kimageshop_doc.cc \
- kimageshop_view.cc \
- preferencesdlg.cc \
- zoomfactordlg.cc \
- canvas.cc \
- canvasview.cc \
- layer.cc \
- layerlist.cc \
- brush.cc \
- channel.cc \
- misc.cc
+kimageshop_SOURCES = kimageshop.idl kimageshop_main.cc kimageshop_shell.cc \
+	kimageshop_doc.cc kimageshop_view.cc preferencesdlg.cc zoomfactordlg.cc \
+	canvas.cc canvasview.cc layer.cc layerlist.cc layerdlg.cc \
+	brush.cc channel.cc misc.cc
 
-noinst_HEADERS = \
- kimageshop_main.h \
- kimageshop_shell.h \
- kimageshop_doc.h \
- kimageshop_view.h \
- preferencesdlg.h \
- zoomfactordlg.h \
- canvas.h \
- canvasview.h \
- layer.h \
- layerlist.h \
- brush.h \
- channel.h \
- misc.h
+noinst_HEADERS = kimageshop_main.h kimageshop_shell.h \
+	kimageshop_doc.h kimageshop_view.h preferencesdlg.h zoomfactordlg.h \
+	canvas.h canvasview.h layer.h layerlist.h layerdlg.h \
+	brush.h channel.h misc.h
 
-METASOURCES = \
- kimageshop_main.moc \
- kimageshop_shell.moc \
- kimageshop_doc.moc \
- kimageshop_view.moc \
- preferencesdlg.moc \
- zoomfactordlg.moc \
- canvasview.moc \
- layer.moc
+METASOURCES = kimageshop_main.moc kimageshop_shell.moc \
+	kimageshop_doc.moc kimageshop_view.moc preferencesdlg.moc zoomfactordlg.moc \
+	canvasview.moc layer.moc layerdlg.moc
 
-idl_DATA = kimageshop.idl
+#idl_DATA = kimageshop.idl
 
 kdelnk_DATA = kimageshop.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
