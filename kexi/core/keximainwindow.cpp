@@ -258,9 +258,6 @@ KexiMainWindow::initActions()
 	d->action_edit_cut = createSharedAction( KStdAction::Cut, "edit_cut");
 	d->action_edit_copy = createSharedAction( KStdAction::Copy, "edit_copy");
 	d->action_edit_paste = createSharedAction( KStdAction::Paste, "edit_paste");
-//	d->action_edit_cut = KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
-//	d->action_edit_copy = KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
-//	d->action_edit_paste = KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
 
 	d->action_edit_delete = createSharedAction(i18n("&Delete"), "button_cancel", Key_Delete, "edit_delete");
 	d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), 0/*SmallIcon("button_cancel")*/, 
@@ -373,6 +370,13 @@ void KexiMainWindow::invalidateProjectWideActions()
 	d->action_project_properties->setEnabled(d->prj);
 	d->action_close->setEnabled(d->prj);
 	d->action_view_nav->setEnabled(d->prj);
+
+	const bool have_dialog = d->curDialog;
+	//VIEW MENU
+
+	d->action_view_data_mode->setEnabled( have_dialog );
+	d->action_view_design_mode->setEnabled( have_dialog );
+	d->action_view_text_mode->setEnabled( have_dialog );
 
 #ifndef KEXI_NO_CTXT_HELP
 	d->action_show_helper->setEnabled(d->prj);
@@ -895,6 +899,7 @@ KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 	if (update_dlg_caption) {
 		slotCaptionForCurrentMDIChild(d->curDialog->mdiParent()->state()==KMdiChildFrm::Maximized);
 	}
+	invalidateActions();
 }
 
 bool
@@ -1222,6 +1227,7 @@ KexiMainWindow::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 		}
 	}
 	KMdiMainFrm::closeWindow(pWnd, layoutTaskBar);
+	invalidateActions();
 }
 
 /*
