@@ -1473,7 +1473,7 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
         }
         if ( m_styleStack.hasAttribute( "fo:keep-with-next" ) ) { // 3.11.31 (the doc said style:keep-with-next but DV said it's wrong)
             // OASIS spec says it's "auto"/"always", not a boolean. Not sure which one OO uses.
-            QString val = context.styleStack().attribute( "fo:keep-with-next" );
+            QString val = m_styleStack.attribute( "fo:keep-with-next" );
             pageBreak.setAttribute("keepWithNext", ( val == "true" || val == "always" ) ? "true" : "false");
         }
         layoutElement.appendChild( pageBreak );
