@@ -350,14 +350,15 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
         // lets check the minimum size for all the cells in this row.
 
         // Take a square of table cells which depend on each others height. It is always the full
-        // width of the table and the height is determened by joined cells, the minimum is one row.
+        // width of the table and the height is determined by joined cells, the minimum is one row.
         double minHeightOtherCols=0;    // The minimum height which the whole square of table cells can take
         double minHeightActiveRow=0;    // The minimum height our cell can get because of cells in his row
         double minHeightMyCol=0;        // The minimum height our column can get in the whole square
         unsigned int rowSpan = activeCell->rowSpan();
         unsigned int startRow = activeCell->firstRow();
-        int colCount=0;
-        do { // for each column
+        for (uint colCount = 0; colCount < getCols(); ++colCount )
+        {
+            // for each column
             unsigned int rowCount=startRow;
             double thisColHeight=0;     // the total height of this column
             double thisColActiveRow=0;  // the total height of all cells in this col, completely in the
@@ -367,12 +368,10 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
                 if(thisCell->firstRow() < startRow) { // above -> set startRow and restart
                     rowSpan += startRow - thisCell->firstRow();
                     startRow = thisCell->firstRow();
-                    colCount = -1;
                     break;
                 }
                 if(thisCell->rowAfter() > startRow + rowSpan) {
                     rowSpan = thisCell->rowAfter() - startRow;
-                    colCount = -1;
                     break;
                 }
 
@@ -386,24 +385,23 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
                 rowCount += thisCell->rowSpan();
             } while (rowCount < rowSpan+startRow);
 
-            if(static_cast<unsigned int>(colCount) >= activeCell->firstCol() &&
-                  static_cast<unsigned int>(colCount) < activeCell->colAfter() )
-                minHeightMyCol=thisColHeight;
+            if(colCount >= activeCell->firstCol() &&
+                  colCount < activeCell->colAfter() )
+                minHeightMyCol = thisColHeight;
             else {
                 minHeightOtherCols = QMAX(minHeightOtherCols, thisColHeight);
                 minHeightActiveRow = QMAX(minHeightActiveRow, thisColActiveRow);
             }
-            colCount++;
-        } while(static_cast<unsigned int>(colCount) < getCols());
+        } // for each column
 
 #if 0
-    kdDebug(32004) << "activeCell: " << activeCell->firstRow() << ","<< activeCell->firstCol() << endl;
-    kdDebug(32004) << "activeCell height. Cur:  " << activeCell->frame(0)->height() << ", new "<< activeCell->frame(0)->minFrameHeight() << endl;
-    kdDebug(32004) << "minHeightOtherCols: " << minHeightOtherCols << endl;
-    kdDebug(32004) << "minHeightActiveRow: " << minHeightActiveRow << endl;
-    kdDebug(32004) << "minHeightMyCol: " << minHeightMyCol << endl;
-    kdDebug(32004) << "rowSpan: " << rowSpan << endl;
-    kdDebug(32004) << "startRow: " << startRow << endl;
+    kdDebug(32004) << " activeCell: " << activeCell->firstRow() << ","<< activeCell->firstCol() << endl;
+    kdDebug(32004) << " activeCell height. Cur:  " << activeCell->frame(0)->height() << ", minFrameHeight: "<< activeCell->frame(0)->minFrameHeight() << endl;
+    kdDebug(32004) << " minHeightOtherCols: " << minHeightOtherCols << endl;
+    kdDebug(32004) << " minHeightActiveRow: " << minHeightActiveRow << endl;
+    kdDebug(32004) << " minHeightMyCol: " << minHeightMyCol << endl;
+    kdDebug(32004) << " rowSpan: " << rowSpan << endl;
+    kdDebug(32004) << " startRow: " << startRow << endl;
 #endif
 
         bool bottomRow = (startRow+rowSpan == activeCell->rowAfter());
@@ -416,11 +414,13 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
         }
         if(activeCell->frame(0)->minFrameHeight() > activeCell->frame(0)->height()) { // wants to grow
             activeCell->frame(0)->setHeight(activeCell->frame(0)->minFrameHeight());
+            //kdDebug(32004) << activeCell->getName() << " grew to its minheight: " << activeCell->frame(0)->minFrameHeight() << endl;
         } else { // wants to shrink
             double newHeight=QMAX(activeCell->frame(0)->minFrameHeight(),minHeightActiveRow);
             if(bottomRow) // I'm a strech cell
                 newHeight=QMAX(newHeight, minHeightOtherCols - (minHeightMyCol - activeCell->frame(0)->minFrameHeight()));
             activeCell->frame(0)->setHeight(newHeight);
+            //kdDebug(32004) << activeCell->getName() << " shrunk to: " << newHeight << endl;
         }
     }
 
@@ -580,7 +580,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             }
             pageNumber++;
             pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
-            //kdDebug(32004) << "pageBottom; " << pageBottom << endl;
+            //kdDebug(32004) << " pageBottom: " << pageBottom << " pageNumber=" << pageNumber << endl;
             if((int)pageNumber > m_doc->numPages()) {
                 int num = m_doc->appendPage();
                 m_doc->afterAppendPage( num );

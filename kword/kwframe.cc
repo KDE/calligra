@@ -1709,6 +1709,17 @@ void KWFrameSet::printDebug()
     kdDebug() << " |  Type: " << typeFrameset[ type() ] << endl;
     kdDebug() << " |  Info: " << infoFrameset[ frameSetInfo() ] << endl;
     kdDebug() << " |  Floating: " << isFloating() << endl;
+    kdDebug() << " |  Frames in page array: " << endl;
+    for ( uint i = 0 ; i < m_framesInPage.size() ; ++i )
+    {
+        QPtrListIterator<KWFrame> it( *m_framesInPage[i] );
+        int pgNum = i + m_firstPage;
+        for ( ; it.current() ; ++it )
+            kdDebug() << " |     " << pgNum << ": " << it.current() << "   " << *it.current()
+                      << " internalY=" << it.current()->internalY() << "pt "
+                      << " (in LU:" << m_doc->ptToLayoutUnitPixY( it.current()->internalY() )
+                      << " height=" << m_doc->ptToLayoutUnitPixX( it.current()->innerHeight() ) << ")" << endl;
+    }
 
     QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( unsigned int j = 0; frameIt.current(); ++frameIt, ++j ) {

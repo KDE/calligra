@@ -1033,7 +1033,9 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
             if(fit.current()->frameSetInfo()==KWFrameSet::FI_BODY && !fit.current()->isFloating()) {
                 KWFrameSet * fs = fit.current();
                 for (QPtrListIterator<KWFrame> f = fs->frameIterator(); f.current() ; ++f ) {
-                    kdDebug() << " fs=" << fs->getName() << " bottom=" << f.current()->bottom() << endl;
+#ifdef DEBUG_PAGES
+                    kdDebug(32002) << " fs=" << fs->getName() << " bottom=" << f.current()->bottom() << endl;
+#endif
                     maxBottom=QMAX(maxBottom, f.current()->bottom());
                 }
             }

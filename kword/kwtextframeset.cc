@@ -1015,9 +1015,23 @@ void KWTextFrameSet::getMargins( int yp, int h, int reqMinWidth,
 #ifdef DEBUG_MARGINS
         kdDebug(32002) << "  getMargins: internalToDocument returned frame=0L for y=" << yUsedForFrame << " ->aborting with 0 margins" << endl;
 #endif
-        // frame == 0 happens when the parag is on a not-yet-created page (formatMore will notice afterwards)
-        // Abort then, no need to return precise values
-        return;
+        // frame == 0 happens when the parag is under the last frame.
+        // On an auto-resizable frame, we know the frame will grow so we can go ahead
+        // and use its width.
+        if ( !frames.isEmpty() && frames.last()->frameBehavior() == KWFrame::AutoExtendFrame )
+        {
+            theFrame = frames.last();
+        }
+        else
+        {
+            // On auto-create-new-frame, this means the parag is on a not-yet-created page
+            // (formatMore will notice afterwards)
+            // Abort then, no need to return precise values
+            // We also abort in the third case (Ignore)
+            if ( validHeight )
+                *validHeight = 0;
+            return;
+        }
     }
 #ifdef DEBUG_MARGINS
     else
@@ -1705,17 +1719,6 @@ void KWTextFrameSet::printDebug()
     if ( !isDeleted() )
     {
         kdDebug() << "KoTextDocument width = " << textDocument()->width() << " height = " << textDocument()->height() << endl;
-        kdDebug() << " -- Frames in page array -- " << endl;
-        for ( uint i = 0 ; i < m_framesInPage.size() ; ++i )
-        {
-            QPtrListIterator<KWFrame> it( *m_framesInPage[i] );
-            int pgNum = i + m_firstPage;
-            for ( ; it.current() ; ++it )
-                kdDebug() << "  " << pgNum << ": " << it.current() << "   " << *it.current()
-                          << " internalY=" << it.current()->internalY() << "pt "
-                          << " (in LU:" << m_doc->ptToLayoutUnitPixY( it.current()->internalY() )
-                          << " height=" << m_doc->ptToLayoutUnitPixX( it.current()->innerHeight() ) << ")" << endl;
-        }
     }
 
     QPtrListIterator<KoTextCustomItem> cit( textDocument()->allCustomItems() );
@@ -2091,10 +2094,10 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom, bool* abort )
                 // We will set the minFrameHeight to the correct value and let the tables code
                 // do the rescaling based on all the frames in the row. (see KWTableFrameSet::recalcRows())
                 if(wantedPosition != theFrame->top() + theFrame->minFrameHeight()) {
-#ifdef DEBUG_FORMAT_MORE
-                    kdDebug(32002) << "is table cell; only setting new minFrameHeight, recalcrows will do the rest" << endl;
-#endif
                     theFrame->setMinFrameHeight(wantedPosition - theFrame->top());
+#ifdef DEBUG_FORMAT_MORE
+                    kdDebug(32002) << "is table cell; only setting new minFrameHeight to " << theFrame->minFrameHeight() << ", recalcrows will do the rest" << endl;
+#endif
                     KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)theFrame->frameSet();
                     table->recalcCols(cell->firstCol(), cell->firstRow());
                     table->recalcRows(cell->firstCol(), cell->firstRow());
