@@ -5,17 +5,17 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __KCHARTPAGELAYOUT__
 #define __KCHARTPAGELAYOUT__
@@ -27,22 +27,27 @@ class KChartView;
 class KChartParams;
 class KChartPageLayout : public KDialogBase
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  KChartPageLayout( KChartParams* _params, QWidget* parent, const char* name);
+    KChartPageLayout( KChartParams* _params, QWidget* parent, const char* name);
 public slots:
-  void slotOk();
- void slotApply();
+    void slotOk();
+    void slotApply();
+    void slotReset();
 protected:
- void init(); 
+    void init();
 private:
- QLineEdit *leftBorder;
- QLineEdit *rightBorder;
- QLineEdit *topBorder;
- QLineEdit *bottomBorder;
- KChartParams* params;	
+    QLineEdit *leftBorder;
+    QLineEdit *rightBorder;
+    QLineEdit *topBorder;
+    QLineEdit *bottomBorder;
+    KChartParams* params;
+    int oldGlobalLeadingRight;
+    int oldGlobalLeadingLeft;
+    int oldGlobalLeadingTop;
+    int oldGlobalLeadingBottom;
 signals:
- void dataChanged();
+    void dataChanged();
 };
 
 #endif

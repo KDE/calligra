@@ -27,11 +27,13 @@
 #include <qlabel.h>
 
 KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, TRUE,i18n("Page Layout") )
+	: KDialogBase( parent, name, TRUE,i18n("Page Layout"),KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::User1 | KDialogBase::Apply , KDialogBase::Ok,true )
 {
     params=_params;
     QWidget *page = new QWidget( this );
     setMainWidget(page);
+
+    setButtonText( KDialogBase::User1, i18n("Reset") );
 
     QGridLayout *grid = new QGridLayout(page, 4, 2, 15);
 
@@ -66,14 +68,17 @@ KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent, cons
     init();
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
     connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );
+    connect( this, SIGNAL( user1Clicked() ), this ,SLOT( slotReset() ));
+
 }
 
 void KChartPageLayout::init()
 {
-    rightBorder->setText(QString::number(params->globalLeadingRight()));
-    leftBorder->setText(QString::number(params->globalLeadingLeft()));
-    topBorder->setText(QString::number(params->globalLeadingTop()));
-    bottomBorder->setText(QString::number(params->globalLeadingBottom()));
+    oldGlobalLeadingRight = params->globalLeadingRight();
+    oldGlobalLeadingLeft = params->globalLeadingLeft();
+    oldGlobalLeadingTop = params->globalLeadingTop();
+    oldGlobalLeadingBottom = params->globalLeadingBottom();
+    slotReset();
 }
 
 void KChartPageLayout::slotOk()
@@ -86,4 +91,12 @@ void KChartPageLayout::slotApply()
 {
     params->setGlobalLeading( leftBorder->text().toInt(),topBorder->text().toInt() , rightBorder->text().toInt(), bottomBorder->text().toInt() );
     emit dataChanged();
+}
+
+void KChartPageLayout::slotReset()
+{
+    rightBorder->setText(QString::number(oldGlobalLeadingRight));
+    leftBorder->setText(QString::number(oldGlobalLeadingLeft));
+    topBorder->setText(QString::number(oldGlobalLeadingTop));
+    bottomBorder->setText(QString::number(oldGlobalLeadingBottom));
 }
