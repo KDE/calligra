@@ -2566,6 +2566,8 @@ void KSpreadTable::insertColumn( unsigned long int _column )
     emit sig_updateVBorder( this );
 }
 
+
+
 void KSpreadTable::deleteColumn( unsigned long int _column )
 {
 
@@ -2684,6 +2686,175 @@ void KSpreadTable::deleteColumn( unsigned long int _column )
     emit sig_updateHBorder( this );
     emit sig_updateVBorder( this );
 }
+
+void KSpreadTable::insertRightCell( unsigned long int _column )
+{
+//todo
+}
+
+void KSpreadTable::insertBottomCell(unsigned long int _row)
+{
+//todo
+}
+
+void KSpreadTable::borderbottom( const QPoint &_marker,QColor _color )
+{
+QRect r( m_rctSelection );
+if ( m_rctSelection.left()==0 )
+	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+for ( int x = r.left(); x <= r.right(); x++ )
+	{
+	int y = r.bottom();
+	KSpreadCell *cell = cellAt( x, y );
+	if ( cell == m_pDefaultCell )
+		{
+		cell = new KSpreadCell( this, x, y );
+		int key = y + ( x * 0x10000 );
+		m_dctCells.insert( key, cell );
+		}
+        cell->setBottomBorderStyle( SolidLine );
+        cell->setBottomBorderColor( _color );
+        cell->setBottomBorderWidth( 2 );
+        }
+emit sig_updateView( this, r );
+}
+
+void KSpreadTable::borderright( const QPoint &_marker,QColor _color )
+{
+
+QRect r( m_rctSelection );
+if ( m_rctSelection.left()==0 )
+	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+for ( int y = r.top(); y <= r.bottom(); y++ )
+	{
+	int x = r.right();
+	KSpreadCell *cell = cellAt( x, y );
+	if ( cell == m_pDefaultCell )
+		{
+		cell = new KSpreadCell( this, x, y );
+		int key = y + ( x * 0x10000 );
+		m_dctCells.insert( key, cell );
+		}
+	
+  	cell->setRightBorderStyle( SolidLine );
+   	cell->setRightBorderColor( _color );
+    	cell->setRightBorderWidth( 2 );
+      	}
+emit sig_updateView( this, r );
+}
+
+void KSpreadTable::borderleft( const QPoint &_marker,QColor _color )
+{
+QRect r( m_rctSelection );
+if ( m_rctSelection.left()==0 )
+	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+for ( int y = r.top(); y <= r.bottom(); y++ )
+	{
+	int x = r.left();
+	KSpreadCell *cell = cellAt( x, y );
+	if ( cell == m_pDefaultCell )
+		{
+		cell = new KSpreadCell( this, x, y );
+		int key = y + ( x * 0x10000 );
+		m_dctCells.insert( key, cell );
+		}
+  	cell->setLeftBorderStyle( SolidLine );
+   	cell->setLeftBorderColor( _color );
+    	cell->setLeftBorderWidth( 2 );
+     	}
+emit sig_updateView( this, r );
+}
+void KSpreadTable::bordertop( const QPoint &_marker,QColor _color )
+{
+
+QRect r( m_rctSelection );
+if ( m_rctSelection.left()==0 )
+	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+for ( int x = r.left(); x <= r.right(); x++ )
+	{
+	int y = r.top();
+	KSpreadCell *cell = cellAt( x, y );
+	if ( cell == m_pDefaultCell )
+		{
+		cell = new KSpreadCell( this, x, y );
+		int key = y + ( x * 0x10000 );
+		m_dctCells.insert( key, cell );
+		}
+  	cell->setTopBorderStyle( SolidLine );
+   	cell->setTopBorderColor( _color );
+    	cell->setTopBorderWidth( 2 );
+     	}
+emit sig_updateView( this, r );
+}
+void KSpreadTable::borderoutline( const QPoint &_marker,QColor _color )
+{
+borderright( _marker,_color);
+borderleft(_marker,_color);
+bordertop(_marker,_color);
+borderbottom(_marker,_color);
+}
+void KSpreadTable::borderall( const QPoint &_marker,QColor _color )
+{
+QRect r( m_rctSelection );
+if ( m_rctSelection.left()==0 )
+	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+for ( int x = r.left(); x <= r.right(); x++ )
+	{
+	for(int y=r.top();y<=r.bottom();y++)
+	{
+	KSpreadCell *cell = cellAt( x, y );
+	if ( cell == m_pDefaultCell )
+		{
+		cell = new KSpreadCell( this, x, y );
+		int key = y + ( x * 0x10000 );
+		m_dctCells.insert( key, cell );
+		}
+	cell->setBottomBorderStyle( SolidLine );
+        cell->setBottomBorderColor( _color );
+        cell->setBottomBorderWidth( 2 );
+	cell->setRightBorderStyle( SolidLine );
+   	cell->setRightBorderColor( _color );
+    	cell->setRightBorderWidth( 2 );
+	cell->setLeftBorderStyle( SolidLine );
+   	cell->setLeftBorderColor( _color );
+    	cell->setLeftBorderWidth( 2 );
+  	cell->setTopBorderStyle( SolidLine );
+   	cell->setTopBorderColor( _color );
+    	cell->setTopBorderWidth( 2 );
+     	}
+     	}
+emit sig_updateView( this, r );
+}
+
+void KSpreadTable::borderremove( const QPoint &_marker )
+{
+QRect r( m_rctSelection );
+if ( m_rctSelection.left()==0 )
+	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+for ( int x = r.left(); x <= r.right(); x++ )
+	{
+	for(int y=r.top();y<=r.bottom();y++)
+		{
+		KSpreadCell *cell = cellAt( x, y );
+	
+		cell->setBottomBorderStyle( NoPen );
+	        cell->setBottomBorderColor( black );
+        	cell->setBottomBorderWidth( 1 );
+		cell->setRightBorderStyle( NoPen );
+   		cell->setRightBorderColor( black );
+	    	cell->setRightBorderWidth( 1 );
+		cell->setLeftBorderStyle( NoPen );
+	   	cell->setLeftBorderColor( black );
+    		cell->setLeftBorderWidth( 1 );
+	  	cell->setTopBorderStyle( NoPen );
+   		cell->setTopBorderColor( black );
+    		cell->setTopBorderWidth( 1 );
+     		}
+     		
+     	}
+emit sig_updateView( this, r );
+}
+
 
 void KSpreadTable::copySelection( const QPoint &_marker )
 {

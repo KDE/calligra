@@ -65,6 +65,7 @@
 #include "kspread_dlg_anchor.h"
 #include "kspread_dlg_resize.h"
 #include "kspread_dlg_show.h"
+#include "kspread_dlg_insert.h"
 
 /*****************************************************************************
  *
@@ -696,7 +697,35 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   pix = OPUIUtils::convertPixmap( BarIcon("funct") );
   m_idButtonLayout_funct = m_vToolBarLayout->insertButton2( pix, 18, SIGNAL( clicked() ), this, "funct", true, i18n( "Function" ), -1 );
 
+  pix = OPUIUtils::convertPixmap( BarIcon("borderbottom") );
+  m_idButtonLayout_borderbottom = m_vToolBarLayout->insertButton2( pix, 19, SIGNAL( clicked() ), this, "borderbottom", true, i18n( "Border bottom" ), -1 );
 
+  pix = OPUIUtils::convertPixmap( BarIcon("borderleft") );
+  m_idButtonLayout_borderleft = m_vToolBarLayout->insertButton2( pix, 20, SIGNAL( clicked() ), this, "borderleft", true, i18n( "Border left" ), -1 );
+
+  pix = OPUIUtils::convertPixmap( BarIcon("borderright") );
+  m_idButtonLayout_borderright = m_vToolBarLayout->insertButton2( pix, 21, SIGNAL( clicked() ), this, "borderright", true, i18n( "Border right" ), -1 );
+
+  pix = OPUIUtils::convertPixmap( BarIcon("bordertop") );
+  m_idButtonLayout_bordertop = m_vToolBarLayout->insertButton2( pix, 22, SIGNAL( clicked() ), this, "bordertop", true, i18n( "Border top" ), -1 );
+
+  pix = OPUIUtils::convertPixmap( BarIcon("borderoutline") );
+  m_idButtonLayout_borderoutline = m_vToolBarLayout->insertButton2( pix, 23, SIGNAL( clicked() ), this, "borderoutline", true, i18n( "Border outline" ), -1 );
+
+  pix = OPUIUtils::convertPixmap( BarIcon("borderall") );
+  m_idButtonLayout_borderall = m_vToolBarLayout->insertButton2( pix, 24, SIGNAL( clicked() ), this, "borderall", true, i18n( "All borders" ), -1 );
+
+  pix = OPUIUtils::convertPixmap( BarIcon("borderremove") );
+  m_idButtonLayout_borderremove = m_vToolBarLayout->insertButton2( pix, 25, SIGNAL( clicked() ), this, "borderremove", true, i18n( "Remove borders" ), -1 );
+
+
+  borderColor = black;
+  pix = KOUIUtils::colorPixmap( borderColor, KOUIUtils::FRAME_COLOR );
+
+  m_idButtonLayout_border_Color = m_vToolBarLayout->insertButton2( pix, 26 , SIGNAL( clicked() ), this, "bordercolor",
+							  true, i18n( "Border Color" ), -1 );
+
+							
   m_vToolBarLayout->enable( OpenPartsUI::Show );
 
   m_vToolBarMath = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
@@ -936,7 +965,7 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuView->insertSeparator( -1 );
 
   m_idMenuView_ShowPageBorders = m_vMenuView->insertItem( i18n( "Show Page Borders" ), this, "togglePageBorders", 0 );
-  m_vMenuView->setItemChecked( m_idMenuView_ShowPageBorders, m_pTable->isShowPageBorders() );
+  m_vMenuView->setItemChecked( m_idMenuView_ShowPageBorders,m_pTable->isShowPageBorders() );
 
   // Data
   _menubar->insertMenu( i18n( "D&ata" ), m_vMenuData, -1, -1 );
@@ -1076,6 +1105,17 @@ if ( m_pTable != 0L )
     }
 }
 
+void KSpreadView::bordercolor()
+{
+if ( m_pTable != 0L )
+	{
+	if ( KColorDialog::getColor( borderColor ) )
+    		{
+		OpenPartsUI::Pixmap_var pix = KOUIUtils::colorPixmap( borderColor, KOUIUtils::FRAME_COLOR );
+        	m_vToolBarLayout->setButtonPixmap( 26, pix );
+    		}
+    }
+}
 
 void KSpreadView::helpUsing()
 {
@@ -1446,6 +1486,120 @@ if ( m_pTable != 0L )
 	}
 }
 
+void KSpreadView::borderbottom()
+{
+if ( m_pTable != 0L )
+	{
+	QRect selection( m_pTable->selectionRect() );
+	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
+		{
+		QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+		}
+	else
+		{
+		m_pTable->borderbottom( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,borderColor);
+		}
+	}
+}
+void KSpreadView::borderright()
+{
+if ( m_pTable != 0L )
+	{
+	QRect selection( m_pTable->selectionRect() );
+	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
+		{
+		QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+		}
+	else
+		{
+		m_pTable->borderright( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,borderColor);
+		}
+	}	
+}
+void KSpreadView::borderleft()
+{
+if ( m_pTable != 0L )
+	{
+	QRect selection( m_pTable->selectionRect() );
+	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
+		{
+		QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+		}
+	else
+		{
+		m_pTable->borderleft( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),borderColor );
+		}
+	}
+}
+void KSpreadView::bordertop()
+{
+if ( m_pTable != 0L )
+	{
+	QRect selection( m_pTable->selectionRect() );
+	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
+		{
+		QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+		}
+	else
+		{
+		m_pTable->bordertop( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),borderColor );
+		}
+	}
+}
+void KSpreadView::borderoutline()
+{
+if ( m_pTable != 0L )
+	{
+	QRect selection( m_pTable->selectionRect() );
+	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
+		{
+		QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+		}
+	else
+		{
+		m_pTable->borderoutline( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,borderColor);
+		}
+	}
+}
+void KSpreadView::borderall()
+{
+if ( m_pTable != 0L )
+	{
+	QRect selection( m_pTable->selectionRect() );
+	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
+		{
+		QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+		}
+	else
+		{
+		m_pTable->borderall( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),borderColor );
+		}
+	}
+}
+
+void KSpreadView::borderremove()
+{
+if ( m_pTable != 0L )
+	{
+	QRect selection( m_pTable->selectionRect() );
+	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
+		{
+		QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+		}
+	else
+		{
+		m_pTable->borderremove( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+		}
+	}
+
+}
 void KSpreadView::reloadScripts()
 {
   // TODO
@@ -2305,6 +2459,10 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_pPopupMenu->insertItem( i18n("Delete"), this, SLOT( slotDelete() ) );
     m_pPopupMenu->insertItem( i18n("Ajust"),this,SLOT(slotAjust()));
     m_pPopupMenu->insertItem( i18n("Clear"),this,SLOT(slotClear()));
+    /*m_pPopupMenu->insertSeparator();
+    m_pPopupMenu->insertItem( i18n("Insert"),this,SLOT(slotInsert()));
+    m_pPopupMenu->insertItem( i18n("Remove"),this,SLOT(slotRemove()));
+    */
     m_pPopupMenu->insertSeparator();
     m_pPopupMenu->insertItem( i18n("Layout"), this, SLOT( slotLayoutDlg() ) );
 
@@ -2383,6 +2541,17 @@ void KSpreadView::slotActivateTool( int _id )
   }
 }
 
+void KSpreadView::slotInsert()
+{
+KSpreadinsert* dlg = new KSpreadinsert( this, "Insert",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow()) );
+dlg->show();
+}
+
+void KSpreadView::slotRemove()
+{
+
+}
+
 void KSpreadView::slotCopy()
 {
   assert( m_pTable );
@@ -2434,23 +2603,31 @@ void KSpreadView::slotClear()
 
 void KSpreadView::slotLayoutDlg()
 {
+
   QRect selection( m_pTable->selectionRect() );
-
-  m_pCanvas->hideMarker();
-
-  cout << "#######################################" << endl;
-
-  if ( selection.contains( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ) )
-    CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
-		       selection.right(), selection.bottom() );
+  if(selection.right()==0x7FFF||selection.bottom()==0x7FFF)
+  	{
+  	QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+  	}
   else
-    CellLayoutDlg dlg( this, m_pTable, m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+  	{	
+  	m_pCanvas->hideMarker();
 
-  m_pDoc->setModified( true );
+  	cout << "#######################################" << endl;
 
-  cout << "------------------------------------------" << endl;
+  	if ( selection.contains( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ) )
+    		CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
+		       selection.right(), selection.bottom() );
+  	else
+    		CellLayoutDlg dlg( this, m_pTable, m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
 
-  m_pCanvas->showMarker();
+  	m_pDoc->setModified( true );
+
+  	cout << "------------------------------------------" << endl;
+
+  	m_pCanvas->showMarker();
+  	}
 }
 
 void KSpreadView::layoutcell()
@@ -2458,22 +2635,29 @@ void KSpreadView::layoutcell()
   if ( !m_pTable )
        return;
   QRect selection( m_pTable->selectionRect() );
-
-  m_pCanvas->hideMarker();
-
-  cout << "#######################################" << endl;
-
-  if ( selection.contains( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ) )
-    CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
-		       selection.right(), selection.bottom() );
+  if(selection.right()==0x7FFF||selection.bottom()==0x7FFF)
+  	{
+  	QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+  	}
   else
-    CellLayoutDlg dlg( this, m_pTable, m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+  	{	
+  	m_pCanvas->hideMarker();
 
-  m_pDoc->setModified( true );
+  	cout << "#######################################" << endl;
 
-  cout << "------------------------------------------" << endl;
+  	if ( selection.contains( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ) )
+    		CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
+		       selection.right(), selection.bottom() );
+  	else
+    		CellLayoutDlg dlg( this, m_pTable, m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
 
-  m_pCanvas->showMarker();
+ 	 m_pDoc->setModified( true );
+
+  	cout << "------------------------------------------" << endl;
+
+  	m_pCanvas->showMarker();
+  	}
 }
 void KSpreadView::paperLayoutDlg()
 {

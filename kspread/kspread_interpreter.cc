@@ -68,7 +68,7 @@ void makeDepends( KSParseNode* node, KSpreadMap* m, KSpreadTable* t, QList<KSpre
       d->m_iRow = extra->point()->pos.y();
       d->m_iColumn2 = -1;
       d->m_iRow2 = -1;
-      d->m_pTable = extra->point()->table;
+      d->m_pTable=extra->point()->table;
       depends.append( d );
       node->setExtra( extra );
     }

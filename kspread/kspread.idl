@@ -117,6 +117,12 @@ module KSpread
     		slot void formulaLeftSub();
 		slot void formulaSum();
 		slot void formulaProduct();
+		slot void borderbottom();
+    		slot void borderright();
+    		slot void borderleft();
+    		slot void bordertop();
+    		slot void borderoutline();
+    		slot void borderall();
 		slot void RemoveTable();
 		slot void resizeheight();
 		slot void resizewidth();
@@ -124,6 +130,8 @@ module KSpread
                 slot void renametable();
 		slot void hidetable();
 		slot void showtable();
+		slot void bordercolor();
+		slot void borderremove();
 		Book book();
 
 		struct EventSelectionChanged

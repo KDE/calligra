@@ -132,3 +132,9 @@ reference.
 -Now you can clear area
 -You can ajust area
 -bugfix
+
+1999-10-08  -Montel laurent<montell@club-internet.fr>
+-----------------------------------------------------
+-Bug fix
+-Now you can create border directly
+-Start insert and remove cell (=>move cell at right or bottom)

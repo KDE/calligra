@@ -398,6 +398,7 @@ public:
 
     void TextColor();
     void BackgroundColor();
+    void bordercolor();
     void sortincr();
     void sortdecrease();
 
@@ -416,7 +417,13 @@ public:
     void formulaLeftSub();
     void formulaSum();
     void formulaProduct();
-
+    void borderbottom();
+    void borderright();
+    void borderleft();
+    void bordertop();
+    void borderoutline();
+    void borderall();
+    void borderremove();
 
     virtual void cleanUp();
 
@@ -448,6 +455,8 @@ protected slots:
     void slotDelete();
     void slotAjust();
     void slotClear();
+    void slotInsert();
+    void slotRemove();
     /**
      * Popup menu
      */
@@ -582,6 +591,14 @@ protected:
     long int m_idButtonLayout_sort_incr;
     long int m_idButtonLayout_sort_decrease;
     long int m_idButtonLayout_funct;
+    long int m_idButtonLayout_borderbottom;
+    long int m_idButtonLayout_borderright;
+    long int m_idButtonLayout_borderleft;
+    long int m_idButtonLayout_bordertop;
+    long int m_idButtonLayout_borderoutline;
+    long int m_idButtonLayout_borderall;
+    long int m_idButtonLayout_border_Color;
+    long int m_idButtonLayout_borderremove;
 
     OpenPartsUI::ToolBar_var m_vToolBarFormula;
     long int m_idButtonFormula_Power;
@@ -671,6 +688,8 @@ protected:
 
      QColor tbColor;
      QColor bgColor;
+     QColor borderColor;
+
     /**
      * Tells whether the user modfied the current cell.
      * Some key events are passed to the @ref EditWindow. When this flag is set and you

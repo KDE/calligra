@@ -390,6 +390,17 @@ public:
     void clearSelection(const QPoint &_marker );
     int ajustColumn(int _col=-1);
     int ajustRow(int _row=-1);
+
+    void borderbottom( const QPoint &_marker,QColor _color );
+    void borderright( const QPoint &_marker,QColor _color );
+    void borderleft( const QPoint &_marker,QColor _color );
+    void bordertop( const QPoint &_marker,QColor _color );
+    void borderoutline( const QPoint &_marker,QColor _color );
+    void borderall( const QPoint &_marker,QColor _color );
+    void borderremove( const QPoint &_marker );
+
+    void insertRightCell( unsigned long int _column );
+    void insertBottomCell(unsigned long int _row);
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
      */
