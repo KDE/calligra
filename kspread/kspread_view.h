@@ -168,6 +168,7 @@ public slots:
     void gotoCell();
     void replace();
     void conditional();
+    void series();
     void sort();
     void createAnchor();
     void consolidate();
@@ -371,6 +372,7 @@ private:
     KAction* m_gotoCell;
     KAction* m_replace;
     KAction* m_conditional;
+    KAction* m_series;
     KAction* m_sort;
     KAction* m_createAnchor;
     KAction* m_consolidate;

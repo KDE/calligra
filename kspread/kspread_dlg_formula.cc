@@ -75,7 +75,9 @@ KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
   QObject::connect( type_formula, SIGNAL( highlighted(const QString &) ), this, SLOT( slotselected(const QString &) ) );
   QObject::connect( formula, SIGNAL( doubleClicked(QListBoxItem *)),this ,SLOT( slotOk() ) );
   resize( 350, 300 );
-
+  slotselected(i18n("All"));
+  type_formula->setCurrentItem(0);
+  formula->setCurrentItem(0);
 }
 
 

@@ -819,6 +819,38 @@ m_pDoc->setModified( true );
     }
 }
 
+void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,Series mode)
+{
+m_pDoc->setModified( true );
+QRect r(_marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+int y = r.top();
+int x = r.left();
+int posx=0;
+int posy=0;
+for ( int incr=start;incr<end;incr=incr+step )
+	{		
+	KSpreadCell *cell = cellAt( x+posx, y+posy );
+		
+	if ( cell == m_pDefaultCell )
+		{
+		cell = new KSpreadCell( this, x+posx, y+posy );
+		int key = y+posy + ( (x+posx) * 0x10000 );
+		m_dctCells.insert( key, cell );
+		}
+	QString tmp;
+	cell->setText(tmp.setNum(incr));
+	    
+	if(mode==Column)	
+	    posy++;
+	else
+	    posx++;
+	    
+	}
+
+}
+
+
 
 void KSpreadTable::setSelectionPercent( const QPoint &_marker )
 {

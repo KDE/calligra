@@ -1782,9 +1782,13 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
     _painter.setPen( m_leftBorderPen );
   // Fix a 'bug' in the pens width setting. We still need the upper left corner
   // of the line but a width > 1 won't work for us.
-  int dx = (int)ceil( (double)( m_leftBorderPen.width() - 1) / 2.0 );
-  int dy = (int)ceil( (double)( m_topBorderPen.width() - 1) / 2.0 );
+  //int dx = (int)ceil( (double)( m_leftBorderPen.width() - 1) / 2.0 );
+  //int dy = (int)ceil( (double)( m_topBorderPen.width() - 1) / 2.0 );
+  //border should be centered on cell grid
+  int dx = 0;
+  int dy = 0;
   _painter.drawLine( _tx + dx, _ty, _tx + dx, _ty + h );
+
   if ( m_topBorderPen.style() == Qt::NoPen )
   	{
     	if(!table()->getShowGrid())
@@ -1911,7 +1915,8 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
     else
   	{
         _painter.setFont( m_textFont );
-	_painter.setPen( m_textPen.color() );
+        m_textPen.setColor(m_textColor );
+	_painter.setPen( m_textPen );
 	}
     //_painter.setFont( m_textFont );
     conditionAlign(_painter,_col,_row);

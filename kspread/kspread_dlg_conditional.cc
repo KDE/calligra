@@ -32,9 +32,7 @@
 #include <qbuttongroup.h>
 #include <qstringlist.h>
 #include <kfontdialog.h>
-
-
-
+#include <knumvalidator.h>
 
 KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const char* name )
 	: QWidget( _parent )
@@ -53,6 +51,16 @@ KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const char* 
   tmplabel->resize( tmplabel->sizeHint() );
   grid2->addWidget(tmplabel,0,0);
 
+  preview=new QLineEdit(gb);
+  preview->resize( preview->sizeHint() );
+
+  preview->setAlignment(AlignCenter);
+  preview->setBackgroundColor(white);
+//  preview->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
+//  preview->setLineWidth( 1 );
+  preview->setText(i18n("Preview"));
+  grid2->addWidget(preview,1,1);
+    
   choose=new QComboBox(gb);
   choose->resize( choose->sizeHint() );
   grid2->addWidget(choose,0,1);
@@ -60,11 +68,13 @@ KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const char* 
   edit1=new QLineEdit(gb);
   edit1->resize( edit1->sizeHint() );
   grid2->addWidget(edit1,0,2);
+  edit1->setValidator( new KFloatValidator( edit1 ) );
 
   edit2=new QLineEdit(gb);
   edit2->resize( edit2->sizeHint() );
   grid2->addWidget(edit2,0,3);
-
+  edit2->setValidator( new KFloatValidator( edit2 ) );
+  
   color=new KColorButton(gb);
   color->resize( color->sizeHint() );
   color->setColor(Qt::black);
@@ -100,7 +110,10 @@ KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const char* 
   edit2->setEnabled(false);
   connect(choose,SIGNAL(highlighted(const QString &)),this,SLOT(changeIndex(const QString &)));
   connect(fontButton,SIGNAL(clicked()),this,SLOT(changeLabelFont()));
-
+ 
+  connect(this,SIGNAL(fontSelected()),
+	  this,SLOT(refreshPreview()));
+  emit(fontSelected());
 }
 
 void KSpreadWidgetconditional::init(KSpreadConditional *tmp)
@@ -163,6 +176,15 @@ switch(tmp->m_cond)
 		break;
 	}
 
+emit(fontSelected());
+}
+
+void KSpreadWidgetconditional::refreshPreview()
+{
+
+  preview->setFont(font);
+//  preview->color(color->color());
+  preview->repaint();
 
 }
 
@@ -170,7 +192,7 @@ void KSpreadWidgetconditional::changeLabelFont()
 {
 if (KFontDialog::getFont( font,true,this ) == QDialog::Rejected )
         return;
-
+emit(fontSelected());
 }
 
 void KSpreadWidgetconditional::changeIndex(const QString &text)
@@ -200,76 +222,18 @@ double KSpreadWidgetconditional::getBackFirstValue()
 {
 QString tmp;
 tmp=edit1->text();
-double val1=0;
-if(edit1->isEnabled())
-        {
-        if(tmp.toInt()!=0 || tmp.toDouble()!=0 )
-                {
-                if(tmp.toDouble())
-	                val1=tmp.toDouble();
-                else
-	                val1=(double)tmp.toInt();
-                }
-
-        }
-
-return val1;
+return (tmp.toDouble()); 
 }
 
 double KSpreadWidgetconditional::getBackSecondValue()
 {
 QString tmp;
 tmp=edit2->text();
-double val2=0;
-if(edit2->isEnabled())
-        {
-        if(tmp.toInt()!=0 || tmp.toDouble()!=0 )
-                {
-                if(tmp.toDouble())
-	                val2=tmp.toDouble();
-                else
-	                val2=(double)tmp.toInt();
-                }
-        }
-return val2;
+return(	tmp.toDouble());
 }
 
 
-bool KSpreadWidgetconditional::firstValueIsGood()
-{
-QString tmp;
-bool stat1=false;
-tmp=edit1->text();
-bool ok1=false;
-bool ok2=false;
-int val;
-double val2;
-if(edit1->isEnabled())
-        {
-        val=tmp.toInt(&ok1);
-        val2=tmp.toDouble(&ok2) ;
-        stat1=(ok1 | ok2);
-        }
-return(stat1);
-}
 
-bool KSpreadWidgetconditional::secondValueIsGood()
-{
-QString tmp;
-bool stat2=false;
-tmp=edit2->text();
-bool ok1=false;
-bool ok2=false;
-int val;
-double val2;
-if(edit2->isEnabled())
-        {
-        val=tmp.toInt(&ok1); 
-        val2=tmp.toDouble(&ok2) ;
-        stat2=(ok1 | ok2);
-        }
-return(stat2);
-}
 
 QColor KSpreadWidgetconditional::getColor()
 {
@@ -319,7 +283,7 @@ KSpreadconditional::KSpreadconditional( KSpreadView* parent, const char* name,co
 {
   m_pView = parent;
   marker=_marker;
-  setCaption( i18n("Conditional") );
+  setCaption( i18n("Relational cell attributes") );
 
   QGridLayout *grid1 = new QGridLayout(this,4,1,15,7);
   firstCond=new KSpreadWidgetconditional(this,i18n("First condition"));
@@ -387,176 +351,84 @@ void KSpreadconditional::slotOk()
 {
 KSpreadConditional tmpCond[3];
 
-bool stat1=false;
-bool stat2=false;
-bool stat3=false;
 if(firstCond->typeOfCondition()!=None)
-        {
-        if(firstCond->firstValueIsGood())
-                {
-                stat1=true;
-                if((firstCond->typeOfCondition()==Between )
-                ||(firstCond->typeOfCondition()==Different))
-                        {
-                        if(firstCond->secondValueIsGood())
-                                stat1=true;
-                        else
-                                stat1=false;
-                        }
-
-                }
+  {
+    tmpCond[0].val1=firstCond->getBackFirstValue();
+    tmpCond[0].fontcond=firstCond->getFont();
+    tmpCond[0].colorcond=firstCond->getColor();
+    tmpCond[0].m_cond=firstCond->typeOfCondition();
+    if((firstCond->typeOfCondition()==Different)||
+       (firstCond->typeOfCondition()==Between))
+      {
+	tmpCond[0].val2=firstCond->getBackSecondValue();
+      }
         else
-                {
-                stat1=false;
+	  tmpCond[0].val2=-1;
+  }
+ else
+   {
+     QFont font( "Times", 12 );
+     tmpCond[0].m_cond=None;
+     tmpCond[0].fontcond=font;
+     tmpCond[0].colorcond=Qt::black;
+     tmpCond[0].val2=0;
+     tmpCond[0].val1=0;
+   }
+ 
+ if(secondCond->typeOfCondition()!=None)
+   {
+     tmpCond[1].val1=secondCond->getBackFirstValue();
+     tmpCond[1].fontcond=secondCond->getFont();
+     tmpCond[1].colorcond=secondCond->getColor();
+     tmpCond[1].m_cond=secondCond->typeOfCondition();
+     if((secondCond->typeOfCondition()==Different)||
+	(secondCond->typeOfCondition()==Between))
+       {
+	 tmpCond[1].val2=secondCond->getBackSecondValue();
+       }
+     else
+       tmpCond[1].val2=-1;
+   }
+ else
+   {
+     QFont font( "Times", 12 );
+     tmpCond[1].m_cond=None;
+     tmpCond[1].fontcond=font;
+     tmpCond[1].colorcond=Qt::black;
+     tmpCond[1].val2=0;
+     tmpCond[1].val1=0;
+   }
+ 
+ if(thirdCond->typeOfCondition()!=None)
+   {
+     tmpCond[2].val1=thirdCond->getBackFirstValue();
+     tmpCond[2].fontcond=thirdCond->getFont();
+     tmpCond[2].colorcond=thirdCond->getColor();
+     tmpCond[2].m_cond=thirdCond->typeOfCondition();
+     if((thirdCond->typeOfCondition()==Different)||
+	(thirdCond->typeOfCondition()==Between))
+       {
+	 tmpCond[2].val2=thirdCond->getBackSecondValue();
+       }
+     else
+       tmpCond[2].val2=-1;
+   }
+ else
+   {
+     QFont font( "Times", 12 );
+     tmpCond[2].m_cond=None;
+     tmpCond[2].fontcond=font;
+     tmpCond[2].colorcond=Qt::black;
+     tmpCond[2].val2=0;
+     tmpCond[2].val1=0;
+   }
+ 
+ m_pView->activeTable()->setConditional( QPoint(  m_pView->canvasWidget()->markerColumn(),
+						  m_pView->canvasWidget()->markerRow() ), tmpCond );
 
-                }
-        }
-else
-        {
-        stat1=true;
-        }
-//second condition
-if(secondCond->typeOfCondition()!=None)
-        {
-        if(secondCond->firstValueIsGood())
-                {
-                stat2=true;
-                if((secondCond->typeOfCondition()==Between )
-                ||(secondCond->typeOfCondition()==Different))
-                        {
-                        if(secondCond->secondValueIsGood())
-                                stat2=true;
-                        else
-                                stat2=false;
-                        }
-
-                }
-        else
-                {
-                stat2=false;
-
-                }
-        }
-else
-        {
-        stat2=true;
-        }
-
-//third condition
-if(thirdCond->typeOfCondition()!=None)
-        {
-        if(thirdCond->firstValueIsGood())
-                {
-                stat3=true;
-                if((thirdCond->typeOfCondition()==Between )
-                ||(thirdCond->typeOfCondition()==Different))
-                        {
-                        if(thirdCond->secondValueIsGood())
-                                stat3=true;
-                        else
-                                stat3=false;
-                        }
-
-                }
-        else
-                {
-                stat3=false;
-
-                }
-        }
-else
-        {
-        stat3=true;
-        }
-
-if(((firstCond->typeOfCondition()!=None)&&stat1==false)||
-        ((secondCond->typeOfCondition()!=None)&&stat2==false)||
-        ((thirdCond->typeOfCondition()!=None)&&stat3==false))
-                {
-                QMessageBox::warning( 0L, i18n("Error"),
-                i18n("There is a value which is not a double !"), i18n("Ok"));
-                }
-        else
-                {
-                //enregister les valeurs : à tester
-                if(firstCond->typeOfCondition()!=None)
-                        {
-                        tmpCond[0].val1=firstCond->getBackFirstValue();
-                        tmpCond[0].fontcond=firstCond->getFont();
-                        tmpCond[0].colorcond=firstCond->getColor();
-                        tmpCond[0].m_cond=firstCond->typeOfCondition();
-                        if((firstCond->typeOfCondition()==Different)||
-                                (firstCond->typeOfCondition()==Between))
-                                {
-                                tmpCond[0].val2=firstCond->getBackSecondValue();
-                                }
-                        else
-                                tmpCond[0].val2=-1;
-                        }
-                else
-                        {
-                        QFont font( "Times", 12 );
-                        tmpCond[0].m_cond=None;
-                        tmpCond[0].fontcond=font;
-                        tmpCond[0].colorcond=Qt::black;
-                        tmpCond[0].val2=0;
-                        tmpCond[0].val1=0;
-                        }
-
-                if(secondCond->typeOfCondition()!=None)
-                        {
-                        tmpCond[1].val1=secondCond->getBackFirstValue();
-                        tmpCond[1].fontcond=secondCond->getFont();
-                        tmpCond[1].colorcond=secondCond->getColor();
-                        tmpCond[1].m_cond=secondCond->typeOfCondition();
-                        if((secondCond->typeOfCondition()==Different)||
-                                (secondCond->typeOfCondition()==Between))
-                                {
-                                tmpCond[1].val2=secondCond->getBackSecondValue();
-                                }
-                        else
-                                tmpCond[1].val2=-1;
-                        }
-                else
-                        {
-                        QFont font( "Times", 12 );
-                        tmpCond[1].m_cond=None;
-                        tmpCond[1].fontcond=font;
-                        tmpCond[1].colorcond=Qt::black;
-                        tmpCond[1].val2=0;
-                        tmpCond[1].val1=0;
-                        }
-
-                if(thirdCond->typeOfCondition()!=None)
-                        {
-                        tmpCond[2].val1=thirdCond->getBackFirstValue();
-                        tmpCond[2].fontcond=thirdCond->getFont();
-                        tmpCond[2].colorcond=thirdCond->getColor();
-                        tmpCond[2].m_cond=thirdCond->typeOfCondition();
-                        if((thirdCond->typeOfCondition()==Different)||
-                                (thirdCond->typeOfCondition()==Between))
-                                {
-                                tmpCond[2].val2=thirdCond->getBackSecondValue();
-                                }
-                        else
-                                tmpCond[2].val2=-1;
-                        }
-                else
-                        {
-                        QFont font( "Times", 12 );
-                        tmpCond[2].m_cond=None;
-                        tmpCond[2].fontcond=font;
-                        tmpCond[2].colorcond=Qt::black;
-                        tmpCond[2].val2=0;
-                        tmpCond[2].val1=0;
-                        }
-
-                m_pView->activeTable()->setConditional( QPoint(  m_pView->canvasWidget()->markerColumn(),
-                m_pView->canvasWidget()->markerRow() ), tmpCond );
-
-                accept();
-                }
-
+ accept();
+ 
+ 
 }
 
 

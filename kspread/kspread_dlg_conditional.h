@@ -27,6 +27,7 @@
 #include <kcolorbtn.h>
 #include <qpushbutton.h>
 #include <qfont.h>
+#include <qlabel.h>
 #include "kspread_cell.h"
 class KSpreadView;
 class KSpreadTable;
@@ -39,8 +40,6 @@ public:
   KSpreadWidgetconditional(QWidget *_parent,const char* name);
   double getBackFirstValue();
   double getBackSecondValue();
-  bool firstValueIsGood();
-  bool secondValueIsGood();
   QFont getFont(){return font;}
   QColor getColor();
   Conditional typeOfCondition();
@@ -48,6 +47,9 @@ public:
 public slots:
   void changeLabelFont();
   void changeIndex(const QString &text);
+  void refreshPreview();
+signals:            
+  void fontSelected();
 protected:
   QComboBox *choose;
   QLineEdit *edit1;
@@ -56,7 +58,7 @@ protected:
   QPushButton *fontButton;
   QFont font;
   KSpreadConditional tmpCond;
-
+  QLineEdit *preview;
 };
 
 class KSpreadconditional : public QDialog

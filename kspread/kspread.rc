@@ -23,6 +23,7 @@
   <Separator/>
   <Action name="createAnchor"/>
   <Action name="conditional"/>
+  <Action name="series"/>
   <Action name="editCell"/>
   <Separator/>
   <Action name="insertChart"/>

@@ -330,3 +330,14 @@ Reduce memory to store condition.
 -----------------------------------------------------
 -Add new function "find"
 -bug fix
+
+2000-03-03 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add new dialog box "Linear Series" =>now you can create linear series
+-Improved kspread_dlg_conditional =>now there is a preview
+But I can't change color because there isn't "setColor" for a QLineEdit 
+bug ? perhaps in QT2.2
+Now I use knumvalidator for QLineEdit
+-Bug fix . Fix bug that Michael Koch reported me in kspread_dlg_formula
+  centered border on cell grid ..
+-Bug fix in KSpread_dlg_conditional.

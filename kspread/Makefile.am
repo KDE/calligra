@@ -25,7 +25,7 @@ libkspread_la_SOURCES = kspread_canvas.cc \
 	kspread_dlg_special.cc kspread_dlg_goto.cc  kspread_dlg_replace.cc \
 	kspread_dlg_sort.cc kspread_dlg_anchor.cc kspread_dlg_conditional.cc\
 	kspread_dlg_resize.cc kspread_factory.cc kspread_handler.cc \
-	kspread_events.cc kspread_dlg_show.cc \
+	kspread_events.cc kspread_dlg_show.cc kspread_dlg_series.cc \
 	kspread_dlg_insert.cc KSpreadDocIface.skel KSpreadMapIface.skel \
 	KSpreadTableIface.skel KSpreadDocIface.cc KSpreadMapIface.cc \
 	KSpreadTableIface.cc KSpreadCellIface.cc KSpreadCellIface.skel \
@@ -44,7 +44,7 @@ noinst_HEADERS = kspread_shell.h kspread_doc.h \
 	kspread_util.h kspread_canvas.h \
 	kspread_editors.h kspread_dlg_tabname.h kspread_dlg_formula.h \
 	kspread_dlg_special.h kspread_dlg_goto.h kspread_dlg_replace.h \
-	kspread_dlg_sort.h kspread_dlg_create.h kspread_dlg_anchor.h kspread_dlg_anchor.h \
+	kspread_dlg_sort.h kspread_dlg_create.h kspread_dlg_anchor.h kspread_dlg_series.h \
 	kspread_dlg_resize.h kspread_factory.h kspread_handler.h \
 	kspread_events.h kspread_global.h  \
 	kspread_dlg_show.h kspread_dlg_insert.h KSpreadViewIface.h \
