@@ -11,6 +11,7 @@
 class QComboBox;
 class QLineEdit;
 class QSpinBox;
+class KColorButton;
 
 class VGradientDlg : public KDialog
 {
@@ -22,11 +23,17 @@ public:
 	int gradientRepeat() const;
 	int gradientType() const;
 	bool gradientFill() const;
+	QColor startColor() const;
+	QColor endColor() const;
 	void setGradientType( int value );
 	void setGradientRepeat( int value );
 	void setGradientFill( bool b );
+	void setStartColor( const QColor &c );
+	void setEndColor( const QColor &c );
 
 private:
+	KColorButton *m_startColor;
+	KColorButton *m_endColor;
 	QComboBox* m_gradientFill;
 	QComboBox* m_gradientRepeat;
 	QComboBox* m_gradientType;

@@ -16,6 +16,7 @@
 #include <qwidget.h>
 
 #include <klocale.h>
+#include <kcolorbutton.h>
 
 #include "vgradientdlg.h"
 
@@ -31,17 +32,21 @@ VGradientDlg::VGradientDlg( QWidget* parent, const char* name )
 	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	outerbox->addWidget( group );
 
+	new QLabel( i18n( "Start color:" ), group );
+	m_startColor = new KColorButton( group );
+	new QLabel( i18n( "End color:" ), group );
+	m_endColor = new KColorButton( group );
 	new QLabel( i18n( "Gradient target:" ), group );
-	m_gradientFill = new QComboBox( false,group );
+	m_gradientFill = new QComboBox( false, group );
 	m_gradientFill->insertItem( i18n( "Stroke" ), 0 );
 	m_gradientFill->insertItem( i18n( "Fill" ), 1 );
 	new QLabel( i18n( "Gradient repeat:" ), group );
-	m_gradientRepeat = new QComboBox( false,group );
+	m_gradientRepeat = new QComboBox( false, group );
 	m_gradientRepeat->insertItem( i18n( "None" ), 0 );
 	m_gradientRepeat->insertItem( i18n( "Reflect" ), 1 );
 	m_gradientRepeat->insertItem( i18n( "Repeat" ), 2 );
 	new QLabel( i18n( "Gradient type:" ), group );
-	m_gradientType = new QComboBox( false,group );
+	m_gradientType = new QComboBox( false, group );
 	m_gradientType->insertItem( i18n( "Linear" ), 0 );
 	m_gradientType->insertItem( i18n( "Radial" ), 1 );
 	m_gradientType->insertItem( i18n( "Conical" ), 2 );
@@ -68,6 +73,18 @@ VGradientDlg::VGradientDlg( QWidget* parent, const char* name )
 	// signals and slots:
 	connect( okbutton, SIGNAL( clicked() ), this, SLOT( accept() ) );
 	connect( cancelbutton, SIGNAL( clicked() ), this, SLOT( reject() ) );
+}
+
+QColor
+VGradientDlg::startColor() const
+{
+	return m_startColor->color();
+}
+
+QColor
+VGradientDlg::endColor() const
+{
+	return m_endColor->color();
 }
 
 int
@@ -104,6 +121,18 @@ void
 VGradientDlg::setGradientFill( bool b )
 {
 	m_gradientFill->setCurrentItem( b );
+}
+
+void
+VGradientDlg::setStartColor( const QColor &c )
+{
+	m_startColor->setColor( c );
+}
+
+void
+VGradientDlg::setEndColor( const QColor &c )
+{
+	m_endColor->setColor( c );
 }
 
 #include "vgradientdlg.moc"

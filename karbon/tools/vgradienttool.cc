@@ -21,6 +21,8 @@ VGradientTool::VGradientTool( KarbonPart* part )
 	m_dialog->setGradientRepeat( gradient_repeat_none );
 	m_dialog->setGradientType( gradient_linear );
 	m_dialog->setGradientFill( 1 );
+	m_dialog->setStartColor( Qt::red );
+	m_dialog->setEndColor( Qt::yellow );
 }
 
 VGradientTool::~VGradientTool()
@@ -84,8 +86,8 @@ VGradientTool::eventFilter( KarbonView* view, QEvent* event )
 		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
 		VGradient gradient;
-		gradient.addStop( VColor( qRgba( 255, 0, 0, 255 ) ), 0.0, 0.5 );
-		gradient.addStop( VColor( qRgba( 255, 255, 0, 255 ) ), 1.0, 0.5 );
+		gradient.addStop( VColor( m_dialog->startColor().rgb() ), 0.0, 0.5 );
+		gradient.addStop( VColor( m_dialog->endColor().rgb() ), 1.0, 0.5 );
 		gradient.setOrigin( fp * ( 1.0 / view->zoom() ) );
 		gradient.setVector( lp * ( 1.0 / view->zoom() ) );
 		gradient.setType( (VGradientType)m_dialog->gradientType() );
