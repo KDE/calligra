@@ -597,9 +597,7 @@ void KWDocument::recalcFrames()
 
         // Create new frames in the main text frameset
         // ( taking into account the header/footer sizes )
-        for ( unsigned int j = 0;
-              j < static_cast<unsigned int>( ceil( static_cast<double>( frms ) /
-                                                   static_cast<double>( m_pageColumns.columns ) ) ); j++ ) {
+        for ( uint j = 0; j < (uint) m_pages; j++ ) {
             if ( j == 0 ) {
                 headOffset = firstHeadOffset;
                 footOffset = firstFootOffset;
