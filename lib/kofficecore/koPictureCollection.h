@@ -86,16 +86,18 @@ public:
      *
      * @param store the store in which to save the pictures
      * @param keys the list of keys corresponding to the pictures to save
+     * @return true on success, false on failure (e.g. disk full)
      */
-    void saveToStore(const Type pictureType, KoStore * store, QValueList<KoPictureKey> keys );
+    bool saveToStore(const Type pictureType, KoStore * store, QValueList<KoPictureKey> keys );
 
     /**
      * Save the used pictures from the collection into the store, however in KOffice 1.1 format
      *
      * @param store the store in which to save the pictures in KOffice 1.1 format
      * @param keys the list of keys corresponding to the pictures to save
+     * @return true on success, false on failure (e.g. disk full)
      */
-    void saveToStoreAsKOffice1Dot1(const Type pictureType, KoStore * store, QValueList<KoPictureKey> keys );
+    bool saveToStoreAsKOffice1Dot1(const Type pictureType, KoStore * store, QValueList<KoPictureKey> keys );
 
     /**
      * Generate the &lt;PICTURES&gt;, &lt;PIXMAPS> or &lt;CLIPARTS> tag, that saves the key and the related
@@ -158,7 +160,7 @@ private:
     /**
      * @internal
      */
-    void saveToStoreInternal(const Type pictureType, KoStore *store,
+    bool saveToStoreInternal(const Type pictureType, KoStore *store,
                              QValueList<KoPictureKey>& keys, const bool koffice11);
 
     class Private;

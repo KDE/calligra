@@ -148,7 +148,7 @@ QString KoPictureCollection::getFileNameAsKOffice1Dot1(const Type pictureType, K
 }
 
 
-void KoPictureCollection::saveToStoreInternal(const Type pictureType, KoStore *store, QValueList<KoPictureKey>& keys, const bool koffice11)
+bool KoPictureCollection::saveToStoreInternal(const Type pictureType, KoStore *store, QValueList<KoPictureKey>& keys, const bool koffice11)
 {
     int counter=0;
     QValueList<KoPictureKey>::Iterator it = keys.begin();
@@ -169,23 +169,27 @@ void KoPictureCollection::saveToStoreInternal(const Type pictureType, KoStore *s
             {
                 KoStoreDevice dev(store);
                 if (koffice11)
-                    c.saveAsKOffice1Dot1(&dev);
+                    if ( !c.saveAsKOffice1Dot1(&dev) )
+                        return false;
                 else
-                    c.save(&dev);
-                store->close();
+                    if ( ! c.save(&dev) )
+                        return false; // e.g. bad image?
+                if ( !store->close() )
+                    return false; // e.g. disk full
             }
         }
     }
+    return true;
 }
 
-void KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, QValueList<KoPictureKey> keys)
+bool KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, QValueList<KoPictureKey> keys)
 {
-    saveToStoreInternal(pictureType,store, keys, false);
+    return saveToStoreInternal(pictureType,store, keys, false);
 }
 
-void KoPictureCollection::saveToStoreAsKOffice1Dot1(const Type pictureType, KoStore *store, QValueList<KoPictureKey> keys)
+bool KoPictureCollection::saveToStoreAsKOffice1Dot1(const Type pictureType, KoStore *store, QValueList<KoPictureKey> keys)
 {
-    saveToStoreInternal(pictureType,store, keys, true);
+    return saveToStoreInternal(pictureType,store, keys, true);
 }
 
 QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &doc, QValueList<KoPictureKey> keys)
