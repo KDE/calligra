@@ -31,8 +31,8 @@ KAboutData * newKivioAboutData()
     KAboutData * aboutData=new KAboutData( "kivio", I18N_NOOP("Kivio"),
                                            version, description, KAboutData::License_GPL,
                                            "theKompany.com - Kivio",0,"www.thekompany.com");
-    aboutData->addAuthor("Dave Marotti","Main author and the original author of Queesio, from which this source is based","lndshark@speakeasy.net");
-    aboutData->addAuthor("Max Judin","GUI widgets","max@thekompany.com");
+    aboutData->addAuthor("Dave Marotti", I18N_NOOP("Main author and the original author of Queesio, from which this source is based"),"lndshark@speakeasy.net");
+    aboutData->addAuthor("Max Judin", I18N_NOOP("GUI widgets"),"max@thekompany.com");
     return aboutData;
 }
 
