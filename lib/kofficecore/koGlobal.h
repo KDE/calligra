@@ -230,6 +230,8 @@ public:
 
     static QStringList listOfLanguage();
     static QString tagOfLanguage( const QString & _lang);
+    static int languageIndexFromTag( const QString &_lang);
+    static QString languageFromTag( const QString &_lang );
 protected:
     KoGlobal(){} // don't use
 private:

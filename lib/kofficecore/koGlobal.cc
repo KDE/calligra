@@ -413,3 +413,17 @@ QString KoGlobal::tagOfLanguage( const QString & _lang)
     }
     return QString::null;
 }
+
+int KoGlobal::languageIndexFromTag( const QString &_lang )
+{
+    return s_languageTag.findIndex( _lang );
+}
+
+QString KoGlobal::languageFromTag( const QString &_lang )
+{
+    int pos = s_languageTag.findIndex( _lang );
+    if ( pos != -1)
+        return s_languageList[ pos ];
+    else
+        return QString::null;
+}
