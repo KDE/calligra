@@ -182,14 +182,14 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
 	// Picture frame
     } else if(frameType==FT_PICTURE) {
-	aspectRatio = new QCheckBox (i18n("Retain origional aspect-ratio"),tab1);
+	aspectRatio = new QCheckBox (i18n("Retain original aspect-ratio"),tab1);
 	grid1->addWidget(aspectRatio,1,0);
 
 	// Text frame
     } else if(frameType==FT_TEXT) {
 
 	// AutoCreateNewFrame policy.
-	endOfFrame = new QGroupBox(i18n("If text is to long for frame:"),tab1);
+	endOfFrame = new QGroupBox(i18n("If text is too long for frame:"),tab1);
 	grid1->addWidget( endOfFrame, 1, 0 );
 
 	eofGrid= new QGridLayout (endOfFrame,4,1,15,7);
