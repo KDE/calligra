@@ -42,6 +42,7 @@
 
 #include <koGlobal.h>
 #include <koStore.h>
+#include <koFilterChain.h>
 
 #include <asciiimport.h>
 #include <asciiimport.moc>
@@ -61,8 +62,8 @@ protected:
 
 K_EXPORT_COMPONENT_FACTORY( libasciiimport, ASCIIImportFactory() );
 
-ASCIIImport::ASCIIImport(KoFilter *parent, const char *name, const QStringList &) :
-                     KoFilter(parent, name) {
+ASCIIImport::ASCIIImport(KoFilter *, const char *, const QStringList &) :
+                     KoFilter() {
 }
 
 void ASCIIImport::prepareDocument(QDomDocument& mainDocument, QDomElement& mainFramesetElement)
@@ -194,25 +195,23 @@ void ASCIIImport::prepareDocument(QDomDocument& mainDocument, QDomElement& mainF
 
 }
 
-bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
-                         const QString& from, const QString& to,
-                         const QString &)
+KoFilter::ConversionStatus ASCIIImport::convert( const QCString& from, const QCString& to )
 {
     if (to!="application/x-kword" || from!="text/plain")
-        return false;
+        return KoFilter::NotImplemented;
 
     AsciiImportDialog* dialog = new AsciiImportDialog();
 
     if (!dialog)
     {
         kdError(30502) << "Dialog has not been created! Aborting!" << endl;
-        return false;
+        return KoFilter::StupidError;
     }
 
     if (!dialog->exec())
     {
         kdError(30502) << "Dialog was aborted! Aborting filter!" << endl;
-        return false;
+        return KoFilter::StupidError;
     }
 
     QTextCodec* codec=dialog->getCodec();
@@ -224,11 +223,11 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
     //int table_no = 0;  // used for table identifiers
     int numLines; // Number of lines of the paragraph
 
-    QFile in(fileIn);
+    QFile in(m_chain->inputFile());
     if(!in.open(IO_ReadOnly)) {
         kdError(30502) << "Unable to open input file!" << endl;
         in.close();
-        return false;
+        return KoFilter::FileNotFound;
     }
 
     QString tbl;  // string for table XML
@@ -244,7 +243,7 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
     {
         kdError(30502) << "Could not create QTextCodec! Aborting" << endl;
         in.close();
-        return false;
+        return KoFilter::StupidError;
     }
 
     kdDebug(30502) << "Charset used: " << codec->name() << endl;
@@ -313,19 +312,17 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
     kdDebug(30502) << mainDocument.toString() << endl;
 #endif
 
-    KoStore out=KoStore(QString(fileOut), KoStore::Write);
-    if(!out.open("root")) {
+    KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
+    if(!out) {
         kdError(30502) << "Unable to open output file!" << endl;
         in.close();
-        out.close();
-        return false;
+        return KoFilter::StorageCreationError;
     }
     QCString cstr=mainDocument.toCString();
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
-    out.write(cstr,cstr.length());
-    out.close();
+    out->writeBlock(cstr,cstr.length());
     in.close();
-    return true;
+    return KoFilter::OK;
 }
 
 void ASCIIImport::processParagraph(QDomDocument& mainDocument,

@@ -18,7 +18,10 @@ libasciiexport_la_SOURCES = asciiexport.cc ExportDialogUI.ui ExportDialog.cc
 
 noinst_HEADERS = asciiimport.h ImportDialog.h asciiexport.h ExportDialog.h
 
-METASOURCES = AUTO
+#METASOURCES = AUTO
+libasciiimport_la_METASOURCES = asciiimport.moc
+
+libasciiexport_la_METASOURCES = asciiexport.moc ExportDialog.moc
 
 service_DATA = kword_ascii_import.desktop kword_ascii_export.desktop
 

@@ -62,10 +62,8 @@ public:
     ASCIIImport(KoFilter *parent, const char *name, const QStringList &);
     ASCIIImport();
     virtual ~ASCIIImport() {}
-    /** filtering :) */
-    virtual bool filter(const QString &fileIn, const QString &fileOut,
-                        const QString &from, const QString &to,
-                        const QString &config=QString::null);
+
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 private: // not yet changed
 #if 0
     void WriteOutTableCell( int table_no, int row, int col, Position *pos,

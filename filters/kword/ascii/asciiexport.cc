@@ -28,6 +28,7 @@
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
+#include <koFilterChain.h>
 
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
@@ -82,7 +83,7 @@ private:
     int  m_counterList; // Counter for te lists
 };
 
-bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& to)
+bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 {
     m_ioDevice=new QFile(filenameOut);
 
@@ -172,7 +173,7 @@ bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& lay
     const ValueListFormatData& paraFormatDataList)
 {
     kdDebug(30502) << "Entering ASCIIWorker::doFullParagraph" << endl;
-    
+
     // As KWord has only one depth of lists, we can process lists very simply.
     if ( layout.counter.numbering == CounterData::NUM_LIST )
     {
@@ -304,20 +305,16 @@ bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& lay
 }
 
 
-ASCIIExport::ASCIIExport(KoFilter *parent, const char *name, const QStringList &) :
-                     KoFilter(parent, name)
+ASCIIExport::ASCIIExport(KoFilter *, const char *, const QStringList &) :
+                     KoFilter()
 {
 }
 
-bool ASCIIExport::filter(const QString  &filenameIn,
-                         const QString  &filenameOut,
-                         const QString  &from,
-                         const QString  &to,
-                         const QString  &param )
+KoFilter::ConversionStatus ASCIIExport::convert( const QCString& from, const QCString& to )
 {
     if ( to != "text/plain" || from != "application/x-kword" )
     {
-        return false;
+        return KoFilter::NotImplemented;
     }
 
     AsciiExportDialog* dialog = new AsciiExportDialog();
@@ -325,13 +322,13 @@ bool ASCIIExport::filter(const QString  &filenameIn,
     if (!dialog)
     {
         kdError(30502) << "Dialog has not been created! Aborting!" << endl;
-        return false;
+        return KoFilter::StupidError;
     }
 
     if (!dialog->exec())
     {
         kdError(30502) << "Dialog was aborted! Aborting filter!" << endl;
-        return false;
+        return KoFilter::StupidError;
     }
 
     ASCIIWorker* worker=new ASCIIWorker();
@@ -340,27 +337,30 @@ bool ASCIIExport::filter(const QString  &filenameIn,
     {
         kdError(30502) << "Cannot create Worker! Aborting!" << endl;
         delete dialog;
-        return false;
+        return KoFilter::StupidError;
     }
 
     worker->setCodec(dialog->getCodec());
     worker->setEndOfLine(dialog->getEndOfLine());
 
     delete dialog;
-    
+
     KWEFKWordLeader* leader=new KWEFKWordLeader(worker);
 
     if (!leader)
     {
         kdError(30502) << "Cannot create Worker! Aborting!" << endl;
         delete worker;
-        return false;
+        return KoFilter::StupidError;
     }
 
-    bool flag=leader->filter(filenameIn,filenameOut,from,to,param);
+    bool flag=leader->filter(m_chain->inputFile(),m_chain->outputFile(),from,to,"");
 
     delete leader;
     delete worker;
 
-    return flag;
+    if ( flag )
+        return KoFilter::OK;
+    else
+        return KoFilter::StupidError;
 }
