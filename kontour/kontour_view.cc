@@ -635,7 +635,7 @@ void KontourView::changeSelection()
   if(page->objectCount() <= 1)
     m_group->setEnabled(false);
   else
-    m_ungroup->setEnabled(true);
+    m_group->setEnabled(true);
   if(page->objectCount() == page->selectionCount())
     m_selectAll->setEnabled(false);
   else
