@@ -12,6 +12,7 @@ noinst_HEADERS = \
 	vcdlg_sinus.h \
 	vcdlg_spiral.h \
 	vcdlg_star.h \
+	vtranslate.h \
 	vtoolcontainer.h
 
 libkarbonui_la_SOURCES = \
@@ -23,6 +24,7 @@ libkarbonui_la_SOURCES = \
 	vcdlg_sinus.cc \
 	vcdlg_spiral.cc \
 	vcdlg_star.cc \
+	vtranslate.cc \
 	vtoolcontainer.cc
 
 
