@@ -95,8 +95,8 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_paperUnit = KoUnit::U_MM;
   m_paperWidth = PG_A4_WIDTH;
   m_paperHeight = PG_A4_HEIGHT;
-  calcPaperSize();
   m_orientation = PG_PORTRAIT;
+  calcPaperSize();
   m_pMap = 0L;
   m_bLoading = false;
 

@@ -62,6 +62,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
 
   m_content = Text;
   m_dataType = StringData; // we use this for empty cells
+  m_dValue = 0.0;
 
   m_iRow = _row;
   m_iColumn = _column;
