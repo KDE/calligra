@@ -1813,90 +1813,104 @@ KWTextParag * KWTextFrameSet::loadOasisText( const QDomElement &bodyElem, KoOasi
     {
         context.styleStack().save();
         QDomElement e = text.toElement();
-        QString name = e.tagName();
+        const QString tagName = e.tagName();
+        const bool textFoo = tagName.startsWith( "text:" );
 
-        if ( name == "text:p" ) {  // text paragraph
-            context.fillStyleStack( e, "text:style-name" );
-
-            KWTextParag *parag = new KWTextParag( textDocument(), lastParagraph );
-            parag->loadOasis( e, context, m_doc->styleCollection() );
-            if ( !lastParagraph )        // First parag
-                textDocument()->setFirstParag( parag );
-            lastParagraph = parag;
-            m_doc->progressItemLoaded(); // ## check
-        }
-        else if ( name == "text:h" ) // heading
+        if ( textFoo )
         {
-            context.fillStyleStack( e, "text:style-name" );
-            int level = e.attribute( "text:level" ).toInt();
-            bool listOK = false;
-            // When a heading is inside a list, it seems that the list prevails.
-            // Example:
-            //    <text:ordered-list text:style-name="Numbering 1">
-            //      <text:list-item text:start-value="5">
-            //        <text:h text:style-name="P2" text:level="4">The header</text:h>
-            // where P2 has list-style-name="something else"
-            // Result: the numbering of the header follows "Numbering 1".
-            // So we use the style for the outline level only if we're not inside a list:
-            //if ( !context.atStartOfListItem() )
-            // === The new method for this is that we simply override it in parseList, afterwards.
-            listOK = context.pushOutlineListLevelStyle( level );
-            int restartNumbering = -1;
-            if ( e.hasAttribute( "text:start-value" ) )
-                // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
-                restartNumbering = e.attribute( "text:start-value" ).toInt();
+            if ( tagName == "text:p" ) {  // text paragraph
+                context.fillStyleStack( e, "text:style-name" );
 
-            KWTextParag *parag = new KWTextParag( textDocument(), lastParagraph );
-            parag->loadOasis( e, context, m_doc->styleCollection() );
-            if ( !lastParagraph )        // First parag
-                textDocument()->setFirstParag( parag );
-            lastParagraph = parag;
-            if ( listOK ) {
-                parag->applyListStyle( context, restartNumbering, true /*ordered*/, true /*heading*/, level );
-                context.listStyleStack().pop();
+                KWTextParag *parag = new KWTextParag( textDocument(), lastParagraph );
+                parag->loadOasis( e, context, m_doc->styleCollection() );
+                if ( !lastParagraph )        // First parag
+                    textDocument()->setFirstParag( parag );
+                lastParagraph = parag;
+                m_doc->progressItemLoaded(); // ## check
+            }
+            else if ( tagName == "text:h" ) // heading
+            {
+                context.fillStyleStack( e, "text:style-name" );
+                int level = e.attribute( "text:level" ).toInt();
+                bool listOK = false;
+                // When a heading is inside a list, it seems that the list prevails.
+                // Example:
+                //    <text:ordered-list text:style-name="Numbering 1">
+                //      <text:list-item text:start-value="5">
+                //        <text:h text:style-name="P2" text:level="4">The header</text:h>
+                // where P2 has list-style-name="something else"
+                // Result: the numbering of the header follows "Numbering 1".
+                // So we use the style for the outline level only if we're not inside a list:
+                //if ( !context.atStartOfListItem() )
+                // === The new method for this is that we simply override it in parseList, afterwards.
+                listOK = context.pushOutlineListLevelStyle( level );
+                int restartNumbering = -1;
+                if ( e.hasAttribute( "text:start-value" ) )
+                    // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
+                    restartNumbering = e.attribute( "text:start-value" ).toInt();
+
+                KWTextParag *parag = new KWTextParag( textDocument(), lastParagraph );
+                parag->loadOasis( e, context, m_doc->styleCollection() );
+                if ( !lastParagraph )        // First parag
+                    textDocument()->setFirstParag( parag );
+                lastParagraph = parag;
+                if ( listOK ) {
+                    parag->applyListStyle( context, restartNumbering, true /*ordered*/, true /*heading*/, level );
+                    context.listStyleStack().pop();
+                }
+            }
+            else if ( tagName == "text:unordered-list" || tagName == "text:ordered-list" // OOo-1.1
+                      || tagName == "text:list" )  // OASIS
+            {
+                lastParagraph = loadList( e, context, lastParagraph );
+                context.styleStack().restore();
+                continue;
+            }
+            else if ( tagName == "text:section" ) // Provisory support (###TODO)
+            {
+                kdDebug(32002) << "Section found!" << endl;
+                context.fillStyleStack( e, "text:style-name" );
+                lastParagraph = loadOasisText( e, context, lastParagraph );
+            }
+            else if ( tagName == "text:variable-decls" )
+            {
+                // We don't parse variable-decls since we ignore var types right now
+                // (and just storing a list of available var names wouldn't be much use)
+            }
+#if 0 // TODO
+            else if ( tagName == "text:table-of-content" )
+            {
+                appendTOC( e );
+            }
+#endif
+            // TODO text:sequence-decls
+            else
+            {
+                kdWarning(32002) << "Unsupported body element '" << tagName << "'" << endl;
             }
         }
-        else if ( name == "text:unordered-list" || name == "text:ordered-list" // OOo-1.1
-                  || name == "text:list" )  // OASIS
+        else // not text:
         {
-            lastParagraph = loadList( e, context, lastParagraph );
-            context.styleStack().restore();
-            continue;
-        }
-        else if ( name == "text:section" ) // Provisory support (###TODO)
-        {
-            kdDebug(32002) << "Section found!" << endl;
-            context.fillStyleStack( e, "text:style-name" );
-            lastParagraph = loadOasisText( e, context, lastParagraph );
-        }
+            if ( tagName == "draw:image" )
+            {
+                KWFrameSet* fs = new KWPictureFrameSet( m_doc, e, context );
+                m_doc->addFrameSet( fs, false );
+            }
 #if 0
-        else if ( name == "table:table" )
-        {
-            kdDebug(32002) << "Table found!" << endl;
-            parseTable( e, currentFramesetElement );
-        }
-        else if ( name == "draw:image" )
-        {
-            appendPicture( e );
-        }
-        else if ( name == "draw:text-box" )
-        {
-            appendTextBox( e );
-        }
-        else if ( name == "text:variable-decls" )
-        {
-            // We don't parse variable-decls since we ignore var types right now
-            // (and just storing a list of available var names wouldn't be much use)
-        }
-        else if ( name == "text:table-of-content" )
-        {
-            appendTOC( e );
-        }
+            if ( tagName == "table:table" )
+            {
+                kdDebug(32002) << "Table found!" << endl;
+                parseTable( e, currentFramesetElement );
+            }
+            else if ( tagName == "draw:text-box" )
+            {
+                appendTextBox( e );
+            }
 #endif
-        // TODO text:sequence-decls
-        else
-        {
-            kdWarning(32002) << "Unsupported body element '" << name << "'" << endl;
+            else
+            {
+                kdWarning(32002) << "Unsupported body element '" << tagName << "'" << endl;
+            }
         }
 
         context.styleStack().restore(); // remove the styles added by the paragraph or list

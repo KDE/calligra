@@ -65,7 +65,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                                   QString& textData, KoTextCustomItem* & /*customItem*/ )
 {
     const QString tagName( tag.tagName() );
-    bool textFoo = tagName.startsWith( "text:" );
+    const bool textFoo = tagName.startsWith( "text:" );
     kdDebug() << k_funcinfo << tagName << endl;
 
     if ( textFoo )
