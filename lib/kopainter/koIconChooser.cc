@@ -30,7 +30,7 @@
 #include <kdebug.h>
 
 KoPixmapWidget::KoPixmapWidget(const QPixmap &aPixmap, QWidget *parent, const char *name):
-QFrame(parent, name, WStyle_Customize | WStyle_NoBorder)
+QFrame(parent, name, WStyle_Customize | WStyle_NoBorder | WType_Dialog)
 {
   setFrameStyle(QFrame::WinPanel | QFrame::Raised);
   mPixmap = aPixmap;
@@ -91,6 +91,7 @@ KoIconChooser::~KoIconChooser()
 void KoIconChooser::addItem(KoIconItem *item)
 {
   Q_INT32 n = mItemCount;
+  KoIconItem *current = currentItem();
 
   Q_ASSERT(item);
 
@@ -111,6 +112,7 @@ void KoIconChooser::addItem(KoIconItem *item)
 
   if (mSort)
   {
+    setCurrentItem(current);
     updateContents();
   }
   else
@@ -163,8 +165,10 @@ void KoIconChooser::setCurrentItem(KoIconItem *item)
     mCurCol = index % mNCols;
 
     // repaint the old and the new item
-    updateCell(oldRow, oldCol);
-    updateCell(mCurRow, mCurCol);
+    repaintCell(oldRow, oldCol);
+    repaintCell(mCurRow, mCurCol);
+
+    ensureCellVisible(mCurRow, mCurCol);
   }
 }
 
@@ -193,15 +197,7 @@ void KoIconChooser::mousePressEvent(QMouseEvent *e)
         if(pix.width() > mItemWidth || pix.height() > mItemHeight)
           showFullPixmap(pix, p);
 
-        int oldRow = mCurRow;
-        int oldCol = mCurCol;
-
-        mCurRow = row;
-        mCurCol = col;
-
-        updateCell(oldRow, oldCol);
-        updateCell(mCurRow, mCurCol);
-
+        setCurrentItem(item);
         emit selected( item );
       }
     }
@@ -378,7 +374,7 @@ void KoIconChooser::calculateCells()
 // show the full pixmap of a large item in an extra widget
 void KoIconChooser::showFullPixmap(const QPixmap &pix, const QPoint &/*p*/)
 {
-  mPixmapWidget = new KoPixmapWidget(pix, 0L);
+  mPixmapWidget = new KoPixmapWidget(pix, this);
 }
 
 int KoIconChooser::sortInsertionIndex(const KoIconItem *item)
