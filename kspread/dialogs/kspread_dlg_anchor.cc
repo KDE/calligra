@@ -96,7 +96,7 @@ void KSpreadLinkDlg::setCellText( const QString &_text )
 
     KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),m_pView->canvasWidget()->markerRow() );
 
-    if ( !cell->isDefault() )
+    if ( !cell->isEmpty() )
       {
 	int ret = KMessageBox::warningYesNo( this, i18n( "Cell is not empty.\nDo you want to continue?" ) );
 	if ( ret == 4 )
