@@ -310,6 +310,7 @@ public slots:
     void insertSeries();
     void sort();
     void insertHyperlink();
+    void removeHyperlink();
     void goalSeek();
     void multipleOperations();
     void subtotals();

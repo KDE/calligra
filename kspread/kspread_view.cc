@@ -555,6 +555,7 @@ public:
     KAction* autoSum;
     KSelectAction* formulaSelection;
     KAction* insertLink;
+    KAction* removeLink;
     KAction* consolidate;
     KAction* goalSeek;
     KAction* subTotals;
@@ -971,6 +972,10 @@ void ViewPrivate::initActions()
       0, view, SLOT( insertHyperlink() ), ac, "insertHyperlink" );
   actions->insertLink->setToolTip(i18n("Insert an Internet hyperlink."));
 
+  actions->removeLink = new KAction( i18n("&Remove Link"),
+      0, view, SLOT( removeHyperlink() ), ac, "removeHyperlink" );
+  actions->removeLink->setToolTip(i18n("Remove a link."));
+  
   actions->insertSpecialChar = new KAction( i18n( "S&pecial Character..." ), "char",
       view, SLOT( insertSpecialChar() ), ac, "insertSpecialChar" );
   actions->insertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
@@ -4305,6 +4310,21 @@ void KSpreadView::sort()
 
     KSpreadSortDlg dlg( this, "Sort" );
     dlg.exec();
+}
+
+void KSpreadView::removeHyperlink()
+{
+    QPoint marker( selectionInfo()->marker() );
+    KSpreadCell * cell = d->activeSheet->cellAt( marker );
+    if( !cell ) return;    
+    if( cell->link().isEmpty() ) return;
+    
+    LinkCommand* command = new LinkCommand( cell, QString::null, QString::null );
+    d->doc->addCommand( command );
+    command->execute();
+    
+	canvasWidget()->setFocus();
+	editWidget()->setText( cell->text() );
 }
 
 void KSpreadView::insertHyperlink()

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="24">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="25">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -31,6 +31,7 @@
         <Action name="clearconditional"/>
   </Menu>
   <Action name="delete"/>
+  <Action name="removeHyperlink"/>
   <Separator/>
   <Action name="conditional"/>
   <Action name="validity"/>

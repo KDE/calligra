@@ -544,7 +544,8 @@ void LinkCommand::execute()
 {
   if( !cell ) return;
   
-  cell->setCellText( newText );
+  if( !newText.isEmpty() )
+    cell->setCellText( newText );
   cell->setLink( newLink  );
   
   doc->addDamage( new CellDamage( cell ) );
@@ -562,6 +563,6 @@ void LinkCommand::unexecute()
 
 QString LinkCommand::name() const
 {
-  return i18n("Set Link");
+  return newLink.isEmpty() ? i18n("Remove Link") : i18n("Set Link");
 }
 
