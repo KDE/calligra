@@ -76,11 +76,11 @@ class TagProcessing
         void    *data;
 };
 
-void ProcessSubtags     ( QDomNode                   parentNode,
+void ProcessSubtags     ( const QDomNode             &parentNode,
                           QValueList<TagProcessing>  &tagProcessingList,
                           KWEFKWordLeader            *leader);
 
-void AllowNoSubtags ( QDomNode myNode, KWEFKWordLeader *leader );
+void AllowNoSubtags ( const QDomNode& myNode, KWEFKWordLeader *leader );
 
 
 /**
@@ -154,9 +154,9 @@ public:
     void     *data;
 };
 
-void ProcessAttributes ( QDomNode                     myNode,
+void ProcessAttributes ( const QDomNode              &myNode,
                          QValueList<AttrProcessing>  &attrProcessingList );
 
-void AllowNoAttributes ( QDomNode  myNode );
+void AllowNoAttributes ( const QDomNode& myNode );
 
 #endif

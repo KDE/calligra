@@ -38,9 +38,10 @@
 #include <kdebug.h>
 #include <qdom.h>
 
-#include <TagProcessing.h>
+#include "TagProcessing.h"
 
-//#define DEBUG_KWORD_TAGS
+#define DEBUG_KWORD_TAGS
+// #define DEBUG_KWORD_IGNORED_TAGS
 
 
 // The class TagProcessing and the two functions ProcessSubtags () and
@@ -51,7 +52,7 @@
 // call the corresponding processing function, and do all the
 // necessary error handling.
 
-void ProcessSubtags ( QDomNode                   parentNode,
+void ProcessSubtags ( const QDomNode             &parentNode,
                       QValueList<TagProcessing>  &tagProcessingList,
                       KWEFKWordLeader            *leader)
 {
@@ -79,10 +80,10 @@ void ProcessSubtags ( QDomNode                   parentNode,
                     {
                         ((*tagProcessingIt).processor) ( childNode, (*tagProcessingIt).data, leader );
                     }
-#ifdef DEBUG_KWORD_TAGS
+#ifdef DEBUG_KWORD_IGNORED_TAGS
                     else
                     {
-                        kdWarning (30508) << "Ignoring " << childNode.nodeName ()
+                        kdDebug(30520) << "Ignoring " << childNode.nodeName ()
                             << " tag in " << parentNode.nodeName () << endl;
                     }
 #endif
@@ -102,7 +103,7 @@ void ProcessSubtags ( QDomNode                   parentNode,
 
 #ifdef DEBUG_KWORD_TAGS
 // Version for debugging (process all sub tags)
-void AllowNoSubtags ( QDomNode myNode, KWEFKWordLeader *leader )
+void AllowNoSubtags ( const QDomNode& myNode, KWEFKWordLeader *leader )
 {
     QString outputText;
     QValueList<TagProcessing> tagProcessingList;
@@ -110,7 +111,7 @@ void AllowNoSubtags ( QDomNode myNode, KWEFKWordLeader *leader )
 }
 #else
 // Normal version: no subtags expected, so do not search any!
-void AllowNoSubtags ( QDomNode, KWEFKWordLeader* )
+void AllowNoSubtags ( const QDomNode&, KWEFKWordLeader* )
 {
 }
 #endif
@@ -144,7 +145,7 @@ AttrProcessing::AttrProcessing ( const QString& n, const QString& t, void *d )
 }
 
 
-void ProcessAttributes ( QDomNode                     myNode,
+void ProcessAttributes ( const QDomNode              &myNode,
                          QValueList<AttrProcessing>  &attrProcessingList )
 {
     //kdDebug(30508) << "Starting ProcessAttributes for node: " << myNode.nodeName() << endl;
@@ -223,10 +224,10 @@ void ProcessAttributes ( QDomNode                     myNode,
                             }
                         }
                     }
-#ifdef DEBUG_KWORD_TAGS
+#ifdef DEBUG_KWORD_IGNORED_TAGS
                     else
                     {
-                        kdWarning(30508) << "Ignoring " << myNode.nodeName()
+                        kdDebug(30520) << "Ignoring " << myNode.nodeName()
                             << " attribute " << (*attrProcessingIt).name
                             << endl;
                     }
@@ -247,14 +248,14 @@ void ProcessAttributes ( QDomNode                     myNode,
 
 #ifdef DEBUG_KWORD_TAGS
 // Version for debugging (process all attributes)
-void AllowNoAttributes ( QDomNode  myNode )
+void AllowNoAttributes ( const QDomNode & myNode )
 {
     QValueList<AttrProcessing> attrProcessingList;
     ProcessAttributes (myNode, attrProcessingList);
 }
 #else
 // Normal version: no attributes expected, so do not process any!
-void AllowNoAttributes ( QDomNode )
+void AllowNoAttributes ( const QDomNode & )
 {
 }
 #endif
