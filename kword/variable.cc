@@ -27,8 +27,6 @@
 #include "serialletter.h"
 
 #include <klocale.h>
-#include <kconfig.h>
-#include <kglobal.h>
 #include <kdebug.h>
 
 QString KWVariableDateFormat::convert( const QDate & date ) const

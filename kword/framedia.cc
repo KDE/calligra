@@ -18,7 +18,6 @@
 */
 
 #include "kwdoc.h"
-#include "kwframe.h"
 #include "kwtextframeset.h"
 #include "framedia.h"
 #include "framedia.moc"
@@ -28,25 +27,18 @@
 #include <kotextdocument.h>
 
 #include <klocale.h>
-#include <kapplication.h>
 #include <kiconloader.h>
-#include <kglobal.h>
 
 #include <qlineedit.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qlayout.h>
 #include <qlabel.h>
-#include <qgroupbox.h>
-#include <qpixmap.h>
 #include <qradiobutton.h>
-#include <qevent.h>
 #include <qlistview.h>
 #include <qbuttongroup.h>
 #include <qhbox.h>
 #include <qheader.h>
 #include <kmessagebox.h>
-#include <qvalidator.h>
 #include <knumvalidator.h>
 #include <kcolorbutton.h>
 

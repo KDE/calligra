@@ -22,7 +22,6 @@
 #include "serialletter_classicplugin.moc"
 #include "serialletter.h"
 #include <klineeditdlg.h>
-#include <qdom.h>
 
 #define KWSLCPBarIcon( x ) BarIcon( x, db->KWInstance() )
 

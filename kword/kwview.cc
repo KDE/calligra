@@ -58,27 +58,18 @@
 #include "koInsertLink.h"
 
 #include <koMainWindow.h>
-#include <koDocument.h>
-#include <koRuler.h>
-#include <koTabChooser.h>
 #include <koTemplateCreateDia.h>
 #include <koPartSelectAction.h>
 #include <koFrame.h>
 #include <kotextobject.h>
 
 #include <ktempfile.h>
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kstdaction.h>
 #include <klocale.h>
-#include <qrect.h>
 #undef Bool
 #include <kspell.h>
-#include <kcolordialog.h>
-#include <kiconloader.h>
-#include <kglobal.h>
-#include <kimageio.h>
 #include <tkcoloractions.h>
 #include <kstandarddirs.h>
 #include <kparts/event.h>

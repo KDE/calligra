@@ -24,26 +24,11 @@
 #include "defs.h"
 #include <koFontDia.h>
 
-#include <qwidget.h>
 #include <qtabwidget.h>
-#include <qlistbox.h>
 #include <qpushbutton.h>
-#include <qlayout.h>
-#include <qgroupbox.h>
-#include <qfont.h>
-#include <qcolor.h>
-#include <qlineedit.h>
 #include <qlabel.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qbrush.h>
-#include <qstrlist.h>
 #include <qcombobox.h>
-#include <qcheckbox.h>
 
-#include <kbuttonbox.h>
-#include <kapplication.h>
-#include <kcolordialog.h>
 #include <klocale.h>
 #include <kwtextdocument.h>
 #include <kiconloader.h>

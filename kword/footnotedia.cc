@@ -17,14 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kwdoc.h"
 #include "kwcanvas.h"
 #include "footnotedia.h"
 #include "footnotedia.moc"
 #include "footnote.h"
 
-#include <qptrlist.h>
-#include <qwidget.h>
 #include <qlabel.h>
 
 #include <klocale.h>

@@ -22,7 +22,6 @@
 #include "kwanchor.h"
 #include "kwtextimage.h"
 #include "kwtextframeset.h"
-#include "kwviewmode.h"
 #include "variable.h"
 #include <koparagcounter.h>
 #include <klocale.h>

@@ -19,7 +19,6 @@
 
 #include "serialletter_qtsqlplugin.h"
 //#include "serialletter_qtsqlplugin.moc"
-#include <qdom.h>
 
 #define KWQTSQLBarIcon( x ) BarIcon( x, db->KWInstance() )
 
