@@ -36,7 +36,7 @@ class KexiTableItem;
 class KexiTableViewData;
 class KexiRecordMarker;
 class KexiRecordNavigator;
-class KexiDataItemInterface;
+#include <kexidataiteminterface.h>
 
 namespace KexiDB {
 	class RowEditBuffer;
@@ -497,7 +497,8 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 If you reimplement this method, don't forget to call this one. */
 		virtual void clearVariables();
 
-		/*! Internal: creates editor structure without filling it with data.
+		/*! @internal 
+		 Creates editor structure without filling it with data.
 		 Used in createEditor() and few places to be able to display cell contents 
 		 dependending on its type. If \a ignoreMissingEditor is false (the default),
 		 and editor cannot be instantiated, current row editing (if present) is cancelled.
