@@ -113,6 +113,7 @@ QString OOWriterWorker::escapeOOText(const QString& strText) const
 
 QString OOWriterWorker::escapeOOSpan(const QString& strText) const
 // We need not only to escape the classical XML stuff but also to take care of spaces and tabs.
+// ### FIXME: be careful of bordercases like <tag> </tag>  or <tag> <tag2/> </tag>
 {
     QString strReturn;
     QChar ch;
@@ -910,7 +911,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
     return strElement.stripWhiteSpace(); // Remove especially trailing spaces
 }
 
-#undef ALLOW_TABLE
+#define ALLOW_TABLE
 
 #ifdef ALLOW_TABLE
 // ### TODO: make it a member of OOWriterWorker (when table support will work)
@@ -989,7 +990,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 
     // ### TODO: automatic styles
 
-    *m_streamOut << "<table:row>\n";
+    *m_streamOut << "<table:table-row>\n";
     int rowCurrent = 0;
 
 
@@ -1002,8 +1003,8 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         if ( rowCurrent != (*itCell).row )
         {
             rowCurrent = (*itCell).row;
-            *m_streamOut << "</table:row>\n";
-            *m_streamOut << "<table:row>\n";
+            *m_streamOut << "</table:table-row>\n";
+            *m_streamOut << "<table:table-row>\n";
         }
 
         const QString automaticCellStyle ( makeAutomaticStyleName( tableName + ".Cell", cellNumber ) );
@@ -1031,9 +1032,9 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         *m_streamOut << "</table:table-cell>\n";
     }
 
-    *m_streamOut << "</table:row>\n";
+    *m_streamOut << "</table:table-row>\n";
     *m_streamOut << "</table:table>\n";
-    *m_streamOut << "<text:p>\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
+    *m_streamOut << "<text:p text:style-name=\"Standard\">\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
 #endif
     return true;
 }
