@@ -225,11 +225,13 @@ void Document::Attributes::rewriteField(
         kdDebug(s_area) << "Document::rewriteField: missing separator" << endl;
         m_field.separator = m_field.end;
     }
-    kdDebug(s_area) << "Document::rewriteField: before: " << text << endl;
+    //kdDebug(s_area) << "Document::rewriteField: before: " << text << endl;
     unsigned lhsLength = chpxs[m_field.separator].startFc - chpxs[m_field.start].startFc + 1;
     unsigned rhsLength = chpxs[m_field.end].startFc - chpxs[m_field.separator].startFc;
     unsigned run;
     int length;
+    int adjusted;
+    int adjustment;
     QString newLhs;
     QString newRhs;
 
@@ -256,12 +258,16 @@ void Document::Attributes::rewriteField(
         run = m_field.start;
         text.replace(chpxs[run].startFc, lhsLength, newLhs);
         length = lhsLength - newLhs.length();
-        chpxs[run].endFc -= length;
+        adjustment = QMIN(length, chpxs[run].endFc - chpxs[run].startFc);
+        chpxs[run].endFc -= adjustment;
+        adjusted = adjustment;
         run++;
         while (run < chpxs.size())
         {
-            chpxs[run].startFc -= length;
-            chpxs[run].endFc -= length;
+            adjustment = QMIN(length - adjusted, chpxs[run].endFc - chpxs[run].startFc);
+            chpxs[run].startFc -= adjusted;
+            adjusted += adjustment;
+            chpxs[run].endFc -= adjusted;
             run++;
         }
     }
@@ -270,18 +276,22 @@ void Document::Attributes::rewriteField(
 
     {
         run = m_field.separator;
-        text.replace(chpxs[run].startFc + 1, rhsLength, newRhs);
+        text.replace(chpxs[run].startFc, rhsLength, newRhs);
         length = rhsLength - newRhs.length();
-        chpxs[run].endFc -= length;
+        adjustment = QMIN(length - adjusted, chpxs[run].endFc - chpxs[run].startFc);
+        chpxs[run].endFc -= adjustment;
+        adjusted = adjustment;
         run++;
         while (run < chpxs.size())
         {
-            chpxs[run].startFc -= length;
-            chpxs[run].endFc -= length;
+            adjustment = QMIN(length - adjusted, chpxs[run].endFc - chpxs[run].startFc);
+            chpxs[run].startFc -= adjusted;
+            adjusted += adjustment;
+            chpxs[run].endFc -= adjusted;
             run++;
         }
     }
-    kdDebug(s_area) << "Document::rewriteField: after: " << text << endl;
+    //kdDebug(s_area) << "Document::rewriteField: after: " << text << endl;
 }
 
 const QValueList<KSharedPtr<Document::Run> > &Document::Attributes::runs() const
@@ -334,6 +344,7 @@ void Document::Attributes::setRuns(
     } specialChars;
     CHPXarray chpxs = originalChpxs;
     unsigned runs;
+    QValueList<KSharedPtr<Run> > tmpRuns;
     unsigned i;
 
     runs = chpxs.size();
@@ -528,7 +539,20 @@ void Document::Attributes::setRuns(
             format->values = new Properties(exceptionStyle);
             run = format;
         }
-        m_runs.append( KSharedPtr<Run>( run ) );
+        tmpRuns.append( KSharedPtr<Run>( run ) );
+    }
+
+    // Deal with the effects of rewriteField() in case it modified a run (or
+    // even set it to zero length!) after it was created.
+
+    for (i = 0; i < runs; i++)
+    {
+        if (chpxs[i].startFc != chpxs[i].endFc)
+        {
+            tmpRuns[i]->start = chpxs[i].startFc;
+            tmpRuns[i]->end = chpxs[i].endFc;
+            m_runs.append(tmpRuns[i]);
+        }
     }
 
     // Paragraphs end with a control character that we want to suppress.
@@ -536,10 +560,18 @@ void Document::Attributes::setRuns(
     unsigned length = text.length() - 1;
     QChar last = text[length];
 
+    runs = m_runs.count();
     if ((last == QChar('\r')) ||
         (last == QChar('\a')))
     {
         text.truncate(length);
-        m_runs[chpxs.size()-1]->end--;
+        m_runs[runs - 1]->end--;
+
+        // Trim the final run if required.
+
+        if (m_runs[runs - 1]->start == m_runs[runs - 1]->end)
+        {
+            m_runs.remove(m_runs.last());
+        }
     }
 }
