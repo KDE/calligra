@@ -16,7 +16,7 @@ libkexicore_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) -Wnounresolved -no-undefi
 SUBDIRS = .
 
 libkexicore_la_LIBADD = $(LIB_KEXI_KMDI) \
-	../kexidb/libkexidb.la
+	../kexidb/libkexidb.la ../kexidb/parser/libkexidbparser.la
 
 INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/lib/kofficeui \
