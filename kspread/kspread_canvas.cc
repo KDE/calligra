@@ -1176,9 +1176,11 @@ void KSpreadCanvas::drawCell( QPainter &painter, KSpreadCell *_cell, int _col, i
  *
  ****************************************************************/
 
-KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas ) 
+KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view)
     : QWidget( _parent, "", WNorthWestGravity )
 {
+
+  m_pView = _view;
   m_pCanvas = _canvas;
 
   setBackgroundColor( lightGray );
@@ -1234,7 +1236,15 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     selection.setCoords( 1, hit_row, 0x7FFF, hit_row );
     update();
     table->setSelection( selection, m_pCanvas );
+
+    if ( _ev->button() == RightButton )
+  	{
+	QPoint p = mapToGlobal( _ev->pos() );
+    	m_pView->PopupMenuRow( p );
+  	m_bSelection=FALSE;
+  	}
   }
+
 }
 
 void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
@@ -1406,9 +1416,10 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
  *
  ****************************************************************/
 
-KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas ) 
+KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpreadView *_view )
     : QWidget( _parent, "", WNorthWestGravity )
 {
+  m_pView = _view;
   m_pCanvas = _canvas;
 
   setBackgroundColor( lightGray );
@@ -1460,6 +1471,12 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     QRect r;
     r.setCoords( hit_col, 1, hit_col, 0x7FFF );
     table->setSelection( r, m_pCanvas );
+    if ( _ev->button() == RightButton )
+  	{
+	QPoint p = mapToGlobal( _ev->pos() );
+    	m_pView->PopupMenuColumn( p );
+  	m_bSelection=FALSE;
+  	}
   }
 }
 

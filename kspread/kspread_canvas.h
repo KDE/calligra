@@ -291,8 +291,8 @@ class KSpreadHBorder : public QWidget
 {
     Q_OBJECT
 public:
-    KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas );
-    
+    KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view  );
+    int markerColumn(){return  m_iSelectionAnchor;}
 protected:
     virtual void paintEvent ( QPaintEvent* _ev ); 
     virtual void mousePressEvent( QMouseEvent* _ev );
@@ -300,7 +300,7 @@ protected:
     virtual void mouseMoveEvent( QMouseEvent* _ev );
 
     KSpreadCanvas *m_pCanvas;
-
+    KSpreadView *m_pView;
     /**
      * Flag that inidicates wether the user wants to mark columns.
      * The user may mark columns by dragging the mouse around in th XBorder widget.
@@ -341,8 +341,8 @@ class KSpreadVBorder : public QWidget
 {
     Q_OBJECT
 public:
-    KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas );
-    
+    KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view );
+    int markerRow(){return  m_iSelectionAnchor;}
 protected:
     virtual void paintEvent ( QPaintEvent* _ev ); 
     virtual void mousePressEvent( QMouseEvent* _ev );
@@ -350,7 +350,7 @@ protected:
     virtual void mouseMoveEvent( QMouseEvent* _ev );
 
     KSpreadCanvas *m_pCanvas;
-
+    KSpreadView *m_pView;
     bool m_bSelection;
     int m_iSelectionAnchor;
     bool m_bResize;

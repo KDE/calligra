@@ -124,7 +124,9 @@ public:
     KSpreadTable* activeTable() { return m_pTable; }   
 
     void openPopupMenu( const QPoint &_global );
-  
+
+    void PopupMenuRow(const QPoint & _point ) ;
+    void PopupMenuColumn( const QPoint & _point);
     /**
      * Used by @ref KSpreadEditWidget. Sets the text of the active cell.
      */
@@ -384,6 +386,14 @@ protected slots:
      */
     void slotScrollToLastTable();
 
+    void slotInsertRow();
+
+    void slotRemoveRow();
+
+    void slotInsertColumn();
+
+    void slotRemoveColumn();
+
 public slots:
     // Document signals
     void slotUnselect( KSpreadTable *_table, const QRect& _old );
@@ -509,7 +519,9 @@ protected:
      */
     QPopupMenu *m_pPopupMenu;
     int m_popupMenuFirstToolId;
- 
+
+    QPopupMenu *m_pPopupRow;
+    QPopupMenu *m_pPopupColumn;
     /**
      * Tells wether the user modfied the current cell.
      * Some key events are passed to the @ref EditWindow. When this flag is set and you

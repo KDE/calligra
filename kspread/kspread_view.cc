@@ -141,8 +141,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   // The widget on which we display the table
   m_pCanvas = new KSpreadCanvas( m_pFrame, this, _doc );
 
-  m_pHBorderWidget = new KSpreadHBorder( m_pFrame, m_pCanvas );
-  m_pVBorderWidget = new KSpreadVBorder( m_pFrame, m_pCanvas );
+  m_pHBorderWidget = new KSpreadHBorder( m_pFrame, m_pCanvas,this );
+  m_pVBorderWidget = new KSpreadVBorder( m_pFrame, m_pCanvas ,this );
 
   m_pCanvas->setFocusPolicy( QWidget::StrongFocus );
   QWidget::setFocusPolicy( QWidget::StrongFocus );
@@ -163,9 +163,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
 void KSpreadView::init()
 {
   m_pluginManager = new KoPluginManager();
-  
+
   m_pluginManager->setView( this );
-  
+
   /******************************************************
    * Menu
    ******************************************************/
@@ -236,7 +236,7 @@ void KSpreadView::cleanUp()
 
   m_pluginManager->cleanUp();
   delete m_pluginManager;
-  
+
   KoViewIf::cleanUp();
 
   cerr << "2) VIEW void KOMBase::incRef() = " << m_ulRefCount << endl;
@@ -271,7 +271,7 @@ bool KSpreadView::mappingEventChartInserted( KSpread::EventChartInserted& _event
 {
   if ( m_pTable == 0L )
     return true;
-  
+
   // Request the best matching document which supports the charting interface.
   QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'IDL:Chart/SimpleChart:1.0' in RepoIds", 1 );
   if ( vec.isEmpty() )
@@ -1322,7 +1322,7 @@ void KSpreadView::resizeEvent( QResizeEvent * )
 
     m_pCanvas->setGeometry( YBORDER_WIDTH, XBORDER_HEIGHT,
 								  m_pFrame->width() - YBORDER_WIDTH, m_pFrame->height() - XBORDER_HEIGHT );
-   
+
     m_pHBorderWidget->setGeometry( YBORDER_WIDTH, 0, m_pFrame->width() - YBORDER_WIDTH, XBORDER_HEIGHT );
     m_pHBorderWidget->show();
 
@@ -1480,6 +1480,62 @@ void KSpreadView::print()
 }
 */
 
+void KSpreadView::PopupMenuColumn(const QPoint & _point)
+{
+    assert( m_pTable );
+
+    if (m_pPopupColumn != 0L )
+	delete m_pPopupColumn ;
+
+    m_pPopupColumn= new QPopupMenu();
+
+    m_pPopupColumn->insertItem( "Insert Column", this, SLOT( slotInsertColumn() ) );
+    m_pPopupColumn->insertItem( "Remove Column", this, SLOT( slotRemoveColumn() ) );
+
+    QObject::connect( m_pPopupColumn, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
+    m_pPopupColumn->popup( _point );
+}
+
+void KSpreadView::slotInsertColumn()
+{
+    m_pTable->insertColumn( m_pHBorderWidget->markerColumn() );
+}
+
+void KSpreadView::slotRemoveColumn()
+{
+    m_pTable->deleteColumn( m_pHBorderWidget->markerColumn() );
+}
+
+void KSpreadView::PopupMenuRow(const QPoint & _point )
+{
+    assert( m_pTable );
+
+    if (m_pPopupRow != 0L )
+	delete m_pPopupRow ;
+
+    m_pPopupRow= new QPopupMenu();
+
+    m_pPopupRow->insertItem( "Insert Row", this, SLOT( slotInsertRow() ) );
+    m_pPopupRow->insertItem( "Remove Row", this, SLOT( slotRemoveRow() ) );
+
+    QObject::connect( m_pPopupRow, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
+    m_pPopupRow->popup( _point );
+}
+
+
+void KSpreadView::slotInsertRow()
+{
+
+
+    m_pTable->insertRow( m_pVBorderWidget->markerRow() );
+}
+
+void KSpreadView::slotRemoveRow()
+{
+
+    m_pTable->deleteRow( m_pVBorderWidget->markerRow() );
+}
+
 void KSpreadView::openPopupMenu( const QPoint & _point )
 {
     assert( m_pTable );
@@ -1512,10 +1568,10 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
         {
 	  QStringList lst = entry->commandsI18N();
 	  QStringList::ConstIterator it = lst.begin();
-	  
+	
 	  for (; it != lst.end(); ++it )
 	    m_pPopupMenu->insertItem( *it, m_popupMenuFirstToolId + i++ );
-	  
+	
 	  lst = entry->commands();
           it = lst.begin();
 	  for (; it != lst.end(); ++it )
