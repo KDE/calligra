@@ -744,11 +744,12 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         setErrorMessage( i18n( "Invalid document. No office:body." ));
         return false;
     }
+    //load in first
+    d->styleManager->loadOasisStyleTemplate( oasisStyles );
 
     // TODO check versions and mimetypes etc.
     loadOasisAreaName( body );
     loadOasisCellValidation( body );
-    d->styleManager->loadOasisStyleTemplate( oasisStyles );
 
     // all <table:table> goes to workbook
     if ( !d->workbook->loadOasis( body, oasisStyles ) )

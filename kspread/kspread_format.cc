@@ -323,6 +323,15 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
 
 void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, int _col, int _row )
 {
+    if ( m_pStyle->type() == KSpreadStyle::BUILTIN || m_pStyle->type() == KSpreadStyle::CUSTOM )
+    {
+        currentCellStyle.addAttribute( "style:parent-style-name", ((KSpreadCustomStyle *) m_pStyle)->name() );
+    }
+    else //FIXME !!!!
+    {
+        if ( m_pStyle->parent() && m_pStyle->parent()->name().length() > 0 )
+            currentCellStyle.addAttribute( "style:parent-style-name", m_pStyle->parent()->name() );
+    }
 
     //FIXME fallback ????
     KSpreadFormat::Align alignX = KSpreadFormat::Undefined;
@@ -439,7 +448,7 @@ void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, int _col, 
             currentCellStyle.addProperty( "fo:border-left", convertOasisPenToString( leftBorder ) );
 
         if ( ( rightBorder.width() != 0 ) && ( rightBorder.style() != Qt::NoPen ) )
-           currentCellStyle.addProperty( "fo:border-right", convertOasisPenToString( rightBorder ) );
+            currentCellStyle.addProperty( "fo:border-right", convertOasisPenToString( rightBorder ) );
 
         if ( ( topBorder.width() != 0 ) && ( topBorder.style() != Qt::NoPen ) )
             currentCellStyle.addProperty( "fo:border-top", convertOasisPenToString( topBorder ) );
@@ -979,6 +988,47 @@ bool KSpreadFormat::loadFontOasisStyle( KoStyleStack & font )
 bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisStyles& oasisStyles )
 {
     kdDebug() << "*** Loading style properties *****" << endl;
+#if 0
+    if ( f.hasAttribute( "style-name" ) )
+    {
+      KSpreadStyle * s = m_pTable->doc()->styleManager()->style( f.attribute( "style-name" ) );
+
+      //kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
+      if ( s )
+      {
+        setKSpreadStyle( s );
+
+        return true;
+      }
+      else if ( !paste )
+        return false;
+    }
+    else
+    if ( f.hasAttribute( "parent" ) )
+    {
+      KSpreadCustomStyle * s = (KSpreadCustomStyle *) m_pTable->doc()->styleManager()->style( f.attribute( "parent" ) );
+      //kdDebug() << "Loading Style, parent: " << s->name() << ": " << s << endl;
+
+      if ( s )
+      {
+        if ( m_pStyle && m_pStyle->release() )
+          delete m_pStyle;
+
+        m_pStyle = new KSpreadStyle();
+        m_pStyle->setParent( s );
+      }
+    }
+#endif
+    if (  styleStack.hasAttribute("style:parent-style-name" ) )
+    {
+        KSpreadStyle * s = m_pTable->doc()->styleManager()->style( styleStack.attribute("style:parent-style-name" ) );
+
+        //kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
+        if ( s )
+        {
+            setKSpreadStyle( s );
+        }
+    }
 
     if ( styleStack.hasAttribute( "style:decimal-places" ) )
     {
