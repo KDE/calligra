@@ -78,6 +78,7 @@ public:
     m_splitter=0L;
     m_orientation=0L;
     m_removeView=0L;
+    m_toolbarList.setAutoDelete( true );
   }
   ~KoMainWindowPrivate()
   {
@@ -94,6 +95,8 @@ public:
   QSplitter *m_splitter;
   KSelectAction *m_orientation;
   KAction *m_removeView;
+
+  QList <KAction> m_toolbarList;
 
   bool bMainWindowGUIBuilt;
 };
@@ -169,7 +172,6 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_rootViews=new QList<KoView>;
 
     buildMainWindowGUI();
-    //createGUI( 0L ); // NOT this ! (duplicates shell entries !)
 
     if (QApplication::desktop()->width() > 1100) // very big desktop ?
         resize( 900, 800 );
@@ -573,6 +575,21 @@ void KoMainWindow::slotConfigureToolbars()
   edit.exec();
 }
 
+void KoMainWindow::slotToolbarToggled( bool toggle )
+{
+  // The action (sender) and the toolbar have the same name
+  KToolBar * bar = toolBar( sender()->name() );
+  if (bar)
+  {
+    if (toggle)
+      bar->show();
+    else
+      bar->hide();
+  }
+  else
+    kdWarning(30003) << "slotToolbarToggled : Toolbar " << toolBarName << " not found!" << endl;
+}
+
 void KoMainWindow::slotHelpAbout()
 {
     KAboutDialog *dia = new KAboutDialog( KAboutDialog::AbtProduct | KAboutDialog::AbtTitle | KAboutDialog::AbtImageOnly,
@@ -647,6 +664,13 @@ void KoMainWindow::buildMainWindowGUI()
 
 void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 {
+
+  // This looks very much like KParts::MainWindow::createGUI, but we have
+  // to reimplement it because it works with an active part, whereas we work
+  // with an active view _and_ an active part, depending for what.
+  // Both are KXMLGUIClients, but e.g. the plugin query needs a QObject.
+
+
   kdDebug(30003) <<  "KoMainWindow::slotActivePartChanged( Part * newPart) newPart = " <<
     newPart << endl;
   kdDebug(30003) <<  "current active part is " << d->m_activePart << endl;
@@ -666,7 +690,8 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 
   if ( d->m_activeView )
   {
-    //TODO: event stuff
+    KParts::GUIActivateEvent ev( false );
+    QApplication::sendEvent( d->m_activePart, &ev );
 
     plugins = KParts::Plugin::pluginClients( d->m_activeView );
     pIt = plugins.fromLast();
@@ -679,6 +704,9 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
       factory->removeClient( *pIt );
 
     factory->removeClient( (KXMLGUIClient *)d->m_activeView );
+
+    unplugActionList( "toolbarlist" );
+    d->m_toolbarList.clear(); // deletes the actions
   }
 
   buildMainWindowGUI();
@@ -688,6 +716,9 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     d->m_activeView = (KoView *)d->m_manager->activeWidget();
     d->m_activePart = newPart;
     kdDebug(30003) <<  "new active part is " << d->m_activePart << endl;
+
+    KParts::GUIActivateEvent ev( true );
+    QApplication::sendEvent( d->m_activePart, &ev );
 
     factory->addClient( (KXMLGUIClient *)d->m_activeView );
 
@@ -699,6 +730,19 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 
     if(d->m_rootViews->findRef(d->m_activeView)!=-1)
 	factory->plugActionList((KXMLGUIClient*)d->m_activeView, "view_split", *d->m_splitViewActionList );
+
+    // Create and plug toolbar list for Settings menu
+    QListIterator<KToolBar> it = toolBarIterator();
+    for ( ; it.current() ; ++it )
+    {
+      KToggleAction * act = new KToggleAction( i18n("Show %1 Toolbar").arg( (*it)->text() ), 0,
+                                               actionCollection(), (*it)->name() );
+      connect( act, SIGNAL( toggled( bool ) ), this, SLOT( slotToolbarToggled( bool ) ) );
+      act->setChecked ( true );
+      d->m_toolbarList.append( act );
+    }
+    plugActionList( "toolbarlist", d->m_toolbarList );
+
   }
   else
   {

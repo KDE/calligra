@@ -158,8 +158,20 @@ public slots:
      */
     virtual void slotFileQuit();
 
+    /**
+     *  Configure key bindings
+     */
     virtual void slotConfigureKeys();
+
+    /**
+     *  Configure toolbars
+     */
     virtual void slotConfigureToolbars();
+
+    /**
+     *  Shows or hides a toolbar
+     */
+    virtual void slotToolbarToggled( bool toggle );
 
     /**
      *  Shows an about dialog for the app.
@@ -221,8 +233,6 @@ protected slots:
 private:
 
     void buildMainWindowGUI();
-
-    QWidget * m_dummyWidget;
 
     static QList<KoMainWindow>* s_lstMainWindows;
 
