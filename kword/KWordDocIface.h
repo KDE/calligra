@@ -106,6 +106,18 @@ k_dcop:
     virtual void startBackgroundSpellCheck();
     virtual void reactivateBgSpellChecking();
 
+    virtual void setConfigUpperCase( bool _uc );
+    virtual void setConfigUpperUpper( bool _uu );
+    virtual void setConfigAdvancedAutocorrect( bool _aa );
+    virtual void setConfigAutoDetectUrl(bool _au);
+    virtual void setConfigIgnoreDoubleSpace( bool _ids);
+
+    virtual bool configUpperCase() const;
+    virtual bool configUpperUpper() const;
+    virtual bool configAdvancedAutoCorrect() const;
+    virtual bool configAutoDetectUrl() const;
+    virtual bool configIgnoreDoubleSpace() const;
+
 
     //init/save config
     virtual void initConfig();
