@@ -4440,7 +4440,7 @@ void KSpreadView::setText( const QString& _text )
 
   m_pTable->setText( m_pCanvas->markerRow(), m_pCanvas->markerColumn(), _text );
   KSpreadCell* cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-  if(cell->isString() && !_text.isEmpty() && !_text.at(0).isDigit())
+  if(cell->isString() && !_text.isEmpty() && !_text.at(0).isDigit() && !cell->isFormula())
       m_pDoc->addStringCompletion(_text);
 }
 
