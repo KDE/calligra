@@ -164,6 +164,8 @@ public:
 
     void apply( KWFormat &_format );
 
+    void selectWord(KWFormatContext &_fc1,KWFormatContext &_fc2,QPainter &painter);
+
 protected:
     void calcTextLen();
 

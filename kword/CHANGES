@@ -158,3 +158,13 @@ Reggie, 2.10.1998:
 - Implemented deleting selected text and replacing
   selected text with an entered character
 - Implemented selecting text with the keyboard (cursor-keys + Shift)
+
+Reggie, 3.10.1998:
+------------------
+- Bugfix with setting the format for multiple characters
+- Implemented selection a word with a mouse double click
+- The flows CENTER and RIGHT work now => ALL flows work now :-)
+- Fixed a bug in cursor navigation
+- Automatical scrolling when selecting text 
+  (there are some redraw problems when selecting text now because of the 
+   automatical scrolling)

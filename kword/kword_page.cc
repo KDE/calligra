@@ -80,6 +80,8 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
       
       _painter.end();
 
+      scrollToCursor(*fc);
+
       if (fc->getPTPos() != doc->getSelStart()->getPTPos() ||
 	  fc->getPTY() != doc->getSelStart()->getPTY())
 	{
@@ -103,10 +105,14 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 
   if (doc->has_selection())
     {
-      doc->drawSelection(_painter,xOffset,yOffset);
+      //doc->drawSelection(_painter,xOffset,yOffset);
       doc->setSelection(false);
+      //erase();
+      buffer = QPixmap(width(),height());
+      buffer.fill(white);
+      repaint(false);
     }  
-      
+
   doc->drawMarker(*fc,&_painter,xOffset,yOffset);
   markerIsVisible = false;
   
@@ -126,6 +132,54 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 void KWPage::mouseReleaseEvent(QMouseEvent *e)
 {
   mousePressed = false;
+
+  //erase();
+  buffer = QPixmap(width(),height());
+  buffer.fill(white);
+  repaint(false);
+
+//   if (doc->has_selection())
+//     {
+//       buffer.fill(white);
+//       repaint(true);
+//     }
+}
+
+/*================================================================*/
+void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
+{
+  unsigned int mx = e->x() + xOffset;
+  unsigned int my = e->y() + yOffset;
+
+  mousePressed = false;
+  
+  QPainter _painter;
+  _painter.begin(this);
+
+  if (doc->has_selection())
+    {
+      doc->drawSelection(_painter,xOffset,yOffset);
+      doc->setSelection(false);
+    }  
+
+  doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+  markerIsVisible = false;
+  
+  fc->cursorGotoPixelLine(mx,my,_painter);
+  fc->cursorGotoPixelInLine(mx,my,_painter);
+      
+  KWFormatContext fc1(doc),fc2(doc);
+  fc->selectWord(fc1,fc2,_painter);
+
+  doc->drawMarker(*fc,&_painter,xOffset,yOffset);
+  markerIsVisible = true;
+
+  doc->setSelStart(fc1);
+  doc->setSelEnd(fc2);
+  doc->setSelection(true);
+  doc->drawSelection(_painter,xOffset,yOffset);
+
+  _painter.end();
 }
 
 /*================================================================*/
@@ -327,6 +381,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    doc->setSelection(true);
 	    painter.end();
 	    repaint(false);
+	    scrollToCursor(*fc);
 	    kbdc.auto_repeat_mode = repeat;
 	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
 	    return;
@@ -347,6 +402,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    doc->setSelection(true);
 	    painter.end();
 	    repaint(false);
+	    scrollToCursor(*fc);
 	    kbdc.auto_repeat_mode = repeat;
 	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
 	    return;
@@ -367,6 +423,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    doc->setSelection(true);
 	    painter.end();
 	    repaint(false);
+	    scrollToCursor(*fc);
 	    kbdc.auto_repeat_mode = repeat;
 	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
 	    return;
@@ -387,6 +444,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    doc->setSelection(true);
 	    painter.end();
 	    repaint(false);
+	    scrollToCursor(*fc);
 	    kbdc.auto_repeat_mode = repeat;
 	    XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
 	    return;
@@ -877,10 +935,11 @@ void KWPage::calcVisiblePages()
 /*================================================================*/
 void KWPage::drawBuffer()
 {
-  QPainter painter;
-  painter.begin(this);
-  painter.drawPixmap(0,0,buffer);
-  painter.end();
+  bitBlt(this,0,0,&buffer,0,0,buffer.width(),buffer.height());
+//   QPainter painter;
+//   painter.begin(this);
+//   painter.drawPixmap(0,0,buffer);
+//   painter.end();
 }
 
 /*================================================================*/

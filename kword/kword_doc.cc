@@ -101,9 +101,12 @@ CORBA::Boolean KWordDocument_impl::init()
   KWParag *p = new KWParag(this,0L,0L,defaultParagLayout);
   p->insertText(0," ");
 
-//   parags->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-//   p = new KWParag( this, parags, 0L, defaultParagLayout );
-//   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
+  //   parags->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
+//    p = new KWParag( this, parags, 0L, defaultParagLayout );
+//    p->insertText( 0, "Das ist ein Test");
+//    KWFormat *format = new KWFormat(this);
+//    format->setDefaults(this);
+//    p->setFormat(0,strlen("Das ist ein Test"),*format);
 //   p = new KWParag( this, p, 0L, defaultParagLayout );
 //   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
 //   p = new KWParag( this, p, 0L, defaultParagLayout );

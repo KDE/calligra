@@ -318,8 +318,8 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
     }
     
     cursorGotoLineStart( _painter );
-    while (ptPos < WantedPtPos && !isCursorAtLineEnd()){
-	cursorGotoRight( _painter);
+    while (ptPos < WantedPtPos && textPos < lineEndPos - 1 && !isCursorAtLineEnd()){
+      cursorGotoRight( _painter);
     }
     //during_vertical_cursor_movement = TRUE;
 }
@@ -598,10 +598,11 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
 
 bool KWFormatContext::makeLineLayout( QPainter &_painter )
 {
-  if (parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT || 
-      parag->getParagLayout()->getFlow() == KWParagLayout::CENTER)
-    calcTextLen();
-
+//   if (parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT || 
+//       parag->getParagLayout()->getFlow() == KWParagLayout::CENTER)
+//     calcTextLen();
+  
+    ptTextLen = 0;
     specialHeight = 0;
 
     ptPos = 0;
@@ -667,14 +668,10 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     ptPos = 0;
     
     // Calculate the first characters position in screen coordinates
-    if ( parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT )
-	ptPos = xShift + document->getPTColumnWidth() - right - ptTextLen;
-    else if ( parag->getParagLayout()->getFlow() == KWParagLayout::LEFT )
-	ptPos = xShift + left;
+    if ( parag->getParagLayout()->getFlow() == KWParagLayout::LEFT )
+      ptPos = xShift + left;
     else if ( parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK )
-	ptPos = xShift + left;
-    else if ( parag->getParagLayout()->getFlow() == KWParagLayout::CENTER )
-	ptPos = xShift + ( document->getPTColumnWidth() - indent - left - right - ptTextLen ) / 2;
+      ptPos = xShift + left;
 
     //debug("%d %d %d",ptPos,ptTextLen,xShift + document->getPTColumnWidth());
 
@@ -786,6 +783,17 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
 	spaces = tmpSpaces;
     }
     
+    if ( parag->getParagLayout()->getFlow() == KWParagLayout::CENTER )
+      {
+	ptPos = xShift + ( document->getPTColumnWidth() - indent - left - right - ptTextLen ) / 2;
+	ptStartPos = ptPos;
+      }
+    else if ( parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT )
+      {      
+	ptPos = xShift + document->getPTColumnWidth() - right - ptTextLen;
+	ptStartPos = ptPos;
+      }
+
     // Calculate the space between words if we have "block" formating.
     if ( parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK && spaces > 0)
       ptSpacing = (float)( document->getPTColumnWidth() - ptTextLen - indent) / (float)spaces;
@@ -865,6 +873,44 @@ void KWFormatContext::apply( KWFormat &_format )
       ptDescender = displayFont->getPTDescender();
       ptMaxAscender = max(ptAscender,ptMaxAscender);
       ptMaxDescender = max(ptDescender,ptMaxDescender);
+    }
+}
+
+void KWFormatContext::selectWord(KWFormatContext &_fc1,KWFormatContext &_fc2,QPainter &painter)
+{
+  KWChar *text = parag->getText();
+
+  KWFormatContext fc(document);
+  fc = *this;
+
+  if (text[textPos].c == ' ')
+    {
+      _fc1 = *this;
+      cursorGotoRight(painter);
+    }
+  else
+    {
+      unsigned int i = textPos;
+      while (i > 0 && i > lineStartPos && text[i].c != ' ')
+	{
+	  cursorGotoLeft(painter);
+	  i = textPos;
+	}
+      cursorGotoRight(painter);
+      _fc1 = *this;
+    }
+
+  if (text[textPos].c == ' ')
+    _fc2 = *this;
+  else
+    {
+      unsigned int i = textPos;
+      while (i < parag->getTextLen() && i < lineEndPos && text[i].c != ' ')
+	{
+	  cursorGotoRight(painter);
+	  i = textPos;
+	}
+      _fc2 = *this;
     }
 }
 

@@ -51,6 +51,7 @@ public:
   void mousePressEvent(QMouseEvent* e);
   void mouseMoveEvent(QMouseEvent* e);
   void mouseReleaseEvent(QMouseEvent* e);
+  void mouseDoubleClickEvent(QMouseEvent *e);
   void paintEvent(QPaintEvent* e);
   void keyPressEvent(QKeyEvent * e);
   void resizeEvent(QResizeEvent *e);

@@ -55,7 +55,7 @@ void KWFormatCollection::removeFormat(KWFormat *_format)
   QString key = generateKey(*_format);
 
   formats.remove(key);
-  
+
   //if (formats.remove(key))
   //debug("remove: %s",key.data());
 }
