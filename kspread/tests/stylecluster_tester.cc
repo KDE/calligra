@@ -140,6 +140,7 @@ void StyleClusterTester::run()
   kdDebug() << "5. Insert done" << endl;
   CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(0,1));
   kdDebug() << "6. check done" << endl;
+  CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(1,0));
   CHECK_QUAD(stylecluster.lookupNode(1,0), stylecluster.lookupNode(1,1));
   kdDebug() << "7. check done" << endl;
 

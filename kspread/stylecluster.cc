@@ -179,8 +179,8 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
     
     path.push(current_node);
     
-    if( x - x_offset < half_quad_size ) {
-      if( y - y_offset < half_quad_size ) {
+    if( x - x_offset <= half_quad_size ) {
+      if( y - y_offset <= half_quad_size ) {
         current_node = &((*current_node)->m_topLeft);
       }
       else {
@@ -188,7 +188,7 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
         y_offset += half_quad_size;
       }
     } else {
-      if( y - y_offset < half_quad_size ) {
+      if( y - y_offset <= half_quad_size ) {
         current_node = &((*current_node)->m_topRight);
         x_offset += half_quad_size;
       }
@@ -198,7 +198,7 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
         x_offset += half_quad_size;
       }
     }
-    kdDebug() << "gone down one to size "<< half_quad_size << endl;
+    kdDebug() << "gone down one to size "<< half_quad_size << " offset " << x_offset << "," << y_offset << endl;
     //Now we have gone down one step.  The parent is a quad, but the current node
     //may be null, in which case our style is the style of the parent, or it's Simple,
     //in which case we need to check whether we to subdivide, or it's a quad, in which case
@@ -212,10 +212,12 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
       Q_ASSERT( last_node->m_type == StyleClusterQuad::Quad );
       
       //The whole of this section is already this style.  No need to do anything.
-      if( style == last_node->getStyle()) return;
+      if( style == last_node->getStyle() ) return;
 
       if(half_quad_size == 0) {  //We are now on a single cell
 	int num_null_children_in_parent = last_node->numNullChildren();
+
+	Q_ASSERT(last_node->getStyle() != NULL);
 	
         Q_ASSERT(num_null_children_in_parent > 0);
 	if(num_null_children_in_parent == 1) {// We are the only one using the style info in parent, so just change the m_style in parent
@@ -226,7 +228,7 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
 	} else {  //someone else in the parent is using the style info in parent, so we have to create our own child
           (*current_node) = new StyleClusterQuad(); //defaults to a Simple
           (*current_node)->setStyle(style);
-          kdDebug() << "Making a simple " << endl;
+          kdDebug() << "Making a simple.  Num null children in parent is " << num_null_children_in_parent << ".  Style in parent is " << last_node->getStyle() << ", this style is " <<style << endl;
 	}
         return;
       }
@@ -365,8 +367,8 @@ StyleClusterQuad* StyleCluster::lookupNode(int x, int y) {
     last_node = current_node;
     half_quad_size /= 2;
     kdDebug() << "Looking up size " << half_quad_size << endl;
-    if( x - x_offset < half_quad_size ) {
-      if( y - y_offset < half_quad_size ) {
+    if( x - x_offset <= half_quad_size ) {
+      if( y - y_offset <= half_quad_size ) {
         current_node = current_node->m_topLeft;
       }
       else {
@@ -374,7 +376,7 @@ StyleClusterQuad* StyleCluster::lookupNode(int x, int y) {
         y_offset += half_quad_size;
       }
     } else {
-      if( y - y_offset < half_quad_size ) {
+      if( y - y_offset <= half_quad_size ) {
         current_node = current_node->m_topRight;
         x_offset += half_quad_size;
       }
@@ -385,8 +387,9 @@ StyleClusterQuad* StyleCluster::lookupNode(int x, int y) {
       }
     }
   }
+  
   if( !current_node ) return last_node;
-
+  
   return current_node;
 }
 
