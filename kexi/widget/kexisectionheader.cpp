@@ -106,7 +106,7 @@ bool KexiSectionHeader::eventFilter( QObject *o, QEvent *e )
 //			d->lbl->setPaletteBackgroundColor( e->type()==QEvent::FocusIn ? red : blue);
 //		}
 	}
-	return false;
+	return QWidget::eventFilter(o,e);
 }
 
 

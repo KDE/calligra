@@ -203,6 +203,7 @@ bool KexiViewBase::eventFilter( QObject *o, QEvent *e )
 	if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut) {// && o->inherits("QWidget")) {
 //		//hp==true if currently focused widget is a child of this table view
 //		const bool hp = Kexi::hasParent( static_cast<QWidget*>(o), focusWidget());
+//		kexidbg << "KexiViewBase::eventFilter(): " << o->name() << " " << e->type() << endl;
 		if (Kexi::hasParent( this, static_cast<QWidget*>(o))) {
 			if (e->type()==QEvent::FocusOut && focusWidget() && !Kexi::hasParent( this, focusWidget())) {
 				//focus out: when currently focused widget is not a parent of this view

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -130,6 +130,8 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 	if (!d->doc)
 		return;
 	d->view = d->doc->createView(fr, 0L);
+//	setFocusProxy(d->view);
+
 
 
 //	f->resetContainer("codefolding");
@@ -283,12 +285,13 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 	}
 	connect(d->doc, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 #endif
-	setViewWidget(d->view);
 	d->view->installEventFilter(this);
+//	QObject::installEventFilter(this);
 
 
 //	setFocusProxy(d->view);
 	lyr->addWidget(d->view);
+	setViewWidget(d->view, true/*focus*/);
 
 //	QPushButton *btnQuery = new QPushButton(i18n("&Query"), this);
 //	btnQuery->setFlat(true);
@@ -356,7 +359,7 @@ bool KexiQueryDesignerSQLEditor::eventFilter(QObject *o, QEvent *ev)
 		QKeyEvent *ke = static_cast<QKeyEvent*>(ev);
 		kdDebug() << ke->key() << endl;
 	}
-	return false;
+	return KexiViewBase::eventFilter(o,ev);
 }
 
 // === KexiQueryDesignerSQLEditor implementation using KTextEditor ===

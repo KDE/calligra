@@ -176,6 +176,10 @@ extern "C" int kdemain(int argc, char *argv[])
 	win->show();
 	app.processEvents();//allow refresh our app
 
+#ifdef OOPL_VERSION
+# include "oopl_exec.h"
+#endif
+
 	return app.exec();
 }
 

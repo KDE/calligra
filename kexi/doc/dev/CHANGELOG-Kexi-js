@@ -384,6 +384,10 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 CCMAIL: dkite@shaw.ca
 
+2005-01-17
+SQL Editor
+- focus is correctly to editor widget
+
 2005-01-14
 General
 - KEXI_REPORTS_SUPPORT compile-time define added

@@ -259,6 +259,8 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 	}
 
 	setDirty(true);*/
+//	if (parentDialog()->hasFocus())
+	d->editor->setFocus();
 	return true;
 }
 

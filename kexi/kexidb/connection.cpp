@@ -149,6 +149,7 @@ Connection::~Connection()
 	m_destructor_started = true;
 //	KexiDBDbg << "Connection::~Connection()" << endl;
 	delete d;
+	d = 0;
 /*	if (m_driver) {
 		if (m_is_connected) {
 			//delete own table schemas
