@@ -1,7 +1,6 @@
 <!DOCTYPE autocorrection>
 <Word>
  <items>
-  <item find="(C)" replace="©" />
   <item find="(R)" replace="®" />
   <item find="(c)" replace="©" />
   <item find="(r)" replace="®" />
@@ -16,10 +15,14 @@
   <item find="Allo" replace="Allô" />
   <item find="Antrée" replace="Entrée" />
   <item find="Août" replace="août" />
+  <item find="Au moment ou" replace="Au moment où" />
   <item find="Avril" replace="avril" />
   <item find="Basses Pyrénées" replace="Basses-Pyrénées" />
   <item find="Bien sur" replace="Bien sûr" />
+  <item find="Bonne après-midi" replace="Bon après-midi" />
   <item find="C'st" replace="C'est" />
+  <item find="Ce pendant" replace="Cependant" />
+  <item find="Ceci sont" replace="Ceux-ci sont" />
   <item find="Cepedant" replace="Cependant" />
   <item find="Cependatn" replace="Cependant" />
   <item find="Cependent" replace="Cependant" />
@@ -62,8 +65,10 @@
   <item find="Thorvalds" replace="Torvalds" />
   <item find="Torvald" replace="Torvalds" />
   <item find="X Windows" replace="X Window" />
+  <item find="a aperçut" replace="a aperçu" />
   <item find="a conclut" replace="a conclu" />
   <item find="a conçut" replace="a conçu" />
+  <item find="a définit" replace="a défini" />
   <item find="a investit" replace="a investi" />
   <item find="a propos" replace="à propos" />
   <item find="a reçut" replace="a reçu" />
@@ -116,6 +121,7 @@
   <item find="ajourd'hui" replace="aujourd'hui" />
   <item find="algérie" replace="Algérie" />
   <item find="allemagne" replace="Allemagne" />
+  <item find="aller entrain" replace="aller en train" />
   <item find="allieurs" replace="ailleurs" />
   <item find="allo" replace="allô" />
   <item find="alosr" replace="alors" />
@@ -183,6 +189,7 @@
   <item find="au dessus" replace="au-dessus" />
   <item find="au devant" replace="au-devant" />
   <item find="au dépens" replace="aux dépens" />
+  <item find="au moment ou" replace="au moment où" />
   <item find="au-dela" replace="au-delà" />
   <item find="aucunes" replace="aucune" />
   <item find="aujourdh'ui" replace="aujourd'hui" />
@@ -228,6 +235,7 @@
   <item find="bolc" replace="bloc" />
   <item find="bolcs" replace="blocs" />
   <item find="bon grès mal grès" replace="bon gré mal gré" />
+  <item find="bonne après-midi" replace="bon après-midi" />
   <item find="bonour" replace="bonjour" />
   <item find="bosi" replace="bois" />
   <item find="boute en train" replace="boute-en-train" />
@@ -261,6 +269,7 @@
   <item find="canada" replace="Canada" />
   <item find="canoé" replace="canoë" />
   <item find="carreaus" replace="carreaux" />
+  <item find="ce pendant" replace="cependant" />
   <item find="ceal" replace="cela" />
   <item find="celle là" replace="celle-là" />
   <item find="celle-la" replace="celle-là" />
@@ -274,6 +283,7 @@
   <item find="cerf volant" replace="cerf-volant" />
   <item find="cerf-volants" replace="cerfs-volants" />
   <item find="cetrain" replace="certain" />
+  <item find="cette après-midi" replace="cet après-midi" />
   <item find="ceux là" replace="ceux-là" />
   <item find="chacuns" replace="chacun" />
   <item find="chaine" replace="chaîne" />
@@ -353,6 +363,7 @@
   <item find="crûs" replace="crus" />
   <item find="cuissse" replace="cuisse" />
   <item find="côte d'ivoire" replace="Côte d'Ivoire" />
+  <item find="d'en train" replace="d'entrain" />
   <item find="danemark" replace="Danemark" />
   <item find="dannemark" replace="Danemark" />
   <item find="de bon grès" replace="de bon gré" />
@@ -397,12 +408,17 @@
   <item find="déviser" replace="dévisser" />
   <item find="dûe" replace="due" />
   <item find="dûs" replace="dus" />
+  <item find="elle aperçu" replace="elle aperçut" />
+  <item find="elle choisi" replace="elle choisit" />
   <item find="elle conseil" replace="elle conseille" />
+  <item find="elle fourni" replace="elle fournit" />
+  <item find="elle investi" replace="elle investit" />
   <item find="elle même" replace="elle-même" />
   <item find="elle survie" replace="elle survit" />
   <item find="elle transfert" replace="elle transfère" />
   <item find="elles mêmes" replace="elles-mêmes" />
   <item find="empiètement" replace="empiétement" />
+  <item find="en adhérent" replace="en adhérant" />
   <item find="en fabricant" replace="en fabriquant" />
   <item find="encâblure" replace="encablure" />
   <item find="encâblures" replace="encablures" />
@@ -418,6 +434,10 @@
   <item find="erronnés" replace="erronés" />
   <item find="espagne" replace="Espagne" />
   <item find="esse-que" replace="est-ce que" />
+  <item find="est choisit" replace="est choisi" />
+  <item find="est conçut" replace="est conçu" />
+  <item find="est définit" replace="est défini" />
+  <item find="est fournit" replace="est fourni" />
   <item find="est suffisent" replace="est suffisant" />
   <item find="est-ce-que" replace="est-ce que" />
   <item find="etre" replace="être" />
@@ -546,7 +566,11 @@
   <item find="identation" replace="indentation" />
   <item find="identer" replace="indenter" />
   <item find="identé" replace="indenté" />
+  <item find="il aperçu" replace="il aperçut" />
+  <item find="il choisi" replace="il choisit" />
   <item find="il conseil" replace="il conseille" />
+  <item find="il fourni" replace="il fournit" />
+  <item find="il investi" replace="il investit" />
   <item find="il sans va" replace="il s'en va" />
   <item find="il survie" replace="il survit" />
   <item find="il transfert" replace="il transfère" />
@@ -595,6 +619,7 @@
   <item find="jutse" replace="juste" />
   <item find="kioske" replace="kiosque" />
   <item find="l'adhérant" replace="l'adhérent" />
+  <item find="l'en train" replace="l'entrain" />
   <item find="l'équivalant" replace="l'équivalent" />
   <item find="la notre" replace="la nôtre" />
   <item find="la planisphère" replace="le planisphère" />
@@ -616,8 +641,11 @@
   <item find="les adhérants" replace="les adhérents" />
   <item find="les notres" replace="les nôtres" />
   <item find="les résidants" replace="les résidents" />
+  <item find="les un" replace="les uns" />
+  <item find="les une" replace="les unes" />
   <item find="les votres" replace="les vôtres" />
   <item find="lesson" replace="leçon" />
+  <item find="leur équivalant" replace="leur équivalent" />
   <item find="libre échange" replace="libre-échange" />
   <item find="libre échangiste" replace="libre-échangiste" />
   <item find="license" replace="licence" />
@@ -813,6 +841,7 @@
   <item find="porte fenêtre" replace="porte-fenêtre" />
   <item find="portugal" replace="Portugal" />
   <item find="pourir" replace="pourrir" />
+  <item find="pous" replace="plus" />
   <item find="poçible" replace="possible" />
   <item find="presqu'ile" replace="presqu'île" />
   <item find="pret" replace="prêt" />
@@ -843,6 +872,8 @@
   <item find="quand à" replace="quant à" />
   <item find="quand-même" replace="quand même" />
   <item find="quatres" replace="quatre" />
+  <item find="que un" replace="qu'un" />
+  <item find="que une" replace="qu'une" />
   <item find="quelque soit" replace="quel que soit" />
   <item find="quitance" replace="quittance" />
   <item find="quitances" replace="quittances" />
@@ -1001,11 +1032,12 @@
   <item find="un expédiant" replace="un expédient" />
   <item find="un fabriquant" replace="un fabricant" />
   <item find="un insère" replace="un insert" />
+  <item find="un jouer" replace="un jour" />
   <item find="un on dit" replace="un on-dit" />
   <item find="un pronostique" replace="un pronostic" />
   <item find="un précédant" replace="un précédent" />
-  <item find="un résidant" replace="un résident" />
   <item find="un transfère" replace="un transfert" />
+  <item find="un travestit" replace="un travesti" />
   <item find="un épistaxis" replace="une épistaxis" />
   <item find="un équivalant" replace="un équivalent" />
   <item find="un équivoque" replace="une équivoque" />
@@ -1028,6 +1060,7 @@
   <item find="une hémisphère" replace="un hémisphère" />
   <item find="une planisphère" replace="un planisphère" />
   <item find="une sourie" replace="une souris" />
+  <item find="une sourit" replace="une souris" />
   <item find="uqi" replace="qui" />
   <item find="utilsateur" replace="utilisateur" />
   <item find="utilsateurs" replace="utilisateurs" />
@@ -1039,6 +1072,8 @@
   <item find="valloir" replace="valoir" />
   <item find="vanuatu" replace="Vanuatu" />
   <item find="vasy" replace="vas-y" />
+  <item find="verre de terre" replace="ver de terre" />
+  <item find="vers d'eau" replace="verre d'eau" />
   <item find="vert de gris" replace="vert-de-gris" />
   <item find="veulliez" replace="veuillez" />
   <item find="virsu" replace="virus" />
@@ -1051,6 +1086,7 @@
   <item find="vénus" replace="Vénus" />
   <item find="wallis" replace="Wallis" />
   <item find="À pirori" replace="A priori" />
+  <item find="À priori" replace="A priori" />
   <item find="à priori" replace="a priori" />
   <item find="àla" replace="à la" />
   <item find="çette" replace="cette" />
