@@ -212,6 +212,9 @@ void KoTemplateTree::readGroups() {
     for(QStringList::ConstIterator it=dirs.begin(); it!=dirs.end(); ++it) {
         //kdDebug() << "dir: " << *it << endl;
         QDir dir(*it);
+        // avoid the annoying warning
+        if(!dir.exists())
+            continue;
         dir.setFilter(QDir::Dirs);
         QStringList templateDirs=dir.entryList();
         for(QStringList::ConstIterator tdirIt=templateDirs.begin(); tdirIt!=templateDirs.end(); ++tdirIt) {
