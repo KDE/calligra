@@ -1904,7 +1904,7 @@ void KPTextView::insertComment(const QString &_comment)
 void KPTextView::insertVariable( int type, int subtype )
 {
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
-
+    bool refreshCustomMenu = false;
     KoVariable * var = 0L;
     if ( type == VT_CUSTOM )
     {
@@ -1914,16 +1914,17 @@ void KPTextView::insertVariable( int type, int subtype )
             KoCustomVariable *v = new KoCustomVariable( textObject()->textDocument(), dia.name(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection() );
             v->setValue( dia.value() );
             var = v;
+            refreshCustomMenu = true;
         }
     }
     else
         var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textObject()->textDocument(),doc);
 
-    insertVariable( var );
+    insertVariable( var , 0L, true,refreshCustomMenu);
     doc->recalcPageNum();
 }
 
-void KPTextView::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, bool removeSelectedText )
+void KPTextView::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, bool removeSelectedText,bool refreshCustomMenu )
 {
     if ( var )
     {
@@ -1941,7 +1942,7 @@ void KPTextView::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, b
         var->recalc();
         cursor()->parag()->invalidate(0);
         cursor()->parag()->setChanged( true );
-        if ( var->type() == VT_CUSTOM)
+        if ( refreshCustomMenu && var->type() == VT_CUSTOM )
             kpTextObject()->kPresenterDocument()->refreshMenuCustomVariable();
         kpTextObject()->kPresenterDocument()->repaint( kpTextObject() );
     }
