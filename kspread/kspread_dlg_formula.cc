@@ -697,6 +697,9 @@ void KSpreadDlgFormula::slotActivated(const QString & string)
     list_anal+="MOD";
     list_anal+="sign";
     list_anal+="INV";
+    list_anal+="DECBIN";
+    list_anal+="DECHEX";
+    list_anal+="DECOCT";
     list_anal.sort();
 
     QStringList list_trig;
@@ -1411,6 +1414,14 @@ void KSpreadDlgFormula::changeFunction()
         tmp.firstElementType=type_double;
         tmp.secondElementType=type_double;
     }
+    else if (m_funcName=="DECBIN" ||m_funcName=="DECHEX" || m_funcName=="DECOCT")
+    {
+        tmp.nb_param=1;
+        tmp.firstElementLabel=i18n("Int");
+        tmp.help=m_funcName+"("+"Int"+")";
+        tmp.firstElementType=type_int;
+    }
+
     else
     {
         tmp.nb_param=0;

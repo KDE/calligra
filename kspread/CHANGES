@@ -788,3 +788,5 @@ etc...
 =>now I move backgroundcolor to pattern page
 so now you can see pattern with its backgroundcolor
 -Imporved show example format, I think that it works.
+-Add new functions : DECHEX convert a decimal number to hexadecimal
+DECBIN, DECOCT

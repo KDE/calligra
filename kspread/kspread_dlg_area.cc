@@ -95,9 +95,87 @@ void KSpreadarea::slotOk()
         KMessageBox::error( this, i18n("Area text is empty!") );
   }
 }
-
+#include <math.h>
 void KSpreadarea::slotClose()
 {
+  cout <<"14.1567\n";
+  double x=14.1567;
+  int n=2;
+  double preci=pow(10,-3);
+  /*double q1=1;
+  bool cont=true;
+  double p1=0;
+  double q=0;
+  double d=0;
+  cout <<"0.4 :"<<rint(0.4)<<endl;
+  cout <<"0.5 :"<<rint(0.5)<<endl;
+  cout <<"0.6 :"<<rint(0.6)<<endl;
+  cout <<"10^n :"<<pow(10,n)<<endl;
+  while(cont)
+  {
+  p1=rint(q1*x);
+  d=fabs(x-p1/q1);
+  cout <<"d :"<<d <<endl;
+  if(d!=0)
+        {
+        q=1;
+        while( (fabs(q*x-rint(q*x))>=fabs(q1*x-rint(q1*x))&& q<pow(10,n)))
+                {
+                q++;
+                cout <<"entrer :"<<q<<endl;
+                }
+        cout <<"q :"<<q<<" q1 :"<<q1<<endl;
+        if(q<(pow(10,n)))
+                {
+                q1=q;
+                }
+        else
+                cont=false;
+        }
+  else
+        cont=false;
+  }
+
+  */
+  cout <<"preci :"<<preci<<endl;
+  double y=x;
+//> partie entière (x) -> c
+double c=rint(x);
+
+//> Partie entière (x) -> a
+double a=rint(x);
+double e=1;
+double d=1;
+double f=0;
+//> 1 -> e
+//> 1 -> d
+//> 0 -> f
+double p,q;
+while(fabs(c/d-x)>preci)
+{
+y=(1/(y-a));
+a=rint(y);
+p= a*c + e;
+q= a*d + f;
+e=c;
+f=d;
+c=p;
+d=q;
+}
+/*> Tant que abs (c/d-x) > E faire
+> ....(1/(y-a)) -> y
+> ....Partie entière (y) -> a
+> ....a*c + e -> p
+> ....a*d + f -> q
+> ....c -> e
+> ....d -> f
+> ....p -> c
+> ....q -> d
+> Fin Tant que
+> return c/d*/
+  cout <<" c :"<<c<<" d :"<<d<<endl;
+
+
   reject();
 }
 

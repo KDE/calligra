@@ -1776,7 +1776,7 @@ static bool kspreadfunc_sign( KSContext& context )
     value=-1;
   else if(args[0]->doubleValue()==0)
     value=0;
-  	
+
   context.setValue( new KSValue( value ) );
 
   return true;
@@ -1810,6 +1810,57 @@ static bool kspreadfunc_inv( KSContext& context )
 
 
   context.setValue( new KSValue( args[0]->doubleValue()*(-1) ) );
+
+  return true;
+}
+
+static bool kspreadfunc_dechex( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "DECHEX", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  QString tmp;
+  tmp=tmp.setNum( args[0]->intValue(),16);
+  context.setValue( new KSValue( tmp ));
+
+  return true;
+}
+
+static bool kspreadfunc_decoct( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "DECOCT", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  QString tmp;
+  tmp=tmp.setNum( args[0]->intValue(),8);
+  context.setValue( new KSValue( tmp ));
+
+  return true;
+}
+
+static bool kspreadfunc_decbin( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "DECBIN", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  QString tmp;
+  tmp=tmp.setNum( args[0]->intValue(),2);
+  context.setValue( new KSValue( tmp ));
 
   return true;
 }
@@ -2035,6 +2086,12 @@ module,"sign",kspreadfunc_sign) ) );
 module,"atan2",kspreadfunc_atan2) ) );
   module->addObject( "INV", new KSValue( new KSBuiltinFunction(
 module,"INV",kspreadfunc_inv) ) );
+  module->addObject( "DECBIN", new KSValue( new KSBuiltinFunction(
+module,"DECBIN",kspreadfunc_decbin) ) );
+  module->addObject( "DECOCT", new KSValue( new KSBuiltinFunction(
+module,"DECOCT",kspreadfunc_decoct) ) );
+  module->addObject( "DECHEX", new KSValue( new KSBuiltinFunction(
+module,"DECHEX",kspreadfunc_dechex) ) );
   return module;
 }
 
