@@ -810,7 +810,7 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     }
     // Now try Y
     p = m_boundingRect.topLeft();
-    p.setY( docPoint.y() - m_hotSpot.y() );
+    p.setY( docPoint.y()- m_hotSpot.y() );
     if ( !shiftPressed ) // Shift disables the grid
         applyGrid( p );
     //kdDebug() << "       (grid again) p.x is now " << DEBUGDOUBLE( p.x() )
