@@ -435,7 +435,7 @@ void IndexElement::moveUp(FormulaCursor* cursor, BasicElement* from)
     }
     else {
         if (from == content) {
-            if ((cursor->getPos() == 0) && hasUpperLeft()) {
+            if ((cursor->getPos() == 0) && (cursor->getElement() == from) && hasUpperLeft()) {
                 upperLeft->moveLeft(cursor, this);
             }
             else if (hasUpperRight()) {
@@ -472,7 +472,7 @@ void IndexElement::moveDown(FormulaCursor* cursor, BasicElement* from)
     }
     else {
         if (from == content) {
-            if ((cursor->getPos() == 0) && hasLowerLeft()) {
+            if ((cursor->getPos() == 0) && (cursor->getElement() == from) && hasLowerLeft()) {
                 lowerLeft->moveLeft(cursor, this);
             }
             else if (hasLowerRight()) {

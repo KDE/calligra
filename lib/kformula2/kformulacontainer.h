@@ -219,6 +219,8 @@ private:
 
     // debug
     friend class TestFormulaCursor;
+    friend class TestIndexElement;
+    
 
     //Undo and redo stack
     QStack<KFormulaCommand> undoStack;
