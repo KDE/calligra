@@ -680,7 +680,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
     if (force || ( formatOrigin.underlineWord != formatData.underlineWord )
         || (formatOrigin.strikeoutWord != formatData.strikeoutWord ) )
     {
-        // Strikeout and underline can only have one word-by.word behaviour in OO
+        // Strikeout and underline can only have one word-by-word behaviour in OO
         strElement+="fo:score-spaces=\""; // Are space processed?
         if ( formatData.underlineWord || formatData.strikeoutWord )
         {
