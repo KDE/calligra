@@ -1645,6 +1645,7 @@ void Connection::setAvailableDatabaseName(const QString& dbName)
 bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf)
 {
 	KexiDBDrvDbg << "Connection::updateRow.." << endl;
+	clearError();
 	//--get PKEY
 	if (buf.dbBuffer().isEmpty()) {
 		KexiDBDrvDbg << " -- NO CHANGES DATA!" << endl;
@@ -1706,6 +1707,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf)
 {
 	KexiDBDrvDbg << "Connection::updateRow.." << endl;
+	clearError();
 	//--get PKEY
 	if (buf.dbBuffer().isEmpty()) {
 		KexiDBDrvDbg << " -- NO CHANGES DATA!" << endl;
@@ -1779,6 +1781,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 bool Connection::deleteRow(QuerySchema &query, RowData& data)
 {
 	KexiDBDrvDbg << "Connection::deleteRow.." << endl;
+	clearError();
 	if (!query.parentTable()) {
 		KexiDBDrvDbg << " -- NO PARENT TABLE!" << endl;
 		return false;

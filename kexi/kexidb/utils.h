@@ -52,6 +52,16 @@ namespace KexiDB
 		return v.isNull();
 	}
 
+	/*! Sets \a msg to an error message retrieved from object \a obj, and \a details
+	 to details of this error (server message and result number).
+	 Does nothing if \a obj is null or no error occured.
+	 \a msg and \a details strings are not overwritten but strings are appended.
+	 */
+	KEXI_DB_EXPORT void getHTMLErrorMesage(Object* obj, QString& msg, QString &details);
+
+	/*! This methods works like above, but appends both a message and a description
+	 to \a msg. */
+	KEXI_DB_EXPORT void getHTMLErrorMesage(Object* obj, QString& msg);
 }
 
 #endif

@@ -429,14 +429,17 @@ bool Cursor::getNextRecord()
 bool Cursor::updateRow(RowData& data, RowEditBuffer& buf)
 {
 //TODO: doesn't update cursor's buffer YET!
+	clearError();
 	if (!m_query)
 		return false;
+	clearError();
 	return m_conn->updateRow(*m_query, data, buf);
 }
 
 bool Cursor::insertRow(RowData& data, RowEditBuffer& buf)
 {
 //TODO: doesn't update cursor's buffer YET!
+	clearError();
 	if (!m_query)
 		return false;
 	return m_conn->insertRow(*m_query, data, buf);
@@ -445,6 +448,7 @@ bool Cursor::insertRow(RowData& data, RowEditBuffer& buf)
 bool Cursor::deleteRow(RowData& data)
 {
 //TODO: doesn't update cursor's buffer YET!
+	clearError();
 	if (!m_query)
 		return false;
 	return m_conn->deleteRow(*m_query, data);

@@ -19,8 +19,11 @@
 
 #include <kexidb/utils.h>
 #include <kexidb/driver.h>
+#include <kexidb/cursor.h>
 
 #include <qmap.h>
+
+#include <klocale.h>
 
 using namespace KexiDB;
 
@@ -85,5 +88,33 @@ QStringList KexiDB::typeStringsForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
 	initList();
 	return slist[ typeGroup ];
+}
+
+void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
+{
+	if (!obj || !obj->error()) {
+		if (dynamic_cast<Cursor*>(obj))
+			obj = dynamic_cast<Cursor*>(obj)->connection();
+		else
+			return;
+	}
+	if (!obj || !obj->error())
+		return;
+	if (!msg.isEmpty())
+		msg += "<p>";
+	msg += obj->errorMsg();
+	if (!obj->serverErrorMsg().isEmpty())
+		details += "<p><b><nobr>" +i18n("Message from server:") + "</nobr></b><br>" + obj->serverErrorMsg();
+	QString resname = obj->serverResultName();
+	if (!resname.isEmpty())
+		details += (QString("<p><b><nobr>")+i18n("Server result name:")+"</nobr></b><br>"+resname);
+	if (!details.isEmpty()) {
+		details += (QString("<p><b><nobr>")+i18n("Result number:")+"</nobr></b><br>"+QString::number(obj->serverResult()));
+	}
+}
+
+void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg)
+{
+	getHTMLErrorMesage(obj, msg, msg);
 }
 

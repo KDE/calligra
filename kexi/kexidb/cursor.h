@@ -274,7 +274,7 @@ class KEXI_DB_EXPORT Cursor: public Object
 		 the same that is returend by serverResult(). */
 		virtual void drv_clearServerResult() = 0;
 
-		Connection *m_conn;
+		QGuardedPtr<Connection> m_conn;
 		QuerySchema *m_query;
 //		CursorData *m_data;
 		QString m_rawStatement;

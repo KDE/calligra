@@ -79,7 +79,7 @@ class KEXIDATATABLE_EXPORT ResultInfo
 	int column; //!< faulty column, -1 (the default) means: there is no faulty column
 };
 
-}
+}//namespace
 
 #endif
 
