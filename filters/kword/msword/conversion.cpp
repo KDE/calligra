@@ -115,13 +115,20 @@ QString Conversion::lineSpacing( const wvWare::Word97::LSPD& lspd )
     return value;
 }
 
-void Conversion::setBorderAttributes( QDomElement& borderElement, const wvWare::Word97::BRC& brc )
+void Conversion::setColorAttributes( QDomElement& element, int ico, const QString& prefix, bool defaultWhite )
 {
-    QColor color = Conversion::color( brc.ico, -1 );
-    borderElement.setAttribute( "red", color.red() );
-    borderElement.setAttribute( "blue", color.blue() );
-    borderElement.setAttribute( "green", color.green() );
-    borderElement.setAttribute( "width", (double)brc.dptLineWidth / 8.0 );
+    QColor color = Conversion::color( ico, -1, defaultWhite );
+    element.setAttribute( prefix.isNull() ? "red" : prefix+"Red", color.red() );
+    element.setAttribute( prefix.isNull() ? "blue" : prefix+"Blue", color.blue() );
+    element.setAttribute( prefix.isNull() ? "green" : prefix+"Green", color.green() );
+}
+
+void Conversion::setBorderAttributes( QDomElement& borderElement, const wvWare::Word97::BRC& brc, const QString& prefix )
+{
+    setColorAttributes( borderElement, brc.ico, prefix, false );
+
+    borderElement.setAttribute( prefix.isNull() ? "width" : prefix+"Width",
+                                (double)brc.dptLineWidth / 8.0 );
 
     QString style = "0"; // KWord: solid
     switch ( brc.brcType ) {
@@ -150,7 +157,7 @@ void Conversion::setBorderAttributes( QDomElement& borderElement, const wvWare::
         // (so we keep the default value, "0", for "solid single line".
         break;
     }
-    borderElement.setAttribute( "style", style );
+    borderElement.setAttribute( prefix.isNull() ? "style" : prefix+"Style", style );
     // We ignore brc.dptSpace (spacing), brc.fShadow (shadow), and brc.fFrame (?)
 }
 

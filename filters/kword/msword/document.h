@@ -34,7 +34,11 @@
 
 namespace wvWare {
     class Parser;
+    namespace Word97 {
+        class BRC;
+    }
 }
+class KoRect;
 class KWordReplacementHandler;
 class KWordTableHandler;
 class KWordTextHandler;
@@ -86,14 +90,15 @@ protected slots:
 
     // Similar to footnoteStart/footnoteEnd but for cells.
     // This is connected to KWordTableHandler
-    void slotTableCellStart( int row, int column, int rowSize, int columnSize, const QString& tableName );
+    void slotTableCellStart( int row, int column, int rowSize, int columnSize, const KoRect& cellRect, const QString& tableName, const wvWare::Word97::TC& tc, const wvWare::Word97::SHD& shd );
     void slotTableCellEnd();
 
 private:
     void processStyles();
     void processAssociatedStrings();
     enum NewFrameBehavior { Reconnect=0, NoFollowup=1, Copy=2 };
-    void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool autoExtend, NewFrameBehavior nfb );
+    QDomElement createInitialFrame( QDomElement& parentFramesetElem, double left, double right, double top, double bottom, bool autoExtend, NewFrameBehavior nfb );
+    void generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, int ico = -1 );
 
     QDomDocument& m_mainDocument;
     QDomDocument& m_documentInfo;

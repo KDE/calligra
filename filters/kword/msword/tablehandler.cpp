@@ -24,6 +24,7 @@
 #include <word97_generated.h>
 
 #include <kdebug.h>
+#include <koRect.h>
 
 #include <algorithm>
 
@@ -98,8 +99,13 @@ void KWordTableHandler::tableCellStart()
         // Vertical merging is much harder to implement....
         // ##### How do I find out the TAP of the rows below?
     }
-    kdDebug() << k_funcinfo << " row=" << m_row << " column=" << m_column << " colSize=" << colSize << endl;
-    emit sigTableCellStart( m_row, m_column, 1 /*TODO*/, colSize, m_currentTableName );
+    KoRect cellRect( m_tap->rgdxaCenter[ m_column ] / 20.0, // left
+                     0, // top
+                     ( m_tap->rgdxaCenter[ m_column+1 ] - m_tap->rgdxaCenter[ m_column ] ) / 20.0, // width
+                     20 ); // height (dyaRowHeight seems to be 0 most of the time)
+    kdDebug() << k_funcinfo << " row=" << m_row << " column=" << m_column << " colSize=" << colSize << " cellRect=" << cellRect << endl;
+    const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
+    emit sigTableCellStart( m_row, m_column, 1 /*TODO*/, colSize, cellRect, m_currentTableName, tc, shd );
 }
 
 void KWordTableHandler::tableCellEnd()

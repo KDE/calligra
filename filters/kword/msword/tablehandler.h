@@ -27,6 +27,14 @@
 #include <qobject.h>
 #include <deque>
 
+namespace wvWare {
+    namespace Word97 {
+        class TC;
+        class SHD;
+    }
+}
+class KoRect;
+
 namespace KWord
 {
     typedef const wvWare::TableRowFunctor* TableRowFunctorPtr;
@@ -64,7 +72,7 @@ public:
 
 signals:
     // Tells Document to create frameset for cell
-    void sigTableCellStart( int row, int column, int rowSize, int columnSize, const QString& tableName );
+    void sigTableCellStart( int row, int column, int rowSize, int columnSize, const KoRect&, const QString& tableName, const wvWare::Word97::TC& tc, const wvWare::Word97::SHD& shd );
     void sigTableCellEnd();
 
 private:

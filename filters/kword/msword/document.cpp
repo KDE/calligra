@@ -22,6 +22,7 @@
 #include "texthandler.h"
 #include "associatedstrings.h"
 
+#include <koRect.h>
 #include <koGlobal.h>
 #include <kdebug.h>
 
@@ -55,8 +56,8 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
         m_parser->setInlineReplacementHandler( m_replacementHandler );
         processStyles();
         processAssociatedStrings();
-        connect( m_tableHandler, SIGNAL( sigTableCellStart( int, int, int, int, const QString& ) ),
-                 this, SLOT( slotTableCellStart( int, int, int, int, const QString& ) ) );
+        connect( m_tableHandler, SIGNAL( sigTableCellStart( int, int, int, int, const KoRect&, const QString&, const wvWare::Word97::TC&, const wvWare::Word97::SHD& ) ),
+                 this, SLOT( slotTableCellStart( int, int, int, int, const KoRect&, const QString&, const wvWare::Word97::TC&, const wvWare::Word97::SHD& ) ) );
         connect( m_tableHandler, SIGNAL( sigTableCellEnd() ),
                  this, SLOT( slotTableCellEnd() ) );
     }
@@ -209,7 +210,8 @@ void Document::bodyStart()
     // TODO: "name" attribute (needs I18N)
     m_framesetsElement.appendChild(mainFramesetElement);
 
-    createInitialFrame( mainFramesetElement, 42, 566, false, Reconnect );
+    // Those values are unused. The paper margins make recalcFrames() resize this frame.
+    createInitialFrame( mainFramesetElement, 29, 798, 42, 566, false, Reconnect );
 
     m_textHandler->setFrameSetElement( mainFramesetElement );
     connect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
@@ -275,7 +277,7 @@ void Document::headerStart( wvWare::HeaderData::Type type )
 
     bool isHeader = Conversion::isHeader( type );
 
-    createInitialFrame( framesetElement, isHeader?0:567, isHeader?41:567+41, true, Copy );
+    createInitialFrame( framesetElement, 29, 798, isHeader?0:567, isHeader?41:567+41, true, Copy );
 
     m_textHandler->setFrameSetElement( framesetElement );
 
@@ -310,7 +312,7 @@ void Document::footnoteStart()
         framesetElement.setAttribute("name", i18n("Footnote %1").arg( ++m_footNoteNumber ) );
     m_framesetsElement.appendChild(framesetElement);
 
-    createInitialFrame( framesetElement, 567, 567+41, true, NoFollowup );
+    createInitialFrame( framesetElement, 29, 798, 567, 567+41, true, NoFollowup );
 
     m_textHandler->setFrameSetElement( framesetElement );
 }
@@ -321,7 +323,7 @@ void Document::footnoteEnd()
     m_textHandler->setFrameSetElement( QDomElement() );
 }
 
-void Document::slotTableCellStart( int row, int column, int rowSize, int columnSize, const QString& tableName )
+void Document::slotTableCellStart( int row, int column, int rowSize, int columnSize, const KoRect& cellRect, const QString& tableName, const wvWare::Word97::TC& tc, const wvWare::Word97::SHD& shd )
 {
     // Create footnote/endnote frameset
     QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
@@ -335,7 +337,8 @@ void Document::slotTableCellStart( int row, int column, int rowSize, int columnS
     framesetElement.setAttribute( "cols", columnSize );
     m_framesetsElement.appendChild(framesetElement);
 
-    createInitialFrame( framesetElement, 0 /*?*/, 41 /*?*/, true, NoFollowup );
+    QDomElement frameElem = createInitialFrame( framesetElement, cellRect.left(), cellRect.right(), cellRect.top(), cellRect.bottom(), true, NoFollowup );
+    generateFrameBorder( frameElem, tc.brcTop, tc.brcBottom, tc.brcLeft, tc.brcRight, shd.icoBack );
 
     m_textHandler->setFrameSetElement( framesetElement );
 }
@@ -345,12 +348,12 @@ void Document::slotTableCellEnd()
     m_textHandler->setFrameSetElement( QDomElement() );
 }
 
-void Document::createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool autoExtend, NewFrameBehavior nfb )
+QDomElement Document::createInitialFrame( QDomElement& parentFramesetElem, double left, double right, double top, double bottom, bool autoExtend, NewFrameBehavior nfb )
 {
     QDomElement frameElementOut = parentFramesetElem.ownerDocument().createElement("FRAME");
     // Those values are unused. The paper margins make recalcFrames() resize this frame.
-    frameElementOut.setAttribute( "left", 28 );
-    frameElementOut.setAttribute( "right", 798 );
+    frameElementOut.setAttribute( "left", left );
+    frameElementOut.setAttribute( "right", right );
     frameElementOut.setAttribute( "top", top );
     frameElementOut.setAttribute( "bottom", bottom );
     frameElementOut.setAttribute( "runaround", 1 );
@@ -358,6 +361,17 @@ void Document::createInitialFrame( QDomElement& parentFramesetElem, int top, int
     frameElementOut.setAttribute( "autoCreateNewFrame", autoExtend ? 0 : 1 );
     frameElementOut.setAttribute( "newFrameBehavior", nfb );
     parentFramesetElem.appendChild( frameElementOut );
+    return frameElementOut;
+}
+
+void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, int ico )
+{
+    Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
+    Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
+    Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
+    Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );
+    if ( ico != -1 )
+        Conversion::setColorAttributes( frameElementOut, ico, "bk", true );
 }
 
 void Document::slotSubDocFound( const wvWare::FunctorBase* functor, int data )
