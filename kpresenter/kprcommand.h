@@ -227,6 +227,8 @@ public:
         Effect effect;
         Effect2 effect2;
         Effect3 effect3;
+        EffectSpeed m_appearSpeed;
+        EffectSpeed m_disappearSpeed;
         bool disappear;
         int appearTimer, disappearTimer;
         bool appearSoundEffect, disappearSoundEffect;

@@ -65,7 +65,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     grp1->layout()->setSpacing(KDialog::spacingHint());
     grp1->layout()->setMargin(KDialog::marginHint());
     topLayout->addWidget(grp1);
-    QGridLayout *upperRow = new QGridLayout(grp1->layout(), 5, 4);
+    QGridLayout *upperRow = new QGridLayout(grp1->layout(), 6, 4);
 
     lAppear = new QLabel( i18n( "Order of appearance:" ), grp1 );
     lAppear->setAlignment( AlignVCenter );
@@ -101,13 +101,25 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
     connect( cEffect, SIGNAL( activated( int ) ), this, SLOT( appearEffectChanged( int ) ) );
 
+    lAppearSpeed = new QLabel( i18n( "Speed:" ), grp1 );
+    lAppearSpeed->setAlignment( AlignVCenter );
+    upperRow->addWidget(lAppearSpeed, 2, 0);
+
+    cAppearSpeed = new QComboBox( false, grp1, "cEffect" );
+    cAppearSpeed->insertItem( i18n( "Slow" ) );
+    cAppearSpeed->insertItem( i18n( "Medium" ) );
+    cAppearSpeed->insertItem( i18n( "Fast" ) );
+    cAppearSpeed->setCurrentItem( static_cast<int>( obj->getAppearSpeed() ) );
+    upperRow->addWidget(cAppearSpeed, 2, 1);
+    appearEffectChanged( cEffect->currentItem() );
+
     lEffect2 = new QLabel( i18n( "Effect (object specific):" ), grp1 );
     lEffect2->setAlignment( AlignVCenter );
-    upperRow->addWidget(lEffect2, 2, 0);
+    upperRow->addWidget(lEffect2, 3, 0);
 
     cEffect2 = new QComboBox( false, grp1, "cEffect2" );
     cEffect2->insertItem( i18n( "No Effect" ) );
-    upperRow->addWidget(cEffect2, 2, 1);
+    upperRow->addWidget(cEffect2, 3, 1);
 
     switch ( obj->getType() ) {
     case OT_TEXT: {
@@ -133,12 +145,12 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
     QLabel *lTimerOfAppear = new QLabel( i18n( "Timer of the object:" ), grp1 );
     lTimerOfAppear->setAlignment( AlignVCenter );
-    upperRow->addWidget( lTimerOfAppear, 3, 0 );
+    upperRow->addWidget( lTimerOfAppear, 4, 0 );
 
     timerOfAppear = new KIntNumInput( obj->getAppearTimer(), grp1 );
     timerOfAppear->setRange( 1, 600, 1 );
     timerOfAppear->setSuffix( i18n( " seconds" ) );
-    upperRow->addWidget( timerOfAppear, 3, 1 );
+    upperRow->addWidget( timerOfAppear, 4, 1 );
 
     if ( view->kPresenterDoc()->spManualSwitch() )
         timerOfAppear->setEnabled( false );
@@ -147,17 +159,17 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     // setup the Sound Effect stuff
     appearSoundEffect = new QCheckBox( i18n( "Sound effect" ), grp1 );
     appearSoundEffect->setChecked( obj->getAppearSoundEffect() );
-    upperRow->addWidget( appearSoundEffect, 4, 0 );
+    upperRow->addWidget( appearSoundEffect, 5, 0 );
 
     connect( appearSoundEffect, SIGNAL( clicked() ), this, SLOT( appearSoundEffectChanged() ) );
 
     lSoundEffect1 = new QLabel( i18n( "File name:" ), grp1 );
     lSoundEffect1->setAlignment( AlignVCenter );
-    upperRow->addWidget( lSoundEffect1, 5, 0 );
+    upperRow->addWidget( lSoundEffect1, 6, 0 );
 
     requester1 = new KURLRequester( grp1 );
     requester1->setURL( obj->getAppearSoundEffectFileName() );
-    upperRow->addWidget( requester1, 5, 1 );
+    upperRow->addWidget( requester1, 6, 1 );
 
     connect( requester1, SIGNAL( openFileDialog( KURLRequester * ) ),
              this, SLOT( slotRequesterClicked( KURLRequester * ) ) );
@@ -168,14 +180,14 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     buttonTestPlaySoundEffect1 = new QPushButton( grp1 );
     buttonTestPlaySoundEffect1->setPixmap( BarIcon("1rightarrow", KIcon::SizeSmall) );
     QToolTip::add( buttonTestPlaySoundEffect1, i18n("Play") );
-    upperRow->addWidget( buttonTestPlaySoundEffect1, 5, 2 );
+    upperRow->addWidget( buttonTestPlaySoundEffect1, 6, 2 );
 
     connect( buttonTestPlaySoundEffect1, SIGNAL( clicked() ), this, SLOT( playSound1() ) );
 
     buttonTestStopSoundEffect1 = new QPushButton( grp1 );
     buttonTestStopSoundEffect1->setPixmap( BarIcon("player_stop", KIcon::SizeSmall) );
     QToolTip::add( buttonTestStopSoundEffect1, i18n("Stop") );
-    upperRow->addWidget( buttonTestStopSoundEffect1, 5, 3 );
+    upperRow->addWidget( buttonTestStopSoundEffect1, 6, 3 );
 
     connect( buttonTestStopSoundEffect1, SIGNAL( clicked() ), this, SLOT( stopSound1() ) );
 
@@ -188,7 +200,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     grp2->layout()->setSpacing(KDialog::spacingHint());
     grp2->layout()->setMargin(KDialog::marginHint());
     topLayout->addWidget(grp2);
-    QGridLayout *lowerRow = new QGridLayout(grp2->layout(), 4, 4);
+    QGridLayout *lowerRow = new QGridLayout(grp2->layout(), 5, 4);
 
     lDisappear = new QLabel( i18n( "Order of disappearance:" ), grp2 );
     lDisappear->setAlignment( AlignVCenter );
@@ -221,14 +233,27 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
 
     connect( cDisappear, SIGNAL( activated( int ) ), this, SLOT( disappearEffectChanged( int ) ) );
 
+    lDisappearSpeed = new QLabel( i18n( "Speed:" ), grp2 );
+    lDisappearSpeed->setAlignment( AlignVCenter );
+    lowerRow->addWidget(lDisappearSpeed, 2, 0);
+
+    cDisappearSpeed = new QComboBox( false, grp2, "cEffect" );
+    cDisappearSpeed->insertItem( i18n( "Slow" ) );
+    cDisappearSpeed->insertItem( i18n( "Medium" ) );
+    cDisappearSpeed->insertItem( i18n( "Fast" ) );
+    cDisappearSpeed->setCurrentItem( static_cast<int>( obj->getDisappearSpeed() ) );
+    lowerRow->addWidget(cDisappearSpeed, 2, 1);
+    
+    //appearEffectChanged( cEffect->currentItem() );
+
     QLabel *lTimerOfDisappear = new QLabel( i18n( "Timer of the object:" ), grp2 );
     lTimerOfDisappear->setAlignment( AlignVCenter );
-    lowerRow->addWidget( lTimerOfDisappear, 2, 0 );
+    lowerRow->addWidget( lTimerOfDisappear, 3, 0 );
 
     timerOfDisappear = new KIntNumInput( obj->getDisappearTimer(), grp2 );
     timerOfDisappear->setRange( 1, 600, 1 );
     timerOfDisappear->setSuffix( i18n( " seconds" ) );
-    lowerRow->addWidget( timerOfDisappear, 2, 1 );
+    lowerRow->addWidget( timerOfDisappear, 3, 1 );
 
     if ( view->kPresenterDoc()->spManualSwitch() )
         timerOfDisappear->setEnabled( false );
@@ -237,18 +262,18 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     // setup the Sound Effect stuff
     disappearSoundEffect = new QCheckBox( i18n( "Sound effect" ), grp2 );
     disappearSoundEffect->setChecked( obj->getDisappearSoundEffect() );
-    lowerRow->addWidget( disappearSoundEffect, 3, 0 );
+    lowerRow->addWidget( disappearSoundEffect, 4, 0 );
     disappearSoundEffect->setEnabled( disappear->isChecked() );
 
     connect( disappearSoundEffect, SIGNAL( clicked() ), this, SLOT( disappearSoundEffectChanged() ) );
 
     lSoundEffect2 = new QLabel( i18n( "File name:" ), grp2 );
     lSoundEffect2->setAlignment( AlignVCenter );
-    lowerRow->addWidget( lSoundEffect2, 4, 0 );
+    lowerRow->addWidget( lSoundEffect2, 5, 0 );
 
     requester2 = new KURLRequester( grp2 );
     requester2->setURL( obj->getDisappearSoundEffectFileName() );
-    lowerRow->addWidget( requester2, 4, 1 );
+    lowerRow->addWidget( requester2, 5, 1 );
 
     connect( requester2, SIGNAL( openFileDialog( KURLRequester * ) ),
              this, SLOT( slotRequesterClicked( KURLRequester * ) ) );
@@ -259,14 +284,14 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     buttonTestPlaySoundEffect2 = new QPushButton( grp2 );
     buttonTestPlaySoundEffect2->setPixmap( BarIcon("1rightarrow", KIcon::SizeSmall) );
     QToolTip::add( buttonTestPlaySoundEffect2, i18n("Play") );
-    lowerRow->addWidget( buttonTestPlaySoundEffect2, 4, 2 );
+    lowerRow->addWidget( buttonTestPlaySoundEffect2, 5, 2 );
 
     connect( buttonTestPlaySoundEffect2, SIGNAL( clicked() ), this, SLOT( playSound2() ) );
 
     buttonTestStopSoundEffect2 = new QPushButton( grp2 );
     buttonTestStopSoundEffect2->setPixmap( BarIcon("player_stop", KIcon::SizeSmall) );
     QToolTip::add( buttonTestStopSoundEffect2, i18n("Stop") );
-    lowerRow->addWidget( buttonTestStopSoundEffect2, 4, 3 );
+    lowerRow->addWidget( buttonTestStopSoundEffect2, 5, 3 );
 
     connect( buttonTestStopSoundEffect2, SIGNAL( clicked() ), this, SLOT( stopSound2() ) );
 
@@ -278,7 +303,6 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     connect( disappear, SIGNAL( clicked() ), this, SLOT( disappearChanged() ) );
     disappearChanged();
     appearSoundEffectChanged();
-    disappearSoundEffectChanged();
 }
 
 EffectDia::~EffectDia()
@@ -301,6 +325,8 @@ void EffectDia::slotEffectDiaOk()
         e.effect = o->getEffect();
         e.effect2 = o->getEffect2();
         e.effect3 = o->getEffect3();
+        e.m_appearSpeed = o->getAppearSpeed();
+        e.m_disappearSpeed = o->getDisappearSpeed();
         e.disappear = o->getDisappear();
         e.appearTimer = o->getAppearTimer();
         e.disappearTimer = o->getDisappearTimer();
@@ -317,6 +343,8 @@ void EffectDia::slotEffectDiaOk()
     eff.effect = ( Effect )cEffect->currentItem();
     eff.effect2 = ( Effect2 )cEffect2->currentItem();
     eff.effect3 = ( Effect3 )cDisappear->currentItem();
+    eff.m_appearSpeed = ( EffectSpeed )cAppearSpeed->currentItem();
+    eff.m_disappearSpeed = ( EffectSpeed )cDisappearSpeed->currentItem();
     eff.disappear = disappear->isChecked();
     eff.appearTimer = timerOfAppear->value();
     eff.disappearTimer = timerOfDisappear->value();
@@ -343,6 +371,7 @@ void EffectDia::disappearChanged()
     eDisappearStep->setEnabled( disappear->isChecked() );
     disappearSoundEffect->setEnabled( disappear->isChecked() );
     disappearSoundEffectChanged();
+    disappearEffectChanged( cDisappear->currentItem() );
 
     if ( !view->kPresenterDoc()->spManualSwitch() )
         timerOfDisappear->setEnabled( disappear->isChecked() );
@@ -350,10 +379,16 @@ void EffectDia::disappearChanged()
 
 void EffectDia::appearEffectChanged( int num )
 {
+    bool b = ( cEffect->currentItem() != 0 );
+    lAppearSpeed->setEnabled( b );
+    cAppearSpeed->setEnabled( b );
 }
 
 void EffectDia::disappearEffectChanged( int num )
 {
+    bool b = ( cDisappear->currentItem() !=0 && disappear->isChecked() );
+    lDisappearSpeed->setEnabled( b );
+    cDisappearSpeed->setEnabled( b );
 }
 
 void EffectDia::appearSoundEffectChanged()

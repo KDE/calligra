@@ -434,6 +434,8 @@ void EffectCmd::execute()
         it.current()->setDisappear( newEffect.disappear );
         it.current()->setEffect3( newEffect.effect3 );
         it.current()->setDisappearStep( newEffect.disappearStep );
+        it.current()->setAppearSpeed( newEffect.m_appearSpeed );
+        it.current()->setDisappearSpeed( newEffect.m_disappearSpeed );
         it.current()->setAppearTimer( newEffect.appearTimer );
         it.current()->setDisappearTimer( newEffect.disappearTimer );
         it.current()->setAppearSoundEffect( newEffect.appearSoundEffect );
@@ -455,6 +457,8 @@ void EffectCmd::unexecute()
         object->setDisappear( oldEffects[ i ].disappear );
         object->setEffect3( oldEffects[ i ].effect3 );
         object->setDisappearStep( oldEffects[ i ].disappearStep );
+        object->setAppearSpeed( oldEffects[ i ].m_appearSpeed );
+        object->setDisappearSpeed( oldEffects[ i ].m_disappearSpeed );
         object->setAppearTimer( oldEffects[ i ].appearTimer );
         object->setDisappearTimer( oldEffects[ i ].disappearTimer );
         object->setAppearSoundEffect( oldEffects[ i ].appearSoundEffect );

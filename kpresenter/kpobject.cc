@@ -222,6 +222,8 @@ KPObject::KPObject()
     effect = EF_NONE;
     effect2 = EF2_NONE;
     effect3 = EF3_NONE;
+    m_appearSpeed = ES_MEDIUM;
+    m_disappearSpeed = ES_MEDIUM;
     disappear = false;
     appearTimer = 1;
     disappearTimer = 1;
