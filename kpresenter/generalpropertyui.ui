@@ -80,7 +80,7 @@
                         <cstring>positionGroup</cstring>
                     </property>
                     <property name="title">
-                        <string>Positon</string>
+                        <string>Position</string>
                     </property>
                     <property name="flat">
                         <bool>false</bool>
