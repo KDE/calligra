@@ -9,6 +9,9 @@ module KCharter
 	interface View : OPParts::View
 	{
 		slot void newView();
+		slot void setTypeBars();
+		slot void setTypeLines();
+		slot void setTypeArea();
 	};
 
 	interface Document : OPParts::Document, Chart::SimpleChart

@@ -28,6 +28,9 @@ public:
 
   // IDL
   virtual void newView();
+  virtual void setTypeBars();
+  virtual void setTypeLines();
+  virtual void setTypeArea();
   
   // C++
   virtual void setDocument( KChartDocument *_doc );
@@ -50,9 +53,11 @@ protected:
   CORBA::Long m_idMenuView;
   CORBA::Long m_idMenuView_NewView;
   
-  /* OPParts::ToolBarFactory_var m_vToolBarFactory;
-  ToolBar_ref m_rToolBarEdit;
-  CORBA::Long m_idButtonEdit_Darker; */
+  OPParts::ToolBarFactory_var m_vToolBarFactory;
+  ToolBar_ref m_rToolBarLayout;
+  CORBA::Long m_idButtonLayout_Bars;
+  CORBA::Long m_idButtonLayout_Area;
+  CORBA::Long m_idButtonLayout_Lines;
 };
 
 #endif

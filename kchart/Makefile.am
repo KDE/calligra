@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS = core
+SUBDIRS = core pics
 
 INCLUDES  = $(MICO_INCLUDES)  -I./core  -I../lib/koml \
 	-I../lib/kofficecore -I../lib/kofficeui $(all_includes) -I$(idldir)

@@ -172,4 +172,9 @@ void KChartDocument::fill( const Chart::Range& range, const Chart::Matrix& matri
   cerr << "6" << endl;
 }
 
+void KChartDocument::emitModified()
+{
+  emit sig_modified();
+}
+
 #include "kchart_doc.moc"

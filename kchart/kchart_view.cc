@@ -46,11 +46,8 @@ void KChartView::cleanUp()
   m_rMenuBar = 0L;
   m_vMenuBarFactory = 0L;
 
-  /*
-  m_rToolBarFile = 0L;
-  m_rToolBarEdit = 0L;
+  m_rToolBarLayout = 0L;
   m_vToolBarFactory = 0L;
-  */
 
   View_impl::cleanUp();
 }
@@ -93,30 +90,32 @@ void KChartView::createGUI()
     m_rMenuBar = m_vMenuBarFactory->createMenuBar( this );
 
     // View
-    m_idMenuView = m_rMenuBar->insertMenu( CORBA::string_dup( "&View" ) );
+    m_idMenuView = m_rMenuBar->insertMenu( i18n( "&View" ) );
 
-    m_idMenuView_NewView = m_rMenuBar->insertItem( CORBA::string_dup( "&New View" ), m_idMenuView,
-						       this, CORBA::string_dup( "newView" ) );
+    m_idMenuView_NewView = m_rMenuBar->insertItem( i18n( "&New View" ), m_idMenuView,
+						       this, "newView" );
   }
 
-  /*
   m_vToolBarFactory = m_vPartShell->toolBarFactory();
   if ( !CORBA::is_nil( m_vToolBarFactory ) )
   {
-    m_rToolBarFile = m_vToolBarFactory->createToolBar( this, CORBA::string_dup( "File" ) );
-    m_rToolBarFile->setFileToolBar( true );
-    QString tmp = opapp->kde_icondir().copy();
-    tmp += "/mini/mini-doc.xpm";
-    QString pix = loadPixmap( tmp );
-    m_idButtonFile_Open = m_rToolBarFile->insertButton( CORBA::string_dup( pix ), "Open", 0L, 0L );
+    m_rToolBarLayout = m_vToolBarFactory->createToolBar( this, i18n( "Layout" ) );
 
-    m_rToolBarEdit = m_vToolBarFactory->createToolBar( this, "Edit" );
-    tmp = opapp->kde_icondir().copy();
-    tmp += "/mini/mini-eyes.xpm";
+    QString tmp = kapp->kde_datadir().copy();
+    tmp += "/kchart/pics/bars.xpm";
+    QString pix = loadPixmap( tmp );
+    m_idButtonLayout_Bars = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), i18n( "Bars" ), this, "setTypeBars" );
+
+    tmp = kapp->kde_datadir().copy();
+    tmp += "/kchart/pics/area.xpm";
     pix = loadPixmap( tmp );
-    m_idButtonEdit_Darker = m_rToolBarEdit->insertButton( CORBA::string_dup( pix ), "Darker", 0L, 0L );
+    m_idButtonLayout_Area = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), "Area", this, "setTypeArea" );
+
+    tmp = kapp->kde_datadir().copy();
+    tmp += "/kchart/pics/lines.xpm";
+    pix = loadPixmap( tmp );
+    m_idButtonLayout_Lines = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), "Lines", this, "setTypeLines" );
   }
-  */
 }
 
 void KChartView::newView()
@@ -133,5 +132,28 @@ void KChartView::newView()
   CORBA::release( shell );
 }
 
+void KChartView::setTypeBars()
+{
+  m_pDoc->chart().setChartType( Bars );
+  m_pDoc->emitModified();
+}
+
+void KChartView::setTypeLines()
+{
+  m_pDoc->chart().setChartType( Lines );
+  m_pDoc->emitModified();
+}
+
+void KChartView::setTypeArea()
+{
+  m_pDoc->chart().setChartType( Area );
+  m_pDoc->emitModified();
+}
+
 #include "kchart_view.moc"
+
+
+
+
+
 

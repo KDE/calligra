@@ -70,6 +70,8 @@ public:
   virtual void removeView( KChartView *_view );
 
   KChart& chart() { return m_chart; }
+
+  void emitModified();
   
 signals:
   void sig_modified();
