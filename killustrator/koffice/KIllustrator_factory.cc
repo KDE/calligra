@@ -2,6 +2,7 @@
 #include "KIllustrator_doc.h"
 
 #include <kinstance.h>
+#include <kiconloader.h>
 #include <kstddirs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
@@ -74,6 +75,8 @@ KInstance* KIllustratorFactory::global()
     s_global->dirs ()->addResourceType ("killustrator_palettes",
 					KStandardDirs::kde_default("data") +
 					"killustrator/palettes/");
+    // Tell the iconloader about share/apps/koffice/icons
+    s_global->iconLoader()->addAppDir("koffice");
     return s_global;
 }
 

@@ -2,7 +2,7 @@
 #include "kformula_doc.h"
 
 #include <kinstance.h>
-
+#include <kiconloader.h>
 
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -39,6 +39,8 @@ KFormulaFactory::KFormulaFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
     s_global = new KInstance( "kformula" );
+    // Tell the iconloader about share/apps/koffice/icons
+    s_global->iconLoader()->addAppDir("koffice");
 }
 
 KFormulaFactory::~KFormulaFactory()

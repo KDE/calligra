@@ -69,6 +69,9 @@ KInstance* ExampleFactory::global()
     {
         s_global = new KInstance( aboutData() );
         // Add any application-specific resource directories here
+
+	// Tell the iconloader about share/apps/koffice/icons
+	s_global->iconLoader()->addAppDir("koffice");
     }
 
     return s_global;

@@ -29,6 +29,7 @@
 #include <kaboutdata.h>
 #include <qstringlist.h>
 #include <klocale.h>
+#include <kiconloader.h>
 
 
 static const char* description=I18N_NOOP("KOffice Presentation Tool");
@@ -120,6 +121,8 @@ KInstance* KPresenterFactory::global()
 				        KStandardDirs::kde_default("data") + "koffice/toolbar/");
       s_global->dirs()->addResourceType("toolbar",
  				        KStandardDirs::kde_default("data") + "kpresenter/toolbar/");
+      // Tell the iconloader about share/apps/koffice/icons
+      s_global->iconLoader()->addAppDir("koffice");
     }
     return s_global;
 }

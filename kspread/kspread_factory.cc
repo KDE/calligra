@@ -7,6 +7,7 @@
 #include <kinstance.h>
 #include <kstddirs.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
 static const char* description=I18N_NOOP("KOffice Spreadsheet Application");
 static const char* version="0.1";
@@ -85,6 +86,8 @@ KInstance* KSpreadFactory::global()
       s_global->dirs()->addResourceType( "table-styles", KStandardDirs::kde_default("data") + "kspread/tablestyles/");
       s_global->dirs()->addResourceType( "scripts", KStandardDirs::kde_default("data") + "koffice/scripts/");
       s_global->dirs()->addResourceType( "scripts", KStandardDirs::kde_default("data") + "kspread/scripts/");
+      // Tell the iconloader about share/apps/koffice/icons
+      s_global->iconLoader()->addAppDir("koffice");
     }
     return s_global;
 }

@@ -20,6 +20,7 @@
 #include <kinstance.h>
 #include <klocale.h>
 #include <kaboutdata.h>
+#include <kiconloader.h>
 
 #include <graphitepart.h>
 #include <graphitefactory.h>
@@ -71,9 +72,11 @@ KAboutData* GraphiteFactory::aboutData() {
 }
 
 KInstance *GraphiteFactory::global() {
-    
+
     if (!s_global) {
         s_global=new KInstance(aboutData());
+	// Tell the iconloader about share/apps/koffice/icons
+	s_global->iconLoader()->addAppDir("koffice");
     }
     return s_global;
 }

@@ -10,6 +10,7 @@
 #include <kinstance.h>
 #include <kaboutdata.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
 static const char* description=I18N_NOOP("KOffice Chart Generator");
 static const char* version="0.1";
@@ -72,6 +73,8 @@ KInstance* KChartFactory::global()
     if ( !s_global )
     {
          s_global = new KInstance(aboutData());
+	 // Tell the iconloader about share/apps/koffice/icons
+	 s_global->iconLoader()->addAppDir("koffice");
     }
     return s_global;
 }

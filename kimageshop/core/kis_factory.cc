@@ -23,6 +23,7 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kaboutdata.h>
+#include <kiconloader.h>
 
 #include "kis_factory.h"
 #include "kis_pluginserver.h"
@@ -89,25 +90,25 @@ KInstance* KisFactory::global()
 {
     if ( !s_global )
     {
-      s_global = new KInstance(s_aboutData);
-
-      s_global->dirs()->addResourceType("kis",
-										KStandardDirs::kde_default("data") + "kimageshop/");
-      s_global->dirs()->addResourceType("kis_images",
-										KStandardDirs::kde_default("data") + "kimageshop/images/");
-      s_global->dirs()->addResourceType("kis_brushes",
-										KStandardDirs::kde_default("data") + "kimageshop/brushes/");
-	  s_global->dirs()->addResourceType("kis_pattern",
-										KStandardDirs::kde_default("data") + "kimageshop/pattern/");
-	  s_global->dirs()->addResourceType("kis_gradients",
-										KStandardDirs::kde_default("data") + "kimageshop/gradients/");
-      s_global->dirs()->addResourceType("kis_pics",
-										KStandardDirs::kde_default("data") + "kimageshop/pics/");
-      s_global->dirs()->addResourceType("kis_plugins",
-										KStandardDirs::kde_default("data") + "kimageshop/plugins/");
-	  s_global->dirs()->addResourceType("toolbars",
-										KStandardDirs::kde_default("data") + "koffice/toolbar/");
-
+	s_global = new KInstance(s_aboutData);
+	s_global->dirs()->addResourceType("kis",
+					  KStandardDirs::kde_default("data") + "kimageshop/");
+	s_global->dirs()->addResourceType("kis_images",
+					  KStandardDirs::kde_default("data") + "kimageshop/images/");
+	s_global->dirs()->addResourceType("kis_brushes",
+					  KStandardDirs::kde_default("data") + "kimageshop/brushes/");
+	s_global->dirs()->addResourceType("kis_pattern",
+					  KStandardDirs::kde_default("data") + "kimageshop/pattern/");
+	s_global->dirs()->addResourceType("kis_gradients",
+					  KStandardDirs::kde_default("data") + "kimageshop/gradients/");
+	s_global->dirs()->addResourceType("kis_pics",
+					  KStandardDirs::kde_default("data") + "kimageshop/pics/");
+	s_global->dirs()->addResourceType("kis_plugins",
+					  KStandardDirs::kde_default("data") + "kimageshop/plugins/");
+	s_global->dirs()->addResourceType("toolbars",
+					  KStandardDirs::kde_default("data") + "koffice/toolbar/");
+	// Tell the iconloader about share/apps/koffice/icons
+	s_global->iconLoader()->addAppDir("koffice");
     }
     return s_global;
 }
