@@ -36,6 +36,25 @@ class QCloseEvent;
 class QListView;
 class QListViewItem;
 class QLineEdit;
+class KColorButton;
+
+
+/******************************************************************/
+/* Class: KWBrushStylePreview		                          */
+/******************************************************************/
+class KWBrushStylePreview : public QFrame
+{
+    Q_OBJECT
+public:
+    KWBrushStylePreview( QWidget*, const char* = 0L );
+    ~KWBrushStylePreview() {}
+    void setBrush(QBrush _brush){ brush=_brush;}
+protected:
+    void drawContents( QPainter* );
+private:
+    QBrush brush;
+};
+
 
 /******************************************************************/
 /* Class: KWFrameDia                                              */
@@ -58,10 +77,13 @@ protected:
     void setupTab2();
     void setupTab3();
     void setupTab4();
+    void setupTab5();
     void uncheckAllRuns();
     void updateFrames();
     void enableRunAround();
     void enableOnNewPageOptions();
+    void initComboStyleBrush();
+    QBrush frameBrushStyle();
 
     // TAB 1:
     QWidget *tab1;
@@ -97,6 +119,13 @@ protected:
     QLineEdit *sx, *sy, *sw, *sh, *sml, *smr, *smt, *smb;
     QCheckBox *floating;
 
+    // TAB 5:
+    QWidget *tab5;
+    QGridLayout *grid5;
+    QComboBox *brushStyle;
+    KColorButton *brushColor;
+    KWBrushStylePreview *brushPreview;
+
     KWFrame *frame;
     KWDocument *doc;
     FrameSetType frameType;
@@ -107,6 +136,7 @@ protected:
     int /*FrameBehaviour*/ frameBehaviour;
     KWUnit::Unit frameUnits;
     QString oldFrameSetName;
+    QBrush newBrushStyle;
 
 protected slots:
     void runNoClicked();
@@ -118,6 +148,7 @@ protected slots:
     void setFrameBehaviourInputOff();
     void slotFloatingToggled(bool);
     void textNameFrameChanged ( const QString & );
+    void updateBrushConfiguration();
 };
 
 #endif

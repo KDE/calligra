@@ -328,6 +328,7 @@ void KWFrame::save( QDomElement &frameElem )
         frameElem.setAttribute( "bkRed", getBackgroundColor().color().red() );
         frameElem.setAttribute( "bkGreen", getBackgroundColor().color().green() );
         frameElem.setAttribute( "bkBlue", getBackgroundColor().color().blue() );
+        frameElem.setAttribute( "bkStyle", (int)getBackgroundColor().style ());
     }
     if(getBLeft() != 0)
         frameElem.setAttribute( "bleftpt", getBLeft() );
@@ -418,6 +419,11 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
     brd_top = t;
     brd_bottom = b;
     backgroundColor = QBrush( c );
+
+
+    if( frameElem.hasAttribute("bkStyle"))
+        backgroundColor.setStyle (static_cast<Qt::BrushStyle>(KWDocument::getAttribute( frameElem, "bkStyle", Qt::SolidPattern )));
+
     bleft = frameElem.attribute( "bleftpt" ).toDouble();
     bright = frameElem.attribute( "brightpt" ).toDouble();
     btop = frameElem.attribute( "btoppt" ).toDouble();

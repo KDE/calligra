@@ -48,11 +48,31 @@
 #include <kmessagebox.h>
 #include <qvalidator.h>
 #include <knumvalidator.h>
+#include <kcolorbutton.h>
 
 #include <stdlib.h>
 #include <limits.h>
 
 #include <kdebug.h>
+
+/******************************************************************/
+/* Class KWBrushStylePreview                                      */
+/******************************************************************/
+KWBrushStylePreview::KWBrushStylePreview( QWidget*parent, const char* name )
+    :QFrame(parent,name)
+{
+}
+
+void KWBrushStylePreview::drawContents( QPainter* painter )
+{
+    painter->save();
+    painter->translate( contentsRect().x(), contentsRect().y() );
+    painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
+                       colorGroup().base() );
+    painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(), brush );
+    painter->restore();
+}
+
 
 /******************************************************************/
 /* Class: KWFrameDia                                              *
@@ -103,7 +123,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, Fram
 
 void KWFrameDia::init() {
 
-    tab1 = tab2 = tab3 = tab4 = 0;
+    tab1 = tab2 = tab3 = tab4 = tab5 = 0;
     if (frame) {
         KoRect r = frame->normalize();
         frame->setRect( r.x(), r.y(), r.width(), r.height() );
@@ -121,12 +141,14 @@ void KWFrameDia::init() {
         {
             setupTab2();
             setupTab4();
+            setupTab5();
         }
         else if ( fs && fs->isHeaderOrFooter() )
         {
             setupTab1();
             setupTab2();
             setupTab4();
+            setupTab5();
         }
         else if(frameType == FT_TEXT)
         {
@@ -134,6 +156,7 @@ void KWFrameDia::init() {
             setupTab2();
             setupTab3();
             setupTab4();
+            setupTab5();
             if(! frame->getFrameSet()) // first creation
                 showPage(2);
         }
@@ -738,8 +761,184 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     //kdDebug() << "setup tab 4 exit"<<endl;
 }
 
+void KWFrameDia::setupTab5()
+{
+    tab5 = addPage( i18n("Background") );
+    grid5 = new QGridLayout( tab5, 8, 2, KDialog::marginHint(), KDialog::spacingHint() );
+
+    QLabel *l = new QLabel( i18n( "Background Color:" ), tab5 );
+    l->setFixedHeight( l->sizeHint().height() );
+
+    grid5->addWidget(l,0,0);
+
+    brushColor = new KColorButton( Qt::white, tab5 );
+    grid5->addWidget(brushColor,1,0);
+
+    connect( brushColor, SIGNAL( changed( const QColor & ) ),
+	     this, SLOT( updateBrushConfiguration() ) );
 
 
+    l = new QLabel( i18n( "Background Style:" ), tab5 );
+    grid5->addWidget(l,2,0);
+
+    brushStyle = new QComboBox( false,tab5, "BStyle" );
+    grid5->addWidget(brushStyle,3,0);
+
+    brushStyle->insertItem( i18n( "100% fill Pattern" ) );
+    brushStyle->insertItem( i18n( "94% fill Pattern" ) );
+    brushStyle->insertItem( i18n( "88% fill Pattern" ) );
+    brushStyle->insertItem( i18n( "63% fill Pattern" ) );
+    brushStyle->insertItem( i18n( "50% fill Pattern" ) );
+    brushStyle->insertItem( i18n( "37% fill Pattern" ) );
+    brushStyle->insertItem( i18n( "12% fill Pattern" ) );
+    brushStyle->insertItem( i18n( "6% fill Pattern" ) );
+    brushStyle->insertItem( i18n( "Horizontal Lines" ) );
+    brushStyle->insertItem( i18n( "Vertical Lines" ) );
+    brushStyle->insertItem( i18n( "Crossing Lines" ) );
+    brushStyle->insertItem( i18n( "Diagonal Lines ( / )" ) );
+    brushStyle->insertItem( i18n( "Diagonal Lines ( \\ )" ) );
+    brushStyle->insertItem( i18n( "Diagonal Crossing Lines" ) );
+    brushStyle->insertItem( i18n( "No Brush" ) );
+    connect(  brushStyle, SIGNAL( activated( int ) ),
+	     this, SLOT( updateBrushConfiguration() ) );
+
+    brushPreview=new KWBrushStylePreview(tab5);
+    grid5->addMultiCellWidget(brushPreview,0,7,1,1);
+
+    initComboStyleBrush();
+    updateBrushConfiguration();
+}
+
+void KWFrameDia::initComboStyleBrush()
+{
+    if ( frame )
+        newBrushStyle = frame->getBackgroundColor();
+    else
+    {
+        KWFrame *firstFrame = doc->getFirstSelectedFrame();
+        if ( firstFrame )
+            newBrushStyle = frame->getBackgroundColor();
+    }
+
+    switch ( newBrushStyle.style() )
+    {
+    case SolidPattern:
+        brushStyle->setCurrentItem( 0 );
+	break;
+    case Dense1Pattern:
+        brushStyle->setCurrentItem( 1 );
+	break;
+    case Dense2Pattern:
+        brushStyle->setCurrentItem( 2 );
+	break;
+    case Dense3Pattern:
+        brushStyle->setCurrentItem( 3 );
+	break;
+    case Dense4Pattern:
+        brushStyle->setCurrentItem( 4 );
+	break;
+    case Dense5Pattern:
+        brushStyle->setCurrentItem( 5 );
+	break;
+    case Dense6Pattern:
+        brushStyle->setCurrentItem( 6 );
+	break;
+    case Dense7Pattern:
+        brushStyle->setCurrentItem( 7 );
+	break;
+    case HorPattern:
+        brushStyle->setCurrentItem( 8 );
+	break;
+    case VerPattern:
+        brushStyle->setCurrentItem( 9 );
+	break;
+    case CrossPattern:
+        brushStyle->setCurrentItem( 10 );
+	break;
+    case BDiagPattern:
+        brushStyle->setCurrentItem( 11 );
+	break;
+    case FDiagPattern:
+        brushStyle->setCurrentItem( 12 );
+	break;
+    case DiagCrossPattern:
+        brushStyle->setCurrentItem( 13 );
+	break;
+    case NoBrush:
+        brushStyle->setCurrentItem( 14 );
+	break;
+    case CustomPattern:
+	break;
+    }
+    QColor col=newBrushStyle.color();
+    col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
+
+    brushColor->setColor( col );
+}
+
+QBrush KWFrameDia::frameBrushStyle()
+{
+    QBrush brush;
+
+    switch ( brushStyle->currentItem() )
+    {
+    case 0:
+        brush.setStyle( SolidPattern );
+	break;
+    case 1:
+        brush.setStyle( Dense1Pattern );
+	break;
+    case 2:
+        brush.setStyle( Dense2Pattern );
+	break;
+    case 3:
+        brush.setStyle( Dense3Pattern );
+	break;
+    case 4:
+        brush.setStyle( Dense4Pattern );
+	break;
+    case 5:
+        brush.setStyle( Dense5Pattern );
+	break;
+    case 6:
+        brush.setStyle( Dense6Pattern );
+	break;
+    case 7:
+        brush.setStyle( Dense7Pattern );
+	break;
+    case 8:
+        brush.setStyle( HorPattern );
+	break;
+    case 9:
+        brush.setStyle( VerPattern );
+	break;
+    case 10:
+        brush.setStyle( CrossPattern );
+	break;
+    case 11:
+        brush.setStyle( BDiagPattern );
+	break;
+    case 12:
+        brush.setStyle( FDiagPattern );
+	break;
+    case 13:
+        brush.setStyle( DiagCrossPattern );
+	break;
+    case 14:
+        brush.setStyle( NoBrush );
+	break;
+    }
+
+    brush.setColor( brushColor->color() );
+
+    return brush;
+}
+
+void KWFrameDia::updateBrushConfiguration()
+{
+    brushPreview->setBrush(frameBrushStyle());
+    brushPreview->repaint(true);
+}
 
 void KWFrameDia::uncheckAllRuns()
 {
@@ -1031,13 +1230,25 @@ bool KWFrameDia::applyChanges()
         frame->setRunAroundGap( KWUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() ) );
     }
 
+    if(tab5)
+    {
+        QBrush tmpBrush=frameBrushStyle();
+        if(tmpBrush!=frame->getBackgroundColor())
+        {
+            frame->setBackgroundColor(tmpBrush);
+            doc->repaintAllViews();
+        }
+    }
+
+
     // Undo/redo for frame properties
     if(!isNewFrame && (
                       frameCopy->isCopy()!=frame->isCopy()
                    || frameCopy->getFrameBehaviour()!=frame->getFrameBehaviour()
                    || frameCopy->getNewFrameBehaviour()!=frame->getNewFrameBehaviour())
                    || frameCopy->runAround()!=frame->runAround()
-                   || frameCopy->runAroundGap()!=frame->runAroundGap())
+                   || frameCopy->runAroundGap()!=frame->runAroundGap()
+                   || (tab5 && frameCopy->getBackgroundColor()!=frameBrushStyle()))
     {
         if(!macroCmd)
             macroCmd = new KMacroCommand( i18n("Frame Properties") );
