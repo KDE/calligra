@@ -1553,6 +1553,7 @@ void KWView::updateReadWrite( bool readwrite )
     }
     else
     {
+        frameSelectedChanged();
         slotFrameSetEditChanged();
         refreshCustomMenu();
 
@@ -3043,6 +3044,8 @@ void KWView::tableInsertRow()
     m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     Q_ASSERT(table);
+    if (!table)
+        return;
     KWInsertDia dia( this, "", table, m_doc, KWInsertDia::ROW, m_gui->canvasWidget() );
     dia.setCaption( i18n( "Insert Row" ) );
     dia.exec();
@@ -3053,6 +3056,8 @@ void KWView::tableInsertCol()
     m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     Q_ASSERT(table);
+    if (!table)
+        return;
     // value = 62 because a insert column = 60 +2 (border )see kwtableframeset.cc
     if ( table->boundingRect().right() + 62 > static_cast<int>( m_doc->ptPaperWidth() ) )
     {
@@ -3075,6 +3080,8 @@ void KWView::tableDeleteRow()
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     Q_ASSERT(table);
+    if (!table)
+        return;
     if ( table->getRows() == 1 )
     {
         int result;
@@ -3105,6 +3112,8 @@ void KWView::tableDeleteCol()
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     Q_ASSERT(table);
+    if (!table)
+        return;
     if ( table->getCols() == 1 )
     {
         int result;
@@ -3134,6 +3143,8 @@ void KWView::tableJoinCells()
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     Q_ASSERT(table);
+    if (!table)
+        return;
     KCommand * cmd=table->joinCells();
     if ( !cmd )
     {
@@ -3204,6 +3215,8 @@ void KWView::tableUngroupTable()
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     Q_ASSERT(table);
+    if (!table)
+        return;
 
     // Use a macro command because we may have to make the table non-floating first
     KMacroCommand * macroCmd = new KMacroCommand( i18n( "Ungroup Table" ) );
@@ -3224,6 +3237,8 @@ void KWView::tableDelete()
 {
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     Q_ASSERT(table);
+    if (!table)
+        return;
     m_doc->deleteTable( table );
     m_gui->canvasWidget()->emitFrameSelectedChanged();
 }
