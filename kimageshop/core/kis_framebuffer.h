@@ -30,7 +30,7 @@
  
 class KisSelection;
 class KisPattern;
-
+class KisLayer;
 
 class KisFrameBuffer : public QObject 
 {

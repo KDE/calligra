@@ -29,13 +29,13 @@
 #include <qtimer.h>
 
 #include <stdlib.h>
-#include <X11/Xlib.h>
 
 #include "kis_layer.h"
 #include "kis_global.h"
 #include "kis_color.h"
 
 class KisBrush;
+#include <X11/Xlib.h>  // for XImage
 
 
 class KisImage : public QObject

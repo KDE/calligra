@@ -36,13 +36,13 @@
 #include <kdebug.h>
 
 #include "kis_factory.h"
-#include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_util.h"
 #include "kis_brush.h"
 #include "kis_global.h"
 #include "kis_util.h"
 #include "kis_timer.h"
+#include "kis_image.h"
 
 #define KIS_DEBUG(AREA, CMD)
 //#define TEST_UNOPTIMIZED_VISUAL
