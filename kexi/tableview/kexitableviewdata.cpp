@@ -398,6 +398,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert)
 		if (insert) {
 			if (!m_cursor->insertRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() )) {
 				m_result.msg = i18n("Row inserting failed.");
+				KexiDB::getHTMLErrorMesage(m_cursor, m_result.desc);
 
 /*			if (desc)
 			*desc = 
@@ -412,7 +413,7 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 		else {
 			if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() )) {
 				m_result.msg = i18n("Row changing failed.");
-/*! js: TODO: the same as for inserting ^^^^^ */
+				KexiDB::getHTMLErrorMesage(m_cursor, m_result.desc);
 				return false;
 			}
 		}
