@@ -73,7 +73,7 @@ public:
    * The table named @param _from is being moved to the table @param _to.
    * If @param _before is true @param _from is inserted before (after otherwise)   * @param _to.
    */
-  void moveTable( const char* _from, const char* to, bool _before = true );
+  void moveTable( const QString & _from, const QString & _to, bool _before = true );
 
   KSpreadTable* findTable( const QString & _name );
 

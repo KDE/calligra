@@ -549,7 +549,7 @@ public:
     /**
      * A convenience function that finds a table by its name.
      */
-    KSpreadTable *findTable( const char *_name );
+    KSpreadTable *findTable( const QString & _name );
 
     /**
      * Used by Undo.

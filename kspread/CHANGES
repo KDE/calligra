@@ -608,3 +608,11 @@ Numbers are sorted as numbers, and are always smaller than texts (as Excel does)
 -Re-enabled empty cells in sorting, creating nonDefaultCells when necessary.
 -Got rid of "onlyRow" and "onlyColumn" hacks
 -Fixed the sort dialog for those cases
+
+2000-06-05 -David Faure <faure@kde.org>
+-----------------------------------------------------
+-Fixes for non-latin1 users. grep ascii *cc *h returns nothing anymore,
+and grep latin1 only very few safe ones. Please let it remain this way :)
+This fix will be tested by Tinkl Lukás.
+TODO: trying to make this compile with the no-ascii-casts flags ;-)
+

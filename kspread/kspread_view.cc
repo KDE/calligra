@@ -1559,7 +1559,7 @@ void KSpreadView::changeTable( const QString& _name )
     KSpreadTable *t = m_pDoc->map()->findTable( _name );
     if ( !t )
     {
-	kdDebug(36001) << "Unknown table " << _name.latin1() << endl;
+	kdDebug(36001) << "Unknown table " << _name << endl;
 	return;
     }
 
@@ -2177,35 +2177,6 @@ void KSpreadView::slotActivateTool( int _id )
   if ( tool->run( entry->command, &text, "QString", "text/plain") )
       cell->setCellText( text, true );
 
-  // ############## TODO
-  /*
-//  CORBA::Object_var obj = imr_activate( entry->entry->name(), "IDL:DataTools/Tool:1.0" );
-  CORBA::Object_var obj = entry->entry->ref();
-  if ( CORBA::is_nil( obj ) )
-    // TODO: error message
-    return;
-
-  DataTools::Tool_var tool = DataTools::Tool::_narrow( obj );
-  if ( CORBA::is_nil( tool ) )
-    // TODO: error message
-    return;
-
-  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-  if ( !cell->isFormular() && !cell->isValue() )
-  {
-    QString text = cell->text();
-    CORBA::Any value;
-    value <<= CORBA::Any::from_string( (char*)text.data(), 0 );
-    CORBA::Any anyid;
-    KSpread::DataToolsId id;
-    id.time = (unsigned long int)time( 0L );
-    id.row = m_pCanvas->markerRow();
-    id.column = m_pCanvas->markerColumn();
-    anyid <<= id;
-    tool->run( entry->command.ascii(), this, value, anyid );
-    return;
-  }
-  */
 }
 
 void KSpreadView::deleteSelection()

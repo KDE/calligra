@@ -988,12 +988,12 @@ void CellLayoutPageFont::display_example(const QFont& font)
   example_label->setFont(font);
   example_label->repaint();
 
-  kdDebug(36001) << "FAMILY 2 '" << font.family().ascii() << "' " << font.pointSize() << endl;
+  kdDebug(36001) << "FAMILY 2 '" << font.family() << "' " << font.pointSize() << endl;
 
   QFontInfo info = example_label->fontInfo();
   actual_family_label_data->setText(info.family());
 
-  kdDebug(36001) << "FAMILY 3 '" << info.family().latin1() << "' " << info.pointSize() << endl;
+  kdDebug(36001) << "FAMILY 3 '" << info.family() << "' " << info.pointSize() << endl;
 
   string.setNum(info.pointSize());
   actual_size_label_data->setText(string);

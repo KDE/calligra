@@ -463,8 +463,8 @@ void KSpreadTabBar::mouseReleaseEvent( QMouseEvent* _ev )
 	    m_pAutoScrollTimer->stop();
 	    m_autoScroll = 0;
 	}
-	m_pView->doc()->map()->moveTable( (*tabsList.at( activeTab - 1 )).ascii(),
-					  (*tabsList.at( m_moveTab - 1 )).ascii(),
+	m_pView->doc()->map()->moveTable( (*tabsList.at( activeTab - 1 )),
+					  (*tabsList.at( m_moveTab - 1 )),
 					  m_moveTabFlag == moveTabBefore );
 	moveTab( activeTab - 1, m_moveTab - 1, m_moveTabFlag == moveTabBefore );
 

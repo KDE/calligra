@@ -62,7 +62,7 @@ void KSpreadMap::removeTable( KSpreadTable *_table )
   m_lstTables.setAutoDelete( true );
 }
 
-void KSpreadMap::moveTable( const char* _from, const char* _to, bool _before )
+void KSpreadMap::moveTable( const QString & _from, const QString & _to, bool _before )
 {
   KSpreadTable* tablefrom = findTable( _from );
   KSpreadTable* tableto = findTable( _to );

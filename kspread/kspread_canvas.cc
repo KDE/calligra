@@ -1255,7 +1255,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
       if ( !m_pEditor && !m_bChoose )
       {
-        if ( _ev->ascii() == '*' )
+        if ( _ev->text() == QString::fromLatin1("*") )
           createEditor( FormulaEditor );
         else
         {

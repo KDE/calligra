@@ -1825,7 +1825,9 @@ void KSpreadTable::changeNameCellRef(int pos,ChangeRef ref,QString tabname)
     {
       QString erg = "";
 
-      const char *p = it.current()->text().ascii();
+      // Should this be rewritten to use QString instead of char *
+      // or is local8Bit ok ? (David)
+      const char *p = it.current()->text().local8Bit();
       char buf[ 2 ];
       buf[ 1 ] = 0;
 
@@ -1996,7 +1998,9 @@ void KSpreadTable::changeNameCellRef2(const QPoint & pos, ChangeRef ref,QString 
     {
       QString erg = "";
 
-      const char *p = it.current()->text().ascii();
+      // Should this be rewritten to use QString instead of char *
+      // or is local8Bit ok ? (David)
+      const char *p = it.current()->text().local8Bit();
       char buf[ 2 ];
       buf[ 1 ] = 0;
 
@@ -2963,7 +2967,7 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
     if(!currency)
     	{
     	currency = KGlobal::locale()->currencySymbol();
-	kdDebug(36001) << "Money:" << currency.ascii() << endl;
+	kdDebug(36001) << "Money:" << currency << endl;
     	}
     bool selected = ( m_rctSelection.left() != 0 );
     QString tmp=" "+currency;
@@ -4726,7 +4730,7 @@ const char *KSpreadTable::columnLabel(int column)
   return m_arrColumnLabel;
 }
 
-KSpreadTable* KSpreadTable::findTable( const char *_name )
+KSpreadTable* KSpreadTable::findTable( const QString & _name )
 {
   if ( !m_pMap )
     return 0L;
@@ -5021,7 +5025,7 @@ bool ChartChild::save( ostream& out )
     QString u = document()->url().url();
     QString mime = document()->mimeType();
 
-    out << indent << "<CHART url=\"" << u.ascii() << "\" mime=\"" << mime.ascii()<< "\">"
+    out << indent << "<CHART url=\"" << u.utf8().data() << "\" mime=\"" << mime.utf8().data() << "\">"
 	<< geometry();
     if ( m_pBinding )
 	out << "<BINDING>" << m_pBinding->dataArea() << "</BINDING>";

@@ -52,7 +52,7 @@
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->updateCell( this, m_iColumn, m_iRow );
 #define DO_UPDATE m_pTable->updateCell( this, m_iColumn, m_iRow )
 
-char KSpreadCell::decimal_point = '\0';
+QChar KSpreadCell::decimal_point = '\0';
 
 /*****************************************************************************
  *
@@ -814,12 +814,10 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // First get some locale information
     if (!decimal_point)
     { // (decimal_point is static)
-      decimal_point = KGlobal::locale()->decimalSymbol()[0].latin1();
-      // Hmm we should use QChar here and QString a lot more around
-      // here... (David)
+      decimal_point = KGlobal::locale()->decimalSymbol()[0];
       kdDebug(36001) << "decimal_point is '" << decimal_point << "'" << endl;
       // HACK
-      if ( decimal_point == 0 )
+      if ( decimal_point.isNull() )
 	  decimal_point = '.';
     }
 
