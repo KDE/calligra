@@ -304,7 +304,7 @@ QDomElement KWString::save( QDomDocument& d )
     if ( f.isNull() )
 	return f;
     e.appendChild( f );
-    
+
     QString buffer;
 
     for ( unsigned int i = 0; i < _len_; i++ ) {
@@ -345,6 +345,7 @@ bool KWString::load( const QDomElement &element, KWordDocument* doc )
 	else if ( t.tagName() == "VARIABLE" )
         {
 	    KWChar c;
+	    c.c = KWSpecialChar;	    
 	    c.attrib = new KWCharVariable();
 	    if ( !((KWCharVariable*)c.attrib)->load( t, doc ) )
 		return FALSE;
@@ -353,11 +354,17 @@ bool KWString::load( const QDomElement &element, KWordDocument* doc )
 	}
 	else if ( t.tagName() == "FOOTNOTE" )
         {
-	    // ####todo
+	    KWChar c;
+	    c.c = KWSpecialChar;
+	    c.attrib = new KWCharFootNote();
+	    if ( !((KWCharFootNote*)c.attrib)->load( t, doc ) )
+		return FALSE;
+	    append( c );
 	}
 	else if ( t.tagName() == "TAB" )
         {
 	    KWChar c;
+	    c.c = KWSpecialChar;
 	    c.attrib = new KWCharTab();
 	    if ( !((KWCharTab*)c.attrib)->load( t, doc ) )
 		return FALSE;
@@ -365,12 +372,18 @@ bool KWString::load( const QDomElement &element, KWordDocument* doc )
 	}
 	else if ( t.tagName() == "IMAGE" )
         {
-	    // ####todo
+	    unsigned int oldlen = _len_;
+	    resize( 1 + _len_ );
+
+	    _data_[ oldlen ].c = KWSpecialChar;
+	    _data_[ oldlen ].attrib = new KWCharImage();;
+	    if ( !((KWCharImage*)_data_[ oldlen ].attrib)->load( t, doc ) )
+		return FALSE;
 	}
 	else
 	    ASSERT( 0 );
     }
-    
+
     // insert( 0, "A woooooooooooooonsinn!" );
     return TRUE;
 }
@@ -646,7 +659,8 @@ KWChar* KWString::copy( KWChar *_data, unsigned int _len )
  case ID_KWCharImage:
      {
 	 KWCharImage *attrib = ( KWCharImage* )_data[ i ].attrib;
-	 attrib->getImage()->incRef();
+	 if ( attrib->getImage() )
+	     attrib->getImage()->incRef();
 	 KWCharImage *f = new KWCharImage( attrib->getImage() );
 	 __data[ i ].attrib = f;
      } break;
@@ -699,7 +713,8 @@ KWChar& KWString::copy( KWChar _c )
  case ID_KWCharImage:
      {
 	 KWCharImage *attrib = ( KWCharImage* )_c.attrib;
-	 attrib->getImage()->incRef();
+	 if ( attrib->getImage() )
+	     attrib->getImage()->incRef();
 	 KWCharImage *f = new KWCharImage( attrib->getImage() );
 	 c->attrib = f;
      } break;
@@ -953,7 +968,7 @@ QDomElement KWCharFormat::save( QDomDocument& doc )
 {
     QDomElement e = doc.createElement( "STYLE" );
     e.setAttribute( "id", format->getId() );
-    
+
     return e;
 }
 
@@ -964,12 +979,12 @@ bool KWCharFormat::load( const QDomElement& element, KWordDocument* doc, KWStrin
 	return FALSE;
 
     KWFormat* format = doc->getFormatCollection()->getFormat( element.attribute( "id" ).toInt() );
-    
+
     // Load the text
     QString t = element.text();
     int start = text->size();
     text->insert( start, t );
-    
+
     // Fill with attributes
     // ### todo: Reggie: you should use chared KWCharFormat here
     uint len = t.length();
@@ -980,7 +995,7 @@ bool KWCharFormat::load( const QDomElement& element, KWordDocument* doc, KWStrin
 	p[ start + i ].attrib = new KWCharFormat( format );
     }
     format->decRef();
-    
+
     return TRUE;
 }
 
@@ -1016,7 +1031,7 @@ QDomElement KWCharVariable::save( QDomDocument& doc )
 {
     QDomElement v = var->save( doc );
     if ( v.isNull() )
-	return v;    
+	return v;
     v.setAttribute( "id", format->getId() );
 
     return v;
@@ -1024,7 +1039,7 @@ QDomElement KWCharVariable::save( QDomDocument& doc )
 
 /*================================================================*/
 bool KWCharVariable::load( const QDomElement& element, KWordDocument* doc )
-{ 
+{
     if ( var )
 	delete var;
     if ( format )

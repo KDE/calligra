@@ -1274,8 +1274,9 @@ bool KWordDocument::loadFrameSets( const QDomElement &framesets )
 	case FT_PICTURE: {
 	    KWPictureFrameSet *frame = new KWPictureFrameSet( this );
 	    frame->setName( fsname );
-	    // #### todo
-	    //frame->load( parser, lst );
+
+	    if ( !frame->load( frameset ) )
+		return FALSE;
 	    frame->setFrameInfo( frameInfo );
 	    frames.append( frame );
 	} break;
@@ -1301,16 +1302,29 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
 	    u += "/";
 	    u += *it;
 
-	    QImage img;
-
 	    _store->open( u, 0L );
+	    CORBA::Long size = _store->size();
+	    QByteArray buffer( size );
+
+	    // A special scope to get rid of "data"
 	    {
-		// #### todo
-		//istorestream in( _store );
-		//in >> img;
+		KOStore::Data_var data = _store->read( size );
+		CORBA::ULong len = data->length();
+
+		char* p = buffer.data();
+		for( CORBA::ULong i = 0; i < len; ++i )
+		    *p++ = data[ i ];
 	    }
 	    _store->close();
 
+	    // Load the image
+	    QImage img;
+	    QBuffer b( buffer );
+	    b.open( IO_ReadOnly );
+	    QImageIO iio( &b, 0 );
+	    iio.setImage( img );
+	    iio.read();
+	    
 	    QString filename = *it;
 	    int dashdash = filename.findRev( "--" );
 	    if ( dashdash != -1 )
