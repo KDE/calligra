@@ -989,10 +989,6 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	QStringList list(container->form()->manager()->lib()->autoSaveProperties(w->className()));
 	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it)
 		tree->addModProperty(*it, w->property((*it).latin1()));
-
-	// Spring needs to do some other loading, so we call it
-	if(el.tagName() == "spacer")
-		Spring::loadSpring(w, el);
 }
 
 void
@@ -1105,12 +1101,15 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 		}
 		else if((tag == "vbox") || (tag == "hbox") || (tag == "grid"))
 		{
-			loadLayout(node, tree);
+			if(tag == "grid")
+				createGridLayout(node, tree);
 			readChildNodes(tree, container, lib, node, w);
-			if(tag != "grid") // no need to reload if layout is a grid
-				tree->container()->reloadLayout();
+			if(tag == "hbox")
+				tree->container()->setLayout(Container::HBox);
+			else if(tag == "vbox")
+				tree->container()->setLayout(Container::VBox);
 		}
-		else // unknown tag, welet the Factory handle it
+		else // unknown tag, we let the Factory handle it
 			lib->readSpecialProperty(w->className(), node, w, tree);
 	}
 
@@ -1118,51 +1117,38 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 	if((!hasGeometryProp) && ((eltag == "widget") || (eltag == "spacer")))
 	{
 		QString parentTag = el.parentNode().toElement().tagName();
-		kdDebug() << "Moving the widget" << w->name() << " by " << tree->parent()->children()->count() << endl;
 		if(parentTag == "hbox")
-			w->move(w->x() + tree->parent()->children()->count(), w->y()); // just right to the previous widget
+			w->move(tree->parent()->children()->count(), w->y()); // just right to the previous widget
 		else if(parentTag == "vbox")
-			w->move(w->x(), w->y() + tree->parent()->children()->count()); // just under the previous widget
+			w->move(w->x(), tree->parent()->children()->count()); // just under the previous widget
 	}
 }
 
 void
-FormIO::loadLayout(const QDomElement &el, ObjectTreeItem *tree)
+FormIO::createGridLayout(const QDomElement &el, ObjectTreeItem *tree)
 {
 	if(!tree->container())
 		return;
 
-	QString name = el.tagName();
-	if(name == "hbox")
+	tree->container()->m_layType = Container::Grid;
+	int nrow = 1, ncol = 1;
+	// We go through the child widgets to see the number of columns and rows in the grid
+	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
-		tree->container()->setLayout(Container::HBox);
-	}
-	else if(name == "vbox")
-	{
-		tree->container()->setLayout(Container::VBox);
-	}
-	else if(name == "grid")
-	{
-		tree->container()->m_layType = Container::Grid;
-		int nrow = 1, ncol = 1;
-		// We go through the child widgets to see the number of columns and rows in the grid
-		for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
+		if(n.toElement().tagName() == "widget")
 		{
-			if(n.toElement().tagName() == "widget")
-			{
-				int wrow = n.toElement().attribute("row").toInt() + 1;
-				if(wrow > nrow)
-					nrow = wrow;
+			int wrow = n.toElement().attribute("row").toInt() + 1;
+			if(wrow > nrow)
+				nrow = wrow;
 
-				int wcol = n.toElement().attribute("column").toInt() + 1;
-				if(wcol > ncol)
-					ncol = wcol;
-			}
+			int wcol = n.toElement().attribute("column").toInt() + 1;
+			if(wcol > ncol)
+				ncol = wcol;
 		}
-		kdDebug() << "FormIO:: the loaded grid will have " << nrow << " rows and " << ncol << " cols." << endl;
-		QGridLayout *layout = new QGridLayout(tree->widget(), nrow, ncol, 10, 2, "grid");
-		tree->container()->m_layout = (QLayout*)layout;
 	}
+	kdDebug() << "FormIO:: the loaded grid will have " << nrow << " rows and " << ncol << " cols." << endl;
+	QGridLayout *layout = new QGridLayout(tree->widget(), nrow, ncol, 10, 2, "grid");
+	tree->container()->m_layout = (QLayout*)layout;
 }
 
 void

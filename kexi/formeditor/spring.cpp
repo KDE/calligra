@@ -120,40 +120,6 @@ Spring::saveSpring(KFormDesigner::ObjectTreeItem *item, QDomElement &parentNode,
 	KFormDesigner::FormIO::prop(tclass, domDoc, "sizeType", item->widget()->property("sizeType"), item->widget());
 }
 
-void
-Spring::loadSpring(QWidget *w, const QDomElement &el)
-{
-	QString parentTag = el.parentNode().toElement().tagName();
-	if(parentTag == "hbox")
-	{
-		QRect r;
-		QDomElement node = el.previousSibling().toElement();
-		for(QDomNode n = node.firstChild(); !n.isNull(); n = n.nextSibling())
-		{
-			if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
-			{
-				r = KFormDesigner::FormIO::readProp(n.firstChild().toElement(), w, "geometry").toRect();
-				break;
-			}
-		}
-		w->move(r.x() + r.width() +1, 0);
-	}
-	else if(parentTag == "vbox")
-	{
-		QRect r;
-		QDomElement node = el.previousSibling().toElement();
-		for(QDomNode n = node.firstChild(); !n.isNull(); n = n.nextSibling())
-		{
-			if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
-			{
-				r = KFormDesigner::FormIO::readProp(n.firstChild().toElement(), w, "geometry").toRect();
-				break;
-			}
-		}
-		w->move(0, r.y() + r.height() +1);
-	}
-}
-
 
 #include "spring.moc"
 

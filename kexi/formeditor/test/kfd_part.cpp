@@ -609,7 +609,7 @@ void
 FormWidgetBase::closeEvent(QCloseEvent *ev)
 {
 	Form *form = m_part->manager()->formForWidget(this);
-	if(!form->isModified() || !form->objectTree())
+	if(!form || !form->isModified() || !form->objectTree())
 		ev->accept();
 	else
 	{

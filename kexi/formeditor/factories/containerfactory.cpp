@@ -311,8 +311,6 @@ ContainerFactory::classes()
 QWidget*
 ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
 {
-	kdDebug() << "ContainerFactory::create() " << this << endl;
-
 	if(c == "QButtonGroup")
 	{
 		QString text = container->form()->manager()->lib()->textForWidgetName(n, c);

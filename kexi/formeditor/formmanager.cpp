@@ -422,6 +422,7 @@ FormManager::formForWidget(QWidget *w)
 		if(form->toplevelContainer() && form->toplevelContainer()->widget() == w)
 			return form;
 	}
+
 	return 0; // not one of toplevel widgets
 }
 

@@ -52,7 +52,6 @@ class KFORMEDITOR_EXPORT Spring : public QWidget
 
 		static bool showProperty(const QString &name);
 		static void saveSpring(KFormDesigner::ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout);
-		static void loadSpring(QWidget *w, const QDomElement &el);
 
 		void setOrientation(Orientation orient);
 		Orientation orientation() const { return m_orient;}

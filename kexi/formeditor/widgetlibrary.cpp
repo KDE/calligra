@@ -138,7 +138,6 @@ WidgetLibrary::createWidget(const QString &w, QWidget *parent, const char *name,
 	kdDebug() << "WidgetLibrary::createWidget(): " << w << "  " << name << endl;
 	if(!wfactory)
 		return 0;
-	kdDebug() << "WidgetLibrary::createWidget(): factory: '" << wfactory->factory()->name() << "' ok." << endl;
 
 	return wfactory->factory()->create(w, parent, name, c);
 }
@@ -234,7 +233,7 @@ WidgetLibrary::icon(const QString &classname)
 	if(m_widgets.find(classname))
 		return m_widgets[classname]->pixmap();
 	else
-		return QString("kexi");
+		return QString("form");
 }
 
 void

@@ -144,9 +144,8 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		    Decoding code is taken from QT Designer.
 		*/
 		static QPixmap      loadImage(QDomDocument domDoc, QString name);
-		/*! Loads the layout (ie calls Container::setLayout() ) which type is \a name,
-		   and belonging to the widget represented by the ObjectTreeItem \a tree. */
-		static void         loadLayout(const QDomElement &el, ObjectTreeItem *tree);
+		/*! Creates a grid layout with the appropriate number of rows/cols.*/
+		static void         createGridLayout(const QDomElement &el, ObjectTreeItem *tree);
 		/*! Reads the child nodes of a "widget" element. */
 		static void         readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *w);
 		/*! Adds an include file to be saved in the "includehints" part of .ui file, which is needed by uic. */

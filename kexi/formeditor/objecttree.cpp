@@ -55,7 +55,6 @@ ObjectTreeItem::rename(const QString &name)
 void
 ObjectTreeItem::addChild(ObjectTreeItem *c)
 {
-	kdDebug() << "ObjectTreeItem::addChild()" << endl;
 	m_children.append(c);
 }
 
@@ -88,7 +87,7 @@ ObjectTreeItem::addModProperty(const QString &property, const QVariant &oldValue
 	if(!m_props.contains(property))
 	{
 		m_props.insert(property, oldValue);
-		kdDebug() << "ObjectTree::adModProperty() added the property in my list" << property << endl;
+		//kdDebug() << "ObjectTree::adModProperty(): Added this property in the list: " << property << endl;
 	}
 }
 
@@ -178,7 +177,6 @@ ObjectTree::lookup(const QString &name)
 void
 ObjectTree::addChild(ObjectTreeItem *parent, ObjectTreeItem *c)
 {
-	kdDebug() << "ObjectTree::addChild()" << endl;
 	m_treeDict.insert(c->name(), c);
 	if(!parent)
 	{
@@ -200,13 +198,11 @@ void
 ObjectTree::addChild(ObjectTreeItem *c)
 {
 	ObjectTreeItem::addChild(c);
-	kdDebug() << "ObjectTree::addChild(): count is now: " << children()->count() << endl;
 }
 
 void
 ObjectTree::removeChild(const QString &name)
 {
-	kdDebug() << "ObjectTree:: remove the object item " << name << endl;
 	ObjectTreeItem *c = lookup(name);
 	if (m_container && m_container->form())
 		m_container->form()->emitChildRemoved(c);
@@ -239,7 +235,6 @@ ObjectTree::genName(const QString &c)
 void
 ObjectTree::debug()
 {
-	kdDebug() << "ObjectTree::debug(): tree dumb" << endl;
 	ObjectTreeItem::debug(0);
 }
 

@@ -293,8 +293,6 @@ StdWidgetFactory::classes()
 QWidget*
 StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
 {
-	kdDebug() << "StdWidgetFactory::create() " << this << endl;
-
 	QWidget *w=0;
 	QString text = container->form()->manager()->lib()->textForWidgetName(n, c);
 
