@@ -43,7 +43,7 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>04 mar 2001</td>
+     <td>08 apr 2001</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
@@ -59,8 +59,7 @@
        - Reads a full applix tagline for all lineread operations. It can be one or more lines to get one tag.<BR>
        - Can differ betwen textstr end and(&quot;) and applix quotes (/&quot;).<BR>
        - Can read the color block and converts cmyk to rgb.<BR>
-       - Font size, bold, italic, underline, fontcolor.<BR>
-     
+       - Font size, bold, italic, underline, fontcolor, fontfamily.<BR>
      </td>
     </tr>
 
@@ -70,22 +69,49 @@
         - Get format and style information and add this into kword<BR>
         - Textblock style, endof line - what is a paragraph<BR>
         - Tabulators<BR>
-        - Fontfamily<BR>
         - Header and footer<BR>
         - Embedded applixwear objects<BR> 
         - Linked objects - e.g. pictures<BR>
         - add endoffile checking with dialog in do-while loops<BR>
-        - correct loadcontrol emiting (procent)<BR>
      </td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>History</font></b></td>
      <td>
-      11 feb 2001: Converts all special characters<BR>
-      25 nov 2000: Written a filter that only can filter text tags out of the applixword fileformat<BR>
-      03 mar 2000: Ignors text in style block<BR>
-      09 mar 2000: Textformats: fontsize, bold, etc.<BR>
+
+       <table border="0" cellspacing="0">
+        <tr valign=top>
+         <td align=right>08 apr 2001</td>
+         <td>&nbsp;:&nbsp;&nbsp;</td>
+         <td>Added fontfamily.<BR>
+             Correct loadcontrol emiting (procent).<BR>
+             Reads the metadata of the applixword fileformat header.<BR>
+             Exports to the new kword fileformat.<BR>
+         </td>
+        </tr>
+        <tr>
+         <td align=right>09 mar 2001</td>
+         <td>&nbsp;:&nbsp;&nbsp;</td>
+         <td>Textformats: fontsize, bold, etc.</td>
+        </tr>
+        <tr>
+         <td align=right>03 mar 2001</td>
+         <td>&nbsp;:&nbsp;&nbsp;</td>
+         <td>Ignors text in style block.</td>
+        </tr>
+        <tr>
+         <td align=right>11 feb 2001</td>
+         <td>&nbsp;:&nbsp;&nbsp;</td>
+         <td>Converts all special characters</td>
+        </tr>
+        <tr>
+         <td align=right>25 nov 2000</td>
+         <td>&nbsp;:&nbsp;&nbsp;</td>
+         <td>Written a filter that only can filter text tags out of the applixword fileformat</td>
+        </tr>
+       </table>
+
     </td>
    </tr>
 

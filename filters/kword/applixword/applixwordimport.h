@@ -49,11 +49,20 @@ public:
     virtual ~APPLIXWORDImport() {}
     /** filtering :) */
     virtual bool filter(const QString &fileIn, const QString &fileOut,
-                        const QString &from, const QString &to,
+                        const QString &from,   const QString &to,
                         const QString &config=QString::null);
+
+protected:
     QChar   specCharfind     (QChar , QChar );
     QString readTagLine      (QTextStream &, QFile &);
     void    replaceSpecial   (QString &);
-
+    QString nextLine         (QTextStream &);
+    int     readHeader       (QTextStream &stream, QFile &); 
+  
+private:
+    int m_stepsize;
+    int m_instep;
+    int m_progress;
+    
 };
 #endif // APPLIXWORDIMPORT_H

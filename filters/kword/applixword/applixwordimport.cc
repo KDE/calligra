@@ -29,21 +29,68 @@
 #include <applixwordimport.moc>
 #include <kdebug.h>
 
-APPLIXWORDImport::APPLIXWORDImport(KoFilter *parent, const char *name) :
+/******************************************************************************
+ *  class: APPLIXWORDImport        function: APPLIXWORDImport                 *
+ ******************************************************************************
+ *                                                                            *
+ *  Short description : Constructor                                           *
+ *                                                                            *
+ *                                                                            *
+ ******************************************************************************/
+APPLIXWORDImport::APPLIXWORDImport (KoFilter *parent, const char *name) :
                      KoFilter(parent, name)
 {
 }
 
-bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOut,
-                              const QString& from, const QString& to,
-                              const QString &)
+/******************************************************************************
+ *  class: APPLIXWORDImport        function: nextLine                         *
+ ******************************************************************************
+ *                                                                            *
+ *  Short description : Readline and update progressbar                       *
+ *                                                                            *
+ *                                                                            *
+ ******************************************************************************/
+QString 
+APPLIXWORDImport::nextLine (QTextStream & stream)
+{
+    QString s;
+
+    // Read one Line
+    s = stream.readLine();
+
+    m_instep += s.length(); 
+    if (m_instep > m_stepsize) 
+    { 
+        m_instep    = 0; 
+        m_progress += 2; 
+        emit sigProgress (m_progress) ; 
+    } 
+ 
+    return s;
+}
+
+
+
+/******************************************************************************
+ *  class: APPLIXWORDImport        function: filter                           *
+ ******************************************************************************
+ *                                                                            *
+ *  Short description :                                                       *
+ *                                                                            *
+ *                                                                            *
+ ******************************************************************************/
+bool 
+APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
+                          const QString &from,   const QString &to,
+                          const QString &)
 {
 
-    if(to!="application/x-kword" || from!="application/x-applixword")
+    if (to!="application/x-kword" || from!="application/x-applixword")
         return false;
 
     QFile in(fileIn);
-    if(!in.open(IO_ReadOnly)) {
+    if (!in.open (IO_ReadOnly)) 
+    {
         kdError(30502) << "Unable to open input file!" << endl;
         in.close();
         return false;
@@ -62,50 +109,28 @@ bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOut,
     str += "  <FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\">\n";
     str += "   <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n";
 
+ 
+    QTextStream stream (&in);
 
-    //int merker=0;
-    QTextStream stream(&in);
-    int rueck;
-    int step  = in.size()/50;
-    int value = 0;
-    int i     = 0;
-    int vers[3] = { 0, 0, 0 };
-    int pos, ok;
+    m_stepsize = in.size()/50;
+    m_instep   = 0;
+    m_progress = 0;
+
+    int  rueck;
+    int  pos, ok;
     char stylename[100];
-    QString mystr, textstr;
+    QString           mystr, textstr;
     QList<t_mycolor>  mcol;
     QStringList       mcoltxt;
 
-    // Read Headline
-    mystr = readTagLine (stream, in);
-
-    // mystr = stream.readLine ();
-    rueck = sscanf ((const char *) mystr.latin1() ,
-                    "*BEGIN WORDS VERSION=%d/%d ENCODING=%dBIT",
-	             &vers[0], &vers[1], &vers[2]);
-    printf ("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]);
-
-    // Check the headline
-    if (rueck <= 0)
-    {
-      printf ("Header not correkt - May be it is not an applixword file\n");
-      printf ("Headerline: <%s>\n", (const char *) mystr.latin1());
-
-      QMessageBox::critical (0L, "Applixword header problem",
-                                  QString ("The Applixword header is not correct. "
-                                           "May be it is not an applixword file! <BR>"
-                                           "This is the header line I did read:<BR><B>%1</B>").arg(mystr.latin1()),
-				    "Okay");
-
-      // i18n( "What is the separator used in this file ? First line is \n%1" ).arg(firstLine),
-      return false;
-    }
+    /**************************************************************************
+     * Read header                                                            *
+     **************************************************************************/
+    if (! readHeader (stream, in)) return false;
 
 
     while (!stream.atEnd())
     {
-        ++i;
-
         // Read one line
         mystr = readTagLine (stream, in);
         ok = true;
@@ -116,7 +141,7 @@ bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOut,
         if (mystr == "<start_styles>")
 	{
           printf ("Start styles\n");
-          t_mycolor *col = new t_mycolor;
+          t_mycolor *col = new t_mycolor; // delete is in place
           QString    coltxt ;
           int zaehler = 0;
           do
@@ -155,11 +180,12 @@ bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOut,
 
 	        mcol.append    (col);
 	        mcoltxt.append (coltxt);
-	      }
-	    }
-	  }
+	      } //end if ...<col...
+	    } //end else
+	  } // end while
           while (ok == true);
-        }
+          delete col;
+        } // end if ...<start_styles>...
         /***********************************************************************
          * jump over embedded Applix docs                                      *
          ***********************************************************************/
@@ -179,9 +205,9 @@ bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOut,
           printf ("Embedded Applix object ends\n\n");
 
         }
-        /***********************************************************************
-         * jump over header footer                                             *
-         ***********************************************************************/
+        /**********************************************************************
+         * jump over header footer                                            *
+         **********************************************************************/
         else if (mystr.startsWith ("<start_hdrftr "))
 	{
           printf ("\nHeader/Footer starts:\n");
@@ -197,9 +223,9 @@ bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOut,
           while (ok == true);
           printf ("\nHeader/Footer ends\n");
         }
-        /***********************************************************************
-         * found a paragraph string                                            *
-         ***********************************************************************/
+        /**********************************************************************
+         * found a paragraph string                                           *
+         **********************************************************************/
         else if (mystr.startsWith ("<P "))
 	{
 	   sscanf ( (const char *) mystr.latin1(), "<P \"%s\"", stylename);
@@ -207,9 +233,9 @@ bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOut,
            printf (" Para  Name: %s\n", stylename);
            printf ("       Rest: %s\n", (const char *) mystr.latin1());
 	}
-        /***********************************************************************
-         * found a textstring                                                  *
-         ***********************************************************************/
+        /**********************************************************************
+         * found a textstring                                                 *
+         **********************************************************************/
         else if (mystr.startsWith ("<T "))
 	{
           QString colname;
@@ -333,10 +359,18 @@ bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOut,
           str += textstr;
           str += "</TEXT>\n";
 
-          if (bold == 1 || underline == 1 || italic == 1 || fontsize != 12 || colpos != -1)
+          if (bold == 1 || underline == 1 || italic == 1 || fontsize != 12 || 
+              colpos != -1 || !fontname.isEmpty())
 	  {
             str += "     <LAYOUT>\n";
             str += "      <FORMAT>\n";
+            if (!fontname.isEmpty())
+	    {
+              str += "       <FONT name=\"";
+              str += fontname;
+              str += "\" />\n";
+	    }
+
             if (fontsize != 1)
 	    {
               str += "       <SIZE value=\"";
@@ -361,7 +395,7 @@ bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOut,
 
             if (colpos != -1)
 	    {
-              t_mycolor *mc = new t_mycolor;
+              t_mycolor *mc = new t_mycolor; // delete is in place
               mc = mcol.at(colpos);
               str += "       <COLOR red=\"";
 
@@ -371,6 +405,7 @@ bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOut,
               str += "\" blue=\"";
               str += QString::number (mc->b);
               str += "\" />\n";
+              delete mc;
 	    }
 
             str += "      </FORMAT>\n";
@@ -379,22 +414,14 @@ bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOut,
           str += "    </PARAGRAPH>\n";
 	}
 
-
-        if (i>step)
-        {
-            i=0;
-            value+=2;
-            emit sigProgress(value);
-        }
     }
     emit sigProgress(100);
 
-    str += "</TEXT>\n";
-    str += "   </PARAGRAPH>\n";
     str += "  </FRAMESET>\n";
     str += " </FRAMESETS>\n";
     str += "</DOC>\n";
     printf ("Text %s\n", (const char *) str.utf8());
+
     KoStore out = KoStore (QString(fileOut), KoStore::Write);
     if (!out.open ("root"))
     {
@@ -406,7 +433,7 @@ bool APPLIXWORDImport::filter(const QString &fileIn, const QString &fileOut,
 
     QCString cstring = str.utf8 ();
 
-    out.write ((const char*)cstring, cstring.length());
+    out.write ((const char*) cstring, cstring.length());
 
     out.close ();
     in.close ();
@@ -595,6 +622,14 @@ APPLIXWORDImport::specCharfind (QChar a, QChar b)
 
 
 
+/******************************************************************************
+ *  class: APPLIXWORDImport        function: readTagLine                      *
+ ******************************************************************************
+ *                                                                            *
+ *  Short description :                                                       *
+ *                                                                            *
+ *                                                                            *
+ ******************************************************************************/
 QString
 APPLIXWORDImport::readTagLine (QTextStream &stream, QFile &in)
 {
@@ -602,7 +637,7 @@ APPLIXWORDImport::readTagLine (QTextStream &stream, QFile &in)
   int     ok, pos;
 
    // Read one line
-   mystr = stream.readLine ();
+   mystr = nextLine (stream); 
 
    // Delete whitespaces
    mystr.stripWhiteSpace();
@@ -617,7 +652,7 @@ APPLIXWORDImport::readTagLine (QTextStream &stream, QFile &in)
        pos = in.at ();
 
        // Read next line
-       mystrn = stream.readLine ();
+       mystrn = nextLine (stream); 
 
        // Is the new line a new tag line
        if (mystrn[0] == ' ')
@@ -647,6 +682,14 @@ APPLIXWORDImport::readTagLine (QTextStream &stream, QFile &in)
 
 
 
+/******************************************************************************
+ *  class: APPLIXWORDImport        function: replaceSpecial                   *
+ ******************************************************************************
+ *                                                                            *
+ *  Short description :                                                       *
+ *                                                                            *
+ *                                                                            *
+ ******************************************************************************/
 void
 APPLIXWORDImport::replaceSpecial (QString &textstr)
 {
@@ -705,4 +748,48 @@ APPLIXWORDImport::replaceSpecial (QString &textstr)
       }
     }
     while (foundSpecialCharakter == true);
+}
+
+
+
+/******************************************************************************
+ *  class: APPLIXWORDImport       function: readHeader                        *
+ ******************************************************************************
+ *                                                                            *
+ *  Short description :                                                       *
+ *                                                                            *
+ *                                                                            *
+ ******************************************************************************/
+int
+APPLIXWORDImport::readHeader (QTextStream &stream, QFile &in)  
+{
+  QString mystr;
+  int     rueck;
+  int     vers[3] = { 0, 0, 0 }; 
+                       
+    // Read Headline
+    mystr = readTagLine (stream, in);
+
+    // mystr = stream.readLine ();
+    rueck = sscanf ((const char *) mystr.latin1() ,
+                    "*BEGIN WORDS VERSION=%d/%d ENCODING=%dBIT",
+	             &vers[0], &vers[1], &vers[2]);
+    printf ("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]);
+
+    // Check the headline
+    if (rueck <= 0)
+    {
+      printf ("Header not correkt - May be it is not an applixword file\n");
+      printf ("Headerline: <%s>\n", (const char *) mystr.latin1());
+
+      QMessageBox::critical (0L, "Applixword header problem",
+                                  QString ("The Applixword header is not correct. "
+                                           "May be it is not an applixword file! <BR>"
+                                           "This is the header line I did read:<BR><B>%1</B>").arg(mystr.latin1()),
+				    "Okay");
+
+      // i18n( "What is the separator used in this file ? First line is \n%1" ).arg(firstLine),
+      return false;
+    }
+    else return true;
 }
