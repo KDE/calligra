@@ -37,6 +37,7 @@
 #include <qclipboard.h>
 #include <qdragobject.h>
 #include <klocale.h>
+#include <kconfig.h>
 
 #include <kdebug.h>
 
@@ -3033,6 +3034,28 @@ void KWTextFrameSetEdit::insertVariable( int type )
         kdWarning() << "No variable format found for type " << (int)type << endl;
         return;
     }
+
+    KConfig config("kofficerc");
+    QString full_name;
+    QString email_addr;
+    QString organization;
+    if( config.hasGroup( "Author" ))
+    {
+        config.setGroup( "Author" );
+        full_name=config.readEntry("full-name","");
+        email_addr=config.readEntry("email", "");
+        organization=config.readEntry("company", "");
+    }
+    else
+    {
+        KConfig config2( "emaildefaults", true );
+        config2.setGroup( "Defaults" );
+        QString group = config2.readEntry("Profile","Default");
+        config2.setGroup(QString("PROFILE_%1").arg(group));
+        full_name = config2.readEntry( "FullName", "" );
+        email_addr=config2.readEntry("EmailAddress", "");
+    }
+
     KWVariable * var = 0L;
     switch ( type ) {
         case VT_DATE_FIX: {
@@ -3052,6 +3075,15 @@ void KWTextFrameSetEdit::insertVariable( int type )
         } break;
         case  VT_FILENAME: {
             var = new KWFileNameVariable( textFrameSet(),doc->url().isEmpty()?i18n("<None>"):doc->url().filename(), varFormat );
+        } break;
+        case VT_AUTHORNAME: {
+            var = new KWNameAuthorVariable( textFrameSet(),full_name.isEmpty()?i18n("<None>"):full_name, varFormat );
+        } break;
+        case VT_EMAIL: {
+            var = new KWEmailVariable( textFrameSet(),email_addr.isEmpty()?i18n("<None>"):email_addr, varFormat );
+        } break;
+        case VT_COMPANYNAME: {
+            var = new KWCompanyNameVariable( textFrameSet(),organization.isEmpty()?i18n("<None>"):organization, varFormat );
         } break;
         case VT_CUSTOM: {
             // Choose an existing variable

@@ -385,6 +385,16 @@ void KWView::setupActions()
     actionInsertVarFileName = new KAction( i18n( "File Name" ), 0,
                                         this, SLOT( insertVariableFileName() ),
                                         actionCollection(), "insert_var_filename" );
+    actionInsertVarAuthorName = new KAction( i18n( "Author Name" ), 0,
+                                        this, SLOT( insertVariableAuthorName() ),
+                                        actionCollection(), "insert_var_authorname" );
+    actionInsertVarEmail = new KAction( i18n( "Email" ), 0,
+                                        this, SLOT( insertVariableEmail() ),
+                                        actionCollection(), "insert_var_email" );
+    actionInsertVarCompanyName = new KAction( i18n( "Company Name" ), 0,
+                                        this, SLOT( insertVariableCompanyName() ),
+                                        actionCollection(), "insert_var_companyname" );
+
     actionInsertVarCustom = new KAction( i18n( "&Custom..." ), 0,
                                          this, SLOT( insertVariableCustom() ),
                                          actionCollection(), "insert_var_custom" );
@@ -1430,6 +1440,29 @@ void KWView::insertVariableFileName()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->insertVariable( VT_FILENAME );
+}
+
+/*===============================================================*/
+void KWView::insertVariableAuthorName()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertVariable( VT_AUTHORNAME );
+}
+/*===============================================================*/
+void KWView::insertVariableEmail()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertVariable( VT_EMAIL );
+}
+
+/*===============================================================*/
+void KWView::insertVariableCompanyName()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+        edit->insertVariable( VT_COMPANYNAME );
 }
 
 /*===============================================================*/
@@ -2712,6 +2745,9 @@ void KWView::updateButtons()
     actionInsertVarPgNum->setEnabled(state);
     actionInsertVarCustom->setEnabled(state);
     actionInsertVarFileName->setEnabled(state);
+    actionInsertVarEmail->setEnabled(state);
+    actionInsertVarAuthorName->setEnabled(state);
+    actionInsertVarCompanyName->setEnabled(state);
 
 }
 

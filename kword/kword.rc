@@ -48,6 +48,9 @@
    <Action name="insert_var_timefix"/>
    <Action name="insert_var_timevar"/>
    <Action name="insert_var_filename"/>
+   <Action name="insert_var_authorname"/>
+   <Action name="insert_var_email"/>
+   <Action name="insert_var_companyname"/>
    <Action name="insert_var_pgnum"/>
    <Separator/>
    <Action name="insert_var_custom"/>

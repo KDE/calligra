@@ -29,7 +29,8 @@ class KWVariable;
 class QDomElement;
 
 enum VariableType { VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4,
-                    VT_NUMPAGES = 5, VT_FILENAME = 6 ,VT_CUSTOM = 7, VT_SERIALLETTER = 8 , VT_NONE };
+                    VT_NUMPAGES = 5, VT_FILENAME = 6, VT_AUTHORNAME = 7, VT_EMAIL =8
+ ,VT_COMPANYNAME=9, VT_CUSTOM = 10, VT_SERIALLETTER = 11 , VT_NONE };
 //enum VariableFormatType { VFT_DATE = 0, VFT_TIME = 1, VFT_PGNUM = 2, VFT_NUMPAGES = 3, VFT_CUSTOM = 4,
 //                          VFT_SERIALLETTER = 5 };
 
@@ -72,6 +73,51 @@ class KWVariableFileNameFormat : public KWVariableFormat
 {
 public:
     KWVariableFileNameFormat() : KWVariableFormat() {}
+
+//    virtual VariableFormatType getType() const
+//    { return VFT_TIME; }
+
+    virtual QString convert( KWVariable *_var );
+
+};
+
+/******************************************************************/
+/* Class: KWVariableAuthorNameFormat                              */
+/******************************************************************/
+class KWVariableAuthorNameFormat : public KWVariableFormat
+{
+public:
+    KWVariableAuthorNameFormat() : KWVariableFormat() {}
+
+//    virtual VariableFormatType getType() const
+//    { return VFT_TIME; }
+
+    virtual QString convert( KWVariable *_var );
+
+};
+
+/******************************************************************/
+/* Class: KWVariableEmailFormat                                   */
+/******************************************************************/
+class KWVariableEmailFormat : public KWVariableFormat
+{
+public:
+    KWVariableEmailFormat() : KWVariableFormat() {}
+
+//    virtual VariableFormatType getType() const
+//    { return VFT_TIME; }
+
+    virtual QString convert( KWVariable *_var );
+
+};
+
+/******************************************************************/
+/* Class: KWVariableCompanyNameFormat                             */
+/******************************************************************/
+class KWVariableCompanyNameFormat : public KWVariableFormat
+{
+public:
+    KWVariableCompanyNameFormat() : KWVariableFormat() {}
 
 //    virtual VariableFormatType getType() const
 //    { return VFT_TIME; }
@@ -335,6 +381,93 @@ public:
 
 protected:
     QString filename;
+};
+
+/******************************************************************/
+/* Class: KWNameAuthorVariable                                    */
+/******************************************************************/
+
+class KWNameAuthorVariable : public KWVariable
+{
+public:
+    KWNameAuthorVariable( KWTextFrameSet *fs, const QString &_authorName, KWVariableFormat *_varFormat );
+
+/*    virtual KWVariable *copy() {
+        KWFileNameVariable *var = new KWAuthorNameVariable( doc, filename );
+        var->setVariableFormat( varFormat );
+        var->setInfo( frameSetNum, frameNum, pageNum, parag );
+        return var;
+        }*/
+
+    virtual VariableType getType() const
+    { return VT_AUTHORNAME; }
+
+    QString getAuthorName() const { return authorname; }
+    void setAuthorName( QString _authorname ) { authorname = _authorname; }
+
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
+
+protected:
+    QString authorname;
+};
+
+/******************************************************************/
+/* Class: KWEmailVariable                                         */
+/******************************************************************/
+
+class KWEmailVariable : public KWVariable
+{
+public:
+    KWEmailVariable( KWTextFrameSet *fs, const QString &_email, KWVariableFormat *_varFormat );
+
+/*    virtual KWVariable *copy() {
+        KWFileNameVariable *var = new KWEmailVariable( doc, filename );
+        var->setVariableFormat( varFormat );
+        var->setInfo( frameSetNum, frameNum, pageNum, parag );
+        return var;
+        }*/
+
+    virtual VariableType getType() const
+    { return  VT_EMAIL; }
+
+    QString getEmail() const { return email; }
+    void setEmail( QString _email ) { email = _email; }
+
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
+
+protected:
+    QString email;
+};
+
+/******************************************************************/
+/* Class: KWCompanyNameVariable                                   */
+/******************************************************************/
+
+class KWCompanyNameVariable : public KWVariable
+{
+public:
+    KWCompanyNameVariable( KWTextFrameSet *fs, const QString &_companyname, KWVariableFormat *_varFormat );
+
+/*    virtual KWVariable *copy() {
+        KWFileNameVariable *var = new KWEmailVariable( doc, filename );
+        var->setVariableFormat( varFormat );
+        var->setInfo( frameSetNum, frameNum, pageNum, parag );
+        return var;
+        }*/
+
+    virtual VariableType getType() const
+    { return  VT_COMPANYNAME; }
+
+    QString getCompanyName() const { return companyname; }
+    void setCompanyName( QString _companyname ) { companyname = _companyname; }
+
+    virtual void save( QDomElement &parentElem );
+    virtual void load( QDomElement &elem );
+
+protected:
+    QString companyname;
 };
 
 /******************************************************************/

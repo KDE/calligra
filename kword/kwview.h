@@ -168,6 +168,9 @@ public slots:
     void insertVariableCustom();
     void insertVariableSerialLetter();
     void insertVariableFileName();
+    void insertVariableCompanyName();
+    void insertVariableEmail();
+    void insertVariableAuthorName();
     void insertFootNoteEndNote();
     void insertContents();
 
@@ -293,6 +296,9 @@ private:
     KAction *actionInsertVarFileName;
     KAction *actionInsertVarCustom;
     KAction *actionInsertVarSerialLetter;
+    KAction *actionInsertVarAuthorName;
+    KAction *actionInsertVarEmail;
+    KAction *actionInsertVarCompanyName;
     KAction *actionInsertFormula;
 
     KToggleAction *actionToolsEdit;
