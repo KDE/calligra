@@ -541,6 +541,8 @@ bool KoZip::prepareWriting( const QString& name, const QString& user,
 void KoZip::close() { // HACK for misplaced closeArchive() call in KDE-3.0s KArchive
     if (!isOpened()) return;
     closeArchiveHack();
+    device()->close();
+    m_open = false;
 }
 
 bool KoZip::doneWriting( uint size )
@@ -714,7 +716,7 @@ Q_LONG KoZipFilter::writeBlock(const char * c, long unsigned int i)
         err = deflate( &d_stream, Z_FINISH );
         if ( err == Z_STREAM_END )
             kdDebug(7040) << "Z_STREAM_END " << endl;
-        else
+        else if ( err < 0 )
             kdWarning(7040) << "writeBlock: zlib deflate returned error " << err << endl;
 
         kdDebug(7040) << "compression part 6: total_out: " <<

@@ -47,6 +47,7 @@ KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentific
 
 KoZipStore::~KoZipStore()
 {
+    kdDebug() << "KoZipStore::~KoZipStore" << endl;
     m_pZip->close();
     delete m_pZip;
 }

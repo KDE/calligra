@@ -27,6 +27,9 @@
 #include <qstringlist.h>
 #include <qdict.h>
 #include <qvaluelist.h>
+#define private protected // for m_open access for the HACK
+#include <karchive.h>
+#undef private
 #include <karchive.h>
 #include <zlib.h>
 

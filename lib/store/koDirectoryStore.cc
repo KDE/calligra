@@ -57,13 +57,13 @@ bool KoDirectoryStore::init( Mode _mode )
 
 bool KoDirectoryStore::openReadOrWrite( const QString& name, int iomode )
 {
-    kdDebug(s_area) << "KoDirectoryStore::openReadOrWrite m_currentPath=" << m_currentPath << " name=" << name << endl;
+    //kdDebug(s_area) << "KoDirectoryStore::openReadOrWrite m_currentPath=" << m_currentPath << " name=" << name << endl;
     int pos = name.findRev('/');
     if ( pos != -1 ) // there are subdirs in the name -> maybe need to create them, when writing
     {
         pushDirectory(); // remember where we were
         enterAbsoluteDirectory( QString::null );
-        kdDebug(s_area) << "KoDirectoryStore::openReadOrWrite entering " << name.left(pos) << endl;
+        //kdDebug(s_area) << "KoDirectoryStore::openReadOrWrite entering " << name.left(pos) << endl;
         bool ret = enterDirectory( name.left( pos ) );
         popDirectory();
         if ( !ret )
