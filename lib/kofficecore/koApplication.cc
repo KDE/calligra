@@ -39,7 +39,7 @@ static const KCmdLineOptions options[]=
 {
 	{"print", I18N_NOOP("Only print and exit"),0},
 	{"template", I18N_NOOP("Open a new document with a template"), 0},
-	{0,0,0}
+	KCmdLineLastOption
 };
 
 bool KoApplication::m_starting = true;

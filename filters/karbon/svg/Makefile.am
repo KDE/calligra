@@ -22,7 +22,6 @@ service_DATA = karbon_svg_export.desktop karbon_svg_import.desktop
 servicedir = $(kde_servicesdir)
 
 noinst_HEADERS = \
-	svgexport.h \
 	svgexport.h
 
 libkarbonsvgexport_la_SOURCES = \

@@ -33,7 +33,7 @@ static const KCmdLineOptions options[]=
 	{"+in", I18N_NOOP("Input file"),0},
 	{"+out", I18N_NOOP("Output file"),0},
 	{"mimetype <mime>", I18N_NOOP("Mimetype of the output file"),0},
-	{0,0,0}
+	KCmdLineLastOption
 };
 
 bool convert( const KURL & uIn, const QString & /*inputFormat*/, const KURL & uOut, const QString & outputFormat )

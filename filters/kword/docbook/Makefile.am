@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) -I$(srcdir)/../libexport $(all_includes) $(all_includes)
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) -I$(srcdir)/../libexport $(all_includes)
 libdocbookexport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
 libdocbookexport_la_LIBADD = $(KOFFICE_LIBS) ../libexport/libkwordexportfilters.la
 
