@@ -223,7 +223,7 @@ double KWTableFrameSet::leftWithoutBorder()
 /* returns the cell that occupies row, col. */
 KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int col )
 {
-    if ( row < m_rowArray.size() ) {
+    if ( row < m_rowArray.size() && col < m_rowArray[row]->size() ) {
         Cell* cell = (*m_rowArray[row])[col];
         if ( cell )
             return cell;
