@@ -5107,3 +5107,19 @@ bool KPrCanvas::objectIsAHeaderFooterHidden(KPObject *obj)
         return true;
     return false;
 }
+
+int KPrCanvas::numberOfObjectSelected()
+{
+    int nb=activePage()->numSelected();
+    nb+=m_view->kPresenterDoc()->stickyPage()->numSelected();
+    return nb;
+}
+
+KPObject *KPrCanvas::getSelectedObj()
+{
+    KPObject *obj=activePage()->getSelectedObj();
+    if(obj)
+        return obj;
+    obj=m_view->kPresenterDoc()->stickyPage()->getSelectedObj();
+    return obj;
+}

@@ -998,13 +998,13 @@ void KPresenterView::extraLower()
 /*===============================================================*/
 void KPresenterView::extraRotate()
 {
-    if ( m_canvas->activePage()->numSelected() > 0 ) {
+    if ( m_canvas->numberOfObjectSelected() > 0 ) {
 
 	if ( !rotateDia ) {
 	    rotateDia = new RotationDialogImpl( this );
 	    connect( rotateDia, SIGNAL( apply() ), this, SLOT( rotateOk() ) );
 	}
-	rotateDia->setAngle( m_canvas->activePage()->getSelectedObj()->getAngle() );
+	rotateDia->setAngle( m_canvas->getSelectedObj()->getAngle() );
 	m_canvas->setToolEditMode( TEM_MOUSE );
 	rotateDia->exec();
     }
@@ -1013,7 +1013,7 @@ void KPresenterView::extraRotate()
 /*===============================================================*/
 void KPresenterView::extraShadow()
 {
-    if ( m_canvas->activePage()->numSelected() > 0 ) {
+    if ( m_canvas->numberOfObjectSelected() > 0 ) {
 
 	if ( !shadowDia ) {
 	    shadowDia = new ShadowDialogImpl( this );
@@ -1021,7 +1021,7 @@ void KPresenterView::extraShadow()
 	    connect( shadowDia, SIGNAL( apply() ), this, SLOT( shadowOk() ) );
 	}
 
-	KPObject *object=m_canvas->activePage()->getSelectedObj();
+	KPObject *object=m_canvas->getSelectedObj();
 	shadowDia->setShadowDirection( object->getShadowDirection() );
 	if ( object->getShadowDistance() != 0 )
 	    shadowDia->setShadowDistance( object->getShadowDistance() );
@@ -2992,7 +2992,7 @@ void KPresenterView::objectSelectedChanged()
     actionExtraRotate->setEnabled(state);
     actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPictureObj() && !m_canvas->haveASelectedPartObj());
     actionExtraAlignObjs->setEnabled(state);
-    actionExtraGroup->setEnabled(state && m_canvas->activePage()->numSelected()>1);
+    actionExtraGroup->setEnabled(state && m_canvas->numberOfObjectSelected()>1);
     actionExtraUnGroup->setEnabled(state);
     actionExtraAlignObjLeft->setEnabled(state);
     actionExtraAlignObjCenterH->setEnabled(state);
@@ -3001,8 +3001,8 @@ void KPresenterView::objectSelectedChanged()
     actionExtraAlignObjCenterV->setEnabled(state);
     actionExtraAlignObjBottom->setEnabled(state);
     actionEditDelete->setEnabled(state);
-    actionExtraRaise->setEnabled(state && m_canvas->activePage()->numSelected()==1);
-    actionExtraLower->setEnabled(state && m_canvas->activePage()->numSelected()==1);
+    actionExtraRaise->setEnabled(state && m_canvas->numberOfObjectSelected()==1);
+    actionExtraLower->setEnabled(state && m_canvas->numberOfObjectSelected()==1);
     //actionBrushColor->setEnabled(state);
     //actionPenColor->setEnabled(state);
     //actionExtraPenStyle->setEnabled(state);
@@ -4147,10 +4147,10 @@ void KPresenterView::updateObjectStatusBarItem()
       addStatusBarItem( m_sbObjectLabel );
     }
 
-    int nbSelected = m_canvas->activePage()->numSelected();
+    int nbSelected = m_canvas->numberOfObjectSelected();
 
     if (nbSelected == 1) {
-      KPObject * obj = m_canvas->activePage()->getSelectedObj();
+      KPObject * obj = m_canvas->getSelectedObj();
       m_sbObjectLabel->setText( i18n( "Statusbar info", "Object: %1 -  (width: %2, height: %3)" )
                                 .arg(obj->getTypeString())
                                 .arg(obj->getSize().width())

@@ -202,6 +202,9 @@ public:
     void insertPicture( const QRect &_r );
     void insertClipart( const QRect &_r );
 
+    int numberOfObjectSelected();
+    KPObject *getSelectedObj();
+
 public slots:
     void exitEditMode();
 
