@@ -52,7 +52,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     int initialRMargin = doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), h + c->height(), rm, 4 ) : 0;
     int availableWidth = dw - initialRMargin; // 'w' in QRT
 #ifdef DEBUG_FORMATTER
-    qDebug( "KoTextFormatterBaseBreakWords::format left=%d initialHeight=%d initialLMargin=%d initialRMargin=%d w=%d", left, initialHeight, initialLMargin, initialRMargin, w );
+    qDebug( "KoTextFormatterBaseBreakWords::format left=%d initialHeight=%d initialLMargin=%d initialRMargin=%d availableWidth=%d", left, initialHeight, initialLMargin, initialRMargin, availableWidth );
 #endif
     bool fullWidth = TRUE;
     int marg = left + initialRMargin;
@@ -190,7 +190,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #endif
 
 #ifdef DEBUG_FORMATTER
-	qDebug("c='%c' i=%d/%d x=%d ww=%d w=%d (test is x+ww>w) lastBreak=%d isBreakable=%d",c->c.latin1(),i,len,x,ww,w,lastBreak,isBreakable(string,i));
+	qDebug("c='%c' i=%d/%d x=%d ww=%d availableWidth=%d (test is x+ww>w) lastBreak=%d isBreakable=%d",c->c.latin1(),i,len,x,ww,availableWidth,lastBreak,isBreakable(string,i));
 #endif
 	// Wrapping at end of line
 	if ( wrapEnabled
@@ -292,7 +292,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    // Breakable character
 	    if ( len <= 2 || i < len - 1 ) {
 		//qDebug( " Breakable character (i=%d len=%d): combining %d/%d with %d/%d", i, len,
-		//	tmpBaseLine, tmph, c->ascent(), c->height()+ls );
+		//	tmpBaseLine, tmph, c->ascent(), c->height() );
 		// (combine tmpBaseLine/tmph and this character)
 		int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height() - c->ascent() );
 		tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
@@ -358,7 +358,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	} else {
 	    // Non-breakable character
 	    tminw += ww;
-	    //qDebug( " Non-breakable character: combining %d/%d with %d/%d", tmpBaseLine, tmph, c->ascent(), c->height()+ls );
+	    //qDebug( " Non-breakable character: combining %d/%d with %d/%d", tmpBaseLine, tmph, c->ascent(), c->height() );
 	    // (combine tmpBaseLine/tmph and this character)
 	    int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height() - c->ascent() );
 	    tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );

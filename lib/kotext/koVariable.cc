@@ -415,7 +415,9 @@ QPtrList<KAction> KoVariableCollection::variableActionList()
     return listAction;
 }
 
-
+//class KoVariable::Private
+//{
+//};
 
 /******************************************************************/
 /* Class: KoVariable                                              */
@@ -423,15 +425,18 @@ QPtrList<KAction> KoVariableCollection::variableActionList()
 KoVariable::KoVariable( KoTextDocument *textdoc, KoVariableFormat *varFormat, KoVariableCollection *_varColl)
     : KoTextCustomItem( textdoc )
 {
+    //d = new Private;
     m_varColl=_varColl;
     m_varFormat = varFormat;
     m_varColl->registerVariable( this );
+    m_ascent = 0;
 }
 
 KoVariable::~KoVariable()
 {
     //kdDebug(32500) << "KoVariable::~KoVariable " << this << endl;
     m_varColl->unregisterVariable( this );
+    //delete d;
 }
 
 QStringList KoVariable::subTypeText()
@@ -457,7 +462,8 @@ void KoVariable::resize()
     // zoom to LU
     width = qRound( KoTextZoomHandler::ptToLayoutUnitPt( width ) );
     height = fmt->height();
-    //kdDebug(32500) << "Before KoVariable::resize text=" << txt << " width=" << width << endl;
+    m_ascent = fmt->ascent();
+    //kdDebug(32500) << "KoVariable::resize text=" << txt << " width=" << width << " height=" << height << " ascent=" << m_ascent << endl;
 }
 
 QString KoVariable::fieldCode()

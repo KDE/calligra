@@ -277,6 +277,7 @@ public:
     // KoTextCustomItem stuff
     virtual Placement placement() const { return PlaceInline; }
     virtual void resize();
+    virtual int ascent() const { return m_ascent; } // for text, ascent != height!
     virtual int widthHint() const { return width; }
     virtual int minimumWidth() const { return width; }
     virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const int offset);
@@ -340,6 +341,9 @@ protected:
     KoVariableFormat *m_varFormat;
     KoVariableCollection *m_varColl;
     QVariant m_varValue;
+    int m_ascent;
+
+    // Hmm, this stuff should be static, or in a type class, not duplicated in every variable (DF)
 
     typedef QMap<KAction *, int> SubTextMap;
     SubTextMap m_subTextMap;
