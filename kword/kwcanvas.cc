@@ -22,7 +22,6 @@
 #include "kwframe.h"
 #include "kwtextframeset.h"
 #include "kwtableframeset.h"
-#include "kwtableframeset.h"
 #include "kwdoc.h"
 #include "kwview.h"
 #include "kwtextdocument.h"
@@ -859,7 +858,10 @@ void KWCanvas::mrEditFrame() // Can be called from KWCanvas and from KWResizeHan
             tmpResize.sizeOfEnd = frame->normalize();
 
             index.m_iFrameIndex = frame->getFrameSet()->getFrameFromPtr(frame);
-            index.m_iFrameSetIndex = doc->getFrameSetNum(frame->getFrameSet());
+            if (table)
+                index.m_iFrameSetIndex = doc->getFrameSetNum(table);
+            else
+                index.m_iFrameSetIndex = doc->getFrameSetNum(frame->getFrameSet());
 
             KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), doc, index, tmpResize ) ;
             doc->addCommand(cmd);
