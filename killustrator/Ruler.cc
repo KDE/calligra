@@ -23,33 +23,32 @@
 */
 
 #include "Ruler.h"
-#include "units.h"
-#include "KIllustrator_doc.h"
 
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qglobal.h>
 
-#include <kdebug.h>
-
-#include <Painter.h>
-
 #include <stdio.h>
 #include <string.h>
 #include <math.h>  //fabs()
+#include <iostream>
 
-#include <iostream.h>
+#include "Painter.h"
+#include "units.h"
+#include "KIllustrator_doc.h"
 
-#define MARKER_WIDTH 11
-#define MARKER_HEIGHT 6
+const int MARKER_WIDTH = 11;
+const int MARKER_HEIGHT = 6;
 
-#define RULER_SIZE 20
+const int RULER_SIZE = 20;
 
 Ruler::Ruler (KIllustratorDocument *_doc, Orientation o, MeasurementUnit mu, QWidget *parent,
-              const char *name) : QFrame (parent, name) {
+              const char *name) : QFrame (parent, name)
+{
   setFrameStyle (Box | Raised);
   setLineWidth (1);
   setMidLineWidth (0);
+  setMouseTracking(true);
   orientation = o;
   munit = mu;
   doc = _doc;
@@ -57,6 +56,8 @@ Ruler::Ruler (KIllustratorDocument *_doc, Orientation o, MeasurementUnit mu, QWi
   zeroPoint = 0;
   buffer = 0L;
   currentPosition = -1;
+
+  isMousePressed = false;
 
   if (orientation == Horizontal) {
     setFixedHeight (RULER_SIZE);
@@ -75,7 +76,8 @@ Ruler::~Ruler()
   delete buffer;
 }
 
-void Ruler::initMarker (int w, int h) {
+void Ruler::initMarker (int w, int h)
+{
   QPainter p;
   QPointArray pts (3);
   static QCOORD hpoints [] = { 0,0, MARKER_WIDTH-1,0,
@@ -104,8 +106,8 @@ void Ruler::initMarker (int w, int h) {
   p.end ();
 }
 
-void Ruler::recalculateSize (QResizeEvent *) {
-   kdDebug(38000)<<"recalcSize() 1"<<endl;
+void Ruler::recalculateSize (QResizeEvent *)
+{
   delete buffer;
   buffer = 0L;
 
@@ -118,7 +120,6 @@ void Ruler::recalculateSize (QResizeEvent *) {
 
   int maxsize = (int)(1000.0 * zoom);
 
-  kdDebug(38000)<<"recalcSize() max: "<<maxsize<<endl;
   if (orientation == Horizontal) {
     w = QMAX(width (), maxsize);
     h = RULER_SIZE;
@@ -128,18 +129,17 @@ void Ruler::recalculateSize (QResizeEvent *) {
     h = QMAX(height (), maxsize);
   }
   buffer = new QPixmap (w, h);
-   kdDebug(38000)<<"recalcSize() new buffer created2"<<endl;
   drawRuler ();
-   kdDebug(38000)<<"recalcSize() after drawRuler"<<endl;
   updatePointer (currentPosition, currentPosition);
-   kdDebug(38000)<<"recalcSize() after updatePointer"<<endl;
 }
 
-MeasurementUnit Ruler::measurementUnit () const {
+MeasurementUnit Ruler::measurementUnit () const
+{
   return  munit;
 }
 
-void Ruler::setMeasurementUnit (MeasurementUnit mu) {
+void Ruler::setMeasurementUnit (MeasurementUnit mu)
+{
   munit = mu;
   drawRuler ();
   updatePointer (currentPosition, currentPosition);
@@ -161,52 +161,47 @@ void Ruler::setZoomFactor (float zf, int xpos, int ypos)
 
 void Ruler::updatePointer (int x, int y)
 {
-   if (! buffer)
-      return;
+  if(!buffer)
+    return;
 
-   QRect r1, r2;
-   int pos = 0;
+  QRect r1, r2;
+  int pos = 0;
 
-   if (orientation == Horizontal)
-   {
-      //kdDebug(38000)<<"Ruler::updatePointer ( "<<x<<" | "<<y<<" ) zoom is "<<zoom<<endl;
-      if (currentPosition != -1)
-      {
-         pos=currentPosition-MARKER_WIDTH/2-2;
-
-         r1=QRect(pos,1,MARKER_WIDTH, MARKER_HEIGHT);
-         bitBlt (buffer, pos, 1, bg, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
-         //kdDebug(38000)<<"Ruler::updatePointer() old pos: "<<pos<<endl;
-      }
-      if (x != -1)
-      {
-         pos=x-MARKER_WIDTH/2-2;
-         r2=QRect(pos,1,MARKER_WIDTH,MARKER_HEIGHT);
-
-         bitBlt (bg, 0, 0, buffer, pos, 1, MARKER_WIDTH, MARKER_HEIGHT);
-         bitBlt (buffer, pos, 1, marker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
-         currentPosition = x;
-         //kdDebug(38000)<<"Ruler::updatePointer() new pos x: "<<pos<<" currentPos: "<<x<<endl;
-      }
-   }
-   else
-   {
-      if (currentPosition != -1)
-      {
-         pos=currentPosition-MARKER_HEIGHT/2-2;
-         r1 = QRect (1, pos, MARKER_HEIGHT, MARKER_WIDTH);
-         bitBlt (buffer, 1, pos, bg, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
-      }
-      if (y != -1)
-      {
-         pos=y-MARKER_HEIGHT/2-2;
-         r2 = QRect (1, pos,MARKER_HEIGHT, MARKER_WIDTH);
-         bitBlt (bg, 0, 0, buffer, 1, pos, MARKER_HEIGHT, MARKER_WIDTH);
-         bitBlt (buffer, 1, pos, marker, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
-         currentPosition = y;
-      }
-   }
-   repaint (r1.unite (r2));
+  if(orientation == Horizontal)
+  {
+    if(currentPosition != -1)
+    {
+      pos = currentPosition-MARKER_WIDTH/2-2;
+      r1 = QRect(pos,1,MARKER_WIDTH, MARKER_HEIGHT);
+      bitBlt (buffer, pos, 1, bg, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
+    }
+    if(x != -1)
+    {
+      pos = x-MARKER_WIDTH/2-2;
+      r2=QRect(pos,1,MARKER_WIDTH,MARKER_HEIGHT);
+      bitBlt (bg, 0, 0, buffer, pos, 1, MARKER_WIDTH, MARKER_HEIGHT);
+      bitBlt (buffer, pos, 1, marker, 0, 0, MARKER_WIDTH, MARKER_HEIGHT);
+      currentPosition = x;
+    }
+  }
+  else
+  {
+    if(currentPosition != -1)
+    {
+      pos = currentPosition-MARKER_HEIGHT/2-2;
+      r1 = QRect (1, pos, MARKER_HEIGHT, MARKER_WIDTH);
+      bitBlt (buffer, 1, pos, bg, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
+    }
+    if(y != -1)
+    {
+      pos = y-MARKER_HEIGHT/2-2;
+      r2 = QRect (1, pos,MARKER_HEIGHT, MARKER_WIDTH);
+      bitBlt (bg, 0, 0, buffer, 1, pos, MARKER_HEIGHT, MARKER_WIDTH);
+      bitBlt (buffer, 1, pos, marker, 0, 0, MARKER_HEIGHT, MARKER_WIDTH);
+      currentPosition = y;
+    }
+  }
+  repaint (r1.unite (r2));
 }
 
 void Ruler::updateVisibleArea (const QRect& area)
@@ -279,7 +274,6 @@ void Ruler::drawRuler ()
       s2 = cvtMmToPt(5.0) * zoom > 3.0;
       s3 = cvtMmToPt(10.0) * zoom > 3.0;
       step = 30.0 / (cvtMmToPt(10.0) * zoom);
-      //kdDebug(38000)<<" 30 / "<<cvtMmToPt(10.0)<<" * "<<zoom<<" = "<<step<<endl;
       start = (int)(cvtPtToMm(zeroPoint) / zoom);
       break;
    case UnitPica:
@@ -565,47 +559,53 @@ void Ruler::drawRuler ()
    }
    p.end ();
    //killu draws its rulers 6 (!!!!) times on startup..., aleXXX
-/*   static int blah(0);
-   kdDebug(38000)<<"Ruler::drawing ruler "<<blah<<endl;
-   blah++;*/
 }
 
-void Ruler::resizeEvent (QResizeEvent *e) {
+void Ruler::resizeEvent(QResizeEvent *e)
+{
   recalculateSize (e);
 }
 
-void Ruler::show () {
-  if (orientation == Horizontal) {
+void Ruler::show()
+{
+  if (orientation == Horizontal)
+  {
     setFixedHeight (RULER_SIZE);
     initMarker (MARKER_WIDTH, MARKER_HEIGHT);
   }
-  else {
+  else
+  {
     setFixedWidth (RULER_SIZE);
     initMarker (MARKER_HEIGHT, MARKER_WIDTH);
   }
   QWidget::show ();
 }
 
-void Ruler::hide () {
-  if (orientation == Horizontal)
+void Ruler::hide ()
+{
+  if(orientation == Horizontal)
     setFixedHeight (1);
   else
     setFixedWidth (1);
   QWidget::hide ();
 }
 
-void Ruler::mousePressEvent ( QMouseEvent * e)
+void Ruler::mousePressEvent( QMouseEvent * e)
 {
-   if (e==0) return;
-
-   if (e->button()==Qt::LeftButton)
-      isMousePressed = true;
-   else if (e->button()==Qt::RightButton)
-      emit rmbPressed();
+  if(!e)
+    return;
+  if (e->button()==Qt::LeftButton)
+    isMousePressed = true;
+  else if(e->button()==Qt::RightButton)
+    emit rmbPressed();
 }
 
 void Ruler::mouseMoveEvent ( QMouseEvent * me)
 {
+  if(orientation == Horizontal)
+    updatePointer(me->x(), 0);
+  else
+    updatePointer(0, me->y());
    /* Implement the hooks so that a helpline can be drawn out of the ruler:
       - if the mouse is on the widget, draw a helpline
       - if it is outside remove the XOR'd helpline
@@ -637,22 +637,22 @@ void Ruler::mouseReleaseEvent ( QMouseEvent * me)
 }
 
 void Ruler::drawNum (QPainter &p, int x, int y, int a, bool orient)
- {
+{
   char buf[10];
   sprintf(buf, "%d", (a>=0)? a : -a );
   int l = strlen(buf);
   if( orient )
-   x -= 3*l;
+    x -= 3*l;
   else
-   y -= 2*l - 3;
+    y -= 2*l - 3;
   for(char *ch = buf; *ch; ch++)
-   {
+  {
     p.drawText ( x, y, ch, 1);
     if( orient )
       x += 6;
     else
       y += 7;
-   }
- }
+  }
+}
 
 #include <Ruler.moc>

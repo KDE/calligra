@@ -22,6 +22,8 @@
 
 */
 
+#include "GCurve.h"
+
 #include <assert.h>
 #include <stdlib.h>
 
@@ -29,10 +31,10 @@
 #include <qpainter.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
-#include <GCurve.h>
-#include <GBezier.h>
-#include <Painter.h>
+#include "GBezier.h"
+#include "Painter.h"
 #include "GDocument.h"
 
 static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
@@ -272,6 +274,8 @@ float GSegment::length () const {
   return len;
 }
 
+/*******************[GCurve]*********************/
+
 GCurve::GCurve (GDocument* doc)
 : GObject (doc)
 {
@@ -382,18 +386,20 @@ void GCurve::movePoint (int idx, float dx, float dy, bool /*ctrlPressed*/) {
   }
 }
 
-int GCurve::getNeighbourPoint (const Coord& p) {
+int GCurve::getNeighbourPoint (const Coord& p)
+{
   Coord c;
   int idx = 0;
 
   QValueList<GSegment>::Iterator i;
-  for (i = segments.begin (); i != segments.end (); ++i) {
+  for(i = segments.begin (); i != segments.end (); ++i)
+  {
     int num  = ((*i).kind () == GSegment::sk_Line ? 2 : 4);
-    for (int n = 0; n < num; n++) {
+    for(int n = 0; n < num; n++)
+    {
       c = (*i).pointAt (n).transform (tMatrix);
-      if (c.isNear (p, NEAR_DISTANCE)) {
+      if (c.isNear (p, NEAR_DISTANCE))
         return idx;
-      }
       idx++;
     }
   }
@@ -492,15 +498,17 @@ const GSegment& GCurve::getSegment (int idx) {
     return (*segments.at(idx));
 }
 
-void GCurve::removePoint (int /*idx*/, bool update) {
-    //int pidx = 0;
-    //QValueList<GSegment>::Iterator i;
+void GCurve::removePoint (int idx, bool update)
+{
+  kdDebug(38000) << "GCurve::removePoint isn't implemented" <<endl;
+/*
+    int pidx = 0;
+    QValueList<GSegment>::Iterator i;
 
   if (segments.count() > 1) {
-#if 0
     if (idx == 0) {
       // remove the first segment
-      segments.erase (segments.begin ());
+      segments.remove (segments.begin ());
     }
     else {
       for (i = segments.begin (); i != segments.end (); i++) {
@@ -512,11 +520,11 @@ void GCurve::removePoint (int /*idx*/, bool update) {
         }
       }
     }
-#endif
   }
 
   if (update)
     updateRegion ();
+*/
 }
 
 GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {

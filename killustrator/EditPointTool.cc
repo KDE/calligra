@@ -22,7 +22,7 @@
 
 */
 
-#include <EditPointTool.h>
+#include "EditPointTool.h"
 
 #include <qkeycode.h>
 #include <qcursor.h>
@@ -32,16 +32,15 @@
 #include "GDocument.h"
 #include "KIllustrator_doc.h"
 #include "GPage.h"
-#include <Canvas.h>
-#include <Coord.h>
-#include <CommandHistory.h>
-#include <EditPointCmd.h>
-#include <InsertPointCmd.h>
-#include <RemovePointCmd.h>
-#include <SplitLineCmd.h>
-#include <GPolyline.h>
-#include <GBezier.h>
-
+#include "Canvas.h"
+#include "Coord.h"
+#include "CommandHistory.h"
+#include "EditPointCmd.h"
+#include "InsertPointCmd.h"
+#include "RemovePointCmd.h"
+#include "SplitLineCmd.h"
+#include "GPolyline.h"
+#include "GBezier.h"
 #include "ToolController.h"
 
 #define right_ptr_width 16
@@ -80,11 +79,13 @@ EditPointTool::~EditPointTool () {
   delete cursor;
 }
 
-void EditPointTool::setMode (Mode m) {
+void EditPointTool::setMode (Mode m)
+{
   if(mode==m)
     return;
   mode = m;
-  switch (m) {
+  switch (m)
+  {
   case MovePoint:
     m_toolController->emitModeSelected (m_id,i18n ("Move Point"));
     break;
@@ -105,48 +106,49 @@ void EditPointTool::setMode (Mode m) {
 void EditPointTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
 {
   if(!doc->document()->isReadWrite())
-      return;
-   if (doc->activePage()->selectionIsEmpty ())
-      return;
+    return;
+  if (doc->activePage()->selectionIsEmpty ())
+    return;
 
-   if (e->type () == QEvent::MouseButtonPress)
-   {
-      QMouseEvent *me = (QMouseEvent *) e;
-      float xpos = me->x (), ypos = me->y ();
-      //    canvas->snapPositionToGrid (xpos, ypos);
+  if (e->type () == QEvent::MouseButtonPress)
+  {
+    QMouseEvent *me = (QMouseEvent *) e;
+    float xpos = me->x ();
+    float ypos = me->y ();
+    //    canvas->snapPositionToGrid (xpos, ypos);
 
-      obj = 0L;
-      pointIdx = -1;
-      // for performance reasons check if an object from the selection
-      // has to be edited
-      for (QListIterator<GObject>it(doc->activePage()->getSelection()); it.current(); ++it)
+    obj = 0L;
+    pointIdx = -1;
+    // for performance reasons check if an object from the selection
+    // has to be edited
+    for (QListIterator<GObject>it(doc->activePage()->getSelection()); it.current(); ++it)
+    {
+      GObject* o = *it;
+      int idx = o->getNeighbourPoint (Coord (xpos, ypos));
+      if (idx != -1)
       {
-         GObject* o = *it;
-         int idx = o->getNeighbourPoint (Coord (xpos, ypos));
-         if (idx != -1)
-         {
-            obj = o;
-            pointIdx = idx;
-            startPos = Coord (xpos, ypos);
-            lastPos = startPos;
-            canvas->setCursor (*cursor);
-            break;
-         }
+        obj = o;
+        pointIdx = idx;
+        startPos = Coord (xpos, ypos);
+        lastPos = startPos;
+        canvas->setCursor (*cursor);
+        break;
       }
-      // if no currently selected object was found at the mouse position ...
-      if (obj == 0L)
+    }
+    // if no currently selected object was found at the mouse position ...
+    if (obj == 0L)
+    {
+      if ((obj = doc->activePage()->findContainingObject (qRound (xpos), qRound (ypos))) != 0L)
       {
-         if ((obj = doc->activePage()->findContainingObject (qRound (xpos), qRound (ypos))) != 0L)
-         {
-            // select and edit this object
-            doc->activePage()->unselectAllObjects ();
-            doc->activePage()->selectObject (obj);
-            pointIdx = obj->getNeighbourPoint (Coord (xpos, ypos));
-            startPos = Coord (xpos, ypos);
-            lastPos = startPos;
-            canvas->setCursor (*cursor);
-         }
+      // select and edit this object
+        doc->activePage()->unselectAllObjects ();
+        doc->activePage()->selectObject (obj);
+        pointIdx = obj->getNeighbourPoint (Coord (xpos, ypos));
+        startPos = Coord (xpos, ypos);
+        lastPos = startPos;
+        canvas->setCursor (*cursor);
       }
+    }
    }
    else if (e->type () == QEvent::MouseMove)
    {
@@ -236,12 +238,10 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
       else if (mode == RemovePoint)
       {
          bool removable = true;
-         if (pointIdx != -1 /*&& obj->inherits ("GPolyline")*/)
+	 //removing for GCurve isn't implemented
+         if (pointIdx != -1 && obj->inherits ("GPolyline"))
          {
-            //removing the only point of a oval is not good, Alex
-            if (obj->isA("GOval"))
-               removable=false;
-            else if (obj->isA ("GBezier"))
+             if (obj->isA ("GBezier"))
                // we cannot remove control points of bezier curves
                removable = ((GBezier *) obj)->isEndPoint (pointIdx);
 
@@ -255,12 +255,11 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
       }
       else if (mode == Split)
       {
-         if (pointIdx != -1)
+         //splitting for GCurve isn't implemented
+         if (pointIdx != -1 && obj->inherits ("GPolyline"))
          {
             bool removable = true;
 
-            if (obj->inherits ("GOval"))
-               removable=false;
             if (obj->isA ("GBezier"))
                // we cannot remove control points of bezier curves
                removable = ((GBezier *) obj)->isEndPoint (pointIdx);

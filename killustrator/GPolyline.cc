@@ -200,7 +200,7 @@ void GPolyline::removePoint (int idx, bool update)
       GPolygon *poly = (GPolygon *) this;
       poly->setKind (GPolygon::PK_Polygon);
       kdDebug(38000)<<"setting kind to polygon"<<endl;
-   };
+   }
 
    if (points.count () > 2)
    {
@@ -255,12 +255,12 @@ unsigned int GPolyline::numOfPoints () const {
   return points.count ();
 }
 
-int GPolyline::getNeighbourPoint (const Coord& p) {
+int GPolyline::getNeighbourPoint (const Coord& p)
+{
   Coord c;
-
   // for speedup in add line segments check first point #0 and #num-1
   c = points.at (0)->transform (tMatrix);
-  if (c.isNear (p, NEAR_DISTANCE))
+  if(c.isNear (p, NEAR_DISTANCE))
     return 0;
   unsigned int last = points.count () - 1;
   c = points.at (last)->transform (tMatrix);
@@ -268,7 +268,8 @@ int GPolyline::getNeighbourPoint (const Coord& p) {
     return last;
 
   // and now the remaining
-  for (unsigned int i = 1; i < last; i++) {
+  for (unsigned int i = 1; i < last; i++)
+  {
     c = points.at (i)->transform (tMatrix);
     if (c.isNear (p, NEAR_DISTANCE))
       return i;

@@ -460,7 +460,8 @@ void GPolygon::update_rpoints () {
   }
 }
 
-int GPolygon::getNeighbourPoint (const Coord& p) {
+int GPolygon::getNeighbourPoint (const Coord& p)
+{
   if (kind != PK_Polygon && Roundness > 0) {
     for (unsigned int i = 0; i < rpoints.count (); i++) {
       Coord c = rpoints.at (i)->transform (tMatrix);
