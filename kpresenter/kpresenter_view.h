@@ -603,7 +603,7 @@ public:
 
 protected slots:
     // dialog slots
-    void backOk( bool );
+    void backOk( BackDia*, bool );
     void afChooseOk( const QString & );
     void slotAfchooseCanceled();
     void styleOk();
@@ -760,7 +760,6 @@ private:
     QScrollBar *vert, *horz;
 
     // dialogs
-    BackDia *backDia;
     AFChoose *afChoose;
     StyleDia *styleDia;
     PgConfDia *pgConfDia;

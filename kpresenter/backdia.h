@@ -118,15 +118,15 @@ private slots:
     void selectPic();
     void updateConfiguration();
 
-    void Ok() { emit backOk( false ); }
-    void Apply() { emit backOk( false ); }
-    void ApplyGlobal() { emit backOk( true ); }
+    void Ok() { emit backOk( this, false ); }
+    void Apply() { emit backOk( this, false ); }
+    void ApplyGlobal() { emit backOk( this, true ); }
 
     void changeComboText(int _p);
     void slotReset();
 
 signals:
-    void backOk( bool );
+    void backOk( BackDia*, bool );
 
 };
 #endif //BACKDIA_H

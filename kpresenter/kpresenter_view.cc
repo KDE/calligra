@@ -221,7 +221,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
 
     m_bDisplayFiedCode=false;
     // init
-    backDia = 0;
     afChoose = 0;
     styleDia = 0;
     pgConfDia = 0;
@@ -1280,11 +1279,8 @@ void KPresenterView::extraAlignObjs()
 /*===============================================================*/
 void KPresenterView::extraBackground()
 {
-    delete backDia;
-    backDia =0;
-
     KPrPage *page=m_canvas->activePage();
-    backDia = new BackDia( this, "InfoDia", page->getBackType(  ),
+    BackDia* backDia = new BackDia( this, "InfoDia", page->getBackType(  ),
                            page->getBackColor1(  ),
                            page->getBackColor2(  ),
                            page->getBackColorType(  ),
@@ -1295,12 +1291,11 @@ void KPresenterView::extraBackground()
                            page->getBackYFactor( ),
                            page );
     backDia->setCaption( i18n( "Page Background" ) );
-    QObject::connect( backDia, SIGNAL( backOk( bool ) ), this, SLOT( backOk( bool ) ) );
+    QObject::connect( backDia, SIGNAL( backOk( BackDia*, bool ) ), this, SLOT( backOk( BackDia*, bool ) ) ) ;
     backDia->exec();
 
-    QObject::disconnect( backDia, SIGNAL( backOk( bool ) ), this, SLOT( backOk( bool ) ) );
+    QObject::disconnect( backDia, SIGNAL( backOk( BackDia*, bool ) ), this, SLOT( backOk( BackDia*, bool ) ) );
     delete backDia;
-    backDia = 0;
 }
 
 /*===============================================================*/
@@ -3500,7 +3495,7 @@ void KPresenterView::objectSelectedChanged()
 }
 
 /*=========== take changes for backgr dialog =====================*/
-void KPresenterView::backOk( bool takeGlobal )
+void KPresenterView::backOk( BackDia* backDia, bool takeGlobal )
 {
     KPrPage *page=m_canvas->activePage();
     SetBackCmd *setBackCmd = new SetBackCmd( i18n( "Set Background" ), backDia->getBackColor1(),
