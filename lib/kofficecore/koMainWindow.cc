@@ -183,9 +183,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_manager->setSelectionPolicy( KParts::PartManager::TriState );
     d->m_manager->setAllowNestedParts( true );
     d->m_manager->setIgnoreScrollBars( true );
-#if KDE_VERSION > 305
     d->m_manager->setActivationButtonMask( Qt::LeftButton | Qt::MidButton );
-#endif
 
     connect( d->m_manager, SIGNAL( activePartChanged( KParts::Part * ) ),
              this, SLOT( slotActivePartChanged( KParts::Part * ) ) );
@@ -1143,16 +1141,6 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     QApplication::sendEvent( d->m_activePart, &ev );
     QApplication::sendEvent( d->m_activeView, &ev );
 
-    // As of KDE-3.1, the plugins are child XMLGUI objects of the part
-#if KDE_VERSION < 305
-    QPtrList<KParts::Plugin> plugins = KParts::Plugin::pluginObjects( d->m_activeView );
-    KParts::Plugin *plugin = plugins.last();
-    while ( plugin )
-    {
-      factory->removeClient( plugin );
-      plugin = plugins.prev();
-    }
-#endif
 
     factory->removeClient( d->m_activeView );
 
@@ -1162,10 +1150,8 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 
   if ( !d->bMainWindowGUIBuilt )
   {
-#if KDE_VERSION >= 305
     // Load mainwindow plugins
     KParts::Plugin::loadPlugins( this, this, instance(), true );
-#endif
     createShellGUI();
   }
 
@@ -1177,13 +1163,6 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 
     factory->addClient( d->m_activeView );
 
-    // As of KDE-3.1, the plugins are child XMLGUI objects of the part
-#if KDE_VERSION < 305
-    QPtrList<KParts::Plugin> plugins = KParts::Plugin::pluginObjects( d->m_activeView );
-    QPtrListIterator<KParts::Plugin> pIt( plugins );
-    for (; pIt.current(); ++pIt )
-      factory->addClient( pIt.current() );
-#endif
 
     // This gets plugged in even for embedded views
     factory->plugActionList(d->m_activeView, "view_closeallviews",
