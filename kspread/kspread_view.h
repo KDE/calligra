@@ -76,7 +76,7 @@ public:
     KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc *_doc );
     ~KSpreadView();
 
-    KSpreadCanvas* canvasWidget() { return m_pCanvas; }
+    KSpreadCanvas* canvasWidget() const { return m_pCanvas; }
     KSpreadHBorder* hBorderWidget() { return m_pHBorderWidget; }
     KSpreadVBorder* vBorderWidget() { return m_pVBorderWidget; }
     QScrollBar* horzScrollBar() { return m_pHorzScrollBar; }
@@ -144,6 +144,10 @@ public:
     void deleteEditor( bool saveChanges = true );
 
     virtual DCOPObject* dcopObject();
+
+    virtual QWidget *canvas();
+    virtual int canvasXOffset() const;
+    virtual int canvasYOffset() const;
 
 public slots:
     /**

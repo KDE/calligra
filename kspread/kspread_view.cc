@@ -2457,5 +2457,20 @@ DCOPObject* KSpreadView::dcopObject()
     return m_dcop;
 }
 
+QWidget *KSpreadView::canvas()
+{
+  return canvasWidget(); 
+}
+
+int KSpreadView::canvasXOffset() const
+{
+  return canvasWidget()->xOffset(); 
+}
+
+int KSpreadView::canvasYOffset() const
+{
+  return canvasWidget()->yOffset(); 
+} 
+
 #include "kspread_view.moc"
 
