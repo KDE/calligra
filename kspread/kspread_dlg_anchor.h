@@ -30,6 +30,7 @@
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
+class KURLRequester;
 
 class internetAnchor : public QWidget
 {
@@ -63,6 +64,23 @@ private:
     QCheckBox *italic;
 };
 
+class fileAnchor : public QWidget
+{
+  Q_OBJECT
+public:
+  fileAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  QString apply();
+private:
+    QString createLink();
+    KSpreadView* m_pView;
+
+    QLineEdit* text;
+    KURLRequester* l_file;
+    //QLineEdit* l_file;
+    QCheckBox *bold;
+    QCheckBox *italic;
+};
+
 class cellAnchor : public QWidget
 {
   Q_OBJECT
@@ -92,6 +110,7 @@ public slots:
     KSpreadView* m_pView;
     internetAnchor *_internetAnchor; 
     mailAnchor *_mailAnchor;
+    fileAnchor *_fileAnchor;
     cellAnchor *_cellAnchor;
 };
 

@@ -35,6 +35,8 @@
 #include <kmessagebox.h>
 #include <kdialogbase.h>
 #include <kdebug.h>
+#include <kurlrequester.h>
+#include <klineedit.h>
 
 KSpreadLinkDlg::KSpreadLinkDlg( KSpreadView* parent, const char* /*name*/ )
 :  KDialogBase(KDialogBase::IconList,i18n("Create Hyperlink") ,
@@ -42,11 +44,14 @@ KSpreadLinkDlg::KSpreadLinkDlg( KSpreadView* parent, const char* /*name*/ )
 		KDialogBase::Ok)
 {
   m_pView = parent;
-  QVBox *page=addVBoxPage(i18n("Internet"), QString::null,BarIcon("misc",KIcon::SizeMedium));
+  QVBox *page=addVBoxPage(i18n("Internet"), QString::null,BarIcon("html",KIcon::SizeMedium));
   _internetAnchor = new  internetAnchor(parent,page );
 
   page=addVBoxPage(i18n("Mail"), QString::null,BarIcon("mail_generic",KIcon::SizeMedium));
   _mailAnchor = new  mailAnchor(parent,page );
+
+   page=addVBoxPage(i18n("File"), QString::null,BarIcon("filenew",KIcon::SizeMedium));
+  _fileAnchor = new  fileAnchor(parent,page );
 
   page=addVBoxPage(i18n("Cell"), QString::null,BarIcon("misc",KIcon::SizeMedium));
   _cellAnchor = new  cellAnchor(parent,page );
@@ -67,6 +72,9 @@ void KSpreadLinkDlg::slotOk()
       result=_mailAnchor->apply();
       break;
     case 2:
+      result=_fileAnchor->apply();
+      break;
+    case 3:
       result=_cellAnchor->apply();
       break;
     default:
@@ -233,6 +241,87 @@ QString mailAnchor::createLink()
     link = "!<a href=\""+l_mail->text()+"\""+">";
   else
     link = "!<a href=\"mailto:"+l_mail->text()+"\""+">";
+
+  if(bold->isChecked()&&!italic->isChecked())
+    {
+      link+="<b>"+text->text()+"</b></a>";
+    }
+  else if (!bold->isChecked()&&italic->isChecked())
+    {
+      link+="<i>"+text->text()+"</i></a>";
+    }
+  else if(bold->isChecked()&&italic->isChecked())
+    {
+      link+="<i><b>"+text->text()+"</b></i></a>";
+    }
+  else
+    {
+      link+=text->text()+"</a>";
+    }
+  
+    return link;
+}
+
+
+fileAnchor::fileAnchor( KSpreadView* _view,QWidget *parent , char *name )
+ :QWidget ( parent,name)
+{
+  m_pView=_view;
+  QVBoxLayout *lay1 = new QVBoxLayout( this );
+  lay1->setMargin( 5 );
+  lay1->setSpacing( 10 );
+  QVBoxLayout *lay2 = new QVBoxLayout( lay1);
+  lay2->setSpacing( 5 );
+
+  QLabel* tmpQLabel;
+  tmpQLabel = new QLabel( this);
+
+  lay2->addWidget(tmpQLabel);
+  tmpQLabel->setText(i18n("Text:"));
+
+  text = new QLineEdit( this );
+  lay2->addWidget(text);
+
+  tmpQLabel = new QLabel( this);
+  lay2->addWidget(tmpQLabel);
+  tmpQLabel->setText(i18n("File location:"));
+  //l_file = new QLineEdit( this );
+  l_file = new KURLRequester( this );
+
+  lay2->addWidget(l_file);
+
+  bold=new QCheckBox(i18n("Bold"),this);
+
+  lay2->addWidget(bold);
+
+  italic=new QCheckBox(i18n("Italic"),this);
+
+  lay2->addWidget(italic);
+
+  text->setFocus();
+}
+
+QString fileAnchor::apply()
+{
+ if( l_file->lineEdit()->text().isEmpty() || text->text().isEmpty() )
+    {
+	KMessageBox::error( this, i18n("Area Text or mail is empty!") );
+	return QString();
+    }
+  return createLink();
+}
+
+QString fileAnchor::createLink()
+{
+  QString end_link;
+  QString link;
+  QString tmpText=l_file->lineEdit()->text();
+  if(tmpText.find("file:/")!=-1)
+    link = "!<a href=\""+tmpText+"\""+">";
+  else if(tmpText.at(0)=='/')
+    link = "!<a href=\"file:"+tmpText+"\""+">";
+  else
+    link = "!<a href=\"file:"+tmpText+"\""+">";
 
   if(bold->isChecked()&&!italic->isChecked())
     {

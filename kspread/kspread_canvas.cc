@@ -1081,7 +1081,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     if ( !m_strAnchor.isEmpty() && _ev->button() == LeftButton )
     {
 	if(m_strAnchor.find("http://")!=-1 || m_strAnchor.find("mailto:")!=-1
-	   || m_strAnchor.find("ftp://")!=-1)
+	   || m_strAnchor.find("ftp://")!=-1 || m_strAnchor.find("file:")!=-1)
 	    (void) new KRun( m_strAnchor );
 	else
 	    gotoLocation( KSpreadPoint( m_strAnchor, m_pDoc->map() ) );
