@@ -41,7 +41,7 @@ include_HEADERS = koFilter.h koFilterChain.h \
 	koPictureKey.h koPictureBase.h koPicture.h koPictureImage.h \
 	koPictureClipart.h koPictureCollection.h
 
-noinst_HEADERS = koDocument_p.h koFilterChain.h \
+noinst_HEADERS = koDocument_p.h \
 	koPictureBase.h koPictureImage.h koPictureClipart.h koPictureCollection.h
 
 kodocinfopropspage_la_SOURCES = koDocInfoPropsFactory.cc
