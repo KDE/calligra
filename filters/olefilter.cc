@@ -76,7 +76,7 @@ void OLEFilter::slotSavePic(const char *data, const char *type,
     name+=type;
     int len=name.length();
     *nameOUT=new char[len+1];
-    strncpy(*nameOUT, (const char*)name, len);
+    strncpy(*nameOUT, static_cast<const char*>(name), len);
     *nameOUT[len]='\0';
     name.prepend(dir);
     fileOut->writeFile(name, "", "", size, data);
@@ -103,7 +103,7 @@ void OLEFilter::slotPart(const char *nameIN, const char *type,
         }
         int len=value.length();
         *nameOUT=new char[len+1];
-        strncpy(*nameOUT, (const char*)value, len);
+        strncpy(*nameOUT, static_cast<const char*>(value), len);
         *nameOUT[len]='\0';
     }
 }
@@ -219,7 +219,7 @@ void OLEFilter::convert(const QString &dirname) {
 
         if(myFilter==0L) {
             // unknown
-            kdebug(KDEBUG_INFO, 31000, "superunknown :)");
+            kdebug(KDEBUG_INFO, 31000, "superunknown");
             myFilter=new FilterBase();
             // connect SIGNALs&SLOTs
             connectCommon(&myFilter);
@@ -232,7 +232,7 @@ void OLEFilter::convert(const QString &dirname) {
         QString f=QString(tmp);
         delete [] tmp;
         f.prepend(dir);
-        fileOut->writeFile(f, "", "", file.length(), (const char*)file.utf8());
+        fileOut->writeFile(f, "", "", file.length(), static_cast<const char*>(file.utf8()));
         delete myFilter;
     }
 }

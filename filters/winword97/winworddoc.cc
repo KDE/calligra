@@ -1,5 +1,15 @@
 #include <winworddoc.h>
 
+const short WinWordDoc::CP2UNI[] = { 0x20ac, 0x0000, 0x201a, 0x0192,
+                                     0x201e, 0x2026, 0x2020, 0x2021,
+                                     0x02c6, 0x2030, 0x0160, 0x2039,
+                                     0x0152, 0x0000, 0x017d, 0x0000,
+                                     0x0000, 0x2018, 0x2019, 0x201c,
+                                     0x201d, 0x2022, 0x2013, 0x2014,
+                                     0x02dc, 0x2122, 0x0161, 0x203a,
+                                     0x0153, 0x0000, 0x017e, 0x0178
+};
+
 WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
                        const myFile &table1Stream, const myFile &dataStream) :
                        main(mainStream), data(dataStream) {
@@ -39,40 +49,40 @@ WinWordDoc::~WinWordDoc() {
 
 void WinWordDoc::FIBInfo() {
 
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((unsigned int)fib->wIdent));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->nFib));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->nProduct));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->lid));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->wIdent))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->nFib))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->nProduct))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->lid))));
     kdebug(KDEBUG_INFO, 31000, "some bits -----------------");
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fDot));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fGlsy));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fComplex));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fHasPic));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->cQuickSaves));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fEncrypted));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fWhichTblStm));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fReadOnlyRecommended));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fWriteReservation));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fExtChar));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fLoadOverride));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fFarEast));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fCrypto));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fDot))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fGlsy))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fComplex))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fHasPic))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->cQuickSaves))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fEncrypted))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fWhichTblStm))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fReadOnlyRecommended))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fWriteReservation))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fExtChar))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fLoadOverride))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fFarEast))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fCrypto))));
     kdebug(KDEBUG_INFO, 31000, "--------------------------");
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->nFibBack));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->lKey));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->envr));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->nFibBack))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->lKey))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->envr))));
     kdebug(KDEBUG_INFO, 31000, "bits - bits - bits -------");
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fMac));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fEmptySpecial));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fLoadOverridePage));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fFutureSavedUndo));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fWord97Saved));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fSpare0));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fMac))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fEmptySpecial))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fLoadOverridePage))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fFutureSavedUndo))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fWord97Saved))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fSpare0))));
     kdebug(KDEBUG_INFO, 31000, "--------------------------");
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->chs));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->chsTables));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->fcMin));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->fcMac));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->chs))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->chsTables))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fcMin))));
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->fcMac))));
     kdebug(KDEBUG_INFO, 31000, "T-e-x-t-------------------");
 
     char *str=new char[fib->fcMac - fib->fcMin];
@@ -81,7 +91,7 @@ void WinWordDoc::FIBInfo() {
     for(i=fib->fcMin, j=0;i<fib->fcMac;++i, ++j)
         str[j]=*(main.data+i);
 
-    kdebug(KDEBUG_INFO, 31000, (const char*)str);
+    kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(str));
     kdebug(KDEBUG_INFO, 31000, "--------------------------");
     delete [] str;
 }
@@ -129,6 +139,13 @@ void WinWordDoc::readFIB() {
     tmpL=(unsigned long*)&fib->fcStshfOrig;
     for(i=0; i<186; ++i, ++tmpL)
         *tmpL=read32(main.data+154+4*i);
+}
+
+const short WinWordDoc::char2uni(const unsigned char c) {
+    if(c<=0x7f || c>=0xa0)
+        return static_cast<short>(c);
+    else
+        return CP2UNI[c-0x80];
 }
 
 inline const unsigned short WinWordDoc::read16(const unsigned char *d) {

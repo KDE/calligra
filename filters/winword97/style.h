@@ -11,9 +11,8 @@ public:
     CStyle(CStyle &rhs);
     ~CStyle();
 
-    const QString format();   // get the <FROMAT> stuff
-    const bool dirty() const { return formatDirty; }
-
+    void forLayout(bool l=true);  // true->create only <FORMAT>, no <FORMAT id=...>
+    const QString format();   // create&get the <FORMAT> stuff
     const unsigned short styleID() const { return stID; }
 
     // general stuff
@@ -32,6 +31,7 @@ public:
     const QString textFontname() const { return _id==1 ? QString(data.text.fontname) : QString(0); }
     const unsigned char textSize() const { return _id==1 ? data.text.size : 0; }
     const unsigned char textWeight() const { return _id==1 ? data.text.weight : 0; }
+    const unsigned char textItalic() const { return _id==1 ? data.text.italic : 0; }
     const unsigned char textUnderline() const { return _id==1 ? data.text.underline : 0; }
     const unsigned char textVertalign() const { return _id==1 ? data.text.vertalign : 0; }
 
@@ -41,6 +41,7 @@ public:
     void textFontname(const QString name);
     void textSize(const unsigned char s) { if(_id==1 && s<101) data.text.size=s; }     // limit?
     void textWeight(const unsigned char w) { if(_id==1 && w<101) data.text.weight=w; } // limit?
+    void textItalic(const unsigned char i) { if(_id==1 && i<2) data.text.italic=i; }
     void textUnderline(const unsigned char u) { if(_id==1 && u<2) data.text.underline=u; }
     void textVertalign(const unsigned char v) { if(_id==1 && v<3) data.text.vertalign=v; }
 
@@ -68,6 +69,7 @@ public:
     const QString variableFontname() const { return _id==4 ? QString(data.variable.fontname) : QString(0); }
     const unsigned char variableSize() const { return _id==4 ? data.variable.size : 0; }
     const unsigned char variableWeight() const { return _id==4 ? data.variable.weight : 0; }
+    const unsigned char variableItalic() const { return _id==4 ? data.variable.italic : 0; }
     const unsigned char variableUnderline() const { return _id==4 ? data.variable.underline : 0; }
     const unsigned char variableVertalign() const { return _id==4 ? data.variable.vertalign : 0; }
 
@@ -89,6 +91,7 @@ public:
     void variableFontname(const QString name);
     void variableSize(const unsigned char s) { if(_id==4 && s<101) data.variable.size=s; }     // limit?
     void variableWeight(const unsigned char w) { if(_id==4 && w<101) data.variable.weight=w; } // limit?
+    void variableItalic(const unsigned char i) { if(_id==4 && i<2) data.variable.italic=i; }
     void variableUnderline(const unsigned char u) { if(_id==4 && u<2) data.variable.underline=u; }
     void variableVertalign(const unsigned char v) { if(_id==4 && v<3) data.variable.vertalign=v; }
 
@@ -107,6 +110,7 @@ public:
     const QString footnoteFontname() const { return _id==5 ? QString(data.footnote.fontname) : QString(0); }
     const unsigned char footnoteSize() const { return _id==5 ? data.footnote.size : 0; }
     const unsigned char footnoteWeight() const { return _id==5 ? data.footnote.weight : 0; }
+    const unsigned char footnoteItalic() const { return _id==5 ? data.footnote.italic : 0; }
     const unsigned char footnoteUnderline() const { return _id==5 ? data.footnote.underline : 0; }
     const unsigned char footnoteVertalign() const { return _id==5 ? data.footnote.vertalign : 0; }
 
@@ -124,13 +128,13 @@ public:
     void footnoteFontname(const QString name);
     void footnoteSize(const unsigned char s) { if(_id==5 && s<101) data.footnote.size=s; }     // limit?
     void footnoteWeight(const unsigned char w) { if(_id==5 && w<101) data.footnote.weight=w; } // limit?
+    void footnoteItalic(const unsigned char i) { if(_id==5 && i<2) data.footnote.italic=i; }
     void footnoteUnderline(const unsigned char u) { if(_id==5 && u<2) data.footnote.underline=u; }
     void footnoteVertalign(const unsigned char v) { if(_id==5 && v<3) data.footnote.vertalign=v; }
 
 private:
-    QString theFormat;
-    bool formatDirty;
     unsigned short stID;
+    bool onlyLayout;
 
     // KWord data
     unsigned char _id;   // 1=text, 2=image, 3=tab, 4=variable, 5=footnote
@@ -141,7 +145,7 @@ private:
         struct {
             unsigned char red, green, blue;
             char *fontname;
-            unsigned char size, weight;
+            unsigned char size, weight, italic;
             unsigned char underline;
             unsigned char vertalign;
         } text;
@@ -158,7 +162,7 @@ private:
 
             unsigned char red, green, blue;
             char *fontname;
-            unsigned char size, weight;
+            unsigned char size, weight, italic;
             unsigned char underline;
             unsigned char vertalign;
         } variable;
@@ -171,7 +175,7 @@ private:
 
             unsigned char red, green, blue;
             char *fontname;
-            unsigned char size, weight;
+            unsigned char size, weight, italic;
             unsigned char underline;
             unsigned char vertalign;
         } footnote;
