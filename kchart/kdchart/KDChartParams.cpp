@@ -2014,13 +2014,19 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                         } else if( tagName == "LabelString" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                if( axisSettings->_axisLabelStringList )
-                                    *(axisSettings->_axisLabelStringList) << string;
+                            {
+                                if( !axisSettings->_axisLabelStringList )
+                                    axisSettings->_axisLabelStringList=new QStringList();
+                                *(axisSettings->_axisLabelStringList) << string;
+                            }
                         } else if( tagName == "ShortLabelString" ) {
                             QString string;
                             if( readStringNode( element, string ) )
-                                if( axisSettings->_axisShortLabelsStringList )
-                                    *(axisSettings->_axisShortLabelsStringList) << string;
+                            {
+                                if( !axisSettings->_axisShortLabelsStringList )
+                                    axisSettings->_axisShortLabelsStringList=new QStringList();
+                                *(axisSettings->_axisShortLabelsStringList) << string;
+                            }
                         } else if( tagName == "LabelText" ) {
                             QString string;
                             if( readStringNode( element, string ) )
