@@ -111,6 +111,9 @@ public:
 
     void configAutoChangeFormat( bool b);
 
+    void configAutoReplaceNumber( bool b );
+
+
     TypographicQuotes getConfigTypographicQuotes() const
     { return m_typographicQuotes; }
     bool getConfigUpperCase() const
@@ -136,6 +139,9 @@ public:
 
     bool getConfigAutoChangeFormat() const
     { return m_autoChangeFormat;}
+
+    bool getConfigAutoReplaceNumber() const
+    { return m_autoReplaceNumber; }
 
     // Add/remove entries, called by the dialog
     void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
@@ -192,6 +198,8 @@ protected:
     void doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
     void doUseBulletStyle(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
 
+    void doAutoReplaceNumber( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
+
 private:
     KoDocument *m_doc;
     KoVariableCollection *m_varCollection;
@@ -200,7 +208,7 @@ private:
     bool m_configRead;
     bool m_convertUpperCase, m_convertUpperUpper,m_advancedAutoCorrect;
     bool m_autoDetectUrl, m_ignoreDoubleSpace, m_removeSpaceBeginEndLine;
-    bool m_useBulletStyle, m_autoChangeFormat;
+    bool m_useBulletStyle, m_autoChangeFormat, m_autoReplaceNumber;
 
     QChar bulletStyle;
 

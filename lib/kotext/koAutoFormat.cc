@@ -78,6 +78,7 @@ void KoAutoFormat::readConfig()
 
     m_autoChangeFormat = config.readBoolEntry( "AutoChangeFormat", false );
 
+    m_autoReplaceNumber = config.readBoolEntry( "AutoReplaceNumber", false );
 
     QString begin = config.readEntry( "TypographicQuotesBegin", "«" );
     m_typographicQuotes.begin = begin[0];
@@ -165,6 +166,8 @@ void KoAutoFormat::saveConfig()
     config.writeEntry( "BulletStyle", QString(bulletStyle));
 
     config.writeEntry( "AutoChangeFormat", m_autoChangeFormat);
+
+    config.writeEntry( "AutoReplaceNumber", m_autoReplaceNumber);
 
     config.setGroup( "AutoFormatEntries" );
     KoAutoFormatEntryMap::Iterator it = m_entries.begin();
@@ -274,6 +277,9 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
         {
             doAutoDetectUrl( textEditCursor, parag,index, word, txtObj );
         }
+        if ( m_autoReplaceNumber )
+            doAutoReplaceNumber( textEditCursor, parag, index, word, txtObj );
+
     }
 
     if( ch =='\n' )
@@ -476,6 +482,40 @@ void KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *parag,
         txtObj->emitShowCursor();
     }
 }
+
+void KoAutoFormat::doAutoReplaceNumber( QTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj )
+{
+    unsigned int length = word.length();
+    if ( length != 3 )
+        return;
+    KoTextDocument * textdoc = parag->textDocument();
+    int start = index - length;
+    if( word == QString("1/2") || word == QString("1/4") || word == QString("3/4") )
+    {
+        QTextCursor cursor( parag->document() );
+        cursor.setParag( parag );
+        cursor.setIndex( start );
+        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        cursor.setIndex( start + length );
+        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+        QString replacement;
+        if( word == QString("1/2") )
+            replacement=QString("½");
+        else if (word == QString("1/4") )
+            replacement=QString("¼");
+        else if (word == QString("3/4") )
+            replacement=QString("¾");
+        QString cmdName=i18n("Autocorrect (replace 1/2... by ")+QString("½...)");
+        txtObj->emitNewCommand(txtObj->replaceSelectionCommand( textEditCursor, replacement,
+                                                           KoTextObject::HighlightSelection,
+                                                                cmdName ));
+        txtObj->emitHideCursor();
+        textEditCursor->gotoRight();
+        txtObj->emitShowCursor();
+    }
+
+}
+
 
 void KoAutoFormat::doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj )
 {
@@ -742,6 +782,11 @@ void KoAutoFormat::configAutoChangeFormat( bool b)
     m_autoChangeFormat = b;
 }
 
+
+void KoAutoFormat::configAutoReplaceNumber( bool b )
+{
+    m_autoReplaceNumber = b;
+}
 
 bool KoAutoFormat::isUpper( const QChar &c )
 {
