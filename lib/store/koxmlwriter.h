@@ -211,7 +211,7 @@ private:
             writeChar( '>' );
         }
     }
-    char* escapeForXML( const char* source ) const;
+    char* escapeForXML( const char* source, int length ) const;
     bool prepareForChild();
     void init();
 

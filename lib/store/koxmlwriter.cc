@@ -184,7 +184,7 @@ void KoXmlWriter::addTextNode( const char* cstr )
         parent.hasChildren = true;
     }
 
-    char* escaped = escapeForXML( cstr );
+    char* escaped = escapeForXML( cstr, -1 );
     writeCString( escaped );
     if(escaped != m_escapeBuffer)
         delete[] escaped;
@@ -195,7 +195,7 @@ void KoXmlWriter::addAttribute( const char* attrName, const char* value )
     writeChar( ' ' );
     writeCString( attrName );
     writeCString("=\"");
-    char* escaped = escapeForXML( value );
+    char* escaped = escapeForXML( value, -1 );
     writeCString( escaped );
     if(escaped != m_escapeBuffer)
         delete[] escaped;
@@ -233,20 +233,23 @@ void KoXmlWriter::writeString( const QString& str )
 
 // In case of a reallocation (ret value != m_buffer), the caller owns the return value,
 // it must delete it (with [])
-char* KoXmlWriter::escapeForXML( const char* source ) const
+char* KoXmlWriter::escapeForXML( const char* source, int length = -1 ) const
 {
     // we're going to be pessimistic on char length; so lets make the outputLength less
     // the amount one char can take: 6
     char* destBoundary = m_escapeBuffer + s_escapeBufferLen - 6;
     char* destination = m_escapeBuffer;
     char* output = m_escapeBuffer;
+    const char* src = source; // src moves, source remains
     for ( ;; ) {
         if(destination >= destBoundary) {
             // When we come to realize that our escaped string is going to
             // be bigger than the escape buffer (this shouldn't happen very often...),
             // we drop the idea of using it, and we allocate a bigger buffer.
-            uint len = qstrlen( source ); // expensive...
-            uint newLength = len * 6 + 1; // worst case. 6 is due to &quot; and &apos;
+            // Note that this if() can only be hit once per call to the method.
+            if ( length == -1 )
+                length = qstrlen( source ); // expensive...
+            uint newLength = length * 6 + 1; // worst case. 6 is due to &quot; and &apos;
             char* buffer = new char[ newLength ];
             destBoundary = buffer + newLength;
             uint amountOfCharsAlreadyCopied = destination - m_escapeBuffer;
@@ -254,7 +257,7 @@ char* KoXmlWriter::escapeForXML( const char* source ) const
             output = buffer;
             destination = buffer + amountOfCharsAlreadyCopied;
         }
-        switch( *source ) {
+        switch( *src ) {
         case 60: // <
             memcpy( destination, "&lt;", 4 );
             destination += 4;
@@ -281,10 +284,10 @@ char* KoXmlWriter::escapeForXML( const char* source ) const
             *destination = '\0';
             return output;
         default:
-            *destination++ = *source++;
+            *destination++ = *src++;
             continue;
         }
-        ++source;
+        ++src;
     }
     // NOTREACHED (see case 0)
     return output;
