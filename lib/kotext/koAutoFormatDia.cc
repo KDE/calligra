@@ -263,6 +263,7 @@ void KoAutoFormatDia::setupTab1()
     cbAutoSuperScript = new QCheckBox( tab1 );
     cbAutoSuperScript->setText( i18n("Replace 1st... with 1^st"));
     cbAutoSuperScript->resize( cbAutoSuperScript->sizeHint() );
+    cbAutoSuperScript->setEnabled( m_autoFormat.nbSuperScriptEntry()>0 );
     ( void )new QWidget( tab1 );
 
     cbUseBulletStyle=new QCheckBox( tab1 );

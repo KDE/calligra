@@ -241,6 +241,8 @@ public:
 
     KCompletion *getCompletion() const { return m_listCompletion; }
 
+    int nbSuperScriptEntry() const
+        { return m_superScriptEntries.count(); }
 
     // Read/save config ( into kwordrc )
     void readConfig();

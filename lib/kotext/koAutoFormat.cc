@@ -547,7 +547,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
         else
             delete macro;
 
-        if( m_bAutoSuperScript )
+        if( m_bAutoSuperScript && m_superScriptEntries.count()>0)
             doAutoSuperScript( textEditCursor, parag, newPos, lastWord, txtObj  );
 
 
