@@ -1654,7 +1654,7 @@ refer to the section entitled <link linkend="expressions">Expressions</link>.</p
 <title>Settings</title>
 
 <variablelist>
-<varlistentry>
+<!--<varlistentry>
 <term>
 <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Show File Toolbar</guimenuitem>
@@ -1753,7 +1753,7 @@ Toolbar</guimenuitem>
 <para><action>Toggles whether the Formula Toolbar is
 visible.</action></para>
 </listitem>
-</varlistentry>
+</varlistentry> -->
 
 <varlistentry>
 <term>

@@ -95,6 +95,14 @@ is causing problems, the picture can always be <link linkend="switch-graphics">c
 <sect2 id="delete-graphics"><title>Delete Graphics</title>
 <para>To delete a graphic in &kword;, simply <link linkend="delete-frame">delete the frame</link> around it.</para>
 </sect2>
+<sect2 id="save-graphics"><title>Saving Graphic in separate file</title>
+<para>You can save a picture or graph to a separate file (for use in another document or to archive the graphic).</para>
+<para>Simply click once on the graphic with the &RMB;.  A submenu will appear.  Select <guilabel>Save Picture</guilabel>. 
+A dialog will appear that will allow you to specify where to save the graphic.</para>
+<note><para>This does not remove the picture from the &kword; document file.  It is simply a way to extract a picture from a 
+document so it can be archived or used in another application.</para></note>
+</sect2>
+
 <sect2 id="switch-graphics"><title>Switching between inline and framed pictures</title>
 <para>Switching between inline pictures and framed pictures is easy in &kword;.</para>
 <sect3 id="inline-to-frame"><title>Change an inline picture to a framed picture</title>
