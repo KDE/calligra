@@ -168,6 +168,8 @@ void KSpreadFormat::clearProperty( Properties p )
     formatChanged();
 }
 
+// FIXME according to Valgrind, this function consumes too much time
+// find a way to optimize it !
 bool KSpreadFormat::hasProperty( Properties p, bool withoutParent ) const
 {
     if ( m_pStyle->hasFeature( (KSpreadStyle::FlagsSet) p, withoutParent ) )
