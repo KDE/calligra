@@ -2112,7 +2112,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             if ( !m_currentTextObjectView->kpTextObject()->isProtectContent() )
                 m_currentTextObjectView->keyPressEvent( e );
             else
-                KMessageBox::information(this, i18n("Readonly content cannot be changed. No modifications will be accepted"));
+                KMessageBox::information(this, i18n("Read-only content cannot be changed. No modifications will be accepted"));
         }
     } else if ( mouseSelectedObject ) {
         m_hotSpot = KoPoint(0,0);
