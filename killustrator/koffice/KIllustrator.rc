@@ -99,13 +99,15 @@
 <ToolBar fullWidth="false" name="edit"><Text>Edit</Text>
   <Action name="undo"/>
   <Action name="redo"/>
-  <Action name="view_zoom"/>
-  <Separator/>
   <Action name="cut"/>
   <Action name="copy"/>
   <Action name="paste"/>
+  <Action name="view_zoom"/>
+  <Separator/>
+  <Action name="tool_zoomin"/>
+  <Action name="tool_zoomout"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="colorbar" position="right"><Text>Color</Text>
+<ToolBar fullWidth="false" name="colorbar"><Text>Color</Text>
   <Action name="colorbar"/>
 </ToolBar>
 <ToolBar fullWidth="false" name="tools" position="left"><Text>Tools</Text>
@@ -126,9 +128,5 @@
   <Action name="newNode"/>
   <Action name="deleteNode"/>
   <Action name="splitLine"/>
-</ToolBar>
-<ToolBar fullWidth="false" name="zoom" position="left"><Text>Zoom</Text>
-  <Action name="tool_zoomin"/>
-  <Action name="tool_zoomout"/>
 </ToolBar>
 </kpartgui>

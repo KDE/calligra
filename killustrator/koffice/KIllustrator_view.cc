@@ -487,7 +487,7 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
     m_redo->setText( label );
 }
 
-void KIllustratorView::resizeEvent(QResizeEvent* ) {
+//void KIllustratorView::resizeEvent(QResizeEvent* ) {
 /*    if(m_bShowRulers) {
         hRuler->setGeometry(20, 0, width()-20, 20);
         vRuler->setGeometry(0, 20, 20, height()-20);
@@ -495,7 +495,7 @@ void KIllustratorView::resizeEvent(QResizeEvent* ) {
     }
     else
         canvas->setGeometry(0, 0, width(), height());*/
-}
+//}
 
 void KIllustratorView::updateReadWrite( bool /*readwrite*/ )
 {

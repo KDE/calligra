@@ -110,7 +110,7 @@ protected:
 
     void setupCanvas ();
     void setupPopups ();
-    void resizeEvent (QResizeEvent*);
+    //void resizeEvent (QResizeEvent*);
 
     virtual void updateReadWrite( bool readwrite );
 
