@@ -549,7 +549,7 @@ void KWView::setupActions()
                                      actionCollection(), "format_frameset" );
     actionFormatFrameSet->setStatusText( i18n( "Alter frameset properties." ) );
     actionFormatFrameSet->setWhatsThis( i18n( "Alter frameset properties.<p>Currently you can change the frame background." ) );
-    
+
     actionFormatPage = new KAction( i18n( "P&age..." ), 0,
                         this, SLOT( formatPage() ),
                         actionCollection(), "format_page" );
@@ -706,7 +706,7 @@ void KWView::setupActions()
                                      actionCollection(), "table_delrow" );
     actionTableDelRow->setStatusText( i18n( "Delete one row from the current table." ) );
     actionTableDelRow->setWhatsThis( i18n( "Delete one row from the current table.<p>Your cursor does not need to be in the row to be deleted. You will be given the opportunity to specify which row to delete." ) );
-    
+
     actionTableDelCol = new KAction( i18n( "D&elete Column..." ), "delete_table_col", 0,
                                      this, SLOT( tableDeleteCol() ),
                                      actionCollection(), "table_delcol" );
@@ -1727,7 +1727,11 @@ void KWView::editCustomVars()
 {
     KoCustomVariablesDia dia( this, m_doc->getVariableCollection()->getVariables() );
     if(dia.exec())
+    {
         m_doc->recalcVariables( VT_CUSTOM );
+        //temporaly hack, for the moment we can't undo/redo change custom variable
+        m_doc->setModified(true);
+    }
 }
 
 void KWView::editSerialLetterDataBase()
