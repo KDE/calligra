@@ -5,6 +5,7 @@
 #include <qstring.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
+#include <qspinbox.h>
 
 class KChartPart;
 class kchartWidget;
@@ -28,6 +29,7 @@ private:
   QLineEdit *y_interval;
   QLineEdit *y_max;
   QLineEdit *y_min;
+  QSpinBox *angle;
 };
 
 #endif

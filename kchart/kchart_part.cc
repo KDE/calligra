@@ -72,7 +72,7 @@ void KChartPart::initRandomData() {
       currentData.expand(4,4);
       for (row = 0;row < 4;row++)
 	for (col = 0;col < 4;col++) {
-	  KChartValue t; 
+	  KChartValue t;
 	  t.exists= true;
 	  t.value.setValue((double)row+col);
 	  // cerr << "Set cell for " << row << "," << col << "\n";
@@ -190,8 +190,60 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
   chart.appendChild(data);
 
   QDomElement params = doc.createElement("params");
-  params.setAttribute("type",(int)_params->type);
   chart.appendChild(params);
+  params.setAttribute("type",(int)_params->type);
+
+  if(!_params->title.isEmpty())
+        {
+        QDomElement title = doc.createElement( "title" );
+        title.appendChild( doc.createTextNode( _params->title ) );
+        params.appendChild( title );
+        QDomElement titlefont = doc.createElement("titlefont");
+        params.appendChild(titlefont);
+        titlefont.appendChild( doc.createElement( "font",_params->titleFont() ) );
+
+        }
+
+
+  if(!_params->xtitle.isEmpty())
+        {
+        QDomElement xtitle = doc.createElement( "xtitle" );
+        xtitle.appendChild( doc.createTextNode( _params->xtitle ) );
+        params.appendChild( xtitle );
+        QDomElement xtitlefont = doc.createElement("xtitlefont");
+        xtitlefont.appendChild( doc.createElement( "font",_params->xTitleFont()  ) );
+        params.appendChild(xtitlefont);
+        }
+  if(!_params->ytitle.isEmpty())
+        {
+        QDomElement ytitle = doc.createElement( "ytitle" );
+        ytitle.appendChild( doc.createTextNode( _params->ytitle ) );
+        params.appendChild( ytitle );
+        QDomElement ytitlefont = doc.createElement("ytitlefont");
+        ytitlefont.appendChild( doc.createElement( "font",_params->yTitleFont() ) );
+        params.appendChild(ytitlefont);
+        }
+  QDomElement yaxis = doc.createElement("yaxis");
+  yaxis.setAttribute("ymin",_params->requested_ymin);
+  yaxis.setAttribute("ymax",_params->requested_ymax);
+  yaxis.setAttribute("yinterval",_params->requested_yinterval);
+  params.appendChild(yaxis);
+
+  QDomElement graph = doc.createElement("graph");
+  graph.setAttribute("grid",(int)_params->grid);
+  graph.setAttribute("xaxis",(int)_params->xaxis);
+  graph.setAttribute("yaxis",(int)_params->yaxis);
+  graph.setAttribute("shelf",(int)_params->shelf);
+  graph.setAttribute("yaxis2",(int)_params->yaxis2);
+  graph.setAttribute("ystyle",(int)_params->yval_style);
+  graph.setAttribute("border",(int)_params->border);
+  graph.setAttribute("transbg",(int)_params->transparent_bg);
+  params.appendChild(graph);
+
+  QDomElement graphparams = doc.createElement("graphparams");
+  graphparams.setAttribute("3ddepth",(double)_params->_3d_depth);
+  graphparams.setAttribute("3dangle",(short)_params->_3d_angle);
+  params.appendChild(graphparams);
 
   cerr << "Ok, till here!!!";
   QBuffer buffer;
@@ -269,6 +321,122 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
 	 if ( !ok )
 	        return false;
          }
+  QDomElement title = params.namedItem( "title" ).toElement();
+    if ( !title.isNull())
+        {
+         QString t = title.text();
+         _params->title=t;
+        }
+  QDomElement titlefont = params.namedItem( "titlefont" ).toElement();
+    if ( !titlefont.isNull())
+        {
+        QDomElement font = titlefont.namedItem( "font" ).toElement();
+	    if ( !font.isNull() )
+		_params->setTitleFont(font.toFont());
+        }
+  QDomElement xtitle = params.namedItem( "xtitle" ).toElement();
+    if ( !xtitle.isNull())
+        {
+         QString t = xtitle.text();
+         _params->xtitle=t;
+        }
+  QDomElement xtitlefont = params.namedItem( "xtitlefont" ).toElement();
+    if ( !xtitlefont.isNull())
+        {
+        QDomElement font = xtitlefont.namedItem( "font" ).toElement();
+	    if ( !font.isNull() )
+		_params->setXTitleFont(font.toFont());
+        }
+  QDomElement ytitle = params.namedItem( "ytitle" ).toElement();
+    if ( !ytitle.isNull())
+        {
+         QString t = ytitle.text();
+         _params->ytitle=t;
+        }
+  QDomElement ytitlefont = params.namedItem( "ytitlefont" ).toElement();
+    if ( !ytitlefont.isNull())
+        {
+        QDomElement font = ytitlefont.namedItem( "font" ).toElement();
+	    if ( !font.isNull() )
+		_params->setYTitleFont(font.toFont());
+        }
+  QDomElement yaxis = params.namedItem( "yaxis" ).toElement();
+    if ( !ytitlefont.isNull())
+        {
+        if(yaxis.hasAttribute( "yinterval" ))
+                {
+                _params->requested_yinterval= yaxis.attribute("yinterval").toDouble( &ok );
+	        if ( !ok ) return false;
+                }
+        if(yaxis.hasAttribute( "ymin" ))
+                {
+                _params->requested_ymin= yaxis.attribute("ymin").toDouble( &ok );
+	        if ( !ok ) return false;
+                }
+         if(yaxis.hasAttribute( "ymax" ))
+                {
+                _params->requested_ymax= yaxis.attribute("ymax").toDouble( &ok );
+	        if ( !ok ) return false;
+                }
+        }
+  QDomElement graph = params.namedItem( "graph" ).toElement();
+  if(!graph.isNull())
+        {
+        if(graph.hasAttribute( "grid" ))
+                {
+                _params->grid=(bool) graph.attribute("grid").toInt( &ok );
+                if(!ok) return false;
+                }
+         if(graph.hasAttribute( "xaxis" ))
+                {
+                _params->xaxis=(bool) graph.attribute("xaxis").toInt( &ok );
+                if(!ok) return false;
+                }
+         if(graph.hasAttribute( "yaxis" ))
+                {
+                _params->yaxis=(bool) graph.attribute("yaxis").toInt( &ok );
+                if(!ok) return false;
+                }
+          if(graph.hasAttribute( "shelf" ))
+                {
+                _params->shelf=(bool) graph.attribute("shelf").toInt( &ok );
+                if(!ok) return false;
+                }
+          if(graph.hasAttribute( "yaxis2" ))
+                {
+                _params->yaxis2=(bool) graph.attribute("yaxis2").toInt( &ok );
+                if(!ok) return false;
+                }
+          if(graph.hasAttribute( "ystyle" ))
+                {
+                _params->yval_style=(bool) graph.attribute("ystyle").toInt( &ok );
+                if(!ok) return false;
+                }
+          if(graph.hasAttribute( "border" ))
+                {
+                _params->border=(bool) graph.attribute("border").toInt( &ok );
+                if(!ok) return false;
+                }
+          if(graph.hasAttribute( "transbg" ))
+                {
+                _params->transparent_bg=(bool) graph.attribute("transbg").toInt( &ok );
+                if(!ok) return false;
+                }
+        }
+  QDomElement graphparams = params.namedItem( "graphparams" ).toElement();
+  if(!graph.isNull())
+        {
+         if(graph.hasAttribute( "3ddept" ))
+                {
+                _params->_3d_depth=graph.attribute("3ddept").toDouble( &ok );
+                if(!ok) return false;
+                }
+         if(graph.hasAttribute( "3dangle" ))
+                {
+                _params->_3d_angle=graph.attribute("3dangle").toShort( &ok );
+                if(!ok) return false;
+                }
+        }
   return true;
 };
 
@@ -308,6 +476,9 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.13  2000/01/03 20:26:42  mlaurent
+ * Improved kchartWizard and bugfix
+ *
  * Revision 1.12  1999/12/21 22:36:17  faure
  * Porting to new QVariant. More like this and I write a script !
  *

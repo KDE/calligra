@@ -63,6 +63,13 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
   border->setGeometry( 70, 410, 110, 30 );
   border->setChecked( _chart->params()->border );
 
+  tmpLabel=new QLabel(this);
+  tmpLabel->setText(i18n("Angle 3D : "));
+  tmpLabel->setGeometry(10,440,50,30);
+  angle = new QSpinBox(1, 90, 1, this);
+  angle->setValue(_chart->params()->_3d_angle);
+  angle->setGeometry( 70, 440, 110, 30 );
+
   /*connect( grid, SIGNAL( toggled( bool ) ),
 	   this, SLOT( setGrid( bool ) ) );
     */
@@ -183,6 +190,7 @@ void kchartWizardSetupAxesPage::apply()
  if( !y_min->text().isEmpty())
         _chart->params()->requested_ymin=y_min->text().toDouble();
  _chart->params()->border =border->isChecked() ;
+ _chart->params()->_3d_angle=angle->value();
 
 }
 /*

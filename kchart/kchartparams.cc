@@ -69,7 +69,7 @@ KChartParameters::KChartParameters() :
 	border = false;
 	transparent_bg = false;
 	percent_labels = KCHARTPCTTYPE_NONE;
-	type = KCHARTTYPE_3DBAR;	
+	type = KCHARTTYPE_3DBAR;
 	hard_size = false;
 	hard_graphheight = 0;
 	hard_graphwidth = 0;
@@ -120,7 +120,7 @@ bool KChartParameters::do_bar() {
 
 
 
-void KChartParameters::saveColorArray(KConfig *conf, 
+void KChartParameters::saveColorArray(KConfig *conf,
 				      KChartColorArray *arr,
 				      QString name) {
   QString confname;
@@ -132,7 +132,7 @@ void KChartParameters::saveColorArray(KConfig *conf,
   }
 }
 
-void KChartParameters::loadColorArray(KConfig *conf, 
+void KChartParameters::loadColorArray(KConfig *conf,
 				      KChartColorArray *arr,
 				      QString name) {
   QString confname;
@@ -150,10 +150,10 @@ void KChartParameters::loadColorArray(KConfig *conf,
 
 void KChartParameters::saveConfig(KConfig *conf) {
   conf->setGroup("ChartParameters");
-
-  conf->writeEntry("title", title);
+  //title, xtitle, ytitle are writting in file when you save.
+  /*conf->writeEntry("title", title);
   conf->writeEntry("xtitle", xtitle);
-  conf->writeEntry("ytitle", ytitle);
+  conf->writeEntry("ytitle", ytitle);*/
   conf->writeEntry("ytitle2", ytitle2);
   // the fonts
   conf->writeEntry("titlefont", titlefont);
@@ -222,9 +222,9 @@ void KChartParameters::saveConfig(KConfig *conf) {
 void KChartParameters::loadConfig(KConfig *conf) {
   conf->setGroup("ChartParameters");
 
-  title = conf->readEntry("title", title);
+  /*title = conf->readEntry("title", title);
   xtitle = conf->readEntry("xtitle", xtitle);
-  ytitle = conf->readEntry("ytitle", ytitle );
+  ytitle = conf->readEntry("ytitle", ytitle );*/
   ytitle2 = conf->readEntry("ytitle2", ytitle2);
   // TODO: the fonts
   QFont tempfont;
