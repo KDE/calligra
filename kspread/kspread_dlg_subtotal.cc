@@ -35,7 +35,7 @@
 
 
 KSpreadSubtotalDlg::KSpreadSubtotalDlg( KSpreadView * parent, QRect const & selection, const char * name )
-  : KDialogBase(parent, name, true, "Subtotals", Ok | Cancel | User1, Ok, true, KGuiItem("Remove All") ),
+  : KDialogBase(parent, name, true, i18n( "Subtotals" ), Ok | Cancel | User1, Ok, true, KGuiItem(i18n( "Remove All" )) ),
     m_pView( parent ),
     m_pTable( m_pView->activeTable() ),
     m_selection( selection ),
