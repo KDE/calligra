@@ -278,8 +278,8 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
         // when the amount of text changed and the frame has to be rescaled we are also called.
         // lets check the minimum size for all the cells in this row.
 
-        // Take a square of table cells which depend on each others height. It is always the full 
-        // width of the table and the height is determened by joined cells, the minimum is one row. 
+        // Take a square of table cells which depend on each others height. It is always the full
+        // width of the table and the height is determened by joined cells, the minimum is one row.
         double minHeightOtherCols=0;    // The minimum height which the whole square of table cells can take
         double minHeightActiveRow=0;    // The minimum height our cell can get because of cells in his row
         double minHeightMyCol=0;        // The minimum height our column can get in the whole square
@@ -289,7 +289,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
         do {
             unsigned int rowCount=startRow;
             double thisColHeight=0;     // the total height of this column
-            double thisColActiveRow=0;  // the total height of all cells in this col, completely in the 
+            double thisColActiveRow=0;  // the total height of all cells in this col, completely in the
                                         // row of the activeCell
             do {
                 Cell *thisCell=getCell(rowCount,colCount);
@@ -312,7 +312,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
                 rowCount+=thisCell->m_rows;
             } while (rowCount < rowSpan+startRow);
 
-            if(static_cast<unsigned int>(colCount) >= activeCell->m_col && 
+            if(static_cast<unsigned int>(colCount) >= activeCell->m_col &&
                   static_cast<unsigned int>(colCount) < activeCell->m_col + activeCell->m_cols)
                 minHeightMyCol=thisColHeight;
             else {
@@ -543,7 +543,7 @@ void KWTableFrameSet::setBoundingRect( KoRect rect, CellSize widthMode, CellSize
    // Column postions..
     m_rowPositions.clear();
     unsigned int cols=0;
-    for(QPtrListIterator<Cell> c(m_cells); c.current();  ++c) 
+    for(QPtrListIterator<Cell> c(m_cells); c.current();  ++c)
         cols=QMAX(cols, c.current()->m_col + c.current()->m_cols);
     double colWidth = rect.width() / cols;
     if ( widthMode == TblAuto ) {
@@ -1406,7 +1406,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
         if(pageBound!=m_pageBoundaries.end() && (*pageBound) == row || i == m_rowPositions.count()-1)
             bottom=true;  // at end of page or end of table draw bottom border of cell.
 
-        KoBorder *border=0;
+        const KoBorder *border=0;
         double startPos =0;
         for(unsigned int col=0; col <= getCols();) {
             Cell *cell = getCell(bottom?row-1:row, col);
@@ -1438,7 +1438,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
             }
             if(cell && startPos==0) {
                 startPos = m_colPositions[col];
-                if(bottom) 
+                if(bottom)
                     border=&(cell->frame(0)->bottomBorder());
                 else
                     border=&(cell->frame(0)->topBorder());
@@ -1447,7 +1447,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
         }
         if(pageBound!=m_pageBoundaries.end() && (*pageBound) == row)
             pageBound++;
-        else 
+        else
             row++;
     }
 
@@ -1458,7 +1458,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
         if(col == m_colPositions.count()-1)
             right=true;
 
-        KoBorder *border=0;
+        const KoBorder *border=0;
         int startRow =-1;
         for(unsigned int row=0; row <= getRows();) {
             //kdDebug() << "row: " << row << endl;
@@ -1504,7 +1504,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
             }
             if(cell && startRow==-1) {
                 startRow = row;
-                if(right) 
+                if(right)
                     border=&(cell->frame(0)->rightBorder());
                 else
                     border=&(cell->frame(0)->leftBorder());
