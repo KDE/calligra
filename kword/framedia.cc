@@ -1030,7 +1030,7 @@ bool KWFrameDia::applyChanges()
     else
     {
         delete frameCopy;
-        if(frame->frameSet() == 0L && createFrameset )
+        if(frame->getFrameSet() == 0L && createFrameset )
         {
             kdDebug() << "KWFrameDia::applyChanges creating a new frameset" << endl;
             KWTextFrameSet *_frameSet = new KWTextFrameSet( doc, name );
