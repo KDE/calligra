@@ -9,8 +9,7 @@
 #include <qdockwindow.h>
 
 class QTabWidget;
-class QPushButton;
-class KButtonBox;
+class QHButtonGroup;
 class KColorPatch;
 class KoMainWindow;
 class KoView;
@@ -26,9 +25,7 @@ private:
 	QTabWidget* mTabWidget;
 	QWidget* mRGBWidget;
 	KColorPatch* mColorPreview;
-	QPushButton *mRGBOutlineButton;
-	QPushButton *mRGBFillButton;
-	KButtonBox *mButtonBox;
+	QHButtonGroup *mButtonGroup;
 	VColorSlider *mRedSlider;
 	VColorSlider *mGreenSlider;
 	VColorSlider *mBlueSlider;

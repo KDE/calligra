@@ -6,10 +6,9 @@
 #include <qtabwidget.h>
 #include <qlayout.h>
 #include <qgroupbox.h>
-#include <qspinbox.h>
-#include <qlabel.h>
+#include <qhbuttongroup.h>
+#include <qpushbutton.h>
 #include <kcolordialog.h>
-#include <kbuttonbox.h>
 #include <klocale.h>
 #include <koMainWindow.h>
 #include <koView.h>
@@ -43,14 +42,13 @@ VColorPanel::VColorPanel( KoView* parent, const char* /*name*/ )
 
 
 	//Buttons
-	mButtonBox = new KButtonBox ( mRGBWidget );
-	mButtonBox->addStretch(1);
-	mRGBOutlineButton = mButtonBox->addButton( i18n( "Outline" ) );
-	mButtonBox->addStretch(1);
-	mRGBFillButton = mButtonBox->addButton( i18n( "Fill" ) );
-	mButtonBox->addStretch(1);
-	mButtonBox->layout();
-	mainLayout->addWidget( mButtonBox, 2, 0);
+	QPushButton *button;
+	mButtonGroup = new QHButtonGroup( mRGBWidget );
+	button = new QPushButton( i18n( "Outline" ), mButtonGroup );
+	mButtonGroup->insert( button, Outline);
+	button = new QPushButton( i18n( "Fill" ), mButtonGroup );
+	mButtonGroup->insert( button, Fill);
+	mainLayout->addWidget( mButtonGroup, 2, 0);
 	mainLayout->activate();
 	mTabWidget->addTab(mRGBWidget, i18n("RGB"));
 	setWidget( mTabWidget );
