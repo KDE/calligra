@@ -62,7 +62,9 @@ void ProcessTextTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 
     *tagText = myNode.toElement().text(); // Get the text, also from a CDATA section
 
-    AllowNoAttributes (myNode);
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList.append ( TagProcessing ( "xml:space" ) );
+    ProcessSubtags (myNode, tagProcessingList, leader);
 
     AllowNoSubtags (myNode, leader);
 }
@@ -240,15 +242,16 @@ static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader
 {
     TextFormatting* text=(TextFormatting*) tagData;
     QString str,style;
-    bool wordbyword = false;
     QString strColor;
 
+    text->underlineWord = false;
+    
     QValueList<AttrProcessing> attrProcessingList;
 
     attrProcessingList
         << AttrProcessing ( "value",   str )
         << AttrProcessing ( "styleline", style )
-        << AttrProcessing ( "wordbyword", wordbyword )
+        << AttrProcessing ( "wordbyword", text->underlineWord )
         << AttrProcessing ( "underlinecolor",   strColor )
         ;
     ProcessAttributes (myNode, attrProcessingList);
@@ -263,13 +266,7 @@ static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     {
         // We assume that anything else is underlined
         text->underline=true;
-    }
-
-    // if underline, process more attributes
-    if( text->underline )
-    {
         text->underlineStyle = style;
-        text->underlineWord = wordbyword;
         text->underlineColor.setNamedColor(strColor);
     }
 }
@@ -279,14 +276,15 @@ static void ProcessStrikeoutTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     TextFormatting* text=(TextFormatting*) tagData;
     QString type, linestyle;
 
+    text->strikeoutWord = false;
+
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ("value" , type );
     attrProcessingList << AttrProcessing ("styleline" , linestyle );
+    attrProcessingList << AttrProcessing ( "wordbyword", text->strikeoutWord );    
     ProcessAttributes (myNode, attrProcessingList);
 
-    if( type.isEmpty() )
-        text->strikeout = false;
-    else if( type == "0" )
+    if( type.isEmpty() || ( type == "0" ) )
         text->strikeout = false;
     else
     {
