@@ -130,7 +130,12 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 
 QString KoUnitDoubleBase::getVisibleText( double value ) const
 {
+#if QT_VERSION > 0x030102
     const QString num ( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ), KoUnit::unitName( m_unit ) ) );
+#else
+    const QString num ( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ) ).arg( KoUnit::unitName( m_unit ) ) );
+#endif
+
     kdDebug(30004) << "getVisibleText: " << QString::number( value, 'f', 12 ) << " => " << num << endl;
     return num;
 }
