@@ -29,6 +29,7 @@
 
 KWord13Document::KWord13Document( void )
 {
+    // ### FIXME: Qt4 does not have setAutoDelete anymore!!
     m_normalTextFramesetList.setAutoDelete( true );
     m_tableFramesetList.setAutoDelete( true );
     m_otherFramesetList.setAutoDelete( true );
