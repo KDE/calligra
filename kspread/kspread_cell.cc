@@ -4643,6 +4643,8 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
 {
   QString t = text.text();
   t = t.stripWhiteSpace();
+  setFlag(Flag_LayoutDirty);
+  setFlag(Flag_TextFormatDirty);
 
   // A formula like =A1+A2 ?
   if( t[0] == '=' )
@@ -4651,7 +4653,6 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
     t = decodeFormula( t, m_iColumn, m_iRow );
     m_strText = pasteOperation( t, m_strText, op );
 
-    setFlag(Flag_LayoutDirty);
     setFlag(Flag_CalcDirty);
     clearAllErrors();
     m_content = Formula;
@@ -4704,6 +4705,9 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
     {
       m_value = KSpreadValue::empty();
       clearAllErrors();
+
+      kdDebug() << "Content (" << m_iColumn << ", " << m_iRow << "): " 
+                << text.text() << "Datatype: " << dataType << endl;
 
       // boolean ?
       if( dataType == "Bool" )
@@ -4798,10 +4802,9 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
   if ( text.hasAttribute( "outStr" ) ) // very new docs
   {
     m_strOutText = text.attribute( "outStr" );
+    kdDebug() << "OutStr: " << m_strOutText << endl;
     clearFlag( Flag_TextFormatDirty );
   }
-  else
-    setFlag( Flag_TextFormatDirty );
 
   if ( !m_pTable->isLoading() )
     setCellText( m_strText );
