@@ -76,7 +76,6 @@
 #include "startup/KexiProjectSelectorBase.h"
 #include "startup/KexiProjectSelector.h"
 */
-#include "kexicontexthelp.h"
 #include "kexinamedialog.h"
 
 //Extreme verbose debug
@@ -89,6 +88,10 @@
 
 //first fix the geometry
 #define KEXI_NO_CTXT_HELP 1
+
+#ifndef KEXI_NO_CTXT_HELP
+#include "kexicontexthelp.h"
+#endif
 
 //show property editor
 #define KEXI_PROP_EDITOR 1
