@@ -326,7 +326,7 @@
 	<Type range="true">Double</Type>
       </Parameter>
       <Help>
-	<Text></Text>
+	<Text>GEOMEAN returns the geometric mean of the given arguments. This is equal to the Nth root of the product of the terms.</Text>
 	<Syntax>GEOMEAN(value; value;...)</Syntax>
 	<Example>GEOMEAN(A1:A5)</Example>
 	<Example>GEOMEAN(21; 33; 54; 23) returns 30.45886</Example>
