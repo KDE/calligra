@@ -98,9 +98,19 @@ public:
 class KWFootNoteVariable : public KoVariable
 {
 public:
-    KWFootNoteVariable( KoTextDocument *textdoc, NoteType noteType, KoVariableFormat *varFormat, KoVariableCollection *varColl );
+    KWFootNoteVariable( KoTextDocument *textdoc, KoVariableFormat *varFormat, KoVariableCollection *varColl, KWDocument *doc );
     virtual VariableType type() const
     { return VT_FOOTNOTE; }
+    enum Numbering {Auto, Manual};
+
+    void setNoteType( NoteType _noteType ) { m_noteType = _noteType;}
+    NoteType noteType() const {return m_noteType; }
+
+    void setNumberingType( Numbering _type );
+    Numbering numberingType() const { return m_numberingType;}
+
+    void setManualString( const QString & _str ) { m_manualString = _str;}
+    QString manualString() const { return m_manualString;}
 
     virtual void drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset );
 
@@ -124,8 +134,11 @@ public:
     virtual void move( int x, int y );
 
 private:
+    KWDocument *m_doc;
     NoteType m_noteType;
     KWTextFrameSet* m_frameset;
+    Numbering m_numberingType;
+    QString m_manualString;
 };
 
 #endif

@@ -2848,8 +2848,8 @@ void KWTextFrameSetEdit::insertFootNote( NoteType noteType )
 {
      kdDebug() << "KWTextFrameSetEdit::insertFootNote " << endl;
      KWDocument * doc = frameSet()->kWordDocument();
-     KWFootNoteVariable * var = new KWFootNoteVariable( textFrameSet()->textDocument(), noteType, doc->variableFormatCollection()->format( "NUMBER" ), doc->getVariableCollection());
-
+     KWFootNoteVariable * var = new KWFootNoteVariable( textFrameSet()->textDocument() , doc->variableFormatCollection()->format( "NUMBER" ), doc->getVariableCollection(), doc);
+     var->setNoteType( noteType );
      // Now create text frameset which will hold the variable's contents
      KWFootNoteFrameSet *fs = new KWFootNoteFrameSet( doc, i18n( "Footnotes" ) );
      fs->setFrameSetInfo( KWFrameSet::FI_FOOTNOTE );

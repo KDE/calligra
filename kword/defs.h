@@ -56,6 +56,6 @@ enum TypeStructDocItem {Arrangement=1, Tables=2, Pictures=4, Cliparts=8, TextFra
 
 // This one has better remain here, otherwise kwtexframeset.h needs footnote.h
 // Yes, if gcc was faster we would choose more modular code over compilation speed...
-enum NoteType { FootNoteAuto, EndNoteAuto, FootNoteManual, EndNoteManual };
+enum NoteType { FootNote, EndNote };
 
 #endif
