@@ -235,7 +235,8 @@ bool KWAutoFormatEntry::getVertAlign()
 /*================================================================*/
 KWAutoFormat::KWAutoFormat( KWordDocument *_doc )
     : typographicQuotes(), enabled( false ), lastWasDotSpace( false ),
-      convertUpperCase( true ), lastWasUpper( false ), convertUpperUpper( false )
+      convertUpperCase( true ), lastWasUpper( false ), convertUpperUpper( false ), 
+      maxlen( 0 )
 {
     doc = _doc;
     tmpBuffer = 0L;
@@ -264,16 +265,16 @@ bool KWAutoFormat::doAutoFormat( KWParag *parag, KWFormatContext *fc )
         tmpBuffer->append( parag->getKWString()->data()[ fc->getTextPos() ] );
     else
         return false;
-    
+
     QMap< QString, KWAutoFormatEntry >::Iterator it = entries.find( tmpBuffer->toString() );
-    
+
     if ( it != entries.end()  )
     {
         unsigned int len = it.key().length();
         KWFormat format;
         format = *( dynamic_cast<KWCharFormat*>( parag->getKWString()->data()[ fc->getTextPos() ].attrib )->getFormat() );
         parag->getKWString()->remove( fc->getTextPos() - ( len - 1 ), len );
-        
+
         QString txt = it.data().getReplace();
         if ( len > txt.length() )
         {
@@ -290,10 +291,13 @@ bool KWAutoFormat::doAutoFormat( KWParag *parag, KWFormatContext *fc )
         parag->insertText( fc->getTextPos() - ( len - 1 ), txt );
         parag->setFormat( fc->getTextPos() - ( len - 1 ), txt.length(), format );
         tmpBuffer->clear();
-        
+
         return true;
     }
 
+    if ( static_cast<int>( tmpBuffer->size() ) == maxlen )
+        tmpBuffer->clear();
+    
     return false;
 }
 
@@ -494,4 +498,14 @@ bool KWAutoFormat::isMark( const QChar &c )
     return ( c == QChar( '.' ) ||
              c == QChar( '?' ) ||
              c == QChar( '!' ) );
+}
+
+/*================================================================*/
+void KWAutoFormat::buildMaxLen()
+{
+    QValueListIterator< int > it = lengths.begin();
+    
+    maxlen = 0;
+    for ( ; it != lengths.end(); ++it )
+        maxlen = QMAX( maxlen, *it );
 }

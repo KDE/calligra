@@ -1215,3 +1215,9 @@ Reggie, 24.5.1999:
 - Advanced autocorrection starts working :-)
   (It's now a bit more flexible). Only the
   configuration dialog is missing...
+
+Reggie, 25.5.1999:
+------------------
+- More work on advanced autocorrection
+- Started with configuration of advanced autocorrection
+

@@ -23,7 +23,9 @@ class KWPage;
 class QPushButton;
 class QCheckBox;
 class QVBox;
+class QHBox;
 class KCharSelect;
+class QListView;
 
 /******************************************************************/
 /* Class: KWAutoFormatDia                                         */
@@ -38,11 +40,15 @@ public:
 
 protected:
     void setupTab1();
+    void setupTab2();
 
     QVBox *tab1;
+    QHBox *tab2;
     QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper;
-    QPushButton *pbQuote1, *pbQuote2;
+    QPushButton *pbQuote1, *pbQuote2, *pbEdit, *pbRemove, *pbAdd;
     KCharSelect *charselect;
+    QListView *entries;
+    
     QChar oBegin, oEnd;
     bool quotesChanged;
 

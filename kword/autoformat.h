@@ -95,8 +95,19 @@ class KWAutoFormat
 public:
     struct TypographicQuotes
     {
-        TypographicQuotes() : begin( '»' ), end( '«' ), replace( true )
+        TypographicQuotes() : begin( ( char )'»' ), end( ( char )'«' ), replace( true )
         {}
+        TypographicQuotes( const TypographicQuotes &t )
+            : replace( t.replace ) {
+                begin = t.begin;
+                end = t.end;
+        }
+        TypographicQuotes &operator=( const TypographicQuotes &t ) {
+            begin = t.begin;
+            end = t.end;
+            replace = t.replace;
+            return *this;
+        }
 
         QChar begin, end;
         bool replace;
@@ -136,19 +147,30 @@ public:
     static bool isLower( const QChar &c );
     static bool isMark( const QChar &c );
 
-    void addAutoFormatEntry( KWAutoFormatEntry *entry ) { 
+    void addAutoFormatEntry( KWAutoFormatEntry *entry ) {
         if ( !entry )
             return;
         entries.insert( entry->getFind(), *entry );
         begins.append( entry->getFind()[ 0 ] );
+        lengths.append( entry->getFind().length() );
+        buildMaxLen();
     }
 
-    void removeAutoFormatEntry( const QString &key ) { 
+    void removeAutoFormatEntry( const QString &key ) {
         if ( entries.contains( key ) )
             entries.remove( key );
+        buildMaxLen();
     }
+
+    QMap< QString, KWAutoFormatEntry >::Iterator firstAutoFormatEntry()
+    { return entries.begin(); }
     
+    QMap< QString, KWAutoFormatEntry >::Iterator lastAutoFormatEntry()
+    { return entries.end(); }
+
 protected:
+    void buildMaxLen();
+    
     KWordDocument *doc;
     TypographicQuotes typographicQuotes;
     bool enabled;
@@ -157,7 +179,9 @@ protected:
     bool lastWasUpper, convertUpperUpper;
     QMap< QString, KWAutoFormatEntry > entries;
     QValueList< QChar > begins;
-    
+    int maxlen;
+    QValueList< int > lengths;
+
 };
 
 #endif

@@ -31,6 +31,8 @@
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qfont.h>
+#include <qlistview.h>
+#include <qmap.h>
 
 /******************************************************************/
 /* Class: KWAutoFormatDia                                         */
@@ -45,7 +47,8 @@ KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWordDocume
     page = _page;
 
     setupTab1();
-
+    setupTab2();
+    
     setCancelButton( i18n( "Cancel" ) );
     setOkButton( i18n( "OK" ) );
 
@@ -66,6 +69,7 @@ void KWAutoFormatDia::setupTab1()
     cbTypographicQuotes->setChecked( doc->getAutoFormat().getConfigTypographicQuotes().replace );
 
     QHBox *quotes = new QHBox( tab1 );
+    quotes->setSpacing( 5 );
     pbQuote1 = new QPushButton( quotes );
     pbQuote1->setText( doc->getAutoFormat().getConfigTypographicQuotes().begin );
     pbQuote1->resize( pbQuote1->sizeHint() );
@@ -99,6 +103,32 @@ void KWAutoFormatDia::setupTab1()
     addTab( tab1, i18n( "Simple Autocorrection" ) );
 
     resize(minimumSize());
+}
+
+/*================================================================*/
+void KWAutoFormatDia::setupTab2()
+{
+    tab2 = new QHBox( this );
+    tab2->setMargin( 10 );
+    tab2->setSpacing( 5 );
+
+    entries = new QListView( tab2 );
+    entries->addColumn( i18n( "Find" ) );
+    entries->addColumn( i18n( "Replace" ) );
+    
+    QMap< QString, KWAutoFormatEntry >::Iterator it = doc->getAutoFormat().firstAutoFormatEntry();
+    for ( ; it != doc->getAutoFormat().lastAutoFormatEntry(); ++it )
+        ( void )new QListViewItem( entries, it.key(), it.data().getReplace() );
+    
+    QVBox *buttons = new QVBox( tab2 );
+    
+    pbAdd = new QPushButton( i18n( "Add..."), buttons  );
+    pbRemove = new QPushButton( i18n( "Remove" ), buttons );
+    ( void )new QWidget( buttons );
+    pbEdit = new QPushButton( i18n( "Edit..." ), buttons );
+    ( void )new QWidget( buttons );
+    
+    addTab( tab2, i18n( "Advanced Autocorrection" ) );
 }
 
 /*================================================================*/
