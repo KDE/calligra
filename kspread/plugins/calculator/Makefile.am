@@ -1,5 +1,4 @@
-INCLUDES  = -I$(srcdir)/../../../kspread $(KOFFICE_INCLUDES) $(all_includes) \
--I$(top_srcdir)/lib/koscript -I$(top_builddir)/lib/koscript
+INCLUDES  = -I$(srcdir)/../../../kspread $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/koscript -I$(top_builddir)/lib/koscript $(all_includes)
 
 kde_module_LTLIBRARIES = libkspreadcalc.la
 
