@@ -178,16 +178,28 @@ bool Msod::parse(
     return true;
 }
 
-void Msod::opAlignrule(MSOFBH &, U32, QDataStream &)
+void Msod::opAlignrule(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
-void Msod::opAnchor(MSOFBH &, U32, QDataStream &)
+void Msod::opAnchor(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
-void Msod::opArcrule(MSOFBH &, U32, QDataStream &)
+void Msod::opArcrule(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
 void Msod::opBlip(MSOFBH &, U32 byteOperands, QDataStream &operands)
@@ -393,12 +405,20 @@ void Msod::opBstorecontainer(MSOFBH &, U32 byteOperands, QDataStream &operands)
     walk(byteOperands, operands);
 }
 
-void Msod::opCalloutrule(MSOFBH &, U32, QDataStream &)
+void Msod::opCalloutrule(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
-void Msod::opChildanchor(MSOFBH &, U32, QDataStream &)
+void Msod::opChildanchor(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
 void Msod::opClientanchor(MSOFBH &, U32 byteOperands, QDataStream &operands)
@@ -423,28 +443,52 @@ void Msod::opClientdata(MSOFBH &, U32 byteOperands, QDataStream &operands)
     skip(byteOperands - sizeof(data), operands);
 }
 
-void Msod::opClientrule(MSOFBH &, U32, QDataStream &)
+void Msod::opClientrule(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
-void Msod::opClienttextbox(MSOFBH &, U32, QDataStream &)
+void Msod::opClienttextbox(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
-void Msod::opClsid(MSOFBH &, U32, QDataStream &)
+void Msod::opClsid(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
-void Msod::opColormru(MSOFBH &, U32, QDataStream &)
+void Msod::opColormru(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
-void Msod::opConnectorrule(MSOFBH &, U32, QDataStream &)
+void Msod::opConnectorrule(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
-void Msod::opDeletedpspl(MSOFBH &, U32, QDataStream &)
+void Msod::opDeletedpspl(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
 // FDG - File DG
@@ -458,6 +502,7 @@ void Msod::opDg(MSOFBH &, U32 byteOperands, QDataStream &operands)
     } data;
 
     operands >> data.csp >> data.spidCur;
+    kdDebug(s_area) << "drawing id: " << data.spidCur << endl;
     m_isRequiredDrawing = (m_requestedShapeId == data.spidCur);
     if (m_isRequiredDrawing)
     {
@@ -495,6 +540,9 @@ void Msod::opDgg(MSOFBH &, U32 byteOperands, QDataStream &operands)
     unsigned i;
 
     operands >> data.spidMax >> data.cidcl >> data.cspSaved >> data.cdgSaved;
+    kdDebug(s_area) << data.cspSaved << " shapes in " <<
+        data.cidcl - 1 << " clusters in " <<
+        data.cdgSaved << " drawings" << endl;
     for (i = 0; i < data.cidcl - 1; i++)
     {
         operands >> data1.dgid >> data1.cspidCur;
@@ -507,8 +555,12 @@ void Msod::opDggcontainer(MSOFBH &, U32 byteOperands, QDataStream &operands)
     walk(byteOperands, operands);
 }
 
-void Msod::opOleobject(MSOFBH &, U32, QDataStream &)
+void Msod::opOleobject(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
 void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
@@ -673,12 +725,20 @@ void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
     skip(complexLength, operands);
 }
 
-void Msod::opRegroupitems(MSOFBH &, U32, QDataStream &)
+void Msod::opRegroupitems(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
-void Msod::opSelection(MSOFBH &, U32, QDataStream &)
+void Msod::opSelection(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
 void Msod::opSolvercontainer(MSOFBH &, U32 byteOperands, QDataStream &operands)
@@ -963,6 +1023,7 @@ void Msod::opSp(MSOFBH &op, U32 byteOperands, QDataStream &operands)
         } data;
 
         operands >> data.spid >> data.grfPersistent.info;
+        kdDebug(s_area) << "shape-id: " << data.spid << endl;
         byteOperands -= sizeof(data);
         kdDebug(s_area) << "opSp: opcode: " << funcTab[i].name <<
             (data.grfPersistent.fields.fGroup ? " group" : "") <<
@@ -1023,8 +1084,12 @@ void Msod::opSplitmenucolors(MSOFBH &, U32 byteOperands, QDataStream &operands)
     skip(m_dggError, operands);
 }
 
-void Msod::opTextbox(MSOFBH &, U32, QDataStream &)
+void Msod::opTextbox(
+    MSOFBH &,
+    U32 byteOperands,
+    QDataStream &operands)
 {
+    skip(byteOperands, operands);
 }
 
 void Msod::shpPictureFrame(MSOFBH &, U32 byteOperands, QDataStream &operands)
