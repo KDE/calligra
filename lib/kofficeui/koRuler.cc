@@ -164,6 +164,29 @@ void KoRuler::setMousePos( int mx, int my )
     mposY = my;
 }
 
+// distance between the main lines (those with a number)
+double KoRuler::lineDistance() const
+{
+    switch( m_unit ) {
+    case KoUnit::U_INCH:
+        return INCH_TO_POINT( m_zoom ); // every inch
+    case KoUnit::U_PT:
+        return 100.0 * m_zoom; // every 100 pt
+    case KoUnit::U_MM:
+    case KoUnit::U_CM:
+    case KoUnit::U_DM:
+        return CM_TO_POINT ( m_zoom ); // every cm
+    case KoUnit::U_PI:
+        return PI_TO_POINT ( 10.0 * m_zoom ); // every 10 pica
+    case KoUnit::U_DD:
+        return DD_TO_POINT( m_zoom ); // every diderot
+    case KoUnit::U_CC:
+        return CC_TO_POINT( 10.0 * m_zoom ); // every 10 cicero
+    }
+    // should never end up here
+    return 100.0 * m_zoom;
+}
+
 /*================================================================*/
 void KoRuler::drawHorizontal( QPainter *_painter )
 {
@@ -171,7 +194,6 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     QPainter p( &buffer );
     p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
 
-    double dist=0.0;
     int totalw = qRound( zoomIt(layout.ptWidth) );
     QString str;
     QFont font; // Use the global KDE font. Let's hope it's appropriate.
@@ -197,21 +219,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     p.setFont( font );
 
     // Draw the numbers
-    switch( m_unit ) {
-    case KoUnit::U_INCH:
-        dist = INCH_TO_POINT (m_zoom);
-        break;
-    case KoUnit::U_PT:
-        dist = 100.0 * m_zoom;
-        break;
-    case KoUnit::U_MM:
-        dist = MM_TO_POINT ( 10.0 * m_zoom );
-        break;
-    case KoUnit::U_CM:
-        dist = CM_TO_POINT ( m_zoom );
-        break;
-    }
-
+    double dist = lineDistance();
     int j = 0;
     int maxwidth = 0;
     for ( double i = 0.0;i <= (double)totalw;i += dist ) {
@@ -335,7 +343,6 @@ void KoRuler::drawVertical( QPainter *_painter )
 
     int totalh = qRound( zoomIt(layout.ptHeight) );
     if ( ( diffy >= 0 && totalh > diffy ) || ( diffy < 0 && diffy + totalh >= 0 ) ) {
-        double dist=0.0;
         int j = 0;
         QString str;
         QFont font; // Use the global KDE font. Let's hope it's appropriate.
@@ -361,22 +368,7 @@ void KoRuler::drawVertical( QPainter *_painter )
         p.setFont( font );
 
         // Draw the numbers
-        switch( m_unit ) {
-            case KoUnit::U_INCH:
-                dist = INCH_TO_POINT ( m_zoom );
-                break;
-            case KoUnit::U_PT:
-                dist = 100.0 * m_zoom;
-                break;
-            case KoUnit::U_MM:
-                dist = MM_TO_POINT ( 10.0 * m_zoom );
-                break;
-            case KoUnit::U_CM:
-                dist = CM_TO_POINT (  m_zoom );
-                break;
-
-        }
-
+        double dist = lineDistance();
         int maxheight = 0;
         for ( double i = 0.0;i <= (double)totalh;i += dist ) {
             str=QString::number(j++);

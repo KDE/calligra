@@ -271,6 +271,7 @@ protected:
 private:
     double applyRtlAndZoom( double value ) const;
     double unZoomItRtl( int pixValue ) const;
+    double lineDistance() const;
 
     KoRulerPrivate *d;
 
