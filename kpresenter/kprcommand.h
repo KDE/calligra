@@ -54,7 +54,7 @@ class KoCustomVariable;
 /* Class: ShadowCmd                                               */
 /******************************************************************/
 
-class ShadowCmd : public KCommand
+class ShadowCmd : public KNamedCommand
 {
 public:
     struct ShadowValues
@@ -83,7 +83,7 @@ protected:
 /* Class: SetOptionsCmd                                           */
 /******************************************************************/
 
-class SetOptionsCmd : public KCommand
+class SetOptionsCmd : public KNamedCommand
 {
 public:
     SetOptionsCmd( const QString &_name, QValueList<KoPoint> &_diffs, QPtrList<KPObject> &_objects,
@@ -110,7 +110,7 @@ protected:
 /* Class: SetBackCmd						  */
 /******************************************************************/
 
-class SetBackCmd : public KCommand
+class SetBackCmd : public KNamedCommand
 {
 public:
     SetBackCmd( const QString &_name, const QColor &_backColor1, const QColor &_backColor2, BCType _bcType,
@@ -154,7 +154,7 @@ protected:
 /* Class: RotateCmd                                               */
 /******************************************************************/
 
-class RotateCmd : public KCommand
+class RotateCmd : public KNamedCommand
 {
 public:
     struct RotateValues
@@ -181,7 +181,7 @@ protected:
 /* Class: ResizeCmd                                               */
 /******************************************************************/
 
-class ResizeCmd : public KCommand
+class ResizeCmd : public KNamedCommand
 {
 public:
     ResizeCmd( const QString &_name, const KoPoint &_m_diff, const KoSize &_r_diff, KPObject *_object, KPresenterDoc *_doc );
@@ -204,7 +204,7 @@ protected:
 /* Class: ChgClipCmd                                              */
 /******************************************************************/
 
-class ChgClipCmd : public KCommand
+class ChgClipCmd : public KNamedCommand
 {
 public:
     ChgClipCmd( const QString &_name, KPClipartObject *_object, KPClipartCollection::Key _oldName,
@@ -225,7 +225,7 @@ protected:
 /* Class: ChgPixCmd                                               */
 /******************************************************************/
 
-class ChgPixCmd : public KCommand
+class ChgPixCmd : public KNamedCommand
 {
 public:
     ChgPixCmd( const QString &_name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
@@ -247,7 +247,7 @@ protected:
 /* Class: DeleteCmd                                               */
 /******************************************************************/
 
-class DeleteCmd : public KCommand
+class DeleteCmd : public KNamedCommand
 {
 public:
     DeleteCmd( const QString &_name, QPtrList<KPObject> &_objects, KPresenterDoc *_doc , KPrPage *_page);
@@ -268,7 +268,7 @@ protected:
 /* Class: EffectCmd                                               */
 /******************************************************************/
 
-class EffectCmd : public KCommand
+class EffectCmd : public KNamedCommand
 {
 public:
     struct EffectStruct {
@@ -301,7 +301,7 @@ protected:
 /* Class: GroupObjCmd						  */
 /******************************************************************/
 
-class GroupObjCmd : public KCommand
+class GroupObjCmd : public KNamedCommand
 {
 public:
     GroupObjCmd( const QString &_name,
@@ -325,7 +325,7 @@ protected:
 /* Class: UnGroupObjCmd						  */
 /******************************************************************/
 
-class UnGroupObjCmd : public KCommand
+class UnGroupObjCmd : public KNamedCommand
 {
 public:
     UnGroupObjCmd( const QString &_name,
@@ -350,7 +350,7 @@ protected:
 /* Class: InsertCmd                                               */
 /******************************************************************/
 
-class InsertCmd : public KCommand
+class InsertCmd : public KNamedCommand
 {
 public:
     InsertCmd( const QString &_name, KPObject *_object, KPresenterDoc *_doc, KPrPage *_page );
@@ -371,7 +371,7 @@ protected:
 /* Class: LowerRaiseCmd                                           */
 /******************************************************************/
 
-class LowerRaiseCmd : public KCommand
+class LowerRaiseCmd : public KNamedCommand
 {
 public:
     LowerRaiseCmd( const QString &_name, QPtrList<KPObject> _oldList, QPtrList<KPObject> _newList, KPresenterDoc *_doc, KPrPage *_page );
@@ -393,7 +393,7 @@ protected:
 /* Class: MoveByCmd                                               */
 /******************************************************************/
 
-class MoveByCmd : public KCommand
+class MoveByCmd : public KNamedCommand
 {
 public:
     MoveByCmd( const QString &_name, const KoPoint &_diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page );
@@ -415,7 +415,7 @@ protected:
 /* Class: MoveByCmd2                                              */
 /******************************************************************/
 
-class MoveByCmd2 : public KCommand
+class MoveByCmd2 : public KNamedCommand
 {
 public:
     MoveByCmd2( const QString &_name, QPtrList<KoPoint> &_diffs, QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
@@ -436,7 +436,7 @@ protected:
 /* Class: PenBrushCmd						  */
 /******************************************************************/
 
-class PenBrushCmd : public KCommand
+class PenBrushCmd : public KNamedCommand
 {
 public:
     struct Pen {
@@ -501,7 +501,7 @@ protected:
 /* Class: PgConfCmd                                               */
 /******************************************************************/
 
-class PgConfCmd : public KCommand
+class PgConfCmd : public KNamedCommand
 {
 public:
     PgConfCmd( const QString &_name, bool _manualSwitch, bool _infinitLoop,
@@ -532,7 +532,7 @@ protected:
 /* Class: PgLayoutCmd                                             */
 /******************************************************************/
 
-class PgLayoutCmd : public KCommand
+class PgLayoutCmd : public KNamedCommand
 {
 public:
     PgLayoutCmd( const QString &_name, KoPageLayout _layout, KoPageLayout _oldLayout,
@@ -554,7 +554,7 @@ protected:
 /* Class: PieValueCmd                                             */
 /******************************************************************/
 
-class PieValueCmd : public KCommand
+class PieValueCmd : public KNamedCommand
 {
 public:
     struct PieValues
@@ -583,7 +583,7 @@ protected:
 /* Class: PolygonSettingCmd                                       */
 /******************************************************************/
 
-class PolygonSettingCmd : public KCommand
+class PolygonSettingCmd : public KNamedCommand
 {
 public:
     struct PolygonSettings
@@ -613,7 +613,7 @@ protected:
 /* Class: RectValueCmd                                            */
 /******************************************************************/
 
-class RectValueCmd : public KCommand
+class RectValueCmd : public KNamedCommand
 {
 public:
     struct RectValues
@@ -641,7 +641,7 @@ protected:
 /* Class: DeletePageCmd                                           */
 /******************************************************************/
 
-class KPrDeletePageCmd : public KCommand
+class KPrDeletePageCmd : public KNamedCommand
 {
 public:
     KPrDeletePageCmd( const QString &_name,int _pos, KPrPage *page, KPresenterDoc *_doc );
@@ -660,7 +660,7 @@ protected:
 /* Class: KPrInsertPageCmd                                        */
 /******************************************************************/
 
-class KPrInsertPageCmd : public KCommand
+class KPrInsertPageCmd : public KNamedCommand
 {
 public:
     KPrInsertPageCmd( const QString &_name,int _pos, KPrPage *page, KPresenterDoc *_doc );
@@ -674,7 +674,7 @@ protected:
     int position;
 };
 
-class KPrMovePageCmd : public KCommand
+class KPrMovePageCmd : public KNamedCommand
 {
 public:
     KPrMovePageCmd( const QString &_name,int _oldpos,int newPos, KPrPage *page, KPresenterDoc *_doc );
@@ -713,7 +713,7 @@ protected:
 /**
  * Command to change variable setting
  */
-class KPrChangeStartingPageCommand : public KCommand
+class KPrChangeStartingPageCommand : public KNamedCommand
 {
 public:
     KPrChangeStartingPageCommand( const QString &name, KPresenterDoc *_doc, int _oldStartingPage, int _newStartingPage);
@@ -730,7 +730,7 @@ protected:
 /**
  * Command to display link setting
  */
-class KPrChangeDisplayLinkCommand : public KCommand
+class KPrChangeDisplayLinkCommand : public KNamedCommand
 {
 public:
     KPrChangeDisplayLinkCommand( const QString &name, KPresenterDoc *_doc, bool _oldDisplay, bool _newDisplay);
@@ -747,7 +747,7 @@ protected:
 /**
  * Command to change title page name
  */
-class KPrChangeTitlePageNameCommand : public KCommand
+class KPrChangeTitlePageNameCommand : public KNamedCommand
 {
 public:
     KPrChangeTitlePageNameCommand( const QString &name, KPresenterDoc *_doc, const QString &_oldPageName, const QString &_newPageName, KPrPage *_page);
@@ -762,7 +762,7 @@ protected:
     KPrPage *m_page;
 };
 
-class KPrChangeCustomVariableValue : public KCommand
+class KPrChangeCustomVariableValue : public KNamedCommand
 {
  public:
     KPrChangeCustomVariableValue( const QString &name, KPresenterDoc *_doc,const QString & _oldValue, const QString & _newValue, KoCustomVariable *var);
