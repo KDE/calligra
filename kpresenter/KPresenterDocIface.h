@@ -131,6 +131,23 @@ k_dcop:
     virtual bool showStatusBar() const;
     virtual void setShowStatusBar( bool _status );
 
+    void setConfigAutoNumberStyle( bool b );
+    bool configAutoNumberStyle() const;
+
+    void setConfigAutoCompletion( bool b );
+    bool configAutoCompletion() const;
+
+    void setConfigAppendSpace( bool b);
+    bool configAppendSpace() const;
+
+    void setConfigMinWordLength( uint val );
+    uint configMinWordLength() const;
+
+    void setConfigNbMaxCompletionWord( uint val );
+    uint configNbMaxCompletionWord() const;
+
+
+
 private:
     KPresenterDoc *doc;
 

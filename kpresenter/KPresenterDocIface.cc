@@ -441,3 +441,54 @@ void KPresenterDocIface::setShowStatusBar( bool _status )
     doc->setShowStatusBar(_status);
     doc->reorganizeGUI();
 }
+
+void KPresenterDocIface::setConfigAutoNumberStyle( bool b )
+{
+    doc->getAutoFormat()->configAutoNumberStyle(b);
+}
+
+bool KPresenterDocIface::configAutoNumberStyle() const
+{
+    return doc->getAutoFormat()->getConfigAutoNumberStyle();
+}
+
+void KPresenterDocIface::setConfigAutoCompletion( bool b )
+{
+    doc->getAutoFormat()->configAutoCompletion( b );
+}
+
+bool KPresenterDocIface::configAutoCompletion() const
+{
+    return doc->getAutoFormat()->getConfigAutoCompletion();
+}
+
+void KPresenterDocIface::setConfigAppendSpace( bool b)
+{
+    doc->getAutoFormat()->configAppendSpace( b );
+}
+
+bool KPresenterDocIface::configAppendSpace() const
+{
+    return doc->getAutoFormat()->getConfigAppendSpace();
+}
+
+void KPresenterDocIface::setConfigMinWordLength( uint val )
+{
+    doc->getAutoFormat()->configMinWordLength( val );
+}
+
+uint KPresenterDocIface::configMinWordLength() const
+{
+    return doc->getAutoFormat()->getConfigMinWordLength();
+}
+
+void KPresenterDocIface::setConfigNbMaxCompletionWord( uint val )
+{
+    doc->getAutoFormat()->configNbMaxCompletionWord( val );
+}
+
+uint KPresenterDocIface::configNbMaxCompletionWord() const
+{
+    return doc->getAutoFormat()->getConfigNbMaxCompletionWord();
+}
+

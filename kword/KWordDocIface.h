@@ -136,6 +136,22 @@ k_dcop:
     virtual bool allowAutoFormat() const;
     virtual void setAllowAutoFormat(bool _b);
 
+
+    void setConfigAutoNumberStyle( bool b );
+    bool configAutoNumberStyle() const;
+
+    void setConfigAutoCompletion( bool b );
+    bool configAutoCompletion() const;
+
+    void setConfigAppendSpace( bool b);
+    bool configAppendSpace() const;
+
+    void setConfigMinWordLength( uint val );
+    uint configMinWordLength() const;
+
+    void setConfigNbMaxCompletionWord( uint val );
+    uint configNbMaxCompletionWord() const;
+
     //init/save config
     virtual void initConfig();
     virtual void saveConfig();

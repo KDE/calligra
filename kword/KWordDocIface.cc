@@ -476,3 +476,53 @@ void KWordDocIface::setAllowAutoFormat(bool _b)
     doc->setAllowAutoFormat(_b);
 }
 
+void KWordDocIface::setConfigAutoNumberStyle( bool b )
+{
+    doc->getAutoFormat()->configAutoNumberStyle(b);
+}
+
+bool KWordDocIface::configAutoNumberStyle() const
+{
+    return doc->getAutoFormat()->getConfigAutoNumberStyle();
+}
+
+void KWordDocIface::setConfigAutoCompletion( bool b )
+{
+    doc->getAutoFormat()->configAutoCompletion( b );
+}
+
+bool KWordDocIface::configAutoCompletion() const
+{
+    return doc->getAutoFormat()->getConfigAutoCompletion();
+}
+
+void KWordDocIface::setConfigAppendSpace( bool b)
+{
+    doc->getAutoFormat()->configAppendSpace( b );
+}
+
+bool KWordDocIface::configAppendSpace() const
+{
+    return doc->getAutoFormat()->getConfigAppendSpace();
+}
+
+void KWordDocIface::setConfigMinWordLength( uint val )
+{
+    doc->getAutoFormat()->configMinWordLength( val );
+}
+
+uint KWordDocIface::configMinWordLength() const
+{
+    return doc->getAutoFormat()->getConfigMinWordLength();
+}
+
+void KWordDocIface::setConfigNbMaxCompletionWord( uint val )
+{
+    doc->getAutoFormat()->configNbMaxCompletionWord( val );
+}
+
+uint KWordDocIface::configNbMaxCompletionWord() const
+{
+    return doc->getAutoFormat()->getConfigNbMaxCompletionWord();
+}
+
