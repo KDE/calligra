@@ -64,7 +64,7 @@ libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
 	InsertObjCmd.cc ShearCmd.cc \
 	SplitLineCmd.cc CommandHistory.cc \
 	FilterInfo.cc ExportFilter.cc \
-	ImportFilter.cc Ruler.cc qwmf.cc \
+	ImportFilter.cc Ruler.cc \
 	Arrow.cc Painter.cc LineStyle.cc \
 	TransformationDialog.cc \
 	PStateManager.cc OptionDialog.cc \
