@@ -39,5 +39,5 @@ kdemimedir = $(kde_mimedir)/application
 rc_DATA = kosoap.rc
 rcdir = $(kde_datadir)/kosoap
 
-messages: rc.cpp
-	$(XGETTEXT) rc.cpp *.cpp kosoap_aboutdata.h -o $(podir)/example.pot
+#messages: rc.cpp
+#	$(XGETTEXT) rc.cpp *.cpp kosoap_aboutdata.h -o $(podir)/kosoap.pot
