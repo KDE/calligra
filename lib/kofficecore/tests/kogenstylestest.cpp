@@ -70,6 +70,8 @@ int main( int, char** ) {
     assert( userStyleName == "User" );
 
     assert( coll.styles().count() == 3 );
+    assert( coll.styles( STYLE_AUTO ).count() == 2 );
+    assert( coll.styles( STYLE_USER ).count() == 1 );
 
     TEST_BEGIN( 0, 0 );
     first.writeStyle( &writer, "style:style", firstName );

@@ -78,6 +78,16 @@ public:
      */
     const StyleMap& styles() const { return m_styles; }
 
+    struct NamedStyle {
+        const KoGenStyle* style; // owned by the collection
+        QString name;
+    };
+    /**
+     * Return all styles of a given type
+     * Use this for saving the styles
+     */
+    QValueList<NamedStyle> styles( int type ) const;
+
 private:
     QString makeUniqueName( const QString& base, bool forceNumbering ) const;
 
@@ -119,6 +129,12 @@ public:
         m_properties.insert( propName, propValue );
     }
 
+    /// Add a property which represents a distance, measured in pt
+    /// The number is written out with the highest possible precision
+    /// (unlike QString::number and setNum, which default to 6 digits),
+    /// and the unit name ("pt") is appended to it.
+    void addPropertyPt( const QString& propName, double propValue );
+
     /// Add an attribute to the style
     /// The difference between property and attributes is a bit oasis-format-specific:
     /// attributes are for the style element itself, and properties are in the style:properties child element
@@ -129,7 +145,8 @@ public:
     /// Write the definition of this style to @p writer, using the OASIS format.
     /// @param elementName the name of the XML element, e.g. "style:style"
     /// @param name must come from the collection
-    void writeStyle( KoXmlWriter* writer, const char* elementName, const QString& name ) const;
+    /// @param closeElement set it to false to be able to add more child elements to the style element
+    void writeStyle( KoXmlWriter* writer, const char* elementName, const QString& name, bool closeElement = true ) const;
 
     /// QMap requires a complete sorting order.
     /// Another solution would have been a qdict and a key() here, a la KoTextFormat,

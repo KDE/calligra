@@ -18,6 +18,7 @@
 
 #include "koGenStyles.h"
 #include <koxmlwriter.h>
+#include <float.h>
 
 KoGenStyles::KoGenStyles()
 {
@@ -56,7 +57,25 @@ QString KoGenStyles::makeUniqueName( const QString& base, bool forceNumbering ) 
     return name;
 }
 
-void KoGenStyle::writeStyle( KoXmlWriter* writer, const char* elementName, const QString& name ) const
+QValueList<KoGenStyles::NamedStyle> KoGenStyles::styles( int type ) const
+{
+    QValueList<KoGenStyles::NamedStyle> lst;
+    StyleMap::const_iterator it = m_styles.begin();
+    StyleMap::const_iterator end = m_styles.end();
+    for ( ; it != end ; ++it ) {
+        if ( it.key().type() == type ) {
+            NamedStyle s;
+            s.style = & it.key();
+            s.name = it.data();
+            lst.append( s );
+        }
+    }
+    return lst;
+}
+
+////
+
+void KoGenStyle::writeStyle( KoXmlWriter* writer, const char* elementName, const QString& name, bool closeElement ) const
 {
     writer->startElement( elementName );
     writer->addAttribute( "style:name", name );
@@ -72,5 +91,14 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, const char* elementName, const
             writer->addAttribute( it.key().utf8(), it.data().utf8() );
         writer->endElement();
     }
-    writer->endElement();
+    if ( closeElement )
+        writer->endElement();
+}
+
+void KoGenStyle::addPropertyPt( const QString& propName, double propValue )
+{
+    QString str;
+    str.setNum( propValue, 'g', DBL_DIG );
+    str += "pt";
+    m_properties.insert( propName, str );
 }
