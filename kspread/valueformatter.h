@@ -20,6 +20,12 @@
 #ifndef KSPREAD_VALUEFORMATTER
 #define KSPREAD_VALUEFORMATTER
 
+#include "kspread_global.h"
+
+#include <qdatetime.h>
+
+class KSpreadCell;
+
 namespace KSpread {
 
 
@@ -32,12 +38,31 @@ It follows the Singleton pattern.
 class ValueFormatter {
  public:
    /** returns an instance of this class */
- static ValueFormatter *self ();
-  /** destructor */
-  ~ValueFormatter ();
+  static ValueFormatter *self ();
+   /** destructor */
+   ~ValueFormatter ();
+
+  /** create a text representation of data in this cell */
+  QString formatText (KSpreadCell *cell, FormatType fmtType);
  
+
+  /** create a number format */
+  QString createNumberFormat (double value, KSpreadCell *cell);
+  
+  /** create a date format */
+  QString dateFormat (KLocale* locale, const QDate &_date, FormatType fmtType);
+  
+  /** create a time format */
+  QString timeFormat (KLocale* locale, const QDateTime &_time,
+      FormatType fmtType);
+  
+  /** create a fraction format */
+  QString fractionFormat (double value, FormatType fmtType);
+  
+  QString errorFormat (KSpreadCell *cell);
+
  protected:
-  ValueFormatter () {};
+  ValueFormatter ();
   static ValueFormatter *_self;
 };
 

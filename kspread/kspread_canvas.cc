@@ -2702,6 +2702,10 @@ void KSpreadCanvas::convertToMoney( KSpreadCell * cell )
 
 void KSpreadCanvas::convertToTime( KSpreadCell * cell )
 {
+  //(Tomas) This is weird. And I mean *REALLY* weird. First, we
+  //generate a time (QTime), then we convert it to text, then
+  //we give the text to the cell and ask it to parse it. Weird...
+  
   if ( cell->isDefault() || cell->isEmpty() )
     return;
   if ( cell->isDate() )
@@ -2715,6 +2719,10 @@ void KSpreadCanvas::convertToTime( KSpreadCell * cell )
 
 void KSpreadCanvas::convertToDate( KSpreadCell * cell )
 {
+  //(Tomas) This is weird. And I mean *REALLY* weird. First, we
+  //generate a date (QDate), then we convert it to text, then
+  //we give the text to the cell and ask it to parse it. Weird...
+  
   if ( cell->isDefault() || cell->isEmpty() )
     return;
   if ( cell->isTime() )
@@ -2722,10 +2730,11 @@ void KSpreadCanvas::convertToDate( KSpreadCell * cell )
   cell->setFormatType (ShortDate_format);
   cell->setFactor( 1.0 );
 
+  //TODO: why did we call setValue(), when we override it here?
   QDate date(1900, 1, 1);
   date = date.addDays( (int) cell->value().asFloat() - 1 );
   date = cell->value().asDateTime().date();
-  cell->setCellText (util_dateFormat(m_pDoc->locale(), date, ShortDate_format));
+  cell->setCellText (m_pDoc->locale()->formatDate (date, true));
 }
 
 bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )

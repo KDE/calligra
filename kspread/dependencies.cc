@@ -85,7 +85,7 @@ class DependencyList {
   /** list of leading cells of all cell chunks that this range belongs to */
   QValueList<KSpreadPoint> leadingCells (const KSpreadRange &range) const;
   /** retrieve a list of cells that a given cell depends on */
-  RangeList getDependencies (const KSpreadPoint &cell) const;
+  RangeList computeDependencies (const KSpreadPoint &cell) const;
   
   /** KSpreadSheet whose dependencies are managed by this instance */
   KSpreadSheet *sheet;
@@ -125,7 +125,10 @@ void DependencyManager::cellChanged (const KSpreadPoint &cell)
   //if the cell contains the circle error, we mustn't do anything
   if (c->testFlag (KSpreadCell::Flag_CircularCalculation))
     return;
-
+  
+  kdDebug(36001) << "updating dependencies for cell (" <<
+      c->row() << "," << c->column() << ")" << endl;
+  
   //don't re-generate dependencies if we're updating dependencies
   if ( !(c->testFlag (KSpreadCell::Flag_Progress)))
     deps->generateDependencies (cell);
@@ -208,6 +211,8 @@ QValueList<KSpreadPoint> DependencyList::getDependants (const KSpreadPoint &cell
 void DependencyList::addDependency (const KSpreadPoint &cell1,
     const KSpreadPoint &cell2)
 {
+  kdDebug(36001) << "Dep. manager: added a dependency" << endl;
+  
   //cell2 can be in another sheet (inter-sheet dependency)
   KSpreadSheet *sh = cell2.table;
   if (!sh)
@@ -311,14 +316,14 @@ void DependencyList::generateDependencies (const KSpreadPoint &cell)
 {
   //get rid of old dependencies first
   removeDependencies (cell);
-  
+
   //new dependencies only need to be generated if the cell contains a formula
   KSpreadCell *c = sheet->cellAt (cell.column(), cell.row());
   if (!c->isFormula())
     return;
   
   //now we need to generate dependencies
-  RangeList rl = getDependencies (cell);
+  RangeList rl = computeDependencies (cell);
   
   //now that we have the new dependencies, we put them into our data structures
   //and we're done
@@ -477,7 +482,8 @@ void DependencyList::updateCell (const KSpreadPoint &cell) const
     c->clearFlag (KSpreadCell::Flag_Progress);
     return;
   }
-  
+  kdDebug() << "Updating depending cell (" <<
+      c->row() << "," << c->column() << ")" << endl;
   //set the computing-dependencies flag
   c->setFlag (KSpreadCell::Flag_Progress);
   
@@ -526,7 +532,7 @@ QValueList<KSpreadPoint> DependencyList::leadingCells (const KSpreadRange &range
   return cells;
 }
 
-RangeList DependencyList::getDependencies (const KSpreadPoint &cell) const
+RangeList DependencyList::computeDependencies (const KSpreadPoint &cell) const
 {
   RangeList rl;
   KSpreadCell *c = cell.cell();
@@ -538,6 +544,8 @@ RangeList DependencyList::getDependencies (const KSpreadPoint &cell) const
   Formula formula;
   formula.setExpression (c->text());
   
+  kdDebug(36001) << "Retrieving dependencies for cell with text \"" <<
+    c->text() << "\"" << endl;
   //now that we have the formula, we ask it to give us the dependencies
   rl = formula.getDependencies (sheet);
   return rl;

@@ -194,14 +194,6 @@ int util_decodeColumnLabelText( const QString &_col );
 */
 QString util_encodeColumnLabelText( int column );
 
-QString util_dateFormat( KLocale* locale, const QDate &_date, FormatType fmtType);
-
-QString util_timeFormat( KLocale* locale, const QDateTime &_time, FormatType fmtType);
-
-QString util_dateTimeFormat( KLocale * locale, double date, FormatType fmtType, QString const & format );
-
-QString util_fractionFormat( double value , FormatType fmtType);
-
 QString formatNumber( KSpreadValue const & value, QString format, bool & setRed,
                       KLocale const * const locale, bool insert );
 

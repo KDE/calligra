@@ -473,9 +473,6 @@ public:
     bool isDate() const;
     bool isTime() const;
 
-    void setDate( QString const & dateString );
-    void setDate( QDate const & date );
-    void setTime( QTime const & time );
     void setNumber( double number );
 
     /**
@@ -795,11 +792,6 @@ protected:
      * @reimp
      */
     const KSpreadFormat* fallbackFormat( int col, int row ) const;
-
-    /**
-     * Format a numeric value (isNumeric()==true) using the user-specified format
-     */
-    QString createFormat( double value, int col, int row );
 
     /**
      * Applies the font to use to @param painter

@@ -63,6 +63,7 @@
 #include "kspread_locale.h"
 #include "kspread_view.h"
 #include "kspread_value.h"
+#include "valueformatter.h"
 #include "valueparser.h"
 
 #include <koxmlwriter.h>
@@ -1452,244 +1453,26 @@ void KSpreadCell::setOutputText()
 
   clearFlag( Flag_TextFormatDirty );
 
-  if ( hasError() )
-  {
-    if ( testFlag( Flag_ParseError ) )
-    {
-      d->strOutText = "#" + i18n("Parse") + "!";
-    }
-    else if ( testFlag( Flag_CircularCalculation ) )
-    {
-      d->strOutText = "#" + i18n("Circle") + "!";
-    }
-    else if ( testFlag( Flag_DependancyError ) )
-    {
-      d->strOutText = "#" + i18n("Depend") + "!";
-    }
-    else
-    {
-      d->strOutText = "####";
-      kdDebug(36001) << "Unhandled error type." << endl;
-    }
-    if ( d->hasExtra() && d->extra()->conditions )
-      d->extra()->conditions->checkMatches();
-    return;
-  }
 
-
-  /**
-   * A usual numeric, boolean, date, time or string value.
-   */
 
   //
   // Turn the stored value in a string
   //
 
-  if ( isFormula() && m_pTable->getShowFormula()
+  //should we display the formula?
+  if ( (!hasError()) && isFormula() && m_pTable->getShowFormula()
        && !( m_pTable->isProtected() && isHideFormula( d->column, d->row ) ) )
-  {
     d->strOutText = d->strText;
-  }
-  else if ( value().isBoolean() )
+  else
   {
-    d->strOutText = ( value().asBoolean()) ? i18n("True") : i18n("False");
+    //we should display real value
+    KSpread::ValueFormatter *formatter = KSpread::ValueFormatter::self();
+    d->strOutText = formatter->formatText (this, formatType());
   }
-  else if( isDate() )
-  {
-    d->strOutText = util_dateFormat( locale(), value().asDate(), formatType() );
-  }
-  else if( isTime() )
-  {
-    d->strOutText = util_timeFormat( locale(), value().asDateTime(), formatType() );
-  }
-  else if ( value().isNumber() )
-  {
-    // First get some locale information
-    if (!decimal_point)
-    { // (decimal_point is static)
-      decimal_point = locale()->decimalSymbol()[0];
-      kdDebug(36001) << "decimal_point is '" << decimal_point.unicode() << "'" << endl;
-
-      if ( decimal_point.isNull() )
-        decimal_point = '.';
-    }
-
-    // Scale the value as desired by the user.
-    double v = value().asFloat() * factor(column(),row());
-
-    // Always unsigned ?
-    if ( floatFormat( column(), row() ) == KSpreadCell::AlwaysUnsigned &&
-         v < 0.0)
-      v *= -1.0;
-
-    // Make a string out of it.
-    QString localizedNumber = createFormat( v, column(), row() );
-
-    // Remove trailing zeros and the decimal point if necessary
-    // unless the number has no decimal point
-    if ( precision( column(), row())== -1 && localizedNumber.find(decimal_point) >= 0 )
-    {
-      int start=0;
-      if(localizedNumber.find('%')!=-1)
-        start=2;
-      else if (localizedNumber.find( locale()->currencySymbol()) == ((int)(localizedNumber.length() -
-                                                                           locale()->currencySymbol().length())))
-        start=locale()->currencySymbol().length() + 1;
-      else if((start=localizedNumber.find('E'))!=-1)
-        start=localizedNumber.length()-start;
-      else
-        start=0;
-
-      int i = localizedNumber.length()-start;
-      bool bFinished = FALSE;
-      while ( !bFinished && i > 0 )
-      {
-        QChar ch = localizedNumber[ i - 1 ];
-        if ( ch == '0' )
-          localizedNumber.remove(--i,1);
-        else
-        {
-          bFinished = TRUE;
-          if ( ch == decimal_point )
-            localizedNumber.remove(--i,1);
-        }
-      }
-    }
-
-    // Start building the output string with prefix and postfix
-    d->strOutText = "";
-    if( !prefix( column(), row() ).isEmpty())
-      d->strOutText += prefix( column(), row() )+" ";
-
-    d->strOutText += localizedNumber;
-
-    if( !postfix( column(), row() ).isEmpty())
-      d->strOutText += " "+postfix( column(), row() );
-
-
-    // This method only calculates the text, and its width.
-    // No need to bother about the color (David)
-  }
-  else if ( isFormula() )
-  {
-    //NOTHING HERE
-  }
-  else if( value().isString() )
-  {
-    if (!value().asString().isEmpty() && value().asString()[0]=='\'' )
-      d->strOutText = value().asString().mid(1);
-    else
-      d->strOutText = value().asString();
-  }
-  else // When does this happen ?
-  {
-//    kdDebug(36001) << "Please report: final case of makeLayout ...  d->strText=" << d->strText << endl;
-    d->strOutText = value().asString();
-  }
+  
+  //check conditions if needed
   if ( d->hasExtra() && d->extra()->conditions )
     d->extra()->conditions->checkMatches();
-}
-
-QString KSpreadCell::createFormat( double value, int _col, int _row )
-{
-    // if precision is -1, ask for a huge number of decimals, we'll remove
-    // the zeros later. Is 8 ok ?
-    int p = (precision(_col,_row) == -1) ? 8 : precision(_col,_row) ;
-    QString localizedNumber= locale()->formatNumber( value, p );
-    int pos = 0;
-
-    // this will avoid displaying negative zero, i.e "-0.0000"
-    if( fabs( value ) < DBL_EPSILON ) value = 0.0;
-
-    // round the number, based on desired precision if not scientific is chosen (scientific has relativ precision)
-    if( formatType() != Scientific_format )
-    {
-        double m[] = { 1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10 };
-        double mm = (p > 10) ? pow(10.0,p) : m[p];
-        bool neg = value < 0;
-        value = floor( fabs(value)*mm + 0.5 ) / mm;
-        if( neg ) value = -value;
-    }
-
-    switch( formatType() )
-    {
-    case Number_format:
-        localizedNumber = locale()->formatNumber(value, p);
-        if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
-        {
-            if(locale()->positiveSign().isEmpty())
-                localizedNumber='+'+localizedNumber;
-        }
-        break;
-    case Percentage_format:
-        localizedNumber = locale()->formatNumber(value, p)+ " %";
-        if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
-        {
-            if(locale()->positiveSign().isEmpty())
-                localizedNumber='+'+localizedNumber;
-        }
-        break;
-    case Money_format:
-        localizedNumber = locale()->formatMoney(value, getCurrencySymbol(), p );
-        if( floatFormat( _col, _row) == KSpreadCell::AlwaysSigned && value >= 0 )
-        {
-            if (locale()->positiveSign().isNull())
-                localizedNumber = '+' + localizedNumber;
-        }
-        break;
-    case Scientific_format:
-        localizedNumber= QString::number(value, 'E', p);
-        if((pos=localizedNumber.find('.'))!=-1)
-            localizedNumber=localizedNumber.replace(pos,1,decimal_point);
-        if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
-        {
-            if(locale()->positiveSign().isEmpty())
-                localizedNumber='+'+localizedNumber;
-        }
-        break;
-    case ShortDate_format:
-    case TextDate_format:
-    case date_format1:
-    case date_format2:
-    case date_format3:
-    case date_format4:
-    case date_format5:
-    case date_format6:
-    case date_format7:
-    case date_format8:
-    case date_format9:
-    case date_format10:
-    case date_format11:
-    case date_format12:
-    case date_format13:
-    case date_format14:
-    case date_format15:
-    case date_format16:
-    case date_format17:
-    case Text_format:
-        break;
-    case fraction_half:
-    case fraction_quarter:
-    case fraction_eighth:
-    case fraction_sixteenth:
-    case fraction_tenth:
-    case fraction_hundredth:
-    case fraction_one_digit:
-    case fraction_two_digits:
-    case fraction_three_digits:
-        localizedNumber=util_fractionFormat( value, formatType() );
-        if( floatFormat( _col, _row ) == KSpreadCell::AlwaysSigned && value >= 0 )
-        {
-            if(locale()->positiveSign().isEmpty())
-                localizedNumber='+'+localizedNumber;
-        }
-        break;
-    default :
-        kdDebug(36001)<<"Error in m_eFormatNumber\n";
-        break;
-    }
-
-    return localizedNumber;
 }
 
 //used in makeLayout() and calculateTextParameters()
@@ -2142,24 +1925,21 @@ bool KSpreadCell::calc(bool delay)
 
     return false;
   }
+  //d->strOutText will be set in setOutputText (called by makeLayout),
+  //so we needn't worry about that here
   else if ( context.value()->type() == KSValue::DoubleType )
   {
     setValue ( KSpreadValue( context.value()->doubleValue() ) );
     checkNumberFormat(); // auto-chooses number or scientific
-    // Format the result appropriately
-    d->strOutText = createFormat( value().asFloat(), d->column, d->row );
   }
   else if ( context.value()->type() == KSValue::IntType )
   {
     setValue ( KSpreadValue( (int)context.value()->intValue() ) );
     checkNumberFormat(); // auto-chooses number or scientific
-    // Format the result appropriately
-    d->strOutText = createFormat( value().asFloat(), d->column, d->row );
   }
   else if ( context.value()->type() == KSValue::BoolType )
   {
     setValue ( KSpreadValue( context.value()->boolValue() ) );
-    d->strOutText = context.value()->boolValue() ? i18n("True") : i18n("False");
     setFormatType(Number_format);
   }
   else if ( context.value()->type() == KSValue::TimeType )
@@ -2168,30 +1948,20 @@ bool KSpreadCell::calc(bool delay)
 
     //change format
     FormatType tmpFormat = formatType();
-    if( tmpFormat != SecondeTime_format &&  tmpFormat != Time_format1 &&  tmpFormat != Time_format2
-        && tmpFormat != Time_format3)
+    if (!isTime())
     {
-      d->strOutText = locale()->formatTime( value().asDateTime().time(), false);
+      tmpFormat = Time_format;
       setFormatType (Time_format);
-    }
-    else
-    {
-      d->strOutText = util_timeFormat(locale(), value().asDateTime(), tmpFormat);
     }
   }
   else if ( context.value()->type() == KSValue::DateType)
   {
     setValue ( KSpreadValue( context.value()->dateValue() ) );
     FormatType tmpFormat = formatType();
-    if( tmpFormat != TextDate_format
-        && !(tmpFormat>=200 &&tmpFormat<=216))
+    if (!isDate())
     {
-        setFormatType(ShortDate_format);
-        d->strOutText = locale()->formatDate( value().asDateTime().date(), true);
-    }
-    else
-    {
-        d->strOutText = util_dateFormat( locale(), value().asDateTime().date(), tmpFormat);
+      tmpFormat = ShortDate_format;
+      setFormatType (ShortDate_format);
     }
   }
   else if ( context.value()->type() == KSValue::Empty )
@@ -2199,20 +1969,15 @@ bool KSpreadCell::calc(bool delay)
     setValue (KSpreadValue::empty());
     // Format the result appropriately
     setFormatType(Number_format);
-    d->strOutText = createFormat( 0.0, d->column, d->row );
   }
   else
   {
 //FIXME    m_dataType = StringData;
-    setValue( KSpreadValue( context.value()->toString( context ) ) );
-    d->strOutText = context.value()->toString( context );
-    if ( !d->strOutText.isEmpty() && d->strOutText[0] == '!' )
+    QString str = context.value()->toString( context );
+    setValue (KSpreadValue (str));
+    if (!str.isEmpty() && str[0] == '!' )
     {
-      d->extra()->QML = new QSimpleRichText( d->strOutText.mid(1),  QApplication::font() );//, m_pTable->widget() );
-    }
-    else if( !d->strOutText.isEmpty() && d->strOutText[0]=='\'')
-    {
-        d->strOutText=d->strOutText.right(d->strOutText.length()-1);
+      d->extra()->QML = new QSimpleRichText(str.mid(1), QApplication::font()); //, m_pTable->widget() );
     }
 
     setFormatType(Text_format);
@@ -4212,18 +3977,6 @@ void KSpreadCell::decPrecision()
   setFlag( Flag_LayoutDirty );
 }
 
-//NOT USED ANYWHERE YET - date setting done by checkTextInput
-void KSpreadCell::setDate( QString const & )
-{
-//NOT USED
-}
-
-//NOT USED ANYWHERE YET
-void KSpreadCell::setDate( QDate const & date )
-{
-//NOT USED
-}
-
 //set numerical value
 //used in KSpreadSheet::setSeries (nowhere else yet)
 void KSpreadCell::setNumber( double number )
@@ -4655,7 +4408,7 @@ void KSpreadCell::checkTextInput()
   }
 }
 
-//used in calc, setDate, setNumber, ValueParser
+//used in calc, setNumber, ValueParser
 void KSpreadCell::checkNumberFormat()
 {
     if ( formatType() == Number_format && value().isNumber() )
@@ -5954,17 +5707,9 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
     {
       // ...except for date/time
       FormatType cellFormatType = formatType();
-      if ((cellFormatType==TextDate_format ||
-           cellFormatType==ShortDate_format
-           ||((int)(cellFormatType)>=200 && (int)(cellFormatType)<=217))
-          && ( t.contains('/') == 2 ))
+      if (isDate() && ( t.contains('/') == 2 ))
         dataType = "Date";
-      else if ( (cellFormatType==Time_format
-                 || cellFormatType==SecondeTime_format
-                 ||cellFormatType==Time_format1
-                 ||cellFormatType==Time_format2
-                 ||cellFormatType==Time_format3)
-                && ( t.contains(':') == 2 ) )
+      else if (isTime() && ( t.contains(':') == 2 ) )
         dataType = "Time";
       else
       {
