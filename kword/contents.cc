@@ -91,6 +91,8 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
     fs->layout();
     fs->updateFrames();
 
+    //kdDebug() << "KWInsertTOCCommand::execute layouting done, setting page numbers" << endl;
+
     // Now add the page numbers, and apply the style
     QMap<KWTextParag *, KWTextParag *>::Iterator mapIt = paragMap.begin();
     for ( ; mapIt != paragMap.end() ; ++mapIt )
@@ -104,7 +106,7 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
         if ( frame ) // let's be safe
         {
             parag->append( "\t" );
-            parag->append( QString::number( frame->pageNum() ) );
+            parag->append( QString::number( frame->pageNum() + 1 ) );
         }
 
         // Apply style
