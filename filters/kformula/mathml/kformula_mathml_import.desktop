@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+X-KDE-Export=application/x-kformula
+ExportDescription=KFormula
+Icon=
+X-KDE-Import=text/mml
+X-KDE-Weight=1
+ImportDescription=MathM
+Name=KFormula MathML Import Filter
+ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Library=libkfomathmlimport
