@@ -118,34 +118,41 @@ valueToCursorName(int shape)
 
 //===================================================
 
-class KexiProperty::KexiPropertyListData
+KexiProperty::ListData::ListData(const QStringList& keys_, const QStringList& names_)
+ : keys(keys_)
+ , names(names_)
+ , fixed(true)
 {
-	public:
-		KexiPropertyListData()
-		{
-		}
-		QStringList keys, names;
-};
+}
+
+KexiProperty::ListData::ListData()
+ : fixed(true)
+{
+}
+
+KexiProperty::ListData::~ListData()
+{
+}
 
 //===================================================
 
 KexiProperty::KexiProperty(const QCString &name, QVariant value, const QString &desc)
 {
-	m_list = 0;
 	m_name = name;
 	m_desc = desc;
 	init(value);
 }
 
-KexiProperty::KexiProperty(const QCString &name, const QString &value,
+/*KexiProperty::KexiProperty(const QCString &name, const QString &value,
  const QStringList &key_list, const QStringList &name_list,
- const QString &desc)
+ const QString &desc)*/
+KexiProperty::KexiProperty(const QCString &name, const QString &value,
+	ListData* listData, const QString &desc)
 {
 	m_name = name;
 	m_desc = desc;
 	init(value);
-	m_list = new KexiPropertyListData();
-	setList(key_list, name_list);
+	setListData(listData);
 }
 
 KexiProperty::KexiProperty()
@@ -204,11 +211,14 @@ void KexiProperty::init(QVariant value)
 		{
 			QSizePolicy p = value.toSizePolicy();
 
+			ListData *listData = new ListData();
+			listData->keys = spHelper.list;
+			listData->names = spHelper.list;
 			addChild( new KexiProperty("horSizeType", spHelper.valueToKey(p.horData()),
-				spHelper.list, spHelper.list, i18n("horSizeType")) );
+				listData, i18n("horSizeType")) );
 
-			addChild( new KexiProperty("verSizeType",
-				spHelper.valueToKey(p.verData()), spHelper.list, spHelper.list, i18n("verSizeType")) );
+			addChild( new KexiProperty("verSizeType", spHelper.valueToKey(p.verData()), 
+				new ListData(*listData)/*copy*/, i18n("verSizeType")) );
 
 			addChild( new KexiProperty("hStretch", (int)p.horStretch(), i18n("hStretch") ) );
 			addChild( new KexiProperty("vStretch", (int)p.verStretch(), i18n("vStretch") ) );
@@ -285,7 +295,7 @@ KexiProperty::operator=(const KexiProperty &property)
 	m_parent = property.m_parent;
 
 	if(property.m_list) {
-		m_list = new KexiProperty::KexiPropertyListData();
+		m_list = new ListData();
 		*m_list = *(property.m_list);
 	} else {
 		m_list=0;
@@ -408,10 +418,11 @@ void KexiProperty::setValue(const QVariant &v, bool saveOldValue)
 	setValue(v, true, saveOldValue);
 }
 
-void KexiProperty::setList(const QStringList &key_list, const QStringList &name_list)
+//void KexiProperty::setList(const QStringList &key_list, const QStringList &name_list)
+void KexiProperty::setListData(ListData* listData)
 {
-	m_list->keys = key_list;
-	m_list->names = name_list;
+	delete m_list;
+	m_list = listData;
 }
 
 QVariant KexiProperty::value() const
@@ -577,26 +588,27 @@ KexiProperty* KexiProperty::child(const QCString& name)
 	return m_children_dict->find(name);
 }
 
-void KexiProperty::debug()
+QString KexiProperty::debugString() const
 {
 	QString dbg = "KexiProperty( name='" + QString(m_name) + "' desc='" + m_desc
 		+ "' val=" + (m_value.isValid() ? m_value.toString() : "<INVALID>");
+	dbg += (QString::fromLatin1("type=") + QVariant::typeToName(type()));
+	if (m_list) {
+		dbg += (QString::fromLatin1(" keys=[") + m_list->keys.join(",") 
+			+ QString("] values=[") + m_list->names.join(",")
+			+ QString("] fixed=") + (m_list->fixed?"true":"false"));
+	}
 	if (!m_oldValue.isValid())
 		dbg += (", oldVal='" + m_oldValue.toString() + "'");
 	dbg += (QString(m_changed ? " " : " un") + "changed");
 	dbg += (m_visible ? " visible" : " hidden");
 	dbg+=" )";
-	kdDebug() << dbg << endl;
+	return dbg;
 }
 
-QStringList* KexiProperty::keys() const
+void KexiProperty::debug()
 {
-	return m_list ? &m_list->keys : 0;
-}
-
-QStringList* KexiProperty::names() const
-{
-	return m_list ? &m_list->names : 0;
+	kdDebug() << debugString() << endl;
 }
 
 QString

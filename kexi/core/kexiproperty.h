@@ -58,6 +58,30 @@ class KEXICORE_EXPORT KexiProperty
 		typedef QPtrListIterator<KexiProperty> ListIterator;
 //		typedef QMap<QString,KexiProperty> Map;
 
+	class KEXICORE_EXPORT ListData
+	{
+		public:
+			/*! Data container for list-value property. 
+			 The user will be able to choose an item from this list. */
+			ListData(const QStringList& keys_, const QStringList& names_);
+			ListData();
+			~ListData();
+
+			/*! The string list containing all possible keys for this property
+			 or NULL if this is not a property of type 'list'. The values in this list are ordered,
+			 so the first key element is associated with first element from 
+			 the 'names' list, and so on. */
+			QStringList keys;
+
+			/*! The list of i18n'ed names that will be visible on the screen.
+			 First value is referenced by first key, and so on. */
+			QStringList names;
+
+			/*! True (the default), if the list has fixed number of possible 
+			 items (keys). If this is false, user can add or enter own values. */
+			bool fixed : 1;
+		};
+
 		QT_STATIC_CONST KexiProperty null;
 
 //		/*! Creates a simple property with \a name as name and \a value as value. */
@@ -68,15 +92,11 @@ class KEXICORE_EXPORT KexiProperty
 		KexiProperty(const QCString &name, QVariant value, const QString &desc = QString::null);
 
 		/*! Creates a list property with \a name as name, \a value as value
-		  and \a key_list as the list of all possible keys. Value must be
-		  an element from \a key_list list.
-		  \a name_list is a list of i18n'ed names that will be visible ont he screen,
-		  instead of keys.
-		  The user will be able to choose a value from \a key_list.
-		*/
+		 and \a listData as the list of all possible items wit names and keys. 
+		 Passed \a listData object will be owned by this KexiProperty.
+		  \sa ListData */
 		KexiProperty(const QCString &name, const QString &value,
-		 const QStringList &key_list, const QStringList &name_list,
-		 const QString &desc = QString::null);
+			ListData* listData, const QString &desc = QString::null);
 
 		//! Copy constructor.
 		KexiProperty(const KexiProperty &property);
@@ -134,13 +154,21 @@ class KEXICORE_EXPORT KexiProperty
 		/*! Equivalent to setValue(const QVariant &) */
 		inline KexiProperty& operator= ( const QVariant& val ) { setValue(val); return *this; }
 
-		/*! For property of type "list of values":
-		 sets \a key_list as a new list of keys and \a name_list as a new list
-		 of i18n'e names (corresponding to keys). Sometimes it's necessary to change
-		 the list. You should ensure yourself that current value is a string that
-		 is one of a new \a key_list.
+		/*! Sets a list data \a listData for property of type 'list'.
+		 Passed \a listData object will be owned by this KexiProperty.
+		 You should ensure yourself that current value is a string that
+		 is one of a new \a key_list. Set \a listData to NULL if you want to delete
+		 previously defined list. 
 		 \sa keys(), \a names() */
-		void setList(const QStringList &key_list, const QStringList &name_list);
+		void setListData(ListData* listData);
+
+		/*! \return a pointer to the list data or NULL if this property 
+		 is not of type 'list' */
+		inline ListData* listData() const { return m_list; }
+
+		/*! Only meaningful when the property is of type 'list'.
+		 \return true if list data is fixed (see ListData::fixed). */
+		inline bool isFixedList() const { return m_list ? m_list->fixed : false; }
 
 		/*! Resets this property value to its old value.
 		 The property becames unchanged after that and old value becames null.
@@ -149,8 +177,7 @@ class KEXICORE_EXPORT KexiProperty
 		void resetValue();
 
 		/*! \return old property value. This makes only sense when changed() is true.
-		 The old value is saved on first change.
-		*/
+		 The old value is saved on first change. */
 		inline QVariant oldValue() const { return m_oldValue; }
 
 		//! \return property i18n'ed description.
@@ -158,17 +185,6 @@ class KEXICORE_EXPORT KexiProperty
 
 		/*! \return the QVariant::Type of property value and QVariant::StringList if this is a list property. */
 		QVariant::Type type() const;
-
-		/*! \return a pointer to the string list containing all possible keys for this property
-		 or NULL if this is not a property of type stringlist. The values in this list are ordered,
-		 so the first key element is associated with first element from the list returned by
-		 KexiProperty::names(), and so on. */
-		QStringList* keys() const;
-
-		/*! \return a pointer to the string list containing all possible i18n'd names for this property
-		 or NULL if this is not a property of type stringlist.
-		 @sa keys() */
-		QStringList* names() const;
 
 		/*! \return 1 if the property should be synced automatically in Property Editor
 		  as soon as editor contents change (e.g. when the user types text). If autoSync() == 0, property value
@@ -217,7 +233,12 @@ class KEXICORE_EXPORT KexiProperty
 
 		void execute(const QString &value); // TMP
 
+		/*! \return debug information about this property. */
+		QString debugString() const;
+
+		/*! Sends debug information about this property to debug output. */
 		void debug();
+
 	protected:
 		/*! Internal: Works like setValue(const QVariant &v, bool saveOldValue),
 		 but allows to skip updating values for children. */
@@ -247,8 +268,7 @@ class KEXICORE_EXPORT KexiProperty
 		QString m_pixmapName;
 		QString m_icon;
 		QVariant m_oldValue;
-		class KexiPropertyListData;
-		KexiPropertyListData *m_list;
+		ListData *m_list;
 		KexiProperty* m_parent;
 		QGuardedPtr<KexiPropertyBuffer> m_buf;
 		KexiProperty::Dict* m_children_dict;
