@@ -1790,7 +1790,7 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 	  
 	  // Test next character.
 	  i++;
-	  if ( _fc.cursorGotoNextChar( _painter ) != 1 || text[_fc.getTextPos()].c == ' ' || i >= 199 )
+	  if ( _fc.cursorGotoNextChar( _painter ) != 1 || (text[_fc.getTextPos()].c == ' ' && _fc.getParag()->getParagLayout()->getFlow() == KWParagLayout::BLOCK) || i >= 199 )
 	    {
 	      // there was a blank _or_ there will be a font switch _or_ a special object next, so print 
 	      // what we have so far

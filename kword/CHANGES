@@ -820,3 +820,7 @@ Reggie, 5.2.1999:
 Reggie, 6.2.1999:
 -----------------
 - More work on variables
+
+Reggie, 7.2.1999:
+-----------------
+- Small fix in printLine
