@@ -20,6 +20,9 @@ class KPresenterShell_impl;
 #include <default_shell_impl.h>
 #include <document_impl.h>
 
+#include <qstring.h>
+#include <qfileinf.h>
+
 #include "kpresenter.h"
 #include "kpresenter_doc.h"
 
@@ -43,6 +46,7 @@ public:
   // open - save document
   virtual bool openDocument(const char *_filename);
   virtual bool saveDocument(const char *_file,const char *_format);
+  virtual void fileSave();
 
   // new document
   virtual void fileNew();
@@ -57,6 +61,7 @@ protected:
   // reference to a document
   Document_ref m_rDoc;
   OPParts::View_var m_vView;
+  const char *filename,*format;
 
 };
 

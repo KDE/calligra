@@ -22,6 +22,8 @@
 /*====================== constructor =============================*/
 KPresenterShell_impl::KPresenterShell_impl()
 {
+  filename = 0;
+  format = 0;
 }
 
 /*======================= destrcutor =============================*/
@@ -30,6 +32,15 @@ KPresenterShell_impl::~KPresenterShell_impl()
   sdeb("KPresenterShell_impl::~KPresenterShell_impl()\n");
   cleanUp();
   edeb("...KPresenterShell_impl::~KPresenterShell_impl()\n");
+}
+
+/*========================= save file ============================*/
+void KPresenterShell_impl::fileSave()
+{
+  if (!filename)
+    fileSaveAs();
+  else
+    m_rDoc->saveAs(filename,format);
 }
 
 /*====================== set document ============================*/ 
@@ -53,8 +64,19 @@ bool KPresenterShell_impl::openDocument(const char *_filename)
   OPParts::View_var view = m_rDoc->createView();
   view->setPartShell(this);
   setRootPart(view);
+
   m_rMenuBar->setItemEnabled(m_idMenuFile_SaveAs,true);
+  m_rMenuBar->setItemEnabled(m_idMenuFile_Save,true);
   m_rToolBarFile->setItemEnabled(m_idButtonFile_Print,true);
+
+  filename = qstrdup(_filename);
+
+  QFileInfo tmp(_filename);
+  
+  if (tmp.extension().isEmpty())
+    format = qstrdup("kpr");
+  else
+    format = qstrdup(tmp.extension());
 
   return true;
 }
@@ -65,6 +87,12 @@ bool KPresenterShell_impl::saveDocument(const char *_filename,const char *_forma
   assert(!CORBA::is_nil(m_rDoc));
 
   if (_format == 0L || *_format == 0) _format = "kpr";
+  
+  if (filename) delete filename;
+  if (format) delete format;
+
+  filename = qstrdup(_filename);
+  format = qstrdup(_format);
   
   return m_rDoc->saveAs(_filename,_format);
 }
@@ -82,10 +110,16 @@ void KPresenterShell_impl::fileNew()
       return;
     }
   
+  if (filename) delete filename;
+  if (format) delete format;
+  filename = 0;
+  format = 0;
+
   m_vView = m_rDoc->createView();
   m_vView->setPartShell(this);
   setRootPart(m_vView);
   m_rMenuBar->setItemEnabled(m_idMenuFile_SaveAs,true);
+  m_rMenuBar->setItemEnabled(m_idMenuFile_Save,true);
   m_rToolBarFile->setItemEnabled(m_idButtonFile_Print,true);
 }
 
