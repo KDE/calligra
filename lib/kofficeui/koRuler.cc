@@ -497,6 +497,10 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
         }
         else if ( d->flags & F_HELPLINES )
         {
+            if( orientation == Qt::Horizontal)
+                setCursor( Qt::sizeVerCursor );
+            else
+                setCursor( Qt::sizeHorCursor );
             d->action=A_HELPLINES;
         }
     }
