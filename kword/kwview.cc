@@ -3080,6 +3080,7 @@ void KWView::insertFormula( QMimeSource* source )
             frameset->paste( formula );
         }
         KWFrame *frame = new KWFrame(frameset, 0, 0, 10, 10 );
+        frame->setZOrder( m_doc->maxZOrder( frame->pageNum(m_doc) ) + 1 ); // make sure it's on top
         frameset->addFrame( frame, false );
         edit->insertFloatingFrameSet( frameset, i18n("Insert Formula") );
         frameset->finalize(); // done last since it triggers a redraw
