@@ -59,6 +59,80 @@ double KWord13OasisGenerator::numberOrNull( const QString& str ) const
         return 0.0;
 }
 
+
+// Inspired from KoTextFormat::save but we have not the same data to start with.
+void KWord13OasisGenerator::fillGenStyleWithFormatOne( const KWord13FormatOne& one, KoGenStyle& gs, const bool style ) const
+{
+    QString str; // helper string
+    
+    KoGenStyle::PropertyType tt = KoGenStyle::TextType;
+#if 0
+    gs.addProperty( "fo:color", col.isValid() ? col.name() : "#000000", tt );
+#endif
+    // TODO declare svg font faces stuff according to the OASIS format;
+    str = one.getProperty( "FONT:name" );
+    if ( !str.isEmpty() )
+    {
+        gs.addProperty( "style:font-name", str, tt ); // hack
+    }
+    // ### TODO What to do if a style does not define a font? Do we leave it empty or do we use our default font?
+
+    double d = numberOrNull( one.getProperty( "SIZE:value" ) );
+    if ( d >= 1.0 ) // Sane value?
+    {
+        gs.addPropertyPt( "fo:font-size", d, tt );
+    }
+    // ### TODO If not, same question as with font name.
+    
+#if 0
+    int w = fn.weight();
+    gs.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( w * 10 ), tt );
+    gs.addProperty( "fo:font-style", fn.italic() ? "italic" : "normal", tt );
+    gs.addProperty( "style:text-underline-mode", d->m_bWordByWord ? "skip-white-space" : "continuous", tt );
+    gs.addProperty( "style:text-underline-type", m_underlineType == U_NONE ? "none" :
+                    m_underlineType == U_DOUBLE ? "double" : "single", tt );
+    QString styleline;
+    if ( m_underlineType == U_WAVE )
+        styleline = "wave";
+    else
+        styleline = exportOasisUnderline( m_underlineStyle );
+    gs.addProperty( "style:text-underline-style", styleline, tt );
+    gs.addProperty( "style:text-underline-color", m_textUnderlineColor.isValid() ? m_textUnderlineColor.name() : "font-color", tt );
+    // TODO U_SIMPLE_BOLD
+    // TODO style:text-line-through-mode
+    gs.addProperty( "style:text-line-through-type", m_strikeOutType == S_NONE ? "none" :
+                    m_strikeOutType == S_DOUBLE ? "double" : "single", tt );
+
+    styleline = exportOasisUnderline( (UnderlineStyle) m_strikeOutStyle );
+    gs.addProperty( "style:text-line-through-style", styleline, tt );
+    //gs.addProperty( "style:text-line-through-color", ...) TODO in kotext
+
+    QString textPos;
+    if ( d->m_offsetFromBaseLine != 0 )
+        textPos = QString::number( 100 * d->m_offsetFromBaseLine / fn.pointSizeFloat() ) + '%';
+    else if ( va == AlignSuperScript ) textPos = "super";
+    else if ( va == AlignSubScript ) textPos = "sub";
+    else textPos = "0%";
+    textPos += ' ';
+    textPos += QString::number( d->m_relativeTextSize * 100 );
+    textPos += '%';
+    gs.addProperty( "style:text-position", textPos, tt );
+
+    if ( m_attributeFont == ATT_SMALL_CAPS )
+        gs.addProperty( "fo:font-variant", "small-caps", tt );
+    else if ( m_attributeFont == ATT_UPPER )
+        gs.addProperty( "fo:text-transform", "uppercase", tt );
+    else if ( m_attributeFont == ATT_LOWER )
+        gs.addProperty( "fo:text-transform", "lowercase", tt );
+
+    gs.addProperty( "fo:language", m_language == "en_US" ? QString("en") : m_language, tt );
+    gs.addProperty( "fo:background-color",
+                    m_textBackColor.isValid() ? m_textBackColor.name() : "transparent", tt );
+    gs.addProperty( "fo:text-shadow", shadowAsCss(), tt );
+    gs.addProperty( "fo:hyphenate", d->m_bHyphenation, tt );
+#endif
+}
+
 // Inspired from KoParagLayout::saveOasis but we have not the same data to start with.
 void KWord13OasisGenerator::fillGenStyleWithLayout( const KWord13Layout& layout, KoGenStyle& gs, const bool style ) const
 {

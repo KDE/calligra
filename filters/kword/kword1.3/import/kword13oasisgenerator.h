@@ -56,6 +56,7 @@ protected: // ZIP methods
     void writeMetaXml( void );
 protected: // Preparing phase
     double numberOrNull( const QString& str ) const;
+    void fillGenStyleWithFormatOne( const KWord13FormatOne& one, KoGenStyle& gs, const bool style ) const;
     void fillGenStyleWithLayout( const KWord13Layout& layout, KoGenStyle& gs, const bool style ) const;
 protected:
     KWord13Document* m_kwordDocument;
