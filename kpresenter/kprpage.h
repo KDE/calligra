@@ -205,8 +205,8 @@ public:
     void setInsPictureFile( const QString &_file ) { m_pictureFile = _file; }
     void setInsClipartFile( const QString &_file ) { m_clipartFile = _file; }
 
-    QString getInsPictureFile() const { return m_pictureFile; }
-    QString getInsClipartFile() const { return m_clipartFile; }
+    QString insPictureFile() const { return m_pictureFile; }
+    QString insClipartFile() const { return m_clipartFile; }
 
 protected:
 

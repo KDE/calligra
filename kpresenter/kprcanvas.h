@@ -297,7 +297,7 @@ protected:
     void insertCubicBezierCurve( const KoPointArray &_pointArray );
     void insertPolygon( const KoPointArray &_pointArray );
     void insertPicture( const QRect &_r );
-    void insertCripart( const QRect &_r );
+    void insertClipart( const QRect &_r );
 
     void selectNext();
     void selectPrev();

@@ -1237,7 +1237,7 @@ void KPresenterView::screenConfigPages()
 			       m_canvas->activePage()->getPageTimer(),
 			       m_canvas->activePage()->getPageSoundEffect(),
 			       m_canvas->activePage()->getPageSoundFileName(),
-                               kPresenterDoc()->getPresentationDuration() );
+                               kPresenterDoc()->presentationDuration() );
     pgConfDia->setCaption( i18n( "KPresenter - Page Configuration for Screen Presentations" ) );
     QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
     pgConfDia->exec();
@@ -1354,7 +1354,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         actionScreenStart->setEnabled( false );
         actionScreenViewPage->setEnabled( false );
 
-        if ( kPresenterDoc()->getPresentationDuration() && pgNum == -1 ) {
+        if ( kPresenterDoc()->presentationDuration() && pgNum == -1 ) {
             m_presentationDuration.start();
             m_presentationTotalDuration.start();
 
@@ -1396,7 +1396,7 @@ void KPresenterView::screenStop()
         //xOffset = xOffsetSaved;
         //yOffset = yOffsetSaved;
 
-        if ( kPresenterDoc()->getPresentationDuration() )
+        if ( kPresenterDoc()->presentationDuration() )
             setPresentationDuration( m_canvas->presPage() - 1 );
 
         m_canvas->stopScreenPresentation();
@@ -1421,7 +1421,7 @@ void KPresenterView::screenStop()
         actionScreenViewPage->setEnabled( true );
         pageBase->resizeEvent( 0 );
 
-        if ( kPresenterDoc()->getPresentationDuration() ) {
+        if ( kPresenterDoc()->presentationDuration() ) {
             openThePresentationDurationDialog();
             m_presentationDurationList.clear();
         }
@@ -2973,7 +2973,7 @@ void KPresenterView::pgConfOk()
 					  m_canvas->activePage()->getPageTimer(),
 					  m_canvas->activePage()->getPageSoundEffect(),
 					  m_canvas->activePage()->getPageSoundFileName(),
-                                          kPresenterDoc()->getPresentationDuration(),
+                                          kPresenterDoc()->presentationDuration(),
 					  kPresenterDoc(), m_canvas->activePage() );
     pgConfCmd->execute();
     kPresenterDoc()->addCommand( pgConfCmd );

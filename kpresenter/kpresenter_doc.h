@@ -150,7 +150,7 @@ public:
     // get values for screenpresentations
     bool spInfinitLoop() const { return _spInfinitLoop; }
     bool spManualSwitch() const { return _spManualSwitch; }
-    bool getPresentationDuration() const { return _showPresentationDuration; }
+    bool presentationDuration() const { return _showPresentationDuration; }
     void setInfinitLoop( bool il ) { _spInfinitLoop = il; }
     void setManualSwitch( bool ms ) { _spManualSwitch = ms; }
     void setPresentationDuration( bool pd ) { _showPresentationDuration = pd; }

@@ -179,3 +179,31 @@ bool KPresenterDocIface::insertNewPage(int pos )
   bool state = (ret !=-1);
   return state;
 }
+
+// return false when we can't remove page
+bool KPresenterDocIface::deletePage( int _page )
+{
+  if( _page < 0 || _page > doc->getPageNums()-1 )
+      return false;
+  doc->deletePage(_page);
+}
+
+void KPresenterDocIface::deSelectAllObj()
+{
+    doc->deSelectAllObj();
+}
+
+void KPresenterDocIface::recalcPageNum()
+{
+    doc->recalcPageNum();
+}
+
+bool KPresenterDocIface::presentationDuration() const
+{
+    return doc->presentationDuration();
+}
+
+void KPresenterDocIface::setPresentationDuration( bool pd )
+{
+    doc->setPresentationDuration(pd);
+}

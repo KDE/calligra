@@ -63,6 +63,12 @@ k_dcop:
     virtual void setDisplayLink(bool b);
     virtual bool displayLink();
     virtual bool insertNewPage(int pos );
+    virtual bool deletePage( int _page );
+    virtual void deSelectAllObj();
+    virtual void recalcPageNum();
+
+    virtual bool presentationDuration() const;
+    virtual void setPresentationDuration( bool pd );
 private:
     KPresenterDoc *doc;
 

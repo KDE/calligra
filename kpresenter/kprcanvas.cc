@@ -1011,7 +1011,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         setToolEditMode( TEM_MOUSE );
     } break;
     case INS_CLIPART: {
-        if ( !insRect.isNull() ) insertCripart( insRect );
+        if ( !insRect.isNull() ) insertClipart( insRect );
         setToolEditMode( TEM_MOUSE );
     } break;
     default: break;
@@ -2196,7 +2196,7 @@ bool KPrCanvas::pNext( bool )
 
         changePages( _pix1, _pix2, _pageEffect );
 
-        if ( m_view->kPresenterDoc()->getPresentationDuration() )
+        if ( m_view->kPresenterDoc()->presentationDuration() )
             m_view->setPresentationDuration( currPresPage - 2 );
 
 
@@ -2244,7 +2244,7 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
         presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage );
         currPresStep = *( --presStepList.end() );
 
-        if ( m_view->kPresenterDoc()->getPresentationDuration() )
+        if ( m_view->kPresenterDoc()->presentationDuration() )
             m_view->setPresentationDuration( currPresPage );
 
         return true;
@@ -3874,7 +3874,7 @@ void KPrCanvas::insertPicture( const QRect &_r )
     QRect r( _r );
     r.moveBy( diffx(), diffy() );
     KoRect rect = m_view->zoomHandler()->unzoomRect( r );
-    QString file = m_activePage->getInsPictureFile();
+    QString file = m_activePage->insPictureFile();
 
     QCursor c = cursor();
     setCursor( waitCursor );
@@ -3886,12 +3886,12 @@ void KPrCanvas::insertPicture( const QRect &_r )
 }
 
 /*================================================================*/
-void KPrCanvas::insertCripart( const QRect &_r )
+void KPrCanvas::insertClipart( const QRect &_r )
 {
     QRect r( _r );
     r.moveBy( diffx(), diffy() );
     KoRect rect = m_view->zoomHandler()->unzoomRect( r );
-    QString file = m_activePage->getInsClipartFile();
+    QString file = m_activePage->insClipartFile();
 
     QCursor c = cursor();
     setCursor( waitCursor );
@@ -4155,7 +4155,7 @@ void KPrCanvas::slotGotoPage()
         setNextPageTimer( true );
     }
 
-    if ( m_view->kPresenterDoc()->getPresentationDuration() )
+    if ( m_view->kPresenterDoc()->presentationDuration() )
         m_view->setPresentationDuration( pg - 1 );
 
 }
@@ -4984,7 +4984,7 @@ void KPrCanvas::drawPolygon( const QPoint &startPoint, const QPoint &endPoint )
     int dy = QABS( startPoint.y () - endPoint.y () );
     double radius = ( dx > dy ? (double)dx / 2.0 : (double)dy / 2.0 );
 
-    //xoff / yoff : coordinate of centre of the circle. 
+    //xoff / yoff : coordinate of centre of the circle.
     double xoff = startPoint.x() + ( startPoint.x() < endPoint.x() ? radius : -radius );
     double yoff = startPoint.y() + ( startPoint.y() < endPoint.y() ? radius : -radius );
 
