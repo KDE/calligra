@@ -423,8 +423,7 @@ bool KoStore::extractFile ( const QString &srcName, const QString &fileName )
     file.writeBlock ( data.data(), block );
   }
 
-  if( size() != -1 )
-  	Q_ASSERT( total == size() );
+  Q_ASSERT( total == size() );
 
   file.close();
   close();
