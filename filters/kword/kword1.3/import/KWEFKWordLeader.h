@@ -99,7 +99,7 @@ class KWEFKWordLeader
         /// Name of the current frame set
         QString m_currentFramesetName;
         /// Number of paragraph in each frameset (for bookmarks)
-        QMap<QString,uint> m_paraCountMap;
+        QMap<QString,int> m_paraCountMap;
         /// List of bookmarks
         QValueList<Bookmark> m_bookmarkList;
 

@@ -144,7 +144,7 @@ static void InsertBookmarkFormatData (const int pos, const QString& name, const 
 
 void KWEFKWordLeader::createBookmarkFormatData( ParaData& paraData )
 {
-    const uint paraCount = m_paraCountMap[ m_currentFramesetName ];
+    const int paraCount = m_paraCountMap[ m_currentFramesetName ];
 
     QValueList<Bookmark>::ConstIterator it;
     for (it = m_bookmarkList.begin(); it != m_bookmarkList.end(); ++it )
@@ -181,7 +181,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
     AllowNoAttributes (myNode);
 
     // We need to adjust the paragraph number (0 if first)
-    QMap<QString,uint>::Iterator it = leader->m_paraCountMap.find( leader->m_currentFramesetName );
+    QMap<QString,int>::Iterator it = leader->m_paraCountMap.find( leader->m_currentFramesetName );
     if ( it == leader->m_paraCountMap.end() )
         leader->m_paraCountMap.insert( leader->m_currentFramesetName, 0 );
     else
