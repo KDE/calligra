@@ -284,6 +284,12 @@ protected slots:
     void slotRemove();
 
     /**
+     * Invoked if the popup menu for an embedded document should be opened.
+     */
+    void popupChildMenu( KoChild*, const QPoint& global_pos );
+    void slotPopupDeleteChild();
+    
+    /**
      * Border popup menu
      */
     void slotPopupResizeColumn();
@@ -495,6 +501,15 @@ private:
 
     QPopupMenu *m_pPopupRow;
     QPopupMenu *m_pPopupColumn;
+
+    /**
+     * Used for embedded children.
+     */
+    QPopupMenu* m_popupChild;
+    /**
+     * Holds a pointer of the child for which the popup menu has been opened.
+     */
+    KSpreadChild* m_popupChildObject;
 
     /**
      * This DCOP object represents the view.

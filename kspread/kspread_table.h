@@ -694,10 +694,22 @@ public:
 
     void print( QPainter &painter, QPrinter *_printer );
 
-    void insertChart( const QRect& _geometry, KoDocumentEntry&, const QRect& _data );
+    /**
+     * Deletes a child object. That will cause all views to update
+     * accordingly. Do not use this child object afterwards.
+     *
+     * @ref #insertChild
+     */
+    void deleteChild( KSpreadChild *_child );
+    /**
+     * @ref #deleteChild
+     */
     void insertChild( const QRect& _geometry, KoDocumentEntry& );
+    /**
+     * A convenience function around @ref #insertChild.
+     */
+    void insertChart( const QRect& _geometry, KoDocumentEntry&, const QRect& _data );
     void changeChildGeometry( KSpreadChild *_child, const QRect& _geometry );
-    // QListIterator<KSpreadChild> childIterator();
 
     void update();
 

@@ -112,6 +112,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_pPopupMenu = 0;
     m_pPopupColumn = 0;
     m_pPopupRow = 0;
+    m_popupChild = 0;
+
     m_dcop = 0;
     m_bLoading =false;
     // Vert. Scroll Bar
@@ -202,7 +204,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadTable* ) ), SLOT( slotAddTable( KSpreadTable* ) ) );
 
     // Handler for moving and resizing embedded parts
-    (void)new ContainerHandler( this, m_pCanvas );
+    ContainerHandler* h = new ContainerHandler( this, m_pCanvas );
+    connect( h, SIGNAL( popupMenu( KoChild*, const QPoint& ) ), this, SLOT( popupChildMenu( KoChild*, const QPoint& ) ) );
 
     m_bold = new KToggleAction( i18n("Bold"), "text_bold", CTRL + Key_B, actionCollection(), "bold");
     connect( m_bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
@@ -345,6 +348,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_formulaProduct = new KAction( i18n("Formula Product"), "prod", 0, this, SLOT( formulaProduct() ),
                                     actionCollection(), "formulaProduct");
     m_formulaSelection = new KSelectAction( i18n("Formula Selection"), 0, actionCollection(), "formulaSelection" );
+	
     QStringList lst;
     lst.append( "sum");
     lst.append( "cos");
@@ -1549,10 +1553,11 @@ void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
 
 void KSpreadView::slotRemoveChild( KSpreadChild *_child )
 {
-  if ( _child->table() != m_pTable )
-    return;
+    if ( _child->table() != m_pTable )
+	return;
 
-  // TODO
+    // Make shure that this child has no active embedded view -> activate ourselfs
+    partManager()->setActivePart( koDocument(), this );
 }
 
 void KSpreadView::slotUpdateChildGeometry( KSpreadChild */*_child*/ )
@@ -1739,6 +1744,31 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     m_pVBorderWidget->show();
 }
 
+void KSpreadView::popupChildMenu( KoChild* child, const QPoint& global_pos )
+{
+    if ( !child )
+	return;
+
+    if ( m_popupChild != 0 )
+	delete m_popupChild;
+
+    m_popupChildObject = static_cast<KSpreadChild*>(child);
+
+    m_popupChild = new QPopupMenu( this );
+
+    m_popupChild->insertItem( i18n("Delete embedded document"), this, SLOT( slotPopupDeleteChild() ) );
+	
+    m_popupChild->popup( global_pos );
+}
+
+void KSpreadView::slotPopupDeleteChild()
+{
+    if ( !m_popupChildObject || !m_popupChildObject->table() )
+	return;
+    
+    m_popupChildObject->table()->deleteChild( m_popupChildObject );
+    m_popupChildObject = 0;
+}
 
 void KSpreadView::popupColumnMenu(const QPoint & _point)
 {
@@ -1750,7 +1780,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     if (m_pPopupColumn != 0L )
         delete m_pPopupColumn ;
 
-    m_pPopupColumn= new QPopupMenu();
+    m_pPopupColumn = new QPopupMenu( this );
 
     m_pPopupColumn->insertItem( KSBarIcon("insert_table_col"),i18n("Insert Column"), this, SLOT( slotPopupInsertColumn() ) );
     m_pPopupColumn->insertItem( KSBarIcon("delete_table_col"),i18n("Remove Column"), this, SLOT( slotPopupRemoveColumn() ) );

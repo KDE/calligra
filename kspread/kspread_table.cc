@@ -5160,6 +5160,17 @@ void KSpreadTable::insertChild( KSpreadChild *_child )
     emit sig_polygonInvalidated( _child->framePointArray() );
 }
 
+void KSpreadTable::deleteChild( KSpreadChild* child )
+{
+    QPointArray polygon = child->framePointArray();
+    
+    emit sig_removeChild( child );
+    
+    delete child;
+    
+    emit sig_polygonInvalidated( polygon );
+}
+
 void KSpreadTable::changeChildGeometry( KSpreadChild *_child, const QRect& _rect )
 {
     _child->setGeometry( _rect );
