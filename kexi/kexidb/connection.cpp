@@ -454,13 +454,13 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible )
 		int num;
 		static QString notfound_str = i18n("\"%1\" database property not found");
 		if (!querySingleNumber(
-			"select db_value from kexi__db where db_property=\"kexidb_major_ver\"", num)) {
+			"select db_value from kexi__db where db_property=" + m_driver->escapeString(QString("kexidb_major_ver")), num)) {
 			d->errorInvalidDBContents(notfound_str.arg("kexidb_major_ver"));
 			return false;
 		}
 		d->m_versionMajor = num;
 		if (!querySingleNumber(
-			"select db_value from kexi__db where db_property=\"kexidb_minor_ver\"", num)) {
+			"select db_value from kexi__db where db_property=" + m_driver->escapeString(QString("kexidb_minor_ver")), num)) {
 			d->errorInvalidDBContents(notfound_str.arg("kexidb_minor_ver"));
 			return false;
 		}
