@@ -26,7 +26,7 @@
 class KSpreadSheet;
 class KSpreadView;
 
-class KSpreadSelection
+class KSPREAD_EXPORT KSpreadSelection
 {
 public:
 
