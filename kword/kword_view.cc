@@ -3527,7 +3527,7 @@ void KWordView::changeRedo( QString _text, bool _enable )
 }
 
 /******************************************************************/
-/* Class: KWordGUI						  */
+/* Class: KWLayoutWidget					  */
 /******************************************************************/
 
 KWLayoutWidget::KWLayoutWidget( QWidget *parent, KWordGUI *g )
@@ -3542,7 +3542,9 @@ void KWLayoutWidget::resizeEvent( QResizeEvent *e )
     gui->reorganize();
 }
 
-/*================================================================*/
+/******************************************************************/
+/* Class: KWordGUI      					  */
+/******************************************************************/
 KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view )
     : QWidget( parent, "" )
 {
