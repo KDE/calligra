@@ -111,6 +111,7 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
     connect(m_delExpression, SIGNAL( clicked() ), this,SLOT( slotRemoveExpression() ));
     connect(m_addGroup, SIGNAL( clicked() ), this,SLOT( slotAddGroup()));
     connect(m_delGroup, SIGNAL( clicked() ), this,SLOT( slotRemoveGroup() ));
+    updateWidget();
 
     setFocus();
 }
@@ -284,7 +285,7 @@ void KWEditPersonnalExpression::slotAddGroup() {
     listExpression.insert(i18n("new group"),QStringList());
     initGroupList();
     m_groupList->setCurrentItem(m_groupList->count() -1);
-    m_delGroup->setEnabled(true);
+    updateWidget();
     m_bChanged=true;
 }
 
@@ -294,7 +295,17 @@ void KWEditPersonnalExpression::slotRemoveGroup() {
         return;
     listExpression.remove( group );
     m_groupList->removeItem(m_groupList->currentItem());
+    updateWidget();
     m_bChanged=true;
+}
+
+void KWEditPersonnalExpression::updateWidget()
+{
+    bool state = listExpression.count()> 0;
+    m_delGroup->setEnabled( state );
+    m_expressionLineEdit->setEnabled( state );
+    m_addExpression->setEnabled( state );
+    m_delExpression->setEnabled( state );
 }
 
 void KWEditPersonnalExpression::saveFile()

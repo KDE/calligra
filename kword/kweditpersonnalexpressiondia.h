@@ -38,6 +38,7 @@ protected:
     void loadFile();
     void initGroupList();
     void saveFile();
+    void updateWidget();
 
 
 protected slots:
