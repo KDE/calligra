@@ -75,8 +75,8 @@ protected:
     // ********** variables **********
 
     // GUI-elements
-    KButton *ok;
-    KButton *cancel;
+    QToolButton *ok;
+    QToolButton *cancel;
     QLineEdit *lineEdit;
     KTreeList *treeList;
 

@@ -1095,7 +1095,7 @@ QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget 
   if ( !_kbutton )
     pb = new QPushButton( _parent );
   else
-    pb = new KButton( _parent );
+    pb = new QToolButton( _parent );
   if ( pixmap )
     pb->setPixmap( *pixmap );
 

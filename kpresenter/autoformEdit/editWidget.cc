@@ -29,11 +29,11 @@ EditWidget::EditWidget( QWidget *parent, const char *name )
 {
     QPixmap pixmap;
 
-    ok = new KButton(this);
+    ok = new QToolButton(this);
     ok->setPixmap(BarIcon("tick"));
     QToolTip::add(ok,"Take the changes");
 
-    cancel = new KButton(this);
+    cancel = new QToolButton(this);
     cancel->setPixmap(BarIcon("exit"));
     QToolTip::add(cancel,"Don't take the changes");
 
