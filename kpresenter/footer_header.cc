@@ -123,7 +123,7 @@ void KPFooterHeaderEditor::setupHeader()
     htool2->enableMoving( false );
 
     QStringList fontList;
-    KFontChooser::getFontList( fontList, false );
+    KFontChooser::getFontList( fontList, 0 );
 
     h_font = 99;
     QStringList lst;
@@ -247,7 +247,7 @@ void KPFooterHeaderEditor::setupFooter()
     ftool2->enableMoving( false );
 
     QStringList fontList;
-    KFontChooser::getFontList( fontList, false );
+    KFontChooser::getFontList( fontList, 0 );
 
     QStringList lst;
     QValueList<QString>::ConstIterator it = fontList.begin();
