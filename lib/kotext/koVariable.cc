@@ -635,7 +635,7 @@ KoDateVariable::KoDateVariable( KoTextDocument *textdoc, int subtype, KoVariable
 
 QString KoDateVariable::fieldCode()
 {
-    return i18n("Date");
+    return (m_subtype == VST_DATE_FIX)?i18n("Date(Fixed)"):i18n("Date");
 }
 
 void KoDateVariable::recalc()
@@ -798,7 +798,7 @@ KoTimeVariable::KoTimeVariable( KoTextDocument *textdoc, int subtype, KoVariable
 
 QString KoTimeVariable::fieldCode()
 {
-    return i18n("Date");
+    return (m_subtype == VST_TIME_FIX)?i18n("Time(Fixed)"):i18n("Time");
 }
 
 
@@ -1058,7 +1058,12 @@ KoPgNumVariable::KoPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariab
 
 QString KoPgNumVariable::fieldCode()
 {
-    return i18n("Page Num");
+    if ( m_subtype == VST_PGNUM_CURRENT )
+        return i18n("Page Current Num");
+    else if (  m_subtype == VST_PGNUM_TOTAL )
+        return i18n("Total Page Num");
+    else
+        return i18n("Current Section");
 }
 
 
