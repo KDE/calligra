@@ -126,7 +126,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 		SLOT(slotConfigure()), actionCollection(), "configure");
 
     // ------ Popup
-    new KAction(i18n("Node properties..."), "node_properties", 0, this,
+    new KAction(i18n("Node Properties"), "node_properties", 0, this,
 		SLOT(slotOpenNode()), actionCollection(), "node_properties");
 
 

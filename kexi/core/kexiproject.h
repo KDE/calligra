@@ -26,8 +26,8 @@
 #include <qptrlist.h>
 
 #include <koDocument.h>
-#include <kexiDB/kexidb.h>
-#include <kexiDB/kexidberror.h>
+#include "../kexiDB/kexidb.h"
+#include "../kexiDB/kexidberror.h"
 
 class KexiDoc;
 class DCOPObject;

@@ -8,23 +8,23 @@
       <Name>ADDRESS</Name>
       <Type>String</Type>
       <Parameter>
-        <Comment>Row Number</Comment>
+        <Comment>Row number</Comment>
         <Type>Int</Type>
       </Parameter>
       <Parameter>
-        <Comment>Column Number</Comment>
+        <Comment>Column number</Comment>
         <Type>Int</Type>
       </Parameter>
       <Parameter>
-        <Comment>Absolute Number (optional)</Comment>
+        <Comment>Absolute number (optional)</Comment>
         <Type>Int</Type>
       </Parameter>
       <Parameter>
-        <Comment>A1 Style (optional)</Comment>
+        <Comment>A1 style (optional)</Comment>
         <Type>Boolean</Type>
       </Parameter>
       <Parameter>
-        <Comment>Sheet Name</Comment>
+        <Comment>Sheet name</Comment>
         <Type>String</Type>
       </Parameter>
       <Help>

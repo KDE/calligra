@@ -102,7 +102,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     m_forward->setPixmap(BarIcon(QString::fromLatin1("forward")));
     QToolTip::add(m_forward, i18n("Forward"));
     row1->addWidget(m_forward, 0);
-    m_lang = new KPushButton(i18n("Change Language"), m_page);
+    m_lang = new KPushButton(i18n("Change Language..."), m_page);
     connect(m_lang, SIGNAL(clicked()), this, SLOT(slotChangeLanguage()));
     row1->addWidget(m_lang, 0);
 
@@ -402,7 +402,7 @@ void Thesaurus::findTermThesaurus(const QString &term)
 
     if( !QFile::exists(m_data_file) ) {
         KMessageBox::error(0, i18n("The thesaurus file '%1' was not found. "
-            "Please use 'Change Language' to select a thesaurus file.").
+            "Please use 'Change Language...' to select a thesaurus file.").
             arg(m_data_file));
         return;
     }

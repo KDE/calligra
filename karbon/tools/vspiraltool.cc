@@ -32,7 +32,7 @@
 
 
 VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n( "Insert spiral" ), Ok | Cancel ), m_part(part)
+	: KDialogBase( parent, name, true, i18n( "Insert Spiral" ), Ok | Cancel ), m_part(part)
 {
 	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 

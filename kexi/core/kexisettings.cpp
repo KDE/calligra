@@ -30,7 +30,7 @@ KexiSettings::KexiSettings(QWidget *parent)
  : KDialogBase(IconList, i18n("Kexi Settings"), KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, parent, 0, true)
 {
 	addPage(i18n("Printing"), i18n("Default Printer Settings"), ListIcon("print_printer"));
-	QFrame *lnf = addPage(i18n("Look & Feel"), i18n("Look and Feel"), ListIcon("looknfeel"));
+	QFrame *lnf = addPage(i18n("Look & Feel"), i18n("Look & Feel"), ListIcon("looknfeel"));
 	QCheckBox *showBGAltering = new QCheckBox(i18n("Use backgroundaltering for tables"), lnf);
 	showBGAltering->setChecked(true);
 	QGridLayout *gLnf = new QGridLayout(lnf);

@@ -39,7 +39,7 @@
 #include <visitors/vselectiondesc.h>
 
 VSelectOptionsWidget::VSelectOptionsWidget( KarbonPart *part )
-	: KDialogBase( 0L, "", true, i18n( "Insert star" ), Ok | Cancel ), m_part( part )
+	: KDialogBase( 0L, "", true, i18n( "Insert Star" ), Ok | Cancel ), m_part( part )
 {
 	QButtonGroup *group = new QButtonGroup( 1, Qt::Horizontal, i18n( "Selection Mode" ), this );
 
