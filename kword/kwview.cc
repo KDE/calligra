@@ -119,7 +119,6 @@
 
 #ifdef HAVE_LIBKSPELL2
 #include <kspell2/dialog.h>
-#include <kspell2/broker.h>
 #include <kspell2/defaultdictionary.h>
 #include "kospell.h"
 using namespace KSpell2;
@@ -2302,17 +2301,15 @@ void KWView::editPaste()
             insertFormula( data );
         }
     }
-    else if ( providesKWordText )
-    {
-        KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
-        if ( edit )
-            edit->paste();
-    }
     else // pasting frames
     {
         deselectAllFrames();
-        if ( providesKWord ) {
-            m_gui->canvasWidget()->pasteFrames();
+        if ( providesKWord || providesKWordText ) { // TODO merge those two [once everything works]
+            KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
+            if ( edit )
+                edit->paste();
+            // TODO port to OASIS, by merging into KWFrameSetEdit::paste
+            //m_gui->canvasWidget()->pasteFrames();
         }
         else { // providesImage, must be after providesKWord
             KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
@@ -3366,7 +3363,11 @@ void KWView::formatFont()
         return;
 
     delete m_fontDlg;
-    m_fontDlg = new KoFontDia( *textIface->currentFormat(), this, "" );
+    m_fontDlg = new KoFontDia( *textIface->currentFormat()
+#ifdef HAVE_LIBKSPELL2
+                               , m_broker
+#endif
+                               , this, "" );
 
     connect( m_fontDlg, SIGNAL( applyFont() ),
                  this, SLOT( slotApplyFont() ) );

@@ -47,7 +47,7 @@ public:
     void setFrameSetNumber( int number );
 
     static int decodeFrameSetNumber( QMimeSource *e );
-    static bool provides( QMimeSource* e , const char* mimeType, const char* acceptMimeType, QString &returnedTypeMime);
+    static bool provides( QMimeSource* e, const char* acceptMimeType, QCString &returnedTypeMime);
 
 protected:
     QCString kword;

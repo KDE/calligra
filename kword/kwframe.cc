@@ -2270,7 +2270,7 @@ void KWPictureFrameSet::loadOasis( const QDomElement& frame, const QDomElement& 
             {
                 KoStoreDevice dev(store);
                 if ( !m_picture.load( &dev, strExtension ) )
-                    kdWarning(30518) << "Cannot load picture: " << filename << " " << href << endl;
+                    kdWarning(32001) << "Cannot load picture: " << filename << " " << href << endl;
                 store->close();
             }
         }

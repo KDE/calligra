@@ -18,8 +18,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qregexp.h>
-
 #include "kwtextframeset.h"
 #include "kwtableframeset.h"
 #include "kwdoc.h"
@@ -43,10 +41,6 @@
 #include <koparagcounter.h>
 #include <koVariableDlgs.h>
 #include <koAutoFormat.h>
-#include <qclipboard.h>
-#include <qcursor.h> 
-#include <qprogressdialog.h>
-#include <qpopupmenu.h>
 #include <kotextobject.h>
 #include <kocommand.h>
 #include <kotextformatter.h>
@@ -54,6 +48,9 @@
 #include <koxmlns.h>
 #include <koxmlwriter.h>
 #include <kooasiscontext.h>
+#include <koOasisStore.h>
+#include <koStore.h>
+#include <koStoreDrag.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -61,13 +58,16 @@
 #include <krun.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kmultipledrag.h>
 #include <ktempfile.h>
 
 #include <qbuffer.h>
-#include <qfile.h>
 #include <qclipboard.h>
-#include <qprogressdialog.h>
+#include <qcursor.h>
+#include <qfile.h>
 #include <qpopupmenu.h>
+#include <qprogressdialog.h>
+#include <qregexp.h>
 
 #include <assert.h>
 
@@ -2474,14 +2474,12 @@ KCommand * KWTextFrameSet::setPageBreakingCommand( KoTextCursor * cursor, int pa
     return new KoTextCommand( m_textobj, /*cmd, */i18n("Change Paragraph Attribute") );
 }
 
-KCommand * KWTextFrameSet::pasteOasis( KoTextCursor * cursor, const QCString & data, bool removeSelected )
+KCommand * KWTextFrameSet::pasteOasis( KoTextCursor * cursor, const QByteArray & data, bool removeSelected )
 {
     if (protectContent() )
         return 0;
-    // Having data as a QCString instead of a QByteArray seems to fix the trailing 0 problem
-    // I tried using QDomDocument::setContent( QByteArray ) but that leads to parse error at the end
 
-    //kdDebug(32001) << "KWTextFrameSet::pasteOasis" << endl;
+    kdDebug(32001) << "KWTextFrameSet::pasteOasis" << endl;
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Paste") );
     if ( removeSelected && textDocument()->hasSelection( KoTextDocument::Standard ) )
         macroCmd->addCommand( m_textobj->removeSelectedTextCommand( cursor, KoTextDocument::Standard ) );
@@ -3030,14 +3028,16 @@ void KWTextFrameSetEdit::slotFrameDeleted( KWFrame *frm )
 void KWTextFrameSetEdit::paste()
 {
     QMimeSource *data = QApplication::clipboard()->data();
-    // Hmm, we could reuse the result of KWView::checkClipboard...
-    QString returnedTypeMime;
-    if ( KWTextDrag::provides( data , KWTextDrag::selectionMimeType(), KoTextObject::acceptSelectionMimeType(), returnedTypeMime) )
+    QCString returnedTypeMime;
+    // Check for any oasis mimetype (we also accept pasting e.g. kpresenter data)
+    if ( KWTextDrag::provides( data, KoTextObject::acceptSelectionMimeType(), returnedTypeMime) )
     {
-        QByteArray arr = data->encodedData( returnedTypeMime.latin1() );
+        kdDebug() << k_funcinfo << "returnedTypeMime=" << returnedTypeMime << endl;
+        QByteArray arr = data->encodedData( returnedTypeMime );
+        Q_ASSERT( !arr.isEmpty() );
         if ( arr.size() )
         {
-            KCommand *cmd =textFrameSet()->pasteOasis( cursor(), QCString( arr, arr.size()+1 ), true );
+            KCommand *cmd = textFrameSet()->pasteOasis( cursor(), arr, true );
             if ( cmd )
                 frameSet()->kWordDocument()->addCommand(cmd);
         }
@@ -3063,8 +3063,8 @@ void KWTextFrameSetEdit::cut()
 void KWTextFrameSetEdit::copy()
 {
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
-        KWTextDrag *kd = newDrag( 0L );
-        QApplication::clipboard()->setData( kd );
+        QDragObject *drag = newDrag( 0 );
+        QApplication::clipboard()->setData( drag );
     }
 }
 
@@ -3158,22 +3158,24 @@ void KWTextFrameSetEdit::startDrag()
 {
     textView()->dragStarted();
     m_canvas->dragStarted();
-    KWTextDrag *drag = newDrag( m_canvas->viewport() );
+    QDragObject *drag = newDrag( m_canvas->viewport() );
     if ( !frameSet()->kWordDocument()->isReadWrite() )
         drag->dragCopy();
     else {
         if ( drag->drag() && QDragObject::target() != m_canvas && QDragObject::target() != m_canvas->viewport() ) {
+#if 0
             //This is when dropping text _out_ of KWord. Since we have Move and Copy
             //options (Copy being accessed by pressing CTRL), both are possible.
             //But is that intuitive enough ? Doesn't the user expect a Copy in all cases ?
             //Losing the selection when dropping out of kword seems quite unexpected to me.
             //Undecided about this........
             textObject()->removeSelectedText( cursor() );
+#endif
         }
     }
 }
 
-KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent )
+QDragObject * KWTextFrameSetEdit::newDrag( QWidget * parent )
 {
     KWTextFrameSet* fs = textFrameSet();
 #if 0 // old koffice-1.3 format
@@ -3182,51 +3184,57 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent )
     domDoc.appendChild( elem );
     const QString plainText = fs->copyTextParag( elem, KoTextDocument::Standard );
     const QCString cstr = domDoc.toCString();
-#else // oasis format
-    KoGenStyles mainStyles;
-    KoSavingContext savingContext( mainStyles, KoSavingContext::Flat );
-
-    // Save user styles as KoGenStyle objects - useful when pasting into another document
-    KWDocument * doc = frameSet()->kWordDocument();
-    KoSavingContext::StyleNameMap map = doc->styleCollection()->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
-    savingContext.setStyleNameMap( map );
-
-    QBuffer buff;
-    buff.open( IO_WriteOnly );
-    KoXmlWriter* contentWriter = KoDocument::createOasisXmlWriter( &buff, "office:document-content" );
-    // not sure how to avoid copy/pasting that code...
-    KTempFile contentTmpFile;
-    contentTmpFile.setAutoDelete( true );
-    QFile* tmpFile = contentTmpFile.file();
-    KoXmlWriter contentTmpWriter( tmpFile, 1 );
-    contentTmpWriter.startElement( "office:body" );
-    contentTmpWriter.startElement( "office:text" );
-
-    const QString plainText = fs->textDocument()->copySelection( contentTmpWriter, savingContext, KoTextDocument::Standard );
-
-    contentTmpWriter.endElement(); // office:text
-    contentTmpWriter.endElement(); // office:body
-
-    // Done with writing out the contents to the tempfile, we can now write out the automatic styles
-    KWDocument::writeAutomaticStyles( *contentWriter, mainStyles );
-
-    // And now we can copy over the contents from the tempfile to the real one
-    tmpFile->close();
-    contentWriter->addCompleteElement( tmpFile );
-    contentTmpFile.close();
-    contentWriter->endElement(); // document-content
-    contentWriter->endDocument();
-    delete contentWriter;
-
-    const QByteArray data = buff.buffer();
-    const QCString cstr( data.data(), data.size() + 1 ); // null-terminate
-#endif
     KWTextDrag *kd = new KWTextDrag( parent );
     kd->setPlain( plainText );
     kd->setFrameSetNumber( fs->kWordDocument()->numberOfTextFrameSet( fs, false ) );
     kd->setKWord( cstr );
     kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << cstr << endl;
     return kd;
+#else // oasis format
+
+    // We'll create a store (ZIP format) in memory
+    QBuffer buffer;
+    KoStore* store = KoStore::createStore( &buffer, KoStore::Write, KWTextDrag::selectionMimeType() );
+    Q_ASSERT( store );
+    Q_ASSERT( !store->bad() );
+
+    KoGenStyles mainStyles;
+    KoSavingContext savingContext( mainStyles );
+
+    // Save user styles as KoGenStyle objects - useful when pasting into another document
+    KWDocument * doc = frameSet()->kWordDocument();
+    KoSavingContext::StyleNameMap map = doc->styleCollection()->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
+    savingContext.setStyleNameMap( map );
+
+    KoOasisStore oasisStore( store );
+
+    // TODO manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+    KoXmlWriter* contentWriter = oasisStore.contentWriter();
+    if ( !contentWriter ) {
+        delete store;
+        return 0;
+    }
+    KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
+    bodyWriter->startElement( "office:body" );
+    bodyWriter->startElement( "office:text" );
+
+    const QString plainText = fs->textDocument()->copySelection( *bodyWriter, savingContext, KoTextDocument::Standard );
+
+    bodyWriter->endElement(); // office:text
+    bodyWriter->endElement(); // office:body
+
+    KWDocument::writeAutomaticStyles( *contentWriter, mainStyles );
+
+    oasisStore.closeContentWriter();
+    delete store;
+
+    KMultipleDrag* multiDrag = new KMultipleDrag( parent );
+    multiDrag->addDragObject( new QTextDrag( plainText, 0 ) );
+    KoStoreDrag* storeDrag = new KoStoreDrag( KWTextDrag::selectionMimeType(), 0 );
+    storeDrag->setEncodedData( buffer.buffer() );
+    multiDrag->addDragObject( storeDrag );
+    return multiDrag;
+#endif
 }
 
 void KWTextFrameSetEdit::ensureCursorVisible()
@@ -3524,10 +3532,10 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
             textDocument()->removeSelection( KoTextDocument::Standard );
             textObject()->selectionChangedNotify();
         }
-        QString returnedTypeMime;
-        if ( KWTextDrag::provides( e , KWTextDrag::selectionMimeType(), KoTextObject::acceptSelectionMimeType(),returnedTypeMime ))
+        QCString returnedTypeMime;
+        if ( KWTextDrag::provides( e, KoTextObject::acceptSelectionMimeType(),returnedTypeMime ))
         {
-            QByteArray arr = e->encodedData( returnedTypeMime.latin1() );
+            QByteArray arr = e->encodedData( returnedTypeMime );
             if ( arr.size() )
             {
                 KCommand *cmd=textFrameSet()->pasteOasis( cursor(), QCString(arr, arr.size()+1 ), false );

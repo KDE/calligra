@@ -39,6 +39,12 @@ test -f $tmpoasisfile || exit 1
 
 dcopquit $appid
 
+rm -rf oasisregtest-oasis
+mkdir oasisregtest-oasis
+cd oasisregtest-oasis || exit 1
+unzip $tmpoasisfile || exit 1
+cd ..
+
 # Load resulting OASIS file, convert to old native format
 tmpnativefile=$PWD/oasisregtest-final.$oldextension
 appid=`dcopstart $appname $tmpoasisfile`
@@ -54,8 +60,6 @@ rm -rf oasisregtest-orig
 mkdir oasisregtest-orig
 rm -rf oasisregtest-final
 mkdir oasisregtest-final
-rm -rf oasisregtest-oasis
-mkdir oasisregtest-oasis
 cd oasisregtest-orig || exit 1
 unzip $origfile || exit 1
 cd ..
@@ -64,7 +68,6 @@ unzip $tmpnativefile || exit 1
 cd ..
 # Validate OASIS format
 cd oasisregtest-oasis || exit 1
-unzip $tmpoasisfile || exit 1
 if test "$checkoasis" = "1"; then
   if type -p oasislint >/dev/null 2>&1; then
     for f in content.xml styles.xml meta.xml settings.xml; do

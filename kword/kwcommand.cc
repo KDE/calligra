@@ -17,9 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kwcommand.h"
 #include "kwdoc.h"
 #include "kwtextframeset.h"
-#include "kwcommand.h"
 #include "kwtablestyle.h"
 #include "kwtabletemplate.h"
 #include "kwtableframeset.h"
@@ -28,17 +28,20 @@
 #include "kwtextparag.h"
 #include "kwanchor.h"
 #include "kwvariable.h"
-#include "kovariable.h"
+
 #include <kotextobject.h>
-#include <klocale.h>
-#include <kdebug.h>
 #include <koOasisStyles.h>
 #include <kooasiscontext.h>
 #include <koxmlns.h>
 #include <kodom.h>
+#include <koStore.h>
+#include <koOasisStore.h>
+
+#include <klocale.h>
+#include <kdebug.h>
+
 #include <qxml.h>
 #include <qbuffer.h>
-
 
 KWPasteTextCommand::KWPasteTextCommand( KoTextDocument *d, int parag, int idx,
                                 const QCString & data )
@@ -236,7 +239,7 @@ KoTextCursor * KWPasteTextCommand::unexecute( KoTextCursor *c )
 // ###### TODO: this command can probably move to kotext
 // (it would take as additional arguments: KoDocument *, KoVariableCollection& varColl, KoStyleCollection&)
 KWOasisPasteCommand::KWOasisPasteCommand( KoTextDocument *d, int parag, int idx,
-                                const QCString & data )
+                                const QByteArray& data )
     : KoTextDocCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data ), m_oldParagLayout( 0 )
 {
 }
@@ -246,7 +249,7 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
     KoTextParag *firstParag = doc->paragAt( m_parag );
     if ( !firstParag ) {
         qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
-        return 0;
+        return c;
     }
     //kdDebug() << "KWOasisPasteCommand::execute m_parag=" << m_parag << " m_idx=" << m_idx
     //          << " firstParag=" << firstParag << " " << firstParag->paragId() << endl;
@@ -254,44 +257,72 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
     cursor.setIndex( m_idx );
     c->setParag( firstParag );
     c->setIndex( m_idx );
+
     QBuffer buffer( m_data );
-    QXmlInputSource source( &buffer );
-    QXmlSimpleReader reader;
-    KoDocument::setupXmlReader( reader,true );
-    QDomDocument domDoc;
-    domDoc.setContent( &source, &reader );
-    QDomElement content = domDoc.documentElement();
+
+    // Old code before using a KoStore in memory:
+    //QXmlInputSource source( &buffer );
+
+    KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
+    if ( store->bad() || !store->hasFile( "content.xml" ) )
+    {
+        delete store;
+        kdError(32001) << "Invalid ZIP store in memory" << endl;
+        if ( !store->hasFile( "content.xml" ) )
+            kdError(32001) << "No content.xml file" << endl;
+        return c;
+    }
+    store->disallowNameExpansion();
+
+    KoOasisStore oasisStore( store );
+    QDomDocument contentDoc;
+    QString errorMessage;
+    bool ok = oasisStore.loadAndParse( "content.xml", contentDoc, errorMessage );
+    if ( !ok ) {
+        kdError(32001) << "Error parsing content.xml: " << errorMessage << endl;
+        return c;
+    }
+
+    KoOasisStyles oasisStyles;
+    QDomDocument stylesDoc;
+    (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, errorMessage );
+    // Load styles from style.xml
+    oasisStyles.createStyleMap( stylesDoc );
+    // Also load styles from content.xml
+    oasisStyles.createStyleMap( contentDoc );
+
+    QDomElement content = contentDoc.documentElement();
 
     QDomElement body ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( body.isNull() ) {
-        kdError(30518) << "No office:body found!" << endl;
-        return 0;
+        kdError(32001) << "No office:body found!" << endl;
+        return c;
     }
-    QDomElement tmpbody = KoDom::namedItemNS( body, KoXmlNS::office, "text" );
-    if ( tmpbody.isNull() )
-    {
-        //find a better method to find body element
-        tmpbody = KoDom::namedItemNS( body, KoXmlNS::office, "presentation" );
-        if ( tmpbody.isNull() ) {
-            kdError(30518) << "No office:text found!" << endl;
-            return 0;
-        }
+    // We then want to use whichever element is the child of <office:body>,
+    // whether that's <office:text> or <office:presentation> or whatever.
+    QDomElement iter, realBody;
+    forEachElement( iter, body ) {
+        realBody = iter;
+    }
+    if ( realBody.isNull() ) {
+        kdError(32001) << "No element found inside office:body!" << endl;
+        return c;
     }
 
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
     KWTextFrameSet * textFs = textdoc->textFrameSet();
     KWDocument * doc = textFs->kWordDocument();
 
-    KoOasisStyles oasisStyles;
-    oasisStyles.createStyleMap( domDoc );
-    KoOasisContext context( doc, *doc->getVariableCollection(), oasisStyles, 0 /*TODO store*/ );
-    *c = textFs->textObject()->pasteOasisText( tmpbody, context, cursor, doc->styleCollection() );
+    KoOasisContext context( doc, *doc->getVariableCollection(), oasisStyles, store );
+    *c = textFs->textObject()->pasteOasisText( realBody, context, cursor, doc->styleCollection() );
 
     textFs->textObject()->setNeedSpellCheck( true );
     // In case loadFormatting queued any image request
 
     //kdDebug() << "KWOasisPasteCommand::execute calling doc->pasteFrames" << endl;
     doc->completePasting();
+
+    delete store;
 
     m_lastParag = c->parag()->paragId();
     m_lastIndex = c->index();

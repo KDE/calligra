@@ -82,13 +82,13 @@ class KWOasisPasteCommand : public KoTextDocCommand
 {
 public:
     KWOasisPasteCommand( KoTextDocument *d, int parag, int idx,
-                             const QCString & data );
+                             const QByteArray & data );
     KoTextCursor *execute( KoTextCursor *c );
     KoTextCursor *unexecute( KoTextCursor *c );
 protected:
     int m_parag;
     int m_idx;
-    QCString m_data;
+    QByteArray m_data;
     // filled in by execute(), for unexecute()
     int m_lastParag;
     int m_lastIndex;

@@ -60,6 +60,7 @@
 #include <koStore.h>
 #include <koStoreDevice.h>
 #include <koxmlwriter.h>
+#include <koOasisStore.h>
 #include <koOasisSettings.h>
 #include <koxmlns.h>
 #include <kodom.h>
@@ -75,7 +76,6 @@
 
 #include <unistd.h>
 #include <math.h>
-#include <ktempfile.h>
 
 //#define DEBUG_PAGES
 //#define DEBUG_SPEED
@@ -1044,14 +1044,14 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     QDomElement body ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( body.isNull() )
     {
-        kdError(30518) << "No office:body found!" << endl;
+        kdError(32001) << "No office:body found!" << endl;
         setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
         return false;
     }
     body = KoDom::namedItemNS( body, KoXmlNS::office, "text" );
     if ( body.isNull() )
     {
-        kdError(30518) << "No office:text found!" << endl;
+        kdError(32001) << "No office:text found!" << endl;
         // ## TODO: print the actual tag that was found, it might help finding the right app to use :)
         setErrorMessage( i18n( "Invalid OASIS document. No office:text tag found." ) );
         return false;
@@ -1255,7 +1255,7 @@ static QString headerTypeToFramesetName( const QString& tagName, bool hasEvenOdd
         return hasEvenOdd ? i18n("Odd Pages Footer") : i18n( "Footer" );
     if ( tagName == "style:footer-left" )
         return i18n("Even Pages Footer");
-    kdWarning(30518) << "Unknown tag in headerTypeToFramesetName: " << tagName << endl;
+    kdWarning(32001) << "Unknown tag in headerTypeToFramesetName: " << tagName << endl;
     // ######
     //return i18n("First Page Header");
     //return i18n("First Page Footer");
@@ -2606,19 +2606,19 @@ void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroComm
 
 bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
-    if ( !store->open( "content.xml" ) )
-        return false;
-
     m_pictureCollection->assignUniqueIds();
 
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
-    KoStoreDevice contentDev( store );
-    KoXmlWriter* contentWriter = createOasisXmlWriter( &contentDev, "office:document-content" );
+    KoOasisStore oasisStore( store );
+
+    KoXmlWriter* contentWriter = oasisStore.contentWriter();
+    if ( !contentWriter )
+        return false;
 
     m_varColl->variableSetting()->setModificationDate(QDateTime::currentDateTime());
     recalcVariables( VT_DATE );
     recalcVariables( VT_TIME ); // for "current time"
-    m_syntaxVersion = CURRENT_SYNTAX_VERSION; // todo clean this up
+    m_syntaxVersion = CURRENT_SYNTAX_VERSION; // ### clean this up once we remove the old format
 
     KoGenStyles mainStyles;
     KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
@@ -2644,33 +2644,22 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         }
     }
 
-    KTempFile contentTmpFile;
-    contentTmpFile.setAutoDelete( true );
-    QFile* tmpFile = contentTmpFile.file();
-    KoXmlWriter contentTmpWriter( tmpFile, 1 );
-    contentTmpWriter.startElement( "office:body" );
-    contentTmpWriter.startElement( "office:text" );
+    KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
+    bodyWriter->startElement( "office:body" );
+    bodyWriter->startElement( "office:text" );
 
-    // save the content into contentTmpWriter!
-    saveOasisBody( contentTmpWriter, savingContext );
+    // save the body into bodyWriter
+    saveOasisBody( *bodyWriter, savingContext );
     // TODO save embedded objects
 
-    contentTmpWriter.endElement(); // office:text
-    contentTmpWriter.endElement(); // office:body
+    bodyWriter->endElement(); // office:text
+    bodyWriter->endElement(); // office:body
 
-    // Done with writing out the contents to the tempfile, we can now write out the automatic styles
     writeAutomaticStyles( *contentWriter, mainStyles );
 
-    // And now we can copy over the contents from the tempfile to the real one
-    tmpFile->close();
-    contentWriter->addCompleteElement( tmpFile );
-    contentTmpFile.close();
-    contentWriter->endElement(); // document-content
-    contentWriter->endDocument();
-    delete contentWriter;
+    oasisStore.closeContentWriter();
 
-    if ( !store->close() ) // done with content.xml
-        return false;
+    // Done with content.xml, now prepare things for styles.xml
 
     KoGenStyle pageLayout = m_pageLayout.saveOasis();
     pageLayout.addAttribute( "style:page-usage", "all" ); // needed?
@@ -2743,6 +2732,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if(!store->open("settings.xml"))
         return false;
 
+    KoStoreDevice contentDev( store );
     KoXmlWriter& settingsWriter = *createOasisXmlWriter(&contentDev, "office:document-settings");
     settingsWriter.startElement("office:settings");
     settingsWriter.startElement("config:config-item-set");

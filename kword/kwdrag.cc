@@ -48,23 +48,23 @@ QByteArray KWTextDrag::encodedData( const char *mime ) const
         return QTextDrag::encodedData(mime);
 }
 
-bool KWTextDrag::provides( QMimeSource* e , const char* mimeType, const char* acceptMimeType, QString &returnedTypeMime)
+bool KWTextDrag::provides( QMimeSource* e, const char* acceptMimeType, QCString &returnedTypeMime)
 {
     const char* fmt;
     for (int i=0; (fmt = e->format(i)); i++) {
-	if ( !qstricmp(mimeType,fmt) || QString( fmt ).startsWith( acceptMimeType ))
+	if ( QString( fmt ).startsWith( acceptMimeType ) )
         {
             returnedTypeMime = fmt;
-	    return TRUE;
+	    return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 bool KWTextDrag::canDecode( QMimeSource* e )
 {
-    QString tmp;
-    if ( KWTextDrag::provides( e, selectionMimeType(), KoTextObject::acceptSelectionMimeType(),tmp ) )
+    QCString tmp;
+    if ( KWTextDrag::provides( e, KoTextObject::acceptSelectionMimeType(), tmp ) )
        return true;
     return QTextDrag::canDecode(e);
 }

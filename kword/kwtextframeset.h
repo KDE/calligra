@@ -29,7 +29,6 @@
 
 class KoGenStyles;
 class KWStyle;
-class KWTextDrag;
 class KWDocument;
 class DCOPObject;
 #ifndef KWTextFormat
@@ -184,7 +183,7 @@ public:
 
     void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
 
-    KCommand* pasteOasis( KoTextCursor * cursor, const QCString & data, bool removeSelected );
+    KCommand* pasteOasis( KoTextCursor * cursor, const QByteArray & data, bool removeSelected );
     void insertTOC( KoTextCursor * cursor );
     KNamedCommand* insertFrameBreakCommand( KoTextCursor *cursor );
     void insertFrameBreak( KoTextCursor * cursor );
@@ -448,9 +447,9 @@ protected:
     virtual void showToolTipBox(KoTextParag *parag, int index, QWidget *widget, const QPoint &pos);
     virtual void textIncreaseIndent();
     virtual bool textDecreaseIndent();
-    
+
     virtual void startDrag();
-    KWTextDrag * newDrag( QWidget * parent );
+    QDragObject * newDrag( QWidget * parent );
 
 private slots:
     void slotFrameDeleted(KWFrame *);
