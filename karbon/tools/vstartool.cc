@@ -58,6 +58,11 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const
 	m_edges = new KIntSpinBox( this );
 	m_edges->setMinValue( 3 );
 
+	new QLabel( i18n( "Inner angle:" ), this );
+	m_innerAngle = new KIntSpinBox( this );
+	m_innerAngle->setMinValue( 0 );
+	m_innerAngle->setMaxValue( 360 );
+
 	setInsideMargin( 4 );
 	setInsideSpacing( 2 );
 }
@@ -111,11 +116,17 @@ VStarOptionsWidget::type() const
 	return m_type->currentItem();
 }
 
+uint
+VStarOptionsWidget::innerAngle() const
+{
+	return m_innerAngle->value();
+}
+
 void
 VStarOptionsWidget::typeChanged( int type )
 {
-	kdDebug() << "type : " << type << endl;
 	m_innerR->setEnabled( type == VStar::star_outline || type == VStar::framed_star );
+	m_innerAngle->setEnabled( type == VStar::star_outline || type == VStar::framed_star );
 }
 
 VStarTool::VStarTool( KarbonView* view )
@@ -167,7 +178,8 @@ VStarTool::shape( bool interactive ) const
 				m_p,
 				KoUnit::ptFromUnit( m_optionsWidget->outerRadius(), view()->part()->unit() ),
 				KoUnit::ptFromUnit( m_optionsWidget->innerRadius(), view()->part()->unit() ),
-				m_optionsWidget->edges(), 0.0, (VStar::VStarType)m_optionsWidget->type() );
+				m_optionsWidget->edges(), 0.0,
+				m_optionsWidget->innerAngle(), (VStar::VStarType)m_optionsWidget->type() );
 	}
 	else
 		return
@@ -178,7 +190,7 @@ VStarTool::shape( bool interactive ) const
 				m_optionsWidget->innerRadius() * m_d1 /
 				m_optionsWidget->outerRadius(),
 				m_optionsWidget->edges(),
-				m_d2, (VStar::VStarType)m_optionsWidget->type() );
+				m_d2, m_optionsWidget->innerAngle(), (VStar::VStarType)m_optionsWidget->type() );
 }
 
 #include "vstartool.moc"

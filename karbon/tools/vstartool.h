@@ -45,6 +45,7 @@ public:
 	double innerRadius() const;
 	double outerRadius() const;
 	uint type() const;
+	uint innerAngle() const;
 	void setEdges( int );
 	void setInnerRadius( double );
 	void setOuterRadius( double );
@@ -56,6 +57,7 @@ private:
 	KoUnitDoubleSpinBox	*m_innerR;
 	KoUnitDoubleSpinBox	*m_outerR;
 	KIntSpinBox			*m_edges;
+	KIntSpinBox			*m_innerAngle;
 	KComboBox			*m_type;
 	KarbonPart			*m_part;
 	QLabel				*m_innerRLabel;

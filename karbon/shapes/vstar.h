@@ -36,7 +36,7 @@ public:
 	};
 	VStar( VObject* parent,
 		const KoPoint& center, double outerRadius, double innerRadius,
-		uint edges, double angle = 0.0, VStarType type = star_outline );
+		uint edges, double angle = 0.0, uint innerAngle = 0, VStarType type = star_outline );
 
 	virtual QString name() const;
 

@@ -30,7 +30,7 @@
 
 VStar::VStar( VObject* parent,
 		const KoPoint& center, double outerRadius, double innerRadius,
-		uint edges, double angle, VStarType type )
+		uint edges, double angle, uint innerAngle, VStarType type )
 	: VComposite( parent ), m_type( type )
 {
 	// A star should have at least 3 edges:
@@ -59,9 +59,9 @@ VStar::VStar( VObject* parent,
 		if( m_type != polygon )
 		{
 			p.setX( innerRadius *
-				cos( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) );
+				cos( angle + VGlobal::twopi / 360 * innerAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) );
 			p.setY( innerRadius *
-				sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) );
+				sin( angle + VGlobal::twopi / 360 * innerAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 ) ) );
 			lineTo( p );
 		}
 
