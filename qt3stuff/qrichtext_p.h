@@ -805,6 +805,8 @@ public:
     bool verticalBreak() const { return pages; }
     void setVerticalBreak( bool b ) { pages = b; }
 
+    void setWithoutDoubleBuffer( bool b ) { withoutDoubleBuffer = b; }
+
     void setUseFormatCollection( bool b ) { useFC = b; }
     bool useFormatCollection() const { return useFC; }
 
