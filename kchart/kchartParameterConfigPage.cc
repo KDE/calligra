@@ -1,7 +1,5 @@
 /*
- * $Id$
- *
- * Copyright 2000 by Laurent Montel, released under Artistic License.
+ * Copyright 2001 by Laurent Montel, released under Artistic License.
  */
 
 #include "kchartParameterConfigPage.h"
@@ -225,8 +223,10 @@ void KChartParameterConfigPage::init()
     //     else
     shelf->setEnabled(false);
 
+
+    title->setText(_params->header1Text());
+
     // PENDING(kalle) Adapt this
-    //     title->setText(_params->title);
     //     xtitle->setText(_params->xtitle);
     //     ytitle->setText(_params->ytitle);
     //     int len=_params->ylabel_fmt.length();
@@ -277,11 +277,11 @@ void KChartParameterConfigPage::apply()
     //     	_params->ytitle2=ytitle2->text();
     //     	}
 
+    _params->setHeader1Text(title->text());
 
     // PENDING(kalle) Adapt this
     //     if(grid->isChecked())
     //     	_params->shelf=shelf->isChecked();
-    //     _params->title=title->text();
     //     _params->xtitle=xtitle->text();
     //     _params->ytitle=ytitle->text();
     //     if(!ylabel_fmt->text().isEmpty())
