@@ -108,27 +108,13 @@ DCOPObject* KPrPage::dcopObject()
 
 bool KPrPage::saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj )
 {
-    QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it )
-    {
-        it.current()->saveOasis( xmlWriter, context, indexObj );
-    }
+    saveOasisObject( store, xmlWriter, context, indexObj );
+
     return true;
 }
 
-bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj )
+void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj )
 {
-    //store use to save picture and co
-    xmlWriter.startElement( "draw:page" );
-    xmlWriter.addAttribute( "draw:name", m_manualTitle ); //we must store a name
-    xmlWriter.addAttribute( "draw:id", posPage );
-    xmlWriter.addAttribute( "draw:master-page-name", "Standard"); //by default name of page is Standard
-
-    QString styleName = kpbackground->saveOasisBackgroundPageStyle( store, xmlWriter, context.mainStyles() );
-    kdDebug()<<" styleName :"<<styleName<<endl;
-    if ( !styleName.isEmpty() )
-        xmlWriter.addAttribute( "draw:style-name", styleName );
-
 
     KTempFile animationTmpFile;
     animationTmpFile.setAutoDelete( true );
@@ -200,6 +186,22 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     else
         tmpFile->close();
     animationTmpFile.close();
+}
+
+bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj )
+{
+    //store use to save picture and co
+    xmlWriter.startElement( "draw:page" );
+    xmlWriter.addAttribute( "draw:name", m_manualTitle ); //we must store a name
+    xmlWriter.addAttribute( "draw:id", posPage );
+    xmlWriter.addAttribute( "draw:master-page-name", "Standard"); //by default name of page is Standard
+
+    QString styleName = kpbackground->saveOasisBackgroundPageStyle( store, xmlWriter, context.mainStyles() );
+    kdDebug()<<" styleName :"<<styleName<<endl;
+    if ( !styleName.isEmpty() )
+        xmlWriter.addAttribute( "draw:style-name", styleName );
+
+    saveOasisObject( store, xmlWriter, context,  indexObj );
 
     saveOasisNote( xmlWriter );
     xmlWriter.endElement();
