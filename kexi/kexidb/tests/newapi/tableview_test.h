@@ -17,7 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <tableview/kexitableview.h>
+//#include <tableview/kexitableview.h>
+#include <widget/kexidatatableview.h>
+#include <kexidb/cursor.h>
 
 int tableViewTest()
 {
@@ -33,7 +35,17 @@ int tableViewTest()
 		return 1;
 	}
 
-	KexiTableView *tv = new KexiTableView(0, "tv", /*KexiTableList *contents=*/0);
+//	KexiTableView *tv = new KexiTableView(0, "tv", /*KexiTableList *contents=*/0);
+
+	KexiDB::Cursor *cursor = conn->executeQuery( "select * from persons", KexiDB::Cursor::Buffered );
+	if (!cursor) {
+		conn->debugError();
+		kdDebug() << "tableViewTest(): !cursor" <<endl;
+		return 1;
+	}
+
+	KexiDataTableView *tv = new KexiDataTableView(0, "tv", cursor);
+
 	app->setMainWidget(tv);
 
 	tv->show();

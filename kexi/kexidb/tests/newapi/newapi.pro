@@ -13,7 +13,8 @@ win32 {
   $$QKWLIB/kdewin32$$KDELIB_SUFFIX $$QKWLIB/kofficecore$$KDELIB_SUFFIX $$QKWLIB/kfile$$KDELIB_SUFFIX \
   $$QKWLIB/kparts$$KDELIB_SUFFIX \
   $$QKWLIB/kexicore$$KEXILIB_SUFFIX \
-  $$QKWLIB/kexidatatable$$KEXILIB_SUFFIX
+  $$QKWLIB/kexidatatable$$KEXILIB_SUFFIX \
+  $$QKWLIB/kexiextendedwidgets$$KEXILIB_SUFFIX
 
 QMAKE_CXXFLAGS += $(KEXI_OPTIONS)
 
