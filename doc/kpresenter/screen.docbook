@@ -4,7 +4,8 @@
 <para>Here is the default &kpresenter; Screen Layout.</para>
 
 <para>At the top there is the menu bar.  All &kpresenter; functions
-are available from the menus, which are described in detail in <xref linkend="menu-items" /></para>
+are available from the menus, which are described in detail in <xref linkend="menu-items" />.
+</para>
 
 <para>Below the menu bar are the toolbars.  There are several
 toolbars.  You may hide and show toolbars as you prefer.  The toolbars
@@ -18,7 +19,7 @@ thumbnails of each slide, and allows you to drag and drop to change
 the order.  The <guilabel>Outline</guilabel> pane provides a
 hierarchal tree of each slide, and also the objects inside the slides.
 As well as overview, this allows you to easily select objects which
-may be covered by others, or otherwise difficult to grab directly on
+may be covered by others, or are otherwise difficult to grab directly on
 the slide.</para>
 
 </chapter>

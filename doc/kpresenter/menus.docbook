@@ -257,7 +257,7 @@ one of several common formats.</para>
 <listitem>
 <para>Export the currently open presentation to one of several common
 formats for use in another application, or for exchange with someone
-who does not have access to kpresenter.</para></listitem>
+who does not have access to &kpresenter;.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -608,8 +608,9 @@ will be asked to confirm this action.
 
 <varlistentry>
 <term><menuchoice>
-<guimenu>Edit</guimenu><guimenuitem>Duplicate
-Object...</guimenuitem></menuchoice></term>
+<guimenu>Edit</guimenu>
+<guimenuitem>Duplicate Object...</guimenuitem>
+</menuchoice></term>
 <listitem><para>
 Create a duplicate of the currently selected object.  A dialog will
 display allowing you to set some options for the duplicate, &eg; if it
@@ -737,11 +738,11 @@ overview of all the slides in your presentation.
 <term><menuchoice><guimenu>View</guimenu>
 <guimenuitem>Formatting Characters</guimenuitem>
 </menuchoice></term>
-<listitem><para>Show a visual representation of <quote>non printing
+<listitem><para>Show a visual representation of <quote>non-printing
 characters</quote>, such as tabs and paragraph markers.  This can be
 a useful aid to precisely positioning text.</para>
-<para>This item is a toggle, if enabled, formatting characters are
-visible, if disabled, they are not.</para>
+<para>This item can be toggled. If enabled, formatting characters are
+visible; if disabled, they are not.</para>
 </listitem>
 </varlistentry>
 
@@ -751,7 +752,7 @@ visible, if disabled, they are not.</para>
 </menuchoice></term>
 <listitem><para>When working in &kpresenter; you can drag a <quote>help
 line</quote> from either the horizontal or vertical ruler onto your
-document.  This guide line will not print or display in the finished
+document.  This guide-line will not print or display in the finished
 presentation, it is simply to help you align objects on screen.  If
 this item is enabled, these help lines will be visible.  If this is
 disabled, they will not be visible.</para>
@@ -803,7 +804,7 @@ Snap to Grid</guimenuitem></menuchoice>
 slide the top left corner of the object will <quote>snap</quote> or
 move, to the nearest grid point.</para>
 <para>This does reduce your freedom to freely position objects on the
-slide, however it also helps things to line up precisely.  It is
+slide, however it also helps to line up objects precisely.  It is
 easily disabled or enabled with this menu entry, allowing you the best
 of both worlds.</para>
 </listitem>
@@ -868,7 +869,7 @@ address.</para></listitem>
 <term><menuchoice><guimenu>Insert</guimenu>
 <guimenuitem>Comment...</guimenuitem></menuchoice></term>
 <listitem><para>Enter a small note that does not display during the
-real presentation.  You might use this to comment on a colleagues
+real presentation.  You might use this to comment on a colleague's
 text, or to leave a note for yourself about something to do
 later.</para>
 <!-- FIXME: How do you display these again? -->
@@ -915,7 +916,7 @@ you wish the text to appear.</para>
 <listitem><para>FIXME: This name is a little awkward, I didn't know
 what it was.  Perhaps 'stencil' might be a better term?  Shape would
 work, but it's already used.</para>
-<para>Insert a pre-drawn shape that, such as an arrow or a connecting
+<para>Insert a pre-drawn shape, such as an arrow or a connecting
 line.</para>
 <para>Click and drag to draw a box stretching from the top left to the
 lower right, where you wish the autoform to display.  It will be
@@ -1090,9 +1091,9 @@ press the &Esc; key to cancel, or use
 <listitem><para>This is where you can manipulate the stacking order of
 objects on the slide.</para>
 
-<para>An object that is on top, will cover, either partially or fully
-depending on it's size, all other objects beneath it. Meanwhile an
-object on the bottom of the sack may not be visible at all, as it is
+<para>An object that is on top will cover, either partially or fully
+depending on its size, all other objects beneath it. Meanwhile an
+object on the bottom of the stack may not be visible at all, as it is
 covered up by other objects.  An object in the middle may be partially
 covered by other objects, while partially covering yet more objects
 itself.</para>
@@ -1127,11 +1128,11 @@ vertically or horizontally.</para>
 </menuchoice>
 </term>
 <listitem>
-<para>This put as colored copy of either text or a drawn object behind
+<para>This puts a colored copy of either text or a drawn object behind
 it. You can make nice <quote>dropped shadows</quote> for logos with
 this tool. To work with text, ensure that you have the text
 box selected (you will see the six small black boxes around the
-outline) You choose the color, select which way the shadow is going to
+outline.) You choose the color, select which way the shadow is going to
 fall and select a distance. For text it looks nice if you set the
 distance to two or three.  Click <guibutton>Apply</guibutton> to see
 the result.</para>
@@ -1224,7 +1225,7 @@ choosing a color/gradient.</para>
 </menuchoice></term>
 <listitem><para>
 The properties dialog for an object allows you to maniplate it in a
-very detailed manner</para></listitem>
+very detailed manner.</para></listitem>
 </varlistentry>
 </variablelist>
 
@@ -1416,7 +1417,7 @@ selected text.</para></listitem>
 <guimenuitem>Create Style From Selection</guimenuitem>
 </menuchoice></term>
 <listitem><para>Copy the properties of the currently selected text and
-save them as a style that you may apply to other of text.</para>
+save them as a style that you may apply to other text.</para>
 </listitem></varlistentry>
 
 <varlistentry>
@@ -1730,7 +1731,7 @@ Go immediately to the final slide in the slide show.
 <guisubmenu>Toolbars</guisubmenu>
 </menuchoice></term>
 <listitem><para>
-The items in this submenu are toggles, that is, you can both enable and
+The items in this submenu can be toggled, that is, you can both enable and
 disable the display of specific toolbars here.
 </para></listitem>
 </varlistentry>
