@@ -3690,11 +3690,16 @@ void KSpreadCell::checkValue()
 
 void KSpreadCell::checkNumberFormat()
 {
+    if(m_eFormatNumber==Number)
+    {
     if ( m_bValue )
+        {
         if ( m_dValue > 1e+10 )
             setFormatNumber( Scientific );
         else
             setFormatNumber( Number );
+        }
+    }
 }
 
 void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row )
