@@ -66,13 +66,11 @@
 #include "vtool.h"
 #include "vtoolfactory.h"
 #include "vgroup.h"
-#include "vpath.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
 #include "vstrokefillpreview.h"
 #include "vstatebutton.h"
 #include "vcanvas.h"
-#include "vlayer.h"
 #include "vtoolbox.h"
 
 // Only for debugging.
@@ -309,12 +307,9 @@ KarbonView::print( KPrinter &printer )
 	// print the doc using QPainter at zoom level 1
 	// TODO : better use eps export?
 	// TODO : use real page layout stuff
-	QPtrListIterator<VLayer> i = part()->document().layers();
 	KoRect rect( 0, 0, width(), height() );
 
-	for( ; i.current(); ++i )
-		//if( i.current()->visible() )
-		i.current()->draw( &p, &rect );
+	part()->document().draw( &p, &rect );
 
 	p.end();
 }
