@@ -448,3 +448,10 @@ Reggie, 3.12.1998:
 - Fix with following parag layouts, format updating, etc.
 - Fix with placing cursor with the mouse
 - If multiple underlined words are written the spaces between are underlined too now
+
+Reggie, 4.12.1998:
+------------------
+- When the width of a word is larger than the width of the frame, the kernel
+  stays cool and doesn't get confused anymore :-)
+- When the frame width < rastX (e.g. because other frame(s) are overlapping so much and the user
+  enabled 'runaround') the next line is drawn a bit more down (where we have enough space again)

@@ -827,8 +827,17 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 
     lineStartFormat = *this;
     
+    if (static_cast<int>(ptWidth) < document->getRastX())
+      {
+	while (static_cast<int>(ptWidth) < document->getRastX())
+	  makeNextLineLayout(_painter);
+	return makeLineLayout(_painter);
+      }
+	
+    bool _broken = false;
+
     // Loop until we reach the end of line
-    while (ptPos < xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right && 
+    while ((ptPos < xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right || !_broken) && 
 	   textPos < parag->getTextLen())
     {
 	char c = text[ textPos ].c;
@@ -846,13 +855,14 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	// if we will not fit into the line anymore, let us leave the loop
 	if (c != 0)
 	  {
-	    if (ptPos + displayFont->getPTWidth(c) >= xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right)
+	    if (ptPos + displayFont->getPTWidth(c) >= 
+		xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right && _broken)
 	      break;
 	  }
 	else
 	  {
 	    if (((KWCharImage*)text[textPos].attrib)->getImage()->width() + ptPos >= 
-		xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right)
+		xShift + document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() - indent - _right && _broken)
 	      break;
 	  }
 
@@ -874,6 +884,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	    spaces = tmpSpaces;
 	    // ... or one more space if we dont break the line here.
 	    tmpSpaces++;
+	    _broken = true;
 	}
 
 	// Do we have some format definition here ?
