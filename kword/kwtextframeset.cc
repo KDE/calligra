@@ -40,7 +40,7 @@
 #include <qpopupmenu.h>
 #include <kapplication.h>
 #include <klocale.h>
-#include <koDataTool.h>
+#include <kaction.h>
 #include <kotextobject.h>
 #include <kocommand.h>
 #include <kotextformatter.h>
