@@ -790,7 +790,11 @@ bool KoMainWindow::saveDocument( bool saveas )
 
             // this file exists and we are not just clicking "Save As" to change filter options
             // => ask for confirmation
+#if KDE_IS_VERSION(3,1,90)
             if ( KIO::NetAccess::exists( newURL, false /*will write*/, this ) && !justChangingFilterOptions )
+#else
+            if ( KIO::NetAccess::exists( newURL, this ) && !justChangingFilterOptions )
+#endif
             {
                 bOk = KMessageBox::questionYesNo( this,
                                                   i18n("A document with this name already exists.\n"\
