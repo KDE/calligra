@@ -33,6 +33,7 @@
 /*******************************************/
 void PictureFormat::analysePictureFormat(const QDomNode balise)
 {
+// ### TODO/FIXME: that is the old format, KWord 1.2 uses <PICTURE> and <KEY>
 	/* MARKUPS FORMAT id="1" pos="0" len="17">
 	 * <IMAGE>
 	 * 	<FILENAME value="/my/pictures/directory/filename.png">
@@ -44,7 +45,7 @@ void PictureFormat::analysePictureFormat(const QDomNode balise)
 	kdDebug() << "ANALYSE A PICTURE ZONE" << endl;
 
 	/* Children Markups Analyse */
-	analyseImage(getChild(balise, "IMAGE"));
+	analyseImage(getChild(balise, "PICTURE"));
 	kdDebug() << "END OF A PICTURE ZONE" << endl;
 }
 

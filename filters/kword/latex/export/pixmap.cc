@@ -67,9 +67,9 @@ void Pixmap::analyse(const QDomNode balise)
 		{
 			analyseParamFrame(balise);
 		}
-		else if(getChildName(balise, index).compare("IMAGE")== 0)
+		else if(getChildName(balise, index).compare("PICTURE")== 0)
 		{
-			getPixmap(getChild(balise, "IMAGE"));
+			getPixmap(getChild(balise, "PICTURE"));
 		}
 
 	}

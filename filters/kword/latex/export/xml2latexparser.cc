@@ -66,8 +66,8 @@ void Xml2LatexParser::analyse()
 	kdDebug() <<"HEADER -> END FRAMESETS" << endl;
 	//kdDebug() <<"HEADER -> STYLES" << endl;
 	//
-	kdDebug() <<"HEADER -> PIXMAPS" << endl;
-	_document.analysePixmaps(getChild(balise, "PIXMAPS"));
+	kdDebug() <<"HEADER -> PICTURES" << endl;
+	_document.analysePixmaps(getChild(balise, "PICTURES"));
 	//kdDebug() <<"HEADER -> SERIALL" << endl;
 	kdDebug() << "END ANALYSE" << endl;
 }
