@@ -255,32 +255,26 @@ EpsExport::visitVSubpath( VSubpath& path )
 
 	for( ; itr.current(); ++itr )
 	{
-		switch( itr.current()->type() )
-		{
-			case VSegment::curve:
-				*m_stream <<
-					itr.current()->point( 0 ).x() << " " <<
-					itr.current()->point( 0 ).y() << " " <<
-					itr.current()->point( 1 ).x() << " " <<
-					itr.current()->point( 1 ).y() << " " <<
-					itr.current()->knot().x() << " " <<
-					itr.current()->knot().y() << " " <<
-					l1_curveto << "\n";
-			break;
-			case VSegment::line:
-				*m_stream <<
-					itr.current()->knot().x() << " " <<
-					itr.current()->knot().y() << " " <<
-					l1_lineto << "\n";
-			break;
-			case VSegment::begin:
-				*m_stream <<
-					itr.current()->knot().x() << " " <<
-					itr.current()->knot().y() << " " <<
-					l1_moveto << "\n";
-			break;
-			default:
-			break;
+		VSegment *segment = itr.current();
+		if ( segment->isCurve() ) {
+		    *m_stream <<
+			itr.current()->point( 0 ).x() << " " <<
+			itr.current()->point( 0 ).y() << " " <<
+			itr.current()->point( 1 ).x() << " " <<
+			itr.current()->point( 1 ).y() << " " <<
+			itr.current()->knot().x() << " " <<
+			itr.current()->knot().y() << " " <<
+			l1_curveto << "\n";
+		} else if ( segment->isLine() ) {
+		    *m_stream <<
+			itr.current()->knot().x() << " " <<
+			itr.current()->knot().y() << " " <<
+			l1_lineto << "\n";
+		} else if ( segment->isBegin() ) {
+		    *m_stream <<
+			itr.current()->knot().x() << " " <<
+			itr.current()->knot().y() << " " <<
+			l1_moveto << "\n";
 		}
 	}
 
