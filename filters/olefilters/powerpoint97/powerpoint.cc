@@ -44,7 +44,7 @@ void Powerpoint::invokeHandler(
     typedef struct
     {
         const char *name;
-        unsigned short opcode;
+        Q_UINT16 opcode;
         method handler;
     } opcodeEntry;
 
@@ -252,7 +252,32 @@ void Powerpoint::invokeHandler(
     {
         kdDebug(s_area) << "invokeHandler: opcode: " << funcTab[i].name <<
             " operands: " << bytes << endl;
-        (this->*result)(op, bytes, operands);
+
+        // We don't invoke the handler directly on the incoming operands, but
+        // via a temporary datastream. This adds overhead, but eliminates the
+        // need for the individual handlers to read *exactly* the right amount
+        // of data (thus speeding development, and possibly adding some
+        // future-proofing).
+
+        if (bytes)
+        {
+            QByteArray *record = new QByteArray(bytes);
+            QDataStream *body;
+
+            operands.readRawBytes(record->data(), bytes);
+            body = new QDataStream(*record, IO_ReadOnly);
+            body->setByteOrder(QDataStream::LittleEndian);
+            (this->*result)(op, bytes, *body);
+            delete body;
+            delete record;
+        }
+        else
+        {
+            QDataStream *body = new QDataStream();
+
+            (this->*result)(op, bytes, *body);
+            delete body;
+        }
     }
 }
 
@@ -308,7 +333,6 @@ void Powerpoint::opColorSchemeAtom(
     operands >> data.background >> data.textAndLines >> data.shadows >>
         data.titleText >> data.fills >> data.accent >> data.accentAndHyperlink >>
         data.accentAndFollowedHyperlink;
-    skip(bytes - sizeof(data), operands);
 }
 
 //
@@ -416,7 +440,6 @@ void Powerpoint::opDocumentAtom(
     Q_UINT32 bytes,
     QDataStream &operands)
 {
-    skip(bytes, operands);
 }
 
 void Powerpoint::opEndDocument(
@@ -461,14 +484,12 @@ void Powerpoint::opExEmbedAtom(
         Q_UINT8 cantLockServerB;
         Q_UINT8 noSizeToServerB;
         Q_UINT8 isTable;
-        Q_INT8 junk;
     } data;
 
     operands >> data.followColorScheme;
     operands >> data.cantLockServerB;
     operands >> data.noSizeToServerB;
     operands >> data.isTable;
-    operands >> data.junk;
 }
 
 void Powerpoint::opFontCollection(
@@ -484,7 +505,6 @@ void Powerpoint::opFontEntityAtom(
     Q_UINT32 bytes,
     QDataStream &operands)
 {
-    skip(bytes, operands);
 }
 
 void Powerpoint::opHeadersFooters(
@@ -500,7 +520,6 @@ void Powerpoint::opHeadersFootersAtom(
     Q_UINT32 bytes,
     QDataStream &operands)
 {
-    skip(bytes, operands);
 }
 
 void Powerpoint::opList(
@@ -529,7 +548,6 @@ void Powerpoint::opMsod(
     switch (m_pass)
     {
     case PASS_GET_SLIDE_REFERENCES:
-        skip(bytes, operands);
         break;
     case PASS_GET_SLIDE_CONTENTS:
         data = new char[bytes];
@@ -561,7 +579,6 @@ void Powerpoint::opNotesAtom(
     } data;
 
     operands >> data.slideId >> data.flags;
-    skip(bytes - 6, operands);
 }
 
 //
@@ -594,7 +611,6 @@ void Powerpoint::opExObjRefAtom(
     Q_UINT32 bytes,
     QDataStream &operands)
 {
-    skip(bytes, operands);
 }
 
 void Powerpoint::opExOleObj(
@@ -602,7 +618,6 @@ void Powerpoint::opExOleObj(
     Q_UINT32 bytes,
     QDataStream &operands)
 {
-    skip(bytes, operands);
 }
 
 void Powerpoint::opExOleObjAtom(
@@ -625,8 +640,7 @@ void Powerpoint::opExOleObjAtom(
     operands >> data.subType;
     operands >> data.isBlank;
     kdDebug(s_area) << ((data.type == 0) ? "embedded " : "linked ") <<
-	"OLE obj id: " << data.objID << endl;
-    skip(bytes - 17, operands);
+        "OLE obj id: " << data.objID << endl;
 }
 
 void Powerpoint::opExOleObjStg(
@@ -634,7 +648,6 @@ void Powerpoint::opExOleObjStg(
     Q_UINT32 bytes,
     QDataStream &operands)
 {
-    skip(bytes, operands);
 }
 
 void Powerpoint::opOutlineViewInfo(
@@ -734,7 +747,6 @@ void Powerpoint::opSlideAtom(
     tmp.length = sizeof(data.layout);
     invokeHandler(tmp, tmp.length, operands);
     operands >> data.masterId >> data.notesId >> data.flags;
-    skip(bytes - 22, operands);
 }
 
 void Powerpoint::opSlideListWithText(
@@ -761,7 +773,6 @@ void Powerpoint::opSlidePersistAtom(
 
     operands >> data.psrReference >> data.flags >> data.numberTexts >>
         data.slideId >> data.reserved;
-    skip(bytes - sizeof(data), operands);
 
     switch (m_pass)
     {
@@ -798,7 +809,6 @@ void Powerpoint::opSSDocInfoAtom(
     Q_UINT32 bytes,
     QDataStream &operands)
 {
-    skip(bytes, operands);
 }
 
 void Powerpoint::opSSSlideLayoutAtom(
@@ -818,7 +828,6 @@ void Powerpoint::opSSSlideLayoutAtom(
     {
         operands >> data.id[i];
     }
-    skip(bytes - sizeof(data), operands);
 }
 
 void Powerpoint::opStyleTextPropAtom(
@@ -826,7 +835,6 @@ void Powerpoint::opStyleTextPropAtom(
     Q_UINT32 bytes,
     QDataStream &operands)
 {
-    skip(bytes, operands);
 }
 
 void Powerpoint::opTextBytesAtom(
@@ -910,7 +918,6 @@ void Powerpoint::opTextHeaderAtom(
      } data;
 
     operands >> data.txType;
-    skip(bytes - sizeof(data), operands);
 
     switch (m_pass)
     {
@@ -927,7 +934,6 @@ void Powerpoint::opTextSpecInfoAtom(
     Q_UINT32 bytes,
     QDataStream &operands)
 {
-    skip(bytes, operands);
 }
 
 void Powerpoint::opTxMasterStyleAtom(
@@ -935,7 +941,6 @@ void Powerpoint::opTxMasterStyleAtom(
     Q_UINT32 bytes,
     QDataStream &operands)
 {
-    skip(bytes, operands);
 }
 
 void Powerpoint::opTxSIStyleAtom(
@@ -943,7 +948,6 @@ void Powerpoint::opTxSIStyleAtom(
     Q_UINT32 bytes,
     QDataStream &operands)
 {
-    skip(bytes, operands);
 }
 
 //
@@ -969,7 +973,6 @@ void Powerpoint::opUserEditAtom(
     operands >> data.lastSlideID  >> data.version >> data.offsetLastEdit >>
         data.offsetPersistDirectory >> data.documentRef >>
         data.maxPersistWritten >> data.lastViewType;
-    skip(bytes - sizeof(data), operands);
 
     switch (m_pass)
     {
@@ -1034,17 +1037,18 @@ void Powerpoint::walk(Q_UINT32 bytes, QDataStream &operands)
     Header op;
     Q_UINT32 length = 0;
 
-    while (length < bytes)
+    // Stop parsing when there are no more records. Note that we stop as soon
+    // as we cannot get a complete header.
+    while (length + 8 <= bytes)
     {
         operands >> op.opcode.info >> op.type >> op.length;
-        if (op.type == 0)
-            break;
 
         // Package the arguments...
 
         invokeHandler(op, op.length, operands);
         length += op.length + 8;
     }
+    skip(bytes - length, operands);
 }
 
 void Powerpoint::walk(Q_UINT32 mainStreamOffset)
