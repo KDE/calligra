@@ -567,6 +567,7 @@ public:
     virtual void redo();
 
 protected:
+    void execute( bool b );
     QString m_tableName;
 };
 
@@ -580,6 +581,7 @@ public:
     virtual void redo();
 
 protected:
+    void execute( bool b );
     QString m_tableName;
 };
 

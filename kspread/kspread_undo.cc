@@ -2302,26 +2302,25 @@ KSpreadUndoHideTable::~KSpreadUndoHideTable()
 {
 }
 
-void KSpreadUndoHideTable::undo()
+void KSpreadUndoHideTable::execute( bool b )
 {
     KSpreadTable* table = doc()->map()->findTable( m_tableName );
     if ( !table )
 	return;
 
     doc()->undoBuffer()->lock();
-    table->hideTable(false);
+    table->hideTable(b);
     doc()->undoBuffer()->unlock();
+
+}
+void KSpreadUndoHideTable::undo()
+{
+    execute( false );
 }
 
 void KSpreadUndoHideTable::redo()
 {
-    KSpreadTable* table = doc()->map()->findTable( m_tableName );
-    if ( !table )
-	return;
-
-    doc()->undoBuffer()->lock();
-    table->hideTable(true);
-    doc()->undoBuffer()->unlock();
+    execute( true );
 }
 
 /****************************************************************************
@@ -2343,26 +2342,25 @@ KSpreadUndoShowTable::~KSpreadUndoShowTable()
 {
 }
 
-void KSpreadUndoShowTable::undo()
+void KSpreadUndoShowTable::execute( bool b )
 {
     KSpreadTable* table = doc()->map()->findTable( m_tableName );
     if ( !table )
 	return;
 
     doc()->undoBuffer()->lock();
-    table->hideTable(true);
+    table->hideTable(b);
     doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoShowTable::undo()
+{
+    execute( true );
 }
 
 void KSpreadUndoShowTable::redo()
 {
-    KSpreadTable* table = doc()->map()->findTable( m_tableName );
-    if ( !table )
-	return;
-
-    doc()->undoBuffer()->lock();
-    table->hideTable(false);
-    doc()->undoBuffer()->unlock();
+    execute( false );
 }
 
 /****************************************************************************
