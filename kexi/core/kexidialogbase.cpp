@@ -61,7 +61,8 @@ KexiView *KexiDialogBase::kexiView()const
 
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 {
-return;
+	showMaximized();
+	return;
 #if 0
 	myDock=0;
 	if (! ((m_mainWindow->windowMode()==KexiView::MDIWindowMode) && (wt==DocumentWindow)))
