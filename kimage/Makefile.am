@@ -10,6 +10,7 @@ LDADD =  ../lib/kofficeui/libkofficeui.la \
 ####### Files
 
 bin_PROGRAMS = img.bin
+bin_SCRIPTS = img
 
 img_bin_SOURCES = img_main.cc img_doc.cc img_view.cc img.cc img_shell.cc
 noinst_HEADERS = img_main.h img_doc.h img_view.h img.h img_shell.h
