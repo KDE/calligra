@@ -301,7 +301,7 @@ void KPTPertCanvas::clear()
 
 void KPTPertCanvas::contentsMousePressEvent ( QMouseEvent * e )
 {
-    kdDebug()<<k_funcinfo<<" gl.X,gl.Y="<<e->globalX()<<","<<e->globalY()<<" x,y="<<e->x()<<","<<e->y()<<endl;
+    //kdDebug()<<k_funcinfo<<" gl.X,gl.Y="<<e->globalX()<<","<<e->globalY()<<" x,y="<<e->x()<<","<<e->y()<<endl;
     switch (e->button())
     {
         case QEvent::LeftButton:
@@ -327,7 +327,10 @@ void KPTPertCanvas::contentsMousePressEvent ( QMouseEvent * e )
                         item->setSelected(true);
                         canvas()->update();
                         emit rightButtonPressed(&(item->node()), e->globalPos());
-                        item->setSelected(false);
+                        if (item == selectedItem()) {
+                            // item maybe deleted
+                            item->setSelected(false);
+                        }
                         canvas()->update();
                         break;
                     }
