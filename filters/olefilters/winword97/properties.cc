@@ -986,7 +986,7 @@ void Properties::apply(const MsWord::LFO &style)
             ptr2 += level.cbGrpprlPapx;
             ptr2 += level.cbGrpprlChpx;
             ptr2 += MsWordGenerated::read(ptr2, &numberTextLength);
-            ptr2 += MsWord::read(m_document.m_fib.lid, ptr2, &numberText, numberTextLength, true);
+            ptr2 += MsWord::read(m_document.m_fib.lid, ptr2, &numberText, numberTextLength, true, m_document.m_fib.nFib);
             break;
         }
     }
