@@ -48,20 +48,25 @@ def writeFontTable(fontname, f):
             f.write('    { ' + key + ', ' + hex(pos) + ', ' + charClass + ' },\n')
     f.write('    { 0, 0, ORDINARY }\n};\n\n')
 
-    
-def main():
-    f = open('../symbolfontmapping.cc', 'w')
-    f.write('''//
+
+def write_header(f):
+    print >>f, '''//
 // Created: ''' + time.ctime(time.time()) + '''
 //      by: gensymbolfontmap.py
 //    from: symbol.xml
 //
 // WARNING! All changes made in this file will be lost!
-
-struct InternFontTable { short unicode; uchar pos; CharClass cl; };
-''')
-    fontnames = [ "symbol",
-                  "esstixnine", 
+'''
+    
+def main():
+    f = open('../symbolfontmapping.cc', 'w')
+    write_header(f)
+    writeFontTable("symbol", f)
+    f.close()
+    
+    f = open('../esstixfontmapping.cc', 'w')
+    write_header(f)
+    fontnames = [ "esstixnine", 
                   "esstixthirteen", 
                   "esstixeleven", 
                   "esstixfourteen", 
@@ -80,7 +85,10 @@ struct InternFontTable { short unicode; uchar pos; CharClass cl; };
                   "esstixfour" ]
     for fn in fontnames:
         writeFontTable(fn, f)
+    f.close()
 
+    f = open('../unicodenames.cc', 'w')
+    write_header(f)
     print >>f, 'struct UnicodeNameTable { short unicode; const char* name; };'
     print >>f, 'static UnicodeNameTable nameTable[] = {'
     nameDir = {}
