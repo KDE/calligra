@@ -672,6 +672,28 @@
 
 
     <Function>
+      <Name>ROUND</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Digits</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The ROUND(value;[digits]) function returns value rounded. Digits is the number of digits to which you want to round that number. If digits is zero or omitted, value is rounded up to the nearest integer. If digits is smaller than zero, the corresponding interger part of the number is rounded.</Text>
+	<Syntax>ROUND(value;[digits])</Syntax>
+	<Example>ROUND(1.252;2) equals 1.25</Example>
+	<Example>ROUND(-1.252;2) equals -1.25</Example>
+	<Example>ROUND(1.258;2) equals 1.26</Example>
+	<Example>ROUND(-12.25;-1) equals -10</Example>
+	<Example>ROUND(-1.252;0) equals -1</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>ROUNDUP</Name>
       <Type>Float</Type>
       <Parameter>
@@ -687,7 +709,7 @@
 	<Syntax>ROUNDUP(value;[digits])</Syntax>
 	<Example>ROUNDUP(1.252;2) equals 1.26</Example>
 	<Example>ROUNDUP(-1.252;2) equals -1.25</Example>
-                <Example>ROUNDUP(-1.252) equals -1</Example>
+	<Example>ROUNDUP(-1.252) equals -1</Example>
       </Help>
     </Function>
 

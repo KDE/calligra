@@ -184,6 +184,38 @@ bool kspreadfunc_islogic( KSContext& context )
   return true;
 }
 
+// Function: ISEMPTY
+bool kspreadfunc_isempty( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "ISEMPTY", true ) )
+    return false;
+
+  if ( KSUtil::checkType( context, args[0], KSValue::Empty, true ) ) {
+    context.setValue( new KSValue(true) );
+    return true;
+  }
+
+  if ( KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) ) {
+    KScript::Double d = args[0]->doubleValue();
+    bool logic = (d==0);
+    context.setValue( new KSValue(logic) );
+    return true;
+  }
+
+  if ( KSUtil::checkType( context, args[0], KSValue::StringType, true ) ) {
+    QString s = args[0]->stringValue();
+    bool logic = s.isEmpty() || s.stripWhiteSpace().isEmpty();
+    context.setValue( new KSValue(logic) );
+    return true;
+  }
+  
+  context.setValue( new KSValue(false) );
+  return true;
+}
+	
+
 // Function: ISTEXT
 bool kspreadfunc_istext( KSContext& context )
 {
@@ -286,7 +318,7 @@ bool kspreadfunc_isodd( KSContext& context )
                 result=false;
         }
 
- context.setValue( new KSValue(result));
+  context.setValue( new KSValue(result));
 
   return true;
 }
@@ -309,7 +341,7 @@ bool kspreadfunc_iseven( KSContext& context )
                 result=true;
         }
 
- context.setValue( new KSValue(result));
+  context.setValue( new KSValue(result));
 
   return true;
 }
