@@ -89,7 +89,7 @@ const bool OLEFilter::filter(const QString &fileIn, const QString &fileOut,
 
     store=new KoStore(fileOut, KoStore::Write);
     if(store->bad()) {
-        kdError(s_area) << "OLEFilter::filter(): Unable to open output file!" << endl;
+        kdError(s_area) << "OLEFilter::filter(): Unable to open output file! " << fileOut << endl;
         delete [] olefile.data;
         olefile.data=0L;
         delete store;
@@ -326,7 +326,7 @@ unsigned OLEFilter::convert(const QString &parentPath, const QString &dirname) {
                 mimeType = "application/x-kword";
                 myFilter=new WordFilter(main, table0, table1, data);
             }
-            else if(node->name=="Workbook") {
+            else if(node->name=="Workbook" || node->name=="Book") {
                 // Excel
                 // kdDebug(s_area) << "OLEFilter::convert(): Excel" << endl;
 
