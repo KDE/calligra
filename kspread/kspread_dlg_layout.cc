@@ -201,8 +201,8 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     bMultiRow = obj->multiRow( _left, _top );
     bVerticalText=obj->verticalText( _left, _top );
 
-    textRotation = obj->getAngle();
-    formatNumber = obj->getFormatNumber();
+    textRotation = obj->getAngle(_left, _top);
+    formatNumber = obj->getFormatNumber(_left, _top);
 
     cellText=obj->text();
 
@@ -322,9 +322,9 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 		bTextFontItalic = FALSE;
 	    if ( bgColor != obj->bgColor( x, y ) )
 		bBgColor = FALSE;
-            if( textRotation != obj->getAngle() )
+            if( textRotation != obj->getAngle(_left, _top) )
                 bTextRotation = FALSE;
-            if( formatNumber != obj->getFormatNumber() )
+            if( formatNumber != obj->getFormatNumber(_left, _top) )
                 bFormatNumber = FALSE;
 	    if ( eStyle != obj->style() )
 		eStyle = KSpreadCell::ST_Undef;

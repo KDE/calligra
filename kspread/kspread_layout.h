@@ -39,6 +39,10 @@ public:
     enum AlignY { Top = 1, Middle = 2, Bottom =3 };
     enum FloatFormat { AlwaysSigned = 1, AlwaysUnsigned = 2, OnlyNegSigned = 3 };
     enum FloatColor { NegRed = 1, AllBlack = 2 };
+    enum formatNumber { Number=0,Money=10,Percentage=25,Scientific=30,ShortDate=35,TextDate=36, Time=50,
+    SecondeTime=51,fraction_half=70,fraction_quarter=71,fraction_eighth=72,fraction_sixteenth=73,
+     fraction_tenth=74,fraction_hundredth=75,fraction_one_digit=76,
+     fraction_two_digits=77,fraction_three_digits=78};
 
     enum Properties{ PAlign  = 0x01,
 		     PAlignY = 0x02,
@@ -59,13 +63,15 @@ public:
 		     PFloatColor = 0x10000,
 		     PMultiRow = 0x20000,
 		     PVerticalText = 0x40000,
-                     PPrecision = 0x80000 };
+                     PPrecision = 0x80000,
+                     PFormatNumber = 0x100000,
+                     PAngle = 0x200000};
 
     KSpreadLayout( KSpreadTable *_table );
     virtual ~KSpreadLayout();
 
     void copy( KSpreadLayout &_l );
-    
+
     ////////////////////////////////
     //
     // Loading and saving
@@ -151,6 +157,11 @@ public:
     virtual void setMultiRow( bool _b );
 
     virtual void setVerticalText( bool _b );
+
+    virtual void setFormatNumber(formatNumber _format);
+
+    virtual void setAngle(int _angle);
+
 
     ////////////////////////////////
     //
@@ -244,6 +255,10 @@ public:
 
     virtual bool verticalText( int col, int row ) const;
 
+    virtual formatNumber getFormatNumber(int col, int row )const ;
+
+    virtual int getAngle(int col, int row) const;
+
     KSpreadTable* table() { return m_pTable; }
     const KSpreadTable* table() const { return m_pTable; }
 
@@ -276,7 +291,7 @@ protected:
     QDomElement createElement( const QString& tagname, const QPen& pen, QDomDocument &doc ) const;
     QFont toFont(QDomElement &element) const;
     QPen toPen(QDomElement &element) const;
-    
+
     /**
      * Tells whether text may be broken into multiple lines.
      */
@@ -372,6 +387,14 @@ protected:
     KSpreadTable *m_pTable;
 
     uint m_mask;
+
+    formatNumber m_eFormatNumber;
+
+    /**
+    * give angle of rotation
+    * default is null
+    */
+    int m_rotateAngle;
 
 private:
     void setProperty( Properties p );

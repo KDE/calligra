@@ -104,7 +104,7 @@ void KSpreadCellIface::setAngle(int angle)
 int  KSpreadCellIface::angle() const
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->getAngle();
+    return cell->getAngle(m_point.x(), m_point.y());
 }
 
 void KSpreadCellIface::setVerticalText(bool _vertical)
@@ -286,7 +286,7 @@ QString KSpreadCellIface::getFormatNumber() const
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QString stringFormat;
-    switch( cell->getFormatNumber())
+    switch( cell->getFormatNumber(m_point.x(), m_point.y()))
         {
         case KSpreadCell::Number:
                 stringFormat="Number";

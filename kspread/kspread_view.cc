@@ -472,12 +472,12 @@ void KSpreadView::updateEditWidget()
     else
         m_percent->setChecked( FALSE );
     */
-    if( cell->getFormatNumber() == KSpreadCell::Percentage )
+    if( cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow()) == KSpreadCell::Percentage )
         m_percent->setChecked( TRUE );
     else
         m_percent->setChecked( FALSE );
 
-    if( cell->getFormatNumber() == KSpreadCell::Money )
+    if( cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow()) == KSpreadCell::Money )
         m_money->setChecked( TRUE );
     else
         m_money->setChecked( FALSE );

@@ -123,12 +123,8 @@ class KSpreadCell : public KSpreadLayout
   friend SelectPrivate;
 
 public:
-    enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
     enum Content { Text, RichText, Formula, VisualFormula };
-    enum formatNumber { Number=0,Money=10,Percentage=25,Scientific=30,ShortDate=35,TextDate=36, Time=50,
-    SecondeTime=51,fraction_half=70,fraction_quarter=71,fraction_eighth=72,fraction_sixteenth=73,
-     fraction_tenth=74,fraction_hundredth=75,fraction_one_digit=76,
-     fraction_two_digits=77,fraction_three_digits=78};
+    enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
 
     KSpreadCell( KSpreadTable *_table, int _column, int _row );
     /**
@@ -278,8 +274,6 @@ public:
      */
     QString text() const { return m_strText; }
 
-    void setStyle( Style _s );
-
     void setAction( const QString& _action ) { m_strAction = _action; }
 
     void setComment( const QString& c );
@@ -358,6 +352,8 @@ public:
      * @see #m_style
      */
     Style style() const { return m_style; }
+
+    void setStyle( Style _s );
     /**
      * @see #setAction
      * @see #m_strAction
@@ -612,12 +608,6 @@ public:
 
     void conditionAlign(QPainter &painter,int _col,int _row);
 
-    void setAngle(int _angle) {m_rotateAngle=_angle;}
-
-    int getAngle(){return m_rotateAngle;}
-
-    void setFormatNumber(formatNumber _format){m_eFormatNumber=_format;}
-    formatNumber getFormatNumber(){return  m_eFormatNumber;}
 
     /**
      * Used for comparing cells (when sorting)
@@ -832,6 +822,7 @@ protected:
      * @persistent
      */
     Style m_style;
+
     /**
      * Used for example if the cell is displayed as a button.
      * It tells which command has to be executed.
@@ -922,13 +913,6 @@ protected:
     */
     int m_nbLines;
 
-    /**
-    * give angle of rotation
-    * default is null
-    */
-    int m_rotateAngle;
-
-    formatNumber m_eFormatNumber;
 
     KSpreadCell* m_nextCell;
     KSpreadCell* m_previousCell;

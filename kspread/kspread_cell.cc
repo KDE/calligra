@@ -76,8 +76,6 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_lstDepends.setAutoDelete( TRUE );
 
   m_bLayoutDirtyFlag= FALSE;
-
-  m_style = KSpreadCell::ST_Normal;
   m_content = Text;
 
   m_iRow = _row;
@@ -90,7 +88,7 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_bTime = FALSE;
   m_bProgressFlag = FALSE;
   m_bDisplayDirtyFlag = false;
-
+  m_style = ST_Normal;
   m_bForceExtraCells = FALSE;
   m_iExtraXCells = 0;
   m_iExtraYCells = 0;
@@ -108,8 +106,6 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   m_conditionIsTrue=false;
   m_numberOfCond=-1;
   m_nbLines=0;
-  m_rotateAngle=0;
-  m_eFormatNumber=KSpreadCell::Number;
 }
 
 void KSpreadCell::copyLayout( KSpreadCell *_cell )
@@ -154,7 +150,7 @@ void KSpreadCell::copyLayout( int _column, int _row )
     setFaktor( o->faktor( _column, _row ) );
     setMultiRow( o->multiRow( _column, _row ) );
     setVerticalText( o->verticalText( _column, _row ) );
-    setStyle( o->style() );
+    setStyle( o->style());
 
     KSpreadConditional *tmpCondition;
     if( o->getFirstCondition(0) )
@@ -185,8 +181,8 @@ void KSpreadCell::copyLayout( int _column, int _row )
   	tmpCondition->m_cond=o->getThirdCondition(0)->m_cond;
     }
     setComment( o->comment() );
-    setAngle( o->getAngle() );
-    setFormatNumber( o->getFormatNumber() );
+    setAngle( o->getAngle(_column, _row) );
+    setFormatNumber( o->getFormatNumber(_column, _row) );
 }
 
 void KSpreadCell::copyAll( KSpreadCell *cell )
@@ -257,9 +253,9 @@ void KSpreadCell::defaultStyle()
   m_conditionIsTrue=false;
   m_numberOfCond=-1;
   m_strComment="";
-  m_bVerticalText=false;
-  m_rotateAngle=0;
-  m_eFormatNumber=KSpreadCell::Number;
+  setVerticalText(false);
+  setAngle(m_rotateAngle);
+  setFormatNumber(KSpreadCell::Number);
 }
 
 void KSpreadCell::layoutChanged()
@@ -3622,10 +3618,6 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
     QDomElement format = KSpreadLayout::save( doc );
     cell.appendChild( format );
 
-    // ### always saved
-    if ( m_style )
-	format.setAttribute( "style", (int)m_style );
-
     if ( isForceExtraCells() )
     {
 	if ( extraXCells() )
@@ -3633,13 +3625,9 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 	if ( extraYCells() )
 	    format.setAttribute( "rowspan", extraYCells() );
     }
+    if ( style() )
+	format.setAttribute( "style", (int)m_style );
 
-    // ### always saved and bad name for the attribute
-    format.setAttribute( "format",(int) getFormatNumber() );
-
-    // ### always saved
-    if( m_rotateAngle != 0 )
-	format.setAttribute( "angle", m_rotateAngle );
 
     if( ( m_firstCondition != 0 ) || ( m_secondCondition != 0 ) || ( m_thirdCondition != 0 ) )
     {
@@ -3711,7 +3699,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 	    text.appendChild( doc.createCDATASection( m_strText ) );
 	    cell.appendChild( text );
 	}
-	else if( (getFormatNumber()==ShortDate || getFormatNumber()==TextDate)&& m_bDate )
+	else if( (getFormatNumber(m_iColumn,m_iRow)==ShortDate || getFormatNumber(m_iColumn,m_iRow)==TextDate)&& m_bDate )
         {
 	    QDomElement text = doc.createElement( "text" );
 	    QString tmp;
@@ -3719,7 +3707,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 	    text.appendChild( doc.createTextNode( tmp ) );
 	    cell.appendChild( text );
 	}
-	else if( (getFormatNumber()==Time || getFormatNumber()==SecondeTime)&& m_bTime )
+	else if( (getFormatNumber(m_iColumn,m_iRow)==Time || getFormatNumber(m_iColumn,m_iRow)==SecondeTime)&& m_bTime )
         {
 	    QDomElement text = doc.createElement( "text" );
 	    QString tmp;
@@ -3775,12 +3763,6 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	if ( !KSpreadLayout::load( f ) )
 	    return false;
 
-	if ( f.hasAttribute( "format" ) )
-        {
-	    m_eFormatNumber=(formatNumber)f.attribute("format").toInt( &ok );
-	    if ( !ok ) return false;
-	}
-
 	if ( f.hasAttribute( "colspan" ) )
         {
 	    int i = f.attribute("colspan").toInt( &ok );
@@ -3816,18 +3798,6 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
             forceExtraCells(m_iColumn,m_iRow,m_iExtraXCells,m_iExtraYCells);
         }
 
-        if ( f.hasAttribute( "format" ) )
-        {
-	    m_eFormatNumber=(formatNumber)f.attribute("format").toInt( &ok );
-	    if ( !ok ) return false;
-	}
-
-        if ( f.hasAttribute( "angle" ) )
-        {
-            setAngle(f.attribute( "angle").toInt( &ok ));
-	    if ( !ok )
-		return false;
-        }
     }
 
     //
@@ -3952,7 +3922,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
             setCellText( pasteOperation( t, m_strText, op ), false );
         }
 	// A date
-        else if( getFormatNumber() == ShortDate || getFormatNumber() == TextDate)
+        else if( getFormatNumber(m_iColumn,m_iRow) == ShortDate || getFormatNumber(m_iColumn,m_iRow) == TextDate)
         {
 	    int pos;
 	    int pos1;
@@ -3971,7 +3941,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
                 setCellText( pasteOperation( t, m_strText, op ), false );
         }
 	// A Time
-        else if( getFormatNumber() == Time || getFormatNumber() == SecondeTime )
+        else if( getFormatNumber(m_iColumn,m_iRow) == Time || getFormatNumber(m_iColumn,m_iRow) == SecondeTime )
         {
 	    int hours = -1;
 	    int minutes = -1;

@@ -72,6 +72,8 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_bMultiRow = FALSE;
     m_bVerticalText = FALSE;
     m_textPen.setColor( QApplication::palette().active().text() );
+    m_eFormatNumber=KSpreadLayout::Number;
+    m_rotateAngle=0;
 
     QFont font( "Helvetica", 12 );
     m_textFont = font;
@@ -105,6 +107,8 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
     m_strPrefix = _l.m_strPrefix;
     m_strPostfix = _l.m_strPostfix;
     m_bVerticalText = _l.m_bVerticalText;
+    m_eFormatNumber = _l.m_eFormatNumber;
+    m_rotateAngle = _l.m_rotateAngle;
 }
 
 void KSpreadLayout::clearProperties()
@@ -233,6 +237,10 @@ QDomElement KSpreadLayout::save( QDomDocument& doc ) const
 	format.setAttribute( "floatcolor", (int)m_eFloatColor );
     if ( hasProperty( PFaktor ) )
 	format.setAttribute( "faktor", m_dFaktor );
+    if ( hasProperty( PFormatNumber ) )
+	format.setAttribute( "format",(int) m_eFormatNumber);
+    if ( hasProperty( PAngle ) )
+	format.setAttribute( "angle", m_rotateAngle );
     if ( hasProperty( PFont ) )
 	format.appendChild( createElement( "font", m_textFont, doc ) );
     if ( hasProperty( PTextPen ) && m_textPen.color().isValid())
@@ -366,6 +374,17 @@ bool KSpreadLayout::load( const QDomElement& f )
     {
 	setFaktor( f.attribute("faktor").toDouble( &ok ) );
 	if ( !ok ) return false;
+    }
+    if ( f.hasAttribute( "format" ) )
+    {
+	setFormatNumber((formatNumber)f.attribute("format").toInt( &ok ));
+	if ( !ok ) return false;
+    }
+    if ( f.hasAttribute( "angle" ) )
+    {
+            setAngle(f.attribute( "angle").toInt( &ok ));
+	    if ( !ok )
+		return false;
     }
 
     if ( f.hasAttribute( "brushcolor" ) )
@@ -830,6 +849,29 @@ void KSpreadLayout::setVerticalText( bool _b )
     layoutChanged();
 }
 
+void KSpreadLayout::setFormatNumber(formatNumber _format)
+{
+    if ( _format == KSpreadLayout::Number )
+        clearProperty( PFormatNumber );
+    else
+        setProperty( PFormatNumber );
+
+    m_eFormatNumber=_format;
+    layoutChanged();
+
+}
+
+void KSpreadLayout::setAngle(int _angle)
+{
+    if ( _angle == 0 )
+        clearProperty( PAngle );
+    else
+        setProperty( PAngle );
+
+    m_rotateAngle=_angle;
+    layoutChanged();
+}
+
 /////////////
 //
 // Get methods
@@ -1204,6 +1246,30 @@ bool KSpreadLayout::verticalText( int col, int row ) const
     }
 
     return m_bVerticalText;
+}
+
+KSpreadLayout::formatNumber KSpreadLayout::getFormatNumber( int col, int row ) const
+{
+    if ( !hasProperty( PFormatNumber ) )
+    {
+	const KSpreadLayout* l = fallbackLayout( col, row );
+	if ( l )
+	    return l->getFormatNumber( col, row );
+    }
+
+    return m_eFormatNumber;
+}
+
+int KSpreadLayout::getAngle( int col, int row ) const
+{
+    if ( !hasProperty( PAngle ) )
+    {
+	const KSpreadLayout* l = fallbackLayout( col, row );
+	if ( l )
+	    return l->getAngle( col, row );
+    }
+
+    return m_rotateAngle;
 }
 
 /////////////

@@ -836,3 +836,8 @@ Text size and position are refreshing
 attributes" and when you make "negative format" (text color
 is red)
 
+2000-07-27-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Move m_rotateAngle code and  FormatNumber code to kspread_layout.cc
+=>now undo works for formatnumber and rotate.
+
