@@ -102,6 +102,7 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
     setFocusPolicy( QWidget::StrongFocus );
     setFocus();
     setKeyCompression( true );
+    installEventFilter( this );
 }
 
 /*======================== destructor ============================*/
@@ -112,6 +113,36 @@ Page::~Page()
 
     delete presMenu;
 }
+
+
+bool Page::eventFilter( QObject *o, QEvent *e )
+{
+
+    if ( !o || !e )
+        return TRUE;
+    switch ( e->type() )
+    {
+    case QEvent::AccelOverride:
+    {
+        QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
+        if ( m_currentTextObjectView &&
+             (keyev->key()==Key_Home ||keyev->key()==Key_End
+              || keyev->key()==Key_Tab || keyev->key()==Key_Prior
+                 || keyev->key()==Key_Next) )
+        {
+            m_currentTextObjectView->keyPressEvent( keyev );
+            return true;
+        }
+    }
+    }
+    return false;
+}
+
+bool Page::focusNextPrevChild( bool )
+{
+    return TRUE; // Don't allow to go out of the canvas widget by pressing "Tab"
+}
+
 
 /*======================== paint event ===========================*/
 void Page::paintEvent( QPaintEvent* paintEvent )

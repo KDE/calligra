@@ -262,6 +262,8 @@ protected:
 				const QSize &presSize, KPPixmapObject *obj );
     QSize getPixmapOrigSize( KPPixmapObject *&obj );
     void setTextBackground( KPTextObject *obj );
+    bool eventFilter( QObject *o, QEvent *e );
+    bool focusNextPrevChild( bool );
 
 private:
     // variables
