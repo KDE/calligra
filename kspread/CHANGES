@@ -28,6 +28,7 @@ Bugfixes:
   (merging cells, return from edit mode, dragging cell content).
 - Fix display of cells overlapping in vertical direction
 - Set a minimum size for embedded objects (so it cannot have a size of 0).
+- Fix for endless loop when calculating formulas.
 
 
 Changes from 1.1 to 1.2

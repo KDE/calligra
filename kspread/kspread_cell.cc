@@ -1030,8 +1030,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         setFlag(Flag_CellTooShort);
       }
     }
-// 
-// 
+
     // Do we have to occupy additional cells at the bottom ?
     if ( m_iOutTextHeight > h - 2 * BORDER_SPACE -
          topBorderWidth( _col, _row ) - bottomBorderWidth( _col, _row ) )
@@ -1081,8 +1080,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         setFlag( Flag_CellTooShort );
       }
     }
-// 
-// 
+
     clearFlag(Flag_LayoutDirty);
 
     return;
@@ -1588,6 +1586,7 @@ void KSpreadCell::clearFormula()
 
 bool KSpreadCell::calc(bool delay)
 {
+  QString strFormulaOutBegin = m_strFormulaOut;
   if ( testFlag(Flag_Progress) )
   {
     /* This may not be a circular error - if we're calculating a dependancy,
@@ -1785,7 +1784,7 @@ bool KSpreadCell::calc(bool delay)
   }
   else
   {
-      delete m_pQML;
+    delete m_pQML;
 
     m_pQML = 0;
     clearAllErrors();
@@ -1814,7 +1813,7 @@ bool KSpreadCell::calc(bool delay)
   clearFlag(Flag_Progress);
 
   // if our value changed the cells that depend on us need to be updated
-  if ( m_strFormulaOut != m_strOutText )
+  if ( m_strFormulaOut != strFormulaOutBegin )
   {
     setFlag(Flag_UpdatingDeps);
 
@@ -3878,7 +3877,7 @@ void KSpreadCell::updateDepending()
     {
       for (int r = d->Top(); r <= d->Bottom(); r++)
       {
-        kdDebug() << "Cell: " << c << ", " << r << endl;
+        kdDebug(36001) << "Cell: " << c << ", " << r << endl;
         cell = d->Table()->cellAt( c, r );
         cell->setCalcDirtyFlag();
         cell->calc();
@@ -4633,7 +4632,7 @@ bool KSpreadCell::loadCellData(const QDomElement &text, Operation op )
   }
   else if (t[0] == '!' )
   {
-      kdDebug()<<" text :"<<t<<endl;
+      kdDebug(36001)<<" text :"<<t<<endl;
       m_pQML = new QSimpleRichText( t.mid(1),  QApplication::font() );//, m_pTable->widget() );
       m_strText = t;
 
