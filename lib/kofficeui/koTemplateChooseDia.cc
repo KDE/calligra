@@ -326,17 +326,26 @@ void KoTemplateChooseDia::chooseFile()
     if ( QFile::exists( lFile->text() ) )
 	dir = QFileInfo( lFile->text() ).absFilePath();
 
-    QString filename;
 #ifdef USE_QFD
+    QString filename;
     filename = QFileDialog::getOpenFileName( dir, m_strImportFilter );
 #else
-    filename = KFileDialog::getOpenFileName( dir, m_strImportFilter );
+    KURL url;
+    url = KFileDialog::getOpenURL( dir, m_strImportFilter );
 #endif
 
+#ifdef USE_QFD
     if ( !filename.isEmpty() && QFileInfo( filename ).isFile() ||
 	( QFileInfo( filename ).isSymLink() && !QFileInfo( filename ).readLink().isEmpty() &&
 	 QFileInfo( QFileInfo( filename ).readLink() ).isFile() ) )
 	lFile->setText( filename );
+#else
+    QString filename = url.url();
+    if ( !filename.isEmpty() && QFileInfo( filename ).isFile() ||
+	( QFileInfo( filename ).isSymLink() && !QFileInfo( filename ).readLink().isEmpty() &&
+	 QFileInfo( QFileInfo( filename ).readLink() ).isFile() ) )
+	lFile->setText( filename );
+#endif
 
     openFile();
     if ( !filename.isEmpty() )
