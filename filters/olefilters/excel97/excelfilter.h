@@ -36,6 +36,9 @@ public:
     virtual bool filter();
     virtual const QDomDocument *const part();
 
+private slots:
+    void slotGotAuthor(const QString &author);
+
 private:
     QDataStream *s;
     XMLTree *tree;

@@ -30,6 +30,7 @@ ExcelFilter::ExcelFilter(const QByteArray &mainStream):FilterBase(), length(main
     s->setByteOrder(QDataStream::LittleEndian);
 
     tree = new XMLTree();
+    connect(tree, SIGNAL(gotAuthor(const QString &)), this, SLOT(slotGotAuthor(const QString &)));
 }
 
 ExcelFilter::~ExcelFilter()
@@ -117,6 +118,11 @@ bool ExcelFilter::filter()
     m_ready = true;
 
     return m_success;
+}
+
+void ExcelFilter::slotGotAuthor(const QString &author)
+{
+    emit signalSaveDocumentInformation(author, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null);
 }
 
 const QDomDocument* const ExcelFilter::part()

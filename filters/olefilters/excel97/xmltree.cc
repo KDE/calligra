@@ -19,7 +19,7 @@
 #include <kdebug.h>
 #include <qdatastream.h>
 #include <qstringlist.h>
-#include <xmltree.h>
+#include "xmltree.moc"
 
 const char *palette[65] = {
   "#000000", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff",
@@ -2012,8 +2012,7 @@ bool XMLTree::_writeaccess(Q_UINT32, QDataStream &body)
 
   char *name = new char[length];
   body.readRawBytes(name, length);
-  QString s = QString::fromLatin1(name, length);
-  doc.setAttribute("author", s);
+  emit gotAuthor(QString::fromLatin1(name, length));
 
   delete []name;
 

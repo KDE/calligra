@@ -28,6 +28,7 @@
 
 class XMLTree:public QObject
 {
+Q_OBJECT
 public:
   XMLTree();
   ~XMLTree();
@@ -35,6 +36,9 @@ public:
   const QDomDocument * const part();
 
   bool invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operands);
+
+signals:
+  void gotAuthor(const QString &);
 
 private:
   // Debug support.
