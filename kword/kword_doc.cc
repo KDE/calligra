@@ -1230,8 +1230,10 @@ bool KWordDocument::loadFrameSets( const QDomElement &framesets )
 	    KWTextFrameSet *frame = new KWTextFrameSet( this );
 	    frame->setVisible( _visible );
 	    frame->setName( fsname );
-	    // #### todo
-	    //frame->load( parser, lst );
+	    
+	    if ( ! frame->load( frameset ) )
+		return FALSE;
+	    
 	    frame->setAutoCreateNewFrame( autoCreateNewFrame );
 	    frame->setFrameInfo( frameInfo );
 	    frame->setIsRemoveableHeader( removeable );
@@ -1274,6 +1276,8 @@ bool KWordDocument::loadFrameSets( const QDomElement &framesets )
 	default: break;
 	}
     }
+    
+    return true;
 }
 
 /*===================================================================*/
