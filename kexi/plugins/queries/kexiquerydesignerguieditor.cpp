@@ -365,6 +365,16 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 		temp->query->addTable( it.current()->table() );
 	}
 
+	//add relations (looking for connections)
+	for (ConnectionListIterator it(*m_relations->connections()); it.current(); ++it) {
+		KexiRelationViewTableContainer *masterTable = it.current()->masterTable();
+		KexiRelationViewTableContainer *detailsTable = it.current()->detailsTable();
+
+		temp->query->addRelationship(
+			masterTable->table()->field(it.current()->masterField()),
+			detailsTable->table()->field(it.current()->detailsField()) );
+	}
+
 	//add fields
 	bool fieldsFound = false;
 	for (int i=0; i<(int)m_buffers->size(); i++) {
@@ -472,7 +482,6 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode, bool &cancelled)
 				//(todo: instead of hiding all tables and showing some tables, 
 				// show only these new and hide these unncecessary; the same for connections)
 				KexiDB::QuerySchema *q = tempData()->query;
-				q->debug();
 				for (QPtrListIterator<KexiDB::TableSchema> it(*q->tables()); it.current(); ++it) {
 					m_relations->addTable( it.current() );
 				}

@@ -331,6 +331,17 @@ TODO:
 
 ===================== Kexi 0.1 Beta 4 =====================
 
+2004-07-09
+KexiDB
+- It's possible to define relationships for QuerySchema 
+  (with Relationship objects)
+- Connection: optimization: QString::reserve() used 
+   before generationg SQL statements
+- Connection::selectStatement() now generates joining rules 
+  (i.e. relationships using WHERE)
+Query Designer
+- joins defined by GUI are now visible in SQL View
+
 2004-07-08
 Query Designer
 - switching between design modes improved
