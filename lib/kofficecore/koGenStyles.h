@@ -122,7 +122,7 @@ public:
     /// Write the definition of this style to @p writer, using the OASIS format.
     /// @param elementName the name of the XML element, e.g. "style:style"
     /// @param name must come from the collection
-    void writeStyle( KoXmlWriter* writer, const char* elementName, const QString& name );
+    void writeStyle( KoXmlWriter* writer, const char* elementName, const QString& name ) const;
 
     /// QMap requires a complete sorting order.
     /// Another solution would have been a qdict and a key() here, a la KoTextFormat,

@@ -56,7 +56,7 @@ QString KoGenStyles::makeUniqueName( const QString& base, bool forceNumbering ) 
     return name;
 }
 
-void KoGenStyle::writeStyle( KoXmlWriter* writer, const char* elementName, const QString& name )
+void KoGenStyle::writeStyle( KoXmlWriter* writer, const char* elementName, const QString& name ) const
 {
     writer->startElement( elementName );
     writer->addAttribute( "style:name", name );
