@@ -350,6 +350,10 @@
                 <title xml:lang="en_us">LaTeX</title>
                 <stat import="none" export="planned"/>
             </filter>
+            <filter id="karbon_oodraw">
+                <title xml:lang="en_us">OpenOffice Draw</title>
+                <stat import="onestar" export="none"/>
+            </filter>
         </application>
 
         <application id="krita">
