@@ -90,7 +90,7 @@ public:
 public slots:
 	virtual void slotChangeColor(const KoColor& c);
 	virtual void slotChangeColor(const QColor& c);
-	virtual void slotRefreshColor();
+	virtual void slotRefreshColor() = 0;
 
 protected:
 	KoColor mColor;
@@ -168,7 +168,6 @@ private:
   QSpinBox         *mSIn;
   QSpinBox         *mVIn;
   KColorPatch *mColorPatch;
-  KoColor mColor;
 };
 
 class GreyWidget : public ColorWidget
@@ -194,7 +193,6 @@ protected:
   QLabel      *mVLabel;
   QSpinBox    *mVIn;
   KColorPatch *mColorPatch;
-  KoColor mColor;
 };
 
 class LABWidget : public ColorWidget
@@ -232,7 +230,6 @@ private:
   QSpinBox *mAIn;
   QSpinBox *mBIn;
   KColorPatch *mColorPatch;
-  KoColor mColor;
 };
 
 #endif

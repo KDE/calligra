@@ -40,26 +40,24 @@ KoColorChooser::KoColorChooser(QWidget *parent, const char *name) : QWidget(pare
   mRGBWidget = new RGBWidget(m_tab);
   m_current = mRGBWidget;
   m_tab -> addTab(mRGBWidget, "RGB");
-#if 0
   mHSVWidget = new HSVWidget(m_tab);
   m_tab -> addTab(mHSVWidget, "HSV");
+#if 0
   mCMYKWidget = new QWidget(m_tab);
   m_tab -> addTab(mCMYKWidget, "CMYK");
   mLABWidget = new LABWidget(m_tab);
   m_tab -> addTab(mLABWidget, "LAB");
+#endif
   mGreyWidget = new GreyWidget(m_tab);
   m_tab -> addTab(mGreyWidget, i18n("Grey"));
-#endif
   mColorSelector = new KHSSelector(this);
   mColorSelector->setFixedHeight(20);
   mGrid->addMultiCellWidget(m_tab, 0, 1, 0, 4);
   mGrid->addMultiCellWidget(mColorSelector, 2, 2, 0, 4);
   connect(mRGBWidget, SIGNAL(colorChanged(const KoColor &)), this, SLOT(childColorChanged(const KoColor &)));
-#if 0
   connect(mHSVWidget, SIGNAL(colorChanged(const KoColor &)), this, SLOT(childColorChanged(const KoColor &)));
-  connect(mLABWidget, SIGNAL(colorChanged(const KoColor &)), this, SLOT(childColorChanged(const KoColor &)));
+//  connect(mLABWidget, SIGNAL(colorChanged(const KoColor &)), this, SLOT(childColorChanged(const KoColor &)));
   connect(mGreyWidget, SIGNAL(colorChanged(const KoColor &)), this, SLOT(childColorChanged(const KoColor &)));
-#endif
   connect(mColorSelector, SIGNAL(valueChanged(int, int)), this, SLOT(slotChangeXY(int, int)));
   connect(m_tab, SIGNAL(currentChanged(QWidget*)), this, SLOT(slotCurrentChanged(QWidget*)));
   slotChangeColor(KoColor::black());
@@ -75,12 +73,7 @@ void KoColorChooser::slotChangeXY(int h, int s)
 {
   KoColor c(h, s, 192, KoColor::csHSV);
 
-  mRGBWidget->slotChangeColor(c);
-#if 0
-  mHSVWidget->slotChangeColor(c);
-  mLABWidget->slotChangeColor(c);
-  mGreyWidget->slotChangeColor(c);
-#endif
+  m_current -> slotChangeColor(c);
 }
 
 void KoColorChooser::slotChangeColor(const QColor &c)
@@ -90,7 +83,7 @@ void KoColorChooser::slotChangeColor(const QColor &c)
 
 void KoColorChooser::childColorChanged(const KoColor& c)
 {
-  mColor = c;
+  mColor.setRGB(c.R(), c.G(), c.B());
   emit colorChanged(mColor);
 }
 
@@ -177,7 +170,7 @@ ColorWidget::~ColorWidget()
 
 void ColorWidget::slotChangeColor(const KoColor& c)
 {
-  mColor = c;
+  mColor.setRGB(c.R(), c.G(), c.B());
   slotRefreshColor();
 }
 
@@ -185,10 +178,6 @@ void ColorWidget::slotChangeColor(const QColor& c)
 {
   mColor.setColor(c);
   slotRefreshColor();
-}
-
-void ColorWidget::slotRefreshColor()
-{
 }
 
 void RGBWidget::slotRefreshColor()
@@ -296,15 +285,15 @@ HSVWidget::HSVWidget(QWidget *parent): ColorWidget(parent)
   /* setup color sliders */
   mHSlider = new KoColorSlider(this);
   mHSlider->setMaximumHeight(20);
-  mHSlider->slotSetRange(0, 360);
+  mHSlider->slotSetRange(0, 359);
 
   mSSlider = new KoColorSlider(this);
   mSSlider->setMaximumHeight(20);
-  mSSlider->slotSetRange(0, 100);
+  mSSlider->slotSetRange(0, 255);
 
   mVSlider = new KoColorSlider(this);
   mVSlider->setMaximumHeight(20);
-  mVSlider->slotSetRange(0, 100);
+  mVSlider->slotSetRange(0, 255);
 
   /* setup slider labels */
   mHLabel = new QLabel("H", this);
@@ -318,13 +307,13 @@ HSVWidget::HSVWidget(QWidget *parent): ColorWidget(parent)
   mVLabel->setFixedHeight(20);
 
   /* setup spin box */
-  mHIn = new QSpinBox(0, 360, 1, this);
+  mHIn = new QSpinBox(0, 359, 1, this);
   mHIn->setFixedWidth(42);
   mHIn->setFixedHeight(20);
-  mSIn = new QSpinBox(0, 100, 1, this);
+  mSIn = new QSpinBox(0, 255, 1, this);
   mSIn->setFixedWidth(42);
   mSIn->setFixedHeight(20);
-  mVIn = new QSpinBox(0, 100, 1, this);
+  mVIn = new QSpinBox(0, 255, 1, this);
   mVIn->setFixedWidth(42);
   mVIn->setFixedHeight(20);
 
@@ -359,17 +348,17 @@ void HSVWidget::slotRefreshColor()
   int v = mColor.V();
 
   mHSlider->slotSetColor1(KoColor(0, s, v, KoColor::csHSV).color());
-  mHSlider->slotSetColor2(KoColor(360, s, v, KoColor::csHSV).color());
+  mHSlider->slotSetColor2(KoColor(359, s, v, KoColor::csHSV).color());
   mHSlider->slotSetValue(h);
   mHIn->setValue(h);
 
   mSSlider->slotSetColor1(KoColor(h, 0, v, KoColor::csHSV).color());
-  mSSlider->slotSetColor2(KoColor(h, 100, v, KoColor::csHSV).color());
+  mSSlider->slotSetColor2(KoColor(h, 255, v, KoColor::csHSV).color());
   mSSlider->slotSetValue(s);
   mSIn->setValue(s);
 
   mVSlider->slotSetColor1(KoColor(h, s, 0, KoColor::csHSV).color());
-  mVSlider->slotSetColor2(KoColor(h, s, 100, KoColor::csHSV).color());
+  mVSlider->slotSetColor2(KoColor(h, s, 255, KoColor::csHSV).color());
   mVSlider->slotSetValue(v);
   mVIn->setValue(v);
   mColorPatch -> setColor(mColor.color());
@@ -520,7 +509,6 @@ void GreyWidget::slotPatchChanged(const QColor& clr)
   mColor.setRGB(gray, gray, gray);
   slotRefreshColor();
   emit colorChanged(mColor);
-
 }
 
 LABWidget::LABWidget(QWidget *parent) : ColorWidget(parent)
