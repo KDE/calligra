@@ -486,7 +486,7 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
     KoTextParag *parag = static_cast<KoTextParag*> (textDocument()->firstParag());
     // ### fix this loop (Werner)
     while ( parag ) {
-        saveParagraph( doc, parag, textobj, 0, parag->length()-1 );
+        saveParagraph( doc, parag, textobj, 0, parag->length()-2 );
         parag = static_cast<KoTextParag*>( parag->next());
     }
     return textobj;
@@ -702,7 +702,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem )
             }
         } else if ( e.tagName() == "UNSORTEDLISTTYPE" ) {
             if ( listNum < 4 ) {
-                QColor c( e.attribute( "red" ).toInt(), e.attribute( "green" ).toInt(), e.attribute( "blue" ).toInt() );
+                //QColor c( e.attribute( "red" ).toInt(), e.attribute( "green" ).toInt(), e.attribute( "blue" ).toInt() );
                 // ## settings.bulletColor[ listNum++ ] = c;
             }
         }
@@ -2001,7 +2001,7 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent ) const
     if ( c1.parag() == c2.parag() )
     {
         text = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
-        m_kptextobj->saveParagraph( domDoc, c1.parag(), elem, c1.index(), c2.index()-1 );
+        m_kptextobj->saveParagraph( domDoc, c1.parag(), elem, c1.index(), c2.index()-2 );
     }
     else
     {

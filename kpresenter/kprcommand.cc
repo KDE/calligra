@@ -1965,11 +1965,16 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
     QString text;
 
     QValueList<QDomElement> listParagraphs;
+    bool firstparag = true;
     QDomElement paragElem = elem.firstChild().toElement();
     for ( ; !paragElem.isNull() ; paragElem = paragElem.nextSibling().toElement() )
     {
         if ( paragElem.tagName() == "P" )
         {
+            if ( !firstparag )
+                text += '\n';
+            else
+                firstparag = false;
             QDomElement n = paragElem.firstChild().toElement();
             while ( !n.isNull() ) {
                 if ( n.tagName() == "TEXT" )
@@ -1977,7 +1982,6 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
                 n = n.nextSibling().toElement();
             }
             listParagraphs.append( paragElem );
-            text += '\n';
         }
     }
     kdDebug(33001) << "KPrPasteTextCommand::execute Inserting text: '" << text << "'" << endl;
