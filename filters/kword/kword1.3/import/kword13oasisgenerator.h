@@ -57,6 +57,9 @@ protected: // ZIP methods
     void writeContentXml( void );
     void writeMetaXml( void );
 protected: // Preparing phase
+    void prepareTextFrameset( KWordTextFrameset* frameset );
+    /// Also sets the name of the automatical style
+    void declareLayout( KWord13Layout& layout );
     /// Also sets the name of the automatical style
     void declareStyle( KWord13Layout& layout );
     double numberOrNull( const QString& str ) const;

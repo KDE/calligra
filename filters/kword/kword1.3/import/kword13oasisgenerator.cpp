@@ -43,6 +43,21 @@ KWord13OasisGenerator::~KWord13OasisGenerator( void )
 {
 }
 
+void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
+{
+    if ( ! frameset )
+    {
+        kdWarning(30520) << "Tried to prepare a NULL text frameset!" << endl;
+        return;
+    }
+    
+    for ( QValueList<KWordParagraph>::Iterator it = frameset->m_paragraphGroup.begin();
+        it != frameset->m_paragraphGroup.end(); ++it)
+    {
+        declareLayout( (*it).m_layout );
+    }
+}
+
 bool KWord13OasisGenerator::prepare( KWord13Document& kwordDocument )
 {
     if ( !m_kwordDocument )
@@ -63,6 +78,9 @@ bool KWord13OasisGenerator::prepare( KWord13Document& kwordDocument )
         declareStyle( *it );    
     }
     
+    // Prepare first text frameset
+    prepareTextFrameset( m_kwordDocument->m_normalTextFramesetList.first() );
+    
     // ### TODO
     
     return true;
@@ -77,6 +95,30 @@ double KWord13OasisGenerator::numberOrNull( const QString& str ) const
     else
         return 0.0;
 }
+
+// Inspired by KoParagStyle::saveStyle
+void KWord13OasisGenerator::declareLayout( KWord13Layout& layout )
+{
+    KoGenStyle gs( KoGenStyle::STYLE_AUTO, "paragraph", layout.m_name );
+
+    // ### TODO: any display name? gs.addAttribute( "style:display-name", layout.m_name );
+#if 0
+    // TODO: check that this is correct
+    if ( m_paragLayout.counter && m_paragLayout.counter->depth() ) {
+        if ( m_bOutline )
+            gs.addAttribute( "style:default-outline-level", (int)m_paragLayout.counter->depth() + 1 );
+        else
+            gs.addAttribute( "style:default-level", (int)m_paragLayout.counter->depth() + 1 );
+    }
+#endif
+    fillGenStyleWithLayout( layout, gs, true );
+    fillGenStyleWithFormatOne( layout.m_format , gs, true );
+
+    layout.m_autoStyleName = m_oasisGenStyles.lookup( gs, "P", true );
+    
+    kdDebug(30520) << "Layout: Parent " << layout.m_name << " => " << layout.m_autoStyleName << endl;
+}
+
 
 // Inspired by KoParagStyle::saveStyle
 void KWord13OasisGenerator::declareStyle( KWord13Layout& layout )
