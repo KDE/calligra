@@ -64,7 +64,7 @@ void KWTextImage::resize()
     }
 }
 
-void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected , const int /*offset*/)
+void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int /*ascentpix*/, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, int /*offset*/)
 {
     // (x,y) is the position of the inline item (in pixels)
     // (wpix,hpix) is the size of the inline item (in pixels)
@@ -75,7 +75,6 @@ void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix,
         return;
     }
 
-    KoZoomHandler *zh = textDocument()->paintingZoomHandler();
     QSize imgSize( wpix, hpix );
 
     QRect rect( QPoint(x, y), imgSize );

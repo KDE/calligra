@@ -124,7 +124,7 @@ public:
     QString manualString() const { return m_varValue.toString();}
 
     virtual void resize();
-    virtual void drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset );
+    virtual void drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset );
 
     /** The frameset that contains the text for this footnote */
     KWFootNoteFrameSet * frameSet() const { return m_frameset; }
