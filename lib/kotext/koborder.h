@@ -36,9 +36,9 @@ public:
     KoBorder();
     KoBorder( const QColor & c, BorderStyle s, double width );
     QColor color;
-    BorderStyle style;
     void setPenWidth(double _w);
-
+    void setStyle(BorderStyle _style);
+    BorderStyle getStyle() const {return style;}
     double penWidth() const{ return ptPenWidth;}
     double width() const { return ptWidth; }
 
@@ -71,6 +71,7 @@ public:
 private:
     double ptWidth;
     double ptPenWidth;
+    BorderStyle style;
 };
 
 #endif

@@ -272,7 +272,7 @@ void KoBorderPreview::drawContents( QPainter* painter )
     if ( m_topBorder.width() > 0 ) {
         painter->setPen( setBorderPen( m_topBorder ) );
         painter->drawLine( r.x() + 20, r.y() + 30, r.right() - 20, r.y() + 30 );
-        if ( m_topBorder.style==KoBorder::DOUBLE_LINE)
+        if ( m_topBorder.getStyle()==KoBorder::DOUBLE_LINE)
             painter->drawLine( r.x() + 20, r.y() + 30+m_topBorder.width()+1, r.right() - 20, r.y() + 30+m_topBorder.width()+1 );
 
 
@@ -281,7 +281,7 @@ void KoBorderPreview::drawContents( QPainter* painter )
     if ( m_bottomBorder.width() > 0 ) {
         painter->setPen( setBorderPen( m_bottomBorder ) );
         painter->drawLine( r.x() + 20, r.bottom() - 30, r.right() - 20, r.bottom() - 30 );
-        if ( m_bottomBorder.style==KoBorder::DOUBLE_LINE)
+        if ( m_bottomBorder.getStyle()==KoBorder::DOUBLE_LINE)
             painter->drawLine( r.x() + 20, r.y() - 30-m_bottomBorder.width()-1, r.right() - 20, r.y() - 30 - m_bottomBorder.width()- 1 );
 
     }
@@ -289,7 +289,7 @@ void KoBorderPreview::drawContents( QPainter* painter )
     if ( m_leftBorder.width() > 0 ) {
         painter->setPen( setBorderPen( m_leftBorder ) );
         painter->drawLine( r.x() + 20, r.y() + 30, r.x() + 20, r.bottom() - 30 );
-        if ( m_leftBorder.style==KoBorder::DOUBLE_LINE)
+        if ( m_leftBorder.getStyle()==KoBorder::DOUBLE_LINE)
             painter->drawLine( r.x() + 20 - m_leftBorder.width() -1 , r.y() + 30, r.x() + 20- m_leftBorder.width() -1, r.bottom() - 30 );
 
     }
@@ -297,7 +297,7 @@ void KoBorderPreview::drawContents( QPainter* painter )
     if ( m_rightBorder.width() > 0 ) {
         painter->setPen( setBorderPen( m_rightBorder ) );
         painter->drawLine( r.right() - 20, r.y() + 30, r.right() - 20, r.bottom() - 30 );
-        if ( m_rightBorder.style==KoBorder::DOUBLE_LINE)
+        if ( m_rightBorder.getStyle()==KoBorder::DOUBLE_LINE)
             painter->drawLine( r.right() - 20 -m_rightBorder.width()-1, r.y() + 30, r.right() - 20-m_rightBorder.width()-1, r.bottom() - 30 );
 
     }
@@ -310,7 +310,7 @@ QPen KoBorderPreview::setBorderPen( KoBorder _brd )
     pen.setWidth( static_cast<int>( _brd.penWidth() ) );
     pen.setColor( _brd.color );
 
-    switch ( _brd.style ) {
+    switch ( _brd.getStyle() ) {
     case KoBorder::SOLID:
         pen.setStyle( SolidLine );
         break;
@@ -962,11 +962,11 @@ void KoParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
     {
         if( (  ((int)m_topBorder.penWidth() != cWidth->currentText().toInt()) ||(m_topBorder.color != bColor->color() )
-               ||(m_topBorder.style!=KoBorder::getStyle(cStyle->currentText()) )) && bTop->isOn() )
+               ||(m_topBorder.getStyle()!=KoBorder::getStyle(cStyle->currentText()) )) && bTop->isOn() )
         {
             m_topBorder.setPenWidth( cWidth->currentText().toInt() );
             m_topBorder.color = QColor( bColor->color() );
-            m_topBorder.style = KoBorder::getStyle(cStyle->currentText());
+            m_topBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
             prev3->setTopBorder( m_topBorder );
         }
         else
@@ -976,11 +976,11 @@ void KoParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
     {
         if( (  ((int)m_bottomBorder.penWidth() != cWidth->currentText().toInt()) ||(m_bottomBorder.color != bColor->color() )
-               ||(m_bottomBorder.style!=KoBorder::getStyle(cStyle->currentText()) )) && bBottom->isOn() )
+               ||(m_bottomBorder.getStyle()!=KoBorder::getStyle(cStyle->currentText()) )) && bBottom->isOn() )
         {
             m_bottomBorder.setPenWidth(cWidth->currentText().toInt());
             m_bottomBorder.color = QColor( bColor->color() );
-            m_bottomBorder.style=KoBorder::getStyle(cStyle->currentText());
+            m_bottomBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
             prev3->setBottomBorder( m_bottomBorder );
         }
         else
@@ -992,11 +992,11 @@ void KoParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
     {
 
         if( (  ((int)m_leftBorder.penWidth() != cWidth->currentText().toInt()) ||(m_leftBorder.color != bColor->color() )
-               ||(m_leftBorder.style!=KoBorder::getStyle(cStyle->currentText()) )) && bLeft->isOn() )
+               ||(m_leftBorder.getStyle()!=KoBorder::getStyle(cStyle->currentText()) )) && bLeft->isOn() )
         {
             m_leftBorder.setPenWidth( cWidth->currentText().toInt());
             m_leftBorder.color = QColor( bColor->color() );
-            m_leftBorder.style=KoBorder::getStyle(cStyle->currentText());
+            m_leftBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
             prev3->setLeftBorder( m_leftBorder );
         }
         else
@@ -1007,11 +1007,11 @@ void KoParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
     {
 
         if( (  ((int)m_rightBorder.penWidth() != cWidth->currentText().toInt()) ||(m_rightBorder.color != bColor->color() )
-               ||(m_rightBorder.style!=KoBorder::getStyle(cStyle->currentText()) )) && bRight->isOn() )
+               ||(m_rightBorder.getStyle()!=KoBorder::getStyle(cStyle->currentText()) )) && bRight->isOn() )
         {
             m_rightBorder.setPenWidth( cWidth->currentText().toInt());
             m_rightBorder.color = bColor->color();
-            m_rightBorder.style=KoBorder::getStyle(cStyle->currentText());
+            m_rightBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
             prev3->setRightBorder( m_rightBorder );
         }
         else
@@ -1041,7 +1041,7 @@ void KoParagBorderWidget::brdLeftToggled( bool _on )
     else {
         m_leftBorder.setPenWidth(cWidth->currentText().toInt());
         m_leftBorder.color = bColor->color();
-        m_leftBorder.style= KoBorder::getStyle( cStyle->currentText() );
+        m_leftBorder.setStyle(KoBorder::getStyle( cStyle->currentText() ));
     }
     prev3->setLeftBorder( m_leftBorder );
 }
@@ -1053,7 +1053,7 @@ void KoParagBorderWidget::brdRightToggled( bool _on )
     else {
         m_rightBorder.setPenWidth(cWidth->currentText().toInt());
         m_rightBorder.color = bColor->color();
-        m_rightBorder.style= KoBorder::getStyle( cStyle->currentText() );
+        m_rightBorder.setStyle( KoBorder::getStyle( cStyle->currentText() ));
     }
     prev3->setRightBorder( m_rightBorder );
 }
@@ -1065,7 +1065,7 @@ void KoParagBorderWidget::brdTopToggled( bool _on )
     else {
         m_topBorder.setPenWidth(cWidth->currentText().toInt());
         m_topBorder.color = bColor->color();
-        m_topBorder.style= KoBorder::getStyle( cStyle->currentText() );
+        m_topBorder.setStyle(KoBorder::getStyle( cStyle->currentText() ));
     }
     prev3->setTopBorder( m_topBorder );
 }
@@ -1077,7 +1077,7 @@ void KoParagBorderWidget::brdBottomToggled( bool _on )
     else {
         m_bottomBorder.setPenWidth( cWidth->currentText().toInt());
         m_bottomBorder.color = bColor->color();
-        m_bottomBorder.style=KoBorder::getStyle(cStyle->currentText());
+        m_bottomBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
     }
     prev3->setBottomBorder( m_bottomBorder );
 }

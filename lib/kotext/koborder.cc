@@ -44,6 +44,12 @@ bool KoBorder::operator!=( const KoBorder _brd ) const {
     return ( style != _brd.style || color != _brd.color || ptPenWidth != _brd.ptPenWidth );
 }
 
+void KoBorder::setStyle(BorderStyle _style)
+{
+    style = _style;
+    setPenWidth(ptPenWidth);
+}
+
 void KoBorder::setPenWidth(double _w)
 {
     ptPenWidth = _w;
