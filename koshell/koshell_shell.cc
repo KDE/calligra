@@ -169,7 +169,7 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
     tmpUrl.setPath( tmpFile->name() );
   }
 
-  m_recent->addURL( url );
+  recentAction()->addURL( url );
 
   KoDocument* newdoc = m_documentEntry.createDoc();
 
@@ -438,7 +438,7 @@ void KoShellWindow::slotFileOpen()
     KURL url;
     if(dialog->exec()==QDialog::Accepted) {
         url=dialog->selectedURL();
-        m_recent->addURL( url );
+        recentAction()->addURL( url );
         if ( url.isLocalFile() )
             KRecentDocument::add(url.path(-1));
         else
