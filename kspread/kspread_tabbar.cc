@@ -560,7 +560,7 @@ void TabBar::paintEvent( QPaintEvent* )
         {
             int x = rect.x();
             if( d->targetTab > d->tabRects.count() )
-              x = rect.right();
+              x = rect.right()-7;
             d->drawMoveMarker( painter, x, rect.y() );
         }
     }
