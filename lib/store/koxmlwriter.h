@@ -195,10 +195,11 @@ public:
 private:
     struct Tag {
         Tag( const char* t = 0, bool ind = true )
-            : tagName( t ), hasChildren( false ),
+            : tagName( t ), hasChildren( false ), lastChildIsText( false ),
               openingTagClosed( false ), indentInside( ind ) {}
         const char* tagName;
         bool hasChildren; ///< element or text children
+        bool lastChildIsText; ///< last child is a text node
         bool openingTagClosed; ///< true once the '\>' in \<tag a="b"\> is written out
         bool indentInside; ///< whether to indent the contents of this tag
     };

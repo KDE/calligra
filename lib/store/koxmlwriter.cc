@@ -111,6 +111,7 @@ bool KoXmlWriter::prepareForChild()
         if ( !parent.hasChildren ) {
             closeStartElement( parent );
             parent.hasChildren = true;
+            parent.lastChildIsText = false;
         }
         if ( parent.indentInside ) {
             writeIndent();
@@ -166,7 +167,7 @@ void KoXmlWriter::endElement()
         writeCString( "/>" );
     }
     else {
-        if ( tag.indentInside ) {
+        if ( tag.indentInside && !tag.lastChildIsText ) {
             writeIndent();
         }
         writeCString( "</" );
@@ -182,6 +183,7 @@ void KoXmlWriter::addTextNode( const char* cstr )
     if ( !parent.hasChildren ) {
         closeStartElement( parent );
         parent.hasChildren = true;
+        parent.lastChildIsText = true;
     }
 
     char* escaped = escapeForXML( cstr, -1 );

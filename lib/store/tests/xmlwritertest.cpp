@@ -106,8 +106,11 @@ int main( int argc, char** argv ) {
     writer.addConfigItem( "TestConfigBool", val );
     writer.addConfigItem( "TestConfigInt", num );
     writer.addConfigItem( "TestConfigDouble", numdouble );
-    TEST_END( "test config", "<r>\n <config:config-item config:name=\"TestConfigDouble\" config:type=\"double\"/>5.0</config:config-item><r>\n"  );
-
+    TEST_END( "test config", "<r>\n"
+                             " <config:config-item config:name=\"TestConfigBool\" config:type=\"boolean\">true</config:config-item>\n"
+                             " <config:config-item config:name=\"TestConfigInt\" config:type=\"int\">1</config:config-item>\n"
+                             " <config:config-item config:name=\"TestConfigDouble\" config:type=\"double\">5</config:config-item>\n"
+                             "</r>\n" );
 
     speedTest();
 }
