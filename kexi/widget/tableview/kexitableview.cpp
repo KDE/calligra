@@ -466,7 +466,7 @@ void KexiTableView::setupNavigator()
 	connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
 		this,SLOT(vScrollBarValueChanged(int)));
 
-	d->navPanel->updateGeometry(leftMargin());
+//	d->navPanel->updateGeometry(leftMargin());
 }
 
 #if 0
@@ -3934,22 +3934,6 @@ bool KexiTableView::rowEditing() const
 	return d->rowEditing;
 }
 
-/*bool KexiTableView::navigatorEnabled() const
-{
-	return d->navigatorEnabled;
-}
-	
-void KexiTableView::setNavigatorEnabled(bool set)
-{
-	if (d->navigatorEnabled==set)
-		return;
-	d->navigatorEnabled = set;
-	if(!set)
-		d->navPanel->hide();
-	else
-		d->navPanel->show();
-}*/
-
 bool KexiTableView::contextMenuEnabled() const
 {
 	return d->contextMenuEnabled;
@@ -3965,10 +3949,9 @@ void KexiTableView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int
 /*todo*/
 	kdDebug(44021)<<"KexiTableView::setHBarGeometry"<<endl;
 	if (d->appearance.navigatorEnabled) {
-		hbar.setGeometry( x + d->navPanel->width(), y, w - d->navPanel->width(), h );
+		d->navPanel->setHBarGeometry( hbar, x, y, w, h );
 	}
-	else
-	{
+	else {
 		hbar.setGeometry( x , y, w, h );
 	}
 }
@@ -3987,7 +3970,6 @@ void KexiTableView::setSpreadSheetMode()
 {
 	d->spreadSheetMode = true;
 	Appearance a = d->appearance;
-//	setNavigatorEnabled( false );
 	setSortingEnabled( false );
 	setInsertingEnabled( false );
 	setAcceptsRowEditAfterCellAccepting( true );
@@ -4266,7 +4248,6 @@ void KexiTableView::setAppearance(const Appearance& a)
 	}
 //	}
 
-//	if (d->appearance.navigatorEnabled != a.navigatorEnabled) {
 	if(!a.navigatorEnabled)
 		d->navPanel->hide();
 	else
