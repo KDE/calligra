@@ -53,7 +53,11 @@ VShapeTool::eventFilter( QEvent* event )
 
 		// adjust to real viewport contents instead of raw mouse coords:
 		KoPoint p = view()->canvasWidget()->viewportToContents( QPoint( m_p.x(), m_p.y() ) );
-
+		m_p.setX( m_p.x() / view()->zoom() );
+		m_p.setY( m_p.y() / view()->zoom() );
+		m_d1 /= view()->zoom();
+		if( !m_isPolar )
+			m_d2 /= view()->zoom();
 
 		VShapeCmd* cmd = new VShapeCmd(
 			&view()->part()->document(),
