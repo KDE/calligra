@@ -41,7 +41,7 @@ class KoVariable;
 class KoTextViewIface;
 #include "korichtext.h"
 class KoBorder;
-class KoStyle;
+class KoParagStyle;
 
 /**
  * Object that is created to edit a KoTextObject.
@@ -102,7 +102,7 @@ public:
     KCommand * setBordersCommand( const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& bottomBorder, const KoBorder& topBorder );
     KCommand * setMarginCommand( QStyleSheetItem::Margin m, double margin );
     KCommand * setTabListCommand( const KoTabulatorList & tabList );
-    void applyStyle( const KoStyle * style );
+    void applyStyle( const KoParagStyle * style );
 
     void dragStarted();
     void focusInEvent();
@@ -147,8 +147,8 @@ public:
     void copyTextOfComment();
 
     // This is in fact "from selection or cursor"
-    KoStyle * createStyleFromSelection(const QString & name);
-    void updateStyleFromSelection(KoStyle* style);
+    KoParagStyle * createStyleFromSelection(const QString & name);
+    void updateStyleFromSelection(KoParagStyle* style);
 
     QString underCursorWord();
 

@@ -59,7 +59,7 @@ void KoImportStyleDia::generateStyleList()
         {
             QString name = m_listStyleName->text(i );
             //remove this style from list
-            QPtrListIterator<KoStyle> styleIt( m_styleList );
+            QPtrListIterator<KoParagStyle> styleIt( m_styleList );
             for ( ; styleIt.current(); ++styleIt )
             {
                 if ( styleIt.current()->name() == name )
@@ -75,7 +75,7 @@ void KoImportStyleDia::generateStyleList()
 
 void KoImportStyleDia::updateFollowingStyle(const QString & _name)
 {
-    QPtrListIterator<KoStyle> styleIt( m_styleList );
+    QPtrListIterator<KoParagStyle> styleIt( m_styleList );
     for ( ; styleIt.current(); ++styleIt )
     {
         if ( styleIt.current()->followingStyle()->translatedName() == _name )
@@ -94,7 +94,7 @@ void KoImportStyleDia::slotLoadFile()
 void KoImportStyleDia::initList()
 {
     QStringList lst;
-    for ( KoStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+    for ( KoParagStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
     {
         lst<<p->translatedName();
     }
@@ -120,9 +120,9 @@ QString KoImportStyleDia::generateStyleName( const QString & templateName )
     return name;
 }
 
-KoStyle *KoImportStyleDia::findStyle( const QString & _name)
+KoParagStyle *KoImportStyleDia::findStyle( const QString & _name)
 {
-    QPtrListIterator<KoStyle> styleIt( m_styleList );
+    QPtrListIterator<KoParagStyle> styleIt( m_styleList );
     for ( ; styleIt.current(); ++styleIt )
     {
         if ( styleIt.current()->name() == _name ) {

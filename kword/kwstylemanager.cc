@@ -28,13 +28,13 @@
 /* Class: KWStyleManager                                          */
 /******************************************************************/
 
-KWStyleManager::KWStyleManager( QWidget *_parent, KoUnit::Unit unit,KWDocument *_doc, const QPtrList<KoStyle> & style, const QString & activeStyleName)
+KWStyleManager::KWStyleManager( QWidget *_parent, KoUnit::Unit unit,KWDocument *_doc, const QPtrList<KoParagStyle> & style, const QString & activeStyleName)
     : KoStyleManager(_parent,unit,style, activeStyleName)
 {
     m_doc = _doc;
 }
 
-KoStyle* KWStyleManager::addStyleTemplate(KoStyle *style)
+KoParagStyle* KWStyleManager::addStyleTemplate(KoParagStyle *style)
 {
     m_doc->setModified( true);
     return m_doc->styleCollection()->addStyleTemplate(style);
@@ -45,7 +45,7 @@ void KWStyleManager::applyStyleChange( KoStyleChangeDefMap changed )
     m_doc->applyStyleChange( changed );
 }
 
-void KWStyleManager::removeStyleTemplate( KoStyle *style )
+void KWStyleManager::removeStyleTemplate( KoParagStyle *style )
 {
     m_doc->setModified( true);
     m_doc->styleCollection()->removeStyleTemplate(style);

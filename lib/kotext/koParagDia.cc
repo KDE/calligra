@@ -752,7 +752,7 @@ void KoStylePreview::setCounter( const KoParagCounter & counter )
     repaint( true );
 }
 
-void KoStylePreview::setStyle( KoStyle * style )
+void KoStylePreview::setStyle( KoParagStyle * style )
 {
     KoTextParag * parag = m_textdoc->firstParag();
     parag->applyStyle( style );

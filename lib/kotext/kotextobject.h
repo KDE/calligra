@@ -182,7 +182,7 @@ public:
      * This constructor creates the contained KoTextDocument automatically.
      */
     KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage,
-                  bool defaultHyphenation, KoStyle* defaultStyle, int tabStopWidth = -1,
+                  bool defaultHyphenation, KoParagStyle* defaultStyle, int tabStopWidth = -1,
                   QObject* parent = 0, const char *name = 0 );
 
     /** Alternative constructor.
@@ -191,7 +191,7 @@ public:
      * @param defaultStyle the style to use by default (initial pararaph, and when deleting a used style)
      * This constructor allows to use a derived class from KoTextDocument.
      */
-    KoTextObject( KoTextDocument *textdoc, KoStyle* defaultStyle,
+    KoTextObject( KoTextDocument *textdoc, KoParagStyle* defaultStyle,
                   QObject* parent = 0, const char *name = 0 );
 
     virtual ~KoTextObject();
@@ -295,16 +295,16 @@ public:
     KCommand * setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, int selectionId = KoTextDocument::Standard );
 
     /**
-     * Apply a KoStyle to a selection.
+     * Apply a KoParagStyle to a selection.
      * @param cursor the current cursor; used if there is no selection. Can be 0L if there is one.
-     * @param style the KoStyle to apply
+     * @param style the KoParagStyle to apply
      * @param selectionId the id of the selection, usually Standard or Temp
      * @param paragLayoutFlags which settings from the paragraph layout to apply
      * @param formatFlags which settings from the text format to apply
      * @param createUndoRedo if true, an undo/redo command will be created and emitted
      * @param interactive if true, the text will be reformatted/repainted to show the new style
      */
-    void applyStyle( KoTextCursor * cursor, const KoStyle * style,
+    void applyStyle( KoTextCursor * cursor, const KoParagStyle * style,
                      int selectionId = KoTextDocument::Standard,
                      int paragLayoutFlags = KoParagLayout::All, int formatFlags = KoTextFormat::Format,
                      bool createUndoRedo = true, bool interactive = true );
@@ -314,7 +314,7 @@ public:
      * e.g. to put it into a macro-command.
      * @return the command for 'apply style', or 0L if createUndoRedo is false.
      */
-    KCommand* applyStyleCommand( KoTextCursor * cursor, const KoStyle * style,
+    KCommand* applyStyleCommand( KoTextCursor * cursor, const KoParagStyle * style,
                      int selectionId = KoTextDocument::Standard,
                      int paragLayoutFlags = KoParagLayout::All, int formatFlags = KoTextFormat::Format,
                      bool createUndoRedo = true, bool interactive = true );
@@ -539,7 +539,7 @@ private:
 
     /** The style to use by default (initial pararaph, and when deleting a used style)
         TODO: check that we support 0 */
-    KoStyle* m_defaultStyle;
+    KoParagStyle* m_defaultStyle;
 
     bool m_visible;
 

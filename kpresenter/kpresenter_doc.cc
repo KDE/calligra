@@ -151,7 +151,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bGlobalHyphenation = false;
     _duplicatePage=false;
 
-    KoStyle* m_standardStyle = new KoStyle( "Standard" );
+    KoParagStyle* m_standardStyle = new KoParagStyle( "Standard" );
     m_styleColl->addStyleTemplate( m_standardStyle );
 
     KConfig *config = KPresenterFactory::global()->config();
@@ -619,8 +619,8 @@ QDomDocument KPresenterDoc::saveXML()
     {
         QDomElement styles = doc.createElement( "STYLES" );
         presenter.appendChild( styles );
-        QPtrList<KoStyle> m_styleList(m_styleColl->styleList());
-        for ( KoStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+        QPtrList<KoParagStyle> m_styleList(m_styleColl->styleList());
+        for ( KoParagStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
             saveStyle( p, styles );
 
         emit sigProgress( 60 );
@@ -3547,13 +3547,13 @@ void KPresenterDoc::refreshAllNoteBar(int page, const QString &text, KPresenterV
 void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
 {
     QValueList<QString> followingStyles;
-    QPtrList<KoStyle>m_styleList(m_styleColl->styleList());
+    QPtrList<KoParagStyle>m_styleList(m_styleColl->styleList());
 
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
 
-        KoStyle *sty = new KoStyle( QString::null );
+        KoParagStyle *sty = new KoParagStyle( QString::null );
         // Load the style from the <STYLE> element
         sty->loadStyle( styleElem );
 
@@ -3577,7 +3577,7 @@ void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
     Q_ASSERT( followingStyles.count() == m_styleList.count() );
     unsigned int i=0;
     for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
-        KoStyle * style = m_styleColl->findStyle(*it);
+        KoParagStyle * style = m_styleColl->findStyle(*it);
         m_styleColl->styleAt( i++)->setFollowingStyle( style );
     }
 }
@@ -3598,7 +3598,7 @@ void KPresenterDoc::applyStyleChange( KoStyleChangeDefMap changed )
     m_stickyPage->applyStyleChange( changed );
 }
 
-void KPresenterDoc::saveStyle( KoStyle *sty, QDomElement parentElem )
+void KPresenterDoc::saveStyle( KoParagStyle *sty, QDomElement parentElem )
 {
     QDomDocument doc = parentElem.ownerDocument();
     QDomElement styleElem = doc.createElement( "STYLE" );

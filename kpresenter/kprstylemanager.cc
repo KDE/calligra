@@ -27,13 +27,13 @@
 #include <kostyle.h>
 
 KPrStyleManager::KPrStyleManager( QWidget *_parent, KoUnit::Unit unit,KPresenterDoc *_doc,
-                                  const QPtrList<KoStyle> & style, const QString & activeStyleName)
+                                  const QPtrList<KoParagStyle> & style, const QString & activeStyleName)
     : KoStyleManager(_parent,unit,style, activeStyleName)
 {
     m_doc = _doc;
 }
 
-KoStyle* KPrStyleManager::addStyleTemplate(KoStyle *style)
+KoParagStyle* KPrStyleManager::addStyleTemplate(KoParagStyle *style)
 {
     m_doc->setModified( true );
     return m_doc->styleCollection()->addStyleTemplate(style);
@@ -44,7 +44,7 @@ void KPrStyleManager::applyStyleChange( KoStyleChangeDefMap changed )
     m_doc->applyStyleChange( changed );
 }
 
-void KPrStyleManager::removeStyleTemplate( KoStyle *style )
+void KPrStyleManager::removeStyleTemplate( KoParagStyle *style )
 {
     m_doc->setModified( true );
     m_doc->styleCollection()->removeStyleTemplate(style);

@@ -45,7 +45,7 @@ public:
 
 KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont,
                             const QString &defaultLanguage, bool hyphenation,
-                            KoStyle* defaultStyle, int tabStopWidth,
+                            KoParagStyle* defaultStyle, int tabStopWidth,
                             QObject* parent, const char *name )
     : QObject( parent, name ), m_defaultStyle( defaultStyle ), undoRedoInfo( this )
 {
@@ -55,7 +55,7 @@ KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont,
     init();
 }
 
-KoTextObject::KoTextObject( KoTextDocument* _textdoc, KoStyle* defaultStyle,
+KoTextObject::KoTextObject( KoTextDocument* _textdoc, KoParagStyle* defaultStyle,
                             QObject* parent, const char *name )
  : QObject( parent, name ), m_defaultStyle( defaultStyle ), undoRedoInfo( this )
 {
@@ -496,10 +496,10 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
             setLastFormattedParag( cursor->parag()->prev() );
 
         doUpdateCurrentFormat = false;
-        KoStyle * style = cursor->parag()->prev()->style();
+        KoParagStyle * style = cursor->parag()->prev()->style();
         if ( style )
         {
-            KoStyle * newStyle = style->followingStyle();
+            KoParagStyle * newStyle = style->followingStyle();
             if ( newStyle && style != newStyle ) // different "following style" applied
             {
                 doUpdateCurrentFormat = true;
@@ -695,7 +695,7 @@ void KoTextObject::pasteText( KoTextCursor * cursor, const QString & text, KoTex
 }
 
 
-void KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newStyle,
+void KoTextObject::applyStyle( KoTextCursor * cursor, const KoParagStyle * newStyle,
                                int selectionId,
                                int paragLayoutFlags, int formatFlags,
                                bool createUndoRedo, bool interactive )
@@ -709,7 +709,7 @@ void KoTextObject::applyStyle( KoTextCursor * cursor, const KoStyle * newStyle,
         Q_ASSERT( !cmd ); // mem leak, if applyStyleCommand created a command despite createUndoRedo==false!
 }
 
-KCommand *KoTextObject::applyStyleCommand( KoTextCursor * cursor, const KoStyle * newStyle,
+KCommand *KoTextObject::applyStyleCommand( KoTextCursor * cursor, const KoParagStyle * newStyle,
                                int selectionId,
                                int paragLayoutFlags, int formatFlags,
                                bool createUndoRedo, bool interactive )

@@ -45,7 +45,7 @@ class KPrTextDrag;
 class KPrTextDocument;
 class DCOPObject;
 class KPrPage;
-class KoStyle;
+class KoParagStyle;
 
 class KPTextObject :  public QObject, public KP2DObject
 {

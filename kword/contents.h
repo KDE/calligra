@@ -22,7 +22,7 @@
 
 class KWTextFrameSet;
 class KMacroCommand;
-class KoStyle;
+class KoParagStyle;
 #include <korichtext.h>
 
 // This command inserts a TOC at the beginning of a frameset, and is able to undo that.
@@ -42,7 +42,7 @@ public:
 
 protected:
     // Find or create a toc style
-    static KoStyle * findOrCreateTOCStyle( KWTextFrameSet *fs, int depth );
+    static KoParagStyle * findOrCreateTOCStyle( KWTextFrameSet *fs, int depth );
 
     int m_paragId;
 };

@@ -26,7 +26,7 @@
 #include <koStylist.h>
 
 class KPresenterDoc;
-class KoStyle;
+class KoParagStyle;
 class KoUnit;
 
 class KPrStyleManager : public KoStyleManager
@@ -35,11 +35,11 @@ class KPrStyleManager : public KoStyleManager
 
 public:
     KPrStyleManager( QWidget *_parent, KoUnit::Unit unit,KPresenterDoc *_doc,
-                     const QPtrList<KoStyle> & style, const QString & activeStyleName );
+                     const QPtrList<KoParagStyle> & style, const QString & activeStyleName );
 
-    virtual KoStyle* addStyleTemplate(KoStyle *style);
+    virtual KoParagStyle* addStyleTemplate(KoParagStyle *style);
     virtual void applyStyleChange( KoStyleChangeDefMap changed  );
-    virtual void removeStyleTemplate( KoStyle *style );
+    virtual void removeStyleTemplate( KoParagStyle *style );
     virtual void updateAllStyleLists();
     virtual void updateStyleListOrder( const QStringList & list);
 protected:

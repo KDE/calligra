@@ -34,7 +34,7 @@ public:
     KoImportStyleDia( const QStringList & _list, QWidget *parent, const char *name );
     ~KoImportStyleDia();
 
-    QPtrList<KoStyle> listOfStyleImported()const { return m_styleList;}
+    QPtrList<KoParagStyle> listOfStyleImported()const { return m_styleList;}
 protected slots:
     virtual void slotOk();
     void slotLoadFile();
@@ -48,12 +48,12 @@ protected:
 
     QString generateStyleName( const QString & templateName );
 
-    KoStyle *findStyle( const QString & _name);
+    KoParagStyle *findStyle( const QString & _name);
 
     void initList();
 
     QListBox *m_listStyleName;
-    QPtrList<KoStyle> m_styleList;
+    QPtrList<KoParagStyle> m_styleList;
 
     QStringList m_list;
 };

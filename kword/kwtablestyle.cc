@@ -135,7 +135,7 @@ void KWTableStyleCollection::updateTableStyleListOrder( const QStringList &list 
     m_styleList.clear();
     m_styleList = orderStyle;
 #if 0
-    QPtrListIterator<KoStyle> style( m_styleList );
+    QPtrListIterator<KoParagStyle> style( m_styleList );
     for ( ; style.current() ; ++style )
     {
         kdDebug()<<" style.current()->name() :"<<style.current()->name()<<endl;

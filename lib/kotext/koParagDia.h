@@ -415,7 +415,7 @@ public:
 
     /** Apply the given @p style to the preview.
      * Note that this overwrites anything done by setCounter. */
-    void setStyle( KoStyle *style );
+    void setStyle( KoParagStyle *style );
 
     /** Set the given @p counter to the preview. */
     void setCounter( const KoParagCounter & counter );

@@ -36,11 +36,11 @@ class KWFrameSet;
 class KWTableFrameSet;
 class KWPartFrameSet;
 class KoStyleCollection;
-class KoStyle;
+class KoParagStyle;
 class KWFrameStyle;
 class KWTableStyle;
 class KWTableTemplate;
-#define KWStyle KoStyle
+#define KWStyle KoParagStyle
 class KWFrame;
 class KWView;
 class KWViewMode;

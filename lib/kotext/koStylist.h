@@ -29,7 +29,7 @@
 #include <kostyle.h>
 
 class KoFontChooser;
-class KoStyle;
+class KoParagStyle;
 class KoStyleEditor;
 class KoStyleManagerTab;
 class QCheckBox;
@@ -51,21 +51,21 @@ class KoStyleManager : public KDialogBase
     Q_OBJECT
 
 public:
-    KoStyleManager( QWidget *_parent,KoUnit::Unit unit,const QPtrList<KoStyle> & style, const QString & activeStyleName );
+    KoStyleManager( QWidget *_parent,KoUnit::Unit unit,const QPtrList<KoParagStyle> & style, const QString & activeStyleName );
     virtual ~KoStyleManager();
 
-    virtual KoStyle* addStyleTemplate(KoStyle *style)=0;
-    //virtual void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )=0;
+    virtual KoParagStyle* addStyleTemplate(KoParagStyle *style)=0;
+    //virtual void applyStyleChange( KoParagStyle * changedStyle, int paragLayoutChanged, int formatChanged )=0;
     virtual void applyStyleChange( KoStyleChangeDefMap changed )=0;
 
-    virtual void removeStyleTemplate( KoStyle *style )=0;
+    virtual void removeStyleTemplate( KoParagStyle *style )=0;
     virtual void updateAllStyleLists()=0;
     virtual void updateStyleListOrder( const QStringList & list)=0;
 
 protected:
-    void updateFollowingStyle( KoStyle *s );
-    void updateInheritStyle( KoStyle *s );
-    void setupWidget(const QPtrList<KoStyle> & style);
+    void updateFollowingStyle( KoParagStyle *s );
+    void updateInheritStyle( KoParagStyle *s );
+    void setupWidget(const QPtrList<KoParagStyle> & style);
     void addGeneralTab();
     void apply();
     void updateGUI();
@@ -85,9 +85,9 @@ private:
     QComboBox *m_inheritCombo;
     KoStyleManagerPrivate *d;
 
-    KoStyle *m_currentStyle;
-    QPtrList<KoStyle> m_origStyles;      // internal list of orig styles we have modified
-    QPtrList<KoStyle> m_changedStyles;   // internal list of changed styles.
+    KoParagStyle *m_currentStyle;
+    QPtrList<KoParagStyle> m_origStyles;      // internal list of orig styles we have modified
+    QPtrList<KoParagStyle> m_changedStyles;   // internal list of changed styles.
     QPtrList<KoStyleManagerTab> m_tabsList;
     QStringList m_styleOrder;
     int numStyles;
@@ -104,7 +104,7 @@ protected slots:
     void moveDownStyle();
     void renameStyle(const QString &);
 protected:
-    KoStyle * style( const QString & _name );
+    KoParagStyle * style( const QString & _name );
     void addTab( KoStyleManagerTab * tab );
 };
 
@@ -114,7 +114,7 @@ public:
     KoStyleManagerTab(QWidget *parent) : QWidget(parent) {};
 
     /** the new style which is to be displayed */
-    void setStyle(KoStyle *style) { m_style = style; }
+    void setStyle(KoParagStyle *style) { m_style = style; }
     /**  update the GUI from the current Style*/
     virtual void update() = 0;
     /**  return the (i18n-ed) name of the tab */
@@ -122,7 +122,7 @@ public:
     /** save the GUI to the style */
     virtual void save() = 0;
 protected:
-    KoStyle *m_style;
+    KoParagStyle *m_style;
 };
 
 // A tab to edit parts of the parag-layout of the style

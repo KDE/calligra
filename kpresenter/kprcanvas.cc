@@ -3438,6 +3438,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
             dForceHeight = dForceWidth * dRectHeight / dRectWidth;
 
         // set the stretching values
+        // ### TODO: this should probably be setZoomedResolution, please test
         doc->zoomHandler()->setResolution( dForceWidth / dRectWidth,
                                            dForceHeight / dRectHeight );
         // As of yet (Feb. 2004) the following call results

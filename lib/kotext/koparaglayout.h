@@ -24,13 +24,13 @@
 #include "koborder.h"
 class KoGenStyle;
 class KoParagCounter;
-class KoStyle;
+class KoParagStyle;
 class KoOasisContext;
 
 /**
  * This class holds the paragraph-specific formatting information
  * It's separated from KoTextParag so that it can be copied in
- * the undo/redo history, and in KoStyle.
+ * the undo/redo history, and in KoParagStyle.
  */
 class KoParagLayout
 {
@@ -96,7 +96,7 @@ public:
     /** can be 0 if no counter set */
     KoParagCounter* counter;
 
-    KoStyle* style;
+    KoParagStyle* style;
 
     bool hasBorder() const { return topBorder.penWidth() > 0
                                  || bottomBorder.penWidth() > 0

@@ -271,7 +271,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     // Some simple import filters don't define any style,
     // so let's have a Standard style at least
-    KoStyle * standardStyle = new KoStyle( "Standard" ); // This gets translated later on
+    KoParagStyle * standardStyle = new KoParagStyle( "Standard" ); // This gets translated later on
     //kdDebug() << "KWDocument::KWDocument creating standardStyle " << standardStyle << endl;
     standardStyle->format().setFont( m_defaultFont );
     m_styleColl->addStyleTemplate( standardStyle );
@@ -1111,8 +1111,8 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
                 m_iFootNoteSeparatorLineLength = qRound( pageWidth.toDouble() );
             }
             // Not in KWord: color, distance before and after separator
-            // Not in OOo: line type of separator (solid, dot, dash etc.)
-            // m_footNoteSeparatorLineType = ...  // TODO
+            // Not in OOo, but in OASIS now: line type of separator (solid, dot, dash etc.)
+            // m_footNoteSeparatorLineType = ...  // TODO style:line-style, added in OASIS
 
             QString pos = footnoteSep.attribute( "style:adjustment" );
             if ( pos =="centered" )
@@ -1782,7 +1782,7 @@ void KWDocument::loadStyleTemplates( const QDomElement &stylesElem )
     QValueList<QString> followingStyles;
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
     if( listStyles.count() > 0) { // we are going to import at least one style.
-        KoStyle *s = m_styleColl->findStyle("Standard");
+        KoParagStyle *s = m_styleColl->findStyle("Standard");
         //kdDebug(32001) << "KWDocument::loadStyleTemplates looking for Standard, to delete it. Found " << s << endl;
         if(s) // delete the standard style.
             m_styleColl->removeStyleTemplate(s);
@@ -1790,11 +1790,11 @@ void KWDocument::loadStyleTemplates( const QDomElement &stylesElem )
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
 
-        KoStyle *sty = new KoStyle( QString::null );
+        KoParagStyle *sty = new KoParagStyle( QString::null );
         // Load the style from the <STYLE> element
         sty->loadStyle( styleElem, m_syntaxVersion );
 
-        //kdDebug(32001) << "KoStyle created name=" << sty->name() << endl;
+        //kdDebug(32001) << "KoParagStyle created name=" << sty->name() << endl;
 
         if ( m_syntaxVersion < 3 )
         {
@@ -1829,7 +1829,7 @@ void KWDocument::loadStyleTemplates( const QDomElement &stylesElem )
 
     unsigned int i=0;
     for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
-        KoStyle * style = m_styleColl->findStyle(*it);
+        KoParagStyle * style = m_styleColl->findStyle(*it);
         m_styleColl->styleAt(i++)->setFollowingStyle( style );
     }
 
@@ -2808,8 +2808,8 @@ QDomDocument KWDocument::saveXML()
 
     QDomElement styles = doc.createElement( "STYLES" );
     kwdoc.appendChild( styles );
-    QPtrList<KoStyle> m_styleList(m_styleColl->styleList());
-    for ( KoStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+    QPtrList<KoParagStyle> m_styleList(m_styleColl->styleList());
+    for ( KoParagStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
         saveStyle( p, styles );
 
     QDomElement frameStyles = doc.createElement( "FRAMESTYLES" );
@@ -2894,7 +2894,7 @@ void KWDocument::saveEmbeddedObjects( QDomElement& parentElem, const QPtrList<Ko
 }
 
 // KWord-1.3 format
-void KWDocument::saveStyle( KoStyle *sty, QDomElement parentElem )
+void KWDocument::saveStyle( KoParagStyle *sty, QDomElement parentElem )
 {
     QDomDocument doc = parentElem.ownerDocument();
     QDomElement styleElem = doc.createElement( "STYLE" );
@@ -4292,8 +4292,8 @@ void KWDocument::slotCommandExecuted()
 void KWDocument::printStyleDebug()
 {
     kdDebug() << "----------------------------------------"<<endl;
-    QPtrList<KoStyle> m_styleList(m_styleColl->styleList());
-    for ( KoStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+    QPtrList<KoParagStyle> m_styleList(m_styleColl->styleList());
+    for ( KoParagStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
     {
         kdDebug() << "Style " << p << "  " << p->name() <<endl;
         kdDebug() << "   format: " << p->format().key() <<endl;

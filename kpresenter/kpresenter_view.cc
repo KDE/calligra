@@ -5791,7 +5791,7 @@ void KPresenterView::viewHeader()
 
 void KPresenterView::showStyle( const QString & styleName )
 {
-    QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
+    QPtrListIterator<KoParagStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
     for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
     {
         if ( styleIt.current()->name() == styleName ) {
@@ -5806,7 +5806,7 @@ void KPresenterView::updateStyleList()
     QString currentStyle = actionFormatStyle->currentText();
     // Generate list of styles
     QStringList lst;
-    QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
+    QPtrListIterator<KoParagStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
     int pos = -1;
     for ( int i = 0; styleIt.current(); ++styleIt, ++i ) {
         QString name = styleIt.current()->translatedName();
@@ -5834,7 +5834,7 @@ void KPresenterView::updateStyleList()
     {
         if ( !(*it)->shortcut().toString().isEmpty())
         {
-            KoStyle* tmp = m_pKPresenterDoc->styleCollection()->findStyleShortCut( (*it)->name() );
+            KoParagStyle* tmp = m_pKPresenterDoc->styleCollection()->findStyleShortCut( (*it)->name() );
             if ( tmp )
                 shortCut.insert( tmp->shortCutName(), KShortcut( (*it)->shortcut()));
         }
@@ -5847,7 +5847,7 @@ void KPresenterView::updateStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act = 0L;
-        KoStyle *tmp = m_pKPresenterDoc->styleCollection()->findStyle( lst[ i]);
+        KoParagStyle *tmp = m_pKPresenterDoc->styleCollection()->findStyle( lst[ i]);
         if ( tmp )
         {
             QCString name = tmp->shortCutName().latin1();
@@ -5906,7 +5906,7 @@ void KPresenterView::textStyleSelected( int index )
     textStyleSelected( m_pKPresenterDoc->styleCollection()->styleAt( index ) );
 }
 
-void KPresenterView::textStyleSelected( KoStyle *_sty )
+void KPresenterView::textStyleSelected( KoParagStyle *_sty )
 {
     if ( !_sty )
         return;
@@ -6568,7 +6568,7 @@ void KPresenterView::createStyleFromSelection()
     if ( edit )
     {
         QStringList list;
-        QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
+        QPtrListIterator<KoParagStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
         for ( ; styleIt.current(); ++styleIt )
             list.append( styleIt.current()->name() );
         KoCreateStyleDia *dia = new KoCreateStyleDia( QStringList(), this, 0 );
@@ -6578,14 +6578,14 @@ void KPresenterView::createStyleFromSelection()
             if ( list.contains( name ) ) // update existing style
             {
                 // TODO confirmation message box
-                KoStyle* style = m_pKPresenterDoc->styleCollection()->findStyle( name );
+                KoParagStyle* style = m_pKPresenterDoc->styleCollection()->findStyle( name );
                 Q_ASSERT( style );
                 if ( style )
                     edit->updateStyleFromSelection( style );
             }
             else // create new style
             {
-                KoStyle *style = edit->createStyleFromSelection( name );
+                KoParagStyle *style = edit->createStyleFromSelection( name );
                 m_pKPresenterDoc->styleCollection()->addStyleTemplate( style );
                 m_pKPresenterDoc->updateAllStyleLists();
             }
@@ -6681,21 +6681,21 @@ void KPresenterView::insertFile(const QString &path)
 void KPresenterView::importStyle()
 {
     QStringList lst;
-    QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
+    QPtrListIterator<KoParagStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
 
     for ( ; styleIt.current(); ++styleIt )
         lst<<styleIt.current()->translatedName();
 
     KPrImportStyleDia dia( m_pKPresenterDoc, lst, this, 0L );
     if ( dia.exec() ) {
-        QPtrList<KoStyle>list(dia.listOfStyleImported());
-        QPtrListIterator<KoStyle> style(  list );
+        QPtrList<KoParagStyle>list(dia.listOfStyleImported());
+        QPtrListIterator<KoParagStyle> style(  list );
         QMap<QString, QString>followStyle;
 
         for ( ; style.current() ; ++style )
         {
             followStyle.insert( style.current()->translatedName(), style.current()->followingStyle()->translatedName());
-            m_pKPresenterDoc->styleCollection()->addStyleTemplate(new KoStyle(*style.current()));
+            m_pKPresenterDoc->styleCollection()->addStyleTemplate(new KoParagStyle(*style.current()));
         }
         if ( style.count()>0)
             m_pKPresenterDoc->setModified( true );
@@ -6705,9 +6705,9 @@ void KPresenterView::importStyle()
         QMapIterator<QString, QString> itFollow = followStyle.begin();
         for ( ; itFollow != followStyle.end(); ++itFollow )
         {
-            KoStyle * style = m_pKPresenterDoc->styleCollection()->findStyle(itFollow.key());
+            KoParagStyle * style = m_pKPresenterDoc->styleCollection()->findStyle(itFollow.key());
             QString newName =(followStyle)[ itFollow.key() ];
-            KoStyle * styleFollow = m_pKPresenterDoc->styleCollection()->findStyle(newName);
+            KoParagStyle * styleFollow = m_pKPresenterDoc->styleCollection()->findStyle(newName);
             if (styleFollow )
                 style->setFollowingStyle( styleFollow );
         }

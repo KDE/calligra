@@ -23,7 +23,7 @@
 #include <koStylist.h>
 
 class KWDocument;
-class KoStyle;
+class KoParagStyle;
 class KoUnit;
 /******************************************************************/
 /* Class: KWStyleManager                                          */
@@ -33,11 +33,11 @@ class KWStyleManager : public KoStyleManager
     Q_OBJECT
 
 public:
-    KWStyleManager( QWidget *_parent, KoUnit::Unit unit, KWDocument *_doc, const QPtrList<KoStyle> & style, const QString & activeStyleName = QString::null );
+    KWStyleManager( QWidget *_parent, KoUnit::Unit unit, KWDocument *_doc, const QPtrList<KoParagStyle> & style, const QString & activeStyleName = QString::null );
 
-    virtual KoStyle* addStyleTemplate(KoStyle *style);
+    virtual KoParagStyle* addStyleTemplate(KoParagStyle *style);
     virtual void applyStyleChange( KoStyleChangeDefMap changed  );
-    virtual void removeStyleTemplate( KoStyle *style );
+    virtual void removeStyleTemplate( KoParagStyle *style );
     virtual void updateAllStyleLists();
     virtual void updateStyleListOrder( const QStringList & list);
 protected:

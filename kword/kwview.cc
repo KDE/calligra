@@ -2058,7 +2058,7 @@ void KWView::updateStyleList()
     {
         if ( !(*it)->shortcut().toString().isEmpty())
         {
-            KoStyle* tmp = m_doc->styleCollection()->findStyleShortCut( (*it)->name() );
+            KoParagStyle* tmp = m_doc->styleCollection()->findStyleShortCut( (*it)->name() );
             if ( tmp )
                 shortCut.insert( tmp->shortCutName(), KShortcut( (*it)->shortcut()));
         }
@@ -2069,7 +2069,7 @@ void KWView::updateStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act = 0L;
-        KoStyle *tmp = m_doc->styleCollection()->findStyle( lst[ i]);
+        KoParagStyle *tmp = m_doc->styleCollection()->findStyle( lst[ i]);
         if ( tmp )
         {
             QCString name = tmp->shortCutName().latin1();
@@ -4186,7 +4186,7 @@ void KWView::slotStyleSelected()
     }
 }
 
-void KWView::textStyleSelected( KoStyle *_sty )
+void KWView::textStyleSelected( KoParagStyle *_sty )
 {
     if ( !_sty )
         return;
@@ -6189,14 +6189,14 @@ void KWView::createStyleFromSelection()
             if ( list.contains( name ) ) // update existing style
             {
                 // TODO confirmation message box
-                KoStyle* style = m_doc->styleCollection()->findStyle( name );
+                KoParagStyle* style = m_doc->styleCollection()->findStyle( name );
                 Q_ASSERT( style );
                 if ( style )
                     edit->updateStyleFromSelection( style );
             }
             else // create new style
             {
-                KoStyle *style = edit->createStyleFromSelection( name );
+                KoParagStyle *style = edit->createStyleFromSelection( name );
                 m_doc->styleCollection()->addStyleTemplate( style );
                 m_doc->updateAllStyleLists();
             }

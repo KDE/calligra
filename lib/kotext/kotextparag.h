@@ -28,7 +28,7 @@
 // #include "kotextformat.h"
 // class KoTextDocument;
 // class KoParagCounter;
-// class KoStyle;
+// class KoParagStyle;
 // class KoTextCustomItem;
 
 /**
@@ -101,11 +101,11 @@ public:
     int counterWidth() const;
 
     /** Style used by this paragraph */
-    KoStyle *style() const { return m_layout.style; }
+    KoParagStyle *style() const { return m_layout.style; }
     /** Sets the style in this paragraph, but doesn't _apply_ it, only sets a reference */
-    void setStyle( KoStyle *style ) { m_layout.style = style; }
+    void setStyle( KoParagStyle *style ) { m_layout.style = style; }
     /** Applies the style directly (without undo/redo! See KoTextObject for undo/redo) */
-    void applyStyle( KoStyle *style );
+    void applyStyle( KoParagStyle *style );
 
     /** Get tabulator positions */
     const KoTabulatorList& tabList() const { return m_layout.tabList(); }

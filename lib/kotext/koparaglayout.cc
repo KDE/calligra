@@ -146,10 +146,10 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
         if ( element.tagName() == "TABULATOR" )
         {
             KoTabulator tab;
-            tab.type = static_cast<KoTabulators>( KoStyle::getAttribute( element, "type", T_LEFT ) );
-            tab.ptPos = KoStyle::getAttribute( element, "ptpos", 0.0 );
-            tab.filling = static_cast<KoTabulatorFilling>( KoStyle::getAttribute( element, "filling", TF_BLANK ) );
-            tab.ptWidth = KoStyle::getAttribute( element, "width", 0.5 );
+            tab.type = static_cast<KoTabulators>( KoParagStyle::getAttribute( element, "type", T_LEFT ) );
+            tab.ptPos = KoParagStyle::getAttribute( element, "ptpos", 0.0 );
+            tab.filling = static_cast<KoTabulatorFilling>( KoParagStyle::getAttribute( element, "filling", TF_BLANK ) );
+            tab.ptWidth = KoParagStyle::getAttribute( element, "width", 0.5 );
             QString alignCharStr = element.attribute("alignchar");
             if ( alignCharStr.isEmpty() )
                 tab.alignChar = KGlobal::locale()->decimalSymbol()[0];
@@ -193,34 +193,34 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
     {
         element = parentElem.namedItem( "OHEAD" ).toElement(); // used by KWord-0.8
         if ( !element.isNull() )
-            layout.margins[QStyleSheetItem::MarginTop] = KoStyle::getAttribute( element, "pt", 0.0 );
+            layout.margins[QStyleSheetItem::MarginTop] = KoParagStyle::getAttribute( element, "pt", 0.0 );
 
         element = parentElem.namedItem( "OFOOT" ).toElement(); // used by KWord-0.8
         if ( !element.isNull() )
-            layout.margins[QStyleSheetItem::MarginBottom] = KoStyle::getAttribute( element, "pt", 0.0 );
+            layout.margins[QStyleSheetItem::MarginBottom] = KoParagStyle::getAttribute( element, "pt", 0.0 );
 
         element = parentElem.namedItem( "IFIRST" ).toElement(); // used by KWord-0.8
         if ( !element.isNull() )
-            layout.margins[QStyleSheetItem::MarginFirstLine] = KoStyle::getAttribute( element, "pt", 0.0 );
+            layout.margins[QStyleSheetItem::MarginFirstLine] = KoParagStyle::getAttribute( element, "pt", 0.0 );
 
         element = parentElem.namedItem( "ILEFT" ).toElement(); // used by KWord-0.8
         if ( !element.isNull() )
-            layout.margins[QStyleSheetItem::MarginLeft] = KoStyle::getAttribute( element, "pt", 0.0 );
+            layout.margins[QStyleSheetItem::MarginLeft] = KoParagStyle::getAttribute( element, "pt", 0.0 );
     }
 
     // KWord-1.0 DTD
     element = parentElem.namedItem( "INDENTS" ).toElement();
     if ( !element.isNull() )
     {
-        layout.margins[QStyleSheetItem::MarginFirstLine] = KoStyle::getAttribute( element, "first", 0.0 );
-        layout.margins[QStyleSheetItem::MarginLeft] = KoStyle::getAttribute( element, "left", 0.0 );
-        layout.margins[QStyleSheetItem::MarginRight] = KoStyle::getAttribute( element, "right", 0.0 );
+        layout.margins[QStyleSheetItem::MarginFirstLine] = KoParagStyle::getAttribute( element, "first", 0.0 );
+        layout.margins[QStyleSheetItem::MarginLeft] = KoParagStyle::getAttribute( element, "left", 0.0 );
+        layout.margins[QStyleSheetItem::MarginRight] = KoParagStyle::getAttribute( element, "right", 0.0 );
     }
     element = parentElem.namedItem( "OFFSETS" ).toElement();
     if ( !element.isNull() )
     {
-        layout.margins[QStyleSheetItem::MarginTop] = KoStyle::getAttribute( element, "before", 0.0 );
-        layout.margins[QStyleSheetItem::MarginBottom] = KoStyle::getAttribute( element, "after", 0.0 );
+        layout.margins[QStyleSheetItem::MarginTop] = KoParagStyle::getAttribute( element, "before", 0.0 );
+        layout.margins[QStyleSheetItem::MarginBottom] = KoParagStyle::getAttribute( element, "after", 0.0 );
     }
 
     if ( docVersion < 2 )
@@ -229,7 +229,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
         if ( !element.isNull() )
         {
             layout.lineSpacingType = KoParagLayout::LS_CUSTOM;
-            layout.lineSpacing = KoStyle::getAttribute( element, "pt", 0.0 );
+            layout.lineSpacing = KoParagStyle::getAttribute( element, "pt", 0.0 );
         }
     }
 

@@ -768,7 +768,7 @@ bool KoTextView::insertParagraph(const QPoint &pos)
 {
     KoTextParag *last = textDocument()->lastParag();
     KoTextFormat *f = 0;
-    KoStyle *style = last->style();
+    KoParagStyle *style = last->style();
     KoParagCounter *counter = last->counter();
     int diff = (pos.y()- textDocument()->height());
     f = last->at( last->length()-1 )->format();
@@ -871,7 +871,7 @@ void KoTextView::dragStarted()
     inDoubleClick = FALSE;
 }
 
-void KoTextView::applyStyle( const KoStyle * style )
+void KoTextView::applyStyle( const KoParagStyle * style )
 {
     if ( style )
     {
@@ -1315,12 +1315,12 @@ void KoTextView::removeComment()
     }
 }
 
-KoStyle * KoTextView::createStyleFromSelection(const QString & name)
+KoParagStyle * KoTextView::createStyleFromSelection(const QString & name)
 {
     KoTextCursor cursor = *m_cursor;
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
         cursor = textDocument()->selectionStartCursor( KoTextDocument::Standard );
-    KoStyle * style = new KoStyle (name);
+    KoParagStyle * style = new KoParagStyle (name);
     KoParagLayout layout(cursor.parag()->paragLayout());
     layout.style = style;
     style->setFollowingStyle( style );
@@ -1332,7 +1332,7 @@ KoStyle * KoTextView::createStyleFromSelection(const QString & name)
     return style;
 }
 
-void KoTextView::updateStyleFromSelection( KoStyle* style )
+void KoTextView::updateStyleFromSelection( KoParagStyle* style )
 {
     KoTextCursor cursor = *m_cursor;
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) )

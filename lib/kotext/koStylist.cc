@@ -61,7 +61,7 @@ public:
     QCheckBox* cbIncludeInTOC;
 };
 
-KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrList<KoStyle> & style, const QString & activeStyleName)
+KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrList<KoParagStyle> & style, const QString & activeStyleName)
     : KDialogBase( _parent, "Stylist", true,
                    i18n("Style Manager"),
                    KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply )
@@ -111,8 +111,8 @@ KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrLi
 KoStyleManager::~KoStyleManager()
 {
     for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
-        KoStyle *orig = m_origStyles.at(i);
-        KoStyle *changed = m_changedStyles.at(i);
+        KoParagStyle *orig = m_origStyles.at(i);
+        KoParagStyle *changed = m_changedStyles.at(i);
         if( orig && changed && orig != changed ) // modified style, we can delete the changed one now that changes have been applied
             delete changed;
     }
@@ -127,12 +127,12 @@ void KoStyleManager::addTab( KoStyleManagerTab * tab )
     tab->layout()->activate();
 }
 
-void KoStyleManager::setupWidget(const QPtrList<KoStyle> & styleList)
+void KoStyleManager::setupWidget(const QPtrList<KoParagStyle> & styleList)
 {
     QFrame * frame1 = makeMainWidget();
     QGridLayout *frame1Layout = new QGridLayout( frame1, 0, 0, // auto
                                                  KDialog::marginHint(), KDialog::spacingHint() );
-    QPtrListIterator<KoStyle> style( styleList );
+    QPtrListIterator<KoParagStyle> style( styleList );
     numStyles = styleList.count();
     m_stylesList = new QListBox( frame1, "stylesList" );
     for ( ; style.current() ; ++style )
@@ -245,7 +245,7 @@ void KoStyleManager::switchStyle() {
     int num = styleIndex( m_stylesList->currentItem() );
     kdDebug(32500) << "KoStyleManager::switchStyle switching to " << num << endl;
     if(m_origStyles.at(num) == m_changedStyles.at(num)) {
-        m_currentStyle = new KoStyle( *m_origStyles.at(num) );
+        m_currentStyle = new KoParagStyle( *m_origStyles.at(num) );
         m_changedStyles.take(num);
         m_changedStyles.insert(num, m_currentStyle);
     } else {
@@ -273,7 +273,7 @@ int KoStyleManager::styleIndex( int pos ) {
     int p = 0;
     for(unsigned int i=0; i < m_changedStyles.count(); i++) {
         // Skip deleted styles, they're no in m_stylesList anymore
-        KoStyle * style = m_changedStyles.at(i);
+        KoParagStyle * style = m_changedStyles.at(i);
         if ( !style ) continue;
         if ( p == pos )
             return i;
@@ -362,11 +362,11 @@ void KoStyleManager::save() {
     }
 }
 
-KoStyle * KoStyleManager::style( const QString & _name )
+KoParagStyle * KoStyleManager::style( const QString & _name )
 {
     for(unsigned int i=0; i < m_changedStyles.count(); i++) {
         // Skip deleted styles, they're no in m_stylesList anymore
-        KoStyle * style = m_changedStyles.at(i);
+        KoParagStyle * style = m_changedStyles.at(i);
         if ( !style ) continue;
         if ( style->name() == _name)
             return style;
@@ -380,11 +380,11 @@ void KoStyleManager::addStyle() {
     QString str = i18n( "New Style Template (%1)" ).arg(numStyles++);
     if ( m_currentStyle )
     {
-        m_currentStyle = new KoStyle( *m_currentStyle ); // Create a new style, initializing from the current one
+        m_currentStyle = new KoParagStyle( *m_currentStyle ); // Create a new style, initializing from the current one
         m_currentStyle->setName( str );
     }
     else
-        m_currentStyle = new KoStyle( str );
+        m_currentStyle = new KoParagStyle( str );
     m_currentStyle->setFollowingStyle( m_currentStyle ); // #45868
 
     noSignals=true;
@@ -400,9 +400,9 @@ void KoStyleManager::addStyle() {
     updateGUI();
 }
 
-void KoStyleManager::updateFollowingStyle( KoStyle *s )
+void KoStyleManager::updateFollowingStyle( KoParagStyle *s )
 {
-    for ( KoStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next() )
+    for ( KoParagStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next() )
     {
         if ( p->followingStyle() == s)
             p->setFollowingStyle(p);
@@ -410,9 +410,9 @@ void KoStyleManager::updateFollowingStyle( KoStyle *s )
 
 }
 
-void KoStyleManager::updateInheritStyle( KoStyle *s )
+void KoStyleManager::updateInheritStyle( KoParagStyle *s )
 {
-    for ( KoStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next() )
+    for ( KoParagStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next() )
     {
         //when we remove style, we must replace inherite style to 0L
         //when parent style was removed.
@@ -428,7 +428,7 @@ void KoStyleManager::deleteStyle() {
     unsigned int cur = styleIndex( m_stylesList->currentItem() );
     unsigned int curItem = m_stylesList->currentItem();
     QString name = m_stylesList->currentText();
-    KoStyle *s = m_changedStyles.at(cur);
+    KoParagStyle *s = m_changedStyles.at(cur);
     m_styleOrder.remove( s->name());
     updateFollowingStyle( s );
     updateInheritStyle( s );
@@ -518,16 +518,16 @@ void KoStyleManager::slotApply() {
 void KoStyleManager::apply() {
     noSignals=true;
     KoStyleChangeDefMap styleChanged;
-    QPtrList<KoStyle> removeStyle;
+    QPtrList<KoParagStyle> removeStyle;
     for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
         if(m_origStyles.at(i) == 0L && m_changedStyles.at(i)!=0L) {           // newly added style
             kdDebug(32500) << "adding new " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
-            KoStyle *tmp = addStyleTemplate(m_changedStyles.take(i));
+            KoParagStyle *tmp = addStyleTemplate(m_changedStyles.take(i));
             m_changedStyles.insert(i, tmp);
         } else if(m_changedStyles.at(i) == 0L && m_origStyles.at(i) != 0L) { // deleted style
             kdDebug(32500) << "deleting orig " << m_origStyles.at(i)->name() << " (" << i << ")" << endl;
 
-            KoStyle *orig = m_origStyles.at(i);
+            KoParagStyle *orig = m_origStyles.at(i);
             //applyStyleChange( orig, -1, -1 );
             KoStyleChangeDef tmp( -1,-1);
             styleChanged.insert( orig, tmp);
@@ -537,8 +537,8 @@ void KoStyleManager::apply() {
 
         } else if(m_changedStyles.at(i) != 0L && m_origStyles.at(i)!=0L) { // simply updated style
             kdDebug(32500) << "update style " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
-            KoStyle *orig = m_origStyles.at(i);
-            KoStyle *changed = m_changedStyles.at(i);
+            KoParagStyle *orig = m_origStyles.at(i);
+            KoParagStyle *changed = m_changedStyles.at(i);
             if ( orig != changed )
             {
                 int paragLayoutChanged = orig->paragLayout().compare( changed->paragLayout() );
@@ -564,7 +564,7 @@ void KoStyleManager::apply() {
 
     applyStyleChange( styleChanged );
 
-    KoStyle *tmp = 0L;
+    KoParagStyle *tmp = 0L;
     for ( tmp = removeStyle.first(); tmp ;tmp = removeStyle.next() )
         removeStyleTemplate( tmp );
 

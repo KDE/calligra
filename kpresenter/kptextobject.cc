@@ -962,7 +962,7 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresente
     // Only when loading paragraphs, not when loading styles
     if ( findStyle )
     {
-        KoStyle *style;
+        KoParagStyle *style;
         // Name of the style. If there is no style, then we do not supply
         // any default!
         QDomElement element = parentElem.namedItem( "NAME" ).toElement();

@@ -28,7 +28,7 @@ class QLineEdit;
 class QListBox;
 class KPresenterDoc;
 class QPushButton;
-class KoStyle;
+class KoParagStyle;
 
 class KPrImportStyleDia : public KoImportStyleDia
 {

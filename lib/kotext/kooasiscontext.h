@@ -20,7 +20,7 @@
 #ifndef KOOASISCONTEXT_H
 #define KOOASISCONTEXT_H
 
-class KoStyle;
+class KoParagStyle;
 class KoGenStyles;
 class QDomElement;
 class KoDocument;
@@ -110,14 +110,14 @@ public:
 
     KoGenStyles& mainStyles() { return m_mainStyles; }
 
-    typedef QMap<KoStyle*, QString> StyleNameMap;
+    typedef QMap<KoParagStyle*, QString> StyleNameMap;
 
     /// Called after saving the user styles.
-    /// Associates every KoStyle with its automatic name (style:name attribute)
+    /// Associates every KoParagStyle with its automatic name (style:name attribute)
     void setStyleNameMap( const StyleNameMap& map ) { m_styleNameMap = map; }
 
-    /// @return the automatic name for a KoStyle
-    QString styleAutoName( KoStyle* style ) const {
+    /// @return the automatic name for a KoParagStyle
+    QString styleAutoName( KoParagStyle* style ) const {
         StyleNameMap::const_iterator it = m_styleNameMap.find( style );
         if ( it != m_styleNameMap.end() )
             return *it;

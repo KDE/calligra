@@ -39,7 +39,7 @@ class KoVariable;
 class KoVariableFormatCollection;
 class KPrVariableCollection;
 class KTempFile;
-class KoStyle;
+class KoParagStyle;
 #ifdef HAVE_LIBKSPELL2
 class KPrBgSpellCheck;
 #endif
@@ -80,7 +80,7 @@ class KPrPage;
 class KPObject;
 class KPresenterDoc;
 
-class KoStyle;
+class KoParagStyle;
 class KoStyleCollection;
 
 class KPresenterChild : public KoDocumentChild
@@ -517,7 +517,7 @@ protected:
     virtual bool saveChildren( KoStore* _store );
 
     void loadStyleTemplates( const QDomElement &styles );
-    void saveStyle( KoStyle *sty, QDomElement parentElem );
+    void saveStyle( KoParagStyle *sty, QDomElement parentElem );
 
     QDomDocumentFragment saveBackground( QDomDocument& );
     QDomElement saveObjects( QDomDocument &doc );

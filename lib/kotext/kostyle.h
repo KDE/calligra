@@ -26,7 +26,7 @@
 #include <qptrlist.h>
 
 class KoGenStyles;
-class KoStyle;
+class KoParagStyle;
 class KoOasisContext;
 
 struct KoStyleChangeDef {
@@ -41,26 +41,26 @@ struct KoStyleChangeDef {
     int paragLayoutChanged;
     int formatChanged;
 };
-typedef QMap<KoStyle *, KoStyleChangeDef> KoStyleChangeDefMap;
+typedef QMap<KoParagStyle *, KoStyleChangeDef> KoStyleChangeDefMap;
 
 class KoStyleCollection
 {
 public:
     KoStyleCollection();
     ~KoStyleCollection();
-    const QPtrList<KoStyle> & styleList() const { return m_styleList; }
+    const QPtrList<KoParagStyle> & styleList() const { return m_styleList; }
 
-    KoStyle* findStyle( const QString & name );
-    KoStyle* findStyleShortCut( const QString & _shortCut );
+    KoParagStyle* findStyle( const QString & name );
+    KoParagStyle* findStyleShortCut( const QString & _shortCut );
     /**
      * Return style number @p i.
      */
-    KoStyle* styleAt( int i ) { return m_styleList.at(i); }
+    KoParagStyle* styleAt( int i ) { return m_styleList.at(i); }
 
    // #### TODO: remove Template from those method names
-    KoStyle* addStyleTemplate( KoStyle *style );
+    KoParagStyle* addStyleTemplate( KoParagStyle *style );
 
-    void removeStyleTemplate ( KoStyle *style );
+    void removeStyleTemplate ( KoParagStyle *style );
 
     void updateStyleListOrder( const QStringList &list );
 
@@ -68,19 +68,23 @@ public:
     /// Save the entire style collection to OASIS
     /// @p styleType is the STYLE_* value for this style.
     /// Return a the auto-name for each style, to be used when saving the document.
-    QMap<KoStyle*, QString> saveOasis( KoGenStyles& styles, int styleType ) const;
+    QMap<KoParagStyle*, QString> saveOasis( KoGenStyles& styles, int styleType ) const;
 
 private:
-    QPtrList<KoStyle> m_styleList;
-    QPtrList<KoStyle> m_deletedStyles;
+    QPtrList<KoParagStyle> m_styleList;
+    QPtrList<KoParagStyle> m_deletedStyles;
     static int styleNumber;
-    KoStyle *m_lastStyle;
+    KoParagStyle *m_lastStyle;
 };
 
+/**
+ * A KoCharStyle is a set of formatting attributes (font, color, etc.)
+ * to be applied to a run of text.
+ */
 class KoCharStyle
 {
 public:
-/** Create a blank style (with default attributes) */
+    /** Create a blank style (with default attributes) */
     KoCharStyle( const QString & name );
 
     /** Copy another style */
@@ -116,28 +120,28 @@ protected:
 };
 
 /**
- * A style is a combination of formatting attributes (font, color, etc.)
+ * A paragraph style is a combination of a character style
  * and paragraph-layout attributes, all grouped under a name.
  */
-class KoStyle : public KoCharStyle
+class KoParagStyle : public KoCharStyle
 {
 public:
     /** Create a blank style (with default attributes) */
-    KoStyle( const QString & name );
+    KoParagStyle( const QString & name );
 
     /** Copy another style */
-    KoStyle( const KoStyle & rhs );
+    KoParagStyle( const KoParagStyle & rhs );
 
-    ~KoStyle() {}
+    ~KoParagStyle() {}
 
-    void operator=( const KoStyle & );
+    void operator=( const KoParagStyle & );
 
 
     const KoParagLayout & paragLayout() const;
     KoParagLayout & paragLayout();
 
-    KoStyle *followingStyle() const { return m_followingStyle; }
-    void setFollowingStyle( KoStyle *fst ) { m_followingStyle = fst; }
+    KoParagStyle *followingStyle() const { return m_followingStyle; }
+    void setFollowingStyle( KoParagStyle *fst ) { m_followingStyle = fst; }
 
     /// Saves the name, layout, the following style and the outline bool. Not the format.
     /// @deprecated  (1.3 format)
@@ -164,8 +168,8 @@ public:
 	return value.isNull() ? defaultValue : value.toDouble();
       }
 
-    KoStyle * parentStyle() const {return m_parentStyle;}
-    void setParentStyle( KoStyle *_style){ m_parentStyle = _style;}
+    KoParagStyle * parentStyle() const {return m_parentStyle;}
+    void setParentStyle( KoParagStyle *_style){ m_parentStyle = _style;}
 
     int inheritedParagLayoutFlag() const { return m_inheritedParagLayoutFlag; }
     int inheritedFormatFlag() const { return m_inheritedFormatFlag; }
@@ -178,8 +182,8 @@ public:
 
 private:
     KoParagLayout m_paragLayout;
-    KoStyle *m_followingStyle;
-    KoStyle *m_parentStyle;
+    KoParagStyle *m_followingStyle;
+    KoParagStyle *m_parentStyle;
     int m_inheritedParagLayoutFlag;
     int m_inheritedFormatFlag;
     bool m_bOutline;

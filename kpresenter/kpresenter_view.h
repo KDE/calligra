@@ -63,7 +63,7 @@ class KToggleAction;
 class TKSelectColorAction;
 class KoPartSelectAction;
 class KoPicture;
-class KoStyle;
+class KoParagStyle;
 
 class KoCharSelectDia;
 class KoTextFormat;
@@ -785,7 +785,7 @@ protected:
     int getZoomEntirePage() const;
 
     KCommand * applyAutoFormatToCurrentPage( const QPtrList<KoTextObject> & lst);
-    void textStyleSelected( KoStyle *_sty );
+    void textStyleSelected( KoParagStyle *_sty );
 
     /*
      * create a command which sets the pen according to the flags

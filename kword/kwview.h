@@ -507,7 +507,7 @@ protected:
     int lowerFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
     int bringToFront(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
     int sendToBack(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
-    void textStyleSelected( KoStyle *_sty );
+    void textStyleSelected( KoParagStyle *_sty );
     void frameStyleSelected( KWFrameStyle *_sty );
     void tableStyleSelected( KWTableStyle *_sty );
     void changeFootEndNoteState();

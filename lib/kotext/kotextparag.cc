@@ -1026,12 +1026,12 @@ void KoTextParag::drawCursor( QPainter &painter, KoTextCursor *cursor, int curx,
 void KoTextParag::copyParagData( KoTextParag *parag )
 {
     // Style of the previous paragraph
-    KoStyle * style = parag->style();
+    KoParagStyle * style = parag->style();
     // Obey "following style" setting
     bool styleApplied = false;
     if ( style )
     {
-        KoStyle * newStyle = style->followingStyle();
+        KoParagStyle * newStyle = style->followingStyle();
         if ( newStyle && style != newStyle ) // if same style, keep paragraph-specific changes as usual
         {
             setParagLayout( newStyle->paragLayout() );
@@ -1208,7 +1208,7 @@ int KoTextParag::nextTab( int chnum, int x )
     return KoTextParag::nextTabDefault( chnum, x );
 }
 
-void KoTextParag::applyStyle( KoStyle *style )
+void KoTextParag::applyStyle( KoParagStyle *style )
 {
     setParagLayout( style->paragLayout() );
     KoTextFormat *newFormat = &style->format();
@@ -1743,7 +1743,7 @@ KoParagLayout KoTextParag::loadParagLayout( KoOasisContext& context, KoStyleColl
     // Only when loading paragraphs, not when loading styles
     if ( findStyle )
     {
-        KoStyle *style;
+        KoParagStyle *style;
         // Name of the style. If there is no style, then we do not supply
         // any default!
         QString styleName = context.styleStack().userStyleName();

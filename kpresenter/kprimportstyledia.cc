@@ -87,7 +87,7 @@ void KPrImportStyleDia::loadFile()
                 {
                     QDomElement styleElem = listStyles.item( item ).toElement();
 
-                    KoStyle *sty = new KoStyle( QString::null );
+                    KoParagStyle *sty = new KoParagStyle( QString::null );
 	            // Load the style from the <STYLE> element
 	            sty->loadStyle( styleElem );
 
@@ -123,7 +123,7 @@ void KPrImportStyleDia::loadFile()
                     if ( insertStyle.contains( *it ) )
                         newName = (insertStyle)[ *it ];
 
-                    KoStyle * style = findStyle(newName);
+                    KoParagStyle * style = findStyle(newName);
                     if ( style )
                         m_styleList.at(i++)->setFollowingStyle( style );
                 }

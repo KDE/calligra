@@ -22,6 +22,6 @@
 
 #include <kostyle.h>
 // Same thing at the moment
-#define KWStyle KoStyle
+#define KWStyle KoParagStyle
 
 #endif
