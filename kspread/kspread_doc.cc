@@ -2128,8 +2128,8 @@ void KSpreadDoc::loadOasisCellValidation( const QDomElement&body )
             if ( n.isElement() )
             {
                 QDomElement element = n.toElement();
-                kdDebug()<<" loadOasisCellValidation element.tagName() :"<<element.tagName()<<endl;
-                if ( element.tagName() ==  "table:content-validation" ) {
+                //kdDebug()<<" loadOasisCellValidation element.tagName() :"<<element.tagName()<<endl;
+                if ( element.tagName() ==  "content-validation" && element.namespaceURI() == KoXmlNS::table ) {
                     d->m_loadingInfo->appendValidation(element.attributeNS( KoXmlNS::table, "name", QString::null ), element );
                     kdDebug()<<" validation found :"<<element.attributeNS( KoXmlNS::table, "name", QString::null )<<endl;
                 }

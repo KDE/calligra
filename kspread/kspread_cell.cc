@@ -4941,10 +4941,12 @@ QString KSpreadCell::convertFormulaToOasisFormat( const QString & formula ) cons
 
 void KSpreadCell::loadOasisConditional( QDomElement * style )
 {
+    kdDebug()<<" void KSpreadCell::loadOasisConditional( QDomElement * style  :"<<style<<endl;
     if ( style )//safe
     {
         QDomElement elementItem = style->firstChild().toElement();
         elementItem = elementItem.firstChild().toElement();
+        kdDebug()<<"elementItem.isNull () :"<< elementItem.isNull ()<<endl;
         if ( !elementItem.isNull() )
         {
             if (d->hasExtra())
@@ -4962,6 +4964,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     kdDebug()<<" table:style-name :"<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
     if ( element.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
+        kdDebug()<<"bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )****************************** loadOasisConditionsal\n";
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
         QDomElement * style = oasisStyles.styles()[str];
         kdDebug()<<" style :"<<style<<endl;
