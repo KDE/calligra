@@ -63,7 +63,7 @@ void KWDocStructParagItem::slotDoubleClicked( QListViewItem *_item )
     if ( _item == this )
     {
         KWTextFrameSet * fs = parag->textDocument()->textFrameSet();
-        QPoint iPoint =  gui->canvasWidget()->kWordDocument()->zoomPoint(parag->rect().topLeft()); // small bug if a paragraph is cut between two pages.
+        QPoint iPoint =  parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
         QPoint cPoint;
         KWFrame * frame = fs->internalToContents( iPoint, cPoint );
         gui->canvasWidget()->scrollToOffset(  cPoint.x() , cPoint.y() );
