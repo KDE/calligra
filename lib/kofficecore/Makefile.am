@@ -36,11 +36,10 @@ include_HEADERS = handler.h \
 	koView.h koFrame.h koDocumentChild.h \
 	koDocumentInfoDlg.h koFactory.h koChild.h \
 	KoApplicationIface.h KoDocumentIface.h KoViewIface.h KoMainWindowIface.h \
-	koPictureKey.h koPictureBase.h koPicture.h koPictureShared.h \
-	koPictureImage.h koPictureClipart.h koPictureCollection.h
+	koPictureKey.h koPicture.h koPictureCollection.h
 
 noinst_HEADERS = koDocument_p.h \
-	koPictureImage.h koPictureBase.h koPictureImage.h koPictureClipart.h
+	koPictureShared.h koPictureBase.h koPictureImage.h koPictureClipart.h
 
 kodocinfopropspage_la_SOURCES = koDocInfoPropsFactory.cc
 kodocinfopropspage_la_LIBADD = ./libkofficecore.la
