@@ -58,7 +58,8 @@
 #include "kppartobject.h"
 #include "sidebar.h"
 #include "notebar.h"
-#include <insertpagedia.h>
+#include "insertpagedia.h"
+
 #include <koPictureFilePreview.h>
 #include <koCreateStyleDia.h>
 

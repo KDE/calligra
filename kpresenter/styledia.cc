@@ -19,7 +19,7 @@
 */
 
 #include "styledia.h"
-#include <generalconfig.h>
+#include "generalconfig.h"
 #include "confpiedia.h"
 #include "confrectdia.h"
 #include "confpolygondia.h"

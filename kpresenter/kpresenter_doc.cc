@@ -34,7 +34,7 @@
 #include "kpgroupobject.h"
 #include "kprcommand.h"
 #include "styledia.h"
-#include <insertpagedia.h>
+#include "insertpagedia.h"
 #include "kpfreehandobject.h"
 #include "kppolylineobject.h"
 #include "kpquadricbeziercurveobject.h"

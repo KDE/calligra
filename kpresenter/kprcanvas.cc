@@ -58,7 +58,7 @@
 #include <kozoomhandler.h>
 #include <koStore.h>
 #include <koStoreDrag.h>
-#include <koPointArray.h>
+#include "koPointArray.h"
 
 #include "styledia.h"
 #include "kpresenter_view.h"
@@ -3213,7 +3213,7 @@ bool KPrCanvas::pNext( bool )
 #endif
         QPixmap _pix1( desk.width(), desk.height() );
         drawCurrentPageInPix( _pix1 );
-        
+
         m_view->setPageDuration( m_step.m_pageNumber );
 
         m_step.m_pageNumber = *( ++m_presentationSlidesIterator ) - 1;
@@ -3515,7 +3515,7 @@ void KPrCanvas::doObjEffects()
         delete m_effectHandler;
         m_effectHandler = 0;
     }
-    
+
     QPixmap screen_orig( kapp->desktop()->width(), kapp->desktop()->height() );
 
     // YABADABADOOOOOOO.... That's a hack :-)
@@ -3537,7 +3537,7 @@ void KPrCanvas::doObjEffects()
     }
 
     QPtrList<KPObject> allObjects( m_activePage->objectList() );
-    
+
     QPtrListIterator<KPObject> it( stickyPage()->objectList() );
     for ( ; it.current(); ++it ) {
         if ( objectIsAHeaderFooterHidden( it.current() ) )
@@ -4311,7 +4311,7 @@ void KPrCanvas::gotoPage( int pg )
 #else
         resize( QApplication::desktop()->screenGeometry(this).size());
 #endif
-#endif        
+#endif
         doObjEffects();
         setFocus();
         m_view->refreshPageButton();
