@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = libmagickimport.la
 
 libmagickimport_la_SOURCES = magickimport.cpp
 libmagickimport_la_LDFLAGS = -module $(KDE_PLUGIN)
-libmagickimport_la_LIBADD = $(KOFFICE_LIBS) $(top_builddir)/krita/libkritapart.la
+libmagickimport_la_LIBADD = $(KOFFICE_LIBS) $(top_builddir)/krita/libkritacommon.la
 
 METASOURCES = AUTO
 
