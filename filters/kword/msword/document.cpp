@@ -70,12 +70,12 @@ void Document::processStyles()
 
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
     unsigned int count = styles.size();
-    kdDebug() << k_funcinfo << "count=" << count << endl;
+    //kdDebug() << k_funcinfo << "styles count=" << count << endl;
     for ( unsigned int i = 0; i < count ; ++i )
     {
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
-        kdDebug() << k_funcinfo << "style " << i << " " << style << endl;
+        //kdDebug() << k_funcinfo << "style " << i << " " << style << endl;
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
             QDomElement styleElem = m_mainDocument.createElement("STYLE");
@@ -86,7 +86,7 @@ void Document::processStyles()
             element.setAttribute( "value", name.string() );
             styleElem.appendChild( element );
 
-            kdDebug() << k_funcinfo << "Style: " << name.string() << endl;
+            //kdDebug() << k_funcinfo << "Style: " << name.string() << endl;
 
             const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
             if ( followingStyle && followingStyle != style )
@@ -170,7 +170,7 @@ void Document::writeFormat( QDomElement& parentElement, const wvWare::Word97::CH
         format.appendChild( fontElem );
     }
 
-    kdDebug() << "        font size: " << chp->hps/2 << endl;
+    //kdDebug() << "        font size: " << chp->hps/2 << endl;
     QDomElement fontSize( m_mainDocument.createElement( "SIZE" ) );
     fontSize.setAttribute( "value", (int)(chp->hps / 2) ); // hps is in half points
     format.appendChild( fontSize );
@@ -274,9 +274,9 @@ QString Document::getFont(unsigned fc) const
     QConstString fontName( Conversion::string( ffn.xszFfn ) );
     QString font = fontName.string();
 
-//#ifdef FONT_DEBUG
+#ifdef FONT_DEBUG
     kdDebug() << "    MS-FONT: " << font << endl;
-//#endif
+#endif
 
     static const unsigned ENTRIES = 6;
     static const char* const fuzzyLookup[ENTRIES][2] =
