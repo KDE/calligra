@@ -1243,19 +1243,17 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
 {
     painter->save();
 
-    for ( unsigned i =0; i < frames.count() ; i++)
+    QListIterator<KWFrame> frameIt = frameIterator();
+    for ( ; frameIt.current(); ++frameIt )
     {
-        KWFrame *frame = frames.at(i);
-        // ## TODO port to outerRect ( see KWFrameSet )
-        QRect frameRect( m_doc->zoomRect(  *frame ) );
-//        frameRect.rLeft() -= 1;
-//        frameRect.rTop() -= 1;
-//        frameRect.rRight() += 1;
-//        frameRect.rBottom() += 1;
-        if ( !crect.intersects( frameRect ) )
+        KWFrame *frame = frameIt.current();
+        QRect frameRect( m_doc->zoomRect( *frame ) );
+        QRect outerRect( frame->outerRect() );
+
+        if ( !crect.intersects( outerRect ) )
             continue;
 
-        region = region.subtract( frameRect );
+        region = region.subtract( outerRect );
 
         // Set the background color.
         painter->setBrush( frame->getBackgroundColor() );
