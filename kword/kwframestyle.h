@@ -69,7 +69,7 @@ public:
 
     KWFrameStyle( const QString & name, KWFrame * frame );
     KWFrameStyle( QDomElement & parentElem, int docVersion=2 );
-    
+
     /** Copy another framestyle */
     KWFrameStyle( const KWFrameStyle & rhs ) { *this = rhs; }
 
@@ -90,7 +90,7 @@ public:
 
     // ATTRIBUTES
     QBrush backgroundColor() const { return m_backgroundColor; }
-    void setBackgroundColor( QBrush _color ) { m_backgroundColor = _color; }
+    void setBackgroundColor( const QBrush &_color ) { m_backgroundColor = _color; }
 
     const KoBorder & leftBorder() const { return m_borderLeft; }
     void setLeftBorder( KoBorder _left )  { m_borderLeft = _left; }
@@ -105,29 +105,10 @@ public:
     void setBottomBorder( KoBorder _bottom )  { m_borderBottom = _bottom; }
 
     // SAVING METHODS
-    void save( QDomElement parentElem, KoZoomHandler* zh );
     void saveFrameStyle( QDomElement & parentElem );
 
     // STATIC METHODS
     static KWFrameStyle *loadStyle( QDomElement & parentElem, int docVersion=2 );
-
-    static int getAttribute(QDomElement &element, const char *attributeName, int defaultValue)
-    {
-      QString value;
-      if ( ( value = element.attribute( attributeName ) ) != QString::null )
-        return value.toInt();
-      else
-        return defaultValue;
-    }
-
-    static double getAttribute(QDomElement &element, const char *attributeName, double defaultValue)
-    {
-      QString value;
-      if ( ( value = element.attribute( attributeName ) ) != QString::null )
-        return value.toDouble();
-      else
-        return defaultValue;
-    }
 
 private:
     QString m_name;

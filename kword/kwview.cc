@@ -1132,42 +1132,42 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
     QDomNode n = doc.documentElement().firstChild();
     bool expressionExist=false;
     for( ; !n.isNull(); n = n.nextSibling() )
+    {
+        if ( n.isElement() )
         {
-            if ( n.isElement() )
+            QDomElement e = n.toElement();
+            if ( e.tagName() == "Type" )
+            {
+                if(!expressionExist)
                 {
-                    QDomElement e = n.toElement();
-                    if ( e.tagName() == "Type" )
-                        {
-                            if(!expressionExist)
-                            {
-                                parentMenu->popupMenu()->insertSeparator();
-                                expressionExist=true;
-                            }
-                            group = i18n( e.namedItem( "TypeName" ).toElement().text().utf8() );
-                            KActionMenu * subMenu = new KActionMenu( group, actionCollection() );
-                            parentMenu->insert( subMenu );
-
-                            QDomNode n2 = e.firstChild();
-                            for( ; !n2.isNull(); n2 = n2.nextSibling() )
-                                {
-
-                                    if ( n2.isElement() )
-                                        {
-                                            QDomElement e2 = n2.toElement();
-                                            if ( e2.tagName() == "Expression" )
-                                                {
-                                                    QString text = i18n( e2.namedItem( "Text" ).toElement().text().utf8() );
-                                                    KAction * act = new KAction( text, 0, this, SLOT( insertExpression() ),
-                                                                                 actionCollection(), "expression-action" );
-                                                    subMenu->insert( act );
-                                                }
-                                        }
-                                }
-
-                            group = "";
-                        }
+                    parentMenu->popupMenu()->insertSeparator();
+                    expressionExist=true;
                 }
+                group = i18n( e.namedItem( "TypeName" ).toElement().text().utf8() );
+                KActionMenu * subMenu = new KActionMenu( group, actionCollection() );
+                parentMenu->insert( subMenu );
+
+                QDomNode n2 = e.firstChild();
+                for( ; !n2.isNull(); n2 = n2.nextSibling() )
+                {
+
+                    if ( n2.isElement() )
+                    {
+                        QDomElement e2 = n2.toElement();
+                        if ( e2.tagName() == "Expression" )
+                        {
+                            QString text = i18n( e2.namedItem( "Text" ).toElement().text().utf8() );
+                            KAction * act = new KAction( text, 0, this, SLOT( insertExpression() ),
+                                                         actionCollection(), "expression-action" );
+                            subMenu->insert( act );
+                        }
+                    }
+                }
+
+                group = "";
+            }
         }
+    }
 }
 
 void KWView::insertExpression()

@@ -377,8 +377,7 @@ void KWTableTemplatePreview::setTableTemplate( KWTableTemplate *_tableTemplate )
 {
     origTableTemplate = _tableTemplate;
 
-    if (tableTemplate)
-        delete tableTemplate;
+    delete tableTemplate;
 
     tableTemplate = new KWTableTemplate(_tableTemplate->translatedName());
     tableTemplate->setBodyCell( _tableTemplate->pBodyCell() );
@@ -509,7 +508,7 @@ void KWTableTemplatePreview::cbBodyChanged( bool enable )
 
     setSpecialCells(oldTemplate);
 
-    if (oldTemplate) delete oldTemplate;
+    delete oldTemplate;
 
     repaint( true );
 }
