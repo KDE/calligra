@@ -149,6 +149,7 @@ void KWFootNoteVariable::saveVariable( QDomElement &parentElem )
     pgNumElem.setAttribute( "subtype", 0 ); // the only kind currently
     pgNumElem.setAttribute( "value", m_varType.toString() );
     pgNumElem.setAttribute( "notetype", m_noteType );
+    pgNumElem.setAttribute( "numberingtype", m_numberingType );
 }
 
 void KWFootNoteVariable::load( QDomElement &elem )
@@ -159,6 +160,7 @@ void KWFootNoteVariable::load( QDomElement &elem )
     {
         //m_subtype = footnoteElem.attribute("subtype").toInt();
         m_noteType = (NoteType)footnoteElem.attribute("notetype").toInt();
+        m_numberingType = (Numbering)footnoteElem.attribute("numberingtype").toInt();
         if ( m_numberingType == Auto )
             m_varType = QVariant(footnoteElem.attribute("value").toInt());
         else
