@@ -1343,9 +1343,9 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 	objStartY = 0;
 	_clean = true;
 	setModified(true);
-	QString fileName( _template );
-        KURL::encode( fileName );
-	bool ok = openURL( KURL( fileName ) );
+	KURL url;
+	url.setPath( _template );
+	bool ok = openURL( url );
 	resetURL();
 	return ok;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
