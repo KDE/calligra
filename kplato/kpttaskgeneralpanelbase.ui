@@ -12,9 +12,6 @@
             <height>378</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>KPTTaskGeneralPanelBase</string>
-    </property>
     <hbox>
         <property name="name">
             <cstring>unnamed</cstring>

@@ -13,9 +13,6 @@
             <height>593</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>KPTTaskResourcesPanelBase</string>
-    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
