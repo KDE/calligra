@@ -19,6 +19,7 @@
 #include <qapplication.h>
 #include <qtimer.h>
 #include <float.h>
+#include <math.h>
 
 KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent,
                                                       KSpreadView * _view )
@@ -3463,10 +3464,12 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   painter.setClipRect( _ev->rect() );
 
   double dblYpos;
-  int top_row = table->topRow( _ev->rect().y(), dblYpos, m_pCanvas );
-  int bottom_row = table->bottomRow( _ev->rect().bottom(), m_pCanvas );
-  dblYpos = dblYpos / m_pCanvas->zoom(); //unzoom the ypos
-  int scaledYpos = qRound( int( dblYpos ) * m_pCanvas->zoom() );
+  //Get the top row and the current y-position
+  int y = table->topRow( static_cast<int>( ceil( (_ev->rect().y() + m_pCanvas->yOffset() ) ) / m_pCanvas->zoom() ), dblYpos );
+  //Unzoom the position and align to the offset
+  dblYpos = dblYpos - m_pCanvas->yOffset() / m_pCanvas->zoom();
+  //Simulate the scaling
+  int scaledYpos = qRound( dblYpos * m_pCanvas->zoom() );
 
   QFont normalFont = painter.font();
   if (m_pCanvas->zoom() < 1)
@@ -3479,7 +3482,8 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   //several cells selected but not just a cell merged
   bool area= !(m_pView->selectionInfo()->singleCellSelection());
 
-  for ( int y = top_row; y <= bottom_row; y++ )
+  //Loop through the rows, until we are out of range
+  while ( scaledYpos <= _ev->rect().bottom() )
   {
     bool highlighted = (area && y >= m_pView->selection().top() &&
                         y <= m_pView->selection().bottom() );
@@ -3527,6 +3531,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 
     dblYpos += row_lay->dblHeight();
     scaledYpos = qRound( int( dblYpos ) * m_pCanvas->zoom() );
+    y++;
   }
   m_pCanvas->updatePosWidget();
   painter.end();
@@ -4002,7 +4007,6 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   //This means this ugly formula qRound(int(dblheight)*zoom) simulates this scaling.
 
   KSpreadTable *table = m_pCanvas->activeTable();
-
   if (!table )
     return;
 
@@ -4021,10 +4025,12 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 
   // Determine which columns need painting
   double dblXpos;
-  int left_col = table->leftColumn( _ev->rect().x(), dblXpos, m_pCanvas );
-  int right_col = table->rightColumn( _ev->rect().right(), m_pCanvas );
-  dblXpos = dblXpos / m_pCanvas->zoom(); //unzoom the xpos
-  int scaledXpos = qRound( int( dblXpos ) * m_pCanvas->zoom() );
+  //Get the left column and the current x-position
+  int x = table->leftColumn( static_cast<int>( ceil( (_ev->rect().x() + m_pCanvas->xOffset() ) ) / m_pCanvas->zoom() ), dblXpos );
+  //Unzoom the position and align to the offset
+  dblXpos = dblXpos - m_pCanvas->xOffset() / m_pCanvas->zoom();
+  //Simulate the scaling
+  int scaledXpos = qRound( dblXpos * m_pCanvas->zoom() );
 
   QFont normalFont = painter.font();
   QFont boldFont = normalFont;
@@ -4038,7 +4044,8 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   bool area=( m_pView->selection().left()!=0 &&
               extraCell != m_pView->selection() );
 
-  for ( int x = left_col; x <= right_col; x++ )
+  //Loop through the columns, until we are out of range
+  while ( scaledXpos <= _ev->rect().right() )
   {
     bool highlighted = ( area && x >= m_pView->selection().left() &&
                          x <= m_pView->selection().right());
@@ -4099,6 +4106,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
     }
     dblXpos += col_lay->dblWidth();
     scaledXpos = qRound( int( dblXpos ) * m_pCanvas->zoom() );
+    x++;
   }
   m_pCanvas->updatePosWidget();
   painter.end();
