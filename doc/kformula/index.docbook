@@ -16,7 +16,7 @@
 <author>
 <firstname>Jonathan</firstname>
 <surname>Drews</surname>
-<address><email>j.e.drews@att.net</email></address>
+<affiliation><address><email>j.e.drews@att.net</email></address></affiliation>
 </author>
 
 <othercredit role="developer">
