@@ -13,13 +13,21 @@ class QDomElement;
 class VFill
 {
 public:
+	// paint server
+    enum VPServerMode {
+        pserver_none	= 0,
+        pserver_fill	= 1,
+        pserver_gradient= 2 };
 	VFill();
 
 	const VColor& color() const { return m_color; }
-	void setColor( const VColor& color ) { m_color = color; }
+	void setColor( const VColor& color ) { m_color = color; m_mode = pserver_fill; }
 
 	float opacity() const { return m_opacity; }
 	void setOpacity( float opacity ) { m_opacity = opacity; }
+
+	VPServerMode mode() const { return m_mode; }
+	void setMode( VPServerMode mode ) { m_mode = mode; }
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
@@ -27,6 +35,7 @@ public:
 private:
 	VColor m_color;
 	float m_opacity;
+	VPServerMode m_mode;
 };
 
 #endif

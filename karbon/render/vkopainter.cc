@@ -22,6 +22,7 @@
 #include <art_affine.h>
 #include <art_rgb_svp.h>
 #include <art_svp_intersect.h>
+#include <art_pathcode.h>
 
 #include <X11/Xlib.h>
 
@@ -45,8 +46,8 @@ VKoPainter::VKoPainter( QWidget *target, int w, int h ) : VPainter( target, w, h
 
 	xlib_rgb_init_with_depth( target->x11Display(), XScreenOfDisplay( target->x11Display(),
 							  target->x11Screen() ), target->x11Depth() );
-	gc = XCreateGC( target->x11Display(), target->handle(), 0, 0 );
 
+	gc = XCreateGC( target->x11Display(), target->handle(), 0, 0 );
 }
 
 VKoPainter::~VKoPainter()
@@ -258,7 +259,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 {
 	QColor color;
 	ArtSVP *strokeSvp = 0L;
-	//ArtSVP *fillSvp = 0L;
+	ArtSVP *fillSvp = 0L;
 
 	// set up world matrix
 	double affine[6];
@@ -275,9 +276,9 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	int g = 0;
 	int b = 0;
 	int a = 0;
-	//art_u32 fillColor;
+	art_u32 fillColor;
     // TODO : filling
-	/*if( m_fill )
+	if( m_fill && m_fill->mode() == VFill::pserver_fill )
 	{
 		m_fill->color().pseudoValues( r, g, b );
 		a = qRound( 255 * m_fill->opacity() );
@@ -296,7 +297,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		fillSvp = art_svp_writer_rewind_reap( swr );
 
 		art_svp_free( temp );
-	}*/
+	}
 
 	art_u32 strokeColor;
 	// stroke
@@ -333,15 +334,18 @@ VKoPainter::drawVPath( ArtVpath *vec )
 
 	// render the svp to the buffer
 	if( strokeSvp )
+	{
 		art_rgb_svp_alpha( strokeSvp, 0, 0, m_width, m_height, strokeColor, m_buffer, m_width * 3, 0 );
+		art_svp_free( strokeSvp );
+	}
 
-	//if( fillSvp )
-	//	art_rgb_svp_alpha( fillSvp, 0, 0, m_width, m_height, fillColor, m_buffer, m_width * 3, 0 );
+	if( fillSvp )
+	{
+		art_rgb_svp_alpha( fillSvp, 0, 0, m_width, m_height, fillColor, m_buffer, m_width * 3, 0 );
+		art_svp_free( fillSvp );
+	}
 
 	m_stroke = 0L;
 	m_fill = 0L;
-
-	art_svp_free( strokeSvp );
-	//art_svp_free( fillSvp );
 }
 
