@@ -3224,7 +3224,7 @@ void KPresenterView::setupActions()
                                            actionCollection(), "format_style" );
     connect( actionFormatStyle, SIGNAL( activated( int ) ),
              this, SLOT( textStyleSelected( int ) ) );
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
     actionFormatStyle->setRemoveAmpersandsInCombo( true );
 #endif
     updateStyleList();
@@ -3972,7 +3972,7 @@ void KPresenterView::screenPenColor()
 {
     QColor c = kPresenterDoc()->presPen().color();
     if ( KColorDialog::getColor( c
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
                                  , Qt::red
 #endif
              ) ) {
@@ -5116,7 +5116,7 @@ void KPresenterView::extraSpelling()
 {
     if (m_spell.kspell) return; // Already in progress
     m_spell.macroCmdSpellCheck=0L;
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
     m_spell.replaceAll.clear();
 #endif
 
@@ -5173,7 +5173,7 @@ void KPresenterView::startKSpell()
     if(m_pKPresenterDoc->getKSpellConfig())
     {
         m_pKPresenterDoc->getKSpellConfig()->setIgnoreList(m_pKPresenterDoc->spellListIgnoreAll());
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
         m_pKPresenterDoc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
 #endif
 
@@ -5194,7 +5194,7 @@ void KPresenterView::startKSpell()
                       this, SLOT( spellCheckerDone( const QString & ) ) );
     QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
                       this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
     QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &, const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &, const QString & )));
 #endif
 
@@ -5323,7 +5323,7 @@ void KPresenterView::spellCheckerDone( const QString & )
     {
         m_pKPresenterDoc->setReadWrite(true);
         m_spell.textObject.clear();
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
         m_spell.replaceAll.clear();
 #endif
 
@@ -5362,7 +5362,7 @@ void KPresenterView::spellCheckerFinished()
     m_spell.macroCmdSpellCheck=0L;
 
     m_pKPresenterDoc->setReadWrite(true);
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
     m_spell.replaceAll.clear();
 #endif
 
@@ -6273,7 +6273,7 @@ void KPresenterView::updateStyleList()
     // to individual actions
     QStringList lstWithAccels;
     // Generate unique accelerators for the menu items
-#if KDE_VERSION >= 305  // but only if the '&' will be removed from the combobox
+#if KDE_VERSION > 305  // but only if the '&' will be removed from the combobox
     KAccelGen::generate( lst, lstWithAccels );
 #else
     lstWithAccels = lst;

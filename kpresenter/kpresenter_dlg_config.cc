@@ -305,7 +305,7 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
     grid1->addWidget( lab, 0, 0 );
 
     bgColor = new KColorButton( oldBgColor,
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
                                 oldBgColor,
 #endif
                                 tmpQGroupBox );
@@ -318,7 +318,7 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
     grid1->addWidget( lab, 2, 0 );
 
     gridColor = new KColorButton( oldGridColor,
-#if KDE_VERSION >= 305
+#if KDE_VERSION > 305
                                   oldGridColor,
 #endif
                                   tmpQGroupBox );
