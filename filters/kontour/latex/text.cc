@@ -78,15 +78,15 @@ void Text::analyseParam(const QDomNode balise)
 void Text::generatePSTRICKS(QTextStream& out)
 {
 	double x, y;
-
+	kdDebug() << "Generate a text zone" << endl;
 	out << "\\rput";
 	
 	/* Options */
-	QString param = getBaseContentAttr();
-	QString params;
+	//QString param = getBaseContentAttr();
+	//QString params;
 
-	concat(params, param);
-	generateList(out, "[", params, "]");
+	//concat(params, param);
+	//generateList(out, "[", params, "]");
 
 	getMatrix().map(getX(), getY(), &x, &y);
 	y = getFileHeader()->convert(y);
@@ -94,6 +94,44 @@ void Text::generatePSTRICKS(QTextStream& out)
 	out << "(" << x << "," << y << ")";
 
 	/* text */
-	out << "{" << _text << "}";
+	out << "{" << getTextStyle(_text) << "}";
 	out << endl;
+	kdDebug() << "Text zone generated" << endl;
+}
+
+/*******************************************/
+/* GetTextStyle                            */
+/*******************************************/
+QString Text::getTextStyle(QString text) const
+{
+	QString out;
+	int nbToClose = 0; /* Number of "}" to write at the end */
+	
+	out = out + QString("\\textcolor{" + getStrokeColorName() + "}{");
+	nbToClose = nbToClose + 1;
+
+	/* Here the style (bold, italic, ...) */
+	if(((Font*) _fonts.getFirst())->getWeight() == 75)
+	{
+		out = out + "\\textbf{";
+		nbToClose = nbToClose + 1;
+	}
+	if(((Font*) _fonts.getFirst())->isItalic())
+	{
+		out = out + "\\textit{";
+		nbToClose = nbToClose + 1;
+	}
+	if(((Font*) _fonts.getFirst())->getPointSize() != 11)
+	{
+		out = out + "\\fontsize{";
+		QString size;
+		out = out + size.setNum(((Font*) _fonts.getFirst())->getPointSize()) + "}{1}%\n";
+		out = out + "\\selectfont\n";
+	}
+	out = out + text;
+	for(int index = 0; index < nbToClose; index++)
+	{
+		out = out + "}";
+	}
+	return out;
 }

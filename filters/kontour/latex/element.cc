@@ -239,7 +239,8 @@ void Element::concat(QString& param, float newParam)
 }
 
 
-void Element::generateList(QTextStream & out, const QString first, const QString body, const QString end)
+void Element::generateList(QTextStream & out, const QString first,
+							const QString body, const QString end)
 {
 	if(!body.isEmpty())
 	{

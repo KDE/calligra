@@ -84,15 +84,17 @@ class Element: public XmlParser
 		 */
 		QString  getBaseContentAttr() const;
 
-		double   getLineWidth     () const { return _lineWidth;   }
-		EStyle   getStrokeStyle   () const { return _strokeStyle; }
-		EStyle   getFillStyle     () const { return _fillStyle;   }
-		QString  getFillColor     () const { return _fillColor;   }
-		QString  getStrokeColor   () const { return _strokeColor; }
-		QString  getGradientColor1() const { return _gradientColor1; }
-		QString  getGradientColor2() const { return _gradientColor2; }
-		QWMatrix getMatrix        () const { return _matrix;      }
-		int      getFillPattern   () const { return _fillpattern; }
+		double   getLineWidth      () const { return _lineWidth;      }
+		EStyle   getStrokeStyle    () const { return _strokeStyle;    }
+		EStyle   getFillStyle      () const { return _fillStyle;      }
+		QString  getFillColor      () const { return _fillColor;      }
+		QString  getFillColorName  () const { return _fillcolorname;  }
+		QString  getStrokeColor    () const { return _strokeColor;    }
+		QString  getStrokeColorName() const { return _strokecolorname;}
+		QString  getGradientColor1 () const { return _gradientColor1; }
+		QString  getGradientColor2 () const { return _gradientColor2; }
+		QWMatrix getMatrix         () const { return _matrix;         }
+		int      getFillPattern    () const { return _fillpattern;    }
 
 		/**
 		 * Modifiors

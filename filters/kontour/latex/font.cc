@@ -30,6 +30,7 @@
 /*******************************************/
 Font::Font()
 {
+	_italic = 0;
 }
 
 /*******************************************/
@@ -61,8 +62,9 @@ void Font::analyseParam(const QDomNode balise)
 {
 	/* Get parameters */
 	setFace(getAttr(balise, "face"));
-	setPointSize(getAttr(balise, "point-size").toInt());
-	setWeight(getAttr(balise, "weight").toInt());
+	setPointSize(getAttr(balise, "point-size").toDouble());
+	setWeight(getAttr(balise, "weight").toDouble());
+	setItalic(getAttr(balise, "italic").toInt());
 }
 
 /*******************************************/
@@ -70,6 +72,6 @@ void Font::analyseParam(const QDomNode balise)
 /*******************************************/
 void Font::generatePSTRICKS(QTextStream& out)
 {
-
+	
 }
 

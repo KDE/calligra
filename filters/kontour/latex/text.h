@@ -80,6 +80,7 @@ class Text: public Element
 		void  analyse(const QDomNode);
 
 		void  generatePSTRICKS(QTextStream&);
+		QString getTextStyle(QString) const;
 
 	private:
 		void  analyseParam(const QDomNode);

@@ -39,6 +39,7 @@ class Font: public XmlParser
 	QString _face;
 	double  _pointSize;
 	double  _weight;
+	int     _italic;
 
 	public:
 		/**
@@ -59,6 +60,8 @@ class Font: public XmlParser
 		 */
 		QString getFace     () const { return _face;       }
 		double  getPointSize() const { return _pointSize;  }
+		bool    isItalic    () const { return _italic == 1;}
+		double  getWeight   () const { return _weight;     }
 
 		/**
 		 * Modifiors
@@ -67,6 +70,7 @@ class Font: public XmlParser
 		void   setFace     (QString f) { _face      = f;  }
 		void   setPointSize(double ps) { _pointSize = ps; }
 		void   setWeight   (double w)  { _weight    = w;  }
+		void   setItalic   (int i)     { _italic    = i;  }
 		void   analyse(const QDomNode);
 
 		void  generatePSTRICKS(QTextStream&);

@@ -265,7 +265,7 @@ void Header::generatePackage(QTextStream &out)
 	if(_hasGradient)
 		out << "\\usepackage{pst-grad}" << endl;
 	if(_colors.count() > 0)
-		out << "\\usepackage{colortbl}" << endl;
+		out << "\\usepackage{pstcol}" << endl;
 	out << endl;
 			
 }
