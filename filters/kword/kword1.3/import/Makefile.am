@@ -1,19 +1,24 @@
 ####### General stuff
 
-INCLUDES = -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
-
-libkwordexportfilters_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
-
-libkwordexportfilters_la_LIBADD = $(KOFFICE_LIBS)
+INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 
 ####### Files
+kde_module_LTLIBRARIES = libkwordkword1dot3import.la
 
-lib_LTLIBRARIES = libkwordexportfilters.la
 
-libkwordexportfilters_la_SOURCES = TagProcessing.cc KWEFStructures.cc\
+libkwordkword1dot3import_la_SOURCES = oowriterexport.cc ExportFilter.cc \
+TagProcessing.cc KWEFStructures.cc\
 ProcessDocument.cc KWEFUtil.cc KWEFKWordLeader.cc KWEFBaseWorker.cc
 
+libkwordkword1dot3import_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
+libkwordkword1dot3import_la_LIBADD  = $(KOFFICE_LIBS)
+
 noinst_HEADERS = TagProcessing.h KWEFStructures.h\
-ProcessDocument.h KWEFUtil.h KWEFKWordLeader.h KWEFBaseWorker.h
+ProcessDocument.h KWEFUtil.h KWEFKWordLeader.h KWEFBaseWorker.h ExportFilter.h
 
 METASOURCES = AUTO
+
+service_DATA = kword_kword1dot3_import.desktop
+
+servicedir = $(kde_servicesdir)
+
