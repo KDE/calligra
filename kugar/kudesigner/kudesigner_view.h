@@ -27,7 +27,7 @@ class KAction;
 class KRadioAction;
 class QPaintEvent;
 
-class KudesignerPart;
+class KudesignerDoc;
 
 class ReportCanvas;
 class CanvasReportItem;
@@ -37,7 +37,7 @@ class KudesignerView : public KoView
 {
     Q_OBJECT
 public:
-    KudesignerView( KudesignerPart* part, QWidget* parent = 0, const char* name = 0 );
+    KudesignerView( KudesignerDoc* part, QWidget* parent = 0, const char* name = 0 );
 
 protected slots:
     void cut();

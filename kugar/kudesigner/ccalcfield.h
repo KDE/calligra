@@ -23,7 +23,7 @@
 class CanvasCalculatedField: public CanvasField{
 public:
     CanvasCalculatedField(int x, int y, int width, int height, QCanvas * canvas);
-    virtual int rtti() const { return RttiCanvasCalculated; }
+    virtual int rtti() const { return KuDesignerRttiCanvasCalculated; }
     virtual QString getXml();
     virtual void draw(QPainter &painter);
     virtual void updateGeomProps()

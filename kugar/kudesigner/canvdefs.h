@@ -21,10 +21,10 @@
 #include <qcanvas.h>
 #include <qstringlist.h>
 
-enum MyCanvasRtti { RttiCanvasBox = 1700, RttiCanvasSection, RttiCanvasBand,
-    RttiKugarTemplate=1800, RttiReportHeader, RttiPageHeader, RttiDetailHeader,
-    RttiDetail, RttiDetailFooter, RttiPageFooter, RttiReportFooter,
-    RttiTextBox=2000, RttiCanvasReportItem, RttiCanvasLabel, RttiCanvasField,
-    RttiCanvasSpecial, RttiCanvasCalculated, RttiCanvasLine};
+enum KuDesignerCanvasRtti { KuDesignerRttiCanvasBox = 1700, KuDesignerRttiCanvasSection, KuDesignerRttiCanvasBand,
+    KuDesignerRttiKugarTemplate=1800, KuDesignerRttiReportHeader, KuDesignerRttiPageHeader, KuDesignerRttiDetailHeader,
+    KuDesignerRttiDetail, KuDesignerRttiDetailFooter, KuDesignerRttiPageFooter, KuDesignerRttiReportFooter,
+    KuDesignerRttiTextBox=2000, KuDesignerRttiCanvasReportItem, KuDesignerRttiCanvasLabel, KuDesignerRttiCanvasField,
+    KuDesignerRttiCanvasSpecial, KuDesignerRttiCanvasCalculated, KuDesignerRttiCanvasLine};
 
 #endif

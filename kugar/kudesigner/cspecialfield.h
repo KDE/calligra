@@ -23,7 +23,7 @@
 class CanvasSpecialField: public CanvasLabel{
 public:
     CanvasSpecialField(int x, int y, int width, int height, QCanvas * canvas);
-    virtual int rtti() const { return RttiCanvasSpecial; }
+    virtual int rtti() const { return KuDesignerRttiCanvasSpecial; }
     virtual QString getXml();
     virtual void draw(QPainter &painter);
     virtual void updateGeomProps()

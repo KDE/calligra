@@ -29,12 +29,12 @@ class QDomNode;
 class CanvasReportItem;
 class CanvasBand;
 
-class KudesignerPart : public KoDocument
+class KudesignerDoc : public KoDocument
 {
     Q_OBJECT
 public:
-    KudesignerPart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
-    ~KudesignerPart();
+    KudesignerDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+    ~KudesignerDoc();
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE, double zoomX = 1.0, double zoomY = 1.0 );
 
@@ -44,6 +44,8 @@ public:
     virtual QDomDocument saveXML();
 
     MyCanvas *canvas();
+
+    void loadPlugin(const QString& name);
 
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );

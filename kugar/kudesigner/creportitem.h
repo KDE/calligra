@@ -33,7 +33,7 @@ public:
         setZ(20);
         parentSection = 0;
     }
-    virtual int rtti() const { return RttiCanvasReportItem; }
+    virtual int rtti() const { return KuDesignerRttiCanvasReportItem; }
     
     virtual void updateGeomProps();
     virtual void draw(QPainter &painter) { CanvasBox::draw(painter); }
@@ -48,7 +48,7 @@ public:
     QRect leftMiddleResizableRect();
     QRect rightMiddleResizableRect();
 
-    CanvasBand *section();
+    virtual CanvasBand *section();
     virtual void setSection(CanvasBand *section);
     virtual void setSectionUndestructive(CanvasBand *section);
 

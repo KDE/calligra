@@ -107,7 +107,7 @@ void ReportCanvas::deleteItem(QCanvasItemList &l)
         }
 	if ((*it)->rtti() > 1800)
 	{
-/*	    if ((*it)->rtti() == RttiDetail)
+/*	    if ((*it)->rtti() == KuDesignerRttiDetail)
 	    {
 		CanvasDetail *det = (CanvasDetail*)(*it);
 		if ( det->props["Level"].first.toInt() <
@@ -149,7 +149,7 @@ void ReportCanvas::editItem(QCanvasItemList &l)
 	    dlgItemOptions *dlgOpts = new dlgItemOptions(&(l->props), this);
 	    dlgOpts->exec();
 	    delete dlgOpts;
-	    if ((*it)->rtti() == RttiKugarTemplate)
+	    if ((*it)->rtti() == KuDesignerRttiKugarTemplate)
 		((CanvasKugarTemplate*)(*it))->updatePaperProps();
 	    (*it)->hide();
 	    (*it)->show();
@@ -440,7 +440,7 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
         QCanvasRectangle *r = (QCanvasRectangle *)resizing;
         double w = r->width() + p.x() - moving_start.x();
         double h = r->height() + p.y() - moving_start.y();
-	if (resizing->rtti() !=RttiCanvasLine)
+	if (resizing->rtti() !=KuDesignerRttiCanvasLine)
 	{
 		fixMinValues(h,10,moving_offsetY);
 		fixMinValues(w,10,moving_offsetX);
@@ -449,7 +449,7 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 	fixMaxValues(h,resizing->y(),resizing->parentSection->y()+resizing->parentSection->height(),moving_offsetY);
 	fixMaxValues(w,resizing->x(),resizing->parentSection->x()+resizing->parentSection->width(),moving_offsetX);
 
-//        if (((w > 10) && (h > 10)) || (resizing->rtti() == RttiCanvasLine))
+//        if (((w > 10) && (h > 10)) || (resizing->rtti() == KuDesignerRttiCanvasLine))
             r->setSize(w, h);
         moving_start = p;
         resizing->updateGeomProps();

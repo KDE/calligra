@@ -23,7 +23,7 @@
 class CanvasLabel: public CanvasReportItem{
 public:
     CanvasLabel(int x, int y, int width, int height, QCanvas * canvas);
-    virtual int rtti() const { return RttiCanvasLabel; }
+    virtual int rtti() const { return KuDesignerRttiCanvasLabel; }
     virtual QString getXml();
     
     int getTextAlignment();

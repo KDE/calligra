@@ -18,7 +18,7 @@
 */
 
 #include <kudesigner_factory.h>
-#include <kudesigner_part.h>
+#include <kudesigner_doc.h>
 #include <kudesigner_aboutdata.h>
 #include <kinstance.h>
 #include <kiconloader.h>
@@ -51,17 +51,27 @@ KudesignerFactory::~KudesignerFactory()
     s_global = 0L;
 }
 
-KParts::Part* KudesignerFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* KudesignerFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & data)
 {
     // If classname is "KoDocument", our host is a koffice application
     // otherwise, the host wants us as a simple part, so switch to readonly and single view.
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
-
     // parentWidget and widgetName are used by KoDocument for the "readonly+singleView" case.
-    KudesignerPart *part = new KudesignerPart( parentWidget, widgetName, parent, name, !bWantKoDocument );
+    KudesignerDoc *part = new KudesignerDoc( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
     if ( !bWantKoDocument )
       part->setReadWrite( false );
+
+    if (bWantKoDocument && (data.count()>0)) 
+    {
+	for (QStringList::const_iterator it=data.begin();it!=data.end();++it)
+	{
+		if ((*it).startsWith("plugin="))
+		{
+			part->loadPlugin((*it).right((*it).length()-7));
+		}
+	}
+    }
 
     return part;
 }

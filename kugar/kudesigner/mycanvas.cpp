@@ -26,7 +26,7 @@ void MyCanvas::scaleCanvas(int scale)
     QCanvasItemList l=this->allItems();
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
     {
-	if ((*it)->rtti() == RttiTextBox)
+	if ((*it)->rtti() == KuDesignerRttiTextBox)
 	{
 /*	    CanvasTextBox* b = (CanvasTextBox*)(*it);
 	    b->scale(scale);*/

@@ -41,7 +41,7 @@ public:
     }
     virtual ~CanvasBox();
 
-    virtual int rtti() const { return RttiCanvasBox; }
+    virtual int rtti() const { return KuDesignerRttiCanvasBox; }
     virtual void draw(QPainter &painter);
     void scale(int scale);
     virtual QString getXml() { return ""; }
@@ -71,7 +71,7 @@ public:
 	    CanvasBox(x, y, width, height, canvas) { }
     virtual QString getXml() { return ""; }
     virtual void draw(QPainter &painter);
-    virtual int rtti() const { return RttiCanvasSection; }
+    virtual int rtti() const { return KuDesignerRttiCanvasSection; }
 };
 
 class CanvasBand: public CanvasSection{
@@ -83,7 +83,7 @@ public:
     }
     ~CanvasBand();
     virtual void draw(QPainter &painter);
-    virtual int rtti() const { return RttiCanvasBand; }
+    virtual int rtti() const { return KuDesignerRttiCanvasBand; }
     virtual QString getXml();
     void arrange(int base, bool destructive = TRUE);
 
@@ -96,7 +96,7 @@ class CanvasKugarTemplate: public CanvasSection{
 public:
     CanvasKugarTemplate(int x, int y, int width, int height, QCanvas * canvas);
     ~CanvasKugarTemplate();
-    virtual int rtti() const { return RttiKugarTemplate; }
+    virtual int rtti() const { return KuDesignerRttiKugarTemplate; }
     virtual void draw(QPainter &painter);
     void arrangeSections(bool destructive=TRUE);
     void updatePaperProps();
@@ -122,7 +122,7 @@ private:
 class CanvasReportHeader: public CanvasBand{
 public:
     CanvasReportHeader(int x, int y, int width, int height, QCanvas * canvas);
-    virtual int rtti() const { return RttiReportHeader; }
+    virtual int rtti() const { return KuDesignerRttiReportHeader; }
     virtual void draw(QPainter &painter);
     virtual QString getXml();
 };
@@ -130,7 +130,7 @@ public:
 class CanvasReportFooter: public CanvasBand{
 public:
     CanvasReportFooter(int x, int y, int width, int height, QCanvas * canvas);
-    virtual int rtti() const { return RttiReportFooter; }
+    virtual int rtti() const { return KuDesignerRttiReportFooter; }
     virtual void draw(QPainter &painter);
     virtual QString getXml();
 };
@@ -139,14 +139,14 @@ class CanvasPageHeader: public CanvasBand{
 public:
     CanvasPageHeader(int x, int y, int width, int height, QCanvas * canvas);
     virtual void draw(QPainter &painter);
-    virtual int rtti() const { return RttiPageHeader; }
+    virtual int rtti() const { return KuDesignerRttiPageHeader; }
     virtual QString getXml();
 };
 
 class CanvasPageFooter: public CanvasBand{
 public:
     CanvasPageFooter(int x, int y, int width, int height, QCanvas * canvas);
-    virtual int rtti() const { return RttiPageFooter; }
+    virtual int rtti() const { return KuDesignerRttiPageFooter; }
     virtual void draw(QPainter &painter);
     virtual QString getXml();
 };
@@ -154,7 +154,7 @@ public:
 class CanvasDetailHeader: public CanvasBand{
 public:
     CanvasDetailHeader(int x, int y, int width, int height, QCanvas * canvas);
-    virtual int rtti() const { return RttiDetailHeader; }
+    virtual int rtti() const { return KuDesignerRttiDetailHeader; }
     virtual void draw(QPainter &painter);
     virtual QString getXml();
 };
@@ -162,7 +162,7 @@ public:
 class CanvasDetail: public CanvasBand{
 public:
     CanvasDetail(int x, int y, int width, int height, QCanvas * canvas);
-    virtual int rtti() const { return RttiDetail; }
+    virtual int rtti() const { return KuDesignerRttiDetail; }
     virtual void draw(QPainter &painter);
     virtual QString getXml();
 };
@@ -170,7 +170,7 @@ public:
 class CanvasDetailFooter: public CanvasBand{
 public:
     CanvasDetailFooter(int x, int y, int width, int height, QCanvas * canvas);
-    virtual int rtti() const { return RttiDetailFooter; }
+    virtual int rtti() const { return KuDesignerRttiDetailFooter; }
     virtual void draw(QPainter &painter);
     virtual QString getXml();
 };

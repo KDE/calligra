@@ -4,10 +4,9 @@ INCLUDES = -I$(srcdir)/../lib $(KOFFICE_INCLUDES) $(all_includes)
 
 
 ## The kdeinit loadable module
-lib_LTLIBRARIES = kudesigner.la
-kudesigner_la_SOURCES = canvbox.cpp \
+lib_LTLIBRARIES = libkudesignercore.la kudesigner.la
+libkudesignercore_la_SOURCES = canvbox.cpp \
 	creportitem.cpp \
-	main.cpp \
 	ccalcfield.cpp \
 	cspecialfield.cpp \
 	mycanvas.cpp \
@@ -17,23 +16,29 @@ kudesigner_la_SOURCES = canvbox.cpp \
 	cline.cpp \
 	property.cpp \
 	propertyeditor.cpp \
-	propertywidgets.cpp
-kudesigner_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -avoid-version
-kudesigner_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE) $(LIB_KIO) $(LIB_KDEPRINT)
+	propertywidgets.cpp \
+	kudesigner_view.cpp \
+	kudesigner_factory.cpp \
+	kudesigner_doc.cpp
+libkudesignercore_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -avoid-version
+libkudesignercore_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE) $(LIB_KIO) $(LIB_KDEPRINT)
 
 ## The part
 kde_module_LTLIBRARIES = libkudesignerpart.la
-libkudesignerpart_la_SOURCES = kudesigner_part.cpp \
-	kudesigner_view.cpp \
-	kudesigner_factory.cpp 
+libkudesignerpart_la_SOURCES = kudesigner_part.cpp 
 libkudesignerpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(KDE_RPATH)
-libkudesignerpart_la_LIBADD = kudesigner.la $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE)
+libkudesignerpart_la_LIBADD = libkudesignercore.la $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE)
+
+## The kdeinit loadable module
+kudesigner_la_SOURCES = main.cpp
+kudesigner_la_LDFLAGS = $(all_libraries) -module -avoid-version
+kudesigner_la_LIBADD = $(LIB_KOFFICECORE)
 
 ## The executable
 bin_PROGRAMS = kudesigner
 kudesigner_SOURCES = dummy.cc
 kudesigner_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kudesigner_LDADD = kudesigner.la $(LIB_KPARTS) $(LIB_KOFFICECORE)
+kudesigner_LDADD = kudesigner.la
 
 dummy.cc:
 	echo > dummy.cc

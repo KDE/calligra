@@ -23,7 +23,7 @@
 class CanvasLine: public CanvasReportItem{
 public:
     CanvasLine(int x, int y, int width, int height, QCanvas * canvas);
-    virtual int rtti() const { return RttiCanvasLine; }
+    virtual int rtti() const { return KuDesignerRttiCanvasLine; }
     virtual QString getXml();
     virtual void draw(QPainter &painter);
         
