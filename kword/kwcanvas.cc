@@ -486,6 +486,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                     emit currentFrameSetEditChanged();
                  emit updateRuler();
             }
+            m_scrollTimer->start( 50 );
         }
         break;
         case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE:
@@ -959,7 +960,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
     if ( m_mousePressed ) {
 
-	doAutoScroll();
+	//doAutoScroll();
 
         switch ( m_mouseMode ) {
             case MM_EDIT:
@@ -1194,7 +1195,7 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
     if ( m_printing )
         return;
     if ( m_scrollTimer->isActive() )
-	m_scrollTimer->stop();
+        m_scrollTimer->stop();
     if ( m_mousePressed ) {
         if ( m_deleteMovingRect )
             deleteMovingRect();

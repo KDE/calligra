@@ -2269,9 +2269,11 @@ void KWView::insertFormula()
         frameset->finalize(); // done last since it triggers a redraw
 
         // Strange, seems we need this - hmm, do we, still ?
-        edit->getCursor()->parag()->invalidate( 0 ); // and that's done by KWTextParag::setCustomItem. Hmm.
-        edit->getCursor()->parag()->setChanged( true );
-        m_doc->slotRepaintChanged( edit->frameSet() );
+        // There was a bug in KWFormulaFrameSet::slotFormulaChanged that could
+        // have been the cause of this. Maybe we don't need this any longer.
+        //edit->getCursor()->parag()->invalidate( 0 ); // and that's done by KWTextParag::setCustomItem. Hmm.
+        //edit->getCursor()->parag()->setChanged( true );
+        //m_doc->slotRepaintChanged( edit->frameSet() );
         m_doc->refreshDocStructure(FT_FORMULA);
     }
 }
