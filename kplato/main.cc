@@ -19,6 +19,7 @@
 
 #include "kptaboutdata.h"
 
+#include <koffice_export.h>
 #include <koApplication.h>
 #include <kcmdlineargs.h>
 #include <dcopclient.h>
