@@ -164,9 +164,9 @@ protected:
     // Reimplemented from KoTextView
     virtual void doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
     virtual void showFormat( KoTextFormat *format ) ;
+    virtual void drawCursor( bool b );
 
     virtual void pgUpKeyPressed();
-
     virtual void pgDownKeyPressed();
 
     KPTextObject *m_kptextobj;

@@ -116,8 +116,8 @@ Page::~Page()
 /*======================== paint event ===========================*/
 void Page::paintEvent( QPaintEvent* paintEvent )
 {
-    //kdDebug(33001) << "Page::paintEvent " << paintEvent->rect().x() << "," << paintEvent->rect().y()
-    //          << " " << paintEvent->rect().width() << "x" << paintEvent->rect().height() << endl;
+    kdDebug(33001) << "Page::paintEvent " << paintEvent->rect().x() << "," << paintEvent->rect().y()
+                   << " " << paintEvent->rect().width() << "x" << paintEvent->rect().height() << endl;
     QPainter painter;
 
     painter.begin( &buffer );
@@ -210,10 +210,10 @@ void Page::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion
 }
 
 /*========================= draw objects =========================*/
-void Page::drawObjects( QPainter *painter, QRect rect, bool ignoreSkip, bool drawCursor )
+void Page::drawObjects( QPainter *painter, QRect rect, bool drawCursor, bool ignoreSkip )
 {
     int pgNum = editMode ? (int)view->getCurrPgNum() : currPresPage;
-    //kdDebug(33001) << "Page::drawObjects ----- pgNum=" << pgNum << " currPresStep=" << currPresStep << " _presFakt=" << _presFakt << endl;
+    kdDebug(33001) << "Page::drawObjects ----- pgNum=" << pgNum << " currPresStep=" << currPresStep << " drawCursor=" << drawCursor << endl;
 
     QPtrListIterator<KPObject> it(*objectList());
     for ( int i = 0 ; it.current(); ++it, ++i ) {
@@ -246,7 +246,7 @@ void Page::drawObjects( QPainter *painter, QRect rect, bool ignoreSkip, bool dra
 		kpobject->setOrig( op.x(), op.y() - pg * getPageRect( 0, _presFakt ).height() + pgNum * getPageRect( 0, _presFakt ).height() );
 	    }
 
-            //kdDebug(33001) << "                 drawing object at " << diffx() << "," << diffy() << "  and setting subpresstep to 0 !" << endl;
+            kdDebug(33001) << "                 drawing object at " << diffx() << "," << diffy() << "  and setting subpresstep to 0 !" << endl;
             if ( drawCursor && kpobject->getType() == OT_TEXT && m_currentTextObjectView )
             {
                 KPTextObject* textObject = static_cast<KPTextObject*>( kpobject );

@@ -287,6 +287,7 @@ void KPTextObject::drawTextObject( QPainter* _painter, bool onlyChanged, QTextCu
 
 void KPTextObject::drawText( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged )
 {
+    kdDebug() << "KPTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
     QColorGroup cg = QApplication::palette().active();
     QRect r( 0, 0, ext.width(), ext.height() );
 
@@ -755,4 +756,17 @@ void KPTextView::insertSoftHyphen()
 void KPTextView::selectAll()
 {
     textObject()->selectAll( true );
+}
+
+void KPTextView::drawCursor( bool b )
+{
+    KoTextView::drawCursor( b );
+    if ( !cursor()->parag() )
+        return;
+    if ( !kpTextObject()->kPresenterDocument()->isReadWrite() )
+        return;
+
+    // We repaint the whole object.
+    // TODO a kword-like painting method (many changes required though)
+    kpTextObject()->kPresenterDocument()->repaint( kpTextObject() );
 }
