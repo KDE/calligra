@@ -255,8 +255,8 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	affine[3] = m_matrix.m22();
 	affine[4] = m_matrix.dx();
 	affine[5] = m_matrix.dy();
-	/*ArtVpath *temp = art_vpath_affine_transform( vec, affine );
-	vec = temp;*/
+	ArtVpath *temp = art_vpath_affine_transform( vec, affine );
+	vec = temp;
 
     // TODO : filling
 	/*{

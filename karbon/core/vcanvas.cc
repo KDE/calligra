@@ -36,8 +36,9 @@ void
 VCanvas::viewportPaintEvent( QPaintEvent * )
 {
 	//kdDebug() << "VCanvas::viewportPaintEvent" << endl;
-	VPainter *p = VPainterFactory::painter();
-	p->end();
+	drawDocument( 0, QRect( 0, 0, width(), height() ) );
+	/*VPainter *p = VPainterFactory::painter();
+	p->end();*/
 }
 
 void
@@ -53,6 +54,9 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 {
 	VPainter *p = VPainterFactory::painter();
 	p->begin();
+	QWMatrix mat;
+	mat.translate( -contentsX(), -contentsY() );
+	p->setWorldMatrix( mat );
 	//VPainter *p = VPainterFactory::painter( this, visibleWidth(), visibleHeight() );
 	//erase( rect );
 
