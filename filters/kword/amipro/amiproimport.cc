@@ -155,9 +155,9 @@ static QString AmiProLayoutAsXML( const AmiProLayout& layout )
             "\" after=\"" + QString::number(layout.spaceAfter) + "\"";
 
   QString linespacing;
-  linespacing = layout.linespace==AmiPro::LS_Single ? "0" :
-                layout.linespace==AmiPro::LS_OneAndHalf ? "oneandhalf" :
-                layout.linespace==AmiPro::LS_Double ? "double" :
+  linespacing = layout.linespace==AmiPro::LS_Single ? QString::fromLatin1( "0" ) :
+                layout.linespace==AmiPro::LS_OneAndHalf ? QString::fromLatin1( "oneandhalf" ) :
+                layout.linespace==AmiPro::LS_Double ? QString::fromLatin1( "double" ) :
                   QString::number( layout.linespace );
 
   result.append( "<LAYOUT>\n" );
@@ -210,9 +210,9 @@ static QString AmiProStyleAsXML( const AmiProStyle& style )
           "left";
 
   QString linespacing;
-  linespacing = style.linespace==AmiPro::LS_Single ? "0" :
-                style.linespace==AmiPro::LS_OneAndHalf ? "oneandhalf" :
-                style.linespace==AmiPro::LS_Double ? "double" :
+  linespacing = style.linespace==AmiPro::LS_Single ? QString::fromLatin1( "0" ) :
+                style.linespace==AmiPro::LS_OneAndHalf ? QString::fromLatin1( "oneandhalf" ) :
+                style.linespace==AmiPro::LS_Double ? QString::fromLatin1( "double" ) :
                   QString::number( style.linespace );
 
   QString offsets;
@@ -301,6 +301,7 @@ bool AmiProConverter::doCloseDocument()
 bool AmiProConverter::doDefineStyle( const AmiProStyle& style )
 {
   styleList.append( style );
+  return true;
 }
 
 bool AmiProConverter::doParagraph( const QString& text, AmiProFormatList formatList,
