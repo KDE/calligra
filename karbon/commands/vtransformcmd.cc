@@ -235,10 +235,10 @@ VShearCmd::VShearCmd( VDocument *doc, const KoPoint& p, double s1, double s2 )
 	m_mat.translate( -p.x(), -p.y() );
 }
 
-VRotateCmd::VRotateCmd( VDocument *doc, const KoPoint& p, double angle )
-		: VTransformCmd( doc, i18n( "Rotate Objects" ), "14_rotate" )
+VRotateCmd::VRotateCmd( VDocument *doc, const KoPoint& p, double angle, bool duplicate )
+		: VTransformCmd( doc, i18n( "Rotate Objects" ), "14_rotate", duplicate )
 {
-	if( !m_selection || m_selection->objects().count() == 1 )
+	if( !duplicate && ( !m_selection || m_selection->objects().count() == 1 ) )
 		setName( i18n( "Rotate Object" ) );
 
 	m_mat.translate( p.x(), p.y() );

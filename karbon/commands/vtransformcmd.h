@@ -89,7 +89,7 @@ public:
 class VRotateCmd : public VTransformCmd
 {
 public:
-	VRotateCmd( VDocument *doc, const KoPoint& p, double angle );
+	VRotateCmd( VDocument *doc, const KoPoint& p, double angle, bool duplicate = false );
 };
 
 class VTranslateBezierCmd : public VCommand

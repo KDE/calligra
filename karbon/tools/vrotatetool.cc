@@ -107,7 +107,7 @@ VRotateTool::mouseDragRelease()
 		new VRotateCmd(
 			&view()->part()->document(),
 			m_center,
-			m_angle ),
+			m_angle, altPressed() ),
 		true );
 
 	view()->selectionChanged();
