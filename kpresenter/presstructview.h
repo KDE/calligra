@@ -17,40 +17,12 @@
 #define presstructview_h
 
 #include <qdialog.h>
-#include <qlistview.h>
 
 class KPresenterDoc;
 class KPresenterView;
-
-/******************************************************************
- *
- * Class: KPPresStructTreeView
- *
- ******************************************************************/
-
-class KPPresStructTreeView : public QListView
-{
-    Q_OBJECT
-    
-public:
-    KPPresStructTreeView( QWidget *parent, const char *name );
-
-};
-    
-/******************************************************************
- *
- * Class: KPPresStructTableView
- *
- ******************************************************************/
-
-class KPPresStructTableView : public QListView
-{
-    Q_OBJECT
-    
-public:
-    KPPresStructTableView( QWidget *parent, const char *name );
-    
-};
+class QListView;
+class QSplitter;
+class QResizeEvent;
 
 /******************************************************************
  *
@@ -61,18 +33,23 @@ public:
 class KPPresStructView : public QDialog
 {
     Q_OBJECT
-    
+
 public:
-    KPPresStructView( QWidget *parent, const char *name, 
+    KPPresStructView( QWidget *parent, const char *name,
                       KPresenterDoc *_doc, KPresenterView *_view );
-    
+
 protected:
+    void setupSlideList();
+    void resizeEvent( QResizeEvent *e );
+    
     KPresenterDoc *doc;
     KPresenterView *view;
-
+    QListView *slides;
+    QSplitter *hsplit;
+    
 signals:
     void presStructViewClosed();
-    
+
 };
 
 #endif
