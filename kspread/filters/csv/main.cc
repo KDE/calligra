@@ -49,8 +49,8 @@ KOffice::Filter_ptr Factory::create() {
 Filter::Filter() : KOMComponent(), KOffice::Filter_skel() {
 }
 
-void Filter::filter(KOffice::Filter::Data& data, const char *_from,
-                    const char *_to) {
+void Filter::filter(KOffice::Filter::Data& data, const QCString & _from,
+                    const QCString & _to) {
 
     QString to(_to);
     QString from(_from);
@@ -63,20 +63,8 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
         return;
     }
 
-    // Get length
-    CORBA::ULong len = data.length();
-    if (len==0)
-        return;
-    // Convert to unsigned chars
-    unsigned char *buffer = new unsigned char[len + 1];
-    for(CORBA::ULong i=0; i<len; ++i)
-        buffer[i] = static_cast<unsigned char>(data[i]);
-    buffer[len] = 0;
-
-    // Create Text Stream
-    QByteArray a;
-    a.setRawData( (char*) buffer, (int) len );
-    QTextIStream inputStream( a );
+    // Create Text Stream from QByteArray
+    QTextIStream inputStream( data );
 
     // Create Filter
     // "CSV File" will be the table name. I would have preferred to set
@@ -113,13 +101,10 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
 
     // return the XML string
     QCString cstr=QCString(str.utf8());
-    len = cstr.length();
-    data.length(len);
-    for(CORBA::ULong i=0; i<len; ++i)
-        data[i]=cstr[i];
+    char * ret = strdup( cstr.data() );
+    data.assign( ret, cstr.length() );
 
     // cleanups
-    delete [] buffer;
     delete myCSVFilter;
 }
 

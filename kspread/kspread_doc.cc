@@ -87,11 +87,11 @@ KSpreadDoc::KSpreadDoc()
   m_lstViews.setAutoDelete( false );
 
   // DEBUG: print the IOR
-  CORBA::String_var tmp = opapp_orb->object_to_string( this );
-  cout << "DOC=" << tmp.in() << endl;
+  QString tmp = opapp_orb->object_to_string( this );
+  cout << "DOC=" << tmp << endl;
 }
 
-CORBA::Boolean KSpreadDoc::initDoc()
+bool KSpreadDoc::initDoc()
 {
   KSpreadTable *t = createTable();
   m_pMap->addTable( t );
@@ -145,16 +145,13 @@ OpenParts::View_ptr KSpreadDoc::createView()
   return OpenParts::View::_duplicate( createSpreadView() );
 }
 
-void KSpreadDoc::viewList( OpenParts::Document::ViewList*& _list )
+void KSpreadDoc::viewList( OpenParts::Document::ViewList & _list )
 {
-  (*_list).length( m_lstViews.count() );
+  _list.clear();
 
-  int i = 0;
   QListIterator<KSpreadView> it( m_lstViews );
   for( ; it.current(); ++it )
-  {
-    (*_list)[i++] = OpenParts::View::_duplicate( it.current() );
-  }
+    _list.append ( OpenParts::View::_duplicate( it.current() ) );
 }
 
 int KSpreadDoc::viewCount()
@@ -766,8 +763,8 @@ KOffice::MainWindow_ptr KSpreadDoc::createMainWindow()
   return KOffice::MainWindow::_duplicate( shell->koInterface() );
 }
 
-void KSpreadDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
-		       CORBA::Float _scale)
+void KSpreadDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
+		       float _scale)
 {
   if ( m_pMap )
     m_pMap->draw( _dev, _width, _height, _scale );

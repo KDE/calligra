@@ -39,7 +39,7 @@ KSpreadPart::~KKSpreadPart()
 {
 }
 
-CORBA::Boolean KSpreadPart::save( const char *_url, CORBA::Boolean _append )
+bool KSpreadPart::save( const char *_url, bool _append )
 {
     StoreDevice dev( _append, _url );
     
@@ -53,7 +53,7 @@ CORBA::Boolean KSpreadPart::save( const char *_url, CORBA::Boolean _append )
     return writeToStore( store );
 }
 
-CORBA::Boolean KSpreadPart::load( const char *_url, CORBA::Long _offset, CORBA::Long _size )
+bool KSpreadPart::load( const char *_url, long int _offset, long int _size )
 {
     StoreDevice dev( _url, _offset, _size );
     Store store( &dev );

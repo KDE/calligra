@@ -119,29 +119,29 @@ void ChartBinding::cellChanged( KSpreadCell* )
   matrix.columns = m_rctDataArea.width() - 1;
   matrix.rows = m_rctDataArea.height() - 1;
 
-  matrix.matrix.length( ( m_rctDataArea.width() - 1 ) * ( m_rctDataArea.height() - 1 ) );
+  //matrix.matrix.length( ( m_rctDataArea.width() - 1 ) * ( m_rctDataArea.height() - 1 ) );
   for ( int y = 0; y < m_rctDataArea.height() - 1; y++ )
     for ( int x = 0; x < m_rctDataArea.width() - 1; x++ )
       matrix.matrix[ y * ( m_rctDataArea.width() - 1 ) + x ] =
 	m_pTable->cellAt( m_rctDataArea.left() + x + 1, m_rctDataArea.top() + y + 1 )->valueDouble();
 
-  matrix.columnDescription.length( m_rctDataArea.width() - 1 );
+  //matrix.columnDescription.length( m_rctDataArea.width() - 1 );
   int i = 0;
   for ( i = 0; i < m_rctDataArea.width() - 1; i++ )
     matrix.columnDescription[i] =
-      CORBA::string_dup( m_pTable->cellAt( m_rctDataArea.left() + i + 1, m_rctDataArea.top() )->valueString() );
+      m_pTable->cellAt( m_rctDataArea.left() + i + 1, m_rctDataArea.top() )->valueString();
 
-  matrix.rowDescription.length( m_rctDataArea.height() - 1 );
+  //matrix.rowDescription.length( m_rctDataArea.height() - 1 );
   for ( i = 0; i < m_rctDataArea.height() - 1; i++ )
     matrix.rowDescription[i] =
-      CORBA::string_dup( m_pTable->cellAt( m_rctDataArea.left(), m_rctDataArea.top() + i + 1 )->valueString() );
+      m_pTable->cellAt( m_rctDataArea.left(), m_rctDataArea.top() + i + 1 )->valueString();
 
   Chart::Range range;
   range.top = m_rctDataArea.top();
   range.left = m_rctDataArea.left();
   range.right = m_rctDataArea.right();
   range.bottom = m_rctDataArea.bottom();
-  range.table = CORBA::string_dup( m_pTable->name() );
+  range.table = m_pTable->name();
 
   m_vChart->fill( range, matrix );
 }
@@ -214,11 +214,11 @@ KSpread::Book_ptr KSpreadTable::book()
   return KSpread::Book::_duplicate( m_pMap );
 }
 
-KSpread::Range* KSpreadTable::range( CORBA::ULong left, CORBA::ULong top,
-				    CORBA::ULong right, CORBA::ULong bottom )
+KSpread::Range* KSpreadTable::range( unsigned long int left, unsigned long int top,
+				    unsigned long int right, unsigned long int bottom )
 {
   KSpread::Range* r = new KSpread::Range;
-  r->table = CORBA::string_dup( m_strName.data() );
+  r->table = m_strName;
   r->left = left;
   r->top = top;
   r->right = right;
@@ -227,11 +227,11 @@ KSpread::Range* KSpreadTable::range( CORBA::ULong left, CORBA::ULong top,
   return r;
 }
 
-KSpread::Range* KSpreadTable::rangeFromString( const char* str )
+KSpread::Range* KSpreadTable::rangeFromString( const QString & str )
 {
   KSpread::Range* r = new KSpread::Range;
   *r = util_parseRange( str );
-  r->table = CORBA::string_dup( m_strName.data() );
+  r->table = m_strName;
 
   return r;
 }
@@ -239,11 +239,11 @@ KSpread::Range* KSpreadTable::rangeFromString( const char* str )
 KSpread::Range* KSpreadTable::rangeFromCells( const KSpread::Cell& topleft,
 					     const KSpread::Cell& bottomright )
 {
-  if ( strcmp( topleft.table.in(), bottomright.table.in() ) != 0 )
+  if ( strcmp( topleft.table, bottomright.table ) != 0 )
   {
     KSpread::DifferentTables exc;
-    exc.table1 = CORBA::string_dup( topleft.table.in() );
-    exc.table2 = CORBA::string_dup( bottomright.table.in() );
+    exc.table1 = topleft.table;
+    exc.table2 = bottomright.table;
     mico_throw( exc );
   }
 
@@ -252,27 +252,27 @@ KSpread::Range* KSpreadTable::rangeFromCells( const KSpread::Cell& topleft,
   r->top = topleft.y;
   r->right = bottomright.x;
   r->bottom = bottomright.y;
-  r->table = CORBA::string_dup( topleft.table.in() );
+  r->table = topleft.table;
 
   return r;
 }
 
-KSpread::Cell* KSpreadTable::cellFromString( const char* str )
+KSpread::Cell* KSpreadTable::cellFromString( const QString & str )
 {
   KSpread::Cell* c = new KSpread::Cell;
   *c = util_parseCell( str );
-  c->table = CORBA::string_dup( m_strName.data() );
+  c->table = m_strName;
 
   return c;
 }
 
-void KSpreadTable::setValue( const KSpread::Cell& cell, CORBA::Double value )
+void KSpreadTable::setValue( const KSpread::Cell& cell, double value )
 {
-  if ( m_strName != cell.table.in() )
+  if ( m_strName != cell.table )
   {
     KSpread::DifferentTables exc;
-    exc.table1 = CORBA::string_dup( cell.table.in() );
-    exc.table2 = CORBA::string_dup( m_strName.data() );
+    exc.table1 = cell.table;
+    exc.table2 = m_strName;
     mico_throw( exc );
   }
 
@@ -280,13 +280,13 @@ void KSpreadTable::setValue( const KSpread::Cell& cell, CORBA::Double value )
   c->setValue( value );
 }
 
-void KSpreadTable::setStringValue( const KSpread::Cell& cell, const char* value )
+void KSpreadTable::setStringValue( const KSpread::Cell& cell, const QString & value )
 {
-  if ( m_strName != cell.table.in() )
+  if ( m_strName != cell.table )
   {
     KSpread::DifferentTables exc;
-    exc.table1 = CORBA::string_dup( cell.table.in() );
-    exc.table2 = CORBA::string_dup( m_strName.data() );
+    exc.table1 = cell.table;
+    exc.table2 = m_strName.data();
     mico_throw( exc );
   }
 
@@ -294,13 +294,13 @@ void KSpreadTable::setStringValue( const KSpread::Cell& cell, const char* value 
   c->setText( value );
 }
 
-CORBA::Double KSpreadTable::value( const KSpread::Cell& cell )
+double KSpreadTable::value( const KSpread::Cell& cell )
 {
-  if ( m_strName != cell.table.in() )
+  if ( m_strName != cell.table )
   {
     KSpread::DifferentTables exc;
-    exc.table1 = CORBA::string_dup( cell.table.in() );
-    exc.table2 = CORBA::string_dup( m_strName.data() );
+    exc.table1 = cell.table;
+    exc.table2 = m_strName;
     mico_throw( exc );
   }
 
@@ -315,27 +315,27 @@ CORBA::Double KSpreadTable::value( const KSpread::Cell& cell )
   return c->valueDouble();
 }
 
-char* KSpreadTable::stringValue( const KSpread::Cell& cell )
+QString KSpreadTable::stringValue( const KSpread::Cell& cell )
 {
-  if ( m_strName != cell.table.in() )
+  if ( m_strName != cell.table )
   {
     KSpread::DifferentTables exc;
-    exc.table1 = CORBA::string_dup( cell.table.in() );
-    exc.table2 = CORBA::string_dup( m_strName.data() );
+    exc.table1 = cell.table;
+    exc.table2 = m_strName;
     mico_throw( exc );
   }
 
   KSpreadCell* c = cellAt( cell.x, cell.y );
-  return CORBA::string_dup( c->valueString() );
+  return c->valueString();
 }
 
 void KSpreadTable::setSelection( const KSpread::Range& sel )
 {
-  if ( m_strName != sel.table.in() )
+  if ( m_strName != sel.table )
   {
     KSpread::DifferentTables exc;
-    exc.table1 = CORBA::string_dup( sel.table.in() );
-    exc.table2 = CORBA::string_dup( m_strName.data() );
+    exc.table1 = sel.table;
+    exc.table2 = m_strName;
     mico_throw( exc );
   }
 
@@ -345,7 +345,7 @@ void KSpreadTable::setSelection( const KSpread::Range& sel )
 KSpread::Range* KSpreadTable::selection()
 {
   KSpread::Range* r = new KSpread::Range;
-  r->table = CORBA::string_dup( m_strName.data() );
+  r->table = m_strName;
   r->left = m_rctSelection.left();
   if ( r->left == 0 )
   {
@@ -394,7 +394,7 @@ void KSpreadTable::pasteSelection( const KSpread::Cell& cell )
   paste( p );
 }
 
-CORBA::Boolean KSpreadTable::isEmpty( CORBA::ULong x, CORBA::ULong y )
+bool KSpreadTable::isEmpty( unsigned long int x, unsigned long int y )
 {
   KSpreadCell* c = cellAt( x, y );
   if ( !c || c->isEmpty() )
@@ -1884,7 +1884,7 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
 }
 
 
-void KSpreadTable::insertRow( CORBA::ULong _row )
+void KSpreadTable::insertRow( unsigned long int _row )
 {
     KSpreadUndoInsertRow *undo;
     if ( !m_pDoc->undoBuffer()->isLocked() )
@@ -1897,10 +1897,10 @@ void KSpreadTable::insertRow( CORBA::ULong _row )
     m_dctRows.setAutoDelete( FALSE );
 
     kauto_array<KSpreadCell*> list(m_dctCells.count());
-    CORBA::ULong count = 0;
+    unsigned long int count = 0;
     // Find the last row
     QIntDictIterator<KSpreadCell> it( m_dctCells );
-    CORBA::ULong max_row = 1;
+    unsigned long int max_row = 1;
     for ( ; it.current(); ++it )
     {
       list[ count++ ] = it.current();
@@ -1908,9 +1908,9 @@ void KSpreadTable::insertRow( CORBA::ULong _row )
 	max_row = it.current()->row();
     }
 
-    for ( CORBA::ULong i = max_row; i >= _row; i-- )
+    for ( unsigned long int i = max_row; i >= _row; i-- )
     {
-      for( CORBA::ULong k = 0; k < count; k++ )
+      for( unsigned long int k = 0; k < count; k++ )
       {
 	if ( list[ k ]->row() == (int)i && !list[ k ]->isDefault() )
 	{
@@ -1936,9 +1936,9 @@ void KSpreadTable::insertRow( CORBA::ULong _row )
 	max_row = it2.current()->row();
     }
 
-    for ( CORBA::ULong i = max_row; i >= _row; i-- )
+    for ( unsigned long int i = max_row; i >= _row; i-- )
     {
-      for( CORBA::ULong k = 0; k < count; k++ )
+      for( unsigned long int k = 0; k < count; k++ )
       {
 	if ( list2[ k ]->row() == (int)i )
 	{
@@ -1961,7 +1961,7 @@ void KSpreadTable::insertRow( CORBA::ULong _row )
     emit sig_updateVBorder( this );
 }
 
-void KSpreadTable::deleteRow( CORBA::ULong _row )
+void KSpreadTable::deleteRow( unsigned long int _row )
 {
     KSpreadUndoDeleteRow *undo = 0L;
     if ( !m_pDoc->undoBuffer()->isLocked() )
@@ -2074,7 +2074,7 @@ void KSpreadTable::deleteRow( CORBA::ULong _row )
     emit sig_updateVBorder( this );
 }
 
-void KSpreadTable::insertColumn( CORBA::ULong _column )
+void KSpreadTable::insertColumn( unsigned long int _column )
 {
     KSpreadUndoInsertColumn *undo;
     if ( !m_pDoc->undoBuffer()->isLocked() )
@@ -2087,10 +2087,10 @@ void KSpreadTable::insertColumn( CORBA::ULong _column )
     m_dctColumns.setAutoDelete( FALSE );
 
     kauto_array<KSpreadCell*> list( m_dctCells.count());
-    CORBA::ULong count = 0;
+    unsigned long int count = 0;
     QIntDictIterator<KSpreadCell> it( m_dctCells );
     // Determine right most column
-    CORBA::ULong max_column = 1;
+    unsigned long int max_column = 1;
     for ( ; it.current(); ++it )
     {
       list[ count++ ] = it.current();
@@ -2098,9 +2098,9 @@ void KSpreadTable::insertColumn( CORBA::ULong _column )
 	max_column = it.current()->column();
     }
 
-    for ( CORBA::ULong i = max_column; i >= _column; i-- )
+    for ( unsigned long int i = max_column; i >= _column; i-- )
     {
-      for( CORBA::ULong k = 0; k < count; k++ )
+      for( unsigned long int k = 0; k < count; k++ )
       {
 	if ( list[ k ]->column() == (int)i && !list[ k ]->isDefault() )
 	{
@@ -2128,9 +2128,9 @@ void KSpreadTable::insertColumn( CORBA::ULong _column )
 	max_column = it2.current()->column();
     }
 
-    for ( CORBA::ULong i = max_column; i >= _column; i-- )
+    for ( unsigned long int i = max_column; i >= _column; i-- )
     {
-      for( CORBA::ULong k = 0; k < count; k++ )
+      for( unsigned long int k = 0; k < count; k++ )
       {
 	if ( list2[ k ]->column() == (int)i )
 	{
@@ -2153,7 +2153,7 @@ void KSpreadTable::insertColumn( CORBA::ULong _column )
     emit sig_updateVBorder( this );
 }
 
-void KSpreadTable::deleteColumn( CORBA::ULong _column )
+void KSpreadTable::deleteColumn( unsigned long int _column )
 {
     KSpreadUndoDeleteColumn *undo = 0L;
     if ( !m_pDoc->undoBuffer()->isLocked() )
@@ -2524,8 +2524,8 @@ void KSpreadTable::deleteSelection( const QPoint &_marker )
     emit sig_updateView( this );
 }
 
-void KSpreadTable::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
-			 CORBA::Float _scale )
+void KSpreadTable::draw( QPaintDevice* _dev, long int _width, long int _height,
+			 float _scale )
 {
   QRect page_range;
   page_range.setLeft( 1 );
@@ -3153,7 +3153,7 @@ bool KSpreadTable::saveChildren( KOStore::Store_ptr _store, const char *_path )
   {
     QString path = QString( "%1/%2" ).arg( _path ).arg( i++ );
     KOffice::Document_var doc = it.current()->document();
-    if ( !doc->saveToStore( _store, 0L, path ) )
+    if ( !doc->saveToStore( _store, "", path ) )
       return false;
   }
   return true;
@@ -3262,10 +3262,10 @@ void ChartChild::update()
 
 bool ChartChild::save( ostream& out )
 {
-  CORBA::String_var u = m_rDoc->url();
-  CORBA::String_var mime = m_rDoc->mimeType();
+  QString u = m_rDoc->url();
+  QString mime = m_rDoc->mimeType();
 
-  out << indent << "<CHART url=\"" << u << "\" mime=\"" << mime << "\">"
+  out << indent << "<CHART url=\"" << u.ascii() << "\" mime=\"" << mime.ascii()<< "\">"
       << m_geometry;
   if ( m_pBinding )
     out << "<BINDING>" << m_pBinding->dataArea() << "</BINDING>";

@@ -190,42 +190,42 @@ public:
 
     // IDL
     virtual KSpread::Book_ptr book();
-    virtual KSpread::Range* range( CORBA::ULong left, CORBA::ULong top,
-				  CORBA::ULong right, CORBA::ULong bottom );
-    virtual KSpread::Range* rangeFromString( const char* str );
+    virtual KSpread::Range* range( unsigned long int left, unsigned long int top,
+				  unsigned long int right, unsigned long int bottom );
+    virtual KSpread::Range* rangeFromString( const QString & str );
     virtual KSpread::Range* rangeFromCells( const KSpread::Cell& topleft,
 					   const KSpread::Cell& bottomright );
-    virtual KSpread::Cell* cellFromString( const char* str );
-    virtual void setValue( const KSpread::Cell& cell, CORBA::Double value );
-    virtual void setStringValue( const KSpread::Cell& cell, const char* value );
-    virtual CORBA::Double value( const KSpread::Cell& cell );
-    virtual char* stringValue( const KSpread::Cell& cell );
+    virtual KSpread::Cell* cellFromString( const QString & str );
+    virtual void setValue( const KSpread::Cell& cell, double value );
+    virtual void setStringValue( const KSpread::Cell& cell, const QString & value );
+    virtual double value( const KSpread::Cell& cell );
+    virtual QString stringValue( const KSpread::Cell& cell );
     /**
      * Deletes the column '_column' and redraws the table.
      */
-    virtual void deleteColumn( CORBA::ULong col );
+    virtual void deleteColumn( unsigned long int col );
     /**
      * Moves all columns which are >= _column one position to the right and
      * inserts a new and empty column. After this the table is redrawn.
      */
-    virtual void insertColumn( CORBA::ULong col );
+    virtual void insertColumn( unsigned long int col );
     /**
      * Deletes the row '_ow' and redraws the table.
      */
-    virtual void deleteRow( CORBA::ULong row );
+    virtual void deleteRow( unsigned long int row );
     /**
      * Moves all rows which are >= _row one position down and
      * inserts a new and empty row. After this the table is redrawn.
      */
-    virtual void insertRow( CORBA::ULong row );
+    virtual void insertRow( unsigned long int row );
     virtual void setSelection( const KSpread::Range& sel );
     virtual KSpread::Range* selection();
     virtual void copySelection();
     virtual void cutSelection();
     virtual void pasteSelection( const KSpread::Cell& cell );
-    virtual CORBA::Boolean isEmpty( CORBA::ULong x, CORBA::ULong y );
+    virtual bool isEmpty( unsigned long int x, unsigned long int y );
   
-    char* tableName() { return CORBA::string_dup( m_strName.data() ); }
+    QString tableName() { return m_strName; }
 
     // C++
     virtual bool save( ostream& );
@@ -499,8 +499,8 @@ public:
     /**
      * Needed for the printing Extension KOffice::Print
      */
-    void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
-	       CORBA::Float _scale );
+    void draw( QPaintDevice* _dev, long int _width, long int _height,
+	       float _scale );
 
     void insertChart( const QRect& _geometry, KoDocumentEntry&, const QRect& _data );
     void insertChild( const QRect& _geometry, KoDocumentEntry& );

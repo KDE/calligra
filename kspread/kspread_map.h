@@ -50,8 +50,8 @@ public:
   virtual ~KSpreadMap();
   
   // IDL
-  virtual KSpread::TableSeq* tables();
-  virtual KSpread::Table_ptr table( const char* name );
+  virtual KSpread::TableSeq tables();
+  virtual KSpread::Table_ptr table( const QString & name );
   
   // C++
   virtual bool save( ostream& );
@@ -84,7 +84,7 @@ public:
    */ 
   void moveTable( const char* _from, const char* to, bool _before = true );
  
-  KSpreadTable* findTable( const char *_name );
+  KSpreadTable* findTable( const QString & _name );
         
   /**
    * Use the @ref #nextTable function to get all the other tables.
@@ -114,8 +114,8 @@ public:
   /**
    * Needed for the printing Extension KOffice::Print
    */
-  void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
-	       CORBA::Float _scale );
+  void draw( QPaintDevice* _dev, long int _width, long int _height,
+	       float _scale );
   
 protected:
   /**

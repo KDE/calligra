@@ -62,27 +62,25 @@ Filter::Filter() : KOMComponent(), KOffice::Filter_skel() {
 }
 
 /*================================================================*/
-void Filter::filter(KOffice::Filter::Data& data, const char *_from,
-                    const char *_to) {
+void Filter::filter(KOffice::Filter::Data& data, const QCString &from,
+                    const QCString &to) {
 
     OLEFilter::OUT out;
-    QString to(_to);
 
     if (to=="application/x-kword")
         out=OLEFilter::KWord;
     else if(to=="application/x-kspread")
         out=OLEFilter::KSpread;
-    else if(to="application/x-kpresenter")
+    else if(to=="application/x-kpresenter")
         out=OLEFilter::KPresenter;
     else {
         KOffice::Filter::UnsupportedFormat exc;
-        exc.format = CORBA::string_dup(_to);
+        exc.format = to;
         mico_throw(exc);
         return;
     }
 
     OLEFilter::IN in;
-    QString from(_from);
 
     if (from=="application/x-winword97")
         in=OLEFilter::Word;
@@ -92,21 +90,15 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
         in=OLEFilter::PowerPoint;
     else {
         KOffice::Filter::UnsupportedFormat exc;
-        exc.format = CORBA::string_dup(_from);
+        exc.format = from;
         mico_throw(exc);
         return;
     }
 
-    CORBA::ULong len = data.length();
-    if (len==0)
+    docFile.data=(unsigned char *) data.data();
+    docFile.length=data.size();
+    if (docFile.length==0)
         return;
-    unsigned char *buffer = new unsigned char[len + 1];
-    for(CORBA::ULong i=0; i<len; ++i)
-        buffer[i] = static_cast<unsigned char>(data[i]);
-    buffer[len] = 0;
-
-    docFile.data=buffer;   // see myfile.h
-    docFile.length=len;
     myOLEFilter=new OLEFilter(docFile, in, out);
 
     QString str;
@@ -412,16 +404,12 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
         }
     }
     // will disappear soon?
-    QCString cstr=QCString(str.utf8());
-    len = cstr.length();
-    data.length(len);
-    
     // will we give back the name only, soon?
-    for(CORBA::ULong i=0; i<len; ++i)
-        data[i]=cstr[i];
-
-    delete [] buffer;
-    buffer=0L;
+    // Not sure, why ? (David)
+    QCString cstr=QCString(str.utf8());
+    char * ret = strdup( cstr.data() );
+    data.assign( ret, cstr.length() ); 
+    
     delete myOLEFilter;
     myOLEFilter=0L;
 }

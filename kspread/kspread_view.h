@@ -155,7 +155,7 @@ public:
      */
     void insertChild( const QRect& _geometry, KoDocumentEntry& _entry );
 
-    void setFocus( CORBA::Boolean mode );
+    void setFocus( bool mode );
 
 #ifdef USE_PICTURE
     QListIterator<KSpreadChildPicture> pictures() { return QListIterator<KSpreadChildPicture>( m_lstPictures ); }
@@ -163,7 +163,7 @@ public:
     void markChildPicture( KSpreadChildPicture *_pic );
 #endif
     // IDL
-    virtual CORBA::Boolean printDlg();
+    virtual bool printDlg();
 
     // IDL Slots
     /**
@@ -335,11 +335,11 @@ public:
     /**
      * ToolBar
      */
-    void fontSelected( const CORBA::WChar *_font );
+    void fontSelected( const QString &_font );
     /**
      * ToolBar
      */
-    void fontSizeSelected( const CORBA::WChar *_size );
+    void fontSizeSelected( const QString &_size );
     /**
      * ToolBar
      */
@@ -369,7 +369,7 @@ public:
      *Toolbar
      */
 
-    void formulaselection( const CORBA::WChar *_math );
+    void formulaselection( const QString &_math );
 
     void TextColor();
     void BackgroundColor();
@@ -479,10 +479,10 @@ public slots:
     void slotChildMoveEnd( KoFrame* );
 
     // IDL
-    virtual CORBA::ULong leftGUISize();
-    virtual CORBA::ULong rightGUISize();
-    virtual CORBA::ULong topGUISize();
-    virtual CORBA::ULong bottomGUISize();
+    virtual unsigned long int leftGUISize();
+    virtual unsigned long int rightGUISize();
+    virtual unsigned long int topGUISize();
+    virtual unsigned long int bottomGUISize();
 
 signals:
     void sig_selectionChanged( KSpreadTable* _table, const QRect& _selection );
@@ -525,90 +525,90 @@ protected:
 
 
     OpenPartsUI::ToolBar_var m_vToolBarEdit;
-    CORBA::Long m_idButtonEdit_Copy;
-    CORBA::Long m_idButtonEdit_Paste;
-    CORBA::Long m_idButtonEdit_Cut;
-    CORBA::Long m_idButtonEdit_DelRow;
-    CORBA::Long m_idButtonEdit_DelCol;
-    CORBA::Long m_idButtonEdit_InsRow;
-    CORBA::Long m_idButtonEdit_InsCol;
+    long int m_idButtonEdit_Copy;
+    long int m_idButtonEdit_Paste;
+    long int m_idButtonEdit_Cut;
+    long int m_idButtonEdit_DelRow;
+    long int m_idButtonEdit_DelCol;
+    long int m_idButtonEdit_InsRow;
+    long int m_idButtonEdit_InsCol;
     OpenPartsUI::ToolBar_var m_vToolBarLayout;
-    CORBA::Long m_idComboLayout_Font;
-    CORBA::Long m_idComboLayout_FontSize;
-    CORBA::Long m_idButtonLayout_Bold;
-    CORBA::Long m_idButtonLayout_Italic;
-    CORBA::Long m_idButtonLayout_Money;
-    CORBA::Long m_idButtonLayout_Percent;
-    CORBA::Long m_idButtonLayout_Left;
-    CORBA::Long m_idButtonLayout_Center;
-    CORBA::Long m_idButtonLayout_Right;
-    CORBA::Long m_idButtonLayout_MultiRows;
-    CORBA::Long m_idButtonLayout_PrecMinus;
-    CORBA::Long m_idButtonLayout_PrecPlus;
-    CORBA::Long m_idButtonLayout_Chart;
-    CORBA::Long m_idButtonLayout_Text_Color;
-    CORBA::Long m_idButtonLayout_bg_Color;
-    CORBA::Long m_idButtonLayout_sort_incr;
-    CORBA::Long m_idButtonLayout_sort_decrease;
-    CORBA::Long m_idButtonLayout_funct;
+    long int m_idComboLayout_Font;
+    long int m_idComboLayout_FontSize;
+    long int m_idButtonLayout_Bold;
+    long int m_idButtonLayout_Italic;
+    long int m_idButtonLayout_Money;
+    long int m_idButtonLayout_Percent;
+    long int m_idButtonLayout_Left;
+    long int m_idButtonLayout_Center;
+    long int m_idButtonLayout_Right;
+    long int m_idButtonLayout_MultiRows;
+    long int m_idButtonLayout_PrecMinus;
+    long int m_idButtonLayout_PrecPlus;
+    long int m_idButtonLayout_Chart;
+    long int m_idButtonLayout_Text_Color;
+    long int m_idButtonLayout_bg_Color;
+    long int m_idButtonLayout_sort_incr;
+    long int m_idButtonLayout_sort_decrease;
+    long int m_idButtonLayout_funct;
 
     OpenPartsUI::ToolBar_var m_vToolBarFormula;
-    CORBA::Long m_idButtonFormula_Power;
-    CORBA::Long m_idButtonFormula_Subscript;
-    CORBA::Long m_idButtonFormula_Parentheses;
-    CORBA::Long m_idButtonFormula_AbsValue;
-    CORBA::Long m_idButtonFormula_Brackets;
-    CORBA::Long m_idButtonFormula_Fraction;
-    CORBA::Long m_idButtonFormula_Root;
-    CORBA::Long m_idButtonFormula_Integral;
-    CORBA::Long m_idButtonFormula_Matrix;
-    CORBA::Long m_idButtonFormula_LeftSuper;
-    CORBA::Long m_idButtonFormula_LeftSub;
-    CORBA::Long m_idButtonFormula_Sum;
-    CORBA::Long m_idButtonFormula_Product;
+    long int m_idButtonFormula_Power;
+    long int m_idButtonFormula_Subscript;
+    long int m_idButtonFormula_Parentheses;
+    long int m_idButtonFormula_AbsValue;
+    long int m_idButtonFormula_Brackets;
+    long int m_idButtonFormula_Fraction;
+    long int m_idButtonFormula_Root;
+    long int m_idButtonFormula_Integral;
+    long int m_idButtonFormula_Matrix;
+    long int m_idButtonFormula_LeftSuper;
+    long int m_idButtonFormula_LeftSub;
+    long m_idButtonFormula_Sum;
+    long m_idButtonFormula_Product;
 
     OpenPartsUI::Menu_var m_vMenuEdit;
-    CORBA::Long m_idMenuEdit_Undo;
-    CORBA::Long m_idMenuEdit_Redo;
-    CORBA::Long m_idMenuEdit_Cut;
-    CORBA::Long m_idMenuEdit_Copy;
-    CORBA::Long m_idMenuEdit_Paste;
-    CORBA::Long m_idMenuEdit_Cell;
-    CORBA::Long m_idMenuEdit_Layout;
-    CORBA::Long m_idMenuEdit_Special;
+    long int m_idMenuEdit_Undo;
+    long int m_idMenuEdit_Redo;
+    long int m_idMenuEdit_Cut;
+    long int m_idMenuEdit_Copy;
+    long int m_idMenuEdit_Paste;
+    long int m_idMenuEdit_Cell;
+    long int m_idMenuEdit_Layout;
+    long int m_idMenuEdit_Special;
 
     OpenPartsUI::Menu_var m_vMenuEdit_Insert;
-    CORBA::Long m_idMenuEdit_Insert_Table;
-    CORBA::Long m_idMenuEdit_Insert_Chart;
-    CORBA::Long m_idMenuEdit_Insert_Image;
-    CORBA::Long m_idMenuEdit_Insert_Object;
+    long int m_idMenuEdit_Insert_Table;
+    long int m_idMenuEdit_Insert_Chart;
+    long int m_idMenuEdit_Insert_Image;
+    long int m_idMenuEdit_Insert_Object;
 
     OpenPartsUI::Menu_var m_vMenuEdit_Remove;
-    CORBA::Long m_idMenuEdit_Remove_Table;
+    long int m_idMenuEdit_Remove_Table;
 
     OpenPartsUI::Menu_var m_vMenuView;
-    CORBA::Long m_idMenuView_NewView;
-    CORBA::Long m_idMenuView_ShowPageBorders;
+    long int m_idMenuView_NewView;
+    long int m_idMenuView_ShowPageBorders;
     OpenPartsUI::Menu_var m_vMenuData;
-    CORBA::Long m_idMenuData_Consolidate;
-    CORBA::Long m_idMenuData_replace;
-    CORBA::Long m_idMenuData_sort;
-    CORBA::Long m_idMenuData_goto;
-    CORBA::Long m_idMenuData_anchor;
+    long int m_idMenuData_Consolidate;
+    long int m_idMenuData_replace;
+    long int m_idMenuData_sort;
+    long int m_idMenuData_goto;
+    long int m_idMenuData_anchor;
     OpenPartsUI::Menu_var m_vMenuFolder;
-    CORBA::Long m_idMenuFolder_NewTable;
+    long int m_idMenuFolder_NewTable;
     OpenPartsUI::Menu_var m_vMenuFormat;
-    CORBA::Long m_idMenuFormat_AutoFill;
+    long int m_idMenuFormat_AutoFill;
     OpenPartsUI::Menu_var m_vMenuScripts;
-    CORBA::Long m_idMenuScripts_EditGlobal;
-    CORBA::Long m_idMenuScripts_EditLocal;
-    CORBA::Long m_idMenuScripts_Reload;
-    CORBA::Long m_idMenuScripts_Run;
+    long int m_idMenuScripts_EditGlobal;
+    long int m_idMenuScripts_EditLocal;
+    long int m_idMenuScripts_Reload;
+    long int m_idMenuScripts_Run;
     OpenPartsUI::Menu_var m_vMenuHelp;
-    CORBA::Long m_idMenuHelp_About;
-    CORBA::Long m_idMenuHelp_Using;
+    long int m_idMenuHelp_About;
+    long int m_idMenuHelp_Using;
     OpenPartsUI::ToolBar_var m_vToolBarMath ;
-    CORBA::Long m_idComboMath;
+    long int m_idComboMath;
 
 
     /**

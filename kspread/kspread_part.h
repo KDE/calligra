@@ -59,8 +59,8 @@ public:
 
     Shell_ptr shell() { return Shell::_duplicate( (Shell_ptr)vShell ); }
 
-    CORBA::Boolean save( const char *_url, CORBA::Boolean _append );
-    CORBA::Boolean load( const char *_url, CORBA::Long _offset, CORBA::Long _size );
+    bool save( const char *_url, bool _append );
+    bool load( const char *_url, long int _offset, long int _size );
 
     char* mimeType() { return "application/x-kde-kxcl"; }
     char* editorType() { return "IDL:KSpreadFactory:1.0"; }

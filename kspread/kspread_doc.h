@@ -76,7 +76,7 @@ public:
   virtual KSpreadView* createSpreadView( QWidget* _parent = 0 );
 
   // IDL
-  virtual CORBA::Boolean initDoc();
+  virtual bool initDoc();
 
   virtual KSpread::Book_ptr book();
 
@@ -85,11 +85,11 @@ public:
    */
   virtual OpenParts::View_ptr createView();
   
-  virtual void viewList( OpenParts::Document::ViewList*& _list );
+  virtual void viewList( OpenParts::Document::ViewList & _list );
   
-  virtual char* mimeType() { return CORBA::string_dup( MIME_TYPE ); }
+  virtual QCString mimeType() { return MIME_TYPE; }
   
-  virtual CORBA::Boolean isModified() { return m_bModified; }
+  virtual bool isModified() { return m_bModified; }
 
   virtual KOffice::MainWindow_ptr createMainWindow();
   
@@ -276,8 +276,8 @@ protected:
   /**
    * Needed for the printing extension KOffice::Print
    */
-  virtual void draw( QPaintDevice*, CORBA::Long _width, CORBA::Long _height,
-		     CORBA::Float _scale );
+  virtual void draw( QPaintDevice*, long int _width, long int _height,
+		     float _scale );
 
   /**
    * Overloaded function of @ref KoDocument.

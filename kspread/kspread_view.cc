@@ -528,9 +528,9 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::EventKeyPressed& _event )
 
 bool KSpreadView::mappingEventSetText( KSpread::EventSetText& _event )
 {
-  cerr << "GOT EventSetText ´" << _event.text.in() << "´" << endl;
+  cerr << "GOT EventSetText ´" << _event.text << "´" << endl;
 
-  m_pTable->setText( m_pCanvas->markerRow(), m_pCanvas->markerColumn(), _event.text.in() );
+  m_pTable->setText( m_pCanvas->markerRow(), m_pCanvas->markerColumn(), _event.text );
 
   return true;
 }
@@ -567,34 +567,32 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
     return true;
   }
 
-  CORBA::WString_var wstr;
-
   m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarEdit->setFullWidth(false);
 
   OpenPartsUI::Pixmap_var pix;
   pix = OPUIUtils::convertPixmap( BarIcon("editcopy") );
-  m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "copySelection", true, ( wstr = Q2C( i18n( "Copy" ) ) ), -1 );
+  m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "copySelection", true, i18n( "Copy" ), -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("editcut") );
-  m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ), this, "cutSelection", true, ( wstr = Q2C( i18n( "Cut" ) ) ), -1 );
+  m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ), this, "cutSelection", true, i18n( "Cut" ), -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("editpaste") );
-  m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "paste", true, ( wstr = Q2C( i18n( "Paste" ) ) ), -1 );
+  m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "paste", true, i18n( "Paste" ), -1 );
 
   m_vToolBarEdit->insertSeparator( -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("rowout") );
-  m_idButtonEdit_DelRow = m_vToolBarEdit->insertButton2( pix, 4, SIGNAL( clicked() ), this, "deleteRow", true, ( wstr = Q2C( i18n( "Delete Row" ) ) ), -1 );
+  m_idButtonEdit_DelRow = m_vToolBarEdit->insertButton2( pix, 4, SIGNAL( clicked() ), this, "deleteRow", true, i18n( "Delete Row" ), -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("colout") );
-  m_idButtonEdit_DelCol = m_vToolBarEdit->insertButton2( pix, 5, SIGNAL( clicked() ), this, "deleteColumn", true, ( wstr = Q2C( i18n( "Delete Column") ) ), -1 );
+  m_idButtonEdit_DelCol = m_vToolBarEdit->insertButton2( pix, 5, SIGNAL( clicked() ), this, "deleteColumn", true, i18n( "Delete Column"), -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("rowin") );
-  m_idButtonEdit_InsRow = m_vToolBarEdit->insertButton2( pix, 6, SIGNAL( clicked() ), this, "insertRow", true, ( wstr = Q2C( i18n( "Insert Row"  ) ) ), -1 );
+  m_idButtonEdit_InsRow = m_vToolBarEdit->insertButton2( pix, 6, SIGNAL( clicked() ), this, "insertRow", true, i18n( "Insert Row" ), -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("colin") );
-  m_idButtonEdit_InsCol = m_vToolBarEdit->insertButton2( pix, 7, SIGNAL( clicked() ), this, "insertColumn", true, ( wstr = Q2C( i18n( "Insert Column"  ) ) ), -1 );
+  m_idButtonEdit_InsCol = m_vToolBarEdit->insertButton2( pix, 7, SIGNAL( clicked() ), this, "insertColumn", true, i18n( "Insert Column" ), -1 );
 
   m_vToolBarEdit->setFullWidth(false);
   m_vToolBarEdit->enable( OpenPartsUI::Show );
@@ -602,73 +600,72 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   m_vToolBarLayout = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarLayout->setFullWidth(false);
 
-  OpenPartsUI::StrList fonts;
-  fonts.length( 4 );
-  fonts[0] = CORBA::string_dup( "Courier" );
-  fonts[1] = CORBA::string_dup( "Helvetica" );
-  fonts[2] = CORBA::string_dup( "Symbol" );
-  fonts[3] = CORBA::string_dup( "Times" );
+  OpenPartsUI::WStrList fonts;
+  fonts.clear();
+  fonts.append( "Courier" );
+  fonts.append( "Helvetica" );
+  fonts.append( "Symbol" );
+  fonts.append( "Times" );
 
   m_idComboLayout_Font = m_vToolBarLayout->insertCombo( fonts, 1, false, SIGNAL( activated( const QString & ) ), this,
-							"fontSelected", true, ( wstr = Q2C( i18n( "Font") ) ),
+							"fontSelected", true, i18n( "Font"),
 							120, -1, OpenPartsUI::AtBottom );
 
-  OpenPartsUI::StrList sizelist;
+  OpenPartsUI::WStrList sizelist;
   int sizes[24] = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 48, 64 };
-  sizelist.length( 24 );
   for( int i = 0; i < 24; i++ )
   {
-    char buffer[ 10 ];
-    sprintf( buffer, "%i", sizes[i] );
-    sizelist[i] = CORBA::string_dup( buffer );
+    QString buffer;
+    buffer.setNum( sizes[i] );
+    sizelist.append( buffer );
   }
   m_idComboLayout_FontSize = m_vToolBarLayout->insertCombo( sizelist, 2, true, SIGNAL( activated( const QString & ) ),
 							    this, "fontSizeSelected", true,
-							    ( wstr = Q2C( i18n( "Font Size"  ) ) ), 50, -1, OpenPartsUI::AtBottom );
+							    i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
 
   pix = OPUIUtils::convertPixmap( BarIcon("bold") );
-  m_idButtonLayout_Bold = m_vToolBarLayout->insertButton2( pix, 3, SIGNAL( clicked() ), this, "bold", true, ( wstr = Q2C( i18n( "Bold" ) ) ), -1 );
+  m_idButtonLayout_Bold = m_vToolBarLayout->insertButton2( pix, 3, SIGNAL( clicked() ), this, "bold", true, i18n( "Bold" ), -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("italic") );
-  m_idButtonLayout_Italic = m_vToolBarLayout->insertButton2( pix, 4, SIGNAL( clicked() ), this, "italic", true, ( wstr = Q2C( i18n( "Italic" ) ) ), -1 );
+  m_idButtonLayout_Italic = m_vToolBarLayout->insertButton2( pix, 4, SIGNAL( clicked() ), this, "italic", true, i18n( "Italic" ), -1 );
 
   m_vToolBarLayout->insertSeparator( -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("money") );
-  m_idButtonLayout_Money = m_vToolBarLayout->insertButton2( pix, 5, SIGNAL( clicked() ), this, "moneyFormat", true, ( wstr = Q2C( i18n( "Money Format" ) ) ), -1 );
+  m_idButtonLayout_Money = m_vToolBarLayout->insertButton2( pix, 5, SIGNAL( clicked() ), this, "moneyFormat", true, i18n( "Money Format" ), -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("percent") );
-  m_idButtonLayout_Percent = m_vToolBarLayout->insertButton2( pix, 6, SIGNAL( clicked() ), this, "percent", true, ( wstr = Q2C( i18n( "Percent Format" ) ) ), -1 );
+  m_idButtonLayout_Percent = m_vToolBarLayout->insertButton2( pix, 6, SIGNAL( clicked() ), this, "percent", true, i18n( "Percent Format" ), -1 );
 
   m_vToolBarLayout->insertSeparator( -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("left") );
-  m_idButtonLayout_Left = m_vToolBarLayout->insertButton2( pix, 7, SIGNAL( clicked() ), this, "alignLeft", true, ( wstr = Q2C( i18n( "Align Left" ) ) ), -1 );
+  m_idButtonLayout_Left = m_vToolBarLayout->insertButton2( pix, 7, SIGNAL( clicked() ), this, "alignLeft", true, i18n( "Align Left" ), -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("center") );
-  m_idButtonLayout_Center = m_vToolBarLayout->insertButton2( pix, 8, SIGNAL( clicked() ), this, "alignCenter", true, ( wstr = Q2C( i18n( "Align Center" ) ) ), -1 );
+  m_idButtonLayout_Center = m_vToolBarLayout->insertButton2( pix, 8, SIGNAL( clicked() ), this, "alignCenter", true, i18n( "Align Center" ), -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("right") );
-  m_idButtonLayout_Right = m_vToolBarLayout->insertButton2( pix, 9, SIGNAL( clicked() ), this, "alignRight", true, ( wstr = Q2C( i18n( "Align Right" ) ) ), -1 );
+  m_idButtonLayout_Right = m_vToolBarLayout->insertButton2( pix, 9, SIGNAL( clicked() ), this, "alignRight", true, i18n( "Align Right" ), -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("multirow") );
   m_idButtonLayout_MultiRows = m_vToolBarLayout->insertButton2( pix, 10, SIGNAL( clicked() ), this, "multiRow", true,
-							       ( wstr = Q2C( i18n( "Allow multiple lines" ) ) ), -1 );
+							       i18n( "Allow multiple lines" ), -1 );
 
   m_vToolBarLayout->insertSeparator( -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("precminus") );
   m_idButtonLayout_PrecMinus = m_vToolBarLayout->insertButton2( pix, 11, SIGNAL( clicked() ), this, "precisionMinus", true,
-								 ( wstr = Q2C( i18n( "Lower Precision"  ) ) ), -1 );
+								 i18n( "Lower Precision" ), -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("precplus") );
   m_idButtonLayout_PrecPlus = m_vToolBarLayout->insertButton2( pix, 12, SIGNAL( clicked() ), this, "precisionPlus", true,
-							      ( wstr = Q2C( i18n( "Higher Precision" ) ) ), -1 );
+							      i18n( "Higher Precision" ), -1 );
 
   m_vToolBarLayout->insertSeparator( -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("chart") );
-  m_idButtonLayout_Chart = m_vToolBarLayout->insertButton2( pix, 13, SIGNAL( clicked() ), this, "insertChart", true, ( wstr = Q2C( i18n( "Insert Chart" ) ) ), -1 );
+  m_idButtonLayout_Chart = m_vToolBarLayout->insertButton2( pix, 13, SIGNAL( clicked() ), this, "insertChart", true, i18n( "Insert Chart" ), -1 );
 
   m_vToolBarLayout->insertSeparator( -1 );
 
@@ -677,22 +674,22 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   pix = KOUIUtils::colorPixmap( tbColor, KOUIUtils::TXT_COLOR );
 
   m_idButtonLayout_Text_Color = m_vToolBarLayout->insertButton2( pix, 14 , SIGNAL( clicked() ), this, "TextColor",
-							  true, (wstr=Q2C( i18n( "Text Color" ))), -1 );
+							  true, i18n( "Text Color" ), -1 );
 
   bgColor = white;
   pix = KOUIUtils::colorPixmap( bgColor, KOUIUtils::BACK_COLOR );
 
   m_idButtonLayout_bg_Color = m_vToolBarLayout->insertButton2( pix, 15 , SIGNAL( clicked() ), this, "BackgroundColor",
-							  true, (wstr=Q2C( i18n( "Background Color" ))), -1 );
+							  true, i18n( "Background Color" ), -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("sort_incr") );
-  m_idButtonLayout_sort_incr = m_vToolBarLayout->insertButton2( pix, 16, SIGNAL( clicked() ), this, "sortincr", true, ( wstr = Q2C( i18n( "Sort Increase" ) ) ), -1 );
+  m_idButtonLayout_sort_incr = m_vToolBarLayout->insertButton2( pix, 16, SIGNAL( clicked() ), this, "sortincr", true, i18n( "Sort Increase" ), -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("sort_decrease") );
-  m_idButtonLayout_sort_decrease = m_vToolBarLayout->insertButton2( pix, 17, SIGNAL( clicked() ), this, "sortdecrease", true, ( wstr = Q2C( i18n( "Sort Decrease" ) ) ), -1 );
+  m_idButtonLayout_sort_decrease = m_vToolBarLayout->insertButton2( pix, 17, SIGNAL( clicked() ), this, "sortdecrease", true, i18n( "Sort Decrease" ), -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("funct") );
-  m_idButtonLayout_funct = m_vToolBarLayout->insertButton2( pix, 18, SIGNAL( clicked() ), this, "funct", true, ( wstr = Q2C( i18n( "Function" ) ) ), -1 );
+  m_idButtonLayout_funct = m_vToolBarLayout->insertButton2( pix, 18, SIGNAL( clicked() ), this, "funct", true, i18n( "Function" ), -1 );
 
 
   m_vToolBarLayout->enable( OpenPartsUI::Show );
@@ -700,14 +697,13 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   m_vToolBarMath = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarMath->setFullWidth(false);
   
-  OpenPartsUI::StrList math;
-  math.length( 4 );
-  math[0] = CORBA::string_dup( "sum" );
-  math[1] = CORBA::string_dup( "cos" );
-  math[2] = CORBA::string_dup( "sqrt" );
-  math[3] = CORBA::string_dup( "Others.." );
+  OpenPartsUI::WStrList math;
+  math.append( "sum" );
+  math.append( "cos" );
+  math.append( "sqrt" );
+  math.append( "Others.." );
   m_idComboMath = m_vToolBarMath->insertCombo( math, 1, false, SIGNAL( activated( const QString & ) ), this,
-					       "formulaselection", true, ( wstr = Q2C( i18n( "Formula") ) ),
+					       "formulaselection", true, i18n( "Formula"),
 					       80,-1, OpenPartsUI::AtBottom );
   
   m_vToolBarMath->enable( OpenPartsUI::Show );
@@ -719,57 +715,57 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
     pix = OPUIUtils::convertPixmap( BarIcon( "index2" ) );
     m_idButtonFormula_Power = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
 								this, "formulaPower",
-								TRUE, Q2C( i18n( "Power" ) ), -1 );
+								TRUE, i18n( "Power" ), -1 );
     pix = OPUIUtils::convertPixmap( BarIcon( "index3" ) );
     m_idButtonFormula_Subscript = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
 								    this, "formulaSubscript",
-								    TRUE, Q2C( i18n( "Subscript" ) ), -1 );
+								    TRUE, i18n( "Subscript" ), -1 );
     pix = OPUIUtils::convertPixmap( BarIcon( "bra" ) );
     m_idButtonFormula_Parentheses = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
 								      this, "formulaParentheses",
-								      TRUE, Q2C( i18n( "Parentheses" ) ), -1 );
+								      TRUE, i18n( "Parentheses" ), -1 );
     pix = OPUIUtils::convertPixmap( BarIcon( "abs" ) );
     m_idButtonFormula_AbsValue = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
 								   this, "formulaAbsValue",
-								   TRUE, Q2C( i18n( "Absolute Value" ) ), -1 );
+								   TRUE, i18n( "Absolute Value" ), -1 );
     pix = OPUIUtils::convertPixmap( BarIcon( "brackets" ) );
     m_idButtonFormula_Brackets = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
 								   this, "formulaBrackets",
-								   TRUE, Q2C( i18n( "Brackets" ) ), -1 );
+								   TRUE, i18n( "Brackets" ), -1 );
     pix = OPUIUtils::convertPixmap( BarIcon( "frac" ) );
     m_idButtonFormula_Fraction = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
 								   this, "formulaFraction",
-								   TRUE, Q2C( i18n( "Fraction" ) ), -1 );
+								   TRUE, i18n( "Fraction" ), -1 );
     pix = OPUIUtils::convertPixmap( BarIcon( "root" ) );
     m_idButtonFormula_Root = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
 							       this, "formulaRoot",
-							       TRUE, Q2C( i18n( "Root" ) ), -1 );
+							       TRUE, i18n( "Root" ), -1 );
     pix = OPUIUtils::convertPixmap( BarIcon( "integral" ) );
     m_idButtonFormula_Integral = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
 								   this, "formulaIntegral",
-								   TRUE, Q2C( i18n( "Integral" ) ), -1 );
+								   TRUE, i18n( "Integral" ), -1 );
     pix = OPUIUtils::convertPixmap( BarIcon( "matrix" ) );
     m_idButtonFormula_Matrix = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
 								 this, "formulaMatrix",
-								 TRUE, Q2C( i18n( "Matrix" ) ), -1 );
+								 TRUE, i18n( "Matrix" ), -1 );
     pix = OPUIUtils::convertPixmap( BarIcon( "index0" ) );
     m_idButtonFormula_LeftSuper = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
 								    this, "formulaLeftSuper",
-								    TRUE, Q2C( i18n( "Left Superscript" ) ), -1 );
+								    TRUE, i18n( "Left Superscript" ), -1 );
     pix = OPUIUtils::convertPixmap( BarIcon( "index1" ) );
     m_idButtonFormula_LeftSub = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
 								  this, "formulaLeftSub",
-								  TRUE, Q2C( i18n( "Left Subscript" ) ), -1 );
-                                                                  pix = OPUIUtils::convertPixmap( BarIcon( "index1" ) );
+								  TRUE, i18n( "Left Subscript" ), -1 );
+
     pix = OPUIUtils::convertPixmap( BarIcon( "sum" ) );
     m_idButtonFormula_Sum = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
 								  this, "formulaSum",
-								  TRUE, Q2C( i18n( "Sum" ) ), -1 );
+								  TRUE, i18n( "Sum" ), -1 );
 
     pix = OPUIUtils::convertPixmap( BarIcon( "product" ) );
     m_idButtonFormula_Product = m_vToolBarFormula->insertButton2( pix, 1, SIGNAL( clicked() ),
 								  this, "formulaProduct",
-								  TRUE, Q2C( i18n( "Product" ) ), -1 );								  								
+								  TRUE, i18n( "Product" ), -1 );								  								
     m_vToolBarFormula->enable( OpenPartsUI::Hide );
 
 
@@ -880,105 +876,103 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     return true;
   }
 
-  CORBA::WString_var wstr;
-
   // Edit
-  _menubar->insertMenu( ( wstr = Q2C( i18n( "&Edit" ) ) ), m_vMenuEdit, -1, -1 );
+  _menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
 
   OpenPartsUI::Pixmap_var pix;
   pix = OPUIUtils::convertPixmap( BarIcon("undo") );
-  m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, ( wstr = Q2C( i18n( "Un&do") ) ), this, "undo", stdAccel.undo(), -1, -1 );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, i18n( "Un&do"), this, "undo", stdAccel.undo(), -1, -1 );
   pix = OPUIUtils::convertPixmap( BarIcon("redo") );
-  m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, ( wstr = Q2C( i18n( "&Redo") ) ), this, "redo", 0, -1, -1 );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, i18n( "&Redo"), this, "redo", 0, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("editcut") );
-  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, ( wstr = Q2C( i18n( "C&ut") ) ), this, "cutSelection", stdAccel.cut(), -1, -1 );
+  m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, i18n( "C&ut"), this, "cutSelection", stdAccel.cut(), -1, -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("editcopy") );
-  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, ( wstr = Q2C( i18n( "&Copy") ) ), this, "copySelection", stdAccel.copy(), -1, -1 );
+  m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, i18n( "&Copy"), this, "copySelection", stdAccel.copy(), -1, -1 );
 
   pix = OPUIUtils::convertPixmap( BarIcon("editpaste") );
-  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, ( wstr = Q2C( i18n( "&Paste") ) ), this, "paste", stdAccel.paste(), -1, -1 );
+  m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, i18n( "&Paste"), this, "paste", stdAccel.paste(), -1, -1 );
 
-  m_idMenuEdit_Special = m_vMenuEdit->insertItem( ( wstr = Q2C( i18n( "Special Paste" ) ) ), this, "Specialpaste", 0 );
-
-  m_vMenuEdit->insertSeparator( -1 );
-
-  m_vMenuEdit->insertItem8( ( wstr = Q2C( i18n( "&Insert" ) ) ), m_vMenuEdit_Insert, -1, -1 );
-  m_idMenuEdit_Insert_Table = m_vMenuEdit_Insert->insertItem( ( wstr = Q2C( i18n( "&Table" ) ) ), this, "insertTable", 0 );
-  m_idMenuEdit_Insert_Image = m_vMenuEdit_Insert->insertItem( ( wstr = Q2C( i18n( "&Image" ) ) ), this, "insertImage", 0 );
-  m_idMenuEdit_Insert_Chart = m_vMenuEdit_Insert->insertItem( ( wstr = Q2C( i18n( "&Chart" ) ) ), this, "insertChart", 0 );
-  m_idMenuEdit_Insert_Object = m_vMenuEdit_Insert->insertItem( ( wstr = Q2C( i18n( "&Object ..." ) ) ), this, "insertObject", 0 );
+  m_idMenuEdit_Special = m_vMenuEdit->insertItem( i18n( "Special Paste" ), this, "Specialpaste", 0 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  m_vMenuEdit->insertItem8( ( wstr = Q2C( i18n( "Remove" ) ) ), m_vMenuEdit_Remove, -1, -1 );
-  m_idMenuEdit_Remove_Table = m_vMenuEdit_Remove->insertItem( ( wstr = Q2C( i18n( "&Table" ) ) ), this, "RemoveTable", 0 );
+  m_vMenuEdit->insertItem8( i18n( "&Insert" ), m_vMenuEdit_Insert, -1, -1 );
+  m_idMenuEdit_Insert_Table = m_vMenuEdit_Insert->insertItem( i18n( "&Table" ), this, "insertTable", 0 );
+  m_idMenuEdit_Insert_Image = m_vMenuEdit_Insert->insertItem( i18n( "&Image" ), this, "insertImage", 0 );
+  m_idMenuEdit_Insert_Chart = m_vMenuEdit_Insert->insertItem( i18n( "&Chart" ), this, "insertChart", 0 );
+  m_idMenuEdit_Insert_Object = m_vMenuEdit_Insert->insertItem( i18n( "&Object ..." ), this, "insertObject", 0 );
 
   m_vMenuEdit->insertSeparator( -1 );
-  m_idMenuEdit_Cell = m_vMenuEdit->insertItem( ( wstr = Q2C( i18n( "C&ell" ) ) ), this, "editCell", CTRL+Key_E );
+
+  m_vMenuEdit->insertItem8( i18n( "Remove" ), m_vMenuEdit_Remove, -1, -1 );
+  m_idMenuEdit_Remove_Table = m_vMenuEdit_Remove->insertItem( i18n( "&Table" ), this, "RemoveTable", 0 );
+
+  m_vMenuEdit->insertSeparator( -1 );
+  m_idMenuEdit_Cell = m_vMenuEdit->insertItem( i18n( "C&ell" ), this, "editCell", CTRL+Key_E );
 	
   m_vMenuEdit->insertSeparator( -1 );
 
-  m_idMenuEdit_Layout = m_vMenuEdit->insertItem( ( wstr = Q2C( i18n( "Paper &Layout" ) ) ), this, "paperLayoutDlg", 0 );
+  m_idMenuEdit_Layout = m_vMenuEdit->insertItem( i18n( "Paper &Layout" ), this, "paperLayoutDlg", 0 );
 
   // View
-  _menubar->insertMenu( ( wstr = Q2C( i18n( "&View" ) ) ), m_vMenuView, -1, -1 );
+  _menubar->insertMenu( i18n( "&View" ), m_vMenuView, -1, -1 );
   m_vMenuView->setCheckable( true );
 
-  m_idMenuView_NewView = m_vMenuView->insertItem( ( wstr = Q2C( i18n( "New View" ) ) ), this, "newView", 0 );
+  m_idMenuView_NewView = m_vMenuView->insertItem( i18n( "New View" ), this, "newView", 0 );
 
   m_vMenuView->insertSeparator( -1 );
 
-  m_idMenuView_ShowPageBorders = m_vMenuView->insertItem( ( wstr = Q2C( i18n( "Show Page Borders" ) ) ), this, "togglePageBorders", 0 );
+  m_idMenuView_ShowPageBorders = m_vMenuView->insertItem( i18n( "Show Page Borders" ), this, "togglePageBorders", 0 );
   m_vMenuView->setItemChecked( m_idMenuView_ShowPageBorders, m_pTable->isShowPageBorders() );
 
   // Data
-  _menubar->insertMenu( ( wstr = Q2C( i18n( "D&ata" ) ) ), m_vMenuData, -1, -1 );
-  m_idMenuData_goto = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Goto cell" ) ) ), this, "gotocell", CTRL+Key_G );
+  _menubar->insertMenu( i18n( "D&ata" ), m_vMenuData, -1, -1 );
+  m_idMenuData_goto = m_vMenuData->insertItem( i18n( "Goto cell" ), this, "gotocell", CTRL+Key_G );
 
   m_vMenuData->insertSeparator( -1 );
-  m_idMenuData_replace = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Replace" ) ) ), this, "replace", 0 );
+  m_idMenuData_replace = m_vMenuData->insertItem( i18n( "Replace" ), this, "replace", 0 );
 
   m_vMenuData->insertSeparator( -1 );
-  m_idMenuData_sort = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Sort" ) ) ), this, "sort", 0 );
+  m_idMenuData_sort = m_vMenuData->insertItem( i18n( "Sort" ), this, "sort", 0 );
 
   m_vMenuData->insertSeparator( -1 );
-  m_idMenuData_anchor = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Create anchor" ) ) ), this, "createanchor", 0 );
+  m_idMenuData_anchor = m_vMenuData->insertItem( i18n( "Create anchor" ), this, "createanchor", 0 );
 
   m_vMenuData->insertSeparator( -1 );
-  m_idMenuData_Consolidate = m_vMenuData->insertItem( ( wstr = Q2C( i18n( "Consolidate" ) ) ), this, "consolidate", 0 );
+  m_idMenuData_Consolidate = m_vMenuData->insertItem( i18n( "Consolidate" ), this, "consolidate", 0 );
 
   // Folder
-  _menubar->insertMenu( ( wstr = Q2C( i18n( "F&older" ) ) ), m_vMenuFolder, -1, -1 );
+  _menubar->insertMenu( i18n( "F&older" ), m_vMenuFolder, -1, -1 );
 
-  m_idMenuFolder_NewTable = m_vMenuFolder->insertItem( ( wstr = Q2C( i18n( "New Table" ) ) ), this, "insertNewTable", 0 );
+  m_idMenuFolder_NewTable = m_vMenuFolder->insertItem( i18n( "New Table" ), this, "insertNewTable", 0 );
 
   // Format
-  _menubar->insertMenu( ( wstr = Q2C( i18n( "Fo&rmat" ) ) ), m_vMenuFormat, -1, -1 );
+  _menubar->insertMenu( i18n( "Fo&rmat" ), m_vMenuFormat, -1, -1 );
 
-  m_idMenuFormat_AutoFill = m_vMenuFormat->insertItem( ( wstr = Q2C( i18n( "&Auto Fill ..." ) ) ), this, "autoFill", 0 );
+  m_idMenuFormat_AutoFill = m_vMenuFormat->insertItem( i18n( "&Auto Fill ..." ), this, "autoFill", 0 );
 
   // Scripts
-  _menubar->insertMenu( ( wstr = Q2C( i18n( "&Scripts" ) ) ), m_vMenuScripts, -1, -1 );
+  _menubar->insertMenu( i18n( "&Scripts" ), m_vMenuScripts, -1, -1 );
 
-  m_idMenuScripts_EditGlobal = m_vMenuScripts->insertItem( ( wstr = Q2C( i18n( "Edit &global scripts..." ) ) ), this, "editGlobalScripts", 0 );
-  m_idMenuScripts_EditLocal = m_vMenuScripts->insertItem( ( wstr = Q2C( i18n( "Edit &local script" ) ) ), this, "editLocalScripts", 0 );
-  m_idMenuScripts_Reload = m_vMenuScripts->insertItem( ( wstr = Q2C( i18n( "&Reload scripts" ) ) ), this, "reloadScripts", 0 );
-  m_idMenuScripts_Run = m_vMenuScripts->insertItem( ( wstr = Q2C( i18n( "R&un local script" ) ) ), this, "runLocalScript", 0 );
+  m_idMenuScripts_EditGlobal = m_vMenuScripts->insertItem( i18n( "Edit &global scripts..." ), this, "editGlobalScripts", 0 );
+  m_idMenuScripts_EditLocal = m_vMenuScripts->insertItem( i18n( "Edit &local script" ), this, "editLocalScripts", 0 );
+  m_idMenuScripts_Reload = m_vMenuScripts->insertItem( i18n( "&Reload scripts" ), this, "reloadScripts", 0 );
+  m_idMenuScripts_Run = m_vMenuScripts->insertItem( i18n( "R&un local script" ), this, "runLocalScript", 0 );
 
   // Help
   m_vMenuHelp = _menubar->helpMenu();
   if ( CORBA::is_nil( m_vMenuHelp ) )
   {
     _menubar->insertSeparator( -1 );
-    _menubar->setHelpMenu( _menubar->insertMenu( ( wstr = Q2C( i18n( "&Help" ) ) ), m_vMenuHelp, -1, -1 ) );
+    _menubar->setHelpMenu( _menubar->insertMenu( i18n( "&Help" ), m_vMenuHelp, -1, -1 ) );
   }
 
-  // m_idMenuHelp_About = m_vMenuHelp->insertItem( ( wstr = Q2C( i18n( "&About" ) ) ), this, "helpAbout", 0 );
-  m_idMenuHelp_Using = m_vMenuHelp->insertItem( ( wstr = Q2C( i18n( "&Using KSpread" ) ) ), this, "helpUsing", 0 );
+  // m_idMenuHelp_About = m_vMenuHelp->insertItem( i18n( "&About" ), this, "helpAbout", 0 );
+  m_idMenuHelp_Using = m_vMenuHelp->insertItem( i18n( "&Using KSpread" ), this, "helpUsing", 0 );
 	
   enableUndo( false );
   enableRedo( false );
@@ -997,7 +991,7 @@ void KSpreadView::setMode( OPParts::Part::Mode _mode )
     m_bShowGUI = true;
 }
 
-void KSpreadView::setFocus( CORBA::Boolean _mode )
+void KSpreadView::setFocus( bool _mode )
 {
   Part_impl::setFocus( _mode );
 
@@ -1139,19 +1133,19 @@ void KSpreadView::insertRow()
    m_pTable->recalc(true);
 }
 
-void KSpreadView::fontSelected( const CORBA::WChar *_font )
+void KSpreadView::fontSelected( const QString &_font )
 {
     if ( m_pTable != 0L )
-      m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), C2Q( _font ) );
+      m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), _font );
 }
 
-void KSpreadView::formulaselection( const CORBA::WChar *_math )
+void KSpreadView::formulaselection( const QString &_math )
 {
 
 
     if ( m_pTable != 0L )
     	{
-     	if(C2Q(_math)=="Others..")
+     	if(_math=="Others..")
      	    {
      	    if(editWidget()->isActivate()|| ((m_pCanvas->pointeur() != 0)&&m_pCanvas->EditorisActivate()))
      	    	{
@@ -1166,16 +1160,16 @@ void KSpreadView::formulaselection( const CORBA::WChar *_math )
      	    int pos;
      	    string="";
      	    	
-     	    if( C2Q(_math) =="sum" )
+     	    if( _math =="sum" )
 		{
 	    	string=":";
 		}
             if(editWidget()->isActivate() )
 		{
 		
-		name_function= C2Q( _math ) + "(" + string + ")";
+		name_function= _math + "(" + string + ")";
 	    	//last position of cursor + length of function +1 "("
-		pos=editWidget()->cursorPosition()+ C2Q( _math ).length()+1;
+		pos=editWidget()->cursorPosition()+ _math.length()+1;
 	    	editWidget()->setText( editWidget()->text().insert(editWidget()->cursorPosition(),name_function) );
 	    	editWidget()->setFocus();
 	    	editWidget()->setCursorPosition(pos);
@@ -1184,8 +1178,8 @@ void KSpreadView::formulaselection( const CORBA::WChar *_math )
 		{
 	    	if(m_pCanvas->EditorisActivate())
 	    		{
-			name_function= C2Q( _math ) + "(" + string + ")";
-			pos=m_pCanvas->posEditor()+ C2Q( _math ).length()+1;
+			name_function= _math + "(" + string + ")";
+			pos=m_pCanvas->posEditor()+ _math.length()+1;
 			m_pCanvas->setEditor(m_pCanvas->editEditor().insert(m_pCanvas->posEditor(),name_function) );
 	    		m_pCanvas->focusEditor();
 	    		m_pCanvas->setPosEditor(pos);
@@ -1198,10 +1192,10 @@ void KSpreadView::formulaselection( const CORBA::WChar *_math )
 }
 
 
-void KSpreadView::fontSizeSelected( const CORBA::WChar *_size )
+void KSpreadView::fontSizeSelected( const QString &_size )
 {
   if ( m_pTable != 0L )
-      m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, C2Q( _size ).toInt() );
+      m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, _size.toInt() );
 }
 
 void KSpreadView::bold()
@@ -1601,7 +1595,7 @@ void KSpreadView::newView()
   shell->setDocument( m_pDoc );
 }
 
-CORBA::Boolean KSpreadView::printDlg()
+bool KSpreadView::printDlg()
 {
   // Open some printer dialog
   /* QPrinter prt;
@@ -1773,9 +1767,9 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
     QApplication::sendEvent( m_pCanvas, _ev );
 }
 
-void KSpreadView::setFocus( CORBA::Boolean mode )
+void KSpreadView::setFocus( bool mode )
 {
-  CORBA::Boolean old = m_bFocus;
+  bool old = m_bFocus;
 
   KoViewIf::setFocus( mode );
 
@@ -1786,22 +1780,22 @@ void KSpreadView::setFocus( CORBA::Boolean mode )
     resizeEvent( 0L );
 }
 
-CORBA::ULong KSpreadView::leftGUISize()
+unsigned long int KSpreadView::leftGUISize()
 {
   return YBORDER_WIDTH;
 }
 
-CORBA::ULong KSpreadView::rightGUISize()
+unsigned long int KSpreadView::rightGUISize()
 {
   return 20;
 }
 
-CORBA::ULong KSpreadView::topGUISize()
+unsigned long int KSpreadView::topGUISize()
 {
   return 30 + XBORDER_HEIGHT;
 }
 
-CORBA::ULong KSpreadView::bottomGUISize()
+unsigned long int KSpreadView::bottomGUISize()
 {
   return 20;
 }
@@ -2142,11 +2136,11 @@ void KSpreadView::slotActivateTool( int _id )
     value <<= CORBA::Any::from_string( (char*)text.data(), 0 );
     CORBA::Any anyid;
     KSpread::DataToolsId id;
-    id.time = (CORBA::ULong)time( 0L );
+    id.time = (unsigned long int)time( 0L );
     id.row = m_pCanvas->markerRow();
     id.column = m_pCanvas->markerColumn();
     anyid <<= id;
-    tool->run( entry->command, this, value, anyid );
+    tool->run( entry->command.ascii(), this, value, anyid );
     return;
   }
 }
@@ -2394,7 +2388,7 @@ void KSpreadView::setText( const QString& _text )
   }
 
   KSpread::EventSetText event;
-  event.text = CORBA::string_dup( _text );
+  event.text = _text;
   EMIT_EVENT( this, KSpread::eventSetText, event );
 
   // m_pTable->setText( m_pCanvas->markerRow(), m_pCanvas->markerColumn(), _text );
@@ -2477,7 +2471,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
   ev.range.left = _new.left();
   ev.range.right = _new.right();
   ev.range.bottom = _new.bottom();
-  ev.range.table = CORBA::string_dup( activeTable()->name() );
+  ev.range.table = activeTable()->name();
   EMIT_EVENT( this, KSpread::View::eventSelectionChanged, ev );
 
   // Do we display this table ?

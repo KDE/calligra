@@ -12,14 +12,14 @@ KSpread::Cell util_parseCell( const QString& _str )
   if ( !c.isValid() )
   {
     KSpread::MalformedExpression exc;
-    exc.expr = CORBA::string_dup( _str );
+    exc.expr = _str;
     mico_throw( exc );
   }
 
   KSpread::Cell c2;
   c2.x = c.pos.x();
   c2.y = c.pos.y();
-  c2.table = CORBA::string_dup( "" );
+  c2.table = "";
   
   return c2;
 }
@@ -31,21 +31,21 @@ KSpread::Cell util_parseCell( const QString& _str, KSpreadMap* _map )
   if ( !c.table )
   {
     KSpread::UnknownTable exc;
-    exc.table = CORBA::string_dup( c.tableName );
+    exc.table = c.tableName;
     mico_throw( exc );
   }
 
   if ( !c.isValid() )
   {
     KSpread::MalformedExpression exc;
-    exc.expr = CORBA::string_dup( _str );
+    exc.expr = _str;
     mico_throw( exc );
   }
 
   KSpread::Cell c2;
   c2.x = c.pos.x();
   c2.y = c.pos.y();
-  c2.table = CORBA::string_dup( c.tableName );
+  c2.table = c.tableName;
   
   return c2;
 }
@@ -57,7 +57,7 @@ KSpread::Range util_parseRange( const QString& _str )
   if ( !r.isValid() )
   {
     KSpread::MalformedExpression exc;
-    exc.expr = CORBA::string_dup( _str );
+    exc.expr = _str;
     mico_throw( exc );
   }
 
@@ -66,7 +66,7 @@ KSpread::Range util_parseRange( const QString& _str )
   r2.right = r.range.right();
   r2.top = r.range.top();
   r2.bottom = r.range.bottom();
-  r2.table = CORBA::string_dup( "" );
+  r2.table = "";
   
   return r2;
 }
@@ -78,14 +78,14 @@ KSpread::Range util_parseRange( const QString& _str, KSpreadMap*  )
   if ( !r.table )
   {
     KSpread::UnknownTable exc;
-    exc.table = CORBA::string_dup( r.tableName );
+    exc.table = r.tableName;
     mico_throw( exc );
   }
   
   if ( !r.isValid() )
   {
     KSpread::MalformedExpression exc;
-    exc.expr = CORBA::string_dup( _str );
+    exc.expr = _str;
     mico_throw( exc );
   }
 
@@ -94,7 +94,7 @@ KSpread::Range util_parseRange( const QString& _str, KSpreadMap*  )
   r2.right = r.range.right();
   r2.top = r.range.top();
   r2.bottom = r.range.bottom();
-  r2.table = CORBA::string_dup( r.tableName );
+  r2.table = r.tableName;
   
   return r2;
 }

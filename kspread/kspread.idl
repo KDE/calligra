@@ -16,14 +16,14 @@ module KSpread
 		unsigned long top;
 		unsigned long right;
 		unsigned long bottom;
-		string table;
+		wstring table;
 	};
 
 	struct Cell
 	{
 		unsigned long x;
 		unsigned long y;
-		string table;
+		wstring table;
 	};
 
 	exception NoNumericValue
@@ -33,18 +33,18 @@ module KSpread
 
 	exception MalformedExpression
 	{
-		string expr;
+		wstring expr;
 	};
 
 	exception DifferentTables
 	{
-		string table1;
-		string table2;
+		wstring table1;
+		wstring table2;
 	};
 
 	exception UnknownTable
 	{
-		string table;
+		wstring table;
 	};
 
 	exception NoActiveSelection
@@ -131,27 +131,27 @@ module KSpread
 	interface Book
 	{
 		TableSeq tables();
-		Table table( in string name );		
+		Table table( in wstring name );		
 	};
 
 	interface Table
 	{		
 		Book book();
 
-		string tableName();
+		wstring tableName();
 
 		Range range( in unsigned long left, in unsigned long top,
 			     in unsigned long right, in unsigned long bottom );
-		Range rangeFromString( in string str ) raises( MalformedExpression );
+		Range rangeFromString( in wstring str ) raises( MalformedExpression );
 		Range rangeFromCells( in Cell topleft, in Cell bottomright );
 
-		Cell cellFromString( in string str ) raises( MalformedExpression );
+		Cell cellFromString( in wstring str ) raises( MalformedExpression );
 
 		void setValue( in Cell cell, in double value );
-		void setStringValue( in Cell cell, in string value );
+		void setStringValue( in Cell cell, in wstring value );
 
 		double value( in Cell cell ) raises ( NoNumericValue );
-		string stringValue( in Cell cell );
+		wstring stringValue( in Cell cell );
 
 		void insertColumn( in unsigned long col );
 		void insertRow( in unsigned long row );
@@ -191,7 +191,7 @@ module KSpread
 
 	struct EventSetText
 	{
-		string text;
+		wstring text;
 	};
 	const string eventSetText = "UserEvent/KSpread/SetText";
 

@@ -65,7 +65,7 @@ class Filter : virtual public KOMComponent,
 public:
     Filter();
 
-    void filter(KOffice::Filter::Data& data,const char *_from,const char *_to);
+    void filter(KOffice::Filter::Data& data,const QCString & _from,const QCString & _to);
 
 private:
     OLEFilter *myOLEFilter;

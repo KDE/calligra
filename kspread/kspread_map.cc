@@ -131,20 +131,18 @@ void KSpreadMap::update()
     it.current()->update();
 }
 
-KSpread::TableSeq* KSpreadMap::tables()
+KSpread::TableSeq KSpreadMap::tables()
 {
-  KSpread::TableSeq* seq = new KSpread::TableSeq;
-  seq->length( m_lstTables.count() );
+  KSpread::TableSeq seq;
 
   KSpreadTable *t;
-  int i = 0;
   for ( t = m_lstTables.first(); t != 0L; t = m_lstTables.next() )
-    (*seq)[i++] = KSpread::Table::_duplicate( t );
+    seq.append( KSpread::Table::_duplicate( t ) );
     
   return seq;
 }
 
-KSpread::Table_ptr KSpreadMap::table( const char* _name )
+KSpread::Table_ptr KSpreadMap::table( const QString & _name )
 {
   KSpreadTable *t = findTable( _name );
   if ( t == 0L )
@@ -153,13 +151,13 @@ KSpread::Table_ptr KSpreadMap::table( const char* _name )
   return KSpread::Table::_duplicate( t );
 }
 
-KSpreadTable* KSpreadMap::findTable( const char *_name )
+KSpreadTable* KSpreadMap::findTable( const QString & _name )
 {
     KSpreadTable *t;
  
     for ( t = m_lstTables.first(); t != 0L; t = m_lstTables.next() )
     {
-	if ( strcmp( _name, t->name() ) == 0 )
+	if ( _name == t->name() )
 	    return t;
     }
 
@@ -201,8 +199,8 @@ bool KSpreadMap::hasToWriteMultipart()
   return false;
 }
 
-void KSpreadMap::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
-		       CORBA::Float _scale )
+void KSpreadMap::draw( QPaintDevice* _dev, long int _width, long int _height,
+		       float _scale )
 {
   // Only the view knows about the active table. So we can just assume that
   // embedded KSpread documents do only have one table
