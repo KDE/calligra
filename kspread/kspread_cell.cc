@@ -4946,18 +4946,22 @@ void KSpreadCell::loadOasisConditional( QDomElement * style )
     kdDebug()<<" void KSpreadCell::loadOasisConditional( QDomElement * style  :"<<style<<endl;
     if ( style )//safe
     {
-        QDomElement elementItem = style->firstChild().toElement();
-        kdDebug()<<" elementItem.tagName() :"<<elementItem.localName()<<endl;
-        elementItem = elementItem.firstChild().toElement();
-        kdDebug()<<"elementItem.isNull () :"<< elementItem.isNull ()<<endl;
-        if ( !elementItem.isNull() )
+        //TODO fixme it doesn't work :(((
+        QDomElement e;
+        forEachElement( e, style->toElement() )
         {
-            if (d->hasExtra())
-              delete d->extra()->conditions;
-            d->extra()->conditions = new KSpreadConditions( this );
-            d->extra()->conditions->loadOasisConditions( elementItem );
-            d->extra()->conditions->checkMatches();
+            kdDebug()<<"e.localName() :"<<e.localName()<<endl;
+            if ( e.localName() == "map" && e.namespaceURI() == KoXmlNS::style )
+            {
+                if (d->hasExtra())
+                    delete d->extra()->conditions;
+                d->extra()->conditions = new KSpreadConditions( this );
+                d->extra()->conditions->loadOasisConditions( e );
+                d->extra()->conditions->checkMatches();
+                break;
+            }
         }
+
     }
 }
 
