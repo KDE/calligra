@@ -63,6 +63,9 @@ KInstance* KWordFactory::s_global = 0;
 KWordFactory::KWordFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
+  // Create our instance, so that it becomes KGlobal::instance if the
+  // main app is KWord.
+  (void) global();
 }
 
 KWordFactory::~KWordFactory()
