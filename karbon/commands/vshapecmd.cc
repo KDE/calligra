@@ -41,7 +41,8 @@ VShapeCmd::execute()
 	else
 	{
 		m_shape->setState( VObject::normal );
-		m_doc->applyDefaultColors( *m_shape );
+		m_shape->setFill( *( m_doc->selection()->fill() ) );
+		m_shape->setStroke( *( m_doc->selection()->stroke() ) );
 
 		// Add path:
 		m_doc->append( m_shape );

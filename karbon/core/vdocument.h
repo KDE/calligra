@@ -101,33 +101,6 @@ public:
 		{ return m_selection; }
 
 	/**
-	 * Returns the default stroke.
-	 */
-	VStroke defaultStroke()
-		{ return m_defaultStroke; }
-
-	/**
-	 * Returns the default fill.
-	 */
-	VFill defaultFill()
-		{ return m_defaultFill; }
-
-	/**
-	 * Sets the default stroke.
-	 */
-	void setDefaultStroke( const VStroke &s )
-		{ m_defaultStroke = s; }
-
-	/**
-	 * Sets the default fill.
-	 */
-	void setDefaultFill( const VFill &f )
-		{ m_defaultFill = f; }
-
-	/// all newly created shapes in this document get the default color by using this method
-	void applyDefaultColors( VObject & ) const;
-
-	/**
 	 * Append a new object.
 	 */
 	void append( VObject* object );
@@ -146,11 +119,6 @@ private:
 
 	/// The selection. A list of selected objects.
 	VSelection* m_selection;
-
-	/// Default stroke for new objects.
-	VStroke m_defaultStroke;
-	/// Default fill for new objects.
-	VFill m_defaultFill;
 
 	/// The mime type.
 	QString m_mime;

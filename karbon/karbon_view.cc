@@ -781,21 +781,23 @@ KarbonView::strokeClicked()
 void
 KarbonView::slotStrokeChanged( const VStroke &c )
 {
-	m_part->document().setDefaultStroke( c );
+	m_part->document().selection()->setStroke( c );
 
 	m_part->addCommand( new VStrokeCmd( &m_part->document(), &c ), true );
 
-	m_strokeFillPreview->update( m_part->document().defaultStroke(), m_part->document().defaultFill() );
+	m_strokeFillPreview->update( *( m_part->document().selection()->stroke() ),
+								 *( m_part->document().selection()->fill() ) );
 }
 
 void
 KarbonView::slotFillChanged( const VFill &f )
 {
-	m_part->document().setDefaultFill( f );
+	m_part->document().selection()->setFill( f );
 
 	m_part->addCommand( new VFillCmd( &m_part->document(), f ), true );
 
-	m_strokeFillPreview->update( m_part->document().defaultStroke(), m_part->document().defaultFill() );
+	m_strokeFillPreview->update( *( m_part->document().selection()->stroke() ),
+								 *( m_part->document().selection()->fill() ) );
 }
 
 void
@@ -1108,7 +1110,10 @@ KarbonView::initActions()
 		//new KWidgetAction( m_strokeFillPreview, i18n(""), 0, this, SLOT( ), actionCollection(), "preview" );
 #endif
 		mainWindow()->toolBar( "Toolbox" )->insertWidget( 10, 30, m_strokeFillPreview );
-		m_strokeFillPreview->update( part()->document().defaultStroke(), part()->document().defaultFill() );
+		//part()->document().selection()->setStroke( VStroke( VColor( Qt::black ) ) );
+		//part()->document().selection()->setFill( VFill( VColor( Qt::black ) ) );
+		m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
+									 *( part()->document().selection()->fill() ) );
 	}
 
 	m_configureAction = new KAction(
@@ -1222,7 +1227,8 @@ KarbonView::selectionChanged()
 	}
 	else
 	{
-		m_strokeFillPreview->update( part()->document().defaultStroke(), part()->document().defaultFill() );
+		m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
+									 *( part()->document().selection()->fill() ) );
 		m_setLineWidth->setEnabled( false );
 		m_objectDlg->reset();
 		m_objectDlg->disable();

@@ -104,14 +104,15 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	mainLayout->addWidget( m_joinOption );
 	connect( m_joinOption, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
 
-	if( part->document().selection()->objects().count() > 0 ) // there is a selection, so take the stroke of first selected object
+	VSelection *sel = part->document().selection();
+	if( sel && sel->objects().count() > 0 ) // there is a selection, so take the stroke of first selected object
 	{
-		m_stroke.setType ( part->document().selection()->objects().getFirst()->stroke()->type() );
-		m_stroke.setColor ( part->document().selection()->objects().getFirst()->stroke()->color() );
-		m_stroke.setLineWidth ( part->document().selection()->objects().getFirst()->stroke()->lineWidth() );
-		m_stroke.setLineCap ( part->document().selection()->objects().getFirst()->stroke()->lineCap() );   
-		m_stroke.setLineJoin ( part->document().selection()->objects().getFirst()->stroke()->lineJoin() );
-		m_stroke.setMiterLimit ( part->document().selection()->objects().getFirst()->stroke()->miterLimit() );
+		m_stroke.setType ( sel->objects().getFirst()->stroke()->type() );
+		m_stroke.setColor ( sel->objects().getFirst()->stroke()->color() );
+		m_stroke.setLineWidth ( sel->objects().getFirst()->stroke()->lineWidth() );
+		m_stroke.setLineCap ( sel->objects().getFirst()->stroke()->lineCap() );   
+		m_stroke.setLineJoin ( sel->objects().getFirst()->stroke()->lineJoin() );
+		m_stroke.setMiterLimit ( sel->objects().getFirst()->stroke()->miterLimit() );
 	}
 
 	slotUpdateDialog(); //Put the values of selected objects (or default)
@@ -119,8 +120,8 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 
 	//setMainWidget( mainWidget );
 
-	m_colortab = new VColorTab( part->document().selection()->objects().count() == 0 ? part->document().defaultStroke().color() :
-								part->document().selection()->objects().getFirst()->stroke()->color(), this);
+	m_colortab = new VColorTab( sel->objects().count() == 0 ? sel->stroke()->color() :
+								sel->objects().getFirst()->stroke()->color(), this);
 	m_colortab->insertTab( mainWidget, i18n("Stroke"), 0 );
 	m_colortab->setCurrentPage( 0 );
 

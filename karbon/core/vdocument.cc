@@ -179,10 +179,3 @@ VDocument::accept( VVisitor& visitor )
 	visitor.visitVDocument( *this );
 }
 
-void
-VDocument::applyDefaultColors( VObject& obj ) const
-{
-	obj.setStroke( m_defaultStroke );
-	obj.setFill( m_defaultFill );
-}
-

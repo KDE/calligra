@@ -31,6 +31,8 @@ VSelection::VSelection( VObject* parent )
 	: VObject( parent )
 {
 	m_qrect = new QRect[10];
+	setStroke( VStroke( VColor( Qt::black ) ) );
+	setFill( VFill() );
 }
 
 VSelection::VSelection( const VSelection& selection )
