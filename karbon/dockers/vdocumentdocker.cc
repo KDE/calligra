@@ -168,11 +168,7 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 		VColor c( Qt::black );
 		VStroke stroke( c, 0L, 1.0 / scaleFactor );
 		p.setPen( stroke );
-		p.moveTo( KoPoint( 2, 2 ) );
-		p.lineTo( KoPoint( m_document->width() - 2, 2 ) );
-		p.lineTo( KoPoint( m_document->width() - 2, m_document->height() - 2 ) );
-		p.lineTo( KoPoint( 2, m_document->height() - 2 ) );
-		p.lineTo( KoPoint( 2, 2 ) );
+		p.drawRect( KoRect( 2, 2, m_document->width() - 2, m_document->height() - 2 ) );
 		p.strokePath();
 		m_document->draw( &p, &rect );
 		p.end();
