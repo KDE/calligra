@@ -7381,6 +7381,7 @@ void KSpreadTable::paperLayoutDlg()
     
             if ( error ) KMessageBox::information( 0, i18n( "Print range wrong, changes are ignored." ) );
         }
+        m_pDoc->setModified( true );
     }
     else
     {
@@ -7708,7 +7709,18 @@ void KSpreadTable::setPrintRange( QRect _printRange )
     return;
 
   m_printRange = _printRange;
-  emit sig_updateView( this );      
+  m_pDoc->setModified( true );
+
+  emit sig_updateView( this );
+}
+
+void KSpreadTable::setPrintGrid( bool _printGrid )
+{
+  if ( m_bPrintGrid == _printGrid )
+    return;
+
+  m_bPrintGrid = _printGrid;
+  m_pDoc->setModified( true );
 }
 
 QRect KSpreadTable::getSelectionHandleArea(KSpreadCanvas* canvas)

@@ -699,16 +699,6 @@ public:
     void setShowGrid( bool _showGrid ) { m_bShowGrid=_showGrid; }
 
     /**
-     * Returns, if the grid shall be shown on printouts
-     */
-    bool getPrintGrid() const { return m_bPrintGrid; }
-
-    /**
-     * Sets, if the grid shall be shown on printouts
-     */
-    void setPrintGrid( bool _printGrid ) { m_bPrintGrid=_printGrid; }
-
-    /**
      * Sets, if formula shall be shown instead of the result
      */
     bool getShowFormula() const {return m_bShowFormula;}
@@ -1317,10 +1307,6 @@ protected:
      * Show the grid on the screen
      */
     bool m_bShowGrid;
-    /**
-     * Show the grid when making printout
-     */
-    bool m_bPrintGrid;
     bool m_bShowFormula;
     bool m_bShowFormulaIndicator;
     bool m_bAutoCalc;
@@ -1472,6 +1458,16 @@ public:
     void setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
                           const QString &_footl, const QString &_footm, const QString &_footr );
 
+    /**
+     * Returns, if the grid shall be shown on printouts
+     */
+    bool getPrintGrid() const { return m_bPrintGrid; }
+
+    /**
+     * Sets, if the grid shall be shown on printouts
+     */
+    void setPrintGrid( bool _printGrid );
+
 
 public slots:
     /**
@@ -1571,6 +1567,11 @@ protected:
      * Defined printable area
      */
     QRect m_printRange;
+
+    /**
+     * Show the grid when making printout
+     */
+    bool m_bPrintGrid;
 
 public:
     // see kspread_table.cc for an explanation of this
