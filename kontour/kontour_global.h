@@ -3,7 +3,7 @@
   $Id$
 
   This file is part of Kontour.
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -39,7 +39,7 @@ namespace Kontour
   const int brushCellWidth = 40;
   const int brushCellHeight = 30;
 
-  enum Position{ HPos_Top = 1, HPos_Right = 2, HPos_Bottom = 4, HPos_Left = 8, HPos_Center = 16 };
+  enum HandlePosition{ HPosTop = 1, HPosRight = 2, HPosBottom = 4, HPosLeft = 8, HPosTopR = 16, HPosRightR = 32, HPosBottomR = 64, HPosLeftR = 128, HPosCenter = 256 };
   
   inline double segLength(const KoPoint &c1, const KoPoint &c2)
   {

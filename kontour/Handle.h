@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -32,22 +32,13 @@
 class GPage;
 class QPainter;
 
-#define Handle_Top     1
-#define Handle_Right   2
-#define Handle_Bottom  4
-#define Handle_Left    8
-#define Handle_Center  16
-
 class Handle
 {
 public:
-  enum Mode{ HMode_Default, HMode_Rotate };
   Handle(GPage *aGPage);
 
   void show(bool flag = true);
   void empty(bool flag = true);
-
-  void mode(Mode m, bool propagate = false);
 
   void box(const KoRect &r);
 
@@ -66,7 +57,6 @@ private:
   KoPoint pos[8];
   KoRect mBox;
   KoPoint mRotCenter;
-  Mode mMode;
   bool mShow;
   bool mEmpty;
 };

@@ -219,7 +219,7 @@ void TransformPanel::slotDupPressed()
     c->addCommand(new ShearCmd(mPage->document(), mHandle->rotCenter(), mShearAngleXBox->value() * deg2rad,
 	                 mShearAngleYBox->value() * deg2rad));
   else if(mTab->currentPage() == mScale)
-    c->addCommand(new ScaleCmd(mPage->document(), Kontour::HPos_Center, mScaleX->value() / 100.0, mScaleY->value() / 100.0, mPage->boundingBoxForSelection()));
+    c->addCommand(new ScaleCmd(mPage->document(), Kontour::HPosCenter, mScaleX->value() / 100.0, mScaleY->value() / 100.0, mPage->boundingBoxForSelection()));
   emit changeTransform(c);
 }
 
@@ -245,7 +245,7 @@ void TransformPanel::slotApplyPressed()
     c = new ShearCmd(mPage->document(), mHandle->rotCenter(), mShearAngleXBox->value() * deg2rad,
 	                 mShearAngleYBox->value() * deg2rad);
   else if(mTab->currentPage() == mScale)
-    c = new ScaleCmd(mPage->document(), Kontour::HPos_Center, mScaleX->value() / 100.0, mScaleY->value() / 100.0, mPage->boundingBoxForSelection());
+    c = new ScaleCmd(mPage->document(), Kontour::HPosCenter, mScaleX->value() / 100.0, mScaleY->value() / 100.0, mPage->boundingBoxForSelection());
 
   if(c)
     emit changeTransform(c);

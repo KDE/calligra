@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -54,7 +54,7 @@ private:
   void processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas *canvas);
 
 private:
-  enum State{ S_Init, S_Rubberband, S_Pick, S_RotateSelect, S_Translate, S_Scale, S_Shear, S_Rotate, S_DragHorizHelpline, S_DragVertHelpline, S_MoveRotCenter};
+  enum State{ S_Init, S_Rubberband, S_Pick, S_Translate, S_Scale, S_Shear, S_Rotate, S_DragHorizHelpline, S_DragVertHelpline, S_MoveRotCenter};
   State state;
   enum CursorType{ C_Arrow, C_Size, C_Move, C_Shear, C_Rotate, C_Horiz, C_Vert};
   CursorType ctype;

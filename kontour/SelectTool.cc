@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -60,7 +60,6 @@ void SelectTool::activate()
   ctype = C_Arrow;
   toolController()->view()->canvas()->setCursor(Qt::arrowCursor);
   GPage *page = toolController()->view()->activeDocument()->activePage();
-  page->handle().mode(Handle::HMode_Default);
   page->handle().show(true);
 /*  if(page->lastObject())
   {
@@ -151,7 +150,7 @@ void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *ca
   fp = canvas->point(e->x(), e->y());
   p1.setX(xpos);
   p1.setY(ypos);
-  if(state == S_Init || state == S_Pick || state == S_RotateSelect)
+  if(state == S_Init || state == S_Pick)
   {
     if(ctype == C_Arrow)
     {
@@ -180,7 +179,6 @@ void SelectTool::processButtonPressEvent(QMouseEvent *e, GPage *page, Canvas *ca
           page->unselectAllObjects();
         /* add the object to the selection */
         page->selectObject(obj);
-	page->handle().mode(Handle::HMode_Default);
       }
       else
       {
@@ -261,28 +259,28 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
           ctype = C_Size;
           switch(oldmask)
           {
-          case(Kontour::HPos_Left | Kontour::HPos_Top):
+          case(Kontour::HPosLeft | Kontour::HPosTop):
             canvas->setCursor(Qt::sizeFDiagCursor);
             break;
-          case(Kontour::HPos_Top):
+          case(Kontour::HPosTop):
             canvas->setCursor(Qt::sizeVerCursor);
             break;
-          case(Kontour::HPos_Top | Kontour::HPos_Right):
+          case(Kontour::HPosTop | Kontour::HPosRight):
             canvas->setCursor(Qt::sizeBDiagCursor);
             break;
-          case(Kontour::HPos_Right):
+          case(Kontour::HPosRight):
             canvas->setCursor(Qt::sizeHorCursor);
             break;
-          case(Kontour::HPos_Right | Kontour::HPos_Bottom):
+          case(Kontour::HPosRight | Kontour::HPosBottom):
             canvas->setCursor(Qt::sizeFDiagCursor);
             break;
-          case(Kontour::HPos_Bottom):
+          case(Kontour::HPosBottom):
             canvas->setCursor(Qt::sizeVerCursor);
             break;
-          case(Kontour::HPos_Bottom | Kontour::HPos_Left):
+          case(Kontour::HPosBottom | Kontour::HPosLeft):
             canvas->setCursor(Qt::sizeBDiagCursor);
             break;
-          case(Kontour::HPos_Left):
+          case(Kontour::HPosLeft):
             canvas->setCursor(Qt::sizeHorCursor);
              break;
           default:
@@ -299,7 +297,7 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
       }
     }
   }
-  else if(state == S_RotateSelect)
+/*  else if(state == S_RotateSelect)
   {
     if(e->state() & Qt::LeftButton)
     {
@@ -377,7 +375,7 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
         ctype = C_Arrow;
       }
     }
-  }
+  }*/
   else if(state == S_DragHorizHelpline)
   {
     page->document()->updateHorizHelpline(mHL, y);
@@ -447,17 +445,17 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
       if(fabs(xoff) > fabs(yoff))
       {
         yoff = xoff;
-        if((oldmask & (Kontour::HPos_Left | Kontour::HPos_Bottom)) || (oldmask & (Kontour::HPos_Right | Kontour::HPos_Top)))
+        if((oldmask & (Kontour::HPosLeft | Kontour::HPosBottom)) || (oldmask & (Kontour::HPosRight | Kontour::HPosTop)))
           yoff = -yoff;
       }
       else
       {
         xoff = yoff;
-        if((oldmask & (Kontour::HPos_Left | Kontour::HPos_Bottom)) || (oldmask & (Kontour::HPos_Right | Kontour::HPos_Top)))
+        if((oldmask & (Kontour::HPosLeft | Kontour::HPosBottom)) || (oldmask & (Kontour::HPosRight | Kontour::HPosTop)))
           xoff = -xoff;
       }
     }
-    if(oldmask == (Kontour::HPos_Left | Kontour::HPos_Bottom) || oldmask == (Kontour::HPos_Left | Kontour::HPos_Top) || oldmask == (Kontour::HPos_Right | Kontour::HPos_Bottom) || oldmask == (Kontour::HPos_Right | Kontour::HPos_Top))
+    if(oldmask == (Kontour::HPosLeft | Kontour::HPosBottom) || oldmask == (Kontour::HPosLeft | Kontour::HPosTop) || oldmask == (Kontour::HPosRight | Kontour::HPosBottom) || oldmask == (Kontour::HPosRight | Kontour::HPosTop))
       scale(page, oldmask, xoff, yoff, true);
     else
       scale(page, oldmask, xoff, yoff, false);
@@ -499,26 +497,24 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
     state = S_Init;
   else if(state == S_MoveRotCenter)
   {
-    state = S_RotateSelect;
+//    state = S_RotateSelect;
   }
   else if(state == S_Pick)
   {
     if(ctype == C_Move)
     {
-      page->handle().mode(Handle::HMode_Rotate);
       page->updateSelection();
-      state = S_RotateSelect;
+//      state = S_RotateSelect;
     }
   }
-  else if(state == S_RotateSelect)
+/*  else if(state == S_RotateSelect)
   {
     if(ctype == C_Shear)
     {
-      page->handle().mode(Handle::HMode_Default);
       page->updateSelection();
       state = S_Pick;
     }
-  }
+  }*/
   else if(state == S_Translate)
   {
     state = S_Pick;
@@ -552,12 +548,12 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
           xoff = -xoff;
       }
     }*/
-    if(oldmask == (Kontour::HPos_Left | Kontour::HPos_Bottom) || oldmask == (Kontour::HPos_Left | Kontour::HPos_Top) || oldmask == (Kontour::HPos_Right | Kontour::HPos_Bottom) || oldmask == (Kontour::HPos_Right | Kontour::HPos_Top))
+    if(oldmask == (Kontour::HPosLeft | Kontour::HPosBottom) || oldmask == (Kontour::HPosLeft | Kontour::HPosTop) || oldmask == (Kontour::HPosRight | Kontour::HPosBottom) || oldmask == (Kontour::HPosRight | Kontour::HPosTop))
       scale(page, oldmask, xoff, yoff, true, true);
     else
       scale(page, oldmask, xoff, yoff, false, true);
   }
-  else if(state == S_Shear)
+/*  else if(state == S_Shear)
   {
     state = S_RotateSelect;
     shear(page, oldmask, x - fp.x(), y - fp.y(), true);
@@ -566,7 +562,7 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
   {
     state = S_RotateSelect;
     rotate(page, fp.x(), fp.y(), x, y, true);
-  }
+  }*/
 }
 
 void SelectTool::processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas *canvas)
@@ -668,13 +664,13 @@ void SelectTool::scale(GPage *page, int mask, double dx, double dy, bool type, b
   double sx = 1;
   double sy = 1;
 
-  if(mask & Kontour::HPos_Right)
+  if(mask & Kontour::HPosRight)
     newbox.setRight(newbox.right() + dx);
-  if(mask & Kontour::HPos_Bottom)
+  if(mask & Kontour::HPosBottom)
     newbox.setBottom(newbox.bottom() + dy);
-  if(mask & Kontour::HPos_Left)
+  if(mask & Kontour::HPosLeft)
     newbox.setLeft(newbox.left() + dx);
-  if(mask & Kontour::HPos_Top)
+  if(mask & Kontour::HPosTop)
     newbox.setTop(newbox.top() + dy);
 
   kdDebug() << "**********" << endl;
@@ -744,13 +740,13 @@ void SelectTool::shear(GPage *page, int mask, double dx, double dy, bool permane
   KoRect origbox = page->boundingBoxForSelection();
   double sx = 0.0;
   double sy = 0.0;
-  if(mask == Kontour::HPos_Top)
+  if(mask == Kontour::HPosTop)
     sx = -dx / origbox.width();
-  else if(mask == Kontour::HPos_Bottom)
+  else if(mask == Kontour::HPosBottom)
     sx = dx / origbox.width();
-  else if(mask == Kontour::HPos_Left)
+  else if(mask == Kontour::HPosLeft)
     sy = -dy / origbox.height();
-  else if(mask == Kontour::HPos_Right)
+  else if(mask == Kontour::HPosRight)
     sy = dy / origbox.height();
 
   if(permanent)

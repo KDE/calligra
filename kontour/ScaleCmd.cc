@@ -53,11 +53,11 @@ void ScaleCmd::execute()
 
   kdDebug() << "SX = " << sx << " SY = " << sy << endl;
 
-  if(hmask & Kontour::HPos_Left)
+  if(hmask & Kontour::HPosLeft)
     xback = box.left() + box.width() * (1.0 - sx);
-  if(hmask & Kontour::HPos_Top)
+  if(hmask & Kontour::HPosTop)
     yback = box.top() + box.height() * (1.0 - sy);
-  if(hmask & Kontour::HPos_Center)
+  if(hmask & Kontour::HPosCenter)
   {
     xback = box.left() + box.width() * 0.5 * (1.0 - sx);
     yback = box.top() + box.height() * 0.5 * (1.0 - sy);

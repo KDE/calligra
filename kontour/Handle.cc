@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -34,7 +34,6 @@
 Handle::Handle(GPage *aGPage)
 {
   mGPage = aGPage;
-  mMode = HMode_Default;
   mShow = false;
   mEmpty = true;
 }
@@ -47,12 +46,6 @@ void Handle::show(bool flag)
 void Handle::empty(bool flag)
 {
   mEmpty = flag;
-}
-
-void Handle::mode(Mode m, bool propagate)
-{
-  if(mMode != m || propagate)
-    mMode = m;
 }
 
 void Handle::box(const KoRect &r)
@@ -90,10 +83,52 @@ void Handle::draw(QPainter &p)
 
   QBrush brush;
   p.save();
-
   p.setPen(Qt::black);
+
   p.drawPoint(qRound(mRotCenter.x()), qRound(mRotCenter.y()));
-  p.drawEllipse(qRound(mRotCenter.x()) - 5, qRound(mRotCenter.y()) - 5, 10, 10);
+  p.drawEllipse(qRound(mRotCenter.x()) - 5, qRound(mRotCenter.y()) - 5, 11, 11);
+
+  brush = QBrush(Qt::black);
+  p.setBrush(brush);
+  /* Top arrow */
+  p.drawLine(static_cast<int>(pos[1].x()) - 5, static_cast<int>(pos[1].y()) - 5, static_cast<int>(pos[1].x()) + 4, static_cast<int>(pos[1].y()) - 5);
+  drawArrow(p, static_cast<int>(pos[1].x()) - 5, static_cast<int>(pos[1].y()) - 5, Arrow_Left);
+  drawArrow(p, static_cast<int>(pos[1].x()) + 4, static_cast<int>(pos[1].y()) - 5, Arrow_Right);
+
+  /* Right arrow */
+  p.drawLine(static_cast<int>(pos[3].x()) + 4, static_cast<int>(pos[3].y()) - 5, static_cast<int>(pos[3].x()) + 4, static_cast<int>(pos[3].y()) + 4);
+  drawArrow(p, static_cast<int>(pos[3].x()) + 4, static_cast<int>(pos[3].y()) - 5, Arrow_Up);
+  drawArrow(p, static_cast<int>(pos[3].x()) + 4, static_cast<int>(pos[3].y()) + 4, Arrow_Down);
+
+  /* Bottom arrow */
+  p.drawLine(static_cast<int>(pos[5].x()) - 5, static_cast<int>(pos[5].y()) + 4, static_cast<int>(pos[5].x()) + 4, static_cast<int>(pos[5].y()) + 4);
+  drawArrow(p, static_cast<int>(pos[5].x()) - 5, static_cast<int>(pos[5].y()) + 4, Arrow_Left);
+  drawArrow(p, static_cast<int>(pos[5].x()) + 4, static_cast<int>(pos[5].y()) + 4, Arrow_Right);
+
+  /* Left arrow */
+  p.drawLine(static_cast<int>(pos[7].x()) - 5, static_cast<int>(pos[7].y()) - 5, static_cast<int>(pos[7].x()) - 5, static_cast<int>(pos[7].y()) + 4);
+  drawArrow(p, static_cast<int>(pos[7].x()) - 5, static_cast<int>(pos[7].y()) - 5, Arrow_Up);
+  drawArrow(p, static_cast<int>(pos[7].x()) - 5, static_cast<int>(pos[7].y()) + 4, Arrow_Down);
+
+  /* Left Top arrow */
+  p.drawArc(static_cast<int>(pos[0].x()) - 5, static_cast<int>(pos[0].y()) - 5, 20, 20, 1440, 1440);
+  drawArrow(p, static_cast<int>(pos[0].x()) + 5, static_cast<int>(pos[0].y()) - 5, Arrow_Right);
+  drawArrow(p, static_cast<int>(pos[0].x()) - 5, static_cast<int>(pos[0].y()) + 5, Arrow_Down);
+
+  /* Right Top arrow */
+  p.drawArc(static_cast<int>(pos[2].x()) - 15, static_cast<int>(pos[2].y()) - 5, 20, 20, 0, 1440);
+  drawArrow(p, static_cast<int>(pos[2].x()) - 5, static_cast<int>(pos[2].y()) - 5, Arrow_Left);
+  drawArrow(p, static_cast<int>(pos[2].x()) + 4, static_cast<int>(pos[2].y()) + 5, Arrow_Down);
+
+  /* Right Bottom arrow */
+  p.drawArc(static_cast<int>(pos[4].x()) - 15, static_cast<int>(pos[4].y()) - 15, 20, 20, 4320, 1440);
+  drawArrow(p, static_cast<int>(pos[4].x()) - 5, static_cast<int>(pos[4].y()) + 4, Arrow_Left);
+  drawArrow(p, static_cast<int>(pos[4].x()) + 4, static_cast<int>(pos[4].y()) - 5, Arrow_Up);
+
+  /* Left Bottom arrow */
+  p.drawArc(static_cast<int>(pos[6].x()) - 5, static_cast<int>(pos[6].y()) - 15, 20, 20, 2880, 1440);
+  drawArrow(p, static_cast<int>(pos[6].x()) + 5, static_cast<int>(pos[6].y()) + 4, Arrow_Right);
+  drawArrow(p, static_cast<int>(pos[6].x()) - 5, static_cast<int>(pos[6].y()) - 5, Arrow_Up);
 
   brush = QBrush(Qt::blue);
   p.setBrush(brush);
@@ -102,46 +137,6 @@ void Handle::draw(QPainter &p)
     p.drawRect(static_cast<int>(pos[i].x() - 3), static_cast<int>(pos[i].y() - 3), 6, 6);
     p.fillRect(static_cast<int>(pos[i].x() - 2), static_cast<int>(pos[i].y() - 2), 4, 4, brush);
   }
-
-  brush = QBrush(Qt::black);
-  p.setBrush(brush);
-
-  /* Top arrow */
-  p.drawLine(static_cast<int>(pos[1].x()) - 4, static_cast<int>(pos[1].y()) - 6, static_cast<int>(pos[1].x()) + 4, static_cast<int>(pos[1].y()) - 6);
-  drawArrow(p, static_cast<int>(pos[1].x()) - 4, static_cast<int>(pos[1].y()) - 6, Arrow_Left);
-  drawArrow(p, static_cast<int>(pos[1].x()) + 4, static_cast<int>(pos[1].y()) - 6, Arrow_Right);
-
-  p.drawLine(static_cast<int>(pos[3].x()), static_cast<int>(pos[3].y()) - 4, static_cast<int>(pos[3].x()), static_cast<int>(pos[3].y()) + 4);
-  drawArrow(p, static_cast<int>(pos[3].x()), static_cast<int>(pos[3].y()) - 4, Arrow_Up);
-  drawArrow(p, static_cast<int>(pos[3].x()), static_cast<int>(pos[3].y()) + 4, Arrow_Down);
-
-  p.drawLine(static_cast<int>(pos[5].x()) - 4, static_cast<int>(pos[5].y()) + 4, static_cast<int>(pos[5].x()) + 4, static_cast<int>(pos[5].y()));
-  drawArrow(p, static_cast<int>(pos[5].x()) - 4, static_cast<int>(pos[5].y()) + 4, Arrow_Left);
-  drawArrow(p, static_cast<int>(pos[5].x()) + 4, static_cast<int>(pos[5].y()) + 4, Arrow_Right);
-
-  /* Bottom arrow */
-  p.drawLine(static_cast<int>(pos[7].x()), static_cast<int>(pos[7].y()) - 6, static_cast<int>(pos[7].x()), static_cast<int>(pos[7].y()) + 6);
-  drawArrow(p, static_cast<int>(pos[7].x()), static_cast<int>(pos[7].y()) - 6, Arrow_Up);
-  drawArrow(p, static_cast<int>(pos[7].x()), static_cast<int>(pos[7].y()) + 6, Arrow_Down);
-
-/*
-  p.drawArc(static_cast<int>(pos[0].x()), static_cast<int>(pos[0].y()), 10, 10, 1440, 1440);
-  drawArrow(p, static_cast<int>(pos[0].x()) + 5, static_cast<int>(pos[0].y()), Arrow_Right);
-  drawArrow(p, static_cast<int>(pos[0].x()), static_cast<int>(pos[0].y()) + 5, Arrow_Down);
-
-  p.drawArc(static_cast<int>(pos[2].x()) - 10, static_cast<int>(pos[2].y()), 10, 10, 0, 1440);
-  drawArrow(p, static_cast<int>(pos[2].x()) - 5, static_cast<int>(pos[2].y()), Arrow_Left);
-  drawArrow(p, static_cast<int>(pos[2].x()), static_cast<int>(pos[2].y()) + 5, Arrow_Down);
-
-  p.drawArc(static_cast<int>(pos[4].x()) - 10, static_cast<int>(pos[4].y()) - 10, 10, 10, 4320, 1440);
-  drawArrow(p, static_cast<int>(pos[4].x()) - 5, static_cast<int>(pos[4].y()), Arrow_Left);
-  drawArrow(p, static_cast<int>(pos[4].x()), static_cast<int>(pos[4].y()) - 5, Arrow_Up);
-
-  p.drawArc(static_cast<int>(pos[6].x()), static_cast<int>(pos[6].y()) - 10, 10, 10, 2880, 1440);
-  drawArrow(p, static_cast<int>(pos[6].x()) + 5, static_cast<int>(pos[6].y()), Arrow_Right);
-  drawArrow(p, static_cast<int>(pos[6].x()), static_cast<int>(pos[6].y()) - 5, Arrow_Up);
-*/
-
   p.restore();
 }
 
@@ -149,14 +144,14 @@ int Handle::contains(const KoPoint &p)
 {
   static int mask[] =
   {
-    Kontour::HPos_Left | Kontour::HPos_Top,
-    Kontour::HPos_Top,
-    Kontour::HPos_Top | Kontour::HPos_Right,
-    Kontour::HPos_Right,
-    Kontour::HPos_Right | Kontour::HPos_Bottom,
-    Kontour::HPos_Bottom,
-    Kontour::HPos_Bottom | Kontour::HPos_Left,
-    Kontour::HPos_Left
+    Kontour::HPosLeft | Kontour::HPosTop,
+    Kontour::HPosTop,
+    Kontour::HPosTop | Kontour::HPosRight,
+    Kontour::HPosRight,
+    Kontour::HPosRight | Kontour::HPosBottom,
+    Kontour::HPosBottom,
+    Kontour::HPosBottom | Kontour::HPosLeft,
+    Kontour::HPosLeft
   };
   /* Check if one of the outer handles is selected */
   for(int i = 0; i < 8; i++)
@@ -167,7 +162,7 @@ int Handle::contains(const KoPoint &p)
   }
   /* Maybe the rotation center ? */
   if(mRotCenter.isNear(p, 5.0))
-    return Kontour::HPos_Center;
+    return Kontour::HPosCenter;
   return 0;
 }
 
