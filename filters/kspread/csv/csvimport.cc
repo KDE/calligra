@@ -28,7 +28,10 @@
 
 #include <koFilterChain.h>
 #include <kspread_doc.h>
+#include <kspread_global.h>
 #include <kspread_sheet.h>
+#include <kspread_style.h>
+#include <kspread_style_manager.h>
 #include <kspread_cell.h>
 
 #include <csvdialog.h>
@@ -100,6 +103,8 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     if (!dialog->exec())
         return KoFilter::UserCancelled;
 
+    ElapsedTime t( "Filling data into document" );
+
     KSpreadCell *cell;
     KSpreadSheet *table=ksdoc->createTable();
     ksdoc->addTable(table);
@@ -126,6 +131,8 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     QFontMetrics fm( c->textFont( 1, 1 ) );
     double width = fm.width('x');
 
+    KSpreadStyle * s = ksdoc->styleManager()->defaultStyle();
+
     for ( int row = 0; row < numRows; ++row )
     {
         for (int col = 0; col < numCols; ++col)
@@ -137,35 +144,50 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
             double len = (double) text.length() * width;
             if ( len > widths[col] )
               widths[col] = len;
+            double d;
+            bool ok = false;
 
             switch (dialog->getHeader(col))
             {
              case CSVDialog::TEXT:
-              table->setText( row + 1, col + 1, text, false, true );
-              cell = table->cellAt( col + 1, row + 1, false );
+              cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+              cell->setCellText( text, false, true );
               break;
              case CSVDialog::NUMBER:
-              table->setText( row + 1, col + 1, text, false );
-              cell = table->cellAt( col + 1, row + 1, false );
-              cell->setFormatType(KSpreadCell::Number);
-              cell->setPrecision(2);
+              d = ksdoc->locale()->readNumber( text, &ok );
+              // If not, try with the '.' as decimal separator
+              if ( !ok )
+                d = text.toDouble( &ok );
+              if ( !ok ) 
+              {
+                table->setText( row + 1, col + 1, text, false );
+                cell->setFormatType( KSpreadCell::Number );
+              }
+              else
+              {
+                cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+                cell->setNumber( d );
+              }
+              cell->setPrecision( 2 );
               break;
              case CSVDialog::DATE:
-              table->setText( row + 1, col + 1, text, false );
-              cell = table->cellAt( col + 1, row + 1, false );
-              cell->setFormatType(KSpreadCell::ShortDate);
+              cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+              cell->setDate( text );
+              cell->setFormatType( KSpreadCell::ShortDate );
               break;
              case CSVDialog::CURRENCY:
-              table->setText( row + 1, col + 1, text, false );
-              cell = table->cellAt( col + 1, row + 1, false );
-              cell->setFormatType(KSpreadCell::Money);
-              cell->setPrecision(2);
+              cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+              cell->setCellText( text, false, false );
+              cell->setFormatType( KSpreadCell::Money );
+              cell->setPrecision( 2 );
               break;
             }
         }        
     }
 
     emit sigProgress( 98 );
+
+    ElapsedTime t2( "Resizing columns" );
     for ( i = 0; i < numCols; ++i )
     {
       ColumnFormat * c  = table->nonDefaultColumnFormat( i + 1 );
