@@ -1,4 +1,4 @@
 
-scripts_DATA = *.png
-scriptsdir = $(kde_datadir)/kword/horizontalline
+img_DATA = line.png
+imgdir = $(kde_datadir)/kword/horizontalline
 
