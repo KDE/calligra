@@ -880,6 +880,12 @@ void KoMainWindow::slotToolbarToggled( bool toggle )
     kdWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->name() << " not found!" << endl;
 }
 
+bool KoMainWindow::toolbarIsVisible(const char *tbName)
+{
+    QWidget *tb = toolBar( tbName);
+    return !tb->isHidden();
+}
+
 void KoMainWindow::showToolbar( const char * tbName, bool shown )
 {
     QWidget * tb = toolBar( tbName );

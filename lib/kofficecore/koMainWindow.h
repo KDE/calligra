@@ -88,6 +88,8 @@ public:
      */
     void showToolbar( const char * tbName, bool shown );
 
+    bool toolbarIsVisible(const char *tbName);
+
     /**
      * Get hold of the label in the statusbar, to write messages to it.
      * You can also insert other items in the status bar by using QStatusBar::addWidget.
