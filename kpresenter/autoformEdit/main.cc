@@ -15,9 +15,12 @@
 /******************************************************************/
 
 #include "autoformEdit.h"
+#include <kglobal.h>
+#include <kstddirs.h>
 
 int main(int argc, char *argv[])
 {
+  KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_data_relative() + "kpresenter/toolbar/");
   KApplication a(argc,argv,"AutoformEditor"); 
   AEditWin *aEditWin;
   aEditWin = new AEditWin;

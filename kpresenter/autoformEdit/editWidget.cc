@@ -15,6 +15,7 @@
 /******************************************************************/
 
 #include "editWidget.h"
+#include <kglobal.h>
 #include "editWidget.moc"
 
 /*================================================================*/
@@ -25,19 +26,14 @@
 EditWidget::EditWidget( QWidget *parent, const char *name )
     : QWidget(parent,name)
 {
-    QString pixdir;
     QPixmap pixmap;
 
-    pixdir = KApplication::kde_toolbardir();
-
     ok = new KButton(this);
-    pixmap.load(pixdir+"/tick.xpm");
-    ok->setPixmap(pixmap);
+    ok->setPixmap(ICON("tick.xpm"));
     QToolTip::add(ok,"Take the changes");
 
     cancel = new KButton(this);
-    pixmap.load(pixdir+"/exit.xpm");
-    cancel->setPixmap(pixmap);
+    cancel->setPixmap(ICON("exit.xpm"));
     QToolTip::add(cancel,"Don't take the changes");
 
     lineEdit = new QLineEdit(this);

@@ -6091,18 +6091,11 @@ void KTextObject::_setHorzAlign( TxtParagraph::HorzAlign ha, int p = -1 )
 /*====================== create rb-menu ==========================*/
 void KTextObject::createRBMenu()
 {
-    QString pixdir;
-    QPixmap pixmap;
-    pixdir = KApplication::kde_toolbardir();
-
     rbMenu = new QPopupMenu();
     CHECK_PTR( rbMenu );
-    pixmap.load( pixdir+"/editcut.xpm" );
-    CB_CUT = rbMenu->insertItem( pixmap, i18n( "&Cut" ), this, SLOT( clipCut() ) );
-    pixmap.load( pixdir+"/editcopy.xpm" );
-    CB_COPY = rbMenu->insertItem( pixmap, i18n( "C&opy" ), this, SLOT( clipCopy() ) );
-    pixmap.load( pixdir+"/editpaste.xpm" );
-    CB_PASTE = rbMenu->insertItem( pixmap, i18n( "&Paste" ), this, SLOT( clipPaste() ) );
+    CB_CUT = rbMenu->insertItem( ICON("editcut.xpm"), i18n( "&Cut" ), this, SLOT( clipCut() ) );
+    CB_COPY = rbMenu->insertItem( ICON("editcopy.xpm"), i18n( "C&opy" ), this, SLOT( clipCopy() ) );
+    CB_PASTE = rbMenu->insertItem( ICON("editpaste.xpm"), i18n( "&Paste" ), this, SLOT( clipPaste() ) );
     rbMenu->setMouseTracking( true );
 }
 

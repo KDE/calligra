@@ -569,25 +569,19 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
   //  m_vToolBarEdit->setItemEnabled (ID_EDIT_REDO, false);
   m_vToolBarEdit->insertSeparator (-1);
 
-  tmp = kapp->kde_toolbardir ().copy ();
-  tmp += "/editcut.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap(ICON("editcut.xpm"));
   toolTip = Q2C( i18n ("Cut") );
   m_idEditCut =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_CUT, SIGNAL (clicked ()),
 				   this, "editCut", true, toolTip, -1);
 
-  tmp = kapp->kde_toolbardir ().copy ();
-  tmp += "/editcopy.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap (ICON("editcut.xpm"));
   toolTip = Q2C( i18n ("Copy") );
   m_idEditCopy =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_COPY, SIGNAL (clicked ()),
 				   this, "editCopy", true, toolTip, -1);
 
-  tmp = kapp->kde_toolbardir ().copy ();
-  tmp += "/editpaste.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap (ICON("editpaste.xpm"));
   toolTip = Q2C( i18n ("Paste") );
   m_idEditPaste =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_PASTE, SIGNAL (clicked ()),
@@ -595,9 +589,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
 				   toolTip, -1);
   m_vToolBarEdit->insertSeparator (-1);
 
-  tmp = kapp->kde_datadir ().copy ();
-  tmp += "/kpresenter/toolbar/delete.xpm";
-  pix = OPUIUtils::loadPixmap (tmp);
+  pix = OPUIUtils::convertPixmap (ICON("delete.xpm"));
   toolTip = Q2C( i18n ("Delete") );
   m_idEditDelete =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_DELETE, SIGNAL (clicked ()),

@@ -15,6 +15,7 @@
 /******************************************************************/
 
 #include "autoformEdit.h"
+#include <kglobal.h>
 #include "autoformEdit.moc"
 
 /*================================================================*/
@@ -48,20 +49,13 @@ AEditWin::~AEditWin()
 /*====================== setup menu ==============================*/
 void AEditWin::setupMenu()
 {
-    QString pixdir,tmp;
-    QPixmap pixmap;
-
     /* file menu */
     file = new QPopupMenu( this );
     CHECK_PTR(file);
-    pixdir = KApplication::kde_toolbardir();
-    pixmap.load(pixdir+"/filenew.xpm");
-    M_FNEW = file->insertItem(pixmap,"&New",this,SLOT(fileNew()),CTRL+Key_N);
-    pixmap.load(pixdir+"/fileopen.xpm");
-    M_FOPEN = file->insertItem(pixmap,"&Open...",this,SLOT(fileOpen()),CTRL+Key_O);
+    M_FNEW = file->insertItem(ICON("filenew.xpm"),"&New",this,SLOT(fileNew()),CTRL+Key_N);
+    M_FOPEN = file->insertItem(ICON("fileopen.xpm"),"&Open...",this,SLOT(fileOpen()),CTRL+Key_O);
     file->insertSeparator();
-    pixmap.load(pixdir+"/filefloppy.xpm");
-    M_FSAVE = file->insertItem(pixmap,"&Save",this,SLOT(fileSave()),CTRL+Key_S);
+    M_FSAVE = file->insertItem(ICON("filefloppy.xpm"),"&Save",this,SLOT(fileSave()),CTRL+Key_S);
     M_FSAS = file->insertItem("S&ave as...",this,SLOT(fileSaveAs()),ALT+Key_S);
     file->insertSeparator();
     M_FWIN = file->insertItem("New &Window",this,SLOT(fileNewWin()),ALT+Key_N);
@@ -72,26 +66,17 @@ void AEditWin::setupMenu()
     /* edit menu */
     edit = new QPopupMenu( this );
     CHECK_PTR(edit);
-    pixdir = KApplication::kde_toolbardir();
-    pixmap.load(pixdir+"/editcut.xpm");
-    M_ECUT = edit->insertItem(pixmap,"&Cut",this,SLOT(editCut()),CTRL+Key_X);
-    pixmap.load(pixdir+"/editcopy.xpm");
-    M_ECOPY = edit->insertItem(pixmap,"C&opy",this,SLOT(editCopy()),CTRL+Key_C);
-    pixmap.load(pixdir+"/editpaste.xpm");
-    M_EPASTE = edit->insertItem(pixmap,"&Paste",this,SLOT(editPaste()),CTRL+Key_V);
-    pixdir = KApplication::kde_datadir();
-    pixmap.load(pixdir+"/kpresenter/toolbar/delete.xpm");
-    M_EDELETE = edit->insertItem(pixmap,"&Delete",this,SLOT(editDelete()),CTRL+Key_Delete);
+    M_ECUT = edit->insertItem(ICON("editcut.xpm"),"&Cut",this,SLOT(editCut()),CTRL+Key_X);
+    M_ECOPY = edit->insertItem(ICON("editcopy.xpm"),"C&opy",this,SLOT(editCopy()),CTRL+Key_C);
+    M_EPASTE = edit->insertItem(ICON("editpaste.xpm"),"&Paste",this,SLOT(editPaste()),CTRL+Key_V);
+    M_EDELETE = edit->insertItem(ICON("delete.xpm"),"&Delete",this,SLOT(editDelete()),CTRL+Key_Delete);
     edit->setMouseTracking(true);
     /* extra menu */
     extra = new QPopupMenu( this );
     CHECK_PTR(extra);
-    pixdir = KApplication::kde_datadir();
-    pixmap.load(pixdir+"/kpresenter/toolbar/newPoint.xpm");
-    M_EINSPNT = extra->insertItem(pixmap,"&Insert Point...",this,SLOT(extraInsertPoint()),ALT+Key_I);
+    M_EINSPNT = extra->insertItem(ICON("newPoint.xpm"),"&Insert Point...",this,SLOT(extraInsertPoint()),ALT+Key_I);
     extra->insertSeparator();
-    pixmap.load(pixdir+"/kpresenter/toolbar/121.xpm");
-    M_E121 = extra->insertItem(pixmap,"&View autoform in 1:1",this,SLOT(extraOne2One()),CTRL+Key_R);
+    M_E121 = extra->insertItem(ICON("121.xpm"),"&View autoform in 1:1",this,SLOT(extraOne2One()),CTRL+Key_R);
     extra->setItemChecked(M_E121,true);
     extra->setMouseTracking(true);
     extra->setCheckable(true);
@@ -126,52 +111,40 @@ void AEditWin::setupMenu()
 /*====================== setup toolbar1 ==========================*/
 void AEditWin::setupToolbar1()
 {
-    QString pixdir,tmp;
-    QPixmap pixmap;
+    QString tmp;
     QStrList comboList;
     int i;
 
     /* create toolbar */
     toolbar1 = new KToolBar(this);
     /* insert buttons */
-    pixdir = KApplication::kde_toolbardir();
-    pixmap.load(pixdir+"/filenew.xpm");
-    toolbar1->insertButton(pixmap,0,
+    toolbar1->insertButton(ICON("filenew.xpm"),0,
                            SIGNAL(clicked()),this,
                            SLOT(fileNew()),true,"Create a new autoform in that window");
-    pixmap.load(pixdir+"/fileopen.xpm");
-    toolbar1->insertButton(pixmap,0,
+    toolbar1->insertButton(ICON("fileopen.xpm"),0,
                            SIGNAL(clicked()),this,
                            SLOT(fileOpen()),true,"Open an autoform in that window");
-    pixmap.load(pixdir+"/filefloppy.xpm");
-    toolbar1->insertButton(pixmap,0,
+    toolbar1->insertButton(ICON("filefloppy.xpm"),0,
                            SIGNAL(clicked()),this,
                            SLOT(fileSave()),true,"Save current autoform");
     toolbar1->insertSeparator();
-    pixmap.load(pixdir+"/editcut.xpm");
-    toolbar1->insertButton(pixmap,0,
+    toolbar1->insertButton(ICON("editcut.xpm"),0,
                            SIGNAL(clicked()),this,
                            SLOT(editCut()),true,"Cut to the clipboard");
-    pixmap.load(pixdir+"/editcopy.xpm");
-    toolbar1->insertButton(pixmap,0,
+    toolbar1->insertButton(ICON("editcopy.xpm"),0,
                            SIGNAL(clicked()),this,
                            SLOT(editCopy()),true,"Copy to the clipboard");
-    pixmap.load(pixdir+"/editpaste.xpm");
-    toolbar1->insertButton(pixmap,0,
+    toolbar1->insertButton(ICON("editpaste.xpm"),0,
                            SIGNAL(clicked()),this,
                            SLOT(editPaste()),true,"Paste from the clipboard");
-    pixdir = KApplication::kde_datadir() + QString("/kpresenter/toolbar/");
-    pixmap.load(pixdir+"/delete.xpm");
-    toolbar1->insertButton(pixmap,0,
+    toolbar1->insertButton(ICON("delete.xpm"),0,
                            SIGNAL(clicked()),this,
                            SLOT(editDelete()),true,"Delete selected point");
     toolbar1->insertSeparator();
-    pixmap.load(pixdir+"newPoint.xpm");
-    toolbar1->insertButton(pixmap,0,
+    toolbar1->insertButton(ICON("newPoint.xpm"),0,
                            SIGNAL(clicked()),this,
                            SLOT(extraInsertPoint()),true,"Insert a new point");
-    pixmap.load(pixdir+"121.xpm");
-    toolbar1->insertButton(pixmap,T_RELATION,
+    toolbar1->insertButton(ICON("121.xpm"),T_RELATION,
                            SIGNAL(clicked()),this,
                            SLOT(extraOne2One()),true,"Switch relation of the autoform viewer");
     toolbar1->setToggle(T_RELATION,true);
