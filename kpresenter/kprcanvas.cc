@@ -4776,39 +4776,6 @@ void KPrCanvas::setTextBackground( KPTextObject */*obj*/ )
 #endif
 }
 
-QValueList<int> KPrCanvas::pages(const QString &range) const {
-
-    if(range.isEmpty())
-        return QValueList<int> ();
-    QValueList<int> list;
-    int start=-1;
-    int end=range.find(',');
-    bool ok=true;
-    QString tmp;
-    while(end!=-1 && start!=end && ok) {
-        tmp=range.mid(start+1, end-start-1);
-        ok=pagesHelper(tmp, list);
-        start=range.find(',', end);
-        end=range.find(',', start+1);
-    }
-    pagesHelper(range.mid(start+1), list);
-    return list;
-}
-
-bool KPrCanvas::pagesHelper(const QString &chunk, QValueList<int> &list) const {
-
-    bool ok=true;
-    int mid=chunk.find('-');
-    if(mid!=-1) {
-        int start=chunk.left(mid).toInt(&ok);
-        int end=chunk.mid(mid+1).toInt(&ok);
-        while(ok && start<=end)
-            list.append(start++);
-    }
-    else
-        list.append(chunk.toInt(&ok));
-    return ok;
-}
 
 void KPrCanvas::moveObject( int x, int y, bool key )
 {
@@ -5343,20 +5310,9 @@ int KPrCanvas::getPenBrushFlags() const
 
 void KPrCanvas::ungroupObjects()
 {
-    KMacroCommand *macro = new KMacroCommand(i18n( "Ungroup Objects" ));
-    KCommand *cmd = m_activePage->ungroupObjects();
-    if ( cmd )
-    {
-        macro = new KMacroCommand(i18n( "Ungroup Objects" ));
-        macro->addCommand( cmd );
-    }
-    cmd = stickyPage()->ungroupObjects();
-    if ( cmd )
-    {
-        if ( !macro)
-            macro = new KMacroCommand(i18n( "Ungroup Objects" ));
-        macro->addCommand( cmd );
-    }
+    KMacroCommand *macro = 0;
+    m_activePage->ungroupObjects( &macro );
+    stickyPage()->ungroupObjects( &macro );
     if ( macro )
         m_view->kPresenterDoc()->addCommand( macro );
 }

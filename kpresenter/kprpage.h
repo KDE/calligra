@@ -32,6 +32,7 @@
 #include <koDocumentChild.h>
 #include <koPictureCollection.h>
 
+class KMacroCommand;
 class KoSavingContext;
 class KURL;
 class KPTextView;
@@ -153,7 +154,7 @@ public:
      * group selected objects.
      */
     void groupObjects();
-    KCommand * ungroupObjects();
+    void ungroupObjects( KMacroCommand ** macro );
     void raiseObjs( bool forward );
     void lowerObjs( bool backward );
     bool getCheckConcavePolygon( bool check ) const;

@@ -116,7 +116,8 @@ DCOPRef KPresenterPageIface::groupObjects()
 
 void KPresenterPageIface::ungroupObjects()
 {
-    m_page->ungroupObjects();
+    //FIXME
+    //m_page->ungroupObjects();
 }
 
 void KPresenterPageIface::raiseObjs()

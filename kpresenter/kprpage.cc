@@ -587,17 +587,24 @@ void KPrPage::groupObjects()
     }
 }
 
-KCommand * KPrPage::ungroupObjects()
+void KPrPage::ungroupObjects( KMacroCommand ** macro )
 {
-    KPObject *kpobject = getSelectedObj();
+    QPtrList<KPObject> objects( getSelectedObjects( true ) );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+        KPObject *object = it.current();
+        if ( object->getType() == OT_GROUP )
+        {
+            UnGroupObjCmd *cmd = new UnGroupObjCmd( i18n( "Ungroup Objects" ),
+                (KPGroupObject*)object, m_doc, this );
+            cmd->execute();
 
-    if ( kpobject && kpobject->getType() == OT_GROUP ) {
-        UnGroupObjCmd *unGroupObjCmd = new UnGroupObjCmd( i18n( "Ungroup Objects" ),
-                                                          (KPGroupObject*)kpobject, m_doc, this );
-        unGroupObjCmd->execute();
-        return unGroupObjCmd;
+            if ( !*macro )
+                *macro = new KMacroCommand(i18n( "Ungroup Objects" ));
+            (*macro)->addCommand( cmd );
+        }
     }
-    return 0L;
 }
 
 QPen KPrPage::getPen( const QPen &pen ) const
@@ -1735,9 +1742,7 @@ KCommand* KPrPage::setPictureSettings( PictureMirrorType _mirrorType, int _depth
 
 void KPrPage::slotRepaintVariable()
 {
-    QPtrList<KPObject> lst;
-    getAllObjectSelectedList(lst,true /*force*/ );
-    QPtrListIterator<KPObject> it( lst );
+    QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->getType() == OT_TEXT )
@@ -1747,9 +1752,7 @@ void KPrPage::slotRepaintVariable()
 
 void KPrPage::recalcPageNum()
 {
-    QPtrList<KPObject> lst;
-    getAllObjectSelectedList(lst,true /*force*/ );
-    QPtrListIterator<KPObject> it( lst );
+    QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->getType() == OT_TEXT )
@@ -2228,10 +2231,7 @@ bool KPrPage::oneObjectTextSelected()
 
 bool KPrPage::isOneObjectSelected()
 {
-    QPtrList<KPObject> lst;
-    getAllObjectSelectedList(lst );
-    QPtrListIterator<KPObject> oIt( lst );
-    return oIt.count()>0;
+    return 0 != getSelectedObj();
 }
 
 bool KPrPage::haveASelectedPartObj()
@@ -2248,7 +2248,8 @@ bool KPrPage::haveASelectedPartObj()
 
 bool KPrPage::haveASelectedGroupObj()
 {
-    QPtrListIterator<KPObject> it( m_objectList );
+    QPtrList<KPObject> objects( getSelectedObjects( true ) );
+    QPtrListIterator<KPObject> it( objects );
     for ( ; it.current(); ++it ) {
         if ( it.current()->getType() == OT_GROUP )
             return true;
