@@ -24,6 +24,7 @@
 #include <qptrlist.h>
 
 class KivioStencil;
+class KoPoint;
 
 namespace Kivio {
   /**
@@ -39,10 +40,11 @@ namespace Kivio {
       
     public slots:
       virtual void setActivated(bool) = 0;
-      /** This function should apply a change to @param stencil
+      /** This function should apply a change to @param stencils
        * done by the tool.
        */
-      virtual void applyToolAction(QPtrList<KivioStencil>*) {};
+      virtual void applyToolAction(QPtrList<KivioStencil>* /*stencils*/) {};
+      virtual void applyToolAction(KivioStencil* /*stencil*/, const KoPoint& /*pos*/) {};
     
     signals:
       /** this should be emited when the tool wants to be active */

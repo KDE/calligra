@@ -31,13 +31,12 @@ class KivioPainter;
 
 class KivioGroupStencil : public KivioStencil
 {
-protected:
-//    void drawSelectionHandles( KivioPainter * );
-
+  protected:
     // The list of child stencils
     QPtrList<KivioStencil> *m_pGroupList;
+    int checkForCollision(const KoPoint& p);
 
-public:
+  public:
     KivioGroupStencil();
     virtual ~KivioGroupStencil();
 

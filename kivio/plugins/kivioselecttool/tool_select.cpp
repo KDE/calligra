@@ -1074,12 +1074,30 @@ void SelectTool::showPopupMenu( const QPoint &pos )
  * it launches the text tool on the selected stencils and switches back
  * to this tool when it's done.
  */
-void SelectTool::leftDoubleClick(const QPoint& /*pos*/)
+void SelectTool::leftDoubleClick(const QPoint& pos)
 {
   if( view()->activePage()->selectedStencils()->count() <= 0 )
     return;
   
-  editText(view()->activePage()->selectedStencils());
+  KoPoint pagePoint = view()->canvasWidget()->mapFromScreen(pos);
+  // Figure out how big 4 pixels is in terms of points
+  double threshold =  view()->zoomHandler()->unzoomItY(4);
+  int colType;
+  KivioPage *page = view()->activePage();
+  KivioStencil* stencil = page->checkForStencil( &pagePoint, &colType, threshold, false);
+  
+  if(stencil) {
+    // Locate the text tool.  If not found, bail with an error
+    Kivio::Plugin *p = view()->pluginManager()->findPlugin("Text Mouse Tool");
+    
+    if( !p )
+    {
+      kdDebug(43000) << "SelectTool::leftDoubleClick() - unable to locate Text Tool" << endl;
+      return;
+    }
+    
+    static_cast<Kivio::MouseTool*>(p)->applyToolAction(stencil, pagePoint);
+  }
 }
 
 void SelectTool::editText(QPtrList<KivioStencil>* stencils)

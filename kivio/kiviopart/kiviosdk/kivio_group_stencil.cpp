@@ -597,23 +597,15 @@ int KivioGroupStencil::resizeHandlePositions()
 
 QString KivioGroupStencil::getTextBoxName(const KoPoint& p)
 {
-  KivioStencil *pStencil = m_pGroupList->first();
-  QString name;
-  int id = 0;
+  int id = checkForCollision(p);
   
-  while(pStencil)
-  {
-    name = pStencil->getTextBoxName(p);
-    
-    if(!name.isEmpty()) {
-      return QString::number(id) + "-" + name;
-    }
-    
-    pStencil = m_pGroupList->next();
-    id++;
+  if(id < 0) {
+    return QString::null;
   }
   
-  return QString::null;
+  KivioStencil* pStencil = m_pGroupList->at(id);
+  QString name = QString::number(id) + "-" + pStencil->getTextBoxName(p);
+  return name;
 }
 
 void KivioGroupStencil::setText(const QString& text, const QString& name)
@@ -630,4 +622,23 @@ QString KivioGroupStencil::text(const QString& name)
   QString n = name.section("-", 1);
   
   return m_pGroupList->at(id)->text(n);
+}
+
+int KivioGroupStencil::checkForCollision(const KoPoint& p)
+{
+  KivioStencil *pStencil = m_pGroupList->first();
+  KoPoint pos = p;
+  int id = 0;
+  
+  while(pStencil)
+  {
+    if(pStencil->checkForCollision(&pos, 4.0) != kctNone) {
+      return id;
+    }
+    
+    pStencil = m_pGroupList->next();
+    id++;
+  }
+  
+  return -1;
 }

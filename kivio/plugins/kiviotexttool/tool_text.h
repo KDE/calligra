@@ -43,9 +43,9 @@ class TextTool : public Kivio::MouseTool
     void text(QRect);
   
   public slots:
-    void setActivated(bool a);
-    void applyToolAction(QPtrList<KivioStencil>* stencils);
-    void applyToolAction(KivioStencil* stencil, const KoPoint& pos);
+    virtual void setActivated(bool a);
+    virtual void applyToolAction(QPtrList<KivioStencil>* stencils);
+    virtual void applyToolAction(KivioStencil* stencil, const KoPoint& pos);
   
   signals:
     void operationDone();

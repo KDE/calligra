@@ -1995,6 +1995,7 @@ void KivioSMLStencil::setLineStyle(KivioLineStyle ls)
 QString KivioSMLStencil::getTextBoxName(const KoPoint& p)
 {
   KivioShape* pShape = m_pShapeList->first();
+  KivioShape* first = 0;
   KoPoint pos = p;
   
   // Calculate the rotation...
@@ -2027,12 +2028,20 @@ QString KivioSMLStencil::getTextBoxName(const KoPoint& p)
       if(PointInPoly(pPoints, 4, &pos)) {
         return pShape->shapeData()->name();
       }
+      
+      if(!first) {
+        first = pShape;
+      }
     }
 
     pShape = m_pShapeList->next();
   }
   
-  return QString::null;
+  if(first) {
+    return first->shapeData()->name();
+  } else {
+    return QString::null;
+  }
 }
 
 void KivioSMLStencil::setText(const QString& text, const QString& name)
