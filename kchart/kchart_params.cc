@@ -17,27 +17,31 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include "kchart_params.h"
 #include "KChartParamsIface.h"
 #include <dcopobject.h>
 #include "kdchart/KDChartParams.h"
 
+
 KChartParams::KChartParams()
     : KDChartParams()
 {
-    dcop = 0;
+    m_dcop = 0;
     //dcopObject(); // build it
 }
 
+
 KChartParams::~KChartParams()
 {
-    delete dcop;
+    delete m_dcop;
 }
+
 
 DCOPObject* KChartParams::dcopObject()
 {
-    if ( !dcop )
-	dcop = new KChartParamsIface( this );
-    return dcop;
+    if ( !m_dcop )
+	m_dcop = new KChartParamsIface( this );
+    return m_dcop;
 }
 

@@ -17,22 +17,29 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #ifndef KCHART_PARAMS_H
 #define KCHART_PARAMS_H
+
 
 class KDChartParams;
 class DCOPObject;
 
+
 #include "kdchart/KDChartParams.h"
+
 
 class KChartParams : public KDChartParams
 {
   public:
     KChartParams();
     ~KChartParams();
-    DCOPObject* dcopObject();
- private:
-    DCOPObject *dcop;
+
+    DCOPObject  *dcopObject();
+
+  private:
+    DCOPObject  *m_dcop;
 };
+
 
 #endif

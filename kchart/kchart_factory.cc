@@ -4,6 +4,7 @@
  * Kalle Dalheimer <kalle@kde.org>
  */
 
+
 #include "kchart_factory.h"
 #include "kchart_aboutdata.h"
 #include "kchart_part.h"
@@ -11,6 +12,7 @@
 #include <kinstance.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+
 
 extern "C"
 {
@@ -20,14 +22,17 @@ extern "C"
     }
 }
 
-KInstance* KChartFactory::s_global = 0;
-KAboutData* KChartFactory::s_aboutData = 0;
+
+KInstance   *KChartFactory::s_global    = 0;
+KAboutData  *KChartFactory::s_aboutData = 0;
+
 
 KChartFactory::KChartFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
     global();
 }
+
 
 KChartFactory::~KChartFactory()
 {
@@ -37,11 +42,18 @@ KChartFactory::~KChartFactory()
     s_global = 0;
 }
 
-KParts::Part* KChartFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char *classname, const QStringList & )
+
+KParts::Part* KChartFactory::createPartObject( QWidget *parentWidget,
+					       const char *widgetName,
+					       QObject* parent,
+					       const char* name,
+					       const char *classname,
+					       const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-    KChartPart *part = new KChartPart( parentWidget, widgetName, parent, name, !bWantKoDocument );
+    KChartPart *part = new KChartPart( parentWidget, widgetName, parent, name,
+				       !bWantKoDocument );
 
     if ( !bWantKoDocument )
       part->setReadWrite( false );
@@ -49,12 +61,14 @@ KParts::Part* KChartFactory::createPartObject( QWidget *parentWidget, const char
     return part;
 }
 
+
 KAboutData* KChartFactory::aboutData()
 {
     if( !s_aboutData )
         s_aboutData = newKChartAboutData();
     return s_aboutData;
 }
+
 
 KInstance* KChartFactory::global()
 {
@@ -66,5 +80,6 @@ KInstance* KChartFactory::global()
     }
     return s_global;
 }
+
 
 #include <kchart_factory.moc>
