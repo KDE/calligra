@@ -153,7 +153,7 @@ public:
     void redo();
     void clearUndoRedoInfo();
     void pasteText( QTextCursor * cursor, const QString & text, KWTextFormat * currentFormat, bool removeSelected );
-    void pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected );
+    KCommand* pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected );
     void insertTOC( QTextCursor * cursor );
     void insertParagraph( QTextCursor * cursor, KWTextFormat * currentFormat );
     void insertFrameBreak( QTextCursor * cursor, KWTextFormat *currentFormat );

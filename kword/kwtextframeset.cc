@@ -3127,7 +3127,7 @@ void KWTextFrameSet::pasteText( QTextCursor * cursor, const QString & text, KWTe
         insert( cursor, currentFormat, t, true /*checkNewLine*/, removeSelected, i18n("Paste Text") );
 }
 
-void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected )
+KCommand * KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected )
 {
     // Having data as a QCString instead of a QByteArray seems to fix the trailing 0 problem
     // I tried using QDomDocument::setContent( QByteArray ) but that leads to parse error at the end
@@ -3159,12 +3159,13 @@ void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bo
 
     (void) availableHeight(); // calculate it again (set to -1 due to unzoom/zoom)
 
-    m_doc->addCommand(macroCmd);
+    //m_doc->addCommand(macroCmd);
     formatMore();
     emit repaintChanged( this );
     emit ensureCursorVisible();
     emit updateUI( true );
     emit showCursor();
+    return macroCmd;
 }
 
 void KWTextFrameSet::insertTOC( QTextCursor * cursor )
@@ -3856,7 +3857,7 @@ void KWTextFrameSetEdit::paste()
     {
         QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
         if ( arr.size() )
-            textFrameSet()->pasteKWord( cursor, QCString( arr ), true );
+            frameSet()->kWordDocument()->addCommand(textFrameSet()->pasteKWord( cursor, QCString( arr ), true ));
     }
     else
     {
@@ -4172,8 +4173,8 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
 {
     if ( frameSet()->kWordDocument()->isReadWrite() && KWTextDrag::canDecode( e ) )
     {
+        KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
         e->acceptAction();
-
         QTextCursor dropCursor( textDocument() );
         QPoint dropPoint;
         if ( !textFrameSet()->normalToInternal( nPoint, dropPoint ) )
@@ -4244,7 +4245,8 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
                     kdDebug(32001) << "dropCursor: parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
                 }
 
-                textFrameSet()->removeSelectedText( cursor );
+                //textFrameSet()->removeSelectedText( cursor );
+                macroCmd->addCommand(textFrameSet()->removeSelectedTextCommand( cursor,QTextDocument::Standard ));
             }
             hideCursor();
             *cursor = dropCursor;
@@ -4261,7 +4263,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
         {
             QByteArray arr = e->encodedData( KWTextDrag::selectionMimeType() );
             if ( arr.size() )
-                textFrameSet()->pasteKWord( cursor, QCString(arr), false );
+                macroCmd->addCommand(textFrameSet()->pasteKWord( cursor, QCString(arr), false ));
         }
         else
         {
@@ -4269,6 +4271,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
             if ( QTextDrag::decode( e, text ) )
                 textFrameSet()->pasteText( cursor, text, m_currentFormat, false );
         }
+        frameSet()->kWordDocument()->addCommand(macroCmd);
     }
 }
 
