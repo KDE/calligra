@@ -192,7 +192,7 @@ void Document::gotTableRow(
 
 void Document::parse()
 {
-    readAssociatedStrings();
+    //readAssociatedStrings();
 
     m_tableNumber = 0;
     m_characterPosition = 0;
