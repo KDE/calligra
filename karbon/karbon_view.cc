@@ -288,6 +288,7 @@ KarbonView::groupSelection()
 void
 KarbonView::ungroupSelection()
 {
+/*
 	if( m_part->document().selection().objects().count() == 1 )
 	{
 		VGroup *grp = dynamic_cast<VGroup *>( m_part->document().selection().objects().getFirst() );
@@ -298,6 +299,7 @@ KarbonView::ungroupSelection()
 			m_part->document().deselect();
 		}
 	}
+*/
 }
 
 // TODO: remove this one someday:
