@@ -320,7 +320,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
                     _painter->drawPixmap( 0, 0, pix );
                 }
 
-                _painter->setPen( pen );
+                _painter->setPen( pen2 );
                 _painter->setBrush( Qt::NoBrush );
                 _painter->drawPolygon( pntArray2 );
             }
@@ -328,7 +328,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
         else
         {
             KoSize diff1( 0, 0 ), diff2( 0, 0 );
-            double _w = pen.width();
+            double _w = pen2.width();
 
             if ( lineBegin != L_NORMAL )
                 diff1 = getBoundingSize( lineBegin, _w,_zoomHandler );
@@ -370,7 +370,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
                         break;
                     }
 
-                    drawFigure( lineBegin, _painter, pnt3, pen.color(), _w, _angle, _zoomHandler );
+                    drawFigure( lineBegin, _painter, pnt3, pen2.color(), _w, _angle, _zoomHandler );
                 }
 
                 if ( lineEnd != L_NORMAL )
@@ -406,11 +406,11 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
                         break;
                     }
 
-                    drawFigure( lineEnd, _painter, pnt3, pen.color(), _w, _angle,_zoomHandler );
+                    drawFigure( lineEnd, _painter, pnt3, pen2.color(), _w, _angle,_zoomHandler );
                 }
             }
 
-            _painter->setPen( pen );
+            _painter->setPen( pen2 );
             _painter->drawPolyline( pntArray2 );
         }
 

@@ -305,7 +305,7 @@ void KPPolylineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
             QPoint point = (*it1);
             if ( startPoint != point ) {
                 float angle = getAngle( startPoint, point );
-                drawFigure( lineBegin, _painter, startPoint, pen.color(), _w, angle,_zoomHandler );
+                drawFigure( lineBegin, _painter, startPoint, pen2.color(), _w, angle,_zoomHandler );
 
                 break;
             }
@@ -325,7 +325,7 @@ void KPPolylineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
             QPoint point = (*it2);
             if ( endPoint != point ) {
                 float angle = getAngle( endPoint, point );
-                drawFigure( lineEnd, _painter, endPoint, pen.color(), _w, angle,_zoomHandler );
+                drawFigure( lineEnd, _painter, endPoint, pen2.color(), _w, angle,_zoomHandler );
 
                 break;
             }

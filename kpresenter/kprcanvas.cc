@@ -255,10 +255,13 @@ void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect )
     if ( editMode )
     {
         //kdDebug(33001) << "KPrCanvas::drawBackground drawing bg for page " << i+1 << " editMode=" << editMode << endl;
-        QRect pageRect = m_activePage->getZoomPageRect();//getPageRect( 0, _presFakt );
+        QRect pageRect = m_activePage->getZoomPageRect();
         //kdDebug() << "KPrCanvas::drawBackground pageRect=" << DEBUGRECT(pageRect) << endl;
+        //kdDebug() << "KPrCanvas::drawBackground rect=" << DEBUGRECT(rect) << endl;
         if ( rect.intersects( pageRect ) )
+        {
             m_activePage->background()->draw( painter, true ); // TODO pass rect ?
+        }
         // Include the border now
         pageRect.rLeft() -= 1;
         pageRect.rTop() -= 1;
