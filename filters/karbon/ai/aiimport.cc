@@ -78,7 +78,7 @@ AiImport::convert( const QCString& from, const QCString& to )
 		fileIn.close();
 		return KoFilter::CreationError;
         }
-	QString &result = doc.toString();
+	QString result = doc.toString();
 
         kdDebug() << result << endl;
 	KoStoreDevice* storeOut = m_chain->storageFile( "root", KoStore::Write );
