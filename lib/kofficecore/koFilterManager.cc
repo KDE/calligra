@@ -147,28 +147,26 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
         {
             QCString nativeFormat = m_document->nativeFormatMimeType ();
 
-            QApplication::setOverrideCursor (arrowCursor);
-            KoFilterChooser *chooser = new KoFilterChooser
-                                            (0,
-                                            KoFilterManager::mimeFilter (nativeFormat, KoFilterManager::Import),
-                                            nativeFormat);
-            if (chooser->exec ())
+            QApplication::setOverrideCursor( arrowCursor );
+            KoFilterChooser chooser(0,
+                                    KoFilterManager::mimeFilter (nativeFormat, KoFilterManager::Import),
+                                    nativeFormat);
+            if (chooser.exec ())
             {
-                QString f = chooser->filterSelected ();
+                QCString f = chooser.filterSelected ().latin1();
 
-                if (f == QString (nativeFormat))
+                if (f == nativeFormat)
                 {
                     status = KoFilter::OK;
+                    QApplication::restoreOverrideCursor();
                     return url;
                 }
 
-                m_graph.setSourceMimeType (f.latin1 ());
+                m_graph.setSourceMimeType (f);
             }
             else
                 userCancelled = true;
-
-            delete chooser;
-            QApplication::restoreOverrideCursor ();
+            QApplication::restoreOverrideCursor();
         }
 
         if (!m_graph.isValid())
@@ -242,22 +240,20 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString
         if ( !m_graph.isValid() ) {
             kdWarning(s_area) << "Can't open " << t->name () << ", trying filter chooser" << endl;
 
-            QApplication::setOverrideCursor (arrowCursor);
-            KoFilterChooser *chooser = new KoFilterChooser (0, KoFilterManager::mimeFilter ());
-            if (chooser->exec ())
-                m_graph.setSourceMimeType (chooser->filterSelected ().latin1 ());
+            QApplication::setOverrideCursor( arrowCursor );
+            KoFilterChooser chooser(0, KoFilterManager::mimeFilter ());
+            if (chooser.exec ())
+                m_graph.setSourceMimeType (chooser.filterSelected ().latin1 ());
             else
                 userCancelled = true;
 
-            delete chooser;
-            QApplication::restoreOverrideCursor ();
+            QApplication::restoreOverrideCursor();
         }
     }
 
     if (!m_graph.isValid ())
     {
         kdError(s_area) << "Couldn't create a valid graph for this source mimetype." << endl;
-        QApplication::restoreOverrideCursor();
         if (!userCancelled) KMessageBox::error( 0L, i18n("Could not export file."), i18n("Missing Export Filter") );
         return KoFilter::BadConversionGraph;
     }
@@ -266,7 +262,6 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString
 
     if ( !chain ) {
         kdError(s_area) << "Couldn't create a valid filter chain!" << endl;
-        QApplication::restoreOverrideCursor();
         KMessageBox::error( 0L, i18n("Could not export file."), i18n("Missing Export Filter") );
         return KoFilter::BadConversionGraph;
     }
@@ -487,7 +482,6 @@ bool KoFilterManager::filterAvailable( KoFilterEntry::Ptr entry )
 void KoFilterManager::importErrorHelper( const QString& mimeType, const bool suppressDialog )
 {
     QString tmp = i18n("Could not import file of type\n%1").arg( mimeType );
-    QApplication::restoreOverrideCursor();
     // ###### FIXME: use KLibLoader::lastErrorMessage() here
     if (!suppressDialog) KMessageBox::error( 0L, tmp, i18n("Missing Import Filter") );
 }

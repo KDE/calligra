@@ -48,6 +48,7 @@
 #include <kdeversion.h>
 #if ! KDE_IS_VERSION(3,1,90)
 #include <kdebugclasses.h>
+#include <kfileitem.h>
 #endif
 
 #include <qfile.h>
@@ -56,7 +57,6 @@
 #include <qtimer.h>
 #include <qimage.h>
 #include <kiconloader.h>
-#include <kfileitem.h>
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qcursor.h>
@@ -365,8 +365,6 @@ bool KoDocument::saveFile()
         KIO::UDSEntry entry;
         if ( KIO::NetAccess::stat( url(), entry ) ) { // this file exists => backup
             emit sigStatusBarMessage( i18n("Making backup...") );
-            KFileItem item( entry, url() );
-            Q_ASSERT( item.name() == url().fileName() );
             KURL backup;
             if ( d->m_backupPath.isEmpty())
                 backup = url();
@@ -376,6 +374,8 @@ bool KoDocument::saveFile()
 #if KDE_IS_VERSION(3,1,90)
             KIO::NetAccess::file_copy( url(), backup, -1, true /*overwrite*/ );
 #else
+            KFileItem item( entry, url() );
+            Q_ASSERT( item.name() == url().fileName() );
             KIO::NetAccess::del( backup ); // Copy does not remove existing destination file
             KIO::NetAccess::copy( url(), backup );
             // Not network transparent.
