@@ -544,7 +544,7 @@ public:
     bool isVisible() const;
 
     /** set the visibility of the frameset. */
-    void setVisible( bool v );
+    virtual void setVisible( bool v );
 
     /** get/set frameset name. For tables in particular, this _must_ be unique */
     QString getName() const { return m_name; }

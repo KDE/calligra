@@ -2520,16 +2520,6 @@ void KWDocument::framesChanged( const QPtrList<KWFrame> & frames, KWView * view 
 void KWDocument::setHeaderVisible( bool h )
 {
     m_headerVisible = h;
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWFrameSet * frameSet = fit.current();
-        //Laurent I don't break this loop when I found a header
-        //because there is several header (FI_FIRST_HEADER, FI_ODD_HEADER etc...
-        //if we break it we can't hide all custom in all header
-        if ( frameSet->isAHeader() )
-            static_cast<KWTextFrameSet*>(frameSet)->hideCustomItems(h);
-    }
     recalcFrames();
     updateAllFrames();
     layout();
@@ -2540,16 +2530,6 @@ void KWDocument::setHeaderVisible( bool h )
 void KWDocument::setFooterVisible( bool f )
 {
     m_footerVisible = f;
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWFrameSet * frameSet = fit.current();
-         //Laurent I don't break this loop when I found a header
-        //because there is several footer (FI_FIRST_FOOTER, FI_ODD_FOOTER etc...
-        //if we break it we can't hide all custom in all header
-        if ( frameSet->isAFooter() )
-            static_cast<KWTextFrameSet*>(frameSet)->hideCustomItems(f);
-    }
     recalcFrames();
     updateAllFrames();
     layout();

@@ -160,7 +160,11 @@ public:
      */
     void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged );
 
-    void hideCustomItems(bool);
+    /** set the visibility of the frameset. */
+    virtual void setVisible( bool v );
+
+    /** Show or hide all inline frames that are inside this frameset */
+    void setInlineFramesVisible(bool);
 
 #ifndef NDEBUG
     void printRTDebug( int );
