@@ -1098,10 +1098,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 	    bool cursorAlreadySet = false;
 	    if ( (int)objectList().count() - 1 >= 0 || (int)m_view->kPresenterDoc()->stickyPage()->objectList().count() -1>=0 )
             {
-                kpobject=m_activePage->getCursor(docPoint );
+                kpobject=m_activePage->getCursor(docPoint);
                 if( kpobject)
                 {
-                    setCursor( kpobject->getCursor( docPoint, modType ) );
+                    setCursor( kpobject->getCursor( docPoint, modType,m_view->zoomHandler() ) );
                     cursorAlreadySet = true;
                 }
                 else
@@ -1109,7 +1109,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     kpobject=m_view->kPresenterDoc()->stickyPage()->getCursor(docPoint );
                     if( kpobject)
                     {
-                        setCursor( kpobject->getCursor( docPoint, modType ) );
+                        setCursor( kpobject->getCursor( docPoint, modType,m_view->zoomHandler() ) );
                         cursorAlreadySet = true;
                     }
                 }
@@ -3962,12 +3962,12 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
         QPoint pos=QCursor::pos();
         KPObject *obj=m_activePage->getCursor( pos);
         if(obj)
-            setCursor( obj->getCursor( pos, modType ) );
+            setCursor( obj->getCursor( pos, modType,m_view->zoomHandler() ) );
         else
         {
             obj=m_view->kPresenterDoc()->stickyPage()->getCursor( pos );
             if(obj)
-                setCursor( obj->getCursor( pos, modType ) );
+                setCursor( obj->getCursor( pos, modType,m_view->zoomHandler() ) );
         }
     }
     else

@@ -350,7 +350,7 @@ bool KPObject::intersects( const KoRect &_rect,KoZoomHandler *_zoomHandler ) con
 }
 
 /*======================== get cursor ============================*/
-QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType ) const
+QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KoZoomHandler *_zoomHandler ) const
 {
     double px = _point.x();
     double py = _point.y();
@@ -361,9 +361,21 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType ) const
     double oh = ext.height();
 
     KoRect r( ox, oy, ow, oh );
-
+    if ( angle != 0.0 )
+    {
+        r=rotateRectObject(_zoomHandler );
+        ox = r.x() ;
+        oy = r.y();
+        ow = r.width();
+        oh = r.height();
+    }
+#if 0
+    kdDebug() << "KPObject::getCursor"<<DEBUGRECT(r) << endl;
+    kdDebug() << "KPObject::getCursor :"<<_point.x() <<" :"<<_point.y() << endl;
+    kdDebug() << "KPObject::getCursor r.contains( _point ) "<<r.contains( _point ) << endl;
+#endif
     if ( !r.contains( _point ) )
-        return Qt::arrowCursor;
+      return Qt::arrowCursor;
 
     if ( px >= ox && py >= oy && px <= ox + 6 && py <= oy + 6 )
     {
@@ -526,6 +538,26 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler )
 
     if ( selected )
     {
+        _painter->save();
+
+        if ( angle != 0 )
+        {
+            KoRect br = KoRect( 0, 0, ext.width(), ext.height() );
+            double pw = br.width();
+            double ph = br.height();
+            KoRect rr = br;
+            double yPos = -rr.y();
+            double xPos = -rr.x();
+            rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
+
+            QWMatrix m;
+            m.translate( _zoomHandler->zoomItX(pw / 2.0), _zoomHandler->zoomItX(ph / 2.0) );
+            m.rotate( angle );
+            m.translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY(rr.top() + yPos) );
+
+            _painter->setWorldMatrix( m, true );
+        }
+
         _painter->fillRect( 0, 0, _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
         _painter->fillRect( 0, _zoomHandler->zoomItY(ext.height() / 2 - 3), _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
         _painter->fillRect( 0, _zoomHandler->zoomItY(ext.height() - 6), _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
@@ -534,6 +566,8 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler )
         _painter->fillRect( _zoomHandler->zoomItX(ext.width() - 6), _zoomHandler->zoomItY(ext.height() - 6), _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
         _painter->fillRect( _zoomHandler->zoomItX(ext.width() / 2 - 3), 0,_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
         _painter->fillRect( _zoomHandler->zoomItX(ext.width() / 2 - 3), _zoomHandler->zoomItY(ext.height() - 6),_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+        _painter->restore();
+
     }
 
     _painter->setRasterOp( rop );
