@@ -537,7 +537,7 @@ bool KoDocument::saveToStore( KoStore* _store, const QCString & _format, const Q
     return false;
 
   QString u = url().url();
-  if ( _store->open( u, _format ) )
+  if ( _store->open( u ) )
   {
     ostorestream out( _store );
     if ( !save( out, _format ) )
@@ -656,7 +656,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
       return false;
     }
 
-    if ( store->open( "root", "" ) )
+    if ( store->open( "root" ) )
     {
       istorestream in( store );
       if ( !load( in, store ) )
@@ -676,7 +676,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
       return false;
     }
 
-    if ( store->open( "/documentinfo.xml", "" ) )
+    if ( store->open( "/documentinfo.xml" ) )
     {
       istorestream in( store );
 
@@ -718,7 +718,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
 bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
 {
-  if ( _store->open( url.url(), "" ) )
+  if ( _store->open( url.url() ) )
   {
     istorestream in( _store );
     if ( !load( in, _store ) )
