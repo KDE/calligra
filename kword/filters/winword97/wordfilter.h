@@ -12,13 +12,13 @@ class QString;
 class WordFilter {
 
 public:
-	WordFilter(myFile in);
-	~WordFilter();
-	bool filterIt();
-	QString kwdFile();
-	
+    WordFilter(myFile in);
+    ~WordFilter();
+    bool filterIt();
+    QString kwdFile();
+    
 private:
     WinWordDoc *myDoc;
-	KWordDoc *myKwd;
+    KWordDoc *myKwd;
 };
 #endif // WORDFILTER_H

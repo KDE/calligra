@@ -12,9 +12,9 @@
 class WinWordDoc {
 
 public:
-	WinWordDoc(myFile in);
-	~WinWordDoc();
-	
+    WinWordDoc(myFile in);
+    ~WinWordDoc();
+    
 private:
     myFile doc;     // raw data
     FIB *fib;

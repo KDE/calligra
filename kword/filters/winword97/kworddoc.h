@@ -6,11 +6,11 @@
 class KWordDoc {
 
 public:
-	KWordDoc();
-	~KWordDoc();
-	QString kwdFile();
-	
+    KWordDoc();
+    ~KWordDoc();
+    QString kwdFile();
+    
 private:
-	QString kwd;	
+    QString kwd;    
 };
 #endif // KWORDDOC_H
