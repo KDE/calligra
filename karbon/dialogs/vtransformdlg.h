@@ -21,6 +21,8 @@ class VReference;
 
 enum ButtonChoice { tr_Duplicate, tr_Apply };
 
+enum TabChoice { Translate, Rotate, Shear, Scale }; //<--- For quickjumping to a certain tab - useful for quick shortcuts
+
 // Translate widget for this dialog...
 class VTranslateWidget : public QWidget
 {
@@ -83,14 +85,8 @@ class VTransformDlg : public QDockWindow
 	Q_OBJECT
 
 public:
-	enum TabChoice {
-		Translate,
-		Rotate,
-		Shear,
-		Scale
-	}; //<--- For quickjumping to a certain tab - useful for quick shortcuts
-	
 	VTransformDlg( KarbonPart* part, KoView* parent = 0L, const char* name = 0L );
+	void setTab( TabChoice m_tabChoice );
   
 private:
 	QTabWidget* mTabWidget;

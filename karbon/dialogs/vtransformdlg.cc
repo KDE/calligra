@@ -188,5 +188,20 @@ VTransformDlg::VTransformDlg( KarbonPart* part, KoView* parent, const char* /*na
 	setWidget( mTabWidget );
 }
 
+void VTransformDlg::setTab( TabChoice m_tabChoice )
+{
+	switch( m_tabChoice ) {
+		case Translate:
+			mTabWidget->showPage( mTranslateWidget );
+		case Rotate:
+			mTabWidget->showPage( mRotateWidget );
+		case Shear:
+			mTabWidget->showPage( mShearWidget );
+		case Scale:
+			mTabWidget->showPage( mScaleWidget );
+	}
+}
+
+
 #include "vtransformdlg.moc"
 
