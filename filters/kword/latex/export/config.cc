@@ -84,7 +84,7 @@ void Config::writeIndent(QTextStream& out)
 	}
 }
 
-static Config* Config::instance()
+Config* Config::instance()
 {
 	if(_instance == 0)
 		_instance = new Config();
