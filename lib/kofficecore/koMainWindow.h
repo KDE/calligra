@@ -107,6 +107,11 @@ public:
     void setMaxRecentItems(uint _number);
 
     /**
+     * The document opened a URL -> store into recent list.
+     */
+    void addRecentURL( const KURL& url );
+
+    /**
      * Load the desired document and show it.
      * @param url the URL to open
      *

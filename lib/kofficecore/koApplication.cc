@@ -91,10 +91,12 @@ bool KoApplication::start()
         KoMainWindow *shell = new KoMainWindow( doc->instance() );
         shell->show();
         QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
+        doc->addShell( shell ); // for initDoc to fill in the recent docs list
         if ( doc->initDoc() )
-            {
-                shell->setRootDocument( doc );
-            }
+        {
+            doc->removeShell( shell ); // setRootDocument will redo it
+            shell->setRootDocument( doc );
+        }
         else
             return false;
         QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));

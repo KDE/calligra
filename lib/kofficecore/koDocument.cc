@@ -770,6 +770,15 @@ bool KoDocument::openURL( const KURL & _url )
   }
   if ( autosaveOpened )
       m_url = KURL(); // Force save to act like 'Save As'
+  else
+  {
+      if ( d->m_shells.isEmpty() )
+          kdWarning() << "KoDocument::openURL no shell yet !" << endl;
+      // Add to recent actions list in our shells
+      QListIterator<KoMainWindow> it( d->m_shells );
+      for (; it.current(); ++it )
+          it.current()->addRecentURL( _url );
+  }
   return ret;
 }
 

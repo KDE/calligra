@@ -182,8 +182,8 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
                         this, SLOT( slotDocumentInfo() ),
                         actionCollection(), "file_documentinfo" );
 
-    KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection(), "configurekeys" );
-    KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection(), "configuretoolbars" );
+    KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
+    KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection() );
 
     d->m_paDocInfo->setEnabled( false );
     d->m_paSaveAs->setEnabled( false );
@@ -272,7 +272,7 @@ KoMainWindow::~KoMainWindow()
 
     // Save list of recent files
     KConfig * config = instance() ? instance()->config() : KGlobal::config();
-    //kdDebug() << "Saving recent files list into config. instance()=" << instance() << endl;
+    //kdDebug() << this << " Saving recent files list into config. instance()=" << instance() << endl;
     m_recent->saveEntries( config );
     config->sync();
 
@@ -306,9 +306,6 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     d->m_rootDoc->addShell( this );
     d->m_removeView->setEnabled(false);
     d->m_orientation->setEnabled(false);
-    // Add entry to recent documents list (doing here makes it work with cmd line too etc.)
-    if ( !doc->url().isEmpty() )
-      m_recent->addURL( doc->url() );
   }
 
   bool enable = d->m_rootDoc != 0 ? true : false;
@@ -342,6 +339,21 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QList<KoView> &
   d->m_paSaveAs->setEnabled( enable );
   d->m_paPrint->setEnabled( enable );
   d->m_paPrintPreview->setEnabled( enable );
+}
+
+void KoMainWindow::addRecentURL( const KURL& url )
+{
+    kdDebug() << "KoMainWindow::addRecentURL url=" << url.prettyURL() << endl;
+    // Add entry to recent documents list
+    // (call coming from KoDocument because it must work with cmd line, template dlg, file/open, etc.)
+    if ( !url.isEmpty() )
+    {
+        m_recent->addURL( url );
+        if ( url.isLocalFile() )
+            KRecentDocument::add(url.path(-1));
+        else
+            KRecentDocument::add(url.url(-1), true);
+    }
 }
 
 KoDocument* KoMainWindow::createDoc() const
@@ -694,11 +706,6 @@ void KoMainWindow::slotFileOpen()
     KURL url;
     if(dialog->exec()==QDialog::Accepted) {
         url=dialog->selectedURL();
-        m_recent->addURL( url );
-        if ( url.isLocalFile() )
-            KRecentDocument::add(url.path(-1));
-        else
-            KRecentDocument::add(url.url(-1), true);
     }
     else
     {
