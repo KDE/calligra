@@ -3,6 +3,7 @@
 
 class KWFormatContext;
 class KWordDocument;
+class KWCharAttribute;
 
 #include <qpainter.h>
 
@@ -25,11 +26,11 @@ class KWFormatContext : public KWFormat
 {
 public:
   enum LayoutError { COLUMN_TOO_TALL, PAPER_HEIGHT_TOO_SMALL, NO_ERROR };
-  
+
   KWFormatContext(KWordDocument *_doc,unsigned int _frameSet);
   ~KWFormatContext();
-  
-  void init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true, bool _fromStart = true, 
+
+  void init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true, bool _fromStart = true,
 	     int _frame = -1, int _page = -1 );
   void enterNextParag( QPainter &_painter, bool _updateCounters = true );
   void skipCurrentParag( QPainter &_painter );
@@ -45,6 +46,7 @@ public:
    */
   void cursorGotoPixelLine(unsigned int mx,unsigned int my,QPainter &_painter);
   void cursorGotoPixelInLine(unsigned int mx,unsigned int my,QPainter &_painter);
+  KWCharAttribute* getObjectType(unsigned int mx,unsigned int my,QPainter &_painter);
   /**
    * Move the cursor to the next character very fast. Return -1 if the next character
    * is a special object like an image or such, returns 0 if there is a character
@@ -74,7 +76,7 @@ public:
   bool makeNextLineLayout( QPainter &_painter );
   bool makeLineLayout( QPainter &_painter, bool _checkIntersects = true, bool _checkTabs = true );
   void makeCounterLayout( QPainter &_painter );
-  
+
   bool isCursorAtParagStart();
   bool isCursorAtLineStart();
   bool isCursorInFirstLine();
@@ -86,9 +88,9 @@ public:
    */
   bool isCursorAtLastChar();
   bool isCursorInLastLine();
-  
+
   KWDisplayFont& getDisplayFont() { return *displayFont; }
-  
+
   /**
    * @return the paragraph we are in currently.
    *
@@ -108,7 +110,7 @@ public:
    */
   unsigned int getFrameSet() { return frameSet; }
   unsigned int getFrame() { return frame; }
-  
+
   /**
    * @return the text that represents the counter
    */
@@ -147,28 +149,28 @@ public:
    *         of the paper.
    */
   unsigned int getPTPos() { return ptPos; }
-  
+
   unsigned int getPTTextLen() { return ptTextLen; }
-  
+
   unsigned int getPTLeft() { return ptLeft; }
-  
+
   unsigned int getPTWidth() { return ptWidth; }
-  
+
   float getPTSpacing() { return ptSpacing; }
-  
+
   unsigned int getLineStartPos() { return lineStartPos; }
   unsigned int getLineEndPos() { return lineEndPos; }
   unsigned int getTextPos() { return textPos; }
   void setTextPos(unsigned int _pos) { textPos = _pos; }
-  
+
   unsigned int getLineHeight();
-  
+
   void apply( KWFormat &_format );
-  
+
   void selectWord(KWFormatContext &_fc1,KWFormatContext &_fc2,QPainter &painter);
-  
+
   void setFrameSet(unsigned int _frameSet) { frameSet = _frameSet; }
-  
+
 protected:
   unsigned int ptTextLen;
   unsigned int ptAscender;
@@ -183,22 +185,22 @@ protected:
   unsigned int specialHeight;
   unsigned int frameSet;
   unsigned int frame;
-  
+
   unsigned int page;
   //unsigned int column;
-  
+
   unsigned int lineStartPos;
   KWFormat lineStartFormat;
-  
+
   unsigned int lineEndPos;
   unsigned int textPos;
-  
+
   /**
    * Amount of spaces in the line. This is needed if we have "Blocksatz".
    * We need this to calculate the width of a single space character.
    */
   unsigned short spaces;
-  
+
   /**
    * Additional offsets to the left and right.
    * Counters cause them to become different from 0.
@@ -207,12 +209,12 @@ protected:
   unsigned int ptWidth;
   unsigned int ptStartPos;
   unsigned int ptCounterPos;
-  
+
   /**
    * We use this instance for font loading stuff.
    */
   KWFormat tmpFormat;
-    
+
   /**
    * The paragraph we are currently in.
    */
@@ -220,10 +222,10 @@ protected:
   /**
    * The document we are in right now.
    */
-  KWordDocument *document;    
-  
+  KWordDocument *document;
+
   LayoutError error;
-  
+
   /**
    * This is the counter text of this paragraph.
    */
@@ -239,19 +241,19 @@ protected:
    * This is the font we are using.
    */
   KWDisplayFont *displayFont;
-  
+
   /**
    * The amount of points that you have to add to every spaces width to
    * get the BLOCK flow.
    */
   float ptSpacing;
-  
+
   /**
    * The error we make in 'block' mode, by assigning spaces
    * an integer size, but a float size would be correct.
    */
   float spacingError;
-  
+
   bool compare_formats;
   bool outOfFrame;
   bool offsetsAdded;

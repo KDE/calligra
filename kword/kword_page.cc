@@ -793,6 +793,19 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	unsigned int mx = e->x() + xOffset;
 	unsigned int my = e->y() + yOffset;
 
+	if (mouseMode != MM_EDIT_FRAME)
+	  {
+	    KWCharAttribute *attrib = 0L;
+	    
+	    QPainter painter;	
+	    painter.begin(this);
+	    attrib = fc->getObjectType(mx,my,painter);
+	    painter.end();
+	    
+	    if (attrib)
+	      debug("ObjectType: %d, %p",attrib->getClassId(),attrib);
+	    break;
+	  }
 	if (doc->getFrameSet(mx,my) == -1)
 	  {
 	    KPoint pnt(QCursor::pos());

@@ -1005,3 +1005,4 @@ Reggie, 29.3.1999:
   into the table first
 - Implemented splitting cells - this means you can only split a joined
   cell yet, no "normal" cells. I'll improve that later.
+- Prepeared everything for context sensitive right button menus

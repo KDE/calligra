@@ -4,6 +4,7 @@
 #include "fc.h"
 #include "kword_doc.h"
 #include "paraglayout.h"
+#include "char.h"
 
 #ifndef max
 #define max(a,b) ((a)>(b)?(a):(b))
@@ -688,6 +689,32 @@ void KWFormatContext::cursorGotoPixelInLine(unsigned int mx,unsigned int my,QPai
     }
 }
 
+KWCharAttribute* KWFormatContext::getObjectType(unsigned int mx,unsigned int my,QPainter &_painter)
+{
+  KWFormatContext fc(document,frameSet);
+  fc = *this;
+  
+  fc.cursorGotoPixelLine(mx,my,_painter);
+
+  if (isCursorAtLineEnd()) return 0L;
+  unsigned int oldPTPos,oldDist = 0,dist = 0;
+
+  while (!fc.isCursorAtLineEnd())
+    {
+      oldPTPos = fc.getPTPos();
+      fc.cursorGotoRight(_painter);
+      dist = (fc.getPTPos() - oldPTPos) / 3;
+      if (mx >= oldPTPos - oldDist && mx <= fc.getPTPos() - dist || fc.getTextPos() == fc.getLineStartPos())
+	{
+	  fc.cursorGotoLeft(_painter);
+	  return fc.getParag()->getKWString()->data()[fc.getTextPos()].attrib;
+	}
+      oldDist = dist;
+    }
+  
+  return fc.getParag()->getKWString()->data()[fc.getTextPos()].attrib;
+}
+
 int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
 {
   // If we are already at lineend, then we wont move further
@@ -807,7 +834,7 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
 {
   if (!document->getFrameSet(frameSet - 1)->isVisible())
     return false;
-  
+
   if ( lineEndPos == parag->getTextLen() )
     {
       if ( parag->getNext() == 0L || outOfFrame)
