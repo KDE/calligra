@@ -1800,7 +1800,7 @@ bool RowLayout::load( const QDomElement& row, int yshift, PasteMode sp)
     if ( row.hasAttribute( "height" ) )
     {
 	if ( m_pTable->doc()->syntaxVersion() < 1.0 ) //compatibility with old format - was in millimeter
-	    m_fHeight = MM_TO_POINT( row.attribute( "height" ).toDouble( &ok ) );
+	    m_fHeight = qRound( MM_TO_POINT( row.attribute( "height" ).toDouble( &ok ) ) );
 	else
 	    m_fHeight = row.attribute( "height" ).toDouble( &ok );
 
@@ -2037,7 +2037,7 @@ bool ColumnLayout::load( const QDomElement& col, int xshift,PasteMode sp )
     if ( col.hasAttribute( "width" ) )
     {
 	if ( m_pTable->doc()->syntaxVersion() < 1.0 ) //combatibility to old format - was in millimeter
-	    m_fWidth = MM_TO_POINT ( col.attribute( "width" ).toDouble( &ok ) );
+	    m_fWidth = qRound( MM_TO_POINT ( col.attribute( "width" ).toDouble( &ok ) ) );
 	else
 	    m_fWidth = col.attribute( "width" ).toDouble( &ok );
 
