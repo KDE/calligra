@@ -3075,7 +3075,7 @@ bool KPrPage::haveASelectedPixmapObj()
     return false;
 }
 
-KoRect KPrPage::getBoundingRect(const KoRect &rect, KPresenterDoc *doc) const
+KoRect KPrPage::getBoundingRect(const KoRect &rect) const
 {
     KoRect boundingRect =rect ;
     QPtrListIterator<KPObject> it( m_objectList );
@@ -3545,7 +3545,7 @@ bool KPrPage::getProtectContent(bool p) const
     return p;
 }
 
-KoRect KPrPage::getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc) const
+KoRect KPrPage::getBoundingAllObjectRect(const KoRect &rect) const
 {
     KoRect boundingRect =rect ;
     QPtrListIterator<KPObject> it( m_objectList );

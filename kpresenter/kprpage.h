@@ -247,8 +247,8 @@ public:
     bool haveASelectedGroupObj();
     bool haveASelectedPixmapObj();
 
-    KoRect getBoundingRect(const KoRect &rect, KPresenterDoc *doc) const;
-    KoRect getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc) const;
+    KoRect getBoundingRect(const KoRect &rect) const;
+    KoRect getBoundingAllObjectRect(const KoRect &rect) const;
     bool chPic( KPresenterView *_view);
 
     //return command when we move object

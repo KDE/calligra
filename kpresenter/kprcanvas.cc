@@ -1144,8 +1144,8 @@ void KPrCanvas::calcBoundingRect()
 {
   m_boundingRect = KoRect();
 
-  m_boundingRect=m_activePage->getBoundingRect(m_boundingRect, m_view->kPresenterDoc());
-  m_boundingRect=stickyPage()->getBoundingRect(m_boundingRect, m_view->kPresenterDoc());
+  m_boundingRect=m_activePage->getBoundingRect(m_boundingRect);
+  m_boundingRect=stickyPage()->getBoundingRect(m_boundingRect);
 
 }
 
@@ -1153,8 +1153,8 @@ KoRect KPrCanvas::objectSelectedBoundingRect() const
 {
   KoRect objBoundingRect=KoRect();
 
-  objBoundingRect = m_activePage->getBoundingRect( objBoundingRect, m_view->kPresenterDoc());
-  objBoundingRect = stickyPage()->getBoundingRect( objBoundingRect, m_view->kPresenterDoc());
+  objBoundingRect = m_activePage->getBoundingRect( objBoundingRect);
+  objBoundingRect = stickyPage()->getBoundingRect( objBoundingRect);
   return objBoundingRect;
 }
 
@@ -6314,8 +6314,8 @@ KoRect KPrCanvas::zoomAllObject()
 {
     KoRect objBoundingRect=KoRect();
 
-    objBoundingRect = m_activePage->getBoundingAllObjectRect( objBoundingRect, m_view->kPresenterDoc());
-    objBoundingRect = stickyPage()->getBoundingAllObjectRect( objBoundingRect, m_view->kPresenterDoc());
+    objBoundingRect = m_activePage->getBoundingAllObjectRect( objBoundingRect);
+    objBoundingRect = stickyPage()->getBoundingAllObjectRect( objBoundingRect);
     return objBoundingRect;
 }
 
