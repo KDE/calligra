@@ -144,6 +144,7 @@ public:
 
     virtual void load( QDomElement &attributes, bool loadFrames = true );
 
+    virtual void finalize();
     virtual void zoom( bool forPrint );
     void unzoom();
     //virtual void preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags );

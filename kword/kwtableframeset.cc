@@ -1990,7 +1990,10 @@ void KWTableFrameSet::finalize( ) {
     //kdDebug(32004) << "KWTableFrameSet::finalize" << endl;
 
     for ( unsigned int i = 0; i < m_cells.count(); i++ )
+    {
         position(m_cells.at( i ));
+        m_cells.at( i )->finalize();
+    }
 
     recalcCols();
     recalcRows();

@@ -1781,6 +1781,14 @@ void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
     //kdDebug(32001) << "KWTextFrameSet::load done" << endl;
 }
 
+void KWTextFrameSet::finalize()
+{
+    KWFrameSet::finalize();
+    m_textobj->formatMore( 2 ); // just to get the timer going
+    // This is important in case of auto-resized frames or table cells,
+    // which come from an import filter, which didn't give them the right size.
+}
+
 void KWTextFrameSet::zoom( bool forPrint )
 {
     KWFrameSet::zoom( forPrint );
@@ -2126,14 +2134,16 @@ void KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int d
         // already have left in this page. Otherwise we'll loop infinitely.
         QPtrList<KWFrame> framesToCopy = m_doc->framesToCopyOnNewPage( m_doc->numPages() - 1 );
         QPtrListIterator<KWFrame> frameIt( framesToCopy );
-        int heightWeWillGet = 0;
+        int heightWeWillGet = 0; // in LU
         for ( ; frameIt.current(); ++frameIt )
             if (frameIt.current()->frameSet() == this &&
                 frameIt.current()->newFrameBehavior()==KWFrame::Reconnect)
-                heightWeWillGet += frameIt.current()->height();
+                heightWeWillGet += m_doc->ptToLayoutUnitPixY( frameIt.current()->height() );
 
         kdDebug(32002) << "height we will get in the new page:" << heightWeWillGet << " current overflow height:" << difference << endl;
-        if ( heightWeWillGet < difference )
+        // This logic doesn't applies to tables though, since they can be broken over multiple pages
+        // TODO: lastFormatted->containsTable() or so (containsPageBreakableItem rather).
+        if ( heightWeWillGet < difference && !grpMgr )
         {
             kdDebug(32002) << "not enough height on the new page, not worth it" << endl;
             m_textobj->setLastFormattedParag( 0 );
