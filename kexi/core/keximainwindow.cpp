@@ -319,7 +319,7 @@ bool KexiMainWindow::openProject(KexiProjectData *projectData)
 			not_found_msg += ( (*it).second + " - " + i18n("unknown object type \"%1\"").arg((*it).first)+"<br>" );
 			continue;
 		}
-		KexiPart::Item &item = d->prj->item(i, (*it).second);
+		KexiPart::Item item = d->prj->item(i, (*it).second);
 		if (item.isNull()) {
 			not_found_msg += ( (*it).second + " - " + i18n("object not found") +"<br>" );
 			continue;
@@ -829,7 +829,7 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 bool
 KexiMainWindow::executeObject(const QString& mime, const QString& name)
 {
-	KexiPart::Item &item = d->prj->item(mime,name);
+	KexiPart::Item item = d->prj->item(mime,name);
 	if (item.isNull())
 		return false;
 	return executeObject(item);
