@@ -121,6 +121,8 @@ public:
 
 	virtual QRect boundingBox() const;
 
+	virtual VObject *clone();
+
 private:
 	void drawBox( QPainter &painter, double x, double y, uint handleSize = 3 ); // helper function for draw()
 

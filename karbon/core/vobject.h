@@ -33,6 +33,8 @@ public:
 	void setState( const VState state ) { m_state = state; }
 	VState state() const { return m_state; }
 
+	virtual VObject *clone() = 0;
+
 private:
 	VState m_state;
 };

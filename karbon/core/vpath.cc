@@ -991,3 +991,10 @@ VPath::boundingBox() const
 
 	return rect;
 }
+
+VObject *
+VPath::clone()
+{
+	return new VPath( *this );
+}
+

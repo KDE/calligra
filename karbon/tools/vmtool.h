@@ -2,13 +2,14 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#ifndef __VTOOL_H__
-#define __VTOOL_H__
+#ifndef __VMTOOL_H__
+#define __VMTOOL_H__
 
 #include <math.h>
 #include <qpoint.h>
 
 #include "vglobal.h"
+#include "vtool.h"
 
 class QEvent;
 
@@ -16,11 +17,11 @@ class KarbonPart;
 class KarbonView;
 class VCommand;
 
-class VTool
+class VMTool : public VTool
 {
 public:
-	VTool( KarbonPart* part = 0L, bool polar = false );
-	virtual ~VTool() {}
+	VMTool( KarbonPart* part = 0L, bool polar = false );
+	virtual ~VMTool() {}
 
 	// derived tools implement specialised commands. d1, d2 are either
 	// width, height or radius, angle.
@@ -30,37 +31,17 @@ public:
 	virtual void drawTemporaryObject(
 		KarbonView* view, const QPoint& p, double d1, double d2 ) = 0;
 
+	// allows for things like copying the object(s) to manipulate
+	virtual void startDragging() = 0;
+
 	virtual bool eventFilter( KarbonView* view, QEvent* event );
-
-	KarbonPart* part() const { return m_part; }
-
-protected:
-	// that's our part:
-	KarbonPart* m_part;
 
 protected:	// for selection-tool. it has to reimplement eventFilter.
 	inline void recalcCoords();
-
-	// states:
-	bool m_isDragging;
-	bool m_isSquare;
-	bool m_isCentered;
-
-	// calculate width, height or radius, angle?
-	bool m_calcPolar;
-
-	// input (mouse coordinates):
-	QPoint m_fp;
-	QPoint m_lp;
-
-	// output:
-	QPoint m_p;
-	double m_d1;
-	double m_d2;
 };
 
 inline void
-VTool::recalcCoords()
+VMTool::recalcCoords()
 {
 	// calculate radius and angle:
 	if( m_calcPolar )
@@ -87,8 +68,8 @@ VTool::recalcCoords()
 		const int m_sign1 = m_d1 < 0.0 ? -1 : +1;
 		const int m_sign2 = m_d2 < 0.0 ? -1 : +1;
 
-		m_d1 = QABS( m_d1 );
-		m_d2 = QABS( m_d2 );
+		//m_d1 = QABS( m_d1 );
+		//m_d2 = QABS( m_d2 );
 
 		if ( m_isSquare )
 		{
@@ -98,8 +79,8 @@ VTool::recalcCoords()
 				m_d1 = m_d2;
 		}
 
-		m_p.setX( int( m_fp.x() - ( m_sign1 < 0.0 ? m_d1 : 0.0 ) ) );
-		m_p.setY( int( m_fp.y() - ( m_sign2 < 0.0 ? m_d2 : 0.0 ) ) );
+		m_p.setX( int( m_fp.x() ) /* - ( m_sign1 < 0.0 ? m_d1 : 0.0 */ );
+		m_p.setY( int( m_fp.y() ) /* - ( m_sign2 < 0.0 ? m_d2 : 0.0 */ );
 
 		if ( m_isCentered )
 		{

@@ -5,13 +5,13 @@
 #ifndef __VMTOOLSELECT_H__
 #define __VMTOOLSELECT_H__
 
-#include "vtool.h"
+#include "vmtool.h"
 
 class KarbonPart;
 
 // A singleton state to select object(s)
 
-class VMToolSelect : public VTool
+class VMToolSelect : public VMTool
 {
 public:
 	virtual ~VMToolSelect();
@@ -22,8 +22,7 @@ public:
 	virtual void drawTemporaryObject(
 		KarbonView* view, const QPoint& p, double d1, double d2 );
 
-	// selection-tool needs it's own event-filter:
-	//virtual bool eventFilter( KarbonView* view, QEvent* event );
+	virtual void startDragging();
 
 protected:
 	VMToolSelect( KarbonPart* part );
