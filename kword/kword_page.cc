@@ -192,7 +192,7 @@ unsigned int KWPage::ptColumnSpacing()
 void KWPage::init()
 {
     if ( fc->getParag() )
-    {   
+    {  
         gui->getView()->updateStyle( fc->getParag()->getParagLayout()->getName(), false );
         gui->getView()->setFormat( *( ( KWFormat* )fc ), true, false );
         gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
@@ -1351,7 +1351,8 @@ void KWPage::recalcWholeText( bool _cursor = false, bool _fast = false )
     if ( recalcingText ) return;
 
     setCursor( waitCursor );
-
+    dynamic_cast<QWidget*>( parent() )->setCursor( waitCursor );
+    
     recalcingText = true;
     QPainter painter;
     painter.begin( this );
@@ -1367,8 +1368,8 @@ void KWPage::recalcWholeText( bool _cursor = false, bool _fast = false )
         while ( !bend )
         {
             bend = !_fc.makeNextLineLayout( painter );
-            if (/*_fast &&*/ doc->getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->y() > static_cast<int>(yOffset + height() + 20))
-                bend = true;
+            //if (/*_fast &&*/ doc->getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->y() > static_cast<int>(yOffset + height() + 20))
+            //bend = true;
         }
     }
 
@@ -1377,7 +1378,8 @@ void KWPage::recalcWholeText( bool _cursor = false, bool _fast = false )
     recalcingText = false;
 
     setCursor( ibeamCursor );
-
+    dynamic_cast<QWidget*>( parent() )->setCursor( arrowCursor );
+    
     if ( blinking )
         startBlinkCursor();
 }

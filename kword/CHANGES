@@ -1201,3 +1201,11 @@ Reggie, 16.5.1999:
 Reggie, 18.5.1999:
 ------------------
 - QChar related fix
+
+Reggie, 21.5.1999:
+------------------
+- The whole document needs to be calcualted at the beginning
+  and when the pageformat changes 
+  (although this may take a bit long for large docs)
+- Fixed loading templates and loading docs using the template dialog (Also stores and embedded parts
+  are loaded in these cases correctly)
