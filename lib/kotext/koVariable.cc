@@ -291,7 +291,7 @@ void KoVariableCollection::changeTypeOfVariable()
     {
         if( m_varSelected )
         {
-            m_varSelected->setVariableSubType( *it );
+            m_varSelected->setVariableSubType( m_varSelected->variableSubType(*it) );
             recalcVariables(m_varSelected);
         }
     }
@@ -1122,6 +1122,7 @@ void KoFieldVariable::recalc()
         case VST_POSTAL_CODE:
         case VST_CITY:
         case VST_STREET:
+        case VST_AUTHORTITLE:
         {
             KoDocumentInfo * info = m_doc->documentInfo();
             KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
@@ -1147,6 +1148,8 @@ void KoFieldVariable::recalc()
                     value = authorPage->city();
                 else if ( m_subtype == VST_STREET )
                     value = authorPage->street();
+                else if ( m_subtype == VST_AUTHORTITLE )
+                    value = authorPage->title();
             }
         }
         break;
@@ -1176,23 +1179,77 @@ void KoFieldVariable::recalc()
 
 QStringList KoFieldVariable::actionTexts()
 {
+    // NOTE: if you change here, also change fieldSubType()
     QStringList lst;
-    lst << i18n( "File Name" );
-    lst << i18n( "Directory Name" ); // is "Name" necessary ?
-    lst << i18n( "Author Name" ); // is "Name" necessary ?
+    lst << i18n( "Author Name" );
+    lst << i18n( "Title" );
+    lst << i18n( "Company" );
     lst << i18n( "Email" );
-    lst << i18n( "Company Name" ); // is "Name" necessary ?
-    lst << i18n( "Directory and File Name" );
-    lst << i18n( "File Name Without Extension" );
     lst << i18n( "Telephone");
     lst << i18n( "Fax");
-    lst << i18n( "Country");
-    lst << i18n( "Document Title" );
-    lst << i18n( "Document Abstract" );
+    lst << i18n( "Street" );
     lst << i18n( "Postal Code" );
     lst << i18n( "City" );
-    lst << i18n( "Street" );
+    lst << i18n( "Country");
+
+    lst << i18n( "Document Title" );
+    lst << i18n( "Document Abstract" );
+
+    lst << i18n( "File Name" );
+    lst << i18n( "File Name Without Extension" );
+    lst << i18n( "Directory Name" ); // is "Name" necessary ?
+    lst << i18n( "Directory and File Name" );
     return lst;
+}
+
+short int KoFieldVariable::variableSubType( short int menuNumber )
+{
+    return fieldSubType(menuNumber);
+}
+
+KoFieldVariable::FieldSubType KoFieldVariable::fieldSubType(short int menuNumber)
+{
+    // NOTE: if you change here, also change actionTexts()
+    FieldSubType v;
+    switch (menuNumber)
+    {
+        case 0: v = VST_AUTHORNAME;
+                break;
+        case 1: v = VST_AUTHORTITLE;
+                break;
+        case 2: v = VST_COMPANYNAME;
+                break;
+        case 3: v = VST_EMAIL;
+                break;
+        case 4: v = VST_TELEPHONE;
+                break;
+        case 5: v = VST_FAX;
+                break;
+        case 6: v = VST_STREET;
+                break;
+        case 7: v = VST_POSTAL_CODE;
+                break;
+        case 8: v = VST_CITY;
+                break;
+        case 9: v = VST_COUNTRY;
+                break;
+        case 10: v = VST_TITLE;
+                break;
+        case 11: v = VST_ABSTRACT;
+                break;
+        case 12: v = VST_FILENAME;
+                break;
+        case 13: v = VST_FILENAMEWITHOUTEXTENSION;
+                break;
+        case 14: v = VST_DIRECTORYNAME;
+                break;
+        case 15: v = VST_PATHFILENAME;
+                break;
+        default:
+            v = VST_NONE;
+            break;
+    }
+    return v;
 }
 
 QStringList KoFieldVariable::subTypeText()

@@ -525,7 +525,7 @@ void KWView::setupActions()
                                             actionCollection(), "insert_variable" );
 
     // The last argument is only needed if a submenu is to be created
-    addVariableActions( VT_FIELD, KoFieldVariable::actionTexts(), actionInsertVariable, i18n("&Property") );
+    addVariableActions( VT_FIELD, KoFieldVariable::actionTexts(), actionInsertVariable, i18n("Document &Information") );
     addVariableActions( VT_DATE, KoDateVariable::actionTexts(), actionInsertVariable, i18n("&Date") );
     addVariableActions( VT_TIME, KoTimeVariable::actionTexts(), actionInsertVariable, i18n("&Time") );
     addVariableActions( VT_PGNUM, KoPgNumVariable::actionTexts(), actionInsertVariable, i18n("&Page") );
@@ -2712,7 +2712,10 @@ void KWView::insertVariable()
             kdWarning() << "Action not found in m_variableDefMap." << endl;
         else
         {
-            edit->insertVariable( (*it).type, (*it).subtype );
+            if ( (*it).type == VT_FIELD )
+                edit->insertVariable( (*it).type, KoFieldVariable::fieldSubType( (*it).subtype ) );
+            else
+                edit->insertVariable( (*it).type, (*it).subtype );
         }
     }
 }

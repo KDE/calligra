@@ -317,6 +317,10 @@ public:
     virtual QStringList subTypeFormat();
     virtual void setVariableSubType( short int /*subtype*/) {}
 
+    /**
+     * Converts the @p menuNumber to variable subtype number (VST_x)
+     */
+    virtual short int variableSubType(short int menuNumber){ return menuNumber; }
 
 protected:
     /** Variable should reimplement this to implement saving. */
@@ -422,7 +426,7 @@ class KoFieldVariable : public KoVariable
 public:
     KoFieldVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KoDocument *_doc );
 
-    // Do not change existing values
+    // Do not change existing values, they are saved in document files
     enum FieldSubType { VST_NONE = -1,
                         VST_FILENAME = 0, VST_DIRECTORYNAME = 1,
                         VST_AUTHORNAME = 2, VST_EMAIL = 3, VST_COMPANYNAME = 4,
@@ -430,7 +434,8 @@ public:
                         VST_TELEPHONE = 7, VST_FAX = 8, VST_COUNTRY = 9,
                         // room for more 'author' page info fields if asked for
                         VST_TITLE = 10, VST_ABSTRACT = 11,
-                        VST_POSTAL_CODE = 12, VST_CITY = 13, VST_STREET = 14};
+                        VST_POSTAL_CODE = 12, VST_CITY = 13, VST_STREET = 14,
+                        VST_AUTHORTITLE = 15};
 
     virtual VariableType type() const
     { return VT_FIELD; }
@@ -443,6 +448,14 @@ public:
     QString value() const { return m_varValue.toString(); }
 
     static QStringList actionTexts();
+    /**
+     * Converts @p menuNumber to field variable subtype number
+     */
+    virtual short int variableSubType( short int menuNumber );
+    /**
+     * Converts @p menuNumber to field variable subtype number
+     */
+    static FieldSubType fieldSubType( short int menuNumber);
 
     virtual QStringList subTypeText();
     virtual void setVariableSubType( short int type){m_subtype=type;}
