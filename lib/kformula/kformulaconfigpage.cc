@@ -49,7 +49,11 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     // fonts
 
     QWidget* fontWidget = new QWidget( box );
-    QGridLayout* fontLayout = new QGridLayout( fontWidget, 5, 1, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout* fontLayout = new QGridLayout( fontWidget, 5, 3, KDialog::marginHint(), KDialog::spacingHint() );
+
+    fontLayout->setColStretch(0, 0);
+    fontLayout->setColStretch(1, 1);
+    fontLayout->setColStretch(2, 0);
 
     defaultFont = contextStyle.getDefaultFont();
     nameFont = contextStyle.getNameFont();
@@ -57,41 +61,37 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     operatorFont = contextStyle.getOperatorFont();
 
     connect( buildFontLine( fontWidget, fontLayout, 0,
-                            defaultFont, i18n( "Default font" ), defaultFontName ), SIGNAL( clicked() ),
+                            defaultFont, i18n( "Default font:" ), defaultFontName ), SIGNAL( clicked() ),
              this, SLOT( selectNewDefaultFont() ) );
     connect( buildFontLine( fontWidget, fontLayout, 1,
-                            nameFont, i18n( "Name font" ), nameFontName ), SIGNAL( clicked() ),
+                            nameFont, i18n( "Name font:" ), nameFontName ), SIGNAL( clicked() ),
              this, SLOT( selectNewNameFont() ) );
     connect( buildFontLine( fontWidget, fontLayout, 2,
-                            numberFont, i18n( "Number font" ), numberFontName ), SIGNAL( clicked() ),
+                            numberFont, i18n( "Number font:" ), numberFontName ), SIGNAL( clicked() ),
              this, SLOT( selectNewNumberFont() ) );
     connect( buildFontLine( fontWidget, fontLayout, 3,
-                            operatorFont, i18n( "Operator font" ), operatorFontName ), SIGNAL( clicked() ),
+                            operatorFont, i18n( "Operator font:" ), operatorFontName ), SIGNAL( clicked() ),
              this, SLOT( selectNewOperatorFont() ) );
 
-    QWidget* sizeContainer = new QWidget( fontWidget );
-    QGridLayout* sizeLayout = new QGridLayout( sizeContainer, 1, 3 );
+    QLabel* sizeTitle = new QLabel( i18n( "Base size:" ), fontWidget );
+    fontLayout->addWidget( sizeTitle, 4, 0 );
 
-    sizeLayout->setColStretch(0, 0);
-    sizeLayout->setColStretch(1, 1);
-    sizeLayout->setColStretch(2, 0);
+    QWidget* baseSpinContainer = new QWidget( fontWidget );
+    QGridLayout* baseSpinLayout = new QGridLayout( baseSpinContainer, 1, 2 );
+    baseSpinLayout->setColStretch(1, 1);
 
-    QLabel* sizeTitle = new QLabel( i18n( "Base Size" ), sizeContainer );
-    QLabel* empty = new QLabel( "", sizeContainer );
-    sizeSpin = new QSpinBox( 8, 72, 1, sizeContainer );
+    sizeSpin = new QSpinBox( 8, 72, 1, baseSpinContainer );
     sizeSpin->setValue( contextStyle.baseSize() );
+    sizeSpin->setFixedSize(sizeSpin->sizeHint());
+    baseSpinLayout->addWidget( sizeSpin, 0, 0);
 
-    sizeLayout->addWidget( sizeTitle, 0, 0 );
-    sizeLayout->addWidget( empty, 0, 1 );
-    sizeLayout->addWidget( sizeSpin, 0, 2 );
-
-    fontLayout->addWidget( sizeContainer, 4, 0 );
+    fontLayout->addWidget( baseSpinContainer, 4, 1 );
 
     connect( sizeSpin, SIGNAL( valueChanged( int ) ), this, SLOT( baseSizeChanged( int ) ) );
 
     // syntax highlighting
 
-    syntaxHighlighting = new QCheckBox( i18n( "Syntax Highlighting" ), box );
+    syntaxHighlighting = new QCheckBox( i18n( "Syntax highlighting" ), box );
     syntaxHighlighting->setChecked( contextStyle.syntaxHighlighting() );
 
     QWidget* widget = new QWidget( box );
@@ -101,7 +101,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     layout->setMargin( KDialog::marginHint() );
 
     QLabel* defaultLabel = new QLabel( widget, "defaultLabel" );
-    defaultLabel->setText( i18n( "default color" ) );
+    defaultLabel->setText( i18n( "Default color:" ) );
     layout->addWidget( defaultLabel, 0, 0 );
 
     defaultColorBtn = new KColorButton( widget, "defaultColor" );
@@ -110,7 +110,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
 
     QLabel* numberLabel = new QLabel( widget, "numberLabel" );
-    numberLabel->setText( i18n( "number color" ) );
+    numberLabel->setText( i18n( "Number color:" ) );
     layout->addWidget( numberLabel, 1, 0 );
 
     numberColorBtn = new KColorButton( widget, "numberColor" );
@@ -119,7 +119,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
 
     QLabel* operatorLabel = new QLabel( widget, "operatorLabel" );
-    operatorLabel->setText( i18n( "operator color" ) );
+    operatorLabel->setText( i18n( "Operator color:" ) );
     layout->addWidget( operatorLabel, 2, 0 );
 
     operatorColorBtn = new KColorButton( widget, "operatorColor" );
@@ -128,7 +128,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
 
     QLabel* emptyLabel = new QLabel( widget, "emptyLabel" );
-    emptyLabel->setText( i18n( "empty color" ) );
+    emptyLabel->setText( i18n( "Empty color:" ) );
     layout->addWidget( emptyLabel, 3, 0 );
 
     emptyColorBtn = new KColorButton( widget, "emptyColor" );
@@ -137,7 +137,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 
 
     QLabel* errorLabel = new QLabel( widget, "errorLabel" );
-    errorLabel->setText( i18n( "error color" ) );
+    errorLabel->setText( i18n( "Error color:" ) );
     layout->addWidget( errorLabel, 4, 0 );
 
     errorColorBtn = new KColorButton( widget, "errorColor" );
@@ -158,29 +158,19 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 QPushButton* ConfigurePage::buildFontLine( QWidget* fontWidget, QGridLayout* layout, int number,
                                            QFont font, QString name, QLabel*& fontName )
 {
-    QWidget* fontContainer = new QWidget( fontWidget );
-    QGridLayout* fontLayout = new QGridLayout( fontContainer, 1, 3 );
-
-    fontLayout->setColStretch(0, 0);
-    fontLayout->setColStretch(1, 1);
-    fontLayout->setColStretch(2, 0);
-
-    QLabel* fontTitle = new QLabel( name, fontContainer );
-
-    //font = new QFont();
-    //font->fromString( defaultFont );
+    QLabel* fontTitle = new QLabel( name, fontWidget );
 
     QString labelName = font.family() + ' ' + QString::number( font.pointSize() );
-    fontName = new QLabel( labelName, fontContainer );
+    fontName = new QLabel( labelName, fontWidget );
     fontName->setFont( font );
+    fontName->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 
-    QPushButton* chooseButton = new QPushButton( i18n( "Choose..." ), fontContainer );
+    QPushButton* chooseButton = new QPushButton( i18n( "Choose..." ), fontWidget );
 
-    fontLayout->addWidget( fontTitle, 0, 0 );
-    fontLayout->addWidget( fontName, 0, 1 );
-    fontLayout->addWidget( chooseButton, 0, 2 );
+    layout->addWidget( fontTitle, number, 0 );
+    layout->addWidget( fontName, number, 1 );
+    layout->addWidget( chooseButton, number, 2 );
 
-    layout->addWidget( fontContainer, number, 0 );
     return chooseButton;
 }
 
