@@ -75,9 +75,7 @@ VColor::pseudoValues( int& v1, int& v2, int& v3 ) const
 }
 
 void
-VColor::values(
-	float* v1, float* v2,
-	float* v3, float* v4 ) const
+VColor::values( float* v1, float* v2, float* v3, float* v4 ) const
 {
 	if( v1 )
 		*v1 = m_value[0];
@@ -90,9 +88,7 @@ VColor::values(
 }
 
 void
-VColor::setValues(
-	const float* v1, const float* v2,
-	const float* v3, const float* v4 )
+VColor::setValues( const float* v1, const float* v2, const float* v3, const float* v4 )
 {
 	if( v1 )
 		m_value[0] = *v1;
@@ -310,11 +306,15 @@ VColor::load( const QDomElement& element )
 QColor
 VColor::toQColor() const
 {
-	if( m_colorSpace == rgb )
-	{
+	switch ( m_colorSpace ) {
+	case rgb:
 		return QColor( int( 255 * m_value[0] ), int( 255 * m_value[1] ), int( 255 * m_value[2] ));
-	}
-	else
+		break;
+	case cmyk:
+		return QColor( int( 255 * ( 1.0 - m_value[0] - m_value[3] ) ), int( 255 * ( 1.0 - m_value[1] - m_value[3] ) ), int( 255 * ( 1.0 - m_value[2] - m_value[3] ) ) );
+		break;
+	default:
 		return QColor();
+	}
 }
 
