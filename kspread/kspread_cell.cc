@@ -1727,6 +1727,7 @@ bool KSpreadCell::calc(bool delay)
     setFlag(Flag_UpdatingDeps);
 
     KSpreadDependency * d = 0;
+    KSpreadCell *cell = 0;
     // Every cell that references us must calculate with this new value
     for (d = m_lstDependingOnMe.first(); d != NULL; d = m_lstDependingOnMe.next())
     {
@@ -1734,7 +1735,9 @@ bool KSpreadCell::calc(bool delay)
       {
         for (int r = d->Top(); r <= d->Bottom(); r++)
         {
-          d->Table()->cellAt( c, r )->calc();
+            cell = d->Table()->cellAt( c, r );
+            cell->clearAllErrors();
+            cell->calc();
         }
       }
     }
