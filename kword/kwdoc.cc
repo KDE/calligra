@@ -2425,7 +2425,7 @@ KWFrame * KWDocument::frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool
             if (allreadyFoundArgumentFrame) {
                 if(f->frameAtPos(nPoint, true)) {
                     if ( border ) *border = true;
-                    return frame;
+                    return f;
                 }
                 if(f->frameAtPos(nPoint))
                     return deepestInlineFrame(f,nPoint,border);
