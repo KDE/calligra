@@ -43,6 +43,7 @@ class KWPaintWindow;
 #include <koRuler.h>
 #include <kcolordlg.h>
 #include <koTabChooser.h>
+#include <knewpanner.h>
 
 #include "kword.h"
 #include "kword_page.h"
@@ -56,6 +57,7 @@ class KWPaintWindow;
 #include "tabledia.h"
 #include "insdia.h"
 #include "deldia.h"
+#include "docstruct.h"
 
 #include <koPageLayoutDia.h>
 #include <koPartSelectDia.h>
@@ -120,6 +122,7 @@ public:
   virtual void viewTableGrid();
   virtual void viewHeader();
   virtual void viewFooter();
+  virtual void viewDocStruct();
 
   virtual void insertPicture();
   virtual void insertClipart();
@@ -280,6 +283,7 @@ protected:
   CORBA::Long m_idMenuView_TableGrid;
   CORBA::Long m_idMenuView_Header;
   CORBA::Long m_idMenuView_Footer;
+  CORBA::Long m_idMenuView_DocStruct;
  
   // insert menu
   OpenPartsUI::Menu_var m_vMenuInsert;
@@ -479,6 +483,23 @@ protected:
 /* Class: KWordGUI                                                */
 /******************************************************************/
 
+class KExtPanner : public KNewPanner
+{
+  Q_OBJECT
+
+public:
+  KExtPanner(QWidget *parent = 0,const char *name = 0,Orientation orient = Vertical,Units units = Percent,int pos = 50)
+    : KNewPanner(parent,name,orient,units,pos) {}
+
+protected:
+  void resizeEvent(QResizeEvent *e)
+    { KNewPanner::resizeEvent(e); emit pannerResized(); }
+
+signals:
+  void pannerResized();
+
+};
+
 class KWordGUI : public QWidget
 {
   Q_OBJECT
@@ -508,7 +529,11 @@ public:
     { return r_horz; }
   KoTabChooser *getTabChooser()
     { return tabChooser; }
+  KWDocStruct *getDocStruct() 
+    { return docStruct; }
   
+  void showDocStruct(bool __show);
+
   void setOffset(int _x,int _y)
     { xOffset = _x; yOffset = _y; }
 
@@ -524,11 +549,11 @@ protected slots:
   void scrollH(int);
   void scrollV(int);
   void unitChanged(QString);
+  void reorganize();
 
 protected:
   void resizeEvent(QResizeEvent *e);
   void keyPressEvent(QKeyEvent *e);
-  void reorganize();
 
   int xOffset,yOffset;
   bool _show;
@@ -538,6 +563,10 @@ protected:
   KWordDocument *doc;
   KWordView *view;
   KoTabChooser *tabChooser;
+  KWDocStruct *docStruct;
+  KExtPanner *panner;
+  QWidget *left;
+  bool _showStruct;
 
 };
 

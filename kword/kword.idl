@@ -23,6 +23,7 @@ module KWord
       slot void viewTableGrid();
       slot void viewHeader();
       slot void viewFooter();
+      slot void viewDocStruct();
       
       slot void insertPicture();
       slot void insertClipart();

@@ -734,6 +734,13 @@ void KWordView::viewFooter()
 }
 
 /*===============================================================*/
+void KWordView::viewDocStruct()
+{
+  m_vMenuView->setItemChecked(m_idMenuView_DocStruct,!m_vMenuView->isItemChecked(m_idMenuView_DocStruct));
+  gui->showDocStruct(m_vMenuView->isItemChecked(m_idMenuView_DocStruct));
+}
+
+/*===============================================================*/
 void KWordView::insertPicture()
 {
   QString file = KFilePreviewDialog::getOpenFileName(0,
@@ -1499,12 +1506,15 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuView->insertSeparator(-1);
   m_idMenuView_Header = m_vMenuView->insertItem4( i18n("&Header"), this, "viewHeader", 0, -1, -1 );
   m_idMenuView_Footer = m_vMenuView->insertItem4( i18n("F&ooter"), this, "viewFooter", 0, -1, -1 );
+  m_vMenuView->insertSeparator(-1);
+  m_idMenuView_DocStruct = m_vMenuView->insertItem4( i18n("&Document Structure"), this, "viewDocStruct", 0, -1, -1 );
 
   m_vMenuView->setCheckable(true);
   m_vMenuView->setItemChecked(m_idMenuView_FrameBorders,true);
   m_vMenuView->setItemChecked(m_idMenuView_TableGrid,true);
   m_vMenuView->setItemChecked(m_idMenuView_Header,m_pKWordDoc->hasHeader());
   m_vMenuView->setItemChecked(m_idMenuView_Footer,m_pKWordDoc->hasFooter());
+  m_vMenuView->setItemChecked(m_idMenuView_DocStruct,false);
 
   // insert menu
   _menubar->insertMenu( i18n( "&Insert" ), m_vMenuInsert, -1, -1 );
@@ -2512,13 +2522,21 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
 {
   doc = _doc;
   view = _view;
+  _showStruct = false;
 
   r_horz = r_vert = 0;
 
-  paperWidget = new KWPage(this,doc,this);
+  panner = new KExtPanner(this);
+  left = new QWidget(panner);
+  left->show();
+  paperWidget = new KWPage(left,doc,this);
+  docStruct = new KWDocStruct(panner,doc,this);
 
-  s_vert = new QScrollBar(QScrollBar::Vertical,this);
-  s_horz = new QScrollBar(QScrollBar::Horizontal,this);
+  panner->activate(docStruct,left);
+  panner->setSeparatorPos(0);
+
+  s_vert = new QScrollBar(QScrollBar::Vertical,left);
+  s_horz = new QScrollBar(QScrollBar::Horizontal,left);
   QObject::connect(s_vert,SIGNAL(valueChanged(int)),this,SLOT(scrollV(int)));
   QObject::connect(s_horz,SIGNAL(valueChanged(int)),this,SLOT(scrollH(int)));
   s_vert->setValue(s_vert->maxValue());
@@ -2534,10 +2552,10 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
   KoKWHeaderFooter hf;
   doc->getPageLayout(layout,cols,hf);
 
-  tabChooser = new KoTabChooser(this,KoTabChooser::TAB_ALL);
+  tabChooser = new KoTabChooser(left,KoTabChooser::TAB_ALL);
 
-  r_horz = new KoRuler(this,paperWidget,KoRuler::HORIZONTAL,layout,KoRuler::F_INDENTS | KoRuler::F_TABS,tabChooser);
-  r_vert = new KoRuler(this,paperWidget,KoRuler::VERTICAL,layout,0);
+  r_horz = new KoRuler(left,paperWidget,KoRuler::HORIZONTAL,layout,KoRuler::F_INDENTS | KoRuler::F_TABS,tabChooser);
+  r_vert = new KoRuler(left,paperWidget,KoRuler::VERTICAL,layout,0);
   connect(r_horz,SIGNAL(newPageLayout(KoPageLayout)),view,SLOT(newPageLayout(KoPageLayout)));
   connect(r_horz,SIGNAL(newLeftIndent(int)),paperWidget,SLOT(newLeftIndent(int)));
   connect(r_horz,SIGNAL(newFirstIndent(int)),paperWidget,SLOT(newFirstIndent(int)));
@@ -2582,6 +2600,7 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
   scrollV(0);
   paperWidget->setXOffset(xOffset);
   paperWidget->setYOffset(yOffset);
+  docStruct->show();
 
   reorganize();
 
@@ -2602,6 +2621,8 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
   connect(r_horz,SIGNAL(tabListChanged(QList<KoTabulator>*)),paperWidget,SLOT(tabListChanged(QList<KoTabulator>*)));
 
   paperWidget->forceFullUpdate();
+  panner->setAbsSeparatorPos(0,true); 
+  connect(panner,SIGNAL(pannerResized()),this,SLOT(reorganize()));
 }
 
 /*================================================================*/
@@ -2668,6 +2689,7 @@ void KWordGUI::keyPressEvent(QKeyEvent* e)
 /*================================================================*/
 void KWordGUI::reorganize()
 {
+  disconnect(panner,SIGNAL(pannerResized()),this,SLOT(reorganize()));
   if (_show)
     {
       s_vert->show(); 
@@ -2675,14 +2697,17 @@ void KWordGUI::reorganize()
       r_vert->show();
       r_horz->show();
       tabChooser->show();
-      
+
       tabChooser->setGeometry(0,0,20,20);
 
-      r_horz->setGeometry(20,0,width() - 36,20);
-      r_vert->setGeometry(0,20,20,height() - 36);
-      s_horz->setGeometry(0,height() - 16,width() - 16,16);
-      s_vert->setGeometry(width() - 16,0,16,height() - 16);
-      paperWidget->setGeometry(20,20,width() - 36,height() - 36);
+      if (!_showStruct || _showStruct && panner->absSeparatorPos() == 0)
+	panner->setAbsSeparatorPos(_showStruct ? (width() / 100) * 20 : 0,true); 
+      panner->setGeometry(0,0,width(),height());
+      paperWidget->setGeometry(20,20,left->width() - 36,left->height() - 36);
+      r_horz->setGeometry(20,0,left->width() - 36,20);
+      r_vert->setGeometry(0,20,20,left->height() - 36);
+      s_horz->setGeometry(0,left->height() - 16,left->width() - 16,16);
+      s_vert->setGeometry(left->width() - 16,0,16,left->height() - 16);
 
       setRanges();
     }
@@ -2694,8 +2719,12 @@ void KWordGUI::reorganize()
       r_horz->hide();
       tabChooser->hide();
 
-      paperWidget->setGeometry(0,0,width(),height());
+      panner->setAbsSeparatorPos(0,true); 
+      panner->setGeometry(0,0,width(),height());
+      paperWidget->setGeometry(20,20,left->width() - 36,left->height() - 36);
+
     }
+  connect(panner,SIGNAL(pannerResized()),this,SLOT(reorganize()));
 }
 
 /*================================================================*/
@@ -2704,3 +2733,18 @@ void KWordGUI::unitChanged(QString u)
   doc->setUnit(u); 
   doc->setUnitToAll(); 
 }
+
+/*================================================================*/
+void KWordGUI::showDocStruct(bool __show)
+{ 
+  if (!__show) 
+    panner->setAbsSeparatorPos(0,true); 
+  else 
+    panner->setAbsSeparatorPos((width() / 100) * 20,true); 
+
+  _showStruct = __show;
+
+  reorganize();
+}
+
+

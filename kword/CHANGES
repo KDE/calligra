@@ -775,3 +775,12 @@ Reggie, 31.1.1999:
 Reggie, 1.2.1999:
 -----------------
 - Started with internal stuff for variables (pagenum, date, etc.)
+
+Reggie, 2.2.1999:
+-----------------
+- Started with a document structure viewer. This is placed at the left of the canvas (can be hided)
+  Currently it's hided by default, since it's still useless :-) Use View->Document Structure to show it
+- The document structure viewer will show a hirarchical arrangement of chapters, all pictures, tables,
+  embedded objs, etc. in a structured tree view. It will also be possible to rearrange the document
+  there and if you click on a item you will get to this part of the text in the canvas.
+  Currently you will not see much :-)
