@@ -24,18 +24,8 @@
 #include <qdom.h>
 
 #include <paragraph.h>
-#include <stylesheet.h>
-#include <section.h>
 #include <myfile.h>
-#include <misc.h>
 #include <msword.h>
-//#include <pcd.h>
-#include <atrd.h>
-#include <sttbf.h>
-#include <bkf.h>
-#include <bkl.h>
-#include <ffn.h>
-#include <frd.h>
 
 #include <kdebug.h>
 
@@ -51,20 +41,6 @@ public:
 
     const bool convert();
     const QDomDocument * const part();
-
-    /////////////////////////////////////////////////////////////
-    const ATRD atrd(const long &pos);
-    const unsigned short numATRD() { return m_atrdCount; }
-
-    const BKF bkf(const long &pos);
-    const unsigned short numBKF() { return m_bkfCount; }
-
-    const BKL bkl(const long &pos);
-    const unsigned short numBKsL() { return m_bklCount; }
-
-    void sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned long &lcb,
-               const unsigned char * const stream);
-    //////////////////////////////////////////////////////////
 
 private:
     WinWordDoc(const WinWordDoc &);
@@ -97,29 +73,9 @@ private:
     void gotTableEnd();
     void gotTableRow(const QString texts[], const PAP styles[], TAP &row);
 
-    void FIBInfo();
-
-    void locateATRD();
-    void locateBKF();
-    void locateBKL();
-
-    const bool checkBinTables();
-    void readCommentStuff();
-
     QDomDocument m_part;
     unsigned m_tableManager;
     unsigned m_tableRow;
-
-    // Stylesheet
-    StyleSheet *m_styleSheet;
-    // ATRD
-    unsigned long m_atrdBase, m_atrdCount;
-    // BKF
-    unsigned long m_bkfBase, m_bkfCount;
-    // BKL
-    unsigned long m_bklBase, m_bklCount;
-
-    STTBF m_grpXst, m_atnbkmk, m_assocStrings;
 
     // Since there is no way to fill m_part incrementally with XML content,
     // we will fill m_body instead.
