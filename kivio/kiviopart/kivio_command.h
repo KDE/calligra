@@ -306,5 +306,23 @@ protected:
     int newValue;
 };
 
+class KivioChangeBeginEndArrowCommand : public KNamedCommand
+{
+public:
+    KivioChangeBeginEndArrowCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldArrow,  int _newArrow, bool _beginArrow);
+
+    ~KivioChangeBeginEndArrowCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage *m_page;
+    KivioStencil *m_stencil;
+    int oldArrow;
+    int newArrow;
+    bool beginArrow;
+};
+
 #endif
 

@@ -1237,12 +1237,25 @@ void KivioView::slotSetStartArrow( int i )
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
-
+    KMacroCommand *macro = new KMacroCommand( i18n("Change Begin Arrow"));
+    bool createMacro = false;
     while( pStencil )
     {
-        pStencil->setStartAHType(i);
+        if (pStencil->startAHType()!=i)
+        {
+            pStencil->setStartAHType(i);
+            KivioChangeBeginEndArrowCommand *cmd=new KivioChangeBeginEndArrowCommand( i18n("Change Arrow"), m_pActivePage, pStencil,  pStencil->startAHType(),  i, true);
+            pStencil->setStartAHType(i);
+
+            macro->addCommand( cmd );
+            createMacro= true;
+        }
         pStencil = m_pActivePage->selectedStencils()->next();
     }
+    if (createMacro )
+        m_pDoc->addCommand( macro );
+    else
+        delete macro;
     m_pDoc->updateView(m_pActivePage);
 }
 
@@ -1251,12 +1264,26 @@ void KivioView::slotSetEndArrow( int i )
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
+    KMacroCommand *macro = new KMacroCommand( i18n("Change End Arrow"));
+    bool createMacro = false;
 
     while( pStencil )
     {
-        pStencil->setEndAHType(i);
+        if (pStencil->endAHType()!=i)
+        {
+            KivioChangeBeginEndArrowCommand *cmd=new KivioChangeBeginEndArrowCommand( i18n("Change Arrow"), m_pActivePage, pStencil, pStencil->endAHType(),  i, false);
+            pStencil->setEndAHType(i);
+
+            macro->addCommand( cmd );
+            createMacro= true;
+        }
         pStencil = m_pActivePage->selectedStencils()->next();
     }
+    if (createMacro )
+        m_pDoc->addCommand( macro );
+    else
+        delete macro;
+
     m_pDoc->updateView(m_pActivePage);
 }
 

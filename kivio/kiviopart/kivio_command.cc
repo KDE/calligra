@@ -474,3 +474,38 @@ void KivioChangeLineWidthCommand::unexecute()
     m_page->doc()->updateView(m_page);
     m_page->doc()->slotSelectionChanged();
 }
+
+
+KivioChangeBeginEndArrowCommand::KivioChangeBeginEndArrowCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldArrow,  int _newArrow, bool _beginArrow)
+    :KNamedCommand( _name),
+     m_page(_page),
+     m_stencil( _stencil ),
+     oldArrow( _oldArrow),
+     newArrow( _newArrow),
+     beginArrow(_beginArrow)
+{
+}
+
+KivioChangeBeginEndArrowCommand::~KivioChangeBeginEndArrowCommand()
+{
+}
+
+void KivioChangeBeginEndArrowCommand::execute()
+{
+    if (beginArrow)
+        m_stencil->setStartAHType(newArrow);
+    else
+        m_stencil->setEndAHType(newArrow);
+    m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
+}
+
+void KivioChangeBeginEndArrowCommand::unexecute()
+{
+    if (beginArrow)
+        m_stencil->setStartAHType(oldArrow);
+    else
+        m_stencil->setEndAHType(oldArrow);
+    m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
+}
