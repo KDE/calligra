@@ -142,7 +142,7 @@ public:
     /**
      * Set the name of the dictionary to use.
      */
-    void setDictionary (const QString qs);
+    void setDictionary (const QString &qs);
     void setDictFromList (bool dfl);
 
     //Not present in old aspell/ispell lib
@@ -194,6 +194,7 @@ public:
 protected:
     void fillInDialog();
     bool readGlobalSettings();
+    QString getLanguage( int i );
 
     /**
      * This takes a dictionary file name (fname) and returns a language

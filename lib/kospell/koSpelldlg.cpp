@@ -48,6 +48,8 @@ KOSpellDlg::KOSpellDlg(
     QWidget * w = new QWidget(this);
     setMainWidget(w);
     m_indexLanguage=0;
+    m_previous = 0L;
+
     wordlabel = new QLabel(w, "wordlabel");
     wordlabel->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 
@@ -62,13 +64,17 @@ KOSpellDlg::KOSpellDlg(
 
     language->insertStringList( KOSpellConfig::listOfAspellLanguages());
     language->setCurrentItem( indexOfLanguage);
+    if ( _autocorrect )
+    {
+        m_previous = new QCheckBox( i18n("Previous word"), w);
+    }
 
-    m_previous = new QCheckBox( i18n("Previous word"), w);
     if( _ksc->client() == KOS_CLIENT_ISPELL)
     {
         language->hide();
         l_language->hide();
-        m_previous->hide();
+        if( m_previous )
+            m_previous->hide();
     }
 
     QLabel * l_misspelled = new QLabel(i18n("Misspelled word:"), w, "l_misspelled");
@@ -125,7 +131,8 @@ KOSpellDlg::KOSpellDlg(
     leftGrid->addWidget(l_language, 3, 0);
     leftGrid->addMultiCellWidget(language, 3, 3, 1, 2);
 
-    leftGrid->addMultiCellWidget( m_previous, 4, 4, 0, 2);
+    if( m_previous )
+        leftGrid->addMultiCellWidget( m_previous, 4, 4, 0, 2);
 
     layout->addWidget(buttonBox);
 
@@ -288,7 +295,7 @@ void KOSpellDlg::replaceAll()
 
 bool KOSpellDlg::previousWord() const
 {
-    return m_previous->isChecked();
+    return m_previous ? m_previous->isChecked(): false;
 }
 
 #include "koSpelldlg.moc"

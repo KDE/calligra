@@ -639,34 +639,56 @@ void KOSpellConfig::setRunTogether(bool b)
       cb2->setChecked(b);
 }
 
-void KOSpellConfig::setDictionary (const QString s)
+void KOSpellConfig::setDictionary (const QString &s)
 {
-  qsdict=s; //.copy();
+    qsdict=s; //.copy();
 
-  if (qsdict.length()>5)
-    if ((signed)qsdict.find(".hash")==(signed)qsdict.length()-5)
-      qsdict.remove (qsdict.length()-5,5);
+    if (qsdict.length()>5)
+        if ((signed)qsdict.find(".hash")==(signed)qsdict.length()-5)
+            qsdict.remove (qsdict.length()-5,5);
 
 
-  if(dictcombo)
-  {
-    int whichelement=-1;
-    if (dictFromList())
+    if(dictcombo)
     {
-      for (unsigned int i=0;i<listOfLanguageFileName().count();i++)
-      {
-         if (listOfLanguageFileName()[i] == s)
-           whichelement=i;
-      }
-
-      if(whichelement >= 0)
-      {
-        dictcombo->setCurrentItem(whichelement);
-      }
+        int whichelement=-1;
+        if (dictFromList())
+        {
+            if (iclient == KOS_CLIENT_ISPELL)
+            {
+                for (unsigned int i=0; i<langfnames.count(); i++)
+                {
+                    if (langfnames[i] == s )
+                    {
+                        whichelement=i;
+                        break;
+                    }
+                }
+            }
+            else if(iclient == KOS_CLIENT_ASPELL)
+            {
+                for (unsigned int i=0; i<listOfLanguageFileName().count(); i++)
+                {
+                    if (listOfLanguageFileName()[i] == s )
+                    {
+                        whichelement=i;
+                        break;
+                    }
+                }
+            }
+#if 0
+            else if (iclient == KOS_CLIENT_HSPELL)
+            {
+                langfnames.clear();
+                dictcombo->clear();
+                dictcombo->insertItem(i18n("Hebrew"));
+            }
+#endif
+            if(whichelement >= 0)
+            {
+                dictcombo->setCurrentItem(whichelement);
+            }
+        }
     }
-  }
-
-
 }
 
 void KOSpellConfig::setDictFromList (bool dfl)
@@ -717,9 +739,29 @@ void KOSpellConfig::sNoAff(bool)
 }
 
 
+QString KOSpellConfig::getLanguage( int i )
+{
+    if (iclient == KOS_CLIENT_ISPELL)
+    {
+        return langfnames[i];
+    }
+    else if(iclient == KOS_CLIENT_ASPELL)
+    {
+        return listOfLanguageFileName()[i];
+    }
+#if 0
+    else if (iclient == KOS_CLIENT_HSPELL)
+    {
+        langfnames.clear();
+        dictcombo->clear();
+        dictcombo->insertItem(i18n("Hebrew"));
+    }
+#endif
+}
+
 void KOSpellConfig::sSetDictionary (int i)
 {
-  setDictionary (listOfLanguageFileName()[i]);
+  setDictionary (getLanguage( i ));
   setDictFromList (TRUE);
   emit configChanged();
 }
@@ -730,7 +772,7 @@ KOSpellConfig::sDictionary(bool on)
   if (on)
     {
       dictcombo->setEnabled (TRUE);
-      setDictionary (listOfLanguageFileName()[dictcombo->currentItem()] );
+      setDictionary (getLanguage( dictcombo->currentItem() ));
       setDictFromList (TRUE);
     }
   else

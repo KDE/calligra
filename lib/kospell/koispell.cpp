@@ -155,7 +155,7 @@ void KOISpell::startIspell()
     kdDebug(750) << "Using ispell" << endl;
 
     // TODO: add option -h to ignore HTML (XML) code
-    if (ksconfig->client() == KOS_CLIENT_ISPELL || ksconfig->client() == KOS_CLIENT_ASPELL)
+    if (ksconfig->client() == KOS_CLIENT_ISPELL /*|| ksconfig->client() == KOS_CLIENT_ASPELL*/)
     {
         *proc << "-a" << "-S";
         if (ksconfig->noRootAffix())
@@ -797,6 +797,7 @@ void KOISpell::checkList4 ()
 
 bool KOISpell::check( const QString &_buffer, bool _usedialog )
 {
+    kdDebug()<<" bool KOISpell::check( const QString &_buffer, bool _usedialog )************************************\n";
   QString qs;
 
   usedialog=_usedialog;

@@ -5325,10 +5325,12 @@ void KWView::spellCheckerReady()
         }
         if ( !textIsEmpty )
         {
-            //kdDebug(32001) << "Checking " << text << endl;
+            kdDebug(32001) << "Checking " << text << endl;
             text += '\n'; // end of paragraph
+            text += '\n'; // empty line required by kspell
             m_spell.kospell->check( text);
-            /// ??? textfs->textObject()->setNeedSpellCheck(true);
+            kdDebug()<<" check :"<<text<<endl;
+            // ??? textfs->textObject()->setNeedSpellCheck(true);
             return;
         }
     }
@@ -5342,6 +5344,7 @@ void KWView::spellCheckerReady()
                                  i18n("Spell Checking"));
     }
     //m_doc->setReadWrite(true);
+    kdDebug()<<" clearSpellChecker();************************\n";
     clearSpellChecker();
 }
 
@@ -5409,7 +5412,7 @@ void KWView::spellCheckerDone( const QString & )
 
 void KWView::clearSpellChecker()
 {
-    //kdDebug(32001) << "KWView::clearSpellChecker" << endl;
+    kdDebug(32001) << "KWView::clearSpellChecker" << endl;
     delete m_spell.kospell;
     m_spell.kospell=0;
 #if 0
@@ -5430,7 +5433,7 @@ void KWView::clearSpellChecker()
 
 void KWView::spellCheckerFinished() // connected to death()
 {
-    //kdDebug(32001) << "KWView::spellCheckerFinished (death)" << endl;
+    kdDebug(32001) << "KWView::spellCheckerFinished (death)" << endl;
     bool kspellNotConfigured=false;
     delete m_spell.kospell;
     m_spell.kospell = 0;
