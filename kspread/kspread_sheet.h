@@ -66,7 +66,6 @@ class KoOasisSettings;
 #include <koOasisStyles.h>
 #include <koxmlwriter.h>
 
-#include "docbase.h"
 #include "kspread_autofill.h"
 #include "kspread_format.h"
 #include "kspread_cell.h"
@@ -234,7 +233,7 @@ class SheetPrivate;
 
 /**
  */
-class KSPREAD_EXPORT KSpreadSheet : public QObject, public KSpread::DocBase
+class KSPREAD_EXPORT KSpreadSheet : public QObject
 {
     friend class KSpreadCell;
 
@@ -253,7 +252,7 @@ public:
 
     enum LayoutDirection { LeftToRight, RightToLeft };
 
-    KSpreadSheet (KSpread::DocInfo *docinfo, const QString &sheetName,
+    KSpreadSheet ( KSpreadMap* map, const QString &sheetName,
         const char *_name=0L );
     ~KSpreadSheet();
 
@@ -289,6 +288,9 @@ public:
      * @see #sheetName
      */
     bool setSheetName( const QString& name, bool init = FALSE, bool makeUndo=true );
+    
+    KSpreadMap* workbook();
+    KSpreadDoc* doc();
 
     /**
      * Saves the sheet and all it's children in XML format

@@ -37,9 +37,9 @@ namespace KSpread {
 
 
 /** d-pointer of DependencyManager */
-class DependencyList : public DocBase {
+class DependencyList {
  public:
-  DependencyList (DocInfo *docinfo, KSpreadSheet *s);
+  DependencyList (KSpreadSheet *s);
   ~DependencyList () { reset (); };
   /** clear internal structures */
   void reset ();
@@ -103,9 +103,9 @@ class DependencyList : public DocBase {
 
 using namespace KSpread;
 
-DependencyManager::DependencyManager (KSpreadSheet *s, DocInfo *di)
+DependencyManager::DependencyManager (KSpreadSheet *s)
 {
-  deps = new DependencyList (di, s);
+  deps = new DependencyList (s);
 }
 
 DependencyManager::~DependencyManager ()
@@ -163,8 +163,8 @@ QValueList<KSpreadPoint> DependencyManager::getDependants (const KSpreadPoint &c
   return deps->getDependants (cell);
 }
 
-DependencyList::DependencyList (DocInfo *docinfo, KSpreadSheet *s)
-    : DocBase (docinfo), sheet (s)
+DependencyList::DependencyList (KSpreadSheet *s)
+    : sheet (s)
 {
 }
 
@@ -574,14 +574,14 @@ RangeList DependencyList::computeDependencies (const KSpreadPoint &cell) const
     if (tokenType == Token::Cell)
     {
       QString text = token.text();
-      KSpreadPoint cell (text, sheet->map(), sheet);
+      KSpreadPoint cell (text, sheet->workbook(), sheet);
       if (cell.isValid())
         rl.cells.push_back (cell);
     }
     else if (tokenType == Token::Range)
     {
       QString text = token.text();
-      KSpreadRange range (text, sheet->map(), sheet);
+      KSpreadRange range (text, sheet->workbook(), sheet);
       if (range.isValid())
         rl.ranges.push_back (range);
     }

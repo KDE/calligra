@@ -269,7 +269,7 @@ CellExtra* CellPrivate::extra()
 
 
 KSpreadCell::KSpreadCell( KSpreadSheet * _sheet, int _column, int _row )
-  : KSpreadFormat (_sheet, _sheet->styleManager()->defaultStyle())
+  : KSpreadFormat (_sheet, _sheet->doc()->styleManager()->defaultStyle())
 {
   d = new CellPrivate;
   d->row = _row;

@@ -224,6 +224,9 @@ const char * KSpreadTextDrag::selectionMimeType()
 class SheetPrivate
 {
 public:
+
+  KSpreadMap* workbook;
+  
   DCOPObject* dcop;
 
   QString name;
@@ -312,31 +315,28 @@ KSpreadSheet* KSpreadSheet::find( int _id )
   return (*s_mapSheets)[ _id ];
 }
 
-KSpreadSheet::KSpreadSheet (KSpread::DocInfo *docinfo,
+KSpreadSheet::KSpreadSheet (KSpreadMap* map,
     const QString &sheetName, const char *_name )
-  : QObject( docinfo->map, _name ), DocBase (docinfo)
+  : QObject( map, _name )
 {
   if ( s_mapSheets == 0L )
     s_mapSheets = new QIntDict<KSpreadSheet>;
-
   d = new SheetPrivate;
 
+  d->workbook = map;
+  
   d->id = s_id++;
   s_mapSheets->insert( d->id, this );
 
   d->layoutDirection = LeftToRight;
 
-  d->defaultFormat = new KSpreadFormat (this, styleManager()->defaultStyle());
-
+  d->defaultFormat = new KSpreadFormat (this, d->workbook->doc()->styleManager()->defaultStyle());
   d->emptyPen.setStyle( Qt::NoPen );
-
   d->dcop = 0;
-
   d->name = sheetName;
-
+  
   dcopObject();
   d->cellBindings.setAutoDelete( FALSE );
-
 
   // m_lstChildren.setAutoDelete( true );
 
@@ -344,12 +344,11 @@ KSpreadSheet::KSpreadSheet (KSpread::DocInfo *docinfo,
   d->rows.setAutoDelete( true );
   d->columns.setAutoDelete( true );
 
-  d->defaultCell = new KSpreadCell( this, styleManager()->defaultStyle(), 0, 0);
+  d->defaultCell = new KSpreadCell( this, d->workbook->doc()->styleManager()->defaultStyle(), 0, 0);
   d->defaultRowFormat = new RowFormat( this, 0 );
   d->defaultRowFormat->setDefault();
   d->defaultColumnFormat = new ColumnFormat( this, 0 );
   d->defaultColumnFormat->setDefault();
-
 
   d->widget = new QWidget();
   d->painter = new QPainter;
@@ -383,12 +382,22 @@ KSpreadSheet::KSpreadSheet (KSpread::DocInfo *docinfo,
   d->print = new KSpreadSheetPrint( this );
 
   //initialize dependencies
-  d->dependencies = new KSpread::DependencyManager (this, di);
+  d->dependencies = new KSpread::DependencyManager (this);
 }
 
 QString KSpreadSheet::sheetName() const
 {
   return d->name;
+}
+
+KSpreadMap* KSpreadSheet::workbook()
+{
+  return d->workbook;
+}
+
+KSpreadDoc* KSpreadSheet::doc()
+{
+  return d->workbook->doc();
 }
 
 int KSpreadSheet::id() const
@@ -1352,11 +1361,11 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
 
   KSpreadSheet::SelectionType result;
 
-  emitBeginOperation();
+  doc()->emitBeginOperation();
 
   // create cells in rows if complete columns selected
   KSpreadCell * cell;
-  KSpreadStyle * s = styleManager()->defaultStyle();
+  KSpreadStyle * s = doc()->styleManager()->defaultStyle();
 
   if ( !worker.type_B && selected && util_isColumnSelected(selection) )
   {
@@ -2326,7 +2335,7 @@ bool KSpreadSheet::shiftRow( const QRect &rect,bool makeUndo )
                 res=false;
         }
     }
-    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
+    QPtrListIterator<KSpreadSheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
     {
         for(int i = rect.top(); i <= rect.bottom(); i++ )
@@ -2364,7 +2373,7 @@ bool KSpreadSheet::shiftColumn( const QRect& rect,bool makeUndo )
         }
     }
 
-    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
+    QPtrListIterator<KSpreadSheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
     {
         for(int i=rect.left();i<=rect.right();i++)
@@ -2398,7 +2407,7 @@ void KSpreadSheet::unshiftColumn( const QRect & rect,bool makeUndo )
         for(int j=0;j<=(rect.bottom()-rect.top());j++)
                 d->cells.unshiftColumn( QPoint(i,rect.top()) );
 
-    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
+    QPtrListIterator<KSpreadSheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         for(int i=rect.left();i<=rect.right();i++)
                 it.current()->changeNameCellRef( QPoint( i, rect.top() ), false,
@@ -2428,7 +2437,7 @@ void KSpreadSheet::unshiftRow( const QRect & rect,bool makeUndo )
         for(int j=0;j<=(rect.right()-rect.left());j++)
                 d->cells.unshiftRow( QPoint(rect.left(),i) );
 
-    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
+    QPtrListIterator<KSpreadSheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         for(int i=rect.top();i<=rect.bottom();i++)
                 it.current()->changeNameCellRef( QPoint( rect.left(), i ), false,
@@ -2467,7 +2476,7 @@ bool KSpreadSheet::insertColumn( int col, int nbCol, bool makeUndo )
         d->sizeMaxX += columnFormat( col+i )->dblWidth();
     }
 
-    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
+    QPtrListIterator<KSpreadSheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true,
                                          KSpreadSheet::ColumnInsert, name(),
@@ -2510,7 +2519,7 @@ bool KSpreadSheet::insertRow( int row, int nbRow, bool makeUndo )
         d->sizeMaxY += rowFormat( row )->dblHeight();
     }
 
-    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
+    QPtrListIterator<KSpreadSheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true,
                                          KSpreadSheet::RowInsert, name(),
@@ -2549,7 +2558,7 @@ void KSpreadSheet::removeColumn( int col, int nbCol, bool makeUndo )
         d->sizeMaxX += columnFormat( KS_colMax )->dblWidth();
     }
 
-    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
+    QPtrListIterator<KSpreadSheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true,
                                          KSpreadSheet::ColumnRemove, name(),
@@ -2586,7 +2595,7 @@ void KSpreadSheet::removeRow( int row, int nbRow, bool makeUndo )
         d->sizeMaxY += rowFormat( KS_rowMax )->dblHeight();
     }
 
-    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
+    QPtrListIterator<KSpreadSheet> it( workbook()->sheetList() );
     for( ; it.current(); ++it )
         it.current()->changeNameCellRef( QPoint( 1, row ), true,
                                          KSpreadSheet::RowRemove, name(),
@@ -6247,7 +6256,7 @@ void KSpreadSheet::mergeCells( const QRect &area )
   // sanity check
   if( isProtected() )
     return;
-  if( map()->isProtected() )
+  if( workbook()->isProtected() )
     return;
 
   // no span ?
@@ -7476,7 +7485,8 @@ void KSpreadSheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) 
                 }
                 else if ( var == "<author>" )
                 {
-                    KoDocumentInfo       * docInfo    = doc()->documentInfo();
+                    KSpreadDoc* sdoc = d->workbook->doc();
+                    KoDocumentInfo       * docInfo    = sdoc->documentInfo();
                     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
 
                     text += authorPage->fullName();
@@ -7485,7 +7495,8 @@ void KSpreadSheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) 
                 }
                 else if ( var == "<email>" )
                 {
-                    KoDocumentInfo       * docInfo    = doc()->documentInfo();
+                    KSpreadDoc* sdoc = d->workbook->doc();
+                    KoDocumentInfo       * docInfo    = sdoc->documentInfo();
                     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
 
                     text += authorPage->email();
@@ -7494,7 +7505,8 @@ void KSpreadSheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) 
                 }
                 else if ( var == "<org>" )
                 {
-                    KoDocumentInfo       * docInfo    = doc()->documentInfo();
+                    KSpreadDoc* sdoc = d->workbook->doc();
+                    KoDocumentInfo       * docInfo    = sdoc->documentInfo();
                     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
 
                     text += authorPage->company();
@@ -7771,7 +7783,7 @@ bool KSpreadSheet::loadXML( const QDomElement& sheet )
 
     /* so we don't panic over finding ourself in the follwing test*/
     d->name = "";
-    while (map()->findSheet(testName) != NULL)
+    while (workbook()->findSheet(testName) != NULL)
     {
       nameSuffix++;
       testName = baseName + '_' + QString::number(nameSuffix);
@@ -8084,10 +8096,10 @@ void KSpreadSheet::removeCellBinding( CellBinding *_bind )
 
 KSpreadSheet* KSpreadSheet::findSheet( const QString & _name )
 {
-  if ( !map() )
+  if ( !workbook() )
     return 0L;
 
-  return map()->findSheet( _name );
+  return workbook()->findSheet( _name );
 }
 
 // ###### Torben: Use this one instead of d->cells.insert()
@@ -8348,7 +8360,7 @@ void KSpreadSheet::removeSheet()
 
 bool KSpreadSheet::setSheetName( const QString& name, bool init, bool /*makeUndo*/ )
 {
-    if ( map()->findSheet( name ) )
+    if ( workbook()->findSheet( name ) )
         return FALSE;
 
     if ( isProtected() )
@@ -8363,7 +8375,7 @@ bool KSpreadSheet::setSheetName( const QString& name, bool init, bool /*makeUndo
     if ( init )
         return TRUE;
 
-    QPtrListIterator<KSpreadSheet> it( map()->sheetList() );
+    QPtrListIterator<KSpreadSheet> it( workbook()->sheetList() );
     for ( ; it.current(); ++it )
         it.current()->changeCellTabName( old_name, name );
 
@@ -8379,7 +8391,7 @@ bool KSpreadSheet::setSheetName( const QString& name, bool init, bool /*makeUndo
 
 void KSpreadSheet::updateLocale()
 {
-  emitBeginOperation(true);
+  doc()->emitBeginOperation(true);
   setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
 
   KSpreadCell* c = d->cells.firstCell();

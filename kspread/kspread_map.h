@@ -22,6 +22,7 @@
 
 class KSpreadChanges;
 class KSpreadMap;
+class KSpreadDoc;
 
 class KoStore;
 
@@ -40,25 +41,26 @@ class KoOasisSettings;
 #include <qintdict.h>
 #include <qobject.h>
 
-#include "docbase.h"
 #include "kspread_sheet.h"
 
 /**
   A map is a simple container for all sheets. Usually a complete map
   is saved in one file.
  */
-class KSPREAD_EXPORT KSpreadMap : public QObject, public KSpread::DocBase
+class KSPREAD_EXPORT KSpreadMap : public QObject
 {
 Q_OBJECT
 public:
   /**
    * Created an empty map.
    */
-  KSpreadMap (KSpread::DocInfo *docinfo, const char* name = 0);
+  KSpreadMap ( KSpreadDoc* doc, const char* name = 0);
   /**
    * This deletes all sheets contained in this map.
    */
   virtual ~KSpreadMap();
+  
+  KSpreadDoc* doc();
 
   QDomElement save( QDomDocument& doc );
 
@@ -159,6 +161,9 @@ signals:
    */
   void sig_addSheet( KSpreadSheet *_table );
 private:
+
+  KSpreadDoc* m_doc;
+
   /**
    * List of all sheets in this map. The list has autodelete turned on.
    */

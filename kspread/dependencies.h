@@ -31,7 +31,6 @@ namespace KSpread {
 
 
 struct DependencyList;
-struct DocInfo;
 
 /** Range dependency - stores information about one dependency of one cell on
 one range of cells. */
@@ -52,7 +51,7 @@ TODO: describe how it works and why there are two types of dependencies
 class DependencyManager {
  public:
   /** constructor */
-   DependencyManager (KSpreadSheet *s, DocInfo *di);
+   DependencyManager (KSpreadSheet *s);
   /** destructor */
   ~DependencyManager ();
  

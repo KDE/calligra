@@ -179,7 +179,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->docinfo->doc = this;
   di = d->docinfo;
 
-  d->docinfo->map = new KSpreadMap( d->docinfo, "Map" );
+  d->docinfo->map = new KSpreadMap( this, "Map" );
   d->docinfo->styleManager = new KSpreadStyleManager();
   d->docinfo->locale = new KSpreadLocale;
 

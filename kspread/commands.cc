@@ -20,6 +20,7 @@
 
 #include "commands.h"
 #include "damages.h"
+#include "docbase.h"
 #include "kspread_doc.h"
 #include "kspread_locale.h"
 #include "kspread_map.h"
@@ -221,13 +222,13 @@ AddSheetCommand::AddSheetCommand( KSpreadSheet* s )
 
 void AddSheetCommand::execute()
 {
-    sheet->map()->insertSheet( sheet );
+    sheet->workbook()->insertSheet( sheet );
     doc->insertSheet( sheet );
 }
 
 void AddSheetCommand::unexecute()
 {
-    sheet->map()->takeSheet( sheet );
+    sheet->workbook()->takeSheet( sheet );
     doc->takeSheet( sheet );
 }
 
@@ -247,13 +248,13 @@ RemoveSheetCommand::RemoveSheetCommand( KSpreadSheet* s )
 
 void RemoveSheetCommand::execute()
 {
-    sheet->map()->takeSheet( sheet );
+    sheet->workbook()->takeSheet( sheet );
     doc->takeSheet( sheet );
 }
 
 void RemoveSheetCommand::unexecute()
 {
-    sheet->map()->insertSheet( sheet );
+    sheet->workbook()->insertSheet( sheet );
     doc->insertSheet( sheet );
 }
 

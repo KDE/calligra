@@ -247,7 +247,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
   {
     KSpreadSheet * sheet = m_pView->activeSheet();
 
-    KSpreadPoint source( m_sourceEdit->text(), sheet->map(), sheet );
+    KSpreadPoint source( m_sourceEdit->text(), sheet->workbook(), sheet );
     if (!source.isValid())
     {
       KMessageBox::error( this, i18n("Cell reference is invalid.") );
@@ -258,7 +258,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
       return;
     }
 
-    KSpreadPoint target( m_targetEdit->text(), sheet->map(), sheet );
+    KSpreadPoint target( m_targetEdit->text(), sheet->workbook(), sheet );
     if (!target.isValid())
     {
       KMessageBox::error( this, i18n("Cell reference is invalid.") );

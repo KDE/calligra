@@ -1284,7 +1284,7 @@ KSpreadValue Formula::eval() const
         val1 = KSpreadValue::empty();
         if (sheet)
         {
-          KSpreadPoint cell (c, sheet->map(), sheet);
+          KSpreadPoint cell (c, sheet->workbook(), sheet);
           if (cell.isValid())
             val1 = cell.sheet->value (cell.column(), cell.row());
         }
@@ -1296,7 +1296,7 @@ KSpreadValue Formula::eval() const
         val1 = KSpreadValue::empty();
         if (sheet)
         {
-          KSpreadRange range (c, sheet->map(), sheet);
+          KSpreadRange range (c, sheet->workbook(), sheet);
           if (range.isValid())
             val1 = range.sheet->valueRange (range.startCol(), range.startRow(),
                 range.endCol(), range.endRow());

@@ -38,13 +38,13 @@
 
 bool KSpreadMap::respectCase = true;
 
-KSpreadMap::KSpreadMap (KSpread::DocInfo *docinfo, const char* name)
-  : QObject( docinfo->doc, name ),
-    DocBase (docinfo),
+KSpreadMap::KSpreadMap ( KSpreadDoc* doc, const char* name)
+  : QObject( doc, name ),
     m_initialActiveSheet( 0 ),
     m_initialMarkerColumn( 0 ),
     m_initialMarkerRow( 0 ),
     tableId (1),
+    m_doc( doc ),
     m_dcop( 0 )
 {
   m_lstSheets.setAutoDelete( true );
@@ -53,6 +53,11 @@ KSpreadMap::KSpreadMap (KSpread::DocInfo *docinfo, const char* name)
 KSpreadMap::~KSpreadMap()
 {
     delete m_dcop;
+}
+
+KSpreadDoc* KSpreadMap::doc()
+{
+  return m_doc;
 }
 
 void KSpreadMap::setProtected( QCString const & passwd )
@@ -64,7 +69,7 @@ KSpreadSheet* KSpreadMap::createSheet()
 {
   QString s( i18n("Sheet%1") );
   s = s.arg( tableId++ );
-  KSpreadSheet *t = new KSpreadSheet (di, s,s.utf8());
+  KSpreadSheet *t = new KSpreadSheet ( this, s , s.utf8());
   t->setSheetName( s, TRUE ); // huh? (Werner)
   return t;
 }
@@ -73,7 +78,7 @@ void KSpreadMap::addSheet( KSpreadSheet *_sheet )
 {
   m_lstSheets.append( _sheet );
 
-  doc()->setModified( TRUE );
+  m_doc->setModified( TRUE );
 
   emit sig_addSheet( _sheet );
 }
@@ -145,7 +150,7 @@ void KSpreadMap::saveOasisSettings( KoXmlWriter &settingsWriter )
     settingsWriter.addConfigItem( "ViewId", QString::fromLatin1( "View1" ) );
     // Save visual info for the first view, such as active sheet and active cell
     // It looks like a hack, but reopening a document creates only one view anyway (David)
-    KSpreadView * view = static_cast<KSpreadView*>(this->doc()->views().getFirst());
+    KSpreadView * view = static_cast<KSpreadView*>( m_doc->views().getFirst());
     if ( view ) // no view if embedded document
     {
         // save current sheet selection before to save marker, otherwise current pos is not saved
@@ -213,7 +218,7 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
   QDomElement mymap = doc.createElement( "map" );
   // Save visual info for the first view, such as active sheet and active cell
   // It looks like a hack, but reopening a document creates only one view anyway (David)
-  KSpreadView * view = static_cast<KSpreadView*>(this->doc()->views().getFirst());
+  KSpreadView * view = static_cast<KSpreadView*>(m_doc->views().getFirst());
   if ( view ) // no view if embedded document
   {
     KSpreadCanvas * canvas = view->canvasWidget();
