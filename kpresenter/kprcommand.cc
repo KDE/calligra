@@ -513,8 +513,7 @@ GroupObjCmd::~GroupObjCmd()
 /*==============================================================*/
 void GroupObjCmd::execute()
 {
-    QRect r = doc->zoomHandler()->zoomRect(objects.first()->getBoundingRect(doc->zoomHandler() ));
-
+    KoRect r=KoRect();
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
@@ -523,12 +522,12 @@ void GroupObjCmd::execute()
 	it.current()->setSelected( false );
         m_page->takeObject(it.current());
 	it.current()->removeFromObjList();
-	r = r.unite( doc->zoomHandler()->zoomRect(it.current()->getBoundingRect( doc->zoomHandler())) );
+        r |= it.current()->getBoundingRect(doc->zoomHandler());
     }
 
     grpObj->setUpdateObjects( false );
-    grpObj->setOrigPointInGroup( QPoint( r.x(), r.y() ) );
-    grpObj->setOrigSizeInGroup( KoSize( r.width(), r.height() ) );
+    grpObj->setOrigPointInGroup( r.topLeft() );
+    grpObj->setOrigSizeInGroup( r.size() );
     grpObj->setOrig( r.x(), r.y() );
     grpObj->setSize( r.width(), r.height() );
     m_page->appendObject( grpObj );
