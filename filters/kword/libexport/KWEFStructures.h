@@ -48,12 +48,14 @@
 class TextFormatting
 {
     public:
-        TextFormatting(): italic (false), underline (false), strikeout (false),
+        TextFormatting(): italic (false), underline (false),
+            underlineIsDouble (false), strikeout (false),
             weight (50), fontSize (0), verticalAlignment (0), missing (true) {}
 
         TextFormatting(const bool newMissing) : italic (false),
-            underline (false), strikeout (false), weight (50), fontSize (0),
-            verticalAlignment (0), missing (newMissing) {}
+            underline (false), underlineIsDouble (false), strikeout (false),
+            weight (50), fontSize (0), verticalAlignment (0),
+            missing (newMissing) {}
 
         TextFormatting ( QString f,
                          bool    i,
@@ -63,15 +65,21 @@ class TextFormatting
                          int     sz,
                          QColor  fg,
                          QColor  bg,
-                         int     v
-                                     ) : fontName (f), italic (i), underline (u), strikeout (s),
-                                         weight (w), fontSize (sz), fgColor (fg), bgColor (bg),
-                                         verticalAlignment (v), missing (false) {}
+                         int     v) :
+            fontName (f), italic (i), underline (u), underlineIsDouble (false),
+            strikeout (s), weight (w), fontSize (sz), fgColor (fg),
+            bgColor (bg), verticalAlignment (v), missing (false) {}
 
         QString fontName;
 
         bool    italic;
-        bool    underline;
+
+        // As doubled underlined was introduced late in KWord, we must use a compatibe way
+        // First with "underline", we check if an underline is wanted or not.
+        // Then with "underIsDouble", we check the type of the underline (simple or double.)
+        bool    underline;       // underline? (If true, we do not know if simple or double)
+        bool    underlineIsDouble; // simple or double underline? (Undefined if "underline" is false)
+
         bool    strikeout;
 
         int     weight;

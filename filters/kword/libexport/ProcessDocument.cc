@@ -46,7 +46,7 @@
 #include "KWEFKWordLeader.h"
 
 
-// == KOFFICE DOCUMENT INFOMRATION ==
+// == KOFFICE DOCUMENT INFORMATION ==
 
 // TODO: verify that all document info is read!
 
@@ -209,6 +209,37 @@ static void ProcessStringNameTag (QDomNode myNode, void *tagData, KWEFKWordLeade
 // --------------------------------------------------------------------------------
 
 
+static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
+{
+    TextFormatting* text=(TextFormatting*) tagData;
+    QString str;
+    ProcessOneAttrTag (myNode, "value", "QString", &str, leader);
+    str=str.stripWhiteSpace();
+    if (str=="0")
+    {
+        // As it is the default, do not put it with the "else" case
+        text->underline=false;
+        text->underlineIsDouble=false;
+    }
+    else if ((str=="1") || (str=="single"))
+    {
+        text->underline=true;
+        text->underlineIsDouble=false;
+    }
+    else if (str=="double")
+    {
+        text->underline=true; // Yes, it is true!
+        text->underlineIsDouble=true;
+    }
+    else
+    {
+        kdWarning (30508) << "Unknown underline value:" << str << endl;
+        // We assume no underline
+        text->underline=false;
+        text->underlineIsDouble=false;
+    }
+}
+
 void ProcessAnchorTag ( QDomNode       myNode,
                         void          *tagData,
                         KWEFKWordLeader *leader )
@@ -285,7 +316,7 @@ static void AppendTagProcessingFormatOne(QValueList<TagProcessing>& tagProcessin
         << TagProcessing ( "SIZE",                ProcessIntValueTag,     &formatData.text.fontSize          )
         << TagProcessing ( "WEIGHT",              ProcessIntValueTag,     &formatData.text.weight            )
         << TagProcessing ( "ITALIC",              ProcessBoolIntValueTag, &formatData.text.italic            )
-        << TagProcessing ( "UNDERLINE",           ProcessBoolIntValueTag, &formatData.text.underline         )
+        << TagProcessing ( "UNDERLINE",           ProcessUnderlineTag,    &formatData.text                   )
         << TagProcessing ( "STRIKEOUT",           ProcessBoolIntValueTag, &formatData.text.strikeout         )
         << TagProcessing ( "CHARSET",             NULL,                   NULL                               )
         << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     &formatData.text.verticalAlignment )
