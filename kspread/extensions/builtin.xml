@@ -876,7 +876,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The EVEN() function returns the number rounded up to the earest even integer.</Text>
+	<Text>The EVEN() function returns the number rounded up to the nearest even integer.</Text>
 	<Syntax>EVEN( value  )</Syntax>
 	<Example>EVEN(1.2) returns 2</Example>
 	<Example>EVEN(2) returns 2</Example>
@@ -1114,8 +1114,7 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The multiply() function multiplies all the values given in the
-parameters. You can multiply values given by a range multiply(A1:B5) or list of values like multiply(12;5;12.5)</Text>
+	<Text>The multiply() function multiplies all the values given in the parameters. You can multiply values given by a range multiply(A1:B5) or list of values like multiply(12;5;12.5)</Text>
 	<Syntax>multiply( values; values; ... )</Syntax>
 	<Example>multiply(12;5;7) equals 420</Example>
 	<Example>multiply(12.5;2) equals 25</Example>
