@@ -484,7 +484,11 @@ int KoParagCounter::width( const KoTextParag *paragraph )
     m_cache.counterFormat->addRef();
     m_cache.width = 0;
     QString text = m_cache.text;
-    if ( !text.isEmpty() )
+    if (  style() ==KoParagCounter::STYLE_CUSTOMBULLET && !text.isEmpty())
+    {
+        text.append( "  " ); // append a trailing space, see KoTextParag::drawLabel
+    }
+    else if ( !text.isEmpty() )
         text.append( ' ' ); // append a trailing space, see KoTextParag::drawLabel
     QFontMetrics fm = m_cache.counterFormat->screenFontMetrics( 0L, false );
     for ( unsigned int i = 0; i < text.length(); i++ )
