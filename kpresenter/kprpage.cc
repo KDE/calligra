@@ -108,14 +108,14 @@ DCOPObject* KPrPage::dcopObject()
 
 bool KPrPage::saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj )
 {
-    saveOasisObject( store, xmlWriter, context, indexObj );
-
+    saveOasisObject( store, xmlWriter, context, indexObj, true );
+    //todo for animation style for sticky object it's neccesary to use "presentation:style-name="pr1"
+    // => create style presentation.
     return true;
 }
 
-void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj )
+void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, bool stickyObj )
 {
-
     KTempFile animationTmpFile;
     animationTmpFile.setAutoDelete( true );
     QFile* tmpFile = animationTmpFile.file();
@@ -125,7 +125,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
     for ( ; it.current() ; ++it )
     {
         it.current()->saveOasis( xmlWriter, context, indexObj );
-        if ( it.current()->haveAnimation() )
+        if ( !stickyObj && it.current()->haveAnimation() )
         {
             kdDebug()<<" it.current()->haveAnimation() \n";
             listAnimation *lst = new listAnimation;

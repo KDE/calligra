@@ -309,7 +309,7 @@ private:
     void makeUsedPixmapListForGroupObject( KPObject *_obj );
     void completeLoadingForGroupObject( KPObject *_obj );
     bool objectNameExists( KPObject *object, QPtrList<KPObject> &list );
-    void saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj );
+    void saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, bool stickyObj=false );
 
 
     // list of objects
