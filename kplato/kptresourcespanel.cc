@@ -380,7 +380,8 @@ void KPTResourcesPanel::slotResourceRename( const QString &newName) {
     emit changed();
 }
 
-void KPTResourcesPanel::ok() {
+bool KPTResourcesPanel::ok() {
+    return true;
 }
 
 KCommand *KPTResourcesPanel::buildCommand(KPTPart *part) {

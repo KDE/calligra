@@ -7,10 +7,12 @@ libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
     kptrelation.cc kptresource.cc kpttask.cc \
     kptduration.cc kptfactory.cc kptpart.cc kptview.cc \
     kptdurationwidget.ui relationpanel.ui\
-    kptprojectdialog.cc kptmainprojectdialog.cc kpttaskdialog.cc  \
+    kptprojectdialog.cc kpttaskdialog.cc  \
+    kptmainprojectdialog.cc kptmainprojectpanel.cc kptmainprojectpanelbase.ui \
     kptganttview.cc kptresourcespanel.cc \
     kptpertview.cc kptpertcanvas.cc kptrelationdialog.cc \
-    kptcanvasitem.cc kptprojectdialogbase.ui kptmainprojectdialogbase.ui resourcespanelbase.ui \
+    kptcanvasitem.cc kptprojectdialogbase.ui \
+    resourcespanelbase.ui \
     kptresourceview.cc \
     kpttaskresourcespanelbase.ui kptrequestresourcespanel.cc \
     resourcedialogbase.ui kptresourcedialog.cc \
@@ -30,7 +32,8 @@ libkplatopart_la_SOURCES =   kptnode.cc kptproject.cc \
 noinst_HEADERS = kptaboutdata.h kptduration.h kptfactory.h \
     kptnode.h kptpart.h kptproject.h kptrelation.h \
     kptresource.h kpttask.h kptview.h \
-    kptprojectdialog.h kptmainprojectdialog.h kpttaskdialog.h  \
+    kptprojectdialog.h kpttaskdialog.h  \
+    kptmainprojectdialog.h \
     kptganttview.h kptcanvasitem.h \
     kptpertview.h kptpertcanvas.h kptrelationdialog.h \
     kptresourcespanel.h kptresourceview.h \

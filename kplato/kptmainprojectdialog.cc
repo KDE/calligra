@@ -17,27 +17,16 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qtextedit.h>
-#include <qlineedit.h>
-#include <qdatetimeedit.h>
-#include <qdatetime.h>
-#include <qtabwidget.h>
-#include <qtextbrowser.h>
-#include <qbuttongroup.h>
+#include <qvbox.h>
 
 #include <klocale.h>
-#include <kmessagebox.h>
-#include <kabc/addressee.h>
-#include <kabc/addresseedialog.h>
+#include <kcommand.h>
 
 #include <kdebug.h>
 
 #include "kptmainprojectdialog.h"
 #include "kptproject.h"
+#include "kptmainprojectpanel.h"
 #include "kptresourcespanel.h"
 #include "kptresource.h"
 
@@ -45,109 +34,47 @@ namespace KPlato
 {
 
 KPTMainProjectDialog::KPTMainProjectDialog(KPTProject &p, QWidget *parent, const char *name)
-    : KDialogBase( Swallow, i18n("Project Settings"), Ok|Cancel, Ok, parent, name, true, true),
+    : KDialogBase( Tabbed, i18n("Project Settings"), Ok|Cancel, Ok, parent, name, true, true),
       project(p)
 {
-    dia = new KPTMainProjectDialogImpl(this);
-    resourcesTab = new KPTResourcesPanel(dia, &project);
-    dia->daTabs->insertTab(resourcesTab, i18n("Resources"), 1);
-    setMainWidget(dia);
+    QVBox *page = addVBoxPage(i18n("General"));    
+    generalTab = new KPTMainProjectPanel(project, page);
+    
+    page = addVBoxPage(i18n("Resources"));
+    resourcesTab = new KPTResourcesPanel(page, &project);
+    
+    setMainWidget(generalTab);
     enableButtonOK(false);
 
-	dia->namefield->setText(project.name());
-	dia->idfield->setText(project.id());
-	dia->leaderfield->setText(project.leader());
+    connect(generalTab, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOK(bool)));
 
-    dia->startDateTime->setDateTime(project.startTime());
-    dia->endDateTime->setDateTime(project.endTime());
-    if (project.constraint() == KPTNode::MustStartOn) {
-        dia->schedulingGroup->setButton(0);
-        dia->startDateTime->setEnabled(true);
-    }
-    else if (project.constraint() == KPTNode::MustFinishOn) {
-        dia->schedulingGroup->setButton(1);
-        dia->endDateTime->setEnabled(true);
-    }
-
-    connect(dia, SIGNAL( obligatedFieldsFilled(bool) ), SLOT( enableButtonOK(bool) ));
-
-    dia->namefield->setFocus();
-
-    connect(resourcesTab, SIGNAL( changed() ), dia, SLOT( slotCheckAllFieldsFilled() ));
+    connect(resourcesTab, SIGNAL(changed()), generalTab, SLOT(slotCheckAllFieldsFilled()));
 }
 
 
 void KPTMainProjectDialog::slotOk() {
-    if (dia->idfield->text() != project.id() && 
-        KPTNode::find(dia->idfield->text())) 
-    {
-        KMessageBox::sorry(this, "Project id must be unique");
-        dia->idfield->setFocus();
+    if (!generalTab->ok())
         return;
-    }
-    project.setConstraint(KPTNode::MustStartOn); // default
-    if (dia->bEndDate->state())
-        project.setConstraint(KPTNode::MustFinishOn);
-
-    if (project.constraint() == KPTNode::MustStartOn)
-        project.setStartTime(dia->startDateTime->dateTime());
-    else if (project.constraint() == KPTNode::MustFinishOn)
-        project.setEndTime(dia->endDateTime->dateTime());
-
-    project.setName(dia->namefield->text());
-    project.setId(dia->idfield->text());
-    project.setLeader(dia->leaderfield->text());
-    project.setDescription(dia->descriptionfield->text());
-
-	resourcesTab->ok();
+    if (!resourcesTab->ok())
+        return;
 
     accept();
 }
 
 KCommand *KPTMainProjectDialog::buildCommand(KPTPart *part) {
-    return resourcesTab->buildCommand(part);
-}
-
-KPTMainProjectDialogImpl::KPTMainProjectDialogImpl (QWidget *parent) : KPTMainProjectDialogBase(parent) {
-    startDateTime->setEnabled(false);
-    endDateTime->setEnabled(false);
-
-    connect (namefield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
-    connect (idfield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
-    connect (leaderfield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
-	connect (chooseLeader, SIGNAL(pressed()), this, SLOT(slotChooseLeader()));
-
-    connect (bStartDate, SIGNAL(clicked()), SLOT(slotStartDateClicked()) );
-    connect (bEndDate, SIGNAL(clicked()), SLOT(slotEndDateClicked()) );
-
-    connect (startDateTime, SIGNAL(valueChanged(const QDateTime &)), SLOT(slotCheckAllFieldsFilled()));
-    connect (endDateTime, SIGNAL(valueChanged(const QDateTime &)), SLOT(slotCheckAllFieldsFilled()));
-}
-
-void KPTMainProjectDialogImpl::slotCheckAllFieldsFilled() {
-    kdDebug()<<k_funcinfo<<endl;
-    emit obligatedFieldsFilled( !(namefield->text().isEmpty() || leaderfield->text().isEmpty() || idfield->text().isEmpty()) );
-}
-
-void KPTMainProjectDialogImpl::slotChooseLeader() {
-  KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
-  if (!a.isEmpty()) {
-	  leaderfield->setText(a.fullEmail());
-  }
-}
-
-void KPTMainProjectDialogImpl::slotStartDateClicked() {
-    kdDebug()<<k_funcinfo<<endl;
-    startDateTime->setEnabled(true);
-    endDateTime->setEnabled(false);
-    slotCheckAllFieldsFilled();
-}
-
-void KPTMainProjectDialogImpl::slotEndDateClicked() {
-    kdDebug()<<k_funcinfo<<"state="<<bEndDate->state()<<" on="<<bEndDate->isOn()<<" down="<<bEndDate->isDown()<<endl;
-    startDateTime->setEnabled(false);
-    endDateTime->setEnabled(true);
-    slotCheckAllFieldsFilled();
+    KMacroCommand *m = 0;
+    QString c = i18n("Modify main project");
+    KCommand *cmd = generalTab->buildCommand(part);
+    if (cmd) {
+        if (!m) m = new KMacroCommand(c);
+        m->addCommand(cmd);
+    }
+    cmd = resourcesTab->buildCommand(part);
+    if (cmd) {
+        if (!m) m = new KMacroCommand(c);
+        m->addCommand(cmd);
+    }
+    return m;
 }
 
 }  //KPlato namespace

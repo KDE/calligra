@@ -149,7 +149,7 @@ KMacroCommand *KPTTaskGeneralPanel::buildCommand(KPTPart *part) {
 
 bool KPTTaskGeneralPanel::ok() {
     if (idfield->text() != m_task.id() && KPTNode::find(idfield->text())) {
-        KMessageBox::sorry(this, "Task id must be unique");
+        KMessageBox::sorry(this, i18n("Task id must be unique"));
         idfield->setFocus();
         return false;
     }

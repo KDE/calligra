@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003, 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,10 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KPTMAINPROJECTDIALOG_H
-#define KPTMAINPROJECTDIALOG_H
+#ifndef KPTMAINPROJECTPANEL_H
+#define KPTMAINPROJECTPANEL_H
 
-#include <kdialogbase.h>
+#include "kptmainprojectpanelbase.h"
 
 class KCommand;
 
@@ -28,27 +28,22 @@ namespace KPlato
 {
 
 class KPTProject;
-class KPTMainProjectPanel;
-class KPTResourcesPanel;
 class KPTPart;
 
 
-class KPTMainProjectDialog : public KDialogBase {
+class KPTMainProjectPanel : public KPTMainProjectPanelBase {
     Q_OBJECT
 public:
-    KPTMainProjectDialog(KPTProject &project, QWidget *parent=0, const char *name=0);
+    KPTMainProjectPanel(KPTProject &project, QWidget *parent=0, const char *name=0);
 
     KCommand *buildCommand(KPTPart *part);
     
-protected slots:
-    void slotOk();
+    bool ok();
 
 private:
     KPTProject &project;
-    KPTMainProjectPanel *generalTab;
-    KPTResourcesPanel *resourcesTab;
 };
 
 }  //KPlato namespace
 
-#endif // KPTMAINPROJECTDIALOG_H
+#endif // KPTMAINPROJECTPANEL_H

@@ -42,7 +42,7 @@ class KPTResourcesPanel : public ResourcesPanelBase {
 public:
     KPTResourcesPanel (QWidget *parent, KPTProject *project);
 
-    void ok();
+    bool ok();
     KCommand *buildCommand(KPTPart *part);
 
     void sendChanged();

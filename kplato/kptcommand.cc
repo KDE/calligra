@@ -277,6 +277,44 @@ void KPTNodeModifyConstraintEndTimeCmd::unexecute() {
         m_part->setCommandType(1);
 }
 
+KPTNodeModifyStartTimeCmd::KPTNodeModifyStartTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_node(node),
+      newTime(dt),
+      oldTime(node.startTime()) {
+
+}
+void KPTNodeModifyStartTimeCmd::execute() {
+    m_node.setStartTime(newTime);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTNodeModifyStartTimeCmd::unexecute() {
+    m_node.setStartTime(oldTime);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+
+KPTNodeModifyEndTimeCmd::KPTNodeModifyEndTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_node(node),
+      newTime(dt),
+      oldTime(node.endTime()) {
+
+}
+void KPTNodeModifyEndTimeCmd::execute() {
+    m_node.setEndTime(newTime);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTNodeModifyEndTimeCmd::unexecute() {
+    m_node.setEndTime(oldTime);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+
 KPTNodeModifyIdCmd::KPTNodeModifyIdCmd(KPTPart *part, KPTNode &node, QString id, QString name)
     : KNamedCommand(name),
       m_part(part),
