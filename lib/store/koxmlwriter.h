@@ -38,6 +38,23 @@ public:
      * the given QIODevice.
      */
     KoXmlWriter( QIODevice* dev );
+    /**
+     *  Return an XML writer for saving Oasis XML into the device @p dev,
+     *  including the XML processing instruction,
+     *  the complete DOCTYPE tag (with systemId and publicId),
+     *  and the root element with all its namespaces.
+     *  You can add more namespaces afterwards with addAttribute.
+     *
+     *  @param subtype either 0, "content", "styles", "meta" or "settings",
+     *   which is the second part of the name of the tag for the root element.
+     *  @return the KoXmlWriter instance. It becomes owned by the caller, which
+     *  must delete it at some point.
+     *
+     * Once done with writing the contents of the root element, you
+     * will need to call endElement(); endDocument(); before destroying the KoXmlWriter.
+     */
+    KoXmlWriter( QIODevice* dev, const char* subtype );
+
     /// Destructor
     ~KoXmlWriter();
 
@@ -76,21 +93,6 @@ public:
     }
     void addTextNode( const char* cstr );
 
-
-    /**
-     *  Return an XML writer for saving Oasis XML into the device @p dev,
-     *  including the XML processing instruction,
-     *  the complete DOCTYPE tag (with systemId and publicId),
-     *  and the root element with all its namespaces.
-     *  You can add more namespaces afterwards with addAttribute.
-     *
-     *  @param subtype either 0, "content", "styles", "meta" or "settings",
-     *   which is the second part of the name of the tag for the root element.
-     *  @return the KoXmlWriter instance. It becomes owned by the caller, which
-     *  must delete it at some point.
-     */
-    static KoXmlWriter* createOasisXmlWriter( QIODevice* dev, const char* subtype );
-
 private:
     struct Tag {
         Tag( const char* t = 0 ) : tagName( t ), hasChildren( false ),
@@ -126,6 +128,7 @@ private:
         }
     }
     char* escapeForXML( const char* source ) const;
+    void init();
 
     QIODevice* m_dev;
     QValueStack<Tag> m_tags;

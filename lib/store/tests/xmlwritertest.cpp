@@ -82,6 +82,11 @@ int main( int argc, char** argv ) {
     TEST_END( "attributes test", "<!DOCTYPE r>\n<r a=\"val\" b=\"&lt;&quot;&gt;\"/>\n" );
 
     TEST_BEGIN( 0, 0 );
+    writer.startElement( "m" );
+    writer.endElement();
+    TEST_END( "empty element test", "<!DOCTYPE r>\n<r>\n <m/>\n</r>\n" );
+
+    TEST_BEGIN( 0, 0 );
     writer.startElement( "a" );
     writer.startElement( "b" );
     writer.startElement( "c" );

@@ -25,11 +25,55 @@ static const unsigned int s_indentBufferLength = 100;
 KoXmlWriter::KoXmlWriter( QIODevice* dev )
     : m_dev( dev )
 {
+    init();
+}
+
+void KoXmlWriter::init()
+{
     m_indentBuffer = new char[ s_indentBufferLength ];
     memset( m_indentBuffer, ' ', s_indentBufferLength );
     *m_indentBuffer = '\n'; // write newline before indentation, in one go
 
     m_escapeBuffer = new char[s_escapeBufferLen];
+}
+
+// subtype is either 0, content, styles, meta or settings
+KoXmlWriter::KoXmlWriter( QIODevice* dev, const char* subtype )
+    : m_dev( dev )
+{
+    init();
+
+    QCString rootElemName = "office:document";
+    if ( subtype )
+    {
+        rootElemName += '-';
+        rootElemName += subtype;
+    }
+    startDocument( rootElemName /*TODO: , publicId, systemId - how do I refer to a relaxng schema? */ );
+    startElement( rootElemName );
+    addAttribute( "xmlns:office", "urn:oasis:names:tc:openoffice:xmlns:office:1.0" );
+    addAttribute( "xmlns:meta", "urn:oasis:names:tc:openoffice:xmlns:meta:1.0" );
+
+    if ( qstrcmp( subtype, "meta" ) != 0 ) {
+        addAttribute( "xmlns:config", "urn:oasis:names:tc:openoffice:xmlns:config:1.0" );
+        addAttribute( "xmlns:text", "urn:oasis:names:tc:openoffice:xmlns:text:1.0" );
+        addAttribute( "xmlns:table", "urn:oasis:names:tc:openoffice:xmlns:table:1.0" );
+        addAttribute( "xmlns:draw", "urn:oasis:names:tc:openoffice:xmlns:drawing:1.0" );
+        addAttribute( "xmlns:presentation", "urn:oasis:names:tc:openoffice:xmlns:presentation:1.0" );
+        addAttribute( "xmlns:dr3d", "urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0" );
+        addAttribute( "xmlns:chart", "urn:oasis:names:tc:openoffice:xmlns:chart:1.0" );
+        addAttribute( "xmlns:form", "urn:oasis:names:tc:openoffice:xmlns:form:1.0" );
+        addAttribute( "xmlns:script", "urn:oasis:names:tc:openoffice:xmlns:script:1.0" );
+        addAttribute( "xmlns:style", "urn:oasis:names:tc:openoffice:xmlns:style:1.0" );
+        addAttribute( "xmlns:number", "urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0" );
+    }
+    // missing: office:version="1.0"
+
+    addAttribute( "xmlns:dc", "http://purl.org/dc/elements/1.1/" );
+    addAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
+    addAttribute( "xmlns:math", "http://www.w3.org/1998/Math/MathML" );
+    addAttribute( "xmlns:fo", "http://www.w3.org/1999/XSL/Format" );
+    addAttribute( "xmlns:svg", "http://www.w3.org/2000/svg" );
 }
 
 KoXmlWriter::~KoXmlWriter()
@@ -63,6 +107,8 @@ void KoXmlWriter::endDocument()
 
 void KoXmlWriter::startElement( const char* tagName )
 {
+    Q_ASSERT( tagName != 0 );
+
     // Tell parent that it has children
     if ( !m_tags.isEmpty() ) {
         Tag& parent = m_tags.top();
@@ -84,6 +130,7 @@ void KoXmlWriter::startElement( const char* tagName )
 
 void KoXmlWriter::endElement()
 {
+    Q_ASSERT( !m_tags.isEmpty() );
     Tag tag = m_tags.pop();
     if ( !tag.hasChildren ) {
         writeCString( "/>" );
@@ -93,6 +140,7 @@ void KoXmlWriter::endElement()
             writeIndent();
         }
         writeCString( "</" );
+        Q_ASSERT( tag.tagName != 0 );
         writeCString( tag.tagName );
         writeChar( '>' );
     }
@@ -195,39 +243,4 @@ char* KoXmlWriter::escapeForXML( const char* source ) const
     }
     // NOTREACHED (see case 0)
     return output;
-}
-
-// subtype is either 0, content, styles, meta or settings
-KoXmlWriter* KoXmlWriter::createOasisXmlWriter( QIODevice* dev, const char* subtype )
-{
-    KoXmlWriter* writer = new KoXmlWriter( dev );
-    QCString rootElemName = "office:document";
-    if ( subtype )
-    {
-        rootElemName += '-';
-        rootElemName += subtype;
-    }
-    writer->startDocument( rootElemName /*TODO: , publicId, systemId - how do I refer to a relaxng schema? */ );
-    writer->startElement( rootElemName );
-    writer->addAttribute( "xmlns:office", "urn:oasis:names:tc:openoffice:xmlns:office:1.0" );
-    writer->addAttribute( "xmlns:meta", "urn:oasis:names:tc:openoffice:xmlns:meta:1.0" );
-    writer->addAttribute( "xmlns:config", "urn:oasis:names:tc:openoffice:xmlns:config:1.0" );
-    writer->addAttribute( "xmlns:text", "urn:oasis:names:tc:openoffice:xmlns:text:1.0" );
-    writer->addAttribute( "xmlns:table", "urn:oasis:names:tc:openoffice:xmlns:table:1.0" );
-    writer->addAttribute( "xmlns:draw", "urn:oasis:names:tc:openoffice:xmlns:drawing:1.0" );
-    writer->addAttribute( "xmlns:presentation", "urn:oasis:names:tc:openoffice:xmlns:presentation:1.0" );
-    writer->addAttribute( "xmlns:dr3d", "urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0" );
-    writer->addAttribute( "xmlns:chart", "urn:oasis:names:tc:openoffice:xmlns:chart:1.0" );
-    writer->addAttribute( "xmlns:form", "urn:oasis:names:tc:openoffice:xmlns:form:1.0" );
-    writer->addAttribute( "xmlns:script", "urn:oasis:names:tc:openoffice:xmlns:script:1.0" );
-    writer->addAttribute( "xmlns:style", "urn:oasis:names:tc:openoffice:xmlns:style:1.0" );
-    writer->addAttribute( "xmlns:number", "urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0" );
-
-    writer->addAttribute( "xmlns:dc", "http://purl.org/dc/elements/1.1/" );
-    writer->addAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
-    writer->addAttribute( "xmlns:math", "http://www.w3.org/1998/Math/MathML" );
-    writer->addAttribute( "xmlns:fo", "http://www.w3.org/1999/XSL/Format" );
-    writer->addAttribute( "xmlns:svg", "http://www.w3.org/2000/svg" );
-
-    return writer;
 }
