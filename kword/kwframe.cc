@@ -1850,8 +1850,8 @@ void KWFormulaFrameSet::load(QDomElement& attributes, bool loadFrames)
     if (!formulaElem.isNull()) {
         if (formula == 0) {
             formula = m_doc->getFormulaDocument()->createFormula();
-            connect(formula, SIGNAL(formulaChanged(int, int)),
-                    this, SLOT(slotFormulaChanged(int, int)));
+            connect(formula, SIGNAL(formulaChanged(double, double)),
+                    this, SLOT(slotFormulaChanged(double, double)));
         }
         if (!formula->load(formulaElem)) {
             kdError(32001) << "Error loading formula" << endl;
@@ -1905,6 +1905,7 @@ KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
 {
     //kdDebug(32001) << "KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit" << endl;
     focusOutEvent();
+    // this causes a core dump on quit
     m_canvas->gui()->getView()->showFormulaToolbar(false);
     delete formulaView;
     formulaView = 0;

@@ -234,6 +234,8 @@ KWDocument::~KWDocument()
     //don't save config when kword is embedded into konqueror
     if(isReadWrite())
         saveConfig();
+    // formula frames have to be deleted before m_formulaDocument
+    frames.clear();
     delete m_autoFormat;
     delete m_formulaDocument;
     delete m_commandHistory;
