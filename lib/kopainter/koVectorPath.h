@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (c) 2002 Igor Janssen (rm@kde.org)
+  Copyright (c) 2002 Igor Jansen (rm@kde.org)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,6 +46,7 @@ public:
 
   static KoVectorPath *rectangle(double x, double y, double w, double h, double rx, double ry);
   static KoVectorPath *ellipse(double cx, double cy, double rx, double ry);
+  static KoVectorPath *arc(double cx, double cy, double rx, double ry, double sa, double a);
 
 private:
   void KoVectorPath::bez(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3);

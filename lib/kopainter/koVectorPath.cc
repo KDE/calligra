@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (c) 2002 Igor Janssen (rm@kde.org)
+  Copyright (c) 2002 Igor Jansen (rm@kde.org)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,8 +22,6 @@
 #include <cmath>
 
 #include <qwmatrix.h>
-
-#include <kdebug.h>
 
 KoVectorPath::KoVectorPath()
 {
@@ -209,7 +207,27 @@ void KoVectorPath::bezierTo(double x, double y, double x1, double y1, double x2,
 
 void KoVectorPath::arcTo(double rx, double ry, double sa, double a)
 {
-//  double x1 = 
+  double t = M_PI * a / 360.0;
+  double x0 = cos(t);
+  double y0 = -sin(t);
+  double x1 = (4.0 - cos(t)) / 3.0;
+  double y1 = (1.0 - cos(t)) * (cos(t) - 3.0) / (3.0 * sin(t));
+  double x2 = x1;
+  double y2 = -y1;
+  double x3 = x0;
+  double y3 = -y0;
+  QWMatrix m, mm;
+  double x;
+  double y;
+  m.scale(rx, ry);
+  m.rotate(sa + a / 2.0);
+  m.map(x0, y0, &x0, &y0);
+  mm = mm.translate(xe - x0, ye - y0);
+  m *= mm;
+  m.map(x1, y1, &x1, &y1);
+  m.map(x2, y2, &x2, &y2);
+  m.map(x3, y3, &x3, &y3);
+  bezierTo(x3, y3, x1, y1, x2, y2);
 }
 
 void KoVectorPath::transform(const QWMatrix &m)
@@ -285,5 +303,25 @@ KoVectorPath *KoVectorPath::ellipse(double cx, double cy, double rx, double ry)
   vec->bezierTo(cx, cy + ry, cx + rx, cy  + sry, cx + srx, cy + ry);
   vec->bezierTo(cx - rx, cy, cx - srx, cy + ry, cx - rx, cy  + sry);
   vec->bezierTo(cx, cy - ry, cx - rx, cy - sry, cx - srx, cy - ry);
+  return vec;
+}
+
+KoVectorPath *KoVectorPath::arc(double cx, double cy, double rx, double ry, double sa, double a)
+{
+  KoVectorPath *vec = new KoVectorPath;
+  double ea = sa + a;
+  double sar = M_PI * sa / 180.0;
+  double xs = cx + rx * cos(sar);
+  double ys = cy + ry * sin(sar);
+  vec->moveTo(xs, ys);
+  double ca = 90.0 * static_cast<int>(sa / 90.0) + 90.0;
+  double r = QMIN(ea, ca);
+  vec->arcTo(rx, ry, sa, r - sa);
+  while(ca < ea)
+  {
+    r = QMIN(ea, ca + 90.0);
+    vec->arcTo(rx, ry, ca, r - ca);
+    ca += 90.0;
+  }
   return vec;
 }
