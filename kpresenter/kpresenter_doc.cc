@@ -1104,6 +1104,21 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
     settingsWriter.addTextNode(m_bSnapToGrid ? "true" : "false" );
     settingsWriter.endElement();
 
+    //<config:config-item config:name="GridFineWidth" config:type="int">500</config:config-item>
+    settingsWriter.startElement( "config:config-item" );
+    settingsWriter.addAttribute( "config:name", "GridFineWidth" );
+    settingsWriter.addAttribute( "config:type", "int" );
+    settingsWriter.addTextNode( QString::number( m_gridX ) );
+    settingsWriter.endElement();
+
+
+    //<config:config-item config:name="GridFineHeight" config:type="int">500</config:config-item>
+    settingsWriter.startElement( "config:config-item" );
+    settingsWriter.addAttribute( "config:name", "GridFineHeight" );
+    settingsWriter.addAttribute( "config:type", "int" );
+    settingsWriter.addTextNode( QString::number( m_gridX ) );
+    settingsWriter.endElement();
+
     //<config:config-item config:name="SelectedPage" config:type="short">3</config:config-item>
     settingsWriter.startElement( "config:config-item" );
     settingsWriter.addAttribute( "config:name", "SelectedPage" );
