@@ -73,6 +73,11 @@ public:
     bool isNull() const;
 
     /**
+     * Convenience method, returns the size of the image.
+     */
+    QSize size() const;
+
+    /**
      * Scales the image's width and height to the specified size and returns
      * a new KoImage object for it.
      * Note that KoImage is intelligent enough to always scale from the
@@ -173,6 +178,14 @@ bool KoImage<Key>::isNull() const
 }
 
 template <class Key>
+QSize KoImage<Key>::size() const
+{
+    if ( !d ) return QSize();
+
+    return d->m_image.size();
+}
+
+template <class Key>
 KoImage<Key> KoImage<Key>::scale( const QSize &size ) const
 {
     if ( !d )
@@ -185,7 +198,7 @@ KoImage<Key> KoImage<Key>::scale( const QSize &size ) const
     else
         originalImage = *this;
 
-    if ( originalImage.image().size() == size )
+    if ( originalImage.size() == size )
         return originalImage;
 
     QImage scaledImg = originalImage.image().smoothScale( size.width(), size.height() );
