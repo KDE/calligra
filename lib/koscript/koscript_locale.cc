@@ -28,7 +28,7 @@ KSLocale::KSLocale() :
     setMonetaryThousandsSeparator("");
     setPositiveSign("");
     setNegativeSign("-");
-    setWeekStartsMonday(false);
+    setWeekStartDay(7); // Sunday
     setTimeFormat("%I:%M:%S %p");
     setDateFormat("%A %d %B %Y");
     setDateFormatShort("%m/%d/%y");
