@@ -23,6 +23,8 @@
 
 #include <qstring.h>
 
+#include <kexi_export.h>
+
 /*! KexiDB error codes */
 
 #define ERR_NONE 0

@@ -41,11 +41,6 @@
 #include "kexirelationviewtable.h"
 #include "kexirelationview.h"
 
-#if defined(Q_WS_WIN) || KDE_IS_VERSION(3,2,90)
-# define USE_KMDI_getCaptionColors //we'are using KMDI feature from KDE 3.3
-# include <kmdichildarea.h>
-#endif
-
 KexiRelationViewTableContainer::KexiRelationViewTableContainer(
 	KexiRelationView *parent, KexiDB::TableSchema *t)
  : QFrame(parent,"KexiRelationViewTableContainer" )
@@ -179,47 +174,15 @@ void KexiRelationViewTableContainer::unsetFocus()
 //============================================================================
 //BEGIN KexiRelatoinViewTableContainerHeader
 
-//for compat. with KDE <= 3.2
-#ifndef USE_KMDI_getCaptionColors
-void getCaptionColors( const QPalette &pal, 
-    QColor &activeBG, QColor &activeFG, QColor &inactiveBG, QColor &inactiveFG )
-{
-    QColor def_activeBG = pal.active().highlight();
-    QColor def_activeFG = pal.active().highlightedText();
-    QColor def_inactiveBG = pal.inactive().dark();
-    QColor def_inactiveFG = pal.inactive().brightText();
-
-    if ( QApplication::desktopSettingsAware() ) {
-        //get colors from WM
-        KConfig *cfg = KGlobal::config();
-        cfg->setGroup( "WM" );
-        activeBG = cfg->readColorEntry("activeBackground", &def_activeBG);
-        activeFG = cfg->readColorEntry("activeForeground", &def_activeFG);
-        inactiveBG = cfg->readColorEntry("inactiveBackground", &def_inactiveBG);
-        inactiveFG = cfg->readColorEntry("inactiveForeground", &def_inactiveFG);
-    }
-    else {
-        activeBG = def_activeBG;
-        activeFG = def_activeFG;
-        inactiveBG = def_inactiveBG;
-        inactiveFG = def_inactiveFG;
-    }
-}
-#endif
-
-
 KexiRelationViewTableContainerHeader::KexiRelationViewTableContainerHeader(
 	const QString& text,QWidget *parent)
 	:QLabel(text,parent),m_dragging(false) 
 {
 	setMargin(1);
-
-#ifdef USE_KMDI_getCaptionColors
-	KMdiChildArea::getCaptionColors( 
-#else
-	getCaptionColors( 
-#endif
-		palette(), m_activeBG, m_activeFG, m_inactiveBG, m_inactiveFG );
+	m_activeBG = KGlobalSettings::activeTitleColor();
+	m_activeFG = KGlobalSettings::activeTextColor();
+	m_inactiveBG = KGlobalSettings::inactiveTitleColor();
+	m_inactiveFG = KGlobalSettings::inactiveTextColor();
 
 	installEventFilter(this);
 }

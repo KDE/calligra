@@ -22,6 +22,8 @@
 
 #include <qguardedptr.h>
 
+#include <kexi_export.h>
+
 namespace KexiDB {
 
 class Connection;

@@ -72,3 +72,4 @@ messages: rc.cpp
 
 #obsolete:
 #kde_services_DATA = kexipart.desktop
+

@@ -13,3 +13,5 @@ $(USE_EXCEPTIONS) $(KEXI_OPTIONS) \
 # additional default options
 KDE_CXXFLAGS += -DKEXI_NO_CTXT_HELP=1
 
+KDE_CXXFLAGS += -include $(top_srcdir)/kexi/kexi_export.h
+

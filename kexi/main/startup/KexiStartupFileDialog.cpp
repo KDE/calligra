@@ -88,7 +88,7 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode)
 	}
 	mime = KMimeType::mimeType("all/allfiles");
 	if (mime) {
-		filter += (mime->patterns().isEmpty() ? "*" : mime->patterns().join(" ")) + "|" + mime->comment()+ " (*)\n";
+		filter += QString(mime->patterns().isEmpty() ? "*" : mime->patterns().join(" ")) + "|" + mime->comment()+ " (*)\n";
 	}
 	
 	if (allfilters.count()>1) {//prepend "all supoported files" entry

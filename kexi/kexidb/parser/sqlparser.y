@@ -159,7 +159,7 @@
 %token GRANT
 %token GREATER_OR_EQUAL
 %token GREATER_THAN
-%token GROUP
+//conflict %token GROUP
 %token HAVING
 %token HOUR
 %token HOURS_BETWEEN
