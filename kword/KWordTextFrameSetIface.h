@@ -38,6 +38,8 @@ k_dcop:
     virtual DCOPRef startEditing();
     bool hasSelection() const;
     int numberOfParagraphs();
+    int paragraphsSelected();
+
     QString name() const;
     bool isVisible() const;
     bool isFloating() const;

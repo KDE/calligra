@@ -53,3 +53,8 @@ void KWordTextFrameSetEditIface::insertLink(const QString &_linkName, const QStr
 {
     m_framesetedit->insertLink(_linkName,hrefName);
 }
+
+void KWordTextFrameSetEditIface::insertTOC()
+{
+    m_framesetedit->insertTOC();
+}

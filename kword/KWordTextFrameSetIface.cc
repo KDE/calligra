@@ -88,3 +88,8 @@ void KWordTextFrameSetIface::selectAll( bool select )
 {
     m_frametext->textObject()->selectAll(select);
 }
+
+int KWordTextFrameSetIface::paragraphsSelected()
+{
+    return m_frametext->paragraphsSelected();
+}
