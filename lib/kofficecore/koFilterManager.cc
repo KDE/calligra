@@ -51,6 +51,10 @@ public:
 
     int exitCode; // the exit code of the external filter process
     QString tempfname; // yes, ugly :)
+
+    // Define the KTrader constraints used for filters.
+    static const char * const IMPORT;
+    static const char * const EXPORT;
 };
 
 
@@ -95,9 +99,9 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
         constraint += QString::fromLatin1(_format);
         constraint += "' in ";
         if ( direction == Import )
-            constraint += "[X-KDE-Export]";
+            constraint += d->IMPORT;
         else
-            constraint += "[X-KDE-Import]";
+            constraint += d->EXPORT;
     }
 
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constraint );
@@ -180,9 +184,9 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
         constraint += nativeFormat;
         constraint += "' in ";
         if ( direction == Import )
-            constraint += "[X-KDE-Export]";
+            constraint += d->IMPORT;
         else
-            constraint += "[X-KDE-Import]";
+            constraint += d->EXPORT;
     }
 
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constraint );
@@ -230,7 +234,8 @@ QString KoFilterManager::import( const QString &_file, QString &mimeType,
     // Now find the list of filters that can deal with this file.
     QString constr = "'";
     constr += mimeType;
-    constr += "' in Import";
+    constr += "' in ";
+    constr += d->IMPORT;
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
     if ( vec.isEmpty() )
     {
@@ -286,9 +291,12 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
 
     QString constr = "'";
     constr += _native_format;
-    constr += "' in [X-KDE-Export] and '";
+    constr += "' in ";
+    constr += d->EXPORT;
+    constr += " and '";
     constr += mimeType;
-    constr += "' in [X-KDE-Import]";
+    constr += "' in ";
+    constr += d->IMPORT;
 
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
     if ( vec.isEmpty() )
@@ -402,9 +410,12 @@ QString KoFilterManager::prepareExport( const QString & file,
 
     QString constr = "'";
     constr += outputFormat;
-    constr += "' in [X-KDE-Export] and '";
+    constr += "' in ";
+    constr += d->EXPORT;
+    constr += " and '";
     constr += _native_format;
-    constr += "' in [X-KDE-Import]";
+    constr += "' in ";
+    constr += d->IMPORT;
 
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
     if ( vec.isEmpty() )
@@ -504,5 +515,8 @@ void KoFilterManager::receivedStdout(KProcess * /*p*/, char *buffer, int buflen)
         d->tempfname=tmp;
     }
 }
+
+const char * const KoFilterManagerPrivate::IMPORT = "[X-KDE-Import]";
+const char * const KoFilterManagerPrivate::EXPORT = "[X-KDE-Export]";
 
 #include <koFilterManager.moc>
