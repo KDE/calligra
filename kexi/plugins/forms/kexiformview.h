@@ -122,9 +122,9 @@ class KexiFormView : public KexiDataAwareView
 		 (in KMDI's Child Frame mode), because otherwise tabstop ordering can get broken. */
 		void updateTabStopsOrder();
 
-		virtual void parentDialogDetached();
+//		virtual void parentDialogDetached();
 
-		virtual void parentDialogAttached(KMdiChildFrm *);
+//		virtual void parentDialogAttached(KMdiChildFrm *);
 
 		KexiDBForm *m_dbform;
 		KexiFormScrollView *m_scrollView;

@@ -23,6 +23,7 @@
 #include <qpainter.h>
 #include <qcursor.h>
 #include <qapplication.h>
+#include <qfocusdata.h>
 
 #include <kdebug.h>
 
@@ -34,10 +35,12 @@ class KexiDBForm::Private
 {
 	public:
 		Private()
-		 : autoTabStops(false)
+		 : orderedFocusWidgetsIterator(orderedFocusWidgets)
+		 , autoTabStops(false)
 		{
 		}
 		QPtrList<QWidget> orderedFocusWidgets;
+		QPtrListIterator<QWidget> orderedFocusWidgetsIterator;
 		bool autoTabStops : 1;
 };
 
@@ -231,52 +234,77 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 {
 	QWidget *fromWidget = 0;
 	QWidget *topLevelWidget = form->widget()->topLevelWidget();
+	form->updateTabStopsOrder(); //certain widgets can have now updated focusPolicy properties, fix this
 	if (d->orderedFocusWidgets.isEmpty()) {
 		//generate a new list
 		for (KFormDesigner::ObjectTreeListIterator it(form->tabStopsIterator()); it.current(); ++it) {
 			it.current()->widget()->installEventFilter(this);
 			if (fromWidget) {
-				kdDebug() << "KexiFormView::initForm() tab order: " << fromWidget->name() 
+				kdDebug() << "KexiDBForm::updateTabStopsOrder() tab order: " << fromWidget->name() 
 					<< " -> " << it.current()->widget()->name() << endl;
-				setTabOrder( fromWidget, it.current()->widget() );
+//				setTabOrder( fromWidget, it.current()->widget() );
 			}
 			fromWidget = it.current()->widget();
 			d->orderedFocusWidgets.append( it.current()->widget() );
 		}
 	}
-	else {
+/*	else {
 		//restore ordering
 		for (QPtrListIterator<QWidget> it(d->orderedFocusWidgets); it.current(); ++it) {
 			if (fromWidget) {
-				kdDebug() << "KexiFormView::initForm() tab order: " << fromWidget->name() 
+				kdDebug() << "KexiDBForm::updateTabStopsOrder() tab order: " << fromWidget->name() 
 					<< " -> " << it.current()->name() << endl;
 				setTabOrder( fromWidget, it.current() );
 			}
 			fromWidget = it.current();
 		}
 //		SET_FOCUS_USING_REASON(focusWidget(), QFocusEvent::Tab);
-	}
+	}*/
  }
 
 bool KexiDBForm::eventFilter ( QObject * watched, QEvent * e )
 {
-	if (e->type()==QEvent::KeyPress && dynamic_cast<KexiDataItemInterface*>(watched)) {
-		kdDebug() << watched->name() << endl;
-		if (d->orderedFocusWidgets.first() && static_cast<QKeyEvent*>(e)->key() == Key_Tab 
-			&& watched == d->orderedFocusWidgets.last())
+	if (e->type()==QEvent::KeyPress && static_cast<QWidget*>(watched)) {
+		if (static_cast<QKeyEvent*>(e)->key() == Key_Tab
+			|| static_cast<QKeyEvent*>(e)->key() == Key_Backtab)
 		{
-			//set focus, but don't use just setFocus() because certain widgets
-			//behaves differently (e.g. QLineEdit calls selectAll()) when 
-			//focus event's reason is QFocusEvent::Tab
-			SET_FOCUS_USING_REASON(d->orderedFocusWidgets.first(), QFocusEvent::Tab);
-			return true;
-		}
-		else if (d->orderedFocusWidgets.last() && static_cast<QKeyEvent*>(e)->key() == Key_BackTab 
-			&& watched == d->orderedFocusWidgets.first())
-		{
-			//set focus, see above note
-			SET_FOCUS_USING_REASON(d->orderedFocusWidgets.last(), QFocusEvent::Backtab);
-			return true;
+			if (d->orderedFocusWidgetsIterator.current() != static_cast<QWidget*>(watched)) {
+				d->orderedFocusWidgetsIterator.toFirst();
+				while (d->orderedFocusWidgetsIterator.current() && d->orderedFocusWidgetsIterator.current()!=static_cast<QWidget*>(watched)) {
+					QWidget *ww = d->orderedFocusWidgetsIterator.current();
+					++d->orderedFocusWidgetsIterator;
+				}
+			}
+			kdDebug() << watched->name() << endl;
+			if (static_cast<QKeyEvent*>(e)->key() == Key_Tab) {
+				if (d->orderedFocusWidgets.first() && watched == d->orderedFocusWidgets.last()) {
+					d->orderedFocusWidgetsIterator.toFirst();
+				}
+				else if (watched == d->orderedFocusWidgetsIterator.current()) {
+					++d->orderedFocusWidgetsIterator; //next
+				}
+				else
+					return true; //ignore
+				//set focus, but don't use just setFocus() because certain widgets
+				//behaves differently (e.g. QLineEdit calls selectAll()) when 
+				//focus event's reason is QFocusEvent::Tab
+				SET_FOCUS_USING_REASON(d->orderedFocusWidgetsIterator.current(), QFocusEvent::Tab);
+				kdDebug() << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
+				return true;
+			}	else if (static_cast<QKeyEvent*>(e)->key() == Key_BackTab) {
+				if (d->orderedFocusWidgets.last() && watched == d->orderedFocusWidgets.first()) {
+					d->orderedFocusWidgetsIterator.toLast();
+				}
+				else if (watched == d->orderedFocusWidgetsIterator.current()) {
+					--d->orderedFocusWidgetsIterator; //prev
+				}
+				else
+					return true; //ignore
+				//set focus, see above note
+				SET_FOCUS_USING_REASON(d->orderedFocusWidgetsIterator.current(), QFocusEvent::Backtab);
+				kdDebug() << "focusing " << d->orderedFocusWidgetsIterator.current()->name() << endl;
+				return true;
+			}
 		}
 	}
 	return KexiGradientWidget::eventFilter(watched, e);

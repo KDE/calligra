@@ -35,8 +35,13 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
 	m_currentLocalSortColumn = -1; /* no column */
 	m_localSortingOrder = -1; /* no sorting */
 	m_navPanel = m_scrollViewNavPanel; //copy this pointer from KexiScrollView
-	if(preview)
+	if(preview) {
 		setRecordNavigatorVisible(true);
+//tmp
+//		recordNavigator()->setEditingIndicatorEnabled(true);
+//		recordNavigator()->showEditingIndicator(true);
+	}
+
 	connect(this, SIGNAL(resizingStarted()), this, SLOT(slotResizingStarted()));
 	//context menu
 	m_popup = new KPopupMenu(this, "contextMenu");

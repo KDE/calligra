@@ -191,6 +191,7 @@ KexiFormView::initForm()
 	if(form()->autoTabStops())
 		form()->autoAssignTabStops();
 
+	//collect tab order information
 	m_dbform->updateTabStopsOrder(form());
 
 //	if (m_dbform->orderedFocusWidgets()->first())
@@ -198,6 +199,8 @@ KexiFormView::initForm()
 
 	formPart()->manager()->importForm(form(), viewMode()==Kexi::DataViewMode);
 	m_scrollView->setForm(form());
+
+//	m_dbform->updateTabStopsOrder(form());
 //	QSize s = m_dbform->size();
 //	QApplication::sendPostedEvents();
 //	m_scrollView->resize( s );
@@ -623,6 +626,7 @@ KexiFormView::setFocusInternal()
 }
 
 
+/*
 void KexiFormView::parentDialogDetached()
 {
 	m_dbform->updateTabStopsOrder(form());
@@ -631,7 +635,7 @@ void KexiFormView::parentDialogDetached()
 void KexiFormView::parentDialogAttached(KMdiChildFrm *)
 {
 	m_dbform->updateTabStopsOrder(form());
-}
+}*/
 
 #include "kexiformview.moc"
 
