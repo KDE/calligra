@@ -120,7 +120,7 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
   clearAllErrors();
 }
 
-KSpreadSheet * KSpreadCell::sheet()
+KSpreadSheet * KSpreadCell::sheet() const
 {
   return m_pTable;
 }
@@ -1589,7 +1589,10 @@ void KSpreadCell::applyZoomedFont( QPainter &painter, int _col, int _row )
          && !(m_pTable->getShowFormula() 
               && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) ) )
     {
-        tmpFont = condition.fontcond;
+        if ( condition.fontcond )
+            tmpFont = *condition.fontcond;
+        else
+            tmpFont = condition.style->font();
     }
     else
     {
@@ -5327,9 +5330,9 @@ QValueList<KSpreadConditional> KSpreadCell::conditionList() const
   return conditions.conditionList();
 }
 
-void KSpreadCell::setConditionList(const QValueList<KSpreadConditional> &newList)
+void KSpreadCell::setConditionList( const QValueList<KSpreadConditional> & newList )
 {
-  conditions.setConditionList(newList);
+  conditions.setConditionList( newList );
 }
 
 bool KSpreadCell::hasError() const
@@ -5342,34 +5345,34 @@ bool KSpreadCell::hasError() const
 
 void KSpreadCell::clearAllErrors()
 {
-  clearFlag(Flag_ParseError);
-  clearFlag(Flag_CircularCalculation);
-  clearFlag(Flag_DependancyError);
+  clearFlag( Flag_ParseError );
+  clearFlag( Flag_CircularCalculation );
+  clearFlag( Flag_DependancyError );
 }
 
 bool KSpreadCell::calcDirtyFlag()
 {
-  return (m_content == Formula ? false : testFlag(Flag_CalcDirty));
+  return ( m_content == Formula ? false : testFlag( Flag_CalcDirty ) );
 }
 
 bool KSpreadCell::layoutDirtyFlag() const
 {
-  return testFlag(Flag_LayoutDirty);
+  return testFlag( Flag_LayoutDirty );
 }
 
 void KSpreadCell::clearDisplayDirtyFlag()
 {
-  clearFlag(Flag_DisplayDirty);
+  clearFlag( Flag_DisplayDirty );
 }
 
 void KSpreadCell::setDisplayDirtyFlag()
 {
-  setFlag(Flag_DisplayDirty);
+  setFlag( Flag_DisplayDirty );
 }
 
 bool KSpreadCell::isForceExtraCells() const
 {
-  return testFlag(Flag_ForceExtra);
+  return testFlag( Flag_ForceExtra );
 }
 
 void KSpreadCell::clearFlag( CellFlags flag )
@@ -5458,4 +5461,5 @@ QString KSpreadCell::fullName( const KSpreadSheet* s, int col, int row )
 }
 
 #include "kspread_cell.moc"
+
 

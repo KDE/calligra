@@ -22,61 +22,77 @@
 #define __kspread_dlg_conditional__
 
 #include <kdialogbase.h>
-#include "kspread_cell.h"
-class KSpreadView;
-class KSpreadSheet;
-class QLabel;
-class QLineEdit;
-class QFont;
-class KColorButton;
+#include <qwidget.h>
+
 class QComboBox;
+class KLineEdit;
 
-#define KSPREAD_NUM_CONDITIONALS 3
+class KSpreadCell;
+class KSpreadStyle;
+class KSpreadView;
 
-class KSpreadWidgetconditional : public QWidget
+#include "kspread_condition.h"
+
+class KSpreadConditionalWidget : public QWidget
 {
   Q_OBJECT
-public:
-  KSpreadWidgetconditional(QWidget *_parent, const QString &name);
-  double getBackFirstValue()const;
-  double getBackSecondValue()const;
-  QFont getFont()const {return font;}
-  QColor getColor()const;
-  Conditional typeOfCondition()const;
-  void init(KSpreadConditional tmp);
-public slots:
-  void changeLabelFont();
-  void changeIndex(const QString &text);
-  void refreshPreview();
-  void disabled();
-signals:
-  void fontSelected();
-protected:
-  QComboBox *choose;
-  QLineEdit *edit1;
-  QLineEdit *edit2;
-  KColorButton* color;
-  QPushButton *fontButton;
-  QFont font;
-  KSpreadConditional tmpCond;
-  QLineEdit *preview;
+  
+ public:
+  KSpreadConditionalWidget( QWidget * parent = 0, const char * name = 0, WFlags fl = 0 );
+  ~KSpreadConditionalWidget();
+
+  QComboBox * m_condition_1;
+  QComboBox * m_style_1;
+  KLineEdit * m_firstValue_1;
+  KLineEdit * m_secondValue_1;
+  
+  QComboBox * m_condition_2;
+  QComboBox * m_style_2;
+  KLineEdit * m_firstValue_2;
+  KLineEdit * m_secondValue_2;
+  
+  QComboBox * m_condition_3;
+  QComboBox * m_style_3;
+  KLineEdit * m_firstValue_3;
+  KLineEdit * m_secondValue_3;
+
+ public slots:
+  void slotTextChanged1( const QString & );
+  void slotTextChanged2( const QString & );
+  void slotTextChanged3( const QString & );
 };
 
-class KSpreadconditional : public KDialogBase
+
+class KSpreadConditionalDlg : public KDialogBase
 {
   Q_OBJECT
-public:
-  KSpreadconditional(KSpreadView* parent, const char* name,
-		     const QRect &_marker );
+ public:
+  KSpreadConditionalDlg( KSpreadView * parent, const char * name,
+                         const QRect & marker );
+
   void init();
-  public slots:
+
+ public slots:
   void slotOk();
 
-protected:
-  KSpreadView* m_pView;
-  QRect  marker;
-  KSpreadWidgetconditional *conditionals[KSPREAD_NUM_CONDITIONALS];
-  KSpreadConditional result;
+ protected:
+  KSpreadView *              m_view;
+  KSpreadConditionalWidget * m_dlg;
+  QRect                      m_marker;
+  KSpreadConditional         m_result;
+
+ private:
+  void init( KSpreadConditional const & tmp, int numCondition );
+  Conditional typeOfCondition( QComboBox const * const cb ) const;
+
+  bool checkInputData( KLineEdit const * const edit1,
+                       KLineEdit const * const edit2 );
+  bool checkInputData();
+  bool getCondition( KSpreadConditional & newCondition, QComboBox const * const cb,
+                     KLineEdit const * const edit1, KLineEdit const * const edit2,
+                     QComboBox const * const sb, KSpreadStyle * style );
+
 };
 
 #endif
+

@@ -24,11 +24,13 @@
 
 #include <qvaluelist.h>
 #include <qdom.h>
-#include <qfont.h>
-#include <qcolor.h>
 
 class KSpreadCell;
+class KSpreadStyle;
 
+class QColor;
+class QFont;
+class QString;
 
 /**
  * Structure to indicate the condition we're testing on a cell and the special
@@ -36,11 +38,15 @@ class KSpreadCell;
  */
 struct KSpreadConditional
 {
- double val1;
- double val2;
- QColor colorcond;
- QFont fontcond;
- Conditional m_cond;
+  double         val1;
+  double         val2;
+  QString *      strVal1;
+  QString *      strVal2;
+  QColor  *      colorcond;
+  QFont   *      fontcond;
+  QString *      styleName;
+  KSpreadStyle * style;
+  Conditional    cond;
 };
 
 
@@ -49,13 +55,13 @@ struct KSpreadConditional
  */
 class KSpreadConditions
 {
-public:
+ public:
 
   /**
    * Constructor.  There is no default constructor - you must use this one
    * with the owner cell as a parameter
    */
-  KSpreadConditions(const KSpreadCell *ownerCell);
+  KSpreadConditions( const KSpreadCell * ownerCell );
   virtual ~KSpreadConditions();
 
   /**
@@ -68,7 +74,7 @@ public:
    *
    * @return true if one of the conditions is true, false if not.
    */
-  bool currentCondition(KSpreadConditional& condition);
+  bool currentCondition( KSpreadConditional & condition );
 
   /**
    * Retrieve the current list of conditions we're checking
@@ -78,23 +84,24 @@ public:
   /**
    * Replace the current list of conditions with this new one
    */
-  void setConditionList(const QValueList<KSpreadConditional> &list);
+  void setConditionList( const QValueList<KSpreadConditional> & list );
 
   /**
    * Saves the conditions to a DOM tree structure.
    * @return the DOM element for the conditions.
    */
-  QDomElement saveConditions(QDomDocument& doc) const;
+  QDomElement saveConditions( QDomDocument & doc ) const;
 
   /**
    * Takes a parsed DOM element and recreates the conditions structure out of
    * it
-   */
-  void loadConditions(const QDomElement &element);
+   */ 
+  void loadConditions( const QDomElement & element );
 private:
+  KSpreadConditions() {}
 
-  const KSpreadCell *cell;
-  QValueList<KSpreadConditional> condList;
+  const KSpreadCell * m_cell;
+  QValueList<KSpreadConditional> m_condList;
 };
 
 

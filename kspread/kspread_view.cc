@@ -3757,7 +3757,7 @@ void KSpreadView::conditional()
   }
   else
   {
-    KSpreadconditional dlg( this, "conditional", rect);
+    KSpreadConditionalDlg dlg( this, "KSpreadConditionalDlg", rect);
     dlg.exec();
   }
 }

@@ -134,7 +134,7 @@ public:
      */
     ~KSpreadCell();
 
-    KSpreadSheet* sheet();
+    KSpreadSheet* sheet() const;
     KSpreadCell* previousCell()const { return m_previousCell; }
     KSpreadCell* nextCell()const { return m_nextCell; }
     void setPreviousCell( KSpreadCell* c ) { m_previousCell = c; }
@@ -997,9 +997,9 @@ private:
      * A pointer to the decimal separator
      */
     static QChar decimal_point;
-    static const char* s_dataTypeToString[];
+    // static const char* s_dataTypeToString[];
 
-  /* helper functions to the paintCell(...) function */
+    /* helper functions to the paintCell(...) function */
     void paintCellBorders( QPainter& painter, const KoRect &rect,
                            const KoRect &cellRect, const QPoint &cellRef,
                            bool paintBorderRight, bool paintBorderBottom );

@@ -17,97 +17,158 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kspread_condition.h"
-#include "kspread_cell.h"
-#include "kspread_sheet.h"
-#include "kspread_util.h"
-#include <qdom.h>
-#include <kdebug.h>
 #include <float.h>
 
+#include "kspread_cell.h"
+#include "kspread_condition.h"
+#include "kspread_doc.h"
+#include "kspread_sheet.h"
+#include "kspread_style.h"
+#include "kspread_style_manager.h"
+#include "kspread_util.h"
 
-KSpreadConditions::KSpreadConditions(const KSpreadCell *ownerCell)
+#include <qdom.h>
+
+#include <kdebug.h>
+
+
+KSpreadConditions::KSpreadConditions( const KSpreadCell * ownerCell )
+  : m_cell( ownerCell )
 {
-  Q_ASSERT(ownerCell != NULL);
-
-  cell = ownerCell;
+  Q_ASSERT( ownerCell != NULL );
 }
 
 KSpreadConditions::~KSpreadConditions()
 {
-    condList.clear();
+  QValueList<KSpreadConditional>::const_iterator it;
+  for ( it = m_condList.begin(); it != m_condList.end(); ++it )
+  {
+    KSpreadConditional c = *it;
+    delete c.strVal1;
+    delete c.strVal2;
+    delete c.fontcond;
+    delete c.colorcond;
+    delete c.styleName;
+  }
+  m_condList.clear();
 }
 
-bool KSpreadConditions::currentCondition(KSpreadConditional& condition)
+bool KSpreadConditions::currentCondition( KSpreadConditional & condition )
 {
   /* for now, the first condition that is true is the one that will be used */
 
   QValueList<KSpreadConditional>::const_iterator it;
-  double value = cell->value().asFloat() * cell->factor(cell->column(),
-						    cell->row());
+  double value   = m_cell->value().asFloat() * m_cell->factor( m_cell->column(), m_cell->row() );
+  QString strVal = m_cell->strOutText();
 
-  if (cell->value().isNumber() && !cell->table()->getShowFormula())
+  //  if ( m_cell->value().isNumber() && !m_cell->table()->getShowFormula())
+  //  {
+
+  for ( it = m_condList.begin(); it != m_condList.end(); ++it )
   {
-    for (it = condList.begin(); it != condList.end(); it++)
+    condition = *it;
+
+    if ( condition.strVal1 && m_cell->value().isNumber() )
+      continue;
+
+    switch ( condition.cond )
     {
-      condition = *it;
-      switch (condition.m_cond)
+     case Equal :
+      if ( condition.strVal1 )
       {
-      case Equal :
-	if (value - condition.val1 < DBL_EPSILON &&
-	    value - condition.val1 > (0.0 - DBL_EPSILON))
-	{
-	  return true;
-	}
-	break;
-
-      case Superior :
-	if( value > condition.val1 )
-	{
-	  return true;
-	}
-	break;
-
-      case Inferior :
-	if(value < condition.val1 )
-	{
-	  return true;
-	}
-	break;
-
-      case SuperiorEqual :
-	if( value >= condition.val1 )
-	{
-	  return true;
-	}
-	break;
-
-      case InferiorEqual :
-	if(value <= condition.val1 )
-	{
-	  return true;
-	}
-	break;
-
-      case Between :
-	if( ( value > QMIN(condition.val1, condition.val2 ) ) &&
-	    ( value < QMAX(condition.val1, condition.val2 ) ) )
-	{
-	  return true;
-	}
-	break;
-
-      case Different :
-	if( ( value < QMIN(condition.val1, condition.val2 ) ) ||
-	    ( value > QMAX(condition.val1, condition.val2) ) )
-	{
-	  return true;
-	}
-	break;
-
-      default:
-	break;
+        if ( strVal == *condition.strVal1 )
+          return true;
       }
+      else
+      if ( value - condition.val1 < DBL_EPSILON &&
+           value - condition.val1 > (0.0 - DBL_EPSILON) )
+      {
+        return true;
+      }
+      break;
+
+     case Superior :
+      if ( condition.strVal1 )
+      {
+        if ( strVal > *condition.strVal1 )
+          return true;
+      }
+      else
+      if ( value > condition.val1 )
+      {
+        return true;
+      }
+      break;
+
+     case Inferior :
+      if ( condition.strVal1 )
+      {
+        if ( strVal < *condition.strVal1 )
+          return true;
+      }
+      else
+      if ( value < condition.val1 )
+      {
+        return true;
+      }
+      break;
+
+     case SuperiorEqual :
+      if ( condition.strVal1 )
+      {
+        if ( strVal >= *condition.strVal1 )
+          return true;
+      }
+      else
+      if ( value >= condition.val1 )
+      {
+        return true;
+      }
+      break;
+
+     case InferiorEqual :
+      if ( condition.strVal1 )
+      {
+        if ( strVal <= *condition.strVal1 )
+          return true;
+      }
+      else
+      if ( value <= condition.val1 )
+      {
+        return true;
+      }
+      break;
+
+     case Between :
+      if ( condition.strVal1 && condition.strVal2 )
+      {
+        if ( strVal > *condition.strVal1 && strVal < *condition.strVal2 )
+          return true;
+      }
+      else
+      if ( ( value > QMIN(condition.val1, condition.val2 ) )
+           && ( value < QMAX(condition.val1, condition.val2 ) ) )
+      {
+        return true;
+      }
+      break;
+
+     case Different :
+      if ( condition.strVal1 && condition.strVal2 )
+      {
+        if ( strVal < *condition.strVal1 || strVal > *condition.strVal2 )
+          return true;
+      }
+      else
+      if ( ( value < QMIN(condition.val1, condition.val2 ) )
+           || ( value > QMAX(condition.val1, condition.val2) ) )
+      {
+        return true;
+      }
+      break;
+      
+     default:
+      break;
     }
   }
   return false;
@@ -115,15 +176,15 @@ bool KSpreadConditions::currentCondition(KSpreadConditional& condition)
 
 QValueList<KSpreadConditional> KSpreadConditions::conditionList() const
 {
-  return condList;
+  return m_condList;
 }
 
-void KSpreadConditions::setConditionList(const QValueList<KSpreadConditional> &list)
+void KSpreadConditions::setConditionList( const QValueList<KSpreadConditional> & list )
 {
-  condList = list;
+  m_condList = list;
 }
 
-QDomElement KSpreadConditions::saveConditions(QDomDocument& doc) const
+QDomElement KSpreadConditions::saveConditions( QDomDocument & doc ) const
 {
   QDomElement conditions = doc.createElement("condition");
   QValueList<KSpreadConditional>::const_iterator it;
@@ -131,7 +192,7 @@ QDomElement KSpreadConditions::saveConditions(QDomDocument& doc) const
   int num = 0;
   QString name;
 
-  for (it = condList.begin(); it != condList.end(); it++)
+  for ( it = m_condList.begin(); it != m_condList.end(); ++it )
   {
     KSpreadConditional condition = *it;
 
@@ -139,22 +200,40 @@ QDomElement KSpreadConditions::saveConditions(QDomDocument& doc) const
      * This is unimportant now but in older versions three conditions were
      * hardcoded with names "first" "second" and "third"
      */
-    name.setNum(num);
-    name.prepend("condition");
+    name.setNum( num );
+    name.prepend( "condition" );
 
-    child = doc.createElement(name);
-    child.setAttribute("cond", (int)condition.m_cond);
-    child.setAttribute("val1", condition.val1);
-    child.setAttribute("val2", condition.val2);
-    child.setAttribute("color", condition.colorcond.name());
-    child.appendChild( util_createElement( "font", condition.fontcond, doc ));
+    child = doc.createElement( name );
+    child.setAttribute( "cond", (int) condition.cond );
 
-    conditions.appendChild(child);
+    // TODO: saving in KSpread 1.1 | KSpread 1.2 format
+    if ( condition.strVal1 )
+    {
+      child.setAttribute( "strval1", *condition.strVal1 );
+      if ( condition.strVal2 )
+        child.setAttribute( "strval2", *condition.strVal2 );
+    }
+    else
+    {
+      child.setAttribute( "val1", condition.val1 );
+      child.setAttribute( "val2", condition.val2 );
+    }
+    if ( condition.styleName )
+    {
+      child.setAttribute( "style", *condition.styleName );
+    }
+    else
+    {
+      child.setAttribute( "color", condition.colorcond->name() );
+      child.appendChild( util_createElement( "font", *condition.fontcond, doc ) );
+    }
 
-    num++;
+    conditions.appendChild( child );
+
+    ++num;
   }
 
-  if (num == 0)
+  if ( num == 0 )
   {
     /* there weren't any real conditions -- return a null dom element */
     return QDomElement();
@@ -165,43 +244,63 @@ QDomElement KSpreadConditions::saveConditions(QDomDocument& doc) const
   }
 }
 
-void KSpreadConditions::loadConditions(const QDomElement &element)
+void KSpreadConditions::loadConditions( const QDomElement & element )
 {
   QDomNodeList nodeList = element.childNodes();
   KSpreadConditional newCondition;
   bool ok;
+  KSpreadStyleManager * manager = m_cell->sheet()->doc()->styleManager();
 
-  for (int i = 0; i < (int)(nodeList.length()); i++)
+  for ( int i = 0; i < (int)(nodeList.length()); ++i )
   {
-    QDomElement conditionElement = nodeList.item(i).toElement();
-    ok = true;
+    newCondition.strVal1   = 0;
+    newCondition.strVal2   = 0;
+    newCondition.styleName = 0;
+    newCondition.fontcond  = 0;
+    newCondition.colorcond = 0;
 
-    ok = conditionElement.hasAttribute( "cond" ) &&
-         conditionElement.hasAttribute( "val1" ) &&
-         conditionElement.hasAttribute( "val2" ) &&
-         conditionElement.hasAttribute( "color" );
+    QDomElement conditionElement = nodeList.item( i ).toElement();
 
-    if (ok) newCondition.m_cond =
-	      (Conditional) conditionElement.attribute("cond").toInt( &ok );
+    ok = conditionElement.hasAttribute( "cond" );
 
-    if (ok) newCondition.val1 =
-	      conditionElement.attribute("val1").toDouble( &ok );
+    if ( ok ) 
+      newCondition.cond = (Conditional) conditionElement.attribute( "cond" ).toInt( &ok );
+    else continue;
 
-    if (ok) newCondition.val2 =
-	      conditionElement.attribute("val2").toDouble( &ok );
+    if ( conditionElement.hasAttribute( "val1" ) )
+    {
+      newCondition.val1 = conditionElement.attribute( "val1" ).toDouble( &ok );
 
-    if (ok) newCondition.colorcond =
-	      QColor(conditionElement.attribute("color"));
+      if ( conditionElement.hasAttribute( "val2" ) )
+        newCondition.val2 = conditionElement.attribute("val2").toDouble( &ok );
+    }
+
+    if ( conditionElement.hasAttribute( "strval1" ) )
+    {
+      newCondition.strVal1 = new QString( conditionElement.attribute( "strval1" ) );
+
+      if ( conditionElement.hasAttribute( "strval2" ) )
+        newCondition.strVal2 = new QString( conditionElement.attribute( "strval2" ) );
+    }
+
+    if ( conditionElement.hasAttribute( "color" ) )
+      newCondition.colorcond = new QColor( conditionElement.attribute( "color" ) );
 
     QDomElement font = conditionElement.namedItem( "font" ).toElement();
     if ( !font.isNull() )
+      newCondition.fontcond = new QFont( util_toFont( font ) );
+
+    if ( conditionElement.hasAttribute( "style" ) )
     {
-      newCondition.fontcond = util_toFont(font);
+      newCondition.styleName = new QString( conditionElement.attribute( "style" ) );
+      newCondition.style = manager->style( *newCondition.styleName );
+      if ( !newCondition.style )
+        ok = false;
     }
 
-    if (ok)
+    if ( ok )
     {
-      condList.append(newCondition);
+      m_condList.append( newCondition );
     }
     else
     {
