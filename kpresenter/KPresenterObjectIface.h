@@ -36,14 +36,12 @@ public:
 
 k_dcop:
     int getType();
-    QRect getBoundingRect();
+
     bool isSelected();
     float angle();
     int shadowDistance();
     int shadowDirection();
     QColor shadowColor();
-    QSize getSize();
-    QPoint getOrig();
     int effect();
     int effect2();
     int presNum();
@@ -51,6 +49,9 @@ k_dcop:
     bool disappear();
     int disappearNum();
     int effect3();
+
+    void setEffect(const QString & effect);
+    void setEffect3(const QString & effect);
 
     void setSelected( bool _selected );
     void rotate( float _angle );

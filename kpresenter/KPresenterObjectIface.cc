@@ -20,7 +20,7 @@
 #include "KPresenterObjectIface.h"
 
 #include "kpobject.h"
-
+#include <kdebug.h>
 #include <kapplication.h>
 #include <dcopclient.h>
 
@@ -33,12 +33,6 @@ KPresenterObjectIface::KPresenterObjectIface( KPObject *obj_ )
 int KPresenterObjectIface::getType()
 {
     return (int)obj->getType();
-}
-
-QRect KPresenterObjectIface::getBoundingRect()
-{
-    //FIXME
-    return QRect(); //obj->getBoundingRect( );
 }
 
 bool KPresenterObjectIface::isSelected()
@@ -64,17 +58,6 @@ int KPresenterObjectIface::shadowDirection()
 QColor KPresenterObjectIface::shadowColor()
 {
     return obj->getShadowColor();
-}
-
-QSize KPresenterObjectIface::getSize()
-{
-    return QSize();//return obj->getSize();
-}
-
-QPoint KPresenterObjectIface::getOrig()
-{
-    return QPoint();
-    //return obj->getOrig();
 }
 
 int KPresenterObjectIface::effect()
@@ -214,4 +197,67 @@ QString KPresenterObjectIface::disappearSoundEffectFileName() const
 QString KPresenterObjectIface::typeString() const
 {
     return obj->getTypeString();
+}
+
+void KPresenterObjectIface::setEffect(const QString & effect)
+{
+    if(effect=="NONE")
+        obj->setEffect(EF_NONE);
+    else if(effect=="COME_RIGHT")
+        obj->setEffect(EF_COME_RIGHT);
+    else if(effect=="COME_LEFT")
+        obj->setEffect(EF_COME_LEFT);
+    else if(effect=="COME_TOP")
+        obj->setEffect(EF_COME_TOP);
+    else if(effect=="COME_BOTTOM")
+        obj->setEffect(EF_COME_BOTTOM);
+    else if(effect=="COME_RIGHT_TOP")
+        obj->setEffect(EF_COME_RIGHT_TOP);
+    else if(effect=="COME_RIGHT_BOTTOM")
+        obj->setEffect(EF_COME_RIGHT_BOTTOM);
+    else if(effect=="COME_LEFT_TOP")
+        obj->setEffect(EF_COME_LEFT_TOP);
+    else if(effect=="COME_LEFT_BOTTOM")
+        obj->setEffect(EF_COME_LEFT_BOTTOM);
+    else if(effect=="WIPE_LEFT")
+        obj->setEffect(EF_WIPE_LEFT);
+    else if(effect=="WIPE_RIGHT")
+        obj->setEffect(EF_WIPE_RIGHT);
+    else if(effect=="WIPE_TOP")
+        obj->setEffect(EF_WIPE_TOP);
+    else if(effect=="WIPE_BOTTOM")
+        obj->setEffect(EF_WIPE_BOTTOM);
+    else
+        kdDebug()<<"Error : setEffect()\n";
+}
+
+void KPresenterObjectIface::setEffect3(const QString & effect)
+{
+    if(effect=="NONE")
+        obj->setEffect3(EF3_NONE);
+    else if(effect=="GO_RIGHT")
+        obj->setEffect3(EF3_GO_RIGHT);
+    else if(effect=="GO_LEFT")
+        obj->setEffect3(EF3_GO_LEFT);
+    else if(effect=="GO_TOP")
+        obj->setEffect3(EF3_GO_TOP);
+    else if(effect=="GO_BOTTOM")
+        obj->setEffect3(EF3_GO_BOTTOM);
+    else if(effect=="GO_RIGHT_TOP")
+        obj->setEffect3(EF3_GO_RIGHT_TOP);
+    else if(effect=="GO_RIGHT_BOTTOM")
+        obj->setEffect3(EF3_GO_RIGHT_BOTTOM);
+    else if(effect=="GO_LEFT_TOP")
+        obj->setEffect3(EF3_GO_LEFT_TOP);
+    else if(effect=="GO_LEFT_BOTTOM")
+        obj->setEffect3(EF3_GO_LEFT_BOTTOM);
+    else if(effect=="WIPE_LEFT")
+        obj->setEffect3(EF3_WIPE_LEFT);
+    else if(effect=="WIPE_RIGHT")
+        obj->setEffect3(EF3_WIPE_RIGHT);
+    else if(effect=="WIPE_TOP")
+        obj->setEffect3(EF3_WIPE_TOP);
+    else if(effect=="WIPE_BOTTOM")
+        obj->setEffect3(EF3_WIPE_BOTTOM);
+
 }
