@@ -36,7 +36,7 @@ class KoVariableFormatCollection;
 class KCompletion;
 class KoTextCursor;
 class KCommand;
-
+class KoSearchContext;
 /******************************************************************/
 /* Class: KWAutoFormatEntry					  */
 /******************************************************************/
@@ -45,15 +45,15 @@ class KoAutoFormatEntry
 public:
     // The text to find is actually the key in KWAutoFormat's map.
     // What we replace it with is replace().
-    KoAutoFormatEntry(const QString& replace = QString::null)
-        : m_replace( replace ) {}
+    KoAutoFormatEntry(const QString& replace = QString::null);
+    ~KoAutoFormatEntry();
 
     QString replace() const { return m_replace; }
-
+    KoSearchContext *formatEntryContext()const;
 protected:
     QString m_replace;
     // For formatting in the replacement - not implemented yet
-    //KWSearchContext m_formatOptions;
+    KoSearchContext *m_formatOptions;
 };
 
 typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;

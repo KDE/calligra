@@ -39,6 +39,24 @@
 //#include <kotextformat.h>
 #include <kcompletion.h>
 #include <kcommand.h>
+#include <koSearchDia.h>
+
+KoAutoFormatEntry::KoAutoFormatEntry(const QString& replace)
+    : m_replace( replace )
+{
+    m_formatOptions= 0L;
+}
+
+KoAutoFormatEntry::~KoAutoFormatEntry()
+{
+    delete m_formatOptions;
+}
+
+KoSearchContext *KoAutoFormatEntry::formatEntryContext()const
+{
+    return m_formatOptions;
+}
+
 
 /******************************************************************/
 /* Class: KoAutoFormat						  */
