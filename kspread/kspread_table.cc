@@ -5538,7 +5538,7 @@ bool KSpreadTable::loadXML( const QDomElement& table )
         {
             KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
             if ( cell->load( e, 0, 0 ) )
-                insertCell( cell );
+                insertCell( cell, false /* don't update depending cells */ );
             else
                 delete cell; // Allow error handling: just skip invalid cells
         }
@@ -5675,7 +5675,7 @@ KSpreadTable* KSpreadTable::findTable( const QString & _name )
 }
 
 // ###### Torben: Use this one instead of m_cells.insert()
-void KSpreadTable::insertCell( KSpreadCell *_cell )
+void KSpreadTable::insertCell( KSpreadCell *_cell, bool _updateDepend )
 {
   m_cells.insert( _cell, _cell->column(), _cell->row() );
 
@@ -5686,8 +5686,10 @@ void KSpreadTable::insertCell( KSpreadCell *_cell )
 
   /* a full scan of all the tables isn't fun, but that was already happening every time a cell is updated
      anyway.  So this isn't any worse than what we've had */
-  QPtrListIterator<KSpreadTable> it( map()->tableList() );
-  KSpreadCell* c;
+  if ( _updateDepend )
+  {
+    QPtrListIterator<KSpreadTable> it( map()->tableList() );
+    KSpreadCell* c;
     for( ; it.current(); ++it )
     {
         c = it.current()->firstCell();
@@ -5699,19 +5701,11 @@ void KSpreadTable::insertCell( KSpreadCell *_cell )
 	  }
 	}
     }
-
+  }
   if ( m_bScrollbarUpdates )
-  {
-    if ( _cell->column() > m_iMaxColumn )
-    {
-      m_iMaxColumn = _cell->column();
-      emit sig_maxColumn( _cell->column() );
-    }
-    if ( _cell->row() > m_iMaxRow )
-    {
-      m_iMaxRow = _cell->row();
-      emit sig_maxRow( _cell->row() );
-    }
+  {                         
+    checkRangeHBorder ( _cell->column() );
+    checkRangeVBorder ( _cell->row() );
   }
 }
 

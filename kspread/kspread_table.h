@@ -794,11 +794,14 @@ public:
     KSpreadTable *findTable( const QString & _name );
 
     /**
-     * Used by Undo.
+     * Inserts the @p _cell into the table.
+     * All cells depending on this cell will be actualized.
+     * The border range will be actualized, when the cell is out of current range.
      *
-     * @see KSpreadUndoDeleteColumn
+     * The second argument @p _updateDepend defaults to true.
+     * If set to false, then the update of the depending cells is switched off.
      */
-    void insertCell( KSpreadCell *_cell );
+    void insertCell( KSpreadCell *_cell, bool _updateDepend = true );
     /**
      * Used by Undo.
      *
