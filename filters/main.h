@@ -17,15 +17,10 @@
 #define __main_h__
 
 #include <kom.h>
-#include <komAutoLoader.h>
 #include <komComponent.h>
+#include <komAutoLoader.h>
 #include <koffice.h>
 #include <koApplication.h>
-#include <koStream.h>
-#include <komlMime.h>
-#include <komlParser.h>
-#include <komlStreamFeed.h>
-#include <komlWriter.h>
 
 #include <qstring.h>
 #include <qcstring.h>
