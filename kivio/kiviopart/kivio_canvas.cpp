@@ -77,6 +77,7 @@ KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, ToolCont
   m_pVertScrollBar->setLineStep(1);
   m_pHorzScrollBar->setLineStep(1);
 
+
   m_pVertScrollBar->setPageStep(10);
   m_pHorzScrollBar->setPageStep(10);
 
@@ -199,6 +200,7 @@ void KivioCanvas::resizeEvent( QResizeEvent* )
   KivioGuideLines::resize(size(),m_pDoc);
   m_buffer->resize(size());
   updateRulers(true,true);
+  updateScrollBars();
 
   emit visibleAreaChanged();
 }

@@ -140,6 +140,8 @@ public slots:
 
   void updateGuides();
 
+  void updateScrollBars();
+
 protected:
   virtual void mousePressEvent( QMouseEvent* );
   virtual void mouseReleaseEvent( QMouseEvent* );
@@ -159,7 +161,6 @@ protected:
 
   virtual void keyReleaseEvent( QKeyEvent * );
 
-  void updateScrollBars();
   void updateRulers( bool horiz, bool vert );
   TKSize actualPaperSizePt();
   TKSize actualGridFrequency();
