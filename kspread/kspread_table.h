@@ -308,10 +308,26 @@ public:
      *
      * @param _canvas If not 0 then the returned position is in screen
      *                coordinates. Otherwise the point (0|0) is in the upper
-     *               left corner of the table.
+     *                left corner of the table.
      */
     int columnPos( int _col, KSpreadCanvas *_canvas = 0L );
+    /**
+     * @retrun the top corner of the row.
+     *
+     * @param _canvas If not 0 then the returned position is in screen
+     *                coordinates. Otherwise the point (0|0) is in the upper
+     *                top corner of the table.
+     */
     int rowPos( int _row, KSpreadCanvas *_canvas = 0L );
+
+    /**
+     * @retrun the maximum size of the column range
+     */
+    int columnRangeMax ();
+    /**
+     * @retrun the maximum size of the row range
+     */
+    int rowRangeMax ();
 
     /**
      * Sets the @ref KSpreadCell::layoutDirtyFlag in all cells.
@@ -824,7 +840,18 @@ public:
 
     int id() { return m_id; }
 
+    /**
+     * Return the currently maximum defined column of the column scrollbar.
+     * It's always 10 times higher than the maximum access column.
+     * In an empty table it starts with 256.
+     */
     int maxColumn() { return m_iMaxColumn; }
+
+    /**
+     * Return the currently maximum defined row of the row scrollbar
+     * It's always 10 times higher than the maximum access row.
+     * In an empty table it starts with 256.
+     */
     int maxRow() { return m_iMaxRow; }
     void enableScrollBarUpdates( bool _enable );
 

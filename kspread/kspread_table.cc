@@ -400,6 +400,38 @@ int KSpreadTable::rowPos( int _row, KSpreadCanvas *_canvas )
     return y;
 }
 
+int KSpreadTable::columnRangeMax()
+{
+    //Fix me! It's called on every screen/cursor move.
+    //This function can be optimized, if we store this value
+    //and only recalculate it if we resize/delete/insert columns
+
+    // Add width of all used columns
+    // (+1 as we need the width of the last one too)
+    int x = columnPos( maxColumn() + 1 );
+
+    // Then add the default width for the unused
+    x += ( KS_colMax - maxColumn() ) * colWidth;
+
+    return x;
+}
+
+int KSpreadTable::rowRangeMax()
+{
+    //Fix me! It's called on every screen/cursor move.
+    //This function can be optimized, if we store this value
+    //and only recalculate it if we resize/delete/insert rows
+
+    // Add the height of all used rows
+    // (+1 as we need the height of the last one too)
+    int y = rowPos( maxRow() + 1 );
+
+    // Then add the default height for the unused
+    y += ( KS_rowMax - maxRow() ) * heightOfRow;
+
+    return y;
+}
+
 KSpreadCell* KSpreadTable::visibleCellAt( int _column, int _row, bool _no_scrollbar_update )
 {
   KSpreadCell* cell = cellAt( _column, _row, _no_scrollbar_update );
@@ -435,6 +467,15 @@ const KSpreadCell* KSpreadTable::cellAt( int _column, int _row ) const
 
 KSpreadCell* KSpreadTable::cellAt( int _column, int _row, bool _no_scrollbar_update )
 {
+  if ( _column > KS_colMax ) {
+    _column = KS_colMax;
+    kdDebug (36001) << "KSpreadTable::cellAt: column range: (col: " << _column << ")" << endl;
+  }
+  if ( _row > KS_rowMax) {
+    kdDebug (36001) << "KSpreadTable::cellAt: row out of range: (row: " << _row << ")" << endl;
+    _row = KS_rowMax;
+  }
+
   if ( !_no_scrollbar_update && m_bScrollbarUpdates )
   {
     if ( _column > m_iMaxColumn )
@@ -665,10 +706,12 @@ void KSpreadTable::setSelection( const QRect &_sel, const QPoint& m, KSpreadCanv
   else if(cell->isObscuringForced())
         {
         KSpreadCell* cell2 = cellAt( cell->obscuringCellsColumn(),
-        cell->obscuringCellsRow() );
+                                     cell->obscuringCellsRow() );
         QRect extraArea;
-        extraArea.setCoords( cell->obscuringCellsColumn(),cell->obscuringCellsRow(),
-        cell->obscuringCellsColumn()+ cell2->extraXCells(),cell->obscuringCellsRow()+ cell2->extraYCells());
+        extraArea.setCoords( cell->obscuringCellsColumn(),
+                             cell->obscuringCellsRow(),
+                             cell->obscuringCellsColumn() + cell2->extraXCells(),
+                             cell->obscuringCellsRow() + cell2->extraYCells() );
         if(extraArea.contains(m.x(),m.y()))
                 {
                 m_marker=extraArea;
@@ -682,8 +725,8 @@ void KSpreadTable::setSelection( const QRect &_sel, const QPoint& m, KSpreadCanv
   else
         {
         m_oldPos=QPoint( m.x(),m.y());
-      m_marker = QRect( m, m );
-      }
+        m_marker = QRect( m, m );
+        }
 
   emit sig_changeSelection( this, old, old_marker );
 }
