@@ -577,7 +577,7 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target 
 {
     QDomElement orig = source.namedItem( "ORIG" ).toElement();
     QDomElement size = source.namedItem( "SIZE" ).toElement();
-
+    QDomElement name = source.namedItem( "OBJECTNAME").toElement();
     float y = orig.attribute( "y" ).toFloat();
     y -= m_pageHeight * ( m_currentPage - 1 );
 
@@ -585,6 +585,9 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target 
     target.setAttribute( "svg:y", QString( "%1cm" ).arg( KoUnit::toCM( y ) ) );
     target.setAttribute( "svg:width", StyleFactory::toCM( size.attribute( "width" ) ) );
     target.setAttribute( "svg:height", StyleFactory::toCM( size.attribute( "height" ) ) );
+    QString nameStr = name.attribute("objectName");
+    if( !nameStr.isEmpty() )
+      target.setAttribute( "draw:name", nameStr );
 }
 
 void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & target )
