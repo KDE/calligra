@@ -32,6 +32,8 @@
 
 #include <kdebug.h>
 
+#define PANEL_SIZEX		50.0
+#define PANEL_SIZEY		50.0
 
 #define FILL_TOPX		15.0
 #define FILL_TOPY		20.0
@@ -61,8 +63,8 @@ VStrokeFillPreview::VStrokeFillPreview(
 #endif
 	installEventFilter( this );
 
-	m_pixmap.resize( 50, 50 );
-	m_painter = new VKoPainter( &m_pixmap, 50, 50 );
+	m_pixmap.resize( PANEL_SIZEX, PANEL_SIZEY );
+	m_painter = new VKoPainter( &m_pixmap, PANEL_SIZEX, PANEL_SIZEY );
 }
 
 VStrokeFillPreview::~VStrokeFillPreview()
@@ -73,7 +75,7 @@ VStrokeFillPreview::~VStrokeFillPreview()
 void
 VStrokeFillPreview::paintEvent( QPaintEvent* event )
 {
-	bitBlt( this, ( width() - 50 ) / 2, 0, &m_pixmap, 0, 0, 50, 50 );
+	bitBlt( this, ( width() - PANEL_SIZEX ) / 2, ( height() - PANEL_SIZEY ) / 2, &m_pixmap, 0, 0, PANEL_SIZEX, PANEL_SIZEY );
 	QFrame::paintEvent( event );
 }
 
@@ -83,20 +85,16 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 	if( event && event->type() == QEvent::MouseButtonPress )
 	{
 		QMouseEvent *e = static_cast<QMouseEvent *>( event );
-		if( e->x() >= 15 && e->x() <= 45 && e->y() >= 20 && e->y() <= 50 )
-		{
+		if( e->x() >= FILL_TOPX && e->x() <= FILL_BOTTOMX && e->y() >= FILL_TOPY && e->y() <= FILL_BOTTOMY )
 			emit fillSelected();
-		}
-		else if( e->x() >= 5 && e->x() <= 35 && e->y() >= 10 && e->y() <= 40 )
-		{
+		else if( e->x() >= STROKE_TOPX && e->x() <= STROKE_BOTTOMX && e->y() >= STROKE_TOPY && e->y() <= STROKE_BOTTOMY )
 			emit strokeSelected();
-		}
 	}
 
 	if( event && event->type() == QEvent::MouseButtonDblClick )
 	{
 		QMouseEvent *e = static_cast<QMouseEvent *>( event );
-		if( e->x() >= 15 && e->x() <= 45 && e->y() >= 20 && e->y() <= 50 )
+		if( e->x() >= FILL_TOPX && e->x() <= FILL_BOTTOMX && e->y() >= FILL_TOPY && e->y() <= FILL_BOTTOMY )
 		{
 			VFillDlg* dialog = new VFillDlg( m_part );
 			connect( dialog, SIGNAL( fillChanged( const VFill & ) ), this, SIGNAL( fillChanged( const VFill & ) ) );
@@ -104,7 +102,7 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 			delete dialog;
 			disconnect( dialog, SIGNAL( fillChanged( const VFill & ) ), this, SIGNAL( fillChanged( const VFill & ) ) );
 		}
-		else if( e->x() >= 5 && e->x() <= 35 && e->y() >= 10 && e->y() <= 40 )
+		else if( e->x() >= STROKE_TOPX && e->x() <= STROKE_BOTTOMX && e->y() >= STROKE_TOPY && e->y() <= STROKE_BOTTOMY )
 		{
 			VStrokeDlg* dialog = new VStrokeDlg( m_part );
 			connect( dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SIGNAL( strokeChanged( const VStroke & ) ) );
@@ -137,21 +135,21 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 				fill.gradient() = s.gradient();
 				if( s.gradient().type() == VGradient::linear )
 				{
-					fill.gradient().setOrigin( KoPoint( 20, 10 ) );
-					fill.gradient().setVector( KoPoint( 20, 40 ) );
+					fill.gradient().setOrigin( KoPoint( FILL_TOPX, 10 ) );
+					fill.gradient().setVector( KoPoint( FILL_TOPX, 40 ) );
 				}
 				else if( s.gradient().type() == VGradient::radial )
 				{
-					fill.gradient().setOrigin( KoPoint( 20, 25 ) );
-					fill.gradient().setVector( KoPoint( 20, 40 ) );
+					fill.gradient().setOrigin( KoPoint( FILL_TOPX, 25 ) );
+					fill.gradient().setVector( KoPoint( FILL_TOPX, 40 ) );
 				}
 				fill.setType( VFill::grad );
 			}
 			else
 			{
 				fill.pattern() = s.pattern();
-				fill.pattern().setOrigin( KoPoint( 20, 10 ) );
-				fill.pattern().setVector( KoPoint( 20, 40 ) );
+				fill.pattern().setOrigin( KoPoint( FILL_TOPX, 10 ) );
+				fill.pattern().setVector( KoPoint( FILL_TOPX, 40 ) );
 				fill.setType( VFill::patt );
 			}
 		}
