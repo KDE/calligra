@@ -1009,6 +1009,7 @@ void KWView::setTool( MouseMode _mouseMode )
     actionTableDelete->setEnabled( FALSE );
     actionTableUngroup->setEnabled( FALSE );
     actionBackgroundColor->setEnabled(FALSE);
+    actionFormatFrameSet->setEnabled(FALSE);
     KWTableFrameSet *table = gui->canvasWidget()->getTable();
 
     switch ( _mouseMode ) {
@@ -2657,6 +2658,7 @@ void KWView::updateButtons()
     actionInsertVariable->setEnabled(state);
     actionBackgroundColor->setEnabled(!state && gui->canvasWidget()->getMouseMode()==MM_EDIT_FRAME);
 
+
     KWTableFrameSet *table = gui->canvasWidget()->getTable();
     actionTableInsertRow->setEnabled( table );
     actionTableInsertCol->setEnabled( table );
@@ -2671,8 +2673,10 @@ void KWView::updateButtons()
 void KWView::frameSelectedChanged()
 {
     KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
-    actionTableJoinCells->setEnabled( table && (doc->getSelectedFrames().count()>1));
-    actionTableSplitCells->setEnabled( table && (doc->getSelectedFrames().count()==1) );
+    int nbFrame=doc->getSelectedFrames().count();
+    actionTableJoinCells->setEnabled( table && (nbFrame>1));
+    actionTableSplitCells->setEnabled( table && (nbFrame==1) );
+    actionFormatFrameSet->setEnabled( !currentTextEdit() && (nbFrame>=1));
 }
 
 void KWView::docStructChanged(TypeStructDocItem _type)
