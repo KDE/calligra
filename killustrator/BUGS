@@ -11,9 +11,11 @@ Bugs from above bug page:
   and resize it to fit an A4 page. 
 ------------------------------------
 
-* Keyword/Comment support:
-  Reading from file doesn't work (see GDocument -> readFromXml)
-  
+* Keyword/Comment support (see GDocument and DocumentInfo) doesn't work yet
+
+* Right mouse button menu is not available in the KO version
+
+* statusbar for the Koffice version, or is this lack a feature?
 
 * The menu entries should obey the standard that a ... follows commands which
   exec a dialog(ue), what should appear when a flowing window is open (something

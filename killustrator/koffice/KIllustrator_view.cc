@@ -193,7 +193,7 @@ void KIllustratorView::setupPopups () {
   objMenu->insertItem (i18n ("Copy"), this, SLOT (editCopySlot ()));
   objMenu->insertItem (i18n ("Cut"), this, SLOT (editCutSlot ()));
   objMenu->insertSeparator ();
-  objMenu->insertItem (i18n ("Properties"), this,
+  objMenu->insertItem (i18n ("Properties..."), this,
 		       SLOT (editPropertiesSlot ()));
   objMenu->insertSeparator ();
   objMenu->insertItem (i18n ("Align"), this, SLOT (arrangeAlignSlot ()));
@@ -298,7 +298,7 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
   m_idMenuView_Normal =
     m_vMenuView->insertItem (text, this, "viewNormal", 0);
   m_vMenuView->insertSeparator (-1);
-  text = i18n ("Layers") ;
+  text = i18n ("Layers...") ;
   m_idMenuView_Layers =
     m_vMenuView->insertItem (text, this, "editLayers", 0);
   m_vMenuView->insertSeparator (-1);
@@ -318,14 +318,14 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
   // Menu: Layout
   text = i18n ("&Layout") ;
   menubar->insertMenu (text, m_vMenuLayout, -1, -1);
-  text = i18n ("Page Layout") ;
+  text = i18n ("Page Layout...") ;
   m_idMenuLayout_PageLayout =
     m_vMenuLayout->insertItem (text, this, "setupPage", 0);
   m_vMenuLayout->insertSeparator (-1);
-  text = i18n ("Setup Grid") ;
+  text = i18n ("Setup Grid...") ;
   m_idMenuLayout_SetupGrid =
     m_vMenuLayout->insertItem (text, this, "setupGrid", 0);
-  text = i18n ("Setup Helplines") ;
+  text = i18n ("Setup Helplines...");
   m_idMenuLayout_SetupHelplines =
     m_vMenuLayout->insertItem (text, this,
 			       "setupHelplines", 0);
@@ -346,7 +346,7 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
   menubar->insertMenu (text, m_vMenuArrange, -1, -1);
   text = i18n ("Transform") ;
   m_vMenuArrange->insertItem8 (text, m_vMenuTransform, -1, -1);
-  text = i18n ("Align") ;
+  text = i18n ("Align...") ;
   m_idMenuArrange_Align = m_vMenuArrange->insertItem (text, this,
 						      "arrangeAlign", 0);
   text = i18n ("To Front") ;
@@ -377,21 +377,21 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
     m_vMenuArrange->insertItem (text,
 				this,
 				"arrangeTextAlongPath", 0);
-
+				
   // Menu: Arrange->Transform
-  text = i18n ("Position") ;
+  text = i18n ("Position...") ;
   m_idMenuTransform_Position =
     m_vMenuTransform->insertItem (text, this,
 				  "transformPosition", 0);
-  text = i18n ("Dimension") ;
+  text = i18n ("Dimension...") ;
   m_idMenuTransform_Dimension =
     m_vMenuTransform->insertItem (text, this,
 				  "transformDimension", 0);
-  text = i18n ("Rotation") ;
+  text = i18n ("Rotation...") ;
   m_idMenuTransform_Rotation =
     m_vMenuTransform->insertItem (text, this,
 				  "transformRotation", 0);
-  text = i18n ("Mirror") ;
+  text = i18n ("Mirror...") ;
   m_idMenuTransform_Mirror =
     m_vMenuTransform->insertItem (text, this,
 				  "transformMirror", 0);

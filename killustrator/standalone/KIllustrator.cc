@@ -618,7 +618,7 @@ void KIllustrator::initMenu () {
   edit->insertSeparator ();
   edit->insertItem (i18n ("&Insert"), insert);
   edit->insertSeparator ();
-  edit->insertItem (i18n ("Pr&operties"), ID_EDIT_PROPERTIES);
+  edit->insertItem (i18n ("Pr&operties..."), ID_EDIT_PROPERTIES);
   connect (edit, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
   view->insertItem (i18n ("Outline"), ID_VIEW_OUTLINE);
@@ -636,9 +636,9 @@ void KIllustrator::initMenu () {
   view->setItemChecked (ID_VIEW_HELPLINES, false);
   connect (view, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
-  layout->insertItem (i18n ("&Page"), ID_LAYOUT_PAGE);
-  layout->insertItem (i18n ("&Grid"), ID_LAYOUT_GRID);
-  layout->insertItem (i18n ("&Helplines"), ID_LAYOUT_HELPLINES);
+  layout->insertItem (i18n ("&Page..."), ID_LAYOUT_PAGE);
+  layout->insertItem (i18n ("&Grid..."), ID_LAYOUT_GRID);
+  layout->insertItem (i18n ("&Helplines..."), ID_LAYOUT_HELPLINES);
   layout->insertSeparator ();
   layout->insertItem (i18n ("Align to Grid"), ID_LAYOUT_ALIGN_GRID);
   layout->setItemChecked (ID_LAYOUT_ALIGN_GRID, false);
@@ -648,19 +648,19 @@ void KIllustrator::initMenu () {
   connect (layout, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
   QPopupMenu* transformations = new QPopupMenu ();
-  transformations->insertItem (i18n ("Position"),
+  transformations->insertItem (i18n ("Position..."),
 			       ID_TRANSFORM_POSITION);
-  transformations->insertItem (i18n ("Dimension"),
+  transformations->insertItem (i18n ("Dimension..."),
 			       ID_TRANSFORM_DIMENSION);
-  transformations->insertItem (i18n ("Rotation"),
+  transformations->insertItem (i18n ("Rotation..."),
 			       ID_TRANSFORM_ROTATION);
-  transformations->insertItem (i18n ("Mirror"),
+  transformations->insertItem (i18n ("Mirror..."),
 			       ID_TRANSFORM_MIRROR);
   connect (transformations, SIGNAL (activated (int)),
 	   SLOT (menuCallback (int)));
 
   arrangement->insertItem (i18n ("Transform"), transformations);
-  arrangement->insertItem (i18n ("Align"), ID_ARRANGE_ALIGN);
+  arrangement->insertItem (i18n ("Align..."), ID_ARRANGE_ALIGN);
   arrangement->setAccel (CTRL + Key_A, ID_ARRANGE_ALIGN);
   arrangement->insertItem (i18n ("To Front"), ID_ARRANGE_FRONT);
   arrangement->setAccel (SHIFT + Key_PageUp, ID_ARRANGE_FRONT);
@@ -718,9 +718,9 @@ void KIllustrator::initMenu () {
   popupMenu->insertItem (i18n ("Copy"), ID_EDIT_COPY);
   popupMenu->insertItem (i18n ("Cut"), ID_EDIT_CUT);
   popupMenu->insertSeparator ();
-  popupMenu->insertItem (i18n ("Properties"), ID_EDIT_PROPERTIES);
+  popupMenu->insertItem (i18n ("Properties..."), ID_EDIT_PROPERTIES);
   popupMenu->insertSeparator ();
-  popupMenu->insertItem (i18n ("Align"), ID_ARRANGE_ALIGN);
+  popupMenu->insertItem (i18n ("Align..."), ID_ARRANGE_ALIGN);
   popupMenu->insertSeparator ();
   popupMenu->insertItem (i18n ("To Front"), ID_ARRANGE_FRONT);
   popupMenu->insertItem (i18n ("To Back"), ID_ARRANGE_BACK);

@@ -3,6 +3,7 @@ TODO-LIST
 See also: http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator-bw.html
 
 Small Feature Wishes
+
 * Layers: Undo of deleting
 
 * If the mouse pointer (PointEditTool) is outside an arc/pie, paint an arc, else
@@ -12,8 +13,6 @@ Small Feature Wishes
   This switch should also be available when the first point is already set
   (mouse: left button down)
   [Shift] should be made to draw centerbased ellips/rectangles.
-
-* Support keywords and comments when saving as XML/.kil
 
 * [Tab] should circle to the next object (maybe config: next object in this
   layer in all layers), presently it jumps to the zoom combobox and stays there.
@@ -86,11 +85,19 @@ Bigger ones
   layer below and above)
 
 * Zoom arbitry values
+  If the combobox is editable (see KO version), this seems to work well,
+  maybe this needs only a two liner.
   If this is done:
   - Zoom to object
 
+* When zooming using the mouse, the viewport should be centered relative to the
+  mouse position, using the combobox the topmost left point should be used
+  (presently everything seems to be reverted to (0,0))
+
 * arbitray values for the angle of linear gradient
   (presently: only horizontal and vertical)
+* Pattern: Besides no background as second colour, an optional second colour
+  should be supported
 
 * Auxilary lines should be moveable by mouse and should be drawable out of the
   rouler
