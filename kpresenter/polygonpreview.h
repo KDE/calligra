@@ -42,6 +42,7 @@ public:
         { pen = _pen; brush = _brush; repaint( true ); }
 
 public slots:
+    void slotConvexConcave( bool convexConcave );
     void slotConvexPolygon();
     void slotConcavePolygon();
     void slotCornersValue( int value );

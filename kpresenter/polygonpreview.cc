@@ -82,6 +82,13 @@ void PolygonPreview::drawContents( QPainter *painter )
 }
 
 
+void PolygonPreview::slotConvexConcave( bool convexConcave )
+{
+    isConcave = convexConcave;
+    repaint();
+}
+
+
 void PolygonPreview::slotConvexPolygon()
 {
     isConcave = false;
