@@ -662,7 +662,7 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   m_vToolBarMath->setFullWidth(false);
   
   OpenPartsUI::StrList math;
-  math.length( 16 );
+  math.length( 25 );
   math[0] = CORBA::string_dup( "cos" );
   math[1] = CORBA::string_dup( "sin" );
   math[2] = CORBA::string_dup( "tan" );
@@ -679,9 +679,18 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   math[13] = CORBA::string_dup( "ceil" );
   math[14] = CORBA::string_dup( "max" );
   math[15] = CORBA::string_dup( "min" );
+  math[16] = CORBA::string_dup( "cosh" );
+  math[17] = CORBA::string_dup( "sinh" );
+  math[18] = CORBA::string_dup( "tanh" );
+  math[19] = CORBA::string_dup( "acosh" );
+  math[20] = CORBA::string_dup( "asinh" );
+  math[21] = CORBA::string_dup( "atanh" );
+  math[22] = CORBA::string_dup( "degree" );
+  math[23] = CORBA::string_dup( "radian" );
+  math[24] = CORBA::string_dup( "average" );
   m_idComboMath = m_vToolBarMath->insertCombo( math, 1, false, SIGNAL( activated( const QString & ) ), this,
 					       "formulaselection", true, ( wstr = Q2C( i18n( "Formula") ) ),
-					       60,-1, OpenPartsUI::AtBottom );
+					       80,-1, OpenPartsUI::AtBottom );
   
   m_vToolBarMath->enable( OpenPartsUI::Show );
   

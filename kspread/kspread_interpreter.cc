@@ -298,6 +298,127 @@ static bool kspreadfunc_log( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_asinh( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "asinh", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  context.setValue( new KSValue( asinh( args[0]->doubleValue() ) ) );
+
+  return true;
+}
+
+static bool kspreadfunc_acosh( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "acosh", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  context.setValue( new KSValue( acosh( args[0]->doubleValue() ) ) );
+
+  return true;
+}
+
+static bool kspreadfunc_atanh( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "atanh", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  context.setValue( new KSValue( atanh( args[0]->doubleValue() ) ) );
+
+  return true;
+}
+
+static bool kspreadfunc_tanh( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "tanh", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  context.setValue( new KSValue( tanh( args[0]->doubleValue() ) ) );
+
+  return true;
+}
+
+static bool kspreadfunc_sinh( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "sinh", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  context.setValue( new KSValue( sinh( args[0]->doubleValue() ) ) );
+
+  return true;
+}
+
+static bool kspreadfunc_cosh( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "cosh", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  context.setValue( new KSValue( cosh( args[0]->doubleValue() ) ) );
+
+  return true;
+}
+
+static bool kspreadfunc_degree( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "degree", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  context.setValue( new KSValue( (args[0]->doubleValue()*180)/M_PI  ));
+
+  return true;
+}
+
+static bool kspreadfunc_radian( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "radian", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  context.setValue( new KSValue( (args[0]->doubleValue()*M_PI )/180  ));
+
+  return true;
+}
+
+
 static bool kspreadfunc_sum_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
@@ -420,6 +541,44 @@ static bool kspreadfunc_min( KSContext& context )
   return b;
 }
 
+static bool kspreadfunc_average_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,int& number)
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_average_helper( context, (*it)->listValue(), result ,number) )
+	return false;
+	
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+      {
+      result += (*it)->doubleValue();
+      number++;
+      }
+    else
+    	return false;
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_average( KSContext& context )
+{
+  double result = 0.0;
+
+  int number=0;
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result ,number);
+
+  if ( b )
+    context.setValue( new KSValue( result/number ) );
+
+
+  return b;
+}
 
 static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
 {
@@ -441,6 +600,15 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "log", new KSValue( new KSBuiltinFunction( module, "log", kspreadfunc_log ) ) );
   module->addObject( "max", new KSValue( new KSBuiltinFunction( module, "max", kspreadfunc_max ) ) );
   module->addObject( "min", new KSValue( new KSBuiltinFunction( module, "min", kspreadfunc_min ) ) );
+  module->addObject( "cosh", new KSValue( new KSBuiltinFunction( module, "cosh", kspreadfunc_cosh ) ) );
+  module->addObject( "sinh", new KSValue( new KSBuiltinFunction( module, "sinh", kspreadfunc_sinh ) ) );
+  module->addObject( "tanh", new KSValue( new KSBuiltinFunction( module, "tanh", kspreadfunc_tanh ) ) );
+  module->addObject( "acosh", new KSValue( new KSBuiltinFunction( module, "acosh", kspreadfunc_acosh ) ) );
+  module->addObject( "asinh", new KSValue( new KSBuiltinFunction( module, "asinh", kspreadfunc_asinh ) ) );
+  module->addObject( "atanh", new KSValue( new KSBuiltinFunction( module, "atanh", kspreadfunc_atanh ) ) );
+  module->addObject( "degree", new KSValue( new KSBuiltinFunction( module, "degree", kspreadfunc_degree ) ) );
+  module->addObject( "radian", new KSValue( new KSBuiltinFunction( module, "radian", kspreadfunc_radian ) ) );
+  module->addObject( "average", new KSValue( new KSBuiltinFunction( module, "average", kspreadfunc_average ) ) );
   return module;
 }
 
