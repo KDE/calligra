@@ -275,6 +275,7 @@ void KWView::setupActions()
                                       this, SLOT( editDeleteFrame() ),
                                       actionCollection(), "edit_delframe" );
 
+    /*
     actionToolsEdit = new KToggleAction( i18n( "Edit &Text" ), "edittool", Key_F4,
                                          this, SLOT( toolsEdit() ),
                                          actionCollection(), "tools_edit" );
@@ -283,7 +284,7 @@ void KWView::setupActions()
                                                this, SLOT( toolsEditFrame() ),
                                                actionCollection(), "tools_editframes" );
     actionToolsEditFrames->setExclusiveGroup( "tools" );
-
+    */
 
     // -------------- View menu
     actionViewPageMode = new KToggleAction( i18n( "&Page mode" ), 0,
@@ -1025,71 +1026,37 @@ void KWView::setTool( MouseMode _mouseMode )
 {
     switch ( _mouseMode ) {
     case MM_EDIT:
-        actionToolsEdit->setChecked( TRUE );
-        break;
-    case MM_EDIT_FRAME:
-        actionToolsEditFrames->setChecked( TRUE );
-        break;
-    case MM_CREATE_TEXT:
-        actionToolsCreateText->setChecked( TRUE );
-        break;
-    case MM_CREATE_PIX:
-        actionToolsCreatePix->setChecked( TRUE );
-        break;
     case MM_CREATE_TABLE:
     case MM_CREATE_FORMULA:
-        // no such tool
+        // No tool to activate for this mode -> deselect all the others
+        actionToolsCreateText->setChecked( false );
+        actionToolsCreatePix->setChecked( false );
+        actionToolsCreatePart->setChecked( false );
+        break;
+    case MM_CREATE_TEXT:
+        actionToolsCreateText->setChecked( true );
+        break;
+    case MM_CREATE_PIX:
+        actionToolsCreatePix->setChecked( true );
         break;
     case MM_CREATE_PART:
-        actionToolsCreatePart->setChecked( TRUE );
+        actionToolsCreatePart->setChecked( true );
         break;
     }
 
-    if ( _mouseMode == MM_EDIT_FRAME )
-    {
-        //checked false all frame border button
-        //because when you change mode to edit frame
-        // there isn't any frame selected => border button
-        //should be unselect.
-
-        /// ### But this is a hack (what happens when selecting a frame and then unselecting it again ?)
-        // The same code should be called, but it isn't. And the same applied to Delete Frame, etc.
-        // --> TODO: a signal (from canvas preferrably), when the selected frames change.
-        actionBorderOutline->setChecked(false);
-        actionBorderLeft->setChecked(false);
-        actionBorderRight->setChecked(false);
-        actionBorderTop->setChecked(false);
-        actionBorderBottom->setChecked(false);
-    }
-
-    actionTableInsertRow->setEnabled( FALSE );
-    actionTableInsertCol->setEnabled( FALSE );
-    actionTableDelRow->setEnabled( FALSE );
-    actionTableDelCol->setEnabled( FALSE );
     actionTableJoinCells->setEnabled( FALSE );
     actionTableSplitCellsVerticaly->setEnabled( FALSE );
     actionTableSplitCellsHorizontaly->setEnabled( FALSE );
-    actionTableDelete->setEnabled( FALSE );
-    actionTableUngroup->setEnabled( FALSE );
-    actionBackgroundColor->setEnabled(FALSE);
     actionFormatFrameSet->setEnabled(FALSE);
     KWTableFrameSet *table = gui->canvasWidget()->getTable();
 
-    switch ( _mouseMode ) {
-    case MM_EDIT: {
-        actionTableInsertRow->setEnabled( table );
-        actionTableInsertCol->setEnabled( table );
-        actionTableDelRow->setEnabled( table );
-        actionTableDelCol->setEnabled( table );
-        actionTableDelete->setEnabled( table );
-        actionTableUngroup->setEnabled( table );
-    } break;
-    case MM_EDIT_FRAME: {
-        frameSelectedChanged();
-        actionBackgroundColor->setEnabled(TRUE);
-    } break;
-    default: break;
-    }
+    actionTableInsertRow->setEnabled( table );
+    actionTableInsertCol->setEnabled( table );
+    actionTableDelRow->setEnabled( table );
+    actionTableDelCol->setEnabled( table );
+    actionTableDelete->setEnabled( table );
+    actionTableUngroup->setEnabled( table );
+    frameSelectedChanged();
 }
 
 void KWView::showStyle( const QString & styleName )
@@ -1815,6 +1782,7 @@ void KWView::extraCreateTemplate()
                                                     "kword/templates/");
 }
 
+#if 0
 void KWView::toolsEdit()
 {
     if ( actionToolsEdit->isChecked() )
@@ -1830,6 +1798,7 @@ void KWView::toolsEditFrame()
     else
         actionToolsEditFrames->setChecked( true ); // always one has to be checked !
 }
+#endif
 
 void KWView::toolsCreateText()
 {
@@ -2058,7 +2027,7 @@ void KWView::tableDeleteCol()
 
 void KWView::tableJoinCells()
 {
-    gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
+    //gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
 
     KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
     if ( !table )
@@ -2094,7 +2063,7 @@ void KWView::tableSplitCellsHorizontaly()
 
 void KWView::tableSplitCells(int cols, int rows)
 {
-    gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
+    //gui->canvasWidget()->setMouseMode( MM_EDIT_FRAME );
 
     QList <KWFrame> selectedFrames = doc->getSelectedFrames();
     KWTableFrameSet *table = gui->canvasWidget()->getCurrentTable();
@@ -2428,14 +2397,11 @@ void KWView::borderStyle( const QString &style )
 
 void KWView::backgroundColor()
 {
-    // The effect of this action depends on if we are in Edit Text or Edit Frame mode.
-    if ( actionToolsEditFrames->isChecked() )
-    {
-        backColor = actionBackgroundColor->color();
-        if ( gui )
-            gui->canvasWidget()->setFrameBackgroundColor( backColor );
-    }
-    //borderSet();
+    // This action is disabled when no frame is selected.
+    // So here we know that a frame is selected.
+    backColor = actionBackgroundColor->color();
+    if ( gui )
+        gui->canvasWidget()->setFrameBackgroundColor( backColor );
 }
 
 void KWView::borderSet()
@@ -2462,12 +2428,17 @@ void KWView::borderSet()
     {
         m_border.bottom.ptWidth = 0;
     }
-    if ( actionToolsEditFrames->isChecked() )
+    KWTextFrameSetEdit *edit = currentTextEdit();
+    if ( edit )
+    {
+        edit->setBorders( m_border.left, m_border.right, m_border.top, m_border.bottom );
+    }
+    else
     {
         if ( (actionBorderLeft->isChecked() && actionBorderRight->isChecked()
-            && actionBorderBottom->isChecked() && actionBorderTop->isChecked())
-            || (!actionBorderLeft->isChecked() && !actionBorderRight->isChecked()
-            && !actionBorderBottom->isChecked() && !actionBorderTop->isChecked()))
+              && actionBorderBottom->isChecked() && actionBorderTop->isChecked())
+             || (!actionBorderLeft->isChecked() && !actionBorderRight->isChecked()
+                 && !actionBorderBottom->isChecked() && !actionBorderTop->isChecked()))
         {
             gui->canvasWidget()->setOutlineFrameBorder( m_border.common, actionBorderLeft->isChecked() );
         }
@@ -2477,14 +2448,6 @@ void KWView::borderSet()
             gui->canvasWidget()->setRightFrameBorder( m_border.common, actionBorderRight->isChecked() );
             gui->canvasWidget()->setTopFrameBorder( m_border.common, actionBorderTop->isChecked() );
             gui->canvasWidget()->setBottomFrameBorder( m_border.common, actionBorderBottom->isChecked() );
-        }
-    }
-    else
-    {
-        KWTextFrameSetEdit *edit = currentTextEdit();
-        if ( edit )
-        {
-            edit->setBorders( m_border.left, m_border.right, m_border.top, m_border.bottom );
         }
     }
 }
@@ -2810,7 +2773,6 @@ void KWView::updateButtons()
     actionInsertVariable->setEnabled(state);
     actionInsertExpression->setEnabled(state);
     actionInsertFrameBreak->setEnabled(state);
-    actionBackgroundColor->setEnabled( (edit == 0) && gui->canvasWidget()->getMouseMode()==MM_EDIT_FRAME);
 
     bool table = ( gui->canvasWidget()->getTable() != 0 ) && rw;
     actionTableInsertRow->setEnabled( table );
@@ -2831,7 +2793,8 @@ void KWView::frameSelectedChanged()
     actionTableSplitCellsVerticaly->setEnabled( table && (nbFrame==1) );
     actionTableSplitCellsHorizontaly->setEnabled( table && (nbFrame==1) );
     actionFormatFrameSet->setEnabled( !currentTextEdit() && (nbFrame>=1));
-    actionEditDelFrame->setEnabled(!currentTextEdit() && (nbFrame==1));
+    actionEditDelFrame->setEnabled( !currentTextEdit() && (nbFrame==1));
+    actionBackgroundColor->setEnabled( nbFrame >= 1 );
 }
 
 void KWView::docStructChanged(TypeStructDocItem _type)

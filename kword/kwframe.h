@@ -360,7 +360,7 @@ public:
     /** returns true if we have a frame occupying that position */
     virtual bool contains( double mx, double my );
 
-    virtual bool getMouseCursor( const QPoint &nPoint, QCursor & cursor );
+    virtual bool getMouseCursor( const QPoint &nPoint, bool controlPressed, QCursor & cursor );
 
     /** create XML to describe yourself */
     virtual void save( QDomElement &parentElem );

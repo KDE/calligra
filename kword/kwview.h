@@ -173,8 +173,8 @@ public slots:
     void extraStylist();
     void extraCreateTemplate();
 
-    void toolsEdit();
-    void toolsEditFrame();
+    //void toolsEdit();
+    //void toolsEditFrame();
     void toolsCreateText();
     void toolsCreatePix();
     void toolsFormula();
@@ -258,7 +258,7 @@ protected:
     void loadexpressionActions( KActionMenu * parentMenu);
 
     void createExpressionActions( KActionMenu * parentMenu,const QString& filename );
-   
+
 
     KWTextFrameSetEdit *currentTextEdit();
 
@@ -310,8 +310,8 @@ private:
     VariableDefMap m_variableDefMap;
     KAction *actionInsertFormula;
 
-    KToggleAction *actionToolsEdit;
-    KToggleAction *actionToolsEditFrames;
+    //KToggleAction *actionToolsEdit;
+    //KToggleAction *actionToolsEditFrames;
     KToggleAction *actionToolsCreateText;
     KToggleAction *actionToolsCreatePix;
     KToggleAction *actionToolsCreateClip;

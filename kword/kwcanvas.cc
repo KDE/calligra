@@ -286,19 +286,9 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
     frameResized = false;
     if ( e )
     {
-        KWFrame * frame;
-        // If nor Ctrl nor Shift are selected, allow click inside a frame to go to edit mode
-        if ( !(e->state() & ControlButton) && !(e->state() & ShiftButton) )
-        {
-            frame = doc->frameByBorder( nPoint );
-            if ( !frame ) // Didn't click on a frame border -> back to edit mode
-            {
-                setMouseMode( MM_EDIT );
-                // Simulate the click again, but this time mousePressEvent will treat it in MM_EDIT mode
-                contentsMousePressEvent( e );
-                return;
-            }
-        } else
+        // Find the frame we clicked upon (try by border, fallback on frame's internal rect)
+        KWFrame * frame = doc->frameByBorder( nPoint );
+        if ( !frame )
             frame = doc->frameAtPos( x, y );
 
         KWFrameSet *fs = frame ? frame->getFrameSet() : 0;
@@ -367,7 +357,7 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
     if(frameindexMove.count()!=0)
         cmdMoveFrame = new KWFrameMoveCommand( i18n("Move Frame"),doc,frameindexList, frameindexMove ) ;
 
-    viewport()->setCursor( doc->getMouseCursor( nPoint ) );
+    viewport()->setCursor( doc->getMouseCursor( nPoint, e && e->state() & ControlButton ) );
 
     deleteMovingRect = FALSE;
 }
@@ -418,13 +408,20 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         {
             // See if we clicked on a frame's border
             KWFrame * frame = doc->frameByBorder( normalPoint );
-            if ( frame )
+            bool selectedFrame = doc->getFirstSelectedFrame() != 0L;
+            // Frame border, or pressing Control or pressing Shift and a frame has already been selected
+            // [We must keep shift+click for selecting text, when no frame is selected]
+            if ( frame || e->state() & ControlButton ||
+                 ( ( e->state() & ShiftButton ) && selectedFrame ) )
             {
-                setMouseMode( MM_EDIT_FRAME );
+                if ( m_currentFrameSetEdit )
+                    terminateCurrentEdit();
                 mpEditFrame( e, normalPoint );
             }
             else
             {
+                selectAllFrames( false );
+
                 frame = doc->frameAtPos( docPoint.x(), docPoint.y() );
                 KWFrameSet * fs = frame ? frame->getFrameSet() : 0L;
                 bool emitChanged = false;
@@ -442,9 +439,6 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             }
         }
         break;
-        case MM_EDIT_FRAME:
-            mpEditFrame( e, normalPoint );
-            break;
         case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE:
         case MM_CREATE_FORMULA:
             if ( e->button() == LeftButton )
@@ -468,15 +462,11 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         switch ( m_mouseMode )
         {
             case MM_EDIT:
-                m_gui->getView()->openPopupMenuEditText( QCursor::pos() );
-                break;
-            case MM_EDIT_FRAME:
             {
-                if (!doc->frameAtPos( docPoint.x(), docPoint.y() ))
-                    m_gui->getView()->openPopupMenuChangeAction( QCursor::pos() );
-                else
+                // See if we clicked on a frame's border
+                KWFrame * frame = doc->frameByBorder( normalPoint );
+                if ( frame )
                 {
-                    //todo create a popupMenu for frame (delete - properties etc...)
                     KWFrame *frame = doc->getFirstSelectedFrame();
                     // if a header/footer etc. Dont show the popup.
                     if((frame->getFrameSet() && frame->getFrameSet()->getFrameInfo() != FI_BODY))
@@ -485,6 +475,13 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                         return;
                     }
                     m_gui->getView()->openPopupMenuEditFrame( QCursor::pos() );
+                }
+                else
+                {
+                    if (doc->frameAtPos( docPoint.x(), docPoint.y() ))
+                        m_gui->getView()->openPopupMenuEditText( QCursor::pos() );
+                    else
+                        m_gui->getView()->openPopupMenuChangeAction( QCursor::pos() );
                 }
             }
             break;
@@ -851,16 +848,18 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
 
         switch ( m_mouseMode ) {
             case MM_EDIT:
+            {
                 if ( m_currentFrameSetEdit )
                     m_currentFrameSetEdit->mouseMoveEvent( e, normalPoint, docPoint );
-                break;
-            case MM_EDIT_FRAME: {
-                int mx = ( normalPoint.x() / doc->gridX() ) * doc->gridX();
-                int my = ( normalPoint.y() / doc->gridY() ) * doc->gridY();
-
-                if ( viewport()->cursor().shape() == SizeAllCursor )
-                    mmEditFrameMove( mx, my );
-                deleteMovingRect = TRUE;
+                else
+                {
+                    if ( viewport()->cursor().shape() == SizeAllCursor )
+                    {
+                        int mx = ( normalPoint.x() / doc->gridX() ) * doc->gridX();
+                        int my = ( normalPoint.y() / doc->gridY() ) * doc->gridY();
+                        mmEditFrameMove( mx, my );
+                    }
+                }
             } break;
             case MM_CREATE_TEXT: case MM_CREATE_PIX: case MM_CREATE_PART:
             case MM_CREATE_TABLE: case MM_CREATE_FORMULA:
@@ -868,8 +867,8 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
             default: break;
         }
     } else {
-        if ( m_mouseMode == MM_EDIT || m_mouseMode == MM_EDIT_FRAME )
-            viewport()->setCursor( doc->getMouseCursor( normalPoint ) );
+        if ( m_mouseMode == MM_EDIT )
+            viewport()->setCursor( doc->getMouseCursor( normalPoint, e->state() & ControlButton ) );
     }
 }
 
@@ -1023,8 +1022,6 @@ void KWCanvas::mrCreateTable()
             KWCreateTableCommand *cmd=new KWCreateTableCommand(i18n("Create table"),doc, table );
             doc->addCommand(cmd);
             cmd->execute();
-            // ## TODO undo/redo support. KWCreateFrameCommand won't do it, we need a new command.
-            // Only here, not in createTable() (anchored tables are handled differently)
             emit docStructChanged(Tables);
         }
         doc->updateAllFrames();
@@ -1083,9 +1080,8 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
             case MM_EDIT:
                 if ( m_currentFrameSetEdit )
                     m_currentFrameSetEdit->mouseReleaseEvent( e, normalPoint, docPoint );
-                break;
-            case MM_EDIT_FRAME:
-                mrEditFrame();
+                else
+                    mrEditFrame();
                 break;
             case MM_CREATE_TEXT:
                 mrCreateText();
@@ -1614,7 +1610,6 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
 {
     if ( m_mouseMode != newMouseMode )
     {
-        KWFrame * frame = doc->getFirstSelectedFrame();
         selectAllFrames( false );
 
         if ( newMouseMode != MM_EDIT )
@@ -1622,15 +1617,6 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
             // Terminate edition of current frameset
             if ( m_currentFrameSetEdit )
                 terminateCurrentEdit();
-        } else if ( doc->isReadWrite() )
-        {
-            ASSERT( !m_currentFrameSetEdit );
-            // When switching to edit mode, start edition of main frameset
-            // If a frame was selected, we edit that one instead - ## well, its frameset at least.
-            KWFrameSet * fs = frame ? frame->getFrameSet() : doc->getFrameSet( 0 );
-            ASSERT( fs );
-            if ( fs && checkCurrentEdit( fs ) )
-                emit currentFrameSetEditChanged();
         }
     }
 
@@ -1638,22 +1624,18 @@ void KWCanvas::setMouseMode( MouseMode newMouseMode )
     emit currentMouseModeChanged(m_mouseMode);
 
     switch ( m_mouseMode ) {
-        case MM_EDIT: {
-            //if ( doc->isReadWrite() )
-                viewport()->setCursor( ibeamCursor );
-            //else
-            //viewport()->setCursor( arrowCursor );
-        } break;
-        case MM_EDIT_FRAME:
-            viewport()->setCursor( arrowCursor );
+    case MM_EDIT: {
+        QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
+        QPoint normalPoint = m_viewMode->viewToNormal( mousep );
+        viewport()->setCursor( doc->getMouseCursor( normalPoint, false /*....*/ ) );
+    } break;
+    case MM_CREATE_TEXT:
+    case MM_CREATE_PIX:
+    case MM_CREATE_TABLE:
+    case MM_CREATE_FORMULA:
+    case MM_CREATE_PART:
+        viewport()->setCursor( crossCursor );
         break;
-        case MM_CREATE_TEXT:
-        case MM_CREATE_PIX:
-        case MM_CREATE_TABLE:
-        case MM_CREATE_FORMULA:
-        case MM_CREATE_PART:
-            viewport()->setCursor( crossCursor );
-            break;
     }
 }
 
@@ -1819,7 +1801,23 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     m_currentFrameSetEdit->keyPressEvent( keyev );
                     return TRUE;
                 }
+
+                // Because of the dependency on the control key, we need to update the mouse cursor here
+                if ( keyev->key() == Key_Control )
+                {
+                    QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
+                    QPoint normalPoint = m_viewMode->viewToNormal( mousep );
+                    viewport()->setCursor( doc->getMouseCursor( normalPoint, true );
+                }
             } break;
+            case QEvent::KeyRelease:
+                if ( keyev->key() == Key_Control )
+                {
+                    QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
+                    QPoint normalPoint = m_viewMode->viewToNormal( mousep );
+                    viewport()->setCursor( doc->getMouseCursor( normalPoint, false );
+                }
+            break;
             default:
                 break;
 	}

@@ -59,7 +59,6 @@
   <Action name="format_font"/>
   <!--<Action name="format_color"/> part of format_font now-->
   <Action name="format_paragraph"/>
-  <Action name="format_frameset"/>
   <Action name="format_page"/>
   <Action name="format_stylist"/>
   <Action name="format_style"/>
@@ -73,10 +72,8 @@
  </Menu>
  </Menu>
  <Menu name="frames"><text>Fra&amp;mes</text>
+  <Action name="format_frameset"/>
   <Action name="edit_delframe"/>
-  <Separator/>
-  <Action name="tools_edit"/>
-  <Action name="tools_editframes"/>
  </Menu>
  <Menu name="table"><text>Ta&amp;ble</text>
   <Action name="table_insrow"/>
@@ -210,9 +207,6 @@
  <ActionList name="datatools"/>
 </Menu>
 <Menu name="action_popup">
-  <Action name="tools_edit"/>
-  <Action name="tools_editframes"/>
-  <Separator/>
   <Action name="tools_createtext"/>
   <Action name="tools_createpix"/>
   <Action name="tools_table"/>

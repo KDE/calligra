@@ -250,7 +250,7 @@ public:
 
     ProcessingType processingType() { return m_processingType;  }
 
-    QCursor getMouseCursor( const QPoint& nPoint );
+    QCursor getMouseCursor( const QPoint& nPoint, bool controlPressed );
     QList<KWFrame> getSelectedFrames();
     KWFrame *getFirstSelectedFrame();
     int getFrameSetNum( KWFrameSet* fs ) { return frames.findRef( fs ); }

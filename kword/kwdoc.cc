@@ -2094,7 +2094,7 @@ QString KWDocument::generateFramesetName( const QString & templateName )
     return name;
 }
 
-QCursor KWDocument::getMouseCursor( const QPoint &nPoint )
+QCursor KWDocument::getMouseCursor( const QPoint &nPoint, bool controlPressed )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( fit.toLast(); fit.current() ; --fit )
@@ -2104,7 +2104,8 @@ QCursor KWDocument::getMouseCursor( const QPoint &nPoint )
             continue;
 
         QCursor cursor;
-        if ( frameSet->getMouseCursor( nPoint, cursor ) )
+        if ( !fit.atFirst() && // Can't move/resize main text frame
+             frameSet->getMouseCursor( nPoint, controlPressed, cursor ) )
             return cursor;
     }
 

@@ -29,7 +29,7 @@
 
 enum MouseMode {
     MM_EDIT = 0,
-    MM_EDIT_FRAME = 1,
+    //MM_EDIT_FRAME = 1,
     MM_CREATE_TEXT = 2,
     MM_CREATE_PIX = 3,
     MM_CREATE_TABLE = 5,
