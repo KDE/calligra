@@ -266,6 +266,12 @@ QDomDocument KivioDoc::saveXML()
   return doc;
 }
 
+bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles )
+{
+    //todo
+    return true;
+}
+
 bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
 {
   m_bLoading = true;
@@ -540,7 +546,7 @@ bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDi
   zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
     QPaintDevice::x11AppDpiY());
   QPixmap buffer;
-  
+
   if( dlg->fullPage()==true )
   {
     buffer.resize(zoom.zoomItX(pPage->paperLayout().ptWidth) + dlg->border()*2,
@@ -656,7 +662,7 @@ KivioDoc::~KivioDoc()
     delete m_pMap;
     delete dcop;
     delete m_commandHistory;
-    
+
     if( m_pLstSpawnerSets )
     {
         delete m_pLstSpawnerSets;
