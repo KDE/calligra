@@ -2726,7 +2726,7 @@ void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
 {
     /// Why does this use __pgLayout instead of m_pageLayout ?
     int page = (int)(offset/__pgLayout.ptHeight)+m_insertFilePage;
-    int newPos=(int)((offset+m_insertFilePage*__pgLayout.ptHeight)-page*__pgLayout.ptHeight);
+    double newPos = offset - ( page - m_insertFilePage ) * __pgLayout.ptHeight;
     if ( page > ( (int)m_pageList.count()-1 ) )
     {
         for (int i=(m_pageList.count()-1); i<page;i++)
