@@ -45,16 +45,23 @@ const bool CSVFilter::filter()
       while ( (nextsep = line.find( CSV_DELIMITER, sep ) ) >= 0 ) // find next ";"
       {
         // hmm... I'm afraid this method of parsing might be a bit slow...
-        // Anybody with a better implementation ? strstr is fine but doesn't
-        // support Unicode...
+        // And it doesn't support ';' nested in double quotes.
+        // I'll write a state machine soon.
+        //
+        //   first_field;second_field;last_field
+        //               ^ sep       ^ nextsep
         tree.cell( line.mid( sep, nextsep-sep ) ); // extract field
         sep = nextsep + 1;
       }
+      // No more ';'. Store last cell in the line.
+      //   first_field;second_field;last_field
+      //                            ^ sep     ^ length
+      tree.cell( line.right( line.length() - sep ) );
     }
     tree.newline();
   }
 
-  bSuccess = true; // TODO : only if file parsed correctly
+  bSuccess = true;
   return bSuccess;
 }
 

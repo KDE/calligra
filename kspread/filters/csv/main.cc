@@ -8,7 +8,7 @@
 
 #include <klocale.h>
 
-#include <stdio.h> // for fopen
+#include <stdio.h> // for stdin
 
 typedef KOMAutoLoader<Factory> MyAutoLoader;
 
@@ -52,7 +52,6 @@ Filter::Filter() : KOMComponent(), KOffice::Filter_skel() {
 void Filter::filter(KOffice::Filter::Data& data, const char *_from,
                     const char *_to) {
 
-  debug("Filter::filter !");
     QString to(_to);
     QString from(_from);
 
@@ -82,10 +81,11 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
     // Create Filter
     // "CSV File" will be the table name. I would have preferred to set
     // it to the input filename, but how to get hold of it here ? (David)
-    myCSVFilter = new CSVFilter(inputStream, i18n( "CSV File") );
+    CSVFilter * myCSVFilter = new CSVFilter(inputStream, i18n( "CSV File") );
 
     QString str;
 
+    // Go for it, boy !
     if ( myCSVFilter->filter() )
     {
         str = myCSVFilter->part();
@@ -111,25 +111,22 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
             "</DOC>";
             }
 
-    // will disappear soon?
+    // return the XML string
     QCString cstr=QCString(str.utf8());
     len = cstr.length();
     data.length(len);
-    
-    // will we give back the name only, soon?
     for(CORBA::ULong i=0; i<len; ++i)
         data[i]=cstr[i];
 
+    // cleanups
     delete [] buffer;
-    buffer=0L;
     delete myCSVFilter;
-    myCSVFilter=0L;
 }
 
 /*================================================================*/
 int main(int argc,char **argv) {
 
-#define TEST_ONLY // define this to enable using the filter on standard input/output
+#undef TEST_ONLY // define this to enable using the filter on standard input/output
 
 #ifdef TEST_ONLY
     QTextIStream inputStream( stdin );
@@ -141,10 +138,10 @@ int main(int argc,char **argv) {
       debug( "error ! filter() returned false" );
 
     delete myCSVFilter;
-    return 0;
 #else
     MyApplication app(argc,argv);
     MyAutoLoader loader("IDL:KOffice/FilterFactory:1.0","KSpreadCSVFilter");
-    return app.exec();
+    app.exec();
 #endif
+    return 0;
 }

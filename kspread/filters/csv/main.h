@@ -55,8 +55,5 @@ public:
     Filter();
 
     void filter(KOffice::Filter::Data& data,const char *_from,const char *_to);
-
-private:
-    CSVFilter *myCSVFilter;
 };
 #endif  // __main_h__
