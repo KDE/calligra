@@ -92,8 +92,12 @@ void PythonKexiDBConnection::init_type(void)
         "KexiDBCursor KexiDBConnection.executeQuery(querystatement)\n"
     );
     add_varargs_method("querySingleString", &PythonKexiDBConnection::querySingleString,
-        "boolean KexiDBConnection.querySingleString(sqlstatement, value, columnnumber)\n"
+        "value KexiDBConnection.querySingleString(sqlstatement, columnnumber)\n"
     );
+    add_varargs_method("queryStringList", &PythonKexiDBConnection::queryStringList,
+        "valuelist KexiDBConnection.queryStringList(sqlstatement, columnnumber)\n"
+    );
+
 
     add_varargs_method("insertRecord", &PythonKexiDBConnection::insertRecord,
         "boolean KexiDBConnection.insertRecord(KexiDBFieldList)\n"
@@ -223,19 +227,36 @@ Py::Object PythonKexiDBConnection::executeQuery(const Py::Tuple& args)
 
 Py::Object PythonKexiDBConnection::querySingleString(const Py::Tuple& args)
 {
-    PythonUtils::checkArgs(args, 2, 3);
+    PythonUtils::checkArgs(args, 1, 2);
     PythonKexiDB::checkObject(d->connection);
-
     QString sql = args[0].as_string().c_str();
-    QString value = args[1].as_string().c_str();
+    QString value;
     uint column = 0;
-    if(args.size() >= 3) {
-        if(! args[2].isNumeric())
-            throw Py::TypeError("KexiDBConnection.querySingleString(sqlstatement,value,columnnumber) columnnumber needs to be numeric.");
-        column = (unsigned long)Py::Long(args[2]);
+    if(args.size() >= 2) {
+        if(! args[1].isNumeric())
+            throw Py::TypeError("KexiDBConnection.querySingleString(sqlstatement, columnnumber) columnnumber needs to be numeric.");
+        column = (unsigned long)Py::Long(args[1]);
     }
+    if(! d->connection->querySingleString(sql, value, column))
+        return Py::None();
+    return PythonUtils::toPyObject(value);
+}
 
-    return Py::Int( d->connection->querySingleString(sql, value, column) );
+Py::Object PythonKexiDBConnection::queryStringList(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 1, 2);
+    PythonKexiDB::checkObject(d->connection);
+    QString sql = args[0].as_string().c_str();
+    QStringList valuelist;
+    uint column = 0;
+    if(args.size() >= 2) {
+        if(! args[1].isNumeric())
+            throw Py::TypeError("KexiDBConnection.querySingleString(sqlstatement, columnnumber) columnnumber needs to be numeric.");
+        column = (unsigned long)Py::Long(args[1]);
+    }
+    if(! d->connection->queryStringList(sql, valuelist, column))
+        return Py::None();
+    return PythonUtils::toPyObject(valuelist);
 }
 
 Py::Object PythonKexiDBConnection::insertRecord(const Py::Tuple& args)
