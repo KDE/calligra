@@ -33,6 +33,17 @@
 #include <qvaluevector.h>
 #include <qwidget.h>
 
+// TODO
+// improvement possibilities
+// - use offscreen buffer to reduce flicker even more
+// - keep track of tabs, only (re)layout when necessary
+// - paint all tabs to buffer, show only by shifting
+// - customizable button pixmaps
+// - implement few things as properties (use Q_PROPERTY)
+// - reverse layout (for RTL sheets)
+// - use QStyle to paint the tabs & buttons (is it good/possible?)
+
+
 namespace KSpread
 {
 
