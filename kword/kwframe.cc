@@ -662,7 +662,7 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
     }
 }
 
-void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect,QColorGroup &/*cg*/, KWViewMode *viewMode )
+void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect, const QColorGroup &, KWViewMode *viewMode )
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
     //kdDebug(32001) << "KWFrameSet::drawMargins frame: " << frame
@@ -1112,7 +1112,7 @@ const QPtrList<KWFrame> & KWFrameSet::framesInPage( int pageNum ) const
     return * m_framesInPage[pageNum - m_firstPage];
 }
 
-void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg,
+void KWFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGroup &cg,
                                bool onlyChanged, bool resetChanged,
                                KWFrameSetEdit *edit, KWViewMode *viewMode )
 {
@@ -1151,7 +1151,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
 
 void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
                                       QPainter *painter, const QRect &crect,
-                                      QColorGroup &cg, bool onlyChanged, bool resetChanged,
+                                      const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                       KWFrameSetEdit *edit, KWViewMode *viewMode,
                                       KWFrame *settingsFrame, bool drawUnderlyingFrames )
 {
@@ -1174,6 +1174,11 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
         // Determine settingsFrame if not passed (for speedup)
         if ( !settingsFrame )
             settingsFrame = this->settingsFrame( frame );
+
+        QColorGroup frameColorGroup( cg );
+        QBrush bgBrush( settingsFrame->backgroundColor() );
+        bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
+        frameColorGroup.setBrush( QColorGroup::Base, bgBrush );
 
         QRect normalInnerFrameRect( m_doc->zoomRect( frame->innerRect() ) );
         QRect innerFrameRect( viewMode->normalToView( normalInnerFrameRect ) );
@@ -1219,46 +1224,41 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
             painter->translate( innerCRect.x() - fcrect.x(), innerCRect.y() - fcrect.y() ); // This assume that viewToNormal() is only a translation
             painter->setBrushOrigin( painter->brushOrigin() + innerCRect.topLeft() - fcrect.topLeft() );
 
-            QBrush bgBrush( settingsFrame->backgroundColor() );
-            bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
-            cg.setBrush( QColorGroup::Base, bgBrush );
-            drawFrame( frame, painter, fcrect, cg, onlyChanged, resetChanged, edit, viewMode, drawUnderlyingFrames );
+            drawFrame( frame, painter, fcrect, frameColorGroup, onlyChanged, resetChanged, edit, viewMode, drawUnderlyingFrames );
 
             painter->restore();
         }
-        if( !getGroupManager() ) // not for table cells
+        // Now draw the frame border
+        // Clip frames on top, but don't clip to the frame, the border is outside
+        // TODO (speed) : calc this one first, then reduce it to get the above inner-frame-region
+        if ( drawUnderlyingFrames )
+            reg = frameClipRegion( painter, frame, outerCRect, viewMode, onlyChanged, false );
+        else
+            reg = painter->xForm( outerCRect );
+        if ( !reg.isEmpty() )
         {
-            // Now draw the frame border
-            // Clip frames on top, but don't clip to the frame, the border is outside
-            // TODO (speed) : calc this one first, then reduce it to get the above inner-frame-region
-            QRegion reg;
-            if ( drawUnderlyingFrames )
-                reg = frameClipRegion( painter, frame, outerCRect, viewMode, onlyChanged, false );
-            else
-                reg = painter->xForm( outerCRect );
-            if ( !reg.isEmpty() )
-            {
-                painter->save();
-                painter->setClipRegion( reg );
+            painter->save();
+            painter->setClipRegion( reg );
+            if( !getGroupManager() ) // not for table cells
                 drawFrameBorder( painter, frame, settingsFrame, outerCRect, viewMode );
-                drawMargins( frame, painter, outerCRect, cg, viewMode );
+            if ( frame->bLeft() || frame->bTop() || frame->bRight() || frame->bBottom() )
+                drawMargins( frame, painter, outerCRect, frameColorGroup, viewMode );
 
-                painter->restore();
-            }
-            //else
-            //    kdDebug(32001) << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
+            painter->restore();
         }
+        //else
+        //    kdDebug(32001) << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
     }
 }
 
 void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
-                            QColorGroup &cg, bool onlyChanged, bool resetChanged,
+                            const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit *edit, KWViewMode* viewMode, bool drawUnderlyingFrames )
 {
     if ( crect.isEmpty() )
         return;
 #ifdef DEBUG_DRAW
-    kdDebug(32001) << "\nKWFrameSet::drawFrame " << getName() << " crect=" << crect << endl;
+    kdDebug(32001) << "\nKWFrameSet::drawFrame " << getName() << " crect=" << crect << " drawUnderlyingFrames=" << drawUnderlyingFrames << endl;
 #endif
 
     if ( drawUnderlyingFrames )
@@ -1310,7 +1310,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crec
             doubleBufPainter->restore();
         }
 
-        drawFrameContents( frame, doubleBufPainter, crect, cg, edit, viewMode );
+        drawFrameContents( frame, doubleBufPainter, crect, cg, onlyChanged, resetChanged, edit, viewMode );
         if ( painter->device()->devType() != QInternal::Printer )
         {
             painter->drawPixmap( crect.topLeft(), *pix, crect );
@@ -1319,12 +1319,12 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crec
     }
     else
     {
-        drawFrameContents( frame, painter, crect, cg, edit, viewMode );
+        drawFrameContents( frame, painter, crect, cg, onlyChanged, resetChanged, edit, viewMode );
     }
 }
 
 void KWFrameSet::drawFrameContents( KWFrame *, QPainter *, const QRect &,
-                                    QColorGroup &, KWFrameSetEdit*, KWViewMode * )
+                                    const QColorGroup &, bool, bool, KWFrameSetEdit*, KWViewMode * )
 {
     kdWarning() << "Default implementation of drawFrameContents called for " << className() << " " << this << " " << getName() << kdBacktrace();
     //drawFrame( frame, painter, crect, cg, false, false, edit, viewMode, true );
@@ -1679,7 +1679,8 @@ void KWFrameSet::printDebug()
         kdDebug() << "     BackgroundColor: "<< ( col.isValid() ? col.name().latin1() : "(default)" ) << endl;
         kdDebug() << "     SheetSide "<< frame->sheetSide() << endl;
         kdDebug() << "     Z Order: " << frame->zOrder() << endl;
-        kdDebug() << "     Number of frames on top: " << frame->framesOnTop().count() << endl;
+        kdDebug() << "     Frames below: " << frame->framesBelow().count()
+                  << " frames on top: " << frame->framesOnTop().count() << endl;
         kdDebug() << "     minFrameHeight "<< frame->minFrameHeight() << endl;
         if(frame->isSelected())
             kdDebug() << " *   Page "<< frame->pageNum() << endl;
@@ -1700,7 +1701,7 @@ KWFrameSetEdit::KWFrameSetEdit( KWFrameSet * fs, KWCanvas * canvas )
 }
 
 void KWFrameSetEdit::drawContents( QPainter *p, const QRect &crect,
-                                   QColorGroup &cg, bool onlyChanged, bool resetChanged,
+                                   const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                    KWViewMode *viewMode )
 {
     //kdDebug(32001) << "KWFrameSetEdit::drawContents " << frameSet()->getName() << endl;
@@ -1852,7 +1853,7 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
 }
 
 void KWPictureFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, const QRect &crect,
-                                   QColorGroup &, KWFrameSetEdit *, KWViewMode * )
+                                           const QColorGroup &, bool, bool, KWFrameSetEdit *, KWViewMode * )
 {
 #ifdef DEBUG_DRAW
     kdDebug(32001) << "KWPictureFrameSet::drawFrameContents crect=" << crect << " size=" << kWordDocument()->zoomItX( frame->innerWidth() ) << "x" << kWordDocument()->zoomItY( frame->innerHeight() ) << endl;
@@ -1932,10 +1933,10 @@ KWordFrameSetIface* KWPartFrameSet::dcopObject()
 
 
 void KWPartFrameSet::drawFrameContents( KWFrame* frame, QPainter * painter, const QRect & /*crect TODO*/,
-                                        QColorGroup &, /*bool onlyChanged, bool, */
+                                        const QColorGroup &, bool onlyChanged, bool,
                                         KWFrameSetEdit *, KWViewMode * )
 {
-    //if (!onlyChanged)
+    if (!onlyChanged)
     {
         if ( !m_child || !m_child->document() )
         {
@@ -2197,7 +2198,7 @@ KWFrameSetEdit* KWFormulaFrameSet::createFrameSetEdit(KWCanvas* canvas)
 }
 
 void KWFormulaFrameSet::drawFrame( KWFrame* /*frame*/, QPainter* painter, const QRect& crect,
-                                   QColorGroup& cg, bool onlyChanged, bool resetChanged,
+                                   const QColorGroup& cg, bool onlyChanged, bool resetChanged,
                                    KWFrameSetEdit *edit, KWViewMode *, bool )
 {
     //kdDebug(32001) << "KWFormulaFrameSet::drawFrame m_changed=" << m_changed << " onlyChanged=" << onlyChanged << endl;

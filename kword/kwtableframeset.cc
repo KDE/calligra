@@ -1780,7 +1780,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
 }
 
 void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
-                                    QColorGroup & cg, bool onlyChanged, bool resetChanged,
+                                    const QColorGroup & cg, bool onlyChanged, bool resetChanged,
                                     KWFrameSetEdit * edit, KWViewMode * viewMode )
 {
     for (unsigned int i=0; i < m_cells.count() ; i++)

@@ -417,7 +417,7 @@ QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
     }
 }
 
-void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg,
+void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGroup &cg,
                                    bool onlyChanged, bool resetChanged,
                                    KWFrameSetEdit *edit, KWViewMode *viewMode )
 {
@@ -504,10 +504,20 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
 }
 
 void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRect &r,
-                                QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                                KWFrameSetEdit *edit, KWViewMode *viewMode, bool /*TODO*/ )
+                                const QColorGroup &cg, bool onlyChanged, bool resetChanged,
+                                KWFrameSetEdit *edit, KWViewMode *viewMode, bool drawUnderlyingFrames )
 {
-    //kdDebug() << "KWTextFrameSet::drawFrame " << getName() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << r << " onlyChanged=" << onlyChanged << endl;
+    // Detect if text frame needs transparency painting, to save time if it's using SolidPattern
+    // In theory this code should be in kwFrameSet, but currently only text frames obey m_backgroundColor.
+    drawUnderlyingFrames &= theFrame->backgroundColor().style() != Qt::SolidPattern;
+    KWFrameSet::drawFrame( theFrame, painter, r, cg, onlyChanged, resetChanged, edit, viewMode, drawUnderlyingFrames );
+}
+
+void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, const QRect &r,
+                                        const QColorGroup &cg, bool onlyChanged, bool resetChanged,
+                                        KWFrameSetEdit *edit, KWViewMode *viewMode )
+{
+    //kdDebug() << "KWTextFrameSet::drawFrameContents " << getName() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << r << " onlyChanged=" << onlyChanged << endl;
     m_currentDrawnFrame = theFrame;
     if ( theFrame ) // 0L in the text viewmode
     {
@@ -552,7 +562,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
 //kdDebug() << "KWTextFrameSet::drawFrame calling drawWYSIWYG. cg base color:" << DEBUGBRUSH(cg.brush( QColorGroup::Base)) << endl;
     KoTextParag * lastFormatted = textDocument()->drawWYSIWYG(
         painter, r.x(), r.y(), r.width(), r.height(),
-        cg, kWordDocument(), // TODO view's zoom handler
+        cg, kWordDocument(),
         onlyChanged, drawCursor, cursor, resetChanged, drawingFlags );
 
     // The last paragraph of this frame might have a bit in the next frame too.
@@ -1357,7 +1367,7 @@ struct FrameStruct
     }
 
     /*
-    the sorting of all frames in the same frameset is done as all sorting 
+    the sorting of all frames in the same frameset is done as all sorting
     based on a simple frameOne > frameTwo question.
     Frame frameOne is greater then frameTwo if the center point lies more down then (the whole of)
     frame frameTwo. When they are equal, the X position is considered. */

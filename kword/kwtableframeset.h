@@ -118,10 +118,10 @@ public:
     virtual void createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode );
     void drawBorders( QPainter& painter, const QRect &crect, KWViewMode *viewMode );
     virtual void drawContents( QPainter * painter, const QRect & crect,
-                               QColorGroup & cg, bool onlyChanged, bool resetChanged,
+                               const QColorGroup & cg, bool onlyChanged, bool resetChanged,
                                KWFrameSetEdit *edit, KWViewMode *viewMode );
     // Dummy since we reimplement drawContents
-    virtual void drawFrame(KWFrame *, QPainter *, const QRect &, QColorGroup &,
+    virtual void drawFrame(KWFrame *, QPainter *, const QRect &, const QColorGroup &,
                            bool, bool, KWFrameSetEdit *, KWViewMode *, bool ) {}
 
     // Frameset management
