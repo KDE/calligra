@@ -29,6 +29,8 @@
 #include <knumvalidator.h>
 #include <kdebug.h>
 #include <koGlobal.h>
+#include <qlabel.h>
+#include <qlineedit.h>
 
 KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const QString &name )
         : QWidget( _parent )

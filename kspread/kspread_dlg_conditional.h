@@ -23,15 +23,14 @@
 
 #include <qdialog.h>
 #include <qcombobox.h>
-#include <qlineedit.h>
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 #include <qpushbutton.h>
 #include <qfont.h>
-#include <qlabel.h>
 #include "kspread_cell.h"
 class KSpreadView;
 class KSpreadTable;
-
+class QLabel;
+class QLineEdit;
 
 class KSpreadWidgetconditional : public QWidget
 {

@@ -25,15 +25,14 @@
 #include <qtabdialog.h>
 #include <qapplication.h>
 #include <qbuttongroup.h>
-#include <qcheckbox.h>
 #include <qgroupbox.h>
-#include <qlistbox.h>
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 #include <knuminput.h>
 #include <kcompletion.h>
 #include "kspread_view.h"
 #include "kspread_cell.h"
 #include "kspread_doc.h"
+#include <qcheckbox.h>
 
 class QPixmap;
 class QRadioButton;
@@ -46,7 +45,7 @@ class CellLayoutDlg;
 class KSpreadTable;
 class KLineEdit;
 class QFrame;
-
+class QListBox;
 
 class KSpreadPatternSelect : public QFrame
 {

@@ -23,15 +23,14 @@
 
 #include <qframe.h>
 #include <qdialog.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
 #include <qcombobox.h>
 #include <qlistbox.h>
-#include <qlineedit.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
+
 #include <klineedit.h>
 #include <kcompletion.h>
+#include <qpushbutton.h>
+#include <qlayout.h>
+#include <qlabel.h>
 
 class QTextBrowser;
 class QTabWidget;
@@ -39,6 +38,7 @@ class QTabWidget;
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
+class QLineEdit;
 
 #include "kspread_functions.h"
 
