@@ -91,6 +91,7 @@ AC_OUTPUT( \
 	kword/dtd/Makefile \
 	kdiagramm/Makefile \
 	kdiagramm/pics/Makefile \
+	kimage/Makefile \
 	lib/Makefile \
 	lib/kofficecore/Makefile \
 	lib/kofficeui/Makefile \
