@@ -137,7 +137,7 @@ private:
     void appendBrush( QDomDocument& doc, QDomElement& e );
     void appendShadow( QDomDocument& doc, QDomElement& e );
     void appendLineEnds( QDomDocument& doc, QDomElement& e );
-    void appendTextObjectMargin(QDomDocument& doc, QDomElement&e );
+    void appendTextObjectMargin( QDomDocument& doc, QDomElement& e );
 
     double toPoint( QString value );
 

@@ -991,16 +991,16 @@ double OoImpressImport::toPoint( QString value )
         return 0;
 }
 
-void OoImpressImport::appendTextObjectMargin(QDomDocument& /*doc*/, QDomElement&e)
+void OoImpressImport::appendTextObjectMargin( QDomDocument& /*doc*/, QDomElement& e )
 {
-    if( m_styleStack.hasAttribute("fo:padding-top"))
-        e.setAttribute("btoppt",toPoint( m_styleStack.attribute( "fo:padding-top")));
-    if( m_styleStack.hasAttribute("fo:padding-bottom"))
-        e.setAttribute("bbottompt",toPoint( m_styleStack.attribute( "fo:padding-bottom")));
-    if( m_styleStack.hasAttribute("fo:padding-left"))
-        e.setAttribute("bleftpt",toPoint( m_styleStack.attribute( "fo:padding-left")));
-    if( m_styleStack.hasAttribute("fo:padding-right"))
-        e.setAttribute("brightpt",toPoint( m_styleStack.attribute( "fo:padding-right")));
+    if( m_styleStack.hasAttribute( "fo:padding-top" ) )
+        e.setAttribute( "btoppt", toPoint( m_styleStack.attribute( "fo:padding-top" ) ) );
+    if( m_styleStack.hasAttribute( "fo:padding-bottom" ) )
+        e.setAttribute( "bbottompt", toPoint( m_styleStack.attribute( "fo:padding-bottom" ) ) );
+    if( m_styleStack.hasAttribute( "fo:padding-left" ) )
+        e.setAttribute( "bleftpt", toPoint( m_styleStack.attribute( "fo:padding-left" ) ) );
+    if( m_styleStack.hasAttribute( "fo:padding-right" ) )
+        e.setAttribute( "brightpt", toPoint( m_styleStack.attribute( "fo:padding-right" ) ) );
 }
 
 
@@ -1008,9 +1008,6 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
 {
     QDomElement textObjectElement = doc.createElement( "TEXTOBJ" );
     appendTextObjectMargin( doc, textObjectElement );
-
-    //lukas: TODO the text box can have a style as well (presentation:style-name)!
-    //percy: this should be fixed with the new StyleStack
 
     // KPresenter needs an attribute 'verticalValue' for vertical alignment to work
     // correctly. It is somehow calculated like value = 'height of box' - 'height of text'.
@@ -1160,55 +1157,61 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         }
         else
             textData = t.data();
+
+        // offset before and after paragraph
         if( m_styleStack.hasAttribute("fo:margin-top") ||
             m_styleStack.hasAttribute("fo:margin-bottom"))
         {
-            double mtop = toPoint( m_styleStack.attribute( "fo:margin-top"));
-            double mbottom = toPoint( m_styleStack.attribute("fo:margin-bottom"));
-            if( mtop != 0 || mbottom!=0 )
+            double mtop = toPoint( m_styleStack.attribute( "fo:margin-top" ) );
+            double mbottom = toPoint( m_styleStack.attribute("fo:margin-bottom" ) );
+            if( mtop != 0 || mbottom != 0 )
             {
                 QDomElement offset = doc.createElement( "OFFSETS" );
-                if( mtop!= 0)
-                    offset.setAttribute("before", mtop);
-                if( mbottom!=0)
-                    offset.setAttribute("after",mbottom);
+                if( mtop != 0 )
+                    offset.setAttribute( "before", mtop );
+                if( mbottom != 0 )
+                    offset.setAttribute( "after", mbottom );
                 p.appendChild( offset );
             }
         }
-        // take care of indentation
+
+        // indentation of paragraph
         if ( m_styleStack.hasAttribute( "fo:margin-left" ) ||
-            m_styleStack.hasAttribute( "fo:margin-right" ) ||
-            m_styleStack.hasAttribute( "fo:text-indent"))
+             m_styleStack.hasAttribute( "fo:margin-right" ) ||
+             m_styleStack.hasAttribute( "fo:text-indent"))
         {
             double marginLeft =toPoint( m_styleStack.attribute( "fo:margin-left" ) );
             double marginRight = toPoint( m_styleStack.attribute( "fo:margin-right" ) );
-            double first = toPoint( m_styleStack.attribute("fo:text-indent"));
-            if ( (marginLeft!= 0) || marginRight!=0 || first!=0)
+            double first = toPoint( m_styleStack.attribute( "fo:text-indent" ) );
+            if ( marginLeft != 0 || marginRight != 0 || first != 0 )
             {
                 QDomElement indent = doc.createElement( "INDENTS" );
-                if( marginLeft != 0)
+                if( marginLeft != 0 )
                     indent.setAttribute( "left", marginLeft );
                 if( marginRight != 0 )
                     indent.setAttribute( "right", marginLeft );
-                if( first != 0)
-                    indent.setAttribute( "first", first);
+                if( first != 0 )
+                    indent.setAttribute( "first", first );
                 p.appendChild( indent );
             }
         }
-        if( m_styleStack.hasAttribute("fo:line-height"))
+
+        // line spacing
+        if( m_styleStack.hasAttribute( "fo:line-height" ) )
         {
             QString value = m_styleStack.attribute( "fo:line-height" );
             QDomElement lineSpacing = doc.createElement( "LINESPACING" );
-            if( value=="150%")
+            if( value == "150%" )
             {
-                lineSpacing.setAttribute("type","oneandhalf");
+                lineSpacing.setAttribute( "type", "oneandhalf" );
             }
-            else if( value=="200%")
+            else if( value == "200%" )
             {
-                lineSpacing.setAttribute("type","double");
+                lineSpacing.setAttribute( "type", "double" );
             }
-            p.appendChild(lineSpacing );
+            p.appendChild( lineSpacing );
         }
+
         QDomElement text = doc.createElement( "TEXT" );
         text.appendChild( doc.createTextNode( textData ) );
 
@@ -1234,46 +1237,46 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         if ( m_styleStack.hasAttribute( "fo:font-style" ) )
             if ( m_styleStack.attribute( "fo:font-style" ) == "italic" )
                 text.setAttribute( "italic", 1 );
-        if( m_styleStack.hasAttribute("style:text-crossing-out" ))
+        if ( m_styleStack.hasAttribute( "style:text-crossing-out" ) )
         {
             QString strikeOutType = m_styleStack.attribute( "style:text-crossing-out" );
-            if( strikeOutType =="double-line")
+            if ( strikeOutType =="double-line" )
             {
-                text.setAttribute("strikeOut", "double");
-                text.setAttribute("strikeoutstyleline","solid");
+                text.setAttribute( "strikeOut", "double" );
+                text.setAttribute( "strikeoutstyleline", "solid" );
             }
-            else if( strikeOutType =="single-line")
+            else if ( strikeOutType == "single-line" )
             {
-                text.setAttribute("strikeOut", "single");
-                text.setAttribute("strikeoutstyleline","solid");
+                text.setAttribute( "strikeOut", "single" );
+                text.setAttribute( "strikeoutstyleline", "solid" );
             }
-            else if( strikeOutType =="thick-line")
+            else if ( strikeOutType =="thick-line" )
             {
-                text.setAttribute("strikeOut", "single-bold");
-                text.setAttribute("strikeoutstyleline","solid");
+                text.setAttribute( "strikeOut", "single-bold" );
+                text.setAttribute( "strikeoutstyleline","solid" );
             }
 
         }
-        if( m_styleStack.hasAttribute("style:text-position"))
+        if ( m_styleStack.hasAttribute( "style:text-position" ) )
         {
-            QString textPos =m_styleStack.attribute("style:text-position");
+            QString textPos =m_styleStack.attribute( "style:text-position" );
             //relativetextsize="0.58"
             //"super 58%"
-            if( textPos.contains("super"))
+            if( textPos.contains( "super" ) )
             {
-                textPos=textPos.remove("super");
-                textPos=textPos.remove("%");
+                textPos = textPos.remove( "super" );
+                textPos = textPos.remove( "%" );
                 double value = textPos.stripWhiteSpace().toDouble();
-                text.setAttribute("VERTALIGN",2);
-                text.setAttribute("relativetextsize", value/100 );
+                text.setAttribute( "VERTALIGN", 2 );
+                text.setAttribute( "relativetextsize", value / 100 );
             }
-            else if(textPos.contains("sub"))
+            else if (textPos.contains("sub"))
             {
-                textPos=textPos.remove("sub");
-                textPos=textPos.remove("%");
+                textPos = textPos.remove( "sub" );
+                textPos = textPos.remove( "%" );
                 double value = textPos.stripWhiteSpace().toDouble();
-                text.setAttribute("VERTALIGN",1);
-                text.setAttribute("relativetextsize", value/100 );
+                text.setAttribute( "VERTALIGN", 1 );
+                text.setAttribute( "relativetextsize", value / 100 );
             }
         }
         if ( m_styleStack.hasAttribute( "style:text-underline" ) )
@@ -1283,52 +1286,52 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
             if ( underType == "single" )
             {
                 text.setAttribute( "underline", 1 );
-                text.setAttribute( "underlinestyleline", "solid" );  //lukas: TODO support more underline styles
-                text.setAttribute("underlinecolor", underLineColor);
+                text.setAttribute( "underlinestyleline", "solid" );
+                text.setAttribute( "underlinecolor", underLineColor );
             }
-            else if(underType =="double")
+            else if ( underType == "double" )
             {
                 text.setAttribute( "underline", "double" );
-                text.setAttribute( "underlinestyleline", "solid" );  //lukas: TODO support more underline styles
-                text.setAttribute("underlinecolor", underLineColor);
+                text.setAttribute( "underlinestyleline", "solid" );
+                text.setAttribute( "underlinecolor", underLineColor );
             }
-            else if( underType == "bold" )
+            else if ( underType == "bold" )
             {
-                text.setAttribute("underline","single-bold");
-                text.setAttribute("underlinestyleline","solid");
-                text.setAttribute("underlinecolor", underLineColor);
+                text.setAttribute( "underline", "single-bold" );
+                text.setAttribute( "underlinestyleline", "solid" );
+                text.setAttribute( "underlinecolor", underLineColor );
             }
-            else if( underType =="wave")
+            else if ( underType == "wave" )
             {
                 //not implemented into kpresenter
-                text.setAttribute("underline","wave");
-                text.setAttribute("underlinestyleline","solid");
-                text.setAttribute("underlinecolor", underLineColor);
+                text.setAttribute( "underline", "wave" );
+                text.setAttribute( "underlinestyleline", "solid" );
+                text.setAttribute( "underlinecolor", underLineColor );
             }
-            else if( underType =="dotted")
+            else if ( underType == "dotted" )
             {
-                text.setAttribute("underline", 1 );
-                text.setAttribute("underlinestyleline","dot");
-                text.setAttribute("underlinecolor", underLineColor);
+                text.setAttribute( "underline", 1 );
+                text.setAttribute( "underlinestyleline", "dot" );
+                text.setAttribute( "underlinecolor", underLineColor );
 
             }
-            else if( underType =="dash")
+            else if ( underType == "dash" )
             {
-                text.setAttribute("underline", 1 );
-                text.setAttribute("underlinestyleline","dash");
-                text.setAttribute("underlinecolor", underLineColor);
+                text.setAttribute( "underline", 1 );
+                text.setAttribute( "underlinestyleline", "dash" );
+                text.setAttribute( "underlinecolor", underLineColor );
             }
-            else if( underType=="dot-dash")
+            else if ( underType == "dot-dash" )
             {
-                text.setAttribute("underline", 1 );
-                text.setAttribute("underlinestyleline","dash");
-                text.setAttribute("underlinecolor", underLineColor);
+                text.setAttribute( "underline", 1 );
+                text.setAttribute( "underlinestyleline", "dash" );
+                text.setAttribute( "underlinecolor", underLineColor );
             }
-            else if( underType=="bold-dotted")
+            else if ( underType == "bold-dotted" )
             {
-                text.setAttribute("underline", "single-bold" );
-                text.setAttribute("underlinestyleline","dot");
-                text.setAttribute("underlinecolor", underLineColor);
+                text.setAttribute( "underline", "single-bold" );
+                text.setAttribute( "underlinestyleline", "dot" );
+                text.setAttribute( "underlinecolor", underLineColor );
             }
 
         }
