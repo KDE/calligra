@@ -233,7 +233,7 @@ public:
     void updateCursorType();
 
     QBrush backgroundColor() const { return m_backgroundColor; }
-    void setBackgroundColor( const QBrush &_color ) { m_backgroundColor = _color; }
+    void setBackgroundColor( const QBrush &_color );
 
     KoRect innerRect() const;
 
@@ -920,8 +920,8 @@ public:
     /**
      * Move the frame 'frameNum' to the given position and
      * move the document child window with it
-     * This is called when the frame is anchored and the anchor moves (see KWAnchor). 
-    */ 
+     * This is called when the frame is anchored and the anchor moves (see KWAnchor).
+    */
     virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
 
 #ifndef NDEBUG

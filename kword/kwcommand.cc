@@ -426,9 +426,12 @@ void KWFrameBackGroundColorCommand::execute()
     for ( tmp=m_indexFrame.first(); tmp != 0; tmp=m_indexFrame.next() )
     {
         KWFrameSet *frameSet =tmp->m_pFrameSet;
-        doc = frameSet->kWordDocument();
-        KWFrame *frame=frameSet->frame(tmp->m_iFrameIndex);
-        frame->setBackgroundColor(m_newColor);
+        if ( frameSet && (frameSet->type() != FT_PICTURE) )
+        {
+            doc = frameSet->kWordDocument();
+            KWFrame *frame=frameSet->frame(tmp->m_iFrameIndex);
+            frame->setBackgroundColor(m_newColor);
+        }
     }
     //update frame
     if ( doc )
@@ -442,10 +445,13 @@ void KWFrameBackGroundColorCommand::unexecute()
     for ( tmp=m_indexFrame.first(); tmp != 0; tmp=m_indexFrame.next() )
     {
         KWFrameSet *frameSet =tmp->m_pFrameSet;
-        doc = frameSet->kWordDocument();
-        KWFrame *frame=frameSet->frame(tmp->m_iFrameIndex);
-        QBrush *tmpFrameStruct=m_oldBackGroundColor.at(m_indexFrame.find(tmp));
-        frame->setBackgroundColor(*tmpFrameStruct);
+        if ( frameSet && (frameSet->type() != FT_PICTURE) )
+        {
+            doc = frameSet->kWordDocument();
+            KWFrame *frame=frameSet->frame(tmp->m_iFrameIndex);
+            QBrush *tmpFrameStruct=m_oldBackGroundColor.at(m_indexFrame.find(tmp));
+            frame->setBackgroundColor(*tmpFrameStruct);
+        }
     }
 
     //update frames
@@ -475,7 +481,8 @@ void KWFrameStyleCommand::unexecute()
 
 void KWFrameStyleCommand::applyFrameStyle( KWFrameStyle * _sty )
 {
-    m_frame->setBackgroundColor( _sty->backgroundColor() );
+    if ( m_frame->frameSet() && (m_frame->frameSet()->type() != FT_PICTURE))
+        m_frame->setBackgroundColor( _sty->backgroundColor() );
     m_frame->setLeftBorder( _sty->leftBorder() );
     m_frame->setRightBorder( _sty->rightBorder() );
     m_frame->setTopBorder( _sty->topBorder() );

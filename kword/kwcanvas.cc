@@ -1713,7 +1713,7 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
         QBrush *_color=new QBrush(frame->backgroundColor());
         oldColor.append(_color);
 
-        if (_backColor!=frame->backgroundColor())
+        if (frame->frameSet() && frame->frameSet()->type()!=FT_PICTURE &&  _backColor!=frame->backgroundColor())
         {
             colorChanged=true;
             frame->setBackgroundColor(_backColor);

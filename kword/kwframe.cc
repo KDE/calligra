@@ -100,7 +100,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_bCopy( false ),
       m_selected( false ),
       m_drawFootNoteLine( false ),
-      m_backgroundColor( QBrush( QColor() ) ), // valid brush with invalid color ( default )
+      m_backgroundColor( (fs && fs->type() == FT_PICTURE) ? QBrush( QColor(), Qt::NoBrush) : QBrush( QColor() ) ), // valid brush with invalid color ( default )
       brd_left( QColor(), KoBorder::SOLID, 0 ),
       brd_right( QColor(), KoBorder::SOLID, 0 ),
       brd_top( QColor(), KoBorder::SOLID, 0 ),
@@ -120,6 +120,12 @@ KWFrame::~KWFrame()
     if (m_selected)
         removeResizeHandles();
 }
+
+void KWFrame::setBackgroundColor( const QBrush &_color )
+{
+    m_backgroundColor = _color;
+}
+
 
 int KWFrame::pageNum() const
 {
