@@ -45,9 +45,6 @@ public:
 
     KPAutoformObject &operator=( const KPAutoformObject & );
 
-    virtual void setSize( double _width, double _height );
-    virtual void resizeBy( double _dx, double _dy );
-
     virtual void setFileName( const QString &_filename );
     virtual void setLineBegin( LineEnd _lineBegin )
     { lineBegin = _lineBegin; }
@@ -75,10 +72,9 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc,int offset );
     virtual int load(const QDomElement &element);
-    virtual void zoomObject();
 protected:
     float getAngle( const QPoint &p1, const QPoint &p2 );
-    virtual void paint( QPainter *_painter, KoZoomHandler *_zoomHandler );
+    virtual void paint( QPainter *_painter, KoZoomHandler *_zoomHandler, bool drawingShadow );
 
     QString filename;
     LineEnd lineBegin, lineEnd;

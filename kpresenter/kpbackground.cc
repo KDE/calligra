@@ -56,7 +56,7 @@ KPBackGround::KPBackGround( KPrPage *_page )
     soundEffect = false;
     soundFileName = QString::null;
 
-    gradient = 0L;
+    gradientPixmap = 0L;
     m_page=_page;
 }
 
@@ -146,8 +146,6 @@ void KPBackGround::restore()
 	setBackClipart( backClipart.key().filename(), backClipart.key().lastModified() );
     else
         backClipart = KPClipart();
-
-    //removeGradient();
 }
 
 /*================================================================*/
@@ -415,15 +413,10 @@ void KPBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const QR
     }
     else if ( backType == BT_COLOR || backType == BT_CLIPART ||
               backType == BT_PICTURE && backView == BV_CENTER ) {
-        // Remove previous gradient if size changed
-        if ( gradient && gradient->size() != ext )
-            removeGradient();
-        // Create gradient with new size if necessary
-        if (!gradient)
-            gradient = gradientCollection()->getGradient( backColor1, backColor2, bcType, ext, unbalanced, xfactor, yfactor );
         // Draw gradient
-        if ( gradient )
-            _painter->drawPixmap( crect.topLeft(), *gradient, crect );
+        if ( !gradientPixmap || gradientPixmap->size() != ext )
+            generateGradient( ext );
+        _painter->drawPixmap( crect.topLeft(), *gradientPixmap, crect );
     }
 }
 
@@ -562,12 +555,25 @@ void KPBackGround::drawBorders( QPainter *_painter, const QSize& ext, const QRec
     _painter->drawRect( 0, 0, ext.width() + 1, ext.height() + 1 );
 }
 
+void KPBackGround::generateGradient( const QSize& size )
+{
+    if ( backType == BT_COLOR || backType == BT_CLIPART ||
+         backType == BT_PICTURE && backView == BV_CENTER ) {
+        removeGradient();
+        gradientPixmap = &gradientCollection()->getGradient( backColor1, backColor2, bcType, size, unbalanced, xfactor, yfactor );
+    }
+
+    // Avoid keeping an unused gradient around
+    if ( backType == BT_PICTURE && backView != BV_CENTER && gradientPixmap )
+        removeGradient();
+}
+
 void KPBackGround::removeGradient()
 {
-    if ( gradient ) {
-        gradientCollection()->removeRef( backColor1, backColor2, bcType, gradient->size(),
-                                       unbalanced, xfactor, yfactor);
-        gradient = 0;
+    if ( gradientPixmap ) {
+        gradientCollection()->removeRef( backColor1, backColor2, bcType, gradientPixmap->size(),
+                                         unbalanced, xfactor, yfactor);
+        gradientPixmap = 0;
     }
 }
 

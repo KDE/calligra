@@ -161,8 +161,6 @@ void KPTextObject::setSize( double _width, double _height )
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
     slotAvailableHeightNeeded();
     m_textobj->formatMore();
-    if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
 }
 
 /*======================= set size ===============================*/
@@ -174,8 +172,6 @@ void KPTextObject::resizeBy( double _dx, double _dy )
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
     slotAvailableHeightNeeded();
     m_textobj->formatMore();
-    if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
 }
 
 /*========================= save =================================*/
@@ -252,20 +248,23 @@ void KPTextObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     //kdDebug() << "Painting text object at " << ox << "," << oy << ":" << m_textobj->textDocument()->text() << endl;
     double ow = ext.width();
     double oh = ext.height();
+    QSize size( _zoomHandler->zoomSize( ext ) );
 
     _painter->setPen( pen );
     _painter->setBrush( brush );
 
     // Handle the rotation, draw the background/border, then call drawText()
+    // ### Why not use KP2DObject's draw() code for all this ??
     int penw = pen.width() / 2;
     _painter->translate( _zoomHandler->zoomItX(ox),_zoomHandler->zoomItY( oy) );
     if ( angle == 0 )
     {
       if ( fillType == FT_BRUSH || !gradient )
-        _painter->drawRect( penw, penw, _zoomHandler->zoomItX( ext.width() - 2 * penw), _zoomHandler->zoomItY( ext.height() - 2 * penw) );
-      else
-        _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, _zoomHandler->zoomItX( ow - 2 * penw ), _zoomHandler->zoomItY( oh - 2 * penw ) );
-
+          _painter->drawRect( penw, penw, _zoomHandler->zoomItX( ext.width() - 2 * penw), _zoomHandler->zoomItY( ext.height() - 2 * penw) );
+      else {
+          gradient->setSize( size );
+          _painter->drawPixmap( penw, penw, gradient->pixmap(), 0, 0, _zoomHandler->zoomItX( ow - 2 * penw ), _zoomHandler->zoomItY( oh - 2 * penw ) );
+      }
       drawText( _painter, _zoomHandler, onlyChanged, cursor, resetChanged );
     }
     else
@@ -288,8 +287,10 @@ void KPTextObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
       if ( fillType == FT_BRUSH || !gradient )
         _painter->drawRect( _zoomHandler->zoomItX(rr.left() + xPos + penw), _zoomHandler->zoomItY(rr.top() + yPos + penw), _zoomHandler->zoomItX(ext.width() - 2 * penw), _zoomHandler->zoomItY(ext.height() - 2 * penw) );
-      else
-        _painter->drawPixmap( _zoomHandler->zoomItX( rr.left() + xPos + penw ), _zoomHandler->zoomItY( rr.top() + yPos + penw ), *gradient->getGradient(), 0, 0, _zoomHandler->zoomItX( ow - 2 * penw ), _zoomHandler->zoomItY( oh - 2 * penw ) );
+      else {
+          gradient->setSize( size );
+          _painter->drawPixmap( _zoomHandler->zoomItX( rr.left() + xPos + penw ), _zoomHandler->zoomItY( rr.top() + yPos + penw ), gradient->pixmap(), 0, 0, _zoomHandler->zoomItX( ow - 2 * penw ), _zoomHandler->zoomItY( oh - 2 * penw ) );
+      }
 
       _painter->translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY( rr.top() + yPos) );
       drawText( _painter, _zoomHandler, onlyChanged, cursor, resetChanged );
@@ -1518,15 +1519,6 @@ void KPTextView::dropEvent( QDropEvent * e )
         kpTextObject()->kPresenterDocument()->addCommand(macroCmd);
     }
 #endif
-}
-
-
-void KPTextObject::zoomObject()
-{
-    if ( fillType == FT_GRADIENT && gradient )
-    {
-        gradient->setSize(getSize());
-    }
 }
 
 void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElement &parentElem,

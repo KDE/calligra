@@ -26,31 +26,37 @@
 class QPixmap;
 class KPGradient;
 
-/******************************************************************/
-/* Class: KPGradientCollection                                    */
-/******************************************************************/
-
+/**
+ * Class: KPGradientCollection
+ * Holds a collection of gradients, and is able to provide a gradient
+ * for a given set of gradient parameters.
+ * The idea is to be able to share gradients among pages which need the same one.
+ * This class is currently only used for KPBackground, not for objects with gradients
+ * (those having much less chances of sharing).
+ */
 class KPGradientCollection
 {
 public:
     KPGradientCollection()
     { gradientList.setAutoDelete( true ); }
 
-    virtual ~KPGradientCollection()
+    ~KPGradientCollection()
     { gradientList.clear(); }
 
-    virtual QPixmap* getGradient( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,
-				  bool _unbalanced, int _xfactor, int _yfactor, bool addref = true );
+    /** Retrieve or create gradient for the given parameters */
+    const QPixmap& getGradient( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,
+                                bool _unbalanced, int _xfactor, int _yfactor, bool addref = true );
 
-    virtual void removeRef( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,
-			    bool _unbalanced, int _xfactor, int _yfactor );
+    /** Remove reference to gradient with the given parameters */
+    void removeRef( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,
+                    bool _unbalanced, int _xfactor, int _yfactor );
 
 protected:
-    virtual int inGradientList( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,
-				bool _unbalanced, int _xfactor, int _yfactor );
+    KPGradient* inGradientList( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,
+                                bool _unbalanced, int _xfactor, int _yfactor ) const;
 
+private:
     QPtrList<KPGradient> gradientList;
-
 };
 
 #endif

@@ -122,7 +122,7 @@ void KPLineObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler, bool dr
             getShadowCoords( sx, sy,_zoomhandler );
 
             _painter->translate( _zoomhandler->zoomItX(sx), _zoomhandler->zoomItY(sy) );
-            paint( _painter,_zoomhandler );
+            paint( _painter, _zoomhandler );
         }
         else
         {
@@ -223,7 +223,7 @@ float KPLineObject::getAngle( const KoPoint &p1, const KoPoint &p2 )
 }
 
 /*======================== paint =================================*/
-void KPLineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
+void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler )
 {
     double ow = ext.width();
     double oh = ext.height();

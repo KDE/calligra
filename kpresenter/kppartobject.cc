@@ -48,68 +48,56 @@ KPPartObject &KPPartObject::operator=( const KPPartObject & )
     return *this;
 }
 
-/*================================================================*/
+void KPPartObject::updateChildGeometry()
+{
+    KoZoomHandler* zh = child->parent()->zoomHandler();
+    child->setGeometry( zh->zoomRect( KoRect( orig, ext ) ) );
+    child->setRotationPoint( QPoint( zh->zoomItX( getOrig().x() + getSize().width() / 2 ),
+                             zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
+}
+
 void KPPartObject::rotate( float _angle )
 {
     KPObject::rotate( _angle );
 
     child->setRotation( _angle );
-    child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
-                             getOrig().y() + getSize().height() / 2 ) );
-    if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
+    KoZoomHandler* zh = child->parent()->zoomHandler();
+    child->setRotationPoint( QPoint( zh->zoomItX( getOrig().x() + getSize().width() / 2 ),
+                             zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
 }
 
-/*======================== draw ==================================*/
 void KPPartObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
-    child->setGeometry( KoRect( orig, ext ).toQRect() );
-    child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
-                                     getOrig().y() + getSize().height() / 2 ) );
-    if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
+    updateChildGeometry();
 }
 
-/*======================== draw ==================================*/
 void KPPartObject::setOrig( const KoPoint &_point )
 {
     setOrig(_point.x(), _point.y());
 }
 
-/*======================== draw ==================================*/
 void KPPartObject::setOrig( double _x, double _y )
 {
     KPObject::setOrig( _x, _y );
-    child->setGeometry( KoRect( orig, ext ).toQRect() );
-    child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
-                                     getOrig().y() + getSize().height() / 2 ) );
+    updateChildGeometry();
 }
 
-/*======================== draw ==================================*/
 void KPPartObject::moveBy( const KoPoint &_point )
 {
     moveBy(_point.x(), _point.y());
 }
 
-/*======================== draw ==================================*/
 void KPPartObject::moveBy( double _dx, double _dy )
 {
     KPObject::moveBy( _dx, _dy );
-    child->setGeometry( KoRect( orig, ext ).toQRect() );
-    child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
-                                     getOrig().y() + getSize().height() / 2 ) );
+    updateChildGeometry();
 }
 
-/*======================== draw ==================================*/
 void KPPartObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
-    child->setGeometry( KoRect( orig, ext ).toQRect() );
-    child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
-                                     getOrig().y() + getSize().height() / 2 ) );
-    if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
+    updateChildGeometry();
 }
 
 /*======================== draw ==================================*/
@@ -120,6 +108,7 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool d
     double ow = ext.width();
     double oh = ext.height();
 
+    QSize size( _zoomhandler->zoomSize( ext ) );
     int penw = pen.width() / 2;
 
     _painter->save();
@@ -132,9 +121,10 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool d
         _painter->setBrush( brush );
         if ( fillType == FT_BRUSH || !gradient )
             _painter->drawRect( penw, penw, _zoomhandler->zoomItX( ext.width() - 2 * penw), _zoomhandler->zoomItY( ext.height() - 2 * penw) );
-        else
-            _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, _zoomhandler->zoomItX(ow - 2 * penw), _zoomhandler->zoomItY(oh - 2 * penw) );
-
+        else {
+            gradient->setSize( size );
+            _painter->drawPixmap( penw, penw, gradient->pixmap(), 0, 0, _zoomhandler->zoomItX(ow - 2 * penw), _zoomhandler->zoomItY(oh - 2 * penw) );
+        }
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
         _painter->drawRect( _zoomhandler->zoomItX(penw), _zoomhandler->zoomItY(penw), _zoomhandler->zoomItX(ow - 2 * penw), _zoomhandler->zoomItY(oh - 2 * penw) );
@@ -166,9 +156,10 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool d
 
         if ( fillType == FT_BRUSH || !gradient )
             _painter->drawRect(_zoomhandler->zoomItX(penw), _zoomhandler->zoomItY(penw), _zoomhandler->zoomItX(ext.width() - 2 * penw), _zoomhandler->zoomItY(ext.height() - 2 * penw) );
-        else
-            _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
-
+        else {
+            gradient->setSize( size );
+            _painter->drawPixmap( penw, penw, gradient->pixmap(), 0, 0, ow - 2 * penw, oh - 2 * penw );
+        }
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
         _painter->drawRect( _zoomhandler->zoomItX(penw), _zoomhandler->zoomItY(penw), _zoomhandler->zoomItX(ow - 2 * penw), _zoomhandler->zoomItY(oh - 2 * penw) );
@@ -187,22 +178,24 @@ void KPPartObject::slot_changed(KoChild *child)
     QRect g = child->geometry();
     KPObject::setOrig( g.x(), g.y() );
     KPObject::setSize( g.width(), g.height() );
-    if ( fillType == FT_GRADIENT && gradient )//FIXME
-        gradient->setSize( KoSize(g.size().width(),g.size().height()) );
 }
 
 /*================================================================*/
-void KPPartObject::paint( QPainter *_painter,KoZoomHandler*_zoomHandler )
+void KPPartObject::paint( QPainter *_painter, KoZoomHandler *_zoomHandler )
 {
     if ( !_enableDrawing ) return;
 
-    // ######### Torben: Care about zooming
-    if ( child && child->document() )
-        child->document()->paintEverything( *_painter, QRect( QPoint( 0, 0 ),QPoint(_zoomHandler->zoomItX( getSize().width()),_zoomHandler->zoomItY( getSize().height()) )), true, 0 );
+    if ( !child || !child->document() )
+        return;
+
+    child->document()->paintEverything( *_painter, _zoomHandler->zoomRect( getRect() ),
+        true, // flicker?
+        0 /* View isn't known from here - is that a problem? */,
+        _zoomHandler->zoomedResolutionX(), _zoomHandler->zoomedResolutionY() );
 }
 
 /*================================================================*/
-void KPPartObject::activate( QWidget *_widget, int /*diffx*/, int /*diffy*/ )
+void KPPartObject::activate( QWidget *_widget )
 {
     KPresenterView *view = (KPresenterView*)_widget;
     KoDocument* part = child->document();
@@ -263,7 +256,7 @@ int KPPartObject::load(const QDomElement &element)
     if(!e.isNull()) {
         KPObject::toGradient(e, gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
         if(gradient)
-            gradient->init(gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
+            gradient->setParameters(gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
     }
     return offset;
 }

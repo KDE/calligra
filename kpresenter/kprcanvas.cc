@@ -47,6 +47,7 @@
 #include <kptextobject.h>
 #include <kpresenter_sound_player.h>
 #include <notebar.h>
+#include <kppartobject.h>
 #include "kpresenter_utils.h"
 #include <koparagcounter.h>
 #include <kapplication.h>
@@ -1336,7 +1337,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
 		    editNum = i;
 		    break;
 		} else if ( kpobject->getType() == OT_PART ) {
-		    kpobject->activate( m_view );
+		    static_cast<KPPartObject *>(kpobject)->activate( m_view );
 		    editNum = i;
 		    break;
 		}
@@ -3684,7 +3685,7 @@ void KPrCanvas::insertObject( const QRect &_r )
 /*================================================================*/
 void KPrCanvas::insertFreehand( const KoPointArray &_pointArray )
 {
-    KoRect rect = getDrawRect( _pointArray );
+    KoRect rect = _pointArray.boundingRect();
 
     double ox = rect.x();
     double oy = rect.y();
@@ -3712,7 +3713,7 @@ void KPrCanvas::insertFreehand( const KoPointArray &_pointArray )
 /*================================================================*/
 void KPrCanvas::insertPolyline( const KoPointArray &_pointArray )
 {
-    KoRect rect = getDrawRect( _pointArray );
+    KoRect rect = _pointArray.boundingRect();
 
     double ox = rect.x();
     double oy = rect.y();
@@ -4784,45 +4785,6 @@ void KPrCanvas::setXimPosition( int x, int y, int w, int h, QFont *f )
     QWidget::setMicroFocusHint( x - diffx(), y - diffy(), w, h, true, f );
 }
 
-KoRect KPrCanvas::getDrawRect( const KoPointArray &_points )
-{
-    double maxX = 0, maxY = 0;
-    double minX = 0, minY = 0;
-    double tmpX = 0, tmpY = 0;
-    bool first = true;
-
-    KoPointArray points( _points );
-    KoPointArray::ConstIterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
-        KoPoint point = (*it);
-        tmpX = point.x();
-        tmpY = point.y();
-
-        if ( first ) {
-            maxX = tmpX;
-            maxY = tmpY;
-            minX = tmpX;
-            minY = tmpY;
-
-            first = false;
-        }
-
-        if ( maxX < tmpX )
-            maxX = tmpX;
-        if ( maxY < tmpY )
-            maxY = tmpY;
-        if ( minX > tmpX )
-            minX = tmpX;
-        if ( minY > tmpY )
-            minY = tmpY;
-    }
-
-    KoPoint topLeft = KoPoint( minX, minY );
-    KoPoint bottomRight = KoPoint( maxX, maxY );
-    KoRect rect = KoRect( topLeft, bottomRight );
-    return rect;
-}
-
 void KPrCanvas::createEditing( KPTextObject *textObj )
 {
     if( m_currentTextObjectView)
@@ -4919,7 +4881,8 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
         p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
         p.setBrush( Qt::NoBrush );
         p.setRasterOp( Qt::NotROP );
-        p.drawCubicBezier( m_oldCubicBezierPointArray.toQPointArray() );  // erase old cubic bezier curve
+        // erase old cubic bezier curve
+        p.drawCubicBezier( m_oldCubicBezierPointArray.zoomPointArray( m_view->zoomHandler() ) );
 
         double _firstX = m_pointArray.at( m_indexPointArray - 2 ).x();
         double _firstY = m_pointArray.at( m_indexPointArray - 2 ).y();
@@ -4949,7 +4912,7 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
         KoPointArray points;
         points.putPoints( 0, 4, _firstX,_firstY, _secondX,_secondY, _thirdX,_thirdY, _fourthX,_fourthY );
         // draw new cubic bezier curve
-        p.drawCubicBezier( points.toQPointArray() );  // ### zoom it, don't convert it!
+        p.drawCubicBezier( points.zoomPointArray( m_view->zoomHandler() ) );
 
         m_oldCubicBezierPointArray = points;
 
@@ -5043,8 +5006,7 @@ void KPrCanvas::drawPolygon( const QPoint &startPoint, const QPoint &endPoint )
             points.setPoint( i, (int)( xp + xoff ), (int)( yp + yoff ) );
         }
     }
-    //FIXME
-    p.drawPolygon( points.toQPointArray() );
+    p.drawPolygon( points.zoomPointArray( m_view->zoomHandler() ) );
     p.end();
 
     m_pointArray = points;

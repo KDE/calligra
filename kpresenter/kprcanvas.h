@@ -335,8 +335,6 @@ private:
 
     void playSound( const QString &soundFileName );
 
-    KoRect getDrawRect( const KoPointArray &_points );
-
     void drawPolygon( const QPoint &startPoint, const QPoint &endPoint );
 
     void drawPieObject(QPainter *p);

@@ -64,42 +64,10 @@ KPPixmapObject &KPPixmapObject::operator=( const KPPixmapObject & )
     return *this;
 }
 
-/*======================= set size ===============================*/
-void KPPixmapObject::setSize( double _width, double _height )
-{
-    KPObject::setSize( _width, _height );
-
-    //image = image.scale( ext.toQSize() );
-    // TODO: copy create-gradient-on-demand from KPBackground
-    if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
-}
-
-/*======================= set size ===============================*/
-void KPPixmapObject::resizeBy( double _dx, double _dy )
-{
-    KPObject::resizeBy( _dx, _dy );
-#if 0
-    if ( ext == orig_size )
-        ext = KoSize::fromQSize(image.size());
-
-    image = image.scale( ext.toQSize() );
-#endif
-
-    if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
-}
-
 /*================================================================*/
-void KPPixmapObject::setPixmap( const KPImageKey & key /*, const KoSize &_size*/ )
+void KPPixmapObject::setPixmap( const KPImageKey & key )
 {
     image = imageCollection->findImage( key );
-#if 0
-    if ( ext == orig_size )
-        ext = KoSize::fromQSize(image.size());
-
-    image = image.scale( ext.toQSize() );
-#endif
 }
 
 /*========================= save =================================*/
@@ -156,12 +124,6 @@ int KPPixmapObject::load(const QDomElement &element)
                 KPImageKey key( _fileName, dateTime );
                 image = imageCollection->loadXPMImage( key, _data );
             }
-#if 0
-            if ( ext == orig_size )
-                ext = KoSize::fromQSize(image.size());
-
-            image = image.scale( ext.toQSize() );
-#endif
         }
     }
     return offset;
@@ -226,6 +188,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool 
     }
     _painter->restore();
     _painter->save();
+    QSize size( _zoomHandler->zoomSize( ext ) );
 
     if ( angle == 0 ) {
         // Draw background
@@ -233,9 +196,12 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool 
         _painter->setBrush( brush );
         if ( fillType == FT_BRUSH || !gradient )
             _painter->drawRect( _zoomHandler->zoomItX(ox + penw), _zoomHandler->zoomItY(oy + penw), _zoomHandler->zoomItX(ext.width() - 2 * penw), _zoomHandler->zoomItY(ext.height() - 2 * penw) );
-        else
-            _painter->drawPixmap( _zoomHandler->zoomItX(ox + penw), _zoomHandler->zoomItY(oy + penw), *gradient->getGradient(),
+        else {
+            gradient->setSize( size );
+            _painter->drawPixmap( _zoomHandler->zoomItX(ox + penw), _zoomHandler->zoomItY(oy + penw), gradient->pixmap(),
                                   0, 0, _zoomHandler->zoomItX(ow - 2 * penw), _zoomHandler->zoomItY(oh - 2 * penw) );
+        }
+
         // Draw pixmap
         image.draw( *_painter,
                     _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy),
@@ -270,9 +236,11 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool 
         if ( fillType == FT_BRUSH || !gradient )
             _painter->drawRect( _zoomHandler->zoomItX(rr.left() + pixXPos + penw), _zoomHandler->zoomItY(rr.top() + pixYPos + penw),
                                 _zoomHandler->zoomItX(ext.width() - 2 * penw), _zoomHandler->zoomItY(ext.height() - 2 * penw) );
-        else
+        else {
+            gradient->setSize( size );
             _painter->drawPixmap( _zoomHandler->zoomItX(rr.left() + pixXPos + penw), _zoomHandler->zoomItY(rr.top() + pixYPos + penw),
-                                  *gradient->getGradient(), 0, 0, _zoomHandler->zoomItX(ow - 2 * penw), _zoomHandler->zoomItY(oh - 2 * penw) );
+                                  gradient->pixmap(), 0, 0, _zoomHandler->zoomItX(ow - 2 * penw), _zoomHandler->zoomItY(oh - 2 * penw) );
+        }
 
         // Draw pixmap
         image.draw( *_painter,

@@ -685,7 +685,7 @@ LowerRaiseCmd::LowerRaiseCmd( const QString &_name, QPtrList<KPObject> _oldList,
     oldList = _oldList;
     newList = _newList;
     m_page=_page;
-    m_executed = false;
+    //m_executed = false;
     oldList.setAutoDelete( false );
     newList.setAutoDelete( false );
     doc = _doc;
@@ -706,7 +706,7 @@ void LowerRaiseCmd::execute()
 {
     m_page->setObjectList( newList );
     doc->repaint( false );
-    m_executed = true;
+    //m_executed = true;
 }
 
 /*====================== unexecute ===============================*/
@@ -714,7 +714,7 @@ void LowerRaiseCmd::unexecute()
 {
     m_page->setObjectList( oldList );
     doc->repaint( false );
-    m_executed = false;
+    //m_executed = false;
 }
 
 /******************************************************************/

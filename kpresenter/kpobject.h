@@ -207,7 +207,6 @@ public:
     virtual void setOrigSizeInGroup( const KoSize &_size ) { origSizeInGroup = _size; }
     virtual KoSize getOrigSizeInGroup() const{ return origSizeInGroup; }
     void paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler );
-    virtual void zoomObject(){};
 protected:
     /**
      * Modifies x and y to add the shadow offsets
@@ -290,14 +289,9 @@ public:
     KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
                 const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                   bool _unbalanced, int _xfactor, int _yfactor );
-    virtual ~KP2DObject() { if ( gradient ) delete gradient; }
+    virtual ~KP2DObject() { delete gradient; }
 
     KP2DObject &operator=( const KP2DObject & );
-
-    virtual void setSize( double _width, double _height );
-    virtual void setSize( const KoSize & _size )
-    { setSize( _size.width(), _size.height() ); }
-    virtual void resizeBy( double _dx, double _dy );
 
     virtual void setPen( const QPen &_pen )
     { pen = _pen; }
@@ -342,7 +336,17 @@ public:
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection );
 
 protected:
-    virtual void paint( QPainter* /*_painter*/,KoZoomHandler* /*_zoomHandler*/  ) {}
+    /**
+     * This method is to be implemented by all KP2DObjects, to draw themselves.
+     * @ref draw took care of the shadow and of preparing @p painter for rotation.
+     * @ref paint must take care of the gradient itself!
+     *
+     * @param drawingShadow true if called to draw the shadow of the object. Usually
+     * objects will want to draw a simpler version of themselves in that case.
+     *
+     * This method isn't pure virtual because some objects implement draw() directly.
+     */
+    virtual void paint( QPainter* /*painter*/, KoZoomHandler* /*zoomHandler*/, bool /*drawingShadow*/ ) {}
 
     QPen pen;
     QBrush brush;
@@ -353,7 +357,6 @@ protected:
     int xfactor, yfactor;
 
     KPGradient *gradient;
-    bool drawShadow;
 };
 
 #endif

@@ -123,6 +123,8 @@ protected:
     void drawHeaderFooter( QPainter *_painter, const QSize& ext, const QRect& crect );
     // The current gradient isn't valid anymore (e.g. size or settings changed) -> discard it
     void removeGradient();
+    // Generate a new gradient pixmap, for the given size
+    void generateGradient( const QSize& size );
 
     KPImageCollection *imageCollection() const;
     KPGradientCollection *gradientCollection() const;
@@ -142,7 +144,7 @@ private:
     KPImage backImage;
     KPClipart backClipart;
     // Pixmap used to cache the drawing of the gradient, at the current size
-    QPixmap *gradient;
+    const QPixmap *gradientPixmap;
 
     // The page for which this background exists
     KPrPage *m_page;

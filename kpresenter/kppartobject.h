@@ -62,8 +62,8 @@ public:
 
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool drawSelection );
 
-    virtual void activate( QWidget *_widget, int diffx, int diffy );
-    virtual void deactivate();
+    void activate( QWidget *_widget );
+    void deactivate();
 
     KPresenterChild *getChild() const { return child; }
 
@@ -73,6 +73,7 @@ public slots:
     void slot_changed(KoChild *child);
 
 protected:
+    void updateChildGeometry();
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler );
 
     bool _enableDrawing;

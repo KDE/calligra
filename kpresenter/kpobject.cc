@@ -177,7 +177,7 @@ int KPObject::load(const QDomElement &element) {
             orig.setX(e.attribute(attrX).toDouble());
         if(e.hasAttribute(attrY))
         {
-            offset=e.attribute(attrY).toDouble();
+            offset=e.attribute(attrY).toInt();
             orig.setY(0);
         }
         origTopLeftPointInGroup = orig;
@@ -450,7 +450,13 @@ void KPObject::draw( QPainter *_painter, KoZoomHandler *_zoomHandler, bool drawS
 void KPObject::getShadowCoords( double& _x, double& _y ,KoZoomHandler *_zoomHandler) const
 {
     double sx = 0, sy = 0;
-    double shadowDir=_zoomHandler->zoomItX(shadowDistance);
+    double shadowDir=_zoomHandler->zoomItX(shadowDistance); // ######## ????????
+    // The above looks wrong (DF).
+    // If shadowDistance is in pixels, it has to be unzoomed, not zoomed.
+    // But that's not good anyway, we don't want a constant number of pixels.
+    // I think shadowDistance should be a 'double' - then the parameter
+    // _zoomHandler can be removed.
+
     switch ( shadowDirection )
     {
     case SD_LEFT_UP:
@@ -502,7 +508,7 @@ void KPObject::getShadowCoords( double& _x, double& _y ,KoZoomHandler *_zoomHand
 void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler )
 {
     _painter->save();
-    _painter->translate( _zoomHandler->zoomItX(orig.x()) , _zoomHandler->zoomItY( orig.y()) );
+    _painter->translate( _zoomHandler->zoomItX(orig.x()), _zoomHandler->zoomItY(orig.y()) );
     Qt::RasterOp rop = _painter->rasterOp();
 
     _painter->setRasterOp( Qt::NotROP );
@@ -674,7 +680,6 @@ KP2DObject::KP2DObject()
     gradient = 0;
     fillType = FT_BRUSH;
     gType = BCT_GHORZ;
-    drawShadow = false;
     unbalanced = false;
     xfactor = 100;
     yfactor = 100;
@@ -687,13 +692,12 @@ KP2DObject::KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillTy
 {
     gType = _gType;
     fillType = _fillType;
-    drawShadow = false;
     unbalanced = _unbalanced;
     xfactor = _xfactor;
     yfactor = _yfactor;
 
     if ( fillType == FT_GRADIENT )
-        gradient = new KPGradient( gColor1, gColor2, gType, KoSize( 1, 1 ), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, QSize(), unbalanced, xfactor, yfactor );
     else
         gradient = 0;
 }
@@ -701,22 +705,6 @@ KP2DObject::KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillTy
 KP2DObject &KP2DObject::operator=( const KP2DObject & )
 {
     return *this;
-}
-
-void KP2DObject::setSize( double _width, double _height )
-{
-    KPObject::setSize( _width, _height );
-
-    if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize());
-}
-
-void KP2DObject::resizeBy( double _dx, double _dy )
-{
-    KPObject::resizeBy( _dx, _dy );
-
-    if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
 }
 
 void KP2DObject::setFillType( FillType _fillType )
@@ -729,7 +717,7 @@ void KP2DObject::setFillType( FillType _fillType )
         gradient = 0;
     }
     if ( fillType == FT_GRADIENT && !gradient )
-        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, QSize(), unbalanced, xfactor, yfactor );
 }
 
 QDomDocumentFragment KP2DObject::save( QDomDocument& doc,int offset )
@@ -771,7 +759,7 @@ int KP2DObject::load(const QDomElement &element)
     if(!e.isNull()) {
         KPObject::toGradient(e, gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
         if(gradient)
-            gradient->init(gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
+            gradient->setParameters(gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
     }
     else {
         gColor1=Qt::red;
@@ -792,9 +780,9 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
     double oh = ext.height();
     _painter->save();
 
+    // Draw the shadow if any
     if ( shadowDistance > 0 )
     {
-        drawShadow = true;
         QPen tmpPen( pen );
         pen.setColor( shadowColor );
         QBrush tmpBrush( brush );
@@ -807,7 +795,7 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
             getShadowCoords( sx, sy, _zoomHandler );
 
             _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY( sy) );
-            paint( _painter, _zoomHandler );
+            paint( _painter, _zoomHandler, true /* drawing shadow */ );
         }
         else
         {
@@ -831,14 +819,12 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
             m.translate( _zoomHandler->zoomItX( rr.left() + xPos + sx),_zoomHandler->zoomItY( rr.top() + yPos + sy) );
 
             _painter->setWorldMatrix( m, true );
-            paint( _painter,_zoomHandler );
+            paint( _painter, _zoomHandler, true /* drawing shadow */ );
         }
 
         pen = tmpPen;
         brush = tmpBrush;
     }
-
-    drawShadow = false;
 
     _painter->restore();
 
@@ -846,7 +832,7 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
     _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
     if ( angle == 0 )
-        paint( _painter,_zoomHandler );
+        paint( _painter,_zoomHandler, false );
     else
     {
         KoRect br = KoRect( 0, 0, ow, oh );
@@ -863,10 +849,9 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
         m.translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY(rr.top() + yPos) );
 
         _painter->setWorldMatrix( m, true );
-        paint( _painter,_zoomHandler );
+        paint( _painter, _zoomHandler, false );
     }
-    if( gradient)
-        gradient->paint(_painter, _zoomHandler);
+
     _painter->restore();
 
     KPObject::draw( _painter, _zoomHandler, drawSelection );

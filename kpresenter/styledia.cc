@@ -71,7 +71,7 @@ void PBPreview::resizeEvent( QResizeEvent *e )
     QFrame::resizeEvent( e );
     if ( gradient )
     {
-	gradient->setSize( KoSize( _zoomHandler->unzoomItX(contentsRect().width()), _zoomHandler->unzoomItY( contentsRect().height()) ) );
+	gradient->setSize( contentsRect().size() );
         repaint();
     }
 }
@@ -111,8 +111,7 @@ void PBPreview::drawContents( QPainter *painter )
 			   colorGroup().base() );
 	painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(), brush );
     } else if ( paintType == Gradient && gradient ) {
-        gradient->paint(painter,_zoomHandler);
-	painter->drawPixmap( 0, 0 ,*gradient->getGradient());
+	painter->drawPixmap( 0, 0, gradient->pixmap());
     }
 
     painter->restore();
@@ -365,7 +364,8 @@ void StyleDia::setupTab2()
     connect( yfactor, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( updateBrushConfiguration() ) );
 
-    gradient = new KPGradient( Qt::red, Qt::green, BCT_GHORZ, KoSize( chooseBCol->width(), 25 ),
+    // Note: size probably doesn't matter [:)], see resizeEvent
+    gradient = new KPGradient( Qt::red, Qt::green, BCT_GHORZ, QSize( chooseBCol->width(), 25 ),
 			       false, 100, 100 );
 
     (void)new QWidget( gradientConfig );

@@ -53,7 +53,7 @@ public:
     virtual int load(const QDomElement &element);
 
 protected:
-    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler );
+    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler, bool drawingShadow );
 
     int xRnd, yRnd;
 };

@@ -124,7 +124,7 @@ int KPPieObject::load(const QDomElement &element)
 }
 
 /*======================== paint =================================*/
-void KPPieObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
+void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler, bool /*drawingShadow*/ )
 {
     double ow = ext.width();
     double oh = ext.height();

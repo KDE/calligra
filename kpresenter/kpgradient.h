@@ -23,20 +23,23 @@
 #include <qcolor.h>
 #include <kpixmap.h>
 #include <global.h>
-#include <koSize.h>
 
 class QPainter;
 class KoZoomHandler;
 
-/******************************************************************/
-/* Class: KPGradient						  */
-/******************************************************************/
-
+/**
+ * Class: KPGradient
+ *
+ * Encapsulates all gradient related functionality, to share it between
+ * KP2DObject and KPBackGround.
+ * KPGradient stores the gradient parameters, and generate the gradient
+ * on demand, in @ref pixmap().
+ */
 class KPGradient
 {
 public:
     KPGradient( const QColor &_color1, const QColor &_color2, BCType _bcType,
-                const KoSize &_size, bool _unbalanced, int _xfactor, int _yfactor );
+                const QSize &_size, bool _unbalanced, int _xfactor, int _yfactor );
     ~KPGradient() {}
 
     QColor getColor1() const { return color1; }
@@ -46,38 +49,46 @@ public:
     int getXFactor() const { return xFactor; }
     int getYFactor() const { return yFactor; }
 
-    void setColor1( const QColor &_color ) { color1 = _color; /*paint();*/ }
-    void setColor2( const QColor &_color ) { color2 = _color; /*paint();*/ }
-    void setBackColorType( BCType _type ) { bcType = _type; /*paint();*/ }
-    void setUnbalanced( bool b ) { unbalanced = b; /*paint();*/ }
-    void setXFactor( int i ) { xFactor = i; /*paint();*/ }
-    void setYFactor( int i ) { yFactor = i; /*paint();*/ }
+    void setColor1( const QColor &_color ) { color1 = _color; m_bDirty = true; }
+    void setColor2( const QColor &_color ) { color2 = _color; m_bDirty = true; }
+    void setBackColorType( BCType _type ) { bcType = _type; m_bDirty = true; }
+    void setUnbalanced( bool b ) { unbalanced = b; m_bDirty = true; }
+    void setXFactor( int i ) { xFactor = i; m_bDirty = true; }
+    void setYFactor( int i ) { yFactor = i; m_bDirty = true; }
+    void setSize( const QSize& _size ) {
+        if ( size() != _size ) {
+            m_pixmap.resize( _size );
+            m_bDirty = true;
+        }
+    }
 
-    void init(const QColor &c1, const QColor &c2, BCType _type,
-              bool _unbalanced, int xf, int yf);
+    // Sets all of the above at once. Used when loading.
+    void setParameters(const QColor &c1, const QColor &c2, BCType _type,
+                       bool _unbalanced, int xf, int yf);
 
-    QPixmap* getGradient() const { return (QPixmap*)&pixmap; }
-    QSize getSize() const { return pixmap.size(); }
-    KoSize getKoSize() const { return gradientSize;}
-    void setSize( const KoSize &_size );
+    /** Return the pixmap containing the gradient.
+     * Calculated on demand if necessary (if m_bDirty is true).
+     */
+    const QPixmap& pixmap() const;
+    QSize size() const { return m_pixmap.size(); }
 
     void addRef();
     bool removeRef();
 
-    void paint(QPainter *_painter, KoZoomHandler*_zoomHandler);
-
 protected:
+    /** Create the pixmap containing the gradient */
+    void paint();
+
     KPGradient() {}
 
     QColor color1, color2;
     BCType bcType;
 
-    KPixmap pixmap;
+    KPixmap m_pixmap;
     int refCount;
-
-    bool unbalanced;
     int xFactor, yFactor;
-    KoSize gradientSize;
+    bool unbalanced;
+    bool m_bDirty;
 };
 
 #endif

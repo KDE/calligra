@@ -61,7 +61,7 @@ KPAutoformObject::KPAutoformObject( const QPen & _pen, const QBrush &_brush, con
 
     if ( fillType == FT_GRADIENT )
     {
-        gradient = new KPGradient( gColor1, gColor2, gType, KoSize( 1, 1 ), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, QSize(), unbalanced, xfactor, yfactor );
         redrawPix = true;
         pix.resize( getSize().toQSize() );
     }
@@ -73,30 +73,6 @@ KPAutoformObject::KPAutoformObject( const QPen & _pen, const QBrush &_brush, con
 KPAutoformObject &KPAutoformObject::operator=( const KPAutoformObject & )
 {
     return *this;
-}
-
-/*================================================================*/
-void KPAutoformObject::setSize( double _width, double _height )
-{
-    KPObject::setSize( _width, _height );
-
-    if ( fillType == FT_GRADIENT && gradient )
-    {
-        gradient->setSize( getSize() );
-        redrawPix = true;
-    }
-}
-
-/*================================================================*/
-void KPAutoformObject::resizeBy( double _dx, double _dy )
-{
-    KPObject::resizeBy( _dx, _dy );
-
-    if ( fillType == FT_GRADIENT && gradient )
-    {
-        gradient->setSize( getSize() );
-        redrawPix = true;
-    }
 }
 
 /*====================== set filename ============================*/
@@ -118,7 +94,7 @@ void KPAutoformObject::setFillType( FillType _fillType )
     }
     if ( fillType == FT_GRADIENT && !gradient )
     {
-        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, QSize(), unbalanced, xfactor, yfactor );
         redrawPix = true;
     }
 }
@@ -235,11 +211,12 @@ float KPAutoformObject::getAngle( const QPoint &p1, const QPoint &p2 )
 }
 
 /*======================== paint =================================*/
-void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
+void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler, bool drawingShadow )
 {
     unsigned int pw = 0, pwOrig = 0, px, py;
     QPen pen2(pen);
     pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
+    QSize size( _zoomHandler->zoomSize( ext ) );
 
     _painter->setPen( pen2 );
     pwOrig = pen2.width() + 3;
@@ -267,14 +244,14 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
     {
         if ( pntArray2.at( 0 ) == pntArray2.at( pntArray2.size() - 1 ) )
         {
-            if ( drawShadow || fillType == FT_BRUSH || !gradient )
+            if ( drawingShadow || fillType == FT_BRUSH || !gradient )
                 _painter->drawPolygon( pntArray2 );
             else
             {
                 if ( angle == 0 || angle==360 )
                 {
-                    int ox = _painter->viewport().x() + static_cast<int>( _painter->worldMatrix().dx() );
-                    int oy = _painter->viewport().y() + static_cast<int>( _painter->worldMatrix().dy() );
+                    //int ox = _painter->viewport().x() + static_cast<int>( _painter->worldMatrix().dx() );
+                    //int oy = _painter->viewport().y() + static_cast<int>( _painter->worldMatrix().dy() );
 
                     QPointArray pntArray3 = pntArray2.copy();
                     _painter->save();
@@ -287,14 +264,16 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
 
                     _painter->setClipRegion( clipregion, QPainter::CoordPainter );
 
-                    _painter->drawPixmap( 0, 0, *gradient->getGradient() );
+                    gradient->setSize( size );
+                    _painter->drawPixmap( 0, 0, gradient->pixmap() );
 
                     _painter->restore();
                 }
                 else
                 {
-                    if ( redrawPix )
+                    if ( redrawPix || gradient->size() != size )
                     {
+                        gradient->setSize( size );
                         redrawPix = false;
                         QRegion clipregion( pntArray2 );
                         pix.resize ( _zoomHandler->zoomItX(ext.width()),_zoomHandler->zoomItY(ext.height()) );
@@ -304,7 +283,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
                         QPainter p;
                         p.begin( &pix );
                         p.setClipRegion( clipregion , QPainter::CoordPainter);
-                        p.drawPixmap( 0, 0, *gradient->getGradient() );
+                        p.drawPixmap( 0, 0, gradient->pixmap() );
                         p.end();
 
                         pix.setMask( pix.createHeuristicMask() );
@@ -408,14 +387,5 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
             _painter->drawPolyline( pntArray2 );
         }
 
-    }
-}
-
-void KPAutoformObject::zoomObject()
-{
-    if ( fillType == FT_GRADIENT && gradient )
-    {
-        gradient->setSize(getSize());
-        redrawPix=true;
     }
 }

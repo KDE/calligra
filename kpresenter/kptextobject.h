@@ -113,8 +113,6 @@ public:
 
     KoTextFormat loadFormat( QDomElement &n );
 
-    virtual void zoomObject();
-
 signals:
     void repaintChanged( KPTextObject* );
 

@@ -23,6 +23,7 @@
 #include <koPoint.h>
 #include <koRect.h>
 
+class KoZoomHandler;
 class KoPointArray : public QMemArray<KoPoint>
 {
 public:
@@ -48,7 +49,12 @@ public:
 
     KoPointArray cubicBezier() const;
     static void cleanBuffers();
-    QPointArray toQPointArray() const;
+
+    QPointArray zoomPointArray( KoZoomHandler* zoomHandler ) const;
+    // Zoom the point array, taking into account the width of the pen
+    // (reducing the figure as necessary)
+    QPointArray zoomPointArray( KoZoomHandler* zoomHandler, int penWidth ) const;
+
 protected:
     static uint splen;
     static void* sp;

@@ -60,9 +60,8 @@ KPPolygonObject::KPPolygonObject( const KoPointArray &_points, const KoSize &_si
     redrawPix = false;
 
     if ( fillType == FT_GRADIENT ) {
-        gradient = new KPGradient( gColor1, gColor2, gType, KoSize( 1, 1 ), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, QSize(), unbalanced, xfactor, yfactor );
         redrawPix = true;
-        pix.resize( getSize().toQSize() );
     }
     else
         gradient = 0;
@@ -156,15 +155,10 @@ void KPPolygonObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
 
-    double fx = (double)( (double)ext.width() / (double)origSize.width() );
-    double fy = (double)( (double)ext.height() / (double)origSize.height() );
+    double fx = (double)ext.width() / (double)origSize.width();
+    double fy = (double)ext.height() / (double)origSize.height();
 
     updatePoints( fx, fy );
-
-    if ( fillType == FT_GRADIENT && gradient ) {
-        gradient->setSize( getSize() );
-        redrawPix = true;
-    }
 }
 
 void KPPolygonObject::resizeBy( const KoSize &_size )
@@ -177,15 +171,10 @@ void KPPolygonObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
 
-    double fx = (double)( (double)ext.width() / (double)origSize.width() );
-    double fy = (double)( (double)ext.height() / (double)origSize.height() );
+    double fx = (double)ext.width() / (double)origSize.width();
+    double fy = (double)ext.height() / (double)origSize.height();
 
     updatePoints( fx, fy );
-
-    if ( fillType == FT_GRADIENT && gradient ) {
-        gradient->setSize( getSize() );
-        redrawPix = true;
-    }
 }
 
 void KPPolygonObject::updatePoints( double _fx, double _fy )
@@ -215,67 +204,49 @@ void KPPolygonObject::setFillType( FillType _fillType )
     }
 
     if ( fillType == FT_GRADIENT && !gradient ) {
-        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, QSize(), unbalanced, xfactor, yfactor );
         redrawPix = true;
     }
 }
 
 /*======================== paint =================================*/
-void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
+void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler, bool drawingShadow )
 {
-    double _w =  _zoomHandler->zoomItX (pen.width());
+    int _w = _zoomHandler->zoomItX( pen.width() );
     QPen pen2(pen);
     pen2.setWidth(_w);
 
-    QPointArray pointArray = points.toQPointArray();
-    double fx=1.0;
-    double fy=1.0;
-    if(_w>1)
-    {
-        fx = (double)( (double)( _zoomHandler->zoomItX(ext.width()) - _w ) / (double)_zoomHandler->zoomItX(ext.width()) );
-        fy = (double)( (double)( _zoomHandler->zoomItY(ext.height()) - _w ) / (double)_zoomHandler->zoomItY(ext.height()) );
-    }
+    QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
 
-    unsigned int index = 0;
-    KoPointArray tmpPoints;
-    KoPointArray::ConstIterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
-        KoPoint point = (*it);
-        double tmpX = _zoomHandler->zoomItX( point.x()) * fx ;
-        double tmpY = _zoomHandler->zoomItY(point.y()) * fy;
-        if ( tmpX == 0 )
-            tmpX = _w;
-        if ( tmpY == 0 )
-            tmpY = _w;
-
-        tmpPoints.putPoints( index, 1, tmpX,tmpY );
-        ++index;
-    }
-    pointArray = tmpPoints.toQPointArray();
-
-    if ( drawShadow || fillType == FT_BRUSH || !gradient ) {
+    if ( drawingShadow || fillType == FT_BRUSH || !gradient ) {
         _painter->setPen( pen2 );
         _painter->setBrush( brush );
         _painter->drawConvexPolygon( pointArray );
     }
     else {
-        if ( redrawPix ) {
+        QSize size( _zoomHandler->zoomSize( ext ) );
+        kdDebug() << "KPPolygonObject::paint size(pix)=" << size.width() << "," << size.height()
+                  << " ext(pt)=" << ext.width() << "," << ext.height() << endl;
+        if ( redrawPix || gradient->size() != size )
+        {
             redrawPix = false;
+            gradient->setSize( size );
             QRegion clipregion( pointArray );
-            pix.resize ( _zoomHandler->zoomItX(ext.width()),_zoomHandler->zoomItY(ext.height()) );
+            pix.resize( size );
             pix.fill( Qt::white );
 
             QPainter p;
             p.begin( &pix );
             p.setClipRegion( clipregion );
-            p.drawPixmap( 0, 0, *gradient->getGradient() );
+            p.drawPixmap( 0, 0, gradient->pixmap() );
             p.end();
 
             pix.setMask( pix.createHeuristicMask() );
         }
 
         QRect _rect = pointArray.boundingRect();
-        _painter->drawPixmap( _zoomHandler->zoomItX( _w/2),_zoomHandler->zoomItY( _w/2), pix, 0, 0,_zoomHandler->zoomItX( _rect.width()),_zoomHandler->zoomItY( _rect.height()) );
+        kdDebug() << "KPPolygonObject::paint _rect:" << DEBUGRECT(_rect) << endl;
+        _painter->drawPixmap(_w/2, _w/2, pix, 0, 0, _rect.width(), _rect.height() );
 
         _painter->setPen( pen2 );
         _painter->setBrush( Qt::NoBrush );
@@ -339,8 +310,8 @@ void KPPolygonObject::drawPolygon()
     }
 
     KoRect _changRect = _points.boundingRect();
-    double fx = (double)( (double)_rect.width() / (double)_changRect.width() );
-    double fy = (double)( (double)_rect.height() / (double)_changRect.height() );
+    double fx = (double)_rect.width() / (double)_changRect.width();
+    double fy = (double)_rect.height() / (double)_changRect.height();
 
     double _diffx = (double)_rect.width() / 2.0;
     double _diffy = (double)_rect.height() / 2.0;
@@ -363,15 +334,5 @@ void KPPolygonObject::drawPolygon()
 
     if ( fillType == FT_GRADIENT && gradient ) {
         redrawPix = true;
-    }
-}
-
-
-void KPPolygonObject::zoomObject()
-{
-    if ( fillType == FT_GRADIENT && gradient )
-    {
-        gradient->setSize(getSize());
-        redrawPix=true;
     }
 }

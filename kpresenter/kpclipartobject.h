@@ -25,7 +25,6 @@
 
 #include <qdatetime.h>
 
-class KPGradient;
 class QPicture;
 
 /******************************************************************/
@@ -60,7 +59,6 @@ public:
 
     KPClipartCollection::Key getKey() const
     { return m_clipart.key(); }
-    virtual void zoomObject();
 
 protected:
     KPClipart m_clipart;

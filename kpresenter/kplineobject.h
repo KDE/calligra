@@ -70,7 +70,7 @@ public:
 
 protected:
     float getAngle( const KoPoint &p1, const KoPoint &p2 );
-    void paint( QPainter *_painter,KoZoomHandler*_zoomHandler );
+    void paint( QPainter *_painter, KoZoomHandler*_zoomHandler );
 
     QPen pen;
     LineEnd lineBegin, lineEnd;

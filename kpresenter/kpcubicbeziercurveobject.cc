@@ -143,6 +143,7 @@ int KPCubicBezierCurveObject::load(const QDomElement &element)
 /*========================= draw =================================*/
 void KPCubicBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
 {
+    /// See comment in KPFreehandObject::draw about future plans
     double ox = orig.x();
     double oy = orig.y();
     double ow = ext.width();
@@ -158,7 +159,7 @@ void KPCubicBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHand
             getShadowCoords( sx, sy, _zoomHandler );
 
             _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY(sy) );
-            paint( _painter,_zoomHandler );
+            paint( _painter,_zoomHandler, true );
         }
         else {
             _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
@@ -181,7 +182,7 @@ void KPCubicBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHand
             m.translate( rr.left() + xPos + _zoomHandler->zoomItX(sx), rr.top() + yPos + _zoomHandler->zoomItY(sy) );
 
             _painter->setWorldMatrix( m, true );
-            paint( _painter,_zoomHandler );
+            paint( _painter,_zoomHandler, true );
         }
 
         pen = tmpPen;
@@ -193,7 +194,7 @@ void KPCubicBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHand
     _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
     if ( angle == 0 )
-        paint( _painter,_zoomHandler );
+        paint( _painter,_zoomHandler, false );
     else {
         QRect br = QRect( 0, 0, ow, oh );
         int pw = br.width();
@@ -209,7 +210,7 @@ void KPCubicBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHand
         m.translate( rr.left() + xPos, rr.top() + yPos );
 
         _painter->setWorldMatrix( m, true );
-        paint( _painter,_zoomHandler );
+        paint( _painter,_zoomHandler, false );
     }
 
     _painter->restore();
@@ -253,37 +254,36 @@ float KPCubicBezierCurveObject::getAngle( const QPoint &p1, const QPoint &p2 )
 }
 
 /*======================== paint =================================*/
-void KPCubicBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
+void KPCubicBezierCurveObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler, bool /*drawingShadow*/ )
 {
     int _w = pen.width();
     QPen pen2(pen);
     pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
-    QPointArray pointArray = allPoints.toQPointArray();
+    QPointArray pointArray; // = allPoints.zoomPointArray( _zoomHandler );
     double fx=1.0;
     double fy=1.0;
     if(_w>1.0)
     {
-        fx = (double)( (double)( _zoomHandler->zoomItX( ext.width()) - _w ) / (double)_zoomHandler->zoomItX( ext.width()) );
-        fy = (double)( (double)( _zoomHandler->zoomItY( ext.height()) - _w ) / (double)_zoomHandler->zoomItY( ext.height()) );
+        fx = (double)( _zoomHandler->zoomItX( ext.width()) - _w ) / (double)_zoomHandler->zoomItX( ext.width());
+        fy = (double)( _zoomHandler->zoomItY( ext.height()) - _w ) / (double)_zoomHandler->zoomItY( ext.height());
     }
 
     unsigned int index = 0;
-    KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
     for ( it = allPoints.begin(); it != allPoints.end(); ++it ) {
-        KoPoint point = (*it);
-        double tmpX = _zoomHandler->zoomItX( point.x()) * fx;
-        double tmpY = _zoomHandler->zoomItY( point.y()) * fy;
+        //double tmpX = _zoomHandler->zoomItX( point.x()) * fx;
+        //double tmpY = _zoomHandler->zoomItY( point.y()) * fy;
+        int tmpX = qRound( (*it).x() * fx );
+        int tmpY = qRound( (*it).y() * fy );
 
         if ( tmpX == 0 )
             tmpX = _w;
         if ( tmpY == 0 )
             tmpY = _w;
 
-        tmpPoints.putPoints( index, 1, tmpX,tmpY );
+        pointArray.putPoints( index, 1, tmpX,tmpY );
         ++index;
     }
-    pointArray = tmpPoints.toQPointArray();
 
     _painter->setPen( pen2 );
     _painter->drawPolyline( pointArray );
@@ -333,8 +333,8 @@ void KPCubicBezierCurveObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
 
-    double fx = (double)( (double)ext.width() / (double)origSize.width() );
-    double fy = (double)( (double)ext.height() / (double)origSize.height() );
+    double fx = (double)ext.width() / (double)origSize.width();
+    double fy = (double)ext.height() / (double)origSize.height();
 
     updatePoints( fx, fy );
 }
@@ -348,8 +348,8 @@ void KPCubicBezierCurveObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
 
-    double fx = (double)( (double)ext.width() / (double)origSize.width() );
-    double fy = (double)( (double)ext.height() / (double)origSize.height() );
+    double fx = (double)ext.width() / (double)origSize.width();
+    double fy = (double)ext.height() / (double)origSize.height();
 
     updatePoints( fx, fy );
 }
@@ -361,8 +361,8 @@ void KPCubicBezierCurveObject::updatePoints( double _fx, double _fy )
     KoPointArray::ConstIterator it;
     for ( it = origAllPoints.begin(); it != origAllPoints.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = ( (double)point.x() * _fx );
-        double tmpY = ( (double)point.y() * _fy );
+        double tmpX = point.x() * _fx;
+        double tmpY = point.y() * _fy;
 
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;
@@ -373,8 +373,8 @@ void KPCubicBezierCurveObject::updatePoints( double _fx, double _fy )
     tmpPoints = KoPointArray();
     for ( it = origControlPoints.begin(); it != origControlPoints.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = ( (double)point.x() * _fx );
-        double tmpY = ( (double)point.y() * _fy );
+        double tmpX = point.x() * _fx;
+        double tmpY = point.y() * _fy;
 
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;

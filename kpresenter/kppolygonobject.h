@@ -69,10 +69,8 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
     virtual int load( const QDomElement &element );
 
-    virtual void zoomObject();
-
 protected:
-    void paint( QPainter *_painter,KoZoomHandler*_zoomHandler );
+    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler, bool drawingShadow );
 
     void updatePoints( double _fx, double _fy );
 

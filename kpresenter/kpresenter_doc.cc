@@ -95,7 +95,7 @@ static const int CURRENT_SYNTAX_VERSION = 2;
 
 /*====================== constructor =============================*/
 KPresenterChild::KPresenterChild( KPresenterDoc *_kpr, KoDocument* _doc, const QRect& _rect )
-    : KoDocumentChild( _kpr, _doc, QRect( _rect.left(), _rect.top(), _rect.width(), _rect.height() ) )
+    : KoDocumentChild( _kpr, _doc, _rect )
 {
 }
 
@@ -1472,9 +1472,8 @@ void KPresenterDoc::repaint( bool erase )
 {
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it ) {
-	// I am doing a cast to KPresenterView here, since some austrian hacker :-)
-	// decided to overload the non virtual repaint method!
-	((KPresenterView*)it.current())->repaint( erase );
+	KPrCanvas* canvas = ((KPresenterView*)it.current())->getCanvas();
+	canvas->repaint( erase );
     }
 }
 
@@ -2066,19 +2065,16 @@ void KPresenterDoc::newZoomAndResolution( bool updateViews, bool forPrint )
         repaintAllViews( true );
     }
 #endif
-
+#if 0
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
         m_pageList.at(i)->background()->restore();
     }
-    QPtrListIterator<KoView> it( views() );
-    for (; it.current(); ++it )
+#endif
+    if ( updateViews )
     {
-        QPtrListIterator<KPObject> oIt( ((KPresenterView*)it.current())->getCanvas()->getObjectList() );
-        for (; oIt.current(); ++oIt )
-        {
-            oIt.current()->zoomObject();
-            repaint(oIt.current());
-        }
+        QPtrListIterator<KoView> it( views() );
+        for (; it.current(); ++it )
+            static_cast<KPresenterView *>( it.current() )->getCanvas()->update();
     }
 }
 

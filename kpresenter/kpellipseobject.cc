@@ -50,7 +50,7 @@ KPEllipseObject::KPEllipseObject( const QPen &_pen, const QBrush &_brush, FillTy
 
     if ( fillType == FT_GRADIENT )
     {
-        gradient = new KPGradient( gColor1, gColor2, gType, KoSize( 1, 1 ), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, QSize(), unbalanced, xfactor, yfactor );
         redrawPix = true;
         pix.resize( getSize().toQSize() );
     }
@@ -58,43 +58,10 @@ KPEllipseObject::KPEllipseObject( const QPen &_pen, const QBrush &_brush, FillTy
         gradient = 0;
 }
 
-void KPEllipseObject::zoomObject()
-{
-    if ( fillType == FT_GRADIENT && gradient )
-    {
-        gradient->setSize(getSize());
-        redrawPix=true;
-    }
-}
-
 /*================================================================*/
 KPEllipseObject &KPEllipseObject::operator=( const KPEllipseObject & )
 {
     return *this;
-}
-
-/*================================================================*/
-void KPEllipseObject::setSize( double _width, double _height )
-{
-    KPObject::setSize( _width, _height );
-
-    if ( fillType == FT_GRADIENT && gradient )
-    {
-        gradient->setSize( getSize() );
-        redrawPix = true;
-    }
-}
-
-/*================================================================*/
-void KPEllipseObject::resizeBy( double _dx, double _dy )
-{
-    KPObject::resizeBy( _dx, _dy );
-
-    if ( fillType == FT_GRADIENT && gradient )
-    {
-        gradient->setSize( getSize() );
-        redrawPix = true;
-    }
 }
 
 /*================================================================*/
@@ -109,20 +76,21 @@ void KPEllipseObject::setFillType( FillType _fillType )
     }
     if ( fillType == FT_GRADIENT && !gradient )
     {
-        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, QSize(), unbalanced, xfactor, yfactor );
         redrawPix = true;
     }
 }
 
 /*======================== paint =================================*/
-void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
+void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler, bool drawingShadow )
 {
     double ow = ext.width();
     double oh = ext.height();
+    QSize size( _zoomHandler->zoomSize( ext ) );
     double pw = pen.width() / 2;
     QPen pen2(pen);
     pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
-    if ( drawShadow || fillType == FT_BRUSH || !gradient )
+    if ( drawingShadow || fillType == FT_BRUSH || !gradient )
     {
         _painter->setPen( pen2 );
         _painter->setBrush( brush );
@@ -130,17 +98,17 @@ void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
     }
     else
     {
-        if ( redrawPix )
+        if ( redrawPix || gradient->size() != size )
         {
             redrawPix = false;
-
+            gradient->setSize( size );
             QRegion clipregion( 0, 0, _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw), QRegion::Ellipse );
             pix.resize ( _zoomHandler->zoomItX(ow),_zoomHandler->zoomItY(oh) );
             pix.fill( Qt::white );
             QPainter p;
             p.begin( &pix );
             p.setClipRegion( clipregion );
-            p.drawPixmap( 0, 0, *gradient->getGradient() );
+            p.drawPixmap( 0, 0, gradient->pixmap() );
             p.end();
 
             pix.setMask( pix.createHeuristicMask() );

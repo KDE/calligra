@@ -385,7 +385,7 @@ protected:
 
     QPtrList<KPObject> oldList, newList;
     KPresenterDoc *doc;
-    bool m_executed;
+    //bool m_executed;
     KPrPage *m_page;
 
 };

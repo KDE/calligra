@@ -88,7 +88,7 @@ int KPRectObject::load(const QDomElement &element)
 }
 
 /*======================== paint =================================*/
-void KPRectObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
+void KPRectObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler, bool drawingShadow )
 {
     double ow = ext.width();
     double oh = ext.height();
@@ -97,7 +97,7 @@ void KPRectObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
     QPen pen2(pen);
     pen2.setWidth(_zoomHandler->zoomItX(pen.width()));
 
-    if ( drawShadow || fillType == FT_BRUSH || !gradient )
+    if ( drawingShadow || fillType == FT_BRUSH || !gradient )
     {
         _painter->setPen( pen2 );
         _painter->setBrush( brush );
@@ -105,14 +105,16 @@ void KPRectObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
     }
     else
     {
+        QSize size( _zoomHandler->zoomSize( ext ) );
+        gradient->setSize( size );
         if ( angle == 0 || angle==360 )
-            _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), *gradient->getGradient(), 0, 0, _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw) );
+            _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), gradient->pixmap(), 0, 0, _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw) );
         else  //rotated
         {
             QPixmap pix( _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw ));
             QPainter p;
             p.begin( &pix );
-            p.drawPixmap( 0, 0, *gradient->getGradient() );
+            p.drawPixmap( 0, 0, gradient->pixmap() );
             p.end();
 
             _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), pix );

@@ -137,6 +137,9 @@ int KPFreehandObject::load( const QDomElement &element )
 /*========================= draw =================================*/
 void KPFreehandObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
 {
+    // Hmm, this code is so much like KP2DObject::draw, but KPFreehandObject isn't a KP2DObject,
+    // it doesn't have gradients etc.
+    // Maybe this standard shadow-drawing code should be moved to KPObject in fact.
     double ox = orig.x();
     double oy = orig.y();
     double ow = ext.width();
@@ -154,7 +157,7 @@ void KPFreehandObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, boo
             getShadowCoords( sx, sy, _zoomHandler );
 
             _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY( sy) );
-            paint( _painter,_zoomHandler );
+            paint( _painter, _zoomHandler, true );
         }
         else {
             _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
@@ -177,7 +180,7 @@ void KPFreehandObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, boo
             m.translate( rr.left() + xPos + _zoomHandler->zoomItX(sx), rr.top() + yPos + _zoomHandler->zoomItY(sy) );
 
             _painter->setWorldMatrix( m, true );
-            paint( _painter,_zoomHandler );
+            paint( _painter,_zoomHandler, true );
         }
 
         pen = tmpPen;
@@ -189,7 +192,7 @@ void KPFreehandObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, boo
     _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
     if ( angle == 0 )
-        paint( _painter,_zoomHandler );
+        paint( _painter,_zoomHandler, false );
     else {
         KoRect br = KoRect( 0, 0, ow, oh );
         double pw = br.width();
@@ -205,7 +208,7 @@ void KPFreehandObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, boo
         m.translate( rr.left() + xPos, rr.top() + yPos );
 
         _painter->setWorldMatrix( m, true );
-        paint( _painter,_zoomHandler );
+        paint( _painter,_zoomHandler, false );
     }
 
     _painter->restore();
@@ -249,36 +252,13 @@ float KPFreehandObject::getAngle( const QPoint &p1, const QPoint &p2 )
 }
 
 /*======================== paint =================================*/
-void KPFreehandObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
+void KPFreehandObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler, bool /*drawingShadow*/ )
 {
-    double _w = _zoomHandler->zoomItX(pen.width());
+    int _w = _zoomHandler->zoomItX(pen.width());
     QPen pen2(pen);
-    pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
+    pen2.setWidth( _w );
 
-    QPointArray pointArray = points.toQPointArray();
-    double fx=1.0;
-    double fy=1.0;
-    if(_w>1.0)
-    {
-        fx = (double)( (double)(  _zoomHandler->zoomItX(ext.width()) - _w ) / (double) _zoomHandler->zoomItX(ext.width()) );
-        fy = (double)( (double)(  _zoomHandler->zoomItY(ext.height()) - _w ) / (double) _zoomHandler->zoomItY(ext.height()) );
-    }
-    unsigned int index = 0;
-    KoPointArray tmpPoints;
-    KoPointArray::ConstIterator it;
-    for ( it = points.begin(); it != points.end(); ++it ) {
-        KoPoint point = (*it);
-        double tmpX = _zoomHandler->zoomItX( (double)point.x()) * fx;
-        double tmpY = _zoomHandler->zoomItY( (double)point.y()) * fy;
-
-        if ( tmpX == 0 )
-            tmpX = _w;
-        if ( tmpY == 0 )
-            tmpY = _w;
-        tmpPoints.putPoints( index, 1, tmpX,tmpY );
-        ++index;
-    }
-    pointArray = tmpPoints.toQPointArray();
+    QPointArray pointArray = points.zoomPointArray( _zoomHandler, _w );
 
     _painter->setPen( pen2 );
     _painter->drawPolyline( pointArray );

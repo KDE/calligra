@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Laurent MONTEL <lmontel@mandrakesoft.com>
 
+#include "koPointArray.h"
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -20,6 +22,7 @@
 #include <koPointArray.h>
 #include <koRect.h>
 #include <stdarg.h>
+#include <kozoomhandler.h>
 
 void KoPointArray::translate( double dx, double dy )
 {
@@ -286,13 +289,42 @@ KoPointArray KoPointArray::cubicBezier() const
     }
 }
 
-QPointArray KoPointArray::toQPointArray() const
+QPointArray KoPointArray::zoomPointArray( KoZoomHandler* zoomHandler ) const
 {
     QPointArray tmpPoints(size());
+    for ( uint i= 0; i<size();i++ ) {
+        KoPoint p = at( i );
+        tmpPoints.putPoints( i, 1, zoomHandler->zoomItX(p.x()),zoomHandler->zoomItY(p.y()) );
+    }
+    return tmpPoints;
+}
+
+QPointArray KoPointArray::zoomPointArray( KoZoomHandler* zoomHandler, int penWidth ) const
+{
+    double fx;
+    double fy;
+    KoSize ext = boundingRect().size();
+    if(penWidth>1.0)
+    { // Large pen -> apply zoom + reduction due to pen
+        fx = (double)( zoomHandler->zoomItX(ext.width()) - penWidth ) / ext.width();
+        fy = (double)( zoomHandler->zoomItY(ext.height()) - penWidth ) / ext.height();
+    } else
+    { // Normal pen -> apply the zoom only
+        fx = (double)( zoomHandler->zoomItX(ext.width()) ) / ext.width();
+        fy = (double)( zoomHandler->zoomItY(ext.height()) ) / ext.height();
+    }
+    unsigned int index = 0;
+    QPointArray tmpPoints;
     KoPointArray::ConstIterator it;
-    for ( int i= 0; i<size();i++ ) {
-        KoPoint p = QMemArray<KoPoint>::at( i );
-        tmpPoints.putPoints( i, 1, qRound(p.x()),qRound(p.y()) );
+    for ( it = begin(); it != end(); ++it, ++index ) {
+        double tmpX = (*it).x() * fx;
+        double tmpY = (*it).y() * fy;
+
+        if(penWidth>1.0) {
+            tmpX += penWidth / 2;
+            tmpY += penWidth / 2;
+        }
+        tmpPoints.putPoints( index, 1, qRound(tmpX), qRound(tmpY) );
     }
     return tmpPoints;
 }

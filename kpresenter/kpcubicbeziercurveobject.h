@@ -66,7 +66,7 @@ public:
 
 protected:
     float getAngle( const QPoint &p1, const QPoint &p2 );
-    void paint( QPainter *_painter,KoZoomHandler*_zoomHandler );
+    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler, bool drawingShadow );
 
     void updatePoints( double _fx, double _fy );
 
