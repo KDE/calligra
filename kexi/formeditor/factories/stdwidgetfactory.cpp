@@ -125,7 +125,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	m_classes.append(wLineEdit);
 
 	KFormDesigner::Widget *wSpacer = new KFormDesigner::Widget(this);
-	wSpacer->setPixmap("kexi");
+	wSpacer->setPixmap("spacer");
 	wSpacer->setClassName("Spacer");
 	wSpacer->setName(i18n("Spacer"));
 	wSpacer->setDescription(i18n("A spacer widget to fill in blanks"));
