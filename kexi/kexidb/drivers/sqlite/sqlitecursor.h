@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,21 +36,6 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteCursor : public Cursor
 {
 	public:
 		virtual ~SQLiteCursor();
-		/*! Opens the cursor using \a statement */
-//		bool open( const QString& statement = QString::null );
-		/*! Closes previously opened cursor. 
-			If the cursor is closed, nothing happens. */
-//		virtual bool close();
-		/*! Moves current position to the first record and retrieves it. */
-//		virtual bool moveFirst();
-		/*! Moves current position to the last record and retrieves it. */
-//		virtual bool moveLast();
-		/*! Moves current position to the next record and retrieves it. */
-//		virtual bool moveNext();
-		/*! \return true if current position is after last record. */
-//		bool eof();
-		/*! \return current internal position of the query. */
-//		int at();
 		virtual QVariant value(uint i);
 
 		/*! [PROTOTYPE] \return internal buffer data. */
