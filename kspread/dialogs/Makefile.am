@@ -40,6 +40,7 @@ libdialogs_la_SOURCES = \
 	kspread_dlg_subtotal.cc \
 	kspread_dlg_validity.cc \
 	kspreadsubtotal.ui \
+    link.cc \
 	sheet_properties_base.ui \
 	sheet_properties.cc
 
@@ -63,7 +64,8 @@ noinst_HEADERS = \
 	kspread_dlg_pasteinsert.h \
 	kspread_dlg_preference.h \
 	kspread_dlg_reference.h \
-	kspread_dlg_resize2.h
+	kspread_dlg_resize2.h \
+    link.h
 
 METASOURCES = AUTO
 
