@@ -176,6 +176,8 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
             }
         } else if ( tagName == "year" ) {
             format += shortForm ? "yy" : "yyyy";
+        } else if ( tagName == "era" ) {
+            //todo I don't know what is it... (define into oo spec)
         } else if ( tagName == "week-of-year" || tagName == "quarter") {
             // ### not supported in Qt
         } else if ( tagName == "hours" ) {
