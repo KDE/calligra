@@ -1,0 +1,4 @@
+Changes after KOffice-1.2
+=======================
+- New command line option: --print. Prints the document(s) passed on the command
+   line, without showing a window. Useful for scripts and servicemenus.
