@@ -81,7 +81,7 @@ rc_DATA = kchart.rc kchart_shell.rc
 
 
 kdelnk_DATA = kchart.desktop
-kdelnkdir = $(kde_appsdir)/KOffice
+kdelnkdir = $(kde_appsdir)/Applications/KOffice
 
 kdemime_DATA = x-kchart.desktop
 kdemimedir = $(kde_mimedir)/application

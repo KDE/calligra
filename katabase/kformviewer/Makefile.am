@@ -33,7 +33,7 @@ idl_DATA = kformviewer.idl
 kformviewer.h: $(top_builddir)/lib/kofficecore/koffice.idl
 
 kdelnk_DATA = kformviewer.desktop
-kdelnkdir = $(kde_appsdir)/KOffice
+kdelnkdir = $(kde_appsdir)/Applications/KOffice
 
 ####### Implicit rules
 

@@ -27,10 +27,10 @@ libkimage_la_METASOURCES = kimage_shell.moc kimage_factory.moc kimage_doc.moc \
 	kimage_view.moc preferencesdlg.moc zoomfactordlg.moc kintegerinputdialog.moc
 
 kdelnk_DATA = kimage.desktop
-kdelnkdir = $(kde_appsdir)/KOffice
+kdelnkdir = $(kde_appsdir)/Applications/KOffice
 
 kdelnk_DATA = kimage.desktop
-kdelnkdir = $(kde_appsdir)/KOffice
+kdelnkdir = $(kde_appsdir)/Applications/KOffice
 
 kdemime_DATA = x-kimage.desktop
 kdemimedir = $(kde_mimedir)/application

@@ -42,7 +42,7 @@ METASOURCES =	kword_view.moc kword_doc.moc kword_shell.moc paragdia.moc \
 		kword_factory.moc
 
 kdelnk_DATA = kword.desktop
-kdelnkdir = $(kde_appsdir)/KOffice
+kdelnkdir = $(kde_appsdir)/Applications/KOffice
 
 kdemime_DATA = x-kword.desktop
 kdemimedir = $(kde_mimedir)/application

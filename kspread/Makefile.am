@@ -52,7 +52,7 @@ noinst_HEADERS = kspread_shell.h kspread_doc.h \
 libkspread_la_METASOURCES = AUTO
 
 kdelnk_DATA = kspread.desktop
-kdelnkdir = $(kde_appsdir)/KOffice
+kdelnkdir = $(kde_appsdir)/Applications/KOffice
 
 kdemime_DATA = x-kspread.desktop
 kdemimedir = $(kde_mimedir)/application

@@ -29,7 +29,7 @@ libkimageshop_la_METASOURCES = kimageshop_shell.moc kimageshop_doc.moc \
 	kimageshop_view.moc kimageshop_factory.moc kimageshop_config.moc layer.moc tool.moc
 
 kdelnk_DATA = kimageshop.desktop
-kdelnkdir = $(kde_appsdir)/KOffice
+kdelnkdir = $(kde_appsdir)/Applications/KOffice
 
 kdemime_DATA = x-kimageshop.desktop
 kdemimedir = $(kde_mimedir)/application

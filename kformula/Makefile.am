@@ -29,7 +29,7 @@ kformula.h : $(top_builddir)/lib/kofficecore/koffice.idl
 kde_icon_DATA = kformula.xpm
 
 kdelnk_DATA = kformula.desktop
-kdelnkdir = $(kde_appsdir)/KOffice
+kdelnkdir = $(kde_appsdir)/Applications/KOffice
 
 ####### Implicit rules
 

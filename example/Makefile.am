@@ -25,7 +25,7 @@ libexample_la_METASOURCES = example_shell.moc example_part.moc \
 			       example_view.moc example_factory.moc
 
 kdelnk_DATA = example.desktop
-kdelnkdir = $(kde_appsdir)/KOffice
+kdelnkdir = $(kde_appsdir)/Applications/KOffice
 
 kdemime_DATA = x-example.desktop
 kdemimedir = $(kde_mimedir)/application

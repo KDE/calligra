@@ -71,7 +71,7 @@ METASOURCES =	kpresenter_doc.moc kpresenter_view.moc \
 		footer_header.moc kpresenter_shell.moc kpresenter_factory.moc
 
 kdelnk_DATA = kpresenter.desktop
-kdelnkdir = $(kde_appsdir)/KOffice
+kdelnkdir = $(kde_appsdir)/Applications/KOffice
 
 kdemime_DATA = x-kpresenter.desktop
 kdemimedir = $(kde_mimedir)/application

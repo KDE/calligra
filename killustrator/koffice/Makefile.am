@@ -31,7 +31,7 @@ libkillustrator_la_METASOURCES = KIllustrator_shell.moc KIllustrator_doc.moc \
 				 KIllustrator_factory.moc
 
 kdelnk_DATA = killustrator.desktop
-kdelnkdir = $(kde_appsdir)/KOffice
+kdelnkdir = $(kde_appsdir)/Applications/KOffice
 
 kdemime_DATA = x-killustrator.desktop
 kdemimedir = $(kde_mimedir)/application
