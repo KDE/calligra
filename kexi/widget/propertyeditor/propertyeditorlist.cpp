@@ -166,7 +166,14 @@ PropertyEditorList::value()
 void
 PropertyEditorList::setValue(const QVariant &value)
 {
-	m_combo->setCurrentText(value.toString());
+	int idx = m_property->keys()->findIndex( value.toString() );
+	if (idx>=0) {
+		m_combo->setCurrentItem(idx);
+	}
+	else {
+		kdDebug() << "PropertyEditorList::setValue(): NO SUCH KEY! '" << value.toString() << "'" << endl;
+		m_combo->setCurrentText(QString::null);
+	}
 	emit changed(this);
 }
 
