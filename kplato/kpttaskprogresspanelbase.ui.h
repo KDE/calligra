@@ -28,27 +28,10 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kptduration.h"
 
 namespace KPlato 
 {
-
-void KPTTaskProgressPanelBase::slotPerformedGroupToggled(bool state)
-{
-    if (state)
-    {
- resourceList->setEnabled(true);
-        // disable totalPerformed
-    }
-    else
-    {
- resourceList->setEnabled(false);
-        // disable totalPerformed
-    }
-}
-
-
-}
-
 
 void KPTTaskProgressPanelBase::slotChanged()
 {
@@ -56,7 +39,43 @@ void KPTTaskProgressPanelBase::slotChanged()
 }
 
 
-void KPTTaskProgressPanelBase::slotResourcePerformedChanged()
+
+void KPTTaskProgressPanelBase::slotStartedChanged(bool state)
 {
-    // add resources, put to total effort
+    if (state)
+    {
+        startTime->setDateTime(QDateTime::currentDateTime());
+ percentFinished->setValue(0);
+    }
+    enableWidgets();
+}
+
+
+void KPTTaskProgressPanelBase::slotFinishedChanged(bool state)
+{
+    if (state)
+    {
+        percentFinished->setValue(100);
+    }   
+    enableWidgets();
+}
+
+
+void KPTTaskProgressPanelBase::enableWidgets()
+{
+    started->setEnabled(!finished->isChecked());
+    finished->setEnabled(started->isChecked());
+    finishTime->setEnabled(started->isChecked());
+    startTime->setEnabled(started->isChecked() && !finished->isChecked());
+    performedGroup->setEnabled(started->isChecked() && !finished->isChecked());}
+
+
+void KPTTaskProgressPanelBase::slotPercentFinishedChanged( int value )
+{
+    if (value == 100)
+    {
+ //remainingEffort->setValue(KPTDuration::zeroDuration); //FIXME
+    }
+}
+
 }

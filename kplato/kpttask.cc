@@ -43,9 +43,7 @@ KPTTask::KPTTask(KPTNode *parent) : KPTNode(parent), m_resource() {
 
     if (m_parent)
         m_leader = m_parent->leader();
-        
-    m_progress.percentFinished = 0;
-        
+            
     m_parentProxyRelations.setAutoDelete(true);
     m_childProxyRelations.setAutoDelete(true);
 }
@@ -234,8 +232,12 @@ bool KPTTask::load(QDomElement &element) {
                 }
             }
         } else if (e.tagName() == "progress") {
+            m_progress.started = (bool)e.attribute("started", "0").toInt();
+            m_progress.finished = (bool)e.attribute("finished", "0").toInt();
+            m_progress.startTime = KPTDateTime::fromString(e.attribute("startTime"));
+            m_progress.finishTime = KPTDateTime::fromString(e.attribute("finishTime"));
             m_progress.percentFinished = e.attribute("percent-finished", "0").toInt();
-            m_progress.remainingEffort =             KPTDuration::fromString(e.attribute("remaining-effort"));
+            m_progress.remainingEffort = KPTDuration::fromString(e.attribute("remaining-effort"));
             m_progress.totalPerformed = KPTDuration::fromString(e.attribute("performed-effort"));
         }
     }
@@ -273,6 +275,10 @@ void KPTTask::save(QDomElement &element)  {
 
     QDomElement el = me.ownerDocument().createElement("progress");
     me.appendChild(el);
+    el.setAttribute("started", m_progress.started);
+    el.setAttribute("finished", m_progress.finished);
+    el.setAttribute("startTime", m_progress.startTime.toString());
+    el.setAttribute("finishTime", m_progress.finishTime.toString());
     el.setAttribute("percent-finished", m_progress.percentFinished);
     el.setAttribute("remaining-effort", m_progress.remainingEffort.toString());
     el.setAttribute("performed-effort", m_progress.totalPerformed.toString());

@@ -180,18 +180,25 @@ public:
     bool isStartNode() const;
     
     struct Progress {
+        Progress() { started = finished = false; percentFinished = 0; }
         bool operator==(struct Progress &p) {
-            return percentFinished == p.percentFinished &&
+            return started == p.started && finished == p.finished &&
+                   startTime == p.startTime && finishTime == p.finishTime &&
+                   percentFinished == p.percentFinished &&
                    remainingEffort == p.remainingEffort &&
                    totalPerformed == p.totalPerformed;
         }
         bool operator!=(struct Progress &p) { return !(*this == p); }
         struct Progress &operator=(struct Progress &p) {
+            started = p.started; finished = p.finished;
+            startTime = p.startTime; finishTime = p.finishTime;
             percentFinished = p.percentFinished;
             remainingEffort = p.remainingEffort;
             totalPerformed = p.totalPerformed;
             return *this;
         }
+        bool started, finished;
+        KPTDateTime startTime, finishTime;
         int percentFinished;
         KPTDuration remainingEffort;
         KPTDuration totalPerformed;        

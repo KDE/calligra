@@ -21,6 +21,7 @@
 
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
+#include <qcheckbox.h>
 
 #include <klineedit.h>
 #include <ktextedit.h>
@@ -45,7 +46,13 @@ KPTTaskProgressPanel::KPTTaskProgressPanel(KPTTask &task, QWidget *parent, const
 {
     kdDebug()<<k_funcinfo<<endl;
     m_progress = task.progress();
+    started->setChecked(m_progress.started);
+    finished->setChecked(m_progress.finished);
+    startTime->setDateTime(m_progress.startTime);
+    finishTime->setDateTime(m_progress.finishTime);
+    
     percentFinished->setValue(m_progress.percentFinished);
+    
     remainingEffort->setValue(m_progress.remainingEffort);
     remainingEffort->setVisibleFields(KPTDurationWidget::Days | KPTDurationWidget::Hours | KPTDurationWidget::Minutes);
     remainingEffort->setFieldUnit(0, i18n("d"));
@@ -58,14 +65,17 @@ KPTTaskProgressPanel::KPTTaskProgressPanel(KPTTask &task, QWidget *parent, const
     totalPerformed->setFieldUnit(1, i18n("h"));
     totalPerformed->setFieldUnit(2, i18n("m"));
     
-    perResource->setChecked(false);
-    
-    percentFinished->setFocus();
+    enableWidgets();
+    started->setFocus();
     
 }
 
 
 bool KPTTaskProgressPanel::ok() {
+    m_progress.started = started->isChecked();
+    m_progress.finished = finished->isChecked();
+    m_progress.startTime = startTime->dateTime();
+    m_progress.finishTime = finishTime->dateTime();
     m_progress.percentFinished = percentFinished->value();
     m_progress.remainingEffort = remainingEffort->value();
     m_progress.totalPerformed = totalPerformed->value();
