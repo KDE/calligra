@@ -419,8 +419,7 @@ void KoMainWindow::slotFileOpen()
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
     dialog->setCaption( i18n("Open document") );
     KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import,
-                                           KoDocument::nativeFormatMimeType(),
-					   nativeFormatPattern(),
+                                           KoDocument::readNativeFormatMimeType(), nativeFormatPattern(),
                                            nativeFormatName(), true);
     KURL url;
     if(dialog->exec()==QDialog::Accepted)
