@@ -21,6 +21,7 @@
 #include "kivio_page.h"
 #include "kivio_map.h"
 #include "kivio_doc.h"
+#include "kivio_layer.h"
 
 KivioChangePageNameCommand::KivioChangePageNameCommand(const QString &_name,  const QString & _oldPageName, const QString & _newPageName, KivioPage *_page)
     : KNamedCommand( _name ),
@@ -119,4 +120,32 @@ void KivioRemovePageCommand::unexecute()
     m_page->map()->insertPage( m_page );
     m_page->doc()->insertPage( m_page );
 
+}
+
+KivioAddStencilCommand::KivioAddStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, KivioStencil *_stencil )
+    : KNamedCommand( _name ),
+      m_page( _page ),
+      m_layer( _layer),
+      m_stencil( _stencil)
+{
+}
+
+KivioAddStencilCommand::~KivioAddStencilCommand()
+{
+}
+
+void KivioAddStencilCommand::execute()
+{
+    m_layer->insertStencil( m_stencil );
+    m_page->doc()->updateView(m_page);
+    m_stencil->unselect();
+    m_page->doc()->slotSelectionChanged();
+}
+
+void KivioAddStencilCommand::unexecute()
+{
+    m_layer->takeStencilFromList( m_stencil );
+    m_page->doc()->updateView(m_page);
+    m_stencil->unselect();
+    m_page->doc()->slotSelectionChanged();
 }

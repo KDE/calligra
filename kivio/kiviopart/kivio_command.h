@@ -22,6 +22,10 @@
 
 #include <kcommand.h>
 class KivioPage;
+class KivioLayer;
+class KivioPage;
+class KivioLayer;
+class KivioStencil;
 
 class KivioChangePageNameCommand : public KNamedCommand
 {
@@ -85,6 +89,21 @@ public:
 
 protected:
     KivioPage * m_page;
+};
+
+class KivioAddStencilCommand : public KNamedCommand
+{
+public:
+    KivioAddStencilCommand( const QString &_name, KivioPage *_page,  KivioLayer * _layer, KivioStencil *_stencil  );
+    ~KivioAddStencilCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage * m_page;
+    KivioLayer * m_layer;
+    KivioStencil *m_stencil;
 };
 
 

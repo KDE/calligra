@@ -96,6 +96,8 @@ public:
     int generateStencilIds( int );
 
     void searchForConnections( KivioPage * );
+    void takeStencilFromList(  KivioStencil *pStencil );
+    void insertStencil( KivioStencil *pStencil );
 
 };
 

@@ -76,6 +76,17 @@ bool KivioLayer::addStencil( KivioStencil *pStencil )
     return true;
 }
 
+void KivioLayer::takeStencilFromList(  KivioStencil *pStencil )
+{
+    int pos=m_pStencilList->findRef(pStencil);
+    m_pStencilList->take( pos );
+}
+
+void KivioLayer::insertStencil( KivioStencil *pStencil )
+{
+    m_pStencilList->append( pStencil );
+}
+
 bool KivioLayer::removeStencil( KivioStencil *pStencil )
 {
     return m_pStencilList->remove( pStencil );

@@ -60,6 +60,7 @@
 #include "kivio_ps_printer.h"
 #include "kivio_stencil.h"
 #include "KIvioPageIface.h"
+#include "kivio_command.h"
 
 int KivioPage::s_id = 0L;
 QIntDict<KivioPage>* KivioPage::s_mapPages;
@@ -431,6 +432,9 @@ bool KivioPage::addStencil( KivioStencil *pStencil )
        kdDebug() << "KivioPage::addStencil() - NULL current layer" << endl;
         return false;
     }
+
+    KivioAddStencilCommand *cmd = new KivioAddStencilCommand(i18n("Add Stencil"), this, m_pCurLayer, pStencil );
+    m_pDoc->addCommand(cmd);
 
     return m_pCurLayer->addStencil( pStencil );
 }
