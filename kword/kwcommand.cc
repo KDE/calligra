@@ -1983,6 +1983,11 @@ void KWChangeFootNoteParametersCommand::changeVariableParameter( FootNoteParamet
     m_var->setManualString( _param.manualString );
     m_var->resize();
     m_var->frameSet()->setCounterText( m_var->text() );
+    m_var->setNumDisplay( -1 );
+    KWTextFrameSet * frameset = dynamic_cast<KWTextFrameSet *>( m_doc->frameSet( 0 ));
+    if ( frameset)
+        frameset->renumberFootNotes();
+
     m_var->paragraph()->invalidate(0);
     m_var->paragraph()->setChanged( true );
     m_doc->slotRepaintVariable();
