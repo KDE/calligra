@@ -1276,6 +1276,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
 		angle -= angle1;
 		angle -= startAngle;
+                if ( angle < 0 )
+                    angle += 360;
+                else if ( angle > 360 )
+                    angle -= 360;
 
 		activePage()->rotateObj( angle );
 		stickyPage()->rotateObj( angle );
