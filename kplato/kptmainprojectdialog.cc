@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003, 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,42 +34,29 @@ namespace KPlato
 {
 
 KPTMainProjectDialog::KPTMainProjectDialog(KPTProject &p, QWidget *parent, const char *name)
-    : KDialogBase( Tabbed, i18n("Project Settings"), Ok|Cancel, Ok, parent, name, true, true),
+    : KDialogBase( Swallow, i18n("Project Settings"), Ok|Cancel, Ok, parent, name, true, true),
       project(p)
 {
-    QVBox *page = addVBoxPage(i18n("General"));    
-    generalTab = new KPTMainProjectPanel(project, page);
+    panel = new KPTMainProjectPanel(project, this);
     
-    page = addVBoxPage(i18n("Resources"));
-    resourcesTab = new KPTResourcesPanel(page, &project);
-    
-    setMainWidget(generalTab);
+    setMainWidget(panel);
     enableButtonOK(false);
 
-    connect(generalTab, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOK(bool)));
-
-    connect(resourcesTab, SIGNAL(changed()), generalTab, SLOT(slotCheckAllFieldsFilled()));
+    connect(panel, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOK(bool)));
 }
 
 
 void KPTMainProjectDialog::slotOk() {
-    if (!generalTab->ok())
+    if (!panel->ok())
         return;
-    if (!resourcesTab->ok())
-        return;
-
+    
     accept();
 }
 
 KCommand *KPTMainProjectDialog::buildCommand(KPTPart *part) {
     KMacroCommand *m = 0;
     QString c = i18n("Modify main project");
-    KCommand *cmd = generalTab->buildCommand(part);
-    if (cmd) {
-        if (!m) m = new KMacroCommand(c);
-        m->addCommand(cmd);
-    }
-    cmd = resourcesTab->buildCommand(part);
+    KCommand *cmd = panel->buildCommand(part);
     if (cmd) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(cmd);

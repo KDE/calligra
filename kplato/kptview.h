@@ -106,6 +106,7 @@ protected slots:
     void slotProjectCalendar();
     void slotProjectWorktime();
     void slotProjectCalculate();
+    void slotProjectResources();
     void slotReportDesign();
     void slotReportGenerate(int);
 
@@ -176,8 +177,9 @@ private:
     
     // ------ Project
     KAction *actionEditMainProject;
-    KAction *actionEditCalendar;
     KAction *actionEditStandardWorktime;
+    KAction *actionEditCalendar;
+    KAction *actionEditResources;
     KAction *actionCalculate;
 
     // ------ Reports

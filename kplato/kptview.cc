@@ -76,6 +76,7 @@
 #include "kptresourceview.h"
 #include "kptresourcedialog.h"
 #include "kptresource.h"
+#include "kptresourcesdialog.h"
 #include "kptcalendarlistdialog.h"
 #include "kptstandardworktimedialog.h"
 #include "kptcanvasitem.h"
@@ -164,8 +165,9 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
     // ------ Project
     actionEditMainProject = new KAction(i18n("Edit Main Project..."), "project_edit", 0, this, SLOT(slotProjectEdit()), actionCollection(), "project_edit");
-    actionEditCalendar = new KAction(i18n("Edit Calendar..."), "project_calendar", 0, this, SLOT(slotProjectCalendar()), actionCollection(), "project_calendar");
     actionEditStandardWorktime = new KAction(i18n("Edit Standard Worktime..."), "project_worktime", 0, this, SLOT(slotProjectWorktime()), actionCollection(), "project_worktime");
+    actionEditCalendar = new KAction(i18n("Edit Calendar..."), "project_calendar", 0, this, SLOT(slotProjectCalendar()), actionCollection(), "project_calendar");
+    actionEditResources = new KAction(i18n("Edit Resources..."), "project_resources", 0, this, SLOT(slotProjectResources()), actionCollection(), "project_resources");
     actionCalculate = new KAction(i18n("Calculate"), "project_calculate", 0, this, SLOT(slotProjectCalculate()), actionCollection(), "project_calculate");
 
     // ------ Reports
@@ -365,6 +367,18 @@ void KPTView::slotProjectWorktime() {
         KMacroCommand *cmd = dia->buildCommand(getPart());
         if (cmd) {
             //kdDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
+            getPart()->addCommand(cmd); //also executes
+        }
+    }
+    delete dia;
+}
+
+void KPTView::slotProjectResources() {
+    KPTResourcesDialog *dia = new KPTResourcesDialog(getProject());
+    if (dia->exec()) {
+        KCommand *cmd = dia->buildCommand(getPart());
+        if (cmd) {
+            //kdDebug()<<k_funcinfo<<"Modifying resources"<<endl;
             getPart()->addCommand(cmd); //also executes
         }
     }
