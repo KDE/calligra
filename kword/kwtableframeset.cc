@@ -994,11 +994,12 @@ void KWTableFrameSet::insertCol( unsigned int newColNumber,QPtrList<KWFrameSet> 
 /* Delete all cells that are completely in this row.              */
 void KWTableFrameSet::deleteRow( unsigned int row, bool _recalc )
 {
-    unsigned int rowspan;
+    unsigned int rowspan=0;
     // I want to know the amount of the row(s) I am removing.
-    for (rowspan=1; rowspan < m_rows; rowspan++) {
+    for (unsigned int rs=1; rs < m_rows && rowspan == 0; rs++) {
         for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
-            if(m_cells.at(i)->m_row == row && m_cells.at(i)->m_rows==rowspan) {
+            if(m_cells.at(i)->m_row == row && m_cells.at(i)->m_rows==rs) {
+                rowspan=rs;
                 break;
             }
         }
