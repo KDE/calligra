@@ -3983,8 +3983,8 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
   double x;
   if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
   {
-    xpos = dWidth - table->dblColumnPos( marker.left() ) - xOffset();
-    x    = dWidth - table->dblColumnPos( marker.right() ) - xOffset();
+    xpos = dWidth - table->dblColumnPos( marker.right() ) + xOffset();
+    x    = dWidth - table->dblColumnPos( marker.left() ) + xOffset();
   }
   else
   {
@@ -3995,7 +3995,7 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
 
   const ColumnFormat *columnFormat = table->columnFormat( marker.right() );
   double tw = columnFormat->dblWidth( );
-  double w = QABS( x - xpos ) + tw;
+  double w = x - xpos + tw;
 
   double y = table->dblRowPos( marker.bottom() ) - yOffset();
   const RowFormat* rowFormat = table->rowFormat( marker.bottom() );
@@ -4003,12 +4003,17 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
   double h = ( y - ypos ) + th;
 
   /* left, top, right, bottom */
-  positions[0] = xpos;
-  positions[1] = ypos;
   if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
-    positions[2] = xpos - w + 1;
+  {
+    positions[0] = xpos - tw;
+    positions[2] = xpos - tw + w;
+  }
   else
+  {
+    positions[0] = xpos;
     positions[2] = xpos + w;
+  }
+  positions[1] = ypos;
   positions[3] = ypos + h;
 
   /* these vars are used for clarity, the array for simpler function arguments  */
@@ -4017,32 +4022,21 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
   double right = positions[2];
   double bottom = positions[3];
 
-  if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
-    kdDebug() << "X: " << x << ", xpos: " << xpos << ", w: " << w
-              << ", Right: " << right << ", VRight: " << viewRect.right()
-              << ", Left:  " << left  << ", VLeft:  " << viewRect.left() << endl;
-
   /* left, top, right, bottom */
+  paintSides[0] = (viewRect.left() <= left) && (left <= viewRect.right()) &&
+                (bottom >= viewRect.top()) && (top <= viewRect.bottom());
+  paintSides[1] = (viewRect.top() <= top) && (top <= viewRect.bottom())
+               && (right >= viewRect.left()) && (left <= viewRect.right());
   if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
-  {
-    paintSides[0] = (viewRect.left() <= left) && (left - 1 <= viewRect.right()) &&
-                  (bottom >= viewRect.top()) && (top <= viewRect.bottom());
-    paintSides[1] = (viewRect.top() <= top) && (top <= viewRect.bottom())
-                 && (QABS(right) >= viewRect.left()) && (left - 1 <= viewRect.right());
-    paintSides[3] = (viewRect.top() <= bottom) && (bottom <= viewRect.bottom())
-                 && (QABS(right) >= viewRect.left()) && (left - 1 <= viewRect.right());
-  }
+    paintSides[2] = (viewRect.left() <= right ) &&
+                    (right - 1 <= viewRect.right()) &&
+                    (bottom >= viewRect.top()) && (top <= viewRect.bottom());
   else
-  {
-    paintSides[0] = (viewRect.left() <= left) && (left <= viewRect.right()) &&
-                  (bottom >= viewRect.top()) && (top <= viewRect.bottom());
-    paintSides[1] = (viewRect.top() <= top) && (top <= viewRect.bottom())
-                 && (right >= viewRect.left()) && (left <= viewRect.right());
-    paintSides[3] = (viewRect.top() <= bottom) && (bottom <= viewRect.bottom())
-                 && (right >= viewRect.left()) && (left <= viewRect.right());
-  }
-  paintSides[2] = (viewRect.left() <= right ) && (right <= viewRect.right()) &&
-                  (bottom >= viewRect.top()) && (top <= viewRect.bottom());
+    paintSides[2] = (viewRect.left() <= right ) &&
+                    (right <= viewRect.right()) &&
+                    (bottom >= viewRect.top()) && (top <= viewRect.bottom());
+  paintSides[3] = (viewRect.top() <= bottom) && (bottom <= viewRect.bottom())
+               && (right >= viewRect.left()) && (left <= viewRect.right());
 
   positions[0] = QMAX( left,   viewRect.left() );
   positions[1] = QMAX( top,    viewRect.top() );
