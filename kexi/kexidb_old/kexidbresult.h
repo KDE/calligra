@@ -33,7 +33,7 @@ class KexiDBResult
 		 *  even drivers use their own (mostly)
 		 */
 		KexiDBResult(QObject *parent);
-		~KexiDBResult();
+		virtual ~KexiDBResult();
 
 		/*! returns the value of "field" */
 		virtual QVariant	value(unsigned int field);
