@@ -158,6 +158,10 @@ void GraphiteView::rulerUnitChanged(GraphiteGlobal::Unit unit) {
     m_horiz->setUnit(unit);
 }
 
+void GraphiteView::openPageLayoutDia() {
+    m_doc->showPageLayoutDia(this);
+}
+
 void GraphiteView::resizeEvent(QResizeEvent *e) {
 
     m_canvas->resize(e->size().width()-20, e->size().height()-20);
@@ -193,21 +197,28 @@ void GraphiteView::setupActions() {
 
 void GraphiteView::setupRulers() {
 
+    GraphiteGlobal *global=GraphiteGlobal::self();
     m_vert=new Ruler(this, m_canvas->viewport(), Qt::Vertical,
-                     m_doc->pageLayout(), GraphiteGlobal::self()->zoomedResolution());
+                     m_doc->pageLayout(), global->zoomedResolution());
     m_vert->showMousePos(true);
-    connect(m_vert, SIGNAL(unitChanged(GraphiteGlobal::Unit)), this,
-            SLOT(rulerUnitChanged(GraphiteGlobal::Unit)));
+    m_vert->setUnit(global->unit());
+    connect(m_vert, SIGNAL(unitChanged(GraphiteGlobal::Unit)), global,
+            SLOT(setUnit(GraphiteGlobal::Unit)));
+    connect(m_vert, SIGNAL(openPageLayoutDia()), this, SLOT(openPageLayoutDia()));
 
     m_horiz=new Ruler(this, m_canvas->viewport(), Qt::Horizontal,
-                     m_doc->pageLayout(), GraphiteGlobal::self()->zoomedResolution());
+                     m_doc->pageLayout(), global->zoomedResolution());
     m_horiz->showMousePos(true);
-    connect(m_horiz, SIGNAL(unitChanged(GraphiteGlobal::Unit)), this,
-            SLOT(rulerUnitChanged(GraphiteGlobal::Unit)));
+    m_horiz->setUnit(global->unit());
+    connect(m_horiz, SIGNAL(unitChanged(GraphiteGlobal::Unit)), global,
+            SLOT(setUnit(GraphiteGlobal::Unit)));
+    connect(m_horiz, SIGNAL(openPageLayoutDia()), this, SLOT(openPageLayoutDia()));
 
     m_canvas->setRulers(m_horiz, m_vert);
     connect(m_canvas, SIGNAL(contentsMoving(int, int)), this,
             SLOT(recalcRulers(int, int)));
+    connect(global, SIGNAL(unitChanged(GraphiteGlobal::Unit)), this,
+            SLOT(rulerUnitChanged(GraphiteGlobal::Unit)));
 }
 
 #include <graphiteview.moc>

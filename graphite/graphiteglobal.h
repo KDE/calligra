@@ -20,6 +20,7 @@
 #ifndef GRAPHITE_GLOBAL_H
 #define GRAPHITE_GLOBAL_H
 
+#include <qobject.h>
 #include <qprinter.h>
 #include <kimageeffect.h>
 #include <koGlobal.h>
@@ -101,6 +102,7 @@ const short pageHeight[]={ 297, 257, 279, 356, 254, 1189, 841, 594,
 struct PageBorders {
     // TODO: Initialize w/ real values
     PageBorders() : left(10.0), top(10.0), right(10.0), bottom(10.0) {}
+    PageBorders &operator=(const PageBorders &rhs);
     double left;
     double top;
     double right;
@@ -111,7 +113,7 @@ struct PageLayout {
     // TODO: read the defaults from a KConfig object
     PageLayout() : orientation(PG_PORTRAIT), layout(Norm),
         size(QPrinter::A4), customWidth(-1.0), customHeight(-1.0) {}
-
+    PageLayout &operator=(const PageLayout &rhs);
     double width() const;
     double height() const;
 
@@ -129,7 +131,9 @@ struct PageLayout {
 // This class is used to access some configurable values.
 // We also use this class to save the rc file.
 // Note: Follows the singleton pattern
-class GraphiteGlobal {
+class GraphiteGlobal : public QObject {
+
+    Q_OBJECT
 
 public:
     enum Unit { MM, Pt, Inch };
@@ -158,7 +162,6 @@ public:
     void setThirdHandleTrigger(const int &thirdHandleTrigger) { m_thirdHandleTrigger=thirdHandleTrigger; }
 
     const Unit &unit() const { return m_unit; }
-    void setUnit(const Unit &unit);
     QString unitString() const { return m_unitString; }
 
     // current zoom factor (for the "active" view), 1.0 == 100%
@@ -187,9 +190,16 @@ public:
     // maybe I'll add a init(...) method which takes a KConfig file/pointer
     // and initializes all the "global" vars.
 
+public slots:
+    void setUnit(GraphiteGlobal::Unit);
+
+signals:
+    void unitChanged(GraphiteGlobal::Unit);
+
 private:
+    friend class gcc_you_freak;  // to avoid an ugly warning
     GraphiteGlobal();
-    // please don't try to copy or assing this object
+    // don't try to copy or assing this object
     GraphiteGlobal(const GraphiteGlobal &rhs);
     GraphiteGlobal &operator=(const GraphiteGlobal &rhs);
 

@@ -48,6 +48,7 @@ protected slots:
 
     void recalcRulers(int x, int y);
     void rulerUnitChanged(GraphiteGlobal::Unit);
+    void openPageLayoutDia();
 
 protected:
     void resizeEvent(QResizeEvent *e);

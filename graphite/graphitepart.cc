@@ -31,6 +31,8 @@
 #include <graphitefactory.h>
 #include <graphitepart.h>
 
+#include <pagelayoutdia_impl.h>
+
 // test
 #include <ggroup.h>
 
@@ -113,6 +115,10 @@ void GraphitePart::setPageOrientation(const KoOrientation &orientation) {
 void GraphitePart::setPageBorders(const Graphite::PageBorders &pageBorders) {
     m_pageLayout.borders=pageBorders;
     // TODO -- update
+}
+
+void GraphitePart::showPageLayoutDia(QWidget *parent) {
+    PageLayoutDiaImpl::pageLayoutDia(m_pageLayout, parent);
 }
 
 void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {

@@ -174,6 +174,24 @@ void scalePoint(FxPoint &p, const double &xfactor, const double &yfactor, const 
     p.setY(py);
 }
 
+PageBorders &PageBorders::operator=(const PageBorders &rhs) {
+    left=rhs.left;
+    top=rhs.top;
+    bottom=rhs.bottom;
+    right=rhs.right;
+    return *this;
+}
+
+PageLayout &PageLayout::operator=(const PageLayout &rhs) {
+    orientation=rhs.orientation;
+    layout=rhs.layout;
+    size=rhs.size;
+    customWidth=rhs.customWidth;
+    customHeight=rhs.customHeight;
+    borders=rhs.borders;
+    return *this;
+}
+
 double PageLayout::width() const {
 
     if(layout==Graphite::PageLayout::Norm) {
@@ -234,7 +252,7 @@ void GraphiteGlobal::setRotHandleSize(const int &rotHandleSize) {
     m_rotHandleOffset=Graphite::double2Int(static_cast<double>(rotHandleSize)*0.5);
 }
 
-void GraphiteGlobal::setUnit(const Unit &unit) {
+void GraphiteGlobal::setUnit(GraphiteGlobal::Unit unit) {
 
     if(m_unit==unit)
         return;
@@ -245,6 +263,7 @@ void GraphiteGlobal::setUnit(const Unit &unit) {
         m_unitString=QString::fromLatin1("inch");
     else
         m_unitString=QString::fromLatin1("pt");
+    emit unitChanged(unit);
 }
 
 void GraphiteGlobal::setZoom(const double &zoom) {
@@ -367,7 +386,7 @@ FxRect GraphiteGlobal::toFxRect(const QDomElement &element) const {
     return rect;
 }
 
-GraphiteGlobal::GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4),
+GraphiteGlobal::GraphiteGlobal() : QObject(), m_fuzzyBorder(3), m_handleSize(4),
                                    m_rotHandleSize(4), m_thirdHandleTrigger(20),
                                    m_handleOffset(2), m_rotHandleOffset(2),
                                    m_unit(MM), m_zoom(1.0) {
@@ -692,3 +711,5 @@ bool operator!=(const FxRect &lhs, const FxRect &rhs) {
              lhs.bottomRight().pxX()!=rhs.bottomRight().pxX() ||
              lhs.bottomRight().pxY()!=rhs.bottomRight().pxY() );
 }
+
+#include <graphiteglobal.moc>

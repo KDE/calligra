@@ -50,14 +50,17 @@ public:
 
     // will return NPageSize if "Custom"!
     QPrinter::PageSize pageSize() const;
+    // returns(!) the height/width
     void pageSize(double &width, double &height) const;
-    void setPageSize(const QPrinter::PageSize &pageSize); // Norm
-    void setPageSize(const double &width, const double &height); // Custom
+    void setPageSize(const QPrinter::PageSize &pageSize); // implies Norm
+    void setPageSize(const double &width, const double &height); // implies Custom
     KoOrientation pageOrientation() const { return m_pageLayout.orientation; }
     void setPageOrientation(const KoOrientation &orientation);
     Graphite::PageBorders pageBorders() const { return m_pageLayout.borders; }
     void setPageBorders(const Graphite::PageBorders &pageBorders);
     const Graphite::PageLayout &pageLayout() const { return m_pageLayout; }
+    // This method is used to shot the page layout dialog (e.g. on a dbl click on the ruler)
+    void showPageLayoutDia(QWidget *parent);
 
     // The canvas forwards the Events to us. We test if any
     // object has been hit (z-order!) and handle the event.
@@ -85,7 +88,7 @@ private:
     void setGlobalZoom(const double &zoom=1.0); // set the global zoom factor (for this view)
 
     KCommandHistory *m_history;
-    QMap<GraphiteView*, GObjectM9r*> m_m9rMap; // relate views to m9rs
+    QMap<GraphiteView*, GObjectM9r*> m_m9rMap; // map views to m9rs
     // TODO: If an object is selected, store a pointer
     //       to its M9r here and draw the handles after
     //       drawing the whole tree.
