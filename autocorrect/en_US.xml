@@ -399,7 +399,6 @@
  <item find="gievn" replace="given" />
  <item find="giveing" replace="giving" />
  <item find="gloabl" replace="global" />
- <item find="gnu" replace="GNU" />
  <item find="goign" replace="going" />
  <item find="goitre" replace="goiter" />
  <item find="govenment" replace="government" />
@@ -771,8 +770,6 @@
  <item find="seperate" replace="separate" />
  <item find="sercumstances" replace="circumstances" />
  <item find="shcool" replace="school" />
- <item find="she have" replace="she has" />
- <item find="she were" replace="she was" />
  <item find="she;ll" replace="she'll" />
  <item find="shesaid" replace="she said" />
  <item find="shineing" replace="shining" />
