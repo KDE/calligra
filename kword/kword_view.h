@@ -61,6 +61,7 @@ class KWordShell;
 #include "deldia.h"
 #include "docstruct.h"
 #include "variable.h"
+#include "footnotedia.h"
 
 #include <koPageLayoutDia.h>
 #include <koPartSelectDia.h>

@@ -1039,3 +1039,8 @@ Reggie, 5.4.1999:
 - More work on footnotes/endnotes
 - Started with Drag'n'Drop (dragging a selected text from one KWord App and dropping
   it into another KWord App works already somehow)
+
+Reggie, 6.4.1999:
+-----------------
+- Started with a dialog for inserting a footnote where you can make crazy footnotes
+  if you want (like [1,2,3-6,7] and so on)

@@ -874,7 +874,7 @@ void KWordView::viewFootNotes()
   m_vMenuEdit->setItemChecked(m_idMenuView_EndNotes,false);
 
   m_pKWordDoc->setNoteType(KWordDocument::FootNotes);
-  
+
   sendFocusEvent();
 }
 
@@ -996,30 +996,9 @@ void KWordView::insertFootNoteEndNote()
     {
       debug("NUMBER: %d",start);
 
-      /**************
-       *
-       * Dialog for crating the footnote/endnote must be called here!
-       *
-       **************/
-
-      // Remove this later >>>>>>>>>>>>>>
-
-      KWFootNote::KWFootNoteInternal *fi = new KWFootNote::KWFootNoteInternal;
-      fi->from = start;
-      fi->to = -1;
-      fi->space = "-";
-
-      QList<KWFootNote::KWFootNoteInternal> *lfi = new QList<KWFootNote::KWFootNoteInternal>();
-      lfi->setAutoDelete(false);
-      lfi->append(fi);
-
-      KWFootNote *fn = new KWFootNote(m_pKWordDoc,lfi);
-      fn->setBefore("[");
-      fn->setAfter("]");
-
-      // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-      gui->getPaperWidget()->insertFootNote(fn);
+      KWFootNoteDia dia(0L,"",m_pKWordDoc,gui->getPaperWidget(),start);
+      dia.setCaption(i18n("Insert Footnote/Endnote"));
+      dia.show();
     }
 
   sendFocusEvent();
@@ -1858,49 +1837,49 @@ void KWordView::keyPressEvent(QKeyEvent *e)
 /*================================================================*/
 void KWordView::mousePressEvent(QMouseEvent *e)
 {
-  QApplication::sendEvent(gui->getPaperWidget(),e); 
+  QApplication::sendEvent(gui->getPaperWidget(),e);
 }
 
 /*================================================================*/
 void KWordView::mouseMoveEvent(QMouseEvent *e)
 {
-  QApplication::sendEvent(gui->getPaperWidget(),e); 
+  QApplication::sendEvent(gui->getPaperWidget(),e);
 }
 
 /*================================================================*/
 void KWordView::mouseReleaseEvent(QMouseEvent *e)
 {
-  QApplication::sendEvent(gui->getPaperWidget(),e); 
+  QApplication::sendEvent(gui->getPaperWidget(),e);
 }
 
 /*================================================================*/
 void KWordView::focusInEvent(QFocusEvent *e)
 {
-  QApplication::sendEvent(gui->getPaperWidget(),e); 
+  QApplication::sendEvent(gui->getPaperWidget(),e);
 }
 
 /*================================================================*/
 void KWordView::dragEnterEvent(QDragEnterEvent *e)
-{ 
-  QApplication::sendEvent(gui,e); 
+{
+  QApplication::sendEvent(gui,e);
 }
 
 /*================================================================*/
 void KWordView::dragMoveEvent(QDragMoveEvent *e)
-{ 
-  QApplication::sendEvent(gui,e); 
+{
+  QApplication::sendEvent(gui,e);
 }
 
 /*================================================================*/
 void KWordView::dragLeaveEvent(QDragLeaveEvent *e)
-{ 
-  QApplication::sendEvent(gui,e); 
+{
+  QApplication::sendEvent(gui,e);
 }
 
 /*================================================================*/
 void KWordView::dropEvent(QDropEvent *e)
-{ 
-  QApplication::sendEvent(gui,e); 
+{
+  QApplication::sendEvent(gui,e);
 }
 
 /*================================================================*/
@@ -3254,26 +3233,26 @@ void KWordGUI::keyPressEvent(QKeyEvent* e)
 
 /*================================================================*/
 void KWordGUI::dragEnterEvent(QDragEnterEvent *e)
-{ 
-  QApplication::sendEvent(paperWidget,e); 
+{
+  QApplication::sendEvent(paperWidget,e);
 }
 
 /*================================================================*/
 void KWordGUI::dragMoveEvent(QDragMoveEvent *e)
-{ 
-  QApplication::sendEvent(paperWidget,e); 
+{
+  QApplication::sendEvent(paperWidget,e);
 }
 
 /*================================================================*/
 void KWordGUI::dragLeaveEvent(QDragLeaveEvent *e)
-{ 
-  QApplication::sendEvent(paperWidget,e); 
+{
+  QApplication::sendEvent(paperWidget,e);
 }
 
 /*================================================================*/
 void KWordGUI::dropEvent(QDropEvent *e)
-{ 
-  QApplication::sendEvent(paperWidget,e); 
+{
+  QApplication::sendEvent(paperWidget,e);
 }
 
 /*================================================================*/
