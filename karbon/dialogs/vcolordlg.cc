@@ -153,12 +153,13 @@ VColorDlg::VColorDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	//Components
 	QGroupBox* h2groupbox = new QGroupBox( 1, Horizontal, i18n( "Components" ), mHSBWidget );
 	mHSSelector = new KHSSelector( h2groupbox );
-	mHSSelector->setMinimumHeight( 100 );
+	mHSSelector->setMinimumHeight( 65 );
 	QGroupBox* h3groupbox = new QGroupBox( 3, Horizontal, i18n( "H:S:B" ), h2groupbox );
 	mH = new KIntSpinBox( 0, 359, 1, 0, 10, h3groupbox );
 	mS = new KIntSpinBox( 0, 255, 1, 0, 10, h3groupbox );
 	mB = new KIntSpinBox( 0, 255, 1, 0, 10, h3groupbox );
 	mainHSBLayout->addWidget( h2groupbox, 1, 0 );
+	connect( mHSSelector, SIGNAL( valueChanged( int, int ) ), this, SLOT( slotHSChanged( int, int ) ) );
 	connect( mH, SIGNAL( valueChanged ( int ) ), this, SLOT( updateHSBColorPreview() ) );
 	connect( mS, SIGNAL( valueChanged ( int ) ), this, SLOT( updateHSBColorPreview() ) );
 	connect( mB, SIGNAL( valueChanged ( int ) ), this, SLOT( updateHSBColorPreview() ) );
@@ -185,6 +186,26 @@ VColorDlg::VColorDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	setWidget( mTabWidget );
 	
 	m_Color = new VColor();
+}
+
+void VColorDlg::buttonClicked( int button_ID )
+{
+	switch( button_ID ) {
+	case Fill:
+		if( m_part )
+		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( *m_Color ) ), true );
+		break;
+	case Outline:
+		if( m_part )
+		m_part->addCommand( new VStrokeColorCmd( &m_part->document(), m_Color ), true );
+		break;
+	}
+}
+
+void VColorDlg::slotHSChanged( int h, int s )
+{
+	mH->setValue( h );
+	mS->setValue( s );
 }
 
 void VColorDlg::updateRGBColorPreview()
@@ -216,20 +237,6 @@ void VColorDlg::updateHSBColorPreview()
 	m_Color->setValues( &h, &s, &b, 0L );
 	m_Color->setOpacity( op );
 	mHSBColorPreview->setColor( m_Color->toQColor() );
-}
-
-void VColorDlg::buttonClicked( int button_ID )
-{
-	switch( button_ID ) {
-	case Fill:
-		if( m_part )
-		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( *m_Color ) ), true );
-		break;
-	case Outline:
-		if( m_part )
-		m_part->addCommand( new VStrokeColorCmd( &m_part->document(), m_Color ), true );
-		break;
-	}
 }
 
 #include "vcolordlg.moc"

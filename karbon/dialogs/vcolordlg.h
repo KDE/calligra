@@ -71,10 +71,12 @@ private:
 	KarbonPart *m_part;
 	
 private slots:
+	void buttonClicked( int button_ID );
+	void slotHSChanged( int, int );
 	void updateRGBColorPreview();
 	void updateCMYKColorPreview();
 	void updateHSBColorPreview();
-	void buttonClicked( int button_ID );
+	
 
 protected:
 	VColor *m_Color;
