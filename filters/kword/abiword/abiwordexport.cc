@@ -32,11 +32,13 @@
    License version 2.
 */
 
+#include <qmap.h>
 #include <qregexp.h>
 #include <qtextstream.h>
 #include <qdom.h>
 
 #include <kdebug.h>
+#include <kmdcodec.h>
 #include <kfilterdev.h>
 
 #include <koGlobal.h>
@@ -46,7 +48,6 @@
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
 
-#include "kqiodevicegzip.h"
 #include <abiwordexport.h>
 #include <abiwordexport.moc>
 
@@ -73,11 +74,21 @@ public:
 private:
     void ProcessParagraphData (const QString& paraText, const ValueListFormatData& paraFormatDataList);
     QString textFormatToAbiProps(const TextFormatting& formatData) const;
+    QString escapeAbiWordText(const QString& strText) const;
+    bool makeImage(const FrameAnchor& anchor);
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
     QString m_pagesize; // Buffer for the <pagesize> tag
+    QMap<QString,QString> m_mapData;
 };
+
+QString AbiWordWorker::escapeAbiWordText(const QString& strText) const
+{
+    // Escape quotes (needed in attributes)
+    // Escape apostrophs
+    return KWEFUtil::EscapeSgmlText(NULL,strText,true,true);
+}
 
 bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
 {
@@ -182,6 +193,32 @@ bool AbiWordWorker::doOpenDocument(void)
 
 bool AbiWordWorker::doCloseDocument(void)
 {
+    // We need to create all <data> elements here
+    
+    if (m_kwordLeader)
+    {
+        *m_streamOut << "<!--\n"; // PROVISORY
+
+        QMap<QString,QString>::ConstIterator it;
+
+        for (it=m_mapData.begin(); it!=m_mapData.end(); it++)
+        {
+            QByteArray image;
+            m_kwordLeader->loadKoStoreFile(it.key(),image);
+            *m_streamOut << "<data name=\"" << it.data() << "\" type=\"base64\" mime=\"????\">\n";
+            *m_streamOut << "<d>\n";
+
+            QCString base64=KCodecs::base64Encode(image,true);
+
+            *m_streamOut << base64 << "\n"; // QCString is taken as Latin1 by QTextStream
+
+            *m_streamOut << "</d>\n";
+            *m_streamOut << "</data>\n";
+        }
+
+        *m_streamOut << "-->\n"; // PROVISORY
+    }
+
     *m_streamOut << "</abiword>\n"; //Close the file for XML
     return true;
 }
@@ -316,6 +353,18 @@ QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatData) co
     return strElement;
 }
 
+bool AbiWordWorker::makeImage(const FrameAnchor& anchor)
+{
+    // PROVISORY
+    kdDebug(30506) << "New image: " << anchor.picture.koStoreName
+        << " , " << anchor.picture.key << endl;
+
+    m_mapData[anchor.picture.koStoreName]=anchor.picture.key;
+
+    return true;
+}
+
+
 // ProcessParagraphData () mangles the pure text through the
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
@@ -333,33 +382,48 @@ void AbiWordWorker::ProcessParagraphData ( const QString &paraText,
               paraFormatDataIt != paraFormatDataList.end ();
               paraFormatDataIt++ )
         {
-            // Retrieve text and escape it
-            partialText=EscapeXmlText(
-                paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len),
-                true,true);
-
-            if ((*paraFormatDataIt).text.missing)
+            if (1==(*paraFormatDataIt).id)
             {
-                // It's just normal text, so we do not need a <c> element!
-                *m_streamOut << partialText;
-            }
-            else
-            { // Text with properties, so use a <c> element!
+                // Retrieve text and escape it
+                partialText=escapeAbiWordText(paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len));
 
-                QString abiprops=textFormatToAbiProps((*paraFormatDataIt).text);
-
-                // Erase the last semi-comma (as in CSS2, semi-commas only separate instructions and do not terminate them)
-                const int result=abiprops.findRev(";");
-
-                if (result>=0)
+                if ((*paraFormatDataIt).text.missing)
                 {
-                    // Remove the last semi-comma and the space thereafter
-                    abiprops.remove(result,2);
+                    // It's just normal text, so we do not need a <c> element!
+                    *m_streamOut << partialText;
                 }
+                else
+                { // Text with properties, so use a <c> element!
 
-                *m_streamOut << "<c props=\"" << abiprops << "\">";
-                *m_streamOut << partialText << "</c>";
+                    QString abiprops=textFormatToAbiProps((*paraFormatDataIt).text);
+
+                    // Erase the last semi-comma (as in CSS2, semi-commas only separate instructions and do not terminate them)
+                    const int result=abiprops.findRev(";");
+
+                    if (result>=0)
+                    {
+                        // Remove the last semi-comma and the space thereafter
+                        abiprops.remove(result,2);
+                    }
+
+                    *m_streamOut << "<c props=\"" << abiprops << "\">";
+                    *m_streamOut << partialText << "</c>";
+                }
             }
+            else if (6==(*paraFormatDataIt).id)
+            {
+                // We have an image or a table
+                // However, AbiWord does not support tables
+                if (2==(*paraFormatDataIt).frameAnchor.type)
+                {
+                    makeImage((*paraFormatDataIt).frameAnchor);
+                }
+                else
+                {
+                    kdWarning(30506) << "Unsupported anchor type: "
+                        << (*paraFormatDataIt).frameAnchor.type << endl;
+                }
+           }
        }
     }
 }
