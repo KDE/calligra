@@ -1,5 +1,6 @@
 ####### General stuff
 
+KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES= -I$(top_srcdir) $(all_includes)
 LDFLAGS	= $(all_libraries)  -version-info 1:0:0
 libkoparts_la_LIBADD  = $(LIB_KDEUI)
