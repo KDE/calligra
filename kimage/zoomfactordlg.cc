@@ -35,13 +35,7 @@ KZoomFactorDialog::KZoomFactorDialog( QWidget* parent, const char* name, WFlags 
   // Layout
   QGridLayout* grid = new QGridLayout( this, 6, 4, 15, 7 );
 
-  // Inputline X
-  //m_pLineEditXFactor = new KIntNumInput( QString::null, -INT_MAX, INT_MAX, 1,
-  //					 0,
-  //					 QString::null, 10, false, this,
-  //					 "inputZoomX");
   m_pLineEditXFactor = new KIntNumInput(0, this, 10, "inputZoomX");
-  m_pLineEditXFactor->setRange(-INT_MAX, INT_MAX, 1);
   grid->addMultiCellWidget( m_pLineEditXFactor, 1, 1, 0, 3 );
   QLabel* label = new QLabel( m_pLineEditXFactor, i18n( "Zoom factor for width in % (1x = 100)" ), this );
   grid->addWidget( label, 0, 0 );
