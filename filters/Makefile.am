@@ -33,3 +33,8 @@ endif
 
 
 SUBDIRS = generic_wrapper liboofilter $(KSPREADDIR) $(KWORDDIR) $(KPRESENTERDIR) olefilters $(XSLTFILTERDIR) $(KFORMULADIR) $(KARBONDIR) $(KUGARDIR) $(KRITADIR)
+
+messages: rc.cpp
+	$(EXTRACTRC) `find . -name \*.ui` >> rc.cpp
+	$(EXTRACTRC) `find . -name \*.rc` >> rc.cpp
+	$(XGETTEXT) `find . -name \*.cpp -o -name \*.cc` -o $(podir)/kofficefilters.pot
