@@ -1,4 +1,4 @@
-application_DATA = x-kplato.desktop x-kosoap.desktop
+application_DATA = x-kplato.desktop
 
 applicationdir = $(kde_mimedir)/application
 
