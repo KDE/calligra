@@ -860,7 +860,8 @@ void KIllustratorView::slotDuplicate()
 
 void KIllustratorView::slotDelete()
 {
-    cmdHistory.addCommand (new DeleteCmd (m_pDoc->gdoc()), true);
+   if(tcontroller->getActiveTool ()->id()!=Tool::ToolText)
+       cmdHistory.addCommand (new DeleteCmd (m_pDoc->gdoc()), true);
 }
 
 void KIllustratorView::slotSelectAll()
