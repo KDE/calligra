@@ -90,7 +90,6 @@ public:
     void addItem( int pos );
     void moveItem( int oldPos, int newPos );
     void removeItem( int pos );
-    QRect tip(const QPoint &pos, QString &title);
 
 protected:
     void contentsDropEvent( QDropEvent *e );

@@ -48,40 +48,25 @@
 class ThumbToolTip : public QToolTip
 {
 public:
-    ThumbToolTip(QWidget *parent)
-        : QToolTip(parent)
+    ThumbToolTip( ThumbBar *parent )
+        : QToolTip( parent->viewport() )
+        , m_thumbBar( parent )
         {}
 
 protected:
     void maybeTip(const QPoint &pos)
     {
         QString title;
-        QRect r(((ThumbBar*)parentWidget())->tip(pos, title));
+        QRect r( m_thumbBar->tip( pos, title ) );
         if (!r.isValid())
             return;
 
         tip(r, title);
     }
+private:
+    ThumbBar *m_thumbBar;
 };
 
-class OutlineToolTip : public QToolTip
-{
-public:
-    OutlineToolTip(QWidget *parent)
-        : QToolTip(parent)
-        {}
-
-protected:
-    void maybeTip( const QPoint &pos )
-    {
-        QString title;
-        Outline* outline = dynamic_cast<Outline*>(parentWidget());
-        QRect r( outline->tip(pos, title) );
-        if (!r.isValid())
-            return;
-        tip(r, title);
-    }
-};
 
 class OutlineSlideItem: public KListViewItem
 {
@@ -726,8 +711,6 @@ Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     addColumn( i18n( "Slide" ) );
     setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
-    m_outlineTip = new OutlineToolTip(this);
-
     connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
     connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int ) ),
              this, SLOT( rightButtonPressed( QListViewItem *, const QPoint &, int ) ) );
@@ -856,20 +839,6 @@ void Outline::removeItem( int pos )
         item->updateTitle();
 }
 
-QRect Outline::tip(const QPoint &pos, QString &title)
-{
-    QListViewItem *item = itemAt( pos );
-    if (!item)
-        return QRect(0, 0, -1, -1);
-
-    OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(item);
-    if( !slideItem )
-        return QRect(0, 0, -1, -1);
-    title = slideItem->text( 0 );
-
-    return itemRect(item);
-}
-
 void Outline::itemClicked( QListViewItem *item )
 {
     if( !item ) return;
@@ -919,7 +888,7 @@ void Outline::itemClicked( QListViewItem *item )
  * When an item is about to move (using drag-and-drop), it makes shure that 
  * it's not moved right after an object.
  */
-void Outline::slotDropped( QDropEvent *e, QListViewItem *parent, QListViewItem *target )
+void Outline::slotDropped( QDropEvent * /* e */, QListViewItem *parent, QListViewItem *target )
 {
     kdDebug(33001) << "slotDropped" << endl;
     /* slide doesn't have parent (always 0)
