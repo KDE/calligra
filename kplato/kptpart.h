@@ -57,6 +57,7 @@ public:
     virtual bool loadXML(QIODevice *, const QDomDocument &document);
     virtual QDomDocument saveXML();
 
+    bool loadOasis(const QDomDocument &, KoOasisStyles &) { return false; }
 
 protected:
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
