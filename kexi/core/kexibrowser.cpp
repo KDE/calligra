@@ -90,7 +90,7 @@ KexiBrowser::addItem(KexiPart::Item item)
 	{
 		//part object
 		KexiBrowserItem *parent = m_baseItems.find(item.mime());
-		kdDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
+		kdDebug() << "KexiBrowser::addItem() found parent:" << parent->name() << endl;
 		KexiBrowserItem *bitem = new KexiBrowserItem(parent, item.mime(), item.name(), item.identifier());
 		bitem->setPixmap(0, SmallIcon(parent->info()->itemIcon()));
 	}

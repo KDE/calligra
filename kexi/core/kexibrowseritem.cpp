@@ -29,8 +29,8 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, QString mime, QString name, 
 	m_identifier = identifier;
 	m_info = info;
 
-	m_proxy = 0;
-	m_item = 0;
+//	m_proxy = 0;
+//	m_item = 0;
 	
 	initItem();
 	m_fifoSorting = 1; //because this is top level item
@@ -72,8 +72,8 @@ KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, QString mime, QString na
 	m_mime = mime;
 	m_name = name;
 	m_identifier = identifier;
-	m_proxy = 0;
-	m_item = 0;
+//	m_proxy = 0;
+//	m_item = 0;
 	m_info = 0;
 
 	initItem();
@@ -107,7 +107,7 @@ void KexiBrowserItem::initItem()
 //	kdDebug() << "m_sortKey=" << m_sortKey << endl;
 }
 
-KexiProjectHandlerProxy*
+/*KexiProjectHandlerProxy*
 KexiBrowserItem::proxy()
 {
 	return m_proxy;
@@ -117,7 +117,7 @@ KexiProjectHandlerItem*
 KexiBrowserItem::item()
 {
 	return m_item;
-}
+}*/
 
 QString
 KexiBrowserItem::mime()

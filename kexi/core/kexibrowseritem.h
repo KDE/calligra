@@ -40,12 +40,12 @@ class KEXICORE_EXPORT KexiBrowserItem : public KListViewItem
 		/*constructor for main db listing */
 		KexiBrowserItem(KListView *parent, QString mime, QString name, int identifier, KexiPart::Info *i);
 		KexiBrowserItem(KListViewItem *parent, QString mime, QString name, int identifier);
-		KexiBrowserItem(KListViewItem *parent, KexiProjectHandlerItem *item);
+//		KexiBrowserItem(KListViewItem *parent, KexiProjectHandlerItem *item);
 
 		~KexiBrowserItem() {};
 
-		KexiProjectHandlerItem	*item();
-		KexiProjectHandlerProxy	*proxy();
+//		KexiProjectHandlerItem	*item();
+//		KexiProjectHandlerProxy	*proxy();
 		QString			mime();
 		QString			name();
 		int			identifier() { return m_identifier; }
@@ -58,8 +58,8 @@ class KEXICORE_EXPORT KexiBrowserItem : public KListViewItem
 		void initItem();
 		virtual QString key( int column, bool ascending ) const;
 		
-		KexiProjectHandlerItem	*m_item;
-		KexiProjectHandlerProxy	*m_proxy;
+//		KexiProjectHandlerItem	*m_item;
+//		KexiProjectHandlerProxy	*m_proxy;
 		QString			m_mime;
 		QString			m_name;
 		int			m_identifier;
