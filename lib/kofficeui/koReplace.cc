@@ -162,7 +162,13 @@ bool KoReplace::replace(QString &text, const QRect &expose)
                     kapp->enter_loop();
                 }
                 else
-                    m_index += m_matchedLength;
+                {
+                    if ( m_options & KoFindDialog::FindBackwards )
+                        m_index -= m_matchedLength;
+                    else
+                        m_index += m_matchedLength;
+                }
+
             }
             else
             {
