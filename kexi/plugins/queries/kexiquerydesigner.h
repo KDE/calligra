@@ -35,7 +35,9 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesigner : public KexiDialogBase
 	Q_OBJECT
 
 	public:
-		KexiQueryDesigner(KexiView *view,QWidget *parent, KexiQueryPartItem *item, bool modeview=true);
+		KexiQueryDesigner(KexiView *view, KexiQueryPartItem *item, 
+			QWidget *parent = 0, bool modeview = true);
+//		KexiQueryDesigner(KexiView *view,QWidget *parent, KexiQueryPartItem *item, bool modeview=true);
 //		KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name, KexiQueryPartItem *item,
 //		 bool modeview=true);
 		~KexiQueryDesigner();
@@ -69,9 +71,9 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesigner : public KexiDialogBase
 
 		KexiQueryDesignerGuiEditor	*m_editor;
 		KexiQueryDesignerSQL		*m_sql;
-		KexiDataTable			*m_view;
+		KexiDataTable			*m_queryView;
 
-		KexiQueryPartItem		*m_item;
+		KexiQueryPartItem		*m_queryPartItem;
 };
 
 #endif

@@ -41,6 +41,12 @@ KexiQueryPart::KexiQueryPart(QObject *project,const char *,const QStringList &)
 QString
 KexiQueryPart::name()
 {
+	return i18n("Query");
+}
+
+QString
+KexiQueryPart::groupName()
+{
 	return i18n("Queries");
 }
 

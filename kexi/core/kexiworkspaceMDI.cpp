@@ -28,10 +28,11 @@
 
 KexiWorkspaceMDI::KexiWorkspaceMDI(QWidget *parent, const char *name,KexiView *mw) 
 	: QWorkspace(parent, name),KexiWorkspace()
+	,m_mainwindow(mw)
+	,no(0)
+	,m_activeDialog(0)
 {
-	m_mainwindow=mw;
-	no = 0;
-	m_activeDialog=0;
+	setScrollBarsEnabled(true);
 	connect(this,SIGNAL(windowActivated(QWidget*)),this,SLOT(slotWindowActivated(QWidget*)));
 }
 
@@ -67,17 +68,19 @@ void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 		if (m_activeDialog.isNull())
 		{
 			olddialog->deactivateActions();
-			if (olddialog->guiClient()->factory()==m_mainwindow->factory())
-				m_mainwindow->factory()->removeClient(olddialog->guiClient());
+//			if (olddialog->guiClient()->factory()==m_mainwindow->factory())
+			if (olddialog->factory()==m_mainwindow->factory())
+				m_mainwindow->factory()->removeClient(olddialog);
 		}
 		else
 		{
-			if (m_activeDialog->guiClient()!=olddialog->guiClient())
+//			if (m_activeDialog->guiClient()!=olddialog->guiClient())
+			if (m_activeDialog->xmlFile()!=olddialog->xmlFile())
 			{
 				olddialog->deactivateActions();
-				if (olddialog->guiClient()->factory()==m_mainwindow->factory())
-					m_mainwindow->factory()->removeClient(olddialog->guiClient());
-				m_mainwindow->factory()->addClient(m_activeDialog->guiClient());
+				if (olddialog->factory()==m_mainwindow->factory())
+					m_mainwindow->factory()->removeClient(olddialog);
+				m_mainwindow->factory()->addClient(m_activeDialog);
 #ifndef KEXI_NO_CTXT_HELP
 				if(m_mainwindow->help()) {
 					m_mainwindow->help()->setContextHelp(
@@ -110,7 +113,8 @@ void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 	else
 	if (!m_activeDialog.isNull())
 	{
-		m_mainwindow->factory()->addClient(m_activeDialog->guiClient());
+		if (m_mainwindow->factory())
+			m_mainwindow->factory()->addClient(m_activeDialog);
 #ifndef KEXI_NO_CTXT_HELP
 		if(m_mainwindow->help()) {
 			m_mainwindow->help()->setContextHelp(

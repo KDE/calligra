@@ -138,8 +138,19 @@ void KexiView::initMainDock()
 
 void KexiView::initBrowser()
 {
-	m_browser = new KexiTabBrowser(this, m_workspace, "Document Browser");
+	QDockWindow *dock = new QDockWindow(m_workspace, "Browser Dock");
+	dock->setResizeEnabled(true);
+	dock->setCloseMode(QDockWindow::Always);
+//		 reparent(w,QPoint(0,0),true);
+	mainWindow()->moveDockWindow(dock, DockLeft);
+//	w->setCaption(this->caption());
+	addQDockWindow(dock);
+
+	m_browser = new KexiTabBrowser(this, dock, "Document Browser");
+	dock->setCaption(m_browser->caption());
+	dock->setWidget(m_browser);
 	m_browser->show(); //TODO: read settings
+	dock->show();
 	m_actionBrowser->setChecked(m_browser->isVisible());
 	m_browser->plugToggleAction(m_actionBrowser);
 
@@ -166,7 +177,7 @@ void KexiView::initActions()
 	(void*) KStdAction::preferences(this, SLOT(slotSettings()), actionCollection());
 
 //	KAction *actionProjectProps = new KAction(i18n("Project Properties"), "project_props", Key_F7,
-	KAction *actionProjectProps = new KAction(i18n("Project Properties"), "", Key_F7,
+	KAction *actionProjectProps = new KAction(i18n("Project Properties"), "edit", Key_F7,
 	 actionCollection(), "project_props");
 	connect(actionProjectProps, SIGNAL(activated()), this, SLOT(slotShowProjectProps()));
 
@@ -199,6 +210,11 @@ void KexiView::initActions()
 	KActionCollection *parentCollection = shell()->actionCollection();
 	for (int i=0;i<(int)parentCollection->count();i++)
 		kdDebug() << parentCollection->action(i)->name() << endl;
+	kdDebug() << "--" << endl;
+	KActionCollection *myCollection = actionCollection();
+	for (int i=0;i<(int)myCollection->count();i++)
+		kdDebug() << myCollection->action(i)->name() << endl;
+
 //	parentCollection->action("file_import_file")->setEnabled(false);
 #define INIT_UNF_ACT(act) \
 	{ if (act) connect(act, SIGNAL(activated()), this, SLOT(slotInfoUnfinished())); }
@@ -213,6 +229,7 @@ void KexiView::initActions()
 	INIT_UNF("file_send_file");
 	INIT_UNF("help_contents");
 //	INIT_UNF_ACT(actionProjectProps);
+
 #undef INIT_UNF
 #endif
 }
@@ -403,6 +420,9 @@ KexiView::registerDialog(KexiDialogBase *dlg, const QString &identifier)
 bool
 KexiView::removeDialog(const QString &identifier)
 {
+	Windows::const_iterator it = m_wins.find(identifier);
+	if (it==m_wins.end())
+		return false;
 	m_wins.remove(identifier);
 	return true;
 }

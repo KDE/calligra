@@ -34,7 +34,8 @@ class KEXI_HAND_TBL_EXPORT KexiAlterTable : public KexiDialogBase
 	Q_OBJECT
 	public:
 //		KexiAlterTable(KexiView *view, QWidget *parent, QString caption, QString identifier, bool create=false);
-		KexiAlterTable(KexiView *view, QWidget *parent, KexiProjectHandlerItem *item, bool create=false);
+		KexiAlterTable(KexiView *view, KexiProjectHandlerItem *item, QWidget *parent = 0, bool create=false);
+
 //		KexiAlterTable(KexiView *view, QWidget *parent, const QString &table,
 //			bool create = false, const char *name=0);
 
@@ -44,7 +45,7 @@ class KEXI_HAND_TBL_EXPORT KexiAlterTable : public KexiDialogBase
 		void setFocus();
 
 	protected:
-		void init(QString title, QString identifier);
+		void init();
 		void initView();
 		void getFields();
 		virtual void closeEvent(QCloseEvent *ev);
@@ -58,7 +59,7 @@ class KEXI_HAND_TBL_EXPORT KexiAlterTable : public KexiDialogBase
 		void tmp_filedTableCurrentItemRemoveRequest(); //TMP
 
 	private:
-		QString m_table;
+//		QString m_table;
 		KexiTableView* m_fieldTable;
 		PropertyEditor* m_propList;
 		KexiDBTableStruct m_tableFields;

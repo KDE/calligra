@@ -38,6 +38,7 @@ class KEXI_HAND_TBL_EXPORT KexiTablePart : public KexiProjectHandler, public Kex
 		KexiTablePart(QObject *project,const char *,const QStringList &);
 
 		virtual QString				name();
+		virtual QString				groupName();
 		virtual QString				mime();
 		virtual bool				visible();
 
@@ -46,7 +47,6 @@ class KEXI_HAND_TBL_EXPORT KexiTablePart : public KexiProjectHandler, public Kex
 
 		virtual void store (KoStore *){;}
 		virtual void load  (KoStore *){getTables();}
-
 
 		virtual QPixmap				groupPixmap();
 		virtual QPixmap				itemPixmap();

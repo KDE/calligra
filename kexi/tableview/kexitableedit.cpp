@@ -19,9 +19,12 @@
 
 #include "kexitableedit.h"
 
+#include <qpalette.h>
+
 KexiTableEdit::KexiTableEdit(QWidget* parent, const char* name)
 	: QWidget(parent, name)
 {
+	setPaletteBackgroundColor( palette().color(QPalette::Active, QColorGroup::Base) );
 	installEventFilter(this);
 }
 

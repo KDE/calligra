@@ -46,9 +46,11 @@ class QTimer;
 
 class KPrinter;
 
+class KexiTableHeader;
 class KexiTableRM;
 class KexiTableItem;
 class KexiTableEdit;
+class KexiTableViewPrivate;
 //class KexiTableList;
 
 /*
@@ -82,13 +84,13 @@ public:
 	bool				columnEditable(int col);
 	inline KexiTableItem		*itemAt(int row);
 
-	inline int			currentRow();
-	inline KexiTableItem		*selectedItem();
+	int currentRow();
+	KexiTableItem *selectedItem();
 
 	int		rows() const;
 	int		cols() const;
 
-	int		currentCol() { return m_curCol; }
+	int		currentCol();
 
 	QRect		cellGeometry(int row, int col) const;
 	int		columnWidth(int col) const;
@@ -107,8 +109,14 @@ public:
 	void		remove(KexiTableItem *item, bool moveCursor=true);
 
 	// properties
-	void		setBackgroundAltering(bool altering) { m_bgAltering = altering; }
-	void		setRecordIndicator(bool indicator) { m_recordIndicator = indicator; }
+	bool		backgroundAltering();
+	void		setBackgroundAltering(bool altering);
+	bool		recordIndicator();
+	void		setRecordIndicator(bool indicator);
+	bool		editableOnDoubleClick();
+	void		setEditableOnDoubleClick(bool set);
+	QColor		emptyAreaColor();
+	void		setEmptyAreaColor(QColor c);
 
 #ifndef KEXI_NO_PRINT
 	// printing
@@ -128,16 +136,14 @@ public:
 
 	void		emitSelected();
 
-	bool		m_editOnDubleClick;
-
 	KexiTableRM	*recordMarker();
-
+	KexiTableRM *verticalHeader();
+	
 	KexiTableList	*contents() { return m_contents; }
 
-
 	void		takeInsertItem();
-	void		setInsertItem(KexiTableItem *i) { m_pInsertItem = i; }
-	KexiTableItem	*insertItem() { return m_pInsertItem; }
+	void		setInsertItem(KexiTableItem *i);
+	KexiTableItem	*insertItem();
 
 	enum AdditionPolicy
 	{
@@ -160,10 +166,15 @@ public:
 	virtual void	setDeletionPolicy(DeletionPolicy policy);
 	DeletionPolicy	deletionPolicy();
 
-	void triggerUpdate()
-		{   if(!m_pUpdateTimer->isActive()) m_pUpdateTimer->start(1, true); }
+	void triggerUpdate();
 
-	KexiTableRM		*verticalHeader() { return m_pVerticalHeader; }
+	typedef enum ScrollDirection
+	{
+		ScrollUp,
+		ScrollDown,
+		ScrollLeft,
+		ScrollRight
+	};
 
 protected:
 	// painting and layout
@@ -174,23 +185,29 @@ protected:
 	void	updateGeometries();
 	virtual QSize tableSize() const;
 
+	QPoint contentsToViewport2( const QPoint &p );
+	void contentsToViewport2( int x, int y, int& vx, int& vy );
+	QPoint viewportToContents2( const QPoint& vp );
+
 	// event handling
-	void	contentsMousePressEvent(QMouseEvent*);
-	void	contentsMouseMoveEvent(QMouseEvent*);
-	void	contentsMouseDoubleClickEvent(QMouseEvent *e);
-	void	contentsMouseReleaseEvent(QMouseEvent *e);
-	void	keyPressEvent(QKeyEvent*);
-	void	focusInEvent(QFocusEvent*);
-	void	focusOutEvent(QFocusEvent*);
-	void	resizeEvent(QResizeEvent *);
-	void	showEvent(QShowEvent *e);
-	void	contentsDragMoveEvent(QDragMoveEvent *e);
-	void	contentsDropEvent(QDropEvent *ev);
+	virtual void contentsMousePressEvent(QMouseEvent*);
+	virtual void contentsMouseMoveEvent(QMouseEvent*);
+	virtual void contentsMouseDoubleClickEvent(QMouseEvent *e);
+	virtual void contentsMouseReleaseEvent(QMouseEvent *e);
+	virtual void keyPressEvent(QKeyEvent*);
+	virtual void focusInEvent(QFocusEvent*);
+	virtual void focusOutEvent(QFocusEvent*);
+	virtual void resizeEvent(QResizeEvent *);
+	virtual void viewportResizeEvent( QResizeEvent *e );//js
+	virtual void showEvent(QShowEvent *e);
+	virtual void contentsDragMoveEvent(QDragMoveEvent *e);
+	virtual void contentsDropEvent(QDropEvent *ev);
 
 	void	createEditor(int row, int col, QString addText = QString::null, bool backspace = false);
 	bool	focusNextPrevChild(bool next);
 
 	bool	updateContextMenu();
+	void	showContextMenu( QPoint pos = QPoint(-1,-1) );
 
 protected slots:
 	void			columnWidthChanged( int col, int os, int ns );
@@ -227,14 +244,18 @@ signals:
 	void			sortedColumnChanged(int col);
 
 protected:
+
+/*
+	bool		m_editOnDubleClick;
+
 	// cursor position
 	int			m_curRow;
 	int			m_curCol;
-	KexiTableItem		*m_pCurrentItem;
+	KexiTableItem	*m_pCurrentItem;
 
     // foreign widgets
 	QHeader			*m_pTopHeader;
-	KexiTableRM		*m_pVerticalHeader;
+	KexiTableHeader	*m_pVerticalHeader;
 	KexiTableRM		*m_pRecordMarker;
 	KexiTableEdit	*m_pEditor;
 
@@ -266,25 +287,20 @@ protected:
 
 	QStringList		m_dropFilters;
 
-	enum ScrollDirection
-	{
-		ScrollUp,
-		ScrollDown,
-		ScrollLeft,
-		ScrollRight
-	};
-
 	ScrollDirection		m_scrollDirection;
 
-	bool			m_bgAltering;
+	bool			m_bgAltering;*/
 
+	KexiTableList *m_contents;
+
+	KexiTableViewPrivate *d;
 };
 
 inline KexiTableItem *KexiTableView::itemAt(int row)
 {
 	return m_contents->at(row);
 }
-
+/*
 inline int KexiTableView::currentRow()
 {
 	return m_curRow;
@@ -313,5 +329,5 @@ inline QVariant KexiTableView::columnDefault(int col)
 {
 	return *m_pColumnDefaults->at(col);
 }
-
+*/
 #endif

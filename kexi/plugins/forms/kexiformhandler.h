@@ -37,6 +37,7 @@ class KexiFormHandler : public KexiProjectHandler
 		KexiFormHandler(QObject *project, const char *, const QStringList &);
 
 		virtual QString		name();
+		virtual QString		groupName();
 		virtual QString		mime();
 		virtual bool		visible();
 

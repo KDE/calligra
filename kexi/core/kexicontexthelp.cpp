@@ -26,15 +26,16 @@
 #include <qlayout.h>
 
 KexiContextHelp::KexiContextHelp(KexiView *view, QWidget *parent, const char *name)
-: KexiDialogBase(view,parent,name) 
+: KexiDialogBase(view, "KexiContextHelp", parent, name)
 {
-	setCaption(i18n("Context Help"));
-	( new QVBoxLayout(this))->setAutoAdd(true);
+	setCustomCaption(i18n("Context Help"));
+//js	( new QVBoxLayout(this))->setAutoAdd(true);
 	m_widget=new KoContextHelpWidget(this);
+	gridLayout()->addWidget( m_widget, 0, 0 );
 	connect(m_widget,SIGNAL(linkClicked( const QString& )),
 		this,SLOT(linkClickedInternal( const QString& )));
 	m_guiClient= new KXMLGUIClient();
-        registerAs(KexiDialogBase::ToolWindow);
+//js        registerAs(KexiDialogBase::ToolWindow);
 //	connect(dock(),SIGNAL(visibilityChanged(bool)), this, SLOT(slotVisibilityChanged(bool)));
 }
 

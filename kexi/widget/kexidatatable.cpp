@@ -51,28 +51,35 @@
 #include "kexiview.h"
 #include "kexiprojecthandleritem.h"
 
-KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, QString caption, QString identifier, bool embedd)
-	: KexiDialogBase(view,parent, identifier.latin1())
+KexiDataTable::KexiDataTable(KexiView *view, QString caption, QString identifier, 
+	QWidget *parent, bool embedd)
+	: KexiDialogBase(view, identifier, parent, identifier.latin1())
 {
-	init(caption, identifier, embedd);
+	init(/*caption, identifier, embedd*/);
+	setCustomCaption(caption);
 }
 
-KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, KexiProjectHandlerItem *item, /*QString caption, const char *name,*/ bool embedd)
-	: KexiDialogBase(view,parent, item->fullIdentifier().latin1())
+KexiDataTable::KexiDataTable(KexiView *view, KexiProjectHandlerItem *item, 
+	QWidget *parent, bool embedd)
+//	: KexiDialogBase(view, parent, item->fullIdentifier().latin1())
+	: KexiDialogBase(view, item, parent)
 {
-	init(item->title(), item->fullIdentifier(), embedd);
+//	init(item->title(), item->fullIdentifier(), embedd);
+	init();
+	//item->title(), item->fullIdentifier(), embedd);
 }
 
 void
-KexiDataTable::init(QString caption, QString identifier, bool embedd)
+KexiDataTable::init(/*QString caption, QString identifier, bool embedd*/)
 {
-	m_record=0;
-	setCaption(i18n("%1 - Table").arg(caption));
+//	m_record=0;
+//	setCaption(i18n("%1 - Table").arg(caption));
 
-	QGridLayout *g = new QGridLayout(this);
+//	QGridLayout *g = new QGridLayout(this);
+//	g->setMargin(4);
 	m_tableView = new KexiDataTableView(this);
-	m_tableView->m_editOnDubleClick = true;
-	m_statusBar = new QStatusBar(this);
+	m_tableView->setEditableOnDoubleClick( true );
+//js	m_statusBar = new QStatusBar(this);
 #ifndef KEXI_NO_DATATABLE_SEARCH
 	// greate linux mess ;)
 	m_searchVisible=true;
@@ -80,45 +87,54 @@ KexiDataTable::init(QString caption, QString identifier, bool embedd)
 	m_searchCol = new QComboBox(this);
 	m_search = new QLineEdit("", this);
 
-	g->addWidget(m_lSearch,			0,	0);
-	g->addWidget(m_searchCol,		0,	1);
-	g->addWidget(m_search,			0,	2);
+	gridLayout()->addWidget(m_lSearch,			0,	0);
+	gridLayout()->addWidget(m_searchCol,		0,	1);
+	gridLayout()->addWidget(m_search,			0,	2);
 
 	connect(m_search, SIGNAL(textChanged(const QString &)), this, SLOT(slotSearchChanged(const QString &)));
 	connect(m_searchCol, SIGNAL(activated(int)), this, SLOT(slotSerachColChanged(int)));
 	connect(m_tableView, SIGNAL(sortedColumnChanged(int)), this, SLOT(slotTableSearchChanged(int)));
 #endif
 
-	g->addMultiCellWidget(m_tableView,	1,	1,	0,	2);
-	g->addMultiCellWidget(m_statusBar,	2,	2,	0,	2);
+	gridLayout()->addMultiCellWidget(m_tableView,	1,	1,	0,	2);
+//js	gridLayout()->addMultiCellWidget(m_statusBar,	2,	2,	0,	2);
 
 //	connect(m_tableView, SIGNAL(itemChanged(KexiTableItem *, int,QVariant)), this, SLOT(slotItemChanged(KexiTableItem *, int,QVariant)));
 //	connect(m_tableView, SIGNAL(contextMenuRequested(KexiTableItem *, int, const QPoint &)), this,
 //	 SLOT(slotContextMenu(KexiTableItem *, int, const QPoint &)));
 	m_tableView->setDeletionPolicy( KexiDataTableView::SignalDelete );
+
 	connect(m_tableView, SIGNAL(currentItemRemoveRequest()), this, SLOT(slotRemoveCurrentRecord()));
 
-	m_db = m_view->project()->db();
-	connect(m_db->watcher(), SIGNAL(updated(QObject *, const QString &, const QString &, uint, QVariant &)), this,
-	 SLOT(slotUpdated(QObject *, const QString &, const QString &, uint, QVariant &)));
-	connect(m_db->watcher(), SIGNAL(removed(QObject *, const QString &, uint)), this,
-	 SLOT(slotRemoved(QObject *, const QString &, uint)));
+//	m_db = m_view->project()->db();
 
-	m_first = true;
+//	connect(m_db->watcher(), SIGNAL(updated(QObject *, const QString &, const QString &, uint, QVariant &)), this,
+//	 SLOT(slotUpdated(QObject *, const QString &, const QString &, uint, QVariant &)));
+//	connect(m_db->watcher(), SIGNAL(removed(QObject *, const QString &, uint)), this,
+//	 SLOT(slotRemoved(QObject *, const QString &, uint)));
 
-	if(!embedd)
-		registerAs(DocumentWindow, identifier);
-	else
-		m_statusBar->hide();
+//	m_first = true;
+
+//js	if(!embedd)
+//js		registerAs(DocumentWindow, identifier);
+//js	else
+//js		m_statusBar->hide();
+
+	setXMLFile("kexitableview.rc");
+#ifndef KEXI_NO_DATATABLE_SEARCH
+	//TODO
+	new KToggleAction(i18n("Show incremental search"), 0, t, SLOT(showISearch()), 0, "showISearch");
+#endif
 
 }
 
 void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
 {
 	m_tableView->setDataSet(rec);
-	m_tableView->setDataBase(m_db);
-	m_statusBar->message(i18n("%1 records.").arg(m_tableView->records()));
-
+// Not yet please. Later special navigating widget will 
+// be added in place of status bar:
+//	m_statusBar->message(i18n("%1 records.").arg(m_tableView->records()));
+	
 #if 0
 	if(!m_first)
 		m_tableView->clearAll();
@@ -139,7 +155,7 @@ void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
 		if(m_record->isForignField(i))
 		{
 			QStringList fdata;
-			KexiDBRecordSet *ftr = m_db->queryRecord("SELECT * FROM " + m_db->escapeName(m_record->fieldInfo(i)->table()));
+			KexiDBRecordSet *ftr = m_db->queryRecord("SELECT * FROM `" + m_record->fieldInfo(i)->table() + "`");
 			if(ftr)
 			{
 				while(ftr->next())
@@ -190,35 +206,193 @@ void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
 		m_tableView->selectRow( m_tableView->rows()-1 );
 	}*/
 	//m_tableView->update();
-//rows
+
 	m_first = false;
 #endif
-
 }
 
 bool
 KexiDataTable::readOnly()
 {
-	return m_record ? m_record->readOnly() : true;
+	return m_tableView->readOnly();
+//	return m_record ? m_record->readOnly() : true;
+}
+
+/*
+bool
+KexiDataTable::executeQuery(const QString &queryStatement)
+{
+	kdDebug() << "KexiDataTable::executeQuery(): executing query: '" << queryStatement << "'" << endl;
+	if(queryStatement.isEmpty())
+		return false;
+
+	m_record = kexiProject()->db()->queryRecord(queryStatement, true);
+	if (!m_record) {
+		kdDebug() << "KexiDataTable::executeQuery(): db-error" << endl;
+		kexiProject()->db()->latestError()->toUser(this);
+		return false;
+	}
+
+	kdDebug() << "KexiDataTable::executeQuery(): record: " << m_record << endl;
+
+	setDataSet(m_record);
+	return true;
+}*/
+
+/*void
+KexiDataTable::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
+{
+	if(i->isInsertItem())
+	{
+		i->setInsertItem(false);
+		i->setHint("UPDATING");//;QVariant(m_record->insert()));
+		KexiDBUpdateRecord *urec=m_record->insert(true);
+		urec->setValue(col,i->getValue(col));
+		m_insertMapping.insert(urec,i);
+
+//		m_record->update(i->getHint().toInt(), col, i->getValue(col));
+
+		if ((!m_record->writeOut(urec))) //i->getHint().toInt(), true))
+		{
+			KMessageBox::detailedError(this, i18n("Error occurred while updating table."), m_record->latestError()->message(),
+			 i18n("Database Error"));
+//			err.toUser(this);
+			return;
+		}
+//		i->setInsertItem(false);
+
+		KexiDBField *fi = m_record->fieldInfo(col);
+		m_db->watcher()->update(this, fi->table(), fi->name(), i->getHint().toUInt(),
+		 i->getValue(col));
+
+		KexiTableItem *newinsert = new KexiTableItem(m_tableView);
+		newinsert->setHint(QVariant(i->getHint().toInt() + 1));
+		newinsert->setInsertItem(true);
+
+		m_tableView->takeInsertItem();
+		m_tableView->recordMarker()->setInsertRow(m_tableView->rows());
+		m_tableView->setInsertItem(newinsert);
+	}
+	else
+	{
+
+
+		QMap<QString,QVariant> fnvm;
+		for (int c=0;c<m_tableView->cols();c++)
+			fnvm[m_tableView->column(c)]=((c==col)?oldValue:i->getValue(c));
+		KexiDBUpdateRecord *ur=m_record->update(fnvm);
+		if (ur) {
+			ur->setValue(col,i->getValue(col));
+			m_record->writeOut();
+		}
+#if 0
+		int record = i->getHint().toInt();
+		kdDebug() << "KexiDataTable::slotItemChanged(" << record << ")" << endl;
+		if(m_record->update(record, col, i->getValue(col)))
+		{
+			m_record->commit(i->getHint().toInt(), false);
+			KexiDBField *fi = m_record->fieldInfo(col);
+			m_db->watcher()->update(this, fi->table(), fi->name(), i->getHint().toUInt(),
+			 i->getValue(col));
+		}
+#endif
+	}
 }
 
 void
-KexiDataTable::slotContextMenu(KexiTableItem *i, int, const QPoint &pos)
-{
-	if (i->isInsertItem()) //avoid delete not inserted item
-		return;
-	QPopupMenu context;
-	context.insertItem(i18n("Delete Record"), this, SLOT(slotRemoveCurrentRecord()));
-	context.exec(pos);
+KexiDataTable::recordInsertFinished(KexiDBUpdateRecord* ur) {
+	kdDebug()<<"KexiDataTable::recordInsertFinished:INSERT FINISHED CALLED"<<endl;
+	if (m_insertMapping.contains(ur)) {
+		KexiTableItem *it=m_insertMapping[ur];
+		m_insertMapping.remove(ur);
+		for (int i=0;i<m_tableView->cols();i++)
+			it->setValue(i,ur->value(i));
+	}
 }
+
+void
+KexiDataTable::slotUpdated(QObject *sender, const QString &table, const QString &fieldName,
+ uint record, QVariant &value)
+{
+return;
+	kdDebug() << "KexiDataTable::slotUpdated() " << this << endl;
+	kdDebug() << "KexiDataTable::slotUpdated() table: " << table << endl;
+	kdDebug() << "KexiDataTable::slotUpdated() field: " << fieldName << endl;
+	kdDebug() << "KexiDataTable::slotUpdated() record: " << record << endl;
+
+	for(uint f=0; f < m_record->fieldCount(); f++)
+	{
+		KexiDBField *field = m_record->fieldInfo(f);
+		if(table == field->table() && fieldName == field->name())
+		{
+			kdDebug() << "KexiDataTable::slotUpdated(): meta match" << endl;
+			for(int i=0; i < m_tableView->rows(); i++)
+			{
+				KexiTableItem *item = m_tableView->itemAt(i);
+				kdDebug() << "KexiDataTable::slotUpdated(): current record:" << item->getHint().toInt() <<
+				 " " << item->isInsertItem() << endl;
+				if(item->getHint().toUInt() == record)
+				{
+					kdDebug() << "KexiDataTable::slotUpdated(): record match:" << endl;
+					if(!item->isInsertItem())
+					{
+						item->setValue(f, value);
+						m_tableView->updateCell(i, f);
+					}
+					else
+					{
+						item->setInsertItem(false);
+						item->setValue(f, value);
+
+						KexiTableItem *newinsert = new KexiTableItem(m_tableView);
+						newinsert->setHint(QVariant(item->getHint().toInt() + 1));
+						newinsert->setInsertItem(true);
+					}
+
+				}
+			}
+		}
+	}
+}
+
+void
+KexiDataTable::slotRemoved(QObject *sender, const QString &table, uint record)
+{
+	if(sender == this)
+		return;
+
+	kdDebug() << "KexiDataTable::slotRemoved()" << endl;
+	for(uint f=0; f < m_record->fieldCount(); f++)
+	{
+		KexiDBField *field = m_record->fieldInfo(f);
+		if(table == field->table())
+		{
+			kdDebug() << "KexiDataTable::slotRemoved(): table match" << endl;
+
+			for(int i=0; i < m_tableView->rows(); i++)
+			{
+				KexiTableItem *item = m_tableView->itemAt(i);
+				if(item->getHint().toUInt() == record)
+				{
+					kdDebug() << "KexiDataTable::slotRemoved(): record match" << endl;
+					m_tableView->remove(m_tableView->itemAt(i));
+//					m_tableView->setCursor(i, -1);
+//					slotRemoveCurrentRecord();
+				}
+			}
+		}
+	}
+}*/
+
 
 void
 KexiDataTable::slotRemoveCurrentRecord()
 {
+	//IS IT GOOD WE HAVE THIS HERE? maybe move some to KexiDataTableView?
 	if(m_tableView->selectedItem() && !m_tableView->selectedItem()->isInsertItem())
 	{
-		m_record->deleteRecord(m_tableView->selectedItem()->getHint().toInt());
-		m_db->watcher()->remove(this, m_record->fieldInfo(0)->table(), m_tableView->selectedItem()->getHint().toInt());
+		m_tableView->recordSet()->deleteRecord(m_tableView->selectedItem()->getHint().toInt());
+		m_tableView->recordSet()->database()->watcher()->remove(this, m_tableView->recordSet()->fieldInfo(0)->table(), m_tableView->selectedItem()->getHint().toInt());
 		m_tableView->remove(m_tableView->selectedItem());
 	}
 }
@@ -231,6 +405,12 @@ KexiDataTable::print(KPrinter &printer)
 }
 #endif
 
+KexiDataTable::~KexiDataTable()
+{
+	kdDebug()<<"KexiDataTable::~KexiDataTable()"<<endl;
+//	if (!m_record) kdDebug()<<"m_record == 0"<<endl;
+//	delete m_record;
+}
 
 /*! Sets focus on:
  - first row for read-only table
@@ -304,19 +484,11 @@ KexiDataTable::setSearchVisible(bool visible)
 #endif
 }
 
-
+/*
 KXMLGUIClient *
 KexiDataTable::guiClient()
 {
 	return new TableGUIClient(this);
-}
-
-
-KexiDataTable::~KexiDataTable()
-{
-	kdDebug()<<"KexiDataTable::~KexiDataTable()"<<endl;
-	if (!m_record) kdDebug()<<"m_record == 0"<<endl;
-	delete m_record;
 }
 
 //GUI client implementation follows...
@@ -324,12 +496,12 @@ TableGUIClient::TableGUIClient(KexiDataTable *t)
 {
 	setXMLFile("kexitableview.rc");
 #ifndef KEXI_NO_DATATABLE_SEARCH
-	new KToggleAction(i18n("Show incremental search"), 0, t, SLOT(showIS), 0, "showISearch");
+	new KToggleAction(i18n("Show incremental search"), 0, t, SLOT(showISearch()), 0, "showISearch");
 #endif
 }
 
 TableGUIClient::~TableGUIClient()
 {
-}
+}*/
 
 #include "kexidatatable.moc"

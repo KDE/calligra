@@ -38,13 +38,19 @@ KexiRelationHandler::KexiRelationHandler(QObject *project,const char *,const QSt
 QString
 KexiRelationHandler::name()
 {
-	return i18n("Relation");
+	return i18n("Relations");
+}
+
+QString
+KexiRelationHandler::groupName()
+{
+	return i18n("Relations");
 }
 
 QString
 KexiRelationHandler::mime()
 {
-	return QString("kexi/relation");
+	return QString("kexi/relations");
 }
 
 bool
@@ -72,9 +78,9 @@ void KexiRelationHandler::hookIntoView(KexiView *view)
 }
 
 QWidget *
-KexiRelationHandler::embeddReadOnly(QWidget *parent, KexiView *v)
+KexiRelationHandler::embeddReadOnly(QWidget *parent, KexiView *v, QString identifier)
 {
-	KexiRelationDialog *d = new KexiRelationDialog(v, parent, "embedded-redit", true);
+	KexiRelationDialog *d = new KexiRelationDialog(v, identifier, parent, "embedded-redit", true);
 	d->setIcon(itemPixmap());
 	kdDebug() << "KexiRelationHandler::embeddReadOnly [" << d << "]" << endl;
 	return d;

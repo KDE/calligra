@@ -98,10 +98,11 @@ void KexiKugarHandlerProxy::slotGeneratorLicense()
 	lic.exec();
 }
 
-void
+bool
 KexiKugarHandlerProxy::executeItem(const QString& identifier)
 {
 	m_kugarManager->view(kexiView(),identifier);
+	return true;
 }
 
 void

@@ -33,6 +33,7 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryPart : public KexiProjectHandler, KexiData
 		KexiQueryPart(QObject *project,const char *,const QStringList &);
 
 		virtual QString				name();
+		virtual QString				groupName();
 		virtual QString				mime();
 		virtual bool				visible();
 

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +25,7 @@
 #include <qptrlist.h>
 #include <qdict.h>
 
-#include <kexirelation.h>
+#include "kexirelation.h"
 #include "kexirelationviewconnection.h"
 
 
@@ -35,6 +36,8 @@ class KexiRelationViewTableContainer;
 class KexiRelation;
 class KexiRelationDialog;
 class KexiDBTable;
+class KAction;
+class KPopupMenu;
 
 typedef QDict<KexiRelationViewTableContainer> TableList;
 typedef QPtrList<KexiRelationViewConnection> ConnectionList;
@@ -51,15 +54,19 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationView : public QScrollView
 		void		addConnection(SourceConnection con, bool interactive=true);
 
 		RelationList	getConnections()const { return m_connections; };
-		void		setReadOnly(bool);
+		void setReadOnly(bool);
+		void executePopup( QPoint pos = QPoint(-1,-1) );
 
 	public slots:
 		void		slotTableScrolling(QString);
-		void		removeSelected();
+		void		removeSelectedConnection();
+		void		removeSelectedTableQuery();
 
 	protected slots:
 		void		containerMoved(KexiRelationViewTableContainer *c);
 		void		slotListUpdate(QObject *s);
+		void		tableViewEndDrag();
+		void		tableViewGotFocus();
 
 	protected:
 		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
@@ -67,17 +74,24 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationView : public QScrollView
 		virtual void	keyPressEvent(QKeyEvent *ev);
 
 		void		recalculateSize(int width, int height);
+		void stretchExpandSize();
+		void invalidateActions();
 
 	private:
-		int			m_tableCount;
-
 		KexiRelationDialog	*m_parent;
 		TableList		m_tables;
 		RelationList		m_connections;
 		bool			m_readOnly;
 		KexiRelation    	*m_relation;
 		ConnectionList		m_connectionViews;
-		KexiRelationViewConnection *m_selected;
+		KexiRelationViewConnection *m_selectedConnection;
+
+		KexiRelationViewTableContainer *m_focusedTableView;
+
+		KPopupMenu *m_popup;
+		KAction *m_openSelectedTableQueryAction;
+		KAction *m_removeSelectedTableQueryAction;
+		KAction *m_removeSelectedConnectionAction;
 };
 
 #endif

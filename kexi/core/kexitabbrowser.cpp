@@ -38,8 +38,18 @@
 #include "kexiprojecthandler.h"
 #include <kexiview.h>
 
+/*		w=new QDockWindow(m_view->mainWindow());
+		w->setResizeEnabled(true);
+		w->setCloseMode(QDockWindow::Always);
+		 reparent(w,QPoint(0,0),true);
+		w->setWidget(this);
+		m_view->mainWindow()->moveDockWindow(w, DockLeft);
+		w->setCaption(this->caption());
+		kexiView()->addQDockWindow(w);
+		return;
+*/
 KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
-	: KexiDialogBase(view,parent,name),
+	: KexiDialogBase(view, "KexiTabBrowser", parent, name),
 		m_project( view->project() ),
 		m_tabBar( new KMultiTabBar(this, KMultiTabBar::Vertical) ),
 		m_stack( new QWidgetStack(this) ),
@@ -47,20 +57,20 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 		m_activeTab( -1 ),
 		m_db( new KexiBrowser(m_stack, "kexi/db", 0) )
 {
-	setCaption(i18n("Project"));
+	setCustomCaption(i18n("Project"));
 
-	QGridLayout *layout=new QGridLayout(this);
+//	QGridLayout *layout=new QGridLayout(this);
 	m_tabBar->setPosition(KMultiTabBar::Left);
 	m_tabBar->showActiveTabTexts(true);
 
-	layout->addWidget(m_tabBar,     0,      0);
-	layout->addWidget(m_stack,      0,      1);
-	layout->setColStretch(1, 1);
+	gridLayout()->addWidget(m_tabBar,     0,      0);
+	gridLayout()->addWidget(m_stack,      0,      1);
+	gridLayout()->setColStretch(1, 1);
 	
 //	m_stack->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum); //(JS)
 
-	m_stack->show();
-	m_tabBar->show();
+//	m_stack->show();
+//	m_tabBar->show();
 
 	addBrowser(m_db, kapp->iconLoader()->loadIcon("db", KIcon::Small), i18n("Database"));
 
@@ -86,7 +96,7 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 	slotUpdateBrowsers();
 	connect(kexiProject(),SIGNAL(partListUpdated()),this,SLOT(slotUpdateBrowsers()));
 
-	registerAs(KexiDialogBase::ToolWindow);
+//js	registerAs(KexiDialogBase::ToolWindow);
 }
 
 void
@@ -142,7 +152,7 @@ KexiTabBrowser::slotUpdateBrowsers()
 		{
 			m_db->addGroup(part);
 #ifndef KEXI_NO_MULTI_TABS
-			addBrowser(new KexiBrowser(m_stack, part->mime(), part), part->groupPixmap(), part->name());
+			addBrowser(new KexiBrowser(m_stack, part->mime(), part), part->groupPixmap(), part->groupName());
 #endif
 			kdDebug() << "KexiTabBrowser::slotUpdateBrowsers(): added " << part->name() << endl;
 			// Update the databasetab

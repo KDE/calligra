@@ -46,13 +46,13 @@ class KexiFormBase;
 class KexiProject;
 class DCOPObject;
 
-typedef QMap<QString, KexiDialogBase *> Windows;
-
 class KEXICORE_EXPORT KexiView : public KoView
 {
    Q_OBJECT
 
 public:
+	typedef QMap<QString, KexiDialogBase *> Windows;
+
 	enum KexiWindowMode {MultipleWindowMode=0,SingleWindowMode=1,MDIWindowMode=2,EmbeddedMode=3};
 
 	KexiView(KexiWindowMode winmode, KexiProject* part,QWidget *parent=0, const char *name=0);
@@ -94,6 +94,8 @@ protected:
 	void initHelper();
 	void initBrowser();
 	virtual void finalizeInit();
+
+//	void invokeStartupActions();
 
 	QWidget			*m_mainContent;
 	KDockWidget		*m_mainDock;

@@ -22,6 +22,7 @@
 #include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qdom.h>
+#include <qtimer.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -32,18 +33,21 @@
 #include "kexiDB/kexidbrecordset.h"
 #include "kexiDB/kexidbtable.h"
 
+#include "kexiview.h"
 #include "kexiproject.h"
 #include "kexirelationview.h"
 #include "kexirelationdialog.h"
 
-KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const char *name, bool embedd)
- : KexiDialogBase(view,parent, name)
+#define TESTING_KexiRelationDialog
+
+KexiRelationDialog::KexiRelationDialog(KexiView *view, QString identifier, QWidget *parent, const char *name, bool embedd)
+	: KexiDialogBase(view, identifier, parent)
 	, m_db(kexiProject()->db())
 {
-	setCaption(i18n("Relations"));
+	setCustomCaption(i18n("Relations"));
 
-	QVBoxLayout *vlyr = new QVBoxLayout(this);
-	QHBoxLayout *hlyr = new QHBoxLayout(vlyr);
+	QHBoxLayout *hlyr = new QHBoxLayout(0);
+	gridLayout()->addLayout( hlyr, 0, 0 );
 
 	m_tableCombo = new QComboBox(this);
 	hlyr->addWidget(m_tableCombo);
@@ -58,11 +62,11 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 	hlyr->addStretch(1);
 	connect(btnAdd, SIGNAL(clicked()), this, SLOT(slotAddTable()));
 
-	m_view = new KexiRelationView(this, 0, kexiProject()->relationManager());
-	vlyr->addWidget(m_view);
-	m_view->setFocus();
+	m_relationView = new KexiRelationView(this, 0, kexiProject()->relationManager());
+	gridLayout()->addWidget(m_relationView, 1, 0);
+	m_relationView->setFocus();
 	if(!embedd)
-		setFocusProxy(m_view);
+		setFocusProxy(m_relationView);
 
 	connect(kexiProject(), SIGNAL(saving(KoStore *)), this, SLOT(slotSave(KoStore *)));
 	RelationList rl = kexiProject()->relationManager()->projectRelations();
@@ -73,18 +77,26 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 			chooseTable((*it).srcTable);
 			chooseTable((*it).rcvTable);
 
-			m_view->addConnection((*it),true);
+			m_relationView->addConnection((*it),true);
 		}
 	}
 
 	if(!embedd)
 	{
-		registerAs(DocumentWindow, "kexi/relations");
-		setContextHelp(i18n("Relations"), i18n("To create a relation simply drag the source field onto the targetfield.\
-		 An arrowhead is used to show which table is the parent (master) and which table is the child (slave) in the relation."));
+		setContextHelp(i18n("Relations"), i18n("To create a relation simply drag the source field onto the targetfield. "
+			"An arrowhead is used to show which table is the parent (master) and which table is the child (slave) in the relation."));
 	}
-	else
-		m_view->setReadOnly(true);
+//	else
+//js: while embedding means read-only?		m_relationView->setReadOnly(true);
+
+	setXMLFile("kexirelationsview.rc");
+	view->insertChildClient(this);
+
+
+#ifdef TESTING_KexiRelationDialog
+	for (int i=0;i<(int)m_db->tableNames().count();i++)
+		QTimer::singleShot(100,this,SLOT(slotAddTable()));
+#endif
 }
 
 void
@@ -99,7 +111,7 @@ KexiRelationDialog::slotAddTable()
 //			QStringList fields;
 //			for(uint i=0; i < t->fieldCount(); i++)
 //				fields.append(t->field(i).name());
-			m_view->addTable(tname, t);
+			m_relationView->addTable(tname, t);
 			kdDebug() << "KexiRelationDialog::slotAddTable(): adding table " << tname << endl;
 		}
 
@@ -132,18 +144,19 @@ void
 KexiRelationDialog::keyPressEvent(QKeyEvent *ev)
 {
 	kdDebug() << "KexiRelationDialog::keyPressEvent()" << endl;
-	m_view->removeSelected();
+//	m_relationView->removeSelected();
 }
 
 void
 KexiRelationDialog::slotSave(KoStore *store)
 {
 	kdDebug() << "KexiRelationDialog::slotSave()" << endl;
-//	storeRelations(m_view->getConnections(), store);
+//	storeRelations(m_relationView->getConnections(), store);
 }
 
 KexiRelationDialog::~KexiRelationDialog()
 {
 }
+
 
 #include "kexirelationdialog.moc"

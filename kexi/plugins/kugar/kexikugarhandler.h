@@ -36,6 +36,7 @@ class KexiKugarHandler : public KexiProjectHandler
 		virtual ~KexiKugarHandler();
 
 		virtual QString				name();
+		virtual QString				groupName();
 		virtual QString				mime();
 		virtual bool				visible();
 

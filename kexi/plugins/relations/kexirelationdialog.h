@@ -29,21 +29,18 @@ class QComboBox;
 class KoStore;
 class KexiDB;
 
-
-typedef QValueList<SourceConnection> RelationList;
-
 class KEXI_HAND_RELAT_EXPORT KexiRelationDialog : public KexiDialogBase
 {
 	Q_OBJECT
 
 	public:
-		KexiRelationDialog(KexiView *view,QWidget *parent, const char *name="relations", bool embedd=false);
+		KexiRelationDialog(KexiView *view, QString identifier, QWidget *parent = 0, const char *name="relations", bool embedd=false);
 		~KexiRelationDialog();
 
-		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
-
-		KexiRelationView	*view()const { return m_view; }
+		KexiRelationView	*relationView() const { return m_relationView; }
 		void			chooseTable(QString t);
+
+		typedef QValueList<SourceConnection> RelationList;
 
 	public slots:
 		void			slotSave(KoStore *store);
@@ -55,7 +52,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationDialog : public KexiDialogBase
 	private:
 		KexiDB			*m_db;
 		QComboBox		*m_tableCombo;
-		KexiRelationView	*m_view;
+		KexiRelationView	*m_relationView;
 };
 
 #endif

@@ -37,11 +37,13 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationHandlerProxy : public KexiProjectHandle
 //                virtual KexiPartPopupMenu       *groupContext();
 //                virtual KexiPartPopupMenu       *itemContext(const QString&);
 
-		virtual void executeItem(const QString&);
+		virtual bool executeItem(const QString&);
 
 	protected slots:
 		void slotShowRelationEditor();
-	private:
+
+	protected:
+		KAction *m_groupOpenAction;
 };
 
 #endif

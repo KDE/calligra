@@ -96,10 +96,10 @@ KexiQueryPartProxy::itemContext(const QString& identifier)
 }*/
 
 
-void
+bool
 KexiQueryPartProxy::executeItem(const QString& identifier)
 {
-	slotOpen(identifier);
+	return slotOpen(identifier);
 }
 
 
@@ -112,35 +112,39 @@ KexiQueryPartProxy::slotCreateQuery()
     if (!ok || name.isEmpty())
 		return;
 	KexiQueryPartItem *it=new KexiQueryPartItem(part(), name, "kexi/query", name);
-	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, it, false);
+	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), it, 0, false);
+//	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, it, false);
 	part()->items()->insert(it->fullIdentifier(),it);
 //        KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "query",it, false);
 	emit m_queryPart->itemListChanged(part());
 	kexiView()->project()->addFileReference(FileReference("Queries",name,"/query/" + name + ".query"));
-	kqd->setIcon( it->handler()->itemPixmap() );
+//	kqd->setIcon( it->handler()->itemPixmap() );
 	kqd->show();
 	kexiView()->project()->setModified(true);
 }
 
-void
+bool
 KexiQueryPartProxy::slotOpen(const QString& identifier)
 {
 	kdDebug() << "KexiQueryPartProxy::slotOpen(): id=" << identifier <<endl;
 
 	part()->debug();
 	KexiProjectHandlerItem *it=part()->items()->find(identifier);
-	if (!it) return;
+	if (!it)
+		return false;
 
 	if(kexiView()->activateWindow(it->identifier()))
-		return;
+		return true;
 
 	KexiQueryPartItem *it1=static_cast<KexiQueryPartItem*>(it->qt_cast("KexiQueryPartItem"));
-	if (!it1) return;
+	if (!it1)
+		return false;
 
-	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, it1, true);
-//	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "oq", it1, true);
-	kqd->setIcon( it->handler()->itemPixmap() );
+	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), it1, 0, true);
+//	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, it1, true);
+//	kqd->setIcon( it->handler()->itemPixmap() );
 	kqd->show();
+	return true;
 }
 
 void
@@ -156,9 +160,9 @@ KexiQueryPartProxy::slotEdit(const QString &identifier)
 	KexiQueryPartItem *it1=static_cast<KexiQueryPartItem*>(it->qt_cast("KexiQueryPartItem"));
 	if (!it1) return;
 
-	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, it1, false);
-//	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "oq", it1, false);
-	kqd->setIcon( it->handler()->itemPixmap() );
+	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), it1, 0, false);
+//	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, it1, false);
+//	kqd->setIcon( it->handler()->itemPixmap() );
 	kqd->show();
 }
 

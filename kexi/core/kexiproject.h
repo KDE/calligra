@@ -37,6 +37,7 @@ class KexiProjectHandlerProxy;
 class KexiDBConnection;
 class KexiDBInterfaceManager;
 class KexiFilterManager;
+class KexiView;
 
 typedef QPtrList<KexiProjectHandler> ProviderList;
 
@@ -115,6 +116,8 @@ public:
 	ProviderList providers(const QString &interfaceName);
 	virtual bool completeLoading( KoStore* store );
 
+	virtual bool openURL( const KURL & url );
+
 public slots:
 	void	slotImportFileData();
 	void	slotImportServerData();
@@ -134,6 +137,9 @@ protected:
 	bool loadProject(const QString&);
 
 //	void removeProjectHandlerItem( KexiProjectHandlerItem &item );
+
+//	virtual void addView( KoView *view );
+	void invokeStartupActions( KexiView *view );
 
 private:
 	void saveConnectionSettings(QDomDocument&);
@@ -157,6 +163,10 @@ private:
 	KexiDB		*m_projectDB;
 
 	KexiFilterManager *m_filterManager;
+
+	//! Flag used to ensure that KexiView::invokeActionsOnStartup()
+	//! is invoked only once.
+	bool m_invokeActionsOnStartup : 1;
 };
 
 #endif

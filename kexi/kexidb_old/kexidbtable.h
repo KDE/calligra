@@ -33,6 +33,7 @@ public:
 	unsigned int fieldCount() const;
 	KexiDBField field(unsigned int id) const;
 	QStringList primaryKeys() const;
+	bool hasPrimaryKeys() const;
 	void addField(KexiDBField field);
 	void addPrimaryKey(const QString& key);
 private:

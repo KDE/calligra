@@ -42,9 +42,9 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryPartProxy : public KexiProjectHandlerProxy
 
 
 	protected slots:
-		virtual void executeItem(const QString& identifier);
+		virtual bool executeItem(const QString& identifier);
 		void				slotCreateQuery();
-		void				slotOpen(const QString& identifier);
+		bool				slotOpen(const QString& identifier);
 		void				slotEdit(const QString &identifier);
 		void				slotDelete(const QString& identifier);
 

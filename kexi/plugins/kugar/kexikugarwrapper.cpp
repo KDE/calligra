@@ -29,36 +29,38 @@
 #include <qlayout.h>
 #include <qobjectlist.h>
 
-KexiKugarWrapper::KexiKugarWrapper(KexiView *view, KexiKugarHandlerItem* item,const QString& path,
-                                QWidget *parent, const char *name)
-	: KexiDialogBase(view,parent,name),m_part(0)
+KexiKugarWrapper::KexiKugarWrapper(KexiView *view, KexiKugarHandlerItem* item, 
+	const QString& path, QWidget *parent)
+	: KexiDialogBase(view, item, parent)
+	,m_part(0)
 {
-	setCaption(i18n("Report %1").arg(item->title()));
+//	setCaption(i18n("Report %1").arg(item->title()));
 
-	KIconLoader *iloader = KGlobal::iconLoader();
-	setIcon(iloader->loadIcon("form", KIcon::Small));
+//	KIconLoader *iloader = KGlobal::iconLoader();
+//	setIcon(iloader->loadIcon("form", KIcon::Small));
 
-	(new QVBoxLayout(this))->setAutoAdd(true);
+//	(new QVBoxLayout(this))->setAutoAdd(true);
 	m_part=KParts::ComponentFactory::createPartInstanceFromLibrary<KParts::ReadOnlyPart>(QFile::encodeName("libkugarpart"),
 			this,"embeddedKugarView",this,0,QStringList("template=/usr/src/kde3/koffice/kugar/samples/sample2.kut"));
+	gridLayout()->addWidget((QWidget*)m_part, 0, 0);
 	
 	m_part->openURL(path);
 //	part->widget()->show();
 	setMinimumWidth(50);
 	setMinimumHeight(50);
-	registerAs(DocumentWindow);
+//	registerAs(DocumentWindow);
 }
 
 KexiKugarWrapper::~KexiKugarWrapper(){}
 
-
+/*
 KXMLGUIClient *KexiKugarWrapper::guiClient()
 {
 	if (m_part==0) kdDebug()<<"That shouldn't happen"<<endl;
 	return m_part;
 //	return new KXMLGUIClient();
 //	return 0;
-}
+}*/
 
 void KexiKugarWrapper::activateActions()
 {

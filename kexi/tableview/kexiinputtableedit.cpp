@@ -40,6 +40,7 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 	m_value = value;
 
 	QHBoxLayout *lyr = new QHBoxLayout(this);
+	lyr->addSpacing(4);
 	lyr->setAutoAdd(true);
 	m_cview = new KLineEdit(this, "tableLineEdit");
 

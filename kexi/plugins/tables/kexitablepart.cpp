@@ -56,6 +56,12 @@ void KexiTablePart::hookIntoView(KexiView *view)
 QString
 KexiTablePart::name()
 {
+	return i18n("Table");
+}
+
+QString
+KexiTablePart::groupName()
+{
 	return i18n("Tables");
 }
 

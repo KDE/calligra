@@ -50,7 +50,7 @@ class KEXICORE_EXPORT KexiProjectHandlerProxy : public QObject
 		virtual KexiPartPopupMenu* itemContextMenu(const QString& identifier) { return m_item_pmenu; }
 
 	public slots:
-		virtual void executeItem(const QString& identifier)=0;
+		virtual bool executeItem(const QString& identifier)=0;
 
 	protected:
 		QGuardedPtr<KexiView> m_view;

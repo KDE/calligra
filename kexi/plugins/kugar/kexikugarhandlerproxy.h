@@ -39,11 +39,11 @@ class KexiKugarHandlerProxy : public KexiProjectHandlerProxy, public KXMLGUIClie
 
 
         public slots:
-		virtual void executeItem(const QString& identifier);
-                void                            slotCreateReport();
-                void                            slotEdit(const QString& identifier);
-                void                            slotDelete(const QString& identifier);
-		void				slotGeneratorLicense();
+		virtual bool executeItem(const QString& identifier);
+				void slotCreateReport();
+				void slotEdit(const QString& identifier);
+				void slotDelete(const QString& identifier);
+				void slotGeneratorLicense();
 
 	private:
 		KexiKugarHandler *m_kugarManager;

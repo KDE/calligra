@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,20 +26,23 @@
 
 #include <kdatepicker.h>
 
-/*
+
+//class KDatePicker;
+
+class KDatePicker;
+class KLineEdit;
+class KDateWidget;
+class QDateEdit;
+class QDate;
+class KPopupMenu;
+
+/*!
   this class represents an editor for QVariant::Date
 
   uhm, thanks to tronical, who added me a second constructor
   for KDatePicker i dont't have to type so much JIPPIE
   update (2002-09-02 (00:30))
 */
-
-//class KDatePicker;
-
-class KexiDatePicker;
-class QLineEdit;
-class QDate;
-
 class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiTableEdit
 {
 
@@ -48,16 +52,20 @@ class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiTableEdit
 		KexiDateTableEdit(QVariant v=0, QWidget *parent=0, const char *name=0);
 
 		QVariant value();
-
+	
 	protected:
-		KexiDatePicker	*m_datePicker;
-		QLineEdit* m_edit;
-		
-		QDate m_oldVal;
+		virtual bool eventFilter( QObject *o, QEvent *e );
 
 	protected slots:
-		void		slotDateChanged(QDate);
-		void		slotShowDatePicker();
+		void slotDateChanged(QDate);
+		void slotShowDatePicker();
+
+	protected:
+		KDatePicker	*m_datePicker;
+		/*KLineEdit*/QDateEdit* m_edit;
+		
+		QDate m_oldVal;
+		KPopupMenu *m_datePickerPopupMenu;
 };
 
 class KEXIDATATABLE_EXPORT KexiDatePicker : public KDatePicker

@@ -40,11 +40,11 @@ class KexiKugarWrapper : public KexiDialogBase
 	Q_OBJECT
 
 	public:
-		KexiKugarWrapper(KexiView *view, KexiKugarHandlerItem* ,const QString& path,
-				QWidget *parent=0, const char *name=0);
+		KexiKugarWrapper(KexiView *view, KexiKugarHandlerItem* item, 
+			const QString& path, QWidget *parent = 0);
 		~KexiKugarWrapper();
 
-                virtual KXMLGUIClient *guiClient();
+//                virtual KXMLGUIClient *guiClient();
 		virtual void activateActions();
 		virtual void deactivateActions();
 

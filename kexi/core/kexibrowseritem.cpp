@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 KexiBrowserItem::KexiBrowserItem(KListView *parent, QString mime, QString name, QString identifier)
- : KListViewItem(parent, name)
+ : KListViewItem(parent, " "+ name)
 {
 	m_mime = mime;
 	m_name = name;
@@ -40,10 +40,10 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, QString mime, QString name, 
 }
 
 KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerProxy *proxy)
- : KListViewItem(parent, proxy->part()->name())
+ : KListViewItem(parent, " "+ proxy->part()->groupName())
 {
 	m_mime = proxy->part()->mime();
-	m_name = proxy->part()->name();
+	m_name = proxy->part()->groupName();
 	m_identifier = QString::null;
 
 	m_proxy = proxy;
@@ -54,7 +54,7 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerProxy *pro
 }
 
 KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerItem *item)
- : KListViewItem(parent, item->title())
+ : KListViewItem(parent, " "+ item->title())
 {
 	m_mime = item->mime();
 	m_name = item->title();
@@ -67,7 +67,7 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectHandlerItem *item
 }
 
 KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, QString mime, QString name, QString identifier)
- : KListViewItem(parent, name)
+ : KListViewItem(parent, " "+ name)
 {
 	m_mime = mime;
 	m_name = name;
@@ -79,7 +79,7 @@ KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, QString mime, QString na
 }
 
 KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiProjectHandlerItem *item)
- : KListViewItem(parent, item->title())
+ : KListViewItem(parent, " "+ item->title())
 {
 	m_mime = item->mime();
 	m_name = item->title();
@@ -101,7 +101,7 @@ void KexiBrowserItem::initItem()
 		sortKey = listView()->childCount();
 	}
 	m_sortKey.sprintf("%2.2d",sortKey);
-	kdDebug() << "m_sortKey=" << m_sortKey << endl;
+//	kdDebug() << "m_sortKey=" << m_sortKey << endl;
 }
 
 KexiProjectHandlerProxy*

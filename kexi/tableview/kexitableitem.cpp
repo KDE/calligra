@@ -28,6 +28,8 @@
 #include "kexitablerm.h"
 #include "kexitableitem.h"
 
+#include "kexitableview_p.h"
+
 KexiTableItem::KexiTableItem(int numCols)
 {
 	m_userData=0;
@@ -48,7 +50,7 @@ void KexiTableItem::attach(KexiTableView *tableView, bool sorted)
 		qDebug("inserting sorted");
 		tableView->m_contents->inSort(this);
 	}
-	tableView->m_numRows++;
+	tableView->d->numRows++;
 	tableView->triggerUpdate();
 
 //	if(isInsertItem())
@@ -60,7 +62,7 @@ void KexiTableItem::attach(KexiTableView *tableView, int position)
 //	qDebug("inserting at position %i", position);
 	m_position = position;
 	tableView->m_contents->insert(position, this);
-	tableView->m_numRows++;
+	tableView->d->numRows++;
 	tableView->triggerUpdate();
 
 //	if(isInsertItem())
@@ -86,7 +88,7 @@ KexiTableItem::KexiTableItem(KexiTableView *tableView)
 	tableView->m_contents->append(this);
 	tableView->inserted();
 
-	tableView->m_numRows++;
+	tableView->d->numRows++;
 	tableView->triggerUpdate();
 	m_pTable = tableView;
 //	tableView->m_pUpdateTimer->start(1,true);

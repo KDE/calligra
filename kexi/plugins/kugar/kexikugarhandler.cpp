@@ -55,6 +55,12 @@ KexiKugarHandler::~KexiKugarHandler()
 QString
 KexiKugarHandler::name()
 {
+	return i18n("Report");
+}
+
+QString
+KexiKugarHandler::groupName()
+{
 	return i18n("Reports");
 }
 
@@ -112,7 +118,7 @@ void KexiKugarHandler::editReport(KexiView *view,const QString &identifier)
 	if (!item->designer()) {
 		//some error handling
 	} else {
-		(void) new KexiKugarDesignerWrapper(view,0,"kugar_editview",item,false);
+		(void) new KexiKugarDesignerWrapper(view, item, 0, false);
 		kexiProject()->setModified(true);
 	}
 }
@@ -132,7 +138,7 @@ void KexiKugarHandler::createReport(KexiView *view)
 			items()->remove(id);
 			return;
 		}
-		KexiKugarDesignerWrapper *kw=new KexiKugarDesignerWrapper(view,0,"kugar_editview",item,true);
+		KexiKugarDesignerWrapper *kw=new KexiKugarDesignerWrapper(view, item, 0, true);
         kexiProject()->setModified(true);
         emit itemListChanged(this);
     }

@@ -73,7 +73,7 @@ void KexiProjectHandler::unhookFromView(KexiView* view)
 	deleteFromViewProxyMap(view);
 }
 
-QWidget *KexiProjectHandler::embeddReadOnly(QWidget *, KexiView *)
+QWidget *KexiProjectHandler::embeddReadOnly(QWidget *, KexiView *, QString)
 {
 	kdDebug() << "KexiProjectHandler::embeddReadOnly" << endl;
 	return 0;

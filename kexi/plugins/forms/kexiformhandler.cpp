@@ -45,6 +45,12 @@ KexiFormHandler::KexiFormHandler(QObject *project,const char *,const QStringList
 QString
 KexiFormHandler::name()
 {
+	return i18n("Form");
+}
+
+QString
+KexiFormHandler::groupName()
+{
 	return i18n("Forms");
 }
 

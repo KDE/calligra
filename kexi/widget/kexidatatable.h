@@ -22,7 +22,6 @@
 #ifndef KEXIDATATABLE_H
 #define KEXIDATATABLE_H
 
-#include <kxmlguiclient.h>
 #include "kexidialogbase.h"
 
 class KexiTableItem;
@@ -42,28 +41,27 @@ class KexiProjectHandlerItem;
 class KexiDataTable;
 
 
-class TableGUIClient : public KXMLGUIClient
+/*class TableGUIClient : public KXMLGUIClient
 {
 	public:
 		TableGUIClient(KexiDataTable *t);
 		~TableGUIClient();
 
 };
-
+*/
 
 class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 {
 	Q_OBJECT
 
 	public:
-		KexiDataTable(KexiView *view,QWidget *parent, KexiProjectHandlerItem *item, bool embedd=false);
-		KexiDataTable(KexiView *View,QWidget *parent, QString caption, QString identifier, bool embedd=false);
+		KexiDataTable(KexiView *view, QString caption, QString identifier, QWidget *parent = 0, bool embedd=false);
+		KexiDataTable(KexiView *view, KexiProjectHandlerItem *item, QWidget *parent = 0, bool embedd=false);
 		~KexiDataTable();
 
-		bool executeQuery(const QString &query);
+//		bool executeQuery(const QString &query);
 		void setDataSet(KexiDBRecordSet *rec);
 
-		virtual KXMLGUIClient *guiClient();
 		bool readOnly();
 
 # ifndef KEXI_NO_DATATABLE_SEARCH
@@ -79,10 +77,15 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 		void setSearchVisible(bool visible);
 
 	protected slots:
-		void init(QString caption, QString identifier, bool embedd);
-		void slotContextMenu(KexiTableItem *i, int col, const QPoint &pos);
+		void init(/*QString caption, QString identifier, bool embedd*/);
+//		void slotItemChanged(KexiTableItem *i, int col, QVariant oldValue);
 
 		void slotRemoveCurrentRecord();
+//		void slotUpdated(QObject *sender, const QString &table, const QString &field,
+//		 uint record, QVariant &value);
+//		void slotRemoved(QObject *sender, const QString &table, uint record);
+
+//		void recordInsertFinished(KexiDBUpdateRecord*);
 
 		void slotSearchChanged(const QString &);
 		void slotSerachColChanged(int index);
@@ -102,11 +105,11 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 # endif
 
 		//db stuff
-		KexiDBRecordSet	*m_record;
+//		KexiDBRecordSet	*m_record;
 
-		bool		m_first;
-		KexiDB		*m_db;
-		QMap<KexiDBUpdateRecord*,KexiTableItem*> m_insertMapping;
+//		bool		m_first;
+//		KexiDB		*m_db;
+//		QMap<KexiDBUpdateRecord*,KexiTableItem*> m_insertMapping;
 };
 
 #endif

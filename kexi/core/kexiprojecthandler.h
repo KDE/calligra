@@ -58,6 +58,7 @@ class KEXICORE_EXPORT KexiProjectHandler : public QObject
 
 		//general information about parthandler
 		virtual QString			name() = 0;
+		virtual QString			groupName() = 0;
 		virtual QString			mime() = 0;
 		virtual bool			visible() = 0;
 
@@ -65,7 +66,7 @@ class KEXICORE_EXPORT KexiProjectHandler : public QObject
 		virtual void hookIntoView(KexiView*)=0;
 		virtual void unhookFromView(KexiView*);
 
-		virtual QWidget *embeddReadOnly(QWidget *, KexiView *v);
+		virtual QWidget *embeddReadOnly(QWidget *, KexiView *v, QString identifier);
 
 		virtual QPixmap			groupPixmap() = 0;
 		virtual QPixmap			itemPixmap() = 0;

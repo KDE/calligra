@@ -55,12 +55,14 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_parent = myparent;
 
 	QSplitter *hSplitter = new QSplitter(Vertical, this);
-	m_tables = view->project()->handlerForMime("kexi/relation")->embeddReadOnly(hSplitter, view);
+	m_tables = view->project()->handlerForMime("kexi/relations")
+		->embeddReadOnly(hSplitter, view, myparent->partItem()->fullIdentifier() + "/relations");
+	m_tables->layout()->setMargin(0);
 	QSplitter *vSplitter = new QSplitter(Horizontal, hSplitter);
 //	m_tables = new KexiRelationDialog(view,this, "querytables", true);
 
 	m_designTable = new KexiTableView(vSplitter, "designer", item->designData());
-	m_designTable->m_editOnDubleClick = true;
+	m_designTable->setEditableOnDoubleClick( true );
 //	m_designTable->setAdditionPolicy( KexiTableView::AutoAdd );
 	m_designTable->setDeletionPolicy( KexiTableView::ImmediateDelete );
 

@@ -43,18 +43,21 @@ class KexiKugarDesignerWrapper : public KexiDialogBase
 	Q_OBJECT
    
 	public: 
-		KexiKugarDesignerWrapper(KexiView *view, QWidget *parent=0, const char *name=0, KexiKugarHandlerItem *item=0, bool newrep=false);
+		KexiKugarDesignerWrapper(KexiView *view, KexiKugarHandlerItem *item,
+			QWidget *parent=0, bool newrep=false);
 		~KexiKugarDesignerWrapper();
 		
-                virtual KXMLGUIClient *guiClient();
+//		virtual KXMLGUIClient *guiClient();
 		virtual void activateActions();
 		virtual void deactivateActions();
 		bool initFailed();
+	
 	public slots:
-                void getPath(QString &path);
+		void getPath(QString &path);
+	
 	private:
 		KoView *m_view;
-		KexiKugarHandlerItem *m_item;
+//		KexiKugarHandlerItem *m_item;
 		bool m_initFailed;
 };
 

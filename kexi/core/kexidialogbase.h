@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,23 +29,28 @@
 class KexiView;
 class KexiProject;
 class QDockWindow;
+class QGridLayout;
 
 class KPrinter;
 class KToggleAction;
+class KexiProjectHandler;
+class KexiProjectHandlerItem;
 
 typedef QPtrList<QWidget> Widgets;
 
 
-class KEXICORE_EXPORT KexiDialogBase : public QWidget
+class KEXICORE_EXPORT KexiDialogBase : public QWidget, public KXMLGUIClient
 {
 	Q_OBJECT
 
 	public:
 
-		KexiDialogBase(KexiView *view,QWidget *parent, const char *name);
+		KexiDialogBase(KexiView* view, QString identifier, QWidget *parent = 0, const char *name = 0);
+		KexiDialogBase(KexiView *view, KexiProjectHandlerItem *item, QWidget *parent = 0, const char *name = 0 );
 		~KexiDialogBase();
 
-		virtual KXMLGUIClient *guiClient()=0;
+//		virtual KXMLGUIClient *guiClient();
+
 		virtual void activateActions();
 		virtual void deactivateActions();
 		KexiView *mainWindow()const{return m_mainWindow;};
@@ -63,14 +69,25 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget
 		void aboutToShow();
 		void aboutToHide();
 
-		QDockWindow *dock() { return w; }
+//		QDockWindow *dock() { return w; }
 
 		void plugToggleAction(KToggleAction *toggle_action);
 
+		virtual QString windowTypeName();
+
+		/*! Returns main grid layout that can be used to add contents widget(s) */
+		QGridLayout* gridLayout() { return m_gridLyr; }
+
+		KexiProjectHandlerItem *partItem() { return m_partItem; }
+		KexiProjectHandler *part();
+
+		virtual QSize sizeHint () const;
 	public slots:
 		virtual void show();
 		virtual void hide();
 		virtual void setVisible(bool on);
+
+		virtual void setCustomCaption( const QString &caption );
 
 	signals:
 		void closing(KexiDialogBase *);
@@ -78,9 +95,13 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget
 		void shown(); //! signalled on show event
 
 	protected:
+		void init();
+		void updateCaption();
+		void setCustomWindowTypeName( const QString &tn );
+
 		virtual void focusInEvent ( QFocusEvent *);
-		enum WindowType {ToolWindow, DocumentWindow};
-		void registerAs(KexiDialogBase::WindowType wt, const QString &identifier=QString::null);
+//		enum WindowType {ToolWindow, DocumentWindow};
+//		void registerAs(KexiDialogBase::WindowType wt, const QString &identifier=QString::null);
 		void registerChild(QWidget *w);
 		virtual void closeEvent(QCloseEvent *ev);
 		virtual void hideEvent(QHideEvent *ev);
@@ -91,21 +112,33 @@ class KEXICORE_EXPORT KexiDialogBase : public QWidget
 		static QPtrList<KexiDialogBase> *s_DocumentWindows;
 		static QPtrList<KexiDialogBase> *s_ToolWindows;
 
-		class KDockWidget *myDock;
+//		class KDockWidget *myDock;
 //	private:
 		KexiView *m_mainWindow;
-		KexiProject *m_project;
+//		KexiProject *m_project;
 		KexiView *m_view;
-		QDockWindow *w;
+		KexiProjectHandlerItem *m_partItem;
+		QString	m_identifier; //! window is registered to the view with this identifier
+
+		/*! (i18n-ed) data type of this window (by default: none).
+			change this if window will show data of given type, like 'Table',
+			thus window's caption will be in the style of "<title> - <typename>".
+			Else use setCustomCaption() to set custom static caption like in QWidget.
+			\sa set
+		*/
+		QString m_windowTypeName;
+//		QDockWindow *w;
 		bool	m_registered;
-		enum	WindowType m_wt;
+//		enum	WindowType m_wt;
 		bool	m_registering;
 		QString	m_contextTitle;
 		QString	m_contextMessage;
 		Widgets	m_widgets;
-		QString	m_identifier;
 
-		KToggleAction *m_toggleAction;
+		KToggleAction *m_toggleAction; //! (optional) show/hide action for this window
+
+		QString m_customCaption;
+		QGridLayout *m_gridLyr;
 };
 
 #endif

@@ -31,13 +31,13 @@
 #include "kexidatatableview.h"
 
 KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name)
- : KexiTableView(parent, name),m_db(0)
+ : KexiTableView(parent, name)
 {
 	init();
 }
 
-KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name, KexiDB *db,KexiDBRecordSet *rec)
- : KexiTableView(parent, name),m_db(db)
+KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name, KexiDBRecordSet *rec)
+ : KexiTableView(parent, name)
 {
 	init();
 	setDataSet(rec);
@@ -53,11 +53,6 @@ KexiDataTableView::init()
 
 	connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotMoving(int)));
 	connect(verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotMoving(int)));
-}
-
-void KexiDataTableView::setDataBase(KexiDB *db)
-{
-	m_db=db;
 }
 
 void KexiDataTableView::setDataSet(KexiDBRecordSet *rec)
@@ -108,12 +103,19 @@ void KexiDataTableView::setDataSet(KexiDBRecordSet *rec)
 	}
 }
 
+bool
+KexiDataTableView::readOnly()
+{
+	return m_record ? m_record->readOnly() : true;
+}
+
 void
 KexiDataTableView::insertNext()
 {
-	if(m_maxRecord + 1== m_records)
-		return appendInsertItem();
-	else if(!m_record->next())
+	if((m_maxRecord + 1) == m_records) {
+		appendInsertItem();
+		return;
+	}else if(!m_record->next())
 		return;
 
 	KexiTableItem *it = new KexiTableItem(this);
@@ -155,9 +157,8 @@ KexiDataTableView::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
 		}
 
 		KexiDBField *fi = m_record->fieldInfo(col);
-		if (m_db)
-			m_db->watcher()->update(this, fi->table(), fi->name(), i->getHint().toUInt(),
-			 i->getValue(col));
+		m_record->database()->watcher()->update(this, fi->table(), fi->name(), i->getHint().toUInt(),
+		 i->getValue(col));
 
 		KexiTableItem *newinsert = new KexiTableItem(this);
 		newinsert->setHint(QVariant(i->getHint().toInt() + 1));

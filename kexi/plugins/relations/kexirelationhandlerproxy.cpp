@@ -39,14 +39,14 @@ KexiRelationHandlerProxy::KexiRelationHandlerProxy(KexiRelationHandler *part,Kex
 {
 	kdDebug() << "KexiRelationHandlerProxy::KexiRelationHandlerProxy()" << endl;
 
-    m_createAction = new KAction(i18n("Relations"), "relation", "",
+    m_groupOpenAction = new KAction(i18n("Relations"), "relation", "",
     	this,SLOT(slotShowRelationEditor()), actionCollection(), "relations");
 	// actions in group menu
-	m_createAction->plug(m_group_pmenu);
+	m_groupOpenAction->plug(m_group_pmenu);
 
 	// actions in item menu
 //	m_item_pmenu->insertSeparator();
-	m_createAction->plug(m_item_pmenu);
+	m_groupOpenAction->plug(m_item_pmenu);
 
     setXMLFile("kexirelationhandlerui.rc");
 
@@ -67,9 +67,11 @@ KexiRelationHandlerProxy::itemContext(const QString&)
 }
 */
 
-void
+bool
 KexiRelationHandlerProxy::executeItem(const QString&)
 {
+	slotShowRelationEditor();
+	return true;
 }
 
 
@@ -77,10 +79,10 @@ KexiRelationHandlerProxy::executeItem(const QString&)
 void
 KexiRelationHandlerProxy::slotShowRelationEditor()
 {
-	m_part->debug();
-	if (m_view->activateWindow("kexi/relations"))
+	part()->debug();
+	if (m_view->activateWindow(part()->mime()))
 		return;
-	KexiRelationDialog *krd = new KexiRelationDialog(kexiView(), 0, "relations");
+	KexiRelationDialog *krd = new KexiRelationDialog(kexiView(), part()->mime(), 0, "relations");
 	krd->setIcon(part()->itemPixmap());
 	krd->show();
 }

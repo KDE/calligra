@@ -50,22 +50,24 @@
 	init(identifier);
 }
 */
-KexiAlterTable::KexiAlterTable(KexiView *view, QWidget *parent, KexiProjectHandlerItem *item, bool create)
-	: KexiDialogBase(view, parent, item->fullIdentifier().latin1())
-	, m_table(item->identifier())
+KexiAlterTable::KexiAlterTable(KexiView *view, KexiProjectHandlerItem *item, QWidget *parent, bool create)
+	: KexiDialogBase(view, item, parent)
+//	: KexiDialogBase(view, parent, item->fullIdentifier().latin1())
+//	, m_table(item->identifier())
 //	, m_title(item->title())
 	, m_create(create)
 {
-	init(item->title(),item->fullIdentifier());
+	setCustomWindowTypeName( i18n("Table Editor") );
+	init(/*item->title(),item->fullIdentifier()*/);
 }
 
 void
-KexiAlterTable::init(QString title, QString identifier)
+KexiAlterTable::init(/*QString title, QString identifier*/)
 {
 	initView();
 	getFields();
-	setCaption(i18n("%1 - Table Editor").arg(title));
-	registerAs(DocumentWindow, identifier);
+//	setCaption(i18n("%1 - Table Editor").arg(title));
+//	registerAs(DocumentWindow, identifier);
 	m_tableFields.setAutoDelete(true);
 }
 
@@ -108,14 +110,15 @@ KexiAlterTable::initView()
 	m_autoIncItem = new PropertyEditorItem(m_propList, i18n("Auto Increment"), QVariant::Bool, QVariant(false, 1));
 	m_primaryItem = new PropertyEditorItem(m_propList, i18n("Primary Key"), QVariant::Bool, QVariant(false, 1));
 
-	QGridLayout* l = new QGridLayout(this);
-	l->setSpacing(KDialog::spacingHint());
-	l->setMargin(KDialog::marginHint());
+///	QGridLayout* l = new QGridLayout(this);
+///	gridLayout()->setSpacing(KDialog::spacingHint());
+///	gridLayout()->setMargin(KDialog::marginHint());
+
 //	l->addWidget(tableLbl, 0, 0);
 //	l->addWidget(lineFrm, 1, 0);
 //	l->addWidget(m_fieldTable, 2, 0);
 //	l->addWidget(m_propList, 3, 0);
-	l->addWidget(splitter, 2, 0);
+	gridLayout()->addWidget(splitter, 2, 0);
 
 	connect(m_fieldTable, SIGNAL(itemSelected(KexiTableItem*)), SLOT(changeShownField(KexiTableItem*)));
 	connect(m_fieldTable, SIGNAL(itemChanged(KexiTableItem *, int)), SLOT(tableItemChanged(KexiTableItem *, int)));
@@ -142,7 +145,8 @@ KexiAlterTable::getFields()
 	int fc = 0;
 	if(!m_create)
 	{
-		m_tableFields = kexiProject()->db()->structure(m_table);
+		m_tableFields = kexiProject()->db()->structure(m_partItem->identifier());
+//		m_tableFields = kexiProject()->db()->structure(m_table);
 
 		for(KexiDBField* field = m_tableFields.first(); field; field = m_tableFields.next())
 		{
@@ -249,7 +253,8 @@ KexiAlterTable::tableItemChanged(KexiTableItem *i, int col)
 void
 KexiAlterTable::changeTable()
 {
-	KexiDBField* field = new KexiDBField(m_table);
+	KexiDBField* field = new KexiDBField(m_partItem->identifier());
+//	KexiDBField* field = new KexiDBField(m_table);
 	field->setName(m_nameItem->value().toString());
 	field->setColumnType(static_cast<KexiDBField::ColumnType>(m_datatypeItem->value().toInt() + 1));
 	field->setLength(m_lengthItem->value().toInt());
@@ -341,7 +346,8 @@ KexiAlterTable::closeEvent(QCloseEvent *ev)
 	if (m_tableFields.isEmpty()) {
 		kdDebug() <<"NO FIELDS!";
 		ev->ignore();
-		KMessageBox::sorry( 0, i18n( "Table \"%1\" should contain at least one field. Add fields to this table." ).arg(m_table) );
+		KMessageBox::sorry( 0, i18n( "Table \"%1\" should contain at least one field. Add fields to this table." )
+			.arg(m_partItem->identifier()) );
 		return;
 	}
 	KexiDialogBase::closeEvent(ev);

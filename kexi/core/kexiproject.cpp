@@ -30,6 +30,7 @@
 #include <kparts/componentfactory.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
+#include <kcmdlineargs.h>
 
 #include <koStore.h>
 #include <koTemplateChooseDia.h>
@@ -44,12 +45,14 @@
 #include "kexicreateprojectiface.h"
 #include "kexirelation.h"
 #include "kexiprojecthandler.h"
+#include "kexiprojecthandlerproxy.h"
 #include "kexidbconnection.h"
 #include "filters/kexifiltermanager.h"
 
 #include "koApplication.h"
 #include "kexi_global.h"
 #include "kexi_utils.h"
+#include "kexiworkspaceMDI.h"
 
 #undef JoWenn_VERY_EXPERIMENTAL
 
@@ -71,6 +74,7 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
 	m_dbconnection = new KexiDBConnection();
 	m_projectConnection=new KexiDBConnection();
 	m_relationManager=new KexiRelation(this);
+	m_invokeActionsOnStartup = true;
 
 	m_parts = new PartList();
 
@@ -190,6 +194,11 @@ KoView* KexiProject::createViewInstance( QWidget* parent, const char* name )
 	for(KexiProjectHandler *part = m_parts->first(); part; part = m_parts->next())
 		part->hookIntoView(v);
 	v->finalizeInit();
+	//invoke startup actions if document is not empty (ie. is loaded)
+//	if (!isEmpty() && m_invokeActionsOnStartup) {
+//		m_invokeActionsOnStartup = false; //only once
+//		v->invokeStartupActions();
+//	}
 	return v;
 }
 
@@ -505,7 +514,7 @@ void KexiProject::loadHandlers()
 		else //add to end
 			ordered.insert(offset++, (KService*)ptr);
 	}
-	for (int i = 0; i<ordered.size(); i++) {
+	for (int i = 0; i< (int)ordered.size(); i++) {
 		KService::Ptr ptr = ordered[i];
 		if (ptr) {
 			kdDebug() << "loadHandlers(): adding library=" << ptr->library() << endl;
@@ -530,3 +539,70 @@ void KexiProject::slotImportServerData()
 	m_filterManager->import(KexiFilterManager::Server,KexiFilterManager::AllEntries);
 }
 
+/*! Here we try to invoke actions defined to be automatically
+	invoked on application startup. Now these are specified with 
+	--open command line option (see main.cpp).
+	Actions in this method are invoked only once.
+*/
+void KexiProject::invokeStartupActions( KexiView *view )
+{
+	if (isEmpty() || !m_invokeActionsOnStartup)
+		return;
+	m_invokeActionsOnStartup = false; //only once
+
+	KCmdLineArgs *args = KCmdLineArgs::parsedArgs(0);
+	if (!args)
+		return;
+	QString not_found_msg;
+	QCStringList list = args->getOptionList("open");
+	QCStringList::const_iterator it;
+	for ( it = list.begin(); it!=list.end(); ++it) {
+		QString type_name, obj_name, item=*it;
+		int idx;
+		//option with " " (type: default)
+		if (item.left(1)=="\"" && item.right(1)=="\"") {
+			obj_name = item.mid(1, item.length()-2);
+			type_name = "table";
+		}
+		//option with type name specified:
+		else if ((idx = item.find(':'))!=-1) {
+			type_name = item.left(idx).lower();
+			obj_name = item.mid(idx+1);
+			//optional: remove ""
+			if (obj_name.left(1)=="\"" && obj_name.right(1)=="\"")
+				obj_name = obj_name.mid(1, obj_name.length()-2);
+		}
+		//just obj. name: type name is "table" by default
+		else {
+			obj_name = item;
+			type_name = "table";
+		}
+		if (type_name.isEmpty() || obj_name.isEmpty())
+			continue;
+		//ok, now open this object
+		QString obj_mime = QString("kexi/") + type_name;
+		QString obj_identifier = obj_mime + "/" + obj_name;
+		KexiProjectHandler *hd = handlerForMime(obj_mime);
+		KexiProjectHandlerProxy *pr = hd ? hd->proxy(view) : 0;
+		if (!pr || !pr->executeItem(obj_identifier)) {
+			if (!not_found_msg.isEmpty())
+				not_found_msg += ",<br>";
+			not_found_msg += (pr ? pr->part()->name() : i18n("Unknown object")) + " \"" + obj_name + "\"";
+		}
+	}
+	if (!not_found_msg.isEmpty())
+		KMessageBox::sorry(0, "<p><b>" + i18n("Requested objects cannot be opened:") + "</b><p>" + not_found_msg );
+}
+
+bool KexiProject::openURL( const KURL & url )
+{
+	bool ret = KoDocument::openURL( url );
+	if (!ret)
+		return false;
+	QPtrListIterator<KoView> it(views());
+	KoView *view = it.current();
+	if (view) {
+		invokeStartupActions( static_cast<KexiView*>(view) );
+	}
+	return true;
+}

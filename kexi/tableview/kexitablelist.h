@@ -36,7 +36,7 @@ typedef QPtrList<KexiTableItem>		KexiTableListBase;
 class KEXIDATATABLE_EXPORT KexiTableList : public KexiTableListBase
 {
 public: 
-	KexiTableList() : m_key(0), m_order(true), m_type(1) {}
+	KexiTableList() : KexiTableListBase(), m_key(0), m_order(true), m_type(1) {}
 	~KexiTableList() {/* qDebug("~List"); */}
 	void setSorting(int key, bool order=true, short type=1);
 protected:

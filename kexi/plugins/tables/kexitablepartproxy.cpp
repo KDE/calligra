@@ -29,6 +29,7 @@
 #include <klineeditdlg.h>
 #include <kmessagebox.h>
 #include <kaction.h>
+#include <kstatusbar.h>
 
 #include "kexitablepartproxy.h"
 #include "kexitablepart.h"
@@ -43,7 +44,7 @@
 #include "kexi_global.h"
 
 KexiTablePartProxy::KexiTablePartProxy(KexiTablePart *part,KexiView *view)
- : KexiProjectHandlerProxy(part,view),KXMLGUIClient()
+ : KexiProjectHandlerProxy(part,view), KXMLGUIClient()
 {
 	setInstance(part->kexiProject()->instance());
 	m_tablePart=part;
@@ -122,26 +123,27 @@ KexiTablePartProxy::slotCreate()
 			return;
 		}
 		KexiProjectHandlerItem *new_item = new KexiProjectHandlerItem(part(), name, "kexi/table",  name);
-		KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, new_item, true);
+		KexiAlterTable* kat = new KexiAlterTable(kexiView(), new_item, 0, true);
+//		KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, new_item, true);
 //		KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, name, true, "alterTable");
-//		kat->show();
-		kat->setIcon( new_item->handler()->itemPixmap() );
+		kat->show();
+//		kat->setIcon( new_item->handler()->itemPixmap() );
 		list->insert(new_item->fullIdentifier(), new_item);
 		emit m_tablePart->itemListChanged(part());
 	}
 }
 
-void
+bool
 KexiTablePartProxy::slotOpen(const QString& identifier)
 {
 	KexiDialogBase *w = m_view->findWindow(identifier);
 	KexiProjectHandlerItem *item = part()->items()->find(identifier);
 	if (!item)
-		return;
+		return false;
 	if (w) {
 		if (w->isA("KexiDataTable")) { //just activate data table window
 			m_view->activateWindow(identifier);
-			return;
+			return true;
 		}
 		else if (w->isA("KexiAlterTable")) {
 			m_view->activateWindow(identifier);
@@ -149,15 +151,15 @@ KexiTablePartProxy::slotOpen(const QString& identifier)
 				"Project of \"%1\" table is altered now.\n"
 				"Do you want to stop altering this table and display its data?" ).arg(item->title()) )==KMessageBox::No)
 			{
-				return;
+				return true;
 			}
 			//yes: close alter window and open in data mode
 			if (!w->close(true))
-				return; //window do not want to be closed: give up!
+				return false; //window do not want to be closed: give up!
 
 		}
-	else
-		return; //unknown window type
+		else
+			return false; //unknown window type
 	}
 
 	kdDebug() << "KexiTablePartProxy::slotOpen(): indentifier = " << identifier << endl;
@@ -168,14 +170,22 @@ KexiTablePartProxy::slotOpen(const QString& identifier)
 		identifier,KexiDataProvider::Parameters());
 	if (!data) {
 		 kdDebug() <<"KexitablePartProxy::slotOpen(): error while retrieving data, aborting"<<endl;
-		 return;
+		 return false;
 	}
 
-	KexiDataTable *kt = new KexiDataTable(kexiView(), 0, item);
+	KexiDataTable *kt = new KexiDataTable(kexiView(), item);
 //	KexiDataTable *kt = new KexiDataTable(kexiView(), 0, item->title(), "table");
-	kt->setIcon( item->handler()->itemPixmap() );
+//	kt->setIcon( item->handler()->itemPixmap() );
+	QWidget * wid = m_view->workspaceWidget();
+	int max_w = m_view->workspaceWidget()->width();
+	int max_h = m_view->workspaceWidget()->height();
+	int h = m_view->statusBar()->height();
+//	kt->resize(100,100);
+	kt->updateGeometry();
+	kt->show();
 	kdDebug() << "KexiTablePart::slotOpen(): indentifier = " << identifier << endl;
 	kt->setDataSet(data);
+	return true;
 }
 
 void
@@ -206,9 +216,10 @@ KexiTablePartProxy::slotAlter(const QString& identifier)
 	else
 		return; //unknown window type
 	}
-	KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, item, false);
+	KexiAlterTable* kat = new KexiAlterTable(kexiView(), item);
+//	KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, item, false);
 //	KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, part()->items()->find(identifier)->identifier(), false, "alterTable");
-	kat->setIcon( part()->itemPixmap() );
+//	kat->setIcon( part()->itemPixmap() );
 	kat->show();
 }
 
@@ -241,10 +252,10 @@ KexiTablePartProxy::slotDrop(const QString& identifier)
 	}
 }
 
-void
+bool
 KexiTablePartProxy::executeItem(const QString& identifier)
 {
-	slotOpen(identifier);
+	return slotOpen(identifier);
 }
 
 void

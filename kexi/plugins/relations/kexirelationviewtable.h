@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,7 +29,7 @@
 class KexiRelationView;
 class KexiRelationViewTable;
 class KexiDBTable;
-//class KexiRelationViewTableContainer;
+class KexiRelationViewTableContainerHeader;
 
 class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainer : public QFrame
 {
@@ -39,10 +40,25 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainer : public QFrame
 		~KexiRelationViewTableContainer();
 
 		int			globalY(const QString &field);
-		const QString		table();
+		const QString table();
+
+		virtual QSize sizeHint();
+		
+		int right() { return x() + width() - 1; }
+		int bottom() { return y() + height() - 1; }
 
 	signals:
 		void			moved(KexiRelationViewTableContainer *);
+		void endDrag();
+		void gotFocus();
+
+	public slots:
+		virtual void setFocus();
+		virtual void unsetFocus();
+
+	protected slots:
+		void moved();
+		void slotContextMenu(KListView *lv, QListViewItem *i, const QPoint& p);
 
 	protected:
 		virtual void			mouseMoveEvent(QMouseEvent *ev);
@@ -55,14 +71,19 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainer : public QFrame
 		int			m_grabX;
 		int			m_grabY;
 
-		QLabel *m_tableHeader;
+		KexiRelationViewTableContainerHeader *m_tableHeader;
 
-	private:
 		KexiRelationViewTable	*m_tableView;
 		KexiRelationView	*m_parent;
+};
 
-	protected slots:
-		void moved();
+
+class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableItem : public KListViewItem
+{
+	public:
+		KexiRelationViewTableItem(QListView *parent, QListViewItem *after,
+			QString key, QString field);
+		virtual void paintFocus ( QPainter * p, const QColorGroup & cg, const QRect & r );
 };
 
 
@@ -78,22 +99,27 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewTable : public KListView
 		int			globalY(const QString &item);
 		void setReadOnly(bool);
 
+		virtual QSize sizeHint();
+
 	signals:
 		void			tableScrolling();
-
-	protected:
-		virtual bool		acceptDrag(QDropEvent *e) const;
-		virtual QDragObject	*dragObject();
 
 	protected slots:
 		void			slotDropped(QDropEvent *e);
 		void			slotContentsMoving(int, int);
+
+	protected:
+		virtual void contentsMousePressEvent( QMouseEvent * e );
+		virtual bool		acceptDrag(QDropEvent *e) const;
+		virtual QDragObject	*dragObject();
+		virtual QRect drawItemHighlighter(QPainter *painter, QListViewItem *item); 
 
 	private:
 		QStringList		m_fieldList;
 		QString			m_table;
 
 		KexiRelationView	*m_view;
+		QPixmap m_keyIcon, m_noIcon;
 };
 
 class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainerHeader : public QLabel
@@ -102,6 +128,13 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainerHeader : public QLabe
 	public:
 		KexiRelationViewTableContainerHeader(const QString& text,QWidget *parent);
 		virtual ~KexiRelationViewTableContainerHeader();
+
+		virtual void setFocus();
+		virtual void unsetFocus();
+
+	signals:
+		void moved();
+		void endDrag();
 
 	protected:
 		bool			eventFilter(QObject *obj, QEvent *ev);
@@ -113,8 +146,8 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainerHeader : public QLabe
 		int			m_grabY;
 		int			m_offsetX;
 		int			m_offsetY;
-	signals:
-		void			moved();
+
+		QColor m_activeBG, m_activeFG, m_inactiveBG, m_inactiveFG;
 };
 
 #endif

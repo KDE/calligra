@@ -33,12 +33,13 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationHandler: public KexiProjectHandler
 		KexiRelationHandler(QObject *project,const char *,const QStringList &);
 
 		virtual QString				name();
+		virtual QString				groupName();
 		virtual QString				mime();
 		virtual bool				visible();
 
 
 		virtual void hookIntoView(KexiView *view);
-		virtual QWidget* embeddReadOnly(QWidget *parent, KexiView *v);
+		virtual QWidget* embeddReadOnly(QWidget *parent, KexiView *v, QString identifier);
 
 		virtual void store(KoStore *);
 		virtual void load(KoStore *);

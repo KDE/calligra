@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,15 +30,16 @@
 #include <qpoint.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
-#include <qlineedit.h>
+#include <qdatetimeedit.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kdatepicker.h>
 #include <kdatetbl.h>
-
-//#include "datepicker.h"
+#include <klineedit.h>
+#include <kpopupmenu.h>
+#include <kdatewidget.h>
 
 #include "kexidatetableedit.h"
 
@@ -47,14 +49,31 @@ KexiDateTableEdit::KexiDateTableEdit(QVariant v, QWidget *parent, const char *na
 	kdDebug() << "KexiDateTableEdit: Date = " << v.toString() << endl;
 	m_datePicker = 0;
 	m_view = new QWidget(this);
-	m_edit = new QLineEdit(m_view);
-	m_edit->setValidator(new KDateValidator(m_edit, "DateValidator"));
+//	m_edit = new KLineEdit(m_view);
+	m_edit = new QDateEdit(m_view);
+	m_edit->setAutoAdvance(true);
+//js	m_edit->setFrame(false);
+//js	m_edit->setValidator(new KDateValidator(m_edit, "DateValidator"));
 	QToolButton* btn = new QToolButton(m_view);
 	btn->setText("...");
-	connect(btn, SIGNAL(clicked()), this, SLOT(slotShowDatePicker()));
+	btn->setFixedWidth( QFontMetrics(btn->font()).width(" ... ") );
+	btn->setPopupDelay(1); //1 ms
+	
+	m_datePickerPopupMenu = new KPopupMenu(0, "date_popup");
+	connect(m_datePickerPopupMenu, SIGNAL(aboutToShow()), this, SLOT(slotShowDatePicker()));
+	m_datePicker = new KDatePicker(m_datePickerPopupMenu, QDate(), 0);
+	m_datePicker->setCloseButton(true);
+	m_datePicker->installEventFilter(this);
+//	, WType_TopLevel | WDestructiveClose | WStyle_Customize
+		//| WStyle_StaysOnTop | WStyle_NoBorder);
+	m_datePickerPopupMenu->insertItem(m_datePicker);
+	btn->setPopup(m_datePickerPopupMenu);
+	
+//	connect(btn, SIGNAL(clicked()), this, SLOT(slotShowDatePicker()));
+	
 	QHBoxLayout* layout = new QHBoxLayout(m_view);
-	layout->addWidget(m_edit);
-	layout->addWidget(btn);
+	layout->addWidget(m_edit, 1);
+	layout->addWidget(btn, 0);
 
 	bool ok;
 	QDate date = KGlobal::locale()->readDate(v.toString(), &ok);
@@ -64,7 +83,9 @@ KexiDateTableEdit::KexiDateTableEdit(QVariant v, QWidget *parent, const char *na
 		date = QDate::currentDate();
 	}
 
-	m_edit->setText(KGlobal::locale()->formatDate(date, true));
+//js	m_edit->setText(KGlobal::locale()->formatDate(date, true));
+	m_edit->setDate(date);
+	
 	m_oldVal = date;
 	setFocusProxy(m_edit);
 }
@@ -72,15 +93,18 @@ KexiDateTableEdit::KexiDateTableEdit(QVariant v, QWidget *parent, const char *na
 void
 KexiDateTableEdit::slotDateChanged(QDate date)
 {
-	m_edit->setText(KGlobal::locale()->formatDate(date, true));
+//js	m_edit->setText(KGlobal::locale()->formatDate(date, true));
+	m_edit->setDate(date);
+
 	repaint();
 }
 
 QVariant
 KexiDateTableEdit::value()
 {
-	bool ok;
-	QDate date = KGlobal::locale()->readDate(m_edit->text(), &ok);
+	bool ok = true;
+//js	QDate date = KGlobal::locale()->readDate(m_edit->text(), &ok);
+	QDate date = m_edit->date();
 
 	if(!ok)
 	{
@@ -93,6 +117,18 @@ KexiDateTableEdit::value()
 void
 KexiDateTableEdit::slotShowDatePicker()
 {
+	bool ok = true;
+//js	QDate date = KGlobal::locale()->readDate(m_edit->text(), &ok);
+	QDate date = m_edit->date();
+
+	if(!ok)
+		date = QDate::currentDate();
+	
+	m_datePicker->setDate(date);
+	m_datePicker->setFocus();
+	m_datePicker->show();
+	m_datePicker->setFocus();
+	/*
 	bool ok;
 	QDate date = KGlobal::locale()->readDate(m_edit->text(), &ok);
 
@@ -108,6 +144,45 @@ KexiDateTableEdit::slotShowDatePicker()
 	m_datePicker->show();
 
 	connect(m_datePicker, SIGNAL(dateChanged(QDate)), this, SLOT(slotDateChanged(QDate)));
+	*/
+}
+
+/*! filtering some events on date picket */
+bool
+KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
+{
+	if (o==m_datePicker) {
+		kdDebug() << e->type() << endl;
+		switch (e->type()) {
+		case QEvent::Hide:
+			m_datePickerPopupMenu->hide();
+			break;
+		case QEvent::KeyPress:
+		case QEvent::KeyRelease: {
+			kdDebug() << "ok!" << endl;
+			QKeyEvent *ke = (QKeyEvent *)e;
+			if (ke->key()==Key_Enter || ke->key()==Key_Return) {
+				//accepting picker
+//js				m_edit->setText( KGlobal::locale()->formatDate(m_datePicker->date(), true) );
+				m_edit->setDate(m_datePicker->date());
+				m_datePickerPopupMenu->hide();
+				kdDebug() << "accept" << endl;
+				return true;
+			}
+			else if (ke->key()==Key_Escape) {
+				//cancelling picker
+				m_datePickerPopupMenu->hide();
+				kdDebug() << "reject" << endl;
+				return true;
+			}
+			else m_datePickerPopupMenu->setFocus();
+			break;
+			}
+		default:
+			break;
+		}
+	}
+	return false;
 }
 
 // we need the date thing

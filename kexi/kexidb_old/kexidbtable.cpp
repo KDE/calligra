@@ -42,6 +42,12 @@ QStringList KexiDBTable::primaryKeys() const{
 	return m_primaryKeys;
 }
 
+bool KexiDBTable::hasPrimaryKeys() const
+{
+	return !m_primaryKeys.isEmpty();
+}
+
+
 const QString& KexiDBTable::tableName() const {
 	return m_tableName;
 }
