@@ -34,8 +34,8 @@
 
 /* slots gets defined in Qt 3.2 and conflicts with python 2.3 headers */
 #undef slots
-
 #include <Python.h>
+#define slots
 
 class KivioPyStencilSpawner;
 class KivioPainter;
