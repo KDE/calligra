@@ -104,9 +104,7 @@ KOSpellDlg::KOSpellDlg(
 
     buttonBox->layout();
 
-    QHBoxLayout * layout = 0L;
-    layout = new QHBoxLayout(w, KDialog::marginHint(), KDialog::spacingHint());
-
+    QHBoxLayout * layout = new QHBoxLayout(w, KDialog::marginHint(), KDialog::spacingHint());
     QGridLayout * leftGrid = new QGridLayout(layout);
 
     leftGrid->addWidget(l_misspelled,   0, 0);
@@ -114,11 +112,11 @@ KOSpellDlg::KOSpellDlg(
 
     leftGrid->addWidget(l_suggestions,  2, 0);
     leftGrid->addMultiCellWidget(wordlabel,      0,0, 1, 2);
-    leftGrid->addWidget(editbox,        1, 1);
+    leftGrid->addMultiCellWidget(editbox, 1, 1, 1, 2);
     leftGrid->addMultiCellWidget(listbox,        2, 2, 1, 2);
 
-    leftGrid->addWidget(l_language,     3, 0);
-    leftGrid->addMultiCellWidget(language,       3, 3, 1, 2);
+    leftGrid->addWidget(l_language, 3, 0);
+    leftGrid->addMultiCellWidget(language, 3, 3, 1, 2);
 
     leftGrid->addMultiCellWidget( m_previous, 4, 4, 0, 2);
 

@@ -447,7 +447,7 @@ void KOSpell::dialog(const QString & word, QStringList & sugg )
     ksdlg->init (word, &sugg);
     kdDebug()<<" lastpos :"<<lastpos<<endl;
     kdDebug()<<" word.length() :"<<word.length()<<endl;
-    emit misspelling (word, sugg, lastpos-word.length());
+    emit misspelling (word, sugg, lastpos-word.length()-1);
 
     ksdlg->show();
 }
