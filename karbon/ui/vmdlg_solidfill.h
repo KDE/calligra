@@ -8,6 +8,7 @@
 
 #include <qtabdialog.h>
 
+class QColor;
 class QSpinBox;
 class KHSSelector;
 class KGradientSelector;
@@ -38,6 +39,7 @@ private slots:
 	void slotUpdateFromRGBSpinBoxes();
 	void slotUpdateFromHSVSpinBoxes();
 	void slotApplyButtonPressed();
+	void slotUpdate(QColor* color = 0L);
 };
 
 #endif

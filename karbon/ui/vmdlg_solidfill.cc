@@ -51,6 +51,7 @@ VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ),
 
 	mOldColor->setColor( color );
 	mColorPreview->setColor( color );
+	connect (mColorPreview, SIGNAL( colorChanged( color )), this, SLOT (slotUpdate( color )));
 	mainLayout->addWidget( groupbox, 0, 2);
 
 	//Components
@@ -111,6 +112,13 @@ void VMDlgSolidFill::slotApplyButtonPressed()
 
 	if( m_part )
 		m_part->addCommand( new VMCmdFill( m_part, color ), true );
+}
+
+void VMDlgSolidFill::slotUpdate(QColor *color)
+{
+	mRed->setValue( color->red() );
+	mGreen->setValue( color->green() );
+	mBlue->setValue( color->blue() );
 }
 
 #include "vmdlg_solidfill.moc"
