@@ -440,13 +440,18 @@ void KoContextHelpAction::closePopup()
 KoContextHelpDocker::KoContextHelpDocker( QWidget* parent, const char* name )
 		: QDockWindow( parent, name )
 {
-	QGridLayout* layout = new QGridLayout( this );
-	layout->addWidget( m_helpIcon = new QLabel( this ), 0, 0 );
-	layout->addWidget( m_helpTitle = new KoVerticalLabel( this ), 1, 0 );
-	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", this ), 0, 1, 1, 1 );
+	setCaption(i18n("Context Help"));
+	QWidget *w=new QWidget(this);
+	QGridLayout* layout = new QGridLayout( w );
+	layout->addWidget( m_helpIcon = new QLabel( w), 0, 0 );
+	layout->addWidget( m_helpTitle = new KoVerticalLabel( w ), 1, 0 );
+	layout->addMultiCellWidget( m_helpViewer = new KoHelpWidget( "", w ), 0, 1, 1, 1 );
 	layout->setMargin( 2 );
 	layout->setSpacing( 1 );
 	layout->setRowStretch( 1, 1 );
+	setWidget(w);
+	w->show();
+	setContextHelp("TITLE","This is some text &TEXT &WAS",0);
 } // KoContextHelpDocker::KoContextHelpDocker
 
 KoContextHelpDocker::~KoContextHelpDocker()
