@@ -59,6 +59,7 @@ void KCharSelectDia::initDialog(const QChar &_chr, const QString &_font, bool /*
     grid = new QGridLayout( page, 1, 1, 15, 7 );
 
     charSelect = new KCharSelect( page, "", _font, _chr );
+    connect(charSelect, SIGNAL(doubleClicked()),this, SLOT(slotDoubleClicked()));
     charSelect->resize( charSelect->sizeHint() );
     charSelect->enableFontCombo( true );
     grid->addWidget( charSelect, 0, 0 );
@@ -98,6 +99,11 @@ QString KCharSelectDia::font()
 }
 
 void KCharSelectDia::slotUser1()
+{
+    emit insertChar(chr(),font());
+}
+
+void KCharSelectDia::slotDoubleClicked()
 {
     emit insertChar(chr(),font());
 }

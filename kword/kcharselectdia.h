@@ -57,6 +57,7 @@ private:
 
 private slots:
     void slotUser1();
+ void slotDoubleClicked();
 
 protected:
     // dialog objects
