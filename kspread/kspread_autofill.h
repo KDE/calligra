@@ -24,7 +24,7 @@ class AutoFillDeltaSequence;
 class AutoFillSequenceItem;
 class AutoFillSequence;
 
-#include <qarray.h>
+#include <qmemarray.h>
 #include <qstring.h>
 #include <qptrlist.h>
 #include <qstringlist.h>
@@ -95,13 +95,13 @@ public:
 
     bool equals( AutoFillDeltaSequence *_delta );
 
-    QArray<double>* getSequence() { return sequence; }
+    QMemArray<double>* getSequence() { return sequence; }
 
     double getItemDelta( int _pos );
 
 protected:
     bool ok;
-    QArray<double>* sequence;
+    QMemArray<double>* sequence;
 };
 
 #endif

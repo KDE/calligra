@@ -47,7 +47,7 @@ AutoFillDeltaSequence::AutoFillDeltaSequence( AutoFillSequence *_first, AutoFill
     return;
   }
 
-  sequence = new QArray<double> ( _first->count() );
+  sequence = new QMemArray<double> ( _first->count() );
 
   AutoFillSequenceItem *item = _first->getFirst();
   AutoFillSequenceItem *item2 = _next->getFirst();

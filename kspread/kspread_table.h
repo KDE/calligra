@@ -43,7 +43,7 @@ class KPrinter;
 #include <qpen.h>
 #include <qptrlist.h>
 #include <qintdict.h>
-#include <qarray.h>
+#include <qmemarray.h>
 #include <qrect.h>
 #include <qwidget.h>
 
