@@ -42,6 +42,7 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qframe.h>
+#include <qlabel.h>
 
 #include <kdebug.h>
 #include <kurlrequester.h>
@@ -51,6 +52,7 @@
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kfiledialog.h>
+
 
 KPEffectPreview::KPEffectPreview( QWidget *parent, KPresenterDoc *_doc, KPresenterView *_view )
     : QLabel( parent ), doc( _doc ), view( _view )
@@ -189,6 +191,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
         effectList->setCurrentItem( effectList->count() );
 
     connect( effectList, SIGNAL(highlighted(int)), this, SLOT(effectChanged(int)) );
+    connect( effectList, SIGNAL( doubleClicked ( QListBoxItem *) ), this, SLOT( effectChanged()) );
 
     new QLabel( i18n("Speed:"), leftpart );
 
@@ -283,6 +286,11 @@ void KPTransEffectDia::preview()
     if( pageEffect==PEF_NONE)
         return;
     effectPreview->run( pageEffect, speed );
+}
+
+void KPTransEffectDia::effectChanged()
+{
+    effectChanged( effectList->currentItem() );
 }
 
 void KPTransEffectDia::effectChanged( int index )

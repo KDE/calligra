@@ -24,7 +24,6 @@
 #define __TRANSEFFECTDIA_H
 
 #include <kdialogbase.h>
-#include <klistview.h>
 #include <qlabel.h>
 #include "global.h"
 
@@ -71,12 +70,12 @@ public:
     KPTransEffectDia( QWidget *parent, const char *name,
                       KPresenterDoc *_doc, KPresenterView *_view );
 
-    PageEffect getPageEffect(){ return pageEffect; }
-    PresSpeed getPresSpeed(){ return speed; }
-    bool getSoundEffect(){ return soundEffect; }
-    QString getSoundFileName(){ return soundFileName; }
-    bool getAutoAdvance(){ return false; } // FIXME !
-    int getSlideTime(){ return slideTime; }
+    PageEffect getPageEffect() const { return pageEffect; }
+    PresSpeed getPresSpeed() const { return speed; }
+    bool getSoundEffect() const { return soundEffect; }
+    QString getSoundFileName() const { return soundFileName; }
+    bool getAutoAdvance() const { return false; } // FIXME !
+    int getSlideTime() const { return slideTime; }
 
 public slots:
 
@@ -115,6 +114,8 @@ protected slots:
 
     void preview();
     void effectChanged( int );
+    void effectChanged();
+
     void speedChanged( int );
     void timeChanged( int );
 

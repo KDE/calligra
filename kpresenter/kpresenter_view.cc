@@ -148,6 +148,11 @@
 #include <koStore.h>
 #include <koStoreDrag.h>
 
+#ifdef HAVE_LIBKSPELL2
+#include <kspell2/broker.h>
+#include <kspell2/defaultdictionary.h>
+#endif
+
 
 #define DEBUG
 
