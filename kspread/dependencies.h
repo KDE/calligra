@@ -37,6 +37,7 @@ one range of cells. */
 
 struct RangeDependency {
   int cellrow, cellcolumn;
+  KSpreadSheet *cellsheet;
   KSpreadRange range;
 };
 

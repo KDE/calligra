@@ -204,7 +204,7 @@ QValueList<KSpreadPoint> DependencyList::getDependants (const KSpreadPoint &cell
       KSpreadPoint c;
       c.setRow ((*it).cellrow);
       c.setColumn ((*it).cellcolumn);
-      c.table = sheet;
+      c.table = (*it).cellsheet;
       list.push_back (c);
     }
   }
@@ -234,7 +234,7 @@ void DependencyList::addRangeDependency (const RangeDependency &rd)
     sh = sheet;
   
   KSpreadPoint cell;
-  cell.table = sheet;
+  cell.table = rd.cellsheet;
   cell.setRow (rd.cellrow);
   cell.setColumn (rd.cellcolumn);
   dependencies[cell].ranges.push_back (rd.range);
@@ -343,7 +343,9 @@ void DependencyList::generateDependencies (const KSpreadPoint &cell)
     RangeDependency rd;
     rd.cellrow = cell.row();
     rd.cellcolumn = cell.column();
+    rd.cellsheet = sheet;
     rd.range = *it2;
+    if (rd.range.table == 0) rd.range.table = sheet;
     addRangeDependency (rd);
   }
 }
@@ -391,7 +393,7 @@ void DependencyList::processRangeDependencies (const KSpreadPoint &cell)
   QValueList<RangeDependency>::iterator it;
   if (!rangeDeps.count (leading))
     return;  //no range dependencies in this cell chunk
-  
+
   for (it = rangeDeps[leading].begin();
       it != rangeDeps[leading].end(); ++it)
   {
@@ -402,7 +404,7 @@ void DependencyList::processRangeDependencies (const KSpreadPoint &cell)
       KSpreadPoint c;
       c.setRow ((*it).cellrow);
       c.setColumn ((*it).cellcolumn);
-      c.table = sheet;
+      c.table = (*it).cellsheet;
       updateCell (c);
     }
   }
