@@ -2217,6 +2217,12 @@ void KexiTableView::showEvent(QShowEvent *e)
 		resizeContents(s.width(),s.height());
 	}
 	updateGeometries();
+
+	//now we can ensure cell's visibility ( if there was such a call before show() )
+	if (d->ensureCellVisibleOnShow!=QPoint(-1,-1)) {
+		ensureCellVisible( d->ensureCellVisibleOnShow.x(), d->ensureCellVisibleOnShow.y() );
+		d->ensureCellVisibleOnShow = QPoint(-1,-1); //reset the flag
+	}
 }
 
 bool KexiTableView::dropsAtRowEnabled() const
@@ -2476,6 +2482,12 @@ int KexiTableView::columns() const
 
 void KexiTableView::ensureCellVisible(int row, int col/*=-1*/)
 {
+	if (!isVisible()) {
+		//the table is invisible: we can't ensure visibility now
+		d->ensureCellVisibleOnShow = QPoint(row,col);
+		return;
+	}
+
 	//quite clever: ensure the cell is visible:
 	QRect r( columnPos(col==-1 ? d->curCol : col), rowPos(row), 
 		columnWidth(col==-1 ? d->curCol : col), rowHeight());

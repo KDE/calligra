@@ -63,6 +63,7 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	dragIndicatorLine = -1;
 	dropsAtRowEnabled = false;
 	initDataContentsOnShow = false;
+	ensureCellVisibleOnShow = QPoint(-1,-1);
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()

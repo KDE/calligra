@@ -208,6 +208,10 @@ class KexiTableViewPrivate
 
 	//! Used by delayed mode of maximizeColumnsWidth() 
 	QValueList<int> maximizeColumnsWidthOnShow;
+
+	/*! Used for delayed call of ensureCellVisible() after show().
+	 It's equal to (-1,-1) if ensureCellVisible() shouldn't e called. */
+	QPoint ensureCellVisibleOnShow;
 };
 
 #endif
