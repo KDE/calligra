@@ -1309,15 +1309,17 @@ void KivioSMLStencil::drawTextBox( KivioShape *pShape, KivioIntraStencilData *pD
   int _h = zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
 
-  /*QFont f = pShapeData->textFont();
+  QFont f = pShapeData->textFont();
   f.setPointSizeFloat(f.pointSizeFloat() * (((float)zoomHandler->zoom()) / 100.0));
   painter->setFont( f );
   painter->setTextColor( pShapeData->textColor() );
 
 
   int tf = pShapeData->vTextAlign() | pShapeData->hTextAlign();
-  painter->drawText( _x, _y, _w, _h, tf | Qt::WordBreak, pShapeData->text() );*/
-  QSimpleRichText richText(pShapeData->text(), pShapeData->textFont());
+  painter->drawText( _x, _y, _w, _h, tf | Qt::WordBreak, pShapeData->text() );
+  
+  // TODO Implement richtext support
+/*  QSimpleRichText richText(pShapeData->text(), pShapeData->textFont());
   richText.setWidth(_w);
   int hdiff = _h - richText.height();
   
@@ -1327,7 +1329,7 @@ void KivioSMLStencil::drawTextBox( KivioShape *pShape, KivioIntraStencilData *pD
     _y += hdiff;
   }
 
-  richText.draw(static_cast<KivioScreenPainter*>(painter)->painter(), _x, _y, QRect(0, 0, _w, _h), QColorGroup());
+  richText.draw(static_cast<KivioScreenPainter*>(painter)->painter(), _x, _y, QRect(0, 0, _w, _h), QColorGroup());*/
 }
 
 

@@ -28,7 +28,8 @@ KivioStencilTextDlg::KivioStencilTextDlg( QWidget *p, const QString &initText )
                   KDialogBase::Ok | KDialogBase::Cancel)
 {
   m_text = new QTextEdit(this, "stencilTextEdit");
-  m_text->setTextFormat(RichText);
+  // TODO Implement richtext support
+  //m_text->setTextFormat(RichText);
   m_text->setText(initText);
   setMainWidget(m_text);
 
