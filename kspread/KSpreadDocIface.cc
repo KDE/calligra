@@ -134,3 +134,17 @@ void KSpreadDocIface::changePageBorderColor( const QColor & _color)
     doc->changePageBorderColor( _color);
 }
 
+void KSpreadDocIface::addIgnoreWordAll( const QString &word)
+{
+    doc->addIgnoreWordAll( word );
+}
+
+void KSpreadDocIface::clearIgnoreWordAll( )
+{
+    doc->clearIgnoreWordAll();
+}
+
+QStringList KSpreadDocIface::spellListIgnoreAll() const
+{
+    return doc->spellListIgnoreAll();
+}

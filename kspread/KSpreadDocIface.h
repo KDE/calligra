@@ -6,6 +6,7 @@
 
 #include <qstring.h>
 #include <qcolor.h>
+#include <qstringlist.h>
 class KSpreadDoc;
 
 class KSpreadDocIface : virtual public KoDocumentIface
@@ -42,6 +43,10 @@ k_dcop:
 
     QColor pageBorderColor() const;
     void changePageBorderColor( const QColor & _color);
+    void addIgnoreWordAll( const QString &word);
+    void clearIgnoreWordAll( );
+    QStringList spellListIgnoreAll() const;
+
 
 private:
     KSpreadDoc* doc;
