@@ -545,12 +545,18 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     bool doubleUnderline = lastFormat->doubleUnderline();
     if ( doubleUnderline )
     {
-        //kdDebug() << "KoTextParag::drawParagStringInternal double underline. lastY=" << lastY << " baseLine=" << baseLine << " 1pix=" << KoBorder::zoomWidthY( 1, zh, 0 ) << " descent=(LU:" << lastFormat->descent() << " pix:" << zh->layoutUnitToPixelY( lastFormat->descent() ) << ")" << endl;
-	int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
-        painter.setPen( QPen( textColor, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+        // For double-underlining, both lines are of width 0.5 (*zoom), in the hopes
+	// to have room for both.
+	// Another solution would be to increase the descent, but this would have to be
+	// done in the formatter
+	// ### TODO scale the painter to do this, especially when printing, to gain more resolution
+        //kdDebug() << "KoTextParag::drawParagStringInternal double underline. lastY=" << lastY << " baseLine=" << baseLine << " 0.5pix=" << KoBorder::zoomWidthY( 0.5, zh, 0 ) << " 1pix=" << KoBorder::zoomWidthY( 1, zh, 0 ) << " descent=(LU:" << lastFormat->descent() << " pix:" << zh->layoutUnitToPixelY( lastFormat->descent() ) << ")" << endl;
+
+	int y = lastY + baseLine + KoBorder::zoomWidthY( 0.2, zh, 0 ); // slightly under the baseline if possible
+        painter.setPen( QPen( textColor, KoBorder::zoomWidthY( 0.5, zh, 1 ), Qt::SolidLine ) );
         painter.drawLine( startX, y, startX + bw, y );
         //kdDebug() << "KoTextParag::drawParagStringInternal drawing first line at " << y << endl;
-	y = lastY + baseLine + zh->layoutUnitToPixelY( lastFormat->descent() ) - KoBorder::zoomWidthY( 1, zh, 0 );
+	y = lastY + baseLine + zh->layoutUnitToPixelY( lastFormat->descent() ) /*- KoBorder::zoomWidthY( 1, zh, 0 )*/;
         //kdDebug() << "KoTextParag::drawParagStringInternal drawing second line at " << y << endl;
 	painter.drawLine( startX, y, startX + bw, y );
     }
