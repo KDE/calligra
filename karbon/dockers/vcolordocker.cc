@@ -95,7 +95,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 
 	//Pattern
 	KoPatternChooser *pPatternChooser = new KoPatternChooser( KarbonFactory::rServer()->patterns(), mTabWidget );
-    pPatternChooser->setCaption(i18n("Patterns"));
+    pPatternChooser->setCaption( i18n( "Patterns" ) );
 
 	connect( pPatternChooser, SIGNAL(selected( KoIconItem * ) ), this, SLOT( slotItemSelected( KoIconItem * )));
 	mTabWidget->addTab( pPatternChooser, i18n( "Patterns" ) );

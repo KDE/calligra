@@ -40,7 +40,7 @@
 #include "vgradientwidget.h"
 #include "vgradienttabwidget.h"
 #include "karbon_resourceserver.h"
-#include "../render/vkopainter.h"
+#include "vkopainter.h"
 #include "vfill.h"
 
 VGradientPreview::VGradientPreview( VGradient*& gradient, QWidget* parent, const char* name )

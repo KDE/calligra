@@ -83,8 +83,8 @@ bool
 VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 {
 	QMouseEvent *e = static_cast<QMouseEvent *>( event );
-	int ex = e->x() - ( width() - PANEL_SIZEX ) / 2;
-	int ey = e->y() - ( height() - PANEL_SIZEY ) / 2;
+	int ex = e->x() - int( ( width() - PANEL_SIZEX ) / 2 );
+	int ey = e->y() - int( ( height() - PANEL_SIZEY ) / 2 );
 	if( event && event->type() == QEvent::MouseButtonPress )
 	{
 		if( ex >= FILL_TOPX && ex <= FILL_BOTTOMX && ey >= FILL_TOPY && ey <= FILL_BOTTOMY )

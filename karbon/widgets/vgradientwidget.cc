@@ -31,7 +31,7 @@
 #include "vgradientwidget.h"
 #include "vcolordlg.h"
 #include "vfill.h"
-#include "../render/vkopainter.h"
+#include "vkopainter.h"
 
 static unsigned char midPoint_bits[] =
 {
