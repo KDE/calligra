@@ -617,9 +617,9 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 
 		double dx = ( gradient.vector().x() - gradient.origin().x() ) * m_zoomFactor;
 		double _y1 = gradient.vector().y();
-		_y1 = m_matrix.m22() * _y1 + m_matrix.dy();
+		_y1 = m_matrix.m22() * _y1 + m_matrix.dy() / m_zoomFactor;
 		double _y2 = gradient.origin().y();
-		_y2 = m_matrix.m22() * _y2 + m_matrix.dy();
+		_y2 = m_matrix.m22() * _y2 + m_matrix.dy() / m_zoomFactor;
 		kdDebug() << "_y1 : " << _y1 << ", _y2 " << _y2 << endl;
 		double dy = ( _y1 - _y2 ) * m_zoomFactor;
 		double scale = 1.0 / ( dx * dx + dy * dy );
