@@ -483,10 +483,11 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 		d->pCurrentItem = m_data->current();
 	}
 
-	if (!isInsertingEnabled())
-		setCursor(d->curRow-1); //move up
-	else
-		setCursor(d->curRow, d->curCol, true/*forceSet*/);
+	int row = d->curRow;
+	if (!isInsertingEnabled() && row>=rows())
+		row--; //move up
+
+	setCursor(row, d->curCol, true/*forceSet*/);
 
 	d->pVerticalHeader->removeLabel();
 //		if(moveCursor)
