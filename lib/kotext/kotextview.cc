@@ -757,10 +757,21 @@ bool KoTextView::maybeStartDrag( QMouseEvent* e )
 void KoTextView::insertParagraph(const QPoint &pos)
 {
     KoTextParag *last = textDocument()->lastParag();
+    KoTextFormat *f = 0;
+    KoStyle *style = last->style();
+    KoParagCounter *counter = last->counter();
+    int diff = (pos.y()- textDocument()->height());
+    kdDebug()<<" diff :"<<diff<<endl;
+    f = last->at( last->length()-1 )->format();
     //todo add kotextparag.
     for (int i = 0; i < 3 ;i++)
     {
         KoTextParag *s=textDocument()->createParag( textDocument(), last );
+        if ( f )
+	    s->setFormat( 0, 1, f, TRUE );
+        if ( style )
+            s->setStyle( style );
+        s->setCounter( counter );
         last = s;
     }
 }
