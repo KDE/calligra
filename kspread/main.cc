@@ -35,6 +35,7 @@ int main( int argc, char **argv )
 
     KCmdLineArgs::init( argc, argv, newKSpreadAboutData() );
     KCmdLineArgs::addCmdLineOptions( options );
+    KoApplication::addCmdLineOptions();
 
     KoApplication app;
 

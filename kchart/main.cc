@@ -32,6 +32,7 @@ int main( int argc, char **argv )
 {
     KCmdLineArgs::init( argc, argv, newKChartAboutData());
     KCmdLineArgs::addCmdLineOptions( options );
+    KoApplication::addCmdLineOptions();
 
     KoApplication app;
     if (!app.start())
