@@ -73,13 +73,13 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
   m_bg = KisColor::white();
 
   setupCanvas();
-  setupSideBar();
   setupScrollBars();
   setupRulers();
   setupTabBar();
   setupActions();
   setupDialogs();
   setupTools();
+  setupSideBar();
 }
 
 void KisView::setupCanvas()
@@ -104,7 +104,8 @@ void KisView::setupSideBar()
 {
   m_pSideBar = new KisSideBar(this, "kis_sidebar"); 
   connect(m_pSideBar, SIGNAL(fgColorChanged(const KisColor&)), this, SLOT(slotSetFGColor(const KisColor&)));
-  connect(m_pSideBar, SIGNAL(bgColorChanged(const KisColor&)), this, SLOT(slotSetBGColor(const KisColor&))); 
+  connect(m_pSideBar, SIGNAL(bgColorChanged(const KisColor&)), this, SLOT(slotSetBGColor(const KisColor&)));
+  m_pSideBar->slotSetBrush(*m_pBrush);
 }
 
 void KisView::setupScrollBars()
@@ -132,11 +133,13 @@ void KisView::setupRulers()
   m_pHRuler->setGeometry(20, 0, width()-20, 20);
   m_pVRuler->setGeometry(0, 20, 20, height()-20);
 
-  m_pVRuler->setFrameStyle(QFrame::WinPanel | QFrame::Raised);
-  m_pHRuler->setFrameStyle(QFrame::WinPanel | QFrame::Raised);
-
   m_pVRuler->setRulerStyle(KRuler::pixel);
   m_pHRuler->setRulerStyle(KRuler::pixel);
+
+  m_pVRuler->setFrameStyle(QFrame::Panel | QFrame::Raised);
+  m_pHRuler->setFrameStyle(QFrame::Panel | QFrame::Raised);
+  m_pHRuler->setLineWidth(1);
+  m_pVRuler->setLineWidth(1);
 }
 
 void KisView::setupTabBar()
@@ -494,12 +497,28 @@ void KisView::canvasGotMousePressEvent( QMouseEvent *e )
 
 void KisView::canvasGotMouseMoveEvent ( QMouseEvent *e )
 {
+  int x = e->pos().x() - xPaintOffset() + m_pHorz->value();
+  int y = e->pos().y() - yPaintOffset() + m_pVert->value();
+
   QMouseEvent ev( QEvent::MouseMove
-		  , QPoint(e->pos().x() - xPaintOffset() + m_pHorz->value(),
-			   e->pos().y() - yPaintOffset() + m_pVert->value())
+		  , QPoint(x, y)
 		  , e->globalPos(), e->button(), e->state() );
 
   emit canvasMouseMoveEvent( &ev );
+
+  if (x > docWidth() || x < 0 || y > docHeight() || y < 0)
+    {
+      x = -1;
+      y = -1;
+      m_pSideBar->slotSetPosition( QPoint( x,y ) );
+      m_pSideBar->slotSetColor( KisColor::white() );
+      return;
+    }
+
+  m_pSideBar->slotSetPosition( QPoint( x,y ) );
+
+  KisColor c = m_pColorPicker->pick( x, y );
+  m_pSideBar->slotSetColor( c );
 }
 
 void KisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
@@ -508,6 +527,8 @@ void KisView::canvasGotMouseReleaseEvent ( QMouseEvent *e )
 		  , QPoint(e->pos().x() - xPaintOffset() + m_pHorz->value(),
 			   e->pos().y() - yPaintOffset() + m_pVert->value())
 		  , e->globalPos(), e->button(), e->state() );
+
+  m_pSideBar->slotSetPosition( QPoint( -1, -1 ) );
 
   emit canvasMouseReleaseEvent( &ev );
 }
@@ -835,6 +856,8 @@ void KisView::slotSetBrush(const KisBrush* b)
     m_pAirBrushTool->setBrush(b);
   if (m_pEraserTool)
     m_pEraserTool->setBrush(b);
+
+  m_pSideBar->slotSetBrush(*b);
 }
 
 void KisView::slotSetFGColor(const KisColor& c)

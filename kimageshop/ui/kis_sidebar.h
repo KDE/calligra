@@ -22,9 +22,12 @@
 #define __kis_sidebar_h__
 
 #include <qframe.h>
+#include <qlabel.h>
 #include <kis_color.h>
 
 class KDualColorButton;
+class KisBrushWidget;
+class KisBrush;
 
 class TopFrame : public QFrame
 {
@@ -48,6 +51,24 @@ class ControlFrame : public QFrame
   void setFGColor(const KisColor&);
   void setBGColor(const KisColor&);
 
+  void setBrush(const KisBrush&);
+
+  void setC1Label(const QString& c) { m_pC1Label->setText(c); }
+  void setC2Label(const QString& c) { m_pC2Label->setText(c); }
+  void setC3Label(const QString& c) { m_pC3Label->setText(c); }
+  void setC4Label(const QString& c) { m_pC4Label->setText(c); }
+  void setCALabel(const QString& c) { m_pALabel->setText(c); }
+
+  void setC1Value(const QString& c) { m_pC1Value->setText(c); }
+  void setC2Value(const QString& c) { m_pC2Value->setText(c); }
+  void setC3Value(const QString& c) { m_pC3Value->setText(c); }
+  void setC4Value(const QString& c) { m_pC4Value->setText(c); }
+  void setAValue(const QString& c) { m_pAValue->setText(c); }
+  void setXValue(const QString& c) { m_pXValue->setText(c); }
+  void setYValue(const QString& c) { m_pYValue->setText(c); }
+
+  void setColorFrame(const QColor& c) { m_pColorFrame->setBackgroundColor(c); }
+
  signals:
   void fgColorChanged(const KisColor&);
   void bgColorChanged(const KisColor&);
@@ -61,6 +82,10 @@ class ControlFrame : public QFrame
 
  private:
   KDualColorButton  *m_pColorButton;
+  QLabel            *m_pC1Label, *m_pC2Label, *m_pC3Label, *m_pC4Label, *m_pALabel, *m_pXLabel, *m_pYLabel;
+  QLabel            *m_pC1Value, *m_pC2Value, *m_pC3Value, *m_pC4Value, *m_pAValue, *m_pXValue, *m_pYValue;
+  QFrame            *m_pColorFrame;
+  KisBrushWidget    *m_pBrushWidget;
 };
 
 class KisSideBar : public QWidget
@@ -74,6 +99,10 @@ class KisSideBar : public QWidget
  public slots:
   void slotSetFGColor(const KisColor&);
   void slotSetBGColor(const KisColor&);
+
+  void slotSetColor(const KisColor&);
+  void slotSetPosition( const QPoint& );
+  void slotSetBrush(const KisBrush&);
 
  signals:
   void fgColorChanged(const KisColor&);
