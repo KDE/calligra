@@ -78,7 +78,7 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
-	KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
+	KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x() / view->zoom(), m_lp.y() / view->zoom() ) );
 
 	KoRect rect = part()->document().selection()->boundingBox();
 
@@ -136,10 +136,10 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
 		}
 		KoPoint sp = KoPoint( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
-		mat.translate( sp.x() / view->zoom(), sp.y() / view->zoom());
+		mat.translate( sp.x(), sp.y() );
 		mat.scale( m_s1, m_s2 );
-		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ) / view->zoom(),
-						- ( sp.y() + view->canvasWidget()->contentsY() ) / view->zoom() );
+		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ),
+						- ( sp.y() + view->canvasWidget()->contentsY() ) );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->document().selection()->objects();
@@ -193,9 +193,7 @@ VScaleTool::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
-		part()->addCommand(
-			new VScaleCmd( &part()->document(), m_sp * ( 1.0 / view->zoom() ), m_s1, m_s2 ),
-			true );
+		part()->addCommand( new VScaleCmd( &part()->document(), m_sp * 1.0 /* view->zoom() )*/, m_s1, m_s2 ), true );
 
 		m_isDragging = false;
 
