@@ -63,6 +63,7 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT TABLE (FIELD+)>
 <!ATTLIST TABLE
     name CDATA #REQUIRED
+    description CDATA #REQUIRED
     fkey CDATA>
 
 <!ELEMENT FIELD EMPTY>
