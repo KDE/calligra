@@ -43,6 +43,10 @@ public:
     /** Return the text object in which this document is.
      * Note that this can be 0L (e.g. for paragraphs in the paragdia preview) */
     KPTextObject * textObject() const { return m_textobj; }
+    /// Extensions to KoTextParag::loadOasisSpan
+    bool loadSpanTag( const QDomElement& tag, KoOasisContext& context,
+                      KoTextParag* parag, uint pos,
+                      QString& textData, KoTextCustomItem* & customItem );
 
 private:
     KPTextObject * m_textobj;
