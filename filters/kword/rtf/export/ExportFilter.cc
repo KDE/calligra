@@ -153,13 +153,13 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
 
     QString strTag;
     if (strExt==".bmp")
-        strTag="\\wbitmap";
+        strTag="\\dibitmap";
     else if (strExt==".png")
         strTag="\\pngblip";
     else if ( (strExt==".jpeg") || (strExt==".jpg") )
         strTag="\\jpegblip";
     else if (strExt==".wmf")
-        strTag="\\wmetafile8";
+        strTag="\\wmetafile8"; // 8 == anisotropic
     else
     {
         // either without extension or format is unknown
