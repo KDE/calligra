@@ -285,7 +285,7 @@ void KSpreadViewIface::setSelectionPercent( bool b )
 
 void KSpreadViewIface::setSelectionMultiRow( bool enable )
 {
-  m_view->multiRow(enable);
+  m_view->wrapText(enable);
 }
 
 void KSpreadViewIface::setSelectionSize(int size)

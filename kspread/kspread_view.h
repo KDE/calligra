@@ -27,7 +27,6 @@
 #ifndef KSPREAD_VIEW
 #define KSPREAD_VIEW
 
-class QFrame;
 class QScrollBar;
 class QButton;
 
@@ -93,13 +92,14 @@ public:
     KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc *_doc );
     ~KSpreadView();
 
-    KSpreadCanvas* canvasWidget() const { return m_pCanvas; }
-    KSpreadHBorder* hBorderWidget()const { return m_pHBorderWidget; }
-    KSpreadVBorder* vBorderWidget()const { return m_pVBorderWidget; }
-    QScrollBar* horzScrollBar()const { return m_pHorzScrollBar; }
-    QScrollBar* vertScrollBar()const { return m_pVertScrollBar; }
-    KSpreadEditWidget* editWidget()const { return m_pEditWidget; }
-    KSpreadLocationEditWidget* posWidget()const { return m_pPosWidget; }
+    KSpreadCanvas* canvasWidget() const;
+    KSpreadHBorder* hBorderWidget() const;
+    KSpreadVBorder* vBorderWidget() const;
+    QScrollBar* horzScrollBar() const;
+    QScrollBar* vertScrollBar() const;
+    KSpreadEditWidget* editWidget() const;
+    KSpreadLocationEditWidget* posWidget() const;
+    KSpread::TabBar* tabBar() const;
 
     KSpreadDoc* doc()const { return m_pDoc; }
     void changeZoomMenu( int zoom );
@@ -112,7 +112,6 @@ public:
 
     const KSpreadSheet* activeTable() const { return m_pTable; }
     KSpreadSheet* activeTable() { return m_pTable; }
-    KSpread::TabBar* tabBar()const { return  m_pTabBar;}
 
     void openPopupMenu( const QPoint &_global );
     void popupRowMenu(const QPoint & _point ) ;
@@ -293,7 +292,7 @@ public slots:
     void alignTop( bool b );
     void alignMiddle( bool b );
     void alignBottom( bool b );
-    void multiRow( bool b );
+    void wrapText( bool b );
     void precisionMinus();
     void precisionPlus();
     void createStyleFromCell();
@@ -506,18 +505,7 @@ private:
     // GUI stuff
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
     void updateButton(KSpreadCell *cell, int column, int row);
-    QScrollBar *m_pHorzScrollBar;
-    QScrollBar *m_pVertScrollBar;
-    KSpreadCanvas *m_pCanvas;
-    KSpreadVBorder *m_pVBorderWidget;
-    KSpreadHBorder *m_pHBorderWidget;
-    KSpreadEditWidget *m_pEditWidget;
-    QWidget *m_pFrame;
-    QFrame *m_pToolWidget;
-    QButton *m_pOkButton;
-    QButton *m_pCancelButton;
-    KSpread::TabBar *m_pTabBar;
-    KSpreadLocationEditWidget *m_pPosWidget;
+
     KoCharSelectDia * m_specialCharDlg;
 
     struct
@@ -655,8 +643,6 @@ private:
   void initializeCellOperationActions();
   void initializeCellPropertyActions();
   void initializeTextFormatActions();
-  void initializeTextLayoutActions();
-  void initializeTextPropertyActions();
   void initializeTableActions();
   void initializeSpellChecking();
   void initializeRowColumnActions();
