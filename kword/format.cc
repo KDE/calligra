@@ -172,15 +172,18 @@ void KWFormat::incRef()
 }
 
 /*================================================================*/
-void KWFormat::save( ostream &out )
+QDomElement KWFormat::save( QDomDocument &doc )
 {
-    out << indent << "<COLOR red=\"" << color.red() << "\" green=\"" << color.green() << "\" blue=\"" << color.blue() << "\"/>" << endl;
-    out << indent << "<FONT name=\"" << correctQString( userFont->getFontName() ).latin1() << "\"/>" << endl;
-    out << indent << "<SIZE value=\"" << ptFontSize << "\"/>" << endl;
-    out << indent << "<WEIGHT value=\"" << weight << "\"/>" << endl;
-    out << indent << "<ITALIC value=\"" << static_cast<int>( italic ) << "\"/>" << endl;
-    out << indent << "<UNDERLINE value=\"" << static_cast<int>( underline ) << "\"/>" << endl;
-    out << indent << "<VERTALIGN value=\"" << static_cast<int>( vertAlign ) << "\"/>" << endl;
+    QDomElement format = doc.createElement( "FORMAT" );
+    format.setAttribute( "color", color.name() );
+    format.setAttribute( "font", userFont->getFontName() );
+    format.setAttribute( "size", ptFontSize );
+    format.setAttribute( "weight", weight );
+    format.setAttribute( "italic", italic );
+    format.setAttribute( "underline", underline );
+    format.setAttribute( "vertalign", vertAlign );
+
+    return format;
 }
 
 /*================================================================*/

@@ -44,7 +44,7 @@ public:
 	return indexMap; 
     }
     
-    QDomElement save( QDOM::Document &doc );
+    QDomElement save( QDomDocument &doc );
     void load( KOMLParser&, vector<KOMLAttrib>& );
     
 protected:

@@ -98,7 +98,7 @@ KWFormat *KWFormatCollection::insertFormat( QString _key, const KWFormat &_forma
 }
 
 /*================================================================*/
-QDomElement KWFormatCollection::save( QDOM::Document &doc )
+QDomElement KWFormatCollection::save( QDomDocument &doc )
 {
     QDomElement formats_ = doc.createElement( "FORMATS" );
     indexMap.clear();

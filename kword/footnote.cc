@@ -214,7 +214,7 @@ void KWFootNoteManager::addFootNoteText( KWFootNote *fn )
 }
 
 /*================================================================*/
-QDomElement KWFootNoteManager::save( QDOM::Document& doc )
+QDomElement KWFootNoteManager::save( QDomDocument& doc )
 {
   QDomElement e = doc.createElement( "FOOTNODE-GLOBAL" );
 

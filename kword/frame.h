@@ -187,7 +187,7 @@ public:
     virtual void deSelectFrame( unsigned int mx, unsigned int my );
     virtual QCursor getMouseCursor( unsigned int mx, unsigned int my );
 
-    virtual QDomElement save( QDOM::Document &doc );
+    virtual QDomElement save( QDomDocument &doc );
 
     int getNext( QRect _rect );
     int getPageOfFrame( int i ) { return frames.at( i )->getPageNum(); }
@@ -265,7 +265,7 @@ public:
     void insertParag( KWParag *_parag, InsertPos _pos );
     void splitParag( KWParag *_parag, unsigned int _pos );
 
-    virtual QDomElement save( QDOM::Document &doc );
+    virtual QDomElement save( QDomDocument &doc );
     virtual void load( KOMLParser&, vector<KOMLAttrib>& );
 
     bool getAutoCreateNewFrame() { return autoCreateNewFrame; }
@@ -312,7 +312,7 @@ public:
     { return image; }
     QString getFileName() { return filename; }
 
-    virtual QDomElement save( QDOM::Document &doc );
+    virtual QDomElement save( QDomDocument &doc );
     virtual void load( KOMLParser&, vector<KOMLAttrib>& );
 
 protected:

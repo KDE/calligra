@@ -121,7 +121,7 @@ void KWParagLayout::setFormat( const KWFormat &_f )
 }
 
 /*================================================================*/
-QDomElement KWParagLayout::save( const QDOM::Document& doc )
+QDomElement KWParagLayout::save( const QDomDocument& doc )
 {
     QDomElement layout = doc.createElement( "PARAGLAYOUT" );
     layout.setAttribute( "name", name );

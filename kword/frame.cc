@@ -516,7 +516,7 @@ QCursor KWFrameSet::getMouseCursor( unsigned int mx, unsigned int my )
 }
 
 /*================================================================*/
-QDomElement KWFrameSet::save( QDOM::Document &doc )
+QDomElement KWFrameSet::save( QDomDocument &doc )
 {
     QDomElement frameset = doc.createElement( "FRAMESET" );
     
@@ -883,7 +883,7 @@ void KWTextFrameSet::splitParag( KWParag *_parag, unsigned int _pos )
 }
 
 /*================================================================*/
-QDomElement KWTextFrameSet::save( QDOM::Document &doc )
+QDomElement KWTextFrameSet::save( QDomDocument &doc )
 {
     QDomElement frameset = KWFrameSet::save( doc );
     
@@ -1318,7 +1318,7 @@ void KWPictureFrameSet::setSize( QSize _imgSize )
 }
 
 /*================================================================*/
-QDomElement KWPictureFrameSet::save( QDOM::Document &doc )
+QDomElement KWPictureFrameSet::save( QDomDocument &doc )
 {
     QDomElement frameset = KWFrameSet::save( doc );
     frameset.setAttribute( "frameType", (int)getFrameType() );

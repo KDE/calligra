@@ -54,7 +54,7 @@ public:
     NoteType getNoteType() { return noteType; }
     void setNoteType( NoteType nt ) { noteType = nt; }
 
-    QDomElement save( QDOM::Document& );
+    QDomElement save( QDomDocument& );
     bool load( QDomElement& );
 
 protected:
