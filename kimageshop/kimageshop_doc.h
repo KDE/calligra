@@ -1,21 +1,22 @@
-/* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
- 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
- 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-*/     
+/*
+ *  kimageshop_doc.h - part of KImageShop
+ *
+ *  Copyright (c) 1999 The KImageShop team (see file AUTHORS)
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
 
 #ifndef __kimageshop_doc_h__
 #define __kimageshop_doc_h__
@@ -37,13 +38,13 @@
 #define EDITOR "IDL:KImageShop/Document:1.0"
 
 class KImageShopDoc : public QObject,
-                  virtual public KoDocument,
-                  virtual public KoPrintExt,
-                  virtual public KImageShop::Document_skel
+		      virtual public KoDocument,
+		      virtual public KoPrintExt,
+		      virtual public KImageShop::Document_skel
 {
   Q_OBJECT
-
-public:
+    
+ public:
   KImageShopDoc();
   ~KImageShopDoc();
 
@@ -53,13 +54,13 @@ public:
   virtual bool loadXML( KOMLParser&, KOStore::Store_ptr _store );
   virtual void cleanUp();
   virtual void removeView( KImageShopView* _view );
-
+  
   // C++
   virtual KImageShopView* createImageView( QWidget* _parent = 0 );
-
+  
   virtual CORBA::Boolean initDoc();
   virtual KOffice::MainWindow_ptr createMainWindow();
-
+  
   /**
    * Wrapper for @ref #createImageView
    */
@@ -73,7 +74,7 @@ public:
   virtual void print( QPaintDevice* _dev );
   virtual void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale );
   void paperLayoutDlg();
-
+  
   /**
    * @return the printable width of the paper in millimeters.
    */
@@ -117,7 +118,7 @@ public:
   KoFormat paperFormat();
   
   /**
-   * Changes the paper layout and repaints the currently displayed KSpreadTable.
+   * Changes the paper layout and repaints the currently displayed View
    */
   void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder, KoFormat _paper, KoOrientation orientation );
   void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder, const char * _paper, const char* _orientation );
