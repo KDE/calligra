@@ -26,8 +26,7 @@
 #define KSPREAD_TABBAR
 
 #include <qwidget.h>
-#include <qpainter.h>
-#include <qstrlist.h>
+#include <qstringlist.h>
 
 class KSpreadSheet;
 class KSpreadView;

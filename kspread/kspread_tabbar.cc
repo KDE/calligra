@@ -24,20 +24,20 @@
 
 #include "kspread_tabbar.h"
 
-#include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_map.h"
 #include "kspread_undo.h"
 #include "kspread_view.h"
 
-#include <qtimer.h>
 #include <qdrawutil.h>
+#include <qpainter.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qtimer.h>
 #include <qvaluevector.h>
+#include <qwidget.h>
 
-#include <kdebug.h>
-#include <klineeditdlg.h>
 #include <kmessagebox.h>
-#include <knotifyclient.h>
 
 namespace KSpread
 {
@@ -75,13 +75,20 @@ public:
     // whether a tab is being moved using the mouse and in which direction
     enum { moveTabNo = 0, moveTabBefore, moveTabAfter } moveTabFlag;
 
+    // true if autoscroll is active
     bool autoScroll;
 
+    // calculate the bounding rectangle for each visible tab
     void layoutTabs();
 
+    // find a tab whose bounding rectangle contains the pos
+    // return -1 if no such tab is found
     int tabAt( const QPoint& pos );
 
+    // draw a single tab
     void drawTab( QPainter& painter, QRect& rect, const QString& text, bool active );
+
+    // draw a marker to indicate tab moving
     void drawMoveMarker( QPainter& painter, int x, int y );
 };
 
@@ -213,11 +220,7 @@ void TabBar::addTab( const QString& text )
 void TabBar::removeTab( const QString& text )
 {
     int i = d->visibleTabs.findIndex( text );
-    if ( i == -1 )
-    {
-        kdError(36001) << "ERROR: KSpreadSheet '" << text << "' not found" << endl;
-        return;
-    }
+    if ( i == -1 ) return;
 
     if ( d->activeTab == i + 1 )
         d->activeTab = i;
