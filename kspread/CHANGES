@@ -681,3 +681,6 @@ etc...)
 Now you can goto cell or range directly.
 KSpreadLocationEditWidget displays cell pos or range, and allows to
 enter cell pos or range.
+-Now you can write a table name with a space example "Table 1"
+-Now you use press Key_Home you go to beginning of the row
+and not at cell A1

@@ -111,7 +111,7 @@ void KSpreadTextEditor::setText(QString text)
 {
     if(m_pEdit !=0)
 	m_pEdit->setText(text);
-}	
+}
 
 int KSpreadTextEditor::cursorPosition() const
 {
@@ -150,9 +150,9 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
         {
 	    // Send directly to canvas
 	    QApplication::sendEvent( parent(), e );
-	    return TRUE;	
+	    return TRUE;
 	}
-	
+
 	// End choosing. May be restarted by KSpreadTextEditor::slotTextChanged
 	if ( e->type() == QEvent::KeyPress && !k->text().isEmpty() )
         {
