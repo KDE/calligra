@@ -4164,13 +4164,16 @@ void KPresenterView::skipToPage( int num )
     if ( num < 0 || num > static_cast<int>( m_pKPresenterDoc->getPageNums() ) - 1 || !m_canvas )
         return;
     m_canvas->exitEditMode();
-    vert->setValue( 0 );
     currPg = num;
     emit currentPageChanged( currPg );
     if( sidebar )
         sidebar->setCurrentPage( currPg );
     KPrPage* page = m_pKPresenterDoc->pageList().at( currPg );
     m_canvas->setActivePage( page );
+    // don't scroll before new active page is set,
+    // the page active until then might have been deleted
+    vert->setValue( 0 );
+    horz->setValue( 0 );
     if ( notebar ) {
         QString text = page->noteText( );
         notebar->setCurrentNoteText( text );
