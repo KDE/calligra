@@ -30,6 +30,7 @@ private:
     QTextStream & inputStream;
     bool bReady;
     bool bSuccess;
+    QChar csv_delimiter;
 };
 
 #endif // CSVFILTER_H

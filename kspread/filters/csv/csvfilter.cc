@@ -10,20 +10,23 @@
 #include <qstring.h>
 #include <iostream.h> // debug output
 
+#include <kglobal.h>
+#include <klocale.h>
+
 #include <csvfilter.h>
 #include <csvfilter.moc>
-
-#define CSV_DELIMITER ';' // I never understood why CSV is actually separated by semicolons...
-
-// In fact, Excel's opinion of CSV is semicolons, 
-// but Applix's is commas (in a broken way : thousands are separated by commas as well !!)
-// I would recommend exporting from Applix using XLS instead, or ASCII grid (and s/<tab>/;/g)
 
 CSVFilter::CSVFilter(QTextStream &_inputStream, const QString & _tableName) 
   : inputStream ( _inputStream ), // keep a copy
     tree ( _tableName ), // XMLTree constructor takes the table name as argument
     bReady( false )
 {
+   QChar decimal_point = KGlobal::locale()->decimalSymbol()[0];
+   // English-speaking countries : decimal_point = '.', CSV delimiter = ','
+   // France :                     decimal_point = ',', CSV delimiter = ';'
+   // I need more input !!!
+   // Current hack :
+   csv_delimiter = (decimal_point == ',') ? ';' : ',';
 }
 
 CSVFilter::~CSVFilter() 
@@ -42,7 +45,7 @@ const bool CSVFilter::filter()
     if ( !line.isEmpty() )
     {
       sep = 0;
-      while ( (nextsep = line.find( CSV_DELIMITER, sep ) ) >= 0 ) // find next ";"
+      while ( (nextsep = line.find( csv_delimiter, sep ) ) >= 0 ) // find next ";"
       {
         // hmm... I'm afraid this method of parsing might be a bit slow...
         // And it doesn't support ';' nested in double quotes.
