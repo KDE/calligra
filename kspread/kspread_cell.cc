@@ -3817,23 +3817,28 @@ void KSpreadCell::checkValue()
     QDate tmpDate;
     if((tmpDate=locale()->readDate(m_strText)).isValid())
     {
-        m_bDate = true;
-        m_dValue = 0;
-        formatNumber tmpFormat=getFormatNumber(column(),row());
-        if(tmpFormat!=TextDate &&
-        !(tmpFormat>=200&&tmpFormat<=216))
-                {
-                //test if it's a short date or text date.
-                if( (locale()->formatDate(tmpDate,true)==m_strText))
-                        setFormatNumber(ShortDate);
-                else if((locale()->formatDate(tmpDate,false)==m_strText))
-                        setFormatNumber(TextDate);
-                else
-                        setFormatNumber(ShortDate);
-                }
-        m_Date=tmpDate;
-        m_strText=locale()->formatDate(m_Date,true); //short format date
-        return;
+        //KLocale::readDate( QString ) doesn't support long dates... _If_ the input is a long date,
+        //check if the first character isn't a number...
+        if ( m_strText.contains( " " ) == 0 )  //No spaces " " in short dates...
+        {
+                m_bDate = true;
+                m_dValue = 0;
+                formatNumber tmpFormat=getFormatNumber(column(),row());
+                if(tmpFormat!=TextDate &&
+                !(tmpFormat>=200&&tmpFormat<=216))
+                        {
+                        //test if it's a short date or text date.
+                        if( (locale()->formatDate(tmpDate,true)==m_strText))
+                                setFormatNumber(ShortDate);
+                        else if((locale()->formatDate(tmpDate,false)==m_strText))
+                                setFormatNumber(TextDate);
+                        else
+                                setFormatNumber(ShortDate);
+                        }
+                m_Date=tmpDate;
+                m_strText=locale()->formatDate(m_Date,true); //short format date
+                return;
+        }
     }
 
     if(m_pTable->getFirstLetterUpper())
