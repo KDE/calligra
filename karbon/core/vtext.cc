@@ -30,7 +30,7 @@
 #include "vvisitor.h"
 #include "vsegment.h"
 
-#ifdef HAVE_FREETYPE
+#ifdef HAVE_KARBONTEXT
 
 #include <freetype2/freetype/freetype.h>
 #include <fontconfig/fontconfig.h>
@@ -112,7 +112,7 @@ FT_Outline_Funcs OutlineMethods =
 	0
 };
 
-#endif // HAVE_FREETYPE
+#endif // HAVE_KARBONTEXT
 
 VText::VText( VObject* parent, VState state )
 	: VObject( parent, state ), m_basePath( 0L )
@@ -143,7 +143,11 @@ VText::VText( const VText& text )
 	// copy glyphs
 	VCompositeListIterator itr( text.m_glyphs );
 	for( ; itr.current() ; ++itr )
-		m_glyphs.append( itr.current()->clone() );
+	{
+		VComposite* c = itr.current()->clone();
+		c->setParent( this );
+		m_glyphs.append( c );
+	}
 
 	m_boundingBoxIsInvalid = true;
 }
@@ -171,6 +175,32 @@ VText::draw( VPainter* painter, const KoRect* /*rect*/ ) const
 	{
 		// paint fill:
 		painter->newPath();
+
+		if ( m_shadow )
+		{
+			VColor color;
+			if ( m_translucentShadow )
+			{
+				color.set( 0., 0., 0. );
+				color.setOpacity( .3 );
+			}
+			else
+			{
+				color.set( .3, .3, .3 );
+				color.setOpacity( 1. );
+			}
+			int shadowDx = m_shadowDistance * cos( m_shadowAngle / 360. * 6.2832 );
+			int shadowDy = m_shadowDistance * sin( m_shadowAngle / 360. * 6.2832 );
+		
+			for( itr.toFirst(); itr.current(); ++itr )
+			{
+				itr.current()->transform( QWMatrix( 1, 0, 0, 1, shadowDx, shadowDy ) );
+				itr.current()->setFill( VFill( color ) );
+				itr.current()->setStroke( VStroke( color ) );
+				itr.current()->draw( painter );
+				itr.current()->transform( QWMatrix( 1, 0, 0, 1, -shadowDx, -shadowDy ) );
+			}
+		}
 
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
@@ -262,6 +292,8 @@ VText::save( QDomElement& element ) const
 		element.appendChild( me );
 
 		m_basePath.save( me );
+		m_stroke->save( me );
+		m_fill->save( me );
 
 		// save all glyphs / paths
 		VCompositeListIterator itr = m_glyphs;
@@ -302,6 +334,14 @@ VText::load( const QDomElement& element )
 			{
 				m_basePath.load( e );
 			}
+			if( e.tagName() == "STROKE" )
+			{
+				m_stroke->load( e );
+			}
+			if( e.tagName() == "FILL" )
+			{
+				m_fill->load( e );
+			}
 		}
 	}
 	m_boundingBoxIsInvalid = true;
@@ -325,7 +365,7 @@ VText::accept( VVisitor& visitor )
 	visitor.visitVText( *this );
 }
 
-#ifdef HAVE_FREETYPE
+#ifdef HAVE_KARBONTEXT
 
 void
 VText::traceText()
@@ -502,6 +542,11 @@ VText::traceText()
 QString
 VText::buildRequest( QString family, int weight, int slant, double size, int &id )
 {
+		// Strip those stupid [Xft or whatever]...
+	int pos;
+	if( ( pos = family.find( '[' ) ) )
+		family = family.left( pos );
+
 	// Use FontConfig to locate & select fonts and use  FreeType2 to open them
 	FcPattern *pattern;
 	QString fileName;
@@ -554,4 +599,4 @@ VText::buildRequest( QString family, int weight, int slant, double size, int &id
 	return fileName;
 }
 
-#endif // HAVE_FREETYPE
+#endif // HAVE_KARBONTEXT

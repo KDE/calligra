@@ -22,6 +22,10 @@
 #ifndef _VTEXTTOOL_H_
 #define _VTEXTTOOL_H_
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include "qframe.h"
 #include "qgroupbox.h"
 
@@ -105,6 +109,12 @@ class VTextOptionsWidget : public QFrame
 		VText::Position position();
 		void setAlignment( VText::Alignment alignment );
 		VText::Alignment alignment();
+		void setUseShadow( bool state );
+		bool useShadow();
+		void setShadow( int angle, int distance, bool translucent );
+		bool translucentShadow();
+		int shadowAngle();
+		int shadowDistance();
 
 	public slots:
 		void valueChanged( int );
@@ -163,7 +173,8 @@ class VTextTool : public VTool, public VVisitor
 			public:
 				VTextCmd( VDocument* doc, KarbonView* view, const QString& name, VText* text );
 				VTextCmd( VDocument* doc, KarbonView* view, const QString& name, VText* text,
-						const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText );
+						const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText,
+						bool newUseShadow, int newShadowAngle, int newShadowDistance, bool newTranslucentShadow );
 				virtual ~VTextCmd();
 
 				virtual void execute();
@@ -183,6 +194,14 @@ class VTextTool : public VTool, public VVisitor
 					VText::Alignment newAlignment;
 					QString          oldText;
 					QString          newText;
+					bool             oldUseShadow;
+					bool             newUseShadow;
+					int              oldShadowAngle;
+					int              newShadowAngle;
+					int              oldShadowDistance;
+					int              newShadowDistance;
+					bool             oldTranslucentShadow;
+					bool             newTranslucentShadow;
 				} VTextModifPrivate;
 				
 				KarbonView*         m_view;

@@ -414,6 +414,36 @@ VText::Alignment VTextOptionsWidget::alignment()
 	return (VText::Alignment)m_textAlignment->currentItem();
 } // VTextOptionsWidget::alignment
 
+void VTextOptionsWidget::setUseShadow( bool state )
+{
+	m_shadow->setUseShadow( state );
+} // VTextOptionsWidget::setUseShadow
+
+bool VTextOptionsWidget::useShadow()
+{
+	return m_shadow->useShadow();
+} // VTextOptionsWidget::useShadow
+
+void VTextOptionsWidget::setShadow( int angle, int distance, bool translucent )
+{
+	m_shadow->setShadowValues( angle, distance, translucent );
+} // VTextOptionsWidget::setShadow
+
+bool VTextOptionsWidget::translucentShadow()
+{
+	return m_shadow->isTranslucent();
+} // VTextOptionsWidget::translucentShadow
+
+int VTextOptionsWidget::shadowAngle()
+{
+	return m_shadow->shadowAngle();
+} // VTextOptionsWidget::shadowAngle
+
+int VTextOptionsWidget::shadowDistance()
+{
+	return m_shadow->shadowDistance();
+} // VTextOptionsWidget::shadowDistance
+
 VTextTool::VTextTool( KarbonView* view )
 		: VTool( view )
 {
@@ -550,27 +580,37 @@ void VTextTool::textChanged()
 
 void VTextTool::accept()
 {
-	if( m_text )
+	VTextCmd* cmd;
+	
+	if( !m_creating )
 	{
-		m_text->setFont( m_editedText->font() );
-		m_text->setBasePath( m_editedText->basePath() );
-		m_text->setPosition( m_editedText->position() );
-		m_text->setAlignment( m_editedText->alignment() );
-		m_text->setText( m_editedText->text() );
-		m_text->traceText();
-		//m_text->setParent( view()->part()->document().activeLayer() );
-		m_text->setState( VObject::normal );
+		cmd = new VTextCmd(
+			&view()->part()->document(),
+			view(),
+			( m_creating ? i18n( "Insert text" ) : i18n( "Change text" ) ),
+			m_text,
+			m_editedText->font(),
+			m_editedText->basePath(),
+			m_editedText->position(),
+			m_editedText->alignment(),
+			m_editedText->text(),
+			m_optionsWidget->useShadow(),
+			m_optionsWidget->shadowAngle(), 
+			m_optionsWidget->shadowDistance(), 
+			m_optionsWidget->translucentShadow() );
 	}
 	else
 	{
 		m_text = m_editedText->clone();
+		m_text->setUseShadow( m_optionsWidget->useShadow() );
+		m_text->setShadow( m_optionsWidget->shadowAngle(), m_optionsWidget->shadowDistance(), m_optionsWidget->translucentShadow() );
+		cmd = new VTextCmd(
+			&view()->part()->document(),
+			view(),
+			( m_creating ? i18n( "Insert text" ) : i18n( "Change text" ) ),
+			m_text );
 	} 
-
-	VTextCmd* cmd = new VTextCmd(
-		&view()->part()->document(),
-		view(),
-		( m_creating ? i18n( "Insert text" ) : i18n( "Change text" ) ),
-		m_text );
+	
 	view()->part()->addCommand( cmd, true );
 	view()->selectionChanged();
 
@@ -643,20 +683,29 @@ VTextTool::VTextCmd::VTextCmd( VDocument* doc, KarbonView* view, const QString& 
 } // VTextTool::VTextCmd::VTextCmd
 
 VTextTool::VTextCmd::VTextCmd( VDocument* doc, KarbonView* view, const QString& name, VText* text,
-		const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText )
+		const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText,
+		bool newUseShadow, int newShadowAngle, int newShadowDistance, bool newTranslucentShadow )
 		: VCommand( doc, name, "14_text" ), m_view( view ), m_text( text )
 {
 	m_textModifications = (VTextModifPrivate*)malloc( sizeof( VTextModifPrivate ) );
-	m_textModifications->newFont     = newFont;
-	m_textModifications->oldFont     = text->font();
-	m_textModifications->newBasePath = newBasePath;
-	m_textModifications->oldBasePath = text->basePath();
-	m_textModifications->newPosition = newPosition;
-	m_textModifications->oldPosition = text->position();
-	m_textModifications->newAlignment= newAlignment;
-	m_textModifications->oldAlignment= text->alignment();
-	m_textModifications->newText     = newText;
-	m_textModifications->oldText     = text->text();
+	m_textModifications->newFont              = newFont;
+	m_textModifications->oldFont              = text->font();
+	m_textModifications->newBasePath          = newBasePath;
+	m_textModifications->oldBasePath          = text->basePath();
+	m_textModifications->newPosition          = newPosition;
+	m_textModifications->oldPosition          = text->position();
+	m_textModifications->newAlignment         = newAlignment;
+	m_textModifications->oldAlignment         = text->alignment();
+	m_textModifications->newText              = newText;
+	m_textModifications->oldText              = text->text();
+	m_textModifications->newUseShadow         = newUseShadow;
+	m_textModifications->oldUseShadow         = text->useShadow();
+	m_textModifications->newShadowAngle       = newShadowAngle;
+	m_textModifications->oldShadowAngle       = text->shadowAngle();
+	m_textModifications->newShadowDistance    = newShadowDistance;
+	m_textModifications->oldShadowDistance    = text->shadowDistance();
+	m_textModifications->newTranslucentShadow = newTranslucentShadow;
+	m_textModifications->oldTranslucentShadow = text->translucentShadow();
 	
 	m_executed = false;
 } // VTextTool::VTextCmd::VTextCmd
@@ -690,6 +739,8 @@ void VTextTool::VTextCmd::execute()
 		m_text->setPosition( m_textModifications->newPosition );
 		m_text->setAlignment( m_textModifications->newAlignment );
 		m_text->setText( m_textModifications->newText );
+		m_text->setUseShadow( m_textModifications->newUseShadow );
+		m_text->setShadow( m_textModifications->newShadowAngle, m_textModifications->newShadowDistance, m_textModifications->newTranslucentShadow );
 		m_text->traceText();
 	}
 
@@ -713,6 +764,8 @@ void VTextTool::VTextCmd::unexecute()
 		m_text->setPosition( m_textModifications->oldPosition );
 		m_text->setAlignment( m_textModifications->oldAlignment );
 		m_text->setText( m_textModifications->oldText );
+		m_text->setUseShadow( m_textModifications->oldUseShadow );
+		m_text->setShadow( m_textModifications->oldShadowAngle, m_textModifications->oldShadowDistance, m_textModifications->oldTranslucentShadow );
 		m_text->traceText();
 	}
 

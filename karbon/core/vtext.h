@@ -65,6 +65,13 @@ public:
 	virtual Position position() { return m_position; }
 	virtual void setAlignment( Alignment alignment ) { m_alignment = alignment; }
 	virtual Alignment alignment() { return m_alignment; }
+	virtual void setUseShadow( bool state ) { m_shadow = state; }
+	virtual bool useShadow() { return m_shadow; }
+	virtual void setShadow( int angle, int distance, bool translucent ) 
+		{ m_translucentShadow = translucent; m_shadowAngle = angle; m_shadowDistance = distance; }
+	virtual bool translucentShadow() { return m_translucentShadow; }
+	virtual int shadowAngle() { return m_shadowAngle; }
+	virtual int shadowDistance() { return m_shadowDistance; }
 	
 	virtual void draw( VPainter* painter, const KoRect* rect = 0L ) const;
 
@@ -81,12 +88,12 @@ public:
 	
 	virtual void accept( VVisitor& visitor );
 	
-#ifdef HAVE_FREETYPE
+#ifdef HAVE_KARBONTEXT
 	void traceText();
-#endif // HAVE_FREETYPE
 
 protected:
 	QString buildRequest( QString family, int weight, int slant, double size, int &id );
+#endif // HAVE_KARBONTEXT
 
 private:
 		// The font to use to draw the text.
@@ -99,6 +106,11 @@ private:
 	Alignment   m_alignment;
 		// The text to draw
 	QString     m_text;
+		// Shadow parameters
+	bool        m_shadow;
+	bool        m_translucentShadow;
+	int         m_shadowDistance;
+	int         m_shadowAngle;
 		// The glyphs (allow to keep a font even if not present on the computer. works as long as you don't edit the text.)
 	VCompositeList   m_glyphs;
 };
