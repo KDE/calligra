@@ -696,11 +696,13 @@ void KoMainWindow::slotFilePrintPreview()
     KPrinter printer;
     KTempFile tmpFile;
 
+    // This line has to be before setupPrinter to let the apps decide what to
+    // print and what not (if they want to :)
+    printer.setFromTo( printer.minPage(), printer.maxPage() );
     rootView()->setupPrinter( printer );
 
     printer.setOutputFileName(tmpFile.name());
     printer.setOutputToFile( true ); // kdeprint bug - setOutputFileName is enough with QPrinter
-    printer.setFromTo( printer.minPage(), printer.maxPage() );
     printer.setNumCopies( 1 );
     rootView()->print(printer);
     KoPrintPreview::preview(this, "KoPrintPreviewDialog", tmpFile.name());
