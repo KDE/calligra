@@ -43,10 +43,10 @@ DIGIT    [0-9]
 
 {DIGIT}*"\."{DIGIT}+ { yylval.dbl = atof( yytext ); return NUM; }
 
-"$"?[A-Z]+"$"?{DIGIT}+ { printf("CELL %s\n",yytext); yylval.dbl = getCell( yytext ); return NUM; }
-[A-Za-z0-9]+"!""$"?[A-Z]+"$"?{DIGIT}+ { printf("CELL2 %s\n",yytext); yylval.dbl = getCell2( yytext ); return NUM; }
-[A-Za-z0-9]+"!""$"?[A-Z]+"$"?{DIGIT}+":""$"?[A-Z]+"$"?{DIGIT}+ { printf("RANGE %s\n",yytext); yylval.range = parseRange2( yytext ); return RANGE; }
-"$"?[A-Z]+"$"?{DIGIT}+":""$"?[A-Z]+"$"?{DIGIT}+ { printf("RANGE %s\n",yytext); yylval.range = parseRange( yytext ); return RANGE; }
+"$"?[A-Z]+"$"?{DIGIT}+ { yylval.dbl = getCell( yytext ); return NUM; }
+[A-Za-z0-9]+"!""$"?[A-Z]+"$"?{DIGIT}+ { yylval.dbl = getCell2( yytext ); return NUM; }
+[A-Za-z0-9]+"!""$"?[A-Z]+"$"?{DIGIT}+":""$"?[A-Z]+"$"?{DIGIT}+ { yylval.range = parseRange2( yytext ); return RANGE; }
+"$"?[A-Z]+"$"?{DIGIT}+":""$"?[A-Z]+"$"?{DIGIT}+ { yylval.range = parseRange( yytext ); return RANGE; }
 
 [a-zA-Z]+ { yylval.name = putSymbol( yytext ); return ID; }
 

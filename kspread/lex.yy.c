@@ -4,12 +4,6 @@
  * $Header$
  */
 
-/* Reggie: this is needed at least on alpha/linux */
-#include <math.h>
-#ifndef PI
-#define PI M_PI
-#endif
-
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
@@ -785,22 +779,22 @@ YY_RULE_SETUP
 case 18:
 YY_RULE_SETUP
 #line 46 "lex.l"
-{ printf("CELL %s\n",yytext); yylval.dbl = getCell( yytext ); return NUM; }
+{ yylval.dbl = getCell( yytext ); return NUM; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 47 "lex.l"
-{ printf("CELL2 %s\n",yytext); yylval.dbl = getCell2( yytext ); return NUM; }
+{ yylval.dbl = getCell2( yytext ); return NUM; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 48 "lex.l"
-{ printf("RANGE %s\n",yytext); yylval.range = parseRange2( yytext ); return RANGE; }
+{ yylval.range = parseRange2( yytext ); return RANGE; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
 #line 49 "lex.l"
-{ printf("RANGE %s\n",yytext); yylval.range = parseRange( yytext ); return RANGE; }
+{ yylval.range = parseRange( yytext ); return RANGE; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP

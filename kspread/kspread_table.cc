@@ -176,6 +176,10 @@ KSpreadTable::KSpreadTable( KSpreadDoc *_doc, const char *_name )
   m_pWidget = new QWidget();
   m_pPainter = new QPainter;
   m_pPainter->begin( m_pWidget );
+
+  m_iMaxColumn = 256;
+  m_iMaxRow = 256;
+  m_bScrollbarUpdates = true;
 }
 
 //-----------------------------------------------------------
@@ -506,15 +510,29 @@ int KSpreadTable::rowPos( int _row, KSpreadView *_view )
     return y;
 }
 
-KSpreadCell* KSpreadTable::cellAt( int _column, int _row )
+KSpreadCell* KSpreadTable::cellAt( int _column, int _row, bool _no_scrollbar_update )
 {
-    int i = _row + ( _column * 0x10000 );
+  if ( !_no_scrollbar_update && m_bScrollbarUpdates )
+  {
+    if ( _column > m_iMaxColumn )
+    {
+      m_iMaxColumn = _column;
+      emit sig_maxColumn( _column );
+    }
+    if ( _row > m_iMaxRow )
+    {
+      m_iMaxRow = _row;
+      emit sig_maxRow( _row );
+    }
+  }
+  
+  int i = _row + ( _column * 0x10000 );
     
-    KSpreadCell *p = m_dctCells[ i ];
-    if ( p != 0L )
-	return p;
+  KSpreadCell *p = m_dctCells[ i ];
+  if ( p != 0L )
+    return p;
 
-    return m_pDefaultCell;
+  return m_pDefaultCell;
 }
 
 ColumnLayout* KSpreadTable::nonDefaultColumnLayout( int _column )
@@ -544,18 +562,33 @@ RowLayout* KSpreadTable::nonDefaultRowLayout( int _row )
     return p;
 }
 
-KSpreadCell* KSpreadTable::nonDefaultCell( int _column, int _row )
+KSpreadCell* KSpreadTable::nonDefaultCell( int _column, int _row,
+					   bool _no_scrollbar_update )
 {
-    int key = _row + ( _column * 0x10000 );
+  if ( !_no_scrollbar_update && m_bScrollbarUpdates )
+  {
+    if ( _column > m_iMaxColumn )
+    {
+      m_iMaxColumn = _column;
+      emit sig_maxColumn( _column );
+    }
+    if ( _row > m_iMaxRow )
+    {
+      m_iMaxRow = _row;
+      emit sig_maxRow( _row );
+    }
+  }
+  
+  int key = _row + ( _column * 0x10000 );
     
-    KSpreadCell *p = m_dctCells[ key ];
-    if ( p != 0L )
-	return p;
-
-    KSpreadCell *cell = new KSpreadCell( this, _column, _row );
-    m_dctCells.insert( key, cell );
-
-    return cell;
+  KSpreadCell *p = m_dctCells[ key ];
+  if ( p != 0L )
+    return p;
+  
+  KSpreadCell *cell = new KSpreadCell( this, _column, _row );
+  m_dctCells.insert( key, cell );
+  
+  return cell;
 }
 
 void KSpreadTable::setText( int _row, int _column, const char *_text )
@@ -999,9 +1032,9 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
 	{
 	  it.current()->setDisplayDirtyFlag();
 	  if ( _delta == 1 )
-	    it.current()->setPrecision( it.current()->precision() + 1 );
-	  else if ( it.current()->precision() >= 0 )
-	    it.current()->setPrecision( it.current()->precision() - 1 );
+	    it.current()->incPrecision();
+	  else
+	    it.current()->decPrecision();
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -1021,9 +1054,9 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
 	{
 	  it.current()->setDisplayDirtyFlag();
 	  if ( _delta == 1 )
-	    it.current()->setPrecision( it.current()->precision() + 1 );
-	  else if ( it.current()->precision() >= 0 )
-	    it.current()->setPrecision( it.current()->precision() - 1 );
+	    it.current()->incPrecision();
+	  else
+	    it.current()->decPrecision();
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -1059,9 +1092,9 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
 		cell->setDisplayDirtyFlag();
 
 		if ( _delta == 1 )
-		  cell->setPrecision( cell->precision() + 1 );
-		else if ( cell->precision() >= 0 )
-		  cell->setPrecision( cell->precision() - 1 );
+		  cell->incPrecision();
+		else
+		  cell->decPrecision();
 
 		cell->clearDisplayDirtyFlag();
 	    }
@@ -2036,6 +2069,8 @@ bool KSpreadTable::save( ostream &out )
 
 bool KSpreadTable::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
 {
+  // enableScrollBarUpdates( false );
+  
   vector<KOMLAttrib>::const_iterator it = _attribs.begin();
   for( ; it != _attribs.end(); it++ )
   {
@@ -2096,6 +2131,8 @@ bool KSpreadTable::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
     }
   }
 
+  // enableScrollBarUpdates( false );
+
   return true;
 }
 
@@ -2103,7 +2140,8 @@ void KSpreadTable::update()
 {
   QIntDictIterator<KSpreadCell> it( m_dctCells );
   for ( ; it.current(); ++it ) 
-    it.current()->setText( it.current()->valueString() );
+    if ( it.current()->calcDirtyFlag() )
+      it.current()->update();
 }
 
 bool KSpreadTable::loadChildren( KOStore::Store_ptr _store )
@@ -2212,6 +2250,20 @@ void KSpreadTable::insertCell( KSpreadCell *_cell )
 {
   int key = _cell->row() + ( _cell->column() * 0x10000 );    
   m_dctCells.replace( key, _cell );
+
+  if ( m_bScrollbarUpdates )
+  {
+    if ( _cell->column() > m_iMaxColumn )
+    {
+      m_iMaxColumn = _cell->column();
+      emit sig_maxColumn( _cell->column() );
+    }
+    if ( _cell->row() > m_iMaxRow )
+    {
+      m_iMaxRow = _cell->row();
+      emit sig_maxRow( _cell->row() );
+    }
+  }
 }
 
 void KSpreadTable::insertColumnLayout( ColumnLayout *_l )
@@ -2361,6 +2413,11 @@ KSpreadTable::~KSpreadTable()
   m_pPainter->end();
   delete m_pPainter;
   delete m_pWidget;
+}
+
+void KSpreadTable::enableScrollBarUpdates( bool _enable )
+{
+  m_bScrollbarUpdates = _enable;
 }
 
 /**********************************************************

@@ -193,12 +193,12 @@ extern int rfunc1( const char *_name, range* r, double* _res )
 	KSpreadCell *obj = r->table->cellAt( x, y );
 	if ( obj->isValue() )
 	  res += obj->valueDouble();
-	else
+	/* else
 	{    
 	  setError( ERR_NOT_A_NUMERIC_VALUE, "" );
 	  *_res = 1.0;
 	  return -1;
-	}
+	  } */
       }
     
     *_res = res;
@@ -421,9 +421,9 @@ double cellValue( void *_table, int _x, int _y )
   if ( obj->isValue() )
     return obj->valueDouble();
 
-  setError( ERR_NOT_A_NUMERIC_VALUE, "" );
+  // setError( ERR_NOT_A_NUMERIC_VALUE, "" );
   
-  return 1.0;
+  return 0.0;
 }
 
 void makeCellDepend( const char *_str )

@@ -64,6 +64,8 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row, const cha
     m_iExtraXCells = 0;
     m_iExtraYCells = 0;
     m_pObscuringCell = 0;
+
+    m_iPrecision = -1;
 }
 
 void KSpreadCell::copyLayout( int _column, int _row )
@@ -903,22 +905,23 @@ void KSpreadCell::clearFormular()
 bool KSpreadCell::calc( bool _makedepend )
 {
   if ( !m_bFormular )
-    return TRUE;
+    return true;
   
   if ( !m_bCalcDirtyFlag )
-    return TRUE;
+    return true;
     
   if ( m_bProgressFlag )
   {
     printf("ERROR: Circle\n");
     m_strFormularOut = "##";
-    m_bLayoutDirtyFlag= TRUE;    
+    m_bLayoutDirtyFlag = true;    
     return FALSE;
   }
   
-  m_bLayoutDirtyFlag= TRUE;    
-  m_bProgressFlag = TRUE;
-    
+  m_bLayoutDirtyFlag= true;
+  m_bProgressFlag = true;
+  m_bCalcDirtyFlag = false;
+  
   if ( _makedepend )
   {
     KSpreadDepend *dep;
@@ -937,14 +940,13 @@ bool KSpreadCell::calc( bool _makedepend )
 	  {
 	    KSpreadCell *cell = dep->m_pTable->cellAt( x, y );
 	    if ( cell == 0L )
-	      return FALSE;
+	      return false;
 	    ok = cell->calc( _makedepend );
 	    if ( !ok )
 	    {
 	      printf("ERROR: Calculating\n");
-	      m_bProgressFlag = FALSE;
-	      m_bCalcDirtyFlag = FALSE;
-	      return FALSE;
+	      m_bProgressFlag = false;
+	      return false;
 	    }
 	  }
       }
@@ -952,14 +954,13 @@ bool KSpreadCell::calc( bool _makedepend )
       {
 	KSpreadCell *cell = dep->m_pTable->cellAt( dep->m_iColumn, dep->m_iRow );
 	if ( cell == 0L )
-	  return FALSE;
+	  return false;
 	ok = cell->calc( _makedepend );
 	if ( !ok )
 	{
 	  printf("ERROR: Calculating\n");
-	  m_bProgressFlag = FALSE;
-	  m_bCalcDirtyFlag = FALSE;
-	  return FALSE;
+	  m_bProgressFlag = false;
+	  return false;
 	}
       }
     }
@@ -985,12 +986,11 @@ bool KSpreadCell::calc( bool _makedepend )
   
   checkValue();
   */
-  m_bProgressFlag = FALSE;
-  m_bCalcDirtyFlag = FALSE;
+  m_bProgressFlag = false;
 
   DO_UPDATE;
   
-  return TRUE;
+  return true;
 }
 
 const char* KSpreadCell::valueString()
@@ -1519,6 +1519,57 @@ const QColor& KSpreadCell::bottomBorderColor( int _col, int _row )
     return cell->topBorderColor( column(), row() + 1 );
 }
 
+void KSpreadCell::incPrecision()
+{
+  if ( !isValue() )
+    return;
+
+  if ( m_iPrecision == -1 )
+  {
+    const char *val = valueString();
+    int len = strlen( val );
+    // TODO: Watch for "," in germany
+    int pos = 0;
+    while( val[pos] && val[pos] != '.' ) pos++;
+    if ( pos == len )
+      m_iPrecision = 1;
+    else
+      m_iPrecision = len - pos;
+    m_bLayoutDirtyFlag = TRUE;
+  }
+  else if ( m_iPrecision < 10 )
+  {    
+    m_iPrecision++;
+    m_bLayoutDirtyFlag = TRUE;
+  }
+}
+
+void KSpreadCell::decPrecision()
+{
+  if ( !isValue() )
+    return;
+ 
+  if ( m_iPrecision == -1 )
+  {
+    const char *val = valueString();
+    int len = strlen( val );
+    // TODO: Watch for "," in germany
+    int pos = 0;
+    while( val[pos] && val[pos] != '.' ) pos++;
+    if ( pos == len )
+      return;
+    m_iPrecision = len - pos - 2;
+    if ( m_iPrecision < 0 )
+      m_iPrecision = 0;
+    m_bLayoutDirtyFlag = TRUE;
+  }
+  else if ( m_iPrecision > 0 )
+  {    
+    m_iPrecision--;
+    m_bLayoutDirtyFlag = TRUE;
+  }
+}
+
 void KSpreadCell::setPrefix( const char * _prefix )
 {
   m_strPrefix = _prefix;
@@ -1592,6 +1643,8 @@ void KSpreadCell::setValue( double _d )
 
 void KSpreadCell::update()
 {
+  cerr << "C=" << m_iColumn << " R=" << m_iRow << endl;
+  
   UPDATE_BEGIN;
 
   /* m_lstDepends.clear();
@@ -1650,6 +1703,8 @@ void KSpreadCell::update()
   }
 
   UPDATE_END;
+
+  cerr << "END C=" << m_iColumn << " R=" << m_iRow << endl;
 }
 
 void KSpreadCell::checkValue()
@@ -2006,10 +2061,11 @@ bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs, int _x
   } while( res );
 
   text.stripWhiteSpace();
-  // cerr << "TEXT: '" << text << "'" << endl;
+  cerr << "TEXT: '" << text << "'" << endl;
   if ( text[0] == '=' )
   {
     QString tmp = decodeFormular( text.c_str(), m_iColumn, m_iRow );
+    cerr << "DECODED: '" << tmp << "'" << endl;
     setText( tmp );
   }
   else

@@ -1,6 +1,5 @@
 #include <qprinter.h>
 #include "kspread_view.h"
-
 #include <kapp.h>
 #include <qpushbt.h>
 #include <qmsgbox.h>
@@ -919,7 +918,8 @@ void KSpreadView::addTable( KSpreadTable *_t )
   QObject::connect( _t, SIGNAL( sig_updateChildGeometry( KSpreadChild* ) ),
 		    SLOT( slotUpdateChildGeometry( KSpreadChild* ) ) );
   QObject::connect( _t, SIGNAL( sig_removeChild( KSpreadChild* ) ), SLOT( slotRemoveChild( KSpreadChild* ) ) );
-
+  QObject::connect( _t, SIGNAL( sig_maxColumn( int ) ), SLOT( slotMaxColumn( int ) ) );
+  QObject::connect( _t, SIGNAL( sig_maxRow( int ) ), SLOT( slotMaxRow( int ) ) );
 }
 
 void KSpreadView::removeTable( KSpreadTable *_t )
@@ -962,6 +962,9 @@ void KSpreadView::setActiveTable( KSpreadTable *_t )
   m_pVBorderWidget->repaint();
   m_pHBorderWidget->repaint();
   m_pCanvasWidget->repaint();
+
+  slotMaxColumn( m_pTable->maxColumn() );
+  slotMaxRow( m_pTable->maxRow() );
 }
 
 KSpreadTable* KSpreadView::findTable( const char *_name )
@@ -975,6 +978,20 @@ KSpreadTable* KSpreadView::findTable( const char *_name )
   }
   
   return 0L;
+}
+
+void KSpreadView::slotMaxColumn( int _max_column )
+{
+  int xpos = m_pTable->columnPos( _max_column + 10, this );
+
+  m_pHorzScrollBar->setRange( 0, xpos + xOffset() );
+}
+
+void KSpreadView::slotMaxRow( int _max_row )
+{
+  int ypos = m_pTable->rowPos( _max_row + 10, this );
+
+  m_pVertScrollBar->setRange( 0, ypos + yOffset() );
 }
 
 void KSpreadView::slotChangeTable( const char *_name )
@@ -1717,6 +1734,8 @@ void KSpreadView::slotScrollHorz( int _value )
   if ( m_pTable == 0L )
     return;
 
+  m_pTable->enableScrollBarUpdates( false );
+  
   hideMarker();
   
   int dx = xOffset() - _value;
@@ -1725,12 +1744,16 @@ void KSpreadView::slotScrollHorz( int _value )
   m_pHBorderWidget->scroll( dx, 0 );
 
   showMarker();
+
+  m_pTable->enableScrollBarUpdates( true );
 }
 
 void KSpreadView::slotScrollVert( int _value )
 {
   if ( m_pTable == 0L )
     return;
+
+  m_pTable->enableScrollBarUpdates( false );
 
   hideMarker();
   
@@ -1740,6 +1763,8 @@ void KSpreadView::slotScrollVert( int _value )
   m_pVBorderWidget->scroll( 0, dy );
 
   showMarker();
+
+  m_pTable->enableScrollBarUpdates( true );
 }
 
 void KSpreadView::setText( const char *_text )

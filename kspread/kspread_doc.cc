@@ -496,11 +496,12 @@ bool KSpreadDoc::completeLoading( KOStore::Store_ptr /* _store */ )
 {
   cerr << "------------------------ COMPLETING --------------------" << endl;
 
+  m_bLoading = false;
+
   m_pMap->update();
 
   cerr << "------------------------ COMPLETION DONE --------------------" << endl;
 
-  m_bLoading = false;
   m_bModified = false;
 
   return true;

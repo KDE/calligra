@@ -244,13 +244,24 @@ public:
      * @return a non default RowLayout for this row.
      */
     RowLayout* nonDefaultRowLayout( int _row );
-    KSpreadCell* cellAt( int _column, int _row );
+    /**
+     * @param _no_scrollbar_update wont change the scrollbar if set to true disregarding
+     *                             wether _column/_row are bigger than
+     *                             m_iMaxRow/m_iMaxColumn. May be overrules by
+     *                             @ref #m_bScrollbarUpdates.
+     */
+    KSpreadCell* cellAt( int _column, int _row, bool _no_scrollbar_update = false );
     /**
      * If no special KSpreadCell exists for this position then a new one is created.
      *
+     * @param _no_scrollbar_update wont change the scrollbar if set to true disregarding
+     *                             wether _column/_row are bigger than
+     *                             m_iMaxRow/m_iMaxColumn. May be overrules by
+     *                             @ref #m_bScrollbarUpdates.
+     *
      * @return a non default KSpreadCell for the position.
      */
-    KSpreadCell* nonDefaultCell( int _column, int _row );
+    KSpreadCell* nonDefaultCell( int _column, int _row, bool _no_scrollbar_update = false );
 
     KSpreadCell* defaultCell() { return m_pDefaultCell; }
   
@@ -436,6 +447,10 @@ public:
 
     int id() { return m_id; }
 
+    int maxColumn() { return m_iMaxColumn; }
+    int maxRow() { return m_iMaxRow; }
+    void enableScrollBarUpdates( bool _enable );
+  
     static KSpreadTable* find( int _id );
   
     /**
@@ -456,7 +471,9 @@ signals:
     void sig_insertChild( KSpreadChild *_child );
     void sig_updateChildGeometry( KSpreadChild *_child );
     void sig_removeChild( KSpreadChild *_child );
-
+    void sig_maxColumn( int _max_column );
+    void sig_maxRow( int _max_row );
+  
 protected:
     void insertChild( KSpreadChild *_child );
   
@@ -539,6 +556,16 @@ protected:
     QList<KSpreadChild> m_lstChildren;
 
     int m_id;
+
+    /**
+     * The highest row ever accessed by the user.
+     */
+    int m_iMaxRow;
+    /**
+     * The highest column ever accessed by the user.
+     */
+    int m_iMaxColumn;
+    bool m_bScrollbarUpdates;
   
     static int s_id;
     static QIntDict<KSpreadTable>* s_mapTables;

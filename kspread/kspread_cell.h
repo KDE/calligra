@@ -120,6 +120,9 @@ public:
 	
     const char *text() { return m_strText.data(); }
 
+    void incPrecision();
+    void decPrecision();
+  
     /**
      * Set the column this cell is now in. This function is usually used after the 'paste'
      * command.
@@ -257,7 +260,8 @@ public:
      * Set the calcDirtyFlag
      */
     void setCalcDirtyFlag() { if ( m_bFormular ) m_bCalcDirtyFlag = TRUE; }
-    
+    bool calcDirtyFlag() { if ( !m_bFormular ) return false; return m_bCalcDirtyFlag; }
+  
     /**
      * Sets the calcDirtyFlag if this cell depends on a given cell.
      * If cell (_column|_row) in table '_table' changed and we depend on this cells value, the

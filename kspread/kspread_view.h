@@ -570,6 +570,8 @@ protected slots:
      */
     void slotLayoutDlg();
 
+    void slotMaxColumn( int _max_column );
+    void slotMaxRow( int _max_row );
     /**
      * @ref #tabBar is connected to this slot.
      * When the user selects a new table using the @ref #tabBar this slot
