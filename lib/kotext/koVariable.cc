@@ -29,6 +29,13 @@
 #include <koUtils.h>
 #include <koDocument.h>
 #include <kdialogbase.h>
+#include <kconfig.h>
+#include <kinstance.h>
+#include <kaboutdata.h>
+#include <qstringlist.h>
+#include <qcombobox.h>
+#include <qvaluelist.h>
+#include <qradiobutton.h>
 #include "timeformatwidget_impl.h"
 
 QString KoVariableDateFormat::convert( const QDate & date ) const
@@ -270,6 +277,7 @@ void KoVariable::save( QDomElement &formatElem )
     formatElem.appendChild( typeElem );
     typeElem.setAttribute( "type", static_cast<int>( type() ) );
     typeElem.setAttribute( "key", m_varFormat->key() );
+    typeElem.setAttribute( "text", text() );
 }
 
 void KoVariable::load( QDomElement & )
@@ -282,6 +290,12 @@ KoVariable * KoVariable::createVariable( int type, int subtype, KoVariableFormat
     QCString string;
     KDialogBase* dialog;
     QWidget* widget;
+	QStringList stringList;
+	QStringList pstringList;
+	KAboutData* kad=new KAboutData("koffice", "KOffice Library", "");
+	KConfig * config;
+	KInstance* instance;
+	int count=1, noe=5, nope=5;
     if ( varFormat == 0L )
     {
         // Get the default format for this variable (this method is only called in the interactive case, not when loading)
@@ -289,20 +303,86 @@ KoVariable * KoVariable::createVariable( int type, int subtype, KoVariableFormat
         case VT_DATE:
             varFormat = coll->format( "DATE" );
             break;
-        case VT_TIME:
-	    dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
-	    dialog->disableResize();
-	    widget=new TimeFormatWidget(dialog);
-	    dialog->setMainWidget(widget);
-	    if(dialog->exec()==QDialog::Accepted){
-    		string=dynamic_cast<TimeFormatWidget*>(dialog->mainWidget())->resultString().utf8();
-    	    }
-	    else{
-		return 0;
-	    }
-	    delete dialog;
+        case VT_TIME: {
+            dialog=new KDialogBase(0, 0, true, i18n("Time Format"), KDialogBase::Ok|KDialogBase::Cancel);
+            widget=new TimeFormatWidget(dialog);
+            dialog->setMainWidget(widget);
+            instance=new KInstance(kad);
+            config=instance->config();
+            bool selectLast=false;
+            if( config->hasGroup("Time format history") )
+            {
+                count=0;
+                config->setGroup("Time format history");
+                noe=config->readNumEntry("Number Of Entries", 5);
+                for(int i=0;i<noe;i++)
+                {
+                    QString num, tmpString;
+                    num.setNum(i);
+                    tmpString=config->readEntry("Last Used"+num);
+                    if(tmpString.compare(i18n("Locale"))==0)
+                    {
+                        if(i==0) selectLast = true;
+                        continue;
+                    }
+                    if(stringList.contains(tmpString))
+                        continue;
+                    if(!tmpString.isEmpty())
+                    {
+                        stringList.append(tmpString);
+                        count++;
+                    }
+                }
+                dynamic_cast<TimeFormatWidget*>(widget)->combo1->insertStringList(stringList);
+                nope=config->readNumEntry("Number Of Persistent Entries", 5);
+                for(int i=0;i<nope;i++)
+                {
+                    QString num, tmpString;
+                    num.setNum(i);
+                    tmpString=config->readEntry("Persistent"+num);
+                    if(!tmpString.isEmpty())
+                        pstringList.append(tmpString);
+                }
+            }
+            if(!stringList.isEmpty())
+                dynamic_cast<TimeFormatWidget*>(widget)->combo1->insertItem("---");
+            if(pstringList.count())
+            {
+                dynamic_cast<TimeFormatWidget*>(widget)->combo1->insertStringList(pstringList);
+            }
+            else
+            {
+                dynamic_cast<TimeFormatWidget*>(widget)->combo1->insertItem(i18n("Locale"));
+            }
+            if(selectLast) {
+                QComboBox *combo= dynamic_cast<TimeFormatWidget*>(widget)->combo1;
+                combo->setCurrentItem(combo->count() -1);
+            }
+
+            if(dialog->exec()==QDialog::Accepted)
+            {
+                string=dynamic_cast<TimeFormatWidget*>(dialog->mainWidget())->resultString().utf8();
+            }
+            else
+            {
+                return 0;
+            }
+            config->setGroup("Time format history");
+            stringList.remove(string);
+            stringList.prepend(string);
+            for(int i=0;i<=count;i++)
+            {
+                QString num;
+                num.setNum(i);
+                config->writeEntry("Last Used"+num, stringList[i]);
+            }
+            config->sync();
+            delete dialog;
+            delete kad;
+            delete instance;
             varFormat = coll->format( "TIME"+string );
             break;
+        }
         case VT_PGNUM:
             varFormat = coll->format( "NUMBER" );
             break;
@@ -455,7 +535,7 @@ void KoTimeVariable::save( QDomElement& parentElem )
     elem.setAttribute( "hour", m_time.hour() );
     elem.setAttribute( "minute", m_time.minute() );
     elem.setAttribute( "second", m_time.second() );
-    elem.setAttribute( "msecond", m_time.msec() );
+//    elem.setAttribute( "msecond", m_time.msec() );
     elem.setAttribute( "fix", m_subtype == VST_TIME_FIX );
 }
 

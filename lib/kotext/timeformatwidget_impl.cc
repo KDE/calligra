@@ -7,6 +7,7 @@
 #include <qradiobutton.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <qlineedit.h>
 
 /* 
  *  Constructs a TimeFormatWidget which is a child of 'parent', with the 
@@ -15,8 +16,6 @@
 TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, WFlags fl )
     : TimeFormatWidgetPrototype( parent, name, fl )
 {
-    radio1->setChecked(true);
-    updateLabel();
 }
 
 /*  
@@ -30,31 +29,44 @@ TimeFormatWidget::~TimeFormatWidget()
 /* 
  * public slot
  */
+void TimeFormatWidget::comboActivated()
+{
+	QString string=combo2->currentText();
+	if(combo1->currentText().lower()==i18n("Locale").lower())
+		combo1->setCurrentText("");
+	if(string==i18n("Hour"))
+		combo1->lineEdit()->insert("h");
+	if(string==i18n("Hour (2 digit)"))
+		combo1->lineEdit()->insert("hh");
+	if(string==i18n("Minute"))
+		combo1->lineEdit()->insert("m");
+	if(string==i18n("Minute (2 digit)"))
+		combo1->lineEdit()->insert("mm");
+	if(string==i18n("Second"))
+		combo1->lineEdit()->insert("s");
+	if(string==i18n("AM/PM"))
+		combo1->lineEdit()->insert("AP");
+	if(string==i18n("am/pm"))
+		combo1->lineEdit()->insert("ap");
+	updateLabel();
+	combo1->setFocus();
+}
+
+/* 
+ * public slot
+ */
 void TimeFormatWidget::updateLabel()
 {
     QTime ct=QTime::currentTime();
-    if(combo->currentText().lower()==i18n("locale")){
+    if(combo1->currentText().lower()==i18n("Locale").lower())
+    {
 	label->setText(KGlobal::locale()->formatTime( ct ));
-	box->setEnabled(false);
 	return;
     }
-    switch(box->id(box->selected()))
-    {
-	case 0:
-	    suffix="";
-	    break;	
-	case 1:
-	    suffix=" ap";
-	    break;	
-	case 2:
-	    suffix=" AP";
-	    break;
-    }
-    box->setEnabled(true);
-    label->setText(ct.toString(combo->currentText()+suffix)); 
+    label->setText(ct.toString(combo1->currentText()));
 }
 
 QString TimeFormatWidget::resultString()
 {
-    return combo->currentText()+suffix;
+    return combo1->currentText();
 }

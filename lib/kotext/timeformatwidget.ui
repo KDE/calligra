@@ -9,165 +9,158 @@
             <x>0</x>
             <y>0</y>
             <width>260</width>
-            <height>220</height>
+            <height>130</height>
         </rect>
     </property>
     <property name="minimumSize">
         <size>
             <width>260</width>
-            <height>220</height>
+            <height>130</height>
         </size>
     </property>
     <property name="baseSize">
         <size>
             <width>260</width>
-            <height>220</height>
+            <height>130</height>
         </size>
     </property>
     <property name="caption">
         <string>TimeFormat</string>
         <comment>This dialog allows you to set the format of the time variable</comment>
     </property>
-    <widget class="QLabel">
+    <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>190</y>
-                <width>240</width>
-                <height>19</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string></string>
-        </property>
-        <property name="textFormat">
-            <enum>PlainText</enum>
-        </property>
-        <property name="indent">
-            <number>5</number>
-        </property>
-    </widget>
-    <widget class="QButtonGroup">
-        <property name="name">
-            <cstring>box</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>50</y>
-                <width>240</width>
-                <height>130</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>am/pm usage</string>
-        </property>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>radio1</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>30</y>
-                    <width>220</width>
-                    <height>24</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>24 hour time</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>radio2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>60</y>
-                    <width>220</width>
-                    <height>24</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>12 hour time (am/pm)</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>radio3</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>90</y>
-                    <width>220</width>
-                    <height>24</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>12 hour time (AM/PM)</string>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QComboBox">
-        <item>
-            <property name="text">
-                <string>h:m:s</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Locale</string>
-            </property>
-        </item>
-        <property name="name">
-            <cstring>combo</cstring>
+            <cstring>Layout7</cstring>
         </property>
         <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>10</y>
                 <width>240</width>
-                <height>26</height>
+                <height>110</height>
             </rect>
         </property>
-        <property name="editable">
-            <bool>true</bool>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
         </property>
+            <property name="margin">
+                <number>0</number>
+        </property>
+            <property name="spacing">
+                <number>15</number>
+        </property>
+            <widget class="QComboBox">
+        <property name="name">
+                    <cstring>combo1</cstring>
+        </property>
+                <property name="editable">
+                    <bool>true</bool>
+        </property>
+            </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>Layout5</cstring>
+        </property>
+                <hbox>
+            <property name="name">
+                        <cstring>unnamed</cstring>
+            </property>
+                    <property name="margin">
+                        <number>0</number>
+            </property>
+                    <property name="spacing">
+                        <number>6</number>
+            </property>
+                    <widget class="QLabel">
+            <property name="name">
+                            <cstring>TextLabel1</cstring>
+            </property>
+            <property name="text">
+                            <string>Insert:</string>
+            </property>
+        </widget>
+                    <widget class="QComboBox">
+                        <item>
+                            <property name="text">
+                                <string>Hour</string>
+            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Hour (2 digit)</string>
+            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Minute</string>
+            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Minute (2 digit)</string>
+            </property>
+                        </item>
+                        <item>
+            <property name="text">
+                                <string>Second</string>
+            </property>
+                        </item>
+        <item>
+            <property name="text">
+                                <string>am/pm</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                                <string>AM/PM</string>
+            </property>
+        </item>
+        <property name="name">
+                            <cstring>combo2</cstring>
+        </property>
+                        <property name="currentItem">
+                            <number>0</number>
+        </property>
+                    </widget>
+                </hbox>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>label</cstring>
+                </property>
+                <property name="text">
+                    <string></string>
+                </property>
+                <property name="textFormat">
+                    <enum>PlainText</enum>
+        </property>
+                <property name="indent">
+                    <number>5</number>
+                </property>
+            </widget>
+        </vbox>
     </widget>
 </widget>
 <connections>
     <connection>
-        <sender>combo</sender>
+        <sender>combo1</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>TimeFormatWidgetPrototype</receiver>
         <slot>updateLabel()</slot>
     </connection>
     <connection>
-        <sender>radio1</sender>
-        <signal>clicked()</signal>
+        <sender>combo2</sender>
+        <signal>activated(int)</signal>
         <receiver>TimeFormatWidgetPrototype</receiver>
-        <slot>updateLabel()</slot>
-    </connection>
-    <connection>
-        <sender>radio2</sender>
-        <signal>clicked()</signal>
-        <receiver>TimeFormatWidgetPrototype</receiver>
-        <slot>updateLabel()</slot>
-    </connection>
-    <connection>
-        <sender>radio3</sender>
-        <signal>clicked()</signal>
-        <receiver>TimeFormatWidgetPrototype</receiver>
-        <slot>updateLabel()</slot>
+        <slot>comboActivated()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>combo1</tabstop>
+</tabstops>
 <slots>
+    <slot>comboActivated()</slot>
     <slot>updateLabel()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>

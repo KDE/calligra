@@ -10,11 +10,9 @@ public:
     TimeFormatWidget( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
     ~TimeFormatWidget();
     QString resultString();
-private:
-    QString suffix;
 public slots:
     void updateLabel();
-
+    void comboActivated();
 };
 
 #endif // TIMEFORMATWIDGET_H
