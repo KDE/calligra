@@ -49,11 +49,9 @@ KoShellWindow::KoShellWindow()
 {
   m_activePage = m_lstPages.end();
 
-  m_pLayout = new QHBox( this );
+  m_pLayout = new QHBox( centralWidget() );
 
   m_pKoolBar = new KoKoolBar( m_pLayout );
-
-  setCentralWidget( m_pLayout );
 
   m_pFrame = new KoShellFrame( m_pLayout );
 
