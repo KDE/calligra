@@ -206,12 +206,9 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 === i18n ===
 - plugins/forms/kexiformpart.cpp "Best Fit" instead of "To Fit" (pl=Najlepsze dopasowanie)
 - KexiQueryDesignerGuiEditor::initTableColumns(): i18n("Visible") --> i18n("Column visible", "Visible")
-- fix pl tr. for:
---"Could not remove project.\n"
-"The file \"%1\" does not exist."
---"Could not load project.\n"
-"The file \"%1\" does not exist."
 - add comment for translators: i18n("'empty' is an adjective here", "Empty database")
+-"Could rename table \"%1\" using the same name."
+  --> "Could NOT rename table \"%1\" using the same name."
 
 
 === Import/Export Framework TODO ===
@@ -397,6 +394,12 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 
 CCMAIL: dkite@shaw.ca
+
+
+
+2004-11-22
+I18N
+- pl translation updated
 
 2004-11-20
 KexiDB
