@@ -23,6 +23,7 @@
 #include <qpicture.h>
 
 #include <kdebug.h>
+#include <kdebugclasses.h>
 
 #include "koPictureKey.h"
 #include "koPictureBase.h"
@@ -88,16 +89,20 @@ bool KoPictureClipart::isNull(void) const
 void KoPictureClipart::drawQPicture(QPicture& clipart, QPainter& painter,
     int x, int y, int width, int height, int sx, int sy, int sw, int sh)
 {
+    kdDebug(30003) << "Drawing KoPictureClipart " << this << endl;
+    kdDebug(30003) << "  x=" << x << " y=" << y << " width=" << width << " height=" << height << endl;
+    kdDebug(30003) << "  sx=" << sx << " sy=" << sy << " sw=" << sw << " sh=" << sh << endl;
     painter.save();
     // Thanks to Harri, Qt3 makes it much easier than Qt2 ;)
     QRect br = clipart.boundingRect();
-    //kdDebug() << "KWClipartFrameSet::drawFrame boundingRect: " << br.width() << "x" << br.height() << endl;
+    kdDebug(30003) << "  Bounding rect. " << br << endl;
+
+    painter.translate(x,y); // Translating must be done before scaling!
     if ( br.width() && br.height() )
-        // TODO: verify if we do not need to use (x,y) somehow
         painter.scale(double(width)/double(br.width()),double(height)/double(br.height()));
     else
-        kdDebug(30003) << "Null bounding rectangle: " << br.width() << " x " << br.height() << endl;
-    painter.drawPicture(clipart);
+        kdWarning(30003) << "Null bounding rectangle: " << br.width() << " x " << br.height() << endl;
+    painter.drawPicture(0,0,clipart);
     painter.restore();
 }
 
@@ -108,7 +113,6 @@ void KoPictureClipart::draw(QPainter& painter, int x, int y, int width, int heig
         kdWarning(30003) << "No private data " << this << endl;
         return;
     }
-    kdDebug(30003) << "Drawing KoPictureClipart " << this << endl;
     drawQPicture(d->m_clipart, painter, x, y, width, height, sx, sy, sw, sh);
 }
 
