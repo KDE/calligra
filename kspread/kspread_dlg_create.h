@@ -38,7 +38,7 @@ class KSpreadcreate : public QDialog
   Q_OBJECT
 public:
   KSpreadcreate( KSpreadView* parent, const QString& _name );
-
+  ~KSpreadcreate();
   QString create_formula();
   QString make_formula( const QString& _text, int nb_line);
   void setText(QString text);

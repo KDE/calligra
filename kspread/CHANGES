@@ -132,3 +132,9 @@ We can write in a specific table, create new table change name ...
 
 thanks .
 
+1999-11-02 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-bugfix
+-change name in kspread_dlg_formula to correspond with kspread_interpreter
+(for example NO =>not etc ...)
+Now it works

@@ -165,16 +165,14 @@ list_trig+="degree";
 list_trig+="radian";
 
 QStringList list_logic;
-list_logic+="IF";
-list_logic+="true";
-list_logic+="false";
-list_logic+="NO";
+list_logic+="if";
+list_logic+="not";
 
 QStringList list_text;
 list_text+="conc";
-list_text+="RIGHT";
-list_text+="LEFT";
-list_text+="NBCAR";
+list_text+="right";
+list_text+="left";
+list_text+="nbcar";
 list_text+="EXACT";
 list_text+="STXT";
 list_text+="REPT";

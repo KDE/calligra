@@ -61,8 +61,14 @@ KSpreadcreate::KSpreadcreate( KSpreadView* parent, const QString& _name )
     old_text = m_pView->canvasWidget()->editor()->text();
 
     init();
+    m_pView->canvasWidget()->startChoose();
     connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
     connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+}
+
+KSpreadcreate::~KSpreadcreate()
+{
+ m_pView->canvasWidget()->endChoose();
 }
 
 void KSpreadcreate::init()
@@ -97,7 +103,7 @@ void KSpreadcreate::init()
   	tmp_label->setText(exp_funct);
   	edit[0]=type_double;
     }
-    else if( name == "true" || name == "false" || name == "PI" )
+    else if( name == "PI" )
     {
 	nb_param = 0;
 	exp_funct=name+"()";
@@ -105,7 +111,7 @@ void KSpreadcreate::init()
   	lay1->addWidget(tmp_label,0,0);
   	tmp_label->setText(exp_funct);
     }
-   else if( name=="RIGHT" || name=="LEFT" || name=="REPT" )
+   else if( name=="right" || name=="left" || name=="REPT" )
    {
         nb_param=2;
         tmp_label = new QLabel( this);
@@ -116,7 +122,7 @@ void KSpreadcreate::init()
   	
   	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label,2,0);
-        if( name=="RIGHT"||name=="LEFT")
+        if( name=="right"||name=="left")
 		tmp_label->setText(i18n("Number of characters"));
         else if(name=="REPT")
         	tmp_label->setText(i18n("Number of repetition"));
@@ -214,7 +220,7 @@ void KSpreadcreate::init()
   	edit[3]=type_double;
   	edit[4]=type_double;
    }
-   else if (name=="IF")
+   else if (name=="if")
    {
        nb_param=3;
        tmp_label = new QLabel( this);
@@ -243,7 +249,7 @@ void KSpreadcreate::init()
        edit[1]=type_string;
        edit[2]=type_string;
    }
-   else if (name=="NO")
+   else if (name=="not")
    {
        nb_param=1;
        tmp_label = new QLabel( this);
@@ -280,7 +286,7 @@ void KSpreadcreate::init()
        edit[0]=type_string;
        edit[1]=type_string;
    }
-   else if (name=="NBCAR")
+   else if (name=="nbcar")
    {
        nb_param=1;
        tmp_label = new QLabel( this);

@@ -161,7 +161,7 @@ void KSpreadCanvas::endChoose()
 {
     // ############ Torben: remove the choose marker
     m_bChoose = FALSE;
-
+    hideChooseCell();
     activeTable()->unselect();
 }
 
