@@ -123,15 +123,43 @@ bool kspreadfunc_decsex( KSContext& context )
     return false;
   int inter;
   double val=args[0]->doubleValue();
-  int hours,minutes,second;
+  int hours,minutes,seconds;
   if(val>0)
     inter=1;
   else
     inter=-1;
   hours=inter*(int)(fabs(val));
-  minutes=(int)(60*val-60*(int)(val));
-  second=(int)(3600*val-3600*(int)(val)-60*(int)(60*val-60*(int)(val)));
-  QTime _time(hours,minutes,second);
+  
+  double workingVal = (val - (double)hours) * inter;
+  
+  /* try to do this without rounding errors */
+  workingVal *= 60.0;
+  minutes = (int)(floor(workingVal));
+  
+  workingVal -= minutes;
+  workingVal *= 60;
+  
+  seconds = (int)(floor(workingVal));
+  workingVal -= seconds;
+  
+  /* now we need to try to round up the seconds if that makes sense */
+  if (workingVal >= 0.5)
+  {
+    seconds++;
+    while (seconds >= 60)
+    {
+      minutes++;
+      seconds -= 60;
+    }
+    
+    while (minutes >= 60)
+    {
+      hours++;
+      minutes -= 60;
+    }
+  }
+  
+  QTime _time(hours,minutes,seconds);
   context.setValue( new KSValue(_time));
 
   return true;
