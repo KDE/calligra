@@ -42,7 +42,7 @@
 #include <knuminput.h>
 #include <kdeversion.h>
 
-KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTypeLetter, QWidget * parent, const char* name  )
+KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTypeLetter, bool disableAll, QWidget * parent, const char* name  )
     :QWidget( parent, name ),
     stylesList()
 {
@@ -111,6 +111,18 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     connect( spnStart, SIGNAL( valueChanged (int) ), this, SLOT( startChanged(int) ) );
     connect( spnDepth, SIGNAL( valueChanged (int) ), this, SLOT( depthChanged(int) ) );
     noSignals = false;
+    if (disableAll )
+    {
+        gStyle->setEnabled( false );
+        lstStyle->setEnabled( false );
+        sSuffix->setEnabled( false );
+        sPrefix->setEnabled( false );
+        bCustom->setEnabled( false );
+        spnStart->setEnabled( false );
+        spnDepth->setEnabled( false );
+        lStart->setEnabled( false );
+        lCustom->setEnabled( false );
+    }
 }
 
 void KoCounterStyleWidget::setCounter (KoParagCounter counter )
@@ -1313,7 +1325,7 @@ QString KoParagBorderWidget::tabName()
 }
 
 
-KoParagCounterWidget::KoParagCounterWidget( QWidget * parent, const char * name )
+KoParagCounterWidget::KoParagCounterWidget( bool disableAll, QWidget * parent, const char * name )
     : KoParagLayoutWidget( KoParagDia::PD_NUMBERING, parent, name )
 {
 
@@ -1350,7 +1362,7 @@ KoParagCounterWidget::KoParagCounterWidget( QWidget * parent, const char * name 
     Form1Layout->addWidget( gNumbering );
     connect( gNumbering, SIGNAL( clicked( int ) ), this, SLOT( numTypeChanged( int ) ) );
 
-    m_styleWidget = new KoCounterStyleWidget( true, false, this );
+    m_styleWidget = new KoCounterStyleWidget( true, false, disableAll, this );
 
     connect( m_styleWidget, SIGNAL( sig_suffixChanged (const QString &) ), this, SLOT( suffixChanged(const QString &) ) );
     connect( m_styleWidget, SIGNAL( sig_prefixChanged (const QString &) ), this, SLOT( prefixChanged(const QString &) ) );
@@ -1366,7 +1378,11 @@ KoParagCounterWidget::KoParagCounterWidget( QWidget * parent, const char * name 
 
     preview = new KoStylePreview( i18n( "Preview" ), i18n("Normal paragraph text"), this, "counter preview" );
     Form1Layout->addWidget( preview );
-
+    if ( disableAll)
+    {
+        gNumbering->setEnabled( false);
+        preview->setEnabled( false );
+    }
 }
 
 void KoParagCounterWidget::styleChanged (KoParagCounter::Style st )
@@ -2221,7 +2237,7 @@ void KoParagShadowWidget::save( KoParagLayout & lay ) {
 /* Class: KoParagDia                                              */
 /******************************************************************/
 KoParagDia::KoParagDia( QWidget* parent, const char* name,
-                        int flags, KoUnit::Unit unit, double _frameWidth, bool breakLine )
+                        int flags, KoUnit::Unit unit, double _frameWidth, bool breakLine, bool disableAll )
     : KDialogBase(Tabbed, QString::null, Ok | Cancel | User1 | Apply, Ok, parent, name, true )
 {
     m_flags = flags;
@@ -2245,7 +2261,7 @@ KoParagDia::KoParagDia( QWidget* parent, const char* name,
     if ( m_flags & PD_NUMBERING )
     {
         QVBox * page = addVBoxPage( i18n( "Bullets/Numbers" ) );
-        m_counterWidget = new KoParagCounterWidget( page, "numbers" );
+        m_counterWidget = new KoParagCounterWidget( disableAll , page, "numbers" );
     }
     if ( m_flags & PD_TABS )
     {

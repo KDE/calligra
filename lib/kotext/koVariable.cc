@@ -1152,26 +1152,21 @@ QString KoFieldVariable::fieldCode()
     case VST_COMPANYNAME:
         return i18n("Company Name");
         break;
-
     case VST_TELEPHONE:
         return i18n("Telephone");
         break;
-
     case VST_FAX:
         return i18n("Fax");
         break;
-
     case VST_COUNTRY:
         return i18n("Country");
         break;
-
     case VST_POSTAL_CODE:
         return i18n("Postal Code");
         break;
     case VST_CITY:
         return i18n("City");
         break;
-
     case VST_STREET:
         return i18n("Street");
         break;

@@ -203,7 +203,7 @@ class KoCounterStyleWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoCounterStyleWidget( bool displayDepth= true, bool onlyStyleTypeLetter = false, QWidget* parent = 0, const char* name = 0 );
+    KoCounterStyleWidget( bool displayDepth= true, bool onlyStyleTypeLetter = false, bool disableAll=false, QWidget* parent = 0, const char* name = 0 );
 
     class StyleRepresenter {
         public:
@@ -275,7 +275,7 @@ class KoParagCounterWidget : public KoParagLayoutWidget
     Q_OBJECT
 public:
 
-    KoParagCounterWidget( QWidget * parent, const char * name = 0 );
+    KoParagCounterWidget( bool disableAll=false ,QWidget * parent=0L, const char * name = 0 );
     virtual ~KoParagCounterWidget() {}
 
     virtual void display( const KoParagLayout & lay );
@@ -491,7 +491,7 @@ public:
     /**
      * breakLine : kpresenter didn't used this attibute, kword use it.
      */
-    KoParagDia( QWidget*, const char*, int flags, KoUnit::Unit unit, double _frameWidth=-1,bool breakLine=true);
+    KoParagDia( QWidget*, const char*, int flags, KoUnit::Unit unit, double _frameWidth=-1,bool breakLine=true, bool disableAll = false);
     ~KoParagDia();
 
     int getFlags()const { return m_flags; }
