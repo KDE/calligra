@@ -578,43 +578,7 @@ void OoWriterImport::createDocumentInfo( QDomDocument &docinfo )
 {
     docinfo = KoDocument::createDomDocument( "document-info" /*DTD name*/, "document-info" /*tag name*/, "1.1" );
 
-    QDomNode meta   = m_meta.namedItem( "office:document-meta" );
-    QDomNode office = meta.namedItem( "office:meta" );
-
-    if ( office.isNull() )
-        return;
-    QDomElement elementDocInfo  = docinfo.documentElement();
-
-    QDomElement e = office.namedItem( "dc:creator" ).toElement();
-    if ( !e.isNull() && !e.text().isEmpty() )
-    {
-        QDomElement author = docinfo.createElement( "author" );
-        elementDocInfo.appendChild( author);
-        QDomElement t = docinfo.createElement( "full-name" );
-        author.appendChild( t );
-        t.appendChild( docinfo.createTextNode( e.text() ) );
-    }
-    e = office.namedItem( "dc:title" ).toElement();
-    if ( !e.isNull() && !e.text().isEmpty() )
-    {
-        QDomElement about = docinfo.createElement( "about" );
-        elementDocInfo.appendChild( about );
-        QDomElement title = docinfo.createElement( "title" );
-        about.appendChild( title );
-        title.appendChild( docinfo.createTextNode( e.text() ) );
-    }
-    e = office.namedItem( "dc:description" ).toElement();
-    if ( !e.isNull() && !e.text().isEmpty() )
-    {
-        QDomElement about = elementDocInfo.namedItem( "about" ).toElement();
-        if ( about.isNull() ) {
-            about = docinfo.createElement( "about" );
-            elementDocInfo.appendChild( about );
-        }
-        QDomElement title = docinfo.createElement( "abstract" );
-        about.appendChild( title );
-        title.appendChild( docinfo.createTextNode( e.text() ) );
-    }
+    OoUtils::createDocumentInfo(m_meta, docinfo);
 
     //kdDebug(30518)<<" meta-info :"<<m_meta.toCString()<<endl;
 }

@@ -26,6 +26,7 @@
 class QColor;
 class QDomElement;
 class StyleStack;
+class QDomDocument;
 
 namespace OoUtils
 {
@@ -58,6 +59,9 @@ namespace OoUtils
     // From style:text-position (for subscript/superscript)
     // to kword/kpresenter's value/relativetextsize
     void importTextPosition( const QString& text_position, QString& value, QString& relativetextsize );
+
+    void createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo);
+
 }
 
 #endif /* OOUTILS_H */

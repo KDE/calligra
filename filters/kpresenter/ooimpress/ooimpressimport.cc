@@ -185,50 +185,9 @@ KoFilter::ConversionStatus OoImpressImport::loadAndParse(const QString& filename
 // Very related to OoWriterImport::createDocumentInfo
 void OoImpressImport::createDocumentInfo( QDomDocument &docinfo )
 {
-    docinfo.appendChild( docinfo.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDomDocument doc = KoDocument::createDomDocument( "document-info" /*DTD name*/, "document-info" /*tag name*/, "1.1" );
+    docinfo = KoDocument::createDomDocument( "document-info" /*DTD name*/, "document-info" /*tag name*/, "1.1" );
 
-    QDomNode meta   = m_meta.namedItem( "office:document-meta" );
-    QDomNode office = meta.namedItem( "office:meta" );
-
-    if ( office.isNull() )
-        return;
-    QDomElement elementDocInfo  = doc.documentElement();
-
-    QDomElement e = office.namedItem( "dc:creator" ).toElement();
-    if ( !e.isNull() && !e.text().isEmpty() )
-    {
-        QDomElement author = doc.createElement( "author" );
-        QDomElement t = doc.createElement( "full-name" );
-        author.appendChild( t );
-        t.appendChild( doc.createTextNode( e.text() ) );
-        elementDocInfo.appendChild( author);
-    }
-
-    e = office.namedItem( "dc:title" ).toElement();
-    if ( !e.isNull() && !e.text().isEmpty() )
-    {
-        QDomElement about = doc.createElement( "about" );
-        QDomElement title = doc.createElement( "title" );
-        about.appendChild( title );
-        title.appendChild( doc.createTextNode( e.text() ) );
-        elementDocInfo.appendChild( about );
-    }
-
-    e = office.namedItem( "dc:description" ).toElement();
-    if ( !e.isNull() && !e.text().isEmpty() )
-    {
-        QDomElement about = elementDocInfo.namedItem( "about" ).toElement();
-        if ( about.isNull() ) {
-            about = docinfo.createElement( "about" );
-            elementDocInfo.appendChild( about );
-        }
-        QDomElement title = docinfo.createElement( "abstract" );
-        about.appendChild( title );
-        title.appendChild( docinfo.createTextNode( e.text() ) );
-    }
-    docinfo.appendChild(doc);
-
+    OoUtils::createDocumentInfo(m_meta, docinfo);
     //kdDebug(30518) << " meta-info :" << m_meta.toCString() << endl;
 }
 

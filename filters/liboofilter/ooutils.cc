@@ -403,3 +403,46 @@ void OoUtils::importTextPosition( const QString& text_position, QString& value, 
     else
         value = "0";
 }
+
+void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
+{
+    QDomNode meta   = _meta.namedItem( "office:document-meta" );
+    QDomNode office = meta.namedItem( "office:meta" );
+
+    if ( office.isNull() )
+        return;
+    QDomElement elementDocInfo  = docinfo.documentElement();
+
+    QDomElement e = office.namedItem( "dc:creator" ).toElement();
+    if ( !e.isNull() && !e.text().isEmpty() )
+    {
+        QDomElement author = docinfo.createElement( "author" );
+        QDomElement t = docinfo.createElement( "full-name" );
+        author.appendChild( t );
+        t.appendChild( docinfo.createTextNode( e.text() ) );
+        elementDocInfo.appendChild( author);
+    }
+
+    e = office.namedItem( "dc:title" ).toElement();
+    if ( !e.isNull() && !e.text().isEmpty() )
+    {
+        QDomElement about = docinfo.createElement( "about" );
+        QDomElement title = docinfo.createElement( "title" );
+        about.appendChild( title );
+        title.appendChild( docinfo.createTextNode( e.text() ) );
+        elementDocInfo.appendChild( about );
+    }
+
+    e = office.namedItem( "dc:description" ).toElement();
+    if ( !e.isNull() && !e.text().isEmpty() )
+    {
+        QDomElement about = elementDocInfo.namedItem( "about" ).toElement();
+        if ( about.isNull() ) {
+            about = docinfo.createElement( "about" );
+            elementDocInfo.appendChild( about );
+        }
+        QDomElement title = docinfo.createElement( "abstract" );
+        about.appendChild( title );
+        title.appendChild( docinfo.createTextNode( e.text() ) );
+    }
+}
