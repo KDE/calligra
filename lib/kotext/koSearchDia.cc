@@ -50,15 +50,11 @@ KoSearchContextUI::KoSearchContextUI( KoSearchContext *ctx, QWidget *parent )
 {
     m_bOptionsShown = false;
     m_btnShowOptions = new QPushButton( i18n("Show Formatting Options"), parent );
-    m_btnNoOptions= new QPushButton( i18n("No Options"), parent );
     connect( m_btnShowOptions, SIGNAL( clicked() ), SLOT( slotShowOptions() ) );
-    connect( m_btnNoOptions, SIGNAL( clicked() ), SLOT( slotNoOptions() ) );
 
     m_grid = new QGridLayout( m_parent, 1, 1, 0, 6 );
     m_grid->addWidget( m_btnShowOptions, 0, 0 );
-    m_grid->addWidget( m_btnNoOptions, 1, 0 );
     m_btnShowOptions->setEnabled( true );
-    m_btnNoOptions->setEnabled( false );
 }
 
 void KoSearchContextUI::slotShowOptions()
@@ -68,17 +64,9 @@ void KoSearchContextUI::slotShowOptions()
     {
         dlg->ctxOptions( );
         m_bOptionsShown = true;
-        m_btnNoOptions->setEnabled( true );
     }
 
     delete dlg;
-}
-
-void KoSearchContextUI::slotNoOptions()
-{
-    m_bOptionsShown = false;
-    m_btnNoOptions->setEnabled( false);
-    m_ctx->m_optionsMask = 0;
 }
 
 void KoSearchContextUI::setCtxOptions( long options )
@@ -589,14 +577,16 @@ bool KoTextReplace::validateMatch( const QString &/*text*/, int index, int match
 }
 
 KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* name)
-    : KDialogBase( parent, name, true, i18n("Formatting Options"), Ok|Cancel|User1 ),
+    : KDialogBase( parent, name, true, i18n("Formatting Options"), Ok|Cancel|User1 |User2 ),
       m_ctx(_ctx)
 {
     QWidget *page = new QWidget( this );
     setMainWidget(page);
     setButtonText( KDialogBase::User1, i18n("Reset") );
+    setButtonText( KDialogBase::User2, i18n("Clear") );
 
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
+    connect( this, SIGNAL( user2Clicked() ), this, SLOT(slotClear()));
 
     QGridLayout *m_grid = new QGridLayout( page, 12, 2, 0, 6 );
     m_checkFamily = new QCheckBox( i18n( "Family:" ),page  );
@@ -700,6 +690,13 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
 
     QObject::connect( m_checkUnderline, SIGNAL( toggled( bool ) ), m_underlineItem, SLOT( setEnabled( bool ) ) );
 
+    slotReset();
+}
+
+void KoFormatDia::slotClear()
+{
+    m_ctx->m_optionsMask = 0;
+    m_ctx->m_options = 0;
     slotReset();
 }
 

@@ -95,14 +95,12 @@ public:
     KoSearchContext *context() const { return m_ctx;}
 private slots:
     void slotShowOptions();
-    void slotNoOptions();
 
 private:
     KoSearchContext *m_ctx;
     QGridLayout *m_grid;
     bool m_bOptionsShown;
     QPushButton *m_btnShowOptions;
-    QPushButton *m_btnNoOptions;
     QWidget *m_parent;
 };
 
@@ -251,6 +249,7 @@ public:
 
 protected slots:
     void slotReset();
+    void slotClear();
 private:
     QCheckBox *m_checkFamily;
     QCheckBox *m_checkSize;
