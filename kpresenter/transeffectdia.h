@@ -55,7 +55,7 @@ public:
 
 public slots:
     void setPixmap( const QPixmap& pixmap );
-    void run( PageEffect effect, PresSpeed speed );
+    void run( PageEffect effect, EffectSpeed speed );
 
 protected:
     KPresenterDoc *doc;
@@ -80,7 +80,7 @@ public:
                       KPresenterDoc *_doc, KPresenterView *_view );
 
     PageEffect getPageEffect() const { return pageEffect; }
-    PresSpeed getPresSpeed() const { return speed; }
+    EffectSpeed getPageEffectSpeed() const { return speed; }
     bool getSoundEffect() const { return soundEffect; }
     QString getSoundFileName() const { return soundFileName; }
     bool getAutoAdvance() const { return false; } // FIXME !
@@ -97,7 +97,7 @@ protected:
     KPresenterView *view;
 
     PageEffect pageEffect;
-    PresSpeed speed;
+    EffectSpeed speed;
     bool soundEffect;
     QString soundFileName;
 

@@ -55,7 +55,7 @@ KPBackGround::KPBackGround( KPrPage *_page )
     yfactor = 100;
     pageTimer = 1;
 
-    m_presSpeed = 5;//medium as in oo.
+    m_pageEffectSpeed = ES_MEDIUM;
 
     soundEffect = false;
     soundFileName = QString::null;
@@ -185,7 +185,7 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
     if (pageEffect!=PEF_NONE) {
         element=doc.createElement("PGEFFECT");
         element.setAttribute("value", static_cast<int>( pageEffect ));
-        element.setAttribute("speed", static_cast<int>( m_presSpeed ));
+        element.setAttribute("speed", static_cast<int>( m_pageEffectSpeed ));
         page.appendChild(element);
     }
 
@@ -361,11 +361,11 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
         //keep compatible
         stylepageauto.addProperty( "presentation:transition-type", "automatic" );
     }
-    if ( m_presSpeed != 5 )
+    if ( m_pageEffectSpeed != ES_MEDIUM ) // we don't save the default value
     {
-        if ( m_presSpeed == 10 )
+        if ( m_pageEffectSpeed == ES_FAST )
             stylepageauto.addProperty( "presentation:transition-speed", "fast" );
-        else if ( m_presSpeed == 1 )
+        else if ( m_pageEffectSpeed == ES_SLOW )
             stylepageauto.addProperty( "presentation:transition-speed", "slow" );
     }
     if ( !m_page->isSlideSelected() )
@@ -640,15 +640,15 @@ void KPBackGround::loadOasis(KoOasisContext & context )
         QString speed = styleStack.attribute( "presentation:transition-speed" );
         if ( speed == "slow" )
         {
-            m_presSpeed = 1;
+            m_pageEffectSpeed = ES_SLOW;
         }
         else if ( speed == "medium" )
         {
-            m_presSpeed = 5;
+            m_pageEffectSpeed = ES_MEDIUM;
         }
         else if ( speed == "fast" )
         {
-            m_presSpeed = 10;
+            m_pageEffectSpeed = ES_FAST;
         }
         else
             kdDebug()<<" transition-speed not defined :"<<speed<<endl;
@@ -819,7 +819,7 @@ void KPBackGround::load( const QDomElement &element )
         setPageEffect(static_cast<PageEffect>(tmp));
         if(e.hasAttribute("speed"))
             tmp=e.attribute("speed").toInt();
-        setPresSpeed(static_cast<PresSpeed>(tmp));
+        setPageEffectSpeed( static_cast<EffectSpeed>(tmp) );
     }
     e=element.namedItem("BGRADIENT").toElement();
     if(!e.isNull()) {

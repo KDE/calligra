@@ -113,8 +113,15 @@ public:
     QString getPageSoundFileName() const
         { return soundFileName; }
 
-    PresSpeed getPresSpeed() const { return m_presSpeed; }
-    void setPresSpeed( PresSpeed _presSpeed ) { m_presSpeed = _presSpeed; }
+    /**
+     * get the effect speed for the page transition
+     */
+    EffectSpeed getPageEffectSpeed() const { return m_pageEffectSpeed; }
+
+    /**
+     * set the effect speed for the page transition to pageEffectSpeed
+     */
+    void setPageEffectSpeed( EffectSpeed pageEffectSpeed ) { m_pageEffectSpeed = pageEffectSpeed; }
 
     // Draw the background.
     // Uses the @p zoomHandler to determine the size of the background
@@ -156,7 +163,10 @@ private:
     PageEffect pageEffect;
     // Sound played when showing this page
     QString soundFileName;
-    PresSpeed m_presSpeed;
+    /**
+     * The speed of the page effect.
+     */
+    EffectSpeed m_pageEffectSpeed;
 
     // Background picture
     KoPicture backPicture;

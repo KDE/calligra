@@ -489,7 +489,7 @@ class TransEffectCmd : public KCommand
 public:
     struct PageEffectSettings {
         PageEffect pageEffect;
-        PresSpeed transSpeed;
+        EffectSpeed effectSpeed;
         bool soundEffect;
         QString soundFileName;
         bool autoAdvance;

@@ -718,16 +718,18 @@ void KPresenterDoc::compatibilityPresSpeed()
 {
     if ( m_loadingInfo && m_loadingInfo->presSpeed != - 1 )
     {
-        int newValue = 5;
-        if ( m_loadingInfo->presSpeed < 3 )
-            newValue = 1;
-        else if ( m_loadingInfo->presSpeed < 7 )
-            newValue = 5;
-        else
-            newValue = 10;
-        //todo when we save with old format create compatibility
-        for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
-            m_pageList.at(i)->background()->setPresSpeed( newValue );
+        if ( m_loadingInfo->presSpeed != -1 )
+        {
+            EffectSpeed newValue = ES_MEDIUM;
+            if ( m_loadingInfo->presSpeed < 3 )
+                newValue = ES_SLOW;
+            else if ( m_loadingInfo->presSpeed > 7 )
+                newValue = ES_FAST;
+
+            //todo when we save with old format create compatibility
+            for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
+                m_pageList.at(i)->background()->setPageEffectSpeed( newValue );
+            }
         }
         delete m_loadingInfo;
         m_loadingInfo = 0L;

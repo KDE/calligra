@@ -1226,7 +1226,7 @@ void TransEffectCmd::PageEffectSettings::applyTo( KPrPage *page )
     page->setPageSoundFileName( soundFileName );
     // TODO page->setAutoAdvance( autoAdvance );
     page->setPageTimer( slideTime );
-    page->background()->setPresSpeed( transSpeed );
+    page->background()->setPageEffectSpeed( effectSpeed );
 }
 
 void TransEffectCmd::execute()

@@ -32,7 +32,7 @@
 #include <krandomsequence.h>
 
 
-KPPageEffects::KPPageEffects( QPaintDevice *dst, const QPixmap &pageTo, PageEffect effect, PresSpeed speed )
+KPPageEffects::KPPageEffects( QPaintDevice *dst, const QPixmap &pageTo, PageEffect effect, EffectSpeed speed )
 : m_dst( dst ), m_pageTo( pageTo ), m_pageFrom(m_pageTo.width(),m_pageTo.height()), m_effect(effect), m_speed(speed), m_effectStep(0)
 , m_width(m_pageTo.width()), m_height(m_pageTo.height()), m_finished(false)
 {
@@ -41,9 +41,10 @@ KPPageEffects::KPPageEffects( QPaintDevice *dst, const QPixmap &pageTo, PageEffe
         KRandomSequence random;
         m_randomEffect = static_cast<PageEffect>( random.getLong( PEF_LAST_MARKER ) );
     }
+    int div[] = { 100, 65, 30 };
 
-    m_stepWidth = (int) ( m_width / ( 10.0 * ( m_speed + 1 ) ) );
-    m_stepHeight = (int) ( m_height / ( 10.0 * ( m_speed + 1 ) ) );
+    m_stepWidth = (int) ( m_width / div[m_speed] );
+    m_stepHeight = (int) ( m_height / div[m_speed] );
 }
 
 
@@ -429,7 +430,8 @@ bool KPPageEffects::effectInterlockingVertical2() const
 
 bool KPPageEffects::effectSurround1() const
 {
-    int stepSize = 10 * ( ( 11 - m_speed ) / 5 + 2 );
+    int div[] = { 20, 15, 10 };
+    int stepSize = m_height / div[m_speed];
     int step = m_effectStep * stepSize;
 
     int h = m_height / 10;
@@ -443,6 +445,7 @@ bool KPPageEffects::effectSurround1() const
     int rw = 0;
     int repaint_rh = 0;
     int repaint_rw = 0;
+
     // 1
     if ( step < m_height )
     {
@@ -569,7 +572,7 @@ bool KPPageEffects::effectSurround1() const
         rh = step - 4 * m_height + 8 * h - 4 * m_width + 10 * w;
         rw = 2 * w;
         h = stepSize;
-        if ( step + stepSize >= 5 * m_height - 10 * h + 4 * m_width - 10 * w )
+        if ( step + stepSize >= 5 * m_height - 10 * repaint_h + 4 * m_width - 10 * repaint_w )
         {
             repaint = true;
 
@@ -735,7 +738,9 @@ bool KPPageEffects::effectSurround1() const
     bitBlt( m_dst, rw, rh, &m_pageTo, rw, rh, w, h );
 
     if ( repaint )
+    {
         bitBlt( m_dst, repaint_rw, repaint_rh, &m_pageTo, repaint_rw, repaint_rh, repaint_w, repaint_h );
+    }
 
     return finished;
 }
@@ -744,8 +749,8 @@ bool KPPageEffects::effectSurround1() const
 bool KPPageEffects::effectFlyAway1()
 {
     bool finished = false;
-    // 20, 15, 10
-    int pSteps = 25 - 5 * ( ( 11 - m_speed ) / 5 + 1 );
+    int steps[] = { 20, 15, 10 };
+    int pSteps = steps[m_speed];
 
     if ( m_effectStep == 0 )
     {
@@ -1409,8 +1414,8 @@ bool KPPageEffects::effectDissolve()
             m_list.append( c );
     }
 
-    // this gives fast = 90, medium = 60, slow = 30
-    int dissove = ( 30 * ( ( 11 - m_speed ) / 5 + 1 ) );
+    int steps[] = { 30, 60, 90 };
+    int dissove = steps[m_speed];
     while ( !m_list.isEmpty() && dissove > 0 )
     {
         --dissove;

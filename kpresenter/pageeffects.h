@@ -46,7 +46,7 @@ public:
      * effect The effect which sould be used.
      * speed  The speed which should be used.
      */
-    KPPageEffects( QPaintDevice *dst, const QPixmap &pageTo, PageEffect effect, PresSpeed speed );
+    KPPageEffects( QPaintDevice *dst, const QPixmap &pageTo, PageEffect effect, EffectSpeed speed );
 
     ~KPPageEffects();
 
@@ -108,7 +108,7 @@ protected:
     QPixmap m_pageFrom;
     PageEffect m_effect;
     PageEffect m_randomEffect;
-    PresSpeed m_speed;
+    EffectSpeed m_speed;
     QValueList<int> m_list;
     int m_effectStep;
     int m_stepWidth;

@@ -89,7 +89,7 @@ void KPEffectPreview::setPixmap( const QPixmap& pixmap )
     QLabel::setPixmap( m_pixmap );
 }
 
-void KPEffectPreview::run( PageEffect effect, PresSpeed speed )
+void KPEffectPreview::run( PageEffect effect, EffectSpeed speed )
 {
     QRect rect = m_pixmap.rect();
     m_target.resize( rect.size() );
@@ -176,7 +176,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     effectPreview->setPixmap( pix );
 
     pageEffect = pg->getPageEffect();
-    speed = pg->background()->getPresSpeed();
+    speed = pg->background()->getPageEffectSpeed();
 
     QVBoxLayout *leftlayout = new QVBoxLayout( leftpart, KDialog::marginHint(), KDialog::spacingHint() );
     leftlayout->setAutoAdd( true );
@@ -247,13 +247,8 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     speedCombo->insertItem(i18n("Fast") );
 
 
-    if ( speed == 1 )
-        speedCombo->setCurrentItem( 0 );
-    else if ( speed == 5 )
-        speedCombo->setCurrentItem( 1 );
-    else if ( speed == 10 )
-        speedCombo->setCurrentItem( 2 );
-
+    speedCombo->setCurrentItem( speed );
+    
     connect( speedCombo, SIGNAL(activated(int)), this, SLOT(speedChanged(int)) );
 
 
@@ -351,12 +346,7 @@ void KPTransEffectDia::effectChanged( int index )
 
 void KPTransEffectDia::speedChanged( int value )
 {
-    if ( value == 0 )
-        speed = static_cast<PresSpeed>(1);
-    else if ( value == 1 )
-        speed = static_cast<PresSpeed>(5);
-    if ( value == 2 )
-        speed = static_cast<PresSpeed>(10);
+    speed = static_cast<EffectSpeed>(value);
 }
 
 void KPTransEffectDia::timeChanged( int value )

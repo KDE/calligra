@@ -276,6 +276,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
         elem=doc.createElement(tagEFFECTS);
         elem.setAttribute(attrEffect, static_cast<int>( effect ));
         elem.setAttribute(attrEffect2, static_cast<int>( effect2 ));
+        elem.setAttribute( "speed", static_cast<int>(m_appearSpeed) );
         fragment.appendChild(elem);
     }
     if(appearStep!=0)
@@ -289,6 +290,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
         elem=doc.createElement(tagDISAPPEAR);
         elem.setAttribute(attrEffect, static_cast<int>( effect3 ));
         elem.setAttribute(attrDoit, static_cast<int>( disappear ));
+        elem.setAttribute( "speed", static_cast<int>(m_disappearSpeed) );
         elem.setAttribute(attrNum, disappearStep);
         fragment.appendChild(elem);
     }
@@ -924,6 +926,8 @@ double KPObject::load(const QDomElement &element) {
             effect=static_cast<Effect>(e.attribute(attrEffect).toInt());
         if(e.hasAttribute(attrEffect2))
             effect2=static_cast<Effect2>(e.attribute(attrEffect2).toInt());
+        if(e.hasAttribute("speed"))
+            m_appearSpeed=static_cast<EffectSpeed>(e.attribute("speed").toInt());
     }
     else {
         effect=EF_NONE;
@@ -951,6 +955,8 @@ double KPObject::load(const QDomElement &element) {
             disappear=static_cast<bool>(e.attribute(attrDoit).toInt());
         if(e.hasAttribute(attrNum))
             disappearStep=e.attribute(attrNum).toInt();
+        if(e.hasAttribute("speed"))
+            m_disappearSpeed=static_cast<EffectSpeed>(e.attribute("speed").toInt());
     }
     else {
         effect3=EF3_NONE;

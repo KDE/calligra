@@ -3574,7 +3574,7 @@ void KPresenterView::transEffectOk( bool global )
         for( QPtrListIterator<KPrPage> it( m_pKPresenterDoc->getPageList() ); *it; ++it, ++i )
         {
             oldSettings[i].pageEffect = it.current()->getPageEffect();
-            oldSettings[i].transSpeed = it.current()->background()->getPresSpeed();
+            oldSettings[i].effectSpeed = it.current()->background()->getPageEffectSpeed();
             oldSettings[i].soundEffect = it.current()->getPageSoundEffect();
             oldSettings[i].soundFileName = it.current()->getPageSoundFileName();
             oldSettings[i].autoAdvance = /*TODO it.current()->getAutoAdvance() */ false;
@@ -3586,7 +3586,7 @@ void KPresenterView::transEffectOk( bool global )
         oldSettings.resize( 1 );
         KPrPage *page = m_canvas->activePage();
         oldSettings[0].pageEffect = page->getPageEffect();
-        oldSettings[0].transSpeed = page->background()->getPresSpeed();
+        oldSettings[0].effectSpeed = page->background()->getPageEffectSpeed();
         oldSettings[0].soundEffect = page->getPageSoundEffect();
         oldSettings[0].soundFileName = page->getPageSoundFileName();
         oldSettings[0].autoAdvance = /*TODO page->getAutoAdvance() */ false;
@@ -3594,7 +3594,7 @@ void KPresenterView::transEffectOk( bool global )
     }
     TransEffectCmd::PageEffectSettings newSettings;
     newSettings.pageEffect = transEffectDia->getPageEffect();
-    newSettings.transSpeed = transEffectDia->getPresSpeed();
+    newSettings.effectSpeed = transEffectDia->getPageEffectSpeed();
     newSettings.soundEffect = transEffectDia->getSoundEffect();
     newSettings.soundFileName = transEffectDia->getSoundFileName();
     newSettings.autoAdvance = transEffectDia->getAutoAdvance();

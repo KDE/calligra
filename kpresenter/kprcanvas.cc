@@ -3222,7 +3222,8 @@ bool KPrCanvas::pNext( bool gotoNextPage )
     {
         if ( !spManualSwitch() && m_setPageTimer )
         {
-            m_view->setAutoPresTimer( doc->pageList().at( (*m_presentationSlidesIterator) - 1 )->getPageTimer() / ( doc->pageList().at( (*m_presentationSlidesIterator) - 1 )->background()->getPresSpeed() ) );
+            //TODO add global presentation speed
+            m_view->setAutoPresTimer( doc->pageList().at( (*m_presentationSlidesIterator) - 1 )->getPageTimer() / 1 ); 
             m_setPageTimer = false;
             return false;
         }
@@ -3270,7 +3271,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
             playSound( _soundFileName );
         }
 
-        m_pageEffect = new KPPageEffects( this, _pix2, _pageEffect, backtmp->getPresSpeed() );
+        m_pageEffect = new KPPageEffects( this, _pix2, _pageEffect, backtmp->getPageEffectSpeed() );
         if ( m_pageEffect->doEffect() )
         {
             delete m_pageEffect;
@@ -3583,7 +3584,8 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
             allObjects.append( it.current() );
     }
 
-    m_effectHandler = new EffectHandler( m_step.m_step, m_step.m_subStep, goingBack, this, &screen_orig, allObjects, m_view, m_activePage->background()->getPresSpeed() );
+    //TODO add global presentation speed
+    m_effectHandler = new EffectHandler( m_step.m_step, m_step.m_subStep, goingBack, this, &screen_orig, allObjects, m_view, 1 );
     if ( m_effectHandler->doEffect() )
     {
         delete m_effectHandler;
