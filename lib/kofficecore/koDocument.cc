@@ -174,8 +174,8 @@ bool KoDocument::saveFile()
     d->m_changed=false;
     QString nativeFile=KoFilterManager::self()->prepareExport( m_file, _native_format, this);
     kdDebug(30003) << "Temp native file " << nativeFile << endl;
-    
-    if(d->m_changed==false && nativeFile!=m_file) {    
+
+    if(d->m_changed==false && nativeFile!=m_file) {
 	ret = saveNativeFormat( nativeFile );
 	if ( !ret )
 	    kdError(30003) << "Couldn't save in native format!" << endl;
@@ -545,10 +545,12 @@ bool KoDocument::openFile()
   QApplication::setOverrideCursor( waitCursor );
 
   d->m_changed=false;
-  
+
   // Launch a filter if we need one for this url ?
   QString importedFile = KoFilterManager::self()->import( m_file, nativeFormatMimeType(), this );
-
+  
+  kdDebug(30003) << QString("KoDocument::openFile - importedFile %1").arg( importedFile ) << endl;
+  
   QApplication::restoreOverrideCursor();
 
   // The filter, if any, has been applied. It's all native format now.
