@@ -86,7 +86,6 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
     if ( vec.isEmpty() )
     {
       // Still no match. Either the mimetype itself is unknown, or we have no service for it.
-      // The third possibility is that we have to use a filter to be able to read this mimetype (Werner)
       // Help the user debugging stuff by providing some more diagnostics
       if ( KServiceType::serviceType( mimetype ) == 0L )
       {
@@ -94,37 +93,8 @@ KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
         kdError(30003) << "Check your installation (for instance, run 'kde-config --path mime' and check the result)." << endl;
       } else
       {
-        // (Werner) Okay, the mimetype exists but we don't have a *native* part for it
-        // Let's go and check if we have a filter. This "feature" is needed in KOShell
-        // if we want to be able to open non-native files.
-        constr = "'";
-        constr += mimetype;
-        constr += "' in Import";
-        QValueList<KoFilterEntry::Ptr> filters = KoFilterEntry::query( constr );
-        if ( !filters.isEmpty() )
-        {
-          kdDebug(30003) << "Found at least one filter which can handle '" << mimetype << "'" << endl;
-          // Note: I decided *not* to recurse here as I'm not entirely sure that
-          // this recursion would stop in every single case
-          for ( unsigned int i=0; i < filters.count(); ++i )
-          {
-            QStringList exp = filters[i]->export_;
-            QStringList::ConstIterator it=exp.begin();
-            while(it!=exp.end())
-            {
-              constr = QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1'" ).arg( *it );
-              vec = query( constr );
-              // Found something useful
-              if ( !vec.isEmpty() )
-                return vec[0];
-            }
-          }
-        }
-        else
-        {
-          kdError(30003) << "Found no KOffice part able to handle " << mimetype << "!" << endl;
-          kdError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and KOfficePart, did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
-        }
+        kdError(30003) << "Found no KOffice part able to handle " << mimetype << "!" << endl;
+        kdError(30003) << "Check your installation (does the desktop file have X-KDE-NativeMimeType and KOfficePart, did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
       }
       return KoDocumentEntry();
     }

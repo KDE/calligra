@@ -383,7 +383,21 @@ KoStoreDevice* KoFilterChain::storageHelper( const QString& file, const QString&
         return 0;
     }
 
-    *storage = new KoStore( file, mode );
+    QCString appIdentification( "" );
+    if ( mode == KoStore::Write ) {
+        // To create valid storages we also have to add the mimetype
+        // magic "applicationIndentifier" to the storage.
+        // As only filters with a KOffice destination should query
+        // for a storage to write to, we don't check the content of
+        // the mimetype here. It doesn't do a lot of harm if someome
+        // "abuses" this method.
+        appIdentification = "KOffice ";
+        appIdentification += m_chainLinks.current()->to();
+        appIdentification += '\004'; // Two magic bytes to make the identification
+        appIdentification += '\006'; // more reliable (DF)
+    }
+    *storage = new KoStore( file, mode, appIdentification );
+
     if ( ( *storage )->bad() )
         return storageCleanupHelper( storage );
     if ( !( *storage )->open( streamName ) )
