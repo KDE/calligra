@@ -100,15 +100,15 @@ void OLEFilter::slotSavePic(const QString &extension, unsigned int length, const
     if(it!=imageMap.end())        // The "key-name" is already here - return the id
         id=imageMap[key];
     else {
-        QString value="tar:/";                          // generate one...
+        QString value="tar:";                          // generate one...
         for(unsigned int i=0; i<storePath.size(); ++i) {
-            if (i>0)
-              value+='/';
+            value+='/';
             value+=QString::number(static_cast<unsigned int>(storePath[i]));
         }
         id=QString("pictures/picture%1.%2").arg(numPic++).arg(extension);
         imageMap.insert(key, id);           // ...and store it
-        value+=id;
+        value+='/';
+	value+=id;
         if(!store->open(value)) {
             success=false;
             kdError(30510) << "OLEFilter::convert(): Could not open KoStore!" << endl;
