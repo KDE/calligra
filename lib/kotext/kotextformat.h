@@ -20,7 +20,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
+class KoCharStyle;
 class Q_EXPORT KoTextFormat
 {
     friend class KoTextFormatCollection;
@@ -37,6 +37,7 @@ public:
 
     {
         memset( m_screenWidths, 0, 256 * sizeof( ushort ) );
+        m_charStyle = 0L;
     }
     ~KoTextFormatPrivate()
     {
@@ -57,6 +58,7 @@ public:
     double m_relativeTextSize;
     int m_offsetFromBaseLine;
     bool m_bWordByWord;
+    KoCharStyle *m_charStyle;
 };
 
 public:
@@ -267,6 +269,7 @@ public:
     int charWidthLU( const KoTextStringChar* c,
                      const KoTextParag* parag, int i ) const;
 
+    void applyCharStyle( KoCharStyle *_style );
     static QString underlineStyleToString( UnderlineLineStyle _lineType );
     static QString strikeOutStyleToString( StrikeOutLineStyle _lineType );
     static UnderlineLineStyle stringToUnderlineStyle( const QString & _str );

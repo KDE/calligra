@@ -23,7 +23,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <assert.h>
-
+#include "kostyle.h"
 void KoTextFormat::KoTextFormatPrivate::clearCache()
 {
     delete m_screenFontMetrics; m_screenFontMetrics = 0L;
@@ -817,6 +817,11 @@ int KoTextFormat::charWidthLU( const KoTextStringChar* c, const KoTextParag* par
 int KoTextFormat::width( const QChar& ch ) const
 {
     return KoTextZoomHandler::ptToLayoutUnitPt( refFontMetrics().width( ch ) );
+}
+
+void KoTextFormat::applyCharStyle( KoCharStyle *_style )
+{
+    d->m_charStyle = _style;
 }
 
 //static
