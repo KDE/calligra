@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <float.h>
 #include <kppixmapobject.h>
 #include <kpgradient.h>
 
@@ -207,121 +208,36 @@ double KPPixmapObject::load(const QDomElement &element)
     return offset;
 }
 
-/*========================= draw =================================*/
-void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
-			   SelectionMode selectionMode, bool drawContour )
+/*========================= drawShadow ===========================*/
+void KPPixmapObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandler)
 {
-    if ( image.isNull() ) return;
-
-    double ox = orig.x();
-    double oy = orig.y();
-    double ow = ext.width();
-    double oh = ext.height();
+    const double ox = orig.x();
+    const double oy = orig.y();
+    const double ow = ext.width();
+    const double oh = ext.height();
 
      _painter->save();
 
-    QPen pen2;
-    if ( drawContour ) {
-        pen2 = QPen( Qt::black, 1, Qt::DotLine );
-        _painter->setRasterOp( Qt::NotXorROP );
-    }
-    else {
-        pen2 = pen;
-        pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
-    }
-
+    QPen pen2(pen);
+    pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
     _painter->setPen( pen2 );
-    if ( !drawContour )
-	_painter->setBrush( brush );
+    _painter->setBrush( brush );
 
-    double penw = _zoomHandler->zoomItX( pen.width() ) / 2.0;
+    double sx = 0;
+    double sy = 0;
 
-    if ( shadowDistance > 0 && !drawContour )
+    getShadowCoords( sx, sy );
+
+    _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
+    _painter->setPen( QPen( shadowColor ) );
+    _painter->setBrush( shadowColor );
+    if ( kAbs(angle) <= DBL_EPSILON )
     {
-        double sx = 0;
-        double sy = 0;
-
-        getShadowCoords( sx, sy );
-
-        if ( angle == 0 )
-        {
-            _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
-            _painter->setPen( QPen( shadowColor ) );
-            _painter->setBrush( shadowColor );
-            _painter->drawRect( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ),
-                                _zoomHandler->zoomItX( ext.width() ), _zoomHandler->zoomItY( ext.height() ) );
-        }
-        else
-        {
-            _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
-
-            QSize bs = QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
-            QRect br = QRect( 0, 0, bs.width(), bs.height() );
-            int pw = br.width();
-            int ph = br.height();
-            QRect rr = br;
-            int pixYPos = -rr.y();
-            int pixXPos = -rr.x();
-            br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
-            rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
-
-            QWMatrix m;
-            m.translate( pw / 2, ph / 2 );
-            m.rotate( angle );
-            m.translate( rr.left() + pixXPos + _zoomHandler->zoomItX( sx ),
-                         rr.top() + pixYPos + _zoomHandler->zoomItY( sy ) );
-
-            _painter->setWorldMatrix( m, true );
-
-            _painter->setPen( QPen( shadowColor ) );
-            _painter->setBrush( shadowColor );
-
-            _painter->drawRect( 0, 0, bs.width(), bs.height() );
-        }
+        _painter->drawRect( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ),
+                            _zoomHandler->zoomItX( ext.width() ), _zoomHandler->zoomItY( ext.height() ) );
     }
-    _painter->restore();
-    _painter->save();
-    QSize size( _zoomHandler->zoomSize( ext ) );
-
-    if ( angle == 0 ) {
-        // Draw background
-        _painter->setPen( Qt::NoPen );
-	if ( !drawContour )
-	    _painter->setBrush( brush );
-        if ( fillType == FT_BRUSH || !gradient || drawContour )
-            _painter->drawRect( (int)( _zoomHandler->zoomItX( ox ) + penw ),
-                                (int)( _zoomHandler->zoomItY( oy ) + penw ),
-                                (int)( _zoomHandler->zoomItX( ext.width() ) - 2 * penw ),
-                                (int)( _zoomHandler->zoomItY( ext.height() ) - 2 * penw ) );
-        else {
-            gradient->setSize( size );
-            _painter->drawPixmap( (int)( _zoomHandler->zoomItX( ox ) + penw ),
-                                  (int)( _zoomHandler->zoomItY( oy ) + penw ),
-                                  gradient->pixmap(), 0, 0,
-                                  (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
-                                  (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
-        }
-
-	// Draw pixmap
-        if ( !drawContour ) {
-            QRect rect( (int)( _zoomHandler->zoomItX( ox ) + penw ),
-                        (int)( _zoomHandler->zoomItY( oy ) + penw ),
-                        (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
-                        (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
-            QPixmap _pixmap = image.generatePixmap( rect.size(), true );
-
-	    QPixmap tmpPix = changePictureSettings( _pixmap ); // hmm, what about caching that pixmap?
-
-            _painter->drawPixmap( rect, tmpPix );
-	}
-
-        // Draw border - TODO port to KoBorder::drawBorders() (after writing a simplified version of it, that takes the same border on each size)
-        _painter->setPen( pen2 );
-        _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect( (int)( _zoomHandler->zoomItX( ox ) + penw ), (int)( _zoomHandler->zoomItY( oy ) + penw ),
-                            (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ), (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
-    } else {
-        _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
+    else
+    {
 
         QSize bs = QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
         QRect br = QRect( 0, 0, bs.width(), bs.height() );
@@ -336,44 +252,148 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         QWMatrix m;
         m.translate( pw / 2, ph / 2 );
         m.rotate( angle );
-        m.translate( rr.left() + pixXPos, rr.top() + pixYPos );
+        m.translate( rr.left() + pixXPos + _zoomHandler->zoomItX( sx ),
+                    rr.top() + pixYPos + _zoomHandler->zoomItY( sy ) );
 
         _painter->setWorldMatrix( m, true );
 
-        _painter->setPen( Qt::NoPen );
-	if ( !drawContour )
-	    _painter->setBrush( brush );
+        _painter->drawRect( 0, 0, bs.width(), bs.height() );
+    }
 
-        if ( fillType == FT_BRUSH || !gradient  || drawContour )
-            _painter->drawRect( (int)penw, (int)penw,
-                                (int)( _zoomHandler->zoomItX( ext.width() ) - 2 * penw ),
-                                (int)( _zoomHandler->zoomItY( ext.height() ) - 2 * penw ) );
+    _painter->restore();
+}
+
+
+QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
+{
+    const double penw = _zoomHandler->zoomItX( pen.width() ) / 2.0;
+    
+    QSize size( _zoomHandler->zoomSize( ext ) );
+    QPixmap pixmap(size);
+    QPainter paint;
+
+    paint.begin( &pixmap );
+
+    // First, fill with a white background
+    paint.setBackgroundColor( Qt::white );
+    pixmap.fill( Qt::white );
+
+    // Draw background
+    paint.setPen( Qt::NoPen );
+    paint.setBrush( brush );
+
+    QRect rect( (int)( penw ), (int)( penw ),
+                (int)( _zoomHandler->zoomItX( ext.width() ) - 2 * penw ),
+                (int)( _zoomHandler->zoomItY( ext.height() ) - 2 * penw ) );
+
+    if ( fillType == FT_BRUSH || !gradient )
+        paint.drawRect( rect );
+    else {
+        // ### TODO: this was also drawn for drawContour==true, but why?
+        gradient->setSize( size );
+        paint.drawPixmap( (int)( penw ), (int)( penw ),
+                            gradient->pixmap(), 0, 0,
+                            (int)( _zoomHandler->zoomItX( ext.width() ) - 2 * penw ),
+                            (int)( _zoomHandler->zoomItY( ext.height() ) - 2 * penw ) );
+    }
+
+    image.draw( paint, 0, 0, size.width(), size.height(), 0, 0, -1, -1, false); // Always slow mode!
+    paint.end();
+    return pixmap;
+}
+
+/*========================= draw =================================*/
+void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+			   SelectionMode selectionMode, bool drawContour )
+{
+    if ( image.isNull() ) return;
+
+
+    if ( shadowDistance > 0 && !drawContour )
+    {
+        drawShadow(_painter, _zoomHandler);
+    }
+
+    const double ox = orig.x();
+    const double oy = orig.y();
+    const double ow = ext.width();
+    const double oh = ext.height();
+    const double penw = _zoomHandler->zoomItX( pen.width() ) / 2.0;
+
+    _painter->save();
+
+    _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
+
+    if ( kAbs(angle)> DBL_EPSILON ) {
+        QSize bs = QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
+        QRect br = QRect( 0, 0, bs.width(), bs.height() );
+        int pw = br.width();
+        int ph = br.height();
+        QRect rr = br;
+        int pixYPos = -rr.y();
+        int pixXPos = -rr.x();
+        br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
+        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+
+        QWMatrix m;
+        m.translate( pw / 2, ph / 2 );
+        m.rotate( angle );
+        m.translate( rr.left() + pixXPos, rr.top() + pixYPos );
+        _painter->setWorldMatrix( m, true );
+    }
+
+    if ( !drawContour )
+    {
+        QRect rect( (int)( penw ), (int)( penw ),
+                    (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
+                    (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
+#if 0
+        QSize size( _zoomHandler->zoomSize( ext ) );
+
+        // Draw background
+        _painter->setPen( Qt::NoPen );
+        _painter->setBrush( brush );
+
+        if ( fillType == FT_BRUSH || !gradient )
+            _painter->drawRect( rect );
         else {
+            // ### TODO: this was also drawn for drawContour==true, but why?
             gradient->setSize( size );
-            _painter->drawPixmap( (int)penw, (int)penw, gradient->pixmap(), 0, 0,
-                                  (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
-                                  (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
+            _painter->drawPixmap( (int)( penw ),
+                                (int)( penw ),
+                                gradient->pixmap(), 0, 0,
+                                (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
+                                (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
         }
 
         // Draw pixmap
-        if ( !drawContour ) {
-            QRect rect( (int)penw,
-                        (int)penw,
-                        (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
-                        (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
-            QPixmap _pixmap = image.generatePixmap( rect.size(), true );
+        QPixmap _pixmap = image.generatePixmap( rect.size(), true );
+#else
+        // Generate a QPixmap from background and from the picture
+        QPixmap _pixmap = generatePixmap( _zoomHandler );
+#endif
 
-	    QPixmap tmpPix = changePictureSettings( _pixmap );
+        QPixmap tmpPix = changePictureSettings( _pixmap ); // hmm, what about caching that pixmap?
 
-            _painter->drawPixmap( rect, tmpPix );
-	}
-
-        _painter->setPen( pen2 );
-        _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect( (int)penw, (int)penw,
-                            (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
-                            (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
+        _painter->drawPixmap( rect, tmpPix );
     }
+
+    // Draw border
+    // ### TODO port to KoBorder::drawBorders() (after writing a simplified version of it, that takes the same border on each size)
+    QPen pen2;
+    if ( drawContour ) {
+        pen2 = QPen( Qt::black, 1, Qt::DotLine );
+        _painter->setRasterOp( Qt::NotXorROP );
+    }
+    else {
+        pen2 = pen;
+        pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
+    }
+    _painter->setPen( pen2 );
+    _painter->setBrush( Qt::NoBrush );
+    _painter->drawRect( (int)( penw ), (int)( penw ),
+                        (int)( _zoomHandler->zoomItX( ow ) - 2.0 * penw ),
+                        (int)( _zoomHandler->zoomItY( oh ) - 2.0 * penw ) );
 
     _painter->restore();
 

@@ -91,6 +91,14 @@ protected:
 
     QPixmap changePictureSettings( QPixmap _tmpPixmap );
 
+    /**
+     * @internal
+     * Draws the shadow
+     */
+    void drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandler);
+    
+    QPixmap generatePixmap(KoZoomHandler*_zoomHandler);
+
     KoPictureCollection *imageCollection;
     KoPicture image;
     KPGradient *gradient;
