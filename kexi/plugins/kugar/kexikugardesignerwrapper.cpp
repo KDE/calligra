@@ -85,10 +85,18 @@ KXMLGUIClient *KexiKugarDesignerWrapper::guiClient()
 
 void KexiKugarDesignerWrapper::activateActions()
 {
+		 KParts::GUIActivateEvent ev(true);
+		 QApplication::sendEvent(m_item->designer(),&ev);
+		 QApplication::sendEvent(m_view,&ev);
+
 }
 
 void KexiKugarDesignerWrapper::deactivateActions()
 {
+		 KParts::GUIActivateEvent ev(false);
+		 QApplication::sendEvent(m_item->designer(),&ev);
+		 QApplication::sendEvent(m_view,&ev);
+
 }
 
 #include "kexikugardesignerwrapper.moc"

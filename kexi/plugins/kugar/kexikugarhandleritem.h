@@ -24,6 +24,8 @@ public:
 	KoDocument *designer(bool newReport=false);
 	void store (KoStore *ks);
 
+public slots:
+	void pluginStorageFile(QString &path);
 private:
 	QStringList m_storedDataSetNames;
 	QDict<QString> m_storedDataSets;

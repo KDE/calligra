@@ -33,7 +33,9 @@
 #include <kexiprojecthandler.h>
 #include <klocale.h>
 #include <qlabel.h>
-
+#include <kio/netaccess.h>
+#include <ksimpleconfig.h>
+#include <mycanvas.h>
 
 //BEGIN KuKexiDataSourceComboBox
 
@@ -175,13 +177,14 @@ QString KuKexiFieldComboBox::value() const {
 
 
 KuKexi::KuKexi(QObject *parent, const char* name, const QStringList& args):KuDesignerPlugin(parent,name,args) {
-//	m_kugar=(KudesignerDoc*)parent;
+	m_kudesigner=static_cast<KudesignerDoc*>(parent->qt_cast("KudesignerDoc"));
 //	m_dialog=((KexiDialogBase*)parent->parent());
 //	m_kexi=(KexiProject*)m_dialog->kexiProject();
 //	m_kexi=(KexiProject*)(((KexiProjectHandlerItem*)parent->parent())->projectPart()->kexiProject());	
 	KexiProjectHandlerItem *it=static_cast<KexiProjectHandlerItem*>(parent->parent()->qt_cast("KexiProjectHandlerItem"));
 	m_kexi=(KexiProject*)(it->projectPart()->kexiProject());
 	updateSourceList();
+	connect(this,SIGNAL(getStorageFile(QString &)),parent->parent(),SLOT(pluginStorageFile(QString &)));
 }
 
 KuKexi::~KuKexi(){}
@@ -244,5 +247,92 @@ void KuKexi::slotDataSourceSelected(int level, int value)
 void KuKexi::updateSourceList() {
 	KexiDataSourceComboBox::fillList(m_kexi,m_sourceMapping);
 }
+
+bool KuKexi::store(KoStore*) {
+	QString filename;
+	getStorageFile(filename);
+	if (filename.isEmpty()) return false;
+	if (KIO::NetAccess::exists(filename)) {
+		if (!KIO::NetAccess::del(filename,0)) {
+			kdDebug()<<"Couldn't delete temporary file template.kukexi file"<<endl;
+			return false;
+		}
+	}
+
+	KSimpleConfig cfg(filename);
+	std::map<int, DetailBand> *details=&(m_kudesigner->canvas()->templ->details);
+	for (std::map<int, DetailBand>::const_iterator it = details->begin(); it != details->end(); ++it){
+		/*
+        	//getting xml from detail header
+	        if (it->second.first.first)
+        		result += it->second.first.first->getXml();
+		*/
+        	if (it->second.second) {
+        		QString value=it->second.second->props["Datasource"]->value();
+			QString key="DETAIL_"+it->second.second->props["Level"]->value();
+			cfg.writeEntry(key,value);
+		}
+		/*
+	        //getting xml from detail footer
+        	if (it->second.first.second)
+	        	result += it->second.first.second->getXml();
+		*/
+	}
+	cfg.sync();
+	return true;	
+}
+        
+bool KuKexi::load(KoStore*) {
+	QString filename;
+	getStorageFile(filename);
+	if (filename.isEmpty()) return false;
+
+	kdDebug()<<"******KuKexi::load*******"<<endl;
+
+	KSimpleConfig cfg(filename);
+	std::map<int, DetailBand> *details=&(m_kudesigner->canvas()->templ->details);
+	for (std::map<int, DetailBand>::const_iterator it = details->begin(); it != details->end(); ++it){
+		kdDebug()<<"Trying to configure datasource for one band"<<endl;
+		/*
+        	//getting xml from detail header
+	        if (it->second.first.first)
+        		result += it->second.first.first->getXml();
+		*/
+
+        	if (it->second.second) {
+			QString key="DETAIL_"+it->second.second->props["Level"]->value();
+			int level=it->second.second->props["Level"]->value().toInt();
+			QString value=cfg.readEntry(key);
+			if (!value.isEmpty()) {
+				bool found=false;
+				int i=0;			
+				for (KexiDataSourceComboBox::ItemList::const_iterator sit=m_sourceMapping.begin();
+					sit!=m_sourceMapping.end();++sit,i++) {
+					kdDebug()<<(*sit).globalIdentifier<<"=="<<value<<"?"<<endl;
+					if ((*sit).globalIdentifier==value) {
+						it->second.second->props["Datasource"]->setValue(value);
+						slotDataSourceSelected(level,i);
+						found=true;
+						break;
+					}
+					
+				}
+				if (found) continue;
+
+			}
+			else kdDebug()<<"VALUE IS EMTPY"<<endl;
+			it->second.second->props["Datasource"]->setValue(QString::null);
+		}
+		/*
+	        //getting xml from detail footer
+        	if (it->second.first.second)
+	        	result += it->second.first.second->getXml();
+		*/
+	}
+
+
+	return true;
+}
+
 
 K_EXPORT_COMPONENT_FACTORY( kudesigner_kexiplugin, KGenericFactory<KuKexi> )

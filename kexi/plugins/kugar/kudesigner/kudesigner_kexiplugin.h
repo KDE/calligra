@@ -40,13 +40,17 @@ public:
 	virtual bool acceptsDrops(){kdDebug()<<"****ACCEPT DROPS"<<endl; return true;}
         virtual bool dragMove(QDragMoveEvent *,CanvasBox *) {return true;}
 	virtual void newCanvasBox(int type, CanvasBox *cb);
+	virtual bool store(KoStore*);
+	virtual bool load(KoStore*);
 protected slots:
 	void slotDataSourceSelected(int level, int value);
+signals:
+	void getStorageFile(QString &path);
 private:
 	friend class KuKexiFieldComboBox;
 	KexiDialogBase* m_dialog;
 	KexiProject* m_kexi;
-	KudesignerDoc* m_kugar;
+	KudesignerDoc* m_kudesigner;
 	KexiDataSourceComboBox::ItemList m_sourceMapping;
 	void updateSourceList();
 	typedef QMap<int,QStringList> FieldMap;
