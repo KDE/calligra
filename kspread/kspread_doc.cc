@@ -1961,15 +1961,19 @@ void KSpreadDoc::loadOasisCellValidation( const QDomElement&body )
     kdDebug()<<"validation.isNull ? "<<validation.isNull()<<endl;
     if ( !validation.isNull() )
     {
-        QDomElement element = validation.firstChild().toElement();
-        kdDebug()<<"element.isNull ??? :"<<element.isNull()<<endl;
-        for ( ; !element.isNull() ; element = element.nextSibling().toElement() ) {
-            if ( element.tagName() ==  "table:content-validation" ) {
-                d->m_loadingInfo->appendValidation(element.attribute("table:name" ), element );
-                kdDebug()<<" validation found :"<<element.attribute("table:name" )<<endl;
-            }
-            else {
-                kdDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
+        QDomNode n = validation.firstChild();
+        for( ; !n.isNull(); n = n.nextSibling() )
+        {
+            if ( n.isElement() )
+            {
+                QDomElement element = n.toElement();
+                if ( element.tagName() ==  "table:content-validation" ) {
+                    d->m_loadingInfo->appendValidation(element.attribute("table:name" ), element );
+                    kdDebug()<<" validation found :"<<element.attribute("table:name" )<<endl;
+                }
+                else {
+                    kdDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
+                }
             }
         }
     }
