@@ -88,15 +88,17 @@ util_fractionFormat(double value, KSpreadCell::FormatType fmtType)
 	&& fmtType != KSpreadCell::fraction_two_digits
 	&& fmtType != KSpreadCell::fraction_one_digit) {
 	double calc = 0;
-	int index1 = 1;
+	int index1 = 0;
 	double diff = result;
-	for (int i = 1; i < index; i++) {
+	for (int i = 1; i <= index; i++) {
 	    calc = i * 1.0 / index;
 	    if (fabs(result - calc) < diff) {
 		index1 = i;
 		diff = fabs(result - calc);
 	    }
 	}
+	if( index1 == 0 ) return QString("%1").arg( floor(value) );
+	if( index1 == index ) return QString("%1").arg( floor(value)+1 );
 	return QString("%1 %2/%3")
 		.arg( floor(value) )
 	      	.arg( index1 )
