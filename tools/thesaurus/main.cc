@@ -21,6 +21,8 @@
 FIXME:
 -Get rid of the broken icon
 -KDataTool in general: can it be accessed without using the mouse?
+-Improve the user interface, so that every word can be used to replace
+ the current selection
 -see the fixme's in the source below
 -function words (like "if" etc) are not part of wordnet. There  are not *that*
  many of them, so maybe we should add them. See search tools' stop word list for
@@ -39,37 +41,14 @@ FIXME:
  *
  ***************************************************/
 
- // TODO: simplify with macro as Simon says:
-
-extern "C"
-{
-    void* init_libthesaurustool()
-    {
-      return new ThesaurusFactory;
-    }
-};
-
-ThesaurusFactory::ThesaurusFactory( QObject* parent, const char* name )
-    : KLibFactory( parent, name )
-{
-}
-
-ThesaurusFactory::~ThesaurusFactory()
-{
-}
-
-QObject* ThesaurusFactory::createObject(QObject* parent, const char* name, const char* /*classname*/, const QStringList &)
-{
-    Thesaurus *wn = new Thesaurus(parent, name);
-    return wn;
-}
+K_EXPORT_COMPONENT_FACTORY( libthesaurustool, KGenericFactory<Thesaurus> );
 
 /***************************************************
  *
  * Thesaurus *
  ***************************************************/
 
-Thesaurus::Thesaurus(QObject* parent, const char* name)
+Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList)
     : KDataTool(parent, name)
 {
     dialog = new KDialogBase("Thesaurus", KDialogBase::User1|KDialogBase::Cancel,

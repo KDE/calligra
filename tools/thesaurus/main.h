@@ -21,11 +21,12 @@
 #define __main_h__
 
 #include <qlayout.h>
-#include <qstring.h>
 #include <qlistbox.h>
 #include <qcombobox.h>
 #include <qobject.h>
 #include <qregexp.h>
+#include <qstring.h>
+#include <qstringlist.h>
 #include <qwidget.h>
 #include <qvbox.h>
 
@@ -33,6 +34,7 @@
 #include <kdatatool.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
+#include <kgenericfactory.h>
 #include <klibloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -43,8 +45,7 @@ class Thesaurus : public KDataTool
     Q_OBJECT
 
 public:
-    //Thesaurus(QObject* parent = 0, const char* name = 0, const QStringList* = 0);
-    Thesaurus(QObject* parent = 0, const char* name = 0);
+    Thesaurus(QObject* parent = 0, const char* name = 0, const QStringList = 0);
     ~Thesaurus();
     virtual bool run( const QString& command, void* data, const QString& datatype, const QString& mimetype);
 
@@ -67,17 +68,6 @@ protected:
     QComboBox *combobox;
     KDialogBase *dialog;
     void* data_access;
-};
-
-class ThesaurusFactory : public KLibFactory
-{
-    Q_OBJECT
-
-public:
-    ThesaurusFactory( QObject* parent = 0, const char* name = 0 );
-    ~ThesaurusFactory();
-    virtual QObject* createObject( QObject* parent = 0, const char* name = 0,
-        const char* classname = "QObject", const QStringList &args = QStringList() );
 };
 
 #endif
