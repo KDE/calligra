@@ -814,14 +814,13 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 	QPtrVector<VColorStop> colorStops = gradient.colorStops();
 	offsets = colorStops.count();
 
-	QMemArray<ArtGradientStop> *stopArray = new QMemArray<ArtGradientStop>();
-	stopArray->resize( offsets * 2 - 1 );
+	ArtGradientStop *stopArray = art_new( ArtGradientStop, offsets * 2 - 1 );
 
 	for( int offset = 0 ; offset < offsets ; offset++ )
 	{
 		double ramp = colorStops[ offset ]->rampPoint;
 		//double mid  = colorStops[ offset ]->midPoint;
-		(*stopArray)[ offset * 2 ].offset = ramp;
+		stopArray[ offset * 2 ].offset = ramp;
 
 		QColor qStopColor = colorStops[ offset ]->color;
 		int r = qRed( qStopColor.rgb() );
@@ -836,14 +835,14 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 		g = (g + (g >> 8)) >> 8;
 		b = ((rgba >> 8) & 0xff) * a + 0x80;
 		b = (b + (b >> 8)) >> 8;
-		(*stopArray)[ offset * 2 ].color[ 0 ] = ART_PIX_MAX_FROM_8(r);
-		(*stopArray)[ offset * 2 ].color[ 1 ] = ART_PIX_MAX_FROM_8(g);
-		(*stopArray)[ offset * 2 ].color[ 2 ] = ART_PIX_MAX_FROM_8(b);
-		(*stopArray)[ offset * 2 ].color[ 3 ] = ART_PIX_MAX_FROM_8(a);
+		stopArray[ offset * 2 ].color[ 0 ] = ART_PIX_MAX_FROM_8(r);
+		stopArray[ offset * 2 ].color[ 1 ] = ART_PIX_MAX_FROM_8(g);
+		stopArray[ offset * 2 ].color[ 2 ] = ART_PIX_MAX_FROM_8(b);
+		stopArray[ offset * 2 ].color[ 3 ] = ART_PIX_MAX_FROM_8(a);
 
 		if( offset + 1 != offsets )
 		{
-			(*stopArray)[ offset * 2 + 1 ].offset = ramp + ( colorStops[ offset + 1 ]->rampPoint - ramp ) * colorStops[ offset ]->midPoint;
+			stopArray[ offset * 2 + 1 ].offset = ramp + ( colorStops[ offset + 1 ]->rampPoint - ramp ) * colorStops[ offset ]->midPoint;
 
 			QColor qStopColor2 = colorStops[ offset + 1 ]->color;
 			rgba = int(r + ((qRed(qStopColor2.rgb()) - r)) * 0.5) << 24 |
@@ -858,15 +857,15 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 			g = (g + (g >> 8)) >> 8;
 			b = ((rgba >> 8) & 0xff) * a + 0x80;
 			b = (b + (b >> 8)) >> 8;
-			(*stopArray)[ offset * 2 + 1 ].color[ 0 ] = ART_PIX_MAX_FROM_8(r);
-			(*stopArray)[ offset * 2 + 1 ].color[ 1 ] = ART_PIX_MAX_FROM_8(g);
-			(*stopArray)[ offset * 2 + 1 ].color[ 2 ] = ART_PIX_MAX_FROM_8(b);
-			(*stopArray)[ offset * 2 + 1 ].color[ 3 ] = ART_PIX_MAX_FROM_8(a);
+			stopArray[ offset * 2 + 1 ].color[ 0 ] = ART_PIX_MAX_FROM_8(r);
+			stopArray[ offset * 2 + 1 ].color[ 1 ] = ART_PIX_MAX_FROM_8(g);
+			stopArray[ offset * 2 + 1 ].color[ 2 ] = ART_PIX_MAX_FROM_8(b);
+			stopArray[ offset * 2 + 1 ].color[ 3 ] = ART_PIX_MAX_FROM_8(a);
 		}
 	}
 
 	offsets = offsets * 2 - 1;
-	return stopArray->data();
+	return stopArray;
 }
 
 void
