@@ -584,6 +584,65 @@ void KWord13OasisGenerator::writeStartOfFile(const QString& type)
 }
 
 void KWord13OasisGenerator::writeStylesXml( void )
+#if 1
+// Inspired by KWDocument::saveOasisDocumentStyles
+{
+    if ( !m_store || !m_kwordDocument )
+        return;
+
+    m_store->open("meta.xml"); // ### TODO: check error!
+    KoStoreDevice io ( m_store );
+    io.open( IO_WriteOnly );  // ### TODO: check error!
+    
+    KoXmlWriter stylesWriter( &io, "office:document-styles" );
+
+    stylesWriter.startElement( "office:styles" );
+    QValueList<KoGenStyles::NamedStyle> styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_USER );
+    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, m_oasisGenStyles, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+    stylesWriter.endElement(); // office:styles
+
+    stylesWriter.startElement( "office:automatic-styles" );
+#if 0
+    styles = m_oasisGenStyles.styles( KWDocument::STYLE_FRAME );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, m_oasisGenStyles, "style:style", (*it).name , "style:graphic-properties"  );
+    }
+#endif
+
+    QString pageLayoutName;
+    styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
+    Q_ASSERT( styles.count() == 1 );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, m_oasisGenStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
+        //if ( m_pageLayout.columns > 1 ) TODO add columns element. This is a bit of a hack,
+        // which only works as long as we have only one page master
+        stylesWriter.endElement();
+        Q_ASSERT( pageLayoutName.isEmpty() ); // if there's more than one pagemaster we need to rethink all this
+        pageLayoutName = (*it).name;
+    }
+
+
+
+    stylesWriter.endElement(); // office:automatic-styles
+
+    stylesWriter.startElement( "office:master-styles" );
+    stylesWriter.startElement( "style:master-page" );
+    stylesWriter.addAttribute( "style:name", "Standard" );
+    stylesWriter.addAttribute( "style:page-layout-name", pageLayoutName );
+    stylesWriter.endElement();
+    stylesWriter.endElement(); // office:master-styles
+
+    stylesWriter.endElement(); // root element (office:document-styles)
+    stylesWriter.endDocument();
+    io.close();
+    m_store->close();
+}
+#else
 {
     if (!m_zip && !m_kwordDocument)
         return;
@@ -662,7 +721,7 @@ void KWord13OasisGenerator::writeStylesXml( void )
 
     zipDoneWriting();
 }
-
+#endif
 
 void KWord13OasisGenerator::writeContentXml(void)
 {

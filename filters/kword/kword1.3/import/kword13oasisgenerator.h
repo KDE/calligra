@@ -31,6 +31,8 @@ class KoStore;
 class KoGenStyle;
 class KWord13Document;
 
+#include <koGenStyles.h>
+
 class KWord13OasisGenerator
 {
 public:
@@ -66,6 +68,7 @@ protected:
     QTextStream* m_streamOut;
     QByteArray m_contentBody; ///< office:body element of content.xml
     QString m_contentAutomaticStyles; ///< Automatic styles for content.xml (in OO format)
+    KoGenStyles m_oasisGenStyles; ///< OASIS styles
 };
 
 #endif // KWORD_1_3_OASIS_GENERATOR
