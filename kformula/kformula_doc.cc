@@ -33,8 +33,6 @@
 KFormulaDoc::KFormulaDoc()
 {
     //    setFocusPolicy( ClickFocus );
-    eList.clear();
-    eList.setAutoDelete(TRUE);
     thePosition=0;
     thePainter = new QPainter();
     warning("General Settings");
@@ -53,14 +51,8 @@ KFormulaDoc::KFormulaDoc()
     m_bEmpty = true;
 
     theFirstElement= new BasicElement(this,0L,-1,0L,"");
-    PosType *p=new PosType;
-    p->element=theFirstElement;
-    p->pos=0;
-    eList.append(p);
-    p= new PosType;
-    p->element=theFirstElement;
-    p->pos=-1;
-    eList.append(p);    
+    addElement(theFirstElement, 0);
+    addElement(theFirstElement, -1);
     eList.at(0);
     thePosition=0;
 
@@ -171,37 +163,37 @@ void KFormulaDoc::emitModified()
     eList.clear();
     theFirstElement->makeList();  
     eList.at(thePosition);
-    emit sig_changeType( eList.current()->element );
+    emit sig_changeType( currentElement() );
     emit sig_modified();
 }
 
 void KFormulaDoc::addRootElement()
 {
     BasicElement *newElement;
-    if(eList.current()->element==0L)
+    if(currentElement()==0L)
 	setActiveElement(theFirstElement);
 
-    if (typeid(*eList.current()->element) == typeid(BasicElement)) {
+    if (typeid(*currentElement()) == typeid(BasicElement)) {
 	warning("substitueted");
 	newElement = new RootElement(this);
-	eList.current()->element->substituteElement(newElement);
-	delete	eList.current()->element;
-        eList.current()->element=0;
+	currentElement()->substituteElement(newElement);
+	delete	currentElement();
+	eList.current()->element = 0;
 	warning("done");
     } else {
-	BasicElement *nextElement=eList.current()->element->getNext();
+	BasicElement *nextElement=currentElement()->getNext();
 	if(nextElement!=0L){       //If there's a next insert root before next
 	    nextElement->insertElement(newElement=new RootElement(this));
 	} else  //If there isn't a next append only.
-	    eList.current()->element->setNext(newElement=new RootElement(this,eList.current()->element));
+	    currentElement()->setNext(newElement=new RootElement(this,currentElement()));
     }
     newElement->check();
     //    warning("Set activeelement...");
     setActiveElement(newElement);
     //    warning("done");
     //RootElement need a child[0] i.e. root content
-    //    newElement = new BasicElement(this,eList.current()->element,4);
-    //    eList.current()->element->setChild(newElement,0);
+    //    newElement = new BasicElement(this,currentElement(),4);
+    //    currentElement()->setChild(newElement,0);
     
     setActiveElement(newElement->getChild(0)); //I prefere to AutoActivate RootContent
     
@@ -213,29 +205,29 @@ void KFormulaDoc::addPrefixedElement(QString cont)
     BasicElement *newElement;
     //     if(eList.at()==-1)
     //         eList.first();
-    if(eList.current()->element==0L)
+    if(currentElement()==0L)
 	setActiveElement(theFirstElement);
 
 
     //If current Element is a Basic, change it into a Prefixed
-    if (typeid(*eList.current()->element) == typeid(BasicElement)) {
+    if (typeid(*currentElement()) == typeid(BasicElement)) {
 	warning("substitueted");
 	newElement = new PrefixedElement(this);
-	eList.current()->element->substituteElement(newElement);
-	delete 	eList.current()->element;
-        eList.current()->element=0;
+	currentElement()->substituteElement(newElement);
+	delete 	currentElement();
+        eList.current()->element =0;
 	//theActiveElement = 0;
     } else {
-	BasicElement *nextElement=eList.current()->element->getNext();
+	BasicElement *nextElement=currentElement()->getNext();
 	if(nextElement!=0L){       //If there's a next insert root before next
 	    nextElement->insertElement(newElement=new PrefixedElement(this));
 	} else  //If there isn't a next append only.
-	    eList.current()->element->setNext(newElement=new PrefixedElement(this,eList.current()->element));
+	    currentElement()->setNext(newElement=new PrefixedElement(this,currentElement()));
     }
     setActiveElement(newElement);
-    eList.current()->element->setContent(cont);
-    newElement = new BasicElement(this,eList.current()->element,4);
-    eList.current()->element->setChild(newElement,0);
+    currentElement()->setContent(cont);
+    newElement = new BasicElement(this,currentElement(),4);
+    currentElement()->setChild(newElement,0);
     setActiveElement(newElement); //I prefere to AutoActivate RootContent
     emitModified();
 }
@@ -244,29 +236,29 @@ void KFormulaDoc::addFractionElement(QString cont)
 {
     BasicElement *nextElement;
     BasicElement *newElement;
-    if(eList.current()->element==0L)
+    if(currentElement()==0L)
 	setActiveElement(theFirstElement);
 
-    if(typeid(*eList.current()->element) == typeid(BasicElement))  //If current Element is a Basic
+    if(typeid(*currentElement()) == typeid(BasicElement))  //If current Element is a Basic
 	{					//It change it into a Root
-	    eList.current()->element->substituteElement(newElement = new FractionElement(this));
-	    delete eList.current()->element;
+	    currentElement()->substituteElement(newElement = new FractionElement(this));
+	    delete currentElement();
 	    eList.current()->element = 0;
 	}
     else
 	{
-	    nextElement=eList.current()->element->getNext();
+	    nextElement=currentElement()->getNext();
 	    if(nextElement!=0L){       //If there's a next insert root before next
 		nextElement->insertElement(newElement=new FractionElement(this));
 	    }
 	    else              //If there isn't a next append only.
-		eList.current()->element->setNext(newElement=new FractionElement(this,eList.current()->element));
+		currentElement()->setNext(newElement=new FractionElement(this,currentElement()));
 	}
     newElement->setContent(cont);	
     setActiveElement(newElement);
     //RootElement need a child[0] i.e. numer
-    eList.current()->element->setChild(newElement = new BasicElement(this,eList.current()->element,5),1);	
-    eList.current()->element->setChild(newElement = new BasicElement(this,eList.current()->element,4),0);	
+    currentElement()->setChild(newElement = new BasicElement(this,currentElement(),5),1);	
+    currentElement()->setChild(newElement = new BasicElement(this,currentElement(),4),0);	
     setActiveElement(newElement); //I prefere to AutoActivate numerator
     emitModified();
 
@@ -279,30 +271,30 @@ void KFormulaDoc::addMatrixElement(QString cont)
 
     BasicElement *nextElement;
     BasicElement *newElement;
-    if(eList.current()->element==0L)
+    if(currentElement()==0L)
 	setActiveElement(theFirstElement);
 
-    if(typeid(*eList.current()->element) == typeid(BasicElement))  //If current Element is a Basic
+    if(typeid(*currentElement()) == typeid(BasicElement))  //If current Element is a Basic
 	{					//It change it into a Root
-	    eList.current()->element->substituteElement(newElement = new MatrixElement(this));
-	    delete eList.current()->element;
+	    currentElement()->substituteElement(newElement = new MatrixElement(this));
+	    delete currentElement();
 	    eList.current()->element = 0;
 	}
     else
 	{
-	    nextElement=eList.current()->element->getNext();
+	    nextElement=currentElement()->getNext();
 	    if(nextElement!=0L){       //If there's a next insert root before next
 		nextElement->insertElement(newElement=new MatrixElement(this));
 	    }
 	    else              //If there isn't a next append only.
-		eList.current()->element->setNext(newElement=new MatrixElement(this,eList.current()->element));
+		currentElement()->setNext(newElement=new MatrixElement(this,currentElement()));
 	}
     newElement->setContent(cont);	
     setActiveElement(newElement);
     //RootElement need a child[0] i.e. numer
-    ((MatrixElement *)(eList.current()->element))->setChildrenNumber(rows*cols);
+    ((MatrixElement *)(currentElement()))->setChildrenNumber(rows*cols);
     for (int i=rows*cols-1;i>=0;i--)
-	eList.current()->element->setChild(newElement = new BasicElement(this,eList.current()->element,i+4),i);	
+	currentElement()->setChild(newElement = new BasicElement(this,currentElement(),i+4),i);	
     setActiveElement(newElement); //I prefere to AutoActivate numerator
     emitModified();
 
@@ -312,28 +304,28 @@ void KFormulaDoc::addBracketElement(QString cont)
 {
     BasicElement *nextElement;
     BasicElement *newElement;
-    if(eList.current()->element==0L)
+    if(currentElement()==0L)
 	setActiveElement(theFirstElement);
 
-    if(typeid(*eList.current()->element) == typeid(BasicElement))  //If current Element is a Basic
+    if(typeid(*currentElement()) == typeid(BasicElement))  //If current Element is a Basic
 	{					//It change it into a Bracket
-	    eList.current()->element->substituteElement(newElement = new BracketElement(this));
-	    delete eList.current()->element;
-	    eList.current()->element=0;
+	    currentElement()->substituteElement(newElement = new BracketElement(this));
+	    delete currentElement();
+	    eList.current()->element = 0;
 	}
     else
 	{
-	    nextElement=eList.current()->element->getNext();
+	    nextElement=currentElement()->getNext();
 	    if(nextElement!=0L){       //If there's a next insert  Brackets before next
 		nextElement->insertElement(newElement=new BracketElement(this));
 	    }
 	    else              //If there isn't a next append only.
-		activeElement()->setNext(newElement=new BracketElement(this,eList.current()->element));
+		activeElement()->setNext(newElement=new BracketElement(this,currentElement()));
 	}
     newElement->setContent(cont);	
     setActiveElement(newElement);
     //RootElement need a child[0] i.e. parenthesis content
-    eList.current()->element->setChild(newElement = new BasicElement(this,eList.current()->element,4),0);	
+    currentElement()->setChild(newElement = new BasicElement(this,currentElement(),4),0);	
     setActiveElement(newElement); //I prefere to AutoActivate RootContent
     emitModified();
 }
@@ -348,13 +340,13 @@ BasicElement * KFormulaDoc::addIndex(int index)
 {
     BasicElement *oldIndexElement;
     BasicElement *newElement;
-    if(eList.current()->element==0L)
+    if(currentElement()==0L)
 	setActiveElement(theFirstElement);
 
-    oldIndexElement=eList.current()->element->getIndex(index);
+    oldIndexElement=currentElement()->getIndex(index);
     if(oldIndexElement==0L)
-	eList.current()->element->setIndex(newElement =
-					   new BasicElement(this,eList.current()->element,index),index);
+	currentElement()->setIndex(newElement =
+					   new BasicElement(this,currentElement(),index),index);
     else
 	{
 	    oldIndexElement->insertElement(newElement = new BasicElement(this));
@@ -368,13 +360,13 @@ BasicElement * KFormulaDoc::addChild(int child)
 {
     BasicElement *oldChildElement;
     BasicElement *newElement;
-    if(eList.current()->element==0L)
+    if(currentElement()==0L)
 	setActiveElement(theFirstElement);
 
-    oldChildElement=eList.current()->element->getChild(child);
+    oldChildElement=currentElement()->getChild(child);
     if(oldChildElement==0L)
-	eList.current()->element->setChild(newElement =
-					   new BasicElement(this,eList.current()->element,child+4),child);
+	currentElement()->setChild(newElement =
+					   new BasicElement(this,currentElement(),child+4),child);
     else
 	{
 	    oldChildElement->insertElement(newElement = new BasicElement(this));
@@ -387,22 +379,22 @@ void KFormulaDoc::addTextElement(QString cont)
 {
     BasicElement *nextElement;
     BasicElement *newElement;
-    if(eList.current()->element==0L)
+    if(currentElement()==0L)
 	setActiveElement(theFirstElement);
 
-    if(typeid(*eList.current()->element) == typeid(BasicElement))  //see addRootElement()
+    if(typeid(*currentElement()) == typeid(BasicElement))  //see addRootElement()
 	{
-	    eList.current()->element->substituteElement(newElement = new TextElement(this));
-	    delete eList.current()->element;
-	    eList.current()->element=0;
+	    currentElement()->substituteElement(newElement = new TextElement(this));
+	    delete currentElement();
+	    eList.current()->element = 0;
 	}
     else
 	{
-	    nextElement=eList.current()->element->getNext();
+	    nextElement=currentElement()->getNext();
 	    if(nextElement!=0L){
 		nextElement->insertElement(newElement=new TextElement(this));
 	    }else
-		eList.current()->element->setNext(newElement=new TextElement(this,eList.current()->element));
+		currentElement()->setNext(newElement=new TextElement(this,currentElement()));
 	}
     newElement->setContent(cont);	
     setActiveElement(newElement);
@@ -413,8 +405,8 @@ void KFormulaDoc::mousePressEvent( QMouseEvent *a,QWidget *wid)
 {
 
     setActiveElement(theFirstElement->isInside(a->pos()));
-    /*    if(eList.current()->element!=0)
-	  eList.current()->element->setPosition(-2);
+    /*    if(currentElement()!=0)
+	  currentElement()->setPosition(-2);
     */    emitModified();
     if(a->button()==RightButton){
 	QPopupMenu *mousepopup = new QPopupMenu;
@@ -474,7 +466,7 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 		default:
 		    {
 
-			if (eList.current()->element!=0L)
+			if (currentElement()!=0L)
 			    {
 				int po=eList.current()->pos;
 				if (po>0)
@@ -482,9 +474,9 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 					QString text;
 					po--;
 					warning("Internal Text Position %d",po);
-					text=eList.current()->element->getContent().copy();
+					text=currentElement()->getContent().copy();
 					text.insert(po,k->ascii());
-					eList.current()->element->setContent(text);
+					currentElement()->setContent(text);
 					thePosition=eList.at();
 					warning("thePosition %d  int:%d",thePosition,eList.current()->pos);
 					eList.clear();
@@ -502,7 +494,7 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
     else   //Not ascii
 	{
 	    int action=k->key();
-	    if (eList.current()->element!=0L)
+	    if (currentElement()!=0L)
 		{
 		    int po=eList.current()->pos;
 		    if (po>0)
@@ -526,9 +518,9 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 		    if(eList.current()->pos>=0)
 			{
 			    QString text;
-			    text=eList.current()->element->getContent().copy();
+			    text=currentElement()->getContent().copy();
 			    text.remove(eList.current()->pos-1,1);
-			    eList.current()->element->setContent(text);
+			    currentElement()->setContent(text);
 			    thePosition=eList.at();
 			    eList.clear();
 			    theFirstElement->makeList();
@@ -584,7 +576,7 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 	    if(eList.current()->pos==0)
 		{
 		    BasicElement *newElement;
-		    eList.current()->element->insertElement(newElement=new TextElement(this));
+		    currentElement()->insertElement(newElement=new TextElement(this));
 	          
 		    setActiveElement(newElement); 
 		} else  addTextElement();
@@ -595,9 +587,9 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 		    int po=0;
 	       
 		    warning("Internal Text Position %d",po);
-		    text=eList.current()->element->getContent().copy();
+		    text=currentElement()->getContent().copy();
 		    text.insert(po,k->ascii());
-		    eList.current()->element->setContent(text);
+		    currentElement()->setContent(text);
 		    thePosition=eList.at();
 	    	    warning("thePosition %d  int:%d",thePosition,eList.current()->pos);
 		    eList.clear();
@@ -614,9 +606,9 @@ void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 
 	    BasicElement *newActive;
 	    BasicElement *prev;
-	    newActive=eList.current()->element->getNext();
-	    prev=eList.current()->element->getPrev();
-	    eList.current()->element->deleteElement();
+	    newActive=currentElement()->getNext();
+	    prev=currentElement()->getPrev();
+	    currentElement()->deleteElement();
 	    if(prev!=0)
 		prev->check();
 	    setActiveElement(newActive);
@@ -638,13 +630,13 @@ void KFormulaDoc::paintEvent( QPaintEvent *, QWidget *paintGround )
     thePainter->begin(paintGround);
     thePainter->setPen( black );
     theFirstElement->checkSize();
-    if(eList.current()->element!=0L)
-	eList.current()->element->setActive(true);
+    if(currentElement()!=0L)
+	currentElement()->setActive(true);
     theFirstElement->draw(QPoint(5,5)-theFirstElement->getSize().topLeft());
-    //    if(eList.current()->element && typeid(*eList.current()->element) == typeid(TextElement))
+    //    if(currentElement() && typeid(*currentElement()) == typeid(TextElement))
     //	{
     //thePainter->drawWinFocusRect(theCursor);
-    theCursor=eList.current()->element->getCursor(eList.current()->pos);
+    theCursor=currentElement()->getCursor(eList.current()->pos);
     thePainter->drawLine(theCursor.topLeft()+QPoint(0,1),theCursor.topRight()+QPoint(0,1));
     thePainter->drawLine(theCursor.bottomLeft()-QPoint(0,1),theCursor.bottomRight()-QPoint(0,1));
     thePainter->drawLine(theCursor.topLeft()+QPoint(theCursor.width()/2,1),
@@ -666,18 +658,18 @@ void KFormulaDoc::print( QPrinter *thePrt)
 
 void KFormulaDoc::setActiveElement(BasicElement* c)
 {
-    warning("Set active element old %p  new %p",eList.current()->element,c);
+    warning("Set active element old %p  new %p",currentElement(),c);
 
     eList.clear();
     thePosition=-1;
     theFirstElement->makeList();
     for(eList.first();eList.current()!=0;eList.next())
-	if(eList.current()->element==c)
+	if(currentElement()==c)
 	    thePosition=eList.at();
     eList.at(thePosition);
     
-    /*    if(eList.current()->element)
-	  eList.current()->element->setActive(false);
+    /*    if(currentElement())
+	  currentElement()->setActive(false);
 	  if (c!=0)
 	  c->setActive(true);
 	  eList.clear();

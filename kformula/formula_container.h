@@ -13,6 +13,9 @@ class KFormulaContainer : public QObject {
     Q_OBJECT
 	
  public:
+    
+    KFormulaContainer();
+
     void setPainter(QPainter* p) { thePainter=p; }
     QPainter *painter() const { return thePainter; } 
 

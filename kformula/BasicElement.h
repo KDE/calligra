@@ -193,8 +193,8 @@ class BasicElement
      *  At the moment they do nothing.
      *  
      */
-    void save(ostream& out);
-    void load(int file);
+    virtual void save(ostream& out);
+    virtual void load(istream& in);
   
  protected:
     /*

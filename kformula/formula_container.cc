@@ -22,4 +22,10 @@ void KFormulaContainer::addElement(BasicElement *e, int pos)
     eList.append(p);
 }
 
+KFormulaContainer::KFormulaContainer() 
+{
+    eList.clear();
+    eList.setAutoDelete(true); 
+}
+
 #include "formula_container.moc"

@@ -62,7 +62,10 @@ class BracketElement : public BasicElement
      * if input is delete,backspace,arrows,home,end....
      * return cursor position (-1 if no cursor is need)
      */
-    
+
+    virtual void save(ostream& out);
+    virtual void load(istream& in);
+
 //    virtual int takeActionFromKeyb(int action);
     /*
      * do nothing

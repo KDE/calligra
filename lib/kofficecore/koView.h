@@ -45,7 +45,7 @@ public:
   virtual void setMainWindow( OpenParts::MainWindow_ptr _main );
 
   // IDL
-  void KoViewIf::setFocus( CORBA::Boolean _focus );
+  void setFocus( CORBA::Boolean _focus );
 
   // IDL
   virtual CORBA::ULong leftGUISize() { return 0; }
