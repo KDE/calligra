@@ -1717,8 +1717,10 @@ void KWFrameSet::printDebug()
         for ( ; it.current() ; ++it )
             kdDebug() << " |     " << pgNum << ": " << it.current() << "   " << *it.current()
                       << " internalY=" << it.current()->internalY() << "pt "
-                      << " (in LU:" << m_doc->ptToLayoutUnitPixY( it.current()->internalY() )
-                      << " height=" << m_doc->ptToLayoutUnitPixX( it.current()->innerHeight() ) << ")" << endl;
+                      << " (in LU pix:" << m_doc->ptToLayoutUnitPixY( it.current()->internalY() ) << ")"
+                      << " innerHeight=" << it.current()->innerHeight()
+                      << " (in LU pix:" << m_doc->ptToLayoutUnitPixY( it.current()->innerHeight() ) << ")"
+                      << endl;
     }
 
     QPtrListIterator<KWFrame> frameIt = frameIterator();

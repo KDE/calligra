@@ -188,9 +188,10 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 QSize KWAnchor::size() const
 {
     KoSize kosz = m_frameset->floatingFrameSize( m_frameNum );
-    //kdDebug() << "KWAnchor::size " << kosz.width() << "x" << kosz.height() << endl;
+    //kdDebug() << "KWAnchor::size in pt: " << kosz.width() << "x" << kosz.height() << endl;
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
-    QSize sz( zh->ptToLayoutUnitPixX( kosz.width() ), zh->ptToLayoutUnitPixX( kosz.height() ) );
+    QSize sz( zh->ptToLayoutUnitPixX( kosz.width() ), zh->ptToLayoutUnitPixY( kosz.height() ) );
+    //kdDebug() << "KWAnchor::size in LU: " << sz.width() << "x" << sz.height() << endl;
     if ( sz.isNull() ) // for some reason, we don't know the size yet
         sz = QSize( width, height ); // LU
     return sz;
