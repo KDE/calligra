@@ -1418,19 +1418,16 @@ struct SetSelectionPercentWorker : public KSpreadTable::CellWorkerTypeA {
     }
     void doWork( RowLayout* rw ) {
 	rw->setFactor( b ? 100.0 : 1.0 );
-	rw->setPrecision( 0 );
+	//rw->setPrecision( 0 );
 	rw->setFormatType( b ? KSpreadCell::Percentage : KSpreadCell::Number);
     }
     void doWork( ColumnLayout* cl ) {
 	cl->setFactor( b ? 100.0 : 1.0 );
-	cl->setPrecision( 0 );
 	cl->setFormatType( b ? KSpreadCell::Percentage : KSpreadCell::Number);
     }
     void prepareCell( KSpreadCell* cell ) {
 	cell->clearProperty(KSpreadCell::PFactor);
 	cell->clearNoFallBackProperties( KSpreadCell::PFactor );
-	cell->clearProperty(KSpreadCell::PPrecision);
-	cell->clearNoFallBackProperties( KSpreadCell::PPrecision );
 	cell->clearProperty(KSpreadCell::PFormatType);
 	cell->clearNoFallBackProperties( KSpreadCell::PFormatType );
     }
@@ -1441,7 +1438,6 @@ struct SetSelectionPercentWorker : public KSpreadTable::CellWorkerTypeA {
 	if ( cellRegion )
 	    cell->setDisplayDirtyFlag();
 	cell->setFactor( b ? 100.0 : 1.0 );
-	cell->setPrecision( 0 );
 	cell->setFormatType( b ? KSpreadCell::Percentage : KSpreadCell::Number);
 	if ( cellRegion )
 	    cell->clearDisplayDirtyFlag();
