@@ -8,27 +8,26 @@ everybody.
 People working on documentation:
 
 Mike McBride <mpmcbride7@yahoo.com>
-Jost Schenck <uzsnty@uni-bonn.de>
-Daniel Bungert <drb210@psu.edu>
-Axel Rueweler <axel@rsfvs.schulen-gt.de>
 Ben Lamb <kde@zurgy.org>
 Raphael Langerhorst <raphael-langerhorst@gmx.at>
 
 [add yourself here]
 --------------------------------------------------------------
 Tasks:
-KWord		Mike; german transl. Axel
+KWord		Mike
 KPresenter	
 KSpread		Raphael
 KChart		
 Kivio		Ben
+Kexi
 KPlato
 Krita
 Kugar
 KFormula
-KOffice/general Jost
+KoShell
 
-KOffice FAQ	Jost
+KOffice/general 
+KOffice FAQ
 
 --------------------------------------------------------------
 What if I don't know DocBook?
