@@ -164,7 +164,7 @@ QString internetAnchor::apply()
 {
   if ( l_internet->text().isEmpty() || text->text().isEmpty() )
     {
-	KMessageBox::error( this, i18n( "Area text or cell is empty!" ) );
+	KMessageBox::error( this, i18n( "Area text or cell is empty." ) );
 	return QString();
     }
   return createLink();
@@ -244,7 +244,7 @@ QString mailAnchor::apply()
 {
  if ( l_mail->text().isEmpty() || text->text().isEmpty() )
     {
-	KMessageBox::error( this, i18n( "Area text or mail is empty!") );
+	KMessageBox::error( this, i18n( "Area text or mail is empty.") );
 	return QString();
     }
   return createLink();
@@ -356,7 +356,7 @@ QString fileAnchor::apply()
 {
  if ( l_file->lineEdit()->text().isEmpty() || text->text().isEmpty() )
     {
-	KMessageBox::error( this, i18n("Area text or mail is empty!") );
+	KMessageBox::error( this, i18n("Area text or mail is empty.") );
 	return QString();
     }
   return createLink();
@@ -447,7 +447,7 @@ QString cellAnchor::apply()
 {
   if ( l_cell->text().isEmpty() || text->text().isEmpty() )
   {
-    KMessageBox::error( this, i18n("Area text or cell is empty!") );
+    KMessageBox::error( this, i18n("Area text or cell is empty.") );
     return QString();
   }
   return createLink();

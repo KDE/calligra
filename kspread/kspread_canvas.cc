@@ -1200,7 +1200,7 @@ void KSpreadCanvas::processLeftClickAnchor()
     if ( isLocalLink )
     {
       question += i18n("Note that opening a link to a local file may "
-                       "compromise your system's security!");
+                       "compromise your system's security.");
     }
 
     // this will also start local programs, so adding a "don't warn again"

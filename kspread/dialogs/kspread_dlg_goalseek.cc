@@ -250,7 +250,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
     KSpreadPoint source( m_sourceEdit->text(), table->map(), table );
     if (!source.isValid())
     {
-      KMessageBox::error( this, i18n("Cell reference is invalid!") );
+      KMessageBox::error( this, i18n("Cell reference is invalid.") );
       m_sourceEdit->selectAll();
       m_sourceEdit->setFocus();
 
@@ -261,7 +261,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
     KSpreadPoint target( m_targetEdit->text(), table->map(), table );
     if (!target.isValid())
     {
-      KMessageBox::error( this, i18n("Cell reference is invalid!") );
+      KMessageBox::error( this, i18n("Cell reference is invalid.") );
       m_targetEdit->selectAll();
       m_targetEdit->setFocus();
 
@@ -273,7 +273,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
     double goal = m_targetValueEdit->text().toDouble( &ok );
     if ( !ok )
     {
-      KMessageBox::error( this, i18n("Target value is invalid!") );
+      KMessageBox::error( this, i18n("Target value is invalid.") );
       m_targetValueEdit->selectAll();
       m_targetValueEdit->setFocus();
 
@@ -286,7 +286,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
 
     if ( !m_sourceCell->value().isNumber() )
     {
-      KMessageBox::error( this, i18n("Source cell must contain a numeric value!") );
+      KMessageBox::error( this, i18n("Source cell must contain a numeric value.") );
       m_sourceEdit->selectAll();
       m_sourceEdit->setFocus();
 
@@ -296,7 +296,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
 
     if ( !m_targetCell->isFormula() )
     {
-      KMessageBox::error( this, i18n("Target cell must contain a formula!") );
+      KMessageBox::error( this, i18n("Target cell must contain a formula.") );
       m_targetEdit->selectAll();
       m_targetEdit->setFocus();
 

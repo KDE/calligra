@@ -409,7 +409,7 @@ void KSpreadSortDlg::slotOk()
   KSpreadSheet * table = m_pView->doc()->map()->findTable( m_outputTable->currentText() );
   if ( !table )
   {
-    KMessageBox::error( this, i18n("The selected output table doesn't exist!") );
+    KMessageBox::error( this, i18n("The selected output table does not exist.") );
     m_outputTable->setFocus();
     m_tabWidget->setTabEnabled(m_page2, true);
     m_pView->slotUpdateView( m_pView->activeTable() );
@@ -419,7 +419,7 @@ void KSpreadSortDlg::slotOk()
   KSpreadPoint outputPoint( m_outputCell->text() );
   if ( !outputPoint.isValid() || outputPoint.isTableKnown() )
   {
-    KMessageBox::error( this, i18n("The output cell is invalid!") );
+    KMessageBox::error( this, i18n("The output cell is invalid.") );
     m_outputCell->setFocus();
     m_tabWidget->setTabEnabled(m_page2, true);
     m_pView->slotUpdateView( m_pView->activeTable() );
@@ -437,7 +437,7 @@ void KSpreadSortDlg::slotOk()
          || ( w >= r.left() && w <= r.right() )
          || ( h >= r.top()  && h <= r.bottom() ) )
     {
-      KMessageBox::error( this, i18n("The output region must not overlapp with the source region!") );
+      KMessageBox::error( this, i18n("The output region must not overlap with the source region.") );
       m_outputCell->setFocus();
       m_pView->slotUpdateView( m_pView->activeTable() );
       // TODO: set right tab

@@ -3830,7 +3830,7 @@ void KSpreadView::mergeCell()
   if ( ( util_isRowSelected( selection() ) )
        || ( util_isColumnSelected( selection() ) ) )
   {
-    KMessageBox::error( this, i18n( "Area too large!" ) );
+    KMessageBox::error( this, i18n( "Area too large." ) );
     return;
   }
 
@@ -4214,7 +4214,7 @@ void KSpreadView::conditional()
 
   if ( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
   {
-    KMessageBox::error( this, i18n("Area too large!") );
+    KMessageBox::error( this, i18n("Area too large.") );
   }
   else
   {
@@ -4229,7 +4229,7 @@ void KSpreadView::validity()
 
   if ( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
   {
-    KMessageBox::error( this, i18n("Area too large!"));
+    KMessageBox::error( this, i18n("Area too large."));
   }
   else
   {
@@ -4395,7 +4395,7 @@ void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
 
     if ( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
     {
-      KMessageBox::error( this, i18n("Area too large!"));
+      KMessageBox::error( this, i18n("Area too large."));
       d->activeSheet->insertChart( unzoomedGeometry,
                              _e,
                              QRect( d->canvas->markerColumn(),
@@ -5351,7 +5351,7 @@ void KSpreadView::adjust()
 {
     if ( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
     {
-      KMessageBox::error( this, i18n("Area too large!"));
+      KMessageBox::error( this, i18n("Area too large."));
     }
     else
     {
@@ -5498,7 +5498,7 @@ void KSpreadView::showAreaName()
 void KSpreadView::resizeRow()
 {
   if ( util_isColumnSelected(selection()) )
-    KMessageBox::error( this, i18n("Area too large!"));
+    KMessageBox::error( this, i18n("Area too large."));
   else
   {
     KSpreadResizeRow dlg( this );
@@ -5509,7 +5509,7 @@ void KSpreadView::resizeRow()
 void KSpreadView::resizeColumn()
 {
   if ( util_isRowSelected( selection() ) )
-    KMessageBox::error( this, i18n( "Area too large!" ) );
+    KMessageBox::error( this, i18n( "Area too large." ) );
   else
   {
     KSpreadResizeColumn dlg( this );
@@ -5520,7 +5520,7 @@ void KSpreadView::resizeColumn()
 void KSpreadView::equalizeRow()
 {
   if ( util_isColumnSelected( selection() ) )
-    KMessageBox::error( this, i18n( "Area too large!" ) );
+    KMessageBox::error( this, i18n( "Area too large." ) );
   else
   {
     d->doc->emitBeginOperation( false );
@@ -5532,7 +5532,7 @@ void KSpreadView::equalizeRow()
 void KSpreadView::equalizeColumn()
 {
   if ( util_isRowSelected( selection() ) )
-    KMessageBox::error( this, i18n( "Area too large!" ) );
+    KMessageBox::error( this, i18n( "Area too large." ) );
   else
   {
     d->doc->emitBeginOperation( false );
@@ -5861,7 +5861,7 @@ void KSpreadView::insertChart()
 {
   if ( util_isColumnSelected(selection()) || util_isRowSelected(selection()) )
   {
-    KMessageBox::error( this, i18n("Area too large!"));
+    KMessageBox::error( this, i18n("Area too large."));
     return;
   }
   QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( true, "'KOfficeChart' in ServiceTypes" );

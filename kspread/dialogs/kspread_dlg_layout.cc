@@ -244,7 +244,7 @@ bool GeneralTab::checkParent( const QString & parentName )
 
     if ( !p )
     {
-      KMessageBox::sorry( this, i18n( "The parent style doesn't exist." ) );
+      KMessageBox::sorry( this, i18n( "The parent style does not exist." ) );
       return false;
     }
   }
@@ -2478,7 +2478,7 @@ CellFormatPageProtection::CellFormatPageProtection( QWidget* parent, CellFormatD
   groupBox2->layout()->setMargin( KDialog::marginHint() );
   QVBoxLayout * groupBox2Layout = new QVBoxLayout( groupBox2->layout() );
 
-  m_bDontPrint = new QCheckBox( i18n( "&Don't print text" ), groupBox2, "m_bDontPrint" );
+  m_bDontPrint = new QCheckBox( i18n( "&Do not print text" ), groupBox2, "m_bDontPrint" );
   groupBox2Layout->addWidget( m_bDontPrint );
   Form1Layout->addWidget( groupBox2 );
   QSpacerItem * spacer_4 = new QSpacerItem( 20, 90, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -2667,7 +2667,7 @@ CellFormatPageMisc::CellFormatPageMisc( QWidget* parent, CellFormatDlg *_dlg ) :
 
     box = new QGroupBox( this, "Box1");
     grid = new QGridLayout(box,4,1,KDialog::marginHint(), KDialog::spacingHint());
-    dontPrintText= new QCheckBox(i18n("Don't print text"),box);
+    dontPrintText= new QCheckBox(i18n("Do not print text"),box);
     dontPrintText->setChecked(dlg->bDontPrintText);
 
     grid->addWidget(dontPrintText,0,0);

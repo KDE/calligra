@@ -428,7 +428,7 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   m_driver->insertStringList( str );
   if ( str.isEmpty() )
   {
-    KMessageBox::error( this, i18n("No database drivers available! You need "
+    KMessageBox::error( this, i18n("No database drivers available; you need "
                                    "to compile Qt with the necessary drivers.") );
   }
 
@@ -537,7 +537,7 @@ void KSpreadDatabaseDlg::accept()
     KSpreadRange range( m_region->text() );
     if ( range.isTableKnown() )
     {
-      KMessageBox::error( this, i18n("You cannot specify a table here!") );
+      KMessageBox::error( this, i18n("You cannot specify a table here.") );
       m_region->setFocus();
       m_region->selectAll();
       return;
@@ -547,7 +547,7 @@ void KSpreadDatabaseDlg::accept()
 
     if ( !range.isValid() )
     {
-      KMessageBox::error( this, i18n("You have to specify a valid region!") );
+      KMessageBox::error( this, i18n("You have to specify a valid region.") );
       m_region->setFocus();
       m_region->selectAll();
       return;
@@ -562,7 +562,7 @@ void KSpreadDatabaseDlg::accept()
     KSpreadPoint point( m_cell->text() );
     if ( point.isTableKnown() )
     {
-      KMessageBox::error( this, i18n("You cannot specify a table here!") );
+      KMessageBox::error( this, i18n("You cannot specify a table here.") );
       m_cell->setFocus();
       m_cell->selectAll();
       return;
@@ -571,7 +571,7 @@ void KSpreadDatabaseDlg::accept()
     //    if ( point.pos.x() < 1 || point.pos.y() < 1 )
     if ( !point.isValid() )
     {
-      KMessageBox::error( this, i18n("You have to specify a valid cell!") );
+      KMessageBox::error( this, i18n("You have to specify a valid cell.") );
       m_cell->setFocus();
       m_cell->selectAll();
       return;
@@ -599,21 +599,21 @@ void KSpreadDatabaseDlg::accept()
        || ( queryStr.find("UPDATE", 0, false) != -1 )
        || ( queryStr.find("SELECT", 0, false) == -1 ) )
   {
-    KMessageBox::error( this, i18n("You are not allowed to change data in the database!") );
+    KMessageBox::error( this, i18n("You are not allowed to change data in the database.") );
     m_sqlQuery->setFocus();
     return;
   }
 
   if ( !query.exec( queryStr ) )
   {
-    KMessageBox::error( this, i18n( "Executing query failed!" ) );
+    KMessageBox::error( this, i18n( "Executing query failed." ) );
     m_sqlQuery->setFocus();
     return;
   }
 
   if ( query.size() == 0 )
   {
-    KMessageBox::error( this, i18n( "You don't get any results with this query." ) );
+    KMessageBox::error( this, i18n( "You did not get any results with this query." ) );
     m_sqlQuery->setFocus();
     return;
   }
@@ -787,7 +787,7 @@ bool KSpreadDatabaseDlg::tablesDoNext()
 
   if (tables.empty())
   {
-    KMessageBox::error( this, i18n("You have to select at least one table!") );
+    KMessageBox::error( this, i18n("You have to select at least one table.") );
     return false;
   }
 
@@ -831,7 +831,7 @@ bool KSpreadDatabaseDlg::columnsDoNext()
 
   if (columns.empty())
   {
-    KMessageBox::error( this, i18n("You have to select at least one column!") );
+    KMessageBox::error( this, i18n("You have to select at least one column.") );
     return false;
   }
 

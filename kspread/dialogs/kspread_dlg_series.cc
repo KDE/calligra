@@ -133,17 +133,17 @@ void KSpreadSeriesDlg::slotOk()
   {
       if  ( dstart < 0 || dend < 0 )
       {
-          KMessageBox::error( this, i18n("End and start value must be positive!") );
+          KMessageBox::error( this, i18n("End and start value must be positive.") );
           return;
       }
       if ( dstart > dend && dstep >= 1)
       {
-        KMessageBox::error( this, i18n("End value must be greater than the start value or the step must be less than '1'!") );
+        KMessageBox::error( this, i18n("End value must be greater than the start value or the step must be less than '1'.") );
         return;
       }
       if ( dstart == 0 || dend == 0 || dstep == 0)
       {
-        KMessageBox::error( this, i18n("None of the Start, Stop or Step values may be equal to zero!") );
+        KMessageBox::error( this, i18n("None of the Start, Stop or Step values may be equal to zero.") );
         return;
       }
       if ( dstep == 1)
@@ -157,15 +157,15 @@ void KSpreadSeriesDlg::slotOk()
   {
       if (linear->isChecked() && dstep == 0)
       {
-          KMessageBox::error( this, i18n("The step value must be greater than zero. "
-                                         "Otherwise the linear series is infinite!") );
+          KMessageBox::error( this, i18n("The step value must be greater than zero; "
+                                         "otherwise, the linear series is infinite.") );
           step->setFocus();
           return;
       }
       /*      else if (geometric->isChecked() && dstep <= 1)
               {
-              KMessageBox::error( this, i18n("The step value must be greater than one. "
-                                       "Otherwise the geometric series is infinite!") );
+              KMessageBox::error( this, i18n("The step value must be greater than one; "
+                                       "otherwise, the geometric series is infinite.") );
                                        step->setFocus();
                                        return;
                                        }
@@ -173,13 +173,13 @@ void KSpreadSeriesDlg::slotOk()
       else if ( type == Linear && dend < dstart )
       {
           KMessageBox::error( this,
-                              i18n("If the start value is greater than the end value the step must be less than zero!") );
+                              i18n("If the start value is greater than the end value the step must be less than zero.") );
           return;
       }
   }
   else if (type != Linear)
   {
-      KMessageBox::error( this, i18n("Step is negative!") );
+      KMessageBox::error( this, i18n("Step is negative.") );
       return;
   }
   else
@@ -187,7 +187,7 @@ void KSpreadSeriesDlg::slotOk()
       if (dstart <= dend)
       {
         KMessageBox::error( this,
-                            i18n("If the step is negative, the start value must be greater then the end value!") );
+                            i18n("If the step is negative, the start value must be greater then the end value.") );
         return;
       }
   }

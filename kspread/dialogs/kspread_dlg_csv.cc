@@ -215,7 +215,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
     QFile in(file);
     if (!in.open(IO_ReadOnly))
     {
-      KMessageBox::sorry( this, i18n("Cannot open input file!") );
+      KMessageBox::sorry( this, i18n("Cannot open input file.") );
       in.close();
       actionButton( Ok )->setEnabled( false );
       m_cancelled = true;

@@ -588,7 +588,7 @@
         <Type range="false">Number</Type>
       </Parameter>
       <Help>  
-        <Text>Returns a part of the string that matches a regular expression. If the string doesn't match the given regular expression, value specified as default is returned.</Text> 
+        <Text>Returns a part of the string that matches a regular expression. If the string does not match the given regular expression, value specified as default is returned.</Text> 
         <Text>If a back-reference is provided, then the value of that back-reference is returned.</Text>
         <Text>If no default value is given, an empty string is assumed. If no back-reference is given, 0 is assumed (so that entire matching part is returned).</Text>
         <Syntax>REGEXP(text, regexp, default, backref)</Syntax>
