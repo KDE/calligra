@@ -146,7 +146,7 @@ VSelection::append( const KoRect& rect, bool selectObjects, bool exclusive )
 void
 VSelection::clear()
 {
-	VSelectNodes op( false );
+	VSelectNodes op( true );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
