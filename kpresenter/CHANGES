@@ -421,3 +421,8 @@ Reggie, 26.8.1999:
 - Implemented selecting a word in the textobject by
   doubleclicking on it
 - lots of fixes in the textobject
+
+Reggie, 27.8.1999:
+------------------
+- Improved DnD
+- Removed lots of unused code in the KTextObject

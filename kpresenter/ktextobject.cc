@@ -37,42 +37,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-const char KTextObject::tag_html[] = "HTML";
-const char KTextObject::tag_head[] = "HEAD";
-const char KTextObject::tag_body[] = "BODY";
-const char KTextObject::tag_font[] = "FONT";
-const char KTextObject::tag_bold[] = "B";
-const char KTextObject::tag_italic[] = "I";
-const char KTextObject::tag_underline[] = "U";
-const char KTextObject::tag_paragraph[] = "P";
-const char KTextObject::tag_break[] = "BR";
-const char KTextObject::tag_h1[] = "H1";
-const char KTextObject::tag_h2[] = "H2";
-const char KTextObject::tag_h3[] = "H3";
-const char KTextObject::tag_h4[] = "H4";
-const char KTextObject::tag_h5[] = "H5";
-const char KTextObject::tag_h6[] = "H6";
-const char KTextObject::tag_plain[] = "PLAIN";
-const char KTextObject::tag_enumlist[] = "ENUM_LIST";
-const char KTextObject::tag_unsortlist[] = "UNSORT_LIST";
-
-const char KTextObject::attrib_face[] = "FACE";
-const char KTextObject::attrib_char[] = "CHAR";
-const char KTextObject::attrib_start[] = "START";
-const char KTextObject::attrib_before[] = "BEFORE";
-const char KTextObject::attrib_after[] = "AFTER";
-const char KTextObject::attrib_type[] = "TYPE";
-const char KTextObject::attrib_size[] = "SIZE";
-const char KTextObject::attrib_color[] = "COLOR";
-const char KTextObject::attrib_align[] = "ALIGN";
-const char KTextObject::attrib_bold[] = "BOLD";
-const char KTextObject::attrib_italic[] = "ITALIC";
-const char KTextObject::attrib_underline[] = "UNDERLINE";
-
-const char attrib_value_left[] = "LEFT";
-const char attrib_value_center[] = "CENTER";
-const char attrib_value_right[] = "RIGHT";
-
 /******************************************************************/
 /* class TxtCursor - Text Cursor				  */
 /******************************************************************/
@@ -155,8 +119,10 @@ void TxtCursor::lineUp()
 	// else: if the upper line is in the upper paragraph and the line is at least as long as the current one
 	// -> jump exactly one line up
 	else if ( line == 0 && paragraph != 0 &&
-		  txtObj->paragraphAt( paragraph-1 )->lineAt( txtObj->paragraphAt( paragraph-1 )->lines()-1 )->lineLength() >= inLine )
-	    absPos -= txtObj->paragraphAt( paragraph-1 )->lineAt( txtObj->paragraphAt( paragraph-1 )->lines()-1 )->lineLength();
+		  txtObj->paragraphAt( paragraph-1 )->lineAt( txtObj->paragraphAt( paragraph-1 )->
+							      lines()-1 )->lineLength() >= inLine )
+	    absPos -= txtObj->paragraphAt( paragraph-1 )->lineAt( txtObj->paragraphAt( paragraph-1 )->
+								  lines()-1 )->lineLength();
 
 	// else: if the upper line is in the same paragraph and the line is at least as long as the current one
 	// -> jump exactly one line up
@@ -1008,7 +974,8 @@ QRect TxtParagraph::breakLines( int wid, bool regExpMode , bool composerMode )
     linePtr = toOneLine();
     //debug( " concat lines end" );
 
-    if ( regExpMode && regExpList && !composerMode ) doRegExpMode( regExpList, !composerMode );
+    if ( regExpMode && regExpList && !composerMode ) 
+	;
 
     line = new TxtLine();
     int i, j, w = 0;
@@ -1028,7 +995,8 @@ QRect TxtParagraph::breakLines( int wid, bool regExpMode , bool composerMode )
 	    obj = linePtr->itemAt( i );
 
 	    // if the object fits into the line or is a separator
-	    // ( separators have always to be appended, never insert a separator as first char in a line -> looks ugly! )
+	    // ( separators have always to be appended, never insert a separator as first char in a line -> 
+	    //looks ugly! )
 	    if ( w + widthToNextSep( i ) <= wid ) { // || obj->type() == TxtObj::SEPARATOR )
 		line->append( obj );
 		w += obj->width();
@@ -1062,7 +1030,8 @@ void TxtParagraph::break_Lines( int wid, bool regExpMode, bool composerMode )
 {
     linePtr = toOneLine();
 
-    if ( regExpMode && regExpList && !composerMode ) doRegExpMode( regExpList, !composerMode );
+    if ( regExpMode && regExpList && !composerMode ) 
+	;
 
     line = new TxtLine();
     int i, j, w = 0;
@@ -1073,7 +1042,8 @@ void TxtParagraph::break_Lines( int wid, bool regExpMode, bool composerMode )
 	    obj = linePtr->itemAt( i );
 
 	    // if the object fits into the line or is a separator
-	    // ( separators have always to be appended, never insert a separator as first char in a line -> looks ugly! )
+	    // ( separators have always to be appended, never insert a separator as first char in a line -> 
+	    //looks ugly! )
 	    if ( w + charsToNextSep( i ) <= wid ) { // || obj->type() == TxtObj::SEPARATOR )
 		line->append( obj );
 		w += obj->textLength();
@@ -1117,163 +1087,6 @@ TxtLine* TxtParagraph::toOneLine()
     }
 
     return 0;
-}
-
-/*================== do composer mode ============================*/
-void TxtParagraph::doComposerMode( QColor quoted_color, QFont quoted_font, QColor normal_color, QFont normal_font )
-{
-    QString str;
-    bool quoted;
-    int i;
-
-    if ( !lineList.isEmpty() )
-    {
-	for ( linePtr = lineList.first(); linePtr != 0; linePtr = lineList.next() )
-	{
-	    quoted = false;
-	    if ( linePtr->items() == 0 ) break;
-
-	    for ( i = 0; i < static_cast<int>( linePtr->items() ); i++ )
-	    {
-		obj = linePtr->itemAt( i );
-
-		if ( obj->type() == TxtObj::SEPARATOR ) continue;
-
-		str = obj->text().simplifyWhiteSpace();
-		if ( str.length() == 0 ) continue;
-
-		if ( str.left( 1 ) == ">" || str.left( 1 ) == ":" || str.left( 1 ) == "|" )
-		{
-		    quoted = true;
-		    break;
-		}
-		else break;
-	    }
-
-	    for ( i = 0; i < static_cast<int>( linePtr->items() ); i++ )
-	    {
-		if ( quoted )
-		{
-		    linePtr->itemAt( i )->setFont( quoted_font );
-		    linePtr->itemAt( i )->setColor( quoted_color );
-		}
-		else
-		{
-		    linePtr->itemAt( i )->setFont( normal_font );
-		    linePtr->itemAt( i )->setColor( normal_color );
-		}
-	    }
-
-	    if ( regExpList )
-		doRegExpMode( regExpList, false );
-	}
-    }
-}
-
-/*======================== do regexp mode ========================*/
-void TxtParagraph::doRegExpMode( QList<RegExpMode> *regExpList, bool revert )
-{
-    if ( linePtr && !regExpList->isEmpty() )
-    {
-	QString text = linePtr->getText();
-	RegExpMode *regexp;
-	int index, len;
-	enum CurPos {C_IN, C_BEFORE, C_AFTER};
-	int start_pos = 0, start_cpos = C_IN, i, j;
-	int stop_pos = 0, stop_cpos = C_IN, objnum, start, stop;
-
-	for ( i = 0, regexp = regExpList->first(); regexp != 0; regexp = regExpList->next(), i++ )
-	{
-	    if ( i == 0 && revert )
-	    {
-		for ( j = 0; j < static_cast<int>( linePtr->items() ); j++ )
-		{
-		    obj = linePtr->itemAt( j );
-		    obj->setFont( regexp->font );
-		    obj->setColor( regexp->color );
-		}
-		continue;
-	    }
-
-	    index = 0;
-	    len = 0;
-	    while ( true )
-	    {
-		index = regexp->regexp.match( text.data(), index + len, &len );
-		if ( index == -1 ) break;
-
-		objnum = linePtr->getInObj( index );
-		if ( objnum == -1 )
-		{
-		    objnum = linePtr->getBeforeObj( index );
-		    if ( objnum == -1 )
-		    {
-			objnum = linePtr->getAfterObj( index );
-			if ( objnum == -1 )
-			    // something wrong here - let's exit!
-			    return;
-			else start_cpos = C_AFTER;
-		    }
-		    else start_cpos = C_BEFORE;
-
-		}
-		else start_cpos = C_IN;
-
-		start_pos = objnum;
-
-		objnum = linePtr->getInObj( index + len );
-		if ( objnum == -1 )
-		{
-		    objnum = linePtr->getBeforeObj( index + len );
-		    if ( objnum == -1 )
-		    {
-			objnum = linePtr->getAfterObj( index + len );
-			if ( objnum == -1 )
-			    // something wrong here - let's exit!
-			    return;
-			else stop_cpos = C_AFTER;
-		    }
-		    else stop_cpos = C_BEFORE;
-
-		}
-		else stop_cpos = C_IN;
-
-		stop_pos = objnum;
-
-		if ( stop_cpos == C_AFTER ) stop_pos++;
-
-		if ( start_cpos == C_IN )
-		{
-		    linePtr->splitObj( index );
-		    start_pos++;
-		    start_cpos = C_BEFORE;
-		    stop_pos++;
-		}
-
-		if ( stop_cpos == C_IN )
-		{
-		    linePtr->splitObj( index + len );
-		    //stop_cpos = C_BEFORE;
-		}
-
-		if ( start_cpos == C_AFTER ) start = start_pos + 1;
-		else start = start_pos;
-
-		if ( stop_cpos == C_AFTER ) stop = stop_pos + 1;
-		else if ( stop_cpos == C_BEFORE ) stop = stop_pos - 1;
-		else stop = stop_pos;
-
-		for ( i = start; i <= stop; i++ )
-		{
-		    if ( i < static_cast<int>( linePtr->items() ) )
-		    {
-			linePtr->itemAt( i )->setFont( regexp->font );
-			linePtr->itemAt( i )->setColor( regexp->color );
-		    }
-		}
-	    }
-	}
-    }
 }
 
 /*==================== get number of TxtObjs =====================*/
@@ -1777,7 +1590,8 @@ void KTextObject::zoom( float _fakt )
 	txtParagraph->setOrigSpacings( txtParagraph->getLineSpacing(),
 				       txtParagraph->getDistBefore(),
 				       txtParagraph->getDistAfter() );
-	txtParagraph->setLineSpacing( static_cast<int>( static_cast<float>( txtParagraph->getLineSpacing() ) * _fakt ) );
+	txtParagraph->setLineSpacing( static_cast<int>( static_cast<float>( txtParagraph->getLineSpacing() ) 
+							* _fakt ) );
 	txtParagraph->setDistBefore( static_cast<int>( static_cast<float>( txtParagraph->getDistBefore() ) * _fakt ) );
 	txtParagraph->setDistAfter( static_cast<int>( static_cast<float>( txtParagraph->getDistAfter() ) * _fakt ) );
 	
@@ -1984,211 +1798,6 @@ QString KTextObject::toASCII( bool linebreak, bool makelist )
     return str;
 }
 
-/*==================== return html text ==========================*/
-QString KTextObject::toHTML( bool /*clean*/, bool /*onlyBody*/ )
-{
-//   QString str, str2;
-
-//   TxtObj *txtObj;
-//   TxtLine *txtLine;
-//   TxtParagraph *txtParagraph;
-//   int i, j, k;
-//   QFont font;
-//   QColor color;
-
-//   // head
-//   if ( !onlyBody )
-//     {
-//	 str = "<HTML>\n";
-//	 str += "<HEAD>\n";
-//	 str += "<TITLE></TITLE>\n";
-//	 str += "</HEAD>\n";
-//     }
-
-//   // body
-//   if ( !onlyBody )
-//     str += "<BODY>\n";
-
-//   if ( !clean ) str += "<!UNCLEAN FONTSIZES>\n";
-//   else str += "<!CLEAN FONTSIZES>\n";
-
-//   switch ( objType() )
-//     {
-//     case PLAIN: str += "<!PLAIN>\n";
-//	 break;
-//     case UNSORT_LIST:
-//	 {
-//  font = objUnsortListType.font[ 0 ];
-//  color = objUnsortListType.color[ 0 ];
-
-//  str2.sprintf( "%d", objUnsortListType.chr[ 0 ] );
-
-//  str += "<!UNSORT_LIST ";
-//  str += "CHAR=";
-//  str += str2;
-//  str += " FACE=\"";
-//  str += font.family();
-//  str += "\" SIZE=";
-
-//  str2.sprintf( "%d", font.pointSize() );
-//  str += str2;
-
-//  str += " COLOR=\"";
-//  str += toHexString( color ) + "\" ";
-//  if ( font.bold() ) str += "BOLD=1 ";
-//  else str += "BOLD=0 ";
-//  if ( font.italic() ) str += "ITALIC=1";
-//  else str += "ITALIC=0 ";
-//  if ( font.underline() ) str += "UNDERLINE=1>\n";
-//  else str += "UNDERLINE=0>\n";
-
-//  str += "<UL>\n";
-//	 }
-//	 break;
-//     case ENUM_LIST:
-//	 {
-//  font = objEnumListType.font;
-//  color = objEnumListType.color;
-
-//  str2.sprintf( "%d", objEnumListType.start );
-
-//  str += "<!ENUM_LIST ";
-//  str += "START=";
-//  str += str2;
-
-//  str2.sprintf( "%d", objEnumListType.type );
-
-//  str += " TYPE=";
-//  str += str2;
-//  str += " BEFORE=\"";
-//  str += objEnumListType.before;
-//  str += "\" AFTER=\"";
-//  str += objEnumListType.after;
-//  str += "\" FACE=\"";
-//  str += font.family();
-//  str += "\" SIZE=";
-
-//  str2.sprintf( "%d", font.pointSize() );
-//  str += str2;
-
-//  str += " COLOR=\"";
-//  str += toHexString( color ) + "\" ";
-//  if ( font.bold() ) str += "BOLD=1 ";
-//  else str += "BOLD=0 ";
-//  if ( font.italic() ) str += "ITALIC=1";
-//  else str += "ITALIC=0 ";
-//  if ( font.underline() ) str += "UNDERLINE=1>\n";
-//  else str += "UNDERLINE=0>\n";
-
-//  str += "<OL>\n";
-//	  } break;
-//     default: break;
-//     }
-
-//   for ( i = 0; i < paragraphs(); i++ )
-//     {
-//	 txtParagraph = paragraphAt( i );
-
-//	 switch ( txtParagraph->horzAlign() )
-//  {
-//  case TxtParagraph::LEFT:
-//    str += "<P ALIGN=LEFT>\n";
-//    break;
-//  case TxtParagraph::CENTER:
-//    str += "<P ALIGN=CENTER>\n";
-//    break;
-//  case TxtParagraph::RIGHT:
-//    str += "<P ALIGN=RIGHT>\n";
-//    break;
-//  case TxtParagraph::BLOCK:
-//    str += "<P ALIGN=LEFT>\n";
-//    break;
-//  }
-
-//	 switch ( objType() )
-//  {
-//  case UNSORT_LIST:
-//    str += "<LI>\n";
-//    break;
-//  case ENUM_LIST:
-//    str += "<LI>\n";
-//    break;
-//  default: break;
-//  }
-
-//	 for ( j = 0; j < txtParagraph->lines(); j++ )
-//  {
-//    txtLine = txtParagraph->lineAt( j );
-
-//    for ( k = 0; k < txtLine->items(); k++ )
-//	{
-//	  txtObj = txtLine->itemAt( k );
-//	  if ( k == 0 || font.operator!=( txtObj->font() ) || color.operator!=( txtObj->color() ) )
-//	{
-//	  if ( k > 0 )
-//	    {
-//	      if ( font.underline() ) str += "</U>";
-//	      if ( font.italic() ) str += "</I>";
-//	      if ( font.bold() ) str += "</B>";
-//	      str += "</FONT>";
-//	    }
-
-//	  font = txtObj->font();
-//	  color = txtObj->color();
-
-//	  if ( !clean )
-//	    str2.sprintf( "%d", font.pointSize() );
-//	  else
-//	    str2.sprintf( "%d", static_cast<int>( static_cast<float>( font.pointSize() ) / 6.0 ) );
-
-//	  str += "<FONT FACE=\"";
-//	  str += font.family();
-//	  str += "\" SIZE=";
-//	  str += str2;
-//	  str += " COLOR=\"";
-//	  str += toHexString( color ) + "\">";
-//	  if ( font.bold() ) str += "<B>";
-//	  if ( font.italic() ) str += "<I>";
-//	  if ( font.underline() ) str += "<U>";
-//	}
-
-//	  QString *str3 = new QString();
-//	  str3->append( txtObj->text() );
-//	  str3->replace( QRegExp( "\x20" ), "&nbsp; " );
-//	  str += *str3;
-//	  delete str3;
-
-//	}
-
-//    if ( font.underline() ) str += "</U>";
-//    if ( font.italic() ) str += "</I>";
-//    if ( font.bold() ) str += "</B>";
-//    str += "</FONT>";
-//    str += "\n";
-
-//  }
-//     }
-
-//   switch ( objType() )
-//     {
-//     case UNSORT_LIST: str += "</UL>\n";
-//	 break;
-//     case ENUM_LIST: str += "</OL>\n";
-//	 break;
-//     default: break;
-//     }
-
-//   // foot
-//   if ( !onlyBody )
-//     {
-//	 str += "</BODY>\n";
-//	 str += "</HTML>\n";
-//     }
-
-//   return str;
-    return QString( "" );
-}
-
 /*======================= save ASCII text ========================*/
 void KTextObject::saveASCII( QString filename, bool linebreak )
 {
@@ -2196,15 +1805,6 @@ void KTextObject::saveASCII( QString filename, bool linebreak )
 
     file = fopen( filename.data(), "w" );
     fprintf( file, toASCII( linebreak ).data() );
-    fclose( file );
-}
-/*======================= save HTML text =========================*/
-void KTextObject::saveHTML( QString filename, bool clean )
-{
-    FILE *file;
-
-    file = fopen( filename.data(), "w" );
-    fprintf( file, toHTML( clean ).data() );
     fclose( file );
 }
 
@@ -2243,8 +1843,10 @@ void KTextObject::addText( QString text, QFont font, QColor color,
     else
     {
 	txtParagraph = paragraphAt( paragraphs()-1 );
-	if ( txtParagraph->lineAt( txtParagraph->lines()-1 )->itemAt( txtParagraph->lineAt( txtParagraph->lines()-1 )->items()-1 )->type() == TxtObj::SEPARATOR )
-	    txtParagraph->lineAt( txtParagraph->lines()-1 )->deleteItem( txtParagraph->lineAt( txtParagraph->lines()-1 )->items()-1 );
+	if ( txtParagraph->lineAt( txtParagraph->lines()-1 )->
+	     itemAt( txtParagraph->lineAt( txtParagraph->lines()-1 )->items()-1 )->type() == TxtObj::SEPARATOR )
+	    txtParagraph->lineAt( txtParagraph->lines()-1 )->
+		deleteItem( txtParagraph->lineAt( txtParagraph->lines()-1 )->items()-1 );
     }
 
     txtObj = new TxtObj();
@@ -2343,203 +1945,8 @@ void KTextObject::addText( QString text, QFont font, QColor color,
 	repaint( true );
 	updateTableSize();
     }
-}
 
-/*======================= parse HTML =============================*/
-void KTextObject::parseHTML( QString )
-{
-//   clear();
-
-//   text = text.simplifyWhiteSpace();
-
-//   ParsedTag parsedTag;
-//   QFont font, oldFont;
-//   QColor color, oldColor;
-//   TxtParagraph::HorzAlign align = TxtParagraph::LEFT;
-//   bool newPara = false;
-//   Attrib *attribs;
-//   int tag_begin = -1, tag_end = -1;
-//   int font_fakt = 6;
-
-//   paragraphList.remove( static_cast<int>( 0 ) );
-
-//   while ( true )
-//     {
-//	 tag_begin = text.find( "<" );
-//	 tag_end = text.find( ">" );
-
-//	 if ( tag_begin == -1 && tag_end == -1 ) break;
-//	 else if ( tag_begin < tag_end )
-//  {
-//    if ( isValid( text.left( tag_begin ) ) )
-//	{
-//	  addText( text.left( tag_begin ), font, color, newPara, align, false, true );
-//	  newPara = false;
-//	}
-
-//    parsedTag = parseTag( text.mid( tag_begin + 1, tag_end - tag_begin - 1 ) );
-
-//    text.remove( 0, tag_end + 1 );
-
-//    if ( parsedTag.state == COMMENT )
-//	{
-//	  parsedTag.additional = parsedTag.additional.simplifyWhiteSpace();
-
-//	  if ( parsedTag.additional == "CLEAN FONTSIZES" )
-//	font_fakt = 6;
-//	  else if ( parsedTag.additional == "UNCLEAN FONTSIZES" )
-//	font_fakt = 1;
-//	  else if ( parsedTag.type == PLAIN_TEXT )
-//	setObjType( PLAIN );
-//	  else if ( parsedTag.type == ENUMLIST )
-//	{
-//	  setObjType( ENUM_LIST );
-//	  if ( !parsedTag.attribs.isEmpty() )
-//	  {
-//	    objEnumListType.font.setBold( false );
-//	    objEnumListType.font.setUnderline( false );
-//	    objEnumListType.font.setItalic( false );
-//	    for ( attribs = parsedTag.attribs.first(); attribs != 0; attribs = parsedTag.attribs.next() )
-//	      {
-//	    if ( attribs->key == START )
-//	      objEnumListType.start = atoi( attribs->value );
-//	    else if ( attribs->key == TYPE )
-//	      objEnumListType.type = atoi( attribs->value );
-//	    else if ( attribs->key == BEFORE )
-//	      objEnumListType.before = attribs->value;
-//	    else if ( attribs->key == AFTER )
-//	      objEnumListType.after = attribs->value;
-//	    else if ( attribs->key == FACE )
-//	      objEnumListType.font.setFamily( attribs->value.lower() );
-//	    else if ( attribs->key == SIZE )
-//	      objEnumListType.font.setPointSize( atoi( attribs->value ) );
-//	    else if ( attribs->key == COLOR )
-//	      objEnumListType.color = hexStringToQColor( attribs->value );
-//	    else if ( attribs->key == B && atoi( attribs->value ) == 1 )
-//	      objEnumListType.font.setBold( true );
-//	    else if ( attribs->key == I && atoi( attribs->value ) == 1 )
-//	      objEnumListType.font.setItalic( true );
-//	    else if ( attribs->key == U && atoi( attribs->value ) == 1 )
-//	      objEnumListType.font.setUnderline( true );
-//	      }
-//	  }
-//	}
-//	  else if ( parsedTag.type == UNSORTLIST )
-//	{
-//	  setObjType( UNSORT_LIST );
-//	  if ( !parsedTag.attribs.isEmpty() )
-//	  {
-//	    objUnsortListType.font[ 0 ].setBold( false );
-//	    objUnsortListType.font[ 0 ].setUnderline( false );
-//	    objUnsortListType.font[ 0 ].setItalic( false );
-//	    for ( attribs = parsedTag.attribs.first(); attribs != 0; attribs = parsedTag.attribs.next() )
-//	      {
-//	    if ( attribs->key == CHAR )
-//	      objUnsortListType.chr[ 0 ] = atoi( attribs->value );
-//	    else if ( attribs->key == FACE )
-//	      objUnsortListType.font[ 0 ].setFamily( attribs->value.lower() );
-//	    else if ( attribs->key == SIZE )
-//	      objUnsortListType.font[ 0 ].setPointSize( atoi( attribs->value ) );
-//	    else if ( attribs->key == COLOR )
-//	      objUnsortListType.color[ 0 ] = hexStringToQColor( attribs->value );
-//	    else if ( attribs->key == B && atoi( attribs->value ) == 1 )
-//	      objUnsortListType.font[ 0 ].setBold( true );
-//	    else if ( attribs->key == I && atoi( attribs->value ) == 1 )
-//	      objUnsortListType.font[ 0 ].setItalic( true );
-//	    else if ( attribs->key == U && atoi( attribs->value ) == 1 )
-//	      objUnsortListType.font[ 0 ].setUnderline( true );
-//	      }
-//	  }
-//	}
-//	  continue;
-//	}
-
-//    switch ( parsedTag.type )
-//	{
-//	case PARAGRAPH:
-//	  {
-//	newPara = true;
-//	if ( !parsedTag.attribs.isEmpty() && parsedTag.state == BEGIN )
-//	  {
-//	    for ( attribs = parsedTag.attribs.first(); attribs != 0; attribs = parsedTag.attribs.next() )
-//	      {
-//	    if ( attribs->key == ALIGN )
-//	      {
-//		if ( attribs->value == attrib_value_left )
-//		  align = TxtParagraph::LEFT;
-//		else if ( attribs->value == attrib_value_center )
-//		  align = TxtParagraph::CENTER;
-//		else if ( attribs->value == attrib_value_right )
-//		  align = TxtParagraph::RIGHT;
-//	      }
-//	      }
-//	  }
-//	  } break;
-//	case FONT:
-//	  {
-//	if ( parsedTag.state == BEGIN )
-//	  {
-//	    font.setBold( oldFont.bold() );
-//	    font.setItalic( oldFont.italic() );
-//	    font.setUnderline( oldFont.underline() );
-//	    oldFont = font;
-//	    oldColor = color;
-
-//	    if ( !parsedTag.attribs.isEmpty() )
-//	      {
-//	    for ( attribs = parsedTag.attribs.first(); attribs != 0; attribs = parsedTag.attribs.next() )
-//	      {
-//		if ( attribs->key == FACE )
-//		  font.setFamily( attribs->value.lower() );
-//		else if ( attribs->key == SIZE )
-//		// ******* TODO: fonts with size +X, -X *********
-//		  font.setPointSize( atoi( attribs->value ) * font_fakt );
-//		else if ( attribs->key == COLOR )
-//		  color = hexStringToQColor( attribs->value );
-//	      }
-//	      }
-//	  }
-//	else if ( parsedTag.state == END )
-//	  {
-//	    oldFont.setBold( font.bold() );
-//	    oldFont.setItalic( font.italic() );
-//	    oldFont.setUnderline( font.underline() );
-//	    font = oldFont;
-//	    color = oldColor;
-//	  }
-//	  } break;
-//	case BOLD:
-//	  {
-//	if ( parsedTag.state == BEGIN )
-//	  font.setBold( true );
-//	else if ( parsedTag.state == END )
-//	  font.setBold( false );
-//	  } break;
-//	case ITALIC:
-//	  {
-//	if ( parsedTag.state == BEGIN )
-//	  font.setItalic( true );
-//	else if ( parsedTag.state == END )
-//	  font.setItalic( false );
-//	  } break;
-//	case UNDERLINE:
-//	  {
-//	if ( parsedTag.state == BEGIN )
-//	  font.setUnderline( true );
-//	else if ( parsedTag.state == END )
-//	  font.setUnderline( false );
-//	  } break;
-//	case BREAK:
-//	  newPara = true;
-//	  break;
-//	default: break;
-//	}
-//  }
-//     }
-
-//   recalc();
-//   repaint( false );
-//   updateTableSize();
+    txtCursor->setMaxPosition( textLength() );
 }
 
 /*===================== open ascii file ==========================*/
@@ -2574,33 +1981,6 @@ void KTextObject::openASCII( QString filename )
     setCursor( ibeamCursor );
 }
 
-/*===================== open html file ===========================*/
-void KTextObject::openHTML( QString filename )
-{
-    setCursor( waitCursor );
-    doRepaints = false;
-
-    QFile f( filename );
-    QTextStream t( &f );
-    QString s = "";
-
-    if ( f.open( IO_ReadOnly ) )
-    {
-	while ( !t.eof() )
-	{
-	    s.append( t.readLine() );
-	    s.append( "\n" );
-	}
-	f.close();
-    }
-
-    parseHTML( s );
-
-    doRepaints = true;
-    repaint( false );
-    setCursor( ibeamCursor );
-}
-
 /*==================== set linebreak =============================*/
 void KTextObject::setLineBreak( int _width )
 {
@@ -2609,47 +1989,6 @@ void KTextObject::setLineBreak( int _width )
     linebreak_width = _width;
     recalc();
     repaint( false );
-}
-
-/*====================== enable composer mode ====================*/
-void KTextObject::enableComposerMode( QColor quoted_color, QFont quoted_font, QColor normal_color, QFont normal_font )
-{
-    _modified = true;
-
-    _quoted_color = quoted_color;
-    _quoted_font = quoted_font;
-    _normal_color = normal_color;
-    _normal_font = normal_font;
-    composerMode = true;
-    recalc( true );
-    repaint( false );
-}
-
-/*======================= enable regexp mode =====================*/
-void KTextObject::enableRegExpMode( QList<TxtParagraph::RegExpMode> &regList )
-{
-    _modified = true;
-
-    if ( !regExpList.isEmpty() )
-	regExpList.clear();
-
-    regexpMode = true;
-    regExpList = regList;
-    regExpList.setAutoDelete( true );
-    recalc( true );
-    repaint( false );
-}
-
-/*====================== set auto replacement ====================*/
-void KTextObject::setAutoReplacement( QList<AutoReplace> &aReplace )
-{
-    _modified = true;
-
-    if ( !autoReplace.isEmpty() )
-	autoReplace.clear();
-
-    autoReplace = aReplace;
-    autoReplace.setAutoDelete( true );
 }
 
 /*===================== get part of text =========================*/
@@ -3036,7 +2375,8 @@ void KTextObject::deleteItem( int pos )
     int para, line;
     getPara( pos, line, para );
 
-    if ( para >= 0 && para < static_cast<int>( paragraphs() ) && line >= 0 && line < static_cast<int>( paragraphAt( para )->lines() ) )
+    if ( para >= 0 && para < static_cast<int>( paragraphs() ) && line >= 0 && 
+	 line < static_cast<int>( paragraphAt( para )->lines() ) )
 	deleteItem( pos, line, para );
 }
 
@@ -3048,7 +2388,8 @@ void KTextObject::deleteItemInLine( int pos, int line )
     int para;
     getPara( line, para );
 
-    if ( para >= 0 && para < static_cast<int>( paragraphs() ) && line >= 0 && line < static_cast<int>( paragraphAt( para )->lines() ) )
+    if ( para >= 0 && para < static_cast<int>( paragraphs() ) && line >= 0 &&
+	 line < static_cast<int>( paragraphAt( para )->lines() ) )
 	deleteItem( pos, line, para );
 }
 
@@ -3060,7 +2401,8 @@ void KTextObject::deleteItemInPara( int pos, int para )
     int line;
     getLine( pos, para, line );
 
-    if ( para >= 0 && para < static_cast<int>( paragraphs() ) && line >= 0 && line < static_cast<int>( paragraphAt( para )->lines() ) )
+    if ( para >= 0 && para < static_cast<int>( paragraphs() ) && line >= 0 &&
+	 line < static_cast<int>( paragraphAt( para )->lines() ) )
 	deleteItem( pos, line, para );
 }
 
@@ -3074,8 +2416,10 @@ void KTextObject::deleteItem( int pos, int line, int para )
     if ( para < static_cast<int>( paragraphs() ) && line < static_cast<int>( paragraphAt( para )->lines() ) &&
 	 pos < static_cast<int>( paragraphAt( para )->lineAt( line )->items() ) )
     {
-	txtCursor->setMaxPosition(txtCursor->maxPosition() - paragraphAt(para)->lineAt(line)->itemAt(pos)->textLength());
-	txtCursor->setPositionAbs( txtCursor->positionAbs() - paragraphAt( para )->lineAt( line )->itemAt( pos )->textLength() );
+	txtCursor->setMaxPosition(txtCursor->maxPosition() - 
+				  paragraphAt(para)->lineAt(line)->itemAt(pos)->textLength());
+	txtCursor->setPositionAbs( txtCursor->positionAbs() - 
+				   paragraphAt( para )->lineAt( line )->itemAt( pos )->textLength() );
 	paragraphAt( para )->lineAt( line )->deleteItem( pos );
 	if ( paragraphAt( para )->lineAt( line )->items() == 0 )
 	{
@@ -3192,7 +2536,8 @@ void KTextObject::deleteLine( int line )
     int para;
     getPara( line, para );
 
-    if ( para >= 0 && para < static_cast<int>( paragraphs() ) && line >= 0 && line < static_cast<int>( paragraphAt( para )->lines() ) )
+    if ( para >= 0 && para < static_cast<int>( paragraphs() ) && line >= 0 &&
+	 line < static_cast<int>( paragraphAt( para )->lines() ) )
 	deleteLine( line, para );
 }
 
@@ -3258,7 +2603,8 @@ void KTextObject::deleteRegion( TxtCursor *_startCursor, TxtCursor *_stopCursor 
 	if ( _startCursor->positionLine() == 0 && _startCursor->positionInLine() == 0 &&
 	     _stopCursor->positionLine() == paragraphAt( _startCursor->positionParagraph() )->lines() - 1 &&
 	     _stopCursor->positionInLine() ==
-	     paragraphAt( _startCursor->positionParagraph() )->lineAt( _stopCursor->positionLine() )->lineLength() - 1 )
+	     paragraphAt( _startCursor->positionParagraph() )->lineAt( _stopCursor->positionLine() )->lineLength() -
+	     1 )
 	{
 	    deleteParagraph( _startCursor->positionParagraph(), false );
 	    if ( paragraphs() == 0 ) clear();
@@ -3808,7 +3154,8 @@ void KTextObject::changeRegionAttribs( TxtCursor *_startCursor, TxtCursor *_stop
     for ( i = 0; i < static_cast<int>( _startCursor->positionLine() ); i++ )
 	start_pos += paragraphAt( _startCursor->positionParagraph() )->lineAt( i )->items();
 
-    objnum = paragraphAt( _startCursor->positionParagraph() )->lineAt( _startCursor->positionLine() )->getInObj( _startCursor->positionInLine() );
+    objnum = paragraphAt( _startCursor->positionParagraph() )->lineAt( _startCursor->positionLine() )->
+	     getInObj( _startCursor->positionInLine() );
     if ( objnum == -1 )
     {
 	objnum = paragraphAt( _startCursor->positionParagraph() )->
@@ -3835,7 +3182,8 @@ void KTextObject::changeRegionAttribs( TxtCursor *_startCursor, TxtCursor *_stop
     for ( i = 0; i < static_cast<int>( _stopCursor->positionLine() ); i++ )
 	stop_pos += paragraphAt( _stopCursor->positionParagraph() )->lineAt( i )->items();
 
-    objnum = paragraphAt( _stopCursor->positionParagraph() )->lineAt( _stopCursor->positionLine() )->getInObj( _stopCursor->positionInLine() );
+    objnum = paragraphAt( _stopCursor->positionParagraph() )->lineAt( _stopCursor->positionLine() )->
+	     getInObj( _stopCursor->positionInLine() );
     if ( objnum == -1 )
     {
 	objnum = paragraphAt( _stopCursor->positionParagraph() )->
@@ -3859,7 +3207,8 @@ void KTextObject::changeRegionAttribs( TxtCursor *_startCursor, TxtCursor *_stop
 
     if ( start_cpos == C_IN )
     {
-	paragraphAt( _startCursor->positionParagraph() )->lineAt( _startCursor->positionLine() )->splitObj( _startCursor->positionInLine() );
+	paragraphAt( _startCursor->positionParagraph() )->lineAt( _startCursor->positionLine() )->
+	    splitObj( _startCursor->positionInLine() );
 	start_pos++;
 	start_cpos = C_BEFORE;
 	stop_pos++;
@@ -3867,7 +3216,8 @@ void KTextObject::changeRegionAttribs( TxtCursor *_startCursor, TxtCursor *_stop
 
     if ( stop_cpos == C_IN )
     {
-	paragraphAt( _stopCursor->positionParagraph() )->lineAt( _stopCursor->positionLine() )->splitObj( _stopCursor->positionInLine() );
+	paragraphAt( _stopCursor->positionParagraph() )->lineAt( _stopCursor->positionLine() )->
+	    splitObj( _stopCursor->positionInLine() );
 	//stop_cpos = C_BEFORE;
     }
 
@@ -4190,7 +3540,8 @@ bool KTextObject::searchNext( QString text, TxtCursor *from, TxtCursor *to, bool
 	drawSelection = true;
 	redrawSelection( startCursor, stopCursor );
 
-	if ( ( tableFlags() & Tbl_vScrollBar || tableFlags() & Tbl_hScrollBar ) && !rowIsVisible( txtCursor->positionParagraph() ) )
+	if ( ( tableFlags() & Tbl_vScrollBar || tableFlags() & Tbl_hScrollBar ) &&
+	     !rowIsVisible( txtCursor->positionParagraph() ) )
 	    setTopCell( txtCursor->positionParagraph() );
 
 	return true;
@@ -4244,7 +3595,8 @@ bool KTextObject::searchNextRev( QString text, TxtCursor *from, TxtCursor *to, b
 	drawSelection = true;
 	redrawSelection( startCursor, stopCursor );
 
-	if ( ( tableFlags() & Tbl_vScrollBar || tableFlags() & Tbl_hScrollBar ) && !rowIsVisible( txtCursor->positionParagraph() ) )
+	if ( ( tableFlags() & Tbl_vScrollBar || tableFlags() & Tbl_hScrollBar ) &&
+	     !rowIsVisible( txtCursor->positionParagraph() ) )
 	    setTopCell( txtCursor->positionParagraph() );
 
 	return true;
@@ -4296,7 +3648,8 @@ bool KTextObject::replaceNext( QString search, QString replace, TxtCursor *from,
 }
 
 /*====================== replace first reverse ===================*/
-bool KTextObject::replaceFirstRev( QString search, QString replace, TxtCursor *from, TxtCursor *to, bool caseSensitive )
+bool KTextObject::replaceFirstRev( QString search, QString replace, TxtCursor *from, TxtCursor *to,
+				   bool caseSensitive )
 {
     _modified = true;
 
@@ -4307,7 +3660,8 @@ bool KTextObject::replaceFirstRev( QString search, QString replace, TxtCursor *f
 }
 
 /*====================== replace next reverse ====================*/
-bool KTextObject::replaceNextRev( QString search, QString replace, TxtCursor *from, TxtCursor *to, bool caseSensitive )
+bool KTextObject::replaceNextRev( QString search, QString replace, TxtCursor *from, TxtCursor *to,
+				  bool caseSensitive )
 {
     _modified = true;
 
@@ -4431,10 +3785,12 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 	    }
 
 	    if ( objEnumListType.type == NUMBER )
-		sprintf( chr, "%s%d%s", objEnumListType.before.data(), getParagNum( paragraphPtr ) + objEnumListType.start,
+		sprintf( chr, "%s%d%s", objEnumListType.before.data(), getParagNum( paragraphPtr ) + 
+			 objEnumListType.start,
 			 objEnumListType.after.data() );
 	    else
-		sprintf( chr, "%s%c%s", objEnumListType.before.data(), getParagNum( paragraphPtr ) + objEnumListType.start,
+		sprintf( chr, "%s%c%s", objEnumListType.before.data(), getParagNum( paragraphPtr ) + 
+			 objEnumListType.start,
 			 objEnumListType.after.data() );
 	    p->setFont( objEnumListType.font );
 	    fm = QFontMetrics( p->font() );
@@ -4470,7 +3826,8 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 		p->setPen( allColor );
 	    QChar _chr = *objUnsortListType.chr->at( paragraphPtr->getDepth() );
 	    if ( !paragraphPtr->isEmpty() )
-		p->drawText( 0 + getLeftIndent( row ), ( !drawPic ? 0 : y ) + paragraphPtr->lineAt( 0 )->ascent( paragraphPtr ) - fm.ascent(),
+		p->drawText( 0 + getLeftIndent( row ), ( !drawPic ? 0 : y ) + paragraphPtr->lineAt( 0 )->
+			     ascent( paragraphPtr ) - fm.ascent(),
 			     xstart, fm.height() + paragraphPtr->getLineSpacing(), AlignLeft, _chr );
 
 	    if ( !drawPic )
@@ -4522,7 +3879,8 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 		    fm = QFontMetrics( p->font() );
 
 		    // check, if cursor should be drawn - if yes calculate it
-		    if ( drawCursor = !drawPic && !cursorDrawn && showCursor() && static_cast<int>( txtCursor->positionParagraph() ) == row &&
+		    if ( drawCursor = !drawPic && !cursorDrawn && showCursor() && 
+			 static_cast<int>( txtCursor->positionParagraph() ) == row &&
 			 txtCursor->positionLine() == i && txtCursor->positionInLine() >= chars &&
 			 txtCursor->positionInLine() <= chars+len )
 		    {
@@ -4539,8 +3897,7 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 			p->setPen( allColor );
 
 		    //debug( "%d", x );
-		    p->drawText(x,(!drawPic ? 0 : y) + linePtr->ascent(paragraphPtr)/*-objPtr->ascent()*/,/*w,linePtr->height(paragraphPtr),
-										      AlignLeft, */objPtr->text() );
+		    p->drawText(x,(!drawPic ? 0 : y) + linePtr->ascent(paragraphPtr), objPtr->text() );
 
 		    // draw Cursor
 		    if ( drawCursor )
@@ -4559,7 +3916,9 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 			txtCursor->setYPos( y + ry );
 			txtCursor->setHeight( c2.y() - c1.y() );
 			p->setPen( QPen( Qt::black, 1, SolidLine ) );
-			if ( p->font().italic() ) c1.setX( c1.x() + static_cast<int>( static_cast<float>( linePtr->height( paragraphPtr ) ) / 3.732 ) );
+			if ( p->font().italic() ) 
+			    c1.setX( c1.x() + static_cast<int>( static_cast<float>( linePtr->height( paragraphPtr ) ) 
+								/ 3.732 ) );
 			p->drawLine( c1, c2 );
 			cursorDrawn = true;
 		    }
@@ -4572,9 +3931,11 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 			int sx, sw;
 			bool select_full = selectFull( row, i, j, sx, sw );
 			if ( select_full )
-			    p->fillRect( x, ( !drawPic ? 0 : y ), objPtr->width(), linePtr->height( paragraphPtr ), Qt::black );
+			    p->fillRect( x, ( !drawPic ? 0 : y ), objPtr->width(), linePtr->height( paragraphPtr ),
+					 Qt::black );
 			else
-			    p->fillRect( x + sx, ( !drawPic ? 0 : y ), sw, linePtr->height( paragraphPtr ), Qt::black );
+			    p->fillRect( x + sx, ( !drawPic ? 0 : y ), sw, linePtr->height( paragraphPtr ),
+					 Qt::black );
 			p->setRasterOp( ro );
 		    }
 
@@ -5103,19 +4464,19 @@ void KTextObject::recalc( bool breakAllLines )
 
 	    if ( linebreak_width < 1 )
 	    {
-		paragraphPtr->breakLines( cellWidth( 0 ) - getLeftIndent( paragraphList.at() ), regexpMode, composerMode );
+		paragraphPtr->breakLines( cellWidth( 0 ) - getLeftIndent( paragraphList.at() ), 
+					  regexpMode, composerMode );
 		cellWidths.at( 0 )->wh = width() - xstart;
 		if ( tableFlags() & Tbl_vScrollBar ) cellWidths.at( 0 )->wh -= verticalScrollBar()->width();
 	    }
 	    else
 	    {
-		paragraphPtr->break_Lines( linebreak_width - getLeftIndent( paragraphList.at() ), regexpMode, composerMode );
+		paragraphPtr->break_Lines( linebreak_width - getLeftIndent( paragraphList.at() ), 
+					   regexpMode, composerMode );
 		_width = max(_width,static_cast<int>(paragraphPtr->width()));
 		cellWidths.at( 0 )->wh = _width;
 	    }
 
-	    if ( composerMode )
-		paragraphPtr->doComposerMode( _quoted_color, _quoted_font, _normal_color, _normal_font );
 	}
 
 	cellHeights.at( paragraphList.at() )->wh = paragraphPtr->height();
@@ -5575,13 +4936,15 @@ bool KTextObject::insertChar( QChar c )
 		lin->splitObj( inLine );
 	}
 	if ( lin->getAfterObj( inLine ) != -1 &&
-	     lin->itemAt( lin->getAfterObj( inLine ) )->type() != TxtObj::SEPARATOR && sameEffects( lin->itemAt( lin->getAfterObj( inLine ) ) ) )
+	     lin->itemAt( lin->getAfterObj( inLine ) )->type() != TxtObj::SEPARATOR && 
+	     sameEffects( lin->itemAt( lin->getAfterObj( inLine ) ) ) )
 	{
 	    objPos = lin->getAfterObj( inLine );
 	    lin->itemAt( objPos )->append( str.data() );
 	}
 	else if ( lin->getBeforeObj( inLine ) != -1 &&
-		  lin->itemAt( lin->getBeforeObj( inLine ) )->type() != TxtObj::SEPARATOR && sameEffects( lin->itemAt( lin->getBeforeObj( inLine ) ) ) )
+		  lin->itemAt( lin->getBeforeObj( inLine ) )->type() != TxtObj::SEPARATOR && 
+		  sameEffects( lin->itemAt( lin->getBeforeObj( inLine ) ) ) )
 	{
 	    objPos = lin->getBeforeObj( inLine );
 	    lin->itemAt( objPos )->insert( 0, str.data() );
@@ -5619,7 +4982,8 @@ bool KTextObject::makeCursorVisible()
 {
     bool _update = false;
 
-    if ( static_cast<int>( height() ) - 16 <= static_cast<int>( txtCursor->ypos() ) + static_cast<int>( txtCursor->height() ) )
+    if ( static_cast<int>( height() ) - 16 <= static_cast<int>( txtCursor->ypos() ) +
+	 static_cast<int>( txtCursor->height() ) )
     {
 	_update = true;
 	setYOffset( ( static_cast<int>( yOffset() ) + static_cast<int>( txtCursor->height() ) <
@@ -5776,180 +5140,6 @@ QString KTextObject::toHexString( QColor c )
     return str;
 }
 
-/*====================== parse HTML tag =========================*/
-KTextObject::ParsedTag KTextObject::parseTag( QString tag )
-{
-    ParsedTag parsedTag;
-    int i;
-    AttribList attribList;
-    Attrib *attrib;
-    QString str;
-    char c[ 1 ];
-
-    tag = tag.simplifyWhiteSpace();
-    tag = tag.upper();
-    tag += " ";
-    sprintf( c, "%s", tag.mid( 0, 1 ).data() );
-
-    if ( c[ 0 ] == end_tag ) parsedTag.state = END;
-    else if ( c[ 0 ] == comment_tag ) parsedTag.state = COMMENT;
-    else parsedTag.state = BEGIN;
-
-    if ( parsedTag.state != BEGIN )
-	tag.remove( 0, 1 );
-
-    if ( parsedTag.state == COMMENT )
-    {
-	parsedTag.additional = "";
-	parsedTag.additional.append( tag );
-	parsedTag.type = UNKNOWN_TAG;
-    }
-
-    if ( tag.find( ' ' ) != -1 )
-	str = tag.left( tag.find( ' ' ) );
-    else
-	str = tag;
-
-    tag.remove( 0, str.length() );
-    if ( tag.length() > 0 && tag.mid( 0, 1 ) == " " )
-	tag.remove( 0, 1 );
-
-    if ( str == tag_html )
-	parsedTag.type = HTML;
-    else if ( str == tag_head )
-	parsedTag.type = HEAD;
-    else if ( str == tag_body )
-	parsedTag.type = BODY;
-    else if ( str == tag_font )
-	parsedTag.type = FONT;
-    else if ( str == tag_bold )
-	parsedTag.type = BOLD;
-    else if ( str == tag_italic )
-	parsedTag.type = ITALIC;
-    else if ( str == tag_underline )
-	parsedTag.type = UNDERLINE;
-    else if ( str == tag_paragraph )
-	parsedTag.type = PARAGRAPH;
-    else if ( str == tag_enumlist )
-	parsedTag.type = ENUMLIST;
-    else if ( str == tag_unsortlist )
-	parsedTag.type = UNSORTLIST;
-    else if ( str == tag_plain )
-	parsedTag.type = PLAIN_TEXT;
-    else if ( str == tag_break || str == tag_h1 || str == tag_h2 || str == tag_h3 || str == tag_h4 || str == tag_h5 || str == tag_h6 )
-	parsedTag.type = BREAK;
-    else
-	parsedTag.type = UNKNOWN_TAG;
-
-    str = "";
-
-    if ( ( parsedTag.state == BEGIN && ( parsedTag.type == FONT || parsedTag.type == PARAGRAPH ) ) ||
-	 ( parsedTag.state == COMMENT && ( parsedTag.type == UNSORTLIST || parsedTag.type == ENUMLIST ) ) )
-    {
-	tag = tag.simplifyWhiteSpace();
-
-	i = -1;
-	while ( true )
-	{
-	    i = tag.find( " = " );
-	    if ( i != -1 )
-		tag.replace( i, 3, "=" );
-	    else
-	    {
-		i = tag.find( "= " );
-		if ( i != -1 )
-		    tag.replace( i, 2, "=" );
-		else
-		{
-		    i = tag.find( " =" );
-		    if ( i != -1 )
-			tag.replace( i, 2, "=" );
-		    else break;
-		}
-	    }
-	}
-
-	while ( true )
-	{
-	    i = tag.find( QRegExp( "[ \x3d\x2d\x2b ]" ) );
-	    if ( i != -1 )
-	    {
-		attrib = new Attrib;
-		attrib->value = "";
-		tag += " ";
-
-		str = tag.left( i );
-		str = str.simplifyWhiteSpace();
-
-		if ( str == attrib_face )
-		    attrib->key = FACE;
-		else if ( str == attrib_char )
-		    attrib->key = CHAR;
-		else if ( str == attrib_start )
-		    attrib->key = START;
-		else if ( str == attrib_before )
-		    attrib->key = BEFORE;
-		else if ( str == attrib_after )
-		    attrib->key = AFTER;
-		else if ( str == attrib_type )
-		    attrib->key = TYPE;
-		else if ( str == attrib_size )
-		    attrib->key = SIZE;
-		else if ( str == attrib_color )
-		    attrib->key = COLOR;
-		else if ( str == attrib_align )
-		    attrib->key = ALIGN;
-		else if ( str == attrib_bold )
-		    attrib->key = B;
-		else if ( str == attrib_underline )
-		    attrib->key = U;
-		else if ( str == attrib_italic )
-		    attrib->key = I;
-		else
-		    attrib->key = UNKNOWN_ATTRIB;
-
-		tag.remove( 0, i );
-
-		if ( tag.left( 1 )[ 0 ] == operator_plus )
-		    attrib->op = PLUS;
-		else if (tag.left(1)[0] == operator_minus)
-		    attrib->op = MINUS;
-		else if ( tag.left( 1 )[ 0 ] == operator_assign )
-		    attrib->op = ASSIGN;
-
-		tag.remove( 0, 1 );
-
-		if ( tag.left( 1 ) == "\"" )
-		{
-		    tag.remove( 0, 1 );
-		    i = tag.find( "\"" );
-		}
-		else
-		    i = tag.find( " " );
-
-
-		if ( i != -1 )
-		{
-		    attrib->value = tag.left( i );
-		    tag.remove( 0, i+1 );
-		    tag.simplifyWhiteSpace();
-		    attribList.append( attrib );
-
-		    if ( tag.length() == 0 )
-			break;
-		}
-		else
-		    break;
-	    }
-	    else
-		break;
-	}
-    }
-
-    parsedTag.attribs = attribList;
-    return parsedTag;
-}
-
 /*====================== convert hex-string to color ============*/
 QColor KTextObject::hexStringToQColor( QString str )
 {
@@ -5992,9 +5182,11 @@ bool KTextObject::selectionInObj( int para, int line, int item )
     {
 	bool start = false, stop = false;
 
-	if ( static_cast<int>( startCursor.positionParagraph() ) < para || static_cast<int>( startCursor.positionParagraph() ) == para
+	if ( static_cast<int>( startCursor.positionParagraph() ) < para || 
+	     static_cast<int>( startCursor.positionParagraph() ) == para
 	     && static_cast<int>( startCursor.positionLine() ) < line ) start = true;
-	else if ( static_cast<int>( startCursor.positionParagraph() ) == para && static_cast<int>( startCursor.positionLine() ) == line )
+	else if ( static_cast<int>( startCursor.positionParagraph() ) == para && 
+		  static_cast<int>( startCursor.positionLine() ) == line )
 	{
 	    int startInLine = startCursor.positionInLine();
 	    int startItem;
@@ -6010,9 +5202,11 @@ bool KTextObject::selectionInObj( int para, int line, int item )
 	    if ( startItem <= item ) start = true;
 	}
 
-	if ( static_cast<int>( stopCursor.positionParagraph() ) > para || static_cast<int>( stopCursor.positionParagraph() ) == para
+	if ( static_cast<int>( stopCursor.positionParagraph() ) > para || 
+	     static_cast<int>( stopCursor.positionParagraph() ) == para
 	     && static_cast<int>( stopCursor.positionLine() ) > line ) stop = true;
-	else if ( static_cast<int>( stopCursor.positionParagraph() ) == para && static_cast<int>( stopCursor.positionLine() ) == line )
+	else if ( static_cast<int>( stopCursor.positionParagraph() ) == para && 
+		  static_cast<int>( stopCursor.positionLine() ) == line )
 	{
 	    int stopInLine = stopCursor.positionInLine();
 	    int stopItem;
@@ -6041,7 +5235,8 @@ bool KTextObject::selectFull( int para, int line, int item, int &sx, int &sw )
     bool select_full = true;
     int i, wid;
 
-    if ( static_cast<int>( startCursor.positionParagraph() ) == para && static_cast<int>( startCursor.positionLine() ) == line )
+    if ( static_cast<int>( startCursor.positionParagraph() ) == para && 
+	 static_cast<int>( startCursor.positionLine() ) == line )
     {
 	int startInLine = startCursor.positionInLine();
 	int startItem = paragraphAt( para )->lineAt( line )->getInObj( startInLine );
@@ -6066,7 +5261,8 @@ bool KTextObject::selectFull( int para, int line, int item, int &sx, int &sw )
 	}
     }
 
-    if ( static_cast<int>( stopCursor.positionParagraph() ) == para && static_cast<int>( stopCursor.positionLine() ) == line )
+    if ( static_cast<int>( stopCursor.positionParagraph() ) == para && 
+	 static_cast<int>( stopCursor.positionLine() ) == line )
     {
 	wid = 0;
 	int stopInLine = stopCursor.positionInLine();
@@ -6100,7 +5296,8 @@ void KTextObject::redrawSelection( TxtCursor _startCursor, TxtCursor _stopCursor
     // should be rewritten - this is too slow
     drawLine = -1;
     drawParagraph = -1;
-    for ( int i = static_cast<int>( _startCursor.positionParagraph() ); i <= static_cast<int>( _stopCursor.positionParagraph() ); i++ )
+    for ( int i = static_cast<int>( _startCursor.positionParagraph() ); 
+	  i <= static_cast<int>( _stopCursor.positionParagraph() ); i++ )
 	updateCell( i, 0, false );
 }
 
@@ -6242,8 +5439,9 @@ void KTextObject::incDepth()
 					     paragraphList.at( i )->getDepth() + 1 : 15 );
     }
     else
-	paragraphList.at( txtCursor->positionParagraph() )->setDepth( paragraphList.at( txtCursor->positionParagraph() )->getDepth() + 1 < 16 ?
-								      paragraphList.at( txtCursor->positionParagraph() )->getDepth() + 1 : 15 );
+	paragraphList.at( txtCursor->positionParagraph() )->
+	    setDepth( paragraphList.at( txtCursor->positionParagraph() )->getDepth() + 1 < 16 ?
+		      paragraphList.at( txtCursor->positionParagraph() )->getDepth() + 1 : 15 );
 
     recalc();
     repaint( true );
@@ -6262,8 +5460,9 @@ void KTextObject::decDepth()
 					     paragraphList.at( i )->getDepth() - 1 : 0 );
     }
     else
-	paragraphList.at( txtCursor->positionParagraph() )->setDepth( paragraphList.at( txtCursor->positionParagraph() )->getDepth() - 1 >= 0 ?
-								      paragraphList.at( txtCursor->positionParagraph() )->getDepth() - 1 : 0 );
+	paragraphList.at( txtCursor->positionParagraph() )->
+	    setDepth( paragraphList.at( txtCursor->positionParagraph() )->getDepth() - 1 >= 0 ?
+		      paragraphList.at( txtCursor->positionParagraph() )->getDepth() - 1 : 0 );
     recalc();
     repaint( true );
 }

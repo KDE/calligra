@@ -1187,31 +1187,11 @@ public:
     QString text( bool linebreak=true ) {return toASCII( linebreak ); }
 
     /**
-     * Returns the text of the KTextObject as HTML-Text in a string.
-     * If <i>clean</i> in <i>true</i> the fontsizes are calculated correctly as HTML, else
-     * the real fontsize is used. If you only want to save and load the text in the KTextObject,
-     * <i>clean</i> should be <i>false</i>, if you want to use the output for a HTML-Page, <i>clean</i> should
-     * be <i>true</i>. If <i>onlyBody</i> is <i>true</i>, only the stuff which is between the body-begin
-     * and body-end flag is returned, else a whole, valide HTML-document is returned.
-     */
-    QString toHTML( bool clean=false, bool onlyBody=false );
-
-    /**
      * Saves the text of the KTextObject as ASCII-Text to the file
      * <i>filename</i>.<br>
      * If linebreak is <i>true</i> for each linebreak a \n is used.
      */
     void saveASCII( QString filename, bool linebreak=true );
-
-    /**
-     * Saves the text of the KTextObject in HTML-Text to the file
-     * <i>filename</i>.<br>
-     * If clean in <i>true</i> the fontsizes are calculated correctly as HTML, else
-     * the real fontsize is used. If you only want to save and load the text in the KTextObject,
-     * clean should be <i>false</i>, if you want to use the output for a HTML-Page, clean should
-     * be <i>true</i>.
-     */
-    void saveHTML( QString filename, bool clean=false );
 
     /**
      * Adds the <i>text</i> in the given <i>color</i> and <i>font</i> to the KTextObject.
@@ -1226,72 +1206,15 @@ public:
                   bool _recalc=true, bool htmlMode=false );
 
     /**
-     * Parses a HTML text and sets it into the KTextObject.
-     */
-    void parseHTML( QString text );
-
-    /**
      * Opens an ASCII file for editing in the KTextObject.
      */
     void openASCII( QString filename );
-
-    /**
-     * Opens an HTML file for editing in the KTextObject.
-     */
-    void openHTML( QString filename );
 
     /**
      * Set the type of the linebreaking. A <i>_width</i> < 1 means dynamically linebreaking.
      * If <i>_width</i> is >= 1, this argument sets the maximal number of chars of a line.
      */
     void setLineBreak( int _width );
-
-    /**
-     * With this function you can switch on a composer mode. If the composer-mode is
-     * on, all lines, which begin with a char out of '>:|' will be displayed in <i>quoted_color</i>
-     * and <i>quoted_font</i>. The rest is displayed in <i>normal_color</i> and <i>normal_font</i>.
-     */
-    void enableComposerMode( QColor quoted_color, QFont quoted_font, QColor normal_color, QFont normal_font );
-
-    /**
-     * With this function you can switch off the composer mode.
-     */
-    void disableComposerMode() {composerMode = false; }
-
-    /**
-     * Enable RegExpMode. In this mode you can give a list of @ref #RegExpMode, which is used for
-     * syntax highliting. That means, if a part of the text string matches to a regexp of the list, this part
-     * is drawn in the attributes of this list item.<br>
-     * <b>IMPORTANT</b>: The first item of the list has to store the attributes of the default text. So the
-     * regular expression of the first list-item is ignored!<br>
-     * The structure TxtParagraph::RegExpMode looks like that:
-     * <pre>struct RegExpMode
-     * {
-     * &nbsp; &nbsp; QRegExp regexp;
-     * &nbsp; &nbsp; QFont font;
-     * &nbsp; &nbsp; QColor color;
-     * };
-     * </pre>
-     */
-    void enableRegExpMode( QList<TxtParagraph::RegExpMode>& );
-
-    /**
-     * Disable RegExpMode.
-     */
-    void disableRegExpMode() {regexpMode = false; }
-
-    /**
-     * Set a replacement list. Here you can give a list of characters, which should be automatically converted to another
-     * string, if the char is entered.<br>
-     * The type AutoReplace looks like that:
-     * <pre>struct AutoReplace
-     * {
-     * &nbsp; &nbsp; char c;
-     * &nbsp; &nbsp; QString replace;
-     * };
-     * </pre>
-     */
-    void setAutoReplacement( QList<AutoReplace>& );
 
     /**
      * Returns a part of the text.
@@ -1913,31 +1836,6 @@ signals:
 
 protected:
 
-    //**************** types *****************
-    enum TagType {HTML, HEAD, BODY, FONT, BOLD, ITALIC, UNDERLINE,
-                  PARAGRAPH, BREAK, UNSORTLIST, ENUMLIST, PLAIN_TEXT, UNKNOWN_TAG};
-    enum TagState {BEGIN, END, COMMENT};
-    enum AttribType {FACE, CHAR, START, BEFORE, AFTER, TYPE, SIZE, COLOR, ALIGN, B, I, U, UNKNOWN_ATTRIB};
-    enum Operators {PLUS, MINUS, ASSIGN};
-    enum ParseState {KEY, OPERATOR, VALUE};
-
-    struct Attrib
-    {
-        AttribType key;
-        Operators op;
-        QString value;
-    };
-
-    typedef QList<Attrib> AttribList;
-
-    struct ParsedTag
-    {
-        TagType type;
-        TagState state;
-        AttribList attribs;
-        QString additional;
-    };
-
     enum CursorDirection {C_LEFT, C_RIGHT, C_UP, C_DOWN};
 
     //***************** methodes ****************
@@ -1982,8 +1880,6 @@ protected:
     TxtCursor getCursorPos( int, int, bool&, bool set=false, bool redraw=false );
 
     QString toHexString( QColor );
-
-    ParsedTag parseTag( QString );
 
     QColor hexStringToQColor( QString );
 
@@ -2091,54 +1987,6 @@ protected:
     bool allInOneColor;
 
     int CB_CUT, CB_COPY, CB_PASTE;
-
-    //**************** constants ******************
-    // HTML stuff
-    static const char open_tag = '<';
-    static const char close_tag = '>';
-    static const char end_tag = '/';
-    static const char comment_tag = '!';
-
-    static const char operator_assign = '=';
-    static const char operator_plus = '+';
-    static const char operator_minus = '-';
-    static const char space = ' ';
-
-    static const char tag_html[];
-    static const char tag_head[];
-    static const char tag_body[];
-    static const char tag_font[];
-    static const char tag_bold[];
-    static const char tag_italic[];
-    static const char tag_underline[];
-    static const char tag_paragraph[];
-    static const char tag_break[];
-    static const char tag_h1[];
-    static const char tag_h2[];
-    static const char tag_h3[];
-    static const char tag_h4[];
-    static const char tag_h5[];
-    static const char tag_h6[];
-    static const char tag_plain[];
-    static const char tag_enumlist[];
-    static const char tag_unsortlist[];
-
-    static const char attrib_face[];
-    static const char attrib_char[];
-    static const char attrib_start[];
-    static const char attrib_before[];
-    static const char attrib_after[];
-    static const char attrib_type[];
-    static const char attrib_size[];
-    static const char attrib_color[];
-    static const char attrib_align[];
-    static const char attrib_bold[];
-    static const char attrib_italic[];
-    static const char attrib_underline[];
-
-    static const char attrib_value_left[];
-    static const char attrib_value_center[];
-    static const char attrib_value_right[];
 
 };
 #endif //KTEXTOBJECT_H

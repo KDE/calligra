@@ -1147,9 +1147,9 @@ void Page::keyPressEvent( QKeyEvent *e )
 /*========================= resize Event =========================*/
 void Page::resizeEvent( QResizeEvent *e )
 {
-    if ( editMode ) 
+    if ( editMode )
 	QWidget::resizeEvent( e );
-    else 
+    else
 	QWidget::resizeEvent( new QResizeEvent( QSize( QApplication::desktop()->width(), QApplication::desktop()->height() ),
 						e->oldSize() ) );
     if ( editMode )
@@ -3467,8 +3467,7 @@ void Page::dragMoveEvent( QDragMoveEvent *e )
 /*================================================================*/
 void Page::dropEvent( QDropEvent *e )
 {
-    if ( QImageDrag::canDecode( e ) )
-    {
+    if ( QImageDrag::canDecode( e ) ) {
 	setToolEditMode( TEM_MOUSE );
 	deSelectAllObj();
 
@@ -3495,90 +3494,70 @@ void Page::dropEvent( QDropEvent *e )
 	cmd += filename;
 	system( cmd.ascii() );
 	e->accept();
-    }
-    else if ( QTextDrag::canDecode( e ) )
-    {
+    } else if ( QUriDrag::canDecode( e ) ) {
+	setToolEditMode( TEM_MOUSE );
+	deSelectAllObj();
+
+	QStringList lst;
+	QUriDrag::decodeToUnicodeUris( e, lst );
+
+	QStringList::Iterator it = lst.begin();
+	for ( ; it != lst.end(); ++it ) {
+	    KURL url( *it );
+
+	    QString filename;
+	    if ( !url.isLocalFile() ) {
+		filename = QString::null;
+		// #### todo download file
+	    } else {
+		filename = url.path();
+	    }
+
+	    KMimeMagicResult *res = KMimeMagic::self()->findFileType( filename );
+
+	    if ( res && res->isValid() ) {
+		QString mimetype = res->mimeType();
+		if ( mimetype.contains( "image" ) ) {
+		    QCursor c = cursor();
+		    setCursor( waitCursor );
+		    view->kPresenterDoc()->insertPicture( filename, e->pos().x(), e->pos().y() );
+		    setCursor( c );
+		} else if ( mimetype.contains( "text" ) ) {
+		    QCursor c = cursor();
+		    setCursor( waitCursor );
+		    QFile f( filename );
+		    QTextStream t( &f );
+		    QString text = QString::null, tmp;
+
+		    if ( f.open( IO_ReadOnly ) ) {
+			while ( !t.eof() ) {
+			    tmp = t.readLine();
+			    tmp += "\n";
+			    text.append( tmp );
+			}
+			f.close();
+		    }
+
+		    view->kPresenterDoc()->insertText( QRect( e->pos().x(), e->pos().y(), 250, 250 ), 
+						       diffx(), diffy(), text, view );
+		    
+		    setCursor( c );
+		}
+	    }
+	}
+    } else if ( QTextDrag::canDecode( e ) ) {
 	setToolEditMode( TEM_MOUSE );
 	deSelectAllObj();
 
 	QString text;
 	QTextDrag::decode( e, text );
 
-	view->kPresenterDoc()->insertText( QRect( e->pos().x(), e->pos().y(), 250, 250 ), diffx(), diffy(), text, view );
+	view->kPresenterDoc()->insertText( QRect( e->pos().x(), e->pos().y(), 250, 250 ), 
+					   diffx(), diffy(), text, view );
 	e->accept();
-    }
-    else
+    } else
 	e->ignore();
-
-//   else if ( QUrlDrag::canDecode( e ) )
-//     {
-//	 setToolEditMode( TEM_MOUSE );
-//	 deSelectAllObj();
-
-//	 QStrList lst;
-//	 QUrlDrag::decode( e, lst );
-
-//	 QString str;
-//	 for ( str = lst.first(); !str.isEmpty(); str = lst.next() )
-//  {
-// //	  QString uid = getenv( "USER" );
-// //	  QString num;
-// //	  num.setNum( objectList()->count() );
-// //	  uid += "_";
-// //	  uid += num;
-
-// //	  QString filename = "/tmp/kpresenter";
-// //	  filename += uid;
-
-// //	  KIOJob *job = new KIOJob( "kpresenter job" );
-// //	  job->copy( str, filename );
-
-//    // Currently we only allow local files - this should be changed later
-//    KURL url( str );
-//    if ( !url.isLocalFile() ) return;
-
-//    QString filename = url.path();
-//	  KMimeMagicResult *res = KMimeMagic::self()->findFileType( filename );
-
-//    if ( res && res->isValid() )
-//	{
-//	  QString mimetype = res->mimeType();
-//	  if ( mimetype.contains( "image" ) )
-//	{
-//	  QCursor c = cursor();
-//	  setCursor( waitCursor );
-//	  view->kPresenterDoc()->insertPicture( filename, e->pos().x(), e->pos().y() );
-//		  setCursor( c );
-//	  continue;
-//	}
-
-//	}
-
-//    // open any non-picture as text
-//    // in the future we should open specific mime types with "their" programms and embed them
-//    QFile f( filename );
-//    QTextStream t( &f );
-//    QString text = "", tmp;
-
-//    if ( f.open( IO_ReadOnly ) )
-//	{
-//	  while ( !t.eof() )
-//	{
-//	  tmp = t.readLine();
-//	  tmp += "\n";
-//	  text.append( tmp );
-//	}
-//	  f.close();
-//	}
-//    view->kPresenterDoc()->insertText( QRect( e->pos().x(), e->pos().y(), 250, 250 ), diffx(), diffy(), text, view );
-
-// //	  QString cmd = "rm -f ";
-// //	  cmd += filename;
-// //	  system( cmd.ascii() );
-
-// //	  delete job;
-//  }
-//     }
+    
 }
 
 /*================================================================*/
