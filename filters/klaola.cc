@@ -203,17 +203,31 @@ const myFile KLaola::stream(const long &handle) {
     return ret;
 }
 
-const QArray<long> KLaola::find(const QString &name) {
+const QArray<long> KLaola::find(const QString &name, const bool onlyCurrentDir) {
 
     QArray<long> ret(static_cast<int>(0));
     int i=0;
 
     if(ok) {
-        for(OLEInfo *p=ppsList.first(); p!=0; p=ppsList.next()) {
-            if(p->name==name) {
-                ret.resize(i+1);
-                ret[i]=p->handle;
-                i++;
+        if(!onlyCurrentDir) {
+            for(OLEInfo *p=ppsList.first(); p!=0; p=ppsList.next()) {
+                if(p->name==name) {
+                    ret.resize(i+1);
+                    ret[i]=p->handle;
+                    ++i;
+                }
+            }
+        }
+        else {
+            QList<OLENode> list=parseCurrentDir();
+            OLENode *node;
+
+            for(node=list.first(); node!=0; node=list.next()) {
+                if(node->name==name) {
+                    ret.resize(i+1);
+                    ret[i]=node->handle;
+                    ++i;
+                }
             }
         }
     }

@@ -113,19 +113,12 @@ void OLEFilter::slotGetStream(const long &handle, myFile &stream) {
 // are not unique! (searching only the current dir!)
 void OLEFilter::slotGetStream(const QString &name, myFile &stream) {
 
-    QList<OLENode> list=docfile->parseCurrentDir();
-    OLENode *node;
-    bool found=false;
+    QArray<long> handle;
 
-    node=list.first();
-    while(node!=0 && !found) {
-        if(node->name==name)
-            found=true;
-        else
-            node=list.next();
-    }
-    if(found)
-        stream=docfile->stream(node->handle);
+    handle=docfile->find(name, true);  // search only in current dir!
+
+    if(handle.size()==1)
+        stream=docfile->stream(handle[0]);
     else {
         stream.data=0L;
         stream.length=0;
@@ -186,7 +179,9 @@ void OLEFilter::convert(const QString &dirname) {
                 connectCommon(&myFilter);
             }
 
-            // some more will be here, soon...
+            // some more will be here, soon
+            // I'll have to read some additional OLE-Streams as
+            // the names are not unique!
 
             node=list.next();
         } while(myFilter==0L && node!=0);
@@ -195,6 +190,10 @@ void OLEFilter::convert(const QString &dirname) {
             // unknown
             kdebug(KDEBUG_INFO, 31000, "unknown");
         }
+
+        // do the real work! (call filter-Method :) and save
+        // the part (correct name!)
+
         delete myFilter;
     }
 }

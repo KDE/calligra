@@ -63,7 +63,7 @@ public:
     const myFile stream(const long &handle);    // Note: data - 512 byte blocks, but
                                                 // length is set correctly :)
                                                 // make sure that you delete [] the data!
-    const QArray<long> find(const QString &name);
+    const QArray<long> find(const QString &name, const bool onlyCurrentDir=false);
 
     void testIt();                     // dump some info (similar to "lls"
                                        // of the LAOLA-project)
