@@ -37,7 +37,7 @@ VCanvas::viewportPaintEvent( QPaintEvent * )
 {
 	//kdDebug() << "VCanvas::viewportPaintEvent" << endl;
 	drawDocument( 0, QRect( 0, 0, width(), height() ) );
-	/*VPainter *p = VPainterFactory::painter();
+	/*VPainter *p = m_view->painterFactory()->painter();
 	p->end();*/
 }
 
@@ -52,12 +52,12 @@ VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 void
 VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 {
-	VPainter *p = VPainterFactory::painter();
+	VPainter *p = m_view->painterFactory()->painter();
 	p->begin();
 	QWMatrix mat;
 	mat.translate( -contentsX(), -contentsY() );
 	p->setWorldMatrix( mat );
-	//VPainter *p = VPainterFactory::painter( this, visibleWidth(), visibleHeight() );
+	//VPainter *p = m_view->painterFactory()->painter( this, visibleWidth(), visibleHeight() );
 	//erase( rect );
 
 	QPtrListIterator<VLayer> i = m_part->layers();
@@ -80,7 +80,7 @@ VCanvas::resizeEvent( QResizeEvent* event )
 {
 	QScrollView::resizeEvent( event );
 	drawContents( 0, 0, 0, width(), height() );
-    //VPainter *p = VPainterFactory::painter();
+    //VPainter *p = m_view->painterFactory()->painter();
     //p->end();
 }
 

@@ -28,18 +28,19 @@ VMToolSelect::~VMToolSelect()
 VMToolSelect*
 VMToolSelect::instance( KarbonPart* part )
 {
-	if ( s_instance == 0L )
-	{
-		s_instance = new VMToolSelect( part );
-	}
+	delete s_instance;
 
+	//if ( s_instance == 0L )
+	//{
+		s_instance = new VMToolSelect( part );
+	//}
 	return s_instance;
 }
 
 void
 VMToolSelect::drawTemporaryObject( KarbonView* view )
 {
-	VPainter *painter = VPainterFactory::editpainter();
+	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
 	// already selected, so must be a handle operation (move, scale etc.)

@@ -44,7 +44,7 @@ void
 VCToolStar::drawTemporaryObject(
 	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
-	VPainter *painter = VPainterFactory::editpainter();
+	VPainter *painter = view->painterFactory()->editpainter();
 	
 	VCCmdStar* cmd =
 		new VCCmdStar( part(),

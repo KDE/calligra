@@ -39,7 +39,7 @@ VMToolScale::instance( KarbonPart* part )
 void
 VMToolScale::drawTemporaryObject( KarbonView* view )
 {
-	VPainter *painter = VPainterFactory::editpainter();
+	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
 	QRect rect =  part()->selection().boundingBox( view->zoomFactor() );

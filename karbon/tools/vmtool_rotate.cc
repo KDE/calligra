@@ -40,7 +40,7 @@ VMToolRotate::instance( KarbonPart* part )
 void
 VMToolRotate::drawTemporaryObject( KarbonView* view )
 {
-	VPainter *painter = VPainterFactory::editpainter();
+	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
 	// already selected, so must be a handle operation (move, scale etc.)

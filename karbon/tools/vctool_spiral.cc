@@ -45,7 +45,7 @@ void
 VCToolSpiral::drawTemporaryObject(
 	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
-	VPainter *painter = VPainterFactory::editpainter();
+	VPainter *painter = view->painterFactory()->editpainter();
 	
 	VCCmdSpiral* cmd =
 		new VCCmdSpiral( part(),

@@ -44,7 +44,7 @@ void
 VCToolSinus::drawTemporaryObject(
 	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
-	VPainter *painter = VPainterFactory::editpainter();
+	VPainter *painter = view->painterFactory()->editpainter();
 	
 	VCCmdSinus* cmd =
 		new VCCmdSinus( part(), p.x(), p.y(), p.x() + d1, p.y() + d2,

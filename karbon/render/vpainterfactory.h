@@ -17,17 +17,17 @@ public:
 	VPainterFactory();
 	~VPainterFactory();
 
-	static VPainter *painter();
+	VPainter *painter();
 	void setPainter( QWidget *target, int w = 0, int h = 0 );
 
-	static VPainter *editpainter();
+	VPainter *editpainter();
 	void setEditPainter( QWidget *target, int w = 0, int h = 0 );
 
 	void setWireframePainter( QWidget *target, int w = 0, int h = 0 );
 
 private:
-	static VPainter *m_painter;
-	static VPainter *m_editpainter;
+	VPainter *m_painter;
+	VPainter *m_editpainter;
 };
 
 #endif

@@ -44,7 +44,7 @@ void
 VCToolRoundRect::drawTemporaryObject(
 	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
-	VPainter *painter = VPainterFactory::editpainter();
+	VPainter *painter = view->painterFactory()->editpainter();
 	
 	VCCmdRoundRect* cmd =
 		new VCCmdRoundRect( part(), p.x(), p.y(), p.x() + d1, p.y() + d2,

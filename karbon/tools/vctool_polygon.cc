@@ -43,7 +43,7 @@ void
 VCToolPolygon::drawTemporaryObject(
 	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
-	VPainter *painter = VPainterFactory::editpainter();
+	VPainter *painter = view->painterFactory()->editpainter();
 	
 	VCCmdPolygon* cmd =
 		new VCCmdPolygon( part(),

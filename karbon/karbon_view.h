@@ -39,6 +39,8 @@ public:
 
 	const double& zoomFactor() { return m_canvas->zoomFactor(); }
 
+	VPainterFactory *painterFactory() { return m_painterFactory; }
+
 protected slots:
 	// editing:
 	void editCut();

@@ -27,7 +27,7 @@ public:
 
 	KarbonPart* part() const { return m_part; }
 
-private:
+protected:
 	// that's our part:
 	KarbonPart* m_part;
 };

@@ -74,8 +74,8 @@ KarbonView::updateReadWrite( bool /*rw*/ )
 void
 KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 {
-	VPainterFactory::painter()->resize( width(), height() );
-	VPainterFactory::editpainter()->resize( width(), height() );
+	m_painterFactory->painter()->resize( width(), height() );
+	m_painterFactory->editpainter()->resize( width(), height() );
 	m_canvas->resize( width(), height() );
 }
 

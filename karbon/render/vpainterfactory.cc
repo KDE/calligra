@@ -9,11 +9,10 @@
 #include "vkopainter.h"
 #include "vqpainter.h"
 
-VPainter *VPainterFactory::m_painter = 0L;
-VPainter *VPainterFactory::m_editpainter = 0L;
-
 VPainterFactory::VPainterFactory()
 {
+	m_painter = 0L;
+	m_editpainter = 0L;
 }
 
 VPainterFactory::~VPainterFactory()
