@@ -13,10 +13,9 @@ Variables/fields
 ...
 
 === Abiword's rtftest.rtf test file ===
-word by word underline
-double strikeout
+word by word underline (error in the if?)
 shadow (RTF import problem)
-mixed underline/strikeout
+wave (RTF import problem?)
 ...
 
 === Old OOWriter To-Do List ===
@@ -36,7 +35,6 @@ Cursor position
 Document settings
 <FOOTNOTEMGR>, <START>, <FORMAT> as child of <FOOTNOTEMGR>, <FIRSTPARAG>
 <FORMAT id="5"> (footnote)
-<LINESPACE>
 Attachement #4318 of bug #16430 (tables...)
 Underline?
 ...

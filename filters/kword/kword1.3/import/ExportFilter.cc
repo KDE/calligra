@@ -718,13 +718,28 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 
     key += ',';
 
-    if ( force || (formatOrigin.strikeout != formatData.strikeout ) )
+    if ( force
+        || (formatOrigin.strikeout != formatData.strikeout )
+        || (formatOrigin.strikeoutType != formatData.strikeoutType ) )
     {
+        // OOWriter can only do single, double, thick (and slash and X that KWord cannot do.)
+        //  So no dash, dot and friends.
+
         strElement+="style:text-crossing-out=\"";
-        if ( formatData.strikeout )
+        if ( ( formatData.strikeoutType == "single" ) || ( formatData.strikeoutType == "1" ) )
         {
             strElement+="single-line";
-            key += "SL";
+            key += "1";
+        }
+        else if ( formatData.strikeoutType == "double" )
+        {
+            strElement+="double-line";
+            key += "2";
+        }
+        else if ( formatData.strikeoutType == "single-bold" )
+        {
+            strElement+="thick";
+            key += "T";
         }
         else
         {
