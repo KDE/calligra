@@ -67,7 +67,8 @@ KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
             parag = static_cast<KWTextParag *>(textdoc->createParag( textdoc, prevTOCParag /*prev*/, body /*next*/, true ));
             QString txt = p->string()->toString();
             txt = txt.left( txt.length() - 1 ); // remove trailing space
-            txt.prepend( p->counter()->text(p) );
+            if ( p->counter() )
+                txt.prepend( p->counter()->text(p) );
             parag->append( txt );
             prevTOCParag = parag;
 
@@ -102,7 +103,7 @@ KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
         }
 
         // Apply style
-        int depth = p->counter()->depth();    // we checked for p->counter() before putting in the map
+        int depth = p->counter() ? p->counter()->depth() : 0;
         KWStyle * tocStyle = findOrCreateTOCStyle( fs, depth );
         parag->setParagLayout( tocStyle->paragLayout() );
         parag->setFormat( 0, parag->string()->length(), & tocStyle->format() );
