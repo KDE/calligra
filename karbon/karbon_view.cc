@@ -1200,6 +1200,7 @@ KarbonView::selectionChanged()
 		m_setLineWidth->setEnabled( true );
 		m_setLineWidth->setValue( part()->document().selection()->objects().getFirst()->stroke()->lineWidth() );
 		m_objectDlg->enable();
+		m_objectDlg->update( m_part );
 	}
 	else
 	{

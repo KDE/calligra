@@ -24,6 +24,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <koMainWindow.h>
+#include <koRect.h>
 #include <koView.h>
 
 #include <tkfloatspinbox.h>
@@ -31,6 +32,8 @@
 #include "karbon_part.h"
 
 #include "vobjectdlg.h"
+#include "vselection.h"
+#include "vstrokecmd.h"
 
 VObjectDlg::VObjectDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	: QDockWindow( QDockWindow::OutsideDock, parent->shell() ), m_part ( part )
@@ -88,6 +91,26 @@ VObjectDlg::reset() //Show default values
 	m_Width->setValue( 0.00 );
 	m_Height->setValue( 0.00 );
 	m_setLineWidth->setValue( 0.0 );
+}
+
+void
+VObjectDlg::update( KarbonPart* part )
+{
+	if( part->document().selection()->objects().count() > 0 ) // there is a selection, so take the stroke of first selected object
+	{
+		m_X->setValue ( part->document().selection()->objects().getFirst()->boundingBox().left() );
+		m_Y->setValue ( part->document().selection()->objects().getFirst()->boundingBox().top() );
+		m_Width->setValue ( part->document().selection()->objects().getFirst()->boundingBox().width() );
+		m_Height->setValue ( part->document().selection()->objects().getFirst()->boundingBox().height() );
+		
+		m_stroke.setType ( part->document().selection()->objects().getFirst()->stroke()->type() );
+		m_stroke.setColor ( part->document().selection()->objects().getFirst()->stroke()->color() );
+		m_stroke.setLineWidth ( part->document().selection()->objects().getFirst()->stroke()->lineWidth() );
+		m_stroke.setLineCap ( part->document().selection()->objects().getFirst()->stroke()->lineCap() );   
+		m_stroke.setLineJoin ( part->document().selection()->objects().getFirst()->stroke()->lineJoin() );
+		m_stroke.setMiterLimit ( part->document().selection()->objects().getFirst()->stroke()->miterLimit() );
+		m_setLineWidth->setValue( m_stroke.lineWidth() );
+	}
 }
 
 #include "vobjectdlg.moc"
