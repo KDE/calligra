@@ -118,8 +118,8 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 		this, SLOT(slotBeforeCellChanged(KexiTableItem*,int,QVariant,KexiDB::ResultInfo*)));
 	connect(d->data, SIGNAL(rowUpdated(KexiTableItem*)),
 		this, SLOT(slotRowUpdated(KexiTableItem*)));
-	connect(d->data, SIGNAL(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*)),
-		this, SLOT(slotAboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*)));
+	connect(d->data, SIGNAL(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*,bool)),
+		this, SLOT(slotAboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*,bool)));
 
 	setMinimumSize(m_view->minimumSizeHint().width(),m_view->minimumSizeHint().height());
 	m_view->setFocus();
@@ -602,7 +602,7 @@ void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer &buf, KexiProp
 }
 
 void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* item, 
-	KexiDB::ResultInfo* /*result*/)
+	KexiDB::ResultInfo* /*result*/, bool /*repaint*/)
 {
 	setDirty();
 	//TODO

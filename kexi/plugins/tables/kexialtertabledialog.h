@@ -96,7 +96,7 @@ class KexiAlterTableDialog : public KexiDataTable
 		void slotRowUpdated(KexiTableItem *item);
 
 		//! Called before row inserting in tableview.
-		void slotAboutToInsertRow(KexiTableItem* item, KexiDB::ResultInfo* result);
+		void slotAboutToInsertRow(KexiTableItem* item, KexiDB::ResultInfo* result, bool repaint);
 
 		/*! Called after any property has been changed in the current property buffer, 
 		 to perform some actions (like updating other dependent properties) */
