@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include <qkeycode.h>
 #include <qtablevw.h>
@@ -35,6 +36,7 @@
 #include <qtstream.h>
 #include <qregexp.h>
 #include <qpixmap.h>
+#include <qclipbrd.h>
 
 #include <kapp.h>
 
@@ -61,7 +63,7 @@ class KTextObject;
  * best, if you only access methodes of the KTextObject.</b> 
  * @short Class for managing a textcursor.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.1
+ * @version 0.0.2
  */
 
 class TxtCursor
@@ -74,6 +76,11 @@ public:
   TxtCursor(KTextObject*);
   TxtCursor();
   //~TxtCursor() {}
+
+  /**
+   * Get the current character (to the right of the caret).
+   **/
+  char character();
 
   /**
    * Move the cursor a char forward.
@@ -141,14 +148,19 @@ public:
   void setPositionAbs(unsigned int pos);
 
   /**
-   * Set the absolute position of the cursor in a paragraph (calculated in chars).
+   * Set the position of the cursor in a paragraph (calculated in chars).
    */
   void setPositionParagraph(unsigned int paragraph,unsigned int pos);
 
   /**
+   * Set the position of the cursor in a line in a paragraph (calculated in chars).
+   */
+  void setPositionParagraph(unsigned int paragraph,unsigned int line,unsigned int pos);
+
+  /**
    * Set the absolute position of the cursor in a line (calculated in chars).
    */
-  void setPositionLine(unsigned int paragraph,unsigned int line,unsigned int pos);
+  void setPositionLine(unsigned int line,unsigned int pos);
 
   /**
    * Returns the cursorposition relative to the whole text.
@@ -267,7 +279,7 @@ protected:
  * best, if you only access methodes of the KTextObject.</b> 
  * @short Class for a single object in the KTextObject.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.1
+ * @version 0.0.2
  */
 
 class TxtObj
@@ -403,7 +415,7 @@ public:
   /**
    * Returns the position (in chars) at which pos (in pixels) is.
    */
-  int getPos(unsigned int pos); 
+  int getPos(int pos); 
 
 protected:
 
@@ -430,7 +442,7 @@ protected:
  * best, if you only access methodes of the KTextObject.</b> 
  * @short Class for a text line in the KTextObject.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.1
+ * @version 0.0.2
  */
 
 class TxtLine
@@ -510,19 +522,9 @@ public:
   void backspaceLastChar(unsigned int obj);
 
   /**
-   * Delete the text between <i>from</i> and <i>to</i>.
+   * Delete the text object at the position <i>pos</i>.
    */
-  void deleteRegion(unsigned int from,unsigned int to);
-
-  /**
-   * Delete the text object at the position <i>i</i>.
-   */
-  void deleteItem(unsigned int i) {objList.remove(i);}
-
-  /**
-   * change font, color and vertical alignment of a region.
-   */ 
-  void changeRegion(unsigned int from,unsigned int to,QFont,QColor,TxtObj::VertAlign);
+  void deleteItem(unsigned int pos) {objList.remove(pos);}
 
   /**
    * Returns the text object at the position <i>i</i>.
@@ -580,22 +582,42 @@ public:
   void splitObj(unsigned int pos);
 
   /**
-   * Returns the number of the text object, in which <i>pos</i> is. If <i>pos</i> is not in an text object,
+   * Returns the number of the text object, in which <i>pos</i> is. If <i>pos</i> is not in a text object,
    * return -1.
    */
-  int getInObj(unsigned int pos);
+  int getInObj(unsigned int pos,int *startpos = 0L);
 
   /**
-   * Returns the number of the text object, before which <i>pos</i> is. If <i>pos</i> is not before an text object,
+   * Returns the number of the text object, before which <i>pos</i> is. If <i>pos</i> is not before a text object,
    * return -1.
    */
-  int getBeforeObj(unsigned int pos);
+  int getBeforeObj(unsigned int pos,int *startpos = 0L);
 
   /**
-   * Returns the number of the text object, after which <i>pos</i> is. If <i>pos</i> is not after an text object,
+   * Returns the number of the text object, after which <i>pos</i> is. If <i>pos</i> is not after a text object,
    * return -1.
    */
-  int getAfterObj(unsigned int pos);
+  int getAfterObj(unsigned int pos,int *startpos = 0L);
+
+  /**
+   * Returns the text of a line.
+   */
+  QString getText() {return getPartOfText(0,lineLength());}
+
+  /**
+   * Returns the text of a part of a line.
+   */
+  QString getPartOfText(int _from,int _to);
+
+  /**
+   * Returns number of words in that line.
+   */
+  unsigned int words();
+
+  /**
+   * Returns the word at position <i>pos</i>. <i>ind</i> gives the index of the word.
+   */
+  QString wordAt(unsigned int pos,int &ind);
 
 protected:
 
@@ -618,7 +640,7 @@ protected:
  * best, if you only access methodes of the KTextObject.</b> 
  * @short Class for a text paragraph in the KTextObject.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.1
+ * @version 0.0.2
  */
 
 class TxtParagraph 
@@ -677,21 +699,6 @@ public:
   void append(TxtObj*);
 
   /**
-   * Delete the character at the given cursor position.
-   */ 
-  void deleteChar(TxtCursor);
-
-  /**
-   * Delete the region between the given cursor positions.
-   */
-  void deleteRegion(TxtCursor,TxtCursor);
-
-  /**
-   * Change the attributes for a region.
-   */
-  void changeRegion(TxtCursor,TxtCursor,QFont,QColor,TxtObj::VertAlign);
-
-  /**
    * Returns the text line at the position <i>i</i>.
    */
   TxtLine *lineAt(unsigned int i) {return lineList.at(i);}
@@ -746,6 +753,31 @@ public:
    */
   void doComposerMode(QColor,QFont,QColor,QFont);
 
+  /**
+   * Returns number of TxtObjs in the paragraph.
+   */
+  unsigned int items();
+
+  /**
+   * Returns number of words in that line.
+   */
+  unsigned int words();
+
+  /**
+   * Returns the TxtObj at the position <i>pos</i>
+   */
+  TxtObj* itemAt(unsigned int pos);
+
+  /**
+   * Returns the word at position <i>pos</i>. <i>ind</i> gives the index of the word.
+   */
+  QString wordAt(unsigned int pos,int &ind);
+
+  /**
+   * Delete a line.
+   */
+  void deleteLine(unsigned int pos) {lineList.remove(pos);}
+
 protected:
 
   unsigned int widthToNextSep(unsigned int);
@@ -786,7 +818,7 @@ protected:
  * Default is dynamically linebreaking.
  * @short A widget for editing rich text.
  * @author Reginald Stadlbauer <reggie@kde.org>
- * @version 0.0.1
+ * @version 0.0.2
  */
 
 class KTextObject : public QTableView
@@ -973,7 +1005,7 @@ public:
   /**
    * Set the current font.
    */
-  void setFont(QFont f) {currFont = f;}
+  void setFont(QFont f) {currFont = f; if (drawSelection) changeAttribs();}
 
   /**
    * Returns the current font.
@@ -983,7 +1015,7 @@ public:
   /**
    * Set the current color.
    */
-  void setColor(QColor c) {currColor = c;}
+  void setColor(QColor c) {currColor = c; if (drawSelection) changeAttribs();}
 
   /**
    * Returns the current color.
@@ -994,7 +1026,8 @@ public:
    * Set the horizontal alignment of the current paragraph. The current paragraph is the
    * paragraph, in which the cursor is. See @ref #TxtParagraph for more information.
    */
-  void setHorzAlign(TxtParagraph::HorzAlign,int p = -1);
+  void setHorzAlign(TxtParagraph::HorzAlign ha,int p = -1)
+    {changeHorzAlign(ha,p);};
   TxtParagraph::HorzAlign horzAlign(int p = -1);
 
   /**
@@ -1047,6 +1080,11 @@ public:
    * If linebreak is <i>true</i> for each linebreak a \n is used.
    */
   QString toASCII(bool linebreak=true);
+
+  /**
+   * For compatibility to QMultiLineEdit. It just calls @ref toASCII.
+   */
+  QString text(bool linebreak=true) {return toASCII(linebreak);}
 
   /**
    * Returns the text of the KTextObject as HTML-Text in a string.
@@ -1111,7 +1149,7 @@ public:
   /**
    * With this function you can switch on a composer mode. If the composer-mode is
    * on, all lines, which begin with a char out of '>:|' will be displayed in <i>quoted_color</i>
-   * and </i>quoted_font</i>. The rest is displayed in <i>normal_color<i> and <i>normal_font</i>. 
+   * and <i>quoted_font</i>. The rest is displayed in <i>normal_color</i> and <i>normal_font</i>. 
    */
   void enableComposerMode(QColor quoted_color,QFont quoted_font,QColor normal_color,QFont normal_font);
 
@@ -1119,6 +1157,376 @@ public:
    * With this function you can switch off the composer mode.
    */
   void disableComposerMode() {composerMode = false;}
+
+  /**
+   * Returns a part of the text.
+   */
+  QString getPartOfText(TxtCursor*,TxtCursor*);
+
+  /**
+   * Copy selection to clipboard.
+   */
+  void copyRegion();
+
+  /**
+   * Copy selection to clipboard and delete selection (=cut).
+   */
+  void cutRegion();
+
+  /**
+   * Paste text form clipboard.
+   */
+  void paste();
+
+  /**
+   * Returns the number of TxtObjs in the KTextObject. <b>NOTE:</b> A TxtObj isn't a word. A
+   * Word may consist of many TxtObs. To get the number of words, call @ref words.
+   */
+  unsigned int items();
+
+  /**
+   * Returns the number of TxtObjs in the line <i>line</i>.
+   */
+  unsigned int itemsInLine(int line);
+
+  /**
+   * Returns the number of TxtObjs in the line <i>line</i> in the paragraph <i>para</i>.
+   */
+  unsigned int itemsInLine(int line,int para);
+
+  /**
+   * Returns the number of TxtObjs in the paragraph <i>para</i>.
+   */
+  unsigned int itemsInParagraph(int para);
+
+  /**
+   * Returns the number of words in the KTextObject.
+   */
+  unsigned int words();
+
+  /**
+   * Returns the number of words in the line <i>line</i>.
+   */
+  unsigned int wordsInLine(int line);
+
+  /**
+   * Returns the number of words in the line <i>line</i> in the paragraph <i>para</i>.
+   */
+  unsigned int wordsInLine(int line,int para);
+
+  /**
+   * Returns the number of words in the paragraph <i>para</i>.
+   */
+  unsigned int wordsInParagraph(int para);
+
+  /**
+   * Returns the number of lines.
+   */
+  unsigned int lines();
+
+  /**
+   * Returns the number of lines in the paragraph <i>para</i>.
+   */
+  unsigned int linesInParagraph(int para);
+
+  /**
+   * Returns a pointer to the TxtObj at the position <i>pos</i> in the KTextObject.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the TxtObj number <i>pos</i>.
+   */
+  TxtObj* itemAt(int pos);
+
+  /**
+   * Returns a pointer to the TxtObj at the position <i>pos</i> in the line <i>line</i>.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the TxtObj number <i>pos</i>.
+   */
+  TxtObj* itemAtLine(int pos,int line);
+
+  /**
+   * Returns a pointer to the TxtObj at the position <i>pos</i> in the paragraph <i>para</i>.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the TxtObj number <i>pos</i>.
+   */
+  TxtObj* itemAtPara(int pos,int para);
+
+  /**
+   * Returns a pointer to the TxtObj at the position <i>pos</i> in the line <i>line</i><br>
+   * in the paragraph <i>para</i>.
+   * <i>pos</i> is <b>not</b> given in chars, it's the TxtObj number <i>pos</i>.
+   */
+  TxtObj* itemAt(int pos,int line,int para);
+
+
+  /**
+   * Returns the text of the word at the position <i>pos</i> in the KTextObject.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the word number <i>pos</i>. <i>ind</i> gives the index of the word.
+   */
+  QString wordAt(int pos,int &ind);
+
+  /**
+   * Returns the text of the word at the position <i>pos</i> in the line <i>line</i>.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the word number <i>pos</i>. <i>ind</i> gives the index of the word.
+   */
+  QString wordAtLine(int pos,int line,int &ind);
+
+  /**
+   * Returns the text of the word at the position <i>pos</i> in the paragraph <i>para</i>.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the word number <i>pos</i>. <i>ind</i> gives the index of the word.
+   */
+  QString wordAtPara(int pos,int para,int &ind);
+
+  /**
+   * Returns the text of the word at the position <i>pos</i> in the line <i>line</i>
+   * in the paragraph <i>para</i>.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the word number <i>pos</i>n. <i>ind</i> gives the index of the word.
+   */
+  QString wordAt(int pos,int line,int para,int &ind);
+
+  /**
+   * Returns a pointer to the line <i>line</i>.
+   */
+  TxtLine* lineAt(int line);
+
+  /**
+   * Returns a pointer to the line <i>line</i> in the paragraph <i>para</i>.
+   */
+  TxtLine* lineAt(int line,int para);
+
+  /**
+   * Returns the region between <i>_startCursor</i> and <i>_stopCursor</i>. The region
+   * is packed into a list of TxtObjs.
+   */
+  QList<TxtObj>* regionAt(TxtCursor *_startCursor,TxtCursor *_stopCursor);
+
+  /**
+   * Delete the TxtObj at position <i>pos</i>.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the word number <i>pos</i>n.
+   */
+  void deleteItem(int pos);
+
+  /**
+   * Delete the TxtObj in the line <i>line</i> at position <i>pos</i>.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the word number <i>pos</i>n.
+   */
+  void deleteItemInLine(int pos,int line);
+
+  /**
+   * Delete the TxtObj in the paragraph <i>para</i> at position <i>pos</i>.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the word number <i>pos</i>n.
+   */
+  void deleteItemInPara(int pos,int para);
+
+  /**
+   * Delete the TxtObj in the paragraph <i>para</i> in the line <i>line</i> at position <i>pos</i>.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the word number <i>pos</i>n.
+   */
+  void deleteItem(int pos,int line,int para);
+
+  /**
+   * Delete the word at position <i>pos</i>.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the word number <i>pos</i>n.
+   */
+  void deleteWord(int pos);
+
+  /**
+   * Delete the word in the line <i>line</i> at position <i>pos</i>.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the word number <i>pos</i>n.
+   */
+  void deleteWordInLine(int pos,int line);
+
+  /**
+   * Delete the word in the paragraph <i>para</i> at position <i>pos</i>.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the word number <i>pos</i>n.
+   */
+  void deleteWordInPara(int pos,int para);
+
+  /**
+   * Delete the word in the paragraph <i>para</i> in the line <i>line</i> at position <i>pos</i>.<br>
+   * <i>pos</i> is <b>not</b> given in chars, it's the word number <i>pos</i>n.
+   */
+  void deleteWord(int pos,int line,int para);
+
+  /**
+   * Delete the line <i>line</i>.
+   */
+  void deleteLine(int line);
+
+  /**
+   * Delete the line <i>line</i> in the paragraph <i>para</i>.
+   */
+  void deleteLine(int line,int para);
+
+  /**
+   * Delete the paragraph <i>para</i>.
+   */
+  void deleteParagraph(int para);
+
+  /**
+   * Delete the region between <i>_startCursor</i> and <i>_stopCursor</i>.
+   */
+  void deleteRegion(TxtCursor *_startCursor,TxtCursor *_stopCursor);
+
+  /**
+   * Insert the text <i>text</i> at the position <i>pos</i> (given in words). 
+   * The text is written in the font <i>font</i> and the color <i>color</i>.
+   */
+  void insertText(QString text,int pos,QFont font,QColor color);
+
+  /**
+   * Insert the text <i>text</i> in the line <i>line</i> at the position <i>pos</i> (given in words). 
+   * The text is written in the font <i>font</i> and the color <i>color</i>.
+   */
+  void insertTextInLine(QString text,int pos,int line,QFont font,QColor color);
+
+  /**
+   * Insert the text <i>text</i> in the paragraph <i>para</i> at the position <i>pos</i> (given in words). 
+   * The text is written in the font <i>font</i> and the color <i>color</i>.
+   */
+  void insertTextInPara(QString text,int pos,int para,QFont font,QColor color);
+
+  /**
+   * Insert the text <i>text</i> in the line <i>line</i> in the paragraph <i>para</i> at the position <i>pos</i> (given in words). 
+   * The text is written in the font <i>font</i> and the color <i>color</i>.
+   */
+  void insertText(QString text,int pos,int line,int para,QFont font,QColor color);
+
+  /**
+   * Insert the text <i>text</i> at the cursor position <i>_cursor</i>. The text is written in the font <i>font</i>
+   * and the color <i>color</i>.
+   */
+  void insertText(QString text,TxtCursor *_cursor,QFont font,QColor color);
+
+  /**
+   * Insert items <i>items</i> at the position <i>pos</i> (given in items).
+   */
+  void insertItems(QList<TxtObj> *items,int pos);
+
+  /**
+   * Insert items <i>items</i> at the position <i>pos</i> (given in items) in the line <i>line</i>.
+   */
+  void insertItemsInLine(QList<TxtObj> *items,int pos,int line);
+
+  /**
+   * Insert items <i>items</i> at the position <i>pos</i> (given in items) in the paragraph <i>para</i>.
+   */
+  void insertItemsInPara(QList<TxtObj> *items,int pos,int para);
+
+  /**
+   * Insert items <i>items</i> at the position <i>pos</i> (given in items) in the line <i>line</i> in the
+   * paragraph <i>para</i>.
+   */
+  void insertItems(QList<TxtObj> *items,int pos,int line,int para);
+
+  /**
+   * Insert items <i>items</i> at the cursor position <i>_cursor</i>.
+   */
+  void insertItems(QList<TxtObj> *items,TxtCursor *_cursor,bool redraw=true);
+
+  /**
+   * Replace <i>len</i> items beginning at position <i>pos</i> (given in items) with <i>items</i>.
+   */
+  void replaceItems(QList<TxtObj> *items,int pos,int len);
+
+  /**
+   * Replace <i>len</i> items beginning at position <i>pos</i> (given in items) in the line <i>line</i> with <i>items</i>.
+   */
+  void replaceItemsInLine(QList<TxtObj> *items,int pos,int line,int len);
+
+  /**
+   * Replace <i>len</i> items beginning at position <i>pos</i> (given in items) in the paragraph <i>para</i> with <i>items</i>.
+   */
+  void replaceItemsInPara(QList<TxtObj> *items,int pos,int para,int len);
+
+  /**
+   * Replace <i>len</i> items beginning at position <i>pos</i> (given in items) int the line <i>line</i>
+   * in the paragraph <i>para</i> with <i>items</i>.
+   */
+  void replaceItems(QList<TxtObj> *items,int pos,int line,int para,int len);
+
+  /**
+   * Replace the word at position <i>pos</i> with the text <i>text</i>.
+   * The text is written in the font <i>font</i> and the color <i>color</i>.
+   */
+  void replaceWord(QString text,int pos,QFont font,QColor color);
+
+  /**
+   * Replace the word at position <i>pos</i> in the line <i>line</i> with the text <i>text</i>.
+   * The text is written in the font <i>font</i> and the color <i>color</i>.
+   */
+  void replaceWordInLine(QString text,int pos,int line,QFont font,QColor color);
+
+  /**
+   * Replace the word at position <i>pos</i> in the paragraph <i>para</i> with the text <i>text</i>.
+   * The text is written in the font <i>font</i> and the color <i>color</i>.
+   */
+  void replaceWordInPara(QString text,int pos,int para,QFont font,QColor color);
+
+  /**
+   * Replace the word at position <i>pos</i> in the line <i>line</i> in the paragraph <i>para</i> with the text <i>text</i>.
+   * The text is written in the font <i>font</i> and the color <i>color</i>.
+   */
+  void replaceWord(QString text,int pos,int line,int para,QFont font,QColor color);
+
+  /**
+   * Replace region between the cursors <i>_startCursor</i> and <i>_stopCursor</i> with the
+   * items <i>items</i>.
+   */
+  void replaceRegion(QList<TxtObj> *items,TxtCursor *_startCursor,TxtCursor *_stopCursor);
+
+  /**
+   * Replace region between the cursors <i>_startCursor</i> and <i>_stopCursor</i> with the
+   * text <i>text</i>. The text is written with the font <i>font</i> and the color <i>color</i>.
+   */
+  void replaceRegion(QString text,TxtCursor *_startCursor,TxtCursor *_stopCursor,QFont font,QColor color);
+
+  /**
+   * Change the attributes of the text between <i>_startCursor</i> and <i>_stopCursor</i> to <i>font</i> and <i>color</i>.
+   */
+  void changeRegionAttribs(TxtCursor *_startCursor,TxtCursor *_stopCursor,QFont font,QColor color);
+
+  /**
+   * Change the alignment of the paragraphs between <i>_startCursor</i> and <i>_stopCursor</i> to <i>align</i>.
+   */
+  void changeRegionAlign(TxtCursor *_startCursor,TxtCursor *_stopCursor,TxtParagraph::HorzAlign _align);
+
+  /**
+   * Returns absolute position (<i>x1</i> and <i>x2</i>) of the word at position <i>pos</i> in chars.
+   */
+  void getAbsPosOfWord(int pos,int &x1,int &x2);
+
+  /**
+   * Returns absolute position (<i>x1</i> and <i>x2</i>) of the word at position <i>pos</i> in the line <i>line</i> in chars.
+   */
+  void getAbsPosOfWordInLine(int pos,int line,int &x1,int &x2);
+
+  /**
+   * Returns absolute position (<i>x1</i> and <i>x2</i>) of the word at position <i>pos</i> in the paragraph <i>para</i> in chars.
+   */
+  void getAbsPosOfWordInPara(int pos,int para,int &x1,int &x2);
+
+  /**
+   * Returns absolute position (<i>x1</i> and <i>x2</i>) of the word at position <i>pos</i> in the line <i>line</i>
+   * in the paragraph <i>para</i> in chars.
+   */
+  void getAbsPosOfWord(int pos,int line,int para,int &x1,int &x2);
+
+  /**
+   * Returns the line, in which <i>pos</i> is.
+   */
+  void getLine(int &pos,int &line);
+
+  /**
+   * Returns the line in the paragraph <i>para</i>, in which <i>pos</i> is.
+   */
+  void getLine(int &pos,int para,int &line);
+
+  /**
+   * Returns the paragraph, in which <i>line</i> is.
+   */
+  void getPara(int &line,int &para);
+
+  /**
+   * Returns the paragraph and the line in this paragraph, in which <i>pos</i> is.
+   */
+  void getPara(int &pos,int &line,int &para);
 
 signals:
 
@@ -1216,6 +1624,9 @@ protected:
   bool selectFull(int,int,int,int&,int&);
   void redrawSelection(TxtCursor,TxtCursor);
 
+  void changeAttribs();
+  void changeHorzAlign(TxtParagraph::HorzAlign,int);
+  void _setHorzAlign(TxtParagraph::HorzAlign,int);
   //*********** variables ***********
 
   TxtCursor *txtCursor;

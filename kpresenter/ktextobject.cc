@@ -45,6 +45,25 @@ TxtCursor::TxtCursor()
   _xpos = 0;
 }
 
+/*====================== character ===============================*/
+char TxtCursor::character()
+{
+  int obj,i,pos0 = 0;
+  
+  calcPos(); //maybe remove later
+  
+  i = positionInLine();
+  obj = linePtr->getInObj(i,&pos0);
+
+  if (obj == -1)
+    obj = linePtr->getBeforeObj(i,&pos0);
+  
+  if (obj == -1) //end of line or paragraph
+    return 0;
+  
+  return linePtr->itemAt(obj)->text().at(i - pos0);
+}
+
 /*==================== cursor char forward =======================*/
 void TxtCursor::charForward()
 {
@@ -141,11 +160,52 @@ void TxtCursor::lineDown()
 /*==================== cursor word forward =======================*/
 void TxtCursor::wordForward()
 {
+  char c;
+
+  c = character();
+  if (c == 0)
+    {
+      charForward();
+      c = character();
+    }
+  
+  while (isspace(c) && c != 0 && positionAbs() < objMaxPos - 1)
+    {
+      charForward();
+      c = character();
+    }
+  
+  while (!isspace(c) && c != 0  && positionAbs() < objMaxPos - 1)
+    {
+      charForward();
+      c = character();
+    }
 }
 
 /*=================== cursor word backward =======================*/
 void TxtCursor::wordBackward()
 {
+  char c;
+  
+  c = character();
+  
+  do
+    {
+      charBackward();
+      c = character();
+    }  
+  while (isspace(c) && c != 0 && positionAbs() > 0);
+  
+  
+  do
+    {
+      charBackward();
+      c = character();
+    }  
+  while (!isspace(c) && c != 0 && positionAbs() > 0);
+  
+  if (isspace(c) || c == 0)
+    charForward();
 }
 
 /*==================== cursor line forward =======================*/
@@ -188,11 +248,46 @@ void TxtCursor::setPositionAbs(unsigned int pos)
 /*================== set position in a paragraph =================*/
 void TxtCursor::setPositionParagraph(unsigned int paragraph,unsigned int pos)
 {
+  absPos = 0;
+  int i;
+
+  for (i = 0;i < paragraph;i++)
+    absPos += txtObj->paragraphAt(i)->paragraphLength();
+
+  absPos += pos;
+
+  calcPos();
+}
+
+/*================== set position in a paragraph =================*/
+void TxtCursor::setPositionParagraph(unsigned int paragraph,unsigned int line,unsigned int pos)
+{
+  absPos = 0;
+  int i;
+
+  for (i = 0;i < paragraph;i++)
+    absPos += txtObj->paragraphAt(i)->paragraphLength();
+
+  for (i = 0;i < line;i++)
+    absPos += txtObj->paragraphAt(paragraph)->lineAt(i)->lineLength();
+
+  absPos += pos;
+
+  calcPos();
 }
 
 /*================== set position in a line ======================*/
-void TxtCursor::setPositionLine(unsigned int paragraph,unsigned int line,unsigned int pos)
+void TxtCursor::setPositionLine(unsigned int line,unsigned int pos)
 {
+  absPos = 0;
+  int i;
+
+  for (i = 0;i < line;i++)
+    absPos += txtObj->lineAt(i)->lineLength();
+
+  absPos += pos;
+
+  calcPos();
 } 
 
 /*============== calculate the position of the cursor ============*/
@@ -313,19 +408,22 @@ unsigned int TxtObj::descent()
 }
 
 /*======================= get psoition in object =================*/
-int TxtObj::getPos(unsigned int pos)
+int TxtObj::getPos(int pos)
 {
   QFontMetrics fm(objFont);
-  unsigned int w = 0;
+  int w = 0;
 
-  for (unsigned int i = 0;i < objText.length();i++)
+  for (int i = 0;i < objText.length();i++)
     {
-      if (pos >= w && pos <= w + fm.width((const char*)objText.mid(i,1)))
+      if (pos >= w && pos <= w + fm.width(objText[i]))
 	return i;
-      w += fm.width((const char*)objText.mid(i,1));
+	  
+      w += fm.width(objText[i]);
     }
+
   return -1;
 }
+
 /******************************************************************/
 /* class TxtLine - Text Line                                      */
 /******************************************************************/
@@ -395,9 +493,7 @@ void TxtLine::backspaceChar(unsigned int pos)
   if (obj != -1)
     {
       unsigned int relPos,i,w = 0;
-//       TxtObj *obj1 = new TxtObj();
-//       TxtObj *obj2 = new TxtObj();
-      
+
       // get the cursor position relative to the object 
       for (i = 0;i < obj;i++)
 	w += itemAt(i)->textLength();
@@ -416,17 +512,6 @@ void TxtLine::backspaceLastChar(unsigned int obj)
       itemAt(obj)->deleteChar(itemAt(obj)->textLength()-1);
       if (itemAt(obj)->textLength() == 0) objList.remove(obj);
     }
-}
-
-/*===================== delete region ============================*/
-void TxtLine::deleteRegion(unsigned int from,unsigned int to)
-{
-}
-
-/*================== change effects of a region ==================*/
-void TxtLine::changeRegion(unsigned int from,unsigned int to,QFont f,QColor c,
-			   TxtObj::VertAlign va)
-{
 }
 
 /*=================== get length of the line =====================*/
@@ -547,7 +632,7 @@ void TxtLine::splitObj(unsigned int pos)
 }
 
 /*=============== get position in an object ======================*/
-int TxtLine::getInObj(unsigned int pos)
+int TxtLine::getInObj(unsigned int pos, int *startpos=0)
 {
   unsigned int i,obj = 0,objNum = 0;
 
@@ -561,6 +646,10 @@ int TxtLine::getInObj(unsigned int pos)
       if (i == obj+objList.at(objNum)->textLength())
 	{
 	  obj = i;
+
+	  if (startpos != 0)
+	    *startpos = obj;
+	  
 	  objNum++;
 	  if (pos == i) return -1;
 	}
@@ -574,7 +663,7 @@ int TxtLine::getInObj(unsigned int pos)
 }
 
 /*============== get position before an object ===================*/
-int TxtLine::getBeforeObj(unsigned int pos)
+int TxtLine::getBeforeObj(unsigned int pos, int *startpos=0L)
 {
   unsigned int i,obj = 0,objNum = 0;
 
@@ -591,6 +680,10 @@ int TxtLine::getBeforeObj(unsigned int pos)
       if (i == obj+objList.at(objNum)->textLength())
 	{
 	  obj += objList.at(objNum)->textLength();
+
+	  if (startpos != 0)
+	    *startpos = obj;
+
 	  objNum++;
 	  if (pos == i && i < lineLength()-1) return objNum;
 	}
@@ -600,7 +693,7 @@ int TxtLine::getBeforeObj(unsigned int pos)
 }
 
 /*=============== get position after an object ===================*/
-int TxtLine::getAfterObj(unsigned int pos)
+int TxtLine::getAfterObj(unsigned int pos, int *startpos=0L)
 {
   unsigned int i,obj = 0,objNum = 0;
 
@@ -613,6 +706,9 @@ int TxtLine::getAfterObj(unsigned int pos)
       // if we are at the end of an object 
       if (i == obj+objList.at(objNum)->textLength())
 	{
+	  if (startpos != 0)
+	    *startpos = obj;
+
 	  obj += objList.at(objNum)->textLength();
 	  if (pos == i && i > 0) return objNum;
 	  objNum++;
@@ -620,6 +716,85 @@ int TxtLine::getAfterObj(unsigned int pos)
     }
 
   return -1;
+}
+
+/*============== get text of a part of the line ==================*/
+QString TxtLine::getPartOfText(int _from,int _to)
+{
+  QString str;
+  int currPos = 0;
+  int _f,_t;
+
+  for (int i = 0;i < items();i++)
+    {
+      _f = _from - currPos;
+      _f = _f > 0 ? _f : 0;
+      _f = _f < itemAt(i)->textLength() ? _f : itemAt(i)->textLength();
+      _t = _to - currPos;
+      _t = _t > 0 ? _t : 0;
+      _t = _t < itemAt(i)->textLength() ? _t : itemAt(i)->textLength();
+      str.append(itemAt(i)->text().mid(_f,_t - _f));
+
+      currPos += itemAt(i)->textLength();
+    }
+
+  str.append("\n");
+  return str;
+}
+
+/*===================== get number of words ======================*/
+unsigned int TxtLine::words()
+{
+  unsigned int _words = 0,_ind,ind;
+
+  QString str = getText();
+  str = str.simplifyWhiteSpace();
+  if (!str.isEmpty())
+    {
+      ind = 0;
+      while (true)
+	{
+	  _ind = str.find(" ",ind);
+	  if (_ind == -1) break;
+	  _words++;
+	  ind = _ind + 1;
+	}
+      _words++;
+    }
+  
+  return _words;
+}
+
+/*======================= get word ===============================*/
+QString TxtLine::wordAt(unsigned int pos,int &ind)
+{
+  if (pos < words())
+    {
+      QString str = getText();
+      int _word = 0,_ind;
+      ind = 0;
+
+      str = str.simplifyWhiteSpace();
+
+      if (!str.isEmpty())
+	{
+	  str.append(" ");
+	  ind = 0;
+	  while (true)
+	    {
+	      _ind = str.find(" ",ind);
+
+	      if (_ind == -1) break;
+
+	      if (_word == pos) return str.mid(ind,_ind - ind);
+	      
+	      _word++;
+	      ind = _ind + 1;
+	    }
+	}
+    }
+  
+  return QString("");
 }
 
 /******************************************************************/
@@ -666,16 +841,12 @@ void TxtParagraph::append(char text,QFont f,QColor c,TxtObj::VertAlign va)
 /*====================== insert a line ===========================*/
 void TxtParagraph::insert(unsigned int i,TxtLine *l)
 {
-//   lin = new TxtLine();
-//   lin->operator=(l);
   lineList.insert(i,l);
 }
 
 /*====================== append a line ===========================*/
 void TxtParagraph::append(TxtLine *l)
 {
-//   lin = new TxtLine();
-//   lin->operator=(l);
   lineList.append(l);
 }
 
@@ -695,22 +866,6 @@ void TxtParagraph::append(TxtObj* to)
 
   lineList.at(lineList.count()-1)->append((const char*)to->text(),to->font(),
 					  to->color(),to->vertAlign(),to->type());
-}
-
-/*===================== delete character =========================*/
-void TxtParagraph::deleteChar(TxtCursor pos)
-{
-}
-
-/*===================== delete region ============================*/
-void TxtParagraph::deleteRegion(TxtCursor from,TxtCursor to)
-{
-}
-
-/*================== change effects of a region ==================*/
-void TxtParagraph::changeRegion(TxtCursor from,TxtCursor to,QFont f,
-				QColor c,TxtObj::VertAlign va)
-{
 }
 
 /*============= return textlength of the paragraph ===============*/
@@ -924,6 +1079,76 @@ void TxtParagraph::doComposerMode(QColor quoted_color,QFont quoted_font,QColor n
     }
 }
 
+/*==================== get number of TxtObjs =====================*/
+unsigned int TxtParagraph::items()
+{
+  unsigned int _items = 0;
+
+  if (!lineList.isEmpty())
+    {
+      for (int i = 0;i < lineList.count();i++)
+	_items += lineList.at(i)->items();
+    }
+  
+  return _items;
+}
+
+/*=================== get number of words ========================*/
+unsigned int TxtParagraph::words()
+{
+  unsigned int _words = 0;
+
+  if (!lineList.isEmpty())
+    {
+      for (int i = 0;i < lineList.count();i++)
+	_words += lineList.at(i)->words();
+    }
+  
+  return _words;
+}
+
+/*====================== get TxtObj ==============================*/
+TxtObj* TxtParagraph::itemAt(unsigned int pos)
+{
+  int _item = 0; 
+  
+  if (!lineList.isEmpty())
+    {
+      for (int i = 0;i < lines();i++)
+	{
+	  if (pos < _item + lineAt(i)->items())
+	    {
+	      pos -= _item;
+	      return lineAt(i)->itemAt(pos);
+	    }
+	  else _item += lineAt(i)->items();
+	}
+    }
+}
+
+/*======================= get word ===============================*/
+QString TxtParagraph::wordAt(unsigned int pos,int &ind)
+{
+  int _word = 0;
+  ind = 0;
+
+  if (pos < words() && !lineList.isEmpty())
+    {
+      for (int i = 0;i < lines();i++)
+	{
+	  if (pos < _word + lineAt(i)->words())
+	    {
+	      pos -= _word;
+	      QString r = lineAt(i)->wordAt(pos,ind);
+	      return r;
+	    }
+	  else _word += lineAt(i)->words();
+	}
+    }
+
+  return QString("");
+}
+
 /*============= with from an obj to next separator ===============*/
 unsigned int TxtParagraph::widthToNextSep(unsigned int pos)
 {
@@ -1044,15 +1269,6 @@ unsigned int KTextObject::textLength()
     l += paragraphPtr->paragraphLength();
 
   return l;
-}
-
-/*==================== set horizontal alignemnt ==================*/
-void KTextObject::setHorzAlign(TxtParagraph::HorzAlign ha,int p = -1)
-{
-  if (p == -1) p = txtCursor->positionParagraph();
-
-  paragraphAt(p)->setHorzAlign(ha);
-  updateCell(p,0,false);
 }
 
 /*==================== get horizontal alignemnt ==================*/
@@ -1920,6 +2136,1277 @@ void KTextObject::enableComposerMode(QColor quoted_color,QFont quoted_font,QColo
   repaint(false);
 }
 
+/*===================== get part of text =========================*/
+QString KTextObject::getPartOfText(TxtCursor *_from,TxtCursor *_to)
+{
+  QString str;
+  int para1 = _from->positionParagraph();
+  int line1 = _from->positionLine();
+  int pos1 = _from->positionInLine();
+  int para2 = _to->positionParagraph();
+  int line2 = _to->positionLine();
+  int pos2 = _to->positionInLine();
+  int i,j,fromLine,toLine,fromPos,toPos;
+
+  for (i = para1;i <= para2;i++)
+    {
+      paragraphPtr = paragraphAt(i);
+      
+      fromLine = 0;
+      toLine = paragraphPtr->lines() - 1;
+      if (para1 == i) fromLine = line1;
+      if (para2 == i) toLine = line2;
+
+      for (j = fromLine;j <= toLine;j++)
+	{
+	  linePtr = paragraphPtr->lineAt(j);
+
+	  fromPos = 0;
+	  toPos = linePtr->lineLength();
+	  if (para1 == i && line1 == j) fromPos = pos1;
+	  if (para2 == i && line2 == j) toPos = pos2;
+	  
+	  str.append(linePtr->getPartOfText(fromPos,toPos));
+	}
+    }
+	  
+  if (str.right(1) == "\n") str.truncate(str.length() - 1);
+  return str;
+}
+
+/*====================== copy region =============================*/
+void KTextObject::copyRegion()
+{
+  if (drawSelection && stopCursor.positionAbs() != startCursor.positionAbs())
+    {
+      QString buffer = getPartOfText(&startCursor,&stopCursor);
+
+      QClipboard *cb = QApplication::clipboard();
+      cb->setText((const char*)buffer);
+    }
+}
+
+/*====================== cut region =============================*/
+void KTextObject::cutRegion()
+{
+  if (drawSelection && stopCursor.positionAbs() != startCursor.positionAbs())
+    {
+      QString buffer = getPartOfText(&startCursor,&stopCursor);
+
+      QClipboard *cb = QApplication::clipboard();
+      cb->setText((const char*)buffer);
+
+      deleteRegion(&startCursor,&stopCursor);
+    }
+}
+
+/*======================= paste from clipboard ===================*/
+void KTextObject::paste()
+{
+  QClipboard *cb = QApplication::clipboard();
+  if (cb->text())
+    insertText(cb->text(),txtCursor,currFont,currColor);
+}
+
+/*================== get number of TxtObjs =======================*/
+unsigned int KTextObject::items()
+{
+  unsigned int _items = 0;
+
+  for (int i = 0;i < paragraphs();i++)
+    {
+      for (int j = 0;j < paragraphAt(i)->lines();j++)
+	_items += paragraphAt(i)->lineAt(j)->items();
+    }
+
+  return _items;
+}
+
+/*=================== get number of TxtObjs  in a line ===========*/
+unsigned int KTextObject::itemsInLine(int line)
+{
+  if (line < lines())
+    return lineAt(line)->items();
+
+  return 0;
+}
+
+/*========== get number of TxtObjs in a line in a para ===========*/
+unsigned int KTextObject::itemsInLine(int line,int para)
+{
+  if (para < paragraphs() && line < paragraphAt(para)->lines())
+    return paragraphAt(para)->lineAt(line)->items();
+  return 0;
+}
+
+/*=================== get number of TxtObjs in a para ============*/
+unsigned int KTextObject::itemsInParagraph(int para)
+{
+  if (para < paragraphs())
+    return paragraphAt(para)->items();
+  return 0;
+}
+
+/*==================== get number of words =======================*/
+unsigned int KTextObject::words()
+{
+  unsigned int _words = 0;
+  QString str;
+  int ind,_ind;
+
+  for (int i = 0;i < paragraphs();i++)
+    {
+      for (int j = 0;j < paragraphAt(i)->lines();j++)
+	{
+	  str = paragraphAt(i)->lineAt(j)->getText();
+	  str = str.simplifyWhiteSpace();
+	  if (!str.isEmpty())
+	    {
+	      ind = 0;
+	      while (true)
+		{
+		  _ind = str.find(" ",ind);
+		  if (_ind == -1) break;
+		  _words++;
+		  ind = _ind + 1;
+		}
+	      _words++;
+	    }
+	}
+    }
+
+  return _words;
+}
+
+/*=================== get number of words in a line ==============*/
+unsigned int KTextObject::wordsInLine(int line)
+{
+  if (line < lines())
+    return lineAt(line)->words();
+
+  return 0;
+}
+
+/*========== get number of words in a line in a para =============*/
+unsigned int KTextObject::wordsInLine(int line,int para)
+{
+  if (para < paragraphs() && line < paragraphAt(para)->lines())
+    return paragraphAt(para)->lineAt(line)->words();
+
+  return 0;
+}
+
+/*=================== get number of words in a para ==============*/
+unsigned int KTextObject::wordsInParagraph(int para)
+{
+  if (para < paragraphs())
+    return paragraphAt(para)->words();
+
+  return 0;
+}
+
+/*================== get number of lines =========================*/
+unsigned int KTextObject::lines()
+{
+  unsigned int _lines = 0;
+
+  for (int i = 0;i < paragraphs();i++)
+    _lines += paragraphAt(i)->lines();
+  
+  return _lines;
+}
+
+/*=================== get number of lines in a para ==============*/
+unsigned int KTextObject::linesInParagraph(int para)
+{
+  if (para < paragraphs())
+    return paragraphAt(para)->lines();
+
+  return 0;
+}
+
+/*==================== get TxtObj ================================*/
+TxtObj* KTextObject::itemAt(int pos)
+{
+  if (pos < items())
+    {
+      int _item = 0; 
+
+      for (int i = 0;i < paragraphs();i++)
+	{
+	  if (pos < _item + paragraphAt(i)->items())
+	    {
+	      pos -= _item;
+	      return paragraphAt(i)->itemAt(pos);
+	    }
+	  else _item += paragraphAt(i)->items();
+	}
+    }
+
+  return 0;
+}
+
+/*==================== get TxtObj ================================*/
+TxtObj* KTextObject::itemAtLine(int pos,int line)
+{
+  if (line < lines() && pos < lineAt(line)->items())
+    return lineAt(line)->itemAt(pos);
+  
+  return 0;
+}
+
+/*==================== get TxtObj ================================*/
+TxtObj* KTextObject::itemAtPara(int pos,int para)
+{
+  if (para < paragraphs() && pos < paragraphAt(para)->items())
+    return paragraphAt(para)->itemAt(pos);
+
+  return 0;
+}
+
+/*==================== get TxtObj ================================*/
+TxtObj* KTextObject::itemAt(int pos,int line,int para)
+{
+  if (para < paragraphs() && line < paragraphAt(para)->lines() && 
+      pos < paragraphAt(para)->lineAt(line)->items())
+    return paragraphAt(para)->lineAt(line)->itemAt(pos);
+    
+  return 0;
+}
+
+/*================== get text of a word ==========================*/
+QString KTextObject::wordAt(int pos,int &ind)
+{
+  int _word = 0;
+  ind = 0;
+
+  if (pos < words())
+    {
+      for (int i = 0;i < paragraphs();i++)
+	{
+	  if (pos < _word + paragraphAt(i)->words())
+	    {
+	      pos -= _word;
+	      QString r = paragraphAt(i)->wordAt(pos,ind);
+	      return r;
+	    }
+	  else _word += paragraphAt(i)->words();
+	}
+    }
+
+  return QString("");
+}
+
+/*================== get text of a word ==========================*/
+QString KTextObject::wordAtLine(int pos,int line,int &ind)
+{
+  ind = 0;
+
+  if (line < lines() && pos < lineAt(line)->words())
+    {
+      QString r = lineAt(line)->wordAt(pos,ind);
+      return r;
+    }
+
+  return QString("");
+}
+
+/*================== get text of a word ==========================*/
+QString KTextObject::wordAtPara(int pos,int para,int &ind)
+{
+  ind = 0;
+
+  if (para < paragraphs() && pos < paragraphAt(para)->words())
+    {    
+      QString r = paragraphAt(para)->wordAt(pos,ind);
+      return r;
+    }
+
+  return QString("");
+}
+
+/*================== get text of a word ==========================*/
+QString KTextObject::wordAt(int pos,int line,int para,int &ind)
+{
+  ind = 0;
+
+  if (para < paragraphs() && line < paragraphAt(para)->lines() && 
+      pos < paragraphAt(para)->lineAt(line)->words())
+    {    
+      QString r = paragraphAt(para)->lineAt(line)->wordAt(pos,ind);
+      return r;
+    }
+
+  return QString("");
+}
+
+/*===================== get line =================================*/
+TxtLine* KTextObject::lineAt(int line)
+{
+  if (line < lines())
+    {
+      int _line = 0; 
+
+      for (int i = 0;i < paragraphs();i++)
+	{
+	  if (line < _line + paragraphAt(i)->lines())
+	    {
+	      line -= _line;
+	      return paragraphAt(i)->lineAt(line);
+	    }
+	  else _line += paragraphAt(i)->lines();
+	}
+    }
+
+  else return 0;
+}
+
+/*===================== get line =================================*/
+TxtLine* KTextObject::lineAt(int line,int para)
+{
+  if (para < paragraphs() && line < paragraphAt(para)->lines())
+    return paragraphAt(para)->lineAt(line);
+ 
+  return 0;
+}
+
+/*====================== get the region ==========================*/
+QList<TxtObj>* KTextObject::regionAt(TxtCursor *_startCursor,TxtCursor *_stopCursor)
+{
+//   int start_line = 0,start_para = 0,start_pos = 0,i;
+//   int stop_line = 0,stop_para = 0,stop_pos = 0;
+
+//   for (i = 0;i < _startCursor->positionParagraph();i++)
+//     start_line += paragraphAt(i)->lines();
+
+//   start_line += _startCursor->positionLine();
+
+//   //*******************************************
+//   //* HIER WEITERMACHEN ***********************
+//   //*******************************************
+ 
+  return 0;
+}
+
+/*======================= delete item ============================*/
+void KTextObject::deleteItem(int pos)
+{
+  int para,line;
+  getPara(pos,line,para);
+
+  if (para >= 0 && para < paragraphs() && line >= 0 && line < paragraphAt(para)->lines())
+    deleteItem(pos,line,para);
+}
+
+/*======================= delete item ============================*/
+void KTextObject::deleteItemInLine(int pos,int line)
+{
+  int para;
+  getPara(line,para);
+
+  if (para >= 0 && para < paragraphs() && line >= 0 && line < paragraphAt(para)->lines())
+    deleteItem(pos,line,para);
+}
+
+/*======================= delete item ============================*/
+void KTextObject::deleteItemInPara(int pos,int para)
+{
+  int line;
+  getLine(pos,para,line);
+
+  if (para >= 0 && para < paragraphs() && line >= 0 && line < paragraphAt(para)->lines())
+    deleteItem(pos,line,para);
+}
+
+/*======================= delete item ============================*/
+void KTextObject::deleteItem(int pos,int line,int para)
+{
+  bool breakPara = true;
+
+  if (para < paragraphs() && line < paragraphAt(para)->lines() &&
+      pos < paragraphAt(para)->lineAt(line)->items())
+    {
+      txtCursor->setMaxPosition(txtCursor->maxPosition() - paragraphAt(para)->lineAt(line)->itemAt(pos)->textLength());
+      txtCursor->setPositionAbs(txtCursor->positionAbs() - paragraphAt(para)->lineAt(line)->itemAt(pos)->textLength());
+      paragraphAt(para)->lineAt(line)->deleteItem(pos);
+      if (paragraphAt(para)->lineAt(line)->items() == 0)
+	{
+	  paragraphAt(para)->deleteLine(line);
+	  if (paragraphAt(para)->lines() == 0)
+	    {
+	      paragraphList.remove(para);
+	      cellHeights.remove(para);
+	      setNumRows(numRows() - 1);
+	      breakPara = false;
+	    }
+	}
+
+      if (breakPara) changedParagraphs.append((int*)para);
+      recalc(false);
+      changedParagraphs.clear();
+      
+      // should be more efficient!!
+      repaint(false);
+    }
+}
+
+/*====================== delete word =============================*/
+void KTextObject::deleteWord(int pos)
+{
+  int x1,x2;
+  int _pos = pos;
+  getAbsPosOfWord(pos,x1,x2);
+
+  TxtCursor cur1,cur2;
+
+  cur1.setKTextObject((KTextObject*)this);
+  cur2.setKTextObject((KTextObject*)this);
+
+  cur1.setPositionAbs(x1);
+  cur2.setPositionAbs(x2);
+
+  deleteRegion(&cur1,&cur2);
+  pos = _pos;
+}
+
+/*====================== delete word =============================*/
+void KTextObject::deleteWordInLine(int pos,int line)
+{
+  int x1,x2;
+  int _pos = pos;
+  getAbsPosOfWordInLine(pos,line,x1,x2);
+
+  TxtCursor cur1,cur2;
+
+  cur1.setKTextObject((KTextObject*)this);
+  cur2.setKTextObject((KTextObject*)this);
+
+  cur1.setPositionAbs(x1);
+  cur2.setPositionAbs(x2);
+
+  deleteRegion(&cur1,&cur2);
+  pos = _pos;
+}
+
+/*====================== delete word =============================*/
+void KTextObject::deleteWordInPara(int pos,int para)
+{
+  int x1,x2;
+  int _pos = pos;
+  getAbsPosOfWordInPara(pos,para,x1,x2);
+
+  TxtCursor cur1,cur2;
+
+  cur1.setKTextObject((KTextObject*)this);
+  cur2.setKTextObject((KTextObject*)this);
+
+  cur1.setPositionAbs(x1);
+  cur2.setPositionAbs(x2);
+
+  deleteRegion(&cur1,&cur2);
+  pos = _pos;
+}
+
+/*====================== delete word =============================*/
+void KTextObject::deleteWord(int pos,int line,int para)
+{
+  int x1,x2;
+  int _pos = pos;
+  getAbsPosOfWord(pos,line,para,x1,x2);
+
+  TxtCursor cur1,cur2;
+
+  cur1.setKTextObject((KTextObject*)this);
+  cur2.setKTextObject((KTextObject*)this);
+
+  cur1.setPositionAbs(x1);
+  cur2.setPositionAbs(x2);
+
+  deleteRegion(&cur1,&cur2);
+  pos = _pos;
+}
+
+/*====================== delete line =============================*/
+void KTextObject::deleteLine(int line)
+{
+  int para;
+  getPara(line,para);
+
+  if (para >= 0 && para < paragraphs() && line >= 0 && line < paragraphAt(para)->lines())
+    deleteLine(line,para);
+}
+
+/*====================== delete line =============================*/
+void KTextObject::deleteLine(int line,int para)
+{
+  bool breakPara = true;
+ 
+  if (para < paragraphs() && line < paragraphAt(para)->lines())
+    {
+      txtCursor->setMaxPosition(txtCursor->maxPosition() - paragraphAt(para)->lineAt(line)->lineLength());
+      txtCursor->setPositionAbs(txtCursor->positionAbs() - paragraphAt(para)->lineAt(line)->lineLength());
+      paragraphAt(para)->deleteLine(line);
+      if (paragraphAt(para)->lines() == 0)
+	{
+	  paragraphList.remove(para);
+	  cellHeights.remove(para);
+	  setNumRows(numRows() - 1);
+	  breakPara = false;
+	}
+      if (breakPara)
+	changedParagraphs.append((int*)para);
+      recalc(false);
+      changedParagraphs.clear();
+      repaint(false);
+    }
+}
+
+/*====================== delete paragraph ========================*/
+void KTextObject::deleteParagraph(int para)
+{
+  if (para < paragraphs())
+    {
+      txtCursor->setMaxPosition(txtCursor->maxPosition() - paragraphAt(para)->paragraphLength());
+      txtCursor->setPositionAbs(txtCursor->positionAbs() - paragraphAt(para)->paragraphLength());
+      paragraphList.remove(para);
+      cellHeights.remove(para);
+      setNumRows(numRows() - 1);
+      recalc(false);
+      repaint(false);
+    }  
+}
+
+/*====================== delete region ===========================*/
+void KTextObject::deleteRegion(TxtCursor *_startCursor,TxtCursor *_stopCursor)
+{
+  // this methode is _VERY_ unefficient and has to be rewritten
+
+  TxtCursor *_cursor = txtCursor;
+  txtCursor = 0;
+  int diff = _stopCursor->positionAbs() - _startCursor->positionAbs();
+
+  txtCursor = _startCursor;
+  for (int i = 0;i < diff - 1;i++)
+    kdelete();
+
+  txtCursor = _cursor;
+  txtCursor->setPositionAbs(txtCursor->positionAbs() - diff);
+  txtCursor->setMaxPosition(textLength());
+
+  repaint(false);
+
+  changedParagraphs.clear();
+}
+
+/*===================== insert text ==============================*/
+void KTextObject::insertText(QString text,int pos,QFont font,QColor color)
+{
+  int x1,x2;
+  getAbsPosOfWord(pos,x1,x2);
+
+  TxtCursor cur;
+
+  cur.setKTextObject((KTextObject*)this);
+
+  cur.setPositionAbs(x1);
+  cur.calcPos();
+
+  insertText(text,&cur,font,color);
+}
+
+/*===================== insert text ==============================*/
+void KTextObject::insertTextInLine(QString text,int pos,int line,QFont font,QColor color)
+{
+  int x1,x2;
+  getAbsPosOfWordInLine(pos,line,x1,x2);
+
+  TxtCursor cur;
+
+  cur.setKTextObject((KTextObject*)this);
+
+  cur.setPositionAbs(x1);
+  cur.calcPos();
+
+  insertText(text,&cur,font,color);
+}
+
+/*===================== insert text ==============================*/
+void KTextObject::insertTextInPara(QString text,int pos,int para,QFont font,QColor color)
+{
+  int x1,x2;
+  getAbsPosOfWordInPara(pos,para,x1,x2);
+
+  TxtCursor cur;
+
+  cur.setKTextObject((KTextObject*)this);
+
+  cur.setPositionAbs(x1);
+  cur.calcPos();
+
+  insertText(text,&cur,font,color);
+}
+
+/*===================== insert text ==============================*/
+void KTextObject::insertText(QString text,int pos,int line,int para,QFont font,QColor color)
+{
+  int x1,x2;
+  getAbsPosOfWord(pos,line,para,x1,x2);
+
+  TxtCursor cur;
+
+  cur.setKTextObject((KTextObject*)this);
+
+  cur.setPositionAbs(x1);
+  cur.calcPos();
+
+  insertText(text,&cur,font,color);
+}
+
+/*===================== insert text ==============================*/
+void KTextObject::insertText(QString text,TxtCursor *_cursor,QFont font,QColor color)
+{
+  if (!text.isEmpty())
+    {
+      if (text.find('\n') == -1)
+	{
+	  bool _space = false;
+	  if (text.right(1) == " ") _space = true;
+
+	  text = text.simplifyWhiteSpace();
+	  
+	  if (text.find(" ") == -1)
+	    {
+	      QList<TxtObj> il;
+	      il.setAutoDelete(true);
+
+	      TxtObj *o = new TxtObj(text,font,color,TxtObj::NORMAL,TxtObj::TEXT);
+	      il.append(o);
+
+	      if (_space)
+		{
+		  TxtObj *o = new TxtObj(" ",font,color,TxtObj::NORMAL,TxtObj::SEPARATOR);
+		  il.append(o);
+		}
+
+	      insertItems(&il,_cursor);
+  
+	      il.clear();
+	      return;
+	    }
+	}
+
+      int ind = 0,_ind = 0;
+      QString str;
+      QList<TxtObj> il;
+      il.setAutoDelete(true);
+      bool spaceAppended = false;
+
+      if (text.right(1) != " ")
+	{
+	  spaceAppended = true;
+	  text.append(" ");
+	}
+      
+      while (true)
+	{
+	  _ind = text.find(QRegExp("[\x20\t\n]"),ind);
+
+	  if (_ind == -1) break;
+
+	  str = text.mid(ind,_ind - ind);
+	  str = str.stripWhiteSpace();
+	  
+	  if (!str.isEmpty())
+	    {
+	      TxtObj *o = new TxtObj(str,font,color,TxtObj::NORMAL,TxtObj::TEXT);
+	      il.append(o);
+	    }
+
+	  switch (text[_ind])
+	    {
+	    case ' ':
+	      {
+		if (!(_ind == text.length() - 1 && spaceAppended))
+		  {
+		    TxtObj *o = new TxtObj(" ",font,color,TxtObj::NORMAL,TxtObj::SEPARATOR);
+		    il.append(o);
+		  }
+		
+		insertItems(&il,_cursor,false);
+		
+		if (!(_ind == text.length() - 1 && spaceAppended))
+		  _cursor->setPositionAbs(_cursor->positionAbs() + str.length() + 1);
+		else 
+		  _cursor->setPositionAbs(_cursor->positionAbs() + str.length());
+	      } break;
+	    case '\n':
+	      {
+		if (!str.isEmpty())
+		  insertItems(&il,_cursor,false);
+		_cursor->setPositionAbs(_cursor->positionAbs() + str.length());
+		
+		TxtCursor *c = txtCursor;
+		txtCursor = _cursor;
+		splitParagraph();
+		c->setMaxPosition(txtCursor->maxPosition());
+		txtCursor = c;
+	      } break;
+	    case '\t':
+	      {
+		TxtObj *o = new TxtObj("    ",font,color,TxtObj::NORMAL,TxtObj::SEPARATOR);
+		il.append(o);
+		insertItems(&il,_cursor,false);
+		_cursor->setPositionAbs(_cursor->positionAbs() + str.length() + 4);
+	      } break;
+	    }
+	  
+	  il.clear();
+	  ind = _ind + 1;
+	      
+	}
+
+      repaint(false);
+
+    }
+}
+
+/*======================== insert items ==========================*/
+void KTextObject::insertItems(QList<TxtObj> *items,int pos)
+{
+  int line,i,absPos = 0;
+  getLine(pos,line);
+
+  for (i = 0;i < line;i++)
+    absPos += lineAt(i)->lineLength();
+
+  for (i = 0;i < pos;i++)
+    absPos += lineAt(line)->itemAt(i)->textLength();
+
+  TxtCursor _cursor;
+  _cursor.setKTextObject((KTextObject*)this);
+  _cursor.setPositionAbs(absPos);
+  insertItems(items,&_cursor);
+}
+
+/*======================== insert items ==========================*/
+void KTextObject::insertItemsInLine(QList<TxtObj> *items,int pos,int line)
+{
+  int i,absPos = 0;
+
+  for (i = 0;i < line;i++)
+    absPos += lineAt(i)->lineLength();
+
+  for (i = 0;i < pos;i++)
+    absPos += lineAt(line)->itemAt(i)->textLength();
+
+  TxtCursor _cursor;
+  _cursor.setKTextObject((KTextObject*)this);
+  _cursor.setPositionAbs(absPos);
+  insertItems(items,&_cursor);
+}
+
+/*======================== insert items ==========================*/
+void KTextObject::insertItemsInPara(QList<TxtObj> *items,int pos,int para)
+{
+  int i,absPos = 0;
+
+  for (i = 0;i < para;i++)
+    absPos += paragraphAt(i)->paragraphLength();
+
+  for (i = 0;i < pos;i++)
+    absPos += paragraphAt(para)->itemAt(i)->textLength();
+  
+  TxtCursor _cursor;
+  _cursor.setKTextObject((KTextObject*)this);
+  _cursor.setPositionAbs(absPos);
+  insertItems(items,&_cursor);
+}
+
+/*======================== insert items ==========================*/
+void KTextObject::insertItems(QList<TxtObj> *items,int pos,int line,int para)
+{
+  int i,absPos = 0;
+
+  for (i = 0;i < para;i++)
+    absPos += paragraphAt(i)->paragraphLength();
+
+  for (i = 0;i < line;i++)
+    absPos += paragraphAt(para)->lineAt(i)->lineLength();
+
+  for (i = 0;i < pos;i++)
+    absPos += paragraphAt(para)->lineAt(line)->itemAt(i)->textLength();
+
+  TxtCursor _cursor;
+  _cursor.setKTextObject((KTextObject*)this);
+  _cursor.setPositionAbs(absPos);
+  insertItems(items,&_cursor);
+}
+
+/*======================== insert items ==========================*/
+void KTextObject::insertItems(QList<TxtObj> *items,TxtCursor *_cursor,bool redraw=true)
+{
+  TxtObj *item;
+
+  unsigned int i,objPos,w = 0;
+  unsigned int para = _cursor->positionParagraph();
+  int _h = cellHeight(para);
+
+  lin = paragraphAt(para)->toOneLine();
+  paragraphAt(para)->append(lin);
+  _cursor->calcPos();
+  unsigned int inLine = _cursor->positionInLine();
+  lin = paragraphAt(para)->lineAt(0);
+  
+  changedParagraphs.append((int*)para);
+
+  if (!items->isEmpty())
+    {
+      for (item = items->last();item != 0;item = items->prev())
+	{
+	  switch (item->type())
+	    {
+	    case TxtObj::SEPARATOR:
+	      {
+		if (lin->getInObj(inLine) != -1) lin->splitObj(inLine);
+		if (lin->getAfterObj(inLine) != -1)
+		  objPos = lin->getAfterObj(inLine)+1;
+		else
+		  objPos = lin->getBeforeObj(inLine);
+		if (objPos != -1)
+		  {
+		    obj = new TxtObj(item->text(),item->font(),item->color(),item->vertAlign(),item->type());
+		    lin->insert(objPos,obj);
+		  }
+	      } break;
+	    default:
+	      {
+		if (lin->getInObj(inLine) != -1)
+		  {
+		    if (lin->itemAt(lin->getInObj(inLine))->color() == item->color() &&
+			lin->itemAt(lin->getInObj(inLine))->font() == item->font())
+		      {
+			objPos = lin->getInObj(inLine);
+			for (i = 0;i < objPos;i++)
+			  w += lin->itemAt(i)->textLength();
+			lin->itemAt(objPos)->insert(inLine-w,item->text());
+			break;
+		      }
+		    else
+		      lin->splitObj(inLine);
+		  }
+		if (lin->getAfterObj(inLine) != -1 &&
+		    lin->itemAt(lin->getAfterObj(inLine))->type() != TxtObj::SEPARATOR && 
+		    (lin->itemAt(lin->getAfterObj(inLine))->color() == item->color() &&
+		     lin->itemAt(lin->getAfterObj(inLine))->font() == item->font()))
+		  {
+		    objPos = lin->getAfterObj(inLine);
+		    lin->itemAt(objPos)->append(item->text());
+		  }
+		else if (lin->getBeforeObj(inLine) != -1 &&
+			 lin->itemAt(lin->getBeforeObj(inLine))->type() != TxtObj::SEPARATOR && 
+			 (lin->itemAt(lin->getBeforeObj(inLine))->color() == item->color() &&
+			  lin->itemAt(lin->getBeforeObj(inLine))->font() == item->font()))
+		  {
+		    objPos = lin->getBeforeObj(inLine);
+		    lin->itemAt(objPos)->insert(0,item->text());
+		  }
+		else
+		  {
+		    if (lin->getAfterObj(inLine) != -1)
+		      objPos = lin->getAfterObj(inLine)+1;
+		    else
+		      objPos = lin->getBeforeObj(inLine);
+		    if (objPos != -1)
+		      {
+			obj = new TxtObj(item->text(),item->font(),item->color(),TxtObj::NORMAL,TxtObj::TEXT);
+			lin->insert(objPos,obj);
+		      }
+		  }
+	      } break;
+	    }
+	}
+      // for test
+      recalc(false);
+      if (redraw) repaint(false);
+    }
+  txtCursor->setMaxPosition(textLength());
+}
+
+/*==================== replace region ============================*/
+void KTextObject::replaceItems(QList<TxtObj> *items,int pos,int len)
+{
+  for (int i = 0;i < len;i++)
+    deleteItem(pos);
+
+  insertItems(items,pos);
+}
+
+/*==================== replace items =============================*/
+void KTextObject::replaceItemsInLine(QList<TxtObj> *items,int pos,int line,int len)
+{
+  for (int i = 0;i < len;i++)
+    deleteItemInLine(pos,line);
+
+  insertItemsInLine(items,pos,line);
+}
+
+/*==================== replace items =============================*/
+void KTextObject::replaceItemsInPara(QList<TxtObj> *items,int pos,int para,int len)
+{
+  for (int i = 0;i < len;i++)
+    deleteItemInPara(pos,para);
+
+  insertItemsInPara(items,pos,para);
+}
+
+/*==================== replace items =============================*/
+void KTextObject::replaceItems(QList<TxtObj> *items,int pos,int line,int para,int len)
+{
+  for (int i = 0;i < len;i++)
+    deleteItem(pos,line,para);
+
+  insertItems(items,pos,line,para);
+}
+
+/*==================== replace word ==============================*/
+void KTextObject::replaceWord(QString text,int pos,QFont font,QColor color)
+{
+  if (text.right(1) != " ") text.append(" ");
+  insertText(text,pos,font,color);
+  deleteWord(pos + 1);
+}
+
+/*==================== replace word ==============================*/
+void KTextObject::replaceWordInLine(QString text,int pos,int line,QFont font,QColor color)
+{
+  if (text.right(1) != " ") text.append(" ");
+  insertTextInLine(text,pos,line,font,color);
+  deleteWordInLine(pos + 1,line);
+}
+
+/*==================== replace word ==============================*/
+void KTextObject::replaceWordInPara(QString text,int pos,int para,QFont font,QColor color)
+{
+  if (text.right(1) != " ") text.append(" ");
+  insertTextInPara(text,pos,para,font,color);
+  deleteWordInPara(pos + 1,para);
+}
+
+/*==================== replace word ==============================*/
+void KTextObject::replaceWord(QString text,int pos,int line,int para,QFont font,QColor color)
+{
+  if (text.right(1) != " ") text.append(" ");
+  insertText(text,pos,line,para,font,color);
+  deleteWord(pos + 1,line,para);
+}
+
+/*==================== replace region ============================*/
+void KTextObject::replaceRegion(QList<TxtObj> *items,TxtCursor *_startCursor,TxtCursor *_stopCursor)
+{
+  deleteRegion(_startCursor,_stopCursor);
+  insertItems(items,_startCursor);
+}
+
+/*==================== replace region ============================*/
+void KTextObject::replaceRegion(QString text,TxtCursor *_startCursor,TxtCursor *_stopCursor,QFont font,QColor color)
+{
+  deleteRegion(_startCursor,_stopCursor);
+  insertText(text,_startCursor,font,color);
+}
+
+/*================ change attributes of the region ===============*/
+void KTextObject::changeRegionAttribs(TxtCursor *_startCursor,TxtCursor *_stopCursor,QFont font,QColor color)
+{
+  enum CurPos {C_IN,C_BEFORE,C_AFTER};
+  int start_pos = 0,start_cpos = C_IN,i;
+  int stop_pos = 0,stop_cpos = C_IN,objnum;
+  int start,stop;
+
+  for (i = 0;i < _startCursor->positionParagraph();i++)
+    start_pos += paragraphAt(i)->items();  
+
+  for (i = 0;i < _startCursor->positionLine();i++)
+    start_pos += paragraphAt(_startCursor->positionParagraph())->lineAt(i)->items();
+
+  objnum = paragraphAt(_startCursor->positionParagraph())->lineAt(_startCursor->positionLine())->getInObj(_startCursor->positionInLine());
+  if (objnum == -1)
+    {
+      objnum = paragraphAt(_startCursor->positionParagraph())->
+	lineAt(_startCursor->positionLine())->getBeforeObj(_startCursor->positionInLine());
+      if (objnum == -1)
+	{
+	  objnum = paragraphAt(_startCursor->positionParagraph())->
+	    lineAt(_startCursor->positionLine())->getAfterObj(_startCursor->positionInLine());
+	  if (objnum == -1)
+	    // something wrong here - let's exit!
+	    return;
+	  else start_cpos = C_AFTER;
+	}
+      else start_cpos = C_BEFORE;
+
+    }
+  else start_cpos = C_IN;
+  
+  start_pos += objnum;
+
+  for (i = 0;i < _stopCursor->positionParagraph();i++)
+    stop_pos += paragraphAt(i)->items();  
+
+  for (i = 0;i < _stopCursor->positionLine();i++)
+    stop_pos += paragraphAt(_stopCursor->positionParagraph())->lineAt(i)->items();
+
+  objnum = paragraphAt(_stopCursor->positionParagraph())->lineAt(_stopCursor->positionLine())->getInObj(_stopCursor->positionInLine());
+  if (objnum == -1)
+    {
+      objnum = paragraphAt(_stopCursor->positionParagraph())->
+	lineAt(_stopCursor->positionLine())->getBeforeObj(_stopCursor->positionInLine());
+      if (objnum == -1)
+	{
+	  objnum = paragraphAt(_stopCursor->positionParagraph())->
+	    lineAt(_stopCursor->positionLine())->getAfterObj(_stopCursor->positionInLine());
+	  if (objnum == -1)
+	    // something wrong here - let's exit!!
+	    return;
+	  else stop_cpos = C_AFTER;
+	}
+      else stop_cpos = C_BEFORE;
+
+    }
+  else stop_cpos = C_IN;
+
+  stop_pos += objnum;
+  if (stop_cpos == C_AFTER) stop_pos++;
+
+  if (start_cpos == C_IN)
+    {
+      paragraphAt(_startCursor->positionParagraph())->lineAt(_startCursor->positionLine())->splitObj(_startCursor->positionInLine());
+      start_pos++;
+      start_cpos = C_BEFORE;
+      stop_pos++;
+    }
+
+  if (stop_cpos == C_IN)
+    {
+      paragraphAt(_stopCursor->positionParagraph())->lineAt(_stopCursor->positionLine())->splitObj(_stopCursor->positionInLine());
+      stop_cpos = C_BEFORE;
+    }
+
+  if (start_cpos == C_AFTER) start = start_pos + 1;
+  else start = start_pos;
+
+  if (stop_cpos == C_AFTER) stop = stop_pos + 1;
+  else stop = stop_pos;
+
+  for (i = start;i <= stop;i++)
+    {    
+      if (i < items())
+	{
+	  itemAt(i)->setFont(font);
+	  itemAt(i)->setColor(color);
+	}
+    }
+
+  redrawSelection(*_startCursor,*_stopCursor);
+}
+
+/*=============== changen alignment of the region ================*/
+void KTextObject::changeRegionAlign(TxtCursor *_startCursor,TxtCursor *_stopCursor,TxtParagraph::HorzAlign _align)
+{
+  int start_para = _startCursor->positionParagraph();
+  int stop_para = _stopCursor->positionParagraph(),i;
+
+  for (i = start_para;i <= stop_para;i++)
+    setHorzAlign(_align,i);
+}
+
+/*================= get position of a word =======================*/
+void KTextObject::getAbsPosOfWord(int pos,int &x1,int &x2)
+{
+  x1 = x2 = 0;
+
+  int line = 0,_pos = pos,i,ind;
+
+  line = lines() - 1;
+  for (i = 0;i < lines();i++)
+    {
+      _pos -= lineAt(i)->words() - 1;
+      if (_pos <= 0)
+	{
+	  line = i;
+	  break;
+	}
+    }
+
+
+  QString word = wordAt(pos,ind);
+  QString _line = lineAt(line)->getText();
+
+  for (i = 0;i < line;i++)
+    {
+      x1 += lineAt(i)->lineLength();
+      pos -= lineAt(i)->words();
+    }
+
+  x1 += ind;
+  
+  x2 = x1 + word.length();
+}
+
+/*================= get position of a word =======================*/
+void KTextObject::getAbsPosOfWordInLine(int pos,int line,int &x1,int &x2)
+{
+  x1 = x2 = 0;
+
+  int i,ind;
+
+  QString word = wordAtLine(pos,line,ind);
+  QString _line = lineAt(line)->getText();
+
+  for (i = 0;i < line;i++)
+    {
+      x1 += lineAt(i)->lineLength();
+      pos -= lineAt(i)->words();
+    }
+
+  x1 += ind; //_line.find(word);
+  
+  x2 = x1 + word.length();
+}
+
+/*================= get position of a word =======================*/
+void KTextObject::getAbsPosOfWordInPara(int pos,int para,int &x1,int &x2)
+{
+  x1 = x2 = 0;
+
+  int i,line = 0,_pos = pos,ind;
+
+  for (i = 0;i < para;i++)
+    x1 += paragraphAt(i)->paragraphLength();
+
+  line = paragraphAt(para)->lines() - 1; 
+  for (i = 0;i < paragraphAt(para)->lines();i++)
+    {
+      _pos -= paragraphAt(para)->lineAt(i)->words() - 1;
+      if (_pos <= 0)
+	{
+	  line = i;
+	  break;
+	}
+    }
+
+  for (i = 0;i < line;i++)
+    {
+      x1 += paragraphAt(para)->lineAt(i)->lineLength();
+      pos -= paragraphAt(para)->lineAt(i)->words();
+    }
+
+  QString word = wordAt(pos,line,para,ind);
+  QString _line = paragraphAt(para)->lineAt(line)->getText();
+ 
+  x1 += ind; //_line.find(word);
+  
+  x2 = x1 + word.length();
+}
+
+/*================= get position of a word =======================*/
+void KTextObject::getAbsPosOfWord(int pos,int line,int para,int &x1,int &x2)
+{
+  x1 = x2 = 0;
+
+  int i,__line = 0,___line = line,ind;
+
+  for (i = 0;i < para;i++)
+    {
+      x1 += paragraphAt(i)->paragraphLength();
+      __line += paragraphAt(i)->lines() - 1;
+    }
+
+  line += __line;
+
+  for (i = 0;i < line;i++)
+    x1 += lineAt(i)->lineLength();
+
+  QString word = wordAt(pos,___line,para,ind);
+  QString _line = lineAt(line)->getText();
+  
+  x1 += ind; //_line.find(word);
+  
+  x2 = x1 + word.length();
+}
+
+/*========================= get line ============================*/
+void KTextObject::getLine(int &pos,int &line)
+{
+  line = -1;
+
+  if (pos < items())
+    {
+      int _item = 0; 
+
+      for (int i = 0;i < lines();i++)
+	{
+	  if (pos < _item + lineAt(i)->items())
+	    {
+	      pos -= _item;
+	      line = i;
+	      return;
+	    }
+	  else _item += lineAt(i)->items();
+	}
+    }
+}
+
+/*========================= get line in paragraph ===============*/
+void KTextObject::getLine(int &pos,int para,int &line)
+{
+  line = -1;
+
+  if (para < paragraphs())
+    {
+      int _item = 0; 
+
+      for (int i = 0;i < paragraphAt(para)->lines();i++)
+	{
+	  if (pos < _item + paragraphAt(para)->lineAt(i)->items())
+	    {
+	      pos -= _item;
+	      line = i;
+	      return;
+	    }
+	  else _item += paragraphAt(para)->lineAt(i)->items();
+	}
+    }
+}
+
+/*========================= get paragraph =======================*/
+void KTextObject::getPara(int &line,int &para)
+{
+  para = -1;
+
+  if (line < lines())
+    {
+      int _line = 0; 
+
+      for (int i = 0;i < paragraphs();i++)
+	{
+	  if (line < _line + paragraphAt(i)->lines())
+	    {
+	      para = i;
+	      line -= _line;
+	      return;
+	    }
+	  else _line += paragraphAt(i)->lines();
+	}
+    }
+}
+
+/*========================= get paragraph =======================*/
+void KTextObject::getPara(int &pos,int &line,int &para)
+{
+  getLine(pos,line);
+  getPara(line,para);
+}
+
 /*====================== paint cell ==============================*/
 void KTextObject::paintCell(class QPainter* painter,int row,int)
 {
@@ -2203,8 +3690,16 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 
       if (drawSelection)
 	{
-	  drawSelection = false;
-	  redrawSelection(startCursor,stopCursor);
+	  if (e->key() == Key_Return || e->key() == Key_Enter || e->key() == Key_Delete
+	      || e->key() == Key_Backspace || e->ascii() && e->ascii() > 31)
+	    cutRegion();
+	  if (e->key() != Key_Shift && e->key() != Key_Control && e->key() != Key_Alt)
+	    { 
+	      drawSelection = false;
+	      redrawSelection(startCursor,stopCursor);
+	      startCursor.setPositionAbs(0);
+	      stopCursor.setPositionAbs(0);
+	    }
 	}
 
       // always update the maximal cursor position when a key is pressed
@@ -2216,8 +3711,22 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
       // react on the pressed key
       switch (e->key())
 	{
-	case Key_Right: { txtCursor->charForward(); cursorChanged = true; } break;
-	case Key_Left: { txtCursor->charBackward(); cursorChanged = true; } break;
+	case Key_Right:
+	  {
+	    if (e->state() & ControlButton)
+	      txtCursor->wordForward(); 
+	    else
+	      txtCursor->charForward(); 
+	    cursorChanged = true;
+	  } break;
+	case Key_Left:
+	  {
+	    if (e->state() & ControlButton)
+	      txtCursor->wordBackward(); 
+	    else
+	      txtCursor->charBackward(); 
+	    cursorChanged = true;
+	  } break;
 	case Key_Up: { txtCursor->lineUp(); cursorChanged = true; } break;
 	case Key_Down: { txtCursor->lineDown(); cursorChanged = true;} break;
 	case Key_Return: case Key_Enter:
@@ -2325,30 +3834,52 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 /*====================== mouse press event ========================*/
 void KTextObject::mousePressEvent(QMouseEvent *e)
 {
-  mousePressed = true;
   drawSelection = false;
 
   redrawSelection(startCursor,stopCursor);
+  startCursor.setPositionAbs(0);
+  stopCursor.setPositionAbs(0);
 
-  startCursor = getCursorPos(e->x(),e->y(),true,true);
-  stopCursor = getCursorPos(e->x(),e->y(),true,true);
+  switch (e->button())
+    {
+    case LeftButton:
+      {
+	mousePressed = true;
+	startCursor = getCursorPos(e->x(),e->y(),true,true);
+	stopCursor = getCursorPos(e->x(),e->y(),true,true);
+      } break;
+    case MidButton:
+      {
+	getCursorPos(e->x(),e->y(),true,true);
+	mousePressed = false;
+	paste();
+      } break;
+    }
 }
 
 /*====================== mouse release event ======================*/
 void KTextObject::mouseReleaseEvent(QMouseEvent *e)
 {
+  if (mousePressed)
+    {
+      mousePressed = false;
+      
+      TxtCursor cursor = getCursorPos(e->x(),e->y(),true,false);
+      if (cursor.positionAbs() > startCursor.positionAbs())
+	stopCursor = cursor;
+      else
+	startCursor = cursor;
+      
+      if (stopCursor.positionAbs() != startCursor.positionAbs())
+	{
+	  drawSelection = true;
+	  copyRegion();
+	}
+
+      redrawSelection(startCursor,stopCursor);
+    }
+
   mousePressed = false;
-
-  TxtCursor cursor = getCursorPos(e->x(),e->y(),true,false);
-  if (cursor.positionAbs() > startCursor.positionAbs())
-    stopCursor = cursor;
-  else
-    startCursor = cursor;
-  
-  if (stopCursor.positionAbs() != startCursor.positionAbs())
-    drawSelection = true;
-
-  redrawSelection(startCursor,stopCursor);
 }
 
 /*====================== mouse move event =========================*/
@@ -2892,8 +4423,9 @@ void KTextObject::makeCursorVisible()
 /*====================== set cursor psoition ====================*/
 TxtCursor KTextObject::getCursorPos(int _x,int _y,bool set=false,bool redraw=false)
 {
-  unsigned int x = (unsigned int)_x + xOffset();
-  unsigned int y = (unsigned int)_y + yOffset(),i,h = 0,w = 0,para,line,objPos,pos,absPos = 0;;
+  QFontMetrics fm(currFont);
+  int x = _x + xOffset() - fm.width('x') / 2;
+  int y = _y + yOffset(),i,h = 0,w = 0,para,line,objPos,pos,absPos = 0;;
   TxtCursor tmpCursor((KTextObject*)this);
 
   para = paragraphs() - 1;
@@ -2930,10 +4462,12 @@ TxtCursor KTextObject::getCursorPos(int _x,int _y,bool set=false,bool redraw=fal
     case TxtParagraph::RIGHT: x -= cellWidth(0) - linePtr->width() - scrBar; break;
     }
   
+  int x2 = x >= 0 ? x : 0;
+
   objPos = paragraphAt(para)->lineAt(line)->items() - 1;
   for (i = 0;i < paragraphAt(para)->lineAt(line)->items();i++)
     {
-      if (x >= w && x <= w + paragraphAt(para)->lineAt(line)->itemAt(i)->width())
+      if (x2 >= w && x2 <= w + paragraphAt(para)->lineAt(line)->itemAt(i)->width())
 	{
 	  objPos = i;
 	  break;
@@ -2942,10 +4476,8 @@ TxtCursor KTextObject::getCursorPos(int _x,int _y,bool set=false,bool redraw=fal
     }
   
   pos = paragraphAt(para)->lineAt(line)->itemAt(objPos)->getPos(x - w);
-  if (pos == -1) pos = paragraphAt(para)->lineAt(line)->itemAt(objPos)->textLength()-1;
-  else pos++;
-  
-  
+  pos++;
+
   for (i = 0;i < para;i++)
     absPos += paragraphAt(i)->paragraphLength();
   for (i = 0;i < line;i++)
@@ -2959,6 +4491,7 @@ TxtCursor KTextObject::getCursorPos(int _x,int _y,bool set=false,bool redraw=fal
       tmpCursor.setPositionAbs(txtCursor->positionAbs());
       
       txtCursor->setPositionAbs(absPos);
+      cursorChanged = true;
       
       if (redraw)
 	{
@@ -2988,7 +4521,7 @@ QString KTextObject::toHexString(QColor c)
 
   c.rgb(&r,&g,&b);
 
-  str.sprintf("#%2X%2X%2X",r,g,b);
+  str.sprintf("#%02X%02X%02X",r,g,b);
 
   return str;
 }
@@ -3319,4 +4852,29 @@ void KTextObject::redrawSelection(TxtCursor _startCursor,TxtCursor _stopCursor)
   drawParagraph = -1;
   for (int i = _startCursor.positionParagraph(); i <= _stopCursor.positionParagraph();i++)
     updateCell(i,0,false);
+}
+
+/*======================= change attributes ====================*/
+void KTextObject::changeAttribs()
+{
+  if (drawSelection && startCursor.positionAbs() != stopCursor.positionAbs())
+    changeRegionAttribs(&startCursor,&stopCursor,currFont,currColor);
+}
+
+/*===================== change align =============================*/
+void KTextObject::changeHorzAlign(TxtParagraph::HorzAlign ha,int p = -1)
+{
+  if (drawSelection && startCursor.positionAbs() != stopCursor.positionAbs() && p == -1)
+    changeRegionAlign(&startCursor,&stopCursor,ha);
+  else
+    _setHorzAlign(ha,p);
+}
+
+/*==================== set horizontal alignemnt ==================*/
+void KTextObject::_setHorzAlign(TxtParagraph::HorzAlign ha,int p = -1)
+{
+  if (p == -1) p = txtCursor->positionParagraph();
+
+  paragraphAt(p)->setHorzAlign(ha);
+  updateCell(p,0,false);
 }
