@@ -2100,7 +2100,6 @@ void KPresenterView_impl::setupMenu()
       m_rMenuBar->insertSeparator(m_idMenuEdit);
       m_idMenuEdit_Find = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Find...")),m_idMenuEdit,
 						 this,CORBA::string_dup("editFind"));
-      m_rMenuBar->insertSeparator(m_idMenuEdit);
       m_idMenuEdit_FindReplace = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Replace...")),m_idMenuEdit,
 							this,CORBA::string_dup("editFindReplace"));
 
