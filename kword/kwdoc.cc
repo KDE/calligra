@@ -4027,6 +4027,16 @@ MouseMeaning KWDocument::getMouseMeaning( const QPoint &nPoint, int keyState, KW
         else // text view mode
             return MEANING_MOUSE_INSIDE_TEXT;
     }
+    // Allow to select paragraphs by clicking on the left
+    // TODO - introduce real mouse-meaning value, to change the cursor.
+    // TODO: test if other word-processors allow doing it with text-boxes
+    // when clicking on the left of the text box means clicking inside another frame.
+    // Also note that one can currently select text in the very first parag by clicking
+    // above the frame; this would need a normal "inside text" cursor, not a left one.
+    if ( m_viewMode->hasFrames() )
+    {
+        return MEANING_MOUSE_INSIDE_TEXT;
+    }
     return MEANING_NONE;
 }
 
