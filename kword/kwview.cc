@@ -1328,9 +1328,9 @@ void KWView::showRulerIndent( double _leftMargin, double _firstLine, double _rig
   KoRuler * hRuler = m_gui ? m_gui->getHorzRuler() : 0;
   if ( hRuler )
   {
-      hRuler->setFirstIndent( KoUnit::userValue( _firstLine + _leftMargin, m_doc->getUnit() ) );
-      hRuler->setLeftIndent( KoUnit::userValue( _leftMargin, m_doc->getUnit() ) );
-      hRuler->setRightIndent( KoUnit::userValue( _rightMargin, m_doc->getUnit() ) );
+      hRuler->setFirstIndent( KoUnit::ptToUnit( _firstLine + _leftMargin, m_doc->getUnit() ) );
+      hRuler->setLeftIndent( KoUnit::ptToUnit( _leftMargin, m_doc->getUnit() ) );
+      hRuler->setRightIndent( KoUnit::ptToUnit( _rightMargin, m_doc->getUnit() ) );
       actionFormatDecreaseIndent->setEnabled( _leftMargin>0);
   }
 }
@@ -2364,7 +2364,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
                 macroCommand->addCommand(cmd);
                 changed=true;
             }
-            m_gui->getHorzRuler()->setLeftIndent( KoUnit::userValue( paragDia->leftIndent(), m_doc->getUnit() ) );
+            m_gui->getHorzRuler()->setLeftIndent( KoUnit::ptToUnit( paragDia->leftIndent(), m_doc->getUnit() ) );
 
         }
 
@@ -2376,7 +2376,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
                 macroCommand->addCommand(cmd);
                 changed=true;
             }
-            m_gui->getHorzRuler()->setRightIndent( KoUnit::userValue( paragDia->rightIndent(), m_doc->getUnit() ) );
+            m_gui->getHorzRuler()->setRightIndent( KoUnit::ptToUnit( paragDia->rightIndent(), m_doc->getUnit() ) );
         }
         if(paragDia->isSpaceBeforeChanged())
         {
@@ -2405,7 +2405,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
                 changed=true;
             }
             m_gui->getHorzRuler()->setFirstIndent(
-                KoUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), m_doc->getUnit() ) );
+                KoUnit::ptToUnit( paragDia->leftIndent() + paragDia->firstLineIndent(), m_doc->getUnit() ) );
         }
 
         if(paragDia->isAlignChanged())

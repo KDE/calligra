@@ -230,7 +230,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 
 
     QString suffix = KoUnit::unitName( unit ).prepend(' ');
-    gridX=new KDoubleNumInput( KoUnit::userValue( ptGridX, unit ), gbInterfaceGroup );
+    gridX=new KDoubleNumInput( KoUnit::ptToUnit( ptGridX, unit ), gbInterfaceGroup );
     gridX->setRange(0.1, 50, 0.1);
     gridX->setPrecision (1);
     gridX->setSuffix( suffix );
@@ -238,7 +238,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     QWhatsThis::add( gridX, i18n("The grid size on which frames, tabs and other content snaps while "
                     "moving and scaling") );
 
-    gridY=new KDoubleNumInput( KoUnit::userValue( ptGridY, unit ), gbInterfaceGroup );
+    gridY=new KDoubleNumInput( KoUnit::ptToUnit( ptGridY, unit ), gbInterfaceGroup );
     gridY->setRange(0.1, 50, 0.1);
     gridY->setPrecision(1);
     gridY->setLabel(i18n("Vertical grid size:"));
@@ -246,7 +246,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
                     "moving and scaling") );
     gridY->setSuffix( suffix );
 
-    double val = KoUnit::userValue( ptIndent, unit );
+    double val = KoUnit::ptToUnit( ptIndent, unit );
     indent = new KDoubleNumInput( val, gbInterfaceGroup );
     indent->setRange(0.1, 50, 0.1);
     indent->setPrecision(1);
@@ -257,7 +257,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
                     "the more often the buttons will have to be pressed to gain the same "
                     "indentation") );
 
-    m_nbPagePerRow=new KIntNumInput(nbPagePerRow, gbInterfaceGroup );
+    m_nbPagePerRow=new KIntNumInput( nbPagePerRow, gbInterfaceGroup );
     m_nbPagePerRow->setRange(1, 10, 1);
     m_nbPagePerRow->setLabel(i18n("Preview mode - Number of pages per row:"));
     QWhatsThis::add(m_nbPagePerRow , i18n("After selecting preview mode (via the \"View\" "
@@ -268,8 +268,8 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 void ConfigureInterfacePage::apply()
 {
     KWDocument * doc = m_pView->kWordDocument();
-    double valX=KoUnit::fromUserValue( gridX->value(), doc->getUnit() );
-    double valY=KoUnit::fromUserValue( gridY->value(), doc->getUnit() );
+    double valX=KoUnit::ptFromUnit( gridX->value(), doc->getUnit() );
+    double valY=KoUnit::ptFromUnit( gridY->value(), doc->getUnit() );
     int nbRecent=recentFiles->value();
     bool ruler=showRuler->isChecked();
 
@@ -285,7 +285,7 @@ void ConfigureInterfacePage::apply()
         doc->setGridY(valY);
     }
 
-    double newIndent = KoUnit::fromUserValue( indent->value(), doc->getUnit() );
+    double newIndent = KoUnit::ptFromUnit( indent->value(), doc->getUnit() );
     if( newIndent != doc->getIndentValue() )
     {
         config->writeEntry( "Indent", newIndent, true, false, 'g', DBL_DIG /* 6 is not enough */ );
@@ -322,10 +322,10 @@ void ConfigureInterfacePage::apply()
 void ConfigureInterfacePage::slotDefault()
 {
     KWDocument * doc = m_pView->kWordDocument();
-    gridX->setValue( KoUnit::userValue( 10, doc->getUnit() ) );
-    gridY->setValue( KoUnit::userValue( 10, doc->getUnit() ) );
+    gridX->setValue( KoUnit::ptToUnit( 10, doc->getUnit() ) );
+    gridY->setValue( KoUnit::ptToUnit( 10, doc->getUnit() ) );
     m_nbPagePerRow->setValue(4);
-    double newIndent = KoUnit::userValue( MM_TO_POINT( 10 ), doc->getUnit() );
+    double newIndent = KoUnit::ptToUnit( MM_TO_POINT( 10 ), doc->getUnit() );
     indent->setValue( newIndent );
     recentFiles->setValue(10);
     showRuler->setChecked(true);
@@ -387,7 +387,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     QWhatsThis::add( m_undoRedoLimit, i18n("Limit the amount of undo/redo actions remembered to save "
                 "memory") );
 
-    QLabel *varLabel= new QLabel(i18n("Starting page number:"),gbMiscGroup);
+    new QLabel(i18n("Starting page number:"),gbMiscGroup);
 
     KWDocument * doc = m_pView->kWordDocument();
     m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
@@ -481,7 +481,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     }
 
     QString suffix = unitType.prepend(' ');
-    columnSpacing=new KDoubleNumInput( KoUnit::userValue( ptColumnSpacing, unit ), gbDocumentDefaults );
+    columnSpacing=new KDoubleNumInput( KoUnit::ptToUnit( ptColumnSpacing, unit ), gbDocumentDefaults );
     columnSpacing->setRange(0.1, 50, 0.1);
     columnSpacing->setPrecision(1);
     columnSpacing->setSuffix( suffix );
@@ -518,7 +518,7 @@ void ConfigureDefaultDocPage::apply()
 {
     config->setGroup( "Document defaults" );
     KWDocument * doc = m_pView->kWordDocument();
-    int colSpacing=(int)KoUnit::fromUserValue( columnSpacing->value(), doc->getUnit() );
+    int colSpacing=(int)KoUnit::ptFromUnit( columnSpacing->value(), doc->getUnit() );
     if(colSpacing!=doc->defaultColumnSpacing())
     {
         config->writeEntry( "ColumnSpacing",colSpacing , true, false, 'g', DBL_DIG /* 6 is not enough */ );
@@ -529,7 +529,7 @@ void ConfigureDefaultDocPage::apply()
 
 void ConfigureDefaultDocPage::slotDefault()
 {
-   columnSpacing->setValue(KoUnit::userValue( 3, m_pView->kWordDocument()->getUnit() ));
+   columnSpacing->setValue(KoUnit::ptToUnit( 3, m_pView->kWordDocument()->getUnit() ));
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {
