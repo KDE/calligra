@@ -819,7 +819,7 @@ void KTextEdit::placeCursor( const QPoint &pos, KTextEditCursor *c )
     int index;
     int i = 0;
     int cy;
-    int ch;
+    int ch=0;
     for ( ; i < lines; ++i ) {
 	chr = s->lineStartOfLine( i, &index );
 	cy = s->lineY( i );
@@ -2984,7 +2984,7 @@ void KTextEditParag::paint( QPainter &painter, const QColorGroup &cg, KTextEditC
     int startX = 0;
     int bw = 0;
     int cy = 0;
-    int curx = -1, cury, curh;
+    int curx = -1, cury=-1, curh=1;
 
     // #### draw other selections too here!!!!!!!
 #ifdef __DECCXX

@@ -571,8 +571,8 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
         paragraph.setAttribute("depth", parag->listDepth());
         KTextEditFormat *lastFormat = 0;
         QString tmpText, tmpFamily, tmpColor;
-        int tmpPointSize;
-        unsigned int tmpBold, tmpItalic, tmpUnderline;
+        int tmpPointSize=10;
+        unsigned int tmpBold=false, tmpItalic=false, tmpUnderline=false;
         for ( int i = 0; i < parag->length(); ++i ) {
             KTextEditString::Char *c = parag->at( i );
             if ( !lastFormat || c->format->key() != lastFormat->key() ) {
