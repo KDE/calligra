@@ -120,7 +120,7 @@ KWCanvas::~KWCanvas()
 void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
 {
     assert(fs); // the new code can't support fs being 0L here. Mail me if it happens (DF)
-    //kdDebug(32002) << "KWCanvas::repaintChanged this=" << this << " fs=" << fs << endl;
+    kdDebug(32002) << "KWCanvas::repaintChanged this=" << this << " fs=" << fs << endl;
     QPainter p( viewport() );
     p.translate( -contentsX(), -contentsY() );
     p.setBrushOrigin( -contentsX(), -contentsY() );
@@ -130,7 +130,7 @@ void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
 
 void KWCanvas::repaintAll( bool erase /* = false */ )
 {
-    //kdDebug() << "KWCanvas::repaintAll erase=" << erase << endl;
+    kdDebug() << "KWCanvas::repaintAll erase=" << erase << endl;
     viewport()->repaint( erase );
 }
 
@@ -194,7 +194,7 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 
 void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
 {
-    //kdDebug(32002) << "KWCanvas::drawDocument crect: " << DEBUGRECT( crect ) << endl;
+    kdDebug(32002) << "KWCanvas::drawDocument crect: " << DEBUGRECT( crect ) << endl;
 
     // Draw all framesets contents
     QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
@@ -919,7 +919,7 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
 {
     //kdDebug() << "KWCanvas::mrEditFrame" << endl;
     KWFrame *firstFrame = m_doc->getFirstSelectedFrame();
-    //kdDebug() << "KWCanvas::mrEditFrame frameMoved=" << frameMoved << " frameResized=" << frameResized << endl;
+    kdDebug() << "KWCanvas::mrEditFrame frameMoved=" << frameMoved << " frameResized=" << frameResized << endl;
     if ( firstFrame && ( frameMoved || frameResized ) )
     {
         KWTableFrameSet *table = firstFrame->getFrameSet()->getGroupManager();
@@ -1863,7 +1863,7 @@ void KWCanvas::slotNewContentsSize()
     QSize size = m_viewMode->contentsSize();
     if ( size != QSize( contentsWidth(), contentsHeight() ) )
     {
-        //kdDebug() << "KWCanvas::slotNewContentsSize " << size.width() << "x" << size.height() << endl;
+        kdDebug() << "KWCanvas::slotNewContentsSize " << size.width() << "x" << size.height() << endl;
         resizeContents( size.width(), size.height() );
     }
 }

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2001 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,6 +52,7 @@
 #include "kweditpersonnalexpressiondia.h"
 #include "kwformat.h"
 #include "kwframe.h"
+#include "kwinsertpicdia.h"
 #include "kwstyle.h"
 #include "kwtableframeset.h"
 #include "kwtextframeset.h"
@@ -124,7 +126,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     setXMLFile( "kword.rc" );
 
     QObject::connect( this, SIGNAL( embeddImage( const QString & ) ),
-                      this, SLOT( insertPicture( const QString & ) ) );
+                      this, SLOT( slotEmbedImage( const QString & ) ) );
 
     setKeyCompression( TRUE );
     setAcceptDrops( TRUE );
@@ -353,9 +355,9 @@ void KWView::setupActions()
                         this, SLOT( insertTable() ),
                         actionCollection(), "insert_table" );
 
-    actionInsertPicture = new KAction( i18n( "&Picture Inline..." ),"inline_image", Key_F2,
+    /*actionInsertPicture = new KAction( i18n( "&Picture Inline..." ),"inline_image", Key_F2,
                         this, SLOT( insertPicture() ),
-                        actionCollection(), "insert_picture" );
+                        actionCollection(), "insert_picture" );*/
 
     actionInsertSpecialChar = new KAction( i18n( "Sp&ecial Character..." ), "char",
                         ALT + SHIFT + Key_C,
@@ -383,9 +385,10 @@ void KWView::setupActions()
                                                this, SLOT( toolsCreateText() ),
                                                actionCollection(), "tools_createtext" );
     actionToolsCreateText->setExclusiveGroup( "tools" );
-    actionToolsCreatePix = new KToggleAction( i18n( "P&icture Frame" ), "frame_image", Key_F7,
-                                              this, SLOT( toolsCreatePix() ),
-                                              actionCollection(), "tools_createpix" );
+    actionToolsCreatePix = new KToggleAction( i18n( "P&icture..." ), "frame_image", // or inline_image ?
+                                              Key_F3 /*same as kpr*/,
+                                              this, SLOT( insertPicture() ),
+                                              actionCollection(), "insert_picture" );
     actionToolsCreatePix->setExclusiveGroup( "tools" );
     actionToolsCreatePart = new KToggleAction( i18n( "&Object Frame" ), "frame_query", Key_F12,
                                                this, SLOT( toolsPart() ),
@@ -1501,34 +1504,68 @@ void KWView::setZoom( int zoom, bool updateViews )
 
 void KWView::insertPicture()
 {
-    insertPicture( selectPicture() );
+    if ( !actionToolsCreatePix->isChecked() )
+    {
+        actionToolsCreatePix->setChecked( true ); // clicked on the already active tool!
+        return;
+    }
+    KWInsertPicDia dia( this );
+    if ( dia.exec() == QDialog::Accepted && !dia.filename().isEmpty() )
+        insertPicture( dia.filename(), dia.type() == KWInsertPicDia::IPD_CLIPART, dia.makeInline() );
+    else
+        setTool( MM_EDIT );
 }
 
-void KWView::insertPicture(const QString &filename)
+void KWView::slotEmbedImage( const QString &filename )
 {
-    if ( !filename.isEmpty() )
+    insertPicture( filename, false, false );
+}
+
+void KWView::insertPicture( const QString &filename, bool isClipart, bool makeInline )
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit && makeInline )
     {
-        KWTextFrameSetEdit * edit = currentTextEdit();
-        if ( edit )
+        KWFrameSet * fs = 0L;
+        int width = 0;
+        int height = 0;
+        if ( isClipart )
         {
-            // ### Old way: edit->insertPicture( filename );
+            KWClipartFrameSet *frameset = new KWClipartFrameSet( m_doc, QString::null );
+            frameset->loadClipart( filename );
+            fs = frameset;
+            // Set an initial size
+            width = m_doc->zoomItX( 100 );
+            height = m_doc->zoomItY( 100 );
+        }
+        else
+        {
             // New way:
-            KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
             QPixmap pix( filename );
             // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
-            int width = qRound( (double)pix.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
-            int height = qRound( (double)pix.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
+            width = qRound( (double)pix.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
+            height = qRound( (double)pix.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
             // Apply reasonable limits
             width = QMIN( width, m_doc->paperWidth() - m_doc->leftBorder() - m_doc->rightBorder() - m_doc->zoomItX( 10 ) );
             height = QMIN( height, m_doc->paperHeight() - m_doc->topBorder() - m_doc->bottomBorder() - m_doc->zoomItY( 10 ) );
 
+            KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
             frameset->loadImage( filename, QSize( width, height ) );
-            m_doc->addFrameSet( frameset, false ); // done first since the frame number is stored in the undo/redo
-            KWFrame *frame = new KWFrame(frameset, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );
-            frameset->addFrame( frame, false );
-            edit->insertFloatingFrameSet( frameset, i18n("Insert Picture Inline") );
-            frameset->finalize(); // done last since it triggers a redraw
+            fs = frameset;
         }
+        m_doc->addFrameSet( fs, false ); // done first since the frame number is stored in the undo/redo
+        KWFrame *frame = new KWFrame( fs, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );
+        fs->addFrame( frame, false );
+        edit->insertFloatingFrameSet( fs, i18n("Insert Picture Inline") );
+        fs->finalize(); // done last since it triggers a redraw
+        // Reset the 'tool'
+        setTool( MM_EDIT );
+    }
+    else
+    {
+        m_gui->canvasWidget()->setMouseMode( MM_CREATE_PIX );
+        m_gui->canvasWidget()->setPixmapFilename( filename ); // #########
+#warning TODO
     }
 }
 
@@ -1862,45 +1899,6 @@ void KWView::toolsCreateText()
         m_gui->canvasWidget()->setMouseMode( MM_CREATE_TEXT );
     else
         actionToolsCreateText->setChecked( true ); // always one has to be checked !
-}
-
-void KWView::toolsCreatePix()
-{
-    if ( !actionToolsCreatePix->isChecked() )
-    {
-        actionToolsCreatePix->setChecked( true ); // always one has to be checked !
-        return;
-    }
-    m_gui->canvasWidget()->setMouseMode( MM_EDIT );
-
-
-    QString file = selectPicture();
-    if ( !file.isEmpty() ) {
-        m_gui->canvasWidget()->setMouseMode( MM_CREATE_PIX );
-        m_gui->canvasWidget()->setPixmapFilename( file );
-    } else
-        m_gui->canvasWidget()->setMouseMode( MM_EDIT );
-}
-
-QString KWView::selectPicture()
-{
-    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Writing), 0, 0, TRUE );
-    fd.setCaption(i18n("Insert Picture"));
-    fd.setPreviewWidget( new Preview( &fd ) );
-    KURL url;
-    if ( fd.exec() == QDialog::Accepted )
-        url = fd.selectedURL();
-
-    if( url.isEmpty() )
-      return QString::null;
-
-    if( !url.isLocalFile() )
-    {
-      KMessageBox::sorry( 0L, i18n( "Only local files are currently supported." ) );
-      return QString::null;
-    }
-
-    return url.path();
 }
 
 void KWView::insertTable()
@@ -2861,7 +2859,6 @@ void KWView::slotFrameSetEditChanged()
     actionFormatSub->setEnabled(state);
     actionFormatParag->setEnabled(state);
     actionInsertSpecialChar->setEnabled(state);
-    actionInsertPicture->setEnabled(state);
     actionInsertFormula->setEnabled(state);
     actionInsertContents->setEnabled(state);
     actionInsertVariable->setEnabled(state);

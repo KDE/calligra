@@ -17,17 +17,15 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kapp.h>
-#include <kdialogbase.h>
 #include <klocale.h>
+#include <kinstance.h>
 #include <klineeditdlg.h>
 
 #include <qlayout.h>
+#include <qfile.h>
 #include <qvbox.h>
-#include <kapp.h>
 #include <kdebug.h>
 #include <kstddirs.h>
-#include <qdir.h>
 
 #include <qcombobox.h>
 #include <qlabel.h>
@@ -36,15 +34,12 @@
 #include "kweditpersonnalexpressiondia.h"
 #include "kwview.h"
 
-
 KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const char *name )
-    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+    : KDialogBase( parent, name , true, i18n("Edit personal expression: "), Ok|Cancel, Ok, true )
 {
     QWidget *page = new QWidget( this );
     setMainWidget(page);
-    QGridLayout *grid = new QGridLayout( page, 9, 3, 15, 7 );
-
-    setCaption( i18n("Edit personal expression: ") );
+    QGridLayout *grid = new QGridLayout( page, 9, 3, KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *lab=new QLabel(i18n( "Expression group:" ), page );
     grid->addWidget(lab,0,0);
@@ -257,13 +252,6 @@ void KWEditPersonnalExpression::saveFile()
 
     }
     QCString s = doc.toCString();
-
-    QString dir=KWFactory::global()->dirs()->saveLocation("expression");
-    if(!KStandardDirs::makeDir(dir))
-    {
-        kdDebug()<<"Error in savelocation \n";
-        return;
-    }
 
     QFile file( locateLocal("data","kword/expression/perso.xml") );
     if ( !file.open( IO_ReadWrite ) )

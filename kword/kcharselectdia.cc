@@ -56,7 +56,7 @@ void KCharSelectDia::initDialog(const QChar &_chr, const QString &_font, bool /*
 {
    QWidget *page = plainPage();
 
-    grid = new QGridLayout( page, 1, 1, 15, 7 );
+    grid = new QGridLayout( page, 1, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
     charSelect = new KCharSelect( page, "", _font, _chr );
     connect(charSelect, SIGNAL(doubleClicked()),this, SLOT(slotDoubleClicked()));

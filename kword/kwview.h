@@ -159,7 +159,6 @@ public slots:
 
     void insertTable();
     void insertPicture();
-    void insertPicture(const QString &filename);
     void insertSpecialChar();
     void insertFrameBreak();
     void insertVariable();
@@ -177,7 +176,6 @@ public slots:
     void extraCreateTemplate();
 
     void toolsCreateText();
-    void toolsCreatePix();
     void insertFormula();
     void toolsPart();
 
@@ -259,6 +257,7 @@ public slots:
     void editPersonalExpr();
 
     void slotUpdateRuler();
+    void slotEmbedImage( const QString &filename );
 
 protected:
     void addVariableActions( int type, const QStringList & texts,
@@ -268,7 +267,7 @@ protected:
 
     void createExpressionActions( KActionMenu * parentMenu,const QString& filename );
 
-    QString selectPicture();
+    void insertPicture( const QString &filename, bool isClipart, bool makeInline );
 
     KWTextFrameSetEdit *currentTextEdit();
 
@@ -353,7 +352,6 @@ private:
     KToggleAction *actionFormatSuper;
     KToggleAction *actionFormatSub;
     KAction* actionInsertSpecialChar;
-    KAction* actionInsertPicture;
 
     // Text and Frame borders.
     KToggleAction *actionBorderLeft;

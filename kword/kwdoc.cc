@@ -352,6 +352,7 @@ void KWDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderF
 
 void KWDocument::updateRuler()
 {
+    kdDebug() << "KWDocument::updateRuler" << endl;
     // Invalidate document layout
     layout();
     //refresh koRuler in each view
@@ -1908,6 +1909,7 @@ KWStyle* KWDocument::findStyle( const QString & _name )
  */
 void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
 {
+    //kdDebug() << "KWDocument::repaintAllViewsExcept" << endl;
     for ( KWView * viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
         if ( viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget() ) {
             if ( viewPtr != _view )
@@ -1956,6 +1958,7 @@ void KWDocument::applyStyleChange( KWStyle * changedStyle, int paragLayoutChange
 
 void KWDocument::repaintAllViews( bool erase )
 {
+    //kdDebug() << "KWDocument::repaintAllViews" << endl;
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
         viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
 }
@@ -1963,7 +1966,7 @@ void KWDocument::repaintAllViews( bool erase )
 void KWDocument::appendPage( /*unsigned int _page*/ )
 {
     int thisPageNum = m_pages-1;
-    //kdDebug(32002) << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
+    kdDebug(32002) << "KWDocument::appendPage m_pages=" << m_pages << " so thisPageNum=" << thisPageNum << endl;
     m_pages++;
 
     QListIterator<KWFrameSet> fit = framesetsIterator();
@@ -2184,19 +2187,17 @@ KWFrame *KWDocument::getFirstSelectedFrame()
 
 void KWDocument::updateAllFrames()
 {
-    //kdDebug(32002) << "KWDocument::updateAllFrames " << frames.count() << " framesets." << endl;
+    kdDebug(32002) << "KWDocument::updateAllFrames " << frames.count() << " framesets." << endl;
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
-    {
-        //kdDebug() << "KWDocument::updateAllFrames updating " << fit.current() << endl;
         fit.current()->updateFrames();
-    }
 }
 
 // Tell this method when a frame is moved / resized / created / deleted
 // and everything will be update / repainted accordingly
 void KWDocument::frameChanged( KWFrame * frame, KWView * view )
 {
+    //kdDebug() << "KWDocument::frameChanged" << endl;
     updateAllFrames();
     // If frame with text flowing around it -> re-layout all frames
     if ( !frame || frame->runAround() != KWFrame::RA_NO )
@@ -2212,12 +2213,15 @@ void KWDocument::frameChanged( KWFrame * frame, KWView * view )
 
 void KWDocument::framesChanged( const QList<KWFrame> & frames, KWView * view )
 {
+    //kdDebug() << "KWDocument::framesChanged" << endl;
     updateAllFrames();
     QListIterator<KWFrame> it( frames );
     for ( ; it.current() ; ++it )
         if ( it.current()->runAround() != KWFrame::RA_NO )
         {
+            //kdDebug() << "KWDocument::framesChanged ->layout" << endl;
             layout();
+            //kdDebug() << "KWDocument::framesChanged ->repaintAllViewsExcept" << endl;
             repaintAllViewsExcept( view );
             return;
         }
@@ -2503,7 +2507,8 @@ void KWDocument::layout()
 {
     QListIterator<KWFrameSet> it = framesetsIterator();
     for (; it.current(); ++it )
-        it.current()->layout();
+        if ( it.current()->isVisible() )
+            it.current()->layout();
 }
 
 void KWDocument::invalidate()

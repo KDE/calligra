@@ -38,7 +38,7 @@ KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, int numrows, 
     setInitialSize( QSize(400, 300) );
 
     QWidget *page = plainPage();
-    QGridLayout *grid = new QGridLayout( page, 4, 2, 15, 7 );
+    QGridLayout *grid = new QGridLayout( page, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *lRows = new QLabel( i18n( "Number of Rows:" ), page );
     grid->addWidget( lRows, 0, 0 );

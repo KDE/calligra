@@ -88,7 +88,7 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
 {
     tab1 = addPage( i18n( "Geometry" ) );
 
-    QGridLayout *grid = new QGridLayout( tab1, 9, 2, 15, 7 );
+    QGridLayout *grid = new QGridLayout( tab1, 9, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     lRows = new QLabel( i18n( "Number of Rows:" ), tab1 );
     grid->addWidget( lRows, 0, 0 );
@@ -177,7 +177,7 @@ void KWTableDia::setupTab2()
     readTableStyles();
 
     tab2 = addPage( i18n("Properties"));
-    QGridLayout *grid = new QGridLayout( tab2, 4, 3, 15, 7 );
+    QGridLayout *grid = new QGridLayout( tab2, 4, 3, KDialog::marginHint(), KDialog::spacingHint() );
 
     lStyles = new QLabel( i18n( "Styles" ), tab2 );
     grid->addWidget( lStyles, 0, 0 );

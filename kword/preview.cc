@@ -22,7 +22,7 @@
 #include "preview.moc"
 #include <qscrollview.h>
 #include <qfileinfo.h>
-//#include "qwmf.h"
+#include <qwmf.h>
 
 class PixmapView : public QScrollView
 {
@@ -36,30 +36,30 @@ public:
 	viewport()->repaint( FALSE );
     }
 
-    void setClipart( const QString & ) {
-// 	QWinMetaFile wmf;
+    void setClipart( const QString &s ) {
+ 	QWinMetaFile wmf;
 
-// 	if ( wmf.load( s ) ) {
-// 	    QPicture pic;
-// 	    wmf.paint( &pic );
+ 	if ( wmf.load( s ) ) {
+ 	    QPicture pic;
+ 	    wmf.paint( &pic );
 
-// 	    pixmap = QPixmap( 200, 200 );
-// 	    QPainter p;
+ 	    pixmap = QPixmap( 200, 200 );
+ 	    QPainter p;
 
-// 	    p.begin( &pixmap );
-// 	    p.setBackgroundColor( Qt::white );
-// 	    pixmap.fill( Qt::white );
+ 	    p.begin( &pixmap );
+ 	    p.setBackgroundColor( Qt::white );
+ 	    pixmap.fill( Qt::white );
 
-// 	    QRect oldWin = p.window();
-// 	    QRect vPort = p.viewport();
-// 	    p.setViewport( 0, 0, 200, 200 );
-// 	    p.drawPicture( pic );
-// 	    p.setWindow( oldWin );
-// 	    p.setViewport( vPort );
-// 	    p.end();
-// 	    resizeContents( pixmap.size().width(), pixmap.size().height() );
-// 	    viewport()->repaint( FALSE );
-// 	}
+ 	    QRect oldWin = p.window();
+ 	    QRect vPort = p.viewport();
+ 	    p.setViewport( 0, 0, 200, 200 );
+ 	    p.drawPicture( pic );
+ 	    p.setWindow( oldWin );
+ 	    p.setViewport( vPort );
+ 	    p.end();
+ 	    resizeContents( pixmap.size().width(), pixmap.size().height() );
+ 	    viewport()->repaint( FALSE );
+ 	}
     }
 
     void drawContents( QPainter *p, int, int, int, int ) {
@@ -79,7 +79,6 @@ Preview::Preview( QWidget *parent )
 
 void Preview::showPreview( const KURL &u )
 {
-    pixmap->setPixmap(QPixmap(""));
     if ( u.isLocalFile() ) {
 	QString path = u.path();
 	QFileInfo fi( path );

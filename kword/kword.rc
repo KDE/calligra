@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="17">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="18">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -37,9 +37,7 @@
   <Action name="view_zoom"/>
  </Menu>
  <Menu name="insert"><text>&amp;Insert</text>
-  <!-- Non-frames -->
-  <Action name="insert_picture"/>
-  <Action name="insert_clipart"/>
+  <!-- Inside the text -->
   <Action name="tools_formula"/>
   <Action name="insert_specialchar"/>
   <Action name="insert_framebreak"/>
@@ -48,10 +46,10 @@
   <Action name="insert_variable"/> <!-- menu -->
   <Action name="insert_expression"/> <!-- menu -->
   <Separator/>
-  <!-- frames -->
+  <!-- Frames -->
   <Action name="insert_table"/>
   <Action name="tools_createtext"/>
-  <Action name="tools_createpix"/>
+  <Action name="insert_picture"/>
   <Action name="tools_kspreadtable"/>
   <Action name="tools_part"/>
  </Menu>

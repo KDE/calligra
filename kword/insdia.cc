@@ -56,12 +56,12 @@ void KWInsertDia::setupTab1()
 {
     tab1 = addPage( type == ROW ? i18n( "Insert Row" ) : i18n( "Insert Column" ) );
 
-    grid1 = new QGridLayout( tab1, 3, 1, 15, 7 );
+    grid1 = new QGridLayout( tab1, 3, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
     QButtonGroup *grp = new QButtonGroup( type == ROW ? i18n( "Insert New Row" ) : i18n( "Insert New Column" ), tab1 );
     grp->setExclusive( true );
 
-    grid2 = new QGridLayout( grp, 3, 1, 7, 7 );
+    grid2 = new QGridLayout( grp, 3, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
     rBefore = new QRadioButton( i18n( "Before" ), grp );
     rBefore->resize( rBefore->sizeHint() );
@@ -122,9 +122,6 @@ bool KWInsertDia::doInsert()
     doc->repaintAllViews();
     doc->layout();
     canvas->repaintAll();
-#if 0
-    canvas->recalcCursor();
-#endif
     return true;
 }
 

@@ -50,6 +50,7 @@
 //#define DEBUG_FLOW
 //#define DEBUG_FORMATS
 //#define DEBUG_FORMAT_MORE
+//#define DEBUG_VIEWAREA
 
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc ), undoRedoInfo( this )
@@ -1455,8 +1456,9 @@ void KWTextFrameSet::formatMore()
 
     QTextParag *lastFormatted = m_lastFormatted;
 #ifdef DEBUG_FORMAT_MORE
-    kdDebug(32002) << "KWTextFrameSet::formatMore " << name()
+    kdDebug(32002) << "KWTextFrameSet::formatMore " << getName()
                    << " lastFormatted id=" << lastFormatted->paragId()
+                   << " lastFormatted's top=" << lastFormatted->rect().top()
                    << " lastFormatted's height=" << lastFormatted->rect().height()
                    << " to=" << to << " viewsBottom=" << viewsBottom
                    << " availableHeight=" << m_availableHeight << endl;
@@ -1484,10 +1486,12 @@ void KWTextFrameSet::formatMore()
 #endif
         lastFormatted->format();
         bottom = lastFormatted->rect().top() + lastFormatted->rect().height();
-        lastFormatted = lastFormatted->next();
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug() << "KWTextFrameSet::formatMore bottom=" << bottom << " lastFormatted=" << lastFormatted << endl;
+        kdDebug() << "KWTextFrameSet::formatMore(inside) top=" << lastFormatted->rect().top()
+                  << " height=" << lastFormatted->rect().height()
+                  << " bottom=" << bottom << " lastFormatted(next parag) = " << lastFormatted->next() << endl;
 #endif
+        lastFormatted = lastFormatted->next();
     }
 #ifdef DEBUG_FORMAT_MORE
     kdDebug(32002) << "KWTextFrameSet::formatMore finished formatting. "
@@ -1502,11 +1506,11 @@ void KWTextFrameSet::formatMore()
     {
 #ifdef DEBUG_FORMAT_MORE
         if(lastFormatted)
-            kdDebug(32002) << "KWTextFrameSet::formatMore We need more space."
+            kdDebug(32002) << "KWTextFrameSet::formatMore We need more space in " << getName()
                            << " bottom=" << bottom + lastFormatted->rect().height()
                            << " m_availableHeight=" << m_availableHeight << endl;
         else
-            kdDebug(32002) << "KWTextFrameSet::formatMore We need more space."
+            kdDebug(32002) << "KWTextFrameSet::formatMore We need more space in " << getName()
                            << " bottom2=" << bottom << " m_availableHeight=" << m_availableHeight << endl;
 #endif
 
@@ -1518,13 +1522,25 @@ void KWTextFrameSet::formatMore()
                 case KWFrame::AutoExtendFrame:
                 {
                     double difference = bottom - m_availableHeight;
-                    if(lastFormatted) difference += lastFormatted->rect().height();
+#ifdef DEBUG_FORMAT_MORE
+                    kdDebug(32002) << "AutoExtendFrame bottom=" << bottom << " m_availableHeight=" << m_availableHeight
+                              << " => difference = " << difference << endl;
+#endif
+                    if( lastFormatted && bottom + lastFormatted->rect().height() > m_availableHeight ) {
+#ifdef DEBUG_FORMAT_MORE
+                        kdDebug(32002) << " next will be off -> adding " << lastFormatted->rect().height() << endl;
+#endif
+                        difference += lastFormatted->rect().height();
+                    }
 
                     if(difference > 0) {
                         KWFrame *theFrame = frames.last();
 
                         if ( theFrame->getFrameSet()->isAFooter() )
                         {
+#ifdef DEBUG_FORMAT_MORE
+                            kdDebug(32002) << "KWTextFrameSet::formatMore this is a footer" << endl;
+#endif
                             theFrame->setTop( theFrame->top() - difference );
 
                             m_doc->recalcFrames();
@@ -1541,6 +1557,9 @@ void KWTextFrameSet::formatMore()
                         double pageBottom = (double) (theFrame->pageNum()+1) * m_doc->ptPaperHeight();
                         pageBottom -= m_doc->ptBottomBorder();
                         double newPosition = QMIN(wantedPosition, pageBottom );
+#ifdef DEBUG_FORMAT_MORE
+                        kdDebug(32002) << "KWTextFrameSet::formatMore setting bottom to " << newPosition << endl;
+#endif
                         theFrame->setBottom(newPosition);
                         if(theFrame->getFrameSet()->frameSetInfo() != KWFrameSet::FI_BODY)
                         {
@@ -1559,6 +1578,9 @@ void KWTextFrameSet::formatMore()
                             wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
                             // fall through to AutoCreateNewFrame
                         } else {
+#ifdef DEBUG_FORMAT_MORE
+                            kdDebug(32002) << "KWTextFrameSet::formatMore frame " << theFrame << " changed -> repaint" << endl;
+#endif
                             // m_doc->frameChanged( theFrame );
                             // Warning, can't call layout() (frameChanged calls it)
                             // from here, since it calls formatMore() !
@@ -1572,7 +1594,9 @@ void KWTextFrameSet::formatMore()
                 case KWFrame::AutoCreateNewFrame:
                 {
                     // We need a new frame in this frameset.
-
+#ifdef DEBUG_FORMAT_MORE
+                    kdDebug(32002) << "KWTextFrameSet::formatMore creating new frame in frameset " << getName() << endl;
+#endif
                     uint oldCount = frames.count();
                     // First create a new page for it if necessary
                     if ( frames.last()->pageNum() == m_doc->getPages() - 1 )
@@ -1598,7 +1622,13 @@ void KWTextFrameSet::formatMore()
                 }
                 break;
                 case KWFrame::Ignore:
+                {
+#ifdef DEBUG_FORMAT_MORE
+                    kdDebug(32002) << "KWTextFrameSet::formatMore frame behaviour is Ignore" << endl;
+#endif
+                    lastFormatted = 0;
                     break;
+                }
             }
 
         }
@@ -1657,7 +1687,7 @@ bool KWTextFrameSet::isFrameEmpty( KWFrame * frame )
 
     kdWarning() << "KWTextFrameSet::isFrameEmpty called for frame " << frame << " which isn't a child of ours!" << endl;
     if ( frame->getFrameSet() )
-        kdDebug() << "(this is " << getName() << " and the frame belongs to " << frame->getFrameSet()->name() << endl;
+        kdDebug() << "(this is " << getName() << " and the frame belongs to " << frame->getFrameSet()->getName() << ")" << endl;
     return false;
 }
 
@@ -1667,10 +1697,11 @@ bool KWTextFrameSet::canRemovePage( int num )
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame * frame = frameIt.current();
-        ASSERT ( frame->pageNum() == num );
+        ASSERT( frame->pageNum() == num );
+        ASSERT( frame->getFrameSet() == this );
         bool isEmpty = isFrameEmpty( frame );
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug() << "KWTextFrameSet(" << name() << ")::canRemovePage"
+        kdDebug() << "KWTextFrameSet(" << getName() << ")::canRemovePage"
                   << " found a frame on page " << num << " empty:" << isEmpty << endl;
 #endif
         // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame OR it's empty
@@ -1689,7 +1720,7 @@ void KWTextFrameSet::doChangeInterval()
 void KWTextFrameSet::updateViewArea( QWidget * w, const QPoint & nPointBottom )
 {
     (void) availableHeight(); // make sure that it's not -1
-#ifdef DEBUG_FORMAT_MORE
+#ifdef DEBUG_VIEWAREA
     kdDebug(32002) << "KWTextFrameSet::updateViewArea " << (void*)w << " " << w->name()
                      << " nPointBottom=" << nPointBottom.x() << "," << nPointBottom.y()
                      << " m_availableHeight=" << m_availableHeight << " textdoc->height()=" << textdoc->height() << endl;
@@ -1710,7 +1741,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, const QPoint & nPointBottom )
                          + m_doc->zoomItY( frameIt.current()->height() ) );
         }
     }
-#ifdef DEBUG_FORMAT_MORE
+#ifdef DEBUG_VIEWAREA
     kdDebug(32002) << "KWTextFrameSet (" << getName() << ")::updateViewArea maxY now " << maxY << endl;
 #endif
     // Update map
