@@ -9,7 +9,7 @@ kde_module_LTLIBRARIES = libkspreadexcelexport.la
 
 libkspreadexcelexport_la_SOURCES = excelexport.cc
 libkspreadexcelexport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
-libkspreadexcelexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la ../libkspreadexport/libkspreadexport.la
+libkspreadexcelexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadcommon.la ../libkspreadexport/libkspreadexport.la
 
 METASOURCES = AUTO
 

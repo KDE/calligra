@@ -9,7 +9,7 @@ libkspreadcalc_la_SOURCES = configdlg.cpp \
 			main.cpp \
 			stats.cpp
 libkspreadcalc_la_LDFLAGS = -avoid-version -module -no-undefined
-libkspreadcalc_la_LIBADD = $(all_libraries) ../../libkspreadpart.la
+libkspreadcalc_la_LIBADD = $(all_libraries) ../../libkspreadcommon.la
 
 METASOURCES = AUTO
 

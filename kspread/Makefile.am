@@ -4,11 +4,10 @@ INCLUDES  = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) -I$(interfacedir) \
 	$(KOSCRIPT_INCLUDES) -I$(top_srcdir)/interfaces \
 	 -I$(top_srcdir)/kchart/kdchart $(all_includes)
 
-lib_LTLIBRARIES = 
+lib_LTLIBRARIES = libkspreadcommon.la
 kde_module_LTLIBRARIES = libkspreadpart.la
 
-## The part
-libkspreadpart_la_SOURCES =  \
+libkspreadcommon_la_SOURCES =  \
         digest.cc \
         commands.cc \
         kspread_autofill.cc \
@@ -69,10 +68,17 @@ libkspreadpart_la_SOURCES =  \
         KSpreadViewIface.skel \
         KSpreadViewIface.cc
 
-libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkspreadpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
+libkspreadcommon_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
+libkspreadcommon_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
 	dialogs/libdialogs.la \
 	$(LIB_KOSCRIPT) $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell
+
+libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
+libkspreadpart_la_LIBADD  = libkspreadcommon.la
+libkspreadpart_la_SOURCES = dummy.cpp
+
+dummy.cpp:
+	echo > dummy.cpp
 
 METASOURCES = AUTO
 

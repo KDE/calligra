@@ -9,7 +9,7 @@ kde_module_LTLIBRARIES = libkspreadhtmlexport.la
 
 libkspreadhtmlexport_la_SOURCES = htmlexport.cc
 libkspreadhtmlexport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
-libkspreadhtmlexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la
+libkspreadhtmlexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadcommon.la
 
 METASOURCES = AUTO
 

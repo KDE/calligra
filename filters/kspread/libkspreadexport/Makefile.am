@@ -5,7 +5,7 @@ INCLUDES= -I$(srcdir) -I$(top_srcdir)/kspread -I$(srcdir)/../libkspreadexport $(
 
 libkspreadexport_la_LDFLAGS = $(all_libraries) -module -version-info 1:0:0 -no-undefined
 
-libkspreadexport_la_LIBADD = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la
+libkspreadexport_la_LIBADD = $(KOFFICE_LIBS) ../../../kspread/libkspreadcommon.la
 
 ####### Files
 

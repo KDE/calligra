@@ -8,11 +8,11 @@ kde_module_LTLIBRARIES = libopencalcimport.la libopencalcexport.la
 
 libopencalcexport_la_SOURCES = opencalcexport.cc opencalcstyleexport.cc
 libopencalcexport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
-libopencalcexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la
+libopencalcexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadcommon.la
 
 libopencalcimport_la_SOURCES = opencalcimport.cc
 libopencalcimport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
-libopencalcimport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadpart.la
+libopencalcimport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadcommon.la
 
 METASOURCES = AUTO
 

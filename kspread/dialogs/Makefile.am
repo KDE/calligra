@@ -43,9 +43,6 @@ libdialogs_la_SOURCES = \
 	sheet_properties_base.ui \
 	sheet_properties.cc
 
-libdialogs_la_METASOURCES = \
-	AUTO
-
 noinst_HEADERS = \
 	kspread_dlg_anchor.h \
 	kspread_dlg_angle.h \
@@ -67,4 +64,6 @@ noinst_HEADERS = \
 	kspread_dlg_preference.h \
 	kspread_dlg_reference.h \
 	kspread_dlg_resize2.h
+
+METASOURCES = AUTO
 
