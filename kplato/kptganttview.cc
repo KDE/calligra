@@ -75,6 +75,8 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     
     m_gantt = new KDGanttView(this, "Gantt view");
     m_gantt->setLinkItemsEnabled(true);
+    m_showResources = false; // FIXME
+    m_showTaskName = false; // FIXME
     m_showTaskLinks = false; // FIXME
     m_showProgress = false; //FIXME
     m_showPositiveFloat = false; //FIXME
@@ -389,6 +391,11 @@ void KPTGanttView::modifySummaryTask(KDGanttViewItem *item, KPTTask *task)
     item->setStartTime(task->startTime());
     item->setEndTime(task->endTime());
     //item->setOpen(true);
+    if (m_showTaskName) {
+        item->setText(task->name());
+    } else {
+        item->setText(QString());
+    }    
     setDrawn(item, true);
 }
 
@@ -396,6 +403,7 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
     item->setListViewText(task->name());
+
     if (task->useDateOnly()) {
         item->setStartTime(QDateTime(task->startDate(), QTime()));
         item->setEndTime(QDateTime(task->endDate().addDays(1), QTime())); // hmmm
@@ -404,7 +412,19 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
         item->setEndTime(task->endTime());
     }
     //item->setOpen(true);
-    item->setText(task->name());
+    QString text;
+    if (m_showTaskName) {
+        text = task->name();
+    }
+    if (m_showResources) {
+        QPtrListIterator<KPTAppointment> it = task->appointments();
+        for (; it.current(); ++it) {
+            if (!text.isEmpty())
+                text += ", ";
+            text += it.current()->resource()->name();
+        }
+    }
+    item->setText(text);
     if (m_showProgress) {
         item->setProgress(task->progress().percentFinished);
     } else {
@@ -492,7 +512,11 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
     else
         item->setStartTime(task->startTime());
     //item->setOpen(true);
-    item->setText(task->name());
+    if (m_showTaskName) {
+        item->setText(task->name());
+    } else {
+        item->setText(QString());
+    }    
     if (m_showPositiveFloat) {
         KPTDateTime t = task->startTime() + task->positiveFloat();
         kdDebug()<<k_funcinfo<<task->name()<<" float: "<<t.toString()<<endl;

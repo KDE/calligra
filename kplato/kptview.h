@@ -84,6 +84,8 @@ public slots:
     void slotEditCopy();
     void slotEditPaste();
     void slotViewGantt();
+    void slotViewGanttResources();
+    void slotViewGanttTaskName();
     void slotViewGanttTaskLinks();
     void slotViewGanttProgress();
     void slotViewGanttFloat();
@@ -165,6 +167,8 @@ private:
     
     // ------ View
     KAction *actionViewGantt;
+    KToggleAction *actionViewGanttResources;
+    KToggleAction *actionViewGanttTaskName;
     KToggleAction *actionViewGanttTaskLinks;
     KToggleAction *actionViewGanttProgress;
     KToggleAction *actionViewGanttFloat;

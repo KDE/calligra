@@ -147,6 +147,8 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
     // ------ View
     actionViewGantt = new KAction(i18n("Gantt"), "gantt_chart", 0, this, SLOT(slotViewGantt()), actionCollection(), "view_gantt");
+    actionViewGanttResources = new KToggleAction(i18n("Resources"), 0, 0, this, SLOT(slotViewGanttResources()), actionCollection(), "view_gantt_showResources");
+    actionViewGanttTaskName = new KToggleAction(i18n("Task Name"), 0, 0, this, SLOT(slotViewGanttTaskName()), actionCollection(), "view_gantt_showTaskName");
     actionViewGanttTaskLinks = new KToggleAction(i18n("Task Links"), 0, 0, this, SLOT(slotViewGanttTaskLinks()), actionCollection(), "view_gantt_showTaskLinks");
     actionViewGanttProgress = new KToggleAction(i18n("Progress"), 0, 0, this, SLOT(slotViewGanttProgress()), actionCollection(), "view_gantt_showProgress");
     actionViewGanttFloat = new KToggleAction(i18n("Float"), 0, 0, this, SLOT(slotViewGanttFloat()), actionCollection(), "view_gantt_showFloat");
@@ -295,6 +297,20 @@ void KPTView::slotEditCopy() {
 
 void KPTView::slotEditPaste() {
     //kdDebug()<<k_funcinfo<<endl;
+}
+
+void KPTView::slotViewGanttResources() {
+    kdDebug()<<k_funcinfo<<endl;
+    m_ganttview->setShowResources(actionViewGanttResources->isChecked());
+    if (m_tab->visibleWidget() == m_ganttview)
+        slotUpdate(false);
+}
+
+void KPTView::slotViewGanttTaskName() {
+    kdDebug()<<k_funcinfo<<endl;
+    m_ganttview->setShowTaskName(actionViewGanttTaskName->isChecked());
+    if (m_tab->visibleWidget() == m_ganttview)
+        slotUpdate(false);
 }
 
 void KPTView::slotViewGanttTaskLinks() {

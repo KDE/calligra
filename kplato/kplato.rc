@@ -20,6 +20,8 @@
         <Menu name="view"><text>&amp;View</text>
             <Action name="view_gantt"/>
             <Separator/>
+            <Action name="view_gantt_showResources"/>
+            <Action name="view_gantt_showTaskName"/>
             <Action name="view_gantt_showTaskLinks"/>
             <Action name="view_gantt_showProgress"/>
             <Action name="view_gantt_showFloat"/>
