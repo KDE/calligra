@@ -322,7 +322,7 @@ void KPWebPresentation::createMainPage(QProgressBar *progressBar)
   if (email.isEmpty())
     html += QString("Created on %1 by <I>%2</I><BR><BR>\n").arg(QDate::currentDate().toString()).arg(author);
   else
-    html += QString("Created on %1 by <I><A HREF=\"%2\">mailto:%3</A></I><BR><BR>\n").arg(QDate::currentDate().toString()).arg(email).arg(author);
+    html += QString("Created on %1 by <I><A HREF=\"mailto:%2\">%3</A></I><BR><BR>\n").arg(QDate::currentDate().toString()).arg(email).arg(author);
 
   html += "<B>Table of Contents</B><BR>\n";
   html += "<OL>\n";
