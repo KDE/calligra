@@ -2298,7 +2298,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                              int _col, int _row,
                              ColumnLayout *cl, RowLayout *rl,
                              QRect *_prect, bool override_obscured )
-{
+{ 
     // If this cell is obscured then draw the obscuring one instead.
     if ( m_pObscuringCell && !override_obscured )
     {

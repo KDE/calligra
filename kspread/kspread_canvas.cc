@@ -2127,7 +2127,6 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
                                 i_right+1 , i_bottom+1  );
 
 
-
     // QRect old_marker_rect = _old_sel;
     // if ( old_marker_rect.left() == 0 )
     // old_marker_rect =  QRect( m_marker, m_marker );
@@ -2173,8 +2172,9 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
      while( rl->isHide() && i_top!=0);
     /*old_outer.setCoords( QMAX( 1, old_sel.left() - 1 ), QMAX( 1, old_sel.top() - 1 ),
                          old_sel.right() + 1, old_sel.bottom() + 1 );*/
-    old_outer.setCoords( QMAX( 1, i_left-1  ), QMAX( 1, i_top-1  ),
-                         i_right+1 , i_bottom+1 );
+    old_outer.setCoords( QMAX( 1, i_left-2  ), QMAX( 1, i_top-2  ),
+                         i_right+2 , i_bottom+2 );
+    
     // Which cells are located next to the new selection ?
     // QRect new_outer;
     // outer.setCoords( new_sel.left() - 1, new_sel.top() - 1, new_sel.right() + 1, new_sel.bottom() + 1 );
@@ -2186,7 +2186,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     uni.rBottom() = QMIN( 9999, uni.bottom() );
     uni.rRight() = QMIN( 9999, uni.right() );
 
-    // qDebug("UNI %i/%i %i/%i", uni.left(), uni.top(), uni.right(), uni.bottom() );
+    //qDebug("UNI left/top :%i/%i right/bottom :%i/%i", uni.left(), uni.top(), uni.right(), uni.bottom() );
 
     // Determine the position of "uni" rect on the screen.
     int left = table->columnPos( uni.left() );

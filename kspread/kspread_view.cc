@@ -545,6 +545,11 @@ void KSpreadView::initialPosition()
 
 void KSpreadView::updateEditWidget()
 {
+    bool active=activeTable()->getShowFormular();
+    m_alignLeft->setEnabled(!active);
+    m_alignCenter->setEnabled(!active);
+    m_alignRight->setEnabled(!active); 
+
     m_toolbarLock = TRUE;
 
     KSpreadCell* cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
@@ -1936,6 +1941,10 @@ int KSpreadView::bottomBorder() const
 
 void KSpreadView::refreshView()
 {
+    bool active=activeTable()->getShowFormular();
+    m_alignLeft->setEnabled(!active);
+    m_alignCenter->setEnabled(!active);
+    m_alignRight->setEnabled(!active); 
     m_pToolWidget->show();
     // If this value (30) is changed then topBorder() needs to
     // be changed, too.
