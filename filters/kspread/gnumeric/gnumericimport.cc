@@ -632,8 +632,8 @@ bool GNUMERICFilter::filterImport(const QString &file,
 		
 		if (e.hasAttribute("ExprID"))
 		  {
-		    //		    QString encoded_string(table->cellAt(column,row, true)->encodeFormular(row,column).utf8());
-		    QString encoded_string(table->cellAt(column,row, true)->encodeFormular().latin1());
+		    //		    QString encoded_string(table->cellAt(column,row, true)->encodeFormula(row,column).utf8());
+		    QString encoded_string(table->cellAt(column,row, true)->encodeFormula().latin1());
 
 
 		    char *tmp_string = (char *)malloc(strlen(encoded_string.latin1()));
@@ -661,10 +661,10 @@ bool GNUMERICFilter::filterImport(const QString &file,
 		    //		    expr = exprID_dict[QString("1")];
 
 		    qDebug("FOO:%d %d",column, row);
-		    qDebug("%s",table->cellAt(column,row, true)->decodeFormular(expr,column,row).latin1());
+		    qDebug("%s",table->cellAt(column,row, true)->decodeFormula(expr,column,row).latin1());
 		    qDebug("%s",expr);
 
-		    table->setText(row, column, table->cellAt(column,row, true)->decodeFormular(expr,column,row), false); 	    
+		    table->setText(row, column, table->cellAt(column,row, true)->decodeFormula(expr,column,row), false); 	    
 		  }
 	      }
 	  }

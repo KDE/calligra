@@ -165,7 +165,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 
 		     */
 
-		     switch( cell->getFormatNumber(currentcolumn, currentrow))
+		     switch( cell->getFormatType(currentcolumn, currentrow))
 		       {
 		       case KSpreadCell::Number:
 			 stringFormat="0.00";
