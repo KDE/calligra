@@ -38,7 +38,7 @@ KAboutData *newKontourAboutData()
                                          I18N_NOOP("Kontour"),
                                          version, description,
                                          KAboutData::License_GPL,
-                                         "(c) 1998-2001, The Kontour Team", 0,
+                                         "(c) 1998-2002, The Kontour Team", 0,
 					 "http://www.koffice.org/kontour/");
   aboutData->addAuthor("Kai-Uwe Sattler", "original author", "kus@iti.cs.uni-magdeburg.de");
   aboutData->addAuthor("Igor Janssen", "current maintainer", "rm@linux.ru.net");

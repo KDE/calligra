@@ -47,18 +47,18 @@ GObject(element.namedItem("go").toElement())
 {
   double x = 0;
   double y = 0;
-  double rx = 0;
-  double ry = 0;
+  double sx = 0;
+  double sy = 0;
 
   x = element.attribute("x").toDouble();
   y = element.attribute("y").toDouble();
-  rx = element.attribute("rx").toDouble();
-  ry = element.attribute("ry").toDouble();
+  sx = element.attribute("sx").toDouble();
+  sy = element.attribute("sy").toDouble();
 
   sPoint.setX(x);
   sPoint.setY(y);
-  ePoint.setX(x + rx);
-  ePoint.setY(y + ry);
+  ePoint.setX(x + sx);
+  ePoint.setY(y + sy);
   squareFlag = sFlag;
   calcBoundingBox();
 }

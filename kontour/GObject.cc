@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -52,8 +52,11 @@ GObject::GObject(const QDomElement &element)
   mLayer = 0L;
   sflag = false;
   inWork = false;
-  mStyle = new GStyle;
-  //transform(toMatrix(element.namedItem("matrix").toElement()), false);
+  mId = element.attribute("id").toUInt();
+  mStyle = new GStyle(element.namedItem("style").toElement());
+  tMatrix = toMatrix(element.namedItem("matrix").toElement());
+  iMatrix = tMatrix.invert();
+  initTmpMatrix();
 }
 
 GObject::GObject(const GObject &obj)
@@ -181,7 +184,7 @@ bool GObject::intersects(const KoRect &r)
   return r.intersects(box);
 }
 
-static GObject *objectFactory(const QDomElement &element)
+GObject *GObject::objectFactory(const QDomElement &element)
 {
   if(element.tagName() == "oval")
     return new GOval(element);

@@ -112,7 +112,26 @@ QDomElement GLayer::saveToXml(QDomDocument &document)
 
 bool GLayer::readFromXml(const QDomElement &layer)
 {
-/*  GObject *obj = 0L;
+  GObject *obj;
+  mName = layer.attribute("id");
+  QDomNode cn = layer.firstChild();
+  while(!cn.isNull())
+  {
+    QDomElement child = cn.toElement();
+    obj = GObject::objectFactory(child);
+    if(!obj)
+      kdDebug(38000) << "invalid object type: " << child.tagName() << endl;
+    else
+      kdDebug(38000) << "OBJECT:" << child.tagName() << endl;
+//    if (child.tagName() == "group")
+//      ((GGroup*)obj)->layer(this);
+//    if(obj->hasId())
+//          refDict.insert(obj->getId(), obj);
+    insertObject(obj);
+    cn = cn.nextSibling();
+  }
+
+/*   = 0L;
 //  QDict<GObject> refDict;
   QString id = layer.attribute("id");
   if(id.isEmpty())
@@ -124,24 +143,7 @@ bool GLayer::readFromXml(const QDomElement &layer)
   setPrintable(flags & LAYER_EDITABLE);
   setEditable(flags & LAYER_PRINTABLE);
 
-  QDomNode cn = layer.firstChild();
-  while(!cn.isNull())
-  {
-    QDomElement child = cn.toElement();
-//    obj = KIllustrator::objectFactory(child, document()->document());
-    if(!obj)
-      kdDebug(38000) << "invalid object type: " << child.tagName() << endl;
-    if (child.tagName() == "group")
-      ((GGroup*)obj)->layer(this);
-    if(obj->hasId())
-          refDict.insert(obj->getId(), obj);
-        insertObject(obj);
-        cn=cn.nextSibling();
-        newObjs.append(obj);
-      }
-    }
-    n=n.nextSibling();
-  }
+
 //TODO change GOBject \/
 // update object connections
   for (QPtrListIterator<GLayer> i(layers); i.current(); ++i)

@@ -65,10 +65,10 @@ mHandle(this)
   layers.setAutoDelete(true);
   layers.clear();
 
-  active_layer = addLayer();
-  active_layer->setVisible(true);
-  active_layer->setPrintable(true);
-  active_layer->setEditable(true);
+  mActiveLayer = addLayer();
+  mActiveLayer->setVisible(true);
+  mActiveLayer->setPrintable(true);
+  mActiveLayer->setEditable(true);
 }
 
 GPage::~GPage()
@@ -149,6 +149,23 @@ QDomElement GPage::saveToXml(QDomDocument &doc)
 
 bool GPage::readFromXml(const QDomElement &page)
 {
+  kdDebug(38000) << "Read page..." << endl;
+  mName = page.attribute("id");
+  QDomNode n = page.firstChild();
+  layers.clear();
+  mActiveLayer = 0L;
+  while(!n.isNull())
+  {
+    QDomElement le = n.toElement();
+    if(le.tagName() == "layer")
+    {
+      GLayer *layer = addLayer();
+      if(!mActiveLayer)
+        mActiveLayer = layer;
+      layer->readFromXml(le);
+    }
+    n = n.nextSibling();
+  }
   return true;
 }
 
@@ -159,7 +176,7 @@ void GPage::activeLayer(GLayer *aLayer)
   {
     if ((*i) == aLayer)
     {
-      active_layer = aLayer;
+      mActiveLayer = aLayer;
       unselectAllObjects();
       break;
     }
@@ -168,7 +185,7 @@ void GPage::activeLayer(GLayer *aLayer)
 
 GLayer* GPage::activeLayer()
 {
-  return active_layer;
+  return mActiveLayer;
 }
 
 GLayer *GPage::addLayer()
@@ -187,7 +204,7 @@ void GPage::deleteLayer(GLayer *layer)
     // we need at least one layer
     return;
 
-  bool update = (active_layer == layer);
+  bool update = (mActiveLayer == layer);
 
   int pos=layers.findRef(layer);
   if(pos!=-1) {
@@ -199,9 +216,9 @@ void GPage::deleteLayer(GLayer *layer)
       delete l;
 
       if (update) {
-          active_layer = layers.current();
-          if(!active_layer)   // This one is needed for Qt 3.0 :)
-              active_layer=layers.last();
+          mActiveLayer = layers.current();
+          if(!mActiveLayer)   // This one is needed for Qt 3.0 :)
+              mActiveLayer=layers.last();
           unselectAllObjects();
       }
   }
@@ -258,7 +275,7 @@ unsigned int GPage::objectCount() const
 void GPage::insertObject(GObject *obj)
 {
   obj->ref();
-  active_layer->insertObject(obj);
+  mActiveLayer->insertObject(obj);
 //  connect(obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
 //  connect (obj, SIGNAL(changed(const KoRect&)), this, SLOT(objectChanged(const KoRect&)));
 //  setModified();
@@ -297,7 +314,7 @@ void GPage::insertObjectAtIndex(GObject *obj, unsigned int idx)
   obj->ref();
   GLayer *layer = obj->layer();
   if(layer == 0L)
-    layer = active_layer;
+    layer = mActiveLayer;
   layer->insertObjectAtIndex (obj, idx);
 /*  if (autoUpdate)
   {
@@ -310,7 +327,7 @@ void GPage::moveObjectToIndex(GObject *obj, unsigned int idx)
 {
   GLayer *layer = obj->layer();
   if (layer == 0L)
-    layer = active_layer;
+    layer = mActiveLayer;
   layer->moveObjectToIndex (obj, idx);
 
   //setModified ();
@@ -390,14 +407,14 @@ void GPage::selectNextObject()
   GObject *newSel = 0L;
 //TODO if not editable layer?
   if(selectionIsEmpty())
-    newSel = const_cast<QPtrList<GObject>&>(active_layer->objects()).first();
+    newSel = const_cast<QPtrList<GObject>&>(mActiveLayer->objects()).first();
   else
   {
     GObject *oldSel = selection.first();
     unsigned int idx = findIndexOfObject (oldSel);
-    if (++idx >= active_layer->objects ().count())
+    if (++idx >= mActiveLayer->objects ().count())
       idx = 0;
-    newSel = active_layer->objectAtIndex (idx);
+    newSel = mActiveLayer->objectAtIndex (idx);
   }
 //  setAutoUpdate(false);
 //  unselectAllObjects();
@@ -725,12 +742,12 @@ bool GPage::parseBody (const QDomElement &element, QPtrList<GObject>& newObjs, b
       QString id=layerelem.attribute("id");
       if(!id.isEmpty())
       {
-        active_layer = addLayer ();
-        active_layer->setName (id);
+        mActiveLayer = addLayer ();
+        mActiveLayer->setName (id);
         int flags = layerelem.attribute("flags").toInt();
-        active_layer->setVisible (flags & LAYER_VISIBLE);
-        active_layer->setPrintable (flags & LAYER_EDITABLE);
-        active_layer->setEditable (flags & LAYER_PRINTABLE);
+        mActiveLayer->setVisible (flags & LAYER_VISIBLE);
+        mActiveLayer->setPrintable (flags & LAYER_EDITABLE);
+        mActiveLayer->setEditable (flags & LAYER_PRINTABLE);
       }
 
       QDomNode cn=layerelem.firstChild();
@@ -749,7 +766,7 @@ bool GPage::parseBody (const QDomElement &element, QPtrList<GObject>& newObjs, b
                       kdDebug(38000) << "invalid object type: " << child.tagName() << endl;
 //                }
         if (child.tagName() == "group")
-          ((GGroup*)obj)->setLayer (active_layer);
+          ((GGroup*)obj)->setLayer (mActiveLayer);
         if(obj->hasId())
           refDict.insert(obj->getId(), obj);
         insertObject(obj);

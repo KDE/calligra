@@ -151,7 +151,7 @@ private:
   int mPaperHeight;               // paper height (pt)
   
   QPtrList<GLayer> layers;        // the array of all layers
-  GLayer *active_layer;           // the current layer
+  GLayer *mActiveLayer;           // the current layer
   QPtrList<GObject> selection;    // the array of selected objects
 
   int mCurLayerNum;

@@ -3,7 +3,7 @@
   $Id$
   
   This file is part of Kontour.
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -59,6 +59,16 @@ GStyle::GStyle()
 GStyle::GStyle(const QDomElement &style)
 {
   d = new GStylePrivate;
+  d->stroked = style.attribute("stroked").toInt();
+//  d->ocolor = ;
+  d->lwidth = style.attribute("width").toInt();
+  d->oopacity = style.attribute("oopacity").toInt();
+  d->join = (Qt::PenJoinStyle)style.attribute("join").toInt();
+  d->cap = (Qt::PenCapStyle)style.attribute("cap").toInt();
+  d->ftype = style.attribute("ftype").toInt();
+//  d->fcolor = ;
+//  d->fopacity = obj.d->fopacity;
+//  d->pattern = obj.d->pattern;
 }
 
 GStyle::GStyle(GStyle &obj)
@@ -72,8 +82,8 @@ GStyle::GStyle(GStyle &obj)
   d->cap = obj.d->cap;
   d->ftype = obj.d->ftype;
   d->fcolor = obj.d->fcolor;
-  d->fopacity = obj.d->fopacity;
-  d->pattern = obj.d->pattern;
+//  d->fopacity = obj.d->fopacity;
+//  d->pattern = obj.d->pattern;
 }
 
 GStyle::~GStyle()

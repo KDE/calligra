@@ -257,7 +257,7 @@ bool GDocument::readFromXml(const QDomDocument &document)
   QDomElement kontour = document.documentElement();
   if(kontour.attribute("mime") != "application/x-kontour" )
     return false;
-  if(kontour.attribute("version") != "1")
+  if(kontour.attribute("version") == "1")
   {
     QDomElement head = kontour.namedItem("head").toElement();
     mCurPageNum = head.attribute("cpn").toInt();
@@ -297,7 +297,6 @@ bool GDocument::readFromXml(const QDomDocument &document)
     }
 
     setModified(false);
-//    emit gridChanged ();
     return true;
   }
   return false;
