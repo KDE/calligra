@@ -87,6 +87,25 @@ public:
     // e.g. strText="1" and strOutText="1.00"
     QString strOutText;
     
+    // The parse tree of the real formula (e.g: "=A1*A2").
+    KSParseNode* code;
+
+    // The value we got from calculation.
+    // If the cell holds a formula, makeLayout() will use strFormulaOut
+    // instead of strText since strText stores the formula the user entered.
+    QString strFormulaOut;
+
+    // Set when the cell contains rich text
+    // At the moment, it's used to store hyperlink
+    QSimpleRichText *QML;
+
+    // Tells wether the cell is a button, combobox etc.
+    KSpreadCell::Style style;
+
+    // Used for example if the cell is displayed as a button.
+    // It tells which command has to be executed.
+    QString strAction;
+
     // position and dimension of displayed text
     double textX;
     double textY;
@@ -122,11 +141,6 @@ public:
 
     // list of cells that require this cell's value to be calculated
     QPtrList<KSpreadDependency> m_lstDependingOnMe;
-     
-    // The value we got from calculation.
-    // If @ref isFormula() is TRUE, @ref makeLayout() will use @ref m_strFormulaOut
-    // instead of @ref m_strText since m_strText stores the formula the user entered.
-    QString m_strFormulaOut;
 };
 
 
@@ -138,10 +152,7 @@ public:
 
 KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
   : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() ),
-    m_style( ST_Normal ),
     m_pPrivate( 0 ),
-    m_pQML( 0 ),
-    m_pCode( 0 ),
     m_conditions( 0 ),
     m_nbLines( 0 ),
     m_Validity( 0 ),
@@ -153,6 +164,10 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
   d->column = _column;
   d->content= Text;
   d->value = KSpreadValue::empty();
+  d->code = 0;
+  d->style = ST_Normal;
+  d->QML = 0;
+  
   d->textX = 0.0;
   d->textY = 0.0;
   d->textWidth = 0.0;
@@ -173,10 +188,7 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
 
 KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _column, int _row )
   : KSpreadFormat( _table, _style ),
-    m_style( ST_Normal ),
     m_pPrivate( 0 ),
-    m_pQML( 0 ),
-    m_pCode( 0 ),
     m_conditions( 0 ),
     m_nbLines( 0 ),
     m_Validity( 0 ),
@@ -188,6 +200,10 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
   d->column = _column;
   d->content= Text;
   d->value = KSpreadValue::empty();
+  d->code = 0;
+  d->QML = 0;
+  
+  d->style = ST_Normal;
   d->textX = 0.0;
   d->textY = 0.0;
   d->textWidth = 0.0;
@@ -208,10 +224,7 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
 
 KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _deponme, int _column, int _row )
   : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() ),
-    m_style( ST_Normal ),
     m_pPrivate( 0 ),
-    m_pQML( 0 ),
-    m_pCode( 0 ),
     m_conditions( 0 ),
     m_nbLines( 0 ),
     m_Validity( 0 ),
@@ -223,6 +236,10 @@ KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _dep
   d->column = _column;
   d->content= Text;
   d->value = KSpreadValue::empty();
+  d->code = 0;
+  d->QML = 0;
+  
+  d->style = ST_Normal;
   d->textX = 0.0;
   d->textY = 0.0;
   d->textWidth = 0.0;
@@ -339,6 +356,83 @@ KSpreadCell::Content KSpreadCell::content() const
 bool KSpreadCell::isFormula() const
 {
     return d->content == Formula;
+}
+
+QString KSpreadCell::text() const
+{
+    return d->strText;
+}
+
+QString KSpreadCell::strOutText() const
+{
+    return d->strOutText;
+}
+
+const KSpreadValue KSpreadCell::value() const
+{
+  return d->value;
+}
+
+void KSpreadCell::setValue( const KSpreadValue& v )
+{
+    clearFormula();
+    clearAllErrors();
+    d->value = v;
+
+    if( d->value.isBoolean() )
+        d->strOutText = d->strText  = ( d->value.asBoolean() ? i18n("True") : i18n("False") );
+
+    // Free all content data
+    delete d->QML;
+    d->QML = 0;
+
+    setFlag(Flag_LayoutDirty);
+    setFlag(Flag_TextFormatDirty);
+    d->content = Text;
+
+    m_pTable->setRegionPaintDirty(cellRect());
+}
+
+KSpreadCell::Style KSpreadCell::style() const
+{
+    return d->style;
+}
+
+void KSpreadCell::setStyle( Style _s )
+{
+  if ( d->style == _s )
+    return;
+
+  d->style = _s;
+  setFlag(Flag_LayoutDirty);
+
+  delete m_pPrivate;
+  m_pPrivate = 0;
+
+  if ( _s != ST_Select )
+    return;
+
+  m_pPrivate = new SelectPrivate( this );
+
+  SelectPrivate *s = (SelectPrivate*)m_pPrivate;
+  if ( isFormula() )
+      s->parse( d->strFormulaOut );
+  else
+      s->parse( d->strText );
+  checkTextInput(); // is this necessary?
+  setFlag(Flag_LayoutDirty);
+
+  m_pTable->setRegionPaintDirty(cellRect());
+}
+
+QString KSpreadCell::action() const
+{
+    return d->strAction;
+}
+
+void KSpreadCell::setAction( const QString& action )
+{
+    d->strAction = action;
 }
 
 void KSpreadCell::copyFormat( KSpreadCell * _cell )
@@ -630,9 +724,9 @@ void KSpreadCell::unobscure( KSpreadCell * cell )
 
 void KSpreadCell::clicked( KSpreadCanvas * _canvas )
 {
-  if ( m_style == KSpreadCell::ST_Normal )
+  if ( d->style == KSpreadCell::ST_Normal )
     return;
-  else if ( m_style == KSpreadCell::ST_Select )
+  else if ( d->style == KSpreadCell::ST_Select )
   {
     // We do only show a menu if the user himself clicked
     // on the cell.
@@ -663,13 +757,13 @@ void KSpreadCell::clicked( KSpreadCanvas * _canvas )
     return;
   }
 
-  if ( m_strAction.isEmpty() )
+  if ( d->strAction.isEmpty() )
     return;
 
   KSContext context;
   QPtrList<KSpreadDependency> lst;
   lst.setAutoDelete( TRUE );
-  KSParseNode* code = m_pTable->doc()->interpreter()->parse( context, m_pTable, m_strAction, lst );
+  KSParseNode* code = m_pTable->doc()->interpreter()->parse( context, m_pTable, d->strAction, lst );
   // Did a syntax error occur ?
   if ( context.exception() )
   {
@@ -942,7 +1036,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // are the real coordinates of the cell.
 
     // due to QSimpleRichText, always make layout for QML
-    if ( !testFlag( Flag_LayoutDirty ) && !m_pQML )
+    if ( !testFlag( Flag_LayoutDirty ) && !d->QML )
       return;
 
     m_nbLines = 0;
@@ -982,9 +1076,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     /**
      * RichText
      */
-    if ( m_pQML  )
+    if ( d->QML  )
     {
-        delete m_pQML;
+        delete d->QML;
 
         // TODO: more formatting as QStyleSheet supports
         QString qml_text;
@@ -994,7 +1088,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         //if( _painter.font().underline() ) qml_text += "<u>";
 
         qml_text += d->strText.mid(1);
-        m_pQML = new QSimpleRichText( qml_text, _painter.font() );
+        d->QML = new QSimpleRichText( qml_text, _painter.font() );
 
         setFlag( Flag_LayoutDirty );
 
@@ -1004,7 +1098,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         double max_width = dblWidth( _col );
         bool ende = false;
         int c;
-        m_pQML->setWidth( &_painter, (int)max_width );
+        d->QML->setWidth( &_painter, (int)max_width );
         for( c = _col + 1; !ende && c <= _col + 10; ++c )
         {
             KSpreadCell *cell = m_pTable->cellAt( c, _row );
@@ -1016,23 +1110,23 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
                 max_width += cl->dblWidth();
 
                 // Can we make use of extra cells ?
-                int h = m_pQML->height();
-                m_pQML->setWidth( &_painter, int( max_width ) );
-                if ( m_pQML->height() < h )
+                int h = d->QML->height();
+                d->QML->setWidth( &_painter, int( max_width ) );
+                if ( d->QML->height() < h )
                     ++right;
                 else
                 {
                     max_width -= cl->dblWidth();
-                    m_pQML->setWidth( &_painter, int( max_width ) );
+                    d->QML->setWidth( &_painter, int( max_width ) );
                     ende = true;
                 }
             }
         }
 
         // How may space do we need now ?
-        // m_pQML->setWidth( &_painter, max_width );
-        int h = m_pQML->height();
-        int w = m_pQML->width();
+        // d->QML->setWidth( &_painter, max_width );
+        int h = d->QML->height();
+        int w = d->QML->width();
         kdDebug(36001) << "QML w=" << w << " max=" << max_width << endl;
 
         // Occupy the needed extra cells in horizontal direction
@@ -1150,7 +1244,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     d->extraHeight = h;
 
     // Some space for the little button of the combo box
-    if ( m_style == ST_Select )
+    if ( d->style == ST_Select )
         w -= 16.0;
 
     // Do we need to break the line into multiple lines and are we allowed to
@@ -1312,7 +1406,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
 
     // Do we have to occupy additional cells at the bottom ?
-    if ( ( m_pQML || multiRow( _col, _row ) ) &&
+    if ( ( d->QML || multiRow( _col, _row ) ) &&
          d->textHeight > h - 2 * BORDER_SPACE -
          topBorderWidth( _col, _row ) - bottomBorderWidth( _col, _row ) )
     {
@@ -1420,7 +1514,7 @@ void KSpreadCell::setOutputText()
   {
     d->strOutText = d->strText;
   }
-  else if ( m_style == ST_Select )
+  else if ( d->style == ST_Select )
   {
     // If this is a select box, find out about the selected item
     // in the KSpreadPrivate data struct
@@ -1509,7 +1603,7 @@ void KSpreadCell::setOutputText()
   }
   else if ( isFormula() )
   {
-    d->strOutText = m_strFormulaOut;
+    d->strOutText = d->strFormulaOut;
   }
   else if( d->value.isString() )
   {
@@ -1707,7 +1801,7 @@ void KSpreadCell::offsetAlign( int _col, int _row )
       if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle )
       {
         d->textY = h - BORDER_SPACE - effBottomBorderPen( _col, _row ).width();
-        if( m_pQML ) d->textY = d->textY - m_pQML->height();
+        if( d->QML ) d->textY = d->textY - d->QML->height();
       }
       else if ( tmpAngle != 0 )
       {
@@ -1855,10 +1949,10 @@ void KSpreadCell::textSize( QPainter &_paint )
       fontUnderlined = textFontUnderline( _col, _row );
     }
 
-    if( m_pQML )
+    if( d->QML )
     {
-     d->textWidth = m_pTable->doc()->unzoomItX( m_pQML->widthUsed() );
-     d->textHeight = m_pTable->doc()->unzoomItY( m_pQML->height() );
+     d->textWidth = m_pTable->doc()->unzoomItX( d->QML->widthUsed() );
+     d->textHeight = m_pTable->doc()->unzoomItY( d->QML->height() );
      return;
     }
 
@@ -1981,7 +2075,7 @@ bool KSpreadCell::makeFormula()
     sDelocalizedText.replace( pos++, 1, "." );
     // At least,  =2,5+3,2  is turned into =2.5+3.2, which can get parsed...
   */
-  m_pCode = m_pTable->doc()->interpreter()->parse( context, m_pTable, /*sDelocalizedText*/d->strText, m_lstDepends );
+  d->code = m_pTable->doc()->interpreter()->parse( context, m_pTable, /*sDelocalizedText*/d->strText, m_lstDepends );
   // Did a syntax error occur ?
   if ( context.exception() )
   {
@@ -1989,7 +2083,7 @@ bool KSpreadCell::makeFormula()
     clearFormula();
 
     setFlag(Flag_ParseError);
-    m_strFormulaOut = "####";
+    d->strFormulaOut = "####";
     d->value.setError ( "####" );
     setFlag(Flag_LayoutDirty);
     setFlag(Flag_TextFormatDirty);
@@ -2015,8 +2109,8 @@ void KSpreadCell::clearFormula()
   NotifyDependancyList(m_lstDepends, false);
 
   m_lstDepends.clear();
-  delete m_pCode;
-  m_pCode = 0L;
+  delete d->code;
+  d->code = 0L;
 }
 
 bool KSpreadCell::calc(bool delay)
@@ -2028,19 +2122,19 @@ bool KSpreadCell::calc(bool delay)
   {
     kdError(36001) << "ERROR: Circle" << endl;
     setFlag(Flag_CircularCalculation);
-    m_strFormulaOut = "####";
+    d->strFormulaOut = "####";
     d->value.setError ( "####" );
 
     setFlag(Flag_LayoutDirty);
-    if ( m_style == ST_Select )
+    if ( d->style == ST_Select )
     {
         SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-        s->parse( m_strFormulaOut );
+        s->parse( d->strFormulaOut );
     }
     return false;
   }
 
-  if ( m_pCode == 0 )
+  if ( d->code == 0 )
   {
     if ( testFlag( Flag_ParseError ) )  // there was a parse error
       return false;
@@ -2051,7 +2145,7 @@ bool KSpreadCell::calc(bool delay)
        */
       makeFormula();
 
-      if ( m_pCode == 0 ) // there was a parse error
+      if ( d->code == 0 ) // there was a parse error
         return false;
     }
   }
@@ -2082,14 +2176,14 @@ bool KSpreadCell::calc(bool delay)
 	KSpreadCell *cell = dep->Table()->cellAt( x, y );
 	if ( !cell->calc( delay ) )
         {
-	  m_strFormulaOut = "####";
+	  d->strFormulaOut = "####";
 	  setFlag(Flag_DependancyError);
 	  d->value.setError( "####" );
           clearFlag(Flag_Progress);
-	  if ( m_style == ST_Select )
+	  if ( d->style == ST_Select )
           {
 	    SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-	    s->parse( m_strFormulaOut );
+	    s->parse( d->strFormulaOut );
 	  }
 	  setFlag(Flag_LayoutDirty);
           clearFlag(Flag_CalcDirty);
@@ -2100,11 +2194,11 @@ bool KSpreadCell::calc(bool delay)
   }
 
   KSContext& context = m_pTable->doc()->context();
-  if ( !m_pTable->doc()->interpreter()->evaluate( context, m_pCode, m_pTable, this ) )
+  if ( !m_pTable->doc()->interpreter()->evaluate( context, d->code, m_pTable, this ) )
   {
     // If we got an error during evaluation ...
     setFlag(Flag_ParseError);
-    m_strFormulaOut = "####";
+    d->strFormulaOut = "####";
     setFlag(Flag_LayoutDirty);
     d->value.setError( "####" );
     // Print out exception if any
@@ -2120,10 +2214,10 @@ bool KSpreadCell::calc(bool delay)
     clearFlag(Flag_Progress);
     clearFlag(Flag_CalcDirty);
 
-    if ( m_style == ST_Select )
+    if ( d->style == ST_Select )
     {
         SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-        s->parse( m_strFormulaOut );
+        s->parse( d->strFormulaOut );
     }
     return false;
   }
@@ -2133,7 +2227,7 @@ bool KSpreadCell::calc(bool delay)
     clearAllErrors();
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
-    m_strFormulaOut = createFormat( d->value.asFloat(), d->column, d->row );
+    d->strFormulaOut = createFormat( d->value.asFloat(), d->column, d->row );
   }
   else if ( context.value()->type() == KSValue::IntType )
   {
@@ -2141,13 +2235,13 @@ bool KSpreadCell::calc(bool delay)
     clearAllErrors();
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
-    m_strFormulaOut = createFormat( d->value.asFloat(), d->column, d->row );
+    d->strFormulaOut = createFormat( d->value.asFloat(), d->column, d->row );
   }
   else if ( context.value()->type() == KSValue::BoolType )
   {
     d->value.setValue ( KSpreadValue( context.value()->boolValue() ) );
     clearAllErrors();
-    m_strFormulaOut = context.value()->boolValue() ? i18n("True") : i18n("False");
+    d->strFormulaOut = context.value()->boolValue() ? i18n("True") : i18n("False");
     setFormatType(Number);
   }
   else if ( context.value()->type() == KSValue::TimeType )
@@ -2160,12 +2254,12 @@ bool KSpreadCell::calc(bool delay)
     if( tmpFormat != SecondeTime &&  tmpFormat != Time_format1 &&  tmpFormat != Time_format2
         && tmpFormat != Time_format3)
     {
-      m_strFormulaOut = locale()->formatTime( d->value.asDateTime().time(), false);
+      d->strFormulaOut = locale()->formatTime( d->value.asDateTime().time(), false);
       setFormatType( Time );
     }
     else
     {
-      m_strFormulaOut = util_timeFormat(locale(), d->value.asDateTime(), tmpFormat);
+      d->strFormulaOut = util_timeFormat(locale(), d->value.asDateTime(), tmpFormat);
     }
   }
   else if ( context.value()->type() == KSValue::DateType)
@@ -2177,11 +2271,11 @@ bool KSpreadCell::calc(bool delay)
         && !(tmpFormat>=200 &&tmpFormat<=216))
     {
         setFormatType(ShortDate);
-        m_strFormulaOut = locale()->formatDate( d->value.asDateTime().date(), true);
+        d->strFormulaOut = locale()->formatDate( d->value.asDateTime().date(), true);
     }
     else
     {
-        m_strFormulaOut = util_dateFormat( locale(), d->value.asDateTime().date(), tmpFormat);
+        d->strFormulaOut = util_dateFormat( locale(), d->value.asDateTime().date(), tmpFormat);
     }
   }
   else if ( context.value()->type() == KSValue::Empty )
@@ -2190,33 +2284,33 @@ bool KSpreadCell::calc(bool delay)
     d->value = KSpreadValue::empty();
     // Format the result appropriately
     setFormatType(Number);
-    m_strFormulaOut = createFormat( 0.0, d->column, d->row );
+    d->strFormulaOut = createFormat( 0.0, d->column, d->row );
   }
   else
   {
-    delete m_pQML;
+    delete d->QML;
 
-    m_pQML = 0;
+    d->QML = 0;
     clearAllErrors();
 //FIXME    m_dataType = StringData;
     d->value.setValue( KSpreadValue( context.value()->toString( context ) ) );
-    m_strFormulaOut = context.value()->toString( context );
-    if ( !m_strFormulaOut.isEmpty() && m_strFormulaOut[0] == '!' )
+    d->strFormulaOut = context.value()->toString( context );
+    if ( !d->strFormulaOut.isEmpty() && d->strFormulaOut[0] == '!' )
     {
-      m_pQML = new QSimpleRichText( m_strFormulaOut.mid(1),  QApplication::font() );//, m_pTable->widget() );
+      d->QML = new QSimpleRichText( d->strFormulaOut.mid(1),  QApplication::font() );//, m_pTable->widget() );
     }
-    else if( !m_strFormulaOut.isEmpty() && m_strFormulaOut[0]=='\'')
+    else if( !d->strFormulaOut.isEmpty() && d->strFormulaOut[0]=='\'')
     {
-        m_strFormulaOut=m_strFormulaOut.right(m_strFormulaOut.length()-1);
+        d->strFormulaOut=d->strFormulaOut.right(d->strFormulaOut.length()-1);
     }
     else
-      m_strFormulaOut=m_strFormulaOut;
+      d->strFormulaOut=d->strFormulaOut;
     setFormatType(Text_format);
   }
-  if ( m_style == ST_Select )
+  if ( d->style == ST_Select )
   {
       SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-      s->parse( m_strFormulaOut );
+      s->parse( d->strFormulaOut );
   }
 
   clearFlag(Flag_CalcDirty);
@@ -2343,7 +2437,7 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
   /**
    * QML ?
    */
-    if ( m_pQML
+    if ( d->QML
          && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(), cellRef.y() ) )
          && !( m_pTable->isProtected() && isHideAll( cellRef.x(), cellRef.y() ) ) )
     {
@@ -2427,7 +2521,7 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
      * Modification for drawing the button
      */
 /*
-  if ( m_style == KSpreadCell::ST_Button )
+  if ( d->style == KSpreadCell::ST_Button )
   {
 
   QBrush fill( Qt::lightGray );
@@ -2441,7 +2535,7 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
      * Modification for drawing the combo box
      */
 /*
-  else if ( m_style == KSpreadCell::ST_Select )
+  else if ( d->style == KSpreadCell::ST_Select )
     {
       QApplication::style().drawComboButton(  &_painter, _tx + 1, _ty + 1,
                                                 w2 - 1, h2 - 1,
@@ -3012,11 +3106,11 @@ void KSpreadCell::paintText( QPainter& painter,
 
   if ( !tmpMultiRow && !tmpVerticalText && !tmpAngle )
   {
-    if( !m_pQML )
+    if( !d->QML )
        painter.drawText( doc->zoomItX( indent + cellRect.x() + d->textX - offsetCellTooShort ),
                       doc->zoomItY( cellRect.y() + d->textY - offsetFont ), d->strOutText );
     else
-        m_pQML->draw( &painter,
+        d->QML->draw( &painter,
                     doc->zoomItX( indent + cellRect.x() + d->textX ),
                     doc->zoomItY( cellRect.y() + d->textY - offsetFont ),
                     QRegion( doc->zoomRect( KoRect( cellRect.x(),     cellRect.y(),
@@ -4130,8 +4224,8 @@ void KSpreadCell::setDate( QString const & dateString )
   clearAllErrors();
   clearFormula();
 
-  delete m_pQML;
-  m_pQML = 0L;
+  delete d->QML;
+  d->QML = 0L;
   d->content = Text;
   QString str( dateString );
 
@@ -4172,8 +4266,8 @@ void KSpreadCell::setDate( QDate const & date )
   clearAllErrors();
   clearFormula();
 
-  delete m_pQML;
-  m_pQML = 0L;
+  delete d->QML;
+  d->QML = 0L;
   d->content = Text;
 
   d->value.setValue( KSpreadValue( date ) );
@@ -4189,8 +4283,8 @@ void KSpreadCell::setNumber( double number )
   clearAllErrors();
   clearFormula();
 
-  delete m_pQML;
-  m_pQML = 0L;
+  delete d->QML;
+  d->QML = 0L;
   d->content = Text;
 
   d->value.setValue( KSpreadValue( number ) );
@@ -4214,8 +4308,8 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool as
       clearAllErrors();
       clearFormula();
 
-      delete m_pQML;
-      m_pQML = 0L;
+      delete d->QML;
+      d->QML = 0L;
 
       d->strOutText = ctext;
       d->strText    = ctext;
@@ -4247,8 +4341,8 @@ void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
   d->strText = _text;
 
   // Free all content data
-  delete m_pQML;
-  m_pQML = 0L;
+  delete d->QML;
+  d->QML = 0L;
   clearFormula();
   /**
    * A real formula "=A1+A2*3" was entered.
@@ -4272,7 +4366,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
    */
   else if ( !d->strText.isEmpty() && d->strText[0] == '!' )
   {
-    m_pQML = new QSimpleRichText( d->strText.mid(1),  QApplication::font() );//, m_pTable->widget() );
+    d->QML = new QSimpleRichText( d->strText.mid(1),  QApplication::font() );//, m_pTable->widget() );
     setFlag(Flag_LayoutDirty);
     setFlag(Flag_TextFormatDirty);
     d->content = RichText;
@@ -4294,11 +4388,11 @@ void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
   /**
    *  Special handling for selection boxes
    */
-  if ( m_style == ST_Select && !m_pTable->isLoading() )
+  if ( d->style == ST_Select && !m_pTable->isLoading() )
   {
       SelectPrivate *s = (SelectPrivate*)m_pPrivate;
       if ( d->content == Formula )
-          s->parse( m_strFormulaOut );
+          s->parse( d->strFormulaOut );
       else
           s->parse( d->strText );
       kdDebug(36001) << "SELECT " << s->text() << endl;
@@ -4515,16 +4609,6 @@ KSpreadFormat::FormatType KSpreadCell::formatType() const
     return getFormatType( d->column, d->row );
 }
 
-QString KSpreadCell::text() const
-{
-    return d->strText;
-}
-
-QString KSpreadCell::strOutText() const
-{
-    return d->strOutText;
-}
-
 double KSpreadCell::textWidth() const
 {
     return d->textWidth;
@@ -4563,31 +4647,6 @@ double KSpreadCell::extraWidth() const
 double KSpreadCell::extraHeight() const 
 { 
     return d->extraHeight;
-}
-
-const KSpreadValue KSpreadCell::value() const
-{
-  return d->value;
-}
-
-void KSpreadCell::setValue( const KSpreadValue& v )
-{
-    clearFormula();
-    clearAllErrors();
-    d->value = v;
-
-    if( d->value.isBoolean() )
-        d->strOutText = d->strText  = ( d->value.asBoolean() ? i18n("True") : i18n("False") );
-
-    // Free all content data
-    delete m_pQML;
-    m_pQML = 0;
-
-    setFlag(Flag_LayoutDirty);
-    setFlag(Flag_TextFormatDirty);
-    d->content = Text;
-
-    m_pTable->setRegionPaintDirty(cellRect());
 }
 
 
@@ -4687,10 +4746,10 @@ void KSpreadCell::checkTextInput()
 
     // Get the text from that cell (using result of formula if any)
     QString str = d->strText;
-    if ( m_style == ST_Select )
+    if ( d->style == ST_Select )
         str = (static_cast<SelectPrivate*>(m_pPrivate))->text();
     else if ( isFormula() )
-        str = m_strFormulaOut;
+        str = d->strFormulaOut;
 
     // If the text is empty, we don't have a value
     // If the user stated explicitly that he wanted text (using the format or using a quote),
@@ -5010,7 +5069,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
             format.setAttribute( "rowspan", extraYCells() );
     }
     if ( style() )
-        format.setAttribute( "style", (int) m_style );
+        format.setAttribute( "style", (int) d->style );
 
 
     if ( m_conditions )
@@ -5191,7 +5250,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
 	    {
 	      QString link = subText.attribute( "xlink:href" );
 	      text = "!<a href=\"" + link + "\"><i>" + text + "</i></a>";
-	      m_pQML = new QSimpleRichText( text.mid(1),  QApplication::font() );//, m_pTable->widget() );
+	      d->QML = new QSimpleRichText( text.mid(1),  QApplication::font() );//, m_pTable->widget() );
 	      d->strText = text;
 	    }
 	}
@@ -5610,7 +5669,7 @@ bool KSpreadCell::loadCellData(const QDomElement & text, Operation op )
   // rich text ?
   else if (t[0] == '!' )
   {
-      m_pQML = new QSimpleRichText( t.mid(1),  QApplication::font() );//, m_pTable->widget() );
+      d->QML = new QSimpleRichText( t.mid(1),  QApplication::font() );//, m_pTable->widget() );
       d->strText = t;
   }
   else
@@ -5898,39 +5957,12 @@ QString KSpreadCell::pasteOperation( const QString &new_text, const QString &old
     return tmp;
 }
 
-void KSpreadCell::setStyle( Style _s )
-{
-  if ( m_style == _s )
-    return;
-
-  m_style = _s;
-  setFlag(Flag_LayoutDirty);
-
-  delete m_pPrivate;
-  m_pPrivate = 0;
-
-  if ( _s != ST_Select )
-    return;
-
-  m_pPrivate = new SelectPrivate( this );
-
-  SelectPrivate *s = (SelectPrivate*)m_pPrivate;
-  if ( isFormula() )
-      s->parse( m_strFormulaOut );
-  else
-      s->parse( d->strText );
-  checkTextInput(); // is this necessary?
-  setFlag(Flag_LayoutDirty);
-
-  m_pTable->setRegionPaintDirty(cellRect());
-}
-
 QString KSpreadCell::testAnchor( int _x, int _y ) const
 {
-  if ( !m_pQML )
+  if ( !d->QML )
     return QString::null;
 
-  return m_pQML->anchorAt( QPoint( _x, _y ) );
+  return d->QML->anchorAt( QPoint( _x, _y ) );
 }
 
 void KSpreadCell::tableDies()
@@ -5952,9 +5984,9 @@ KSpreadCell::~KSpreadCell()
         m_previousCell->setNextCell( m_nextCell );
 
     delete m_pPrivate;
-    delete m_pQML;
+    delete d->QML;
     delete m_Validity;
-    delete m_pCode;
+    delete d->code;
 
     // Unobscure cells.
     for( int x = 0; x <= d->extraXCells; ++x )

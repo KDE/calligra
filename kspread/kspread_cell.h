@@ -209,6 +209,32 @@ public:
      */
     bool isFormula() const;
     
+    /**
+     * Return the text the user entered. This could be a value (e.g. "14.03") 
+     * or a formula (e.g. "=SUM(A1:A10)")
+     */
+    QString text() const;
+
+    QString strOutText() const;
+
+    /**
+     * Returns the value that this cell holds. It could be from the user 
+     * (i.e. when s/he enters a value) or a result of formula.
+     */
+    const KSpreadValue value() const;
+
+    /**
+     * Sets the value for this cell.
+     */
+    void setValue( const KSpreadValue& value );
+
+    Style style() const;
+
+    void setStyle( Style s );
+    
+    QString action() const;
+
+    void setAction( const QString& action );
     
     KSpreadCell* previousCell()const { return m_previousCell; }
     KSpreadCell* nextCell()const { return m_nextCell; }
@@ -389,15 +415,6 @@ public:
      */
     void setDisplayText( const QString& _text, bool updateDepends = true );
 
-    /**
-     * @return the text the user entered.
-     */
-    QString text() const;
-
-    QString strOutText() const;
-
-    void setAction( const QString& _action ) { m_strAction = _action; }
-
     ////////////////////////////////
     //
     // Methods for querying format stuff.
@@ -480,19 +497,6 @@ public:
     //////////////////////
 
     /**
-     * @see #setStyle
-     * @see #m_style
-     */
-    Style style() const { return m_style; }
-
-    void setStyle( Style _s );
-    /**
-     * @see #setAction
-     * @see #m_strAction
-     */
-    QString action() const { return m_strAction; }
-
-    /**
      * Return the format of this cell.
      * Convenience method for KSpreadFormat::getFormatType
      * Note that this is "how the user would like the data to be displayed if possible".
@@ -510,10 +514,6 @@ public:
     void setDate( QDate const & date );
     void setTime( QTime const & time );
     void setNumber( double number );
-
-    const KSpreadValue value() const;
-
-    void setValue( const KSpreadValue& value );
 
     /**
      * return size of the text
@@ -917,25 +917,6 @@ private:
     CellPrivate* d;
 
     /**
-     * Tells wether the cell is a button, combobox etc.
-     *
-     * @persistent
-     */
-    Style m_style;
-
-    /**
-     * Used for example if the cell is displayed as a button.
-     * It tells which command has to be executed.
-     *
-     * @see #action
-     * @see #setAction
-     *
-     * @persistent
-     */
-    QString m_strAction;
-
-
-    /**
      * list of cells that must be calculated in order to calculate this cell
      */
     QPtrList<KSpreadDependency> m_lstDepends;
@@ -946,22 +927,7 @@ private:
     QPtrList<KSpreadDependency> m_lstDependingOnMe;
 
 
-    /**
-     * The value we got from calculation.
-     * If @ref isFormula() is TRUE, @ref makeLayout() will use @ref m_strFormulaOut
-     * instead of @ref m_strText since m_strText stores the formula the user entered.
-     */
-    QString m_strFormulaOut;
-
     KSpreadCellPrivate *m_pPrivate;
-
-    QSimpleRichText *m_pQML; // Set when the cell contains QML
-
-    /**
-     * The parse tree of the real formula (e.g: "=A1*A2").
-     */
-    KSParseNode* m_pCode;
-
 
     KSpreadConditions* m_conditions;
 
