@@ -526,7 +526,7 @@ void KWTableStyleCommand::execute()
     {
         KoTextObject *textObject = ((KWTextFrameSet*)m_frame->frameSet())->textObject();
         textObject->textDocument()->selectAll( KoTextDocument::Temp );
-        m_sc = textObject->applyStyle( 0L, m_ts->pStyle(), KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format, true, false );
+        m_sc = textObject->applyStyleCommand( 0L, m_ts->pStyle(), KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format, true, false );
         textObject->textDocument()->removeSelection( KoTextDocument::Temp );
     }
 

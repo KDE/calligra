@@ -3335,7 +3335,6 @@ void KWView::insertContents()
 
 void KWView::formatFont()
 {
-    //kdDebug() << "KWView::formatFont changedFlags = " << flags << endl;
     KoTextFormatInterface* textIface = applicableTextInterfaces().first();
 
     if ( !textIface )
@@ -4181,7 +4180,7 @@ void KWView::textStyleSelected( KoStyle *_sty )
             {
                 KoTextObject *textObject = ((KWTextFrameSet*)curFrameSet)->textObject();
                 textObject->textDocument()->selectAll( KoTextDocument::Temp );
-                KCommand *cmd = textObject->applyStyle( 0L, _sty , KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format, true, true );
+                KCommand *cmd = textObject->applyStyleCommand( 0L, _sty , KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format, true, true );
                 textObject->textDocument()->removeSelection( KoTextDocument::Temp );
                 if (cmd)
                 {
