@@ -65,9 +65,6 @@ class GDocument;
 class GObject : public QObject
 {
     Q_OBJECT
-private:
-   GObject () {cout<<"def ctor()"<<endl; exit(1);};
-   GObject (const QDomElement &) {cout<<"QDom ctor()"<<endl; exit(1);};
 protected:
    GObject (GDocument* gdoc);
    GObject (GDocument* gdoc, const QDomElement &element);

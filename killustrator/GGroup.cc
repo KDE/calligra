@@ -52,7 +52,6 @@ GGroup::GGroup (GDocument *doc, const QDomElement &element)
 //           GObject *proto = GObject::lookupPrototype (child.tagName());
 //           if (proto != 0L)
 //           {
-//              cout<<"********** GGroup::GGroup() calling lookup"<<endl;
 //              obj = proto->create (m_gdoc, child);
 //           }
 //           else

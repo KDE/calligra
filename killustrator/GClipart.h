@@ -32,10 +32,9 @@ class QWinMetaFile;
 class QPicture;
 class QPainter;
 
-class GClipart : public GObject {
+class GClipart : public GObject
+{
   Q_OBJECT
-   private:
-      GClipart():GObject(0) {cout<<"GClipart ctor"<<endl; exit(1);};
 public:
   GClipart (GDocument* parent, QWinMetaFile& wmf, const QString &name);
   GClipart (GDocument* parent, const QDomElement &element);

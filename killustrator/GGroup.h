@@ -30,8 +30,6 @@
 class GGroup : public GObject
 {
    Q_OBJECT
-   private:
-      GGroup():GObject(0) {cout<<"GGroup ctor"<<endl; exit(1);};
 public:
   GGroup (GDocument* parent);
   GGroup (GDocument* parent, const QDomElement &element);

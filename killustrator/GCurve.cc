@@ -520,7 +520,7 @@ void GCurve::removePoint (int /*idx*/, bool update) {
 }
 
 GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
-  GCurve *res = new GCurve ();
+  GCurve *res = new GCurve (0);
   // TODO: Attribute setzen
   res->outlineInfo = start->outlineInfo;
   res->fillInfo = start->fillInfo;

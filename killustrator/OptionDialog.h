@@ -43,6 +43,8 @@ protected:
   void createGeneralWidget (QWidget* parent);
   void createEditWidget (QWidget* parent);
   void createGridWidget (QWidget* parent);
+  void createHorizLineWidget (QWidget* parent);
+  void createVertLineWidget (QWidget* parent);
 
 private:
   QComboBox* unit;
@@ -52,6 +54,9 @@ private:
   QCheckBox *gbutton, *sbutton;
   UnitBox *hspinbox, *vspinbox;
   KColorButton *cbutton;
+  
+  UnitBox *horizValue, *vertValue;
+  QListBox *horizList, *vertList;
 };
 
 #endif

@@ -27,10 +27,9 @@
 
 #include  <GPolyline.h>
 
-class GPolygon : public GPolyline {
+class GPolygon : public GPolyline
+{
   Q_OBJECT
-   private:
-      GPolygon():GPolyline(0) {cout<<"GPolygon ctor"<<endl; exit(1);};
 public:
   enum Kind { PK_Square, PK_Rectangle, PK_Polygon };
 

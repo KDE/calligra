@@ -33,10 +33,9 @@ class GTextState;
 class QFontMetrics;
 class QWMatrix;
 
-class GText : public GObject {
+class GText : public GObject
+{
   Q_OBJECT
-   private:
-      GText():GObject(0) {cout<<"GText ctor"<<endl; exit(1);};
 public:
 
    struct TextInfo

@@ -262,7 +262,6 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
                 && (olast == 0 || olast == (int) obj->numOfPoints () - 1))
             {
                // combine the current line with obj
-               //cout << "COMBINE" << endl;
             }
 #endif
             if (newObj)

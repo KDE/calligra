@@ -626,7 +626,6 @@ bool GPage::parseBody (const QDomElement &element, QList<GObject>& /*newObjs*/, 
 //                   GObject *proto = GObject::lookupPrototype (child.tagName());
 //                   if (proto != 0L)
 //                   {
-//                      cout<<"********** calling lookupPrototype"<<endl;
 //                      obj = proto->create (this, child);
 //                   }
 //                   else

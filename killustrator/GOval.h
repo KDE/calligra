@@ -30,8 +30,6 @@
 class GOval : public GObject
 {
   Q_OBJECT
-   private:
-      GOval():GObject(0) {cout<<"GOval ctor"<<endl; exit(1);};
 public:
   GOval (GDocument* parent, bool cFlag = false);
   GOval (GDocument* parent, const QDomElement &element, bool cFlag = false);

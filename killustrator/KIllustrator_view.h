@@ -135,7 +135,6 @@ private slots:
     /**
      * Actions
      */
-    void slotImport();
     void slotExport();
     void slotInsertBitmap();
     void slotInsertBitmap(const QString &filename);

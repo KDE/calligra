@@ -55,10 +55,9 @@ private:
   QPointArray bpoints;
 };
 
-class GCurve : public GObject {
+class GCurve : public GObject
+{
   Q_OBJECT
-   private:
-      GCurve():GObject(0) {cout<<"GCurve ctor"<<endl; exit(1);};
 public:
   GCurve (GDocument* parent);
   GCurve (GDocument* parent, const QDomElement &element);

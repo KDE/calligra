@@ -35,8 +35,6 @@ class GDocument;
 class GPolyline : public GObject
 {
    Q_OBJECT
-   private:
-      GPolyline ():GObject(0) {cout<<"GPolyline ctor"<<endl; exit(1);};
 public:
   GPolyline (GDocument* doc);
   GPolyline (GDocument* doc, const QDomElement &element);

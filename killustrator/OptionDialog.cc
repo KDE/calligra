@@ -40,11 +40,18 @@
 OptionDialog::OptionDialog (QWidget* parent, const char* name) :
     KDialogBase(KDialogBase::TreeList, i18n("Option"),
                 KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok,
-                parent, name, true) {
-    createGeneralWidget(addPage(i18n("General")));
-    createGridWidget(addPage(i18n("Grid")));
-    createEditWidget(addPage(i18n("Edit")));
-    
+                parent, name, true)
+{
+  QStringList list;
+  createGeneralWidget(addPage(i18n("General")));
+  createGridWidget(addPage(i18n("Grid")));
+  createEditWidget(addPage(i18n("Edit")));
+  list.clear();
+  list << i18n("Helplines") << i18n("vertical");
+  createVertLineWidget(addPage(list));
+  list.clear();
+  list << i18n("Helplines") << i18n("horizontal");
+  createHorizLineWidget(addPage(list));
 }
 
 void OptionDialog::createGeneralWidget (QWidget* parent) {
@@ -206,6 +213,76 @@ int OptionDialog::setup ()
       psm->setDuplicateOffsets (dialog.horiz->getValue (),dialog.vert->getValue ());
    }
    return res;
+}
+
+void OptionDialog::createHorizLineWidget (QWidget* parent)
+{
+
+    QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    QBoxLayout *left=new QVBoxLayout(layout);
+
+    horizValue = new UnitBox (parent);
+    horizValue->setRange (-1000.0, 1000.0);
+    horizValue->setStep (0.1);
+    horizValue->setEditable (true);
+    horizValue->setValue(0.0);
+    left->addWidget(horizValue);
+
+    horizList = new QListBox (parent);
+    horizList->setMultiSelection (false);
+    connect (horizList, SIGNAL(highlighted(int)),
+             this, SLOT(horizLineSelected(int)));
+    left->addWidget(horizList);
+    layout->addSpacing(KDialogBase::spacingHint()*2);
+
+    QBoxLayout *right=new QVBoxLayout(layout);
+    QPushButton *button = new QPushButton (i18n("Add"), parent);
+    connect (button, SIGNAL(clicked ()), this, SLOT(addHorizLine ()));
+    right->addWidget(button);
+
+    button = new QPushButton(i18n("Update"), parent);
+    connect (button, SIGNAL(clicked ()), this, SLOT(updateHorizLine ()));
+    right->addWidget(button);
+
+    button = new QPushButton(i18n("Delete"), parent);
+    connect (button, SIGNAL(clicked ()), this, SLOT(deleteHorizLine ()));
+    right->addWidget(button);
+    right->addStretch();
+}
+
+void OptionDialog::createVertLineWidget (QWidget* parent)
+{
+
+    QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    QBoxLayout *left=new QVBoxLayout(layout);
+
+    vertValue = new UnitBox (parent);
+    vertValue->setRange (-1000.0, 1000.0);
+    vertValue->setStep (0.1);
+    vertValue->setEditable (true);
+    vertValue->setValue(0.0);
+    left->addWidget(vertValue);
+
+    vertList = new QListBox(parent);
+    vertList->setMultiSelection (false);
+    connect (vertList, SIGNAL(highlighted (int)),
+             this, SLOT(vertLineSelected(int)));
+    left->addWidget(vertList);
+    layout->addSpacing(KDialogBase::spacingHint()*2);
+
+    QBoxLayout *right=new QVBoxLayout(layout);
+    QPushButton *button = new QPushButton(i18n("Add"), parent);
+    connect (button, SIGNAL(clicked ()), this, SLOT(addVertLine ()));
+    right->addWidget(button);
+
+    button = new QPushButton(i18n("Update"), parent);
+    connect (button, SIGNAL(clicked ()), this, SLOT(updateVertLine ()));
+    right->addWidget(button);
+
+    button = new QPushButton(i18n("Delete"), parent);
+    connect (button, SIGNAL(clicked ()), this, SLOT(deleteVertLine ()));
+    right->addWidget(button);
+    right->addStretch();
 }
 
 #include <OptionDialog.moc>

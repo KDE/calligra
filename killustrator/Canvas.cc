@@ -830,7 +830,6 @@ void Canvas::drawGrid (QPainter& p)
    float vd = vGridDistance * zoomFactor;
    while(vd < MIN_GRID_DIST)
      vd *= 2.0;
-   //cerr<<endl;
    /* example:   vd = 20
     top = 49
     -> v=11 = 60 -49
@@ -841,16 +840,14 @@ void Canvas::drawGrid (QPainter& p)
    if (m_visibleArea.top()>0) tmp++;
    float v=tmp*int(vd)-m_visibleArea.top();
 
-//   cerr<<"grid y: ";
    for (; v < height() ; v += vd)
    {
       int vi = qRound (v);
       p.drawLine (0, vi, width(), vi);
-//      cerr<<vi<<" ";
    }
 
    p.restore ();
-//   cerr<<"Canvas::drawGrid(): x: "<<hGridDistance<<" hd: "<<hd<<" y: "<<vGridDistance<<" vd: "<<vd<<endl;
+//   kdDebug(38000)<<"Canvas::drawGrid(): x: "<<hGridDistance<<" hd: "<<hd<<" y: "<<vGridDistance<<" vd: "<<vd<<endl;
 }
 
 void Canvas::readGridProperties ()

@@ -36,8 +36,6 @@ class QPainter;
 class GPart : public GObject
 {
   Q_OBJECT
-   private:
-      GPart ():GObject(0) {cout<<"GPart ctor"<<endl; exit(1);};
 public:
   GPart (GDocument* doc);
   GPart (GDocument* doc, KIllustratorChild *c);

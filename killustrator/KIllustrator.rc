@@ -1,7 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KIllustrator" version="6">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
-  <Action name="import"/>
   <Action name="export"/>
  </Menu>
  <Menu name="edit"><text>&amp;Edit</text>

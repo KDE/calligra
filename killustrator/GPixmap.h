@@ -28,10 +28,9 @@
 #include <kurl.h>
 #include <GObject.h>
 
-class GPixmap : public GObject {
+class GPixmap : public GObject
+{
   Q_OBJECT
-   private:
-      GPixmap():GObject(0) {cout<<"GPixmap ctor"<<endl; exit(1);};
 public:
   GPixmap (GDocument* parent, const QString &filename);
   GPixmap (GDocument* parent, const QDomElement &element);

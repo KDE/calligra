@@ -279,7 +279,7 @@ void Ruler::drawRuler ()
       s2 = cvtMmToPt(5.0) * zoom > 3.0;
       s3 = cvtMmToPt(10.0) * zoom > 3.0;
       step = 30.0 / (cvtMmToPt(10.0) * zoom);
-      //cerr<<" 30 / "<<cvtMmToPt(10.0)<<" * "<<zoom<<" = "<<step<<endl;
+      //kdDebug(38000)<<" 30 / "<<cvtMmToPt(10.0)<<" * "<<zoom<<" = "<<step<<endl;
       start = (int)(cvtPtToMm(zeroPoint) / zoom);
       break;
    case UnitPica:

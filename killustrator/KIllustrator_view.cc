@@ -151,7 +151,6 @@ void KIllustratorView::createMyGUI()
    QTime time;
    time.start();
     // File menu
-    new KAction( i18n("&Import..."), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
     new KAction( i18n("&Export..."), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
 
     // Edit menu
@@ -267,7 +266,7 @@ void KIllustratorView::createMyGUI()
     //new KAction( i18n("&Load Palette..."), 0, this, SLOT( slotLoadPalette() ), actionCollection(), "loadPalette" ); // not implemented yet (Werner)
 
     // Settings
-    new KAction( i18n("&Defaults..."), 0, this, SLOT( slotOptions() ), actionCollection(), "configure" );
+    new KAction( i18n("&Options..."), 0, this, SLOT( slotOptions() ), actionCollection(), "configure" );
     new KAction( i18n("&Ellipse..."), 0, this, SLOT( slotConfigureEllipse() ), actionCollection(), "ellipseSettings");
     new KAction( i18n("P&olygon..."), 0, this, SLOT( slotConfigurePolygon() ), actionCollection(), "polygonSettings");
 
@@ -739,43 +738,6 @@ QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
 }
 
 // ---------------------------------------- actions
-
-void KIllustratorView::slotImport()
-{
-    FilterManager* filterMgr = FilterManager::instance ();
-    QString filter = filterMgr->importFilters ();
-
-    KURL url = KFileDialog::getOpenURL( lastImportDir, filter, this );
-    if (!url.isEmpty() && !url.isLocalFile())
-        KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
-    QString fname = url.path();
-    if (! fname.isEmpty ())
-    {
-        QFileInfo finfo (fname);
-        if (!finfo.isFile () || !finfo.isReadable ())
-            return;
-
-        lastImportDir = finfo.dirPath ();
-        FilterInfo* filterInfo = filterMgr->findFilter (fname.latin1(),
-                                                        FilterInfo::FKind_Import);
-        if (filterInfo)
-        {
-            ImportFilter* filter = filterInfo->importFilter ();
-            if (filter->setup (m_pDoc->gdoc(), filterInfo->extension().latin1()))
-            {
-                filter->setInputFileName (fname);
-                filter->importFromFile (m_pDoc->gdoc());
-            }
-            else
-                KMessageBox::error(this, i18n ("Cannot import from file"),
-                                   i18n("KIllustrator Error"));
-        }
-        else
-            KMessageBox::error(this, i18n ("Unknown import format"),
-                                i18n ("KIllustrator Error"));
-    }
-    resetTools ();
-}
 
 void KIllustratorView::slotExport()
 {

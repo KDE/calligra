@@ -482,6 +482,7 @@ void PropertyEditor::applyPressed ()
    {
       tinfo.mask = GText::TextInfo::Font | GText::TextInfo::Align;
       tinfo.font = fontChooser->font ();
+      oinfo.color = penColorBttn->color ();
       if (textAlign[0]->isOn ())
          tinfo.align = GText::TextInfo::AlignLeft;
       else if (textAlign[1]->isOn ())
@@ -513,7 +514,6 @@ void PropertyEditor::applyPressed ()
 
 void PropertyEditor::readProperties ()
 {
-   cerr<<"1"<<endl;
    QString buf;
    PStateManager *psm = PStateManager::instance ();
    MeasurementUnit munit = psm->defaultMeasurementUnit ();
@@ -522,7 +522,6 @@ void PropertyEditor::readProperties ()
 
    if (document->activePage()->selectionCount () == 1)
    {
-      cerr<<"2"<<endl;
       GObject* object = document->activePage()->getSelection().first();
       // Info tab
       Rect boundingBox = object->boundingBox ();
@@ -543,7 +542,6 @@ void PropertyEditor::readProperties ()
       GObject::OutlineInfo oInfo = object->getOutlineInfo ();
       if (haveLineObjects)
       {
-         cerr<<"3"<<endl;
          // Outline tab
          //GObject::OutlineInfo oInfo = object->getOutlineInfo ();
          widthField->setValue (oInfo.width);
@@ -553,13 +551,9 @@ void PropertyEditor::readProperties ()
          {
             leftArrows->setCurrentItem (oInfo.startArrowId);
             rightArrows->setCurrentItem (oInfo.endArrowId);
-         };
-cerr<<"4"<<endl;
+         }
          if (haveRectangleObjects)
-         {
             roundnessSlider->setValue (static_cast<int>(oInfo.roundness)); // #### FIXME
-         };
-cerr<<"5"<<endl;
          if (haveEllipseObjects)
          {
             switch (oInfo.shape)
@@ -575,11 +569,9 @@ cerr<<"5"<<endl;
                break;
             }
          }
-      };
-cerr<<"6"<<endl;
+      }
       if (haveFillObjects)
       {
-cerr<<"7"<<endl;
          // Fill tab
          fillSolidColor->setColor (object->getFillColor ());
          fillPatternColor->setColor (object->getFillColor ());
@@ -618,10 +610,8 @@ cerr<<"7"<<endl;
             break;
          }
       };
-cerr<<"8"<<endl;
       if (haveTextObjects)
       {
-cerr<<"9"<<endl;
          penColorBttn->setColor (oInfo.color);
          GText* tobj = (GText *) object;
          GText::TextInfo tInfo = tobj->getTextInfo ();
@@ -638,7 +628,7 @@ cerr<<"9"<<endl;
             textAlign[0]->setOn (true);
             break;
          }
-      };
+      }
    }
    else
    {
@@ -673,7 +663,7 @@ cerr<<"9"<<endl;
             leftArrows->setCurrentItem (oInfo.startArrowId);
          if(rightArrows)
             rightArrows->setCurrentItem (oInfo.endArrowId);
-      };
+      }
       if (haveFillObjects)
       {
          // Fill tab
@@ -710,7 +700,7 @@ cerr<<"9"<<endl;
          default:
             break;
          }
-      };
+      }
       // Font tab
       if (haveTextObjects)
       {
@@ -727,7 +717,6 @@ cerr<<"9"<<endl;
          fillStyleBttn[GRADIENT_BOX]->setEnabled(false);
       }
    }
-cerr<<"10"<<endl;
 }
 
 void PropertyEditor::fillStyleChanged()

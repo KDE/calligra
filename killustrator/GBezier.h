@@ -28,10 +28,9 @@
 #include <Coord.h>
 #include <GPolyline.h>
 
-class GBezier : public GPolyline {
+class GBezier : public GPolyline
+{
   Q_OBJECT
-   private:
-      GBezier():GPolyline(0) {cout<<"GBezier ctor"<<endl; exit(1);};
 public:
   GBezier (GDocument* parent);
   GBezier (GDocument* parent, const QDomElement &element);
