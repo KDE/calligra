@@ -45,14 +45,17 @@ class KEXIPROPERTYEDITOR_EXPORT KexiProperty
 		QString		desc() const { return m_desc; }
 		QVariant::Type  type() const;
 		QStringList*	list() const{ return m_list;}
+		int		autoSync() const { return m_autosync; }
 
 		void setValue(const QVariant &v) { m_value = v; }
+		void setAutoSync(int sync) { m_autosync = sync; }
 
 	private:
 		QString		m_name;
 		QString		m_desc;
 		QVariant	m_value;
 		QStringList	*m_list;
+		int		m_autosync;
 };
 
 #endif

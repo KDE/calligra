@@ -194,7 +194,9 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 	{
 		QVariant value = m_currentEditor->getValue();
 		m_editItem->setValue(value);
-		if(m_buffer && m_sync)
+		bool sync = (m_editItem->property()->autoSync() != 0 && m_editItem->property()->autoSync() != 1) ? 
+		         m_sync : (bool)m_editItem->property()->autoSync();
+		if(m_buffer && sync)
 		{
 		if(m_editItem->depth()==1)
 			m_buffer->changeProperty(m_editItem->name().latin1(), value);
@@ -242,7 +244,9 @@ KexiPropertyEditor::slotEditorReject(KexiPropertySubEditor *editor)
 {
 	if(m_currentEditor)
 	{
-		if(!m_sync)
+	bool sync = (m_editItem->property()->autoSync() != 0 && m_editItem->property()->autoSync() != 1) ? 
+		         m_sync : (bool)m_editItem->property()->autoSync();
+		if(!sync)
 		{
 			m_editItem->setValue(m_editItem->property()->value());
 			m_currentEditor->setValue(m_editItem->property()->value());

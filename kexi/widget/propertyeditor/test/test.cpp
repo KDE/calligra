@@ -23,6 +23,8 @@ test::test()
 
 	m_buffer = new KexiPropertyBuffer(this);
 	m_buffer->insert("Name", KexiProperty("Name", "Name"));
+	(*m_buffer)["Name"].setAutoSync(1);
+	
 	m_buffer->insert("Int", KexiProperty("Int", 2));
 	m_buffer->insert("Double", KexiProperty("Double", 3.1415));
 	m_buffer->insert("Rect", KexiProperty("Rect", this->geometry()));
@@ -44,7 +46,7 @@ test::test()
 	m_buffer->insert("time", KexiProperty("time", QTime::currentTime()));
 	m_buffer->insert("datetime", KexiProperty("datetime", QDateTime::currentDateTime()));
 	
-	KexiPropertyEditor *edit = new KexiPropertyEditor(this,true);
+	KexiPropertyEditor *edit = new KexiPropertyEditor(this,false);
 	setCentralWidget(edit);
 	edit->setBuffer(m_buffer);
 	resize(500,500);
