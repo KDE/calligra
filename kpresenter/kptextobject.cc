@@ -1851,7 +1851,7 @@ QPoint KPTextView::cursorPosition( const QPoint & pos )
 
 void KPTextView::mousePressEvent( QMouseEvent *e, const QPoint &/*_pos*/)
 {
-    handleMousePressEvent( e, cursorPosition( e->pos() ) );
+    handleMousePressEvent( e, cursorPosition( e->pos() ),true /*bool canStartDrag*/, kpTextObject()->kPresenterDocument()->insertDirectCursor() );
 }
 
 void KPTextView::mouseDoubleClickEvent( QMouseEvent *e, const QPoint &pos)

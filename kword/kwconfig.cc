@@ -790,7 +790,6 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
 
     m_directInsertCursor= new QCheckBox(i18n("Direct insert cursor"),gbDocumentCursor);
     m_directInsertCursor->setChecked(doc->insertDirectCursor());
-    m_directInsertCursor->setEnabled( false );
 }
 
 KCommand *ConfigureDefaultDocPage::apply()

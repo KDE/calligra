@@ -126,3 +126,5 @@ Changes after KPresenter 1.2
 - Add support to add offset from baseline
 - Now koinsertlink use 'recent document'
 - Now "create backup file" is configurable
+- Add support to insert cursor directly
+
