@@ -32,11 +32,10 @@ class GPolygon : public GObject
 {
   Q_OBJECT
 public:
-  GPolygon();
+  GPolygon(const KoPoint &p, int n, double r, double a);
+  GPolygon(const KoPoint &p, int n, double r1, double r2, double a);
   GPolygon(const QDomElement &element);
   GPolygon(const GPolygon &obj);
-
-  void createPolygon(const KoPoint &p, int n, double r);
 
   GObject *copy() const;
 

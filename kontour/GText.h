@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Jansen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,12 +23,10 @@
 
 */
 
-#ifndef GText_h_
-#define GText_h_
+#ifndef __GText_h__
+#define __GText_h__
 
-#include <GObject.h>
-#include <qfont.h>
-#include <qptrvector.h>
+#include "GObject.h"
 
 class GTextState;
 class QFontMetrics;
@@ -37,30 +36,29 @@ class GText : public GObject
 {
   Q_OBJECT
 public:
+  GText();
+  GText(const QDomElement &element);
+  GText(const GText &obj);
+  ~GText();
 
-   struct TextInfo
-   {
-      enum { Font = 1, Align = 2 };
-      unsigned int mask;
-      QFont font;
-      enum Alignment
-      {
-         AlignLeft, AlignCenter, AlignRight
-      } align;
-   };
+  GObject *copy() const;
 
-  static void setDefaultTextInfo (const TextInfo& ti);
-  static TextInfo getDefaultTextInfo ();
+  QString typeName() const;
+  QDomElement writeToXml(QDomDocument &document);
+  void draw(KoPainter *p, const QWMatrix &m, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
 
-  GText (GDocument* parent );
-  GText (GDocument* parent, const QDomElement &element);
-  GText (const GText& obj);
-  ~GText ();
+  int getNeighbourPoint(const KoPoint &point);
+  void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
+  void removePoint(int idx, bool update = true);
+  bool contains(const KoPoint &p);
+  bool findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all);
 
-  virtual void draw (QPainter& p, bool withBasePoints = false,
-                     bool outline = false, bool withEditMarks=true);
+  void calcBoundingBox();
+  GPath *convertToPath() const;
+  bool isConvertible() const;
+};
 
-  void setOrigin (const Coord& p);
+/*  void setOrigin (const Coord& p);
   //  const Coord& origin () const { return opos; }
 
   void setTextInfo (const TextInfo& tinfo);
@@ -124,20 +122,6 @@ private:
   GObject* pathObj;
   QPtrVector<QWMatrix> cmatrices;
 
-  static TextInfo defaultTextInfo;
-};
-
-class GTextState : public GOState {
-  friend class GText;
-protected:
-  GTextState () {}
-
-public:
-  virtual ~GTextState () {}
-
-private:
-  GText::TextInfo info;
-  QString tstring;
-};
+  static TextInfo defaultTextInfo;*/
 
 #endif

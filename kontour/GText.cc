@@ -1,8 +1,9 @@
 /* -*- C++ -*-
 
   $Id$
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Jansen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -21,7 +22,6 @@
 
 */
 
-#include <assert.h>
 #include <GText.h>
 #include <GDocument.h>
 #include "GPage.h"
@@ -30,30 +30,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-float seg_angle (const Coord& c1, const Coord& c2) {
-  float dx = c2.x () - c1.x ();
-  float dy = c2.y () - c1.y ();
-  if (dx != 0)
-    return atan (dy / dx) * RAD_FACTOR;
-  else
-    return 0.0;
-}
-
-GText::TextInfo GText::defaultTextInfo;
-
-void GText::setDefaultTextInfo (const TextInfo& ti) {
-  if (ti.mask & TextInfo::Font)
-    defaultTextInfo.font = ti.font;
-  if (ti.mask & TextInfo::Align)
-    defaultTextInfo.align = ti.align;
-}
-
-GText::TextInfo GText::getDefaultTextInfo () {
-  return defaultTextInfo;
-}
-
-GText::GText (GDocument *doc )
-:GObject(doc)
+GText::GText():
+GObject()
 {
   textInfo = defaultTextInfo;
   fm = new QFontMetrics (textInfo.font);
@@ -65,8 +43,8 @@ GText::GText (GDocument *doc )
   cmatrices.setAutoDelete(true);
 }
 
-GText::GText (GDocument *doc, const QDomElement &element)
-:GObject(doc, element.namedItem("gobject").toElement())
+GText::GText(const QDomElement &element):
+GObject(element.namedItem("go").toElement())
 {
     textInfo = defaultTextInfo;
     fm = new QFontMetrics (textInfo.font);

@@ -27,6 +27,7 @@
 #define __PolygonTool_h__
 
 #include "Tool.h"
+#include <koPoint.h>
 
 class GPolygon;
 
@@ -39,6 +40,20 @@ public:
   void activate();
   void deactivate();
   void processEvent(QEvent *e);
+
+private:
+  void drawPolygon(double r, double a);
+  void drawStar(double r1, double r2, double a);
+
+private:
+  enum State{S_Init, S_Resize};
+  State state;
+  int n;
+  KoPoint mCenter;
+  double radius;
+  bool mFill:1;
+  enum Type{Polygon, Star};
+  Type type;
 };
 
 #endif

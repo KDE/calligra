@@ -35,9 +35,30 @@
 #include "kontour_global.h"
 #include "GPath.h"
 
-GPolygon::GPolygon():
+GPolygon::GPolygon(const KoPoint &p, int n, double r, double a):
 GObject()
 {
+  double k = Kontour::pi / static_cast<double>(n);
+  mVertex = n;
+  mCenter = p;
+  mAAngle = a;
+  mBAngle = a + k;
+  mARadius = r;
+  mBRadius = r * cos(k);
+  calcBoundingBox();
+}
+
+GPolygon::GPolygon(const KoPoint &p, int n, double r1, double r2, double a):
+GObject()
+{
+  double k = Kontour::pi / static_cast<double>(n);
+  mVertex = n;
+  mCenter = p;
+  mAAngle = a;
+  mBAngle = a + k;
+  mARadius = r1;
+  mBRadius = r2;
+  calcBoundingBox();
 }
 
 GPolygon::GPolygon(const QDomElement &element):
@@ -70,11 +91,6 @@ GObject(obj)
 GObject *GPolygon::copy() const
 {
   return new GPolygon(*this);
-}
-
-void GPolygon::createPolygon(const KoPoint &p, int n, double r)
-{
-
 }
 
 QString GPolygon::typeName() const
@@ -171,6 +187,8 @@ void GPolygon::calcBoundingBox()
     ymax = c.y();
   for(int i = 1; i < mVertex; i++)
   {
+    caa += a;
+    cab += a;
     c.setX(mCenter.x() + mARadius * cos(caa));
     c.setY(mCenter.y() + mARadius * sin(caa));
     c = c.transform(tmpMatrix);
@@ -193,8 +211,6 @@ void GPolygon::calcBoundingBox()
       ymin = c.y();
     if(c.y() > ymax)
       ymax = c.y();
-    caa += a;
-    cab += a;
   }
   box.setLeft(xmin);
   box.setRight(xmax);
