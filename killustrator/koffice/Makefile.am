@@ -35,8 +35,6 @@ idl_HEADERS = KIllustrator.h
 kdelnk_DATA = killustrator_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
-SUBDIRS = 
-
 ####### Implicit rules
 
 SUFFIXES = .h .moc
