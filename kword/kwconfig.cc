@@ -51,24 +51,24 @@ KWConfig::KWConfig( KWView* parent )
 		KDialogBase::Ok)
 
 {
-  QVBox *page = addVBoxPage( i18n("Spelling"), i18n("Spell checker behavior"),
+  QVBox *page = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
                         BarIcon("spellcheck", KIcon::SizeMedium) );
   m_spellPage=new ConfigureSpellPage(parent, page);
 
-  QVBox *page2 = addVBoxPage( i18n("Interface"), i18n("Interface"),
+  QVBox *page2 = addVBoxPage( i18n("Interface"), i18n("Interface Settings"),
                               BarIcon("interfaceconfig", KIcon::SizeMedium) );
   m_interfacePage=new ConfigureInterfacePage(parent, page2);
 
-  QVBox *page3 = addVBoxPage( i18n("Misc"), i18n("Misc"),
+  QVBox *page3 = addVBoxPage( i18n("Misc"), i18n("Misc Settings"),
                               BarIcon("miscconfig", KIcon::SizeMedium) );
   m_miscPage=new ConfigureMiscPage(parent, page3);
 
-  QVBox *page4 = addVBoxPage( i18n("Document"), i18n("Document"),
+  QVBox *page4 = addVBoxPage( i18n("Document"), i18n("Document Settings"),
                               BarIcon("documentdefaults", KIcon::SizeMedium) );
 
   m_defaultDocPage=new ConfigureDefaultDocPage(parent, page4);
 
-  QVBox *page5 = addVBoxPage( i18n("Formula"), i18n("Formula defaults"),
+  QVBox *page5 = addVBoxPage( i18n("Formula"), i18n("Formula Defaults"),
                               BarIcon("kformula", KIcon::SizeMedium) );
   m_formulaPage=new KFormula::ConfigurePage( parent->kWordDocument()->getFormulaDocument(),
                                              this, KWFactory::global()->config(), page5 );
@@ -208,7 +208,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     KoUnit::Unit unit = m_pView->kWordDocument()->getUnit();
     QVGroupBox* gbInterfaceGroup = new QVGroupBox( i18n("Interface"), box, "GroupBox" );
     gbInterfaceGroup->setMargin( 10 );
-    gbInterfaceGroup->setInsideSpacing( 5 );
+    gbInterfaceGroup->setInsideSpacing( KDialog::spacingHint() );
 
     double ptGridX=10.0;
     double ptGridY=10.0;
@@ -384,7 +384,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     KoUnit::Unit unit = m_pView->kWordDocument()->getUnit();
     QVGroupBox* gbMiscGroup = new QVGroupBox( i18n("Misc"), box, "GroupBox" );
     gbMiscGroup->setMargin( 10 );
-    gbMiscGroup->setInsideSpacing( 5 );
+    gbMiscGroup->setInsideSpacing( KDialog::spacingHint() );
 
     m_oldNbRedo=30;
     QString unitType=KoUnit::unitName(unit);
@@ -431,10 +431,10 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
                 "memory") );
 
     KWDocument* doc = m_pView->kWordDocument();
-    m_displayLink=new QCheckBox(i18n("Displays link"),gbMiscGroup);
+    m_displayLink=new QCheckBox(i18n("Display &links"),gbMiscGroup);
     m_displayLink->setChecked(doc->getVariableCollection()->variableSetting()->displayLink());
 
-    m_displayComment=new QCheckBox(i18n("Displays comment"),gbMiscGroup);
+    m_displayComment=new QCheckBox(i18n("Display c&omments"),gbMiscGroup);
     m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
 
 }
@@ -504,9 +504,9 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
 {
     m_pView=_view;
     config = KWFactory::global()->config();
-    QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document defaults"), box, "GroupBox" );
+    QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document Defaults"), box, "GroupBox" );
     gbDocumentDefaults->setMargin( 10 );
-    gbDocumentDefaults->setInsideSpacing( 5 );
+    gbDocumentDefaults->setInsideSpacing( KDialog::spacingHint() );
 
     double ptColumnSpacing=3;
     KoUnit::Unit unit = m_pView->kWordDocument()->getUnit();
@@ -537,7 +537,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     fontLayout->setColStretch(1, 1);
     fontLayout->setColStretch(2, 0);
 
-    QLabel *fontTitle = new QLabel(i18n("Default font"), fontContainer);
+    QLabel *fontTitle = new QLabel(i18n("Default font:"), fontContainer);
 
     font= new QFont();
     font->fromString(defaultFont);
@@ -545,6 +545,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     QString labelName = font->family() + ' ' + QString::number(font->pointSize());
     fontName = new QLabel(labelName, fontContainer);
     fontName->setFont(*font);
+    fontName->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);    
 
     QPushButton *chooseButton = new QPushButton(i18n("Choose..."), fontContainer);
     connect(chooseButton, SIGNAL(clicked()), this, SLOT(selectNewDefaultFont()));
@@ -554,9 +555,9 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     fontLayout->addWidget(chooseButton, 0, 2);
 
 
-    QVGroupBox* gbDocumentSettings = new QVGroupBox( i18n("Document settings"), box );
+    QVGroupBox* gbDocumentSettings = new QVGroupBox( i18n("Document Settings"), box );
     gbDocumentSettings->setMargin( 10 );
-    gbDocumentSettings->setInsideSpacing( 5 );
+    gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
     oldAutoSaveValue=KoDocument::defaultAutoSave() / 60;
     if( config->hasGroup("Interface") )
