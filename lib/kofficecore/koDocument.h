@@ -25,6 +25,7 @@ using namespace std;
 #include <qwmatrix.h>
 
 #include <kparts/part.h>
+#include <kparts/browserextension.h>
 #include <kurl.h>
 #include <kservice.h>
 
@@ -555,6 +556,18 @@ private:
     KURL m_strURL;
     bool m_bEmpty;
     static QList<KoDocument> *s_documentList;
+};
+
+// Used in singleViewMode, when embedded into a browser
+class KoBrowserExtension : public KParts::BrowserExtension
+{
+    Q_OBJECT
+public:
+    KoBrowserExtension( KoDocument * doc, const char * name = 0 );
+
+public slots:
+    // Automatically detected by konqueror
+    void print();
 };
 
 #endif

@@ -132,28 +132,23 @@ private:
   KoView* m_view;
 };
 
-// Used in singleViewMode, when embedded into a browser
-class KoBrowserExtension : public KParts::BrowserExtension
+KoBrowserExtension::KoBrowserExtension( KoDocument * doc, const char * name )
+    : KParts::BrowserExtension( doc, name )
 {
-public:
-    KoBrowserExtension( KoDocument * doc, const char * name = 0 )
-        : KParts::BrowserExtension( doc, name ) {
-            emit enableAction( "print", true );
-    }
+    emit enableAction( "print", true );
+}
 
-public slots:
-    // Automatically detected by konqueror
-    void print() {
-        KoDocument * doc = static_cast<KoDocument *>( parent() );
-        KoViewWrapperWidget * wrapper = static_cast<KoViewWrapperWidget *>( doc->widget() );
-        KoView * view = wrapper->koView();
-        // TODO remove code duplication (KoMainWindow), by moving this to KoView
-        KPrinter printer;
-        // ### TODO: apply global koffice settings here
-        view->setupPrinter( printer );
-        if ( printer.setup( view ) )
-            view->print( printer );
-    }
+void KoBrowserExtension::print()
+{
+    KoDocument * doc = static_cast<KoDocument *>( parent() );
+    KoViewWrapperWidget * wrapper = static_cast<KoViewWrapperWidget *>( doc->widget() );
+    KoView * view = wrapper->koView();
+    // TODO remove code duplication (KoMainWindow), by moving this to KoView
+    KPrinter printer;
+    // ### TODO: apply global koffice settings here
+    view->setupPrinter( printer );
+    if ( printer.setup( view ) )
+        view->print( printer );
 };
 
 KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
@@ -185,7 +180,7 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
       d->m_wrapperWidget = new KoViewWrapperWidget( parentWidget, widgetName );
       setWidget( d->m_wrapperWidget );
       kdDebug(30003) << "creating KoBrowserExtension" << endl;
-      //(void) new KoBrowserExtension( this ); // ## only if embedded into a browser?
+      (void) new KoBrowserExtension( this ); // ## only if embedded into a browser?
     }
 
   d->m_docInfo = new KoDocumentInfo( this, "document info" );
@@ -331,8 +326,9 @@ KAction *KoDocument::action( const QDomElement &element ) const
 
 QDomDocument KoDocument::domDocument() const
 {
-  assert(!d->m_views.isEmpty());
-  return d->m_views.getFirst()->domDocument();
+//  assert(!d->m_views.isEmpty());
+//  return d->m_views.getFirst()->domDocument();
+    return QDomDocument();
 }
 
 void KoDocument::setManager( KParts::PartManager *manager )
