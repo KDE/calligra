@@ -105,6 +105,20 @@ bool kspreadfunc_sqrtn( KSContext& context );
 bool kspreadfunc_sum( KSContext& context );
 bool kspreadfunc_sumsq( KSContext& context );
 
+// defined in kspread_functions_engineering.c
+bool kspreadfunc_dec2hex( KSContext& context );
+bool kspreadfunc_dec2oct( KSContext& context );
+bool kspreadfunc_dec2bin( KSContext& context );
+bool kspreadfunc_bin2dec( KSContext& context );
+bool kspreadfunc_bin2oct( KSContext& context );
+bool kspreadfunc_bin2hex( KSContext& context );
+bool kspreadfunc_oct2dec( KSContext& context );
+bool kspreadfunc_oct2bin( KSContext& context );
+bool kspreadfunc_oct2hex( KSContext& context );
+bool kspreadfunc_hex2dec( KSContext& context );
+bool kspreadfunc_hex2bin( KSContext& context );
+bool kspreadfunc_hex2oct( KSContext& context );
+
 // defined in kspread_functions_datetime.cc
 bool kspreadfunc_years( KSContext& context );
 bool kspreadfunc_months( KSContext& context );
@@ -184,18 +198,6 @@ bool kspreadfunc_upper( KSContext& context );
 bool kspreadfunc_value( KSContext& context );
 
 // defined in kspread_functions_conversion.cc
-bool kspreadfunc_dec2hex( KSContext& context );
-bool kspreadfunc_dec2oct( KSContext& context );
-bool kspreadfunc_dec2bin( KSContext& context );
-bool kspreadfunc_bin2dec( KSContext& context );
-bool kspreadfunc_bin2oct( KSContext& context );
-bool kspreadfunc_bin2hex( KSContext& context );
-bool kspreadfunc_oct2dec( KSContext& context );
-bool kspreadfunc_oct2bin( KSContext& context );
-bool kspreadfunc_oct2hex( KSContext& context );
-bool kspreadfunc_hex2dec( KSContext& context );
-bool kspreadfunc_hex2bin( KSContext& context );
-bool kspreadfunc_hex2oct( KSContext& context );
 bool kspreadfunc_polr( KSContext& context );
 bool kspreadfunc_pola( KSContext& context );
 bool kspreadfunc_carx( KSContext& context );
@@ -526,6 +528,20 @@ static const functionEntry funcTab[] = {
   { "SUM", kspreadfunc_sum },
   { "SUMSQ", kspreadfunc_sumsq },
 
+  // engineering
+  { "DEC2HEX", kspreadfunc_dec2hex },
+  { "DEC2BIN", kspreadfunc_dec2bin },
+  { "DEC2OCT", kspreadfunc_dec2oct },
+  { "BIN2DEC", kspreadfunc_bin2dec },
+  { "BIN2OCT", kspreadfunc_bin2oct },
+  { "BIN2HEX", kspreadfunc_bin2hex },
+  { "OCT2BIN", kspreadfunc_oct2bin },
+  { "OCT2DEC", kspreadfunc_oct2dec },
+  { "OCT2HEX", kspreadfunc_oct2hex },
+  { "HEX2BIN", kspreadfunc_hex2bin },
+  { "HEX2DEC", kspreadfunc_hex2dec },
+  { "HEX2OCT", kspreadfunc_hex2oct },
+
   // date & time
   { "DATE", kspreadfunc_date },
   { "DAY", kspreadfunc_day },
@@ -551,18 +567,6 @@ static const functionEntry funcTab[] = {
   // conversion
   { "DEGREE", kspreadfunc_degree },
   { "RADIAN", kspreadfunc_radian },
-  { "DEC2HEX", kspreadfunc_dec2hex },
-  { "DEC2BIN", kspreadfunc_dec2bin },
-  { "DEC2OCT", kspreadfunc_dec2oct },
-  { "BIN2DEC", kspreadfunc_bin2dec },
-  { "BIN2OCT", kspreadfunc_bin2oct },
-  { "BIN2HEX", kspreadfunc_bin2hex },
-  { "OCT2BIN", kspreadfunc_oct2bin },
-  { "OCT2DEC", kspreadfunc_oct2dec },
-  { "OCT2HEX", kspreadfunc_oct2hex },
-  { "HEX2BIN", kspreadfunc_hex2bin },
-  { "HEX2DEC", kspreadfunc_hex2dec },
-  { "HEX2OCT", kspreadfunc_hex2oct },
   { "CHARTOASCII", kspreadfunc_CharToAscii },
   { "ASCIITOCHAR", kspreadfunc_AsciiToChar },
   { "BOOL2STRING", kspreadfunc_BoolToString },
