@@ -43,6 +43,7 @@ static KCmdLineOptions options[] =
 {
   { "open [<object_type>:]<object_name>", I18N_NOOP("Open object of type <object_type>\nand name <object_name> from specified project\non application start.\n<object_type>: is optional, if omitted - table\ntype is assumed.\nOther object types can be query, report, form,\nscript (may be more or less, depending on your\nplugins installed).\nUse \"\" chars to specify names containing spaces.\nExamples: --open MyTable,\n --open query:\"My very big query\""), 0 },
   { "design [<object_type>:]<object_name>", I18N_NOOP("Like --open, but the object will\nbe opened in Design Mode, if one is available"), 0 },
+  { "edittext [<object_type>:]<object_name>", I18N_NOOP("Like --open, but the object will\nbe opened in Text Mode, if one is available"), 0 },
   { "new <object_type>", I18N_NOOP("Start new object design of type <object_type>"), 0 },
   { "+[file]", I18N_NOOP("Database project file (or shortcut file) to open"), 0 },
   // INSERT YOUR COMMANDLINE OPTIONS HERE
@@ -73,7 +74,7 @@ void getAutoopenObjects(KexiProjectData * &projectData,
 			stripQuotes(item, type_name);
 			name_required = false;
 		}
-		else {//open, design
+		else {//open, design, text
 			//option with " " (default type == "table")
 			if (stripQuotes(item, obj_name)) {
 				type_name = "table";
@@ -129,6 +130,7 @@ bool startupActions(KexiProjectData * &projectData)
 	//---autoopen objects:
 	getAutoopenObjects(projectData, args, "open");
 	getAutoopenObjects(projectData, args, "design");
+	getAutoopenObjects(projectData, args, "edittext");
 	getAutoopenObjects(projectData, args, "new");
 
 	return true;

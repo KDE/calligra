@@ -713,7 +713,14 @@ bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
 				internalReason(d->prj)+"<br></li>" );
 			continue;
 		}
-		if (!openObject(item, info["action"]=="design" ? Kexi::DesignViewMode : Kexi::DataViewMode)) {
+		int viewMode;
+		if (info["action"]=="design")
+			viewMode = Kexi::DesignViewMode;
+		else if (info["action"]=="edittext")
+			viewMode = Kexi::TextViewMode;
+		else
+			viewMode = Kexi::DataViewMode;
+		if (!openObject(item, viewMode)) {
 			not_found_msg += "<li>";
 			not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot open object")+
 				internalReason(d->prj)+"<br></li>" );
