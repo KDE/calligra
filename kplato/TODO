@@ -110,7 +110,7 @@ Done    Plain
               * or find a better suited "standard" format
                   http://proj.chbs.dk/specifications/
 
--           Use KPlato namespace for all KPlato classes
+Taken       Use KPlato namespace for all KPlato classes
             Remove KPT prefix from all KPlato classes
             Remove kpt prefix from all KPlato source code files
 
