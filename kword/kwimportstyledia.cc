@@ -298,15 +298,17 @@ void KWImportFrameTableStyleDia::slotOk()
     {
         if ( !m_listStyleName->isSelected( i ))
         {
+            QString name = m_listStyleName->text(i );
             if ( m_typeStyle ==frameStyle )
             {
                 //remove this style from list
                 QPtrListIterator<KWFrameStyle> styleIt( m_frameStyleList );
                 for ( ; styleIt.current(); ++styleIt )
                 {
-                    if ( styleIt.current()->name() == m_listStyleName->text(i ) )
+                    if ( styleIt.current()->name() == name )
                     {
                         m_frameStyleList.remove(styleIt.current());
+                        break;
                     }
                 }
             }
@@ -316,9 +318,10 @@ void KWImportFrameTableStyleDia::slotOk()
                 QPtrListIterator<KWTableStyle> styleIt( m_tableStyleList );
                 for ( ; styleIt.current(); ++styleIt )
                 {
-                    if ( styleIt.current()->name() == m_listStyleName->text(i ) )
+                    if ( styleIt.current()->name() == name )
                     {
                         m_tableStyleList.remove(styleIt.current());
+                        break;
                     }
                 }
             }

@@ -428,6 +428,7 @@ void KWTableStyleManager::importFromFile()
     KWImportFrameTableStyleDia dia( m_doc, lst, KWImportFrameTableStyleDia::TableStyle, this, 0 );
     if ( dia.listOfTableStyleImported().count() > 0 && dia.exec() ) {
         QPtrList<KWTableStyle> list = dia.listOfTableStyleImported();
+        kdDebug()<<" list.count() :"<<list.count()<<endl;
         addStyle( list);
     }
 }

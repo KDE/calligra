@@ -57,14 +57,16 @@ void KoImportStyleDia::generateStyleList()
     {
         if ( !m_listStyleName->isSelected( i ))
         {
+            QString name = m_listStyleName->text(i );
             //remove this style from list
             QPtrListIterator<KoStyle> styleIt( m_styleList );
             for ( ; styleIt.current(); ++styleIt )
             {
-                if ( styleIt.current()->name() == m_listStyleName->text(i ) )
+                if ( styleIt.current()->name() == name )
                 {
                     updateFollowingStyle( styleIt.current()->translatedName() );
                     m_styleList.remove(styleIt.current());
+                    break;
                 }
             }
         }
