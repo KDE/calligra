@@ -66,7 +66,7 @@ QString OOWriterWorker::escapeOOText(const QString& strText) const
 
 
 QString OOWriterWorker::escapeOOSpan(const QString& strText) const
-// We need not only to escape the classical XML stuff but also take care of spaces and tabs.
+// We need not only to escape the classical XML stuff but also to take care of spaces and tabs.
 {
     QString strReturn;
     QChar ch;
@@ -74,7 +74,7 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
 
     for (uint i=0; i<strText.length(); i++)
     {
-        ch=strText[i]; // ###TODO: would it be not better to define a QCharRef instead? (no need to copy anymore.)
+        ch=strText[i];
 
         if (ch!=' ')
         {
@@ -136,6 +136,11 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
         case 39: // '
             {
                 strReturn+="&apos;";
+                break;
+            }
+        case 1: // (Non-XML-compatible) replacement character from KWord 0.8
+            {
+                strReturn+="#"; //use KWord 1.[123] replacement character instead
                 break;
             }
         default:
@@ -597,7 +602,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
     return strElement.stripWhiteSpace(); // Remove especially trailing spaces
 }
 
-bool OOWriterWorker::makeTable(const FrameAnchor& anchor)
+bool OOWriterWorker::makeTable(const FrameAnchor& /*anchor*/ )
 {
 #if 0
     *m_streamOut << "</abiword:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
@@ -634,7 +639,7 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor, const bool useFrameS
     kdDebug(30518) << "New picture: " << anchor.picture.koStoreName
         << " , " << anchor.picture.key.toString() << endl;
 
-    QString koStoreName(anchor.picture.koStoreName);
+    const QString koStoreName(anchor.picture.koStoreName);
 
     QByteArray image;
 
@@ -668,6 +673,8 @@ bool OOWriterWorker::makePicture(const FrameAnchor& anchor, const bool useFrameS
     }
     else
     {
+        // ### TODO: when this filter becomes an import filter to KWord 1.4, remove this conversion.
+        // ### TODO:  from that time point on, the conversion will need to be a feature of KWord, probably of KoPicture
         // All other picture types must be converted to PNG
         isImageLoaded=loadAndConvertToImage(koStoreName,strExtension,"PNG",image);
         strExtension="png";
@@ -737,7 +744,7 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
     const FormatData& formatData)
 {
     // Retrieve text and escape it (and necessary space, tabs and line-break tags)
-    QString partialText(escapeOOSpan(paraText.mid(formatData.pos,formatData.len)));
+    const QString partialText( escapeOOSpan( paraText.mid( formatData.pos, formatData.len ) ) );
 
     if (formatData.text.missing)
     {
@@ -749,7 +756,7 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
         *m_streamOut << "<text:span";
 
         QString styleKey;
-        QString props ( textFormatToStyle(formatLayout,formatData.text,false,styleKey) ); // ### TODO: make const
+        const QString props ( textFormatToStyle( formatLayout,formatData.text, false, styleKey ) );
 
         QMap<QString,QString>::ConstIterator it ( m_mapTextStyleKeys.find(styleKey) );
         kdDebug(30518) << "Searching text key: " << styleKey << endl;
@@ -913,7 +920,7 @@ void OOWriterWorker::processParagraphData ( const QString &paraText,
 QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
     const LayoutData& layout, const bool force, QString& styleKey)
 {
-    QString props; // Props has to remain empty, if there is no difference.
+    QString props; // Props has to remain empty if there is no difference.
 
     styleKey += layout.styleName;
     styleKey += ',';
@@ -1183,7 +1190,7 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
 bool OOWriterWorker::doOpenStyles(void)
 {
     m_styles += " <office:styles>\n";
-    m_styles += "  <style:style style:name=\"Graphics\" style:family=\"graphics\">"; // ### TODO: what if Grpahics is a normal style
+    m_styles += "  <style:style style:name=\"Graphics\" style:family=\"graphics\">"; // ### TODO: what if Graphics is a normal style
     m_styles += "   <style:properties/>";
     m_styles += "  </style:style>";
     return true;
