@@ -96,7 +96,7 @@ void KWFrameStyleListItem::switchStyle()
 {
     if ( m_changedFrameStyle )
         delete m_changedFrameStyle;
-    
+
     if ( m_origFrameStyle )
         m_changedFrameStyle = new KWFrameStyle( *m_origFrameStyle );
 }
@@ -252,7 +252,7 @@ void KWFrameStyleManager::switchStyle()
         m_frameStyles.at(num)->switchStyle();
     else
         m_currentFrameStyle = m_frameStyles.at(num)->changedFrameStyle();
-    
+
     updateGUI();
 
     noSignals=false;
@@ -434,21 +434,21 @@ void KWFrameStyleManager::apply()
     noSignals=true;
     for (unsigned int i =0 ; i < m_frameStyles.count() ; i++) {
         if(m_frameStyles.at(i)->origFrameStyle() == 0) {           // newly added style
-            
+
             kdDebug() << "adding new " << m_frameStyles.at(i)->changedFrameStyle()->name() << " (" << i << ")" << endl;
-            
+
             KWFrameStyle *tmp = addFrameStyleTemplate(m_frameStyles.take(i)->changedFrameStyle());
             m_frameStyles.insert(i, new KWFrameStyleListItem(0, tmp) );
-        
+
         } else if(m_frameStyles.at(i)->changedFrameStyle() == 0) { // deleted style
-            
+
             kdDebug() << "deleting orig " << m_frameStyles.at(i)->origFrameStyle()->name() << " (" << i << ")" << endl;
 
             KWFrameStyle *orig = m_frameStyles.at(i)->origFrameStyle();
             removeFrameStyleTemplate( orig );
-        
+
         } else {
-            
+
             kdDebug() << "update style " << m_frameStyles.at(i)->changedFrameStyle()->name() << " (" << i << ")" << endl;
             m_frameStyles.at(i)->apply();
         }
@@ -470,7 +470,7 @@ void KWFrameStyleManager::renameStyle(const QString &theText) {
 
     // Check how many styles with that name we have now
     int synonyms = 0;
-    for ( int i = 0; i < m_stylesList->count(); i++ ) {
+    for ( uint i = 0; i < m_stylesList->count(); i++ ) {
         if ( m_stylesList->text( i ) == m_stylesList->currentText() )
             ++synonyms;
     }
