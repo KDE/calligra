@@ -5,6 +5,7 @@ koffice (1:1.2.90-1) unstable; urgency=low
   * Binary package kontour no longer exists (closes: #140345, #191517).
   * Split koffice-libs into koffice-libs and koffice-data.
   * Moved import/export filters into app-specific packages where possible.
+  * Build-Depends on new package libwv2-dev.
   * Build-Conflicts with python2.3-dev to ensure we build against python2.2.
   * Karbon no longer crashes with shift/ctrl dragging (closes: #189056).
   * Karbon fixed on big-endian machines (closes: #189735).
