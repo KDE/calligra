@@ -57,7 +57,7 @@ void KPrMoveHelpLineDia::slotRemoveHelpLine()
     KDialogBase::slotOk();
 }
 
-double KPrMoveHelpLineDia::newPosition()
+double KPrMoveHelpLineDia::newPosition() const
 {
     return KoUnit::ptFromUnit(  position->value(), m_doc->getUnit() );
 }
@@ -89,7 +89,7 @@ KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pag
     resize( 300,100 );
 }
 
-double KPrInsertHelpLineDia::newPosition()
+double KPrInsertHelpLineDia::newPosition() const
 {
     return KoUnit::ptFromUnit(  position->value(), m_doc->getUnit() );
 }

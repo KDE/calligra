@@ -27,14 +27,11 @@
 #include <qsize.h>
 #include <global.h>
 #include <koPictureCollection.h>
-#include <global.h>
 #include <qvaluelist.h>
 #include <qpen.h>
 #include <qbrush.h>
-#include <qmap.h>
 #include <koPageLayoutDia.h>
 #include <koparaglayout.h>
-#include <qrichtext_p.h>
 #include <kocommand.h>
 class KPresenterDoc;
 

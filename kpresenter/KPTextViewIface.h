@@ -22,11 +22,10 @@
 
 #include <KoDocumentIface.h>
 #include <dcopref.h>
-
-#include <qstring.h>
-#include <qcolor.h>
 #include <KoTextViewIface.h>
+
 class KPTextView;
+class QString;
 
 class KPTextViewIface :  virtual public KoTextViewIface
 {

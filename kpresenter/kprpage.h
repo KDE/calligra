@@ -29,10 +29,8 @@
 class KPTextView;
 class KPObject;
 class KPresenterDoc;
-class KPBackGround;
 class KPresenterView;
 class KoDocumentEntry;
-class KoRect;
 class KoPageLayout;
 class KCommand;
 class KoPointArray;

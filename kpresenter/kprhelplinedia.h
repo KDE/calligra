@@ -35,7 +35,7 @@ class KPrMoveHelpLineDia : public KDialogBase
 public:
     KPrMoveHelpLineDia( QWidget *parent, double value, double limitTop, double limitBottom , KPresenterDoc *_doc, const char *name=0L);
 
-    double newPosition();
+    double newPosition() const;
     bool removeLine() const { return m_bRemoveLine;}
 
 private slots:
@@ -53,7 +53,7 @@ class KPrInsertHelpLineDia : public KDialogBase
 public:
     KPrInsertHelpLineDia( QWidget *parent, const KoRect &r, KPresenterDoc *_doc, const char *name=0L);
 
-    double newPosition();
+    double newPosition() const;
     //return true if we add a new horizontal line help
     bool addHorizontalHelpLine();
 

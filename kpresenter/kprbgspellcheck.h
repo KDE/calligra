@@ -24,7 +24,6 @@
 class KPresenterDoc;
 class KPTextObject;
 
-#include <qobject.h>
 #include <koBgSpellCheck.h>
 
 class KPrBgSpellCheck : public KoBgSpellCheck

@@ -20,7 +20,6 @@
 #ifndef kpobject_h
 #define kpobject_h
 
-#include <qpoint.h>
 #include <qpen.h>
 #include <qbrush.h>
 #include <qcursor.h>

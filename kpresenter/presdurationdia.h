@@ -21,11 +21,10 @@
 #define presdurationdia_h
 
 #include <kdialogbase.h>
-#include <klistview.h>
-#include <qlabel.h>
 
 class KPresenterDoc;
-class QResizeEvent;
+class KListView;
+class QLabel;
 
 /******************************************************************
  *

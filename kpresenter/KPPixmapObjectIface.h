@@ -25,7 +25,6 @@
 #include "KPresenterObjectIface.h"
 #include "KPresenterObject2DIface.h"
 #include <qstring.h>
-#include <qcolor.h>
 
 class KPPixmapObject;
 

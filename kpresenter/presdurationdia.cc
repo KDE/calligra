@@ -20,10 +20,11 @@
 #include "presdurationdia.h"
 #include "kprcanvas.h"
 #include "kpresenter_doc.h"
+#include <qlabel.h>
 #include <qheader.h>
 #include <qvbox.h>
 #include <qlayout.h>
-
+#include <klistview.h>
 #include <kdebug.h>
 
 /******************************************************************

@@ -23,8 +23,6 @@
 #include <dcopobject.h>
 #include <dcopref.h>
 #include "KPresenterObjectIface.h"
-#include <qstring.h>
-#include <qcolor.h>
 
 class KPPolylineObject;
 
