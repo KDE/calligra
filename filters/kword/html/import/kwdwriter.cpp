@@ -441,7 +441,7 @@ QDomElement KWDWriter::currentFormat(QDomElement paragraph, bool start_new_one) 
 	   if (start_new_one) return startFormat(paragraph);
 	   else { qWarning("warning: returning null format"); }
 	}
-	if (e.attribute("len") != QString::null) {
+	if (!e.attribute("len").isNull()) {
 	   // current format already has length, clone it.
 	   if (start_new_one) return startFormat(paragraph,e);
 	}
@@ -453,7 +453,7 @@ void KWDWriter::cleanUpParagraph(QDomElement paragraph) {
 	QDomElement e=paragraph.elementsByTagName("FORMATS").item(0).toElement();
 	if (e.isNull()) { qWarning("cleanup : no valid paragraph"); exit(0); }
 	for (QDomElement k=e.firstChild().toElement();!k.isNull();k=k.nextSibling().toElement()) {
-	     if (k.attribute("len",QString::null) == QString::null) {
+	     if (k.attribute("len",QString::null).isNull()) {
 	         e.removeChild(k);
 	         cleanUpParagraph(paragraph);
 	         return;
