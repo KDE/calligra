@@ -7,7 +7,7 @@
       <Title data="conditional"/>
       <Id data="conditional"/>
       <Description data="conditional"/>
-      <Version data="0.1"/>
+      <Version data="0.2"/>
       <Web data=""/>
       <Email data="haye@ritterstrasse.org"/>
          <Copyright data="Copyright (C) 2004 Joerg de la Haye. Distributed under the GPL."/>
@@ -24,7 +24,7 @@
       <Line x1="130.0" y1="60.0" x2="130.0" y2="160.0"/>
    </KivioShape>
 
-   <KivioShape type="TextBox" name="Text1" x="65.0" y="2.0" w="130.0" h="16.0"/>
+   <KivioShape type="TextBox" name="Text1" x="5.0" y="2.0" w="250.0" h="56.0"/>
    <KivioShape type="TextBox" name="Text2" x="5.0" y="62.0" w="120.0" h="96.0"/>
    <KivioShape type="TextBox" name="Text3" x="135.0" y="62.0" w="120.0" h="96.0"/>
 

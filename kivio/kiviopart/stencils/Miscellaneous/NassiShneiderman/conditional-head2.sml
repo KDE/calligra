@@ -7,7 +7,7 @@
       <Title data="conditional-head2"/>
       <Id data="conditional-head2"/>
       <Description data="conditional-head2"/>
-      <Version data="0.1"/>
+      <Version data="0.2"/>
       <Web data=""/>
       <Email data="haye@ritterstrasse.org"/>
          <Copyright data="Copyright (C) 2004 Joerg de la Haye. Distributed under the GPL."/>
@@ -22,6 +22,6 @@
       <Line x1="260.0" y1="0.0" x2="240.0" y2="60.0"/>
    </KivioShape>
 
-   <KivioShape type="TextBox" name="Text" x="100.0" y="2.0" w="130.0" h="16.0"/>
+   <KivioShape type="TextBox" name="Text" x="5.0" y="2.0" w="250.0" h="56.0"/>
 
 </KivioShapeStencil>
