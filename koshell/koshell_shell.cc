@@ -112,18 +112,6 @@ KoShellWindow::~KoShellWindow()
   setRootDocumentDirect( 0L, QPtrList<KoView>() ); // prevent our parent destructor from doing stupid things
 }
 
-/* ###### FIXME - delete that code
-QString KoShellWindow::nativeFormatName() const
-{
-  return i18n("KOffice Documents");
-}
-
-QString KoShellWindow::nativeFormatPattern() const
-{
-  return m_filter; // "*.kwd *.ksp *.kpr";
-}
-*/
-
 bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
 {
   KMimeType::Ptr mimeType = KMimeType::findByURL( url );

@@ -51,13 +51,6 @@ public:
 
   virtual QString configFile() const;
 
-  //virtual QString nativeFormatPattern() const;
-  //virtual QString nativeFormatName() const;
-
-/*
-  bool saveAllPages();
-*/
-
 protected slots:
 
   virtual void slotFileNew();
