@@ -25,7 +25,7 @@
 #include <kmimetype.h>
 #include <kdebug.h>
 
-#include <qmsgbox.h>
+#include <qmessagebox.h>
 #include <qstringlist.h>
 
 #include <assert.h>

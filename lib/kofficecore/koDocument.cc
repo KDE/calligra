@@ -38,7 +38,7 @@
 #include <kapp.h>
 #include <kdebug.h>
 
-#include <qmsgbox.h>
+#include <qmessagebox.h>
 #include <qpainter.h>
 #include <qcolor.h>
 #include <qpicture.h>

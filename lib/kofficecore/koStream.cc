@@ -22,7 +22,7 @@
 #include <stdlib.h>
 
 #include <qimage.h>
-#include <qiodev.h>
+#include <qiodevice.h>
 #include <qbuffer.h>
 #include <qpicture.h>
 

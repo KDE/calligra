@@ -25,17 +25,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <qtabdlg.h>
-#include <qcombo.h>
+#include <qtabdialog.h>
+#include <qcombobox.h>
 #include <qlabel.h>
-#include <qgrpbox.h>
+#include <qgroupbox.h>
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qpen.h>
 #include <qbrush.h>
 #include <qcolor.h>
 #include <qpixmap.h>
-#include <qlined.h>
+#include <qlineedit.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 

@@ -22,7 +22,7 @@
 
 #include <qdialog.h>
 #include <qlistbox.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 
 class DlgPartSelectData : public QDialog
 {
