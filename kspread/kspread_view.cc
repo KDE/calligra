@@ -3071,7 +3071,7 @@ void KSpreadView::insertFromTextfile()
     m_pCanvas->deleteEditor( true ); // save changes
   }
 
-  KMessageBox::information( this, "Not implemented yet, work in progress...");
+  //KMessageBox::information( this, "Not implemented yet, work in progress...");
 
   KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", selection(), KSpreadCSVDialog::File );
   dialog.exec();
