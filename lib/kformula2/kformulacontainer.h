@@ -22,6 +22,7 @@
 #define __KFORMULACONTAINER_H
 
 #include <qobject.h>
+#include <qstack.h>
 
 #include "artwork.h"
 #include "basicelement.h"
@@ -32,7 +33,7 @@ class BasicElement;
 class FormulaCursor;
 class QKeyEvent;
 class QPainter;
-
+class KFormulaCommand;
 
 class KFormulaContainer : public QObject {
     Q_OBJECT
@@ -115,13 +116,50 @@ public slots:
 
     void removeSelection(FormulaCursor* cursor, BasicElement::Direction);
 
-    
+    /**
+     * Undo and move the undone command to the redo stack
+     */
+    void undo(); 
+
+    /**
+     * Redo and move the reFdone command to the undo stack
+     */
+    void redo(); 
+
+    /**
+     * Undo and move the undone command to the redo stack
+     */
+    void undo(FormulaCursor *cursor); 
+
+    /**
+     * Redo and move the reFdone command to the undo stack
+     * the given cursor is used for redo and will be put
+     * in the right place after the redo
+     */
+    void redo(FormulaCursor *cursor); 
+        
     /**
      * Emits a formulaChanged signal if we are dirty.
      */
     void testDirty();
     
 private:
+    /**
+     * Push the command to the undo stack
+     */
+     void pushUndoStack(KFormulaCommand *command);
+
+    /**
+     * Push the command to the redo stack
+     */
+     void pushRedoStack(KFormulaCommand *command);
+     
+    /**
+     * Clean redo stack because of a modify.
+     */
+     void cleanRedoStack() {redoStack.clear();}
+     
+
     /**
      * The element tree's root.
      */
@@ -139,6 +177,11 @@ private:
 
     // debug
     friend class TestFormulaCursor;
+
+    //Undo and redo stack
+    QStack<KFormulaCommand> undoStack;
+    QStack<KFormulaCommand> redoStack;
+ 
 };
 
 

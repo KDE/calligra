@@ -147,10 +147,18 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
         case Qt::Key_F4:
             document->save("test");
             break;
+        case Qt::Key_F7:
+            document->undo(cursor);
+            break;
+        case Qt::Key_F8:
+            document->redo(cursor);
+            break;
+
 	}
     }
 
     //Is this necessary here ?
+    
     document->testDirty();
 
     cursor->draw(painter);

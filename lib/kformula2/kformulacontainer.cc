@@ -38,7 +38,7 @@
 #include "sequenceelement.h"
 #include "symbolelement.h"
 #include "textelement.h"
-
+#include "kformulacommand.h"
 
 KFormulaContainer::KFormulaContainer()
     : rootElement(this)
@@ -96,6 +96,13 @@ void KFormulaContainer::draw(QPainter& painter)
 
 void KFormulaContainer::addText(FormulaCursor* cursor, QChar ch)
 {
+
+KFCAddText *command=new KFCAddText(this,cursor,ch);
+
+pushUndoStack(command);
+cleanRedoStack();
+
+/*
     if (cursor->isSelection()) {
         removeSelection(cursor, BasicElement::beforeCursor);
     }
@@ -104,7 +111,9 @@ void KFormulaContainer::addText(FormulaCursor* cursor, QChar ch)
     list.append(new TextElement(ch));
     cursor->insert(list);
     cursor->setSelection(false);
+*/
 }
+
 
 void KFormulaContainer::addOperator(FormulaCursor* cursor, QChar ch)
 {
@@ -225,6 +234,65 @@ void KFormulaContainer::removeSelection(FormulaCursor* cursor,
     }
     //cursor->normalize(direction);
     cursor->normalize();
+}
+
+void KFormulaContainer::undo()
+{
+
+    FormulaCursor tmpCursor(&rootElement);
+    undo(&tmpCursor);
+
+}
+
+
+void KFormulaContainer::undo(FormulaCursor *cursor)
+{
+
+    KFormulaCommand *command;
+    if(!undoStack.isEmpty()) {
+    command=undoStack.pop();
+        if(command->undo(cursor))
+            pushRedoStack(command);
+    } 
+ 
+}
+
+void KFormulaContainer::redo()
+{
+
+    FormulaCursor tmpCursor(&rootElement);
+    redo(&tmpCursor);
+
+}
+
+void KFormulaContainer::redo(FormulaCursor *cursor)
+{
+
+    KFormulaCommand *command;
+
+    if(!redoStack.isEmpty()) {        
+        command=redoStack.pop();
+        if(command->redo(cursor))
+            pushUndoStack(command);
+    }
+//else ??
+    
+}
+
+void KFormulaContainer::pushUndoStack(KFormulaCommand *command) 
+{ 
+    undoStack.push(command); 
+
+//emit signals
+
+}
+
+void KFormulaContainer::pushRedoStack(KFormulaCommand *command) 
+{ 
+    redoStack.push(command); 
+
+//emit signals
+
 }
 
 

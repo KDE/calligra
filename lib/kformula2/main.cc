@@ -1,6 +1,9 @@
+#include <qfontdatabase.h>
 
 #include <iostream>
 #include <memory>
+
+#include <stdio.h>
 
 #include <qaccel.h>
 #include <qapplication.h>
