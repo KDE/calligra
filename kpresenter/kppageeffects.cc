@@ -48,7 +48,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         _steps = hsteps;
         _time.start();
 
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -70,7 +70,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         _steps = wsteps;
         _time.start();
 
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -92,7 +92,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         _steps = wsteps;
         _time.start();
 
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -122,7 +122,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int h0 = 0;
         _time.start();
 
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -147,7 +147,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int w0 = 0;
         _time.start();
 
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -177,7 +177,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
 
         _time.start();
 
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -224,7 +224,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
 
         _time.start();
 
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -260,7 +260,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         }
         _time.start();
 
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -294,7 +294,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         _steps = wsteps;
         _time.start();
 
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -377,7 +377,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         QSize ps;
         QPixmap pix3;
 
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -470,7 +470,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
 
         _h = 0;
 	int h0 = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -499,7 +499,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
 
         _w = 0;
 	int w0 = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -654,7 +654,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int dwidth = width;
 
         _h = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -679,7 +679,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
 
         int dheight = height;
 
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -708,7 +708,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int dwidth = width;
 
         _h = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -733,7 +733,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
 
         int dheight = height;
 
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -762,7 +762,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int dwidth = width;
 
         _w = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -789,7 +789,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int dwidth = width;
 
         _w = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -817,7 +817,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int dwidth = width;;
 
         _w = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -844,7 +844,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int dwidth = width;;
 
         _w = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -872,7 +872,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int dwidth = width;;
 
         _w = _h = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -901,7 +901,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int dwidth = width;;
 
         _w = _h = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -932,7 +932,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int dwidth = width;;
 
         _w = _h = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -961,7 +961,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int dwidth = width;;
 
         _w = _h = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -992,7 +992,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int dwidth = width;;
 
         _w = _h = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -1021,7 +1021,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int dwidth = width;;
 
         _w = _h = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -1052,7 +1052,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int dwidth = width;;
 
         _w = _h = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -1081,7 +1081,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int dwidth = width;;
 
         _w = _h = 0;
-        for ( ; ; )
+        for ( ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
