@@ -60,15 +60,7 @@ void ResizeCmd::execute()
 /*====================== unexecute ===============================*/
 void ResizeCmd::unexecute()
 {
-    QRect oldRect;
-
-    oldRect = object->getBoundingRect( 0, 0 );
-    object->moveBy( -m_diff.x(), -m_diff.y() );
-    object->resizeBy( -r_diff.width(), -r_diff.height() );
-    if ( object->getType() == OT_TEXT )
-	( (KPTextObject*)object )->recalcPageNum( doc );
-    doc->repaint( oldRect );
-    doc->repaint( object );
+    unexecute(true);
 }
 
 /*====================== unexecute ===============================*/
