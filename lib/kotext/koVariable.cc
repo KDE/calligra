@@ -46,9 +46,12 @@ KoVariableSettings::KoVariableSettings()
 
 void KoVariableSettings::save( QDomElement &parentElem )
 {
-    QDomElement elem = parentElem.ownerDocument().createElement( "VARIABLESETTINGS" );
-    parentElem.appendChild( elem );
-    elem.setAttribute( "number_offset", m_offset );
+    if(m_offset!=0)
+    {
+        QDomElement elem = parentElem.ownerDocument().createElement( "VARIABLESETTINGS" );
+        parentElem.appendChild( elem );
+        elem.setAttribute( "number_offset", m_offset );
+    }
 }
 
 void KoVariableSettings::load( QDomElement &elem )
