@@ -21,7 +21,7 @@
 #define __preferencesdlg_h__
 
 #include <qlineedit.h>
-#include <kwizard.h>
+#include <kdialog.h>
 
 /**
  */

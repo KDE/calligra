@@ -20,8 +20,8 @@
 #ifndef __kintegerinputdlg_h__
 #define __kintegerinputdlg_h__
 
-#include <kintlineedit.h>
-#include <kwizard.h>
+#include <knumlineedit.h>
+#include <kdialog.h>
 
 /**
  */

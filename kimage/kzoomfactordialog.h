@@ -20,8 +20,8 @@
 #ifndef __kzoomfactordlg_h__
 #define __kzoomfactordlg_h__
 
-#include <kintlineedit.h>
-#include <kwizard.h>
+#include <knumlineedit.h>
+#include <kdialog.h>
 
 /**
  */

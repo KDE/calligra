@@ -20,7 +20,7 @@
 #ifndef __kinputdialog_h__
 #define __kinputdialog_h__
 
-#include <kwizard.h>
+#include <kdialog.h>
 
 class QLineEdit;
 
