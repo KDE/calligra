@@ -18,7 +18,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <qmessagebox.h>
+#include <kmessagebox.h>
 
 #include "kis_tool.h"
 #include "kis_cursor.h"
@@ -39,7 +39,7 @@ QString KisTool::toolName()
 
 void KisTool::optionsDialog()
 {
-  QMessageBox::information (0L, "KimageShop", "No Options available for this tool.", 1);
+  KMessageBox::sorry(0L, i18n("No Options available for this tool."));
 }
 
 void KisTool::setCursor( const QCursor& c )

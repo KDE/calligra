@@ -25,8 +25,6 @@
 #include <qrect.h>
 #include <qpoint.h>
 
-#include <koStoreStream.h>
-
 #include "kis_global.h"
 
 class KisChannel
