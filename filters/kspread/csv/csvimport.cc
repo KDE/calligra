@@ -101,7 +101,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
         return KoFilter::UserCancelled;
 
     KSpreadCell *cell;
-    KSpreadTable *table=ksdoc->createTable();
+    KSpreadSheet *table=ksdoc->createTable();
     ksdoc->addTable(table);
 
     int numRows = dialog->getRows();
