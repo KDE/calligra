@@ -64,7 +64,7 @@ void PStateManager::readDefaultSettings () {
     defaultUnit = UnitCentimeter;
   else if (value == "pica")
     defaultUnit = UnitPica;
-  else if (value = "didot")
+  else if (value == "didot")
     defaultUnit = UnitDidot;
   else if (value == "cicero")
     defaultUnit = UnitCicero;  

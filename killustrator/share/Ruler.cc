@@ -36,6 +36,8 @@
 #define MARKER_WIDTH 11
 #define MARKER_HEIGHT 6
 
+#define RULER_SIZE 30
+
 Ruler::Ruler (Orientation o, MeasurementUnit mu, QWidget *parent,
 	      const char *name) : QFrame (parent, name) {
   setFrameStyle (Box | Raised);
@@ -49,11 +51,11 @@ Ruler::Ruler (Orientation o, MeasurementUnit mu, QWidget *parent,
   currentPosition = -1;
 
   if (orientation == Horizontal) {
-    setFixedHeight (30);
+    setFixedHeight (RULER_SIZE);
     initMarker (MARKER_WIDTH, MARKER_HEIGHT);
   }
   else {
-    setFixedWidth (30);
+    setFixedWidth (RULER_SIZE);
     initMarker (MARKER_HEIGHT, MARKER_WIDTH);
   }
 }
@@ -102,10 +104,10 @@ void Ruler::recalculateSize (QResizeEvent *) {
 
   if (orientation == Horizontal) {
     w = QMAX(width (), maxsize);
-    h = 30;
+    h = RULER_SIZE;
   }
   else {
-    w = 30;
+    w = RULER_SIZE;
     h = QMAX(height (), maxsize);
   }
   buffer = new QPixmap (w, h);
@@ -304,14 +306,14 @@ void Ruler::drawRuler () {
 	for (int i = -start; i < buffer->width (); i += step) {
 	  int poff = i + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (poff, 10, poff, 30);
+	    p.drawLine (poff, 10, poff, RULER_SIZE);
 	    sprintf (buf, "%d", (int) (((float) i) / zoom));
 	    p.drawText (poff + 3, 18, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (poff, 15, poff, 30);
+	    p.drawLine (poff, 15, poff, RULER_SIZE);
 	  else
-	    p.drawLine (poff, 20, poff, 30);
+	    p.drawLine (poff, 20, poff, RULER_SIZE);
 	}
 	break;
       }
@@ -321,14 +323,14 @@ void Ruler::drawRuler () {
 	  int pos = qRound (i * cvtFactor) + 1;
 	  int poff = pos + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (poff, 10, poff, 30);
+	    p.drawLine (poff, 10, poff, RULER_SIZE);
 	    sprintf (buf, "%d", (int) (((float) i) / zoom));
 	    p.drawText (poff + 3, 18, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (poff, 15, poff, 30);
+	    p.drawLine (poff, 15, poff, RULER_SIZE);
 	  else
-	    p.drawLine (poff, 20, poff, 30);
+	    p.drawLine (poff, 20, poff, RULER_SIZE);
 	}
 	break;
       }
@@ -338,14 +340,14 @@ void Ruler::drawRuler () {
 	  int pos = qRound (i * cvtFactor);
 	  int poff = pos + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (poff, 10, poff, 30);
+	    p.drawLine (poff, 10, poff, RULER_SIZE);
 	    sprintf (buf, "%d", (int) (((float) i) / (zoom * 10.0)));
 	    p.drawText (poff + 3, 18, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (poff, 15, poff, 30);
+	    p.drawLine (poff, 15, poff, RULER_SIZE);
 	  else
-	    p.drawLine (poff, 20, poff, 30);
+	    p.drawLine (poff, 20, poff, RULER_SIZE);
 	}
 	break;
       }
@@ -355,14 +357,14 @@ void Ruler::drawRuler () {
 	  int pos = qRound (i * cvtFactor);
 	  int poff = pos + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (poff, 10, poff, 30);
+	    p.drawLine (poff, 10, poff, RULER_SIZE);
 	    sprintf (buf, "%d", (int) (((float) i) / zoom));
 	    p.drawText (poff + 3, 18, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (poff, 15, poff, 30);
+	    p.drawLine (poff, 15, poff, RULER_SIZE);
 	  else
-	    p.drawLine (poff, 20, poff, 30);
+	    p.drawLine (poff, 20, poff, RULER_SIZE);
 	}
 	break;
       }
@@ -373,14 +375,14 @@ void Ruler::drawRuler () {
 	  int pos = qRound (i * cvtFactor);
 	  int poff = pos + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (poff, 10, poff, 30);
+	    p.drawLine (poff, 10, poff, RULER_SIZE);
 	    sprintf (buf, "%d", (int) (((float) i) / zoom));
 	    p.drawText (poff + 3, 18, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (poff, 15, poff, 30);
+	    p.drawLine (poff, 15, poff, RULER_SIZE);
 	  else
-	    p.drawLine (poff, 20, poff, 30);
+	    p.drawLine (poff, 20, poff, RULER_SIZE);
 	}
 	break;
       }
@@ -390,14 +392,14 @@ void Ruler::drawRuler () {
 	  int pos = qRound (i * cvtFactor);
 	  int poff = pos + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (poff, 10, poff, 30);
+	    p.drawLine (poff, 10, poff, RULER_SIZE);
 	    sprintf (buf, "%d", (int) ((float) i / (zoom * 10)));
 	    p.drawText (poff + 3, 18, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (poff, 15, poff, 30);
+	    p.drawLine (poff, 15, poff, RULER_SIZE);
 	  else
-	    p.drawLine (poff, 20, poff, 30);
+	    p.drawLine (poff, 20, poff, RULER_SIZE);
 	}
 	break;
       }
@@ -412,14 +414,14 @@ void Ruler::drawRuler () {
 	for (int i = -start; i < buffer->height (); i += step) {
 	  int poff = i + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (10, poff, 30, poff);
+	    p.drawLine (10, poff, RULER_SIZE, poff);
 	    sprintf (buf, "%d", (int) (((float) i) / zoom));
 	    p.drawText (10, poff + 9, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (15, poff, 30, poff);
+	    p.drawLine (15, poff, RULER_SIZE, poff);
 	  else
-	    p.drawLine (20, poff, 30, poff);
+	    p.drawLine (20, poff, RULER_SIZE, poff);
 	}
 	break;
       }
@@ -429,14 +431,14 @@ void Ruler::drawRuler () {
 	  int pos = qRound (i * cvtFactor);
 	  int poff = pos + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (10, poff, 30, poff);
+	    p.drawLine (10, poff, RULER_SIZE, poff);
 	    sprintf (buf, "%d", (int) (((float) i) / zoom));
 	    p.drawText (10, poff + 9, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (15, poff, 30, poff);
+	    p.drawLine (15, poff, RULER_SIZE, poff);
 	  else
-	    p.drawLine (20, poff, 30, poff);
+	    p.drawLine (20, poff, RULER_SIZE, poff);
 	}
 	break;
       }
@@ -446,14 +448,14 @@ void Ruler::drawRuler () {
 	  int pos = qRound (i * cvtFactor) + 1;
 	  int poff = pos + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (10, poff, 30, poff);
+	    p.drawLine (10, poff, RULER_SIZE, poff);
 	    sprintf (buf, "%d", (int) (((float) i) / zoom));
 	    p.drawText (10, poff + 9, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (15, poff, 30, poff);
+	    p.drawLine (15, poff, RULER_SIZE, poff);
 	  else
-	    p.drawLine (20, poff, 30, poff);
+	    p.drawLine (20, poff, RULER_SIZE, poff);
 	}
 	break;
       }
@@ -463,14 +465,14 @@ void Ruler::drawRuler () {
 	  int pos = qRound (i * cvtFactor) + 1;
 	  int poff = pos + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (10, poff, 30, poff);
+	    p.drawLine (10, poff, RULER_SIZE, poff);
 	    sprintf (buf, "%d", (int) (((float) i) / (zoom * 10.0)));
 	    p.drawText (10, poff + 9, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (15, poff, 30, poff);
+	    p.drawLine (15, poff, RULER_SIZE, poff);
 	  else
-	    p.drawLine (20, poff, 30, poff);
+	    p.drawLine (20, poff, RULER_SIZE, poff);
 	}
 	break;
       }
@@ -481,14 +483,14 @@ void Ruler::drawRuler () {
 	  int pos = qRound (i * cvtFactor);
 	  int poff = pos + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (10, poff, 30, poff);
+	    p.drawLine (10, poff, RULER_SIZE, poff);
 	    sprintf (buf, "%d", (int) (((float) i) / zoom));
 	    p.drawText (10, poff + 9, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (15, poff, 30, poff);
+	    p.drawLine (15, poff, RULER_SIZE, poff);
 	  else
-	    p.drawLine (20, poff, 30, poff);
+	    p.drawLine (20, poff, RULER_SIZE, poff);
 	}
 	break;
       }
@@ -498,14 +500,14 @@ void Ruler::drawRuler () {
 	  int pos = qRound (i * cvtFactor);
 	  int poff = pos + ioff + start;
 	  if (i % step1 == 0) {
-	    p.drawLine (10, poff, 30, poff);
+	    p.drawLine (10, poff, RULER_SIZE, poff);
 	    sprintf (buf, "%d", (int) (((float) i) / (zoom * 10.0)));
 	    p.drawText (10, poff + 9, buf);
 	  }
 	  else if (i % step2 == 0)
-	    p.drawLine (15, poff, 30, poff);
+	    p.drawLine (15, poff, RULER_SIZE, poff);
 	  else
-	    p.drawLine (20, poff, 30, poff);
+	    p.drawLine (20, poff, RULER_SIZE, poff);
 	}
 	break;
       }
@@ -522,11 +524,11 @@ void Ruler::resizeEvent (QResizeEvent *e) {
 
 void Ruler::show () {
   if (orientation == Horizontal) {
-    setFixedHeight (30);
+    setFixedHeight (RULER_SIZE);
     initMarker (MARKER_WIDTH, MARKER_HEIGHT);
   }
   else {
-    setFixedWidth (30);
+    setFixedWidth (RULER_SIZE);
     initMarker (MARKER_HEIGHT, MARKER_WIDTH);
   }
   QWidget::show ();
@@ -551,17 +553,25 @@ void Ruler::mouseMoveEvent ( QMouseEvent * me){
       - if the mouse it over the page view, set the helpline
        (different place: update the helpline position in the status bar)*/
    if (isMousePressed) {
-      debug("Ruler: drawHelpline");
-      emit drawHelpline(me->globalX(), me->globalY(),
-              (orientation==Horizontal) ? true : false );
+     emit drawHelpline (me->x () + 
+		       (orientation == Horizontal ? firstVisible : 0) -
+		       RULER_SIZE, 
+		       me->y () +
+		       (orientation == Vertical ? firstVisible : 0) -
+		       RULER_SIZE, 
+		       (orientation==Horizontal) ? true : false );
    }
 }
 
 void Ruler::mouseReleaseEvent ( QMouseEvent * me){
   if (isMousePressed) {
      isMousePressed = false;
-     debug("Ruler: addHelpline");
-     emit addHelpline(me->globalX(), me->globalY(),
-                  (orientation==Horizontal) ? true : false );
+     emit addHelpline (me->x () + 
+		       (orientation == Horizontal ? firstVisible : 0) -
+		       RULER_SIZE, 
+		       me->y () +
+		       (orientation == Vertical ? firstVisible : 0) -
+		       RULER_SIZE, 
+		       (orientation==Horizontal) ? true : false );
   }
 }

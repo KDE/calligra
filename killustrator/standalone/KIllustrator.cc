@@ -259,7 +259,16 @@ void KIllustrator::setupMainView () {
   connect (canvas, SIGNAL(mousePositionChanged (int, int)),
 	   vRuler, SLOT(updatePointer(int, int)));
 
-  connect (canvas, SIGNAL(rightButtonAtObjectClicked (int, int, GObject*)),
+  // helpline creation
+  connect (hRuler, SIGNAL (drawHelpline(int, int, bool)),
+           canvas, SLOT(drawTmpHelpline(int, int, bool)));
+  connect (vRuler, SIGNAL (drawHelpline(int, int, bool)),
+           canvas, SLOT(drawTmpHelpline(int, int, bool)));
+  connect (hRuler, SIGNAL (addHelpline(int, int, bool)),
+           canvas, SLOT(addHelpline(int, int, bool)));
+  connect (vRuler, SIGNAL (addHelpline(int, int, bool)),
+           canvas, SLOT(addHelpline(int, int, bool)));
+                                                                                  connect (canvas, SIGNAL(rightButtonAtObjectClicked (int, int, GObject*)),
 	   this, SLOT(popupForObject (int, int, GObject *)));
   connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
 	   this, SLOT(popupForSelection (int, int)));
@@ -819,7 +828,7 @@ void KIllustrator::menuCallback (int item) {
          KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
         QString fname = url.path();
 #else
-        QString name = KFileDialog::getOpenFileName((const char *) lastOpenDir,
+        QString fname = KFileDialog::getOpenFileName((const char *) lastOpenDir,
                                              i18n("*.kil | KIllustrator File"),
                                              this);
 #endif

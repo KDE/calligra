@@ -32,7 +32,11 @@
 
 #include <qpushbutton.h>
 #include <qlabel.h>
+#if QT_VERSION >= 199
 #include <qmultilineedit.h>
+#else
+#include <qmultilinedit.h>
+#endif
 #include <qlayout.h>
 #include <qregexp.h>
 

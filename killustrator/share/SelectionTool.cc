@@ -520,6 +520,8 @@ void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
   case Key_Down:
     dy = (shift ? small_step : big_step);
     break;
+  case Key_Tab:
+    cout << "<tab>" << endl;
   default:
     break;
   }

@@ -65,12 +65,13 @@ Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
   pixmap = 0L;
 
   helplinesAreOn = helplinesSnapIsOn = false;
+  tmpHorizHelpline = tmpVertHelpline = -1;
 
   readGridProperties ();
   updateGridInfos ();
 
   calculateSize ();
-  setFocusPolicy (ClickFocus);
+  setFocusPolicy (StrongFocus);
   setMouseTracking (true);
   setBackgroundMode (NoBackground);
 
@@ -583,6 +584,16 @@ void Canvas::drawHelplines (QPainter& p) {
     p.drawLine (vi, 0, vi, ph);
   }
 
+  if (tmpHorizHelpline != -1) {
+    int hi = qRound (tmpHorizHelpline);
+    p.drawLine (0, hi, pw, hi);
+  }
+
+  if (tmpVertHelpline != -1) {
+    int vi = qRound (tmpVertHelpline);
+    p.drawLine (vi, 0, vi, ph);
+  }
+
   p.restore ();
 }
 
@@ -697,6 +708,51 @@ void Canvas::saveGridProperties () {
 
   config->setGroup (oldgroup);
   config->sync ();
+}
+
+void Canvas::drawTmpHelpline (int x, int y, bool horizH) {
+  float pos = -1;
+  // convert into document coordinates
+  // and add helpline
+  if (horizH) {
+    pos = (float) y / zoomFactor - this->y ();
+    tmpHorizHelpline = pos;
+  }
+  else {
+    pos = (float) x / zoomFactor - this->x ();
+    tmpVertHelpline = pos;
+  }
+  if (helplinesAreOn)
+    updateView ();
+}
+
+void Canvas::addHelpline (int x, int y, bool horizH) {
+  float pos = -1;
+  tmpHorizHelpline = tmpVertHelpline = -1;
+  // convert into document coordinates
+  // and add helpline
+  if (horizH) {
+    pos = (float) y / zoomFactor - this->y ();
+    addHorizHelpline (pos);
+  }
+  else {
+    pos = (float) x / zoomFactor - this->x ();
+    addVertHelpline (pos);
+  }
+}
+
+void Canvas::addHorizHelpline  (float pos) {
+  horizHelplines.push_back (pos);
+  if (helplinesAreOn)
+    updateView ();
+  document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
+}
+
+void Canvas::addVertHelpline  (float pos) {
+  vertHelplines.push_back (pos);
+  if (helplinesAreOn)
+    updateView ();
+  document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
 }
 
 void Canvas::setHorizHelplines (const vector<float>& lines) {

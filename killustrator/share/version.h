@@ -47,6 +47,6 @@
 #endif
 
 #define APP_NAME "killustrator"
-#define APP_VERSION "0.7.1"
+#define APP_VERSION "0.7.2"
 
 #endif

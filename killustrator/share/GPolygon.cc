@@ -199,15 +199,28 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
     p.drawPolygon (parray);
   }
   else {
+    float xcorr = 0, ycorr = 0;
+    /*
+     * Qt draws a rectangle from xpos to (xpos + width - 1). This seems 
+     * to be a bug, because a rectangle from position (20, 20) with a 
+     * witdh of 20 doesn't align to a 20pt grid. Therefore we correct 
+     * the width and height values...
+     */
+    const QWMatrix& m = p.worldMatrix ();
+
+    xcorr = 1.0 / m.m11 ();
+    ycorr = 1.0 / m.m22 ();
     const Coord& p1 = *(points.at (0));
     const Coord& p2 = *(points.at (2));
     if (Roundness != 0)
       p.drawRoundRect (p1.x (), p1.y (),
-		       p2.x () - p1.x (),
-		       p2.y () - p1.y (), Roundness, Roundness);
+		       qRound (p2.x () - p1.x () + xcorr),
+		       qRound (p2.y () - p1.y () + ycorr), 
+		       Roundness, Roundness);
     else
-      Painter::drawRect (p, p1.x (), p1.y (), p2.x () - p1.x (),
-			 p2.y () - p1.y ());
+      Painter::drawRect (p, p1.x (), p1.y (), 
+			 qRound (p2.x () - p1.x () + xcorr),
+			 qRound (p2.y () - p1.y () + ycorr));
   }
 
   p.restore ();

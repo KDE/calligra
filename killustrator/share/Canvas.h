@@ -109,6 +109,9 @@ protected:
   void paintEvent (QPaintEvent *e);
   void moveEvent (QMoveEvent *e);
 
+  void addHorizHelpline (float pos);
+  void addVertHelpline (float pos);
+
 signals:
   void sizeChanged ();
   void gridStatusChanged ();
@@ -127,6 +130,9 @@ public slots:
   void ensureVisibility (bool flag);
   void calculateSize ();
   void updateGridInfos ();
+
+  void addHelpline (int x, int y, bool horizH);
+  void drawTmpHelpline (int x, int y, bool horizH);
 
 private slots:
   void retryUpdateRegion ();
@@ -155,6 +161,7 @@ private:
   Rect regionForUpdate, region;
   vector<float> horizHelplines, vertHelplines;
   bool helplinesAreOn, helplinesSnapIsOn;
+  float tmpHorizHelpline, tmpVertHelpline;
 
   static QArray<float> zoomFactors;
 };
