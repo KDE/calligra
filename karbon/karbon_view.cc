@@ -130,7 +130,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	//Create Dockers
 	m_ColorManager = new VColorDlg( m_part, this );
 	m_TransformDlg = new VTransformDlg( m_part, this );
-	
+
 	if( shell() )
 	{
 		setNumberOfRecentFiles( m_part->maxRecentFiles() );
@@ -164,9 +164,10 @@ KarbonView::~KarbonView()
 	delete( m_sinusTool );
 	delete( m_spiralTool );
 	delete( m_starTool );
-
 	// widgets:
+#if 0
 	delete ( m_toolbox );
+#endif
 	delete ( m_status );
 	delete ( m_painterFactory );
         delete ( m_canvas );
