@@ -1,5 +1,9 @@
 # There is no -dev package.
 kspread: non-dev-pkg-with-shlib-symlink usr/lib/libkspreadpart.so.0.0.0 usr/lib/libkspreadpart.so
 kspread: non-dev-pkg-with-shlib-symlink usr/lib/kspread.so.0.0.0 usr/lib/kspread.so
+# These are modules in /usr/lib/kde2/.
+kspread: shlib-missing-in-control-file libcsvexport.so usr/lib/kde2/libcsvexport.so
+kspread: shlib-missing-in-control-file libcsvimport.so usr/lib/kde2/libcsvimport.so
+kspread: shlib-missing-in-control-file libkspreadcalc.so usr/lib/kde2/libkspreadcalc.so
 # This is inserted by debhelper and is legal.
 kspread: postrm-calls-ldconfig

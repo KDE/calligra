@@ -7,25 +7,25 @@ koffice (1:1.1-20010404-1) unstable; urgency=low
   * Build-Depends: Added uic; required version (>> 3.0.0) of debhelper;
     removed autoconf and gettext which are redundant.
   * For koffice-libs, added a version to Conflicts: koffice and
-    Replaces: koffice; removed Depends: debconf.
+    Replaces: koffice.
   * For koffice-dev, replaced >= with = in Depends: koffice-libs.
   * Replaced individual application recommendations in koshell with a
     single Recommends: koffice.
   * Upgraded debian/rules to DH_COMPAT=3 and removed postinst scripts;
     completely reworked debian/rules.
+  * Added versioning to libraries in /usr/lib/.
   * Moved libcsv[export/import] and associated files from koffice-libs to
-    kspread since it requires kspread libraries.
+    kspread since they require kspread libraries.
   * Moved a few files in /usr/share/services from package koffice-libs to
     individual application packages.
-  * Made links so killustrator icons show up beneath /usr/share/icons/.
   * Registered kword as capable of handling mime type application/x-abiword.
-  * Added versioning to libraries in /usr/lib/.
+  * Made links so killustrator icons show up beneath /usr/share/icons/.
+  * Removed debconf-related material that is no longer used by koffice-libs.
   * Added various man pages.
   * Added icons to the debian menu items.
   * Changed the hint for the KWord debian menu item from "Word processors"
     to "WordProcessors" to match the hint for AbiWord.
   * Slightly altered which miscellaneous documentation files are installed.
-  * Removed debconf-related files that are no longer used for koffice-libs.
   * Overhauled package descriptions.
   * Miscellaneous cleanups in debian.
 
