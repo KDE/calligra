@@ -415,7 +415,7 @@ Container* Document::newFormula( uint number )
 void Document::lazyInit()
 {
     if ( impl->firstTime ) {
-        kdDebug() << "Document::lazyInit" << endl;
+        kdDebug( DEBUGID ) << "Document::lazyInit" << endl;
         impl->firstTime = false;
         impl->contextStyle.init();
 
@@ -475,7 +475,7 @@ void Document::setZoomAndResolution( int zoom, double zoomX, double zoomY, bool 
 
 void Document::setEnabled( bool enabled )
 {
-    //kdDebug() << "Document::setEnabled " << enabled << endl;
+    //kdDebug( DEBUGID ) << "Document::setEnabled " << enabled << endl;
     getAddNegThinSpaceAction()->setEnabled( enabled );
     getMakeGreekAction()->setEnabled( enabled );
     getAddGenericUpperAction()->setEnabled( enabled );
