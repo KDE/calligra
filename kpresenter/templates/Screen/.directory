@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Screen
 Name[da]=Skærm
+Name[el]=Οθόνη
 Name[es]=Pantalla
 Name[he]=ךסמ
 Name[hu]=Képernyő
@@ -8,5 +9,6 @@ Name[ko]=화면
 Name[lt]=Ekranas
 Name[lv]=Ekrāns
 Name[ro]=Ecran
+Name[sl]=Zaslon
 Name[sv]=Skärm
 X-KDE-DefaultTab=true
