@@ -126,8 +126,9 @@ const char* GPolyline::typeName () {
 
 void GPolyline::draw (Painter& p, bool withBasePoints) {
   unsigned int i;
-  QPen pen (outlineInfo.color, (uint) outlineInfo.width, 
-            outlineInfo.style);
+  QPen pen;
+
+  initPen (pen);
   p.save ();
   p.setPen (pen);
   p.setWorldMatrix (tmpMatrix, true);
@@ -413,3 +414,29 @@ bool GPolyline::findNearestPoint (const Coord& p, float max_dist,
   }
   return pidx >= 0;
 }
+
+Rect GPolyline::calcEnvelope () {
+  Rect r;
+  unsigned int num = points.count ();
+
+  if (num == 0)
+    return r;
+  
+  const Coord& p = *points.at (0);
+  
+  r.left (p.x ());
+  r.top (p.y ());
+  r.right (p.x ());
+  r.bottom (p.y ());
+
+  for (unsigned int i = 1; i < num; i++) {
+    const Coord& pi = *points.at (i);
+
+    r.left (QMIN(pi.x (), r.left ()));
+    r.top (QMIN(pi.y (), r.top ()));
+    r.right (QMAX(pi.x (), r.right ()));
+    r.bottom (QMAX(pi.y (), r.bottom ()));
+  }
+  return r;
+}
+

@@ -34,6 +34,7 @@
 #include "GGroup.h"
 #include "GClipart.h"
 #include "GBezier.h"
+#include "Gradient.h"
 
 QDict<GObject> GObject::prototypes;
 GObject::OutlineInfo GObject::defaultOutlineInfo;
@@ -51,8 +52,12 @@ void GObject::setDefaultOutlineInfo (const OutlineInfo& oi) {
 void GObject::setDefaultFillInfo (const FillInfo& fi) {
   if (fi.mask & FillInfo::Color) 
     defaultFillInfo.color = fi.color;
-  if (fi.mask & FillInfo::Style)
-    defaultFillInfo.style = fi.style;
+  if (fi.mask & FillInfo::FillStyle)
+    defaultFillInfo.fstyle = fi.fstyle;
+  if (fi.mask & FillInfo::Pattern)
+    defaultFillInfo.pattern = fi.pattern;
+  if (fi.mask & FillInfo::GradientInfo)
+    defaultFillInfo.gradient = fi.gradient;
 }
 
 GObject::OutlineInfo GObject::getDefaultOutlineInfo () {
@@ -75,7 +80,7 @@ GObject::GObject () {
   outlineInfo.startArrowId = outlineInfo.endArrowId = 0;
 
   fillInfo = defaultFillInfo;
-  fillInfo.mask = FillInfo::Color | FillInfo::Style;
+  fillInfo.mask = FillInfo::Color | FillInfo::FillStyle;
 
   rcount = 1;
 }
@@ -99,8 +104,18 @@ GObject::GObject (const list<XmlAttribute>& attribs) {
       outlineInfo.width = (*first).floatValue ();
     else if (attr == "fillcolor")
       fillInfo.color = (*first).colorValue ();
-    else if (attr == "fillstyle")
-      fillInfo.style = (BrushStyle) (*first).intValue ();
+    else if (attr == "fillstyle") {
+      // just a temporary hack
+      int fill = (*first).intValue ();
+      if (fill > 1) {
+	fillInfo.fstyle = FillInfo::PatternFill;
+	fillInfo.pattern = (BrushStyle) fill;
+      }
+      else if (fill == 1)
+	fillInfo.fstyle = FillInfo::SolidFill;
+      else
+	fillInfo.fstyle = FillInfo::NoFill;
+    }
     first++;
   }
 }
@@ -151,6 +166,7 @@ void GObject::transform (const QWMatrix& m, bool update) {
   tMatrix = tMatrix * m;
   iMatrix = tMatrix.invert ();
   initTmpMatrix ();
+  gShape.setInvalid ();
   if (update) 
     updateRegion ();
 }
@@ -225,8 +241,13 @@ float GObject::getOutlineWidth () const {
 void GObject::setFillInfo (const GObject::FillInfo& info) {
   if (info.mask & FillInfo::Color)
     fillInfo.color = info.color;
-  if (info.mask & FillInfo::Style)
-    fillInfo.style = info.style;
+  if (info.mask & FillInfo::FillStyle)
+    fillInfo.fstyle = info.fstyle;
+  if (info.mask & FillInfo::Pattern)
+    fillInfo.pattern = info.pattern;
+  if (info.mask & FillInfo::GradientInfo)
+    fillInfo.gradient = info.gradient;
+  gShape.setInvalid ();
   updateRegion (false);
   emit propertiesChanged (Prop_Fill, info.mask);
 }
@@ -245,14 +266,36 @@ const QColor& GObject::getFillColor () const {
   return fillInfo.color;
 }
 
-void GObject::setFillStyle (BrushStyle b) {
-  fillInfo.style = b;
+void GObject::setFillPattern (BrushStyle b) {
+  fillInfo.pattern = b;
   updateRegion (false);
-  emit propertiesChanged (Prop_Fill, FillInfo::Style);
+  emit propertiesChanged (Prop_Fill, FillInfo::Pattern);
 }
 
-BrushStyle GObject::getFillStyle () const {
-  return fillInfo.style;
+void GObject::setFillGradient (const Gradient& g) {
+  fillInfo.gradient = g;
+  gShape.setInvalid ();
+  updateRegion (false);
+  emit propertiesChanged (Prop_Fill, FillInfo::GradientInfo);
+}
+
+void GObject::setFillStyle (GObject::FillInfo::Style s) {
+  fillInfo.fstyle = s;
+  gShape.setInvalid ();
+  updateRegion (false);
+  emit propertiesChanged (Prop_Fill, FillInfo::FillStyle);
+}
+
+GObject::FillInfo::Style GObject::getFillStyle () const {
+  return fillInfo.fstyle;
+}
+
+const Gradient& GObject::getFillGradient () const {
+  return fillInfo.gradient;
+}
+
+BrushStyle GObject::getFillPattern () const {
+  return fillInfo.pattern;
 }
 
 void GObject::select (bool flag) {
@@ -346,13 +389,38 @@ void GObject::calcUntransformedBoundingBox (const Coord& tleft,
   updateBoundingBox (r);
 }
 
+void GObject::initBrush (QBrush& brush) {
+  switch (fillInfo.fstyle) {
+  case GObject::FillInfo::NoFill:
+    brush.setStyle (NoBrush);
+    break;
+  case GObject::FillInfo::SolidFill:
+    brush.setColor (fillInfo.color);
+    brush.setStyle (SolidPattern);
+    break;
+  case GObject::FillInfo::PatternFill:
+    brush.setColor (fillInfo.color);
+    brush.setStyle (fillInfo.pattern);
+    break;
+  default:
+    brush.setStyle (NoBrush);
+    break;
+  }
+}
+
+void GObject::initPen (QPen& pen) {
+  pen.setColor (outlineInfo.color);
+  pen.setWidth ((uint) outlineInfo.width);
+  pen.setStyle (outlineInfo.style);
+}
+
 void GObject::writePropertiesToXml (XmlWriter& xml) {
   xml.addAttribute ("matrix", tMatrix);
   xml.addAttribute ("strokecolor", outlineInfo.color);
   xml.addAttribute ("strokestyle", (int) outlineInfo.style);
   xml.addAttribute ("linewidth", outlineInfo.width);
   xml.addAttribute ("fillcolor", fillInfo.color);
-  xml.addAttribute ("fillstyle", (int) fillInfo.style);
+  xml.addAttribute ("fillstyle", (int) fillInfo.fstyle);
 }
 
 void GObject::printInfo () {

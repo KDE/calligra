@@ -34,16 +34,22 @@
 #define Handle_Right   2
 #define Handle_Bottom  4
 #define Handle_Left    8
+#define Handle_Center  16
 
 class Handle : public QObject {
   Q_OBJECT
 public:
   enum Mode { HMode_Default, HMode_Rotate };
+  enum Position { HPos_Top = 1, HPos_Right = 2, HPos_Bottom = 4,
+		  HPos_Left = 8, HPos_Center = 16 };
 
   Handle ();
   ~Handle ();
   
   void setBox (const Rect& r);
+  void setRotCenter (const Coord& p);
+  Coord rotCenter () const { return rcenter; }
+
   void draw (Painter& p);
   int contains (const Coord& p);
   void setMode (Mode m, bool propagate = false);
@@ -58,6 +64,8 @@ private:
   void drawArrow (Painter& p, int x, int y, ArrowDirection d);
 
   Coord pos[8];
+  Rect box;
+  Coord rcenter;
   Mode mode;
   bool showIt;
 };

@@ -44,7 +44,6 @@ class KIllustratorDocument;
 class Canvas;
 class GDocument;
 class QwViewport;
-class TransformationDialog;
 class LayerDialog;
 class ToolController;
 class Canvas;
@@ -198,12 +197,10 @@ protected:
   QwViewport *viewport;
   Canvas *canvas;
   Ruler *hRuler, *vRuler;
-  TransformationDialog *transformationDialog;
   LayerDialog *layerDialog;
   QWidget *mainWidget;
   QGridLayout *grid;
   CommandHistory cmdHistory;
-  static QList<GObject> clipboard;
 };
 
 #endif

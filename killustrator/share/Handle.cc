@@ -39,6 +39,7 @@ void Handle::show (bool flag) {
 }
 
 void Handle::setBox (const Rect& r) {
+  box = r;
   float x1 = r.left () - 5;
   float x3 = r.right () + 5;
   float x2 = (x1 + x3) / 2;
@@ -53,6 +54,12 @@ void Handle::setBox (const Rect& r) {
   pos[5] = Coord (x2, y3);
   pos[6] = Coord (x1, y3);
   pos[7] = Coord (x1, y2);
+  rcenter = r.center ();
+}
+
+void Handle::setRotCenter (const Coord& p) {
+  rcenter = p;
+  emit handleChanged ();
 }
 
 void Handle::draw (Painter& p) {
@@ -68,6 +75,12 @@ void Handle::draw (Painter& p) {
   }
   else {
     QBrush brush (black, SolidPattern);
+
+    p.setPen (black);
+    p.drawPoint (qRound(rcenter.x ()), qRound(rcenter.y ()));
+    p.drawEllipse (qRound (rcenter.x ()) - 5, qRound (rcenter.y ()) - 5, 
+		   10, 10);
+
     p.setBrush (brush);
     p.drawLine (pos[1].x () - 4, pos[1].y (), 
 		pos[1].x () + 4, pos[1].y ());
@@ -115,17 +128,28 @@ void Handle::draw (Painter& p) {
 
 int Handle::contains (const Coord& p) {
   static int mask[] = {
+    /*
     Handle_Left|Handle_Top, Handle_Top,
     Handle_Top|Handle_Right, Handle_Right,
     Handle_Right|Handle_Bottom, Handle_Bottom,
     Handle_Bottom|Handle_Left, Handle_Left
+    */
+    HPos_Left | HPos_Top, HPos_Top,
+    HPos_Top | HPos_Right, HPos_Right,
+    HPos_Right | HPos_Bottom, HPos_Bottom,
+    HPos_Bottom | HPos_Left, HPos_Left
   };
-	
+
+  // Check if one of the outer handles is selected
   for (int i = 0; i < 8; i++) {
     Rect r (pos[i].x () - 3, pos[i].y () - 3, 6, 6);
     if (r.contains (p))
       return mask[i];
   }
+  // Maybe the rotation center ?
+  if (rcenter.isNear (p, 5))
+    return HPos_Center;
+
   return 0;
 }
 

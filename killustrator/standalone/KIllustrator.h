@@ -48,7 +48,6 @@
 class QwViewport;
 class Canvas;
 class GDocument;
-class TransformationDialog;
 class PStateManager;
 class ScriptDialog;
 class LayerDialog;
@@ -181,7 +180,6 @@ private:
   GDocument *document;
   Canvas *canvas;
   Ruler *hRuler, *vRuler;
-  TransformationDialog *transformationDialog;
   ScriptDialog *scriptDialog;
   LayerDialog *layerDialog;
 
@@ -198,7 +196,6 @@ private:
   QArray<float> zFactors;
   PStateManager* psm;
 
-  static QList<GObject> clipboard;
   static QList<KIllustrator> windows;
   static bool previewHandlerRegistered;
 };

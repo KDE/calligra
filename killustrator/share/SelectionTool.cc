@@ -127,6 +127,14 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
 	    me->x (), me->y (), true);
   }
   /**********
+   * S_MoveRotCenter
+   */
+  else if (state == S_MoveRotCenter) {
+    state = S_Rotate;
+    rotCenter = doc->handle().rotCenter ();
+    return;
+  }
+  /**********
    * S_Intermediate2
    */
   else if (state == S_Intermediate2) {
@@ -202,12 +210,16 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
       }
     }
     /**********
+     * S_MoveRotCenter
+     */
+    else if (state == S_MoveRotCenter) {
+      doc->handle ().setRotCenter (Coord (me->x (), me->y ()));
+      return;
+    }
+    /**********
      * S_Rotate
      */
-    else if (state == S_Rotate) {
-      // ?
-    }
-    else if (state == S_RotateSelect) {
+    else if (state == S_RotateSelect || state == S_Rotate) {
       hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
       if (hmask) {
 	if (ctype != C_Size) {
@@ -310,12 +322,6 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
 	  // a ugly workaround, because cliparts cannot be rotated (WHY NOT ?)
 	  //
 	  if (doc->selectionCount () == 1) {
-#ifdef NO_LAYERS
-	    QListIterator<GObject> iter = doc->getSelection ();
-	    // the selected object is a clipart, so don't show rotation handles
-	    if (iter.current ()->isA ("GClipart"))
-	      return;
-#else
 	    list<GObject*>::iterator it =
 	      find_if (doc->getSelection ().begin (),
 		       doc->getSelection ().end (),
@@ -324,7 +330,6 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
 	      // the selected object is a clipart, 
 	      // so don't show rotation handles
 	      return;
-#endif
 	  }
 
 	  // the object is already selected
@@ -360,12 +365,16 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
     if (hmask) {
       origbox = doc->boundingBoxForSelection ();
       oldmask = hmask;
-      if (hmask == (Handle_Top | Handle_Left) ||
-	  hmask == (Handle_Bottom | Handle_Left) ||
-	  hmask == (Handle_Top | Handle_Right) ||
-	  hmask == (Handle_Bottom | Handle_Right)) {
+      if (hmask == (Handle::HPos_Top | Handle::HPos_Left) ||
+	  hmask == (Handle::HPos_Bottom | Handle::HPos_Left) ||
+	  hmask == (Handle::HPos_Top | Handle::HPos_Right) ||
+	  hmask == (Handle::HPos_Bottom | Handle::HPos_Right)) {
 	state = S_Rotate;
-	rotCenter = doc->boundingBoxForSelection ().center ();
+	// rotCenter = doc->boundingBoxForSelection ().center ();
+	rotCenter = doc->handle().rotCenter ();
+      }
+      else if (hmask == Handle::HPos_Center) {
+	state = S_MoveRotCenter;
       }
       else
 	state = S_Shear;

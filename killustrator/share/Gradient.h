@@ -22,10 +22,37 @@
 
 */
 
-#ifndef version_h_
-#define version_h_
+#ifndef Gradient_h_
+#define Gradient_h_
 
-#define APP_NAME "killustrator"
-#define APP_VERSION "0.4.5"
+#include <qpixmap.h>
+#include <qcolor.h>
+
+class Gradient {
+public:
+  enum Style { 
+    Horizontal, Vertical, Radial, Rectangular, Diagonal1, Diagonal2 
+  };
+
+  Gradient (const QColor& c1, const QColor& c2, Style s);
+  Gradient () : style (Horizontal) {}
+
+  void setColor1 (const QColor& c);
+  void setColor2 (const QColor& c);
+  void setStyle (Style s);
+
+  const QColor& getColor1 () const;
+  const QColor& getColor2 () const;
+  Style getStyle () const;
+
+  QPixmap createPixmap (unsigned int width, unsigned int height);
+
+private:
+  void createLinearGradient (QPainter& p, unsigned int width, 
+			     unsigned int height);
+
+  QColor color1, color2;
+  Style style;
+};
 
 #endif

@@ -23,14 +23,27 @@
 */
 
 #include "GroupCmd.h"
+#include <map>
 
 GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {
   document = doc;
   group = 0L;
 
+  map<int, GObject*, less<int> > idx_map;
+  
   for (list<GObject*>::iterator it = doc->getSelection ().begin ();
-       it != doc->getSelection ().end (); it++)
-    objects.push_back (*it);
+       it != doc->getSelection ().end (); it++) {
+    // remember position of object in order to keep the order of
+    // objects in the group
+    GObject* o = *it;
+    int idx = (int) document->findIndexOfObject (o);
+    idx_map.insert (pair<int, GObject*> (idx, o));
+  }
+  for (map<int, GObject*, less<int> >::iterator mi = idx_map.begin ();
+       mi != idx_map.end (); mi++) {
+    // now insert the objects according their position in the list 
+    objects.push_back (mi->second);
+  }
 }
 
 GroupCmd::~GroupCmd () {

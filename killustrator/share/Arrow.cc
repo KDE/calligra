@@ -83,6 +83,8 @@ void Arrow::draw (Painter& p, const Coord& c, const QColor& color,
   p.save ();
   p.translate ((int) c.x (), (int) c.y ());
   p.rotate (angle);
+  if (width == 0)
+    width = 1.0;
   p.scale (width, width);
   if (fill)
     p.setBrush (color);

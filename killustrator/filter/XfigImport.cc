@@ -592,11 +592,11 @@ void XfigImport::setProperties (GObject* obj, int pen_color, int style,
   obj->setOutlineWidth (thickness * 72.0 / 80.0);
 
   if (area_fill == -1)
-    obj->setFillStyle (NoBrush);
+    obj->setFillStyle (GObject::FillInfo::NoFill);
   else {
-    obj->setFillStyle (SolidPattern);
+    obj->setFillStyle (GObject::FillInfo::SolidFill);
     if (fill_color < 1) {
-      // for BALCK or DEFAULT color
+      // for BLACK or DEFAULT color
       int val = qRound ((20 - area_fill) * 255.0 / 20.0);
       obj->setFillColor (QColor (val, val, val));
     }

@@ -32,21 +32,20 @@
 
 #define CELL_HEIGHT 25
 #define CELL1_WIDTH 25
-#define CELL2_WIDTH 100
+#define CELL2_WIDTH 200
 
 LayerView::LayerView (QWidget *parent, const char *name) 
   : QTableView (parent, name) {
-  setNumCols (5);
+  setNumCols (4);
   setBackgroundColor (white);
   
   document = 0L;
   KIconLoader* loader = kapp->getIconLoader ();
   
-  pixmaps[0] = loader->loadIcon ("forward.xpm");
-  pixmaps[1] = loader->loadIcon ("eye.xpm");
-  pixmaps[2] = loader->loadIcon ("freehandtool.xpm");
-  pixmaps[3] = loader->loadIcon ("fileprint.xpm");
-  setMinimumSize (4 * CELL1_WIDTH + CELL2_WIDTH, 5 * CELL_HEIGHT);
+  pixmaps[0] = loader->loadIcon ("eye.xpm");
+  pixmaps[1] = loader->loadIcon ("freehandtool.xpm");
+  pixmaps[2] = loader->loadIcon ("fileprint.xpm");
+  setMinimumSize (3 * CELL1_WIDTH + CELL2_WIDTH, 4 * CELL_HEIGHT);
   setTableFlags (Tbl_autoScrollBars | Tbl_smoothScrolling);
   setFrameStyle (QFrame::Panel | QFrame::Sunken);
   setLineWidth (2);
@@ -68,7 +67,7 @@ void LayerView::showLayers (const vector<GLayer*>& lvec) {
 }
 
 int LayerView::cellWidth (int col) {
-  return (col == 4 ? CELL2_WIDTH : CELL1_WIDTH);
+  return (col == 3 ? CELL2_WIDTH : CELL1_WIDTH);
 }
 
 int LayerView::cellHeight (int row) {
@@ -77,39 +76,35 @@ int LayerView::cellHeight (int row) {
 
 void LayerView::paintCell (QPainter *p, int row, int col) {
   GLayer* layer = layers[numRows () - 1 - row];
-  
+  bool rowIsActive = (document->activeLayer () == layer);
+
+  p->save ();
+  p->setPen (rowIsActive ? white : black);
+  if (col < 3)
+    p->fillRect (0, 0, CELL1_WIDTH, cellHeight (row), 
+		 QBrush (rowIsActive ? darkBlue : white));
+
   switch (col) {
   case 0:
-    // active
-    if (document->activeLayer () == layer)
-      p->drawPixmap (2, 2, pixmaps[col]);
-    else
-      p->eraseRect (0, 0, CELL1_WIDTH, cellHeight (row));
-    break;
-  case 1:
     // visible
     if (layer->isVisible ())
       p->drawPixmap (2, 2, pixmaps[col]);
-    else
-      p->eraseRect (0, 0, CELL1_WIDTH, cellHeight (row));
     break;
-  case 2:
+  case 1:
     // editable
     if (layer->isEditable ())
       p->drawPixmap (2, 2, pixmaps[col]);
-    else
-      p->eraseRect (0, 0, CELL1_WIDTH, cellHeight (row));
     break;
-  case 3:
+  case 2:
     // printable
     if (layer->isPrintable ())
       p->drawPixmap (2, 2, pixmaps[col]);
-    else
-      p->eraseRect (0, 0, CELL1_WIDTH, cellHeight (row));
     break;
-  case 4:
+  case 3:
     {
       // name
+      p->fillRect (0, 0, width (), cellHeight (row),
+		   QBrush (rowIsActive ? darkBlue : white));
       QFontMetrics fm = p->fontMetrics ();
       int yPos;
       if (CELL_HEIGHT < fm.height ())
@@ -122,6 +117,7 @@ void LayerView::paintCell (QPainter *p, int row, int col) {
   default:
     break;
   }
+  p->restore ();
 }
 
 void LayerView::mousePressEvent (QMouseEvent *event) {
@@ -135,17 +131,16 @@ void LayerView::mousePressEvent (QMouseEvent *event) {
     
     switch (col) {
     case 0:
-    case 4:
-      document->setActiveLayer (layer);
-      break;
-    case 1:
       layer->setVisible (! layer->isVisible ());
       break;
-    case 2:
+    case 1:
       layer->setEditable (! layer->isEditable ());
       break;
-    case 3:
+    case 2:
       layer->setPrintable (! layer->isPrintable ());
+      break;
+    case 3:
+      document->setActiveLayer (layer);
       break;
     default:
       break;

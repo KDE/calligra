@@ -1222,7 +1222,8 @@ void GDocument::printInfo (QString& s) {
 	list<GObject*>& contents = layer->objects ();
 	n += contents.size ();
     }
-    os << i18n ("Layers") << ": " << layers.size () << '\n'
+    os << i18n ("Document") << ": "<< (const char *) filename << '\n'
+       << i18n ("Layers") << ": " << layers.size () << '\n'
        << i18n ("Objects") << ": " << n << ends;
     s += os.str ();
 }

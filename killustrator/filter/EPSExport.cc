@@ -59,6 +59,11 @@ bool EPSExport::exportToFile (GDocument* doc) {
   // compute bounding box
   Rect box = doc->boundingBoxForAllObjects ();
 
+  if (box.left () > 0) box.left (box.left () - 1);
+  if (box.top () > 0) box.top (box.top () - 1);
+  box.right (box.right () + 2);
+  box.bottom (box.bottom () + 2);
+
   // write header
   epsStream  << "%!PS-Adobe-2.0 EPSF-2.0\n"
 	     << "%%Title: " << (const char *) doc->fileName () << "\n"

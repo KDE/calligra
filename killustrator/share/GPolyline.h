@@ -79,6 +79,8 @@ protected:
 
   float calcArrowAngle (const Coord& p1, const Coord& p2, int direction);
 
+  Rect calcEnvelope ();
+
 protected slots:
   void updateProperties (GObject::Property prop, int mask);
 

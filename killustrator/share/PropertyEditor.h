@@ -28,17 +28,22 @@
 #include <qdialog.h>
 #include <qlabel.h>
 #include <qpushbt.h>
+#include <qwidgetstack.h>
+
 #include <ktabctl.h>
 #include <kcolordlg.h>
 #include <kspinbox.h>
 #include <kslider.h>
 #include <kcombo.h>
+#include <kcolorbtn.h>
+
 #include "GDocument.h"
 #include "GObject.h"
 #include "FloatSpinBox.h"
 #include "ColorComboBox.h"
 #include "FontSelector.h"
 #include "CommandHistory.h"
+#include "Gradient.h"
 
 class PropertyEditor : public QDialog {
   Q_OBJECT
@@ -57,9 +62,13 @@ protected:
 private slots:
   void applyPressed ();
   void helpPressed ();
+  void fillStyleChanged ();
+  void gradientColorChanged (const QColor&);
+  void gradientStyleChanged (int);
 
 private:
   void readProperties ();
+  void updateGradient ();
 
   GDocument* document;
   //  GObject* object;
@@ -75,7 +84,8 @@ private:
 
   // OutlinePen Tab
   FloatSpinBox* widthField;
-  ColorComboBox* penColorField;
+  //  ColorComboBox* penColorField;
+  KColorButton* penColorBttn;
   KCombo* penStyleField;
   KCombo *leftArrows, *rightArrows;
   QPushButton *ellipseKind[3];
@@ -83,7 +93,13 @@ private:
   KSlider* roundnessSlider;
 
   // Fill Tab
-  ColorComboBox* fillColorField;
+  QRadioButton *fillStyleBttn[5];
+  KCombo *gradStyleCombo;
+  KColorButton *solidColorBttn, *patternColorBttn, 
+    *gradColor1Bttn, *gradColor2Bttn;
+  QLabel *gradPreview;
+  QWidgetStack *wstack;
+  Gradient *gradient;
 
   // Font Tab
   FontSelector* fontSelector;

@@ -34,8 +34,10 @@
 #include <qdict.h>
 #include <qlist.h>
 
+#include "Gradient.h"
 #include "Coord.h"
 #include "Painter.h"
+#include "GradientShape.h"
 
 #include "xmlutils/XmlWriter.h"
 #include "xmlutils/XmlElement.h"
@@ -84,10 +86,15 @@ public:
   };
 
   struct FillInfo {
-    enum { Color = 1, Style = 2, All = 3 };
-    unsigned int mask; // indicates the valid fields of the structure
-    QColor color;      // fill color
-    BrushStyle style;  // fill style
+    enum { Color = 1, FillStyle = 2, Pattern = 4, GradientInfo = 8, All = 15 };
+    enum Style { 
+      NoFill, SolidFill, PatternFill, TileFill, GradientFill 
+    };
+    unsigned int mask;  // indicates the valid fields of the structure
+    QColor color;       // fill color
+    BrushStyle pattern; // pattern
+    Style fstyle;       // fill style
+    Gradient gradient;  // gradient info
   };
 
   static void setDefaultOutlineInfo (const OutlineInfo& oi);
@@ -184,7 +191,11 @@ public:
    *
    * @param b the brush style for fillig the object.
    */
-  void setFillStyle (BrushStyle b);
+  void setFillStyle (FillInfo::Style s);
+
+  void setFillGradient (const Gradient& g);
+
+  void setFillPattern (BrushStyle b);
 
   /**
    * Retrieve the fill color.
@@ -198,7 +209,11 @@ public:
    *
    * @return The brush style.
    */
-  BrushStyle getFillStyle () const;
+  FillInfo::Style getFillStyle () const;
+
+  const Gradient& getFillGradient () const;
+
+  BrushStyle getFillPattern () const;
 
   /**
    * Retrieve the transformation matrix associated with the object.
@@ -252,6 +267,10 @@ public:
    */
   bool isSelected () const { return sflag; }
 
+  bool gradientFill () const { 
+    return fillInfo.fstyle == GObject::FillInfo::GradientFill;
+  }
+  
   /**
    * Retrieve the bounding box for the object.
    *
@@ -322,6 +341,9 @@ signals:
   void propertiesChanged (GObject::Property p, int mask);
   
 protected:
+  void initBrush (QBrush& b);
+  void initPen (QPen& p);
+
   void updateBoundingBox (const Rect& r);
   void updateBoundingBox (const Coord& p1, const Coord& p2);
 
@@ -337,6 +359,7 @@ protected:
   FillInfo fillInfo;
   unsigned int rcount;
   GLayer *layer;
+  GradientShape gShape;
 
   static QDict<GObject> prototypes;
 
@@ -365,4 +388,3 @@ private:
 };
 
 #endif
-

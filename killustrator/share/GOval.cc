@@ -97,9 +97,11 @@ const char* GOval::typeName () {
 
 void GOval::draw (Painter& p, bool withBasePoints) {
   float alen = 0;
-  QPen pen (outlineInfo.color, (uint) outlineInfo.width, 
-            outlineInfo.style);
-  QBrush brush (fillInfo.color, fillInfo.style);
+  QPen pen;
+  QBrush brush;
+
+  initPen (pen);
+  initBrush (brush);
   p.save ();
   p.setPen (pen);
   p.setBrush (brush);
@@ -151,14 +153,14 @@ void GOval::writeToPS (ostream& os) {
   switch (outlineInfo.shape) {
   case GObject::OutlineInfo::PieShape:
     os << sAngle << ' ' << eAngle
-       << (fillInfo.style == NoBrush  ? " false" : " true")
+       << (fillInfo.fstyle == GObject::FillInfo::NoFill ? " false" : " true")
        << " DrawPie\n";
     break;
   case GObject::OutlineInfo::ArcShape:
     os << sAngle << ' ' << eAngle << " DrawArc\n";
     break;
   case GObject::OutlineInfo::DefaultShape:
-    os << (fillInfo.style == NoBrush  ? " false" : " true")
+    os << (fillInfo.fstyle == GObject::FillInfo::NoFill ? " false" : " true")
        << " DrawEllipse\n";
     break;
   }

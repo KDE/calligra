@@ -75,8 +75,6 @@
 #include <qlayout.h>
 #include <unistd.h>
 
-QList<GObject> KIllustratorView::clipboard;
-
 KIllustratorChildFrame::KIllustratorChildFrame (KIllustratorView* view, 
 						KIllustratorChild* child) :
 PartFrame_impl (view) {
@@ -96,10 +94,9 @@ QWidget (parent), View_impl (), KIllustrator::View_skel () {
   m_bShowRulers = true;
   mainWidget = 0L;
   viewport = 0L;
-  transformationDialog = 0L;
   layerDialog = 0L;
   // restore default settings
-  PStateManager* pmgr = PStateManager::instance ();
+  PStateManager::instance ();
 
   const QColor cpalette[] = { white, red, green, blue, cyan, magenta, yellow,
 			      darkRed, darkGreen, darkBlue, darkCyan,
@@ -604,11 +601,10 @@ void KIllustratorView::setFocus (CORBA::Boolean m) {
 }
 
 void KIllustratorView::showTransformationDialog (int id) {
-  if (transformationDialog == 0L) {
-    transformationDialog = new TransformationDialog (&cmdHistory);
-    QObject::connect (m_pDoc, SIGNAL (selectionChanged ()), 
-                      transformationDialog, SLOT (update ()));
-  }
+  TransformationDialog *transformationDialog = 
+    new TransformationDialog (&cmdHistory);
+  QObject::connect (m_pDoc, SIGNAL (selectionChanged ()), 
+		    transformationDialog, SLOT (update ()));
   transformationDialog->setDocument (m_pDoc);
   transformationDialog->showTab (id);
 }
@@ -654,7 +650,15 @@ void KIllustratorView::editInsertOject () {
 }
 
 void KIllustratorView::editProperties () {
-  PropertyEditor::edit (&cmdHistory, m_pDoc);
+  int result = 1;
+
+  if (m_pDoc->selectionIsEmpty ()) {
+    result = KMsgBox::yesNo (this, "Warning", 
+		    i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
+		    KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
+  }
+  if (result == 1)
+    PropertyEditor::edit (&cmdHistory, m_pDoc);
 }
 
 void KIllustratorView::toggleRuler () {
@@ -756,8 +760,14 @@ void KIllustratorView::setPenColor (CORBA::Long id) {
     SetPropertyCmd *cmd = new SetPropertyCmd (m_pDoc, oInfo, fInfo);
     cmdHistory.addCommand (cmd, true);
   }
-  else
-    GObject::setDefaultOutlineInfo (oInfo);
+  else {
+    int result = 
+      KMsgBox::yesNo (this, "Warning", 
+		      i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
+		      KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
+    if (result == 1)
+      GObject::setDefaultOutlineInfo (oInfo);
+  }
 }
 
 void KIllustratorView::setFillColor (CORBA::Long id) {
@@ -766,16 +776,23 @@ void KIllustratorView::setFillColor (CORBA::Long id) {
   oInfo.mask = 0;
   
   GObject::FillInfo fInfo;
-  fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::Style;
+  fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::FillStyle;
   fInfo.color = *(colorPalette[idx]);
-  fInfo.style = (idx == 0 ? NoBrush : SolidPattern);
+  fInfo.fstyle = (idx == 0 ? GObject::FillInfo::NoFill :
+		GObject::FillInfo::SolidFill);
 
   if (! m_pDoc->selectionIsEmpty ()) {
     SetPropertyCmd *cmd = new SetPropertyCmd (m_pDoc, oInfo, fInfo);
     cmdHistory.addCommand (cmd, true);
   }
-  else
-    GObject::setDefaultFillInfo (fInfo);
+  else {
+    int result = 
+      KMsgBox::yesNo (this, "Warning", 
+		      i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
+		      KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
+    if (result == 1)
+      GObject::setDefaultFillInfo (fInfo);
+  }
 }
 
 void KIllustratorView::editLayers () {

@@ -339,6 +339,26 @@ void Canvas::drawGrid (Painter& p) {
 
 void Canvas::printDocument () {
   QPrinter printer;
+  printer.setDocName (document->fileName ());
+  printer.setCreator ("KIllustrator");
+  switch (document->pageLayout ().format) {
+  case PG_DIN_A4:
+    printer.setPageSize (QPrinter::A4);
+    break;
+  case PG_DIN_A5:
+    printer.setPageSize (QPrinter::B5);
+    break;
+  case PG_US_LETTER:
+    printer.setPageSize (QPrinter::Letter);
+    break;
+  case PG_US_LEGAL:
+    printer.setPageSize (QPrinter::Legal);
+    break;
+  default:
+    break;
+  }
+  printer.setOrientation (document->pageLayout ().orientation == PG_PORTRAIT ?
+			  QPrinter::Portrait : QPrinter::Landscape);
   if (printer.setup (this)) {
     Painter paint;
     paint.begin (&printer);

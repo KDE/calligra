@@ -1,6 +1,4 @@
-* propagation of property updates in group objects
-* bounding box for group objects
 * german translation
-* rubberband selection doesn't select all objects 
 * undo/redo for layers
 * object ordering is modified during grouping
+* bounding box for arrows

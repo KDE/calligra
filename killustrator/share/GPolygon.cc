@@ -27,6 +27,7 @@
 #include <assert.h>
 #include "GPolygon.h"
 #include "GPolygon.moc"
+#include "GradientShape.h"
 
 #include <qpntarry.h>
 #include <klocale.h>
@@ -160,19 +161,26 @@ const char* GPolygon::typeName () {
 }
 
 bool GPolygon::isFilled () const {
-  return fillInfo.style != NoBrush;
+  return fillInfo.fstyle != GObject::FillInfo::NoFill;
 }
 
 void GPolygon::draw (Painter& p, bool withBasePoints) {
   unsigned int i, num;
 
-  QPen pen (outlineInfo.color, (uint) outlineInfo.width, 
-            outlineInfo.style);
-  QBrush brush (fillInfo.color, fillInfo.style);
+  QPen pen;
+  QBrush brush;
+  initPen (pen);
   p.save ();
   p.setPen (pen);
-  p.setBrush (brush);
   p.setWorldMatrix (tmpMatrix, true);
+  initBrush (brush);
+  p.setBrush (brush);
+
+  if (gradientFill ()) {
+    if (! gShape.valid ())
+      updateGradientShape (p);
+    gShape.draw (p);
+  }
 
   num = points.count ();
   if (kind == PK_Polygon) {
@@ -226,7 +234,7 @@ void GPolygon::writeToPS (ostream& os) {
       os << ' ' << c->x () << ' ' << c->y ();
     }
     os << "]" 
-       << (fillInfo.style == NoBrush  ? " false" : " true")
+       << (fillInfo.fstyle == GObject::FillInfo::NoFill ? " false" : " true")
        << " DrawPolygon\n";
   }
   else {
@@ -238,7 +246,7 @@ void GPolygon::writeToPS (ostream& os) {
     else
       os << c2->x () << ' ' << c2->y () << ' '
 	 << c1->x () << ' ' << c1->y () << ' ';
-    os << (fillInfo.style == NoBrush  ? "false" : "true");
+    os << (fillInfo.fstyle == GObject::FillInfo::NoFill ? "false" : "true");
     if (outlineInfo.roundness == 100)
       os << " DrawEllipse\n";
     else
@@ -262,6 +270,8 @@ bool GPolygon::contains (const Coord& p) {
 
 void GPolygon::setEndPoint (const Coord& p) {
   assert (kind != PK_Polygon);
+
+  gShape.setInvalid ();
 
   Coord& p0 = *(points.at (0));
   Coord& p2 = *(points.at (2));
@@ -332,6 +342,7 @@ void GPolygon::setSymmetricPolygon (const Coord& sp, const Coord& ep,
 }
 
 void GPolygon::movePoint (int idx, float dx, float dy) {
+  gShape.setInvalid ();
   if (kind == PK_Polygon)
     GPolyline::movePoint (idx, dx, dy);
   else {
@@ -452,3 +463,34 @@ void GPolygon::writeToXml (XmlWriter& xml) {
   else
     xml.closeTag (true);
 }
+
+void GPolygon::updateGradientShape (QPainter& p) {
+  // define the rectangular box for the gradient pixmap 
+  // (in object coordinate system)
+  if (kind != PK_Polygon) {
+    const Coord& p1 = *(points.at (0));
+    const Coord& p2 = *(points.at (2));
+    gShape.setBox (Rect (p1, p2));
+  }
+  else
+    gShape.setBox (calcEnvelope ());
+
+  // define the clipping region
+  QWMatrix matrix = p.worldMatrix ();
+  unsigned int num = points.count ();
+  QPointArray pnts (num);
+  for (unsigned int i = 0; i < num; i++) {
+    QPoint pnt = matrix.map (QPoint (qRound (points.at (i)->x ()),
+				     qRound (points.at (i)->y ())));
+    pnts.setPoint (i, pnt);
+  }
+  QRegion region (pnts);
+  gShape.setRegion (region);
+
+  // update the gradient information
+  gShape.setGradient (fillInfo.gradient);
+
+  // and create a new gradient pixmap
+  gShape.updatePixmap ();
+}
+

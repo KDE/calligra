@@ -45,11 +45,13 @@ void PasteCmd::execute () {
 	(*it)->unref ();
     objects.clear ();
     const char* buf = QApplication::clipboard ()->text ();
-    istrstream is (buf);
-    document->insertFromXml (is, objects);
-    for (list<GObject*>::iterator it = objects.begin ();
-	 it != objects.end (); it++)
+    if (::strlen (buf)) {
+      istrstream is (buf);
+      document->insertFromXml (is, objects);
+      for (list<GObject*>::iterator it = objects.begin ();
+	   it != objects.end (); it++)
 	(*it)->ref ();
+    }
 }
 
 void PasteCmd::unexecute () {

@@ -73,6 +73,7 @@ public:
 
 protected:
   void calcBoundingBox ();
+  void updateGradientShape (QPainter& p);
 
   bool inside_polygon (const Coord& p);
   void update_rpoints ();

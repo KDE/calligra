@@ -108,7 +108,6 @@ KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
   zFactors[4] = 4.0;
 
   canvas = 0L;
-  transformationDialog = 0L;
   scriptDialog = 0L;
   layerDialog = 0L;
   tgroup = new ToolGroup ();
@@ -605,15 +604,16 @@ void KIllustrator::menuCallback (int item) {
     break;
   case ID_FILE_OPEN: 
     {
-      askForSave ();
-      QString fname = 
-	KFilePreviewDialog::getOpenFileURL (0, 
-					    "*.kil | KIllustrator File", this);
-      if (! fname.isEmpty ()) {
-	document->initialize ();
-	openURL ((const char *)fname);
-	cmdHistory.reset ();
-	tcontroller->toolSelected (0);
+      if (askForSave ()) {
+	QString fname = 
+	  KFilePreviewDialog::getOpenFileURL (0, 
+					      "*.kil | KIllustrator File", this);
+	if (! fname.isEmpty ()) {
+	  document->initialize ();
+	  openURL ((const char *)fname);
+	  cmdHistory.reset ();
+	  tcontroller->toolSelected (0);
+	}
       }
       break;
     }
@@ -627,7 +627,8 @@ void KIllustrator::menuCallback (int item) {
     closeWindow (this);
     break;
   case ID_FILE_PRINT:
-    canvas->printPSDocument ();
+    //    canvas->printPSDocument ();
+    canvas->printDocument ();
     break;
   case ID_FILE_INFO:
     DocumentInfo::showInfo (document);
@@ -667,7 +668,18 @@ void KIllustrator::menuCallback (int item) {
     document->selectAllObjects ();
     break;
   case ID_EDIT_PROPERTIES:
-    PropertyEditor::edit (&cmdHistory, document);
+    {
+      int result = 1;
+      
+      if (document->selectionIsEmpty ()) {
+	result = 
+	  KMsgBox::yesNo (this, "Warning", 
+			  i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
+			  KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
+      }
+      if (result == 1)
+	PropertyEditor::edit (&cmdHistory, document);
+    }
     break;
   case ID_VIEW_LAYERS:
     if (!layerDialog) 
@@ -945,8 +957,14 @@ void KIllustrator::setPenColor (const QBrush& b) {
     SetPropertyCmd *cmd = new SetPropertyCmd (document, oInfo, fInfo);
     cmdHistory.addCommand (cmd, true);
   }
-  else
-    GObject::setDefaultOutlineInfo (oInfo);
+  else {
+    int result = 
+      KMsgBox::yesNo (this, "Warning", 
+		      i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
+		      KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
+    if (result == 1)
+      GObject::setDefaultOutlineInfo (oInfo);
+  }
 }
 
 void KIllustrator::setFillColor (const QBrush& b) {
@@ -954,16 +972,25 @@ void KIllustrator::setFillColor (const QBrush& b) {
   oInfo.mask = 0;
   
   GObject::FillInfo fInfo;
-  fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::Style;
+  fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::FillStyle;
   fInfo.color = b.color ();
-  fInfo.style = b.style ();
+  if (b.style () == NoBrush)
+    fInfo.fstyle = GObject::FillInfo::NoFill;
+  else
+    fInfo.fstyle = GObject::FillInfo::SolidFill;
 
   if (! document->selectionIsEmpty ()) {
     SetPropertyCmd *cmd = new SetPropertyCmd (document, oInfo, fInfo);
     cmdHistory.addCommand (cmd, true);
   }
-  else
-    GObject::setDefaultFillInfo (fInfo);
+  else {
+    int result = 
+      KMsgBox::yesNo (this, "Warning", 
+		      i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
+		      KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
+    if (result == 1)
+      GObject::setDefaultFillInfo (fInfo);
+  }
 }
 
 void KIllustrator::dropActionSlot (KDNDDropZone* dzone) {
@@ -1056,11 +1083,10 @@ void KIllustrator::importFromFile (int id) {
 }
 
 void KIllustrator::showTransformationDialog (int id) {
-  if (transformationDialog == 0L) {
-    transformationDialog = new TransformationDialog (&cmdHistory);
-    connect (document, SIGNAL (selectionChanged ()), transformationDialog,
-	     SLOT (update ()));
-  }
+  TransformationDialog *transformationDialog = 
+    new TransformationDialog (&cmdHistory);
+  connect (document, SIGNAL (selectionChanged ()), transformationDialog,
+	   SLOT (update ()));
   transformationDialog->setDocument (document);
   transformationDialog->showTab (id);
 }

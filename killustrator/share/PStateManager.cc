@@ -65,16 +65,15 @@ void PStateManager::readDefaultSettings () {
   oInfo.color = config->readColorEntry ("OutlineColor", &black);
   oInfo.style = (PenStyle) config->readNumEntry ("OutlineStyle", SolidLine);
   oInfo.width = (BrushStyle) config->readDoubleNumEntry ("OutlineWidth", 1.0);
-  //  oInfo.startId = config->readNumEntry ("OutlineLeftArrow", 0);
-  //  oInfo.endId = config->readNumEntry ("OutlineRightArrow", 0);
   oInfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style | 
-    GObject::OutlineInfo::Width /*| GObject::OutlineInfo::Arrows*/;
+    GObject::OutlineInfo::Width;
   GObject::setDefaultOutlineInfo (oInfo);
 
   GObject::FillInfo fInfo;
   fInfo.color = config->readColorEntry ("FillColor", &white);
-  fInfo.style = (BrushStyle) config->readNumEntry ("FillStyle", NoBrush);
-  fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::Style;
+  fInfo.fstyle = GObject::FillInfo::NoFill;
+  //  fInfo.style = (BrushStyle) config->readNumEntry ("FillStyle", NoBrush);
+  fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::FillStyle;
   GObject::setDefaultFillInfo (fInfo);
 
   GText::TextInfo tInfo;
@@ -156,12 +155,10 @@ void PStateManager::saveDefaultSettings () {
   config->writeEntry ("OutlineColor", oInfo.color);
   config->writeEntry ("OutlineStyle", (int) oInfo.style);
   config->writeEntry ("OutlineWidth", (double) oInfo.width);
-  //  config->writeEntry ("OutlineLeftArrow", oInfo.startId);
-  //  config->writeEntry ("OutlineRightArrow", oInfo.endId);
 
   GObject::FillInfo fInfo = GObject::getDefaultFillInfo ();
   config->writeEntry ("FillColor", fInfo.color);
-  config->writeEntry ("FillStyle", (int) fInfo.style);
+  //  config->writeEntry ("FillStyle", (int) fInfo.style);
 
   GText::TextInfo tInfo = GText::getDefaultTextInfo ();
   config->writeEntry ("Font", tInfo.font);

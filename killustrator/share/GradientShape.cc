@@ -22,10 +22,40 @@
 
 */
 
-#ifndef version_h_
-#define version_h_
+#include <iostream.h>
 
-#define APP_NAME "killustrator"
-#define APP_VERSION "0.4.5"
+#include "GradientShape.h"
+#include <qpainter.h>
 
-#endif
+GradientShape::GradientShape () : isValid (false) {
+}
+
+void GradientShape::setRegion (const QRegion& r) {
+  region = r;
+  setInvalid ();
+}
+
+void GradientShape::setBox (const Rect& r) {
+  box = r;
+  setInvalid ();
+}
+
+void GradientShape::setGradient (const Gradient& g) {
+  gradient = g;
+  setInvalid ();
+}
+
+void GradientShape::draw (QPainter& p) {
+  p.save ();
+  p.setClipRegion (region);
+  p.setClipping (true);
+  p.drawPixmap (box.left (), box.top (), pixmap);
+  p.restore ();
+}
+
+void GradientShape::updatePixmap () {
+  if (!region.isEmpty () && !box.empty ()) {
+    isValid = true;
+    pixmap = gradient.createPixmap (box.width (), box.height ());
+  }
+}

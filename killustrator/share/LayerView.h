@@ -52,7 +52,7 @@ protected:
 private:
     GDocument* document;
     vector<GLayer*> layers;
-    QPixmap pixmaps[4];
+    QPixmap pixmaps[3];
 };
 
 #endif

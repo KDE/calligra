@@ -36,6 +36,7 @@
 #include <qpushbt.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qwidgetstack.h>
 
 #include "GText.h"
 #include "GPolygon.h"
@@ -45,6 +46,12 @@
 #include "LineStyle.h"
 #include "PStateManager.h"
 #include "units.h"
+
+#define SOLID_BOX    0
+#define PATTERN_BOX  1
+#define TILE_BOX     2
+#define GRADIENT_BOX 3
+#define NOFILL_BOX   4
 
 PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc, 
 				QWidget* parent, const char* name) : 
@@ -58,6 +65,7 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
     ellipseKind[i] = 0L;
     textAlign[i] = 0L;
   }
+  gradient = 0L;
 
   document = doc;
   haveObjects = ! document->selectionIsEmpty ();
@@ -69,26 +77,6 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
   text = "Text";
 
   if (haveObjects) {
-#ifdef NO_LAYERS
-    QListIterator<GObject> it (document->getSelection ());
-    for (; it.current (); ++it) {
-      if (it.current ()->isA ("GText")) {
-	haveTextObjects = true;
-	GText* tobj = (GText *) it.current ();
-	text = tobj->line (0);
-      }
-      else if (it.current ()->isA ("GPolyline") ||
-	       it.current ()->isA ("GBezier"))
-	haveLineObjects = true;
-      else if (it.current ()->isA ("GOval"))
-	haveEllipseObjects = true;
-      else if (it.current ()->isA ("GPolygon")) {
-	GPolygon* polygon = (GPolygon *) it.current ();
-	if (polygon->isRectangle ())
-	  haveRectangleObjects = true;
-      }
-    }
-#else
     for (list<GObject*>::iterator it = document->getSelection ().begin ();
 	 it != document->getSelection ().end (); it++) {
       GObject* o = *it;
@@ -107,7 +95,6 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
 	  haveRectangleObjects = true;
       }
     }
-#endif
   }
   cmdHistory = history;
 
@@ -148,15 +135,15 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
   button = bbox->addButton (i18n ("Help"));
   connect (button, SIGNAL (clicked ()), SLOT (helpPressed ()));
   bbox->layout ();
-  bbox->setMinimumSize (bbox->sizeHint ());
+  bbox->setMinimumSize (bbox->sizeHint () + QSize (20, 20));
 
   vl->addWidget (bbox);
 
   vl->activate ();
-  adjustSize ();
  
   setMinimumSize (430, 400);
   setMaximumSize (430, 400);
+  adjustSize ();
 
   readProperties ();
 }
@@ -245,7 +232,6 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
   label = new QLabel (w);
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Width:"));
-//  label->setFixedHeight (label->sizeHint ().height ());
   label->move (10, 20);
   
   widthField = new FloatSpinBox (w);
@@ -257,17 +243,15 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
   label = new QLabel (w);
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Color:"));
-//  label->setFixedHeight (label->sizeHint ().height ());
   label->move (10, 60);
   
-  penColorField = new ColorComboBox (w);
-  penColorField->setColor (white);
-  penColorField->move (80, 60);
+  penColorBttn = new KColorButton (w);
+  penColorBttn->setColor (white);
+  penColorBttn->move (80, 60);
 
   label = new QLabel (w);
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Style:"));
-//  label->setFixedHeight (label->sizeHint ().height ());
   label->move (10, 100);
   
   penStyleField = new KCombo (w);
@@ -381,17 +365,116 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
 QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
   QWidget* w;
   QLabel* label;
-
   w = new QWidget (parent);
 
-  label = new QLabel (w);
+  QButtonGroup* group = new QButtonGroup (w);
+  group->setFrameStyle (QFrame::NoFrame);
+  group->setExclusive (true);
+  group->move (10, 10);
+
+  const char *msg[] = { "Solid", "Pattern", "Tile", "Gradient", "No Fill" };
+  for (int i = 0; i < 5; i++) {
+    fillStyleBttn[i] = new QRadioButton (group);
+    fillStyleBttn[i]->setText (msg[i]);
+    fillStyleBttn[i]->move (10, i * 30);
+    connect (fillStyleBttn[i], SIGNAL(clicked()), 
+	     this, SLOT(fillStyleChanged()));
+  }
+  group->adjustSize ();
+
+  wstack = new QWidgetStack (w);
+  wstack->setGeometry (100, 10, 300, 300);
+
+  // ------ Solid Fill ------
+  QGroupBox *box = new QGroupBox (wstack);
+  box->setGeometry (0, 0, 300, 300);
+  box->setTitle (i18n ("Solid Fill"));
+  wstack->addWidget (box, SOLID_BOX);
+  label = new QLabel (box);
+
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Color:"));
-  label->move (10, 20);
-  
-  fillColorField = new ColorComboBox (w);
-  fillColorField->setColor (white);
-  fillColorField->move (80, 20);
+  label->move (10, 15);
+  solidColorBttn = new KColorButton (box);
+  solidColorBttn->setColor (white);
+  solidColorBttn->move (80, 15);
+
+  // ------ Pattern Fill ------
+  box = new QGroupBox (group);
+  box->setGeometry (0, 0, 300, 300);
+  box->setTitle (i18n ("Pattern Fill"));
+  wstack->addWidget (box, PATTERN_BOX);
+  label = new QLabel (box);
+  label->setAlignment (AlignLeft | AlignVCenter);
+  label->setText (i18n ("Color:"));
+  label->move (10, 15);
+  patternColorBttn = new KColorButton (box);
+  patternColorBttn->setColor (white);
+  patternColorBttn->move (80, 15);
+
+  // ------ No Fill ------
+  box = new QGroupBox (group);
+  box->setGeometry (0, 0, 300, 300);
+  box->setTitle (i18n ("No Fill"));
+  wstack->addWidget (box, NOFILL_BOX);
+
+  // ------ Tile Fill ------
+  box = new QGroupBox (group);
+  box->setGeometry (0, 0, 300, 300);
+  box->setTitle (i18n ("Tile Fill"));
+  wstack->addWidget (box, TILE_BOX);
+
+  // ------ Gradient Fill ------
+  box = new QGroupBox (group);
+  box->setGeometry (0, 0, 300, 300);
+  box->setTitle (i18n ("Gradient Fill"));
+  wstack->addWidget (box, GRADIENT_BOX);
+  label = new QLabel (box);
+  label->setAlignment (AlignLeft | AlignVCenter);
+  label->setText (i18n ("Color:"));
+  label->move (10, 15);
+  gradColor1Bttn = new KColorButton (box);
+  gradColor1Bttn->setColor (white);
+  gradColor1Bttn->move (80, 15);
+  connect (gradColor1Bttn, SIGNAL(changed(const QColor&)),
+	   this, SLOT(gradientColorChanged(const QColor&)));
+
+  label = new QLabel (box);
+  label->setAlignment (AlignLeft | AlignVCenter);
+  label->setText (i18n ("Color:"));
+  label->move (10, 50);
+  gradColor2Bttn = new KColorButton (box);
+  gradColor2Bttn->setColor (white);
+  gradColor2Bttn->move (80, 50);
+  connect (gradColor2Bttn, SIGNAL(changed(const QColor&)),
+	   this, SLOT(gradientColorChanged(const QColor&)));
+
+  label = new QLabel (box);
+  label->setAlignment (AlignLeft | AlignVCenter);
+  label->setText (i18n ("Style:"));
+  label->move (10, 85);
+  gradStyleCombo = new KCombo (box);
+  gradStyleCombo->move (80, 85);
+  gradStyleCombo->insertItem (i18n ("Horizontal"));
+  gradStyleCombo->insertItem (i18n ("Vertical"));
+  gradStyleCombo->insertItem (i18n ("Radial"));
+  gradStyleCombo->insertItem (i18n ("Rectangular"));
+  gradStyleCombo->insertItem (i18n ("Diagonal 1"));
+  gradStyleCombo->insertItem (i18n ("Diagonal 2"));
+  connect (gradStyleCombo, SIGNAL(activated(int)), 
+	   this, SLOT(gradientStyleChanged(int)));
+  QFrame* frame = new QFrame (box);
+  frame->setLineWidth (1);
+  frame->setFrameStyle (QFrame::Panel | QFrame::Sunken);
+  frame->move (10, 130);
+  gradPreview = new QLabel (frame);
+  gradPreview->move (2, 2);
+  gradPreview->resize (170, 150);
+  gradPreview->setAutoResize (false);
+  frame->resize (174, 154);
+
+  fillStyleBttn[0]->setChecked (true);
+  wstack->raiseWidget (SOLID_BOX);
 
   w->adjustSize ();
   return w;
@@ -412,7 +495,7 @@ void PropertyEditor::applyPressed () {
     GObject::OutlineInfo oinfo;
 
     oinfo.width = widthField->getValue ();
-    oinfo.color = penColorField->getColor ();
+    oinfo.color = penColorBttn->color ();
     oinfo.style = (PenStyle) penStyleField->currentItem ();
     if (leftArrows != 0L && rightArrows != 0L) {
       oinfo.startArrowId = leftArrows->currentItem ();
@@ -435,9 +518,19 @@ void PropertyEditor::applyPressed () {
     // Fill
     GObject::FillInfo finfo;
 
-    finfo.color = fillColorField->getColor ();
-    finfo.style = SolidPattern;
-    finfo.mask = GObject::FillInfo::Color | GObject::FillInfo::Style;
+    finfo.mask = GObject::FillInfo::Color | GObject::FillInfo::FillStyle;
+    finfo.color = solidColorBttn->color ();
+    if (fillStyleBttn[SOLID_BOX]->isChecked ())
+      finfo.fstyle = GObject::FillInfo::SolidFill;
+    else if (fillStyleBttn[GRADIENT_BOX]->isChecked ()) {
+      finfo.fstyle = GObject::FillInfo::GradientFill;
+      finfo.gradient = *gradient;
+      finfo.mask |= GObject::FillInfo::GradientInfo;
+    }
+    else if (fillStyleBttn[NOFILL_BOX]->isChecked ())
+      finfo.fstyle = GObject::FillInfo::NoFill;
+    else
+      finfo.fstyle = GObject::FillInfo::SolidFill;
 
     SetPropertyCmd* cmd = 0L;
 
@@ -483,12 +576,7 @@ void PropertyEditor::readProperties () {
     const char* ustr = unitToString (munit);
     
     if (document->selectionCount () == 1) {
-#ifdef NO_LAYERS
-      QListIterator<GObject> it (document->getSelection ());
-      GObject* object = it.current ();
-#else
       GObject* object = document->getSelection ().front ();
-#endif
       // Info tab
       Rect boundingBox = object->boundingBox ();
       infoLabel[0]->setText (object->typeName ());
@@ -508,9 +596,9 @@ void PropertyEditor::readProperties () {
       // Outline tab
       GObject::OutlineInfo oInfo = object->getOutlineInfo ();
       widthField->setValue (oInfo.width);
-      penColorField->setColor (oInfo.color);
+      penColorBttn->setColor (oInfo.color);
       penStyleField->setCurrentItem (oInfo.style);
-      if (object->isA ("GPolyline")) {
+      if (object->isA ("GPolyline") || object->isA ("GBezier")) {
 	leftArrows->setCurrentItem (oInfo.startArrowId);
 	rightArrows->setCurrentItem (oInfo.endArrowId);
       }
@@ -534,7 +622,7 @@ void PropertyEditor::readProperties () {
       }
       
       // Fill tab
-      fillColorField->setColor (object->getFillColor ());
+      solidColorBttn->setColor (object->getFillColor ());
       
       // Font tab
       if (object->isA ("GText")) {
@@ -578,11 +666,11 @@ void PropertyEditor::readProperties () {
       // Outline tab
       GObject::OutlineInfo oInfo = GObject::getDefaultOutlineInfo ();
       widthField->setValue (oInfo.width);
-      penColorField->setColor (oInfo.color);
+      penColorBttn->setColor (oInfo.color);
 
       // Fill tab
       GObject::FillInfo fInfo = GObject::getDefaultFillInfo ();
-      fillColorField->setColor (fInfo.color);
+      solidColorBttn->setColor (fInfo.color);
       
       // Font tab
       if (!haveObjects || haveTextObjects) {
@@ -590,6 +678,44 @@ void PropertyEditor::readProperties () {
 	fontSelector->setFont (tInfo.font);
       }
     }
+}
+
+void PropertyEditor::fillStyleChanged () {
+  for (int i = 0; i < 5; i++) {
+    if ((QRadioButton *) sender () == fillStyleBttn[i]) {
+      if (i == GRADIENT_BOX)
+	updateGradient ();
+      wstack->raiseWidget (i);
+      break;
+    }
+  }
+}
+
+void PropertyEditor::gradientColorChanged (const QColor&) {
+  updateGradient ();
+}
+
+void PropertyEditor::gradientStyleChanged (int) {
+  updateGradient ();
+}
+
+void PropertyEditor::updateGradient () {
+  static Gradient::Style styles[] = { 
+    Gradient::Horizontal, Gradient::Vertical, Gradient::Radial, 
+    Gradient::Rectangular, Gradient::Diagonal1, Gradient::Diagonal2 
+  };
+
+  if (gradient == 0L)
+    gradient = new Gradient (gradColor1Bttn->color (), 
+			     gradColor2Bttn->color (), Gradient::Horizontal);
+  else {
+    gradient->setColor1 (gradColor1Bttn->color ());
+    gradient->setColor2 (gradColor2Bttn->color ());
+    gradient->setStyle (styles[gradStyleCombo->currentItem ()]);
+  }
+  gradPreview->setPixmap (gradient->createPixmap (gradPreview->width (),
+						  gradPreview->height ()));
+
 }
 
 int PropertyEditor::edit (CommandHistory* history, GDocument* doc) {

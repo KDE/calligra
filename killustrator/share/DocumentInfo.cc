@@ -73,6 +73,6 @@ DocumentInfo::DocumentInfo (GDocument* doc, QWidget* parent,
 
 void DocumentInfo::showInfo (GDocument* doc) {
     DocumentInfo dialog (doc, 0L);
-    int result = dialog.exec ();
+    dialog.exec ();
 }
 

@@ -24,6 +24,7 @@
 #include "GClipart.h"
 #include "GClipart.moc"
 #include "qwmf.h"
+#include "PSStream.h"
 
 #include <klocale.h>
 #include <kapp.h>
@@ -102,4 +103,3 @@ void GClipart::writeToXml (XmlWriter& xml) {
   xml.addAttribute ("src", (const char *) url.url ());
   xml.closeTag (true);
 }
-

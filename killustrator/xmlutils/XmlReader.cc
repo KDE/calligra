@@ -211,7 +211,7 @@ bool XmlReader::readAttributes (list<XmlAttribute>& attrib_list) {
       break;
     }
     else {
-      cout << "invalid attribute name: " << tok << endl;
+      cout << "invalid attribute name: " << (int) tok << endl;
       return false;
     }
     tok = tokenizer.nextToken ();

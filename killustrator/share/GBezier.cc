@@ -204,12 +204,11 @@ const char* GBezier::typeName () {
 }
 
 void GBezier::draw (Painter& p, bool withBasePoints) {
-  QPen pen (outlineInfo.color, (uint) outlineInfo.width, 
-            outlineInfo.style);
+  QPen pen;
+
+  initPen (pen);
   p.save ();
-
   p.setPen (pen);
-
   p.setWorldMatrix (tmpMatrix, true);
   unsigned int i, num = points.count ();
   for (i = 1; i + 3 < num; i += 3) {
@@ -378,12 +377,12 @@ void GBezier::calcBoundingBox () {
     }
   }
 
-  if (sArrow != 0L) {
+  if (sArrow != 0L && num > 2) {
     Coord p1 = points.at (0)->transform (tmpMatrix);
     Coord p2 = points.at (2)->transform (tmpMatrix);
     sAngle = calcArrowAngle (p1, p2, 0);
   }
-  if (eArrow != 0L) {
+  if (eArrow != 0L && num >= 3) {
     Coord p1 = points.at (num - 3)->transform (tmpMatrix);
     Coord p2 = points.at (num - 1)->transform (tmpMatrix);
     eAngle = calcArrowAngle (p1, p2, 1);
@@ -410,7 +409,17 @@ void GBezier::writeToPS (ostream& os) {
          << points.at (i + j)->y () << ' ';
     os << "curveto\n";
   }
-  os << "SOCol stroke\nsetmatrix\n";
+  os << "SOCol stroke\n";
+  float w = outlineInfo.width == 0 ? 1.0 : outlineInfo.width;
+  if (sArrow != 0L) {
+    Coord p1 = points.at (1)->transform (tmpMatrix);
+    sArrow->writeToPS (os, p1, outlineInfo.color, w, sAngle);
+  }
+  if (eArrow != 0L) {
+    Coord p2 = points.at (points.count () - 2)->transform (tmpMatrix);
+    eArrow->writeToPS (os, p2, outlineInfo.color, w, eAngle);
+  }
+  os << "setmatrix\n";
 }
 
 void GBezier::writeToXml (XmlWriter& xml) {
@@ -458,7 +467,7 @@ bool GBezier::findNearestPoint (const Coord& p, float max_dist,
 }
 
 void GBezier::computePPoints () {
-    if (closed && getFillStyle () != NoBrush) {
+    if (closed) {
     }
 }
 

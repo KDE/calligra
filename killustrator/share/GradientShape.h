@@ -22,10 +22,35 @@
 
 */
 
-#ifndef version_h_
-#define version_h_
+#ifndef GradientShape_h_
+#define GradientShape_h_
 
-#define APP_NAME "killustrator"
-#define APP_VERSION "0.4.5"
+#include <qpixmap.h>
+#include <qregion.h>
+#include "Gradient.h"
+#include "Coord.h"
+
+class GradientShape {
+public:
+  GradientShape ();
+
+  void setRegion (const QRegion& r);
+  void setBox (const Rect& r);
+  void setGradient (const Gradient& g);
+
+  bool valid () const { return isValid; }
+  void setInvalid () { isValid = false; }
+
+  void draw (QPainter& p);
+
+  void updatePixmap ();
+
+private:
+  Rect box;
+  QRegion region;
+  QPixmap pixmap;
+  Gradient gradient;
+  bool isValid;
+};
 
 #endif
