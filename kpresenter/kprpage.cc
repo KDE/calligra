@@ -50,7 +50,7 @@
 #include <kprcommand.h>
 #include "koPointArray.h"
 #include "kprtextdocument.h"
-
+#include <kotextobject.h>
 #include <koRect.h>
 #include <qapplication.h>
 
@@ -3276,4 +3276,17 @@ KCommand *KPrPage::shadowObj(ShadowDirection dir,int dist, const QColor &col)
 	_oldShadow.clear();
     }
     return shadowCmd;
+}
+
+
+QPtrList<KoTextObject> KPrPage::objectText()
+{
+    QPtrList<KoTextObject>lst;
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->getType() == OT_TEXT)
+            lst.append(dynamic_cast<KPTextObject*>(it.current())->textObject());
+    }
+    return lst;
 }

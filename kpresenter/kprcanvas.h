@@ -152,7 +152,6 @@ public:
     KPrPage* activePage();
     void setActivePage( KPrPage* _active);
 
-    QPtrList<KoTextObject> objectText();
     bool oneObjectTextExist();
 
     bool isOneObjectSelected();

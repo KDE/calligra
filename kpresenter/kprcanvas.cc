@@ -5008,18 +5008,6 @@ void KPrCanvas::drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint 
 }
 
 
-QPtrList<KoTextObject> KPrCanvas::objectText()
-{
-    QPtrList<KoTextObject>lst;
-    QPtrListIterator<KPObject> it( getObjectList() );
-    for ( ; it.current() ; ++it )
-    {
-        if(it.current()->getType() == OT_TEXT)
-            lst.append(dynamic_cast<KPTextObject*>(it.current())->textObject());
-    }
-    return lst;
-}
-
 bool KPrCanvas::oneObjectTextExist()
 {
     bool state=m_activePage->oneObjectTextExist();

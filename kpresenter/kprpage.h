@@ -38,6 +38,7 @@ class KCommand;
 class KoPointArray;
 class DCOPObject;
 class KPTextObject;
+class KoTextObject;
 
 class KPrPage
 {
@@ -228,6 +229,8 @@ public:
 
     KCommand *rotateObj(float _newAngle);
     KCommand *shadowObj(ShadowDirection dir,int dist, const QColor &col);
+
+    QPtrList<KoTextObject> objectText();
 
 
     void repaintObj();

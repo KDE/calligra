@@ -4282,6 +4282,15 @@ void KPresenterView::extraSpelling()
     m_spell.currentSpellPage=m_spell.firstSpellPage;
 
     spellAddTextObject();
+
+    //for first page add text object in sticky page
+    //move it in kprpage
+    QPtrListIterator<KPObject> it( stickyPage()->objectList() );
+    for ( ; it.current() ; ++it )
+    {
+        if(it.current()->getType()==OT_TEXT)
+            m_spell.textObject.append(dynamic_cast<KPTextObject*>( it.current() ));
+    }
     startKSpell();
 }
 
@@ -4927,9 +4936,19 @@ void KPresenterView::editFind()
     bool hasSelection=edit && (edit->kpTextObject())->textObject()->hasSelection();
     KoSearchDia dialog( m_canvas, "find", m_searchEntry,hasSelection );
     m_searchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
+
+    //add sticky obj at first page
+    QPtrList<KoTextObject> list=m_canvas->activePage()->objectText();
+    QPtrList<KoTextObject> list2=stickyPage()->objectText();
+    QPtrListIterator<KoTextObject> it( list2 );
+    for ( ; it.current() ; ++it )
+    {
+        list.append(it.current());
+    }
+
     if ( dialog.exec() == QDialog::Accepted )
     {
-        m_findReplace = new KPrFindReplace( m_canvas, &dialog,edit ,m_canvas->objectText());
+        m_findReplace = new KPrFindReplace( m_canvas, &dialog,edit ,list);
         doFindReplace();
     }
 }
@@ -4951,7 +4970,16 @@ void KPresenterView::editReplace()
     KPTextView * edit = m_canvas->currentTextObjectView();
     bool hasSelection=edit && (edit->kpTextObject())->textObject()->hasSelection();
     KoReplaceDia dialog( m_canvas, "replace", m_searchEntry, m_replaceEntry,hasSelection );
-    QPtrList<KoTextObject> list=m_canvas->objectText();
+    //add sticky text object at first page
+    QPtrList<KoTextObject> list=m_canvas->activePage()->objectText();
+    QPtrList<KoTextObject> list2=stickyPage()->objectText();
+
+    QPtrListIterator<KoTextObject> it( list2 );
+    for ( ; it.current() ; ++it )
+    {
+        list.append(it.current());
+    }
+
     if( list.count()==0)
     {
         KMessageBox::sorry( this, i18n( "Sorry, there is not text object!" ) );
@@ -4961,7 +4989,7 @@ void KPresenterView::editReplace()
     if ( dialog.exec() == QDialog::Accepted )
     {
         kdDebug() << "KPresenterView::editReplace" << endl;
-        m_findReplace = new KPrFindReplace( m_canvas, &dialog,edit ,m_canvas->objectText());
+        m_findReplace = new KPrFindReplace( m_canvas, &dialog,edit ,list);
         doFindReplace();
     }
 }
@@ -4994,7 +5022,7 @@ void KPresenterView::doFindReplace()
     bool aborted = findReplace->aborted();
     while(!aborted && searchInOtherPage() )
     {
-        m_findReplace->changeListObject(m_canvas->objectText());
+        m_findReplace->changeListObject(m_canvas->activePage()->objectText());
         findReplace->proceed();
         aborted = findReplace->aborted();
     }
