@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformpartinst" version="1">
+<kpartgui name="kexiformpartinst" version="2">
 
 <MenuBar>
   <Menu name="edit">
@@ -12,6 +12,8 @@
 
 <ToolBar name="widgets" fullWidth="false">
  <text>Widgets</text>
+   <Action name="pointer"/>
+   <Separator/>
    <Action name="library_widget_QButtonGroup"/>
    <Action name="library_widget_QTabWidget"/>
    <Action name="library_widget_QLabel"/>
@@ -21,7 +23,6 @@
  <ActionList name="library_widgets" />
 </ToolBar>
 <ToolBar name="tools" fullWidth="false">
-   <Action name="pointer"/>
    <Action name="change_style"/>
 </ToolBar>
 

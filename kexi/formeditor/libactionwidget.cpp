@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,27 +23,27 @@
 #include "libactionwidget.h"
 #include "widgetfactory.h"
 
-namespace KFormDesigner
-{
+using namespace KFormDesigner;
 
 LibActionWidget::LibActionWidget(Widget *w, KActionCollection *c)
- : KAction(w->name(), w->pixmap(), 0/*Key_F5*/, 0, SLOT(slotWidget()), c, QString("library_widget_" + w->className()).latin1())
+ : KToggleAction(w->name(), w->pixmap(), 0/*Key_F5*/, 0, 0 /*SLOT(slotWidget())*/, c, QString("library_widget_" + w->className()).latin1())
 {
 	kdDebug() << "LibActionWidget::LibActionWidget(): " << QString("library_widget_" + w->className()).latin1() << endl;
 	m_className = w->className();
-	connect(this, SIGNAL(activated()), this, SLOT(slotWidget()));
+	setExclusiveGroup("LibActionWidgets");
+//	connect(this, SIGNAL(activated()), this, SLOT(slotWidget()));
 }
 
 void
-LibActionWidget::slotWidget()
+LibActionWidget::slotActivated()
 {
-	emit prepareInsert(m_className);
+	KToggleAction::slotActivated();
+	if (isChecked())
+		emit prepareInsert(m_className);
 }
 
 LibActionWidget::~LibActionWidget()
 {
-}
-
 }
 
 #include "libactionwidget.moc"

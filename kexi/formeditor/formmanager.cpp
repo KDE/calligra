@@ -116,7 +116,8 @@ FormManager::createActions(KActionCollection *parent, KMainWindow *client)
 	m_client = client;
 
 	Actions actions = m_lib->createActions(parent, this, SLOT(insertWidget(const QString &)));
-	m_pointer = new KToggleAction(i18n("Pointer"), "stop", KShortcut(0), this, SLOT(stopInsert()), parent, "pointer");
+	m_pointer = new KToggleAction(i18n("Pointer"), "mouse_pointer", KShortcut(0), this, SLOT(stopInsert()), parent, "pointer");
+	m_pointer->setExclusiveGroup("LibActionWidgets"); //to be exclusive with any 'widget' action
 	m_pointer->setChecked(true);
 	actions.append(m_pointer);
 

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +22,7 @@
 #define LIBACTIONWIDGET_H
 
 
-#include <kaction.h>
+#include <kactionclasses.h>
 
 namespace KFormDesigner
 {
@@ -29,14 +30,16 @@ namespace KFormDesigner
 class Widget;
 
 /**
- * KAction subclass which remembers the matching class name
+ * KToggleAction subclass which remembers the matching class name.
  */
-class KFORMEDITOR_EXPORT LibActionWidget : public KAction
+class KFORMEDITOR_EXPORT LibActionWidget : public KToggleAction
 {
 	Q_OBJECT
 	public:
+		/** LibActionWidget object is initialized to be mutually 
+			exclusive with all other LibActionWidget objects */
 		LibActionWidget(Widget *, KActionCollection *collection);
-		~LibActionWidget();
+		virtual ~LibActionWidget();
 
 	signals:
 		/**
@@ -45,8 +48,9 @@ class KFORMEDITOR_EXPORT LibActionWidget : public KAction
 		void	prepareInsert(const QString &className);
 
 	protected slots:
-		void	slotWidget();
-
+		/** reimplemented from KToggleAction */
+		virtual void slotActivated();
+		
 	private:
 		QString m_className;
 };

@@ -190,13 +190,6 @@ TODO:
 HINT: removing Qt::WStaticContents from KExiTableView ctor fixed repaint problem
   the problem was with repainting when hscrollbar disapperars....
 
-
-FIXIT::: CRASH!! in kexidb
-lucijan	#2 <signal handler called>
-lucijan	#3 0x414dbf54 in strdup () from /lib/tls/libc.so.6
-lucijan	js^: yes simply add a new kexi__object but o_caption as NULL
-::FIXIT
-
 FIXIT::: open Dialog:
 jowenn	by the way I have a problem with your open dialog. I can only open db's not in current directory, if I add the full path in the file name edit box
 jowenn	Not sure were that comes from, had no time to investigate
@@ -315,6 +308,15 @@ HOT TODO:
 -combobox tv: fix row highlighting for 'related table data' model
 
 CC_MAIL: dkite@shaw.ca
+
+
+2004-06-09
+KexiTableViewPropertyBuffer:
+- slots' connections fixed
+KFormDesigner, Kexi Forms
+- "pointer" action: better icon added (from Karbon); action moved to "widgets" toolbar/menu
+- all "widgets" actions and "pointer" action are mutually exclusive
+
 
 ===================== Kexi 0.1 Beta 3 =====================
 
