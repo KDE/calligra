@@ -795,27 +795,27 @@ int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
 
 bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
 {
-    if ( lineEndPos == parag->getTextLen() )
+  if ( lineEndPos == parag->getTextLen() )
     {
-	if ( parag->getNext() == 0L || outOfFrame)
-	  {
-	    ptY += getLineHeight();
-	    parag->setPTYEnd( ptY );
-	    outOfFrame = false;
-	    return FALSE;
-	  }
-
-	ptY += getLineHeight();
-	enterNextParag( _painter );
+      if ( parag->getNext() == 0L || outOfFrame)
+	{
+	  ptY += getLineHeight();
+	  parag->setPTYEnd( ptY );
+	  outOfFrame = false;
+	  return false;
+	}
+      
+      ptY += getLineHeight();
+      enterNextParag( _painter );
     }
-    else
+  else
     {
-	lineStartPos = lineEndPos;
-	ptY += getLineHeight();
-	makeLineLayout( _painter );
+      lineStartPos = lineEndPos;
+      ptY += getLineHeight();
+      makeLineLayout( _painter );
     }
-
-    return TRUE;
+  
+  return true;
 }
 
 bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects = true, bool _checkTabs = true )
@@ -926,7 +926,10 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     if (static_cast<int>(ptWidth) < document->getRastX())
       {
 	while (static_cast<int>(ptWidth) < document->getRastX())
-	  makeNextLineLayout(_painter);
+	  {
+	    if (!makeNextLineLayout(_painter)) 
+	      break;
+	  }
 	return makeLineLayout(_painter);
       }
 	

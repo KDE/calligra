@@ -29,6 +29,8 @@ KWFrameDia::KWFrameDia(QWidget* parent,const char* name,KWFrameSet *_frameset,KW
 {
   frameset = _frameset;
   frame = _frame;
+  KRect r = frame->normalize();
+  frame->setRect(r.x(),r.y(),r.width(),r.height());
   flags = _flags;
   doc = _doc;
   page = _page;
@@ -205,8 +207,8 @@ void KWFrameDia::setupTab3ConnectTextFrames()
   connect(lFrameSList,SIGNAL(highlighted(int)),this,SLOT(connectListSelected(int)));
   grid3->addWidget(lFrameSList,1,0);
 
-  grid3->addColSpacing(1,lFrameSet->width());
-  grid3->setColStretch(1,1);
+  grid3->addColSpacing(0,lFrameSet->width());
+  grid3->setColStretch(0,1);
 
   grid3->addRowSpacing(0,lFrameSet->height());
   grid3->addRowSpacing(1,lFrameSet->height());

@@ -36,6 +36,7 @@
 #include <openparts.h>
 #include <koPageLayoutDia.h>
 
+class KWFrame;
 class KWordDocument;
 class KWordChild;
 class KWordFrame;
@@ -43,6 +44,26 @@ class KWordFrame;
 enum FrameType {FT_BASE = 0,FT_TEXT = 1,FT_PICTURE = 2,FT_PART};
 enum FrameInfo {FI_BODY = 0,FI_FIRST_HEADER = 1,FI_ODD_HEADER = 2,FI_EVEN_HEADER = 3,FI_FIRST_FOOTER = 4,FI_ODD_FOOTER = 5,FI_EVEN_FOOTER = 6};
 enum RunAround {RA_NO = 0,RA_BOUNDINGRECT = 1,RA_CONTUR = 2};
+
+/******************************************************************/
+/* Class: KWFrameGroup                                            */
+/******************************************************************/
+
+class KWFrameGroup
+{
+public:
+  KWFrameGroup(QString _name) { name = _name; frames.setAutoDelete(false); }
+
+  void addFrame(KWFrame *frame);
+  KRect getRect() { return rect; }
+  QString getName() { return name; }
+
+protected:
+  QList<KWFrame> frames;
+  KRect rect;
+  QString name;
+
+};
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -89,6 +110,9 @@ public:
   void setPageNum(int i) { pageNum = i; }
   int getPageNum() { return pageNum; }
 
+  void setFrameGroup(KWFrameGroup *fg) { group = fg; }
+  KWFrameGroup *getFrameGroup() { return group; }
+
 protected:
   RunAround runAround;
   bool selected;
@@ -97,6 +121,7 @@ protected:
   int pageNum;
 
   QList<KRect> intersections;
+  KWFrameGroup *group;
 
 private:
   KWFrame &operator=(KWFrame &_frame)
@@ -158,6 +183,14 @@ public:
   void setCurrent(int i) { current = i; }
   int getCurrent() { return current; }
 
+  virtual KWFrameGroup *getFrameGroup(QString _name);
+  virtual KWFrameGroup *getFrameGroup(int _num);
+  virtual KWFrameGroup *getFrameGroup(KWFrame *_frame);
+  virtual int getNumFrameGroups();
+  virtual void addFrameGroup(QList<KWFrame> *_frames);
+  virtual void resizeFrameGroupBy(KWFrameGroup *grp,int dx,int dy);
+  virtual void moveFrameGroupBy(KWFrameGroup *grp,int dx,int dy);
+
 protected:
   virtual void init()
     {;}
@@ -167,6 +200,7 @@ protected:
 
   // frames
   QList<KWFrame> frames;
+  QList<KWFrameGroup> groups;
 
   FrameInfo frameInfo;
   int current;

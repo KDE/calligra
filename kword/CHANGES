@@ -552,3 +552,14 @@ Reggie, 23.12.1998:
 - Implemented loading/saving headers/footes (Kalle, I'll send you a mail with the new tags/attributes)
 - Some fixes
 - Different footer/header for first page and the rest of the doc start working now (there are still some problems)
+
+Reggie, 25.12.1998:
+-------------------
+- Different footer/header for first page and the rest of the doc are working fine now (also for printing)
+- Fixes when loading headers/footers
+- Different headers/footers for even and odd pages works now
+
+Reggie, 26.12.1998:
+-------------------
+- Printing of different headers/footers of even and odd pages works now
+- Bugfixes

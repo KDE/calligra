@@ -736,6 +736,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	  {
 	    KWPictureFrameSet *frameset = new KWPictureFrameSet(doc);
 	    frameset->setFileName(pixmap_name,KSize(insRect.width(),insRect.height()));
+	    insRect = insRect.normalize();
 	    KWFrame *frame = new KWFrame(insRect.x() + xOffset,insRect.y() + yOffset,insRect.width(),insRect.height());
 	    frameset->addFrame(frame);
 	    doc->addFrameSet(frameset);
@@ -747,6 +748,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
       {
 	repaint(false);
 
+	insRect = insRect.normalize();
 	if (insRect.width() != 0 && insRect.height() != 0)
 	  doc->insertObject(insRect,partEntry,xOffset,yOffset);
 	mmEdit();
@@ -1504,10 +1506,11 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  }
 	else if (fc->isCursorAtParagStart())
 	  {
+	    KWParag *oldFirst = frameSet->getFirstParag();
 	    frameSet->insertParag(fc->getParag(),I_BEFORE);
 	    fc->setTextPos(0);
 	    recalcPage(0L);
-	    fc->init(fc->getParag(),painter,false,false);
+	    fc->init(fc->getParag(),painter,false,oldFirst != frameSet->getFirstParag());
 	  }
 	else 
 	  {

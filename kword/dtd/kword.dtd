@@ -1,4 +1,4 @@
-<!--	$Id:$
+<!--	$Id$
 
 		This is an XML document type definition (DTD) for the KWord document format.
 		Written by Kalle Dalheimer <kalle@kde.org> with (obviously) input from 
@@ -37,6 +37,12 @@
 		orientation:	0 for landscape, 1 for portrait
 		columns:		the number of columns (only in wordprocessing mode)
 		columnspacing:	the gap between the columns (only in wordprocessing mode)
+		hType: 0 for same headers on all pages, 1 for different headers on first and other pages
+			2, for different headers on even and odd pages
+		fType: 0 for same footers on all pages, 1 for different footers on first and other pages
+			2, for different footers on even and odd pages
+		spHeadBody: distance (in pt) between headers and the text body (only in wordprocessing mode)
+		spFootBody: distance (in pt) between footers and the text body (only in wordprocessing mode)
 -->
 <!ELEMENT PAPER (PAPERBORDERS?)>
 <!ATTLIST PAPER	format CDATA #REQUIRED
@@ -44,8 +50,11 @@
 				height CDATA #REQUIRED
 				orientation CDATA #REQUIRED
 				columns CDATA #REQUIRED
-				columnspacing CDATA #REQUIRED>
-
+				columnspacing CDATA #REQUIRED
+				hType CDATA #IMPLIED
+				fType CDATA #IMPLIED
+				spHeadBody CDATA #IMPLIED
+				spFootBody CDATA #IMPLIED>
 
 
 <!--	Describes the margins of the page.
@@ -68,12 +77,16 @@
 
 		Attributes:
 
-		processing:		0 for word processing, 1 for DTP
+		processing:	0 for word processing, 1 for DTP
 		standardpage:	currently ignored
+		hasHeader:	0 if the document has no headers, 1 if the document has headers
+		hasFooter:	0 if the document has no footers, 1 if the document has footers
 -->
 <!ELEMENT ATTRIBUTES EMPTY>
 <!ATTLIST ATTRIBUTES	processing CDATA #REQUIRED
-						standardpage CDATA #IMPLIED>
+			standardpage CDATA #IMPLIED
+			hasHeader CDATA #IMPLIED
+			hasFooter CDATA #IMPLIED>
 
 
 <!--	Container that as a number of FRAMESET children.
@@ -85,12 +98,13 @@
 
 		Attributes:
 
-		frametype:				1 for text, 2 for graphics
-		autocreatenewframe:		???
+		frametype:		1 for text, 2 for graphics
+		autocreatenewframe:	1 if new frames should be added to the frameset when the text doesn't fit
+					into the existing frames anymore, else 0 (only in wordprocessing mode)	
 -->
 <!ELEMENT FRAMESET (FRAME|PARAGRAPH)*>
 <!ATTLIST FRAMESET		frameType CDATA #REQUIRED
-						autoCreateNewFrame CDATA #REQUIRED>
+				autoCreateNewFrame CDATA #REQUIRED>
 
 
 <!ELEMENT FRAME	EMPTY>
@@ -105,6 +119,14 @@
 <!ATTLIST TEXT	value CDATA #IMPLIED>
 <!ELEMENT FORMATS (FORMAT*)>
 <!ELEMENT FORMAT (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|VERTALIGN)*>
+<!-- A format tag describes the format of one ore more characters in the text
+		
+		Attributes:
+
+		id: 0 invalid, 1 text format, 2 picture, 3 tabulator
+		pos: position where the format starts
+		len: number of characters after pos for which the format is used
+-->
 <!ATTLIST FORMAT		id CDATA #IMPLIED
 						pos CDATA #IMPLIED
 						len CDATA #IMPLIED>

@@ -1276,6 +1276,8 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuView->setCheckable(true);
   //m_vMenuView->setItemChecked(m_idMenuView_FormattingChars,true);
   m_vMenuView->setItemChecked(m_idMenuView_FrameBorders,true);
+  m_vMenuView->setItemChecked(m_idMenuView_Header,m_pKWordDoc->hasHeader());
+  m_vMenuView->setItemChecked(m_idMenuView_Footer,m_pKWordDoc->hasFooter());
 
   // insert menu
   _menubar->insertMenu( i18n( "&Insert" ), m_vMenuInsert, -1, -1 );

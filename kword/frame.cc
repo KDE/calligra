@@ -28,6 +28,27 @@
 #endif
 
 /******************************************************************/
+/* Class: KWFrameGroup                                            */
+/******************************************************************/
+
+/*================================================================*/
+void KWFrameGroup::addFrame(KWFrame *_frame)
+{
+  frames.append(_frame);
+  _frame->setFrameGroup(this);
+
+  rect = KRect(0,0,0,0);
+  KRect tmp;
+  KWFrame *frame;
+
+  for (unsigned int i = 0;i < frames.count();i++)
+    {
+      tmp = KRect(frame->x(),frame->y(),frame->width(),frame->height());
+      rect = rect.unite(tmp);
+    }
+}
+
+/******************************************************************/
 /* Class: KWFrame                                                 */
 /******************************************************************/
 
@@ -40,6 +61,7 @@ KWFrame::KWFrame()
   selected = false;
   runAroundGap = 1;
   mostRight = false;
+  group = 0L;
 }
 
 /*================================================================*/
@@ -51,6 +73,7 @@ KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright)
   selected = false;
   runAroundGap = 1;
   mostRight = false;
+  group = 0L;
 } 
 
 /*================================================================*/
@@ -62,6 +85,7 @@ KWFrame::KWFrame(const KPoint &topleft,const KSize &size)
   selected = false;
   runAroundGap = 1;
   mostRight = false;
+  group = 0L;
 }    
 
 /*================================================================*/
@@ -73,6 +97,7 @@ KWFrame::KWFrame(int left,int top,int width,int height)
   selected = false;
   runAroundGap = 1;
   mostRight = false;
+  group = 0L;
 }
 
 /*================================================================*/
@@ -84,6 +109,7 @@ KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap)
   selected = false;
   runAroundGap = _gap;
   mostRight = false;
+  group = 0L;
 }
 
 /*================================================================*/
@@ -95,6 +121,7 @@ KWFrame::KWFrame(const QRect &_rect)
   selected = false;
   runAroundGap = 1;
   mostRight = false;
+  group = 0L;
 }
 
 /*================================================================*/
@@ -183,6 +210,7 @@ KWFrameSet::KWFrameSet(KWordDocument *_doc)
 { 
   doc = _doc; 
   frames.setAutoDelete(true); 
+  groups.setAutoDelete(true); 
   frameInfo = FI_BODY;
   current = 0;
 }
@@ -287,7 +315,8 @@ void KWFrameSet::save(ostream &out)
       out << indent << "<FRAME left=\"" << frame->left() << "\" top=\"" << frame->top()
 	  << "\" right=\"" << frame->right() << "\" bottom=\"" << frame->bottom() 
 	  << "\" runaround=\"" << static_cast<int>(frame->getRunAround()) 
-	  << "\" runaroundGap=\"" << frame->getRunAroundGap() << "\"/>" << endl;
+	  << "\" runaroundGap=\"" << frame->getRunAroundGap() << "\" group=\""
+	  << (frame->getFrameGroup() ? frame->getFrameGroup()->getName() : QString("")) << "\"/>" << endl;
     }
 }
 
@@ -301,6 +330,69 @@ int KWFrameSet::getNext(KRect _rect)
     }
 
   return -1;
+}
+
+/*================================================================*/
+KWFrameGroup *KWFrameSet::getFrameGroup(QString _name)
+{
+  for (unsigned int i = 0;i < groups.count();i++)
+    {
+      if (groups.at(i)->getName() == _name) return groups.at(i);
+    }
+
+  return 0L;
+}
+
+/*================================================================*/
+KWFrameGroup *KWFrameSet::getFrameGroup(int _num)
+{
+  return groups.at(_num);
+}
+
+/*================================================================*/
+KWFrameGroup *KWFrameSet::getFrameGroup(KWFrame *_frame)
+{
+  if (_frame && _frame->getFrameGroup())
+    return _frame->getFrameGroup();
+
+  return 0L;
+}
+
+/*================================================================*/
+int KWFrameSet::getNumFrameGroups()
+{
+  return groups.count();
+}
+
+/*================================================================*/
+void KWFrameSet::addFrameGroup(QList<KWFrame> *_frames)
+{
+  int num = -1;
+  for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
+    {   
+      if (doc->getFrameSet(i) == this) num = i;
+    }
+
+  QString _name;
+  _name.sprintf("frameset%d_group%d",num,groups.count());
+
+  KWFrameGroup *grp = new KWFrameGroup(_name);
+  for (unsigned int j = 0;j < _frames->count();j++)
+    {
+      frames.append(_frames->at(j));
+      grp->addFrame(_frames->at(j));
+    }
+  update();
+}
+
+/*================================================================*/
+void KWFrameSet::resizeFrameGroupBy(KWFrameGroup *grp,int dx,int dy)
+{
+}
+
+/*================================================================*/
+void KWFrameSet::moveFrameGroupBy(KWFrameGroup *grp,int dx,int dy)
+{
 }
 
 /******************************************************************/
@@ -512,7 +604,7 @@ void KWTextFrameSet::insertParag(KWParag *_parag,InsertPos _pos)
       {
 	_new = new KWParag(this,doc,_prev,_parag,_parag->getParagLayout());
 	if (_parag) _parag->setPrev(_new);
-	else setFirstParag(_new);
+	if (!_prev) setFirstParag(_new);
       } break;
     }
 

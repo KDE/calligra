@@ -304,7 +304,7 @@ void KWordDocument::recalcFrames()
   if (processingType == WP)
     {
       int headOffset = 0,footOffset = 0;
-      
+           
       for (unsigned int j = 0;j < static_cast<unsigned int>(ceil(static_cast<double>(frms) / static_cast<double>(pageColumns.columns)));j++)
 	{
 	  if (j == 0)
@@ -322,13 +322,14 @@ void KWordDocument::recalcFrames()
 	      headOffset = oddHeadOffset;
 	      footOffset = oddFootOffset;
 	    }
-	  
+	
 	  for (int i = 0;i < pageColumns.columns;i++)
 	    {
 	      if (j * pageColumns.columns + i < frameset->getNumFrames())
 		{
 		  frameset->getFrame(j * pageColumns.columns + i)->setRect(getPTLeftBorder() + i * (ptColumnWidth + getPTColumnSpacing()),
-									   j * getPTPaperHeight() + getPTTopBorder() + headOffset,ptColumnWidth,
+									   j * getPTPaperHeight() + getPTTopBorder() + headOffset,
+									   ptColumnWidth,
 									   getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder() -
 									   headOffset - footOffset);
 		}
@@ -373,6 +374,64 @@ void KWordDocument::recalcFrames()
 	  } break;
 	case HF_EO_DIFF:
 	  {
+	    int h1 = evenHeader->getFrame(0)->height();
+	    int h2 = oddHeader->getFrame(0)->height();
+	    evenHeader->setCurrent(0);
+	    oddHeader->setCurrent(0);
+	    int even = 0,odd = 0;
+	    for (int l = 0;l < pages;l++)
+	      {
+		if (((l + 1) / 2) * 2 != l + 1)
+		  {
+		    odd++;
+		    if (static_cast<int>(oddHeader->getCurrent()) < static_cast<int>(oddHeader->getNumFrames()))
+		      {
+			oddHeader->getFrame(oddHeader->getCurrent())->setRect(getPTLeftBorder(),l * getPTPaperHeight() + getPTTopBorder(),
+									      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h2);
+			oddHeader->setCurrent(oddHeader->getCurrent() + 1);
+		      }
+		    else
+		      {
+			KWFrame *frame = new KWFrame(getPTLeftBorder(),l * getPTPaperHeight() + getPTTopBorder(),
+						     getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h2);
+			oddHeader->addFrame(frame);
+		      }
+		  }
+		else
+		  {
+		    even++;
+		    if (static_cast<int>(evenHeader->getCurrent()) < static_cast<int>(evenHeader->getNumFrames()))
+		      {
+			evenHeader->getFrame(evenHeader->getCurrent())->setRect(getPTLeftBorder(),l * getPTPaperHeight() + getPTTopBorder(),
+										getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h1);
+			evenHeader->setCurrent(evenHeader->getCurrent() + 1);
+		      }
+		    else
+		      {
+			KWFrame *frame = new KWFrame(getPTLeftBorder(),l * getPTPaperHeight() + getPTTopBorder(),
+						     getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h1);
+			evenHeader->addFrame(frame);
+		      }
+		  }
+	      }
+	    if (even + 1 < static_cast<int>(evenHeader->getNumFrames()))
+	      {	
+		int diff = evenHeader->getNumFrames() - even;
+		for (;diff > 0;diff--)
+		  evenHeader->delFrame(evenHeader->getNumFrames() - 1);
+	      }
+	    if (odd + 1 < static_cast<int>(oddHeader->getNumFrames()))
+	      {	
+		int diff = oddHeader->getNumFrames() - odd;
+		for (;diff > 0;diff--)
+		  oddHeader->delFrame(oddHeader->getNumFrames() - 1);
+	      }
+	    if (pages == 1 && evenHeader->getNumFrames() > 0)
+	      {
+		for (unsigned int m = 0;m < evenHeader->getNumFrames();m++)
+		  evenHeader->getFrame(m)->setRect(0,pages * getPTPaperHeight() + h1,
+						   getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h1);
+	      }
 	  } break;
 	case HF_FIRST_DIFF:
 	  {
@@ -403,6 +462,12 @@ void KWordDocument::recalcFrames()
 		int diff = evenHeader->getNumFrames() - pages;
 		for (;diff > 0;diff--)
 		  evenHeader->delFrame(evenHeader->getNumFrames() - 1);
+	      }
+	    if (pages == 1 && evenHeader->getNumFrames() > 0)
+	      {
+		for (unsigned int m = 0;m < evenHeader->getNumFrames();m++)
+		  evenHeader->getFrame(m)->setRect(0,pages * getPTPaperHeight() + h,
+						   getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h);
 	      }
 	  } break;
 	}
@@ -436,6 +501,68 @@ void KWordDocument::recalcFrames()
 	  } break;
 	case HF_EO_DIFF:
 	  {
+	    int h1 = evenFooter->getFrame(0)->height();
+	    int h2 = oddFooter->getFrame(0)->height();
+	    evenFooter->setCurrent(0);
+	    oddFooter->setCurrent(0);
+	    int even = 0,odd = 0;
+	    for (int l = 0;l < pages;l++)
+	      {
+		if (((l + 1) / 2) * 2 != l + 1)
+		  {
+		    odd++;
+		    if (static_cast<int>(oddFooter->getCurrent()) < static_cast<int>(oddFooter->getNumFrames()))
+		      {
+			oddFooter->getFrame(oddFooter->getCurrent())->setRect(getPTLeftBorder(),
+									      (l + 1)  * getPTPaperHeight() - getPTBottomBorder() - h2,
+									      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h2);
+			oddFooter->setCurrent(oddFooter->getCurrent() + 1);
+		      }
+		    else
+		      {
+			KWFrame *frame = new KWFrame(getPTLeftBorder(),
+						     (l + 1)  * getPTPaperHeight() - getPTBottomBorder() - h2,
+						     getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h2);
+			oddFooter->addFrame(frame);
+		      }
+		  }
+		else
+		  {
+		    even++;
+		    if (static_cast<int>(evenFooter->getCurrent()) < static_cast<int>(evenFooter->getNumFrames()))
+		      {
+			evenFooter->getFrame(evenFooter->getCurrent())->setRect(getPTLeftBorder(),
+										(l + 1)  * getPTPaperHeight() - getPTBottomBorder() - h1,
+										getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h1);
+			evenFooter->setCurrent(evenFooter->getCurrent() + 1);
+		      }
+		    else
+		      {
+			KWFrame *frame = new KWFrame(getPTLeftBorder(),
+						     (l + 1)  * getPTPaperHeight() - getPTBottomBorder() - h1,
+						     getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h1);
+			evenFooter->addFrame(frame);
+		      }
+		  }
+	      }
+	    if (even + 1 < static_cast<int>(evenFooter->getNumFrames()))
+	      {	
+		int diff = evenFooter->getNumFrames() - even;
+		for (;diff > 0;diff--)
+		  evenFooter->delFrame(evenFooter->getNumFrames() - 1);
+	      }
+	    if (odd + 1 < static_cast<int>(oddFooter->getNumFrames()))
+	      {	
+		int diff = oddFooter->getNumFrames() - odd;
+		for (;diff > 0;diff--)
+		  oddFooter->delFrame(oddFooter->getNumFrames() - 1);
+	      }
+	    if (pages == 1 && evenFooter->getNumFrames() > 0)
+	      {
+		for (unsigned int m = 0;m < evenFooter->getNumFrames();m++)
+		  evenFooter->getFrame(m)->setRect(0,pages * getPTPaperHeight() + h1,
+						   getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h1);
+	      }
 	  } break;
 	case HF_FIRST_DIFF:
 	  {
@@ -466,6 +593,12 @@ void KWordDocument::recalcFrames()
 		int diff = evenFooter->getNumFrames() - pages;
 		for (;diff > 0;diff--)
 		  evenFooter->delFrame(evenFooter->getNumFrames() - 1);
+	      }
+	    if (pages == 1 && evenFooter->getNumFrames() > 0)
+	      {
+		for (unsigned int m = 0;m < evenFooter->getNumFrames();m++)
+		  evenFooter->getFrame(m)->setRect(0,pages * getPTPaperHeight() + h,
+						   getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h);
 	      }
 	  } break;
 	}
@@ -2311,6 +2444,54 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
 		fc = fcList.at(j - minus);
 		if (frames.at(j)->getFrameInfo() != FI_BODY)
 		  {
+		    if (frames.at(j)->getFrameInfo() == FI_EVEN_HEADER || frames.at(j)->getFrameInfo() == FI_FIRST_HEADER ||
+			frames.at(j)->getFrameInfo() == FI_ODD_HEADER)
+		      {
+			if (!hasHeader()) continue;
+			switch (getHeaderType())
+			  {
+			  case HF_SAME:
+			    {
+			      if (frames.at(j)->getFrameInfo() != FI_EVEN_HEADER) continue;
+			    } break;
+			  case HF_EO_DIFF:
+			    {
+			      if (frames.at(j)->getFrameInfo() == FI_FIRST_HEADER) continue;
+			      if (((i + 1) / 2) * 2 == i + 1 && frames.at(j)->getFrameInfo() == FI_ODD_HEADER) continue;
+			      if (((i + 1) / 2) * 2 != i + 1 && frames.at(j)->getFrameInfo() == FI_EVEN_HEADER) continue;
+			    } break;
+			  case HF_FIRST_DIFF:
+			    {
+			      if (i == 0 && frames.at(j)->getFrameInfo() != FI_FIRST_HEADER) continue;
+			      if (i > 0 && frames.at(j)->getFrameInfo() != FI_EVEN_HEADER) continue;
+			    } break;
+			  default: break;
+			  }
+		      }
+		    if (frames.at(j)->getFrameInfo() == FI_EVEN_FOOTER || frames.at(j)->getFrameInfo() == FI_FIRST_FOOTER ||
+			frames.at(j)->getFrameInfo() == FI_ODD_FOOTER)
+		      {
+			if (!hasFooter()) continue;
+			switch (getFooterType())
+			  {
+			  case HF_SAME:
+			    {
+			      if (frames.at(j)->getFrameInfo() != FI_EVEN_FOOTER) continue;
+			    } break;
+			  case HF_EO_DIFF:
+			    {
+			      if (frames.at(j)->getFrameInfo() == FI_FIRST_FOOTER) continue;
+			      if (((i + 1) / 2) * 2 == i + 1 && frames.at(j)->getFrameInfo() == FI_ODD_FOOTER) continue;
+			      if (((i + 1) / 2) * 2 != i + 1 && frames.at(j)->getFrameInfo() == FI_EVEN_FOOTER) continue;
+			    } break;
+			  case HF_FIRST_DIFF:
+			    {
+			      if (i == 0 && frames.at(j)->getFrameInfo() != FI_FIRST_FOOTER) continue;
+			      if (i > 0 && frames.at(j)->getFrameInfo() != FI_EVEN_FOOTER) continue;
+			    } break;
+			  default: break;
+			  }
+		      }
 		    fc->init(dynamic_cast<KWTextFrameSet*>(frames.at(j))->getFirstParag(),*painter,true,true,
 			     frames.at(j)->getCurrent() + 1,i + 1);
 		    if (static_cast<int>(frames.at(j)->getNumFrames() - 1) > static_cast<int>(frames.at(j)->getCurrent()))
