@@ -199,6 +199,8 @@ QString KWMailMergeVariable::value() const
 
 QString KWMailMergeVariable::text()
 {
+    if (m_varColl->variableSetting()->displayFiedCode())
+        return fieldCode();
     // ## should use a format maybe
     QString v = value();
     if ( v == name() )
