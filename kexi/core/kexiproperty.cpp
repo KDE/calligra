@@ -26,8 +26,11 @@
 #include <qsizepolicy.h>
 #include <qsize.h>
 #include <qrect.h>
+#include <qfont.h>
+#include <qcursor.h>
 
 #include <klocale.h>
+#include <kglobal.h>
 
 
 class spHelper
@@ -64,6 +67,34 @@ spHelper::list()
 	list << "Fixed" << "Maximum" << "Minimum" << "Preferred" << "Expanding" 
 		<< "MinimumExpanding" << "Ignored";
 	return list;
+}
+
+//===================================================
+
+// Helper method for cursor
+QString
+valueToCursorName(int shape)
+{
+	switch(shape)
+	{
+		case Qt::ArrowCursor: return i18n("Arrow");
+		case Qt::UpArrowCursor: return i18n("Up Arrow");
+		case Qt::CrossCursor: return i18n("Cross");
+		case Qt::WaitCursor: return i18n("Waiting");
+		case Qt::IbeamCursor: return i18n("iBeam");
+		case Qt::SizeVerCursor: return i18n("Size Vertical");
+		case Qt::SizeHorCursor: return i18n("Size Horizontal");
+		case Qt::SizeFDiagCursor: return i18n("Size Slash");
+		case Qt::SizeBDiagCursor: return i18n("Size Backslash");
+		case Qt::SizeAllCursor: return i18n("Size All");
+		case Qt::BlankCursor: return i18n("Blank");
+		case Qt::SplitVCursor: return i18n("Split Vertical");
+		case Qt::SplitHCursor: return i18n("Split Horizontal");
+		case Qt::PointingHandCursor: return i18n("Pointing Hand");
+		case Qt::ForbiddenCursor: return i18n("Forbidden");
+		case Qt::WhatsThisCursor: return i18n("Whats This");
+		default: return QString();
+	}
 }
 
 //===================================================
@@ -322,7 +353,7 @@ QVariant KexiProperty::value() const
 QString KexiProperty::valueText() const
 {
 	if (!m_list)
-		return m_value.toString();
+		return KexiProperty::format( m_value );
 	//special case: return text
 	int idx = m_list->keys.findIndex( m_value.toString() );
 	if (idx<0) {
@@ -409,3 +440,63 @@ QStringList* KexiProperty::names() const
 {
 	return m_list ? &m_list->names : 0;
 }
+
+QString
+KexiProperty::format(const QVariant &v)
+{
+	switch(v.type())
+	{
+		case QVariant::Size:
+		{
+			QSize s = v.toSize();
+			return QString("[" + QString::number(s.width()) + "," + QString::number(s.height()) + "]");
+		}
+		case QVariant::Rect:
+		{
+			QRect r = v.toRect();
+			QString x = QString::number(r.x());
+			QString y = QString::number(r.y());
+			QString w = QString::number(r.width());
+			QString h = QString::number(r.height());
+
+			return QString("[" + x + "," + y + "," + w + "," + h + "]");
+		}
+		case QVariant::Bool:
+		{
+			if(v.toBool())
+			{
+				return i18n("True");
+			}
+			
+			return i18n("False");
+		}
+		case QVariant::Font:
+		{
+			QFont f = v.toFont();
+			return QString(f.family() + " " + QString::number(f.pointSize()));
+		}
+		case QVariant::Double:
+		{
+			return QString(KGlobal::locale()->formatNumber(v.toDouble()));
+		}
+		case QVariant::StringList:
+		{
+			return v.toStringList().join("|");
+		}
+		case QVariant::SizePolicy:
+		{
+			QSizePolicy p = v.toSizePolicy(); 
+			return QString(spHelper::valueToKey(p.horData()) + "/" + spHelper::valueToKey(p.verData()));
+		}
+		case QVariant::Cursor:
+		{
+			QCursor c = v.toCursor();
+			return valueToCursorName(c.shape());
+		}
+		default:
+		{
+			return v.toString();
+		}
+	}
+}
+

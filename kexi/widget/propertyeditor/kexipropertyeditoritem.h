@@ -73,11 +73,6 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 		*/
 		void		updateChildValue();
 
-		/*! \return the QString to be shown in the 2nd column of the list. The value is formatted depending on its 
-		    QVariant::Type.
-		*/
-		static QString	format(const QVariant &s);
-
 		//! \return true if the item has been modified.
 //		bool		modified() { return !(m_value==m_oldvalue);}
 

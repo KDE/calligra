@@ -168,6 +168,11 @@ class KEXICORE_EXPORT KexiProperty
 		/*! Sets visiblility of this property to \a v. \sa isVisible() */
 		void setVisible( bool v ) { m_visible=v; }
 
+		/*! \return the value text useful for displaying.
+		 The value is formatted depending on its QVariant::Type.
+		*/
+		static QString format(const QVariant &v);
+
 		void debug();
 	protected:
 		/*! Internal: Works like setValue(const QVariant &v, bool saveOldValue), 
