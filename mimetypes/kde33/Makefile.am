@@ -12,7 +12,9 @@ application_DATA = \
  vnd.oasis.opendocument.spreadsheet-template.desktop \
  vnd.oasis.opendocument.spreadsheet.desktop \
  vnd.oasis.opendocument.text-template.desktop \
- vnd.oasis.opendocument.text.desktop
+ vnd.oasis.opendocument.text.desktop \
+ vnd.oasis.opendocument.image.desktop \
+ vnd.oasis.opendocument.chart.desktop
 
 applicationdir = $(kde_mimedir)/application
 

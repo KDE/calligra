@@ -6,6 +6,6 @@ DONE: application/vnd.oasis.opendocument.drawing / odg
 DONE: application/vnd.oasis.opendocument.drawing-template / otg
 DONE: application/vnd.oasis.opendocument.presentation / odp
 DONE: application/vnd.oasis.opendocument.presentation-template / otp
-TOADD: application/vnd.oasis.opendocument.image / odi
+Verify icon: application/vnd.oasis.opendocument.image / odi
 DONE: application/vnd.oasis.opendocument.formula / odf
-TOADD: application/vnd.oasis.opendocument.chart / odc
+Verify icon: application/vnd.oasis.opendocument.chart / odc
