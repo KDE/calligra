@@ -127,11 +127,13 @@ bool KexiProject::initDoc()
 
 		QObject *newDlg = KParts::ComponentFactory::
 			createInstanceFromLibrary<QObject>( "kexiprojectwizard", this );
+		if (newDlg) {
 		ok=(static_cast<KexiCreateProjectIface*>(newDlg->
 			qt_cast("KexiCreateProjectIface"))->execute())==QDialog::Accepted;
 		QString newProjectFileName=(static_cast<KexiCreateProjectIface*>(newDlg->
 			qt_cast("KexiCreateProjectIface")))->projectFileName();
 		delete newDlg;
+		}
 
 		/*create the initial project, which will than be reopened for work*/
 		if (ok) {

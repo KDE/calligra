@@ -27,7 +27,7 @@
 #include <qstringlist.h>
 class KexiProject;
 
-class KexiProjectIface : public KoDocumentIface
+class KEXICORE_EXPORT KexiProjectIface : public KoDocumentIface
 {
     K_DCOP
 public:

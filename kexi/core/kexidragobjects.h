@@ -25,7 +25,7 @@
 class QString;
 class QWidget;
 
-class KexiFieldDrag : public QStoredDrag
+class KEXICORE_EXPORT KexiFieldDrag : public QStoredDrag
 {
         public:
                 KexiFieldDrag(const QString& sourceType, const QString& source,const QString& field, 
@@ -37,7 +37,7 @@ class KexiFieldDrag : public QStoredDrag
 
 };
 
-class KexiDataProviderDrag : public QStoredDrag
+class KEXICORE_EXPORT KexiDataProviderDrag : public QStoredDrag
 {
         public:
                 KexiDataProviderDrag(const QString& sourceType, const QString& source, 

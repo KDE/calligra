@@ -24,7 +24,7 @@
 
 #include <qwidget.h>
 
-class KexiProjectPropertiesDB : public QWidget
+class KEXICORE_EXPORT KexiProjectPropertiesDB : public QWidget
 {
 	Q_OBJECT
 	

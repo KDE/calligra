@@ -39,7 +39,7 @@ class QPainter;
 class QFrame;
 
 
-class KMultiTabBar: public QWidget
+class KEXICORE_EXPORT KMultiTabBar: public QWidget
 {
 	Q_OBJECT
 public:
@@ -71,7 +71,7 @@ private:
 	KMultiTabBarPosition position;
 };
 
-class KMultiTabBarButton: public QPushButton
+class KEXICORE_EXPORT KMultiTabBarButton: public QPushButton
 {
 	Q_OBJECT
 public:
@@ -99,7 +99,7 @@ protected slots:
 };
 
 
-class KMultiTabBarTab: public KMultiTabBarButton
+class KEXICORE_EXPORT KMultiTabBarTab: public KMultiTabBarButton
 {
 	Q_OBJECT
 public:
@@ -124,7 +124,7 @@ public slots:
 	virtual void setIcon(const QString&);
 };
 
-class KMultiTabBarInternal: public QScrollView
+class KEXICORE_EXPORT KMultiTabBarInternal: public QScrollView
 {
 	Q_OBJECT
 public:

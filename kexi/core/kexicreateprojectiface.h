@@ -19,7 +19,7 @@
 
 #ifndef _KEXI_CREATE_PROJECT_IFACE_H_
 #define _KEXI_CREATE_PROJECT_IFACE_H_
-class KexiCreateProjectIface {
+class KEXICORE_EXPORT KexiCreateProjectIface {
 	public:
 	KexiCreateProjectIface(){;}
 	virtual ~KexiCreateProjectIface(){;}

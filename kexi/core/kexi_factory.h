@@ -25,7 +25,7 @@
 class KInstance;
 class KAboutData;
 
-class KexiFactory : public KoFactory
+class KEXICORE_EXPORT KexiFactory : public KoFactory
 {
     Q_OBJECT
 public:

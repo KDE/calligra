@@ -33,7 +33,7 @@ class KPrinter;
 
 typedef QPtrList<QWidget> Widgets;
 
-class KexiDialogBase : public QWidget
+class KEXICORE_EXPORT KexiDialogBase : public QWidget
 {
 	Q_OBJECT
 
@@ -54,9 +54,10 @@ class KexiDialogBase : public QWidget
 
 		void	setContextHelp(const QString &title, const QString &message);
 
+#ifndef KEXI_NO_PRINT
 		virtual void setupPrinter(KPrinter &printer){;}
 		virtual void print(KPrinter &printer) {; }
-
+#endif
 		void aboutToShow();
 		void aboutToHide();
 

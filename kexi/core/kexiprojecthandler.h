@@ -39,12 +39,13 @@ class KexiProjectHandlerItem;
 class KexiProjectHandlerProxy;
 class KexiEventHandler;
 
+
 /*!
  *  this is a baseclass for project parts like:
  *  queries, tables, forms, reports
  */
 
-class KexiProjectHandler : public QObject
+class KEXICORE_EXPORT KexiProjectHandler : public QObject
 {
 	Q_OBJECT
 

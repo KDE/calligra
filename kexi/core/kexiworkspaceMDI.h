@@ -29,7 +29,7 @@
 class KexiDialogBase;
 class KexiView;
 
-class KexiWorkspaceMDI : public QWorkspace, public KexiWorkspace
+class KEXICORE_EXPORT KexiWorkspaceMDI : public QWorkspace, public KexiWorkspace
 {
 	Q_OBJECT
 	

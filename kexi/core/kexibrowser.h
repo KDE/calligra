@@ -38,7 +38,7 @@ class KexiProjectHandlerItem;
 
 typedef QDict<KexiBrowserItem> BaseItemList;
 
-class KexiBrowser : public KListView
+class KEXICORE_EXPORT KexiBrowser : public KListView
 {
 	Q_OBJECT
 

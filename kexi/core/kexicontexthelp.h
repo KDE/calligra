@@ -26,7 +26,7 @@ class KoContextHelpWidget;
 class KXMLGUIClient;
 class KToggleAction;
 
-class KexiContextHelp : public KexiDialogBase
+class KEXICORE_EXPORT KexiContextHelp : public KexiDialogBase
 {
 	Q_OBJECT
 

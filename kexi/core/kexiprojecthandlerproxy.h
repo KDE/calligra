@@ -28,7 +28,7 @@
 #include "kexihandlerpopupmenu.h"
 #include "kexiview.h"
 
-class KexiProjectHandlerProxy : public QObject
+class KEXICORE_EXPORT KexiProjectHandlerProxy : public QObject
 {
 	Q_OBJECT
 

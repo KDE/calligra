@@ -27,7 +27,7 @@ class KexiProject;
 class KexiDataSourceComboBox;
 class QLineEdit;
 
-class KexiDataSourceDlg : public QDialog
+class KEXICORE_EXPORT KexiDataSourceDlg : public QDialog
 {
 	Q_OBJECT
 

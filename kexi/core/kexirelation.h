@@ -29,7 +29,7 @@
 class KexiProject;
 class KoStore;
 
-class KexiRelation : public QObject
+class KEXICORE_EXPORT KexiRelation : public QObject
 {
 	Q_OBJECT
 

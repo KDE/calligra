@@ -39,7 +39,7 @@ class KexiFilterManager;
 
 typedef QPtrList<KexiProjectHandler> ProviderList;
 
-class FileReference
+class KEXICORE_EXPORT FileReference
 {
 public:
 	FileReference():group(),name(),location(){;}
@@ -72,7 +72,7 @@ typedef QValueList<FileReference> References;
 typedef QMap<QString, FileReference> ReferencesM;
 typedef QPtrList<KexiProjectHandler> PartList;
 
-class KexiProject : public KoDocument
+class KEXICORE_EXPORT KexiProject : public KoDocument
 {
 	Q_OBJECT
 public:

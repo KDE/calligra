@@ -84,7 +84,11 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt, const QString &id
 	m_registered=true;
 	if (wt==ToolWindow)
 	{
+#if QT_VERSION >= 0x030100 //(js)
 		w=new QDockWindow(m_view->mainWindow());
+#else //QT 3.0.x
+		w=new QDockWindow(QDockWindow::InDock, m_view->mainWindow());
+#endif
 		w->setResizeEnabled(true);
 		w->setCloseMode(QDockWindow::Always);
 		 reparent(w,QPoint(0,0),true);

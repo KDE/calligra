@@ -23,6 +23,7 @@
 #include <qdom.h>
 #include <qdir.h>
 #include <qfile.h>
+#include <qregexp.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -33,6 +34,7 @@
 #include <kmessagebox.h>
 #include <koStore.h>
 
+#include<kexiDB/kexidb.h>
 #include <kexiDB/kexidbinterfacemanager.h>
 #include <kexiDB/kexidberror.h>
 #include "kexidbconnection.h"
@@ -433,7 +435,8 @@ KexiDBConnection::provide(KoStore *store)
 		for(QStringList::Iterator it = index.begin(); it != index.end(); ++it)
 		{
 			QString currentDest = *it;
-			currentDest = currentDest.replace("/db", "");
+//js:	QT3.0 compat:		currentDest = currentDest.replace("/db", "");
+			currentDest = currentDest.replace(QRegExp("/db"), "");
 			currentDest = m_tmpname + currentDest;
 //
 			kdDebug() << "KexiDBConnection::provide(): extracting " << *it << ":" << currentDest << endl;

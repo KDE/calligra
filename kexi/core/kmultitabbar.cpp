@@ -28,6 +28,7 @@
 #include <qpopupmenu.h>
 #include <qlayout.h>
 #include <qpainter.h>
+#include <kdebug.h>
 #include <qtooltip.h>
 #include <qfontmetrics.h>
 #include <qstyle.h>
@@ -148,7 +149,7 @@ int KMultiTabBarInternal::appendTab(const QPixmap &pic ,int id,const QString& te
 	if (m_showActiveTabTexts)
 	{
 		int size=0;
-		for (uint i=0;i<m_tabs.count();i++)
+		for (int i=0;i<m_tabs.count();i++)
 		{
 			int tmp=m_tabs.at(i)->neededSize();
 			size=(size<tmp)?tmp:size;
@@ -175,7 +176,7 @@ void KMultiTabBarInternal::removeTab(int id)
 void KMultiTabBarInternal::setPosition(enum KMultiTabBar::KMultiTabBarPosition pos)
 {
 	position=pos;
-	for (uint i=0;i<m_tabs.count();i++)
+	for (int i=0;i<m_tabs.count();i++)
 		m_tabs.at(i)->setPosition(position);
 	viewport()->repaint();
 }

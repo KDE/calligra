@@ -24,7 +24,7 @@
 
 class FakeHandler;
 
-class KexiEventHandler : public QObject
+class KEXICORE_EXPORT KexiEventHandler : public QObject
 {
 	Q_OBJECT
 

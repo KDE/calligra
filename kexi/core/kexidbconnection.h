@@ -26,6 +26,7 @@
 class QDomElement;
 class QDomDocument;
 class KoStore;
+class KexiDB;
 class KexiDBInterfaceManager;
 /**
  * this class aims to provide
@@ -33,7 +34,7 @@ class KexiDBInterfaceManager;
  * especially for file based engines
  */
 
-class KexiDBConnection
+class KEXICORE_EXPORT KexiDBConnection
 {
 	public:
 		/**

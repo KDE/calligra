@@ -25,7 +25,7 @@
 
 typedef QMemArray<const char*> Slots;
 
-class KexiPartPopupMenu : public QPopupMenu
+class KEXICORE_EXPORT KexiPartPopupMenu : public QPopupMenu
 {
 	Q_OBJECT
 

@@ -35,6 +35,10 @@
 #include <kparts/event.h>
 #include <kprinter.h>
 
+#ifndef KEXI_NO_PRINT
+#include <kprinter.h>
+#endif
+
 #include "kexiview.h"
 #include "kexisettings.h"
 #include "kexiproject.h"
@@ -310,6 +314,7 @@ void KexiView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     KoView::guiActivateEvent( ev );
 }
 
+#ifndef KEXI_NO_PRINT
 void
 KexiView::setupPrinter(KPrinter &printer)
 {
@@ -341,6 +346,7 @@ KexiView::print(KPrinter &printer)
 	p.end();
 */
 }
+#endif //!KEXI_NO_PRINT
 
 bool
 KexiView::activateWindow(const QString &id)

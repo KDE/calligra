@@ -26,7 +26,7 @@
 class KexiProjectHandlerProxy;
 class KexiProjectHandlerItem;
 
-class KexiBrowserItem : public KListViewItem
+class KEXICORE_EXPORT KexiBrowserItem : public KListViewItem
 {
 	public:
 		/*constructor for listviews in seperated lists */

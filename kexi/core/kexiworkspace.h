@@ -26,7 +26,7 @@
 class KexiDialogBase;
 class KexiView;
 
-class KexiWorkspace
+class KEXICORE_EXPORT KexiWorkspace
 {
 	
 	public:

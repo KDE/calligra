@@ -25,7 +25,7 @@
 
 #include "kexiprojecthandler.h"
 
-class KexiProjectHandlerItem : public QObject
+class KEXICORE_EXPORT KexiProjectHandlerItem : public QObject
 {
 	Q_OBJECT
 

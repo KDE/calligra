@@ -119,7 +119,7 @@ void KexiRelation::storeRelations(KoStore *store)
 
 	m_undoStack.clear();
 	m_usageCount=0;
-    return false;
+    return;
 
 }
 

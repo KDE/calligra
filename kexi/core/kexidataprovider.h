@@ -31,10 +31,10 @@ class QWidget;
 #define KEXIDATAPROVIDER(obj) ((obj)?static_cast<KexiDataProvider*>((obj)->qt_cast("KexiDataProvider")):0)
 
 //Interface KexiDataProvider
-class KexiDataProvider
+class KEXICORE_EXPORT KexiDataProvider
 {
 public:
-	class Parameter{
+	class KEXICORE_EXPORT Parameter{
 	public:
 		Parameter(const QString& name_, const int type_){name=name_;type=type_;}
 		Parameter(){}
@@ -57,5 +57,9 @@ public:
 	virtual KexiDBRecordSet *records(QWidget*,const QString& identifier,Parameters params) {return 0;}
 	virtual ParameterList parameters(QWidget*,const QString &identifier) { return ParameterList();}
 };
+
+#ifdef Q_WS_WIN
+class KEXICORE_EXPORT KexiDataProvider::Parameter;
+#endif
 
 #endif

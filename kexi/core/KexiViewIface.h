@@ -26,7 +26,7 @@
 
 class KexiView;
 
-class KexiViewIface : public KoViewIface
+class KEXICORE_EXPORT KexiViewIface : public KoViewIface
 {
     K_DCOP
 public:

@@ -29,7 +29,7 @@
 class QComboBox;
 class KexiDBConnection;
 
-class KexiProjectProperties : public KDialogBase
+class KEXICORE_EXPORT KexiProjectProperties : public KDialogBase
 {
 	Q_OBJECT
 

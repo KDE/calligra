@@ -28,7 +28,7 @@
 class KexiProject;
 
 
-class KexiDataSourceComboBox: public KComboBox {
+class KEXICORE_EXPORT KexiDataSourceComboBox: public KComboBox {
 	Q_OBJECT
 public:
 	class Item {
