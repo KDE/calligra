@@ -297,3 +297,11 @@ bool KWordDocIface::setCustomVariableValue(const QString & varname, const QStrin
         return false;
     return true;
 }
+
+
+QString KWordDocIface::customVariableValue(const QString & varname)const
+{
+    if(doc->getVariableCollection()->customVariableExist(varname))
+        return doc->getVariableCollection()->getVariableValue( varname );
+    return QString::null;
+}
