@@ -3,9 +3,9 @@ Food for thought:
 General info:
 - FAQ for comp.graphics.algorithms:
   http://www.landfield.com/faqs/graphics/algorithms-faq/
-
-(I'm still looking for some algorithms which do boolean operations on
-polygons/curves)
+- Graphics Gems Repository
+  http://www.acm.org/tog/GraphicsGems/
+  (especially http://www.acm.org/tog/GraphicsGems/gemsiv/curve_isect/)
 
 Similar projects:
 - Autotrace
