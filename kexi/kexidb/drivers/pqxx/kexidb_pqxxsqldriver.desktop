@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=PostgreSQL
-Comment=PostgreSQL is better then mySQL :)
+Comment=With a 16 year development history, one of the strongest development communities in the world, and a global reputation for high quality software engineering, PostgreSQL is the world's most advanced Open Source Database for large corporations and individual users.
 X-KDE-Library=kexidb_pqxxsqldriver
 ServiceTypes=Kexi/DBDriver
 Type=Service
