@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="111">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="112">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -156,8 +156,10 @@
 	  <Action name="extra_spellcheck"/>
   </Menu>  
   <Separator/>
-  <Action name="enable_autocorrection"/>
-  <Action name="apply_autoformat"/>
+  <Menu name="AutoFormat"><text>Autocorrection</text>
+  	<Action name="enable_autocorrection"/>
+  	<Action name="apply_autoformat"/>
+  </Menu>
  </Menu>
  <Menu name="Slide Show"><text>Sli&amp;de Show</text>
   <Action name="screen_configpages"/>
