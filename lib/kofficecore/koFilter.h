@@ -49,6 +49,7 @@ class KoFilter : public QObject
     Q_OBJECT
 
     friend class KoFilterEntry;  // needed for the filter chain pointer :(
+    friend class KoFilterChain;
 
 public:
     /**
@@ -141,6 +142,8 @@ private:
 class KoEmbeddingFilter : public KoFilter
 {
     Q_OBJECT
+
+    friend class KoFilterChain;
 
 public:
     virtual ~KoEmbeddingFilter();

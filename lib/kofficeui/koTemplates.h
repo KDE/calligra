@@ -132,6 +132,6 @@ private:
 
 namespace KoTemplates {
 QString stripWhiteSpace(const QString &string);
-};
+}
 
 #endif

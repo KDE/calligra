@@ -46,7 +46,7 @@ namespace KParts
   class PartManager;
   class PartActivateEvent;
   class PartSelectEvent;
-};
+}
 
 /**
  * This class is used to display a @ref KoDocument.

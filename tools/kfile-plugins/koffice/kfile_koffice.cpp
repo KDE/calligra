@@ -31,7 +31,7 @@
 
 typedef KGenericFactory<KOfficePlugin> KOfficeFactory;
 
-K_EXPORT_COMPONENT_FACTORY(kfile_koffice, KOfficeFactory( "kfile_koffice" ));
+K_EXPORT_COMPONENT_FACTORY(kfile_koffice, KOfficeFactory( "kfile_koffice" ))
 
 KOfficePlugin::KOfficePlugin(QObject *parent, const char *name,
                        const QStringList &args)

@@ -201,7 +201,7 @@ void KoBrowserExtension::print()
     view->setupPrinter( printer );
     if ( printer.setup( view ) )
         view->print( printer );
-};
+}
 
 KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KParts::ReadWritePart( parent, name )

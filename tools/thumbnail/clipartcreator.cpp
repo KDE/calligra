@@ -32,7 +32,7 @@ extern "C"
     {
         return new ClipartCreator;
     }
-};
+}
 
 bool ClipartCreator::create(const QString &path, int width, int height, QImage &img)
 {

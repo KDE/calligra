@@ -24,7 +24,7 @@
 
 namespace TK {
   enum IconMode { IconOnly, IconAndText, TextOnly };
-};
+}
 
 class TKToolBarButton;
 class TKComboBox;

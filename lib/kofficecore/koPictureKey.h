@@ -40,7 +40,7 @@ namespace KoPictureType
         TypeClipart,        /// Clipart, QPicture-based
         TypeWmf             /// WMF (Windows Meta File)
     };
-};
+}
 
 // TODO: correct documentation
 

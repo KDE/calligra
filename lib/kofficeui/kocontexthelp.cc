@@ -37,10 +37,10 @@
 KoVerticalLabel::KoVerticalLabel( QWidget* parent, const char* name )
 		: QWidget( parent, name, Qt::WRepaintNoErase )
 {
-	QFont font( font() );
-	font.setPointSize( font.pointSize() + 2 );
-	font.setBold( true );
-	setFont( font );
+	QFont f( font() );
+	f.setPointSize( f.pointSize() + 2 );
+	f.setBold( true );
+	setFont( f );
 	setBackgroundMode( PaletteLight );
 } // KoVerticalLabel::KoVerticalLabel
 
@@ -134,7 +134,7 @@ KoTinyButton::KoTinyButton( Action a, QWidget* parent )
 	m_bitmap.setMask( m_bitmap );
 	setMinimumSize( 7, 7 );
 	setBackgroundMode( PaletteBackground );
-}; // KoTinyButton::KoTinyButton
+} // KoTinyButton::KoTinyButton
 
 void KoTinyButton::paintEvent( QPaintEvent* )
 {
@@ -147,7 +147,7 @@ void KoTinyButton::paintEvent( QPaintEvent* )
 			p.setPen( colorGroup().text() );
 		p.drawPixmap( width() / 2 - 2, 1, m_bitmap );
 	}
-}; // KoTinyButton::paintEvent
+} // KoTinyButton::paintEvent
 
 void KoTinyButton::mousePressEvent( QMouseEvent* )
 {
@@ -156,7 +156,7 @@ void KoTinyButton::mousePressEvent( QMouseEvent* )
 		m_pressed = true;
 		update();
 	}
-}; // KoTinyButton::mousePressEvent
+} // KoTinyButton::mousePressEvent
 
 void KoTinyButton::mouseReleaseEvent( QMouseEvent* )
 {
@@ -177,7 +177,7 @@ void KoTinyButton::mouseReleaseEvent( QMouseEvent* )
 		}
 		update();
 	}
-}; // KoTinyButton::mouseReleaseEvent
+} // KoTinyButton::mouseReleaseEvent
 
 KoHelpView::KoHelpView( QWidget* parent )
 		: QWidget( parent )
@@ -186,13 +186,13 @@ KoHelpView::KoHelpView( QWidget* parent )
 	setBackgroundMode( PaletteLight );
 	parent->installEventFilter( this );
 	setMouseTracking( true );
-}; // KoHelpView::KoHelpView
+} // KoHelpView::KoHelpView
 
 KoHelpView::~KoHelpView()
 {
 	if ( currentText )
 		delete currentText;
-}; // KoHelpView::~KoHelpView
+} // KoHelpView::~KoHelpView
 
 void KoHelpView::setText( const QString& text )
 {
@@ -201,7 +201,7 @@ void KoHelpView::setText( const QString& text )
 	currentText = new QSimpleRichText( text, font() );
 	currentText->setWidth( width() );
 	setFixedHeight( currentText->height() );
-}; // KoHelpView::setText
+} // KoHelpView::setText
 
 void KoHelpView::mousePressEvent( QMouseEvent* e )
 {
@@ -210,7 +210,7 @@ void KoHelpView::mousePressEvent( QMouseEvent* e )
 		e->accept();
 	else
 		e->ignore();
-}; // KoHelpView::mousePressEvent
+} // KoHelpView::mousePressEvent
 
 void KoHelpView::mouseReleaseEvent( QMouseEvent* e )
 {
@@ -239,7 +239,7 @@ void KoHelpView::mouseReleaseEvent( QMouseEvent* e )
 	}
 	else
 		e->ignore();
-}; // KoHelpView::mouseReleaseEvent
+} // KoHelpView::mouseReleaseEvent
 
 void KoHelpView::mouseMoveEvent( QMouseEvent* e )
 {
@@ -247,7 +247,7 @@ void KoHelpView::mouseMoveEvent( QMouseEvent* e )
 		setCursor( KCursor::handCursor() );
 	else
 		setCursor( KCursor::arrowCursor() );
-}; // KoHelpView::mouseMove
+} // KoHelpView::mouseMove
 
 bool KoHelpView::eventFilter( QObject*, QEvent* e )
 {
@@ -260,13 +260,13 @@ bool KoHelpView::eventFilter( QObject*, QEvent* e )
 		return true;
 	}
 	return false;
-}; // KoHelpView::resizeEvent
+} // KoHelpView::resizeEvent
 
 void KoHelpView::paintEvent( QPaintEvent* )
 {
 	QPainter p( this );
 	currentText->draw( &p, 0, 0, QRect(), colorGroup() );
-}; // KoHelpView::paintEvent
+} // KoHelpView::paintEvent
 
 KoHelpWidget::KoHelpWidget( QString help, QWidget* parent )
 		: QWidget( parent )

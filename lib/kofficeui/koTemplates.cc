@@ -327,4 +327,4 @@ QString stripWhiteSpace(const QString &string) {
     }
     return ret;
 }
-};
+}

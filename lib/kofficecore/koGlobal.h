@@ -140,7 +140,7 @@ namespace KoPageFormat
      * Useful to some import filters.
      */
     KoFormat guessFormat( double width, double height );
-};
+}
 
 
 /**

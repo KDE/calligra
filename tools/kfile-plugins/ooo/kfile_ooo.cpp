@@ -42,7 +42,7 @@
 
 typedef KGenericFactory<KOfficePlugin> KOfficeFactory;
 
-K_EXPORT_COMPONENT_FACTORY(kfile_ooo, KOfficeFactory( "kfile_ooo" ));
+K_EXPORT_COMPONENT_FACTORY(kfile_ooo, KOfficeFactory( "kfile_ooo" ))
 
 static const char * const mimetypes[] =
 { "application/vnd.sun.xml.calc",   "application/vnd.sun.xml.calc.template",

@@ -54,7 +54,7 @@ NOT TODO:
  ***************************************************/
 
 typedef KGenericFactory<Thesaurus, KDataTool> ThesaurusFactory;
-K_EXPORT_COMPONENT_FACTORY( libthesaurustool, ThesaurusFactory("thesaurus_tool") );
+K_EXPORT_COMPONENT_FACTORY( libthesaurustool, ThesaurusFactory("thesaurus_tool") )
 
 /***************************************************
  *

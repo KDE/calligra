@@ -42,7 +42,7 @@ extern "C"
     {
         return new KOfficeCreator;
     }
-};
+}
 
 KOfficeCreator::KOfficeCreator()
     : m_doc(0)

@@ -40,7 +40,7 @@
  *
  ***************************************************/
 
-K_EXPORT_COMPONENT_FACTORY( libkspelltool, KGenericFactory<SpellChecker> );
+K_EXPORT_COMPONENT_FACTORY( libkspelltool, KGenericFactory<SpellChecker> )
 
 /***************************************************
  *

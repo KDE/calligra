@@ -22,7 +22,7 @@
 #ifndef __ko_document_h__
 #define __ko_document_h__
 
-namespace std { };
+namespace std { }
 using namespace std;
 #include <qwmatrix.h>
 

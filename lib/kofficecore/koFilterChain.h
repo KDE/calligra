@@ -50,6 +50,7 @@ class KoFilterChain : public KShared
     // Only KOffice::Graph is allowed to construct instances and
     // add chain links.
     friend class KOffice::Graph;
+    friend class KoFilterManager;
 
 public:
     typedef KSharedPtr<KoFilterChain> Ptr;
