@@ -53,6 +53,8 @@ KoDocument* KImageShell::createDoc()
   return new KImageDocument;
 }
 
+#include <kmimetype.h>
+
 // FIXME: is this really neccassary here to support more then one MimeType ?
 void KImageShell::slotFileOpen()
 {
@@ -68,9 +70,7 @@ void KImageShell::slotFileOpen()
   if ( file.isNull() )
     return;
 
-  KMimeMagic *mimemagic = KMimeMagic::self();
-  KMimeMagicResult *result = mimemagic->findFileType( file );
-
+  KMimeType::Ptr result = KMimeType::findByURL( file );
   if( ( result->mimeType() != "image/jpeg" ) &&
       ( result->mimeType() != "image/bmp" ) &&
       ( result->mimeType() != "image/png" ) &&
@@ -96,6 +96,7 @@ bool KImageShell::openDocument( const char* _url )
 }
 
 #include "kimage_shell.moc"
+
 
 
 
