@@ -269,10 +269,25 @@ void
 KexiRelationView::addConnection(SourceConnection connection)
 {
 	SourceConnection *conn = &connection;
+	bool add=true;
+	for (RelationList::iterator it=m_connections.begin();it!=m_connections.end();++it)
+	{
+		if (
+			(connection.srcTable==(*it).srcTable) &&
+			(connection.rcvTable==(*it).rcvTable) &&
+			(connection.srcField==(*it).srcField) &&
+			(connection.rcvField==(*it).rcvField)
+		)
+		{	
+			add=false;
+			m_connections.remove(it);
+			break;
+		}
+	}
 
 	recalculateConnectionRect(conn);
 
-	m_connections.append((*conn));
+	if (add) m_connections.append((*conn));
 
 	updateContents((*conn).geometry);
 	kdDebug() << "KexiRelationView::addConnection(): rect: " << (*conn).geometry.x() << ", " << (*conn).geometry.y() << endl;

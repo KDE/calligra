@@ -41,6 +41,7 @@
 #include "kexidatatable.h"
 #include "kexialtertable.h"
 #include "kexiquerydesigner.h"
+#include "kexikugarwrapper.h"
 #include "kexiproject.h"
 
 KexiBrowser::KexiBrowser(KexiView *view,QWidget *parent, Section s, const char *name ) : KListView(parent,name)
@@ -91,12 +92,16 @@ void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p
 			}
 			case KexiBrowserItem::Form:
 			{
-				m->insertItem(i18n("Create Form"), this, SLOT(slotCreateNewForm()));
-				if (r->type()==KexiBrowserItem::Child)
 				{
+					m->insertItem(i18n("Create Form"), this, SLOT(slotCreate()));
 					m->insertItem(i18n("Delete Form"), this, SLOT(slotDelete()));
 					m->insertItem(i18n("Edit Form"), this, SLOT(slotEdit()));
 				}
+				break;
+			}
+			case KexiBrowserItem::Report:
+			{
+				m->insertItem(i18n("Show Report"), this, SLOT(slotShowReport()));
 				break;
 			}
 			default:
@@ -214,6 +219,11 @@ void KexiBrowser::slotAlterTable()
 		KexiAlterTable* kat = new KexiAlterTable(m_view,0,r->text(0), "alterTable");
 		kat->show();
 	}
+}
+
+void KexiBrowser::slotShowReport()
+{
+	new KexiKugarWrapper(m_view,0,"blah","report");
 }
 
 void KexiBrowser::slotCreateQuery()

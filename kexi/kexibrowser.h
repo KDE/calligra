@@ -77,6 +77,8 @@ protected slots:
 	void		slotCreateNewForm();
 
 	void		slotCreateQuery();
+
+	void		slotShowReport();
 };
 
 #endif
