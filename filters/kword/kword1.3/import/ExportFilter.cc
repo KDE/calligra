@@ -1167,6 +1167,19 @@ void OOWriterWorker::processFootnote( const VariableData& variable )
     }
 }
 
+void OOWriterWorker::processNote( const VariableData& variable )
+{
+    // KWord 1.3's annotations are anonymous and undated, however the OO specification tells that author and date are mandatory.
+    // ### TODO: how to have a better author and date for annotations?
+    *m_streamOut << "<office:annotation office:create-date=\"1970-01-01\" office:author=\""
+        << escapeOOText( i18n("Pseudo-author for annotations", "KWord 1.3" ) )
+        << "\">\n";
+    *m_streamOut << "<text:p>"
+        << escapeOOSpan( variable.getGenericData( "note" ) )
+        << "</text:p>\n"
+        << "</office:annotation>";
+}
+
 void OOWriterWorker::processVariable ( const QString&,
     const TextFormatting& formatLayout,
     const FormatData& formatData)
@@ -1206,13 +1219,7 @@ void OOWriterWorker::processVariable ( const QString&,
     }
     else if ( 10 == formatData.variable.m_type )
     {   // Note (OOWriter: annotation)
-        // KWord 1.3's annotations are anonymous and undated, however the OO specification tells that author and date are mandatory.
-        // ### TODO: how to have a better author and date for annotations?
-        *m_streamOut << "<office:annotation office:create-date=\"1970-01-01\" office:author=\""
-            << escapeOOText( i18n("Pseudo-author for annotations", "KWord 1.3" ) )
-            << "\">\n";
-        *m_streamOut << "<text:p>" << escapeOOSpan( formatData.variable.getGenericData( "note" ) ) << "</text:p>\n"
-            << "</office:annotation>";
+        processNote ( formatData.variable );
     }
     else if (11==formatData.variable.m_type)
     {
