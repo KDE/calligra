@@ -1165,3 +1165,6 @@ Reggie, 3.5.1999:
 -----------------
 - Added PNG to filters when opening KFileDialog for opening a pic
 
+Reggie, 4.5.1999:
+-----------------
+- Use libqimageio if present
