@@ -898,6 +898,12 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
             recalcVariables( VT_PGNUM );
         }
 
+
+        if ( toPage == -1 )
+            toPage = m_pages - 1;
+        KWFrameLayout frameLayout( this, headerFooterList, footnotesHFList );
+        frameLayout.layout( frameset, m_pageColumns.columns, fromPage, toPage );
+
     } else {
         // DTP mode: calculate the number of pages from the frames.
         double height=0;
@@ -912,15 +918,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
         }
         m_pages = static_cast<int>((height / ptPaperHeight()) + 0.5);
         if(m_pages < 1) m_pages=1;
-
-        // Problem: in DTP mode ptLeftBorder() etc. seem to be 0,
-        // so the headers and footers are at the edge of the page....
     }
-
-    if ( toPage == -1 )
-        toPage = m_pages - 1;
-    KWFrameLayout frameLayout( this, headerFooterList, footnotesHFList );
-    frameLayout.layout( frameset, m_pageColumns.columns, fromPage, toPage );
 }
 
 bool KWDocument::loadChildren( KoStore *_store )
@@ -976,6 +974,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_spellListIgnoreAll.clear();
 
     m_pageColumns.columns = 1;
+    m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
 
     m_pageHeaderFooter.header = HF_SAME;
     m_pageHeaderFooter.footer = HF_SAME;
@@ -988,6 +987,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     KoPageLayout __pgLayout;
     KoColumns __columns;
+    __columns.columns = 1;
+    __columns.ptColumnSpacing = m_defaultColumnSpacing;
     KoKWHeaderFooter __hf;
     __hf.header = HF_SAME;
     __hf.footer = HF_SAME;
@@ -1337,6 +1338,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         } else if(!fs->getNumFrames()) {
             kdWarning () << "frameset " << i << " has no frames" << endl;
             removeFrameSet(fs);
+            if ( fs->type() == FT_PART )
+                delete static_cast<KWPartFrameSet *>(fs)->getChild();
             delete fs;
         } else if (fs->type() == FT_TEXT) {
             for (int f=fs->getNumFrames()-1; f>=0; f--) {
@@ -2498,7 +2501,6 @@ void KWDocument::eraseEmptySpace( QPainter * painter, const QRegion & emptySpace
 
 void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
 {
-
     KoDocument* doc = _e.createDoc( this );
     if ( !doc || !doc->initDoc() )
         return;
