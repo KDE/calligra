@@ -1,7 +1,7 @@
 // $Header$
 
 /* This file is part of the KDE project
-   Copyright (C) 2002 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2002 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,10 @@
 
 #include "ImportField.h"
 
+QString getFootnoteFramesetName(const QString& id)
+{
+    return QString("Footnote %1").arg(id); // ### TODO: I18N
+}
 
 static void InsertTimeVariable(QDomDocument& mainDocument,
     QDomElement& variableElement, QString strKey)
@@ -134,7 +138,7 @@ static bool ProcessDateField(QDomDocument& mainDocument,
 }
 
 bool ProcessField(QDomDocument& mainDocument,
-    QDomElement& variableElement, QString strType)
+    QDomElement& variableElement, QString strType, const QXmlAttributes& attributes)
 {
     // In AbiWord:
     //   field names are in the file: src/text/fmt/xp/fp_Fields.h
@@ -175,6 +179,23 @@ bool ProcessField(QDomDocument& mainDocument,
         variableElement.appendChild(fieldElement); //Append to <VARIABLE>
         done=true;
     }
+    else if (strType=="endnote_ref")
+    {
+        QDomElement typeElement=mainDocument.createElement("TYPE");
+        typeElement.setAttribute("key","STRING");
+        typeElement.setAttribute("type",11);
+        typeElement.setAttribute("text","?"); // ### TODO: do we need this information right now?
+        variableElement.appendChild(typeElement); //Append to <VARIABLE>
+        QDomElement element=mainDocument.createElement("FOOTNOTE");
+        element.setAttribute("numberingtype","auto"); // ### TODO: support other types
+        element.setAttribute("notetype","footnote");
+        QString reference(attributes.value("endnote-id").stripWhiteSpace());
+        element.setAttribute("frameset", getFootnoteFramesetName(reference)); // ### TODO: better name
+        element.setAttribute("value","?"); // Should be the same as the text attribute
+        variableElement.appendChild(element); //Append to <VARIABLE>
+        done=true;
+    }
+    
     // Not supported:
     //  app_ver
     //  app_id
@@ -189,6 +210,7 @@ bool ProcessField(QDomDocument& mainDocument,
     //  para_count
     //  nbsp_count
     //  page_ref
+    // ...
 
     return done;
 }

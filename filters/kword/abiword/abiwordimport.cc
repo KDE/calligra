@@ -100,6 +100,8 @@ private:
     bool EndElementM (StackItem* stackItem);
     bool StartElementSection(StackItem* stackItem, StackItem* stackCurrent,
         const QXmlAttributes& attributes);
+    bool StartElementFoot(StackItem* stackItem, StackItem* stackCurrent,
+        const QXmlAttributes& attributes);
 private:
     void createDocument(void);
     void createDocInfo(void);
@@ -391,7 +393,7 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
         // We create a format element
         QDomElement variableElement=mainDocument.createElement("VARIABLE");
 
-        if (!ProcessField(mainDocument, variableElement, strType))
+        if (!ProcessField(mainDocument, variableElement, strType, attributes))
         {
             // The field type was not recognised,
             //   therefore write the field type in red as normal text
@@ -1043,6 +1045,44 @@ static bool EndElementIW(StackItem* stackItem, StackItem* /*stackCurrent*/,
     return true;
 }
 
+// <foot>
+bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackCurrent*/,
+    const QXmlAttributes& attributes)
+{
+    // We do not assume when we are called or if we are or not a child of <metadata>
+    stackItem->elementType=ElementTypeFoot;
+
+    QString id(attributes.value("endnote-id").stripWhiteSpace());
+    kdDebug(30506) << "Foot note id: " << id << endl;
+
+    if (id.isEmpty())
+    {
+        kdWarning(30506) << "Footnote has no id!" << endl;
+        stackItem->elementType=ElementTypeIgnore;
+        return true;
+    }
+
+    // We need to create a frameset for the foot note.    
+    QDomElement framesetElement(mainDocument.createElement("FRAMESET"));
+    framesetElement.setAttribute("frameType",1);
+    framesetElement.setAttribute("frameInfo",0);
+    framesetElement.setAttribute("visible",1);
+    framesetElement.setAttribute("name",getFootnoteFramesetName(id));
+    framesetsPluralElement.appendChild(framesetElement);
+
+    QDomElement frameElementOut(mainDocument.createElement("FRAME"));
+    //frameElementOut.setAttribute("left",28);
+    //frameElementOut.setAttribute("top",42);
+    //frameElementOut.setAttribute("bottom",566);
+    //frameElementOut.setAttribute("right",798);
+    frameElementOut.setAttribute("runaround",1);
+    // ### TODO: a few attributes are missing
+    mainFramesetElement.appendChild(frameElementOut);
+    
+    stackItem->m_frameset=framesetElement;
+
+    return true;
+}
 
 // Parser for SAX2
 
@@ -1169,6 +1209,10 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     else if (name=="m") // No upper-case
     {
         success=StartElementM(stackItem,structureStack.current(),attributes);
+    }
+    else if (name=="foot") // No upper-case
+    {
+        success=StartElementFoot(stackItem,structureStack.current(),attributes);
     }
     else
     {

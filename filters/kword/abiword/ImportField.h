@@ -1,7 +1,7 @@
 // $Header$
 
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,8 +22,11 @@
 #ifndef IMPORTFIELD_H
 #define IMPORTFIELD_H
 
+#include <qxml.h>
+
+QString getFootnoteFramesetName(const QString& id);
 bool ProcessField(QDomDocument& mainDocument,
-    QDomElement& variableElement, QString strType);
+    QDomElement& variableElement, QString strType, const QXmlAttributes& attributes);
 
 
 #endif /* IMPORTFIELD_H */

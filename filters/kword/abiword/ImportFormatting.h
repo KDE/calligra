@@ -48,7 +48,8 @@ enum StackItemElementType{
     ElementTypeAnchor,      // <a>
     ElementTypeAnchorContent,// <c> when child of <a>
     ElementTypeIgnoreWord,  // <iw>
-    ElementTypeRealMetaData // <m>
+    ElementTypeRealMetaData,// <m>
+    ElementTypeFoot         // <foot>
 };
 
 // Tags that we do not care of:
