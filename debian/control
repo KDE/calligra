@@ -1,5 +1,5 @@
 Source: koffice
-Build-Depends: automake, libtool, debhelper, libqt2.2-dev, kdelibs3-dev, jade, sgml-base, docbook, libpng2-dev, zlib1g-dev, libtiff3g-dev, docbook, gettext, docbook-stylesheets, xlibs-dev
+Build-Depends: automake, libtool, debhelper, libqt2.2-dev, kdelibs3-dev, jade, sgml-base, docbook, libpng2-dev, zlib1g-dev, libtiff3g-dev, docbook, gettext, docbook-stylesheets, xlibs-dev | xlib6g-dev
 Section: x11
 Priority: optional
 Maintainer: Ivan E. Moore II <rkrusty@debian.org>
@@ -21,7 +21,7 @@ Package: koffice-common
 Architecture: all
 Section: x11
 Depends: koffice-libs
-Suggests: kdebase, kword, kchart, kspread, killustrator, kpresenter
+Suggests: kdebase, kword, kchart, kspread, killustrator, kpresenter, kivio
 Description: KDE Office Suite (Common files)
  KDE Office Suite
  .
@@ -31,7 +31,7 @@ Package: task-koffice
 Architecture: all
 Section: x11
 Depends: koffice-libs, koffice-common, kchart, kword, kspread, killustrator, kpresenter
-Suggests: kdebase
+Suggests: kdebase, kivio
 Description: KDE Office Suite
  KDE Office Suite
  . 
