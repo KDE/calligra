@@ -141,13 +141,12 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
             _painter->drawPixmap( ox + penw, oy + penw, *gradient->getGradient(),
                                   0, 0, ow - 2 * penw, oh - 2 * penw );
 
-        // We have to use setViewport here, but it doesn't cumulate with previous transformations
-        // (e.g. painter translation set up by kword when embedding kpresenter...)   :(
         _painter->save();
-        //QRect r = _painter->window();
-        //_painter->translate( ox+1, oy+1 );
-        //_painter->scale( 1.0 * (ext.width()-2) / r.width(), 1.0 * (ext.height()-2) / r.height() );
-        _painter->setViewport( ox+1, oy+1, ext.width()-2, ext.height()-2 );
+        QRect br = m_clipart.picture()->boundingRect();
+        _painter->translate( ox /*+1*/, oy /*+1*/ );
+        if ( br.width() && br.height() )
+            //_painter->scale( (double)(ext.width()-2) / (double)br.width(), (double)(ext.height()-2) / (double)br.height() );
+            _painter->scale( (double)(ext.width()) / (double)br.width(), (double)(ext.height()) / (double)br.height() );
         _painter->drawPicture( *m_clipart.picture() );
         _painter->restore();
 
@@ -174,6 +173,9 @@ void KPClipartObject::draw( QPainter *_painter, int _diffx, int _diffy )
         pm.fill( Qt::white );
         QPainter pnt;
         pnt.begin( &pm );
+        QRect brect = m_clipart.picture()->boundingRect();
+        if ( brect.width() && brect.height() )
+            pnt.scale( (double)(pw) / (double)brect.width(), (double)(ph) / (double)brect.height() );
         pnt.drawPicture( *m_clipart.picture() );
         pnt.end();
 

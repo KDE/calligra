@@ -116,7 +116,6 @@ void KPBackGround::draw( QPainter *_painter, QPoint _offset, bool _drawBorders )
         if ( !backClipart.isNull() )
         {
             _painter->save();
-            _painter->translate( _offset.x(), _offset.y() );
             QRect br = backClipart.picture()->boundingRect();
             if ( br.width() && br.height() )
                 _painter->scale( (double)ext.width() / (double)br.width(), (double)ext.height() / (double)br.height() );
