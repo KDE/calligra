@@ -1,0 +1,72 @@
+<!--	$Id:$
+
+		This is an XML document type definition (DTD) for the KImageShop
+		image format. 
+		Written by Matthias Elter <elter@kde.org>.
+
+-->
+
+
+
+
+<!--	A KImageshop image consists of a list of image layers.
+
+		Attributes:
+
+		author:		The image's author
+		email:		The image's author's email address
+		editor:		The program this file was written with
+        mime:		The MIME type (must always have the value application/x-kspread
+        width:      The image with in pixels.
+        height:     The image height in pixels.
+        bitDepth:   The bit depth. == The number of bits a pixel uses _per channel_!.
+        cMode:      The image's color mode. "RGBA" for example. See kis_global.h.
+        
+-->
+<!ELEMENT IMAGE (LAYER)*>
+<!ATTLIST IMAGE author   CDATA #IMPLIED
+                email    CDATA #IMPLIED
+                editor   CDATA #IMPLIED
+                mime     CDATA "application/x-kimageshop"
+                width    CDATA #REQUIRED
+                height   CDATA #REQUIRED
+                bitDepth CDATA #REQUIRED
+                cMode    CDATA #REQUIRED>
+
+
+
+<!--	A KImageShop layer consists of a list of channels.
+
+        Attributes:
+
+        name:       The channel's name.
+        width:      The channel's width in pixels.
+        height:     The channel's height in pixels.
+        x:          The channel's horizontal positon in the image.
+        y:          The channel's vertical position in the image.
+        opacity:    The channel's opactiy. A value betwenn 0 and 255.
+        isVisible   Is the channel visible? (yes or no)
+        isLinked    Is the channel linked? (yes or no)
+-->
+<!ELEMENT LAYER (CHANNEL)*>
+<!ATTLIST LAYER name      CDATA #REQUIRED
+                width     CDATA #REQUIRED
+                height    CDATA #REQUIRED
+                x         CDATA #REQUIRED
+                y         CDATA #REQUIRED
+                opacity   CDATA #REQUIRED
+                isVisible CDATA #REQUIRED
+                isLinked  CDATA #REQUIRED>
+
+
+
+<!--	KImageShop channels contain the actual image data.
+        The data is saved in external binary files.
+        The binaries are named "channel<id>.bin". "channelR.bin" for example.
+
+		Attributes:
+
+		id:	        The channels identifier. "R" for example.
+-->
+<!ELEMENT CHANNEL EMPTY>
+<!ATTLIST CHANNEL name   CDATA #REQUIRED>
