@@ -121,6 +121,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_gridX = m_gridY = 10;
     m_indent = MM_TO_POINT( 10.0 );
 
+    m_bShowRuler=true;
+
     _viewFormattingChars = FALSE;
     _viewFrameBorders = TRUE;
     _viewTableGrid = TRUE;
@@ -2526,5 +2528,11 @@ void KWDocument::refreshFrameBorderButton()
     }
 }
 
+void KWDocument::reorganizeGUI()
+{
+   QListIterator<KWView> it( m_lstViews );
+   for ( ; it.current() ; ++it )
+       it.current()->getGUI()->reorganize();
+}
 
 #include "kwdoc.moc"

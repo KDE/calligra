@@ -26,6 +26,7 @@
 #include <knuminput.h>
 
 class KWView;
+class QCheckBox;
 
 class configureSpellPage : public QWidget
 {
@@ -51,6 +52,7 @@ private:
   KIntNumInput *gridX,*gridY;
   KIntNumInput *indent;
   KIntNumInput * recentFiles;
+  QCheckBox *showRuler;
   int oldNbRecentFiles;
   KConfig* config;
 };

@@ -455,9 +455,12 @@ public:
     KoTabChooser *getTabChooser() { return tabChooser; }
     KWDocStruct *getDocStruct() { return docStruct; }
 
+public slots:
+    void reorganize();
+
 protected slots:
     void unitChanged( QString );
-    void reorganize();
+    
 
 protected:
     void resizeEvent( QResizeEvent *e );

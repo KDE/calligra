@@ -26,6 +26,7 @@
 #include <qvbox.h>
 #include <kconfig.h>
 #include <qlabel.h>
+#include <qcheckbox.h>
 
 #include "kwconfig.h"
 #include "kwview.h"
@@ -108,6 +109,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     int m_iGridY=10;
     double ptIndent = MM_TO_POINT(10.0);
     int m_iNumOfRecentFile=10;
+    bool m_bShowRuler=true;
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
@@ -115,6 +117,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
         m_iGridY=config->readNumEntry("GridY",10);
         ptIndent = config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0));
         m_iNumOfRecentFile=config->readNumEntry("NbRecentFile",10);
+        m_bShowRuler=config->readBoolEntry("Rulers",true);
     }
 
     gridX=new KIntNumInput(m_iGridX, tmpQGroupBox , 10);
@@ -156,6 +159,10 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     recentFiles->setLabel(i18n("Number of recent file:"));
     lay1->addWidget(recentFiles);
 
+    showRuler= new QCheckBox(i18n("Show rulers"),tmpQGroupBox);
+    showRuler->setChecked(m_bShowRuler);
+    lay1->addWidget(showRuler);
+
     box->addWidget( tmpQGroupBox);
 }
 
@@ -164,6 +171,7 @@ void configureInterfacePage::apply()
     int valX=gridX->value();
     int valY=gridY->value();
     int nbRecent=recentFiles->value();
+    bool ruler=showRuler->isChecked();
     KWDocument * doc = m_pView->getGUI()->getDocument();
 
     config->setGroup( "Interface" );
@@ -189,6 +197,15 @@ void configureInterfacePage::apply()
         config->writeEntry( "NbRecentFile", nbRecent);
         m_pView->changeNbOfRecentFiles(nbRecent);
     }
+
+    if(ruler != doc->getShowRuler())
+    {
+        config->writeEntry( "Rulers", ruler );
+        doc->setShowRuler( ruler );
+        doc->reorganizeGUI();
+    }
+
+
 }
 
 void configureInterfacePage::slotDefault()
@@ -196,9 +213,10 @@ void configureInterfacePage::slotDefault()
     gridX->setValue(10);
     gridY->setValue(10);
     KWDocument * doc = m_pView->getGUI()->getDocument();
-    double newIndent = KWUnit::fromUserValue( MM_TO_POINT( 10 ), doc->getUnit() );
-    indent->setValue( newIndent );
-    // ## and recent files ?
+    double newIndent = KWUnit::userValue( MM_TO_POINT( 10 ), doc->getUnit() );
+    indent->setValue( (int)newIndent );
+    recentFiles->setValue(10);
+    showRuler->setChecked(true);
 }
 
 #include "kwconfig.moc"

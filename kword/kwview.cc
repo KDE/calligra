@@ -173,6 +173,8 @@ void KWView::initConfig()
       double indent = MM_TO_POINT( config->readDoubleNumEntry("Indent", POINT_TO_MM(10.0) ) );
       doc->setIndentValue(indent);
       changeNbOfRecentFiles(config->readNumEntry("NbRecentFile",10));
+
+      doc->setShowRuler(config->readBoolEntry("Rulers",true));
     }
 }
 
@@ -2962,16 +2964,26 @@ void KWGUI::resizeEvent( QResizeEvent *e )
 /*================================================================*/
 void KWGUI::reorganize()
 {
-    r_vert->show();
-    r_horz->show();
-    tabChooser->show();
-
-    tabChooser->setGeometry( 0, 0, 20, 20 );
+    int space=20;
+    if(doc->getShowRuler())
+    {
+        r_vert->show();
+        r_horz->show();
+        tabChooser->show();
+        tabChooser->setGeometry( 0, 0, 20, 20 );
+    }
+    else
+    {
+        r_vert->hide();
+        r_horz->hide();
+        tabChooser->hide();
+        space=0;
+    }
 
     panner->setGeometry( 0, 0, width(), height() );
-    canvas->setGeometry( 20, 20, left->width() - 20, left->height() - 20 );
-    r_horz->setGeometry( 20, 0, left->width() - 20, 20 );
-    r_vert->setGeometry( 0, 20, 20, left->height() - 20 );
+    canvas->setGeometry( space, space, left->width() - space, left->height() - space );
+    r_horz->setGeometry( space, 0, left->width() - space, space );
+    r_vert->setGeometry( 0, space, space, left->height() - space );
 }
 
 /*================================================================*/

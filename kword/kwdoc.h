@@ -433,6 +433,12 @@ public:
      */
     KFormulaDocument* getFormulaDocument();
 
+
+    void setShowRuler(bool _ruler){m_bShowRuler=_ruler;}
+    bool getShowRuler(){return m_bShowRuler;}
+
+    void reorganizeGUI();
+
 signals:
     void sig_imageModified();
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
@@ -532,6 +538,8 @@ private:
     KFormulaDocument* m_formulaDocument;
 
     double m_indent; // in pt
+
+    bool m_bShowRuler;
 };
 
 
