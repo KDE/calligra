@@ -515,7 +515,7 @@ void QuerySchema::setColumnAlias(uint position, const QCString& alias)
 			<< ") out of range!" << endl;
 		return;
 	}
-	QCString fixedAlias = alias.lower().stripWhiteSpace();
+	QCString fixedAlias = alias.stripWhiteSpace();
 	if (fixedAlias.isEmpty()) {
 		d->aliases.remove(position);
 		d->maxIndexWithAlias = -1;
