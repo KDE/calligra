@@ -28,13 +28,15 @@
 #include "karbon_part.h"
 #include "vspiral.h"
 #include "vspiraltool.h"
+#include "vunitspinbox.h"
 
 
-VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( QWidget* parent, const char* name )
-	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name )
+VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
+	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
 {
 	new QLabel( i18n( "Radius:" ), this );
-	m_radius = new KDoubleNumInput( 0, this );
+	m_radius = new VUnitDoubleSpinBox( 0.0, 1000.0, 0.5, 0.0, 2, this );
+	refreshUnit();
 	new QLabel( i18n( "Segments:" ), this );
 	m_segments = new KIntSpinBox( this );
 	m_segments->setMinValue( 1 );
@@ -99,11 +101,17 @@ VSpiralTool::VSpiralOptionsWidget::setClockwise( bool value )
 	m_clockwise->setCurrentItem( value ? 0 : 1 );
 }
 
+void
+VSpiralTool::VSpiralOptionsWidget::refreshUnit()
+{
+	m_radius->setUnit( m_part->getUnit() );
+}
+
 VSpiralTool::VSpiralTool( KarbonView* view )
 	: VShapeTool( view, i18n( "Insert Spiral" ), true )
 {
 	// create config dialog:
-	m_optionsWidget = new VSpiralOptionsWidget();
+	m_optionsWidget = new VSpiralOptionsWidget( view->part() );
 	m_optionsWidget->setRadius( 100.0 );
 	m_optionsWidget->setSegments( 8 );
 	m_optionsWidget->setFade( 0.8 );
@@ -113,6 +121,12 @@ VSpiralTool::VSpiralTool( KarbonView* view )
 VSpiralTool::~VSpiralTool()
 {
 	delete( m_optionsWidget );
+}
+
+void
+VSpiralTool::refreshUnit()
+{
+	m_optionsWidget->refreshUnit();
 }
 
 VComposite*

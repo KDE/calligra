@@ -1394,6 +1394,7 @@ void KarbonView::setUnit( KoUnit::Unit /*_unit*/ )
 	m_ellipseTool->refreshUnit();
 	m_rectangleTool->refreshUnit();
 	m_sinusTool->refreshUnit();
+	m_spiralTool->refreshUnit();
 	m_starTool->refreshUnit();
 	m_roundRectTool->refreshUnit();
 }

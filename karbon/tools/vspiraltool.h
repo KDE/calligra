@@ -28,8 +28,10 @@
 #include "vshapetool.h"
 
 class KComboBox;
-class KDoubleNumInput;
+class VUnitDoubleSpinBox;
+class VDoubleNumInput;
 class KIntSpinBox;
+class KarbonPart;
 
 class VSpiralTool : public VShapeTool
 {
@@ -43,11 +45,13 @@ public:
 
 	virtual VComposite* shape( bool interactive = false ) const;
 
+	void refreshUnit();
+
 private:
 	class VSpiralOptionsWidget : public QGroupBox
 	{
 	public:
-		VSpiralOptionsWidget( QWidget *parent = 0L, const char* name = 0L );
+		VSpiralOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char* name = 0L );
 
 		double radius() const;
 		uint segments() const;
@@ -58,11 +62,14 @@ private:
 		void setFade( double value );
 		void setClockwise( bool value );
 
+		void refreshUnit();
+
 	private:
-		KDoubleNumInput		*m_radius;
+		VUnitDoubleSpinBox	*m_radius;
 		KIntSpinBox			*m_segments;
 		KDoubleNumInput		*m_fade;
 		QComboBox			*m_clockwise;
+		KarbonPart			*m_part;
 	};
 
 	VSpiralOptionsWidget *m_optionsWidget;
