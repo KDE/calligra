@@ -27,8 +27,6 @@
 #ifndef kggrouppool_h
 #define kggrouppool_h
 
-#include <qlist.h>
-
 #include <kggenericpool.h>
 #include <kggroup.h>
 
@@ -38,10 +36,10 @@ class KGGroupPool : public KGGenericPool<KGGroup> {
 public:
     KGGroupPool();
     virtual ~KGGroupPool() {}
-    
+
     virtual QDomElement save(QDomDocument &doc);
 
-    KGGroup *find(const int &id);  // find the group via its ID
+    KGGroup *find(const int &id) const;  // find the group via its ID
 
     void add(const KGGroup *group);
     virtual const bool remove(const unsigned int &index);

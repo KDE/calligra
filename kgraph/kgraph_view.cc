@@ -17,13 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qpainter.h>
-#include <qevent.h>
+//#include <qpainter.h>
+//#include <qevent.h>
 
-#include <klocale.h>
-#include <kdebug.h>
+//#include <klocale.h>
+//#include <kdebug.h>
 
 #include <kgraph_part.h>
+#include <kgraph_factory.h>
 #include <kgraph_view.h>
 
 

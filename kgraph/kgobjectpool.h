@@ -26,32 +26,33 @@
 #ifndef kgobjectpool_h
 #define kgobjectpool_h
 
-#include <qlist.h>
-
 #include <kgobject.h>
 #include <kggenericpool.h>
 
 class QRect;
 class KGraphPart;
+class KGGroupPool;
 
 
 class KGObjectPool : public KGGenericPool<KGObject> {
 
 public:
-    KGObjectPool(const KGraphPart * const part);
+    KGObjectPool(const KGraphPart * const part,
+		 const KGGroupPool * const groupPool);
     virtual ~KGObjectPool() {}
 
     virtual QDomElement save(QDomDocument &doc);
-    
+
     // used by all the KGObjects to connect the actions
     const KGraphPart * const part() const { return m_part; }
+    const KGGroupPool * const groupPool() const { return m_groupPool; }
 
     // used by all the KGOs to find out the current zoom value
     // more complex KGOs store the zoomed values and a flag
     // which signals zoom changes (-> reclac)
     const double zoom() const { return m_zoom; }
     void setZoom(const double &zoom) { m_zoom=zoom; }
-        
+
     virtual const bool remove(const unsigned int &index);
     virtual const bool remove(const KGObject *object);
 
@@ -75,7 +76,8 @@ private:
     KGObjectPool &operator=(const KGObjectPool &rhs);
 
     const KGraphPart * const m_part;  // a ptr to our part (b/c of SLOTs)
-    
+    const KGGroupPool * const m_groupPool; // and to the groupPool (to find
+                                           // the groups :)
     double m_zoom;
     bool m_zoomChanged;
 
@@ -94,7 +96,12 @@ private:
     // Canvas :)
     QList<KGObject> activeObject;
 
-    bool m_dirty;       // a repaint was requested
-    QRect rect;         // rect=for this region, (0, 0, 0, 0)=total repaint
+    // This list is used to (temporary) store the objects which
+    // are selected. After everything was painted the "handles"
+    // have to be added for all these objects
+    QList<KGObject> handles;
+
+    bool m_dirty;       // a repaint was requested - the DB was invalidated
+    QRect rect;         // rect=repaint this rect, (0, 0, 0, 0)=total repaint
 };
 #endif // kgobjectpool_h

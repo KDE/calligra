@@ -23,7 +23,7 @@
 #define kgcanvas_h
 
 #include <qscrollview.h>
-#include <kdebug.h>
+//#include <kdebug.h>
 
 class KGObjectPool;
 

@@ -20,15 +20,11 @@
 #ifndef KGRAPH_GLOBAL_H
 #define KGRAPH_GLOBAL_H
 
-#include <kiconloader.h>
 #include <kimageeffect.h>
-#include <kgraph_factory.h>
 
-class QSize;
 class QColor;
 
 typedef struct Gradient {
-    QSize size;
     QColor ca;
     QColor cb;
     KImageEffect::GradientType type;

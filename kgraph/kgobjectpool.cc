@@ -21,8 +21,9 @@
 #include <kgobjectpool.h>
 
 
-KGObjectPool::KGObjectPool(const KGraphPart * const part) :
-    KGGenericPool<KGObject>(), m_part(part) {
+KGObjectPool::KGObjectPool(const KGraphPart * const part,
+			   const KGGroupPool * const groupPool) :
+    KGGenericPool<KGObject>(), m_part(part), m_groupPool(groupPool) {
 }
 
 QDomElement KGObjectPool::save(QDomDocument &doc) {

@@ -29,7 +29,7 @@ template<class type> class KGGenericPool {
 
 public:
     virtual QDomElement save(QDomDocument &doc) = 0;
-    
+
     type *first() { return pool.first(); }
     type *last() { return pool.last(); }
     type *next() { return pool.next(); }
@@ -48,7 +48,7 @@ protected:
     KGGenericPool() { pool.setAutoDelete(true); }
     virtual ~KGGenericPool() { pool.clear(); }
 
-    QList<type> pool;
+    mutable QList<type> pool;
 
 private:
     KGGenericPool &operator=(const KGGenericPool &rhs);

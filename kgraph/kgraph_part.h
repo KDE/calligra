@@ -22,10 +22,10 @@
 
 #include <koDocument.h>
 
-#include <kgobjectpool.h>
-#include <kggrouppool.h>
-
 class QPainter;
+
+class KGObjectPool;
+class KGGroupPool;
 
 
 class KGraphPart : public KoDocument {

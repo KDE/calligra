@@ -27,13 +27,15 @@
 #include <kgraph_shell.h>
 #include <kgraph_factory.h>
 #include <kgraph_part.h>
+#include <kgobjectpool.h>
+#include <kggrouppool.h>
 
 
 KGraphPart::KGraphPart(QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parent, name, singleViewMode) {
 
-    objectPool=new KGObjectPool(this);
     groupPool=new KGGroupPool();
+    objectPool=new KGObjectPool(this, groupPool);
 
     KStdAction::cut(this, SLOT( edit_cut() ), actionCollection(), "edit_cut" );
 }
