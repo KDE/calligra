@@ -677,3 +677,15 @@ void KWordDocIface::setViewFormattingBreak(bool _b)
 {
     doc->setViewFormattingBreak( _b );
 }
+
+int KWordDocIface::footNoteSeparatorLineLength() const
+{
+    return doc->footNoteSeparatorLineLength();
+}
+
+void KWordDocIface::setFootNoteSeparatorLineLength( int _length)
+{
+    doc->setFootNoteSeparatorLineLength( _length );
+    doc->repaintAllViews();
+}
+

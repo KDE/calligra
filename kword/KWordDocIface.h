@@ -199,6 +199,8 @@ k_dcop:
 
     bool viewFormattingBreak() const;
     void setViewFormattingBreak(bool _b);
+    int footNoteSeparatorLineLength() const;
+    void setFootNoteSeparatorLineLength( int _length);
 
 private:
     KWDocument *doc;

@@ -399,7 +399,8 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
         int pages = m_doc->getPages();
         double left = m_doc->ptLeftBorder();
         double factor = 100.0/m_doc->footNoteSeparatorLineLength();
-        double width = ( m_doc->ptPaperWidth() - m_doc->ptRightBorder() - left ) / factor; // ### is 1/5 ok?
+        double pageWidth = m_doc->ptPaperWidth() - m_doc->ptRightBorder() - left ;
+        double width = pageWidth / factor; // ### is 1/5 ok?
         int numColumns = m_doc->getColumns();
         for ( int pageNum = 0; pageNum < pages; pageNum++ )
         {
@@ -415,6 +416,18 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                     {
                         double y = frame->bottomLeft().y() + m_doc->headerFooterInfo().ptFootNoteBodySpacing / 2;
                         KoRect rect( left, y, width, 0 ); // this rect is flat
+                        switch( m_doc->footNoteSeparatorLinePosition())
+                        {
+                        case SLP_LEFT:
+                            break;
+                        case SLP_CENTERED:
+                            rect = KoRect( pageWidth/2.0+left-width/2.0, y,width,0);
+                            break;
+                        case SLP_RIGHT:
+                            rect = KoRect( pageWidth+left-width, y,width,0);
+                            break;
+                        }
+
                         QRect flatRect = viewMode->normalToView( m_doc->zoomRect( rect ) );
                         //kdDebug() << " KWTextFrameSet::drawFrame rect=" << rect << " zoomed:" << flatRect << endl;
                         flatRect.setBottom( flatRect.top() + 1 ); // #!@!@!& QRect....
