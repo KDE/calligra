@@ -2413,15 +2413,7 @@ void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
     }
 
     if(lowestZOrder != 10000 && m_doc->processingType() == KWDocument::WP) {
-        // Get the main frameset and see if we have to lower that frame.
-        QPtrList<KWFrame> framesInPage = m_doc->framesInPage(pageNum);
-        for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
-            if(frameIt.current()->frameSet()->isMainFrameset()) {
-                if(lowestZOrder <= frameIt.current()->zOrder())
-                    frameIt.current()->setZOrder(lowestZOrder-1);
-                return; // all done :)
-            }
-        }
+        m_doc->lowerMainFrames( pageNum, lowestZOrder );
     }
 }
 

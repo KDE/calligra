@@ -3394,12 +3394,39 @@ void KWDocument::fixZOrders() {
             }
         }
 
+        if ( m_processingType == KWDocument::WP )
+        {
+            // In all cases, ensure the main frames are below the rest.
+            // (This could not be the case after e.g. an import filter does it wrong)
+            lowerMainFrames( pgnum );
+        }
     }
     if ( fixed_something )
         updateFramesOnTopOrBelow();
 }
 
+void KWDocument::lowerMainFrames( int pageNum )
+{
+    QPtrList<KWFrame> framesInPage = this->framesInPage(pageNum);
+    int lowestZOrder=10000;
+    for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt )
+        lowestZOrder=QMIN(lowestZOrder, frameIt.current()->zOrder());
+    lowerMainFrames( pageNum, lowestZOrder );
+}
 
+// separated from the above one for KWView (which knows lowestZOrder already)
+void KWDocument::lowerMainFrames( int pageNum, int lowestZOrder )
+{
+    // Get the main frameset and see if we have to lower its frame(s).
+    QPtrList<KWFrame> framesInPage = this->framesInPage(pageNum);
+    for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
+        if(frameIt.current()->frameSet()->isMainFrameset()) {
+            if(lowestZOrder <= frameIt.current()->zOrder())
+                frameIt.current()->setZOrder(lowestZOrder-1);
+            // keep going, in case of multiple columns
+        }
+    }
+}
 
 // TODO pass viewmode for isVisible? Depends on how framesInPage is being used...
 QPtrList<KWFrame> KWDocument::framesInPage( int pageNum, bool sorted ) const {

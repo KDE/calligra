@@ -454,6 +454,9 @@ public:
     KWFrame *getFirstSelectedFrame() const;
     int frameSetNum( KWFrameSet* fs ) { return m_lstFrameSet.findRef( fs ); }
 
+    void lowerMainFrames( int pageNum );
+    void lowerMainFrames( int pageNum, int lowestZOrder );
+
     // Those three method consider _all_ text framesets, even table cells
     QPtrList<KWTextFrameSet> allTextFramesets( bool onlyReadWrite ) const;
     int numberOfTextFrameSet( KWFrameSet* fs, bool onlyReadWrite );
