@@ -18,6 +18,13 @@
 #include <qprogbar.h>
 #include "page.h"
 #include "page.moc"
+#include <qdragobject.h>
+#include <qfile.h>
+#include <qtextstream.h>
+
+#include <kmimemagic.h>
+#include <kio_job.h>
+#include <kurl.h>
 
 /******************************************************************/
 /* class Page - Page                                              */
@@ -49,6 +56,7 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView *_view=0)
       drawRubber = false;
       toolEditMode = TEM_MOUSE;
       tmpObjs.setAutoDelete(false);
+      setAcceptDrops(true);
     }
   else
     {
@@ -2974,4 +2982,130 @@ void Page::selectPrev()
     }
   view->makeRectVisible(view->kPresenterDoc()->getSelectedObj()->getBoundingRect(0,0));
   _repaint(false);
+}
+
+/*================================================================*/
+void Page::dragEnterEvent(QDragEnterEvent *e)
+{
+  if (QUrlDrag::canDecode(e) ||
+      QTextDrag::canDecode(e) ||
+      QImageDrag::canDecode(e))
+    e->accept();
+}
+
+/*================================================================*/
+void Page::dragLeaveEvent(QDragLeaveEvent *e)
+{
+}
+
+/*================================================================*/
+void Page::dragMoveEvent(QDragMoveEvent *e)
+{
+}
+
+/*================================================================*/
+void Page::dropEvent(QDropEvent *e)
+{
+  if (QImageDrag::canDecode(e))
+    {
+      setToolEditMode(TEM_MOUSE);
+      deSelectAllObj();
+
+      QImage pix;
+      QImageDrag::decode(e,pix);
+      
+      QString uid = getenv("USER");
+      QString num;
+      num.setNum(objectList()->count());
+      uid += "_";
+      uid += num;
+      
+      QString filename = "/tmp/kpresenter";
+      filename += uid;
+      filename += ".xpm";
+      
+      pix.save(filename,"XPM");
+      view->kPresenterDoc()->insertPicture(filename,e->pos().x(),e->pos().y());
+      
+      QString cmd = "rm -f ";
+      cmd += filename;
+      system(cmd.ascii());
+    }
+  else if (QTextDrag::canDecode(e))
+    {
+      setToolEditMode(TEM_MOUSE);
+      deSelectAllObj();
+
+      QString text;
+      QTextDrag::decode(e,text);
+      
+      view->kPresenterDoc()->insertText(KRect(e->pos().x(),e->pos().y(),250,250),diffx(),diffy(),text,view);
+    }
+  else if (QUrlDrag::canDecode(e))
+    {
+      setToolEditMode(TEM_MOUSE);
+      deSelectAllObj();
+
+      QStrList lst;
+      QUrlDrag::decode(e,lst);
+      
+      QString str;
+      for (str = lst.first();!str.isEmpty();str = lst.next())
+	{
+// 	  QString uid = getenv("USER");
+// 	  QString num;
+// 	  num.setNum(objectList()->count());
+// 	  uid += "_";
+// 	  uid += num;
+		  
+// 	  QString filename = "/tmp/kpresenter";
+// 	  filename += uid;
+		  
+// 	  KIOJob *job = new KIOJob("kpresenter job");
+// 	  job->copy(str,filename);
+
+	  // Currently we only allow local files - this should be changed later
+	  KURL url(str);
+	  if (!url.isLocalFile()) return;
+
+	  QString filename = url.path();
+ 	  KMimeMagic::initStatic();
+ 	  KMimeMagicResult *res = KMimeMagic::self()->findFileType(filename);
+	  
+	  if (res && res->isValid())
+	    {
+	      QString mimetype = res->mimeType();
+	      if (mimetype.contains("image"))
+		{
+		  view->kPresenterDoc()->insertPicture(filename,e->pos().x(),e->pos().y());
+      		  continue;
+		}	
+	      
+	    }
+	  
+	  // open any non-picture as text
+	  // in the future we should open specific mime types with "their" programms and embed them
+	  QFile f(filename);
+	  QTextStream t(&f);
+	  QString text = "",tmp;
+
+	  if (f.open(IO_ReadOnly))
+	    {
+	      while (!t.eof())
+		{
+		  tmp = t.readLine();
+		  tmp += "\n";
+		  text.append(tmp);
+		}
+	      f.close();
+	    }
+	  view->kPresenterDoc()->insertText(KRect(e->pos().x(),e->pos().y(),250,250),diffx(),diffy(),text,view);
+
+// 	  QString cmd = "rm -f ";
+// 	  cmd += filename;
+// 	  system(cmd.ascii());
+	  
+// 	  delete job;
+	}
+    }
 }

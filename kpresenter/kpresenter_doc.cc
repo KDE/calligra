@@ -17,6 +17,8 @@
 #include "kpresenter_doc.moc"
 #include "kpresenter_shell.h"
 #include "page.h"
+#include "kpresenter_view.h"
+#include "ktextobject.h"
 
 /******************************************************************/
 /* class KPresenterChild                                          */
@@ -2292,10 +2294,10 @@ void KPresenterDoc::raiseObjs(int diffx,int diffy)
 }
 
 /*=================== insert a picture ==========================*/
-void KPresenterDoc::insertPicture(QString filename,int diffx,int diffy)
+void KPresenterDoc::insertPicture(QString filename,int diffx,int diffy,int _x = 10,int _y = 10)
 {
   KPPixmapObject *kppixmapobject = new KPPixmapObject(&_pixmapCollection,filename);
-  kppixmapobject->setOrig(((diffx + 10) / _rastX) * _rastX,((diffy + 10) / _rastY) * _rastY);
+  kppixmapobject->setOrig(((diffx + _x) / _rastX) * _rastX,((diffy + _y) / _rastY) * _rastY);
   kppixmapobject->setSelected(true);
 
   InsertCmd *insertCmd = new InsertCmd(i18n("Insert picture"),kppixmapobject,this);
@@ -2428,13 +2430,18 @@ void KPresenterDoc::insertPie(KRect r,QPen pen,QBrush brush,FillType ft,QColor g
 }
 
 /*===================== insert a textobject =====================*/
-void KPresenterDoc::insertText(KRect r,int diffx,int diffy)
+void KPresenterDoc::insertText(KRect r,int diffx,int diffy,QString text = QString::null,KPresenterView *_view = 0L)
 {
   KPTextObject *kptextobject = new KPTextObject();
   kptextobject->setOrig(r.x() + diffx,r.y() + diffy);
   kptextobject->setSize(r.width(),r.height());
   kptextobject->setSelected(true);
-
+  if (!text.isEmpty() && _view)
+    {
+      kptextobject->getKTextObject()->clear();
+      kptextobject->getKTextObject()->addText(text,_view->currFont(),_view->currColor());
+    }
+  
   InsertCmd *insertCmd = new InsertCmd(i18n("Insert text"),kptextobject,this);
   insertCmd->execute();
   _commands.addCommand(insertCmd);

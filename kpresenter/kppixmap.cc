@@ -34,7 +34,7 @@ KPPixmap::KPPixmap(QString _filename,KSize _size)
   else
     data = load_pixmap_native_format(filename);
 
-  if (_size != pixmap.size() && _size != orig_size)
+  if (_size != pixmap.size() && _size != orig_size && pixmap.width() != 0 && pixmap.height() != 0)
     {
       QWMatrix m;
       m.scale(static_cast<float>(_size.width()) / static_cast<float>(pixmap.width()),
@@ -50,7 +50,7 @@ KPPixmap::KPPixmap(QString _filename,QString _data,KSize _size)
   pixmap = native_string_to_pixmap(data);
   orig_pixmap = pixmap;
 
-  if (_size != pixmap.size() && _size != orig_size)
+  if (_size != pixmap.size() && _size != orig_size && pixmap.width() != 0 && pixmap.height() != 0)
     {
       QWMatrix m;
       m.scale(static_cast<float>(_size.width()) / static_cast<float>(pixmap.width()),
@@ -66,7 +66,7 @@ KPPixmap::KPPixmap(QString _filename,QString _data,QPixmap *_pixmap,KSize _size)
   pixmap = QPixmap(*_pixmap);
   orig_pixmap = QPixmap(*_pixmap);
 
-  if (_size != pixmap.size() && _size != orig_size)
+  if (_size != pixmap.size() && _size != orig_size && pixmap.width() != 0 && pixmap.height() != 0)
     {
       QWMatrix m;
       m.scale(static_cast<float>(_size.width()) / static_cast<float>(pixmap.width()),

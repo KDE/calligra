@@ -64,3 +64,14 @@ Reggie, 29.3.1999:
 Reggie, 2.4.1999:
 -----------------
 - KPresenter uses now keyCompression
+
+Reggie, 6.4.1999:
+-----------------
+- Started with Drag'n'Drop:
+  - If a picture is dropped into a KPresenter Page, a pixmap object
+    with the dropped picture is inserted into the presentation
+  - If a text is dropped into a KPresenter Page, a text object
+    with the dropped text is inserted into the presentation
+  - If a url (list of urls) is dropped into a KPresenter page, 
+    KPresenter tries to open the urls (image/* mimetypes are opened
+    as pixmap objects, all others are opened as textobjects at the moment)

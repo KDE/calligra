@@ -112,7 +112,7 @@ KPresenterView::KPresenterView( QWidget *_parent, const char *_name, KPresenterD
 		   this,SLOT(slotUpdateChildGeometry(KPresenterChild*)));
 
   createGUI();
-  
+
   setKeyCompression(true);
 }
 
@@ -2731,6 +2731,30 @@ void KPresenterView::resizeEvent(QResizeEvent *e)
     page->move(0,0);
     page->resize(widget()->width(),widget()->height());
   }
+}
+
+/*===============================================================*/
+void KPresenterView::dragEnterEvent(QDragEnterEvent *e)
+{
+  QApplication::sendEvent(page,e);
+}
+
+/*===============================================================*/
+void KPresenterView::dragMoveEvent(QDragMoveEvent *e)
+{
+  QApplication::sendEvent(page,e);
+}
+
+/*===============================================================*/
+void KPresenterView::dragLeaveEvent(QDragLeaveEvent *e)
+{
+  QApplication::sendEvent(page,e);
+}
+
+/*===============================================================*/
+void KPresenterView::dropEvent(QDropEvent *e)
+{
+  QApplication::sendEvent(page,e);
 }
 
 /*======================= key press event =======================*/

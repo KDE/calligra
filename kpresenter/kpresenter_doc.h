@@ -244,7 +244,7 @@ public:
   void lowerObjs(int,int);
 
   // insert/change objects
-  void insertPicture(QString,int,int);
+  void insertPicture(QString,int,int,int _x = 10,int _y = 10);
   void insertClipart(QString,int,int);
   void changePicture(QString,int,int);
   void changeClipart(QString,int,int);
@@ -253,7 +253,7 @@ public:
   void insertCircleOrEllipse(KRect,QPen,QBrush,FillType,QColor,QColor,BCType,int,int);
   void insertPie(KRect,QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
 		 BCType gt,PieType pt,int _angle,int _len,LineEnd lb,LineEnd le,int diffx,int diffy);
-  void insertText(KRect,int,int);
+  void insertText(KRect,int,int,QString text = QString::null,KPresenterView *_view = 0L);
   void insertAutoform(KRect,QPen,QBrush,LineEnd,LineEnd,FillType,QColor,QColor,BCType,QString,int,int);
 
   // get list of pages and objects

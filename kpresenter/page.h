@@ -39,7 +39,10 @@
 #include <qpopmenu.h>
 #include <qimage.h>
 #include <qdatetm.h>
+#include <qdropsite.h>
+
 #include <koQueryTypes.h>
+
 #include "ktextobject.h"
 #include "global.h"
 #include "qwmf.h"
@@ -73,20 +76,20 @@ public:
 
   // constructor - destructor
   Page(QWidget *parent=0,const char *name=0,KPresenterView *_view=0);
-  ~Page(); 
-  
+  ~Page();
+
   // public functions
   void draw(KRect,QPainter*);
   void selectAllObj();
   void deSelectAllObj();
-  void selectObj(int num);      
-  void selectObj(KPObject*);      
+  void selectObj(int num);
+  void selectObj(KPObject*);
   void deSelectObj(int num);
   void deSelectObj(KPObject*);
   void setTextFont(QFont*);
   void setTextColor(QColor*);
   void setTextAlign(TxtParagraph::HorzAlign);
-  KTextObject* kTxtObj() 
+  KTextObject* kTxtObj()
     { return ((editNum != -1 && objectList()->at(editNum)->getType() == OT_TEXT) ?
 	      dynamic_cast<KPTextObject*>(objectList()->at(editNum))->getKTextObject() : 0); }
 
@@ -123,9 +126,9 @@ public slots:
   void deleteObjs() {view->kPresenterDoc()->deleteObjs(); setToolEditMode(toolEditMode);}
   void rotateObjs() {view->extraRotate(); setToolEditMode(toolEditMode);}
   void shadowObjs() {view->extraShadow(); setToolEditMode(toolEditMode);}
-  
+
 protected:
-  
+
   struct PicCache
   {
     QPicture pic;
@@ -134,23 +137,27 @@ protected:
   };
 
   // functions for displaying
-  void paintEvent(QPaintEvent*);    
+  void paintEvent(QPaintEvent*);
   void paintBackground(QPainter*,KRect);
   void drawBackground(QPainter*,KRect);
   void drawObjects(QPainter*,KRect);
-  void mousePressEvent(QMouseEvent *e); 
+  void mousePressEvent(QMouseEvent *e);
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
   void mouseDoubleClickEvent(QMouseEvent *e);
   void resizeEvent(QResizeEvent *e);
-  int getObjectAt(int x,int y); 
+  int getObjectAt(int x,int y);
   void focusInEvent(QFocusEvent*) {}
   void focusOutEvent(QFocusEvent*) {}
   void enterEvent(QEvent *e)
     { view->setRulerMousePos(((QMouseEvent*)e)->x(),((QMouseEvent*)e)->y()); view->setRulerMouseShow(true); }
   void leaveEvent(QEvent *e)
     { view->setRulerMouseShow(false); }
-
+  void dragEnterEvent(QDragEnterEvent *e);
+  void dragLeaveEvent(QDragLeaveEvent *e);
+  void dragMoveEvent(QDragMoveEvent *e);
+  void dropEvent(QDropEvent *e);
+  
   // setup popupmenus
   void setupMenus();
 
@@ -166,7 +173,7 @@ protected:
   QColor txtBackCol() {return view->kPresenterDoc()->txtBackCol();}
   bool spInfinitLoop() {return view->kPresenterDoc()->spInfinitLoop();}
   bool spManualSwitch() {return view->kPresenterDoc()->spManualSwitch();}
-  KRect getPageSize(unsigned int p,float fakt=1.0,bool decBorders = true) 
+  KRect getPageSize(unsigned int p,float fakt=1.0,bool decBorders = true)
     {return view->kPresenterDoc()->getPageSize(p,diffx(),diffy(),fakt,decBorders);}
   unsigned int pageNums() {return view->kPresenterDoc()->getPageNums();}
   int getPageOfObj(int i,float fakt = 1.0) {return view->kPresenterDoc()->getPageOfObj(i,diffx(),diffy(),fakt);}
@@ -204,9 +211,9 @@ protected:
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu,*presMenu;
   QPopupMenu *alignMenu1,*alignMenu2,*alignMenu3,*alignMenu4,*alignMenu5;
   QPopupMenu *pageMenu,*pieMenu,*rectMenu,*alignMenu6,*partMenu,*alignMenu7;
-  bool mousePressed;              
-  ModifyType modType;                    
-  unsigned int oldMx,oldMy;                
+  bool mousePressed;
+  ModifyType modType;
+  unsigned int oldMx,oldMy;
   int resizeObjNum,editNum;
   bool fillBlack;
   KPresenterView *view;
@@ -224,7 +231,7 @@ protected:
   KoDocumentEntry partEntry;
   QList <KPObject> tmpObjs;
   QString autoform;
-  
+
 public slots:
   void chPic();
   void chClip();
@@ -234,7 +241,7 @@ private slots:
   // slots to react on changes
   void toFontChanged(QFont* font) { emit fontChanged(font); }
   void toColorChanged(QColor* color) { emit colorChanged(color); }
-  void toAlignChanged(TxtParagraph::HorzAlign a) { emit alignChanged(a); } 
+  void toAlignChanged(TxtParagraph::HorzAlign a) { emit alignChanged(a); }
   void objProperties();
   void objConfigPie() {view->extraConfigPie();}
   void objConfigRect() {view->extraConfigRect();}
@@ -269,7 +276,7 @@ private slots:
     {view->screenConfigPages();}
   void presStructView()
     {view->screenPresStructView();}
- 
+
 signals:
 
   // signals to notify of changes

@@ -139,7 +139,7 @@ public:
   ~KPresenterView();
 
   void setShell(KPresenterShell *_shell) { shell = _shell; }
-  
+
   void init();
 
   // clean
@@ -332,6 +332,9 @@ public:
   void setFramesToParts();
   void hideAllFrames();
 
+  QFont &currFont() { return tbFont; }
+  QColor &currColor() { return tbColor; }
+
 public slots:
 
   // Document signals
@@ -344,7 +347,7 @@ public slots:
   void slotMoveEnd( KoFrame* );
 
   void sendFocusEvent();
-  
+
 protected slots:
 
   // dialog slots
@@ -420,7 +423,7 @@ protected slots:
   void openPageLayoutDia()
     { extraLayout(); }
   void unitChanged(QString);
-
+  
 protected:
 
   // ********* functions ***********
@@ -433,7 +436,11 @@ protected:
 
   // resize event
   void resizeEvent(QResizeEvent*);
-
+  virtual void dragEnterEvent(QDragEnterEvent *e);
+  virtual void dragMoveEvent(QDragMoveEvent *e);
+  virtual void dragLeaveEvent(QDragLeaveEvent *e);
+  virtual void dropEvent(QDropEvent *e);
+  
   // GUI
   void setupPopupMenus();
   void setupScrollbars();
@@ -705,7 +712,7 @@ protected:
   int screensaver_pid;
 
   KPresenterShell *shell;
-  
+
   // ids
   static const int ID_TOOL_MOUSE = 2;
   static const int ID_TOOL_LINE = 3;
