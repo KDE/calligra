@@ -156,7 +156,7 @@ void KWStyleManager::setupWidget()
     frame1Layout->addWidget( m_newButton, 2, 0 );
 
     m_tabs = new QTabWidget( frame1 );
-    frame1Layout->addMultiCellWidget( m_tabs, 0, 1, 2, 2 );
+    frame1Layout->addMultiCellWidget( m_tabs, 0, 2, 2, 2 );
 
     connect( m_stylesList, SIGNAL( selectionChanged() ), this, SLOT( switchStyle() ) );
     connect( m_tabs, SIGNAL( currentChanged ( QWidget * ) ), this, SLOT( switchTabs() ) );
