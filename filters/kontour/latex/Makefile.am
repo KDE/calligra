@@ -41,5 +41,3 @@ METASOURCES = AUTO
 
 service_DATA = kontour_latex_export.desktop
 servicedir = $(kde_servicesdir)
-#data_DATA = x-latex.desktop
-datadir = $(kde_mimedir)/image

@@ -24,6 +24,3 @@ METASOURCES = AUTO
 
 service_DATA = kword_abiword_import.desktop kword_abiword_export.desktop
 servicedir = $(kde_servicesdir)
-
-kdemime_DATA = x-abiword.desktop
-kdemimedir = $(kde_mimedir)/application

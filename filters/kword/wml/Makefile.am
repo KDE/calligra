@@ -19,6 +19,3 @@ METASOURCES = AUTO
 
 service_DATA = kword_wml_import.desktop kword_wml_export.desktop
 servicedir = $(kde_servicesdir)
-
-data_DATA = wml.desktop
-datadir = $(kde_mimedir)/text

@@ -19,6 +19,3 @@ METASOURCES = AUTO
 
 service_DATA = kword_palmdoc_import.desktop kword_palmdoc_export.desktop
 servicedir = $(kde_servicesdir)
-
-data_DATA = palm.desktop
-datadir = $(kde_mimedir)/application

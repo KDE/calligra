@@ -21,8 +21,5 @@ service_DATA = kspread_csv_import.desktop kspread_csv_export.desktop
 
 servicedir = $(kde_servicesdir)
 
-data_DATA = x-csv.desktop
-datadir = $(kde_mimedir)/text
-
 messages: rc.cpp
 	$(XGETTEXT) *.cc *.cpp -o $(podir)/csvfilter.pot

@@ -16,5 +16,3 @@ METASOURCES = AUTO
 
 service_DATA = kontour_msod_import.desktop
 servicedir = $(kde_servicesdir)
-data_DATA = x-msod.desktop
-datadir = $(kde_mimedir)/image

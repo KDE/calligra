@@ -16,5 +16,3 @@ METASOURCES = AUTO
 
 service_DATA = kontour_xfig_import.desktop
 servicedir = $(kde_servicesdir)
-data_DATA = x-xfig.desktop
-datadir = $(kde_mimedir)/image

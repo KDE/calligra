@@ -19,6 +19,3 @@ METASOURCES = AUTO
 service_DATA = kspread_gnumeric_export.desktop kspread_gnumeric_import.desktop
 
 servicedir = $(kde_servicesdir)
-
-data_DATA = x-gnumeric.desktop
-datadir = $(kde_mimedir)/text

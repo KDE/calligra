@@ -20,8 +20,5 @@ METASOURCES = AUTO
 service_DATA = kspread_qpro_import.desktop
 servicedir = $(kde_servicesdir)
 
-kdemime_DATA = x-quattropro.desktop
-kdemimedir = $(kde_mimedir)/application
-
 messages: rc.cpp
 	$(XGETTEXT) *.cc *.cpp -o $(podir)/kspreadqprofilter.pot

@@ -20,6 +20,3 @@ METASOURCES = AUTO
 
 service_DATA = kword_amipro_import.desktop kword_amipro_export.desktop
 servicedir = $(kde_servicesdir)
-
-data_DATA = amipro.desktop
-datadir = $(kde_mimedir)/application
