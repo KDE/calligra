@@ -900,7 +900,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 
 void KWTextFrameSet::formatMore()
 {
-    if ( !m_lastFormatted && !isVisible() )
+    if ( !m_lastFormatted || !isVisible() )
 	return;
 
     int bottom = -1;
