@@ -1154,7 +1154,8 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
 
     grid2->addWidget(angleRotation,0,0);
     grid3->addWidget(grp,1,1);
-
+    if(dlg->textRotation!=0)
+        multi->setEnabled(false);
 
     grp = new QButtonGroup( i18n("Size of cell"),this);
     grid2 = new QGridLayout(grp,2,2,15,7);
