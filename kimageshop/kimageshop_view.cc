@@ -794,6 +794,8 @@ void KImageShopView::viewColorDialog()
 
 void KImageShopView::changeUndo( QString _text, bool _enable )
 {
+  cout << "ImageShopView::changeUndo : ";
+
   CORBA::WString_var text;
  
   if( _enable )
@@ -805,7 +807,7 @@ void KImageShopView::changeUndo( QString _text, bool _enable )
     m_vMenuEdit->changeItemText( text, m_idMenuEdit_Undo );
     m_vToolBarEdit->setItemEnabled( TBEDIT_UNDO, true );
 
-    cout << "Michael : UNDO enabled" << endl;
+    cout << "UNDO enabled" << endl;
   }
   else
   {
@@ -814,12 +816,14 @@ void KImageShopView::changeUndo( QString _text, bool _enable )
     m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
     m_vToolBarEdit->setItemEnabled( TBEDIT_UNDO, false );
 
-    cout << "Michael : UNDO not enabled" << endl;
+    cout << "UNDO not enabled" << endl;
   }
 }
 
 void KImageShopView::changeRedo( QString _text, bool _enable )
 {
+  cout << "KImageShopView::changeRedo : ";
+
   CORBA::WString_var text;
  
   if( _enable )
@@ -831,7 +835,7 @@ void KImageShopView::changeRedo( QString _text, bool _enable )
     m_vMenuEdit->changeItemText( text, m_idMenuEdit_Redo );
     m_vToolBarEdit->setItemEnabled( TBEDIT_REDO, true );
 
-    cout << "Michael : REDO enabled" << endl;
+    cout << "REDO enabled" << endl;
   }
   else
   {
@@ -840,7 +844,7 @@ void KImageShopView::changeRedo( QString _text, bool _enable )
     m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
     m_vToolBarEdit->setItemEnabled( TBEDIT_REDO, false );
 
-    cout << "Michael : REDO not enabled" << endl;
+    cout << "REDO not enabled" << endl;
   }
 }
 

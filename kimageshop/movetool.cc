@@ -23,34 +23,46 @@
 #include "movetool.h"
 #include "kimageshop_doc.h"
 
-MoveCommand::MoveCommand( KImageShopDoc *doc, int layer, QPoint oldpos, QPoint newpos )
-  : KImageShopCommand( i18n( "Move layer" ), doc )
-  , m_layer( layer )
-  , m_oldPos( oldpos )
-  , m_newPos( newpos )
+MoveCommand::MoveCommand( KImageShopDoc *_doc, int _layer, QPoint _oldpos, QPoint _newpos )
+  : KImageShopCommand( i18n( "Move layer" ), _doc )
+  , m_layer( _layer )
+  , m_oldPos( _oldpos )
+  , m_newPos( _newpos )
 {
 }
 
 void MoveCommand::execute()
 {
-  cout << "Michael : execute command" << endl;
+  cout << "MoveCommand::execute" << endl;
 
-  m_pDoc->setCurrentLayer( m_layer );
-  QRect updateRect( m_pDoc->getCurrentLayer()->imageExtents() );
-  m_pDoc->moveLayer( m_oldPos.x(), m_oldPos.y() );
-  updateRect = updateRect.unite( m_pDoc->getCurrentLayer()->imageExtents() );
-  m_pDoc->compositeImage( updateRect );
+  moveTo( m_newPos );
 }
 
 void MoveCommand::unexecute()
 {
-  cout << "Michael : unexecute command" << endl;
+  cout << "MoveCommand::unexecute" << endl;
+
+  moveTo( m_oldPos );
+}
+
+void MoveCommand::moveTo( QPoint _pos )
+{
+  cout << "MoveCommand::moveTo" << endl;
+
+  QRect oldRect;
+  QRect newRect;
+  QRect updateRect;
 
   m_pDoc->setCurrentLayer( m_layer );
-  QRect updateRect( m_pDoc->getCurrentLayer()->imageExtents() );
-  m_pDoc->moveLayer( m_newPos.x(), m_newPos.y() );
-  updateRect = updateRect.unite( m_pDoc->getCurrentLayer()->imageExtents() );
-  m_pDoc->compositeImage( updateRect );
+
+  oldRect = m_pDoc->getCurrentLayer()->imageExtents();
+  newRect = QRect( _pos, oldRect.size() );
+
+  m_pDoc->moveLayer( _pos.x(), _pos.y() );
+  updateRect = oldRect.unite( newRect );
+  m_pDoc->compositeImage( updateRect );  
+
+  m_pDoc->slotUpdateViews( updateRect );
 }
 
 MoveTool::MoveTool( KImageShopDoc *doc )
@@ -97,12 +109,14 @@ void MoveTool::mouseRelease( const KImageShop::MouseEvent& e )
   if( !e.leftButton )
     return;
 
-  cout << "Michael : add move command" << endl;
+  if( m_dragStart != m_dragPosition )
+  {
+    cout << "add move command" << endl;
 
-  MoveCommand *moveCommand = new MoveCommand( m_pDoc, m_pDoc->getCurrentLayerIndex(), m_dragStart, m_dragPosition );
+    MoveCommand *moveCommand = new MoveCommand( m_pDoc, m_pDoc->getCurrentLayerIndex(), m_dragStart, m_dragPosition );
 
-  m_pDoc->commandHistory()->addCommand( moveCommand );
-
+    m_pDoc->commandHistory()->addCommand( moveCommand );
+  }
   m_dragging = false;
 }
 

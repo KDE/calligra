@@ -30,12 +30,14 @@ class MoveCommand : public KImageShopCommand
 {
 public:
 
-  MoveCommand( KImageShopDoc *doc, int layer, QPoint oldpos, QPoint newpos );
+  MoveCommand( KImageShopDoc *_doc, int _layer, QPoint _oldpos, QPoint _newpos );
 
   virtual void execute();
   virtual void unexecute();
 
 private:
+
+  void moveTo( QPoint _pos );
 
   int m_layer;
   QPoint m_oldPos;
