@@ -2430,10 +2430,17 @@ void KoTextDocument::removeSelectedText( int id, KoTextCursor *cursor )
 	return;
     }
 
+    // ## Qt has a strange setValid/isValid on QTextCursor, only used in the few lines below !?!?
+    bool valid = true;
+    if ( c1.parag() == fParag && c1.index() == 0 &&
+         c2.parag() == lParag && c2.index() == lParag->length() - 1 )
+        valid = FALSE;
+
     bool didGoLeft = FALSE;
-    if (  c1.index() == 0 ) {
+    if (  c1.index() == 0 && c1.parag() != fParag ) {
 	cursor->gotoPreviousLetter();
-	didGoLeft = TRUE;
+        if ( valid )
+            didGoLeft = TRUE;
     }
 
     c1.parag()->remove( c1.index(), c1.parag()->length() - 1 - c1.index() );
