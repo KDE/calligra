@@ -49,7 +49,6 @@
 #include <koPicture.h>
 
 #include <KWEFStructures.h>
-#include <KWEFUtil.h>
 #include <KWEFKWordLeader.h>
 
 #include "ExportFilter.h"

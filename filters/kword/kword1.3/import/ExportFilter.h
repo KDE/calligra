@@ -36,7 +36,6 @@
 #define _EXPORTFILTER_H
 
 #include <KWEFStructures.h>
-#include <KWEFUtil.h>
 #include <KWEFKWordLeader.h>
 
 #define STRICT_OOWRITER_VERSION_1
