@@ -23,7 +23,7 @@
 
 SheetTable::SheetTable( int cols, int rows, QWidget *parent,
                           int flags, const char *name, bool _editable)
-    :QTableView(parent,name)
+    :QtTableView(parent,name)
 {
     editable = _editable;
     if ( flags < 0 )

@@ -14,12 +14,12 @@
 
 #ifndef TABLE_H
 #define TABLE_H
-#include <qtableview.h>
+#include <qttableview.h>
 #include <qlineedit.h>
 #include <qpainter.h>
 #include <qstringlist.h>
 
-class SheetTable : public QTableView
+class SheetTable : public QtTableView
 {
     Q_OBJECT
 public:
