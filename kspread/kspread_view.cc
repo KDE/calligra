@@ -25,7 +25,6 @@
 #include <cassert>
 
 #include <qpushbutton.h>
-#include <qmessagebox.h>
 #include <qprintdialog.h>
 #include <qcollection.h>
 #include <qkeycode.h>
@@ -39,6 +38,7 @@
 #include <kstdaccel.h>
 #include <kstdaction.h>
 #include <kglobal.h>
+#include <kmessagebox.h>
 #include <kformulaedit.h>
 #include <kcoloractions.h>
 
@@ -789,13 +789,11 @@ void KSpreadView::tableFormat()
 QRect r( activeTable()-> selectionRect() );
 if( r.right() ==0x7FFF)
 	{
-	 QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			   i18n("Ok") );
+	 KMessageBox::error( 0L, i18n("Area too large!"));
 	}
 else if(r.bottom()==0x7FFF)
 	{
-	 QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			   i18n("Ok") );
+	 KMessageBox::error( 0L, i18n("Area too large!"));
 	}
 else
 	{
@@ -1117,18 +1115,15 @@ QRect r( activeTable()-> selectionRect() );
 if ( r.left() == 0 || r.top() == 0 ||
        r.right() == 0 || r.bottom() == 0 )
   	{
-  	QMessageBox::warning( 0L, i18n("Error"), i18n("One cell was selected!"),
-			   i18n("Ok") );
+  	KMessageBox::error( 0L, i18n("One cell was selected!") );
 	}
 else if( r.right() ==0x7FFF)
 	{
-	 QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			   i18n("Ok") );
+	 KMessageBox::error( 0L, i18n("Area too large!") );
 	}
 else if(r.bottom()==0x7FFF)
 	{
-	 QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			   i18n("Ok") );
+	 KMessageBox::error( 0L, i18n("Area too large!") );
 	}
 else
 	{
@@ -1143,18 +1138,15 @@ void KSpreadView::sortDec()
     if ( r.left() == 0 || r.top() == 0 ||
 	 r.right() == 0 || r.bottom() == 0 )
     {
-  	QMessageBox::warning( 0L, i18n("Error"), i18n("One cell was selected!"),
-			      i18n("Ok") );
+  	KMessageBox::error( 0L, i18n("One cell was selected!") );
     }
     else if( r.right() ==0x7FFF)
     {
-	QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			      i18n("Ok") );
+	KMessageBox::error( 0L, i18n("Area too large!") );
     }
     else if(r.bottom()==0x7FFF)
     {
-	QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			      i18n("Ok") );
+	KMessageBox::error( 0L, i18n("Area too large!") );
     }
     else
     {
@@ -1195,7 +1187,7 @@ void KSpreadView::editLocalScripts()
   // TODO
   /* if ( !m_pDoc->editPythonCode() )
   {
-    QMessageBox::message( i18n( "KSpread Error" ), i18n( "Could not start editor" ) );
+    KMessageBox::error( i18n( "Could not start editor" ) );
     return;
     } */
 }
@@ -1207,8 +1199,7 @@ if ( m_pTable != 0L )
 	QRect selection( m_pTable->selectionRect() );
 	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
 		{
-		QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			   i18n("Ok") );
+		KMessageBox::error( 0L, i18n("Area too large!") );
 		}
 	else
 		{
@@ -1223,8 +1214,7 @@ if ( m_pTable != 0L )
 	QRect selection( m_pTable->selectionRect() );
 	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
 		{
-		QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			   i18n("Ok") );
+		KMessageBox::error( 0L, i18n("Area too large!") );
 		}
 	else
 		{
@@ -1239,8 +1229,7 @@ if ( m_pTable != 0L )
 	QRect selection( m_pTable->selectionRect() );
 	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
 		{
-		QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			   i18n("Ok") );
+		KMessageBox::error( 0L, i18n("Area too large!") );
 		}
 	else
 		{
@@ -1255,8 +1244,7 @@ if ( m_pTable != 0L )
 	QRect selection( m_pTable->selectionRect() );
 	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
 		{
-		QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			   i18n("Ok") );
+		KMessageBox::error( 0L, i18n("Area too large!") );
 		}
 	else
 		{
@@ -1271,8 +1259,7 @@ if ( m_pTable != 0L )
 	QRect selection( m_pTable->selectionRect() );
 	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
 		{
-		QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			   i18n("Ok") );
+		KMessageBox::error( 0L, i18n("Area too large!") );
 		}
 	else
 		{
@@ -1287,8 +1274,7 @@ if ( m_pTable != 0L )
 	QRect selection( m_pTable->selectionRect() );
 	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
 		{
-		QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			   i18n("Ok") );
+		KMessageBox::error( 0L, i18n("Area too large!") );
 		}
 	else
 		{
@@ -1304,8 +1290,7 @@ if ( m_pTable != 0L )
 	QRect selection( m_pTable->selectionRect() );
 	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
 		{
-		QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			   i18n("Ok") );
+		KMessageBox::error( 0L, i18n("Area too large!") );
 		}
 	else
 		{
@@ -1525,13 +1510,11 @@ void KSpreadView::sort()
   QRect selection( m_pTable->selectionRect() );
   if(selection.left()==0)
     {
-    QMessageBox::warning( 0L, i18n("Error"), i18n("One cell was selected!"),
-			   i18n("Ok") );
+    KMessageBox::error( 0L, i18n("One cell was selected!") );
     }
   else if((selection.right()==0x7FFF) ||(selection.bottom()==0x7FFF))
   	{
-  	QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
-			   i18n("Ok") );
+  	KMessageBox::error( 0L, i18n("Area too large!"));
 	}
    else
         {
@@ -2171,7 +2154,7 @@ void KSpreadView::insertChart()
     QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'KChart' in ServiceTypes", 1 );
     if ( vec.isEmpty() )
     {
-	QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
+	KMessageBox::error( 0L, i18n("Sorry, no charting component registered") );
 	return;
     }
 
@@ -2216,7 +2199,7 @@ void KSpreadView::removeTable()
    if ( doc()->map()->count() <= 1 )
     {
         QApplication::beep();
-        QMessageBox::warning( this, i18n("Remove table"), i18n("You cannot delete the only table of the map."), i18n("OK") ); // FIXME bad english? no english!
+        KMessageBox::sorry( this, i18n("You cannot delete the only table of the map."), i18n("Remove table") ); // FIXME bad english? no english!
         return;
     }
     QApplication::beep();
