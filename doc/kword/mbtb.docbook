@@ -1214,7 +1214,7 @@ more information go to <link linkend="formulas">Formulas</link></para>
 <varlistentry>
 <term id="reconnect-frame">
 <menuchoice>
-<guimenu>Edit</guimenu><guimenuitem>Frame/Frameset</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1228,7 +1228,7 @@ frames</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Edit</guimenu><guimenuitem>Delete Frame</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Delete Frame</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1244,7 +1244,7 @@ before the frame is deleted.</action></para>
 <shortcut>
 <keycombo action="simul">&Ctrl;&Shift;<keycap>R</keycap></keycombo>
 </shortcut>
-<guimenu>Edit</guimenu><guimenuitem>Raise Frame</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Raise Frame</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1261,7 +1261,7 @@ using the menubar. </para>
 <shortcut>
 <keycombo action="simul">&Ctrl;&Shift;<keycap>L</keycap></keycombo>
 </shortcut>
-<guimenu>Edit</guimenu><guimenuitem>Lower Frame</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Lower Frame</guimenuitem>
 </menuchoice>
 </term>
 <listitem>

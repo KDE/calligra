@@ -49,8 +49,9 @@ automatically continued into Frame #2.</para>
 </varlistentry>
 </variablelist>
 
-<para>As you can see, text must (and does) move freely between frames
-within a Frameset.</para>
+<para>Text moves freely between frames
+within a Frameset.  If you insert text in the middle of a frame, all text after the inserted text is 
+rearranged as you type.</para>
 
 </sect2>
 
@@ -63,12 +64,12 @@ within a Frameset.</para>
 <listitem>
 <para>By selecting <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Text
-Frame...</guimenuitem></menuchoice> from the Menu bar</para>
+Frame</guimenuitem></menuchoice> from the Menu bar</para>
 </listitem>
 
 <listitem>
 <para>You can use the keyboard shortcut:
-<keycombo><keycap>F6</keycap></keycombo></para>
+<keycombo><keycap>F2</keycap></keycombo></para>
 </listitem>
 
 <listitem>
@@ -91,64 +92,49 @@ button.</para>
 you drag the mouse, you will see a box drawn.  This box represents the
 boundaries of your new text frame.</para>
 
-<para>When you are satisfied with the size and shape of your new text
-box, release the mouse button.  </para>
+<para>When you are satisfied with the size and shape of the new text
+frame, release the mouse button.  </para>
 
 <para>A dialog box appears.</para>
 
 <screenshot>
 <mediaobject>
-<imageobject><imagedata fileref="Tut15.png" format="PNG"/></imageobject>
+<imageobject><imagedata fileref="formframe3.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
 
-<para>The purpose of this dialog box is two fold:</para>
+<para>This dialog box is used to determine which frameset this new frame will belong to.</para>
 
-<orderedlist numeration="arabic">
-<listitem>
-<para>Determine which frame set this new frame will belong to</para>
-</listitem>
-
-<listitem>
-<para>Set up text flow options.</para>
-</listitem>
-</orderedlist>
-
-<para>The tab labeled <guilabel>Connect Text Frames</guilabel> in this
-dialog box is used to determine which frame set this new text box
-belongs.</para>
-
-<para>Using the example given, you have just created a new frame in a
+<para>Using the screenshot as an example, a new text frame has been created in a
 document which currently has two framesets (called <guilabel>Frameset
 1</guilabel>, and <guilabel>Frameset 2</guilabel>).</para>
 
 <para>You now have the option of either:</para>
 
-<orderedlist numeration="arabic">
-<listitem>
-<para>appending this text box to one of the previously created
-framesets.</para>
+<variablelist>
+<varlistentry>
+<term>Append it to a  previously created
+framesets.</term>
 
-<para>To do this, simply select the frame set you want to connect this
-new text box two (either <guilabel>Frameset 1</guilabel>, or
-<guilabel>Frameset 2</guilabel>)</para>
+<listitem><para>To do this, simply select the frameset you want the new frame to belong to.
+ (Either <guilabel>Frameset 1</guilabel>, or
+<guilabel>Frameset 2</guilabel> in the example.)</para>
 
 <para>When this text frame is created, the new text frame will become
-the last frame in the selected frame set.</para>
-
-<para>or</para>
+the last frame in the selected frameset.</para>
 </listitem>
+</varlistentry>
 
-<listitem>
-<para>You can create a new frame set.  This newly added frame will be the
-first (and currently only) frame in the frame set.</para>
+<varlistentry><term>Create a new frameset.  </term>
 
-<para>If you want this to be a new frame set, you can enter a descriptive
+<listitem><para>If you want this to be a new frame set, you should enter a descriptive
 name for your new frame set.  (A name which will tell you what you might
 find in that frame set).  This name should be entered in the text box
 labeled <guilabel>Name of new Frameset</guilabel>.</para>
-</listitem>
-</orderedlist>
+<para>This newly added frame will be the
+first (and currently only) frame in the frameset.</para>
+</listitem></varlistentry>
+</variablelist>
 
 <para>The other tabs in this dialog box, can be used to set some options
 for this frame.  For more information on these options, see the section
@@ -179,37 +165,36 @@ to delete.</para>
 
 <itemizedlist>
 <listitem>
+<para>Press the <keycap>Delete</keycap> key.</para>
+</listitem>
+
+<listitem>
 <para>selecting <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Delete
-Frame</guimenuitem></menuchoice> from the Menu bar</para><para>or</para>
+Frame</guimenuitem></menuchoice> from the Menu bar</para>
 </listitem>
 
 <listitem>
 <para>While the cursor is on the border of the frame you want to delete,
-click once with the <mousebutton>right</mousebutton> mouse button.</para>
+click once with the &RMB;.</para>
 
 <para>A small menu will appear.  Select <guimenuitem>Delete
 Frame</guimenuitem>.</para>
 </listitem>
 </itemizedlist>
 
-<para>If you are trying to delete the last frame in a frame set, &kword;
+<warning><para>If you are trying to delete the last frame in a frame set, &kword;
 will ask you if you want to delete the current text frame.  If you click
 <guibutton>Delete</guibutton>, the frame, all frames connected to it,
-and the data within these frames (if there is any), will be deleted. If
+and the data within these frames (if there is any), will be deleted.</para>
+<para>If
 you click <guibutton>Cancel</guibutton>, the frame will not be
-deleted.</para>
+deleted.</para></warning>
 
 <para>If you are trying to delete a frame that is not the last frame in
 a frame set, &kword; will not ask for a confirmation.  It will delete the
 current frame immediately, and move the data into the next frame in a
 frame set. No data will be deleted. </para>
-
-<warning>
-<para>Deleting the last frame in a Frameset will delete the entire
-frame set.  All data within that frame set will be lost.  Always use
-caution when deleting the last frame in a frame set.</para>
-</warning>
 
 </sect2>
 
@@ -237,8 +222,8 @@ outline is where you want it, release the mouse button.</para>
 
 <para>It is also easy to change the size or shape of a frame.</para>
 
-<para>Place the cursor on the border of the frame you want to change the
-size or shape of and click once with the left mouse button. This selects
+<para>Place the cursor on the border of the frame 
+and click once with the &LMB;. This selects
 this frame as the current frame.</para>
 
 <para>There are now 8 black squares on the edges of the frame. By moving
@@ -258,22 +243,18 @@ location.</para>
 mouse over the box at the six o'clock position in the frame.  When the
 mouse is over the box, it will change to a double headed arrow.</para>
 
-<para>Now click with the <mousebutton>left</mousebutton> mouse button
+<para>Now click with the &LMB;
 and hold the button down.  As you move the mouse up and down on the
-page, you will see that the frame changes shape to match your mouse
-movements. When you have the bottom edge of the frame where you want it,
-simply release the mouse button, and your changes will become
+page, you will see that the frame changes shape to match the movements of
+the  mouse. When the bottom edge of the frame is at the new location,
+simply release the mouse button, and the changes will become
 permanent.</para>
 
-<para>If you need to resize the frame of a neighboring frame, you should
-click once inside that frame (to make it the current frame), and you can
-move its borders in the same fashion.</para>
-
-<note> 
+<note>
 <para>If you are using a Text Layout Template, you cannot change
 the size of the primary frame by dragging the edges of the frame.  If you
 want to resize this frame, you must do so by <link
-linkend="page-format">Changing the margins</link> </para> 
+linkend="page-format">Changing the margins</link> </para>
 </note>
 
 </sect2>
@@ -281,36 +262,71 @@ linkend="page-format">Changing the margins</link> </para>
 <sect2 id="connect-frame">
 <title>Reconnecting Frames in a Frameset/Changing text flow..</title>
 
-<para>This section of the Users Guide is devoted to controlling where
-(which text frame) text flows when the current frame is full.</para>
+<para>Normally, each new text frame is created with a specific
+purpose.  Sometimes, however, as the document is changed, changes to the text flow
+will need to be made.  To accomplish this, you will need
+to know how to move a frame from one frameset to another.</para>
 
-<para>Normally, you will create each new text frame with a specific
-purpose.  Sometimes, however, as the document is changed, you will want
-the text to flow to a new text frame.  To accomplish this, you will need
-to know how to move a frame from one frame set to another.</para>
-
-<para>Begin by clicking on the frame border of the frame you want to
-change.</para>
+<para>First click on the frame border of the frame you want to
+move to another frameset..</para>
 
 <para>You can change the frame set of the currently selected frame by
 selecting <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Frame/Frameset</guimenuitem></menuchoice>
 from the Menu bar</para>
 
-<para>This will bring up a dialog box with 4 tabs.  Select the tab
+<tip><para>You can also accomplish this by clicking on the frame border once with the &RMB;, and selecting
+<guilabel>Frame/Frameset...</guilabel> from the submenu.</para></tip>
+
+<para>This will bring up a dialog box with five tabs.  Select the tab
 labeled <guilabel>Connect Text Frames</guilabel>.</para>
 
-<para>You will be presented with a list of framesets.  Simply select the
-frame set you want, and the currently selected frame will be added
-<emphasis>to the end</emphasis> of that frame set.</para>
+<para>You will be presented with a list of framesets.  Simply select the new
+frameset.</para>
 
-<para>When you click <guibutton>OK</guibutton>, you will notice that
-&kword; automatically updates the text flow immediately.</para>
+<para>When you click <guibutton>OK</guibutton>, the currently selected frame will be added
+<emphasis>to the end</emphasis> of that frameset.</para>
 
 </sect2>
 
 <sect2 id="raise-frame"><title>Raise and Lower Frames</title>
+<para>When two frames occupy the same place on a page, they must overlap.  
+When they overlap, one frame sits <emphasis>above</emphasis> the other frame.</para>
+<para>You can raise and lower the frames to change which frame sits above the other frames by using two commands.</para>
+
+<variablelist>
+<varlistentry>
+<term>Raise frame</term>
+<listitem><para>To raise a frame, select the frame by clicking once on the frame border with the &RMB;.</para>
+<para>Select <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Raise Frame</guimenuitem>
+</menuchoice> from the menubar.</para>
+<para>This will place the frame on top of <emphasis>all other frames</emphasis> that it overlaps.</para>
+<tip><para>Pressing <keycombo action="simul">&Ctrl;&Shift;<keycap>R</keycap></keycombo> is the
+same as selecting <guilabel>Raise Frame</guilabel> from the menubar.</para></tip>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Lower frame</term>
+<listitem><para>To lower a frame, select the frame by clicking once on the frame border with the &RMB;.</para>
+<para>Select <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Lower Frame</guimenuitem>
+</menuchoice> from the menubar.</para>
+<para>This will place the frame below <emphasis>all other frames</emphasis> that it overlaps.</para>
+<tip><para>Pressing <keycombo action="simul">&Ctrl;&Shift;<keycap>L</keycap></keycombo> is the
+same as selecting <guilabel>Lower Frame</guilabel> from the menubar.</para></tip>
+</listitem></varlistentry>
+</variablelist>
+
 <para></para>
+<para></para>
+<para></para>
+
+
+
+
+
 </sect2>
 
 <sect2 id="hard-break">
@@ -320,17 +336,17 @@ frame set you want, and the currently selected frame will be added
 invisible on the final printed output.</para>
 
 <para>The purpose of a hard frame break, is to force all the text that
-follows it into the next frame in the Frameset.</para>
+follows it into the next frame in the frameset.</para>
 
-<para>If we have the following sentence:  <emphasis>We have nothing to
-fear but fear itself</emphasis></para>
+<para>If we have the following sentence:  <quote>We have nothing to
+fear but fear itself</quote></para>
 
 <para>and we insert a Hard Frame Break, just before the word
 <emphasis>but</emphasis>.</para>
 
-<para>We will end up with one frame containing <emphasis>We have nothing
-to fear</emphasis>, and the next frame in the frame set begins with
-<emphasis>but fear itself</emphasis>.</para>
+<para>We will end up with one frame containing <quote>We have nothing
+to fear</quote>, and the next frame in the frameset begining with
+<quote>but fear itself</quote>.</para>
 
 <para>To add a Hard Frame Break, you should first place the keyboard
 cursor where you want the break to be located in the document.</para>
@@ -350,23 +366,22 @@ Frame Break</guimenuitem></menuchoice> from the Menu bar</para>
 </itemizedlist>
 
 <para>If you want to remove a Hard Frame Break, you simply delete it
-like you would any other character.  Since this is not a character that
-you can see, I recommend the following procedure to most easily delete
-the Hard Frame Break.</para>
+like you would any other character.</para>
+<tip><para>Since this is not a character that
+you can normally see in &kword;, it will be easier to delete a Hard Frame Break with the following proceedure.</para>
 
-<para>First, I recommend turning on <guimenuitem>View Formatting
-Characters</guimenuitem> (Select <menuchoice>
+<orderedlist>
+
+<listitem><para>Select <menuchoice>
 <guimenu>View</guimenu><guimenuitem>Formatting
-Characters</guimenuitem></menuchoice> from the Menu bar)</para>
+Characters</guimenuitem></menuchoice> from the menubar.  This will make the paragraph marks visible.</para></listitem>
 
-<para>This will let you see the carriage returns, and tab stops in your
-document.</para>
+<listitem><para>Find the newly revealed Hard Frame Break, labled <guilabel>---Frame Break---</guilabel>.
+  Place the cursor in
+front of this and click once with the &LMB;.</para></listitem>
 
-<para>Find the <emphasis>last</emphasis> carriage return
-<emphasis>before</emphasis> the break in your text.  Place the cursor in
-front of this carriage return.</para>
-
-<para>Now press the <keycap>delete</keycap> key.</para>
+<listitem><para>Now press the <keycap>Delete</keycap> key.</para></listitem>
+</orderedlist></tip>
 
 </sect2>
 

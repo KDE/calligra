@@ -54,7 +54,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-23-03</date>
+<date>2002-07-04</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -253,6 +253,8 @@ formula editor.</para>
 <para>You can access an on-line thesaurus (English only) to find the exact word you are looking for.</para>
 </listitem><listitem>
 <para>&kword; can automatically create a table of contents, and keep it up to date.</para>
+</listitem><listitem>
+<para>&kword; has optional autocompletion for commonly used words.</para>
 </listitem>
 </itemizedlist>
 
@@ -348,24 +350,18 @@ determine which parts of the manual will be helpful to read before you begin usi
 
 <chapter id="guides-3">
 <title>Detailed Guides: Document Layout</title>
-<para><link linkend="store-print">Two sections ago</link>, we talked about
-<link linkend="new-doc">creating</link>, <link
-linkend="saving">saving</link>, <link linkend="loading">loading</link>
-and <link linkend="printing">printing documents</link>. <link
-linkend="guides-2">In the section after that</link> (the previous
-section), we discussed <link linkend="select">entering the textual
-information</link>, <link linkend="clipboard">moving it around</link>,
-<link linkend="spell-check">spell checking</link>, and <link
-linkend="autocorrect">auto-correcting</link> your text.</para>
 
-<para>This section of the guide is designed to help you layout your
-documents.  We will begin with changing the size and shape of the page
+<para>This section of the guide is designed to help the user with the format and layout of their
+documents.  The section will begin with information on changing the size and shape of the page
 and the margins, and work progressively through smaller and smaller
-blocks of text (frames, then paragraphs, then characters).</para>
+blocks of text (frames, then paragraphs, then characters). At each level, all of the format and 
+layout options will be explained.</para>
 
-<para>After we have discussed formatting individual characters, we
-will deal with some miscellaneous topics related to layout of your
-document.</para>
+<para>After discussing the formatting of individual characters, the manual will elaborate on styles
+(to provide formatting consistancy through the document), multi-column documents, tables and finally the use of headers
+and footers in a document.</para>
+
+<para>The final part will show you how to save a document as a template.</para>
 
 &pageformat;
 &frames;
@@ -547,6 +543,10 @@ onto any website.</para>
 <link linkend="template-delete-group">Removing template group</link>.</para>
 </sect1>
 
+<sect1 id="qd-reorder">
+<title>How do I re-order the frames in a frameset</title>
+<para></para>
+</sect1>
 </chapter>
 
 <!-- **************************************************************************************************** -->
