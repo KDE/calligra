@@ -69,17 +69,18 @@ uninstall-local:
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kspread.pot
 
+kspread.cc: kspread.h
 kspread.h: kspread.idl $(top_srcdir)/lib/kofficecore/koffice.idl $(micodir)/include/CORBA.h
 	$(IDL) $(IDL_FLAGS) $(srcdir)/kspread.idl
 
+chart.cc: chart.h
 chart.h: $(interfacedir)/chart.idl $(micodir)/include/CORBA.h
 	$(IDL) $(IDL_FLAGS) $(interfacedir)/chart.idl
 
+datatools.cc: datatools.h
 datatools.h: $(idldir)/datatools.idl $(micodir)/include/CORBA.h
 	$(IDL) $(IDL_FLAGS) $(idldir)/datatools.idl
 
-datatools.cc: datatools.h
-kspread.cc: kspread.h
 kspread_canvas.cc: kspread.h chart.h
 kspread_doc.cc: kspread.h 
 kspread_main.cc: kspread.h kspread_table.h 
