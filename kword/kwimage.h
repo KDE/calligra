@@ -43,7 +43,7 @@ public:
     int widthHint() const { return width; }
     int minimumWidth() const { return width; }
 
-    void setImage( const KWImage &image ) { m_image = image; }
+    void setImage( const KWImage &image );
     KWImage image() const { return m_image; }
 
     void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );

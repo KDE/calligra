@@ -248,7 +248,7 @@ public:
     // Load and apply paragraph layout
     void loadLayout( QDomElement & attributes );
 
-    void insertCustomItem( int index, QTextCustomItem * custom, QTextFormat * currentFormat );
+    void setCustomItem( int index, QTextCustomItem * custom, QTextFormat * currentFormat );
 
     const QList<KoTabulator> *tabList() const { return &m_tabList; }
     void setTabList( const QList<KoTabulator> *tabList );
@@ -295,8 +295,8 @@ class KWTextDocument : public QTextDocument
 public:
     KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p ) : QTextDocument( p ), m_textfs( textfs ) {
         // QTextDocument::QTextDocument creates a parag, but too early for our createParag to get called !
-        // So we have to get rid of it and re-created it.
-        clear( true );
+        // So we have to get rid of it.
+        clear( false );
     }
 
     virtual QTextParag * createParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE )

@@ -519,7 +519,7 @@ void KWTextFrameSet::updateFrames()
             }
         }
     }
-    if ( getFrameInfo() == FI_BODY )
+    //if ( getFrameInfo() == FI_BODY )
         kdDebug(32002) << "KWTextFrameSet::updateFrames m_availableHeight=" << m_availableHeight << endl;
     frames.setAutoDelete( true );
 
@@ -634,10 +634,12 @@ void KWTextFrameSet::zoom()
     }
 
     // Mark all paragraphs as changed !
-    for ( QTextParag * s = text->firstParag() ; s ; s = s->next() )
+    for ( KWTextParag * s = static_cast<KWTextParag *>( text->firstParag() ) ; s ; s = static_cast<KWTextParag *>( s->next() ) )
     {
         s->setChanged( TRUE );
         s->invalidate( 0 );
+        if ( s->counter() )
+            s->counter()->invalidate();
     }
     m_lastFormatted = text->firstParag();
     m_availableHeight = -1; // to be recalculated
@@ -661,11 +663,6 @@ void KWTextFrameSet::unzoom()
     }
 
     m_origFontSizes.clear();
-
-    // Unzoom all custom items
-    QListIterator<QTextCustomItem> cit( text->allCustomItems() );
-    for ( ; cit.current() ; ++cit )
-        cit.current()->adjustToPainter( 0L );        // See zoom()
 }
 
 int KWTextFrameSet::docFontSize( QTextFormat * format ) const
@@ -903,7 +900,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 
 void KWTextFrameSet::formatMore()
 {
-    if ( !m_lastFormatted )
+    if ( !m_lastFormatted && !isVisible() )
 	return;
 
     int bottom = -1;
@@ -921,6 +918,8 @@ void KWTextFrameSet::formatMore()
     // Stop if we have formatted everything or if we need more space
     // Otherwise, stop formatting after "to" paragraphs,
     // but make sure we format everything the views need
+    // ###### lastFormatted->rect().height() is dangerous. It's 0 initially, and it can
+    // be too big after zooming out !!!
     for ( int i = 0;
           lastFormatted && bottom + lastFormatted->rect().height() <= m_availableHeight &&
           ( i < to || bottom <= viewsBottom ) ; ++i )
@@ -930,6 +929,7 @@ void KWTextFrameSet::formatMore()
 	bottom = lastFormatted->rect().top() + lastFormatted->rect().height();
 	lastFormatted = lastFormatted->next();
     }
+    kdDebug(32002) << "KWTextFrameSet::formatMore finished formatting. Setting m_lastFormatted to " << lastFormatted << endl;
     m_lastFormatted = lastFormatted;
 
     if ( lastFormatted && bottom != -1 && bottom + lastFormatted->rect().height() > m_availableHeight )
@@ -2489,7 +2489,8 @@ void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
 void KWTextFrameSetEdit::insertPicture( const QString & file )
 {
     KWTextImage * custom = new KWTextImage( textDocument(), file );
-    static_cast<KWTextParag *>( cursor->parag() )->insertCustomItem( cursor->index(), custom, currentFormat );
+    cursor->parag()->insert( cursor->index(), QChar('@') /*whatever*/ );
+    static_cast<KWTextParag *>( cursor->parag() )->setCustomItem( cursor->index(), custom, currentFormat );
     // TODO undo/redo support
 }
 

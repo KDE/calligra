@@ -819,9 +819,8 @@ void KWTextParag::copyParagData( QTextParag *_parag )
     // applying the parag layout will create them
 }
 
-void KWTextParag::insertCustomItem( int index, QTextCustomItem * custom, QTextFormat * currentFormat )
+void KWTextParag::setCustomItem( int index, QTextCustomItem * custom, QTextFormat * currentFormat )
 {
-    insert( index, QChar('@') /*whatever*/ );
     setFormat( index, 1, currentFormat );
     at( index )->setCustomItem( custom );
     addCustomItem();
@@ -1094,7 +1093,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                 KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
                 KWTextImage * custom = new KWTextImage( textdoc, QString::null );
                 kdDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
-                insertCustomItem( index, custom, paragFormat() );
+                setCustomItem( index, custom, paragFormat() );
                 // <IMAGE>
                 QDomElement image = formatElem.namedItem( "IMAGE" ).toElement();
                 if ( !image.isNull() ) {
