@@ -55,6 +55,9 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
     initDoc(KoDocument::InitDocAppStarting);
     m_bCanChangeValue=true;
 
+    // Display parameters
+    m_displayData = m_currentData;
+
     // hack
     setModified(true);
 }
@@ -74,6 +77,9 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     m_params = new KChartParams();
     m_params->setThreeDBars( true );
+
+    // Handle data in rows per default.
+    m_auxiliary.m_dataDirection = KChartAuxiliary::DataRows;
 
     return TRUE;
 }
@@ -119,7 +125,31 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     // If params is 0, initDoc() has not been called.
     Q_ASSERT( m_params != 0 );
 
-    // ####### handle transparency
+    // Handle data in rows or columns.
+    if (m_auxiliary.m_dataDirection == KChartAuxiliary::DataRows) {
+	// These are efficient so it doesn't matter if we always copy.
+	m_displayData = m_currentData;
+    }
+    else {
+	// FIXME: Only copy when necessary.
+	
+	// Resize displayData so that the transposed data has room.
+	m_displayData.expand(m_currentData.usedCols(),
+			     m_currentData.usedRows());
+	
+	// Copy data and transpose it.
+	for (uint row = 0; row < m_currentData.usedCols(); row++) {
+	    for (uint col = 0; col < m_currentData.usedRows(); col++) {
+		m_displayData.setCell(row, col, m_currentData.cell(col, row));
+	    }
+	}
+
+	// FIXME: Transpose headers as well.  This is done in params.
+    }
+
+    // Now start the real painting.
+
+    // Handle transparency.
     if( !transparent )
         painter.eraseRect( rect );
 
@@ -130,8 +160,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     //                << m_currentData.usedCols() << endl;
 
     // Need to draw only the document rectangle described in the parameter rect.
-    //  return;
-    KDChart::paint( &painter, m_params, &m_currentData, 0, &rect );
+    KDChart::paint( &painter, m_params, &m_displayData, 0, &rect );
 }
 
 
@@ -451,8 +480,18 @@ QDomDocument KChartPart::saveXML()
     kdDebug(35001) << "kchart saveXML called" << endl;
     QDomDocument doc = m_params->saveXML( false );
 
-    // Save the data values.
     QDomElement docRoot = doc.documentElement();
+
+    // Save auxiliary data.
+    QDomElement aux = doc.createElement( "KChartAuxiliary" );
+    docRoot.appendChild( aux );
+
+    // Only one auxiliary element so far: the data direction (rows/columns).
+    QDomElement e = doc.createElement( "direction" );
+    aux.appendChild( e );
+    e.setAttribute( "value", (int) m_auxiliary.m_dataDirection );
+
+    // Save the data values.
     QDomElement data = doc.createElement( "data" );
     docRoot.appendChild( data );
 
@@ -506,9 +545,9 @@ QDomDocument KChartPart::saveXML()
 }
 
 
-bool KChartPart::loadOasis( const QDomDocument& doc,
-			    KoOasisStyles&      oasisStyles,
-			    const QDomDocument& settings,
+bool KChartPart::loadOasis( const QDomDocument& /*doc*/,
+			    KoOasisStyles&      /*oasisStyles*/,
+			    const QDomDocument& /*settings*/,
 			    KoStore* )
 {
     //todo
@@ -527,6 +566,11 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 {
     kdDebug(35001) << "kchart loadXML called" << endl;
     bool result=m_params->loadXML( doc );
+
+    
+    kdDebug(35001) << "LabelTexts: " << endl;
+
+
     if (!result)
     {
         //try to load old file format
@@ -535,14 +579,62 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 
     if ( result )
     {
-        result = loadData( doc, m_currentData );
-#if 0
-        bool retData = loadData( doc, m_currentData );
-        if ( !retData )
-            initRandomData();
-#endif
+        result = loadAuxiliary(doc)
+	    && loadData( doc, m_currentData );
     }
+
     return result;
+}
+
+
+bool KChartPart::loadAuxiliary( const QDomDocument& doc )
+{
+    QDomElement  chart = doc.documentElement();
+    QDomElement  aux   = chart.namedItem("KChartAuxiliary").toElement();
+
+    // Older XML files might be missing this section.  That is OK; the
+    // defaults will be used.
+    if (aux.isNull())
+	return true;
+
+    QDomNode node = aux.firstChild();
+
+    // If the aux section exists, it should contain data.
+    while (!node.isNull()) {
+
+	QDomElement e = node.toElement();
+	if (e.isNull()) {
+	    // FIXME: Should this be regarded as an error?
+	    node = node.nextSibling();
+	    continue;
+	}
+
+	// Check for direction
+	if ( e.tagName() == "direction" ) {
+	    if ( e.hasAttribute("value") ) {
+		bool  ok;
+		int   dir = e.attribute("value").toInt(&ok);
+		if ( !ok )
+		    dir = (int) KChartAuxiliary::DataRows;
+
+		kdDebug(35001) << "Got aux value \"direction\": " << dir << endl;
+		m_auxiliary.m_dataDirection = (KChartAuxiliary::DataDirection) dir;
+	    }
+	    else {
+		kdDebug(35001) << "Error in direction tag." << endl;
+	    }
+	}
+#if 0
+	// Expand with more auxiliary types when needed.
+	else if ( e.tagName() == "..." ) {
+	}
+	and so on...
+#endif
+
+	node = node.nextSibling();
+    }
+
+    return true;
 }
 
 

@@ -234,11 +234,18 @@ void kchartDataEditor::setXLabel( const QStringList & xlbl )
 {
     QHeader  *colHeader = m_table->horizontalHeader();
 
+    kdDebug(35001) << "setXLabel called." << endl;
 #if 0
     int  numCols = _widget->usedCols()
 #else
     int  numCols = m_colsSB->value();
 #endif
+    for (int col = 0;col < numCols; col++) {
+        if( xlbl[col].isNull() )
+	    kdDebug(35001) << "(NULL)" << endl;
+	else
+	    kdDebug(35001) << xlbl[col] << endl;;
+    }
 
     colHeader->setLabel(0, "");
     for (int col = 0;col < numCols; col++) {

@@ -51,7 +51,8 @@ class KChartConfigDialog : public QTabDialog
 public:
     enum { KC_FONT = 1, KC_COLORS = 2, KC_BACK = 4, KC_LEGEND=8, KC_SUBTYPE=16,KC_HEADERFOOTER=32,KC_ALL=256 };
     KChartConfigDialog( KChartParams* params,
-                        QWidget* parent, int flags,KoChart::Data *dat );
+                        QWidget* parent, int flags,
+			KoChart::Data *dat, KChartAuxiliary *aux );
 
     void initSubtypePage();
 signals:
@@ -59,6 +60,7 @@ signals:
 
 protected:
     KChartParams                 *m_params;
+    KChartAuxiliary              *m_aux;
 
     KChartDataConfigPage         *m_datapage;
     KChartSubTypeChartPage       *m_subTypePage;

@@ -49,8 +49,10 @@ namespace KChart
 {
 
 KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
-                                            QWidget* parent, KoChart::Data *dat) :
-    QWidget( parent ), m_params( params ), data(dat)
+					    QWidget* parent, 
+					    KoChart::Data *dat,
+					    KChartAuxiliary *aux) :
+    QWidget( parent ), m_params( params ), data(dat), m_aux(aux)
 {
     QGridLayout *grid1 = new QGridLayout(this, 2, 1, KDialog::marginHint(),
 					 KDialog::spacingHint());
@@ -94,18 +96,32 @@ KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
 
 void KChartDataConfigPage::init()
 {
-    m_rowMajor->setChecked(true);
+    if (m_aux->m_dataDirection == KChartAuxiliary::DataRows)
+	m_rowMajor->setChecked(true);
+    else
+	m_colMajor->setChecked(true);
 }
 
 
 void KChartDataConfigPage::defaults()
 {
+    // FIXME: KChartConfigEditor calls defaults() on init.  It should
+    // call init() instead.  Until that is fixed, we will have to call
+    // init here as well.
+#if 0
     m_rowMajor->setChecked(true);
+#else
+    init();
+#endif
 }
 
 
 void KChartDataConfigPage::apply()
 {
+    if (m_rowMajor->isChecked())
+	m_aux->m_dataDirection = KChartAuxiliary::DataRows;
+    else
+	m_aux->m_dataDirection = KChartAuxiliary::DataColumns;
 }
 
 

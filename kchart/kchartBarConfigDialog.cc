@@ -31,8 +31,9 @@ namespace KChart
 {
 
 KChartBarConfigDialog::KChartBarConfigDialog( KChartParams* params,
-					      QWidget* parent, int flag, KoChart::Data *dat ) :
-    KChartConfigDialog( params, parent, flag,dat  )
+					      QWidget* parent, int flag, 
+					      KoChart::Data *dat) :
+    KChartConfigDialog( params, parent, flag, dat, NULL  )
 {
     // Bar page
     _barpage = new KChartBarConfigPage( this );

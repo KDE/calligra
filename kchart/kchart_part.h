@@ -6,13 +6,29 @@
 #define KCHART_PART_H
 
 
-#include <koChart.h>
 #include <kconfig.h>
+
+#include <koChart.h>
+
 
 namespace KChart
 {
 
 class KChartParams;
+
+
+// This struct only exists because the configuration editor needs
+// access to it.
+//
+// You might wonder why this is a struct instead of a class. Well, if
+// it was a class, we would have to provide all members with
+// accessors, and then we would have won nothing.
+//
+struct KChartAuxiliary {
+    typedef  enum {DataRows = 0, DataColumns = 1} DataDirection;
+
+    DataDirection  m_dataDirection; // Rows or Columns
+};
 
 
 class KChartPart : public KoChart::Part
@@ -42,8 +58,9 @@ public:
     void saveConfig(KConfig *conf);
     void defaultConfig();
 
-    KoChart::Data  *data()                     { return &m_currentData; }
-    KChartParams   *params() const             { return m_params;      }
+    KoChart::Data   *data()                    { return &m_currentData; }
+    KChartParams    *params() const            { return m_params;       }
+    KChartAuxiliary *auxdata()                 { return &m_auxiliary;   }
 
     // Save and load
     virtual       QDomDocument saveXML();
@@ -66,6 +83,7 @@ protected:
     void  initRandomData();
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
     bool  loadOldXML( const QDomDocument& doc );
+    bool  loadAuxiliary( const QDomDocument& doc );
     bool  loadData( const QDomDocument& doc, KoChart::Data& currentData );
 
 private:
@@ -81,12 +99,20 @@ private:
     QStringList    m_longLabels;
     QStringList    m_shortLabels;
 
+    // Auxiliary values that are part of the document, and thus will
+    // be included in saved files.
+    KChartAuxiliary  m_auxiliary;
+
     // Auxiliary values
     bool           m_bCanChangeValue;
 
     // Graphics
     QWidget       *m_parentWidget;
+
+    // Used when displaying.
+    KoChart::Data  m_displayData;
 };
+
 
 class WizardExt : public KoChart::WizardExtension
 {

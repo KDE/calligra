@@ -1,5 +1,25 @@
 2005-03-07    <inge@lysator.liu.se>
 
+	Start on bug 14971: kchart data import should flip X & Y data.
+	* kchart_part.{h,cc} (KChartAuxiliary): New struct.
+	(auxdata): new method in KChartPart.
+	(loadAuxiliary): new method in KChartPart.
+	(m_auxiliary): new member in KChartPart.
+
+	(paintContent): Paint data in rows or columns (labels not yet done).
+	(saveXML): Save auxiliary data (data direction) as well.
+	(loadXML): Call loadAuxiliary().
+	* kchartConfigDialog.{h,cc} (constructor): Take auxiliary data as 
+	parameter and send it to the DataConfigPage.
+	* kchartDataConfigPage.{h,cc} (constructor): Take aux data.
+	(apply): Set data direction in aux data
+	(init): Read data direction from aux data
+
+	
+	Cleaning:
+	* kchart_part.cc (loadOasis): remove parameter names to remove
+	warnings.
+
 	Reorder chart types to make it more logical order
 	* kchart.rc (Toolbar): Reorder chart types
 	* kchartWizardSelectChartTypePage.cc (constructor): Reorder chart
