@@ -5,6 +5,7 @@ Name[no]=Graf
 Name[ru]=Графики
 Exec=kchart.bin --server
 Comment=Kalles Charter
+Comment[fi]=Kallen kuvaajaohjelma
 Comment[no]=Kalles graf
 Comment[pt_BR]=Programa de desenho de fluxogramas
 Comment[ru]=Графики Kalle

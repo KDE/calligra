@@ -1,10 +1,13 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KWord
+Name[is]=Ritvinnsla
 Name[no]=Ord
 Name[ru]=Текстовый процессор
 Exec=kword.bin --server
 Comment=KWord
+Comment[fi]=TekstinkДsittelyohjelma
+Comment[is]=kword:  Ritvinnsluforrit K vЖndulsins
 Comment[ru]=Тестовый процессор
 MimeTypes=application/x-kword,
 RepoID=IDL:KWord/DocumentFactory:1.0,

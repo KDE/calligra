@@ -1,10 +1,13 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KPresenter
+Name[is]=Varpi
 Name[no]=Presenterer
 Name[ru]=Презентации
 Exec=kpresenter.bin --server
 Comment=Reggie's Presentation Software
+Comment[fi]=Reggien esitysohjelma
+Comment[is]=kpresenter:  Kerfi til aП smМПa 'glФrur' og halda kynningar
 Comment[no]=Reggies presentasjonsprogramvare
 Comment[pt_BR]=Software de ApresentaГУes
 Comment[ru]=Программа для подготовки презентаций Reggie

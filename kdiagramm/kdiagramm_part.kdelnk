@@ -1,10 +1,12 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KDiagramm
+Name[fi]=KDiagram
 Name[no]=Diagram
 Name[ru]=‰…¡«“¡ÕÕŸ
 Exec=kdiagramm.bin --server
 Comment=Torben's Chart
+Comment[fi]=Torbenin kuvaajaohjelma
 Comment[no]=Torbens graf
 Comment[pt_BR]=Programa para confecÁ„o de diagramas
 Comment[ru]=Á“¡∆…À… Torben'¡

@@ -1,10 +1,13 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=SpellTool
+Name[is]=Réttritun
 Name[no]=Staveverktøy
 Name[ru]=ğÒÏ×ÅÒËÁ ĞÒÁ×ÏĞÉÓÁÎÉÑ
 Exec=spell_tool --server
 Comment=Torben's Spell Tool
+Comment[fi]=Oikeinkirjoituksen tarkistaja
+Comment[is]=ol:  Forrit til ağ yfirfara stafsetningu
 Comment[no]=Torbens staveverktøy
 Comment[pt_BR]=Ferramenta de correção ortográfica
 Comment[ru]=ğÒÏ×ÅÒËÁ ĞÒÁ×ÏĞÉÓÁÎÉÑ Torben'Á

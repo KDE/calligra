@@ -1,10 +1,13 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KSpread
+Name[is]=Töflureiknir
 Name[no]=Regneark
 Name[ru]=ôÁÂÌÉÃÁ
 Exec=kspread.bin --server
 Comment=Torben's Spread Sheet
+Comment[fi]=Torbenin taulukkolaskenta
+Comment[is]=Töflureiknir K vöndulsins
 Comment[no]=Torbens regneark
 Comment[pt_BR]=Planilha Eletrônica
 Comment[ru]=ôÁÂÌÉÃÙ Torben'Á

@@ -1,10 +1,13 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KFormula
+Name[is]=FormЗlur
 Name[no]=Formel
 Name[ru]=Формулы
 Exec=kformula.bin --server
 Comment=The Formula Editor
+Comment[fi]=Kaavaeditori
+Comment[is]=kformula:  TСl til aП vinna meП formЗlur
 Comment[no]=Formelregidereren
 Comment[pt_BR]=Editor de FСrmulas
 Comment[ru]=Редактор формул
