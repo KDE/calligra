@@ -444,6 +444,10 @@ Startup TODO:
 KexiDB
 - mysql/sqlite drivers: fixed problem with xxxxConnection::value(int)
   when we're using raw sql statements (so expanded field list is empty)
+- MySQL Driver: a hack to enable local connections without using 
+  a local socket file: if user doesn't want to use local socket file,
+  host name is automatically set (internally) to "127.0.0.1" 
+  before connecting. This is especially usable when we're using SSH tunneling.
 
 2005-02-26
 Widgets
