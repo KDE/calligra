@@ -57,8 +57,12 @@ KPGotoPage::KPGotoPage( KPresenterDoc *doc, float fakt, const QValueList<int> &s
     QValueList<int>::ConstIterator it = slides.begin();
     unsigned int i = 0;
     for ( unsigned int j = 0; it != slides.end(); ++it, ++j ) {
-        QString t;
-        t = doc->getPageTitle( *it - 1, i18n( "Slide %1" ).arg( *it ), fakt );
+        QString t(doc->getPageTitle( *it - 1, i18n( "Slide %1" ).arg( *it ), fakt ));
+        // cut ultra long titles...
+        if(t.length() > 30) {
+            t.truncate(30);
+            t+=i18n("...");
+        }
         spinbox->insertItem( QString( "%1 - %2" ).arg( *it ).arg( t ), -1 );
         if ( *it == start )
             i = j;
