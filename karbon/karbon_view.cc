@@ -343,6 +343,8 @@ KarbonView::zoomChanged()
 	bool bOK;
 	double zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
 	m_canvas->setZoomFactor( zoomFactor );
+	// TODO : I guess we should define a document size member at this point...
+	m_canvas->resizeContents( 800 * zoomFactor, 600 * zoomFactor );
 	m_canvas->repaintAll();
 }
 
