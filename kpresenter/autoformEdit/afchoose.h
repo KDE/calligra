@@ -78,6 +78,7 @@ private slots:
 
   void cancelClicked();
 
+  void slotDoubleClick();
 protected:
   void closeEvent ( QCloseEvent * );
 

@@ -149,12 +149,20 @@ void AFChoose::setupTabs()
                     this,SLOT(nameChanged(QString)));
             connect(this, SIGNAL(currentChanged(QWidget *)), this,
                     SLOT(tabChanged(QWidget*)));
+            connect(grpPtr->loadWid,SIGNAL( doubleClicked ( QIconViewItem *)),this,
+                   SLOT(slotDoubleClick()));
             grpPtr->label = new QLabel(grpPtr->tab);
             grpPtr->label->setText(" ");
             grpPtr->label->setMaximumHeight(grpPtr->label->sizeHint().height());
             addTab(grpPtr->tab,grpPtr->name);
         }
     }
+}
+
+void AFChoose::slotDoubleClick()
+{
+    chosen();
+    accept();
 }
 
 /*====================== name changed ===========================*/
