@@ -569,7 +569,7 @@ void KWView::setupActions()
         actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next frame in the frameset." ) );
     }
 
-    /*actionInsertPage =*/ new KAction( m_doc->processingType() == KWDocument::WP ? i18n( "Page" ) : i18n( "Page..." ), "newslide", 0,
+    /*actionInsertPage =*/ new KAction( m_doc->processingType() == KWDocument::WP ? i18n( "Page" ) : i18n( "Page..." ), "page", 0,
                                     this, SLOT( insertPage() ),
                                     actionCollection(), "insert_page" );
 

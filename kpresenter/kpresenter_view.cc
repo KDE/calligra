@@ -2428,7 +2428,7 @@ void KPresenterView::setupActions()
 
     // ---------------- insert actions
 
-    actionInsertPage = new KAction( i18n( "&Slide..." ), "newslide", Key_F2,
+    actionInsertPage = new KAction( i18n( "&Slide..." ), "slide", Key_F2,
                                     this, SLOT( insertPage() ),
                                     actionCollection(), "insert_page" );
 
