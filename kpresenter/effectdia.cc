@@ -33,6 +33,7 @@
 #include <qvbox.h>
 #include <qlineedit.h>
 #include <qvaluelist.h>
+#include <qlayout.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -49,23 +50,28 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QList<KPObject>& 
     view = _view;
     KPObject *obj = objs.at( 0 );
 
-    back = new QVBox( this );
-    back->setMargin( 10 );
-    back->setSpacing( 5 );
+    topLayout = new QVBoxLayout(this, 4);
+    topLayout->setMargin( 10 );
+    topLayout->setSpacing( 10 );
 
-    QGroupBox *grp1 = new QGroupBox( 4, Qt::Horizontal, i18n( "Appear" ), back );
+    QGroupBox *grp1 = new QGroupBox(i18n( "Appear" ), this );
+    topLayout->addWidget(grp1);
+    QGridLayout *upperRow = new QGridLayout(grp1, 3, 2, 15);
 
     lNum = new QLabel( i18n( "Number: " ), grp1 );
     lNum->setAlignment( AlignVCenter );
+    upperRow->addWidget(lNum, 0, 0);
 
     eNum = new QSpinBox( 0, 100, 1, grp1 );
     eNum->setValue( obj->getPresNum() );
+    upperRow->addWidget(eNum, 0, 1);
 
-    ( void )new QWidget( grp1 );
-    ( void )new QWidget( grp1 );
+    //( void )new QWidget( grp1 );
+    //( void )new QWidget( grp1 );
 
     lEffect = new QLabel( i18n( "Effect (appearing): " ), grp1 );
     lEffect->setAlignment( AlignVCenter );
+    upperRow->addWidget(lEffect, 1, 0);
 
     cEffect = new QComboBox( false, grp1, "cEffect" );
     cEffect->insertItem( i18n( "No Effect" ) );
@@ -82,12 +88,15 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QList<KPObject>& 
     cEffect->insertItem( i18n( "Wipe from top" ) );
     cEffect->insertItem( i18n( "Wipe from bottom" ) );
     cEffect->setCurrentItem( static_cast<int>( obj->getEffect() ) );
-
+    upperRow->addWidget(cEffect, 1, 1);
+    
     lEffect2 = new QLabel( i18n( "Effect (object specific): " ), grp1 );
     lEffect2->setAlignment( AlignVCenter );
+    upperRow->addWidget(lEffect2, 2, 0);
 
     cEffect2 = new QComboBox( false, grp1, "cEffect2" );
     cEffect2->insertItem( i18n( "No Effect" ) );
+    upperRow->addWidget(cEffect2, 2, 1);
 
     switch ( obj->getType() ) {
     case OT_TEXT: {
@@ -108,19 +117,25 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QList<KPObject>& 
         }
     }
 
-    disappear = new QCheckBox( i18n( "Disappear" ), back );
+    disappear = new QCheckBox( i18n( "Disappear" ), this );
     disappear->setChecked( obj->getDisappear() );
+    topLayout->addWidget(disappear);
 
-    QGroupBox *grp2 = new QGroupBox( 2, Qt::Horizontal, back );
+    QGroupBox *grp2 = new QGroupBox(i18n( "Disappear" ), this);
+    topLayout->addWidget(grp2);
+    QGridLayout *lowerRow = new QGridLayout(grp2, 2, 1, 15);
 
     lDisappear = new QLabel( i18n( "Number: " ), grp2 );
     lDisappear->setAlignment( AlignVCenter );
+    lowerRow->addWidget(lDisappear, 0, 0);
 
     eDisappear = new QSpinBox( 0, 100, 1, grp2 );
     eDisappear->setValue( obj->getDisappearNum() );
+    lowerRow->addWidget(eDisappear, 0, 1);
 
     lDEffect = new QLabel( i18n( "Effect (disappearing): " ), grp2 );
     lDEffect->setAlignment( AlignVCenter );
+    lowerRow->addWidget(lDEffect, 1, 0);
 
     cDisappear = new QComboBox( false, grp2, "cDisappear" );
     cDisappear->insertItem( i18n( "No Effect" ) );
@@ -137,11 +152,11 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QList<KPObject>& 
     cDisappear->insertItem( i18n( "Wipe to the top" ) );
     cDisappear->insertItem( i18n( "Wipe to the bottom" ) );
     cDisappear->setCurrentItem( static_cast<int>( obj->getEffect3() ) );
-
-    ( void )new QWidget( back );
-
-    KButtonBox *bb = new KButtonBox( back );
+    lowerRow->addWidget(cDisappear, 1, 1);
+    
+    KButtonBox *bb = new KButtonBox(this);
     bb->addStretch();
+    topLayout->addWidget(bb);
 
     okBut = bb->addButton( i18n( "OK" ) );
     okBut->setAutoRepeat( false );
@@ -152,6 +167,7 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QList<KPObject>& 
     cancelBut = bb->addButton( i18n( "Cancel" ) );
 
     bb->layout();
+    topLayout->activate();
 
     bb->setMaximumHeight( bb->sizeHint().height() );
 
@@ -160,8 +176,6 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QList<KPObject>& 
     connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
     connect( disappear, SIGNAL( clicked() ), this, SLOT( disappearChanged() ) );
     disappearChanged();
-
-    resize( 630, 260 );
 }
 
 /*================================================================*/
@@ -199,7 +213,7 @@ void EffectDia::slotEffectDiaOk()
 void EffectDia::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
-    back->resize( size() );
+    //topLayout->resize( size() );
 }
 
 /*================================================================*/

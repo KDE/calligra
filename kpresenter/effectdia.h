@@ -29,7 +29,7 @@ class QComboBox;
 class QLabel;
 class QPushButton;
 class QCheckBox;
-class QVBox;
+class QBoxLayout;
 class QResizeEvent;
 class KPObject;
 
@@ -55,7 +55,7 @@ protected:
     QSpinBox *eNum,*eDisappear;
     QPushButton *cancelBut, *okBut;
     QCheckBox *disappear;
-    QVBox *back;
+    QBoxLayout *topLayout;
 
     KPresenterView *view;
     QList<KPObject> objs;
