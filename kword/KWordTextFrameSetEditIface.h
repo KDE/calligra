@@ -38,6 +38,7 @@ k_dcop:
     void insertExpression(const QString &_c);
     void insertFrameBreak();
     void insertVariable( int type, int subtype = 0 );
+    void insertVariable( const QString & var);
     void insertCustomVariable( const QString &name);
     void insertLink(const QString &_linkName, const QString & hrefName);
     void insertTOC();
