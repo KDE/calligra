@@ -1445,7 +1445,8 @@ void KPresenterView::screenConfigPages()
     pgConfDia = new PgConfDia( this, "PageConfig",
                                kPresenterDoc()->spInfiniteLoop(),
                                kPresenterDoc()->spManualSwitch(),
-                               kPresenterDoc()->presentationDuration() );
+                               kPresenterDoc()->presentationDuration(),
+                               kPresenterDoc()->presPen() );
     pgConfDia->setCaption( i18n( "Configure Slide Show" ) );
     QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
     pgConfDia->exec();
@@ -3871,10 +3872,11 @@ void KPresenterView::pgConfOk()
 {
     PgConfCmd *pgConfCmd = new PgConfCmd( i18n( "Configure Slide Show" ),
 					  pgConfDia->getManualSwitch(), pgConfDia->getInfiniteLoop(),
-                                          pgConfDia->getPresentationDuration(),
+                                          pgConfDia->getPresentationDuration(), pgConfDia->getPen(),
 					  kPresenterDoc()->spManualSwitch(),
 					  kPresenterDoc()->spInfiniteLoop(),
                                           kPresenterDoc()->presentationDuration(),
+                                          kPresenterDoc()->presPen(),
 					  kPresenterDoc() );
     pgConfCmd->execute();
     kPresenterDoc()->addCommand( pgConfCmd );

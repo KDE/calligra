@@ -22,6 +22,7 @@
 
 #include <kdialogbase.h>
 #include <qmap.h>
+#include <qpen.h>
 
 #include <global.h>
 class QButtonGroup;
@@ -33,9 +34,11 @@ class KPresenterDoc;
 class QRadioButton;
 class QComboBox;
 class QCheckBox;
+class QColor;
 class KIntNumInput;
 class KURLRequester;
 class KPresenterSoundPlayer;
+class KColorButton;
 
 /******************************************************************/
 /* class PgConfDia                                                */
@@ -49,11 +52,13 @@ public:
 
     // constructor - destructor
     PgConfDia( QWidget* parent, const char* name,
-               bool infLoop, bool swMan, bool showPresentationDuration );
+               bool infLoop, bool swMan, 
+               bool showPresentationDuration, QPen pen );
     ~PgConfDia();
     bool getInfiniteLoop() const;
     bool getManualSwitch() const;
     bool getPresentationDuration()const;
+    QPen getPen() const;
 
 protected:
 
@@ -63,6 +68,8 @@ protected:
     QLabel *label2, *label3, *lTimer;
     QVBoxLayout *back;
     QListView *lSlides;
+    KColorButton* penColor;
+    KIntNumInput* penWidth;
 
 public slots:
     void confDiaOk() { emit pgConfDiaOk(); }

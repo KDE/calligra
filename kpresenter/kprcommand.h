@@ -529,9 +529,9 @@ class PgConfCmd : public KNamedCommand
 {
 public:
     PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
-               bool _showPresentationDuration,
+               bool _showPresentationDuration, QPen _pen,
                bool _oldManualSwitch, bool _oldInfiniteLoop,
-               bool _oldShowPresentationDuration,
+               bool _oldShowPresentationDuration, QPen _oldPen, 
                KPresenterDoc *_doc );
 
     virtual void execute();
@@ -541,6 +541,7 @@ protected:
     bool manualSwitch, oldManualSwitch;
     bool infiniteLoop, oldInfiniteLoop;
     bool showPresentationDuration, oldShowPresentationDuration;
+    QPen pen, oldPen;
     KPresenterDoc *doc;
 };
 

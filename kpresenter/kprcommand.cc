@@ -1444,18 +1444,20 @@ void BrushCmd::unexecute()
 
 /*================================================================*/
 PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
-                      bool _showPresentationDuration,
+                      bool _showPresentationDuration, QPen _pen, 
                       bool _oldManualSwitch, bool _oldInfiniteLoop,
-                      bool _oldShowPresentationDuration,
+                      bool _oldShowPresentationDuration, QPen _oldPen,
                       KPresenterDoc *_doc )
     : KNamedCommand( _name )
 {
     manualSwitch = _manualSwitch;
     infiniteLoop = _infiniteLoop;
     showPresentationDuration = _showPresentationDuration;
+    pen = _pen;
     oldManualSwitch = _oldManualSwitch;
     oldInfiniteLoop = _oldInfiniteLoop;
     oldShowPresentationDuration = _oldShowPresentationDuration;
+    oldPen = _oldPen;
     doc = _doc;
 }
 
@@ -1465,6 +1467,7 @@ void PgConfCmd::execute()
     doc->setManualSwitch( manualSwitch );
     doc->setInfiniteLoop( infiniteLoop );
     doc->setPresentationDuration( showPresentationDuration );
+    doc->setPresPen( pen );
 }
 
 /*================================================================*/
@@ -1473,6 +1476,7 @@ void PgConfCmd::unexecute()
     doc->setManualSwitch( oldManualSwitch );
     doc->setInfiniteLoop( oldInfiniteLoop );
     doc->setPresentationDuration( oldShowPresentationDuration );
+    doc->setPresPen( oldPen );
 }
 
 /******************************************************************/

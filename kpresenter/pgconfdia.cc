@@ -25,10 +25,14 @@
 #include <qbuttongroup.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
+#include <qhbox.h>
+#include <qpen.h>
 
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <kglobal.h>
+#include <knuminput.h>
+#include <kcolorbutton.h>
 
 /******************************************************************/
 /* class PgConfDia                                                */
@@ -36,7 +40,8 @@
 
 /*================================================================*/
 PgConfDia::PgConfDia( QWidget* parent, const char* name,
-                      bool infLoop, bool swMan, bool showPresentationDuration )
+                      bool infLoop, bool swMan, 
+                      bool showPresentationDuration, QPen pen )
     : KDialogBase( parent, name, true, "",Ok|Cancel )
 {
     QWidget *page = new QWidget( this );
@@ -81,6 +86,22 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
              this, SLOT( presSlidesChanged( int ) ) );
 #endif
 
+    // presentation pen (color and width)
+
+    new QLabel( i18n( "Presentation Pen:" ), general );
+
+    QHBox* penGroup = new QHBox( general );
+    penGroup->setSpacing( KDialog::spacingHint() );
+
+    new QLabel( i18n( "Color:" ), penGroup );
+    penColor = new KColorButton( pen.color(), pen.color(), penGroup );
+
+    new QLabel( i18n( "Width:" ), penGroup );
+    penWidth = new KIntNumInput( 1, penGroup );
+    penWidth->setSuffix( i18n(" pt") ); 
+    penWidth->setRange( 1, 10, 1 );
+    penWidth->setValue( pen.width() );
+
     connect( this, SIGNAL( okClicked() ), this, SLOT( confDiaOk() ) );
     connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 
@@ -119,6 +140,12 @@ bool PgConfDia::getManualSwitch() const
 bool PgConfDia::getPresentationDuration() const
 {
     return presentationDuration->isChecked();
+}
+
+/*================================================================*/
+QPen PgConfDia::getPen() const
+{
+    return QPen( penColor->color(), penWidth->value() );
 }
 
 #include <pgconfdia.moc>
