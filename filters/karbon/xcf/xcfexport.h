@@ -46,6 +46,9 @@ private:
 	virtual void visitVLayer( VLayer& layer );
 	
 	QDataStream* m_stream;
+
+	unsigned m_width;
+	unsigned m_height;
 };
 
 #endif

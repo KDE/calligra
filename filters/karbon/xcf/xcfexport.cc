@@ -90,14 +90,19 @@ XcfExport::convert( const QCString& from, const QCString& to )
 void
 XcfExport::visitVDocument( VDocument& document )
 {
-	// Header tag.
+	// Remember width and height for layer saving.
+	m_width  = static_cast<unsigned>( document.width() );
+	m_height = static_cast<unsigned>( document.height() );
+
+
+	// Header tag (length 14 bytes).
 	m_stream->writeRawBytes( "gimp xcf file", 14 );
 
 	// Image width.
-	*m_stream << static_cast<Q_UINT32>( document.width() );
+	*m_stream << static_cast<Q_UINT32>( m_width );
 
 	// Image height.
-	*m_stream << static_cast<Q_UINT32>( document.height() );
+	*m_stream << static_cast<Q_UINT32>( m_height );
 
 	// Image type 0 = RGB.
 	*m_stream << static_cast<Q_UINT32>( 0 );
@@ -108,6 +113,22 @@ XcfExport::visitVDocument( VDocument& document )
 		<< static_cast<Q_UINT32>( 0 )
 		// size 0.
 		<< static_cast<Q_UINT32>( 0 );
+
+
+	// Write layer offsets.
+	QIODevice::Offset offset = m_stream->device()->at();
+
+//	for( unsigned i = 0; i < document.layers().count(); ++i )
+//	{
+//		*m_stream << static_cast<Q_UINT32>( offset + ( i + 3 + 2 ) * 4 );
+//	}
+	
+	// Append a zero offset to mark end of layer offset list.
+	*m_stream << static_cast<Q_UINT32>( 0 );
+
+
+	// Append a zero offset to mark end of channel offset list.
+	*m_stream << static_cast<Q_UINT32>( 0 );
 
 
 	// Export layers.
