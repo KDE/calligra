@@ -5015,9 +5015,22 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     QDomElement textP = element.namedItem( "text:p" ).toElement();
     if ( !textP.isNull() )
     {
-        text = textP.text();
-        setCellText( text );
-        setValue( text );
+      QDomElement subText = textP.firstChild().toElement();
+      if ( !subText.isNull() )
+	{
+	  // something in <text:p>, e.g. links
+	  text = subText.text();
+	  
+	  if ( subText.hasAttribute( "xlink:href" ) )
+	    {
+	      QString link = subText.attribute( "xlink:href" );
+	      text = "!<a href=\"" + link + "\"><i>" + text + "</i></a>";
+	    }
+	}
+      else
+        text = textP.text(); // our text, could contain formating for value or result of formul
+      setCellText( text );
+      setValue( text );
     }
     
     return true;
