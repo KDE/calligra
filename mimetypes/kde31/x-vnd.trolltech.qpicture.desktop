@@ -4,4 +4,4 @@ Icon=vectorgfx
 Type=MimeType
 MimeType=image/x-vnd.trolltech.qpicture
 Patterns=*.qpic;
-Comment=QT's QPicture Meta File
+Comment=QPicture Metafile
