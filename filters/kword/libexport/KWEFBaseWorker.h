@@ -38,9 +38,10 @@ class KWEFBaseWorker
     public:
         void registerKWordLeader(KWEFKWordLeader* leader);
     public: // callbacks to Leader
-        bool loadKoStoreFile(const QString& fileName, QByteArray& array); // DEPRECATED (use loadSubFile)
         bool loadSubFile(const QString& fileName, QByteArray& array);
         QIODevice* getSubFileDevice(const QString& fileName);
+    public: // indirect callbacks to Leader:
+        bool loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image);
     public: // leader/worker functions
         virtual bool doOpenFile (const QString& filenameOut, const QString& to);
         virtual bool doCloseFile (void); // Close file in normal conditions

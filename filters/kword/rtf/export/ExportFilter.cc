@@ -23,7 +23,6 @@
 */
 
 #include <qstring.h>
-#include <qregexp.h>
 #include <qtextcodec.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -35,8 +34,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdebugclasses.h>
-
-#include <koPicture.h>
 
 #include <KWEFUtil.h>
 #include <KWEFBaseWorker.h>
@@ -111,50 +108,6 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
     return true;
 }
 
-// convert unknown image to PNG using QImageIO
-// return false is failed
-
-bool RTFWorker::convertUnknownPicture(const QString& strName, const QString& extension, QByteArray& image)
-{
-    QIODevice* io=getSubFileDevice(strName);
-    if (!io)
-    {
-        // NO message error, as there must be already one
-        return false;
-    }
-
-    kdDebug(30515) << "Picture " << strName << " has size: " << io->size() << endl;
-    
-    KoPicture picture;
-    if (!picture.load(io, extension)) // we do not care about KoPictureKey
-    {
-        kdWarning(30515) << "Could not read picture: " << strName << " (RTFWorker::convertUnknownPicture)" << endl;
-        return false;
-    }
-    
-    QImageIO imageIO;
-    imageIO.setImage(picture.generateImage(picture.getOriginalSize())); // ### TODO: KoPicture::getOriginalSize is bad for cliparts
-
-    QBuffer buffer(image); // A QBuffer is a QIODevice
-    if (!buffer.open(IO_WriteOnly))
-    {
-        kdWarning(30515) << "Could not open buffer! (RTFWorker::convertUnknownPicture)" << endl;
-        return false;
-    }
-
-    imageIO.setIODevice(&buffer);
-    imageIO.setFormat("PNG"); // Save as PNG
-
-    if (!imageIO.write())
-    {
-        kdWarning(30515) << "Could not write converted image! (RTFWorker::convertUnknownPicture)" << endl;
-        return false;
-    }
-    buffer.close();
-
-    return true;
-}
-
 bool RTFWorker::makeImage(const FrameAnchor& anchor)
 {
     QString strImageName(anchor.picture.koStoreName);
@@ -182,7 +135,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
         kdDebug(30515) << "Converting image " << anchor.picture.koStoreName << endl;
 
         strTag="\\pngblip";
-        if( !convertUnknownPicture(anchor.picture.koStoreName,strExt,image) )
+        if( !loadAndConvertToImage(anchor.picture.koStoreName,strExt,"PNG",image) )
         {
             kdWarning(30515) << "Unable to convert " << anchor.picture.koStoreName << endl;
             return true;
@@ -191,7 +144,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
 
     // load the image, this isn't necessary for converted image
     if( !image.size() )
-        if (!loadKoStoreFile(anchor.picture.koStoreName,image))
+        if (!loadSubFile(anchor.picture.koStoreName,image))
         {
             kdWarning(30515) << "Unable to load picture " << anchor.picture.koStoreName << endl;
             return true;

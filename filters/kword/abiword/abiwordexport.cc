@@ -34,9 +34,6 @@
 
 #include <qmap.h>
 #include <qiodevice.h>
-#include <qbuffer.h>
-#include <qimage.h>
-#include <qpicture.h>
 #include <qtextstream.h>
 #include <qdom.h>
 
@@ -49,7 +46,6 @@
 #include <koGlobal.h>
 #include <koFilterChain.h>
 #include <koPictureKey.h>
-#include <koPicture.h>
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
@@ -257,47 +253,6 @@ bool AbiWordWorker::doOpenDocument(void)
     return true;
 }
 
-bool AbiWordWorker::convertUnknownPicture(const QString& strName, const QString& extension, QByteArray& image)
-{
-    QIODevice* io=getSubFileDevice(strName);
-    if (!io)
-    {
-        // NO message error, as there must be already one
-        return false;
-    }
-
-    kdDebug(30506) << "Picture " << strName << " has size: " << io->size() << endl;
-    
-    KoPicture picture;
-    if (!picture.load(io, extension)) // we do not care about KoPictureKey
-    {
-        kdWarning(30506) << "Could not read picture: " << strName << " (AbiWordWorker::convertUnknownPicture)" << endl;
-        return false;
-    }
-    
-    QImageIO imageIO;
-    imageIO.setImage(picture.generateImage(picture.getOriginalSize())); // ### TODO: KoPicture::getOriginalSize is bad for cliparts
-
-    QBuffer buffer(image); // A QBuffer is a QIODevice
-    if (!buffer.open(IO_WriteOnly))
-    {
-        kdWarning(30506) << "Could not open buffer! (AbiWordWorker::convertUnknownPicture)" << endl;
-        return false;
-    }
-
-    imageIO.setIODevice(&buffer);
-    imageIO.setFormat("PNG"); // Save as PNG
-
-    if (!imageIO.write())
-    {
-        kdWarning(30506) << "Could not write converted image! (AbiWordWorker::convertUnknownPicture)" << endl;
-        return false;
-    }
-    buffer.close();
-
-    return true;
-}
-
 void AbiWordWorker::writePictureData(const QString& koStoreName, const QString& keyName)
 {
     kdDebug(30506) << "AbiWordWorker::writeImageData" << endl;
@@ -315,13 +270,13 @@ void AbiWordWorker::writePictureData(const QString& koStoreName, const QString& 
 
     if (strExtension=="png")
     {
-        isImageLoaded=loadKoStoreFile(koStoreName,image);
+        isImageLoaded=loadSubFile(koStoreName,image);
     }
     else
     {
         // All other picture types must be converted to PNG
         //   (yes, even JPEG, SVG or WMF!)
-        isImageLoaded=convertUnknownPicture(koStoreName,strExtension,image);
+        isImageLoaded=loadAndConvertToImage(koStoreName,strExtension,"PNG",image);
     }
 
     if (isImageLoaded)

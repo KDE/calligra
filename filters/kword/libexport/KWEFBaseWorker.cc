@@ -20,7 +20,12 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qbuffer.h>
+#include <qimage.h>
+
 #include <kdebug.h>
+
+#include <koPicture.h>
 
 #include "KWEFStructures.h"
 #include "KWEFBaseWorker.h"
@@ -64,11 +69,6 @@ bool KWEFBaseWorker::doFullAllParagraphs (const QValueList<ParaData>& paraList)
     return true;
 }
 
-bool KWEFBaseWorker::loadKoStoreFile(const QString& fileName, QByteArray& array)
-{   // DEPRECATED: use loadSubFile
-    return loadSubFile(fileName,array);
-}
-
 bool KWEFBaseWorker::loadSubFile(const QString& fileName, QByteArray& array)
 // return value:
 //   true if the file is not empty
@@ -95,6 +95,49 @@ QIODevice* KWEFBaseWorker::getSubFileDevice(const QString& fileName)
     }
     return m_kwordLeader->getSubFileDevice(fileName);
 }
+
+
+bool KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image)
+{
+    QIODevice* io=getSubFileDevice(strName);
+    if (!io)
+    {
+        // NO message error, as there must be already one
+        return false;
+    }
+
+    kdDebug(30508) << "Picture " << strName << " has size: " << io->size() << endl;
+    
+    KoPicture picture;
+    if (!picture.load(io, inExtension)) // we do not care about KoPictureKey
+    {
+        kdWarning(30508) << "Could not read picture: " << strName << " (KWEFBaseWorker::loadAndConvertToImage)" << endl;
+        return false;
+    }
+    
+    QImageIO imageIO;
+    imageIO.setImage(picture.generateImage(picture.getOriginalSize())); // ### TODO: KoPicture::getOriginalSize is bad for cliparts
+
+    QBuffer buffer(image); // A QBuffer is a QIODevice
+    if (!buffer.open(IO_WriteOnly))
+    {
+        kdWarning(30508) << "Could not open buffer! (KWEFBaseWorker::loadAndConvertToImage)" << endl;
+        return false;
+    }
+
+    imageIO.setIODevice(&buffer);
+    imageIO.setFormat(outExtension.utf8());
+
+    if (!imageIO.write())
+    {
+        kdWarning(30508) << "Could not write converted image! (KWEFBaseWorker::loadAndConvertToImage)" << endl;
+        return false;
+    }
+    buffer.close();
+
+    return true;
+}
+
 
 //
 // Secondly, define all methods returning false
