@@ -2096,10 +2096,10 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             m_currentTextObjectView->keyPressEvent( e );
         }
     } else if ( mouseSelectedObject ) {
+        m_hotSpot = KoPoint(0,0);
 	if ( e->state() & ControlButton ) {
             int offsetx=QMAX(1,m_view->zoomHandler()->zoomItX(10));
             int offsety=QMAX(1,m_view->zoomHandler()->zoomItY(10));
-            m_hotSpot = KoPoint(0,0);
             if ( !m_keyPressEvent )
             {
                 firstX = m_view->zoomHandler()->zoomItX(m_boundingRect.x());
