@@ -1,6 +1,5 @@
+usr/bin/filter_wrapper
 usr/bin/koscript
-usr/lib/libkformula.so.*
-usr/lib/libkformula.la
 usr/lib/libkformula2.so.*
 usr/lib/libkformula2.la
 usr/lib/libkochart.so.*
