@@ -804,7 +804,7 @@ void KWordView::setFormat( const KWFormat &_format, bool _check, bool _update_pa
 
     if ( _format.getPTFontSize() != -1 ) {
 	( (KFontSizeAction*)actionFormatFontSize )->blockSignals( TRUE );
-	( (KFontSizeAction*)actionFormatFontSize )->setCurrentItem( _format.getPTFontSize() - 1 );
+	( (KFontSizeAction*)actionFormatFontSize )->setFontSize( format.getPTFontSize() );
 	( (KFontSizeAction*)actionFormatFontSize )->blockSignals( FALSE );
     }
 
