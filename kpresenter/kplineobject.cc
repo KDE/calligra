@@ -60,9 +60,12 @@ QDomDocumentFragment KPLineObject::save( QDomDocument& doc )
 {
     QDomDocumentFragment fragment=KPObject::save(doc);
     fragment.appendChild(KPObject::createPenElement("PEN", pen, doc));
-    fragment.appendChild(KPObject::createValueElement("LINETYPE", static_cast<int>(lineType), doc));
-    fragment.appendChild(KPObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
-    fragment.appendChild(KPObject::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
+    if (lineType!=LT_HORZ)
+        fragment.appendChild(KPObject::createValueElement("LINETYPE", static_cast<int>(lineType), doc));
+    if (lineBegin!=L_NORMAL)
+        fragment.appendChild(KPObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
+    if (lineEnd!=L_NORMAL)
+        fragment.appendChild(KPObject::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
     return fragment;
 }
 
