@@ -3932,9 +3932,55 @@ void KSpreadTable::setWordSpelling(const QPoint &_marker, const QString _listWor
 
 void KSpreadTable::copyAsText( const QPoint &_marker )
 {
-    KSpreadCell* cell = cellAt( _marker.x(), _marker.y() );
-    if( !cell->isDefault() )
-        QApplication::clipboard()->setText( cell->text() );
+    // No selection ? => copy active cell
+    if ( m_rctSelection.left() == 0 )
+    {
+        KSpreadCell * cell = cellAt( _marker.x(), _marker.y() );
+        if( !cell->isDefault() )
+            QApplication::clipboard()->setText( cell->text() );
+        
+        return;
+    }
+
+    int x;
+    int y;
+    unsigned int max = 1;
+    QString result;
+    for (y = m_rctSelection.top(); y <= m_rctSelection.bottom(); ++y)
+    {
+      for (x = m_rctSelection.left(); x <= m_rctSelection.right(); ++x)
+      {
+        KSpreadCell * cell = cellAt( x, y );
+        if( !cell->isDefault() )
+        {
+          if ( cell->strOutText().length() > max )
+            max = cell->strOutText().length();
+        }
+      }
+    }
+
+    for (y = m_rctSelection.top(); y <= m_rctSelection.bottom(); ++y)
+    {
+      for (x = m_rctSelection.left(); x <= m_rctSelection.right(); ++x)
+      {
+        KSpreadCell * cell = cellAt( x, y );
+        if( !cell->isDefault() )
+        {
+            int l = max - cell->strOutText().length();
+            for ( int i = 0; i < l; ++i )
+              result += " ";
+            result += cell->strOutText();
+        }
+        else
+        {
+            for ( int i = 0; i < max; ++i )
+              result += " ";
+        }
+      }
+      result += "\n";
+    }
+
+    QApplication::clipboard()->setText( result );
 }
 
 void KSpreadTable::copySelection( const QPoint &_marker )

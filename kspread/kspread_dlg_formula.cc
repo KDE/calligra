@@ -610,6 +610,9 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
     int pos = result->cursorPosition();
     result->setText( m_leftText+functions->text( functions->currentItem() ) + "()" + m_rightText);
 
+    if (result->text()[0] != '=')
+      result->setText("=" + result->text());
+
     //
     // Put focus somewhere is there are no QLineEdits visible
     //

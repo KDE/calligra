@@ -1416,7 +1416,6 @@ void KSpreadView::copyAsText()
     if ( !m_pTable )
         return;
     m_pTable->copyAsText( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-
 }
 
 
