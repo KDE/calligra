@@ -120,7 +120,7 @@ public:
     bool isFrameEmpty( KWFrame * frame );
     virtual bool canRemovePage( int num );
     // reimp for internal reasons
-    virtual void delFrame( unsigned int num, bool recalc = true, bool remove = true );
+    virtual void delFrame( unsigned int num, bool remove = true, bool recalc = true );
     void delFrame( KWFrame *frm, bool remove = true, bool recalc = true )
         { KWFrameSet::delFrame( frm, remove, recalc ); } // strange C++ feature ;)
 

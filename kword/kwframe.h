@@ -467,7 +467,19 @@ public:
 
     // frame management
     virtual void addFrame( KWFrame *_frame, bool recalc = true );
+
+    /** Delete a frame from the set of frames this frameSet has.
+    *   @param num The frameNumber to be removed.
+    *   @param remove passing true means that there can not be an undo of the action.
+    *   @param recalc do an updateFrames()
+    */
     virtual void delFrame( unsigned int _num, bool remove = true, bool recalc = true );
+
+    /** Delete a frame from the set of frames this frameSet has.
+    *   @param frm. The frame that should be deleted
+    *   @param remove passing true means that there can not be an undo of the action.
+    *   @param recalc do an updateFrames()
+    */
     void delFrame( KWFrame *frm, bool remove = true, bool recalc = true ); // calls the virtual one
     void deleteAllFrames();
     void deleteAllCopies(); // for headers/footers only
