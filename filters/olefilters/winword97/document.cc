@@ -156,11 +156,6 @@ kdDebug(s_area) << "Document::createAttributes: hps 3: " <<exceptionStyle.getChp
                 if (m_field.fieldType == FIELD_TYPE_EMBEDDED_OBJECT)
                 {
                     m_field.end = i;
-                    kdDebug(s_area) << "Document::createAttributes: field: " <<
-                        m_field.fieldType << ": " <<
-                        chpxs[m_field.start].startFc << "." <<
-                        chpxs[m_field.separator].startFc << "." <<
-                        chpxs[m_field.end].startFc << ": " << endl;
                     rewriteField(text, chpxs);
                 }
                 else
@@ -256,11 +251,6 @@ kdDebug(s_area) << "Document::createAttributes: hps 3: " <<exceptionStyle.getChp
                 break;
             case SPECIAL_FIELD_END_MARK:
                 m_field.end = i;
-                kdDebug(s_area) << "Document::createAttributes: field: " <<
-                    m_field.fieldType << ": " <<
-                    chpxs[m_field.start].startFc << "." <<
-                    chpxs[m_field.separator].startFc << "." <<
-                    chpxs[m_field.end].startFc << ": " << endl;
                 rewriteField(text, chpxs);
                 break;
             default:
@@ -444,6 +434,18 @@ void Document::rewriteField(
     QString &text,
     CHPXarray &chpxs)
 {
+    kdDebug(s_area) << "Document::rewriteField: field: " <<
+        m_field.fieldType << ": " <<
+        chpxs[m_field.start].startFc << "." <<
+        chpxs[m_field.separator].startFc << "." <<
+        chpxs[m_field.end].startFc << ": " <<
+        text.mid(chpxs[m_field.start].startFc, chpxs[m_field.end].startFc - chpxs[m_field.start].startFc + 1) << endl;
+    if (m_field.separator < m_field.start)
+    {
+        kdDebug(s_area) << "Document::rewriteField: missing separator" << endl;
+        m_field.separator = m_field.end;
+    }
+    kdDebug(s_area) << "Document::rewriteField: before: " << text << endl;
     unsigned lhsLength = chpxs[m_field.separator].startFc - chpxs[m_field.start].startFc;
     unsigned rhsLength = chpxs[m_field.end].startFc - chpxs[m_field.separator].startFc;
     unsigned run;
@@ -457,7 +459,7 @@ void Document::rewriteField(
         break;
     case 0: // TBD: some (second?, mailto:?) HYPERLINKs look like this!
     case FIELD_TYPE_HYPERLINK:
-        newRhs = text.mid(chpxs[m_field.separator].startFc, rhsLength);
+        newRhs = text.mid(chpxs[m_field.separator].startFc + 1, rhsLength - 1);
         break;
     default:
         kdError(s_area) << "Document::rewriteField: unsupported field: " <<
@@ -469,7 +471,7 @@ void Document::rewriteField(
 
     {
         run = m_field.start;
-        text.replace(chpxs[run].startFc, lhsLength, newLhs);
+        text.replace(chpxs[run].startFc, lhsLength + 1, newLhs);
         length = lhsLength - newLhs.length();
         chpxs[run].endFc -= length;
         run++;
@@ -485,7 +487,7 @@ void Document::rewriteField(
 
     {
         run = m_field.separator;
-        text.replace(chpxs[run].startFc, rhsLength, newRhs);
+        text.replace(chpxs[run].startFc, rhsLength + 1, newRhs);
         length = rhsLength - newRhs.length();
         chpxs[run].endFc -= length;
         run++;
@@ -496,4 +498,5 @@ void Document::rewriteField(
             run++;
         }
     }
+    kdDebug(s_area) << "Document::rewriteField: after: " << text << endl;
 }
