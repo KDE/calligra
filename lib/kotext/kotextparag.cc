@@ -1329,7 +1329,7 @@ QString KoTextParag::toString( int from, int length ) const
     if ( from == 0 && m_layout.counter )
         str += m_layout.counter->text( this ) + ' ';
     // ### is this correct for RTL text?
-    if ( length == 0xffffffff )
+    if ( length == -1 )
         length=this->length()-1;
     for ( int i = from ; i < (length+from) ; ++i )
     {
@@ -1339,6 +1339,8 @@ QString KoTextParag::toString( int from, int length ) const
             KoVariable * var = dynamic_cast<KoVariable *>(ch->customItem());
             if ( var )
                 str += var->text(true);
+            else //frame inline
+                str +=' ';
         }
         else
             str += ch->c;
