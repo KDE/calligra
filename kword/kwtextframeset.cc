@@ -3044,84 +3044,33 @@ void KWTextFrameSetEdit::insertVariable( int type )
 {
     kdDebug() << "KWTextFrameSetEdit::insertVariable " << type << endl;
     KWDocument * doc = frameSet()->kWordDocument();
-    KWVariableFormat * varFormat = doc->variableFormat( type );
-    if ( !varFormat )
-    {
-        kdWarning() << "No variable format found for type " << (int)type << endl;
-        return;
-    }
-
-    KConfig config("kofficerc");
-    QString full_name;
-    QString email_addr;
-    QString organization;
-    if( config.hasGroup( "Author" ))
-    {
-        config.setGroup( "Author" );
-        full_name=config.readEntry("full-name","");
-        email_addr=config.readEntry("email", "");
-        organization=config.readEntry("company", "");
-    }
-    else
-    {
-        KConfig config2( "emaildefaults", true );
-        config2.setGroup( "Defaults" );
-        QString group = config2.readEntry("Profile","Default");
-        config2.setGroup(QString("PROFILE_%1").arg(group));
-        full_name = config2.readEntry( "FullName", "" );
-        email_addr=config2.readEntry("EmailAddress", "");
-    }
 
     KWVariable * var = 0L;
-    switch ( type ) {
-        case VT_DATE_FIX: {
-            var = new KWDateVariable( textFrameSet(), TRUE, QDate::currentDate(), varFormat );
-        } break;
-        case VT_DATE_VAR: {
-            var = new KWDateVariable( textFrameSet(), FALSE, QDate::currentDate(), varFormat );
-        } break;
-        case VT_TIME_FIX: {
-            var = new KWTimeVariable( textFrameSet(), TRUE, QTime::currentTime(), varFormat );
-        } break;
-        case VT_TIME_VAR: {
-            var = new KWTimeVariable( textFrameSet(), FALSE, QTime::currentTime(), varFormat );
-        } break;
-        case VT_PGNUM: {
-            var = new KWPgNumVariable( textFrameSet(), varFormat );
-        } break;
-        case  VT_FILENAME: {
-            var = new KWFileNameVariable( textFrameSet(),doc->url().isEmpty()?i18n("<None>"):doc->url().filename(), varFormat );
-        } break;
-        case VT_AUTHORNAME: {
-            var = new KWNameAuthorVariable( textFrameSet(),full_name.isEmpty()?i18n("<None>"):full_name, varFormat );
-        } break;
-        case VT_EMAIL: {
-            var = new KWEmailVariable( textFrameSet(),email_addr.isEmpty()?i18n("<None>"):email_addr, varFormat );
-        } break;
-        case VT_COMPANYNAME: {
-            var = new KWCompanyNameVariable( textFrameSet(),organization.isEmpty()?i18n("<None>"):organization, varFormat );
-        } break;
-        case VT_CUSTOM: {
-            // Choose an existing variable
-            KWVariableNameDia dia( m_canvas, doc->getVariables() );
-            if ( dia.exec() == QDialog::Accepted )
-                var = new KWCustomVariable( textFrameSet(), dia.getName(), varFormat );
-            else
-                var = 0L;
-        } break;
-        case VT_SERIALLETTER: {
-            KWSerialLetterVariableInsertDia dia( m_canvas, doc->getSerialLetterDataBase() );
-            if ( dia.exec() == QDialog::Accepted )
-                var = new KWSerialLetterVariable( textFrameSet(), dia.getName(), varFormat );
-        } break;
-        default: break;
+    if ( type == VT_CUSTOM )
+    {
+        // Choose an existing variable
+        KWVariableNameDia dia( m_canvas, doc->getVariables() );
+        if ( dia.exec() == QDialog::Accepted )
+            var = new KWCustomVariable( textFrameSet(), dia.getName(), doc->variableFormat( type ) );
     }
+    else if ( type == VT_SERIALLETTER )
+    {
+        KWSerialLetterVariableInsertDia dia( m_canvas, doc->getSerialLetterDataBase() );
+        if ( dia.exec() == QDialog::Accepted )
+            var = new KWSerialLetterVariable( textFrameSet(), dia.getName(), doc->variableFormat( type ) );
+    }
+    else
+        var = KWVariable::createVariable( type, textFrameSet() );
+
     if ( var )
     {
         kdDebug() << "KWTextFrameSetEdit::insertVariable inserting into paragraph" << endl;
         // TODO undo/redo support
         cursor->parag()->insert( cursor->index(), QChar('&') /*whatever*/ );
         static_cast<KWTextParag *>( cursor->parag() )->setCustomItem( cursor->index(), var, currentFormat );
+        var->adjustToPainter( 0L ); // just a way to compute the width from the start
+        cursor->parag()->setChanged( true );
+        // repaintChanged?
     }
 }
 

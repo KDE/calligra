@@ -22,6 +22,7 @@
 #include "kwtextframeset.h"
 #include "kwdoc.h"
 #include "defs.h"
+#include <qdom.h>
 #include <kdebug.h>
 
 KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
@@ -75,4 +76,33 @@ void KWTextImage::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int c
         p->drawPixmap( x, y, m_image.pixmap() );
     else
         p->drawPixmap( cx, cy, m_image.pixmap(), cx - x, cy - y, cw, ch );
+}
+
+void KWTextImage::save( QDomElement & formatElem )
+{
+    formatElem.setAttribute( "id", 2 ); // code for a picture
+    QDomElement imageElem = formatElem.ownerDocument().createElement( "IMAGE" );
+    formatElem.appendChild( imageElem );
+    QDomElement elem = formatElem.ownerDocument().createElement( "FILENAME" );
+    imageElem.appendChild( elem );
+    elem.setAttribute( "value", image().key() );
+}
+
+void KWTextImage::load( QDomElement & formatElem )
+{
+    // <IMAGE>
+    QDomElement image = formatElem.namedItem( "IMAGE" ).toElement();
+    if ( !image.isNull() ) {
+        // <FILENAME>
+        QDomElement filenameElement = image.namedItem( "FILENAME" ).toElement();
+        if ( !filenameElement.isNull() )
+        {
+            QString filename = filenameElement.attribute( "value" );
+            KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
+            doc->addImageRequest( filename, this );
+        }
+        else
+            kdError(32001) << "Missing FILENAME tag in IMAGE" << endl;
+    } else
+        kdError(32001) << "Missing IMAGE tag in FORMAT wth id=2" << endl;
 }

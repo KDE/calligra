@@ -23,9 +23,10 @@
 #include "kwstyle.h"
 #include "kwdoc.h"
 #include "kwformat.h"
-#include "kwanchor.h"
+#include "kwanchorpos.h"
 #include "kwtextimage.h"
 #include "kwtextframeset.h"
+#include "variable.h"
 #include "counter.h"
 #include <kdebug.h>
 #include <qdom.h>
@@ -381,7 +382,7 @@ void KWTextParag::removeCustomItem( int index )
     document()->unregisterCustomItem( item, this );
 }
 
-int KWTextParag::findCustomItem( QTextCustomItem * custom ) const
+int KWTextParag::findCustomItem( const QTextCustomItem * custom ) const
 {
     int len = string()->length();
     for ( int i = 0; i < len; ++i )
@@ -510,7 +511,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
             formatsElem.appendChild( formatElem );
             formatElem.setAttribute( "pos", index );
             formatElem.setAttribute( "len", 1 );
-            saveCustomItem( formatElem, ch.customItem() );
+            static_cast<KWTextCustomItem *>( ch.customItem() )->save( formatElem );
             startPos = -1;
         }
         else
@@ -559,39 +560,6 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
     // pass it instead of 0L, to only save the non-default attributes
     QDomElement paragFormatElement = saveFormat( doc, paragFormat(), 0L, 0, to - from + 1 );
     layoutElem.appendChild( paragFormatElement );
-}
-
-void KWTextParag::saveCustomItem( QDomElement & formatElem, QTextCustomItem * item )
-{
-    // Is it an image ?
-    KWTextImage * ti = dynamic_cast<KWTextImage *>( item );
-    if ( ti )
-    {
-        formatElem.setAttribute( "id", 2 ); // code for a picture
-        QDomElement imageElem = formatElem.ownerDocument().createElement( "IMAGE" );
-        formatElem.appendChild( imageElem );
-        QDomElement elem = formatElem.ownerDocument().createElement( "FILENAME" );
-        imageElem.appendChild( elem );
-        elem.setAttribute( "value", ti->image().key() );
-        return;
-    }
-
-    // Is it an anchor ?
-    KWAnchor * anchor = dynamic_cast<KWAnchor *>( item );
-    if ( anchor )
-    {
-        formatElem.setAttribute( "id", 6 ); // code for an anchor
-        QDomElement anchorElem = formatElem.ownerDocument().createElement( "ANCHOR" );
-        formatElem.appendChild( anchorElem );
-        anchorElem.setAttribute( "type", "frameset" ); // the only possible value currently
-        KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
-        // ## TODO save the frame number as well ? Only the first frame ? to be determined
-        // ## or maybe use len=<number of frames>. Difficult :}
-        int num = doc->getFrameSetNum( anchor->frame()->getFrameSet() );
-        anchorElem.setAttribute( "instance", num );
-        return;
-    }
-    // else ....
 }
 
 //static
@@ -726,21 +694,33 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                     KWTextImage * custom = new KWTextImage( textDocument(), QString::null );
                     kdDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
                     setCustomItem( index, custom, paragFormat() );
-                    // <IMAGE>
-                    QDomElement image = formatElem.namedItem( "IMAGE" ).toElement();
-                    if ( !image.isNull() ) {
-                        // <FILENAME>
-                        QDomElement filenameElement = image.namedItem( "FILENAME" ).toElement();
-                        if ( !filenameElement.isNull() )
-                        {
-                            QString filename = filenameElement.attribute( "value" );
-                            doc->addImageRequest( filename, custom );
-                        }
-                        else
-                            kdError(32001) << "Missing FILENAME tag in IMAGE" << endl;
-                    } else
-                        kdError(32001) << "Missing IMAGE tag in FORMAT wth id=2" << endl;
-
+                    custom->load( formatElem );
+                    break;
+                }
+                case 4: // Variable
+                {
+                    QDomElement varElem = formatElem.namedItem( "VARIABLE" ).toElement();
+                    bool oldDoc = false;
+                    if ( varElem.isNull() )
+                    {
+                        // Not found, must be an old document -> the tags were directly
+                        // under the FORMAT tag.
+                        varElem = formatElem;
+                        oldDoc = true;
+                    }
+                    QDomElement typeElem = varElem.namedItem( "TYPE" ).toElement();
+                    if ( typeElem.isNull() )
+                        kdWarning(32001) <<
+                            ( oldDoc ? "No <TYPE> in <FORMAT> with id=4, for a variable [old document assumed] !"
+                              : "No <TYPE> found in <VARIABLE> tag!" ) << endl;
+                    else
+                    {
+                        int type = typeElem.attribute( "type" ).toInt();
+                        KWVariable * var = KWVariable::createVariable( type, textDocument()->textFrameSet() );
+                        var->load( varElem );
+                        QTextFormat f = loadFormat( formatElem, paragFormat(), doc->defaultFont() );
+                        setCustomItem( index, var, &f );
+                    }
                     break;
                 }
                 case 6:

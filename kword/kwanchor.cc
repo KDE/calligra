@@ -23,6 +23,7 @@
 #include "kwtextframeset.h"
 #include "kwdoc.h"
 #include <kdebug.h>
+#include <qdom.h>
 
 KWAnchor::KWAnchor( KWTextDocument *textdoc, KWFrame * frame )
     : KWTextCustomItem( textdoc ),
@@ -122,4 +123,18 @@ void KWAnchor::addDeleteCommand( KMacroCommand * macroCmd )
     KWDeleteFrameCommand * cmd = new KWDeleteFrameCommand( QString::null, m_frameset->kWordDocument(), frame() );
     macroCmd->addCommand( cmd );
     cmd->execute(); // deletes the frame
+}
+
+void KWAnchor::save( QDomElement &formatElem )
+{
+    formatElem.setAttribute( "id", 6 ); // code for an anchor
+    QDomElement anchorElem = formatElem.ownerDocument().createElement( "ANCHOR" );
+    formatElem.appendChild( anchorElem );
+    anchorElem.setAttribute( "type", "frameset" ); // the only possible value currently
+    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
+    // ## TODO save the frame number as well ? Only the first frame ? to be determined
+    // ## or maybe use len=<number of frames>. Difficult :}
+    int num = doc->getFrameSetNum( frame()->getFrameSet() );
+    anchorElem.setAttribute( "instance", num );
+    return;
 }

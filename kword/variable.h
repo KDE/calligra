@@ -22,15 +22,21 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
-
-class KWTextFrameSet;
+#include <kwtextdocument.h>
 class KWDocument;
 class KWVariable;
 class QDomElement;
+namespace Qt3 {
+class QTextFormat;
+}
+using namespace Qt3;
 
-enum VariableType { VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4,
-                    VT_NUMPAGES = 5, VT_FILENAME = 6, VT_AUTHORNAME = 7, VT_EMAIL =8
- ,VT_COMPANYNAME=9, VT_CUSTOM = 10, VT_SERIALLETTER = 11 , VT_NONE };
+// Always add new types at the _end_ of this list.
+enum VariableType { VT_NONE = -1,
+                    VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4,
+                    VT_NUMPAGES = 5, VT_CUSTOM = 6, VT_SERIALLETTER = 7, VT_FILENAME = 8, VT_AUTHORNAME = 9,
+                    VT_EMAIL = 10, VT_COMPANYNAME = 11 };
+
 //enum VariableFormatType { VFT_DATE = 0, VFT_TIME = 1, VFT_PGNUM = 2, VFT_NUMPAGES = 3, VFT_CUSTOM = 4,
 //                          VFT_SERIALLETTER = 5 };
 
@@ -207,22 +213,13 @@ using namespace Qt3;
 /* Class: KWVariable                                              */
 /******************************************************************/
 
-class KWVariable : public QTextCustomItem
+class KWVariable : public KWTextCustomItem
 {
 public:
     KWVariable( KWTextFrameSet *fs, KWVariableFormat *_varFormat );
     virtual ~KWVariable();
 
-    /* Clones a variable */
-/*    virtual KWVariable *copy() {
-        KWVariable *v = new KWVariable( doc );
-        v->setVariableFormat( varFormat );
-        v->setInfo( frameSetNum, frameNum, pageNum, parag );
-        return v;
-        }*/
-
-    virtual VariableType getType() const
-    { return VT_NONE; }
+    virtual VariableType getType() const { return VT_NONE; }
 
     // QTextCustomItem stuff
     Placement placement() const { return PlaceInline; }
@@ -231,6 +228,7 @@ public:
     int minimumWidth() const { return width; }
     void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
 
+    QTextFormat * format() const;
 
 // Much too dangerous.
 //    void setVariableFormat( KWVariableFormat *_varFormat, bool _deleteOld = false )
@@ -242,21 +240,17 @@ public:
     QString getText()
     { return varFormat->convert( this ); }
 
-    // parag * is a bit dangerous. paragId() maybe?
-    virtual void setInfo( int _frameSetNum, int _frameNum, int _pageNum /*, KWParag * _parag*/ )
-    { frameSetNum = _frameSetNum; frameNum = _frameNum; pageNum = _pageNum; /*parag = _parag;*/ }
-
     virtual void recalc() {}
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
+    static KWVariable * createVariable( int type, KWTextFrameSet * textFrameSet );
+
 protected:
     KWDocument *doc;
     KWVariableFormat *varFormat;
     QString text;
-    int frameSetNum, frameNum, pageNum;
-    //KWParag *parag;
 };
 
 /******************************************************************/
@@ -269,17 +263,10 @@ public:
     KWPgNumVariable( KWTextFrameSet *fs, KWVariableFormat *_varFormat )
         : KWVariable( fs, _varFormat ) { pgNum = 0; }
 
-/*    virtual KWVariable *copy() {
-        KWPgNumVariable *var = new KWPgNumVariable( doc );
-        var->setVariableFormat( varFormat );
-        var->setInfo( frameSetNum, frameNum, pageNum, parag );
-           return var;
-           }*/
-
     virtual VariableType getType() const
     { return VT_PGNUM; }
 
-    virtual void recalc() { pgNum = pageNum; }
+    // virtual void recalc(); // TODO !
     int getPgNum() const { return pgNum; }
 
     virtual void save( QDomElement &parentElem );
@@ -299,13 +286,6 @@ class KWDateVariable : public KWVariable
 public:
     KWDateVariable( KWTextFrameSet *fs, bool _fix, QDate _date, KWVariableFormat *_varFormat );
     //KWDateVariable( KWTextFrameSet *fs ) : KWVariable( fs ) {}
-
-/*    virtual KWVariable *copy() {
-        KWDateVariable *var = new KWDateVariable( doc, fix, date );
-        var->setVariableFormat( varFormat );
-        var->setInfo( frameSetNum, frameNum, pageNum, parag );
-        return var;
-        }*/
 
     virtual VariableType getType() const
     { return fix ? VT_DATE_FIX : VT_DATE_VAR; }
@@ -332,13 +312,6 @@ public:
     KWTimeVariable( KWTextFrameSet *fs, bool _fix, QTime _time, KWVariableFormat *_varFormat );
     //KWTimeVariable( KWTextFrameSet *fs ) : KWVariable( fs ) {}
 
-/*    virtual KWVariable *copy() {
-        KWTimeVariable *var = new KWTimeVariable( doc, fix, time );
-        var->setVariableFormat( varFormat );
-        var->setInfo( frameSetNum, frameNum, pageNum, parag );
-        return var;
-        }*/
-
     virtual VariableType getType() const
     { return fix ? VT_TIME_FIX : VT_TIME_VAR; }
 
@@ -363,13 +336,6 @@ class KWFileNameVariable : public KWVariable
 public:
     KWFileNameVariable( KWTextFrameSet *fs, const QString &_fileName, KWVariableFormat *_varFormat );
 
-/*    virtual KWVariable *copy() {
-        KWFileNameVariable *var = new KWFileNameVariable( doc, filename );
-        var->setVariableFormat( varFormat );
-        var->setInfo( frameSetNum, frameNum, pageNum, parag );
-        return var;
-        }*/
-
     virtual VariableType getType() const
     { return VT_FILENAME; }
 
@@ -391,13 +357,6 @@ class KWNameAuthorVariable : public KWVariable
 {
 public:
     KWNameAuthorVariable( KWTextFrameSet *fs, const QString &_authorName, KWVariableFormat *_varFormat );
-
-/*    virtual KWVariable *copy() {
-        KWFileNameVariable *var = new KWAuthorNameVariable( doc, filename );
-        var->setVariableFormat( varFormat );
-        var->setInfo( frameSetNum, frameNum, pageNum, parag );
-        return var;
-        }*/
 
     virtual VariableType getType() const
     { return VT_AUTHORNAME; }
@@ -421,13 +380,6 @@ class KWEmailVariable : public KWVariable
 public:
     KWEmailVariable( KWTextFrameSet *fs, const QString &_email, KWVariableFormat *_varFormat );
 
-/*    virtual KWVariable *copy() {
-        KWFileNameVariable *var = new KWEmailVariable( doc, filename );
-        var->setVariableFormat( varFormat );
-        var->setInfo( frameSetNum, frameNum, pageNum, parag );
-        return var;
-        }*/
-
     virtual VariableType getType() const
     { return  VT_EMAIL; }
 
@@ -449,13 +401,6 @@ class KWCompanyNameVariable : public KWVariable
 {
 public:
     KWCompanyNameVariable( KWTextFrameSet *fs, const QString &_companyname, KWVariableFormat *_varFormat );
-
-/*    virtual KWVariable *copy() {
-        KWFileNameVariable *var = new KWEmailVariable( doc, filename );
-        var->setVariableFormat( varFormat );
-        var->setInfo( frameSetNum, frameNum, pageNum, parag );
-        return var;
-        }*/
 
     virtual VariableType getType() const
     { return  VT_COMPANYNAME; }
@@ -479,13 +424,6 @@ class KWCustomVariable : public KWVariable
 public:
     KWCustomVariable( KWTextFrameSet *fs, const QString &name_, KWVariableFormat *_varFormat );
     //KWCustomVariable( KWTextFrameSet *fs ) : KWVariable( fs ) {}
-
-/*    virtual KWVariable *copy() {
-        KWCustomVariable *var = new KWCustomVariable( doc, name );
-        var->setVariableFormat( varFormat );
-        var->setInfo( frameSetNum, frameNum, pageNum, parag );
-        return var;
-        }*/
 
     virtual VariableType getType() const
     { return VT_CUSTOM; }
@@ -512,13 +450,6 @@ class KWSerialLetterVariable : public KWVariable
 public:
     KWSerialLetterVariable( KWTextFrameSet *fs, const QString &name_, KWVariableFormat *_varFormat );
     //KWSerialLetterVariable( KWTextFrameSet *fs ) : KWVariable( fs ) {}
-
-/*    virtual KWVariable *copy() {
-        KWSerialLetterVariable *var = new KWSerialLetterVariable( doc, name );
-        var->setVariableFormat( varFormat );
-        var->setInfo( frameSetNum, frameNum, pageNum, parag );
-        return var;
-        }*/
 
     virtual VariableType getType() const
     { return VT_SERIALLETTER; }

@@ -25,6 +25,7 @@
 #include "serialletter.h"
 
 #include <klocale.h>
+#include <kconfig.h>
 #include <kglobal.h>
 #include <kdebug.h>
 
@@ -161,12 +162,11 @@ QString KWVariableSerialLetterFormat::convert( KWVariable *_var )
 /* Class: KWVariable                                              */
 /******************************************************************/
 KWVariable::KWVariable( KWTextFrameSet *fs, KWVariableFormat *_varFormat )
-    : QTextCustomItem( fs->textDocument() ), text()
+    : KWTextCustomItem( fs->textDocument() ), text()
 {
     varFormat = _varFormat;
     doc = fs->kWordDocument();
     doc->registerVariable( this );
-    adjustToPainter( 0L ); // just a way to compute the width from the start
 }
 
 
@@ -175,40 +175,132 @@ KWVariable::~KWVariable()
     doc->unregisterVariable( this );
 }
 
+QTextFormat * KWVariable::format() const
+{
+    ASSERT( paragraph() );
+    KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
+    int index = parag->findCustomItem( this );
+    return parag->at( index )->format();
+}
+
 void KWVariable::adjustToPainter( QPainter* )
 {
-    width = 50; // ### we need to get hold of the format
+    QTextString text;
+    text.insert( 0, getText(), format() );
+    width = 0;
+    for ( uint i = 0 ; i < text.length() ; ++i )
+        width += text.width( i );
 }
 
 void KWVariable::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
 {
-    // todo much stuff
-    p->drawText( x, y+20 /* Autsch, as someone would say */, getText() );
+    QTextFormat * f = format();
+    p->save();
+    p->setPen( QPen( f->color() ) );
+    p->setFont( f->font() );
+    int bl, _y;
+    KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
+    int index = parag->findCustomItem( this );
+    parag->lineHeightOfChar( index, &bl, &_y );
+    p->drawText( x, y /*+ _y*/ + bl, getText() );
+    p->restore();
 }
 
 
-void KWVariable::save( QDomElement &parentElem )
+void KWVariable::save( QDomElement &formatElem )
 {
-    QDomElement typeElem = parentElem.ownerDocument().createElement( "TYPE" );
-    parentElem.appendChild( typeElem );
+    kdDebug() << "KWVariable::save" << endl;
+    formatElem.setAttribute( "id", 4 ); // code for a variable
+    QDomElement typeElem = formatElem.ownerDocument().createElement( "TYPE" );
+    formatElem.appendChild( typeElem );
     typeElem.setAttribute( "type", static_cast<int>( getType() ) );
-    QDomElement posElem = parentElem.ownerDocument().createElement( "POS" );
-    parentElem.appendChild( typeElem );
-    typeElem.setAttribute( "frameSet", frameSetNum );
-    typeElem.setAttribute( "frame", frameNum );
-    typeElem.setAttribute( "pageNum", pageNum );
 }
 
 
-void KWVariable::load( QDomElement & elem )
+void KWVariable::load( QDomElement & )
 {
-    QDomElement posElem = elem.namedItem("POS").toElement();
-    if (!posElem.isNull())
+}
+
+//static
+KWVariable * KWVariable::createVariable( int type, KWTextFrameSet * textFrameSet )
+{
+    KWDocument * doc = textFrameSet->kWordDocument();
+    KWVariableFormat * varFormat = doc->variableFormat( type );
+    if ( !varFormat )
     {
-        frameSetNum = posElem.attribute( "frameSet" ).toInt();
-        frameNum = posElem.attribute( "frame" ).toInt();
-        pageNum = posElem.attribute( "pgNum" ).toInt();
+        kdWarning() << "No variable format found for type " << (int)type << endl;
+        return 0L;
     }
+    KWVariable * var = 0L;
+    switch ( type ) {
+    case VT_DATE_FIX:
+        var = new KWDateVariable( textFrameSet, TRUE, QDate::currentDate(), varFormat );
+    break;
+    case VT_DATE_VAR:
+        var = new KWDateVariable( textFrameSet, FALSE, QDate::currentDate(), varFormat );
+    break;
+    case VT_TIME_FIX:
+        var = new KWTimeVariable( textFrameSet, TRUE, QTime::currentTime(), varFormat );
+    break;
+    case VT_TIME_VAR:
+        var = new KWTimeVariable( textFrameSet, FALSE, QTime::currentTime(), varFormat );
+    break;
+    case VT_PGNUM:
+        var = new KWPgNumVariable( textFrameSet, varFormat );
+    break;
+    case  VT_FILENAME:
+        var = new KWFileNameVariable( textFrameSet,
+                                      doc->url().isEmpty()?i18n("<None>"):doc->url().filename(),
+                                      varFormat );
+    break;
+    case VT_AUTHORNAME:
+    case VT_EMAIL:
+    case VT_COMPANYNAME:
+    {
+        KConfig config("kofficerc");
+        QString full_name;
+        QString email_addr;
+        QString organization;
+        if( config.hasGroup( "Author" ))
+        {
+            config.setGroup( "Author" );
+            full_name=config.readEntry("full-name","");
+            email_addr=config.readEntry("email", "");
+            organization=config.readEntry("company", "");
+        }
+        else
+        {
+            KConfig config2( "emaildefaults", true );
+            config2.setGroup( "Defaults" );
+            QString group = config2.readEntry("Profile","Default");
+            config2.setGroup(QString("PROFILE_%1").arg(group));
+            full_name = config2.readEntry( "FullName", "" );
+            email_addr=config2.readEntry("EmailAddress", "");
+        }
+
+        switch ( type ) {
+        case VT_AUTHORNAME:
+            var = new KWNameAuthorVariable( textFrameSet,full_name.isEmpty()?i18n("<None>"):full_name, varFormat );
+            break;
+        case VT_EMAIL:
+            var = new KWEmailVariable( textFrameSet,email_addr.isEmpty()?i18n("<None>"):email_addr, varFormat );
+            break;
+        case VT_COMPANYNAME:
+            var = new KWCompanyNameVariable( textFrameSet,organization.isEmpty()?i18n("<None>"):organization, varFormat );
+            break;
+        defaut:
+            break;
+        }
+        break;
+    }
+    case VT_CUSTOM:
+        var = new KWCustomVariable( textFrameSet, QString::null, doc->variableFormat( type ) );
+        break;
+    case VT_SERIALLETTER:
+        var = new KWSerialLetterVariable( textFrameSet, QString::null, doc->variableFormat( type ) );
+        break;
+    }
+    return var;
 }
 
 /******************************************************************/
@@ -349,6 +441,7 @@ KWFileNameVariable::KWFileNameVariable( KWTextFrameSet *fs,const QString &_fileN
 
 void KWFileNameVariable::save( QDomElement& parentElem )
 {
+    kdDebug() << "KWFileNameVariable::save" << endl;
     KWVariable::save( parentElem );
     QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
     parentElem.appendChild( elem );

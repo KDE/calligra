@@ -159,7 +159,7 @@ public:
     void removeCustomItem( int index );
     // Find a custom item that we know is somewhere in this paragraph
     // Returns the index in the paragraph
-    int findCustomItem( QTextCustomItem * custom ) const;
+    int findCustomItem( const QTextCustomItem * custom ) const;
 
 #ifndef NDEBUG
     void printRTDebug( int );
@@ -183,7 +183,6 @@ protected:
     virtual void copyParagData( QTextParag *_parag );
     void invalidateCounters();
     void checkItem( QStyleSheetItem * & item, const char * name );
-    void saveCustomItem( QDomElement & formatElem, QTextCustomItem * item );
 
 private:
     QStyleSheetItem * m_item;

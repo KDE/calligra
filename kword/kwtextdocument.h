@@ -25,6 +25,7 @@ using namespace Qt3;
 class KWTextFrameSet;
 class KWTextFormatCollection;
 class KMacroCommand;
+class QDomElement;
 
 /**
  * This is our QTextDocument reimplementation, to create KWTextParag instead of QTextParags,
@@ -64,6 +65,9 @@ public:
     // moved into the undo/redo history - setDeleted( true )
     // and it can be then copied back from there into the real world - setDeleted( false ).
     virtual void setDeleted( bool b ) { m_deleted = b; }
+
+    // Save to XML
+    virtual void save( QDomElement & /*formatElem*/ ) = 0;
 
 protected:
     bool m_deleted;

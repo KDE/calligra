@@ -355,7 +355,7 @@ don't put a </?xml...> at the end of the file!).
                                     1..."normal" text
                                     2...a picture - in that case, only IMAGE is specified
                                     3...tabulator [Might become '\t' in the text instead. To be determined.]
-                                    4...a variable - ...
+                                    4...a variable - in that case, only VARIABLE is specified
                                     5...a footnote - ...
                                     6...an anchor for a floating frame - in that case, only ANCHOR is specified.
 
@@ -369,7 +369,7 @@ don't put a </?xml...> at the end of the file!).
         When FORMAT is used to specify the format of a style, pos and len are omitted.
 -->
 <!ELEMENT FORMAT
-    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|ANCHOR|IMAGE)*>
+    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|ANCHOR|IMAGE|VARIABLE)*>
 <!ATTLIST FORMAT
     id CDATA #REQUIRED
     pos CDATA #IMPLIED
@@ -689,6 +689,34 @@ don't put a </?xml...> at the end of the file!).
     EMPTY>
 <!ATTLIST FILENAME
     value CDATA #REQUIRED>
+
+<!--    Variable
+-->
+<!ELEMENT VARIABLE
+    (TYPE,PGNUM,DATE,TIME,CUSTOM,SERIALLETTER)>
+<!ATTLIST VARIABLE
+    EMPTY>
+
+<!--    Variable type
+        0... Date fixed (uses DATE to save it)
+        1... Current date
+        2... Time fixed (uses TIME to save it)
+        3... Current time 
+        4... Page number (uses PGNUM to save it)
+        5... Number of pages (TODO)
+        6... Custom (uses CUSTOM to save it)
+        7... Serial Letter (uses SERIALLETTER to save it)
+        8... Filename
+        9... Author (as saved in documentinfo.xml)
+        10.. Email (as saved in documentinfo.xml)
+        11.. Company Name (as saved in documentinfo.xml)
+-->
+<!ELEMENT TYPE
+    EMPTY>
+<!ATTLIST TYPE
+    type CDATA #REQUIRED>
+
+<!-- TODO PGNUM,DATE,TIME,CUSTOM,SERIALLETTER -->
 
 <!--
         Embedded object

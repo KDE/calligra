@@ -47,7 +47,11 @@ public:
     void setImage( const KWImage &image );
     KWImage image() const { return m_image; }
 
-    void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
+    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
+
+    // Save to XML
+    virtual void save( QDomElement & formatElem );
+    void load( QDomElement & formatElem );
 
 private:
     Placement place;
