@@ -13,9 +13,7 @@ Changes:
     qmake kugar.pro
     make -f Makefile.qt
  
- 3. Undo/Redo functionality in Kugar Designer.
- 
- 4. Direct database support in Kugar.
+ 3. Direct database support in Kugar.
 
 
 *************************

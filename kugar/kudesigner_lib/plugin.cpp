@@ -16,7 +16,9 @@
  ***************************************************************************/
 
 #include "plugin.h"
+#ifndef PURE_QT
 #include "plugin.moc"
+#endif
 
 KuDesignerPlugin::KuDesignerPlugin(QObject *parent, const char *name, const QStringList&):QObject(parent,name){}
 KuDesignerPlugin::~KuDesignerPlugin(){}

@@ -42,7 +42,8 @@ public slots:
     virtual void          helpAbout();
     virtual void          fileExit();
     virtual void          filePrint();
-    virtual void          slotPreferredTemplate(const QString &tpl);
+    virtual void          fileQuickPrint();
+    virtual void          slotPreferedTemplate(const QString &tpl);
 
 protected:
     /*$PROTECTED_FUNCTIONS$*/

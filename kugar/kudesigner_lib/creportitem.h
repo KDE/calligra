@@ -54,6 +54,8 @@ public:
     virtual int isInHolder(const QPoint p);
     virtual void drawHolders(QPainter &painter);
     virtual void fastProperty() { };
+    
+    QString escape(QString string);
 
 protected:
     friend class ReportCanvas;

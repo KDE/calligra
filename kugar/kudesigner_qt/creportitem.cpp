@@ -1,5 +1,6 @@
 #include "creportitem.h"
 #include <qrect.h>
+#include <qregexp.h>
 
 QRect CanvasReportItem::topLeftResizableRect()
 {
@@ -55,9 +56,18 @@ QString CanvasReportItem::getXml()
     for (it = props.begin(); it != props.end(); ++it)
     {
 	if (!(i%3)) result += "\n\t\t  ";
-	result += " " + it->first + "=" + "\"" + it->second.first + "\"";
+	result += " " + it->first + "=" + "\"" + escape(it->second.first) + "\"";
 	i++;
     }
     return result;
+}
+
+QString CanvasReportItem::escape( QString string )
+{
+    string.replace(QRegExp("&"), "&amp;");
+    string.replace(QRegExp("<"), "&lt;");
+    string.replace(QRegExp(">"), "&gt;");
+    string.replace(QRegExp("\""), "&quot;");
+    return string;
 }
 

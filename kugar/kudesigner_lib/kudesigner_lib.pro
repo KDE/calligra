@@ -48,10 +48,10 @@ SOURCES += canvband.cpp \
            propertyeditor.cpp \
            propertywidget.cpp \
            pspinbox.cpp \
-           pspinbox.moc.cpp \
            psymbolcombo.cpp \
            mycommand.cpp \
-           qlocale.cpp 
+           qlocale.cpp \
+	   canvdetailbase.cpp
 HEADERS += canvband.h \
            canvbox.h \
            canvdefs.h \
@@ -86,4 +86,5 @@ HEADERS += canvband.h \
            pspinbox.h \
            psymbolcombo.h \
            qlocale.h \
-           mycommand.h 
+           mycommand.h \
+	   canvdetailbase.h

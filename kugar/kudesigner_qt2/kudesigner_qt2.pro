@@ -55,3 +55,4 @@ MOC_DIR = .moc
 MAKEFILE = Makefile.qt 
 INCLUDEPATH = ../kudesigner_lib 
 LIBS += -lkudesignercommonqt 
+TARGETDEPS += ../../kugar/kudesigner_lib/libkudesignercommonqt.a

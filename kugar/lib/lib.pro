@@ -39,7 +39,8 @@ TEMPLATE = lib
 CONFIG += release \
           warn_on \
           qt \
-          thread 
+          thread \
+	  staticlib
 DEFINES = PURE_QT 
 OBJECTS_DIR = .obj 
 UI_DIR = .ui 

@@ -21,6 +21,7 @@
         <cstring>menubar</cstring>
     </property>
     <item text="&amp;File" name="fileMenu">
+        <action name="fileQuickPrintAction"/>
         <action name="filePrintAction"/>
         <separator/>
         <action name="fileExitAction"/>
@@ -37,11 +38,29 @@
     </item>
 </menubar>
 <toolbars>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>Toolbar</cstring>
+        </property>
+        <property name="label">
+            <string>Toolbar</string>
+        </property>
+        <action name="viewFirstPageAction"/>
+        <action name="viewPrevPageAction"/>
+        <action name="viewNextPageAction"/>
+        <action name="viewLastPageAction"/>
+        <separator/>
+        <action name="fileQuickPrintAction"/>
+        <action name="filePrintAction"/>
+    </toolbar>
 </toolbars>
 <actions>
     <action>
         <property name="name">
             <cstring>filePrintAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>fileprint.png</iconset>
         </property>
         <property name="text">
             <string>Print</string>
@@ -85,6 +104,9 @@
         <property name="name">
             <cstring>viewNextPageAction</cstring>
         </property>
+        <property name="iconSet">
+            <iconset>1rightarrow.png</iconset>
+        </property>
         <property name="text">
             <string>Next Page</string>
         </property>
@@ -95,6 +117,9 @@
     <action>
         <property name="name">
             <cstring>viewPrevPageAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>1leftarrow.png</iconset>
         </property>
         <property name="text">
             <string>Previous Page</string>
@@ -107,6 +132,9 @@
         <property name="name">
             <cstring>viewFirstPageAction</cstring>
         </property>
+        <property name="iconSet">
+            <iconset>2leftarrow.png</iconset>
+        </property>
         <property name="text">
             <string>First Page</string>
         </property>
@@ -118,11 +146,31 @@
         <property name="name">
             <cstring>viewLastPageAction</cstring>
         </property>
+        <property name="iconSet">
+            <iconset>2rightarrow.png</iconset>
+        </property>
         <property name="text">
             <string>Last Page</string>
         </property>
         <property name="accel">
             <string>Ctrl+End</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileQuickPrintAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>filequickprint.png</iconset>
+        </property>
+        <property name="text">
+            <string>Quick Print</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Quick Print</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+Shift+P</string>
         </property>
     </action>
 </actions>
@@ -169,6 +217,12 @@
         <receiver>KugarMainBase</receiver>
         <slot>viewLastPage()</slot>
     </connection>
+    <connection>
+        <sender>fileQuickPrintAction</sender>
+        <signal>activated()</signal>
+        <receiver>KugarMainBase</receiver>
+        <slot>fileQuickPrint()</slot>
+    </connection>
 </connections>
 <slots>
     <slot>filePrint()</slot>
@@ -178,6 +232,8 @@
     <slot>viewPrevPage()</slot>
     <slot>viewFirstPage()</slot>
     <slot>viewLastPage()</slot>
+    <slot>fileQuickPrint()</slot>
 </slots>
+<pixmapinproject/>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

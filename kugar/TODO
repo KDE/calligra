@@ -1,3 +1,7 @@
+All components:
+- set positions and dimensions in real dpi-independent units like santimeters, inches
+  and get rid of all other dpi dependecies
+
 Kudesigner:
 - Z-Ordering (right-click menu) for report items
     default: all items are created with the same z-position 

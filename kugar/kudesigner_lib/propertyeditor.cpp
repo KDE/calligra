@@ -88,4 +88,6 @@ void PropertyEditor::emitPropertyChange(QString name, QString newValue)
     emit propertyChanged(name, newValue);
 }
 
+#ifndef PURE_QT
 #include "propertyeditor.moc"
+#endif

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kudesigner" version="1">
+<kpartgui name="kudesigner" version="2">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
 <!--   <Action name="koffice_undo"/>
@@ -8,9 +8,9 @@
    <Action name="edit_cut"/>
    <Action name="edit_copy"/>
    <Action name="edit_paste"/>
-   <Separator/> -->
-   <Action name="edit_select_all"/>
    <Separator/>
+   <Action name="edit_select_all"/>
+   <Separator/> -->
    <Action name="edit_delete"/>
  </Menu>
   <Menu name="sections"><text>Sec&amp;tions</text>

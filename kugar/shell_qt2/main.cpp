@@ -25,13 +25,29 @@ int main(int argc, char **argv)
     QApplication kugarApp(argc, argv);
 
     if (argv[1] == 0)
+    {
+        qWarning("No data file specified");
         return 1;
+    }
+    bool print = false;
+    if (argv[2] != 0)
+        if (QString(argv[2]) == QString("--print"))
+            print = true;
     QString dataFile(argv[1]);
 
     KugarMain kugarMain(dataFile);
-    kugarMain.show();
-
-    kugarApp.setMainWidget(&kugarMain);
+    if (!print)
+    {
+        kugarMain.show();
+        kugarApp.setMainWidget(&kugarMain);
+    }
+    else
+    {
+        kugarMain.fileQuickPrint();
+        QObject::connect(&kugarApp, SIGNAL(lastWindowClosed()), &kugarApp, SLOT(quit()));
+        kugarApp.quit();
+        return 0;
+    }
 
     return kugarApp.exec();
 }

@@ -29,7 +29,7 @@ KugarMain::KugarMain(QString dataFile, QWidget* parent, const char* name, WFlags
 {
     rptviewer = new MReportViewer(this);
     connect(rptviewer,SIGNAL(preferedTemplate(const QString &)),
-        SLOT(slotPreferredTemplate(const QString &)));
+        SLOT(slotPreferedTemplate(const QString &)));
 
     setCentralWidget(rptviewer);
 
@@ -98,7 +98,7 @@ void KugarMain::filePrint()
     rptviewer->printReport();
 }
 
-void KugarMain::slotPreferredTemplate( const QString & tpl )
+void KugarMain::slotPreferedTemplate( const QString & tpl )
 {
     QString realtpl = tpl;
     if (!dataPath.isEmpty())
@@ -120,5 +120,9 @@ void KugarMain::slotPreferredTemplate( const QString & tpl )
     }
 }
 
+void KugarMain::fileQuickPrint( )
+{
+    rptviewer->printReportSilent();
+    QApplication::exit(0);
+}
 
-#include "kugarmain.moc"

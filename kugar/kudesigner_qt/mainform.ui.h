@@ -732,6 +732,7 @@ void fmMain::saveReport()
     if (report.open(IO_Raw | IO_ReadWrite | IO_Truncate))
     {
 	QTextStream t(&report);
+    t.setEncoding(QTextStream::UnicodeUTF8);
 	t << canvas->templ->getXml();
     }
     report.close();

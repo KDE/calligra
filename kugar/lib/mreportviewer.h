@@ -25,7 +25,7 @@
 
 #define M_PROGRESS_DELAY 500			// Number of ms to delay progress dialog display
 
-//class KPrinter;
+class QPrinter;
 
 /** Application reference, required for event processing */
 extern QApplication *mAppRef;
@@ -50,6 +50,9 @@ public:
 	bool renderReport();
 	void clearReport();
 	void printReport();
+	void printReport(QPrinter *printer);
+	void setupPrinter(QPrinter *printer);
+    void printReportSilent(int printFrom = -1, int printTo = -1, int printCopies = -1, QString printerName = QString::null);
 
 	QSize sizeHint() const;
 

@@ -298,7 +298,8 @@ void KudesignerDoc::setDetailHeaderAttributes(QDomNode *node)
     CanvasDetailHeader *dh = new CanvasDetailHeader(docCanvas->templ->props["LeftMargin"]->value().toInt(),
         0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"]->value().toInt() -
         docCanvas->templ->props["LeftMargin"]->value().toInt(),
-        attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
+        attributes.namedItem("Height").nodeValue().toInt(),
+        attributes.namedItem("Level").nodeValue().toInt(), docCanvas);
     dh->props["Level"]->setValue(attributes.namedItem("Level").nodeValue());
     dh->props["Height"]->setValue(attributes.namedItem("Height").nodeValue());
     docCanvas->templ->details[attributes.namedItem("Level").nodeValue().toInt()].first.first = dh;
@@ -312,7 +313,8 @@ void KudesignerDoc::setDetailAttributes(QDomNode *node)
     CanvasDetail *d = new CanvasDetail(docCanvas->templ->props["LeftMargin"]->value().toInt(),
         0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"]->value().toInt() -
         docCanvas->templ->props["LeftMargin"]->value().toInt(),
-        attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
+        attributes.namedItem("Height").nodeValue().toInt(),
+        attributes.namedItem("Level").nodeValue().toInt(), docCanvas);
     d->props["Level"]->setValue(attributes.namedItem("Level").nodeValue());
     d->props["Height"]->setValue(attributes.namedItem("Height").nodeValue());
     docCanvas->templ->details[attributes.namedItem("Level").nodeValue().toInt()].second = d;
@@ -326,7 +328,8 @@ void KudesignerDoc::setDetailFooterAttributes(QDomNode *node)
     CanvasDetailFooter *df = new CanvasDetailFooter(docCanvas->templ->props["LeftMargin"]->value().toInt(),
         0, docCanvas->templ->width() - docCanvas->templ->props["RightMargin"]->value().toInt() -
         docCanvas->templ->props["LeftMargin"]->value().toInt(),
-        attributes.namedItem("Height").nodeValue().toInt(), docCanvas);
+        attributes.namedItem("Height").nodeValue().toInt(),
+        attributes.namedItem("Level").nodeValue().toInt(), docCanvas);
     df->props["Level"]->setValue(attributes.namedItem("Level").nodeValue());
     df->props["Height"]->setValue(attributes.namedItem("Height").nodeValue());
     docCanvas->templ->details[attributes.namedItem("Level").nodeValue().toInt()].first.second = df;

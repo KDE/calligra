@@ -23,6 +23,7 @@
 
 #include <qrect.h>
 #include <qpainter.h>
+#include <qregexp.h>
 
 #include "creportitem.h"
 #include "property.h"
@@ -110,7 +111,7 @@ QString CanvasReportItem::getXml()
         if (!(i%3)) result += "\n\t\t  ";
 	
 	QString propName=it->first;
-	QString value=it->second->value();
+	QString value=escape(it->second->value());
 	if (plugin) plugin->modifyItemPropertyOnSave(this,it->second ,propName,value);
         result += " " + propName + "=" + "\"" + value + "\"";
         i++;
@@ -148,4 +149,13 @@ void CanvasReportItem::drawHolders(QPainter &painter)
     painter.drawRect(bottomMiddleResizableRect());
     painter.drawRect(leftMiddleResizableRect());
     painter.drawRect(rightMiddleResizableRect());
+}
+
+QString CanvasReportItem::escape( QString string )
+{
+    string.replace(QRegExp("&"), "&amp;");
+    string.replace(QRegExp("<"), "&lt;");
+    string.replace(QRegExp(">"), "&gt;");
+    string.replace(QRegExp("\""), "&quot;");
+    return string;
 }

@@ -30,6 +30,8 @@ public:
     void setSection(CanvasBand *section);
     void setSectionUndestructive(CanvasBand *section);
     
+    QString escape(QString string);
+    
 protected:
     CanvasBand *parentSection;
 };

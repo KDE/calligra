@@ -166,81 +166,11 @@ void MReportViewer::printReport(){
 
   // Set the printer dialog
 	printer = new QPrinter();
-  printer->setPageSize((QPrinter::PageSize)report->pageSize());
-  printer->setOrientation((QPrinter::Orientation)report->pageOrientation());
-	printer->setMinMax(1, cnt);
-	printer->setFromTo(1, cnt);
-  printer->setFullPage(true);
+    setupPrinter(printer);
 
-  if (printer->setup(this)) {
-		QPicture* page;
-  	QPainter painter;
-		bool printRev;
+  if (printer->setup(this))
+    printReport(printer);
 
-		// Save the viewer's page index
-		int viewIdx = report->getCurrentIndex();
-
-		// Check the order we are printing the pages
-		if (printer->pageOrder() == QPrinter::FirstPageFirst)
-			printRev = false;
-		else
-    	printRev = true;
-
-		// Get the count of pages and copies to print
-		int printFrom = printer->fromPage() - 1;
-		int printTo = printer->toPage();
-		int printCnt = (printTo - printFrom);
-		int printCopies = printer->numCopies();
-		int totalSteps = printCnt * printCopies;
-		int currentStep = 1;
-
-		// Set copies to 1, QPrinter copies does not appear to work ...
-		printer->setNumCopies(1);
-
-		// Setup the progress dialog
-		QProgressDialog progress( "Printing report...",
-					"Cancel",
-		          		totalSteps, this, "progress", true );
-		progress.setMinimumDuration(M_PROGRESS_DELAY);
-		QObject::connect(&progress, SIGNAL(cancelled()), this, SLOT(slotCancelPrinting()));
-		progress.setProgress(0);
-		qApp->processEvents();
-
-		// Start the printer
-   	painter.begin(printer);
-
-		// Print each copy
-		for(int j = 0; j < printCopies; j++){
-      // Print each page in the collection
-      for(int i = printFrom ; i < printTo; i++, currentStep++){
-  			if(!printer->aborted()){
-  				progress.setProgress(currentStep);
-  				qApp->processEvents();
-
-					if (printRev)
-  					report->setCurrentPage((printCnt == 1) ? i : (printCnt - 1) - i);
-					else
-						report->setCurrentPage(i);
-
-        	page = report->getCurrentPage();
-        	page->play(&painter);
-        	if(i < printCnt - 1)
-          	printer->newPage();
-  			}
-  			else{
-					j = printCopies;
-  				break;
-				}
-      }
-			if(j < printCopies - 1)
-				printer->newPage();
-		}
-
-		// Cleanup printing
-		setCursor(arrowCursor);
-    painter.end();
-    report->setCurrentPage(viewIdx);
-  }
 	delete printer;
 }
 
@@ -341,6 +271,116 @@ QSize MReportViewer::sizeHint() const
 {
 	return scroller -> sizeHint();
 }
+
+void MReportViewer::printReport( QPrinter * printer )
+{
+    int cnt = report->pageCount();
+		QPicture* page;
+    	QPainter painter;
+		bool printRev;
+
+		// Save the viewer's page index
+		int viewIdx = report->getCurrentIndex();
+
+		// Check the order we are printing the pages
+		if (printer->pageOrder() == QPrinter::FirstPageFirst)
+			printRev = false;
+		else
+    	printRev = true;
+
+		// Get the count of pages and copies to print
+		int printFrom = printer->fromPage() - 1;
+		int printTo = printer->toPage();
+		int printCnt = (printTo - printFrom);
+		int printCopies = printer->numCopies();
+		int totalSteps = printCnt * printCopies;
+		int currentStep = 1;
+
+		// Set copies to 1, QPrinter copies does not appear to work ...
+//		printer->setNumCopies(1);
+
+		// Setup the progress dialog
+		QProgressDialog progress( "Printing report...",
+					"Cancel",
+		          		totalSteps, this, "progress", true );
+		progress.setMinimumDuration(M_PROGRESS_DELAY);
+		QObject::connect(&progress, SIGNAL(cancelled()), this, SLOT(slotCancelPrinting()));
+		progress.setProgress(0);
+		qApp->processEvents();
+
+		// Start the printer
+   	painter.begin(printer);
+
+		// Print each copy
+		for(int j = 0; j < printCopies; j++){
+      // Print each page in the collection
+      for(int i = printFrom ; i < printTo; i++, currentStep++){
+  			if(!printer->aborted()){
+  				progress.setProgress(currentStep);
+  				qApp->processEvents();
+
+					if (printRev)
+  					report->setCurrentPage((printCnt == 1) ? i : (printCnt - 1) - i);
+					else
+						report->setCurrentPage(i);
+
+        	page = report->getCurrentPage();
+        	page->play(&painter);
+        	if(i < printCnt - 1)
+          	printer->newPage();
+  			}
+  			else{
+					j = printCopies;
+  				break;
+				}
+      }
+			if(j < printCopies - 1)
+				printer->newPage();
+		}
+
+		// Cleanup printing
+		setCursor(arrowCursor);
+    painter.end();
+    report->setCurrentPage(viewIdx);
+}
+
+void MReportViewer::setupPrinter( QPrinter * printer )
+{
+    int cnt = report->pageCount();
+    printer->setPageSize((QPrinter::PageSize)report->pageSize());
+    printer->setOrientation((QPrinter::Orientation)report->pageOrientation());
+    printer->setMinMax(1, cnt);
+    printer->setFromTo(1, cnt);
+    printer->setFullPage(true);
+}
+
+void MReportViewer::printReportSilent( int printFrom, int printTo, int printCopies, QString printerName )
+{
+    int cnt = report->pageCount();
+    if (printFrom == -1)
+        printFrom = 1;
+    if (printTo == -1)
+        printTo = cnt;
+    if (printCopies == -1)
+        printCopies = 1;
+
+
+    printer = new QPrinter();
+
+    printer->setPageSize((QPrinter::PageSize)report->pageSize());
+    printer->setOrientation((QPrinter::Orientation)report->pageOrientation());
+    printer->setMinMax(1, cnt);
+    printer->setFullPage(true);
+    printer->setNumCopies(printCopies);
+    printer->setFromTo(printFrom, printTo);
+    if (!printerName.isEmpty())
+        printer->setPrinterName(printerName);
+
+    printReport(printer);
+
+    delete printer;
+}
+
 #ifndef PURE_QT
 #include "mreportviewer.moc"
 #endif

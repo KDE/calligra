@@ -169,7 +169,20 @@ void KugarPart::slotPreferredTemplate(const QString &tpl)
                 localtpl=tpl;
             }
             else
+	    {
+		    QString former_localtpl = localtpl;
                     localtpl = kapp -> dirs() -> findResource("data","kugar/templates/" + tpl);
+		    if (localtpl.isEmpty())
+		    {
+                    KURL tmpURL(m_docURL);
+                    tmpURL.setFileName("");
+                    tmpURL.addPath(tpl);
+                    if (KIO::NetAccess::download(tmpURL,localtpl))
+                        isTemp=true;
+                    else
+                    KMessageBox::sorry(0,i18n("Unable to download template file: %1").arg(url.prettyURL()));			
+		    }
+	    }
         }
         else
         {
