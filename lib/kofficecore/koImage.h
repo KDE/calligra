@@ -78,6 +78,11 @@ public:
     QSize size() const;
 
     /**
+     * Convenience method, returns the original size of the image, before scaling.
+     */
+    QSize originalSize() const;
+
+    /**
      * Scales the image's width and height to the specified size and returns
      * a new KoImage object for it.
      * Note that KoImage is intelligent enough to always scale from the
@@ -183,6 +188,21 @@ QSize KoImage<Key>::size() const
     if ( !d ) return QSize();
 
     return d->m_image.size();
+}
+
+template <class Key>
+QSize KoImage<Key>::originalSize() const
+{
+    if ( !d ) return QSize();
+
+    KoImage<Key> originalImage;
+
+    if ( !d->m_originalImage.isNull() )
+        originalImage = d->m_originalImage;
+    else
+        originalImage = *this;
+
+    return originalImage.size();
 }
 
 template <class Key>
