@@ -88,27 +88,36 @@ class QButton;
 
 class KisView : public KoView {
 	Q_OBJECT
-
 	typedef KoView super;
- public:  
- 
-    KisView( KisDoc* doc, QWidget* parent = 0, const char* name = 0 );
-    ~KisView();
+
+public:  
+	KisView(KisDoc *doc, QWidget *parent = 0, const char *name = 0 );
+	virtual ~KisView();
     
 	inline void setActiveTool(KisTool *tool);
 	inline KisTool* getActiveTool();
 	inline KisDoc* getKisDocument();
 
-	void setupTools(KisCanvas *canvas, KisBrush *brush, KisPattern *pattern);
+	void setupPixmap();
+	void setupPainter();
+	void setupCanvas();
+	void setupSideBar();
+	void setupScrollBars();
+	void setupRulers();
+	void setupDialogs();
+	void setupActions();
+	void setupTabBar();
+	void setupTools();
 
+	virtual void updateReadWrite(bool readwrite);
 
-    KisColor& fgColor() { return m_fg; }
-    KisColor& bgColor() { return m_bg; }
+	KisColor& fgColor() { return m_fg; }
+	KisColor& bgColor() { return m_bg; }
 
-    KisCanvas   *kisCanvas()        { return m_pCanvas; }
-    KisPainter  *kisPainter()       { return m_pPainter; }
-    KisPattern  *currentPattern()   { return m_pPattern; }
-    KisBrush    *currentBrush()     { return m_pBrush; }
+	KisCanvas   *kisCanvas()        { return m_pCanvas; }
+	KisPainter  *kisPainter()       { return m_pPainter; }
+	KisPattern  *currentPattern()   { return m_pPattern; }
+	KisBrush    *currentBrush()     { return m_pBrush; }
 
     void updateCanvas(QRect & ur);
     void showScrollBars();
@@ -254,17 +263,6 @@ class KisView : public KoView {
  protected:
  
     virtual void resizeEvent( QResizeEvent* );
-    virtual void updateReadWrite( bool readwrite );
-
-    void setupPixmap();
-    void setupPainter();
-    void setupCanvas();
-    void setupSideBar();
-    void setupScrollBars();
-    void setupRulers();
-    void setupDialogs();
-    void setupActions();
-    void setupTabBar();
 
 
 private:
@@ -295,7 +293,7 @@ private:
     // settings actions
     KToggleAction *m_toggle_paint_offset;
     
-    KisDoc *m_pDoc;  // always needed
+    KisDoc *m_doc;  // always needed
     KisTool *m_pTool; // current active tool
 
     // krayon objects - all can be krayons
@@ -352,7 +350,7 @@ KisTool* KisView::getActiveTool()
 
 KisDoc* KisView::getKisDocument()
 {
-	return m_pDoc;
+	return m_doc;
 }
 
 #endif

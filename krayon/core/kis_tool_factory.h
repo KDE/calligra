@@ -30,7 +30,7 @@ class KisPattern;
 class KisDoc;
 class KisView;
 
-ktvector toolFactory(KisCanvas *canvas, KisBrush *brush, KisPattern *pattern, KisDoc *doc, KisView *view);
+ktvector toolFactory(KisCanvas *canvas, KisBrush *brush, KisPattern *pattern, KisDoc *doc);
 
 #endif // KIS_TOOL_FACTORY_H_
 

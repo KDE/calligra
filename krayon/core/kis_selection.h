@@ -41,7 +41,7 @@ public:
     ~KisSelection();
 
     // set up the containers 
-    void setBounds(QRect & r);
+    void setBounds(const QRect& r);
     
     // set the selection rectangle size to 0
     void setNull();

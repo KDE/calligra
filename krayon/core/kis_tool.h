@@ -22,11 +22,12 @@
 #define __kis_tool_h__
 
 #include <qcursor.h>
+#include <qdom.h>
 #include <qimage.h>
 #include <qobject.h>
+#include <qpixmap.h>
 #include <qpoint.h>
 #include <qpointarray.h>
-#include <qpixmap.h>
 #include <qrect.h>
 
 #include "kis_brush.h"
@@ -41,11 +42,13 @@ class KisTool : public QObject {
 Q_OBJECT
 
 public:
-	KisTool(KisDoc *doc, KisView *view);
+	KisTool(KisDoc *doc, const char *name = 0);
 	virtual ~KisTool();
 
 	virtual void setupAction(QObject *collection) = 0;
 
+	virtual QDomElement saveSettings(QDomDocument& doc) const;
+	virtual bool loadSettings(QDomElement& elem);
 	virtual QCursor cursor() const;
 	virtual void setCursor(const QCursor& cursor);
 	virtual void setCursor();
@@ -91,6 +94,17 @@ protected:
 	QCursor m_Cursor;
 	QPixmap clipPixmap;
 	QImage clipImage;
+
+	unsigned int opacity; 
+	bool usePattern;
+	bool useGradient;
+	bool useRegions;
+	bool fillSolid;
+
+private:
+	uint paintThreshold;
+	bool paintWithPattern; 
+	bool paintWithGradient;
 };
 
 #endif

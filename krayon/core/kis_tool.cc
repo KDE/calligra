@@ -31,10 +31,11 @@
 #include "kis_view.h"
 #include "kis_tool.h"
 
-KisTool::KisTool(KisDoc *doc, KisView *view)
+KisTool::KisTool(KisDoc *doc, const char *name) //: QObject(doc, name)
 {
 	m_pDoc = doc;
-	m_pView = view;
+	m_pView = doc -> currentView();
+	assert(m_pView);
 	m_Cursor = KisCursor::arrowCursor();
 }
 
@@ -428,6 +429,16 @@ void KisTool::setMoveCursor()
 
 	if (m_pView)
 		m_pView -> kisCanvas() -> setCursor(KisCursor::moveCursor());
+}
+
+QDomElement KisTool::saveSettings(QDomDocument& /*doc*/) const
+{
+	return QDomElement();
+}
+
+bool KisTool::loadSettings(QDomElement& /*elem*/)
+{
+	return false;
 }
 
 #include "kis_tool.moc"

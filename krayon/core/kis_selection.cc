@@ -52,7 +52,7 @@ KisSelection::~KisSelection()
     a rectangle, an array and a QImage.  Only the rectangle which bounds
     the selection is required.
 */
-void KisSelection::setBounds(QRect & re)
+void KisSelection::setBounds(const QRect & re)
 {
     // resize the selection rectangle
     rectangle = re;

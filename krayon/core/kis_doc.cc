@@ -4,6 +4,7 @@
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
  *  Copyright (c) 2000 John Califf  <jcaliff@compuzone.net>
  *  Copyright (c) 2001 Toshitaka Fujioka  <fujioka@kde.org>
+ *  Copyright (c) 2002 Patrick Julien <freak@ideasandassociates.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,17 +21,12 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <qdom.h>
+#include <qimage.h>
 #include <qpainter.h>
 #include <qwidget.h>
-#include <qregexp.h>
-#include <qfileinfo.h>
-#include <qdom.h>
-#include <qtextstream.h>
-#include <qbuffer.h>
-#include <qimage.h>
 
 #include <kcommand.h>
-#include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kmimetype.h>
 #include <kimageio.h>
@@ -38,11 +34,11 @@
 #include <kmessagebox.h>
 
 #include <koFilterManager.h>
+#include <koMainWindow.h>
+#include <koQueryTrader.h>
 #include <koTemplateChooseDia.h>
 #include <koStore.h>
 #include <koStoreDevice.h>
-#include <koMainWindow.h>
-#include <koQueryTrader.h>
 
 #include "kis_doc.h"
 #include "kis_view.h"
@@ -54,9 +50,6 @@
 #include "kis_channel.h"
 #include "kis_selection.h"
 #include "kis_framebuffer.h"
-#include "kis_timer.h"
-
-#define KIS_DEBUG(AREA, CMD)
 
 /*
     KisDoc - constructor ko virtual method implemented
@@ -65,21 +58,21 @@
 KisDoc::KisDoc( QWidget *parentWidget, const char *widgetName,
     QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
-    , m_commands()
 {
-    bool loadPlugins = true;
-    setInstance( KisFactory::global(), loadPlugins );
+	bool loadPlugins = true;
+	setInstance(KisFactory::global(), loadPlugins);
 
-    m_pCurrent = 0L;
-    m_pNewDialog = 0L;
-    m_pClipImage = 0L;
+	m_current_view = 0;
+	m_pCurrent = 0L;
+	m_pNewDialog = 0L;
+	m_pClipImage = 0L;
 
-    m_pSelection = new KisSelection(this);
-    m_pFrameBuffer = new KisFrameBuffer(this);
+	m_pSelection = new KisSelection(this);
+	m_pFrameBuffer = new KisFrameBuffer(this);
 
-    m_Images.setAutoDelete(false);
+	m_Images.setAutoDelete(false);
 
-kdDebug(0) << "QPixmap::defaultDepth(): " << QPixmap::defaultDepth() << endl;
+	kdDebug(0) << "QPixmap::defaultDepth(): " << QPixmap::defaultDepth() << endl;
 
 }
 
@@ -89,66 +82,64 @@ kdDebug(0) << "QPixmap::defaultDepth(): " << QPixmap::defaultDepth() << endl;
 
 bool KisDoc::initDoc()
 {
+	bool ok = false;
+	QString name = i18n( "image %1" ).arg( m_Images.count() + 1 );
 
-KisTimer::start();
+	// choose dialog for open mode
+	QString templ;
+	KoTemplateChooseDia::ReturnType ret;
 
-    bool ok = false;
-    QString name = i18n( "image %1" ).arg( m_Images.count() + 1 );
+	ret = KoTemplateChooseDia::choose (KisFactory::global(),
+			templ,
+			"application/x-krayon", "*.kra",
+			i18n("Krayon"),
+			KoTemplateChooseDia::NoTemplates,
+			"krayon_template");
 
-    // choose dialog for open mode
-    QString templ;
-    KoTemplateChooseDia::ReturnType ret;
+	// create document from template - use default
+	// 512x512 RGBA image util we have real templates
+	// however, this will never happen because KoTemplateChossDia
+	// returns false if there is no templae selected
 
-    ret = KoTemplateChooseDia::choose (KisFactory::global(),
-              templ,
-              "application/x-krayon", "*.kra",
-              i18n("Krayon"),
-              KoTemplateChooseDia::NoTemplates,
-              "krayon_template");
+	if (m_current_view) {
+		delete m_current_view;
+		m_current_view = 0;
+	}
 
-    // create document from template - use default
-    // 512x512 RGBA image util we have real templates
-    // however, this will never happen because KoTemplateChossDia
-    // returns false if there is no templae selected
+	if (ret == KoTemplateChooseDia::Template) {
+		KisImage *img = newImage(name, 512, 512, cm_RGBA, 8);
 
-    if (ret == KoTemplateChooseDia::Template)
-    {
-        KisImage *img = newImage(name, 512, 512, cm_RGBA, 8);
-        if (!img) return false;
+		if (!img) 
+			return false;
 
-        // add background layer
-        img->addLayer(QRect(0, 0, 512, 512), KisColor::white(),
-            false, i18n("background"));
-        img->markDirty(QRect(0, 0, 512, 512));
+		// add background layer
+		img->addLayer(QRect(0, 0, 512, 512), KisColor::white(), false, i18n("background"));
+		img->markDirty(QRect(0, 0, 512, 512));
 
-        // list of images - mdi document
-        setCurrentImage(img);
+		// list of images - mdi document
+		setCurrentImage(img);
 
-        // signal to tabbar for iages
-        emit imageListUpdated();
+		// signal to tabbar for iages
+		emit imageListUpdated();
 
-        setModified (true);
-        ok = true;
-    }
-    // open an existing document
-    else if ( ret == KoTemplateChooseDia::File )
-    {
-        KURL url;
-        url.setPath (templ);
-        ok = openURL (url);
-    }
-    // create a new document from scratch
-    else if ( ret == KoTemplateChooseDia::Empty )
-    {
-        // NewDialog for entering parameters
-        ok = slotNewImage();
-        // signal to tabbar for images
-        if(ok) emit imageListUpdated();
-    }
+		setModified (true);
+		ok = true;
+	}
+	else if (ret == KoTemplateChooseDia::File) {
+		KURL url;
+		url.setPath (templ);
+		ok = openURL (url);
+	}
+	// create a new document from scratch
+	else if (ret == KoTemplateChooseDia::Empty) {
+		// NewDialog for entering parameters
+		ok = slotNewImage();
+		// signal to tabbar for images
+		if(ok) 
+			emit imageListUpdated();
+	}
 
-KisTimer::stop("initDoc()");
-
-    return ok;
+	return ok;
 }
 
 
@@ -301,224 +292,19 @@ QDomElement KisDoc::saveChannels( QDomDocument &doc, KisLayer *lay )
 }
 
 // save tool settings
-QDomElement KisDoc::saveToolSettings( QDomDocument &doc )
+QDomElement KisDoc::saveToolSettings(QDomDocument& doc) const
 {
-    // tool element
-    QDomElement tool = doc.createElement( "tool" );
+	QDomElement tool = doc.createElement("tool");
 
-    //save pen tool settings
-    tool.appendChild( savePenToolSettings( doc ) );
+	for (ktvector_size_type i = 0; i < m_tools.size(); i++) {
+		kdDebug() << "KisDoc::saveToolSettings\n";
+		tool.appendChild(m_tools[i] -> saveSettings(doc));
+   	}
 
-    // save brush tool settings
-    tool.appendChild( saveBrushToolSettings( doc ) );
-
-    // save airbrush tool settings
-    tool.appendChild( saveAirbrushToolSettings( doc ) );
-
-    // save eraser tool settings
-    tool.appendChild( saveEraserToolSettings( doc ) );
-
-    // save line tool settings
-    tool.appendChild( saveLineToolSettings( doc ) );
-
-    // save polyline tool settings
-    tool.appendChild( savePolylineToolSettings( doc ) );
-
-    // save polygon tool settings
-    tool.appendChild( savePolygonToolSettings( doc ) );
-
-    // save rectangle tool settings
-    tool.appendChild( saveRectangleToolSettings( doc ) );
-
-    // save ellipse tool settings
-    tool.appendChild( saveEllipseToolSettings( doc ) );
-
-    // save filler tool settings
-    tool.appendChild( saveFillerToolSettings( doc ) );
-
-    // save Color changer settings
-    tool.appendChild( saveColorChangerSettings( doc ) );
-
-    // save Stamp (Pattern) tool settings
-    tool.appendChild( saveStampToolSettings( doc ) );
-
-    // save Gradients settings
-    tool.appendChild( saveGradientsSettings( doc ) );
-
-
-    return tool;
+	return tool;
 }
 
-// save pen tool settings
-QDomElement KisDoc::savePenToolSettings( QDomDocument &doc )
-{
-    // pen tool element
-    QDomElement penTool = doc.createElement( "penTool" );
-
-    penTool.setAttribute( "opacity", penToolSettings.opacity );
-    penTool.setAttribute( "paintThreshold", penToolSettings.paintThreshold );
-    penTool.setAttribute( "paintWithPattern", static_cast<int>( penToolSettings.paintWithPattern ) );
-    penTool.setAttribute( "paintWithGradient", static_cast<int>( penToolSettings.paintWithGradient ) );
-
-    return penTool;
-}
-
-// save brush tool settings
-QDomElement KisDoc::saveBrushToolSettings( QDomDocument &doc )
-{
-    // brush tool element
-    QDomElement brushTool = doc.createElement( "brushTool" );
-
-    brushTool.setAttribute( "opacity", brushToolSettings.opacity );
-    brushTool.setAttribute( "blendWithCurrentGradient", static_cast<int>( brushToolSettings.blendWithCurrentGradient ) );
-    brushTool.setAttribute( "blendWithCurrentPattern", static_cast<int>( brushToolSettings.blendWithCurrentPattern ) );
-
-    return brushTool;
-}
-
-// save airbrush tool settings
-QDomElement KisDoc::saveAirbrushToolSettings( QDomDocument &doc )
-{
-    // airbrush tool element
-    QDomElement airbrushTool = doc.createElement( "airbrushTool" );
-
-    airbrushTool.setAttribute( "opacity", airbrushToolSettings.opacity );
-    airbrushTool.setAttribute( "useCurrentGradient", static_cast<int>( airbrushToolSettings.useCurrentGradient ) );
-    airbrushTool.setAttribute( "useCurrentPattern", static_cast<int>( airbrushToolSettings.useCurrentPattern ) );
-
-    return airbrushTool;
-}
-
-// save eraser tool settings
-QDomElement KisDoc::saveEraserToolSettings( QDomDocument &doc )
-{
-    // eraser tool element
-    QDomElement eraserTool = doc.createElement( "eraserTool" );
-
-    eraserTool.setAttribute( "opacity", eraserToolSettings.opacity );
-    eraserTool.setAttribute( "blendWithCurrentGradient", static_cast<int>( eraserToolSettings.blendWithCurrentGradient ) );
-    eraserTool.setAttribute( "blendWithCurrentPattern", static_cast<int>( eraserToolSettings.blendWithCurrentPattern ) );
-
-    return eraserTool;
-}
-
-// save line tool settings
-QDomElement KisDoc::saveLineToolSettings( QDomDocument &doc )
-{
-    // line tool element
-    QDomElement lineTool = doc.createElement( "lineTool" );
-
-    lineTool.setAttribute( "thickness", lineToolSettings.thickness );
-    lineTool.setAttribute( "opacity", lineToolSettings.opacity );
-    lineTool.setAttribute( "fillInteriorRegions", static_cast<int>( lineToolSettings.fillInteriorRegions ) );
-    lineTool.setAttribute( "useCurrentPattern", static_cast<int>( lineToolSettings.useCurrentPattern ) );
-    lineTool.setAttribute( "fillWithGradient", static_cast<int>( lineToolSettings.fillWithGradient ) );
-
-    return lineTool;
-}
-
-// save polyline tool settings
-QDomElement KisDoc::savePolylineToolSettings( QDomDocument &doc )
-{
-    // polyline tool element
-    QDomElement polylineTool = doc.createElement( "polylineTool" );
-
-    polylineTool.setAttribute( "thickness", polylineToolSettings.thickness );
-    polylineTool.setAttribute( "opacity", polylineToolSettings.opacity );
-    polylineTool.setAttribute( "fillInteriorRegions", static_cast<int>( polylineToolSettings.fillInteriorRegions ) );
-    polylineTool.setAttribute( "useCurrentPattern", static_cast<int>( polylineToolSettings.useCurrentPattern ) );
-    polylineTool.setAttribute( "fillWithGradient", static_cast<int>( polylineToolSettings.fillWithGradient ) );
-
-    return polylineTool;
-}
-
-// save polygon tool settings
-QDomElement KisDoc::savePolygonToolSettings( QDomDocument &doc )
-{
-    // polygon tool element
-    QDomElement polygonTool = doc.createElement( "polygonTool" );
-
-    polygonTool.setAttribute( "thickness", polygonToolSettings.thickness );
-    polygonTool.setAttribute( "opacity", polygonToolSettings.opacity );
-    polygonTool.setAttribute( "corners", polygonToolSettings.corners );
-    polygonTool.setAttribute( "sharpness", polygonToolSettings.sharpness );
-    polygonTool.setAttribute( "fillInteriorRegions", static_cast<int>( polygonToolSettings.fillInteriorRegions ) );
-    polygonTool.setAttribute( "useCurrentPattern", static_cast<int>( polygonToolSettings.useCurrentPattern ) );
-    polygonTool.setAttribute( "fillWithGradient", static_cast<int>( polygonToolSettings.fillWithGradient ) );
-    polygonTool.setAttribute( "polygon", static_cast<int>( polygonToolSettings.polygon ) );
-    polygonTool.setAttribute( "concavePolygon", static_cast<int>( polygonToolSettings.concavePolygon ) );
-
-    return polygonTool;
-}
-
-// save rectangle tool settings
-QDomElement KisDoc::saveRectangleToolSettings( QDomDocument &doc )
-{
-    // rectangle tool element
-    QDomElement rectangleTool = doc.createElement( "rectangleTool" );
-
-    rectangleTool.setAttribute( "thickness", rectangleToolSettings.thickness );
-    rectangleTool.setAttribute( "opacity", rectangleToolSettings.opacity );
-    rectangleTool.setAttribute( "fillInteriorRegions", static_cast<int>( rectangleToolSettings.fillInteriorRegions ) );
-    rectangleTool.setAttribute( "useCurrentPattern", static_cast<int>( rectangleToolSettings.useCurrentPattern ) );
-    rectangleTool.setAttribute( "fillWithGradient", static_cast<int>( rectangleToolSettings.fillWithGradient ) );
-
-    return rectangleTool;
-}
-
-// save ellipse tool settings
-QDomElement KisDoc::saveEllipseToolSettings( QDomDocument &doc )
-{
-    // ellipse tool element
-    QDomElement ellipseTool = doc.createElement( "ellipseTool" );
-
-    ellipseTool.setAttribute( "thickness", ellipseToolSettings.thickness );
-    ellipseTool.setAttribute( "opacity", ellipseToolSettings.opacity );
-    ellipseTool.setAttribute( "fillInteriorRegions", static_cast<int>( ellipseToolSettings.fillInteriorRegions ) );
-    ellipseTool.setAttribute( "useCurrentPattern", static_cast<int>( ellipseToolSettings.useCurrentPattern ) );
-    ellipseTool.setAttribute( "fillWithGradient", static_cast<int>( ellipseToolSettings.fillWithGradient ) );
-
-    return ellipseTool;
-}
-
-// save filler tool settings
-QDomElement KisDoc::saveFillerToolSettings( QDomDocument &doc )
-{
-    // filler tool element
-    QDomElement fillerTool = doc.createElement( "fillerTool" );
-
-    fillerTool.setAttribute( "opacity", fillerToolSettings.opacity );
-    fillerTool.setAttribute( "fillWithPattern", static_cast<int>( fillerToolSettings.fillWithPattern ) );
-    fillerTool.setAttribute( "fillWithGradient", static_cast<int>( fillerToolSettings.fillWithGradient ) );
-
-    return fillerTool;
-}
-
-// save Color changer settings
-QDomElement KisDoc::saveColorChangerSettings( QDomDocument &doc )
-{
-    // Color changer element
-    QDomElement colorChanger = doc.createElement( "colorChanger" );
-
-    colorChanger.setAttribute( "opacity", colorChangerSettings.opacity );
-    colorChanger.setAttribute( "fillWithPattern", static_cast<int>( colorChangerSettings.fillWithPattern ) );
-    colorChanger.setAttribute( "fillWithGradient", static_cast<int>( colorChangerSettings.fillWithGradient ) );
-
-    return colorChanger;
-}
-
-// save Stamp (Pattern) tool settings
-QDomElement KisDoc::saveStampToolSettings( QDomDocument &doc )
-{
-    // Stamp (Pattern) tool element
-    QDomElement stampTool = doc.createElement( "stampTool" );
-
-    stampTool.setAttribute( "opacity", stampToolSettings.opacity );
-    stampTool.setAttribute( "blendWithCurrentGradient", static_cast<int>( stampToolSettings.blendWithCurrentGradient ) );
-
-    return stampTool;
-}
-
+#if 0
 // save Gradients settings
 QDomElement KisDoc::saveGradientsSettings( QDomDocument &doc )
 {
@@ -534,6 +320,8 @@ QDomElement KisDoc::saveGradientsSettings( QDomDocument &doc )
 
     return gradients;
 }
+
+#endif
 
 /*
     Save extra, document-specific data outside xml format as defined by
@@ -605,40 +393,42 @@ bool KisDoc::completeSaving( KoStore* store )
 
 bool KisDoc::loadXML( QIODevice *, const QDomDocument& doc )
 {
-    kdDebug(0) << "KisDoc::loadXML() entering" << endl;
+	kdDebug(0) << "KisDoc::loadXML() entering" << endl;
 
-    if ( doc.doctype().name() != "image" )
-    {
-        kdDebug(0) << "KisDoc::loadXML() no doctype name error" << endl;
-        return false;
-    }
+	if (!m_current_view) {
+		m_current_view = new KisView(this);
+		m_current_view -> setupTools();
+	}
 
-    QDomElement images = doc.documentElement();
+	if (doc.doctype().name() != "image") {
+		kdDebug(0) << "KisDoc::loadXML() no doctype name error" << endl;
+		return false;
+	}
 
-    if ( images.attribute( "mime" ) != "application/x-krayon" && images.attribute( "mime" ) != "application/vnd.kde.krayon" )
-    {
-        kdDebug(0) << "KisDoc::loadXML() no mime name error" << endl;
-        return false;
-    }
+	QDomElement images = doc.documentElement();
 
-    if ( images.attribute( "version" ) != "1.2" )
-    {
-        kdDebug(0) << "KisDoc::loadXML() old file format" << endl;
-        oldFileFormat = true;
-        if ( !loadXMLOldFileFormat( images ) )
-            return false;
-    }
-    else
-    {
-        oldFileFormat = false;
-        // load images
-        if ( !loadImages( images ) )
-            return false;
-    }
+	if (images.attribute("mime") != "application/x-krayon" && images.attribute("mime") != "application/vnd.kde.krayon") {
+		kdDebug(0) << "KisDoc::loadXML() no mime name error" << endl;
+		return false;
+	}
 
-    kdDebug(0) << "KisDoc::loadXML() leaving succesfully" << endl;
+	if (images.attribute("version") != "1.2") {
+		kdDebug(0) << "KisDoc::loadXML() old file format" << endl;
+		oldFileFormat = true;
 
-    return true;
+		if (!loadXMLOldFileFormat(images))
+		       	return false;
+	}
+	else {
+		oldFileFormat = false;
+		
+		// load images
+		if (!loadImages(images))
+			return false;
+	}
+
+	kdDebug(0) << "KisDoc::loadXML() leaving succesfully" << endl;
+	return true;
 }
 
 // load images
@@ -794,153 +584,32 @@ void KisDoc::loadChannels( QDomElement &element, KisLayer * /*lay*/ )
 }
 
 // load tool settings
-void KisDoc::loadToolSettings( QDomElement &elem )
+void KisDoc::loadToolSettings(QDomElement& elem)
 {
-    QDomElement tool = elem.firstChild().toElement();
+	QDomElement tool = elem.firstChild().toElement();
+	KisTool *p;
 
-    while ( !tool.isNull() ) {
-        if ( tool.tagName() == "penTool" )
-            loadPenToolSettings( tool );
-        else if ( tool.tagName() == "brushTool" )
-            loadBrushToolSettings( tool );
-        else if ( tool.tagName() == "airbrushTool" )
-            loadAirbrushToolSettings( tool );
-        else if ( tool.tagName() == "eraserTool" )
-            loadEraserToolSettings( tool );
-        else if ( tool.tagName() == "lineTool" )
-            loadLineToolSettings( tool );
-        else if ( tool.tagName() == "polylineTool" )
-            loadPolylineToolSettings( tool );
-        else if ( tool.tagName() == "polygonTool" )
-            loadPolygonToolSettings( tool );
-        else if ( tool.tagName() == "rectangleTool" )
-            loadRectangleToolSettings( tool );
-        else if ( tool.tagName() == "ellipseTool" )
-            loadEllipseToolSettings( tool );
-        else if ( tool.tagName() == "fillerTool" )
-            loadFillerToolSettings( tool );
-        else if ( tool.tagName() == "colorChanger" )
-            loadColorChangerSettings( tool );
-        else if ( tool.tagName() == "stampTool" )
-            loadStampToolSettings( tool );
-        else if ( tool.tagName() == "gradients" )
-            loadGradientsSettings( tool );
+	kdDebug() << "KisDoc::loadToolSettings\n";
+	assert(m_tools.size());
 
-        tool = tool.nextSibling().toElement();
-    }
+	while (!tool.isNull()) {
+		for (ktvector_size_type i = 0; i < m_tools.size(); i++) {
+			p = m_tools[i];
+			assert(p);
+
+			kdDebug() << "TAGNAME = " << tool.tagName() << endl;
+
+			if (p && p -> loadSettings(tool)) {
+				kdDebug() << "Loaded Settings\n\n";
+				break;
+			}
+		}
+
+		tool = tool.nextSibling().toElement();
+	}
 }
 
-// load pen tool settings
-void KisDoc::loadPenToolSettings( QDomElement &elem )
-{
-    penToolSettings.opacity = elem.attribute( "opacity" ).toInt();
-    penToolSettings.paintThreshold = elem.attribute( "paintThreshold" ).toInt();
-    penToolSettings.paintWithPattern = static_cast<bool>( elem.attribute( "paintWithPattern" ).toInt() );
-    penToolSettings.paintWithGradient = static_cast<bool>( elem.attribute( "paintWithGradient" ).toInt() );
-}
-
-// load brush tool settings
-void KisDoc::loadBrushToolSettings( QDomElement &elem )
-{
-    brushToolSettings.opacity = elem.attribute( "opacity" ).toInt();
-    brushToolSettings.blendWithCurrentGradient = static_cast<bool>( elem.attribute( "blendWithCurrentGradient" ).toInt() );
-    brushToolSettings.blendWithCurrentPattern = static_cast<bool>( elem.attribute( "blendWithCurrentPattern" ).toInt() );
-}
-
-// load airbrush tool settings
-void KisDoc::loadAirbrushToolSettings( QDomElement &elem )
-{
-    airbrushToolSettings.opacity = elem.attribute( "opacity" ).toInt();
-    airbrushToolSettings.useCurrentGradient = static_cast<bool>( elem.attribute( "useCurrentGradient" ).toInt() );
-    airbrushToolSettings.useCurrentPattern = static_cast<bool>( elem.attribute( "useCurrentPattern" ).toInt() );
-}
-
-// load eraser tool settings
-void KisDoc::loadEraserToolSettings( QDomElement &elem )
-{
-    eraserToolSettings.opacity = elem.attribute( "opacity" ).toInt();
-    eraserToolSettings.blendWithCurrentGradient = static_cast<bool>( elem.attribute( "blendWithCurrentGradient" ).toInt() );
-    eraserToolSettings.blendWithCurrentPattern = static_cast<bool>( elem.attribute( "blendWithCurrentPattern" ).toInt() );
-}
-
-// load line tool settings
-void KisDoc::loadLineToolSettings( QDomElement &elem )
-{
-    lineToolSettings.thickness = elem.attribute( "thickness" ).toInt();
-    lineToolSettings.opacity = elem.attribute( "opacity" ).toInt();
-    lineToolSettings.fillInteriorRegions = static_cast<bool>( elem.attribute( "fillInteriorRegions" ).toInt() );
-    lineToolSettings.useCurrentPattern = static_cast<bool>( elem.attribute( "useCurrentPattern" ).toInt() );
-    lineToolSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
-}
-
-// load polyline tool settings
-void KisDoc::loadPolylineToolSettings( QDomElement &elem )
-{
-    polylineToolSettings.thickness = elem.attribute( "thickness" ).toInt();
-    polylineToolSettings.opacity = elem.attribute( "opacity" ).toInt();
-    polylineToolSettings.fillInteriorRegions = static_cast<bool>( elem.attribute( "fillInteriorRegions" ).toInt() );
-    polylineToolSettings.useCurrentPattern = static_cast<bool>( elem.attribute( "useCurrentPattern" ).toInt() );
-    polylineToolSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
-
-}
-
-// load polygon tool settings
-void KisDoc::loadPolygonToolSettings( QDomElement &elem )
-{
-    polygonToolSettings.thickness = elem.attribute( "thickness" ).toInt();
-    polygonToolSettings.opacity = elem.attribute( "opacity" ).toInt();
-    polygonToolSettings.corners = elem.attribute( "corners" ).toInt();
-    polygonToolSettings.sharpness = elem.attribute( "sharpness" ).toInt();
-    polygonToolSettings.fillInteriorRegions = static_cast<bool>( elem.attribute( "fillInteriorRegions" ).toInt() );
-    polygonToolSettings.useCurrentPattern = static_cast<bool>( elem.attribute( "useCurrentPattern" ).toInt() );
-    polygonToolSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
-    polygonToolSettings.polygon = static_cast<bool>( elem.attribute( "polygon" ).toInt() );
-    polygonToolSettings.concavePolygon = static_cast<bool>( elem.attribute( "concavePolygon" ).toInt() );
-}
-
-// load rectangle tool settings
-void KisDoc::loadRectangleToolSettings( QDomElement &elem )
-{
-    rectangleToolSettings.thickness = elem.attribute( "thickness" ).toInt();
-    rectangleToolSettings.opacity = elem.attribute( "opacity" ).toInt();
-    rectangleToolSettings.fillInteriorRegions = static_cast<bool>( elem.attribute( "fillInteriorRegions" ).toInt() );
-    rectangleToolSettings.useCurrentPattern = static_cast<bool>( elem.attribute( "useCurrentPattern" ).toInt() );
-    rectangleToolSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
-}
-
-// load ellipse tool settings
-void KisDoc::loadEllipseToolSettings( QDomElement &elem )
-{
-    ellipseToolSettings.thickness = elem.attribute( "thickness" ).toInt();
-    ellipseToolSettings.opacity = elem.attribute( "opacity" ).toInt();
-    ellipseToolSettings.fillInteriorRegions = static_cast<bool>( elem.attribute( "fillInteriorRegions" ).toInt() );
-    ellipseToolSettings.useCurrentPattern = static_cast<bool>( elem.attribute( "useCurrentPattern" ).toInt() );
-    ellipseToolSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
-}
-
-// load filler tool settings
-void KisDoc::loadFillerToolSettings( QDomElement &elem )
-{
-    fillerToolSettings.opacity = elem.attribute( "opacity" ).toInt();
-    fillerToolSettings.fillWithPattern = static_cast<bool>( elem.attribute( "fillWithPattern" ).toInt() );
-    fillerToolSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
-}
-
-// load Color changer settings
-void KisDoc::loadColorChangerSettings( QDomElement &elem )
-{
-    colorChangerSettings.opacity = elem.attribute( "opacity" ).toInt();
-    colorChangerSettings.fillWithPattern = static_cast<bool>( elem.attribute( "fillWithPattern" ).toInt() );
-    colorChangerSettings.fillWithGradient = static_cast<bool>( elem.attribute( "fillWithGradient" ).toInt() );
-}
-
-// load Stamp (Pattern) tool settings
-void KisDoc::loadStampToolSettings( QDomElement &elem )
-{
-    stampToolSettings.opacity = elem.attribute( "opacity" ).toInt();
-    stampToolSettings.blendWithCurrentGradient = static_cast<bool>( elem.attribute( "blendWithCurrentGradient" ).toInt() );
-}
-
+#if 0
 // load Gradients settings
 void KisDoc::loadGradientsSettings( QDomElement &elem )
 {
@@ -951,6 +620,7 @@ void KisDoc::loadGradientsSettings( QDomElement &elem )
     gradientsSettings.gradient = elem.attribute( "gradient" );
     gradientsSettings.repeat = elem.attribute( "repeat" );
 }
+#endif
 
 bool KisDoc::completeLoading( KoStore* store )
 {
@@ -1199,13 +869,13 @@ void KisDoc::setCurrentImage(KisImage *img)
     setCurrentImage - by name
 */
 
-void KisDoc::setCurrentImage(const QString& _name)
+void KisDoc::setCurrentImage(const QString& name)
 {
     KisImage *img = m_Images.first();
 
     while (img)
     {
-        if (img->name() == _name)
+        if (img->name() == name)
 	    {
 	        setCurrentImage(img);
 	        return;
@@ -1220,7 +890,7 @@ void KisDoc::setCurrentImage(const QString& _name)
     renameImage - from menu or click on image tab
 */
 
-void KisDoc::renameImage(QString & oldName, QString & newName)
+void KisDoc::renameImage(const QString& oldName, const QString& newName)
 {
     KisImage *img = m_Images.first();
 
@@ -1263,26 +933,17 @@ QStringList KisDoc::images()
 */
 bool KisDoc::isEmpty() const
 {
-    if (m_pCurrent) return false;
-    return true;
+	return m_pCurrent != 0;
 }
 
 /*
     currentView - pointer to current view for this doc
 */
+
 KisView *KisDoc::currentView()
 {
-/* ### what's this? (Simon
-    KisView *v = 0L;
-    for( v = (KisView*)firstView(); v != 0L; v = (KisView*)nextView() )
-    {
-        // how to tell which of these is current?  too much encapsualtion!
-        //v->enableUndo( _b );
-    }
-
-    return v;
-*/
-    return dynamic_cast<KisView *>( views().getLast() );
+	kdDebug() << "KisDoc::currentView m_current_view = " << m_current_view << endl;
+	return m_current_view; // ? m_current_view : dynamic_cast<KisView *>(views().getLast());
 }
 
 
@@ -1301,7 +962,7 @@ QString KisDoc::currentImage()
 */
 KisImage* KisDoc::current() const
 {
-    return m_pCurrent;
+	return m_pCurrent;
 }
 
 /*
@@ -1427,7 +1088,7 @@ KisDoc::~KisDoc()
 
 */
 
-bool KisDoc::saveAsQtImage( QString file, bool wholeImage)
+bool KisDoc::saveAsQtImage(const QString& file, bool wholeImage)
 {
     int x, y, w, h;
     bool ok = false;
@@ -1613,7 +1274,7 @@ bool KisDoc::QtImageToLayer(QImage *qimg, KisView * /* pView */)
     raster operations, and many other neat effects.
 */
 
-bool KisDoc::LayerToQtImage(QImage *qimg, KisView */*pView*/, QRect & clipRect)
+bool KisDoc::LayerToQtImage(QImage *qimg, KisView * /*pView*/, QRect & clipRect)
 {
     KisImage *img = current();
     if (!img)  return false;
@@ -1669,9 +1330,10 @@ bool KisDoc::LayerToQtImage(QImage *qimg, KisView */*pView*/, QRect & clipRect)
 /*
     setSelection - set selection for document
 */
-void KisDoc::setSelection(QRect & r)
+void KisDoc::setSelection(const QRect& r)
 {
-    m_pSelection->setBounds(r);
+	assert(m_pSelection);
+	m_pSelection -> setBounds(r);
 }
 
 /*
@@ -1878,19 +1540,32 @@ QCString KisDoc::mimeType() const
     or some kind of view manager - needed
 */
 
-KoView* KisDoc::createViewInstance( QWidget* parent, const char* name )
+KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 {
-    if(name == 0) name = "View";
-    KisView* view = new KisView( this, parent, name );
+	KisView *view;
 
-    // undo-redo
+	kdDebug() << "createViewInstance\n";
 
-    QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
-                    view, SLOT( slotUndoRedoChanged( QString, QString ) ) );
-    QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QStringList, QStringList ) ),
-                    view, SLOT( slotUndoRedoChanged( QStringList, QStringList ) ) );
+//	if (!m_current_view) {
+		kdDebug() << "Creating new view\n";
+		view = m_current_view = new KisView(this, parent, name);
+		view -> setupTools();
+#if 0
+	}
+	else
+		kdDebug() << "NOT Creating new view\n";
+#endif
 
-    return (view);
+
+	view -> updateReadWrite(false);
+
+	// undo-redo
+	QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
+			view, SLOT( slotUndoRedoChanged( QString, QString ) ) );
+	QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QStringList, QStringList ) ),
+			view, SLOT( slotUndoRedoChanged( QStringList, QStringList ) ) );
+
+	return view;
 }
 
 
@@ -1974,7 +1649,7 @@ QRect KisDoc::getImageRect()
     return imageRect;
 }
 
-void KisDoc::setImage( QString imageName )
+void KisDoc::setImage(const QString& imageName )
 {
     KisImage *img;
     for ( img = m_Images.first(); img != 0; img = m_Images.next() ) {
@@ -1985,82 +1660,27 @@ void KisDoc::setImage( QString imageName )
     }
 }
 
-// Set Pen tool settings
-void KisDoc::setPenToolSettings( PenToolSettings s )
+ktvector KisDoc::getTools() const
 {
-    penToolSettings = s;
+	return m_tools;
 }
 
-// Set Brush tool settings
-void KisDoc::setBrushToolSettings( BrushToolSettings s )
+void KisDoc::setTools(const ktvector& tools)
 {
-    brushToolSettings = s;
-}
+	assert(tools.size());
+//	m_tools = tools;
 
-// Set Airbrush tool settings
-void KisDoc::setAirbrushToolSettings( AirbrushToolSettings s )
-{
-    airbrushToolSettings = s;
-}
+	for (ktvector_size_type i = 0; i < m_tools.size(); i++) {
+		QObject::disconnect(m_tools[i]);
+		delete m_tools[i];
+	}
 
-// Eraser tool settings
-void KisDoc::setEraserToolSettings( EraserToolSettings s )
-{
-    eraserToolSettings = s;
-}
+	m_tools.erase(m_tools.begin(), m_tools.end());
+	m_tools.reserve(tools.size());
 
-// Set Line tool settings
-void KisDoc::setLineToolSettings( LineToolSettings s )
-{
-    lineToolSettings = s;
-}
-
-// Set Polyline tool settings
-void KisDoc::setPolylineToolSettings( PolylineToolSettings s )
-{
-    polylineToolSettings = s;
-}
-
-// Set Polygon tool settings
-void KisDoc::setPolygonToolSettings( PolygonToolSettings s )
-{
-    polygonToolSettings = s;
-}
-
-// Set Rectangle tool settings
-void KisDoc::setRectangleToolSettings( RectangleToolSettings s )
-{
-    rectangleToolSettings = s;
-}
-
-// Set Ellipse tool settings
-void KisDoc::setEllipseToolSettings( EllipseToolSettings s )
-{
-    ellipseToolSettings = s;
-}
-
-// Set Filler tool settings
-void KisDoc::setFillerToolSettings( FillerToolSettings s )
-{
-    fillerToolSettings = s;
-}
-
-// Set Color changer settings
-void KisDoc::setColorChangerSettings( ColorChangerSettings s )
-{
-    colorChangerSettings = s;
-}
-
-// Set Stamp (Pattern) tool settings
-void KisDoc::setStampToolSettings( StampToolSettings s )
-{
-    stampToolSettings = s;
-}
-
-// Set Gradients settings
-void KisDoc::setGradientsSettings( GradientsSettings s )
-{
-    gradientsSettings = s;
+	for (ktvector_size_type i = 0; i < tools.size(); i++)
+		m_tools.push_back(tools[i]);
 }
 
 #include "kis_doc.moc"
+
