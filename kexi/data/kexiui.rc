@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="107">
+<kpartgui name="kexi" version="108">
 <MenuBar noMerge="0">
   <Menu name="file" noMerge="1">
     <text>&amp;Project</text>
@@ -26,6 +26,7 @@
       <text>&amp;Export</text>
     </Menu>
     <Separator />
+    <Action name="project_relations"/>
     <Action name="project_properties"/>
     <Separator />
     <Action name="project_close"/>
@@ -115,6 +116,8 @@
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
   <Action name="edit_paste"/>
+  <Separator/>
+  <Action name="project_relations"/>
 </ToolBar>
 
 </kpartgui>

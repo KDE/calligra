@@ -85,10 +85,11 @@ KexiBrowser::KexiBrowser(KexiMainWindow *parent )
 	a = new KAction(i18n("&Design"), SmallIcon("edit"), CTRL + Key_Enter, this, 
 		SLOT(slotDesignObject()), this, "design_object");
 	a->plug(m_itemPopup);
-	plugSharedAction("edit_delete", m_itemPopup);
 	m_itemPopup->insertSeparator();
 	plugSharedAction("edit_cut", m_itemPopup);
 	plugSharedAction("edit_copy", m_itemPopup);
+	m_itemPopup->insertSeparator();
+	plugSharedAction("edit_delete", m_itemPopup);
 
 	m_partPopup = new KPopupMenu(this, "partPopup");
 	m_newObjectAction = new KAction("", 0, this, SLOT(slotNewObject()), this, "new_object");

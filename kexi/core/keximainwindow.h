@@ -219,6 +219,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		void slotProjectSaveAs();
 		void slotProjectProperties();
 		void slotProjectClose();
+		void slotProjectRelations();
 		void slotQuit();
 
 		void slotImportFile();

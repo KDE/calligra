@@ -96,6 +96,7 @@ class KexiMainWindow::Private
 		KActionMenu *action_open_recent, *action_show_other;
 		KAction *action_open_recent_more;
 		int action_open_recent_more_id;
+		KAction *action_project_relations;
 
 		//! edit menu
 		KAction *action_edit_delete, *action_edit_delete_row,
@@ -238,6 +239,11 @@ KexiMainWindow::initActions()
 		this, SLOT(slotProjectClose()), actionCollection(), "project_close" );
 	d->action_close->setWhatsThis(i18n("Close the current project."));
 	KStdAction::quit( this, SLOT(slotQuit()), actionCollection(), "quit");
+
+	d->action_project_relations = new KAction(i18n("&Relations..."), "relation", CTRL + Key_R, 
+		this, SLOT(slotProjectRelations()), actionCollection(), "project_relations");
+	d->action_project_relations->setToolTip(i18n("Project relations"));
+	d->action_project_relations->setWhatsThis(i18n("Show project relations"));
 
 	//EDIT MENU
 	d->action_edit_cut = createSharedAction( KStdAction::Cut, "edit_cut");
@@ -1055,6 +1061,11 @@ KexiMainWindow::slotProjectProperties()
 void
 KexiMainWindow::slotProjectClose()
 {
+}
+
+void KexiMainWindow::slotProjectRelations()
+{
+	//TODO
 }
 
 void KexiMainWindow::slotAction(const QString& act_id)
