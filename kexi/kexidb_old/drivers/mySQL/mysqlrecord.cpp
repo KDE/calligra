@@ -457,6 +457,7 @@ MySqlRecord::insert()
 //	int record = m_lastItem;
 	m_lastItem++;
 
+	kdDebug()<<"Leaving and returning an update record"<<endl;
 	return rec;
 }
 

@@ -179,8 +179,7 @@ KexiDataTable::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
 
 //		m_record->update(i->getHint().toInt(), col, i->getValue(col));
 
-		KexiDBUpdateRecord *updR;
-		if ((!m_record->writeOut(updR))) //i->getHint().toInt(), true))
+		if ((!m_record->writeOut(urec))) //i->getHint().toInt(), true))
 		{
 			KMessageBox::detailedError(this, i18n("Error occurred while updating table"), m_record->latestError()->message(),
 			 i18n("Database Error"));
