@@ -26,6 +26,8 @@ Until beta2:
     them in the KSpread handbook later)
 - implemented "Insert from text file" and "Insert formated clipboard data"
 - Added "Text to Column"
+- improved Data Consolidate, with more choices: Sum, Average, Count,
+  Min, Max, Product, Standard Deviation, Variance.
 
 new functions added:
  ISEMPTY
