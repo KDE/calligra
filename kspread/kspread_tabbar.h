@@ -43,6 +43,7 @@ class KSpreadTabBar : public QWidget
     Q_OBJECT
 public:
     KSpreadTabBar( KSpreadView *_parent );
+    virtual ~KSpreadTabBar();
 
     /**
      * Adds a tab to the bar and paints it. The tab does not become active.

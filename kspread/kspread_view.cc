@@ -406,6 +406,10 @@ KSpreadView::~KSpreadView()
     // performed. The repains can happen if you delete an embedded document,
     // which leads to an regionInvalidated() signal emission in KoView, which calls
     // repaint, etc.etc. :-) (Simon)
+
+    delete m_pPopupColumn;
+    delete m_pPopupRow;
+    delete m_pPopupMenu;
 }
 
 void KSpreadView::initialPosition()

@@ -52,6 +52,11 @@ KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent )
     m_autoScroll = 0;
 }
 
+KSpreadTabBar::~KSpreadTabBar()
+{
+    delete m_pPopupMenu;
+}
+
 void KSpreadTabBar::addTab( const QString& _text )
 {
     tabsList.append( _text );

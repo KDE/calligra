@@ -434,6 +434,7 @@ void KSpreadCell::clicked( KSpreadCanvas *_canvas )
     QPoint p( tx, ty );
     QPoint p2 = _canvas->mapToGlobal( p );
     popup->popup( p2 );
+    delete popup;
     return;
   }
 
