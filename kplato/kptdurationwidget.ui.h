@@ -307,9 +307,8 @@ void KPTDurationWidget::setFieldRightscale(int f, unsigned rs)
     m_fields[f].rightScale = rs;
 }
 
-void KPTDurationWidget::setFieldScale(int f, unsigned fullScale, unsigned scale)
+void KPTDurationWidget::setFieldScale(int f, unsigned scale)
 {
-    m_fields[f].fullScale = fullScale;
     m_fields[f].scale = scale;
 }
 

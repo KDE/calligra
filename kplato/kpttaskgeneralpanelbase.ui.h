@@ -168,7 +168,7 @@ void KPTTaskGeneralPanelBase::setEstimateFields( int mask )
 
 void KPTTaskGeneralPanelBase::setEstimateScales( int day )
 {
-    estimate->setFieldScale(0, day, day);
+    estimate->setFieldScale(0, day);
     estimate->setFieldRightscale(0, day);
     
     estimate->setFieldLeftscale(1, day);
