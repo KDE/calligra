@@ -25,7 +25,7 @@
 #include <qradiobutton.h>
 
 class KSpreadView;
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadCell;
 
 class KSpreadspecial : public KDialogBase

@@ -25,7 +25,7 @@
 #include <qrect.h>
 
 class KSpreadView;
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadCell;
 class KURLRequester;
 class QLineEdit;

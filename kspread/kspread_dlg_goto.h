@@ -24,7 +24,7 @@
 #include <kdialogbase.h>
 
 class KSpreadView;
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadCell;
 class QLineEdit;
 

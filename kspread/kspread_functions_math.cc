@@ -1443,7 +1443,7 @@ bool kspreadfunc_multipleOP( KSContext& context )
   kdDebug() << "Old values: Col: " << oldCol << ", Row: " << oldRow << endl;
 
   KSpreadCell * cell;
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadPoint point( extra[1]->stringValue() );  
   KSpreadPoint point2( extra[3]->stringValue() );
@@ -1571,7 +1571,7 @@ bool kspreadfunc_subtotal( KSContext & context )
   
   KSValue * c = 0;
   KSpreadCell  * cell = 0;
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
   KSpreadMap * map = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
 
   kdDebug() << "Range: " << extra[1]->stringValue() << endl;

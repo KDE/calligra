@@ -36,13 +36,13 @@ KSpreadPaperLayout::KSpreadPaperLayout( QWidget* parent, const char* name,
                                         const KoPageLayout& layout,
                                         const KoHeadFoot& headfoot,
                                         int tabs, KoUnit::Unit unit,
-                                        KSpreadTable *table, KSpreadView *view)
+                                        KSpreadSheet *table, KSpreadView *view)
     :KoPageLayoutDia( parent, name, layout, headfoot, tabs, unit, false /*no modal*/),
      m_table( table)
 {
     initTab();
-    connect( view, SIGNAL( sig_selectionChanged( KSpreadTable*, const QRect& ) ),
-             this, SLOT( slotSelectionChanged( KSpreadTable*, const QRect& ) ) );
+    connect( view, SIGNAL( sig_selectionChanged( KSpreadSheet*, const QRect& ) ),
+             this, SLOT( slotSelectionChanged( KSpreadSheet*, const QRect& ) ) );
     qApp->installEventFilter( this );
     m_focus= 0L;
 }
@@ -244,7 +244,7 @@ void KSpreadPaperLayout::closeEvent ( QCloseEvent * )
     delete this;
 }
 
-void KSpreadPaperLayout::slotSelectionChanged( KSpreadTable* /*_table*/, const QRect& _selection )
+void KSpreadPaperLayout::slotSelectionChanged( KSpreadSheet* /*_table*/, const QRect& _selection )
 {
   if ( _selection.left() == 0 || _selection.top() == 0 ||
        _selection.right() == 0 || _selection.bottom() == 0 )

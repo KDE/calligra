@@ -15,7 +15,7 @@ KSpreadMapIface::KSpreadMapIface( KSpreadMap* map )
 
 DCOPRef KSpreadMapIface::table( const QString& name )
 {
-    KSpreadTable* t = m_map->findTable( name );
+    KSpreadSheet* t = m_map->findTable( name );
     if ( !t )
         return DCOPRef();
 
@@ -24,7 +24,7 @@ DCOPRef KSpreadMapIface::table( const QString& name )
 
 DCOPRef KSpreadMapIface::tableByIndex( int index )
 {
-    KSpreadTable* t = m_map->tableList().at( index );
+    KSpreadSheet* t = m_map->tableList().at( index );
     if ( !t )
     {
         kdDebug(36001) << "+++++ No table found at index " << index << endl;
@@ -45,8 +45,8 @@ QStringList KSpreadMapIface::tableNames() const
 {
     QStringList names;
 
-    QPtrList<KSpreadTable>& lst = m_map->tableList();
-    QPtrListIterator<KSpreadTable> it( lst );
+    QPtrList<KSpreadSheet>& lst = m_map->tableList();
+    QPtrListIterator<KSpreadSheet> it( lst );
     for( ; it.current(); ++it )
         names.append( it.current()->name() );
 
@@ -57,8 +57,8 @@ QValueList<DCOPRef> KSpreadMapIface::tables()
 {
     QValueList<DCOPRef> t;
 
-    QPtrList<KSpreadTable>& lst = m_map->tableList();
-    QPtrListIterator<KSpreadTable> it( lst );
+    QPtrList<KSpreadSheet>& lst = m_map->tableList();
+    QPtrListIterator<KSpreadSheet> it( lst );
     for( ; it.current(); ++it )
         t.append( DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopObject()->objId() ) );
 
@@ -70,7 +70,7 @@ DCOPRef KSpreadMapIface::insertTable( const QString& name )
     if ( m_map->findTable( name ) )
         return table( name );
 
-    KSpreadTable* t = new KSpreadTable( m_map, name );
+    KSpreadSheet* t = new KSpreadSheet( m_map, name );
     t->setTableName( name );
     m_map->doc()->addTable( t );
 
@@ -88,7 +88,7 @@ bool KSpreadMapIface::processDynamic(const QCString &fun, const QByteArray &/*da
     if ( fun[ len - 1 ] != ')' || fun[ len - 2 ] != '(' )
         return FALSE;
 
-    KSpreadTable* t = m_map->findTable( fun.left( len - 2 ).data() );
+    KSpreadSheet* t = m_map->findTable( fun.left( len - 2 ).data() );
     if ( !t )
         return FALSE;
 

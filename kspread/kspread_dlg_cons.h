@@ -30,7 +30,7 @@ class QCheckBox;
 class QListBox;
 
 class KSpreadView;
-class KSpreadTable;
+class KSpreadSheet;
 
 class KSpreadConsolidate : public KDialogBase
 {
@@ -46,7 +46,7 @@ public slots:
   void slotAdd();
   void slotRemove();
 
-  void slotSelectionChanged( KSpreadTable* _table, const QRect& _selection );
+  void slotSelectionChanged( KSpreadSheet* _table, const QRect& _selection );
   void slotReturnPressed();
 
 protected:
@@ -62,7 +62,7 @@ protected:
   QCheckBox* m_pCol;
   QCheckBox* m_pCopy;
 
-  QString evaluate( const QString& formula, KSpreadTable* table );
+  QString evaluate( const QString& formula, KSpreadSheet* table );
 
   enum { Sum = 0, Average, Count, Max, Min, Product, StdDev, Var };
 };

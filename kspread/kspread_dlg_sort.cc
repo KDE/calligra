@@ -267,10 +267,10 @@ void KSpreadSortDlg::init()
   }
   m_customList->insertStringList(lst);
 
-  QPtrList<KSpreadTable> tableList = m_pView->doc()->map()->tableList();
+  QPtrList<KSpreadSheet> tableList = m_pView->doc()->map()->tableList();
   for (unsigned int c = 0; c < tableList.count(); ++c)
   {
-    KSpreadTable * t = tableList.at(c);
+    KSpreadSheet * t = tableList.at(c);
     if (!t)
       continue;
     m_outputTable->insertItem( t->tableName() );
@@ -391,7 +391,7 @@ void KSpreadSortDlg::slotOrientationChanged(int id)
 
 void KSpreadSortDlg::slotOk()
 {
-  KSpreadTable * table = m_pView->doc()->map()->findTable( m_outputTable->currentText() );
+  KSpreadSheet * table = m_pView->doc()->map()->findTable( m_outputTable->currentText() );
   if ( !table )
   {
     KMessageBox::error( this, i18n("The selected output table doesn't exist!") );
@@ -431,16 +431,16 @@ void KSpreadSortDlg::slotOk()
   int key2 = 0;
   int key3 = 0;
   QStringList * firstKey = 0L;
-  KSpreadTable::SortingOrder order1;
-  KSpreadTable::SortingOrder order2;
-  KSpreadTable::SortingOrder order3;
+  KSpreadSheet::SortingOrder order1;
+  KSpreadSheet::SortingOrder order2;
+  KSpreadSheet::SortingOrder order3;
 
-  order1 = ( m_sortOrder1->currentItem() == 0 ? KSpreadTable::Increase
-             : KSpreadTable::Decrease );
-  order2 = ( m_sortOrder2->currentItem() == 0 ? KSpreadTable::Increase
-             : KSpreadTable::Decrease );
-  order3 = ( m_sortOrder3->currentItem() == 0 ? KSpreadTable::Increase
-             : KSpreadTable::Decrease );
+  order1 = ( m_sortOrder1->currentItem() == 0 ? KSpreadSheet::Increase
+             : KSpreadSheet::Decrease );
+  order2 = ( m_sortOrder2->currentItem() == 0 ? KSpreadSheet::Increase
+             : KSpreadSheet::Decrease );
+  order3 = ( m_sortOrder3->currentItem() == 0 ? KSpreadSheet::Increase
+             : KSpreadSheet::Decrease );
 
   if ( m_sortRow->isChecked() )
   {

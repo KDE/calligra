@@ -46,7 +46,7 @@ QChar KSpreadCell::decimal_point = '\0';
  *
  *****************************************************************************/
 
-KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
+KSpreadCell::KSpreadCell( KSpreadSheet *_table, int _column, int _row )
   : KSpreadLayout( _table ),
     conditions(this)
     //    m_bShrinkToSize(false)
@@ -4191,7 +4191,7 @@ void KSpreadCell::checkNumberFormat()
     }
 }
 
-bool KSpreadCell::cellDependsOn(KSpreadTable *table, int col, int row)
+bool KSpreadCell::cellDependsOn(KSpreadSheet *table, int col, int row)
 {
   bool isdep = FALSE;
 
@@ -5043,7 +5043,7 @@ bool KSpreadCell::isDefault() const
     return ( m_iColumn == 0 );
 }
 
-void KSpreadCell::NotifyDepending( int col, int row, KSpreadTable* table, bool isDepending )
+void KSpreadCell::NotifyDepending( int col, int row, KSpreadSheet* table, bool isDepending )
 {
   if (isDefault())
   {

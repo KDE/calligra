@@ -23,7 +23,7 @@
 #include <kdialogbase.h>
 
 class KSpreadView;
-class KSpreadTable;
+class KSpreadSheet;
 class KConfig;
 class KIntNumInput;
 class KDoubleNumInput;

@@ -30,7 +30,7 @@ class QTextBrowser;
 class QTabWidget;
 
 class KSpreadView;
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadCell;
 class QLineEdit;
 class QLabel;
@@ -97,7 +97,7 @@ private slots:
      * Connected to @ref KSpreadView to get notified if the selection in the
      * table changes.
      */
-    void slotSelectionChanged( KSpreadTable* _table, const QRect& _selection );
+    void slotSelectionChanged( KSpreadSheet* _table, const QRect& _selection );
     /**
      * Called if the button @ref #selectFunction was clicked. That
      * insertes a new function call to the result.

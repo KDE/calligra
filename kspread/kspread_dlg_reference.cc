@@ -66,7 +66,7 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
 
   QString text;
   QStringList tableName;
-  QPtrListIterator<KSpreadTable> it2 ( m_pView->doc()->map()->tableList() );
+  QPtrListIterator<KSpreadSheet> it2 ( m_pView->doc()->map()->tableList() );
   for( ; it2.current(); ++it2 )
   {
       tableName.append( it2.current()->tableName());
@@ -164,7 +164,7 @@ void KSpreadreference::slotRemove()
 
     m_list->removeItem(m_list->currentItem());
 
-    KSpreadTable *tbl;
+    KSpreadSheet *tbl;
 
     for ( tbl = m_pView->doc()->map()->firstTable(); tbl != 0L; tbl = m_pView->doc()->map()->nextTable() )
     {
@@ -205,7 +205,7 @@ void KSpreadreference::slotOk()
 
     if (m_pView->activeTable()->tableName() != area[ index ].table_name)
     {
-      KSpreadTable *table = m_pView->doc()->map()->findTable(area[ index ].table_name);
+      KSpreadSheet *table = m_pView->doc()->map()->findTable(area[ index ].table_name);
       if (table)
         m_pView->setActiveTable(table);
     }
@@ -279,10 +279,10 @@ KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent,
 
   KSpreadEditAreaNameLayout->addWidget( m_areaName, 0, 1 );
 
-  QPtrList<KSpreadTable> tableList = m_pView->doc()->map()->tableList();
+  QPtrList<KSpreadSheet> tableList = m_pView->doc()->map()->tableList();
   for (unsigned int c = 0; c < tableList.count(); ++c)
   {
-    KSpreadTable * t = tableList.at(c);
+    KSpreadSheet * t = tableList.at(c);
     if (!t)
       continue;
     m_sheets->insertItem( t->tableName() );
@@ -331,7 +331,7 @@ void KSpreadEditAreaName::slotOk()
   m_pView->doc()->removeArea( m_areaName->text() );
   m_pView->doc()->addAreaName(range.range, m_areaName->text(), m_sheets->currentText() );
 
-  KSpreadTable *tbl;
+  KSpreadSheet *tbl;
 
   for ( tbl = m_pView->doc()->map()->firstTable(); tbl != 0L; tbl = m_pView->doc()->map()->nextTable() )
   {

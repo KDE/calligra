@@ -450,7 +450,7 @@ bool kspreadfunc_type( KSContext & context )
   if ( !p.isEmpty() )
   {
     KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-    KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+    KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
     KSpreadPoint point( p, map, table );
     if ( point.isValid() )

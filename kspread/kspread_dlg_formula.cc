@@ -175,8 +175,8 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     connect( fiveElement,SIGNAL(textChanged ( const QString & )),
 	     this,SLOT(slotChangeText(const QString &)));
 
-    connect( m_pView, SIGNAL( sig_chooseSelectionChanged( KSpreadTable*, const QRect& ) ),
-             this, SLOT( slotSelectionChanged( KSpreadTable*, const QRect& ) ) );
+    connect( m_pView, SIGNAL( sig_chooseSelectionChanged( KSpreadSheet*, const QRect& ) ),
+             this, SLOT( slotSelectionChanged( KSpreadSheet*, const QRect& ) ) );
 
     connect( m_browser, SIGNAL( linkClicked( const QString& ) ),
              this, SLOT( slotShowFunction( const QString& ) ) );
@@ -280,7 +280,7 @@ void KSpreadDlgFormula::slotOk()
     // Switch back to the old table
     if( m_pView->activeTable()->tableName() !=  m_tableName )
     {
-        KSpreadTable *table=m_pView->doc()->map()->findTable(m_tableName);
+        KSpreadSheet *table=m_pView->doc()->map()->findTable(m_tableName);
         if( table)
 	    m_pView->setActiveTable(table);
     }
@@ -314,7 +314,7 @@ void KSpreadDlgFormula::slotClose()
     // Switch back to the old table
     if(m_pView->activeTable()->tableName() !=  m_tableName )
     {
-        KSpreadTable *table=m_pView->doc()->map()->findTable(m_tableName);
+        KSpreadSheet *table=m_pView->doc()->map()->findTable(m_tableName);
         if( !table )
 	    return;
 	m_pView->setActiveTable(table);
@@ -685,7 +685,7 @@ void KSpreadDlgFormula::slotShowFunction( const QString& function )
     slotSelected( function );
 }
 
-void KSpreadDlgFormula::slotSelectionChanged( KSpreadTable* _table, const QRect& _selection )
+void KSpreadDlgFormula::slotSelectionChanged( KSpreadSheet* _table, const QRect& _selection )
 {
     if ( !m_focus )
         return;

@@ -25,6 +25,7 @@ class KSpreadInterpreter;
 class KSpreadUndo;
 class KSpreadView;
 class KSpreadMap;
+class KSpreadSheet;
 
 class KoStore;
 
@@ -84,19 +85,19 @@ public:
   virtual QCString mimeType() const { return MIME_TYPE; }
 
   /**
-   * @return a pointer to a new KSpreadTable. The KSpreadTable is not added to the map
+   * @return a pointer to a new KSpreadSheet. The KSpreadSheet is not added to the map
    *         nor added to the GUI.
    */
-  KSpreadTable* createTable();
+  KSpreadSheet* createTable();
 
   /**
-   * Adds a KSpreadTable to the GUI and makes it active. In addition the KSpreadTable is
+   * Adds a KSpreadSheet to the GUI and makes it active. In addition the KSpreadSheet is
    * added to the map.
    *
    * @see KSpreadView
    * @see KSpreadMap
    */
-  void addTable( KSpreadTable *_table );
+  void addTable( KSpreadSheet *_table );
 
   KSpreadMap *map() const { return m_pMap; }
 
@@ -164,7 +165,7 @@ public:
   const QPen& defaultGridPen() { return m_defaultGridPen; }
 
   virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
-  void paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadTable* table, bool drawCursor=true );
+  void paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadSheet* table, bool drawCursor=true );
 
 
   /**
@@ -190,7 +191,7 @@ public:
    */
   void paintCellRegions(QPainter& painter, const QRect &viewRect, KSpreadView* view,
                         QValueList<QRect> cellRegions,
-                        const KSpreadTable* table, bool drawCursor);
+                        const KSpreadSheet* table, bool drawCursor);
 
 
   virtual DCOPObject* dcopObject();
@@ -310,8 +311,8 @@ public:
 
   void updateBorderButton();
 
-    void insertTable( KSpreadTable * table );
-    void takeTable( KSpreadTable * table );
+    void insertTable( KSpreadSheet * table );
+    void takeTable( KSpreadSheet * table );
 
     // The user-chosen global unit
     QString getUnitName()const { return KoUnit::unitName( m_unit ); }
@@ -350,8 +351,8 @@ public:
     void clearIgnoreWordAll( );
     QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
 
-    void setDisplayTable(KSpreadTable *_Table );
-    KSpreadTable * displayTable()const;
+    void setDisplayTable(KSpreadSheet *_Table );
+    KSpreadSheet * displayTable()const;
 
 public slots:
 
@@ -364,7 +365,7 @@ signals:
   /**
    * Emitted if a new table is added to the document.
    */
-  void sig_addTable( KSpreadTable *_table );
+  void sig_addTable( KSpreadSheet *_table );
   /**
    * Emitted if all views have to be updated.
    */
@@ -406,9 +407,9 @@ protected:
   KSpreadMap *m_pMap;
 
   /**
-   * This variable is used to give every KSpreadTable a unique default name.
+   * This variable is used to give every KSpreadSheet a unique default name.
    *
-   * @see #newKSpreadTable
+   * @see #newKSpreadSheet
    */
   int m_iTableId;
 
@@ -520,7 +521,7 @@ protected:
   bool m_bDontCheckTitleCase;
     QStringList m_spellListIgnoreAll;
   KoUnit::Unit m_unit;
-    KSpreadTable *m_activeTable;
+    KSpreadSheet *m_activeTable;
 private:
 
   /* helper functions for painting */
@@ -533,11 +534,11 @@ private:
 
   void PaintRegion(QPainter& painter, const QRect &viewRegion,
 		   KSpreadView* view, const QRect &paintRegion,
-		   const KSpreadTable* table);
+		   const KSpreadSheet* table);
   void PaintChooseRect(QPainter& painter, const QRect &viewRect,
-		       const KSpreadTable* table, const QRect &chooseRect);
+		       const KSpreadSheet* table, const QRect &chooseRect);
   void PaintNormalMarker(QPainter& painter, const QRect &viewRect,
-			 const KSpreadTable* table, const QRect &selection);
+			 const KSpreadSheet* table, const QRect &selection);
 
   /**
    * helper function in drawing the marker and choose marker.
@@ -554,7 +555,7 @@ private:
    *                   Again, these are in the order left, top, right, bottom.
    *                   This should be preallocated with a size of at least 4.
    */
-  void RetrieveMarkerInfo(const QRect &marker, const KSpreadTable* table,
+  void RetrieveMarkerInfo(const QRect &marker, const KSpreadSheet* table,
 			  const QRect &viewRect,
                           int positions[], bool paintSides[]);
 };

@@ -159,8 +159,8 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   connect( m_buttonOk, SIGNAL( clicked() ), this, SLOT( buttonOkClicked() ) );
   connect( m_buttonCancel, SIGNAL( clicked() ), this, SLOT( buttonCancelClicked() ) );
 
-  connect( m_pView, SIGNAL( sig_chooseSelectionChanged( KSpreadTable*, const QRect& ) ),
-           this, SLOT( slotSelectionChanged( KSpreadTable *, const QRect & ) ) );
+  connect( m_pView, SIGNAL( sig_chooseSelectionChanged( KSpreadSheet*, const QRect& ) ),
+           this, SLOT( slotSelectionChanged( KSpreadSheet *, const QRect & ) ) );
 
   // tab order
   setTabOrder( m_targetEdit,      m_targetValueEdit );
@@ -203,7 +203,7 @@ void KSpreadGoalSeekDlg::closeEvent ( QCloseEvent * )
   delete this;
 }
 
-void KSpreadGoalSeekDlg::slotSelectionChanged( KSpreadTable * _table, const QRect & _selection )
+void KSpreadGoalSeekDlg::slotSelectionChanged( KSpreadSheet * _table, const QRect & _selection )
 {
   if ( !m_focus )
     return;
@@ -233,7 +233,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
   KSpreadDoc * pDoc = m_pView->doc();
   if (m_maxIter > 0)
   {
-    KSpreadTable * table = m_pView->activeTable();
+    KSpreadSheet * table = m_pView->activeTable();
 
     KSpreadPoint source( m_sourceEdit->text(), table->map(), table );
     if (!source.isValid())
@@ -344,7 +344,7 @@ void KSpreadGoalSeekDlg::chooseCleanup()
 {
   m_pView->canvasWidget()->endChoose();
 
-  KSpreadTable * table = 0;
+  KSpreadSheet * table = 0;
 
   // Switch back to the old table
   if ( m_pView->activeTable()->tableName() !=  m_tableName )

@@ -26,7 +26,7 @@
 #include <kspread_cell.h>
 
 class KSpreadMap;
-class KSpreadTable;
+class KSpreadSheet;
 //class KSpreadCell;
 class KLocale;
 
@@ -35,7 +35,7 @@ struct KSpreadPoint
 public:
   KSpreadPoint() { pos.setX( -1 ); table = 0; columnFixed = false; rowFixed = false; }
   KSpreadPoint( const QString& );
-  KSpreadPoint( const QString&, KSpreadMap*, KSpreadTable* default_table = 0 );
+  KSpreadPoint( const QString&, KSpreadMap*, KSpreadSheet* default_table = 0 );
   KSpreadPoint( const KSpreadPoint& c ) {
     pos = c.pos;
     table = c.table; tableName = c.tableName;
@@ -54,11 +54,11 @@ public:
   bool rowFixed() const { return m_rowFixed; }
   QPoint pos() const { return m_pos; }
   QString tableName() const { return m_tableName; }
-  KSpreadTable* table() const { return m_table; }
+  KSpreadSheet* table() const { return m_table; }
 
 private:
   */
-  KSpreadTable* table;
+  KSpreadSheet* table;
   QString tableName;
   QPoint pos;
   bool columnFixed;
@@ -72,7 +72,7 @@ struct KSpreadRange
 {
   KSpreadRange() { table = 0; range.setLeft( -1 ); }
   KSpreadRange( const QString& );
-  KSpreadRange( const QString&, KSpreadMap*, KSpreadTable* default_table = 0 );
+  KSpreadRange( const QString&, KSpreadMap*, KSpreadSheet* default_table = 0 );
   KSpreadRange( const KSpreadRange& r ) {
     table = r.table;
     tableName = r.tableName;
@@ -97,7 +97,7 @@ struct KSpreadRange
   bool isValid() const { return ( range.left() >= 0 && range.right() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
   bool isTableKnown() const { return ( !tableName.isEmpty() || table != 0 ); }
 
-  KSpreadTable* table;
+  KSpreadSheet* table;
   QString tableName;
   QRect range;
   bool leftFixed;
@@ -119,7 +119,7 @@ public:
    * Contstruct the iterator with the rectangular cell area and which
    * table the area is on
    */
-  KSpreadRangeIterator(QRect _range, KSpreadTable* _table);
+  KSpreadRangeIterator(QRect _range, KSpreadSheet* _table);
   ~KSpreadRangeIterator();
 
   /**
@@ -135,15 +135,15 @@ public:
 private:
 
   QRect range;
-  KSpreadTable* table;
+  KSpreadSheet* table;
   QPoint current;
 };
 
 
-QString util_cellName( KSpreadTable*, int _col, int _row );
+QString util_cellName( KSpreadSheet*, int _col, int _row );
 QString util_cellName( int _col, int _row );
 QString util_rangeName( const QRect &_area );
-QString util_rangeName( KSpreadTable *_table, const QRect &_area );
+QString util_rangeName( KSpreadSheet *_table, const QRect &_area );
 QString util_rangeColumnName( const QRect &_area);
 QString util_rangeRowName( const QRect &_area);
 

@@ -14,7 +14,7 @@ class KSpreadEditWidget;
 class KSpreadCanvas;
 class KSpreadHBorder;
 class KSpreadVBorder;
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadDoc;
 class KSpreadPoint;
 class KSpreadRange;
@@ -149,8 +149,8 @@ public:
      */
     QRect visibleCells();
 
-    KSpreadTable* activeTable() const;
-    KSpreadTable* findTable( const QString& _name ) const;
+    KSpreadSheet* activeTable() const;
+    KSpreadSheet* findTable( const QString& _name ) const;
 
     /**
      * A convenience function.
@@ -177,13 +177,13 @@ public:
      *                        selected, and the selection anchor will be reset
      *                        to this cell.
      */
-    void gotoLocation( QPoint location, KSpreadTable* table = NULL,
+    void gotoLocation( QPoint location, KSpreadSheet* table = NULL,
                        bool extendSelection = false);
 
     /**
      * convenience function
      */
-    void gotoLocation( int col, int row, KSpreadTable* table = NULL,
+    void gotoLocation( int col, int row, KSpreadSheet* table = NULL,
                        bool extendSelection = false)
     {gotoLocation(QPoint(col, row), table, extendSelection);}
 
@@ -276,7 +276,7 @@ public slots:
     void slotMaxColumn( int _max_column );
     void slotMaxRow( int _max_row );
 
-    // Connected to KoFind/KoReplace by KSpreadTable during a search and replace
+    // Connected to KoFind/KoReplace by KSpreadSheet during a search and replace
     void highlight( const QString &text, int matchingIndex, int matchedLength, const QRect &cellRect );
     void replace( const QString &newText, int index, int replacedLength,int searchWordLenght, const QRect &cellRect );
 
@@ -422,7 +422,7 @@ private:
      * If a choose selection is started (@ref #startChoose) the current
      * table is saved here.
      */
-    KSpreadTable* m_chooseStartTable;
+    KSpreadSheet* m_chooseStartTable;
 
     /**
      * @see #setLastEditorWithFocus

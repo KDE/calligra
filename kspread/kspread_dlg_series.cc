@@ -113,7 +113,7 @@ void KSpreadSeriesDlg::slotOk()
   Series type=Linear;
   QString tmp;
   double dstep, dend, dstart;
-  KSpreadTable * m_pTable;
+  KSpreadSheet * m_pTable;
   m_pTable = m_pView->activeTable();
 
   if(column->isChecked())

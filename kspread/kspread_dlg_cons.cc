@@ -101,8 +101,8 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pRef, SIGNAL( returnPressed() ), this, SLOT( slotReturnPressed() ) );
 
-  connect( m_pView, SIGNAL( sig_selectionChanged( KSpreadTable*, const QRect& ) ),
-	   this, SLOT( slotSelectionChanged( KSpreadTable*, const QRect& ) ) );
+  connect( m_pView, SIGNAL( sig_selectionChanged( KSpreadSheet*, const QRect& ) ),
+	   this, SLOT( slotSelectionChanged( KSpreadSheet*, const QRect& ) ) );
 }
 
 KSpreadConsolidate::~KSpreadConsolidate()
@@ -126,7 +126,7 @@ void KSpreadConsolidate::slotOk()
 {
   KSpreadMap *map = m_pView->doc()->map();
 
-  KSpreadTable* table = m_pView->activeTable();
+  KSpreadSheet* table = m_pView->activeTable();
   int dx = m_pView->selectionInfo()->selection().left();
   int dy = m_pView->selectionInfo()->selection().top();
 
@@ -220,7 +220,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = (*it).table;
+      KSpreadSheet *t = (*it).table;
       Q_ASSERT( t );
       QRect r;
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
@@ -241,7 +241,7 @@ void KSpreadConsolidate::slotOk()
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
         {
-	  KSpreadTable *t = (*it).table;
+	  KSpreadSheet *t = (*it).table;
 	  assert( t );
 	  KSpreadCell *c = t->cellAt( x + (*it).range.left(), y + (*it).range.top() );
           if(!c->isDefault())
@@ -265,7 +265,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = (*it).table;
+      KSpreadSheet *t = (*it).table;
       assert( t );
       kdDebug(36001) << "FROM " << (*it).range.left() << " to " << (*it).range.right() << endl;
       for( int x = (*it).range.left(); x <= (*it).range.right() ; ++x )
@@ -287,7 +287,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = (*it).table;
+      KSpreadSheet *t = (*it).table;
       assert( t );
       QRect r;
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
@@ -315,7 +315,7 @@ void KSpreadConsolidate::slotOk()
         {
 	  for( int i = (*it).range.left(); i <= (*it).range.right(); ++i )
 	  {
-	    KSpreadTable *t = (*it).table;
+	    KSpreadSheet *t = (*it).table;
 	    assert( t );
 	    KSpreadCell *c = t->cellAt( i, (*it).range.top() );
 	    if ( c )
@@ -345,7 +345,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = (*it).table;
+      KSpreadSheet *t = (*it).table;
       assert( t );
       for( int y = (*it).range.top(); y <= (*it).range.bottom() ; ++y )
       {
@@ -366,7 +366,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = (*it).table;
+      KSpreadSheet *t = (*it).table;
       assert( t );
       QRect r;
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
@@ -394,7 +394,7 @@ void KSpreadConsolidate::slotOk()
         {
 	  for( int i = (*it).range.top(); i <= (*it).range.bottom(); i++ )
 	  {
-	    KSpreadTable *t = (*it).table;
+	    KSpreadSheet *t = (*it).table;
 	    assert( t );
 	    KSpreadCell *c = t->cellAt( (*it).range.left(), i );
 	    if ( c )
@@ -426,7 +426,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = (*it).table;
+      KSpreadSheet *t = (*it).table;
       assert( t );
       for( int y = (*it).range.top() + 1; y <= (*it).range.bottom() ; ++y )
       {
@@ -446,7 +446,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = (*it).table;
+      KSpreadSheet *t = (*it).table;
       assert( t );
       for( int x = (*it).range.left() + 1; x <= (*it).range.right() ; ++x )
       {
@@ -467,7 +467,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = (*it).table;
+      KSpreadSheet *t = (*it).table;
       assert( t );
       QRect r;
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
@@ -484,7 +484,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadTable *t = (*it).table;
+      KSpreadSheet *t = (*it).table;
       assert( t );
       for( int x = (*it).range.left() + 1; x <= (*it).range.right() ; ++x )
       {
@@ -596,7 +596,7 @@ QStringList KSpreadConsolidate::refs()
   return list;
 }
 
-void KSpreadConsolidate::slotSelectionChanged( KSpreadTable* _table, const QRect& _selection )
+void KSpreadConsolidate::slotSelectionChanged( KSpreadSheet* _table, const QRect& _selection )
 {
   if ( _selection.left() == 0 || _selection.top() == 0 ||
        _selection.right() == 0 || _selection.bottom() == 0 )
@@ -633,7 +633,7 @@ void KSpreadConsolidate::closeEvent ( QCloseEvent * )
     delete this;
 }
 
-QString KSpreadConsolidate::evaluate( const QString& formula, KSpreadTable* table )
+QString KSpreadConsolidate::evaluate( const QString& formula, KSpreadSheet* table )
 {
   QString result = "###";
 

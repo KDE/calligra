@@ -40,7 +40,7 @@ class QTime;
 class QLabel;
 class QWidget;
 class CellLayoutDlg;
-class KSpreadTable;
+class KSpreadSheet;
 class KLineEdit;
 class QFrame;
 class QListBox;
@@ -369,7 +369,7 @@ public slots:
 
 protected:
 
-  KSpreadTable* table;
+  KSpreadSheet* table;
   KSpreadBorderButton* borderButtons[BorderType_END];
   KSpreadBorderButton* shortcutButtons[BorderShortcutType_END];
 #define NUM_BORDER_PATTERNS 10
@@ -487,7 +487,7 @@ public:
     /**
      * Create a layout dlg for the rectangular area in '_table'.
      */
-    CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _left, int _top, int _right, int _bottom );
+    CellLayoutDlg( KSpreadView *_view, KSpreadSheet *_table, int _left, int _top, int _right, int _bottom );
 
     ~CellLayoutDlg();
 
@@ -504,7 +504,7 @@ public:
      */
     int exec();
 
-    KSpreadTable* getTable() const {	return table; }
+    KSpreadSheet* getTable() const {	return table; }
 
     bool isSingleCell() { return ( left == right && top == bottom ); }
 
@@ -624,7 +624,7 @@ protected:
     /**
      * The table that opened this dlg.
      */
-    KSpreadTable *table;
+    KSpreadSheet *table;
 
     KSpreadView *m_pView;
 

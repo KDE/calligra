@@ -23,7 +23,7 @@
 #include <qrect.h>
 #include "kspread_util.h"
 
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadView;
 
 class KSpreadSelection
@@ -65,9 +65,9 @@ public:
   QRect selectionHandleArea(KSpreadCanvas* canvas) const;
 
   void setSelection( const QPoint &marker, const QPoint &anchor,
-                     KSpreadTable* table );
+                     KSpreadSheet* table );
 
-  void setMarker( const QPoint &point, KSpreadTable* table );
+  void setMarker( const QPoint &point, KSpreadSheet* table );
 
   /**
    * @return the 'anchor' point of the selection -- i.e. the fixed corner
@@ -101,16 +101,16 @@ public:
     { m_chooseAnchor = chooseAnchor; }
   void setChooseMarker( const QPoint &chooseMarker )
     { m_chooseMarker = chooseMarker; }
-  void setChooseCursor( KSpreadTable* table, const QPoint &chooseCursor )
+  void setChooseCursor( KSpreadSheet* table, const QPoint &chooseCursor )
     { m_chooseTable = table; m_chooseCursor = chooseCursor; }
-  void setChooseTable(KSpreadTable* table) { m_chooseTable = table; }
+  void setChooseTable(KSpreadSheet* table) { m_chooseTable = table; }
 
   QRect getChooseRect()const;
   QPoint getChooseCursor()const { return m_chooseCursor; }
   QPoint getChooseMarker()const { return m_chooseMarker; }
   QPoint getChooseAnchor()const { return m_chooseAnchor; }
 
-  KSpreadTable* getChooseTable()const { return m_chooseTable; }
+  KSpreadSheet* getChooseTable()const { return m_chooseTable; }
 
 
 private: /* private data for the above functions on selections */
@@ -130,7 +130,7 @@ private: /* private data for the above functions on selections */
   QPoint m_chooseAnchor;
   QPoint m_chooseCursor;
 
-  KSpreadTable* m_chooseTable;
+  KSpreadSheet* m_chooseTable;
   KSpreadView* m_pView;
 
 private:

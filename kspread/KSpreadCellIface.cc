@@ -6,7 +6,7 @@ KSpreadCellIface::KSpreadCellIface()
 {
 }
 
-void KSpreadCellIface::setCell( KSpreadTable* table, const QPoint& point )
+void KSpreadCellIface::setCell( KSpreadSheet* table, const QPoint& point )
 {
     m_table = table;
     m_point = point;

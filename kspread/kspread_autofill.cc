@@ -442,11 +442,11 @@ void AutoFillSequence::fillCell( KSpreadCell *src, KSpreadCell *dest, AutoFillDe
 
 /**********************************************************************************
  *
- * KSpreadTable
+ * KSpreadSheet
  *
  **********************************************************************************/
 
-void KSpreadTable::autofill( QRect &src, QRect &dest )
+void KSpreadSheet::autofill( QRect &src, QRect &dest )
 {
     if (src == dest)
     {
@@ -561,7 +561,7 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
 }
 
 
-void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList,
+void KSpreadSheet::fillSequence( QPtrList<KSpreadCell>& _srcList,
 				 QPtrList<KSpreadCell>& _destList,
                                  QPtrList<AutoFillSequence>& _seqList,
                                  bool down)
@@ -600,7 +600,7 @@ double getDiff(KSpreadCell * cell1, KSpreadCell * cell2, AutoFillSequenceItem::T
     return 0.0;
 }
 
-bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
+bool KSpreadSheet::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
                                             QPtrList<KSpreadCell>& _destList,
                                             QPtrList<AutoFillSequence>& _seqList,
                                             bool down)
@@ -926,7 +926,7 @@ bool KSpreadTable::FillSequenceWithInterval(QPtrList<KSpreadCell>& _srcList,
   return ok;
 }
 
-void KSpreadTable::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
+void KSpreadSheet::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
                                         QPtrList<KSpreadCell>& _destList,
                                         bool down)
 {

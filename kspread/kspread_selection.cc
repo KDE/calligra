@@ -121,7 +121,7 @@ QRect KSpreadSelection::selectionHandleArea(KSpreadCanvas* canvas) const
 
 void KSpreadSelection::setSelection( const QPoint &newMarker,
                                      const QPoint &newAnchor,
-                                     KSpreadTable *table )
+                                     KSpreadSheet *table )
 {
   QRect oldSelection = selection();
   QPoint oldMarker = m_marker;
@@ -156,7 +156,7 @@ void KSpreadSelection::setSelection( const QPoint &newMarker,
 }
 
 void KSpreadSelection::setMarker( const QPoint &point,
-                                  KSpreadTable* table )
+                                  KSpreadSheet* table )
 {
   QPoint topLeft(point);
   const KSpreadCell* cell = table->cellAt(topLeft);
@@ -188,7 +188,7 @@ QPoint KSpreadSelection::selectionAnchor()const
   QPoint anchor(atLeft ? m_rctSelection.right() : m_rctSelection.left(),
                 atTop ? m_rctSelection.bottom() : m_rctSelection.top());
 
-  KSpreadTable* table = m_pView->activeTable();
+  KSpreadSheet* table = m_pView->activeTable();
   KSpreadCell* cell = table->cellAt(anchor);
 
   if (cell->isObscured())

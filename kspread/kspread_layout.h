@@ -20,7 +20,7 @@
 #ifndef __kspread_layout_h__
 #define __kspread_layout_h__
 
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadCanvas;
 
 class QDomElement;
@@ -97,7 +97,7 @@ public:
       QString symbol;
     };
 
-    KSpreadLayout( KSpreadTable *_table );
+    KSpreadLayout( KSpreadSheet *_table );
     virtual ~KSpreadLayout();
 
     void copy( const KSpreadLayout &_l );
@@ -336,8 +336,8 @@ public:
 
     virtual bool getDontprintText( int col, int row) const;
 
-    KSpreadTable* table() { return m_pTable; }
-    const KSpreadTable* table() const { return m_pTable; }
+    KSpreadSheet* table() { return m_pTable; }
+    const KSpreadSheet* table() const { return m_pTable; }
 
     KLocale* locale()const;
 
@@ -470,7 +470,7 @@ protected:
     double m_dFactor;
 
 
-    KSpreadTable *m_pTable;
+    KSpreadSheet *m_pTable;
 
     uint m_mask;
 
@@ -526,7 +526,7 @@ private:
 class RowLayout : public KSpreadLayout
 {
 public:
-    RowLayout( KSpreadTable *_table, int _row );
+    RowLayout( KSpreadSheet *_table, int _row );
     ~RowLayout();
 
     virtual DCOPObject* dcopObject();
@@ -664,7 +664,7 @@ protected:
 class ColumnLayout : public KSpreadLayout
 {
 public:
-    ColumnLayout( KSpreadTable *_table, int _column );
+    ColumnLayout( KSpreadSheet *_table, int _column );
     ~ColumnLayout();
 
     virtual QDomElement save( QDomDocument&, int xshift = 0 ) const;

@@ -19,11 +19,12 @@
 
 
 #include "kspread_depend.h"
+#include "kspread_table.h"
 
 #include <qglobal.h>
 
 
-KSpreadDependency::KSpreadDependency(int col, int row, KSpreadTable* table)
+KSpreadDependency::KSpreadDependency(int col, int row, KSpreadSheet* table)
 {
   Q_ASSERT(col > 0 && row > 0);
 
@@ -33,7 +34,7 @@ KSpreadDependency::KSpreadDependency(int col, int row, KSpreadTable* table)
   m_table = table;
 }
 
-KSpreadDependency::KSpreadDependency(int left, int top, int right, int bottom, KSpreadTable* table)
+KSpreadDependency::KSpreadDependency(int left, int top, int right, int bottom, KSpreadSheet* table)
 {
   Q_ASSERT(left > 0 && top > 0 && right > 0 && bottom > 0);
 
@@ -65,7 +66,7 @@ int KSpreadDependency::Bottom()const
   return m_bottom;
 }
 
-KSpreadTable* KSpreadDependency::Table()const
+KSpreadSheet* KSpreadDependency::Table()const
 {
   return m_table;
 }

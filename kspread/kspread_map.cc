@@ -44,15 +44,15 @@ KSpreadMap::~KSpreadMap()
     delete m_dcop;
 }
 
-void KSpreadMap::addTable( KSpreadTable *_table )
+void KSpreadMap::addTable( KSpreadSheet *_table )
 {
   m_lstTables.append( _table );
 }
 
 void KSpreadMap::moveTable( const QString & _from, const QString & _to, bool _before )
 {
-  KSpreadTable* tablefrom = findTable( _from );
-  KSpreadTable* tableto = findTable( _to );
+  KSpreadSheet* tablefrom = findTable( _from );
+  KSpreadSheet* tableto = findTable( _to );
 
   int from = m_lstTables.find( tablefrom ) ;
   int to = m_lstTables.find( tableto ) ;
@@ -90,7 +90,7 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
     mymap.setAttribute( "markerRow", canvas->markerRow() );
   }
 
-  QPtrListIterator<KSpreadTable> it( m_lstTables );
+  QPtrListIterator<KSpreadSheet> it( m_lstTables );
   for( ; it.current(); ++it )
   {
     QDomElement e = it.current()->saveXML( doc );
@@ -119,7 +119,7 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
     QDomElement e = n.toElement();
     if ( !e.isNull() && e.tagName() == "table" )
     {
-      KSpreadTable *t = m_pDoc->createTable();
+      KSpreadSheet *t = m_pDoc->createTable();
       m_pDoc->addTable( t );
       if ( !t->loadXML( e ) )
         return false;
@@ -138,14 +138,14 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
 
 void KSpreadMap::update()
 {
-  QPtrListIterator<KSpreadTable> it( m_lstTables );
+  QPtrListIterator<KSpreadSheet> it( m_lstTables );
   for( ; it.current(); ++it )
     it.current()->recalc();
 }
 
-KSpreadTable* KSpreadMap::findTable( const QString & _name )
+KSpreadSheet* KSpreadMap::findTable( const QString & _name )
 {
-    KSpreadTable *t;
+    KSpreadSheet *t;
 
     for ( t = m_lstTables.first(); t != 0L; t = m_lstTables.next() )
     {
@@ -156,9 +156,9 @@ KSpreadTable* KSpreadMap::findTable( const QString & _name )
     return 0L;
 }
 
-KSpreadTable* KSpreadMap::nextTable( KSpreadTable* currentTable )
+KSpreadSheet* KSpreadMap::nextTable( KSpreadSheet* currentTable )
 {
-    KSpreadTable *t;
+    KSpreadSheet *t;
 
     if( currentTable == m_lstTables.last())
       return currentTable;
@@ -172,9 +172,9 @@ KSpreadTable* KSpreadMap::nextTable( KSpreadTable* currentTable )
     return 0L;
 }
 
-KSpreadTable* KSpreadMap::previousTable( KSpreadTable* currentTable )
+KSpreadSheet* KSpreadMap::previousTable( KSpreadSheet* currentTable )
 {
-    KSpreadTable *t;
+    KSpreadSheet *t;
 
     if( currentTable == m_lstTables.first())
       return currentTable;
@@ -190,7 +190,7 @@ KSpreadTable* KSpreadMap::previousTable( KSpreadTable* currentTable )
 
 bool KSpreadMap::saveChildren( KoStore* _store )
 {
-  QPtrListIterator<KSpreadTable> it( m_lstTables );
+  QPtrListIterator<KSpreadSheet> it( m_lstTables );
   for( ; it.current(); ++it )
   {
     // set the child document's url to an internal url (ex: "tar:/0/1")
@@ -202,7 +202,7 @@ bool KSpreadMap::saveChildren( KoStore* _store )
 
 bool KSpreadMap::loadChildren( KoStore* _store )
 {
-  QPtrListIterator<KSpreadTable> it( m_lstTables );
+  QPtrListIterator<KSpreadSheet> it( m_lstTables );
   for( ; it.current(); ++it )
     if ( !it.current()->loadChildren( _store ) )
       return false;
@@ -223,14 +223,14 @@ KSpreadDoc* KSpreadMap::doc() const
     return m_pDoc;
 }
 
-void KSpreadMap::takeTable( KSpreadTable* table )
+void KSpreadMap::takeTable( KSpreadSheet* table )
 {
     int pos=m_lstTables.findRef(table);
     m_lstTables.take( pos );
     m_lstDeletedTables.append( table );
 }
 
-void KSpreadMap::insertTable( KSpreadTable* table )
+void KSpreadMap::insertTable( KSpreadSheet* table )
 {
     int pos=m_lstDeletedTables.findRef(table);
     if ( pos != -1 )

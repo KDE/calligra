@@ -21,7 +21,7 @@
 #define __kspread_cell_h__
 
 class KSpreadCell;
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadCanvas;
 class KSpreadView;
 
@@ -123,7 +123,7 @@ public:
     /** */
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
 
-    KSpreadCell( KSpreadTable *_table, int _column, int _row );
+    KSpreadCell( KSpreadSheet *_table, int _column, int _row );
     /**
      * @see #tableDies
      */
@@ -141,7 +141,7 @@ public:
     void move( int column, int row );
 
     /**
-     * The @ref KSpreadTable calls this method if the table becomes deleted.
+     * The @ref KSpreadSheet calls this method if the table becomes deleted.
      * At the time this method is called other cells may already be deleted or
      * in some inconsistent state.
      *
@@ -262,7 +262,7 @@ public:
      *         That si the case if it has any content, border, backgroundcolor,
      *         or background brush.
      *
-     * @see KSpreadTable::print
+     * @see KSpreadSheet::print
      */
     bool needsPrinting() const;
 
@@ -495,7 +495,7 @@ public:
      *
      * @return TRUE if this cell depends on the given cell
      */
-    bool cellDependsOn(KSpreadTable *table, int col, int row);
+    bool cellDependsOn(KSpreadSheet *table, int col, int row);
 
     /**
      * Notify this cell that another cell is depending, or no longer depending on this cell's value
@@ -506,7 +506,7 @@ public:
      * @param isDepending true if the cell is now depending on this one, false if it is not any longer
      *                    depending on it.
      */
-    void NotifyDepending( int col, int row, KSpreadTable* table, bool isDepending );
+    void NotifyDepending( int col, int row, KSpreadSheet* table, bool isDepending );
 
     /**
      * Causes the layout to be recalculated when the cell is drawn next time.
@@ -738,7 +738,7 @@ public:
    * DisplayDirty
    * If this flag is set, then it is known that this cell has to be updated
    * on the display. This means that somewhere in the calling stack there is a
-   * function which will call @ref KSpreadTable::updateCell once it retains
+   * function which will call @ref KSpreadSheet::updateCell once it retains
    * the control. If a function changes the contents/layout of this cell and this
    * flag is not set, then the function must set it at once. After the changes
    * are done the function must call <tt>m_pTable->updateCell(...).

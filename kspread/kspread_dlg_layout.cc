@@ -103,7 +103,7 @@ void KSpreadPatternSelect::slotSelect()
     repaint();
 }
 
-CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table,
+CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadSheet *_table,
                               int _left, int _top, int _right, int _bottom )
   : QObject()
 {
@@ -1770,7 +1770,7 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
 
 void CellLayoutPageFloat::apply( RowLayout *_obj )
 {
-  KSpreadTable* table = dlg->getTable();
+  KSpreadSheet* table = dlg->getTable();
   KSpreadCell* c = NULL;
   for (int row = dlg->top; row <= dlg->bottom; row++)
   {
@@ -1819,7 +1819,7 @@ void CellLayoutPageFloat::apply( RowLayout *_obj )
 
 void CellLayoutPageFloat::apply( ColumnLayout *_obj )
 {
-  KSpreadTable *table = dlg->getTable();
+  KSpreadSheet *table = dlg->getTable();
   KSpreadCell* c = NULL;
   for (int col = dlg->left; col <= dlg->right; col++)
   {
@@ -1964,7 +1964,7 @@ void CellLayoutPageMisc::apply( KSpreadCell *_obj )
 
 void CellLayoutPageMisc::applyColumn( )
 {
-  KSpreadTable* table = dlg->getTable();
+  KSpreadSheet* table = dlg->getTable();
   KSpreadCell* c = NULL;
   for (int col = dlg->left; col <= dlg->right; col++)
   {
@@ -1978,7 +1978,7 @@ void CellLayoutPageMisc::applyColumn( )
 
 void CellLayoutPageMisc::applyRow( )
 {
-  KSpreadTable* table = dlg->getTable();
+  KSpreadSheet* table = dlg->getTable();
   KSpreadCell* c= NULL;
   for (int row = dlg->top; row <= dlg->bottom; row++)
   {
@@ -2233,7 +2233,7 @@ bTextColorUndefined=false;
 
 void CellLayoutPageFont::apply( ColumnLayout *_obj)
 {
-  KSpreadTable* table = dlg->getTable();
+  KSpreadSheet* table = dlg->getTable();
   KSpreadCell* c= NULL;
   for (int col = dlg->left; col <= dlg->right; col++)
   {
@@ -2270,7 +2270,7 @@ void CellLayoutPageFont::apply( ColumnLayout *_obj)
 
 void CellLayoutPageFont::apply( RowLayout *_obj)
 {
-  KSpreadTable* table = dlg->getTable();
+  KSpreadSheet* table = dlg->getTable();
   KSpreadCell* c= NULL;
   for (int row = dlg->top; row <= dlg->bottom; row++)
   {
@@ -2677,7 +2677,7 @@ else
 
 void CellLayoutPagePosition::apply( ColumnLayout *_obj )
 {
-  KSpreadTable* table = dlg->getTable();
+  KSpreadSheet* table = dlg->getTable();
   KSpreadCell* c= NULL;
   for (int col = dlg->left; col <= dlg->right; col++)
   {
@@ -2735,7 +2735,7 @@ void CellLayoutPagePosition::apply( ColumnLayout *_obj )
 
 void CellLayoutPagePosition::apply( RowLayout *_obj )
 {
-  KSpreadTable* table = dlg->getTable();
+  KSpreadSheet* table = dlg->getTable();
   KSpreadCell* c= NULL;
   for (int row = dlg->top; row <= dlg->bottom; row++)
   {
@@ -3338,7 +3338,7 @@ void CellLayoutPageBorder::applyTopOutline()
 
 void CellLayoutPageBorder::applyBottomOutline()
 {
-  KSpreadTable* table = dlg->getTable();
+  KSpreadSheet* table = dlg->getTable();
   KSpreadBorderButton* bottom = borderButtons[BorderType_Bottom];
   QPen tmpPen( bottom->getColor(),bottom->getPenWidth(),bottom->getPenStyle());
   if( !dlg->isRowSelected && !dlg->isColumnSelected )
@@ -4408,7 +4408,7 @@ void CellLayoutPagePattern::slotUnselect2( KSpreadBrushSelect *_p )
 
 void CellLayoutPagePattern::apply( ColumnLayout *_obj )
 {
-  KSpreadTable* table = dlg->getTable();
+  KSpreadSheet* table = dlg->getTable();
   KSpreadCell* c = NULL;
   for (int col = dlg->left; col <= dlg->right; col++)
   {
@@ -4447,7 +4447,7 @@ void CellLayoutPagePattern::apply( ColumnLayout *_obj )
 
 void CellLayoutPagePattern::apply( RowLayout *_obj )
 {
-  KSpreadTable* table = dlg->getTable();
+  KSpreadSheet* table = dlg->getTable();
   KSpreadCell* c = NULL;
   for (int row = dlg->top; row <= dlg->bottom; row++)
   {

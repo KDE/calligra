@@ -52,7 +52,7 @@ using namespace layout_LNS;
  *
  *****************************************************************************/
 
-KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
+KSpreadLayout::KSpreadLayout( KSpreadSheet *_table )
 {
     QPen pen( Qt::black,1,Qt::NoPen);
     QBrush brush( Qt::red,Qt::NoBrush);
@@ -1923,7 +1923,7 @@ KLocale* KSpreadLayout::locale()const
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateRow( this, m_iRow );
 
-RowLayout::RowLayout( KSpreadTable *_table, int _row ) : KSpreadLayout( _table )
+RowLayout::RowLayout( KSpreadSheet *_table, int _row ) : KSpreadLayout( _table )
 {
     m_next = 0;
     m_prev = 0;
@@ -1965,7 +1965,7 @@ void RowLayout::setHeight( int _h, const KSpreadCanvas *_canvas )
 
 void RowLayout::setDblHeight( double _h, const KSpreadCanvas *_canvas )
 {
-  KSpreadTable *_table = _canvas ? _canvas->activeTable() : m_pTable;
+  KSpreadSheet *_table = _canvas ? _canvas->activeTable() : m_pTable;
   // avoid unnecessary updates
   if ( kAbs( _h - dblHeight( _canvas ) ) < DBL_EPSILON )
     return;
@@ -2160,7 +2160,7 @@ bool RowLayout::isDefault() const
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateColumn( this, m_iColumn );
 
-ColumnLayout::ColumnLayout( KSpreadTable *_table, int _column ) : KSpreadLayout( _table )
+ColumnLayout::ColumnLayout( KSpreadSheet *_table, int _column ) : KSpreadLayout( _table )
 {
   m_bDisplayDirtyFlag = false;
   m_fWidth = gColWidth;
@@ -2200,7 +2200,7 @@ void ColumnLayout::setWidth( int _w, const KSpreadCanvas *_canvas )
 
 void ColumnLayout::setDblWidth( double _w, const KSpreadCanvas *_canvas )
 {
-  KSpreadTable *_table = _canvas ? _canvas->activeTable() : m_pTable;
+  KSpreadSheet *_table = _canvas ? _canvas->activeTable() : m_pTable;
   // avoid unnecessary updates
   if ( kAbs( _w - dblWidth( _canvas ) ) < DBL_EPSILON )
     return;

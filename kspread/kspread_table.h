@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+             (C) 1999-2002 The KSpread Team
+                           www.koffice.org/kspread
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,10 +22,11 @@
 #ifndef __kspread_table_h__
 #define __kspread_table_h__
 
+class KSpreadSheet;
+
 class ColumnLayout;
 class RowLayout;
 class KSpreadCell;
-class KSpreadTable;
 class KSpreadView;
 class KSpreadPoint;
 class KSpreadMap;
@@ -72,7 +75,7 @@ class CellBinding : public QObject
 {
     Q_OBJECT
 public:
-    CellBinding( KSpreadTable *_table, const QRect& _area );
+    CellBinding( KSpreadSheet *_table, const QRect& _area );
     virtual ~CellBinding();
 
     bool contains( int _x, int _y );
@@ -89,14 +92,14 @@ public:
     virtual QRect& dataArea() { return m_rctDataArea; }
     virtual void setDataArea( const QRect _rect ) { m_rctDataArea = _rect; }
 
-    KSpreadTable* table()const { return m_pTable; }
+    KSpreadSheet* table()const { return m_pTable; }
 
 signals:
     void changed( KSpreadCell *_obj );
 
 protected:
     QRect m_rctDataArea;
-    KSpreadTable *m_pTable;
+    KSpreadSheet *m_pTable;
     bool m_bIgnoreChanges;
 };
 
@@ -112,15 +115,15 @@ protected:
 class KSpreadChild : public KoDocumentChild
 {
 public:
-  KSpreadChild( KSpreadDoc *parent, KSpreadTable *_table, KoDocument* doc, const QRect& geometry );
-  KSpreadChild( KSpreadDoc *parent, KSpreadTable *_table );
+  KSpreadChild( KSpreadDoc *parent, KSpreadSheet *_table, KoDocument* doc, const QRect& geometry );
+  KSpreadChild( KSpreadDoc *parent, KSpreadSheet *_table );
   ~KSpreadChild();
 
   KSpreadDoc* parent()const { return (KSpreadDoc*)parent(); }
-  KSpreadTable* table()const { return m_pTable; }
+  KSpreadSheet* table()const { return m_pTable; }
 
 protected:
-  KSpreadTable *m_pTable;
+  KSpreadSheet *m_pTable;
 };
 
 /********************************************************************
@@ -137,7 +140,7 @@ class ChartBinding : public CellBinding
     Q_OBJECT
 public:
 
-    ChartBinding( KSpreadTable *_table, const QRect& _area, ChartChild *_child );
+    ChartBinding( KSpreadSheet *_table, const QRect& _area, ChartChild *_child );
     virtual ~ChartBinding();
 
     virtual void cellChanged( KSpreadCell *_obj );
@@ -150,8 +153,8 @@ class ChartChild : public KSpreadChild
 {
     Q_OBJECT
 public:
-    ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, KoDocument* doc, const QRect& _rect );
-    ChartChild( KSpreadDoc *_spread, KSpreadTable *_table );
+    ChartChild( KSpreadDoc *_spread, KSpreadSheet *_table, KoDocument* doc, const QRect& _rect );
+    ChartChild( KSpreadDoc *_spread, KSpreadSheet *_table );
     ~ChartChild();
 
     void setDataArea( const QRect& _data );
@@ -218,7 +221,7 @@ protected:
 
 /**
  */
-class KSpreadTable : public QObject
+class KSpreadSheet : public QObject
 {
     friend class KSpreadCell;
 
@@ -228,8 +231,8 @@ public:
     enum ChangeRef { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
     enum TestType { Text, Validity, Comment, ConditionalCellAttribute };
 
-    KSpreadTable( KSpreadMap *_map, const QString &tableName, const char *_name=0L );
-    ~KSpreadTable();
+    KSpreadSheet( KSpreadMap *_map, const QString &tableName, const char *_name=0L );
+    ~KSpreadSheet();
 
     virtual bool isEmpty( unsigned long int x, unsigned long int y ) const;
 
@@ -815,7 +818,7 @@ public:
     /**
      * A convenience function that finds a table by its name.
      */
-    KSpreadTable *findTable( const QString & _name );
+    KSpreadSheet *findTable( const QString & _name );
 
     /**
      * Inserts the @p _cell into the table.
@@ -952,7 +955,7 @@ public:
 
     virtual DCOPObject* dcopObject();
 
-    static KSpreadTable* find( int _id );
+    static KSpreadSheet* find( int _id );
 
 #ifndef NDEBUG
     void printDebug();
@@ -1112,10 +1115,10 @@ public:
   KSpreadCell* getNextCellRight(int col, int row) const;
 
 signals:
-    void sig_updateView( KSpreadTable *_table );
-    void sig_updateView( KSpreadTable *_table, const QRect& );
-    void sig_updateHBorder( KSpreadTable *_table );
-    void sig_updateVBorder( KSpreadTable *_table );
+    void sig_updateView( KSpreadSheet *_table );
+    void sig_updateView( KSpreadSheet *_table, const QRect& );
+    void sig_updateHBorder( KSpreadSheet *_table );
+    void sig_updateVBorder( KSpreadSheet *_table );
     void sig_updateChildGeometry( KSpreadChild *_child );
     void sig_removeChild( KSpreadChild *_child );
     void sig_maxColumn( int _max_column );
@@ -1123,18 +1126,18 @@ signals:
     /**
      * @see #setTableName
      */
-    void sig_nameChanged( KSpreadTable* table, const QString& old_name );
+    void sig_nameChanged( KSpreadSheet* table, const QString& old_name );
     /**
      * Emitted if a certain area of some table has to be redrawn.
      * That is for example the case when a new child is inserted.
      */
     void sig_polygonInvalidated( const QPointArray& );
 
-    void sig_TableHidden( KSpreadTable* table);
-    void sig_TableShown( KSpreadTable* table);
-    void sig_TableRemoved( KSpreadTable* table);
-    void sig_TableActivated( KSpreadTable* );
-    void sig_RefreshView( KSpreadTable* );
+    void sig_TableHidden( KSpreadSheet* table);
+    void sig_TableShown( KSpreadSheet* table);
+    void sig_TableRemoved( KSpreadSheet* table);
+    void sig_TableActivated( KSpreadSheet* );
+    void sig_RefreshView( KSpreadSheet* );
 
 protected:
     /**
@@ -1246,7 +1249,7 @@ protected:
     bool m_bTableHide;
 
     static int s_id;
-    static QIntDict<KSpreadTable>* s_mapTables;
+    static QIntDict<KSpreadSheet>* s_mapTables;
 
     /**
      * Show the grid on the screen
@@ -1339,7 +1342,7 @@ public:
     KoPageLayout getPaperLayout() const;
 
      /**
-     * Changes the paper layout and repaints the currently displayed KSpreadTable.
+     * Changes the paper layout and repaints the currently displayed KSpreadSheet.
      */
     void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
                          KoFormat _paper, KoOrientation orientation );
@@ -1502,7 +1505,7 @@ protected:
      * returns the modified one.
      *
      * @param _page is the page number for which the heading is produced.
-     * @param _KSpreadTable is the name of the KSpreadTable for which we generate the headings.
+     * @param _KSpreadSheet is the name of the KSpreadSheet for which we generate the headings.
      */
     QString completeHeading( const QString &_data, int _page, const QString &_table ) const ;
 
@@ -1642,7 +1645,7 @@ public:
 	CellWorker( bool cid=true, bool es=true, bool tb=true ) : create_if_default( cid ), emit_signal( es ), type_B( tb ) { }
 	virtual ~CellWorker() { }
 
-	virtual class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) =0;
+	virtual class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) =0;
 
 	// these are only needed for type A
 	virtual bool testCondition( RowLayout* ) { return false; }
@@ -1659,7 +1662,7 @@ public:
     struct CellWorkerTypeA : public CellWorker {
 	CellWorkerTypeA( ) : CellWorker( true, true, false ) { }
 	virtual QString getUndoTitle( ) =0;
-	class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r );
+	class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r );
     };
 
 protected:
@@ -1682,5 +1685,7 @@ private:
     int adjustColumnHelper( KSpreadCell * c, int _col, int _row );
 
 };
+
+typedef KSpreadSheet KSpreadTable;
 
 #endif

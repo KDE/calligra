@@ -30,7 +30,7 @@ class KSpreadCanvas;
 class KSpreadHBorder;
 class KSpreadVBorder;
 class KSpreadScripts;
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadDoc;
 class KSpreadPaperLayout;
 class KSpreadChildPicture;
@@ -94,13 +94,13 @@ public:
     KSpreadDoc* doc()const { return m_pDoc; }
     void setZoom( int zoom, bool updateViews ); // change the zoom value
 
-    void addTable( KSpreadTable *_t );
-    //void removeTable( KSpreadTable *_t );
+    void addTable( KSpreadSheet *_t );
+    //void removeTable( KSpreadSheet *_t );
     void removeAllTables();
-    void setActiveTable( KSpreadTable *_t,bool updateTable=true );
+    void setActiveTable( KSpreadSheet *_t,bool updateTable=true );
 
-    const KSpreadTable* activeTable() const { return m_pTable; }
-    KSpreadTable* activeTable() { return m_pTable; }
+    const KSpreadSheet* activeTable() const { return m_pTable; }
+    KSpreadSheet* activeTable() { return m_pTable; }
     KSpreadTabBar* tabBar()const { return  m_pTabBar;}
 
     void openPopupMenu( const QPoint &_global );
@@ -182,8 +182,8 @@ public:
     void openPopupMenuMenuPage( const QPoint & _point );
 
     void updateBorderButton();
-    void removeTable( KSpreadTable *_t );
-    void insertTable( KSpreadTable* table );
+    void removeTable( KSpreadSheet *_t );
+    void insertTable( KSpreadSheet* table );
     QColor borderColor() const;
 
   KSpreadSelection* selectionInfo()const { return m_selectionInfo; }
@@ -403,19 +403,19 @@ protected slots:
 
 public slots:
     // Document signals
-    void slotUpdateView( KSpreadTable *_table );
-    void slotUpdateView( KSpreadTable *_table, const QRect& );
-    void slotUpdateHBorder( KSpreadTable *_table );
-    void slotUpdateVBorder( KSpreadTable *_table );
-    void slotChangeSelection( KSpreadTable *_table, const QRect &oldSelection,
+    void slotUpdateView( KSpreadSheet *_table );
+    void slotUpdateView( KSpreadSheet *_table, const QRect& );
+    void slotUpdateHBorder( KSpreadSheet *_table );
+    void slotUpdateVBorder( KSpreadSheet *_table );
+    void slotChangeSelection( KSpreadSheet *_table, const QRect &oldSelection,
                               const QPoint &_oldMarker );
-    void slotAddTable( KSpreadTable *_table );
+    void slotAddTable( KSpreadSheet *_table );
     void slotRemoveChild( KSpreadChild *_child );
     void slotUpdateChildGeometry( KSpreadChild *_child );
-    void slotTableRenamed( KSpreadTable* table, const QString& old_name );
-    void slotTableHidden( KSpreadTable*_table );
-    void slotTableShown( KSpreadTable*_table );
-    void slotTableRemoved( KSpreadTable*_table );
+    void slotTableRenamed( KSpreadSheet* table, const QString& old_name );
+    void slotTableHidden( KSpreadSheet*_table );
+    void slotTableShown( KSpreadSheet*_table );
+    void slotTableRemoved( KSpreadSheet*_table );
     void slotRefreshView( );
     void slotRefreshLocale();
     void extraSpelling();
@@ -435,8 +435,8 @@ public slots:
     virtual int bottomBorder() const;
 
 signals:
-    void sig_selectionChanged( KSpreadTable* _table, const QRect& _selection );
-    void sig_chooseSelectionChanged(KSpreadTable *table, const QRect& _selection);
+    void sig_selectionChanged( KSpreadSheet* _table, const QRect& _selection );
+    void sig_chooseSelectionChanged(KSpreadSheet *table, const QRect& _selection);
 
 protected:
 
@@ -613,8 +613,8 @@ private:
     struct
     {
       KSpreadSpell *   kspell;
-      KSpreadTable *  firstSpellTable;
-      KSpreadTable *  currentSpellTable;
+      KSpreadSheet *  firstSpellTable;
+      KSpreadSheet *  currentSpellTable;
       KSpreadCell  *  currentCell;
       KSpreadMacroUndoAction *macroCmdSpellCheck;
       unsigned int    spellCurrCellX;
@@ -672,9 +672,9 @@ private:
     bool m_bEditDirtyFlag;
 
     /**
-     * The active KSpreadTable. This table has the input focus. It may be 0L, too.
+     * The active KSpreadSheet. This table has the input focus. It may be 0L, too.
      */
-    KSpreadTable* m_pTable;
+    KSpreadSheet* m_pTable;
 
     KSpreadDoc *m_pDoc;
 
@@ -722,8 +722,8 @@ private:
     KStatusBarLabel* m_sbCalcLabel;
 
   KSpreadSelection* m_selectionInfo;
-  QMap<KSpreadTable*, QPoint> savedAnchors;
-  QMap<KSpreadTable*, QPoint> savedMarkers;
+  QMap<KSpreadSheet*, QPoint> savedAnchors;
+  QMap<KSpreadSheet*, QPoint> savedMarkers;
 
   /* helper functions */
     void initializeCalcActions();

@@ -10,15 +10,15 @@
 
 #include "kspread_selection.h"
 
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadCellProxy;
 
-class KSpreadTableIface : virtual public DCOPObject
+class KSpreadSheetIface : virtual public DCOPObject
 {
     K_DCOP
 public:
-    KSpreadTableIface( KSpreadTable* );
-    ~KSpreadTableIface();
+    KSpreadSheetIface( KSpreadSheet* );
+    ~KSpreadSheetIface();
 
     bool processDynamic( const QCString& fun, const QByteArray& data,
 			 QCString& replyType, QByteArray &replyData );
@@ -75,7 +75,7 @@ k_dcop:
     void setFooterRight(const QString & text);
 
 private:
-    KSpreadTable* m_table;
+    KSpreadSheet* m_table;
     KSpreadCellProxy* m_proxy;
 };
 

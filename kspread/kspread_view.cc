@@ -411,7 +411,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     initializeRowColumnActions();
     initializeBorderActions();
 
-    KSpreadTable *tbl;
+    KSpreadSheet *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
       addTable( tbl );
     tbl = 0L;
@@ -427,7 +427,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
       //activate first table which is not hiding
       setActiveTable(m_pDoc->map()->findTable(m_pTabBar->listshow().first()));
 
-    QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadTable* ) ), SLOT( slotAddTable( KSpreadTable* ) ) );
+    QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadSheet* ) ), SLOT( slotAddTable( KSpreadSheet* ) ) );
 
 
     QObject::connect( m_pDoc, SIGNAL( sig_refreshView(  ) ), this, SLOT( slotRefreshView() ) );
@@ -1241,7 +1241,7 @@ KSpreadView::~KSpreadView()
 
     m_pCanvas->endChoose();
     m_pTable = 0; // set the active table to 0L so that when during destruction
-    // of embedded child documents possible repaints in KSpreadTable are not
+    // of embedded child documents possible repaints in KSpreadSheet are not
     // performed. The repains can happen if you delete an embedded document,
     // which leads to an regionInvalidated() signal emission in KoView, which calls
     // repaint, etc.etc. :-) (Simon)
@@ -1353,7 +1353,7 @@ void KSpreadView::initCalcMenu()
 
 void KSpreadView::RecalcWorkBook(){
 
-    KSpreadTable *tbl;
+    KSpreadSheet *tbl;
 
     for ( tbl = m_pDoc->map()->firstTable();
 	  tbl != 0L;
@@ -1371,7 +1371,7 @@ void KSpreadView::RecalcWorkBook(){
 
 void KSpreadView::slotRefreshLocale()
 {
-    KSpreadTable *tbl;
+    KSpreadSheet *tbl;
     for ( tbl = m_pDoc->map()->firstTable();
 	  tbl != 0L;
           tbl = m_pDoc->map()->nextTable() ){
@@ -1602,7 +1602,7 @@ bool KSpreadView::spellSwitchToOtherTable()
     return false;
 
   // for optimization
-  QPtrList<KSpreadTable> tableList = m_pDoc->map()->tableList();
+  QPtrList<KSpreadSheet> tableList = m_pDoc->map()->tableList();
 
   unsigned int curIndex = tableList.findRef(m_spell.currentSpellTable);
   ++curIndex;
@@ -1800,7 +1800,7 @@ void KSpreadView::initialPosition()
 // and shouldn't be necessary at all - Philipp
 //
 //     /*recalc all dependent after loading*/
-//     KSpreadTable *tbl;
+//     KSpreadSheet *tbl;
 //     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
 //     {
 //         if( tbl->getAutoCalc() )
@@ -2473,9 +2473,9 @@ void KSpreadView::sortInc()
 
     // Entire row(s) selected ? Or just one row ?
     if( util_isRowSelected(selection()) || r.top() == r.bottom() )
-        activeTable()->sortByRow( selection(), r.top(), KSpreadTable::Increase );
+        activeTable()->sortByRow( selection(), r.top(), KSpreadSheet::Increase );
     else
-        activeTable()->sortByColumn( selection(), r.left(), KSpreadTable::Increase );
+        activeTable()->sortByColumn( selection(), r.left(), KSpreadSheet::Increase );
     updateEditWidget();
 }
 
@@ -2490,9 +2490,9 @@ void KSpreadView::sortDec()
 
     // Entire row(s) selected ? Or just one row ?
     if( util_isRowSelected(selection()) || r.top() == r.bottom() )
-        activeTable()->sortByRow( selection(), r.top(), KSpreadTable::Decrease );
+        activeTable()->sortByRow( selection(), r.top(), KSpreadSheet::Decrease );
     else
-        activeTable()->sortByColumn( selection(), r.left(), KSpreadTable::Decrease );
+        activeTable()->sortByColumn( selection(), r.left(), KSpreadSheet::Decrease );
     updateEditWidget();
 }
 
@@ -2614,26 +2614,26 @@ void KSpreadView::borderRemove()
     m_pTable->borderRemove( m_selectionInfo );
 }
 
-void KSpreadView::addTable( KSpreadTable *_t )
+void KSpreadView::addTable( KSpreadSheet *_t )
 {
     insertTable( _t );
 
     // Connect some signals
-    QObject::connect( _t, SIGNAL( sig_updateView( KSpreadTable* ) ), SLOT( slotUpdateView( KSpreadTable* ) ) );
-    QObject::connect( _t, SIGNAL( sig_updateView( KSpreadTable *, const QRect& ) ),
-                      SLOT( slotUpdateView( KSpreadTable*, const QRect& ) ) );
-    QObject::connect( _t, SIGNAL( sig_updateHBorder( KSpreadTable * ) ),
-                      SLOT( slotUpdateHBorder( KSpreadTable * ) ) );
-    QObject::connect( _t, SIGNAL( sig_updateVBorder( KSpreadTable * ) ),
-                      SLOT( slotUpdateVBorder( KSpreadTable * ) ) );
-    QObject::connect( _t, SIGNAL( sig_nameChanged( KSpreadTable*, const QString& ) ),
-                      this, SLOT( slotTableRenamed( KSpreadTable*, const QString& ) ) );
-    QObject::connect( _t, SIGNAL( sig_TableHidden( KSpreadTable* ) ),
-                      this, SLOT( slotTableHidden( KSpreadTable* ) ) );
-    QObject::connect( _t, SIGNAL( sig_TableShown( KSpreadTable* ) ),
-                      this, SLOT( slotTableShown( KSpreadTable* ) ) );
-    QObject::connect( _t, SIGNAL( sig_TableRemoved( KSpreadTable* ) ),
-                      this, SLOT( slotTableRemoved( KSpreadTable* ) ) );
+    QObject::connect( _t, SIGNAL( sig_updateView( KSpreadSheet* ) ), SLOT( slotUpdateView( KSpreadSheet* ) ) );
+    QObject::connect( _t, SIGNAL( sig_updateView( KSpreadSheet *, const QRect& ) ),
+                      SLOT( slotUpdateView( KSpreadSheet*, const QRect& ) ) );
+    QObject::connect( _t, SIGNAL( sig_updateHBorder( KSpreadSheet * ) ),
+                      SLOT( slotUpdateHBorder( KSpreadSheet * ) ) );
+    QObject::connect( _t, SIGNAL( sig_updateVBorder( KSpreadSheet * ) ),
+                      SLOT( slotUpdateVBorder( KSpreadSheet * ) ) );
+    QObject::connect( _t, SIGNAL( sig_nameChanged( KSpreadSheet*, const QString& ) ),
+                      this, SLOT( slotTableRenamed( KSpreadSheet*, const QString& ) ) );
+    QObject::connect( _t, SIGNAL( sig_TableHidden( KSpreadSheet* ) ),
+                      this, SLOT( slotTableHidden( KSpreadSheet* ) ) );
+    QObject::connect( _t, SIGNAL( sig_TableShown( KSpreadSheet* ) ),
+                      this, SLOT( slotTableShown( KSpreadSheet* ) ) );
+    QObject::connect( _t, SIGNAL( sig_TableRemoved( KSpreadSheet* ) ),
+                      this, SLOT( slotTableRemoved( KSpreadSheet* ) ) );
     // ########### Why do these signals not send a pointer to the table?
     // This will lead to bugs.
     QObject::connect( _t, SIGNAL( sig_updateChildGeometry( KSpreadChild* ) ),
@@ -2647,7 +2647,7 @@ void KSpreadView::addTable( KSpreadTable *_t )
         updateBorderButton();
 }
 
-void KSpreadView::slotTableRemoved( KSpreadTable *_t )
+void KSpreadView::slotTableRemoved( KSpreadSheet *_t )
 {
   QString m_tableName=_t->tableName();
   m_pTabBar->removeTab( _t->tableName() );
@@ -2666,7 +2666,7 @@ void KSpreadView::slotTableRemoved( KSpreadTable *_t )
 	    doc()->removeArea((*it).ref_name);
 	    //now area name is used in formula
 	    //so you must recalc tables when remove areaname
-	    KSpreadTable *tbl;
+	    KSpreadSheet *tbl;
 
 	    for ( tbl = doc()->map()->firstTable(); tbl != 0L; tbl = doc()->map()->nextTable() )
 	      {
@@ -2684,7 +2684,7 @@ void KSpreadView::removeAllTables()
   setActiveTable( 0L );
 }
 
-void KSpreadView::setActiveTable( KSpreadTable *_t,bool updateTable )
+void KSpreadView::setActiveTable( KSpreadSheet *_t,bool updateTable )
 {
   if ( _t == m_pTable )
     return;
@@ -2712,8 +2712,8 @@ void KSpreadView::setActiveTable( KSpreadTable *_t,bool updateTable )
   }
 
   /* see if there was a previous selection on this other table */
-  QMapIterator<KSpreadTable*, QPoint> it = savedAnchors.find(m_pTable);
-  QMapIterator<KSpreadTable*, QPoint> it2 = savedMarkers.find(m_pTable);
+  QMapIterator<KSpreadSheet*, QPoint> it = savedAnchors.find(m_pTable);
+  QMapIterator<KSpreadSheet*, QPoint> it2 = savedMarkers.find(m_pTable);
 
   QPoint newAnchor = (it == savedAnchors.end()) ? QPoint(1,1) : *it;
   QPoint newMarker = (it2 == savedMarkers.end()) ? QPoint(1,1) : *it2;
@@ -2728,18 +2728,18 @@ void KSpreadView::slotRefreshView(  )
   refreshView();
 }
 
-void KSpreadView::slotTableRenamed( KSpreadTable* table, const QString& old_name )
+void KSpreadView::slotTableRenamed( KSpreadSheet* table, const QString& old_name )
 {
     m_pTabBar->renameTab( old_name, table->tableName() );
 }
 
-void KSpreadView::slotTableHidden( KSpreadTable* table )
+void KSpreadView::slotTableHidden( KSpreadSheet* table )
 {
     m_pTabBar->hideTable( table->tableName() );
     updateShowTableMenu();
 }
 
-void KSpreadView::slotTableShown( KSpreadTable* table )
+void KSpreadView::slotTableShown( KSpreadSheet* table )
 {
     m_pTabBar->displayTable( table->tableName() );
     updateShowTableMenu();
@@ -2750,7 +2750,7 @@ void KSpreadView::changeTable( const QString& _name )
     if ( activeTable()->tableName() == _name )
         return;
 
-    KSpreadTable *t = m_pDoc->map()->findTable( _name );
+    KSpreadSheet *t = m_pDoc->map()->findTable( _name );
     if ( !t )
     {
         kdDebug(36001) << "Unknown table " << _name << endl;
@@ -2795,7 +2795,7 @@ void KSpreadView::slotScrollToLastTable()
 void KSpreadView::insertTable()
 {
   m_pCanvas->closeEditor();
-  KSpreadTable *t = m_pDoc->createTable();
+  KSpreadSheet *t = m_pDoc->createTable();
   m_pDoc->addTable( t );
   updateEditWidget();
   KSpreadUndoAddTable *undo = new KSpreadUndoAddTable(m_pDoc, t);
@@ -3375,7 +3375,7 @@ void KSpreadView::editCell()
 
 void KSpreadView::nextTable(){
 
-    KSpreadTable *t = m_pDoc->map()->nextTable( activeTable() );
+    KSpreadSheet *t = m_pDoc->map()->nextTable( activeTable() );
     if ( !t )
     {
         kdDebug(36001) << "Unknown table " <<  endl;
@@ -3388,7 +3388,7 @@ void KSpreadView::nextTable(){
 
 void KSpreadView::previousTable(){
 
-    KSpreadTable *t = m_pDoc->map()->previousTable( activeTable() );
+    KSpreadSheet *t = m_pDoc->map()->previousTable( activeTable() );
     if ( !t )
     {
         kdDebug(36001) << "Unknown table "  << endl;
@@ -3400,7 +3400,7 @@ void KSpreadView::previousTable(){
 }
 void KSpreadView::firstTable(){
 
-    KSpreadTable *t = m_pDoc->map()->firstTable();
+    KSpreadSheet *t = m_pDoc->map()->firstTable();
     if ( !t )
     {
         kdDebug(36001) << "Unknown table " <<  endl;
@@ -3412,7 +3412,7 @@ void KSpreadView::firstTable(){
 }
 void KSpreadView::lastTable(){
 
-    KSpreadTable *t = m_pDoc->map()->lastTable( );
+    KSpreadSheet *t = m_pDoc->map()->lastTable( );
     if ( !t )
     {
         kdDebug(36001) << "Unknown table " <<  endl;
@@ -4454,7 +4454,7 @@ void KSpreadView::removeTable()
                 m_pCanvas->deleteEditor( false );
         }
         m_pDoc->setModified( true );
-        KSpreadTable *tbl = activeTable();
+        KSpreadSheet *tbl = activeTable();
         KSpreadUndoRemoveTable* undo = new KSpreadUndoRemoveTable(m_pDoc, tbl);
         m_pDoc->undoBuffer()->appendUndo( undo );
         tbl->map()->takeTable( tbl );
@@ -4486,12 +4486,12 @@ void KSpreadView::setText( const QString& _text )
 //
 //------------------------------------------------
 
-void KSpreadView::slotAddTable( KSpreadTable *_table )
+void KSpreadView::slotAddTable( KSpreadSheet *_table )
 {
   addTable( _table );
 }
 
-void KSpreadView::slotUpdateView( KSpreadTable *_table )
+void KSpreadView::slotUpdateView( KSpreadSheet *_table )
 {
 
     // Do we display this table ?
@@ -4501,9 +4501,9 @@ void KSpreadView::slotUpdateView( KSpreadTable *_table )
     m_pCanvas->update();
 }
 
-void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& _rect )
+void KSpreadView::slotUpdateView( KSpreadSheet *_table, const QRect& _rect )
 {
-    // qDebug("void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& %i %i|%i %i )\n",_rect.left(),_rect.top(),_rect.right(),_rect.bottom());
+    // qDebug("void KSpreadView::slotUpdateView( KSpreadSheet *_table, const QRect& %i %i|%i %i )\n",_rect.left(),_rect.top(),_rect.right(),_rect.bottom());
 
     // Do we display this table ?
     if ( _table != m_pTable )
@@ -4512,9 +4512,9 @@ void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& _rect )
     m_pCanvas->updateCellRect( _rect );
 }
 
-void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )
+void KSpreadView::slotUpdateHBorder( KSpreadSheet *_table )
 {
-    // kdDebug(36001)<<"void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )\n";
+    // kdDebug(36001)<<"void KSpreadView::slotUpdateHBorder( KSpreadSheet *_table )\n";
 
     // Do we display this table ?
     if ( _table != m_pTable )
@@ -4523,9 +4523,9 @@ void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )
     m_pHBorderWidget->update();
 }
 
-void KSpreadView::slotUpdateVBorder( KSpreadTable *_table )
+void KSpreadView::slotUpdateVBorder( KSpreadSheet *_table )
 {
-    // kdDebug("void KSpreadView::slotUpdateVBorder( KSpreadTable *_table )\n";
+    // kdDebug("void KSpreadView::slotUpdateVBorder( KSpreadSheet *_table )\n";
 
     // Do we display this table ?
     if ( _table != m_pTable )
@@ -4534,7 +4534,7 @@ void KSpreadView::slotUpdateVBorder( KSpreadTable *_table )
     m_pVBorderWidget->update();
 }
 
-void KSpreadView::slotChangeSelection( KSpreadTable *_table,
+void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
                                        const QRect &oldSelection,
                                        const QPoint& oldMarker )
 {
@@ -4578,7 +4578,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table,
 
 void KSpreadView::resultOfCalc()
 {
-    KSpreadTable * table = activeTable();
+    KSpreadSheet * table = activeTable();
     double result = 0.0;
     int nbCell = 0;
     QRect tmpRect(m_selectionInfo->selection());
@@ -4910,7 +4910,7 @@ void KSpreadView::updateBorderButton()
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders() );
 }
 
-void KSpreadView::removeTable( KSpreadTable *_t )
+void KSpreadView::removeTable( KSpreadSheet *_t )
 {
   QString m_tablName=_t->tableName();
   m_pTabBar->removeTab( m_tablName );
@@ -4921,7 +4921,7 @@ void KSpreadView::removeTable( KSpreadTable *_t )
 
 }
 
-void KSpreadView::insertTable( KSpreadTable* table )
+void KSpreadView::insertTable( KSpreadSheet* table )
 {
   QString tabName = table->tableName();
   if( !table->isHidden() )

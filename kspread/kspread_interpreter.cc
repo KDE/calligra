@@ -47,7 +47,7 @@
 class KSParseNodeExtraPoint : public KSParseNodeExtra
 {
 public:
-  KSParseNodeExtraPoint( const QString& s, KSpreadMap* m, KSpreadTable* t ) : m_point( s, m, t ) 
+  KSParseNodeExtraPoint( const QString& s, KSpreadMap* m, KSpreadSheet* t ) : m_point( s, m, t ) 
   { 
   }
 
@@ -63,7 +63,7 @@ private:
 class KSParseNodeExtraRange : public KSParseNodeExtra
 {
 public:
-  KSParseNodeExtraRange( const QString& s, KSpreadMap* m, KSpreadTable* t )
+  KSParseNodeExtraRange( const QString& s, KSpreadMap* m, KSpreadSheet* t )
     : m_range( s, m, t ) 
   { 
   }
@@ -83,7 +83,7 @@ private:
 /**
  * Creates dependencies from the parse tree of a formula.
  */
-void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadTable* t, QPtrList<KSpreadDependency>& depends )
+void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadSheet* t, QPtrList<KSpreadDependency>& depends )
 {
   KSParseNodeExtra* extra = node->extra();
   if ( !extra )
@@ -425,7 +425,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
   return false;
 }
 
-KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadTable* table, const QString& formula, QPtrList<KSpreadDependency>& depends )
+KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadSheet* table, const QString& formula, QPtrList<KSpreadDependency>& depends )
 {
     // Create the parse tree.
     KSParser parser;
@@ -442,10 +442,10 @@ KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadTable* table,
     return n;
 }
 
-bool KSpreadInterpreter::evaluate( KSContext& context, KSParseNode* node, KSpreadTable* table )
+bool KSpreadInterpreter::evaluate( KSContext& context, KSParseNode* node, KSpreadSheet* table )
 {
     // Save the current table to make this function reentrant.
-    KSpreadTable* t = m_table;
+    KSpreadSheet* t = m_table;
     m_table = table;
 
     bool b = node->eval( context );

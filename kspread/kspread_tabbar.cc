@@ -64,7 +64,7 @@ void KSpreadTabBar::removeTab( const QString& _text )
     int i = tabsList.findIndex( _text );
     if ( i == -1 )
     {
-        kdError(36001) << "ERROR: KSpreadTable '" << _text << "' not found" << endl;
+        kdError(36001) << "ERROR: KSpreadSheet '" << _text << "' not found" << endl;
         return;
     }
 
@@ -349,7 +349,7 @@ void KSpreadTabBar::renameTab( const QString& old_name, const QString& new_name 
 void KSpreadTabBar::slotRename()
 {
     // Store the current name of the active table
-    KSpreadTable* table = m_pView->activeTable();
+    KSpreadSheet* table = m_pView->activeTable();
 
     bool ok;
     QString activeName = table->tableName();
@@ -633,7 +633,7 @@ void KSpreadTabBar::hideTable(const QString& tableName )
 
 void KSpreadTabBar::showTable(const QString& text)
 {
-    KSpreadTable *table;
+    KSpreadSheet *table;
     table=m_pView->doc()->map()->findTable( text);
     if ( !m_pView->doc()->undoBuffer()->isLocked() )
     {
@@ -647,7 +647,7 @@ void KSpreadTabBar::showTable(QStringList list)
 {
     if ( list.count()==0 )
         return;
-    KSpreadTable *table;
+    KSpreadSheet *table;
     KSpreadMacroUndoAction *macroUndo=new KSpreadMacroUndoAction( m_pView->doc(),i18n("Show Table"));
     for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it )
     {

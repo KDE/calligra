@@ -21,7 +21,7 @@
 
 #include <kdialogbase.h>
 #include <koPageLayoutDia.h>
-class KSpreadTable;
+class KSpreadSheet;
 class QCheckBox;
 class QLineEdit;
 class KSpreadView;
@@ -34,21 +34,21 @@ public:
                       const KoPageLayout& layout,
                       const KoHeadFoot& headfoot,
                       int tabs, KoUnit::Unit unit,
-                      KSpreadTable *table, KSpreadView *view);
+                      KSpreadSheet *table, KSpreadView *view);
 
     bool eventFilter( QObject* obj, QEvent* ev );
 
 protected slots:
     virtual void slotOk();
     virtual void slotCancel();
-    void slotSelectionChanged( KSpreadTable* _table, const QRect& _selection );
+    void slotSelectionChanged( KSpreadSheet* _table, const QRect& _selection );
 
 protected:
     void initTab();
 protected:
   virtual void closeEvent ( QCloseEvent * );
 private:
-    KSpreadTable *m_table;
+    KSpreadSheet *m_table;
     QCheckBox *pPrintGrid;
     QCheckBox *pPrintCommentIndicator;
     QCheckBox *pPrintFormulaIndicator;

@@ -22,7 +22,7 @@
 
 class KSpreadUndo;
 class KSpreadUndoAction;
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadLayout;
 class KSpreadDoc;
 class ColumnLayout;
@@ -125,7 +125,7 @@ protected:
 class KSpreadUndoRemoveColumn : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0 );
+    KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadSheet *_table, int _column,int _nbCol=0 );
     virtual ~KSpreadUndoRemoveColumn();
 
     virtual void undo();
@@ -143,7 +143,7 @@ protected:
 class KSpreadUndoInsertColumn : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoInsertColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0 );
+    KSpreadUndoInsertColumn( KSpreadDoc *_doc, KSpreadSheet *_table, int _column,int _nbCol=0 );
     virtual ~KSpreadUndoInsertColumn();
 
     virtual void undo();
@@ -158,7 +158,7 @@ protected:
 class KSpreadUndoRemoveRow : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _nbRow=0 );
+    KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadSheet *_table, int _row,int _nbRow=0 );
     virtual ~KSpreadUndoRemoveRow();
 
     virtual void undo();
@@ -176,7 +176,7 @@ protected:
 class KSpreadUndoInsertRow : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoInsertRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _nbRow=0 );
+    KSpreadUndoInsertRow( KSpreadDoc *_doc, KSpreadSheet *_table, int _row,int _nbRow=0 );
     virtual ~KSpreadUndoInsertRow();
 
     virtual void undo();
@@ -192,12 +192,12 @@ protected:
 class KSpreadUndoHideColumn : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoHideColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0, QValueList<int>listCol=QValueList<int>() );
+    KSpreadUndoHideColumn( KSpreadDoc *_doc, KSpreadSheet *_table, int _column,int _nbCol=0, QValueList<int>listCol=QValueList<int>() );
     virtual ~KSpreadUndoHideColumn();
 
     virtual void undo();
     virtual void redo();
-    void createList( QValueList<int>&list,KSpreadTable *_tab );
+    void createList( QValueList<int>&list,KSpreadSheet *_tab );
 
 protected:
     QString m_tableName;
@@ -209,13 +209,13 @@ protected:
 class KSpreadUndoHideRow : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoHideRow( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0, QValueList<int>_listRow=QValueList<int>() );
+    KSpreadUndoHideRow( KSpreadDoc *_doc, KSpreadSheet *_table, int _column,int _nbCol=0, QValueList<int>_listRow=QValueList<int>() );
     virtual ~KSpreadUndoHideRow();
 
     virtual void undo();
     virtual void redo();
 protected:
-    void createList( QValueList<int>&list,KSpreadTable *_tab );
+    void createList( QValueList<int>&list,KSpreadSheet *_tab );
 
     QString m_tableName;
     int m_iRow;
@@ -226,13 +226,13 @@ protected:
 class KSpreadUndoShowColumn : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoShowColumn( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0, QValueList<int>_list=QValueList<int>() );
+    KSpreadUndoShowColumn( KSpreadDoc *_doc, KSpreadSheet *_table, int _column,int _nbCol=0, QValueList<int>_list=QValueList<int>() );
     virtual ~KSpreadUndoShowColumn();
 
     virtual void undo();
     virtual void redo();
 protected:
-    void createList( QValueList<int>&list,KSpreadTable *_tab );
+    void createList( QValueList<int>&list,KSpreadSheet *_tab );
 
     QString m_tableName;
     int m_iColumn;
@@ -243,14 +243,14 @@ protected:
 class KSpreadUndoShowRow : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoShowRow( KSpreadDoc *_doc, KSpreadTable *_table, int _column,int _nbCol=0, QValueList<int>list=QValueList<int>() );
+    KSpreadUndoShowRow( KSpreadDoc *_doc, KSpreadSheet *_table, int _column,int _nbCol=0, QValueList<int>list=QValueList<int>() );
     virtual ~KSpreadUndoShowRow();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void createList( QValueList<int>&list,KSpreadTable *_tab );
+    void createList( QValueList<int>&list,KSpreadSheet *_tab );
     QString m_tableName;
     int m_iRow;
     int m_iNbRow;
@@ -261,7 +261,7 @@ protected:
 class KSpreadUndoPaperLayout : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoPaperLayout( KSpreadDoc *_doc, KSpreadTable *_table );
+    KSpreadUndoPaperLayout( KSpreadDoc *_doc, KSpreadSheet *_table );
     virtual ~KSpreadUndoPaperLayout();
 
     virtual void undo();
@@ -293,7 +293,7 @@ protected:
 class KSpreadUndoDefinePrintRange : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoDefinePrintRange( KSpreadDoc *_doc, KSpreadTable *_table );
+    KSpreadUndoDefinePrintRange( KSpreadDoc *_doc, KSpreadSheet *_table );
     virtual ~KSpreadUndoDefinePrintRange();
 
     virtual void undo();
@@ -309,7 +309,7 @@ protected:
 class KSpreadUndoSetText : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadTable *_table, const QString& _text, int _column, int _row,KSpreadCell::FormatType _formatType );
+    KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadSheet *_table, const QString& _text, int _column, int _row,KSpreadCell::FormatType _formatType );
     virtual ~KSpreadUndoSetText();
 
     virtual void undo();
@@ -328,14 +328,14 @@ protected:
 class KSpreadUndoCellLayout : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoCellLayout( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_selection, const QString &_title );
+    KSpreadUndoCellLayout( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_selection, const QString &_title );
     virtual ~KSpreadUndoCellLayout();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void copyLayout( QValueList<layoutCell> &list,QValueList<layoutColumn> &listCol,QValueList<layoutRow> &listRow, KSpreadTable* table );
+    void copyLayout( QValueList<layoutCell> &list,QValueList<layoutColumn> &listCol,QValueList<layoutRow> &listRow, KSpreadSheet* table );
 
     QRect m_rctRect;
     QValueList<layoutCell> m_lstLayouts;
@@ -353,7 +353,7 @@ class KSpreadUndoResizeColRow;
 class KSpreadUndoChangeAngle : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoChangeAngle( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_selection );
+    KSpreadUndoChangeAngle( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_selection );
     virtual ~KSpreadUndoChangeAngle();
 
     virtual void undo();
@@ -369,14 +369,14 @@ protected:
 class KSpreadUndoDelete : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_rect );
+    KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_rect );
     virtual ~KSpreadUndoDelete();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadTable* table );
+    void createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadSheet* table );
 
     QRect m_selection;
     QCString m_data;
@@ -391,7 +391,7 @@ protected:
 class KSpreadUndoSetTableName : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoSetTableName( KSpreadDoc *doc, KSpreadTable *table, const QString& name );
+    KSpreadUndoSetTableName( KSpreadDoc *doc, KSpreadSheet *table, const QString& name );
     virtual ~KSpreadUndoSetTableName();
 
     virtual void undo();
@@ -406,14 +406,14 @@ protected:
 class KSpreadUndoResizeColRow : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoResizeColRow( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_selection );
+    KSpreadUndoResizeColRow( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_selection );
     virtual ~KSpreadUndoResizeColRow();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void createList( QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadTable* table );
+    void createList( QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadSheet* table );
 
     QRect m_rctRect;
     QValueList<columnSize> m_lstColumn;
@@ -426,14 +426,14 @@ protected:
 class KSpreadUndoChangeAreaTextCell : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoChangeAreaTextCell( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_selection );
+    KSpreadUndoChangeAreaTextCell( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_selection );
     virtual ~KSpreadUndoChangeAreaTextCell();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void createList( QValueList<textOfCell> &list, KSpreadTable* table );
+    void createList( QValueList<textOfCell> &list, KSpreadSheet* table );
 
     QRect m_rctRect;
     QValueList<textOfCell> m_lstTextCell;
@@ -444,7 +444,7 @@ protected:
 class KSpreadUndoSort : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoSort( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_selection);
+    KSpreadUndoSort( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_selection);
     virtual ~KSpreadUndoSort();
 
     virtual void undo();
@@ -452,7 +452,7 @@ public:
 
 protected:
     void copyAll( QValueList<layoutTextCell> & list, QValueList<layoutColumn> & listCol,
-                  QValueList<layoutRow> & listRow, KSpreadTable * table );
+                  QValueList<layoutRow> & listRow, KSpreadSheet * table );
 
     QRect m_rctRect;
     QValueList<layoutTextCell> m_lstLayouts;
@@ -468,7 +468,7 @@ protected:
 class KSpreadUndoMergedCell : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoMergedCell( KSpreadDoc *_doc, KSpreadTable *_table, int _column, int _row, int _extraX,int _extraY);
+    KSpreadUndoMergedCell( KSpreadDoc *_doc, KSpreadSheet *_table, int _column, int _row, int _extraX,int _extraY);
     virtual ~KSpreadUndoMergedCell();
 
     virtual void undo();
@@ -488,13 +488,13 @@ protected:
 class KSpreadUndoAutofill : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoAutofill( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_rect );
+    KSpreadUndoAutofill( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_rect );
     virtual ~KSpreadUndoAutofill();
 
     virtual void undo();
     virtual void redo();
 protected:
-    void createListCell( QCString &list, KSpreadTable* table );
+    void createListCell( QCString &list, KSpreadSheet* table );
     QRect m_selection;
     QCString m_data;
     QCString m_dataRedo;
@@ -504,7 +504,7 @@ protected:
 class KSpreadUndoInsertCellCol : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoInsertCellCol( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_rect );
+    KSpreadUndoInsertCellCol( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_rect );
     virtual ~KSpreadUndoInsertCellCol();
 
     virtual void undo();
@@ -518,7 +518,7 @@ protected:
 class KSpreadUndoInsertCellRow : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoInsertCellRow( KSpreadDoc *_doc, KSpreadTable *_table,const QRect &_rect );
+    KSpreadUndoInsertCellRow( KSpreadDoc *_doc, KSpreadSheet *_table,const QRect &_rect );
     virtual ~KSpreadUndoInsertCellRow();
 
     virtual void undo();
@@ -532,7 +532,7 @@ protected:
 class KSpreadUndoRemoveCellCol : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoRemoveCellCol( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_rect );
+    KSpreadUndoRemoveCellCol( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_rect );
     virtual ~KSpreadUndoRemoveCellCol();
 
     virtual void undo();
@@ -547,7 +547,7 @@ protected:
 class KSpreadUndoRemoveCellRow : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoRemoveCellRow( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_rect );
+    KSpreadUndoRemoveCellRow( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_rect );
     virtual ~KSpreadUndoRemoveCellRow();
 
     virtual void undo();
@@ -562,13 +562,13 @@ protected:
 class KSpreadUndoConditional : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoConditional( KSpreadDoc *_doc, KSpreadTable *_table, QRect const & _rect );
+    KSpreadUndoConditional( KSpreadDoc *_doc, KSpreadSheet *_table, QRect const & _rect );
     virtual ~KSpreadUndoConditional();
 
     virtual void undo();
     virtual void redo();
 protected:
-    void createListCell( QCString &list, KSpreadTable* table );
+    void createListCell( QCString &list, KSpreadSheet* table );
     QRect m_selection;
     QCString m_data;
     QCString m_dataRedo;
@@ -578,7 +578,7 @@ protected:
 class KSpreadUndoHideTable : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoHideTable( KSpreadDoc *_doc, KSpreadTable *_table );
+    KSpreadUndoHideTable( KSpreadDoc *_doc, KSpreadSheet *_table );
     virtual ~KSpreadUndoHideTable();
 
     virtual void undo();
@@ -592,7 +592,7 @@ protected:
 class KSpreadUndoShowTable : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoShowTable( KSpreadDoc *_doc, KSpreadTable *_table );
+    KSpreadUndoShowTable( KSpreadDoc *_doc, KSpreadSheet *_table );
     virtual ~KSpreadUndoShowTable();
 
     virtual void undo();
@@ -607,14 +607,14 @@ protected:
 class KSpreadUndoCellPaste : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadTable *_table,int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection,bool insert,int insertTo=0 );
+    KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadSheet *_table,int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection,bool insert,int insertTo=0 );
     virtual ~KSpreadUndoCellPaste();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadTable* table );
+    void createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadSheet* table );
 
     QRect m_selection;
     QCString m_data;
@@ -636,14 +636,14 @@ protected:
 class KSpreadUndoStyleCell : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoStyleCell( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_rect );
+    KSpreadUndoStyleCell( KSpreadDoc *_doc, KSpreadSheet *_table, const QRect &_rect );
     virtual ~KSpreadUndoStyleCell();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    void createListCell( QValueList<styleCell> &listCell, KSpreadTable* table );
+    void createListCell( QValueList<styleCell> &listCell, KSpreadSheet* table );
     QRect m_selection;
     QValueList<styleCell> m_lstStyleCell;
     QValueList<styleCell> m_lstRedoStyleCell;
@@ -653,31 +653,31 @@ protected:
 class KSpreadUndoAddTable : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoAddTable(KSpreadDoc *_doc, KSpreadTable* _table);
+    KSpreadUndoAddTable(KSpreadDoc *_doc, KSpreadSheet* _table);
     virtual ~KSpreadUndoAddTable();
 
     virtual void undo();
     virtual void redo();
 protected:
-    KSpreadTable* m_table;
+    KSpreadSheet* m_table;
 };
 
 class KSpreadUndoRemoveTable : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoRemoveTable(KSpreadDoc *_doc, KSpreadTable* _table);
+    KSpreadUndoRemoveTable(KSpreadDoc *_doc, KSpreadSheet* _table);
     virtual ~KSpreadUndoRemoveTable();
 
     virtual void undo();
     virtual void redo();
 protected:
-    KSpreadTable* m_table;
+    KSpreadSheet* m_table;
 };
 
 class KSpreadUndoInsertData : public KSpreadUndoChangeAreaTextCell
 {
  public:
-    KSpreadUndoInsertData( KSpreadDoc * _doc, KSpreadTable * _table, QRect & _selection );
+    KSpreadUndoInsertData( KSpreadDoc * _doc, KSpreadSheet * _table, QRect & _selection );
 };
 
 

@@ -30,7 +30,7 @@
  * available tables.
  *
  * Adding, removing or renaming of tabs does not automatically add, rename or
- * remove KSpreadTable objects. The tabbar is just a GUI element.
+ * remove KSpreadSheet objects. The tabbar is just a GUI element.
  *
  * But activating a tab emits a signal which in turn will show this table
  * in the associated KSpreadView.

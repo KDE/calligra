@@ -525,7 +525,7 @@ void KSpreadDatabaseDlg::back()
 
 void KSpreadDatabaseDlg::accept()
 {
-  KSpreadTable * table = m_pView->activeTable();
+  KSpreadSheet * table = m_pView->activeTable();
   int top;
   int left;
   int width  = -1;

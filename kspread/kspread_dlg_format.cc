@@ -303,7 +303,7 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
     {
 	if ( e.tagName() == "cell" )
         {
-	    KSpreadTable* table = m_view->activeTable();
+	    KSpreadSheet* table = m_view->activeTable();
 	    KSpreadLayout* cell = new KSpreadLayout( table );
 
 	    if ( !cell->load( e.namedItem("format").toElement(),Normal ) )

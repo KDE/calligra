@@ -167,7 +167,7 @@ void getCond( KSpreadDB::Condition & cond, QString text )
   }
 }
 
-int getFieldIndex( QString const & fieldname, QRect const & database, KSpreadTable * table )
+int getFieldIndex( QString const & fieldname, QRect const & database, KSpreadSheet * table )
 {
   int r   = database.right();
   int row = database.top();
@@ -188,7 +188,7 @@ int getFieldIndex( QString const & fieldname, QRect const & database, KSpreadTab
   return -1;
 }
 
-void parseConditions( QPtrList<KSpreadDB::ConditionList> * result, QRect const & database, QRect const & conditions, KSpreadTable * table )
+void parseConditions( QPtrList<KSpreadDB::ConditionList> * result, QRect const & database, QRect const & conditions, KSpreadSheet * table )
 {
   int cCols  = conditions.width();
   int right  = conditions.right();
@@ -351,7 +351,7 @@ bool conditionMatches( KSpreadDB::Condition cond, KSpreadCell * cell )
   return true;
 }
 
-QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadTable * table, int column, QPtrList<KSpreadDB::ConditionList> * conditions )
+QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadSheet * table, int column, QPtrList<KSpreadDB::ConditionList> * conditions )
 {
   kdDebug() << "***** getCellList *****" << endl;
 
@@ -423,7 +423,7 @@ bool kspreadfunc_dsum( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadRange db( extra[0]->stringValue(), map, table );
   KSpreadRange conditions( extra[2]->stringValue(), map, table );
@@ -473,7 +473,7 @@ bool kspreadfunc_daverage( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadRange db( extra[0]->stringValue(), map, table );
   KSpreadRange conditions( extra[2]->stringValue(), map, table );
@@ -527,7 +527,7 @@ bool kspreadfunc_dcount( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadRange db( extra[0]->stringValue(), map, table );
   KSpreadRange conditions( extra[2]->stringValue(), map, table );
@@ -579,7 +579,7 @@ bool kspreadfunc_dcounta( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadRange db( extra[0]->stringValue(), map, table );
   KSpreadRange conditions( extra[2]->stringValue(), map, table );
@@ -629,7 +629,7 @@ bool kspreadfunc_dget( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadRange db( extra[0]->stringValue(), map, table );
   KSpreadRange conditions( extra[2]->stringValue(), map, table );
@@ -688,7 +688,7 @@ bool kspreadfunc_dmax( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadRange db( extra[0]->stringValue(), map, table );
   KSpreadRange conditions( extra[2]->stringValue(), map, table );
@@ -744,7 +744,7 @@ bool kspreadfunc_dmin( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadRange db( extra[0]->stringValue(), map, table );
   KSpreadRange conditions( extra[2]->stringValue(), map, table );
@@ -800,7 +800,7 @@ bool kspreadfunc_dproduct( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadRange db( extra[0]->stringValue(), map, table );
   KSpreadRange conditions( extra[2]->stringValue(), map, table );
@@ -858,7 +858,7 @@ bool kspreadfunc_dstdev( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadRange db( extra[0]->stringValue(), map, table );
   KSpreadRange conditions( extra[2]->stringValue(), map, table );
@@ -932,7 +932,7 @@ bool kspreadfunc_dstdevp( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadRange db( extra[0]->stringValue(), map, table );
   KSpreadRange conditions( extra[2]->stringValue(), map, table );
@@ -1005,7 +1005,7 @@ bool kspreadfunc_dvar( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadRange db( extra[0]->stringValue(), map, table );
   KSpreadRange conditions( extra[2]->stringValue(), map, table );
@@ -1078,7 +1078,7 @@ bool kspreadfunc_dvarp( KSContext & context )
     return false;
 
   KSpreadMap *   map   = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadRange db( extra[0]->stringValue(), map, table );
   KSpreadRange conditions( extra[2]->stringValue(), map, table );

@@ -27,7 +27,7 @@
 #include <qrect.h>
 
 class KSpreadView;
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadSubtotal;
 
 class QLineEdit;
@@ -42,7 +42,7 @@ class KSpreadSubtotalDlg : public KDialogBase
   ~KSpreadSubtotalDlg();
 
   QRect const & selection() const { return m_selection; }
-  KSpreadTable * table() const { return m_pTable; }
+  KSpreadSheet * table() const { return m_pTable; }
 
  private slots:
   void slotOk();
@@ -51,7 +51,7 @@ class KSpreadSubtotalDlg : public KDialogBase
 
  private:
   KSpreadView  *    m_pView;
-  KSpreadTable *    m_pTable;
+  KSpreadSheet *    m_pTable;
   QRect             m_selection;
   KSpreadSubtotal * m_dialog;
 

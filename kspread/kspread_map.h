@@ -65,15 +65,15 @@ public:
    */
   void moveTable( const QString & _from, const QString & _to, bool _before = true );
 
-  KSpreadTable* findTable( const QString & _name );
-  KSpreadTable* nextTable( KSpreadTable* );
-  KSpreadTable* previousTable( KSpreadTable* );
+  KSpreadSheet* findTable( const QString & _name );
+  KSpreadSheet* nextTable( KSpreadSheet* );
+  KSpreadSheet* previousTable( KSpreadSheet* );
 
-  KSpreadTable* initialActiveTable()const { return m_initialActiveTable; }
+  KSpreadSheet* initialActiveTable()const { return m_initialActiveTable; }
   int initialMarkerColumn()const { return m_initialMarkerColumn; }
   int initialMarkerRow()const { return m_initialMarkerRow; }
 
-    void addTable( KSpreadTable *_table );
+    void addTable( KSpreadSheet *_table );
 
   /**
    * Use the @ref #nextTable function to get all the other tables.
@@ -81,7 +81,7 @@ public:
    *
    * @return a pointer to the first table in this map.
    */
-  KSpreadTable* firstTable() { return m_lstTables.first();  }
+  KSpreadSheet* firstTable() { return m_lstTables.first();  }
 
   /**
    * Use the @ref #previousTable function to get all the other tables.
@@ -89,7 +89,7 @@ public:
    *
    * @return a pointer to the last table in this map.
    */
-  KSpreadTable* lastTable() { return m_lstTables.last();  }
+  KSpreadSheet* lastTable() { return m_lstTables.last();  }
 
   /**
    * Call @ref #firstTable first. This will set the list pointer to
@@ -97,9 +97,9 @@ public:
    *
    * @return a pointer to the next table in this map.
    */
-  KSpreadTable* nextTable() { return m_lstTables.next();  }
+  KSpreadSheet* nextTable() { return m_lstTables.next();  }
 
-  QPtrList<KSpreadTable>& tableList() { return m_lstTables; }
+  QPtrList<KSpreadSheet>& tableList() { return m_lstTables; }
 
   /**
    * @return amount of tables in this map.
@@ -117,16 +117,16 @@ public:
   virtual DCOPObject* dcopObject();
 
   KSpreadDoc* doc()const;
-    void takeTable( KSpreadTable* table );
-    void insertTable( KSpreadTable* table );
+    void takeTable( KSpreadSheet* table );
+    void insertTable( KSpreadSheet* table );
 
 
 private:
   /**
    * List of all tables in this map. The list has autodelete turned on.
    */
-  QPtrList<KSpreadTable> m_lstTables;
-  QPtrList<KSpreadTable> m_lstDeletedTables;
+  QPtrList<KSpreadSheet> m_lstTables;
+  QPtrList<KSpreadSheet> m_lstDeletedTables;
 
   /**
    * Pointer to the part which holds this map.
@@ -136,7 +136,7 @@ private:
   /**
    * Set from the XML
    */
-  KSpreadTable * m_initialActiveTable;
+  KSpreadSheet * m_initialActiveTable;
   int m_initialMarkerColumn;
   int m_initialMarkerRow;
 

@@ -20,27 +20,27 @@
 #ifndef __kspread_depend_h__
 #define __kspread_depend_h__
 
-class KSpreadTable;
+class KSpreadSheet;
 
 class KSpreadDependency
 {
  public:
-  KSpreadDependency(int col, int row, KSpreadTable* table);
-  KSpreadDependency(int left, int top, int right, int bottom, KSpreadTable* table);
+  KSpreadDependency(int col, int row, KSpreadSheet* table);
+  KSpreadDependency(int left, int top, int right, int bottom, KSpreadSheet* table);
 
   int Left()const;
   int Right()const;
   int Top()const;
   int Bottom()const;
 
-  KSpreadTable* Table()const;
+  KSpreadSheet* Table()const;
 
  private:
   int m_left;
   int m_right;
   int m_top;
   int m_bottom;
-  KSpreadTable *m_table;
+  KSpreadSheet *m_table;
 
 
 };

@@ -157,7 +157,7 @@ bool KSpreadDoc::initDoc()
 
 	for( int i=0; i<_page; i++ )
 	{
-		KSpreadTable *t = createTable();
+		KSpreadSheet *t = createTable();
 		m_pMap->addTable( t );
 	}
 
@@ -266,7 +266,7 @@ QDomDocument KSpreadDoc::saveXML()
        for the whole map as the map paper layout. */
     if ( specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
     {
-        KSpreadTable* firstTable = m_pMap->firstTable();
+        KSpreadSheet* firstTable = m_pMap->firstTable();
 
         QDomElement paper = doc.createElement( "paper" );
         paper.setAttribute( "format", firstTable->paperFormatString() );
@@ -451,7 +451,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
           float bottom = borders.attribute( "bottom" ).toFloat();
 
           //apply to all tables
-          QPtrListIterator<KSpreadTable> it ( m_pMap->tableList() );
+          QPtrListIterator<KSpreadSheet> it ( m_pMap->tableList() );
           for( ; it.current(); ++it )
           {
             it.current()->setPaperLayout( left, top, right, bottom, format, orientation );
@@ -496,7 +496,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
       fcenter = fcenter.replace( QRegExp("<table>"), "<sheet>" );
       fright  = fright.replace(  QRegExp("<table>"), "<sheet>" );
 
-      QPtrListIterator<KSpreadTable> it ( m_pMap->tableList() );
+      QPtrListIterator<KSpreadSheet> it ( m_pMap->tableList() );
       for( ; it.current(); ++it )
       {
         it.current()->setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
@@ -530,12 +530,12 @@ void KSpreadDoc::setDefaultGridPen( const QPen& p )
     m_defaultGridPen = p;
 }
 
-KSpreadTable* KSpreadDoc::createTable()
+KSpreadSheet* KSpreadDoc::createTable()
 {
   QString s( i18n("Sheet%1") );
   s = s.arg( m_iTableId++ );
-  //KSpreadTable *t = new KSpreadTable( m_pMap, s.latin1() );
-  KSpreadTable *t = new KSpreadTable( m_pMap, s );
+  //KSpreadSheet *t = new KSpreadSheet( m_pMap, s.latin1() );
+  KSpreadSheet *t = new KSpreadSheet( m_pMap, s );
   t->setTableName( s, TRUE ); // huh? (Werner)
   return t;
 }
@@ -547,7 +547,7 @@ void KSpreadDoc::resetInterpreter()
 
   // Update the cell content
   // TODO
-  /* KSpreadTable *t;
+  /* KSpreadSheet *t;
   for ( t = m_pMap->firstTable(); t != 0L; t = m_pMap->nextTable() )
   t->initInterpreter(); */
 
@@ -556,7 +556,7 @@ void KSpreadDoc::resetInterpreter()
 }
 
 
-void KSpreadDoc::addTable( KSpreadTable *_table )
+void KSpreadDoc::addTable( KSpreadSheet *_table )
 {
   m_pMap->addTable( _table );
 
@@ -655,7 +655,7 @@ void KSpreadDoc::enableRedo( bool _b )
 void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
                                bool transparent, double zoomX, double zoomY )
 {
-    KSpreadTable* table = 0L;
+    KSpreadSheet* table = 0L;
     if ( !m_activeTable )
         table = m_pMap->firstTable();
     else
@@ -672,7 +672,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     painter.restore();
 }
 
-void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, KSpreadTable* table, bool drawCursor )
+void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, KSpreadSheet* table, bool drawCursor )
 {
     if ( isLoading() )
         return;
@@ -703,7 +703,7 @@ void KSpreadDoc::paintUpdates()
 {
   QPtrListIterator<KoView> it( views() );
   KSpreadView* view = NULL;
-  KSpreadTable* table = NULL;
+  KSpreadSheet* table = NULL;
 
   for (; it.current(); ++it )
   {
@@ -721,7 +721,7 @@ void KSpreadDoc::paintUpdates()
 void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
                                   KSpreadView* view,
                                   QValueList<QRect> cellRegions,
-                                  const KSpreadTable* table, bool drawCursor)
+                                  const KSpreadSheet* table, bool drawCursor)
 {
   //
   // Clip away children
@@ -768,7 +768,7 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
 
 void KSpreadDoc::PaintRegion(QPainter &painter, const QRect &viewRegion,
                              KSpreadView* view, const QRect &paintRegion,
-			     const KSpreadTable* table)
+			     const KSpreadSheet* table)
 {
   /* paint region has cell coordinates (col,row) while viewRegion has world
      coordinates.  paintRegion is the cells to update and viewRegion is the
@@ -809,7 +809,7 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const QRect &viewRegion,
 }
 
 void KSpreadDoc::PaintChooseRect(QPainter& painter, const QRect &viewRect,
-                                 const KSpreadTable* table,
+                                 const KSpreadSheet* table,
 				 const QRect &chooseRect)
 {
   int positions[4];
@@ -861,7 +861,7 @@ void KSpreadDoc::PaintChooseRect(QPainter& painter, const QRect &viewRect,
 }
 
 void KSpreadDoc::PaintNormalMarker(QPainter& painter, const QRect &viewRect,
-                                   const KSpreadTable* table,
+                                   const KSpreadSheet* table,
 				   const QRect &marker)
 {
   int positions[4];
@@ -923,7 +923,7 @@ void KSpreadDoc::PaintNormalMarker(QPainter& painter, const QRect &viewRect,
 
 
 void KSpreadDoc::RetrieveMarkerInfo(const QRect &marker,
-				    const KSpreadTable* table,
+				    const KSpreadSheet* table,
                                     const QRect &viewRect, int positions[],
                                     bool paintSides[])
 {
@@ -1144,7 +1144,7 @@ void KSpreadDoc::emitBeginOperation(bool waitCursor)
 
 void KSpreadDoc::emitEndOperation()
 {
-   KSpreadTable *t = NULL;
+   KSpreadSheet *t = NULL;
    CellBinding* b = NULL;
 
    m_bDelayCalculation = false;
@@ -1175,14 +1175,14 @@ void KSpreadDoc::updateBorderButton()
       static_cast<KSpreadView *>( it.current() )->updateBorderButton();
 }
 
-void KSpreadDoc::insertTable( KSpreadTable * table )
+void KSpreadDoc::insertTable( KSpreadSheet * table )
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
 	((KSpreadView*)it.current())->insertTable( table );
 }
 
-void KSpreadDoc::takeTable( KSpreadTable * table )
+void KSpreadDoc::takeTable( KSpreadSheet * table )
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
@@ -1205,12 +1205,12 @@ void KSpreadDoc::clearIgnoreWordAll( )
     m_spellListIgnoreAll.clear();
 }
 
-void KSpreadDoc::setDisplayTable(KSpreadTable *_table )
+void KSpreadDoc::setDisplayTable(KSpreadSheet *_table )
 {
     m_activeTable = _table;
 }
 
-KSpreadTable * KSpreadDoc::displayTable()const
+KSpreadSheet * KSpreadDoc::displayTable()const
 {
     return m_activeTable;
 }

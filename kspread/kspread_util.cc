@@ -451,7 +451,7 @@ QString util_cellName(int _col, int _row)
 	    .arg(_row);
 }
 
-QString util_cellName(KSpreadTable * table, int _col, int _row)
+QString util_cellName(KSpreadSheet * table, int _col, int _row)
 {
     return QString("%1!%2%3")
 	    .arg(table->tableName())
@@ -481,7 +481,7 @@ QString util_rangeName(const QRect &_area)
 	    .arg(util_cellName(_area.right(), _area.bottom()));
 }
 
-QString util_rangeName(KSpreadTable * _table, const QRect &_area)
+QString util_rangeName(KSpreadSheet * _table, const QRect &_area)
 {
     return QString("%1!%2")
 	    .arg(_table->tableName())
@@ -607,7 +607,7 @@ void
 }
 
 KSpreadPoint::KSpreadPoint(const QString & _str, KSpreadMap * _map,
-			   KSpreadTable * _table)
+			   KSpreadSheet * _table)
 {
     uint p = 0;
     int p2 = _str.find('!');
@@ -655,7 +655,7 @@ KSpreadRange::KSpreadRange(const QString & _str)
 }
 
 KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
-			   KSpreadTable * _table)
+			   KSpreadSheet * _table)
 {
     range.setLeft(-1);
     table = 0;
@@ -758,7 +758,7 @@ bool util_validateTableName(QString name)
 }
 
 
-KSpreadRangeIterator::KSpreadRangeIterator(QRect _range, KSpreadTable* _table)
+KSpreadRangeIterator::KSpreadRangeIterator(QRect _range, KSpreadSheet* _table)
 {
   range = _range;
   table = _table;

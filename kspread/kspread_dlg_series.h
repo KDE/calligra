@@ -24,7 +24,7 @@
 #include <kdialogbase.h>
 
 class KSpreadView;
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadCell;
 class QRadioButton;
 class QCheckBox;
@@ -37,7 +37,7 @@ public:
 
     KSpreadSeriesDlg(KSpreadView* parent, const char* name,const QPoint &_marker);
 
-    KSpreadTable* table;
+    KSpreadSheet* table;
 
 public slots:
     void slotOk();

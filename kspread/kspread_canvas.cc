@@ -94,7 +94,7 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
                 if ( !point.isValid() && validName)
                 {
                     QRect rect( m_pView->selection() );
-                    KSpreadTable * t = m_pView->activeTable();
+                    KSpreadSheet * t = m_pView->activeTable();
                     // set area name on current selection/cell
 
                     m_pView->doc()->addAreaName(rect, ltext.lower(),
@@ -405,7 +405,7 @@ void KSpreadCanvas::endChoose()
 
   updateChooseRect(QPoint(0,0), QPoint(0,0));
 
-  KSpreadTable *table=m_pView->doc()->map()->findTable(m_chooseStartTable->tableName());
+  KSpreadSheet *table=m_pView->doc()->map()->findTable(m_chooseStartTable->tableName());
   if(table)
         m_pView->setActiveTable(table);
 
@@ -434,12 +434,12 @@ QScrollBar* KSpreadCanvas::vertScrollBar() const
   return m_pView->vertScrollBar();
 }
 
-KSpreadTable* KSpreadCanvas::findTable( const QString& _name ) const
+KSpreadSheet* KSpreadCanvas::findTable( const QString& _name ) const
 {
   return m_pDoc->map()->findTable( _name );
 }
 
-KSpreadTable* KSpreadCanvas::activeTable() const
+KSpreadSheet* KSpreadCanvas::activeTable() const
 {
   return m_pView->activeTable();
 }
@@ -451,7 +451,7 @@ bool KSpreadCanvas::gotoLocation( const KSpreadRange & _range )
     KMessageBox::error( this, i18n( "Invalid cell reference" ) );
     return false;
   }
-  KSpreadTable * table = activeTable();
+  KSpreadSheet * table = activeTable();
   if ( _range.isTableKnown() )
     table = _range.table;
   if ( !table )
@@ -474,7 +474,7 @@ bool KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
     return false;
   }
 
-  KSpreadTable* table = activeTable();
+  KSpreadSheet* table = activeTable();
   if ( _cell.isTableKnown() )
     table = _cell.table;
   if ( !table )
@@ -487,7 +487,7 @@ bool KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
   return true;
 }
 
-void KSpreadCanvas::gotoLocation( QPoint location, KSpreadTable* table,
+void KSpreadCanvas::gotoLocation( QPoint location, KSpreadSheet* table,
                                   bool extendSelection)
 {
   if ( table && (table != activeTable() ))
@@ -539,7 +539,7 @@ void KSpreadCanvas::gotoLocation( QPoint location, KSpreadTable* table,
 
 void KSpreadCanvas::scrollToCell(QPoint location)
 {
-  KSpreadTable* table = activeTable();
+  KSpreadSheet* table = activeTable();
   if (table == NULL)
     return;
 
@@ -713,7 +713,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   }
 
   // Working on this table ?
-  KSpreadTable *table = activeTable();
+  KSpreadSheet *table = activeTable();
   if ( !table )
     return;
 
@@ -767,7 +767,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
     return;
   }
 
-  KSpreadTable *table = activeTable();
+  KSpreadSheet *table = activeTable();
   if ( !table )
     return;
 
@@ -841,7 +841,7 @@ void KSpreadCanvas::processClickSelectionHandle(QMouseEvent *event)
 
 void KSpreadCanvas::extendCurrentSelection(QPoint cell)
 {
-  KSpreadTable* table = activeTable();
+  KSpreadSheet* table = activeTable();
   QPoint chooseAnchor = selectionInfo()->getChooseAnchor();
   QRect newCellArea;
 //  KSpreadCell* destinationCell = table->cellAt(cell);
@@ -910,7 +910,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     return;
   }
 
-  KSpreadTable *table = activeTable();
+  KSpreadSheet *table = activeTable();
 
   if ( !table )
     return;
@@ -1009,7 +1009,7 @@ void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
   if ( !m_bMousePressed )
     return;
 
-  KSpreadTable *table = activeTable();
+  KSpreadSheet *table = activeTable();
   if ( !table )
     return;
 
@@ -1042,7 +1042,7 @@ void KSpreadCanvas::chooseMouseReleaseEvent( QMouseEvent* )
 
 void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
 {
-  KSpreadTable *table = activeTable();
+  KSpreadSheet *table = activeTable();
   if ( !table )
     return;
 
@@ -1086,7 +1086,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   if ( m_pDoc->isLoading() )
     return;
 
-  const KSpreadTable* table = activeTable();
+  const KSpreadSheet* table = activeTable();
   if ( !table )
     return;
 
@@ -1369,7 +1369,7 @@ void KSpreadCanvas::processEscapeKey(QKeyEvent * event)
 void KSpreadCanvas::processHomeKey(QKeyEvent* event)
 {
   bool makingSelection = event->state() & ShiftButton;
-  KSpreadTable* table = activeTable();
+  KSpreadSheet* table = activeTable();
 
   if ( m_pEditor )
   // We are in edit mode -> go beginning of line
@@ -1423,7 +1423,7 @@ void KSpreadCanvas::processHomeKey(QKeyEvent* event)
 void KSpreadCanvas::processEndKey( QKeyEvent *event )
 {
   bool makingSelection = event->state() & ShiftButton;
-  KSpreadTable* table = activeTable();
+  KSpreadSheet* table = activeTable();
   KSpreadCell* cell = NULL;
 
 
@@ -1546,7 +1546,7 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
 {
   bool makingSelection = event->state() & ShiftButton;
 
-  KSpreadTable* table = activeTable();
+  KSpreadSheet* table = activeTable();
   KSpreadCell* cell = NULL;
   KSpreadCell* lastCell;
   QPoint destination;
@@ -1755,7 +1755,7 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
 
 void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 {
-  KSpreadTable * table = activeTable();
+  KSpreadSheet * table = activeTable();
 
   if ( !table || formatKeyPress( _ev ))
     return;
@@ -1926,7 +1926,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
     return false;
 
   KSpreadCell  * cell = 0L;
-  KSpreadTable * table = activeTable();
+  KSpreadSheet * table = activeTable();
   QRect rect = selection();
 
   int right  = rect.right();
@@ -2420,7 +2420,7 @@ void KSpreadCanvas::createEditor()
 
 void KSpreadCanvas::createEditor( EditorType ed, bool addFocus)
 {
-  KSpreadTable *table = activeTable();
+  KSpreadSheet *table = activeTable();
   if ( !m_pEditor )
   {
     KSpreadCell* cell = activeTable()->cellAt( marker() );
@@ -2488,7 +2488,7 @@ void KSpreadCanvas::closeEditor()
 
 void KSpreadCanvas::updateChooseRect(const QPoint &newMarker, const QPoint &newAnchor)
 {
-  KSpreadTable* table = activeTable();
+  KSpreadSheet* table = activeTable();
 
   QPoint oldAnchor = selectionInfo()->getChooseAnchor();
   QPoint oldMarker = selectionInfo()->getChooseMarker();
@@ -2595,7 +2595,7 @@ void KSpreadCanvas::updateSelection( const QRect & oldSelection,
 
 void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
 {
-  const KSpreadTable *table = activeTable();
+  const KSpreadSheet *table = activeTable();
   if ( !table )
     return;
 
@@ -2889,7 +2889,7 @@ void KSpreadCanvas::equalizeRow()
       return;
   for(int i=selection.top()+1;i<=selection.bottom();i++)
   {
-      KSpreadTable *table = activeTable();
+      KSpreadSheet *table = activeTable();
       if ( !table )
           return;
       size=QMAX(m_pView->activeTable()->rowLayout(i)->height(this),size);
@@ -3015,7 +3015,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   if(!m_pView->koDocument()->isReadWrite())
     return;
 
-  const KSpreadTable *table = m_pCanvas->activeTable();
+  const KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
   // We were editing a cell -> save value and get out of editing mode
   if ( m_pCanvas->editor() )
@@ -3084,7 +3084,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
 
 void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
-    KSpreadTable *table = m_pCanvas->activeTable();
+    KSpreadSheet *table = m_pCanvas->activeTable();
     assert( table );
     if( !m_pView->koDocument()->isReadWrite() )
         return;
@@ -3202,7 +3202,7 @@ void KSpreadVBorder::adjustRow( int _row, bool makeUndo )
 
     if ( adjust != -1.0 )
     {
-        KSpreadTable * table = m_pCanvas->activeTable();
+        KSpreadSheet * table = m_pCanvas->activeTable();
         assert( table );
         if ( _row == -1 )
         {
@@ -3229,7 +3229,7 @@ void KSpreadVBorder::adjustRow( int _row, bool makeUndo )
 
 void KSpreadVBorder::equalizeRow( int resize )
 {
-  KSpreadTable *table = m_pCanvas->activeTable();
+  KSpreadSheet *table = m_pCanvas->activeTable();
   Q_ASSERT( table );
   QRect selection( m_pView->selection() );
   if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
@@ -3248,7 +3248,7 @@ void KSpreadVBorder::equalizeRow( int resize )
 
 void KSpreadVBorder::resizeRow( double resize, int nb, bool makeUndo )
 {
-  KSpreadTable *table = m_pCanvas->activeTable();
+  KSpreadSheet *table = m_pCanvas->activeTable();
   Q_ASSERT( table );
   if( nb == -1 ) // I don't know, where this is the case
   {
@@ -3302,7 +3302,7 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   if(!m_pView->koDocument()->isReadWrite())
     return;
 
-  KSpreadTable *table = m_pCanvas->activeTable();
+  KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
   // The button is pressed and we are resizing ?
   if ( m_bResize )
@@ -3376,7 +3376,7 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
 
 void KSpreadVBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
 {
-  KSpreadTable *table = m_pCanvas->activeTable();
+  KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
   if(!m_pView->koDocument()->isReadWrite())
     return;
@@ -3392,7 +3392,7 @@ void KSpreadVBorder::wheelEvent( QWheelEvent* _ev )
 
 void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
 {
-    KSpreadTable *table = m_pCanvas->activeTable();
+    KSpreadSheet *table = m_pCanvas->activeTable();
     assert( table );
 
     QPainter painter;
@@ -3444,7 +3444,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   //Scaling means, we have at the end a qRound function.
   //This means this ugly formula qRound(int(dblheight)*zoom) simulates this scaling.
 
-  KSpreadTable *table = m_pCanvas->activeTable();
+  KSpreadSheet *table = m_pCanvas->activeTable();
   if ( !table )
     return;
 
@@ -3558,7 +3558,7 @@ KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpread
 
 void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 {
-  const KSpreadTable *table = m_pCanvas->activeTable();
+  const KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
 
   if(!m_pView->koDocument()->isReadWrite())
@@ -3639,7 +3639,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 
 void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
-    KSpreadTable *table = m_pCanvas->activeTable();
+    KSpreadSheet *table = m_pCanvas->activeTable();
     assert( table );
     if(!m_pView->koDocument()->isReadWrite())
         return;
@@ -3758,7 +3758,7 @@ void KSpreadHBorder::adjustColumn( int _col, bool makeUndo )
 
   if (adjust != -1.0)
   {
-    KSpreadTable * table = m_pCanvas->activeTable();
+    KSpreadSheet * table = m_pCanvas->activeTable();
     assert( table );
 
     if ( _col == -1 )
@@ -3787,7 +3787,7 @@ void KSpreadHBorder::adjustColumn( int _col, bool makeUndo )
 
 void KSpreadHBorder::equalizeColumn( int resize )
 {
-  KSpreadTable *table = m_pCanvas->activeTable();
+  KSpreadSheet *table = m_pCanvas->activeTable();
   Q_ASSERT( table );
   QRect selection( m_pView->selection() );
   if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
@@ -3807,7 +3807,7 @@ void KSpreadHBorder::equalizeColumn( int resize )
 
 void KSpreadHBorder::resizeColumn( double resize, int nb, bool makeUndo )
 {
-  KSpreadTable *table = m_pCanvas->activeTable();
+  KSpreadSheet *table = m_pCanvas->activeTable();
   Q_ASSERT( table );
 
   if( nb == -1 )
@@ -3862,7 +3862,7 @@ void KSpreadHBorder::resizeColumn( double resize, int nb, bool makeUndo )
 
 void KSpreadHBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
 {
-  KSpreadTable *table = m_pCanvas->activeTable();
+  KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
   if(!m_pView->koDocument()->isReadWrite())
     return;
@@ -3871,7 +3871,7 @@ void KSpreadHBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
 
 void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
 {
-  KSpreadTable *table = m_pCanvas->activeTable();
+  KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
   if(!m_pView->koDocument()->isReadWrite())
     return;
@@ -3956,7 +3956,7 @@ void KSpreadHBorder::wheelEvent( QWheelEvent* _ev )
 
 void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
 {
-    KSpreadTable *table = m_pCanvas->activeTable();
+    KSpreadSheet *table = m_pCanvas->activeTable();
     assert( table );
 
     QPainter painter;
@@ -4006,7 +4006,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   //Scaling means, we have at the end a qRound function.
   //This means this ugly formula qRound(int(dblheight)*zoom) simulates this scaling.
 
-  KSpreadTable *table = m_pCanvas->activeTable();
+  KSpreadSheet *table = m_pCanvas->activeTable();
   if (!table )
     return;
 
@@ -4125,7 +4125,7 @@ KSpreadToolTip::KSpreadToolTip( KSpreadCanvas* canvas )
 
 void KSpreadToolTip::maybeTip( const QPoint& p )
 {
-    KSpreadTable *table = m_canvas->activeTable();
+    KSpreadSheet *table = m_canvas->activeTable();
     if ( !table )
         return;
 

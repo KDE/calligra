@@ -26,7 +26,7 @@
 
 class KSpreadCell;
 class KSpreadPoint;
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadView;
 
 class QFrame;
@@ -54,7 +54,7 @@ class KSpreadGoalSeekDlg : public KDialog
  public slots:
   void buttonOkClicked();
   void buttonCancelClicked();
-  void slotSelectionChanged( KSpreadTable * _table, const QRect & _selection );
+  void slotSelectionChanged( KSpreadSheet * _table, const QRect & _selection );
 
  protected:
   virtual void closeEvent ( QCloseEvent * );

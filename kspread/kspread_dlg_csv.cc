@@ -215,7 +215,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
     setCaption( i18n( "Text to Columns" ) );
     m_data = "";
     KSpreadCell  * cell;
-    KSpreadTable * table = m_pView->activeTable();
+    KSpreadSheet * table = m_pView->activeTable();
     int col = m_targetRect.left();
     for (int i = m_targetRect.top(); i <= m_targetRect.bottom(); ++i)
     {
@@ -579,7 +579,7 @@ void KSpreadCSVDialog::currentCellChanged(int, int col)
 
 void KSpreadCSVDialog::accept()
 {
-  KSpreadTable * table  = m_pView->activeTable();
+  KSpreadSheet * table  = m_pView->activeTable();
   QString csv_delimiter = QString::null;
   KSpreadCell  * cell;
 

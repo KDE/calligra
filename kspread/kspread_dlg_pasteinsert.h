@@ -24,7 +24,7 @@
 #include <kdialogbase.h>
 
 class KSpreadView;
-class KSpreadTable;
+class KSpreadSheet;
 class QCheckBox;
 class QRadioButton;
 

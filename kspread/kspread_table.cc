@@ -61,7 +61,7 @@
  *
  *****************************************************************************/
 
-CellBinding::CellBinding( KSpreadTable *_table, const QRect& _area )
+CellBinding::CellBinding( KSpreadSheet *_table, const QRect& _area )
 {
   m_rctDataArea = _area;
 
@@ -95,7 +95,7 @@ bool CellBinding::contains( int _x, int _y )
  *
  *****************************************************************************/
 
-ChartBinding::ChartBinding( KSpreadTable *_table, const QRect& _area, ChartChild *_child )
+ChartBinding::ChartBinding( KSpreadSheet *_table, const QRect& _area, ChartChild *_child )
     : CellBinding( _table, _area )
 {
   m_child = _child;
@@ -188,14 +188,14 @@ const char * KSpreadTextDrag::selectionMimeType()
 
 /*****************************************************************************
  *
- * KSpreadTable
+ * KSpreadSheet
  *
  *****************************************************************************/
 
-int KSpreadTable::s_id = 0L;
-QIntDict<KSpreadTable>* KSpreadTable::s_mapTables;
+int KSpreadSheet::s_id = 0L;
+QIntDict<KSpreadSheet>* KSpreadSheet::s_mapTables;
 
-KSpreadTable* KSpreadTable::find( int _id )
+KSpreadSheet* KSpreadSheet::find( int _id )
 {
   if ( !s_mapTables )
     return 0L;
@@ -203,11 +203,11 @@ KSpreadTable* KSpreadTable::find( int _id )
   return (*s_mapTables)[ _id ];
 }
 
-KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const char *_name )
+KSpreadSheet::KSpreadSheet( KSpreadMap *_map, const QString &tableName, const char *_name )
   : QObject( _map, _name )
 {
   if ( s_mapTables == 0L )
-    s_mapTables = new QIntDict<KSpreadTable>;
+    s_mapTables = new QIntDict<KSpreadSheet>;
 
   m_id = s_id++;
   s_mapTables->insert( m_id, this );
@@ -289,7 +289,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
 
 }
 
-bool KSpreadTable::isEmpty( unsigned long int x, unsigned long int y ) const
+bool KSpreadSheet::isEmpty( unsigned long int x, unsigned long int y ) const
 {
   const KSpreadCell* c = cellAt( x, y );
   if ( !c || c->isEmpty() )
@@ -298,7 +298,7 @@ bool KSpreadTable::isEmpty( unsigned long int x, unsigned long int y ) const
   return false;
 }
 
-const ColumnLayout* KSpreadTable::columnLayout( int _column ) const
+const ColumnLayout* KSpreadSheet::columnLayout( int _column ) const
 {
     const ColumnLayout *p = m_columns.lookup( _column );
     if ( p != 0L )
@@ -307,7 +307,7 @@ const ColumnLayout* KSpreadTable::columnLayout( int _column ) const
     return m_pDefaultColumnLayout;
 }
 
-ColumnLayout* KSpreadTable::columnLayout( int _column )
+ColumnLayout* KSpreadSheet::columnLayout( int _column )
 {
     ColumnLayout *p = m_columns.lookup( _column );
     if ( p != 0L )
@@ -316,7 +316,7 @@ ColumnLayout* KSpreadTable::columnLayout( int _column )
     return m_pDefaultColumnLayout;
 }
 
-const RowLayout* KSpreadTable::rowLayout( int _row ) const
+const RowLayout* KSpreadSheet::rowLayout( int _row ) const
 {
     const RowLayout *p = m_rows.lookup( _row );
     if ( p != 0L )
@@ -325,7 +325,7 @@ const RowLayout* KSpreadTable::rowLayout( int _row ) const
     return m_pDefaultRowLayout;
 }
 
-RowLayout* KSpreadTable::rowLayout( int _row )
+RowLayout* KSpreadSheet::rowLayout( int _row )
 {
     RowLayout *p = m_rows.lookup( _row );
     if ( p != 0L )
@@ -334,17 +334,17 @@ RowLayout* KSpreadTable::rowLayout( int _row )
     return m_pDefaultRowLayout;
 }
 
-void KSpreadTable::setDefaultHeight( double height )
+void KSpreadSheet::setDefaultHeight( double height )
 {
   m_pDefaultRowLayout->setHeight( height );
 }
 
-void KSpreadTable::setDefaultWidth( double width )
+void KSpreadSheet::setDefaultWidth( double width )
 {
   m_pDefaultColumnLayout->setWidth( width );
 }
 
-int KSpreadTable::leftColumn( int _xpos, double &_left,
+int KSpreadSheet::leftColumn( int _xpos, double &_left,
                               const KSpreadCanvas *_canvas ) const
 {
     if ( _canvas )
@@ -362,7 +362,7 @@ int KSpreadTable::leftColumn( int _xpos, double &_left,
         // Should never happen
         if ( col > KS_colMax - 1 )
 	{
-	    kdDebug(36001) << "KSpreadTable:leftColumn: invalid column (col: " << col + 1 << ")" << endl;
+	    kdDebug(36001) << "KSpreadSheet:leftColumn: invalid column (col: " << col + 1 << ")" << endl;
 	    return KS_colMax + 1; //Return out of range value, so other code can react on this
 	}
         _left += columnLayout( col )->dblWidth( _canvas );
@@ -373,7 +373,7 @@ int KSpreadTable::leftColumn( int _xpos, double &_left,
     return col;
 }
 
-int KSpreadTable::rightColumn( int _xpos, const KSpreadCanvas *_canvas ) const
+int KSpreadSheet::rightColumn( int _xpos, const KSpreadCanvas *_canvas ) const
 {
     if ( _canvas )
         _xpos += int( _canvas->xOffset() );
@@ -385,7 +385,7 @@ int KSpreadTable::rightColumn( int _xpos, const KSpreadCanvas *_canvas ) const
         // Should never happen
         if ( col > KS_colMax )
 	{
-	    kdDebug(36001) << "KSpreadTable:rightColumn: invalid column (col: " << col << ")" << endl;
+	    kdDebug(36001) << "KSpreadSheet:rightColumn: invalid column (col: " << col << ")" << endl;
             return KS_colMax + 1; //Return out of range value, so other code can react on this
 	}
         x += columnLayout( col )->dblWidth( _canvas );
@@ -395,7 +395,7 @@ int KSpreadTable::rightColumn( int _xpos, const KSpreadCanvas *_canvas ) const
     return col - 1;
 }
 
-int KSpreadTable::topRow( int _ypos, double & _top,
+int KSpreadSheet::topRow( int _ypos, double & _top,
                           const KSpreadCanvas *_canvas ) const
 {
     if ( _canvas )
@@ -413,7 +413,7 @@ int KSpreadTable::topRow( int _ypos, double & _top,
         // Should never happen
         if ( row > KS_rowMax - 1 )
         {
-            kdDebug(36001) << "KSpreadTable:topRow: invalid row (row: " << row + 1 << ")" << endl;
+            kdDebug(36001) << "KSpreadSheet:topRow: invalid row (row: " << row + 1 << ")" << endl;
             return KS_rowMax + 1; //Return out of range value, so other code can react on this
         }
         _top += rowLayout( row )->dblHeight( _canvas );
@@ -424,7 +424,7 @@ int KSpreadTable::topRow( int _ypos, double & _top,
     return row;
 }
 
-int KSpreadTable::bottomRow( int _ypos, const KSpreadCanvas *_canvas ) const
+int KSpreadSheet::bottomRow( int _ypos, const KSpreadCanvas *_canvas ) const
 {
     if ( _canvas )
         _ypos += int( _canvas->yOffset() );
@@ -436,7 +436,7 @@ int KSpreadTable::bottomRow( int _ypos, const KSpreadCanvas *_canvas ) const
         // Should never happen
         if ( row > KS_rowMax )
 	{
-	    kdDebug(36001) << "KSpreadTable:bottomRow: invalid row (row: " << row << ")" << endl;
+	    kdDebug(36001) << "KSpreadSheet:bottomRow: invalid row (row: " << row << ")" << endl;
             return KS_rowMax + 1; //Return out of range value, so other code can react on this
 	}
         y += rowLayout( row )->dblHeight( _canvas );
@@ -446,7 +446,7 @@ int KSpreadTable::bottomRow( int _ypos, const KSpreadCanvas *_canvas ) const
     return row - 1;
 }
 
-double KSpreadTable::dblColumnPos( int _col, const KSpreadCanvas *_canvas ) const
+double KSpreadSheet::dblColumnPos( int _col, const KSpreadCanvas *_canvas ) const
 {
     double x = 0.0;
     if ( _canvas )
@@ -456,7 +456,7 @@ double KSpreadTable::dblColumnPos( int _col, const KSpreadCanvas *_canvas ) cons
         // Should never happen
         if ( col > KS_colMax )
 	{
-	    kdDebug(36001) << "KSpreadTable:columnPos: invalid column (col: " << col << ")" << endl;
+	    kdDebug(36001) << "KSpreadSheet:columnPos: invalid column (col: " << col << ")" << endl;
             return x;
 	}
 
@@ -466,13 +466,13 @@ double KSpreadTable::dblColumnPos( int _col, const KSpreadCanvas *_canvas ) cons
     return x;
 }
 
-int KSpreadTable::columnPos( int _col, const KSpreadCanvas *_canvas ) const
+int KSpreadSheet::columnPos( int _col, const KSpreadCanvas *_canvas ) const
 {
     return (int)dblColumnPos( _col, _canvas );
 }
 
 
-double KSpreadTable::dblRowPos( int _row, const KSpreadCanvas *_canvas ) const
+double KSpreadSheet::dblRowPos( int _row, const KSpreadCanvas *_canvas ) const
 {
     double y = 0.0;
     if ( _canvas )
@@ -483,7 +483,7 @@ double KSpreadTable::dblRowPos( int _row, const KSpreadCanvas *_canvas ) const
         // Should never happen
         if ( row > KS_rowMax )
 	{
-	    kdDebug(36001) << "KSpreadTable:rowPos: invalid row (row: " << row << ")" << endl;
+	    kdDebug(36001) << "KSpreadSheet:rowPos: invalid row (row: " << row << ")" << endl;
             return y;
 	}
 
@@ -493,23 +493,23 @@ double KSpreadTable::dblRowPos( int _row, const KSpreadCanvas *_canvas ) const
     return y;
 }
 
-int KSpreadTable::rowPos( int _row, const KSpreadCanvas *_canvas ) const
+int KSpreadSheet::rowPos( int _row, const KSpreadCanvas *_canvas ) const
 {
     return (int)dblRowPos( _row, _canvas );
 }
 
 
-void KSpreadTable::adjustSizeMaxX ( double _x )
+void KSpreadSheet::adjustSizeMaxX ( double _x )
 {
     m_dSizeMaxX += _x;
 }
 
-void KSpreadTable::adjustSizeMaxY ( double _y )
+void KSpreadSheet::adjustSizeMaxY ( double _y )
 {
     m_dSizeMaxY += _y;
 }
 
-KSpreadCell* KSpreadTable::visibleCellAt( int _column, int _row, bool _scrollbar_update )
+KSpreadCell* KSpreadSheet::visibleCellAt( int _column, int _row, bool _scrollbar_update )
 {
   KSpreadCell* cell = cellAt( _column, _row, _scrollbar_update );
   if ( cell->obscuringCells().isEmpty() )
@@ -518,22 +518,22 @@ KSpreadCell* KSpreadTable::visibleCellAt( int _column, int _row, bool _scrollbar
       return cell->obscuringCells().last();
 }
 
-KSpreadCell* KSpreadTable::firstCell() const
+KSpreadCell* KSpreadSheet::firstCell() const
 {
     return m_cells.firstCell();
 }
 
-RowLayout* KSpreadTable::firstRow() const
+RowLayout* KSpreadSheet::firstRow() const
 {
     return m_rows.first();
 }
 
-ColumnLayout* KSpreadTable::firstCol() const
+ColumnLayout* KSpreadSheet::firstCol() const
 {
     return m_columns.first();
 }
 
-KSpreadCell* KSpreadTable::cellAt( int _column, int _row ) const
+KSpreadCell* KSpreadSheet::cellAt( int _column, int _row ) const
 {
     KSpreadCell *p = m_cells.lookup( _column, _row );
     if ( p != 0L )
@@ -542,14 +542,14 @@ KSpreadCell* KSpreadTable::cellAt( int _column, int _row ) const
     return m_pDefaultCell;
 }
 
-KSpreadCell* KSpreadTable::cellAt( int _column, int _row, bool _scrollbar_update )
+KSpreadCell* KSpreadSheet::cellAt( int _column, int _row, bool _scrollbar_update )
 {
   if ( _column > KS_colMax ) {
     _column = KS_colMax;
-    kdDebug (36001) << "KSpreadTable::cellAt: column range: (col: " << _column << ")" << endl;
+    kdDebug (36001) << "KSpreadSheet::cellAt: column range: (col: " << _column << ")" << endl;
   }
   if ( _row > KS_rowMax) {
-    kdDebug (36001) << "KSpreadTable::cellAt: row out of range: (row: " << _row << ")" << endl;
+    kdDebug (36001) << "KSpreadSheet::cellAt: row out of range: (row: " << _row << ")" << endl;
     _row = KS_rowMax;
   }
 
@@ -566,7 +566,7 @@ KSpreadCell* KSpreadTable::cellAt( int _column, int _row, bool _scrollbar_update
   return m_pDefaultCell;
 }
 
-ColumnLayout* KSpreadTable::nonDefaultColumnLayout( int _column, bool force_creation )
+ColumnLayout* KSpreadSheet::nonDefaultColumnLayout( int _column, bool force_creation )
 {
     ColumnLayout *p = m_columns.lookup( _column );
     if ( p != 0L || !force_creation )
@@ -581,7 +581,7 @@ ColumnLayout* KSpreadTable::nonDefaultColumnLayout( int _column, bool force_crea
     return p;
 }
 
-RowLayout* KSpreadTable::nonDefaultRowLayout( int _row, bool force_creation )
+RowLayout* KSpreadSheet::nonDefaultRowLayout( int _row, bool force_creation )
 {
     RowLayout *p = m_rows.lookup( _row );
     if ( p != 0L || !force_creation )
@@ -596,7 +596,7 @@ RowLayout* KSpreadTable::nonDefaultRowLayout( int _row, bool force_creation )
     return p;
 }
 
-KSpreadCell* KSpreadTable::nonDefaultCell( int _column, int _row,
+KSpreadCell* KSpreadSheet::nonDefaultCell( int _column, int _row,
                                            bool _scrollbar_update )
 {
   if ( _scrollbar_update && m_bScrollbarUpdates )
@@ -615,7 +615,7 @@ KSpreadCell* KSpreadTable::nonDefaultCell( int _column, int _row,
   return cell;
 }
 
-void KSpreadTable::setText( int _row, int _column, const QString& _text, bool updateDepends )
+void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool updateDepends )
 {
     KSpreadCell *cell = nonDefaultCell( _column, _row );
 
@@ -632,14 +632,14 @@ void KSpreadTable::setText( int _row, int _column, const QString& _text, bool up
       emit sig_updateView( this, QRect(_column,_row,_column,_row) );
 }
 
-void KSpreadTable::setLayoutDirtyFlag()
+void KSpreadSheet::setLayoutDirtyFlag()
 {
     KSpreadCell * c = m_cells.firstCell();
     for( ; c; c = c->nextCell() )
         c->setLayoutDirtyFlag();
 }
 
-void KSpreadTable::setCalcDirtyFlag()
+void KSpreadSheet::setCalcDirtyFlag()
 {
     KSpreadCell* c = m_cells.firstCell();
     for( ; c; c = c->nextCell() )
@@ -649,7 +649,7 @@ void KSpreadTable::setCalcDirtyFlag()
     }
 }
 
-void KSpreadTable::recalc()
+void KSpreadSheet::recalc()
 {
    // First set all cells as dirty
    setCalcDirtyFlag();
@@ -657,7 +657,7 @@ void KSpreadTable::recalc()
    this->calc();
 }
 
-void KSpreadTable::calc()
+void KSpreadSheet::calc()
 {
   KSpreadCell* c = m_cells.firstCell();
   for( ; c; c = c->nextCell() )
@@ -760,14 +760,14 @@ void KSpreadTable::calc()
  --> use emit_signal=false, create_if_default=false and type B
  */
 
-class KSpreadUndoAction* KSpreadTable::CellWorkerTypeA::createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r )
+class KSpreadUndoAction* KSpreadSheet::CellWorkerTypeA::createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r )
 {
     QString title = getUndoTitle();
     return new KSpreadUndoCellLayout( doc, table, r, title );
 }
 
 /*
-KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, CellWorker& worker )
+KSpreadSheet::SelectionType KSpreadSheet::workOnCells( const QPoint& _marker, CellWorker& worker )
 {
     // see what is selected; if nothing, take marker position
     bool selected = ( m_rctSelection.left() != 0 );
@@ -913,7 +913,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint& _marker, Ce
 
 */
 
-KSpreadTable::SelectionType KSpreadTable::workOnCells( KSpreadSelection* selectionInfo, CellWorker & worker )
+KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selectionInfo, CellWorker & worker )
 {
   // see what is selected; if nothing, take marker position
   QRect selection(selectionInfo->selection());
@@ -924,7 +924,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( KSpreadSelection* selecti
   int bottom = selection.bottom();
   int right  = selection.right();
 
-  KSpreadTable::SelectionType result;
+  KSpreadSheet::SelectionType result;
 
   m_pDoc->emitBeginOperation();
 //  m_pDoc->setCalculationDelay();
@@ -1071,7 +1071,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( KSpreadSelection* selecti
   return result;
 }
 
-struct SetSelectionFontWorker : public KSpreadTable::CellWorkerTypeA
+struct SetSelectionFontWorker : public KSpreadSheet::CellWorkerTypeA
 {
     const char *_font;
     int _size;
@@ -1141,7 +1141,7 @@ struct SetSelectionFontWorker : public KSpreadTable::CellWorkerTypeA
     }
 };
 
-void KSpreadTable::setSelectionFont( KSpreadSelection* selectionInfo,
+void KSpreadSheet::setSelectionFont( KSpreadSelection* selectionInfo,
                                      const char *_font, int _size,
                                      signed char _bold, signed char _italic,
                                      signed char _underline, signed char _strike)
@@ -1150,7 +1150,7 @@ void KSpreadTable::setSelectionFont( KSpreadSelection* selectionInfo,
     workOnCells( selectionInfo, w );
 }
 
-struct SetSelectionSizeWorker : public KSpreadTable::CellWorkerTypeA {
+struct SetSelectionSizeWorker : public KSpreadSheet::CellWorkerTypeA {
     int _size, size;
     SetSelectionSizeWorker( int __size, int size2 ) : _size( __size ), size( size2 ) { }
 
@@ -1180,7 +1180,7 @@ struct SetSelectionSizeWorker : public KSpreadTable::CellWorkerTypeA {
     }
 };
 
-void KSpreadTable::setSelectionSize( KSpreadSelection* selectionInfo, int _size )
+void KSpreadSheet::setSelectionSize( KSpreadSelection* selectionInfo, int _size )
 {
     int size;
     KSpreadCell* c;
@@ -1193,11 +1193,11 @@ void KSpreadTable::setSelectionSize( KSpreadSelection* selectionInfo, int _size 
 }
 
 
-struct SetSelectionUpperLowerWorker : public KSpreadTable::CellWorker {
+struct SetSelectionUpperLowerWorker : public KSpreadSheet::CellWorker {
     int _type;
-    SetSelectionUpperLowerWorker( int type ) : KSpreadTable::CellWorker( false ), _type( type ) { }
+    SetSelectionUpperLowerWorker( int type ) : KSpreadSheet::CellWorker( false ), _type( type ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
 	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
     }
     bool testCondition( KSpreadCell* c ) {
@@ -1215,7 +1215,7 @@ struct SetSelectionUpperLowerWorker : public KSpreadTable::CellWorker {
     }
 };
 
-void KSpreadTable::setSelectionUpperLower( KSpreadSelection* selectionInfo,
+void KSpreadSheet::setSelectionUpperLower( KSpreadSelection* selectionInfo,
                                            int _type )
 {
     SetSelectionUpperLowerWorker w( _type );
@@ -1223,10 +1223,10 @@ void KSpreadTable::setSelectionUpperLower( KSpreadSelection* selectionInfo,
 }
 
 
-struct SetSelectionFirstLetterUpperWorker : public KSpreadTable::CellWorker {
-    SetSelectionFirstLetterUpperWorker( ) : KSpreadTable::CellWorker( false ) { }
+struct SetSelectionFirstLetterUpperWorker : public KSpreadSheet::CellWorker {
+    SetSelectionFirstLetterUpperWorker( ) : KSpreadSheet::CellWorker( false ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
 	return   new KSpreadUndoChangeAreaTextCell( doc, table, r );
     }
     bool testCondition( KSpreadCell* c ) {
@@ -1243,18 +1243,18 @@ struct SetSelectionFirstLetterUpperWorker : public KSpreadTable::CellWorker {
     }
 };
 
-void KSpreadTable::setSelectionfirstLetterUpper( KSpreadSelection* selectionInfo)
+void KSpreadSheet::setSelectionfirstLetterUpper( KSpreadSelection* selectionInfo)
 {
     SetSelectionFirstLetterUpperWorker w;
     workOnCells( selectionInfo, w );
 }
 
 
-struct SetSelectionVerticalTextWorker : public KSpreadTable::CellWorker {
+struct SetSelectionVerticalTextWorker : public KSpreadSheet::CellWorker {
     bool _b;
-    SetSelectionVerticalTextWorker( bool b ) : KSpreadTable::CellWorker( ), _b( b ) { }
+    SetSelectionVerticalTextWorker( bool b ) : KSpreadSheet::CellWorker( ), _b( b ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
         QString title=i18n("Vertical Text");
 	return new KSpreadUndoCellLayout( doc, table, r, title );
     }
@@ -1270,7 +1270,7 @@ struct SetSelectionVerticalTextWorker : public KSpreadTable::CellWorker {
     }
 };
 
-void KSpreadTable::setSelectionVerticalText( KSpreadSelection* selectionInfo,
+void KSpreadSheet::setSelectionVerticalText( KSpreadSelection* selectionInfo,
                                              bool _b )
 {
     SetSelectionVerticalTextWorker w( _b );
@@ -1278,11 +1278,11 @@ void KSpreadTable::setSelectionVerticalText( KSpreadSelection* selectionInfo,
 }
 
 
-struct SetSelectionCommentWorker : public KSpreadTable::CellWorker {
+struct SetSelectionCommentWorker : public KSpreadSheet::CellWorker {
     QString _comment;
-    SetSelectionCommentWorker( QString comment ) : KSpreadTable::CellWorker( ), _comment( comment ) { }
+    SetSelectionCommentWorker( QString comment ) : KSpreadSheet::CellWorker( ), _comment( comment ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
         QString title=i18n("Add Comment");
 	return new KSpreadUndoCellLayout( doc, table, r, title );
     }
@@ -1296,7 +1296,7 @@ struct SetSelectionCommentWorker : public KSpreadTable::CellWorker {
     }
 };
 
-void KSpreadTable::setSelectionComment( KSpreadSelection* selectionInfo,
+void KSpreadSheet::setSelectionComment( KSpreadSelection* selectionInfo,
                                         const QString &_comment)
 {
     SetSelectionCommentWorker w( _comment );
@@ -1304,12 +1304,12 @@ void KSpreadTable::setSelectionComment( KSpreadSelection* selectionInfo,
 }
 
 
-struct SetSelectionAngleWorker : public KSpreadTable::CellWorkerTypeA {
+struct SetSelectionAngleWorker : public KSpreadSheet::CellWorkerTypeA {
     int _value;
     SetSelectionAngleWorker( int value ) : _value( value ) { }
 
     QString getUndoTitle() { return i18n("Change Angle"); }
-    KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ){
+    KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ){
         return new KSpreadUndoChangeAngle( doc, table, r );
     }
 
@@ -1341,17 +1341,17 @@ struct SetSelectionAngleWorker : public KSpreadTable::CellWorkerTypeA {
     }
 };
 
-void KSpreadTable::setSelectionAngle( KSpreadSelection* selectionInfo,
+void KSpreadSheet::setSelectionAngle( KSpreadSelection* selectionInfo,
                                       int _value )
 {
     SetSelectionAngleWorker w( _value );
     workOnCells( selectionInfo, w );
 }
 
-struct SetSelectionRemoveCommentWorker : public KSpreadTable::CellWorker {
-    SetSelectionRemoveCommentWorker( ) : KSpreadTable::CellWorker( false ) { }
+struct SetSelectionRemoveCommentWorker : public KSpreadSheet::CellWorker {
+    SetSelectionRemoveCommentWorker( ) : KSpreadSheet::CellWorker( false ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
         QString title=i18n("Remove Comment");
 	return new KSpreadUndoCellLayout( doc, table, r, title );
     }
@@ -1365,7 +1365,7 @@ struct SetSelectionRemoveCommentWorker : public KSpreadTable::CellWorker {
     }
 };
 
-void KSpreadTable::setSelectionRemoveComment( KSpreadSelection* selectionInfo )
+void KSpreadSheet::setSelectionRemoveComment( KSpreadSelection* selectionInfo )
 {
     if(areaIsEmpty(selectionInfo->selection(), Comment))
         return;
@@ -1374,7 +1374,7 @@ void KSpreadTable::setSelectionRemoveComment( KSpreadSelection* selectionInfo )
 }
 
 
-struct SetSelectionTextColorWorker : public KSpreadTable::CellWorkerTypeA {
+struct SetSelectionTextColorWorker : public KSpreadSheet::CellWorkerTypeA {
     const QColor& tb_Color;
     SetSelectionTextColorWorker( const QColor& _tb_Color ) : tb_Color( _tb_Color ) { }
 
@@ -1404,7 +1404,7 @@ struct SetSelectionTextColorWorker : public KSpreadTable::CellWorkerTypeA {
     }
 };
 
-void KSpreadTable::setSelectionTextColor( KSpreadSelection* selectionInfo,
+void KSpreadSheet::setSelectionTextColor( KSpreadSelection* selectionInfo,
                                           const QColor &tb_Color )
 {
     SetSelectionTextColorWorker w( tb_Color );
@@ -1412,7 +1412,7 @@ void KSpreadTable::setSelectionTextColor( KSpreadSelection* selectionInfo,
 }
 
 
-struct SetSelectionBgColorWorker : public KSpreadTable::CellWorkerTypeA {
+struct SetSelectionBgColorWorker : public KSpreadSheet::CellWorkerTypeA {
     const QColor& bg_Color;
     SetSelectionBgColorWorker( const QColor& _bg_Color ) : bg_Color( _bg_Color ) { }
 
@@ -1442,7 +1442,7 @@ struct SetSelectionBgColorWorker : public KSpreadTable::CellWorkerTypeA {
     }
 };
 
-void KSpreadTable::setSelectionbgColor( KSpreadSelection* selectionInfo,
+void KSpreadSheet::setSelectionbgColor( KSpreadSelection* selectionInfo,
                                         const QColor &bg_Color )
 {
     SetSelectionBgColorWorker w( bg_Color );
@@ -1450,11 +1450,11 @@ void KSpreadTable::setSelectionbgColor( KSpreadSelection* selectionInfo,
 }
 
 
-struct SetSelectionBorderColorWorker : public KSpreadTable::CellWorker {
+struct SetSelectionBorderColorWorker : public KSpreadSheet::CellWorker {
     const QColor& bd_Color;
-    SetSelectionBorderColorWorker( const QColor& _bd_Color ) : KSpreadTable::CellWorker( false ), bd_Color( _bd_Color ) { }
+    SetSelectionBorderColorWorker( const QColor& _bd_Color ) : KSpreadSheet::CellWorker( false ), bd_Color( _bd_Color ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
         QString title=i18n("Change Border Color");
 	return new KSpreadUndoCellLayout( doc, table, r, title );
     }
@@ -1481,7 +1481,7 @@ struct SetSelectionBorderColorWorker : public KSpreadTable::CellWorker {
     }
 };
 
-void KSpreadTable::setSelectionBorderColor( KSpreadSelection* selectionInfo,
+void KSpreadSheet::setSelectionBorderColor( KSpreadSelection* selectionInfo,
                                             const QColor &bd_Color )
 {
     SetSelectionBorderColorWorker w( bd_Color );
@@ -1489,7 +1489,7 @@ void KSpreadTable::setSelectionBorderColor( KSpreadSelection* selectionInfo,
 }
 
 
-void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, double step, Series mode, Series type)
+void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, double step, Series mode, Series type)
 {
   doc()->emitBeginOperation();
 
@@ -1745,7 +1745,7 @@ void KSpreadTable::setSeries( const QPoint &_marker, double start, double end, d
 }
 
 
-struct SetSelectionPercentWorker : public KSpreadTable::CellWorkerTypeA {
+struct SetSelectionPercentWorker : public KSpreadSheet::CellWorkerTypeA {
     bool b;
     SetSelectionPercentWorker( bool _b ) : b( _b ) { }
 
@@ -1781,14 +1781,14 @@ struct SetSelectionPercentWorker : public KSpreadTable::CellWorkerTypeA {
     }
 };
 
-void KSpreadTable::setSelectionPercent( KSpreadSelection* selectionInfo, bool b )
+void KSpreadSheet::setSelectionPercent( KSpreadSelection* selectionInfo, bool b )
 {
     SetSelectionPercentWorker w( b );
     workOnCells( selectionInfo, w );
 }
 
 
-void KSpreadTable::refreshRemoveAreaName(const QString & _areaName)
+void KSpreadSheet::refreshRemoveAreaName(const QString & _areaName)
 {
   KSpreadCell * c = m_cells.firstCell();
   QString tmp = "'" + _areaName + "'";
@@ -1805,7 +1805,7 @@ void KSpreadTable::refreshRemoveAreaName(const QString & _areaName)
   }
 }
 
-void KSpreadTable::refreshChangeAreaName(const QString & _areaName)
+void KSpreadSheet::refreshChangeAreaName(const QString & _areaName)
 {
   KSpreadCell * c = m_cells.firstCell();
   QString tmp = "'" + _areaName + "'";
@@ -1827,7 +1827,7 @@ void KSpreadTable::refreshChangeAreaName(const QString & _areaName)
   }
 }
 
-void KSpreadTable::changeCellTabName(QString old_name,QString new_name)
+void KSpreadSheet::changeCellTabName(QString old_name,QString new_name)
 {
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
@@ -1852,7 +1852,7 @@ void KSpreadTable::changeCellTabName(QString old_name,QString new_name)
     }
 }
 
-bool KSpreadTable::shiftRow( const QRect &rect,bool makeUndo )
+bool KSpreadSheet::shiftRow( const QRect &rect,bool makeUndo )
 {
     if ( !m_pDoc->undoBuffer()->isLocked()  &&makeUndo)
     {
@@ -1871,13 +1871,13 @@ bool KSpreadTable::shiftRow( const QRect &rect,bool makeUndo )
                 res=false;
         }
     }
-    QPtrListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
     {
         for(int i=rect.top();i<=rect.bottom();i++)
-            it.current()->changeNameCellRef( QPoint(rect.left(),i), false, KSpreadTable::ColumnInsert, name() ,(rect.right()-rect.left()+1));
+            it.current()->changeNameCellRef( QPoint(rect.left(),i), false, KSpreadSheet::ColumnInsert, name() ,(rect.right()-rect.left()+1));
     }
-    refreshChart(QPoint(rect.left(),rect.top()), false, KSpreadTable::ColumnInsert);
+    refreshChart(QPoint(rect.left(),rect.top()), false, KSpreadSheet::ColumnInsert);
     recalc();
     refreshMergedCell();
     emit sig_updateView( this );
@@ -1885,7 +1885,7 @@ bool KSpreadTable::shiftRow( const QRect &rect,bool makeUndo )
     return res;
 }
 
-bool KSpreadTable::shiftColumn( const QRect& rect,bool makeUndo )
+bool KSpreadSheet::shiftColumn( const QRect& rect,bool makeUndo )
 {
     if ( !m_pDoc->undoBuffer()->isLocked()  &&makeUndo)
     {
@@ -1905,13 +1905,13 @@ bool KSpreadTable::shiftColumn( const QRect& rect,bool makeUndo )
         }
     }
 
-    QPtrListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
     {
         for(int i=rect.left();i<=rect.right();i++)
-            it.current()->changeNameCellRef( QPoint(i,rect.top()), false, KSpreadTable::RowInsert, name() ,(rect.bottom()-rect.top()+1));
+            it.current()->changeNameCellRef( QPoint(i,rect.top()), false, KSpreadSheet::RowInsert, name() ,(rect.bottom()-rect.top()+1));
     }
-    refreshChart(/*marker*/QPoint(rect.left(),rect.top()), false, KSpreadTable::RowInsert);
+    refreshChart(/*marker*/QPoint(rect.left(),rect.top()), false, KSpreadSheet::RowInsert);
     recalc();
     refreshMergedCell();
     emit sig_updateView( this );
@@ -1919,7 +1919,7 @@ bool KSpreadTable::shiftColumn( const QRect& rect,bool makeUndo )
     return res;
 }
 
-void KSpreadTable::unshiftColumn( const QRect & rect,bool makeUndo )
+void KSpreadSheet::unshiftColumn( const QRect & rect,bool makeUndo )
 {
     if ( !m_pDoc->undoBuffer()->isLocked()  &&makeUndo)
     {
@@ -1935,18 +1935,18 @@ void KSpreadTable::unshiftColumn( const QRect & rect,bool makeUndo )
         for(int j=0;j<=(rect.bottom()-rect.top());j++)
                 m_cells.unshiftColumn( QPoint(i,rect.top()) );
 
-    QPtrListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
         for(int i=rect.left();i<=rect.right();i++)
-                it.current()->changeNameCellRef( QPoint(i,rect.top()), false, KSpreadTable::RowRemove, name(),(rect.bottom()-rect.top()+1) );
+                it.current()->changeNameCellRef( QPoint(i,rect.top()), false, KSpreadSheet::RowRemove, name(),(rect.bottom()-rect.top()+1) );
 
-    refreshChart( QPoint(rect.left(),rect.top()), false, KSpreadTable::RowRemove );
+    refreshChart( QPoint(rect.left(),rect.top()), false, KSpreadSheet::RowRemove );
     refreshMergedCell();
     recalc();
     emit sig_updateView( this );
 }
 
-void KSpreadTable::unshiftRow( const QRect & rect,bool makeUndo )
+void KSpreadSheet::unshiftRow( const QRect & rect,bool makeUndo )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() &&makeUndo)
     {
@@ -1961,18 +1961,18 @@ void KSpreadTable::unshiftRow( const QRect & rect,bool makeUndo )
         for(int j=0;j<=(rect.right()-rect.left());j++)
                 m_cells.unshiftRow( QPoint(rect.left(),i) );
 
-    QPtrListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
         for(int i=rect.top();i<=rect.bottom();i++)
-                it.current()->changeNameCellRef( QPoint(rect.left(),i), false, KSpreadTable::ColumnRemove, name(),(rect.right()-rect.left()+1) );
+                it.current()->changeNameCellRef( QPoint(rect.left(),i), false, KSpreadSheet::ColumnRemove, name(),(rect.right()-rect.left()+1) );
 
-    refreshChart(QPoint(rect.left(),rect.top()), false, KSpreadTable::ColumnRemove );
+    refreshChart(QPoint(rect.left(),rect.top()), false, KSpreadSheet::ColumnRemove );
     refreshMergedCell();
     recalc();
     emit sig_updateView( this );
 }
 
-bool KSpreadTable::insertColumn( int col, int nbCol, bool makeUndo )
+bool KSpreadSheet::insertColumn( int col, int nbCol, bool makeUndo )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
@@ -1996,9 +1996,9 @@ bool KSpreadTable::insertColumn( int col, int nbCol, bool makeUndo )
         m_dSizeMaxX += columnLayout( col+i )->dblWidth();
     }
 
-    QPtrListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert, name(), nbCol+1 );
+        it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadSheet::ColumnInsert, name(), nbCol+1 );
 
     //update print range, when it has been defined
     if ( m_printRange != QRect( QPoint(1, 1), QPoint(KS_colMax, KS_rowMax) ) )
@@ -2017,7 +2017,7 @@ bool KSpreadTable::insertColumn( int col, int nbCol, bool makeUndo )
         setPrintRange( QRect( QPoint( left, m_printRange.top() ), QPoint( right, m_printRange.bottom() ) ) );
     }
 
-    refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert );
+    refreshChart( QPoint( col, 1 ), true, KSpreadSheet::ColumnInsert );
     refreshMergedCell();
     recalc();
     emit sig_updateHBorder( this );
@@ -2026,7 +2026,7 @@ bool KSpreadTable::insertColumn( int col, int nbCol, bool makeUndo )
     return res;
 }
 
-bool KSpreadTable::insertRow( int row, int nbRow, bool makeUndo )
+bool KSpreadSheet::insertRow( int row, int nbRow, bool makeUndo )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
@@ -2050,9 +2050,9 @@ bool KSpreadTable::insertRow( int row, int nbRow, bool makeUndo )
         m_dSizeMaxY += rowLayout( row )->dblHeight();
     }
 
-    QPtrListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowInsert, name(), nbRow+1 );
+        it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadSheet::RowInsert, name(), nbRow+1 );
 
     //update print range, when it has been defined
     if ( m_printRange != QRect( QPoint(1, 1), QPoint(KS_colMax, KS_rowMax) ) )
@@ -2071,7 +2071,7 @@ bool KSpreadTable::insertRow( int row, int nbRow, bool makeUndo )
         setPrintRange( QRect( QPoint( m_printRange.left(), top ), QPoint( m_printRange.right(), bottom ) ) );
     }
 
-    refreshChart( QPoint( 1, row ), true, KSpreadTable::RowInsert );
+    refreshChart( QPoint( 1, row ), true, KSpreadSheet::RowInsert );
     refreshMergedCell();
     recalc();
     emit sig_updateVBorder( this );
@@ -2080,7 +2080,7 @@ bool KSpreadTable::insertRow( int row, int nbRow, bool makeUndo )
     return res;
 }
 
-void KSpreadTable::removeColumn( int col, int nbCol, bool makeUndo )
+void KSpreadSheet::removeColumn( int col, int nbCol, bool makeUndo )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
@@ -2100,9 +2100,9 @@ void KSpreadTable::removeColumn( int col, int nbCol, bool makeUndo )
         m_dSizeMaxX += columnLayout( KS_colMax )->dblWidth();
     }
 
-    QPtrListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove, name(), nbCol+1 );
+        it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadSheet::ColumnRemove, name(), nbCol+1 );
 
     //update print range, when it has been defined
     if ( m_printRange != QRect( QPoint(1, 1), QPoint(KS_colMax, KS_rowMax) ) )
@@ -2138,14 +2138,14 @@ void KSpreadTable::removeColumn( int col, int nbCol, bool makeUndo )
         setPrintRepeatColumns ( qMakePair( left, right ) );
     }
 
-    refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove );
+    refreshChart( QPoint( col, 1 ), true, KSpreadSheet::ColumnRemove );
     recalc();
     refreshMergedCell();
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
 }
 
-void KSpreadTable::removeRow( int row, int nbRow, bool makeUndo )
+void KSpreadSheet::removeRow( int row, int nbRow, bool makeUndo )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo )
     {
@@ -2165,9 +2165,9 @@ void KSpreadTable::removeRow( int row, int nbRow, bool makeUndo )
         m_dSizeMaxY += rowLayout( KS_rowMax )->dblHeight();
     }
 
-    QPtrListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowRemove, name(), nbRow+1 );
+        it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadSheet::RowRemove, name(), nbRow+1 );
 
     //update print range, when it has been defined
     if ( m_printRange != QRect( QPoint(1, 1), QPoint(KS_colMax, KS_rowMax) ) )
@@ -2203,14 +2203,14 @@ void KSpreadTable::removeRow( int row, int nbRow, bool makeUndo )
         setPrintRepeatRows( qMakePair( top, bottom ) );
     }
 
-    refreshChart( QPoint( 1, row ), true, KSpreadTable::RowRemove );
+    refreshChart( QPoint( 1, row ), true, KSpreadSheet::RowRemove );
     recalc();
     refreshMergedCell();
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
 }
 
-void KSpreadTable::hideRow( int _row, int nbRow, QValueList<int>_list )
+void KSpreadSheet::hideRow( int _row, int nbRow, QValueList<int>_list )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -2243,13 +2243,13 @@ void KSpreadTable::hideRow( int _row, int nbRow, QValueList<int>_list )
     emitHideRow();
 }
 
-void KSpreadTable::emitHideRow()
+void KSpreadSheet::emitHideRow()
 {
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
 }
 
-void KSpreadTable::showRow( int _row, int nbRow, QValueList<int>_list )
+void KSpreadSheet::showRow( int _row, int nbRow, QValueList<int>_list )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -2284,7 +2284,7 @@ void KSpreadTable::showRow( int _row, int nbRow, QValueList<int>_list )
 }
 
 
-void KSpreadTable::hideColumn( int _col, int nbCol, QValueList<int>_list )
+void KSpreadSheet::hideColumn( int _col, int nbCol, QValueList<int>_list )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -2317,14 +2317,14 @@ void KSpreadTable::hideColumn( int _col, int nbCol, QValueList<int>_list )
     emitHideColumn();
 }
 
-void KSpreadTable::emitHideColumn()
+void KSpreadSheet::emitHideColumn()
 {
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
 }
 
 
-void KSpreadTable::showColumn( int _col, int nbCol, QValueList<int>_list )
+void KSpreadSheet::showColumn( int _col, int nbCol, QValueList<int>_list )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -2359,7 +2359,7 @@ void KSpreadTable::showColumn( int _col, int nbCol, QValueList<int>_list )
 }
 
 
-void KSpreadTable::refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref)
+void KSpreadSheet::refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref)
 {
   KSpreadCell * c = m_cells.firstCell();
   for( ;c; c = c->nextCell() )
@@ -2406,7 +2406,7 @@ void KSpreadTable::refreshChart(const QPoint & pos, bool fullRowOrColumn, Change
 
 }
 
-void KSpreadTable::refreshMergedCell()
+void KSpreadSheet::refreshMergedCell()
 {
   KSpreadCell* c = m_cells.firstCell();
   for( ;c; c = c->nextCell() )
@@ -2417,7 +2417,7 @@ void KSpreadTable::refreshMergedCell()
 }
 
 
-void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref, QString tabname, int nbCol)
+void KSpreadSheet::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref, QString tabname, int nbCol)
 {
   bool correctDefaultTableName = (tabname == name()); // for cells without table ref (eg "A1")
   KSpreadCell* c = m_cells.firstCell();
@@ -2530,7 +2530,7 @@ void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
   }
 }
 
-void KSpreadTable::find( const QString &_find, long options, KSpreadCanvas *canvas )
+void KSpreadSheet::find( const QString &_find, long options, KSpreadCanvas *canvas )
 {
   KSpreadSelection* selectionInfo = canvas->view()->selectionInfo();
 
@@ -2592,7 +2592,7 @@ void KSpreadTable::find( const QString &_find, long options, KSpreadCanvas *canv
     }
 }
 
-void KSpreadTable::replace( const QString &_find, const QString &_replace, long options,
+void KSpreadSheet::replace( const QString &_find, const QString &_replace, long options,
                             KSpreadCanvas *canvas )
 {
   KSpreadSelection* selectionInfo = canvas->view()->selectionInfo();
@@ -2665,7 +2665,7 @@ void KSpreadTable::replace( const QString &_find, const QString &_replace, long 
     }
 }
 
-void KSpreadTable::borderBottom( KSpreadSelection* selectionInfo,
+void KSpreadSheet::borderBottom( KSpreadSelection* selectionInfo,
                                  const QColor &_color )
 {
   QRect selection( selectionInfo->selection() );
@@ -2726,7 +2726,7 @@ void KSpreadTable::borderBottom( KSpreadSelection* selectionInfo,
   }
 }
 
-void KSpreadTable::borderRight( KSpreadSelection* selectionInfo,
+void KSpreadSheet::borderRight( KSpreadSelection* selectionInfo,
                                 const QColor &_color )
 {
   QRect selection( selectionInfo->selection() );
@@ -2805,7 +2805,7 @@ void KSpreadTable::borderRight( KSpreadSelection* selectionInfo,
   }
 }
 
-void KSpreadTable::borderLeft( KSpreadSelection* selectionInfo,
+void KSpreadSheet::borderLeft( KSpreadSelection* selectionInfo,
                                const QColor &_color )
 {
   QString title = i18n("Change Border");
@@ -2876,7 +2876,7 @@ void KSpreadTable::borderLeft( KSpreadSelection* selectionInfo,
   }
 }
 
-void KSpreadTable::borderTop( KSpreadSelection* selectionInfo,
+void KSpreadSheet::borderTop( KSpreadSelection* selectionInfo,
                               const QColor &_color )
 {
   /* duplicate code in kspread_dlg_layout.cc  That needs fixed at some point
@@ -2934,7 +2934,7 @@ void KSpreadTable::borderTop( KSpreadSelection* selectionInfo,
   }
 }
 
-void KSpreadTable::borderOutline( KSpreadSelection* selectionInfo,
+void KSpreadSheet::borderOutline( KSpreadSelection* selectionInfo,
                                   const QColor &_color )
 {
   QRect selection( selectionInfo->selection() );
@@ -3039,7 +3039,7 @@ void KSpreadTable::borderOutline( KSpreadSelection* selectionInfo,
   }
 }
 
-struct SetSelectionBorderAllWorker : public KSpreadTable::CellWorkerTypeA {
+struct SetSelectionBorderAllWorker : public KSpreadSheet::CellWorkerTypeA {
     QPen pen;
     SetSelectionBorderAllWorker( const QColor& color ) : pen( color, 1, QPen::SolidLine ) { }
 
@@ -3086,14 +3086,14 @@ struct SetSelectionBorderAllWorker : public KSpreadTable::CellWorkerTypeA {
     }
 };
 
-void KSpreadTable::borderAll( KSpreadSelection* selectionInfo,
+void KSpreadSheet::borderAll( KSpreadSelection* selectionInfo,
                               const QColor &_color )
 {
     SetSelectionBorderAllWorker w( _color );
     workOnCells( selectionInfo, w );
 }
 
-struct SetSelectionBorderRemoveWorker : public KSpreadTable::CellWorkerTypeA {
+struct SetSelectionBorderRemoveWorker : public KSpreadSheet::CellWorkerTypeA {
     QPen pen;
     SetSelectionBorderRemoveWorker() : pen( Qt::black, 1, Qt::NoPen  ) { }
     QString getUndoTitle() { return i18n("Change Border"); }
@@ -3153,14 +3153,14 @@ struct SetSelectionBorderRemoveWorker : public KSpreadTable::CellWorkerTypeA {
 };
 
 
-void KSpreadTable::borderRemove( KSpreadSelection* selectionInfo )
+void KSpreadSheet::borderRemove( KSpreadSelection* selectionInfo )
 {
     SetSelectionBorderRemoveWorker w;
     workOnCells( selectionInfo, w );
 }
 
 
-void KSpreadTable::sortByRow( const QRect &area, int ref_row, SortingOrder mode )
+void KSpreadSheet::sortByRow( const QRect &area, int ref_row, SortingOrder mode )
 {
   KSpreadPoint point;
   point.table = this;
@@ -3172,7 +3172,7 @@ void KSpreadTable::sortByRow( const QRect &area, int ref_row, SortingOrder mode 
   sortByRow( area, ref_row, 0, 0, mode, mode, mode, 0, false, false, point );
 }
 
-void KSpreadTable::sortByColumn( const QRect &area, int ref_column, SortingOrder mode )
+void KSpreadSheet::sortByColumn( const QRect &area, int ref_column, SortingOrder mode )
 {
   KSpreadPoint point;
   point.table = this;
@@ -3185,7 +3185,7 @@ void KSpreadTable::sortByColumn( const QRect &area, int ref_column, SortingOrder
                 point );
 }
 
-void KSpreadTable::checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, int & ret)
+void KSpreadSheet::checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, int & ret)
 {
   if ( cell1->isEmpty() )
   {
@@ -3205,7 +3205,7 @@ void KSpreadTable::checkCellContent(KSpreadCell * cell1, KSpreadCell * cell2, in
   ret = 0;
 }
 
-void KSpreadTable::sortByRow( const QRect &area, int key1, int key2, int key3,
+void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
                               SortingOrder order1, SortingOrder order2,
                               SortingOrder order3,
                               QStringList const * firstKey, bool copyLayout,
@@ -3542,7 +3542,7 @@ void KSpreadTable::sortByRow( const QRect &area, int key1, int key2, int key3,
   doc()->emitEndOperation();
 }
 
-void KSpreadTable::sortByColumn( const QRect &area, int key1, int key2, int key3,
+void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3,
                                  SortingOrder order1, SortingOrder order2,
                                  SortingOrder order3,
                                  QStringList const * firstKey, bool copyLayout,
@@ -3894,7 +3894,7 @@ void KSpreadTable::sortByColumn( const QRect &area, int key1, int key2, int key3
 }
 
 // from - to - copyLayout
-void KSpreadTable::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
+void KSpreadSheet::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
 {
   KSpreadCell * sourceCell = cellAt( x1, y1 );
   KSpreadCell * targetCell = cellAt( x2, y2 );
@@ -3958,7 +3958,7 @@ void KSpreadTable::copyCells( int x1, int y1, int x2, int y2, bool cpLayout )
   }
 }
 
-void KSpreadTable::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
+void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
 {
   KSpreadCell * ref1 = cellAt( x1, y1 );
   KSpreadCell * ref2 = cellAt( x2, y2 );
@@ -4139,7 +4139,7 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
   }
 }
 
-void KSpreadTable::refreshPreference()
+void KSpreadSheet::refreshPreference()
 {
   if(getAutoCalc())
         recalc();
@@ -4149,7 +4149,7 @@ void KSpreadTable::refreshPreference()
 }
 
 
-bool KSpreadTable::areaIsEmpty(const QRect &area, TestType _type)
+bool KSpreadSheet::areaIsEmpty(const QRect &area, TestType _type)
 {
     // Complete rows selected ?
     if ( util_isRowSelected(area) )
@@ -4258,13 +4258,13 @@ bool KSpreadTable::areaIsEmpty(const QRect &area, TestType _type)
     return true;
 }
 
-struct SetSelectionMultiRowWorker : public KSpreadTable::CellWorker
+struct SetSelectionMultiRowWorker : public KSpreadSheet::CellWorker
 {
   bool enable;
   SetSelectionMultiRowWorker( bool _enable )
-    : KSpreadTable::CellWorker( ), enable( _enable ) { }
+    : KSpreadSheet::CellWorker( ), enable( _enable ) { }
 
-  class KSpreadUndoAction* createUndoAction( KSpreadDoc * doc, KSpreadTable * table, QRect & r )
+  class KSpreadUndoAction* createUndoAction( KSpreadDoc * doc, KSpreadSheet * table, QRect & r )
   {
     QString title = i18n("Multirow");
     return new KSpreadUndoCellLayout( doc, table, r, title );
@@ -4285,7 +4285,7 @@ struct SetSelectionMultiRowWorker : public KSpreadTable::CellWorker
   }
 };
 
-void KSpreadTable::setSelectionMultiRow( KSpreadSelection* selectionInfo,
+void KSpreadSheet::setSelectionMultiRow( KSpreadSelection* selectionInfo,
                                          bool enable )
 {
     SetSelectionMultiRowWorker w( enable );
@@ -4293,7 +4293,7 @@ void KSpreadTable::setSelectionMultiRow( KSpreadSelection* selectionInfo,
 }
 
 
-struct SetSelectionAlignWorker : public KSpreadTable::CellWorkerTypeA {
+struct SetSelectionAlignWorker : public KSpreadSheet::CellWorkerTypeA {
     KSpreadLayout::Align _align;
     SetSelectionAlignWorker( KSpreadLayout::Align align ) : _align( align ) { }
     QString getUndoTitle() { return i18n("Change Horizontal Alignment"); }
@@ -4323,7 +4323,7 @@ struct SetSelectionAlignWorker : public KSpreadTable::CellWorkerTypeA {
 };
 
 
-void KSpreadTable::setSelectionAlign( KSpreadSelection* selectionInfo,
+void KSpreadSheet::setSelectionAlign( KSpreadSelection* selectionInfo,
                                       KSpreadLayout::Align _align )
 {
     SetSelectionAlignWorker w( _align );
@@ -4331,7 +4331,7 @@ void KSpreadTable::setSelectionAlign( KSpreadSelection* selectionInfo,
 }
 
 
-struct SetSelectionAlignYWorker : public KSpreadTable::CellWorkerTypeA {
+struct SetSelectionAlignYWorker : public KSpreadSheet::CellWorkerTypeA {
     KSpreadLayout::AlignY _alignY;
     SetSelectionAlignYWorker( KSpreadLayout::AlignY alignY ) : _alignY( alignY ) { }
     QString getUndoTitle() { return i18n("Change Vertical Alignment"); }
@@ -4361,7 +4361,7 @@ struct SetSelectionAlignYWorker : public KSpreadTable::CellWorkerTypeA {
 };
 
 
-void KSpreadTable::setSelectionAlignY( KSpreadSelection* selectionInfo,
+void KSpreadSheet::setSelectionAlignY( KSpreadSelection* selectionInfo,
                                        KSpreadLayout::AlignY _alignY )
 {
     SetSelectionAlignYWorker w( _alignY );
@@ -4369,11 +4369,11 @@ void KSpreadTable::setSelectionAlignY( KSpreadSelection* selectionInfo,
 }
 
 
-struct SetSelectionPrecisionWorker : public KSpreadTable::CellWorker {
+struct SetSelectionPrecisionWorker : public KSpreadSheet::CellWorker {
     int _delta;
-    SetSelectionPrecisionWorker( int delta ) : KSpreadTable::CellWorker( ), _delta( delta ) { }
+    SetSelectionPrecisionWorker( int delta ) : KSpreadSheet::CellWorker( ), _delta( delta ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
         QString title=i18n("Change Precision");
 	return new KSpreadUndoCellLayout( doc, table, r, title );
     }
@@ -4390,7 +4390,7 @@ struct SetSelectionPrecisionWorker : public KSpreadTable::CellWorker {
     }
 };
 
-void KSpreadTable::setSelectionPrecision( KSpreadSelection* selectionInfo,
+void KSpreadSheet::setSelectionPrecision( KSpreadSelection* selectionInfo,
                                           int _delta )
 {
     SetSelectionPrecisionWorker w( _delta );
@@ -4398,7 +4398,7 @@ void KSpreadTable::setSelectionPrecision( KSpreadSelection* selectionInfo,
 }
 
 
-struct SetSelectionMoneyFormatWorker : public KSpreadTable::CellWorkerTypeA {
+struct SetSelectionMoneyFormatWorker : public KSpreadSheet::CellWorkerTypeA {
     bool b;
     KSpreadDoc *m_pDoc;
     SetSelectionMoneyFormatWorker( bool _b,KSpreadDoc* _doc ) : b( _b ), m_pDoc(_doc) { }
@@ -4441,7 +4441,7 @@ struct SetSelectionMoneyFormatWorker : public KSpreadTable::CellWorkerTypeA {
 };
 
 
-void KSpreadTable::setSelectionMoneyFormat( KSpreadSelection* selectionInfo,
+void KSpreadSheet::setSelectionMoneyFormat( KSpreadSelection* selectionInfo,
                                             bool b )
 {
     SetSelectionMoneyFormatWorker w( b,doc() );
@@ -4449,7 +4449,7 @@ void KSpreadTable::setSelectionMoneyFormat( KSpreadSelection* selectionInfo,
 }
 
 
-struct IncreaseIndentWorker : public KSpreadTable::CellWorkerTypeA {
+struct IncreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
     int tmpIndent, valIndent;
     IncreaseIndentWorker( int _tmpIndent, int _valIndent ) : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
     QString getUndoTitle() { return i18n("Increase Indent"); }
@@ -4491,7 +4491,7 @@ struct IncreaseIndentWorker : public KSpreadTable::CellWorkerTypeA {
 };
 
 
-void KSpreadTable::increaseIndent(KSpreadSelection* selectionInfo)
+void KSpreadSheet::increaseIndent(KSpreadSelection* selectionInfo)
 {
     int valIndent = doc()->getIndentValue();
     QPoint marker(selectionInfo->marker());
@@ -4503,7 +4503,7 @@ void KSpreadTable::increaseIndent(KSpreadSelection* selectionInfo)
 }
 
 
-struct DecreaseIndentWorker : public KSpreadTable::CellWorkerTypeA {
+struct DecreaseIndentWorker : public KSpreadSheet::CellWorkerTypeA {
     int tmpIndent, valIndent;
     DecreaseIndentWorker( int _tmpIndent, int _valIndent ) : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
     QString getUndoTitle() { return i18n("Decrease Indent"); }
@@ -4535,7 +4535,7 @@ struct DecreaseIndentWorker : public KSpreadTable::CellWorkerTypeA {
 };
 
 
-void KSpreadTable::decreaseIndent( KSpreadSelection* selectionInfo )
+void KSpreadSheet::decreaseIndent( KSpreadSelection* selectionInfo )
 {
     int valIndent = doc()->getIndentValue();
     QPoint marker(selectionInfo->marker());
@@ -4547,7 +4547,7 @@ void KSpreadTable::decreaseIndent( KSpreadSelection* selectionInfo )
 }
 
 
-int KSpreadTable::adjustColumnHelper( KSpreadCell * c, int _col, int _row )
+int KSpreadSheet::adjustColumnHelper( KSpreadCell * c, int _col, int _row )
 {
     int long_max = 0;
     c->conditionAlign( painter(), _col, _row );
@@ -4572,7 +4572,7 @@ int KSpreadTable::adjustColumnHelper( KSpreadCell * c, int _col, int _row )
     return long_max;
 }
 
-int KSpreadTable::adjustColumn( KSpreadSelection* selectionInfo, int _col )
+int KSpreadSheet::adjustColumn( KSpreadSelection* selectionInfo, int _col )
 {
   QRect selection(selectionInfo->selection());
   int long_max = 0;
@@ -4635,7 +4635,7 @@ int KSpreadTable::adjustColumn( KSpreadSelection* selectionInfo, int _col )
     return ( long_max + 4 );
 }
 
-int KSpreadTable::adjustRow( KSpreadSelection* selectionInfo, int _row )
+int KSpreadSheet::adjustRow( KSpreadSelection* selectionInfo, int _row )
 {
   QRect selection(selectionInfo->selection());
   int long_max = 0;
@@ -4709,10 +4709,10 @@ int KSpreadTable::adjustRow( KSpreadSelection* selectionInfo, int _row )
     return ( long_max + 4 );
 }
 
-struct ClearTextSelectionWorker : public KSpreadTable::CellWorker {
-    ClearTextSelectionWorker( ) : KSpreadTable::CellWorker( ) { }
+struct ClearTextSelectionWorker : public KSpreadSheet::CellWorker {
+    ClearTextSelectionWorker( ) : KSpreadSheet::CellWorker( ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
 	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
     }
     bool testCondition( KSpreadCell* cell ) {
@@ -4723,7 +4723,7 @@ struct ClearTextSelectionWorker : public KSpreadTable::CellWorker {
     }
 };
 
-void KSpreadTable::clearTextSelection( KSpreadSelection* selectionInfo )
+void KSpreadSheet::clearTextSelection( KSpreadSelection* selectionInfo )
 {
   if(areaIsEmpty(selectionInfo->selection()))
     return;
@@ -4732,10 +4732,10 @@ void KSpreadTable::clearTextSelection( KSpreadSelection* selectionInfo )
 }
 
 
-struct ClearValiditySelectionWorker : public KSpreadTable::CellWorker {
-    ClearValiditySelectionWorker( ) : KSpreadTable::CellWorker( ) { }
+struct ClearValiditySelectionWorker : public KSpreadSheet::CellWorker {
+    ClearValiditySelectionWorker( ) : KSpreadSheet::CellWorker( ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
 	return new KSpreadUndoConditional( doc, table, r );
     }
     bool testCondition( KSpreadCell* cell ) {
@@ -4746,7 +4746,7 @@ struct ClearValiditySelectionWorker : public KSpreadTable::CellWorker {
     }
 };
 
-void KSpreadTable::clearValiditySelection( KSpreadSelection* selectionInfo )
+void KSpreadSheet::clearValiditySelection( KSpreadSelection* selectionInfo )
 {
     if(areaIsEmpty(selectionInfo->selection(), Validity))
         return;
@@ -4756,12 +4756,12 @@ void KSpreadTable::clearValiditySelection( KSpreadSelection* selectionInfo )
 }
 
 
-struct ClearConditionalSelectionWorker : public KSpreadTable::CellWorker
+struct ClearConditionalSelectionWorker : public KSpreadSheet::CellWorker
 {
-  ClearConditionalSelectionWorker( ) : KSpreadTable::CellWorker( ) { }
+  ClearConditionalSelectionWorker( ) : KSpreadSheet::CellWorker( ) { }
 
   class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc,
-					     KSpreadTable* table,
+					     KSpreadSheet* table,
 					     QRect& r )
   {
     return new KSpreadUndoConditional( doc, table, r );
@@ -4777,17 +4777,17 @@ struct ClearConditionalSelectionWorker : public KSpreadTable::CellWorker
   }
 };
 
-void KSpreadTable::clearConditionalSelection( KSpreadSelection* selectionInfo )
+void KSpreadSheet::clearConditionalSelection( KSpreadSelection* selectionInfo )
 {
   ClearConditionalSelectionWorker w;
   workOnCells( selectionInfo, w );
 }
 
 
-struct DefaultSelectionWorker : public KSpreadTable::CellWorker {
-    DefaultSelectionWorker( ) : KSpreadTable::CellWorker( true, false, true ) { }
+struct DefaultSelectionWorker : public KSpreadSheet::CellWorker {
+    DefaultSelectionWorker( ) : KSpreadSheet::CellWorker( true, false, true ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
         QString title=i18n("Default Parameters");
 	return new KSpreadUndoCellLayout( doc, table, r, title );
     }
@@ -4799,7 +4799,7 @@ struct DefaultSelectionWorker : public KSpreadTable::CellWorker {
     }
 };
 
-void KSpreadTable::defaultSelection( KSpreadSelection* selectionInfo )
+void KSpreadSheet::defaultSelection( KSpreadSelection* selectionInfo )
 {
   QRect selection(selectionInfo->selection());
   DefaultSelectionWorker w;
@@ -4828,14 +4828,14 @@ void KSpreadTable::defaultSelection( KSpreadSelection* selectionInfo )
 }
 
 
-struct SetConditionalWorker : public KSpreadTable::CellWorker
+struct SetConditionalWorker : public KSpreadSheet::CellWorker
 {
   QValueList<KSpreadConditional> conditionList;
   SetConditionalWorker( QValueList<KSpreadConditional> _tmp ) :
-    KSpreadTable::CellWorker( ), conditionList( _tmp ) { }
+    KSpreadSheet::CellWorker( ), conditionList( _tmp ) { }
 
   class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc,
-					     KSpreadTable* table, QRect& r )
+					     KSpreadSheet* table, QRect& r )
   {
     return new KSpreadUndoConditional( doc, table, r );
   }
@@ -4855,7 +4855,7 @@ struct SetConditionalWorker : public KSpreadTable::CellWorker
   }
 };
 
-void KSpreadTable::setConditional( KSpreadSelection* selectionInfo,
+void KSpreadSheet::setConditional( KSpreadSelection* selectionInfo,
                                    QValueList<KSpreadConditional> const & newConditions)
 {
   QRect selection(selectionInfo->selection());
@@ -4886,11 +4886,11 @@ void KSpreadTable::setConditional( KSpreadSelection* selectionInfo,
 }
 
 
-struct SetValidityWorker : public KSpreadTable::CellWorker {
+struct SetValidityWorker : public KSpreadSheet::CellWorker {
     KSpreadValidity tmp;
-    SetValidityWorker( KSpreadValidity _tmp ) : KSpreadTable::CellWorker( ), tmp( _tmp ) { }
+    SetValidityWorker( KSpreadValidity _tmp ) : KSpreadSheet::CellWorker( ), tmp( _tmp ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
 	return new KSpreadUndoConditional( doc, table, r );
     }
     bool testCondition( KSpreadCell* ) {
@@ -4921,7 +4921,7 @@ struct SetValidityWorker : public KSpreadTable::CellWorker {
     }
 };
 
-void KSpreadTable::setValidity(KSpreadSelection* selectionInfo,
+void KSpreadSheet::setValidity(KSpreadSelection* selectionInfo,
                                KSpreadValidity tmp )
 {
     SetValidityWorker w( tmp );
@@ -4929,11 +4929,11 @@ void KSpreadTable::setValidity(KSpreadSelection* selectionInfo,
 }
 
 
-struct GetWordSpellingWorker : public KSpreadTable::CellWorker {
+struct GetWordSpellingWorker : public KSpreadSheet::CellWorker {
     QString& listWord;
-    GetWordSpellingWorker( QString& _listWord ) : KSpreadTable::CellWorker( false, false, true ), listWord( _listWord ) { }
+    GetWordSpellingWorker( QString& _listWord ) : KSpreadSheet::CellWorker( false, false, true ), listWord( _listWord ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc*, KSpreadTable*, QRect& ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc*, KSpreadSheet*, QRect& ) {
 	return 0L;
     }
     bool testCondition( KSpreadCell* ) {
@@ -4951,7 +4951,7 @@ struct GetWordSpellingWorker : public KSpreadTable::CellWorker {
     }
 };
 
-QString KSpreadTable::getWordSpelling(KSpreadSelection* selectionInfo )
+QString KSpreadSheet::getWordSpelling(KSpreadSelection* selectionInfo )
 {
     QString listWord;
     GetWordSpellingWorker w( listWord );
@@ -4960,12 +4960,12 @@ QString KSpreadTable::getWordSpelling(KSpreadSelection* selectionInfo )
 }
 
 
-struct SetWordSpellingWorker : public KSpreadTable::CellWorker {
+struct SetWordSpellingWorker : public KSpreadSheet::CellWorker {
     QStringList& list;
     int pos;
-    SetWordSpellingWorker( QStringList& _list ) : KSpreadTable::CellWorker( false, false, true ), list( _list ), pos( 0 ) { }
+    SetWordSpellingWorker( QStringList& _list ) : KSpreadSheet::CellWorker( false, false, true ), list( _list ), pos( 0 ) { }
 
-    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ) {
+    class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* table, QRect& r ) {
 	return new KSpreadUndoChangeAreaTextCell( doc, table, r );
     }
     bool testCondition( KSpreadCell* ) {
@@ -4984,7 +4984,7 @@ struct SetWordSpellingWorker : public KSpreadTable::CellWorker {
     }
 };
 
-void KSpreadTable::setWordSpelling(KSpreadSelection* selectionInfo,
+void KSpreadSheet::setWordSpelling(KSpreadSelection* selectionInfo,
                                    const QString _listWord )
 {
     QStringList list = QStringList::split ( '\n', _listWord );
@@ -4993,7 +4993,7 @@ void KSpreadTable::setWordSpelling(KSpreadSelection* selectionInfo,
 }
 
 
-QString KSpreadTable::copyAsText( KSpreadSelection* selectionInfo )
+QString KSpreadSheet::copyAsText( KSpreadSelection* selectionInfo )
 {
     // Only one cell selected? => copy active cell
     if ( selectionInfo->singleCellSelection() )
@@ -5072,7 +5072,7 @@ QString KSpreadTable::copyAsText( KSpreadSelection* selectionInfo )
     return result;
 }
 
-void KSpreadTable::copySelection( KSpreadSelection* selectionInfo )
+void KSpreadSheet::copySelection( KSpreadSelection* selectionInfo )
 {
     QRect rct;
 
@@ -5095,13 +5095,13 @@ void KSpreadTable::copySelection( KSpreadSelection* selectionInfo )
     QApplication::clipboard()->setData( kd );
 }
 
-void KSpreadTable::cutSelection( KSpreadSelection* selectionInfo )
+void KSpreadSheet::cutSelection( KSpreadSelection* selectionInfo )
 {
     copySelection( selectionInfo );
     deleteSelection( selectionInfo );
 }
 
-void KSpreadTable::paste( const QRect &pasteArea, bool makeUndo,
+void KSpreadSheet::paste( const QRect &pasteArea, bool makeUndo,
                           PasteMode sp, Operation op, bool insert, int insertTo )
 {
     QMimeSource* mime = QApplication::clipboard()->data();
@@ -5132,7 +5132,7 @@ void KSpreadTable::paste( const QRect &pasteArea, bool makeUndo,
 
 }
 
-void KSpreadTable::pasteTextPlain( QString &_text, QRect pasteArea)
+void KSpreadSheet::pasteTextPlain( QString &_text, QRect pasteArea)
 {
 //  QString tmp;
 //  tmp= QString::fromLocal8Bit(_mime->encodedData( "text/plain" ));
@@ -5205,7 +5205,7 @@ void KSpreadTable::pasteTextPlain( QString &_text, QRect pasteArea)
   emit sig_updateVBorder( this );
 }
 
-void KSpreadTable::paste( const QByteArray& b, const QRect &pasteArea, bool makeUndo,
+void KSpreadSheet::paste( const QByteArray& b, const QRect &pasteArea, bool makeUndo,
                           PasteMode sp, Operation op, bool insert, int insertTo )
 {
     kdDebug(36001) << "Parsing " << b.size() << " bytes" << endl;
@@ -5225,7 +5225,7 @@ void KSpreadTable::paste( const QByteArray& b, const QRect &pasteArea, bool make
                    insertTo );
 }
 
-bool KSpreadTable::loadSelection( const QDomDocument& doc, const QRect &pasteArea,
+bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteArea,
                                   int _xshift, int _yshift, bool makeUndo,
                                   PasteMode sp, Operation op, bool insert,
                                   int insertTo)
@@ -5374,7 +5374,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, const QRect &pasteAre
     return true;
 }
 
-void KSpreadTable::loadSelectionUndo( const QDomDocument & doc, const QRect &loadArea,
+void KSpreadSheet::loadSelectionUndo( const QDomDocument & doc, const QRect &loadArea,
                                       int _xshift, int _yshift, bool insert,
                                       int insertTo)
 {
@@ -5435,7 +5435,7 @@ void KSpreadTable::loadSelectionUndo( const QDomDocument & doc, const QRect &loa
     }
 }
 
-bool KSpreadTable::testAreaPasteInsert()const
+bool KSpreadSheet::testAreaPasteInsert()const
 {
    QMimeSource* mime = QApplication::clipboard()->data();
     if ( !mime )
@@ -5470,7 +5470,7 @@ bool KSpreadTable::testAreaPasteInsert()const
     return false;
 }
 
-void KSpreadTable::deleteCells( const QRect& rect )
+void KSpreadSheet::deleteCells( const QRect& rect )
 {
     // A list of all cells we want to delete.
     QPtrStack<KSpreadCell> cellStack;
@@ -5542,7 +5542,7 @@ void KSpreadTable::deleteCells( const QRect& rect )
     m_pDoc->setModified( true );
 }
 
-void KSpreadTable::deleteSelection( KSpreadSelection* selectionInfo)
+void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo)
 {
     QRect r( selectionInfo->selection() );
 
@@ -5589,7 +5589,7 @@ void KSpreadTable::deleteSelection( KSpreadSelection* selectionInfo)
     emit sig_updateView( this );
 }
 
-void KSpreadTable::refreshView(const QRect& rect)
+void KSpreadSheet::refreshView(const QRect& rect)
 {
   // TODO: don't go through all cells when refreshing!
     QRect tmp(rect);
@@ -5612,12 +5612,12 @@ void KSpreadTable::refreshView(const QRect& rect)
     emit sig_updateView( this, tmp );
 }
 
-void KSpreadTable::updateView(const QRect& rect)
+void KSpreadSheet::updateView(const QRect& rect)
 {
     emit sig_updateView( this, rect );
 }
 
-void KSpreadTable::changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY)
+void KSpreadSheet::changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY)
 {
    if( m_iExtraX==0 && m_iExtraY==0)
    {
@@ -5631,7 +5631,7 @@ void KSpreadTable::changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int 
    mergeCells(rect);
 }
 
-void KSpreadTable::mergeCells( const QRect &area, bool makeUndo)
+void KSpreadSheet::mergeCells( const QRect &area, bool makeUndo)
 {
   if( area.width() == 1 && area.height() == 1)
     return;
@@ -5657,7 +5657,7 @@ void KSpreadTable::mergeCells( const QRect &area, bool makeUndo)
   emit sig_updateView( this, area );
 }
 
-void KSpreadTable::dissociateCell( const QPoint &cellRef, bool makeUndo)
+void KSpreadSheet::dissociateCell( const QPoint &cellRef, bool makeUndo)
 {
   QPoint marker(cellRef);
   KSpreadCell *cell = nonDefaultCell( marker );
@@ -5683,7 +5683,7 @@ void KSpreadTable::dissociateCell( const QPoint &cellRef, bool makeUndo)
     emit sig_updateView( this, selection );
 }
 
-bool KSpreadTable::testListChoose(KSpreadSelection* selectionInfo)
+bool KSpreadSheet::testListChoose(KSpreadSelection* selectionInfo)
 {
    QRect selection( selectionInfo->selection() );
    QPoint marker( selectionInfo->marker() );
@@ -5717,7 +5717,7 @@ bool KSpreadTable::testListChoose(KSpreadSelection* selectionInfo)
 
 
 
-void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
+void KSpreadSheet::print( QPainter &painter, KPrinter *_printer )
 {
     kdDebug(36001)<<"PRINTING ...."<<endl;
 
@@ -5997,7 +5997,7 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
     m_bShowGrid = oldShowGrid;
 }
 
-void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const QRect& view, const QPoint _childOffset )
+void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const QRect& view, const QPoint _childOffset )
 {
 //      kdDebug(36001) << "Rect x=" << page_range.left() << " y=" << page_range.top() << ", w="
 //      << page_range.width() << " h="  << page_range.height() << "  offsetx: "<< _childOffset.x()
@@ -6183,7 +6183,7 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
     }
 }
 
-QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
+QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect )
 {
     QDomDocument doc( "spreadsheet-snippet" );
     doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -6294,7 +6294,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
     return doc;
 }
 
-QDomElement KSpreadTable::saveXML( QDomDocument& doc )
+QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
 {
     QDomElement table = doc.createElement( "table" );
     table.setAttribute( "name", m_strName );
@@ -6468,12 +6468,12 @@ QDomElement KSpreadTable::saveXML( QDomDocument& doc )
     return table;
 }
 
-bool KSpreadTable::isLoading()
+bool KSpreadSheet::isLoading()
 {
     return m_pDoc->isLoading();
 }
 
-bool KSpreadTable::loadXML( const QDomElement& table )
+bool KSpreadSheet::loadXML( const QDomElement& table )
 {
     bool ok = false;
     m_strName = table.attribute( "name" );
@@ -6732,7 +6732,7 @@ bool KSpreadTable::loadXML( const QDomElement& table )
 }
 
 
-bool KSpreadTable::loadChildren( KoStore* _store )
+bool KSpreadSheet::loadChildren( KoStore* _store )
 {
     QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
     for( ; it.current(); ++it )
@@ -6747,7 +6747,7 @@ bool KSpreadTable::loadChildren( KoStore* _store )
     return true;
 }
 
-void KSpreadTable::setShowPageBorders( bool b )
+void KSpreadSheet::setShowPageBorders( bool b )
 {
     if ( b == m_bShowPageBorders )
         return;
@@ -6756,7 +6756,7 @@ void KSpreadTable::setShowPageBorders( bool b )
     emit sig_updateView( this );
 }
 
-bool KSpreadTable::isOnNewPageX( int _column )
+bool KSpreadSheet::isOnNewPageX( int _column )
 {
     //Are these the edges of the print range?
     if ( _column == m_printRange.left() || _column == m_printRange.right() + 1 )
@@ -6806,7 +6806,7 @@ bool KSpreadTable::isOnNewPageX( int _column )
     return FALSE;
 }
 
-bool KSpreadTable::isOnNewPageY( int _row )
+bool KSpreadSheet::isOnNewPageY( int _row )
 {
     //Are these the edges of the print range?
     if ( _row == m_printRange.top() || _row == m_printRange.bottom() + 1 )
@@ -6857,7 +6857,7 @@ bool KSpreadTable::isOnNewPageY( int _row )
 }
 
 
-void KSpreadTable::updateNewPageListX( int _col )
+void KSpreadSheet::updateNewPageListX( int _col )
 {
     //If the new range is after the first entry, we need to delete the whole list
     if ( m_lnewPageListX.first() != m_printRange.left() )
@@ -6888,7 +6888,7 @@ void KSpreadTable::updateNewPageListX( int _col )
     }
 }
 
-void KSpreadTable::updateNewPageListY( int _row )
+void KSpreadSheet::updateNewPageListY( int _row )
 {
     //If the new range is after the first entry, we need to delete the whole list
     if ( m_lnewPageListY.first() != m_printRange.top() )
@@ -6919,21 +6919,21 @@ void KSpreadTable::updateNewPageListY( int _row )
     }
 }
 
-void KSpreadTable::addCellBinding( CellBinding *_bind )
+void KSpreadSheet::addCellBinding( CellBinding *_bind )
 {
   m_lstCellBindings.append( _bind );
 
   m_pDoc->setModified( true );
 }
 
-void KSpreadTable::removeCellBinding( CellBinding *_bind )
+void KSpreadSheet::removeCellBinding( CellBinding *_bind )
 {
   m_lstCellBindings.removeRef( _bind );
 
   m_pDoc->setModified( true );
 }
 
-KSpreadTable* KSpreadTable::findTable( const QString & _name )
+KSpreadSheet* KSpreadSheet::findTable( const QString & _name )
 {
   if ( !m_pMap )
     return 0L;
@@ -6942,7 +6942,7 @@ KSpreadTable* KSpreadTable::findTable( const QString & _name )
 }
 
 // ###### Torben: Use this one instead of m_cells.insert()
-void KSpreadTable::insertCell( KSpreadCell *_cell )
+void KSpreadSheet::insertCell( KSpreadCell *_cell )
 {
 
   m_cells.insert( _cell, _cell->column(), _cell->row() );
@@ -6954,17 +6954,17 @@ void KSpreadTable::insertCell( KSpreadCell *_cell )
   }
 }
 
-void KSpreadTable::insertColumnLayout( ColumnLayout *l )
+void KSpreadSheet::insertColumnLayout( ColumnLayout *l )
 {
   m_columns.insertElement( l, l->column() );
 }
 
-void KSpreadTable::insertRowLayout( RowLayout *l )
+void KSpreadSheet::insertRowLayout( RowLayout *l )
 {
   m_rows.insertElement( l, l->row() );
 }
 
-void KSpreadTable::update()
+void KSpreadSheet::update()
 {
   KSpreadCell* c = m_cells.firstCell();
   for( ;c; c = c->nextCell() )
@@ -6973,7 +6973,7 @@ void KSpreadTable::update()
   }
 }
 
-void KSpreadTable::updateCellArea( const QRect &cellArea )
+void KSpreadSheet::updateCellArea( const QRect &cellArea )
 {
   if ( doc()->isLoading() || doc()->delayCalculation() || (!getAutoCalc()))
     return;
@@ -7017,19 +7017,19 @@ void KSpreadTable::updateCellArea( const QRect &cellArea )
   cell->clearDisplayDirtyFlag();
 }
 
-void KSpreadTable::updateCell( KSpreadCell */*cell*/, int _column, int _row )
+void KSpreadSheet::updateCell( KSpreadCell */*cell*/, int _column, int _row )
 {
   QRect cellArea(QPoint(_column, _row), QPoint(_column, _row));
 
   updateCellArea(cellArea);
 }
 
-void KSpreadTable::emit_polygonInvalidated( const QPointArray& arr )
+void KSpreadSheet::emit_polygonInvalidated( const QPointArray& arr )
 {
     emit sig_polygonInvalidated( arr );
 }
 
-void KSpreadTable::emit_updateRow( RowLayout *_layout, int _row )
+void KSpreadSheet::emit_updateRow( RowLayout *_layout, int _row )
 {
     if ( doc()->isLoading() )
         return;
@@ -7045,7 +7045,7 @@ void KSpreadTable::emit_updateRow( RowLayout *_layout, int _row )
     _layout->clearDisplayDirtyFlag();
 }
 
-void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int _column )
+void KSpreadSheet::emit_updateColumn( ColumnLayout *_layout, int _column )
 {
     if ( doc()->isLoading() )
         return;
@@ -7061,7 +7061,7 @@ void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int _column )
     _layout->clearDisplayDirtyFlag();
 }
 
-void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const QRect& _data )
+void KSpreadSheet::insertChart( const QRect& _rect, KoDocumentEntry& _e, const QRect& _data )
 {
     kdDebug(36001) << "Creating document" << endl;
     KoDocument* doc = _e.createDoc();
@@ -7090,7 +7090,7 @@ void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
         delete ch;
 }
 
-void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
+void KSpreadSheet::insertChild( const QRect& _rect, KoDocumentEntry& _e )
 {
     KoDocument* doc = _e.createDoc( m_pDoc );
     if ( !doc )
@@ -7106,7 +7106,7 @@ void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
     insertChild( ch );
 }
 
-void KSpreadTable::insertChild( KSpreadChild *_child )
+void KSpreadSheet::insertChild( KSpreadChild *_child )
 {
     // m_lstChildren.append( _child );
     m_pDoc->insertChild( _child );
@@ -7114,7 +7114,7 @@ void KSpreadTable::insertChild( KSpreadChild *_child )
     emit sig_polygonInvalidated( _child->framePointArray() );
 }
 
-void KSpreadTable::deleteChild( KSpreadChild* child )
+void KSpreadSheet::deleteChild( KSpreadChild* child )
 {
     QPointArray polygon = child->framePointArray();
 
@@ -7125,7 +7125,7 @@ void KSpreadTable::deleteChild( KSpreadChild* child )
     emit sig_polygonInvalidated( polygon );
 }
 
-void KSpreadTable::changeChildGeometry( KSpreadChild *_child, const QRect& _rect )
+void KSpreadSheet::changeChildGeometry( KSpreadChild *_child, const QRect& _rect )
 {
     _child->setGeometry( _rect );
 
@@ -7133,13 +7133,13 @@ void KSpreadTable::changeChildGeometry( KSpreadChild *_child, const QRect& _rect
 }
 
 /*
-QPtrListIterator<KSpreadChild> KSpreadTable::childIterator()
+QPtrListIterator<KSpreadChild> KSpreadSheet::childIterator()
 {
   return QPtrListIterator<KSpreadChild> ( m_lstChildren );
 }
 */
 
-bool KSpreadTable::saveChildren( KoStore* _store, const QString &_path )
+bool KSpreadSheet::saveChildren( KoStore* _store, const QString &_path )
 {
     int i = 0;
 
@@ -7156,9 +7156,9 @@ bool KSpreadTable::saveChildren( KoStore* _store, const QString &_path )
     return true;
 }
 
-KSpreadTable::~KSpreadTable()
+KSpreadSheet::~KSpreadSheet()
 {
-    //kdDebug()<<" KSpreadTable::~KSpreadTable() :"<<this<<endl;
+    //kdDebug()<<" KSpreadSheet::~KSpreadSheet() :"<<this<<endl;
     s_mapTables->remove( m_id );
 
     //when you remove all table (close file)
@@ -7185,7 +7185,7 @@ KSpreadTable::~KSpreadTable()
 }
 
 
-void KSpreadTable::checkRangeHBorder ( int _column )
+void KSpreadSheet::checkRangeHBorder ( int _column )
 {
     if ( m_bScrollbarUpdates && _column > m_iMaxColumn )
     {
@@ -7194,7 +7194,7 @@ void KSpreadTable::checkRangeHBorder ( int _column )
     }
 }
 
-void KSpreadTable::checkRangeVBorder ( int _row )
+void KSpreadSheet::checkRangeVBorder ( int _row )
 {
     if ( m_bScrollbarUpdates && _row > m_iMaxRow )
     {
@@ -7204,20 +7204,20 @@ void KSpreadTable::checkRangeVBorder ( int _row )
 }
 
 
-void KSpreadTable::enableScrollBarUpdates( bool _enable )
+void KSpreadSheet::enableScrollBarUpdates( bool _enable )
 {
   m_bScrollbarUpdates = _enable;
 }
 
-DCOPObject* KSpreadTable::dcopObject()
+DCOPObject* KSpreadSheet::dcopObject()
 {
     if ( !m_dcop )
-        m_dcop = new KSpreadTableIface( this );
+        m_dcop = new KSpreadSheetIface( this );
 
     return m_dcop;
 }
 
-void KSpreadTable::hideTable(bool _hide)
+void KSpreadSheet::hideTable(bool _hide)
 {
     setHidden(_hide);
     if(_hide)
@@ -7226,12 +7226,12 @@ void KSpreadTable::hideTable(bool _hide)
         emit sig_TableShown(this);
 }
 
-void KSpreadTable::removeTable()
+void KSpreadSheet::removeTable()
 {
     emit sig_TableRemoved(this);
 }
 
-bool KSpreadTable::setTableName( const QString& name, bool init, bool makeUndo )
+bool KSpreadSheet::setTableName( const QString& name, bool init, bool makeUndo )
 {
     if ( map()->findTable( name ) )
         return FALSE;
@@ -7245,7 +7245,7 @@ bool KSpreadTable::setTableName( const QString& name, bool init, bool makeUndo )
     if ( init )
         return TRUE;
 
-    QPtrListIterator<KSpreadTable> it( map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( map()->tableList() );
     for( ; it.current(); ++it )
         it.current()->changeCellTabName( old_name, name );
     if(makeUndo)
@@ -7264,7 +7264,7 @@ bool KSpreadTable::setTableName( const QString& name, bool init, bool makeUndo )
 }
 
 
-void KSpreadTable::updateLocale()
+void KSpreadSheet::updateLocale()
 {
   KSpreadCell* c = m_cells.firstCell();
   for( ;c; c = c->nextCell() )
@@ -7275,31 +7275,31 @@ void KSpreadTable::updateLocale()
   recalc();
 }
 
-KSpreadCell* KSpreadTable::getFirstCellColumn(int col) const
+KSpreadCell* KSpreadSheet::getFirstCellColumn(int col) const
 { return m_cells.getFirstCellColumn(col); }
 
-KSpreadCell* KSpreadTable::getLastCellColumn(int col) const
+KSpreadCell* KSpreadSheet::getLastCellColumn(int col) const
 { return m_cells.getLastCellColumn(col); }
 
-KSpreadCell* KSpreadTable::getFirstCellRow(int row) const
+KSpreadCell* KSpreadSheet::getFirstCellRow(int row) const
 { return m_cells.getFirstCellRow(row); }
 
-KSpreadCell* KSpreadTable::getLastCellRow(int row) const
+KSpreadCell* KSpreadSheet::getLastCellRow(int row) const
 { return m_cells.getLastCellRow(row); }
 
-KSpreadCell* KSpreadTable::getNextCellUp(int col, int row) const
+KSpreadCell* KSpreadSheet::getNextCellUp(int col, int row) const
 { return m_cells.getNextCellUp(col, row); }
 
-KSpreadCell* KSpreadTable::getNextCellDown(int col, int row) const
+KSpreadCell* KSpreadSheet::getNextCellDown(int col, int row) const
 { return m_cells.getNextCellDown(col, row); }
 
-KSpreadCell* KSpreadTable::getNextCellLeft(int col, int row) const
+KSpreadCell* KSpreadSheet::getNextCellLeft(int col, int row) const
 { return m_cells.getNextCellLeft(col, row); }
 
-KSpreadCell* KSpreadTable::getNextCellRight(int col, int row) const
+KSpreadCell* KSpreadSheet::getNextCellRight(int col, int row) const
 { return m_cells.getNextCellRight(col, row); }
 
-void KSpreadTable::convertObscuringBorders()
+void KSpreadSheet::convertObscuringBorders()
 {
   /* a word of explanation here:
      beginning with KSpread 1.2 (actually, cvs of Mar 28, 2002), border information
@@ -7351,7 +7351,7 @@ void KSpreadTable::convertObscuringBorders()
  **********************/
 
 
-void KSpreadTable::definePrintRange (KSpreadSelection* selectionInfo)
+void KSpreadSheet::definePrintRange (KSpreadSelection* selectionInfo)
 {
     if ( !selectionInfo->singleCellSelection() )
     {
@@ -7365,7 +7365,7 @@ void KSpreadTable::definePrintRange (KSpreadSelection* selectionInfo)
     }
 }
 
-void KSpreadTable::resetPrintRange ()
+void KSpreadSheet::resetPrintRange ()
 {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -7376,13 +7376,13 @@ void KSpreadTable::resetPrintRange ()
     setPrintRange( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) );
 }
 
-void KSpreadTable::replaceHeadFootLineMacro ( QString &_text, const QString &_search, const QString &_replace )
+void KSpreadSheet::replaceHeadFootLineMacro ( QString &_text, const QString &_search, const QString &_replace )
 {
     if ( _search != _replace )
         _text.replace ( QRegExp( "<" + _search + ">" ), "<" + _replace + ">" );
 }
 
-QString KSpreadTable::localizeHeadFootLine ( const QString &_text )
+QString KSpreadSheet::localizeHeadFootLine ( const QString &_text )
 {
     QString tmp = _text;
 
@@ -7406,7 +7406,7 @@ QString KSpreadTable::localizeHeadFootLine ( const QString &_text )
 }
 
 
-QString KSpreadTable::delocalizeHeadFootLine ( const QString &_text )
+QString KSpreadSheet::delocalizeHeadFootLine ( const QString &_text )
 {
     QString tmp = _text;
 
@@ -7430,7 +7430,7 @@ QString KSpreadTable::delocalizeHeadFootLine ( const QString &_text )
 }
 
 
-KoHeadFoot KSpreadTable::getHeadFootLine() const
+KoHeadFoot KSpreadSheet::getHeadFootLine() const
 {
   KoHeadFoot hf;
   hf.headLeft  = m_headLeft;
@@ -7444,7 +7444,7 @@ KoHeadFoot KSpreadTable::getHeadFootLine() const
 }
 
 
-void KSpreadTable::setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
+void KSpreadSheet::setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
                                     const QString &_footl, const QString &_footm, const QString &_footr )
 {
   m_headLeft  = _headl;
@@ -7457,7 +7457,7 @@ void KSpreadTable::setHeadFootLine( const QString &_headl, const QString &_headm
   m_pDoc->setModified( TRUE );
 }
 
-void KSpreadTable::setPaperOrientation( KoOrientation _orient )
+void KSpreadSheet::setPaperOrientation( KoOrientation _orient )
 {
   m_orientation = _orient;
   calcPaperSize();
@@ -7470,7 +7470,7 @@ void KSpreadTable::setPaperOrientation( KoOrientation _orient )
 }
 
 
-KoPageLayout KSpreadTable::getPaperLayout() const
+KoPageLayout KSpreadSheet::getPaperLayout() const
 {
   KoPageLayout pl;
   pl.format = m_paperFormat;
@@ -7485,7 +7485,7 @@ KoPageLayout KSpreadTable::getPaperLayout() const
 }
 
 
-void KSpreadTable::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
+void KSpreadSheet::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
                                    KoFormat _paper, KoOrientation _orientation )
 {
   m_leftBorder   = _leftBorder;
@@ -7511,7 +7511,7 @@ void KSpreadTable::setPaperLayout( float _leftBorder, float _topBorder, float _r
   m_pDoc->setModified( TRUE );
 }
 
-void KSpreadTable::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
+void KSpreadSheet::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
                                    const QString& _paper, const QString& _orientation )
 {
     KoFormat f = paperFormat();
@@ -7553,7 +7553,7 @@ void KSpreadTable::setPaperLayout( float _leftBorder, float _topBorder, float _r
     setPaperLayout( _leftBorder, _topBorder, _rightBorder, _bottomBorder, f, o );
 }
 
-void KSpreadTable::calcPaperSize()
+void KSpreadSheet::calcPaperSize()
 {
     if ( m_paperFormat != PG_CUSTOM )
     {
@@ -7562,7 +7562,7 @@ void KSpreadTable::calcPaperSize()
     }
 }
 
-QString KSpreadTable::paperFormatString()const
+QString KSpreadSheet::paperFormatString()const
 {
     if ( m_paperFormat == PG_CUSTOM )
     {
@@ -7574,7 +7574,7 @@ QString KSpreadTable::paperFormatString()const
     return KoPageFormat::formatString( m_paperFormat );
 }
 
-const char* KSpreadTable::orientationString() const
+const char* KSpreadSheet::orientationString() const
 {
     switch( m_orientation )
     {
@@ -7588,7 +7588,7 @@ const char* KSpreadTable::orientationString() const
     return 0;
 }
 
-QString KSpreadTable::completeHeading( const QString &_data, int _page, const QString &_table ) const
+QString KSpreadSheet::completeHeading( const QString &_data, int _page, const QString &_table ) const
 {
     QString page( QString::number( _page) );
     QString pages( QString::number( m_uprintPages ) );
@@ -7670,7 +7670,7 @@ QString KSpreadTable::completeHeading( const QString &_data, int _page, const QS
 }
 
 
-void KSpreadTable::setPrintRange( QRect _printRange )
+void KSpreadSheet::setPrintRange( QRect _printRange )
 {
   if ( m_printRange == _printRange )
     return;
@@ -7690,7 +7690,7 @@ void KSpreadTable::setPrintRange( QRect _printRange )
   emit sig_updateView( this );
 }
 
-void KSpreadTable::setPrintGrid( bool _printGrid )
+void KSpreadSheet::setPrintGrid( bool _printGrid )
 {
   if ( m_bPrintGrid == _printGrid )
     return;
@@ -7699,7 +7699,7 @@ void KSpreadTable::setPrintGrid( bool _printGrid )
   m_pDoc->setModified( true );
 }
 
-void KSpreadTable::setPrintCommentIndicator( bool _printCommentIndicator )
+void KSpreadSheet::setPrintCommentIndicator( bool _printCommentIndicator )
 {
   if ( m_bPrintCommentIndicator == _printCommentIndicator )
     return;
@@ -7708,7 +7708,7 @@ void KSpreadTable::setPrintCommentIndicator( bool _printCommentIndicator )
   m_pDoc->setModified( true );
 }
 
-void KSpreadTable::setPrintFormulaIndicator( bool _printFormulaIndicator )
+void KSpreadSheet::setPrintFormulaIndicator( bool _printFormulaIndicator )
 {
   if ( m_bPrintFormulaIndicator == _printFormulaIndicator )
     return;
@@ -7718,7 +7718,7 @@ void KSpreadTable::setPrintFormulaIndicator( bool _printFormulaIndicator )
 }
 
 
-void KSpreadTable::updatePrintRepeatColumnsWidth()
+void KSpreadSheet::updatePrintRepeatColumnsWidth()
 {
     m_dPrintRepeatColumnsWidth = 0.0;
     if ( m_printRepeatColumns.first != 0 )
@@ -7731,7 +7731,7 @@ void KSpreadTable::updatePrintRepeatColumnsWidth()
 }
 
 
-void KSpreadTable::updatePrintRepeatRowsHeight()
+void KSpreadSheet::updatePrintRepeatRowsHeight()
 {
     m_dPrintRepeatRowsHeight += 0.0;
     if ( m_printRepeatRows.first != 0 )
@@ -7744,7 +7744,7 @@ void KSpreadTable::updatePrintRepeatRowsHeight()
 }
 
 
-void KSpreadTable::setPrintRepeatColumns( QPair<int, int> _printRepeatColumns )
+void KSpreadSheet::setPrintRepeatColumns( QPair<int, int> _printRepeatColumns )
 {
     //Bring arguments in order
     if ( _printRepeatColumns.first > _printRepeatColumns.second )
@@ -7772,7 +7772,7 @@ void KSpreadTable::setPrintRepeatColumns( QPair<int, int> _printRepeatColumns )
     m_pDoc->setModified( true );
 }
 
-void KSpreadTable::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
+void KSpreadSheet::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
 {
     //Bring arguments in order
     if ( _printRepeatRows.first > _printRepeatRows.second )
@@ -7801,17 +7801,17 @@ void KSpreadTable::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
 }
 
 
-void KSpreadTable::setRegionPaintDirty(QRect region)
+void KSpreadSheet::setRegionPaintDirty(QRect region)
 {
   m_paintDirtyList.append(region);
 }
 
-void KSpreadTable::clearPaintDirtyData()
+void KSpreadSheet::clearPaintDirtyData()
 {
   m_paintDirtyList.clear();
 }
 
-bool KSpreadTable::cellIsPaintDirty(QPoint cell)
+bool KSpreadSheet::cellIsPaintDirty(QPoint cell)
 {
   QValueList<QRect>::iterator it;
   bool found = false;
@@ -7830,7 +7830,7 @@ bool KSpreadTable::cellIsPaintDirty(QPoint cell)
 }
 
 #ifndef NDEBUG
-void KSpreadTable::printDebug()
+void KSpreadSheet::printDebug()
 {
     int iMaxColumn = maxColumn();
     int iMaxRow = maxRow();
@@ -7872,13 +7872,13 @@ void KSpreadTable::printDebug()
  *
  **********************************************************/
 
-KSpreadChild::KSpreadChild( KSpreadDoc *parent, KSpreadTable *_table, KoDocument* doc, const QRect& geometry )
+KSpreadChild::KSpreadChild( KSpreadDoc *parent, KSpreadSheet *_table, KoDocument* doc, const QRect& geometry )
   : KoDocumentChild( parent, doc, geometry )
 {
   m_pTable = _table;
 }
 
-KSpreadChild::KSpreadChild( KSpreadDoc *parent, KSpreadTable *_table ) : KoDocumentChild( parent )
+KSpreadChild::KSpreadChild( KSpreadDoc *parent, KSpreadSheet *_table ) : KoDocumentChild( parent )
 {
   m_pTable = _table;
 }
@@ -7894,13 +7894,13 @@ KSpreadChild::~KSpreadChild()
  *
  **********************************************************/
 
-ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, KoDocument* doc, const QRect& geometry )
+ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadSheet *_table, KoDocument* doc, const QRect& geometry )
   : KSpreadChild( _spread, _table, doc, geometry )
 {
     m_pBinding = 0;
 }
 
-ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadTable *_table )
+ChartChild::ChartChild( KSpreadDoc *_spread, KSpreadSheet *_table )
   : KSpreadChild( _spread, _table )
 {
     m_pBinding = 0;

@@ -2,7 +2,7 @@
 #define KSPREAD_CELL_IFACE_H
 
 class QPoint;
-class KSpreadTable;
+class KSpreadSheet;
 class KSpreadCell;
 #include <qcolor.h>
 #include <dcopobject.h>
@@ -13,7 +13,7 @@ class KSpreadCellIface : virtual public DCOPObject
 public:
     KSpreadCellIface();
 
-    void setCell( KSpreadTable* table, const QPoint& point );
+    void setCell( KSpreadSheet* table, const QPoint& point );
 k_dcop:
 
     virtual bool isDefault() const;
@@ -123,7 +123,7 @@ k_dcop:
     virtual bool getDontprintText() const ;
 private:
     QPoint m_point;
-    KSpreadTable* m_table;
+    KSpreadSheet* m_table;
 };
 
 #endif
