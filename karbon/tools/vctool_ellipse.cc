@@ -49,7 +49,7 @@ VCToolEllipse::drawTemporaryObject(
 		new VCCmdEllipse( part(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
 
 	VPath* path = cmd->createPath();
-	path->setState( VObject::edit );
+	path->setState( state_edit );
 	path->draw( painter, path->boundingBox( view->zoomFactor() ) );
 
 	delete( cmd );

@@ -23,7 +23,7 @@ VMCmdDelete::execute()
 	VObjectListIterator itr( m_objects );
 	for ( ; itr.current() ; ++itr )
 	{
-		itr.current()->setState( VObject::deleted );
+		itr.current()->setState( state_deleted );
 	}
 }
 
@@ -33,7 +33,7 @@ VMCmdDelete::unexecute()
 	VObjectListIterator itr( m_objects );
 	for ( ; itr.current() ; ++itr )
 	{
-		itr.current()->setState( VObject::normal );
+		itr.current()->setState( state_normal );
 	}
 }
 

@@ -221,7 +221,7 @@ VKoPainter::setPen( const QColor &c )
 }
 
 void
-VKoPainter::setPen( Qt::PenStyle style )
+VKoPainter::setPen( Qt::PenStyle /*style*/ )
 {
 }
 
@@ -300,7 +300,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	int a = 0;
 	art_u32 fillColor;
     // TODO : filling
-	if( m_fill && m_fill->mode() == VFill::pserver_fill )
+	if( m_fill && m_fill->type() == fill_fill )
 	{
 		m_fill->color().pseudoValues( r, g, b );
 		a = qRound( 255 * m_fill->opacity() );
@@ -310,7 +310,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		ArtSVP *temp;
 		temp = art_svp_from_vpath( vec );
 
-		if( m_fill->fillRule() == evenOdd )
+		if( m_fill->fillRule() == fillrule_evenOdd )
 			swr = art_svp_writer_rewind_new( ART_WIND_RULE_ODDEVEN );
 		else
 			swr = art_svp_writer_rewind_new( ART_WIND_RULE_NONZERO );
@@ -334,19 +334,19 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		strokeColor = ( r << 24 ) | ( g << 16 ) | ( b << 8 ) | a;
 
 		// caps translation karbon -> art
-		if( m_stroke->lineCap() == VStroke::cap_butt )
+		if( m_stroke->lineCap() == cap_butt )
 			capStyle = ART_PATH_STROKE_CAP_BUTT;
-		else if( m_stroke->lineCap() == VStroke::cap_round )
+		else if( m_stroke->lineCap() == cap_round )
 			capStyle = ART_PATH_STROKE_CAP_ROUND;
-		else if( m_stroke->lineCap() == VStroke::cap_square )
+		else if( m_stroke->lineCap() == cap_square )
 			capStyle = ART_PATH_STROKE_CAP_SQUARE;
 
 		// join translation karbon -> art
-		if( m_stroke->lineJoin() == VStroke::join_miter )
+		if( m_stroke->lineJoin() == join_miter )
 			joinStyle = ART_PATH_STROKE_JOIN_MITER;
-		else if( m_stroke->lineJoin() == VStroke::join_round )
+		else if( m_stroke->lineJoin() == join_round )
 			joinStyle = ART_PATH_STROKE_JOIN_ROUND;
-		else if( m_stroke->lineJoin() == VStroke::join_bevel )
+		else if( m_stroke->lineJoin() == join_bevel )
 			joinStyle = ART_PATH_STROKE_JOIN_BEVEL;
 
 		// zoom stroke width;

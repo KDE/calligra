@@ -51,7 +51,7 @@ VCToolRoundRect::drawTemporaryObject(
 			m_dialog->valueRound() );
 
 	VPath* path = cmd->createPath();
-	path->setState( VObject::edit );
+	path->setState( state_edit );
 	path->draw( painter, path->boundingBox( view->zoomFactor() ) );
 
 	delete( cmd );

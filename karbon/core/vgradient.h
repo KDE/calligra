@@ -8,33 +8,36 @@
 #include <qvaluelist.h>
 #include "vcolor.h"
 
+
+enum VGradientType{
+	gradient_linear = 0,
+	gradient_radial = 1,
+	gradient_conic  = 2 };
+
+
 class QDomElement;
 
 class VGradient
 {
 public:
-	enum VGradientType { linear, radial };
-
-	struct VColorPoint
+	struct VColorStop
 	{
 		VColor color;
-		float position;
+
+		// relative position of color point (0.0-1.0):
+		float rampPoint;
+
+		// relative position of midpoint (0.0-1.0)
+		// between two ramp points. ignored for last VColorStop.
+		float midPoint;
 	};
 
-	VGradient( VGradientType type = linear );
+	VGradient( VGradientType type = gradient_linear );
 
 	VGradientType type() const { return m_type; }
 	void setType( VGradientType type ) { m_type = type; }
 
-	const QValueList<float>& midPoints() const
-		{ return m_midPoints; }
-	void setMidPoints( const QValueList<float>& points )
-		{ m_midPoints = points; }
-
-	const QValueList<VColorPoint>& colorPoints() const
-		{ return m_colorPoints; }
-	void setColorPoints( const QValueList<VColorPoint>& points )
-		{ m_colorPoints = points; }
+	QValueList<VColorStop>& colorStops() { return m_colorStops; }
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
@@ -42,8 +45,7 @@ public:
 private:
 	VGradientType m_type;
 
-	QValueList<float> m_midPoints;
-	QValueList<VColorPoint> m_colorPoints;
+	QValueList<VColorStop> m_colorStops;
 };
 
 #endif

@@ -7,29 +7,37 @@
 #define __VFILL_H__
 
 #include "vcolor.h"
+#include "vgradient.h"
 
-enum VFillRule { evenOdd = 0, winding = 1 };
+
+enum VFillRule{
+	fillrule_evenOdd = 0,
+	fillrule_winding = 1 };
+
+enum VFillType{
+	fill_none     = 0,
+	fill_fill     = 1,
+	fill_gradient = 2,
+	fill_unknown  = 3 };
+
 
 class QDomElement;
 
 class VFill
 {
 public:
-	// paint server
-    enum VPServerMode {
-        pserver_none	= 0,
-        pserver_fill	= 1,
-        pserver_gradient= 2 };
 	VFill();
 
 	const VColor& color() const { return m_color; }
-	void setColor( const VColor& color ) { m_color = color; m_mode = pserver_fill; }
+	void setColor( const VColor& color ) { m_color = color; m_type = fill_fill; }
+
+	VGradient& gradient() { return m_gradient; }
 
 	float opacity() const { return m_opacity; }
 	void setOpacity( float opacity ) { m_opacity = opacity; }
 
-	VPServerMode mode() const { return m_mode; }
-	void setMode( VPServerMode mode ) { m_mode = mode; }
+	VFillType type() const { return m_type; }
+	void setType( VFillType type ) { m_type = type; }
 
 	VFillRule fillRule() const { return m_fillRule; }
 	void setFillRule( VFillRule fillRule ) { m_fillRule = fillRule; }
@@ -39,8 +47,10 @@ public:
 
 private:
 	VColor m_color;
+	VGradient m_gradient;
+
 	float m_opacity;
-	VPServerMode m_mode;
+	VFillType m_type;
 	VFillRule m_fillRule;
 };
 

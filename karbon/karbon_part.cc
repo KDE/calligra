@@ -124,14 +124,14 @@ KarbonPart::selectObject( VObject& object, bool exclusive )
 	if( exclusive )
 		deselectAllObjects();
 
-	object.setState( VObject::selected );
+	object.setState( state_selected );
 	m_selection.append( &object );
 }
 
 void
 KarbonPart::deselectObject( VObject& object )
 {
-	object.setState( VObject::normal );
+	object.setState( state_normal );
 	m_selection.removeRef( &object );
 }
 
@@ -149,9 +149,9 @@ KarbonPart::selectAllObjects()
 		VObjectListIterator itr2( objects );
 		for ( ; itr2.current(); ++itr2 )
 		{
-			if( itr2.current()->state() != VObject::deleted )
+			if( itr2.current()->state() != state_deleted )
 			{
-				itr2.current()->setState( VObject::selected );
+				itr2.current()->setState( state_selected );
 				m_selection.append( itr2.current() );
 			}
 		}
@@ -174,7 +174,7 @@ KarbonPart::selectObjectsWithinRect( const QRect& rect,
 		VObjectListIterator itr2( objects );
 		for ( ; itr2.current(); ++itr2 )
 		{
-			itr2.current()->setState( VObject::selected );
+			itr2.current()->setState( state_selected );
 			m_selection.append( itr2.current() );
 		}
 	}
@@ -187,7 +187,7 @@ KarbonPart::deselectAllObjects()
 	VObjectListIterator itr( m_selection );
 	for ( ; itr.current() ; ++itr )
 	{
-		itr.current()->setState( VObject::normal );
+		itr.current()->setState( state_normal );
 	}
 	
 	m_selection.clear();

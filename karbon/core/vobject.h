@@ -9,6 +9,14 @@
 #include <qptrlist.h>
 #include <qrect.h>
 
+
+enum VState{
+	state_normal   = 0,
+	state_selected = 1,
+	state_edit     = 2,
+	state_deleted  = 3 };
+
+
 class QDomElement;
 class VPainter;
 class QWMatrix;
@@ -20,10 +28,8 @@ class VCommand;
 class VObject
 {
 public:
-	enum VState { normal, selected, edit, deleted };
-
 	VObject()
-		: m_state( normal ) {}
+		: m_state( state_normal ) {}
 	virtual ~VObject() {}
 
 	virtual void draw( VPainter *painter, const QRect& rect,

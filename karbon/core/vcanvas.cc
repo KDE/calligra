@@ -69,7 +69,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 }
 
 void
-VCanvas::repaintAll( bool erase )
+VCanvas::repaintAll( bool /*erase*/ )
 {
 	drawContents( 0, 0, 0, width(), height() );
 	//viewport()->repaint( erase );

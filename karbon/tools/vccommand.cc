@@ -10,7 +10,7 @@ void
 VCCommand::execute()
 {
 	if ( m_object )
-		m_object->setState( VObject::normal );
+		m_object->setState( state_normal );
 	else
 	{
 		m_object = createPath();
@@ -26,7 +26,7 @@ VCCommand::unexecute()
 	if ( m_object )
 	{
 		m_part->deselectObject( *m_object );
-		m_object->setState( VObject::deleted );
+		m_object->setState( state_deleted );
 	}
 }
 

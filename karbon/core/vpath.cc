@@ -66,7 +66,7 @@ void
 VPath::draw( VPainter *painter, const QRect& rect,
 	const double zoomFactor )
 {
-	if( state() == deleted )
+	if( state() == state_deleted )
 		return;
 
 	if( !rect.intersects( boundingBox( zoomFactor ) ) )
@@ -78,7 +78,7 @@ VPath::draw( VPainter *painter, const QRect& rect,
 	painter->setWorldMatrix( mat );*/
 	QPtrListIterator<VSegmentList> itr( m_segments );
 
-	if( state() != edit )
+	if( state() != state_edit )
 	{
 		// paint fill:
 		m_fill.begin_draw( painter, zoomFactor );
@@ -96,7 +96,7 @@ VPath::draw( VPainter *painter, const QRect& rect,
 	}
 
 	// draw simplistic contour:
-	if( state() == edit || state() == selected )
+	if( state() == state_edit || state() == state_selected )
 	{
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
@@ -436,7 +436,7 @@ VPath::clone()
 void
 VPath::save( QDomElement& element ) const
 {
-	if( state() != deleted )
+	if( state() != state_deleted )
 	{
 		QDomElement me = element.ownerDocument().createElement( "PATH" );
 		element.appendChild( me );
@@ -466,7 +466,7 @@ VPath::load( const QDomElement& element )
 {
 	m_segments.clear();
 
-	setState( normal );
+	setState( state_normal );
 	m_closed   = element.attribute( "closed" ) == 0 ? false : true;
 
 	QDomNodeList list = element.childNodes();

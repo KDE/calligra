@@ -51,7 +51,7 @@ VQPainter::end()
 }
 
 void
-VQPainter::setWorldMatrix( const QWMatrix &mat )
+VQPainter::setWorldMatrix( const QWMatrix& /*mat*/ )
 {
 	//m_painter->setWorldMatrix( mat );
 }
@@ -132,11 +132,11 @@ VQPainter::setPen( const VStroke &stroke )
 	pen.setWidth( stroke.lineWidth() );
 
 	// caps
-	if( stroke.lineCap() == VStroke::cap_butt )
+	if( stroke.lineCap() == cap_butt )
 		pen.setCapStyle( Qt::FlatCap );
-	else if( stroke.lineCap() == VStroke::cap_round )
+	else if( stroke.lineCap() == cap_round )
 		pen.setCapStyle( Qt::RoundCap );
-	else if( stroke.lineCap() == VStroke::cap_square )
+	else if( stroke.lineCap() == cap_square )
 		pen.setCapStyle( Qt::SquareCap );
 
 	m_painter->setPen( pen );

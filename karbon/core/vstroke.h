@@ -10,22 +10,29 @@
 
 #include "vcolor.h"
 
-class QDomElement;
 
+enum VStrokeType{
+	stroke_none     = 0,
+	stroke_stroke   = 1,
+	stroke_gradient = 2,
+	stroke_unknown  = 3 };
+
+enum VLineCap{
+	cap_butt   = 0,
+	cap_round  = 1,
+	cap_square = 2 };
+
+enum VLineJoin{
+	join_miter = 0,
+	join_round = 1,
+	join_bevel = 2 };
+
+
+class QDomElement;
 
 class VStroke
 {
 public:
-	enum VLineCap{
-		cap_butt   = 0,
-		cap_round  = 1,
-		cap_square = 2 };
-
-	enum VLineJoin{
-		join_miter = 0,
-		join_round = 1,
-		join_bevel = 2 };
-
 	VStroke( float width = 1.0, const VLineCap cap = cap_butt,
 		const VLineJoin join = join_miter, float miterLimit = 10.0 );
 

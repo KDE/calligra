@@ -53,7 +53,7 @@ VLayer::objectsWithinRect( const QRect& rect,
 
 	for ( ; itr.current(); ++itr )
 	{
-		if( itr.current()->state() != VObject::deleted &&
+		if( itr.current()->state() != state_deleted &&
 			itr.current()->intersects( rect, zoomFactor ) )
 		{
 			list.append( itr.current() );
@@ -68,7 +68,7 @@ VLayer::removeDeletedObjects()
 {
 	for( m_objects.first(); m_objects.current(); m_objects.next() )
 	{
-		if( m_objects.current()->state() == VObject::deleted )
+		if( m_objects.current()->state() == state_deleted )
 		{
 			delete( m_objects.current() );
 			m_objects.remove();
