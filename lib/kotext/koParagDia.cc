@@ -880,8 +880,10 @@ int KoIndentSpacingWidget::pageBreaking() const
 void KoIndentSpacingWidget::display( const KoParagLayout & lay )
 {
     double _left = lay.margins[QStyleSheetItem::MarginLeft];
-    eLeft->setValue( KoUnit::ptToUnit( _left, m_unit ) );
-    prev1->setLeft( _left );
+    double leftInUnit = KoUnit::ptToUnit(  _left, m_unit );
+    eLeft->setValue( leftInUnit );
+    //prev1->setLeft( _left );  done by leftChanged() below
+    leftChanged( _left ); // sets min value for eFirstLine
 
     double _right = lay.margins[QStyleSheetItem::MarginRight];
     eRight->setValue( KoUnit::ptToUnit( _right, m_unit ) );
@@ -889,7 +891,7 @@ void KoIndentSpacingWidget::display( const KoParagLayout & lay )
 
     double _first = lay.margins[QStyleSheetItem::MarginFirstLine];
     eFirstLine->setValue( KoUnit::ptToUnit( _first, m_unit ) );
-    prev1->setFirst( _first  );
+    prev1->setFirst( _first );
 
     double _before = lay.margins[QStyleSheetItem::MarginTop];
     eBefore->setValue( KoUnit::ptToUnit( _before, m_unit ) );
@@ -940,6 +942,8 @@ QString KoIndentSpacingWidget::tabName()
 void KoIndentSpacingWidget::leftChanged( double _val )
 {
     prev1->setLeft( _val );
+    // The minimum first-line margin is -leftMargin() (where leftMargin>=0)
+    eFirstLine->setMinValue( -QMAX( 0, _val ) );
 }
 
 void KoIndentSpacingWidget::rightChanged( double _val )
