@@ -63,7 +63,8 @@ private:
     void appendLineEnds( QDomDocument& doc, QDomElement& e );
     void appendTextObjectMargin( QDomDocument& doc, QDomElement& e );
     void appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos);
-    QDomNode findAnimationByObjectID(const QString & id);
+	void createPresentationAnimation(const QDomElement& element);
+
     void appendObjectEffect(QDomDocument& doc, QDomElement& e, const QDomElement& object, QDomElement& sound);
 
     QDomElement saveHelper(const QString &tmpText, QDomDocument &doc);
@@ -84,7 +85,7 @@ private:
     QDomDocument    m_meta;
     QDomDocument    m_settings;
     QDict<QDomElement> m_styles, m_draws;
-    QDomElement m_animations;
+    QDict<QDomElement> m_animations;
     KZip * m_zip;
     StyleStack m_styleStack;
 };

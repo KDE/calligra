@@ -414,7 +414,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         double offset = CM_TO_POINT( ( dp.attribute( "draw:id" ).toInt() - 1 ) * pageHeight ) + 1;
 
         // animations (object effects)
-        m_animations = drawPage.namedItem("presentation:animations").toElement();
+       createPresentationAnimation(drawPage.namedItem("presentation:animations").toElement() );
 
         // parse all objects
         for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
@@ -448,6 +448,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 appendBrush( doc, e );
                 appendRounding( doc, e, o );
                 appendShadow( doc, e );
+
                 appendObjectEffect(doc, e, o, soundElement);
             }
             else if ( name == "draw:circle" || name == "draw:ellipse" )
@@ -457,6 +458,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 append2DGeometry( doc, e, o, (int)offset );
                 appendPen( doc, e );
                 appendShadow( doc, e );
+                appendLineEnds( doc, e );
                 appendObjectEffect(doc, e, o, soundElement);
 
                 if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
@@ -563,7 +565,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             m_styleStack.restore();
         }
 
-        m_animations.clear();
+        //m_animations.clear();
         m_styleStack.restore();
     }
 
@@ -1847,33 +1849,36 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
     e.appendChild(custom);
 }
 
-QDomNode OoImpressImport::findAnimationByObjectID(const QString & id)
+void OoImpressImport::createPresentationAnimation(const QDomElement& element)
 {
-    if (m_animations.isNull() || !m_animations.hasChildNodes())
-        return QDomNode();
-
-    for (QDomNode node = m_animations.firstChild(); !node.isNull(); node = node.nextSibling())
+  for ( QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
-        QDomElement e = node.toElement();
-        if (e.tagName()=="presentation:show-shape" && e.attribute("draw:shape-id")==id)
-            return node;
+        QDomElement e = n.toElement();
+        QCString tagName = e.tagName().latin1();
+        if ( tagName == "presentation:show-shape")
+        {
+            Q_ASSERT( e.hasAttribute( "draw:shape-id" ) );
+            QString name = e.attribute( "draw:shape-id" );
+            //kdDebug()<<" insert animation style : name :"<<name<<endl;
+            QDomElement* ep = new QDomElement( e );
+            m_animations.insert( name, ep );
+        }
     }
-
-    return QDomNode();
 }
 
 void OoImpressImport::appendObjectEffect(QDomDocument& doc, QDomElement& e, const QDomElement& object,
                                          QDomElement& sound)
 {
-    QDomElement origEffect = findAnimationByObjectID(object.attribute("draw:id")).toElement();
-
-    if (origEffect.isNull())
+    if ( !object.hasAttribute("draw:id") )
+        return;
+    QDomElement *origEffect = m_animations[object.attribute("draw:id")];
+    if (!origEffect)
         return;
 
-    QString effect = origEffect.attribute("presentation:effect");
-    QString dir = origEffect.attribute("presentation:direction");
+    QString effect = origEffect->attribute("presentation:effect");
+    QString dir = origEffect->attribute("presentation:direction");
     int effVal=0;
-
+    //kdDebug()<<" effect :"<<effect<<" dir :"<<dir<<endl;
     if (effect=="fade")
     {
         if (dir=="from-right")
@@ -1916,7 +1921,7 @@ void OoImpressImport::appendObjectEffect(QDomDocument& doc, QDomElement& e, cons
     e.appendChild(effElem);
 
     // sound effect
-    QDomElement origSoundEff = origEffect.namedItem("presentation:sound").toElement();
+    QDomElement origSoundEff = origEffect->namedItem("presentation:sound").toElement();
     if (!origSoundEff.isNull())
     {
         QString soundUrl = storeSound(origSoundEff, sound, doc);
