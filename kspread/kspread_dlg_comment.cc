@@ -51,6 +51,8 @@ KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoi
     connect(multiLine, SIGNAL(textChanged ()),this, SLOT(slotTextChanged()));
 
     slotTextChanged();
+
+    resize( 400, height() );
 }
 
 void KSpreadComment::slotTextChanged()
