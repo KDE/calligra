@@ -6,10 +6,13 @@
 #define __VNODESELECTOR_H__
 
 
-#include "vvisitor.h"
+#include <qptrlist.h>
+
 #include "koPoint.h"
 #include "koRect.h"
-#include <qptrlist.h>
+
+#include "vvisitor.h"
+
 
 class VSegment;
 

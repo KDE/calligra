@@ -460,56 +460,14 @@ VSegmentList::clone() const
 }
 
 void
-VSegmentList::transform( const QWMatrix& m, bool selectedSubObjects )
+VSegmentList::transform( const QWMatrix& m )
 {
 	VSegment* segment = m_first;
 	while( segment )
 	{
-		// Transform selected nodes:
-		if( selectedSubObjects )
-		{
-			if(
-				segment->prev() &&
-				segment->prev()->edited( 3 ) )
-			{
-				// Do nothing.
-			}
-			else if( segment->edited( 1 ) )
-			{
-				segment->m_node[0] = segment->m_node[0].transform( m );
-			}
-
-			if( segment->edited( 3 ) )
-			{
-				segment->m_node[1] = segment->m_node[1].transform( m );
-				segment->m_node[2] = segment->m_node[2].transform( m );
-
-				if( segment == last() )
-				{
-					first()->m_node[2] =
-						first()->m_node[2].transform( m );
-					first()->m_next->m_node[0] =
-						first()->next()->m_node[0].transform( m );
-				}
-				else
-				{
-					segment->m_next->m_node[0] =
-						segment->next()->m_node[0].transform( m );
-				}
-			}
-			else if( segment->edited( 2 ) )
-			{
-				segment->m_node[1] = segment->m_node[1].transform( m );
-			}
-		}
-		else
-		// Transform all nodes:
-		{
-			segment->m_node[0] = segment->m_node[0].transform( m );
-			segment->m_node[1] = segment->m_node[1].transform( m );
-			segment->m_node[2] = segment->m_node[2].transform( m );
-		}
-
+		segment->m_node[0] = segment->m_node[0].transform( m );
+		segment->m_node[1] = segment->m_node[1].transform( m );
+		segment->m_node[2] = segment->m_node[2].transform( m );
 
 		segment = segment->m_next;
 	}

@@ -109,13 +109,14 @@ public:
 	 * Returns a pointer to the previous segment, if stored in a
 	 * VSegmentList.
 	 */
-	const VSegment* prev() const
+	VSegment* prev() const
 		{ return m_prev; }
+
 	/**
 	 * Returns a pointer to the next segment, if stored in a
 	 * VSegmentList.
 	 */
-	const VSegment* next() const
+	VSegment* next() const
 		{ return m_next; }
 
 	/**

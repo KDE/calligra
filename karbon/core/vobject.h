@@ -60,7 +60,7 @@ public:
 	 *
 	 * @param m matrix to use for the transformation.
 	 */
-	virtual void transform( const QWMatrix& m, bool selectedSubObjects = false );
+	virtual void transform( const QWMatrix& /*m*/ ) {}
 
 	/**
 	 * Calculates the tightest bounding box around the object.

@@ -14,11 +14,12 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
+#include "veditnodetool.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vselection.h"
-#include "veditnodetool.h"
 #include "vtransformcmd.h"
+#include "vtransformnodes.h"
 
 #include <kdebug.h>
 
@@ -75,6 +76,8 @@ VEditNodeTool::drawTemporaryObject()
 		mat.translate(	( m_lp.x() - fp.x() ) / view()->zoom(),
 						( m_lp.y() - fp.y() ) / view()->zoom() );
 
+		VTransformNodes op( mat );
+
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = view()->part()->document().selection()->objects();
 		VObjectList list;
@@ -89,7 +92,7 @@ VEditNodeTool::drawTemporaryObject()
 		for( ; itr2.current() ; ++itr2 )
 		{
 			itr2.current()->setState( VObject::edit );
-			itr2.current()->transform( mat, true );
+			op.visit( *itr2.current() );
 
 			itr2.current()->draw(
 				painter,

@@ -480,12 +480,12 @@ VPath::combineSegmentList( const VSegmentList& segmentList )
 }
 
 void
-VPath::transform( const QWMatrix& m, bool selectedSubObjects )
+VPath::transform( const QWMatrix& m )
 {
 	QPtrListIterator<VSegmentList> itr( m_segmentLists );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
-		itr.current()->transform( m, selectedSubObjects );
+		itr.current()->transform( m );
 	}
 
 	if( m_stroke->type() == VStroke::grad )

@@ -104,7 +104,7 @@ public:
 		{ return m_segmentLists; }
 
 	/// Applies an affine transformation.
-	virtual void transform( const QWMatrix& m, bool selectedSubObjects = false );
+	virtual void transform( const QWMatrix& m );
 
 	virtual const KoRect& boundingBox() const;
 

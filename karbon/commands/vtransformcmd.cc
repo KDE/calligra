@@ -39,7 +39,7 @@ VTransformCmd::execute()
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
-		itr.current()->transform( m_mat, m_selectedSubObjects );
+		itr.current()->transform( m_mat );
 	}
 }
 
@@ -50,7 +50,7 @@ VTransformCmd::unexecute()
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
-		itr.current()->transform( m_mat.invert(), m_selectedSubObjects );
+		itr.current()->transform( m_mat.invert() );
 	}
 }
 

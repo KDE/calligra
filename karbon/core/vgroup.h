@@ -32,7 +32,7 @@ public:
 
 	virtual void draw( VPainter* painter, const KoRect& rect ) const;
 
-	virtual void transform( const QWMatrix& m, bool selectedSubObjects = false );
+	virtual void transform( const QWMatrix& m );
 
 	virtual const KoRect& boundingBox() const;
 
