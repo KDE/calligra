@@ -385,8 +385,8 @@ void KFormulaDocument::addB3()
 }
 
 
-int KFormulaDocument::addBlock(int Type = -1,int ID = -1,int nextID = -1,int prevID = -1,
-			       QString Cont = "", int Child1 = -1,int Child2=-1, int Child3=-1)
+int KFormulaDocument::addBlock(int Type,int ID,int nextID,int prevID,
+			       QString Cont, int Child1,int Child2, int Child3)
 {
     if ( ID == -1 )
 	ID=firstfree;
@@ -503,8 +503,8 @@ void KFormulaDocument::checkAndCreate(FormulaBlock *bl)
  * more info about child1,child2,child3 on widget.h
  */
 
-FormulaBlock::FormulaBlock( KFormulaDocument *_doc, int Type = -1, int ID = -1, int nextID = -1, int prevID = -1,
-			    QString Cont = "", int Child1 = -1, int Child2 = -1, int Child3 = -1 )
+FormulaBlock::FormulaBlock( KFormulaDocument *_doc, int Type, int ID, int nextID, int prevID,
+			    QString Cont, int Child1, int Child2, int Child3 )
 {
     active = 0;
     getdime = 1;

@@ -17,7 +17,7 @@
  *
  **********************************************************/
 
-KFormulaView::KFormulaView( QWidget *_parent = 0L, const char *_name = 0L ) :
+KFormulaView::KFormulaView( QWidget *_parent, const char *_name) :
     QWidget( _parent, _name ), View_impl(), KFormula::View_skel()
 {
     setWidget( this );
@@ -212,28 +212,24 @@ void KFormulaView::addB0()
 {
     debug("addB0");
     m_pDoc->addB0();
-    m_pDoc->emitModified();
 }
 
 void KFormulaView::addB1()
 { 
     debug("addB1");
     m_pDoc->addB1();
-    m_pDoc->emitModified();
 }
 
 void KFormulaView::addB4()
 {
     debug("addB4");
     m_pDoc->addB4();
-    m_pDoc->emitModified();
 }
 
 void KFormulaView::addB4bis()
 {
     debug("addB4bis");
     m_pDoc->addB4bis();
-    m_pDoc->emitModified();
 }
 
 void KFormulaView::addB3()

@@ -34,8 +34,8 @@ public:
   tstring( size_type n, char c)
     : string( n, c ) { }
 
-  string& tstring::stripWhiteSpace( string& _res ) const;
-  string& tstring::stripWhiteSpace();
+  string& stripWhiteSpace( string& _res ) const;
+  string& stripWhiteSpace();
   string& right( string &_res, int n ) const;
 };
 

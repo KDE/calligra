@@ -22,7 +22,7 @@ class KFormulaView : public QWidget,
     Q_OBJECT
 public:
     // C++
-    KFormulaView( QWidget *_parent = 0L, const char *_name = 0L );
+    KFormulaView( QWidget *_parent = 0, const char *_name = 0 );
     virtual ~KFormulaView();
 
     // IDL
