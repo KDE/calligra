@@ -7,6 +7,5 @@ percent( in v, in p )
 
 main
 {
-	print("!!!!!!! math.ks Extension !!!!!!!!!!");
 	kspread.percent = percent;
 }
