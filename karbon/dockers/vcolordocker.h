@@ -58,7 +58,6 @@ private:
 	VColorSlider *mYellowSlider;
 	VColorSlider *mBlackSlider;
 	VColorSlider *mOpacity;
-	enum ButtonChoice { Outline, Fill };
 	KarbonPart *m_part;
 	KarbonView *m_view;
 	
