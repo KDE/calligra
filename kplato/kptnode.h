@@ -67,6 +67,7 @@ class KPTNode {
         int numDependChildNodes() const { return m_dependChildNodes.count(); }
         virtual void addDependChildNode( KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
         virtual void addDependChildNode( KPTNode *node, TimingType t, TimingRelation p, KPTDuration lag);
+        virtual void addDependChildNode( KPTRelation *relation);
         virtual void insertDependChildNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
         void delDependChildNode( KPTNode *node, bool remove=false);
         void delDependChildNode( int number, bool remove=false);
@@ -75,6 +76,7 @@ class KPTNode {
         int numDependParentNodes() const { return m_dependParentNodes.count(); }
         virtual void addDependParentNode( KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
         virtual void addDependParentNode( KPTNode *node, TimingType t, TimingRelation p, KPTDuration lag);
+        virtual void addDependParentNode( KPTRelation *relation);
         virtual void insertDependParentNode( unsigned int index, KPTNode *node, TimingType t=START_ON_DATE, TimingRelation p=FINISH_START);
         void delDependParentNode( KPTNode *node, bool remove=false);
         void delDependParentNode( int number, bool remove=false);

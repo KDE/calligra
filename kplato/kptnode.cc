@@ -65,12 +65,22 @@ void KPTNode::addDependChildNode( KPTNode *node, TimingType t, TimingRelation p)
 }
 
 void KPTNode::addDependChildNode( KPTNode *node, TimingType t, TimingRelation p, KPTDuration lag) {
-    m_dependChildNodes.append(new KPTRelation(this, node, t, p, lag));
+    KPTRelation *relation = new KPTRelation(this, node, t, p, lag);
+    m_dependChildNodes.append(relation);
+    node->addDependParentNode(relation);
 }
 
 void KPTNode::insertDependChildNode( unsigned int index, KPTNode *node, TimingType t, TimingRelation p) {
-    m_dependChildNodes.insert(index, new KPTRelation(this, node, t, p, KPTDuration()));
+    KPTRelation *relation = new KPTRelation(this, node, t, p, KPTDuration());
+    m_dependChildNodes.insert(index, relation);
+    node->addDependParentNode(relation);
 
+}
+
+void KPTNode::addDependChildNode( KPTRelation *relation) {
+    if(m_dependChildNodes.findRef(relation) != -1)
+        return;
+    m_dependChildNodes.append(relation);
 }
 
 void KPTNode::delDependChildNode( KPTNode *node, bool remove) {
@@ -95,11 +105,21 @@ void KPTNode::addDependParentNode( KPTNode *node, TimingType t, TimingRelation p
 }
 
 void KPTNode::addDependParentNode( KPTNode *node, TimingType t, TimingRelation p, KPTDuration lag) {
-    m_dependChildNodes.append(new KPTRelation(node, this, t, p, lag));
+    KPTRelation *relation = new KPTRelation(node, this, t, p, lag);
+    m_dependParentNodes.append(relation);
+    node->addDependChildNode(relation);
 }
 
 void KPTNode::insertDependParentNode( unsigned int index, KPTNode *node, TimingType t, TimingRelation p) {
-    m_dependParentNodes.insert(index,new KPTRelation(this, node, t, p, KPTDuration()));
+    KPTRelation *relation = new KPTRelation(this, node, t, p, KPTDuration());
+    m_dependParentNodes.insert(index,relation);
+    node->addDependChildNode(relation);
+}
+
+void KPTNode::addDependParentNode( KPTRelation *relation) {
+    if(m_dependParentNodes.findRef(relation) != -1)
+        return;
+    m_dependParentNodes.append(relation);
 }
 
 void KPTNode::delDependParentNode( KPTNode *node, bool remove) {

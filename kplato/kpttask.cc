@@ -35,7 +35,7 @@ KPTDuration *KPTTask::getExpectedDuration() {
     if(m_effort) {
         ed->add(m_effort->expected());
     } else {
-        QListIterator<KPTNode> it(m_nodes); // iterator for employee list
+        QListIterator<KPTNode> it(m_nodes);
         for ( ; it.current(); ++it ) {
             KPTNode *node = it.current();
             KPTDuration *childDuration = node->getExpectedDuration();
