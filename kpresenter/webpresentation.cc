@@ -143,52 +143,35 @@ void KPWebPresentation::initCreation( QProgressBar *progressBar )
     QString cmd;
     int p;
 
-    cmd = QString( "mkdir -p %1/html" ).arg( path );
-    system( cmd );
+    KStandardDirs::makeDir(path + "/html");
 
     p = progressBar->progress();
     progressBar->setProgress( ++p );
     kapp->processEvents();
 
-    cmd = QString( "mkdir -p %1/pics" ).arg( path );
-    system( cmd );
+    KStandardDirs::makeDir(path + "/pics");
 
     p = progressBar->progress();
     progressBar->setProgress( ++p );
     kapp->processEvents();
 
-    QString dir = kapp->kde_datadir() + "/kpresenter/slideshow";
-    QString format = imageFormat( imgFormat );
+    QString format = "." + imageFormat( imgFormat );
 
-    system( QString( "cp %1/%2.%3 %4/pics/%5.%6" ).arg( dir ).arg( "home" ).arg( format ).arg( path ).arg( "home" ).arg( format ) );
+    const char *pics[] = {"home", "first", "next", "prev", "last", 0};
+    uint index = 0;
 
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
-    kapp->processEvents();
-
-    system( QString( "cp %1/%2.%3 %4/pics/%5.%6" ).arg( dir ).arg( "first" ).arg( format ).arg( path ).arg( "first" ).arg( format ) );
-
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
-    kapp->processEvents();
-
-    system( QString( "cp %1/%2.%3 %4/pics/%5.%6" ).arg( dir ).arg( "next" ).arg( format ).arg( path ).arg( "next" ).arg( format ) );
-
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
-    kapp->processEvents();
-
-    system( QString( "cp %1/%2.%3 %4/pics/%5.%6" ).arg( dir ).arg( "prev" ).arg( format ).arg( path ).arg( "prev" ).arg( format ) );
-
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
-    kapp->processEvents();
-
-    system( QString( "cp %1/%2.%3 %4/pics/%5.%6" ).arg( dir ).arg( "last" ).arg( format ).arg( path ).arg( "last" ).arg( format ) );
-
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
-    kapp->processEvents();
+    QString filename;
+    
+    while (pics[index]) {
+	filename = pics[index] + format;
+	system( QString( "cp %1 %2/pics/%3" ).
+		arg( locate("appdata", "slideshow/" + filename) ).
+		arg( path ).arg( filename );
+	p = progressBar->progress();
+	progressBar->setProgress( ++p );
+	kapp->processEvents();
+	index++;
+    }
 }
 
 /*================================================================*/

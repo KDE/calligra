@@ -19,6 +19,7 @@
 #include <koDocument.h>
 #include <opAutoLoader.h>
 #include <kimgio.h>
+#include <kstddirs.h>
 
 KOFFICE_DOCUMENT_FACTORY( KPresenterDoc, KPresenterFactory, KPresenter::DocumentFactory_skel )
 typedef OPAutoLoader<KPresenterFactory> KPresenterAutoLoader;
@@ -44,6 +45,12 @@ int main( int argc, char **argv )
     KPresenterAutoLoader loader( "IDL:KPresenter/DocumentFactory:1.0", "KPresenter" );
 
     KPresenterApp app( argc, argv );
+    KGlobal::dirs()->addResourceType("kpresenter_template", 
+		     KStandardDirs::kde_default("data") + "kpresenter/templates/");
+    KGlobal::dirs()->addResourceType("autoforms", 
+				     KStandardDirs::kde_default("data") + "kpresenter/autoforms/");
+    KGlobal::dirs()->addResourceType("toolbar", 
+				     KStandardDirs::kde_default("data") + "kpresenter/toolbar/");
 
     kimgioRegister();
 

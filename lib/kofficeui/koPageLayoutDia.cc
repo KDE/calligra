@@ -240,12 +240,12 @@ KoPageLayout KoPageLayoutDia::standardLayout()
 /*====================== get header - footer =====================*/
 KoHeadFoot KoPageLayoutDia::getHeadFoot()
 {
-  hf.headLeft = qstrdup(eHeadLeft->text());
-  hf.headMid = qstrdup(eHeadMid->text());
-  hf.headRight = qstrdup(eHeadRight->text());
-  hf.footLeft = qstrdup(eFootLeft->text());
-  hf.footMid = qstrdup(eFootMid->text());
-  hf.footRight = qstrdup(eFootRight->text());
+  hf.headLeft = eHeadLeft->text();
+  hf.headMid = eHeadMid->text();
+  hf.headRight = eHeadRight->text();
+  hf.footLeft = eFootLeft->text();
+  hf.footMid = eFootMid->text();
+  hf.footRight = eFootRight->text();
 
   return hf;
 }

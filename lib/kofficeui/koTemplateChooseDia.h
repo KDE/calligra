@@ -74,10 +74,10 @@ class KoTemplateChooseDia : public QDialog
 public:
 	enum ReturnType {Cancel,Template,File,Empty};
 
-	KoTemplateChooseDia(QWidget *parent,const char *name,QString _globalTemplatePath,QString _personalTemplatePath,bool _hasCancel,bool _onlyTemplates);
+	KoTemplateChooseDia(QWidget *parent,const char *name,const QString& template_type,bool _hasCancel,bool _onlyTemplates);
 	~KoTemplateChooseDia() {;}
 
-	static ReturnType chooseTemplate(QString _globalTemplatePath,QString _personalTemplatePath,QString &_template,bool _hasCancel,bool _onlyTemplates = true);
+	static ReturnType chooseTemplate(const QString& template_type, QString &_template, bool _hasCancel, bool _onlyTemplates = true);
 
 	QString getTemplate() { return templateName; }
 	QString getFullTemplate() { return fullTemplateName; }
@@ -98,8 +98,8 @@ protected:
 
 	QList<Group> groupList;
 	Group *grpPtr;
-	QString globalTemplatePath,personalTemplatePath;
-	QString templateName,fullTemplateName;
+	QString template_type;
+	QString templateName, fullTemplateName;
 	bool onlyTemplates;
 	QRadioButton *rbTemplates,*rbFile,*rbEmpty;
 	QLabel *lFile;

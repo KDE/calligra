@@ -77,6 +77,7 @@
 #include <signal.h>
 
 #include <X11/Xlib.h>
+#include <kstddirs.h>
 
 #define DEBUG
 
@@ -1901,9 +1902,8 @@ void KPresenterView::backOk( bool takeGlobal )
 /*================== autoform chosen =============================*/
 void KPresenterView::afChooseOk( const QString & c )
 {
-    QString afDir = kapp->kde_datadir();
     QFileInfo fileInfo( c );
-    QString fileName( afDir + "/kpresenter/autoforms/" + fileInfo.dirPath( false ) + "/" + fileInfo.baseName() + ".atf" );
+    QString fileName = locate("autoforms", fileInfo.dirPath( false ) + "/" + fileInfo.baseName() + ".atf" );
 
     page->deSelectAllObj();
     //m_pKPresenterDoc->insertAutoform( pen, brush, lineBegin, lineEnd, fillType, gColor1, gColor2, gType, fileName, xOffset, yOffset );
@@ -3306,9 +3306,7 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 /*======================== setup popup menus ===================*/
 void KPresenterView::setupPopupMenus()
 {
-    QString pixdir;
     QPixmap pixmap;
-    pixdir = KApplication::kde_datadir() + QString( "/kpresenter/toolbar/" );
 
     // create right button pen menu
     rb_pen_width = new QPopupMenu();
@@ -3339,57 +3337,43 @@ void KPresenterView::setupPopupMenus()
     // create right button object align menu
     rb_oalign = new QPopupMenu();
     CHECK_PTR( rb_oalign );
-    pixmap.load( pixdir + "aoleft.xpm" );
-    rb_oalign->insertItem( pixmap, this, SLOT( extraAlignObjLeft() ) );
+    rb_oalign->insertItem( ICON("aoleft.xpm" ), this, SLOT( extraAlignObjLeft() ) );
     rb_oalign->insertSeparator( -1 );
-    pixmap.load( pixdir + "aocenterh.xpm" );
-    rb_oalign->insertItem( pixmap, this, SLOT( extraAlignObjCenterH() ) );
+    rb_oalign->insertItem( ICON("aocenterh.xpm" ), this, SLOT( extraAlignObjCenterH() ) );
     rb_oalign->insertSeparator( -1 );
-    pixmap.load( pixdir + "aoright.xpm" );
-    rb_oalign->insertItem( pixmap, this, SLOT( extraAlignObjRight() ) );
+    rb_oalign->insertItem( ICON("aoright.xpm" ), this, SLOT( extraAlignObjRight() ) );
     rb_oalign->insertSeparator( -1 );
-    pixmap.load( pixdir + "aotop.xpm" );
-    rb_oalign->insertItem( pixmap, this, SLOT( extraAlignObjTop() ) );
+    rb_oalign->insertItem(ICON("aotop.xpm" ) , this, SLOT( extraAlignObjTop() ) );
     rb_oalign->insertSeparator( -1 );
-    pixmap.load( pixdir + "aocenterv.xpm" );
-    rb_oalign->insertItem( pixmap, this, SLOT( extraAlignObjCenterV() ) );
+    rb_oalign->insertItem( ICON("aocenterv.xpm" ), this, SLOT( extraAlignObjCenterV() ) );
     rb_oalign->insertSeparator( -1 );
-    pixmap.load( pixdir + "aobottom.xpm" );
-    rb_oalign->insertItem( pixmap, this, SLOT( extraAlignObjBottom() ) );
+    rb_oalign->insertItem( ICON("aobottom.xpm" ), this, SLOT( extraAlignObjBottom() ) );
     rb_oalign->setMouseTracking( true );
     rb_oalign->setCheckable( false );
 
     // create right button line begin
     rb_lbegin = new QPopupMenu();
     CHECK_PTR( rb_lbegin );
-    pixmap.load( pixdir + "line_normal_begin.xpm" );
-    rb_lbegin->insertItem( pixmap, this, SLOT( extraLineBeginNormal() ) );
+    rb_lbegin->insertItem( ICON("line_normal_begin.xpm" ), this, SLOT( extraLineBeginNormal() ) );
     rb_lbegin->insertSeparator( -1 );
-    pixmap.load( pixdir + "line_arrow_begin.xpm" );
-    rb_lbegin->insertItem( pixmap, this, SLOT( extraLineBeginArrow() ) );
+    rb_lbegin->insertItem(ICON("line_arrow_begin.xpm" ), this, SLOT( extraLineBeginArrow() ) );
     rb_lbegin->insertSeparator( -1 );
-    pixmap.load( pixdir + "line_rect_begin.xpm" );
-    rb_lbegin->insertItem( pixmap, this, SLOT( extraLineBeginRect() ) );
+    rb_lbegin->insertItem( ICON("line_rect_begin.xpm" ), this, SLOT( extraLineBeginRect() ) );
     rb_lbegin->insertSeparator( -1 );
-    pixmap.load( pixdir + "line_circle_begin.xpm" );
-    rb_lbegin->insertItem( pixmap, this, SLOT( extraLineBeginCircle() ) );
+    rb_lbegin->insertItem(ICON("line_circle_begin.xpm" ), this, SLOT( extraLineBeginCircle() ) );
     rb_lbegin->setMouseTracking( true );
     rb_lbegin->setCheckable( false );
 
     // create right button line end
     rb_lend = new QPopupMenu();
     CHECK_PTR( rb_lend );
-    pixmap.load( pixdir + "line_normal_end.xpm" );
-    rb_lend->insertItem( pixmap, this, SLOT( extraLineEndNormal() ) );
+    rb_lend->insertItem(ICON("line_normal_end.xpm" ), this, SLOT( extraLineEndNormal() ) );
     rb_lend->insertSeparator( -1 );
-    pixmap.load( pixdir + "line_arrow_end.xpm" );
-    rb_lend->insertItem( pixmap, this, SLOT( extraLineEndArrow() ) );
+    rb_lend->insertItem(ICON("line_arrow_end.xpm" ), this, SLOT( extraLineEndArrow() ) );
     rb_lend->insertSeparator( -1 );
-    pixmap.load( pixdir + "line_rect_end.xpm" );
-    rb_lend->insertItem( pixmap, this, SLOT( extraLineEndRect() ) );
+    rb_lend->insertItem(ICON("line_rect_end.xpm" ), this, SLOT( extraLineEndRect() ) );
     rb_lend->insertSeparator( -1 );
-    pixmap.load( pixdir + "line_circle_end.xpm" );
-    rb_lend->insertItem( pixmap, this, SLOT( extraLineEndCircle() ) );
+    rb_lend->insertItem(ICON("line_circle_end.xpm" ), this, SLOT( extraLineEndCircle() ) );
     rb_lend->setMouseTracking( true );
     rb_lend->setCheckable( false );
 }

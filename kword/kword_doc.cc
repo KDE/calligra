@@ -49,6 +49,7 @@
 #include <math.h>
 
 #include <koTemplateChooseDia.h>
+#include <kstddirs.h>
 
 /******************************************************************/
 /* Class: KWordChild                                              */
@@ -140,10 +141,8 @@ CORBA::Boolean KWordDocument::initDoc()
     pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
 
     QString _template;
-    QString _globalTemplatePath = kapp->kde_datadir() + "/kword/templates/";
-    QString _personalTemplatePath = kapp->localkdedir() + "/share/apps/kword/templates/";
 
-    KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate( _globalTemplatePath, _personalTemplatePath, _template, true, false );
+    KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate( "kword_template", _template, true, false );
     if ( ret == KoTemplateChooseDia::Template )
     {
         QFileInfo fileInfo( _template );
@@ -162,7 +161,7 @@ CORBA::Boolean KWordDocument::initDoc()
     }
     else if ( ret == KoTemplateChooseDia::Empty )
     {
-        QString fileName( _globalTemplatePath + "Wordprocessing/PlainText.kwt" );
+        QString fileName( locate("templates", "Wordprocessing/PlainText.kwt") );
         bool ok = loadTemplate( fileName.data() );
         setURL( QString::null );
         return ok;

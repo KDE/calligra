@@ -382,7 +382,7 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
             ClassIDs _id = ID_KWCharNone;
             unsigned int __pos = 0, __len = 0;
             KWFormat *_format = 0L, *format = 0L;
-            KWImage *_image = 0L, *image = 0L;
+            KWImage *_image = 0L; // , *image = 0L;
             KWCharImage *_kwimage = 0L;
             KWCharFormat *_kwformat = 0L;
             KWCharTab *_kwtab = 0L;

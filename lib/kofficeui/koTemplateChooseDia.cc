@@ -23,16 +23,16 @@
 #include <qhbox.h>
 #include <qvbox.h>
 #include <qlayout.h>
+#include <kstddirs.h>
 
 /******************************************************************/
 /* Class: KoTemplateChooseDia                                     */
 /******************************************************************/
 
 /*================================================================*/
-KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent,const char *name,QString _globalTemplatePath,
-										 QString _personalTemplatePath,bool _hasCancel,bool _onlyTemplates)
-	: QDialog(parent,name,true), globalTemplatePath(_globalTemplatePath),
-	  personalTemplatePath(_personalTemplatePath), onlyTemplates(_onlyTemplates)
+KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent,const char *name,
+					 const QString& _template_type, bool _hasCancel,bool _onlyTemplates)
+	: QDialog(parent,name,true), template_type(_template_type), onlyTemplates(_onlyTemplates)
 {
 	groupList.setAutoDelete(true);
 	getGroups();
@@ -56,21 +56,20 @@ KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent,const char *name,QStrin
 }
 
 /*================================================================*/
-KoTemplateChooseDia::ReturnType KoTemplateChooseDia::chooseTemplate(QString _globalTemplatePath,QString _personalTemplatePath,
-																	QString &_template,bool _hasCancel,bool _onlyTemplates)
+KoTemplateChooseDia::ReturnType KoTemplateChooseDia::chooseTemplate(const QString& _template_type,
+								    QString &_template,bool _hasCancel,bool _onlyTemplates)
 {
 	bool res = false;
-	KoTemplateChooseDia *dlg = new KoTemplateChooseDia(0,"Template",_globalTemplatePath,
-													   _personalTemplatePath,_hasCancel,_onlyTemplates);
+	KoTemplateChooseDia *dlg = new KoTemplateChooseDia(0,"Template", _template_type, _hasCancel,_onlyTemplates);
 
 	dlg->resize(500,400);
 	dlg->setCaption(i18n("Choose a Template"));
 
 	if (dlg->exec() == QDialog::Accepted)
-    {
+	    {
 		res = true;
 		_template = dlg->getFullTemplate();
-    }
+	    }
 
 	ReturnType rt = dlg->getReturnType();
 	delete dlg;
@@ -82,56 +81,32 @@ KoTemplateChooseDia::ReturnType KoTemplateChooseDia::chooseTemplate(QString _glo
 void KoTemplateChooseDia::getGroups()
 {
 	QString str;
-	char* c = new char[256];
-	QString templateDir = qstrdup(globalTemplatePath);
-
-	QFile templateInf(globalTemplatePath + ".templates");
-
-	if (templateInf.open(IO_ReadOnly))
-    {
+	char c[256];
+	
+	QStringList dirs = KGlobal::dirs()->getResourceDirs(template_type);
+	for (QStringList::ConstIterator it = dirs.begin(); it != dirs.end(); it++) {
+	    QFile templateInf(*it + ".templates");
+	    
+	    if (templateInf.open(IO_ReadOnly)) {
 		while (!templateInf.atEnd())
-		{
+		    {
 			templateInf.readLine(c,256);
 			str = c;
 			str = str.stripWhiteSpace();
 			if (!str.isEmpty())
-			{
+			    {
 				grpPtr = new Group;
-				grpPtr->dir.setFile(templateDir + QString(c).stripWhiteSpace() + "/");
-				grpPtr->name = QString(qstrdup(c)).stripWhiteSpace();
+				grpPtr->dir.setFile(*it + QString(c).stripWhiteSpace() + "/");
+				grpPtr->name = QString(c).stripWhiteSpace();
 				groupList.append(grpPtr);
-			}
+			    }
 			strcpy(c,"");
-		}
-
+		    }
+		
 		templateInf.close();
-    }
+	    }
+	}
 
-	templateDir = qstrdup(personalTemplatePath);
-
-	QFile templateInf2(personalTemplatePath + ".templates");
-
-	if (templateInf2.open(IO_ReadOnly))
-    {
-		while (!templateInf2.atEnd())
-		{
-			templateInf2.readLine(c,256);
-			str = c;
-			str = str.stripWhiteSpace();
-			if (!str.isEmpty())
-			{
-				grpPtr = new Group;
-				grpPtr->dir.setFile(templateDir + QString(c).stripWhiteSpace() + "/");
-				grpPtr->name = QString(qstrdup(c)).stripWhiteSpace();
-				groupList.append(grpPtr);
-			}
-			strcpy(c,"");
-		}
-
-		templateInf2.close();
-    }
-
-	delete c;
 }
 
 /*================================================================*/

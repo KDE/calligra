@@ -1442,14 +1442,9 @@ unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore  
 /*================================================================*/
 bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean )
 {
-    QString templateDir = KApplication::kde_datadir();
-
     QString _template;
-    QString _globalTemplatePath = kapp->kde_datadir() + "/kpresenter/templates/";
-    QString _personalTemplatePath = kapp->localkdedir() + "/share/apps/kpresenter/templates/";
-
     KoTemplateChooseDia::ReturnType ret;
-    ret = KoTemplateChooseDia::chooseTemplate( _globalTemplatePath, _personalTemplatePath, _template, true, false );
+    ret = KoTemplateChooseDia::chooseTemplate( "kpresenter_template", _template, true, false );
 
     if ( ret == KoTemplateChooseDia::Template )
     {
@@ -1475,7 +1470,7 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
     }
     else if ( ret == KoTemplateChooseDia::Empty )
     {
-        QString fileName( _globalTemplatePath + "Screenpresentations/Plain.kpt" );
+        QString fileName( locate("kpresenter_template", "Screenpresentations/Plain.kpt") );
         objStartY = 0;
         _clean = true;
         m_bModified = true;
@@ -3268,13 +3263,9 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
 
     if ( _insPos == IP_BEFORE ) _page++;
 
-    QString templateDir = KApplication::kde_datadir();
-
     QString _template;
-    QString _globalTemplatePath = kapp->kde_datadir() + "/kpresenter/templates/";
-    QString _personalTemplatePath = kapp->localkdedir() + "/share/apps/kpresenter/templates/";
 
-    if ( KoTemplateChooseDia::chooseTemplate( _globalTemplatePath, _personalTemplatePath, _template, true, true ) != KoTemplateChooseDia::Cancel )
+    if ( KoTemplateChooseDia::chooseTemplate( "kpresenter_template", _template, true, true ) != KoTemplateChooseDia::Cancel )
     {
         QFileInfo fileInfo( _template );
         QString fileName( fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt" );
