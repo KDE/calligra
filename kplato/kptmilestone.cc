@@ -89,7 +89,7 @@ void KPTMilestone::drawGanttBar(QCanvas* canvas,KPTTimeScale* ts, int y, int h) 
         
     // Draw slack
     QCanvasLine *l = new QCanvasLine(canvas);
-    l->setPoints(ts->getX(&earliestStart),y+h/2,ts->getX(&latestFinish)-2,y+h/2);
+    l->setPoints(ts->getX(&earliestStart),y+h/2,ts->getX(&latestFinish),y+h/2);
     l->setPen( QPen(Qt::blue) );
     l->setZ(40);
     l->show();

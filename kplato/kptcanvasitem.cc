@@ -26,7 +26,7 @@
 #include <koRect.h> //DEBUGRECT
 
 KPTPertCanvasItem::KPTPertCanvasItem( QCanvas *canvas, KPTNode &node, int row, int col )
-    : QCanvasRectangle(canvas),
+    : QCanvasRectangle(0, 0, 100, 30, canvas),
 	m_node(node),
 	m_row(row),
 	m_col(col)
@@ -34,18 +34,13 @@ KPTPertCanvasItem::KPTPertCanvasItem( QCanvas *canvas, KPTNode &node, int row, i
     //kdDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
 	int wgap = 20;
 	int hgap = 10;
-	int w = 100;
-	int h = 30;
-	int left = 6 + col * (w + wgap);
-	int top = 6 + row * (h + hgap);
-	int bottom = top + h;
-	int right = left + w;
-    m_left = QPoint(left, top + h/2);
-	m_right = QPoint(right, m_left.y());
+	int left = 6 + col * (width() + wgap);
+	int top = 6 + row * (height() + hgap);
+    m_left = QPoint(left, top + height()/2);
+	m_right = QPoint(left+width(), m_left.y());
 	
 	setX(left);
 	setY(top);
-	setSize(w,h);
 	setBrush(Qt::yellow);
 	setPen(Qt::black);
 	setZ(50);
@@ -59,7 +54,7 @@ KPTPertCanvasItem::KPTPertCanvasItem( QCanvas *canvas, KPTNode &node, int row, i
 	m_leader->setX(left + 3);
 	m_leader->setY(top + 15);
 	m_leader->setZ(60);
-    //kdDebug()<<k_funcinfo<<" end"<<endl;
+    kdDebug()<<k_funcinfo<<"Rect: "<<DEBUGRECT(rect())<<" h="<<height()<<endl;
 }
 
 KPTPertCanvasItem::~KPTPertCanvasItem()
@@ -96,9 +91,10 @@ void KPTPertCanvasItem::setVisible(bool yes)
 
 void KPTPertCanvasItem::drawShape(QPainter &p)
 {
+	isSelected() ? p.setPen(QPen(Qt::red, 2)) : p.setPen(QPen(Qt::black,1));
+/*	QPointArray pa = areaPoints();
     kdDebug()<<k_funcinfo<<m_node.name()<<" areaPoints:"<<endl;
-	QPointArray pa = areaPoints();
-/*	kdDebug()<<"      "<<pa[0].x()<<","<<pa[0].y()<<"      "<<pa[1].x()<<","<<pa[1].y()<<endl;
+    kdDebug()<<"      "<<pa[0].x()<<","<<pa[0].y()<<"      "<<pa[1].x()<<","<<pa[1].y()<<endl;
 	kdDebug()<<"      "<<pa[2].x()<<","<<pa[2].y()<<"      "<<pa[3].x()<<","<<pa[3].y()<<endl;*/
 	QCanvasRectangle::drawShape(p);
 }
@@ -152,9 +148,12 @@ KPTRelationCanvasItem::KPTRelationCanvasItem( QCanvas *canvas, KPTRelation *rel)
 {
     kdDebug()<<k_funcinfo<<endl;
 	QPoint parentPoint = m_rel->parent()->pertItem()->exitPoint(FINISH_START);
-	QRect parentRect = m_rel->parent()->pertItem()->rect();
 	QPoint childPoint = m_rel->child()->pertItem()->entryPoint(FINISH_START);
-	QRect childRect = m_rel->child()->pertItem()->rect();
+	// could not use ...rect() here, don't know why
+	int parentTop = (int)(m_rel->parent()->pertItem()->y());
+	int parentBottom = (int)parentTop + m_rel->parent()->pertItem()->height();
+	int childTop = (int)m_rel->child()->pertItem()->x();
+	int childBottom = (int)(parentTop + m_rel->child()->pertItem()->height());
 	
 	int childRow = m_rel->child()->pertItem()->row();
 	int childCol =  m_rel->child()->pertItem()->column();
@@ -173,64 +172,91 @@ KPTRelationCanvasItem::KPTRelationCanvasItem( QCanvas *canvas, KPTRelation *rel)
 		{
         	a.putPoints(1, 1, childPoint.x(), childPoint.y());
 			
-			left = a[0].x(); top = a[0].y(); right = a[1].x(); bottom = a[1].y();
+			left = a[0].x(); top = a[0].y(); right = a[1].x(); bottom = a[1].y()+3;
 		}
-		else // go around
+		else // go around below
 		{
-    	    a.putPoints(1, 1, parentPoint.x()+wgap/2, parentPoint.y());
-    	    a.putPoints(2, 1, parentPoint.x()+wgap/2, parentRect.top() - hgap/3);
-    	    a.putPoints(3, 1, childPoint.x() - wgap/2, parentRect.top() - hgap/3);
-    	    a.putPoints(4, 1, childPoint.x() - wgap/2, childPoint.y());
-    	    a.putPoints(5, 1, childPoint.x(), childPoint.y());
+    	    a.putPoints(1, 9, 
+			        parentPoint.x()+(wgap/2)-3, parentPoint.y(),                // stop short
+			        parentPoint.x()+(wgap/2), parentPoint.y()+3,                // right/down
+					parentPoint.x()+(wgap/2), parentBottom+(hgap/2)-3,  // stop short
+    	            parentPoint.x()+(wgap/2)+3, parentBottom+(hgap/2),  // right/down
+    	            childPoint.x()-(wgap/2)-3, parentBottom+(hgap/2),      // stop short
+    	            childPoint.x()-(wgap/2), parentBottom+(hgap/2)-3,      // right/up
+    	            childPoint.x()-(wgap/2), childPoint.y()+3,                      // stop short
+    	            childPoint.x()-(wgap/2)+3, childPoint.y(),                      // right/up
+    	            childPoint.x(), childPoint.y());
 			
-			left = a[0].x(); top = a[2].y(); right = a[5].x(); bottom = a[5].y();
+			left = a[0].x(); top = a[0].y(); right = childPoint.x(); bottom = childPoint.y()+3;
 		}
 	} 
 	else if ( parentRow > childRow )
 	{
 	    if (parentCol == childCol - 1)
 		{
-            a.putPoints(1, 1, parentPoint.x()+wgap/2, parentPoint.y());
-            a.putPoints(2, 1, parentPoint.x()+wgap/2, childPoint.y());
-            a.putPoints(3, 1, childPoint.x(), childPoint.y());
+            a.putPoints(1, 5, 
+			        parentPoint.x()+(wgap/2)-3, parentPoint.y(),
+			        parentPoint.x()+(wgap/2), parentPoint.y()-3, 
+                    parentPoint.x()+wgap/2, childPoint.y()+3,
+    	            parentPoint.x()+(wgap/2)+3, childPoint.y(), 
+                    childPoint.x(), childPoint.y());
 	    
-			left = a[0].x(); top = a[0].y(); right = a[3].x(); bottom = a[3].y();
+			left = a[0].x(); top = childPoint.y()-3; right = childPoint.x(); bottom = a[0].y();
 		}
-		else
+		else // go around above
 		{
-            a.putPoints(1, 1, parentPoint.x()+wgap/2, parentPoint.y());
-            a.putPoints(2, 1, parentPoint.x()+wgap/2, childRect.top()-hgap/3);
-            a.putPoints(3, 1, childPoint.x()-wgap/2, childRect.top()-hgap/3);
-            a.putPoints(4, 1, childPoint.x()-wgap/2, childPoint.y());
-    	    a.putPoints(5, 1, childPoint.x(), childPoint.y());		
+            a.putPoints(1, 9,
+			        parentPoint.x()+(wgap/2)-3, parentPoint.y(),
+                    parentPoint.x()+(wgap/2), parentPoint.y()-3,
+                    parentPoint.x()+wgap/2, parentTop-(hgap/2)+3,
+                    parentPoint.x()+(wgap/2)+3, parentTop-(hgap/2),
+                    childPoint.x()-(wgap/2)-3, parentTop-hgap/2,
+                    childPoint.x()-(wgap/2), parentTop-(hgap/2)-3,
+                    childPoint.x()-wgap/2, childPoint.y()+3,
+				    childPoint.x()-(wgap/2)+3, childPoint.y(),
+    	            childPoint.x(), childPoint.y());
 		
-			left = a[0].x(); top = a[0].y(); right = a[5].x(); bottom = a[5].y();
+			left = a[0].x(); top = childPoint.y()-3; right = childPoint.x(); bottom = a[0].y();
 		}
 	}
 	else if ( parentRow < childRow )
 	{
 	    if (parentCol == childCol - 1)
 		{
-		    a.putPoints(1, 1, parentPoint.x()+wgap/2, parentPoint.y());
-		    a.putPoints(2, 1, parentPoint.x()+wgap/2, childPoint.y());
-    	    a.putPoints(3, 1, childPoint.x(), childPoint.y());		
+		    a.putPoints(1, 5, 
+			        parentPoint.x()+(wgap/2)-3, parentPoint.y(),
+			        parentPoint.x()+(wgap/2), parentPoint.y()+3, 
+		            parentPoint.x()+wgap/2, childPoint.y()-3,
+    	            parentPoint.x()+(wgap/2)+3, childPoint.y(),
+    	            childPoint.x(), childPoint.y());
 			
-			left = a[0].x(); top = a[3].y(); right = a[3].x(); bottom = a[3].y();
+			left = a[0].x(); top = a[3].y(); right = childPoint.x(); bottom = childPoint.y()+3;
 		}
 		else
 		{
-	        a.putPoints(1, 1, parentPoint.x()+wgap/2, childRect.top()-hgap/3);	
-	        a.putPoints(2, 1, parentPoint.x()+wgap/2, parentRect.top()-hgap/3);	
-	        a.putPoints(3, 1, childPoint.x()-wgap/2, parentRect.top()-hgap/3);	
-	        a.putPoints(4, 1, childPoint.x()-wgap/2, childPoint.y()-5);	
-	        a.putPoints(5, 1, childPoint.x(), childPoint.y());	
+	        a.putPoints(1, 9, 
+			        parentPoint.x()+(wgap/2)-3, parentPoint.y(),
+			        parentPoint.x()+(wgap/2), parentPoint.y()+3,
+					parentPoint.x()+wgap/2, childTop-(hgap/2)-3,
+					parentPoint.x()+(wgap/2)+3, childTop-(hgap/2),
+	                childPoint.x()-(wgap/2)-3, childTop-(hgap/2),
+	                childPoint.x()-(wgap/2), childTop-(hgap/2)+3,
+	                childPoint.x()-wgap/2, childPoint.y()-3,
+	                childPoint.x()-wgap/2+3, childPoint.y(),
+	                childPoint.x(), childPoint.y());
 			
-			left = a[0].x(); top = a[0].y(); right = a[5].x(); bottom = a[5].y();
+			left = a[0].x(); top = a[0].y(); right = childPoint.x(); bottom = childPoint.y()+3;
         }
 	}
+
 	setPoints(a);
 	setPen(Qt::black);
 	setZ(45);
+
+/*#ifndef NDEBUG
+    for (int i = 0; i < a.size(); ++i)
+        kdDebug()<<"    a["<<i<<"]="<<a[i].x()<<","<<a[i].y()<<endl;
+#endif*/
 }
 
 KPTRelationCanvasItem::~KPTRelationCanvasItem()
@@ -253,6 +279,12 @@ void KPTRelationCanvasItem::drawShape(QPainter &p)
         //kdDebug()<<k_funcinfo<<" draw["<<i<<"]: "<<a[i].x()<<","<<a[i].y()<<" to "<<a[i+1].x()<<","<<a[i+1].y()<<endl;
 	    p.drawLine(a[i], a[i+1]);
 	}
+	// Draw arrow
+    int pos = a.size()-1;
+	QPoint pnt(a[pos].x()-3, a[pos].y()-3);
+	p.drawLine(a[pos], pnt);
+	pnt.setY(a[pos].y()+3);
+	p.drawLine(a[pos], pnt);
 }
 
 QPointArray KPTRelationCanvasItem::areaPoints () const

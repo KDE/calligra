@@ -85,6 +85,8 @@ QSize KPTPertCanvas::canvasSize()
 		s.setWidth(QMAX(s.width(), r.right()));
 		s.setHeight(QMAX(s.height(), r.bottom()));
 	}
+	s.setWidth(s.width()+20);
+	s.setHeight(s.height()+20);
 	return s;
 }
 
@@ -112,43 +114,47 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 	            if ( (*it)->rtti() == KPTPertCanvasItem::RTTI )
 				{
 				    KPTPertCanvasItem *item = (KPTPertCanvasItem *)(*it);
+					if (m_linkMode)
 					{
-					    if (m_linkMode)
+						m_linkParentNode->pertItem()->setSelected(false);
+						if (item->node().name() == m_linkParentNode->name())
 						{
-						    if (item->node().name() == m_linkParentNode->name())
-							{
-							    m_linkMode = false;
-								break;
-							}
-							kdDebug()<<k_funcinfo<<" Second node="<<item->node().name()<<endl;
-							// open relation dialog
-							KPTRelationDialog *dia;
-							KPTRelation *rel = item->node().findRelation(m_linkParentNode);
-							if (rel)
-								dia = new KPTRelationDialog(rel, this);
-							else
-								dia = new KPTRelationDialog(m_linkParentNode, &(item->node()), this);
-
-							if (dia->exec())
-							{
-								kdDebug()<<k_funcinfo<<" Linked node="<<item->node().name()<<" to "<<m_linkParentNode->name()<<endl; 
-								emit updateView(true);
-							}
-							delete dia;
 							m_linkMode = false;
 							break;
 						}
+						kdDebug()<<k_funcinfo<<" Second node="<<item->node().name()<<endl;
+						// open relation dialog
+						KPTRelationDialog *dia;
+						KPTRelation *rel = item->node().findRelation(m_linkParentNode);
+						if (rel)
+							dia = new KPTRelationDialog(rel, this);
 						else
+							dia = new KPTRelationDialog(m_linkParentNode, &(item->node()), this);
+
+						if (dia->exec())
 						{
-							kdDebug()<<k_funcinfo<<" First node="<<item->node().name()<<endl;
-							m_linkParentNode = &(item->node());
-							m_linkMode = true;
-							return;
+							kdDebug()<<k_funcinfo<<" Linked node="<<item->node().name()<<" to "<<m_linkParentNode->name()<<endl; 
+							emit updateView(true);
 						}
+						delete dia;
+						m_linkMode = false;
+						break;
+					}
+					else
+					{
+						kdDebug()<<k_funcinfo<<" First node="<<item->node().name()<<endl;
+						item->setSelected(true);
+						m_linkParentNode = &(item->node());
+						m_linkMode = true;
+						canvas()->update();
+						return;
 					}
 				}
 				m_linkMode = false;
 			}
+            if (m_linkMode)
+                m_linkParentNode->pertItem()->setSelected(false);
+            canvas()->update();
             break;
         }
         case QEvent::RightButton:

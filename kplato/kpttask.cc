@@ -300,7 +300,16 @@ void KPTTask::drawPert(KPTPertCanvas *view, QCanvas* canvas, int col) {
 		    nit.current()->drawPert(view, canvas, col);
 		}
     } else {
-		if (!m_drawn) {
+		if (m_drawn) {
+		    if (m_pertItem->column() <= col) {
+			    delete m_pertItem;
+				int row = view->row(col);
+				m_pertItem = new KPTPertCanvasItem(canvas, *this, row, col);
+				m_pertItem->show();
+				m_drawn = true;
+				view->setRow(row+1, col);
+			}
+		} else {
 		    int row = view->row(col);
             m_pertItem = new KPTPertCanvasItem(canvas, *this, row, col);
 			m_pertItem->show();

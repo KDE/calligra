@@ -23,6 +23,7 @@
 #include "kptnode.h"
 
 #include <qcanvas.h>
+#include <qrect.h>
 
 class QPainter;
 
