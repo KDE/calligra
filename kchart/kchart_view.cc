@@ -91,9 +91,9 @@ void KChartView::createGUI()
 
     // View
     m_idMenuView = m_rMenuBar->insertMenu( i18n( "&View" ) );
-
+    
     m_idMenuView_NewView = m_rMenuBar->insertItem( i18n( "&New View" ), m_idMenuView,
-						       this, "newView" );
+						   this, "newView" );
   }
 
   m_vToolBarFactory = m_vPartShell->toolBarFactory();
@@ -109,12 +109,12 @@ void KChartView::createGUI()
     tmp = kapp->kde_datadir().copy();
     tmp += "/kchart/pics/area.xpm";
     pix = loadPixmap( tmp );
-    m_idButtonLayout_Area = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), "Area", this, "setTypeArea" );
+    m_idButtonLayout_Area = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), i18n("Area"), this, "setTypeArea" );
 
     tmp = kapp->kde_datadir().copy();
     tmp += "/kchart/pics/lines.xpm";
     pix = loadPixmap( tmp );
-    m_idButtonLayout_Lines = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), "Lines", this, "setTypeLines" );
+    m_idButtonLayout_Lines = m_rToolBarLayout->insertButton( CORBA::string_dup( pix ), i18n("Lines"), this, "setTypeLines" );
   }
 }
 

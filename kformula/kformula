@@ -1,3 +1,5 @@
+#! /bin/sh
+
 micod -ORBIIOPAddr inet:localhost:8888 &
 micod_pid=$!
 sleep 1

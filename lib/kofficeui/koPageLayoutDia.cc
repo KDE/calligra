@@ -22,7 +22,7 @@
 
 /*===================== constrcutor ==============================*/
 KoPagePreview::KoPagePreview(QWidget* parent,const char *name,KoPageLayout _layout)
-  : QGroupBox("Page Preview",parent,name)
+  : QGroupBox(i18n("Page Preview"),parent,name)
 {
   setPageLayout(_layout);
 }
@@ -165,44 +165,44 @@ void KoPageLayoutDia::setupTab1()
 
   // ------------- unit _______________
   // label unit
-  lpgUnit = new QLabel("Unit:",tab1);
+  lpgUnit = new QLabel(i18n("Unit:"),tab1);
   lpgUnit->resize(lpgUnit->sizeHint());
   grid1->addWidget(lpgUnit,0,0);
 
   // combo unit
   cpgUnit = new QComboBox(false,tab1,"cpgUnit");
   cpgUnit->setAutoResize(false);
-  cpgUnit->insertItem("Millimeters (mm)");
-  cpgUnit->insertItem("Centimeters (cm)");
-  cpgUnit->insertItem("Inches (in)");
+  cpgUnit->insertItem(i18n("Millimeters (mm)"));
+  cpgUnit->insertItem(i18n("Centimeters (cm)"));
+  cpgUnit->insertItem(i18n("Inches (in)"));
   cpgUnit->resize(cpgUnit->sizeHint());
   grid1->addWidget(cpgUnit,1,0);
   connect(cpgUnit,SIGNAL(activated(int)),this,SLOT(unitChanged(int)));
 
   // -------------- page format -----------------
-  formatFrame = new QGroupBox("Page Format",tab1);
+  formatFrame = new QGroupBox(i18n("Page Format"),tab1);
   formatGrid = new QGridLayout(formatFrame,4,2,15,7);
 
   // label format
-  lpgFormat = new QLabel("\nFormat:",formatFrame);
+  lpgFormat = new QLabel(i18n("\nFormat:"),formatFrame);
   lpgFormat->resize(lpgFormat->sizeHint());
   formatGrid->addWidget(lpgFormat,0,0);
  
   // label orientation
-  lpgOrientation = new QLabel("\nOrientation:",formatFrame);
+  lpgOrientation = new QLabel(i18n("\nOrientation:"),formatFrame);
   lpgOrientation->resize(lpgOrientation->sizeHint());
   formatGrid->addWidget(lpgOrientation,0,1);
 
   // combo format
   cpgFormat = new QComboBox(false,formatFrame,"cpgFormat");
   cpgFormat->setAutoResize(false);
-  cpgFormat->insertItem("DIN A3");
-  cpgFormat->insertItem("DIN A4");
-  cpgFormat->insertItem("DIN A5");
-  cpgFormat->insertItem("US Letter");
-  cpgFormat->insertItem("US Legal");
-  cpgFormat->insertItem("Screen");
-  cpgFormat->insertItem("Custom");
+  cpgFormat->insertItem(i18n("DIN A3"));
+  cpgFormat->insertItem(i18n("DIN A4"));
+  cpgFormat->insertItem(i18n("DIN A5"));
+  cpgFormat->insertItem(i18n("US Letter"));
+  cpgFormat->insertItem(i18n("US Legal"));
+  cpgFormat->insertItem(i18n("Screen"));
+  cpgFormat->insertItem(i18n("Custom"));
   cpgFormat->resize(cpgFormat->sizeHint());
   formatGrid->addWidget(cpgFormat,1,0);
   connect(cpgFormat,SIGNAL(activated(int)),this,SLOT(formatChanged(int)));
@@ -210,14 +210,14 @@ void KoPageLayoutDia::setupTab1()
   // combo orientation
   cpgOrientation = new QComboBox(false,formatFrame,"cpgOrientation");
   cpgOrientation->setAutoResize(false);
-  cpgOrientation->insertItem("Portrait");
-  cpgOrientation->insertItem("Landscape");
+  cpgOrientation->insertItem(i18n("Portrait"));
+  cpgOrientation->insertItem(i18n("Landscape"));
   cpgOrientation->resize(cpgOrientation->sizeHint());
   formatGrid->addWidget(cpgOrientation,1,1);
   connect(cpgOrientation,SIGNAL(activated(int)),this,SLOT(orientationChanged(int)));
 
   // label width
-  lpgWidth = new QLabel("Width:",formatFrame);
+  lpgWidth = new QLabel(i18n("Width:"),formatFrame);
   lpgWidth->resize(lpgWidth->sizeHint());
   formatGrid->addWidget(lpgWidth,2,0);
 
@@ -236,7 +236,7 @@ void KoPageLayoutDia::setupTab1()
   connect(epgWidth,SIGNAL(textChanged(const char*)),this,SLOT(widthChanged()));
 
   // label height
-  lpgHeight = new QLabel("Height:",formatFrame);
+  lpgHeight = new QLabel(i18n("Height:"),formatFrame);
   lpgHeight->resize(lpgHeight->sizeHint());
   formatGrid->addWidget(lpgHeight,2,1);
 
@@ -280,11 +280,11 @@ void KoPageLayoutDia::setupTab1()
   grid1->addWidget(formatFrame,2,0);
 
   // --------------- page borders ---------------
-  borderFrame = new QGroupBox("Page Borders",tab1);
+  borderFrame = new QGroupBox(i18n("Page Borders"),tab1);
   borderGrid = new QGridLayout(borderFrame,4,2,15,7);
 
   // label left
-  lbrLeft = new QLabel("\nLeft:",borderFrame);
+  lbrLeft = new QLabel(i18n("\nLeft:"),borderFrame);
   lbrLeft->resize(lbrLeft->sizeHint());
   borderGrid->addWidget(lbrLeft,0,0);
 
@@ -301,7 +301,7 @@ void KoPageLayoutDia::setupTab1()
   connect(ebrLeft,SIGNAL(textChanged(const char*)),this,SLOT(leftChanged()));
 
   // label right
-  lbrRight = new QLabel("\nRight:",borderFrame);
+  lbrRight = new QLabel(i18n("\nRight:"),borderFrame);
   lbrRight->resize(lbrRight->sizeHint());
   borderGrid->addWidget(lbrRight,0,1);
 
@@ -318,7 +318,7 @@ void KoPageLayoutDia::setupTab1()
   connect(ebrRight,SIGNAL(textChanged(const char*)),this,SLOT(rightChanged()));
 
   // label top
-  lbrTop = new QLabel("Top:",borderFrame);
+  lbrTop = new QLabel(i18n("Top:"),borderFrame);
   lbrTop->resize(lbrTop->sizeHint());
   borderGrid->addWidget(lbrTop,2,0);
 
@@ -335,7 +335,7 @@ void KoPageLayoutDia::setupTab1()
   connect(ebrTop,SIGNAL(textChanged(const char*)),this,SLOT(topChanged()));
 
   // label bottom
-  lbrBottom = new QLabel("Bottom:",borderFrame);
+  lbrBottom = new QLabel(i18n("Bottom:"),borderFrame);
   lbrBottom->resize(lbrBottom->sizeHint());
   borderGrid->addWidget(lbrBottom,2,1);
 
@@ -399,7 +399,7 @@ void KoPageLayoutDia::setupTab1()
   tab1->setMaximumSize(tab1->size());
   tab1->setMinimumSize(tab1->size());
 
-  addTab(tab1,"Format and Borders");
+  addTab(tab1,i18n("Format and Borders"));
 
   setValuesTab1();
   updatePreview(layout);
@@ -454,11 +454,11 @@ void KoPageLayoutDia::setupTab2()
   grid2 = new QGridLayout(tab2,8,3,15,7);
 
   // ------------- header ---------------
-  lHead = new QLabel("Head line:",tab2);
+  lHead = new QLabel(i18n("Head line:"),tab2);
   lHead->resize(lHead->sizeHint());
   grid2->addWidget(lHead,0,0);
 
-  lHeadLeft = new QLabel("Left:",tab2);
+  lHeadLeft = new QLabel(i18n("Left:"),tab2);
   lHeadLeft->resize(lHeadLeft->sizeHint());
   grid2->addWidget(lHeadLeft,1,0);
 
@@ -467,7 +467,7 @@ void KoPageLayoutDia::setupTab2()
   grid2->addWidget(eHeadLeft,2,0);
   eHeadLeft->setText((const char*)hf.headLeft);
 
-  lHeadMid = new QLabel("Mid:",tab2);
+  lHeadMid = new QLabel(i18n("Mid:"),tab2);
   lHeadMid->resize(lHeadMid->sizeHint());
   grid2->addWidget(lHeadMid,1,1);
 
@@ -476,7 +476,7 @@ void KoPageLayoutDia::setupTab2()
   grid2->addWidget(eHeadMid,2,1);
   eHeadMid->setText((const char*)hf.headMid);
 
-  lHeadRight = new QLabel("Right:",tab2);
+  lHeadRight = new QLabel(i18n("Right:"),tab2);
   lHeadRight->resize(lHeadRight->sizeHint());
   grid2->addWidget(lHeadRight,1,2);
 
@@ -486,11 +486,11 @@ void KoPageLayoutDia::setupTab2()
   eHeadRight->setText((const char*)hf.headRight);
 
   // ------------- footer ---------------
-  lFoot = new QLabel("\nFoot line:",tab2);
+  lFoot = new QLabel(i18n("\nFoot line:"),tab2);
   lFoot->resize(lFoot->sizeHint());
   grid2->addWidget(lFoot,3,0);
 
-  lFootLeft = new QLabel("Left:",tab2);
+  lFootLeft = new QLabel(i18n("Left:"),tab2);
   lFootLeft->resize(lFootLeft->sizeHint());
   grid2->addWidget(lFootLeft,4,0);
 
@@ -499,7 +499,7 @@ void KoPageLayoutDia::setupTab2()
   grid2->addWidget(eFootLeft,5,0);
   eFootLeft->setText((const char*)hf.footLeft);
 
-  lFootMid = new QLabel("Mid:",tab2);
+  lFootMid = new QLabel(i18n("Mid:"),tab2);
   lFootMid->resize(lFootMid->sizeHint());
   grid2->addWidget(lFootMid,4,1);
 
@@ -508,7 +508,7 @@ void KoPageLayoutDia::setupTab2()
   grid2->addWidget(eFootMid,5,1);
   eFootMid->setText((const char*)hf.footMid);
 
-  lFootRight = new QLabel("Right:",tab2);
+  lFootRight = new QLabel(i18n("Right:"),tab2);
   lFootRight->resize(lFootRight->sizeHint());
   grid2->addWidget(lFootRight,4,2);
 
@@ -518,7 +518,7 @@ void KoPageLayoutDia::setupTab2()
   eFootRight->setText((const char*)hf.footRight);
 
   // --------------- macros ---------------------
-  lMacros1 = new QLabel("\nMacros:",tab2);
+  lMacros1 = new QLabel(i18n("\nMacros:"),tab2);
   lMacros1->resize(lMacros1->sizeHint());
   grid2->addWidget(lMacros1,6,0);
 
@@ -566,7 +566,7 @@ void KoPageLayoutDia::setupTab2()
   tab2->setMaximumSize(tab2->size());
   tab2->setMinimumSize(tab2->size());
   
-  addTab(tab2,"Header and Footer");
+  addTab(tab2,i18n("Header and Footer"));
 }
 
 /*====================== update the preview ======================*/

@@ -3,6 +3,7 @@
 Name=KFormula
 Exec=kformula.bin --server
 Comment=The Formula Editor
+MimeTypes=application/x-kformula
 RepoID=IDL:KFormula/Factory:1.0,
 ActivationMode=shared
 Type=OpenPart

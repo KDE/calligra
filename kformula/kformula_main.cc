@@ -20,6 +20,7 @@ typedef AutoLoader<KFormulaFactory> KFormulaAutoLoader;
 
 KFormulaApp::KFormulaApp( int argc, char** argv ) : OPApplication( argc, argv )
 {
+    getLocale()->insertCatalogue("kformula");
 }
 
 KFormulaApp::~KFormulaApp()

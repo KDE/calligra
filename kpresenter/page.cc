@@ -898,23 +898,23 @@ void Page::setupMenus()
   graphMenu = new QPopupMenu();
   CHECK_PTR(graphMenu);
   pixmap.load(pixdir+"/editcut.xpm");
-  graphMenu->insertItem(pixmap,"&Cut",this,SLOT(clipCut()));
+  graphMenu->insertItem(pixmap,i18n("&Cut"),this,SLOT(clipCut()));
   pixmap.load(pixdir+"/editcopy.xpm");
-  graphMenu->insertItem(pixmap,"C&opy",this,SLOT(clipCopy()));
+  graphMenu->insertItem(pixmap,i18n("C&opy"),this,SLOT(clipCopy()));
   pixmap.load(pixdir+"/editpaste.xpm");
-  graphMenu->insertItem(pixmap,"&Paste",this,SLOT(clipPaste()));
+  graphMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
   pixdir = KApplication::kde_datadir();
   pixmap.load(pixdir+"/kpresenter/toolbar/delete.xpm");
-  graphMenu->insertItem(pixmap,"&Delete",this,SLOT(deleteObjs()));
+  graphMenu->insertItem(pixmap,i18n("&Delete"),this,SLOT(deleteObjs()));
   graphMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/rotate.xpm");
-  graphMenu->insertItem(pixmap,"&Rotate...",this,SLOT(rotateObjs()));
+  graphMenu->insertItem(pixmap,i18n("&Rotate..."),this,SLOT(rotateObjs()));
   graphMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/style.xpm");
-  graphMenu->insertItem(pixmap,"&Properties...",this,SLOT(objProperties()));
+  graphMenu->insertItem(pixmap,i18n("&Properties..."),this,SLOT(objProperties()));
   graphMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
-  graphMenu->insertItem(pixmap,"&Assign effect...",this,SLOT(assignEffect()));
+  graphMenu->insertItem(pixmap,i18n("&Assign effect..."),this,SLOT(assignEffect()));
   graphMenu->setMouseTracking(true);
 
   // create right button picture menu
@@ -922,23 +922,23 @@ void Page::setupMenus()
   picMenu = new QPopupMenu();
   CHECK_PTR(picMenu);
   pixmap.load(pixdir+"/editcut.xpm");
-  picMenu->insertItem(pixmap,"&Cut",this,SLOT(clipCut()));
+  picMenu->insertItem(pixmap,i18n("&Cut"),this,SLOT(clipCut()));
   pixmap.load(pixdir+"/editcopy.xpm");
-  picMenu->insertItem(pixmap,"C&opy",this,SLOT(clipCopy()));
+  picMenu->insertItem(pixmap,i18n("C&opy"),this,SLOT(clipCopy()));
   pixmap.load(pixdir+"/editpaste.xpm");
-  picMenu->insertItem(pixmap,"&Paste",this,SLOT(clipPaste()));
+  picMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
   pixdir = KApplication::kde_datadir();
   pixmap.load(pixdir+"/kpresenter/toolbar/delete.xpm");
-  picMenu->insertItem(pixmap,"&Delete",this,SLOT(deleteObjs()));
+  picMenu->insertItem(pixmap,i18n("&Delete"),this,SLOT(deleteObjs()));
   picMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/rotate.xpm");
-  picMenu->insertItem(pixmap,"&Rotate...",this,SLOT(rotateObjs()));
+  picMenu->insertItem(pixmap,i18n("&Rotate..."),this,SLOT(rotateObjs()));
   picMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/picture.xpm");
-  picMenu->insertItem(pixmap,"&Change Picture...",this,SLOT(chPic()));
+  picMenu->insertItem(pixmap,i18n("&Change Picture..."),this,SLOT(chPic()));
   picMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
-  picMenu->insertItem(pixmap,"&Assign effect...",this,SLOT(assignEffect()));
+  picMenu->insertItem(pixmap,i18n("&Assign effect..."),this,SLOT(assignEffect()));
   picMenu->setMouseTracking(true);
 
   // create right button clipart menu 
@@ -946,23 +946,23 @@ void Page::setupMenus()
   clipMenu = new QPopupMenu();
   CHECK_PTR(clipMenu);
   pixmap.load(pixdir+"/editcut.xpm");
-  clipMenu->insertItem(pixmap,"&Cut",this,SLOT(clipCut()));
+  clipMenu->insertItem(pixmap,i18n("&Cut"),this,SLOT(clipCut()));
   pixmap.load(pixdir+"/editcopy.xpm");
-  clipMenu->insertItem(pixmap,"C&opy",this,SLOT(clipCopy()));
+  clipMenu->insertItem(pixmap,i18n("C&opy"),this,SLOT(clipCopy()));
   pixmap.load(pixdir+"/editpaste.xpm");
-  clipMenu->insertItem(pixmap,"&Paste",this,SLOT(clipPaste()));
+  clipMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
   pixdir = KApplication::kde_datadir();
   pixmap.load(pixdir+"/kpresenter/toolbar/delete.xpm");
-  clipMenu->insertItem(pixmap,"&Delete",this,SLOT(deleteObjs()));
+  clipMenu->insertItem(pixmap,i18n("&Delete"),this,SLOT(deleteObjs()));
   clipMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/rotate.xpm");
-  clipMenu->insertItem(pixmap,"&Rotate...",this,SLOT(rotateObjs()));
+  clipMenu->insertItem(pixmap,i18n("&Rotate..."),this,SLOT(rotateObjs()));
   clipMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/clipart.xpm");
-  clipMenu->insertItem(pixmap,"&Change Clipart...",this,SLOT(chClip()));
+  clipMenu->insertItem(pixmap,i18n("&Change Clipart..."),this,SLOT(chClip()));
   clipMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
-  clipMenu->insertItem(pixmap,"&Assign effect...",this,SLOT(assignEffect()));
+  clipMenu->insertItem(pixmap,i18n("&Assign effect..."),this,SLOT(assignEffect()));
   clipMenu->setMouseTracking(true);
 
   // create right button text menu 
@@ -970,20 +970,20 @@ void Page::setupMenus()
   txtMenu = new QPopupMenu();
   CHECK_PTR(txtMenu);
   pixmap.load(pixdir+"/editcut.xpm");
-  txtMenu->insertItem(pixmap,"&Cut",this,SLOT(clipCut()));
+  txtMenu->insertItem(pixmap,i18n("&Cut"),this,SLOT(clipCut()));
   pixmap.load(pixdir+"/editcopy.xpm");
-  txtMenu->insertItem(pixmap,"C&opy",this,SLOT(clipCopy()));
+  txtMenu->insertItem(pixmap,i18n("C&opy"),this,SLOT(clipCopy()));
   pixmap.load(pixdir+"/editpaste.xpm");
-  txtMenu->insertItem(pixmap,"&Paste",this,SLOT(clipPaste()));
+  txtMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
   pixdir = KApplication::kde_datadir();
   pixmap.load(pixdir+"/kpresenter/toolbar/delete.xpm");
-  txtMenu->insertItem(pixmap,"&Delete",this,SLOT(deleteObjs()));
+  txtMenu->insertItem(pixmap,i18n("&Delete"),this,SLOT(deleteObjs()));
   txtMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/rotate.xpm");
-  txtMenu->insertItem(pixmap,"&Rotate...",this,SLOT(rotateObjs()));
+  txtMenu->insertItem(pixmap,i18n("&Rotate..."),this,SLOT(rotateObjs()));
   txtMenu->insertSeparator();
   pixmap.load(pixdir+"/kpresenter/toolbar/effect.xpm");
-  txtMenu->insertItem(pixmap,"&Assign effect...",this,SLOT(assignEffect()));
+  txtMenu->insertItem(pixmap,i18n("&Assign effect..."),this,SLOT(assignEffect()));
   txtMenu->setMouseTracking(true);
 }
 

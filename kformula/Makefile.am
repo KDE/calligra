@@ -2,8 +2,8 @@
 
 SUBDIRS = pics
 
-INCLUDES  = $(MICO_INCLUDES)  -I./ui -I./core  -I../lib/koml \
-	-I../lib/kofficecore -I../lib/kofficeui $(all_includes) -I$(idldir)
+INCLUDES  =   -I./ui -I./core  -I../lib/koml -I../lib/kofficecore \
+	-I../lib/kofficeui $(MICO_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS =   $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD =  ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la \
@@ -13,10 +13,14 @@ LDADD =  ../lib/kofficeui/libkofficeui.la \
 ####### Files
 
 bin_PROGRAMS = kformula.bin
+bin_SCRIPTS = kformula
 
-kformula_bin_SOURCES = kformula_main.cc kformula_doc.cc kformula_view.cc kformula.cc kformula_shell.cc
-noinst_HEADERS = kformula_main.h kformula_doc.h kformula_view.h kformula.h kformula_shell.h
-SRCMETA =	kformula_main.moc kformula_view.moc kformula_doc.moc kformula_shell.moc
+kformula_bin_SOURCES = kformula_main.cc kformula_doc.cc kformula_view.cc \
+	kformula.cc kformula_shell.cc
+noinst_HEADERS = kformula_main.h kformula_doc.h kformula_view.h \
+	kformula.h kformula_shell.h
+SRCMETA = kformula_main.moc kformula_view.moc kformula_doc.moc \
+	kformula_shell.moc
 
 IDL_INCLUDES = -I$(idldir)
 
@@ -40,9 +44,12 @@ install-exec-local:
 
 kformula.h: kformula.idl
 	@echo $(IDL) --query-server-for-narrow $(IDL_INCLUDES) kformula.idl ;\
-	-rm -f kformula.h kformula.cc ;\
+	rm -f kformula.h kformula.cc ;\
 	$(IDL) --query-server-for-narrow $(IDL_INCLUDES) kformula.idl ;\
 	sed -e "s,^#include \".*/\(.*\)\",#include <\1>," kformula.h > kformula.h.new && mv kformula.h.new kformula.h
+
+messages:
+	$(XGETTEXT) -C -ki18n -kklocale -x$(includedir)/kde.pot -x$(includedir)/corba.pot *.cc && mv messages.po ../po/kformula.pot
 
 kformula.cc: kformula.h
 kformula_view.h: kformula.h

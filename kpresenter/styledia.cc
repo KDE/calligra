@@ -15,6 +15,7 @@
 
 #include "styledia.h"
 #include "styledia.moc"
+#include <kapp.h>
 
 /******************************************************************/
 /* class Pen and Brush preview                                    */
@@ -60,33 +61,33 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
   penFrame = new QButtonGroup(this,"penGrp");
   penFrame->setFrameStyle(QFrame::Box|QFrame::Sunken);
   penFrame->move(20,20);
-  penFrame->setTitle("Pen");
+  penFrame->setTitle(i18n("Pen"));
 
   choosePCol = new QPushButton(penFrame,"PCol");
-  choosePCol->setText("Choose color...");
+  choosePCol->setText(i18n("Choose color..."));
   choosePCol->move(10,20);
   choosePCol->resize(choosePCol->sizeHint());
   connect(choosePCol,SIGNAL(clicked()),this,SLOT(changePCol()));
 
   penStyle = new QLabel(penFrame);
-  penStyle->setText("Choose style:");
+  penStyle->setText(i18n("Choose style:"));
   penStyle->move(choosePCol->x(),choosePCol->y()+choosePCol->height()+20);
   penStyle->resize(penStyle->sizeHint());
 
   choosePStyle = new QComboBox(false,penFrame,"PStyle");
   choosePStyle->move(choosePCol->x(),penStyle->y()+penStyle->height()+10);
-  choosePStyle->insertItem("solid line");
-  choosePStyle->insertItem("dash line (----)");
-  choosePStyle->insertItem("dot line (****)");
-  choosePStyle->insertItem("dash dot line (-*-*)");
-  choosePStyle->insertItem("dahs dot dot line (-**-)");
-  choosePStyle->insertItem("no pen");
+  choosePStyle->insertItem(i18n("solid line"));
+  choosePStyle->insertItem(i18n("dash line (----)"));
+  choosePStyle->insertItem(i18n("dot line (****)"));
+  choosePStyle->insertItem(i18n("dash dot line (-*-*)"));
+  choosePStyle->insertItem(i18n("dahs dot dot line (-**-)"));
+  choosePStyle->insertItem(i18n("no pen"));
   choosePStyle->resize(choosePStyle->sizeHint());
   choosePCol->resize(choosePStyle->width(),choosePCol->height());  
   connect(choosePStyle,SIGNAL(activated(int)),this,SLOT(changePStyle(int)));
 
   penWidth = new QLabel(penFrame);
-  penWidth->setText("Choose width:");
+  penWidth->setText(i18n("Choose width:"));
   penWidth->move(choosePCol->x(),choosePStyle->y()+choosePStyle->height()+20);
   penWidth->resize(penWidth->sizeHint());
 
@@ -117,36 +118,36 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
   brushFrame = new QButtonGroup(this,"brushGrp");
   brushFrame->setFrameStyle(QFrame::Box|QFrame::Sunken);
   brushFrame->move(penFrame->x()+penFrame->width()+20,20);
-  brushFrame->setTitle("Brush");
+  brushFrame->setTitle(i18n("Brush"));
 
   chooseBCol = new QPushButton(brushFrame,"BCol");
-  chooseBCol->setText("Choose color...");
+  chooseBCol->setText(i18n("Choose color..."));
   chooseBCol->move(10,20);
   chooseBCol->resize(chooseBCol->sizeHint());
   connect(chooseBCol,SIGNAL(clicked()),this,SLOT(changeBCol()));
 
   brushStyle = new QLabel(brushFrame);
-  brushStyle->setText("Choose style:");
+  brushStyle->setText(i18n("Choose style:"));
   brushStyle->move(chooseBCol->x(),chooseBCol->y()+chooseBCol->height()+20);
   brushStyle->resize(brushStyle->sizeHint());
 
   chooseBStyle = new QComboBox(false,brushFrame,"BStyle");
   chooseBStyle->move(brushStyle->x(),brushStyle->y()+brushStyle->height()+10);
-  chooseBStyle->insertItem("100% fill pattern");
-  chooseBStyle->insertItem("94% fill pattern");
-  chooseBStyle->insertItem("88% fill pattern");
-  chooseBStyle->insertItem("63% fill pattern");
-  chooseBStyle->insertItem("50% fill pattern");
-  chooseBStyle->insertItem("37% fill pattern");
-  chooseBStyle->insertItem("12% fill pattern");
-  chooseBStyle->insertItem("6% fill pattern");
-  chooseBStyle->insertItem("horizontal lines");
-  chooseBStyle->insertItem("vertical lines");
-  chooseBStyle->insertItem("crossing lines");
-  chooseBStyle->insertItem("diagonal lines (/)");
-  chooseBStyle->insertItem("diagonal lines (\\)");
-  chooseBStyle->insertItem("diagonal crossing lines");
-  chooseBStyle->insertItem("no brush");
+  chooseBStyle->insertItem(i18n("100% fill pattern"));
+  chooseBStyle->insertItem(i18n("94% fill pattern"));
+  chooseBStyle->insertItem(i18n("88% fill pattern"));
+  chooseBStyle->insertItem(i18n("63% fill pattern"));
+  chooseBStyle->insertItem(i18n("50% fill pattern"));
+  chooseBStyle->insertItem(i18n("37% fill pattern"));
+  chooseBStyle->insertItem(i18n("12% fill pattern"));
+  chooseBStyle->insertItem(i18n("6% fill pattern"));
+  chooseBStyle->insertItem(i18n("horizontal lines"));
+  chooseBStyle->insertItem(i18n("vertical lines"));
+  chooseBStyle->insertItem(i18n("crossing lines"));
+  chooseBStyle->insertItem(i18n("diagonal lines (/)"));
+  chooseBStyle->insertItem(i18n("diagonal lines (\\)"));
+  chooseBStyle->insertItem(i18n("diagonal crossing lines"));
+  chooseBStyle->insertItem(i18n("no brush"));
   chooseBStyle->resize(chooseBStyle->sizeHint());
   chooseBCol->resize(chooseBStyle->width(),chooseBCol->height());
   connect(chooseBStyle,SIGNAL(activated(int)),this,SLOT(changeBStyle(int)));
@@ -161,14 +162,14 @@ StyleDia::StyleDia(QWidget* parent=0,const char* name=0)
   brushFrame->resize(2*chooseBStyle->x()+chooseBStyle->width(),penFrame->height());
 
   cancelBut = new QPushButton(this,"BCancel");
-  cancelBut->setText("Cancel");
+  cancelBut->setText(i18n("Cancel"));
   cancelBut->move(brushFrame->x()+brushFrame->width(),brushFrame->y()+brushFrame->height()+20);
  
   applyBut = new QPushButton(this,"BApply");
-  applyBut->setText("Apply");
+  applyBut->setText(i18n("Apply"));
 
   okBut = new QPushButton(this,"BOK");
-  okBut->setText("OK");
+  okBut->setText(i18n("OK"));
   okBut->setAutoRepeat(false);
   okBut->setAutoResize(false);
   okBut->setAutoDefault(true);

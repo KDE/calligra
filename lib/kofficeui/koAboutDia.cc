@@ -19,22 +19,25 @@
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-KoAboutDia::KoAboutDia(QWidget* parent=0,const char* name=0,KoApplication koapp=KDE,QString version)
+KoAboutDia::KoAboutDia(QWidget* parent,
+		       const char* name,
+		       KoApplication koapp,
+		       QString version)
   :QDialog(parent,name,true)
 {
   switch (koapp)
     {
     case KPresenter: 
       {
-	setCaption("KPresenter - About"); 
+	setCaption(i18n("KPresenter - About")); 
 	pLogo.load(KApplication::kde_datadir()+"/koffice/pics/koKPresenter.xpm");
 	author = "Reginald Stadlbauer";
 	email = "<reggie@kde.org>";
-	add = "WMF Clipart Support (c) by Stefan Taferner <taferner@kde.org>";
+	add = i18n("WMF Clipart Support (c) by Stefan Taferner <taferner@kde.org>");
       } break;
     case KSpread: 
       {
-	setCaption("KSpread - About"); 
+	setCaption(i18n("KSpread - About")); 
 	pLogo.load(KApplication::kde_datadir()+"/koffice/pics/koKSpread.xpm");
 	author = "Torben Weis";
 	email = "<weis@kde.org>";
@@ -42,7 +45,7 @@ KoAboutDia::KoAboutDia(QWidget* parent=0,const char* name=0,KoApplication koapp=
       } break;
     case KCharts: 
       {
-	setCaption("KCharts - About");
+	setCaption(i18n("KCharts - About"));
 	pLogo.load(KApplication::kde_datadir()+"/koffice/pics/koKCharts.xpm");
 	author = "Torben Weis";
 	email = "<weis@kde.org>";
@@ -50,7 +53,7 @@ KoAboutDia::KoAboutDia(QWidget* parent=0,const char* name=0,KoApplication koapp=
       } break;
     case KImage:
       {
-	setCaption("KImage - About");
+	setCaption(i18n("KImage - About"));
 	pLogo.load(KApplication::kde_datadir()+"/koffice/pics/koKImage.xpm");
 	author = "Torben Weis";
 	email = "<weis@kde.org>";
@@ -58,7 +61,7 @@ KoAboutDia::KoAboutDia(QWidget* parent=0,const char* name=0,KoApplication koapp=
       } break;
     case KAutoformEdit: 
       {
-	setCaption("KAutoformEdit - About");
+	setCaption(i18n("KAutoformEdit - About"));
 	pLogo.load(KApplication::kde_datadir()+"/koffice/pics/koKAutoformEdit.xpm");
 	author = "Reginald Stadlbauer";
 	email = "<reggie@kde.org>";
@@ -66,12 +69,14 @@ KoAboutDia::KoAboutDia(QWidget* parent=0,const char* name=0,KoApplication koapp=
       } break;
     case KOffice: 
       {
-	setCaption("KOffice - About");
+	setCaption(i18n("KOffice - About"));
 	pLogo.load(KApplication::kde_datadir()+"/koffice/pics/koKOffice.xpm");
-	author = "Torben Weis and Reginald Stadlbauer";
-	email = "<weis@kde.org> and <reggie@kde.org>";
+	author = i18n("Torben Weis and Reginald Stadlbauer");
+	email = i18n("<weis@kde.org> and <reggie@kde.org>");
 	add = "";
       } break;
+    default:
+	warning("KoAboutDia can not handle case %d", koapp);
     }
   
   grid = new QGridLayout(this,2,2);
@@ -82,10 +87,12 @@ KoAboutDia::KoAboutDia(QWidget* parent=0,const char* name=0,KoApplication koapp=
   grid->addWidget(lLogo,0,0);
   
   lInfo = new QLabel(this);
-  lInfo->setText("Version: " + version +"\n\n"
-		 "(c) by " + author + " 1997 - 1998\n\n"
-		 "E-Mail: " + email + "\n\n"
-		 "The KOffice is under GNU GPL");
+  QString infoText;
+  infoText.sprintf(i18n("Version: %s\n\n"
+			"(c) by %s 1997 - 1998\n\n"
+			"E-mail: %s \n\n"
+			"The KOffice is under GNU GPL"),
+		   version.data(), author.data(), email.data());
   if (!add.isEmpty())
     lInfo->setText(QString(lInfo->text()) + "\n\n" + add);
   lInfo->resize(lInfo->sizeHint());
@@ -93,7 +100,7 @@ KoAboutDia::KoAboutDia(QWidget* parent=0,const char* name=0,KoApplication koapp=
 
   bbox = new KButtonBox(this,KButtonBox::HORIZONTAL,7);
   bbox->addStretch(20);
-  bOk = bbox->addButton("OK");
+  bOk = bbox->addButton(i18n("OK"));
   bOk->setAutoRepeat(false);
   bOk->setAutoResize(false);
   bOk->setAutoDefault(true);
@@ -120,22 +127,22 @@ KoAboutDia::~KoAboutDia()
 }
 
 /*======================= about application ======================*/
-void KoAboutDia::about(KoApplication koapp,QString version=0)
+void KoAboutDia::about(KoApplication koapp,QString version)
 {
   if (koapp != KDE)
     {
-      KoAboutDia *dlg = new KoAboutDia(0,"About",koapp,version);
+      KoAboutDia *dlg = new KoAboutDia(0,i18n("About"),koapp,version);
       dlg->exec();
       delete dlg;
     }
   else
     {
-      QMessageBox::about(0,klocale->translate(klocale->translate("About KDE")),
-			 klocale->translate("\nThe KDE Desktop Environment was written by the KDE Team,\n"
-					    "a world-wide network of software engineers commited to\n"
-					    "free software development.\n\n"
-					    "Visit http://www.kde.org for more information on the KDE\n"
-					    "Project. Please consider joining and supporting KDE.\n\n"
-					    "Please report bugs at http://buglist.kde.org.\n"));
+	QMessageBox::about(0,i18n("About KDE"),
+			   i18n("\nThe KDE Desktop Environment was written by the KDE Team,\n"
+				"a world-wide network of software engineers commited to\n"
+				"free software development.\n\n"
+				"Visit http://www.kde.org for more information on the KDE\n"
+				"Project. Please consider joining and supporting KDE.\n\n"
+				"Please report bugs at http://buglist.kde.org.\n"));
     }
 }
