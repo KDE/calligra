@@ -50,7 +50,7 @@ class Anchor: public Format
 		/**
 		 * Creates a new instances of Anchor.
 		 *
-		 * @param Para is the parent class.
+		 * @param para the parent class.
 		 */
 		Anchor(Para* para = 0);
 		//Anchor(TextZone);
