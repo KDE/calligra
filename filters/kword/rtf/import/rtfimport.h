@@ -243,12 +243,26 @@ public:
     void setEnumProperty( RTFProperty *property );
     void setUnderlineProperty( RTFProperty *property );
     void setBorderProperty( RTFProperty *property );
+    /**
+     * Sets the value of a border property specified by token.
+     * @param property the property to set
+     */
     void setBorderStyle( RTFProperty *property );
     void setUpProperty( RTFProperty * );
     void setPlainFormatting( RTFProperty * = 0L );
     void setParagraphDefaults( RTFProperty * = 0L );
     void setSectionDefaults( RTFProperty * = 0L );
     void setTableRowDefaults( RTFProperty * = 0L );
+    /**
+     * Select which border is the current one.
+     * @param property the property to set
+     */
+    void selectLayoutBorder( RTFProperty * property );
+    /**
+     * Select which border is the current one, in case of a cell
+     * @param property the property to set
+     */
+    void selectLayoutBorderFromCell( RTFProperty * property );
     void insertParagraph( RTFProperty * = 0L );
     void insertPageBreak( RTFProperty * );
     void insertTableCell( RTFProperty * );

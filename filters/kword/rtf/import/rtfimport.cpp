@@ -97,21 +97,21 @@ static RTFProperty propertyTable[] =
         // \bin is handled in the tokenizer
 	MEMBER(	"@colortbl",	"blue",		setNumericProperty,	blue, 0 ),
 	MEMBER(	0L,		"box",		setEnumProperty,	state.layout.border, 0 ),
-	MEMBER(	0L,		"brdrb",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.layout.borders[3]) ),
+	PROP(	0L,		"brdrb",	selectLayoutBorder,	0L, 3 ),
 	PROP(	0L,		"brdrcf",	setBorderProperty,	offsetof(RTFBorder,color), 0 ),
-	PROP(	0L,		"brdrdash",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Dashes ),
-	PROP(	0L,		"brdrdashd",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::DashDot ),
-	PROP(	0L,		"brdrdashdd",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::DashDotDot ),
-	PROP(	0L,		"brdrdashsm",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Dashes ),
-	PROP(	0L,		"brdrdb",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Solid ),
-	PROP(	0L,		"brdrdot",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Dots ),
-	PROP(	0L,		"brdrhairline",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Solid ),
-	MEMBER(	0L,		"brdrl",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.layout.borders[0]) ),
-	MEMBER(	0L,		"brdrr",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.layout.borders[1]) ),
-	PROP(	0L,		"brdrs",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Solid ),
-	PROP(	0L,		"brdrsh",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Solid ),
-	MEMBER(	0L,		"brdrt",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.layout.borders[2]) ),
-	PROP(	0L,		"brdrth",	setBorderStyle,		offsetof(RTFBorder,style), RTFBorder::Solid ),
+	PROP(	0L,		"brdrdash",	setBorderStyle,		0L, RTFBorder::Dashes ),
+	PROP(	0L,		"brdrdashd",	setBorderStyle,		0L, RTFBorder::DashDot ),
+	PROP(	0L,		"brdrdashdd",	setBorderStyle,		0L, RTFBorder::DashDotDot ),
+	PROP(	0L,		"brdrdashsm",	setBorderStyle,		0L, RTFBorder::Dashes ),
+	PROP(	0L,		"brdrdb",	setBorderStyle,		0L, RTFBorder::Solid ),
+	PROP(	0L,		"brdrdot",	setBorderStyle,		0L, RTFBorder::Dots ),
+	PROP(	0L,		"brdrhairline",	setBorderStyle,		0L, RTFBorder::Solid ),
+	PROP(	0L,		"brdrl",	selectLayoutBorder,	0L, 0 ),
+	PROP(	0L,		"brdrr",	selectLayoutBorder,	0L, 1 ),
+	PROP(	0L,		"brdrs",	setBorderStyle,		0L, RTFBorder::Solid ),
+	PROP(	0L,		"brdrsh",	setBorderStyle,		0L, RTFBorder::Solid ),
+	PROP(	0L,		"brdrt",	selectLayoutBorder,	0L, 2 ),
+	PROP(	0L,		"brdrth",	setBorderStyle,		0L, RTFBorder::Solid ),
 	PROP(	0L,		"brdrw",	setBorderProperty,	offsetof(RTFBorder,width), 0 ),
 	PROP(	0L,		"bullet",	insertSymbol,		0L, 0x2022 ),
 	PROP(	0L,		"brsp",		setBorderProperty,	offsetof(RTFBorder,space), 0 ),
@@ -124,10 +124,10 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"chdate",	insertDateTime,		0L, TRUE ),
 	PROP(	0L,		"chpgn",	insertPageNumber,		0L, 0 ),
 	PROP(	0L,		"chtime",	insertDateTime,		0L, FALSE ),
-	MEMBER(	0L,		"clbrdrb",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[3]) ),
-	MEMBER(	0L,		"clbrdrl",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[0]) ),
-	MEMBER(	0L,		"clbrdrr",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[1]) ),
-	MEMBER(	0L,		"clbrdrt",	setEnumProperty,	state.layout.border, offsetof(RTFImport,state.tableCell.borders[2]) ),
+	PROP(	0L,		"clbrdrb",	selectLayoutBorderFromCell,	0L, 3 ),
+	PROP(	0L,		"clbrdrl",	selectLayoutBorderFromCell,	0L, 0 ),
+	PROP(	0L,		"clbrdrr",	selectLayoutBorderFromCell,	0L, 1 ),
+	PROP(	0L,		"clbrdrt",	selectLayoutBorderFromCell,	0L, 2 ),
 	MEMBER(	0L,		"clcbpat",	setNumericProperty,	state.tableCell.bgcolor, 0 ),
 	PROP(	0L,		"cs",	ignoreKeyword,		0L, 0 ), // Not supported by KWord 1.3
 	PROP(	0L,		"datafield",	skipGroup,		0L, 0 ), // Binary data in variables are not supported
@@ -798,23 +798,18 @@ void RTFImport::setUnderlineProperty( RTFProperty *property )
 }
 
 
-/**
- * Sets the value of a border property specified by token.
- * @param property the property to set
- */
 void RTFImport::setBorderStyle( RTFProperty *property )
 {
     if (state.layout.border)
     {
-	RTFBorder *border = (RTFBorder *)((char *)this + (int)state.layout.border);
-	border->style = (RTFBorder::BorderStyle)property->value;
+        state.layout.border->style = static_cast <RTFBorder::BorderStyle> ( property->value );
     }
     else
     {
-	for (uint i=0; i < 4; i++)
-	{
-	    state.layout.borders[i].style = (RTFBorder::BorderStyle)property->value;
-	}
+        for (uint i=0; i < 4; i++)
+        {
+            state.layout.borders[i].style = static_cast <RTFBorder::BorderStyle> ( property->value );
+        }
     }
 }
 
@@ -826,7 +821,7 @@ void RTFImport::setBorderProperty( RTFProperty *property )
 {
     if (state.layout.border)
     {
-	*((int *)((char *)this + (int)state.layout.border + property->offset)) = token.value;
+        *((int *)(state.layout.border + property->offset)) = token.value;
     }
     else
     {
@@ -939,6 +934,16 @@ void RTFImport::setTableRowDefaults( RTFProperty * )
 	border.width = 0;
 	border.style = RTFBorder::None;
     }
+}
+
+void RTFImport::selectLayoutBorder( RTFProperty * property )
+{
+    state.layout.border = & state.layout.borders [ property->value ];
+}
+
+void RTFImport::selectLayoutBorderFromCell( RTFProperty * property )
+{
+    state.layout.border = & state.tableCell.borders [ property->value ];
 }
 
 /**
