@@ -256,14 +256,6 @@ void KSpreadGoalSeekDlg::buttonCancelClicked()
   reject();
 }
 
-double abs(double c)
-{
-  if (c < 0)
-    return (c * -1);
-
-  return c;
-}
-
 void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
 {
   m_resultText->setText( i18n( "Starting..." ) );
@@ -288,7 +280,7 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
 
   // while the result is not close enough to zero
   // or while the max number of iterations is not reached...
-  while ( abs( resultA ) > eps && ( m_maxIter >= 0 ) )
+  while ( fabs( resultA ) > eps && ( m_maxIter >= 0 ) )
   {
     startA = startB;
     startB = x;
@@ -320,7 +312,7 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
     if ( resultB == resultA )
     {
       //      kdDebug() << " resultA == resultB" << endl;
-      if ( abs( resultA ) < eps )
+      if ( fabs( resultA ) < eps )
       {
         ok = true;
         break;
@@ -333,14 +325,14 @@ void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
     // Point of intersection of secant with x-axis
     x = ( startA * resultB - startB * resultA ) / ( resultB - resultA );
 
-    if ( abs(x) > 100000000 )
+    if ( fabs(x) > 100000000 )
     {
-      //      kdDebug() << "abs(x) > 100000000: " << x << endl;
+      //      kdDebug() << "fabs(x) > 100000000: " << x << endl;
       ok = false;
       break;
     }
 
-    //    kdDebug() << "X: " << x << ", abs (resultA): " << abs(resultA) << ", Real start: " << startA << ", Real result: " << resultA << ", Iteration: " << m_maxIter << endl;
+    //    kdDebug() << "X: " << x << ", fabs (resultA): " << fabs(resultA) << ", Real start: " << startA << ", Real result: " << resultA << ", Iteration: " << m_maxIter << endl;
 
     --m_maxIter;
     if ( m_maxIter % 20 == 0 )
