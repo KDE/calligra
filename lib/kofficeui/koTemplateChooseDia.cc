@@ -160,8 +160,6 @@ void KoTemplateChooseDia::setupTabs()
 	    grpPtr->loadWid->show();
 	    connect( grpPtr->loadWid, SIGNAL( doubleClicked( QIconViewItem * ) ),
 		     this, SLOT( chosen() ) );
-	    connect( grpPtr->loadWid, SIGNAL( nameChanged( const QString & ) ),
-		    this, SLOT( nameChanged( const QString & ) ) );
 	    connect( grpPtr->loadWid, SIGNAL( currentChanged( const QString & ) ),
 		    this, SLOT( currentChanged( const QString & ) ) );
 	    grpPtr->label = new QLabel( grpPtr->tab );
@@ -210,20 +208,6 @@ void KoTemplateChooseDia::setupTabs()
 		
 	connect( rbTemplates, SIGNAL( clicked() ), this, SLOT( openTemplate() ) );
 	openEmpty();
-    }
-}
-
-/*================================================================*/
-void KoTemplateChooseDia::nameChanged( const QString &name )
-{
-    QFileInfo fi( name );
-
-    if ( !groupList.isEmpty() ) {
-	for ( grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next() ) {
-	    grpPtr->label->setText( fi.baseName() );
-	    if ( grpPtr->label->text().isEmpty() )
-		grpPtr->label->setText( " " );
-	}
     }
 }
 

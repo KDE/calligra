@@ -130,7 +130,6 @@ private:
     bool firstTime;
 
 private slots:
-    void nameChanged( const QString & );
     void chosen();
     void currentChanged( const QString & );
 
