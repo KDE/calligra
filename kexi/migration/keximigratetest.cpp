@@ -22,7 +22,7 @@
 //#include <config.h>
 #endif
 
-#include "importwizard.h"
+#include <migration/importwizard.h>
 #include <kapplication.h>
 
 /*

@@ -10,7 +10,8 @@
 //
 //
 #include "importwizard.h"
-#include "keximigrate.h"
+#include <migration/keximigrate.h>
+#include <migration/migratemanager.h>
 
 #include <qhbox.h>
 #include <qlabel.h>
@@ -92,10 +93,15 @@ void importWizard::setupintro()
 //
 void importWizard::setupsrcType()
 {
+    
     QVBox *srcTypeControls = new QVBox(srcTypePage);
     srcTypeCombo = new KComboBox(srcTypeControls);
-    srcTypeCombo->insertItem("PostgreSQL Database", 0);
-    srcTypeCombo->insertItem("Text File", 1);
+    
+    MigrateManager manager;
+
+    QStringList names = manager.migrateDriverNames();
+
+    srcTypeCombo->insertStringList(names);
 }
 
 //===========================================================
@@ -181,13 +187,12 @@ bool importWizard::checkUserInput()
 
     problem = false;
     
-    if (srcTypeCombo->currentText() != "PostgreSQL Database")
+    if (srcTypeCombo->currentText() != "PostgreSQL")
     {
         problem = true;
         finishtxt = i18n("Source type was not PostgreSQL Database.");
     }
-    if ((dstNewDBName->text() == "Enter new database name here" || dstNewDBName->text() == "") 
-		&& dstTypeCombo->currentText().lower() == KexiDB::Driver::defaultFileBasedDriverName())
+    if ((dstNewDBName->text() == "Enter new database name here" || dstNewDBName->text() == ""))
     {
         problem = true;
         finishtxt = finishtxt + i18n("\nNo new database name was entered.");
@@ -218,10 +223,12 @@ void importWizard::accept()
     
     //Start with a driver manager
     KexiDB::DriverManager manager;
-
+    MigrateManager mmanager;
+    
     //get a driver to the destination database
     KexiDB::Driver *driver = manager.driver(dstTypeCombo->currentText());
-
+    
+    
     //Check for errors
     if (!driver || manager.error())
     {
@@ -255,10 +262,10 @@ void importWizard::accept()
     //Create connections to the kexi database
     kexi_conn = driver->createConnection(*cdata);
 
-    //import = new pqxxMigrate(srcConn->selectedConnectionData(), srcdbname->selectedProjectData()->databaseName(), kexi_conn, dbname, false);
+    import = mmanager.migrateDriver(srcTypeCombo->currentText());
+    
+    import->setData(srcConn->selectedConnectionData(), srcdbname->selectedProjectData()->databaseName(), kexi_conn, dbname, false);
 
-#if 0
-piggz: local variable 'import' used without having been initialized
     if (import->performImport())
     {
         KMessageBox::information(this, i18n("Import Succeeded."), i18n("Success"));
@@ -267,7 +274,6 @@ piggz: local variable 'import' used without having been initialized
     {
         KMessageBox::error(this, i18n("Import failed because: "), i18n("Failure"));
     }
-#endif
 }
 
 //===========================================================
@@ -283,7 +289,7 @@ void importWizard::nextClicked(const QString & p)
     else if (currentPage() == srcConnPage)
     {
         srcConnPage->hide();
-        if (srcTypeCombo->currentText() == "PostgreSQL Database")
+        if (srcTypeCombo->currentText() == "PostgreSQL")
         {
             srcConn->showAdvancedConn();
         }
@@ -296,7 +302,7 @@ void importWizard::nextClicked(const QString & p)
     }
     else if (currentPage() == srcdbPage)
     {
-        if (srcTypeCombo->currentText() == "PostgreSQL Database")
+        if (srcTypeCombo->currentText() == "PostgreSQL")
         {
             if (!srcdbname)
             {
@@ -327,7 +333,7 @@ void importWizard::nextClicked(const QString & p)
     }
     else if (currentPage() == finishPage)
     {
-        KMessageBox::information(this, dstConn->m_fileDlg->currentFileName(), "Current File Name");
+        
         if (checkUserInput())
         {
             setFinishEnabled(finishPage, true);

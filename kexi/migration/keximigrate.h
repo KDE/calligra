@@ -47,8 +47,11 @@ namespace KexiMigration
 			//Destructor
 			~KexiMigrate();
 			
-			//Constructor.  Requires two connection objects, a name and a bool
-			KexiMigrate(KexiDB::ConnectionData* externalConnectionData, QString dbFrom, KexiDB::Connection* kexiConnection, QString newdbname, bool keep_data);
+			//Constructor
+			KexiMigrate();
+			
+			//Data Setup.  Requires two connection objects, a name and a bool
+			void setData(KexiDB::ConnectionData* externalConnectionData, QString dbFrom, KexiDB::Connection* kexiConnection, QString newdbname, bool keep_data);
 			
 			//Performs an import operation
 			bool performImport();

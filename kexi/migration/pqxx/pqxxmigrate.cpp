@@ -37,8 +37,7 @@ what the system might be and is a work in progress
 
 //==================================================================================
 //Constructor
-pqxxMigrate::pqxxMigrate(KexiDB::ConnectionData* externalConnectionData, QString dbname, KexiDB::Connection* kexiConnection, QString newdbname, bool keep_data)
-		:KexiMigrate(externalConnectionData, dbname, kexiConnection, newdbname, keep_data)
+pqxxMigrate::pqxxMigrate()
 {
 m_res=0;
 m_trans=0;

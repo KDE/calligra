@@ -32,9 +32,14 @@ to compile, let alone work.  This is meant as an example of
 what the system might be and is a work in progress
 */
 
+KexiMigrate::KexiMigrate()
+{
+  
+}
+
 //==================================================================================
-//Constructor
-KexiMigrate::KexiMigrate(KexiDB::ConnectionData* externalConnectionData, QString dbname, KexiDB::Connection* kexiConnection, QString newdbname, bool keep_data)
+//Data setup
+void KexiMigrate::setData(KexiDB::ConnectionData* externalConnectionData, QString dbname, KexiDB::Connection* kexiConnection, QString newdbname, bool keep_data)
 {
 	m_externalData = externalConnectionData;
 	m_kexiDB = kexiConnection;
