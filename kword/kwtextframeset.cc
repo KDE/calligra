@@ -2733,7 +2733,56 @@ void KWTextFrameSet::sortText()
         return;
     else
     {
-        //todo
+        //create list
+        QMap<QString,int> sortText;
+        QStringList listOfText;
+        QString text = c1.parag()->toString(0);
+        sortText.insert( text, c1.parag()->paragId());
+        listOfText<<text;
+
+        KoTextParag *p = c1.parag()->next();
+        while ( p && p != c2.parag() ) {
+            text = p->toString(0);
+            listOfText<<text;
+            sortText.insert( text, p->paragId());
+            p = p->next();
+        }
+        text = c2.parag()->toString(0);
+        listOfText<<text;
+        sortText.insert( text, c2.parag()->paragId());
+        //sort text
+        int nbParag = sortText.count();
+        QString tmp;
+        for (int pass = 1; pass < nbParag ; pass++)
+        {
+            for (int i = 0; i < nbParag-1; i++)
+            {
+                if ( listOfText[i] > listOfText[i+1] )
+                {
+                    tmp = listOfText[i];
+                    listOfText[i] = listOfText[i+1];
+                    listOfText[i+1] = tmp;
+                }
+            }
+        }
+        //save text !
+        QDomDocument domDoc( "PARAGRAPHS" );
+        QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
+        domDoc.appendChild( elem );
+        KWTextParag *parag =0L;
+        for (unsigned int i =0; i < listOfText.count(); i++)
+        {
+            parag = static_cast<KWTextParag *>(textDocument()->paragAt( sortText.find(listOfText[i]).data() ));
+            parag->save(elem);
+        }
+        KWTextDrag *kd = new KWTextDrag( 0L );
+        kd->setFrameSetNumber( -1 );
+        kd->setKWord( domDoc.toCString() );
+        QApplication::clipboard()->setData( kd );
+        c1.setIndex( 0 );
+        textDocument()->setSelectionStart( KoTextDocument::Standard, &c1 );
+        c2.setIndex( c2.parag()->length()-1 );
+        textDocument()->setSelectionEnd( KoTextDocument::Standard, &c2 );
     }
 }
 

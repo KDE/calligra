@@ -401,3 +401,8 @@ void KWordViewIface::addWordToDictionary()
 {
     view->addWordToDictionary();
 }
+
+void KWordViewIface::sortText()
+{
+    view->sortText();
+}

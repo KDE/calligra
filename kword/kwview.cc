@@ -6881,7 +6881,21 @@ void KWView::sortText()
 {
     KWTextFrameSetEdit* edit = currentTextEdit();
     if ( edit && edit->textFrameSet()->hasSelection())
+    {
         edit->textFrameSet()->sortText();
+        QMimeSource *data = QApplication::clipboard()->data();
+        if ( data->provides( KWTextDrag::selectionMimeType() ) )
+        {
+            QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
+            if ( arr.size() )
+            {
+                KCommand *cmd =edit->textFrameSet()->pasteKWord( edit->cursor(), QCString( arr ), true );
+                if ( cmd )
+                    m_doc->addCommand(cmd);
+            }
+        }
+        QApplication::clipboard()->clear();
+    }
 }
 
 void KWView::addPersonalExpression()

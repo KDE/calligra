@@ -300,3 +300,4 @@ Changes after KWord-1.2
 - Add new lineSpacing type :"At least"/"exactly"/"Multiple"
 - Add horizontal line
 - Now we can select specific horizontal line
+- Now we can sort text

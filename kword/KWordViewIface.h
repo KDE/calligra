@@ -122,6 +122,7 @@ k_dcop:
     void insertHorizontalLine();
     void changeHorizontalLine();
     void addWordToDictionary();
+    void sortText();
 
 private:
     KWView *view;
