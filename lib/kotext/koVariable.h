@@ -289,7 +289,10 @@ public:
      * It doesn't need to be cached, convert() is fast, and it's the actual
      * value (date, time etc.) that is cached in the variable already.
      */
-    virtual QString text() ;
+    virtual QString text();
+
+    /** Return the variable value, as a QVariant, before format conversion */
+    QVariant varValue() const { return m_varValue; }
 
     /** Variables reimplement this method to recalculate their value
      * They must call resize() after having done that.
@@ -307,7 +310,7 @@ public:
 
     virtual QStringList subTypeText();
     virtual QStringList subTypeFormat();
-    virtual void setVariableSubType( short int /*type*/){;}
+    virtual void setVariableSubType( short int /*subtype*/) {}
 
 
 protected:
