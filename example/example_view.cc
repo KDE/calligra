@@ -29,8 +29,10 @@ void ExampleView::paintEvent( QPaintEvent* ev )
 
 void ExampleView::updateReadWrite( bool readwrite )
 {
-#warning TODO 
-} 
+#ifdef __GNUC__
+#warning TODO
+#endif
+}
 
 void ExampleView::cut()
 {

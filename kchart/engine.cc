@@ -24,7 +24,9 @@
 #include <stdarg.h>
 #include <math.h>
 #include <stdio.h> //PENDING(kalle) Remove?
+#include <iostream>
 
+using namespace std;
 
 kchartEngine keng;
 
@@ -45,6 +47,8 @@ int out_graph( short imagewidth,         // no check for an output device that's
 }
 
 int kchartEngine::compute_yintervals() {
+    // TODO
+    return 0;
 }
 
 /*************************************************************/
@@ -109,7 +113,7 @@ int kchartEngine::out_graph() {
       debug( "Sorry, transparent backgrounds are not supported yet." );
     //     if( params->transparent_bg )
     // 	gdImageColorTransparent( im, BGColor );
-    qDebug( "Title text is coming" );   
+    qDebug( "Title text is coming" );
     titleText();
     qDebug( "start drawing, first the grids" );
     if(!params->isPie())
@@ -119,7 +123,7 @@ int kchartEngine::out_graph() {
     	}
     /* interviening set grids */
     /*  0 < setno < num_sets   non-inclusive, they've already been covered */
-    if( params->grid && params->threeD() && !params->isPie()) 
+    if( params->grid && params->threeD() && !params->isPie())
     {
       qDebug("drawing 3d grids");
       draw3DGrids();
@@ -133,7 +137,7 @@ int kchartEngine::out_graph() {
     /* x ticks and xlables */
     if( (params->grid || params->xaxis) &&!params->isPie() )	
     {
-    
+
       qDebug("drawing  x ticks and xlabels");
        //Commented out because it is prone to math error
       drawXTicks();
@@ -144,7 +148,7 @@ int kchartEngine::out_graph() {
       qDebug("Doing volume grids");
       drawVolumeGrids();
     }		// volume polys done
-    if( params->annotation && params->threeD() &&!params->isPie()) 
+    if( params->annotation && params->threeD() &&!params->isPie())
     {		/* back half of annotation line */
       qDebug("drawing 3d annotation");
       draw3DAnnotation();
@@ -153,20 +157,20 @@ int kchartEngine::out_graph() {
     qDebug("drawing the data!!!");
     drawData();
     setno = 0;
-    if( params->scatter && !params->isPie()) 
+    if( params->scatter && !params->isPie())
     {
       qDebug("scatter");
       drawScatter();
     }
-    // overlay with a value and an arrow (e.g., total daily change)    
-    if( params->thumbnail ) 
+    // overlay with a value and an arrow (e.g., total daily change)
+    if( params->thumbnail )
     {
       qDebug("scatter");
       drawThumbnails();
     }
     /* box it off */
     /*  after plotting so the outline covers any plot lines */
-    if (params->border && !params->isPie()) 
+    if (params->border && !params->isPie())
     {
       qDebug("scatter");
       drawBorder();
@@ -178,12 +182,12 @@ int kchartEngine::out_graph() {
 	   {
       	   draw3DShelf();
     	   }
-    
-    if (params->annotation && !params->isPie()) 
+
+    if (params->annotation && !params->isPie())
     {
       qDebug("Draw annotation");
       drawAnnotation();
-    }    
+    }
 }
 
 /* rem circle:  x = rcos(@), y = rsin(@)	*/

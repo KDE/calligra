@@ -28,6 +28,7 @@
  * order by angle opposite (180) of depth angle
  * comparing across 0-360 line
 \* ------------------------------------------------------- */
+extern "C" {
 static int ocmpr( const void *p1, const void *p2 )
 {
     const tmp_slice_t *a=(tmp_slice_t *) p1;
@@ -55,7 +56,7 @@ static int ocmpr( const void *p1, const void *p2 )
     return 0;
 }
 
-
+}
 
 /* ======================================================= *\
  * PIE
@@ -65,7 +66,7 @@ static int ocmpr( const void *p1, const void *p2 )
  *  'missing' slices don't get labels
  *  sum(val[0], ... val[num_points-1]) is assumed to be 100%
 \* ======================================================= */
-void 
+void
 pie_gif( short imagewidth,
          short imageheight,
 	 QPainter*      p, // paint here
@@ -78,8 +79,9 @@ pie_gif( short imagewidth,
     int offsetCol=params->offsetCol;
 
     int	i;
-    QColor BGColor, LineColor, PlotColor,
-        SliceColor[num_points], SliceColorShd[num_points];
+    QColor BGColor, LineColor, PlotColor;
+    QColor *SliceColor = new QColor[num_points];
+    QColor *SliceColorShd = new QColor[num_points];
     //QColor  EdgeColor, EdgeColorShd;
     float rad = 0.0;// radius
     float tot_val = 0.0;
@@ -91,10 +93,10 @@ pie_gif( short imagewidth,
     float min_grphable = ( params->other_threshold < 0?
 			   100.0/(float)MIN(imagewidth,imageheight):
 			   (float)params->other_threshold )/100.0;
-    short num_slices1 = 0;
-    short num_slices2 = 0;
-    char any_too_small = FALSE;
-    char others[num_points];
+    // short num_slices1 = 0;
+    // short num_slices2 = 0;
+    // char any_too_small = FALSE;
+    char *others = new char[num_points];
     float slice_angle[3][num_points];	// must be used with others[]
 
 
@@ -129,7 +131,7 @@ pie_gif( short imagewidth,
             + 2:
             0;
         float	last = 0.0;
-        float	label_explode_limit = 0.0;
+	//        float	label_explode_limit = 0.0;
         int cheight;
         int cwidth;
 
@@ -148,7 +150,7 @@ pie_gif( short imagewidth,
         for( i=0; i<num_points; ++i ) {
             float this_pct = val[i]/tot_val;	/* should never be > 100% */
             float that = this_pct*(2.0*M_PI);	/* pie-portion */
-            
+
 	   if( (this_pct > min_grphable) ||	/* too small */
                 (params->missing.isNull() || !params->missing[offsetCol+i]) )
 		  {	/* still want angles */
@@ -319,7 +321,7 @@ pie_gif( short imagewidth,
 	  if( params->threeD() )
 	    SliceColorShd[i]=colorShd[i];
         }
-   
+
     pscl = (2.0*M_PI)/tot_val;
 	
     /* ----- calc: smallest a slice can be ----- */
@@ -331,14 +333,14 @@ pie_gif( short imagewidth,
     //				   ( 2.0 * (float)imageheight / (float)(SFONTHGT+1+TFONTHGT+2) );
 
 
-    if( params->threeD() ) 
+    if( params->threeD() )
     {
         /* draw background shaded pie */
         {
             float rad1 = rad;
             for( i=0; i<num_points; ++i )
 	      if( !(others[i]) &&
-		(params->missing.isNull() || !params->missing[offsetCol+i]) ) 
+		(params->missing.isNull() || !params->missing[offsetCol+i]) )
 		{
 
                     float rad = rad1;
@@ -402,7 +404,7 @@ pie_gif( short imagewidth,
 
                         // New: Qt
 			p->setBrush(EdgeColorShd);
-          
+
 			p->drawPie( CX(i,1)-rad, // x
                                     CY(i,1)-rad, // y
                                     rad*2, rad*2,     // w, h
@@ -425,9 +427,9 @@ pie_gif( short imagewidth,
 
             for( i=0; i<num_points; ++i )
 	      //if( !GDCPIE_missing || !GDCPIE_missing[i] )	{
-		 if( params->missing.isNull() || !params->missing[offsetCol+i] )      
+		 if( params->missing.isNull() || !params->missing[offsetCol+i] )
 		   {
-  
+
 		 if( RAD_DIST1(slice_angle[1][i]) < RAD_DIST2(slice_angle[0][i]) )
                         tmp_slice[num_slice_angles].hidden = FALSE;
                     else
@@ -498,7 +500,7 @@ pie_gif( short imagewidth,
 				}
 				
 				
-				/*if( params->EdgeColor != QColor() ) 
+				/*if( params->EdgeColor != QColor() )
 				  {
 				    p->setPen( EdgeColorShd );
 				    p->drawLine( CX(i,0),CY(i,0),
@@ -509,8 +511,9 @@ pie_gif( short imagewidth,
 						 OY(i,tmp_slice[t].angle,1) );
 						 }*/
 			}
-		}
 	}
+
+    }
 	
 
 	/* ----- pie face ----- */
@@ -520,9 +523,9 @@ pie_gif( short imagewidth,
 		for( i=0; i<num_points; ++i )
 
 		  /*if( !others[i] &&
-		    (!GDCPIE_missing || !GDCPIE_missing[i]) )*/ 
+		    (!GDCPIE_missing || !GDCPIE_missing[i]) )*/
 		  if( !others[i] &&
-		   (params->missing.isNull() || !params->missing[offsetCol+i]) ) 
+		   (params->missing.isNull() || !params->missing[offsetCol+i]) )
 			  {
 				float	rad = rad1;
 
@@ -543,7 +546,7 @@ pie_gif( short imagewidth,
 				//put slice color
 				p->setBrush(SliceColor[i]);
 				
-			       
+			
 				p->drawPie( CX(i,0)-rad, // x
 					    CY(i,0)-rad, // y
 					    rad*2, rad*2,// w, h
@@ -569,14 +572,14 @@ pie_gif( short imagewidth,
 					     IX(i,0,0), IY(i,0,0) );
 				
 				rad = rad1;
-				/*if( params->EdgeColor != QColor() ) 
+				/*if( params->EdgeColor != QColor() )
 				  {
 				        p->setPen( EdgeColor );
 					p->drawLine( CX(i,0),CY(i,0),
 						IX(i,1,0), IY(i,1,0) );
 					p->drawLine( CX(i,0),CY(i,0),
 						IX(i,2,0), IY(i,2,0) );
-				   
+				
 					// For the differences between Qt arc handling and
 					// gd arc handling, please see the first call to
 					// QPainter::drawArc() in this file.
@@ -599,10 +602,10 @@ pie_gif( short imagewidth,
 					}*/
 			}
 	}
-   
+
 	
 	/* labels */
-	if( !params->legend.isEmpty() ) 
+	if( !params->legend.isEmpty() )
 		{
 		float	liner = rad;
 
@@ -672,7 +675,7 @@ pie_gif( short imagewidth,
 				}
 				
 				
-				if( params->percent_labels != KCHARTPCTTYPE_NONE ) 
+				if( params->percent_labels != KCHARTPCTTYPE_NONE )
 				{
 					p->setPen( LineColor );
 					p->setFont( params->labelFont() );
@@ -705,4 +708,7 @@ pie_gif( short imagewidth,
 		}
 		rad -= params->label_dist;
 	}
+	delete [] SliceColor;
+	delete [] SliceColorShd;
+	delete others;
 }

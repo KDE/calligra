@@ -70,7 +70,7 @@ class GObject : public QObject {
   Q_OBJECT
 protected:
   GObject ();
-  GObject (const list<XmlAttribute>& attribs);
+  GObject (const std::list<XmlAttribute>& attribs);
   GObject (const GObject& obj);
 
   virtual void initState (GOState* state);
@@ -90,9 +90,9 @@ public:
     float width;         // outline width
     // custom properties (depend on object type)
     float roundness;     // roundness for rectangles
-    enum Shape 
-    { 
-      DefaultShape, ArcShape, PieShape 
+    enum Shape
+    {
+      DefaultShape, ArcShape, PieShape
     };
     Shape shape;         // shape of ellipse
     int startArrowId,    // arrow heads (for lines and bezier curves)
@@ -342,7 +342,7 @@ public:
    * @return A copy of this object.
    */
   virtual GObject* copy () = 0;
-  virtual GObject* clone (const list<XmlAttribute>& attribs) = 0;
+  virtual GObject* clone (const std::list<XmlAttribute>& attribs) = 0;
 
   virtual void writeToXml (XmlWriter&) = 0;
 
@@ -357,7 +357,7 @@ public:
   virtual void printInfo ();
   virtual void calcBoundingBox () = 0;
 
-  virtual void getPath (vector<Coord>& /*path*/) {}
+  virtual void getPath (std::vector<Coord>& /*path*/) {}
 
   virtual GCurve* convertToCurve () const { return 0L; }
 

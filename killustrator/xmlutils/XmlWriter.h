@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -37,7 +37,7 @@
 /**
  * The XMLWriter class provides support for writing XML streams.
  * It contains methods for output XML elements with attributes.
- * 
+ *
  * Sample code:
  * <pre>
  *  ofstream os (fname);
@@ -60,7 +60,7 @@ class XmlWriter {
 public:
   /**
    * Create a XmlWriter instance for the given output stream.
-   * 
+   *
    * @param os       The open output stream for writing.
    */
   XmlWriter (ostream& os);
@@ -76,7 +76,7 @@ public:
    *
    * @param id       The element ID.
    * @param closeIt  If <tt>true</tt> the tag is closed by <tt>&gt;</tt>,
-   *                 otherwise not. 
+   *                 otherwise not.
    * @param empty    If <tt>true</tt> an empty element is written, which
    *                 is closed by <tt>/&gt;</tt>.
    */
@@ -87,7 +87,7 @@ public:
    * last opened element.
    *
    * @param id       The element ID. If <tt>NULL</tt> the last opened
-   *                 element is ended. (default). 
+   *                 element is ended. (default).
    */
   void endTag (const char* id = 0L);
 
@@ -99,7 +99,7 @@ public:
   void closeTag (bool empty = false);
 
   /**
-   * Add an attribute with the given value to the current element. 
+   * Add an attribute with the given value to the current element.
    * This method doesn't check, if an element is open.
    *
    * @param name     The attribute name.
@@ -108,7 +108,7 @@ public:
   void addAttribute (const char* name, const char* value);
 
   /**
-   * Add an attribute with the given value to the current element. 
+   * Add an attribute with the given value to the current element.
    * This method doesn't check, if an element is open.
    *
    * @param name     The attribute name.
@@ -117,7 +117,7 @@ public:
   void addAttribute (const char* name, int value);
 
   /**
-   * Add an attribute with the given value to the current element. 
+   * Add an attribute with the given value to the current element.
    * This method doesn't check, if an element is open.
    *
    * @param name     The attribute name.
@@ -126,7 +126,7 @@ public:
   void addAttribute (const char* name, float value);
 
   /**
-   * Add an attribute with the given value to the current element. 
+   * Add an attribute with the given value to the current element.
    * This method doesn't check, if an element is open.
    *
    * @param name     The attribute name.
@@ -135,7 +135,7 @@ public:
   void addAttribute (const char* name, double value);
 
   /**
-   * Add an attribute with the given value to the current element. 
+   * Add an attribute with the given value to the current element.
    * This method doesn't check, if an element is open.
    *
    * @param name     The attribute name.
@@ -144,7 +144,7 @@ public:
   void addAttribute (const char* name, const QColor& color);
 
   /**
-   * Add an attribute with the given value to the current element. 
+   * Add an attribute with the given value to the current element.
    * This method doesn't check, if an element is open.
    *
    * @param name     The attribute name.
@@ -178,8 +178,8 @@ public:
   ostream& stream () { return strm; }
 
 private:
-  stack<string, vector<string> > lastTags;
-  ostream strm;
+    std::stack<string, vector<string> > lastTags;
+    std::ostream strm;
 };
 
 #endif

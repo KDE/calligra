@@ -16,6 +16,9 @@
 #include <engine.h>
 #include <kchartparams.h>
 #include <kglobal.h>
+#include <iostream>
+
+using namespace std;
 
 // Some hardcoded data for a chart
 
@@ -800,6 +803,57 @@ bool KChartPart::load( istream& in, KoStore* store )
 
 /**
  * $Log$
+ * Revision 1.24  2000/02/05 18:12:33  shausman
+ * the port of KOffice to use kparts instead of koparts. What I basically did
+ * was:
+ * - merged the container/view functionality from koparts into kofficecore
+ * - made KoDocument inherits KParts::ReadWritePart
+ * - added support for single-view-mode to KoDocument and reimplemented
+ *   some virtual methods of KParts::Part to redirect requests to the view
+ *   (like action requests for example)
+ * - ported the nested child activation/deactivation code to
+ *   KParts::PartManager (which was a pain, as the old code just deleted
+ *   child views upon deactivation, while in kparts we first have to
+ *   deactivate a views GUI before we can delete it)
+ * - removed the m_bDoPartActivation and partDoubleClick hacks from the
+ *   KWord/KPresenter activation stuff ;-) and replaced with a more simple
+ *   mechanism of adding the child parts to the tree just right before the
+ *   activation
+ *   (there are still bugs in the nested part activation/deactivation stuff
+ *   though, but I'll look into that)
+ * - got rid of all the duplicated shell xml documents and used a common
+ *   shared shell gui
+ * - added support for read-write state changing (as supported by kparts)
+ *   I currently only implemented it in KSpread and added big TODO warnings
+ *   to the other apps ;-) . In those methods just deactivate all actions
+ *   and widgets which could possibly modify the document, in case we
+ *   enter readonly state (this is *VERY* important, *please* support it
+ *   properly)
+ * - ported all the .rc files to the kparts standard and ported the
+ *   calculator plugin of kspread to a real kparts plugin
+ * - I *removed* support for inplace editing! (important, Torben, please read
+ *   :-)
+ *   (I commented out the inplace xml stuff in the .rc files)
+ *   The reason for the disabled support is:
+ *   I can't see how this is supposed to work at all!
+ *   Imaginge I embed a KSpread document into KWord, rotate it and activate
+ *   it. This is when the inplace-editing GUI is meant to be used, instead of
+ *   the "usual" kspread gui. BUT: This cannot work, as the actions are
+ *   only available (allocated, implemented, used, etc..) in a KoView.
+ *   HOWEVER a KoView is *not* created in this case, so I cannot see how this
+ *   is supposed to work?
+ *   Perhaps I'm missing something, but the only situation I see where it
+ *   worked was in kspread itself ;-) , as if I embed a kspread table into
+ *   another kspread table, then the shell (in koparts) considered the
+ *   embedded document to be active, but the active view (as this is where
+ *   the user clicked) is *still* the parent KoView (kspread view). So
+ *   the shell was able to find the actions, apparently from the completely
+ *   wrong view though. Perhaps Torben can help here? :-)
+ *   (perhaps we should move all actions from the view to the document?)
+ * - added check if the global application object is a KoApplication, so that
+ *   the filter stuff is only used inside KOffice (otherwise it used
+ *   to crash horribly ;)
+ *
  * Revision 1.23  2000/01/28 20:00:37  mlaurent
  * Improved save and load parameters (label,legend,extcolor)
  *

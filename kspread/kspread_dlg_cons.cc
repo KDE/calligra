@@ -31,6 +31,7 @@
 #include <qmessagebox.h>
 
 #include <list>
+#include <cassert>
 
 KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
 	: QDialog( parent, name )

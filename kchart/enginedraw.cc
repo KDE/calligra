@@ -69,14 +69,14 @@ void draw_3d_line( QPainter*	p,
 
 #define F(x,i)	(int)( (float)((x)-x1)*slope[i]+(float)y1[i] )
     float depth_slope  = xdepth==0? MAXFLOAT: (float)ydepth/(float)xdepth;
-    float slope[num_sets];
-    int lnclr[num_sets],
-	shclr[num_sets];
+    float *slope = new float[num_sets];
+    int *lnclr = new int[num_sets];
+    int *shclr = new int[num_sets];
     int	i;
     int	x;
     QPointArray	poly( 4 );
-    struct YS	ypts[num_sets];
-    
+    struct YS	*ypts = new struct YS[num_sets];
+
     for( i=0; i<num_sets; ++i ) {
 	// lnclr[i] = clr[i];
 	// shclr[i] = clrshd[i];
@@ -111,6 +111,10 @@ void draw_3d_line( QPainter*	p,
 	    }
 	}
     }
+    delete [] slope;
+    delete [] lnclr;
+    delete [] shclr;
+    delete [] ypts;
 }
 
 /* ------------------------------------------------------------------------- */

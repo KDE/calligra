@@ -15,6 +15,9 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <kfontdialog.h>
+#include <iostream>
+
+using namespace std;
 
 KChartFontConfigPage::KChartFontConfigPage(KChartParameters* params,QWidget* parent ) :
     QWidget( parent ),_params( params )

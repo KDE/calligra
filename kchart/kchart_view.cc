@@ -15,6 +15,9 @@
 #include <qpainter.h>
 #include <kaction.h>
 #include <kglobal.h>
+#include <iostream>
+
+using namespace std;
 
 //#include "sheetdlg.h"
 
@@ -87,8 +90,8 @@ void KChartView::paintEvent( QPaintEvent* /*ev*/ )
 
 void KChartView::updateReadWrite( bool readwrite )
 {
-#warning TODO 
-} 
+#warning TODO
+}
 
 void KChartView::createTempData()
 {

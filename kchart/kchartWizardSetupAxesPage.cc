@@ -262,7 +262,7 @@ void kchartWizardSetupAxesPage::changeLabelFont()
       return;
 }
 
-void kchartWizardSetupAxesPage::paintEvent( QPaintEvent *_ev )
+void kchartWizardSetupAxesPage::paintEvent( QPaintEvent *)
 {
 if(chart3d)
         {

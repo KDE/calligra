@@ -31,6 +31,10 @@
 #include <qpen.h>
 #include <qfont.h>
 
+using std::vector;
+using std::ostream;
+using std::istream;
+
 class QImage;
 class QPicture;
 

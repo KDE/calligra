@@ -24,6 +24,9 @@
 #include <stdlib.h>
 
 #include <qdom.h>
+#include <iostream>
+
+using namespace std;
 
 /*****************************************************************************
  *

@@ -185,6 +185,8 @@ bool kchartWizardSelectChartSubTypePage::createChildren( )
 
   connect( _typeBG, SIGNAL( clicked( int ) ),
 		   this, SLOT( chartSubTypeSelected( int ) ) );
+
+  return true;
 }
 
 void kchartWizardSelectChartSubTypePage::apply()

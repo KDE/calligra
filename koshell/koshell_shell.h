@@ -25,6 +25,7 @@
 #include <qlist.h>
 #include <qmap.h>
 #include <qvaluelist.h>
+#include <view.h>
 
 class QHBox;
 class KoKoolBar;
