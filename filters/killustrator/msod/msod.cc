@@ -41,11 +41,11 @@ Msod::~Msod()
 //
 
 void Msod::invokeHandler(
-    U16 opcode,
+    MSOFBH &op,
     U32 byteOperands,
     QDataStream &operands)
 {
-    typedef void (Msod::*method)(U32 byteOperands, QDataStream &operands);
+    typedef void (Msod::*method)(MSOFBH &op, U32 byteOperands, QDataStream &operands);
 
     typedef struct
     {
@@ -56,38 +56,38 @@ void Msod::invokeHandler(
 
     static const opcodeEntry funcTab[] =
     {
-        { "ALIGNRULE",          0xF013, &Msod::alignrule },
-        { "ANCHOR",             0xF00E, &Msod::anchor },
-        { "ARCRULE",            0xF014, &Msod::arcrule },
-        { "BSE",                0xF007, &Msod::bse },
-        { "BSTORECONTAINER",    0xF001, &Msod::bstorecontainer },
-        { "CALLOUTRULE",        0xF017, &Msod::calloutrule },
-        { "CHILDANCHOR",        0xF00F, &Msod::childanchor },
-        { "CLIENTANCHOR",       0xF010, &Msod::clientanchor },
-        { "CLIENTDATA",         0xF011, &Msod::clientdata },
-        { "CLIENTRULE",         0xF015, &Msod::clientrule },
-        { "CLIENTTEXTBOX",      0xF00D, &Msod::clienttextbox },
-        { "CLSID",              0xF016, &Msod::clsid },
-        { "COLORMRU",           0xF11A, &Msod::colormru },
-        { "CONNECTORRULE",      0xF012, &Msod::connectorrule },
-        { "DELETEDPSPL",        0xF11D, &Msod::deletedpspl },
-        { "DG",                 0xF008, &Msod::dg },
-        { "DGCONTAINER",        0xF002, &Msod::dgcontainer },
-        { "DGG",                0xF006, &Msod::dgg },
-        { "DGGCONTAINER",       0xF000, &Msod::dggcontainer },
-        { "OLEOBJECT",          0xF11F, &Msod::oleobject },
-        { "OPT",                0xF00B, &Msod::opt },
-        { "REGROUPITEMS",       0xF118, &Msod::regroupitems },
-        { "SELECTION",          0xF119, &Msod::selection },
-        { "SOLVERCONTAINER",    0xF005, &Msod::solvercontainer },
-        { "SP",                 0xF00A, &Msod::sp },
-        { "SPCONTAINER",        0xF004, &Msod::spcontainer },
-        { "SPGR",               0xF009, &Msod::spgr },
-        { "SPGRCONTAINER",      0xF003, &Msod::spgrcontainer },
-        { "SPLITMENUCOLORS",    0xF11E, &Msod::splitmenucolors },
-        { "TEXTBOX",            0xF00C, &Msod::textbox },
+        { "ALIGNRULE",          0xF013, &Msod::opAlignrule },
+        { "ANCHOR",             0xF00E, &Msod::opAnchor },
+        { "ARCRULE",            0xF014, &Msod::opArcrule },
+        { "BSE",                0xF007, &Msod::opBse },
+        { "BSTORECONTAINER",    0xF001, &Msod::opBstorecontainer },
+        { "CALLOUTRULE",        0xF017, &Msod::opCalloutrule },
+        { "CHILDANCHOR",        0xF00F, &Msod::opChildanchor },
+        { "CLIENTANCHOR",       0xF010, &Msod::opClientanchor },
+        { "CLIENTDATA",         0xF011, &Msod::opClientdata },
+        { "CLIENTRULE",         0xF015, &Msod::opClientrule },
+        { "CLIENTTEXTBOX",      0xF00D, &Msod::opClienttextbox },
+        { "CLSID",              0xF016, &Msod::opClsid },
+        { "COLORMRU",           0xF11A, &Msod::opColormru },
+        { "CONNECTORRULE",      0xF012, &Msod::opConnectorrule },
+        { "DELETEDPSPL",        0xF11D, &Msod::opDeletedpspl },
+        { "DG",                 0xF008, &Msod::opDg },
+        { "DGCONTAINER",        0xF002, &Msod::opDgcontainer },
+        { "DGG",                0xF006, &Msod::opDgg },
+        { "DGGCONTAINER",       0xF000, &Msod::opDggcontainer },
+        { "OLEOBJECT",          0xF11F, &Msod::opOleobject },
+        { "OPT",                0xF00B, &Msod::opOpt },
+        { "REGROUPITEMS",       0xF118, &Msod::opRegroupitems },
+        { "SELECTION",          0xF119, &Msod::opSelection },
+        { "SOLVERCONTAINER",    0xF005, &Msod::opSolvercontainer },
+        { "SP",                 0xF00A, &Msod::opSp },
+        { "SPCONTAINER",        0xF004, &Msod::opSpcontainer },
+        { "SPGR",               0xF009, &Msod::opSpgr },
+        { "SPGRCONTAINER",      0xF003, &Msod::opSpgrcontainer },
+        { "SPLITMENUCOLORS",    0xF11E, &Msod::opSplitmenucolors },
+        { "TEXTBOX",            0xF00C, &Msod::opTextbox },
         { NULL,                 0,      0 },
-        { "BLIP",               0,      &Msod::blip }
+        { "BLIP",               0,      &Msod::opBlip }
     };
     unsigned i;
     method result;
@@ -96,7 +96,7 @@ void Msod::invokeHandler(
 
     for (i = 0; funcTab[i].name; i++)
     {
-        if (funcTab[i].opcode == opcode)
+        if (funcTab[i].opcode == op.opcode.fields.fbt)
         {
             break;
         }
@@ -105,7 +105,7 @@ void Msod::invokeHandler(
     // Invoke handler.
 
     result = funcTab[i].handler;
-    if (!result && (opcode >= 0xF018) && (0xF117 >= opcode))
+    if (!result && (op.opcode.fields.fbt >= 0xF018) && (0xF117 >= op.opcode.fields.fbt))
         result = funcTab[i + 1].handler;
     if (!result)
     {
@@ -115,7 +115,7 @@ void Msod::invokeHandler(
                 " operands: " << byteOperands << endl;
         else
             kdError(s_area) << "invokeHandler: unsupported opcode: 0x" <<
-                QString::number(opcode, 16) <<
+                QString::number(op.opcode.fields.fbt, 16) <<
                 " operands: " << byteOperands << endl;
 
         // Skip data we cannot use.
@@ -126,7 +126,7 @@ void Msod::invokeHandler(
     {
         kdDebug(s_area) << "invokeHandler: opcode: " << funcTab[i].name <<
             " operands: " << byteOperands << endl;
-        (this->*result)(byteOperands, operands);
+        (this->*result)(op, byteOperands, operands);
     }
 }
 
@@ -166,25 +166,25 @@ bool Msod::parse(
     return true;
 }
 
-void Msod::alignrule(U32 byteOperands, QDataStream &operands)
+void Msod::opAlignrule(MSOFBH &, U32, QDataStream &)
 {
 }
 
-void Msod::anchor(U32 byteOperands, QDataStream &operands)
+void Msod::opAnchor(MSOFBH &, U32, QDataStream &)
 {
 }
 
-void Msod::arcrule(U32 byteOperands, QDataStream &operands)
+void Msod::opArcrule(MSOFBH &, U32, QDataStream &)
 {
 }
 
-void Msod::blip(U32 byteOperands, QDataStream &operands)
+void Msod::opBlip(MSOFBH &, U32, QDataStream &)
 {
 }
 
 // FBSE - File Blip Store Entry
 
-void Msod::bse(U32 byteOperands, QDataStream &operands)
+void Msod::opBse(MSOFBH &, U32 byteOperands, QDataStream &operands)
 {
     struct
     {
@@ -212,31 +212,20 @@ void Msod::bse(U32 byteOperands, QDataStream &operands)
     skip(byteOperands - sizeof(data), operands);
 }
 
-void Msod::bstorecontainer(U32 byteOperands, QDataStream &operands)
+void Msod::opBstorecontainer(MSOFBH &, U32 byteOperands, QDataStream &operands)
 {
     walk(byteOperands, operands);
 }
 
-void Msod::calloutrule(U32 byteOperands, QDataStream &operands)
+void Msod::opCalloutrule(MSOFBH &, U32, QDataStream &)
 {
 }
 
-void Msod::childanchor(U32 byteOperands, QDataStream &operands)
+void Msod::opChildanchor(MSOFBH &, U32, QDataStream &)
 {
 }
 
-void Msod::clientanchor(U32 byteOperands, QDataStream &operands)
-{
-    struct
-    {
-        U32 unknown;
-    } data;
-
-    operands >> data.unknown;
-    skip(byteOperands - sizeof(data), operands);
-}
-
-void Msod::clientdata(U32 byteOperands, QDataStream &operands)
+void Msod::opClientanchor(MSOFBH &, U32 byteOperands, QDataStream &operands)
 {
     struct
     {
@@ -247,33 +236,44 @@ void Msod::clientdata(U32 byteOperands, QDataStream &operands)
     skip(byteOperands - sizeof(data), operands);
 }
 
-void Msod::clientrule(U32 byteOperands, QDataStream &operands)
+void Msod::opClientdata(MSOFBH &, U32 byteOperands, QDataStream &operands)
+{
+    struct
+    {
+        U32 unknown;
+    } data;
+
+    operands >> data.unknown;
+    skip(byteOperands - sizeof(data), operands);
+}
+
+void Msod::opClientrule(MSOFBH &, U32, QDataStream &)
 {
 }
 
-void Msod::clienttextbox(U32 byteOperands, QDataStream &operands)
+void Msod::opClienttextbox(MSOFBH &, U32, QDataStream &)
 {
 }
 
-void Msod::clsid(U32 byteOperands, QDataStream &operands)
+void Msod::opClsid(MSOFBH &, U32, QDataStream &)
 {
 }
 
-void Msod::colormru(U32 byteOperands, QDataStream &operands)
+void Msod::opColormru(MSOFBH &, U32, QDataStream &)
 {
 }
 
-void Msod::connectorrule(U32 byteOperands, QDataStream &operands)
+void Msod::opConnectorrule(MSOFBH &, U32, QDataStream &)
 {
 }
 
-void Msod::deletedpspl(U32 byteOperands, QDataStream &operands)
+void Msod::opDeletedpspl(MSOFBH &, U32, QDataStream &)
 {
 }
 
 // FDG - File DG
 
-void Msod::dg(U32 byteOperands, QDataStream &operands)
+void Msod::opDg(MSOFBH &, U32 byteOperands, QDataStream &operands)
 {
     struct
     {
@@ -285,14 +285,14 @@ void Msod::dg(U32 byteOperands, QDataStream &operands)
     skip(byteOperands - sizeof(data), operands);
 }
 
-void Msod::dgcontainer(U32 byteOperands, QDataStream &operands)
+void Msod::opDgcontainer(MSOFBH &, U32 byteOperands, QDataStream &operands)
 {
     walk(byteOperands, operands);
 }
 
 // FDGG - File DGG
 
-void Msod::dgg(U32 byteOperands, QDataStream &operands)
+void Msod::opDgg(MSOFBH &, U32 byteOperands, QDataStream &operands)
 {
     struct
     {
@@ -321,16 +321,16 @@ void Msod::dgg(U32 byteOperands, QDataStream &operands)
     skip(byteOperands - sizeof(data) - (data.cidcl - 1) * sizeof(data1), operands);
 }
 
-void Msod::dggcontainer(U32 byteOperands, QDataStream &operands)
+void Msod::opDggcontainer(MSOFBH &, U32 byteOperands, QDataStream &operands)
 {
     walk(byteOperands, operands);
 }
 
-void Msod::oleobject(U32 byteOperands, QDataStream &operands)
+void Msod::opOleobject(MSOFBH &, U32, QDataStream &)
 {
 }
 
-void Msod::opt(U32 byteOperands, QDataStream &operands)
+void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
 {
     union
     {
@@ -346,16 +346,20 @@ void Msod::opt(U32 byteOperands, QDataStream &operands)
     U16 length = 0;
     U16 complexLength = 0;
 
+if (1)
+{
     skip(byteOperands, operands);
     return;
-    /*
-    while (length + complexLength < byteOperands)
+}
+else
+{
+    while (length + complexLength < (int)byteOperands)
     {
         operands >> opcode.info >> value;
         length += 4;
-        kdError(s_area) << "opt: fComplex: " << opcode.fields.fComplex << endl;
-        kdError(s_area) << "opt: fBid: " << opcode.fields.fBid << endl;
-        kdError(s_area) << "opt: pid: " << opcode.fields.pid << endl;
+//        kdError(s_area) << "opt: fComplex: " << opcode.fields.fComplex << endl;
+//        kdError(s_area) << "opt: fBid: " << opcode.fields.fBid << endl;
+//        kdError(s_area) << "opt: pid: " << opcode.fields.pid << endl;
         if (opcode.fields.fComplex)
         {
             complexLength += value;
@@ -364,15 +368,371 @@ void Msod::opt(U32 byteOperands, QDataStream &operands)
         kdError(s_area) << "opt: " << length << " " << byteOperands << endl;
     }
     skip(complexLength, operands);
-    */
+}
 }
 
-void Msod::regroupitems(U32 byteOperands, QDataStream &operands)
+void Msod::opRegroupitems(MSOFBH &, U32, QDataStream &)
 {
 }
 
-void Msod::selection(U32 byteOperands, QDataStream &operands)
+void Msod::opSelection(MSOFBH &, U32, QDataStream &)
 {
+}
+
+void Msod::opSolvercontainer(MSOFBH &, U32 byteOperands, QDataStream &operands)
+{
+    walk(byteOperands, operands);
+}
+
+void Msod::opSp(MSOFBH &op, U32 byteOperands, QDataStream &operands)
+{
+    typedef void (Msod::*method)(MSOFBH &op, U32 byteOperands, QDataStream &operands);
+
+    typedef struct
+    {
+        const char *name;
+        method handler;
+    } shapeEntry;
+
+    static const shapeEntry funcTab[] =
+    {
+        { NULL,                     0 },
+        { "RECTANGLE",              &Msod::shpRectangle },
+        { "ROUNDRECTANGLE",         0 /* &Msod::shpRoundrectangle */ },
+        { "ELLIPSE",                0 /* &Msod::shpEllipse */ },
+        { "DIAMOND",                0 /* &Msod::shpDiamond */ },
+        { "ISOCELESTRIANGLE",       0 /* &Msod::shpIsocelestriangle */ },
+        { "RIGHTTRIANGLE",          0 /* &Msod::shpRighttriangle */ },
+        { "PARALLELOGRAM",          0 /* &Msod::shpParallelogram */ },
+        { "TRAPEZOID",              0 /* &Msod::shpTrapezoid */ },
+        { "HEXAGON",                0 /* &Msod::shpHexagon */ },
+        { "OCTAGON",                0 /* &Msod::shpOctagon */ },
+        { "PLUS",                   0 /* &Msod::shpPlus */ },
+        { "STAR",                   0 /* &Msod::shpStar */ },
+        { "ARROW",                  0 /* &Msod::shpArrow */ },
+        { "THICKARROW",             0 /* &Msod::shpThickarrow */ },
+        { "HOMEPLATE",              0 /* &Msod::shpHomeplate */ },
+        { "CUBE",                   0 /* &Msod::shpCube */ },
+        { "BALLOON",                0 /* &Msod::shpBalloon */ },
+        { "SEAL",                   0 /* &Msod::shpSeal */ },
+        { "ARC",                    0 /* &Msod::shpArc */ },
+        { "LINE",                   0 /* &Msod::shpLine */ },
+        { "PLAQUE",                 0 /* &Msod::shpPlaque */ },
+        { "CAN",                    0 /* &Msod::shpCan */ },
+        { "DONUT",                  0 /* &Msod::shpDonut */ },
+        { "TEXTSIMPLE",             0 /* &Msod::shpTextsimple */ },
+        { "TEXTOCTAGON",            0 /* &Msod::shpTextoctagon */ },
+        { "TEXTHEXAGON",            0 /* &Msod::shpTexthexagon */ },
+        { "TEXTCURVE",              0 /* &Msod::shpTextcurve */ },
+        { "TEXTWAVE",               0 /* &Msod::shpTextwave */ },
+        { "TEXTRING",               0 /* &Msod::shpTextring */ },
+        { "TEXTONCURVE",            0 /* &Msod::shpTextoncurve */ },
+        { "TEXTONRING",             0 /* &Msod::shpTextonring */ },
+        { "STRAIGHTCONNECTOR1",     0 /* &Msod::shpStraightconnector1 */ },
+        { "BENTCONNECTOR2",         0 /* &Msod::shpBentconnector2 */ },
+        { "BENTCONNECTOR3",         0 /* &Msod::shpBentconnector3 */ },
+        { "BENTCONNECTOR4",         0 /* &Msod::shpBentconnector4 */ },
+        { "BENTCONNECTOR5",         0 /* &Msod::shpBentconnector5 */ },
+        { "CURVEDCONNECTOR2",       0 /* &Msod::shpCurvedconnector2 */ },
+        { "CURVEDCONNECTOR3",       0 /* &Msod::shpCurvedconnector3 */ },
+        { "CURVEDCONNECTOR4",       0 /* &Msod::shpCurvedconnector4 */ },
+        { "CURVEDCONNECTOR5",       0 /* &Msod::shpCurvedconnector5 */ },
+        { "CALLOUT1",               0 /* &Msod::shpCallout1 */ },
+        { "CALLOUT2",               0 /* &Msod::shpCallout2 */ },
+        { "CALLOUT3",               0 /* &Msod::shpCallout3 */ },
+        { "ACCENTCALLOUT1",         0 /* &Msod::shpAccentcallout1 */ },
+        { "ACCENTCALLOUT2",         0 /* &Msod::shpAccentcallout2 */ },
+        { "ACCENTCALLOUT3",         0 /* &Msod::shpAccentcallout3 */ },
+        { "BORDERCALLOUT1",         0 /* &Msod::shpbordercallout1 */ },
+        { "BORDERCALLOUT2",         0 /* &Msod::shpBordercallout2 */ },
+        { "BORDERCALLOUT3",         0 /* &Msod::shpBordercallout3 */ },
+        { "ACCENTBORDERCALLOUT1",   0 /* &Msod::shpAccentbordercallout1 */ },
+        { "ACCENTBORDERCALLOUT2",   0 /* &Msod::shpAccentbordercallout2 */ },
+        { "ACCENTBORDERCALLOUT3",   0 /* &Msod::shpAccentbordercallout3 */ },
+        { "RIBBON",                 0 /* &Msod::shpRibbon */ },
+        { "RIBBON2",                0 /* &Msod::shpRibbon2 */ },
+        { "CHEVRON",                0 /* &Msod::shpChevron */ },
+        { "PENTAGON",               0 /* &Msod::shpPentagon */ },
+        { "NOSMOKING",              0 /* &Msod::shpNosmoking */ },
+        { "SEAL8",                  0 /* &Msod::shpSeal8 */ },
+        { "SEAL16",                 0 /* &Msod::shpSeal16 */ },
+        { "SEAL32",                 0 /* &Msod::shpSeal32 */ },
+        { "WEDGERECTCALLOUT",       0 /* &Msod::shpWedgerectcallout */ },
+        { "WEDGERRECTCALLOUT",      0 /* &Msod::shpWedgerrectcallout */ },
+        { "WEDGEELLIPSECALLOUT",    0 /* &Msod::shpWedgeellipsecallout */ },
+        { "WAVE",                   0 /* &Msod::shpWave */ },
+        { "FOLDEDCORNER",           0 /* &Msod::shpFoldedcorner */ },
+        { "LEFTARROW",              0 /* &Msod::shpLeftarrow */ },
+        { "DOWNARROW",              0 /* &Msod::shpDownarrow */ },
+        { "UPARROW",                0 /* &Msod::shpUparrow */ },
+        { "LEFTRIGHTARROW",         0 /* &Msod::shpLeftrightarrow */ },
+        { "UPDOWNARROW",            0 /* &Msod::shpUpdownarrow */ },
+        { "IRREGULARSEAL1",         0 /* &Msod::shpIrregularseal1 */ },
+        { "IRREGULARSEAL2",         0 /* &Msod::shpIrregularseal2 */ },
+        { "LIGHTNINGBOLT",          0 /* &Msod::shpLightningbolt */ },
+        { "HEART",                  0 /* &Msod::shpHeart */ },
+        { "PICTUREFRAME",           &Msod::shpPictureFrame },
+        { "QUADARROW",              0 /* &Msod::shpQuadarrow */ },
+        { "LEFTARROWCALLOUT",       0 /* &Msod::shpLeftarrowcallout */ },
+        { "RIGHTARROWCALLOUT",      0 /* &Msod::shpRightarrowcallout */ },
+        { "UPARROWCALLOUT",         0 /* &Msod::shpUparrowcallout */ },
+        { "DOWNARROWCALLOUT",       0 /* &Msod::shpDownarrowcallout */ },
+        { "LEFTRIGHTARROWCALLOUT",  0 /* &Msod::shpLeftrightarrowcallout */ },
+        { "UPDOWNARROWCALLOUT",     0 /* &Msod::shpUpdownarrowcallout */ },
+        { "QUADARROWCALLOUT",       0 /* &Msod::shpQuadarrowcallout */ },
+        { "BEVEL",                  0 /* &Msod::shpBevel */ },
+        { "LEFTBRACKET",            0 /* &Msod::shpLeftbracket */ },
+        { "RIGHTBRACKET",           0 /* &Msod::shpRightbracket */ },
+        { "LEFTBRACE",              0 /* &Msod::shpLeftbrace */ },
+        { "RIGHTBRACE",             0 /* &Msod::shpRightbrace */ },
+        { "LEFTUPARROW",            0 /* &Msod::shpLeftuparrow */ },
+        { "BENTUPARROW",            0 /* &Msod::shpBentuparrow */ },
+        { "BENTARROW",              0 /* &Msod::shpBentarrow */ },
+        { "SEAL24",                 0 /* &Msod::shpSeal24 */ },
+        { "STRIPEDRIGHTARROW",      0 /* &Msod::shpStripedrightarrow */ },
+        { "NOTCHEDRIGHTARROW",      0 /* &Msod::shpNotchedrightarrow */ },
+        { "BLOCKARC",               0 /* &Msod::shpBlockarc */ },
+        { "SMILEYFACE",             0 /* &Msod::shpSmileyface */ },
+        { "VERTICALSCROLL",         0 /* &Msod::shpVerticalscroll */ },
+        { "HORIZONTALSCROLL",       0 /* &Msod::shpHorizontalscroll */ },
+        { "CIRCULARARROW",          0 /* &Msod::shpCirculararrow */ },
+        { "NOTCHEDCIRCULARARROW",   0 /* &Msod::shpNotchedcirculararrow */ },
+        { "UTURNARROW",             0 /* &Msod::shpUturnarrow */ },
+        { "CURVEDRIGHTARROW",       0 /* &Msod::shpCurvedrightarrow */ },
+        { "CURVEDLEFTARROW",        0 /* &Msod::shpCurvedleftarrow */ },
+        { "CURVEDUPARROW",          0 /* &Msod::shpCurveduparrow */ },
+        { "CURVEDDOWNARROW",        0 /* &Msod::shpCurveddownarrow */ },
+        { "CLOUDCALLOUT",           0 /* &Msod::shpCloudcallout */ },
+        { "ELLIPSERIBBON",          0 /* &Msod::shpEllipseribbon */ },
+        { "ELLIPSERIBBON2",         0 /* &Msod::shpEllipseribbon2 */ },
+        { "FLOWCHARTPROCESS",       0 /* &Msod::shpFlowchartprocess */ },
+        { "FLOWCHARTDECISION",      0 /* &Msod::shpFlowchartdecision */ },
+        { "FLOWCHARTINPUTOUTPUT",   0 /* &Msod::shpFlowchartinputoutput */ },
+        { "FLOWCHARTPREDEFINEDPROCESS", 0 /* &Msod::shpFlowchartpredefinedprocess */ },
+        { "FLOWCHARTINTERNALSTORAGE", 0 /* &Msod::shpFlowchartinternalstorage */ },
+        { "FLOWCHARTDOCUMENT",      0 /* &Msod::shpFlowchartdocument */ },
+        { "FLOWCHARTMULTIDOCUMENT", 0 /* &Msod::shpFlowchartmultidocument */ },
+        { "FLOWCHARTTERMINATOR",    0 /* &Msod::shpFlowchartterminator */ },
+        { "FLOWCHARTPREPARATION",   0 /* &Msod::shpFlowchartpreparation */ },
+        { "FLOWCHARTMANUALINPUT",   0 /* &Msod::shpFlowchartmanualinput */ },
+        { "FLOWCHARTMANUALOPERATION", 0 /* &Msod::shpFlowchartmanualoperation */ },
+        { "FLOWCHARTCONNECTOR",     0 /* &Msod::shpFlowchartconnector */ },
+        { "FLOWCHARTPUNCHEDCARD",   0 /* &Msod::shpFlowchartpunchedcard */ },
+        { "FLOWCHARTPUNCHEDTAPE",   0 /* &Msod::shpFlowchartpunchedtape */ },
+        { "FLOWCHARTSUMMINGJUNCTION", 0 /* &Msod::shpFlowchartsummingjunction */ },
+        { "FLOWCHARTOR",            0 /* &Msod::shpFlowchartor */ },
+        { "FLOWCHARTCOLLATE",       0 /* &Msod::shpFlowchartcollate */ },
+        { "FLOWCHARTSORT",          0 /* &Msod::shpFlowchartsort */ },
+        { "FLOWCHARTEXTRACT",       0 /* &Msod::shpFlowchartextract */ },
+        { "FLOWCHARTMERGE",         0 /* &Msod::shpFlowchartmerge */ },
+        { "FLOWCHARTOFFLINESTORAGE", 0 /* &Msod::shpFlowchartofflinestorage */ },
+        { "FLOWCHARTONLINESTORAGE", 0 /* &Msod::shpFlowchartonlinestorage */ },
+        { "FLOWCHARTMAGNETICTAPE",  0 /* &Msod::shpFlowchartmagnetictape */ },
+        { "FLOWCHARTMAGNETICDISK",  0 /* &Msod::shpFlowchartmagneticdisk */ },
+        { "FLOWCHARTMAGNETICDRUM",  0 /* &Msod::shpFlowchartmagneticdrum */ },
+        { "FLOWCHARTDISPLAY",       0 /* &Msod::shpFlowchartdisplay */ },
+        { "FLOWCHARTDELAY",         0 /* &Msod::shpFlowchartdelay */ },
+        { "TEXTPLAINTEXT",          0 /* &Msod::shpTextplaintext */ },
+        { "TEXTSTOP",               0 /* &Msod::shpTextstop */ },
+        { "TEXTTRIANGLE",           0 /* &Msod::shpTexttriangle */ },
+        { "TEXTTRIANGLEINVERTED",   0 /* &Msod::shpTexttriangleinverted */ },
+        { "TEXTCHEVRON",            0 /* &Msod::shpTextchevron */ },
+        { "TEXTCHEVRONINVERTED",    0 /* &Msod::shpTextchevroninverted */ },
+        { "TEXTRINGINSIDE",         0 /* &Msod::shpTextringinside */ },
+        { "TEXTRINGOUTSIDE",        0 /* &Msod::shpTextringoutside */ },
+        { "TEXTARCHUPCURVE",        0 /* &Msod::shpTextarchupcurve */ },
+        { "TEXTARCHDOWNCURVE",      0 /* &Msod::shpTextarchdowncurve */ },
+        { "TEXTCIRCLECURVE",        0 /* &Msod::shpTextcirclecurve */ },
+        { "TEXTBUTTONCURVE",        0 /* &Msod::shpTextbuttoncurve */ },
+        { "TEXTARCHUPPOUR",         0 /* &Msod::shpTextarchuppour */ },
+        { "TEXTARCHDOWNPOUR",       0 /* &Msod::shpTextarchdownpour */ },
+        { "TEXTCIRCLEPOUR",         0 /* &Msod::shpTextcirclepour */ },
+        { "TEXTBUTTONPOUR",         0 /* &Msod::shpTextbuttonpour */ },
+        { "TEXTCURVEUP",            0 /* &Msod::shpTextcurveup */ },
+        { "TEXTCURVEDOWN",          0 /* &Msod::shpTextcurvedown */ },
+        { "TEXTCASCADEUP",          0 /* &Msod::shpTextcascadeup */ },
+        { "TEXTCASCADEDOWN",        0 /* &Msod::shpTextcascadedown */ },
+        { "TEXTWAVE1",              0 /* &Msod::shpTextwave1 */ },
+        { "TEXTWAVE2",              0 /* &Msod::shpTextwave2 */ },
+        { "TEXTWAVE3",              0 /* &Msod::shpTextwave3 */ },
+        { "TEXTWAVE4",              0 /* &Msod::shpTextwave4 */ },
+        { "TEXTINFLATE",            0 /* &Msod::shpTextinflate */ },
+        { "TEXTDEFLATE",            0 /* &Msod::shpTextdeflate */ },
+        { "TEXTINFLATEBOTTOM",      0 /* &Msod::shpTextinflatebottom */ },
+        { "TEXTDEFLATEBOTTOM",      0 /* &Msod::shpTextdeflatebottom */ },
+        { "TEXTINFLATETOP",         0 /* &Msod::shpTextinflatetop */ },
+        { "TEXTDEFLATETOP",         0 /* &Msod::shpTextdeflatetop */ },
+        { "TEXTDEFLATEINFLATE",     0 /* &Msod::shpTextdeflateinflate */ },
+        { "TEXTDEFLATEINFLATEDEFLATE", 0 /* &Msod::shpTextdeflateinflatedeflate */ },
+        { "TEXTFADERIGHT",          0 /* &Msod::shpTextfaderight */ },
+        { "TEXTFADELEFT",           0 /* &Msod::shpTextfadeleft */ },
+        { "TEXTFADEUP",             0 /* &Msod::shpTextfadeup */ },
+        { "TEXTFADEDOWN",           0 /* &Msod::shpTextfadedown */ },
+        { "TEXTSLANTUP",            0 /* &Msod::shpTextslantup */ },
+        { "TEXTSLANTDOWN",          0 /* &Msod::shpTextslantdown */ },
+        { "TEXTCANUP",              0 /* &Msod::shpTextcanup */ },
+        { "TEXTCANDOWN",            0 /* &Msod::shpTextcandown */ },
+        { "FLOWCHARTALTERNATEPROCESS", 0 /* &Msod::shpFlowchartalternateprocess */ },
+        { "FLOWCHARTOFFPAGECONNECTOR", 0 /* &Msod::shpFlowchartoffpageconnector */ },
+        { "CALLOUT90",              0 /* &Msod::shpCallout90 */ },
+        { "ACCENTCALLOUT90",        0 /* &Msod::shpAccentcallout90 */ },
+        { "BORDERCALLOUT90",        0 /* &Msod::shpBordercallout90 */ },
+        { "ACCENTBORDERCALLOUT90",  0 /* &Msod::shpAccentbordercallout90 */ },
+        { "LEFTRIGHTUPARROW",       0 /* &Msod::shpLeftrightuparrow */ },
+        { "SUN",                    0 /* &Msod::shpSun */ },
+        { "MOON",                   0 /* &Msod::shpMoon */ },
+        { "BRACKETPAIR",            0 /* &Msod::shpBracketpair */ },
+        { "BRACEPAIR",              0 /* &Msod::shpBracepair */ },
+        { "SEAL4",                  0 /* &Msod::shpSeal4 */ },
+        { "DOUBLEWAVE",             0 /* &Msod::shpDoublewave */ },
+        { "ACTIONBUTTONBLANK",      0 /* &Msod::shpActionbuttonblank */ },
+        { "ACTIONBUTTONHOME",       0 /* &Msod::shpActionbuttonhome */ },
+        { "ACTIONBUTTONHELP",       0 /* &Msod::shpActionbuttonhelp */ },
+        { "ACTIONBUTTONINFORMATION", 0 /* &Msod::shpActionbuttoninformation */ },
+        { "ACTIONBUTTONFORWARDNEXT", 0 /* &Msod::shpActionbuttonforwardnext */ },
+        { "ACTIONBUTTONBACKPREVIOUS", 0 /* &Msod::shpActionbuttonbackprevious */ },
+        { "ACTIONBUTTONEND",        0 /* &Msod::shpActionbuttonend */ },
+        { "ACTIONBUTTONBEGINNING",  0 /* &Msod::shpActionbuttonbeginning */ },
+        { "ACTIONBUTTONRETURN",     0 /* &Msod::shpActionbuttonreturn */ },
+        { "ACTIONBUTTONDOCUMENT",   0 /* &Msod::shpActionbuttondocument */ },
+        { "ACTIONBUTTONSOUND",      0 /* &Msod::shpActionbuttonsound */ },
+        { "ACTIONBUTTONMOVIE",      0 /* &Msod::shpActionbuttonmovie */ },
+        { "HOSTCONTROL",            0 /* &Msod::shpHostcontrol */ },
+        { "TEXTBOX",                0 /* &Msod::shpTextbox */ },
+    };
+    unsigned i;
+    method result;
+
+    // Scan lookup table for operation.
+
+    if (op.opcode.fields.inst < sizeof(funcTab)/sizeof(funcTab[0]))
+    {
+        i = op.opcode.fields.inst;
+    }
+    else
+    {
+        i = 0;
+    }
+
+    // Invoke handler.
+
+    result = funcTab[i].handler;
+    if (!result)
+    {
+        if (funcTab[i].name)
+            kdError(s_area) << "opSp: unsupported shape: " <<
+                funcTab[i].name <<
+                " operands: " << byteOperands << endl;
+        else
+            kdError(s_area) << "opSp: unsupported shape: " <<
+                op.opcode.fields.inst <<
+                " operands: " << byteOperands << endl;
+
+        // Skip data we cannot use.
+
+        skip(byteOperands, operands);
+    }
+    else
+    {
+        struct
+        {
+            U32 spid;                       // The shape id
+            union
+            {
+                U32 info;
+                struct
+                {
+                    U32 fGroup : 1;         // This shape is a group shape
+                    U32 fChild : 1;         // Not a top-level shape
+                    U32 fPatriarch : 1;     // This is the topmost group shape.
+                                            // Exactly one of these per drawing.
+                    U32 fDeleted : 1;       // The shape has been deleted
+                    U32 fOleShape : 1;      // The shape is an OLE object
+                    U32 fHaveMaster : 1;    // Shape has a hspMaster property
+                    U32 fFlipH : 1;         // Shape is flipped horizontally
+                    U32 fFlipV : 1;         // Shape is flipped vertically
+                    U32 fConnector : 1;     // Connector type of shape
+                    U32 fHaveAnchor : 1;    // Shape has an anchor of some kind
+                    U32 fBackground : 1;    // Background shape
+                    U32 fHaveSpt : 1;       // Shape has a shape type property
+                    U32 reserved : 20;      // Not yet used
+                } fields;
+            } grfPersistent;
+        } data;
+
+        operands >> data.spid >> data.grfPersistent.info;
+        byteOperands -= sizeof(data);
+        kdDebug(s_area) << "opSp: opcode: " << funcTab[i].name <<
+            (data.grfPersistent.fields.fGroup ? "" : " group") <<
+            (data.grfPersistent.fields.fChild ? "" : " child") <<
+            (data.grfPersistent.fields.fPatriarch ? "" : " patriarch") <<
+            (data.grfPersistent.fields.fDeleted ? "" : " deleted") <<
+            (data.grfPersistent.fields.fOleShape ? "" : " oleshape") <<
+            (data.grfPersistent.fields.fHaveMaster ? "" : " master") <<
+            (data.grfPersistent.fields.fFlipH ? "" : " flipv") <<
+            (data.grfPersistent.fields.fConnector ? "" : " connector") <<
+            (data.grfPersistent.fields.fHaveAnchor ? "" : " anchor") <<
+            (data.grfPersistent.fields.fBackground ? "" : " background") <<
+            (data.grfPersistent.fields.fHaveSpt ? "" : " spt") <<
+            " operands: " << byteOperands << endl;
+        if (data.grfPersistent.fields.fDeleted)
+            skip(byteOperands, operands);
+        else
+            (this->*result)(op, byteOperands, operands);
+    }
+}
+
+void Msod::opSpcontainer(MSOFBH &, U32 byteOperands, QDataStream &operands)
+{
+    walk(byteOperands, operands);
+}
+
+void Msod::opSpgr(MSOFBH &, U32 byteOperands, QDataStream &operands)
+{
+    struct
+    {
+        U32 x;
+        U32 y;
+        U32 w;
+        U32 h;
+    } data;
+
+    operands >> data.x >> data.y >> data.w >> data.h;
+    skip(byteOperands - sizeof(data), operands);
+}
+
+void Msod::opSpgrcontainer(MSOFBH &, U32 byteOperands, QDataStream &operands)
+{
+    walk(byteOperands, operands);
+}
+
+void Msod::opSplitmenucolors(MSOFBH &, U32 byteOperands, QDataStream &operands)
+{
+    struct
+    {
+        U32 fill;
+        U32 line;
+        U32 shadow;
+        U32 threeDee;
+    } data;
+
+    operands >> data.fill >> data.line >> data.shadow >> data.threeDee;
+    skip(byteOperands - sizeof(data), operands);
+    skip(m_dggError, operands);
+}
+
+void Msod::opTextbox(MSOFBH &, U32, QDataStream &)
+{
+}
+
+void Msod::shpPictureFrame(MSOFBH &, U32 byteOperands, QDataStream &operands)
+{
+    skip(byteOperands, operands);
+}
+
+void Msod::shpRectangle(MSOFBH &, U32 byteOperands, QDataStream &operands)
+{
+    skip(byteOperands, operands);
 }
 
 void Msod::skip(U32 byteOperands, QDataStream &operands)
@@ -395,84 +755,20 @@ void Msod::skip(U32 byteOperands, QDataStream &operands)
     }
 }
 
-void Msod::solvercontainer(U32 byteOperands, QDataStream &operands)
-{
-    walk(byteOperands, operands);
-}
-
-void Msod::sp(U32 byteOperands, QDataStream &operands)
-{
-}
-
-void Msod::spcontainer(U32 byteOperands, QDataStream &operands)
-{
-    walk(byteOperands, operands);
-}
-
-void Msod::spgr(U32 byteOperands, QDataStream &operands)
-{
-    struct
-    {
-        U32 x;
-        U32 y;
-        U32 w;
-        U32 h;
-    } data;
-
-    operands >> data.x >> data.y >> data.w >> data.h;
-    skip(byteOperands - sizeof(data), operands);
-}
-
-void Msod::spgrcontainer(U32 byteOperands, QDataStream &operands)
-{
-    walk(byteOperands, operands);
-}
-
-void Msod::splitmenucolors(U32 byteOperands, QDataStream &operands)
-{
-    struct
-    {
-        U32 fill;
-        U32 line;
-        U32 shadow;
-        U32 threeDee;
-    } data;
-
-    operands >> data.fill >> data.line >> data.shadow >> data.threeDee;
-    skip(byteOperands - sizeof(data), operands);
-    skip(m_dggError, operands);
-}
-
-void Msod::textbox(U32 byteOperands, QDataStream &operands)
-{
-}
-
 void Msod::walk(U32 byteOperands, QDataStream &stream)
 {
-    // Common Header (MSOBFH)
-
-    union
-    {
-        U32 info;
-        struct
-        {
-            U32 ver:4;
-            U32 inst: 12;
-            U32 fbt: 16;
-        } fields;
-    } opcode;
-    U32 cbLength;
+    MSOFBH op;
     U32 length = 0;
 
     while (length < byteOperands)
     {
-        stream >> opcode.info >> cbLength;
-        if (opcode.fields.fbt == 0)
+        stream >> op.opcode.info >> op.cbLength;
+        if (op.opcode.fields.fbt == 0)
             break;
 
         // Package the arguments...
 
-        invokeHandler(opcode.fields.fbt, cbLength , stream);
-        length += cbLength + 8;
+        invokeHandler(op, op.cbLength , stream);
+        length += op.cbLength + 8;
     }
 }
