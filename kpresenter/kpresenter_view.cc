@@ -38,7 +38,7 @@
 #include <styledia.h>
 #include <pgconfdia.h>
 #include <effectdia.h>
-#include <rotatedia.h>
+#include <rotationdialogimpl.h>
 #include "shadowdialogimpl.h"
 #include <presstructview.h>
 
@@ -998,24 +998,15 @@ void KPresenterView::extraLower()
 /*===============================================================*/
 void KPresenterView::extraRotate()
 {
-    if ( rotateDia ) {
-	delete rotateDia;
-	rotateDia = 0;
-    }
-
     if ( m_canvas->activePage()->numSelected() > 0 ) {
-	rotateDia = new RotateDia( this, "Rotate" );
-	rotateDia->setMaximumSize( rotateDia->width(), rotateDia->height() );
-	rotateDia->setMinimumSize( rotateDia->width(), rotateDia->height() );
-	rotateDia->setCaption( i18n( "KPresenter - Rotate" ) );
-	QObject::connect( rotateDia, SIGNAL( rotateDiaOk() ), this, SLOT( rotateOk() ) );
+
+	if ( !rotateDia ) {
+	    rotateDia = new RotationDialogImpl( this );
+	    connect( rotateDia, SIGNAL( apply() ), this, SLOT( rotateOk() ) );
+	}
 	rotateDia->setAngle( m_canvas->activePage()->getSelectedObj()->getAngle() );
 	m_canvas->setToolEditMode( TEM_MOUSE );
 	rotateDia->exec();
-
-        QObject::disconnect( rotateDia, SIGNAL( rotateDiaOk() ), this, SLOT( rotateOk() ) );
-        delete rotateDia;
-        rotateDia = 0;
     }
 }
 
@@ -1026,7 +1017,8 @@ void KPresenterView::extraShadow()
 
 	if ( !shadowDia ) {
 	    shadowDia = new ShadowDialogImpl( this );
-	    QObject::connect( shadowDia, SIGNAL( apply() ), this, SLOT( shadowOk() ) );
+	    shadowDia->resize( shadowDia->minimumSize() );
+	    connect( shadowDia, SIGNAL( apply() ), this, SLOT( shadowOk() ) );
 	}
 
 	KPObject *object=m_canvas->activePage()->getSelectedObj();
@@ -1035,7 +1027,7 @@ void KPresenterView::extraShadow()
 	    shadowDia->setShadowDistance( object->getShadowDistance() );
 	else
 	    shadowDia->setShadowDistance( 3 );
-	shadowDia->resize( shadowDia->minimumSize() );
+
 	shadowDia->setShadowColor( object->getShadowColor() );
 	m_canvas->setToolEditMode( TEM_MOUSE );
 	shadowDia->exec();
@@ -3232,7 +3224,7 @@ void KPresenterView::effectOk()
 void KPresenterView::rotateOk()
 {
     bool createMacro=false;
-    float _newAngle=rotateDia->getAngle();
+    float _newAngle=rotateDia->angle();
     KMacroCommand *macro=new KMacroCommand(i18n( "Change Rotation" ));
 
     KCommand *cmd=m_canvas->activePage()->rotateObj(_newAngle);

@@ -9,7 +9,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	kpresenter_doc.cc \
 	styledia.cc kpresenter_sound_player.cc \
 	pgconfdia.cc effectdia.cc kprcommand.cc \
-	kpresenter_utils.cc rotatedia.cc \
+	kpresenter_utils.cc  \
 	presstructview.cc \
 	confpiedia.cc confrectdia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
@@ -40,7 +40,8 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	KPLineObjectIface.skel KPLineObjectIface.cc \
 	KPQuadricbezierCurveObjectIface.skel KPQuadricbezierCurveObjectIface.cc \
 	KPCubicbeziercurveObjectIface.skel KPCubicbeziercurveObjectIface.cc \
-	shadowdialog.ui shadowdialogimpl.cc textpreview.cc
+	shadowdialog.ui shadowdialogimpl.cc textpreview.cc \
+	rotationdialogimpl.cc rotationdialog.ui
 
 libkpresenterpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell  -lqtmcop -lkmedia2_idl -lsoundserver_idl -lartskde
@@ -65,7 +66,7 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		backdia.h styledia.h \
 		global.h kprcommand.h kpresenter_sound_player.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
-		rotatedia.h presstructview.h \
+		presstructview.h \
 		confpiedia.h confrectdia.h  searchdia.h \
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
@@ -82,7 +83,8 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		presdurationdia.h KPPieObjectIface.h KPPolygonObjectIface.h KPRectObjectIface.h KPPixmapObjectIface.h \
 		KPAutoFormObjectIface.h KPresenterObject2DIface.h \
 		KPLineObjectIface.h KPQuadricbezierCurveObjectIface.h \
-		KPCubicbeziercurveObjectIface.h textpreview.h
+		KPCubicbeziercurveObjectIface.h textpreview.h \
+		rotationdialogimpl.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office

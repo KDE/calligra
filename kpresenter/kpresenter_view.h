@@ -37,7 +37,7 @@ class QScrollBar;
 class AFChoose;
 class StyleDia;
 class PgConfDia;
-class RotateDia;
+class RotationDialogImpl;
 class ShadowDialogImpl;
 class KPPresStructView;
 class ConfPieDia;
@@ -591,7 +591,7 @@ private:
     AFChoose *afChoose;
     StyleDia *styleDia;
     PgConfDia *pgConfDia;
-    RotateDia *rotateDia;
+    RotationDialogImpl *rotateDia;
     ShadowDialogImpl *shadowDia;
     KPPresStructView *presStructView;
     ConfPieDia *confPieDia;
