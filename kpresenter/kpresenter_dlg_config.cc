@@ -489,8 +489,8 @@ void ConfigureMiscPage::slotDefault()
    m_displayComment->setChecked(true);
    KPresenterDoc* doc = m_pView->kPresenterDoc();
 
-   resolutionY->setText( KoUnit::userValue( 10.0, doc->getUnit() ) );
-   resolutionX->setText( KoUnit::userValue( 10.0, doc->getUnit() ) );
+   resolutionY->setText( KoUnit::userValue( MM_TO_POINT( 10.0), doc->getUnit() ) );
+   resolutionX->setText( KoUnit::userValue( MM_TO_POINT( 10.0 ), doc->getUnit() ) );
 
 }
 
