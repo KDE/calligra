@@ -857,7 +857,9 @@ void KSpreadView::verticalText(bool b)
     if( !m_pTable  )
         return;
     m_pTable->setSelectionVerticalText( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),b );
-    
+    QRect r( activeTable()-> selectionRect() );
+    if( r.right() != 0x7FFF && r.bottom() != 0x7FFF )
+        m_pCanvas->adjustArea();
     updateEditWidget();
 }
 
@@ -1352,7 +1354,12 @@ void KSpreadView::changeAngle()
   if ( !m_pTable )
         return;
   KSpreadAngle* dlg = new KSpreadAngle( this, "Angle" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
-  dlg->exec();
+  if(dlg->exec())
+        {
+        QRect r( activeTable()-> selectionRect() );
+        if( r.right() != 0x7FFF && r.bottom() != 0x7FFF )
+                m_pCanvas->adjustArea();
+        }
 }
 
 void KSpreadView::mergeCell()
