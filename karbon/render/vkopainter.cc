@@ -331,6 +331,28 @@ VKoPainter::clear( unsigned int color )
 }
 
 void
+VKoPainter::clampToViewport( const ArtSVP &svp, double &x0, double &y0, double &x1, double &y1 )
+{
+	// get SVP bbox
+	ArtDRect bbox;
+	art_drect_svp( &bbox, &svp );
+
+	// clamp to viewport
+	x0 = int( bbox.x0 );
+	x0 = QMAX( x0, 0 );
+	x0 = QMIN( x0, m_width );
+	y0 = int( bbox.y0 );
+	y0 = QMAX( y0, 0 );
+	y0 = QMIN( y0, m_height );
+	x1 = int( bbox.x1 ) + 1;
+	x1 = QMAX( x1, 0 );
+	x1 = QMIN( x1, m_width );
+	y1 = int( bbox.y1 ) + 1;
+	y1 = QMAX( y1, 0 );
+	y1 = QMIN( y1, m_height );
+}
+
+void
 VKoPainter::drawVPath( ArtVpath *vec )
 {
 	QColor color;
@@ -426,6 +448,8 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		strokeSvp = art_svp_vpath_stroke( vec, ART_PATH_STROKE_JOIN_ROUND/*joinStyle*/, capStyle, ratio * m_stroke->lineWidth(), 5.0, 0.25 );
 	}
 
+	double x0, y0, x1, y1;
+
 	// render the svp to the buffer
 	if( strokeSvp )
 	{
@@ -433,25 +457,9 @@ VKoPainter::drawVPath( ArtVpath *vec )
 			applyGradient( strokeSvp, false );
 		else
 		{
-			// get SVP bbox
-			ArtDRect bbox;
-			art_drect_svp( &bbox, strokeSvp );
-
-			// clamp to viewport
-			int x0 = int( bbox.x0 );
-			x0 = QMAX( x0, 0 );
-			x0 = QMIN( x0, m_width );
-			int y0 = int( bbox.y0 );
-			y0 = QMAX( y0, 0 );
-			y0 = QMIN( y0, m_height );
-			int x1 = int( bbox.x1 ) + 1;
-			x1 = QMAX( x1, 0 );
-			x1 = QMIN( x1, m_width );
-			int y1 = int( bbox.y1 ) + 1;
-			y1 = QMAX( y1, 0 );
-			y1 = QMIN( y1, m_height );
-
-			art_rgb_svp_alpha( strokeSvp, x0, y0, x1, y1, strokeColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
+			clampToViewport( *strokeSvp, x0, y0, x1, y1 );
+			if( x0 != y0 && x1 != y1 )
+				art_rgb_svp_alpha( strokeSvp, x0, y0, x1, y1, strokeColor, a, m_buffer + int(x0) * 4 + int(y0) * m_width * 4, m_width * 4, 0 );
 			art_svp_free( strokeSvp );
 		}
 	}
@@ -462,25 +470,9 @@ VKoPainter::drawVPath( ArtVpath *vec )
 			applyGradient( fillSvp, true );
 		else
 		{
-			// get SVP bbox
-			ArtDRect bbox;
-			art_drect_svp( &bbox, fillSvp );
-
-			// clamp to viewport
-			int x0 = int( bbox.x0 );
-			x0 = QMAX( x0, 0 );
-			x0 = QMIN( x0, m_width );
-			int y0 = int( bbox.y0 );
-			y0 = QMAX( y0, 0 );
-			y0 = QMIN( y0, m_height );
-			int x1 = int( bbox.x1 ) + 1;
-			x1 = QMAX( x1, 0 );
-			x1 = QMIN( x1, m_width );
-			int y1 = int( bbox.y1 ) + 1;
-			y1 = QMAX( y1, 0 );
-			y1 = QMIN( y1, m_height );
-
-			art_rgb_svp_alpha( fillSvp, x0, y0, x1, y1, fillColor, a, m_buffer + x0 * 4 + y0 * m_width * 4, m_width * 4, 0 );
+			clampToViewport( *fillSvp, x0, y0, x1, y1 );
+			if( x0 != x1 && y0 != y1 )
+				art_rgb_svp_alpha( fillSvp, x0, y0, x1, y1, fillColor, a, m_buffer + int(x0) * 4 + int(y0) * m_width * 4, m_width * 4, 0 );
 			art_svp_free( fillSvp );
 		}
 	}
@@ -496,22 +488,8 @@ VKoPainter::drawVPath( ArtVpath *vec )
 void
 VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 {
-	ArtDRect bbox;
-	art_drect_svp( &bbox, svp );
-
-	// clamp to viewport
-	double x0 = int( bbox.x0 );
-	x0 = QMAX( x0, 0 );
-	x0 = QMIN( x0, m_width );
-	double y0 = int( bbox.y0 );
-	y0 = QMAX( y0, 0 );
-	y0 = QMIN( y0, m_height );
-	double x1 = int( bbox.x1 ) + 1;
-	x1 = QMAX( x1, 0 );
-	x1 = QMIN( x1, m_width );
-	double y1 = int( bbox.y1 ) + 1;
-	y1 = QMAX( y1, 0 );
-	y1 = QMIN( y1, m_height );
+	double x0, y0, x1, y1;
+	clampToViewport( *svp, x0, y0, x1, y1 );
 
 	ArtRender *render = 0L;
 
@@ -549,9 +527,12 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		linear->stops = buildStopArray( gradient, offsets );
 		linear->n_stops = offsets;
 
-		render = art_render_new( x0, y0, x1 + 1, y1 + 1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
-		art_render_svp( render, svp );
-		art_render_gradient_linear( render, linear, ART_FILTER_HYPER );
+		if( x0 != x1 && y0 != y1 )
+		{
+			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
+			art_render_svp( render, svp );
+			art_render_gradient_linear( render, linear, ART_FILTER_HYPER );
+		}
 	}
 	else if( gradient.type() == gradient_radial )
 	{
@@ -587,9 +568,12 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		radial->stops = buildStopArray( gradient, offsets );
 		radial->n_stops = offsets;
 
-		render = art_render_new( x0, y0, x1 + 1, y1 + 1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
-		art_render_svp( render, svp );
-		art_render_gradient_radial( render, radial, ART_FILTER_HYPER );
+		if( x0 != x1 && y0 != y1 )
+		{
+			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_SEPARATE, 0 );
+			art_render_svp( render, svp );
+			art_render_gradient_radial( render, radial, ART_FILTER_HYPER );
+		}
 	}
 	if( render )
 		art_render_invoke( render );
