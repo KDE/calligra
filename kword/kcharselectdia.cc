@@ -20,10 +20,8 @@
 #include "kcharselectdia.h"
 #include "kcharselectdia.moc"
 
-#include <qpushbutton.h>
 #include <qlayout.h>
 #include <qstrlist.h>
-#include <qlist.h>
 
 #include <kbuttonbox.h>
 #include <kapp.h>
