@@ -60,6 +60,9 @@ public:
         return ( classId == _attrib.classId &&
                  ( format ) && *format == *_attrib.format );
     }
+    virtual bool operator!=( const KWCharFormat &_attrib ) {
+        return ( format && *format != *_attrib.format );
+    }
 
     // #### todo
     //virtual void save( ostream &out )
@@ -233,7 +236,8 @@ protected:
     void free( KWChar* _data, unsigned int _len );
     KWChar* copy( KWChar *_data, unsigned int _len );
     KWChar& copy( KWChar _c );
-
+    bool formatChanged( KWCharAttribute *a1, KWCharAttribute *a2 );
+    
     unsigned int _len_;
     unsigned int _max_;
     KWChar* _data_;
