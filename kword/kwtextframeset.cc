@@ -2192,10 +2192,13 @@ void KWTextFrameSetEdit::copy()
 bool KWTextFrameSetEdit::doIgnoreDoubleSpace(KoTextParag * parag,
         int index,QChar ch )
 {
-    KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
-    if( autoFormat )
+    if( textFrameSet()->kWordDocument()->allowAutoFormat())
     {
-        return autoFormat->doIgnoreDoubleSpace( parag, index,ch );
+        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+        if(  autoFormat )
+        {
+            return autoFormat->doIgnoreDoubleSpace( parag, index,ch );
+        }
     }
     return false;
 
@@ -2204,9 +2207,12 @@ bool KWTextFrameSetEdit::doIgnoreDoubleSpace(KoTextParag * parag,
 
 void KWTextFrameSetEdit::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch )
 {
-    KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
-    if( autoFormat )
-        autoFormat->doAutoFormat( cursor, parag, index, ch, textObject());
+    if( textFrameSet()->kWordDocument()->allowAutoFormat() )
+    {
+        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+        if( autoFormat )
+            autoFormat->doAutoFormat( cursor, parag, index, ch, textObject());
+    }
 }
 
 void KWTextFrameSetEdit::startDrag()

@@ -133,6 +133,8 @@ k_dcop:
     virtual bool showStatusBar() const;
     virtual void setShowStatusBar( bool _status );
 
+    virtual bool allowAutoFormat() const;
+    virtual void setAllowAutoFormat(bool _b);
 
     //init/save config
     virtual void initConfig();

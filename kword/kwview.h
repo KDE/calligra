@@ -313,6 +313,8 @@ public slots:
 
     void refreshAllVariable();
 
+    void slotAllowAutoFormat();
+
     // end of public slots
 
 protected slots:
@@ -381,6 +383,8 @@ private:
     KToggleAction *actionViewFootNotes;
     KToggleAction *actionViewEndNotes;
     KToggleAction *actionShowDocStruct;
+    KToggleAction *actionAllowAutoFormat;
+
 
     KSelectAction *actionViewZoom;
 

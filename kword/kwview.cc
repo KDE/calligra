@@ -304,6 +304,7 @@ void KWView::initGUIButton()
 
     actionViewHeader->setChecked(m_doc->isHeaderVisible());
     actionViewFooter->setChecked(m_doc->isFooterVisible());
+    actionAllowAutoFormat->setChecked( m_doc->allowAutoFormat() );
 
     QString mode=m_gui->canvasWidget()->viewMode()->type();
     if(mode=="ModePreview")
@@ -426,6 +427,10 @@ void KWView::setupActions()
     actionViewFootNotes = new KToggleAction( i18n( "Foot&notes" ), 0,
                                              this, SLOT( viewFootNotes() ),
                                           actionCollection(), "view_footnotes" );
+
+    actionAllowAutoFormat = new KToggleAction( i18n( "Allow AutoFormat" ), 0,
+                                             this, SLOT( slotAllowAutoFormat() ),
+                                          actionCollection(), "view_allowAutoFormat" );
 
     actionViewFootNotes->setEnabled( false ); // #### TODO
     actionViewFootNotes->setExclusiveGroup( "notes" );
@@ -1457,6 +1462,7 @@ void KWView::updateReadWrite( bool readwrite )
         actionViewFootNotes->setEnabled( true );
         actionViewEndNotes->setEnabled( true );
         actionViewZoom->setEnabled( true );
+        actionAllowAutoFormat->setEnabled( true );
         KAction* newView = actionCollection()->action("view_newview");
         if (newView) newView->setEnabled( true );
         // Well, the view menu doesn't appear in konq, so this is currently useless...
@@ -4483,6 +4489,12 @@ void KWView::slotLineBreak()
 void KWView::refreshAllVariable()
 {
     m_doc->recalcVariables( VT_ALL );
+}
+
+void KWView::slotAllowAutoFormat()
+{
+    bool state = actionAllowAutoFormat->isChecked();
+    m_doc->setAllowAutoFormat( state );
 }
 
 /******************************************************************/

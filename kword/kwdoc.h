@@ -436,6 +436,10 @@ public:
     bool showdocStruct() const {return  m_bShowDocStruct;}
     void setShowDocStruct(bool _b){m_bShowDocStruct=_b;}
 
+    bool allowAutoFormat() const { return m_bAllowAutoFormat; }
+    void setAllowAutoFormat(bool _b){ m_bAllowAutoFormat=_b; }
+
+
     // in pt
     double indentValue() { return m_indent; }
     void setIndentValue(double _ind) { m_indent=_ind; }
@@ -622,6 +626,8 @@ private:
     bool m_bShowDocStruct;
     bool m_hasTOC;
     bool m_bShowStatusBar;
+
+    bool m_bAllowAutoFormat;
 
     // The document that is used by all formulas
     KFormula::Document* m_formulaDocument;

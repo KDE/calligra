@@ -153,6 +153,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_bDontCheckUpperWord = false;
     m_bDontCheckTitleCase = false;
     m_bShowStatusBar = true;
+    m_bAllowAutoFormat = true;
+
 
     m_lastViewMode="ModeNormal";
 
@@ -297,6 +299,7 @@ void KWDocument::initConfig()
       m_bShowDocStruct = config->readBoolEntry("showDocStruct",true);
       m_lastViewMode= config->readEntry( "viewmode","ModeNormal");
       setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ));
+      setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ));
   }
   else
       m_zoom = 100;
@@ -324,6 +327,7 @@ void KWDocument::saveConfig()
     config->writeEntry( "Zoom", m_zoom );
     config->writeEntry( "showDocStruct",m_bShowDocStruct);
     config->writeEntry( "viewmode",m_lastViewMode);
+    config->writeEntry( "AllowAutoFormat" , m_bAllowAutoFormat );
 }
 
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )

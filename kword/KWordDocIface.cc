@@ -465,3 +465,14 @@ void KWordDocIface::setConfigAutoReplaceNumber( bool b )
 {
     doc->getAutoFormat()->configAutoReplaceNumber(b);
 }
+
+bool KWordDocIface::allowAutoFormat() const
+{
+    return doc->allowAutoFormat();
+}
+
+void KWordDocIface::setAllowAutoFormat(bool _b)
+{
+    doc->setAllowAutoFormat(_b);
+}
+
