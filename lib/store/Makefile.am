@@ -2,21 +2,13 @@
 lib_LTLIBRARIES = libkstore.la
 LDFLAGS = -version-info 1:0:0 $(all_libraries) $(MICO_LDFLAGS)
 INCLUDES = $(MICO_INCLUDES) -I$(idldir) $(all_includes)
+IDL_FLAGS = --relative-paths --query-server-for-narrow
 
 ####### Files
 
 libkstore_la_LIBADD = $(LIB_QT) $(LIBMICO)
-libkstore_la_SOURCES = koStore_idl.cc koStore.cc
+libkstore_la_SOURCES = koStoreIf.idl koStore.cc
 include_HEADERS = koStore.h
 
-idl_DATA = koStore.idl
-idl_HEADERS =  koStore_idl.h
-
-DISTCLEANFILES = koStore_idl.h koStore_idl.cc
-
-####### Build rules
-
-koStore_idl.h: koStore.idl $(micodir)/include/CORBA.h
-	$(IDL) -I./ --relative-paths --query-server-for-narrow --name koStore_idl $(srcdir)/koStore.idl
-koStore_idl.cc: koStore_idl.h
+idl_DATA = koStoreIf.idl
 

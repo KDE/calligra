@@ -26,7 +26,7 @@
 
 #include <kdebug.h>
 
-#include "koStore_idl.h"
+#include "koStoreIf.h"
 
 class KoStore : public KOStore::Store_skel
 {
