@@ -69,9 +69,17 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		KexiMainWindow	*mainWin() { return m_parentWindow; }
 
 		//js todo: maybe remove this since it's often the same as partItem()->identifier()?:
-		void	setDocID(int id);
-		int	docID() { return m_docID; }
-//		KInstance *instance();
+
+		/*! This method sets internal identifier for the dialog, but
+		 if there is a part item associated with this dialog (see partItem()),
+		 partItem()->identifier() will be is used as identifier, so this method is noop. 
+		 Thus, it's usable only for dialog types when no part item is assigned. */
+		void setId(int id) { m_id = id; }
+
+		/*! If there is a part item associated with this dialog (see partItem()),
+		 partItem()->identifier() is returned, otherwise internal dialog's identifier
+		 (previously set by setID()) is returned. */
+		int	id() const;
 
 		//! \return Kexi part used to create this window
 		inline KexiPart::Part* part() const { return m_part; }
@@ -192,7 +200,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 #ifdef KEXI_NO_CTXT_HELP
 		KexiContextHelpInfo *m_contextHelpInfo;
 #endif
-		int m_docID;
+		int m_id;
 //		KInstance *m_instance;
 		QGuardedPtr<KexiPart::Part> m_part;
 		KexiPart::Item *m_item;

@@ -143,7 +143,7 @@ class KexiMainWindowImpl::Private
 		QWidget *focus_before_popup;
 //		KexiRelationPart *relationPart;
 
-		int privateDocIDCounter; //!< counter: ID for private "document" like Relations window
+		int privateIDCounter; //!< counter: ID for private "document" like Relations window
 
 		bool block_KMdiMainFrm_eventFilter : 1;
 
@@ -169,7 +169,7 @@ class KexiMainWindowImpl::Private
 		block_KMdiMainFrm_eventFilter=false;
 		focus_before_popup=0;
 //		relationPart=0;
-		privateDocIDCounter=0;
+		privateIDCounter=0;
 		action_view_nav=0;
 		action_view_propeditor=0;
 		forceDialogClosing=false;
@@ -1137,9 +1137,9 @@ KexiMainWindowImpl::registerChild(KexiDialogBase *dlg)
 		this, SLOT(slotDirtyFlagChanged(KexiDialogBase*)));
 
 //	connect(dlg, SIGNAL(childWindowCloseRequest(KMdiChildView *)), this, SLOT(childClosed(KMdiChildView *)));
-	if(dlg->docID() != -1)
-		d->dialogs.insert(dlg->docID(), dlg);
-	kdDebug() << "KexiMainWindowImpl::registerChild() docID = " << dlg->docID() << endl;
+	if(dlg->id() != -1)
+		d->dialogs.insert(dlg->id(), dlg);
+	kdDebug() << "KexiMainWindowImpl::registerChild() ID = " << dlg->id() << endl;
 
 	if (m_mdiMode==KMdi::ToplevelMode || m_mdiMode==KMdi::ChildframeMode) {//kmdi fix
 		//js TODO: check if taskbar is switched in menu
@@ -1251,7 +1251,7 @@ KexiMainWindowImpl::childClosed(KMdiChildView *v)
 {
 	kdDebug() << "KexiMainWindowImpl::unregisterWindow()" << endl;
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
-	d->dialogs.remove(dlg->docID());
+	d->dialogs.remove(dlg->id());
 
 	//focus navigator if nothing else available
 	if (d->dialogs.isEmpty())
@@ -1711,7 +1711,7 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 		d->nav->updateItemName( dlg->partItem(), false );
 	}
 
-	d->dialogs.take(dlg->docID()); //don't remove -KMDI will do that
+	d->dialogs.take(dlg->id()); //don't remove -KMDI will do that
 
 	KXMLGUIClient *client = dlg->guiClient();
 	if (d->curDialogGUIClient==client) {
@@ -2094,9 +2094,9 @@ bool KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 	return true;
 }
 
-int KexiMainWindowImpl::generatePrivateDocID()
+int KexiMainWindowImpl::generatePrivateID()
 {
-	return --d->privateDocIDCounter;
+	return --d->privateIDCounter;
 }
 
 void KexiMainWindowImpl::propertyBufferSwitched(KexiDialogBase *dlg, bool force)

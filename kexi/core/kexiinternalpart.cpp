@@ -107,7 +107,7 @@ KexiDialogBase* KexiInternalPart::findOrCreateDialog(KexiMainWindow* mainWin,
 	dlg->setTabCaption( view->caption() );
 	dlg->resize(view->sizeHint());
 	dlg->setMinimumSize(view->minimumSizeHint().width(),view->minimumSizeHint().height());
-	dlg->setDocID( mainWin->generatePrivateDocID() );
+	dlg->setId( mainWin->generatePrivateID() );
 	dlg->registerDialog();
 	return dlg;
 }

@@ -62,7 +62,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		 Private means that the object is not stored as-is in the project but is somewhat 
 		 generated and in most cases there is at most one unique instance document of such type (part).
 		 To generate this ID, just app-wide internal counter is used. */
-		virtual int generatePrivateDocID() = 0;
+		virtual int generatePrivateID() = 0;
 	
 	public slots:
 		//! Opens object pointed by \a item in a view \a viewMode

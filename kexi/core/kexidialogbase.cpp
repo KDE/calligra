@@ -57,7 +57,7 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
 	m_contextHelpInfo=new KexiContextHelpInfo();
 #endif
 //	m_instance=parent->instance();
-	m_docID = -1;
+	m_id = -1;
 	m_item = 0;
 }
 
@@ -134,13 +134,9 @@ void KexiDialogBase::detachFromGUIClient() {
 	//TODO
 }
 
-
-void
-KexiDialogBase::setDocID(int id)
+int KexiDialogBase::id() const 
 {
-	kdDebug() << "KexiDialogBase::setDocID(): id = " << id << endl;
-	m_docID = id;
-//	m_parentWindow->registerChild(this);
+	return partItem() ? partItem()->identifier() : m_id;
 }
 
 void KexiDialogBase::setContextHelp(const QString& caption, const QString& text, const QString& iconName) {

@@ -95,7 +95,7 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 //- displaying the same as above in tabCaption (or not)
 //	dlg->setCaption( capt );
 //	dlg->setTabCaption( item.name() );
-	dlg->setDocID(item.identifier());
+	dlg->setId(item.identifier()); //not needed, but we did it
 	dlg->registerDialog();
 	dlg->setIcon( SmallIcon( dlg->itemIcon() ) );
 	if (dlg->mdiParent())

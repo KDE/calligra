@@ -87,7 +87,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		 Private means that the object is not stored as-is in the project but is somewhat 
 		 generated and in most cases there is at most one unique instance document of such type (part).
 		 To generate this ID, just app-wide internal counter is used. */
-		virtual int generatePrivateDocID();
+		virtual int generatePrivateID();
 
 		/*! Reimplemented */
 		virtual void readProperties(KConfig *config);
