@@ -504,6 +504,12 @@ bool KoMainWindow::saveDocument( bool saveas )
 
 void KoMainWindow::closeEvent(QCloseEvent *e) {
     if(queryClose()) {
+        if (settingsDirty() && rootDocument())
+        {
+            saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
+            KGlobal::config()->sync();
+            resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
+        }
         setRootDocument(0L);
         KParts::MainWindow::closeEvent(e);
     }
@@ -685,8 +691,8 @@ void KoMainWindow::slotToolbarToggled( bool toggle )
     else
       bar->hide();
 
-    KGlobal::config()->setGroup( "MainWindow" );
-    saveMainWindowSettings( KGlobal::config() );
+    if (rootDocument())
+        saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
   }
   else
     kdWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->name() << " not found!" << endl;
@@ -853,9 +859,9 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
         factory->plugActionList(d->m_activeView, "view_split", d->m_splitViewActionList );
 
     // Position and show toolbars according to user's preference
-    //kdDebug(30003) << "KoMainWindow::slotActivePartChanged applyMainWindowSettings" << endl;
-    KGlobal::config()->setGroup( "MainWindow" );
-    applyMainWindowSettings( KGlobal::config() );
+    kdDebug(30003) << "KoMainWindow::slotActivePartChanged applyMainWindowSettings " << newPart->instance()->instanceName() << endl;
+    applyMainWindowSettings( KGlobal::config(), newPart->instance()->instanceName() );
+    setAutoSaveSettings( newPart->instance()->instanceName(), false );
 
     // Create and plug toolbar list for Settings menu
     //QListIterator<KToolBar> it = toolBarIterator();
