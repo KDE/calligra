@@ -37,12 +37,12 @@ using namespace KexiMigration;
 
 int main(int argc, char *argv[])
 {
-	KApplication a(argc, argv, "Kexi Migrate Test");
+	KApplication app(argc, argv, "Kexi Migrate Test");
 
 	importWizard* iw = new importWizard();
 	iw->setGeometry(300,300,300,250);
-	a.setMainWidget(iw);
+	app.setMainWidget(iw);
 	iw->show();
 	
-	return a.exec();
+	return app.exec();
 }

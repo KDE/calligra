@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
    Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005 Martin Ellis <kde@martinellis.co.uk>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,11 +32,11 @@ KexiMigrate::KexiMigrate()
 }
 
 KexiMigrate::KexiMigrate(QObject *parent, const char *name,
-  const QStringList &args) : QObject( parent, name )
+  const QStringList&) : QObject( parent, name )
 {
 }
 
-//==================================================================================
+//=============================================================================
 // Migration parameters
 void KexiMigrate::setData(KexiDB::ConnectionData* externalConnectionData, QString dbname, KexiDB::Connection* kexiConnection, QString newdbname, bool keep_data)
 {
@@ -46,87 +47,69 @@ void KexiMigrate::setData(KexiDB::ConnectionData* externalConnectionData, QStrin
 	m_todbname = newdbname;
 }
 
-//==================================================================================
+//=============================================================================
 // Destructor
 KexiMigrate::~KexiMigrate()
 {
 }
 
-//==================================================================================
+//=============================================================================
 // Perform Import operation
 bool KexiMigrate::performImport()
 {
 	QStringList tables;
-	bool failure = false;
-	
-	//Step 1 - connect
-	kdDebug() << "MIGRATE TEST CONNECTING..." << endl;
-	if (drv_connect())
-	{
-		kdDebug() << "MIGRATE TEST GETTING TABLENAMES..." << endl;
-		//Step 2 - get table names
-		if (tableNames(tables))
-		{
-			if (tables.size() > 0)
-			{
-				//There were some tables
-				for (uint i = 0; i < tables.size(); i++)
-				{
-					//Step 3 - Read table schemas
-					if(readTableSchema(tables[i], i))
-					{
-						//yeah, got a table
-						//Add it to list of tables which we will create if all goes well
-						v_tableSchemas.push_back(m_table);
-					}
-					else
-					{
-						failure = true;
-					}
-				}
-			}
-			else
-			{
-				kdDebug() << "There were no tables to import" << endl;
-				failure = true;
-			}
-			// Only create a database if all tables were successfully read
-			if(failure)
-			{
-				return false;
-			}
-			else
-			{
-				// Create new database as we have all required info ;)
-				if (createDatabase(m_todbname)) {
-					for(uint i = 0; i < v_tableSchemas.size(); i++)
-					{
-						
-						if(!copyData(tables[i], v_tableSchemas[i]))
-						{	
-							kdDebug() << "Failed to copy table " << v_tableSchemas[i] << endl;
-							m_kexiDB->debugError();
-							failure = true;
-						}
-					}
-					return true;
-				} else {
-					return false;
-				}
-			}
-			drv_disconnect();
-		}
-		else
-		{
-			kdDebug() << "Couldnt get list of tables" << endl;
-			return false;
-		}
-	}
-	else
-	{
+
+	// Step 1 - connect
+	kdDebug() << "KexiMigrate::performImport() CONNECTING..." << endl;
+	if (!drv_connect()) {
 		kdDebug() << "Couldnt connect to database server" << endl;
 		return false;
 	}
+
+	// Step 2 - get table names
+	kdDebug() << "KexiMigrate::performImport() GETTING TABLENAMES..." << endl;
+	if (!tableNames(tables)) {
+		kdDebug() << "Couldnt get list of tables" << endl;
+		return false;
+	}
+
+	// Check if there are any tables
+	if (!tables.size() > 0) {
+		kdDebug() << "There were no tables to import" << endl;
+		return false;
+	}
+
+	// Step 3 - Read table schemas
+	for (uint i = 0; i < tables.size(); i++) {
+		if(readTableSchema(tables[i])) {
+			//yeah, got a table
+			//Add it to list of tables which we will create if all goes well
+			v_tableSchemas.push_back(m_table);
+		} else {
+			return false;
+		}
+	}
+
+  // Step 4 - Create new database as we have all required info
+	if (!createDatabase(m_todbname)) {
+		return false;
+	}
+
+	if(drv_progressSupported()) {
+		progressInitialise();
+	}
+
+	for(uint i = 0; i < v_tableSchemas.size(); i++) {
+		if(!copyData(tables[i], v_tableSchemas[i])) {
+			kdDebug() << "Failed to copy table " << v_tableSchemas[i] << endl;
+			m_kexiDB->debugError();
+			drv_disconnect();
+			return false;
+		}
+	}
+
+	drv_disconnect();
+	return true;
 }
 
 bool KexiMigrate::copyData(const QString& table, 
@@ -136,7 +119,7 @@ bool KexiMigrate::copyData(const QString& table,
 	return true;
 }
 
-//==================================================================================
+//=============================================================================
 // Create the final database
 bool KexiMigrate::createDatabase(const QString& dbname)
 {
@@ -183,23 +166,68 @@ bool KexiMigrate::createDatabase(const QString& dbname)
 	}
 }
 
-//==================================================================================
+//=============================================================================
 // Get the table names
 bool KexiMigrate::tableNames(QStringList & tn)
 {
+	//! @todo Cache list of table names
 	kdDebug() << "Reading list of tables..." << endl;
 	return drv_tableNames(tn);
 }
 
-//==================================================================================
+//=============================================================================
 // Get the table schema
-bool KexiMigrate::readTableSchema(const QString& t, int i)
+bool KexiMigrate::readTableSchema(const QString& table)
 {
-	kdDebug() << "Reading table schema for [" << t << "]" << endl;
-	return drv_readTableSchema(t);
+	kdDebug() << "Reading table schema for [" << table << "]" << endl;
+	return drv_readTableSchema(table);
 }
 
-//==================================================================================
+
+bool KexiMigrate::progressInitialise() {
+	Q_ULLONG sum = 0, size;
+	bool success = true;
+
+  //! @todo Don't copy table names here
+	QStringList tables;
+	if(!tableNames(tables))
+		return false;
+
+	// Get the number of rows/bytes to import
+	for(QStringList::Iterator it = tables.begin();
+	    it != tables.end() && success; ++it) {
+
+		if(drv_getTableSize(*it, size)) {
+			kdDebug() << "KexiMigrate::progressInitialise() - table: " << *it 
+			          << "size: " << size << endl;
+			sum += size;
+		} else {
+			success = false;
+		}
+
+	}
+
+	kdDebug() << "KexiMigrate::progressInitialise() - job size: " << sum << endl;
+	emit progressPercent(0);
+	progressDone = 0;
+	progressTotal = sum;
+	progressNextReport = sum / 100;
+	return success;
+}
+
+void KexiMigrate::progressDoneRow() {
+	progressDone++;
+	if (progressDone >= progressNextReport) {
+		int percent = (progressDone+1) * 100 / progressTotal;
+		progressNextReport = ((percent + 1) * progressTotal) / 100;
+		kdDebug() << "KexiMigrate::progressDoneRow(): " << progressDone << "/"
+		          << progressTotal << " (" << percent << "%) next report at " 
+		          << progressNextReport << endl;
+		emit progressPercent(percent);
+	}
+
+}
+//=============================================================================
 // Prompt the user to choose a field type
 KexiDB::Field::Type KexiMigrate::userType()
 {

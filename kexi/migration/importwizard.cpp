@@ -27,6 +27,7 @@
 #include <qlabel.h>
 #include <qvbox.h>
 #include <qlayout.h>
+#include <qvbox.h>
 
 #include <kcombobox.h>
 #include <kmessagebox.h>
@@ -224,7 +225,8 @@ void importWizard::setupfinish()
 {
     finishPage->hide();
     QLabel *lblDone = new QLabel(finishPage);
-    lblfinishTxt = new QLabel(finishPage);
+    QVBox *vbox = new QVBox(finishPage);
+    lblfinishTxt = new QLabel(vbox);
 
     lblDone->setText(i18n("Finished!\n"
                      "All required information has now\n"
@@ -234,6 +236,8 @@ void importWizard::setupfinish()
                      "information such as field types if\n"
                      "the import module cannot automatically\n"
                      "determine this for you"));
+    progress = new KProgress(100, vbox);
+    progress->hide();
     finishPage->show();
 }
 
@@ -368,6 +372,12 @@ void importWizard::checkIfDstTypeFileBased(const QString& dstType) {
   }
 }
 
+
+void importWizard::progressUpdated(int percent) {
+  progress->setProgress(percent);
+  KApplication::kApplication()->processEvents();
+}
+
 //===========================================================
 //
 void importWizard::accept()
@@ -445,6 +455,12 @@ void importWizard::accept()
                       false);
     }
     kdDebug() << "Performing import..." << endl;
+    if(import->progressSupported()) {
+      progress->show();
+      progress->updateGeometry();
+      connect(import, SIGNAL(progressPercent(int)),
+              this, SLOT(progressUpdated(int)));
+    }
     if (import->performImport())
     {
         KWizard::accept(); //tmp, before adding "final page"

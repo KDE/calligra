@@ -155,6 +155,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable,
 					vals << var;
 				}
 				m_kexiDB->insertRecord(*dstTable, vals);
+				progressDoneRow();
 			}
 			/*! @todo Check that wasn't an error, rather than end of result set */
 			mysql_free_result(res);
@@ -167,6 +168,25 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable,
 	}
 }
 
+
+bool MySQLMigrate::drv_getTableSize(const QString& table, Q_ULLONG& size) {
+	if(d->executeSQL("SELECT COUNT(*) FROM " + d->escapeIdentifier(table))) {
+		MYSQL_RES *res = mysql_store_result(d->mysql);
+		if (res != NULL) {
+			MYSQL_ROW row;
+			while ((row = mysql_fetch_row(res)) != NULL) {
+				//! @todo check result valid
+				size = QString(row[0]).toULongLong();
+			}
+			mysql_free_result(res);
+		} else {
+			kdDebug() << "MySQLMigrate::drv_getTableSize: null result" << endl;
+		}
+		return true;
+	} else {
+	  return false;
+	}
+}
 
 //! Convert a MySQL type to a KexiDB type, prompting user if necessary.
 KexiDB::Field::Type MySQLMigrate::type(const QString& table,

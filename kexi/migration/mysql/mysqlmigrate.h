@@ -47,10 +47,15 @@ namespace KexiMigration
 
 			virtual bool drv_copyTable(const QString& srcTable,
 			                           KexiDB::TableSchema* dstTable);
+
+			virtual bool drv_progressSupported() { return true; }
+			virtual bool drv_getTableSize(const QString& table, Q_ULLONG& size);
+
 //TODO: move this somewhere to low level class (MIGRATION?)
 //			virtual bool drv_getTablesList( QStringList &list );
 //TODO: move this somewhere to low level class (MIGRATION?)
 //			virtual bool drv_containsTable( const QString &tableName );
+
 		public:
 			~MySQLMigrate();
 			//Constructor

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
    Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005 Martin Ellis <kde@martinellis.co.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +23,9 @@
 #define KEXIMIGRATIONIMPORTWIZARD_H
 
 #include <kwizard.h>
+#include <kprogress.h>
+#include <kapplication.h>
+
 
 class QHBox;
 class QVBox;
@@ -55,6 +59,7 @@ private:
     QLabel *lblfinishTxt;
     bool fileBasedSrc, fileBasedDst, fileBasedDstWasPresented;
     KexiProjectSet* m_prjSet;
+    KProgress *progress;
 
     void setupintro();
     void setupsrcType();
@@ -74,6 +79,9 @@ private:
     void arriveDstTitlePage();
     void arriveDstPage();
     void arriveFinishPage();
+public slots:
+    void progressUpdated(int percent);
+
 private slots:
     void nextClicked(const QString &);
     virtual void accept();

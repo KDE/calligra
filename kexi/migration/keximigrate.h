@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
    Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005 Martin Ellis <kde@martinellis.co.uk>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -69,6 +70,13 @@ namespace KexiMigration
 			//! Perform an export operation
 			bool performExport();
 
+			inline bool progressSupported() { return drv_progressSupported(); }
+
+			//! Returns true if the migration driver supports progress updates.
+		signals:
+			void progressPercent(int percent);
+
+		public:
 			virtual int versionMajor() const = 0;
 			virtual int versionMinor() const = 0;
 		protected:
@@ -87,6 +95,30 @@ namespace KexiMigration
 			//! Copy a table from source DB to target DB (driver specific)
 			virtual bool drv_copyTable(const QString& srcTable,
 			                           KexiDB::TableSchema* dstTable) = 0;
+
+			virtual bool drv_progressSupported() { return false; }
+
+			//! Return the size of a table to be imported, or 0 if not supported
+			/*! Finds the size of the named table, in order to provide feedback on
+			    migration progress.
+
+			    The units of the return type are deliberately unspecified.  Migration
+			    drivers may return the number of records in the table, or the size in
+			    bytes, etc.  Units should be chosen in order that the driver can 
+			    return the size in the fastest way possible (e.g. migration from CSV
+			    files should use file size to avoid counting the number of rows, and
+			    migration from MDB files should return the number of rows as this is
+			    stored within the file).
+
+			    Obviously, the driver should use the same units when reporting
+			    migration progress.
+
+			    \return size of the specified table
+			*/
+			virtual bool drv_getTableSize(const QString&, Q_ULLONG&)
+			{ return false; }
+
+			void progressDoneRow();
 
 			//! Prompt user to select a field type for unrecognised fields
 			KexiDB::Field::Type userType();
@@ -114,7 +146,7 @@ namespace KexiMigration
 			//Perform general functionality and rely on drv_ReadTableSchema()
 			//to do the real work
 			//! Read a table schema object for a table (into m_table)
-			bool readTableSchema(const QString& tabl, int i);
+			bool readTableSchema(const QString& table);
 
 			//! Copy data from original table to new table if required
 			bool copyData(const QString& table, KexiDB::TableSchema* dstTable);
@@ -128,6 +160,21 @@ namespace KexiMigration
 
 			//! Table schemas from source DB
 			std::vector<KexiDB::TableSchema*>v_tableSchemas;
+
+			//! Estimate size of migration job
+			/*! Calls drv_getTableSize for each table to be copied.
+			    \return sum of the size of all tables to be copied.
+			 */
+			bool progressInitialise();
+
+			//! Size of migration job
+			Q_ULLONG progressTotal;
+			//! Amount of migration job complete
+			Q_ULLONG progressDone;
+			//! Don't recalculate progress done until this value is reached.
+			Q_ULLONG progressNextReport;
+
+
 	};
 
 } //namespace KexiMigration
