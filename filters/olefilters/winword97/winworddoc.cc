@@ -276,7 +276,7 @@ QString WinWordDoc::generateBorder(
     QString border;
 
     border.append(prefix);
-    border.append(QString::fromLatin1("Width=\"%1\"").arg(brc.brcType == 0 ? 0.0 : brc.dptLineWidth * 0.125) );
+    border.append(QString::fromLatin1("Width=\"%1\"").arg(brc.dptLineWidth * 0.125));
     border.append(prefix);
     border.append(QString::fromLatin1("Style=\"%1\"").arg(borderStyle(brc.brcType)));
 
@@ -600,9 +600,6 @@ void WinWordDoc::gotListParagraph(
     const PAP *pap = styles.baseStyle().getPap();
     int styleIndex = pap->istd;
 
-    // If the level has a null style, default to something sane.
-    if (styleIndex == 4095)
-        styleIndex = 0;
     encode(xml_friendly);
     paragraph.append("<PARAGRAPH>\n<TEXT>");
     paragraph.append(xml_friendly);
