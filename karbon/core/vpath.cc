@@ -38,10 +38,14 @@ VPath::VPath( const VPath& path )
 {
 	m_segmentLists.setAutoDelete( true );
 
+	VSegmentList* list;
+
 	QPtrListIterator<VSegmentList> itr( path.m_segmentLists );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
-		m_segmentLists.append( new VSegmentList( *( itr.current() ) ) );
+		list = itr.current()->clone();
+		list->setParent( this );
+		m_segmentLists.append( list );
 	}
 }
 
@@ -269,8 +273,8 @@ VPath::moveTo( const KoPoint& p )
 	{
 		// add an initial segmentlist:
 		VSegmentList* list = new VSegmentList( this );
+		list->moveTo( p );
 		m_segmentLists.append( list );
-		m_segmentLists.getLast()->moveTo( p );
 	}
 
 	return false;
@@ -332,7 +336,9 @@ VPath::combine( const VPath& path )
 void
 VPath::combineSegmentList( const VSegmentList& segmentList )
 {
-	m_segmentLists.append( new VSegmentList( segmentList ) );
+	VSegmentList* list = segmentList.clone();
+	list->setParent( this );
+	m_segmentLists.append( list );
 }
 
 void
@@ -343,6 +349,7 @@ VPath::transform( const QWMatrix& m )
 	{
 		itr.current()->transform( m );
 	}
+
 	if( m_stroke->type() == stroke_gradient )
 		m_stroke->gradient().transform( m );
 	if( m_fill->type() == fill_gradient )
