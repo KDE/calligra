@@ -10,6 +10,7 @@
 
 #include <qworkspace.h>
 
+#include <kdeversion.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -18,7 +19,6 @@
 #include "formmanager.h"
 #include "objecttreeview.h"
 #include "kexipropertyeditor.h"
-
 #include "kfmview.h"
 
 KFMView::KFMView()
@@ -42,7 +42,11 @@ KFMView::KFMView()
 	KStdAction::cut(manager, SLOT(cutWidget()), actionCollection());
 	KStdAction::copy(manager, SLOT(copyWidget()), actionCollection());
 	KStdAction::paste(manager, SLOT(pasteWidget()), actionCollection());
+#if KDE_IS_VERSION(3,1,9) 
 	KStdAction::clear(manager, SLOT(deleteWidget()), actionCollection());
+#else
+	//TODO
+#endif
 	manager->createActions(actionCollection());
 
 	createGUI("kfmui.rc", true);
