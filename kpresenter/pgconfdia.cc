@@ -38,7 +38,6 @@
 
 #include <klocale.h>
 #include <kbuttonbox.h>
-#include <knuminput.h>
 #include <kglobal.h>
 #include <kurlrequester.h>
 #include <kurl.h>
