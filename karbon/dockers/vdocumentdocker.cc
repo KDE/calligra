@@ -185,10 +185,7 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 		p1 = m_view->canvasWidget()->toContents( p1 );
 		KoPoint p2( dx / scaleFactor + m_view->canvasWidget()->width(), dy / scaleFactor + m_view->canvasWidget()->height() );
 		p2 = m_view->canvasWidget()->toContents( p2 );
-		p.drawLine( p1.x(), p1.y(), p2.x(), p1.y() );
-		p.drawLine( p2.x(), p1.y(), p2.x(), p2.y() );
-		p.drawLine( p2.x(), p2.y(), p1.x(), p2.y() );
-		p.drawLine( p1.x(), p2.y(), p1.x(), p1.y() );
+		p.drawRect( p1.x(), p1.y(), p2.x() - p1.x(), p2.y() - p1.y() );
 	}
 
 	QPainter pw( &pixmap );

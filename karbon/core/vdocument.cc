@@ -59,44 +59,15 @@ VDocument::~VDocument()
 void
 VDocument::drawPage( VPainter *p ) const
 {
-	double left		= 0;
-	double bottom	= 0;
-	double right	= left + m_width;
-	double top		= bottom + m_height;
-
 	p->setPen( Qt::black );
 	p->setBrush( Qt::white );
-	p->newPath();
-	p->moveTo( KoPoint( left,  bottom ) );
-	p->lineTo( KoPoint( right, bottom ) );
-	p->lineTo( KoPoint( right, top ) );
-	p->lineTo( KoPoint( left,  top ) );
-	p->lineTo( KoPoint( left,  bottom ) );
-	p->fillPath();
-	p->strokePath();
+	p->drawRect( 0, 0, m_width, m_height );
 
 	p->setPen( Qt::NoPen );
 	p->setBrush( Qt::black );
-	p->newPath();
-	p->moveTo( KoPoint( right,     bottom - 2 ) );
-	p->lineTo( KoPoint( right + 2, bottom - 2 ) );
-	p->lineTo( KoPoint( right + 2, top ) );
-	p->lineTo( KoPoint( right,     top ) );
-	p->fillPath();
-
-	p->newPath();
-	p->moveTo( KoPoint( left,  bottom ) );
-	p->lineTo( KoPoint( left,  bottom - 2 ) );
-	p->lineTo( KoPoint( right, bottom - 2 ) );
-	p->lineTo( KoPoint( right, bottom ) );
-	p->fillPath();
-
-	p->newPath();
-	p->moveTo( KoPoint( left,  top ) );
-	p->lineTo( KoPoint( left,  top + 1 ) );
-	p->lineTo( KoPoint( right, top + 1 ) );
-	p->lineTo( KoPoint( right, top ) );
-	p->fillPath();
+	p->drawRect( m_width, - 2, 2, m_height );
+	p->drawRect( 0, - 2, m_width, 2 );
+	//p->drawRect( 0, m_height - 1, m_width, 1 );
 }
 
 void
