@@ -36,8 +36,10 @@
 
 #include <mswriteimport.h>
 
-typedef KGenericFactory<MSWRITE_PROJECT, KoFilter> MSWRITEImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libmswriteimport, MSWRITEImportFactory( "mswriteimport" ) );
+
+typedef KGenericFactory <MSWRITE_PROJECT, KoFilter> MSWRITEImportFactory;
+K_EXPORT_COMPONENT_FACTORY (libmswriteimport, MSWRITEImportFactory ("mswriteimport"));
+
 
 // kdDebug type functions
 //
@@ -168,10 +170,8 @@ int MSWRITE_PROJECT::documentGetStats (void)
 	return 0;
 }
 
-int MSWRITE_PROJECT::documentStartWrite (const int _firstPageNumber)
+int MSWRITE_PROJECT::documentStartWrite (const int firstPageNumber)
 {
-	// TODO: implement _firstPageNumber
-
 	// get dimensions of paper, borders, margins...
 	if (documentGetStats ())
 	{
@@ -212,6 +212,10 @@ int MSWRITE_PROJECT::documentStartWrite (const int _firstPageNumber)
 
 	tagWrite ("<ATTRIBUTES processing=\"0\" standardpage=\"1\" unit=\"mm\" hasHeader=\"%i\" hasFooter=\"%i\"/>",
 					hasHeader () ? 1 : 0, hasFooter () ? 1 : 0);
+
+	// handle page numbering not starting from 1
+	if (firstPageNumber != 1)
+		tagWrite ("<VARIABLESETTINGS number_offset=\"%i\"/>", firstPageNumber - 1);
 
 	tagWrite ("<FRAMESETS>");
 
@@ -319,7 +323,7 @@ int MSWRITE_PROJECT::newLineWrite (void)
 int MSWRITE_PROJECT::bodyStartWrite (void)
 {
 	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"0\" name=\"Text Frameset 1\" visible=\"1\">");
-	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehaviour=\"0\""
+	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"0\""
 					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
 					top, bottom, left, right);
 
@@ -357,20 +361,20 @@ int MSWRITE_PROJECT::headerStartWrite (void)
 	// by setting "visible=1"
 	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"1\" name=\"First Page Header\" visible=\"%i\">",
 						(!isHeaderOnFirstPage ()) ? 1 : 0);
-	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehaviour=\"2\" autoCreateNewFrame=\"0\""
+	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
 					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
 					headerFromTop, headerFromTop, left, right);
 	tagWrite ("</FRAMESET>");
 
 	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"2\" name=\"Odd Pages Header\" visible=\"0\">");
-	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehaviour=\"2\" autoCreateNewFrame=\"0\""
+	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
 					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
 						headerFromTop, headerFromTop, left, right);
 	tagWrite ("</FRAMESET>");
 
 	// real header frame
 	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"3\" name=\"Even Pages Header\" visible=\"1\">");
-	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehaviour=\"2\" autoCreateNewFrame=\"0\""
+	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
 					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
 						headerFromTop, headerFromTop, left, right);
 	return 0;
@@ -396,20 +400,20 @@ int MSWRITE_PROJECT::footerStartWrite (void)
 	// by setting "visible=1"
 	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"4\" name=\"First Page Footer\" visible=\"%i\">",
 					(!isFooterOnFirstPage ()) ? 1 : 0);
-	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehaviour=\"2\" autoCreateNewFrame=\"0\""
+	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
 					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
 					footerFromTop, footerFromTop, left, right);
 	tagWrite ("</FRAMESET>");
 
 	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"5\" name=\"Odd Pages Footer\" visible=\"0\">");
-	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehaviour=\"2\" autoCreateNewFrame=\"0\""
+	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
 					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
 					footerFromTop, footerFromTop, left, right);
 	tagWrite ("</FRAMESET>");
 
 	// real footer frame
 	tagWrite ("<FRAMESET frameType=\"1\" frameInfo=\"6\" name=\"Even Pages Footer\" visible=\"1\">");
-	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehaviour=\"2\" autoCreateNewFrame=\"0\""
+	tagWrite ("<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"2\" autoCreateNewFrame=\"0\""
 					" top=\"%i\" bottom=\"%i\" left=\"%i\" right=\"%i\"/>",
 					footerFromTop, footerFromTop, left, right);
 	return 0;
@@ -425,6 +429,7 @@ int MSWRITE_PROJECT::footerEndWrite (void)
 
 int MSWRITE_PROJECT::paraInfoStartWrite (const MSWRITE_FPROP_PAP &)
 {
+	// TODO: need xml:space=\"preserve\"?
 	if (tagWrite ("<PARAGRAPH><TEXT>"))
 	{
 		error ("tagWrite (\"<p\") error\n");
@@ -844,7 +849,7 @@ int MSWRITE_PROJECT::imageStartWrite (const int imageType, const int outputLengt
 		objectFrameset += imageName;
 		objectFrameset += "\" visible=\"1\">";
 
-		objectFrameset += "<FRAME runaround=\"1\" copy=\"0\" newFrameBehaviour=\"1\"";
+		objectFrameset += "<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"1\"";
 		objectFrameset += " left=\"";
 			objectFrameset += QString::number (left + horizOffsetTwips / 20);
 			objectFrameset += "\"";
@@ -885,7 +890,7 @@ int MSWRITE_PROJECT::imageStartWrite (const int imageType, const int outputLengt
 		objectFrameset += imageName;
 		objectFrameset += "\" visible=\"1\">";
 
-		objectFrameset += "<FRAME runaround=\"1\" copy=\"0\" newFrameBehaviour=\"1\"";
+		objectFrameset += "<FRAME runaround=\"1\" copy=\"0\" newFrameBehavior=\"1\"";
 		objectFrameset += " left=\"";
 			objectFrameset += QString::number (left + horizOffsetTwips / 20);
 			objectFrameset += "\"";
@@ -988,7 +993,7 @@ MSWRITE_PROJECT::~MSWRITE_PROJECT ()
 }
 
 // front-end filter
-KoFilter::ConversionStatus MSWRITE_PROJECT::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus MSWRITE_PROJECT::convert (const QCString &from, const QCString &to)
 {
 	if (to != "application/x-kword" || from != "application/x-mswrite")
 		return KoFilter::NotImplemented;

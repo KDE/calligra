@@ -71,7 +71,7 @@ private:
 	long infileTell (void) const;
 
 	int documentGetStats (void);
-	int documentStartWrite (const int _firstPageNumber);
+	int documentStartWrite (const int firstPageNumber);
 	int documentEndWrite (void);
 
 	int bodyStartWrite (void);
@@ -151,12 +151,12 @@ private:
 	}
 
 public:
-	MSWRITE_PROJECT (KoFilter *parent, const char *name, const QStringList&);
+	MSWRITE_PROJECT (KoFilter *parent, const char *name, const QStringList &);
 	MSWRITE_PROJECT ();
 
 	virtual ~MSWRITE_PROJECT ();
 
-        virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+	virtual KoFilter::ConversionStatus convert (const QCString &from, const QCString &to);
 };
 
 #endif // MSWRITEIMPORT_H

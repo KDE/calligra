@@ -21,8 +21,8 @@
 #define MSWRITE_IMPORT_LIB_H
 
 // CORE LIB VERSION NUMBER //
-#define MSWRITE_IMPORT_LIB_VERSION 				0.3
-#define MSWRITE_IMPORT_LIB_VERSION_STRING		"0.3"		// TODO: there's got to be better way
+#define MSWRITE_IMPORT_LIB_VERSION 				0.39
+#define MSWRITE_IMPORT_LIB_VERSION_STRING		"0.39"		// TODO: there's got to be better way
 
 // DATA TYPES //
 typedef signed char BYTE;			// 1 byte
@@ -596,11 +596,11 @@ public:
 
 	WORD offsetFromLeftMargin;		// offset from left margin (pt / 20)
 	WORD width;
-	WORD Height;
+	WORD height;
 	WORD unused2;
 	DWORD numDataBytes;				// bytes of object data
 	DWORD unused3;
-	DWORD objectNumber;
+	DWORD objectName;
 	WORD unused4;
 	WORD numHeaderBytes;				// number of bytes in this header
 	DWORD unused5;

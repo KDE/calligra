@@ -43,7 +43,7 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>6 Jan 2002</td>
+     <td>13 Jan 2002</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
@@ -52,8 +52,8 @@
      	- Full character formatting (fonts, bold, italic, underline, superscript, subscript, &quot;(page)&quot; numbering) <br>
 		- Full paragraph formatting (justification, linespacing, indenting, tabbing) <br>
 		- Headers & Footers (including whether or not they are printed on first page) <br>
-		- Pagebreaking <br>
-		- Full page formatting (margins, positioning of headers & footers) <br>
+		- Full Pagebreaking (on same line as text and on next line) <br>
+		- Page formatting (margins, positioning of headers & footers, page numbers starting from any number) <br>
 		- [EXPERIMENTAL] embedded images (WMF, monochrome BMPs)
      </td>
     </tr>
@@ -61,13 +61,15 @@
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
      <td>
-	  		- Make sure that the bitmap code is correct <br>
+			- Make sure that the bitmap code is correct <br>
 			- Find out why WMF isn't working <br>
-			- page numbering starting with a number other than 1 (waiting for KWord to support this) <br>
+			- Fix header/footer not on first page (in 1-page document), displayed as two pages bug <br>
+			- Fix cannot use auto spHeadBody and spFootBody bug <br>
 			- OLE <br>
 			- Counters <br>
 			- Portable code (try using this filter on a SPARC or Mac) <br>
 			- Windows charset conversion (is this required???) <br>
+			- Performance <br>
 			- Code cleanup!
 		</td>
     </tr>
@@ -75,6 +77,13 @@
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>History</font></b></td>
      <td>
+	  	<b> Version 0.4pre: </b> <br>
+		- fixed mswritelib.cc crash on files with an unusual font table <br>
+		- page numbers starting from any number <br>
+		- more *.desktop fixes <br>
+
+		<br>
+
 	  	<b> Version 0.3 (7 Jan 2002): Put into CVS for porting to new filter architecture </b> <br>
 		- imports nearly everything: now has full character, paragraph, page formatting <br>
 		- experimental importing of images (WMF + monochrome BMP) <br>
@@ -88,15 +97,15 @@
 		<br>
 
 	   <b> Version 0.2 (4 Dec 2001): First stable release: </b> <br>
-     	- reads documents reliably <br>
-	- can read text with full character formatting plus partial paragraph formatting <br>
+		- reads documents reliably <br>
+		- can read text with full character formatting plus partial paragraph formatting <br>
 		- performance enhancements <br>
 		- nice and modular as it uses the new MSWriteView library (MSWriteLib) <br>
 
 		<br>
 
-     	<b> Version 0.1 (7 Oct 2001): </b> Underlying code is there to read in the
-			format but the filter can only do plain text, with almost no formatting (has alignment)
+		<b> Version 0.1 (7 Oct 2001): </b> Underlying code is there to read in the
+			format but the filter can only do plain text, with almost no formatting (has justification)
 
 		</td>
     </tr>

@@ -1,8 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=KWord Microsoft Write Import Filter
-Export=application/x-kword
-Import=application/x-mswrite
-Implemented=file
+Name[da]=KWord Microsoft Write import-filter
+Name[lv]=KWord Microsoft Write Importa Filtrs
+Name[sv]=Kword-importfilter för Microsoft Write
+X-KDE-Export=application/x-kword
+X-KDE-Import=application/x-mswrite
+X-KDE-Weight=1
 X-KDE-Library=libmswriteimport
 ServiceTypes=KOfficeFilter

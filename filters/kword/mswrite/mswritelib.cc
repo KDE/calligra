@@ -37,6 +37,7 @@
 //#define MSWRITE_DEBUG_PARAINFO
 //#define MSWRITE_DEBUG_CHARINFO
 #define MSWRITE_DEBUG_IMAGE
+#define MSWRITE_DEBUG_OLE
 //#define checkpoint(str) debug("checkpoint: " str "\n")
 #define checkpoint(str)
 
@@ -118,7 +119,7 @@ int MSWRITE_IMPORT_LIB::filter (void)
 		&MSWRITE_IMPORT_LIB::fontTableRead,
 		&MSWRITE_IMPORT_LIB::charInfoRead,
 		&MSWRITE_IMPORT_LIB::paraInfoRead,
-		&MSWRITE_IMPORT_LIB::documentFilter	// the actual filter function
+		&MSWRITE_IMPORT_LIB::documentFilter			// the actual filter function
 	};
 
 	// go through list of functions (like this: f1() && f2() && f3() ...)
@@ -380,7 +381,7 @@ int MSWRITE_IMPORT_LIB::sectionTableRead (void)
 	if (sectionTable->sed [1].afterEndCharByte != header.numBytes + 1)
 	{
 		warning ("2nd SED: doesn't cover after document (%i != %i + 1)\n",
-					sectionTable->sed [1].afterEndCharByte, header.numBytes + 1);
+					sectionTable->sed [1].afterEndCharByte, header.numBytes);
 	}
 
 	// check that 2nd/last SED entry is really dummy
@@ -600,7 +601,7 @@ int MSWRITE_IMPORT_LIB::fontTableRead (void)
 {
 	// variable, holding file offset, for easy seeking
 	long offset;
-
+	
 	numFontTablePages = header.numPages - header.pnFontTable;
 
 	// allocate memory for fontTable
@@ -642,6 +643,7 @@ int MSWRITE_IMPORT_LIB::fontTableRead (void)
 	}
 
 	// loop through FFNs and read them in
+	bool friendlyExit = false;
 	for (int i = 0; i < fontTable->numFFNs; i++)
 	{
 #if defined (MSWRITE_DEBUG_FONT_TABLE)
@@ -680,7 +682,15 @@ int MSWRITE_IMPORT_LIB::fontTableRead (void)
 		if (ffn->numDataBytes == (WORD) 0)
 		{
 			if (i != fontTable->numFFNs - 1)
-				warning ("ffn is marked as last but is not\n");
+			{
+				// we want to continue reading FFNs anyway
+				// (in case there is actually a legitimate one in there)
+				// but we will exit with _success_ if a stupid FFN is detected from now on
+				// so that certain "buggy" documents can be read
+				friendlyExit = true;
+				warning ("ffn is marked as last but is not (i(%i) != fontTable->numFFNs-1(%i))\n",
+							i, fontTable->numFFNs - 1);
+			}
 		}
 
 		// calculate fontName string length
@@ -690,11 +700,11 @@ int MSWRITE_IMPORT_LIB::fontTableRead (void)
 						- 1	// stored length includes NUL
 						;
 
-		// font name can't exceed a bit less than MSWRITE_PAGE_SIZE (128) anyway
-		if (stringlen >= MSWRITE_PAGE_SIZE)
+		// font name can't exceed a bit less than MSWRITE_PAGE_SIZE (128) anyway...
+		if (stringlen <= 0 || stringlen >= MSWRITE_PAGE_SIZE)
 		{
-		 	error ("string length is already too long for a font name: %i\n", stringlen);
-			return 1;
+		 	error ("string length (%i) is invalid\n", stringlen);
+			if (friendlyExit)		return 0;	else	return 1;
 		}
 
 		// allocate memory for string (including NUL) in font table
@@ -715,7 +725,7 @@ int MSWRITE_IMPORT_LIB::fontTableRead (void)
 		if (ffn->fontName [stringlen] != '\0')
 		{
 			error ("font name doesn't end in NUL\n");
-			return 1;
+			if (friendlyExit)		return 0;	else	return 1;
 		}
 
 #if defined (MSWRITE_DEBUG_FONT_TABLE)
@@ -1239,10 +1249,11 @@ int MSWRITE_IMPORT_LIB::documentFilter (void)
 			return 1;
 		}
 
-		// this check also occurs a little later to limit byteMax
+		// paragraph starts after end of file?
 		if (paraStartByte >= header.numBytes)
 		{
-			warning ("paragraph info wrong: unexpected EOF on file\n");
+			warning ("paragraph starts after EOF (%i >= %i)\n",
+						paraStartByte, header.numBytes);
 			break;
 		}
 
@@ -1304,10 +1315,12 @@ int MSWRITE_IMPORT_LIB::documentFilter (void)
 		int paraLoadByte = paraInfo [paraInfoPageUpto].fod [paraInfoFodUpto].afterEndCharByte - 128;
 		int paraEndByte = paraLoadByte - 1;
 
+		// paragraph ends after end of file?
 		if (paraEndByte >= header.numBytes)
 		{
+			warning ("paragraph ends after EOF, limiting paraEndByte (%i >= %i)\n",
+						paraEndByte, header.numBytes);
 			paraEndByte = header.numBytes - 1;
-			warning ("paragraph info wrong: unexpected EOF on file, limiting byteMax\n");
 		}
 
 		checkpoint ("para mess done");
@@ -1395,10 +1408,10 @@ int MSWRITE_IMPORT_LIB::documentFilter (void)
 						}
 
 						// prune characters:
-						//		1 (pageNumber),
-						//		10 (newline),
-						//		13 (ignored),
-						//		12
+						//		1	(pageNumber),
+						//		10	(newline),
+						//		13	(ignored),
+						//		12	(pagebreak)
 						// (using tricky length trick to recycle buffer!)
 						// and generate signals
 
@@ -1478,13 +1491,15 @@ int MSWRITE_IMPORT_LIB::documentFilter (void)
 						uptoByte += numBytesToGet;
 					}		// while (uptoByte <= aimByte) {
 
+#if 1
 					// consistency check
 					if (uptoByte != aimByte + 1)
 					{
-						error ("consistency error:  uptoByte != aimByte + 1  (%i != %i)\n",
+						error ("internal consistency error: uptoByte != aimByte + 1 (%i != %i)\n",
 									uptoByte, aimByte + 1);
 						return 1;
 					}
+#endif
 
 					// generate pageNewWrite/pageTable signal, if requested
 					if (pageTableAck)
@@ -1565,6 +1580,13 @@ int MSWRITE_IMPORT_LIB::documentFilter (void)
 				}
 
 				message = (char *) "[cannot import OLE]";
+
+				MSWRITE_OLE_HEADER *ole = &object.ole;
+				if (processOLE (ole))
+				{
+					error ("processOLE() failed\n");
+					return 1;
+				}
 			}
 
 			// image
@@ -1605,6 +1627,13 @@ int MSWRITE_IMPORT_LIB::documentFilter (void)
 #if defined (MSWRITE_DEBUG_IMAGE)
 				debug ("expected size of data: %i\n", paraEndByte - paraStartByte + 1 - image->numHeaderBytes);
 #endif
+
+				if (image->numHeaderBytes != sizeof (MSWRITE_IMAGE_HEADER))
+				{
+					error ("image->numHeaderBytes (%i) != sizeof (MSWRITE_IMAGE_HEADER) (%i)\n",
+								image->numHeaderBytes, sizeof (MSWRITE_IMAGE_HEADER));
+					return 1;
+				}
 
 				if (image->numDataBytes != image->cbOldSize)
 					warning ("image->numDataBytes (%i) != image->cbOldSize (%i)\n",
@@ -1716,7 +1745,6 @@ int MSWRITE_IMPORT_LIB::documentFilter (void)
 		}
 
 		// end paragraph
-		//debug ("\n*** ending para info at byteUpto - 1 = %i\n", byteUpto - 1);
 		paraInfoEndWrite (pap);
 		paraStartByte = paraLoadByte;
 
@@ -1725,20 +1753,7 @@ int MSWRITE_IMPORT_LIB::documentFilter (void)
 		// inform user of progess (being careful of div by 0)
 		sigProgress ((header.numBytes) ? (paraStartByte * 100 / header.numBytes) : (100));
 
-		// past end of file?
-		// TODO: this check is based on old code and hence, is wrong :)
-		//			figure out proper check to handle this situation (what situation?)
-		/*if (paraStartByte >= header.numBytes)
-		{
-			// paragraph not ended?
-			if (!(paraStartByte >= paraLoadByte))
-			{
-				warning ("paraStartByte (%li) < next paragraph byte start (%li)\n",
-							paraStartByte, paraLoadByte);
-			}
-		}*/
-
-		// no more FODs?
+		// no more paragraphs?
 		if (!paraInfoNext ())
 			break;	// finish filtering!
 
@@ -1771,6 +1786,66 @@ int MSWRITE_IMPORT_LIB::documentFilter (void)
 		error ("documentEndWrite () failed\n");
 		return 1;
 	}
+
+	return 0;
+}
+
+int MSWRITE_IMPORT_LIB::processOLE (const MSWRITE_OLE_HEADER *ole)
+{
+	warning ("OLE not implemented (yet)\n");
+
+#if defined (MSWRITE_DEBUG_OLE)
+	debug ("objectType: ");
+#endif
+	switch (ole->objectType)
+	{
+	case 1:
+#if defined (MSWRITE_DEBUG_OLE)
+		debug ("static\n");
+#endif
+		break;
+	case 2:
+#if defined (MSWRITE_DEBUG_OLE)
+		debug ("embedded\n");
+#endif
+		break;
+	case 3:
+#if defined (MSWRITE_DEBUG_OLE)
+		debug ("link\n");
+#endif
+		break;
+	default:
+		error ("unknown objectType (%i)\n", ole->objectType);
+		return 1;
+	}
+
+#if defined (MSWRITE_DEBUG_OLE)
+	debug ("offsetFromLeftMargin: %i\n", ole->offsetFromLeftMargin);
+	debug ("width (%i) x height (%i)\n", ole->width, ole->height);
+	debug ("numDataBytes: %i\n", ole->numDataBytes);
+	debug ("objectName: %X (%i)\n", ole->objectName, ole->objectName);
+#endif
+
+#if defined (MSWRITE_DEBUG_OLE)
+	debug ("numHeaderBytes: %i\n", ole->numHeaderBytes);
+#endif
+	if (ole->numHeaderBytes != sizeof (MSWRITE_OLE_HEADER))
+	{
+		error ("ole->numHeaderBytes (%i) != sizeof (MSWRITE_OLE_HEADER) (%i)\n",
+					ole->numHeaderBytes, sizeof (MSWRITE_OLE_HEADER));
+		return 1;
+	}
+
+#if defined (MSWRITE_DEBUG_OLE)
+	debug ("widthScaledRe11000: %i    heightScaledRel1000: %i\n",
+				ole->widthScaledRel1000, ole->heightScaledRel1000);
+#endif
+
+#if 1
+#if defined (MSWRITE_DEBUG_OLE)
+	// dump OLE to a file
+#endif
+#endif
 
 	return 0;
 }
@@ -2025,12 +2100,6 @@ int MSWRITE_IMPORT_LIB::processBMP (const MSWRITE_IMAGE_HEADER *image)
 	checkpoint ("after dealloc\n");
 
 	debug ("BMP exported\n");
-	return 0;
-}
-
-int MSWRITE_IMPORT_LIB::processOLE (const MSWRITE_OLE_HEADER *)
-{
-	warning ("OLE not implemented\n");
 	return 0;
 }
 
