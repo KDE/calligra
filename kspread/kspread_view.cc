@@ -1336,6 +1336,7 @@ void KSpreadView::addTable( KSpreadTable *_t )
     QObject::connect( _t, SIGNAL( sig_maxRow( int ) ), m_pCanvas, SLOT( slotMaxRow( int ) ) );
     QObject::connect( _t, SIGNAL( sig_polygonInvalidated( const QPointArray& ) ),
 		      this, SLOT( repaintPolygon( const QPointArray& ) ) );
+  
 }
 
 void KSpreadView::removeTable( KSpreadTable *_t )
@@ -1502,6 +1503,7 @@ void KSpreadView::series()
 {
   KSpreadseries* dlg = new KSpreadseries( this, "Series",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
   dlg->show();
+
 }
 
 void KSpreadView::sort()

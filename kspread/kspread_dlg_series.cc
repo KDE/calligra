@@ -113,22 +113,31 @@ if(column->isChecked())
 	mode=Column;
 else if(row->isChecked())
 	mode=Row;
-
-if(step->text().toInt()>=0)
+if(step->text().isEmpty()||start->text().isEmpty()||end->text().isEmpty())
 	{
-	m_pTable->setSeries( marker,start->text().toInt(),end->text().toInt(),step->text().toInt(),mode );
-
-	KSpreadCell *cell = m_pTable->cellAt( marker.x(),marker.y()  );
-	if ( cell->text() != 0L )
-		m_pView->editWidget()->setText( cell->text() );
-	else
-		m_pView->editWidget()->setText( "" );
-	accept();
+	QMessageBox::warning( 0L, i18n("Error"), i18n("Area text is empty!"),
+			   i18n("Ok") );
 	}
 else
 	{
-	 QMessageBox::warning( 0L, i18n("Error"), i18n("Step is negative !"),
+	if(step->text().toInt()>=0)
+		{
+		int val_end=QMAX(end->text().toInt(),start->text().toInt());
+		int val_start=QMIN(end->text().toInt(),start->text().toInt());
+		m_pTable->setSeries( marker,val_start,val_end,step->text().toInt(),mode );
+
+		KSpreadCell *cell = m_pTable->cellAt( marker.x(),marker.y()  );
+		if ( cell->text() != 0L )
+			m_pView->editWidget()->setText( cell->text() );
+		else
+			m_pView->editWidget()->setText( "" );
+		accept();
+		}
+	else
+		{
+	 	QMessageBox::warning( 0L, i18n("Error"), i18n("Step is negative !"),
 			   i18n("Ok") );
+		}
 	}
 }
 
