@@ -1,0 +1,4 @@
+File=koshell.kcfg
+ClassName=KoShellSettings
+Singleton=true
+Mutators=true

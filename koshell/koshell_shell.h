@@ -27,7 +27,7 @@
 #include <qmap.h>
 #include <qvaluelist.h>
 
-class QHBox;
+class QSplitter;
 class KoKoolBar;
 class KoDocumentEntry;
 class KoShellFrame;
@@ -71,7 +71,8 @@ protected:
 
   virtual bool openDocumentInternal( const KURL & url, KoDocument * newdoc = 0L );
   void closeDocument();
-
+  void saveSettings();
+  
   struct Page
   {
     KoDocument *m_pDoc;
@@ -88,7 +89,7 @@ protected:
 
   int m_grpFile;
   int m_grpDocuments;
-
+  
   // Map of available parts (the int is the koolbar item id)
   QMap<int,KoDocumentEntry> m_mapComponents;
 
@@ -102,7 +103,7 @@ protected:
   KoShellGUIClient *m_client;
   void createShellGUI();
 
-  QHBox *m_pLayout;
+  QSplitter *m_pLayout;
 };
 
 ///////// class KoShellFrame ////////////

@@ -19,10 +19,11 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qhbox.h>
+#include <qsplitter.h>
 #include <assert.h>
 
 #include "koshell_shell.h"
+#include "koshellsettings.h"
 
 #include <ktempfile.h>
 #include <kfiledialog.h>
@@ -52,13 +53,12 @@ KoShellWindow::KoShellWindow()
 {
   m_activePage = m_lstPages.end();
 
-  m_pLayout = new QHBox( centralWidget() );
-
+  m_pLayout = new QSplitter( centralWidget() );
   m_pKoolBar = new KoKoolBar( m_pLayout );
 
   m_pFrame = new KoShellFrame( m_pLayout );
 
-  m_grpFile = m_pKoolBar->insertGroup(i18n("Parts"));
+  m_grpFile = m_pKoolBar->insertGroup(i18n("Components"));
   QValueList<KoDocumentEntry> lstComponents = KoDocumentEntry::query(false,QString());
   QValueList<KoDocumentEntry>::Iterator it = lstComponents.begin();
   for( ; it != lstComponents.end(); ++it )
@@ -93,9 +93,11 @@ KoShellWindow::KoShellWindow()
   m_grpDocuments = m_pKoolBar->insertGroup(i18n("Documents"));
   //m_pKoolBar->insertGroup("Snippets"); //?
 
-  m_pKoolBar->setFixedWidth( 80 );
-  m_pKoolBar->setMinimumHeight( 300 );
-
+  QValueList<int> list;
+  list.append( KoShellSettings::sidebarWidth() );
+  list.append( this->width() - KoShellSettings::sidebarWidth() );
+  m_pLayout->setSizes( list );
+  
   connect( this, SIGNAL( documentSaved() ),
            this, SLOT( slotNewDocumentName() ) );
 
@@ -128,6 +130,7 @@ KoShellWindow::~KoShellWindow()
   m_lstPages.clear();
 
   setRootDocumentDirect( 0L, QPtrList<KoView>() ); // prevent our parent destructor from doing stupid things
+  saveSettings(); // Now save our settings before exiting
 }
 
 bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
@@ -558,6 +561,12 @@ bool KoShellWindow::saveAllPages()
   return false;
 }
 */
+
+void KoShellWindow::saveSettings()
+{
+  KoShellSettings::setSidebarWidth( m_pKoolBar->width() );	
+  KoShellSettings::writeConfig();
+}
 
 QString KoShellWindow::configFile() const
 {
