@@ -40,7 +40,6 @@
 #include <klocale.h>
 #include <ksconfig.h>
 
-#include <koscript_context.h>
 #include <koTemplateChooseDia.h>
 #include <koFilterManager.h>
 #include <koStoreDevice.h>
@@ -677,9 +676,6 @@ void KSpreadDoc::initInterpreter()
 
 void KSpreadDoc::destroyInterpreter()
 {
-    // ######## Torben: Not needed any more
-    m_kscriptMap.clear();
-
     m_context.setValue( 0 );
     m_context.setScope( 0 );
     m_context.setException( 0 );
@@ -687,54 +683,6 @@ void KSpreadDoc::destroyInterpreter()
     m_module = 0;
 
     m_pInterpreter = 0;
-}
-
-// ################# Torben: I think this and associated
-// member variables are not needed.
-KSValue* KSpreadDoc::lookupKeyword( const QString& keyword )
-{
-  QMap<QString,KSValue::Ptr>::Iterator it = m_kscriptMap.find( keyword );
-  if ( it != m_kscriptMap.end() )
-    return it.data();
-
-  QStringList::Iterator sit = m_kscriptModules.begin();
-  for( ; sit != m_kscriptModules.end(); ++sit )
-  {
-    KSModule::Ptr mod = m_pInterpreter->module( *sit );
-    if ( mod )
-    {
-      KSValue* v = mod->object( keyword );
-      if ( v )
-      {
-        v->ref();
-        m_kscriptMap.insert( keyword, v );
-        return v;
-      }
-    }
-  }
-
-  return 0;
-}
-
-// ########### Torben: I think that is not needed any more
-KSValue* KSpreadDoc::lookupClass( const QString& name )
-{
-  // Is the module loaded ?
-  KSModule::Ptr mod = m_pInterpreter->module( "KSpread" );
-  if ( !mod )
-  {
-    // Try to load the module
-    KSContext context;
-    if ( !m_pInterpreter->runModule( context, "KSpread" ) )
-      // TODO: give error
-      return 0;
-
-    context.value()->moduleValue()->ref();
-    mod = context.value()->moduleValue();
-  }
-
-  // Lookup
-  return mod->object( name );
 }
 
 void KSpreadDoc::undo()

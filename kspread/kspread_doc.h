@@ -52,8 +52,6 @@ class KSpellConfig;
 #include "kspread_interpreter.h"
 #include "kspread_locale.h"
 
-#include <koscript_context.h>
-
 #define MIME_TYPE "application/x-kspread"
 
 struct Reference
@@ -215,22 +213,6 @@ public:
    *         This function does remove any exception from the context.
    */
   KSContext& context() { m_context.setException( 0 ); return m_context; }
-  /**
-   * Searches in all KSpread extension modules for the keyword.
-   * The most specific ones are searches first. The modules in the
-   * users apps/kspread directory are considered to be more specific
-   * then the global ones.
-   *
-   * @see #kscriptMap
-   * @see #kscriptModules;
-   */
-  KSValue* lookupKeyword( const QString& keyword );
-  /**
-   * Searches for a class in the kscript module of the KSpread interface.
-   * This is needed to create proxies for KSpread objects in the kscript
-   * environment.
-   */
-  KSValue* lookupClass( const QString& name );
 
   /**
    * Undo the last operation.
@@ -516,14 +498,7 @@ protected:
    * This variable hold the KScript Interpreter.
    */
   KSpreadInterpreter::Ptr m_pInterpreter;
-  /**
-   * Maps keywords to their kscript value. These
-   * keywords are usually functions. This map is used
-   * for quick keyword lookup.
-   *
-   * @see #lookupKeyword
-   */
-  QMap<QString,KSValue::Ptr> m_kscriptMap;
+
   /**
    * This list contains the logical names of all modules
    * which contains KSpread extensions. These modules are
@@ -531,8 +506,6 @@ protected:
    * and the users environment. If a module of the same name
    * exists in both environments, then the most specific one
    * is in this list and the other one is dropped.
-   *
-   * @see #lookupKeyword
    */
   QStringList m_kscriptModules;
   /**

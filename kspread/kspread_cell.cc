@@ -42,7 +42,6 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
-#include <koscript_parsenode.h>
 
 #include <kdebug.h>
 

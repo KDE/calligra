@@ -53,8 +53,6 @@
 
 #include "KSpreadTableIface.h"
 
-#include <koscript_context.h>
-
 #include <kdebug.h>
 #include <assert.h>
 
