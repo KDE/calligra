@@ -36,7 +36,7 @@ public:
     ~KWordShell();
 
     QString nativeFormatPattern() const { return "*.kwd"; }
-    QString nativeFormatName() const { return "KWord"; }
+    QString nativeFormatName() const;
 
     virtual void setRootDocument( KoDocument* );
 

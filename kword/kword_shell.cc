@@ -22,6 +22,7 @@
 #include "kword_view.h"
 #include "kword_factory.h"
 #include <kstddirs.h>
+#include <klocale.h>
 #include <kaboutdialog.h>
 
 KWordShell::KWordShell( const char* name )
@@ -33,6 +34,11 @@ KWordShell::KWordShell( const char* name )
 
 KWordShell::~KWordShell()
 {
+}
+
+QString KWordShell::nativeFormatName() const
+{
+  return i18n("KWord");
 }
 
 KoDocument* KWordShell::createDoc()
