@@ -184,6 +184,10 @@ protected:
 
 private:
     TabBarPrivate *d;
+
+    // don't allow copy or assignment
+    TabBar( const TabBar& );
+    TabBar& operator=( const TabBar& );
 };
 
 };
