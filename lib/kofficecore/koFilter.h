@@ -99,7 +99,7 @@ public:
     /**
      * Takes a file as input and writes the converted information in a
      * QDomDocument. It's slightly faster than the first one, but you need
-     * a part which uses QDom (e.g. KWord, KSpread, KIS,...- but NOT KPresenter yet!).
+     * a part which uses QDom (e.g. KWord, KSpread, Krayon, KPresenter).
      * This one can only be used as import filter!!! (hence the I_ :)
      * @param file      The filename of the input file
      * @param from      Mimetype of the input
