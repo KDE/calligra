@@ -4,6 +4,10 @@
 #include "koscript_parser.h"
 #include <stdlib.h>
 
+#ifdef __DECCXX
+#include <alloca.h>
+#endif
+
 #include <qstring.h>
 
 extern int yylex();
