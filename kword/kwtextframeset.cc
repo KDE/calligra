@@ -3559,6 +3559,7 @@ void KWTextFrameSet::printRTDebug( int info )
 KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     : KWFrameSetEdit( fs, canvas )
 {
+    //kdDebug(32001) << "KWTextFrameSetEdit::KWTextFrameSetEdit " << fs->getName() << endl;
     connect( fs, SIGNAL( hideCursor() ), this, SLOT( hideCursor() ) );
     connect( fs, SIGNAL( showCursor() ), this, SLOT( showCursor() ) );
     connect( fs, SIGNAL( setCursor( QTextCursor * ) ), this, SLOT( setCursor( QTextCursor * ) ) );
@@ -4073,6 +4074,9 @@ void KWTextFrameSetEdit::ensureCursorVisible()
 void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint & nPoint, const KoPoint & )
 {
     textFrameSet()->clearUndoRedoInfo();
+    if ( m_currentFrame )
+        hideCursor(); // Need to do that with the old m_currentFrame
+
     mightStartDrag = FALSE;
 
     QPoint iPoint;
@@ -4085,14 +4089,13 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint & nPoint,
 
     if ( m_currentFrame )
     {
-        emit hideCursor();
         QTextCursor oldCursor = *cursor;
         placeCursor( iPoint );
         ensureCursorVisible();
 
         if ( e->button() != LeftButton )
         {
-            emit showCursor();
+            showCursor();
             return;
         }
 
@@ -4127,7 +4130,7 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint & nPoint,
 
         //kdDebug() << "KWTextFrameSetEdit::mousePressEvent redraw=" << redraw << endl;
         if ( !redraw ) {
-            emit showCursor();
+            showCursor();
         } else {
             textFrameSet()->selectionChangedNotify();
         }
@@ -4408,6 +4411,7 @@ void KWTextFrameSetEdit::blinkCursor()
 
 void KWTextFrameSetEdit::drawCursor( bool visible )
 {
+    //kdDebug() << "KWTextFrameSetEdit::drawCursor " << visible << endl;
     cursorVisible = visible;
     if ( !cursor->parag() )
         return;
