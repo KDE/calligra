@@ -420,6 +420,7 @@
   <item find="ellaborés" replace="élaborés" />
   <item find="elle aperçu" replace="elle aperçut" />
   <item find="elle boîte" replace="elle boite" />
+  <item find="elle calcul" replace="elle calcule" />
   <item find="elle choisi" replace="elle choisit" />
   <item find="elle conseil" replace="elle conseille" />
   <item find="elle fourni" replace="elle fournit" />
@@ -580,6 +581,7 @@
   <item find="identé" replace="indenté" />
   <item find="il aperçu" replace="il aperçut" />
   <item find="il boîte" replace="il boite" />
+  <item find="il calcul" replace="il calcule" />
   <item find="il choisi" replace="il choisit" />
   <item find="il conseil" replace="il conseille" />
   <item find="il fourni" replace="il fournit" />
@@ -770,6 +772,7 @@
   <item find="ognons" replace="oignons" />
   <item find="olécrânes" replace="olécranes" />
   <item find="on a pas" replace="on n'a pas" />
+  <item find="on calcul" replace="on calcule" />
   <item find="on est pas" replace="on n'est pas" />
   <item find="on y survie" replace="on y survit" />
   <item find="ont aperçut" replace="ont aperçu" />
@@ -1078,6 +1081,7 @@
   <item find="un adhérant" replace="un adhérent" />
   <item find="un anagramme" replace="une anagramme" />
   <item find="un apostrophe" replace="une apostrophe" />
+  <item find="un calcule" replace="un calcul" />
   <item find="un champs" replace="un champ" />
   <item find="un conseille" replace="un conseil" />
   <item find="un diagnostique" replace="un diagnostic" />
@@ -1138,6 +1142,7 @@
   <item find="vosu" replace="vous" />
   <item find="votres" replace="vôtres" />
   <item find="vous faîtes" replace="vous faites" />
+  <item find="vous permets" replace="vous permet" />
   <item find="voute" replace="voûte" />
   <item find="voutes" replace="voûtes" />
   <item find="vénus" replace="Vénus" />
