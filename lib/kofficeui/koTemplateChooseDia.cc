@@ -27,7 +27,6 @@
 #include <qdir.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qhbox.h>
 #include <qvbox.h>
 #include <qtabwidget.h>
 #include <qradiobutton.h>
@@ -139,7 +138,7 @@ KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* global, Q
     if(dialogType!=NoTemplates)
 	dlg->resize( 500, 400 );
     else
-	dlg->resize( 500, 10 );
+	dlg->resize( 10, 10 );  // geometry is managed!
 
     dlg->setCaption( i18n( "Choose" ) );
 
@@ -244,14 +243,16 @@ void KoTemplateChooseDia::setupTabs()
     d->m_grid->addWidget( line, 3, 0 );
 
     if ( d->m_dialogType!=OnlyTemplates ) {
-	QHBox *row = new QHBox( this );
-	d->m_rbFile = new QRadioButton( i18n( "&Open an existing document" ), row );
+	QHBoxLayout *row = new QHBoxLayout( this );
+	d->m_rbFile = new QRadioButton( i18n( "&Open an existing document" ), this );
 	connect( d->m_rbFile, SIGNAL( clicked() ), this, SLOT( openFile() ) );
-	d->m_bFile = new QPushButton( i18n( "Choose..." ), row );
+	row->addWidget(d->m_rbFile);
+	row->addSpacing(30);
+	d->m_bFile = new QPushButton( i18n( "Choose..." ), this );
 	d->m_bFile->setMaximumSize( d->m_bFile->sizeHint() );
-	row->setMaximumHeight( d->m_bFile->sizeHint().height() + 10 );
+	row->addWidget(d->m_bFile);
 	connect( d->m_bFile, SIGNAL( clicked() ), this, SLOT( chooseFile() ) );
-	d->m_grid->addWidget( row, 4, 0 );
+	d->m_grid->addLayout( row, 4, 0 );
 		
 	line = new QFrame( this );
 	line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
