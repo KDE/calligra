@@ -515,7 +515,7 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
       selection.setCoords( markerColumn(), markerRow(), markerColumn(), markerRow() );
 
     if ( markerColumn() == selection.left() )
-      selection.setLeft( x );
+     selection.setLeft( x );
     else
       selection.setRight( x );
 
@@ -1318,12 +1318,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   if ( !table )
     return;
 
-  // Dont handle special keys.
-  if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
-  {
-    QWidget::keyPressEvent( _ev );
-    return;
-  }
+  // Dont handle the remaining special keys.
+  if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) && (_ev->key() != Key_Down) && (_ev->key()!= Key_Up)&& (_ev->key() != Key_Right)&& (_ev->key() != Key_Left)&& (_ev->key() != Key_Home) )
+      {
+	  QWidget::keyPressEvent( _ev );
+	  return;
+      }
+  
 
   // Always accept so that events are not
   // passed to the parent.
@@ -1352,189 +1353,369 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
   // Are we making a selection right now ? Go thru this only if no selection is made
   // or if we neither selected complete rows nor columns.
-  bool make_select = m_pView->koDocument()->isReadWrite() && (( _ev->state() & ShiftButton ) == ShiftButton &&
-                     ( bChangingCells || _ev->key() == Key_Home || _ev->key() == Key_End ));
+  bool make_select = m_pView->koDocument()->isReadWrite() && 
+      ((  _ev->state() & ( Qt::ControlButton ) &&_ev->state() & ( Qt::ShiftButton ) ) )
+       && ( bChangingCells || _ev->key() == Key_Home || _ev->key() == Key_End );
 
-  switch( _ev->key() )
-  {
-    case Key_Return:
-    case Key_Enter:
-      if ( !m_bChoose && markerRow() == 0xFFFF )
-        return;
-      if ( m_bChoose && chooseMarkerRow() == 0xFFFF )
-        return;
-
-      if ( m_bChoose )
-        chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select );
-      else
+  if(_ev->state() != Qt::ControlButton){
+      switch( _ev->key() )
       {
-        QRect selection = activeTable()->selectionRect();
-        if( selection.left() == 0 )
-            gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,false,true  );
-        else
-        {
-            if(markerColumn()<selection.right()&&markerRow()<selection.bottom() )
-                gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true ,true);
-            else if( markerRow()==selection.bottom() && markerColumn()<selection.right())
-                gotoLocation( markerColumn()+1, QMIN( 0x7FFF, selection.top() ), 0, make_select,true, true );
-            else if( markerRow()==selection.bottom() && markerColumn()==selection.right())
-                gotoLocation( selection.left(), QMIN( 0x7FFF, selection.top() ), 0, make_select,true,true );
-            else if(markerColumn()==selection.right() && markerRow()<selection.bottom())
-                gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true,true );
-        }
-      }
-      return;
-    case Key_Down:
 
-      if ( !m_bChoose && markerRow() == 0xFFFF )
-        return;
-      if ( m_bChoose && chooseMarkerRow() == 0xFFFF )
-        return;
-
-      if ( m_bChoose )
-        chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select);
-      else
-        gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,false,true  );
-
-      return;
-
-    case Key_Up:
-
-      if ( !m_bChoose && markerRow() == 1 )
-        return;
-      if ( m_bChoose && chooseMarkerRow() == 1 )
-        return;
-
-      if ( m_bChoose )
+      case Key_Return:
+      case Key_Enter:
+	  if ( !m_bChoose && markerRow() == 0xFFFF )
+	      return;
+	  if ( m_bChoose && chooseMarkerRow() == 0xFFFF )
+	      return;
+	  
+	  if ( m_bChoose )
+	      chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select );
+	  else
+	      {
+		  QRect selection = activeTable()->selectionRect();
+		  if( selection.left() == 0 )
+		      gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,false,true  );
+		  else
+		      {
+			  if(markerColumn()<selection.right()&&markerRow()<selection.bottom() )
+			      gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true ,true);
+			  else if( markerRow()==selection.bottom() && markerColumn()<selection.right())
+			      gotoLocation( markerColumn()+1, QMIN( 0x7FFF, selection.top() ), 0, make_select,true, true );
+			  else if( markerRow()==selection.bottom() && markerColumn()==selection.right())
+			      gotoLocation( selection.left(), QMIN( 0x7FFF, selection.top() ), 0, make_select,true,true );
+			  else if(markerColumn()==selection.right() && markerRow()<selection.bottom())
+			      gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true,true );
+		      }
+	      }
+	  return;
+      case Key_Down:
+	  
+	  if ( !m_bChoose && markerRow() == 0xFFFF )
+	      return;
+	  if ( m_bChoose && chooseMarkerRow() == 0xFFFF )
+	      return;
+	  
+	  if ( m_bChoose )
+	      chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select);
+	  else
+	      gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,false,true  );
+	  
+	  return;
+	  
+      case Key_Up:
+	  
+	  if ( !m_bChoose && markerRow() == 1 )
+	      return;
+	  if ( m_bChoose && chooseMarkerRow() == 1 )
+	      return;
+	  
+	  if ( m_bChoose )
         chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, chooseMarkerRow() - 1 ), 0, make_select );
-      else
-        gotoLocation( markerColumn(), QMAX( 1, markerRow() - 1 ), 0, make_select,false,true );
+	  else
+	      gotoLocation( markerColumn(), QMAX( 1, markerRow() - 1 ), 0, make_select,false,true );
+	  
+	  return;
+	  
+      case Key_Right:
+	  
+	  if ( !m_bChoose && markerColumn() >= 26*26)//0xFFFF )
+	      return;
+	  if ( m_bChoose && chooseMarkerColumn() >= 26*26)//0xFFFF )
+	      return;
+	  
+	  if ( m_bChoose )
+	      chooseGotoLocation( QMIN( 26*26/*0x7FFF*/, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
+	  else
+	      gotoLocation( QMIN( /*26*26*/0x7FFF, markerColumn() + 1 ), markerRow(), 0, make_select,false,true );
+	  
+	  return;
+	  
+      case Key_Left:
+	  
+	  if ( !m_bChoose && markerColumn() == 1 )
+	      return;
+	  if ( m_bChoose && chooseMarkerColumn() == 1 )
+	      return;
+	  
+	  if ( m_bChoose )
+	      chooseGotoLocation( QMAX( 1, chooseMarkerColumn() - 1 ), chooseMarkerRow(), 0, make_select );
+	  else
+	      gotoLocation( QMAX( 1, markerColumn() - 1 ), markerRow(), 0, make_select,false,true );
+	  
+	  return;
+	  
+      case Key_Escape:
+	  
+	  if ( m_pEditor )
+	      deleteEditor( false );
+	  
+	  _ev->accept(); // ?
+	  return;
+	  
+      case Key_Home:
+	  
+	  // We are in edit mode -> go beginning of line
+	  if ( m_pEditor )
+	      {
+		  // (David) Do this for text editor only, not formula editor...
+		  // Don't know how to avoid this hack (member var for editor type ?)
+		  if ( m_pEditor->inherits("KSpreadTextEditor") )
+		      QApplication::sendEvent( m_pEditWidget, _ev );
+		  // What to do for a formula editor ?
+	      }
+	  else
+	      {
+		  if ( !m_bChoose && markerColumn() == 1 )
+		      return;
+		  if ( m_bChoose && chooseMarkerColumn() == 1 )
+		      return;
+		  if ( m_bChoose )
+		      chooseGotoLocation( 1, markerRow(), 0, make_select );
+		  else
+		      gotoLocation( 1, markerRow(), 0, make_select,false,true );
+	      }
+	  return;
+	  
+      case Key_Prior:
+	  
+	  if( !m_bChoose && markerRow() == 1 )
+	      return;
+	  if( m_bChoose && chooseMarkerRow() == 1 )
+	      return;
 
-      return;
+	  if ( m_bChoose )
+	      chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, chooseMarkerRow() - 10 ), 0, make_select );
+	  else
+	      gotoLocation( markerColumn(), QMAX( 1, markerRow() - 10 ), 0, make_select,false,true );
+	  
+	  return;
+	  
+      case Key_Next:
+	  
+	  if( !m_bChoose && markerRow() == 0x7FFF )
+	      return;
+	  if( m_bChoose && chooseMarkerRow() == 0x7FFF )
+	      return;
+	  
+	  if ( m_bChoose )
+	      chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 10 ), 0, make_select );
+	  else
+	      gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 10 ), 0, make_select,false,true );
+	  
+	  return;
+	  
+      case Key_Delete:
+	  
+	  activeTable()->clearSelection( QPoint( markerColumn(), markerRow() ) );
+	  m_pView->editWidget()->setText( "" );
+	  return;
+      case Key_F2:
+	  m_pView->editWidget()->setFocus();
+	  if(m_pEditor)
+	      m_pView->editWidget()->setCursorPosition(m_pEditor->cursorPosition()-1);
+	  m_pView->editWidget()->cursorRight(false);
+	  return;
+      default:
+	  
+	  
+	  // No null character ...
+	  if ( _ev->text().isEmpty() || !m_pView->koDocument()->isReadWrite() )
+	      {
+		  _ev->accept();
+		  return;
+	      }
+	  
+	  if ( !m_pEditor && !m_bChoose )
+	      {
+		  if ( _ev->text() == QString::fromLatin1("*") )
+		      createEditor( FormulaEditor );
+		  else
+		      {
+			  // Switch to editing mode
+			  createEditor( CellEditor );
+			  m_pEditor->handleKeyPressEvent( _ev );
+		      }
+	      }
+	  else if ( m_pEditor )
+	      m_pEditor->handleKeyPressEvent( _ev );
+	  
+	  return;
 
-    case Key_Right:
+      } // control  button not pressed
+  }
+  else{ //control button pressed
 
-      if ( !m_bChoose && markerColumn() >= 26*26)//0xFFFF )
-        return;
-      if ( m_bChoose && chooseMarkerColumn() >= 26*26)//0xFFFF )
-        return;
+      int x, x0, y, y0 ;
+      bool emptycell;
 
-      if ( m_bChoose )
-        chooseGotoLocation( QMIN( 26*26/*0x7FFF*/, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
-      else
-        gotoLocation( QMIN( /*26*26*/0x7FFF, markerColumn() + 1 ), markerRow(), 0, make_select,false,true );
+      switch(_ev->key()){
+      case Key_Up:
+	  if ( !m_bChoose && markerRow() == 1 )
+	      return;
+	  if ( m_bChoose && chooseMarkerRow() == 1 )
+		  return;
+	  
+	  if ( m_bChoose )
+	      chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, chooseMarkerRow() - 1 ), 0, make_select );
+	  else{
 
-      return;
+	      x = x0 =  markerColumn();
+	      y = y0 =  markerRow();
 
-    case Key_Left:
+	      emptycell = activeTable()->cellAt(x,y)->isEmpty();
 
-      if ( !m_bChoose && markerColumn() == 1 )
-        return;
-      if ( m_bChoose && chooseMarkerColumn() == 1 )
-        return;
+	      if(!emptycell){
+		  while (!emptycell && !(activeTable()->cellAt( x,y - 1 ))->isEmpty() && y >= 0 ){
+		      y --;
+		  }
+	      }
+	      else{
+		  while (emptycell && (activeTable()->cellAt( x,y))->isEmpty() && y >= 0 ){
+		      y --;
+		  }
+	      }
 
-      if ( m_bChoose )
-        chooseGotoLocation( QMAX( 1, chooseMarkerColumn() - 1 ), chooseMarkerRow(), 0, make_select );
-      else
-        gotoLocation( QMAX( 1, markerColumn() - 1 ), markerRow(), 0, make_select,false,true );
+	      gotoLocation( markerColumn(), QMAX( 1, y  ), 0, make_select,true,true );
+	      repaint();
+	  }
+	  
+	  return;
 
-      return;
+      case Key_Down:
 
-    case Key_Escape:
+	  if ( !m_bChoose && markerRow() == 0xFFFF )
+	      return;
+	  if ( m_bChoose && chooseMarkerRow() == 0xFFFF )
+	      return;
+	  
+	  if ( m_bChoose )
+	      chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select);
+	  else{
 
-      if ( m_pEditor )
-        deleteEditor( false );
+	      x = x0 =  markerColumn();
+	      y = y0 =  markerRow();
+	      
+	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x,QMAX(y+1,0x7FFF))->isEmpty()){
+		  
+		  gotoLocation( markerColumn(), QMIN(0x7FFF,y+1  ), 0, make_select,true,true  );
+	      }
+	      else{
+		  if(! (activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x,QMIN(y + 1, 0x7FFF)))->isEmpty()){
 
-      _ev->accept(); // ?
-      return;
+		      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF  ){
 
-    case Key_Home:
+			  y ++;		  
+		      }
+		      gotoLocation( markerColumn(), QMIN( 0x7FFF,y  ), 0, make_select,true,true  );
+		  }else{
+		      if(! (activeTable()->cellAt(x,y))->isEmpty() &&  !(activeTable()->cellAt(x,QMIN(y + 1, 0x7FFF))->isEmpty())){
+			  while ( !(activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF ){
+			      y ++;		  
+			  }
+			  gotoLocation( markerColumn(), QMIN( 0x7FFF,y  ), 0, make_select,true,true  );
+		      }else{
+			  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x,QMIN(y + 1, 0x7FFF))->isEmpty())){
+			      
+			      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= 0x7FFF ){
+				  y ++;		
+			      }
+			      gotoLocation( markerColumn(), QMIN( 0x7FFF,y  ), 0, make_select,true,true  );
+			      
+			  }
+		      }
+		  }
+	      }
+	  }
+	  repaint();
 
-      // We are in edit mode -> go beginning of line
-      if ( m_pEditor )
-      {
-        // (David) Do this for text editor only, not formula editor...
-        // Don't know how to avoid this hack (member var for editor type ?)
-        if ( m_pEditor->inherits("KSpreadTextEditor") )
-          QApplication::sendEvent( m_pEditWidget, _ev );
-        // What to do for a formula editor ?
+	  return;
+
+      case Key_Right:
+	  
+	  if ( !m_bChoose && markerColumn() >= 26*26)//0xFFFF )
+	      return;
+	  if ( m_bChoose && chooseMarkerColumn() >= 26*26)//0xFFFF )
+	      return;
+	  
+	  if ( m_bChoose )
+	      chooseGotoLocation( QMIN( 26*26/*0x7FFF*/, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
+	  else{
+
+	      x = x0 =  markerColumn();
+	      y = y0 =  markerRow();
+	      
+	      if(activeTable()->cellAt(x,y)->isEmpty() && !activeTable()->cellAt(x+1,y)->isEmpty()){
+		  
+		  gotoLocation( x+1, markerRow()  , 0, make_select,true,true  );
+	      }
+	      else{
+		  if(! (activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x+1,y))->isEmpty()){
+
+		      while (( activeTable()->cellAt( x +1 ,y ))->isEmpty() && x <=26*26  ){
+
+			  x ++;		  
+		      }
+		      gotoLocation( x, markerRow() , 0, make_select,true,true  );
+		  }else{
+		      if(! (activeTable()->cellAt(x,y))->isEmpty() &&  !(activeTable()->cellAt(x + 1,y)->isEmpty())){
+			  while ( !(activeTable()->cellAt( x + 1 ,y ))->isEmpty() && x <= 26*26){
+			      x ++;		  
+			  }
+			  gotoLocation( x, markerRow(), 0, make_select,true,true  );
+		      }else{
+			  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x+1,y)->isEmpty())){
+			      
+			      while (( activeTable()->cellAt( x +1,y ))->isEmpty() && y <= 26*26 ){
+				  x ++;		
+			      }
+			      gotoLocation( x, markerRow(), 0, make_select,true,true  );
+			      
+			  }
+		      }
+		  }
+	      }
+	  }
+	  repaint();
+	  return;
+
+      case Key_Left:
+	  
+	  if ( !m_bChoose && markerColumn() == 1 )
+	      return;
+	  if ( m_bChoose && chooseMarkerColumn() == 1 )
+	      return;
+	  
+	  if ( m_bChoose )
+	      chooseGotoLocation( QMAX( 1, chooseMarkerColumn() - 1 ), chooseMarkerRow(), 0, make_select );
+	  else{
+	      x = x0 =  markerColumn();
+	      y = y0 =  markerRow();
+
+	      emptycell = activeTable()->cellAt(x,y)->isEmpty();
+
+	      if(!emptycell){
+		  while (!emptycell && !(activeTable()->cellAt( x - 1,y  ))->isEmpty() && x >= 0 ){
+		      x --;
+		  }
+	      }
+	      else{
+		  while (emptycell && (activeTable()->cellAt( x,y))->isEmpty() && x >= 0 ){
+		      x--;
+		  }
+	      }
+	      gotoLocation( QMAX(x,1),markerRow()  , 0, make_select,true,true );
+	      repaint();
+	  }
+	  return;
+      case Key_Home:
+	  printf("Bernd Going Home\n");
+	      gotoLocation( 1,1 , 0, make_select,true,true );
+	      repaint();
+
+	  return;
+
       }
-      else
-      {
-        if ( !m_bChoose && markerColumn() == 1 )
-          return;
-        if ( m_bChoose && chooseMarkerColumn() == 1 )
-          return;
-        if ( m_bChoose )
-          chooseGotoLocation( 1, markerRow(), 0, make_select );
-        else
-          gotoLocation( 1, markerRow(), 0, make_select,false,true );
-      }
-      return;
-
-    case Key_Prior:
-
-      if( !m_bChoose && markerRow() == 1 )
-        return;
-      if( m_bChoose && chooseMarkerRow() == 1 )
-        return;
-
-      if ( m_bChoose )
-        chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, chooseMarkerRow() - 10 ), 0, make_select );
-      else
-        gotoLocation( markerColumn(), QMAX( 1, markerRow() - 10 ), 0, make_select,false,true );
-
-      return;
-
-    case Key_Next:
-
-      if( !m_bChoose && markerRow() == 0x7FFF )
-        return;
-      if( m_bChoose && chooseMarkerRow() == 0x7FFF )
-        return;
-
-      if ( m_bChoose )
-        chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 10 ), 0, make_select );
-      else
-        gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 10 ), 0, make_select,false,true );
-
-      return;
-
-    case Key_Delete:
-
-       activeTable()->clearSelection( QPoint( markerColumn(), markerRow() ) );
-       m_pView->editWidget()->setText( "" );
-       return;
-    case Key_F2:
-       m_pView->editWidget()->setFocus();
-       if(m_pEditor)
-        m_pView->editWidget()->setCursorPosition(m_pEditor->cursorPosition()-1);
-       m_pView->editWidget()->cursorRight(false);
-       return;
-    default:
-
-      // No null character ...
-      if ( _ev->text().isEmpty() || !m_pView->koDocument()->isReadWrite() )
-      {
-        _ev->accept();
-        return;
-      }
-
-      if ( !m_pEditor && !m_bChoose )
-      {
-        if ( _ev->text() == QString::fromLatin1("*") )
-          createEditor( FormulaEditor );
-        else
-        {
-          // Switch to editing mode
-          createEditor( CellEditor );
-          m_pEditor->handleKeyPressEvent( _ev );
-        }
-      }
-      else if ( m_pEditor )
-        m_pEditor->handleKeyPressEvent( _ev );
-
-      return;
+	  
   }
 
   /**

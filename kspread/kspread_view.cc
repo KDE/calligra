@@ -1303,6 +1303,7 @@ void KSpreadView::slotScrollToLeftTable()
 
 void KSpreadView::slotScrollToRightTable()
 {
+
   m_pTabBar->scrollRight();
 }
 
@@ -1622,14 +1623,70 @@ void KSpreadView::editCell()
     m_pCanvas->createEditor();
 }
 
-// ############## Torben: Do we need that ?
+void KSpreadView::nextTable(){
+
+    KSpreadTable *t = m_pDoc->map()->nextTable( activeTable() );
+    if ( !t )
+    {
+        kdDebug(36001) << "Unknown table " <<  endl;
+        return;
+    }
+    m_pCanvas->closeEditor();
+    activeTable()->setScrollPosX(m_pHorzScrollBar->value());
+    activeTable()->setScrollPosY(m_pVertScrollBar->value());
+    setActiveTable( t,false );
+
+    t->setActiveTable();
+
+}
+
+void KSpreadView::previousTable(){
+
+    KSpreadTable *t = m_pDoc->map()->previousTable( activeTable() );
+    if ( !t )
+    {
+        kdDebug(36001) << "Unknown table "  << endl;
+        return;
+    }
+    m_pCanvas->closeEditor();
+    activeTable()->setScrollPosX(m_pHorzScrollBar->value());
+    activeTable()->setScrollPosY(m_pVertScrollBar->value());
+    setActiveTable( t,false );
+
+    t->setActiveTable();
+
+
+}
 void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
 {
+
+
   // Dont eat accelerators
-  if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
+  if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) ){
+
+    if ( _ev->state() & ( Qt::ControlButton ) ){
+
+      // Universally reserved Spreadsheet Navigators known to all spreadsheet users around the world
+      switch( _ev->key() ){
+      case Key_PageDown:
+
+	nextTable();
+	return;
+
+      case Key_PageUp:
+	previousTable();
+	return;
+
+      default:
+	  QWidget::keyPressEvent( _ev );
+	  return;
+      }
+    }
     QWidget::keyPressEvent( _ev );
+  }
   else
     QApplication::sendEvent( m_pCanvas, _ev );
+  
 }
 
 KoDocument* KSpreadView::hitTest( const QPoint &pos )

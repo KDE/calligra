@@ -274,6 +274,8 @@ public slots:
      * is signaled.
      */
     void changeTable( const QString& _name );
+    void nextTable();
+    void previousTable();
 
 protected slots:
     /**

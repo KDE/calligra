@@ -163,6 +163,38 @@ KSpreadTable* KSpreadMap::findTable( const QString & _name )
     return 0L;
 }
 
+KSpreadTable* KSpreadMap::nextTable( KSpreadTable* currentTable )
+{
+    KSpreadTable *t;
+
+    if( currentTable == m_lstTables.last())
+      return currentTable;
+
+    for ( t = m_lstTables.first(); t != 0L; t = m_lstTables.next() )
+    {
+        if ( t  == currentTable )
+            return m_lstTables.next();
+    }
+
+    return 0L;
+}
+
+KSpreadTable* KSpreadMap::previousTable( KSpreadTable* currentTable )
+{
+    KSpreadTable *t;
+
+    if( currentTable == m_lstTables.first())
+      return currentTable;
+
+    for ( t = m_lstTables.first(); t != 0L; t = m_lstTables.next() )
+    {
+        if ( t  == currentTable )
+            return m_lstTables.prev();
+    }
+
+    return 0L;
+}
+
 bool KSpreadMap::saveChildren( KoStore* _store, const QString &_path )
 {
   QListIterator<KSpreadTable> it( m_lstTables );

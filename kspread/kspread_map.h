@@ -76,6 +76,8 @@ public:
   void moveTable( const QString & _from, const QString & _to, bool _before = true );
 
   KSpreadTable* findTable( const QString & _name );
+  KSpreadTable* nextTable( KSpreadTable* );
+  KSpreadTable* previousTable( KSpreadTable* );
 
   KSpreadTable* initialActiveTable() { return m_initialActiveTable; }
   int initialMarkerColumn() { return m_initialMarkerColumn; }

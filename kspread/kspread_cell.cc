@@ -1946,7 +1946,7 @@ bool KSpreadCell::calc( bool _makedepend )
   m_bCalcDirtyFlag = false;
   if ( _makedepend )
   {
-    kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " calc() Looking into dependencies..." << endl;
+    //    kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " calc() Looking into dependencies..." << endl;
     KSpreadDepend *dep;
     for ( dep = m_lstDepends.first(); dep != 0L; dep = m_lstDepends.next() )
     {
@@ -2009,7 +2009,7 @@ bool KSpreadCell::calc( bool _makedepend )
       }
     }
   }
-  kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " calc() Now calculating." << endl;
+  //  kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " calc() Now calculating." << endl;
 
   KSContext& context = m_pTable->doc()->context();
   if ( !m_pCode || !m_pTable->doc()->interpreter()->evaluate( context, m_pCode, m_pTable ) )
