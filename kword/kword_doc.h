@@ -100,7 +100,7 @@ protected:
 
 public:
     // IDL
-    virtual CORBA::Boolean init();
+    virtual CORBA::Boolean initDoc();
 
     // C++
     virtual bool loadXML( KOMLParser& parser, KOStore::Store_ptr _store );

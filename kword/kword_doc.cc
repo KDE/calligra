@@ -117,7 +117,7 @@ KWordDocument::KWordDocument()
 }
 
 /*================================================================*/
-CORBA::Boolean KWordDocument::init()
+CORBA::Boolean KWordDocument::initDoc()
 {
     pageLayout.unit = PG_MM;
     pages = 1;
@@ -1484,7 +1484,7 @@ void KWordDocument::insertObject( const KRect& _rect, KoDocumentEntry& _e, int d
     if ( CORBA::is_nil( doc ) )
         return;
 
-    if ( !doc->init() )
+    if ( !doc->initDoc() )
     {
         QMessageBox::critical( ( QWidget* )0L, i18n( "KWord Error" ), i18n( "Could not init" ), i18n( "OK" ) );
         return;

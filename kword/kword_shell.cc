@@ -157,7 +157,7 @@ bool KWordShell::newDocument()
     }
 
     m_pDoc = new KWordDocument;
-    if ( !m_pDoc->init() )
+    if ( !m_pDoc->initDoc() )
     {
         releaseDocument();
         cerr << "ERROR: Could not initialize document" << endl;
