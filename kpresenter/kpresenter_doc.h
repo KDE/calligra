@@ -438,7 +438,7 @@ protected:
     QDomElement saveTitle( QDomDocument &doc );
     QDomElement saveNote( QDomDocument &doc );
     QDomElement saveAttribute( QDomDocument &doc );
-    QDomElement saveUsedSoundFileToXML( QDomDocument &_doc, QStringList _list, const QString &_prefix );
+    QDomElement saveUsedSoundFileToXML( QDomDocument &_doc, QStringList _list );
 
     QDomElement saveHelpLines( QDomDocument &doc );
 
@@ -453,8 +453,8 @@ protected:
     void makeUsedPixmapList();
     void makeUsedSoundFileList();
 
-    void saveUsedSoundFileToStore( KoStore *_store, QStringList _list, const QString &_prefix );
-    void loadUsedSoundFileFromStore( KoStore *_store, QStringList _list, const QString &_prefix );
+    void saveUsedSoundFileToStore( KoStore *_store, QStringList _list );
+    void loadUsedSoundFileFromStore( KoStore *_store, QStringList _list );
 
     // ************ variables ************
 

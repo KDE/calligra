@@ -608,16 +608,13 @@ QDomDocument KPresenterDoc::saveXML()
 
     makeUsedPixmapList();
 
-    // Save the PIXMAPS and CLIPARTS list
-    QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
-
-    QDomElement pixmaps = _imageCollection.saveXML( KoPictureCollection::CollectionImage, doc, usedPixmaps, prefix );
+    QDomElement pixmaps = _imageCollection.saveXML( KoPictureCollection::CollectionImage, doc, usedPixmaps );
     presenter.appendChild( pixmaps );
 
     if ( saveOnlyPage == -1 )
         emit sigProgress( 80 );
 
-    QDomElement cliparts = _clipartCollection.saveXML( KoPictureCollection::CollectionClipart, doc, usedCliparts, prefix );
+    QDomElement cliparts = _clipartCollection.saveXML( KoPictureCollection::CollectionClipart, doc, usedCliparts );
     presenter.appendChild( cliparts );
 
     if ( saveOnlyPage == -1 )
@@ -625,7 +622,7 @@ QDomDocument KPresenterDoc::saveXML()
 
     // Save sound file list.
     makeUsedSoundFileList();
-    QDomElement soundFiles = saveUsedSoundFileToXML( doc, usedSoundFile, prefix );
+    QDomElement soundFiles = saveUsedSoundFileToXML( doc, usedSoundFile );
     presenter.appendChild( soundFiles );
 
     setModified( false );
@@ -729,7 +726,7 @@ QDomElement KPresenterDoc::saveAttribute( QDomDocument &doc )
     return attributes;
 }
 
-QDomElement KPresenterDoc::saveUsedSoundFileToXML( QDomDocument &_doc, QStringList _list, const QString &_prefix )
+QDomElement KPresenterDoc::saveUsedSoundFileToXML( QDomDocument &_doc, QStringList _list )
 {
     QDomElement soundFiles = _doc.createElement( "SOUNDS" );
 
@@ -740,7 +737,6 @@ QDomElement KPresenterDoc::saveUsedSoundFileToXML( QDomDocument &_doc, QStringLi
         int position = soundFileName.findRev( '.' );
         QString format = soundFileName.right( soundFileName.length() - position - 1 );
         QString _name = QString( "sounds/sound%1.%2" ).arg( ++i ).arg( format.lower() );
-        _name.prepend( _prefix );
 
         QDomElement fileElem = _doc.createElement( "FILE" );
         soundFiles.appendChild( fileElem );
@@ -762,10 +758,9 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
         }
 	return true;
     }
-    QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
-    _imageCollection.saveToStore( KoPictureCollection::CollectionImage, _store, usedPixmaps, prefix );
-    _clipartCollection.saveToStore( KoPictureCollection::CollectionClipart, _store, usedCliparts, prefix );
-    saveUsedSoundFileToStore( _store, usedSoundFile, prefix );
+    _imageCollection.saveToStore( KoPictureCollection::CollectionImage, _store, usedPixmaps );
+    _clipartCollection.saveToStore( KoPictureCollection::CollectionClipart, _store, usedCliparts );
+    saveUsedSoundFileToStore( _store, usedSoundFile );
 
     if ( saveOnlyPage == -1 ) {
         emit sigProgress( 100 );
@@ -776,7 +771,7 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
     return true;
 }
 
-void KPresenterDoc::saveUsedSoundFileToStore( KoStore *_store, QStringList _list, const QString &_prefix )
+void KPresenterDoc::saveUsedSoundFileToStore( KoStore *_store, QStringList _list )
 {
     unsigned int i = 0;
     QStringList::Iterator it = _list.begin();
@@ -785,7 +780,6 @@ void KPresenterDoc::saveUsedSoundFileToStore( KoStore *_store, QStringList _list
         int position = soundFileName.findRev( '.' );
         QString format = soundFileName.right( soundFileName.length() - position - 1 );
         QString _storeURL = QString( "sounds/sound%1.%2" ).arg( ++i ).arg( format.lower() );
-        _storeURL.prepend( _prefix );
 
         if ( _store->open( _storeURL ) ) {
             KoStoreDevice dev( _store );
@@ -794,7 +788,6 @@ void KPresenterDoc::saveUsedSoundFileToStore( KoStore *_store, QStringList _list
                dev.writeBlock( ( _file.readAll() ).data(), _file.size() );
                _file.close();
             }
-
             _store->close();
         }
     }
@@ -1619,24 +1612,22 @@ void KPresenterDoc::loadUsedSoundFileFromXML( const QDomElement &element )
 bool KPresenterDoc::completeLoading( KoStore* _store )
 {
     if ( _store ) {
-        QString prefix = urlIntern.isEmpty() ? url().path() : urlIntern;
-        prefix += '/';
         if ( m_pixmapMap ) {
-            _imageCollection.readFromStore( _store, *m_pixmapMap, prefix );
+            _imageCollection.readFromStore( _store, *m_pixmapMap );
             delete m_pixmapMap;
             m_pixmapMap = NULL;
         }
         emit sigProgress( 80 );
 
         if ( m_clipartMap ) {
-            _clipartCollection.readFromStore( _store, *m_clipartMap, prefix );
+            _clipartCollection.readFromStore( _store, *m_clipartMap );
             delete m_clipartMap;
             m_clipartMap = NULL;
         }
         emit sigProgress( 90 );
 
         if ( !usedSoundFile.isEmpty() )
-            loadUsedSoundFileFromStore( _store, usedSoundFile, prefix );
+            loadUsedSoundFileFromStore( _store, usedSoundFile );
 
 	if ( _clean )
         {
@@ -1669,7 +1660,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
     return true;
 }
 
-void KPresenterDoc::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list, const QString &/*_prefix*/ )
+void KPresenterDoc::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list )
 {
     int i = 0;
     QStringList::Iterator it = _list.begin();

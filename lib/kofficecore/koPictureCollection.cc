@@ -75,13 +75,13 @@ KoPicture KoPictureCollection::loadPicture(const QString& fileName)
     return c;
 }
 
-QString KoPictureCollection::getFileName(const Type pictureType, KoPicture& picture, const QString &prefix, int& counter)
+QString KoPictureCollection::getFileName(const Type pictureType, KoPicture& picture, int& counter)
 {
-    QString storeURL(prefix);
+    QString storeURL;
     if (pictureType==CollectionClipart)
-        storeURL+="cliparts/clipart";
+        storeURL="cliparts/clipart";
     else
-        storeURL+="pictures/picture";
+        storeURL="pictures/picture";
     storeURL+=QString::number(++counter);
     storeURL+='.';
     storeURL+=picture.getExtension();
@@ -89,7 +89,7 @@ QString KoPictureCollection::getFileName(const Type pictureType, KoPicture& pict
 }
 
 
-void KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, QValueList<KoPictureKey> keys, const QString & prefix )
+void KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, QValueList<KoPictureKey> keys)
 {
     int counter=0;
     QValueList<KoPictureKey>::Iterator it = keys.begin();
@@ -100,7 +100,7 @@ void KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, QV
             kdWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
         else
         {
-            QString storeURL=getFileName(pictureType, c, prefix, counter);
+            QString storeURL=getFileName(pictureType, c, counter);
 
             if (store->open(storeURL))
             {
@@ -112,8 +112,7 @@ void KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, QV
     }
 }
 
-QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &doc,
-    QValueList<KoPictureKey> keys, const QString & prefix )
+QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &doc, QValueList<KoPictureKey> keys)
 {
     QDomElement cliparts = doc.createElement(
         (pictureType==CollectionClipart)?"CLIPARTS":"PIXMAPS");
@@ -126,7 +125,7 @@ QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &d
             kdWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
         else
         {
-            QString pictureName=getFileName(pictureType, picture, prefix, counter);
+            QString pictureName=getFileName(pictureType, picture, counter);
 
             QDomElement keyElem = doc.createElement( "KEY" );
             cliparts.appendChild(keyElem);
@@ -158,7 +157,7 @@ KoPictureCollection::readXML(QDomElement& pixmapsElem, const QDateTime& defaultD
     return map;
 }
 
-void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & storeMap, const QString &prefix )
+void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & storeMap )
 {
     kdDebug(30003) << "KoPictureCollection::readFromStore " << store << endl;
     StoreMap::ConstIterator it = storeMap.begin();
@@ -168,15 +167,14 @@ void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & store
         if (!c.isNull())
         {
             // Do not load a file that we already have!
-            kdDebug(30003) << "" << store << endl;
+            kdDebug(30003) << store << endl;
             continue;
         }
         QString u(it.data());
         if (u.isEmpty())
         {
             // old naming I suppose ?
-            u=prefix;
-            u+=it.key().toString();
+            u=it.key().toString();
         }
 
         KoPicture picture;
@@ -190,7 +188,7 @@ void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & store
                 return;
             }
         }
-        
+
         const int pos=u.findRev('.');
         if (pos==-1)
         {
@@ -215,4 +213,3 @@ KoPicture KoPictureCollection::findOrLoad(const QString& fileName, const QDateTi
     else
         return loadPicture(fileName);
 }
-

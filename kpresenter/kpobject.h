@@ -314,8 +314,8 @@ protected:
      *
      * This method isn't pure virtual because some objects implement draw() directly.
      */
-    virtual void paint( QPainter* painter, KoZoomHandler* zoomHandler,
-			bool drawingShadow, bool drawContour =  FALSE ) {}
+    virtual void paint( QPainter* /*painter*/, KoZoomHandler* /*zoomHandler*/,
+			bool /*drawingShadow*/, bool /*drawContour*/ =  FALSE ) {}
     QPen pen;
     QBrush brush;
 };

@@ -1644,15 +1644,13 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
 bool KWDocument::completeLoading( KoStore *_store )
 {
     if ( _store ) {
-        QString prefix = m_urlIntern.isEmpty() ? url().path() : m_urlIntern;
-        prefix += '/';
         if ( m_pixmapMap ) {
-            m_imageCollection.readFromStore( _store, *m_pixmapMap, prefix );
+            m_imageCollection.readFromStore( _store, *m_pixmapMap );
             delete m_pixmapMap;
             m_pixmapMap = 0L;
         }
         if ( m_clipartMap ) {
-            m_clipartCollection.readFromStore( _store, *m_clipartMap, prefix );
+            m_clipartCollection.readFromStore( _store, *m_clipartMap );
             delete m_clipartMap;
             m_clipartMap = 0L;
         }
@@ -1932,10 +1930,9 @@ QDomDocument KWDocument::saveXML()
         saveStyle( p, styles );
 
     // Save the PIXMAPS list
-    QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
-    QDomElement pixmaps = m_imageCollection.saveXML( KoPictureCollection::CollectionImage, doc, saveImages, prefix );
+    QDomElement pixmaps = m_imageCollection.saveXML( KoPictureCollection::CollectionImage, doc, saveImages );
     kwdoc.appendChild( pixmaps );
-    QDomElement cliparts = m_clipartCollection.saveXML(KoPictureCollection::CollectionClipart, doc, saveCliparts, prefix );
+    QDomElement cliparts = m_clipartCollection.saveXML(KoPictureCollection::CollectionClipart, doc, saveCliparts );
     kwdoc.appendChild( cliparts );
 
     // Not needed anymore
@@ -2023,9 +2020,8 @@ bool KWDocument::completeSaving( KoStore *_store )
                 saveCliparts.append( key );
         }
     }
-    QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
-    m_imageCollection.saveToStore( KoPictureCollection::CollectionImage, _store, saveImages, prefix );
-    m_clipartCollection.saveToStore( KoPictureCollection::CollectionClipart, _store, saveCliparts, prefix );
+    m_imageCollection.saveToStore( KoPictureCollection::CollectionImage, _store, saveImages );
+    m_clipartCollection.saveToStore( KoPictureCollection::CollectionClipart, _store, saveCliparts );
     return TRUE;
 }
 

@@ -715,10 +715,8 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
     if ( !saveChildren( _store ) )
         return false;
 
-    // Now the children are saved, leave the directory/directories again
-    _store->popDirectory();
-
-    if ( _store->open( _path ) )
+    // In the current directory we're the king :-)
+    if ( _store->open( "root" ) )
     {
         KoStoreDevice dev( _store );
         if ( !saveToStream( &dev ) )
@@ -731,6 +729,9 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
 
     if ( !completeSaving( _store ) )
         return false;
+
+    // Now that we're done leave the directory again
+    _store->popDirectory();
 
     kdDebug(30003) << "Saved document to store" << endl;
 

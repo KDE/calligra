@@ -68,18 +68,15 @@ public:
      *
      * @param store the store in which to save the cliparts
      * @param keys the list of keys corresponding to the cliparts to save
-     * @param prefix the prefix to use when saving the cliparts in the store
-     * (usually: isStoredExtern() ? QString::null : url().url() + "/",
-     * where 'this' is the document)
      */
-    void saveToStore(const Type pictureType, KoStore * store, QValueList<KoPictureKey> keys, const QString & prefix );
+    void saveToStore(const Type pictureType, KoStore * store, QValueList<KoPictureKey> keys );
 
     /**
      * Generate the <CLIPARTS> tag, that saves the key and the related
      * relative path in the store (e.g. pictures/picture1.wmf) for each clipart.
      */
     QDomElement saveXML(const Type pictureType, QDomDocument &doc,
-        QValueList<KoPictureKey> keys, const QString & prefix );
+        QValueList<KoPictureKey> keys );
 
     typedef QMap<KoPictureKey, QString> StoreMap;
     /**
@@ -92,9 +89,8 @@ public:
      * Read all pictures from the store, into this collection
      * The map comes from readXML above, and is used to find which pictures
      * to load, and which key to associate them.
-     * @param prefix same as above (only used for old format support)
      */
-    void readFromStore( KoStore * store, const StoreMap & storeMap, const QString &prefix );
+    void readFromStore( KoStore * store, const StoreMap & storeMap );
 
     /**
      * @deprecated
@@ -108,7 +104,7 @@ private:
     /**
       * @internal
       */
-    QString getFileName(const Type pictureType, KoPicture& picture, const QString &prefix, int& counter);
+    QString getFileName(const Type pictureType, KoPicture& picture, int& counter);
 };
 
 #endif /* __koPictureCollection_h_- */
