@@ -51,9 +51,9 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 
 	m_stack = new QWidgetStack(this);
 
-        layout->addWidget(m_tabBar,     0,      0);
-        layout->addWidget(m_stack,      0,      1);
-        layout->setColStretch(1, 1);
+	layout->addWidget(m_tabBar,     0,      0);
+	layout->addWidget(m_stack,      0,      1);
+	layout->setColStretch(1, 1);
 	
 	m_stack->show();
 	m_tabBar->show();

@@ -63,7 +63,7 @@ KexiTablePart::groupContext()
 {
 	kdDebug() << "KexiTablePart::groupContext()" << endl;
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
-	m->insertAction(i18n("Create Talbe"), SLOT(slotCreate()));
+	m->insertAction(i18n("Create Table"), SLOT(slotCreate()));
 
 	return m;
 }
