@@ -109,6 +109,10 @@ k_dcop:
     virtual int goUpDiagonalWidth() const;
     virtual QString goUpDiagonalColor() const;
     virtual QString goUpDiagonalStyle() const;
+    //indent
+    virtual void setIndent(int indent);
+    virtual int getIndent() const ;
+
 private:
     QPoint m_point;
     KSpreadTable* m_table;

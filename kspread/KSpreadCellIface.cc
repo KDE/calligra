@@ -931,3 +931,20 @@ QString KSpreadCellIface::goUpDiagonalStyle() const
         tmp="SolidLine";
     return tmp;
 }
+
+void KSpreadCellIface::setIndent(int indent)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    if(indent>=0)
+        cell->setIndent(indent);
+    else
+        cell->setIndent(0);
+    cell->update();
+}
+
+int  KSpreadCellIface::getIndent() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->getIndent(m_point.x(), m_point.y());
+}
+

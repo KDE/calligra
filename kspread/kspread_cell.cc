@@ -1192,7 +1192,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     m_fmAscent = fm.ascent();
 
     // Do we have to occupy additional cells right hand ?
-    if ( m_iOutTextWidth > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
+    if ( m_iOutTextWidth+m_indent > w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
          rightBorderWidth( _col, _row ) )
     {
         // No chance. We can not obscure more/less cells.
@@ -1217,7 +1217,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
                     c++;
 
                     // Enough space ?
-                    if ( m_iOutTextWidth <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
+                    if ( m_iOutTextWidth+m_indent <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
                          rightBorderWidth( _col, _row ) )
                         end = 1;
                 }
