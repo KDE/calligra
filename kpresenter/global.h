@@ -26,7 +26,7 @@
 
 #define MAX_UNDO_REDO 100
 #define MASTERPAGE 0
-#define CUSTOMSLIDESHOW 0
+#define CUSTOMSLIDESHOW 1
 
 // types
 enum AlignType {

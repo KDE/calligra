@@ -80,6 +80,7 @@ protected slots:
     void slotMoveInsertSlide();
     void slideNameChanged( const QString & _name);
     void updateButton();
+    virtual void slotOk();
 
 protected:
     void init();
