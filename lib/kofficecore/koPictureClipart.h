@@ -74,8 +74,17 @@ public:
 
     virtual bool load(QIODevice* io, const QString& extension);
 
+    /**
+     * save file
+     * @param io QIODevice used for saving
+     */
     virtual bool save(QIODevice* io);
 
+    /**
+     *  Save picture in the format supported by KOffice 1,1
+     */
+
+    virtual bool saveAsKOffice1Dot1(QIODevice* io, const QString& extension);
     /**
      * @internal
      * (For KoPicture::loadWmf)

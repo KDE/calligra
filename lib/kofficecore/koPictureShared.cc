@@ -162,6 +162,15 @@ bool KoPictureShared::save(QIODevice* io)
     return false;
 }
 
+bool KoPictureShared::saveAsKOffice1Dot1(QIODevice* io)
+{
+    if (!io)
+        return false;
+    if (m_base)
+        return m_base->saveAsKOffice1Dot1(io, getExtension());
+    return false;
+}
+
 void KoPictureShared::clear(void)
 {
     // Clear does not reset the key m_key!
@@ -183,11 +192,15 @@ void KoPictureShared::clearAndSetMode(const QString& newMode)
     {
         m_base=new KoPictureClipart();
     }
+    else if (mode==eps)
+    {
+        KoPictureImage* image=new KoPictureImage();
+        image->setResampleOnResize( true );
+        m_base=image;
+    }
     else
     {   // TODO: test if QImageIO really knows the file format
         m_base=new KoPictureImage();
-        if (mode=="eps")
-            static_cast<KoPictureImage *>(m_base)->setResampleOnResize( true );
     }
 }
 
@@ -204,7 +217,7 @@ void KoPictureShared::setExtension(const QString& extension)
 bool KoPictureShared::load(QIODevice* io, const QString& extension)
 {
     kdDebug(30003) << "KoPictureShared::load(QIODevice*, const QString&) " << extension << endl;
-    bool flag;
+    bool flag=false;
     QString ext(extension.lower());
     if (ext=="wmf")
         flag=loadWmf(io);

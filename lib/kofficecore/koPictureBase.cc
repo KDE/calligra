@@ -73,6 +73,12 @@ bool KoPictureBase::save(QIODevice*)
     return false;
 }
 
+bool KoPictureBase::saveAsKOffice1Dot1(QIODevice* io, const QString&)
+{
+    // The default is the normla save
+    return save(io);
+}
+
 QSize KoPictureBase::getOriginalSize(void) const
 {
     return QSize(0,0);

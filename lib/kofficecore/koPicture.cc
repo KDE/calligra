@@ -139,6 +139,15 @@ bool KoPicture::save(QIODevice* io)
     return false;
 }
 
+bool KoPicture::saveAsKOffice1Dot1(QIODevice* io)
+{
+    if (!io)
+        return false;
+    if (m_sharedData)
+        return m_sharedData->saveAsKOffice1Dot1(io);
+    return false;
+}
+
 void KoPicture::clear(void)
 {
     unlinkSharedData();

@@ -83,6 +83,14 @@ public:
     void saveToStore(const Type pictureType, KoStore * store, QValueList<KoPictureKey> keys );
 
     /**
+     * Save the used picturess from the collection into the store, howver in KOffice 1.1 format
+     *
+     * @param store the store in which to save the pictures in KOffice 1.1 format
+     * @param keys the list of keys corresponding to the pictures to save
+     */
+    void saveToStoreAsKOffice1Dot1(const Type pictureType, KoStore * store, QValueList<KoPictureKey> keys );
+
+    /**
      * Generate the <PIXMAPS> or <CLIPARTS> tag, that saves the key and the related
      * relative path in the store (e.g. pictures/picture1.png) for each picture.
      *
@@ -123,9 +131,14 @@ public:
 
 private:
     /**
-      * @internal
-      */
+     * @internal
+     */
     QString getFileName(const Type pictureType, KoPicture& picture, int& counter);
+
+    /**
+     * @internal
+     */
+    void saveToStoreInternal(const Type pictureType, KoStore *store, QValueList<KoPictureKey>& keys, const bool koffice11);
 
     class Private;
     Private* d;

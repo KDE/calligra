@@ -89,7 +89,16 @@ public:
 
     bool load(QIODevice* io, const QString& extension);
 
+    /**
+     * save file
+     * @param io QIODevice used for saving
+     */
     bool save(QIODevice* io);
+
+    /**
+     *  Save picture in the format supported by KOffice 1,1
+     */
+    bool saveAsKOffice1Dot1(QIODevice* io);
 
     void setExtension(const QString& extension);
 
