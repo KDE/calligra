@@ -175,6 +175,8 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     textFontFamily = obj->textFontFamily();
     textFontBold = obj->textFontBold();
     textFontItalic = obj->textFontItalic();
+    strike=obj->textFontStrike();
+    underline=obj->textFontUnderline();
     // Needed to initialize the font correctly ( bug in Qt )
     textFont = obj->textFont();
     eStyle = obj->style();
@@ -184,7 +186,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     brushStyle = obj->backGroundBrushStyle(_left,_top);
 
     bMultiRow = obj->multiRow();
-    
+
     RowLayout *rl;
     ColumnLayout *cl;
     widthSize=0;
@@ -227,7 +229,8 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     bTextFontSize = TRUE;
     bTextFontBold = TRUE;
     bTextFontItalic = TRUE;
-
+    bStrike=TRUE;
+    bUnderline=TRUE;
     if( left==right)
         oneCol=TRUE;
     else
@@ -258,7 +261,10 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 		bGoUpDiagonalStyle = FALSE;
 	    if ( goUpDiagonalColor != obj->goUpDiagonalColor( x, y ) )
 		bGoUpDiagonalColor = FALSE;
-
+            if ( strike != obj->textFontStrike( ) )
+		bStrike = FALSE;
+            if ( underline != obj->textFontUnderline() )
+		bUnderline = FALSE;
 	    if ( prefix != obj->prefix() )
 		prefix = QString::null;
 	    if ( postfix != obj->postfix() )
@@ -889,10 +895,16 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   strike->setGeometry(6*XOFFSET + LABLE_LENGTH
 			    ,26*YOFFSET - COMBO_ADJUST
 			    ,2*LABLE_LENGTH+20,COMBO_BOX_HEIGHT);
+  strike->setChecked(dlg->strike);
+  connect( strike, SIGNAL( clicked()),
+	   SLOT(strike_chosen_slot()) );
   underline = new QCheckBox(i18n("Underline"),this);
   underline->setGeometry(10*XOFFSET + 6*LABLE_LENGTH
 			    ,26*YOFFSET - COMBO_ADJUST
 			    ,2*LABLE_LENGTH+20,COMBO_BOX_HEIGHT);
+  underline->setChecked(dlg->underline);
+  connect( underline, SIGNAL( clicked()),
+	   SLOT(underline_chosen_slot()) );
 
   weight_combo = new QComboBox( this, "Weight" );
   weight_combo->insertItem( "", 0 );
@@ -948,6 +960,20 @@ void CellLayoutPageFont::apply( KSpreadCell *_obj )
 	_obj->setTextFontBold( selFont.bold() );
     if ( style_combo->currentItem() != 0 )
 	_obj->setTextFontItalic( selFont.italic() );
+    _obj->setTextFontStrike( strike->isChecked() );
+    _obj->setTextFontUnderline(underline->isChecked() );
+}
+
+void CellLayoutPageFont::underline_chosen_slot()
+{
+   selFont.setUnderline( underline->isChecked() );
+   emit fontSelected(selFont);
+}
+
+void CellLayoutPageFont::strike_chosen_slot()
+{
+   selFont.setStrikeOut( strike->isChecked() );
+   emit fontSelected(selFont);
 }
 
 void CellLayoutPageFont::family_chosen_slot(const QString & family)
@@ -1103,7 +1129,7 @@ void CellLayoutPageFont::setCombos()
 CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *_dlg ) : QWidget( parent )
 {
     dlg = _dlg;
-    
+
     QGridLayout *grid3 = new QGridLayout(this,3,2,15,7);
     QButtonGroup *grp = new QButtonGroup( i18n("Horizontal"),this);
     grp->setRadioButtonExclusive( TRUE );

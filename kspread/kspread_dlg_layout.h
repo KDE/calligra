@@ -112,6 +112,8 @@ private slots:
     void      size_chosen_slot(const QString & );
     void      weight_chosen_slot(const QString &);
     void      style_chosen_slot(const QString &);
+    void      underline_chosen_slot();
+    void      strike_chosen_slot();
     void      display_example(const QFont &font);
 
 
@@ -472,6 +474,10 @@ public:
     int textFontSize;
     bool bTextFontFamily;
     QString textFontFamily;
+    bool bStrike;
+    bool strike;
+    bool bUnderline;
+    bool underline;
     QFont textFont;
     QColor bgColor;
     bool bBgColor;
