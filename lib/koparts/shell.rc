@@ -1,0 +1,17 @@
+<!DOCTYPE QConfig ><QConfig>
+<MenuBar>
+ <Menu name="File"><text>File</text>
+  <Action name="shell_open"/>
+  <Action name="shell_save"/>
+  <Action name="shell_print"/>
+  <Part/>
+ </Menu>
+ <Part/>
+ <Menu name="Help"><text>Help</text>
+  <Action name="shell_about"/>
+  <Part/>
+ </Menu>
+</MenuBar>
+<ToolBars>
+</ToolBars>
+</QConfig>
