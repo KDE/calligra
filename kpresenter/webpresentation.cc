@@ -215,7 +215,7 @@ void KPWebPresentation::createSlidesHTML( QProgressBar *progressBar )
     QString html;
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ ) {
 	pgNum = i + 1;
-	html = QString( "<HEAD><TITLE>%1 - %2</TITLE></HEAD>\n" ).arg( title ).arg( slideTitles[ i ] );
+	html = QString( "<HTML><HEAD><TITLE>%1 - %2</TITLE></HEAD>\n" ).arg( title ).arg( slideTitles[ i ] );
 
 	QString c1;
 	c1.sprintf( "%02X%02X%02X", backColor.red(), backColor.green(), backColor.blue() );
@@ -304,7 +304,7 @@ void KPWebPresentation::createMainPage( QProgressBar *progressBar )
 {
     QString html;
 
-    html = QString( "<HTML><TITLE>%1 - Table of Contents</TITLE></HTML>\n" ).arg( title );
+    html = QString( "<HTML><HEAD><TITLE>%1 - Table of Contents</TITLE></HEAD>\n" ).arg( title );
 
     QString c1;
     c1.sprintf( "%02X%02X%02X", backColor.red(), backColor.green(), backColor.blue() );
