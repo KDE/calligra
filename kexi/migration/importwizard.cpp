@@ -36,9 +36,9 @@
 #include <kexidb/driver.h>
 #include <core/kexidbconnectionset.h>
 #include <core/kexi.h>
-#include <main/startup/KexiConnSelector.h>
-#include <main/startup/KexiProjectSelector.h>
-#include <main/startup/KexiOpenExistingFile.h>
+#include <KexiConnSelector.h>
+#include <KexiProjectSelector.h>
+#include <KexiOpenExistingFile.h>
 
 using namespace KexiMigration;
 
