@@ -32,7 +32,8 @@
 class GDocument;
 class Canvas;
 
-class SelectionTool : public Tool {
+class SelectionTool : public Tool
+{
 public:
   SelectionTool (CommandHistory* history);
   ~SelectionTool() { delete cursor; }
@@ -62,20 +63,11 @@ public:
 //  void partSelected (GObject *);
 
 private:
-  void processKeyPressEvent (QKeyEvent* e, GDocument* doc, Canvas* canvas);
+  void processKeyPressEvent (QKeyEvent *e, GDocument *doc, Canvas *canvas);
 
-  void processButtonPressForHelpline (QMouseEvent* e, GDocument* doc,
-                                      Canvas* canvas);
-  void processMouseMoveForHelpline (QMouseEvent* e, GDocument* doc,
-                                    Canvas* canvas);
-  void processButtonReleaseForHelpline (QMouseEvent* e, GDocument* doc,
-                                        Canvas* canvas);
-
-  void processButtonPressEvent (QMouseEvent* e, GDocument* doc,
-                                Canvas* canvas);
-  void processMouseMoveEvent (QMouseEvent* e, GDocument* doc, Canvas* canvas);
-  void processButtonReleaseEvent (QMouseEvent* e, GDocument* doc,
-                                  Canvas* canvas);
+  void processButtonPressEvent (QMouseEvent *e, GDocument *doc, Canvas *canvas);
+  void processMouseMoveEvent (QMouseEvent *e, GDocument *doc, Canvas *canvas);
+  void processButtonReleaseEvent (QMouseEvent *e, GDocument *doc, Canvas *canvas);
 
   enum State { S_Init, S_Pick, S_Intermediate1, S_Intermediate2,
                S_Translate, S_Scale, S_Rubberband, S_RotateSelect,
