@@ -33,25 +33,31 @@
 #include <KIllustrator_view.h>
 #include <KIllustrator_doc.h>
 
-GPart::GPart () {
+GPart::GPart (GDocument* doc )
+:GObject(doc)
+{
   child = 0L;
 }
 
-GPart::GPart (KIllustratorChild *c) {
+GPart::GPart (GDocument* doc, KIllustratorChild *c)
+:GObject(doc)
+{
   child = c;
   initialGeom = child->geometry ();
   calcBoundingBox ();
 }
 
-GPart::GPart (KIllustratorDocument *doc, const QDomElement &element) :
-    GObject (element.namedItem("gobject").toElement())
+GPart::GPart (GDocument* docu, KIllustratorDocument *doc, const QDomElement &element)
+:GObject (docu, element.namedItem("gobject").toElement())
  {
     child = new KIllustratorChild(doc, 0, QRect(0,0,0,0));
     child->load(element);
     calcBoundingBox ();
  }
 
-GPart::GPart (const GPart& obj) : GObject (obj) {
+GPart::GPart (const GPart& obj)
+: GObject (obj)
+{
   calcBoundingBox ();
 }
 
@@ -108,24 +114,24 @@ void GPart::draw (QPainter& p, bool withBasePoints, bool outline)
  }
 
 void GPart::calcBoundingBox ()
- {
-  QRect r = tmpMatrix.map (initialGeom);
+{
+   QRect r = tmpMatrix.map (initialGeom);
 
-  if (r != oldGeom)
+   if (r != oldGeom)
    {
-    oldGeom = r;
-    child->setGeometry (r);
+      oldGeom = r;
+      child->setGeometry (r);
    }
-  updateBoundingBox (Coord (r.x (), r.y ()), Coord(r.right(), r.bottom()));
- }
+   updateBoundingBox (Coord (r.x (), r.y ()), Coord(r.right(), r.bottom()));
+}
 
 GObject* GPart::copy () {
   return new GPart (*this);
 }
 
-GObject* GPart::clone (const QDomElement &element) {
+/*GObject* GPart::clone (const QDomElement &element) {
   return new GPart (0, element);
-}
+}*/
 
 QDomElement GPart::writeToXml (QDomDocument &document) {
 

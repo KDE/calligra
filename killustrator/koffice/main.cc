@@ -24,7 +24,7 @@
 #include <dcopclient.h>
 
 #include <KIllustrator_factory.h>
-#include <PStateManager.h>
+//#include <PStateManager.h>
 
 static const KCmdLineOptions options[]=
 {
@@ -42,7 +42,7 @@ int main( int argc, char **argv )
     app.dcopClient()->registerAs( "killustrator" );
 
     if (!app.start())
-	return 1;
-    app.exec();
-    PStateManager::instance()->saveDefaultSettings();
+       return 1;
+    return app.exec();
+    //PStateManager::instance()->saveDefaultSettings();
 }

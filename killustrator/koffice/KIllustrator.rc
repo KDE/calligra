@@ -1,7 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KIllustrator" version="5">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
-  <Separator/>
   <Action name="import"/>
   <Action name="export"/>
  </Menu>
@@ -22,6 +21,7 @@
  <Menu name="view"><text>&amp;View</text>
   <Action name="view_zoomin"/>
   <Action name="view_zoomout"/>
+  <Action name="zoom"/>
   <Separator/>
   <Action name="view_newview"/>
   <ActionList name="view_closeallviews"/>
@@ -30,12 +30,10 @@
   <Action name="outline"/>
   <Action name="normal"/>
   <Separator/>
-  <Action name="showRuler"/>
   <Action name="showGrid"/>
   <Action name="showHelplines"/>
  </Menu>
- <Menu name="insert"><text>&amp;Insert</text>
-  <Menu name="tools"><text>&amp;Tools</text>
+ <Menu name="insert"><text>&amp;Tools</text>
    <Action name="mouse"/>
    <Separator/>
    <Action name="point"/>
@@ -47,49 +45,41 @@
    <Action name="ellipse"/>
    <Action name="text"/>
    <Separator/>
-   <Action name="zoom"/>
    <Action name="insertpart"/>
-  </Menu>
-  <Action name="insertBitmap"/>
-  <Action name="insertClipart"/>
+   <Action name="insertBitmap"/>
+   <Action name="insertClipart"/>
  </Menu>
  <Menu name="layout"><text>&amp;Layout</text>
-  <Action name="page"/>
-  <Action name="grid"/>
-  <Action name="helplines"/>
-  <Separator/>
-  <Action name="alignToGrid"/>
-  <Action name="alignToHelplines"/>
+   <Action name="alignToGrid"/>
+   <Action name="alignToHelplines"/>
+   <Separator/>
+   <Action name="toFront"/>
+   <Action name="toBack"/>
+   <Action name="forwardOne"/>
+   <Action name="backOne"/>
+   <Separator/>
+   <Action name="group"/>
+   <Action name="ungroup"/>
  </Menu>
  <Menu name="arrange"><text>&amp;Modify</text>
-  <Menu name="Transform"><text>&amp;Transform</text>
    <Action name="transformPosition"/>
    <Action name="transformDimension"/>
    <Action name="transformRotation"/>
    <Action name="transformMirror"/>
-  </Menu>
-  <Action name="distribute"/>
-  <Action name="toFront"/>
-  <Action name="toBack"/>
-  <Action name="forwardOne"/>
-  <Action name="backOne"/>
-  <Separator/>
-  <Action name="group"/>
-  <Action name="ungroup"/>
-  <Separator/>
-  <Action name="textAlongPath"/>
-  <Action name="convertToCurve"/>
- </Menu>
- <Menu name="extra"><text>E&amp;xtra</text>
-  <Action name="blend"/>
-  <Action name="loadPalette"/>
+   <Action name="distribute"/>
+   <Separator/>
+   <Action name="textAlongPath"/>
+   <Action name="convertToCurve"/>
+   <Action name="blend"/>
+   <Action name="loadPalette"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
+  <Action name="page"/>
+  <Action name="grid"/>
+  <Action name="helplines"/>
+  <Action name="ellipseSettings"/>
+  <Action name="polygonSettings"/>
   <Action name="configure"/>
-  <Menu name="toolsettings"><text>&amp;Tools</text>
-   <Action name="ellipseSettings"/>
-   <Action name="polygonSettings"/>
-  </Menu>
   <Separator/>
    <Menu name="panelsettings"><text>&amp;Panels</text>
     <Action name="layers"/>
@@ -120,8 +110,11 @@
   <Action name="polygon"/>
   <Action name="ellipse"/>
   <Action name="text"/>
+  <Action name="textAlongPath"/>
   <Action name="zoom"/>
   <Action name="insertpart"/>
+  <Action name="insertBitmap"/>
+  <Action name="insertClipart"/>
 </ToolBar>
 <ToolBar fullWidth="false" name="nodes" position="left"><Text>Nodes</Text>
   <Action name="moveNode"/>

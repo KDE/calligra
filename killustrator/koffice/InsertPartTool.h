@@ -33,7 +33,7 @@ class GDocument;
 class Coord;
 
 class InsertPartTool : public Tool {
-  Q_OBJECT
+//  Q_OBJECT
 public:
   InsertPartTool (CommandHistory* history);
 

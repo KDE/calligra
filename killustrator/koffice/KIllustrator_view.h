@@ -28,6 +28,7 @@
 #include <CommandHistory.h>
 #include <MainView.h>
 #include <koView.h>
+#include <Tool.h>
 
 /*const int ID_TOOL_DUMMY=1000;
 const int ID_TOOL_SELECT=1001;
@@ -105,7 +106,6 @@ protected:
     void readConfig();
     void writeConfig();
 
-    virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
     void showTransformationDialog (int id);
 
     void setupCanvas ();
@@ -118,13 +118,15 @@ protected:
     virtual void print( QPrinter &printer );
 
 protected slots:
-    void showNodesToolbar(bool show);
+   //connect(tcontroller,SIGNAL(activated(bool)), this, SLOT(enableNodeTools(bool)));
+   void toolActivated(Tool::ToolID, bool show);
+    //void showNodesToolbar(bool show);
     void setUndoStatus( bool undoPossible, bool redoPossible );
     void popupForSelection (int x, int y);
-    void resetTools();
+    void resetTools(Tool::ToolID id=Tool::ToolDummy);
     QString getExportFileName (FilterManager *filterMgr);
 
-    void showCurrentMode (const QString &msg);
+    void showCurrentMode (Tool::ToolID,const QString &msg);
 
        void insertPartSlot (KIllustratorChild *child, GPart *part);
        void changeChildGeometrySlot (KIllustratorChild *child);
@@ -194,12 +196,13 @@ private slots:
     void slotConfigurePolygon();
     void slotConfigureEllipse();
     void slotAddHelpline(int x, int y, bool d);
-    void slotZoomFactorChanged(float factor, int xpos, int ypos);
-    void slotSettingsChanged();
+    void slotZoomFactorChanged(float factor);
+    //void slotZoomFactorChanged(float factor, int xpos, int ypos);
+    //void slotSettingsChanged();
     void slotZoomIn();
     void slotZoomOut();
     void slotViewResize();
-    void activatePart (GObject *obj);
+    void activatePart (Tool::ToolID,GObject *obj);
     
 protected:
     KIllustratorDocument *m_pDoc;
@@ -231,6 +234,11 @@ protected:
     KAction* m_toBack;
     KAction* m_forwardOne;
     KAction* m_backOne;
+
+    KToggleAction *m_alignToGrid;
+    KToggleAction *m_showGrid;
+
+    KToggleAction *m_alignToHelplines;
     KToggleAction *m_showHelplines;
     KToggleAction* m_selectTool;
     KToggleAction* m_moveNode;

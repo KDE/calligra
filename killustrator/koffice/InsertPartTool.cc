@@ -34,6 +34,8 @@
 #include <qpainter.h>
 #include <klocale.h>
 
+#include <ToolController.h>
+
 InsertPartTool::InsertPartTool (CommandHistory* history) : Tool (history)
 {
   validEntry = false;
@@ -41,11 +43,13 @@ InsertPartTool::InsertPartTool (CommandHistory* history) : Tool (history)
 }
 
 void InsertPartTool::activate (GDocument *_doc, Canvas *_canvas)
- {
-  state = S_Init;
-  doc = _doc;
-  canvas = _canvas;
- }
+{
+   state = S_Init;
+   doc = _doc;
+   canvas = _canvas;
+   canvas->setCursor(Qt::arrowCursor);
+   m_toolController->emitModeSelected(m_id,i18n("Insert kOffice parts"));
+}
 
 void InsertPartTool::deactivate (GDocument*, Canvas* )
  {
@@ -63,19 +67,19 @@ void InsertPartTool::processEvent (QEvent* e, GDocument *_doc, Canvas* _canvas)
   if (e->type () == QEvent::MouseButtonRelease)
    {
     processButtonReleaseEvent((QMouseEvent *) e);
-    emit operationDone ();
+    m_toolController->emitOperationDone (m_id);
    }
   else
    if (e->type () == QEvent::MouseButtonPress)
     {
      processButtonPressEvent((QMouseEvent *) e);
-     emit operationDone ();
+     m_toolController->emitOperationDone (m_id);
     }
    else
     if (e->type () == QEvent::MouseMove)
      {
       processMouseMoveEvent((QMouseEvent *) e);
-      emit operationDone ();
+      m_toolController->emitOperationDone (m_id);
      }
  }
 
@@ -103,7 +107,7 @@ void InsertPartTool::processMouseMoveEvent (QMouseEvent* e)
     canvas->repaint();
     QPainter painter;
     painter.save();
-    QPen pen(red, 1, DotLine);
+    QPen pen(Qt::red, 1, Qt::DotLine);
     painter.begin(canvas);
     painter.setPen(pen);
     float sfactor = canvas->scaleFactor();
@@ -138,7 +142,7 @@ void InsertPartTool::processButtonReleaseEvent (QMouseEvent* e)
        kdoc->insertPart (QRect (selPoint[0].x(), selPoint[0].y(), selPoint[1].x() - selPoint[0].x(), selPoint[1].y() - selPoint[0].y()), docEntry);
     }
     canvas->repaint ();
-    emit operationDone ();
+    m_toolController->emitOperationDone (m_id);
     state = S_Init;
     return;
    }

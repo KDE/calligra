@@ -65,7 +65,7 @@ KIllustratorDocument::KIllustratorDocument( QWidget *parentWidget, const char *w
     setInstance( KIllustratorFactory::global() );
     m_gdocument = new GDocument(this);
     connect(m_gdocument, SIGNAL(wasModified(bool)), this, SLOT(modified(bool)));
-    GObject::registerPrototype ("object", new GPart());
+    //GObject::registerPrototype ("object", new GPart());
 }
 
 KIllustratorDocument::~KIllustratorDocument()
@@ -141,7 +141,7 @@ void KIllustratorDocument::insertPart (const QRect& rect, KoDocumentEntry& e)
     KIllustratorChild *child = new KIllustratorChild (this, doc, rect );
     insertChild( child );
 
-    GPart* part = new GPart (child);
+    GPart* part = new GPart (gdoc(), child);
     m_gdocument->insertObject (part);
     emit partInserted (child, part);
 }

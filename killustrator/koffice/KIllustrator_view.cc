@@ -28,6 +28,7 @@
 #include <KIllustrator_view.h>
 #include <KIllustrator_doc.h>
 #include <KIllustrator_factory.h>
+#include <koMainWindow.h>
 
 #include "LayerPanel.h"
 #include "tooldockbase.h"
@@ -90,13 +91,20 @@
 #include <kparts/event.h>
 #include <GPart.h>
 #include <qlayout.h>
+#include <qdatetime.h>
+
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
                                     KIllustratorDocument* doc) :
     KoView( doc, parent, name )
 {
+   QTime time;
+   time.start();
     setInstance( KIllustratorFactory::global() );
-    setXMLFile( "KIllustrator.rc" );
+//    PStateManager::instance ();
+//    setupCanvas ();
+    //setXMLFile( "KIllustrator.rc" );
+    //kdDebug()<<"KIlluView after XMLFile: "<<time.elapsed()<<endl;
     m_pDoc = doc;
     m_bShowGUI = true;
     m_bShowRulers = true;
@@ -104,30 +112,35 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     mParent = parent;
 
     readConfig();
+    kdDebug()<<"KIlluView after readConfig: "<<time.elapsed()<<endl;
     
     // restore default settings
     PStateManager::instance ();
+    kdDebug()<<"KIlluView after instance: "<<time.elapsed()<<endl;
 
-     QObject::connect (m_pDoc, SIGNAL (partInserted (KIllustratorChild *, GPart *)),
+    QObject::connect (m_pDoc, SIGNAL (partInserted (KIllustratorChild *, GPart *)),
                                           this, SLOT (insertPartSlot (KIllustratorChild *, GPart *)));
-     QObject::connect (m_pDoc, SIGNAL (childGeometryChanged (KIllustratorChild *)),
+    QObject::connect (m_pDoc, SIGNAL (childGeometryChanged (KIllustratorChild *)),
                                            this, SLOT(changeChildGeometrySlot (KIllustratorChild *)));
     
+     setupCanvas();
+    kdDebug()<<"KIlluView after setupCanvas: "<<time.elapsed()<<endl;
     createMyGUI();
+    setXMLFile( "KIllustrator.rc" );
+    kdDebug()<<"KIlluView after createMyGUI: "<<time.elapsed()<<endl;
 }
 
 KIllustratorView::~KIllustratorView()
 {
- writeConfig();
- delete mZoomTool;
- delete objMenu;
- delete mToolDockManager;
+   writeConfig();
+   delete mZoomTool;
+   if (objMenu!=0)
+      delete objMenu;
+   delete mToolDockManager;
 }
 
 void KIllustratorView::createMyGUI()
 {
-    setupCanvas ();
-
     // File menu
     new KAction( i18n("&Import..."), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
     new KAction( i18n("&Export..."), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
@@ -154,46 +167,58 @@ void KIllustratorView::createMyGUI()
     connect( m_normal, SIGNAL( toggled( bool ) ), this, SLOT( slotNormal( bool ) ) );
     KToggleAction *m_showRuler = new KToggleAction( i18n("Show &Ruler"), 0, actionCollection(), "showRuler" );
     connect( m_showRuler, SIGNAL( toggled( bool ) ), this, SLOT( slotShowRuler( bool ) ) );
-    KToggleAction *m_showGrid = new KToggleAction( i18n("Show &Grid"), 0, actionCollection(), "showGrid" );
+
+    m_showGrid = new KToggleAction( i18n("Show &Grid"), 0, actionCollection(), "showGrid" );
     connect( m_showGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotShowGrid( bool ) ) );
+
     m_showHelplines = new KToggleAction( i18n("Show &Helplines"), 0, actionCollection(), "showHelplines" );
     connect( m_showHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotShowHelplines( bool ) ) );
 
     // Insert menu
-    new KAction( i18n("Insert &Bitmap..."), 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
-    new KAction( i18n("Insert &Clipart..."), 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
+    new KAction( i18n("Insert &Bitmap..."),"insertpicture", 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
+    new KAction( i18n("Insert &Clipart..."),"insertclipart", 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
 
     // Tools
     m_selectTool = new KToggleAction( i18n("Select objects"), "selecttool", CTRL+Key_1, actionCollection(), "mouse" );
     m_selectTool->setExclusiveGroup( "Tools" );
     connect( m_selectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotSelectTool( bool ) ) );
-    KToggleAction *m_pointTool = new KToggleAction( i18n("Edit points"), "pointtool", CTRL+Key_2, actionCollection(), "point" );
+
+    KToggleAction* m_pointTool = new KToggleAction( i18n("Edit points"), "pointtool", CTRL+Key_2, actionCollection(), "point" );
     m_pointTool->setExclusiveGroup( "Tools" );
     connect( m_pointTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPointTool( bool ) ) );
+
     KToggleAction *m_freehandTool = new KToggleAction( i18n("Freehand"), "freehandtool", CTRL+Key_3, actionCollection(), "freehand" );
     m_freehandTool->setExclusiveGroup( "Tools" );
     connect( m_freehandTool, SIGNAL( toggled( bool ) ), this, SLOT( slotFreehandTool( bool ) ) );
+
     KToggleAction *m_lineTool = new KToggleAction( i18n("Line"), "linetool", CTRL+Key_4, actionCollection(), "line" );
     m_lineTool->setExclusiveGroup( "Tools" );
     connect( m_lineTool, SIGNAL( toggled( bool ) ), this, SLOT( slotLineTool( bool ) ) );
+
     KToggleAction *m_bezierTool = new KToggleAction( i18n("Bezier"), "beziertool", CTRL+Key_5, actionCollection(), "bezier" );
     m_bezierTool->setExclusiveGroup( "Tools" );
     connect( m_bezierTool, SIGNAL( toggled( bool ) ), this, SLOT( slotBezierTool( bool ) ) );
+
     KToggleAction *m_rectTool = new KToggleAction( i18n("Rectangle"), "recttool", CTRL+Key_6, actionCollection(), "rectangle" );
     m_rectTool->setExclusiveGroup( "Tools" );
     connect( m_rectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotRectTool( bool ) ) );
+
     KToggleAction *m_polygonTool = new KToggleAction( i18n("Polygon"), "polygontool", CTRL+Key_7, actionCollection(), "polygon" );
     m_polygonTool->setExclusiveGroup( "Tools" );
     connect( m_polygonTool, SIGNAL( toggled( bool ) ), this, SLOT( slotPolygonTool( bool ) ) );
+
     KToggleAction *m_ellipseTool = new KToggleAction( i18n("Ellipse"), "ellipsetool", CTRL+Key_8, actionCollection(), "ellipse" );
     m_ellipseTool->setExclusiveGroup( "Tools" );
     connect( m_ellipseTool, SIGNAL( toggled( bool ) ), this, SLOT( slotEllipseTool( bool ) ) );
+
     KToggleAction *m_textTool = new KToggleAction( i18n("Text"), "texttool", CTRL+Key_9, actionCollection(), "text" );
     m_textTool->setExclusiveGroup( "Tools" );
     connect( m_textTool, SIGNAL( toggled( bool ) ), this, SLOT( slotTextTool( bool ) ) );
+
     KToggleAction *m_zoomTool = new KToggleAction( i18n("Zoom"), "zoomtool", CTRL+Key_0, actionCollection(), "zoom" );
     m_zoomTool->setExclusiveGroup( "Tools" );
     connect( m_zoomTool, SIGNAL( toggled( bool ) ), this, SLOT( slotZoomTool( bool ) ) );
+
     KToggleAction *m_insertPartTool = new KToggleAction( i18n("Insert Part"), "parts", 0, actionCollection(), "insertpart" );
     m_insertPartTool->setExclusiveGroup( "Tools" );
     connect( m_insertPartTool, SIGNAL( toggled( bool ) ), this, SLOT( slotInsertPartTool( bool ) ) );
@@ -202,9 +227,10 @@ void KIllustratorView::createMyGUI()
     new KAction( i18n("&Page..."), 0, this, SLOT( slotPage() ), actionCollection(), "page" );
     new KAction( i18n("&Grid..."), 0, this, SLOT( slotGrid() ), actionCollection(), "grid" );
     new KAction( i18n("&Helplines..."), 0, this, SLOT( slotHelplines() ), actionCollection(), "helplines" );
-    KToggleAction *m_alignToGrid = new KToggleAction( i18n("&Align To Grid"), 0, actionCollection(), "alignToGrid" );
+    m_alignToGrid = new KToggleAction( i18n("&Align To Grid"), 0, actionCollection(), "alignToGrid" );
     connect( m_alignToGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToGrid( bool ) ) );
-    KToggleAction *m_alignToHelplines = new KToggleAction( i18n("Align &To Helplines"), 0, actionCollection(), "alignToHelplines" );
+
+    m_alignToHelplines = new KToggleAction( i18n("Align &To Helplines"), 0, actionCollection(), "alignToHelplines" );
     connect( m_alignToHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToHelplines( bool ) ) );
 
     // Transform menu
@@ -221,7 +247,7 @@ void KIllustratorView::createMyGUI()
     m_backOne = new KAction( i18n("B&ack One"), 0, this, SLOT( slotBackOne() ), actionCollection(), "backOne" );
     new KAction( i18n("&Group"), 0, this, SLOT( slotGroup() ), actionCollection(), "group" );
     new KAction( i18n("&Ungroup"), 0, this, SLOT( slotUngroup() ), actionCollection(), "ungroup" );
-    new KAction( i18n("Text Along &Path"), 0, this, SLOT( slotTextAlongPath() ), actionCollection(), "textAlongPath" );
+    new KAction( i18n("Text Along &Path"), "texttool",0, this, SLOT( slotTextAlongPath() ), actionCollection(), "textAlongPath" );
     new KAction( i18n("&Convert to Curve"), 0, this, SLOT( slotConvertToCurve() ), actionCollection(), "convertToCurve" );
 
     // Extra menu
@@ -229,9 +255,9 @@ void KIllustratorView::createMyGUI()
     //new KAction( i18n("&Load Palette..."), 0, this, SLOT( slotLoadPalette() ), actionCollection(), "loadPalette" ); // not implemented yet (Werner)
 
     // Settings
-    new KAction( i18n("&Configure..."), 0, this, SLOT( slotOptions() ), actionCollection(), "configure" );
-    new KAction( i18n("&Ellipse Settings..."), 0, this, SLOT( slotConfigureEllipse() ), actionCollection(), "ellipseSettings");
-    new KAction( i18n("&Polygon Settings..."), 0, this, SLOT( slotConfigurePolygon() ), actionCollection(), "polygonSettings");
+    new KAction( i18n("&Defaults..."), 0, this, SLOT( slotOptions() ), actionCollection(), "configure" );
+    new KAction( i18n("&Ellipse..."), 0, this, SLOT( slotConfigureEllipse() ), actionCollection(), "ellipseSettings");
+    new KAction( i18n("&Polygon..."), 0, this, SLOT( slotConfigurePolygon() ), actionCollection(), "polygonSettings");
 
     m_viewZoom = new KSelectAction (i18n ("&Zoom"), 0, actionCollection (), "view_zoom");
     QStringList zooms;
@@ -243,12 +269,14 @@ void KIllustratorView::createMyGUI()
     zooms << "600%";
     zooms << "800%";
     zooms << "1000%";
+    zooms << "100%";
 
     m_viewZoom->setItems (zooms);
     m_viewZoom->setEditable (true);
     connect (m_viewZoom, SIGNAL(activated(const QString &)),
              this, SLOT(slotViewZoom(const QString &)));
     m_viewZoom->setCurrentItem(1);
+
 
     new KAction( i18n("Zoom in"), "viewmag+", 0, this, SLOT( slotZoomIn() ), actionCollection(), "tool_zoomin");
     new KAction( i18n("Zoom out"), "viewmag-", 0, this, SLOT( slotZoomOut() ), actionCollection(), "tool_zoomout");
@@ -281,7 +309,6 @@ void KIllustratorView::createMyGUI()
     m_splitLine->setExclusiveGroup( "Node" );
     connect( m_splitLine, SIGNAL( toggled( bool ) ), this, SLOT( slotSplitLine( bool ) ) );
 
-    m_selectTool->setChecked( true );
     m_normal->setChecked( true );
     m_showRuler->setChecked( true );
     m_showHelplines->setChecked(canvas->showHelplines());
@@ -289,14 +316,16 @@ void KIllustratorView::createMyGUI()
     m_showGrid->setChecked(canvas->showGrid());
     m_alignToGrid->setChecked(canvas->snapToGrid());
 
-    // Disable node actions
-    slotPointTool( false );
+    m_selectTool->setChecked( true );
     tcontroller->toolSelected( Tool::ToolSelect);
 
-    setupPopups ();
     setUndoStatus (false, false);
     QObject::connect (&cmdHistory, SIGNAL(changed(bool, bool)),
                       SLOT(setUndoStatus(bool, bool)));
+
+    // Disable node actions
+    toolActivated(Tool::ToolEditPoint,false);
+
 }
 
 void KIllustratorView::setupPopups()
@@ -319,10 +348,8 @@ void KIllustratorView::setupCanvas()
 {
     MeasurementUnit mu = PStateManager::instance ()->defaultMeasurementUnit ();
     hRuler = new Ruler (Ruler::Horizontal, mu, this);
-//    hRuler->setGeometry(20, 0, width()-20, 20);
     hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
     vRuler = new Ruler (Ruler::Vertical, mu, this);
-//    vRuler->setGeometry(0, 20, 20, height()-20);
     vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
 
     QScrollBar* vBar = new QScrollBar(QScrollBar::Vertical, this);
@@ -330,8 +357,7 @@ void KIllustratorView::setupCanvas()
 
     canvas = new Canvas (m_pDoc->gdoc(), 72.0, hBar, vBar, this);
     canvas->centerPage();
-    canvas->setCursor(Qt::crossCursor);
-//    canvas->setGeometry(20, 20, width()-20, height()-20);
+    canvas->setCursor(Qt::arrowCursor);
 
     QGridLayout* layout = new QGridLayout(this,3,3);
     layout->addWidget(canvas,1,1);
@@ -339,29 +365,13 @@ void KIllustratorView::setupCanvas()
     layout->addWidget(vRuler,1,0);
     layout->addMultiCellWidget(vBar,0,1,2,2);
     layout->addMultiCellWidget(hBar,2,2,0,1);
-/*    layout->addWidget(vRuler,1,0);
-    layout->addWidget(canvasBase,1,1);
-    layout->addMultiCellLayout(tabLayout,2,2,0,1);*/
-
-    
-/*    scrollview->addChild(canvas);
-    scrollview->viewport()->setBackgroundMode(QWidget::PaletteBackground);
-    
-    int x = scrollview->viewport()->width()-canvas->width();
-    int y = scrollview->viewport()->height()-canvas->height();
-    if(x < 0)
-     x = 0;
-    if(y < 0)
-     y = 0;
-    canvas->move(x/2,y/2);
-    hRuler->updateVisibleArea (x/2, y/2);
-    vRuler->updateVisibleArea (x/2, y/2);*/
     
     mToolDockManager = new ToolDockManager(canvas);
 
     //Layer Panel
     mLayerPanel = new LayerPanel(this);
     mLayerDockBase = mToolDockManager->createToolDock(mLayerPanel, i18n("Layers"));
+
     KToggleAction* showLayers = new KToggleAction( i18n("Layers Panel"), "layers", CTRL+Key_L, actionCollection(), "layers" );
     connect( showLayers, SIGNAL(toggled(bool)), mLayerDockBase, SLOT(makeVisible(bool)));
     connect(mLayerDockBase, SIGNAL(visibleChange(bool)), SLOT(slotLayersPanel(bool)));
@@ -374,24 +384,24 @@ void KIllustratorView::setupCanvas()
     QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
                       vRuler, SLOT(updateVisibleArea (int, int)));
 
-    QObject::connect (canvas, SIGNAL(zoomFactorChanged (float, int ,int)),
+/*    QObject::connect (canvas, SIGNAL(zoomFactorChanged (float, int ,int)),
                       hRuler, SLOT(setZoomFactor (float, int ,int)));
     QObject::connect (canvas, SIGNAL(zoomFactorChanged (float, int ,int)),
-                      vRuler, SLOT(setZoomFactor (float, int ,int)));
-    QObject::connect (canvas, SIGNAL(zoomFactorChanged (float, int ,int)),
-                      this, SLOT(slotZoomFactorChanged(float, int ,int)));
-    QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
+                      vRuler, SLOT(setZoomFactor (float, int ,int)));*/
+
+    connect (canvas, SIGNAL(zoomFactorChanged (float)),
+                      this, SLOT(slotZoomFactorChanged(float)));
+
+    connect (canvas, SIGNAL(mousePositionChanged (int, int)),
                       hRuler, SLOT(updatePointer(int, int)));
-    QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
+    connect (canvas, SIGNAL(mousePositionChanged (int, int)),
                       vRuler, SLOT(updatePointer(int, int)));
-    QObject::connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
+    connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
                       this, SLOT(popupForSelection (int, int)));
     
 //    QObject::connect (scrollview, SIGNAL( viewportResize ()),
 //                      this, SLOT( slotViewResize ()));
     
-    connect(PStateManager::instance(), SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
-
     // helpline creation
     connect (hRuler, SIGNAL (drawHelpline(int, int, bool)),
              canvas, SLOT(drawTmpHelpline(int, int, bool)));
@@ -406,55 +416,25 @@ void KIllustratorView::setupCanvas()
     setFocusProxy(canvas);
 
     tcontroller = new ToolController (this);
+    connect(tcontroller,SIGNAL(operationDone(Tool::ToolID)),this,SLOT(resetTools(Tool::ToolID)));
+    connect(tcontroller,SIGNAL(modeSelected(Tool::ToolID,const QString&)),this,SLOT(showCurrentMode(Tool::ToolID,const QString&)));
+    connect(tcontroller,SIGNAL(activated(Tool::ToolID,bool)), this, SLOT(toolActivated(Tool::ToolID,bool)));
+    connect(tcontroller,SIGNAL(partSelected(Tool::ToolID,GObject*)),this, SLOT(activatePart(Tool::ToolID,GObject*)));
 
-    SelectionTool* selTool=new SelectionTool (&cmdHistory);
-    tcontroller->registerTool ( selTool );
-
-    QObject::connect (selTool, SIGNAL(modeSelected(const QString&)),
-                      this, SLOT(showCurrentMode(const QString&)));
-    QObject::connect (selTool, SIGNAL(partSelected(GObject*)),
-                    this, SLOT(activatePart(GObject*)));
-
+    tcontroller->registerTool ( new SelectionTool (&cmdHistory) );
     tcontroller->registerTool (editPointTool = new EditPointTool (&cmdHistory));
-    QObject::connect (editPointTool, SIGNAL(modeSelected(const QString&)),
-                      this, SLOT(showCurrentMode(const QString&)));
-    connect(editPointTool, SIGNAL(activated(bool)), this, SLOT(showNodesToolbar(bool)));
-    Tool* tool;
-    tcontroller->registerTool (tool = new FreeHandTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
-                      this, SLOT(showCurrentMode(const QString&)));
-    tcontroller->registerTool (tool = new PolylineTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
-                      this, SLOT(showCurrentMode(const QString&)));
-    tcontroller->registerTool (tool = new BezierTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
-                      this, SLOT(showCurrentMode(const QString&)));
-    tcontroller->registerTool (tool = new RectangleTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
-                      this, SLOT(showCurrentMode(const QString&)));
-    tcontroller->registerTool (tool = new PolygonTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
-                      this, SLOT(showCurrentMode(const QString&)));
-    tcontroller->registerTool (tool = new OvalTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
-                      this, SLOT(showCurrentMode(const QString&)));
-    tcontroller->registerTool (tool = new TextTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
-                      this, SLOT(showCurrentMode(const QString&)));
+    tcontroller->registerTool (new FreeHandTool (&cmdHistory));
+    tcontroller->registerTool (new PolylineTool (&cmdHistory));
+    tcontroller->registerTool (new BezierTool (&cmdHistory));
+    tcontroller->registerTool (new RectangleTool (&cmdHistory));
+    tcontroller->registerTool (new PolygonTool (&cmdHistory));
+    tcontroller->registerTool (new OvalTool (&cmdHistory));
+    tcontroller->registerTool (new TextTool (&cmdHistory));
     tcontroller->registerTool (mZoomTool = new ZoomTool (&cmdHistory));
-    QObject::connect (mZoomTool, SIGNAL(modeSelected(const QString&)),
-                      this, SLOT(showCurrentMode(const QString&)));
-
-    tcontroller->registerTool (tool = new PathTextTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(operationDone ()),
-                      this, SLOT (resetTools ()));
-
+    tcontroller->registerTool (new PathTextTool (&cmdHistory));
     tcontroller->registerTool (insertPartTool = new InsertPartTool (&cmdHistory));
-    QObject::connect (insertPartTool, SIGNAL(operationDone()),
-                      this, SLOT (resetTools()));
 
     canvas->setToolController(tcontroller);
-
     canvas->installEventFilter(this);
 }
 
@@ -466,10 +446,12 @@ void KIllustratorView::writeConfig()
  {
  }
 
-void KIllustratorView::showCurrentMode (const QString& msg)
- {
-    //statusbar->changeItem (msg, 2);
- }
+void KIllustratorView::showCurrentMode (Tool::ToolID, const QString& msg)
+{
+   for (KoMainWindow * tmpKo=m_pDoc->firstShell();tmpKo!=0;tmpKo=m_pDoc->nextShell())
+      tmpKo->statusBarLabel()->setText(msg);
+   //statusbar->changeItem (msg, 2);
+}
 
 void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 {
@@ -504,12 +486,6 @@ void KIllustratorView::updateReadWrite( bool /*readwrite*/ )
 #endif
 }
 
-void KIllustratorView::guiActivateEvent( KParts::GUIActivateEvent *ev )
- {
-  if(ev->activated())
-   showNodesToolbar(false);
- }
-
 void KIllustratorView::showTransformationDialog( int id )
 {
     TransformationDialog *transformationDialog = new TransformationDialog (&cmdHistory);
@@ -517,21 +493,6 @@ void KIllustratorView::showTransformationDialog( int id )
                       transformationDialog, SLOT (update ()));
     transformationDialog->setDocument ( m_pDoc->gdoc() );
     transformationDialog->showTab (id);
-}
-
-void KIllustratorView::showNodesToolbar(bool show) {
-
-    if ( !factory() )
-        return;
-
-    QWidget *tb = factory()->container( "nodes", this );
-    if( !tb )
-        return;
-
-    if (show)
-        tb->show();
-    else
-        tb->hide();
 }
 
 void KIllustratorView::setupPrinter( QPrinter &printer )
@@ -632,47 +593,46 @@ void KIllustratorView::slotConfigureEllipse()
    tcontroller->configureTool (Tool::ToolEllipse);
 }
 
-/*
-void KIllustratorView::zoomSizeSelected (const QString & s)
-{
-  float value = s.toFloat();
-  if (canvas)
-    canvas->setZoomFactor (value / 100.0);
-}
-*/
-
 void KIllustratorView::popupForSelection (int, int )
 {
-    objMenu->popup( QCursor::pos () );
+   if (objMenu==0)
+      setupPopups();
+   objMenu->popup( QCursor::pos () );
 }
 
-
-void KIllustratorView::resetTools()
+void KIllustratorView::resetTools(Tool::ToolID id)
 {
-    m_selectTool->setEnabled( true );
+   if (id==Tool::ToolPathText)
+   {
+      m_selectTool->setChecked( true );
+      tcontroller->toolSelected( Tool::ToolSelect);
+   };
+   //m_selectTool->setEnabled( true );
 }
 
-void KIllustratorView::activatePart (GObject *obj) {
- if (obj->isA ("GPart")) {
-   GPart *part = (GPart *) obj;
-   part->activate(this);
-   /*cout << "setFramesToParts ..." << endl;
-   setFramesToParts ();
-   cout << "part->activate ..." << endl;
-   int xoff = 1, yoff = 1;
-   if (m_bShowRulers) {
-   xoff += 30;
-   yoff += 30;
-   }
+void KIllustratorView::activatePart (Tool::ToolID, GObject *obj)
+{
+   if (obj->isA ("GPart"))
+   {
+      GPart *part = (GPart *) obj;
+      part->activate(this);
+      /*cout << "setFramesToParts ..." << endl;
+       setFramesToParts ();
+       cout << "part->activate ..." << endl;
+       int xoff = 1, yoff = 1;
+       if (m_bShowRulers) {
+       xoff += 30;
+       yoff += 30;
+       }
 
-  //part->activate (xoff, yoff);
-   setFocusProxy (part->getView ());
-   QWidget::setFocusPolicy (QWidget::StrongFocus);
-   cout << "setFocus ..." << endl;
-//   part->getView ()->setFocusPolicy (QWidget::StrongFocus);
-//   part->getView ()->setFocus ();*/
-   } 
- }
+       //part->activate (xoff, yoff);
+       setFocusProxy (part->getView ());
+       QWidget::setFocusPolicy (QWidget::StrongFocus);
+       cout << "setFocus ..." << endl;
+       //   part->getView ()->setFocusPolicy (QWidget::StrongFocus);
+       //   part->getView ()->setFocus ();*/
+   }
+}
 
 
 GDocument* KIllustratorView::activeDocument()
@@ -926,13 +886,21 @@ void KIllustratorView::slotShowRuler( bool b )
 
 void KIllustratorView::slotShowGrid( bool b )
 {
-    canvas->showGrid( b );
+   if (b!=canvas->showGrid())
+   {
+      canvas->showGrid( b );
+      canvas->saveGridProperties();
+   };
 }
 
 void KIllustratorView::slotShowHelplines( bool b )
 {
-    canvas->showHelplines( b );
-}
+   if (b!=canvas->showHelplines())
+   {
+      canvas->showHelplines( b );
+      canvas->saveGridProperties();
+   }
+};
 
 void KIllustratorView::slotPage()
 {
@@ -946,21 +914,33 @@ void KIllustratorView::slotPage()
 void KIllustratorView::slotGrid()
 {
     GridDialog::setupGrid (canvas);
+    m_alignToGrid->setChecked(canvas->snapToGrid());
+    m_showGrid->setChecked(canvas->showGrid());
 }
 
 void KIllustratorView::slotHelplines()
 {
     HelplineDialog::setup (canvas);
+    m_alignToHelplines->setChecked(canvas->alignToHelplines());
+    m_showHelplines->setChecked(canvas->showHelplines());
 }
 
 void KIllustratorView::slotAlignToGrid( bool b )
 {
-    canvas->snapToGrid( b );
+   if (b!=canvas->snapToGrid())
+   {
+      canvas->snapToGrid( b );
+      canvas->saveGridProperties();
+   };
 }
 
 void KIllustratorView::slotAlignToHelplines( bool b )
 {
-//    canvas->alignToHelplines( b );
+   if (b!=canvas->alignToHelplines())
+   {
+      canvas->alignToHelplines( b );
+      canvas->saveGridProperties();
+   };
 }
 
 void KIllustratorView::slotTransformPosition()
@@ -1045,8 +1025,13 @@ void KIllustratorView::slotBlend()
 
 void KIllustratorView::slotOptions()
 {
-    OptionDialog::setup ();
-}
+   if (OptionDialog::setup()==QDialog::Accepted)
+   {
+      hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
+      vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
+      PStateManager::instance()->saveDefaultSettings();
+   };
+};
 
 void KIllustratorView::slotBrushChosen( const QColor & c )
 {
@@ -1132,17 +1117,27 @@ bool KIllustratorView::eventFilter(QObject *o, QEvent *e)
    return false;
 };
 
-void KIllustratorView::slotPointTool( bool b )
+void KIllustratorView::slotPointTool(bool b)
 {
-    m_moveNode->setEnabled( b );
-    m_newNode->setEnabled( b );
-    m_deleteNode->setEnabled( b );
-    m_splitLine->setEnabled( b );
+   if ( b )
+      tcontroller->toolSelected( Tool::ToolEditPoint );
+}
 
-    if ( b )
-        slotMoveNode( true );
+void KIllustratorView::toolActivated(Tool::ToolID id, bool b )
+{
+   if (id==Tool::ToolEditPoint)
+   {
+      m_moveNode->setEnabled( b );
+      m_newNode->setEnabled( b );
+      m_deleteNode->setEnabled( b );
+      m_splitLine->setEnabled( b );
 
-    tcontroller->toolSelected( Tool::ToolEditPoint );
+      if ( b )
+      {
+         slotMoveNode( true );
+         m_moveNode->setChecked(true);
+      };
+   };
 }
 
 void KIllustratorView::slotFreehandTool( bool b )
@@ -1234,13 +1229,46 @@ void KIllustratorView::slotLoadPalette () {
    
 }
 
-void KIllustratorView::slotViewZoom (const QString& s) {
-    QString z (s);
-    z = z.replace (QRegExp ("%"), "");
-    z = z.simplifyWhiteSpace ();
-    float zoom = z.toFloat () / 100.0;
-    if (zoom != canvas->getZoomFactor ())
-        canvas->setZoomFactor (zoom);
+void KIllustratorView::slotViewZoom (const QString& s)
+{
+   //kdDebug()<<"slotViewZoom(): -"<<s<<"-"<<endl;
+   QString z (s);
+   z = z.replace (QRegExp ("%"), "");
+   z = z.simplifyWhiteSpace ();
+   float zoom = z.toFloat () / 100.0;
+   if (zoom != canvas->getZoomFactor ())
+      canvas->setZoomFactor (zoom);
+}
+
+void KIllustratorView::slotZoomIn()
+{
+   mZoomTool->zoomIn(getCanvas());
+}
+
+void KIllustratorView::slotZoomOut()
+{
+   mZoomTool->zoomOut(getCanvas());
+}
+
+void KIllustratorView::slotZoomFactorChanged(float factor)
+{
+   QStringList list=m_viewZoom->items();
+   QString f=QString::number(qRound(factor*100.0));
+   int i=0;
+   //kdDebug()<<"slotZoomFactorChanged(): -"<<f<<"-"<<endl;
+   for(QValueList<QString>::Iterator it=list.begin(); it!=list.end(); ++it, ++i)
+   {
+      //kdDebug()<<"slotZoomFactorChanged(): it -"<<(*it).left((*it).length()-1)<<"-"<<endl;
+      if((*it).left((*it).length()-1)==f)
+      {
+         m_viewZoom->setCurrentItem(i);
+         return;
+      }
+   }
+   //current zoom value not found in list
+   f+='%';
+   m_viewZoom->changeItem(8,f);
+   m_viewZoom->setCurrentItem(8);
 }
 
 void KIllustratorView::slotAddHelpline(int x, int y, bool d) {
@@ -1248,32 +1276,11 @@ void KIllustratorView::slotAddHelpline(int x, int y, bool d) {
     canvas->addHelpline(x, y, d);
 }
 
-void KIllustratorView::slotZoomFactorChanged(float factor, int xpos, int ypos) {
-    QStringList list=m_viewZoom->items();
-    QString f=QString::number(qRound(factor*100.0));
-    int i=0;
-    for(QValueList<QString>::Iterator it=list.begin(); it!=list.end(); ++it, ++i) {
-        if((*it).left((*it).length()-1)==f) {
-            m_viewZoom->setCurrentItem(i);
-            break;
-        }
-    }
-}
-
-void KIllustratorView::slotSettingsChanged() {
+/*void KIllustratorView::slotSettingsChanged()
+{
     hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
     vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
-}
-
-void KIllustratorView::slotZoomIn()
- {
-  mZoomTool->zoomIn(getCanvas());
- }
-
-void KIllustratorView::slotZoomOut()
- {
-  mZoomTool->zoomOut(getCanvas());
- }
+}*/
 
 void KIllustratorView::slotViewResize()
  {

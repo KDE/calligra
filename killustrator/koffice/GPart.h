@@ -33,12 +33,15 @@ class KIllustratorChild;
 class KIllustratorView;
 class QPainter;
 
-class GPart : public GObject {
+class GPart : public GObject
+{
   Q_OBJECT
+   private:
+      GPart ():GObject(0) {cout<<"GPart ctor"<<endl; exit(1);};
 public:
-  GPart ();
-  GPart (KIllustratorChild *c);
-  GPart (KIllustratorDocument *doc, const QDomElement &element);
+  GPart (GDocument* doc);
+  GPart (GDocument* doc, KIllustratorChild *c);
+  GPart (GDocument* doc, KIllustratorDocument *doc, const QDomElement &element);
   GPart (const GPart& p);
 
   ~GPart ();
@@ -49,7 +52,7 @@ public:
   virtual QString typeName () const;
 
   virtual GObject* copy ();
-  virtual GObject* clone (const QDomElement &element);
+  //virtual GObject* clone (const QDomElement &element);
 
   virtual QDomElement writeToXml (QDomDocument &document);
 
