@@ -44,7 +44,7 @@
 VStyleDocker::VStyleDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
 	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
 {
-	setCaption( i18n( "Fill Color" ) );
+	setCaption( i18n( "Style settings" ) );
 
 	mainWidget = new QWidget( this );
 	mTabWidget = new QTabWidget( mainWidget );
