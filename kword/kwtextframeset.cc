@@ -540,11 +540,19 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
 
 #define DEBUGBRUSH(b) "[ style:" << (b).style() << " color:" << (b).color().name() << " hasPixmap:" << (b).pixmap() << "]"
 
-    //kdDebug() << "KWTextFrameSet::drawFrame calling drawWYSIWYG. cg base color:" << DEBUGBRUSH(cg.brush( QColorGroup::Base)) << endl;
+    uint drawingFlags = 0;
+    if ( viewMode->drawSelections() )
+        drawingFlags |= KoTextDocument::DrawSelections;
+    if ( m_doc->backgroundSpellCheckEnabled() )
+        drawingFlags |= KoTextDocument::DrawMisspelledLine;
+    if ( m_doc->viewFormattingChars() )
+        drawingFlags |= KoTextDocument::DrawFormattingChars;
+
+//kdDebug() << "KWTextFrameSet::drawFrame calling drawWYSIWYG. cg base color:" << DEBUGBRUSH(cg.brush( QColorGroup::Base)) << endl;
     KoTextParag * lastFormatted = textDocument()->drawWYSIWYG(
         painter, r.x(), r.y(), r.width(), r.height(),
         cg, kWordDocument(), // TODO view's zoom handler
-        onlyChanged, drawCursor, cursor, resetChanged,m_doc->backgroundSpellCheckEnabled(),m_doc->viewFormattingChars() );
+        onlyChanged, drawCursor, cursor, resetChanged, drawingFlags );
 
     // The last paragraph of this frame might have a bit in the next frame too.
     // In that case, and if we're only drawing changed paragraphs, (and resetting changed),
@@ -685,13 +693,17 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
 
             QPixmap *pix = 0;
             bool wasChanged = cursor->parag()->hasChanged();
+            uint drawingFlags = KoTextDocument::DrawSelections;
+            if ( m_doc->backgroundSpellCheckEnabled() )
+                drawingFlags |= KoTextDocument::DrawMisspelledLine;
+            if ( m_doc->viewFormattingChars() )
+                drawingFlags |= KoTextDocument::DrawFormattingChars;
             cursor->parag()->setChanged( TRUE );      // To force the drawing to happen
             textDocument()->drawParagWYSIWYG(
                 p, static_cast<KoTextParag *>(cursor->parag()),
                 iPoint.x() - 5, iPoint.y(), clip.width(), clip.height(),
                 pix, cg, m_doc, // TODO view's zoom handler
-                cursorVisible, cursor, FALSE, m_doc->backgroundSpellCheckEnabled(),
-                m_doc->viewFormattingChars());
+                cursorVisible, cursor, FALSE /*resetChanged*/, drawingFlags );
             cursor->parag()->setChanged( wasChanged );      // Maybe we have more changes to draw!
 
             p->restore();
