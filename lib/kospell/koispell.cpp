@@ -117,7 +117,6 @@ void KOISpell::startIspell()
         kdError(30006) << "Spelling configuration error, client=" << ksconfig->client() <<endl;
     }
 
-    // TODO: add option -h to ignore HTML (XML) code
     if (ksconfig->client() == KOS_CLIENT_ISPELL || ksconfig->client() == KOS_CLIENT_ASPELL)
     {
         // -a : pipe mode
@@ -173,8 +172,17 @@ void KOISpell::startIspell()
         //Note to potential debuggers:  -Tlatin2 _is_ being added on the
         //  _first_ try.  But, some versions of ispell will fail with this
         // option, so kspell tries again without it.  That's why as 'ps -ax'
-        // shows "ispell -a -S ..." withou the "-Tlatin2" option.
-
+        // shows "ispell -a -S ..." without the "-Tlatin2" option.
+        /*
+          The background is that -T does not define something like an
+          encoding but -T defines something like a mode. And the potential
+          modes are different for each language. (It is defined in ispell's
+          *.aff files.
+          
+          Note that ispell called without the appopriate -T means that the
+          language does not have special chacarters (e.g. accents) anymore.
+         */
+        
         if (trystart<1)
             switch (ksconfig->encoding())
             {
