@@ -256,7 +256,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
                     "recent files menu item") );
 
     QString suffix = KoUnit::unitName( unit ).prepend(' ');
-    gridX=new KDoubleNumInput( KoUnit::ptToUnit( ptGridX, unit ), gbInterfaceGroup );
+    gridX=new KDoubleNumInput( recentFiles, KoUnit::ptToUnit( ptGridX, unit ), gbInterfaceGroup );
     gridX->setRange(0.1, 50, 0.1);
     gridX->setPrecision (1);
     gridX->setSuffix( suffix );
@@ -264,7 +264,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     QWhatsThis::add( gridX, i18n("The grid size on which frames, tabs and other content snaps while "
                     "moving and scaling") );
 
-    gridY=new KDoubleNumInput( KoUnit::ptToUnit( ptGridY, unit ), gbInterfaceGroup );
+    gridY=new KDoubleNumInput( gridX, KoUnit::ptToUnit( ptGridY, unit ), gbInterfaceGroup );
     gridY->setRange(0.1, 50, 0.1);
     gridY->setPrecision(1);
     gridY->setLabel(i18n("Vertical grid size:"));
@@ -273,7 +273,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     gridY->setSuffix( suffix );
 
     double val = KoUnit::ptToUnit( ptIndent, unit );
-    indent = new KDoubleNumInput( val, gbInterfaceGroup );
+    indent = new KDoubleNumInput( gridY, val, gbInterfaceGroup );
     indent->setRange(0.1, 50, 0.1);
     indent->setPrecision(1);
     indent->setSuffix( suffix );
@@ -283,7 +283,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
                     "the more often the buttons will have to be pressed to gain the same "
                     "indentation") );
 
-    m_nbPagePerRow=new KIntNumInput( nbPagePerRow, gbInterfaceGroup );
+    m_nbPagePerRow=new KIntNumInput( indent, nbPagePerRow, gbInterfaceGroup );
     m_nbPagePerRow->setRange(1, 10, 1);
     m_nbPagePerRow->setLabel(i18n("Preview mode - Number of pages per row:"));
     QWhatsThis::add(m_nbPagePerRow , i18n("After selecting preview mode (via the \"View\" "
