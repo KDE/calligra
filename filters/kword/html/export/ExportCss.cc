@@ -361,7 +361,6 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layoutOrigin,
        strLayout += QString("margin-top:%1pt; ").arg(layout.marginTop);
     }
 
-    // TODO: Konqueror/KHTML does not support "line-height"
     if (force
         || ( layoutOrigin.lineSpacingType != layout.lineSpacingType )
         || ( layoutOrigin.lineSpacing != layout.lineSpacing ) )
@@ -369,13 +368,16 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layoutOrigin,
         switch ( layout.lineSpacingType )
         {
         case LayoutData::LS_CUSTOM:
-            {
+            { 
+                // ### TODO: CSS 2 does not known "at-least".
+#if 0
                 // We have a custom line spacing (in points)
                 const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
                 strLayout += "style:line-spacing:";
                 strLayout += height;
                 strLayout += "pt; ";
-                break;
+#endif
+                break;          
             }
         case LayoutData::LS_SINGLE:
             {
@@ -413,7 +415,7 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layoutOrigin,
             {
                 // We have a at-least line height (in points)
                 const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
-                strLayout += "style:line-height-at-least:";
+                strLayout += "line-height:"; // ### TODO: CSS 2 does not known "at-least".
                 strLayout += height;
                 strLayout += "pt; ";
                 break;
