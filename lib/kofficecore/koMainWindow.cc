@@ -265,7 +265,7 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc )
 
 KoDocument* KoMainWindow::createDoc() const
 {
-    QCString mimetype=rootDocument()->nativeFormatMimeType();
+    QCString mimetype=KoDocument::readNativeFormatMimeType();
     KoDocumentEntry entry=KoDocumentEntry::queryByMimeType(mimetype);
     return entry.createDoc();
 }
@@ -464,7 +464,7 @@ void KoMainWindow::slotFileOpen()
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
     dialog->setCaption( i18n("Open document") );
     KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import,
-					   rootDocument()->nativeFormatMimeType(),
+					   KoDocument::readNativeFormatMimeType(),
 					   nativeFormatPattern(), nativeFormatName(), true);
     KURL url;
     if(dialog->exec()==QDialog::Accepted)
