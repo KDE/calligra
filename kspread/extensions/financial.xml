@@ -93,7 +93,7 @@
     </Function>
 
     <Function>
-      <Name>compound</Name>
+      <Name>COMPOUND</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Principal</Comment>
@@ -112,14 +112,14 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The compound() function returns the value of an investment, given the principal, nominal interest rate, compounding frequency and time. For example: $5000 at 12% interest compounded quarterly for 5 years will become compound(5000;0.12;4;5) or $9030.56.</Text>
-	<Syntax>compound(initial;interest;periods;periods_per_year)</Syntax>
-	<Example>compound(5000;0.12;4;5) equals 9030.56</Example>
+	<Text>The COMPOUND() function returns the value of an investment, given the principal, nominal interest rate, compounding frequency and time. For example: $5000 at 12% interest compounded quarterly for 5 years will become COMPOUND(5000;0.12;4;5) or $9030.56.</Text>
+	<Syntax>COMPOUND(initial;interest;periods;periods_per_year)</Syntax>
+	<Example>COMPOUND(5000;0.12;4;5) equals 9030.56</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>continuous</Name>
+      <Name>CONTINUOUS</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Principal</Comment>
@@ -134,14 +134,14 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The continuous() function calculates the return on continuously compounded interest, given the principal, nominal rate and time in years. For example: $1000 earning 10% for 1 year becomes continuous(1000;.1;1) or $1105.17.</Text>
-	<Syntax>continuous(principal;interest;years)</Syntax>
-	<Example>continuous(1000;0.1;1) equals 1105.17</Example>
+	<Text>The CONTINUOUS() function calculates the return on continuously compounded interest, given the principal, nominal rate and time in years. For example: $1000 earning 10% for 1 year becomes CONTINUOUS(1000;.1;1) or $1105.17.</Text>
+	<Syntax>CONTINOUS(principal;interest;years)</Syntax>
+	<Example>CONTINUOUS(1000;0.1;1) equals 1105.17</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>effective</Name>
+      <Name>EFFECTIVE</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Nominal interest rate</Comment>
@@ -152,14 +152,14 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The effective() function calculates the effective yield for a nominal interest rate (annual rate or APR). For example: 8% interest compounded monthly provides an effective yield of effective(.08;12) or 8.3%.</Text>
-	<Syntax>effective(nominal;periods)</Syntax>
-	<Example>effective(0.08;12) equals 0.083</Example>
+	<Text>The EFFECTIVE() function calculates the effective yield for a nominal interest rate (annual rate or APR). For example: 8% interest compounded monthly provides an effective yield of EFFECTIVE(.08;12) or 8.3%.</Text>
+	<Syntax>EFFECTIVE(nominal;periods)</Syntax>
+	<Example>EFFECTIVE(0.08;12) equals 0.083</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>nominal</Name>
+      <Name>NOMINAL</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Effective interest rate</Comment>
@@ -170,14 +170,14 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The nominal() function calculates the nominal (stated) interest rate for an effective (annualized) interest rate compounded at given intervals. For example: to earn 8% on an account compounded monthly, you need a return of nominal(.08;12) or 7.72%.</Text>
-	<Syntax>nominal(effective;periods)</Syntax>
-	<Example>nominal(0.08;12) equals 0.0772</Example>
+	<Text>The NOMINAL() function calculates the nominal (stated) interest rate for an effective (annualized) interest rate compounded at given intervals. For example: to earn 8% on an account compounded monthly, you need a return of NOMINAL(.08;12) or 7.72%.</Text>
+	<Syntax>NOMINAL(effective;periods)</Syntax>
+	<Example>NOMINAL(0.08;12) equals 0.0772</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>zero_coupon</Name>
+      <Name>ZERO_COUPON</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Face value</Comment>
@@ -192,14 +192,14 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The zero_coupon() function calculates the value of a zero-coupon (pure discount) bond. For example: if the interest rate is 10%, a $1000 bond that matures in 20 years is worth zero_coupon(1000;.1;20) or $148.64.</Text>
-	<Syntax>zero_coupon(face value;rate;years)</Syntax>
-	<Example>zero_coupon(1000;.1;20) equals 148.64</Example>
+	<Text>The ZERO_COUPON() function calculates the value of a zero-coupon (pure discount) bond. For example: if the interest rate is 10%, a $1000 bond that matures in 20 years is worth ZERO_COUPON(1000;.1;20) or $148.64.</Text>
+	<Syntax>ZERO_COUPON(face value;rate;years)</Syntax>
+	<Example>ZERO_COUPON(1000;.1;20) equals 148.64</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>level_coupon</Name>
+      <Name>LEVEL_COUPON</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Face value</Comment>
@@ -222,9 +222,9 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The level_coupon() function calculates the value of a level-coupon bond. For example: if the interest rate is 10%, a $1000 bond with semi-annual coupons at a rate of 13% that matures in 4 years is worth level_coupon(1000;.13;2;4;.1) or $1096.95.</Text>
-	<Syntax>zero_coupon(face value;rate;years)</Syntax>
-	<Example>level_coupon(1000;.13;2;4;.1) equals 1096.95</Example>
+	<Text>The LEVEL_COUPON() function calculates the value of a level-coupon bond. For example: if the interest rate is 10%, a $1000 bond with semi-annual coupons at a rate of 13% that matures in 4 years is worth LEVEL_COUPON(1000;.13;2;4;.1) or $1096.95.</Text>
+	<Syntax>LEVEL_COUPON(face value;rate;years)</Syntax>
+	<Example>LEVEL_COUPON(1000;.13;2;4;.1) equals 1096.95</Example>
       </Help>
     </Function>
 

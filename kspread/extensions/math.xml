@@ -49,20 +49,20 @@
     </Function>
 
     <Function>
-      <Name>eps</Name>
+      <Name>EPS</Name>
       <Type>Float</Type>
       <Help>
-	<Text>eps() returns the machine epsilon; this is the difference between 1 and the next largest floating-point number. Because computers use a finite number of digits, roundoff error is inherent (but usually insignificant) in all calculations.</Text>
-	<Syntax>eps()</Syntax>
+	<Text>EPS() returns the machine epsilon; this is the difference between 1 and the next largest floating-point number. Because computers use a finite number of digits, roundoff error is inherent (but usually insignificant) in all calculations.</Text>
+	<Syntax>EPS()</Syntax>
 	<Example>On most systems, this returns 2^-52=2.2204460492503131e-16</Example>
-	<Example>0.5*eps() returns the "unit round"; this value is interesting because it is the largest number x where (1+x)-1=0 (due to roundoff errors).</Example>
-	<Example>eps() is so small that KSpread displays 1+eps() as 1</Example>
-	<Example>Pick a number x between 0 and eps(). Observe that 1+x rounds x to either 0 or eps() by using the equation (1+x)-1</Example>
+	<Example>0.5*EPS() returns the "unit round"; this value is interesting because it is the largest number x where (1+x)-1=0 (due to roundoff errors).</Example>
+	<Example>EPS() is so small that KSpread displays 1+eps() as 1</Example>
+	<Example>Pick a number x between 0 and EPS(). Observe that 1+x rounds x to either 0 or EPS() by using the equation (1+x)-1</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>pow</Name>
+      <Name>POW</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Floating point value</Comment>
@@ -73,10 +73,10 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The pow(x,y) function returns the value of x raised to the power of y.</Text>
-	<Syntax>pow(value;value)</Syntax>
-	<Example>pow(1.2;3.4) equals 1.8572</Example>
-	<Example>pow(2;3) equals 8</Example>
+	<Text>The POW(x;y) function returns the value of x raised to the power of y.</Text>
+	<Syntax>POW(value;value)</Syntax>
+	<Example>POW(1.2;3.4) equals 1.8572</Example>
+	<Example>POW(2;3) equals 8</Example>
       </Help>
     </Function>
 
@@ -151,7 +151,7 @@
     </Function>
 
     <Function>
-      <Name>sign</Name>
+      <Name>SIGN</Name>
       <Type>Int</Type>
       <Parameter>
 	<Comment>Floating point value</Comment>
@@ -159,10 +159,10 @@
       </Parameter>
       <Help>
 	<Text>This function returns -1 if the number is negative, 0 if the number is null and 1 if the number is positive.</Text>
-	<Syntax>sign(value)</Syntax>
-	<Example>sign(5) equals 1</Example>
-	<Example>sign(0) equals 0</Example>
-	<Example>sign(-5) equals -1</Example>
+	<Syntax>SIGN(value)</Syntax>
+	<Example>SIGN(5) equals 1</Example>
+	<Example>SIGN(0) equals 0</Example>
+	<Example>SIGN(-5) equals -1</Example>
       </Help>
     </Function>
 
@@ -183,7 +183,7 @@
     </Function>
 
     <Function>
-      <Name>count</Name>
+      <Name>COUNT</Name>
       <Type>Float</Type>
       <Parameter optional="true">
 	<Comment>Floating point values</Comment>
@@ -206,30 +206,30 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>This function returns the count of integer or floating arguments passed. You can count using a range: count(A1:B5) or using a list of values like: count(12;5;12.5).</Text>
-	<Syntax>count(value;value;value...)</Syntax>
-	<Example>count(-5;"KSpread";2) returns 2</Example>
-	<Example>count(5) returns 1</Example>
+	<Text>This function returns the count of integer or floating arguments passed. You can count using a range: COUNT(A1:B5) or using a list of values like COUNT(12;5;12.5).</Text>
+	<Syntax>COUNT(value;value;value...)</Syntax>
+	<Example>COUNT(-5;"KSpread";2) returns 2</Example>
+	<Example>COUNT(5) returns 1</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>fact</Name>
+      <Name>FACT</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>A floating point value</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The fact() function calculates the factorial of the parameter. The mathematical expression is (value)!.</Text>
-	<Syntax>fact(Float)</Syntax>
-	<Example>fact(10) returns 3628800</Example>
-	<Example>fact(0) returns 1</Example>
+	<Text>The FACT() function calculates the factorial of the parameter. The mathematical expression is (value)!.</Text>
+	<Syntax>FACT(number)</Syntax>
+	<Example>FACT(10) returns 3628800</Example>
+	<Example>FACT(0) returns 1</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>sum</Name>
+      <Name>SUM</Name>
       <Type>Float</Type>
       <Parameter optional="true">
 	<Comment>Floating point values</Comment>
@@ -252,10 +252,10 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The sum() function calculates the sum of all the values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12;5;12.5).</Text>
-	<Syntax>sum(value;value;...)</Syntax>
-	<Example>sum(12;5;7) equals 24</Example>
-	<Example>sum(12.5;2) equals 14.5</Example>
+	<Text>The SUM() function calculates the sum of all the values given as parameters. You can calculate the sum of a range SUM(A1:B5) or a list of values like SUM(12;5;12.5).</Text>
+	<Syntax>SUM(value;value;...)</Syntax>
+	<Example>SUM(12;5;7) equals 24</Example>
+	<Example>SUM(12.5;2) equals 14.5</Example>
       </Help>
     </Function>
 
@@ -322,7 +322,7 @@
     </Function>
 
     <Function>
-      <Name>sumsq</Name>
+      <Name>SUMSQ</Name>
       <Type>Float</Type>
       <Parameter optional="true">
 	<Comment>Floating point values</Comment>
@@ -345,16 +345,16 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The sumsq() function calculates the sum of all the squares of values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12;5;12.5).</Text>
-	<Syntax>sumsq(value;value;...)</Syntax>
-	<Example>sumsq(12;5;7) equals 218</Example>
-	<Example>sumsq(12.5;2) equals 173</Example>
+	<Text>The SUMSQ() function calculates the sum of all the squares of values given as parameters. You can calculate the sum of a range SUMSQ(A1:B5) or a list of values like SUMSQ(12;5;12.5).</Text>
+	<Syntax>SUMSQ(value;value;...)</Syntax>
+	<Example>SUMSQ(12;5;7) equals 218</Example>
+	<Example>SUMSQ(12.5;2) equals 173</Example>
       </Help>
     </Function>
 
 
     <Function>
-      <Name>max</Name>
+      <Name>MAX</Name>
       <Type>Float</Type>
       <Parameter optional="true">
 	<Comment>Floating point values</Comment>
@@ -377,15 +377,15 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The max() function returns the largest value given in the parameters.</Text>
-	<Syntax>max(value;value;...)</Syntax>
-	<Example>max(12;5;7) returns 12</Example>
-	<Example>max(12.5;2) returns 12.5</Example>
+	<Text>The MAX() function returns the largest value given in the parameters.</Text>
+	<Syntax>MAX(value;value;...)</Syntax>
+	<Example>MAX(12;5;7) returns 12</Example>
+	<Example>MAX(12.5;2) returns 12.5</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>min</Name>
+      <Name>MIN</Name>
       <Type>Float</Type>
       <Parameter optional="true">
 	<Comment>Floating point values</Comment>
@@ -408,15 +408,15 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The min() function returns the smallest value given in the parameters.</Text>
-	<Syntax>min(value;value;...)</Syntax>
-	<Example>min(12;5;7) returns 5</Example>
-	<Example>min(12.5;2) returns 2</Example>
+	<Text>The MIN() function returns the smallest value given in the parameters.</Text>
+	<Syntax>MIN(value;value;...)</Syntax>
+	<Example>MIN(12;5;7) returns 5</Example>
+	<Example>MIN(12.5;2) returns 2</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>multiply</Name>
+      <Name>MULTIPLY</Name>
       <Type>Float</Type>
       <Parameter optional="true">
 	<Comment>Floating point values</Comment>
@@ -439,45 +439,45 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The multiply() function multiplies all the values given in the parameters. You can multiply values given by a range multiply(A1:B5) or a list of values like multiply(12;5;12.5).</Text>
-	<Syntax>multiply(value;value;...)</Syntax>
-	<Example>multiply(12;5;7) equals 420</Example>
-	<Example>multiply(12.5;2) equals 25</Example>
+	<Text>The MULTIPLY() function multiplies all the values given in the parameters. You can multiply values given by a range multiply(A1:B5) or a list of values like multiply(12;5;12.5).</Text>
+	<Syntax>MULTIPLY(value;value;...)</Syntax>
+	<Example>MULTIPLY(12;5;7) equals 420</Example>
+	<Example>MULTIPLY(12.5;2) equals 25</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>sqrt</Name>
-      <Type>Float</Type>
-      <Parameter>
-	<Comment>A floating point value</Comment>
-	<Type>Float</Type>
-      </Parameter>
-      <Help>
-	<Text>The sqrt() function returns the non-negative square root of x. If x is negative, "NaN" is returned.</Text>
-	<Syntax>sqrt(x)</Syntax>
-	<Example>sqrt(9) equals 3</Example>
-	<Example>sqrt(-9) equals "NaN"</Example>
-      </Help>
-    </Function>
-
-    <Function>
-      <Name>ln</Name>
+      <Name>SQRT</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>A floating point value</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The ln() function returns the natural logarithm of x.</Text>
-	<Syntax>ln(x)</Syntax>
-	<Example>ln(0.8) equals -0.22314355</Example>
-	<Example>ln(0) equals -inf</Example>
+	<Text>The SQRT() function returns the non-negative square root of x. If x is negative, "NaN" is returned.</Text>
+	<Syntax>SQRT(x)</Syntax>
+	<Example>SQRT(9) equals 3</Example>
+	<Example>SQRT(-9) equals "NaN"</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>LOGn</Name>
+      <Name>LN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The LN() function returns the natural logarithm of x.</Text>
+	<Syntax>LN(x)</Syntax>
+	<Example>LN(0.8) equals -0.22314355</Example>
+	<Example>LN(0) equals -inf</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>LOGN</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>A floating point value</Comment>
@@ -496,7 +496,7 @@
     </Function>
 
     <Function>
-      <Name>SQRTn</Name>
+      <Name>SQRTN</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>A floating point value</Comment>
@@ -528,77 +528,77 @@
     </Function>
 
     <Function>
-      <Name>log</Name>
+      <Name>LOG</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>A floating point value</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The log() function returns the base-10 logarithm of x.</Text>
-	<Syntax>log(x)</Syntax>
-	<Example>log(0.8) equals -0.09691001</Example>
-	<Example>log(0) equals -inf.</Example>
+	<Text>The LOG() function returns the base-10 logarithm of x.</Text>
+	<Syntax>LOG(x)</Syntax>
+	<Example>LOG(0.8) equals -0.09691001</Example>
+	<Example>LOG(0) equals -inf.</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>exp</Name>
+      <Name>EXP</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>A floating point value</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The exp() function returns the value of e (the base of natural logarithms) raised to the power of x.</Text>
-	<Syntax>exp(x)</Syntax>
-	<Example>exp(9) equals 8 103.08392758</Example>
-	<Example>exp(-9) equals 0.00012341</Example>
+	<Text>The EXP() function returns the value of e (the base of natural logarithms) raised to the power of x.</Text>
+	<Syntax>EXP(x)</Syntax>
+	<Example>EXP(9) equals 8 103.08392758</Example>
+	<Example>EXP(-9) equals 0.00012341</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>ceil</Name>
+      <Name>CEIL</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>A floating point value</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The ceil() function rounds x up to the nearest integer, returning that value as a double.</Text>
-	<Syntax>ceil(x)</Syntax>
-	<Example>ceil(12.5) equals 13</Example>
-	<Example>ceil(-12.5) equals -12</Example>
+	<Text>The CEIL() function rounds x up to the nearest integer, returning that value as a double.</Text>
+	<Syntax>CEIL(x)</Syntax>
+	<Example>CEIL(12.5) equals 13</Example>
+	<Example>CEIL(-12.5) equals -12</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>floor</Name>
+      <Name>FLOOR</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>A floating point value</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The floor() function rounds x down to the nearest integer, returning that value as a double.</Text>
-	<Syntax>floor(x)</Syntax>
-	<Example>floor(12.5) equals 12</Example>
-	<Example>floor(-12.5) equals -13</Example>
+	<Text>The FLOOR() function rounds x down to the nearest integer, returning that value as a double.</Text>
+	<Syntax>FLOOR(x)</Syntax>
+	<Example>FLOOR(12.5) equals 12</Example>
+	<Example>FLOOR(-12.5) equals -13</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>abs</Name>
+      <Name>ABS</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>A floating point value</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The abs() function returns the absolute value of the floating-point number x.</Text>
-	<Syntax>abs(x)</Syntax>
-	<Example>abs(12.5) equals 12.5</Example>
-	<Example>abs(-12.5) equals 12.5</Example>
+	<Text>The ABS() function returns the absolute value of the floating-point number x.</Text>
+	<Syntax>ABS(x)</Syntax>
+	<Example>ABS(12.5) equals 12.5</Example>
+	<Example>ABS(-12.5) equals 12.5</Example>
       </Help>
     </Function>
 
@@ -618,12 +618,12 @@
     </Function>
 
     <Function>
-      <Name>rand</Name>
+      <Name>RAND</Name>
       <Type>Float</Type>
       <Help>
-	<Text>The rand() function returns a pseudo-random number between 0 and 1.</Text>
-	<Syntax>rand()</Syntax>
-	<Example>rand() equals for example 0.78309922...</Example>
+	<Text>The RAND() function returns a pseudo-random number between 0 and 1.</Text>
+	<Syntax>RAND()</Syntax>
+	<Example>RAND() equals for example 0.78309922...</Example>
       </Help>
     </Function>
 

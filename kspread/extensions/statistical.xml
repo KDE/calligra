@@ -160,7 +160,7 @@
     </Function>
 
     <Function>
-      <Name>average</Name>
+      <Name>AVERAGE</Name>
       <Type>Float</Type>
       <Parameter optional="true">
 	<Comment>Floating point values</Comment>
@@ -183,16 +183,16 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The average() function calculates the average of all the values given as parameters. You can calculate the average of a range average(A1:B5) or a list of values like average(12;5;12.5).</Text>
-	<Syntax>average(value;value;...)</Syntax>
-	<Example>average(12;5;7) equals 8</Example>
-	<Example>average(12.5;2) equals 7.25</Example>
+	<Text>The AVERAGE() function calculates the average of all the values given as parameters. You can calculate the average of a range AVERAGE(A1:B5) or a list of values like AVERAGE(12;5;12.5).</Text>
+	<Syntax>AVERAGE(value;value;...)</Syntax>
+	<Example>AVERAGE(12;5;7) equals 8</Example>
+	<Example>AVERAGE(12.5;2) equals 7.25</Example>
       </Help>
     </Function>
 
 
     <Function>
-      <Name>median</Name>
+      <Name>MEDIAN</Name>
       <Type>Float</Type>
       <Parameter optional="true">
 	<Comment>Floating point value or range of values</Comment>
@@ -215,15 +215,15 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The median() function calculates the median of all the values given as parameters. You can calculate the median of a range like median(A1:B5) or a list of values like median(12; 5; 12.5). Blank cells will be considered as a zero, and cells with text will be ignored</Text>
-	<Syntax>median(value;value;...)</Syntax>
-	<Example>median(12; 5; 5.5) equals 5.5</Example>
-	<Example>median(12; 7; 8;2) equals 7.5</Example>
+	<Text>The MEDIAN() function calculates the median of all the values given as parameters. You can calculate the median of a range like MEDIAN(A1:B5) or a list of values like MEDIAN(12; 5; 12.5). Blank cells will be considered as a zero, and cells with text will be ignored</Text>
+	<Syntax>MEDIAN(value;value;...)</Syntax>
+	<Example>MEDIAN(12; 5; 5.5) equals 5.5</Example>
+	<Example>MEDIAN(12; 7; 8;2) equals 7.5</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>variance</Name>
+      <Name>VARIANCE</Name>
       <Type>Float</Type>
       <Parameter optional="true">
 	<Comment>Floating point values</Comment>
@@ -246,15 +246,15 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The variance() function calculates the variance of each parameter which are members of a population.</Text>
-	<Syntax>variance(value;value;...)</Syntax>
-	<Example>variance(12;5;7) equals 8.666...</Example>
-	<Example>variance(15;80;3) equals 1144.22...</Example>
+	<Text>The VARIANCE() function calculates the variance of each parameter which are members of a population.</Text>
+	<Syntax>VARIANCE(value;value;...)</Syntax>
+	<Example>VARIANCE(12;5;7) equals 8.666...</Example>
+	<Example>VARIANCE(15;80;3) equals 1144.22...</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>stddev</Name>
+      <Name>STDDEV</Name>
       <Type>Float</Type>
       <Parameter optional="true">
 	<Comment>Floating point values</Comment>
@@ -278,7 +278,7 @@
       </Parameter>
       <Help>
 	<Text></Text>
-	<Syntax>stddev(value;value;...)</Syntax>
+	<Syntax>STDDEV(value;value;...)</Syntax>
       </Help>
     </Function>
     

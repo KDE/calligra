@@ -92,7 +92,7 @@
     </Function>
 
     <Function>
-      <Name>dayOfYear</Name>
+      <Name>DAYOFYEAR</Name>
       <Type>Int</Type>
       <Parameter>
 	<Comment>Year</Comment>
@@ -107,15 +107,15 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The dayOfYear() function returns the number of the day in the year (1...365).</Text>
-	<Syntax>dayOfYear(year;month;date)</Syntax>
-	<Example>dayOfYear(2000;12;1) returns 336</Example>
-	<Example>dayOfYear(2000;2;29) returns 60</Example>
+	<Text>The DAYOFYEAR() function returns the number of the day in the year (1...365).</Text>
+	<Syntax>DAYOFYEAR(year;month;date)</Syntax>
+	<Example>DAYOFYEAR(2000;12;1) returns 336</Example>
+	<Example>DAYOFYEAR(2000;2;29) returns 60</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>date</Name>
+      <Name>DATE</Name>
       <Type>String</Type>
       <Parameter>
 	<Comment>Year</Comment>
@@ -130,14 +130,14 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The date() function returns the date formatted with local parameters.</Text>
-	<Syntax>date(year;month;date)</Syntax>
-	<Example>date(2000;5;5) returns Friday 05 May 2000</Example>
+	<Text>The DATE() function returns the date formatted with local parameters.</Text>
+	<Syntax>DATE(year;month;date)</Syntax>
+	<Example>DATE(2000;5;5) returns Friday 05 May 2000</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>time</Name>
+      <Name>TIME</Name>
       <Type>String</Type>
       <Parameter>
 	<Comment>Hours</Comment>
@@ -152,30 +152,30 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The time() function returns the time formatted with local parameters.</Text>
-	<Syntax>time(hours;minutes;seconds)</Syntax>
-	<Example>time(10;2;2) returns 10:02:02</Example>
-        <Example>time(10;70;0) returns 11:10:0</Example>
-        <Example>time(10;-40;0) returns 9:20:0</Example>
+	<Text>The TIME() function returns the time formatted with local parameters.</Text>
+	<Syntax>TIME(hours;minutes;seconds)</Syntax>
+	<Example>TIME(10;2;2) returns 10:02:02</Example>
+        <Example>TIME(10;70;0) returns 11:10:0</Example>
+        <Example>TIME(10;-40;0) returns 9:20:0</Example>
       </Help>
     </Function>
     
     <Function>
-     <Name>hours</Name>
+     <Name>HOURS</Name>
       <Type>Int</Type>
       <Parameter>
 	<Comment>time</Comment>
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The hours() function returns the value of the hours in a time expression.</Text>
-	<Syntax>hours(time)</Syntax>
-	<Example>hours("10:5:2") returns 10</Example>
+	<Text>The HOURS() function returns the value of the hours in a time expression.</Text>
+	<Syntax>HOURS(time)</Syntax>
+	<Example>HOURS("10:5:2") returns 10</Example>
       </Help>
     </Function>
 
     <Function>
-     <Name>isLeapYear</Name>
+     <Name>ISLEAPYEAR</Name>
       <Type>Boolean</Type>
       <Parameter>
 	<Comment>year</Comment>
@@ -183,13 +183,13 @@
       </Parameter>
       <Help>
 	<Text>The function isLeapYear() returns True if the given year is leap.</Text>
-	<Syntax>isLeapYear(year)</Syntax>
-	<Example>isLeapYear(2000) returns True</Example>
+	<Syntax>ISLEAPYEAR(year)</Syntax>
+	<Example>ISLEAPYEAR(2000) returns True</Example>
       </Help>
     </Function>
 
     <Function>
-     <Name>daysInMonth</Name>
+     <Name>DAYSINMONTH</Name>
       <Type>Int</Type>
       <Parameter>
 	<Comment>year</Comment>
@@ -200,133 +200,133 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The function daysInMonth() returns number of days in the given year and month.</Text>
-	<Syntax>daysInMonth(year;month)</Syntax>
-	<Example>daysInMonth(2000;2) returns 29</Example>
+	<Text>The function DAYSINMONTH() returns number of days in the given year and month.</Text>
+	<Syntax>DAYSINMONTH(year;month)</Syntax>
+	<Example>DAYSINMONTH(2000;2) returns 29</Example>
       </Help>
     </Function>
 
     <Function>
-     <Name>daysInYear</Name>
+     <Name>DAYSINYEAR</Name>
       <Type>Int</Type>
       <Parameter>
 	<Comment>year</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The function daysInYear() returns the number of days in the given year.</Text>
-	<Syntax>daysInYear(year)</Syntax>
-	<Example>daysInYear(2000) returns 366</Example>
+	<Text>The function DAYSINYEAR() returns the number of days in the given year.</Text>
+	<Syntax>DAYSINYEAR(year)</Syntax>
+	<Example>DAYSINYEAR(2000) returns 366</Example>
       </Help>
     </Function>
 
     <Function>
-     <Name>weeksInYear</Name>
+     <Name>WEEKSINYEAR</Name>
       <Type>Int</Type>
       <Parameter>
 	<Comment>year</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The function weeksInYear() returns the number of weeks in the given year.</Text>
-	<Syntax>weeksInYear(year)</Syntax>
-	<Example>weeksInYear(2000) returns 52</Example>
+	<Text>The function WEEKSINYEAR() returns the number of weeks in the given year.</Text>
+	<Syntax>WEEKSINYEAR(year)</Syntax>
+	<Example>WEEKSINYEAR(2000) returns 52</Example>
       </Help>
     </Function>
 
     <Function>	  
-     <Name>minutes</Name>
+     <Name>MINUTES</Name>
       <Type>Int</Type>
       <Parameter>
 	<Comment>time</Comment>
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The minutes() function returns the value of the minutes in a time expression.</Text>
-	<Syntax>minutes(time)</Syntax>
-	<Example>minutes("10:5:2") returns 5</Example>
+	<Text>The MINUTES() function returns the value of the minutes in a time expression.</Text>
+	<Syntax>MINUTES(time)</Syntax>
+	<Example>MINUTES("10:5:2") returns 5</Example>
       </Help>
     </Function>
 
     <Function>
-     <Name>seconds</Name>
+     <Name>SECONDS</Name>
       <Type>Int</Type>
       <Parameter>
 	<Comment>time</Comment>
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The seconds() function returns the value of the seconds in a time expression.</Text>
-	<Syntax>seconds(time)</Syntax>
-	<Example>seconds("10:5:2") returns 2</Example>
+	<Text>The SECONDS() function returns the value of the seconds in a time expression.</Text>
+	<Syntax>SECONDS(time)</Syntax>
+	<Example>SECONDS("10:5:2") returns 2</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>day</Name>
+      <Name>DAY</Name>
       <Type>String</Type>
       <Parameter>
 	<Comment>Number of day in week (1..7)</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The day() function returns the name of the day of the week (1..7). In some countries the first day of the week is Monday, while in others the first day of the week is Sunday.</Text>
-	<Syntax>day(weekday)</Syntax>
-	<Example>day(1) returns Monday (if the week starts on Monday)</Example>
+	<Text>The DAY() function returns the name of the day of the week (1..7). In some countries the first day of the week is Monday, while in others the first day of the week is Sunday.</Text>
+	<Syntax>DAY(weekday)</Syntax>
+	<Example>DAY(1) returns Monday (if the week starts on Monday)</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>month</Name>
+      <Name>MONTH</Name>
       <Type>String</Type>
       <Parameter>
 	<Comment>Number of month (1..12)</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The month() function returns the name of the month (1...12).</Text>
-	<Syntax>month(number)</Syntax>
-	<Example>month(5) returns May</Example>
+	<Text>The MONTH() function returns the name of the month (1...12).</Text>
+	<Syntax>MONTH(number)</Syntax>
+	<Example>MONTH(5) returns May</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>currentDate</Name>
+      <Name>CURRENTDATE</Name>
       <Type>String</Type>
       <Help>
-	<Text>The currentDate() function returns the current date formatted with local parameters.</Text>
-	<Syntax>currentDate()</Syntax>
-	<Example>currentDate() returns "Saturday 15 July 2000"</Example>
+	<Text>The CURRENTDATE() function returns the current date formatted with local parameters.</Text>
+	<Syntax>CURRENTDATE()</Syntax>
+	<Example>CURRENTDATE() returns "Saturday 15 July 2000"</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>shortcurrentDate</Name>
+      <Name>SHORTCURRENTDATE</Name>
       <Type>String</Type>
       <Help>
-	<Text>The shortcurrentDate() function returns the current date formatted with local parameters.</Text>
-	<Syntax>shortcurrentDate()</Syntax>
-	<Example>shortcurrentDate() returns "2001-05-19"</Example>
+	<Text>The SHORTCURRENTDATE() function returns the current date formatted with local parameters.</Text>
+	<Syntax>SHORTCURRENTDATE()</Syntax>
+	<Example>SHORTCURRENTDATE() returns "2001-05-19"</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>currentDateTime</Name>
+      <Name>CURRENTDATETIME</Name>
       <Type>String</Type>
       <Help>
-	<Text>The currentDateTime() function returns the current date and time formatted with local parameters.</Text>
-	<Syntax>currentDateTime()</Syntax>
-	<Example>currentDateTime() returns "Saturday 15 July 2000 19:12:01"</Example>
+	<Text>The CURRENTDATETIME() function returns the current date and time formatted with local parameters.</Text>
+	<Syntax>CURRENTDATETIME()</Syntax>
+	<Example>CURRENTDATETIME() returns "Saturday 15 July 2000 19:12:01"</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>currentTime</Name>
+      <Name>CURRENTTIME</Name>
       <Type>String</Type>
       <Help>
-	<Text>The currentTime() function returns the current time formatted with local parameters.</Text>
-	<Syntax>currentTime()</Syntax>
-	<Example>currentTime() returns "19:12:01"</Example>
+	<Text>The CURRENTTIME() function returns the current time formatted with local parameters.</Text>
+	<Syntax>CURRENTTIME()</Syntax>
+	<Example>CURRENTTIME() returns "19:12:01"</Example>
       </Help>
     </Function>
 

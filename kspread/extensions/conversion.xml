@@ -68,32 +68,32 @@
     </Function>
 
     <Function>
-      <Name>CharToAscii</Name>
+      <Name>CHARTOASCII</Name>
       <Type>Int</Type>
       <Parameter>
         <Comment>A one character string to convert</Comment>
         <Type>String</Type>
       </Parameter>
       <Help>
-        <Text>The CharToAscii() function returns the ASCII code for the given character.</Text>
-        <Syntax>CharToAscii(value)</Syntax>
-        <Example>CharToAscii("v") returns 118</Example>
-        <Example>CharToAscii(r) is an error. The character must be in quotes.</Example>
+        <Text>The CHARTOASCII() function returns the ASCII code for the given character.</Text>
+        <Syntax>CHARTOASCII(value)</Syntax>
+        <Example>CHARTOASCII("v") returns 118</Example>
+        <Example>CHARTOASCII(r) is an error. The character must be in quotes.</Example>
       </Help>
     </Function>
 
     <Function>
-      <Name>AsciiToChar</Name>
+      <Name>ASCIITOCHAR</Name>
       <Type>String</Type>
       <Parameter>
         <Comment>The ASCII value(s) to convert</Comment>
         <Type>Int</Type>
       </Parameter>
       <Help>
-        <Text>The AsciiToChar() function returns the character for each given ASCII code</Text>
-        <Syntax>AsciiToChar(value)</Syntax>
-        <Example>AsciiToChar(118) returns "v"</Example>
-        <Example>AsciiToChar(75; 68; 69) returns "KDE"</Example>
+        <Text>The ASCIITOCHAR() function returns the character for each given ASCII code</Text>
+        <Syntax>ASCIITOCHAR(value)</Syntax>
+        <Example>ASCIITOCHAR(118) returns "v"</Example>
+        <Example>ASCIITOCHAR(75; 68; 69) returns "KDE"</Example>
       </Help>
     </Function>
 
