@@ -21,6 +21,7 @@ Boston, MA 02111-1307, USA.
 #include <mysql/mysql.h>
 
 #include <qvariant.h>
+#include <qfile.h>
 
 #include <kgenericfactory.h>
 #include <kdebug.h>
@@ -67,7 +68,15 @@ MySqlDB::connect(QString host, QString user, QString password, QString socket, Q
 	
 	if(socket == "")
 	{
-		socket = "/var/lib/mysql/mysql.sock"; // Default socket FIXME: This should be less hardcoded! ;)
+		QStringList sockets;
+		sockets.append("/var/lib/mysql/mysql.sock"); // Default socket FIXME: This should be less hardcoded! ;)
+		sockets.append("/var/run/mysqld/mysqld.sock");
+		
+		for(QStringList::Iterator it = sockets.begin(); it != sockets.end(); it++)
+		{
+			if(QFile(*it).exists())
+				socket = (*it);
+		}
 	}
 	
 	mysql_real_connect(m_mysql, host.local8Bit(), user.local8Bit(), password.local8Bit(), 0,
