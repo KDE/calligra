@@ -513,9 +513,9 @@
 
     <Function>
       <Name>CURRENTDATE</Name>
-      <Type>String</Type>
+      <Type>Date</Type>
       <Help>
-	<Text>The CURRENTDATE() function returns the current date formatted with local parameters.</Text>
+	<Text>The CURRENTDATE() function returns the current date. It is equivalent to the TODAY function.</Text>
 	<Syntax>CURRENTDATE()</Syntax>
 	<Example>CURRENTDATE() returns "Saturday 13 April 2002"</Example>
         <Related>CURRENTTIME</Related>
@@ -525,22 +525,21 @@
 
     <Function>
       <Name>TODAY</Name>
-      <Type>DATE</Type>
+      <Type>Date</Type>
       <Help>
-	<Text>The TODAY() function returns the current date formatted with local parameters. It is similar to  SHORTCURRENTDATE except that it returns a date.</Text>
+	<Text>The TODAY() function returns the current date.</Text>
 	<Syntax>TODAY()</Syntax>
 	<Example>TODAY() returns "Saturday 13 April 2002"</Example>
         <Related>CURRENTTIME</Related>
         <Related>NOW</Related>
-        <Related>SHORTCURRENTDATE</Related>
       </Help>
     </Function>
 
     <Function>
       <Name>NOW</Name>
-      <Type>String</Type>
+      <Type>Date</Type>
       <Help>
-	<Text>The NOW() function returns the current date formatted with local parameters. It is identical with CURRENTDATETIME and provided for compatibility with other applications.</Text>
+	<Text>The NOW() function returns the current date and time. It is identical with CURRENTDATETIME and provided for compatibility with other applications.</Text>
 	<Syntax>NOW()</Syntax>
 	<Example>NOW() returns "Saturday 13 April 2002 19:12:01"</Example>
         <Related>CURRENTTIME</Related>
@@ -549,24 +548,10 @@
     </Function>
 
     <Function>
-      <Name>SHORTCURRENTDATE</Name>
-      <Type>String</Type>
-      <Help>
-	<Text>The SHORTCURRENTDATE() function returns the current date formatted with local parameters.</Text>
-	<Syntax>SHORTCURRENTDATE()</Syntax>
-	<Example>SHORTCURRENTDATE() returns "04/13/02"</Example>
-        <Related>CURRENTDATE</Related>
-        <Related>CURRENTTIME</Related>
-        <Related>NOW</Related>
-        <Related>TODAY</Related>
-      </Help>
-    </Function>
-
-    <Function>
       <Name>CURRENTDATETIME</Name>
-      <Type>String</Type>
+      <Type>Date</Type>
       <Help>
-	<Text>The CURRENTDATETIME() function returns the current date and time formatted with local parameters.</Text>
+	<Text>The CURRENTDATETIME() function returns the current date and time.</Text>
 	<Syntax>CURRENTDATETIME()</Syntax>
 	<Example>CURRENTDATETIME() returns "Saturday 13 April 2002 19:12:01"</Example>
       </Help>
@@ -574,7 +559,7 @@
 
     <Function>
       <Name>CURRENTTIME</Name>
-      <Type>String</Type>
+      <Type>Date</Type>
       <Help>
 	<Text>The CURRENTTIME() function returns the current time formatted with local parameters.</Text>
 	<Syntax>CURRENTTIME()</Syntax>
@@ -584,7 +569,7 @@
 
 	<Function>
       <Name>EASTERSUNDAY</Name>
-      <Type>String</Type>
+      <Type>Date</Type>
 	  <Parameter>
 		<Comment>Year</Comment>
 		<Type>Int</Type>

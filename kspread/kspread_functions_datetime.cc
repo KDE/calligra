@@ -32,12 +32,9 @@
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include "kspread_cell.h"
 #include "kspread_functions.h"
 #include "kspread_functions_helper.h"
 #include "kspread_interpreter.h"
-#include "kspread_util.h"
-#include "kspread_value.h"
 
 // prototypes, sorted
 bool kspreadfunc_currentDate( KSContext& context );
@@ -66,7 +63,6 @@ bool kspreadfunc_monthname( KSContext& context );
 bool kspreadfunc_months( KSContext& context );
 bool kspreadfunc_second( KSContext& context );
 bool kspreadfunc_seconds( KSContext& context );
-bool kspreadfunc_shortcurrentDate( KSContext& context );
 bool kspreadfunc_time( KSContext& context );
 bool kspreadfunc_timevalue( KSContext& context );
 bool kspreadfunc_today( KSContext& context );
@@ -82,6 +78,7 @@ void KSpreadRegisterDateTimeFunctions()
 {
   // missing: Excel:    WORKDAY, NETWORKDAYS, WEEKNUM, DATEDIF
   //          Gnumeric: UNIX2DATE, DATE2UNIX
+  // TODO: do we really need DATEVALUE and TIMEVALUE ?
   KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
   repo->registerFunction( "CURRENTDATE",  kspreadfunc_currentDate );
   repo->registerFunction( "CURRENTDATETIME",  kspreadfunc_currentDateTime );
@@ -110,7 +107,6 @@ void KSpreadRegisterDateTimeFunctions()
   repo->registerFunction( "NOW",  kspreadfunc_currentDateTime );
   repo->registerFunction( "SECOND",  kspreadfunc_second );
   repo->registerFunction( "SECONDS",  kspreadfunc_seconds );
-  repo->registerFunction( "SHORTCURRENTDATE",  kspreadfunc_shortcurrentDate );
   repo->registerFunction( "TIME",  kspreadfunc_time );
   repo->registerFunction( "TIMEVALUE",  kspreadfunc_timevalue );
   repo->registerFunction( "TODAY",  kspreadfunc_today );
@@ -505,6 +501,8 @@ bool kspreadfunc_weekday( KSContext & context )
 }
 
 // Function: datevalue
+// TODO: do we really need this function ? One can get the same result
+// by using the numeric format on a cell with a date/time ...
 bool kspreadfunc_datevalue( KSContext & context )
 {
   QValueList<KSValue::Ptr> & args = context.value()->listValue();
@@ -524,6 +522,8 @@ bool kspreadfunc_datevalue( KSContext & context )
 }
 
 // Function: timevalue
+// TODO: do we really need this function ? One can get the same result
+// by using the numeric format on a cell with a date/time ...
 bool kspreadfunc_timevalue( KSContext & context )
 {
   QValueList<KSValue::Ptr> & args = context.value()->listValue();
@@ -839,7 +839,7 @@ bool kspreadfunc_date( KSContext& context )
 
   QDate _date;
   if( _date.setYMD(args[0]->intValue(), args[1]->intValue(), args[2]->intValue()) )
-    context.setValue( new KSValue(KGlobal::locale()->formatDate(_date)));
+    context.setValue( new KSValue(_date));
   else
     context.setValue( new KSValue(i18n("Err")) );
 
@@ -939,8 +939,7 @@ bool kspreadfunc_time( KSContext& context )
     hour += 24;
   }
 
-  context.setValue( new KSValue(KGlobal::locale()->formatTime(
-    QTime(hour, minute, second),true )));
+  context.setValue( new KSValue(QTime(hour, minute, second)));
 
   return true;
 }
@@ -951,32 +950,19 @@ bool kspreadfunc_currentDate( KSContext& context )
     if ( !KSUtil::checkArgumentsCount( context,0, "currentDate",true ) )
       return false;
 
-    context.setValue( new KSValue(KGlobal::locale()->formatDate(QDate::currentDate())));
-
-    return true;
-}
-
-// Function: shortcurrentDate
-bool kspreadfunc_shortcurrentDate( KSContext& context )
-{
-    if ( !KSUtil::checkArgumentsCount( context,0, "shortcurrentDate",true ) )
-      return false;
-
-    context.setValue( new KSValue(KGlobal::locale()->formatDate(QDate::currentDate(),true)));
+    context.setValue( new KSValue(QDate::currentDate()));
 
     return true;
 }
 
 // Function: today
+// same as currentDate - merge maybe ?
 bool kspreadfunc_today( KSContext& context )
 {
-    if ( !KSUtil::checkArgumentsCount( context,0, "shortcurrentDate",true ) )
+    if ( !KSUtil::checkArgumentsCount( context,0, "today",true ) )
       return false;
 
-    context.setValue( new KSValue( QDate::currentDate() ) );
-    KSpreadCell *  cell  = ((KSpreadInterpreter *) context.interpreter() )->cell();
-    cell->setFormatType( ShortDate_format );
-
+    context.setValue( new KSValue(QDate::currentDate()) );
 
     return true;
 }
@@ -987,7 +973,7 @@ bool kspreadfunc_currentTime( KSContext& context )
     if ( !KSUtil::checkArgumentsCount( context,0, "currentTime",true ) )
       return false;
 
-    context.setValue( new KSValue(KGlobal::locale()->formatTime(QTime::currentTime())));
+    context.setValue( new KSValue(QTime::currentTime()));
 
     return true;
 }
@@ -997,7 +983,8 @@ bool kspreadfunc_currentDateTime( KSContext& context )
 {
     if ( !KSUtil::checkArgumentsCount( context,0, "currentDateTime",true ) )
       return false;
-
+// TODO: do NOT format the date here with the new parser (old one doesn't
+// support QDateTime, so I cannot do it here, sorry)
     context.setValue( new KSValue(KGlobal::locale()->formatDateTime(QDateTime::currentDateTime(), false)));
 
     return true;
@@ -1169,7 +1156,7 @@ bool kspreadfunc_easterSunday( KSContext& context )
     nDay = O % 31 + 1;
     nMonth = int(O / 31);
 
-    context.setValue( new KSValue( KGlobal::locale()->formatDate( QDate(nYear, nMonth, nDay) ) ) );
+    context.setValue( new KSValue(QDate(nYear, nMonth, nDay)));
 
     return true;
 }
