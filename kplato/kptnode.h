@@ -35,6 +35,16 @@ class KPTProject;
  * This class is basically an abstract interface to make the design more OO.
  */
 class KPTNode {
+    /**
+     * Many KPTProject functions deal with lists of KPTNode objects. Although
+     * KPTNode protected functions can be called for any KPTNode in a list
+     * from a KPTNode function (data hiding is at class level) KPTProject can't
+     * call the same functions unless we explicitly allow this. A friend
+     * declaration is a simple solution.
+     *
+     * Note (Bo): When you need to use friend classes, you usually show a
+     * basic design flaw. We should get rid of this.
+     */
     friend class KPTProject;
 
 public:
