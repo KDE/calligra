@@ -40,8 +40,8 @@ DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 idl_DATA = KIllustrator.idl
 idl_HEADERS = KIllustrator.h
 
-kdelnk_DATA = killustrator_part.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/partlnk
+kdelnk_DATA = killustrator.desktop
+kdelnkdir = $(kde_appsdir)/KOffice
 
 ####### Implicit rules
 

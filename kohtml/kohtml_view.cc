@@ -42,7 +42,6 @@
 #include <qclipboard.h>
 #include <qfileinfo.h>
 #include <kiconloader.h>
-#include <kfm.h>
 #include <kmimemagic.h>
 #include <kmimetypes.h>
 #include <kpixmapcache.h>
@@ -772,8 +771,8 @@ void KoHTMLView::editBookmarks()
 
   p += "/share/apps/kfm/bookmarks/";
 
-  KFM kfm;
-  kfm.openURL(p);
+//  KFM kfm;
+//  kfm.openURL(p);
 }
 
 void KoHTMLView::slotBookmarkSelected( CORBA::Long ID )

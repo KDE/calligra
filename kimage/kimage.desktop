@@ -1,5 +1,4 @@
-# KDE Config File
-[KDE Desktop Entry]
+[Desktop Entry]
 Name=KImage
 Name[da]=KBillede
 Name[fi]=Kimage
@@ -7,7 +6,8 @@ Name[is]=MyndsjА
 Name[pt]=Imagens
 Name[ru]=Изображение
 Name[sv]=Bild
-Exec=kimage.bin --server
+Exec=kimage
+CORBAExec=kimage.bin --server
 Comment=Torben's Image Viewer
 Comment[ca]=El visualitzador d'imatges de Torben
 Comment[cs]=TorbenЫv prohlМ╬eХ obrАzkЫ
@@ -28,10 +28,10 @@ Comment[ru]=Программа просмотра изображений Torben'а
 Comment[sk]=Torbenov prehliadaХ obrАzkov
 Comment[sl]=Torbenov pregledovalnik slik
 Comment[sv]=Torbens bildvisare
-MimeTypes=application/x-kimage,image/gif,
-RepoID=IDL:KImage/DocumentFactory:1.0,IDL:KOffice/Print:1.0,
-ActivationMode=shared
+MimeType=application/x-kimage;image/gif
+X-KDE-RepoIds=IDL:KImage/DocumentFactory:1.0#KImage
+X-KDE-ActivationMode=shared
 Type=OpenPart
 Icon=image.xpm
 MiniIcon=image.xpm
-ServiceType=KOfficeDocument
+ServiceTypes=KOfficeDocument

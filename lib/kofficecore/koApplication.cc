@@ -24,7 +24,8 @@
 
 KoApplication::KoApplication(int &argc, char **argv, 
 			     const QString& rAppName)
-    : OPApplication(argc, argv, rAppName)
+    : OPApplication(argc, argv, rAppName),
+      kded( argc, argv, opapp_orb )
 {
     KGlobal::locale()->insertCatalogue("koffice");
     KGlobal::iconLoader()->insertDirectory(0, kde_datadir() + 

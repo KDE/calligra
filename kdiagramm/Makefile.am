@@ -58,8 +58,8 @@ idl_HEADERS = kdiagramm.h
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) chart.h chart.cc
 
-kdelnk_DATA = kdiagramm_part.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/partlnk
+kdelnk_DATA = kdiagramm.desktop
+kdelnkdir = $(kde_appsdir)/KOffice
 
 ####### Implicit rules
 

@@ -274,7 +274,7 @@ bool KSpreadView::mappingEventChartInserted( KSpread::EventChartInserted& _event
   xpos = m_pTable->columnPos( m_pCanvas->markerColumn(), m_pCanvas );
   ypos = m_pTable->rowPos( m_pCanvas->markerRow(), m_pCanvas );
 
-  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:Chart/SimpleChart:1.0' in RepoID", 1 );
+  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:Chart/SimpleChart:1.0' in RepoIds", 1 );
   if ( vec.size() == 0 )
   {
     cout << "Got no results" << endl;
@@ -1668,7 +1668,7 @@ void KSpreadView::percent()
 
 void KSpreadView::insertTable()
 {
-  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KSpread/DocumentFactory:1.0' in RepoID", 1 );
+  vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KSpread/DocumentFactory:1.0#KSpread' in RepoIds", 1 );
   if ( vec.size() == 0 )
   {
     cout << "Got no results" << endl;

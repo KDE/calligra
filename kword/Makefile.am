@@ -33,8 +33,8 @@ DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS)
 idl_DATA = kword.idl
 idl_HEADERS =  kword.h
 
-kdelnk_DATA = kword_part.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/partlnk
+kdelnk_DATA = kword.desktop
+kdelnkdir = $(kde_appsdir)/KOffice
 
 kdemime_DATA = x-kword.kdelnk
 kdemimedir = $(kde_mimedir)/application

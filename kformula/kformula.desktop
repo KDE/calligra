@@ -1,5 +1,4 @@
-# KDE Config File
-[KDE Desktop Entry]
+[Desktop Entry]
 Name=KFormula
 Name[da]=Kformel
 Name[is]=Form˙lur
@@ -8,7 +7,8 @@ Name[pt]=Formulas
 Name[ro]=Formula
 Name[ru]=Êœ“Õ’ÃŸ
 Name[sv]=Formler
-Exec=kformula.bin --server
+Exec=kformula
+CORBAExec=kformula.bin --server
 Icon=kformula.xpm
 Comment=The Formula Editor
 Comment[ca]=L'editor de fÛrmules
@@ -31,10 +31,10 @@ Comment[ru]=Ú≈ƒ¡À‘œ“ ∆œ“Õ’Ã
 Comment[sk]=Editor rovnÌc
 Comment[sl]=Urejevalnik matematiËnih izrazov
 Comment[sv]=Formeleditorn
-MimeTypes=application/x-kformula
-RepoID=IDL:KFormula/DocumentFactory:1.0,
-ActivationMode=shared
+MimeType=application/x-kformula
+X-KDE-RepoIds=IDL:KFormula/DocumentFactory:1.0#KFormula
+X-KDE-ActivationMode=shared
 Type=OpenPart
 Icon=unknown.xpm
 MiniIcon=unknown.xpm
-ServiceType=KOfficeDocument
+ServiceTypes=KOfficeDocument

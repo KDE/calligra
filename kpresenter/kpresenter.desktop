@@ -1,5 +1,4 @@
-# KDE Config File
-[KDE Desktop Entry]
+[Desktop Entry]
 Name=KPresenter
 Name[da]=Præsenterer
 Name[hu]=KElõadó
@@ -8,7 +7,8 @@ Name[pt]=Apresentações
 Name[ro]=Presenter
 Name[ru]=ğÒÅÚÅÎÔÁÃÉÉ
 Name[sv]=Presentation
-Exec=kpresenter.bin --server
+Exec=kpresenter
+CORBAExec=kpresenter.bin --server
 Comment=Reggie's Presentation Software
 Comment[ca]=El programa de presentacions de Reggie
 Comment[cs]=Reggieho presentaèní software
@@ -28,10 +28,10 @@ Comment[ru]=ğÒÏÇÒÁÍÍÁ ÄÌÑ ĞÏÄÇÏÔÏ×ËÉ ĞÒÅÚÅÎÔÁÃÉÊ Reggie
 Comment[sk]=Reggieho Prezentaènı softvér
 Comment[sl]=Reggijev prezentacijski paket
 Comment[sv]=Reggies presentationsprogram
-MimeTypes=application/x-kpresenter,
-RepoID=IDL:KPresenter/DocumentFactory:1.0,
-ActivationMode=shared
+MimeType=application/x-kpresenter
+X-KDE-RepoIds=IDL:KPresenter/DocumentFactory:1.0#KPresenter
+X-KDE-ActivationMode=shared
 Type=OpenPart
 Icon=kpresenter.xpm
 MiniIcon=kpresenter.xpm
-ServiceType=KOfficeDocument
+ServiceTypes=KOfficeDocument

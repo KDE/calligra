@@ -37,8 +37,8 @@ idl_HEADERS = kspread.h chart.h
 
 DISTCLEANFILES = $(idl_HEADERS:.h=.cc) $(idl_HEADERS) KOStore.py KOffice.py KSpread.py OpenPartsUI.py OpenParts.py KOM.py datatools.h datatools.cc
 
-kdelnk_DATA = kspread_part.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/partlnk
+kdelnk_DATA = kspread.desktop
+kdelnkdir = $(kde_appsdir)/KOffice
 
 kdemime_DATA = x-kspread.kdelnk
 kdemimedir = $(kde_mimedir)/application

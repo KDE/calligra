@@ -1,7 +1,7 @@
 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = ../lib/kofficeui/libkofficeui.la $(LIB_KHTML) $(LIB_KFM)
+LDADD = ../lib/kofficeui/libkofficeui.la $(LIB_KHTML)
 
 ####### Files
 
@@ -30,8 +30,8 @@ DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 idl_DATA = kohtml.idl
 idl_HEADERS =  kohtml.h
 
-kdelnk_DATA = kohtml_part.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/partlnk
+kdelnk_DATA = kohtml.desktop
+kdelnkdir = $(kde_appsdir)/KOffice
 
 pics_DATA = kohtml.xpm
 picsdir = $(kde_icondir)

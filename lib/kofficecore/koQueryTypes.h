@@ -21,7 +21,7 @@
 #define __ko_query_types_h__
 
 #include <qstring.h>
-#include <qstrlist.h>
+#include <qstringlist.h>
 #include <qpixmap.h>
 #include <vector>
 
@@ -36,7 +36,7 @@ public:
   QString name;
   QString exec;
   QString activationMode;
-  QStrList repoID;
+  QStringList repoID;
   QPixmap miniIcon;
   QPixmap icon;
   CORBA::Object_var reference;
@@ -48,9 +48,9 @@ public:
   KoDocumentEntry() { }
   KoDocumentEntry( const KoComponentEntry& _e );
   
-  QStrList mimeTypes;
+  QStringList mimeTypes;
 
-  bool supportsMimeType( const char *_m ) { return ( mimeTypes.find( _m ) != -1 ); }
+  bool supportsMimeType( const char *_m ) { return ( mimeTypes.find( _m ) != mimeTypes.end() ); }
 };
 
 class KoFilterEntry : public KoComponentEntry

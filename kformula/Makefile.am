@@ -34,8 +34,8 @@ idl_DATA = kformula.idl
 idl_HEADERS = kformula.h
 pics_DATA = kformula.xpm
 picsdir = $(kde_icondir)
-kdelnk_DATA = kformula_part.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/partlnk
+kdelnk_DATA = kformula.desktop
+kdelnkdir = $(kde_appsdir)/KOffice
 
 uninstall-local:
 	-rm $(bindir)/kformula

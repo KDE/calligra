@@ -1,5 +1,4 @@
-# KDE Config File
-[KDE Desktop Entry]
+[Desktop Entry]
 Name=KDiagramm
 Name[cs]=KDiagram
 Name[da]=KDiagram
@@ -9,7 +8,8 @@ Name[no]=Diagram
 Name[pt]=Diagramas
 Name[ro]=Diagramm
 Name[ru]=‰…¡«“¡ÕÕŸ
-Exec=kdiagramm.bin --server
+Exec=kdiagramm
+CORBAExec=kdiagramm.bin --server
 Comment=Torben's Chart
 Comment[ca]=Els gr‡fics de Torben
 Comment[da]=Torbens graf
@@ -28,10 +28,10 @@ Comment[ru]=Á“¡∆…À… Torben'¡
 Comment[sk]=Torbenova tabuµk·
 Comment[sl]=Torbenovi grafikoni
 Comment[sv]=Torbens diagram
-MimeTypes=application/x-kdiagramm,
-RepoID=IDL:KDiagramm/DocumentFactory:1.0,IDL:Chart/SimpleChart:1.0,
-ActivationMode=shared
+MimeType=application/x-kdiagramm
+X-KDE-RepoIds=IDL:KDiagramm/DocumentFactory:1.0#KDiagramm,IDL:Chart/SimpleChart:1.0
+X-KDE-ActivationMode=shared
 Type=OpenPart
 Icon=kdiagramm.xpm
 MiniIcon=kdiagramm.xpm
-ServiceType=KOfficeDocument
+ServiceTypes=KOfficeDocument

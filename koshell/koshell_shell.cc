@@ -17,6 +17,8 @@
 #include <kapp.h>
 #include <qmsgbox.h>
 #include <klocale.h>
+#include <kded_instance.h>
+#include <kactivator.h>
 
 QList<KoShellWindow>* KoShellWindow::s_lstShells = 0L;
 
@@ -505,6 +507,7 @@ KOffice::View_ptr KoShellWindow::view()
 
 void KoShellWindow::slotFileOpen()
 {
+
   if ( !CORBA::is_nil( m_vKfm ) )
   {
     if ( m_pFrame && m_pFrame != m_pKfmFrame )
@@ -517,31 +520,25 @@ void KoShellWindow::slotFileOpen()
     return;
   }
   
-  CosTrading::OfferIterator_var offer_itr;
-  CosTrading::PolicyNameSeq_var limits_applied;
-  CosTrading::OfferSeq_var offers;
-  koQueryTrader( "FileManager", "", 1, offers, offer_itr, limits_applied );
-  cerr << "################ FileManager=" << offers->length() << " ###########" << endl;
+  KActivator *activator = KdedInstance::self()->kactivator();
+  CORBA::Object_var obj = activator->activateService( "Konqueror", "IDL:Konqueror/Application:1.0", "App" );
 
-  if ( offers->length() > 0 )
-  {
-    OpenParts::Application_var app = OpenParts::Application::_narrow( (*offers)[0].reference );
-    assert( !CORBA::is_nil( app ) );
+  OpenParts::Application_var app = OpenParts::Application::_narrow( obj );
+  assert( !CORBA::is_nil( app ) );
 
-    if ( m_pFrame && m_pFrame != m_pKfmFrame )
-      m_pFrame->hide();
-    m_pFrame = m_pKfmFrame;
-    m_pFrame->raise();
-    setView( m_pFrame );
-    m_pFrame->show();
+  if ( m_pFrame && m_pFrame != m_pKfmFrame )
+    m_pFrame->hide();
+  m_pFrame = m_pKfmFrame;
+  m_pFrame->raise();
+  setView( m_pFrame );
+  m_pFrame->show();
 
-    m_vKfm = app->createPart();
-    assert( !CORBA::is_nil( m_vKfm ) );
-    m_vKfm->setMainWindow( this->koInterface() );
-    m_pFrame->OPFrame::attach( m_vKfm );
-    interface()->setActivePart( m_vKfm->id() );
-  }
-
+  m_vKfm = app->createPart();
+  assert( !CORBA::is_nil( m_vKfm ) );
+  m_vKfm->setMainWindow( this->koInterface() );
+  m_pFrame->OPFrame::attach( m_vKfm );
+  interface()->setActivePart( m_vKfm->id() );
+  
   if( m_pFileMenu )
   {
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );

@@ -63,8 +63,8 @@ idl_HEADERS =	kpresenter.h
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
-kdelnk_DATA = kpresenter.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/partlnk
+kdelnk_DATA = kpresenter.desktop
+kdelnkdir = $(kde_appsdir)/KOffice
 
 SUBDIRS = autoformEdit autoforms pics toolbar templates dtd slideshow
 

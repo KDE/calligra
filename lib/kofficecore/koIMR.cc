@@ -78,7 +78,31 @@ KOffice::Document_ptr imr_createDoc( const char *_server_name, const char *_repo
 
 KOffice::Document_ptr imr_createDoc( KoDocumentEntry& _e )
 {
-  return imr_createDoc( _e.name, _e.repoID.first() );
+  cerr << "1" << endl;
+  
+  KOffice::DocumentFactory_var factory = KOffice::DocumentFactory::_narrow( _e.reference );
+  if( CORBA::is_nil( factory ) )
+  {
+    QString tmp;
+    tmp.sprintf( i18n("Server %s does not implement a KOffice factory" ), _e.name.ascii() );
+    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "Ok" ) );
+    return 0L;
+  }
+
+  cerr << "2" << endl;
+
+  KOffice::Document_ptr doc = factory->create();
+  if( CORBA::is_nil( doc ) )
+  {
+    QString tmp;
+    tmp.sprintf( i18n("Server %s did not create a document" ), _e.name.ascii() );
+    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "Ok" ) );
+    return 0L;
+  }
+
+  cerr << "3" << endl;
+
+  return doc;
 }
 
 KOffice::Document_ptr imr_createDocByMimeType( const char *_mime_type )
@@ -88,7 +112,7 @@ KOffice::Document_ptr imr_createDocByMimeType( const char *_mime_type )
   for( ; it != lst.end(); ++it )
   {
     if ( it->supportsMimeType( _mime_type ) )
-      return imr_createDoc( it->name, it->repoID.first() );
+      return imr_createDoc( *it );
   }
 
   return 0L;

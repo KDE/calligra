@@ -21,6 +21,7 @@
 #define __ko_app_h__
 
 #include <opApplication.h>
+#include <kded_instance.h>
 
 class KoApplication : public OPApplication
 {
@@ -30,7 +31,9 @@ public:
 
     KoApplication( int &argc, char **argv, const QString& rAppName = 0);
     virtual ~KoApplication();
-    
+
+private:
+    KdedInstance kded;
 };
 
 #endif

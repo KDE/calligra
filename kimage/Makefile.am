@@ -49,8 +49,8 @@ idl_HEADERS = kimage.h
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
-kdelnk_DATA = kimage_part.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/partlnk
+kdelnk_DATA = kimage.desktop
+kdelnkdir = $(kde_appsdir)/KOffice
 
 ####### Implicit rules
 

@@ -1,5 +1,4 @@
-# KDE Config File
-[KDE Desktop Entry]
+[Desktop Entry]
 Name=KSpread
 Name[da]=Kregneark
 Name[hu]=KSz·molÛt·bla
@@ -8,7 +7,8 @@ Name[pt]=Folha de C·lculo
 Name[ro]=SpreadSheet
 Name[ru]=Ù¡¬Ã…√¡
 Name[sv]=Kalkyl
-Exec=kspread.bin --server
+Exec=kspread
+CORBAExec=kspread.bin --server
 Comment=Torben's Spread Sheet
 Comment[ca]=La fulla de c‡lcul de Torben
 Comment[cs]=Torben˘v tabulkov˝ procesor
@@ -28,10 +28,10 @@ Comment[ru]=Ù¡¬Ã…√Ÿ Torben'¡
 Comment[sk]=Torbenov Spread Sheet
 Comment[sl]=Torbenova preglednica
 Comment[sv]=Torbens kalkylprogram
-MimeTypes=application/x-kspread,
-RepoID=IDL:KSpread/DocumentFactory:1.0,
-ActivationMode=shared
+MimeType=application/x-kspread
+X-KDE-RepoIds=IDL:KSpread/DocumentFactory:1.0#KSpread
+X-KDE-ActivationMode=shared
 Type=OpenPart
 Icon=kspread.xpm
 MiniIcon=kspread.xpm
-ServiceType=KOfficeDocument
+ServiceTypes=KOfficeDocument
