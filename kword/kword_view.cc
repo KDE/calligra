@@ -394,7 +394,7 @@ void KWordView::setupActions()
 					actionCollection(), "format_alignright" );
     ( (KToggleAction*)actionFormatAlignRight )->setExclusiveGroup( "align" );
     actionFormatAlignBlock = new KToggleAction( i18n( "Align &Block" ), KWBarIcon( "alignBlock" ), ALT + Key_B,
-					this, SLOT( textAlignRight() ),
+					this, SLOT( textAlignBlock() ),
 					actionCollection(), "format_alignblock" );
     ( (KToggleAction*)actionFormatAlignBlock )->setExclusiveGroup( "align" );
     actionFormatLineSpacing = new KSelectAction( i18n( "Linespacing" ), 0,
@@ -1441,7 +1441,7 @@ void KWordView::toolsTable()
 	tableDia = 0L;
     }
 
-    tableDia = new KWTableDia( this, "", gui->getPaperWidget(), m_pKWordDoc, 
+    tableDia = new KWTableDia( this, "", gui->getPaperWidget(), m_pKWordDoc,
 			       gui->getPaperWidget()->tableRows(),
 			       gui->getPaperWidget()->tableCols(),
 			       gui->getPaperWidget()->tableWidthMode(),
