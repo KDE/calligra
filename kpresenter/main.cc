@@ -18,7 +18,6 @@
 */
 
 #include "kpresenter_aboutdata.h"
-#include "kpresenter_doc.h"
 
 #include <koApplication.h>
 
