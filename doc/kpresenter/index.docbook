@@ -238,12 +238,18 @@ Program copyright 1998-2000 by Reginald Stadlbauer
 </para>
 
 <para>
-Current maintainer is Werner Trobin <email>trobin@kde.org</email>.
+Current maintainer is Laurent Montel <email>montel@kde.org</email>.
 </para>
 
 
 <itemizedlist>
 <title>Contributors</title>
+
+<listitem>
+<para>
+Werner Trobin <email>trobin@kde.org</email>.
+</para>
+</listitem>
 
 <listitem>
 <para>
@@ -260,6 +266,24 @@ Toshitaka Fujioka <email>fujioka@kde.org</email>
 <listitem>
 <para>
 Luk&aacute;&scaron; Tinkl <email>lukas@kde.org</email>
+</para>
+</listitem>
+
+<listitem>
+<para>
+Thorsten Zachmann <email>t.zachmann@zagge.de</email>
+</para>
+</listitem>
+
+<listitem>
+<para>
+Ariya Hidayat <email>ariya@kde.org</email>
+</para>
+</listitem>
+
+<listitem>
+<para>
+Percy Leonhardt <email>percy@eris23.de</email>
 </para>
 </listitem>
 </itemizedlist>
