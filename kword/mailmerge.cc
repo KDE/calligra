@@ -48,8 +48,10 @@
 
 KWMailMergeDataBase::KWMailMergeDataBase( KWDocument *doc_ )
     : QObject(doc_,doc_->dcopObject()->objId()+".MailMergeDataBase"),
-	KWordMailMergeDatabaseIface(QCString(doc_->dcopObject()->objId()+".MailMergeDataBase")),doc( doc_ ),
-	m_version(0) {
+	KWordMailMergeDatabaseIface(QCString(doc_->dcopObject()->objId()+".MailMergeDataBase")),
+      m_version(0),
+      doc( doc_ )
+{
    plugin=0; //loadPlugin("classic");
    rejectdcopcall=false;
 }
@@ -78,7 +80,7 @@ bool KWMailMergeDataBase::loadPlugin(QString name,QString command)
 	kdDebug()<<constrain<<endl;
 	KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),constrain);
 	KService::Ptr it=pluginOffers.first();
-	
+
 	QVariant verProp=it->property("X-KDE-PluginVersion");
         int version=verProp.toInt();
 
@@ -459,7 +461,7 @@ void KWMailMergeConfigDialog::doNewActions()
 	if (tmpPlugin)
 	{
 		if (db_->askUserForConfirmationAndConfig(tmpPlugin,true,this,tmpVersion))
-		
+
 		enableDisableEdit();
 	}
 }
