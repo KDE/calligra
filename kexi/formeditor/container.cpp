@@ -33,6 +33,7 @@
 #include "objecttree.h"
 #include "form.h"
 #include "formmanager.h"
+#include "commands.h"
 
 namespace KFormDesigner {
 
@@ -169,29 +170,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
 			if(m_form->manager()->inserting())
 			{
-				QString name = m_form->objectTree()->genName(m_form->manager()->insertClass());
-				QWidget *w = m_form->manager()->lib()->createWidget(m_form->manager()->insertClass(), m_container, name.latin1(), this);
-
-				if(!w)
-					return true;
-
-				if(!m_insertRect.isValid())
-					m_insertRect = QRect(mev->x(), mev->y(), w->sizeHint().width(), w->sizeHint().height());
-				w->move(m_insertRect.x(), m_insertRect.y());
-				w->resize(m_insertRect.width()-1, m_insertRect.height()-1);
-				w->show();
-				m_container->repaint();
-
-				m_insertRect = QRect();
-				m_form->manager()->stopInsert();
-
-				if (!m_form->objectTree()->lookup(name))
-					m_form->objectTree()->addChild(m_tree, new ObjectTreeItem(m_form->manager()->insertClass(), name, w));
-				kdDebug() << "Container::eventFilter(): widget added " << this << endl;
-
-				LayoutType type = layoutType();
-				setLayout(NoLayout);
-				setLayout(type);
+				KCommand *com = new InsertWidgetCommand(this, mev->pos());
+				m_form->commandHistory()->addCommand(com, true);
 			}
 			else if(mev->button() == RightButton)
 			{

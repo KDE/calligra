@@ -2,6 +2,9 @@
 <kpartgui name="kformdesigner" version="3">
 
 <MenuBar>
+  <Menu name="edit">
+      <ActionList name="undo_actions" />
+  </Menu>
   <Menu name="widgets">
    <text>&amp;Widgets</text>
    <Merge/>
@@ -27,7 +30,7 @@
    <Action name="library_widget_Line Edit"/>
    <Action name="library_widget_Text Label"/>
    <Action name="library_widget_Spacer"/>
- <ActionList name="library_widgets" />
+   <ActionList name="undo_actions" />
 </ToolBar>
 
 </kpartgui>

@@ -24,9 +24,12 @@
 
 #include <qobject.h>
 #include <qdict.h>
+#include <qptrlist.h>
 
 class QWidget;
 class QDomElement;
+class KActionCollection;
+class KCommandHistory;
 
 namespace KFormDesigner {
 
@@ -111,7 +114,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		    If \a pos is null or not given, then the widget will be pasted in the actual Container, at the same position as
 		    in its former parent widget. Otherwise, it is pasted at \a pos in the active Container (when the user used the context menu).
 		 */
-		void			pasteWidget(QDomElement &widg, QPoint pos=QPoint());
+		void			pasteWidget(QDomElement &widg, Container *cont=0, QPoint pos=QPoint());
 
 		/*! This function is used by ObjectTree to emit childAdded() signal (as it is not a QObject). */
 		void			emitChildAdded(ObjectTreeItem *item);
@@ -122,6 +125,9 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		QString			filename() const { return m_filename; }
 		//! Sets the filename of this Form to \a filename.
 		void			setFilename(const QString &file) { m_filename = file; }
+
+		KCommandHistory*	commandHistory() { return m_history; }
+		KActionCollection*	actionCollection() { return m_collection; }
 
 	public slots:
 		/*! This slot is called when the name of a widget was changed in Property Editor. It renames the ObjectTreeItem
@@ -183,6 +189,9 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		bool			m_inter;
 		bool			m_design;
 		QString			m_filename;
+
+		KCommandHistory		*m_history;
+		KActionCollection	*m_collection;
 };
 
 }

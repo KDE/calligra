@@ -135,6 +135,10 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		ObjectTreeItem	*m_tree;
 
 		Form		*m_form;
+
+		friend class InsertWidgetCommand;
+		friend class PasteWidgetCommand;
+		friend class DeleteWidgetCommand;
 };
 
 }

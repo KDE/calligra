@@ -25,6 +25,10 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kpopupmenu.h>
+#include <kstdaction.h>
+#include <kactioncollection.h>
+#include <kxmlguiclient.h>
+#include <kmainwindow.h>
 
 #include "kexipropertyeditor.h"
 #include "objpropbuffer.h"
@@ -34,6 +38,7 @@
 #include "container.h"
 #include "formIO.h"
 #include "objecttreeview.h"
+#include "commands.h"
 
 #include "formmanager.h"
 
@@ -51,6 +56,7 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 	m_active = 0;
 	m_inserting = false;
 	m_count = 0;
+	m_collection = 0;
 
 	m_domDoc.appendChild(m_domDoc.createElement("UI"));
 
@@ -77,8 +83,10 @@ FormManager::setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview)
 }
 
 Actions
-FormManager::createActions(KActionCollection *parent)
+FormManager::createActions(KActionCollection *parent, KMainWindow *client)
 {
+	m_collection = parent;
+	m_client = client;
 	return m_lib->createActions(parent, this, SLOT(insertWidget(const QString &)));
 }
 
@@ -109,6 +117,14 @@ FormManager::stopInsert()
 void
 FormManager::windowChanged(QWidget *w)
 {
+	if(m_collection->action( KStdAction::name(KStdAction::Undo)))
+	{
+		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Undo) ) );
+		kdDebug() << "kkkkkkkkkkkkkkkkkkkkkkkkchanging the undo action" << endl;
+	}
+	if(m_collection->action( KStdAction::name(KStdAction::Redo)))
+		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Redo) ) );
+
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
@@ -116,11 +132,19 @@ FormManager::windowChanged(QWidget *w)
 		{
 			m_active = form;
 			m_treeview->setForm(form);
-			kdDebug() << "active form is " << form->objectTree()->name() << endl;
+			kdDebug() << "***************active form is " << form->objectTree()->name() << endl;
+			m_collection->addDocCollection(form->actionCollection());
+			m_client->createGUI(m_client->xmlFile());
+			/*Actions actions;
+			actions.append(form->actionCollection()->action( KStdAction::name(KStdAction::Undo) ));
+			actions.append(form->actionCollection()->action( KStdAction::name(KStdAction::Redo) ));
+			m_client->unplugActionList("undo_actions");
+			m_client->plugActionList("undo_actions", actions);*/
 			return;
 		}
 	}
 	//m_active = 0;
+
 }
 
 Form*
@@ -234,6 +258,8 @@ FormManager::initForm(Form *form)
 	connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
 	connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), form, SLOT(changeName(const QString&, const QString&)));
 	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget*)));
+
+	windowChanged(form->toplevelContainer()->widget());
 }
 
 
@@ -287,8 +313,6 @@ FormManager::isTopLevel(QWidget *w)
 void
 FormManager::deleteWidget()
 {
-	//if (activeForm() && activeForm()->parentContainer())
-	//	activeForm()->parentContainer()->deleteItem();
 	if(!activeForm())
 		return;
 
@@ -296,12 +320,8 @@ FormManager::deleteWidget()
 	if(list->isEmpty())
 		return;
 
-	QWidget *w;
-	for(w = list->first(); w; w= list->next())
-	{
-		if(w)
-			activeForm()->parentContainer(w)->deleteItem();
-	}
+	KCommand *com = new DeleteWidgetCommand(*list, activeForm());
+	activeForm()->commandHistory()->addCommand(com, true);
 }
 
 void
@@ -318,12 +338,11 @@ FormManager::copyWidget()
 	if(parent.hasChildNodes())
 	{
 		parent.clear();
-		parent = m_domDoc.createElement("UI");
-		m_domDoc.appendChild(parent);
+		m_domDoc.appendChild(m_domDoc.createElement("UI"));
 	}
 
 	QWidget *w;
-	for(w = list->first(); w; w= list->next())
+	for(w = list->first(); w; w = list->next())
 	{
 		ObjectTreeItem *it = activeForm()->objectTree()->lookup(w->name());
 		if (!it)
@@ -335,31 +354,28 @@ FormManager::copyWidget()
 void
 FormManager::cutWidget()
 {
-	copyWidget();
-	deleteWidget();
+	if(!activeForm())
+		return;
+
+	QPtrList<QWidget> *list = activeForm()->selectedWidgets();
+	if(list->isEmpty())
+		return;
+
+	KCommand *com = new CutWidgetCommand(*list, activeForm());
+	activeForm()->commandHistory()->addCommand(com, true);
 }
 
 void
 FormManager::pasteWidget()
 {
+	kdDebug() << m_domDoc.toString() << endl;
 	if(!m_domDoc.namedItem("UI").hasChildNodes())
 		return;
 	if(!activeForm())
 		return;
 
-	if(m_domDoc.namedItem("UI").firstChild().nextSibling().isNull())
-	{
-		QDomElement widg = m_domDoc.namedItem("UI").firstChild().toElement();
-		if(m_insertPoint.isNull())
-			activeForm()->pasteWidget(widg);
-		else
-			activeForm()->pasteWidget(widg, m_insertPoint);
-	}
-	else for(QDomNode n = m_domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling())
-	{
-		QDomElement widg = n.toElement();
-		activeForm()->pasteWidget(widg);
-	}
+	KCommand *com = new PasteWidgetCommand(m_domDoc, activeForm()->activeContainer(), m_insertPoint);
+	activeForm()->commandHistory()->addCommand(com, true);
 }
 
 void

@@ -152,7 +152,6 @@ ObjectTree::addChild(ObjectTreeItem *parent, ObjectTreeItem *c)
 void
 ObjectTree::addChild(ObjectTreeItem *c)
 {
-	m_treeDict.insert(c->name(), c);
 	ObjectTreeItem::addChild(c);
 	kdDebug() << "ObjectTree::addChild(): count is now: " << children()->count() << endl;
 }

@@ -23,12 +23,14 @@
 #include "kexipropertybuffer.h"
 
 class KexiPropertyEditor;
+class KCommand;
 
 namespace KFormDesigner {
 
 class Form;
 class FormManager;
 class Container;
+class PropertyCommand;
 
 //! A buffer which holds the property of the selected widget
 /*! This class inherits KexiPropertyBuffer and holds the properties of the selected widget, which are shown in
@@ -66,7 +68,8 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		/*!  This function is called every time a property is modifed.  It takes care of saving set and enum
 		 properties.
 		*/
-		void	slotChangeProperty(KexiPropertyBuffer *buff, KexiProperty &prop);
+		void	slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty &prop);
+		void    widgetDestroyed();
 
 	signals:
 		/*! This signal is emitted when the name of the widget is modified. \a oldname is the name of the widget before the
@@ -111,6 +114,10 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		QPtrList<QWidget> m_widgets;
 		bool		m_multiple;
 		FormManager     *m_manager;
+		KCommand	*m_lastcom;
+		bool		m_undoing;
+
+		friend class PropertyCommand;
 };
 
 }

@@ -31,6 +31,8 @@ class KexiPropertyEditor;
 class KexiPropertyBuffer;
 class KActionCollection;
 class KAction;
+class KXMLGUIClient;
+class KMainWindow;
 
 namespace KFormDesigner {
 
@@ -60,7 +62,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  These actions are automatically connected to insertWidget() slot.
 		  \return a QPtrList of the created actions.
 		 */
-		Actions createActions(KActionCollection *parent);
+		Actions createActions(KActionCollection *parent, KMainWindow *client);
 
 		/*! Sets the external editors used by FormDesigner (as they may be docked). This function also connects
 		  appropriate signals and slots to ensure sync with the current Form.
@@ -181,6 +183,11 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		bool			m_inserting;
 		QString			m_insertClass;
+
+		KActionCollection	*m_collection;
+		KMainWindow 		*m_client;
+
+		friend class CutWidgetCommand;
 };
 
 }

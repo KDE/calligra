@@ -22,6 +22,8 @@
 #include <qtabwidget.h>
 
 #include <kdebug.h>
+#include <kcommand.h>
+#include <kaction.h>
 
 #include "container.h"
 #include "objecttree.h"
@@ -44,6 +46,8 @@ Form::Form(FormManager *manager, const char *name)
 	m_resizeHandles.setAutoDelete(true);
 	m_inter = true;
 	m_design = true;
+	m_collection = new KActionCollection(this);
+	m_history = new KCommandHistory(m_collection, true);
 }
 
 void
@@ -192,9 +196,10 @@ Form::parentContainer(QWidget *w)
 }
 
 void
-Form::pasteWidget(QDomElement &widg, QPoint pos)
+Form::pasteWidget(QDomElement &widg, Container *cont, QPoint pos)
 {
-	if (!activeContainer())
+	Container *container = cont ? cont : activeContainer();
+	if (!container)
 		return;
 	fixNames(widg);
 	if(pos.isNull())
@@ -202,7 +207,7 @@ Form::pasteWidget(QDomElement &widg, QPoint pos)
 	else
 		widg = fixPos(widg, pos);
 	m_inter = false;
-	FormIO::loadWidget(activeContainer(), m_manager->lib(), widg);
+	FormIO::loadWidget(container, m_manager->lib(), widg);
 	m_inter = true;
 }
 

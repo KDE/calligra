@@ -32,6 +32,7 @@
 #include "spacer.h"
 #include "kexipropertyeditor.h"
 #include "kexipropertyeditoritem.h"
+#include "commands.h"
 
 #include "objpropbuffer.h"
 
@@ -42,16 +43,15 @@ ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent
 {
 	m_object = 0;
 	m_manager = manager;
+	m_lastcom = 0;
+	m_undoing = false;
 
-	connect(this, SIGNAL(propertyChanged(KexiPropertyBuffer*, KexiProperty&)), this, SLOT(slotChangeProperty(KexiPropertyBuffer*, KexiProperty&)));
+	connect(this, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), this, SLOT(slotChangeProperty(KexiPropertyBuffer&, KexiProperty&)));
 }
 
 void
-ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer *buff, KexiProperty &prop)
+ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty &prop)
 {
-	if(buff != this)
-		return;
-
 	QString property = prop.name();
 	QVariant value = prop.value();
 	kdDebug() << "ObjPropBuffer::changeProperty(): changing: " << property << endl;
@@ -71,6 +71,14 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer *buff, KexiProperty 
 	{
 		if(!m_multiple)
 		{
+			PropertyCommand *com = static_cast<PropertyCommand*>(m_lastcom);
+			if(com && com->property() == prop.name() && !m_undoing)
+				com->setValue(value);
+			else if(!m_undoing)
+			{
+				m_lastcom = new PropertyCommand(this, m_object->name(), m_object->property(property.latin1()), value, prop.name());
+				m_manager->activeForm()->commandHistory()->addCommand(m_lastcom, false);
+			}
 			m_object->setProperty(property.latin1(), value);
 			emit propertyChanged(m_object, property, value);
 		}
@@ -149,9 +157,11 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 		ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(widg->name());
 		if(tree->modifProp()->contains(meta->name()))
 		{
+			blockSignals(true);
 			QVariant v = (*this)[meta->name()]->value();
 			(*this)[meta->name()]->setValue( tree->modifProp()->find(meta->name()).data() , false);
 			(*this)[meta->name()]->setValue(v, true);
+			blockSignals(false);
 		}
 	}
 
@@ -165,6 +175,14 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 	m_manager->showPropertyBuffer(this);
 
 	obj->installEventFilter(this);
+	connect(obj, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
+}
+
+void
+ObjectPropertyBuffer::widgetDestroyed()
+{
+	m_object = 0;
+	kdDebug() << "ObjecPropBuffer :: object is being destroyed, reseting m_object " << endl;
 }
 
 void
@@ -201,7 +219,7 @@ ObjectPropertyBuffer::showProperty(QObject *obj, const QString &property)
 		if(!(list.grep(property)).isEmpty())
 			return false;
 	}
-	kdDebug() << "object is a " << obj->className() << endl;
+
 	if(obj->isA("KFormDesigner::Spacer"))
 		return Spacer::showProperty(property);
 	return true;
@@ -346,10 +364,19 @@ ObjectPropertyBuffer::saveAlignProperty()
 	list.append( (*this)["vAlign"]->value().toString().latin1() );
 	if( (*this)["wordbreak"]->value().toBool() )
 		list.append("WordBreak");
-	kdDebug() << "alignemnt " << QStringList::fromStrList(list).join("|") << endl;
+
 	int count = m_object->metaObject()->findProperty("alignment", true);
 	const QMetaProperty *meta = m_object->metaObject()->property(count, true);
 	m_object->setProperty("alignment", meta->keysToValue(list));
+
+	PropertyCommand *com = static_cast<PropertyCommand*>(m_lastcom);
+	if(com && com->property() == "alignment" && !m_undoing)
+		com->setValue(meta->keysToValue(list));
+	else if(!m_undoing)
+	{
+		m_lastcom = new PropertyCommand(this, m_object->name(), m_object->property("alignment"), meta->keysToValue(list), "alignment");
+		m_manager->activeForm()->commandHistory()->addCommand(m_lastcom, false);
+	}
 }
 
 void
@@ -398,10 +425,23 @@ ObjectPropertyBuffer::saveLayoutProperty(const QString &value)
 		return;
 	}
 
-	if(value == "NoLayout")    cont->setLayout(Container::NoLayout);
-	if(value == "HBox")        cont->setLayout(Container::HBox);
-	if(value == "VBox")        cont->setLayout(Container::VBox);
-	if(value == "Grid")        cont->setLayout(Container::Grid);
+	Container::LayoutType type;
+	if(value == "NoLayout")    type = Container::NoLayout;
+	if(value == "HBox")        type = Container::HBox;
+	if(value == "VBox")        type = Container::VBox;
+	if(value == "Grid")        type = Container::Grid;
+
+	LayoutPropertyCommand *com = static_cast<LayoutPropertyCommand*>(m_lastcom);
+	if(com && !m_undoing)
+		com->setValue(type);
+	else if(!m_undoing)
+	{
+		m_lastcom = new LayoutPropertyCommand(cont, cont->layoutType(), type);
+		m_manager->activeForm()->commandHistory()->addCommand(m_lastcom, true);
+	}
+	else
+		cont->setLayout(type);
+
 }
 
 ObjectPropertyBuffer::~ObjectPropertyBuffer()

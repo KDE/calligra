@@ -30,8 +30,6 @@ KFMView::KFMView()
 
 	manager = new KFormDesigner::FormManager(w, this, "manager");
 
-	//editor->show();
-
 	QDockWindow *dockTree = new QDockWindow(this);
 	KFormDesigner::ObjectTreeView *view = new KFormDesigner::ObjectTreeView(dockTree);
 	dockTree->setWidget(view);
@@ -65,10 +63,11 @@ KFMView::KFMView()
 #else
 	//TODO
 #endif
-	manager->createActions(actionCollection());
+	manager->createActions(actionCollection(), this);
 
 	createGUI("kfmui.rc", true);
 	setXMLFile("kfmui.rc", true);
+
 }
 
 void
