@@ -9,6 +9,7 @@ class KOSpell;
 class QWidget;
 class KOSpellConfig;
 class ApplicationWindowSpell;
+class QPopupMenu;
 
 class spellConfig : public KDialogBase
 {
@@ -46,13 +47,15 @@ private slots:
     void spellCheckerReplaceAll( const QString &, const QString & );
 
     void slotModalSpellText();
-
+    void slotSelectionChanged();
 private:
     void posToRowCol(unsigned int pos, unsigned int &line, unsigned int &col);
 
     QMultiLineEdit *multi;
     KOSpell *m_spell;
     KOSpellConfig *m_spellConfig;
+    int m_modalSpellCheckMenuIndex;
+    QPopupMenu * file;
 };
 
 

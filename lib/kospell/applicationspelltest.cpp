@@ -23,24 +23,25 @@ ApplicationWindowSpell::ApplicationWindowSpell()
     QToolBar * fileTools = new QToolBar( this, "file operations" );
     fileTools->setLabel( "File Operations" );
 
-    QPopupMenu * file = new QPopupMenu( this );
+    file = new QPopupMenu( this );
     menuBar()->insertItem( "&File", file );
 
 
     file->insertItem( "Spell text", this, SLOT(slotSpellText()));
-    file->insertItem( "Modal Spell text", this, SLOT(slotModalSpellText()));
+    m_modalSpellCheckMenuIndex = file->insertItem( "Modal Spell text", this, SLOT(slotModalSpellText()));
 
     file->insertItem( "Config", this, SLOT(slotConfigSpellText()));
 
     file->insertItem( "Quit", this, SLOT(close()));
 
     multi = new QMultiLineEdit( this, "editor" );
+    connect( multi, SIGNAL( selectionChanged ()),this, SLOT( slotSelectionChanged()));
     multi->setFocus();
     setCentralWidget( multi );
     resize( 450, 600 );
     m_spell = 0L;
-    m_spellConfig = 0L;
     m_spellConfig=new KOSpellConfig();
+    file->setItemEnabled( m_modalSpellCheckMenuIndex, false );
 }
 
 
@@ -48,6 +49,11 @@ ApplicationWindowSpell::~ApplicationWindowSpell()
 {
     delete m_spell;
     delete m_spellConfig;
+}
+
+void ApplicationWindowSpell::slotSelectionChanged()
+{
+    file->setItemEnabled( m_modalSpellCheckMenuIndex, multi->hasSelectedText () );
 }
 
 void ApplicationWindowSpell::slotModalSpellText()
