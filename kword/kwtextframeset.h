@@ -93,12 +93,13 @@ public:
 
     void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible );
 
-    void insert( QTextCursor * cursor, QTextFormat * currentFormat, const QString &text );
+    void insert( QTextCursor * cursor, QTextFormat * currentFormat, const QString &text, bool checkNewLine, bool removeSelected = true );
     void removeSelectedText( QTextCursor * cursor );
     void undo();
     void redo();
     void clearUndoRedoInfo();
-    void pasteSubType( QTextCursor * cursor, QTextFormat * currentFormat, const QCString& );
+    void pasteKWord( QTextCursor * cursor, const QCString & data );
+    void pasteText( QTextCursor * cursor, const QString & text, QTextFormat * currentFormat );
 
     /** Set format changes on selection or current cursor */
     void setFormat( QTextCursor * cursor, QTextFormat * & currentFormat, QTextFormat *format, int flags);

@@ -839,15 +839,15 @@ void KWTextFrameSet::formatMore()
         viewsBottom = QMAX( viewsBottom, mapIt.data() );
 
     QTextParag *lastFormatted = m_lastFormatted;
-    //kdDebug() << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
-    //          << " to=" << to << " viewsBottom=" << viewsBottom << endl;
+    kdDebug() << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
+              << " to=" << to << " viewsBottom=" << viewsBottom << endl;
 
     // Stop if we have formatted everything or if we need more space
     // Otherwise, stop formatting after "to" paragraphs,
     // but make sure we format everything the views need
     for ( int i = 0; lastFormatted && bottom <= m_availableHeight && ( i < to || bottom <= viewsBottom ) ; ++i )
     {
-        //kdDebug() << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
+        kdDebug() << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
 	lastFormatted->format();
 	bottom = lastFormatted->rect().top() + lastFormatted->rect().height();
 	lastFormatted = lastFormatted->next();
@@ -1431,11 +1431,11 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor )
     undoRedoInfo.clear();
 }
 
-void KWTextFrameSet::insert( QTextCursor * cursor, QTextFormat * currentFormat, const QString &text )
+void KWTextFrameSet::insert( QTextCursor * cursor, QTextFormat * currentFormat, const QString &txt, bool checkNewLine, bool removeSelected )
 {
-    QString txt( text );
+    QTextCursor c2 = *cursor;
     emit hideCursor();
-    if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+    if ( textDocument()->hasSelection( QTextDocument::Standard ) && removeSelected ) {
 	checkUndoRedoInfo( cursor, UndoRedoInfo::RemoveSelected );
 	if ( !undoRedoInfo.valid() ) {
 	    textDocument()->selectionStart( QTextDocument::Standard, undoRedoInfo.id, undoRedoInfo.index );
@@ -1451,17 +1451,33 @@ void KWTextFrameSet::insert( QTextCursor * cursor, QTextFormat * currentFormat, 
 	undoRedoInfo.text = QString::null;
         undoRedoInfo.name = i18n("Insert text");
     }
-    int idx = cursor->index();
-    cursor->insert( txt, FALSE );
-    if ( textDocument()->useFormatCollection() )
-	cursor->parag()->setFormat( idx, txt.length(), currentFormat, TRUE );
+    int oldLen = undoRedoInfo.text.length();
+    QTextCursor oldCursor = *cursor;
+    cursor->insert( txt, checkNewLine );
 
+    undoRedoInfo.text += txt;
+
+    for ( int i = 0; i < (int)txt.length(); ++i ) {
+        if ( txt[ i ] != '\n' )
+        {
+            c2.parag()->at( c2.index() )->setFormat( currentFormat );
+            currentFormat->addRef();
+            undoRedoInfo.text.setFormat( oldLen + i, currentFormat, TRUE );
+        }
+        c2.gotoRight();
+    }
+    m_lastFormatted = oldCursor.parag();
     formatMore();
     emit repaintChanged();
     ensureCursorVisible();
     emit showCursor();
-    undoRedoInfo.text += txt;
+
     doc->setModified(true);
+    if ( !removeSelected ) {
+        textDocument()->setSelectionStart( QTextDocument::Standard, &oldCursor );
+        textDocument()->setSelectionEnd( QTextDocument::Standard, cursor );
+        repaintChanged();
+    }
 }
 
 void KWTextFrameSet::undo()
@@ -1503,21 +1519,24 @@ void KWTextFrameSet::clearUndoRedoInfo()
     undoRedoInfo.clear();
 }
 
-void KWTextFrameSet::pasteSubType( QTextCursor * cursor, QTextFormat * currentFormat, const QCString& subtype )
+void KWTextFrameSet::pasteText( QTextCursor * cursor, const QString & text, QTextFormat * currentFormat )
 {
-    QCString st = subtype;
-    QString t = QApplication::clipboard()->text(st);
-    if ( !t.isEmpty() ) {
-	// Need to convert CRLF to NL
-	QRegExp crlf( QString::fromLatin1("\r\n") );
-	t.replace( crlf, QChar('\n') );
-	for ( int i=0; (uint) i<t.length(); i++ ) {
-	    if ( t[ i ] < ' ' && t[ i ] != '\n' && t[ i ] != '\t' )
-		t[ i ] = ' ';
-	}
-	if ( !t.isEmpty() )
-	    insert( cursor, currentFormat, t );
+    QString t = text;
+    // Need to convert CRLF to NL
+    QRegExp crlf( QString::fromLatin1("\r\n") );
+    t.replace( crlf, QChar('\n') );
+    // Convert non-printable chars
+    for ( int i=0; (uint) i<t.length(); i++ ) {
+        if ( t[ i ] < ' ' && t[ i ] != '\n' && t[ i ] != '\t' )
+            t[ i ] = ' ';
     }
+    if ( !t.isEmpty() )
+        insert( cursor, currentFormat, t, true /*checkNewLine*/);
+}
+
+void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data )
+{
+    // TODO
 }
 
 void KWTextFrameSet::checkUndoRedoInfo( QTextCursor * cursor, UndoRedoInfo::Type t )
@@ -1716,7 +1735,7 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 		     cursor->index() == 0 && ( e->text() == "-" || e->text() == "*" ) ) {
 		    setParagType( QStyleSheetItem::DisplayListItem, QStyleSheetItem::ListDisc );
 		} else {*/
-		    textFrameSet()->insert( cursor, currentFormat, e->text() );
+		    textFrameSet()->insert( cursor, currentFormat, e->text(), false );
 		//}
 		break;
 	    }
@@ -1834,7 +1853,21 @@ void KWTextFrameSetEdit::moveCursor( MoveDirectionPrivate direction, bool contro
 
 void KWTextFrameSetEdit::paste()
 {
-    textFrameSet()->pasteSubType( cursor, currentFormat, "plain" );
+    QMimeSource *data = QApplication::clipboard()->data();
+    if ( data->provides( MIME_TYPE ) )
+    {
+        QByteArray arr = data->encodedData( MIME_TYPE );
+        if ( arr.size() )
+            textFrameSet()->pasteKWord( cursor, QCString(arr) );
+    }
+    else
+    {
+        // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
+        // In particular it handles charsets (in the mimetype).
+        QString text = QApplication::clipboard()->text();
+        if ( !text.isEmpty() )
+            textFrameSet()->pasteText( cursor, text, currentFormat );
+    }
 }
 
 void KWTextFrameSetEdit::cut()
@@ -1843,7 +1876,6 @@ void KWTextFrameSetEdit::cut()
 	textDocument()->copySelectedText( QTextDocument::Standard );
 	textFrameSet()->removeSelectedText( cursor );
     }
-
 }
 
 void KWTextFrameSetEdit::copy()
@@ -1864,7 +1896,6 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     parag->lineHeightOfChar( cursor->index(), &dummy, &y );
     y += parag->rect().y() + cursor->offsetY();
     int w = 1;
-    int pg;
     QPoint p;
     KWFrame * frame = textFrameSet()->internalToContents( QPoint(x, y), p );
     if ( frame )
@@ -2000,18 +2031,23 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e )
 	       e->source() == m_canvas->viewport() ) &&
 	     e->action() == QDropEvent::Move ) {
 	    textFrameSet()->removeSelectedText( cursor );
-	}
+	} else
+        {
+            textDocument()->removeSelection( QTextDocument::Standard );
+        }
         hideCursor();
         placeCursor( textFrameSet()->contentsToInternal( e->pos() ), cursor );
         showCursor();
 
-	textFrameSet()->insert( cursor, currentFormat, text );
+	textFrameSet()->insert( cursor, currentFormat, text,
+                                true /* checkNewLine */, false /* don't remove selected text */ );
     }
 }
 
 void KWTextFrameSetEdit::focusInEvent()
 {
     blinkTimer->start( QApplication::cursorFlashTime() / 2 );
+    showCursor();
 }
 
 void KWTextFrameSetEdit::focusOutEvent()
@@ -2191,8 +2227,7 @@ void KWTextFrameSetEdit::setTextSuperScript(bool on)
 /*===============================================================*/
 void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
 {
-    QTextFormat format( *currentFormat );
-    textFrameSet()->insert( cursor, &format, _c );
+    textFrameSet()->insert( cursor, currentFormat, _c, false /* no newline */ );
 }
 
 /*===============================================================*/
