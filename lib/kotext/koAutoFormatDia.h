@@ -167,6 +167,7 @@ protected slots:
     void slotResetConf();
     void changeAutoformatLanguage(const QString & );
     void slotClearTextFormatEntry();
+    void slotChangeAdvancedAutoCorrection();
 };
 
 class KoCompletionDia : public KDialogBase

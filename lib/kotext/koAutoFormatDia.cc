@@ -504,7 +504,7 @@ void KoAutoFormatDia::setupTab3()
 
     cbAdvancedAutoCorrection = new QCheckBox( tab3 );
     cbAdvancedAutoCorrection->setText( i18n("Enable word replacement") );
-
+    connect( cbAdvancedAutoCorrection, SIGNAL(clicked ()), this, SLOT( slotChangeAdvancedAutoCorrection()));
     grid->addMultiCellWidget( cbAdvancedAutoCorrection, 1, 1, 0, 6 );
 
     cbAutoCorrectionWithFormat = new QCheckBox( tab3 );
@@ -588,6 +588,7 @@ void KoAutoFormatDia::setupTab3()
     pbAdd->setEnabled(false);
     pbClearFormat->setEnabled( false);
     initTab3();
+    slotChangeAdvancedAutoCorrection();
 }
 
 void KoAutoFormatDia::initTab3()
@@ -612,6 +613,21 @@ void KoAutoFormatDia::initTab3()
         else
             autoFormatLanguage->setCurrentText(initialLanguage);
     }
+}
+
+void KoAutoFormatDia::slotChangeAdvancedAutoCorrection()
+{
+    bool state = cbAdvancedAutoCorrection->isChecked();
+    cbAutoCorrectionWithFormat->setEnabled( state );
+    pbClearFormat->setEnabled( state );
+    pbRemove->setEnabled( state );
+    pbChangeFormat->setEnabled( state );
+    pbAdd->setEnabled( state );
+    pbSpecialChar2->setEnabled( state );
+    pbSpecialChar1->setEnabled( state );
+    m_replace->setEnabled( state);
+    m_find->setEnabled( state);
+    m_pListView->setEnabled( state);
 }
 
 void KoAutoFormatDia::changeAutoformatLanguage(const QString & text)
