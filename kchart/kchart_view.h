@@ -1,5 +1,4 @@
 /**
- * $Id$
  *
  * Kalle Dalheimer <kalle@kde.org>
  */
@@ -48,12 +47,14 @@ public slots:
       void slotConfigFont();
       void slotConfigColor();
       void slotConfigLegend();
+      void slotConfigSubTypeChart();
 protected:
     void paintEvent( QPaintEvent* );
 
     virtual void updateReadWrite( bool readwrite );
 
     virtual void mousePressEvent ( QMouseEvent * );
+    void updateButton();
 
 private:
     KAction* m_cut;
@@ -67,12 +68,14 @@ private:
     KAction* m_fontConfig;
     KAction* m_backConfig;
     KAction* m_legendConfig;
+    KAction* m_subTypeChartConfig;
     KToggleAction* m_chartpie;
     KToggleAction* m_chartareas;
     KToggleAction* m_chartbars;
     KToggleAction* m_chartline;
     KToggleAction* m_charthilo;
     KToggleAction* m_chartring;
+    
 
     DCOPObject *dcop;
 };

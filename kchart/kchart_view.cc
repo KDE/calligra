@@ -102,7 +102,9 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     m_legendConfig = new KAction( i18n( "&Configure legend" ), 0,
                             this, SLOT( slotConfigLegend() ),
                             actionCollection(), "legend_config" );
-
+    m_subTypeChartConfig= new KAction( i18n( "&Configure sub type chart" ), 0,
+                            this, SLOT( slotConfigSubTypeChart() ),
+                            actionCollection(), "legend_subtype" );
     // initialize the configuration
     //    loadConfig();
 
@@ -250,6 +252,7 @@ void KChartView::updateGuiTypeOfChart()
       //todo
       break;
     }
+  updateButton();
 }
 
 void KChartView::slotConfig()
@@ -305,6 +308,7 @@ void KChartView::pieChart()
       params->setThreeDPies( true );
       params->setExplodeFactor( 0 );
       params->setExplode( true );
+      updateButton();
       repaint();
     }
   else
@@ -318,6 +322,7 @@ void KChartView::lineChart()
       KChartParams* params = ((KChartPart*)koDocument())->params();
       params->setChartType( KDChartParams::Line );
       params->setLineChartSubType( KDChartParams::LineNormal );
+      updateButton();
       repaint();
     }
   else
@@ -332,6 +337,7 @@ void KChartView::barsChart()
       KChartParams* params = ((KChartPart*)koDocument())->params();
       params->setChartType( KDChartParams::Bar );
       params->setBarChartSubType( KDChartParams::BarNormal );
+      updateButton();
       params->setThreeDBars( true );
       repaint();
     }
@@ -346,6 +352,7 @@ void KChartView::areasChart()
       KChartParams* params = ((KChartPart*)koDocument())->params();
       params->setChartType( KDChartParams::Area );
       params->setAreaChartSubType( KDChartParams::AreaNormal );
+      updateButton();
       repaint();
     }
   else
@@ -361,6 +368,7 @@ if ( m_charthilo->isChecked() )
     KChartParams* params = ((KChartPart*)koDocument())->params();
     params->setChartType( KDChartParams::HiLo );
     params->setHiLoChartSubType( KDChartParams::HiLoNormal );
+    updateButton();
     repaint();
     }
  else
@@ -374,6 +382,7 @@ void KChartView::ringChart()
     {
       KChartParams* params = ((KChartPart*)koDocument())->params();
       params->setChartType( KDChartParams::Ring );
+      updateButton();
       repaint();
     }
   else
@@ -409,5 +418,20 @@ void KChartView::slotConfigLegend()
    config(KChartConfigDialog::KC_LEGEND);
 }
 
+void KChartView::slotConfigSubTypeChart()
+{
+    config(KChartConfigDialog::KC_SUBTYPE);
+}
+
+void KChartView::updateButton()
+{
+    //disable sub chart config item.
+    KChartParams* params = ((KChartPart*)koDocument())->params();
+    bool state=(params->chartType()==KDChartParams::Bar ||
+                params->chartType()==KDChartParams::Area ||
+                params->chartType()==KDChartParams::Line ||
+                params->chartType()==KDChartParams::HiLo);
+    m_subTypeChartConfig->setEnabled(state);
+}
 
 #include "kchart_view.moc"

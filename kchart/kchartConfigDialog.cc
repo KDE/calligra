@@ -66,6 +66,30 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
         _parameterLegend = new KChartLegendConfigPage(_params,this );
         addTab( _parameterLegend,i18n("Legend"));
     }
+    else if(flags & KC_SUBTYPE)
+    {
+        // Lines and pies might need config pages as well, but not yet
+        switch( _params->chartType() ) {
+        case KDChartParams::Bar:
+            _subTypePage = new KChartBarSubTypeChartPage( _params, this );
+            addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+            break;
+        case KDChartParams::Area:
+            _subTypePage = new KChartAreaSubTypeChartPage( _params, this );
+            addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+            break;
+        case KDChartParams::Line:
+            _subTypePage = new KChartLineSubTypeChartPage( _params, this );
+            addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+            break;
+        case KDChartParams::HiLo:
+            _subTypePage = new KChartHiloSubTypeChartPage( _params, this );
+            addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+            break;
+        default:
+            ; // do nothing
+        }
+    }
     else if( flags & KC_ALL )
     {
         _colorpage = new KChartColorConfigPage( this );
