@@ -436,17 +436,6 @@ QString Helper::formatValue( double value, Q_UINT16 xf )
 		case 26: // assume Date-format (normally defined by file)
 		case 28:
 		
-		case 164:
-		case 174:
-		case 176:
-		case 177:
-		case 178:
-		case 179:
-		case 180:
-		case 181:
-		case 182:
-		case 183:
-		case 184:
 			s = locale().formatDate(getDate(value),true);
 			break;
 		default: // Number
@@ -678,22 +667,18 @@ void getReference(Q_UINT16 row, Q_UINT16 column, Q_INT16 &refRow, Q_INT16 &refCo
 {
 	if(biff == BIFF_8)
 	{
-		colSign = (refColumn & 0x8000) ? "#" : "$";
-		rowSign = (refColumn & 0x4000) ? "#" : "$";
+		bool rowRelative = (refColumn & 0x8000);
+		bool colRelative = (refColumn & 0x4000);
+		refColumn &= 0x3fff;
 
-		if((refColumn & 0x8000) && !shared)
+		rowSign = rowRelative ? "#" : "$";
+		colSign = colRelative ? "#" : "$";
+
+		if( rowRelative && !shared)
 			refRow -= row;
-		
-		if(refColumn & 0x4000)
-		{
-			if(!shared)
-			{
-				refColumn &= 0x3fff;
-				refColumn -= column;
-			}
-			else
-				refColumn = (Q_INT8) refColumn;
-		}
+
+		if( colRelative )
+			refColumn -= column;
 	}
 	else
 	{

@@ -192,7 +192,8 @@ bool Worker::op_boundsheet(Q_UINT32, QDataStream &body)
 {
 	Q_UINT32 lbPlyPos;
 	Q_UINT16 grbit;
-	Q_UINT16 cch;
+	Q_UINT8 cch;
+	Q_UINT8 flag = 0;
 	Q_UINT8 tmp8;
 	QDomElement *e;
 
@@ -203,16 +204,34 @@ bool Worker::op_boundsheet(Q_UINT32, QDataStream &body)
 			cch = tmp8;
 			break;
 		case BIFF_8:
-			body >> lbPlyPos >> grbit >> cch;
+			body >> lbPlyPos >> grbit >> cch >> flag;
 			break;
 		default:
 			return false;
 	}
 
-	char *name = new char[cch];
-	body.readRawBytes(name, cch);
-	QString s = QString::fromLatin1(name, cch);
-	delete []name;
+	QString s; // name of sheet/macro/chart
+
+	if( flag & 1 )
+	{
+		// Unicode
+		for( int i=0; i<cch; i++ )
+		{
+			Q_UINT16 ch;
+			body >> ch;
+			s.append( QChar( ch ) );
+		}
+	}
+	else
+	{
+		// Latin1
+		for( int i=0; i<cch; i++ )
+		{
+			Q_UINT8 ch;
+			body >> ch;
+			s.append( (char)ch );
+		}
+	}
 
 	if((grbit & 0x0f) == 0)
 	{
@@ -1268,21 +1287,19 @@ bool Worker::op_mulblank(Q_UINT32 size, QDataStream &body)
 void Worker::rk_internal( int row, int column, Q_UINT16 xf, Q_UINT32 number )
 {
 	double value = m_helper->GetDoubleFromRK(number);
+	int format = 0;
 
 	xfrec *xwork = static_cast<xfrec *>(m_helper->queryDict(D_XF, xf));
 	if(!xwork)
-	{
 		kdError(30511) << "Missing format definition: " << xf << endl;
-		xf = 0;
-	}
-	// kdWarning(30511) << __FUNCTION__ << " xf/ifmt " << xf << "/" << xwork->ifmt << endl;
-	QString s = m_helper->formatValue(value, xf);
-
+	else
+		format = xwork->ifmt;
+	// kdWarning(30511) << __FUNCTION__ << " xf/ifmt " << xf << "/" << format << endl;
+	QString s = m_helper->formatValue(value, format);
 	QDomElement e = m_root->createElement("cell");
-	e.appendChild(m_helper->getFormat(xf));
+	if( xwork ) e.appendChild(m_helper->getFormat(xf));
 	e.setAttribute("row", row+1);
 	e.setAttribute("column", column+1);
-
 	QDomElement text = m_root->createElement("text");
 	text.appendChild(m_root->createTextNode(s));
 
@@ -1315,7 +1332,6 @@ bool Worker::op_mulrk(Q_UINT32 size, QDataStream &body)
 		body >> xf >> number;
 		rk_internal(row, column, xf, number);
 	}
-
 	return true;
 }
 
@@ -1349,7 +1365,6 @@ bool Worker::op_number(Q_UINT32, QDataStream &body)
 	}
 	
 	QString s = m_helper->formatValue(value, xf);
-
 	QDomElement text = m_root->createElement("text");
 	text.appendChild(m_root->createTextNode(s));
 	e.appendChild(text);
