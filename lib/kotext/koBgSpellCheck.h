@@ -51,6 +51,8 @@ public:
     virtual KoTextObject* nextTextObject( KoTextObject *obj )=0;
     void addIgnoreWordAll( const QString & word);
     void clearIgnoreWordAll( );
+    void addIgnoreWordAllList( const QStringList & list);
+
 public slots:
     void startBackgroundSpellCheck();
 

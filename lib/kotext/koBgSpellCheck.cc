@@ -70,6 +70,12 @@ void KoBgSpellCheck::addIgnoreWordAll( const QString & word)
     m_pKSpellConfig->setIgnoreList( m_spellListIgnoreAll );
 }
 
+void KoBgSpellCheck::addIgnoreWordAllList( const QStringList & list)
+{
+    m_spellListIgnoreAll.clear();
+    m_pKSpellConfig->setIgnoreList( list );
+}
+
 void KoBgSpellCheck::clearIgnoreWordAll( )
 {
     m_spellListIgnoreAll.clear();
