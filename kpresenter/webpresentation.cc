@@ -912,18 +912,6 @@ void KPWebPresentationWizard::finish()
     KPWebPresentationCreateDialog::createWebPresentation( doc, view, webPres );
 }
 
-
-/*================================================================*/
-bool KPWebPresentationWizard::isPathValid() const
-{
-    QFileInfo fi( path->lineEdit()->text() );
-
-    if ( fi.exists() && fi.isDir() )
-        return true;
-
-    return false;
-}
-
 /*================================================================*/
 void KPWebPresentationWizard::pageChanged()
 {

@@ -160,8 +160,6 @@ protected:
     void setupPage2();
     void setupPage3();
 
-    bool isPathValid() const;
-
     void closeEvent( QCloseEvent *e );
 
     QString config;
