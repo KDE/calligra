@@ -132,13 +132,18 @@ the new frame's settings.</para>
 </mediaobject>
 </screenshot>
 
-<para>The ruler can measure the page in 3 units of measure:</para>
+<para>The ruler can measure the page in many common units of measure including:</para>
 
-<orderedlist numeration="arabic">
+<itemizedlist>
 <listitem><para>Millimeters (mm)</para></listitem>
 <listitem><para>Points (pt)</para></listitem>
-<listitem><para>Inches (inch)</para></listitem>
-</orderedlist>
+<listitem><para>Inches (in)</para></listitem>
+<listitem><para>Centimeters (cm)</para></listitem>
+<listitem><para>Decimeters (dm)</para></listitem>
+<listitem><para>Pica (pi)</para></listitem>
+<listitem><para>Didot (dd)</para></listitem>
+<listitem><para>Cicero (cc)</para></listitem>
+</itemizedlist>
 
 <para>To change the units of the ruler, place the mouse cursor over one
 of the rulers (either one), and click with the
@@ -169,8 +174,9 @@ will appear.</para>
 <note>
 <para>If you don't want the rulers in your document area, they
 can be switched off.</para><para> Simply select <menuchoice>
-<guimenu>View</guimenu><guimenuitem>Show Rulers</guimenuitem></menuchoice> from the menubar.  
-This will let you toggle the rulers on and off as you desire.
+<guimenu>View</guimenu><guimenuitem>Hide Rulers</guimenuitem></menuchoice> from the menubar.  
+This will remove the rulers from the document area. Simply select <menuchoice>
+<guimenu>View</guimenu><guimenuitem>Show Rulers</guimenuitem></menuchoice> to display the rulers again.
 </para>
 </note>
 

@@ -8,7 +8,7 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo>
-<title>Detailed Guides: Document Storage and Printing</title>
+<title>Detailed Guides: Document Creation, Storage, and Printing</title>
 
 <para>This section of the documentation will cover everything you need
 to know about starting a new document, saving a document, retrieving a
@@ -74,97 +74,63 @@ document</link></para>
 <para><link linkend="loading-recent-doc">Open a recent
 document</link></para>
 </listitem>
-<listitem>
-<para><link linkend="loading-empty-doc">Start an <quote>Empty</quote>
-document. (This is the default)</link></para>
-</listitem>
 </itemizedlist>
 <para>&kword; remembers your previous choice.  That previous choice will be the current default option.</para>
-<tip>
-<para>You can use the following keyboard shortcuts:</para>
-
-<informaltable>
-<tgroup cols="2"><tbody>
-<row><entry>New document from a template</entry><entry><keycombo
-action="simul">&Alt;<keycap>T</keycap></keycombo></entry></row>
-<row><entry>Open a recent document</entry><entry><keycombo
-action="simul">&Alt;<keycap>R</keycap></keycombo></entry></row>
-<row><entry>Start and Empty document</entry><entry><keycombo
-action="simul">&Alt;<keycap>E</keycap></keycombo></entry></row>
-</tbody></tgroup></informaltable>
-
-<para>If you use the keyboard shortcuts, you will need to press
-<keycap>Enter</keycap> on the keyboard or click
-<guibutton>OK</guibutton> to confirm your selection.</para>
-
-</tip>
 
 
 <sect2 id="new-doc-from-template">
 <title>Starting a new document from a template</title>
 
 <para>In order to start a new document based on a template, you must
-first choose your template.</para>
+first choose which template you want to use.</para>
 
+<orderedlist>
+<listitem><para>Use the icons located along the left edge of the dialog box to select your template group.  Simply click with the &LMB; to select that group and 
+display all the available templates of that group.</para>
+
+<note>
 <para>Remember templates are either Text Oriented or Page Layout
 templates. If you need to review the differences, click <link
 linkend="wp-vs-dtp">here</link>.</para>
-
-<para>You can use the tabs labled <guilabel>Text Oriented</guilabel> and 
-<guilabel>Page Layout</guilabel> to
-display all the available templates of that group.</para>
-
-<para>Once you are on the correct tab, you are shown all the available
+</note>
+<para>Once you have selected the icon, you are shown all the available
 templates, each with a title and a small icon which shows you the
 general layout of the template. </para>
 
 <tip>
-<para>&kword; comes with two standard template groups. You can add
-new tabs by installing outside templates, or creating templates of your
-own.</para>
-</tip>
+<para>&kword; comes with four standard template groups. You can add
+new tabs by installing outside templates, or <link linkend="template-creation">creating templates of your
+own</link>.</para>
+</tip></listitem>
 
-<para>To select your template, click on it with the left button.  The
-selected template will be highlighted.  Confirm your choice by clicking
+<listitem><para>To select your template, click on it with the &LMB;.  The
+selected template will be highlighted.</para></listitem>  
+<listitem><para>Confirm your choice by clicking
 the <guibutton>OK</guibutton> button. This will begin a new document
-with that template.</para>
+with that template.</para></listitem>
+</orderedlist>
 
 <tip>
 <para>For faster access to a template, simply double click on the
 template, and &kword; will immediately load that template.</para>
 </tip>
-
 </sect2>
 
 <sect2 id="loading-existing-doc">
-<title>Open an existing document</title>
+<title>Opening an existing document</title>
 
-<para>Click on the <guibutton>Choose</guibutton> button, and an new
+<para>Click on the <guibutton>Open Existing Document</guibutton> tab, and an new
 dialog box is revealed.  For more details on this dialog box refer to
 <link linkend="file-dialog">Using the file selection dialog</link>.</para>
 
 <sect3 id="loading-recent-doc">
 <title>Open a Recent Document</title>
-<para>&kword; keeps track of the most recently edited documents.  You can select one of these documents by using the combo box
-to the right of the radio button labeled <guilabel>Open a recent document</guilabel>.</para>
-
-<para>Once the filename is selected in this combo box, click on <guibutton>OK</guibutton> and &kword;
-will load the template.</para>
-
-<note><para>If you delete or move a file, it will still appear in the combo box.</para><para>If you select a deleted or otherwise unavailable file 
-to be opened by &kword;, the <guibutton>OK</guibutton> will turn from black to gray. This indicates you will not be 
-able to open that file.</para></note>
+<para>&kword; keeps track of the most recently edited documents.  You can select one of these documents by clicking on the tab labeled 
+<guilabel>Open a recent document</guilabel>. This will list the most recently edited files on the system.  Simply click on the icon of the desired file with the 
+&LMB; and click <guibutton>OK</guibutton>.</para>
 
 </sect3>
-<sect3 id="loading-empty-doc">
-<title>Loading an Empty Document</title>
 
-<para>This begins a new document in Text Oriented Mode, with one frame per page.
-This is an excellent choice for every day correspondence, or general
-word processing.  Simply click <guibutton>OK</guibutton> to
-begin.</para>
-
-</sect3>
 
 </sect2>
 
@@ -332,7 +298,7 @@ appear.</para>
 <note>
 <para>&kword; will only allow you to save your file where you are
 allowed to by the permissions listed by the operating system. If you try
-to save outside that area, &kword; will generate an error.</para>
+to save outside that area, &kword; will report an error.</para>
 </note>
 </sect3>
 </sect2>
@@ -348,8 +314,8 @@ The Open command can be invoked 4 ways:
 
 <itemizedlist>
 <listitem>
-<para>By clicking <guilabel>Open a previously saved document</guilabel>
-and the <guilabel>Choose</guilabel> button when <link
+<para>By clicking the <guilabel>Open Existing Document</guilabel>
+tab when <link
 linkend="new-doc">Opening a New Document</link></para>
 </listitem>
 
@@ -387,7 +353,7 @@ on the toolbar.</para>
 <link linkend="file-dialog">Using the file dialog</link>.</para>
 
 <para>Use this dialog to locate the document you want to load.  Once located, click
-once with the &LMB; on the filename.  Click <guibutton>OK</guibutton>.  The file will be loaded.</para>
+once with the &LMB; on the filename. Once the filename is selected click <guibutton>OK</guibutton>.  The file will be loaded.</para>
 
 <para>There is a <guibutton>Cancel</guibutton> button, if you click this
 button, the load will be aborted.</para>
@@ -428,24 +394,33 @@ appear.</para>
 
 <para>The top combo box labeled <guilabel>Name:</guilabel> shows the
 currently selected printer.  To configure this printer click on the
-<guibutton>Properties...</guibutton> button.</para>
+<guibutton>Properties</guibutton> button.</para>
 
 <para>To select a different printer, click on the combo box and
 select the desired printer.</para>
 
 <para>If you want to print your output into a postscript file, to a PDF file, 
 a fax modem (to send it as a fax) or email the file as a PDF file, select
-the appropriate option from the combo box. Once that option has been selected, enter
+the appropriate option from the combo box labeled <guilabel>Name</guilabel>. Once that option has been selected, enter
 the filename into the text box labled <guilabel>Output File:</guilabel>.</para>
 
-<para>The line labled <guilabel>Print system currently used:</guilabel> determines how
-&kword; interacts with your computer and any attached printers.  Complete setup of the
+<para>The line labled <guilabel>State</guilabel> tells you if your printer is currently connected and if it is printing another page. You can not change any information on this line.</para>
+
+<para>The lines labled <guilabel>Type</guilabel> and <guilabel>Location</guilabel> tells you what type of printer is currently selected and where that printer is located. You can not change any information on these lines.</para>
+
+
+
+<para>The line labled <guilabel>Comment</guilabel> describes how
+&kword; interacts with your computer (what driver and print system it is using). You can not change anything on this line.  Complete setup of the &kde;
 printing system is beyond the scope of this document.  For more information see the &kde; 
 print web site at <ulink url="http://printing.kde.org">http://printing.kde.org</ulink>.</para>
 
 <para>If you want to print all pages of your document and only one copy, you can click 
 <guibutton>OK</guibutton>.  If you want to change the number of copies or only print selected
-pages, click <guibutton>Expand</guibutton></para>
+pages, click the <guibutton>Expand</guibutton> button.</para>
+
+<note><para>The <guibutton>System Options...</guibutton> button allows a user to change the setup of the printers and &kde; print system.  This is also beyond the scope of this manual.  
+If you need to make changes please refer to the &kde; print web site at <ulink url="http://printing.kde.org">http://printing.kde.org</ulink>.</para></note>
 
 <note><para>Depending on which printing system your computer uses, you may find that you have 
 more printing options then those described below.  What is described here, is available on 
@@ -487,6 +462,8 @@ first).</para>
 
 <para>If you click on <guibutton>Collapse</guibutton>, the print dialog will
 compress down to the previous view.</para>
+
+<note><para>Depending on your systems setup, you may have additional options available to you.  These options are discussed at <ulink url="http://printing.kde.org">http://printing.kde.org</ulink>.</para></note>
 
 <para>When you are satisfied with your selections, you can click
 <guibutton>OK</guibutton> to print.</para>
