@@ -42,6 +42,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
     tmpQButtonGroup = new QButtonGroup( page1, "ButtonGroup_1" );
     tmpQButtonGroup->setFrameStyle( 49 );
     tmpQButtonGroup->setTitle( i18n("Validity Criteria") );
+    tmpQButtonGroup->resize( tmpQButtonGroup->sizeHint() );
     QGridLayout *grid1 = new QGridLayout(tmpQButtonGroup,2,4,KDialogBase::marginHint(),KDialogBase::spacingHint());
 
     QLabel *tmpQLabel = new QLabel( tmpQButtonGroup, "Label_1" );
@@ -140,8 +141,8 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
      grid1->addMultiCellWidget(message,2,3,1,1);
      lay1->addWidget(tmpQButtonGroup);
 
-     connect(choose,SIGNAL(highlighted(int )),this,SLOT(changeIndexCond(int)));
-     connect(chooseType,SIGNAL(highlighted(int )),this,SLOT(changeIndexType(int)));
+     connect(choose,SIGNAL(activated(int )),this,SLOT(changeIndexCond(int)));
+     connect(chooseType,SIGNAL(activated(int )),this,SLOT(changeIndexType(int)));
      connect( this, SIGNAL(user1Clicked()), SLOT(OkPressed()) );
      connect( this, SIGNAL(user2Clicked()), SLOT(clearAllPressed()) );
      init();
@@ -273,6 +274,8 @@ switch(_index)
                         }
                 break;
         }
+    if ( width() < sizeHint().width() )
+      resize( sizeHint() );
 }
 
 void KSpreadDlgValidity::changeIndexCond(int _index)
