@@ -30,3 +30,9 @@ QDomElement ListStyleStack::currentListStyle() const
     Q_ASSERT( !m_stack.isEmpty() );
     return m_stack.top();
 }
+
+QDomElement ListStyleStack::currentListStyleProperties() const
+{
+    QDomElement style = currentListStyle();
+    return style.namedItem( "style:properties" ).toElement();
+}

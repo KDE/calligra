@@ -53,6 +53,14 @@ public:
     QDomElement currentListStyle() const;
 
     /**
+     * @return the style:properties for the currenty applicable list style.
+     * The list-level properties that are only "style" information,
+     * like text:min-label-width, text:space-before, and style:font-name
+     * are the attributes of that element.
+     */
+    QDomElement currentListStyleProperties() const;
+
+    /**
      * Set the initial level of the list, i.e. of item at the bottom of the stack.
      * This is used when a level is explicitely specified in the
      * [un]ordered-list tag (OASIS extension)

@@ -641,6 +641,7 @@ void OoWriterImport::applyListStyle( QDomDocument& doc, QDomElement& layoutEleme
         bool heading = paragraph.tagName() == "text:h";
         m_nextItemIsListItem = false;
         const QDomElement listStyle = m_listStyleStack.currentListStyle();
+        const QDomElement listStyleProperties = m_listStyleStack.currentListStyleProperties();
         QDomElement counter = doc.createElement( "COUNTER" );
         counter.setAttribute( "numberingtype", heading ? 1 : 0 );
         int level = heading ? paragraph.attribute( "text:level" ).toInt() : m_listStyleStack.level();
@@ -665,8 +666,51 @@ void OoWriterImport::applyListStyle( QDomDocument& doc, QDomElement& layoutEleme
                 counter.setAttribute( "start", listStyle.attribute( "text:start-value" ) );
             }
         }
-        else // TODO bullets, see 3.3.6 p138
-            counter.setAttribute( "type", 10 ); // a disc bullet
+        else { // bullets, see 3.3.6 p138
+            counter.setAttribute( "type", 6 );
+            QString bulletChar = listStyle.attribute( "text:bullet-char" );
+            if ( !bulletChar.isEmpty() ) {
+#if 0 // doesn't work well. Fonts lack those symbols!
+                counter.setAttribute( "bullet", bulletChar[0].unicode() );
+                kdDebug() << "bullet code " << bulletChar[0].unicode() << endl;
+                QString fontName = listStyleProperties.attribute( "style:font-name" );
+                counter.setAttribute( "bulletfont", fontName );
+#endif
+                // Reverse engineering, I found those codes:
+                switch( bulletChar[0].unicode() ) {
+                case 8226: // small disc
+                    counter.setAttribute( "type", 10 ); // a disc bullet
+                    break;
+                case 9679: // large disc
+                    counter.setAttribute( "type", 10 ); // a disc bullet
+                    break;
+                case 57356: // losange - TODO in KWord
+                    counter.setAttribute( "type", 10 ); // a disc bullet
+                    break;
+                case 57354: // square
+                    counter.setAttribute( "type", 9 );
+                    break;
+                case 10132: // arrow
+                case 10146: // two-colors right-pointing triangle (TODO)
+                    counter.setAttribute( "bullet", 206 ); // simpler arrow symbol
+                    counter.setAttribute( "bulletfont", "symbol" );
+                    break;
+                case 10007: // cross
+                    counter.setAttribute( "bullet", 212 ); // simpler cross symbol
+                    counter.setAttribute( "bulletfont", "symbol" );
+                    break;
+                case 10004: // checkmark
+                    counter.setAttribute( "bullet", 246 ); // hmm that's sqrt
+                    counter.setAttribute( "bulletfont", "symbol" );
+                    break;
+                default:
+                    counter.setAttribute( "type", 8 ); // circle
+                    break;
+                }
+            } else { // can never happen
+                counter.setAttribute( "type", 10 ); // a disc bullet
+            }
+        }
 
         layoutElement.appendChild(counter);
     }
