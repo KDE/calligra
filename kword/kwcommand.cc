@@ -1060,13 +1060,15 @@ void KWDeleteFrameCommand::execute()
 
     KWFrame *frame = frameSet->frame( m_frameIndex.m_iFrameIndex );
     Q_ASSERT( frame );
-    frameSet->kWordDocument()->terminateEditing( frameSet );
+    KWDocument* doc = frameSet->kWordDocument();
+    doc->terminateEditing( frameSet );
     frameSet->delFrame( m_frameIndex.m_iFrameIndex );
     //when you delete a frame frame pointer is deleted
     //so used frameChanged with a null pointer.
-    frameSet->kWordDocument()->frameChanged( 0L );
-    frameSet->kWordDocument()->refreshDocStructure( frameSet->type() );
-    frameSet->kWordDocument()->updateRulerFrameStartEnd();
+    doc->frameChanged( 0L );
+    doc->refreshDocStructure( frameSet->type() );
+    doc->updateRulerFrameStartEnd();
+    doc->updateTextFrameSetEdit();
 }
 
 void KWDeleteFrameCommand::unexecute()
@@ -1089,6 +1091,7 @@ void KWDeleteFrameCommand::unexecute()
     doc->recalcFrames( frame->pageNum() );
     doc->refreshDocStructure(frameSet->type());
     doc->updateRulerFrameStartEnd();
+    doc->updateTextFrameSetEdit();
 }
 
 KWCreateFrameCommand::KWCreateFrameCommand( const QString &name, KWFrame * frame ) :
