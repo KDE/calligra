@@ -1,14 +1,11 @@
 TODO:
+-	check/set winding in vpath::combine().
+-	vroundcorners needs to be imrpoved for beziers and big radii (lenny)
 -	check in other apps if this makes sense:
 	(make vselection a visitor and paint selected shapes instead of each shape)
--	add a list of vsegment to vselection, add selection-flags to vsegment for 
-	node-selection
--	add VSegmentList::revert()
--	create all shapes CCW. check in close() and combine().
--	vroundcorners needs to be imrpoved for beziers and big radii (lenny)
 
 REAL BUGS:
--	linewith doesnt update bbox anymore
+-	linewith adjustment via previewwidget doesnt update bbox
 -	mirror coordinate-system so origin is bottom-left
 -	add undo/redo to shape commands like VFlattenCmd etc
 -	scale tool should only scale in one direction while dragging a slection node

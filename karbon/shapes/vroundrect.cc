@@ -3,7 +3,9 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#define QMIN(a, b)      ((a) < (b) ? (a) : (b))
+#ifndef QMIN
+	#define QMIN(a, b)      ((a) < (b) ? (a) : (b))
+#endif
 
 #include <klocale.h>
 
@@ -17,28 +19,29 @@ VRoundRect::VRoundRect( VObject* parent,
 	if( edgeRadius < 0.0 )
 		edgeRadius = 0.0;
 
-	// catch case, when radius is larger than width or height:
+	// Catch case, when radius is larger than width or height:
 	double minimum;
 
-	if( edgeRadius > ( minimum = QMIN( width, height * 0.5 ) ) )
+	if( edgeRadius > ( minimum = QMIN( width * 0.5, height * 0.5 ) ) )
 	{
  		edgeRadius = minimum;
 	}
 
 
-	moveTo( KoPoint( topLeft.x(), topLeft.y() - edgeRadius ) );
-	arcTo(
-		KoPoint( topLeft.x(), topLeft.y() ),
-		KoPoint( topLeft.x() + edgeRadius, topLeft.y() ), edgeRadius );
-	arcTo(
-		KoPoint( topLeft.x() + width, topLeft.y() ),
-		KoPoint( topLeft.x() + width, topLeft.y() - edgeRadius ), edgeRadius );
-	arcTo(
-		KoPoint( topLeft.x() + width, topLeft.y() - height ),
-		KoPoint( topLeft.x() + width - edgeRadius, topLeft.y() - height ), edgeRadius );
+	moveTo(
+		KoPoint( topLeft.x(), topLeft.y() - height + edgeRadius ) );
 	arcTo(
 		KoPoint( topLeft.x(), topLeft.y() - height ),
-		KoPoint( topLeft.x(), topLeft.y() - height + edgeRadius ), edgeRadius );
+		KoPoint( topLeft.x() + edgeRadius, topLeft.y() - height ), edgeRadius );
+	arcTo(
+		KoPoint( topLeft.x() + width, topLeft.y() - height ),
+		KoPoint( topLeft.x() + width, topLeft.y() - height + edgeRadius ), edgeRadius );
+	arcTo(
+		KoPoint( topLeft.x() + width, topLeft.y() ),
+		KoPoint( topLeft.x() + width - edgeRadius, topLeft.y() ), edgeRadius );
+	arcTo(
+		KoPoint( topLeft.x(), topLeft.y() ),
+		KoPoint( topLeft.x(), topLeft.y() - edgeRadius ), edgeRadius );
 	close();
 }
 

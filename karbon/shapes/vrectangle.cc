@@ -12,9 +12,9 @@ VRectangle::VRectangle( VObject* parent,
 	: VPath( parent )
 {
 	moveTo( topLeft );
-	lineTo( KoPoint( topLeft.x() + width, topLeft.y() ) );
-	lineTo( KoPoint( topLeft.x() + width, topLeft.y() - height ) );
 	lineTo( KoPoint( topLeft.x(),         topLeft.y() - height ) );
+	lineTo( KoPoint( topLeft.x() + width, topLeft.y() - height ) );
+	lineTo( KoPoint( topLeft.x() + width, topLeft.y() ) );
 	close();
 }
 
