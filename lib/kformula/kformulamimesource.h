@@ -43,6 +43,7 @@ public:
 
     virtual void elementRemoval(BasicElement* child);
     virtual void changed();
+    virtual void cursorHasMoved( FormulaCursor* );
     virtual const SymbolTable& getSymbolTable() const;
 
 private:

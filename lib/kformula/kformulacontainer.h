@@ -62,6 +62,7 @@ public:
 
     virtual void elementRemoval(BasicElement* child) = 0;
     virtual void changed() = 0;
+    virtual void cursorHasMoved( FormulaCursor* ) = 0;
     virtual const SymbolTable& getSymbolTable() const = 0;
 };
 
@@ -102,10 +103,17 @@ public:
     void elementRemoval(BasicElement* child);
 
     /**
-     * Gets called whenever something changes and we need to
+     * Gets called when ever something changes and we need to
      * recalc.
      */
     void changed();
+
+    /**
+     * Gets called when a request has the side effect of moving the
+     * cursor. In the end any operation that moves the cursor should
+     * call this.
+     */
+    void cursorHasMoved( FormulaCursor* );
 
     /**
      * Draws the whole thing.
@@ -268,95 +276,23 @@ public:
      */
     bool input( QKeyEvent* event );
 
+    void performRequest( Request* request );
+
     // There are a lot of thing we can do with the formula.
 
     void addText(QChar ch, bool isSymbol = false);
     void addText(const QString& text);
 
     void addNameSequence();
-    void addSpace( SpaceWidths space );
 
-    void addLineBreak();
-
-    void addBracket(char left, char right);
-    void addSquareBracket() { addBracket('[', ']'); }
-    void addCurlyBracket()  { addBracket('{', '}'); }
-    void addLineBracket()   { addBracket('|', '|'); }
-    void addCornerBracket() { addBracket('<', '>'); }
-    void addRoundBracket()  { addBracket('(', ')'); }
-
-    void addFraction();
-    void addRoot();
-
-    void addSymbol(SymbolType type);
-    void addIntegral() { addSymbol(Integral); }
-    void addProduct()  { addSymbol(Product); }
-    void addSum()      { addSymbol(Sum); }
-
-    void addMatrix(int rows, int columns);
-
-    /**
-     * Adds a one by two matrix (one column, two rows)
-     **/
-    void addOneByTwoMatrix();
-
-    /**
-     * Asks for a matrix size and inserts it.
-     */
-    void addMatrix();
-
-    /**
-     * Changes the selected matrixes size.
-     */
-    void changeMatrix();
-
-    /**
-     * Adds the lower left index of the current IndexElement.
-     * Creates and inserts an IndexElement if there is non.
-     */
-    void addLowerLeftIndex();
-
-    /**
-     * Adds the upper left index of the current IndexElement.
-     * Creates and inserts an IndexElement if there is non.
-     */
-    void addUpperLeftIndex();
-
-    /**
-     * Adds the lower right index of the current IndexElement.
-     * Creates and inserts an IndexElement if there is non.
-     */
-    void addLowerRightIndex();
-
-    /**
-     * Adds the upper right index of the current IndexElement.
-     * Creates and inserts an IndexElement if there is non.
-     */
-    void addUpperRightIndex();
-
-    /**
-     * Adds a lower index to the current element if possible.
-     */
-    void addGenericLowerIndex();
-
-    /**
-     * Adds an upper index to the current element if possible.
-     */
-    void addGenericUpperIndex();
+    //void addMatrix(int rows, int columns);
 
     void remove(Direction = beforeCursor);
-
-    void replaceElementWithMainChild(Direction = beforeCursor);
 
     /**
      * Replaces the current name with its text symbol if it has one.
      */
     void compactExpression();
-
-    /**
-     * Converts the current character into a greek letter.
-     */
-    void makeGreek();
 
     /**
      * Insert data from the clipboard.
@@ -378,14 +314,6 @@ protected:
     KCommandHistory* getHistory() const;
 
 private:
-
-    /**
-     * Creates a new IndexElement to be inserted and selects the elements
-     * that should become its main child's content.
-     */
-    IndexElement* createIndexElement();
-
-    void addGenericIndex(FormulaCursor* cursor, ElementIndexPtr index);
 
     /**
      * Execute the command if it makes sense.

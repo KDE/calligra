@@ -23,7 +23,6 @@
 
 #include "artwork.h"
 #include "basicelement.h"
-#include "elementindex.h"
 #include "kformuladefs.h"
 
 KFORMULA_NAMESPACE_BEGIN
@@ -34,7 +33,7 @@ KFORMULA_NAMESPACE_BEGIN
 class SymbolElement : public BasicElement {
 public:
 
-    enum { contentPos, upperPos, lowerPos };
+    //enum { contentPos, upperPos, lowerPos };
 
     SymbolElement(SymbolType type = Empty, BasicElement* parent = 0);
     ~SymbolElement();
@@ -191,8 +190,13 @@ public:
 
     // Generic access to each index.
 
-    ElementIndexPtr getUpperIndex() { return ElementIndexPtr(new UpperIndex(this)); }
-    ElementIndexPtr getLowerIndex() { return ElementIndexPtr(new LowerIndex(this)); }
+    ElementIndexPtr getUpperIndex() { return ElementIndexPtr( new UpperIndex( this ) ); }
+    ElementIndexPtr getLowerIndex() { return ElementIndexPtr( new LowerIndex( this ) ); }
+
+    /**
+     * Returns the index at the position. Defaults to upperRight.
+     */
+    ElementIndexPtr getIndex( int position );
 
     // Save&load
     //virtual QDomElement getElementDom(QDomDocument *doc);

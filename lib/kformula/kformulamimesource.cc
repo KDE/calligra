@@ -148,6 +148,10 @@ void MimeSource::changed()
 {
 }
 
+void MimeSource::cursorHasMoved( FormulaCursor* )
+{
+}
+
 const SymbolTable& MimeSource::getSymbolTable() const
 {
     return table;

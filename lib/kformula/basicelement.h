@@ -34,7 +34,9 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
+class Command;
 class ComplexElement;
+class Container;
 class ElementType;
 class FormulaCursor;
 class FormulaElement;
@@ -276,6 +278,17 @@ public:
     virtual void childWillVanish(FormulaCursor*, BasicElement*) {}
 
 
+    /**
+     * This is called by the container to get a command depending on
+     * the current cursor position (this is how the element gets choosen)
+     * and the request.
+     *
+     * @returns the command that performs the requested action with
+     * the containers active cursor.
+     */
+    virtual Command* buildCommand( Container*, Request* ) { return 0; }
+
+
     // basic support
 
     BasicElement* getParent() { return parent; }
@@ -371,7 +384,7 @@ protected:
      *
      * This is a service for all subclasses that contain children.
      */
-    SequenceElement* buildChild(QDomNode& node, QString name);
+    SequenceElement* buildChild( SequenceElement* child, QDomNode node, QString name );
 
     /**
      * @returns our type. This is an object from our parent's syntax tree

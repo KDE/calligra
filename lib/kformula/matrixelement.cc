@@ -18,8 +18,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <iostream.h>
-
 #include <qmemarray.h>
 #include <qpainter.h>
 
@@ -469,7 +467,7 @@ QDomDocument MatrixElement::resizedDom( uint rows, uint cols )
     }
 
     //QCString data = doc.toCString();
-    //kdDebug( 40000 ) << (const char *)data << endl;
+    //kdDebug( DEBUGID ) << (const char *)data << endl;
     return doc;
 }
 
@@ -512,7 +510,7 @@ bool MatrixElement::readAttributesFromDom(QDomElement& element)
         rows = rowStr.toInt();
     }
     if (rows == 0) {
-        cerr << "Rows <= 0 in MatrixElement.\n";
+        kdDebug( DEBUGID ) << "Rows <= 0 in MatrixElement." << endl;
         return false;
     }
 
@@ -522,7 +520,7 @@ bool MatrixElement::readAttributesFromDom(QDomElement& element)
         cols = columnStr.toInt();
     }
     if (cols == 0) {
-        cerr << "Columns <= 0 in MatrixElement.\n";
+        kdDebug( DEBUGID ) << "Columns <= 0 in MatrixElement." << endl;
         return false;
     }
 

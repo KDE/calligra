@@ -148,7 +148,7 @@ luPt ContextStyle::getAdjustedSize( TextStyle tstyle ) const
     return ptToLayoutUnitPt( static_cast<luPt>( baseSize*getReductionFactor( tstyle ) ) );
 }
 
-luPt ContextStyle::getSpace( TextStyle tstyle, SpaceWidths space ) const
+luPt ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space ) const
 {
     switch ( space ) {
     case THIN:   return getThinSpace( tstyle );

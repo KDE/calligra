@@ -30,7 +30,7 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-SpaceElement::SpaceElement( SpaceWidths space, BasicElement* parent )
+SpaceElement::SpaceElement( SpaceWidth space, BasicElement* parent )
     : BasicElement( parent ), spaceWidth( space )
 {
 }

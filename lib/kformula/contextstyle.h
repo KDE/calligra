@@ -119,7 +119,7 @@ public:
     /**
      * TeX like spacings.
      */
-    luPt getSpace( TextStyle tstyle, SpaceWidths space ) const;
+    luPt getSpace( TextStyle tstyle, SpaceWidth space ) const;
     luPt getThinSpace( TextStyle tstyle ) const;
     luPt getMediumSpace( TextStyle tstyle ) const;
     luPt getThickSpace( TextStyle tstyle ) const;

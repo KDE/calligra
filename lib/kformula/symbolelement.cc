@@ -20,18 +20,67 @@
 
 #include <qpainter.h>
 
+#include <kdebug.h>
+
 #include "formulacursor.h"
 #include "formulaelement.h"
+#include "kformulacommand.h"
 #include "sequenceelement.h"
 #include "symbolelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
-using namespace std;
+
+
+class SymbolSequenceElement : public SequenceElement {
+    typedef SequenceElement inherited;
+public:
+
+    SymbolSequenceElement( BasicElement* parent = 0 ) : SequenceElement( parent ) {}
+
+    /**
+     * This is called by the container to get a command depending on
+     * the current cursor position (this is how the element gets choosen)
+     * and the request.
+     *
+     * @returns the command that performs the requested action with
+     * the containers active cursor.
+     */
+    virtual Command* buildCommand( Container*, Request* );
+};
+
+
+Command* SymbolSequenceElement::buildCommand( Container* container, Request* request )
+{
+    switch ( *request ) {
+    case req_addIndex: {
+        IndexRequest* ir = static_cast<IndexRequest*>( request );
+        if ( ( ir->index() == upperMiddlePos ) || ( ir->index() == lowerMiddlePos ) ) {
+            SymbolElement* element = static_cast<SymbolElement*>( getParent() );
+            ElementIndexPtr index = element->getIndex( ir->index() );
+            if ( !index->hasIndex() ) {
+                KFCAddGenericIndex* command = new KFCAddGenericIndex( container, index );
+                return command;
+            }
+            else {
+                FormulaCursor* cursor = container->activeCursor();
+                index->moveToIndex( cursor, afterCursor );
+                cursor->setSelection( false );
+                formula()->cursorHasMoved( cursor );
+                return 0;
+            }
+        }
+    }
+    default:
+        break;
+    }
+    return inherited::buildCommand( container, request );
+}
+
 
 SymbolElement::SymbolElement(SymbolType type, BasicElement* parent)
     : BasicElement(parent), symbol(type)
 {
-    content = new SequenceElement(this);
+    content = new SymbolSequenceElement( this );
     upper = 0;
     lower = 0;
 }
@@ -405,10 +454,10 @@ void SymbolElement::insert(FormulaCursor* cursor,
     index->setParent(this);
 
     switch (cursor->getPos()) {
-    case upperPos:
+    case upperMiddlePos:
         upper = index;
         break;
-    case lowerPos:
+    case lowerMiddlePos:
         lower = index;
         break;
     default:
@@ -443,13 +492,13 @@ void SymbolElement::remove(FormulaCursor* cursor,
 {
     int pos = cursor->getPos();
     switch (pos) {
-    case upperPos:
+    case upperMiddlePos:
         removedChildren.append(upper);
         formula()->elementRemoval(upper);
         upper = 0;
         setToUpper(cursor);
         break;
-    case lowerPos:
+    case lowerMiddlePos:
         removedChildren.append(lower);
         formula()->elementRemoval(lower);
         lower = 0;
@@ -488,9 +537,9 @@ BasicElement* SymbolElement::getChild(FormulaCursor* cursor, Direction)
     switch (pos) {
     case contentPos:
         return content;
-    case upperPos:
+    case upperMiddlePos:
         return upper;
-    case lowerPos:
+    case lowerMiddlePos:
         return lower;
     }
     return 0;
@@ -515,12 +564,12 @@ void SymbolElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 
 void SymbolElement::setToUpper(FormulaCursor* cursor)
 {
-    cursor->setTo(this, upperPos);
+    cursor->setTo(this, upperMiddlePos);
 }
 
 void SymbolElement::setToLower(FormulaCursor* cursor)
 {
-    cursor->setTo(this, lowerPos);
+    cursor->setTo(this, lowerMiddlePos);
 }
 
 /**
@@ -557,6 +606,18 @@ void SymbolElement::moveToLower(FormulaCursor* cursor, Direction direction)
             lower->moveRight(cursor, this);
         }
     }
+}
+
+
+ElementIndexPtr SymbolElement::getIndex( int position )
+{
+    switch ( position ) {
+	case lowerMiddlePos:
+	    return getLowerIndex();
+	case upperMiddlePos:
+	    return getUpperIndex();
+    }
+    return getUpperIndex();
 }
 
 
@@ -616,10 +677,9 @@ bool SymbolElement::readContentFromDom(QDomNode& node)
         return false;
     }
 
-    delete content;
-    content = buildChild(node, "CONTENT");
+    content = buildChild( content, node, "CONTENT" );
     if (content == 0) {
-        cerr << "Empty content in SymbolElement.\n";
+        kdDebug( DEBUGID ) << "Empty content in SymbolElement." << endl;
         return false;
     }
     node = node.nextSibling();
@@ -630,12 +690,12 @@ bool SymbolElement::readContentFromDom(QDomNode& node)
     while (!node.isNull() && !(upperRead && lowerRead)) {
 
         if (!lowerRead && (node.nodeName().upper() == "LOWER")) {
-            lower = buildChild(node, "LOWER");
+            lower = buildChild( new SequenceElement( this ), node, "LOWER" );
             lowerRead = lower != 0;
         }
 
         if (!upperRead && (node.nodeName().upper() == "UPPER")) {
-            upper = buildChild(node, "UPPER");
+            upper = buildChild( new SequenceElement( this ), node, "UPPER" );
             upperRead = upper != 0;
         }
 

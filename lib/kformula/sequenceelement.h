@@ -30,7 +30,6 @@ class QKeyEvent;
 
 KFORMULA_NAMESPACE_BEGIN
 
-class Container;
 class SymbolTable;
 
 
@@ -232,6 +231,17 @@ public:
 
 
     /**
+     * This is called by the container to get a command depending on
+     * the current cursor position (this is how the element gets choosen)
+     * and the request.
+     *
+     * @returns the command that performs the requested action with
+     * the containers active cursor.
+     */
+    virtual Command* buildCommand( Container*, Request* );
+
+
+    /**
      * Parses the input. It's the container which does create
      * new elements because it owns the undo stack. But only the
      * sequence knows what chars are allowed.
@@ -389,6 +399,17 @@ public:
      * to the end of the next.
      */
     virtual void moveWordRight(FormulaCursor* cursor);
+
+    /**
+     * This is called by the container to get a command depending on
+     * the current cursor position (this is how the element gets choosen)
+     * and the request.
+     *
+     * @returns the command that performs the requested action with
+     * the containers active cursor.
+     */
+    virtual Command* buildCommand( Container*, Request* );
+
 
     /**
      * Parses the input. It's the container which does create

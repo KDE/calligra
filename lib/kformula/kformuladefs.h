@@ -35,6 +35,8 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
+const int DEBUGID = 40000;
+
 /**
  * The type to be used for points.
  */
@@ -64,6 +66,7 @@ typedef int luPixel;
 typedef QPoint LuPixelPoint;
 typedef QRect LuPixelRect;
 typedef QSize LuPixelSize;
+
 
 /**
  * The symbols that are supported by our artwork.
@@ -112,10 +115,6 @@ enum CharClass {
 typedef CharClass TokenType;
 
 
-class ElementIndex;
-typedef std::auto_ptr<ElementIndex> ElementIndexPtr;
-
-
 /**
  * Wether we want to insert to the left of the cursor
  * or right of it.
@@ -126,7 +125,127 @@ enum Direction { beforeCursor, afterCursor };
 /**
  * The types of space we know.
  */
-enum SpaceWidths { THIN, MEDIUM, THICK, QUAD };
+enum SpaceWidth { THIN, MEDIUM, THICK, QUAD };
+
+/**
+ * each index has its own number.
+ */
+enum IndexPosition {
+    upperLeftPos,
+    lowerLeftPos,
+    upperMiddlePos,
+    contentPos,
+    lowerMiddlePos,
+    upperRightPos,
+    lowerRightPos,
+    parentPos
+};
+
+
+class BasicElement;
+class FormulaCursor;
+
+/**
+ * A type that describes an index. You can get one of those
+ * for each index from an element that owns indexes.
+ *
+ * This type is used to work on indexes in a generic way.
+ */
+class ElementIndex {
+public:
+
+    virtual ~ElementIndex() { /*cerr << "ElementIndex destroyed.\n";*/ }
+
+    /**
+     * Moves the cursor inside the index. The index has to exist.
+     */
+    virtual void moveToIndex(FormulaCursor*, Direction) = 0;
+
+    /**
+     * Sets the cursor to point to the place where the index normaly
+     * is. These functions are only used if there is no such index and
+     * we want to insert them.
+     */
+    virtual void setToIndex(FormulaCursor*) = 0;
+
+    /**
+     * Tells whether we own those indexes.
+     */
+    virtual bool hasIndex() const = 0;
+
+    /**
+     * Tells to which element the index belongs.
+     */
+    virtual BasicElement* getElement() = 0;
+};
+
+typedef std::auto_ptr<ElementIndex> ElementIndexPtr;
+
+enum RequestID {
+    req_addBracket,
+    req_addFraction,
+    req_addIndex,
+    req_addMatrix,
+    req_addNameSequence,
+    req_addOneByTwoMatrix,
+    req_addRoot,
+    req_addSpace,
+    req_addSymbol,
+    req_changeMatrix,
+    req_compactExpression,
+    req_copy,
+    req_cut,
+    req_makeGreek,
+    req_paste,
+    req_remove,
+    req_removeEnclosing
+};
+
+
+class Request {
+    RequestID id;
+public:
+    Request( RequestID _id ) : id( _id ) {}
+    virtual ~Request() {}
+    operator RequestID() const { return id;}
+};
+
+
+class BracketRequest : public Request {
+    char m_left, m_right;
+public:
+    BracketRequest( char l, char r ) : Request( req_addBracket ), m_left( l ), m_right( r ) {}
+    char left() const { return m_left; }
+    char right() const { return m_right; }
+};
+
+class SymbolRequest : public Request {
+    SymbolType m_type;
+public:
+    SymbolRequest( SymbolType t ) : Request( req_addSymbol ), m_type( t ) {}
+    SymbolType type() const { return m_type; }
+};
+
+class IndexRequest : public Request {
+    IndexPosition m_index;
+public:
+    IndexRequest( IndexPosition i ) : Request( req_addIndex ), m_index( i ) {}
+    IndexPosition index() const { return m_index; }
+};
+
+class SpaceRequest : public Request {
+    SpaceWidth m_space;
+public:
+    SpaceRequest( SpaceWidth s ) : Request( req_addSpace ), m_space( s ) {}
+    SpaceWidth space() const { return m_space; }
+};
+
+class DirectedRemove : public Request {
+    Direction m_direction;
+public:
+    DirectedRemove( RequestID id, Direction d ) : Request( id ), m_direction( d ) {}
+    Direction direction() const { return m_direction; }
+};
 
 
 KFORMULA_NAMESPACE_END

@@ -75,6 +75,13 @@ public:
     void changed();
 
     /**
+     * Gets called when a request has the side effect of moving the
+     * cursor. In the end any operation that moves the cursor should
+     * call this.
+     */
+    void cursorHasMoved( FormulaCursor* );
+
+    /**
      * Calculates the formulas sizes and positions.
      */
     void calcSizes( ContextStyle& context );
@@ -83,6 +90,16 @@ public:
      * Draws the whole thing.
      */
     void draw( QPainter& painter, const QRect& r, ContextStyle& context );
+
+    /**
+     * This is called by the container to get a command depending on
+     * the current cursor position (this is how the element gets choosen)
+     * and the request.
+     *
+     * @returns the command that performs the requested action with
+     * the containers active cursor.
+     */
+    virtual Command* buildCommand( Container*, Request* );
 
     /**
      * @returns our documents symbol table

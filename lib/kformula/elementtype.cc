@@ -152,7 +152,7 @@ void ElementType::append( ElementType* element )
 
 void ElementType::output()
 {
-    cerr << start() << " - " << end() << endl;
+    kdDebug( DEBUGID ) << start() << " - " << end() << endl;
 }
 
 

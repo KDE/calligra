@@ -160,7 +160,7 @@ QDomElement BasicElement::getElementDom(QDomDocument& doc)
 bool BasicElement::buildFromDom(QDomElement& element)
 {
     if (element.tagName() != getTagName()) {
-        kdDebug( 40000 ) << "Wrong tag name " << element.tagName().latin1() << " for " << getTagName().latin1() << ".\n";
+        kdDebug( DEBUGID ) << "Wrong tag name " << element.tagName().latin1() << " for " << getTagName().latin1() << ".\n";
         return false;
     }
     if (!readAttributesFromDom(element)) {
@@ -201,16 +201,14 @@ bool BasicElement::readContentFromDom(QDomNode&)
  * Returns a SequenceElement constructed from the nodes first child
  * if the nodes name matches the given name.
  */
-SequenceElement* BasicElement::buildChild(QDomNode& node, QString name)
+SequenceElement* BasicElement::buildChild( SequenceElement* child, QDomNode node, QString name )
 {
-    SequenceElement* child = 0;
     if (node.isElement()) {
         QDomElement e = node.toElement();
         if (e.tagName().upper() == name) {
             QDomNode nodeInner = e.firstChild();
             if (nodeInner.isElement()) {
                 QDomElement element = nodeInner.toElement();
-                child = new SequenceElement(this);
                 if (!child->buildFromDom(element)) {
                     delete child;
                     child = 0;

@@ -18,22 +18,70 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <iostream>
 #include <qpainter.h>
 #include <qpen.h>
 
+#include <kdebug.h>
+
 #include "formulacursor.h"
 #include "formulaelement.h"
+#include "kformulacommand.h"
 #include "rootelement.h"
 #include "sequenceelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
-using namespace std;
+
+
+class RootSequenceElement : public SequenceElement {
+    typedef SequenceElement inherited;
+public:
+
+    RootSequenceElement( BasicElement* parent = 0 ) : SequenceElement( parent ) {}
+
+    /**
+     * This is called by the container to get a command depending on
+     * the current cursor position (this is how the element gets choosen)
+     * and the request.
+     *
+     * @returns the command that performs the requested action with
+     * the containers active cursor.
+     */
+    virtual Command* buildCommand( Container*, Request* );
+};
+
+
+Command* RootSequenceElement::buildCommand( Container* container, Request* request )
+{
+    switch ( *request ) {
+    case req_addIndex: {
+        IndexRequest* ir = static_cast<IndexRequest*>( request );
+        if ( ir->index() == upperLeftPos ) {
+            RootElement* element = static_cast<RootElement*>( getParent() );
+            ElementIndexPtr index = element->getIndex();
+            if ( !index->hasIndex() ) {
+                KFCAddGenericIndex* command = new KFCAddGenericIndex( container, index );
+                return command;
+            }
+            else {
+                FormulaCursor* cursor = container->activeCursor();
+                index->moveToIndex( cursor, afterCursor );
+                cursor->setSelection( false );
+                formula()->cursorHasMoved( cursor );
+                return 0;
+            }
+        }
+    }
+    default:
+        break;
+    }
+    return inherited::buildCommand( container, request );
+}
+
 
 RootElement::RootElement(BasicElement* parent)
     : BasicElement(parent)
 {
-    content = new SequenceElement(this);
+    content = new RootSequenceElement( this );
     index = 0;
 }
 
@@ -310,7 +358,7 @@ void RootElement::insert(FormulaCursor* cursor,
                          QPtrList<BasicElement>& newChildren,
                          Direction direction)
 {
-    if (cursor->getPos() == indexPos) {
+    if (cursor->getPos() == upperLeftPos) {
         index = static_cast<SequenceElement*>(newChildren.take(0));
         index->setParent(this);
 
@@ -340,11 +388,11 @@ void RootElement::remove(FormulaCursor* cursor,
         getParent()->selectChild(cursor, this);
         getParent()->remove(cursor, removedChildren, direction);
         break;
-    case indexPos:
+    case upperLeftPos:
         removedChildren.append(index);
         formula()->elementRemoval(index);
         index = 0;
-        cursor->setTo(this, indexPos);
+        cursor->setTo(this, upperLeftPos);
         formula()->changed();
         break;
     }
@@ -394,7 +442,7 @@ void RootElement::selectChild(FormulaCursor* cursor, BasicElement* child)
         cursor->setTo(this, contentPos);
     }
     else if (child == index) {
-        cursor->setTo(this, indexPos);
+        cursor->setTo(this, upperLeftPos);
     }
 }
 
@@ -413,7 +461,7 @@ void RootElement::moveToIndex(FormulaCursor* cursor, Direction direction)
 
 void RootElement::setToIndex(FormulaCursor* cursor)
 {
-    cursor->setTo(this, indexPos);
+    cursor->setTo(this, upperLeftPos);
 }
 
 
@@ -460,15 +508,14 @@ bool RootElement::readContentFromDom(QDomNode& node)
         return false;
     }
 
-    delete content;
-    content = buildChild(node, "CONTENT");
+    content = buildChild( content, node, "CONTENT" );
     if (content == 0) {
-        cerr << "Empty content in RootElement.\n";
+        kdDebug( DEBUGID ) << "Empty content in RootElement." << endl;
         return false;
     }
     node = node.nextSibling();
 
-    index = buildChild(node, "INDEX");
+    index = buildChild( new SequenceElement( this ), node, "INDEX" );
     if (index != 0) {
         node = node.nextSibling();
     }

@@ -123,7 +123,7 @@ void View::setReadOnly(bool ro)
 
 void View::draw(QPainter& painter, const QRect& rect, const QColorGroup& cg)
 {
-//     kdDebug( 40000 ) << "View::draw: " << rect.x() << " " << rect.y() << " "
+//     kdDebug( DEBUGID ) << "View::draw: " << rect.x() << " " << rect.y() << " "
 //                      << rect.width() << " " << rect.height() << endl;
     container()->draw( painter, rect, cg );
     if ( cursorVisible() ) {
@@ -156,9 +156,6 @@ void View::keyPressEvent( QKeyEvent* event )
             break;
         case Qt::Key_End:
             slotMoveEnd(flag);
-            break;
-        case Qt::Key_Return:
-            container()->addLineBreak();
             break;
         }
     }

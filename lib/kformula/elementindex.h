@@ -28,40 +28,6 @@
 KFORMULA_NAMESPACE_BEGIN
 
 
-/**
- * A type that describes an index. You can get one of those
- * for each index from an element that owns indexes.
- *
- * This type is used to work on indexes in a generic way.
- */
-class ElementIndex {
-public:
-
-    virtual ~ElementIndex() { /*cerr << "ElementIndex destroyed.\n";*/ }
-
-    /**
-     * Moves the cursor inside the index. The index has to exist.
-     */
-    virtual void moveToIndex(FormulaCursor*, Direction) = 0;
-
-    /**
-     * Sets the cursor to point to the place where the index normaly
-     * is. These functions are only used if there is no such index and
-     * we want to insert them.
-     */
-    virtual void setToIndex(FormulaCursor*) = 0;
-
-    /**
-     * Tells whether we own those indexes.
-     */
-    virtual bool hasIndex() const = 0;
-
-    /**
-     * Tells to which element the index belongs.
-     */
-    virtual BasicElement* getElement() = 0;
-};
-
 KFORMULA_NAMESPACE_END
 
 #endif // ELEMENTINDEX_H

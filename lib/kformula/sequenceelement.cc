@@ -25,13 +25,16 @@
 #include <qpaintdevice.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
+#include "MatrixDialog.h"
 #include "bracketelement.h"
 #include "elementtype.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
 #include "fractionelement.h"
 #include "indexelement.h"
+#include "kformulacommand.h"
 #include "kformulacontainer.h"
 #include "kformuladocument.h"
 #include "matrixelement.h"
@@ -805,6 +808,140 @@ bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
 }
 
 
+Command* SequenceElement::buildCommand( Container* container, Request* request )
+{
+    switch ( *request ) {
+    case req_addNameSequence:
+        if ( onlyTextSelected( container->activeCursor() ) ) {
+            //kdDebug( DEBUGID ) << "SequenceElement::buildCommand" << endl;
+            KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add name" ), container );
+            command->setElement( new NameSequence() );
+            return command;
+        }
+    case req_addBracket: {
+        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add bracket"), container);
+        BracketRequest* br = static_cast<BracketRequest*>( request );
+        command->setElement( new BracketElement( br->left(), br->right() ) );
+        return command;
+    }
+    case req_addSpace: {
+        KFCReplace* command = new KFCReplace( i18n("Add space"), container );
+        SpaceRequest* sr = static_cast<SpaceRequest*>( request );
+        SpaceElement* element = new SpaceElement( sr->space() );
+        command->addElement( element );
+        return command;
+    }
+    case req_addFraction: {
+        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add fraction"), container);
+        command->setElement(new FractionElement());
+        return command;
+    }
+    case req_addRoot: {
+        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add root"), container);
+        command->setElement(new RootElement());
+        return command;
+    }
+    case req_addSymbol: {
+        KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add symbol" ), container );
+        SymbolRequest* sr = static_cast<SymbolRequest*>( request );
+        command->setElement( new SymbolElement( sr->type() ) );
+        return command;
+    }
+    case req_addOneByTwoMatrix: {
+        KFCAddReplacing* command = new KFCAddReplacing( i18n("Add 1x2 matrix"), container );
+        FractionElement* element = new FractionElement();
+        element->showLine(false);
+        command->setElement(element);
+        return command;
+    }
+    case req_addMatrix: {
+        uint rows = 0, cols = 0;
+        MatrixDialog* dialog = new MatrixDialog( 0 );
+        if ( dialog->exec() ) {
+            rows = dialog->h;
+            cols = dialog->w;
+        }
+        delete dialog;
+        if ( ( rows != 0 ) && ( cols != 0 ) ) {
+            KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add matrix" ), container );
+            command->setElement( new MatrixElement( rows, cols ) );
+            return command;
+        }
+    }
+    /*
+    case req_changeMatrix: {
+        FormulaCursor* cursor = activeCursor();
+        MatrixElement* matrix = cursor->getActiveMatrixElement();
+        if ( matrix != 0 ) {
+            MatrixDialog* dialog = new MatrixDialog( 0, matrix->getColumns(), matrix->getRows() );
+            if ( dialog->exec() ) {
+                uint rows = dialog->h;
+                uint cols = dialog->w;
+                if ( ( rows != matrix->getRows() ) || ( cols != matrix->getColumns() ) ) {
+                    // the dialog hides the normal cursor.
+                    *( impl->internCursor ) = *cursor;
+                    paste( matrix->resizedDom( rows, cols ), i18n( "Matrix size change" ) );
+                }
+            }
+            delete dialog;
+        }
+    }
+    */
+    case req_addIndex: {
+        IndexElement* element = new IndexElement;
+        FormulaCursor* cursor = container->activeCursor();
+        if ( !cursor->isSelection() ) {
+            cursor->moveLeft( SelectMovement | WordMovement );
+        }
+        IndexRequest* ir = static_cast<IndexRequest*>( request );
+        KFCAddIndex* command = new KFCAddIndex( container, element, element->getIndex( ir->index() ) );
+        return command;
+    }
+    case req_removeEnclosing: {
+        FormulaCursor* cursor = container->activeCursor();
+        if ( !cursor->isSelection() ) {
+            DirectedRemove* dr = static_cast<DirectedRemove*>( request );
+            KFCRemoveEnclosing* command = new KFCRemoveEnclosing( container, dr->direction() );
+            return command;
+        }
+    }
+    case req_remove: {
+        DirectedRemove* dr = static_cast<DirectedRemove*>( request );
+        KFCRemove* command = new KFCRemove( container, dr->direction() );
+        return command;
+    }
+    case req_compactExpression: {
+        FormulaCursor* cursor = container->activeCursor();
+        cursor->moveEnd();
+        cursor->moveRight();
+        formula()->cursorHasMoved( cursor );
+        break;
+    }
+    case req_makeGreek: {
+        FormulaCursor* cursor = container->activeCursor();
+        TextElement* element = cursor->getActiveTextElement();
+        if ((element != 0) && !element->isSymbol()) {
+            cursor->selectActiveElement();
+            const SymbolTable& table = container->document()->getSymbolTable();
+            if (table.greekLetters().find(element->getCharacter()) != -1) {
+                KFCReplace* command = new KFCReplace( i18n( "Changes the char to a symbol" ), container );
+                TextElement* symbol = new TextElement( table.unicodeFromSymbolFont( element->getCharacter() ), true );
+                command->addElement( symbol );
+                return command;
+            }
+            cursor->setSelection( false );
+        }
+        break;
+    }
+    case req_paste:
+    case req_copy:
+    case req_cut:
+        break;
+    }
+    return 0;
+}
+
+
 bool SequenceElement::input( Container* container, QKeyEvent* event )
 {
     QChar ch = event->text().at( 0 );
@@ -822,18 +959,19 @@ bool SequenceElement::input( Container* container, QKeyEvent* event )
         case Qt::Key_Delete:
             container->remove( afterCursor );
             return true;
-        case Qt::Key_Return:
-            container->addLineBreak();
-            return true;
         default:
             if ( state & Qt::ControlButton ) {
                 switch ( event->key() ) {
-                case Qt::Key_AsciiCircum:
-                    container->addUpperLeftIndex();
+                case Qt::Key_AsciiCircum: {
+                    IndexRequest r( upperLeftPos );
+                    container->performRequest( &r );
                     return true;
-                case Qt::Key_Underscore:
-                    container->addLowerLeftIndex();
+                }
+                case Qt::Key_Underscore: {
+                    IndexRequest r( lowerLeftPos );
+                    container->performRequest( &r );
                     return true;
+                }
                 default:
                     break;
                 }
@@ -851,21 +989,31 @@ bool SequenceElement::input( Container* container, QChar ch )
     case '(':
         container->document()->addDefaultBracket();
         break;
-    case '[':
-        container->addSquareBracket();
+    case '[': {
+        BracketRequest r( '[', ']' );
+        container->performRequest( &r );
         break;
-    case '{':
-        container->addCurlyBracket();
+    }
+    case '{': {
+        BracketRequest r( '{', '}' );
+        container->performRequest( &r );
         break;
-    case '|':
-        container->addLineBracket();
+    }
+    case '|': {
+        BracketRequest r( '|', '|' );
+        container->performRequest( &r );
         break;
-    case '^':
-        container->addUpperRightIndex();
+    }
+    case '^': {
+        IndexRequest r( upperRightPos );
+        container->performRequest( &r );
         break;
-    case '_':
-        container->addLowerRightIndex();
+    }
+    case '_': {
+        IndexRequest r( lowerRightPos );
+        container->performRequest( &r );
         break;
+    }
     case ' ':
         container->compactExpression();
         break;
@@ -942,7 +1090,7 @@ BasicElement* SequenceElement::createElement( QString type )
     else if ( type == "SYMBOL" )       return new SymbolElement();
     else if ( type == "NAMESEQUENCE" ) return new NameSequence();
     else if ( type == "SEQUENCE" ) {
-        kdDebug( 40000 ) << "malformed data: sequence inside sequence." << endl;
+        kdDebug( DEBUGID ) << "malformed data: sequence inside sequence." << endl;
         return 0;
     }
     return 0;
@@ -1091,6 +1239,27 @@ void NameSequence::moveWordRight( FormulaCursor* cursor )
         moveRight( cursor, this );
     }
 }
+
+
+Command* NameSequence::buildCommand( Container* container, Request* request )
+{
+    switch ( *request ) {
+    case req_compactExpression: {
+        BasicElement* element = replaceElement( container->document()->getSymbolTable() );
+        if ( element != 0 ) {
+            getParent()->selectChild( container->activeCursor(), this );
+
+            KFCReplace* command = new KFCReplace( i18n( "Add element" ), container );
+            command->addElement( element );
+            return command;
+        }
+    }
+    default:
+        break;
+    }
+    return inherited::buildCommand( container, request );
+}
+
 
 bool NameSequence::input( Container* container, QChar ch )
 {

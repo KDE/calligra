@@ -6,7 +6,6 @@
 #include <TestCase.h>
 #include <TestSuite.h>
 
-#include "elementindex.h"
 #include "kformuladefs.h"
 
 class KCommandHistory;

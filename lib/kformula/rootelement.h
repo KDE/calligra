@@ -24,7 +24,6 @@
 #include <qpoint.h>
 
 #include "basicelement.h"
-#include "elementindex.h"
 
 KFORMULA_NAMESPACE_BEGIN
 class SequenceElement;
@@ -36,7 +35,7 @@ class SequenceElement;
 class RootElement : public BasicElement {
 public:
 
-    enum { contentPos, indexPos };
+    //enum { contentPos, indexPos };
 
     RootElement(BasicElement* parent = 0);
     ~RootElement();
@@ -146,7 +145,7 @@ public:
 
     bool hasIndex() const { return index != 0; }
 
-    ElementIndexPtr getIndex() { return ElementIndexPtr(new RootElementIndex(this)); }
+    ElementIndexPtr getIndex() { return ElementIndexPtr( new RootElementIndex( this ) ); }
 
     // Save&load
     //virtual QDomElement getElementDom(QDomDocument *doc);

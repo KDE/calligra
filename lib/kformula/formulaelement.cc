@@ -62,13 +62,17 @@ void FormulaElement::changed()
     document->changed();
 }
 
+void FormulaElement::cursorHasMoved( FormulaCursor* cursor )
+{
+    document->cursorHasMoved( cursor );
+}
 
 /**
  * Calculates the formulas sizes and positions.
  */
 void FormulaElement::calcSizes( ContextStyle& context )
 {
-    //kdDebug( 40000 ) << "FormulaElement::calcSizes" << endl;
+    //kdDebug( DEBUGID ) << "FormulaElement::calcSizes" << endl;
     context.setBaseSize( getBaseSize() );
     inherited::calcSizes( context, context.getBaseTextStyle(),
                           ContextStyle::normal );
@@ -80,12 +84,22 @@ void FormulaElement::calcSizes( ContextStyle& context )
 void FormulaElement::draw( QPainter& painter, const QRect& r,
                            ContextStyle& context )
 {
-    //kdDebug( 40000 ) << "FormulaElement::draw" << endl;
+    //kdDebug( DEBUGID ) << "FormulaElement::draw" << endl;
     context.setBaseSize( getBaseSize() );
     inherited::draw( painter, r, context, context.getBaseTextStyle(),
                      ContextStyle::normal, LuPixelPoint() );
 }
 
+Command* FormulaElement::buildCommand( Container* container, Request* request )
+{
+    switch ( *request ) {
+    case req_compactExpression:
+        return 0;
+    default:
+        break;
+    }
+    return inherited::buildCommand( container, request );
+}
 
 const SymbolTable& FormulaElement::getSymbolTable() const
 {

@@ -51,29 +51,28 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
 
     if (state & Qt::ControlButton) {
         switch (event->key()) {
-            case Qt::Key_1: document->addSum(); return;
-            case Qt::Key_2: document->addProduct(); return;
-            case Qt::Key_3: document->addIntegral(); return;
-            case Qt::Key_4: document->addRoot(); return;
-            case Qt::Key_5: document->addFraction(); return;
-            case Qt::Key_6: document->addMatrix(); return;
-	    case Qt::Key_7: document->addOneByTwoMatrix(); return;
-	    case Qt::Key_8: document->changeMatrix(); return;
+            case Qt::Key_1: document->document()->addSum(); return;
+            case Qt::Key_2: document->document()->addProduct(); return;
+            case Qt::Key_3: document->document()->addIntegral(); return;
+            case Qt::Key_4: document->document()->addRoot(); return;
+            case Qt::Key_5: document->document()->addFraction(); return;
+            case Qt::Key_6: document->document()->addMatrix(); return;
+	    case Qt::Key_7: document->document()->addOneByTwoMatrix(); return;
+	    case Qt::Key_8: document->document()->changeMatrix(); return;
             case Qt::Key_0: importOld("oldformula"); return;
             case Qt::Key_A: slotSelectAll(); return;
-            case Qt::Key_C: document->copy(); return;
-            case Qt::Key_D: document->replaceElementWithMainChild(afterCursor); return;
-            case Qt::Key_G: document->makeGreek(); return;
-            case Qt::Key_L: document->addGenericLowerIndex(); return;
+            case Qt::Key_C: document->document()->copy(); return;
+            case Qt::Key_D: document->document()->removeEnclosing(); return;
+            case Qt::Key_G: document->document()->makeGreek(); return;
+            case Qt::Key_L: document->document()->addGenericLowerIndex(); return;
             case Qt::Key_M: document->loadMathMl("mathml.xml"); return;
             case Qt::Key_O: document->load("test.xml"); return;
             case Qt::Key_Q: kapp->quit(); return;
-            case Qt::Key_R: document->replaceElementWithMainChild(beforeCursor); return;
             case Qt::Key_S: document->save("test.xml"); return;
             case Qt::Key_T: cout << document->texString().latin1() << endl; return;
-            case Qt::Key_U: document->addGenericUpperIndex(); return;
-            case Qt::Key_V: document->paste(); return;
-            case Qt::Key_X: document->cut(); return;
+            case Qt::Key_U: document->document()->addGenericUpperIndex(); return;
+            case Qt::Key_V: document->document()->paste(); return;
+            case Qt::Key_X: document->document()->cut(); return;
             case Qt::Key_Z: (state & Qt::ShiftButton) ? document->document()->redo() : document->document()->undo(); return;
             default:
                 //cerr << "Key: " << event->key() << endl;

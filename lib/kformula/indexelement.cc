@@ -18,23 +18,68 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <iostream>
-
 #include <qpainter.h>
+
+#include <kdebug.h>
 
 #include "indexelement.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
+#include "kformulacommand.h"
 #include "sequenceelement.h"
 
+
 KFORMULA_NAMESPACE_BEGIN
-using namespace std;
+
+
+class IndexSequenceElement : public SequenceElement {
+    typedef SequenceElement inherited;
+public:
+
+    IndexSequenceElement( BasicElement* parent = 0 ) : SequenceElement( parent ) {}
+
+    /**
+     * This is called by the container to get a command depending on
+     * the current cursor position (this is how the element gets choosen)
+     * and the request.
+     *
+     * @returns the command that performs the requested action with
+     * the containers active cursor.
+     */
+    virtual Command* buildCommand( Container*, Request* );
+};
+
+
+Command* IndexSequenceElement::buildCommand( Container* container, Request* request )
+{
+    switch ( *request ) {
+    case req_addIndex: {
+        IndexElement* element = static_cast<IndexElement*>( getParent() );
+        IndexRequest* ir = static_cast<IndexRequest*>( request );
+        ElementIndexPtr index = element->getIndex( ir->index() );
+        if ( !index->hasIndex() ) {
+            KFCAddGenericIndex* command = new KFCAddGenericIndex( container, index );
+            return command;
+        }
+        else {
+            FormulaCursor* cursor = container->activeCursor();
+            index->moveToIndex( cursor, afterCursor );
+            cursor->setSelection( false );
+            formula()->cursorHasMoved( cursor );
+            return 0;
+        }
+    }
+    default:
+        break;
+    }
+    return inherited::buildCommand( container, request );
+}
 
 
 IndexElement::IndexElement(BasicElement* parent)
     : BasicElement(parent)
 {
-    content = new SequenceElement(this);
+    content = new IndexSequenceElement( this );
 
     upperLeft   = 0;
     upperMiddle = 0;
@@ -1082,10 +1127,9 @@ bool IndexElement::readContentFromDom(QDomNode& node)
         return false;
     }
 
-    delete content;
-    content = buildChild(node, "CONTENT");
+    content = buildChild( content, node, "CONTENT" );
     if (content == 0) {
-        cerr << "Empty content in IndexElement.\n";
+        kdDebug( DEBUGID ) << "Empty content in IndexElement." << endl;
         return false;
     }
     node = node.nextSibling();
@@ -1102,32 +1146,32 @@ bool IndexElement::readContentFromDom(QDomNode& node)
              lowerLeftRead && lowerMiddleRead && lowerRightRead)) {
 
         if (!upperLeftRead && (node.nodeName().upper() == "UPPERLEFT")) {
-            upperLeft = buildChild(node, "UPPERLEFT");
+            upperLeft = buildChild( new SequenceElement( this ), node, "UPPERLEFT" );
             upperLeftRead = upperLeft != 0;
         }
 
         if (!upperMiddleRead && (node.nodeName().upper() == "UPPERMIDDLE")) {
-            upperMiddle = buildChild(node, "UPPERMIDDLE");
+            upperMiddle = buildChild( new SequenceElement( this ), node, "UPPERMIDDLE" );
             upperMiddleRead = upperMiddle != 0;
         }
 
         if (!upperRightRead && (node.nodeName().upper() == "UPPERRIGHT")) {
-            upperRight = buildChild(node, "UPPERRIGHT");
+            upperRight = buildChild( new SequenceElement( this ), node, "UPPERRIGHT" );
             upperRightRead = upperRight != 0;
         }
 
         if (!lowerLeftRead && (node.nodeName().upper() == "LOWERLEFT")) {
-            lowerLeft = buildChild(node, "LOWERLEFT");
+            lowerLeft = buildChild( new SequenceElement( this ), node, "LOWERLEFT" );
             lowerLeftRead = lowerLeft != 0;
         }
 
         if (!lowerMiddleRead && (node.nodeName().upper() == "LOWERMIDDLE")) {
-            lowerMiddle = buildChild(node, "LOWERMIDDLE");
+            lowerMiddle = buildChild( new SequenceElement( this ), node, "LOWERMIDDLE" );
             lowerMiddleRead = lowerMiddle != 0;
         }
 
         if (!lowerRightRead && (node.nodeName().upper() == "LOWERRIGHT")) {
-            lowerRight = buildChild(node, "LOWERRIGHT");
+            lowerRight = buildChild( new SequenceElement( this ), node, "LOWERRIGHT" );
             lowerRightRead = lowerRight != 0;
         }
 
@@ -1137,7 +1181,7 @@ bool IndexElement::readContentFromDom(QDomNode& node)
         lowerLeftRead || lowerMiddleRead || lowerRightRead;
 }
 
-ElementIndexPtr IndexElement::getIndex(int position)
+ElementIndexPtr IndexElement::getIndex( int position )
 {
     switch (position) {
 	case upperRightPos:

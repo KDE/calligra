@@ -23,7 +23,6 @@
 
 // Formula include
 #include "basicelement.h"
-#include "elementindex.h"
 
 KFORMULA_NAMESPACE_BEGIN
 class SequenceElement;
@@ -34,10 +33,6 @@ class SequenceElement;
  */
 class IndexElement : public BasicElement {
 public:
-
-    // each index has its own number.
-    enum { upperLeftPos, lowerLeftPos, upperMiddlePos, contentPos,
-           lowerMiddlePos, upperRightPos, lowerRightPos, parentPos };
 
     IndexElement(BasicElement* parent = 0);
     ~IndexElement();
@@ -214,17 +209,17 @@ public:
 
     // Generic access to each index.
 
-    ElementIndexPtr getUpperLeft() { return ElementIndexPtr(new UpperLeftIndex(this)); }
-    ElementIndexPtr getLowerLeft() { return ElementIndexPtr(new LowerLeftIndex(this)); }
-    ElementIndexPtr getUpperMiddle() { return ElementIndexPtr(new UpperMiddleIndex(this)); }
-    ElementIndexPtr getLowerMiddle() { return ElementIndexPtr(new LowerMiddleIndex(this)); }
-    ElementIndexPtr getUpperRight() { return ElementIndexPtr(new UpperRightIndex(this)); }
-    ElementIndexPtr getLowerRight() { return ElementIndexPtr(new LowerRightIndex(this)); }
+    ElementIndexPtr getUpperLeft() { return ElementIndexPtr( new UpperLeftIndex( this ) ); }
+    ElementIndexPtr getLowerLeft() { return ElementIndexPtr( new LowerLeftIndex( this ) ); }
+    ElementIndexPtr getUpperMiddle() { return ElementIndexPtr( new UpperMiddleIndex( this ) ); }
+    ElementIndexPtr getLowerMiddle() { return ElementIndexPtr( new LowerMiddleIndex( this ) ); }
+    ElementIndexPtr getUpperRight() { return ElementIndexPtr( new UpperRightIndex( this ) ); }
+    ElementIndexPtr getLowerRight() { return ElementIndexPtr( new LowerRightIndex( this ) ); }
 
     /**
      * Returns the index at the position. Defaults to upperRight.
      */
-    ElementIndexPtr getIndex(int position);
+    ElementIndexPtr getIndex( int position );
 
     /**
      * @returns the latex representation of the element and

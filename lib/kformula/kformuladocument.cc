@@ -224,7 +224,7 @@ ContextStyle& Document::getContextStyle( bool forPrinting )
 {
     // Make sure not to change anything depending on `forPrinting' that
     // would require a new calculation of the formula.
-    //kdDebug( 40000 ) << "Document::activate: forPrinting=" << forPrinting << endl;
+    //kdDebug( DEBUGID ) << "Document::activate: forPrinting=" << forPrinting << endl;
     impl->contextStyle.setSyntaxHighlighting( forPrinting ? false : impl->syntaxHighlighting );
     return impl->contextStyle;
 }
@@ -470,109 +470,125 @@ void Document::cut()
 void Document::addThinSpace()
 {
     if (hasFormula()) {
-        formula()->addSpace( THIN );
+        SpaceRequest r( THIN );
+        formula()->performRequest( &r );
     }
 }
 void Document::addMediumSpace()
 {
     if (hasFormula()) {
-        formula()->addSpace( MEDIUM );
+        SpaceRequest r( MEDIUM );
+        formula()->performRequest( &r );
     }
 }
 void Document::addThickSpace()
 {
     if (hasFormula()) {
-        formula()->addSpace( THICK );
+        SpaceRequest r( THICK );
+        formula()->performRequest( &r );
     }
 }
 void Document::addQuadSpace()
 {
     if (hasFormula()) {
-        formula()->addSpace( QUAD );
+        SpaceRequest r( QUAD );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addDefaultBracket()
 {
     if (hasFormula()) {
-        formula()->addBracket(impl->leftBracketChar, impl->rightBracketChar);
+        BracketRequest r( impl->leftBracketChar, impl->rightBracketChar );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addSquareBracket()
 {
     if (hasFormula()) {
-        formula()->addSquareBracket();
+        BracketRequest r( '[', ']' );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addCurlyBracket()
 {
     if (hasFormula()) {
-        formula()->addCurlyBracket();
+        BracketRequest r( '{', '}' );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addLineBracket()
 {
     if (hasFormula()) {
-        formula()->addLineBracket();
+        BracketRequest r( '|', '|' );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addFraction()
 {
     if (hasFormula()) {
-        formula()->addFraction();
+        Request r( req_addFraction );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addRoot()
 {
     if (hasFormula()) {
-        formula()->addRoot();
+        Request r( req_addRoot );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addIntegral()
 {
     if (hasFormula()) {
-        formula()->addIntegral();
+        SymbolRequest r( Integral );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addProduct()
 {
     if (hasFormula()) {
-        formula()->addProduct();
+        SymbolRequest r( Product );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addSum()
 {
     if (hasFormula()) {
-        formula()->addSum();
+        SymbolRequest r( Sum );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addMatrix()
 {
     if (hasFormula()) {
-        formula()->addMatrix();
+        Request r( req_addMatrix );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::changeMatrix()
 {
     if (hasFormula()) {
-        formula()->changeMatrix();
+        Request r( req_changeMatrix );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addOneByTwoMatrix()
 {
     if (hasFormula()) {
-	formula()->addOneByTwoMatrix();
+        Request r( req_addOneByTwoMatrix );
+        formula()->performRequest( &r );
     }
 }
 
@@ -580,56 +596,64 @@ void Document::addOneByTwoMatrix()
 void Document::addLowerLeftIndex()
 {
     if (hasFormula()) {
-        formula()->addLowerLeftIndex();
+        IndexRequest r( lowerLeftPos );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addUpperLeftIndex()
 {
     if (hasFormula()) {
-        formula()->addUpperLeftIndex();
+        IndexRequest r( upperLeftPos );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addLowerRightIndex()
 {
     if (hasFormula()) {
-        formula()->addLowerRightIndex();
+        IndexRequest r( lowerRightPos );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addUpperRightIndex()
 {
     if (hasFormula()) {
-        formula()->addUpperRightIndex();
+        IndexRequest r( upperRightPos );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addGenericLowerIndex()
 {
     if (hasFormula()) {
-        formula()->addGenericLowerIndex();
+        IndexRequest r( lowerMiddlePos );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::addGenericUpperIndex()
 {
     if (hasFormula()) {
-        formula()->addGenericUpperIndex();
+        IndexRequest r( upperMiddlePos );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::removeEnclosing()
 {
     if (hasFormula()) {
-        formula()->replaceElementWithMainChild();
+        DirectedRemove r( req_removeEnclosing, beforeCursor );
+        formula()->performRequest( &r );
     }
 }
 
 void Document::makeGreek()
 {
     if (hasFormula()) {
-        formula()->makeGreek();
+        Request r( req_makeGreek );
+        formula()->performRequest( &r );
     }
 }
 

@@ -37,7 +37,7 @@ KFORMULA_NAMESPACE_BEGIN
 class SpaceElement : public BasicElement {
 public:
 
-    SpaceElement( SpaceWidths space = THIN, BasicElement* parent = 0 );
+    SpaceElement( SpaceWidth space = THIN, BasicElement* parent = 0 );
 
     /**
      * @returns the type of this element. Used for
@@ -118,7 +118,7 @@ protected:
 
 private:
 
-    SpaceWidths spaceWidth;
+    SpaceWidth spaceWidth;
 };
 
 KFORMULA_NAMESPACE_END

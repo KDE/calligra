@@ -18,8 +18,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <iostream>
 #include <qpainter.h>
+
+#include <kdebug.h>
 
 #include "formulaelement.h"
 #include "formulacursor.h"
@@ -392,18 +393,16 @@ bool FractionElement::readContentFromDom(QDomNode& node)
         return false;
     }
 
-    delete numerator;
-    numerator = buildChild(node, "NUMERATOR");
+    numerator = buildChild( numerator, node, "NUMERATOR" );
     if (numerator == 0) {
-        cerr << "Empty numerator in FractionElement.\n";
+        kdDebug( DEBUGID ) << "Empty numerator in FractionElement." << endl;
         return false;
     }
     node = node.nextSibling();
 
-    delete denominator;
-    denominator = buildChild(node, "DENOMINATOR");
+    denominator = buildChild( denominator, node, "DENOMINATOR" );
     if (denominator == 0) {
-        cerr << "Empty denominator in FractionElement.\n";
+        kdDebug( DEBUGID ) << "Empty denominator in FractionElement." << endl;
         return false;
     }
     node = node.nextSibling();

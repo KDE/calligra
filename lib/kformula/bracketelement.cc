@@ -18,11 +18,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <iostream.h>
 #include <qptrlist.h>
 #include <qpainter.h>
 #include <qpen.h>
 #include <qpointarray.h>
+
+#include <kdebug.h>
 
 #include "artwork.h"
 #include "bracketelement.h"
@@ -340,10 +341,9 @@ bool BracketElement::readContentFromDom(QDomNode& node)
     if (!BasicElement::readContentFromDom(node)) {
         return false;
     }
-    delete content;
-    content = buildChild(node, "CONTENT");
+    content = buildChild( content, node, "CONTENT" );
     if (content == 0) {
-        cerr << "Empty content in BracketElement.\n";
+        kdDebug( DEBUGID ) << "Empty content in BracketElement." << endl;
         return false;
     }
     node = node.nextSibling();
