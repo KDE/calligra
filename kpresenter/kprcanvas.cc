@@ -947,7 +947,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     || ( kpobject->getType() == OT_CLIPART ) ) {
                     deSelectAllObj();
                     selectObj( kpobject );
-                    m_view->openPopupMenuPicObject(pnt);
+                    m_view->openPopupMenuObject( "picmenu_popup", pnt );
                 } else if ( kpobject->getType() == OT_TEXT ) {
                     if ( state )
                         deSelectAllObj();
@@ -955,27 +955,28 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     selectObj( kpobject );
                     if ( obj )
                         m_view->changeVerticalAlignmentStatus( obj->verticalAlignment() );
-                    m_view->openPopupMenuTextObject(pnt);
+                    m_view->openPopupMenuObject( "textobject_popup", pnt );
+
                 } else if ( kpobject->getType() == OT_PIE ) {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    m_view->openPopupMenuPieObject( pnt );
+                    m_view->openPopupMenuObject( "piemenu_popup", pnt );
                 } else if ( kpobject->getType() == OT_RECT ) {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    m_view->openPopupMenuRectangleObject( pnt );
+                    m_view->openPopupMenuObject( "rectangleobject_popup", pnt );
                 } else if ( kpobject->getType() == OT_PART ) {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    m_view->openPopupMenuPartObject( pnt );
+                    m_view->openPopupMenuObject( "partobject_popup", pnt );
                 } else if ( kpobject->getType() == OT_POLYGON ) {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    m_view->openPopupMenuPolygonObject( pnt );
+                    m_view->openPopupMenuObject( "polygonobject_popup", pnt );
                 } else if ( kpobject->getType() == OT_POLYLINE ) {
                     if ( state )
                         deSelectAllObj();
@@ -984,9 +985,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( tmpObj )
                     {
                         if (!tmpObj->isClosed())
-                            m_view->openPopupMenuCloseObject( pnt );
+                            m_view->openPopupMenuObject( "closed_popup", pnt );
                         else
-                            m_view->openPopupMenuFlipObject( pnt );
+                            m_view->openPopupMenuObject( "flip_popup", pnt );
                     }
                 } else if ( kpobject->getType() == OT_CUBICBEZIERCURVE ) {
                     if ( state )
@@ -996,9 +997,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( tmpObj )
                     {
                         if (!tmpObj->isClosed())
-                            m_view->openPopupMenuCloseObject( pnt );
+                            m_view->openPopupMenuObject( "closed_popup", pnt );
                         else
-                            m_view->openPopupMenuFlipObject( pnt );
+                            m_view->openPopupMenuObject( "flip_popup", pnt );
                     }
                 } else if ( kpobject->getType() == OT_QUADRICBEZIERCURVE ) {
                     if ( state )
@@ -1008,9 +1009,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( tmpObj )
                     {
                         if (!tmpObj->isClosed())
-                            m_view->openPopupMenuCloseObject( pnt );
+                            m_view->openPopupMenuObject( "closed_popup", pnt );
                         else
-                            m_view->openPopupMenuFlipObject( pnt );
+                            m_view->openPopupMenuObject( "flip_popup", pnt );
                     }
                 } else if ( kpobject->getType() == OT_FREEHAND ) {
                     if ( state )
@@ -1020,29 +1021,27 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( tmpObj )
                     {
                         if (!tmpObj->isClosed())
-                            m_view->openPopupMenuCloseObject( pnt );
+                            m_view->openPopupMenuObject( "closed_popup", pnt );
                         else
-                            m_view->openPopupMenuFlipObject( pnt );
+                            m_view->openPopupMenuObject( "flip_popup", pnt );
                     }
                 } else if ( kpobject->getType() == OT_LINE ){
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    m_view->openPopupMenuFlipObject( pnt );
+                    m_view->openPopupMenuObject( "flip_popup", pnt );
                 } else if ( kpobject->getType() == OT_CLOSED_LINE ) {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
                     KPClosedLineObject *tmpObj=dynamic_cast<KPClosedLineObject *>(kpobject);
                     if ( tmpObj )
-                    {
-                        m_view->openPopupMenuFlipObject( pnt );
-                    }
+                        m_view->openPopupMenuObject( "flip_popup", pnt );
                 } else {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    m_view->openPopupMenuGraphMenu( pnt );
+                    m_view->openPopupMenuObject( "graphmenu_popup", pnt );
                 }
             } else {
                 QPoint pnt = QCursor::pos();

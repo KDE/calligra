@@ -516,17 +516,9 @@ public:
     void setCanvasXOffset( int _x );
     void setCanvasYOffset( int _y );
 
+    void openPopupMenuObject( const QString & name , const QPoint & _point );
     void openPopupMenuMenuPage( const QPoint & _point );
-    void openPopupMenuTextObject( const QPoint & _point );
-    void openPopupMenuPartObject( const QPoint & _point );
-    void openPopupMenuRectangleObject( const QPoint & _point );
-    void openPopupMenuGraphMenu(const QPoint & _point );
-    void openPopupMenuPieObject( const QPoint & _point );
     void openPopupMenuSideBar(const QPoint & _point);
-    void openPopupMenuPicObject(const QPoint & _point);
-    void openPopupMenuPolygonObject( const QPoint &_point );
-    void openPopupMenuFlipObject( const QPoint &_point );
-    void openPopupMenuCloseObject( const QPoint &_point);
 
     void openPopupMenuHelpLine( const QPoint & _point );
     void openPopupMenuHelpPoint( const QPoint & _point );

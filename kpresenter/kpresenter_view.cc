@@ -4885,40 +4885,12 @@ void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
     delete separator;
 }
 
-void KPresenterView::openPopupMenuTextObject( const QPoint & _point )
+
+void KPresenterView::openPopupMenuObject( const QString & name , const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() || !factory())
         return;
-     static_cast<QPopupMenu*>(factory()->container("textobject_popup",this))->popup(_point);
-}
-
-void KPresenterView::openPopupMenuPartObject( const QPoint & _point )
-{
-    if(!koDocument()->isReadWrite() || !factory())
-        return;
-     static_cast<QPopupMenu*>(factory()->container("partobject_popup",this))->popup(_point);
-}
-
-void KPresenterView::openPopupMenuRectangleObject( const QPoint & _point )
-{
-    if(!koDocument()->isReadWrite() || !factory())
-        return;
-     static_cast<QPopupMenu*>(factory()->container("rectangleobject_popup",this))->popup(_point);
-}
-
-void KPresenterView::openPopupMenuGraphMenu(const QPoint & _point )
-{
-    if(!koDocument()->isReadWrite() || !factory())
-        return;
-     static_cast<QPopupMenu*>(factory()->container("graphmenu_popup",this))->popup(_point);
-}
-
-
-void KPresenterView::openPopupMenuPieObject( const QPoint & _point )
-{
-    if(!koDocument()->isReadWrite() || !factory())
-        return;
-     static_cast<QPopupMenu*>(factory()->container("piemenu_popup",this))->popup(_point);
+     static_cast<QPopupMenu*>(factory()->container(name ,this))->popup(_point);
 }
 
 void KPresenterView::openPopupMenuSideBar(const QPoint & _point)
@@ -4927,21 +4899,6 @@ void KPresenterView::openPopupMenuSideBar(const QPoint & _point)
         return;
     static_cast<QPopupMenu*>(factory()->container("sidebarmenu_popup",this))->popup(_point);
 
-}
-
-void KPresenterView::openPopupMenuPicObject(const QPoint & _point)
-{
-    if(!koDocument()->isReadWrite() || !factory())
-        return;
-    static_cast<QPopupMenu*>(factory()->container("picmenu_popup",this))->popup(_point);
-
-}
-
-void KPresenterView::openPopupMenuPolygonObject( const QPoint &_point )
-{
-    if ( !koDocument()->isReadWrite() || !factory())
-        return;
-    static_cast<QPopupMenu*>( factory()->container( "polygonobject_popup", this ) )->popup( _point );
 }
 
 void KPresenterView::renamePageTitle()
@@ -6812,13 +6769,6 @@ void KPresenterView::flipVertical()
     m_canvas->flipObject( false );
 }
 
-void KPresenterView::openPopupMenuFlipObject( const QPoint &_point )
-{
-    if(!koDocument()->isReadWrite() || !factory())
-        return;
-    static_cast<QPopupMenu*>(factory()->container("flip_popup",this))->popup(_point);
-}
-
 void KPresenterView::slotObjectEditChanged()
 {
     bool state=m_canvas->isOneObjectSelected();
@@ -7072,13 +7022,6 @@ void KPresenterView::createStyleFromSelection()
 void KPresenterView::closeObject()
 {
     m_canvas->closeObject(true);
-}
-
-void KPresenterView::openPopupMenuCloseObject( const QPoint &_point )
-{
-    if(!koDocument()->isReadWrite() || !factory())
-        return;
-    static_cast<QPopupMenu*>(factory()->container("closed_popup",this))->popup(_point);
 }
 
 void KPresenterView::viewSnapToGrid()
