@@ -367,15 +367,15 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     m_undoRedoLimit->setRange(10, 60, 1);
     grid->addWidget(m_undoRedoLimit,0,0);
 
-    QLabel *varLabel= new QLabel(i18n("Variable number offset:"),tmpQGroupBox);
+    QLabel *varLabel= new QLabel(i18n("Starting page number:"),tmpQGroupBox);
     grid->addWidget(varLabel,1,0);
 
     KPresenterDoc* doc = m_pView->kPresenterDoc();
-    m_oldVariableOffset=doc->getVariableCollection()->variableSetting()->numberOffset();
+    m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
     m_variableNumberOffset=new QLineEdit(tmpQGroupBox);
     m_variableNumberOffset->setValidator(new KIntValidator(0,9999,m_variableNumberOffset));
     grid->addWidget(m_variableNumberOffset,2,0);
-    m_variableNumberOffset->setText(QString::number(m_oldVariableOffset));
+    m_variableNumberOffset->setText(QString::number(m_oldStartingPage));
 }
 
 void ConfigureMiscPage::apply()
@@ -388,10 +388,10 @@ void ConfigureMiscPage::apply()
         config->writeEntry("UndoRedo",newUndo);
         doc->setUndoRedoLimit(newUndo);
     }
-    int newVarOffset=m_variableNumberOffset->text().toInt();
-    if(newVarOffset!=m_oldVariableOffset)
+    int newStartingPage=m_variableNumberOffset->text().toInt();
+    if(newStartingPage!=m_oldStartingPage)
     {
-        KPrChangeVariableSettingCommand *cmd = new KPrChangeVariableSettingCommand( i18n("Change starting page number"), doc, m_oldVariableOffset,newVarOffset );
+        KPrChangeVariableSettingCommand *cmd = new KPrChangeVariableSettingCommand( i18n("Change starting page number"), doc, m_oldStartingPage,newStartingPage );
         cmd->execute();
         doc->addCommand(cmd);
 

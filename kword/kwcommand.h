@@ -443,15 +443,15 @@ protected:
 class KWChangeVariableSettingCommand : public KCommand
 {
 public:
-    KWChangeVariableSettingCommand( const QString &name, KWDocument *_doc, int _oldVarOffset, int _newVarOffset);
+    KWChangeVariableSettingCommand( const QString &name, KWDocument *_doc, int _oldStartingPage, int _newStartingPage);
     ~KWChangeVariableSettingCommand(){}
 
     void execute();
     void unexecute();
 protected:
     KWDocument *m_doc;
-    int oldVarOffset;
-    int newVarOffset;
+    int oldStartingPage;
+    int newStartingPage;
 };
 
 #endif

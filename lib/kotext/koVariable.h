@@ -42,14 +42,14 @@ class KoVariableSettings
  public:
     KoVariableSettings();
     virtual ~KoVariableSettings() {}
-    int numberOffset(){return m_offset;}
-    void setNumberOffset(int _offset){ m_offset=_offset;}
+    int startingPage(){return m_startingpage;}
+    void setStartingPage(int _startingpage){ m_startingpage=_startingpage;}
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
  private:
-    int m_offset;
+    int m_startingpage;
 };
 
 /**

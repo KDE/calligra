@@ -54,6 +54,8 @@ k_dcop:
     virtual void recalcVariables( int type );
     virtual void recalcAllVariables();
     virtual void recalcVariables(const QString &varName);
+    virtual int startingPage();
+    virtual void setStartingPage(int nb);
 
 private:
     KPresenterDoc *doc;

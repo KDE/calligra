@@ -25,6 +25,7 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <koVariable.h>
+#include "kprvariable.h"
 
 KPresenterDocIface::KPresenterDocIface( KPresenterDoc *doc_ )
     : KoDocumentIface( doc_ )
@@ -125,4 +126,15 @@ void KPresenterDocIface::recalcVariables(const QString &varName)
         doc->recalcVariables(8);
     else if(varName=="VT_ALL")
         doc->recalcVariables(256);
+}
+
+int KPresenterDocIface::startingPage()
+{
+    return doc->getVariableCollection()->variableSetting()->startingPage();
+}
+
+void KPresenterDocIface::setStartingPage(int nb)
+{
+    doc->getVariableCollection()->variableSetting()->setStartingPage(nb);
+    doc->recalcVariables(VT_PGNUM);
 }

@@ -387,13 +387,13 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     QWhatsThis::add( m_undoRedoLimit, i18n("Limit the amount of undo/redo actions remembered to save "
                 "memory") );
 
-    QLabel *varLabel= new QLabel(i18n("Variable number offset:"),gbMiscGroup);
+    QLabel *varLabel= new QLabel(i18n("Starting page number:"),gbMiscGroup);
 
     KWDocument * doc = m_pView->kWordDocument();
-    m_oldVariableOffset=doc->getVariableCollection()->variableSetting()->numberOffset();
+    m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
     m_variableNumberOffset=new QLineEdit(gbMiscGroup);
     m_variableNumberOffset->setValidator(new KIntValidator(0,9999,m_variableNumberOffset));
-    m_variableNumberOffset->setText(QString::number(m_oldVariableOffset));
+    m_variableNumberOffset->setText(QString::number(m_oldStartingPage));
 }
 
 void ConfigureMiscPage::apply()
@@ -424,10 +424,10 @@ void ConfigureMiscPage::apply()
         config->writeEntry("UndoRedo",newUndo);
         doc->setUndoRedoLimit(newUndo);
     }
-    int newVarOffset=m_variableNumberOffset->text().toInt();
-    if(newVarOffset!=m_oldVariableOffset)
+    int newStartingPage=m_variableNumberOffset->text().toInt();
+    if(newStartingPage!=m_oldStartingPage)
     {
-        KWChangeVariableSettingCommand *cmd = new KWChangeVariableSettingCommand( i18n("Change starting page number"), doc, m_oldVariableOffset,newVarOffset );
+        KWChangeVariableSettingCommand *cmd = new KWChangeVariableSettingCommand( i18n("Change starting page number"), doc, m_oldStartingPage,newStartingPage );
         cmd->execute();
         doc->addCommand(cmd);
     }

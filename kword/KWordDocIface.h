@@ -85,8 +85,8 @@ k_dcop:
     virtual void recalcVariables(int _var);
     virtual void recalcVariables(const QString &varName);
     
-    virtual void setNumberOffset(int nb);
-    virtual int numberOffset();
+    virtual void setStartingPage(int nb);
+    virtual int startingPage();
 private:
     KWDocument *doc;
 

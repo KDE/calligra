@@ -1710,23 +1710,23 @@ QTextCursor * KPrPasteTextCommand::unexecute( QTextCursor *c )
 }
 
 
-KPrChangeVariableSettingCommand::KPrChangeVariableSettingCommand( const QString &name, KPresenterDoc *_doc, int _oldVarOffset, int _newVarOffset):
+KPrChangeVariableSettingCommand::KPrChangeVariableSettingCommand( const QString &name, KPresenterDoc *_doc, int _oldStartingPage, int _newStartingPage):
     KCommand(name),
     m_doc(_doc),
-    oldVarOffset(_oldVarOffset),
-    newVarOffset(_newVarOffset)
+    oldStartingPage(_oldStartingPage),
+    newStartingPage(_newStartingPage)
 {
 }
 
 void KPrChangeVariableSettingCommand::execute()
 {
-    m_doc->getVariableCollection()->variableSetting()->setNumberOffset(newVarOffset);
+    m_doc->getVariableCollection()->variableSetting()->setStartingPage(newStartingPage);
     m_doc->recalcVariables( VT_PGNUM );
 }
 
 void KPrChangeVariableSettingCommand::unexecute()
 {
-    m_doc->getVariableCollection()->variableSetting()->setNumberOffset(oldVarOffset);
+    m_doc->getVariableCollection()->variableSetting()->setStartingPage(oldStartingPage);
     m_doc->recalcVariables( VT_PGNUM );
 }
 

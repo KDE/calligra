@@ -682,15 +682,15 @@ protected:
 class KPrChangeVariableSettingCommand : public KCommand
 {
 public:
-    KPrChangeVariableSettingCommand( const QString &name, KPresenterDoc *_doc, int _oldVarOffset, int _newVarOffset);
+    KPrChangeVariableSettingCommand( const QString &name, KPresenterDoc *_doc, int _oldStartingPage, int _newStartingPage);
     ~KPrChangeVariableSettingCommand(){}
 
     void execute();
     void unexecute();
 protected:
     KPresenterDoc *m_doc;
-    int oldVarOffset;
-    int newVarOffset;
+    int oldStartingPage;
+    int newStartingPage;
 };
 
 

@@ -79,7 +79,7 @@ private:
     int m_oldUnit;
     KIntNumInput* m_undoRedoLimit;
     int m_oldNbRedo;
-    int m_oldVariableOffset;
+    int m_oldStartingPage;
     QLineEdit* m_variableNumberOffset;
 };
 

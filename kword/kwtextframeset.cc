@@ -351,7 +351,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
         {
             //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNum()+1
             //          << " and invalidating parag " << var->paragraph() << endl;
-            var->setPgNum( theFrame->pageNum() + 1 + kWordDocument()->getVariableCollection()->variableSetting()->numberOffset());
+            var->setPgNum( theFrame->pageNum()  + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
             var->resize();
             var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
             var->paragraph()->setChanged( true );
