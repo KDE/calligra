@@ -1967,70 +1967,35 @@ void KWTextFrameSet::formatMore()
 double KWTextFrameSet::footerHearderSizeMax(  KWFrame *theFrame )
 {
     double tmp =m_doc->ptPaperHeight()-m_doc->ptBottomBorder()-m_doc->ptTopBorder()-40;//default min 40 for page size
-    switch ( theFrame->getFrameSet()->frameSetInfo() ) {
-        case KWFrameSet::FI_FIRST_HEADER:
-            if ( m_doc->isHeaderVisible() ) {
-                QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
-                for ( ; fit.current() ; ++fit )
-                {
-                    if(fit.current()->frameSetInfo()==KWFrameSet::FI_FIRST_FOOTER)
-                        return (tmp-fit.current()->getFrame( 0 )->height());
+    int page = theFrame->pageNum();
+    if(theFrame->getFrameSet()->isAHeader()&& m_doc->isHeaderVisible())
+    {
+        QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+        KWFrame *frm=0L;
+        for ( ; fit.current() ; ++fit )
+        {
+            if(fit.current()->isVisible() && fit.current()->isAFooter())
+            {
+                frm=fit.current()->getFrame( 0 );
+                if(frm->pageNum()==page )
+                    return (tmp-frm->height());
+            }
 
-                }
+        }
+    }
+    else if(theFrame->getFrameSet()->isAFooter()&&m_doc->isFooterVisible())
+    {
+        QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+        KWFrame *frm=0L;
+        for ( ; fit.current() ; ++fit )
+        {
+            if(fit.current()->isVisible()&&fit.current()->isAHeader())
+            {
+                frm=fit.current()->getFrame( 0 );
+                if(frm->pageNum()==page )
+                    return (tmp-frm->height());
             }
-            break;
-        case KWFrameSet::FI_EVEN_HEADER:
-            if (  m_doc->isHeaderVisible() ) {
-               QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
-                for ( ; fit.current() ; ++fit )
-                {
-                    if(fit.current()->frameSetInfo()==KWFrameSet::FI_EVEN_FOOTER)
-                        return (tmp-fit.current()->getFrame( 0 )->height());
-                }
-            }
-            break;
-        case KWFrameSet::FI_ODD_HEADER:
-            if (  m_doc->isHeaderVisible() ) {
-
-                QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
-                for ( ; fit.current() ; ++fit )
-                {
-                    if(fit.current()->frameSetInfo()==KWFrameSet::FI_ODD_FOOTER)
-                        return (tmp-fit.current()->getFrame( 0 )->height());
-                }
-
-            }
-            break;
-        case KWFrameSet::FI_FIRST_FOOTER:
-            if (  m_doc->isFooterVisible() ) {
-                QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
-                for ( ; fit.current() ; ++fit )
-                {
-                    if(fit.current()->frameSetInfo()==KWFrameSet::FI_FIRST_HEADER)
-                        return (tmp-fit.current()->getFrame( 0 )->height());
-                }
-            }
-            break;
-        case KWFrameSet::FI_EVEN_FOOTER:
-            if (  m_doc->isFooterVisible() ) {
-                  QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
-                for ( ; fit.current() ; ++fit )
-                {
-                    if(fit.current()->frameSetInfo()==KWFrameSet::FI_EVEN_HEADER)
-                        return (tmp-fit.current()->getFrame( 0 )->height());
-                }
-            }
-            break;
-        case KWFrameSet::FI_ODD_FOOTER:
-            if (  m_doc->isFooterVisible() ) {
-                    QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
-                for ( ; fit.current() ; ++fit )
-                {
-                    if(fit.current()->frameSetInfo()==KWFrameSet::FI_ODD_HEADER)
-                        return (tmp-fit.current()->getFrame( 0 )->height());
-                }
-            }
-        default: break;
+        }
     }
     return 0;
 }
