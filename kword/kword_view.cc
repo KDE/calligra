@@ -1730,8 +1730,10 @@ void KWordView::textStyleSelected( const QString &_style )
     if ( gui )
 	gui->getPaperWidget()->applyStyle( style );
     format = m_pKWordDoc->findParagLayout( style )->getFormat();
-    if ( gui )
+    if ( gui ) {
 	gui->getPaperWidget()->formatChanged( format, FALSE );
+	gui->getPaperWidget()->setFocus();
+    }
     updateStyle( style, FALSE );
 }
 
@@ -1741,8 +1743,10 @@ void KWordView::textSizeSelected( const QString &_size)
     QString size = _size;
     tbFont.setPointSize( size.toInt() );
     format.setPTFontSize( size.toInt() );
-    if ( gui )
+    if ( gui ) {
 	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::FontSize );
+	gui->getPaperWidget()->setFocus();
+    }
 }
 
 /*======================= text font selected  ===================*/
@@ -1751,8 +1755,10 @@ void KWordView::textFontSelected( const QString &_font )
     QString font = _font;
     tbFont.setFamily( font );
     format.setUserFont( m_pKWordDoc->findUserFont( font ) );
-    if ( gui )
+    if ( gui ) {
 	gui->getPaperWidget()->formatChanged( format, TRUE, KWFormat::FontFamily );
+	gui->getPaperWidget()->setFocus();
+    }
 }
 
 /*========================= text bold ===========================*/
