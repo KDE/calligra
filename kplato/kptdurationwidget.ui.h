@@ -7,12 +7,20 @@
 // place of a destructor.
 //
 
+/**
+ * This structure describes one of the fields shown.
+ */
 struct FieldDescriptor
 {
+    // Which field is to my left, and what conversion factor separates us?
     QLineEdit *left;
     unsigned leftScale;
+    
+    // Which field am I, and how am I formatted?
     QLineEdit *current;
     const char *format;
+    
+    // Which field is to my right, and what conversion factor separates us?
     QLineEdit *right;
     unsigned rightScale;
 };
@@ -30,17 +38,20 @@ do \
     
 void KPTDurationWidget::init()
 {
+    // Use the user's decimal point!
     m_decimalPoint = tr2i18n(".");
     
     // Any field can be entered as an integer or a floating point value. Whatever
     // is entered is treated as follows:
     //
-    //	- any fractional part is moved right one field
+    //    - any fractional part is moved right one field
     //
-    //         - any overflow from the integer part is carried left one field
+    //    - any overflow from the integer part is carried left one field
     //
     // and the process repeated until the rightmost and leftmost fields are reached.
-    QRegExp re(QString("\\d{1,10}|\\d{1,5}\\") + m_decimalPoint + QString("\\d{0,5}|\\d{0,5}\\") + m_decimalPoint + QString("\\d{1,5}"));
+    QRegExp re(QString("\\d{1,10}|\\d{1,5}\\") + m_decimalPoint + 
+        QString("\\d{0,5}|\\d{0,5}\\") + m_decimalPoint + 
+        QString("\\d{1,5}"));
     m_validator = new QRegExpValidator(re, this);
     m_ddd->setValidator(m_validator);
     m_hh->setValidator(m_validator);
@@ -147,7 +158,7 @@ void KPTDurationWidget::handleLostFocus(
             tmp.sprintf(rightFormat, (unsigned)(rightScale * newValue.mid(point).toDouble()));
             right->setText(tmp);
         }
-	
+        
         // Truncate the fractional value.
         newValue = newValue.left(point);
     }
@@ -161,7 +172,7 @@ void KPTDurationWidget::handleLostFocus(
             tmp.sprintf(leftFormat, currentValue / leftScale);
             left->setText(tmp);
             handleLostFocus(field - 1);
-	    
+
             // Get remainder.
             currentValue = currentValue % leftScale;
         }
