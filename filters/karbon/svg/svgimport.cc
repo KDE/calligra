@@ -372,7 +372,8 @@ SvgImport::parsePA( VObject *obj, GraphicsContext *gc, const QString &command, c
 				//kdDebug() << gc->fill.gradient().vector().y() << endl;
 			}
 			gc->fill.gradient().transform( m_gradients[ key ].gradientTransform );
-			gc->fill.gradient().transform( gc->matrix );
+			if( !m_gradients[ key ].bbox )
+				gc->fill.gradient().transform( gc->matrix );
 			gc->fill.setType( VFill::grad );
 		}
 		else
