@@ -494,6 +494,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     grid4 = new QGridLayout( tab4, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
     floating = new QCheckBox (i18n("Frame is floating"), tab4);
+
     connect( floating, SIGNAL( toggled(bool) ), this, SLOT( slotFloatingToggled(bool) ) );
     int row = 0;
     grid4->addMultiCellWidget( floating, row, row, 0, 1 );
@@ -520,6 +521,13 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     grp1 = new QGroupBox( i18n("Position in %1").arg(doc->getUnitName()), tab4 );
     pGrid = new QGridLayout( grp1, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
+
+    if(frame && frame->getFrameSet())
+    {
+        bool _f=frame->getFrameSet()->isFloating();
+        floating->setChecked(_f);
+        slotFloatingToggled(_f);
+    }
 
     lx = new QLabel( i18n( "Left:" ), grp1 );
     lx->resize( lx->sizeHint() );
