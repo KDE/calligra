@@ -394,8 +394,8 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
     if ( !m_cache.text.isNull() )
         return m_cache.text;
 
-    // Recurse to find the text of the preceeding level.
-    if ( parent( paragraph ) )
+    // Chapter numbering: recurse to find the text of the preceeding level.
+    if ( m_numbering == NUM_CHAPTER && parent( paragraph ) )
     {
         m_cache.text = m_cache.parent->counter()->text( m_cache.parent );
 
@@ -450,21 +450,24 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
     tmp.prepend( paragraph->string()->isRightToLeft() ? suffix() : prefix() );
     tmp.append( paragraph->string()->isRightToLeft() ? prefix() : suffix() );
 
-    // Find the number of missing parents, and add dummy text for them.
-    int missingParents;
-    if ( parent( paragraph ) )
+    if ( m_numbering == NUM_CHAPTER )
     {
-        missingParents = m_depth - m_cache.parent->counter()->m_depth - 1;
-    }
-    else
-    {
-        missingParents = m_depth;
-    }
-    while ( missingParents > 0 )
-    {
-        // Each missing level adds a "0." prefix.
-        tmp.prepend( "0." );
-        missingParents--;
+        // Find the number of missing parents, and add dummy text for them.
+        int missingParents;
+        if ( parent( paragraph ) )
+        {
+            missingParents = m_depth - m_cache.parent->counter()->m_depth - 1;
+        }
+        else
+        {
+            missingParents = m_depth;
+        }
+        while ( missingParents > 0 )
+        {
+            // Each missing level adds a "0." prefix.
+            tmp.prepend( "0." );
+            missingParents--;
+        }
     }
     m_cache.text.append( tmp );
     return m_cache.text;

@@ -130,6 +130,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
 {
     // layout is an input and output parameter
     // It can have been initialized already, e.g. by copying from a style
+    // (we don't do that anymore though).
 
     // Load the paragraph tabs - we load into a clean list, not mixing with those already in "layout"
     // We can't apply the 'default comes from the style' in this case, because
