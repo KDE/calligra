@@ -319,7 +319,7 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *theFrame = frameIt.current();
-        QRect r( 0, m_doc->ptToLayoutUnitPixY( theFrame->internalY() ), m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() ), m_doc->ptToLayoutUnitPixY( theFrame->innerHeight() ) );
+        QRect r( 0, m_doc->ptToLayoutUnitPixY( theFrame->internalY() ), m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() )+1, m_doc->ptToLayoutUnitPixY( theFrame->innerHeight()+1 ) );
 #ifdef DEBUG_ITD
         kdDebug() << "ITD: r=" << r << " iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
 #endif
@@ -1328,7 +1328,7 @@ void KWTextFrameSet::updateFrames()
     {
         //kdDebug(32002) << "KWTextFrameSet::updateFrames setWidth " << width << endl;
         textDocument()->setMinimumWidth( -1, 0 );
-        textDocument()->setWidth( width );
+        textDocument()->setWidth( width + 1 ); // QRect semantics problem (#32866)
     } //else kdDebug(32002) << "KWTextFrameSet::updateFrames width already " << width << endl;
 
     qHeapSort( sortedFrames );
