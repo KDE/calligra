@@ -24,6 +24,7 @@ INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/lib/kofficeui \
 	-I$(top_srcdir)/kexi \
 	-I$(top_srcdir)/kexi/core \
+	-I$(top_builddir)/kexi/core \
 	-I$(top_srcdir)/kexi/main \
 	-I$(top_srcdir)/kexi/main/projectWizard \
 	-I$(top_srcdir)/kexi/main/startup \
