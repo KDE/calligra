@@ -43,7 +43,7 @@ class QPainter;
 class KTextEdit;
 class KPTextObject;
 class KPObject;
-class QPopupMenu;
+class KPopupMenu;
 class QResizeEvent;
 class QPaintEvent;
 class QDragEnterEvent;
@@ -658,15 +658,27 @@ private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
     void toColorChanged( const QColor &color ) { emit colorChanged( color ); }
     void toAlignChanged( int a ) { emit alignChanged( a ); }
-    void drawingMode();
-    void switchingMode();
+    /**
+     * Switch to drawing mode. In drawing mode it is possible to draw on the 
+     * current slide.
+     * Only to be used in presentation mode.
+     */
+    void setDrawingMode();
+    /**
+     * Set switching mode. This ends drawing mode and goes back to 
+     * stepping between the pages.
+     * If continueTimer is true the autoPres timer is continued
+     * Only to be used in presentation mode.
+     */
+    void setSwitchingMode( bool continueTimer = true );
     void slotGotoPage();
     void slotExitPres();
     void terminateEditing( KPTextObject * );
 
 private:
     // variables
-    QPopupMenu *presMenu;
+    /// Popup menu used in presentation mode.
+    KPopupMenu *m_presMenu;
     bool showingLastSlide;
     bool mousePressed;
     bool drawContour;
@@ -677,8 +689,17 @@ private:
 
     bool fillBlack;
     KPresenterView *m_view;
-    bool editMode, goingBack, drawMode;
-    bool drawLineInDrawMode;
+    bool editMode, goingBack;
+    /** 
+     * True when we are in drawing mode.
+     * False when we are in switching mode.
+     */
+    bool m_drawMode;
+    /**
+     * True if the a line should be drawn.
+     * Used in drawing mode.
+     */
+    bool m_drawLineInDrawMode;
     bool mouseSelectedObject;
     /// information about current step of the presentation
     PresStep m_step;
@@ -690,7 +711,8 @@ private:
     QValueList<int> m_presentationSlides;
     /// Iterator over the slides of a presentation
     QValueList<int>::Iterator m_presentationSlidesIterator;
-    int PM_DM, PM_SM;
+    /// menu identifier for draw mode
+    int PM_DM;
     int firstX, firstY;
     int delPageId;
     bool drawRubber;

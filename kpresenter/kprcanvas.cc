@@ -27,7 +27,7 @@
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qapplication.h>
-#include <qpopupmenu.h>
+#include <kpopupmenu.h>
 #include <qimage.h>
 #include <qdatetime.h>
 #include <qdropsite.h>
@@ -89,7 +89,7 @@
 KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     : QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase ), buffer( size() )
 {
-    presMenu = 0;
+    m_presMenu = 0;
     m_currentTextObjectView=0L;
     m_activePage=0L;
     m_xOffset = 0;
@@ -123,7 +123,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         m_step.m_subStep = 0;
         _presFakt = 1.0;
         goingBack = false;
-        drawMode = false;
+        m_drawMode = false;
         fillBlack = true;
         drawRubber = false;
         m_zoomRubberDraw = false;
@@ -135,7 +135,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         mouseSelectedObject = false;
         selectedObjectPosition = -1;
         nextPageTimer = true;
-        drawLineInDrawMode = false;
+        m_drawLineInDrawMode = false;
         soundPlayer = 0;
         m_drawPolyline = false;
         m_drawCubicBezierCurve = false;
@@ -172,7 +172,7 @@ KPrCanvas::~KPrCanvas()
 
     exitEditMode();
 
-    delete presMenu;
+    delete m_presMenu;
 
     stopSound();
     delete soundPlayer;
@@ -1110,26 +1110,24 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         oldMx = e->x();
         oldMy = e->y();
         if ( e->button() == LeftButton ) {
-            if ( presMenu->isVisible() ) {
-                presMenu->hide();
-                setCursor( blankCursor );
-            } else {
-                if ( drawMode ) {
-                    setCursor( KPresenterUtils::penCursor() );
-                    drawLineInDrawMode = true;
-                }
-                else
-                    m_view->screenNext();
+            if ( m_drawMode ) {
+                setCursor( KPresenterUtils::penCursor() );
+                m_drawLineInDrawMode = true;
             }
+            else
+                m_view->screenNext();
         } else if ( e->button() == MidButton )
             m_view->screenPrev();
         else if ( e->button() == RightButton ) {
-            if ( !drawMode && !spManualSwitch() )
+            if ( !m_drawMode && !spManualSwitch() )
                 m_view->stopAutoPresTimer();
 
             setCursor( arrowCursor );
             QPoint pnt = QCursor::pos();
-            presMenu->popup( pnt );
+            int ret = m_presMenu->exec( pnt );
+            // we have to continue the timer if the menu was canceled and we draw mode is not active
+            if ( ret == -1 && !m_presMenu->isItemChecked( PM_DM ) && !spManualSwitch() )
+                m_view->continueAutoPresTimer();
         }
     }
 #if 0 // Where do you need this ? (toshitaka)
@@ -1192,8 +1190,8 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     if ( e->button() != LeftButton )
         return;
 
-    if ( drawMode ) {
-        drawLineInDrawMode = false;
+    if ( m_drawMode ) {
+        m_drawLineInDrawMode = false;
         return;
     }
     bool state = m_view->kPresenterDoc()->snapToGrid();
@@ -1925,7 +1923,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             default: break;
             }
         }
-    } else if ( !editMode && drawMode && drawLineInDrawMode ) {
+    } else if ( !editMode && m_drawMode && m_drawLineInDrawMode ) {
         QPainter p;
         p.begin( this );
         p.setPen( m_view->kPresenterDoc()->presPen() );
@@ -1935,7 +1933,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         p.end();
     }
 
-    if ( !editMode && !drawMode && !presMenu->isVisible() && fillBlack )
+    if ( !editMode && !m_drawMode && !m_presMenu->isVisible() && fillBlack )
         setCursor( blankCursor );
 }
 
@@ -2072,7 +2070,7 @@ QPoint KPrCanvas::limitOfPoint(const QPoint& _point) const
 
 void KPrCanvas::wheelEvent( QWheelEvent *e )
 {
-    if ( !editMode && !drawMode ) {
+    if ( !editMode && !m_drawMode ) {
         if ( e->delta() == -120 )     // wheel down
             m_view->screenNext();
         else if ( e->delta() == 120 ) // wheel up
@@ -2088,16 +2086,25 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
     if ( !editMode ) {
         switch ( e->key() ) {
         case Key_Space: case Key_Right: case Key_Down: case Key_Next:
-            m_view->screenNext(); break;
+            setSwitchingMode( false );
+            m_view->screenNext(); 
+            break;
         case Key_Backspace: case Key_Left: case Key_Up: case Key_Prior:
-            m_view->screenPrev(); break;
+            setSwitchingMode( false );
+            m_view->screenPrev(); 
+            break;
         case Key_Escape: case Key_Q: case Key_X:
-            m_view->screenStop(); break;
+            setSwitchingMode( false );
+            m_view->screenStop(); 
+            break;
         case Key_G:
+            // setSwitchingMode( false ) not needed as it is allready done in slotGotoPage;
             if ( !spManualSwitch() )
                 m_view->stopAutoPresTimer();
-            slotGotoPage(); break;
+            slotGotoPage(); 
+            break;
         case Key_Home:  // go to first page
+            setSwitchingMode( false );
             presGotoFirstPage();
             if ( !spManualSwitch() ) {
                 m_view->setAutoPresTimer( 1 );
@@ -2105,6 +2112,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             }
             break;
         case Key_End:  // go to last page
+            setSwitchingMode( false );
             if ( m_presentationSlidesIterator != m_presentationSlides.end() ) {
                 gotoPage( *(--m_presentationSlides.end()) );
                 if ( !spManualSwitch() ) {
@@ -2405,18 +2413,18 @@ void KPrCanvas::setMouseSelectedObject(bool b)
 void KPrCanvas::setupMenus()
 {
     // create right button presentation menu
-    presMenu = new QPopupMenu();
-    Q_CHECK_PTR( presMenu );
-    presMenu->setCheckable( true );
-    PM_SM = presMenu->insertItem( i18n( "&Switching Mode" ), this, SLOT( switchingMode() ) );
-    PM_DM = presMenu->insertItem( i18n( "&Drawing Mode" ), this, SLOT( drawingMode() ) );
-    presMenu->insertSeparator();
-    presMenu->insertItem( SmallIcon("goto"), i18n( "&Goto Slide..." ), this, SLOT( slotGotoPage() ) );
-    presMenu->insertSeparator();
-    presMenu->insertItem( i18n( "&End Slide Show" ), this, SLOT( slotExitPres() ) );
-    presMenu->setItemChecked( PM_SM, true );
-    presMenu->setItemChecked( PM_DM, false );
-    presMenu->setMouseTracking( true );
+    m_presMenu = new KPopupMenu();
+    Q_CHECK_PTR( m_presMenu );
+    m_presMenu->setCheckable( true );
+    m_presMenu->insertTitle( i18n( "Slide Show" ) );
+    m_presMenu->insertItem( i18n( "&Continue" ), this, SLOT( setSwitchingMode() ) );
+    PM_DM = m_presMenu->insertItem( i18n( "&Drawing Mode" ), this, SLOT( setDrawingMode() ) );
+    m_presMenu->insertSeparator();
+    m_presMenu->insertItem( SmallIcon("goto"), i18n( "&Goto Slide..." ), this, SLOT( slotGotoPage() ) );
+    m_presMenu->insertSeparator();
+    m_presMenu->insertItem( i18n( "&End" ), this, SLOT( slotExitPres() ) );
+    m_presMenu->setItemChecked( PM_DM, false );
+    m_presMenu->setMouseTracking( true );
 }
 
 void KPrCanvas::clipCut()
@@ -3047,8 +3055,8 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
     //kdDebug(33001) << "KPrCanvas::startScreenPresentation curPgNum=" << curPgNum << endl;
     //kdDebug(33001) << "                              _presFakt=" << _presFakt << endl;
 
-    presMenu->setItemChecked( PM_SM, true );
-    presMenu->setItemChecked( PM_DM, false );
+    //setup presentation menu
+    m_presMenu->setItemChecked( PM_DM, false );
 
     setCursor( waitCursor );
     tmpObjs.clear();
@@ -3120,7 +3128,7 @@ void KPrCanvas::stopScreenPresentation()
     goingBack = false;
     m_step.m_pageNumber = 0;
     editMode = true;
-    drawMode = false;
+    m_drawMode = false;
     repaint( false );
     setToolEditMode( toolEditMode );
     tmpObjs.clear();
@@ -4926,7 +4934,8 @@ void KPrCanvas::dropEvent( QDropEvent *e )
 
 void KPrCanvas::slotGotoPage()
 {
-    setCursor( blankCursor );
+    setSwitchingMode( false );
+    //setCursor( blankCursor );
     int pg = m_step.m_pageNumber + 1;
     
     m_view->setPageDuration( m_step.m_pageNumber );
@@ -4938,9 +4947,6 @@ void KPrCanvas::slotGotoPage()
         m_view->setAutoPresTimer( 1 );
         setNextPageTimer( true );
     }
-
-    if ( presMenu->isItemChecked ( PM_DM ) )
-        setCursor( KPresenterUtils::penCursor() );
 }
 
 void KPrCanvas::gotoPage( int pg )
@@ -4951,7 +4957,7 @@ void KPrCanvas::gotoPage( int pg )
         kdDebug(33001) << "Page::gotoPage m_step.m_pageNumber =" << m_step.m_pageNumber << endl;
         m_presentationSlidesIterator = m_presentationSlides.find( m_step.m_pageNumber + 1 );
         editMode = false;
-        drawMode = false;
+        m_drawMode = false;
         m_pageEffectSteps = m_view->kPresenterDoc()->getPageEffectSteps( m_step.m_pageNumber );
         m_step.m_step = *m_pageEffectSteps.begin();
         m_step.m_subStep = 0;
@@ -5193,30 +5199,25 @@ void KPrCanvas::slotExitPres()
     m_view->screenStop();
 }
 
-void KPrCanvas::drawingMode()
+void KPrCanvas::setDrawingMode()
 {
+    m_presMenu->setItemChecked( PM_DM, true );
+    m_drawMode = true;
+
     setCursor( KPresenterUtils::penCursor() );
-    if(!presMenu->isItemChecked ( PM_DM ))
-    {
-        presMenu->setItemChecked( PM_DM, true );
-        presMenu->setItemChecked( PM_SM, false );
-        drawMode = true;
-    }
 }
 
-void KPrCanvas::switchingMode()
+void KPrCanvas::setSwitchingMode( bool continueTimer )
 {
-    if(!presMenu->isItemChecked ( PM_SM ))
-    {
-        presMenu->setItemChecked( PM_DM, false );
-        presMenu->setItemChecked( PM_SM, true );
-    }
+    m_presMenu->setItemChecked( PM_DM, false );
     
     // the following have to be done even when nothing changed
     // we don't want to see the cursor nor the automatic pesentation stopped
-    drawMode = false; setCursor( blankCursor );
+    m_drawMode = false; 
+    m_drawLineInDrawMode = false;
+    setCursor( blankCursor );
 
-    if ( !spManualSwitch() )
+    if ( continueTimer && !spManualSwitch() )
         m_view->continueAutoPresTimer();
 }
 
