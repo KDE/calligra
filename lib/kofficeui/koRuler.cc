@@ -405,7 +405,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 
     switch ( e->button() ) {
     case RightButton:
-        if(d->currTab==d->tabList.end())
+        if(d->currTab==d->tabList.end() || !(d->flags & F_TABS))
             d->rb_menu->setItemEnabled(d->mRemoveTab, false);
         else
             d->rb_menu->setItemEnabled(d->mRemoveTab, true);
