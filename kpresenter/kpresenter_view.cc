@@ -1051,7 +1051,7 @@ void KPresenterView::screenPresStructView()
     sendFocusEvent();
 }
 
-/*========================== screen assign effect ===============*/
+/*===============================================================*/
 void KPresenterView::screenAssignEffect()
 {
     int _pNum, _oNum;
@@ -1067,8 +1067,6 @@ void KPresenterView::screenAssignEffect()
     if ( page->canAssignEffect( _pNum, _oNum ) && _pNum >= 1 )
     {
         effectDia = new EffectDia( 0, "Effect", _pNum, _oNum, ( KPresenterView* )this );
-        effectDia->setMaximumSize( effectDia->width(), effectDia->height() );
-        effectDia->setMinimumSize( effectDia->width(), effectDia->height() );
         effectDia->setCaption( i18n( "KPresenter - Assign effects" ) );
         QObject::connect( effectDia, SIGNAL( effectDiaOk() ), this, SLOT( effectOk() ) );
         effectDia->show();

@@ -74,6 +74,12 @@ public:
     { effect2 = _effect2; }
     virtual void setPresNum( int _presNum )
     { presNum = _presNum; }
+    virtual void setDisappear( bool b )
+    { disappear = b; }
+    virtual void setDisappearNum( int num )
+    { disappearNum = num; }
+    virtual void setEffect3( Effect3 _effect3) 
+    { effect3 = _effect3; }
     
     virtual void save( ostream& out )
     {; }
@@ -105,7 +111,13 @@ public:
     { return presNum; }
     virtual int getSubPresSteps()
     { return 0; }
-    
+    virtual bool getDisappear()
+    { return disappear; }
+    virtual int getDisappearNum()
+    { return disappearNum; }
+    virtual Effect3 getEffect3()
+    { return effect3; }
+
     virtual void drawSelection( bool _dSelection )
     { dSelection = _dSelection; }
 
@@ -154,8 +166,10 @@ protected:
     QColor shadowColor;
     Effect effect;
     Effect2 effect2;
-    int presNum;
-
+    Effect3 effect3;
+    int presNum, disappearNum;
+    bool disappear;
+    
     bool selected, dSelection;
     bool zoomed;
     float presFakt;
@@ -169,7 +183,7 @@ protected:
     bool inObjList;
     int cmds;
     bool move;
-    
+
 };
 
 #endif

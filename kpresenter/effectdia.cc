@@ -24,6 +24,10 @@
 #include <qbttngrp.h>
 #include <qcombo.h>
 #include <qlabel.h>
+#include <qgroupbox.h>
+#include <qcheckbox.h>
+#include <qhbox.h>
+#include <qvbox.h>
 
 #include <krestrictedline.h>
 #include <kapp.h>
@@ -36,31 +40,33 @@
 /* class EffectDia                                                */
 /******************************************************************/
 
-/*==================== constructor ===============================*/
+/*================================================================*/
 EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objNum, KPresenterView *_view )
-    :QDialog( parent, name, true )
+    : QDialog( parent, name, true )
 {
     pageNum = _pageNum;
     objNum = _objNum;
     view = _view;
 
-    lNum = new QLabel( i18n( "Number: " ), this );
-    lNum->move( 10, 10 );
-    lNum->resize( lNum->sizeHint() );
+    back = new QVBox( this );
+    back->setMargin( 10 );
+    back->setSpacing( 5 );
+    
+    QGroupBox *grp1 = new QGroupBox( 4, Qt::Horizontal, i18n( "Appear" ), back );
+    
+    lNum = new QLabel( i18n( "Number: " ), grp1 );
     lNum->setAlignment( AlignVCenter );
 
-    eNum = new QSpinBox( 0, 100, 1, this );
-    eNum->move( lNum->width() + 15, 10 );
+    eNum = new QSpinBox( 0, 100, 1, grp1 );
     eNum->setValue( view->kPresenterDoc()->objectList()->at(_objNum)->getPresNum() );
-    eNum->resize( eNum->sizeHint().width(), eNum->sizeHint().height() );
-    lNum->resize( lNum->width(), eNum->height() );
 
-    lEffect = new QLabel( i18n( "Effect ( appearing ): " ), this );
-    lEffect->move( 10, eNum->y()+eNum->height()+20 );
-    lEffect->resize( lEffect->sizeHint() );
+    ( void )new QWidget( grp1 );
+    ( void )new QWidget( grp1 );
+    
+    lEffect = new QLabel( i18n( "Effect (appearing): " ), grp1 );
     lEffect->setAlignment( AlignVCenter );
 
-    cEffect = new QComboBox( false, this, "cEffect" );
+    cEffect = new QComboBox( false, grp1, "cEffect" );
     cEffect->insertItem( i18n( "No Effect" ) );
     cEffect->insertItem( i18n( "Come from right" ) );
     cEffect->insertItem( i18n( "Come from left" ) );
@@ -75,16 +81,11 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
     cEffect->insertItem( i18n( "Wipe from top" ) );
     cEffect->insertItem( i18n( "Wipe from bottom" ) );
     cEffect->setCurrentItem( static_cast<int>( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect() ) );
-    cEffect->move(max(lEffect->width(),lNum->width())+15,lEffect->y());
-    cEffect->resize( cEffect->sizeHint() );
-    lEffect->resize( lEffect->width(), cEffect->height() );
 
-    lEffect2 = new QLabel( i18n( "Effect ( object specific ): " ), this );
-    lEffect2->move( cEffect->x()+cEffect->width()+20, eNum->y()+eNum->height()+20 );
-    lEffect2->resize( lEffect2->sizeHint() );
+    lEffect2 = new QLabel( i18n( "Effect (object specific): " ), grp1 );
     lEffect2->setAlignment( AlignVCenter );
 
-    cEffect2 = new QComboBox( false, this, "cEffect2" );
+    cEffect2 = new QComboBox( false, grp1, "cEffect2" );
     cEffect2->insertItem( i18n( "No Effect" ) );
 
     switch ( view->kPresenterDoc()->objectList()->at( _objNum )->getType() )
@@ -109,65 +110,103 @@ EffectDia::EffectDia( QWidget* parent, const char* name, int _pageNum, int _objN
         }
     }
 
-    cEffect2->move( lEffect2->x()+lEffect2->width()+5, lEffect2->y() );
-    cEffect2->resize( cEffect2->sizeHint() );
-    lEffect2->resize( lEffect2->width(), cEffect2->height() );
+    disappear = new QCheckBox( i18n( "Disappear" ), back ); 
+    disappear->setChecked( view->kPresenterDoc()->objectList()->at(_objNum)->getDisappear() );
 
-    resize( cEffect2->x()+cEffect2->width()+10, cEffect->y()+cEffect->height()+10 );
+    QGroupBox *grp2 = new QGroupBox( 2, Qt::Horizontal, back );
 
-    cancelBut = new QPushButton( this, "BCancel" );
+    lDisappear = new QLabel( i18n( "Number: " ), grp2 );
+    lDisappear->setAlignment( AlignVCenter );
+
+    eDisappear = new QSpinBox( 0, 100, 1, grp2 );
+    eDisappear->setValue( view->kPresenterDoc()->objectList()->at(_objNum)->getDisappearNum() );
+
+    lDEffect = new QLabel( i18n( "Effect (disappearing): " ), grp2 );
+    lDEffect->setAlignment( AlignVCenter );
+
+    cDisappear = new QComboBox( false, grp2, "cDisappear" );
+    cDisappear->insertItem( i18n( "No Effect" ) );
+    cDisappear->insertItem( i18n( "Disappear to the right" ) );
+    cDisappear->insertItem( i18n( "Disappear to the left" ) );
+    cDisappear->insertItem( i18n( "Disappear to the top" ) );
+    cDisappear->insertItem( i18n( "Disappear to the bottom" ) );
+    cDisappear->insertItem( i18n( "Disappear to the right/top" ) );
+    cDisappear->insertItem( i18n( "Disappear to the right/bottom" ) );
+    cDisappear->insertItem( i18n( "Disappear to the left/top" ) );
+    cDisappear->insertItem( i18n( "Disappear to the left/bottom" ) );
+    cDisappear->insertItem( i18n( "Wipe to the left" ) );
+    cDisappear->insertItem( i18n( "Wipe to the right" ) );
+    cDisappear->insertItem( i18n( "Wipe to the top" ) );
+    cDisappear->insertItem( i18n( "Wipe to the bottom" ) );
+    cDisappear->setCurrentItem( static_cast<int>( view->kPresenterDoc()->objectList()->at( _objNum )->getEffect3() ) );
+    
+    ( void )new QWidget( back );
+    
+    QHBox *buttons = new QHBox( back );
+    buttons->setSpacing( 10 );
+    
+    ( void )new QWidget( buttons );
+    
+    cancelBut = new QPushButton( buttons, "BCancel" );
     cancelBut->setText( i18n( "Cancel" ) );
 
-    okBut = new QPushButton( this, "BOK" );
+    okBut = new QPushButton( buttons, "BOK" );
     okBut->setText( i18n( "OK" ) );
     okBut->setAutoRepeat( false );
     okBut->setAutoResize( false );
     okBut->setAutoDefault( true );
     okBut->setDefault( true );
 
-    int butW = max(cancelBut->sizeHint().width(),okBut->sizeHint().width());
-    int butH = cancelBut->sizeHint().height();
-
-    cancelBut->resize( butW, butH );
-    okBut->resize( butW, butH );
-
-    cancelBut->move( width()-10-cancelBut->width(), cEffect->y()+cEffect->height()+20 );
-    okBut->move( cancelBut->x()-okBut->width()-5, cancelBut->y() );
-
+    buttons->setMaximumHeight( okBut->height() );
+    
     connect( okBut, SIGNAL( clicked() ), this, SLOT( slotEffectDiaOk() ) );
     connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
     connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
-
-    resize( cEffect2->x()+cEffect2->width()+10, okBut->y()+okBut->height()+10 );
+    connect( disappear, SIGNAL( clicked() ), this, SLOT( disappearChanged() ) );
+    disappearChanged();
+    
+    resize( 630, 300 );
 }
 
-/*===================== destructor ===============================*/
-EffectDia::~EffectDia()
-{
-}
-
-/*====================== effect dia ok ===========================*/
+/*================================================================*/
 void EffectDia::slotEffectDiaOk()
 {
-    EffectCmd *effectCmd = new EffectCmd( i18n( "Assign Object Effects" ), atoi( eNum->text() ),
+    EffectCmd *effectCmd = new EffectCmd( i18n( "Assign Object Effects" ), eNum->value(),
                                           ( Effect )cEffect->currentItem(), ( Effect2 )cEffect2->currentItem(),
+                                          disappear->isChecked(), ( Effect3 )cDisappear->currentItem(),
+                                          eDisappear->value(),
                                           view->kPresenterDoc()->objectList()->at( objNum )->getPresNum(),
                                           view->kPresenterDoc()->objectList()->at( objNum )->getEffect(),
                                           view->kPresenterDoc()->objectList()->at( objNum )->getEffect2(),
+                                          view->kPresenterDoc()->objectList()->at( objNum )->getDisappear(),
+                                          view->kPresenterDoc()->objectList()->at( objNum )->getEffect3(),
+                                          view->kPresenterDoc()->objectList()->at( objNum )->getDisappearNum(),
                                           view->kPresenterDoc()->objectList()->at( objNum ) );
     effectCmd->execute();
     view->kPresenterDoc()->commands()->addCommand( effectCmd );
     emit effectDiaOk();
 }
 
+/*================================================================*/
+void EffectDia::resizeEvent( QResizeEvent *e )
+{
+    QDialog::resizeEvent( e );
+    back->resize( size() );
+}
 
+/*================================================================*/
+void EffectDia::disappearChanged()
+{
+    cDisappear->setEnabled( disappear->isChecked() );
+    eDisappear->setEnabled( disappear->isChecked() );
+}
 
+/*================================================================*/
+void EffectDia::num1Changed( int num )
+{
+}
 
-
-
-
-
-
-
-
-
+/*================================================================*/
+void EffectDia::num2Changed( int num )
+{
+}

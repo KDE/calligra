@@ -58,7 +58,7 @@ void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
     KRect r;
 
     int penw = pen.width();
-    
+
     _painter->save();
 
     r = _painter->viewport();
@@ -227,6 +227,8 @@ void KPPartObject::save( ostream& out )
         << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
         << gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
         << static_cast<int>( gType ) << "\"/>" << endl;
+    out << indent << "<DISAPPEAR effect=\"" << static_cast<int>( effect3 ) << "\" doit=\"" << static_cast<int>( disappear )
+        << "\" num=\"" << disappearNum << "\"/>" << endl;
 }
 
 /*========================== load ================================*/
@@ -291,6 +293,22 @@ void KPPartObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                     brush.setStyle( ( Qt::BrushStyle )atoi( ( *it ).m_strValue.c_str() ) );
             }
             setBrush( brush );
+        }
+
+        // disappear
+        else if ( name == "DISAPPEAR" )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "effect" )
+                    effect3 = ( Effect3 )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "doit" )
+                    disappear = ( bool )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "num" )
+                    disappearNum = atoi( ( *it ).m_strValue.c_str() );
+            }
         }
 
         // angle

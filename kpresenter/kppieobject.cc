@@ -141,6 +141,8 @@ void KPPieObject::save( ostream& out )
     out << indent << "<PIEANGLE value=\"" << p_angle << "\"/>" << endl;
     out << indent << "<PIELENGTH value=\"" << p_len << "\"/>" << endl;
     out << indent << "<PIETYPE value=\"" << static_cast<int>( pieType ) << "\"/>" << endl;
+    out << indent << "<DISAPPEAR effect=\"" << static_cast<int>( effect3 ) << "\" doit=\"" << static_cast<int>( disappear )
+        << "\" num=\"" << disappearNum << "\"/>" << endl;
 }
 
 /*========================== load ================================*/
@@ -152,7 +154,7 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     while ( parser.open( 0L, tag ) )
     {
         KOMLParser::parseTag( tag.c_str(), name, lst );
-    
+
         // orig
         if ( name == "ORIG" )
         {
@@ -178,6 +180,22 @@ void KPPieObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                     ext.setWidth( atoi( ( *it ).m_strValue.c_str() ) );
                 if ( ( *it ).m_strName == "height" )
                     ext.setHeight( atoi( ( *it ).m_strValue.c_str() ) );
+            }
+        }
+
+        // disappear
+        else if ( name == "DISAPPEAR" )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "effect" )
+                    effect3 = ( Effect3 )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "doit" )
+                    disappear = ( bool )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "num" )
+                    disappearNum = atoi( ( *it ).m_strValue.c_str() );
             }
         }
 
@@ -423,7 +441,7 @@ void KPPieObject::draw( QPainter *_painter, int _diffx, int _diffy )
             int sx = ox;
             int sy = oy;
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
-            
+
             _painter->setViewport( sx, sy, r.width(), r.height() );
             paint( _painter );
         }
@@ -438,7 +456,7 @@ void KPPieObject::draw( QPainter *_painter, int _diffx, int _diffy )
             int yPos = -rr.y();
             int xPos = -rr.x();
             rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
-    
+
             int sx = 0;
             int sy = 0;
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
@@ -448,7 +466,7 @@ void KPPieObject::draw( QPainter *_painter, int _diffx, int _diffy )
             m.translate( pw / 2, ph / 2 );
             m2.translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
             m = m2 * mtx * m;
-            
+
             _painter->setWorldMatrix( m );
             paint( _painter );
         }

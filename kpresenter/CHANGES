@@ -244,3 +244,9 @@ Reggie, 22 - 23.5.1999:
 - Implemented a clipart collection simlar to the pixmap collection
 - Cliparts are now saved into KPresenter docments (using KoStore)
   (old docs can be still loaded)
+
+Reggie, 26.5.1999:
+------------------
+- Started implementing the option to let objects disappear in screenpresentations: Configuration,
+  Loading/Saving and Undo/Redo already works. I'll implement the disappearing (with effects of course :-)
+  tomorrow...

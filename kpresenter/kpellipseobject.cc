@@ -124,6 +124,8 @@ void KPEllipseObject::save( ostream& out )
         << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
         << gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
         << static_cast<int>( gType ) << "\"/>" << endl;
+    out << indent << "<DISAPPEAR effect=\"" << static_cast<int>( effect3 ) << "\" doit=\"" << static_cast<int>( disappear )
+        << "\" num=\"" << disappearNum << "\"/>" << endl;
 }
 
 /*========================== load ================================*/
@@ -135,7 +137,7 @@ void KPEllipseObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     while ( parser.open( 0L, tag ) )
     {
         KOMLParser::parseTag( tag.c_str(), name, lst );
-    
+
         // orig
         if ( name == "ORIG" )
         {
@@ -147,6 +149,22 @@ void KPEllipseObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                     orig.setX( atoi( ( *it ).m_strValue.c_str() ) );
                 if ( ( *it ).m_strName == "y" )
                     orig.setY( atoi( ( *it ).m_strValue.c_str() ) );
+            }
+        }
+
+        // disappear
+        else if ( name == "DISAPPEAR" )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "effect" )
+                    effect3 = ( Effect3 )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "doit" )
+                    disappear = ( bool )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "num" )
+                    disappearNum = atoi( ( *it ).m_strValue.c_str() );
             }
         }
 
@@ -346,7 +364,7 @@ void KPEllipseObject::draw( QPainter *_painter, int _diffx, int _diffy )
             int sx = ox;
             int sy = oy;
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
-            
+
             _painter->setViewport( sx, sy, r.width(), r.height() );
             paint( _painter );
         }
@@ -361,7 +379,7 @@ void KPEllipseObject::draw( QPainter *_painter, int _diffx, int _diffy )
             int yPos = -rr.y();
             int xPos = -rr.x();
             rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
-    
+
             int sx = 0;
             int sy = 0;
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
@@ -371,7 +389,7 @@ void KPEllipseObject::draw( QPainter *_painter, int _diffx, int _diffy )
             m.translate( pw / 2, ph / 2 );
             m2.translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
             m = m2 * mtx * m;
-            
+
             _painter->setWorldMatrix( m );
             paint( _painter );
         }
@@ -463,12 +481,12 @@ void KPEllipseObject::paint( QPainter* _painter )
                 QRegion clipregion( 0, 0, ow - 2 * pw, oh - 2 * pw, QRegion::Ellipse );
                 QPicture pic;
                 QPainter p;
-    
+
                 p.begin( &pic );
                 p.setClipRegion( clipregion );
                 p.drawPixmap( 0, 0, *gradient->getGradient() );
                 p.end();
-    
+
                 pix.fill( Qt::white );
                 QPainter p2;
                 p2.begin( &pix );

@@ -186,7 +186,9 @@ void Page::drawObjects( QPainter *painter, KRect rect )
 
         if ( ( rect.intersects( kpobject->getBoundingRect( diffx( i ), diffy( i ) ) ) && editMode ) ||
              ( !editMode && getPageOfObj( i, _presFakt ) == static_cast<int>( currPresPage ) &&
-               kpobject->getPresNum() <= static_cast<int>( currPresStep ) ) )
+               kpobject->getPresNum() <= static_cast<int>( currPresStep )/* && 
+               ( !kpobject->getDisappear() || kpobject->getDisappear() && 
+               kpobject->getDisappearNum() > static_cast<int>( currPresStep ) )*/ ) )
         {
             if ( !editMode && static_cast<int>( currPresStep ) == kpobject->getPresNum() && !goingBack )
             {
@@ -2372,7 +2374,6 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
                     m.scale( static_cast<float>( pix3.width() - dw ) / static_cast<float>( pix3.width() ),
                              static_cast<float>( pix3.height() - dh ) / static_cast<float>( pix3.height() ) );
                     pix3 = pix3.xForm( m );
-                    //pix3.resize( pix3.width() - dw, pix3.height() - dh );
                     ps = pix3.size();
 
                     bitBlt( &pix4, ( pix4.width() - pix3.width() ) / 2, ( pix4.height() - pix3.height() ) / 2,
@@ -2382,14 +2383,6 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
                     KRect r = newRect.unite( oldRect );
                     bitBlt( this, r.x(), r.y(), &pix4, r.x(), r.y(), r.width(), r.height() );
                     oldRect = newRect;
-                }
-                if ( _step == _psteps )
-                {
-//          pix3 = QPixmap( _pix1 );
-//          QWMatrix m;
-//          m.scale( static_cast<float>( ps.width() ) / static_cast<float>( pix3.width() ),
-//              static_cast<float>( ps.height() ) / static_cast<float>( pix3.height() ) );
-//          pix3 = pix3.xForm( m );
                 }
                 if ( _step > _psteps && _step < _psteps * 2 )
                 {
@@ -2437,7 +2430,7 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
     }
 }
 
-/*======================= do object effects ======================*/
+/*================================================================*/
 void Page::doObjEffects()
 {
     QPixmap screen_orig( kapp->desktop()->width(), kapp->desktop()->height() );

@@ -41,8 +41,11 @@ KPObject::KPObject()
     : orig(), ext(), shadowColor( Qt::gray )
 {
     presNum = 0;
+    disappearNum = 1;
     effect = EF_NONE;
     effect2 = EF2_NONE;
+    effect3 = EF3_NONE;
+    disappear = false;
     angle = 0.0;
     shadowDirection = SD_RIGHT_BOTTOM;
     shadowDistance = 0;
@@ -113,10 +116,10 @@ bool KPObject::contains( KPoint _point, int _diffx, int _diffy )
         m.translate( pw / 2, ph / 2 );
         m2.translate( rr.left() + xPos, rr.top() + yPos );
         m = m2 * mtx * m;
-        
+
         KRect r = m.map( br );
         r.moveBy( orig.x() - _diffx, orig.y() - _diffy );
-        
+
         return r.contains( _point );
     }
 }
@@ -145,10 +148,10 @@ bool KPObject::intersects( KRect _rect, int _diffx, int _diffy )
         m.translate( pw / 2, ph / 2 );
         m2.translate( rr.left() + xPos, rr.top() + yPos );
         m = m2 * mtx * m;
-        
+
         KRect r = m.map( br );
         r.moveBy( orig.x() - _diffx, orig.y() - _diffy );
-        
+
         return r.intersects( _rect );
     }
 }

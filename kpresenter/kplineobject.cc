@@ -61,6 +61,8 @@ void KPLineObject::save( ostream& out )
     out << indent << "<LINEEND value=\"" << static_cast<int>( lineEnd ) << "\"/>" << endl;
     out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
     out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
+    out << indent << "<DISAPPEAR effect=\"" << static_cast<int>( effect3 ) << "\" doit=\"" << static_cast<int>( disappear )
+        << "\" num=\"" << disappearNum << "\"/>" << endl;
 }
 
 /*========================== load ================================*/
@@ -72,7 +74,7 @@ void KPLineObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     while ( parser.open( 0L, tag ) )
     {
         KOMLParser::parseTag( tag.c_str(), name, lst );
-    
+
         // orig
         if ( name == "ORIG" )
         {
@@ -98,6 +100,22 @@ void KPLineObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                     ext.setWidth( atoi( ( *it ).m_strValue.c_str() ) );
                 if ( ( *it ).m_strName == "height" )
                     ext.setHeight( atoi( ( *it ).m_strValue.c_str() ) );
+            }
+        }
+
+        // disappear
+        else if ( name == "DISAPPEAR" )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "effect" )
+                    effect3 = ( Effect3 )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "doit" )
+                    disappear = ( bool )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "num" )
+                    disappearNum = atoi( ( *it ).m_strValue.c_str() );
             }
         }
 
@@ -256,7 +274,7 @@ void KPLineObject::draw( QPainter *_painter, int _diffx, int _diffy )
             int sx = ox;
             int sy = oy;
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
-            
+
             _painter->setViewport( sx, sy, r.width(), r.height() );
             paint( _painter );
         }
@@ -271,7 +289,7 @@ void KPLineObject::draw( QPainter *_painter, int _diffx, int _diffy )
             int yPos = -rr.y();
             int xPos = -rr.x();
             rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
-    
+
             int sx = 0;
             int sy = 0;
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
@@ -281,7 +299,7 @@ void KPLineObject::draw( QPainter *_painter, int _diffx, int _diffy )
             m.translate( pw / 2, ph / 2 );
             m2.translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
             m = m2 * mtx * m;
-            
+
             _painter->setWorldMatrix( m );
             paint( _painter );
         }
@@ -376,19 +394,19 @@ void KPLineObject::paint( QPainter* _painter )
     {
         KSize diff1( 0, 0 ), diff2( 0, 0 );
         int _w = pen.width();
-    
+
         if ( lineBegin != L_NORMAL )
             diff1 = getBoundingSize( lineBegin, _w );
-    
+
         if ( lineEnd != L_NORMAL )
             diff2 = getBoundingSize( lineEnd, _w );
-    
+
         if ( lineBegin != L_NORMAL )
             drawFigure( lineBegin, _painter, KPoint( diff1.width() / 2, oh / 2 ), pen.color(), _w, 180.0 );
-    
+
         if ( lineEnd != L_NORMAL )
             drawFigure( lineEnd, _painter, KPoint( ow - diff2.width() / 2, oh / 2 ), pen.color(), _w, 0.0 );
-    
+
         _painter->setPen( pen );
         _painter->drawLine( diff1.width() / 2, oh / 2, ow - diff2.width() / 2, oh / 2 );
     } break;
@@ -396,19 +414,19 @@ void KPLineObject::paint( QPainter* _painter )
     {
         KSize diff1( 0, 0 ), diff2( 0, 0 );
         int _w = pen.width();
-    
+
         if ( lineBegin != L_NORMAL )
             diff1 = getBoundingSize( lineBegin, _w );
-    
+
         if ( lineEnd != L_NORMAL )
             diff2 = getBoundingSize( lineEnd, _w );
-    
+
         if ( lineBegin != L_NORMAL )
             drawFigure( lineBegin, _painter, KPoint( ow / 2, diff1.width() / 2 ), pen.color(), _w, 270.0 );
-    
+
         if ( lineEnd != L_NORMAL )
             drawFigure( lineEnd, _painter, KPoint( ow / 2, oh - diff2.width() / 2 ), pen.color(), _w, 90.0 );
-    
+
         _painter->setPen( pen );
         _painter->drawLine( ow / 2, diff1.width() / 2, ow / 2, oh - diff2.width() / 2 );
     } break;
@@ -416,19 +434,19 @@ void KPLineObject::paint( QPainter* _painter )
     {
         KSize diff1( 0, 0 ), diff2( 0, 0 );
         int _w = pen.width();
-    
+
         if ( lineBegin != L_NORMAL )
             diff1 = getBoundingSize( lineBegin, _w );
-    
+
         if ( lineEnd != L_NORMAL )
             diff2 = getBoundingSize( lineEnd, _w );
-    
+
         KPoint pnt1( diff1.height() / 2 + _w / 2, diff1.width() / 2 + _w / 2 );
         KPoint pnt2( ow - diff2.height() / 2 - _w / 2, oh - diff2.width() / 2 - _w / 2 );
         float _angle;
-    
+
         _angle = getAngle( pnt1, pnt2 );
-    
+
         if ( lineBegin != L_NORMAL )
         {
             _painter->save();
@@ -443,7 +461,7 @@ void KPLineObject::paint( QPainter* _painter )
             drawFigure( lineEnd, _painter, KPoint( 0, 0 ), pen.color(), _w, _angle - 180 );
             _painter->restore();
         }
-    
+
         _painter->setPen( pen );
         _painter->drawLine( diff1.height() / 2 + _w / 2, diff1.width() / 2 + _w / 2,
                             ow - diff2.height() / 2 - _w / 2, oh - diff2.width() / 2 - _w / 2 );
@@ -452,19 +470,19 @@ void KPLineObject::paint( QPainter* _painter )
     {
         KSize diff1( 0, 0 ), diff2( 0, 0 );
         int _w = pen.width();
-    
+
         if ( lineBegin != L_NORMAL )
             diff1 = getBoundingSize( lineBegin, _w );
-    
+
         if ( lineEnd != L_NORMAL )
             diff2 = getBoundingSize( lineEnd, _w );
-    
+
         KPoint pnt1( diff1.height() / 2 + _w / 2, oh - diff1.width() / 2 - _w / 2 );
         KPoint pnt2( ow - diff2.height() / 2 - _w / 2, diff2.width() / 2 + _w / 2 );
         float _angle;
-    
+
         _angle = getAngle( pnt1, pnt2 );
-    
+
         if ( lineBegin != L_NORMAL )
         {
             _painter->save();
@@ -479,7 +497,7 @@ void KPLineObject::paint( QPainter* _painter )
             drawFigure( lineEnd, _painter, KPoint( 0, 0 ), pen.color(), _w, _angle - 180 );
             _painter->restore();
         }
-    
+
         _painter->setPen( pen );
         _painter->drawLine( diff1.height() / 2 + _w / 2, oh - diff1.width() / 2 - _w / 2,
                             ow - diff2.height() / 2 - _w / 2, diff2.width() / 2 + _w / 2 );

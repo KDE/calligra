@@ -152,6 +152,8 @@ void KPAutoformObject::save( ostream& out )
         << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
         << gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
         << static_cast<int>( gType ) << "\"/>" << endl;
+    out << indent << "<DISAPPEAR effect=\"" << static_cast<int>( effect3 ) << "\" doit=\"" << static_cast<int>( disappear )
+        << "\" num=\"" << disappearNum << "\"/>" << endl;
 }
 
 /*========================== load ================================*/
@@ -163,7 +165,7 @@ void KPAutoformObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     while ( parser.open( 0L, tag ) )
     {
         KOMLParser::parseTag( tag.c_str(), name, lst );
-    
+
         // orig
         if ( name == "ORIG" )
         {
@@ -228,6 +230,23 @@ void KPAutoformObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                     effect2 = ( Effect2 )atoi( ( *it ).m_strValue.c_str() );
             }
         }
+
+        // disappear
+        else if ( name == "DISAPPEAR" )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "effect" )
+                    effect3 = ( Effect3 )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "doit" )
+                    disappear = ( bool )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "num" )
+                    disappearNum = atoi( ( *it ).m_strValue.c_str() );
+            }
+        }
+
         // pen
         else if ( name == "PEN" )
         {
@@ -416,7 +435,7 @@ void KPAutoformObject::draw( QPainter *_painter, int _diffx, int _diffy )
             int sx = ox;
             int sy = oy;
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
-            
+
             _painter->setViewport( sx, sy, r.width(), r.height() );
             paint( _painter );
         }
@@ -431,7 +450,7 @@ void KPAutoformObject::draw( QPainter *_painter, int _diffx, int _diffy )
             int yPos = -rr.y();
             int xPos = -rr.x();
             rr.moveTopLeft( KPoint( -rr.width() / 2, -rr.height() / 2 ) );
-    
+
             int sx = 0;
             int sy = 0;
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
@@ -441,7 +460,7 @@ void KPAutoformObject::draw( QPainter *_painter, int _diffx, int _diffy )
             m.translate( pw / 2, ph / 2 );
             m2.translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
             m = m2 * mtx * m;
-            
+
             _painter->setWorldMatrix( m );
             paint( _painter );
         }
@@ -570,7 +589,7 @@ void KPAutoformObject::paint( QPainter* _painter )
                     QPointArray pntArray3 = pntArray2.copy();
                     pntArray3.translate( ox, oy );
                     _painter->save();
-        
+
                     QRegion clipregion( pntArray3 );
 
                     if ( _painter->hasClipping() )
@@ -590,12 +609,12 @@ void KPAutoformObject::paint( QPainter* _painter )
                         QRegion clipregion( pntArray2 );
                         QPicture pic;
                         QPainter p;
-        
+
                         p.begin( &pic );
                         p.setClipRegion( clipregion );
                         p.drawPixmap( 0, 0, *gradient->getGradient() );
                         p.end();
-        
+
                         pix.fill( Qt::white );
                         QPainter p2;
                         p2.begin( &pix );
@@ -605,7 +624,7 @@ void KPAutoformObject::paint( QPainter* _painter )
 
                     _painter->drawPixmap( 0, 0, pix );
                 }
-    
+
                 _painter->setPen( pen );
                 _painter->setBrush( Qt::NoBrush );
                 _painter->drawPolygon( pntArray2 );
@@ -615,20 +634,20 @@ void KPAutoformObject::paint( QPainter* _painter )
         {
             KSize diff1( 0, 0 ), diff2( 0, 0 );
             int _w = pen.width();
-    
+
             if ( lineBegin != L_NORMAL )
                 diff1 = getBoundingSize( lineBegin, _w );
-    
+
             if ( lineEnd != L_NORMAL )
                 diff2 = getBoundingSize( lineEnd, _w );
-    
+
             if ( pntArray.size() > 1 )
             {
                 if ( lineBegin != L_NORMAL )
                 {
                     KPoint pnt1( pntArray2.at( 0 ) ), pnt2( pntArray2.at( 1 ) ), pnt3, pnt4( pntArray.at( 0 ) );
                     float _angle = getAngle( pnt1, pnt2 );
-        
+
                     switch ( static_cast<int>( _angle ) )
                     {
                     case 0:
@@ -655,16 +674,16 @@ void KPAutoformObject::paint( QPainter* _painter )
                         pnt3 = pnt1;
                         break;
                     }
-        
+
                     drawFigure( lineBegin, _painter, pnt3, pen.color(), _w, _angle );
                 }
-        
+
                 if ( lineEnd != L_NORMAL )
                 {
                     KPoint pnt1( pntArray2.at( pntArray2.size() - 1 ) ), pnt2( pntArray2.at( pntArray2.size() - 2 ) );
                     KPoint  pnt3, pnt4( pntArray.at( pntArray.size() - 1 ) );
                     float _angle = getAngle( pnt1, pnt2 );
-        
+
                     switch ( ( int )_angle )
                     {
                     case 0:
@@ -691,11 +710,11 @@ void KPAutoformObject::paint( QPainter* _painter )
                         pnt3 = pnt1;
                         break;
                     }
-        
+
                     drawFigure( lineEnd, _painter, pnt3, pen.color(), _w, _angle );
                 }
             }
-    
+
             _painter->setPen( pen );
             _painter->drawPolyline( pntArray2 );
         }

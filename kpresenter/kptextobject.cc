@@ -100,6 +100,8 @@ void KPTextObject::save( ostream& out )
         << "\" style=\"" << static_cast<int>( pen.style() ) << "\"/>" << endl;
     out << indent << "<BRUSH red=\"" << brush.color().red() << "\" green=\"" << brush.color().green()
         << "\" blue=\"" << brush.color().blue() << "\" style=\"" << static_cast<int>( brush.style() ) << "\"/>" << endl;
+    out << indent << "<DISAPPEAR effect=\"" << static_cast<int>( effect3 ) << "\" doit=\"" << static_cast<int>( disappear )
+        << "\" num=\"" << disappearNum << "\"/>" << endl;
     saveKTextObject( out );
 }
 
@@ -124,6 +126,22 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
                     orig.setX( atoi( ( *it ).m_strValue.c_str() ) );
                 if ( ( *it ).m_strName == "y" )
                     orig.setY( atoi( ( *it ).m_strValue.c_str() ) );
+            }
+        }
+
+        // disappear
+        else if ( name == "DISAPPEAR" )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+                if ( ( *it ).m_strName == "effect" )
+                    effect3 = ( Effect3 )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "doit" )
+                    disappear = ( bool )atoi( ( *it ).m_strValue.c_str() );
+                if ( ( *it ).m_strName == "num" )
+                    disappearNum = atoi( ( *it ).m_strValue.c_str() );
             }
         }
 
@@ -462,7 +480,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         m = mtx * m;
 
         _painter->setWorldMatrix( m );
-        
+
         _painter->setPen( Qt::NoPen );
         _painter->setBrush( brush );
 
