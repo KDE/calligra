@@ -120,7 +120,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
     // (Hey, this could be part of the dialog too, choosing which table to export....
     //  It's great to have parametrable filters... IIRC even MSOffice doesn't have that)
     // Ok, for now we'll use the first table - my document has only one table anyway ;-)))
-    KSpreadTable * table = ksdoc->map()->firstTable();
+    KSpreadSheet * table = ksdoc->map()->firstSheet();
 
     // header
     str = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" ";
@@ -330,7 +330,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
       }
       str += "\n</" + html_table_tag + ">\n<br>\n";
 
-    table = ksdoc->map()->nextTable();
+    table = ksdoc->map()->nextSheet();
     }
 
     str += "</body>\n";

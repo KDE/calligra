@@ -448,7 +448,7 @@ void CellStyle::loadData( CellStyle & cs, KSpreadCell const * const cell )
   int col = cell->column();
   int row = cell->row();
 
-  KSpreadFormat * f = new KSpreadFormat( 0, cell->table()->doc()->styleManager()->defaultStyle() );
+  KSpreadFormat * f = new KSpreadFormat( 0, cell->sheet()->doc()->styleManager()->defaultStyle() );
 
   QFont font = cell->textFont( col, row );
   if ( font != f->font() )
