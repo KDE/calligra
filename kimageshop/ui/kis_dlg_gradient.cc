@@ -14,9 +14,10 @@
 #undef Below
 #undef Above
 
-GradientDialog::GradientDialog( KisDoc *_doc, QWidget *_parent, const char *_name )
-  : KFloatingDialog( _parent, _name )
-  , m_pDoc( _doc )
+GradientDialog::GradientDialog( KisDoc *_doc, 
+    QWidget *_parent, const char *_name )
+    : KFloatingDialog( _parent, _name )
+    , m_pDoc( _doc )
 {
   setCaption( i18n( "Gradients" ) );
 

@@ -122,6 +122,8 @@
 
 <Menu name="settings"><text>Settings</text>
   <Action name="current_tool_properties"/>  
+  <Action name="dialog_gradienteditor"/>      
+  <Action name="dialog_gradient"/>      
   <Action name="preferences"/>    
   <Action name="save_options"/>
   <Separator/>

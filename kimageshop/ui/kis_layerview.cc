@@ -50,12 +50,13 @@
 //#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
 using namespace std;
+const int iheight = 32;
 
-KisLayerView::KisLayerView( KisDoc *_doc, QWidget *_parent, const char *_name )
-  : QWidget( _parent, _name )
+KisLayerView::KisLayerView( KisDoc *doc, QWidget *parent, const char *name )
+  : QWidget( parent, name )
 {
     buttons = new QHBox( this );
-    buttons->setMaximumHeight(15);
+    buttons->setMaximumHeight(12);
     
     pbAddLayer = new KisFrameButton( buttons );
     pbAddLayer->setPixmap( BarIcon( "newlayer" ) );
@@ -73,7 +74,7 @@ KisLayerView::KisLayerView( KisDoc *_doc, QWidget *_parent, const char *_name )
     frame = new QHBox( this );
     frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );    
 
-    layertable = new LayerTable( _doc, frame, this, "layerlist" );
+    layertable = new LayerTable( doc, frame, this, "layerlist" );
 
     connect( pbAddLayer, SIGNAL( clicked() ), 
         layertable, SLOT( slotAddLayer() ) );
@@ -117,26 +118,26 @@ void KisLayerView::showScrollBars( )
     resizeEvent(0L);
 }
 
-LayerTable::LayerTable( QWidget* _parent, const char* _name )
-  : QTableView( _parent, _name )
+LayerTable::LayerTable( QWidget* parent, const char* name )
+  : QTableView( parent, name )
 {
     pLayerView = 0L;
     init( 0 );
 }
 
 
-LayerTable::LayerTable( KisDoc* doc, QWidget* _parent, const char* _name )
-  : QTableView( _parent, _name )
+LayerTable::LayerTable( KisDoc* doc, QWidget* parent, const char* name )
+  : QTableView( parent, name )
 {
     pLayerView = 0L;
     init( doc );
 }
 
-LayerTable::LayerTable( KisDoc* doc, QWidget* _parent, 
-KisLayerView *_layerview, const char* _name )
-  : QTableView( _parent, _name )
+LayerTable::LayerTable( KisDoc* doc, QWidget* parent, 
+KisLayerView *layerview, const char* name )
+  : QTableView(parent, name )
 {
-    pLayerView = _layerview;
+    pLayerView = layerview;
     init( doc );
 }
 
@@ -148,39 +149,34 @@ void LayerTable::init( KisDoc* doc)
     setBackgroundColor( white );
 
     // load icon pixmaps
-    QString _icon = locate( "kis_pics", "visible.png", KisFactory::global() );
+    QString icon = locate( "kis_pics", "visible.png", KisFactory::global());
     mVisibleIcon = new QPixmap;
-    if( !mVisibleIcon->load( _icon ) )
+    if( !mVisibleIcon->load( icon ) )
 	    KMessageBox::error( this, "Can't find visible.png", "Canvas" );
-    mVisibleRect = QRect( QPoint( 2,( CELLHEIGHT - mVisibleIcon->height() ) / 2 ), 
-        mVisibleIcon->size() );
+    mVisibleRect = QRect( QPoint( 3, (iheight - 24)/2), QSize(24,24)); 
 
-    _icon = locate( "kis_pics", "novisible.png", 
+    icon = locate( "kis_pics", "novisible.png", 
         KisFactory::global() );
     mNovisibleIcon = new QPixmap;
-    if( !mNovisibleIcon->load( _icon ) )
+    if( !mNovisibleIcon->load( icon ) )
 	    KMessageBox::error( this, "Can't find novisible.png", "Canvas" );
 
-    _icon = locate( "kis_pics", "linked.png", KisFactory::global() );
+    icon = locate( "kis_pics", "linked.png", KisFactory::global() );
     mLinkedIcon = new QPixmap;
-    if( !mLinkedIcon->load( _icon ) )
+    if( !mLinkedIcon->load( icon ) )
 	    KMessageBox::error( this, "Can't find linked.png", "Canvas" );
-    mLinkedRect = QRect( QPoint( 25,( CELLHEIGHT - mLinkedIcon->height() ) / 2 ), 
-        mLinkedIcon->size() );
+    mLinkedRect = QRect(QPoint(30, (iheight - 24)/2), QSize(24,24));
 
-    _icon = locate( "kis_pics", "unlinked.png", KisFactory::global() );
+    icon = locate( "kis_pics", "unlinked.png", KisFactory::global() );
     mUnlinkedIcon = new QPixmap;
-    if( !mUnlinkedIcon->load( _icon ) )
+    if( !mUnlinkedIcon->load( icon ) )
 	    KMessageBox::error( this, "Can't find unlinked.png", "Canvas" );
-
-    mPreviewRect 
-        = QRect( QPoint( 50, (CELLHEIGHT - mLinkedIcon->height() ) /2 ),
-	        mLinkedIcon->size() );
+    mPreviewRect = QRect(QPoint(57, (iheight - 24)/2), QSize(24,24));
 
     updateTable();
 
     setCellWidth( CELLWIDTH );
-    setCellHeight( CELLHEIGHT );
+    setCellHeight( iheight );
     m_selected = m_doc->current()->layerList().count() - 1;
 
     QPopupMenu *submenu = new QPopupMenu();
@@ -207,11 +203,16 @@ void LayerTable::init( KisDoc* doc)
     m_contextmenu->insertItem( i18n( "Add Mask" ), ADDMASK );
     m_contextmenu->insertItem( i18n( "Remove Mask"), REMOVEMASK );
 
-    connect( m_contextmenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
-    connect( submenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
-    connect( doc, SIGNAL( layersUpdated()), this, SLOT( slotDocUpdated () ) );
+    connect( m_contextmenu, SIGNAL( activated( int ) ), 
+        SLOT( slotMenuAction( int ) ) );
+    connect( submenu, SIGNAL( activated( int ) ), 
+        SLOT( slotMenuAction( int ) ) );
+    connect( doc, SIGNAL( layersUpdated()), 
+        this, SLOT( slotDocUpdated () ) );
+        
     setAutoUpdate(true); 
 }
+
 
 void LayerTable::slotDocUpdated()
 {
@@ -220,54 +221,65 @@ void LayerTable::slotDocUpdated()
     if(pLayerView) pLayerView->showScrollBars();
 }
 
-void LayerTable::paintCell( QPainter* _painter, int _row, int )
-{
-    if( _row == m_selected )
-    {
-        _painter->fillRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1, gray);
-    }
 
-    style().drawPanel( _painter, mVisibleRect.x(),
-		     mVisibleRect.y(),
-		     mVisibleRect.width(),
-		     mVisibleRect.height(), colorGroup(),
-		      true );
-                      
-    if( m_doc->current()->layerList().at( _row )->visible() )
+void LayerTable::paintCell( QPainter* painter, int row, int )
+{
+    if( row == m_selected )
     {
-        _painter->drawPixmap( mVisibleRect.topLeft(), *mVisibleIcon );
+        painter->fillRect( 0, 0, 
+            cellWidth(0) - 1, cellHeight() - 1, gray);
     }
     else
     {
-        _painter->drawPixmap( mVisibleRect.topLeft(), *mNovisibleIcon );
+        painter->fillRect( 0, 0, 
+            cellWidth(0) - 1, cellHeight() - 1, lightGray);
     }
 
-    style().drawPanel( _painter, mLinkedRect.x(),
+    style().drawPanel( painter, mVisibleRect.x(),
+		     mVisibleRect.y(),
+		     mVisibleRect.width(),
+		     mVisibleRect.height(), 
+             colorGroup(), true );
+                      
+    QPoint pt = QPoint(mVisibleRect.left() + 2, mVisibleRect.top() + 2);
+    if( m_doc->current()->layerList().at(row)->visible() )
+    {
+        painter->drawPixmap( pt, *mVisibleIcon );
+    }
+    else
+    {
+        painter->drawPixmap( pt, *mNovisibleIcon );
+    }
+
+    style().drawPanel(painter, mLinkedRect.x(),
 		     mLinkedRect.y(),
 		     mLinkedRect.width() ,
 		     mLinkedRect.height(), colorGroup(),
 		     true );
-                     
-    if( m_doc->current()->layerList().at( _row )->linked() )
+    
+    pt = QPoint(mLinkedRect.left() + 2, mLinkedRect.top() + 2);                      
+    if( m_doc->current()->layerList().at(row)->linked() )
     {
-        _painter->drawPixmap( mLinkedRect.topLeft(), *mLinkedIcon );
+        painter->drawPixmap( pt, *mLinkedIcon );
     }
     else
     {
-        _painter->drawPixmap( mLinkedRect.topLeft(), *mUnlinkedIcon );
+        painter->drawPixmap( pt, *mUnlinkedIcon );
     }
     
-    style().drawPanel( _painter,    
+    style().drawPanel( painter,    
                     mPreviewRect.x(), 
                     mPreviewRect.y(), 
                     mPreviewRect.width(), 
                     mPreviewRect.height(),                                     
                     colorGroup(), true );
 
-    _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
-    _painter->drawText( 80, 
-        20, m_doc->current()->layerList().at( _row )->name() );
+    painter->drawRect(0, 0, cellWidth(0) - 1, cellHeight() - 1);
+    painter->drawText(iheight * 3 + 3*3, 20, 
+        m_doc->current()->layerList().at(row)->name());
 }
+
+
 
 void LayerTable::updateTable()
 {
@@ -290,48 +302,50 @@ void LayerTable::updateTable()
 }
 
 
-void LayerTable::update_contextmenu( int _index )
+void LayerTable::update_contextmenu( int indx )
 {
     m_contextmenu->setItemChecked( VISIBLE, 
-        m_doc->current()->layerList().at( _index )->visible() );
+        m_doc->current()->layerList().at(indx)->visible() );
     m_contextmenu->setItemChecked( LINKING, 
-        m_doc->current()->layerList().at( _index )->linked() );
+        m_doc->current()->layerList().at(indx)->linked() );
 }
 
 /*
     makes this the current layer and highlites in gray
 */
-void LayerTable::selectLayer( int _index )
+void LayerTable::selectLayer( int indx )
 {
     int currentSel = m_selected;
     m_selected = -1;
     
     updateCell( currentSel, 0 );
-    m_selected = _index;
+    m_selected = indx;
     m_doc->current()->setCurrentLayer( m_selected );
     updateCell( m_selected, 0 );
 }
 
 
-void LayerTable::slotInverseVisibility( int _index )
+void LayerTable::slotInverseVisibility( int indx )
 {
-    m_doc->current()->layerList().at( _index )->setVisible( !m_doc->current()->layerList().at( _index )->visible() );
-    updateCell( _index, 0 );
+  KisImage *img = m_doc->current();
+  img->layerList().at(indx)->setVisible(!img->layerList().at(indx)->visible());
+  updateCell( indx, 0 );
   
-    m_doc->current()->markDirty( m_doc->current()->layerList().at( _index )->imageExtents() );
+  img->markDirty(img->layerList().at( indx )->imageExtents() );
 }
 
 
-void LayerTable::slotInverseLinking( int _index )
+void LayerTable::slotInverseLinking( int indx )
 {
-    m_doc->current()->layerList().at( _index )->setLinked( !m_doc->current()->layerList().at( _index )->linked() );
-    updateCell( _index, 0 );
+    KisImage *img = m_doc->current();
+    img->layerList().at(indx)->setLinked(!img->layerList().at(indx)->linked());
+    updateCell( indx, 0 );
 }
 
 
-void LayerTable::slotMenuAction( int _id )
+void LayerTable::slotMenuAction( int id )
 {
-    switch( _id )
+    switch( id )
     {
         case VISIBLE:
             slotInverseVisibility( m_selected );
@@ -371,17 +385,17 @@ QSize LayerTable::sizeHint() const
     if(pLayerView)
         return QSize( CELLWIDTH, pLayerView->getFrame()->height());    
     else 
-        return QSize( CELLWIDTH, CELLHEIGHT * 5 );
+        return QSize( CELLWIDTH, iheight * 5 );
 }
 
 
-void LayerTable::mousePressEvent( QMouseEvent *_event )
+void LayerTable::mousePressEvent( QMouseEvent *ev)
 {
-    int row = findRow( _event->pos().y() );
-    QPoint localPoint( _event->pos().x() % cellWidth(), 
-        _event->pos().y() % cellHeight() );
+    int row = findRow( ev->pos().y() );
+    QPoint localPoint( ev->pos().x() % cellWidth(), 
+        ev->pos().y() % cellHeight() );
 
-    if( _event->button() & LeftButton )
+    if( ev->button() & LeftButton )
     {
         if( mVisibleRect.contains( localPoint ) )
         {
@@ -396,21 +410,21 @@ void LayerTable::mousePressEvent( QMouseEvent *_event )
             selectLayer( row );
         }
     }
-    else if( _event->button() & RightButton )
+    else if( ev->button() & RightButton )
     {
-        // Should the Layer under the cursor selected when clicking RMB ?
-        // Matthias: IMO it should.
-
-        selectLayer( row );
-        update_contextmenu( row );
-        m_contextmenu->popup( mapToGlobal( _event->pos() ) );
+        if( row != -1)
+        {
+            selectLayer( row );
+            update_contextmenu( row );
+            m_contextmenu->popup( mapToGlobal( ev->pos() ) );
+        }    
     }
 }
 
 
-void LayerTable::mouseDoubleClickEvent( QMouseEvent *_event )
+void LayerTable::mouseDoubleClickEvent( QMouseEvent *ev )
 {
-    if( _event->button() & LeftButton )
+    if( ev->button() & LeftButton )
     {
         slotProperties();
     }
@@ -426,8 +440,8 @@ void LayerTable::slotAddLayer()
 
     img->addLayer( img->imageExtents(), KisColor::white(), true, name );
 
-    QRect updateRect = img->layerList().at( img->layerList().count() - 1 )->imageExtents();
-    img->markDirty( updateRect );
+    QRect uR = img->layerList().at(img->layerList().count() - 1)->imageExtents();
+    img->markDirty(uR);
 
     selectLayer( img->layerList().count() - 1 );
 
@@ -440,9 +454,9 @@ void LayerTable::slotRemoveLayer()
 {
   if( m_doc->current()->layerList().count() != 0 )
   {
-    QRect updateRect = m_doc->current()->layerList().at( m_selected )->imageExtents();
+    QRect uR = m_doc->current()->layerList().at(m_selected)->imageExtents();
     m_doc->current()->removeLayer( m_selected );
-    m_doc->current()->markDirty( updateRect );
+    m_doc->current()->markDirty(uR);
 
     if( m_selected == (int)m_doc->current()->layerList().count() )
       m_selected--;
@@ -485,27 +499,28 @@ void LayerTable::slotRaiseLayer()
 
 void LayerTable::slotLowerLayer()
 {
-    int newpos = ( m_selected + 1 ) < (int)m_doc->current()->layerList().count() ? m_selected + 1 : m_selected;
+    int npos = (m_selected + 1) < (int)m_doc->current()->layerList().count() ? 
+        m_selected + 1 : m_selected;
 
-    if( m_selected != newpos )
+    if( m_selected != npos )
     {
         m_doc->current()->lowerLayer( m_selected );
         repaint();
-        swapLayers( m_selected, newpos );
-        selectLayer( newpos );
+        swapLayers( m_selected, npos );
+        selectLayer( npos );
     }
 }
 
 
 void LayerTable::slotFrontLayer()
 {
-  if( m_selected != (int) ( m_doc->current()->layerList().count() - 1 ) )
+  if( m_selected != (int)(m_doc->current()->layerList().count() - 1))
   {
     m_doc->current()->setFrontLayer( m_selected );
     selectLayer( m_doc->current()->layerList().count() - 1 );
 
-    QRect updateRect = m_doc->current()->layerList().at( m_selected )->imageExtents();
-    m_doc->current()->markDirty( updateRect );
+    QRect uR = m_doc->current()->layerList().at( m_selected )->imageExtents();
+    m_doc->current()->markDirty( uR );
 
     updateAllCells();
   }
@@ -519,8 +534,8 @@ void LayerTable::slotBackgroundLayer()
         m_doc->current()->setBackgroundLayer( m_selected );
         selectLayer( 0 );
 
-        QRect updateRect = m_doc->current()->layerList().at( m_selected )->imageExtents();
-        m_doc->current()->markDirty( updateRect );
+        QRect uR = m_doc->current()->layerList().at(m_selected)->imageExtents();
+        m_doc->current()->markDirty(uR);
 
         updateAllCells();
     }
@@ -537,28 +552,29 @@ void LayerTable::updateAllCells()
 
 void LayerTable::slotProperties()
 {
-    if( LayerPropertyDialog::editProperties( *( m_doc->current()->layerList().at( m_selected ) ) ) )
+    if( LayerPropertyDialog::editProperties( 
+        *( m_doc->current()->layerList().at(m_selected))))
     {
-        QRect updateRect = m_doc->current()->layerList().at( m_selected )->imageExtents();
+        QRect uR = m_doc->current()->layerList().at( m_selected )->imageExtents();
         updateCell( m_selected, 0 );
-        m_doc->current()->markDirty( updateRect );
+        m_doc->current()->markDirty( uR );
     }
 }
 
-LayerPropertyDialog::LayerPropertyDialog( QString _layername, uchar _opacity, 
-    QWidget *_parent, const char *_name )
-    : QDialog( _parent, _name, true )
+LayerPropertyDialog::LayerPropertyDialog( QString layername, 
+    uchar opacity,  QWidget *parent, const char *name )
+    : QDialog( parent, name, true )
 {
     QGridLayout *layout = new QGridLayout( this, 4, 2, 15, 7 );
 
-    m_name = new QLineEdit( _layername, this );
+    m_name = new QLineEdit( layername, this );
     layout->addWidget( m_name, 0, 1 );
 
     QLabel *lblName = new QLabel( m_name, i18n( "Name" ), this );
     layout->addWidget( lblName, 0, 0 );
 
     m_opacity = new IntegerWidget( 0, 255, this );
-    m_opacity->setValue( _opacity );
+    m_opacity->setValue( opacity );
     m_opacity->setTickmarks( QSlider::Below );
     m_opacity->setTickInterval( 32 );
     layout->addWidget( m_opacity, 1, 1 );
@@ -573,27 +589,30 @@ LayerPropertyDialog::LayerPropertyDialog( QString _layername, uchar _opacity,
 
     (void) new QWidget( buttons );
 
-    QPushButton *pbOk = new QPushButton( i18n( "OK" ), buttons );
+    QPushButton *pbOk = new QPushButton( i18n("OK"), buttons);
     pbOk->setDefault( true );
-    QObject::connect( pbOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
+    QObject::connect( pbOk, SIGNAL(clicked()), this, SLOT(accept()));
 
-    QPushButton *pbCancel = new QPushButton( i18n( "Cancel" ), buttons );
-    QObject::connect( pbCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
+    QPushButton *pbCancel = new QPushButton( i18n( "Cancel" ), buttons);
+    QObject::connect(pbCancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
 
-bool LayerPropertyDialog::editProperties( KisLayer &_layer )
+bool LayerPropertyDialog::editProperties( KisLayer &layer )
 {
     LayerPropertyDialog *dialog;
 
-    dialog = new LayerPropertyDialog( _layer.name(), _layer.opacity(), NULL, "opacity_dialog" );
+    dialog = new LayerPropertyDialog( layer.name(), layer.opacity(), 
+        NULL, "Layer Properties" );
+
     if( dialog->exec() == Accepted )
     {
-        _layer.setName( dialog->m_name->text() );
-        _layer.setOpacity( dialog->m_opacity->value() );
+        layer.setName( dialog->m_name->text() );
+        layer.setOpacity( dialog->m_opacity->value() );
 
         return true;
     }
+
     return false;
 }
 

@@ -28,7 +28,7 @@
 #include "kis_view.h"
 #include "kis_vec.h"
 #include "kis_cursor.h"
-
+#include "opts_pen_dlg.h"
 
 PenTool::PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, const KisBrush *_brush)
   : KisTool(doc, view)
@@ -36,6 +36,10 @@ PenTool::PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, const KisBrush *
     m_dragging = false;
     m_pView  = view;
     m_pCanvas = canvas;
+
+    penColorThreshold = 128;
+    penOpacity        = 255;
+    
     setBrush(_brush);
 }
 
@@ -125,9 +129,7 @@ bool PenTool::paint(QPoint pos)
 
     uchar *sl;
     uchar bv;
-    // uchar invbv;
-    uchar a;
-    int   v;
+    uchar r, g, b;
 
     int red = m_pView->fgColor().R();
     int green = m_pView->fgColor().G();
@@ -145,23 +147,19 @@ bool PenTool::paint(QPoint pos)
 	        // alpha blending only (maybe)
             
 	        bv = *(sl + x);
-	        if (bv == 0) continue;
-		  
-	        //invbv = 255 - bv;
-		  
-	        lay->setPixel(0, startx + x, starty + y, red);
-	        lay->setPixel(1, startx + x, starty + y, green);
-	        lay->setPixel(2, startx + x, starty + y, blue);
+	        if (bv < penColorThreshold) continue;
+            
+		    r   = red;   
+            g   = green; 
+            b   = blue;  
+           
+	        lay->setPixel(0, startx + x, starty + y, r);
+	        lay->setPixel(1, startx + x, starty + y, g);
+	        lay->setPixel(2, startx + x, starty + y, b);
                        	  
             if (alpha)
 	        {
-	            a = lay->pixel(3, startx + x, starty + y);
-		        v = a + bv;
-		        if (v < 0 ) v = 0;
-		        if (v > 255 ) v = 255;
-		        a = (uchar) v;
-			  
-		        lay->setPixel(3, startx + x, starty + y, a);
+		        lay->setPixel(3, startx + x, starty + y, bv);
 	        }
 	    } 
     }
@@ -238,4 +236,16 @@ void PenTool::mouseRelease(QMouseEvent *e)
         return;
         
     m_dragging = false;
+}
+
+void PenTool::optionsDialog()
+{
+    PenOptionsDialog *pOptsDialog = new PenOptionsDialog();
+    pOptsDialog->exec();
+    if(!pOptsDialog->result() == QDialog::Accepted)
+        return;
+
+    penColorThreshold = pOptsDialog->threshold();
+    penOpacity        = pOptsDialog->opacity();
+   
 }

@@ -1,5 +1,5 @@
 /*
- *  kis_sidebar.h - part of KImageShop
+ *  kis_sidebar.h - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter  <elter@kde.org>
  *
@@ -48,126 +48,122 @@ class TopTitleFrame : public QFrame
   Q_OBJECT
 
  public:
-  TopTitleFrame( QWidget* parent = 0, const char* name = 0 );
+    TopTitleFrame( QWidget* parent = 0, const char* name = 0 );
 
  signals:
-  void hideClicked();
+    void hideClicked();
 
  protected:
-  virtual void resizeEvent ( QResizeEvent * );
+    virtual void resizeEvent ( QResizeEvent * );
 
  protected slots:
-  void slotHideClicked();
+    void slotHideClicked();
 
  private:
-  KisFrameButton *m_pHideButton, *m_pTitleButton;
-  QFrame *m_pEmptyFrame;
+    KisFrameButton *m_pHideButton, *m_pTitleButton;
+    QFrame *m_pEmptyFrame;
 };
 
 
-class TopFrame : public QFrame
+class TopColorFrame : public QFrame
 {
   Q_OBJECT
 
  public:
-  TopFrame( QWidget* parent = 0, const char* name = 0 );
+    TopColorFrame( QWidget* parent = 0, const char* name = 0 );
 
  signals:
-  void hideClicked();
-  void greyClicked();
-  void rgbClicked();
-  void hsbClicked();
-  void cmykClicked();
-  void labClicked();
+    void hideClicked();
+    void greyClicked();
+    void rgbClicked();
+    void hsbClicked();
+    void cmykClicked();
+    void labClicked();
 
  protected:
-  virtual void resizeEvent ( QResizeEvent * );
+    virtual void resizeEvent ( QResizeEvent * );
 
  protected slots:
-  void slotHideClicked();
-  void slotGreyClicked();
-  void slotRGBClicked();
-  void slotHSBClicked();
-  void slotCMYKClicked();
-  void slotLABClicked();
+    void slotHideClicked();
+    void slotGreyClicked();
+    void slotRGBClicked();
+    void slotHSBClicked();
+    void slotCMYKClicked();
+    void slotLABClicked();
 
  private:
-  KisFrameButton *m_pHideButton, *m_pGreyButton, *m_pRGBButton, *m_pHSBButton,
-	*m_pCMYKButton, *m_pLABButton;
-  QFrame *m_pEmptyFrame;
+    KisFrameButton *m_pHideButton, *m_pGreyButton, *m_pRGBButton, 
+    *m_pHSBButton, *m_pCMYKButton, *m_pLABButton;
+    QFrame *m_pEmptyFrame;
 };
 
-class ChooserFrame : public QFrame
+class ColorChooserFrame : public QFrame
 {
   Q_OBJECT
 
  public:
-  ChooserFrame( QWidget* parent = 0, const char* name = 0 );
+    ColorChooserFrame( QWidget* parent = 0, const char* name = 0 );
 
  public slots:
-  void slotSetFGColor(const KisColor&);
-  void slotSetBGColor(const KisColor&);
+    void slotSetFGColor(const KisColor&);
+    void slotSetBGColor(const KisColor&);
+    void slotSetActiveColor( ActiveColor );
 
-  void slotSetActiveColor( ActiveColor );
-
-  void slotShowGrey();
-  void slotShowRGB();
-  void slotShowHSB();
-  void slotShowCMYK();
-  void slotShowLAB();
+    void slotShowGrey();
+    void slotShowRGB();
+    void slotShowHSB();
+    void slotShowCMYK();
+    void slotShowLAB();
 
  signals:
-  void colorChanged(const KisColor&);
+    void colorChanged(const KisColor&);
 
  protected:
-  virtual void resizeEvent ( QResizeEvent * );
+    virtual void resizeEvent ( QResizeEvent * );
 
  protected slots:
-  void slotColorSelected(const KisColor&);
+    void slotColorSelected(const KisColor&);
 
  private:
-  KisColorChooser   *m_pColorChooser;
+    KisColorChooser   *m_pColorChooser;
 };
 
 class ControlFrame : public QFrame
 {
-  Q_OBJECT
+    Q_OBJECT
 
  public:
-  ControlFrame( QWidget* parent = 0, const char* name = 0 );
-
-  ActiveColor activeColor();
+     ControlFrame( QWidget* parent = 0, const char* name = 0 );
+     ActiveColor activeColor();
 
  public slots:
-  void slotSetFGColor(const KisColor&);
-  void slotSetBGColor(const KisColor&);
+    void slotSetFGColor(const KisColor&);
+    void slotSetBGColor(const KisColor&);
 
-  void slotSetKrayon(const KisKrayon&);
-  void slotSetBrush(const KisBrush&);
-  void slotSetPattern(const KisPattern&);
+    void slotSetKrayon(const KisKrayon&);
+    void slotSetBrush(const KisBrush&);
+    void slotSetPattern(const KisPattern&);
 
  signals:
-  void fgColorChanged(const KisColor&);
-  void bgColorChanged(const KisColor&);
-
-  void activeColorChanged(ActiveColor);
+    void fgColorChanged(const KisColor&);
+    void bgColorChanged(const KisColor&);
+    void activeColorChanged(ActiveColor);
 
  protected:
-  virtual void resizeEvent ( QResizeEvent * );
+    virtual void resizeEvent ( QResizeEvent * );
 
  protected slots:
-  void slotFGColorSelected(const QColor&);
-  void slotBGColorSelected(const QColor&);
-
-  void slotActiveColorChanged(KDualColorButton::DualColor );
+    void slotFGColorSelected(const QColor&);
+    void slotBGColorSelected(const QColor&);
+    void slotActiveColorChanged(KDualColorButton::DualColor );
 
  private:
-  KDualColorButton  *m_pColorButton;
-  KisKrayonWidget   *m_pKrayonWidget;  
-  KisBrushWidget    *m_pBrushWidget;
-  KisPatternWidget  *m_pPatternWidget;
-  KisGradientWidget *m_pGradientWidget;  
-  KisPreviewWidget  *m_pPreviewWidget;  
+    KDualColorButton  *m_pColorButton;
+    KisKrayonWidget   *m_pKrayonWidget;  
+    KisBrushWidget    *m_pBrushWidget;
+    KisPatternWidget  *m_pPatternWidget;
+    KisGradientWidget *m_pGradientWidget;  
+    KisPreviewWidget  *m_pPreviewWidget;  
 };
 
 class DockFrame : public QFrame
@@ -175,66 +171,64 @@ class DockFrame : public QFrame
   Q_OBJECT
 
  public:
-  DockFrame( QWidget* parent = 0, const char* name = 0 );
+    DockFrame( QWidget* parent = 0, const char* name = 0 );
 
  public:
-  void plug (QWidget* w);
-  void unplug (QWidget* w);
+    void plug (QWidget* w);
+    void unplug (QWidget* w);
 
  public slots:
-  void slotActivateTab(const QString& tab);
+    void slotActivateTab(const QString& tab);
 
  protected:
-  virtual void resizeEvent ( QResizeEvent * );
+    virtual void resizeEvent ( QResizeEvent * );
 
  private:
-  QList<QWidget>         m_wlst;
-  QList<KisFrameButton>  m_blst;
+    QList<QWidget>         m_wlst;
+    QList<KisFrameButton>  m_blst;
 };
 
 //class KisSideBar : public QWidget
 class KisSideBar : public KFloatingDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
  public:
-  KisSideBar( QWidget* parent = 0, const char* name = 0 );
+    KisSideBar( QWidget* parent = 0, const char* name = 0 );
 
-  void plug (QWidget* w) { m_pDockFrame->plug(w); }
-  void unplug (QWidget* w) { m_pDockFrame->unplug(w); }
+    void plug (QWidget* w) { m_pDockFrame->plug(w); }
+    void unplug (QWidget* w) { m_pDockFrame->unplug(w); }
 
  public slots:
-  void slotSetFGColor(const KisColor&);
-  void slotSetBGColor(const KisColor&);
+    void slotSetFGColor(const KisColor&);
+    void slotSetBGColor(const KisColor&);
 
-  void slotSetKrayon(const KisKrayon&);
-  void slotSetBrush(const KisBrush&);
-  void slotSetPattern(const KisPattern&);
+    void slotSetKrayon(const KisKrayon&);
+    void slotSetBrush(const KisBrush&);
+    void slotSetPattern(const KisPattern&);
   
-  void slotActivateTab(const QString& tab) { m_pDockFrame->slotActivateTab(tab); }
+    void slotActivateTab(const QString& tab) { m_pDockFrame->slotActivateTab(tab); }
     void slotHideChooserFrame();
     
  signals:
-  void fgColorChanged(const KisColor&);
-  void bgColorChanged(const KisColor&);
+    void fgColorChanged(const KisColor&);
+    void bgColorChanged(const KisColor&);
 
  protected:
-  virtual void resizeEvent ( QResizeEvent * );
+    virtual void resizeEvent ( QResizeEvent * );
 
  protected slots:
-  void slotChooserColorSelected(const KisColor&);
-  void slotControlFGColorSelected(const KisColor&);
-  void slotControlBGColorSelected(const KisColor&);
-  void slotControlActiveColorChanged(ActiveColor);
+    void slotColorChooserColorSelected(const KisColor&);
+    void slotControlFGColorSelected(const KisColor&);
+    void slotControlBGColorSelected(const KisColor&);
+    void slotControlActiveColorChanged(ActiveColor);
 
  private:
-  TopTitleFrame   *m_pTopTitleFrame;
-  ChooserFrame    *m_pChooserFrame;  
-
-  TopFrame        *m_pTopFrame;
-  ControlFrame    *m_pControlFrame;
-
-  DockFrame       *m_pDockFrame;
+    TopTitleFrame       *m_pTopTitleFrame;
+    ControlFrame        *m_pControlFrame; 
+    TopColorFrame       *m_pTopColorFrame;       
+    ColorChooserFrame   *m_pColorChooserFrame;  
+    DockFrame           *m_pDockFrame;
 };
 
 #endif

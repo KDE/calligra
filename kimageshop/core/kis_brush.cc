@@ -126,14 +126,14 @@ void KisBrush::loadViaQImage(QString file, bool monochrome)
         {
             float yFactor = (float)((float)(float)picH/(float)picW);
             ysize = (int)(yFactor * (float)THUMB_SIZE);
-            kdDebug() << "ysize is " << ysize << endl;
+            //kdDebug() << "ysize is " << ysize << endl;
             if(ysize > 30) ysize = 30;
         }
         else if(picW < picH)
         {
             float xFactor = (float)((float)picW/(float)picH);
             xsize = (int)(xFactor * (float)THUMB_SIZE);
-            kdDebug() << "xsize is " << xsize << endl;            
+            //kdDebug() << "xsize is " << xsize << endl;            
             if(xsize > 30) xsize = 30;            
         }
 
@@ -180,7 +180,7 @@ void KisBrush::loadViaQImage(QString file, bool monochrome)
     m_valid = true;
     validPixmap = true;
     
-    qDebug("Loading brush: %s",file.latin1());
+    // qDebug("Loading brush: %s",file.latin1());
 }
 
 

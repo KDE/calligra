@@ -1,5 +1,5 @@
 /*
- *  kis_doc.h - part of KImageShop
+ *  kis_doc.h - part of Krayon
  *
  *  Copyright (c) 1999-2000 Matthias Elter  <me@kde.org>
  *
@@ -132,15 +132,10 @@ public:
 	/*
 	 *  save current image as Qt image (standard image formats)
 	 */    
-    bool saveAsQtImage(QString file);
+    bool saveAsQtImage(QString file, bool wholeImage);
 
 	/*
-	 *  write curren screen contents into layer
-	 */    
-    void CopyToLayer(KisView *pView);
-
-	/*
-	 *  auxillary to above
+	 *  needs to go in kis_framebuffer.cc
 	 */    
     bool QtImageToLayer(QImage *qimage, KisView *pView);
 

@@ -32,7 +32,7 @@
 #include <qclipboard.h>
 
 // kde includes
-#include <kdebug.h>
+
 #include <kmessagebox.h>
 #include <kruler.h>
 #include <kaction.h>
@@ -99,12 +99,15 @@
 #include "kis_tool_fill.h"
 #include "kis_tool_stamp.h"
 
+// debug
+#include <kdebug.h>
+#include "kis_timer.h"
+
 //#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
 KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     : KoView( doc, parent, name )
     , m_pDoc( doc )
-    , m_pTool( 0L )    
     , m_zoomFactor( 1.0 )
 
 {
@@ -119,18 +122,37 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     m_fg = KisColor::black();
     m_bg = KisColor::white();
 
+    m_pTool     = 0L;
+    m_pBrush    = 0L;
+    m_pPattern  = 0L;
+         
     // this is the original configuration that works but tools
     // need to be set up before canvas ? 
     
     setupPainter();
+
     setupCanvas();
+
     setupScrollBars();
+
     setupRulers();
+
     setupTabBar();
+
+KisTimer::start();    
     setupActions();
+KisTimer::stop("setupActions()");
+
     setupDialogs();
+
+KisTimer::start();
     setupSideBar();
+KisTimer::stop("setupSideBar()");    
+
+KisTimer::start();
     setupTools();
+KisTimer::stop("setupTools()");        
+
 }
 
 KisView::~KisView()
@@ -365,7 +387,6 @@ void KisView::setupTools()
 */
 void KisView::setupDialogs()
 {
-#if 0
     // gradient dialog
     m_pGradientDialog = new GradientDialog( m_pDoc, this );
     m_pGradientDialog->resize( 206, 185 );
@@ -383,7 +404,7 @@ void KisView::setupDialogs()
         SLOT( updateToolbarButtons() ) );
 
     updateToolbarButtons();
-#endif    
+    
 }
 
 /*
@@ -407,11 +428,12 @@ void KisView::setupActions()
     new KAction( i18n("Panic Button"),
         "stop", 0, this, SLOT( slotHalt() ),
         actionCollection(), "panic_button" );
-    
+    /*    
     new KAction( i18n("Gimp"),
         "wilbur", 0, this, SLOT( slotGimp() ),
         actionCollection(), "gimp" );
-
+    */
+    
     // selection actions
     m_cut = KStdAction::cut( this, SLOT( cut() ),
         actionCollection(), "cut");
@@ -456,6 +478,7 @@ void KisView::setupActions()
         actionCollection(), "zoom_out" );
 
     // tool settings actions
+    
     m_dialog_gradient = new KToggleAction( i18n("&Gradient Dialog"),
         "gradient_dialog", 0, this, SLOT( dialog_gradient() ),
         actionCollection(), "dialog_gradient");
@@ -463,8 +486,10 @@ void KisView::setupActions()
     m_dialog_gradienteditor = new KToggleAction( i18n("Gradient &Editor"),
         "gradienteditor_dialog",  0, this, SLOT( dialog_gradienteditor() ),
         actionCollection(), "dialog_gradienteditor");
+    
 
     // tool actions - lots of them
+
     m_tool_select_rectangular = new KToggleAction( i18n( "&Rectangular select" ),
         "rectangular", 0, this,  SLOT( tool_select_rectangular() ),
         actionCollection(), "tool_select_rectangular" );
@@ -676,6 +701,7 @@ void KisView::setupActions()
 
     // setting actions
 
+    /*
     (void) KStdAction::showMenubar( this, SLOT( showMenubar() ),
         actionCollection(), "show_menubar" );
 
@@ -684,6 +710,7 @@ void KisView::setupActions()
 
     (void) KStdAction::showStatusbar( this, SLOT( showStatusbar() ),
         actionCollection(), "show_statusbar" );
+    */
 
     m_side_bar = new KToggleAction( i18n("Show/Hide Sidebar"),
         "ok", 0, this, SLOT( showSidebar() ),
@@ -706,6 +733,7 @@ void KisView::setupActions()
 
 	// krayon box toolbar actions 
 
+      /*
       m_dialog_colors = new KToggleAction( i18n("&Colors"),
         "color_dialog", 0, this, SLOT( dialog_colors() ),
         actionCollection(), "colors_dialog");
@@ -729,7 +757,8 @@ void KisView::setupActions()
       m_dialog_channels = new KToggleAction( i18n("Channels"),
         "channel_dialog", 0, this, SLOT( dialog_channels() ),
         actionCollection(), "channels_dialog");
-
+     */
+     
      // help actions - these are standard kde actions
 
       m_helpMenu = new KHelpMenu( this );
@@ -976,6 +1005,7 @@ void KisView::slotUpdateImage()
   {
      QRect updateRect(0, 0, img->width(), img->height());
      img->markDirty(updateRect);
+     resizeEvent(0L);
   }   
 }
 
@@ -1845,11 +1875,11 @@ void KisView::save_layer_image(bool mergeLayers)
             // should merge them to a scratch layer -
             // or at least put up a Yes/No dialog to confirm
             // otherwise layer info will be lost
-            merge_all_layers();    
+            merge_all_layers();
         }
 
         //  save as standard image file (jpg, png, xpm, bmp, NO gif)
-        if(!m_pDoc->saveAsQtImage(url.path()))
+        if(!m_pDoc->saveAsQtImage(url.path(), mergeLayers))
             kdDebug(0) << "Can't save doc as image" << endl;
     }
 }

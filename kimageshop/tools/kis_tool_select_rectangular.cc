@@ -1,7 +1,8 @@
 /*
- *  selecttool.h - part of KImageShop
+ *  selecttool.cpp - part of Krayon
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
+ *                2001 John Califf <jcaliff@compuzone.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -147,11 +148,9 @@ void RectangularSelectTool::mouseRelease( QMouseEvent* event )
         // if there are several partially overlapping or interior
         // layers we must be sure to draw only on the current one
         // imageExtents() will not do as it's the union of all layers
-        if (img && 
-            m_selectRect.intersects(img->getCurrentLayer()->layerExtents()))
+        if (img && m_selectRect.intersects(img->getCurrentLayer()->layerExtents()))
         {
-            m_selectRect 
-                = m_selectRect.intersect(img->getCurrentLayer()->layerExtents());
+            m_selectRect = m_selectRect.intersect(img->getCurrentLayer()->layerExtents());
 
             m_pDoc->getSelection()->setRect(m_selectRect);
 

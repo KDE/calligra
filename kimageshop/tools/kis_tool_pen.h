@@ -31,6 +31,7 @@ class KisBrush;
 class PenTool : public KisTool
 {
  public:
+
     PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, const KisBrush *_brush);
     ~PenTool();
   
@@ -40,11 +41,18 @@ class PenTool : public KisTool
     bool paint(QPoint pos);
 
  public slots:
+
     virtual void mousePress(QMouseEvent*); 
     virtual void mouseMove(QMouseEvent*);
     virtual void mouseRelease(QMouseEvent*);
 
+  virtual void optionsDialog();
+
  protected:
+
+    int penColorThreshold;
+    int penOpacity;
+    
     QPoint 	        m_dragStart;
     bool   	        m_dragging;
     float           m_dragdist;

@@ -251,13 +251,14 @@ bool StampTool::stampColor(QPoint pos)
             // pixel value in scanline at x offset to right
             uint *p = (uint *)qimg->scanLine(y) + x;
 
-            // if it has an alpha channel value less than 100%,
-            // don't paint the pixel. However, we need to combine
-            // the actual alpha value of the pattern pixel with 
-            // that of layer for correct blending, eventually
+            // if it has an alpha channel value of 0,
+            // don't paint the pixel. This is normal in
+            // many images used as sprites
+            
             if(patternAlpha)
             {
-                if (!(*p & 0xff000000)) continue;
+                //if (!(*p & 0xff000000)) continue;
+                if (((*p) >> 24) == 0) continue;
             }
                         
             // set layer pixel to be same as image
@@ -268,6 +269,7 @@ bool StampTool::stampColor(QPoint pos)
             if (layerAlpha)
 	        {
 	            a = lay->pixel(3, startx + x, starty + y);
+
                 if(grayscale)
                 {
                     v = a + bv;
@@ -275,8 +277,16 @@ bool StampTool::stampColor(QPoint pos)
 		            if (v > 255 ) v = 255;
 		            a = (uchar) v; 
 			    }
-                
-		        lay->setPixel(3, startx + x, starty + y, a);
+                else
+                {
+                    v = (int)((*p) >> 24); 
+                    v += a;
+		            if (v < 0 ) v = 0;
+		            if (v > 255 ) v = 255;
+		            a = (uchar) v; 
+                }     
+
+	            lay->setPixel(3, startx + x, starty + y, a);                
 	        }
 	    } 
     }

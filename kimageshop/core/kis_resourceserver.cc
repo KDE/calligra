@@ -29,9 +29,13 @@
 
 #include "kis_factory.h"
 #include "kis_resourceserver.h"
+#include "kis_timer.h"
 
 KisResourceServer::KisResourceServer()
 {
+
+KisTimer::start();
+
     m_brushes.setAutoDelete(true);
     m_patterns.setAutoDelete(true);
 
@@ -75,6 +79,9 @@ KisResourceServer::KisResourceServer()
       file = *it;
       (void) loadPattern( file );
     }
+    
+KisTimer::stop("KisResourceServer()");    
+
 }
 
 KisResourceServer::~KisResourceServer()

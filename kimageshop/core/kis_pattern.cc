@@ -93,14 +93,14 @@ void KisPattern::loadViaQImage(QString file)
         {
             float yFactor = (float)((float)(float)picH/(float)picW);
             ysize = (int)(yFactor * (float)THUMB_SIZE);
-            kdDebug() << "ysize is " << ysize << endl;
+            //kdDebug() << "ysize is " << ysize << endl;
             if(ysize > 30) ysize = 30;
         }
         else if(picW < picH)
         {
             float xFactor = (float)((float)picW/(float)picH);
             xsize = (int)(xFactor * (float)THUMB_SIZE);
-            kdDebug() << "xsize is " << xsize << endl;            
+            //kdDebug() << "xsize is " << xsize << endl;            
             if(xsize > 30) xsize = 30;            
         }
         
@@ -120,7 +120,7 @@ void KisPattern::loadViaQImage(QString file)
     m_h = m_pImage->height();
  
     m_valid = true;
-    qDebug("Loading pattern: %s",file.latin1());
+    //qDebug("Loading pattern: %s",file.latin1());
 }
 
 /*
@@ -157,7 +157,7 @@ void KisPattern::loadViaFormula(int formula)
     m_h = m_pImage->height();
  
     m_valid = true;
-    qDebug("Loading pattern: %d", formula);
+    //qDebug("Loading pattern: %d", formula);
 }
 
 

@@ -333,6 +333,8 @@ QSize ChannelTable::sizeHint() const
 void ChannelTable::mousePressEvent( QMouseEvent *_event )
 {
     int row = findRow( _event->pos().y() );
+    if (row < 0) return;
+    
     QPoint localPoint( _event->pos().x() % cellWidth(), 
         _event->pos().y() % cellHeight() );
 

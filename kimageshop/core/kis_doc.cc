@@ -64,6 +64,7 @@
 #include "kis_selection.h"
 #include "kis_framebuffer.h"
 #include "koUndo.h"
+#include "kis_timer.h"
 
 #define KIS_DEBUG(AREA, CMD)
 
@@ -75,19 +76,20 @@ KisDoc::KisDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, 
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ) 
     , m_commands()
 {
-kdDebug(0) << "KisDoc::KisDoc() entering" << endl;
-
     bool loadPlugins = true;    
     setInstance( KisFactory::global(), loadPlugins );
+
     m_pCurrent = 0L;
     m_pNewDialog = 0L;
     m_pClipImage = 0L;
+    
     m_pSelection = new KisSelection(this);
     m_pFrameBuffer = new KisFrameBuffer(this);
+
     m_Images.setAutoDelete(false);
     
 kdDebug(0) << "QPixmap::defaultDepth(): " << QPixmap::defaultDepth() << endl; 
-kdDebug(0) << "KisDoc::KisDoc() leaving" << endl;    
+
 }
 
 /*
@@ -96,7 +98,8 @@ kdDebug(0) << "KisDoc::KisDoc() leaving" << endl;
 
 bool KisDoc::initDoc()
 {
-    kdDebug(0) << "KisDoc::initDoc() entering" << endl;
+
+KisTimer::start();
     
     bool ok = false;
     QString name;
@@ -148,6 +151,8 @@ bool KisDoc::initDoc()
         ok = slotNewImage();        
         if(ok) emit imageListUpdated();
     } 
+
+KisTimer::stop("initDoc()");
 
     return ok;    
 }
@@ -476,8 +481,6 @@ kdDebug(0) << "KisDoc::completeLoading() leaving" << endl;
 
 void KisDoc::setCurrentImage(KisImage *img)
 {
-kdDebug() << "KisDoc::setCurrentImage entering" << endl; 
-
     if (m_pCurrent)
     {
         // disconnect old current image
@@ -505,8 +508,6 @@ kdDebug() << "KisDoc::setCurrentImage entering" << endl;
     emit imageListUpdated();
     emit layersUpdated();
     emit docUpdated();
-    
-kdDebug() << "KisDoc::setCurrentImage leaving" << endl; 
 }
 
 
@@ -516,9 +517,6 @@ kdDebug() << "KisDoc::setCurrentImage leaving" << endl;
 
 void KisDoc::setCurrentImage(const QString& _name)
 {
-
-kdDebug() << "KisDoc::setCurrentImage entering" << endl;
-
     KisImage *img = m_Images.first();
 
     while (img)
@@ -528,11 +526,9 @@ kdDebug() << "KisDoc::setCurrentImage entering" << endl;
 	        setCurrentImage(img);
 	        return;
 	    }
+        
         img = m_Images.next();
     }
-   
-kdDebug() << "KisDoc::setCurrentImage leaving" << endl;   
-
 }
 
 
@@ -666,126 +662,62 @@ KisDoc::~KisDoc()
     usually one needs to merge all layers first, as with Gimp
     The format the image is saved in is determined solely by 
     the file extension used.
+    
+    This will only save at the display depth of the hardware -
+    often 16 bit.  To insure 32 bit images being exported, we
+    must use another routine to get the data directly from the
+    layer channels, and put it into a QImage, without using
+    the QPimap paint device.
 */
 
-bool KisDoc::saveAsQtImage( QString file)
+bool KisDoc::saveAsQtImage( QString file, bool wholeImage)
 {
-    unsigned int w, h;
+    int x, y, w, h;
     
-    w = (unsigned int) current()->width();
-    h = (unsigned int) current()->height();
+    if(!wholeImage)
+    {
+        x = current()->getCurrentLayer()->layerExtents().left();
+        y = current()->getCurrentLayer()->layerExtents().top();
+        w = current()->getCurrentLayer()->layerExtents().width();
+        h = current()->getCurrentLayer()->layerExtents().height();
+    }
+    else
+    {
+        x = 0;
+        y = 0;
+        w = current()->width();
+        h = current()->height();
+    }
     
     // prepare a pixmap for drawing
-    QPixmap *buffer = new QPixmap (w, h);
-    if (buffer == 0L)
+    QPixmap *pix = new QPixmap (w, h);
+    if (pix == 0L)
     {  
         kdDebug(0) << "KisDoc::saveAsQtImage: can't create QPixmap" << endl;    
         return false;
     }
 
-    buffer->fill (Qt::white);
     QPainter p;
-    p.begin (buffer);
+    p.begin (pix);
     p.setBackgroundColor (Qt::white);
-    p.eraseRect (0, 0, w, h);
-
-    /* draw the contents of the document into the painter
-    Note that later this can be used to trim the image to a
-    selected rectangular or other area */
-    
-    QRect wholeImage = QRect(0, 0, w, h);
-    paintContent(p, wholeImage);
+    p.eraseRect (x, y, w, h);
+    QRect saveRect = QRect(x, y, w, h);
+    paintContent(p, saveRect);
     p.end ();
 
-    // copy the affected area (default is entire image) to the new pixmap
-    QPixmap *pixmap = new QPixmap (w, h);
-    if (pixmap == 0L)
-    {
-        kdDebug(0) << "KisDoc::saveAsQtImage: Can't create QPixmap" << endl;
-        return false;
-    }    
-  
-    // copy from one pixmap to the other, unnecessary, but
-    // useful later for selection of area within image
-    bitBlt (pixmap, 0, 0, buffer, 0, 0, w, h);
-    
-    // clean up source pixmap
-    delete buffer;
-
     // now create an image
-    QImage img  = pixmap->convertToImage ();
-    
-    // need to pass in bool flag for whether or not to set
-    // alpha buffer depending on image and savefile type
-    // img.setAlphaBuffer (true);
+    QImage qimg  = pix->convertToImage();
+    qimg.setAlphaBuffer(current()->colorMode() == cm_RGBA ? true : false);
 
-    // clean up destiation pixmap    
-    delete pixmap;
+    // clean up pixmap    
+    delete pix;
     
-    // and save the image in requested format.
-    // file extension determines image format - best way    
-    return img.save( file, KImageIO::type(file).ascii() );
+    // save the image in requested format. file extension 
+    // determines image format - best way    
+    return qimg.save(file, KImageIO::type(file).ascii());
 }
 
 
-void KisDoc::CopyToLayer(KisView *pView)
-{
-    unsigned int w = (unsigned int) current()->width();
-    unsigned int h = (unsigned int) current()->height();
-    
-    /* prepare a pixmap for drawing - same size as current image */
-    
-    QPixmap *buffer = new QPixmap (w, h);
-    if (buffer == 0L)
-    {  
-        kdDebug(0) << "KisDoc::CopyToLayer: can't create QPixmap" << endl;    
-        return;
-    }
-
-    buffer->fill (Qt::white);
-    QPainter p;
-    p.begin (buffer);
-    p.setBackgroundColor (Qt::white);
-    p.eraseRect (0, 0, w, h);
-
-    /* draw the contents of the document into the painter
-    Note that later this can be used to trim the image to a
-    selected rectangular or other area */
-    
-    QRect wholeImage = QRect(0, 0, w, h);
-    paintContent(p, wholeImage);
-    p.end ();
-
-    /* copy the affected area (default is entire image) to the 
-    new pixmap */
-    
-    QPixmap *pixmap = new QPixmap (w, h);
-    if (pixmap == 0L)
-    {
-        kdDebug(0) << "KisDoc::CanvasToLayer: Can't create QPixmap" << endl;
-        return;
-    }    
-  
-    /* copy from one pixmap to the other, unnecessary, but
-    useful later for selection of area within image and applying
-    Qt raster operations prior to using image - easy to do with 
-    QPixmaps */
-    
-    bitBlt (pixmap, 0, 0, buffer, 0, 0, w, h);
-    
-    // clean up source pixmap
-    delete buffer;
-
-    // now create an image
-    QImage img  = pixmap->convertToImage ();
-    // img.setAlphaBuffer (true);
-    
-    // Copy the image data into the current layer */
-    QtImageToLayer(&img, pView);
-    
-    // clean up destiation pixmap    
-    delete pixmap;
-}
 
 /*
     Copy a QImage exactly into the current image's active layer, 
@@ -796,37 +728,43 @@ void KisDoc::CopyToLayer(KisView *pView)
     effects.  -jwc-
 */
 
-bool KisDoc::QtImageToLayer(QImage *qimage, KisView *pView)
+bool KisDoc::QtImageToLayer(QImage *qimg, KisView *pView)
 {
     KisImage *img = current();
+    if(!img) return false;    
+
     KisLayer *lay = img->getCurrentLayer();
-    QImage   *qimg = qimage;
-
-    if (!img)	        return false;
-    if (!lay)           return false;
-
-    // FIXME: Implement this for non-RGB modes.
-    if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	  return false;
-
-    /* if dealing with 1 or 8 bit images, convert to 16 bit */
-    if(qimage->depth() < 16)
+    if(!lay) return false;
+    
+    if(qimg->depth() < 16)
     {
         QImage Converted 
-            = qimage->smoothScale(qimage->width(), qimage->height());
+            = qimg->smoothScale(qimg->width(), qimg->height());
         qimg = &Converted;
     }
     
-    bool grayScale = false;
+    if(qimg->depth() < 32)
+    {
+        kdDebug() << "qimg depth is less than 32" << endl;
+        kdDebug() << "qimg depth is: " << qimg->depth() << endl;
+        
+        qimg->convertDepth(32);
+    }
+    
+    qimg->setAlphaBuffer(true);
+    
+    bool layerGrayScale = false;
+    bool qimageGrayScale = false;
+    
     int startx = 0;
     int starty = 0;
 
     QRect clipRect(startx, starty, qimg->width(), qimg->height());
 
-    if (!clipRect.intersects(img->getCurrentLayer()->imageExtents()))
+    if (!clipRect.intersects(lay->imageExtents()))
         return false;
   
-    clipRect = clipRect.intersect(img->getCurrentLayer()->imageExtents());
+    clipRect = clipRect.intersect(lay->imageExtents());
 
     int sx = clipRect.left() - startx;
     int sy = clipRect.top() - starty;
@@ -834,66 +772,58 @@ bool KisDoc::QtImageToLayer(QImage *qimage, KisView *pView)
     int ey = clipRect.bottom() - starty;
 
     uchar *sl;
-    uchar bv = 255;
-    uchar invbv = 0;
     uchar r, g, b, a;
-    int   v = 255;
-
-    int red     = pView->fgColor().R();
-    int green   = pView->fgColor().G();
-    int blue    = pView->fgColor().B();
 
     bool alpha = (img->colorMode() == cm_RGBA);
   
     for (int y = sy; y <= ey; y++)
     {
-      sl = qimg->scanLine(y);
+        sl = qimg->scanLine(y);
 
-      for (int x = sx; x <= ex; x++)
-	  {
-        // destination binary values by channel
-	    r = lay->pixel(0, startx + x, starty + y);
-	    g = lay->pixel(1, startx + x, starty + y);
-	    b = lay->pixel(2, startx + x, starty + y);
-
-        if(grayScale)
-        {
-          // source binary value for grayscale - not used here
-	      bv = *(sl + x);
-            
-          // skip black pixels in source - only for gray scale 
-	      if (bv == 0) continue;
-
-          // inverse of gray scale binary value - the darker the higher
-          // the value - only used forgray scale images
-	      invbv = 255 - bv;
-
-	      r = ((red * bv) + (r * invbv))/255;
-	      g = ((green * bv) + (g * invbv))/255;
-          b = ((blue * bv) + (b * invbv))/255;
-        }
-
-        uint *p = (uint *)qimg->scanLine(y) + x;
-            
-	    lay->setPixel(0, startx + x, starty + y, qRed(*p));
-	    lay->setPixel(1, startx + x, starty + y, qGreen(*p));
-	    lay->setPixel(2, startx + x, starty + y, qBlue(*p));
-                       	  
-        if (alpha)
+        for (int x = sx; x <= ex; x++)
 	    {
-	      a = lay->pixel(3, startx + x, starty + y);
-          
-          if(grayScale)
-          {
-		    v = a + bv;
-		    if (v < 0 ) v = 0;
-		    if (v > 255 ) v = 255;
-		    a = (uchar) v;
-          }
+            uint *p = (uint *)qimg->scanLine(y) + x;
 
-		  lay->setPixel(3, startx + x, starty + y, a);
-	    }
-	  } 
+            if(layerGrayScale)
+            {
+                /* only if qimage is gray scale - in which case all 
+                values are packed into the red channel if converted 
+                to 32 bit already - can test above there should be no 
+                8 or 16 bit QImages in Krayon */
+                if(qimageGrayScale)
+                {
+	                r = *(sl + x);
+                }
+                /* rgb qimage, but we are in grayscale mode 
+                average rgb values to convert to 32 bit 
+                gray scale - actually only shows 256 shades
+                of gray because all channels are same value */   
+                else
+                {
+	                r = (qRed(*p) + qGreen(*p) + qBlue(*p))/3;
+                }
+                
+	            lay->setPixel(0, startx + x, starty + y, r);
+	            lay->setPixel(1, startx + x, starty + y, r);
+	            lay->setPixel(2, startx + x, starty + y, r);
+            }
+            else
+            {    
+	            lay->setPixel(0, startx + x, starty + y, qRed(*p));
+	            lay->setPixel(1, startx + x, starty + y, qGreen(*p));
+	            lay->setPixel(2, startx + x, starty + y, qBlue(*p));
+            }               	  
+        
+            if (alpha)
+	        {
+                /* We need to get alpha value from qimg and this
+                will not work with 16 bit images correctly, so must
+                first convert to 32 bit above */
+                
+                a = (*p) >> 24;                 
+		        lay->setPixel(3, startx + x, starty + y, a);
+	        }
+	    } 
     }
     
     return true;
@@ -908,41 +838,28 @@ bool KisDoc::QtImageToLayer(QImage *qimage, KisView *pView)
     raster operations,  and many other neat effects.  -jwc-
 */
 
-// this belongs in either the image class or selection class, 
-// and is not used yet - not finished.  doesn't really belong in document - jwc
-
-bool KisDoc::LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect)
+bool KisDoc::LayerToQtImage(QImage *qimg, KisView *pView, QRect & clipRect)
 {
     KisImage *img = current();
-    KisLayer *lay = img->getCurrentLayer();
-    QImage   *qimg = qimage;
+    if (!img)  return false;    
 
-    if (!img)  return false;
+    KisLayer *lay = img->getCurrentLayer();
     if (!lay)  return false;
 
-    // FIXME: Implement this for non-RGB modes.
-    if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	    return false;
-
-    bool grayScale = false;
-    
-    /* if dealing with 1 or 8 bit images, convert to 16 bit */
-    if(qimage->depth() < 16 && !grayScale)
+    if(qimg->depth() < 16)
     {
         QImage Converted 
-            = qimage->smoothScale(qimage->width(), qimage->height());
+            = qimg->smoothScale(qimg->width(), qimg->height());
         qimg = &Converted;
     }
     
     int startx = 0;
     int starty = 0;
 
-    //QRect clipRect(startx, starty, qimg->width(), qimg->height());
-
-    if (!clipRect.intersects(img->getCurrentLayer()->imageExtents()))
+    if (!clipRect.intersects(lay->imageExtents()))
         return false;
   
-    clipRect = clipRect.intersect(img->getCurrentLayer()->imageExtents());
+    clipRect = clipRect.intersect(lay->imageExtents());
 
     int sx = clipRect.left() - startx;
     int sy = clipRect.top() - starty;
@@ -950,14 +867,8 @@ bool KisDoc::LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect)
     int ey = clipRect.bottom() - starty;
 
     uchar *sl;
-    uchar bv, invbv;
     uchar r, g, b;
     uchar a = 255;
-    int v = 255;
-
-    int red     = pView->fgColor().R();
-    int green   = pView->fgColor().G();
-    int blue    = pView->fgColor().B();
 
     bool alpha = (img->colorMode() == cm_RGBA);
   
@@ -967,36 +878,11 @@ bool KisDoc::LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect)
 
         for (int x = sx; x <= ex; x++)
 	    {
-            // destination binary values by channel
+            // layer binary values by channel
 	        r = lay->pixel(0, startx + x, starty + y);
 	        g = lay->pixel(1, startx + x, starty + y);
 	        b = lay->pixel(2, startx + x, starty + y);
             if(alpha) a = lay->pixel(3, startx + x, starty + y);        
-
-            if(grayScale)
-            {
-                // source binary value for grayscale - not used here
-	            bv = *(sl + x);
-            
-                // skip black pixels in source - only for gray scale 
-	            if (bv == 0) continue;
-
-                // inverse of gray scale binary value  
-                // the darker the higher the value
-	            invbv = 255 - bv;
-
-	            r = ((red * bv) + (r * invbv))/255;
-	            g = ((green * bv) + (g * invbv))/255;
-                b = ((blue * bv) + (b * invbv))/255;
-                
-                if(alpha)
-                {
-		            v = a + bv;
-		            if (v < 0 ) v = 0;
-		            if (v > 255 ) v = 255;
-		            a = (uchar) v;
-                }              
-            }
         
             uint *p = (uint *)qimg->scanLine(y) + x;
             *p = alpha ? qRgba(r, g, b, a) : qRgb(r, g, b);            
@@ -1109,12 +995,7 @@ bool KisDoc::setClipImage()
 KisImage* KisDoc::newImage(const QString& n, int width, int height, 
     cMode cm , uchar bitDepth )
 {
-    kdDebug() << "KisDoc::newImage(): entering" << endl; 
-
     KisImage *img = new KisImage( n, width, height, cm, bitDepth );
-
-    kdDebug() << "KisDoc::newImage(): returned from KisImage constuctor" << endl;
-
     m_Images.append(img);
     return img;
 }
@@ -1159,15 +1040,13 @@ void KisDoc::slotRemoveImage( const QString& _name )
 
 bool KisDoc::slotNewImage()
 {
-    kdDebug() << "KisDoc::slotNewImage:new NewDialog()" << endl; 
     if (!m_pNewDialog) m_pNewDialog = new NewDialog();
-
-    kdDebug() << "KisDoc::slotNewImage:NewDialog()->exec()" << endl; 
 
     /* This dialog causes bad drawable or invalid window paramater.
     It seems harmless, though, just a message about an Xerror. 
     Error only occurs when document is first created and has no
     content, not when adding new image to an existing document */
+
     m_pNewDialog->exec();
     
     if(!m_pNewDialog->result() == QDialog::Accepted)

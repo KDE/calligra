@@ -11,14 +11,14 @@
 GradientView::GradientView( QWidget *_parent, const char *_name )
   : QWidget( _parent, _name )
 {
-  addItem( red   , green , 0.10, 0.40 );
-  addItem( green , blue  , 0.45, 0.50 );
-  addItem( blue  , yellow, 0.52, 0.55 );
-  addItem( yellow, red   , 0.68, 0.70 );
-  addItem( red   , green , 0.90, 1.00 );
+    addItem( red   , green , 0.10, 0.40 );
+    addItem( green , blue  , 0.45, 0.50 );
+    addItem( blue  , yellow, 0.52, 0.55 );
+    addItem( yellow, red   , 0.68, 0.70 );
+    addItem( red   , green , 0.90, 1.00 );
 
-//m_pixmap.resize( size () );
-  m_pixmap.resize( 300, 50 );
+    //m_pixmap.resize( size () );
+    m_pixmap.resize( 300, 50 );
 }
 
 GradientView::~GradientView()
@@ -27,79 +27,86 @@ GradientView::~GradientView()
 
 void GradientView::addItem( QColor _leftColor, QColor _rightColor, float _middle, float _right )
 {
-  GradientItem *item = new GradientItem;
+    GradientItem *item = new GradientItem;
 
-  item->leftColor = _leftColor;
-  item->rightColor = _rightColor;
-  item->middle = _middle;
-  item->right = _right;
+    item->leftColor = _leftColor;
+    item->rightColor = _rightColor;
+    item->middle = _middle;
+    item->right = _right;
 
-  m_lstGradientItems.append( item );
+    m_lstGradientItems.append( item );
 }
+
 
 QSize GradientView::sizeHint() const
 {
-  return QSize( 100, 50 );
+    return QSize( 100, 50 );
 }
+
 
 void GradientView::paintEvent( QPaintEvent */*_event*/ )
 {
-  cout << "GradientView::paintEvent" << endl;
+    cout << "GradientView::paintEvent" << endl;
 
-//int w;
-  int pos = 0;
-//float index = 0.0;
-  QPainter p;
+    //int w;
+    int pos = 0;
+    //float index = 0.0;
+    
+    QPainter p;
+    p.begin( this );
 
-  p.begin( this );
+    updatePixmap();
+    p.drawPixmap( pos, 0, m_pixmap );
 
-  updatePixmap();
-
-  p.drawPixmap( pos, 0, m_pixmap );
 /*
-  GradientItem* item = m_lstGradientItems.first();
-  for( int i = 0; i < m_lstGradientItems.count(); i++ )
-  {
-    w = (int) (( item->right - index ) * (float) width());
+    GradientItem* item = m_lstGradientItems.first();
+    for( int i = 0; i < m_lstGradientItems.count(); i++ )
+    {
+        w = (int) (( item->right - index ) * (float) width());
 
 //  cout << "Michael : processing gradient item, width : " << w << endl;
 
-    p.fillRect( pos, 0, w, height(), item->leftColor );
-    pos += w;
-    index = item->right;
+        p.fillRect( pos, 0, w, height(), item->leftColor );
+        pos += w;
+        index = item->right;
 
-    item = m_lstGradientItems.next();
+        item = m_lstGradientItems.next();
   }
 */
-  p.end();
+    p.end();
 }
+
 
 void GradientView::updatePixmap()
 {
-  cout << "GradientView::updatePixmap()" << endl;
+    cout << "GradientView::updatePixmap()" << endl;
 
-  int w, pos = 0;
-  float index = 0.0;
-  KPixmap grad;
-  GradientItem* item;
+    int w, pos = 0;
+    float index = 0.0;
+    KPixmap grad;
+    GradientItem* item;
 
-  m_pixmap.resize( size() );
-  item = m_lstGradientItems.first();
-  for( unsigned int i = 0; i < m_lstGradientItems.count(); i++ )
-  {
-    // FIXME: Round up, if needed.
-    if( i != ( m_lstGradientItems.count() -1 ) )
-      w = (int) (( item->right - index ) * (float) width());
-    else
-      w = size().width() - pos;
+    m_pixmap.resize( size() );
 
-    grad.resize( w, height() );
-    KPixmapEffect::gradient( grad, item->leftColor, item->rightColor, KPixmapEffect::HorizontalGradient );
-    bitBlt( &m_pixmap, pos, 0, &grad );
-    pos += w;
-    index = item->right;
-    item = m_lstGradientItems.next();
-  }
+    item = m_lstGradientItems.first();
+    for( unsigned int i = 0; i < m_lstGradientItems.count(); i++ )
+    {
+        // FIXME: Round up, if needed.
+        if( i != ( m_lstGradientItems.count() -1 ) )
+            w = (int) (( item->right - index ) * (float) width());
+        else
+            w = size().width() - pos;
+
+        grad.resize( w, height() );
+        
+        KPixmapEffect::gradient( grad, item->leftColor, item->rightColor, 
+            KPixmapEffect::HorizontalGradient );
+        bitBlt( &m_pixmap, pos, 0, &grad );
+        
+        pos += w;
+        index = item->right;
+        item = m_lstGradientItems.next();
+    }
 }
 
 void GradientView::readGIMPGradientFile( const QString& /*_file*/ )
