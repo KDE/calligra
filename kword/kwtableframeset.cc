@@ -1219,7 +1219,7 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
 
     Cell *cell=getCell(row,col);
     KWFrame *firstFrame = cell->getFrame(0);
-
+    kdDebug()<<"row :"<<row <<" col :"<<col<<" cell->m_cols :"<<cell->m_cols<<" cell->m_rows :"<<cell->m_rows<<endl;
     // unselect frame.
     firstFrame->setSelected(false);
     firstFrame->removeResizeHandles();
@@ -1237,6 +1237,7 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
 
     int rowsDiff = intoRows-cell->m_rows;
     int colsDiff = intoCols-cell->m_cols;
+
 
     // adjust cellspan and rowspan on other cells.
     for (unsigned int i=0; i< m_cells.count() ; i++) {
