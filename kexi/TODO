@@ -8,7 +8,7 @@ TODO:
 		- each window, providing actions should be a guiclient (for standard kaction merging mechanisms) (jowenn)
 
 	+ project
-		- allow port specifications (don't forget the "new project wizzard")
+		- ADDED,allow port specifications (don't forget the "new project wizzard")
 		  look what we need for a local database (e.g. "/tmp/mysql.socket")
 	
 	+ table
