@@ -1,0 +1,20 @@
+#ifndef __koStore_idl__
+#define __koStore_idl__
+
+module KOStore
+{
+	typedef sequence<octet> Data;
+	enum Mode { Read, Write, Append };
+	interface Store
+	{
+		string createFileName();
+
+		boolean open( in string name, in string mimetype );
+		void close();
+
+		Data read( in unsigned long max );
+		boolean write( in Data data );
+	};
+};
+
+#endif
