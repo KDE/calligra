@@ -1236,3 +1236,9 @@ Reggie, 30.5.1999:
 - Improved configuration of advanced autocorrection
 - Fixed splitting table cells
 - Saving tables with splitted/joined cells works now
+
+Reggie. 1.6.1999:
+-----------------
+- Pixmaps are saved inline now (using koStore), but
+  not loaded yet that way...
+- Some minor fixes

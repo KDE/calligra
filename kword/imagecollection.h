@@ -44,6 +44,9 @@ public:
 
     KWImage *findImage( QString _key );
 
+    QDictIterator<KWImage> iterator()
+    { return QDictIterator<KWImage>( images ); }
+    
 protected:
     QString generateKey( KWImage &_image );
     QString generateKey( KWImage &_image, KSize _imgSize );

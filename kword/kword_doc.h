@@ -106,6 +106,7 @@ public:
     virtual bool loadXML( KOMLParser& parser, KOStore::Store_ptr _store );
     virtual bool loadChildren( KOStore::Store_ptr _store );
     virtual bool save( ostream& out, const char *_format );
+    virtual bool completeSaving( KOStore::Store_ptr _store );
 
     virtual bool loadTemplate( const char *_url );
 
@@ -490,6 +491,8 @@ protected:
     KWFootNoteManager footNoteManager;
     KWAutoFormat autoFormat;
 
+    QString urlIntern;
+    
 };
 
 #endif

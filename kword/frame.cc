@@ -1231,12 +1231,9 @@ void KWPictureFrameSet::setSize( KSize _imgSize )
 {
     if ( image && _imgSize == image->size() ) return;
 
-    if ( !QFile::exists( filename ) )
-    {
-        QString key;
-        image = doc->getImageCollection()->getImage( *image, key, _imgSize );
-    }
-    else
+    QString key;
+    image = doc->getImageCollection()->getImage( *image, key, _imgSize );
+    if ( !image )
         setFileName( filename, _imgSize );
 }
 

@@ -20,6 +20,7 @@
 #include <qregion.h>
 #include <qclipboard.h>
 #include <qmessagebox.h>
+#include <qdict.h>
 
 #include "kword_doc.h"
 #include "kword_page.h"
@@ -83,7 +84,8 @@ KWordChild::~KWordChild()
 /*================================================================*/
 KWordDocument::KWordDocument()
     : formatCollection( this ), imageCollection( this ), selStart( this, 1 ), selEnd( this, 1 ),
-      ret_pix( ICON( "return.xpm" ) ), unit( "mm" ), numParags( 0 ), footNoteManager( this ), autoFormat( this )
+      ret_pix( ICON( "return.xpm" ) ), unit( "mm" ), numParags( 0 ), footNoteManager( this ), 
+      autoFormat( this ), urlIntern()
 {
     ADD_INTERFACE( "IDL:KOffice/Print:1.0" );
 
@@ -676,7 +678,7 @@ void KWordDocument::cleanUp()
 /*================================================================*/
 bool KWordDocument::hasToWriteMultipart()
 {
-    if ( m_lstChildren.count() == 0 ) return false;
+    //if ( m_lstChildren.count() == 0 ) return false;
 
     return true;
 }
@@ -838,6 +840,8 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
                 return false;
             }
         }
+        else if ( ( *it ).m_strName == "url" )
+            urlIntern = ( *it ).m_strValue.c_str();
     }
 
     // PAPER
@@ -1366,7 +1370,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
     //out << "<!DOCTYPE DOC SYSTEM \"" << kapp->kde_datadir() << "/kword/dtd/kword.dtd\"/>" << endl;
     out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\"" << "reggie@kde.org and weis@kde.org"
-        << "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\">" << endl;
+        << "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\" url=\"" << url() << "\">" << endl;
     out << otag << "<PAPER format=\"" << static_cast<int>( pageLayout.format ) << "\" ptWidth=\"" << pageLayout.ptWidth
         << "\" ptHeight=\"" << pageLayout.ptHeight
         << "\" mmWidth =\"" << pageLayout.mmWidth << "\" mmHeight=\"" << pageLayout.mmHeight
@@ -1415,12 +1419,46 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
     }
     out << etag << "</STYLES>" << endl;
 
+    out << otag << "<PIXMAPS>" << endl;
+    
+    QDictIterator<KWImage> it = imageCollection.iterator();
+    for ( ; it.current(); ++it )
+        out << indent << "<KEY=\"" << it.currentKey().latin1() << "\"/>" << endl;
+    
+    out << etag << "</PIXMAPS>" << endl;
+    
     // Write "OBJECT" tag for every child
     QListIterator<KWordChild> chl( m_lstChildren );
     for( ; chl.current(); ++chl )
         chl.current()->save( out );
 
     out << etag << "</DOC>" << endl;
+
+    return true;
+}
+
+/*==============================================================*/
+bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
+{
+    if ( !_store )
+        return true;
+
+    CORBA::String_var u = url();
+    QDictIterator<KWImage> it = imageCollection.iterator();
+
+    for( ; it.current(); ++it )
+    {
+        QString u2 = u.in();
+        u2 += "/";
+        u2 += it.currentKey();
+
+        QString mime = "image/bmp";
+        _store->open( u2, mime.lower() );
+        ostorestream out( _store );
+        out << *it.current();
+        out.flush();
+        _store->close();
+    }
 
     return true;
 }

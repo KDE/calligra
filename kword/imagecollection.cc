@@ -48,7 +48,6 @@ KWImage *KWImageCollection::getImage( KWImage &_image, QString &key )
     if ( image )
     {
         image->incRef();
-
         return image;
     }
     else
@@ -61,16 +60,24 @@ KWImage *KWImageCollection::getImage( KWImage &_image, QString &key, KSize _imgS
     key = "";
 
     key = generateKey( _image, _imgSize );
-
+    QString key2 = generateKey( _image );
+    
     KWImage *image = findImage( key );
     if ( image )
     {
         image->incRef();
-
         return image;
     }
     else
+    {
+        image = findImage( key2 );
+        if ( image )
+        {
+            KWImage img( *image );
+            return insertImage( key2, img, _imgSize );
+        }
         return insertImage( key, _image, _imgSize );
+    }
 }
 
 /*================================================================*/
