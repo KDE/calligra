@@ -37,7 +37,7 @@ class KoTextCustomItem;
  * like linespacing, borders, counter, tabulators, etc.
  * It also implements WYSIWYG text drawing.
  */
-class KoTextParag : public QTextParag
+class KoTextParag : public Qt3::QTextParag
 {
 public:
     KoTextParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE );

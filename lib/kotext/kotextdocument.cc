@@ -52,7 +52,7 @@ KoTextDocument::~KoTextDocument()
     clear( false );
 }
 
-QTextParag * KoTextDocument::createParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds )
+Qt3::QTextParag * KoTextDocument::createParag( QTextDocument *d, Qt3::QTextParag *pr, Qt3::QTextParag *nx, bool updateIds )
 {
     return new KoTextParag( d, pr, nx, updateIds );
 }
@@ -71,7 +71,7 @@ bool KoTextDocument::visitDocument( KoParagVisitor *visitor, bool forward )
     return visitFromTo( firstParag(), 0, lastParag(), lastParag()->length()-1, visitor, forward );
 }
 
-bool KoTextDocument::visitFromTo( QTextParag *firstParag, int firstIndex, QTextParag* lastParag, int lastIndex, KoParagVisitor* visitor, bool forw )
+bool KoTextDocument::visitFromTo( Qt3::QTextParag *firstParag, int firstIndex, Qt3::QTextParag* lastParag, int lastIndex, KoParagVisitor* visitor, bool forw )
 {
     if ( firstParag == lastParag )
     {
@@ -92,16 +92,16 @@ bool KoTextDocument::visitFromTo( QTextParag *firstParag, int firstIndex, QTextP
             if (!ret) return false;
         }
 
-        QTextParag* currentParag = forw ? firstParag->next() : lastParag->prev();
-        QTextParag * endParag = forw ? lastParag : firstParag;
+        Qt3::QTextParag* currentParag = forw ? firstParag->next() : lastParag->prev();
+        Qt3::QTextParag * endParag = forw ? lastParag : firstParag;
         while ( currentParag && currentParag != endParag )
         {
             ret = visitor->visit( currentParag, 0, currentParag->length() - 1 );
             if (!ret) return false;
             currentParag = forw ? currentParag->next() : currentParag->prev();
         }
-        ASSERT( currentParag );
-        ASSERT( endParag == currentParag );
+        Q_ASSERT( currentParag );
+        Q_ASSERT( endParag == currentParag );
         if ( forw )
             ret = visitor->visit( lastParag, 0, lastIndex );
         else
@@ -147,7 +147,7 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 	p->fillRect( cr, *paper );
     }
 
-    QTextParag *parag = firstParag();
+    Qt3::QTextParag *parag = firstParag();
     while ( parag ) {
 	if ( !parag->isValid() )
 	    parag->format();
@@ -167,7 +167,7 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
     }
 }
 
-void KoTextDocument::drawParagWYSIWYG( QPainter *p, QTextParag *parag, int cx, int cy, int cw, int ch,
+void KoTextDocument::drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int cx, int cy, int cw, int ch,
                                        QPixmap *&doubleBuffer, const QColorGroup &cg,
                                        bool drawCursor, QTextCursor *cursor, bool resetChanged )
 {
@@ -259,7 +259,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, QTextParag *parag, int cx, i
     //parag->document()->nextDoubleBuffered = FALSE;
 }
 
-QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
+Qt3::QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
 				 bool onlyChanged, bool drawCursor, QTextCursor *cursor, bool resetChanged )
 {
     if ( isWithoutDoubleBuffer() /* || par && par->withoutDoubleBuffer */ ) {
@@ -282,7 +282,7 @@ QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, in
 	ch = height();
         }*/
 
-    QTextParag *lastFormatted = 0;
+    Qt3::QTextParag *lastFormatted = 0;
     KoTextParag *parag = static_cast<KoTextParag *>( firstParag() );
 
     QPixmap *doubleBuffer = 0;
@@ -370,14 +370,14 @@ QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, in
 
 int KoTextCustomItem::index() const
 {
-    ASSERT( paragraph() );
+    Q_ASSERT( paragraph() );
     KoTextParag * parag = static_cast<KoTextParag *>( paragraph() );
     return parag->findCustomItem( this );
 }
 
 QTextFormat * KoTextCustomItem::format() const
 {
-    QTextParag * parag = paragraph();
+    Qt3::QTextParag * parag = paragraph();
     //kdDebug() << "KoTextCustomItem::format index=" << index() << " format=" << parag->at( index() )->format() << endl;
     return parag->at( index() )->format();
 }

@@ -50,7 +50,6 @@
 //
 
 #ifndef QT_H
-#include "qt3stuff.h"
 #include "qstring.h"
 #include "qlist.h"
 #include "qrect.h"

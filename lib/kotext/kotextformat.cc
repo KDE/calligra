@@ -40,13 +40,14 @@ QTextFormat * KoTextFormatCollection::format( const QFont &fn, const QColor &c )
     QString key = QTextFormat::getKey( fn, c, FALSE, QString::null, QString::null, QTextFormat::AlignNormal );
     kdDebug() << "format() textformat=" << this << " pointsizefloat=" << fn.pointSizeFloat() << endl;
     // SYNC any changes with generateKey below
-    ASSERT( !key.contains( '+' ) );
+    Q_ASSERT( !key.contains( '+' ) );
     key += '+';
     key += QString::number( (int)fn.strikeOut() );
     key += '/';
     key += QString::number( (int)(fn.pointSizeFloat() * 10) );
-    key += '/';
-    key += QString::number( (int)fn.charSet() );
+    // ######## Not needed in 3.0?
+    //key += '/';
+    //key += QString::number( (int)fn.charSet() );
 
     m_cachedFormat = static_cast<KoTextFormat *>( dict().find( key ) );
     m_cfont = fn;
@@ -93,8 +94,9 @@ void KoTextFormat::copyFormat( const QTextFormat & nf, int flags )
         fn.setPointSizeFloat( nf.font().pointSizeFloat() );
     if ( flags & KoTextFormat::StrikeOut )
         fn.setStrikeOut( nf.font().strikeOut() );
-    if ( flags & KoTextFormat::CharSet )
-        fn.setCharSet( nf.font().charSet() );
+    // ######## Not needed in 3.0?
+    //if ( flags & KoTextFormat::CharSet )
+    //fn.setCharSet( nf.font().charSet() );
     if( flags & KoTextFormat::TextBackgroundColor)
         setTextBackgroundColor(static_cast<const KoTextFormat *>(&nf)->textBackgroundColor());
     update();
@@ -118,13 +120,14 @@ void KoTextFormat::setStrikeOut(bool b)
     update();
 }
 
+/* ####### Not needed with 3.0? (Werner)
 void KoTextFormat::setCharset( QFont::CharSet charset )
 {
     if ( fn.charSet() == charset )
         return;
     fn.setCharSet( charset );
     update();
-}
+}*/
 
 void KoTextFormat::setTextBackgroundColor(const QColor &_col)
 {
@@ -138,14 +141,15 @@ void KoTextFormat::generateKey()
 {
     QTextFormat::generateKey();
     QString k = key();
-    ASSERT( !k.contains( '+' ) );
+    Q_ASSERT( !k.contains( '+' ) );
     // SYNC any changes to the key format with ::format above
     k += '+';
     k += QString::number( (int)fn.strikeOut() );
     k += '/';
     k += QString::number( (int)(fn.pointSizeFloat() * 10) );
-    k += '/';
-    k += QString::number( (int)fn.charSet() );
+    // ######## Not needed in 3.0?
+    //k += '/';
+    //k += QString::number( (int)fn.charSet() );
     k += '/';
     k += m_textBackColor.name();
     setKey( k );
@@ -173,8 +177,9 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
 
     if ( fn.strikeOut() != format.fn.strikeOut() )
         flags |= KoTextFormat::StrikeOut;
-    if ( fn.charSet() != format.fn.charSet() )
-        flags |= KoTextFormat::CharSet;
+    // ######## Not needed in 3.0?
+    //if ( fn.charSet() != format.fn.charSet() )
+    //    flags |= KoTextFormat::CharSet;
     if ( textBackgroundColor() != format.textBackgroundColor() )
         flags |= KoTextFormat::TextBackgroundColor;
     return flags;

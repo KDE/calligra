@@ -51,7 +51,7 @@ KoTextDeleteCommand::KoTextDeleteCommand(
 
 QTextCursor * KoTextDeleteCommand::execute( QTextCursor *c )
 {
-    QTextParag *s = doc ? doc->paragAt( id ) : parag;
+    Qt3::QTextParag *s = doc ? doc->paragAt( id ) : parag;
     if ( !s ) {
         qWarning( "can't locate parag at %d, last parag: %d", id, doc->lastParag()->paragId() );
         return 0;
@@ -80,7 +80,7 @@ QTextCursor * KoTextDeleteCommand::unexecute( QTextCursor *c )
     // Let QRichText re-create the text and formatting
     QTextCursor * cr = QTextDeleteCommand::unexecute(c);
 
-    QTextParag *s = doc ? doc->paragAt( id ) : parag;
+    Qt3::QTextParag *s = doc ? doc->paragAt( id ) : parag;
     if ( !s ) {
         qWarning( "can't locate parag at %d, last parag: %d", id, doc->lastParag()->paragId() );
         return 0;
@@ -93,8 +93,8 @@ QTextCursor * KoTextDeleteCommand::unexecute( QTextCursor *c )
     // Now restore the parag layouts (i.e. libkotext specific stuff)
     QValueList<KoParagLayout>::Iterator lit = m_oldParagLayouts.begin();
     kdDebug() << "KoTextDeleteCommand::unexecute " << m_oldParagLayouts.count() << " parag layouts. First parag=" << s->paragId() << endl;
-    ASSERT( id == s->paragId() );
-    QTextParag *p = s;
+    Q_ASSERT( id == s->paragId() );
+    Qt3::QTextParag *p = s;
     while ( p ) {
         if ( lit != m_oldParagLayouts.end() )
         {
@@ -220,7 +220,7 @@ QTextCursor * KoParagFormatCommand::execute( QTextCursor *c )
 
 QTextCursor * KoParagFormatCommand::unexecute( QTextCursor *c )
 {
-    QTextParag *p = doc->paragAt( firstParag );
+    Qt3::QTextParag *p = doc->paragAt( firstParag );
     if ( !p )
     {
         kdDebug() << "KoParagFormatCommand::unexecute paragraph " << firstParag << "not found" << endl;
@@ -254,8 +254,8 @@ KoTextFormatCommand::~KoTextFormatCommand()
 
 void KoTextFormatCommand::resizeCustomItems()
 {
-    QTextParag *sp = doc->paragAt( startId );
-    QTextParag *ep = doc->paragAt( endId );
+    Qt3::QTextParag *sp = doc->paragAt( startId );
+    Qt3::QTextParag *ep = doc->paragAt( endId );
     if ( !sp || !ep )
         return;
 
@@ -292,7 +292,7 @@ void KoTextFormatCommand::resizeCustomItems()
                 static_cast<KoTextCustomItem *>( start.parag()->at(i)->customItem() )->resize();
             }
 
-        QTextParag *p = start.parag()->next();
+        Qt3::QTextParag *p = start.parag()->next();
         while ( p && p != end.parag() )
         {
             text = p->string()->toString().left( p->length() - 1 );

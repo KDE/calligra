@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qtimer.h>
 #include "kotextview.h"
 #include "koparagcounter.h"
 #include "kotextobject.h"
@@ -159,7 +160,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
             textObject()->removeSelectedText( m_cursor );
         clearUndoRedoInfo = FALSE;
         textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionReturn );
-        ASSERT( m_cursor->parag()->prev() );
+        Q_ASSERT( m_cursor->parag()->prev() );
         if ( m_cursor->parag()->prev() )
             doAutoFormat( m_cursor, static_cast<KoTextParag*>(m_cursor->parag()->prev()),
                           m_cursor->parag()->prev()->length() - 1, '\n' );
@@ -337,7 +338,7 @@ void KoTextView::moveCursor( CursorAction action )
             m_cursor->gotoEnd();
             break;
         case MoveParagUp: {
-            QTextParag * parag = m_cursor->parag()->prev();
+            Qt3::QTextParag * parag = m_cursor->parag()->prev();
             if ( parag )
             {
                 m_cursor->setParag( parag );
@@ -345,7 +346,7 @@ void KoTextView::moveCursor( CursorAction action )
             }
         } break;
         case MoveParagDown: {
-            QTextParag * parag = m_cursor->parag()->next();
+            Qt3::QTextParag * parag = m_cursor->parag()->next();
             if ( parag )
             {
                 m_cursor->setParag( parag );
@@ -514,7 +515,7 @@ bool KoTextView::maybeStartDrag( QMouseEvent* e )
 void KoTextView::placeCursor( const QPoint &pos )
 {
     m_cursor->restoreState();
-    QTextParag *s = textDocument()->firstParag();
+    Qt3::QTextParag *s = textDocument()->firstParag();
     m_cursor->place( pos,  s );
     updateUI( true );
 }

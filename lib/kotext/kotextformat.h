@@ -48,7 +48,8 @@ public:
     void setPointSizeFloat( float );
     float pointSizeFloat() const { return fn.pointSizeFloat(); }
     void setStrikeOut(bool);
-    void setCharset( QFont::CharSet charset );
+    // ####### Not needed with 3.0? (Werner)
+    //void setCharset( QFont::CharSet charset );
 
     /** Call this when a text color is set to 'invalid', meaning 'whatever the
      * default for the color scheme is' */

@@ -51,7 +51,7 @@ public:
     ~KoTextDocument();
 
     /** Factory method for paragraphs */
-    virtual QTextParag * createParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE );
+    virtual Qt3::QTextParag * createParag( QTextDocument *d, Qt3::QTextParag *pr = 0, Qt3::QTextParag *nx = 0, bool updateIds = TRUE );
 
     /** Return the zoom handler associated with this document. */
     KoZoomHandler * zoomHandler() const { return m_zoomHandler; }
@@ -66,20 +66,20 @@ public:
 
     /** Visit the document between those two point.
      * Returns true, unless canceled. See KoParagVisitor. */
-    bool visitFromTo( QTextParag *firstParag, int firstIndex, QTextParag* lastParag, int lastIndex, KoParagVisitor* visitor, bool forw = true );
+    bool visitFromTo( Qt3::QTextParag *firstParag, int firstIndex, Qt3::QTextParag* lastParag, int lastIndex, KoParagVisitor* visitor, bool forw = true );
 
     /** Used by ~KoTextParag to know if it should die quickly */
     bool isDestroying() const { return m_bDestroying; }
 
     /** The main drawing method. Equivalent to QTextDocument::draw, but reimplemented
      * for wysiwyg */
-    QTextParag *drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
+    Qt3::QTextParag *drawWYSIWYG( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
 		      bool onlyChanged = FALSE, bool drawCursor = FALSE, QTextCursor *cursor = 0,
 		      bool resetChanged = TRUE );
 
     /** Draw a single paragraph (used by drawWYSIWYG and by KWTextFrameSet::drawCursor).
      * Equivalent to QTextDocument::draw, but reimplemented for wysiwyg */
-    void drawParagWYSIWYG( QPainter *p, QTextParag *parag, int cx, int cy, int cw, int ch,
+    void drawParagWYSIWYG( QPainter *p, Qt3::QTextParag *parag, int cx, int cy, int cw, int ch,
 		    QPixmap *&doubleBuffer, const QColorGroup &cg,
 		    bool drawCursor, QTextCursor *cursor, bool resetChanged = TRUE );
 
@@ -106,7 +106,7 @@ protected:
     virtual ~KoParagVisitor() {}
 public:
     /** Visit the paragraph @p parag, from index @p start to index @p end */
-    virtual bool visit( QTextParag *parag, int start, int end ) = 0;
+    virtual bool visit( Qt3::QTextParag *parag, int start, int end ) = 0;
 };
 
 class KCommand;

@@ -114,7 +114,7 @@ public:
     /** Highlighting support (for search/replace, spellchecking etc.).
      * Don't forget to ensure the paragraph is visible.
      */
-    void highlightPortion( QTextParag * parag, int index, int length );
+    void highlightPortion( Qt3::QTextParag * parag, int index, int length );
     void removeHighlight();
 
     /** Set format changes on selection or current cursor.
@@ -166,8 +166,8 @@ public:
     /** Set the bottom of the view - in LU */
     void setViewArea( QWidget* w, int maxY );
     /** Make sure that @p parag is formatted */
-    void ensureFormatted( QTextParag * parag );
-    void setLastFormattedParag( QTextParag *parag );
+    void ensureFormatted( Qt3::QTextParag * parag );
+    void setLastFormattedParag( Qt3::QTextParag *parag );
 
     static QChar customItemChar() { return QChar( s_customItemChar ); }
 
@@ -190,7 +190,7 @@ signals:
     /** Emitted by formatMore() after formatting a bunch of paragraphs.
      * KWord uses this signal to check for things like 'I need to create a new page'
      */
-    void afterFormatting( int bottom, QTextParag* m_lastFormatted, bool* abort );
+    void afterFormatting( int bottom, Qt3::QTextParag* m_lastFormatted, bool* abort );
 
     /** Emitted when a new command has been created and should be added to
      * the main list of commands (usually in the KoDocument).
@@ -233,7 +233,7 @@ public: // made public for KWTextFrameSet...
      * But the main point is to avoid too much duplicated code */
     void storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId = QTextDocument::Standard );
     /** Copies a formatted char, <parag, position>, into undoRedoInfo.text, at position <index>. */
-    void copyCharFormatting( QTextParag *parag, int position, int index /*in text*/, bool moveCustomItems );
+    void copyCharFormatting( Qt3::QTextParag *parag, int position, int index /*in text*/, bool moveCustomItems );
     void readFormats( QTextCursor &c1, QTextCursor &c2, bool copyParagLayouts = false, bool moveCustomItems = false );
 
     /**
@@ -294,7 +294,7 @@ private:
     /** All paragraphs up to this one are guaranteed to be formatted.
         The idle-time formatting (formatMore()) pushes this forward.
         Any operation on a paragraph pushes this backward. */
-    QTextParag *m_lastFormatted;
+    Qt3::QTextParag *m_lastFormatted;
     /** Idle-time formatting */
     QTimer *formatTimer, *changeIntervalTimer;
     int interval;

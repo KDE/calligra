@@ -25,7 +25,7 @@
 //#define DEBUG_FORMATTER
 
 // Heavily based on QTextFormatterBreakWords::format()
-int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
+int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
                              int start, const QMap<int, QTextParagLineStart*> & )
 {
     QTextStringChar *c = 0;
@@ -73,7 +73,7 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
     bool lastWasNonInlineCustom = FALSE;
 
     int align = parag->alignment();
-    if ( align == Qt3::AlignAuto && doc && doc->alignment() != Qt3::AlignAuto )
+    if ( align == Qt::AlignAuto && doc && doc->alignment() != Qt::AlignAuto )
 	align = doc->alignment();
 
     int col = 0;
@@ -229,7 +229,7 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
 		minw = QMAX( minw, x + ww );
 	    // No breakable char found -> break at current char
 	    if ( lastBreak < 0 ) {
-		ASSERT( lineStart );
+		Q_ASSERT( lineStart );
 		//if ( lineStart ) {
 		    // (combine lineStart and tmpBaseLine/tmph)
 		    int belowBaseLine = QMAX( h - lineStart->baseLine, tmph - tmpBaseLine );
@@ -431,8 +431,8 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
 	lineStart->h = h;
 	//qDebug(  " -> lineStart->baseLine/lineStart->h : %d/%d", lineStart->baseLine, lineStart->h );
 	// last line in a paragraph is not justified
-	if ( align == Qt3::AlignJustify )
-	    align = Qt3::AlignAuto;
+	if ( align == Qt::AlignJustify )
+	    align = Qt::AlignAuto;
 	QTextParagLineStart *lineStart2 = formatLineKo( zh, parag, string, lineStart, firstChar, c, align, w - x );
 	h += doc ? parag->lineSpacing( linenr++ ) : 0;
 	lineStart->h = h;
@@ -466,7 +466,7 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
 
 QTextParagLineStart *KoTextFormatter::formatLineKo(
     KoZoomHandler *zh,
-    QTextParag * /*parag*/, QTextString *string, QTextParagLineStart *line,
+    Qt3::QTextParag * /*parag*/, QTextString *string, QTextParagLineStart *line,
     QTextStringChar *startChar, QTextStringChar *lastChar, int align, int space )
 {
 //QT2HACK
@@ -481,7 +481,7 @@ QTextParagLineStart *KoTextFormatter::formatLineKo(
 	    space /= 2;
 	for ( int j = start; j <= last; ++j )
 	    string->at( j ).x += space;
-    } else if ( align & Qt3::AlignJustify ) {
+    } else if ( align & Qt::AlignJustify ) {
 	int numSpaces = 0;
 	for ( int j = start; j < last; ++j ) {
 	    if( isBreakable( string, j ) ) {

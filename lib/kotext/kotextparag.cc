@@ -388,7 +388,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
     // for at most one word at a time, never more. This allows to make the spaces slightly
     // bigger to compensate for the rounding problems.
     int realAlignment = alignment();
-    setAlignmentDirect( Qt3::AlignJustify );
+    setAlignmentDirect( Qt::AlignJustify );
 #endif
     //qDebug("KoTextParag::paint %p", this);
     QTextParag::paint( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
@@ -654,7 +654,7 @@ void KoTextParag::setCustomItem( int index, KoTextCustomItem * custom, QTextForm
 
 void KoTextParag::removeCustomItem( int index )
 {
-    ASSERT( at( index )->isCustom() );
+    Q_ASSERT( at( index )->isCustom() );
     QTextCustomItem * item = at( index )->customItem();
     at( index )->loseCustomItem();
     QTextParag::removeCustomItem();
