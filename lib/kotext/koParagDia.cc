@@ -40,6 +40,7 @@
 #include <koGlobal.h>
 #include <qgroupbox.h>
 #include <knuminput.h>
+#include <kdeversion.h>
 
 KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTypeLetter, QWidget * parent, const char* name  )
     :QWidget( parent, name ),
@@ -1931,8 +1932,11 @@ KoParagShadowWidget::KoParagShadowWidget( QWidget * parent, const char * name )
 
     QLabel *lcolor = new QLabel( i18n( "Color:" ), shadow );
     grid2->addWidget(lcolor,0,0);
-
-    color = new KColorButton( black,shadow );
+    color = new KColorButton( black,
+#if KDE_VERSION >= 305
+                              black,
+#endif
+                              shadow );
     grid2->addWidget(color,1,0);
     connect( color, SIGNAL( changed( const QColor& ) ), this, SLOT( colorChanged( const QColor& ) ) );
 
