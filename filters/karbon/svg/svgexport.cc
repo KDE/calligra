@@ -220,6 +220,27 @@ SvgExport::getGradient( const VGradient& grad )
 		*m_defs << "</linearGradient>" << endl;
 		*m_body << "url(#" << uid << ")";
 	}
+	else if( grad.type() == VGradient::radial )
+	{
+		// do radial grad
+		*m_defs << "<radialGradient id=\"" << uid << "\" ";
+		*m_defs << "gradientUnits=\"userSpaceOnUse\" ";
+		*m_defs << "cx=\"" << grad.origin().x() << "\" ";
+		*m_defs << "cy=\"" << grad.origin().y() << "\" ";
+		double r = sqrt( pow( grad.vector().x() - grad.origin().x(), 2 ) + pow( grad.vector().y() - grad.origin().y(), 2 ) );
+		*m_defs << "r=\"" << QString().setNum( r ) << "\" ";
+		if( grad.repeatMethod() == VGradient::reflect )
+			*m_defs << "spreadMethod=\"reflect\" ";
+		else if( grad.repeatMethod() == VGradient::repeat )
+			*m_defs << "spreadMethod=\"repeat\" ";
+		*m_defs << ">" << endl;
+
+		// color stops
+		getColorStops( grad.colorStops() );
+
+		*m_defs << "</radialGradient>" << endl;
+		*m_body << "url(#" << uid << ")";
+	}
 }
 
 void
