@@ -102,14 +102,7 @@ QPixmap KPPixmap::native_string_to_pixmap(const char *_pixmap)
   if (_pixmap == 0L || _pixmap[0] == 0)
     return QPixmap();
   
-  // Count lines in XPM
-  char pixmap[strlen(_pixmap) + 1];
-  strcpy(pixmap,_pixmap);
-  int lines = 1;
-  char* pos = &pixmap[0];
-  char* start = 0L;
-  char* pline = pixmap;
-  char first = *pixmap;
+  char* pos = const_cast<char*>(&_pixmap[0]);
   
   while (*pos)
     {
@@ -119,43 +112,11 @@ QPixmap KPPixmap::native_string_to_pixmap(const char *_pixmap)
       pos++;
     }
   
-  pos = pixmap;
-  while (*pos)
-    {	
-      if (*pos++ == '\n')
-	{
-	  if (strncmp( pos - 3, "\",\n",3) == 0)
-	    { *(pos-1) = 0; *(pos-2) = 0; *(pos-3) = 0; }
-	  else if ( strncmp( pos - 4, "\"};\n", 4 ) == 0 )
-	    { *(pos-1) = 0; *(pos-2) = 0; *(pos-3) = 0; *(pos-4) = 0; }	    
-	  else if ( strncmp( pos - 3, "\"};", 3 ) == 0 )
-	    { *(pos-1) = 0; *(pos-2) = 0; *(pos-3) = 0; }	    
-	  else
-	    { *(pos-1) = 0; }	    
-	  if (first == '\"' && start == 0L)
-	    start = pline;
-	  if (first == '\"')
-	    lines++;
-	  pline = pos;
-	  first = *pline;
-	}
-    }
-  
-  if (start == 0L)
-    return QPixmap();
-  
-  const char* list[lines];
-  int i;
-  const char* p = start;
-  for (i = 0;i < lines;i++)
-    {
-      list[i] = p + 1;
-      p += strlen(p) + 1;
-      while (*p == 0) p++;
-    }
-  list[i] = 0L;
-  
-  return QPixmap(list);
+    QPixmap ret;
+    if (!_pixmap)
+      return ret;
+    ret.loadFromData((unsigned const char*)_pixmap,static_cast<unsigned int>(strlen(_pixmap)));
+    return ret;
 }
 
 /*= load pixmap saved in KPresenter's native format - make valid =*/
