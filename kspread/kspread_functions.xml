@@ -41,7 +41,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The tan() function returns the tangent of x,\nwhere x is given in radians.</Text>
+	<Text>The tan() function returns the tangent of x, where x is given in radians.</Text>
 	<Syntax>tan(Float)</Syntax>
 	<Example>tan(0.7) equals 0.84228838.</Example>
 	<Example>tan(0) equals 0</Example>
@@ -475,8 +475,8 @@
 	<Text>The mid() function returns a substring that contains the len characters of this string, starting at position index.</Text>
 	<Syntax>mid( text, position, length )</Syntax>
 	<Syntax>mid( text, position )</Syntax>
-	<Example>mid( "Koffice",2,3) returns "ffi"</Example>
-	<Example>mid(\"Koffice\",2 ) returns "ffice"</Example>
+	<Example>mid( "Koffice", 2, 3 ) returns "ffi"</Example>
+	<Example>mid( "Koffice", 2 ) returns "ffice"</Example>
       </Help>
     </Function>
 
@@ -862,7 +862,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The log() function returns\nthe base-10 logarithm of x.</Text>
+	<Text>The log() function returns the base-10 logarithm of x.</Text>
 	<Syntax>log( x )</Syntax>
 	<Example>log(0.8) equals -0.09691001</Example>
 	<Example>log(0) equals -inf.</Example>
