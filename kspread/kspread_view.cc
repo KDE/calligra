@@ -41,7 +41,6 @@
 #include <opMainWindowIf.h>
 
 #include <koPartSelectDia.h>
-#include <koPrintDia.h>
 #include <koAboutDia.h>
 #include <koScanTools.h>
 #include <koQueryTypes.h>
