@@ -145,6 +145,7 @@ ParsedArray::Type ParsedArray::parseExpr( double &res )
 	    res += x;
 	else
 	    res -= x;
+        ch = get_c();
     }
     return Number;
 }
@@ -168,13 +169,13 @@ ParsedArray::Type ParsedArray::parseTerm( double &res )
 	if ( ch.unicode() == '*' )
 	    res *= x;
 	else
-                        {
-	        if ( x != 0 )
+        {
+            if ( x != 0 )
 		res /= x;
-	        else
-	        	return Error;
-                        }
-          ch=get_c();
+            else
+                return Error;
+        }
+        ch=get_c();
     }
     return Number;
 }
