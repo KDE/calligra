@@ -78,6 +78,16 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         painter->drawLine( p2, p1);
         painter->drawLine( p2, p3);
     }break;
+    case L_DIMENSION_LINE:
+    {
+        painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
+        painter->setPen( QPen(color , _zoomHandler->zoomItX( _w )) );
+        painter->rotate( angle );
+        painter->scale( 1, 1 );
+        QPoint p1( _zoomHandler->zoomItX(_w/2), _zoomHandler->zoomItY(-5 - _w / 2) );
+        QPoint p2( _zoomHandler->zoomItX(_w/2), _zoomHandler->zoomItY(5 + _w / 2 ) );
+        painter->drawLine( p1, p2);
+    }break;
     default: break;
     }
     painter->restore();
@@ -103,6 +113,9 @@ KoSize getBoundingSize( LineEnd figure, int _w, KoZoomHandler*_zoomHandler )
     case L_LINE_ARROW:
         return KoSize( _zoomHandler->zoomItX( 14 + _w),_zoomHandler->zoomItY( 14 + _w) );
         break;
+    case L_DIMENSION_LINE:
+        return KoSize( _zoomHandler->zoomItX( 14 +_w),_zoomHandler->zoomItY( 14 + _w) );
+        break;
     default: break;
     }
 
@@ -123,6 +136,8 @@ QString lineEndBeginName( LineEnd type )
         return QString("CIRCLE");
     case L_LINE_ARROW:
         return QString("LINE_ARROW");
+    case L_DIMENSION_LINE:
+        return QString("DIMENSION_LINE");
     }
     return QString::null;
 }
@@ -139,6 +154,8 @@ LineEnd lineEndBeginFromString( const QString & type )
         return L_CIRCLE;
     else if(type=="LINE_ARROW")
         return L_LINE_ARROW;
+    else if (type=="DIMENSION_LINE")
+        return L_DIMENSION_LINE;
     else
         kdDebug()<<"Error in LineEnd lineEndBeginFromString( const QString & name )\n";
     return L_NORMAL;

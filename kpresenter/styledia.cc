@@ -231,6 +231,7 @@ void StyleDia::setupTab1()
     clineBegin->insertItem( i18n("Square") );
     clineBegin->insertItem( i18n("Circle") );
     clineBegin->insertItem( i18n("Line Arrow") );
+    clineBegin->insertItem( i18n("Dimension Line") );
     connect( clineBegin, SIGNAL( activated( int ) ),
 	     this, SLOT( updatePenConfiguration() ) );
 
@@ -243,6 +244,7 @@ void StyleDia::setupTab1()
     clineEnd->insertItem( i18n("Square") );
     clineEnd->insertItem( i18n("Circle") );
     clineEnd->insertItem( i18n("Line Arrow") );
+    clineEnd->insertItem( i18n("Dimension Line") );
     connect( clineEnd, SIGNAL( activated( int ) ),
 	     this, SLOT( updatePenConfiguration() ) );
 
