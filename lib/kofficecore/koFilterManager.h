@@ -116,12 +116,14 @@ public:
     /**
      * Set the filter manager is batch mode (no dialog shown)
      * instead of the interactive mode (dialog shown)
+     * @since 1.4
      */
     void setBatchMode ( const bool batch );
 
     /**
      * Get if the filter manager is batch mode (true)
      * or in interactive mode (true)
+     * @since 1.4
      */
     bool getBatchMode ( void ) const;
 
@@ -162,7 +164,6 @@ private:
     /// A static cache for the availability checks of filters
     static QMap<QString, bool> m_filterAvailable;
 
-    // unused right now
     class Private;
     Private *d;
 };
