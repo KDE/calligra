@@ -68,6 +68,9 @@ class KoVariableSettings
     bool m_displayLink;
     bool m_displayComment;
     bool m_underlineLink;
+
+    class Private;
+    Private *d;
 };
 
 /**
@@ -319,6 +322,8 @@ protected:
     KoVariableFormat *m_varFormat;
     KoVariableCollection *m_varColl;
     QVariant m_varValue;
+    class Private;
+    Private *d;
 };
 
 /**

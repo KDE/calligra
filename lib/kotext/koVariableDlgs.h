@@ -25,12 +25,12 @@
 #include <kdialogbase.h>
 #include <qptrlist.h>
 #include <qstring.h>
-#include <qlistview.h>
+#include <klistview.h>
 
 class QComboBox;
 class QVBox;
 class QResizeEvent;
-class QLineEdit;
+class KLineEdit;
 class QCloseEvent;
 
 /******************************************************************
@@ -59,11 +59,11 @@ protected:
     QVBox *back;
 };
 
-/******************************************************************
+/**
  * Class: KoCustomVariablesListItem
  * Used by KoCustomVariablesDia
- ******************************************************************/
-
+ * Represents an item in the listview, holding a lineedit to edit the value of the variable.
+ */
 class KoCustomVariablesListItem : public QListViewItem
 {
 public:
@@ -72,23 +72,24 @@ public:
     void setVariable( KoCustomVariable *v );
     KoCustomVariable *getVariable() const;
 
-    void setup();
+    virtual void setup();
+    virtual int width ( const QFontMetrics & fm, const QListView * lv, int c ) const;
     void update();
 
+    // Gets the value from the lineedit and sets it into the variable
     void applyValue();
 
 protected:
     KoCustomVariable *var;
-    QLineEdit *editWidget;
-
+    KLineEdit *editWidget;
 };
 
-/******************************************************************
+/**
  * Class: KoCustomVariablesList
+ * The listview.
  * Used by KoCustomVariablesDia
- ******************************************************************/
-
-class KoCustomVariablesList : public QListView
+ */
+class KoCustomVariablesList : public KListView
 {
     Q_OBJECT
 
@@ -102,13 +103,14 @@ protected slots:
     void columnSizeChange( int c, int os, int ns );
     void sectionClicked( int c );
 
+    class Private;
+    Private* d; // currently unused
 };
 
-/******************************************************************
+/**
  * Class: KoCustomVariablesDia
  * This dialog allows to set the value of the custom variables.
- ******************************************************************/
-
+ */
 class KoCustomVariablesDia : public KDialogBase
 {
     Q_OBJECT

@@ -28,7 +28,8 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qheader.h>
-#include <qlineedit.h>
+#include <klineedit.h>
+#include <kdebug.h>
 
 /******************************************************************
  *
@@ -99,16 +100,17 @@ void KoVariableNameDia::textChanged ( const QString &_text )
 KoCustomVariablesListItem::KoCustomVariablesListItem( QListView *parent )
     : QListViewItem( parent )
 {
-    editWidget = new QLineEdit( listView()->viewport() );
+    editWidget = new KLineEdit( listView()->viewport() );
     listView()->addChild( editWidget );
 }
 
 void KoCustomVariablesListItem::setup()
 {
+    QListViewItem::setup();
     setHeight( QMAX( listView()->fontMetrics().height(),
                      editWidget->sizeHint().height() ) );
-    if ( listView()->columnWidth( 1 ) < editWidget->sizeHint().width() )
-        listView()->setColumnWidth( 1, editWidget->sizeHint().width() );
+    //if ( listView()->columnWidth( 1 ) < editWidget->sizeHint().width() )
+    //    listView()->setColumnWidth( 1, editWidget->sizeHint().width() );
 }
 
 void KoCustomVariablesListItem::update()
@@ -129,7 +131,6 @@ void KoCustomVariablesListItem::setVariable( KoCustomVariable *v )
 KoCustomVariable *KoCustomVariablesListItem::getVariable() const
 {
     return var;
-
 }
 
 void KoCustomVariablesListItem::applyValue()
@@ -139,6 +140,18 @@ void KoCustomVariablesListItem::applyValue()
         var->setValue( newVal );
 }
 
+int KoCustomVariablesListItem::width( const QFontMetrics & fm, const QListView *lv, int c ) const
+{
+    // The text of the 2nd column isn't known to QListViewItem, only we know it
+    // (it's in our lineedit)
+    if ( c == 1 ) {
+        QString val = editWidget->text();
+        int w = fm.width( val );
+        return w;
+    } else
+        return QListViewItem::width( fm, lv, c );
+}
+
 /******************************************************************
  *
  * Class: KoCustomVariablesList
@@ -146,7 +159,7 @@ void KoCustomVariablesListItem::applyValue()
  ******************************************************************/
 
 KoCustomVariablesList::KoCustomVariablesList( QWidget *parent )
-    : QListView( parent )
+    : KListView( parent )
 {
     header()->setMovingEnabled( FALSE );
     addColumn( i18n( "Variable" ) );
@@ -155,8 +168,6 @@ KoCustomVariablesList::KoCustomVariablesList( QWidget *parent )
              this, SLOT( columnSizeChange( int, int, int ) ) );
     connect( header(), SIGNAL( sectionClicked( int ) ),
              this, SLOT( sectionClicked( int ) ) );
-    setColumnWidthMode( 0, Manual );
-    setColumnWidthMode( 1, Manual );
 
     setSorting( -1 );
 }
@@ -222,6 +233,10 @@ KoCustomVariablesDia::KoCustomVariablesDia( QWidget *parent, const QPtrList<KoVa
     showButtonOK(lst.count()>0);
 
     resize( 600, 400 );
+    list->updateItems();
+    // Oh this is nasty. We do it twice, because the first one computed the size of
+    // the columns (max of the items' width), and the second time will resize all
+    // the lineedits to that size.... David - with shame :)
     list->updateItems();
 }
 
