@@ -18,13 +18,11 @@
  ***************************************************************************/
 
 /*
-FIXME:
--Get rid of the broken icon
--KDataTool in general: can it be accessed without using the mouse?
+TODO:
 -Improve the user interface, so that every word can be used to replace
- the current selection
+ the current selection?
 -see the fixme's in the source below
--function words (like "if" etc) are not part of wordnet. There  are not *that*
+-function words (like "if" etc) are not part of WordNet. There  are not *that*
  many of them, so maybe we should add them. See search tools' stop word list for
  function words.
 */
@@ -51,6 +49,7 @@ K_EXPORT_COMPONENT_FACTORY( libthesaurustool, KGenericFactory<Thesaurus> );
 Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     : KDataTool(parent, name)
 {
+    
     dialog = new KDialogBase("Thesaurus", KDialogBase::User1|KDialogBase::Cancel,
         KDialogBase::Yes, KDialogBase::Cancel,
         0, "thesaurus", true, false, QString::null, i18n("Replace"));
@@ -60,11 +59,6 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
 
     combobox = new QComboBox(layout);
     combobox->setEditable(false);
-    // warning: order matters:
-    combobox->insertItem(i18n("Synonyms"));
-    combobox->insertItem(i18n("Antonyms"));
-    combobox->insertItem(i18n("Hyponyms - ...is a (kind of) X"));
-    combobox->insertItem(i18n("Meroyms - X has a..."));
     // TODO: add all the other relations?
     connect(combobox, SIGNAL(activated(int)), this, SLOT(slotFindTerm()));
 
@@ -108,6 +102,7 @@ Thesaurus::~Thesaurus()
 
 bool Thesaurus::run(const QString& command, void* data, const QString& datatype, const QString& mimetype)
 {
+
     if ( command != "thesaurus" )
     {
         kdDebug(31000) << "Thesaurus does only accept the command 'thesaurus'" << endl;
@@ -147,7 +142,7 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
         }
         *((QString*)data) = replace_text;
     }
-                
+
     return TRUE;
 }
 
@@ -155,9 +150,9 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
 bool Thesaurus::slotFindTerm(int index)
 {
     //kdDebug(31000) << "##KWWordInfo::slotFindTerm(" << index << ")" << endl;
-    if( listbox->currentItem() != -1 && listbox->text(index).left(indent.length()) != indent ) {
+    /*if( listbox->currentItem() != -1 && listbox->text(index).left(indent.length()) != indent ) {
         return false;
-    }
+    }*/
     QString term = listbox->text(index).stripWhiteSpace();
     edit->insertItem(term, 0);
     edit->setCurrentItem(0);
@@ -179,7 +174,7 @@ bool Thesaurus::slotFindTerm(const QString &term)
 
 bool Thesaurus::findTerm(const QString &term)
 {
-    // TODO: show waiting mouse pointer
+    QApplication::setOverrideCursor(KCursor::waitCursor());
 
     procresult_stdout = "";
     procresult_stderr = "";
@@ -188,7 +183,7 @@ bool Thesaurus::findTerm(const QString &term)
     thesaurusproc->clearArguments();
     *thesaurusproc << "wn";
     *thesaurusproc << term;
-    // get all results: nouns, verbs, adjectives, adverbs:
+    // get all results: nouns, verbs, adjectives, adverbs (see below for order):
     if( combobox->currentItem() == 0 ) {
         *thesaurusproc << "-synsn" << "-synsv" << "-synsa" << "-synsr";
     } else if( combobox->currentItem() == 1 ) {
@@ -196,27 +191,53 @@ bool Thesaurus::findTerm(const QString &term)
     } else if( combobox->currentItem() == 2 ) {
         *thesaurusproc << "-hypon" << "-hypov";
     } else if( combobox->currentItem() == 3 ) {
+        *thesaurusproc << "-hypen" << "-hypev";
+    } else if( combobox->currentItem() == 4 ) {
         *thesaurusproc << "-meron";
+    } else if( combobox->currentItem() == 5 ) {
+        *thesaurusproc << "-grepn" << "-grepv" << "-grepa" << "-grepr";
+    } else if( combobox->currentItem() == 6 ) {
+        *thesaurusproc << "-over";
     }
 
     if( thesaurusproc->isRunning() ) {
         // should never happen
         kdDebug(31000) << "Warning: findTerm(): process is already running?!" << endl;
+        QApplication::restoreOverrideCursor();
         return false;
     }
 
     if( !thesaurusproc->start(KProcess::NotifyOnExit, KProcess::AllOutput) ) {
-        KMessageBox::error(0, i18n("Failed to execute thesaurus program 'wn' (wordnet)"));	// TODO: add tips
+        KMessageBox::error(0, i18n("Failed to execute thesaurus program 'wn' (WordNet).\n"
+            "WordNet has to be installed if you want to use the thesaurus.\n"
+            // TODO: make that a real link:
+            "You can get WordNet at http://www.cogsci.princeton.edu/~wn/"));
+        QApplication::restoreOverrideCursor();
         return false;
     }
+
+     // warning: order matters:
+    int current = combobox->currentItem();    // remeber current position
+    combobox->clear();
+    combobox->insertItem(i18n("Synonyms - words with very similar meanings"));
+    combobox->insertItem(i18n("Antonyms - words with opposite meanings"));
+    combobox->insertItem(i18n("Hyponyms - ...is a (kind of) %1").arg(edit->currentText()));
+    combobox->insertItem(i18n("Hypernyms - %1 is a (kind of)...").arg(edit->currentText()));
+    combobox->insertItem(i18n("Meroyms - %1 has a...").arg(edit->currentText()));
+    combobox->insertItem(i18n("List of Compound Words"));
+    combobox->insertItem(i18n("Overview of senses"));
+    combobox->setCurrentItem(current);
+
     return true;
 }
 
 
 void Thesaurus::thesaurusExited(KProcess *)
 {
+    QApplication::restoreOverrideCursor();
+    
     if( !procresult_stderr.isEmpty() ) {
-      KMessageBox::error(0, i18n("Failed to execute thesaurus program 'wn' (wordnet)."
+      KMessageBox::error(0, i18n("Failed to execute thesaurus program 'wn' (WordNet)."
         "Output:\n%1").arg(procresult_stderr));
       return;
     }

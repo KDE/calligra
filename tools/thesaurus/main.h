@@ -20,6 +20,7 @@
 #ifndef __main_h__
 #define __main_h__
 
+#include <qapplication.h>
 #include <qlayout.h>
 #include <qlistbox.h>
 #include <qcombobox.h>
@@ -31,6 +32,7 @@
 #include <qvbox.h>
 
 #include <kcombobox.h>
+#include <kcursor.h>
 #include <kdatatool.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
