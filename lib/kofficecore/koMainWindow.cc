@@ -947,9 +947,15 @@ void KoMainWindow::slotNewToolbarConfig()
   if (rootDocument())
     applyMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
   KXMLGUIFactory *factory = guiFactory();
+  
+  // Check if there's an active view
+  if( !d->m_activeView )
+  	return;
+	
   // This gets plugged in even for embedded views
   factory->plugActionList(d->m_activeView, "view_closeallviews",
 			  d->m_veryHackyActionList);
+				  
   // This one only for root views
   if(d->m_rootViews.findRef(d->m_activeView)!=-1)
     factory->plugActionList(d->m_activeView, "view_split",
