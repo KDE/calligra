@@ -556,10 +556,10 @@ bool KWFrameSet::load( QDomElement& element )
     KWParag *last = 0L;
 
     QDomElement fs = element.namedItem( "FRAMES" ).toElement();
-    KWFrame rect;
     if ( !fs.isNull() ) {
 	QDomElement f = fs.firstChild().toElement();
 	for( ; !f.isNull(); f = f.nextSibling().toElement() ) {
+	    KWFrame rect;
 	    KWParagLayout::Border l, r, t, b;
 	    float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
 	    unsigned int lpt = 0, rpt = 0, tpt = 0, bpt = 0, rapt = 0;
@@ -654,20 +654,20 @@ bool KWFrameSet::load( QDomElement& element )
 		bpt = f.attribute( "border-bottom-pt" ).toInt();
 	    if ( f.hasAttribute( "border-bottom-inch" ) )
 		binch = f.attribute( "border-bottom-inch" ).toInt();
+	    KWFrame *_frame = new KWFrame( rect.x(), rect.y(), rect.width(), rect.height(), rect.getRunAround(),
+					   rainch == -1 ? rect.getRunAroundGap() : KWUnit( rapt, ramm, rainch ) );
+	    _frame->setLeftBorder( l );
+	    _frame->setRightBorder( r );
+	    _frame->setTopBorder( t );
+	    _frame->setBottomBorder( b );
+	    _frame->setBackgroundColor( QBrush( c ) );
+	    _frame->setBLeft( KWUnit( lpt, lmm, linch ) );
+	    _frame->setBRight( KWUnit( rpt, rmm, rinch ) );
+	    _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
+	    _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
+	    frames.append( _frame );
 	}
     }
-    KWFrame *_frame = new KWFrame( rect.x(), rect.y(), rect.width(), rect.height(), rect.getRunAround(),
-				    rainch == -1 ? rect.getRunAroundGap() : KWUnit( rapt, ramm, rainch ) );
-    _frame->setLeftBorder( l );
-    _frame->setRightBorder( r );
-    _frame->setTopBorder( t );
-    _frame->setBottomBorder( b );
-    _frame->setBackgroundColor( QBrush( c ) );
-    _frame->setBLeft( KWUnit( lpt, lmm, linch ) );
-    _frame->setBRight( KWUnit( rpt, rmm, rinch ) );
-    _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
-    _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
-    frames.append( _frame );
 
     return true;
 }
