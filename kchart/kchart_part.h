@@ -1,6 +1,4 @@
 /**
- * $Id$
- *
  * Kalle Dalheimer <kalle@kde.org>
  */
 

@@ -1,7 +1,5 @@
 /*
- * $Id$
- *
- * Copyright 2000 by Laurent Montel, released under Artistic License.
+ * Copyright 2001 by Laurent Montel, released under Artistic License.
  */
 
 #ifndef __KCHARTFONTCONFIGPAGE_H__

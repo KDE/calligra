@@ -16,9 +16,9 @@ public:
     void setData(KoChart::Data* dat);
     void getData(KoChart::Data* dat);
     void getLegend(KDChartParams* params);
-    void setLegend(QStringList legend);
+    void setLegend(const QStringList &legend);
     void getXLabel(KDChartParams* params);
-    void setXLabel(QStringList xlbl);
+    void setXLabel(const QStringList &xlbl);
 private:
     SheetDlg *_widget;
 };

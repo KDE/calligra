@@ -1,6 +1,4 @@
 /****************************************************************************
-** $Id$
-**
 ** Copyright (C) 1992-1998 Troll Tech AS.  All rights reserved.
 **
 ** This file is part of an example program for Qt.  This example

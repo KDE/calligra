@@ -42,7 +42,7 @@ protected:
     KChartFontConfigPage*_parameterfontpage;
     KChartPieConfigPage*_piepage;
     KChartSubTypeChartPage *_subTypePage;
-	KChartBackgroundPixmapConfigPage* _backgroundpixpage;
+    KChartBackgroundPixmapConfigPage* _backgroundpixpage;
     KChartComboPage *_hlcChart;
     KChartLegendConfigPage *_parameterLegend;
 protected slots:

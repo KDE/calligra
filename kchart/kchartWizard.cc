@@ -1,4 +1,3 @@
-/* $Id$ */
 
 #include "kchartWizard.h"
 #include "kchartWizardSelectDataPage.h"
@@ -137,7 +136,7 @@ void KChartWizard::reject()
     QWizard::reject();
 }
 
-void KChartWizard::setDataArea( QString /*area*/ )
+void KChartWizard::setDataArea( const QString &/*area*/ )
 {
     //  _selectdatapage->rangeED->setText( area );
 }

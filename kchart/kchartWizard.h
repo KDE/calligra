@@ -22,7 +22,7 @@ public:
     ~KChartWizard();
 
     KChartPart* chart() const { return _chart; };
-  void setDataArea( QString area );
+  void setDataArea( const QString &area );
   QString dataArea() const;
 
   enum RowCol { Row, Col };

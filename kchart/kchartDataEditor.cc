@@ -79,7 +79,7 @@ void kchartDataEditor::getData( KoChart::Data* dat )
     }
 }
 
-void kchartDataEditor::setLegend( QStringList legend )
+void kchartDataEditor::setLegend( const QStringList &legend )
 {
     for (int row = 0;row < _widget->rows();row++) {
         if( !legend[row].isNull() ) {
@@ -100,7 +100,7 @@ void kchartDataEditor::getLegend( KDChartParams* params )
 }
 
 
-void kchartDataEditor::setXLabel( QStringList xlbl )
+void kchartDataEditor::setXLabel( const QStringList & xlbl )
 {
     for (int col = 0;col < _widget->cols();col++) {
         if( !xlbl[col].isNull() ) {

@@ -1,4 +1,3 @@
-/* $Id$ */
 
 #include "kchartWizardSelectChartTypePage.h"
 #include "kchart_view.h"
@@ -14,8 +13,8 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 
-void KChartWizardSelectChartTypePage::addButton(QString name,
-                                                QString icon_name,
+void KChartWizardSelectChartTypePage::addButton(const QString &name,
+                                                const QString &icon_name,
                                                 int type)
 {
     QFrame* buttonframe = new QFrame( this );

@@ -34,7 +34,7 @@ private:
   int ystep;
   KDChartParams::ChartType _type;
 
-  void addButton(QString name, QString icon_name, int type);
+  void addButton(const QString &name, const QString &icon_name, int type);
 };
 
 
