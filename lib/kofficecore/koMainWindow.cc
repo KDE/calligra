@@ -24,7 +24,6 @@
 #include "koDocument.h"
 #include "koView.h"
 #include "koFilterManager.h"
-#include "koIcons.h"
 #include "koDocumentInfo.h"
 #include "koDocumentInfoDlg.h"
 

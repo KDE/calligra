@@ -18,6 +18,7 @@
 */
 
 #include <klibloader.h>
+#include <kparts/factory.h>
 
 #include "koQueryTrader.h"
 #include "koDocument.h"
@@ -57,7 +58,14 @@ KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name )
     if( !factory )
 	return 0;
 
-    QObject* obj = factory->create( parent, name, "KoDocument" );
+    QObject* obj;
+    if ( factory->inherits( "KParts::Factory" ) )
+      obj = static_cast<KParts::Factory *>(factory)->createPart( 0L, "", parent, name, "KoDocument" );
+    else {
+      kdWarning(30003) << "factory doesn't inherit KParts::Factory ! It is a " << factory->className() << endl; // This shouldn't happen...
+      obj = factory->create( parent, name, "KoDocument" );
+    }
+
     if ( !obj || !obj->inherits( "KoDocument" ) )
     {
 	delete obj;
@@ -65,7 +73,7 @@ KoDocument* KoDocumentEntry::createDoc( KoDocument* parent, const char* name )
 	return 0;
     }
 
-    return (KoDocument*)obj;
+    return static_cast<KoDocument*>(obj);
 }
 
 KoDocumentEntry KoDocumentEntry::queryByMimeType( const QString & mimetype )
@@ -89,7 +97,7 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
-  kdDebug() << "KoDocumentEntry::query " << _constr << " got " << max << " offers " << endl;
+  kdDebug(30003) << "KoDocumentEntry::query " << _constr << " got " << max << " offers " << endl;
   for( unsigned int i = 0; i < max; i++ )
   {
     // Parse the service
