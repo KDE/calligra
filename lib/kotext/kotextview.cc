@@ -441,9 +441,9 @@ KoTextCursor KoTextView::selectWordUnderCursor( const KoTextCursor& cursor, int 
 {
     KoTextCursor c1 = cursor;
     KoTextCursor c2 = cursor;
-    if ( cursor.index() > 0 && !cursor.parag()->at( cursor.index()-1 )->c.isSpace() && !cursor.parag()->at( cursor.index()-1 )->isCustom())
+    if ( cursor.index() > 0 && !cursor.parag()->at( cursor.index()-1 )->c.isSpace() )
         c1.gotoWordLeft();
-    if ( !cursor.parag()->at( cursor.index() )->c.isSpace() && !cursor.atParagEnd() && !cursor.parag()->at( cursor.index() )->isCustom())
+    if ( !cursor.parag()->at( cursor.index() )->c.isSpace() && !cursor.atParagEnd() )
         c2.gotoWordRight();
 
     KoTextString *s = cursor.parag()->string();
