@@ -1252,7 +1252,6 @@ void KPresenterDoc::setBackColor( unsigned int pageNum, QColor backColor1, QColo
 	kpbackground->setBackXFactor( xfactor );
 	kpbackground->setBackYFactor( yfactor );
     }
-    setModified(true);
 }
 
 /*==================== set background picture ====================*/
@@ -1260,7 +1259,6 @@ void KPresenterDoc::setBackPixmap( unsigned int pageNum, const KPImageKey & key 
 {
     if ( pageNum < _backgroundList.count() )
 	backgroundList()->at( pageNum )->setBackPixmap( key.filename(), key.lastModified() );
-    setModified(true);
 }
 
 /*==================== set background clipart ====================*/
@@ -1268,7 +1266,6 @@ void KPresenterDoc::setBackClipart( unsigned int pageNum, const KPClipartKey & k
 {
     if ( pageNum < _backgroundList.count() )
 	backgroundList()->at( pageNum )->setBackClipart( key.filename(), key.lastModified() );
-    setModified(true);
 }
 
 /*================= set background pic view ======================*/
@@ -1276,7 +1273,6 @@ void KPresenterDoc::setBackView( unsigned int pageNum, BackView backView )
 {
     if ( pageNum < _backgroundList.count() )
 	backgroundList()->at( pageNum )->setBackView( backView );
-    setModified(true);
 }
 
 /*==================== set background type =======================*/
@@ -1284,7 +1280,6 @@ void KPresenterDoc::setBackType( unsigned int pageNum, BackType backType )
 {
     if ( pageNum < _backgroundList.count() )
 	backgroundList()->at( pageNum )->setBackType( backType );
-    setModified(true);
 }
 
 /*========================== set page effect =====================*/
@@ -1292,7 +1287,6 @@ void KPresenterDoc::setPageEffect( unsigned int pageNum, PageEffect pageEffect )
 {
     if ( pageNum < _backgroundList.count() )
 	backgroundList()->at( pageNum )->setPageEffect( pageEffect );
-    setModified(true);
 }
 
 /*===================== set pen and brush ========================*/
@@ -1457,7 +1451,6 @@ bool KPresenterDoc::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le,
 	_oldBrush.setAutoDelete( true );
 	_oldBrush.clear();
     }
-
     setModified(true);
     return ret;
 }

@@ -1349,17 +1349,6 @@ void KPresenterView::mtextFont()
     }
 
     delete fontDia;
-#if 0
-    QFont tmpFont = tbFont;
-
-    if ( KFontDialog::getFont( tmpFont ) ) {
-	fontChanged( tmpFont );
-	tbFont = tmpFont;
-	page->setTextFont( tbFont );
-	actionTextFontFamily->setFont( tbFont.family() );
-	actionTextFontSize->setFontSize( tbFont.pointSize() );
-    }
-#endif
 }
 
 /*===============================================================*/
