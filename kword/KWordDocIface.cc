@@ -350,3 +350,13 @@ void KWordDocIface::enableBackgroundSpellCheck( bool b )
 {
     doc->enableBackgroundSpellCheck(b);
 }
+
+void KWordDocIface::startBackgroundSpellCheck()
+{
+    doc->startBackgroundSpellCheck();
+}
+
+void KWordDocIface::reactivateBgSpellChecking()
+{
+    doc->reactivateBgSpellChecking();
+}

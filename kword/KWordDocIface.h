@@ -103,6 +103,9 @@ k_dcop:
     virtual bool backgroundSpellCheckEnabled() const;
     virtual void enableBackgroundSpellCheck( bool b );
 
+    virtual void startBackgroundSpellCheck();
+    virtual void reactivateBgSpellChecking();
+
 
     //init/save config
     virtual void initConfig();
