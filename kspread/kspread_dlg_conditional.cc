@@ -28,6 +28,7 @@
 #include <kfontdialog.h>
 #include <knumvalidator.h>
 #include <kdebug.h>
+#include <koGlobal.h>
 
 KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const QString &name )
         : QWidget( _parent )
@@ -465,7 +466,7 @@ if(firstCond->typeOfCondition()!=None)
   }
  else
    {
-     QFont font = KGlobalSettings::generalFont();
+     QFont font = KoGlobal::defaultFont();
      tmpCond[0].m_cond=None;
      tmpCond[0].fontcond=font;
      tmpCond[0].colorcond=Qt::black;
@@ -489,7 +490,7 @@ if(firstCond->typeOfCondition()!=None)
    }
  else
    {
-     QFont font = KGlobalSettings::generalFont();
+     QFont font = KoGlobal::defaultFont();
      tmpCond[1].m_cond=None;
      tmpCond[1].fontcond=font;
      tmpCond[1].colorcond=Qt::black;
@@ -513,7 +514,7 @@ if(firstCond->typeOfCondition()!=None)
    }
  else
    {
-     QFont font = KGlobalSettings::generalFont();
+     QFont font = KoGlobal::defaultFont();
      tmpCond[2].m_cond=None;
      tmpCond[2].fontcond=font;
      tmpCond[2].colorcond=Qt::black;

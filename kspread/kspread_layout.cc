@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <koGlobal.h>
 
 #include <kdebug.h>
 #include <iostream.h>
@@ -65,7 +66,7 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_indent=0;
     m_bDontPrintText=false;
 
-    QFont font = KGlobalSettings::generalFont();
+    QFont font = KoGlobal::defaultFont();
     // ######## Not needed anymore in 3.0?
     //KGlobal::charsets()->setQFont(font, KGlobal::locale()->charset());
     m_textFont = font;
@@ -907,7 +908,7 @@ void KSpreadLayout::setBackGroundBrushColor( const QColor& c )
 
 void KSpreadLayout::setTextFont( const QFont& _f )
 {
-    if(_f==KGlobalSettings::generalFont())
+    if(_f==KoGlobal::defaultFont())
         {
         clearProperty( PFont );
         setNoFallBackProperties( PFont );
