@@ -1131,13 +1131,17 @@ void OOWriterWorker::processParagraphData ( const QString &paraText,
             {
                 processAnchor(paraText, formatLayout, (*paraFormatDataIt));
             }
-            else if ( 1001 == (*paraFormatDataIt).id )
+            else if ( 1001 == (*paraFormatDataIt).id ) // Start of bookmark
             {
-                *m_streamOut << "<kword:book-start value=\""<< (*paraFormatDataIt).variable.m_text <<"\"/>"; // ### FIXME
+                *m_streamOut << "<text:bookmark-start text:name=\""
+                    << escapeOOText( (*paraFormatDataIt).variable.m_text )
+                    <<"\"/>";
             }
-            else if ( 1002 == (*paraFormatDataIt).id )
+            else if ( 1002 == (*paraFormatDataIt).id ) // End of bookmark
             {
-                *m_streamOut << "<kword:book-end value=\""<< (*paraFormatDataIt).variable.m_text <<"\"/>"; // ### FIXME
+                *m_streamOut << "<text:bookmark-end text:name=\""
+                    << escapeOOText( (*paraFormatDataIt).variable.m_text )
+                    <<"\"/>";
             }
         }
     }
