@@ -84,6 +84,8 @@ class KWEFKWordLeader
         int m_syntaxVersion;
         /// true if oldSyntax (KWord 0.8)
         bool m_oldSyntax;
+        /// Name of the current frame set
+        QString m_currentFramesetName;
     private:
         KWEFBaseWorker *m_worker;
         KoFilterChain* m_chain;

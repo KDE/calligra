@@ -195,6 +195,7 @@ static void ProcessFrameTag ( QDomNode myNode, void *tagData,
 
         << AttrProcessing ( "autoCreateNewFrame",  frameAnchor->frame.autoCreateNewFrame )
         << AttrProcessing ( "newFrameBehavior",    frameAnchor->frame.newFrameBehavior   )
+        << AttrProcessing ( "newFrameBehaviour", frameAnchor->frame.newFrameBehavior ) // Depreciated name
 
         << AttrProcessing ( "copy",       frameAnchor->frame.copy      )
         << AttrProcessing ( "sheetSide",  frameAnchor->frame.sheetSide )
@@ -236,13 +237,28 @@ static void ProcessFrameTag ( QDomNode myNode, void *tagData,
         << AttrProcessing ( "btoppt",      frameAnchor->frame.btoppt    )
         << AttrProcessing ( "bbottompt",   frameAnchor->frame.bbottompt )
         ;
+
+    if ( leader->m_oldSyntax )
+    {
+        attrProcessingList
+            << AttrProcessing ( "bleftmm" )
+            << AttrProcessing ( "bleftinch" )
+            << AttrProcessing ( "brightmm" )
+            << AttrProcessing ( "brightinch" )
+            << AttrProcessing ( "btopmm" )
+            << AttrProcessing ( "btopinch" )
+            << AttrProcessing ( "bbottommm" )
+            << AttrProcessing ( "bbottominch" )
+            ;
+    }
+    
     ProcessAttributes (myNode, attrProcessingList);
 
-    frameAnchor->frame.lColor  = QColor( lRed, lGreen, lBlue );
-    frameAnchor->frame.rColor  = QColor( rRed, rGreen, rBlue );
-    frameAnchor->frame.tColor  = QColor( tRed, tGreen, tBlue );
-    frameAnchor->frame.bColor  = QColor( bRed, bGreen, bBlue );
-    frameAnchor->frame.bkColor = QColor( bkRed, bkGreen, bkBlue );
+    frameAnchor->frame.lColor.setRgb( lRed, lGreen, lBlue );
+    frameAnchor->frame.rColor.setRgb( rRed, rGreen, rBlue );
+    frameAnchor->frame.tColor.setRgb( tRed, tGreen, tBlue );
+    frameAnchor->frame.bColor.setRgb( bRed, bGreen, bBlue );
+    frameAnchor->frame.bkColor.setRgb( bkRed, bkGreen, bkBlue );
 
     AllowNoSubtags (myNode, leader);
 }
@@ -278,11 +294,12 @@ static void ProcessFramesetTag ( QDomNode        myNode,
     int     row       = -1;
     int     cols      = -1;
     int     rows      = -1;
-    QString name;
     QString grpMgr;
 
+    const QString oldName ( leader->m_currentFramesetName );
+    
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "name",        name      )
+    attrProcessingList << AttrProcessing ( "name",        leader->m_currentFramesetName      )
                        << AttrProcessing ( "frameType",   frameType )
                        << AttrProcessing ( "frameInfo",   frameInfo )
                        << AttrProcessing ( "removable" )
@@ -306,6 +323,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 if (frameInfo==0)
                 {
                     // Normal Text
+                    kdDebug(30508) << "Processing Frameset: " << leader->m_currentFramesetName << endl;
                     QValueList<TagProcessing> tagProcessingList;
                     tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag,  paraList ));
@@ -428,7 +446,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             kdDebug (30508) << "DEBUG: FRAMESET name of picture is " << name << endl;
 #endif
 
-            FrameAnchor *frameAnchor = findAnchor (name, *paraList);
+            FrameAnchor *frameAnchor = findAnchor (leader->m_currentFramesetName, *paraList);
 
             if ( frameAnchor )
             {
@@ -451,16 +469,23 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             }
             else
             {
-                kdWarning (30508) << "ProcessFramesetTag: Couldn't find anchor " << name << endl;
+                kdWarning (30508) << "ProcessFramesetTag: Couldn't find anchor " << leader->m_currentFramesetName << endl;
             }
 
             break;
         }
 
+    case 4: // KFormula
+        {
+            kdWarning(30508) << "KFormula frameset not supported yet!" << endl; // ### TODO
+            break;
+        }
     default:
             kdWarning (30508) << "Unexpected frametype " << frameType << " (in ProcessFramesetTag)" << endl;
     }
 
+    leader->m_currentFramesetName = oldName;
+    
 #if 0
     kdDebug (30508) << "ProcessFramesetTag () - End" << endl;
 #endif
