@@ -162,11 +162,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 				else
 					m_painter->setBrush( Qt::white );
 
-				m_painter->drawNode(
-					jtr.current()->knot(),
-					composite.stroke()->lineWidth() > 5.0
-					? 3
-					: 2 );
+				m_painter->drawNode( jtr.current()->knot(), 2 );
 			}
 		}
 	}
