@@ -26,7 +26,7 @@
 
 #include <karbon_view.h>
 #include <karbon_part.h>
-#include <shapes/vpolygon.h>
+#include <shapes/vstar.h>
 #include "vpolygontool.h"
 
 VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
@@ -117,19 +117,20 @@ VPolygonTool::shape( bool interactive ) const
 	if( interactive )
 	{
 		return
-			new VPolygon(
+			new VStar(
 				0L,
 				m_p,
 				KoUnit::ptFromUnit( m_optionsWidget->radius(), view()->part()->unit() ),
-				m_optionsWidget->edges() );
+				KoUnit::ptFromUnit( m_optionsWidget->radius(), view()->part()->unit() ),
+				m_optionsWidget->edges(), 0, 0, 0, VStar::polygon );
 	}
 	else
 		return
-			new VPolygon(
+			new VStar(
 				0L,
 				m_p,
-				m_d1,
+				m_d1, m_d1,
 				m_optionsWidget->edges(),
-				m_d2 );
+				m_d2, 0, 0, VStar::polygon );
 }
 
