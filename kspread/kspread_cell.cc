@@ -2814,14 +2814,15 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
   {
       if ( m_bCalcDirtyFlag )
 	  calc();
-      if ( m_bLayoutDirtyFlag )
-	  makeLayout( m_pTable->painter(), column(), row() );
+      // if ( m_bLayoutDirtyFlag )
+      // makeLayout( m_pTable->painter(), column(), row() );
 
       SelectPrivate *s = (SelectPrivate*)m_pPrivate;
       if ( m_content == Formula )
 	  s->parse( m_strFormularOut );
       else
 	  s->parse( m_strText );
+      printf("SELECT %s\n", s->text().latin1() );
       checkValue();
       // m_bLayoutDirtyFlag = true;
   }
@@ -4014,57 +4015,6 @@ bool KSpreadCell::operator < ( const KSpreadCell & cell ) const
     return valueString().compare(cell.valueString()) < 0;
 }
 
-/***************************************************
- *
- * SelectPrivate
- *
- ***************************************************/
-
-void SelectPrivate::parse( const QString& _text )
-{
-    m_lstItems.clear();
-
-    if ( _text.isEmpty() )
-	return;
-
-    m_lstItems = QStringList::split( '\\', _text );
-
-    if ( m_iIndex != -1 && m_iIndex < (int)m_lstItems.count() )
-    { }
-    else if ( m_lstItems.count() > 0 )
-	m_iIndex = 0;
-    else
-	m_iIndex = -1;
-}
-
-void SelectPrivate::slotItemSelected( int _id )
-{
-    m_iIndex = _id;
-
-    m_pCell->setLayoutDirtyFlag();
-    m_pCell->checkValue();
-    m_pCell->update();
-
-    m_pCell->table()->updateCell( m_pCell, m_pCell->column(), m_pCell->row() );
-}
-
-QString SelectPrivate::text() const
-{
-    if ( m_iIndex == -1 )
-	return QString::null;
-
-    return m_lstItems[ m_iIndex ];
-}
-
-KSpreadCellPrivate* SelectPrivate::copy( KSpreadCell* cell )
-{
-    SelectPrivate* p = new SelectPrivate( cell );
-    p->m_lstItems = m_lstItems;
-    p->m_iIndex = m_iIndex;
-
-    return p;
-}
-
 QDomElement KSpreadCell::createElement( const QString &tagName, const QFont &font, QDomDocument &doc ) const {
 
     QDomElement e=doc.createElement( tagName );
@@ -4124,5 +4074,57 @@ QPen KSpreadCell::toPen(QDomElement &element) const {
 
   return p;
 }
+
+/***************************************************
+ *
+ * SelectPrivate
+ *
+ ***************************************************/
+
+void SelectPrivate::parse( const QString& _text )
+{
+    m_lstItems.clear();
+
+    if ( _text.isEmpty() )
+	return;
+
+    m_lstItems = QStringList::split( '\\', _text );
+
+    if ( m_iIndex != -1 && m_iIndex < (int)m_lstItems.count() )
+    { }
+    else if ( m_lstItems.count() > 0 )
+	m_iIndex = 0;
+    else
+	m_iIndex = -1;
+}
+
+void SelectPrivate::slotItemSelected( int _id )
+{
+    m_iIndex = _id;
+
+    m_pCell->setLayoutDirtyFlag();
+    m_pCell->checkValue();
+    m_pCell->update();
+
+    m_pCell->table()->updateCell( m_pCell, m_pCell->column(), m_pCell->row() );
+}
+
+QString SelectPrivate::text() const
+{
+    if ( m_iIndex == -1 )
+	return QString::null;
+
+    return m_lstItems[ m_iIndex ];
+}
+
+KSpreadCellPrivate* SelectPrivate::copy( KSpreadCell* cell )
+{
+    SelectPrivate* p = new SelectPrivate( cell );
+    p->m_lstItems = m_lstItems;
+    p->m_iIndex = m_iIndex;
+
+    return p;
+}
+
 
 #include "kspread_cell.moc"
