@@ -62,7 +62,7 @@ public:
     // For KoApplication
     static void setDPI( int x, int y );
 
-    ///// ##### TODO: document (Laurent?)
+    // ##### TODO: document (Laurent?)
 
     static QStringList listOfLanguages() {
         return self()->_listOfLanguages();

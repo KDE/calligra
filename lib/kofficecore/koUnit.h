@@ -51,7 +51,7 @@ class QDomElement;
 #define DD_TO_POINT(dd)((dd)*154.08124)
 #define CC_TO_POINT(cc)((cc)*12.840103)
 /**
- * KOffice stores everything in pt (using "double") internally.
+ * %KOffice stores everything in pt (using "double") internally.
  * When displaying a value to the user, the value is converted to the user's unit
  * of choice, and rounded to a reasonable precision to avoid 0.999999
  */
@@ -157,7 +157,7 @@ public:
     static QString unitDescription( Unit _unit );
     static QStringList listOfUnitName();
 
-    /// parse common koffice and OO values, like "10cm", "5mm" to pt
+    /// parse common %KOffice and OO values, like "10cm", "5mm" to pt
     static double parseValue( QString value, double defaultVal = 0.0 );
     // Note: the above method doesn't take a const ref, since it modifies the arg.
 

@@ -66,7 +66,8 @@ public:
     KoPicture insertPicture( const KoPicture& picture );
 
     /**
-     * Download a possibly remote file
+     * @brief Download a possibly remote file
+     *
      * If this file is really remote, it is always downloaded.
      * If the file is local, it acts as @ref #loadPicture.
      * @param url the URL to download from
@@ -76,7 +77,8 @@ public:
     KoPicture downloadPicture(const KURL& url, QWidget *window);
 
     /**
-     * Load a clipart from a file (and insert into the collection).
+     * @brief Load a clipart from a file (and insert into the collection).
+     *
      * The modification date of the file is checked, to create the key
      * for this clipart. If this key maps to an existing clipart in the
      * collection, then this picture is returned, otherwise the file is loaded.

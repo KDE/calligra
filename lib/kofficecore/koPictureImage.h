@@ -29,6 +29,7 @@ class KoPictureImagePrivate;
 /**
  * @internal
  * KoPictureImage is a container class for a QImage-based picture
+ * \todo remove private class, as the header is not installed
  */
 class KoPictureImage : public KoPictureBase
 {
@@ -53,7 +54,8 @@ public:
     virtual bool isNull(void) const;
 
     /**
-     * Draw the image in a painter.
+     * @brief Draw the image in a painter.
+     *
      * No, this isn't as simple as painter.drawPixmap().
      * This method ensures that the best quality is used when printing, scaling the painter.
      *

@@ -55,7 +55,8 @@ public:
     virtual bool isNull(void) const;
 
     /**
-     * Draw the image in a painter.
+     * @brief Draw the image in a painter.
+     *
      * No, this isn't as simple as painter.drawPixmap().
      * This method ensures that the best quality is used when printing, scaling the painter.
      *
@@ -101,7 +102,7 @@ private:
     /**
      * @brief Read a line from a PostScript stream in a QByteArray
      *
-     * The PosctScript stream is somewhere in the QByteArray and therefore has to be
+     * The PostScript stream is somewhere in the QByteArray and therefore has to be
      * determined by the start and length of this stream and the current position
      *
      * @param array the array which is read

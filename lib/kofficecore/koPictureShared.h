@@ -54,14 +54,14 @@ public:
     ~KoPictureShared(void);
 
     /**
-     * Copy constructor
+     * @brief Copy constructor
      *
      * This makes a deep copy. Do not use if you want to share!
      */
     KoPictureShared(const KoPictureShared &other);
 
     /**
-     * Assignment operator
+     * @brief Assignment operator
      *
      * This makes a deep copy. Do not use if you want to share!
      */
@@ -75,7 +75,7 @@ public:
     bool isNull(void) const;
 
     /**
-     * Draw the image in a painter.
+     * @brief Draw the image in a painter.
      *
      * The parameter @p fastMode allows the picture to be re-sized and drawn quicker if possible
      *
@@ -129,7 +129,7 @@ public:
      */
     void clear(void);
 
-    /*
+    /**
      * Load a file
      *
      * @param fileName the name of the file to load

@@ -79,7 +79,7 @@ public:
     bool isNull(void) const;
 
     /**
-     * Draw the picture in a painter.
+     * @brief Draw the picture in a painter.
      *
      * The parameter @p fastMode allows the picture to be re-sized and drawn quicker if possible
      *
@@ -206,7 +206,7 @@ public:
     QImage createAlphaMask(int conversion_flags = 0) const;
 
     /**
-     * Clear any cache
+     * @brief Clear any cache
      *
      * This is used to avoid using too much memory
      * especially if the application somehow also caches the KoPicture's output

@@ -56,7 +56,7 @@ public:
     virtual bool isNull(void) const;
 
     /**
-     * Draw the image in a painter.
+     * @brief Draw the image in a painter.
      *
      * The parameter @p fastMode allows the picture to be re-sized and drawn quicker if possible
      *

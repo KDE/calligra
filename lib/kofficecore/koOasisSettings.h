@@ -24,14 +24,12 @@
 #include <qdom.h>
 
 /**
- * Class used to parse settings.xml file.
- */
-
-/**
+ * @brief Parse settings.xml file.
+ *
  * This class helps parsing the settings.xml file of an OASIS document.
  *
  * For reference, the structure of settings.xml looks like:
- * <code>
+ * <pre>
  *   \<office:settings\>
  *      \<config:config-item-set config:name="view-settings"\>
  *         \<config:config-item-map-indexed config:name="Views"\>
@@ -58,7 +56,7 @@
  *       ....
  *       \</config:config-item-set\>
  *   \</office:settings\>
- * </code>
+ * </pre>
  * Basically, config-items are either part of an item-set, or part of an item-map which is inside an item-set.
  *
  * The API of KoOasisSettings allows the caller to look for a given item-set or item-map once,
@@ -91,9 +89,9 @@ public:
     bool selectItemMapNamed( const QString &itemMapName );
 
 private:
-    /// internal
+    /// @internal
     QString parseConfigItem( const QString &item, const QString &itemNameEntry = QString::null ) const;
-    /// internal
+    /// @internal
     QString parseConfigItemName( const QDomElement & element, const QString &item ) const;
 
     const QDomDocument m_doc;

@@ -26,7 +26,7 @@
 #include <qvaluestack.h>
 
 /**
- *  This class implements a stack for the different styles of an object.
+ *  @brief This class implements a stack for the different styles of an object.
  *
  *  There can be several styles that are valid for one object. For example
  *  a textobject on a page has styles 'pr3' and 'P7' and a paragraph in
@@ -120,11 +120,13 @@ public:
     void setTypeProperties(const QString &typeProperties);
 
 private:
-    // For save/restore: stack of "marks". Each mark is an index in m_stack.
+    /// For save/restore: stack of "marks". Each mark is an index in m_stack.
     QValueStack<int> m_marks;
 
-    // We use QValueList instead of QValueStack because we need access to all styles
-    // not only the top one.
+    /**
+     * We use QValueList instead of QValueStack because we need access to all styles
+     * not only the top one.
+     */
     QValueList<QDomElement> m_stack;
 
     KoStyleStack( const KoStyleStack& );

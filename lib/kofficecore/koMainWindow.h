@@ -38,14 +38,13 @@ namespace KParts
 }
 
 /**
+ * @brief Main window for a KOffice application
  *
  * This class is used to represent a main window
  * of a KOffice component. Each main window contains
  * a menubar and some toolbars.
  *
- * This class does NOT need to be subclassed in your application.
- *
- * @short Main window for a KOffice application
+ * @note This class does NOT need to be subclassed in your application.
  */
 class KoMainWindow : public KParts::MainWindow
 {
@@ -369,9 +368,11 @@ private:
 
 };
 
-// Extension to KFileDialog in order to add special entries to the filter combo,
-// like "save as koffice-1.1", "save as dir" etc.
-// Used only when saving!
+/**
+ * Extension to KFileDialog in order to add special entries to the filter combo,
+ * like "save as koffice-1.1", "save as dir" etc.
+ * @note Used only when saving!
+ */
 class KoFileDialog : public KFileDialog
 {
     Q_OBJECT

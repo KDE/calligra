@@ -26,7 +26,8 @@ class KoXmlWriter;
 class KoGenStyle;
 
 /**
- * Repository of styles used during saving of OASIS/OOo file.
+ * @brief Repository of styles used during saving of OASIS/OOo file.
+ *
  * Each instance of KoGenStyles is a collection of styles whose names
  * are in the same "namespace".
  * This means there should be one instance for all styles in <office:styles>,
@@ -68,9 +69,9 @@ public:
      * is supposed to be the full style name.
      *
      * @return the name for this style
+     * @todo ### rename lookup to insert
      */
     QString lookup( const KoGenStyle& style, const QString& name = QString::null, bool forceNumbering = true );
-    // ### rename lookup to insert
 
     typedef QMap<KoGenStyle, QString> StyleMap;
     /**
@@ -80,7 +81,7 @@ public:
     const StyleMap& styles() const { return m_styles; }
 
     struct NamedStyle {
-        const KoGenStyle* style; // owned by the collection
+        const KoGenStyle* style; ///< @note owned by the collection
         QString name;
     };
     /**
@@ -96,7 +97,7 @@ public:
 
     /**
      * @return an existing style by name, which can be modified.
-     * Note that this is DANGEROUS.
+     * @warning This is DANGEROUS.
      * It basically defeats the purpose of lookup()!
      * Only do this if you know for sure no other 'user' of that style will
      * be affected.
@@ -161,15 +162,25 @@ public:
     /// Return the name of style's parent, if set
     QString parentName() const { return m_parentName; }
 
-    /*  The types of properties.
-     *  DefaultPropertyType depends on family: e.g. paragraph-properties if family=paragraph
-     *  or on the type of style (e.g. page-layout -> page-layout-properties).
-     *  (In fact that tag name is the one passed to writeStyle)
-     *
-     *  TextType is always text-properties.
-     *  This is because only paragraph styles contain two types of properties
+    /**
+     *  @brief The types of properties.
      */
-    enum PropertyType { DefaultType = 0, TextType, ChildElement /*internal*/, N_NumTypes /*internal*/ };
+    enum PropertyType
+    {
+        /**
+         *  DefaultType depends on family: e.g. paragraph-properties if family=paragraph
+         *  or on the type of style (e.g. page-layout -> page-layout-properties).
+         *  (In fact that tag name is the one passed to writeStyle)
+         */
+        DefaultType = 0,
+        /**
+         *  TextType is always text-properties.
+         *  This is because only paragraph styles contain two types of properties
+         */
+        TextType,
+        ChildElement, ///< @internal
+        N_NumTypes ///< @internal
+    };
 
     /// Add a property to the style
     void addProperty( const QString& propName, const QString& propValue, PropertyType type = DefaultType ) {
@@ -227,11 +238,12 @@ public:
     void addAttributePt( const QString& attrName, double attrValue );
 
     /**
-     * Add a child element to the style properties.
+     * @brief Add a child element to the style properties.
+     *
      * What is meant here is that the contents of the QString
      * will be written out literally. This means you should use
      * KoXmlWriter to generate it:
-     * <code>
+     * @code
      * QBuffer buffer;
      * buffer.open( IO_WriteOnly );
      * KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
@@ -240,7 +252,7 @@ public:
      * elementWriter.endElement();
      * QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
      * gs.addChildElement( "...", elementContents );
-     *  </code>
+     * @endcode
      */
     void addChildElement( const QString& elementName, const QString& elementContents ) {
         m_properties[ChildElement].insert( elementName, elementContents );

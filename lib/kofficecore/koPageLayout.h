@@ -27,10 +27,13 @@
 class QDomElement;
 
 /**
- * Represents the paper format a document shall be printed on.
+ * @brief Represents the paper format a document shall be printed on.
+ *
  * For compatibility reasons, and because of screen and custom,
  * this enum doesn't map to QPrinter::PageSize but KoPageFormat::printerPageSize
  * does the conversion.
+ *
+ * @todo convert DIN to ISO in the names
  */
 enum KoFormat {
     PG_DIN_A3 = 0,
@@ -77,14 +80,16 @@ enum KoOrientation {
 namespace KoPageFormat
 {
     /**
-     * Convert a KoFormat into a KPrinter::PageSize.
+     * @brief Convert a KoFormat into a KPrinter::PageSize.
+     *
      * If format is 'screen' it will use A4 landscape.
      * If format is 'custom' it will use A4 portrait.
      * (you may want to take care of those cases separately).
      * Usually passed to KPrinter::setPageSize().
+     *
+     * @note We return int instead of the enum to avoid including kprinter.h
      */
     int /*KPrinter::PageSize*/ printerPageSize( KoFormat format );
-    // We return int instead of the enum to avoid including kprinter.h
 
     /**
      * Returns the width (in mm) for a given page format and orientation
@@ -135,20 +140,16 @@ namespace KoPageFormat
 
 
 /**
- * Header/Footer type.
- * 0 ... Header/Footer is the same on all pages
- * 1 ... Header/Footer is different on first, even and odd pages (2&3)
- * 2 ... Header/Footer for the first page differs
- * 3 ... Header/Footer for even - odd pages are different
+ * @brief Header/Footer type.
  *
- * Yes, this should have been a bitfield, but there was only 0,2,3 in koffice-1.0. Don't ask why.
+ * @note Yes, this should have been a bitfield, but there was only 0, 2, 3 in koffice-1.0. Don't ask why.
  * In the long run this should be replaced with a more flexible repetition/section concept.
  */
 enum KoHFType {
-    HF_SAME = 0,
-    HF_FIRST_EO_DIFF = 1,
-    HF_FIRST_DIFF = 2,
-    HF_EO_DIFF = 3
+    HF_SAME = 0,            ///< 0: Header/Footer is the same on all pages
+    HF_FIRST_EO_DIFF = 1,   ///< 1: Header/Footer is different on first, even and odd pages (2&3)
+    HF_FIRST_DIFF = 2,      ///< 2: Header/Footer for the first page differs
+    HF_EO_DIFF = 3          ///< 3: Header/Footer for even - odd pages are different
 };
 
 /**

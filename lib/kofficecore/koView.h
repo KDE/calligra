@@ -351,13 +351,13 @@ public slots:
 
     /**
      * Display a message in the status bar (calls QStatusBar::message())
-     * TODO: rename to something more generic
+     * @todo rename to something more generic
      */
     void slotActionStatusText( const QString &text );
 
     /**
      * End of the message in the status bar (calls QStatusBar::clear())
-     * TODO: rename to something more generic
+     * @todo rename to something more generic
      */
     void slotClearStatusText();
 
