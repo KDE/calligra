@@ -28,6 +28,17 @@ const bool KoFilter::filter(const QString &, const QString &,
     return false;
 }
 
+const bool KoFilter::filter1(const QString &,
+                            const QString &, const QString &,
+                            const QString &, const QString &,
+                            const QString &) {
+    return false;
+}
+
+bool KoFilter::supportsEmbedding() {
+    return false;
+}
+
 const bool KoFilter::I_filter(const QString &, const QString &,
                               QDomDocument &, const QString &,
                               const QString &) {

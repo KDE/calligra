@@ -65,6 +65,12 @@ public:
                               const QString &from, const QString &to,
                               const QString &config=QString::null);
 
+    virtual const bool filter1(const QString &fileIn,
+                              const QString &fileOut, const QString &prefixOut,
+                              const QString &from, const QString &to,
+                              const QString &config=QString::null);
+    virtual bool supportsEmbedding();
+
     /**
      * Takes a file as input and writes the converted information in a
      * QDomDocument. It's slightly faster than the first one, but you need
