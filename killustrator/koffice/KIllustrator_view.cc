@@ -94,6 +94,7 @@
 #include <koPartSelectDia.h>
 #include <kaction.h>
 #include <kcoloractions.h>
+#include <kmessagebox.h>
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 				    KIllustratorDocument* doc) :
@@ -666,14 +667,16 @@ QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
 					"file dia", true);
     dlg->setCaption (i18n ("Save As"));
     if (! lastExport.isEmpty ()) {
-	dlg->setSelection ((const char *) lastExport);
+	dlg->setSelection (lastExport);
     }
     QString filename;
 
     if (dlg->exec() == QDialog::Accepted) {
-      filename = dlg->selectedFile ();
-      QFileInfo finfo (filename);
-      lastExportDir = finfo.dirPath ();
+      KURL url = dlg->selectedURL ();
+      if (!url.isLocalFile())
+         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+      filename = url.path();
+      lastExportDir = url.directory();
     }
 
     delete dlg;
@@ -692,7 +695,10 @@ void KIllustratorView::slotImport()
 #ifdef USE_QFD
     QString fname = QFileDialog::getOpenFileName (lastImportDir, filter, this);
 #else
-    QString fname = KFileDialog::getOpenFileName (lastImportDir, filter, this);
+  KURL url = KFileDialog::getOpenURL( lastImportDir, filter, this );
+  if (!url.isLocalFile())
+      KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+  QString fname = url.path();
 #endif
     if (! fname.isEmpty ())
     {
@@ -766,13 +772,16 @@ void KIllustratorView::slotInsertBitmap()
                  "*.xpm | X11 Pixmaps"),
              this);
 #else
-    QString fname = KFileDialog::getOpenFileName
-		    ((const char *) lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
+    KURL url = KFileDialog::getOpenURL
+		    (lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
 							"*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
 							"*.png | PNG Images\n"
 							"*.xbm | X11 Bitmaps\n"
 							"*.xpm | X11 Pixmaps"),
 		     this);
+  if (!url.isLocalFile())
+      KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+  QString fname = url.path();
 #endif
     if (! fname.isEmpty ()) {
 	QFileInfo finfo (fname);
@@ -790,9 +799,11 @@ void KIllustratorView::slotInsertClipart()
               (lastClipartDir,
                i18n("*.wmf *.WMF | Windows Metafiles"), this);
 #else
-    QString fname = KFileDialog::getOpenFileName
-		    (lastClipartDir,
-		     i18n("*.wmf *.WMF | Windows Metafiles"), this);
+     KURL url = KFileDialog::getOpenURL( lastClipartDir,
+             i18n("*.wmf *.WMF | Windows Metafiles"), this);
+     if (!url.isLocalFile())
+         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+     QString fname = url.path();
 #endif
     if ( !fname.isEmpty ())
     {
