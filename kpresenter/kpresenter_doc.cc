@@ -3725,6 +3725,32 @@ bool KPresenterDoc::isSlideSelected( int pgNum /* 0-based */ )
     return m_pageList.at(pgNum)->isSlideSelected();
 }
 
+QValueList<int> KPresenterDoc::displaySelectedSlides()  /* returned list is 0-based */
+{
+#if CUSTOMSLIDESHOW
+    QValueList<int> result;
+    if ( m_presentationName.isEmpty() )
+        return selectedSlides();
+    else
+    {
+        kdDebug()<<" KPresenterDoc::displaySelectedSlide m_presentationName : "<<m_presentationName<<endl;
+        QDictIterator<KPrPage> itPage( m_customListSlideShow[m_presentationName] ); // See QDictIterator
+        for( ; itPage.current(); ++itPage )
+        {
+            int pageNum = m_pageList.find(itPage.current() );
+            if ( pageNum != -1 )
+            {
+                kdDebug()<<" KPresenterDoc::displaySelectedSlide : add slide number :"<<pageNum<<endl;
+                result << pageNum;
+            }
+        }
+    }
+    return result;
+#else
+    return selectedSlides();
+#endif
+}
+
 QValueList<int> KPresenterDoc::selectedSlides() /* returned list is 0-based */
 {
     QValueList<int> result;

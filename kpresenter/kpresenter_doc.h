@@ -504,6 +504,10 @@ class KPresenterDoc : public KoDocument
     void setPresentationName( const QString &_name ) { m_presentationName = _name; }
 
     QStringList presentationList();
+    //return list of slide which be displaying:
+    //return selected slide when presentation name is empty
+    //otherwise return list of custom slide show
+    QValueList<int> displaySelectedSlides();
 
 public slots:
     void movePage( int from, int to );
