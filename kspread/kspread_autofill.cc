@@ -910,7 +910,8 @@ void KSpreadSheet::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
   if (!down)
     s = _srcList.count() - 1;
 
-  if ( _srcList.at( s )->value().isNumber() );
+  if ( _srcList.at( s )->value().isNumber() &&
+       !(_srcList.at( s )->isDate() || _srcList.at( s )->isTime() ) )
     factor = _srcList.at( s )->value().asFloat();
 
   while ( cell )
@@ -946,26 +947,6 @@ void KSpreadSheet::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
 	tmp = tmp.setNum(val);
 	cell->setCellText( tmp, true );
         ++incr;
-      }
-      else if(_srcList.at( s )->isDate() && _srcList.count()==1)
-      {
-	QDate tmpDate=(_srcList.at( s )->valueDate());
-        if (!down)
-            tmpDate=tmpDate.addDays( -incr);
-        else
-            tmpDate=tmpDate.addDays( +incr);
-        cell->setCellText(doc()->locale()->formatDate(tmpDate,true),true);
-        incr++;
-      }
-      else if(_srcList.at( s )->isTime() && _srcList.count()==1)
-      {
-	QTime tmpTime=(_srcList.at( s )->valueTime());
-        if (!down)
-            tmpTime=tmpTime.addSecs( -incr*60 );//add one minute.
-        else
-            tmpTime=tmpTime.addSecs( incr*60 );//add one minute.
-	cell->setCellText(doc()->locale()->formatTime(tmpTime,true),true);
-        incr++;
       }
       else if((AutoFillSequenceItem::month != 0L)
 	      && AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != 0L
