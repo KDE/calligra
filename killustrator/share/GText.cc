@@ -471,8 +471,9 @@ void GText::writeToXml (XmlWriter& xml) {
     xml.addAttribute ("italic", 1);
   xml.closeTag (false);
 
-  int i = 1;
-  for (vector<QString>::iterator it = text.begin (); it != text.end (); it++) {
+  int i = 0;
+  for (vector<QString>::iterator it = text.begin (); it != text.end (); 
+       it++, i++) {
     xml.writeText ((const char *) *it);
     if (i < lines () - 1)
       xml.writeTag ("br");
