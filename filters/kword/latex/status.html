@@ -1,0 +1,474 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>KOffice filters status: LaTeX FILTER</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000099" vlink="#666666" alink="#666666">
+<A NAME="START">&nbsp;</A>
+
+<BR>
+<center>
+ <h1>
+  KOffice filters status: &nbsp;&nbsp;<i>LaTeX  FILTER</i>
+ </h1>
+</center>
+
+<hr NOSHADE SIZE=2 WIDTH=70%>
+
+<font size=-1><b>
+ <A HREF="#import">Import</A> |
+ <A HREF="#export">Export</A>
+</b></font>
+
+<BR><BR><BR>
+<center><a NAME="import"></a></center>
+
+<A HREF="#START"><font size=-1><b>Up</b></font></A>
+<center>
+<table BORDER=0 CELLSPACING=0 BGCOLOR="#000000" WIDTH=100%>
+ <tr>
+  <td>
+   <table BORDER=0 CELLPADDING=2 BGCOLOR="#FFFFFF"  WIDTH=100%>
+
+    <tr BGCOLOR="#DDFFDD">
+     <td COLSPAN="2">
+      <center><b><i><font size=+1>
+       <BR>
+        Import LaTeX for kword<BR>
+       <BR>
+      </font></i></b></center>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
+     <td>-</td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
+     <td>None</td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
+     <td>Everything</td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size=+1>History</font></b></td>
+     <td>-</td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size=+1>Authors&nbsp;</font></b></td>
+     <td><!a href="mailto:someone@somewhere.zz">-</a></td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size=+1>Links</font></b></td>
+     <td><!a href="http://---">-</a></td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size=+1>Progress report </font></b></td>
+     <td>---</td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+</table>
+</center>
+<A HREF="#START"><font size=-1><b>Up</b></font></A>
+
+<br><br><br>
+
+<hr NOSHADE SIZE=1>
+<br><br><br>
+
+
+<center>
+ <a NAME="export"></a>
+</center>
+
+<A HREF="#START"><font size=-1><b>Up</b></font></A>
+<center>
+<table BORDER=0 CELLSPACING=0 BGCOLOR="#000000"  WIDTH=100%>
+ <tr>
+  <td>
+   <table BORDER=0 CELLPADDING=2 BGCOLOR="#FFFFFF"  WIDTH=100%>
+    <tr BGCOLOR="#FFDDDD">
+     <td COLSPAN="2">
+      <center><b><i><font size=+1>
+       <BR>Export kword to LaTeX <BR><BR>
+      </font></i></b></center>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
+     <td>11 jan 2001</td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
+     <td>- Can export to LaTeX documents</td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
+     <td>
+<PRE>
+<B>VERSION 1:</B>
+	- texte			DONE
+		* accent ==> accent are converted in 2 caract.
+		  so, some carc, at the end, are lost.
+		* big parag must be truncated. see above.
+		* ...
+	- layout		DONE
+	- titre			DONE
+	- puce			DONE
+	- paper			DONE
+	- footnote, head	DONE
+		* analyser l'entete puis tester s'il y a un entete, pieds
+		* de page, ...
+		* Utiliser le champ hType pour les entete/pieds de page
+		* Utiliser soit \fancyhead soit \chead
+	- clean codes :)))	DONE
+	- commentaires		DONE
+	- stocker toutes les infos fournies par defaut DONE
+
+<B>VERSION 2</B>
+	- table
+	- picture
+	- personalization
+
+<B>VERSION 3</B>
+	- parts
+	- math
+	- figure
+	- frame
+      </PRE>
+     </td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size=+1>History</font></b></td>
+     <td>-</td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size=+1>Authors</font></b></td>
+     <td><a href="mailto:rjacolin@ifrance.com">rjacolin@ifrance.com</a></td>
+    </tr>
+
+    <tr BGCOLOR="#CCCCFF">
+     <td VALIGN=TOP><b><font size=+1>Links</font></b></td>
+     <td><!a href="http://---">-</a></td>
+    </tr>
+
+    <tr BGCOLOR="#EEEEFF">
+     <td VALIGN=TOP><b><font size=+1>Progress report </font></b></td>
+     <td>
+<H2>LaTEX Margin</H2>
+
+<PRE>
+&lt;PAPER&gt;
+	- format			ANALYSE	SUPORTED
+	- ptWidth
+	- ptHeight
+	- mmWidth =&quot;210&quot;
+	- mmHeight=&quot;297&quot;
+	- inchWidth =&quot;8.26772&quot;
+	- inchHeight=&quot;11.6929&quot;
+	- orientation			ANALYSE	SUPORTED
+	- columns=&quot;1&quot;			ANALYSE	SUPORTED
+	- ptColumnspc=&quot;3&quot;
+	- mmColumnspc=&quot;1.05833&quot;
+	- inchColumnspc=&quot;0.0416667&quot;
+	- hType=&quot;0&quot;
+		0...On all pages (even/odd) the same headers	\chead
+		1...Different header only on first page
+		2...Different headers for even/odd pages	\fancyhead
+	- fType=&quot;0&quot;
+	- ptHeadBody=&quot;9&quot;
+	- ptFootBody=&quot;9&quot;
+	- mmHeadBody=&quot;3.5&quot;
+	- mmFootBody=&quot;3.5&quot;
+	- inchHeadBody=&quot;0.137795&quot;
+	- inchFootBody=&quot;0.137795&quot;
+
+	&lt;PAPERBORDERS&gt;
+	- mmLeft=&quot;0&quot;
+	- mmTop=&quot;0&quot;
+	- mmRight=&quot;0&quot;
+	- mmBottom=&quot;0&quot;
+	- ptLeft=&quot;0&quot;
+	- ptTop=&quot;0&quot;
+	- ptRight=&quot;0&quot;
+	- ptBottom=&quot;0&quot;
+	- inchLeft=&quot;0&quot;
+	- inchTop=&quot;0&quot;
+	- inchRight=&quot;0&quot;
+	- inchBottom=&quot;0&quot;
+
+&lt;ATTRIBUTES&gt;
+	- processing=&quot;1&quot;
+		0...&quot;Normal&quot; document (Wordprocessing)
+		1...DTP-document (DTPing)
+	- standardpage=&quot;1&quot;
+	- hasHeader=&quot;0&quot;
+	- hasFooter=&quot;0&quot;
+	- unit=&quot;mm&quot;
+&lt;FOOTNOTEMGR&gt;
+	&lt;START value=&quot;1&quot;/&gt;
+		- value=&quot;1&quot;
+	&lt;FORMAT&gt;
+		- superscript=&quot;1&quot;
+		- type=&quot;1&quot;
+	&lt;FIRSTPARAG&gt;
+		- ref=&quot;(null)&quot;
+
+&lt;FRAMESETS&gt;
+
+&lt;FRAMESET&gt;
+	- frameType=&quot;1&quot;
+		- 0...Base frame (for internal use only!!!)
+	   	- 1...Text frame
+	    	- 2...Picture frame
+	    	- 3...Part frame (e.g. KImage-Part)
+	- autoCreateNewFrame=&quot;1&quot;
+	- frameInfo=&quot;0&quot;
+		- 0...Body
+		- 1...First header
+		- 2...Odd header
+		- 3...Even header
+		- 4...First footer
+		- 5...Odd footer
+		- 6...Even footer
+	- grpMgr=&quot;grpmgr_0&quot;
+	- row=&quot;0&quot;
+	- col=&quot;1&quot;
+	- removeable=&quot;0&quot;
+
+&lt;FRAME&gt;
+	left=&quot;28&quot;
+	top=&quot;42&quot;
+	right=&quot;566&quot;
+	bottom=&quot;798&quot;
+	runaround=&quot;1&quot;
+		0...Don't run around frame
+		1...Run around bounding rectangle
+		2...Run around contur
+	runaGapPT=&quot;2&quot;
+	runaGapMM=&quot;1&quot;
+	runaGapINCH=&quot;0.0393701&quot;
+	lWidth=&quot;1&quot;
+	lRed=&quot;255&quot;
+	lGreen=&quot;255&quot;
+	lBlue=&quot;255&quot;
+	lStyle=&quot;0&quot;
+		0...Solid
+		1...Dash
+		2...Dot
+		3...Dash-Dot
+		4...Dash-Dot-Dot
+	rWidth=&quot;1&quot;
+	rRed=&quot;255&quot;
+	rGreen=&quot;255&quot;
+	rBlue=&quot;255&quot;
+	rStyle=&quot;0&quot;
+	tWidth=&quot;1&quot;
+	tRed=&quot;255&quot;
+	tGreen=&quot;255&quot;
+	tBlue=&quot;255&quot;
+	tStyle=&quot;0&quot;
+	bWidth=&quot;1&quot;
+	bRed=&quot;255&quot;
+	bGreen=&quot;255&quot;
+	bBlue=&quot;255&quot;
+	bStyle=&quot;0&quot;
+	bkRed=&quot;255&quot;
+	bkGreen=&quot;255&quot;
+	bkBlue=&quot;255&quot;
+	bleftpt=&quot;0&quot;
+	bleftmm=&quot;0&quot;
+	bleftinch=&quot;0&quot;
+	brightpt=&quot;0&quot;
+	brightmm=&quot;0&quot;
+	brightinch=&quot;0&quot;
+	btoppt=&quot;0&quot;
+	btopmm=&quot;0&quot;
+	btopinch=&quot;0&quot;
+	bbottompt=&quot;0&quot;
+	bbottommm=&quot;0&quot;
+	bbottominch=&quot;0&quot;
+
+&lt;PARAGRAPH&gt;
+	- &lt;TEXT&gt;		ANALYSE	SUPPORTE :))
+	- &lt;NAME&gt;
+		- name=&quot;Footnote/Endnote_1&quot;
+	&lt;INFO&gt;
+		- info=&quot;0&quot;
+			- 0...No &quot;special&quot; information
+			- 1...Footnote (see &lt;NAME&gt;)
+	&lt;HARDBRK&gt;
+		- frame=&quot;0&quot;
+			- 0...let it flow
+			- 1...hard brake -&gt; next frame
+
+	&lt;FORMATS&gt;
+		- &lt;FORMAT&gt;
+			- id=&quot;1&quot;
+				- 0...none (mustn't be in a file)
+				- 1...&quot;normal&quot; text
+				- 2...a picture
+				- 3...tabulator
+				- 4...a variable
+				- 5...a footnote
+			- pos=&quot;0&quot;
+			- len=&quot;5&quot;
+
+   		- &lt;FORMAT id=&quot;1&quot; ...&gt; texte
+			COLOR			SUPORTED
+			FONT			ANALYSED
+			SIZE			SUPORTED
+			WEIGHT			SUPORTED
+			ITALIC			SUPORTED
+			UNDERLINE		SUPORTED
+			VERTALIGN		SUPORTED
+
+		- &lt;FORMAT id=&quot;2&quot;...&gt;
+			- &lt;FILENAME value=&quot;/home/...&quot;/&gt;
+
+		- &lt;FORMAT id=&quot;3&quot;...&gt;
+
+		- &lt;FORMAT id=&quot;4&quot;...&gt;
+			- &lt;TYPE type=&quot;0&quot;/&gt;
+				- 0...date (fix)
+				- 1...date (variable)
+				- 2...time (fix)
+				- 3...time (variable)
+				- 4...page number
+			- &lt;POS frameSet=&quot;1&quot; frame=&quot;1&quot; pageNum=&quot;1&quot;/&gt;
+
+			- &lt;DATE year=&quot;1999&quot; month=&quot;8&quot; day=&quot;22&quot; fix=&quot;1&quot;/&gt;
+			- &lt;FRMAT&gt;
+			- &lt;COLOR red=&quot;0&quot; green=&quot;0&quot; blue=&quot;0&quot;/&gt;
+			- &lt;FONT name=&quot;times&quot;/&gt;
+			- &lt;SIZE value=&quot;12&quot;/&gt;
+			- &lt;WEIGHT value=&quot;50&quot;/&gt;
+			- &lt;ITALIC value=&quot;0&quot;/&gt;
+			- &lt;UNDERLINE value=&quot;0&quot;/&gt;
+			- &lt;VERTALIGN value=&quot;0&quot;/&gt;
+			- &lt;/FRMAT&gt;
+
+		- &lt;FORMAT id=&quot;5&quot;...&gt;
+			- &lt;INTERNAL&gt;
+			- &lt;PART from=&quot;1&quot; to=&quot;-1&quot; space=&quot;-&quot;/&gt;
+			- &lt;/INTERNAL&gt;
+			- &lt;RANGE start=&quot;1&quot; end=&quot;1&quot;/&gt;
+			- &lt;TEXT before=&quot;[ &quot; after=&quot; ]&quot;/&gt;
+			- &lt;DESCRIPT ref=&quot;Footnote/Endnote_1&quot;/&gt;
+			- &lt;FRMAT&gt;
+			- &lt;COLOR red=&quot;0&quot; green=&quot;0&quot; blue=&quot;0&quot;/&gt;
+			- &lt;FONT name=&quot;times&quot;/&gt;
+			- &lt;SIZE value=&quot;12&quot;/&gt;
+			- &lt;WEIGHT value=&quot;50&quot;/&gt;
+			- &lt;ITALIC value=&quot;0&quot;/&gt;
+			- &lt;UNDERLINE value=&quot;0&quot;/&gt;
+			- &lt;VERTALIGN value=&quot;2&quot;/&gt;
+			- &lt;/FRMAT&gt;
+
+&lt;LAYOUT&gt;
+	- &lt;NAME&gt;
+		- value=&quot;Standard&quot;	SUPORTED
+	- &lt;FOLLOWING&gt;
+		- name=&quot;Standard&quot;	SUPORTED
+	- &lt;FLOW&gt;			SUPORTED
+		- value=&quot;0&quot;
+			- 0...left
+			- 1...right
+			- 2...center
+			- 3...block
+	- &lt;OHEAD&gt;
+		- pt=&quot;0&quot;
+		- mm=&quot;0&quot;
+		- inch=&quot;0&quot;
+
+	- &lt;OFOOT&gt;
+		- pt=&quot;0&quot;
+		- mm=&quot;0&quot;
+		- inch=&quot;0&quot;
+
+	- &lt;IFIRST pt=&quot;0&quot; mm=&quot;0&quot; inch=&quot;0&quot;/&gt;
+	- &lt;ILEFT pt=&quot;0&quot; mm=&quot;0&quot; inch=&quot;0&quot;/&gt;
+	- &lt;LINESPACE pt=&quot;0&quot; mm=&quot;0&quot; inch=&quot;0&quot;/&gt;
+
+	- &lt;COUNTER&gt;
+		- type=&quot;0&quot;			ANALYSED
+			- 0...none
+			- 1...arabic numbers (e.g. &quot;1&quot;)
+			- 2...low letter (e.g. &quot;a&quot;)
+			- 3...captial letter (e.g. &quot;A&quot;)
+			- 4...low letters roman number (e.g. &quot;ii&quot;)
+			- 5...cap. letters roman number (e.g. &quot;IX&quot;)
+			- 6...bullet (e.g. &quot;-&quot;)
+		- depth=&quot;0&quot;			ANALYSED SUPORTED
+		- bullet=&quot;176&quot;			ANALYSED
+		- start=&quot;1&quot;
+		- numberingtype=&quot;1&quot;		ANALYSED SUPORTED
+		- lefttext=&quot;&quot;
+		- righttext=&quot;&quot;
+		- bulletfont=&quot;times&quot;
+
+	- &lt;LEFTBORDER red=&quot;255&quot; green=&quot;255&quot; blue=&quot;255&quot; style=&quot;0&quot; width=&quot;0&quot;/&gt;
+	- &lt;RIGHTBORDER red=&quot;255&quot; green=&quot;255&quot; blue=&quot;255&quot; style=&quot;0&quot; width=&quot;0&quot;/&gt;
+	- &lt;TOPBORDER red=&quot;255&quot; green=&quot;255&quot; blue=&quot;255&quot; style=&quot;0&quot; width=&quot;0&quot;/&gt;
+	- &lt;BOTTOMBORDER red=&quot;255&quot; green=&quot;255&quot; blue=&quot;255&quot; style=&quot;0&quot; width=&quot;0&quot;/&gt;
+		- red, green, blue             color
+		- style=&quot;0&quot;                    linestyle
+			- 0...solid
+			- 1...dash
+			- 2...dot
+			- 3...dash-dot-dash-dot-...
+			- 4...dash-dot-dot-dash-dot-dot-...
+		- width=&quot;0&quot;
+
+&lt;FORMAT&gt;                     The format of this &quot;style&quot; (see &lt;FORMAT&gt;)
+ &lt;COLOR red=&quot;0&quot; green=&quot;0&quot; blue=&quot;0&quot;/&gt;
+ &lt;FONT name=&quot;times&quot;/&gt;
+ &lt;SIZE value=&quot;12&quot;/&gt;
+ &lt;WEIGHT value=&quot;50&quot;/&gt;
+ &lt;ITALIC value=&quot;0&quot;/&gt;
+ &lt;UNDERLINE value=&quot;0&quot;/&gt;
+ &lt;VERTALIGN value=&quot;0&quot;/&gt;
+&lt;/FORMAT&gt;
+
+	- &lt;TABULATOR mmpos=&quot;64.2055&quot; ptpos=&quot;182&quot; inchpos=&quot;2.52778&quot; type=&quot;0&quot;/&gt;
+		- type=&quot;0&quot;
+			- 0...left
+			- 1...center
+			- 2...right
+			- 3...decimal point
+
+
+</PRE>
+     </td>
+    </tr>
+
+
+
+   </table>
+  </td>
+ </tr>
+</table>
+</center>
+<A HREF="#START"><font size=-1><b>Up</b></font></A>
+
+<br>
+<br><br><br><br><br><br><br>
+
+</body>
+</html>
