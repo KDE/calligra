@@ -137,7 +137,7 @@ void KudesignerView::cut()
     kdDebug(31000) << "KudesignerView::cut(): CUT called" << endl;
 }
 
-void KudesignerView::resizeEvent(QResizeEvent* _ev)
+void KudesignerView::resizeEvent(QResizeEvent* /*_ev*/)
 {
     rc->setGeometry(0, 0, width(), height());
 }

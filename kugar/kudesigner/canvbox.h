@@ -46,8 +46,8 @@ public:
     void scale(int scale);
     virtual QString getXml() { return ""; }
 
-    virtual bool isInHolder(const QPoint p) {return true;}
-    virtual void drawHolders(QPainter &painter) {}
+    virtual bool isInHolder(const QPoint ) {return true;}
+    virtual void drawHolders(QPainter &) {}
 
     /**
       DEPRECATED: properties format
