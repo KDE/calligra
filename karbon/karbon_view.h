@@ -46,6 +46,7 @@ class TKUFloatSpinBoxAction;
 
 class VColorDocker;
 class VLayersDocker;
+class VClipartTool;
 class VContextHelpDocker;
 class VEllipseTool;
 class VFill;
@@ -172,6 +173,7 @@ protected slots:
 	void textTool();
 	void gradTool();
 	void polylineTool();
+	void clipartTool();
 
 	// View.
 	void viewModeChanged();
@@ -225,6 +227,7 @@ private:
 	VStarTool* m_starTool;
 	VGradientTool* m_gradTool;
 	VPolylineTool* m_polylineTool;
+	VClipartTool* m_clipartTool;
 
 	// text:
 	KFontAction *m_setFontFamily;

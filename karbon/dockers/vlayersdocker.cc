@@ -52,11 +52,11 @@ void VLayerListViewItem::update()
 	// Y mirroring
 	QWMatrix mat;
 	mat.scale( 1, -1 );
-	mat.translate( 0,  -800.0 * ( 16. / 830.) );
+	mat.translate( 0,  -16 );
 	p.setWorldMatrix( mat );
 
 	// TODO: When the document will support page size, change the following line.
-	p.setZoomFactor( 16. / 830. );
+	p.setZoomFactor( 16. / 800. );
 	m_layer->draw( &p );
 	p.end();
 
@@ -93,7 +93,8 @@ VLayersDocker::VLayersDocker( KarbonView* view )
 	
 	setCaption( i18n( "Layers manager" ) );
 
-	QWidget* mainWidget = new QWidget( this );
+	QFrame* mainWidget = new QFrame( this );
+	mainWidget->setFrameStyle( QFrame::Box | QFrame::Sunken );
 	QGridLayout* layout = new QGridLayout( mainWidget, 2, 4 );
 	layout->addMultiCellWidget( m_layersListView = new QListView( mainWidget ), 0, 0, 0, 3 );
 	layout->addWidget( m_addButton = new QPushButton( QPixmap( il.iconPath( "14_layer_newlayer.png", KIcon::Small ) ), "", mainWidget ), 1, 0, Qt::AlignCenter );
@@ -118,6 +119,7 @@ VLayersDocker::VLayersDocker( KarbonView* view )
 	m_deleteButton->setFixedSize( 30, 30 );
 	
 	connect( m_layersListView, SIGNAL( clicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( selectionChanged( QListViewItem*, const QPoint&, int ) ) );
+	connect( m_layersListView, SIGNAL( rightButtonClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( renameLayer( QListViewItem*, const QPoint&, int ) ) );
 	connect( m_addButton, SIGNAL( clicked() ), this, SLOT( addLayer() ) );
 	connect( m_raiseButton, SIGNAL( clicked() ), this, SLOT( raiseLayer() ) );
 	connect( m_lowerButton, SIGNAL( clicked() ), this, SLOT( lowerLayer() ) );
@@ -142,6 +144,22 @@ void VLayersDocker::selectionChanged( QListViewItem* item, const QPoint &, int c
 		}
 	}
 } // VLayerDocker::selectionChanged
+
+void VLayersDocker::renameLayer( QListViewItem* item, const QPoint&, int col )
+{
+	if ( ( item ) && col == 2 ) 
+	{
+		VLayerListViewItem* layerItem = (VLayerListViewItem*)item;
+		bool ok = true;
+		QString name = QInputDialog::getText( i18n( "Current layer" ), i18n( "Change the name of the current layer:" ),
+																QLineEdit::Normal, layerItem->layer()->name(), &ok, this );
+		if (ok)
+		{
+			layerItem->layer()->setName( name );
+			layerItem->update();
+		}
+	}
+} // VLayersDocker::renameLayer
 
 void VLayersDocker::addLayer()
 {

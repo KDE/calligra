@@ -51,6 +51,7 @@
 #include "vspiraltool.h"
 #include "vstartool.h"
 #include "vpolylinetool.h"
+#include "vcliparttool.h"
 
 // Commands.
 #include "vcleanupcmd.h"
@@ -161,6 +162,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_spiralTool = new VSpiralTool( this );
 	m_starTool = new VStarTool( this );
 	m_polylineTool = new VPolylineTool( this );
+	m_clipartTool = new VClipartTool( this );
 
 	// set up status bar message
 	m_status = new KStatusBarLabel( QString::null, 0, statusBar() );
@@ -230,6 +232,7 @@ KarbonView::~KarbonView()
 	delete( m_spiralTool );
 	delete( m_starTool );
 	delete( m_polylineTool );
+	delete( m_clipartTool );
 
 	// widgets:
 	delete( m_status );
@@ -261,6 +264,7 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 			connect( m_toolbox, SIGNAL( spiralToolActivated() ),		this, SLOT( spiralTool() ) );
 			connect( m_toolbox, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
 			connect( m_toolbox, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
+			connect( m_toolbox, SIGNAL( clipartToolActivated() ),		this, SLOT( clipartTool() ) );
 			if( shell() )
 			{
 				m_strokeFillPreview = m_toolbox->strokeFillPreview();
@@ -743,6 +747,19 @@ KarbonView::polylineTool()
 	{
 		m_currentTool->deactivate();
 		m_currentTool = m_polylineTool;
+		m_currentTool->activateAll();
+	}
+}
+
+void
+KarbonView::clipartTool()
+{
+	if( m_currentTool == m_clipartTool )
+		m_toolOptionsDocker->show();
+	else
+	{
+		m_currentTool->deactivate();
+		m_currentTool = m_clipartTool;
 		m_currentTool->activateAll();
 	}
 }

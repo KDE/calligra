@@ -4,6 +4,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/../commands \
 	-I$(srcdir)/../render \
 	-I$(srcdir)/../dialogs \
+	-I$(srcdir)/../tools \
 	$(all_includes)
 
 noinst_LTLIBRARIES = \

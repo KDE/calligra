@@ -82,10 +82,10 @@ public:
 
 	void initConfig();
 	int maxRecentFiles() const { return m_maxRecentFiles; }
-    QString getUnitName()const { return KoUnit::unitName( m_unit ); }
-    KoUnit::Unit getUnit()const { return m_unit; }
-    void setUnit(KoUnit::Unit _unit);
-    void initUnit();
+	QString getUnitName()const { return KoUnit::unitName( m_unit ); }
+	KoUnit::Unit getUnit()const { return m_unit; }
+	void setUnit(KoUnit::Unit _unit);
+	void initUnit();
 
 public slots:
 	/// repaint all views attached to this koDocument

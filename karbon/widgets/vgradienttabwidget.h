@@ -32,6 +32,7 @@ class KListBox;
 class QListBoxItem;
 class QPushButton;
 class QGroupBox;
+class KarbonResourceServer;
 
 class VGradientPreview : public QWidget
 {
@@ -55,7 +56,7 @@ class VGradientTabWidget : public QTabWidget
 			FILL
 		};
 	
-		VGradientTabWidget( VGradient& gradient, QWidget* parent = 0L, const char* name = 0L );
+		VGradientTabWidget( VGradient& gradient, KarbonResourceServer* server, QWidget* parent = 0L, const char* name = 0L );
 		~VGradientTabWidget();
 
 		const VGradient* gradient();
@@ -68,6 +69,7 @@ class VGradientTabWidget : public QTabWidget
 		void combosChange( int );
 		void addGradientToPredefs();
 		void changeToPredef( QListBoxItem* );
+		void predefSelected( QListBoxItem* );
 		void deletePredef();
 		
 	protected:
@@ -76,20 +78,21 @@ class VGradientTabWidget : public QTabWidget
 		void setupConnections();
 		
 	private:
-		QTabWidget*       m_tabWidget;
-		QGroupBox*        m_editGroup;
-		VGradientWidget*  m_gradientWidget;
-		KComboBox*        m_gradientTarget;
-		KComboBox*        m_gradientRepeat;
-		KComboBox*        m_gradientType;
-		VGradientPreview* m_gradientPreview;
-		KListBox*         m_predefGradientsView;
-		QPushButton*      m_predefDelete;
-		QPushButton*      m_addToPredefs;
+		QTabWidget*           m_tabWidget;
+		QGroupBox*            m_editGroup;
+		VGradientWidget*      m_gradientWidget;
+		KComboBox*            m_gradientTarget;
+		KComboBox*            m_gradientRepeat;
+		KComboBox*            m_gradientType;
+		VGradientPreview*     m_gradientPreview;
+		KListBox*             m_predefGradientsView;
+		QPushButton*          m_predefDelete;
+		QPushButton*          m_predefImport;
+		QPushButton*          m_addToPredefs;
 
-		VGradient*        m_gradient;
+		VGradient*            m_gradient;
 			/** The predefined gradients list. */
-		QPtrList<VGradient>     m_predefGradients;
+		KarbonResourceServer* m_resourceServer;
 }; // VGradientTabWidget
 
 #endif /* _VGRADIENTTABWIDGET_H_ */

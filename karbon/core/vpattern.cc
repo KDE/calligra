@@ -44,9 +44,9 @@ VPattern::load( const QString &tilename )
 	if( m_image.width() > THUMB_SIZE || m_image.height() > THUMB_SIZE )
 	{
 		int xsize = THUMB_SIZE;
-        int ysize = THUMB_SIZE;
-        int picW  = m_image.width();
-        int picH  = m_image.height();
+		int ysize = THUMB_SIZE;
+		int picW  = m_image.width();
+		int picH  = m_image.height();
 		if( picW > picH )
 		{
 			float yFactor = (float)((float)(float)picH/(float)picW);

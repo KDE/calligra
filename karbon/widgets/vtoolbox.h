@@ -48,6 +48,7 @@ signals:
 	void spiralToolActivated();
 	void starToolActivated();
 	void gradToolActivated();
+	void clipartToolActivated();
 
 private:
 	QButtonGroup		*m_btngroup;

@@ -25,6 +25,7 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
+#include "karbon_factory.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vgradienttool.h"
@@ -37,7 +38,7 @@
 VGradientTool::VGradientTool( KarbonView* view )
 	: VTool( view )
 {
-	m_optionsWidget = new VGradientTabWidget( m_gradient, 0L );
+	m_optionsWidget = new VGradientTabWidget( m_gradient, KarbonFactory::rServer() );
 }
 
 VGradientTool::~VGradientTool()

@@ -84,18 +84,29 @@ VPolylineTool::deactivate()
 	if( m_bezierPoints.count() > 2 )
 	{
 		polyline = new VComposite( 0L );
-		polyline->moveTo( *m_bezierPoints.first() );
-
+		KoPoint* p1 = m_bezierPoints.first();
 		KoPoint* p2;
 		KoPoint* p3;
 		KoPoint* p4;
+
+		polyline->moveTo( *p1 );
 
 		while(
 			( p2 = m_bezierPoints.next() ) &&
 			( p3 = m_bezierPoints.next() ) &&
 			( p4 = m_bezierPoints.next() ) )
 		{
-			polyline->curveTo( *p2, *p3, *p4 );
+			if ( *p1 == *p2 )
+				if ( *p3 == *p4 )
+					polyline->lineTo( *p4 );
+				else
+					polyline->curve1To( *p3, *p4 );
+			else
+				if ( *p3 == *p4 )
+					polyline->curve2To( *p2, *p4 );
+				else
+					polyline->curveTo( *p2, *p3, *p4 );
+			p1 = p4;
 		}
 
 		if( m_close )

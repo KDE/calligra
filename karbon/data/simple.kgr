@@ -1,0 +1,11 @@
+<!DOCTYPE PREDEFGRADIENT>
+<PREDEFGRADIENT>
+ <GRADIENT originX="0" originY="0" repeatMethod="1" type="0" vectorX="0" vectorY="50" >
+  <COLORSTOP ramppoint="0" midpoint="0.5" >
+   <COLOR v2="0" v3="0" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="1" midpoint="0.5" >
+   <COLOR v2="1" v3="0" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+ </GRADIENT>
+</PREDEFGRADIENT>

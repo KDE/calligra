@@ -136,8 +136,14 @@ KarbonFactory::instance()
 		s_instance->dirs()->addResourceType("kis_brushes",
 						            KStandardDirs::kde_default("data") + "krita/brushes/");
 
-        s_instance->dirs()->addResourceType("kis_pattern",
+		s_instance->dirs()->addResourceType("kis_pattern",
 						            KStandardDirs::kde_default("data") + "krita/patterns/");
+
+		s_instance->dirs()->addResourceType("karbon_gradient",
+						            KStandardDirs::kde_default("data") + "karbon/gradients/");
+
+		s_instance->dirs()->addResourceType("karbon_clipart",
+						            KStandardDirs::kde_default("data") + "karbon/cliparts/");
 	}
 	return s_instance;
 }

@@ -57,7 +57,8 @@ class VLayersDocker : public VDocker
 		void updateLayers();
 
 	public slots:
-		void selectionChanged( QListViewItem* item, const QPoint& p, int col );
+		void selectionChanged( QListViewItem* item, const QPoint&, int col );
+		void renameLayer( QListViewItem* item, const QPoint&, int col );
 		void addLayer();
 		void raiseLayer();
 		void lowerLayer();

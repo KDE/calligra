@@ -1,7 +1,7 @@
 SUBDIRS = .
 
-predef_DATA = gradients.predef
-predefdir = $(kde_datadir)/karbon
+predef_DATA = simple.kgr allcolors.kgr
+predefdir = $(kde_datadir)/karbon/gradients
 
 kdelnk_DATA = karbon.desktop
 kdelnkdir = $(kde_appsdir)/Office

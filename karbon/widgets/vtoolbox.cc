@@ -138,6 +138,13 @@ VToolBox::VToolBox( KarbonPart* part, QWidget* parent, const char* /*name*/ ) : 
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( polylineToolActivated() ) );
 	m_btngroup->insert( button );
 
+	button = new QToolButton( m_btngroup );
+	pixmap=BarIcon( "14_clipart", KarbonFactory::instance() );
+	button->setPixmap( pixmap );
+	button->setToggleButton( true );
+	connect( button, SIGNAL( clicked() ), this, SIGNAL( clipartToolActivated() ) );
+	m_btngroup->insert( button );
+
 	m_strokeFillPreview = new VStrokeFillPreview( part, this );
 
 	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( this, 2 );

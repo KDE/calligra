@@ -30,6 +30,12 @@
 #include <qstring.h>
 
 #include "vpattern.h"
+#include "vgradient.h"
+#include "vcliparttool.h"
+
+class VGradientListItem;
+class VGradient;
+class VObject;
 
 class KarbonResourceServer
 {
@@ -40,11 +46,29 @@ public:
 	int patternCount() { return m_patterns.count(); }
 	QPtrList<KoIconItem> patterns() { return m_patterns; }
 
+	int gradientCount() { return m_gradients->count(); }
+	QPtrList<VGradientListItem>* gradients() { return m_gradients; }
+	VGradientListItem* addGradient( VGradient* gradient );
+	void removeGradient( VGradientListItem* gradient );
+
+	int clipartCount() { return m_cliparts->count(); }
+	QPtrList<VClipartIconItem>* cliparts() { return m_cliparts; }
+	VClipartIconItem* addClipart( VObject* clipart );
+	void removeClipart( VClipartIconItem* clipartIcon );
+
 protected:
 	const VPattern* loadPattern( const QString& filename );
+
+	void loadGradient( const QString& filename );
+	void saveGradient( VGradient* gradient, const QString& filename );
+	
+	void loadClipart( const QString& filename );
+	void saveClipart( VObject* object, const QString& filename );
  
 private:
-	QPtrList<KoIconItem>  m_patterns;
+	QPtrList<KoIconItem>         m_patterns;
+	QPtrList<VGradientListItem>* m_gradients;
+	QPtrList<VClipartIconItem>*  m_cliparts;
 };
 
 #endif
