@@ -17,7 +17,8 @@ SUBDIRS = startup .
 
 libkexicore_la_LIBADD = $(LIB_KEXI_KMDI) \
 	../kexidb/libkexidb.la \
-	./startup/kexicorestartup.la
+	./startup/libkexicorestartup.la \
+	$(LIB_KOFFICEUI)
 
 INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/kexi \
