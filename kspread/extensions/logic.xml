@@ -237,7 +237,7 @@
 	<Text>The ISTIME() function returns True if the parameter is a time value. Otherwise it returns False.</Text>
 	<Syntax>ISTIME(x)</Syntax>
 	<Example>ISTIME("12:05") returns True</Example>
-	<Example>ISTIME(hello) returns False</Example>
+	<Example>ISTIME("hello") returns False</Example>
       </Help>
     </Function>
 
@@ -252,7 +252,7 @@
 	<Text>The ISDATE() function returns True if the parameter is a date value. Otherwise it returns False</Text>
 	<Syntax>ISDATE(x)</Syntax>
 	<Example>ISDATE("2000-2-2") returns True</Example>
-	<Example>ISDATE(hello) returns False</Example>
+	<Example>ISDATE("hello") returns False</Example>
       </Help>
     </Function>
 

@@ -41,10 +41,10 @@
       </Parameter>
       <Help>
 	<Text>The LCD() function returns the largest common denominator for two or more integer values.</Text>
-	<Syntax>LCM(value; value)</Syntax>
-	<Example>LCM(6;4) returns 2</Example>
-	<Example>LCM(10;20) returns 10</Example>
-	<Example>LCM(20;15;10) returns 5</Example>
+	<Syntax>LCD(value; value)</Syntax>
+	<Example>LCD(6;4) returns 2</Example>
+	<Example>LCD(10;20) returns 10</Example>
+	<Example>LCD(20;15;10) returns 5</Example>
       </Help>
     </Function>
 
@@ -525,7 +525,7 @@
       </Parameter>
       <Help>
 	<Text>The SQRTn() function returns the non-negative nth root of x.</Text>
-	<Syntax>SQRTn(x,n)</Syntax>
+	<Syntax>SQRTn(x;n)</Syntax>
 	<Example>SQRTn(9;2) equals 3</Example>
 	<Related>SQRT</Related>
       </Help>
@@ -723,7 +723,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The COMPLEX(real,imag) returns a complex number of form x+yi.</Text>
+	<Text>The COMPLEX(real;imag) returns a complex number of form x+yi.</Text>
 	<Syntax>COMPLEX(real;imag)</Syntax>
 	<Example>COMPLEX(1.2;3.4) returns "1.2+3.4i"</Example>
 	<Example>COMPLEX(0;-1) returns "-i"</Example>

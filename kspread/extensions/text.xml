@@ -36,9 +36,9 @@
       <Help>
 	      <Text>The COMPARE() function returns 0 if the two strings are equal; -1 if the first one is lower in value than the second one; otherwise it returns 1.</Text>
 	<Syntax>COMPARE(string1; string2; true|false)</Syntax>
-	<Example>COMPARE("KOffice"; "KOffice", true) returns 0</Example>
-        <Example>COMPARE("koffice"; "KOffice", true) returns 1</Example>
-        <Example>COMPARE("kspread"; "KOffice", false) returns 1</Example>
+	<Example>COMPARE("KOffice"; "KOffice"; true) returns 0</Example>
+        <Example>COMPARE("koffice"; "KOffice"; true) returns 1</Example>
+        <Example>COMPARE("kspread"; "KOffice"; false) returns 1</Example>
         <Related>EXACT</Related>
       </Help>
     </Function>

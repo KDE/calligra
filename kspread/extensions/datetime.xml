@@ -21,9 +21,9 @@
       </Parameter>
       <Help>
 	<Text>The WEEKS() function returns the difference between two dates in weeks.The third parameter indicates the calculation mode: if the mode is 0, WEEKS() returns the maximal possible number of weeks between those days. If the mode is 1, it only returns the number of whole weeks in between.</Text>
-	<Syntax>WEEKS(date2, date1, mode)</Syntax>
-	<Example>WEEKS("02/18/2002", "02/26/2002", 0) returns 1, because there is one week and 1 day in between</Example>
-	<Example>WEEKS("02/19/2002", "02/26/2002", 1) returns 0, because there is not a whole week in between, starting at the first day of the week (monday or sunday, depending on your local settings)</Example>
+	<Syntax>WEEKS(date2; date1; mode)</Syntax>
+	<Example>WEEKS("2002-02-18"; "2002-02-26"; 0) returns 1, because there is one week and 1 day in between</Example>
+	<Example>WEEKS("2002-19-02"; "2002-19-02"; 1) returns 0, because there is not a whole week in between, starting at the first day of the week (monday or sunday, depending on your local settings)</Example>
       </Help>
     </Function>
 
@@ -44,9 +44,9 @@
       </Parameter>
       <Help>
 	<Text>The MONTHS() function returns the difference between two dates in months.The third parameter indicates the calculation mode: if the mode is 0, MONTHS() returns the maximal possible number of months between those days. If the mode is 1, it only returns the number of complete months in between.</Text>
-	<Syntax>MONTHS(date2, date1, mode)</Syntax>
-	<Example>MONTHS("01/18/2002", "02/26/2002", 0) returns 1, because there is 1 month and 8 days in between</Example>
-	<Example>MONTHS("01/19/2002", "02/26/2002", 1) returns 0, because there is not a whole month in between, starting at the first day of the month</Example>
+	<Syntax>MONTHS(date2; date1; mode)</Syntax>
+	<Example>MONTHS("2002-01-18"; "2002-02-26"; 0) returns 1, because there is 1 month and 8 days in between</Example>
+	<Example>MONTHS("2002-01-19"; "2002-02-26"; 1) returns 0, because there is not a whole month in between, starting at the first day of the month</Example>
       </Help>
     </Function>
 
@@ -67,9 +67,9 @@
       </Parameter>
       <Help>
 	<Text>The YEARS() function returns the difference between two dates in years.The third parameter indicates the calculation mode: if the mode is 0, YEARS() returns the maximal possible number of months between those days. If the mode is 1, it only returns whole years, starting at the 1st Jan and ending on the 31st Dec.</Text>
-	<Syntax>YEARS(date2, date1, mode)</Syntax>
-	<Example>YEARS("02/19/2001", "02/26/2002", 0) returns 1, because there is one year and 7 days in between</Example>
-	<Example>YEARS("02/19/2002", "02/26/2002", 1) returns 0, because there is not a whole year in between, starting at the first day of the year</Example>
+	<Syntax>YEARS(date2; date1; mode)</Syntax>
+	<Example>YEARS("2001-02-19"; "2002-02-26"; 0) returns 1, because there is one year and 7 days in between</Example>
+	<Example>YEARS("2002-02-19"; "2002-02-26"; 1) returns 0, because there is not a whole year in between, starting at the first day of the year</Example>
       </Help>
     </Function>
 
@@ -86,8 +86,8 @@
       </Parameter>
       <Help>
 	<Text>The DAYS() function returns the difference between two dates in days.</Text>
-	<Syntax>DAYS(date2, date1)</Syntax>
-	<Example>DAYS("02/22/2002", "02/26/2002") returns 4</Example>
+	<Syntax>DAYS(date2; date1)</Syntax>
+	<Example>DAYS("2002-02-22"; "2002-02-26") returns 4</Example>
       </Help>
     </Function>
 

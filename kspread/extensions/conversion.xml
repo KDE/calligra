@@ -33,7 +33,7 @@
         <Syntax>INT2BOOL(value)</Syntax>
         <Example>INT2BOOL(1) returns true</Example>
         <Example>INT2BOOL(0) returns false</Example>
-        <Example>OR(INT2BOOL(1), false) returns true</Example>
+        <Example>OR(INT2BOOL(1); false) returns true</Example>
         <Related>BOOL2INT</Related>
       </Help>
     </Function>
@@ -380,7 +380,7 @@
       </Parameter>
       <Help>
         <Text>The SEXDEC() function returns a decimal value. You can also supply a time value.</Text>
-        <Syntax>SEXDEC(time value) or SEXDEC(hours,minutes,seconds)</Syntax>
+        <Syntax>SEXDEC(time value) or SEXDEC(hours;minutes;seconds)</Syntax>
         <Example>SEXDEC(1;5;7) returns 1.0852778 </Example>
         <Example>DECSEX("8:05") returns 8.08333333</Example>
       </Help>
