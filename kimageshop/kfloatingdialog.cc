@@ -84,6 +84,8 @@ KFloatingDialog::KFloatingDialog(QWidget *parent, const char* name) : QFrame(par
 
 KFloatingDialog::~KFloatingDialog()
 {
+  writeSettings();
+
   delete m_pCloseButton;
   delete m_pDockButton;
   delete m_pMinButton;
@@ -143,6 +145,42 @@ void KFloatingDialog::readSettings()
       if (m_pActivePm->size() == QSize(0,0))
 	m_titleLook = plain;
     }
+
+  // restore position if saved
+  if( name() != "" )
+  {
+    KConfig* kisConfig = KGlobal::config();
+
+    if( kisConfig->hasGroup( name() ) )
+    {
+      kisConfig->setGroup( name() );
+
+      bool docked = kisConfig->readBoolEntry( "Docked", true );
+      int  posX   = kisConfig->readUnsignedNumEntry( "PositionX", 0 );
+      int  posY   = kisConfig->readUnsignedNumEntry( "PositionY", 0 );
+
+      // TODO: set data
+      setDocked( docked );
+      move( posX, posY );
+    }
+  }
+}
+
+void KFloatingDialog::writeSettings()
+{
+  // save position if saved
+  if( name() != "" )
+  {
+    KConfig* kisConfig = KGlobal::config();
+
+    kisConfig->setGroup( name() );
+
+    kisConfig->writeEntry( "Docked", false );
+    kisConfig->writeEntry( "PositionX", 50 );
+    kisConfig->writeEntry( "PositionY", 50 );
+
+    kisConfig->sync();
+  }
 }
 
 void KFloatingDialog::setBaseWidget(QWidget *w)
@@ -476,3 +514,4 @@ void  KFloatingDialog::leaveEvent(QEvent *)
 }
 
 #include "kfloatingdialog.moc"
+

@@ -29,6 +29,8 @@
 PreferencesDialog::PreferencesDialog( QWidget* parent, const char* name, WFlags f )
 	: KDialog( parent, name, true, f )
 {
+  setCaption( i18n( "Preferences" ) );
+
 	// Layout
   QGridLayout* grid = new QGridLayout( this, 5, 5, 7, 15);
 
@@ -69,11 +71,20 @@ PreferencesDialog::~PreferencesDialog()
 {
 }
 
-QString PreferencesDialog::getStr()
+void PreferencesDialog::editPreferences()
 {
-	QString tmp;
+  PreferencesDialog* dialog;
 
-	return tmp;
+  dialog = new PreferencesDialog();
+  if( dialog->exec() == Accepted )
+  {
+  }
 }
 
 #include "preferencesdlg.moc"
+
+
+
+
+
+

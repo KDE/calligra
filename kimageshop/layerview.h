@@ -81,7 +81,7 @@ private:
 
 class Layer;
 
-class PropertyDialog : QDialog
+class LayerPropertyDialog : QDialog
 {
   Q_OBJECT
 
@@ -91,7 +91,7 @@ public:
 
 protected:
 
-  PropertyDialog( QString _layername, uchar _opacity, QWidget *_parent, const char *_name );
+  LayerPropertyDialog( QString _layername, uchar _opacity, QWidget *_parent, const char *_name );
 
   QLineEdit *m_name;
   KIntSpinBox *m_spin;

@@ -80,7 +80,8 @@ class KFloatingDialog : public QFrame
   const QRect lowerRightRect() { return QRect(width()-FRAMEBORDER, height()-FRAMEBORDER , FRAMEBORDER, FRAMEBORDER); }
 
   void readSettings();
-  
+  void writeSettings();
+
  protected:
   enum TitleLook { plain, gradient, pixmap };
   enum resizeMode { horizontal, vertical, diagonal };

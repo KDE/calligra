@@ -54,6 +54,7 @@
 #include "movetool.h"
 #include "brushtool.h"
 #include "zoomtool.h"
+#include "preferencesdlg.h"
 
 KImageShopView::KImageShopView( QWidget* _parent, const char* _name, KImageShopDoc* _doc )
   : QWidget( _parent, _name )
@@ -190,16 +191,18 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   // undo
   text = Q2C( i18n( "Undo last action." ) );
   pix = OPICON( "undo" );
-  m_vToolBarEdit->insertButton2( pix, TBEDIT_UNDO, SIGNAL( clicked() ), this, "slotEditUndo1", true, text, -1 );
+  m_vToolBarEdit->insertButton2( pix, TBEDIT_UNDO, SIGNAL( clicked() ), this, "slotEditUndo", true, text, -1 );
   m_vToolBarEdit->setDelayedPopup( TBEDIT_UNDO, m_vTBUndoMenu );
   m_vToolBarEdit->setItemEnabled( TBEDIT_UNDO, false );
+  m_vTBUndoMenu->connect( "activated", this, "activatedUndoMenu" );
 
   // redo
   text = Q2C( i18n( "Redo last action." ) );
   pix = OPICON( "redo" );
-  m_vToolBarEdit->insertButton2( pix, TBEDIT_REDO, SIGNAL( clicked() ), this, "slotEditRedo1", true, text, -1 );
+  m_vToolBarEdit->insertButton2( pix, TBEDIT_REDO, SIGNAL( clicked() ), this, "slotEditRedo", true, text, -1 );
   m_vToolBarEdit->setDelayedPopup( TBEDIT_REDO, m_vTBRedoMenu );
   m_vToolBarEdit->setItemEnabled( TBEDIT_REDO, false );
+  m_vTBRedoMenu->connect( "activated", this, "activatedRedoMenu" );
 
   m_vToolBarEdit->insertSeparator( -1 );
 
@@ -318,12 +321,12 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
 
   text = Q2C( i18n( "&Undo" ) );
   pix = OPICON( "undo" );
-  m_idMenuEdit_Undo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditUndo1", stdAccel.undo() );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditUndo", stdAccel.undo() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
 
   text = Q2C( i18n( "&Redo" ) );
   pix = OPICON( "redo" );
-  m_idMenuEdit_Redo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditRedo1", stdAccel.redo() );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditRedo", stdAccel.redo() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
 
   m_vMenuEdit->insertSeparator( -1 );
@@ -862,116 +865,52 @@ void KImageShopView::slotSetBrush(const Brush *brush )
   m_pBrush = brush;
 }
 
-void KImageShopView::slotEditUndo1()
+void KImageShopView::slotEditUndo()
 {
   undo( 1 );
 }
 
-void KImageShopView::slotEditUndo2()
-{
-  undo( 2 );
-}
-
-void KImageShopView::slotEditUndo3()
-{
-  undo( 3 );
-}
-
-void KImageShopView::slotEditUndo4()
-{
-  undo( 4 );
-}
-
-void KImageShopView::slotEditUndo5()
-{
-  undo( 5 );
-}
-
-void KImageShopView::slotEditUndo6()
-{
-  undo( 6 );
-}
-
-void KImageShopView::slotEditUndo7()
-{
-  undo( 7 );
-}
-
-void KImageShopView::slotEditUndo8()
-{
-  undo( 8 );
-}
-
-void KImageShopView::slotEditUndo9()
-{
-  undo( 9 );
-}
-
-void KImageShopView::slotEditUndo10()
-{
-  undo( 10 );
-}
-
-void KImageShopView::slotEditRedo1()
+void KImageShopView::slotEditRedo()
 {
   redo( 1 );
 }
 
-void KImageShopView::slotEditRedo2()
-{
-  redo( 2 );
-}
-
-void KImageShopView::slotEditRedo3()
-{
-  redo( 3 );
-}
-
-void KImageShopView::slotEditRedo4()
-{
-  redo( 4 );
-}
-
-void KImageShopView::slotEditRedo5()
-{
-  redo( 5 );
-}
-
-void KImageShopView::slotEditRedo6()
-{
-  redo( 6 );
-}
-
-void KImageShopView::slotEditRedo7()
-{
-  redo( 7 );
-}
-
-void KImageShopView::slotEditRedo8()
-{
-  redo( 8 );
-}
-
-void KImageShopView::slotEditRedo9()
-{
-  redo( 9 );
-}
-
-void KImageShopView::slotEditRedo10()
-{
-  redo( 10 );
-}
-
 void KImageShopView::undo( int _number )
 {
+  cout << "KImageShop::undo()" << endl;
+
   for( int i = 0; i < _number; i++ )
     m_pDoc->commandHistory()->undo();
 }
 
 void KImageShopView::redo( int _number )
 {
+  cout << "KImageShop::redo()" << endl;
+
   for( int i = 0; i < _number; i++ )
     m_pDoc->commandHistory()->redo();
+}
+
+void KImageShopView::activatedUndoMenu( CORBA::Long _id )
+{
+  cout << "Michael : undo-id : " << _id << endl;
+
+  for( int i = 0; i < 10; i++ )
+  {
+    if( m_idTBUndoMenu[ i ] == _id )
+      undo( i + 1 );
+  }
+}
+
+void KImageShopView::activatedRedoMenu( CORBA::Long _id )
+{
+  cout << "Michael : redo-id : " << _id << endl;
+
+  for( int i = 0; i < 10; i++ )
+  {
+    if( m_idTBRedoMenu[ i ] == _id )
+      undo( i + 1 );
+  }
 }
 
 void KImageShopView::slotEditCut()
@@ -1057,6 +996,7 @@ void KImageShopView::slotColorDialog()
 
 void KImageShopView::slotPreferences()
 {
+  PreferencesDialog::editPreferences();
 }
 
 void KImageShopView::changeUndo( QString _text, bool _enable )
@@ -1073,8 +1013,6 @@ void KImageShopView::changeUndo( QString _text, bool _enable )
     text = Q2C( str );
     m_vMenuEdit->changeItemText( text, m_idMenuEdit_Undo );
     m_vToolBarEdit->setItemEnabled( TBEDIT_UNDO, true );
-
-    cout << "UNDO enabled" << endl;
   }
   else
   {
@@ -1082,8 +1020,6 @@ void KImageShopView::changeUndo( QString _text, bool _enable )
     m_vMenuEdit->changeItemText( text, m_idMenuEdit_Undo );
     m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
     m_vToolBarEdit->setItemEnabled( TBEDIT_UNDO, false );
-
-    cout << "UNDO not enabled" << endl;
   }
 }
 
@@ -1101,8 +1037,6 @@ void KImageShopView::changeRedo( QString _text, bool _enable )
     text = Q2C( str );
     m_vMenuEdit->changeItemText( text, m_idMenuEdit_Redo );
     m_vToolBarEdit->setItemEnabled( TBEDIT_REDO, true );
-
-    cout << "REDO enabled" << endl;
   }
   else
   {
@@ -1110,8 +1044,6 @@ void KImageShopView::changeRedo( QString _text, bool _enable )
     m_vMenuEdit->changeItemText( text, m_idMenuEdit_Redo );
     m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
     m_vToolBarEdit->setItemEnabled( TBEDIT_REDO, false );
-
-    cout << "REDO not enabled" << endl;
   }
 }
 
@@ -1126,12 +1058,3 @@ void  KImageShopView::slotSetBGColor(const KColor& c)
 }
 
 #include "kimageshop_view.moc"
-
-
-
-
-
-
-
-
-

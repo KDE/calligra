@@ -26,6 +26,7 @@
 #include <kdialog.h>
 
 /**
+ *  Preferences dialog of KImageShop
  */
 class PreferencesDialog : public KDialog
 {
@@ -33,10 +34,12 @@ class PreferencesDialog : public KDialog
 
 public:
 
+  static void editPreferences();
+
+protected:
+
 	PreferencesDialog( QWidget *_parent = 0, const char *_name = 0, WFlags f = 0 );
 	~PreferencesDialog();
-
-	static QString getStr();
 
 private:
 
@@ -44,4 +47,6 @@ private:
 };
 
 #endif
+
+
 

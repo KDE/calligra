@@ -567,24 +567,30 @@ void KImageShopDoc::slotUndoRedoChanged( QStringList _undo, QStringList _redo )
       while( pView->m_vTBRedoMenu->count() > 0 )
         pView->m_vTBRedoMenu->removeItemAt( 0 );
 
-      QString func = "slotEditUndo%1";
+      for( i = 0; i < 10 ; i++ )
+      {
+        pView->m_idTBUndoMenu[ i ] = -1;
+        pView->m_idTBRedoMenu[ i ] = -1;
+      }
 
       for( i = 0; i < _undo.count(); i++ )
       {
-        pView->m_vTBUndoMenu->insertItem( Q2C( *(_undo.at( i )) ), pView, func.arg( i + 1 ), 0 );
+        pView->m_vTBUndoMenu->insertItem7( Q2C( *(_undo.at( i )) ), pView->m_idTBUndoMenu[ i ], 0 );
       }
-
-      func = "slotEditRedo%1";
 
       for( i = 0; i < _redo.count(); i++ )
       {
-        pView->m_vTBRedoMenu->insertItem( Q2C( *(_redo.at( i )) ), pView, func.arg( i + 1 ), 0 );
+        pView->m_vTBRedoMenu->insertItem7( Q2C( *(_redo.at( i )) ), pView->m_idTBRedoMenu[ i ], 0 );
       }
     }
   }
 }
 
 #include "kimageshop_doc.moc"
+
+
+
+
 
 
 

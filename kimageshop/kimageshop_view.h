@@ -102,26 +102,8 @@ public slots:
   void slotSetBGColor(const KColor&);
   void slotSetBrush(const Brush *);
   
-  virtual void slotEditUndo1();
-  virtual void slotEditUndo2();
-  virtual void slotEditUndo3();
-  virtual void slotEditUndo4();
-  virtual void slotEditUndo5();
-  virtual void slotEditUndo6();
-  virtual void slotEditUndo7();
-  virtual void slotEditUndo8();
-  virtual void slotEditUndo9();
-  virtual void slotEditUndo10();
-  virtual void slotEditRedo1();
-  virtual void slotEditRedo2();
-  virtual void slotEditRedo3();
-  virtual void slotEditRedo4();
-  virtual void slotEditRedo5();
-  virtual void slotEditRedo6();
-  virtual void slotEditRedo7();
-  virtual void slotEditRedo8();
-  virtual void slotEditRedo9();
-  virtual void slotEditRedo10();
+  virtual void slotEditUndo();
+  virtual void slotEditRedo();
 
   virtual void slotEditCut();
   virtual void slotEditCopy();
@@ -140,6 +122,9 @@ public slots:
 
   void changeUndo( QString, bool);
   void changeRedo( QString, bool);
+
+  void activatedUndoMenu( CORBA::Long );
+  void activatedRedoMenu( CORBA::Long );
 
 private:
 
@@ -169,6 +154,9 @@ protected:
 public:
   OpenPartsUI::Menu_var m_vTBUndoMenu;
   OpenPartsUI::Menu_var m_vTBRedoMenu;
+
+  CORBA::Long m_idTBUndoMenu[ 10 ];
+  CORBA::Long m_idTBRedoMenu[ 10 ];
 
 protected:
   OpenPartsUI::Menu_var m_vMenuEdit;
@@ -217,6 +205,11 @@ private:
 };
 
 #endif
+
+
+
+
+
 
 
 

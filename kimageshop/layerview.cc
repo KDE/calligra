@@ -193,7 +193,7 @@ void LayerView::slotMenuAction( int _id )
       slotBackgroundLayer();
       break;
     default:
-      cerr << "Michael : unknown context menu action" << endl;
+      cerr << "Unknown context menu action" << endl;
       break;
   }
 }
@@ -379,7 +379,7 @@ void LayerView::slotProperties()
 {
   cout << "LayerView::slotProperties()" << endl;
 
-  if( PropertyDialog::editProperties( *( m_doc->layerList().at( m_selected ) ) ) )
+  if( LayerPropertyDialog::editProperties( *( m_doc->layerList().at( m_selected ) ) ) )
   {
     QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
 
@@ -389,7 +389,7 @@ void LayerView::slotProperties()
   }
 }
 
-PropertyDialog::PropertyDialog( QString _layername, uchar _opacity, QWidget *_parent, const char *_name )
+LayerPropertyDialog::LayerPropertyDialog( QString _layername, uchar _opacity, QWidget *_parent, const char *_name )
   : QDialog( _parent, _name, true )
 {
   QGridLayout *layout = new QGridLayout( this, 3, 2, 15, 7 );
@@ -416,15 +416,13 @@ PropertyDialog::PropertyDialog( QString _layername, uchar _opacity, QWidget *_pa
   QObject::connect( pbCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
  
-bool PropertyDialog::editProperties( Layer &_layer )
+bool LayerPropertyDialog::editProperties( Layer &_layer )
 {
-  PropertyDialog *dialog;
+  LayerPropertyDialog *dialog;
 
-  dialog = new PropertyDialog( _layer.name(), _layer.opacity(), NULL, "opacity_dialog" );
+  dialog = new LayerPropertyDialog( _layer.name(), _layer.opacity(), NULL, "opacity_dialog" );
   if( dialog->exec() == Accepted )
   {
-    cout << "Michael : Opacity : " << dialog->m_spin->value() << endl;
-
     _layer.setName( dialog->m_name->text() );
     _layer.setOpacity( dialog->m_spin->value() );
 
@@ -434,6 +432,9 @@ bool PropertyDialog::editProperties( Layer &_layer )
 }
 
 #include "layerview.moc"
+
+
+
 
 
 
