@@ -29,8 +29,6 @@
 
 #include "kexigradientwidget.h"
 
-#include <kdebug.h>
-
 KexiGradientWidget::KexiGradientWidget( QWidget *parent, const char *name, WFlags f )
 	: QWidget( parent, name, f ), p_displayMode( NoGradient ),
 	p_gradientType( VerticalGradient ),
@@ -81,8 +79,6 @@ void KexiGradientWidget::buildChildrenList( WidgetList& list, QWidget* p ) {
 }
 
 void KexiGradientWidget::rebuildCache( void ) {
-	kdDebug() << this << " new size: " << size() << endl;
-
 	WidgetList childWidgetList;
 	buildChildrenList( childWidgetList, this );
 
@@ -251,6 +247,17 @@ bool KexiGradientWidget::eventFilter( QObject* object, QEvent* event ) {
 	*/
 	if ( event->type() == QEvent::PaletteChange ) {
 		/**
+		p_currentChild will be == 0L, when the user
+		sets it's palette manually.
+		In this case, it has to be added to the customBackground-list.
+		*/
+		if ( p_currentChild == 0L && child != 0L ) {
+			if ( p_customBackgroundWidgets.contains( child ) == false ) {
+				p_customBackgroundWidgets.append( child );
+				return false;
+			}
+		}
+		/**
 		Check if the widget whose PaletteChange-event we handle
 		isn't the widget we set the background in rebuildCache().
 		*/
@@ -295,6 +302,14 @@ void KexiGradientWidget::updateChildBackground( QWidget* childWidget )
 
 	bgPixmap = paletteBackgroundPixmap() ? (*paletteBackgroundPixmap()) : QPixmap();
 	if ( bgPixmap.isNull() )
+		return;
+
+	/**
+	Exclude widgtes that don't have a parent.
+	This happens when children are removed
+	which are in the knownWidgets-list.
+	*/
+	if ( childWidget->parent() == 0L )
 		return;
 
 	/**
