@@ -469,6 +469,9 @@ Record* Record::create( unsigned type )
   else if( type == FormatRecord::id )
     record = new FormatRecord();
     
+  else if( type == FormulaRecord::id )
+    record = new FormulaRecord();
+    
   else if( type == HeaderRecord::id )
     record = new HeaderRecord();
     
@@ -1637,6 +1640,52 @@ void FormatRecord::setData( unsigned size, const unsigned char* data )
     EString::fromUnicodeString( data+2, size-2 ).str() :
     EString::fromByteString( data+2, false, size-2 ).str();
   setFormatString( fs );
+}
+
+// ========== FORMULA ========== 
+
+const unsigned int FormulaRecord::id = 0x0006;
+
+class FormulaRecord::Private
+{
+public:
+  Value result;
+};
+
+FormulaRecord::FormulaRecord():
+  Record()
+{
+  d = new FormulaRecord::Private();
+}
+
+FormulaRecord::~FormulaRecord()
+{
+  delete d;
+}
+
+Value FormulaRecord::result() const
+{
+  return d->result;
+}
+
+void FormulaRecord::setResult( const Value& r )
+{
+  d->result = r;
+}
+
+void FormulaRecord::setData( unsigned size, const unsigned char* data )
+{
+  if( size < 20 ) return;
+  
+  setRow( readU16( data ) );
+  setColumn( readU16( data+2 ) );
+  setXfIndex( readU16( data+4 ) );
+  
+}
+
+void FormulaRecord::dump( std::ostream& out ) const
+{
+  out << "FORMULA" << std::endl;
 }
 
 // ========== LABEL ========== 

@@ -1422,6 +1422,60 @@ private:
 };
 
 /**
+  Class FormulaRecord holds Formula record.
+  
+ */
+class FormulaRecord : public Record, public CellInfo
+{
+public:
+
+  static const unsigned int id;
+
+  /**
+   * Creates a new Header record.
+   */
+  FormulaRecord();
+  
+  /**
+   * Destroy the record.
+   */
+  ~FormulaRecord();
+  
+  /**
+   * Gets the result of the formula.
+   */
+  Value result() const;
+  
+  /**
+   * Sets the result of the formula.
+   */
+  void setResult( const Value& v );
+  
+  /**
+   \reimpl
+   */
+  virtual void setData( unsigned size, const unsigned char* data );
+
+  /**
+   \reimpl
+   */
+  virtual const char* name(){ return "FORMULA"; }
+
+  /**
+   \reimpl
+   */
+  virtual void dump( std::ostream& out ) const;
+
+private:
+  // no copy or assign
+  FormulaRecord( const FormulaRecord& );
+  FormulaRecord& operator=( const FormulaRecord& );
+
+  class Private;
+  Private* d;
+};
+
+/**
   Class HeaderRecord holds information about sheet header.
   
  */
