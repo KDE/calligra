@@ -149,6 +149,9 @@ k_dcop:
     void setConfigAddCompletionWord( bool b );
     bool configAddCompletionWord() const;
 
+    bool configIncludeTwoUpperUpperLetterException() const;
+    void setConfigIncludeTwoUpperUpperLetterException( bool b);
+
 
 private:
     KPresenterDoc *doc;

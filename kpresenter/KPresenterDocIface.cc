@@ -500,3 +500,13 @@ bool KPresenterDocIface::configAddCompletionWord() const
 {
     return doc->getAutoFormat()->getConfigAddCompletionWord();
 }
+
+bool KPresenterDocIface::configIncludeTwoUpperUpperLetterException() const
+{
+    return doc->getAutoFormat()->getConfigIncludeTwoUpperUpperLetterException();
+}
+
+void KPresenterDocIface::setConfigIncludeTwoUpperUpperLetterException( bool b)
+{
+    doc->getAutoFormat()->configIncludeTwoUpperUpperLetterException( b );
+}
