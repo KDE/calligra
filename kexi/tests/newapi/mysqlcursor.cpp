@@ -7,7 +7,7 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 
-int main(int /*argc*/, char */*argv[]*/)
+int main(int argc, char * argv[])
 {
 	KInstance instance("newapi");
 	KexiDB::DriverManager manager;
@@ -31,7 +31,10 @@ int main(int /*argc*/, char */*argv[]*/)
 	KexiDB::ConnectionData conn_data;
 
 	conn_data.userName="root";
-	conn_data.password="mysql";
+	if (argc>1)
+		conn_data.password=argv[1];
+	else
+		conn_data.password="mysql";
 	conn_data.hostName="localhost";
 
 	KexiDB::Connection *conn = driver->createConnection(conn_data);
@@ -113,6 +116,6 @@ int main(int /*argc*/, char */*argv[]*/)
 	debug("before del");
 	delete conn;
 	debug("after del");
-	return 0;
 #endif
+	return 0;
 }
