@@ -44,11 +44,12 @@ void KWStyle::save( QDomElement parentElem )
     QDomDocument doc = parentElem.ownerDocument();
     QDomElement styleElem = doc.createElement( "STYLE" );
     parentElem.appendChild( styleElem );
+
+    m_paragLayout.save( styleElem );
+
     QDomElement element = doc.createElement( "FOLLOWING" );
     styleElem.appendChild( element );
     element.setAttribute( "name", m_followingStyle );
-    m_paragLayout.save( styleElem );
-
 
     QDomElement formatElem = KWTextParag::saveFormat( doc, &m_format, 0L, 0, 0 );
     styleElem.appendChild( formatElem );
