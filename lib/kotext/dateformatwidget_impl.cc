@@ -53,6 +53,7 @@ DateFormatWidget::DateFormatWidget( QWidget* parent,  const char* name, WFlags f
 
     connect( CheckBox1, SIGNAL(toggled ( bool )),this,SLOT(slotPersonalizeChanged(bool)));
     connect( combo1, SIGNAL(activated ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
+    connect( KIntNumInput1, SIGNAL(valueChanged(int)), this, SLOT( slotOffsetChanged(int)));
     slotPersonalizeChanged(false);
 }
 
@@ -68,6 +69,11 @@ DateFormatWidget::~DateFormatWidget()
  * public slot
  */
 void DateFormatWidget::slotDefaultValueChanged(const QString & )
+{
+    updateLabel();
+}
+
+void DateFormatWidget::slotOffsetChanged(int)
 {
     updateLabel();
 }
@@ -114,6 +120,7 @@ void DateFormatWidget::comboActivated()
 void DateFormatWidget::updateLabel()
 {
     QDate ct=QDate::currentDate();
+    ct = ct.addDays(correctValue());
     if(combo1->currentText().lower()==i18n("Locale").lower())
       {
 	label->setText(KGlobal::locale()->formatDate( ct ));

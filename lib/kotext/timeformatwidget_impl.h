@@ -16,6 +16,7 @@ public slots:
     void comboActivated();
     void slotPersonalizeChanged(bool b);
     void slotDefaultValueChanged(const QString & );
+    void slotOffsetChanged(int);
 };
 
 #endif // TIMEFORMATWIDGET_H

@@ -44,6 +44,7 @@ TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, WFlags f
     label_correction->setText(i18n("Correct in Minutes"));
     connect( CheckBox1, SIGNAL(toggled ( bool )),this,SLOT(slotPersonalizeChanged(bool)));
     connect( combo1, SIGNAL(activated ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
+    connect( KIntNumInput1, SIGNAL(valueChanged(int)), this, SLOT( slotOffsetChanged(int)));
     slotPersonalizeChanged(false);
 }
 
@@ -59,6 +60,11 @@ TimeFormatWidget::~TimeFormatWidget()
  * public slot
  */
 void TimeFormatWidget::slotDefaultValueChanged(const QString & )
+{
+    updateLabel();
+}
+
+void TimeFormatWidget::slotOffsetChanged(int)
 {
     updateLabel();
 }
@@ -103,6 +109,7 @@ void TimeFormatWidget::comboActivated()
 void TimeFormatWidget::updateLabel()
 {
     QTime ct=QTime::currentTime();
+    ct = ct.addSecs(correctValue());
     if(combo1->currentText().lower()==i18n("Locale").lower())
       {
 	label->setText(KGlobal::locale()->formatTime( ct ));
