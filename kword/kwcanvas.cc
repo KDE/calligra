@@ -1868,6 +1868,7 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
 
     if ( !fs->isVisible( viewMode() ) )
         return;
+    setMouseMode( MM_EDIT );
     KWTableFrameSet *table = fs->getGroupManager();
     bool emitChanged = checkCurrentEdit( table ? table : fs );
 
