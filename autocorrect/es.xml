@@ -21,8 +21,6 @@
   <item find="¿que" replace="¿qué" />
   <item find="¿quien" replace="¿quién" />
   <item find="¿quienes" replace="¿quiénes" />
-  <item find="desed" replace="desde" />
-  <item find="ed" replace="de" />
   <item find="a drede" replace="adrede" />
   <item find="abordo de" replace="a bordo de" />
   <item find="abordo del" replace="a bordo del" />
@@ -67,8 +65,6 @@
   <item find="conque" replace="con que" />
   <item find="crocodilo" replace="cocodrilo" />
   <item find="de imprevisto" replace="de improviso" />
-  <item find="decimoprimero" replace="undécimo" />
-  <item find="decimosegundo" replace="duodécimo" />
   <item find="delante mio" replace="delante de mí" />
   <item find="delante tuyo" replace="delante de tí" />
   <item find="dentrifico" replace="dentifríco" />
@@ -83,17 +79,12 @@
   <item find="detras" replace="detrás" />
   <item find="detrás mio" replace="detrás de mí" />
   <item find="detrás tuyo" replace="detrás de tí" />
-  <item find="diezmil" replace="diez mil" />
-  <item find="diez y seis" replace="dieciseis" />
-  <item find="diez y siete" replace="diecisiete" />
-  <item find="diez y ocho" replace="dieciocho" />
-  <item find="diez y nueve" replace="diecinueve" />
   <item find="diferiencia" replace="diferencia" />
   <item find="difernete" replace="diferente" />
   <item find="diverger" replace="divergir" />
   <item find="dsde" replace="desde" />
   <item find="dsede" replace="desde" />
-  <item find="doceavo" replace="duodécimo" />
+  <item find="ed" replace="de" />
   <item find="elejir" replace="elegir" />
   <item find="en favor" replace="a favor" />
   <item find="enmedio" replace="en medio" />
@@ -102,9 +93,58 @@
   <item find="esquies" replace="esquís" />
   <item find="esquíes" replace="esquís" />
   <item find="immediato" replace="inmediato" />
-  <item find="onceavo" replace="undécimo" />
-  <item find="treceavo" replace="decimotercero" />
   <item find="preveer" replace="prever" />
+  <item find="próxiam" replace="próxima" />
+  <item find="próxiom" replace="próximo" />
+  <item find="dieciseis" replace="dieciséis" />
+  <item find="diez y seis" replace="dieciséis" />
+  <item find="diez y siete" replace="diecisiete" />
+  <item find="diez y ocho" replace="dieciocho" />
+  <item find="diez y nueve" replace="diecinueve" />
+  <item find="treintayuno" replace="treinta y uno" />
+  <item find="treintaydos" replace="treinta y dos" />
+  <item find="treintaytres" replace="treinta y tres" />
+  <item find="treintaycuatro" replace="treinta y cuatro" />
+  <item find="treintaycinco" replace="treinta y cinco" />
+  <item find="treintayseis" replace="treinta y seis />
+  <item find="treintaysiete" replace="treinta y siete" />
+  <item find="treintayocho" replace="treinta y ocho" />
+  <item find="treintaynueve" replace="treinta y nueve" />
+  <item find="cuarentayuno" replace="cuarenta y uno" />
+  <item find="cuarentaydos" replace="cuarenta y dos" />
+  <item find="cuarentaytres" replace="cuarenta y tres" />
+  <item find="cuarentaycuatro" replace="cuarenta y cuatro" />
+  <item find="cuarentaycinco" replace="cuarenta y cinco" />
+  <item find="cuarentayseis" replace="cuarenta y seis />
+  <item find="cuarentaysiete" replace="cuarenta y siete" />
+  <item find="cuarentayocho" replace="cuarenta y ocho" />
+  <item find="cuarentaynueve" replace="cuarenta y nueve" />
+  <item find="cincuentayuno" replace="cincuenta y uno" />
+  <item find="cincuentaydos" replace="cincuenta y dos" />
+  <item find="cincuentaytres" replace="cincuenta y tres" />
+  <item find="cincuentaycuatro" replace="cincuenta y cuatro" />
+  <item find="cincuentaycinco" replace="cincuenta y cinco" />
+  <item find="cincuentayseis" replace="cincuenta y seis />
+  <item find="cincuentaysiete" replace="cincuenta y siete" />
+  <item find="cincuentayocho" replace="cincuenta y ocho" />
+  <item find="cincuentaynueve" replace="cincuenta y nueve" />
+  <item find="diezmil" replace="diez mil" />
+  <item find="veintemil" replace="veinte mil" />
+  <item find="treintamil" replace="treinta mil" />
+  <item find="cuarentamil" replace="cuarenta mil" />
+  <item find="cincuentamil" replace="cincuenta mil" />
+  <item find="sesentamil" replace="sesenta mil" />
+  <item find="setentamil" replace="setenta mil" />
+  <item find="ochentamil" replace="ochenta mil" />
+  <item find="noventamil" replace="noventa mil" />
+  <item find="onceavo" replace="undécimo" />
+  <item find="doceavo" replace="duodécimo" />
+  <item find="treceavo" replace="decimotercero" />
+  <item find="onceava" replace="undécima" />
+  <item find="doceava" replace="duodécima" />
+  <item find="treceava" replace="decimotercera" />
+  <item find="decimoprimero" replace="undécimo" />
+  <item find="decimosegundo" replace="duodécimo" />
   <item find="Http://" replace="http://" />
   <item find="htp://" replace="http://" />
   <item find="htpp://" replace="http://" />
