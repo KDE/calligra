@@ -166,6 +166,7 @@ public slots:
 
     void openLink();
     void copyLink();
+    void removeLink();
     QString realSelectedText( KoTextParag *_parag, int start, int len);
     void completion();
 

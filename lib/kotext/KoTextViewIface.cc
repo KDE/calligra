@@ -653,3 +653,13 @@ void KoTextViewIface::addBookmarks(const QString &url)
 {
     m_textView->addBookmarks(url);
 }
+
+void KoTextViewIface::copyLink()
+{
+    m_textView->copyLink();
+}
+
+void KoTextViewIface::removeLink()
+{
+    m_textView->removeLink();
+}

@@ -1267,6 +1267,14 @@ void KoTextView::copyLink()
     }
 }
 
+void KoTextView::removeLink()
+{
+    KoLinkVariable * var=linkVariable();
+    if(var)
+    {//todo
+    }
+}
+
 QString KoTextView::realSelectedText( KoTextParag *_parag, int start, int len)
 {
     QString str;
