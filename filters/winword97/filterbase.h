@@ -11,17 +11,24 @@ public:
     FilterBase() : QObject() {};
     virtual ~FilterBase() {};
 
-    virtual const bool filter() { return false; };
+    virtual const bool filter() { return false; }
     virtual const QString part();
-    virtual const QString extension() { return ".kwd"; };
+    virtual const QString extension() { return ".kwd"; }
 
 signals:
-    virtual void signalSavePic(const char *data, const char *nameOUT);
-    virtual void signalPart(const char *nameIN, const char *nameOUT);
+    virtual void signalSavePic(const char *data, const char *type, const unsigned int size,
+                               char *nameOUT);
+    virtual void signalPart(const char *nameIN, char *nameOUT);
 
 protected slots:
-    virtual void slotSavePic(const char *data, const char *nameOUT);
-    virtual void slotPart(const char *nameIN, const char *nameOUT);
+    virtual void slotSavePic(const char *data, const char *type, const unsigned int size,
+                             char *nameOUT);
+    virtual void slotPart(const char *nameIN, char *nameOUT);
+
+    virtual void slotFilterError();
+
+protected:
+    bool success;
 
 private:
     FilterBase(const FilterBase &);

@@ -2,14 +2,6 @@
 #include "filterbase.moc"
 
 
-void FilterBase::slotSavePic(const char *data, const char *nameOUT) {
-    emit signalSavePic(data, nameOUT);
-}
-
-void FilterBase::slotPart(const char *nameIN, const char *nameOUT) {
-    emit signalPart(nameIN, nameOUT);
-}
-
 const QString FilterBase::part() {
     return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
         "<DOC author=\"Werner Trobin\" email=\"wtrobin@carinthia.com\" editor=\"OLEFilter\" mime=\"application/x-kword\" url=\"error.kwd\">\n"
@@ -61,4 +53,17 @@ const QString FilterBase::part() {
         "  </FRAMESET>\n"
         "  </FRAMESETS>\n"
         "</DOC>\n";
+}
+
+void FilterBase::slotSavePic(const char *data, const char *type, const unsigned int size,
+                             char *nameOUT) {
+    emit signalSavePic(data, type, size, nameOUT);
+}
+
+void FilterBase::slotPart(const char *nameIN, char *nameOUT) {
+    emit signalPart(nameIN, nameOUT);
+}
+
+void FilterBase::slotFilterError() {
+    success=false;
 }

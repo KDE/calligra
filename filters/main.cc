@@ -90,7 +90,7 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
     else if(from=="application/x-excel97")
         in=OLEFilter::Excel;
     else if(from=="application/x-powerpoint97")
-        in=OLEFilter::Powerpoint;
+        in=OLEFilter::PowerPoint;
     else {
         KOffice::Filter::UnsupportedFormat exc;
         exc.format = CORBA::string_dup(_from);
@@ -107,7 +107,7 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
         buffer[i] = static_cast<unsigned char>(data[i]);
     buffer[len] = 0;
 
-    QString nameOut="testOLE.kwd.tgz";
+    QString nameOut="/tmp/testOLE.kwd.tgz";
 
     docFile.data=buffer;   // see myfile.h
     docFile.length=len;

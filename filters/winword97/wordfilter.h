@@ -30,14 +30,10 @@ class WordFilter : public FilterBase {
 public:
     WordFilter(const myFile &mainStream, const myFile &tableStream,
                const myFile &dataStream);
-    ~WordFilter();
+    virtual ~WordFilter();
 
-protected slots:
-    void slotFilterError();
-    
 private:
     WinWordDoc *myDoc;
     KWordDoc *myKwd;
-    bool success;
 };
 #endif // WORDFILTER_H

@@ -25,7 +25,3 @@ WordFilter::~WordFilter() {
         myKwd=0L;
     }
 }
-
-void WordFilter::slotFilterError() {
-    success=false;
-}
