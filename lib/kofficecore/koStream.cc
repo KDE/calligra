@@ -24,6 +24,7 @@
 #include <qimage.h>
 #include <qiodev.h>
 #include <qbuffer.h>
+#include <qpicture.h>
 
 ostream& operator<< ( ostream& outs, const QRect &_rect )
 {
@@ -264,6 +265,14 @@ ostream& operator<< ( ostream& outs, const QImage &_img )
   return outs;
 }
 
+ostream& operator<< ( ostream& outs, const QPicture &_pic )
+{
+  QIO2CPP out( outs );
+  out.writeBlock( _pic.data(), _pic.size() );
+
+  return outs;
+}
+
 class CPP2QIO : public QIODevice
 {
 public:
@@ -333,4 +342,23 @@ istream& operator>> ( istream& ins, QImage &_img )
   return ins;
 }
 
+istream &operator>>( istream &ins, QPicture &_pic )
+{
+    // Create a random access device in memory
+    char buffer[ 4096 ];
 
+    QBuffer buff;
+    buff.open( IO_WriteOnly );
+
+    while ( !ins.eof() )
+    {
+        ins.read( buffer, 4096 );
+        buff.writeBlock( buffer, ins.gcount() );
+    }
+
+    buff.close();
+
+    _pic.setData( buff.buffer(), buff.size() );
+    
+    return ins;
+}
