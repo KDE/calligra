@@ -87,8 +87,8 @@ VSelectNodesTool::draw()
 		{
 			if( segments.count() == 1 && !selrect.contains( segments.at( 0 )->knot() ) )
 			{
-				if( selrect.contains( segments.at( 0 )->point( 1 ) ) ||
-					segments.at( 0 )->prev()->type() != VSegment::curve )
+				if( selrect.contains( segments.at( 0 )->point( 1 ) ) )
+//					segments.at( 0 )->prev()->type() != VSegment::curve )
 				{
 					m_state = movingbezier1;
 					segments.at( 0 )->selectPoint( 1, false );
