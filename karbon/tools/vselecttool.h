@@ -38,6 +38,11 @@ private:
 	KoPoint m_current;
 
 	VHandleNode m_activeNode;
+
+	void recalc();
+
+	// A list of temporary objects:
+	VObjectList m_objects;
 };
 
 #endif

@@ -27,6 +27,7 @@ VSelectTool::VSelectTool( KarbonView* view )
 	: VTool( view ), m_state( normal )
 {
 	m_lock = none;
+	m_objects.setAutoDelete( true );
 }
 
 VSelectTool::~VSelectTool()
@@ -51,7 +52,22 @@ VSelectTool::draw()
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
-	if( m_state == normal )
+	KoRect rect = view()->part()->document().selection()->boundingBox();
+
+	if( m_state != normal || rect.contains( m_current ) )
+	{
+		if( m_state == normal )
+			m_state = moving;
+
+		VObjectListIterator itr = m_objects;
+		for( ; itr.current(); ++itr )
+		{
+			itr.current()->draw( painter, itr.current()->boundingBox() );
+		}
+
+		painter->setZoomFactor( 1.0 );
+	}
+	else if( m_state == normal )
 	{
 		painter->setPen( Qt::DotLine );
 		painter->newPath();
@@ -223,7 +239,7 @@ VSelectTool::mouseDrag( const KoPoint& current )
 {
 	draw();
 
-	m_current = last();
+	recalc();
 
 	draw();
 
@@ -249,6 +265,16 @@ VSelectTool::mouseDragRelease( const KoPoint& current )
 		view()->selectionChanged();
 		view()->part()->repaintAllViews( true );
 	}
+	else if( m_state == moving )
+	{
+		m_state = normal;
+		view()->part()->addCommand(
+			new VTranslateCmd(
+				&view()->part()->document(),
+				qRound( last().x() - first().x() ),
+				qRound( last().y() - first().y() ) ),
+			true );
+	}
 
 /*
 	view()->part()->document().selection()->setState( VObject::selected );
@@ -257,13 +283,6 @@ VSelectTool::mouseDragRelease( const KoPoint& current )
 	{
 		if( m_lock == lockx )
 			lp.setX( fp.x() );
-		m_state = normal;
-		view()->part()->addCommand(
-			new VTranslateCmd(
-				&view()->part()->document(),
-				qRound( ( lp.x() - fp.x() ) * ( 1.0 / view()->zoom() ) ),
-				qRound( ( lp.y() - fp.y() ) * ( 1.0 / view()->zoom() ) ) ),
-			true );
 
 //			view()->part()->repaintAllViews();
 	}
@@ -305,5 +324,35 @@ void
 VSelectTool::mouseDragCtrlReleased( const KoPoint& current )
 {
 	m_lock = none;
+}
+
+void
+VSelectTool::recalc()
+{
+	if( m_state == normal )
+	{
+		m_current = last();
+	}
+	else
+	{
+		// Build affine matrix:
+		QWMatrix mat;
+		mat.translate( last().x() - first().x(), last().y() - first().y() );
+
+
+		// Copy selected objects and transform:
+		m_objects.clear();
+		VObject* copy;
+
+		VObjectListIterator itr = view()->part()->document().selection()->objects();
+		for ( ; itr.current() ; ++itr )
+		{
+			copy = itr.current()->clone();
+			copy->transform( mat );
+			copy->setState( VObject::edit );
+
+			m_objects.append( copy );
+		}
+	}
 }
 
