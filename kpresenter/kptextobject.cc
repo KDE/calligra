@@ -375,7 +375,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     // Never draw shadow (in text objects, it's a character property, not an object property)
     KPrPage *p = m_doc->pageList().at( pageNum );
     // neccessary when on masterpage
-    if ( p ) 
+    if ( p )
         recalcPageNum( p );
     if ( drawingShadow ) return;
     paint( _painter, _zoomHandler, false, 0L, true, drawContour );
@@ -652,7 +652,7 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
         element.setAttribute("wordbyword", true);
     if ( lastFormat->attributeFont()!= KoTextFormat::ATT_NONE )
         element.setAttribute("fontattribute", KoTextFormat::attributeFontToString(lastFormat->attributeFont() ));
-    if ( lastFormat->language()!= QString::null)
+    if ( !lastFormat->language().isEmpty())
         element.setAttribute("language", lastFormat->language());
 }
 

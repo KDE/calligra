@@ -722,19 +722,23 @@ void KPresenterDoc::compatibilityFromOldFileFormat()
     //for example for presSpeed
     if ( m_loadingInfo && m_loadingInfo->oldFormat() )
     {
-        if ( m_loadingInfo->presSpeed != -1 )
+        EffectSpeed newValue = ES_MEDIUM;
+        bool presSpeedChanged = ( m_loadingInfo->presSpeed != -1 );
+        if ( presSpeedChanged )
         {
-            EffectSpeed newValue = ES_MEDIUM;
             if ( m_loadingInfo->presSpeed < 3 )
                 newValue = ES_SLOW;
             else if ( m_loadingInfo->presSpeed > 7 )
                 newValue = ES_FAST;
-
-            //todo when we save with old format create compatibility
-            for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
-                m_pageList.at(i)->background()->setPageEffectSpeed( newValue );
-            }
         }
+        for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
+        {
+            if ( presSpeedChanged )
+                m_pageList.at(i)->background()->setPageEffectSpeed( newValue );
+            m_pageList.at( i )->setHeader( m_loadingInfo->m_header );
+            m_pageList.at( i )->setFooter( m_loadingInfo->m_footer );
+        }
+
     }
     delete m_loadingInfo;
     m_loadingInfo = 0L;
