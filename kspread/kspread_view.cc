@@ -817,7 +817,11 @@ void KSpreadView::deleteColumn()
     if ( !m_pTable )
         return;
 
-    m_pTable->removeColumn( m_pCanvas->markerColumn() );
+    QRect r( activeTable()-> selectionRect() );
+    if(r.left()==0)
+        m_pTable->removeColumn( m_pCanvas->markerColumn() );
+    else
+        m_pTable->removeColumn( r.left() );
 
     updateEditWidget();
 }
@@ -826,8 +830,11 @@ void KSpreadView::deleteRow()
 {
     if ( !m_pTable )
         return;
-
-    m_pTable->removeRow( m_pCanvas->markerRow() );
+    QRect r( activeTable()-> selectionRect() );
+    if(r.left()==0)
+        m_pTable->removeRow( m_pCanvas->markerRow() );
+    else
+        m_pTable->removeRow( r.top() );
 
     updateEditWidget();
 }
@@ -836,8 +843,12 @@ void KSpreadView::insertColumn()
 {
     if ( !m_pTable )
         return;
+    QRect r( activeTable()-> selectionRect() );
+    if(r.left()==0)
+        m_pTable->insertColumn( m_pCanvas->markerColumn() );
+    else
+        m_pTable->insertColumn( r.left() );
 
-    m_pTable->insertColumn( m_pCanvas->markerColumn() );
 
     updateEditWidget();
 }
@@ -846,8 +857,11 @@ void KSpreadView::insertRow()
 {
     if ( !m_pTable )
         return;
-
-    m_pTable->insertRow( m_pCanvas->markerRow() );
+    QRect r( activeTable()-> selectionRect() );
+    if(r.left()==0)
+        m_pTable->insertRow( m_pCanvas->markerRow() );
+    else
+        m_pTable->insertRow( r.top() );
 
     updateEditWidget();
 }
@@ -1481,7 +1495,6 @@ void KSpreadView::validity()
          KSpreadDlgValidity *dlg=new KSpreadDlgValidity( this,"validity",rect);
          dlg->show();
          }
-
 }
 
 
