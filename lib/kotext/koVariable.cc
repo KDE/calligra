@@ -567,6 +567,7 @@ void KoVariable::resize()
     KoTextFormat *fmt = format();
     QFontMetrics fm = fmt->refFontMetrics();
     QString txt = text();
+
     width = 0;
     for ( int i = 0 ; i < (int)txt.length() ; ++i )
         width += fm.charWidth( txt, i ); // size at 100%
@@ -584,10 +585,18 @@ QString KoVariable::fieldCode()
 
 QString KoVariable::text(bool realValue)
 {
+    KoTextFormat *fmt = format();
+    QString str;
     if (m_varColl->variableSetting()->displayFiedCode()&&!realValue)
-        return fieldCode();
+        str = fieldCode();
     else
-        return m_varFormat->convert( m_varValue );
+        str = m_varFormat->convert( m_varValue );
+
+    if ( fmt->attributeFont() == KoTextFormat::ATT_UPPER)
+        str = str.upper();
+    else if ( fmt->attributeFont() == KoTextFormat::ATT_LOWER)
+        str = str.lower();
+    return str;
 }
 
 void KoVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset )
@@ -639,8 +648,8 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int 
                         // change the font passed to drawCustomItemHelper (e.g. KoLinkVariable)
 
     KoTextParag::drawFontEffects( p, fmt, zh, font, textColor, x, ascentpix, wpix, y, hpix );
-
-    p->drawText( x, y + ascentpix + offset - fmt->offsetFromBaseLine(), text() );
+    QString str = text();
+    p->drawText( x, y + ascentpix + offset - fmt->offsetFromBaseLine(), str );
     p->restore();
 }
 
