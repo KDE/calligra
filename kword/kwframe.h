@@ -453,6 +453,7 @@ protected:
 
     void deleteAnchors();
     void updateAnchors();
+    void findFirstAnchor();
 
     KWDocument *m_doc;            // Document
     QList<KWFrame> frames;        // Our frames

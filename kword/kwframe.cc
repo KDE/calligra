@@ -334,7 +334,10 @@ void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
     if(recalc)
         updateFrames();
     if ( isFloating() )
+    {
+        findFirstAnchor();
         updateAnchors();
+    }
 }
 
 void KWFrameSet::delFrame( unsigned int _num )
@@ -527,16 +530,31 @@ void KWFrameSet::updateAnchors()
 void KWFrameSet::deleteAnchors()
 {
     kdDebug() << "KWFrameSet::deleteAnchors" << endl;
+    findFirstAnchor();
     int index = m_anchorIndex;
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
-        if (  frameIt.current()->anchor() )
+        if ( frameIt.current()->anchor() )
         {
-            // Anchor this frame, after the previous one
+            // Delete anchor (after removing anchor char)
             m_anchorParag->at( index )->loseCustomItem();
             m_anchorParag->remove( index, 1 );
             frameIt.current()->deleteAnchor();
         }
+}
+
+void KWFrameSet::findFirstAnchor()
+{
+    ASSERT( frames.count() );
+    if ( frames.count() > 0 && frames.first()->anchor() )
+    {
+        KWAnchor * anchor = frames.first()->anchor();
+        m_anchorParag = static_cast<KWTextParag *>( anchor->paragraph() );
+        m_anchorIndex = m_anchorParag->findCustomItem( anchor );
+    } else {
+        kdDebug() << "KWFrameSet::findFirstAnchor no anchor !" << endl;
+        m_anchorParag = 0L;
+    }
 }
 
 KWFrame * KWFrameSet::getFrame( double _x, double _y )

@@ -85,11 +85,9 @@ public:
     KWTextParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE );
     ~KWTextParag();
 
-    // Creates a KWParagLayout structure from our info (proper+inherited), for undo/redo purposes
-    const KWParagLayout & paragLayout() { return m_layout; }
-
     // Sets all the parameters from a paraglayout struct
     void setParagLayout( const KWParagLayout &layout );
+    const KWParagLayout & paragLayout() { return m_layout; }
 
     // Margins
     double margin( QStyleSheetItem::Margin m ) { return m_layout.margins[m]; }
@@ -135,6 +133,10 @@ public:
     void setLinesTogether( bool b );
     bool linesTogether() const { return m_layout.linesTogether; }
 
+    // Get and set tabulator positions
+    KoTabulatorList tabList() const { return m_layout.tabList(); }
+    void setTabList( const KoTabulatorList &tabList );
+
     // Public for KWStyle
     static QDomElement saveFormat( QDomDocument & doc, QTextFormat * curFormat, QTextFormat * refFormat, int pos, int len );
     static QTextFormat loadFormat( QDomElement &formatElem, QTextFormat * refFormat, const QFont & defaultFont );
@@ -148,10 +150,11 @@ public:
     // Load and apply paragraph layout
     void loadLayout( QDomElement & attributes );
 
+    // Set a @p custom item at position @p index, with format @p currentFormat (convenience method)
     void setCustomItem( int index, QTextCustomItem * custom, QTextFormat * currentFormat );
-
-    KoTabulatorList tabList() const { return m_layout.tabList(); }
-    void setTabList( const KoTabulatorList &tabList );
+    // Find a custom item that we know is somewhere in this paragraph
+    // Returns the index in the paragraph
+    int findCustomItem( QTextCustomItem * custom ) const;
 
 #ifndef NDEBUG
     void printRTDebug( int );

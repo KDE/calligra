@@ -522,13 +522,6 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     grp1 = new QGroupBox( i18n("Position in %1").arg(doc->getUnitName()), tab4 );
     pGrid = new QGridLayout( grp1, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    if(frame && frame->getFrameSet())
-    {
-        bool _f=frame->getFrameSet()->isFloating();
-        floating->setChecked(_f);
-        slotFloatingToggled(_f);
-    }
-
     lx = new QLabel( i18n( "Left:" ), grp1 );
     lx->resize( lx->sizeHint() );
     pGrid->addWidget( lx, 1, 0 );
@@ -660,9 +653,11 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     sh->setValidator( new QDoubleValidator( sh ) );
     sw->setValidator( new QDoubleValidator( sw ) );
 
-    if (doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
-                                           ( doc->processingType() == KWDocument::WP &&
-                                             doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
+    if (doc->isOnlyOneFrameSelected() &&
+        ( doc->processingType() == KWDocument::DTP ||
+          ( doc->processingType() == KWDocument::WP &&
+            doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) )
+    {
 
         KWFrame * theFrame = doc->getFirstSelectedFrame();
 
@@ -675,11 +670,18 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         sy->setText( QString::number( oldY ) );
         sw->setText( QString::number( oldW ) );
         sh->setText( QString::number( oldH ) );
-    } else {
+
+        bool f = theFrame->getFrameSet()->isFloating();
+        floating->setChecked( f );
+        slotFloatingToggled( f );
+    }
+    else
+    {
         sx->setEnabled( false );
         sy->setEnabled( false );
         sw->setEnabled( false );
         sh->setEnabled( false );
+        floating->setEnabled( false );
     }
 
     //kdDebug() << "setup tab 4 exit"<<endl;

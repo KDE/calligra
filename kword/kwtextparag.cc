@@ -391,6 +391,20 @@ void KWTextParag::setCustomItem( int index, QTextCustomItem * custom, QTextForma
     invalidate( 0 );
 }
 
+int KWTextParag::findCustomItem( QTextCustomItem * custom ) const
+{
+    int len = string()->length();
+    for ( int i = 0; i < len; ++i )
+    {
+        QTextStringChar & ch = string()->at(i);
+        if ( ch.isCustom() && ch.customItem() == custom )
+            return i;
+    }
+    kdDebug() << "KWTextParag::findCustomItem custom item " << custom
+              << " not found in paragraph " << this << " " << paragId() << endl;
+    return 0;
+}
+
 void KWTextParag::setTabList( const KoTabulatorList &tabList )
 {
     // TODO support for centered tabs, right-aligned tabs etc.
