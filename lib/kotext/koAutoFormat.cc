@@ -1610,3 +1610,53 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
     return 0L;
 }
 
+void KoAutoFormat::changeTextFormat(KoSearchContext *m_formatOptions, KoTextFormat * format, int & flags )
+{
+    if (m_formatOptions )
+    {
+        if (m_formatOptions->m_optionsMask & KoSearchContext::Bold)
+        {
+            format->setBold( m_formatOptions->m_options & KoSearchContext::Bold);
+            flags |=KoTextFormat::Bold;
+        }
+        if (m_formatOptions->m_optionsMask & KoSearchContext::Size)
+        {
+            format->setBold( m_formatOptions->m_options & KoSearchContext::Bold);
+            flags |=KoTextFormat::Bold;
+        }
+        if ( m_formatOptions->m_optionsMask & KoSearchContext::Family)
+        {
+        }
+        if ( m_formatOptions->m_optionsMask & KoSearchContext::Color)
+        {
+            format->setColor(m_formatOptions->m_color);
+            flags |=KoTextFormat::Color;
+        }
+        if ( m_formatOptions->m_optionsMask & KoSearchContext::BgColor)
+        {
+            format->setTextBackgroundColor(m_formatOptions->m_color);
+            flags |=KoTextFormat::TextBackgroundColor;
+        }
+
+        if ( m_formatOptions->m_optionsMask & KoSearchContext::Italic)
+        {
+            format->setItalic( m_formatOptions->m_options & KoSearchContext::Italic);
+            flags |=KoTextFormat::Italic;
+        }
+        if ( m_formatOptions->m_optionsMask & KoSearchContext::Underline)
+        {
+            format->setUnderlineLineType(m_formatOptions->m_underline);
+            flags |=KoTextFormat::ExtendUnderLine;
+        }
+        if ( m_formatOptions->m_optionsMask & KoSearchContext::StrikeOut)
+        {
+            format->setStrikeOutLineType(m_formatOptions->m_strikeOut);
+            flags |= KoTextFormat::StrikeOut;
+        }
+        if ( m_formatOptions->m_optionsMask & KoSearchContext::VertAlign)
+        {
+            format->setVAlign(m_formatOptions->m_vertAlign);
+            flags |=KoTextFormat::VAlign;
+        }
+    }
+}

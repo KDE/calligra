@@ -37,6 +37,8 @@ class KCompletion;
 class KoTextCursor;
 class KCommand;
 class KoSearchContext;
+class KoTextFormat;
+
 /******************************************************************/
 /* Class: KWAutoFormatEntry					  */
 /******************************************************************/
@@ -262,7 +264,6 @@ public:
     static bool isLower( const QChar &c );
     static bool isMark( const QChar &c ); // End of sentence
     static bool isSeparator( const QChar &c );
-
 protected:
     //return a ref to index otherwise when we uperCase, index is bad !
     KCommand *doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag *parag, int & index, KoTextObject *txtObj );
@@ -284,6 +285,9 @@ protected:
 
     KCommand *doAutoSuperScript( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
     KCommand *scanParag( KoTextParag * parag, KoTextObject * obj );
+
+    static void changeTextFormat(KoSearchContext *m_formatOptions, KoTextFormat * format, int & flags );
+
 private:
     void detectStartOfLink(const QString &word);
     void autoFormatIsActive();
