@@ -634,7 +634,19 @@ void KWDocument::recalcFrames()
                 }
             }
         }
-
+    } else {
+        double height=0;
+        for (QListIterator<KWFrameSet> fit = framesetsIterator(); fit.current() ; ++fit ) {
+            if(fit.current()->frameSetInfo()==KWFrameSet::FI_BODY) {
+                KWFrameSet * fs = fit.current();
+                for (QListIterator<KWFrame> f = fs->frameIterator(); f.current() ; ++f ) {
+                    height=QMAX(height, f.current()->bottom());
+                }
+            }
+        }
+        while(height > ptPaperHeight() * getPages()) {
+            m_pages++;
+        }
     }
 
     if ( isHeaderVisible() ) {
@@ -996,7 +1008,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     unsigned item;
 
     value = KWDocument::getAttribute( word, "mime", QString::null );
-    if ( value != "application/x-kword" )
+    if ( value != "application/x-kword" && value != "application/vnd.kde.kword" )
     {
         kdError(32001) << "Unknown mime type " << value << endl;
         return false;
@@ -2448,13 +2460,6 @@ void KWDocument::framesChanged( const QList<KWFrame> & frames, KWView * view )
 void KWDocument::setHeaderVisible( bool h )
 {
     m_headerVisible = h;
-    QListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWFrameSet * frameSet = fit.current();
-        if ( frameSet->isAHeader() )
-            static_cast<KWTextFrameSet*>(frameSet)->hideCustomItems(h);
-    }
     recalcFrames();
     updateAllFrames();
     layout();
@@ -2464,15 +2469,6 @@ void KWDocument::setHeaderVisible( bool h )
 void KWDocument::setFooterVisible( bool f )
 {
     m_footerVisible = f;
-    QListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWFrameSet * frameSet = fit.current();
-        //don't break loop because there is some header/footer
-        // (odd, even etc...) If we break it it doesn't work
-        if ( frameSet->isAFooter() )
-            static_cast<KWTextFrameSet*>(frameSet)->hideCustomItems(f);
-    }
     recalcFrames();
     updateAllFrames();
     layout();

@@ -1029,7 +1029,8 @@ void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
             frame->save( frameElem );
 
             if(m_doc->processingType() == KWDocument::WP) {
-                if(m_doc->getFrameSet(0) == this) break;
+                // Assume that all header/footer frames in the same frameset are
+                // perfect copies. This might not be the case some day though.
                 if(frameSetInfo() == FI_FIRST_HEADER ||
                    frameSetInfo() == FI_ODD_HEADER ||
                    frameSetInfo() == FI_EVEN_HEADER ||

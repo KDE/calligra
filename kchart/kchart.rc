@@ -1,0 +1,27 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart" version="3">
+<MenuBar>
+ <Menu name="Edit"><text>&amp;Edit</text>
+  <Action name="wizard"/>
+  <Action name="edit"/>
+  <Action name="config"/>
+ </Menu>
+ <Menu name="settings"><text>&amp;Settings</text>
+  <Action name="loadconfig"/>
+  <Action name="saveconfig"/>	
+  <Action name="defaultconfig" />
+  <Separator />
+ </Menu>
+</MenuBar>
+<ToolBar name="KChartToolBar"><Text>Chart</Text>
+ <Action name="wizard"/>
+ <Action name="edit"/>
+ <Action name="config"/>
+ <Action name="piechart"/>
+ <Action name="linechart"/>
+ <Action name="areaschart"/>
+ <Action name="barschart"/>
+ <Action name="hilochart"/>
+ <Action name="ringchart"/>
+ <Action name="polarchart"/>
+</ToolBar>
+</kpartgui>

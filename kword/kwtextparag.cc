@@ -869,7 +869,10 @@ KWTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KWTextFormat * re
 {
     KWTextFormat format;
     if ( refFormat )
+    {
         format = *refFormat;
+        format.setCollection( 0 ); // Out of collection copy
+    }
     QFont font = format.font();
     QDomElement elem;
     elem = formatElem.namedItem( "FONT" ).toElement();

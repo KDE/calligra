@@ -310,12 +310,15 @@ protected:
 private:
     KWDocument *m_doc;
 
+    KAction *actionFileStatistics;
     KAction *actionEditCut;
     KAction *actionEditCopy;
     KAction *actionEditPaste;
     KAction *actionEditSelectAll;
     KAction *actionEditDelFrame;
     KAction *actionEditCustomVars;
+    KAction *actionEditFind;
+    KAction *actionEditReplace;
 
     KToggleAction *actionViewTextMode;
     KToggleAction *actionViewPageMode;
@@ -344,16 +347,17 @@ private:
 
     VariableDefMap m_variableDefMap;
     KAction *actionInsertFormula;
+    KAction *actionInsertTable;
+    KAction *actionAutoFormat;
 
-    //KToggleAction *actionToolsEdit;
-    //KToggleAction *actionToolsEditFrames;
     KToggleAction *actionToolsCreateText;
     KToggleAction *actionToolsCreatePix;
-    KToggleAction *actionToolsCreateClip;
     KoPartSelectAction *actionToolsCreatePart;
 
     KAction *actionFormatFont;
     KAction *actionFormatDefault;
+    KAction *actionFormatStylist;
+    KAction *actionFormatPage;
 
     KFontSizeAction *actionFormatFontSize;
     KFontAction *actionFormatFontFamily;

@@ -115,7 +115,7 @@
  						   I18N_NOOP("Kugar"),
  						   VERSION);
  
---- kugar/part/Makefile.am
++++ kugar/part/Makefile.am
 +++ kugar/part/Makefile.am
 @@ -2,7 +2,7 @@
  

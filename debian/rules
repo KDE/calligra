@@ -16,14 +16,14 @@ kdedocs = $(tmp)/usr/share/doc/kde/HTML
 
 ARCH = $(shell dpkg-architecture -qDEB_BUILD_ARCH)
 ifeq ($(ARCH),alpha)
-  COMPILER_FLAGS=CXX=g++-3.0 CC=gcc-3.0 CFLAGS=-mieee CXXFLAGS=-mieee
+  COMPILER_FLAGS=CFLAGS="-O0 -mieee" CXXFLAGS="-O0 -mieee"
 else
-  COMPILER_FLAGS=CXX=g++ CC=gcc
+  ifeq ($(ARCH),hppa)
+    COMPILER_FLAGS=CFLAGS="-Os -ffunction-sections" CXXFLAGS="-Os -ffunction-sections"
+  else
+    COMPILER_FLAGS=CXX=g++ CC=gcc
+  endif
 endif
-# Note: objprelink is no longer recommended for use.
-# ifeq ($(ARCH),i386)
-#   OBJPRELINK=--enable-objprelink
-# endif
 
 build: build-stamp
 
@@ -38,18 +38,17 @@ build-stamp:
 	  $(MAKE) -f admin/Makefile.common ;\
 	fi 
 	$(COMPILER_FLAGS) ./configure $(configkde) \
-	  --libdir=$(kde_libdir) --includedir=$(kde_includedir) $(OBJPRELINK)
+	  --libdir=$(kde_libdir) --includedir=$(kde_includedir)
 	$(MAKE) KDE_PLUGIN_DEBIAN="-module -no-undefined"
 	touch build-stamp
 
 clean: debian-clean
-	-rm -f debian/debiandirs
 	dh_clean
 
 debian-clean:
 	dh_testdir
 	dh_testroot
-	-rm -f build-stamp install-stamp
+	-rm -f build-stamp install-stamp debian/debiandirs
 	if test -d CVS; then \
 	  $(MAKE) -f admin/Makefile.common cvs-clean ;\
 	fi
@@ -99,21 +98,7 @@ install-stamp: build
 	mv $(tmp)/usr/share/apps/kivio/autoloadStencils/straight_connector.ksp \
 		$(tmp)/usr/lib/kivio/libstraight_connector.so
 
-	# Generate HTML docs from secondary docbook files (not index.docbook).
-	for i in `find $(tmp) -name "*.docbook"`; do \
-	  case "$$i" in \
-	    */index.docbook ) \
-	    ;; \
-	    * ) \
-	      pushd . > /dev/null; cd `dirname $$i`; \
-	      meinproc `basename $$i`; \
-	      popd > /dev/null; \
-	    ;; \
-	  esac; \
-	done
-
-	# Run this again for index.docbook files to ensure index.html
-	# reflects the correct set of chapter headings.
+	# Generate HTML docs.
 	for i in `find $(tmp) -name "index.docbook"`; do \
 	  pushd . > /dev/null; cd `dirname $$i`; meinproc `basename $$i`; \
 	  popd > /dev/null; done
@@ -160,10 +145,6 @@ binary-arch: build install
 	dh_installmenu -a
 	dh_installmime -a
 	dh_installman -a
-	# Move the .pl.* manpages to the correct place.
-	mv debian/kpresenter/usr/share/man/pl/man1/* \
-		debian/kpresenter/usr/share/man/man1
-	rm -rf debian/kpresenter/usr/share/man/pl
 	dh_undocumented -a
 	dh_installchangelogs -pkoffice
 	dh_installchangelogs -pkoffice-libs

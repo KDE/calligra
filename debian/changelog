@@ -1,3 +1,39 @@
+koffice (1:1.1.1-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Ben Burton <benb@acm.org>  Mon, 10 Dec 2001 11:11:28 -0600
+
+koffice (1:1.1.0-final-8) unstable; urgency=low
+
+  * Compiles with -ffunction-sections for hppa (closes: Bug#123216).
+  * Added conflicts for koffice-doc-html.
+
+ -- Ben Burton <benb@acm.org>  Mon, 10 Dec 2001 10:50:29 -0600
+
+koffice (1:1.1.0-final-7) unstable; urgency=low
+
+  * Uses automake again to solve new alpha problems.
+  * Build-Depends: Added python2.1-dev for kivio and removed redundant uic.
+
+ -- Ben Burton <benb@acm.org>  Tue,  6 Nov 2001 23:51:27 -0600
+
+koffice (1:1.1.0-final-6) unstable; urgency=low
+
+  * Builds with automake 1.5.
+  * koffice-libs recommends newer kghostview (closes: #114262, #114539).
+  * HTML documentation generation only uses index.docbook files.
+  * Installs .pl.1 man pages in the correct location (requires newer
+    debhelper).
+
+ -- Ben Burton <benb@acm.org>  Thu, 11 Oct 2001 18:44:09 -0500
+
+koffice (1:1.1.0-final-5) unstable; urgency=low
+
+  * Updated parameters for alpha build.
+
+ -- Ben Burton <benb@acm.org>  Sun, 23 Sep 2001 23:07:01 -0500
+
 koffice (1:1.1.0-final-4) unstable; urgency=low
 
   * objprelink: now you see it, now you don't (removed).
