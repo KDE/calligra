@@ -32,7 +32,8 @@ using namespace Qt3;
 class KWInsertTOCCommand : public QTextCommand
 {
 public:
-    KWInsertTOCCommand( KWTextFrameSet * fs );
+    // The parag is where the TOC should be inserted
+    KWInsertTOCCommand( KWTextFrameSet *fs, QTextParag *parag );
     QTextCursor *execute( QTextCursor *c );
     QTextCursor *unexecute( QTextCursor *c );
 
@@ -44,6 +45,7 @@ protected:
     // Find or create a toc style
     static KWStyle * findOrCreateTOCStyle( KWTextFrameSet *fs, int depth );
 
+    int m_paragId;
 };
 
 

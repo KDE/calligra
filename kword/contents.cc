@@ -33,8 +33,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-KWInsertTOCCommand::KWInsertTOCCommand( KWTextFrameSet * fs )
-    : QTextCommand( fs->textDocument() )
+KWInsertTOCCommand::KWInsertTOCCommand( KWTextFrameSet * fs, QTextParag *parag )
+    : QTextCommand( fs->textDocument() ), m_paragId( parag->paragId() )
 {
 }
 
@@ -45,9 +45,14 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
 
     fs->kWordDocument()->renameButtonTOC(i18n("Update Table of &Contents"));
 
-    KWTextParag *body = static_cast<KWTextParag *>( textdoc->firstParag() );
+    QTextParag *insertionParag = textdoc->paragAt( m_paragId );
+    if ( !insertionParag ) {
+        qWarning( "KWInsertTOCCommand:: can't locate parag at %d, last parag: %d", m_paragId, textdoc->lastParag()->paragId() );
+        return c;
+    }
+    KWTextParag *body = static_cast<KWTextParag *>( insertionParag );
     // Create new very first paragraph
-    KWTextParag *parag = static_cast<KWTextParag *>( textdoc->createParag( textdoc, 0, textdoc->firstParag(), true ) );
+    KWTextParag *parag = static_cast<KWTextParag *>( textdoc->createParag( textdoc, body->prev() /*prev*/, body /*next*/, true ) );
     parag->append( i18n( "Table of Contents" ) );
     KWStyle * style = findOrCreateTOCStyle( fs, -1 ); // "Contents Title"
     parag->setParagLayout( style->paragLayout() );
@@ -169,16 +174,21 @@ void KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMa
             kdDebug() << "KWInsertTOCCommand::removeTOC prev=" << prev << " p=" << p << endl;
             // Fix parag chain
             if ( prev )
+            {
                 prev->setNext( p );
+                p->setParagId( prev->paragId() + 1 );
+            }
             else
+            {
                 textdoc->setFirstParag( p );
+                p->setParagId( 0 );
+            }
             p->setPrev( prev );
-
-            // ### TODO Parag IDs !
         }
         p = p->prev();
     }
     textdoc->invalidate();
+    // ### TODO propagate parag ID changes.
 }
 
 KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int depth )

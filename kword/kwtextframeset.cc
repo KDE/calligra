@@ -2692,7 +2692,7 @@ void KWTextFrameSet::insertTOC( QTextCursor * cursor )
 
     // Insert new TOC
 
-    QTextCommand * cmd = new KWInsertTOCCommand( this );
+    QTextCommand * cmd = new KWInsertTOCCommand( this, cursor->parag() );
     textdoc->addCommand( cmd );
     macroCmd->addCommand( new KWTextCommand( this, QString::null ) );
     *cursor = *( cmd->execute( cursor ) );
