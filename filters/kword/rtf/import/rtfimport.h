@@ -40,7 +40,7 @@ struct RTFProperty
 {
     const char *onlyValidIn;
     const char *name;
-    void (RTFImport::*cwproc)( struct RTFProperty * = 0L );
+    void (RTFImport::*cwproc)( struct RTFProperty * );
     /// offset of formatting property
     int offset;
     /// default value
@@ -61,7 +61,7 @@ struct RTFDestination
 {
     const char *group;
     const char *name;
-    void (RTFImport::*destproc)( RTFProperty * = 0L );
+    void (RTFImport::*destproc)( RTFProperty * );
     void *target;
 };
 
