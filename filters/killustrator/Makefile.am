@@ -1,1 +1,4 @@
-SUBDIRS = svg xfig msod wmf applixgraphics
+SUBDIRS = msod wmf applixgraphics latex xfig
+
+#SUBDIRS = xfig msod wmf applixgraphics
+
