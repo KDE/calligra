@@ -1074,7 +1074,7 @@ void OoImpressImport::appendImage( QDomDocument& doc, QDomElement& e, QDomElemen
     if ( m_styleStack.hasAttribute( "draw:luminance" ) )
     {
         QString str( m_styleStack.attribute( "draw:luminance" ) );
-        str = str.remove( "%" );
+        str = str.remove( '%' );
         settings.setAttribute( "bright", str );
     }
     else
@@ -1090,7 +1090,7 @@ void OoImpressImport::appendImage( QDomDocument& doc, QDomElement& e, QDomElemen
     if ( m_styleStack.hasAttribute( "draw:contrast" ) )
     {
         QString str( m_styleStack.attribute( "draw:contrast" ) );
-        str = str.remove( "%" );
+        str = str.remove( '%' );
         int val = str.toInt();
         val = ( int )( 255.0 *val/100.0 );
         effects.setAttribute( "type", "5" );
