@@ -95,7 +95,7 @@ void KIllustratorShell::createFileMenu (OPMenuBar* mbar) {
   }
 
   KStdAccel stdAccel;
-  m_pFileMenu = new OPMenu (mbar);
+  m_pFileMenu = new OPMenu;
 
   m_idMenuFile_New =
     m_pFileMenu->insertItem (Icon ("filenew.xpm" ), i18n ("&New"),

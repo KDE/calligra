@@ -145,7 +145,7 @@ void KoMainWindow::createFileMenu( OPMenuBar* _menubar )
   {
     bInsertFileMenu = true;
     debug("Creating File Menu in koMainWindow.cc");
-    m_pFileMenu = new OPMenu( _menubar );
+    m_pFileMenu = new OPMenu;
   }
   else
     m_pFileMenu->insertSeparator();    
@@ -190,7 +190,7 @@ void KoMainWindow::createHelpMenu( OPMenuBar* _menubar )
   // No help menu yet ?
   if ( m_pHelpMenu == 0L )
   {    
-    m_pHelpMenu = new OPMenu( _menubar );
+    m_pHelpMenu = new OPMenu;
     bInsertHelpMenu = true;
   }
   else
