@@ -105,7 +105,7 @@ public:
     virtual void setLineSpacing( int _spc );
     virtual void setParagBorders( KWParagLayout::Border _left, KWParagLayout::Border _right,
 				  KWParagLayout::Border _top, KWParagLayout::Border _bottom );
-				  
+
     virtual void setNoteType(KWFootNoteManager::NoteType nt, bool change=true);
 
     KWordGUI *getGUI() { return gui; }
@@ -167,7 +167,7 @@ public slots:
     virtual void viewFootNotes();
     virtual void viewEndNotes();
     virtual void viewZoom( const QString &s );
-    
+
     virtual void insertPicture();
     virtual void insertClipart();
     virtual void insertSpecialChar();
@@ -296,6 +296,7 @@ protected:
     virtual void dragMoveEvent( QDragMoveEvent *e );
     virtual void dragLeaveEvent( QDragLeaveEvent *e );
     virtual void dropEvent( QDropEvent *e );
+    virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
     void setParagBorderValues();
 
@@ -326,7 +327,7 @@ protected:
     KAction *actionViewFootNotes;
     KAction *actionViewEndNotes;
     KAction *actionViewZoom;
-    
+
     KAction *actionInsertPicture;
     KAction *actionInsertClipart;
     KAction *actionInsertSpecialChar;

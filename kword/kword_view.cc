@@ -79,6 +79,7 @@
 #include <kfontdialog.h>
 #include <kstddirs.h>
 #include <kmessagebox.h>
+#include <kparts/event.h>
 
 #include <stdlib.h>
 #define DEBUG
@@ -2409,6 +2410,14 @@ void KWordView::dragLeaveEvent( QDragLeaveEvent *e )
 void KWordView::dropEvent( QDropEvent *e )
 {
     QApplication::sendEvent( gui, e );
+}
+
+void KWordView::guiActivateEvent( KParts::GUIActivateEvent *ev )
+{
+    if ( ev->activated() )
+        initGui();
+
+    KoView::guiActivateEvent( ev );
 }
 
 /*================================================================*/

@@ -38,8 +38,6 @@ public:
     QString nativeFormatPattern() const { return "*.kwd"; }
     QString nativeFormatName() const;
 
-    virtual void setRootDocument( KoDocument* );
-
 public slots:
     void slotFilePrint();
     void slotHelpAbout();
