@@ -48,6 +48,9 @@ public:
      */
     void editProject();
 
+    KPTProject &getProject() { return *m_project; }
+    const KPTProject &getProject() const { return *m_project; }
+
     // The load and save functions. Look in the file kplato.dtd for info
     virtual bool loadXML(QIODevice *, const QDomDocument &document);
     virtual QDomDocument saveXML();
