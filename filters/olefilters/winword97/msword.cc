@@ -847,6 +847,9 @@ bool MsWord::getPicture(
     unsigned bytes;
     QString tiffFilename;
 
+    // sentinel check
+    if( fc > m_dataStreamLength ) return false;
+
     // Get the PICF.
 
     pictureType = "";
@@ -957,6 +960,7 @@ MsWord::MsWord(
         m_tableStream = table1Stream.data;
     }
     m_dataStream = dataStream.data;
+    m_dataStreamLength = dataStream.length;
     if (!m_tableStream)
     {
         // Older versions of Word had no separate table stream.
@@ -970,6 +974,7 @@ MsWord::MsWord(
 
         kdDebug(s_area) << "MsWord::MsWord: no data stream" << endl;
         m_dataStream = m_mainStream;
+        m_dataStreamLength = mainStream.length;
     }
 
     // We must call readStyles() first, as we use the STSHI size to detect

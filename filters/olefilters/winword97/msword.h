@@ -390,6 +390,7 @@ private:
     const U8 *m_mainStream;
     const U8 *m_tableStream;
     const U8 *m_dataStream;
+    U32 m_dataStreamLength;
     FIB m_fib;
 
     myFile mainStream;
