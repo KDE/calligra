@@ -26,7 +26,7 @@ libkarbondockers_la_SOURCES = \
 	vcontexthelpdocker.cc \
 	vstrokedocker.cc \
 	vtooloptionsdocker.cc \
-	vdocumentdocker.cc 
+	vdocumentdocker.cc
 
 libkarbondockers_la_METASOURCES = AUTO
 

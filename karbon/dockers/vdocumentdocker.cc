@@ -552,6 +552,7 @@ void VHistoryTab::commandExecuted( VCommand* command )
 		m_history->setCurrentItem( item );
 		m_history->ensureItemVisible( item );
 	}
+	m_history->update();
 } // VHistoryTab::commandExecuted
 
 void VHistoryTab::commandAdded( VCommand* command )
@@ -587,6 +588,7 @@ void VHistoryTab::commandAdded( VCommand* command )
 	
 	m_history->sort();
 	m_history->ensureItemVisible( m_history->currentItem() );
+	m_history->update();
 } // VHistoryTab::commandAdded
 
 void VHistoryTab::removeFirstCommand()
@@ -691,6 +693,7 @@ void VHistoryTab::groupingChanged( int )
 				item = item->nextSibling();
 	}
 	m_history->sort();
+	m_history->update();
 } // VHistoryTab::groupingChanged
 
 /*************************************************************************
