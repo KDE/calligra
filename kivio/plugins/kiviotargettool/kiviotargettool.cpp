@@ -34,7 +34,7 @@ namespace Kivio {
   TargetTool::TargetTool(KivioView* parent) : MouseTool(parent, "Add Target Mouse Tool")
   {
     m_targetAction = new Kivio::MouseToolAction(i18n("Add Connector Target"),
-        "add_target", actionCollection(), "addTargetTool");
+        "add_target", 0, actionCollection(), "addTargetTool");
     connect(m_targetAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
     connect(m_targetAction, SIGNAL(doubleClicked()), this, SLOT(makePermanent()));
 

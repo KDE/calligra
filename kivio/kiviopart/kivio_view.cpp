@@ -146,7 +146,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   dcop = 0;
   dcopObject(); // build it
 
-  m_pageCountSLbl = new KStatusBarLabel(i18n("Page %1/%2").arg(0).arg(0), PAGECOUNT_TEXT);
+  m_pageCountSLbl = new KStatusBarLabel(i18n("%1 current page, %2 total number of pages", "Page %1/%2").arg(0).arg(0), PAGECOUNT_TEXT);
   addStatusBarItem(m_pageCountSLbl, 0, false);
 
   m_infoSLbl = new KStatusBarLabel("", INFO_TEXT);
