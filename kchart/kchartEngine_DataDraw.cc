@@ -270,8 +270,8 @@ void kchartEngine::drawCross()
 
 void kchartEngine::draw3DLines()
 {
-  int y1[num_sets];
-  int y2[num_sets];
+  int *y1 = new int[num_sets];
+  int *y2 = new int[num_sets];
 
   for(int i=1; i<num_points; ++i )
     {
@@ -299,7 +299,8 @@ void kchartEngine::draw3DLines()
 	       params->stack_type == KCHARTSTACKTYPE_SUM )
 	{// all same plane
 	  int set=0;
-	  QColor clr[num_sets], clrshd[num_sets];
+	  QColor *clr = new QColor[num_sets];
+          QColor *clrshd = new QColor[num_sets];
 	  float usey1 = 0.0;
 	  float usey2 = 0.0;
 	  for(int j=0,set=0; j<num_sets; ++j ) {
@@ -328,8 +329,12 @@ void kchartEngine::draw3DLines()
 			set,
 			clr,
 			clrshd );
+          delete [] clr;
+          delete [] clrshd;
 	}
     }
+  delete [] y1;
+  delete [] y2;
 }
 
 
@@ -339,7 +344,7 @@ void kchartEngine::drawArea() {
     {
     case KCHARTSTACKTYPE_SUM:
       {
-	float	lasty[num_points];
+	float  *lasty = new float[num_points];
 	j = 0;
 	for( i=1; i<num_points; ++i )
 	  if( CELLEXISTS(j,i) )
@@ -363,6 +368,7 @@ void kchartEngine::drawArea() {
 			    params->threeD()? ExtColorShd[j][i]: ExtColor[j][i] );
 	      lasty[i] += CELLVALUE(j,i);
 	    }
+        delete [] lasty;
       }
       break;
 
@@ -641,9 +647,9 @@ void kchartEngine::draw3DCombo() {
 
 void kchartEngine::drawPie()
 {
-  float val[num_sets];
-  QColor color[num_sets];
-  QColor colorShd[num_sets];
+  float *val = new float[num_sets];
+  QColor *color = new QColor[num_sets];
+  QColor *colorShd = new QColor[num_sets];
   for(int i=0; i<num_sets; ++i )
     {
       if( CELLEXISTS(i,params->colPie))
@@ -654,5 +660,8 @@ void kchartEngine::drawPie()
       colorShd[i]=ExtColorShd[i][0];
     }
   pie_gif(imagewidth,imageheight,p,params,num_sets,val,color,colorShd);
+  delete [] colorShd;
+  delete [] color;
+  delete [] val;
 }
 

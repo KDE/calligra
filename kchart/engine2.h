@@ -18,12 +18,12 @@
 /* ref is front plane */
 /* allows for intersecting 3D lines      */
 /*  (also used for single 3D lines >:-Q  */
-struct YS { 
-    int y1; 
-    int y2; 
-    float slope; 
-    QColor lnclr; 
-    QColor shclr; 
+struct YS {
+    int y1;
+    int y2;
+    float slope;
+    QColor lnclr;
+    QColor shclr;
 };
 
 
@@ -64,7 +64,7 @@ struct tmp_slice_t { int	i;					// original index
     char	hidden;				// 'behind' top [3D] pie
     float	angle;				// radian
     float	slice; };			// radian
-static float				pie_3D_rad; 	// user requested 3D angle in radians
+extern float				pie_3D_rad; 	// user requested 3D angle in radians
 
 // degrees (radians) between angle a, and depth angle
 // 1&2, so comparisons can be done.
@@ -73,7 +73,7 @@ static float				pie_3D_rad; 	// user requested 3D angle in radians
 #define RAD_DIST2( a ) ( (dist_foo2=ABS(((a>-.00001&&a<.00001)?0.00001:a)-pie_3D_rad)), ((dist_foo2>M_PI)? ABS(dist_foo2-2.0*M_PI): dist_foo2) )
 
 
-static float				dist_foo1, dist_foo2; // by Werner
+extern float	       dist_foo1, dist_foo2; // by Werner
 
 
 #define	HYP_DEPTH	( (double)((imagewidth+imageheight)/2) * ((double)params->_3d_depth)/100.0 )

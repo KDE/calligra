@@ -48,8 +48,10 @@ public:
     KChartParameters* params() const { return _params; };
     // save and load
     virtual bool save( std::ostream&, const char *_format );
+    virtual bool save() { return KParts::ReadWritePart::save(); }
     virtual bool loadChildren( KoStore* _store );
     virtual bool loadXML( const QDomDocument& doc, KoStore* store );
+    virtual bool loadXML(KOMLParser &p, KoStore *s) { return KoDocument::loadXML(p, s); }
     virtual bool load( std::istream& in, KoStore* _store );
     bool m_bLoading;
     bool isLoading() {

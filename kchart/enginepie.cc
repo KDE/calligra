@@ -15,6 +15,10 @@
 #include <math.h>
 #include <stdio.h> //PENDING(kalle) Remove?
 
+float pie_3D_rad = 0.;
+float dist_foo1 = 0.;
+float dist_foo2 = 0.;
+
 /* expect slice number:     i (index into slice_angle array) *\
  *   and position on slice: f (0: slice middle,              *
  *                             1: leading (clockwise),       *
@@ -97,13 +101,14 @@ pie_gif( short imagewidth,
     // short num_slices2 = 0;
     // char any_too_small = FALSE;
     char *others = new char[num_points];
-    float slice_angle[3][num_points];	// must be used with others[]
 
+    // must be used with others[]
+    float (*slice_angle)[3] = new float[num_points][3];
 
     int	xdepth_3D = 0;// affects func_px()
     int ydepth_3D = 0;// affects func_py()
-    int	do3Dx = 0;  // reserved for macro use
-    int do3Dy = 0;
+    // int	do3Dx = 0;  // reserved for macro use
+    // int do3Dy = 0;
 
 
     //	GDCPIE_3d_angle = MOD_360(90-params->_3d_angle+360);
@@ -422,7 +427,7 @@ pie_gif( short imagewidth,
         /* fill in connection to foreground pie */
         /* this is where we earn our keep */
         {
-            struct tmp_slice_t	tmp_slice[2*num_points+2];
+            tmp_slice_t *tmp_slice = new tmp_slice_t[2*num_points+2];
             int	t,num_slice_angles = 0;
 
             for( i=0; i<num_points; ++i )
@@ -511,6 +516,7 @@ pie_gif( short imagewidth,
 						 OY(i,tmp_slice[t].angle,1) );
 						 }*/
 			}
+            delete [] tmp_slice;
 	}
 
     }
@@ -710,5 +716,6 @@ pie_gif( short imagewidth,
 	}
 	delete [] SliceColor;
 	delete [] SliceColorShd;
+        delete [] slice_angle;
 	delete others;
 }
