@@ -47,6 +47,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiQueryDesigner *parent
 	connect(m_addButton, SIGNAL(clicked()), this, SLOT(slotAddTable()));
 
 	m_designTable = new KexiTableView(this);
+	m_designTable->m_editOnDubleClick = true;
 	connect(m_designTable, SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
 
 	m_designTable->viewport()->setAcceptDrops(true);
@@ -58,6 +59,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiQueryDesigner *parent
 	m_designTable->addColumn(i18n("condition"), QVariant::String, true);
 	
 	KexiTableItem *i = new KexiTableItem(m_designTable);
+	i->setValue(0, 1);
 	i->setInsertItem(true);
 
 	QGridLayout *g = new QGridLayout(this);
