@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,31 +71,33 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLHistory : public QScrollView
 
 //		void		contextMenu(const QPoint &pos, HistoryEntry *e);
 
-		void		setHistory(History *h);
+		void setHistory(History *h);
 
 		QString selectedStatement() const;
 
 	public slots:
-		void		addEvent(QString q, bool s, const QString &error);
+		void addEvent(QString q, bool s, const QString &error);
 
-		void		slotToClipboard();
-		void		slotEdit();
+		void slotToClipboard();
+		void slotEdit();
 
 		void clear();
 
 //		HistoryItem	itemAt(int y);
 
 	protected:
-		void		addEntry(HistoryEntry *e);
-		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
-		void		contentsMousePressEvent(QMouseEvent * e);
+		void addEntry(HistoryEntry *e);
+		virtual void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
+		virtual void contentsMousePressEvent(QMouseEvent * e);
+		virtual void contentsMouseDoubleClickEvent(QMouseEvent * e);
 
 	signals:
-		void		editRequested(const QString &text);
+		void editRequested(const QString &text);
+		void currentItemDoubleClicked();
 
 	private:
-		History		*m_history;
-		HistoryEntry	*m_selected;
+		History *m_history;
+		HistoryEntry *m_selected;
 		KPopupMenu *m_popup;
 };
 

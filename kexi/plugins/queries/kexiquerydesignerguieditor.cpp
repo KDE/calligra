@@ -167,7 +167,7 @@ KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
 void
 KexiQueryDesignerGuiEditor::initTableColumns()
 {
-	KexiTableViewColumn *col1 = new KexiTableViewColumn(i18n("Field"), KexiDB::Field::Enum);
+	KexiTableViewColumn *col1 = new KexiTableViewColumn(i18n("Column"), KexiDB::Field::Enum);
 
 	d->fieldColumnData = new KexiTableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
 	col1->setRelatedData( d->fieldColumnData );
@@ -344,29 +344,36 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	for (int i=0; i<(int)d->buffers->size(); i++) {
 		KexiPropertyBuffer *buf = d->buffers->at(i);
 		if (buf) {
-			KexiDB::TableSchema *t = d->conn->tableSchema((*buf)["table"].value().toString());
-			if (!t) {
-				kdWarning() << "query designer: NO TABLE '" << (*buf)["table"].value().toString() << "'" << endl;
-				continue;
+			QString tableName = (*buf)["table"].value().toString().stripWhiteSpace();
+			if (tableName.isEmpty()) {
+				//expresion?
+				//TODO
 			}
-			QString fieldName = (*buf)["field"].value().toString();
-			bool fieldVisible = (*buf)["visible"].value().toBool();
-			if (fieldName=="*") {
-				//all tables asterisk
-				temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, 0 ), fieldVisible );
-				fieldsFound = true;
-			}
-			else if (fieldName.find(".*")!=-1) {
-				//single-table asterisk: <tablename> + ".*" + number
-				temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, t ), fieldVisible );
-			} else {
-				KexiDB::Field *f = t->field( fieldName );
-				if (!f) {
-					kdWarning() << "query designer: NO FIELD '" << fieldName << "'" << endl;
+			else {
+				KexiDB::TableSchema *t = d->conn->tableSchema(tableName);
+				if (!t) {
+					kdWarning() << "query designer: NO TABLE '" << (*buf)["table"].value().toString() << "'" << endl;
 					continue;
 				}
-				temp->query->addField(f, fieldVisible);
-				fieldsFound = true;
+				QString fieldName = (*buf)["field"].value().toString();
+				bool fieldVisible = (*buf)["visible"].value().toBool();
+				if (fieldName=="*") {
+					//all tables asterisk
+					temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, 0 ), fieldVisible );
+					fieldsFound = true;
+				}
+				else if (fieldName.find(".*")!=-1) {
+					//single-table asterisk: <tablename> + ".*" + number
+					temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, t ), fieldVisible );
+				} else {
+					KexiDB::Field *f = t->field( fieldName );
+					if (!f) {
+						kdWarning() << "query designer: NO FIELD '" << fieldName << "'" << endl;
+						continue;
+					}
+					temp->query->addField(f, fieldVisible);
+					fieldsFound = true;
+				}
 			}
 		}
 	}
@@ -529,11 +536,11 @@ void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 	const bool was_dirty = dirty();
 	
 	//add fields
-	int row_num = 0;
+	uint row_num = 0;
 	KexiDB::Field *field;
 	for (KexiDB::Field::ListIterator it(*query->fields()); (field = it.current()); ++it, row_num++) {
 		//add row
-		QString tableName, fieldName;
+		QString tableName, fieldName, columnAlias;
 		if (field->isQueryAsterisk()) {
 			if (field->table()) {//single-table asterisk
 				tableName = field->table()->name();
@@ -545,14 +552,26 @@ void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 			}
 		}
 		else {
-//TODO: this can be also an expression --> CRASH!
-			tableName = field->table()->name();
-			fieldName = field->name();
+			columnAlias = query->columnAlias(row_num);
+			if (field->isExpression()) {
+//				if (columnAlias.isEmpty()) {
+//					columnAlias = i18n("expression", "expr%1").arg(row_num); //TODO
+//				}
+				fieldName = field->expression()->toString();
+			}
+			else {
+				tableName = field->table()->name();
+				fieldName = field->name();
+			}
 		}
-		KexiTableItem *newItem = createNewRow(tableName, fieldName);
+		KexiTableItem *newItem = createNewRow(tableName, fieldName); //, columnAlias);
 		d->dataTable->tableView()->insertItem(newItem, row_num);
 		//create buffer
 		createPropertyBuffer( row_num, tableName, fieldName, true/*new one*/ );
+		KexiPropertyBuffer &buf = *propertyBuffer();
+		if (!columnAlias.isEmpty()) {//add alias
+			buf["alias"].setValue(columnAlias, false);
+		}
 	}
 	propertyBufferSwitched();
 
@@ -655,11 +674,32 @@ QSize KexiQueryDesignerGuiEditor::sizeHint() const
 	return QSize(QMAX(s1.width(),s2.width()), s1.height()+s2.height());
 }
 
+#if 0
+KexiTableItem* 
+KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString& fieldName) const
+{
+	return createNewRowInternal(tableName+"."+fieldName, tableName);
+}
+
+KexiTableItem* 
+KexiQueryDesignerGuiEditor::createNewRow(const KexiDB::Field &exprField) const
+{
+	exprField.
+	return createNewRowInternal(tableName+"."+fieldName, tableName);
+}
+#endif
+
 KexiTableItem* 
 KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString& fieldName) const
 {
 	KexiTableItem *newItem = new KexiTableItem(d->data->columnsCount());
-	(*newItem)[0]=tableName+"."+fieldName;
+	QString key;
+//	if (!alias.isEmpty())
+//		key=alias+": ";
+	if (!tableName.isEmpty())
+		key = (tableName+".");
+	key += fieldName;
+	(*newItem)[0]=key;
 	(*newItem)[1]=tableName;
 	(*newItem)[2]=QVariant(true,1);//visible
 	(*newItem)[3]=QVariant(0);//totals

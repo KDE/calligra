@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
@@ -138,6 +138,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWid
 	d->historyHead->addButton("editclear", msg_clear, d->history, SLOT(clear()));
 	d->history->popupMenu()->insertItem(SmallIcon("select_item"), msg_back, this, SLOT(slotSelectQuery()));
 	d->history->popupMenu()->insertItem(SmallIcon("editclear"), msg_clear, d->history, SLOT(clear()));
+	connect(d->history, SIGNAL(currentItemDoubleClicked()), this, SLOT(slotSelectQuery()));
 
 	d->heightForHistoryMode = -1; //height() / 2;
 	//d->historyHead->hide();

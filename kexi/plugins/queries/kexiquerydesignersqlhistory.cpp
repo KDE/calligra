@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -103,6 +104,14 @@ KexiQueryDesignerSQLHistory::contentsMousePressEvent(QMouseEvent * e)
 				m_popup->exec(e->globalPos());
 			}
 	}
+}
+
+void
+KexiQueryDesignerSQLHistory::contentsMouseDoubleClickEvent(QMouseEvent * e)
+{
+	contentsMousePressEvent(e);
+	if (m_selected)
+		emit currentItemDoubleClicked();
 }
 
 void
