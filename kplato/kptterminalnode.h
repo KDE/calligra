@@ -20,7 +20,7 @@
 #ifndef kptterminalnode_h
 #define kptterminalnode_h
 
-#include"kptnode.h"
+#include "kptnode.h"
 
 class KPTTerminalNode : public KPTNode {
  public:
