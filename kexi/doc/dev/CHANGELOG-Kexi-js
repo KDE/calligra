@@ -85,6 +85,8 @@ TODO: add kexi driver version info
 TODO: add server version info retrieval
 TODO: add schema to kexi__* tables on createTable()
 TODO: add support for creation temporary databases
+TODO: Connection::selectStatement( KexiDB::QuerySchema& querySchema ) :
+		--add WHERE and other sql parts
 
 FIX: corrupted database can be created sometimes (eg. for tests/newapi sqlite dbcreation)
         --reason: maybe file was not flushed and app too early exited?
@@ -140,6 +142,19 @@ Jowenn's KexiDataProvider class functionality seems to be something like kexidb 
 
 </RENAME_PROPOSALS>
 
+2003-10-13
+- Cursor has now two ways for definition: 1) use raw statement 2) use QuerySchema
+- Conenction: prepareQuery() accepting QuerySchema overload added 
+- TableSchema::query() convenience function added
+- tableview: QuerySchema is now used a bit
+- QuerySchema(TableSchema* tableSchema) is created by defining 
+ "all-tables query asterisk" (see QueryAsterisk) item. 
+- Connection: implemented and selectStatement() replaced queryStatement() because 
+ not only "select" queries will be implemented.
+- QuerySchema::fieldsExpanded() convenient function added to expand query asterisks
+- KexiDataTableView uses QuerySchema even smarter
+- kexi/kexidb/tests moved to kexi/ to avoid curcular deps
+
 2003-10-12
 - Connection::isDatabaseUsed() fixed
 - Connection: isConnected() is substituted with isDatabaseUsed() in some cases
@@ -161,7 +176,6 @@ Jowenn's KexiDataProvider class functionality seems to be something like kexidb 
 - KexiDB::IndexSchema now contains informations about multiple related Reference objects
 - kexidb/tests/newapi : now tests are functions, so can be called as subtests if needed;
    gui tests group added; tableview gui test introduced
-
 
 2003-10-10
 - FIX: creating kexidb system tables schema objects on useDatabase()
