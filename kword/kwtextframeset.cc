@@ -3695,9 +3695,10 @@ void KWTextFrameSetEdit::changeCaseOfText(TypeOfCase _type)
 {
     QString text;
     if ( textFrameSet()->hasSelection() )
-        text = textFrameSet()->selectedText().stripWhiteSpace ();
+        text = textFrameSet()->selectedText();
     if(!text.isEmpty())
     {
+        int i=0;
         switch(_type)
         {
             case UpperCase:
@@ -3707,7 +3708,12 @@ void KWTextFrameSetEdit::changeCaseOfText(TypeOfCase _type)
                 text=text.lower();
                 break;
             case TitleCase:
-                text=text.at(0).upper()+text.right(text.length()-1);
+                for(i=0;i<text.length();i++)
+                {
+                    if(text.at(i)!=' ')
+                        break;
+                }
+                text=text.replace(i, 1, text.at(i).upper() );
                 break;
             default:
                 kdDebug()<<"Error in changeCaseOfText !\n";
