@@ -74,8 +74,19 @@ public:
   void setEnabled(bool e) { enabled = e; }
   bool isEnabled() { return enabled; }
 
-  static bool isUpper(const QChar &c);
+  void configTypographicQuotes(TypographicQuotes _tq);
+  void configUpperCase(bool _uc);
+  void configUpperUpper(bool _uu);
   
+  TypographicQuotes getConfigTypographicQuotes()
+  { return typographicQuotes; }
+  bool getConfigUpperCase()
+  { return convertUpperCase; }
+  bool getConfigUpperUpper()
+  { return convertUpperUpper; }
+  
+  static bool isUpper(const QChar &c);
+
 protected:
   KWordDocument *doc;
   TypographicQuotes typographicQuotes;
@@ -83,7 +94,7 @@ protected:
   KWString *tmpBuffer;
   bool lastWasDotSpace,convertUpperCase;
   bool lastWasUpper,convertUpperUpper;
-  
+
 };
 
 #endif

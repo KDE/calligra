@@ -1118,3 +1118,10 @@ Reggie, 23.4.1999:
 ------------------
 - Implemented autoformat for Upper-Upper -> Upper-Lower
   convert (e.g. convert HAllo to Hallo)
+
+Reggie, 24.4.1999:
+------------------
+- Improvements in Upper-Upper -> Upper-Lower and 
+  automatical uppercase conversation
+- Started implementing dialog to configure autoformat
+- Implemented methodes for configuration of simple autoformat

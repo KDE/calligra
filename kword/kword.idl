@@ -48,6 +48,7 @@ module KWord
       slot void formatFrameSet();
 
       slot void extraSpelling();
+      slot void extraAutoFormat();
       slot void extraStylist();
       slot void extraOptions();
 

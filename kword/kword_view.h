@@ -62,6 +62,7 @@ class KWordShell;
 #include "docstruct.h"
 #include "variable.h"
 #include "footnotedia.h"
+#include "autoformatdia.h"
 
 #include <koPageLayoutDia.h>
 #include <koPartSelectDia.h>
@@ -153,6 +154,7 @@ public:
   virtual void formatFrameSet();
 
   virtual void extraSpelling();
+  virtual void extraAutoFormat();
   virtual void extraStylist();
   virtual void extraOptions();
 
@@ -345,6 +347,7 @@ protected:
   // extra menu
   OpenPartsUI::Menu_var m_vMenuExtra;
   CORBA::Long m_idMenuExtra_Spelling;
+  CORBA::Long m_idMenuExtra_AutoFormat;
   CORBA::Long m_idMenuExtra_Stylist;
   CORBA::Long m_idMenuExtra_Options;
 

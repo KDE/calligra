@@ -1108,6 +1108,16 @@ void KWordView::extraSpelling()
 }
 
 /*===============================================================*/
+void KWordView::extraAutoFormat()
+{
+  KWAutoFormatDia dia(0L,"",m_pKWordDoc,gui->getPaperWidget());
+  dia.setCaption(i18n("Autoformat"));
+  dia.show();
+
+  sendFocusEvent();
+}
+
+/*===============================================================*/
 void KWordView::extraStylist()
 {
   if (styleManager)
@@ -1894,7 +1904,7 @@ bool KWordView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
     }
 
   CORBA::WString_var text;
-    
+
   // edit menu
   text = Q2C( i18n("&Edit") );
   _menubar->insertMenu(text,m_vMenuEdit,-1,-1);
@@ -1998,7 +2008,7 @@ bool KWordView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
   text = Q2C( i18n("Date (fix)") );
   m_idMenuInsert_VariableDateFix = m_vMenuInsert_Variable->insertItem4(text,this,"insertVariableDateFix",0,-1,-1);
   text = Q2C( i18n("Date (variable)") );
-  m_idMenuInsert_VariableDateVar = m_vMenuInsert_Variable->insertItem4(text,this,"insertVariableDateVar",0,-1,-1); 
+  m_idMenuInsert_VariableDateVar = m_vMenuInsert_Variable->insertItem4(text,this,"insertVariableDateVar",0,-1,-1);
   text = Q2C( i18n("Time (fix)") );
   m_idMenuInsert_VariableTimeFix = m_vMenuInsert_Variable->insertItem4(text,this,"insertVariableTimeFix",0,-1,-1);
   text = Q2C( i18n("Time (variable)") );
@@ -2106,7 +2116,9 @@ bool KWordView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
 
   pix = OPUIUtils::convertPixmap(ICON("spellcheck.xpm"));
   text = Q2C( i18n("&Spell Cheking...") );
-  m_idMenuExtra_Spelling = m_vMenuExtra->insertItem6(pix,text,this,"extraSpelling",ALT + Key_C,-1,-1);
+  m_idMenuExtra_Spelling = m_vMenuExtra->insertItem4(text,this,"extraSpelling",ALT + Key_C,-1,-1);
+  text = Q2C( i18n("&Autoformat...") );
+  m_idMenuExtra_AutoFormat = m_vMenuExtra->insertItem6(pix,text,this,"extraAutoFormat",0,-1,-1);
   text = Q2C( i18n("&Stylist...") );
   m_idMenuExtra_Stylist = m_vMenuExtra->insertItem4(text,this,"extraStylist",ALT + Key_S,-1,-1);
 
@@ -3123,7 +3135,7 @@ void KWordView::changeUndo(QString _text,bool _enable)
   if (!m_vMenuEdit || !m_vToolBarEdit) return;
 
   CORBA::WString_var text;
-  
+
   if (_enable)
     {
       m_vMenuEdit->setItemEnabled(m_idMenuEdit_Undo,true);
@@ -3148,7 +3160,7 @@ void KWordView::changeRedo(QString _text,bool _enable)
   if (!m_vMenuEdit || !m_vToolBarEdit) return;
 
   CORBA::WString_var text;
-  
+
   if (_enable)
     {
       m_vMenuEdit->setItemEnabled(m_idMenuEdit_Redo,true);
