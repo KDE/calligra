@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  * Copyright 2000 by Laurent Montel, released under Artistic License.
  */
 
@@ -70,7 +68,7 @@ KChartPieConfigPage::KChartPieConfigPage( KDChartParams* params,
     label->setAlignment(Qt::AlignCenter);
     grid->addWidget( label,6,1);
 
-    depth = new QSpinBox(0, 10, 1, this);
+    depth = new QSpinBox(0, 40, 1, this);
     depth->resize(100, depth->sizeHint().height() );
     grid->addWidget( depth,7,1);
 
@@ -192,7 +190,7 @@ void KChartPieConfigPage::apply()
     if( _params->threeDPies() )	{
         _params->setThreeDPieHeight( depth->value() );
     }
-    
+
     _params->setPieStart( angle->value() );
 
     // PENDING(kalle) Put back in
