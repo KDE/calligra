@@ -243,6 +243,7 @@ void KWView::initGui()
 
     updatePageInfo();
     updateButtons();
+    frameSelectedChanged();
 }
 
 void KWView::setupActions()
