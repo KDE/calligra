@@ -264,6 +264,10 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     protectContent = FALSE;
     m_canvas = 0L;
     m_spell.kspell = 0;
+#if HAVE_LIBASPELL
+    m_spell.kospell = 0;
+#endif
+
     automaticScreenPresFirstTimer = true;
     m_actionList.setAutoDelete( true );
     checkConcavePolygon = false;
@@ -391,6 +395,21 @@ KPresenterView::~KPresenterView()
         config->writeEntry("Notebar", notebar->isVisible());
     }
 
+#if HAVE_LIBASPELL
+    if(m_spell.kospell)
+    {
+        KPTextObject * objtxt = 0L;
+        if(m_spell.spellCurrTextObjNum !=-1)
+        {
+            objtxt =m_spell.textObject.at( m_spell.spellCurrTextObjNum ) ;
+            Q_ASSERT( objtxt );
+            if ( objtxt )
+                objtxt->removeHighlight();
+        }
+        delete m_spell.kospell;
+    }
+
+#else
     if(m_spell.kspell)
     {
         KPTextObject * objtxt = 0L;
@@ -403,7 +422,7 @@ KPresenterView::~KPresenterView()
         }
         delete m_spell.kspell;
     }
-
+#endif
     delete presStructView;
     delete rb_oalign;
     delete rb_lbegin;
@@ -5133,7 +5152,11 @@ void KPresenterView::extraAutoFormat()
 
 void KPresenterView::extraSpelling()
 {
+#if HAVE_LIBASPELL
+    if (m_spell.kospell) return; // Already in progress
+#else
     if (m_spell.kspell) return; // Already in progress
+#endif
     m_spell.macroCmdSpellCheck=0L;
     m_spell.replaceAll.clear();
     m_spell.bSpellSelection = false;
@@ -5208,6 +5231,33 @@ void KPresenterView::spellCheckerReplaceAll( const QString &orig, const QString 
 
 void KPresenterView::startKSpell()
 {
+#if HAVE_LIBASPELL
+    // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
+    if(m_pKPresenterDoc->getKSpellConfig())
+    {
+        m_pKPresenterDoc->getKSpellConfig()->setIgnoreList(m_pKPresenterDoc->spellListIgnoreAll());
+        m_pKPresenterDoc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
+
+    }
+    m_spell.kospell = new KOSpell( this, i18n( "Spell Checking" ), /* m_pKPresenterDoc->getKSpellConfig()*/0L, true,true );
+
+
+    m_spell.kospell->setIgnoreUpperWords(m_pKPresenterDoc->dontCheckUpperWord());
+    m_spell.kospell->setIgnoreTitleCase(m_pKPresenterDoc->dontCheckTitleCase());
+
+    QObject::connect( m_spell.kospell, SIGNAL( death() ),
+                      this, SLOT( spellCheckerFinished() ) );
+    QObject::connect( m_spell.kospell, SIGNAL( misspelling( const QString &, const QStringList &, unsigned int) ),
+                      this, SLOT( spellCheckerMisspelling( const QString &, const QStringList &, unsigned int) ) );
+    QObject::connect( m_spell.kospell, SIGNAL( corrected( const QString &, const QString &, unsigned int) ),
+                      this, SLOT( spellCheckerCorrected( const QString &, const QString &, unsigned int ) ) );
+    QObject::connect( m_spell.kospell, SIGNAL( done( const QString & ) ),
+                      this, SLOT( spellCheckerDone( const QString & ) ) );
+    QObject::connect( m_spell.kospell, SIGNAL( ignoreall (const QString & ) ),
+                      this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
+    QObject::connect( m_spell.kospell, SIGNAL( replaceall( const QString &, const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &, const QString & )));
+     spellCheckerReady();
+#else
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
     if(m_pKPresenterDoc->getKSpellConfig())
     {
@@ -5232,6 +5282,7 @@ void KPresenterView::startKSpell()
     QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
                       this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
     QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &, const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &, const QString & )));
+#endif
 }
 
 void KPresenterView::spellCheckerIgnoreAll( const QString & word)
@@ -5262,7 +5313,11 @@ void KPresenterView::spellCheckerReady()
             continue;
         text += '\n'; // end of last paragraph
         text += '\n'; // empty line required by kspell
+#if HAVE_LIBASPELL
+        m_spell.kospell->check( text);
+#else
         m_spell.kspell->check( text );
+#endif
         textobj->textObject()->setNeedSpellCheck(true);
 
 
@@ -5272,10 +5327,15 @@ void KPresenterView::spellCheckerReady()
     if(!switchInOtherPage(i18n( "Do you want to spellcheck new page?")))
     {
         // Done
-        m_spell.kspell->cleanUp();
         m_pKPresenterDoc->setReadWrite(true);
+#if HAVE_LIBASPELL
+        delete m_spell.kospell;
+        m_spell.kospell=0;
+#else
+        m_spell.kspell->cleanUp();
         delete m_spell.kspell;
         m_spell.kspell = 0;
+#endif
         clearSpellChecker();
     }
     else
@@ -5353,13 +5413,18 @@ void KPresenterView::spellCheckerDone( const QString & )
         if ( textobj )
             textobj->removeHighlight();
     }
-
-    int result = m_spell.kspell->dlgResult();
-
+    int result;
+#if HAVE_LIBASPELL
+    result= m_spell.kospell->dlgResult();
+    //delete m_spell.kospell;
+    //m_spell.kospell = 0;
+#else
+    result= m_spell.kspell->dlgResult();
 
     m_spell.kspell->cleanUp();
     delete m_spell.kspell;
     m_spell.kspell = 0;
+#endif
 
     if ( result != KS_CANCEL && result != KS_STOP )
     {
@@ -5372,8 +5437,12 @@ void KPresenterView::spellCheckerDone( const QString & )
         }
         else
         {
+#if HAVE_LIBASPELL
+            spellCheckerReady();
+#else
             // Try to check another frameset
             startKSpell();
+#endif
         }
     }
     else
@@ -5391,9 +5460,15 @@ void KPresenterView::spellCheckerDone( const QString & )
 void KPresenterView::spellCheckerFinished()
 {
     KSpell::spellStatus status = m_spell.kspell->status();
+    bool kspellNoConfigured=false;
+
+#if HAVE_LIBASPELL
+    delete m_spell.kospell;
+    m_spell.kospell = 0;
+    //FIXME
+#else
     delete m_spell.kspell;
     m_spell.kspell = 0;
-    bool kspellNoConfigured=false;
     if (status == KSpell::Error)
     {
         kspellNoConfigured=true;
@@ -5402,6 +5477,7 @@ void KPresenterView::spellCheckerFinished()
     {
         KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
     }
+#endif
     KPTextObject * textobj = 0L;
     if( m_spell.spellCurrTextObjNum!=-1 )
     {

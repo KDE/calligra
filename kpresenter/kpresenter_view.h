@@ -20,6 +20,10 @@
 #ifndef kpresenter_view_h
 #define kpresenter_view_h
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <qguardedptr.h>
 #include <qtimer.h>
 
@@ -72,6 +76,10 @@ class KPrCanvas;
 class KoFontDia;
 class KoParagDia;
 class KPPixmapObject;
+
+#if HAVE_LIBASPELL
+class KOSpell;
+#endif
 
 class PageBase : public QWidget
 {
@@ -1099,6 +1107,9 @@ private:
     // Spell-checking
     struct {
 	KSpell *kspell;
+#if HAVE_LIBASPELL
+        KOSpell *kospell;
+#endif
 	int spellCurrTextObjNum;
 	QPtrList<KPTextObject> textObject;
 	KMacroCommand * macroCmdSpellCheck;
