@@ -5025,6 +5025,8 @@ void KSpreadView::refreshView()
 
     d->tabBar->setReverseLayout( true );
   }
+  else
+    d->tabBar->setReverseLayout( false );
 
 }
 
