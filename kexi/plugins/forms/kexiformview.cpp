@@ -33,6 +33,7 @@
 #include <kexidialogbase.h>
 #include <kexidatasourcewizard.h>
 #include <kexidb/fieldlist.h>
+#include <kexidb/connection.h>
 
 #include "kexidbform.h"
 #include "kexiformview.h"
@@ -365,7 +366,9 @@ KexiFormView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 		delete s;
 		return 0;
 	}
-	if (true!=storeData()) {
+	if (!storeData()) {
+		//failure: remove object's schema data to avoid garbage
+		m_conn->removeObject( s->id() );
 		delete s;
 		return 0;
 	}
