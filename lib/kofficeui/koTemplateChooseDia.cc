@@ -330,11 +330,13 @@ void KoTemplateChooseDia::chooseFile()
 #else
     filename = KFileDialog::getOpenFileName( dir, m_strImportFilter );
 #endif
-    
+
     if ( !filename.isEmpty() && QFileInfo( filename ).isFile() ||
 	( QFileInfo( filename ).isSymLink() && !QFileInfo( filename ).readLink().isEmpty() &&
 	 QFileInfo( QFileInfo( filename ).readLink() ).isFile() ) )
 	lFile->setText( filename );
 
     openFile();
+    if ( !filename.isEmpty() )
+	chosen();
 }
