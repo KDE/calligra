@@ -2,6 +2,8 @@
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2002, 2003 Ariya Hidayat <ariya@kde.org>
 
+#include "pgconfdia.h"
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -62,11 +64,13 @@ void PgConfDia::setupPageGeneral()
     QVBoxLayout *generalLayout = new QVBoxLayout( generalPage, 0, spacingHint() );
     generalLayout->setAutoAdd( true );
 
-    infiniteLoop = new QCheckBox( i18n( "&Infinite loop" ), generalPage );
-    infiniteLoop->setChecked( m_doc->spInfiniteLoop() );
-
     manualSwitch = new QCheckBox( i18n( "&Manual switch to next step" ), generalPage );
     manualSwitch->setChecked( m_doc->spManualSwitch() );
+    connect( manualSwitch, SIGNAL( toggled(bool) ), this, SLOT( manualSwitchToggled(bool) ) );
+
+    infiniteLoop = new QCheckBox( i18n( "&Infinite loop" ), generalPage );
+    infiniteLoop->setChecked( m_doc->spInfiniteLoop() );
+    infiniteLoop->setEnabled( !m_doc->spManualSwitch() );
 
     presentationDuration = new QCheckBox( i18n( "Show presentation &duration" ), generalPage );
     presentationDuration->setChecked( m_doc->presentationDuration() );
@@ -193,6 +197,11 @@ void PgConfDia::deselectAllSlides()
         if( checkItem ) checkItem->setOn( false );
         item = item->nextSibling();
     }
+}
+
+void PgConfDia::manualSwitchToggled( bool state )
+{
+    infiniteLoop->setEnabled( !state );
 }
 
 #include <pgconfdia.moc>
