@@ -34,7 +34,6 @@ KPrVariableCollection::KPrVariableCollection(KoVariableSettings *_setting)
 KoVariable *KPrVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc )
 {
     KPresenterDoc*m_doc=static_cast<KPresenterDoc*>(doc);
-    KoVariable *var=0L;
     switch(type) {
     case VT_PGNUM:
     {

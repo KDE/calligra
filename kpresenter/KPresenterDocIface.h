@@ -242,6 +242,7 @@ k_dcop:
     bool refreshSideBar()const;
     bool displayFiedCode()const;
     void setDisplayFiedCode( bool b);
+    QString configAutoFormatLanguage( )const;
 
 private:
     KPresenterDoc *doc;

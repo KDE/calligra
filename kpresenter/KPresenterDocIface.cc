@@ -840,3 +840,7 @@ void KPresenterDocIface::setDisplayFiedCode( bool b)
     doc->recalcVariables(VT_ALL);
 }
 
+QString KPresenterDocIface::configAutoFormatLanguage( )const
+{
+    return doc->getAutoFormat()->getConfigAutoFormatLanguage( );
+}
