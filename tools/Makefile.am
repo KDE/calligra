@@ -1,3 +1,1 @@
-SUBDIRS = converter spell thumbnail
-
-
+SUBDIRS = converter spell thumbnail thesaurus
