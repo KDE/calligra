@@ -150,11 +150,12 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
         if ( !parentStyle || parentStyle->attribute( it.key() ) != it.data() )
             writer->addAttribute( it.key().utf8(), it.data().utf8() );
     }
-
+    bool propertiesExist = !QString( propertiesElementName ).isEmpty();
     KoGenStyle::PropertyType i = KoGenStyle::DefaultType;
     if ( !m_properties[i].isEmpty() ||
          !m_properties[KoGenStyle::ChildElement].isEmpty() ) {
-        writer->startElement( propertiesElementName ); // e.g. paragraph-properties
+        if ( propertiesExist )
+            writer->startElement( propertiesElementName ); // e.g. paragraph-properties
         it = m_properties[i].begin();
         for ( ; it != m_properties[i].end(); ++it ) {
             if ( !parentStyle || parentStyle->property( it.key(), i ) != it.data() )
@@ -167,7 +168,8 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
                 writer->addCompleteElement( it.data().utf8() );
             }
         }
-        writer->endElement();
+        if ( propertiesExist )
+            writer->endElement();
     }
     i = KoGenStyle::TextType;
     if ( !m_properties[i].isEmpty() ) {
