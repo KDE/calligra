@@ -33,6 +33,17 @@ class RowLayout;
 #include <qstring.h>
 #include <qrect.h>
 #include <qlist.h>
+#include <qvaluelist.h>
+
+struct rowSize {
+int rowNumber;
+int rowHeight;
+};
+
+struct columnSize {
+int columnNumber;
+int columnWidth;
+};
 
 /**
  * Abstract base class. Every undo/redo action must
@@ -175,6 +186,26 @@ protected:
     QString m_tableName;
     QString m_name;
     QString m_redoName;
+};
+
+class KSpreadUndoResizeColRow : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoResizeColRow( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection );
+    virtual ~KSpreadUndoResizeColRow();
+
+    virtual void undo();
+    virtual void redo();
+
+    void createList( QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadTable* table );
+
+protected:
+    QRect m_rctRect;
+    QValueList<columnSize> m_lstColumn;
+    QValueList<columnSize> m_lstRedoColumn;
+    QValueList<rowSize> m_lstRow;
+    QValueList<rowSize> m_lstRedoRow;
+    QString m_tableName;
 };
 
 class KSpreadUndo

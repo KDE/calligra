@@ -526,18 +526,30 @@ void CellLayoutDlg::slotApply()
             patternPage->apply(obj);
         }
 
+    if(positionPage->getSizeHeight()!=heigthSize
+    || positionPage->getSizeWidth()!=widthSize)
+    {
+        KSpreadUndoResizeColRow *undo2;
+        if ( !table->doc()->undoBuffer()->isLocked())
+        {
+                QRect rect;
+                rect.setCoords( left, top, right , bottom  );
+                undo2 = new KSpreadUndoResizeColRow( table->doc(),table , rect );
+                table->doc()->undoBuffer()->appendUndo( undo2 );
+        }
+    }
     if(positionPage->getSizeHeight()!=heigthSize)
         {
         for ( int x = top; x <= bottom; x++ )
                 {
-                m_pView->vBorderWidget()->resizeRow(positionPage->getSizeHeight(),x );
+                m_pView->vBorderWidget()->resizeRow(positionPage->getSizeHeight(),x,false );
                 }
         }
     if(positionPage->getSizeWidth()!=widthSize)
         {
         for ( int x = left; x <= right; x++ )
                 {
-                m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x );
+                m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x,false );
                 }
         }
 

@@ -25,6 +25,8 @@
 #include "kspread_util.h"
 #include "kspread_layout.h"
 #include "kspread_table.h"
+#include "kspread_doc.h"
+#include "kspread_undo.h"
 #include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
@@ -121,66 +123,70 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
 
 void KSpreadresize2::slotChangeState()
 {
-if(m_pDefault->isChecked())
+    if(m_pDefault->isChecked())
 	m_pSize2->setEnabled(false);
-else
+    else
 	m_pSize2->setEnabled(true);
 }
 
 
 void KSpreadresize2::slotOk()
 {
-QRect selection( m_pView->activeTable()->selectionRect() ); 
-int new_size=m_pSize2->value();
-if(m_pDefault->isChecked())
-{
-switch(type)
+    QRect selection( m_pView->activeTable()->selectionRect() );
+    int new_size=m_pSize2->value();
+    if ( !m_pView->doc()->undoBuffer()->isLocked() )
+    {
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(),m_pView->activeTable() , selection );
+        m_pView->doc()->undoBuffer()->appendUndo( undo );
+    }
+    if(m_pDefault->isChecked())
+    {
+    switch(type)
 	{
 	case resize_row:
 		for(int i=selection.top();i<=selection.bottom();i++)
-			m_pView->vBorderWidget()->resizeRow(20,i );
+			m_pView->vBorderWidget()->resizeRow(20,i,false );
 		break;
 	case resize_column:
 		for(int i=selection.left();i<=selection.right();i++)
-			m_pView->hBorderWidget()->resizeColumn(60,i );
+			m_pView->hBorderWidget()->resizeColumn(60,i,false );
 		break;
 	default :
 	        kdDebug(36001) <<"Err in type_resize" << endl;
 		break;
 	}
-}
-else
-{
-switch(type)
+    }
+    else
+    {
+    switch(type)
 	{
 	case resize_row:
 		if(m_pDefault->isChecked())
 			for(int i=selection.top();i<=selection.bottom();i++)
-					m_pView->vBorderWidget()->resizeRow(20,i );
+					m_pView->vBorderWidget()->resizeRow(20,i,false );
 		else
 			for(int i=selection.top();i<=selection.bottom();i++)
-				m_pView->vBorderWidget()->resizeRow(new_size,i );
+				m_pView->vBorderWidget()->resizeRow(new_size,i,false );
 		break;
 	case resize_column:
 		if(m_pDefault->isChecked())
 			for(int i=selection.left();i<=selection.right();i++)
-				m_pView->hBorderWidget()->resizeColumn(60,i );
+				m_pView->hBorderWidget()->resizeColumn(60,i,false );
 		else
 			for(int i=selection.left();i<=selection.right();i++)
-				m_pView->hBorderWidget()->resizeColumn(new_size,i );
+				m_pView->hBorderWidget()->resizeColumn(new_size,i,false );
 		break;
 	default :
 	        kdDebug(36001) <<"Err in type_resize" << endl;
 		break;
 	}
-}
-accept();
+    }
+    accept();
 }
 
 void KSpreadresize2::slotClose()
 {
-
-reject();
+    reject();
 }
 
 

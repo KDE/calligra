@@ -5,6 +5,7 @@
 #include "kspread_util.h"
 #include "kspread_editors.h"
 #include "kspread_map.h"
+#include "kspread_undo.h"
 
 #include "kspread_view.h"
 #include "kspread_doc.h"
@@ -2031,12 +2032,20 @@ void KSpreadCanvas::setChooseMarker( const QPoint& p )
 void KSpreadCanvas::adjustArea()
 {
   QRect selection( activeTable()->selectionRect() );
+  QRect rect=selection;
+  if(selection.left() == 0)
+        rect.setCoords(markerColumn(),markerRow(),markerColumn(),markerRow() );
+  if ( !doc()->undoBuffer()->isLocked() )
+  {
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( doc(),activeTable() , rect );
+        doc()->undoBuffer()->appendUndo( undo );
+  }
   // Columns selected
   if( selection.left() != 0 && selection.bottom() == 0x7FFF )
   {
     for (int x=selection.left(); x <= selection.right(); x++ )
     {
-      hBorderWidget()->adjustColumn(x);
+      hBorderWidget()->adjustColumn(x,false);
     }
   }
   // Rows selected
@@ -2044,26 +2053,26 @@ void KSpreadCanvas::adjustArea()
   {
     for(int y = selection.top(); y <= selection.bottom(); y++ )
     {
-      vBorderWidget()->adjustRow(y);
+      vBorderWidget()->adjustRow(y,false);
     }
   }
   // No selection
   else if( selection.left() == 0 || selection.top() == 0 ||
            selection.bottom() == 0 || selection.right() == 0 )
   {
-    vBorderWidget()->adjustRow(markerRow());
-    hBorderWidget()->adjustColumn(markerColumn());
+    vBorderWidget()->adjustRow(markerRow(),false);
+    hBorderWidget()->adjustColumn(markerColumn(),false);
   }
   // Selection of a rectangular area
   else
   {
     for (int x=selection.left(); x <= selection.right(); x++ )
     {
-      hBorderWidget()->adjustColumn(x);
+      hBorderWidget()->adjustColumn(x,false);
     }
     for(int y = selection.top(); y <= selection.bottom(); y++ )
     {
-      vBorderWidget()->adjustRow(y);
+      vBorderWidget()->adjustRow(y,false);
     }
   }
 }
@@ -2080,8 +2089,7 @@ void KSpreadCanvas::equalizeRow()
     size=rl->height(this);
     for(int i=selection.top()+1;i<=selection.bottom();i++)
       size=QMAX(m_pView->activeTable()->rowLayout(i)->height(this),size);
-    for(int i=selection.top()+1;i<=selection.bottom();i++)
-      m_pView->vBorderWidget()->resizeRow(size,i );
+    m_pView->vBorderWidget()->equalizeRow(size);
   }
 
 }
@@ -2098,8 +2106,7 @@ void KSpreadCanvas::equalizeColumn()
     size=cl->width(this);
     for(int i=selection.left()+1;i<=selection.right();i++)
       size=QMAX(m_pView->activeTable()->columnLayout(i)->width(this),size);
-    for(int i=selection.left()+1;i<=selection.right();i++)
-      m_pView->hBorderWidget()->resizeColumn(size,i );
+    m_pView->hBorderWidget()->equalizeColumn(size);
   }
 
 }
@@ -2198,13 +2205,21 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
         int start = m_iResizedRow;
         int end = m_iResizedRow;
         QRect selection = m_pCanvas->activeTable()->selectionRect();
+        QRect rect;
+        rect.setCoords( 1,m_iResizedRow,0x7FFF,m_iResizedRow);
         if( selection.left() != 0 && selection.right() == 0x7FFF )
         {
             if( selection.contains( QPoint( 1, m_iResizedRow ) ) )
             {
                 start=selection.top();
                 end=selection.bottom();
+                rect=selection;
             }
+        }
+        if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
+            m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
         }
         int height = 0;
         int y = table->rowPos( m_iResizedRow, m_pCanvas );
@@ -2228,7 +2243,7 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
     m_bResize = FALSE;
 }
 
-void KSpreadVBorder::adjustRow(int _row)
+void KSpreadVBorder::adjustRow(int _row,bool makeUndo)
 {
   int adjust;
   int select;
@@ -2244,6 +2259,13 @@ void KSpreadVBorder::adjustRow(int _row)
   }
   if(adjust!=-1)
   {
+    if(makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
+    {
+        QRect rect;
+        rect.setCoords(1,select,0x7FFF,select);
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
+        m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+    }
     KSpreadTable *table = m_pCanvas->activeTable();
     assert( table );
     RowLayout *rl = table->nonDefaultRowLayout( select );
@@ -2253,12 +2275,38 @@ void KSpreadVBorder::adjustRow(int _row)
   }
 }
 
-void KSpreadVBorder::resizeRow(int resize,int nb  )
+void KSpreadVBorder::equalizeRow(int resize )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   ASSERT( table );
+  QRect selection( table->selectionRect() );
+  if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
+  {
+     KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , selection );
+     m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+  }
+  RowLayout *rl;
+  for (int i=selection.top();i<=selection.bottom();i++)
+  {
+     rl= table->nonDefaultRowLayout( i );
+     resize=QMAX((int)(20* m_pCanvas->zoom()), resize);
+     rl->setHeight( resize, m_pCanvas );
+  }
+}
+void KSpreadVBorder::resizeRow(int resize,int nb,bool makeUndo  )
+{
+  KSpreadTable *table = m_pCanvas->activeTable();
+  ASSERT( table );
+
   if(nb==-1)
   {
+    if(makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
+    {
+        QRect rect;
+        rect.setCoords(1,m_iSelectionAnchor,0x7FFF,m_iSelectionAnchor);
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
+        m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+    }
     RowLayout *rl = table->nonDefaultRowLayout( m_iSelectionAnchor );
     resize = QMAX( (int)(20* m_pCanvas->zoom()), resize );
     rl->setHeight( resize, m_pCanvas );
@@ -2269,12 +2317,24 @@ void KSpreadVBorder::resizeRow(int resize,int nb  )
     if(selection.bottom()==0 ||selection.top()==0 || selection.left()==0
        || selection.right()==0)
     {
+      if(makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
+      {
+        QRect rect;
+        rect.setCoords(1,m_pCanvas->markerRow(),0x7FFF,m_pCanvas->markerRow());
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
+        m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+      }
       RowLayout *rl = table->nonDefaultRowLayout( m_pCanvas->markerRow() );
       resize=QMAX((int)(20* m_pCanvas->zoom()), resize);
       rl->setHeight( resize, m_pCanvas );
     }
     else
     {
+      if(makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
+      {
+          KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , selection );
+          m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+      }
       RowLayout *rl;
       for (int i=selection.top();i<=selection.bottom();i++)
       {
@@ -2565,13 +2625,21 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
     int start=m_iResizedColumn;
     int end=m_iResizedColumn;
     QRect selection = m_pCanvas->activeTable()->selectionRect();
+    QRect rect;
+    rect.setCoords(m_iResizedColumn,1,m_iResizedColumn,0x7FFF);
     if(selection.left()!=0 && selection.bottom()==0x7FFF)
     {
         if(selection.contains(QPoint(m_iResizedColumn,1)))
                 {
                 start=selection.left();
                 end=selection.right();
+                rect=selection;
                 }
+    }
+    if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
+    {
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
+        m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
     }
     int width=0;
     int x = table->columnPos( m_iResizedColumn, m_pCanvas );
@@ -2593,7 +2661,7 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
   m_bResize = FALSE;
 }
 
-void KSpreadHBorder::adjustColumn(int _col)
+void KSpreadHBorder::adjustColumn(int _col, bool makeUndo)
 {
   int adjust;
   int select;
@@ -2612,6 +2680,15 @@ void KSpreadHBorder::adjustColumn(int _col)
   {
     KSpreadTable *table = m_pCanvas->activeTable();
     assert( table );
+
+    if( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
+    {
+        QRect rect;
+        rect.setCoords(select,1,select,0x7FFF);
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
+        m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+    }
+
     ColumnLayout *cl = table->nonDefaultColumnLayout( select );
 
     adjust = QMAX( (int)(20 * m_pCanvas->zoom()), adjust );
@@ -2620,13 +2697,40 @@ void KSpreadHBorder::adjustColumn(int _col)
   }
 }
 
-
-void KSpreadHBorder::resizeColumn(int resize,int nb  )
+void KSpreadHBorder::equalizeColumn( int resize)
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   ASSERT( table );
+  QRect selection( table->selectionRect() );
+  if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
+  {
+      KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , selection );
+      m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+  }
+  ColumnLayout *cl;
+  for (int i=selection.left();i<=selection.right();i++)
+  {
+      cl= table->nonDefaultColumnLayout( i );
+      resize = QMAX( (int)(20* m_pCanvas->zoom()), resize );
+      cl->setWidth( resize, m_pCanvas );
+  }
+
+}
+
+void KSpreadHBorder::resizeColumn(int resize,int nb,bool makeUndo  )
+{
+  KSpreadTable *table = m_pCanvas->activeTable();
+  ASSERT( table );
+
   if( nb == -1 )
   {
+    if( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
+    {
+        QRect rect;
+        rect.setCoords(m_iSelectionAnchor,1,m_iSelectionAnchor,0x7FFF);
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
+        m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+    }
     ColumnLayout *cl = table->nonDefaultColumnLayout( m_iSelectionAnchor );
     resize = QMAX( (int)(20* m_pCanvas->zoom()), resize );
     cl->setWidth( resize, m_pCanvas );
@@ -2637,6 +2741,14 @@ void KSpreadHBorder::resizeColumn(int resize,int nb  )
     if( selection.bottom() == 0 || selection.top() == 0 || selection.left() == 0 ||
         selection.right() == 0 )
     {
+      if( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
+      {
+        QRect rect;
+        rect.setCoords(m_iSelectionAnchor,1,m_iSelectionAnchor,0x7FFF);
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
+        m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+      }
+
       ColumnLayout *cl = table->nonDefaultColumnLayout( m_pCanvas->markerColumn() );
 
       resize = QMAX( (int)(20* m_pCanvas->zoom()), resize );
@@ -2644,6 +2756,11 @@ void KSpreadHBorder::resizeColumn(int resize,int nb  )
     }
     else
     {
+      if( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
+      {
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , selection );
+        m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
+      }
       ColumnLayout *cl;
       for (int i=selection.left();i<=selection.right();i++)
       {

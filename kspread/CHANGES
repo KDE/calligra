@@ -909,3 +909,8 @@ into this area
 * Pressing Enter in the edit widget without changing the
   value doesn't clear the cell anymore.
 
+2000-08-18-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+* Implemented Undo/Redo on column/row resizing
+* Another fix for merged cells (conditionnal formatting).
+

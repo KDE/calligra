@@ -3461,7 +3461,8 @@ void KSpreadTable::setConditional( const QPoint &_marker,KSpreadConditional tmp[
         for( ;c; c = c->nextCell() )
         {
             int row = c->row();
-            if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+            if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+            && !c->isObscured())
             {
                 c->setDisplayDirtyFlag();
                 for(int i=0;i<3;i++)
@@ -3528,7 +3529,8 @@ void KSpreadTable::setConditional( const QPoint &_marker,KSpreadConditional tmp[
         for( ;c; c = c->nextCell() )
         {
             int col = c->column();
-            if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+            if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+            && !c->isObscured())
             {
                 c->setDisplayDirtyFlag();
 
@@ -3605,6 +3607,9 @@ void KSpreadTable::setConditional( const QPoint &_marker,KSpreadConditional tmp[
                     m_cells.insert( cell, x, y );
                 }
 
+                if (!cell->isObscured())
+                {
+
                 cell->setDisplayDirtyFlag();
                 for(int i=0;i<3;i++)
                 {
@@ -3656,6 +3661,7 @@ void KSpreadTable::setConditional( const QPoint &_marker,KSpreadConditional tmp[
                     }
                 }
                 cell->clearDisplayDirtyFlag();
+                }
             }
 
         emit sig_updateView( this, r );

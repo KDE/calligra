@@ -139,7 +139,7 @@ KSpreadUndoRemoveColumn::KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadTable
     // This allows us to treat the QCString like a QByteArray later on.
     m_data = buffer.utf8();
     int len = m_data.length();
-    char tmp = m_data[ len - 1 ]; 
+    char tmp = m_data[ len - 1 ];
     m_data.resize( len );
     *( m_data.data() + len - 1 ) = tmp;
 }
@@ -153,7 +153,7 @@ void KSpreadUndoRemoveColumn::undo()
     KSpreadTable* table = doc()->map()->findTable( m_tableName );
     if ( !table )
 	return;
-    
+
     doc()->undoBuffer()->lock();
 
     table->insertColumn( m_iColumn);
@@ -173,7 +173,7 @@ void KSpreadUndoRemoveColumn::redo()
 	return;
 
     table->removeColumn( m_iColumn );
-    
+
     doc()->undoBuffer()->unlock();
 }
 
@@ -231,7 +231,7 @@ KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadTable *_tab
     QRect selection;
     selection.setCoords( 0, _row, 0x7fff, _row );
     QDomDocument doc = _table->saveCellRect( selection );
-    
+
     // Save to buffer
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
@@ -574,5 +574,162 @@ void KSpreadUndoDelete::redo()
 
     //table->deleteCells( m_selection );
     table->refreshView( m_selection );
+    doc()->undoBuffer()->unlock();
+}
+
+KSpreadUndoResizeColRow::KSpreadUndoResizeColRow( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection ) :
+    KSpreadUndoAction( _doc )
+{
+  m_rctRect = _selection;
+  m_tableName = _table->name();
+
+  createList( m_lstColumn,m_lstRow, _table );
+}
+
+void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadTable* table )
+{
+    listCol.clear();
+    listRow.clear();
+
+    if( m_rctRect.bottom()==0x7FFF) // colonne(s) entiere(s)
+    {
+    for( int y = m_rctRect.left(); y <= m_rctRect.right(); y++ )
+        {
+           ColumnLayout *cl=table->columnLayout(y);
+           columnSize tmpSize;
+           tmpSize.columnNumber=y;
+           tmpSize.columnWidth=cl->width();
+           listCol.append(tmpSize);
+        }
+    }
+    else if(m_rctRect.right()==0x7FFF) // ligne(s) entiere(s)
+    {
+    for( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
+        {
+           RowLayout *rw=table->rowLayout(y);
+           rowSize tmpSize;
+           tmpSize.rowNumber=y;
+           tmpSize.rowHeight=rw->height();
+           listRow.append(tmpSize);
+        }
+    }
+    else //ligne et colonne
+    {
+    for( int y = m_rctRect.left(); y <= m_rctRect.right(); y++ )
+        {
+           ColumnLayout *cl=table->columnLayout(y);
+           columnSize tmpSize;
+           tmpSize.columnNumber=y;
+           tmpSize.columnWidth=cl->width();
+           listCol.append(tmpSize);
+        }
+    for( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
+        {
+           RowLayout *rw=table->rowLayout(y);
+           rowSize tmpSize;
+           tmpSize.rowNumber=y;
+           tmpSize.rowHeight=rw->height();
+           listRow.append(tmpSize);
+        }
+
+    }
+}
+
+KSpreadUndoResizeColRow::~KSpreadUndoResizeColRow()
+{
+}
+
+void KSpreadUndoResizeColRow::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+
+    createList( m_lstRedoColumn,m_lstRedoRow, table );
+
+    if( m_rctRect.bottom()==0x7FFF) // colonne(s) entiere(s)
+    {
+    QValueList<columnSize>::Iterator it2;
+    for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
+        {
+           ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
+           cl->setWidth((*it2).columnWidth);
+        }
+    }
+    else if(m_rctRect.right()==0x7FFF) // ligne(s) entiere(s)
+    {
+    QValueList<rowSize>::Iterator it2;
+    for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
+        {
+           RowLayout *rw=table->rowLayout((*it2).rowNumber);
+           rw->setHeight((*it2).rowHeight);
+        }
+    }
+    else //ligne et colonne
+    {
+    QValueList<columnSize>::Iterator it2;
+    for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
+        {
+           ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
+           cl->setWidth((*it2).columnWidth);
+        }
+    QValueList<rowSize>::Iterator it1;
+    for ( it1 = m_lstRow.begin(); it1 != m_lstRow.end(); ++it1 )
+        {
+           RowLayout *rw=table->rowLayout((*it1).rowNumber);
+           rw->setHeight((*it1).rowHeight);
+        }
+    }
+
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoResizeColRow::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    if( m_rctRect.bottom()==0x7FFF) // colonne(s) entiere(s)
+    {
+    QValueList<columnSize>::Iterator it2;
+    for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
+        {
+           ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
+           cl->setWidth((*it2).columnWidth);
+        }
+    }
+    else if(m_rctRect.right()==0x7FFF) // ligne(s) entiere(s)
+    {
+    QValueList<rowSize>::Iterator it2;
+    for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
+        {
+           RowLayout *rw=table->rowLayout((*it2).rowNumber);
+           rw->setHeight((*it2).rowHeight);
+        }
+    }
+    else //ligne et colonne
+    {
+    QValueList<columnSize>::Iterator it2;
+    for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
+        {
+           ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
+           cl->setWidth((*it2).columnWidth);
+        }
+    QValueList<rowSize>::Iterator it1;
+    for ( it1 = m_lstRedoRow.begin(); it1 != m_lstRedoRow.end(); ++it1 )
+        {
+           RowLayout *rw=table->rowLayout((*it1).rowNumber);
+           rw->setHeight((*it1).rowHeight);
+        }
+    }
+
+
+    //fonction pour raffraichir les colonnes et row
+    //a definir
+
     doc()->undoBuffer()->unlock();
 }
