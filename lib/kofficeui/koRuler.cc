@@ -550,7 +550,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                 // page is too small (infinite loop in the line breaking algorithm)! (Werner)
                 switch ( d->action ) {
                     case A_BR_LEFT: {
-                        if ( d->canvas && mx < right-10 ) {
+                        if ( d->canvas && mx < right-10 && mx+diffx-2 > 0) {
                             drawLine( d->oldMx, mx );
                             layout.ptLeft = unZoomIt(static_cast<double>(mx + diffx));
                             layout.mmLeft = POINT_TO_MM(layout.ptLeft);
@@ -575,7 +575,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             return;
                     } break;
                     case A_BR_RIGHT: {
-                        if ( d->canvas && mx > left+10 && mx+diffx <= pw) {
+                        if ( d->canvas && mx > left+10 && mx+diffx <= pw-2) {
                             drawLine( d->oldMx, mx );
                             layout.ptRight = unZoomIt(static_cast<double>(pw - ( mx + diffx )));
                             layout.mmRight = POINT_TO_MM( layout.ptRight );
@@ -667,7 +667,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
             } else {
                 switch ( d->action ) {
                     case A_BR_TOP: {
-                        if ( d->canvas && my < bottom-20 ) {
+                        if ( d->canvas && my < bottom-20 && my+diffy-2 > 0) {
                             QPainter p( d->canvas );
                             p.setRasterOp( Qt::NotROP );
                             p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
