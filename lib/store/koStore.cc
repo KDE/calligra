@@ -49,6 +49,9 @@ KoStore::KoStore( const QString & _filename, Mode _mode, const QCString & appIde
 
   m_bGood = m_pTar->open( _mode == Write ? IO_WriteOnly : IO_ReadOnly );
 
+  if ( m_bGood && _mode == Read )
+      m_bGood = m_pTar->directory() != 0;
+
 #if KDE_VERSION >= 220 // we have the new KTar
   if ( m_bGood && _mode == Write )
       m_pTar->setOrigFileName( appIdentification );
