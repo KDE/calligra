@@ -17,28 +17,33 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qdatetime.h>
-#include <qstring.h>
-#include <qshared.h>
-
 #include "kspread_value.h"
 
+#include <float.h>
+#include <math.h>
+#include <limits.h>
+
+#include <qstring.h>
+
 // helper class for KSpreadValue
-class KSpreadValueData: public QShared
+class KSpreadValueData
 {
   public:
 
     KSpreadValue::Type type;
 
+    // reference count, at least one when object exists
+    unsigned count;
+    
     // someday move to use union to reduce memory consumption
     bool b;
-    int i;
+    long i;
     double f;
     QString s;
 
     // create empty data
-    KSpreadValueData(): QShared(), type( KSpreadValue::Empty ),
-      b( false ), i( 0 ), f( 0.0 ) { };
+    KSpreadValueData(): type( KSpreadValue::Empty ),
+      count( 1 ), b( false ), i( 0 ), f( 0.0 ) { };
 
     // destroys data
     ~KSpreadValueData(){ if( this == s_null ){ s_null = 0; } }
@@ -46,10 +51,13 @@ class KSpreadValueData: public QShared
     // static empty data to be shared
     static KSpreadValueData* null()
       { if( !s_null) s_null = new KSpreadValueData; else s_null->ref(); return s_null; }
+      
+    // increase reference count
+    void ref() { count++; }
 
     // decrease reference count
     void unref()
-      {  QShared::deref(); if( !count ) delete this; }
+      {  --count; if( !count ) delete this; }
 
     // true if it's null (which is shared)
     bool isNull(){ return this == s_null; }
@@ -57,9 +65,6 @@ class KSpreadValueData: public QShared
   private:
 
     static KSpreadValueData* s_null;
-
-    // don't use QShared::deref, use unref() instead
-    void deref();
 };
 
 // to be shared between all empty value
@@ -112,6 +117,13 @@ KSpreadValue::KSpreadValue( bool b )
 {
   d = KSpreadValueData::null();
   setValue( b );
+}
+
+// create an integer value
+KSpreadValue::KSpreadValue( long i )
+{
+  d = KSpreadValueData::null();
+  setValue ( i );
 }
 
 // create an integer value
@@ -192,17 +204,25 @@ bool KSpreadValue::asBoolean() const
 }
 
 // set the value to integer
-void KSpreadValue::setValue( int i )
+void KSpreadValue::setValue( long i )
 {
   detach();
   d->type = Integer;
   d->i = i;
 }
 
-// get the value as integer
-int KSpreadValue::asInteger() const
+// set the value to integer
+void KSpreadValue::setValue( int i )
 {
-  int result = 0;
+  detach();
+  d->type = Integer;
+  d->i = static_cast<long>( i );
+}
+
+// get the value as integer
+long KSpreadValue::asInteger() const
+{
+  long result = 0;
 
   if( type() == KSpreadValue::Integer )
     result = d->i;
@@ -319,7 +339,7 @@ QDateTime KSpreadValue::asDateTime() const
   double f = asFloat();
   dt = dt.addSecs( (f-(int)f) * 86400 );
   if( f > 1.0 ) dt = dt.addDays( (int) f-1 );
-
+  
   return dt;
 }
 
@@ -330,7 +350,7 @@ QDate KSpreadValue::asDate() const
 
   double f = asFloat();
   if( f > 1.0 ) dt = dt.addDays( (int) f-1 );
-
+  
   return dt;
 }
 
@@ -338,10 +358,10 @@ QDate KSpreadValue::asDate() const
 QTime KSpreadValue::asTime() const
 {
   QTime dt;
-
+  
   double f = asFloat();
   dt = dt.addSecs( (f-(int)f) * 86400 );
-
+  
   return dt;
 }
 
@@ -430,4 +450,272 @@ void KSpreadValue::detach()
     d->unref();
     d = n;
   }
+}
+
+KSpreadValue KSpreadValue::add( const KSpreadValue& v1, const KSpreadValue& v2 )
+{
+  if( !v1.isNumber() ) return KSpreadValue::errorVALUE();
+  if( !v2.isNumber() ) return KSpreadValue::errorVALUE();
+  double result = v1.asFloat() + v2.asFloat();
+  
+  if( v1.isInteger() && v2.isInteger() ) 
+  if( result < (double)INT_MAX )
+  if( result > (double)-INT_MAX )
+    return KSpreadValue( static_cast<long>( result ) );
+    
+  return KSpreadValue( result );
+}
+
+KSpreadValue& KSpreadValue::add( const KSpreadValue& v )
+{
+  setValue( add( *this, v ) );
+  return *this;
+}
+
+KSpreadValue KSpreadValue::sub( const KSpreadValue& v1, const KSpreadValue& v2 )
+{
+  if( !v1.isNumber() ) return KSpreadValue::errorVALUE();
+  if( !v2.isNumber() ) return KSpreadValue::errorVALUE();
+  double result = v1.asFloat() - v2.asFloat();
+  
+  if( v1.isInteger() && v2.isInteger() ) 
+  if( result < (double)INT_MAX )
+  if( result > (double)-INT_MAX )
+    return KSpreadValue( static_cast<long>( result ) );
+    
+  return KSpreadValue( result );
+}
+
+KSpreadValue& KSpreadValue::sub( const KSpreadValue& v )
+{
+  setValue( sub( *this, v ) );
+  return *this;
+}
+
+KSpreadValue KSpreadValue::mul( const KSpreadValue& v1, const KSpreadValue& v2 )
+{
+  if( !v1.isNumber() ) return KSpreadValue::errorVALUE();
+  if( !v2.isNumber() ) return KSpreadValue::errorVALUE();
+  double result = v1.asFloat() * v2.asFloat();
+  
+  if( v1.isInteger() && v2.isInteger() ) 
+  if( result < (double)INT_MAX )
+  if( result > (double)-INT_MAX )
+    return KSpreadValue( static_cast<long>( result ) );
+      
+  return KSpreadValue( result );
+}
+
+KSpreadValue& KSpreadValue::mul( const KSpreadValue& v )
+{
+  setValue( mul( *this, v ) );
+  return *this;
+}
+
+KSpreadValue KSpreadValue::div( const KSpreadValue& v1, const KSpreadValue& v2 )
+{
+  if( !v1.isNumber() ) return KSpreadValue::errorVALUE();
+  if( !v2.isNumber() ) return KSpreadValue::errorVALUE();
+  
+  if( KSpreadValue::isZero( v2.asFloat() ) )
+    return KSpreadValue::errorDIV0();  
+  double result = v1.asFloat() / v2.asFloat();
+  
+  if( v1.isInteger() && v2.isInteger() ) 
+  if( result < (double)INT_MAX )
+  if( result > (double)-INT_MAX )
+  if( floor( result ) == result )
+    return KSpreadValue( static_cast<long>( result ) );
+    
+  return KSpreadValue( result );
+}
+
+KSpreadValue& KSpreadValue::div( const KSpreadValue& v )
+{
+  setValue( div( *this, v ) );
+  return *this;
+}
+
+KSpreadValue KSpreadValue::pow( const KSpreadValue& v1, const KSpreadValue& v2 )
+{
+  if( !v1.isNumber() ) return KSpreadValue::errorVALUE();
+  if( !v2.isNumber() ) return KSpreadValue::errorVALUE();
+  double result = ::pow( v1.asFloat(), v2.asFloat() );
+  
+  if( v1.isInteger() && v2.isInteger() ) 
+  if( result < (double)INT_MAX )
+  if( result > (double)-INT_MAX )
+  if( floor( result ) == result )
+    return KSpreadValue( static_cast<long>( result ) );
+    
+  return KSpreadValue( result );
+}
+
+KSpreadValue& KSpreadValue::pow( const KSpreadValue& v )
+{
+  setValue( KSpreadValue::pow( *this, v ) );
+  return *this;
+}
+
+int KSpreadValue::compare( double v1, double v2 )
+{
+  double v3 = v1 - v2;
+  if( v3 > DBL_EPSILON ) return 1;
+  if( v3 < DBL_EPSILON ) return 1;
+  return 0;
+}
+
+bool KSpreadValue::isZero( double v )
+{
+  return fabs( v ) < DBL_EPSILON;
+}
+
+bool KSpreadValue::isZero() const
+{
+  if( !isNumber() ) return false;
+  return isZero( asFloat() );
+}
+
+bool KSpreadValue::allowComparison( const KSpreadValue& v ) const
+{
+  KSpreadValue::Type t1 = d->type;
+  KSpreadValue::Type t2 = v.type();
+  
+  if( ( t1 == Empty ) && ( t2 == Empty ) ) return true;
+  if( ( t1 == Empty ) && ( t2 == String ) ) return true;
+  
+  if( ( t1 == Boolean ) && ( t2 == Boolean ) ) return true;
+  if( ( t1 == Boolean ) && ( t2 == Integer ) ) return true;
+  if( ( t1 == Boolean ) && ( t2 == Float ) ) return true;
+  if( ( t1 == Boolean ) && ( t2 == String ) ) return true;
+    
+  if( ( t1 == Integer ) && ( t2 == Boolean ) ) return true;
+  if( ( t1 == Integer ) && ( t2 == Integer ) ) return true;
+  if( ( t1 == Integer ) && ( t2 == Float ) ) return true;
+  if( ( t1 == Integer ) && ( t2 == String ) ) return true;
+  
+  if( ( t1 == Float ) && ( t2 == Boolean ) ) return true;
+  if( ( t1 == Float ) && ( t2 == Integer ) ) return true;
+  if( ( t1 == Float ) && ( t2 == Float ) ) return true;
+  if( ( t1 == Float ) && ( t2 == String ) ) return true;
+  
+  if( ( t1 == String ) && ( t2 == Empty ) ) return true;
+  if( ( t1 == String ) && ( t2 == Boolean ) ) return true;
+  if( ( t1 == String ) && ( t2 == Integer ) ) return true;
+  if( ( t1 == String ) && ( t2 == Float ) ) return true;
+  if( ( t1 == String ) && ( t2 == String ) ) return true;
+  
+  return false;
+}
+
+// compare values. looks strange in order to be compatible with Excel
+int KSpreadValue::compare( const KSpreadValue& v ) const 
+{
+  KSpreadValue::Type t1 = d->type;
+  KSpreadValue::Type t2 = v.type();
+  
+  // empty == empty
+  if( ( t1 == Empty ) && ( t2 == Empty ) )
+    return 0;
+  
+  // empty value is always less than string
+  // (except when the string is empty)
+  if( ( t1 == Empty ) && ( t2 == String ) )
+    return( v.asString().isEmpty() ) ? 0 : -1;
+    
+  // boolean vs boolean
+  if( ( t1 == Boolean ) && ( t2 == Boolean ) )
+  {
+    bool p = asBoolean();
+    bool q = v.asBoolean();
+    if( p ) return q ? 0 : 1;
+    else return q ? -1 : 0;
+  }
+  
+  // boolean is always greater than integer
+  if( ( t1 == Boolean ) && ( t2 == Integer ) )
+    return 1;
+  
+  // boolean is always greater than float
+  if( ( t1 == Boolean ) && ( t2 == Float ) )
+    return 1;
+  
+  // boolean is always greater than string
+  if( ( t1 == Boolean ) && ( t2 == String ) )
+    return 1;
+  
+  // integer is always less than boolean
+  if( ( t1 == Integer ) && ( t2 == Boolean ) )
+    return -1;
+    
+  // integer vs integer
+  if( ( t1 == Integer ) && ( t2 == Integer ) )
+  {
+    long p = asInteger();
+    long q = v.asInteger();   
+    return ( p == q ) ? 0 : ( p < q ) ? -1 : 1;
+  }  
+  
+  // integer vs float
+  if( ( t1 == Integer ) && ( t2 == Float ) )
+    return compare( asFloat(), v.asFloat() );
+  
+  // integer is always less than string
+  if( ( t1 == Integer ) && ( t2 == String ) )
+    return -1;
+  
+  // float is always less than boolean
+  if( ( t1 == Float ) && ( t2 == Boolean ) )
+    return -1;
+  
+  // float vs integer
+  if( ( t1 == Float ) && ( t2 == Integer ) )
+    return compare( asFloat(), v.asFloat() );
+  
+  // float vs float
+  if( ( t1 == Float ) && ( t2 == Float ) )
+    return compare( asFloat(), v.asFloat() );
+  
+  // float is always less than string
+  if( ( t1 == Float ) && ( t2 == String ) )
+    return -1;
+
+  // string is always greater than empty value
+  // (except when the string is empty)
+  if( ( t1 == String ) && ( t2 == Empty ) )
+    return( asString().isEmpty() ) ? 0 : 1;
+  
+  // string is always less than boolean
+  if( ( t1 == String ) && ( t2 == Boolean ) )
+    return -1;
+  
+  // string is always greater than integer
+  if( ( t1 == String ) && ( t2 == Integer ) )
+    return 1;
+    
+  // string is always greater than float
+  if( ( t1 == String ) && ( t2 == Float ) )
+    return 1;
+
+  // The-Real-String comparison
+  if( ( t1 == String ) && ( t2 == String ) )
+    return asString().compare( v.asString() );
+
+  // Undefined, actually allowComparison would return false
+  return 0;
+}
+
+bool KSpreadValue::equal( const KSpreadValue& v ) const
+{
+  return compare( v ) == 0;
+}
+
+bool KSpreadValue::less( const KSpreadValue& v ) const
+{
+  return compare( v ) < 0;
+}
+
+bool KSpreadValue::greater( const KSpreadValue& v ) const
+{
+  return compare( v ) > 0;
 }

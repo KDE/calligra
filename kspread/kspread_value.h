@@ -20,10 +20,8 @@
 #ifndef KSPREAD_VALUE_H
 #define KSPREAD_VALUE_H
 
-class QDateTime;
-class QString;
-class QTime;
-class QDate;
+#include <qdatetime.h>
+#include <qstring.h>
 
 class KSpreadValueData;
 
@@ -89,6 +87,11 @@ class KSpreadValue
      * Creates a boolean value.
      */
     KSpreadValue( bool b );
+
+    /**
+     * Creates an integer value.
+     */
+    KSpreadValue( long i );
 
     /**
      * Creates an integer value.
@@ -166,6 +169,9 @@ class KSpreadValue
      */
     bool isError() const { return type() == Error; }
 
+    /**
+     * Sets this value to another value.
+     */
     void setValue( const KSpreadValue& v );
 
     /**
@@ -176,8 +182,13 @@ class KSpreadValue
     /**
      * Sets this value to integer value.
      */
-    void setValue( int i );
+    void setValue( long i );
 
+    /**
+     * Sets this value to integer value.
+     */
+    void setValue( int i );
+    
     /**
      * Sets this value to floating-point value.
      */
@@ -220,7 +231,7 @@ class KSpreadValue
      *
      * Call this function only if isNumber() returns true.
      */
-    int asInteger() const;
+    long asInteger() const;
 
     /**
      * Returns the floating-point value of this value.
@@ -321,6 +332,98 @@ class KSpreadValue
      * is used, usually within a function call, e.g SIN("some text").
      */
     static const KSpreadValue& errorVALUE();
+
+    /**
+     * Returns true if it is OK to compare this value with v.
+     * If this function returns false, then return value of compare is undefined.
+     */
+    bool allowComparison( const KSpreadValue& v ) const;
+    
+    /**
+     * Returns -1, 0, 1, depends whether this value is less than, equal to, or
+     * greater than v.
+     */
+    int compare( const KSpreadValue& v ) const;
+    
+    /**
+     * Returns true if this value is equal to v.
+     */
+    bool equal( const KSpreadValue& v ) const;
+
+    /**
+     * Returns true if this value is less than v.
+     */
+    bool less( const KSpreadValue& v ) const;
+
+    /**
+     * Returns true if this value is greater than v.
+     */
+    bool greater( const KSpreadValue& v ) const;
+    
+    static int compare( double v1, double v2 );
+    
+    bool isZero() const;
+    
+    static bool isZero( double v );
+    
+    /**
+     * Adds two given values, return the result. This only works if both are
+     * numbers. 
+     *
+     * The result is a floating-point number, except when both values 
+     * are integers and the result is still within integer limits.
+     */    
+     static KSpreadValue add( const KSpreadValue& v1, const KSpreadValue& v2 );
+     
+     KSpreadValue& add( const KSpreadValue& v );
+
+    /**
+     * Subtracts two given values, return the result. This only works if both are
+     * numbers. 
+     *
+     * The result is a floating-point number, except when both values 
+     * are integers and the result is still within integer limits.
+     */    
+     static KSpreadValue sub( const KSpreadValue& v1, const KSpreadValue& v2 );
+
+     KSpreadValue& sub( const KSpreadValue& v );
+
+    /**
+     * Multiplies two given values, return the result. This only works if both are
+     * numbers. If any of them is not a number, it will be converted first
+     * into number. When conversion fails, this function will return #VALUE.
+     *
+     * The result is a floating-point number, except when both values 
+     * are integers and the result is still within integer limits.
+     */    
+     static KSpreadValue mul( const KSpreadValue& v1, const KSpreadValue& v2 );
+
+     KSpreadValue& mul( const KSpreadValue& v );
+     
+    /**
+     * Divides two given values, return the result. This only works if both are
+     * numbers. If any of them is not a number, it will be converted first
+     * into number. When conversion fails, this function will return #VALUE.
+     *
+     * The result is a floating-point number, except when the result is still
+     * integer and within integer limits when both values are integers.
+     */    
+     static KSpreadValue div( const KSpreadValue& v1, const KSpreadValue& v2 );
+
+     KSpreadValue& div( const KSpreadValue& v );
+     
+    /**
+     * Calculates one value raised to the power of another value. This only 
+     * works if both are numbers. If any of them is not a number, it will be 
+     * converted first into number. When conversion fails, this function will 
+     * return #VALUE.
+     *
+     * The result is a floating-point number, except when the result is still
+     * integer and within integer limits when both values are integers.
+     */    
+     static KSpreadValue pow( const KSpreadValue& v1, const KSpreadValue& v2 );
+     
+     KSpreadValue& pow( const KSpreadValue& v );
 
   protected:
 
