@@ -106,19 +106,31 @@ bool KexiTablePart::remove(KexiMainWindow *win, KexiPart::Item &item)
 	return conn->removeObject( item.identifier() );
 }
 
+tristate KexiTablePart::rename(KexiMainWindow *win, KexiPart::Item & item, 
+	const QString& newName)
+{
+//TODO: alter table name for server DB backends!
+//TODO: what about objects (queries/forms) that use old name?
+	KexiDB::Connection *conn = win->project()->dbConnection();
+	KexiDB::TableSchema *sch = conn->tableSchema(item.identifier());
+	if (!sch)
+		return false;
+	return conn->alterTableName(*sch, newName);
+}
+
 KexiDB::SchemaData*
 KexiTablePart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata)
 {
 	return dlg->mainWin()->project()->dbConnection()->tableSchema( sdata.name() );
 }
 
-//----------------
-
 KexiPart::DataSource *
 KexiTablePart::dataSource()
 {
 	return new KexiTableDataSource(this);
 }
+
+//----------------
 
 KexiTableDataSource::KexiTableDataSource(KexiPart::Part *part)
  : KexiPart::DataSource(part)

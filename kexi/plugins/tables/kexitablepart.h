@@ -42,6 +42,9 @@ class KexiTablePart : public KexiPart::Part
 
 		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
 
+		virtual tristate rename(KexiMainWindow *win, KexiPart::Item &item, 
+			const QString& newName);
+
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
 			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 
