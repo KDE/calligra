@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
-   Copyright (C) 2000 Kai-Uwe Sattler <kus@iti.cs.uni-magdeburg.de>
    Copyright (C) 2001 Rob Buis <rwlbuis@wanadoo.nl>
 
    This library is free software; you can redistribute it and/or
@@ -22,51 +21,45 @@
 #define SVGEXPORT_TEST_H
 
 #include <koFilter.h>
+#include <qlist.h>
 
-class QCString;
-class QString;
-class KoDocument;
-class GPolygon;
-class GObject;
-class GPolyline;
-class GOval;
-class GText;
-class GBezier;
-class GCurve;
-class GGroup;
-class GPixmap;
 class QDomElement;
-class QDomDocumentFragment;
+class Coord;
 class SVGExport : public KoFilter {
 
     Q_OBJECT
 
 public:
-    SVGExport( KoFilter *parent, const char*name );
+    SVGExport( KoFilter *parent, const char *name );
     virtual ~SVGExport();
-    /** do the filtering :) */
-    virtual bool filterExport( const QString &file, KoDocument * document,
-                               const QString &from, const QString &to,
-                               const QString &config=QString::null );
-				
+    virtual bool filter( const QString &fileIn, const QString &fileOut,
+                         const QString &from,   const QString &to,
+                         const QString &config=QString::null );	
 private:
-  QDomDocumentFragment exportObject( QDomDocument &document, GObject* obj );
-  QDomDocumentFragment exportPolygon( QDomDocument &document, GPolygon* obj );
-  QDomDocumentFragment exportPolyline( QDomDocument &document, GPolyline* obj );
-  QDomDocumentFragment exportEllipse( QDomDocument &document, GOval* obj );
-  QDomDocumentFragment exportText( QDomDocument &document, GText* obj );
-  QDomDocumentFragment exportTextLine( QDomDocument &document, GText* obj, 
-		                       int line, float xoff, float yoff );
-  QDomDocumentFragment exportCurve( QDomDocument &document, GCurve* obj );
-  QDomDocumentFragment exportBezier( QDomDocument &document, GBezier* obj );
-  QDomDocumentFragment exportGroup( QDomDocument &document, GGroup* obj );
-  QDomDocumentFragment exportPixmap( QDomDocument &document, GPixmap* obj );
- 
-  void addTransformationAttribute( QDomElement &element, GObject* obj );
-  void addStyleAttribute( QDomElement &element, GObject* obj );
-  void addTextStyleAttribute( QDomElement &element, GText* obj );
- 
-  QString format;
+  void exportDocument( QDomElement &docNodeOut, const QDomElement &docNodeIn );
+  void exportPage( QDomElement &docNodeOut, const QDomElement &docNodeIn );
+  void exportLayout( QDomElement &docNodeOut, const QDomElement &docNodeIn );
+  void exportLayer( QDomElement &docNodeOut, const QDomElement &docNodeIn );
+  void exportRect( QDomElement &docNodeOut, const QDomElement &docNodeIn );
+  void exportPolygon( QDomElement &docNodeOut, const QDomElement &docNodeIn );
+  void exportGObject( QDomElement &docNodeOut, const QDomElement &docNodeIn,
+                      bool bClosed = true );
+  void exportTransform( QDomElement &docNodeOut, const QDomElement &docNodeIn );
+  void exportPolyline( QDomElement &docNodeOut, const QDomElement &docNodeIn );
+  void exportEllipse( QDomElement &docNodeOut, const QDomElement &docNodeIn );
+  void exportBezier( QDomElement &docNodeOut, const QDomElement &docNodeIn );  
+  void exportCurve( QDomElement &docNodeOut, const QDomElement &docNodeIn );
+  QList<Coord> getSegments( const QDomElement &docNodeIn );
+  QList<Coord> getPoints( const QDomElement &docNodeIn );
+  Coord *createPoint( const QDomElement &docNodeIn );
+  void exportGroup( QDomElement &docNodeOut, const QDomElement &docNodeIn );
+  void exportPixmap( QDomElement &docNodeOut, const QDomElement &docNodeIn );
+  void exportText( QDomElement &docNodeOut, const QDomElement &docNodeIn );
+  void exportTextLine( QDomElement &docNodeOut, const QDomElement &docNodeIn, const QString &text,
+		       QFont &font, float xoff, float yoff );
+  void addTextStyleAttribute( QDomElement &element, 
+                              const QDomElement &docNodeIn, QFont &font );
 };
+
 #endif
 

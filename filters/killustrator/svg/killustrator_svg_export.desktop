@@ -1,8 +1,18 @@
 [Desktop Entry]
 Type=Service
 Name=SVG Export Filter for Killustrator
+Name[da]=SVG Eksport Filter for Killustrator
+Name[de]=SVG-Exportfilter für KIllustrator
+Name[eo]=SVG-Eksportfiltrilo por Ilustrilo
+Name[es]=Filtro de exportación SVG para Killustrator
+Name[he]=Killustrator-ל SVG אוציי ןנסמ
+Name[hu]=SVG exportszűrő a KIllustrator-hoz
+Name[lv]=SVG Eksporta Filtrs Killustratoram
+Name[pt_BR]=Filtro de Exportação de SVG para o KIllustrator
+Name[pt]=Filtro de Exportação de SVG para o KIllustrator
+Name[sv]=SVG-exportfilter för Killustrator
 Export=image/x-svg
 Import=application/x-killustrator
-Implemented=kodocument
+Implemented=file
 X-KDE-Library=libsvgexport
 ServiceTypes=KOfficeFilter
