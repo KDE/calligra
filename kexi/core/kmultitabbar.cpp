@@ -28,8 +28,10 @@
 #include <qpopupmenu.h>
 #include <qlayout.h>
 #include <qpainter.h>
-#include <kdebug.h>
 #include <qtooltip.h>
+
+#include <kiconloader.h>
+#include <kdebug.h>
 
 KMultiTabBarInternal::KMultiTabBarInternal(QWidget *parent, KMultiTabBar::KMultiTabBarBasicMode bm):QScrollView(parent)
 	{
@@ -128,7 +130,7 @@ KMultiTabBarTab* KMultiTabBarInternal::getTab(int id)
 }
 
 
-int KMultiTabBarInternal::appendTab(QPixmap pic ,int id,const QString& text)
+int KMultiTabBarInternal::appendTab(const QPixmap &pic ,int id,const QString& text)
 {
 	KMultiTabBarTab  *tab;
 	m_tabs.append(tab= new KMultiTabBarTab(pic,text,id,box,position));
@@ -136,12 +138,13 @@ int KMultiTabBarInternal::appendTab(QPixmap pic ,int id,const QString& text)
 	if (m_showActiveTabTexts)
 	{
 		int size=0;
-		for (int i=0;i<m_tabs.count();i++)
+		for (uint i=0;i<m_tabs.count();i++)
 		{
 			int tmp=m_tabs.at(i)->neededSize();
 			size=(size<tmp)?tmp:size;
 		}
-		for (int i=0;i<m_tabs.count();i++) m_tabs.at(i)->setSize(size);
+		for (uint i=0;i<m_tabs.count();i++)
+			m_tabs.at(i)->setSize(size);
 	}
 	tab->show();
 	return 0;
@@ -211,6 +214,11 @@ KMultiTabBarTab::KMultiTabBarTab(const QPixmap& pic, const QString& text,
 	setToggleButton(true);
 }
 
+void KMultiTabBarTab::setIcon(const QString& icon)
+{
+	setIconSet(SmallIcon(icon));
+}
+
 void KMultiTabBarTab::slotClicked()
 {
 	updateState();
@@ -261,7 +269,8 @@ void KMultiTabBarTab::drawButton(QPainter *paint)
         QPixmap pixmap;
 	if ( iconSet()) 
         	pixmap = iconSet()->pixmap( QIconSet::Small, QIconSet::Normal );
-    paint->fillRect(0, 0, 24, 24, colorGroup().background());
+	paint->fillRect(0, 0, 24, 24, colorGroup().background());
+	
 	if (!isOn())
 	{
 
@@ -273,11 +282,6 @@ void KMultiTabBarTab::drawButton(QPainter *paint)
 			paint->drawLine(0,22,23,22);
 
 			paint->drawPixmap(12-pixmap.width()/2,12-pixmap.height()/2,pixmap);
-
-//			paint->setPen(colorGroup().light());
-//			paint->drawLine(19,21,21,21);
-//			paint->drawLine(21,19,21,21);
-
 
 			paint->setPen(colorGroup().shadow());
 			paint->drawLine(0,0,0,23);
@@ -337,9 +341,19 @@ void KMultiTabBarTab::drawButton(QPainter *paint)
 
 			if (m_showActiveTabText)
 			{
+				if (height()<25+4) return;
+
+				QPixmap tpixmap(height()-25-3, width()-2);
+				QPainter painter(&tpixmap);
+
+				painter.fillRect(0,0,tpixmap.width(),tpixmap.height(),QBrush(colorGroup().light()));
+
+				painter.setPen(colorGroup().text());
+				painter.drawText(0,+width()/2+QFontMetrics(QFont()).height()/2,m_text);
+
 				paint->rotate(90);
-				paint->setPen(colorGroup().text());
-				paint->drawText(25,-width()/2+QFontMetrics(QFont()).height()/2,m_text);
+				kdDebug()<<"tpixmap.width:"<<tpixmap.width()<<endl;
+				paint->drawPixmap(25,-tpixmap.height()+1,tpixmap);
 			}
 
 		}
@@ -371,6 +385,8 @@ void KMultiTabBarTab::drawButton(QPainter *paint)
 		}
 		else
 		{
+
+
 			paint->setPen(colorGroup().shadow());
 			paint->drawLine(0,height()-1,23,height()-1);
 			paint->drawLine(0,height()-2,23,height()-2);
@@ -378,12 +394,23 @@ void KMultiTabBarTab::drawButton(QPainter *paint)
 			paint->drawPixmap(10-pixmap.width()/2,10-pixmap.height()/2,pixmap);
 			if (m_showActiveTabText)
 			{
-				paint->rotate(-90);
-				paint->setPen(colorGroup().text());
-				paint->drawText(-24-QFontMetrics(QFont()).width(m_text),
-					(width()+QFontMetrics(QFont()).height())/2,m_text);
+
+		       		if (height()<25+4) return;
+
+                                QPixmap tpixmap(height()-25-3, width()-2);
+                                QPainter painter(&tpixmap);
+
+                                painter.fillRect(0,0,tpixmap.width(),tpixmap.height(),QBrush(colorGroup().light()));
+
+                                painter.setPen(colorGroup().text());
+                                painter.drawText(tpixmap.width()-QFontMetrics(QFont()).width(m_text),+width()/2+QFontMetrics(QFont()).height()/2,m_text);
+
+                                paint->rotate(-90);
+                                kdDebug()<<"tpixmap.width:"<<tpixmap.width()<<endl;
+                                
+				paint->drawPixmap(-24-tpixmap.width(),2,tpixmap);
+
 			}
-//			paint->rotate(90);
 
 		}
 
@@ -429,7 +456,7 @@ KMultiTabBar::KMultiTabBar(QWidget *parent,KMultiTabBarBasicMode bm):QWidget(par
   return 0;
 }*/
 
-int KMultiTabBar::appendButton(QPixmap pic ,int id,QPopupMenu *popup,const QString&)
+int KMultiTabBar::appendButton(const QPixmap &pic ,int id,QPopupMenu *popup,const QString&)
 {
 	KMultiTabBarButton  *btn;
 	buttons.append(btn= new KMultiTabBarButton(pic,QString::null,
@@ -440,7 +467,7 @@ int KMultiTabBar::appendButton(QPixmap pic ,int id,QPopupMenu *popup,const QStri
 	return 0;
 }
 
-int KMultiTabBar::appendTab(QPixmap pic ,int id ,const QString& text)
+int KMultiTabBar::appendTab(const QPixmap &pic ,int id ,const QString& text)
 {
  internal->appendTab(pic,id,text);
  return 0;
