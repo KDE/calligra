@@ -2603,7 +2603,11 @@ void KWView::updateButtons()
     actionFormatAlignRight->setEnabled(state);
     actionFormatAlignBlock->setEnabled(state);
     actionFormatIncreaseIndent->setEnabled(state);
-    actionFormatDecreaseIndent->setEnabled(state);
+
+    bool goodleftMargin=(currentTextEdit()->currentParagLayout().margins[QStyleSheetItem::MarginLeft]>0);
+
+    actionFormatDecreaseIndent->setEnabled(goodleftMargin && state);
+
     actionFormatList->setEnabled(state);
     actionFormatSuper->setEnabled(state);
     actionFormatSub->setEnabled(state);
