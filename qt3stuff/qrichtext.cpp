@@ -2457,13 +2457,6 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 		     rect.height(), cg.brush( QColorGroup::Base ) );
     }
 
-    if ( verticalBreak() && parag->lastInFrame && parag->next() )
-        if ( rect.y() + rect.height() < parag->next()->rect().y() ) {
-            p->fillRect( 0, rect.y() + rect.height(),
-                         parag->document()->x() + parag->document()->width(),
-                         parag->next()->rect().y() - ( rect.y() + rect.height() ) - 1,
-                         cg.brush( QColorGroup::Base ) );
-        }
     //if ( verticalBreak() && parag->lastInFrame && parag->document()->flow() )
     //    parag->document()->flow()->eraseAfter( parag, p, cg );
 
@@ -2498,7 +2491,7 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 
     QPixmap *doubleBuffer = 0;
     QPainter painter;
-
+    QRect crect( cx, cy, cw, ch );
     while ( parag ) {
 	lastFormatted = parag;
 	if ( !parag->isValid() )
@@ -2507,15 +2500,18 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
         QRect ir = parag->rect();
         if ( verticalBreak() && parag->next() )
             if ( ir.y() + ir.height() < parag->next()->rect().y() ) {
-                ir.setLeft( 0 );
-                ir.setRight( parag->document()->x() + parag->document()->width() );
-                ir.setBottom( parag->next()->rect().y() - 1 );
+                QRect r( 0, ir.y() + ir.height(),
+                         parag->document()->x() + parag->document()->width(),
+                         parag->next()->rect().y() - ( ir.y() + ir.height() ) - 1 );
+                r &= crect;
+                if ( !r.isEmpty() )
+                    p->fillRect( r, cg.brush( QColorGroup::Base ) );
             }
 
-	if ( !ir.intersects( QRect( cx, cy, cw, ch ) ) ) {
+	if ( !ir.intersects( crect ) ) {
 	    ir.setWidth( parag->document()->width() );
-	    if ( ir.intersects( QRect( cx, cy, cw, ch ) ) )
-                p->fillRect( ir.intersect( QRect( cx, cy, cw, ch ) ), cg.brush( QColorGroup::Base ) );
+	    if ( ir.intersects( crect ) )
+                p->fillRect( ir.intersect( crect ), cg.brush( QColorGroup::Base ) );
 	    if ( ir.y() > cy + ch ) {
 		tmpCursor = 0;
 		if ( buf_pixmap && buf_pixmap->height() > 300 ) {
