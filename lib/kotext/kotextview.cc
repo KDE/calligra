@@ -92,6 +92,8 @@ KoTextView::~KoTextView()
     delete m_cursor;
     delete d;
     delete dcop;
+    delete blinkTimer;
+    delete dragStartTimer;
 }
 
 KoTextViewIface* KoTextView::dcopObject()

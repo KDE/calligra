@@ -325,9 +325,6 @@ QPtrList<KAction> KoVariableCollection::variableActionList()
         QStringList::ConstIterator it = list.begin();
         for ( int i = 0; it != list.end() ; ++it, ++i )
         {
-            if( i == 0)
-                listAction.append( new KActionSeparator() );
-
             if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
             {
                 KAction * act = new KAction( (*it));
