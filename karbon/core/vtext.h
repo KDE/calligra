@@ -32,8 +32,6 @@
 #include "vcomposite.h"
 #include "vpainter.h"
 
-class KarbonView;
-
 typedef QPtrList<VComposite> VCompositeList;
 typedef QPtrListIterator<VComposite> VCompositeListIterator;
 
@@ -76,7 +74,7 @@ public:
 	virtual void accept( VVisitor& visitor );
 	
 #ifdef HAVE_FREETYPE
-	void traceText( const KarbonView* view );
+	void traceText();
 #endif // HAVE_FREETYPE
 
 protected:

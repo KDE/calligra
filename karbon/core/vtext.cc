@@ -23,7 +23,6 @@
 #include <koPoint.h>
 #include <koRect.h>
 
-#include "karbon_view.h"
 #include "vpath.h"
 #include "vtext.h"
 #include "vstroke.h"
@@ -328,13 +327,8 @@ VText::accept( VVisitor& visitor )
 #ifdef HAVE_FREETYPE
 
 void
-VText::traceText( const KarbonView* view )
+VText::traceText()
 {
-	if( !view )
-	{
-		kdDebug() << "Can't trace a text without a view." << endl;
-		return;
-	}
 	if( m_basePath.count() == 0 )
 	{
 		kdDebug() << "Can't draw a text without base path (was: " << m_text << ")." << endl;

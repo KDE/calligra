@@ -512,7 +512,7 @@ void VTextTool::mouseDragRelease()
 	m_text = 0L;
 	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->text() );
 	m_editedText->setState( VObject::edit );
-	m_editedText->traceText( view() );
+	m_editedText->traceText();
 	m_creating = true;
 	
 	drawEditedText();
@@ -528,7 +528,7 @@ void VTextTool::textChanged()
 	m_editedText->setText( m_optionsWidget->text() );
 	m_editedText->setFont( m_optionsWidget->font() );
 	m_editedText->setPosition( m_optionsWidget->position() );
-	m_editedText->traceText( view() );
+	m_editedText->traceText();
 	
 	drawEditedText();
 } // VTextTool::textChanged
@@ -541,8 +541,8 @@ void VTextTool::accept()
 		m_text->setBasePath( m_editedText->basePath() );
 		m_text->setPosition( m_editedText->position() );
 		m_text->setText( m_editedText->text() );
-		m_text->traceText( view() );
-		m_text->setParent( view()->part()->document().activeLayer() );
+		m_text->traceText();
+		//m_text->setParent( view()->part()->document().activeLayer() );
 		m_text->setState( VObject::normal );
 	}
 	else
@@ -585,7 +585,7 @@ void VTextTool::visitVComposite( VComposite& composite )
 	m_text = 0L; 
 	m_editedText = new VText( m_optionsWidget->font(), *composite.paths().getFirst(), m_optionsWidget->position(), m_optionsWidget->text() );
 	m_editedText->setState( VObject::edit );
-	m_editedText->traceText( view() );
+	m_editedText->traceText();
 	m_creating = true;
 
 	drawEditedText();
@@ -596,7 +596,7 @@ void VTextTool::visitVPath( VPath& path )
 	m_text = 0L; 
 	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->text() );
 	m_editedText->setState( VObject::edit );
-	m_editedText->traceText( view() );
+	m_editedText->traceText();
 	m_creating = true;
 
 	drawEditedText();
@@ -670,7 +670,7 @@ void VTextTool::VTextCmd::execute()
 		m_text->setBasePath( m_textModifications->newBasePath );
 		m_text->setPosition( m_textModifications->newPosition );
 		m_text->setText( m_textModifications->newText );
-		m_text->traceText( m_view );
+		m_text->traceText();
 	}
 
 	m_executed = true;
@@ -692,7 +692,7 @@ void VTextTool::VTextCmd::unexecute()
 		m_text->setBasePath( m_textModifications->oldBasePath );
 		m_text->setPosition( m_textModifications->oldPosition );
 		m_text->setText( m_textModifications->oldText );
-		m_text->traceText( m_view );
+		m_text->traceText();
 	}
 
 	m_executed = false;
