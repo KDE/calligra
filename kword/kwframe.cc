@@ -29,7 +29,6 @@
 #include "kwanchor.h"
 #include "resizehandles.h"
 #include <kotextobject.h> // for customItemChar!
-#include <qpicture.h>
 #include <qpopupmenu.h>
 
 #include <kformulacontainer.h>
@@ -1798,10 +1797,10 @@ void KWPictureFrameSet::insertPicture( const KoPicture& picture )
     m_picture = collection->insertPicture( picture.getKey(), picture );
 }
 
-void KWPictureFrameSet::insertPicture( const KoPictureKey& key )
+void KWPictureFrameSet::reloadPicture( const KoPictureKey& key )
 {
     KoPictureCollection *collection = m_doc->pictureCollection();
-    // ### TODO: add some fallback, if the picture was not loaded yet.
+    // If the picture is not already in the collection, then it gives a blank picture
     m_picture = collection->insertPicture( key, KoPicture() );
 }
 

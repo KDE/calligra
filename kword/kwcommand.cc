@@ -711,7 +711,7 @@ void KWFrameChangePictureCommand::execute()
     Q_ASSERT( frame );
     KWDocument * doc = frameSet->kWordDocument();
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-    frameset->insertPicture( m_newKey );
+    frameset->reloadPicture( m_newKey );
     doc->frameChanged( frame );
 }
 
@@ -721,7 +721,7 @@ void KWFrameChangePictureCommand::unexecute()
     KWFrame *frame=frameSet->frame(m_indexFrame.m_iFrameIndex);
     KWDocument * doc = frameSet->kWordDocument();
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-    frameset->insertPicture( m_oldKey );
+    frameset->reloadPicture( m_oldKey );
     doc->frameChanged( frame );
 }
 
