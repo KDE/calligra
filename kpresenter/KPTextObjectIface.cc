@@ -96,7 +96,6 @@ void KPTextObjectIface::setUnderlineColor( const QColor & color )
     delete cmd;
 }
 
-
 void KPTextObjectIface::setStrikeOutText( bool b )
 {
     KCommand *cmd=m_textobject->textObject()->setStrikeOutCommand(b);
@@ -351,7 +350,7 @@ void KPTextObjectIface::setWordByWord( bool _b )
     delete cmd;
 }
 
-QString KPTextObjectIface::fontAttibute()const
+QString KPTextObjectIface::fontAttribute()const
 {
     return KoTextFormat::attributeFontToString( m_textobject->textObject()->fontAttribute() );
 }
