@@ -154,10 +154,10 @@ void KexiInputTableEdit::init(const QString& add, bool removeOld)
 	}
 	else
 #endif
-		QString tmp_val = m_origValue.toString();
 		QVariant origValue;
 		if (!removeOld)
 			origValue = m_origValue;
+		QString tmp_val = origValue.toString();
 
 		if (m_field->isFPNumericType()) {
 			if (origValue.toDouble() == 0.0) {
