@@ -939,7 +939,13 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
 void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRight,
                                  int* breakBegin, int* breakEnd, KoTextParag* parag )
 {
-    int paragLeftMargin = parag ? QMAX( parag->firstLineMargin(), parag->leftMargin() ) : 0;
+    // paragLeftMargin will be used as the minimum width needed for the parag,
+    // to "see" the parag.
+    // So we only apply the first line margin if it increases that width, i.e. if > 0.
+    // Otherwise only the first line might be visible, in a narrow passage.
+    int paragLeftMargin = parag ? parag->leftMargin() : 0;
+    if ( parag && !parag->string()->isRightToLeft() && parag->firstLineMargin() > 0 )
+        paragLeftMargin += parag->firstLineMargin();
 #ifdef DEBUG_MARGINS
     kdDebugBody(32002) << "  KWTextFrameSet " << this << "(" << getName() << ") getMargins yp=" << yp
                        << " h=" << h << " called by "
@@ -2639,7 +2645,7 @@ KoTextDocCommand *KWTextFrameSet::deleteTextCommand( KoTextDocument *textdoc, in
 ///////////////////////////////////////////////////////////////////////////////
 
 KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
-    : KoTextView( fs->textObject() ), KWFrameSetEdit( fs, canvas )
+    : KoTextView( fs->textObject() ), KWFrameSetEdit( fs, canvas ), m_rtl( false )
 {
     kdDebug(32001) << "KWTextFrameSetEdit::KWTextFrameSetEdit " << fs->getName() << endl;
     KoTextView::setReadWrite( fs->kWordDocument()->isReadWrite() );
@@ -3435,12 +3441,14 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat, bool force )
     if( m_paragLayout.margins[QStyleSheetItem::MarginLeft] != parag->margin(QStyleSheetItem::MarginLeft)
         || m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] != parag->margin(QStyleSheetItem::MarginFirstLine)
         || m_paragLayout.margins[QStyleSheetItem::MarginRight] != parag->margin(QStyleSheetItem::MarginRight)
+        || parag->string()->isRightToLeft() != m_rtl
         || force )
     {
         m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] = parag->margin(QStyleSheetItem::MarginFirstLine);
         m_paragLayout.margins[QStyleSheetItem::MarginLeft] = parag->margin(QStyleSheetItem::MarginLeft);
         m_paragLayout.margins[QStyleSheetItem::MarginRight] = parag->margin(QStyleSheetItem::MarginRight);
-        m_canvas->gui()->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine], m_paragLayout.margins[QStyleSheetItem::MarginRight], parag->string()->isRightToLeft() );
+        m_rtl = parag->string()->isRightToLeft();
+        m_canvas->gui()->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine], m_paragLayout.margins[QStyleSheetItem::MarginRight], m_rtl );
     }
     if( m_paragLayout.tabList() != parag->tabList() || force)
     {

@@ -412,6 +412,7 @@ private:
     bool enterCustomItem( KoTextCustomItem* customItem, bool fromRight );
 
     KoParagLayout m_paragLayout;
+    bool m_rtl; // maybe make part of KoParagLayout later
 };
 
 class KWFootNoteVariable;

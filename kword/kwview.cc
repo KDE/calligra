@@ -1717,7 +1717,7 @@ void KWView::showRulerIndent( double _leftMargin, double _firstLine, double _rig
   KoRuler * hRuler = m_gui ? m_gui->getHorzRuler() : 0;
   if ( hRuler )
   {
-      hRuler->setFirstIndent( KoUnit::ptToUnit( _firstLine + _leftMargin, m_doc->getUnit() ) );
+      hRuler->setFirstIndent( KoUnit::ptToUnit( _firstLine, m_doc->getUnit() ) );
       hRuler->setLeftIndent( KoUnit::ptToUnit( _leftMargin, m_doc->getUnit() ) );
       hRuler->setRightIndent( KoUnit::ptToUnit( _rightMargin, m_doc->getUnit() ) );
       hRuler->setDirection( rtl );
@@ -3356,7 +3356,7 @@ void KWView::slotApplyParag()
             macroCommand->addCommand(cmd);
         }
         m_gui->getHorzRuler()->setFirstIndent(
-            KoUnit::ptToUnit( m_paragDlg->leftIndent() + m_paragDlg->firstLineIndent(), m_doc->getUnit() ) );
+            KoUnit::ptToUnit( m_paragDlg->firstLineIndent(), m_doc->getUnit() ) );
     }
 
     if(m_paragDlg->isAlignChanged())
@@ -4867,14 +4867,15 @@ void KWView::slotPageLayoutChanged( const KoPageLayout& layout )
 void KWView::newFirstIndent( double _firstIndent )
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
-    if (!edit) return;
-    double val = _firstIndent - edit->currentLeftMargin();
-    KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginFirstLine, val );
-    if(cmd)
-        m_doc->addCommand(cmd);
+    if (edit)
+    {
+        KCommand *cmd=edit->setMarginCommand( QStyleSheetItem::MarginFirstLine, _firstIndent );
+        if(cmd)
+            m_doc->addCommand(cmd);
+    }
 }
 
-void KWView::newLeftIndent( double _leftIndent)
+void KWView::newLeftIndent( double _leftIndent )
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
