@@ -1175,13 +1175,16 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
 bool KoDocument::saveOasisPreview( KoStore* store )
 {
     const QPixmap pix = generatePreview( QSize( 128, 128 ) );
-    // ### TODO: test if this really works! (No, it does not work. Still no alpha channel!)
-    const QImage preview ( pix.convertToImage().convertDepth( 32, Qt::ColorOnly | Qt::ThresholdAlphaDither ) );
+    QImage preview ( pix.convertToImage().convertDepth( 32, Qt::ColorOnly ) );
+    if ( !preview.hasAlphaBuffer() )
+    {
+        preview.setAlphaBuffer( true );
+    }
     // ### TODO: freedesktop.org Thumbnail specification (date...)
     KoStoreDevice io ( store );
     if ( !io.open( IO_WriteOnly ) )
         return false;
-    if ( ! preview.save( &io, "PNG" ) ) // ### TODO What is -9 in quality terms?
+    if ( ! preview.save( &io, "PNG", 0 ) )
         return false;
     io.close();
     return true;
