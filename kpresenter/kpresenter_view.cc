@@ -3259,80 +3259,7 @@ void KPresenterView::objectSelectedChanged()
     //actionExtraPenStyle->setEnabled(state);
     //actionExtraPenWidth->setEnabled(state);
 
-    bool isText=!m_canvas->applicableTextInterfaces().isEmpty();
-    actionTextFont->setEnabled(isText);
-    actionTextFontSize->setEnabled(isText);
-    actionTextFontFamily->setEnabled(isText);
-    actionTextColor->setEnabled(isText);
-    actionTextAlignLeft->setEnabled(isText);
-    actionTextAlignCenter->setEnabled(isText);
-    actionTextAlignRight->setEnabled(isText);
-    actionTextAlignBlock->setEnabled(isText);
-
-    actionFormatBullet->setEnabled(rw && isText );
-    actionFormatNumber->setEnabled(rw && isText );
-
-    actionTextDepthPlus->setEnabled(isText);
-    actionFormatDefault->setEnabled(isText);
-    actionTextDepthMinus->setEnabled(isText);
-
-    actionTextExtentCont2Height->setEnabled(isText);
-    actionTextExtendObj2Cont->setEnabled(isText);
-    actionTextBold->setEnabled(isText);
-    actionTextItalic->setEnabled(isText);
-    actionTextUnderline->setEnabled(isText);
-    actionFormatStrikeOut->setEnabled(isText);
-    actionFormatSuper->setEnabled(isText);
-    actionFormatSub->setEnabled(isText);
-    actionIncreaseFontSize->setEnabled(isText);
-    actionDecreaseFontSize->setEnabled(isText);
-    if ( !m_canvas->applicableTextInterfaces().isEmpty() )
-    {
-        KoTextFormat format =*(m_canvas->applicableTextInterfaces().first()->currentFormat());
-        //unzoom font
-        format.setPointSize( (int)KoTextZoomHandler::layoutUnitPtToPt( format.font().pointSize() ) );
-        showFormat( format );
-        const KoParagLayout * paragLayout=m_canvas->applicableTextInterfaces().first()->currentParagLayoutFormat();
-        KoParagCounter counter;
-        if(paragLayout->counter)
-            counter = *(paragLayout->counter);
-        alignChanged(  paragLayout->alignment );
-    }
-
-    KPTextView *edit=m_canvas->currentTextObjectView();
-
-    bool val=(edit!=0) && isText;
-    actionInsertSpecialChar->setEnabled(val);
-    actionInsertComment->setEnabled( val );
-
-    actionInsertLink->setEnabled(val);
-    actionFormatParag->setEnabled(val);
-    actionInsertVariable->setEnabled(val);
-    actionTextInsertPageNum->setEnabled(val);
-
-
-    bool hasSelection = false ;
-    if(edit)
-    {
-        double leftMargin =edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-        actionTextDepthMinus->setEnabled( val && leftMargin>0);
-        hasSelection = edit->textObject()->hasSelection();
-    }
-
-    actionChangeCase->setEnabled( (val && rw && hasSelection ) || (rw && !edit && isText));
-
-    if(!edit)
-    {
-        actionEditCopy->setEnabled(state);
-        actionEditCut->setEnabled(state);
-    }
-    actionFormatStyle->setEnabled(isText);
-    state=m_canvas->oneObjectTextExist();
-    actionEditSearch->setEnabled(state);
-    actionEditReplace->setEnabled(state);
-
-    slotUpdateRuler();
-
+    slotObjectEditChanged();
 }
 
 /*=========== take changes for backgr dialog =====================*/
@@ -6403,7 +6330,84 @@ void KPresenterView::openPopupMenuFlipObject( const QPoint &_point )
 
 void KPresenterView::slotObjectEditChanged()
 {
-    //todo
+    bool state=m_canvas->isOneObjectSelected();
+    bool headerfooterselected=false;
+    bool rw = koDocument()->isReadWrite();
+
+    bool isText=!m_canvas->applicableTextInterfaces().isEmpty();
+    actionTextFont->setEnabled(isText);
+    actionTextFontSize->setEnabled(isText);
+    actionTextFontFamily->setEnabled(isText);
+    actionTextColor->setEnabled(isText);
+    actionTextAlignLeft->setEnabled(isText);
+    actionTextAlignCenter->setEnabled(isText);
+    actionTextAlignRight->setEnabled(isText);
+    actionTextAlignBlock->setEnabled(isText);
+
+    actionFormatBullet->setEnabled(rw && isText );
+    actionFormatNumber->setEnabled(rw && isText );
+
+    actionTextDepthPlus->setEnabled(isText);
+    actionFormatDefault->setEnabled(isText);
+    actionTextDepthMinus->setEnabled(isText);
+
+    actionTextExtentCont2Height->setEnabled(isText);
+    actionTextExtendObj2Cont->setEnabled(isText);
+    actionTextBold->setEnabled(isText);
+    actionTextItalic->setEnabled(isText);
+    actionTextUnderline->setEnabled(isText);
+    actionFormatStrikeOut->setEnabled(isText);
+    actionFormatSuper->setEnabled(isText);
+    actionFormatSub->setEnabled(isText);
+    actionIncreaseFontSize->setEnabled(isText);
+    actionDecreaseFontSize->setEnabled(isText);
+    if ( !m_canvas->applicableTextInterfaces().isEmpty() )
+    {
+        KoTextFormat format =*(m_canvas->applicableTextInterfaces().first()->currentFormat());
+        //unzoom font
+        format.setPointSize( (int)KoTextZoomHandler::layoutUnitPtToPt( format.font().pointSize() ) );
+        showFormat( format );
+        const KoParagLayout * paragLayout=m_canvas->applicableTextInterfaces().first()->currentParagLayoutFormat();
+        KoParagCounter counter;
+        if(paragLayout->counter)
+            counter = *(paragLayout->counter);
+        alignChanged(  paragLayout->alignment );
+    }
+
+    KPTextView *edit=m_canvas->currentTextObjectView();
+
+    bool val=(edit!=0) && isText;
+    actionInsertSpecialChar->setEnabled(val);
+    actionInsertComment->setEnabled( val );
+
+    actionInsertLink->setEnabled(val);
+    actionFormatParag->setEnabled(val);
+    actionInsertVariable->setEnabled(val);
+    actionTextInsertPageNum->setEnabled(val);
+
+
+    bool hasSelection = false ;
+    if(edit)
+    {
+        double leftMargin =edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
+        actionTextDepthMinus->setEnabled( val && leftMargin>0);
+        hasSelection = edit->textObject()->hasSelection();
+    }
+
+    actionChangeCase->setEnabled( (val && rw && hasSelection ) || (rw && !edit && isText));
+
+    if(!edit)
+    {
+        actionEditCopy->setEnabled(state);
+        actionEditCut->setEnabled(state);
+    }
+    actionFormatStyle->setEnabled(isText);
+    state=m_canvas->oneObjectTextExist();
+    actionEditSearch->setEnabled(state);
+    actionEditReplace->setEnabled(state);
+
+    slotUpdateRuler();
+
 }
 
 #include <kpresenter_view.moc>
