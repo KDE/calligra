@@ -377,13 +377,10 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
             KWTableFrameSet *table = fs->getGroupManager();
             // We'll have to do better in the long run
             if ( table ) {
-                KWTableFrameSet::Cell *theCell=dynamic_cast<KWTableFrameSet::Cell *>(fs);
-                if ( theCell)
-                {
-                    for(unsigned int col=0; col < table->getCols(); col++) {
-                        KWTableFrameSet::Cell *c = table->getCell(theCell->m_row, col);
-                        m_boundingRect |= *c->frame(0);
-                    }
+                KWTableFrameSet::Cell *theCell=static_cast<KWTableFrameSet::Cell *>(fs);
+                for(unsigned int col=0; col < table->getCols(); col++) {
+                    KWTableFrameSet::Cell *c = table->getCell(theCell->m_row, col);
+                    m_boundingRect |= *c->frame(0);
                 }
             } else
                 m_boundingRect |= *frame;
