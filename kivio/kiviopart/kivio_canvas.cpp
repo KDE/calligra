@@ -1162,6 +1162,7 @@ void KivioCanvas::keyReleaseEvent( QKeyEvent *e )
               gl->removeSelected();
               paintGuides();
               updateGuidesCursor();
+              m_pDoc->setModified( true );
             } else {
               activePage()->deleteSelectedStencils();
               m_pDoc->updateView(activePage());
