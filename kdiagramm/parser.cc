@@ -63,7 +63,7 @@ bool ParsedArray::recalc( int row, int col )
     current = &data[idx(row,col)];
     current->type = parseExpr( current->val );
 
-    return (current->type == Number) && !getc();
+    return (current->type == Number) && !get_c();
 }
 
 
@@ -88,7 +88,7 @@ QString ParsedArray::calc( int row, int col, bool *ok )
     current = &data[idx(row,col)];
     current->type = parseExpr( current->val );
 
-    bool done = (current->type == Number) && !getc();
+    bool done = (current->type == Number) && !get_c();
 
     if ( ok )
 	*ok = done;
@@ -102,17 +102,17 @@ QString ParsedArray::calc( int row, int col, bool *ok )
 }
 
 
-char ParsedArray::getc() 
+char ParsedArray::get_c() 
 { 
     while ( index<(int)current->text.length() && 
 	    isspace( current->text[index] ) ) 
 	index++;
 
     if ( index<(int)current->text.length() ) {
-	//debug ("getc %d,%c,%d", index, contents[index], contents[index]);
+	//debug ("get_c %d,%c,%d", index, contents[index], contents[index]);
 	return current->text[index++];
     } else {
-	//debug("getc EOS %d",index);
+	//debug("get_c EOS %d",index);
 	return 0;
     }
 }
@@ -132,7 +132,7 @@ ParsedArray::Type ParsedArray::parseExpr( double &res )
 	return t;
 
     char ch;
-    while (( ch = getc() )){
+    while (( ch = get_c() )){
 	if ( ch != '+' && ch != '-' ) {
 	    putback();
 	    return Number;
@@ -156,7 +156,7 @@ ParsedArray::Type ParsedArray::parseTerm( double &res )
 	return t;
 
     char ch;
-    while (( ch = getc() )){
+    while (( ch = get_c() )){
 	if ( ch != '*' && ch != '/' ) {
 	    putback();
 	    return Number;
@@ -178,12 +178,12 @@ ParsedArray::Type ParsedArray::parseTerm( double &res )
 
 ParsedArray::Type ParsedArray::parseFactor( double &res )
 {
-    char ch = getc();
+    char ch = get_c();
     if ( ch == '(' ) {
 	Type t = parseExpr( res );
 	if ( t != Number )
 	    return String;
-	if ( getc() == ')' )
+	if ( get_c() == ')' )
 	    return Number;
 	else
 	    return String;
@@ -211,12 +211,12 @@ ParsedArray::Type ParsedArray::parseNumber( double &res )
 ParsedArray::Type ParsedArray::parseInt( int &res )
 {
     res = 0;
-    char ch = getc();
+    char ch = get_c();
     if ( !isdigit(ch) )
 	return String;
     do { 
 	res = res*10 + ch - '0';
-    } while (isdigit(ch=getc()));
+    } while (isdigit(ch=get_c()));
     if (ch)
 	putback();
     return Number;
@@ -226,7 +226,7 @@ ParsedArray::Type ParsedArray::parseInt( int &res )
 ParsedArray::Type ParsedArray::parseRef( double &res )
 {
     res = 0;
-    char ch = getc();
+    char ch = get_c();
     if ( !isalpha(ch) )
 	return String;
     int col = toupper(ch) - 'A'; // ### could be more general

@@ -48,7 +48,7 @@ private:
     Data *current;
     short index; // opt: later const char *
 
-    char getc();
+    char get_c();
     void putback();
 
     Type parseExpr( double & );
