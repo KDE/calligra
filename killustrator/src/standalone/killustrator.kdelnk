@@ -1,0 +1,14 @@
+# KDE Config File
+[KDE Desktop Entry]
+SwallowExec=
+SwallowTitle=
+BinaryPattern=
+MimeType=
+Name[de]=KIlustrator
+Exec=killustrator
+Icon=killustrator.xpm
+TerminalOptions=
+Path=
+Type=Application
+Comment[de]=Vektorgraphikprogramm
+Terminal=0

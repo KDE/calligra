@@ -1,0 +1,87 @@
+/* -*- C++ -*-
+
+  $Id$
+
+  This file is part of KIllustrator.
+  Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Library General Public License as
+  published by  
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU Library General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
+
+#ifndef GPolyline_h_
+#define GPolyline_h_
+
+#include <qobject.h>
+#include <qcolor.h>
+#include <qfont.h>
+#include <qwmatrix.h>
+#include <qpainter.h>
+#include <qdstream.h>
+#include <qdict.h>
+#include <qlist.h>
+
+#include "Coord.h"
+#include "GObject.h"
+#include "Arrow.h"
+
+#define NEAR_DISTANCE 4
+
+class GPolyline : public GObject {
+  Q_OBJECT
+public:
+  GPolyline ();
+  GPolyline (const list<XmlAttribute>& attribs);
+  GPolyline (const GPolyline& obj);
+  ~GPolyline () {}
+  
+  virtual void draw (Painter& p, bool withBasePoints = false);
+  virtual bool contains (const Coord& p);
+  
+  virtual void setPoint (int idx, const Coord& p);
+  virtual void addPoint (int idx, const Coord& p, bool update = true);
+  void _addPoint (int idx, const Coord& p);
+  void movePoint (int idx, float dx, float dy);
+
+  const Coord& getPoint (int idx);
+  QList<Coord>& getPoints ();
+
+  int getNeighbourPoint (const Coord& p);
+  unsigned int numOfPoints () const;
+  void removePoint (int idx, bool update = true);
+
+  virtual const char* typeName ();
+
+  virtual GObject* copy ();
+
+  virtual void writeToXml (XmlWriter&);
+
+protected:
+  void calcBoundingBox ();
+
+  float calcArrowAngle (const Coord& p1, const Coord& p2, int direction);
+
+protected slots:
+  void updateProperties ();
+
+protected:
+  QList<Coord> points;
+  Arrow *sArrow, *eArrow;
+  float sAngle, eAngle;
+};
+
+#endif
+

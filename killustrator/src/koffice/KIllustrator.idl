@@ -1,0 +1,17 @@
+#ifndef KIllustrator_idl_
+#define KIllustrator_idl_
+
+#include <parts.idl>
+
+module KIllustrator {
+	interface View : OPParts::View {
+	};
+
+	interface Document : OPParts::Document {
+	};
+
+	interface Factory : OPParts::Factory {
+	};
+};
+
+#endif

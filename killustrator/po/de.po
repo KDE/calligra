@@ -1,0 +1,559 @@
+# Deutsche Übersetzung für KIllustrator.
+# Copyright (C) 1998 Kai-Uwe Sattler <kus@iti.cs.uni-magdeburg.de>.
+#
+msgid ""
+msgstr ""
+"Date: 1998-06-01 16:01:51+0200\n"
+"From: Kai-Uwe Sattler <kus@iti.cs.uni-magdeburg.de>\n"
+"Content-Type: text/plain; charset=\n"
+"Xgettext-Options: -C -ktranslate -ki18n\n"
+"Files: Handle.cc GObject.cc GPolyline.cc GPolygon.cc GOval.cc GClipart.cc GBezier.cc GText.cc GGroup.cc Tool.cc PolylineTool.cc RectangleTool.cc OvalTool.cc TextTool.cc SelectionTool.cc PolygonTool.cc ToolController.cc EditPointTool.cc BezierTool.cc ZoomTool.cc ToolPalette.cc ColorSelectionPalette.cc Canvas.cc QwViewport.cc GDocument.cc KIllustrator.cc Coord.cc PropertyEditor.cc FloatSpinBox.cc ColorComboBox.cc FontSelector.cc AlignmentDialog.cc PolygonConfigDialog.cc PolygonPreview.cc GridDialog.cc Command.cc AlignCmd.cc DistributeCmd.cc InsertClipartCmd.cc TranslateCmd.cc ScaleCmd.cc RotateCmd.cc CreateOvalCmd.cc CreatePolylineCmd.cc CreateTextCmd.cc CreateRectangleCmd.cc GroupCmd.cc UngroupCmd.cc DeleteCmd.cc CutCmd.cc CopyCmd.cc PasteCmd.cc SetTextCmd.cc SetPropertyCmd.cc ReorderCmd.cc AddLineSegmentCmd.cc EditPointCmd.cc CreatePolygonCmd.cc CreateBezierCmd.cc InsertObjCmd.cc CommandHistory.cc KIllustratorApp.cc FilterInfo.cc ExportFilter.cc ImportFilter.cc Ruler.cc "
+"AboutDialog.cc qwmf.cc main.cc ToolButton.cc Arrow.cc Painter.cc LineStyle.cc TransformationDialog.cc koPageLayoutDia.cc\n"
+
+#: GPolyline.cc:122
+msgid "Polyline"
+msgstr "Linie"
+
+#: GPolygon.cc:143 PolygonConfigDialog.cc:86
+msgid "Polygon"
+msgstr "Polygon"
+
+#: GPolygon.cc:145
+msgid "Rectangle"
+msgstr "Rechteck"
+
+#: GPolygon.cc:147
+msgid "Square"
+msgstr "Quadrat"
+
+#: GOval.cc:93
+msgid "Circle"
+msgstr "Kreis"
+
+#: GOval.cc:95
+msgid "Ellipse"
+msgstr "Ellipse"
+
+#: GClipart.cc:74
+msgid "Clipart object"
+msgstr "Clipart"
+
+#: GBezier.cc:88
+msgid "Bezier curve"
+msgstr "Bezierkurve"
+
+#: GText.cc:101
+msgid "Text"
+msgstr "Text"
+
+#: GGroup.cc:57 
+msgid "Group"
+msgstr "Gruppierung"
+
+#: PolylineTool.cc:156
+msgid "Create Polyline"
+msgstr "Linie zeichnen"
+
+#: RectangleTool.cc:85
+msgid "Create Rectangle"
+msgstr "Rechteck zeichnen"
+
+#: OvalTool.cc:82
+msgid "Create Oval"
+msgstr "Ellipse zeichnen"
+
+#: SelectionTool.cc:456
+msgid "Selection Mode"
+msgstr "Auswählen"
+
+#: PolygonTool.cc:116
+msgid "Create Polygon"
+msgstr "Polygon zeichnen"
+
+#: EditPointTool.cc:147
+msgid "Edit Point"
+msgstr "Punkt bearbeiten"
+
+#: BezierTool.cc:188
+msgid "Create Bezier Curve"
+msgstr "Bezierkurve zeichnen"
+
+#: ZoomTool.cc:46
+msgid "Zoom In"
+msgstr "Vergrößern"
+
+#: KIllustrator.cc:263
+msgid "New Document"
+msgstr "Neues Dokument"
+
+#: KIllustrator.cc:267
+msgid "Open Document"
+msgstr "Dokument ööfnen"
+
+#: KIllustrator.cc:271
+msgid "Save Document"
+msgstr "Dokument speichern"
+
+#: KIllustrator.cc:277
+msgid "Copy"
+msgstr "Kopieren"
+
+#: KIllustrator.cc:281
+msgid "Paste"
+msgstr "Einfügen"
+
+#: KIllustrator.cc:285
+msgid "Cut"
+msgstr "Ausschneiden"
+
+#: KIllustrator.cc:337
+msgid "Ne&w..."
+msgstr "&Neu..."
+
+#: KIllustrator.cc:339
+msgid "&Open..."
+msgstr "Ö&ffnen..."
+
+#: KIllustrator.cc:345
+msgid "Open Recent"
+msgstr "Letzte Öffnen"
+
+#: KIllustrator.cc:347
+msgid "&Save"
+msgstr "&Speichern"
+
+#: KIllustrator.cc:349
+msgid "S&ave as..."
+msgstr "Speichern &unter..."
+
+#: KIllustrator.cc:350
+msgid "&Close"
+msgstr "Sch&ließen"
+
+#: KIllustrator.cc:365
+msgid "Export"
+msgstr "Exportieren"
+
+#: KIllustrator.cc:368
+msgid "&Print"
+msgstr "&Drucken"
+
+#: KIllustrator.cc:371
+msgid "New &Window"
+msgstr "Neues &Fenster"
+
+#: KIllustrator.cc:373
+msgid "E&xit"
+msgstr "&Beenden"
+
+#: KIllustrator.cc:378
+msgid "Undo"
+msgstr "&Rückgängig"
+
+#: KIllustrator.cc:380
+msgid "Redo"
+msgstr "&Wiederherstellen"
+
+#: KIllustrator.cc:382
+msgid "&Copy"
+msgstr "&Kopieren"
+
+#: KIllustrator.cc:384
+msgid "&Paste"
+msgstr "&Einfügen"
+
+#: KIllustrator.cc:386
+msgid "C&ut"
+msgstr "Aus&schneiden"
+
+#: KIllustrator.cc:389
+msgid "&Delete"
+msgstr "&Löschen"
+
+#: KIllustrator.cc:392
+msgid "&Select All"
+msgstr "&Alles auswählen"
+
+#: KIllustrator.cc:394
+msgid "Pr&operties"
+msgstr "E&igenschaften"
+
+#: KIllustrator.cc:397
+msgid "&Page"
+msgstr "Seite einrichten"
+
+#: KIllustrator.cc:399
+msgid "&Grid"
+msgstr "Gitter einrichten"
+
+#: KIllustrator.cc:403 TransformationDialog.cc:57
+msgid "Position"
+msgstr "Position"
+
+#: KIllustrator.cc:405 TransformationDialog.cc:60
+msgid "Dimension"
+msgstr "Skalieren"
+
+#: KIllustrator.cc:407 TransformationDialog.cc:63
+msgid "Rotation"
+msgstr "Rotieren"
+
+#: KIllustrator.cc:409 TransformationDialog.cc:66
+msgid "Mirror"
+msgstr "Spiegeln"
+
+#: KIllustrator.cc:414 TransformationDialog.cc:54
+msgid "Transform"
+msgstr "Verändern"
+
+#: AlignmentDialog.cc:61 KIllustrator.cc:415
+msgid "Align"
+msgstr "Ausrichten"
+
+#: KIllustrator.cc:417
+msgid "To Front"
+msgstr "Nach &vorn"
+
+#: KIllustrator.cc:418
+msgid "To Back"
+msgstr "Nach &hinten"
+
+#: KIllustrator.cc:419
+msgid "Forward One"
+msgstr "&Eins nach vorn"
+
+#: KIllustrator.cc:421
+msgid "Back One"
+msgstr "E&ins nach hinten"
+
+#KIllustrator.cc:424
+msgid "Group"
+msgstr "Gruppieren"
+
+#: KIllustrator.cc:426
+msgid "Ungroup"
+msgstr "Gruppierung aufheben"
+
+#: KIllustrator.cc:430
+msgid "&Options..."
+msgstr "&Optionen..."
+
+#: KIllustrator.cc:432
+msgid "&Clipart..."
+msgstr "&Clipart..."
+
+#: KIllustrator.cc:435
+msgid "&Help..."
+msgstr "&Hilfe..."
+
+#: KIllustrator.cc:437
+msgid "About..."
+msgstr "&Über..."
+
+#: KIllustrator.cc:445
+msgid "&File"
+msgstr "&Datei"
+
+#: KIllustrator.cc:446
+msgid "&Edit"
+msgstr "&Bearbeiten"
+
+#: KIllustrator.cc:447
+msgid "&Layout"
+msgstr "&Layout"
+
+#: KIllustrator.cc:448
+msgid "&Arrange"
+msgstr "&Anordnen"
+
+#: KIllustrator.cc:449
+msgid "Ex&tras"
+msgstr "Ex&tras"
+
+#: KIllustrator.cc:450
+msgid "&Help"
+msgstr "&Hilfe"
+
+#: KIllustrator.cc:679
+msgid ""
+"This Document has been modified.\n"
+"Would you like to save it ?"
+msgstr ""
+"Das Dokument wurde verändert.\n"
+"Wollen Sie speichern ?"
+
+#: KIllustrator.cc:680
+msgid "Yes"
+msgstr "Ja"
+
+#: KIllustrator.cc:681
+msgid "No"
+msgstr "Nein"
+
+#: AlignmentDialog.cc:76 GridDialog.cc:60 KIllustrator.cc:682 PolygonConfigDialog.cc:61 PropertyEditor.cc:120 koPageLayoutDia.cc:95
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: PropertyEditor.cc:89
+msgid "Properties"
+msgstr "Eingenschaften"
+
+#: PropertyEditor.cc:97
+msgid "Info"
+msgstr "Info"
+
+#: PropertyEditor.cc:100
+msgid "Outline"
+msgstr "Umriß"
+
+#: PropertyEditor.cc:103
+msgid "Fill"
+msgstr "Füllung"
+
+#: PropertyEditor.cc:107
+msgid "Font"
+msgstr "Schriftart"
+
+#: AlignmentDialog.cc:74 GridDialog.cc:58 PolygonConfigDialog.cc:59 PropertyEditor.cc:118 koPageLayoutDia.cc:96
+msgid "Ok"
+msgstr "Ok"
+
+#: AlignmentDialog.cc:79 GridDialog.cc:63 PolygonConfigDialog.cc:64 PropertyEditor.cc:123
+msgid "Help"
+msgstr "Hilfe"
+
+#: PropertyEditor.cc:147
+msgid "Type:"
+msgstr "Typ:"
+
+#: PropertyEditor.cc:159
+msgid "Bounding Box"
+msgstr "Auswahlgröße"
+
+#: PropertyEditor.cc:165
+msgid "X Position:"
+msgstr "X-Position:"
+
+#: PropertyEditor.cc:177
+msgid "Y Position:"
+msgstr "Y-Position:"
+
+#: PropertyEditor.cc:189 PropertyEditor.cc:222
+msgid "Width:"
+msgstr "Breite:"
+
+#: PropertyEditor.cc:201
+msgid "Height:"
+msgstr "Höhe:"
+
+#: PropertyEditor.cc:233 PropertyEditor.cc:332
+msgid "Color:"
+msgstr "Farbe:"
+
+#: FontSelector.cc:146 FontSelector.cc:154 PropertyEditor.cc:243
+msgid "Style:"
+msgstr "Stil:"
+
+#: PropertyEditor.cc:259
+msgid "Arrows:"
+msgstr "Linienenden:"
+
+#: PropertyEditor.cc:281
+msgid "Shape:"
+msgstr "Form:"
+
+#: PropertyEditor.cc:312
+msgid "Roundness:"
+msgstr "Rundung:"
+
+#: PropertyEditor.cc:487
+msgid "no selection"
+msgstr "Keine Auswahl"
+
+#: PropertyEditor.cc:489
+msgid "multiple selection"
+msgstr "Mehrfache Auswahl"
+
+#: FontSelector.cc:85
+msgid "Requested Font"
+msgstr ""
+
+#: FontSelector.cc:90
+msgid "Actual Font"
+msgstr ""
+
+#: FontSelector.cc:94 FontSelector.cc:98
+msgid "Family:"
+msgstr ""
+
+#: FontSelector.cc:105 FontSelector.cc:111
+msgid "Charset:"
+msgstr ""
+
+#: FontSelector.cc:118 FontSelector.cc:123
+msgid "Size:"
+msgstr ""
+
+#: FontSelector.cc:132 FontSelector.cc:137
+msgid "Weight:"
+msgstr ""
+
+#: FontSelector.cc:189
+msgid "Charset"
+msgstr ""
+
+#: FontSelector.cc:201
+msgid "Size"
+msgstr ""
+
+#: FontSelector.cc:240
+msgid "Weight"
+msgstr ""
+
+#: FontSelector.cc:241 FontSelector.cc:339
+msgid "normal"
+msgstr ""
+
+#: FontSelector.cc:242 FontSelector.cc:341
+msgid "bold"
+msgstr ""
+
+#: FontSelector.cc:251
+msgid "Style"
+msgstr ""
+
+#: FontSelector.cc:252 FontSelector.cc:352 FontSelector.cc:382
+msgid "roman"
+msgstr ""
+
+#: FontSelector.cc:253 FontSelector.cc:354 FontSelector.cc:380
+msgid "italic"
+msgstr ""
+
+#: FontSelector.cc:375
+msgid "Bold"
+msgstr ""
+
+#: FontSelector.cc:377
+msgid "Normal"
+msgstr ""
+
+#: AlignmentDialog.cc:50
+msgid "Alignment"
+msgstr "Ausrichten"
+
+#: AlignmentDialog.cc:64
+msgid "Distribute"
+msgstr "Verteilen"
+
+#: AlignmentDialog.cc:104 AlignmentDialog.cc:180 GridDialog.cc:99
+msgid "Vertically"
+msgstr "Vertikal:"
+
+#: AlignmentDialog.cc:129 AlignmentDialog.cc:210 GridDialog.cc:88
+msgid "Horizontally"
+msgstr "Horizontal"
+
+#: AlignmentDialog.cc:154
+msgid "To Grid"
+msgstr "An Gitter ausrichten"
+
+#: AlignmentDialog.cc:159
+msgid "Align To Center of Page"
+msgstr "Auf Seitenmitte"
+
+#: AlignmentDialog.cc:240
+msgid "Distribute at"
+msgstr "Verteilen über"
+
+#: AlignmentDialog.cc:243
+msgid "Selection"
+msgstr "Auswahl"
+
+#: AlignmentDialog.cc:247
+msgid "Page"
+msgstr "Seite"
+
+#: PolygonConfigDialog.cc:47
+msgid "Setup Polygon Tool"
+msgstr "Polygonwerkzeug"
+
+#: PolygonConfigDialog.cc:92
+msgid "Concave Polygon"
+msgstr "Konkaves Polygon"
+
+#: PolygonConfigDialog.cc:99
+msgid "Corners:"
+msgstr "Ecken:"
+
+#: PolygonConfigDialog.cc:109
+msgid "Sharpness:"
+msgstr "Tiefe:"
+
+#: GridDialog.cc:46
+msgid "Grid"
+msgstr "Gitter"
+
+#: GridDialog.cc:83
+msgid "Distance"
+msgstr "Abstand"
+
+#: GridDialog.cc:109
+msgid "Snap To Grid"
+msgstr "An Gitter ausrichten"
+
+#: GridDialog.cc:113
+msgid "Show Grid"
+msgstr "Gitter darstellen"
+
+#: AboutDialog.cc:45
+msgid "About KIllustrator"
+msgstr "Über KIllustrator"
+
+#: TransformationDialog.cc:68
+msgid "Close"
+msgstr "Schließen"
+
+#: TransformationDialog.cc:81 TransformationDialog.cc:149 TransformationDialog.cc:219
+msgid "Horizontal:"
+msgstr "Horizontal:"
+
+#: TransformationDialog.cc:93 TransformationDialog.cc:161 TransformationDialog.cc:231
+msgid "Vertical:"
+msgstr "Vertikal:"
+
+#: TransformationDialog.cc:104 TransformationDialog.cc:242
+msgid "Relative Position"
+msgstr "Relative Position"
+
+#: TransformationDialog.cc:108 TransformationDialog.cc:176 TransformationDialog.cc:247 TransformationDialog.cc:289
+msgid "Apply"
+msgstr "Zuweisen"
+
+#: TransformationDialog.cc:112 TransformationDialog.cc:180 TransformationDialog.cc:251 TransformationDialog.cc:293
+msgid "Apply To Duplicate"
+msgstr "Zuweisen an Kopie"
+
+#: TransformationDialog.cc:139
+msgid "Absolute"
+msgstr "Absolut"
+
+#: TransformationDialog.cc:143
+msgid "Percentage"
+msgstr "Prozentual"
+
+#: TransformationDialog.cc:172
+msgid "Proportional"
+msgstr "Proportional"
+
+#: TransformationDialog.cc:203
+msgid "Angle:"
+msgstr "Winkel:"
+
+#: TransformationDialog.cc:214
+msgid "Center"
+msgstr "Rotationspunkt"
+
+#: koPageLayoutDia.cc:100
+msgid "Page Layout"
+msgstr "Seitenformat"

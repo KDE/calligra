@@ -1,0 +1,11 @@
+# KDE Config File
+[KDE Desktop Entry]
+Name=KIllustrator
+Exec=killustrator.bin --server
+Comment=KIllustrator Vector Graphics Application
+MimeTypes=application/x-killustrator,
+RepoID=IDL:KIllustrator/Factory:1.0,
+ActivationMode=shared
+Type=OpenPart
+Icon=unknown.xpm
+MiniIcon=unknown.xpm
