@@ -230,11 +230,11 @@ public:
     void deSelectObj( KPObject *kpobject );
     QDomElement saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset, KoZoomHandler* zoomHandler, int saveOnlyPage ) const;
 
-    bool oneObjectTextExist() const ;
-    bool isOneObjectSelected() const;
-    bool haveASelectedPartObj() const;
-    bool haveASelectedGroupObj() const;
-    bool haveASelectedPixmapObj() const;
+    bool oneObjectTextExist() ;
+    bool isOneObjectSelected();
+    bool haveASelectedPartObj();
+    bool haveASelectedGroupObj();
+    bool haveASelectedPixmapObj();
 
     KoRect getBoundingRect(const KoRect &rect, KPresenterDoc *doc) const;
     KoRect getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc) const;

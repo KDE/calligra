@@ -2947,9 +2947,11 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, doubl
     return objects;
 }
 
-bool KPrPage::oneObjectTextExist() const
+bool KPrPage::oneObjectTextExist()
 {
-    QPtrListIterator<KPObject> it( m_objectList );
+    QPtrList<KPObject> lst;
+    getAllObjectSelectedList(lst,true );
+    QPtrListIterator<KPObject> it( lst );
     for ( ; it.current() ; ++it )
     {
         if ( (it.current()== m_doc->header() && !m_doc->hasHeader())|| (it.current()== m_doc->footer() && !m_doc->hasFooter()))
@@ -2960,9 +2962,11 @@ bool KPrPage::oneObjectTextExist() const
     return false;
 }
 
-bool KPrPage::isOneObjectSelected() const
+bool KPrPage::isOneObjectSelected()
 {
-    QPtrListIterator<KPObject> oIt( m_objectList );
+    QPtrList<KPObject> lst;
+    getAllObjectSelectedList(lst,true );
+    QPtrListIterator<KPObject> oIt( lst );
     for (; oIt.current(); ++oIt )
         if ( oIt.current()->isSelected() )
             return true;
@@ -2970,9 +2974,11 @@ bool KPrPage::isOneObjectSelected() const
     return false;
 }
 
-bool KPrPage::haveASelectedPartObj() const
+bool KPrPage::haveASelectedPartObj()
 {
-    QPtrListIterator<KPObject> it( m_objectList );
+    QPtrList<KPObject> lst;
+    getAllObjectSelectedList(lst,true );
+    QPtrListIterator<KPObject> it( lst );
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() && it.current()->getType() == OT_PART )
             return true;
@@ -2980,9 +2986,11 @@ bool KPrPage::haveASelectedPartObj() const
     return false;
 }
 
-bool KPrPage::haveASelectedGroupObj() const
+bool KPrPage::haveASelectedGroupObj()
 {
-    QPtrListIterator<KPObject> it( m_objectList );
+    QPtrList<KPObject> lst;
+    getAllObjectSelectedList(lst,true );
+    QPtrListIterator<KPObject> it( lst );
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() && it.current()->getType() == OT_GROUP )
             return true;
@@ -2990,9 +2998,11 @@ bool KPrPage::haveASelectedGroupObj() const
     return false;
 }
 
-bool KPrPage::haveASelectedPixmapObj() const
+bool KPrPage::haveASelectedPixmapObj()
 {
-    QPtrListIterator<KPObject> it( m_objectList );
+    QPtrList<KPObject> lst;
+    getAllObjectSelectedList(lst,true );
+    QPtrListIterator<KPObject> it( lst );
     for ( ; it.current() ; ++it ) {
         if ( it.current()->isSelected() &&
             ( ( it.current()->getType() == OT_PICTURE )
