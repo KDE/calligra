@@ -19,5 +19,5 @@ METASOURCES = AUTO
 data_DATA = x-svg.desktop
 datadir = $(kde_mimedir)/image
 
-service_DATA = killustrator_svg_import.desktop killustrator_svg_export.desktop
+service_DATA = kontour_svg_import.desktop kontour_svg_export.desktop
 servicedir = $(kde_servicesdir)
