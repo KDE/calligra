@@ -226,9 +226,9 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     {
         // Default size
         if (QApplication::desktop()->width() > 1100) // very big desktop ?
-            resize( 900, 800 );
+            resize( 1000, 800 );
         if (QApplication::desktop()->width() > 850) // big desktop ?
-            resize( 700, 600 );
+            resize( 800, 600 );
         else // small (800x600, 640x480) desktop
             resize( 600, 400 );
     }
