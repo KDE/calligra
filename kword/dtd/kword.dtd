@@ -400,7 +400,7 @@ don't put a </?xml...> at the end of the file!).
     (NAME|FOLLOWING|
      FLOW|INDENTS|OFFSETS|LINESPACING|PAGEBREAKING|
      LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|
-     COUNTER|FORMAT|TABULATOR)*>
+     COUNTER|FORMAT|TABULATOR|SHADOW)*>
 
 <!ELEMENT COLOR
     EMPTY>
@@ -501,7 +501,7 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT LAYOUT
     (NAME|FLOW|INDENTS|OFFSETS|LINESPACING|PAGEBREAKING|
      LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|
-     COUNTER|FORMAT|TABULATOR)*>
+     COUNTER|FORMAT|TABULATOR|SHADOW)*>
 
 <!-- NAME
         The name of a style.
@@ -695,6 +695,30 @@ don't put a </?xml...> at the end of the file!).
     type CDATA #REQUIRED
     ptpos CDATA #REQUIRED>
 
+<!--    Defines the position of a tabulation
+        Attributes:
+
+            distance:           Shadow distance in pt
+
+            direction:          Direction of the shadow
+                                1 = SD_LEFT_UP
+                                2 = SD_UP
+                                3 = SD_RIGHT_UP
+                                4 = SD_RIGHT
+                                5 = SD_RIGHT_BOTTOM
+                                6 = SD_BOTTOM
+                                7 = SD_LEFT_BOTTOM
+                                8 = SD_LEFT
+            red, green ,blue:   color of shadow
+
+-->
+<!ATTLIST SHADOW
+    distance CDATA #REQUIRED
+    direction CDATA #REQUIRED
+    red CDATA #REQUIRED
+    green CDATA #REQUIRED
+    blue CDATA #REQUIRED>
+
 <!--    An anchor describes an object which is anchored.
 
         Attributes:
@@ -709,6 +733,7 @@ don't put a </?xml...> at the end of the file!).
                                 being anchored.
                                 For framesets, this is the frameset number in the doc.
 -->
+
 <!ELEMENT ANCHOR
     EMPTY>
 <!ATTLIST ANCHOR
