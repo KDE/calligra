@@ -567,8 +567,12 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         else if ( m_mouseMeaning == MEANING_MOUSE_INSIDE || m_mouseMeaning == MEANING_MOUSE_INSIDE_TEXT
                   || m_mouseMeaning == MEANING_ACTIVATE_PART )
         {
-            if ( selectAllFrames( false ) )
-                emit frameSelectedChanged();
+            // LMB/MMB inside a frame always unselects all frames
+            // RMB inside a frame unselects too, except when
+            //     right-clicking on a selected frame
+            if ( ! ( e->button() == RightButton && frame && frame->isSelected() ) )
+                if ( selectAllFrames( false ) )
+                    emit frameSelectedChanged();
 
             KWFrameSet * fs = frame ? frame->frameSet() : 0L;
             bool emitChanged = false;
@@ -670,7 +674,8 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 // See if we clicked on a frame's border
                 bool border = false;
                 KWFrame * frame = m_doc->frameUnderMouse( normalPoint, &border );
-                if ( ( frame && border ) || e->state() & ControlButton )
+                if ( ( frame && ( border || frame->isSelected() ) )
+                       || e->state() & ControlButton )
                 {
                     m_gui->getView()->openPopupMenuEditFrame( QCursor::pos() );
                 }
@@ -2492,10 +2497,13 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     else // Key_PageDown
                         setContentsPos( contentsX(), contentsY() + visibleHeight() );
                 }
-                else if ( keyev->key() == Key_Escape && m_mouseMode != MM_EDIT )
+                else if ( keyev->key() == Key_Escape  )
                 {
-                    // Abort frame creation
-                    setMouseMode( MM_EDIT );
+                    if ( m_mouseMode != MM_EDIT )
+                        // Abort frame creation
+                        setMouseMode( MM_EDIT );
+                    else
+                        selectAllFrames( false );
                 }
                 else // normal key processing
                     if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT && m_doc->isReadWrite() && !m_printing )
