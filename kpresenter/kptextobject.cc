@@ -617,12 +617,16 @@ void KPTextObject::loadKTextObject( const QDomElement &elem )
                     //t = KTextEdit::BulletList;
                     paragLayout.counter->setStyle(KoParagCounter::STYLE_DISCBULLET);
                     paragLayout.counter->setNumbering(KoParagCounter::NUM_LIST);
+                    paragLayout.counter->setPrefix(QString::null);
+                    paragLayout.counter->setSuffix(QString::null);
                 }
                 else if ( type == "2" )
                 {
                     //t = KTextEdit::EnumList;
                     paragLayout.counter->setStyle(KoParagCounter::STYLE_NUM);
                     paragLayout.counter->setNumbering(KoParagCounter::NUM_LIST);
+                    paragLayout.counter->setPrefix(QString::null);
+                    paragLayout.counter->setSuffix(QString::null);
                 }
             }
 
