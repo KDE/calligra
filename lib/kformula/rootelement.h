@@ -103,10 +103,7 @@ public:
      * Removes all selected children and returns them. Places the
      * cursor to where the children have been.
      *
-     * We remove ourselve if we are requested to remove our numerator.
-     *
-     * It is possible to remove the denominator. But after this we
-     * are senseless and the caller is required to replace us.
+     * We remove ourselve if we are requested to remove our content.
      */
     virtual void remove(FormulaCursor*, QPtrList<BasicElement>&, Direction);
 
@@ -218,6 +215,7 @@ private:
      */
     LuPixelPoint rootOffset;
 };
+
 
 KFORMULA_NAMESPACE_END
 

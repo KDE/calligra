@@ -202,10 +202,11 @@ luPt ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 luPixel ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space ) const
 {
     switch ( space ) {
-    case THIN:   return getThinSpace( tstyle );
-    case MEDIUM: return getMediumSpace( tstyle );
-    case THICK:  return getThickSpace( tstyle );
-    case QUAD:   return getQuadSpace( tstyle );
+    case NEGTHIN: return -getThinSpace( tstyle );
+    case THIN:    return getThinSpace( tstyle );
+    case MEDIUM:  return getMediumSpace( tstyle );
+    case THICK:   return getThickSpace( tstyle );
+    case QUAD:    return getQuadSpace( tstyle );
     }
     return 0;
 }

@@ -33,10 +33,146 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-BracketElement::BracketElement(SymbolType l, SymbolType r, BasicElement* parent)
-    : BasicElement(parent)
+SingleContentElement::SingleContentElement(BasicElement* parent )
+    : BasicElement( parent )
 {
-    content = new SequenceElement(this);
+    content = new SequenceElement( this );
+}
+
+SingleContentElement::~SingleContentElement()
+{
+    delete content;
+}
+
+QChar SingleContentElement::getCharacter() const
+{
+    return content->getCharacter();
+}
+
+BasicElement* SingleContentElement::goToPos( FormulaCursor* cursor, bool& handled,
+                                             const LuPixelPoint& point, const LuPixelPoint& parentOrigin )
+{
+    BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
+    if (e != 0) {
+        LuPixelPoint myPos(parentOrigin.x() + getX(),
+                           parentOrigin.y() + getY());
+
+        e = content->goToPos(cursor, handled, point, myPos);
+        if (e != 0) {
+            return e;
+        }
+        return this;
+    }
+    return 0;
+}
+
+void SingleContentElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
+{
+    if (cursor->isSelectionMode()) {
+        getParent()->moveLeft(cursor, this);
+    }
+    else {
+        //bool linear = cursor->getLinearMovement();
+        if (from == getParent()) {
+            content->moveLeft(cursor, this);
+        }
+        else {
+            getParent()->moveLeft(cursor, this);
+        }
+    }
+}
+
+void SingleContentElement::moveRight(FormulaCursor* cursor, BasicElement* from)
+{
+    if (cursor->isSelectionMode()) {
+        getParent()->moveRight(cursor, this);
+    }
+    else {
+        //bool linear = cursor->getLinearMovement();
+        if (from == getParent()) {
+            content->moveRight(cursor, this);
+        }
+        else {
+            getParent()->moveRight(cursor, this);
+        }
+    }
+}
+
+void SingleContentElement::moveUp(FormulaCursor* cursor, BasicElement* /*from*/)
+{
+    getParent()->moveUp(cursor, this);
+}
+
+void SingleContentElement::moveDown(FormulaCursor* cursor, BasicElement* /*from*/)
+{
+    getParent()->moveDown(cursor, this);
+}
+
+void SingleContentElement::remove( FormulaCursor* cursor,
+                                   QPtrList<BasicElement>& removedChildren,
+                                   Direction direction )
+{
+    switch (cursor->getPos()) {
+    case contentPos:
+        BasicElement* parent = getParent();
+        parent->selectChild(cursor, this);
+        parent->remove(cursor, removedChildren, direction);
+    }
+}
+
+void SingleContentElement::normalize( FormulaCursor* cursor, Direction direction )
+{
+    if (direction == beforeCursor) {
+        content->moveLeft(cursor, this);
+    }
+    else {
+        content->moveRight(cursor, this);
+    }
+}
+
+SequenceElement* SingleContentElement::getMainChild()
+{
+    return content;
+}
+
+void SingleContentElement::selectChild(FormulaCursor* cursor, BasicElement* child)
+{
+    if (child == content) {
+        cursor->setTo(this, contentPos);
+    }
+}
+
+void SingleContentElement::writeDom(QDomElement& element)
+{
+    BasicElement::writeDom(element);
+
+    QDomDocument doc = element.ownerDocument();
+
+    QDomElement con = doc.createElement("CONTENT");
+    con.appendChild(content->getElementDom(doc));
+    element.appendChild(con);
+}
+
+bool SingleContentElement::readContentFromDom(QDomNode& node)
+{
+    if (!BasicElement::readContentFromDom(node)) {
+        return false;
+    }
+
+    if ( !buildChild( content, node, "CONTENT" ) ) {
+        kdWarning( DEBUGID ) << "Empty content in " << getTagName() << endl;
+        return false;
+    }
+    node = node.nextSibling();
+
+    return true;
+}
+
+
+
+BracketElement::BracketElement(SymbolType l, SymbolType r, BasicElement* parent)
+    : SingleContentElement(parent)
+{
     right = createBracket(r);
     left = createBracket(l);
 }
@@ -46,7 +182,6 @@ BracketElement::~BracketElement()
 {
     delete left;
     delete right;
-    delete content;
 }
 
 
@@ -57,7 +192,7 @@ BasicElement* BracketElement::goToPos( FormulaCursor* cursor, bool& handled,
     if (e != 0) {
         LuPixelPoint myPos(parentOrigin.x() + getX(),
                            parentOrigin.y() + getY());
-        e = content->goToPos(cursor, handled, point, myPos);
+        e = getContent()->goToPos(cursor, handled, point, myPos);
         if (e != 0) {
             return e;
         }
@@ -66,11 +201,11 @@ BasicElement* BracketElement::goToPos( FormulaCursor* cursor, bool& handled,
         luPixel dx = point.x() - myPos.x();
         luPixel dy = point.y() - myPos.y();
 
-        if ((dx > content->getX()+content->getWidth()) ||
-            (dy > content->getY()+content->getHeight())) {
-            content->moveEnd(cursor);
+        if ((dx > getContent()->getX()+getContent()->getWidth()) ||
+            (dy > getContent()->getY()+getContent()->getHeight())) {
+            getContent()->moveEnd(cursor);
             handled = true;
-            return content;
+            return getContent();
         }
         return this;
     }
@@ -84,6 +219,7 @@ BasicElement* BracketElement::goToPos( FormulaCursor* cursor, bool& handled,
  */
 void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
+    SequenceElement* content = getContent();
     content->calcSizes(style, tstyle, istyle);
 
     if (content->isTextOnly()) {
@@ -161,6 +297,7 @@ void BracketElement::draw( QPainter& painter, const LuPixelRect& r,
     if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
         return;
 
+    SequenceElement* content = getContent();
     content->draw(painter, r, style, tstyle, istyle, myPos);
 
     if (content->isTextOnly()) {
@@ -189,107 +326,6 @@ void BracketElement::draw( QPainter& painter, const LuPixelRect& r,
 
 
 /**
- * Enters this element while moving to the left starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or to the left of it.
- */
-void BracketElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
-{
-    if (cursor->isSelectionMode()) {
-        getParent()->moveLeft(cursor, this);
-    }
-    else {
-        if (from == getParent()) {
-            content->moveLeft(cursor, this);
-        }
-        else {
-            getParent()->moveLeft(cursor, this);
-        }
-    }
-}
-
-/**
- * Enters this element while moving to the right starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or to the right of it.
- */
-void BracketElement::moveRight(FormulaCursor* cursor, BasicElement* from)
-{
-    if (cursor->isSelectionMode()) {
-        getParent()->moveRight(cursor, this);
-    }
-    else {
-        if (from == getParent()) {
-            content->moveRight(cursor, this);
-        }
-        else {
-            getParent()->moveRight(cursor, this);
-        }
-    }
-}
-
-/**
- * Enters this element while moving up starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or above it.
- */
-void BracketElement::moveUp(FormulaCursor* cursor, BasicElement*)
-{
-    getParent()->moveUp(cursor, this);
-}
-
-/**
- * Enters this element while moving down starting inside
- * the element `from'. Searches for a cursor position inside
- * this element or below it.
- */
-void BracketElement::moveDown(FormulaCursor* cursor, BasicElement*)
-{
-    getParent()->moveDown(cursor, this);
-}
-
-
-/**
- * Removes all selected children and returns them. Places the
- * cursor to where the children have been.
- *
- * Here we remove ourselve if we are requested to remove our content.
- */
-void BracketElement::remove(FormulaCursor* cursor,
-                            QPtrList<BasicElement>& removedChildren,
-                            Direction direction)
-{
-    if (cursor->getPos() == contentPos) {
-        BasicElement* parent = getParent();
-        parent->selectChild(cursor, this);
-        parent->remove(cursor, removedChildren, direction);
-    }
-}
-
-
-// main child
-//
-// If an element has children one has to become the main one.
-
-SequenceElement* BracketElement::getMainChild()
-{
-    return content;
-}
-
-
-/**
- * Sets the cursor to select the child. The mark is placed before,
- * the position behind it.
- */
-void BracketElement::selectChild(FormulaCursor* cursor, BasicElement* child)
-{
-    if (child == content) {
-        cursor->setTo(this, contentPos);
-    }
-}
-
-
-/**
  * Creates a new bracket object that matches the char.
  */
 Artwork* BracketElement::createBracket(SymbolType bracket)
@@ -305,15 +341,9 @@ Artwork* BracketElement::createBracket(SymbolType bracket)
  */
 void BracketElement::writeDom(QDomElement& element)
 {
-    BasicElement::writeDom(element);
+    SingleContentElement::writeDom(element);
     element.setAttribute("LEFT", left->getType());
     element.setAttribute("RIGHT", right->getType());
-
-    QDomDocument doc = element.ownerDocument();
-
-    QDomElement con = doc.createElement("CONTENT");
-    con.appendChild(content->getElementDom(doc));
-    element.appendChild(con);
 }
 
 /**
@@ -336,28 +366,10 @@ bool BracketElement::readAttributesFromDom(QDomElement& element)
     return true;
 }
 
-/**
- * Reads our content from the node. Sets the node to the next node
- * that needs to be read.
- * Returns false if it failed.
- */
-bool BracketElement::readContentFromDom(QDomNode& node)
-{
-    if (!BasicElement::readContentFromDom(node)) {
-        return false;
-    }
-    if ( !buildChild( content, node, "CONTENT" ) ) {
-        kdWarning( DEBUGID ) << "Empty content in BracketElement." << endl;
-        return false;
-    }
-    node = node.nextSibling();
-    return true;
-}
-
 QString BracketElement::toLatex()
 {
     QString ls,rs,cs;
-    cs=content->toLatex();
+    cs=getContent()->toLatex();
     ls="\\left"+latexString(left->getType());
     rs="\\right"+latexString(right->getType());
 
@@ -395,7 +407,148 @@ QString BracketElement::latexString(char type)
 
 QString BracketElement::formulaString()
 {
-    return "(" + content->formulaString() + ")";
+    return "(" + getContent()->formulaString() + ")";
+}
+
+
+
+OverlineElement::OverlineElement( BasicElement* parent )
+    : SingleContentElement( parent )
+{
+}
+
+OverlineElement::~OverlineElement()
+{
+}
+
+
+void OverlineElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
+{
+    SequenceElement* content = getContent();
+    content->calcSizes(style, tstyle,
+		       style.convertIndexStyleLower(istyle));
+
+    //luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle ) );
+    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
+    //luPixel unit = (content->getHeight() + distY)/ 3;
+
+    setWidth( content->getWidth() );
+    setHeight( content->getHeight() + distY*2 );
+
+    content->setX( 0 );
+    content->setY( distY );
+    setBaseline(content->getBaseline() + content->getY());
+}
+
+void OverlineElement::draw( QPainter& painter, const LuPixelRect& r,
+                            const ContextStyle& style,
+                            ContextStyle::TextStyle tstyle,
+                            ContextStyle::IndexStyle istyle,
+                            const LuPixelPoint& parentOrigin )
+{
+    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+        return;
+
+    SequenceElement* content = getContent();
+    content->draw( painter, r, style, tstyle,
+                   style.convertIndexStyleLower( istyle ), myPos );
+
+    luPixel x = myPos.x();
+    luPixel y = myPos.y();
+    //int distX = style.getDistanceX(tstyle);
+    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
+    //luPixel unit = (content->getHeight() + distY)/ 3;
+
+    painter.setPen( QPen( style.getDefaultColor(),
+                          style.layoutUnitToPixelY( style.getLineWidth() ) ) );
+
+    painter.drawLine( style.layoutUnitToPixelX( x ),
+                      style.layoutUnitToPixelY( y+distY/3 ),
+                      style.layoutUnitToPixelX( x+content->getWidth() ),
+                      style.layoutUnitToPixelY( y+distY/3 ) );
+}
+
+
+QString OverlineElement::toLatex()
+{
+    return "\\overline{" + getContent()->toLatex() + "}";
+}
+
+QString OverlineElement::formulaString()
+{
+    return getContent()->formulaString();
+}
+
+
+UnderlineElement::UnderlineElement( BasicElement* parent )
+    : SingleContentElement( parent )
+{
+}
+
+UnderlineElement::~UnderlineElement()
+{
+}
+
+
+void UnderlineElement::calcSizes(const ContextStyle& style,
+                                 ContextStyle::TextStyle tstyle,
+                                 ContextStyle::IndexStyle istyle)
+{
+    SequenceElement* content = getContent();
+    content->calcSizes(style, tstyle,
+		       style.convertIndexStyleLower(istyle));
+
+    //luPixel distX = style.ptToPixelX( style.getThinSpace( tstyle ) );
+    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
+    //luPixel unit = (content->getHeight() + distY)/ 3;
+
+    setWidth( content->getWidth() );
+    setHeight( content->getHeight() + distY*2 );
+
+    content->setX( 0 );
+    content->setY( 0 );
+    setBaseline(content->getBaseline() + content->getY());
+}
+
+void UnderlineElement::draw( QPainter& painter, const LuPixelRect& r,
+                             const ContextStyle& style,
+                             ContextStyle::TextStyle tstyle,
+                             ContextStyle::IndexStyle istyle,
+                             const LuPixelPoint& parentOrigin )
+{
+    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+        return;
+
+    SequenceElement* content = getContent();
+    content->draw( painter, r, style, tstyle,
+                   style.convertIndexStyleLower( istyle ), myPos );
+
+    luPixel x = myPos.x();
+    luPixel y = myPos.y();
+    //int distX = style.getDistanceX(tstyle);
+    luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
+    //luPixel unit = (content->getHeight() + distY)/ 3;
+
+    painter.setPen( QPen( style.getDefaultColor(),
+                          style.layoutUnitToPixelY( style.getLineWidth() ) ) );
+
+    painter.drawLine( style.layoutUnitToPixelX( x ),
+                      style.layoutUnitToPixelY( y+getHeight()-distY ),
+                      style.layoutUnitToPixelX( x+content->getWidth() ),
+                      style.layoutUnitToPixelY( y+getHeight()-distY ) );
+}
+
+
+QString UnderlineElement::toLatex()
+{
+    return "\\underline{" + getContent()->toLatex() + "}";
+}
+
+QString UnderlineElement::formulaString()
+{
+    return getContent()->formulaString();
 }
 
 KFORMULA_NAMESPACE_END

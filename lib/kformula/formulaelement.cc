@@ -152,7 +152,7 @@ const SymbolTable& FormulaElement::getSymbolTable() const
 void FormulaElement::writeDom(QDomElement& element)
 {
     inherited::writeDom(element);
-    element.setAttribute( "VERSION", "4" );
+    element.setAttribute( "VERSION", "5" );
     if ( ownBaseSize ) {
         element.setAttribute( "BASESIZE", baseSize );
     }

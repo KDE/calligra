@@ -32,7 +32,7 @@ class SymbolTable;
 KFORMULA_NAMESPACE_BEGIN
 
 /**
- * A element that represents one char.
+ * An element that represents one char.
  */
 class TextElement : public BasicElement {
 public:
@@ -156,6 +156,57 @@ private:
      */
     bool symbol;
 };
+
+
+/**
+ * An element that represents an empty box.
+ */
+class EmptyElement : public BasicElement {
+public:
+
+    EmptyElement( BasicElement* parent = 0 );
+
+    /**
+     * @returns the character that represents this element. Used for
+     * parsing a sequence.
+     * Here we use a dummy so an EmptyElement pretends to be a letter.
+     */
+    virtual QChar getCharacter() const { return 'A'; }
+
+    /**
+     * Calculates our width and height and
+     * our children's parentPosition.
+     */
+    virtual void calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle);
+
+    /**
+     * Draws the whole element including its children.
+     * The `parentOrigin' is the point this element's parent starts.
+     * We can use our parentPosition to get our own origin then.
+     */
+    virtual void draw( QPainter& painter, const LuPixelRect& r,
+                       const ContextStyle& context,
+                       ContextStyle::TextStyle tstyle,
+                       ContextStyle::IndexStyle istyle,
+                       const LuPixelPoint& parentOrigin );
+
+
+    /**
+     * @returns the latex representation of the element and
+     * of the element's children
+     */
+    virtual QString toLatex();
+
+protected:
+
+    //Save/load support
+
+    /**
+     * @returns the tag name of this element type.
+     */
+    virtual QString getTagName() const { return "EMPTY"; }
+};
+
 
 KFORMULA_NAMESPACE_END
 

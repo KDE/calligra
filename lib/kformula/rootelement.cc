@@ -494,10 +494,7 @@ void RootElement::writeDom(QDomElement& element)
  */
 bool RootElement::readAttributesFromDom(QDomElement& element)
 {
-    if (!BasicElement::readAttributesFromDom(element)) {
-        return false;
-    }
-    return true;
+    return BasicElement::readAttributesFromDom(element);
 }
 
 /**

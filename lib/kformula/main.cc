@@ -66,6 +66,8 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_5: document->document()->addFraction(); return;
             case Qt::Key_6: document->document()->addMatrix(); return;
 	    case Qt::Key_7: document->document()->addOneByTwoMatrix(); return;
+	    case Qt::Key_8: document->document()->addOverline(); return;
+	    case Qt::Key_9: document->document()->addUnderline(); return;
             case Qt::Key_0: importOld("oldformula"); return;
             case Qt::Key_A: slotSelectAll(); return;
             case Qt::Key_B: document->document()->appendRow(); return;

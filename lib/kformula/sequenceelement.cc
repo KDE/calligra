@@ -200,8 +200,10 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
                             const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
-    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
-        return;
+    // There might be zero sized elements that still want to be drawn at least
+    // in edit mode. (EmptyElement)
+    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    //    return;
 
     if (!isEmpty()) {
         QPtrListIterator<BasicElement> it( children );
@@ -812,6 +814,12 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
         command->addElement( element );
         return command;
     }
+    case req_addEmptyBox: {
+        KFCReplace* command = new KFCReplace( i18n("Add Empty Box"), container );
+        EmptyElement* element = new EmptyElement;
+        command->addElement( element );
+        return command;
+    }
     case req_addNameSequence:
         if ( onlyTextSelected( container->activeCursor() ) ) {
             //kdDebug( DEBUGID ) << "SequenceElement::buildCommand" << endl;
@@ -824,6 +832,16 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
         KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Bracket"), container);
         BracketRequest* br = static_cast<BracketRequest*>( request );
         command->setElement( new BracketElement( br->left(), br->right() ) );
+        return command;
+    }
+    case req_addOverline: {
+        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Overline"), container);
+        command->setElement(new OverlineElement());
+        return command;
+    }
+    case req_addUnderline: {
+        KFCAddReplacing* command = new KFCAddReplacing(i18n("Add Underline"), container);
+        command->setElement(new UnderlineElement());
         return command;
     }
     case req_addSpace: {
@@ -1076,7 +1094,10 @@ KCommand* SequenceElement::input( Container* container, QChar ch )
         Request r( req_compactExpression );
         return buildCommand( container, &r );
     }
-    case '}':
+    case '}': {
+        Request r( req_addEmptyBox );
+        return buildCommand( container, &r );
+    }
     case ']':
     case ')':
         break;
@@ -1143,6 +1164,7 @@ bool SequenceElement::buildChildrenFromDom(QPtrList<BasicElement>& list, QDomNod
 BasicElement* SequenceElement::createElement( QString type )
 {
     if      ( type == "TEXT" )         return new TextElement();
+    else if ( type == "EMPTY" )        return new EmptyElement();
     else if ( type == "SPACE" )        return new SpaceElement();
     else if ( type == "ROOT" )         return new RootElement();
     else if ( type == "BRACKET" )      return new BracketElement();
@@ -1151,6 +1173,8 @@ BasicElement* SequenceElement::createElement( QString type )
     else if ( type == "FRACTION" )     return new FractionElement();
     else if ( type == "SYMBOL" )       return new SymbolElement();
     else if ( type == "NAMESEQUENCE" ) return new NameSequence();
+    else if ( type == "OVERLINE" )     return new OverlineElement();
+    else if ( type == "UNDERLINE" )    return new UnderlineElement();
     else if ( type == "SEQUENCE" ) {
         kdWarning( DEBUGID ) << "malformed data: sequence inside sequence." << endl;
         return 0;
@@ -1411,6 +1435,7 @@ BasicElement* NameSequence::replaceElement( const SymbolTable& table )
         }
     }
 
+    if ( name == "!" )    return new SpaceElement( NEGTHIN );
     if ( name == "," )    return new SpaceElement( THIN );
     if ( name == ">" )    return new SpaceElement( MEDIUM );
     if ( name == ";" )    return new SpaceElement( THICK );

@@ -298,4 +298,54 @@ QString TextElement::formulaString()
     }
 }
 
+
+EmptyElement::EmptyElement( BasicElement* parent )
+    : BasicElement( parent )
+{
+}
+
+void EmptyElement::calcSizes( const ContextStyle& context,
+                              ContextStyle::TextStyle tstyle,
+                              ContextStyle::IndexStyle /*istyle*/ )
+{
+    luPt mySize = context.getAdjustedSize( tstyle );
+    //kdDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
+
+    QFont font = context.getDefaultFont();
+    font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
+
+    QFontMetrics fm( font );
+    QChar ch = 'A';
+    QRect bound = fm.boundingRect( ch );
+    setWidth( 0 );
+    setHeight( context.ptToLayoutUnitPt( bound.height() ) );
+    setBaseline( context.ptToLayoutUnitPt( -bound.top() ) );
+}
+
+void EmptyElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
+                         const ContextStyle& context,
+                         ContextStyle::TextStyle /*tstyle*/,
+                         ContextStyle::IndexStyle /*istyle*/,
+                         const LuPixelPoint& parentOrigin )
+{
+    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    /*
+    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+        return;
+    */
+
+    if ( context.edit() ) {
+        painter.setPen( context.getEmptyColor() );
+        painter.drawLine( context.layoutUnitToPixelX( myPos.x() ),
+                          context.layoutUnitToPixelY( myPos.y() ),
+                          context.layoutUnitToPixelX( myPos.x() ),
+                          context.layoutUnitToPixelY( myPos.y()+getHeight() ) );
+    }
+}
+
+QString EmptyElement::toLatex()
+{
+    return "{}";
+}
+
 KFORMULA_NAMESPACE_END

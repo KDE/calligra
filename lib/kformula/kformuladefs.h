@@ -140,7 +140,7 @@ enum Direction { beforeCursor, afterCursor };
 /**
  * The types of space we know.
  */
-enum SpaceWidth { THIN, MEDIUM, THICK, QUAD };
+enum SpaceWidth { THIN, MEDIUM, THICK, QUAD, NEGTHIN };
 
 /**
  * each index has its own number.
@@ -198,6 +198,8 @@ typedef std::auto_ptr<ElementIndex> ElementIndexPtr;
 
 enum RequestID {
     req_addBracket,
+    req_addOverline,
+    req_addUnderline,
     req_addFraction,
     req_addIndex,
     req_addMatrix,
@@ -208,6 +210,7 @@ enum RequestID {
     req_addSymbol,
     req_addText,
     req_addTextChar,
+    req_addEmptyBox,
     req_appendColumn,
     req_appendRow,
     req_compactExpression,

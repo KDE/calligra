@@ -123,6 +123,7 @@ public:
      */
     const SymbolTable& getSymbolTable() const;
 
+    KAction* getAddNegThinSpaceAction();
     KAction* getAddThinSpaceAction();
     KAction* getAddMediumSpaceAction();
     KAction* getAddThickSpaceAction();
@@ -144,6 +145,8 @@ public:
     KAction* getAddLowerRightAction();
     KAction* getAddGenericUpperAction();
     KAction* getAddGenericLowerAction();
+    KAction* getAddOverlineAction();
+    KAction* getAddUnderlineAction();
     KAction* getRemoveEnclosingAction();
     KAction* getMakeGreekAction();
     KAction* getInsertSymbolAction();
@@ -175,6 +178,7 @@ public slots:
     void copy();
     void cut();
 
+    void addNegThinSpace();
     void addThinSpace();
     void addMediumSpace();
     void addThickSpace();
@@ -199,6 +203,8 @@ public slots:
     void addUpperRightIndex();
     void addGenericLowerIndex();
     void addGenericUpperIndex();
+    void addOverline();
+    void addUnderline();
     void removeEnclosing();
     void makeGreek();
     void insertSymbol();

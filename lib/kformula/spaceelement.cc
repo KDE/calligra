@@ -61,8 +61,9 @@ void SpaceElement::draw( QPainter& painter, const LuPixelRect& r,
                          const LuPixelPoint& parentOrigin )
 {
     LuPixelPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
-        return;
+    // there is such a thing as negative space!
+    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
+    //    return;
 
     if ( style.edit() ) {
         painter.setPen( style.getEmptyColor() );
@@ -84,10 +85,11 @@ void SpaceElement::draw( QPainter& painter, const LuPixelRect& r,
 QString SpaceElement::toLatex()
 {
     switch ( spaceWidth ) {
-    case THIN:   return "\\, ";
-    case MEDIUM: return "\\> ";
-    case THICK:  return "\\; ";
-    case QUAD:   return "\\quad ";
+    case NEGTHIN: return "\\!";
+    case THIN:    return "\\,";
+    case MEDIUM:  return "\\>";
+    case THICK:   return "\\;";
+    case QUAD:    return "\\quad ";
     }
     return "";
 }
@@ -96,6 +98,9 @@ void SpaceElement::writeDom(QDomElement& element)
 {
     BasicElement::writeDom(element);
     switch ( spaceWidth ) {
+    case NEGTHIN:
+        element.setAttribute( "WIDTH", "negthin" );
+        break;
     case THIN:
         element.setAttribute( "WIDTH", "thin" );
         break;
@@ -126,6 +131,9 @@ bool SpaceElement::readAttributesFromDom( QDomElement& element )
         }
         else if ( widthStr.lower() == "medium" ) {
             spaceWidth = MEDIUM;
+        }
+        else if ( widthStr.lower() == "negthin" ) {
+            spaceWidth = NEGTHIN;
         }
         else {
             spaceWidth = THIN;

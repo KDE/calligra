@@ -56,6 +56,7 @@ struct Document::Document_Impl {
 
     // We know our actions, maybe a client is interessted...
 
+    KAction* addNegThinSpaceAction;
     KAction* addThinSpaceAction;
     KAction* addMediumSpaceAction;
     KAction* addThickSpaceAction;
@@ -77,6 +78,8 @@ struct Document::Document_Impl {
     KAction* addLowerRightAction;
     KAction* addGenericUpperAction;
     KAction* addGenericLowerAction;
+    KAction* addOverlineAction;
+    KAction* addUnderlineAction;
     KAction* removeEnclosingAction;
     KAction* makeGreekAction;
     KAction* insertSymbolAction;
@@ -147,6 +150,7 @@ double Document::getYResolution() const { return impl->contextStyle.zoomedResolu
 KCommandHistory* Document::getHistory() const { return impl->history; }
 const SymbolTable& Document::getSymbolTable() const { return impl->contextStyle.symbolTable(); }
 
+KAction* Document::getAddNegThinSpaceAction()  { return impl->addNegThinSpaceAction; }
 KAction* Document::getAddThinSpaceAction()     { return impl->addThinSpaceAction; }
 KAction* Document::getAddMediumSpaceAction()   { return impl->addMediumSpaceAction; }
 KAction* Document::getAddThickSpaceAction()    { return impl->addThickSpaceAction; }
@@ -168,6 +172,8 @@ KAction* Document::getAddUpperRightAction()    { return impl->addUpperRightActio
 KAction* Document::getAddLowerRightAction()    { return impl->addLowerRightAction; }
 KAction* Document::getAddGenericUpperAction()  { return impl->addGenericUpperAction; }
 KAction* Document::getAddGenericLowerAction()  { return impl->addGenericLowerAction; }
+KAction* Document::getAddOverlineAction()      { return impl->addOverlineAction; }
+KAction* Document::getAddUnderlineAction()     { return impl->addUnderlineAction; }
 KAction* Document::getRemoveEnclosingAction()  { return impl->removeEnclosingAction; }
 KAction* Document::getMakeGreekAction()        { return impl->makeGreekAction; }
 KAction* Document::getInsertSymbolAction()     { return impl->insertSymbolAction; }
@@ -251,12 +257,14 @@ void Document::initSymbolNamesAction()
         const SymbolTable& st = impl->contextStyle.symbolTable();
 
         QStringList names = st.allNames();
+        //QStringList i18nNames;
         QValueList<QFont> fonts;
         QMemArray<uchar> chars( names.count() );
 
         int i = 0;
         for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it, ++i ) {
             QChar ch = st.unicode( *it );
+            //i18nNames.push_back( i18n( ( *it ).latin1() ) );
 
             fonts.append( st.font( ch ) );
             chars[ i ] = st.character( ch );
@@ -311,6 +319,8 @@ void Document::setEnabled( bool enabled )
     getMakeGreekAction()->setEnabled( enabled );
     getAddGenericUpperAction()->setEnabled( enabled );
     getAddGenericLowerAction()->setEnabled( enabled );
+    getAddOverlineAction()->setEnabled( enabled );
+    getAddUnderlineAction()->setEnabled( enabled );
     getRemoveEnclosingAction()->setEnabled( enabled );
     getInsertSymbolAction()->setEnabled( enabled );
     getAddThinSpaceAction()->setEnabled( enabled );
@@ -360,6 +370,10 @@ void Document::formulaDies(Container* f)
 
 void Document::createActions(KActionCollection* collection)
 {
+    impl->addNegThinSpaceAction = new KAction( i18n( "Add Negative Thin Space" ),
+                                    0,
+                                    this, SLOT( addNegThinSpace() ),
+                                    collection, "formula_addnegthinspace") ;
     impl->addThinSpaceAction = new KAction( i18n( "Add Thin Space" ),
                                     0,
                                     this, SLOT( addThinSpace() ),
@@ -465,6 +479,17 @@ void Document::createActions(KActionCollection* collection)
                                       0,
                                       this, SLOT(addGenericLowerIndex()),
                                       collection, "formula_addlowerindex");
+
+    impl->addOverlineAction = new KAction(i18n("Add Overline"),
+                                          "over",
+                                          0,
+                                          this, SLOT(addOverline()),
+                                          collection, "formula_addoverline");
+    impl->addUnderlineAction = new KAction(i18n("Add Underline"),
+                                           "under",
+                                           0,
+                                           this, SLOT(addUnderline()),
+                                           collection, "formula_addunderline");
 
     impl->removeEnclosingAction = new KAction(i18n("Remove Enclosing Element"),
                                         0,
@@ -584,6 +609,13 @@ void Document::cut()
     }
 }
 
+void Document::addNegThinSpace()
+{
+    if (hasFormula()) {
+        SpaceRequest r( NEGTHIN );
+        formula()->performRequest( &r );
+    }
+}
 void Document::addThinSpace()
 {
     if (hasFormula()) {
@@ -769,6 +801,22 @@ void Document::addGenericUpperIndex()
 {
     if (hasFormula()) {
         IndexRequest r( upperMiddlePos );
+        formula()->performRequest( &r );
+    }
+}
+
+void Document::addOverline()
+{
+    if (hasFormula()) {
+        Request r( req_addOverline );
+        formula()->performRequest( &r );
+    }
+}
+
+void Document::addUnderline()
+{
+    if (hasFormula()) {
+        Request r( req_addUnderline );
         formula()->performRequest( &r );
     }
 }

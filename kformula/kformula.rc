@@ -24,10 +24,13 @@
   <Action name="formula_addproduct"/>
   <Action name="formula_addmatrix"/>
   <Action name="formula_add_one_by_two_matrix"/>
+  <Action name="formula_addoverline"/>
+  <Action name="formula_addunderline"/>
   <Separator/>
   <Action name="formula_addupperindex"/>
   <Action name="formula_addlowerindex"/>
   <Separator/>
+  <Action name="formula_addnegthinspace"/>
   <Action name="formula_addthinspace"/>
   <Action name="formula_addmediumspace"/>
   <Action name="formula_addthickspace"/>
@@ -87,6 +90,8 @@
   <Action name="formula_addsqrbra"/>
   <Action name="formula_addcurbra"/>
   <Action name="formula_addabsbra"/>
+  <Action name="formula_addoverline"/>
+  <Action name="formula_addunderline"/>
   <Action name="formula_addintegral"/>
   <Action name="formula_addsum"/>
   <Action name="formula_addproduct"/>
