@@ -37,7 +37,10 @@ public:
     KSpreadSheetPrint( KSpreadSheet *sheet );
     ~KSpreadSheetPrint();
 
-    void print( QPainter &painter, KPrinter *_printer );
+    /**
+     * @return false if nothing to print.
+     */
+    bool print( QPainter &painter, KPrinter *_printer );
 
     /**
      * @return the printable width of the paper in millimeters.

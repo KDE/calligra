@@ -178,7 +178,7 @@ bool KSpreadSheetPrint::pageNeedsPrinting( QRect& page_range )
     return filled;
 }
 
-void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
+bool KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
 {
     kdDebug(36001)<<"PRINTING ...."<<endl;
 
@@ -248,46 +248,40 @@ void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
 
     if ( page_list.count() == 0 )
     {
-        KMessageBox::information( 0, i18n("Nothing to print.") );
-        if ( !m_bPrintGrid )
-        {
-            // Restore the grid pen
-            m_pDoc->setDefaultGridPen( gridPen );
-        }
-        m_pSheet->setShowGrid( oldShowGrid );
-
-        //abort printing
-        _printer->abort();
-
-        return;
+        // nothing to print
+        painter.setPen( QPen( Qt::black, 1 ) );
+        painter.drawPoint( 1, 1 );
     }
-
-    int pageNo = 1;
-
-    //
-    // Print all pages in the list
-    //
-    QValueList<QRect>::Iterator it = page_list.begin();
-    QValueList<KoRect>::Iterator fit = page_frame_list.begin();
-    QValueList<KoPoint>::Iterator fito = page_frame_list_offset.begin();
-
-    for( ; it != page_list.end(); ++it, ++fit, ++fito, ++pageNo )
+    else
     {
-        painter.setClipRect( 0, 0, m_pDoc->zoomItX( paperWidthPts() ),
-                                   m_pDoc->zoomItY( paperHeightPts() ) );
-        printHeaderFooter( painter, pageNo );
 
-        painter.translate( m_pDoc->zoomItX( leftBorderPts() ),
-                           m_pDoc->zoomItY( topBorderPts() ) );
+        int pageNo = 1;
 
-        // Print the page
-        printPage( painter, *it, *fit, *fito );
+        //
+        // Print all pages in the list
+        //
+        QValueList<QRect>::Iterator it = page_list.begin();
+        QValueList<KoRect>::Iterator fit = page_frame_list.begin();
+        QValueList<KoPoint>::Iterator fito = page_frame_list_offset.begin();
 
-        painter.translate( - m_pDoc->zoomItX( leftBorderPts() ),
-                           - m_pDoc->zoomItY( topBorderPts()  ) );
+        for( ; it != page_list.end(); ++it, ++fit, ++fito, ++pageNo )
+        {
+            painter.setClipRect( 0, 0, m_pDoc->zoomItX( paperWidthPts() ),
+                                    m_pDoc->zoomItY( paperHeightPts() ) );
+            printHeaderFooter( painter, pageNo );
 
-        if ( pageNo < (int)page_list.count() )
-            _printer->newPage();
+            painter.translate( m_pDoc->zoomItX( leftBorderPts() ),
+                            m_pDoc->zoomItY( topBorderPts() ) );
+
+            // Print the page
+            printPage( painter, *it, *fit, *fito );
+
+            painter.translate( - m_pDoc->zoomItX( leftBorderPts() ),
+                            - m_pDoc->zoomItY( topBorderPts()  ) );
+
+            if ( pageNo < (int)page_list.count() )
+                _printer->newPage();
+        }
     }
 
     if ( !m_bPrintGrid )
@@ -296,6 +290,8 @@ void KSpreadSheetPrint::print( QPainter &painter, KPrinter *_printer )
         m_pDoc->setDefaultGridPen( gridPen );
     }
     m_pSheet->setShowGrid( oldShowGrid );
+
+    return ( page_list.count() > 0 );
 }
 
 void KSpreadSheetPrint::printPage( QPainter &_painter, const QRect& page_range,

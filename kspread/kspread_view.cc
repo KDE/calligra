@@ -3988,7 +3988,7 @@ void KSpreadView::print( KPrinter &prt )
         print->setPaperOrientation( PG_PORTRAIT );
     }
 
-    print->print( painter, &prt );
+    bool result = print->print( painter, &prt );
 
     //Restore original orientation
     print->setPaperOrientation( _orient );
@@ -4000,6 +4000,16 @@ void KSpreadView::print( KPrinter &prt )
     m_pDoc->emitBeginOperation( false );
     setZoom( oldZoom, false );
     m_pDoc->emitEndOperation();
+
+    // Nothing to print
+    if( !result )
+    {
+      if( !prt.previewOnly() )
+      {
+        KMessageBox::information( 0, i18n("Nothing to print.") );
+        prt.abort();
+      }
+    }
 
     painter.end();
 }
