@@ -70,7 +70,7 @@ VHistoryDocker::VHistoryDocker( KarbonView* view )
 	int c = cmds.count();
 	for ( int i = 0; i < c; i++ )
 		new VHistoryItem( m_history, cmds[ i ] );
-		
+
 	connect( m_history, SIGNAL( mouseButtonClicked( int, QListBoxItem*, const QPoint& ) ), this, SLOT( commandClicked( int, QListBoxItem*, const QPoint& ) ) );
 	connect( view->part()->commandHistory(), SIGNAL( historyCleared() ), this, SLOT( historyCleared() ) );
 	connect( view->part()->commandHistory(), SIGNAL( commandAdded( VCommand* ) ), this, SLOT( commandAdded( VCommand* ) ) );
@@ -92,7 +92,7 @@ void VHistoryDocker::commandExecuted( VCommand* command )
 {
 	int i = 0;
 	int c = m_history->count();
-	while ( ( i < c ) && ( ( (VHistoryItem*)m_history->item( i ) )->command() != command ) )
+	while ( ( i < c ) && m_history->item( i ) && ( ( (VHistoryItem*)m_history->item( i ) )->command() != command ) )
 		i++;
 	if ( ( (VHistoryItem*)m_history->item( i ) )->command() == command )
 		m_history->setCurrentItem( i );
@@ -120,6 +120,8 @@ void VHistoryDocker::removeLastCommand()
 
 void VHistoryDocker::commandClicked( int button, QListBoxItem* item, const QPoint& )
 {
+    if ( !item )
+        return;
 	VCommand* cmd = ( (VHistoryItem*)item )->command();
 	if ( cmd->isExecuted() )
 		if ( button == 1 )
