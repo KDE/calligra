@@ -811,6 +811,7 @@ void KWFrameSetFloatingCommand::execute()
     }
     m_pFrameSet->kWordDocument()->updateAllFrames();
     m_pFrameSet->kWordDocument()->repaintAllViews();
+    m_pFrameSet->kWordDocument()->updateResizeHandles();
 }
 
 void KWFrameSetFloatingCommand::unexecute()
@@ -828,6 +829,7 @@ void KWFrameSetFloatingCommand::unexecute()
     }
     m_pFrameSet->kWordDocument()->updateAllFrames();
     m_pFrameSet->kWordDocument()->repaintAllViews();
+    m_pFrameSet->kWordDocument()->updateResizeHandles();
 }
 
 KWPageLayoutCommand::KWPageLayoutCommand( const QString &name,KWDocument *_doc,pageLayout &_oldLayout, pageLayout &_newLayout  ) :
