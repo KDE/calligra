@@ -756,6 +756,26 @@ QString KoOasisStyles::saveOasisDateStyle( KoGenStyles &mainStyles, const QStrin
                 elementWriter.endElement();
                 format = format.remove( 0, 1 );
             }
+            //TODO implement it !
+            else if ( format.startsWith( "PPPP" ) )
+            {
+                addTextNumber( text, elementWriter );
+                //elementWriter.startElement( "number:month" );
+                //elementWriter.addAttribute( "number:style", "short" );
+                //elementWriter.addAttribute( "number:textual", "false");
+                //elementWriter.endElement();
+                format = format.remove( 0, 4 );
+            }
+            //TODO implement it
+            else if ( format.startsWith( "PPP" ) )
+            {
+                addTextNumber( text, elementWriter );
+                //elementWriter.startElement( "number:month" );
+                //elementWriter.addAttribute( "number:style", "short" );
+                //elementWriter.addAttribute( "number:textual", "false");
+                elementWriter.endElement();
+                format = format.remove( 0, 3 );
+            }
             else if ( format.startsWith( "dddd" ) )
             {
                 addTextNumber( text, elementWriter );
