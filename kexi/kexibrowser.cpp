@@ -41,7 +41,7 @@
 #include "kexidatatable.h"
 #include "kexialtertable.h"
 #include "kexiquerydesigner.h"
-#include "kexikugarwrapper.h"
+//#include "kexikugarwrapper.h"
 #include "kexiproject.h"
 
 KexiBrowser::KexiBrowser(KexiView *view,QWidget *parent, Section s, const char *name ) : KListView(parent,name)
