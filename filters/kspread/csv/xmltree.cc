@@ -21,13 +21,13 @@
 
 XMLTree::XMLTree(const QString & inputFileName)
 {
-  root = new QDomDocument("XML");
+  root = new QDomDocument("spreadsheet");
 
   QDomProcessingInstruction pro;
   pro = root->createProcessingInstruction("xml", "version=\"1.0\"");
   root->appendChild(pro);
 
-  doc = root->createElement("DOC"); 
+  doc = root->createElement("spreadsheet");
   doc.setAttribute("editor", "KSpread CSV Filter");
   doc.setAttribute("mime", "application/x-kspread");
   root->appendChild(doc);

@@ -80,7 +80,7 @@ const QDomDocument * const ExcelFilter::part()
   else {
     m_part=QDomDocument("spreadsheet");
     m_part.setContent(QString("<?xml version=\"1.0\"?>\n"
-      "<DOC author=\"Torben Weis\" email=\"weis@kde.org\" editor=\"KSpread\" mime=\"application/x-kspread\" >\n"
+      "<spreadsheet author=\"Torben Weis\" email=\"weis@kde.org\" editor=\"KSpread\" mime=\"application/x-kspread\" >\n"
       "<PAPER format=\"A4\" orientation=\"Portrait\">\n"
       "<PAPERBORDERS left=\"20\" top=\"20\" right=\"20\" bottom=\"20\"/>\n"
       "<HEAD left=\"\" center=\"\" right=\"\"/>\n"
@@ -94,7 +94,7 @@ const QDomDocument * const ExcelFilter::part()
       "</CELL>\n"
       "</TABLE>\n"
       "</MAP>\n"
-      "</DOC>"));
+      "</spreadsheet>"));
     return &m_part;
   }
 }

@@ -16,14 +16,14 @@ XMLTree::XMLTree()
   QDomElement e;
 
   table = 0L;
-  root = new QDomDocument("XML");
+  root = new QDomDocument("spreadsheet");
 
   QDomProcessingInstruction pro;
   pro = root->createProcessingInstruction("xml", "version=\"1.0\"");
   root->appendChild(pro);
 
-  doc = root->createElement("DOC");
-  //doc.setAttribute("author", "OLEFilter");
+  doc = root->createElement("spreadsheet");
+  doc.setAttribute("author", "OLEFilter");
   doc.setAttribute("email", "unknown");
   doc.setAttribute("editor", "KSpread");
   doc.setAttribute("mime", "application/x-kspread");
@@ -460,7 +460,8 @@ bool XMLTree::_footer(Q_UINT16 size, QDataStream& body)
 
     e = root->createElement("FOOT");
     e.setAttribute("left", "");
-    e.setAttribute("center", s);
+    //e.setAttribute("center", s);  // Werner: BUG?!?
+    e.setAttribute("center", "");
     e.setAttribute("right", "");
     paper.appendChild(e);
   }
@@ -518,7 +519,8 @@ bool XMLTree::_header(Q_UINT16 size, QDataStream& body)
 
     e = root->createElement("HEAD");
     e.setAttribute("left", "");
-    e.setAttribute("center", s);
+    //e.setAttribute("center", s);  // Werner: BUG?!?
+    e.setAttribute("center", "");
     e.setAttribute("right", "");
     paper.appendChild(e);
   }
