@@ -210,11 +210,25 @@ void TKSelectColorAction::setActiveColor( const QColor& color )
 
 void TKSelectColorAction::selectColorDialog()
 {
-  if ( KColorDialog::getColor(m_pCurrentColor) == QDialog::Accepted ) {
-    setCurrentColor(m_pCurrentColor);
-    m_pRecentColor->insertColor(m_pCurrentColor);
-    activate();
-  }
+    if ( d->defaultColorMenu )
+    {
+        if ( KColorDialog::getColor(m_pCurrentColor, d->defaultColor) == QDialog::Accepted )
+        {
+            setCurrentColor(m_pCurrentColor);
+            m_pRecentColor->insertColor(m_pCurrentColor);
+            activate();
+        }
+
+    }
+    else
+    {
+        if ( KColorDialog::getColor(m_pCurrentColor) == QDialog::Accepted )
+        {
+            setCurrentColor(m_pCurrentColor);
+            m_pRecentColor->insertColor(m_pCurrentColor);
+            activate();
+        }
+    }
 }
 
 // Called when activating the menu item, or when clicking the main toolbar button
