@@ -38,7 +38,8 @@ public:
      * counter may have changed. */
     void invalidate();
 
-    /** Return the current value of the counter either as a number or text. */
+    /** Return the current value of the counter either as a number or text.
+     */
     int number( const KoTextParag *paragraph );
     QString text( const KoTextParag *paragraph );
 
@@ -60,7 +61,8 @@ public:
                             // no counter structure associated with a
                             // paragraph.
         NUM_LIST = 0,       // Numbered as a list item.
-        NUM_CHAPTER = 1     // Numbered as a heading.
+        NUM_CHAPTER = 1,    // Numbered as a heading.
+        NUM_FIXEDTEXT = 3   // Fixed text counter, set by the code. This is used by e.g. footnotes.
     };
     enum Style // always add to the end, the numeric values are part of the DTD
     {
@@ -71,14 +73,16 @@ public:
         STYLE_DISCBULLET = 10, STYLE_BOXBULLET = 11
     };
 
-    /** Numbering type and style. */
+    /** Numbering type and style.
+     */
     Numbering numbering() const;
     void setNumbering( Numbering n );
 
     Style style() const;
     void setStyle( Style s );
 
-    /** Does this counter have a bullet style? */
+    /** Does this counter have a bullet style?
+     */
     bool isBullet() const;
 
     /** The level of the numbering.
@@ -87,23 +91,27 @@ public:
     unsigned int depth() const;
     void setDepth( unsigned int d );
 
-    /** Starting number. */
+    /** Starting number.
+     */
     int startNumber() const;
     void setStartNumber( int s );
 
-    /** Prefix and suffix strings. */
+    /** Prefix and suffix strings.
+     */
     QString prefix() const;
     void setPrefix( QString p );
     QString suffix() const;
     void setSuffix( QString s );
 
-    /** The character and font for STYLE_CUSTOMBULLET. */
+    /** The character and font for STYLE_CUSTOMBULLET.
+     */
     QChar customBulletCharacter() const;
     void setCustomBulletCharacter( QChar c );
     QString customBulletFont() const;
     void setCustomBulletFont( QString f );
 
-    /** The string STYLE_CUSTOM. */
+    /** The string STYLE_CUSTOM.
+     */
     QString custom() const;
     void setCustom( QString c );
 
@@ -115,7 +123,8 @@ public:
 private:
 
     /** Return our parent paragraph, if there is such a thing. For a paragraph "1.1.",
-     * the parent is the paragraph numbered "1.". */
+     * the parent is the paragraph numbered "1.".
+     */
     KoTextParag *parent( const KoTextParag *paragraph );
 
     Numbering m_numbering;

@@ -33,6 +33,8 @@
 // in order to set the DisplayMode for counters.
 void KoTextParag::checkItem( QStyleSheetItem * & item, const char * name )
 {
+    // ### Note: now that we forked QRT, we could get rid of this
+    // (useless memory allocation) and call drawLabel directly
     if ( !item )
     {
         item = new QStyleSheetItem( 0, QString::fromLatin1(name) /* For debugging purposes only */ );
@@ -671,6 +673,10 @@ void KoTextParag::copyParagData( KoTextParag *parag )
         // Remove pagebreak flags from initial parag - they got copied to the new parag
         parag->m_layout.pageBreaking &= ~KoParagLayout::HardFrameBreakBefore;
         parag->m_layout.pageBreaking &= ~KoParagLayout::HardFrameBreakAfter;
+        // Remove footnote counter text from second parag
+        if ( m_layout.counter && m_layout.counter->numbering() == KoParagCounter::NUM_FIXEDTEXT )
+            setNoCounter();
+
         // set parag format to the format of the trailing space of the previous parag
         setFormat( parag->at( parag->length()-1 )->format() );
         // KoTextCursor::splitAndInsertEmptyParag takes care of setting the format

@@ -138,6 +138,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
     {
     case NUM_NONE:
         // This should not occur!
+    case NUM_FIXEDTEXT:
         m_cache.number = 0;
         break;
     case NUM_CHAPTER:
@@ -229,6 +230,7 @@ KoTextParag *KoParagCounter::parent( const KoTextParag *paragraph )
     {
     case NUM_NONE:
         // This should not occur!
+    case NUM_FIXEDTEXT:
         otherParagraph = 0L;
         break;
     case NUM_CHAPTER:
@@ -293,7 +295,9 @@ void KoParagCounter::save( QDomElement & element )
         element.setAttribute( "righttext", m_suffix );
     if ( m_startNumber != 1 )
         element.setAttribute( "start", m_startNumber );
-    if ( m_numbering != NUM_NONE )
+    // At the moment we don't need to save NUM_FIXEDTEXT, it's updated right after loading (footnotes)
+    // Change this (and add to the DTD) if using NUM_FIXEDTEXT for something else
+    if ( m_numbering != NUM_NONE && m_numbering != NUM_FIXEDTEXT )
         element.setAttribute( "numberingtype", static_cast<int>( m_numbering ) );
     if ( !m_custom.isEmpty() )
         element.setAttribute( "customdef", m_custom );
