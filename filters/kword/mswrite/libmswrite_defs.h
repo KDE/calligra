@@ -509,6 +509,9 @@ namespace MSWrite
 
 		UseThisMuchPrefixSize &operator= (const UseThisMuchPrefixSize &rhs)
 		{
+			if (this == &rhs)
+				return *this;
+
 			m_val = rhs.m_val;
 			return *this;
 		}
@@ -526,6 +529,9 @@ namespace MSWrite
 	protected:
 		UseThisMuch &operator= (const UseThisMuch &rhs)
 		{
+			if (this == &rhs)
+				return *this;
+
 			this->m_notDefaultBits = rhs.m_notDefaultBits;
 			return *this;
 		}

@@ -80,6 +80,9 @@ namespace MSWrite
 		}
 		dtype &operator= (const dtype &rhs)
 		{
+			if (this == &rhs)
+				return *this;
+
 			this->data = rhs.data;
 			return this->data;
 		}
@@ -284,6 +287,9 @@ namespace MSWrite
 
 		List <dtype> &operator= (const List <dtype> &rhs)
 		{
+			if (this == &rhs)
+				return *this;
+
 			killself ();
 
 			m_num = rhs.m_num;

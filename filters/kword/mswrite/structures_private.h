@@ -39,6 +39,9 @@ namespace MSWrite
 	public:
 		Header &operator= (const Header &rhs)
 		{
+			if (this == &rhs)
+				return *this;
+
 			HeaderGenerated::operator= (rhs);
 
 			m_numCharBytes = rhs.m_numCharBytes;
@@ -80,6 +83,9 @@ namespace MSWrite
 
 		NeedsHeader &operator= (const NeedsHeader &rhs)
 		{
+			if (this == &rhs)
+				return *this;
+
 			m_header = rhs.m_header;
 
 			return *this;
@@ -154,6 +160,9 @@ namespace MSWrite
 
 		PageTable &operator= (const PageTable &rhs)
 		{
+			if (this == &rhs)
+				return *this;
+
 			PageTableGenerated::operator= (rhs);
 			NeedsHeader::operator= (rhs);
 
@@ -206,7 +215,7 @@ namespace MSWrite
 
 			const void *getFormatProperty (void) const	{	return m_formatProperty;	}
 			void setFormatProperty (const void *val)	{	m_formatProperty = val;	}
-			
+
 	public:
 		FormatPointer ();
 		~FormatPointer ();
@@ -234,7 +243,7 @@ namespace MSWrite
 		//
 		// uncompressed data
 		//
-	
+
 		// list of FormatPointers (what byte it covers upto and which FormatProperty)
 		FormatPointer *m_formatPointer;
 
@@ -262,7 +271,7 @@ namespace MSWrite
 
 		// TODO operator=
 		FormatInfoPage &operator= (const FormatInfoPage &rhs);
-		
+
 	public:
 		FormatInfoPage ();
 		~FormatInfoPage ();

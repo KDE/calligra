@@ -23,7 +23,7 @@
 
 namespace MSWrite
 {
-	const char *Version = "0.5";
+	const char *Version = "0.51";
 }
 
 // end of libmswrite_defs.cpp

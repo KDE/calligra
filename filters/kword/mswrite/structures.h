@@ -159,16 +159,19 @@ namespace MSWrite
 			Script		= 0x40,
 			Decorative	= 0x50,	OldEnglish	= 0x50
 		};
-		
+
 		Font (const Byte *name = NULL, const Byte family = DontCare);
 		~Font ();
 
 		Font &operator= (const Font &rhs)
 		{
+			if (this == &rhs)
+				return *this;
+
 			FontGenerated::operator= (rhs);
 
 			setName (rhs.getName ());
-			
+
 			return *this;
 		}
 
@@ -180,7 +183,7 @@ namespace MSWrite
 			if (!m_device)
 				CHECK_DEVICE_ERROR;
 		#endif
-			
+
 			if (!s)
 			{
 				m_device->error (Error::InternalError, "NULL fontName passed to Font::setName\n");
@@ -188,7 +191,7 @@ namespace MSWrite
 			}
 #endif
 			int length = strlen ((const char *) s) + 1 /* NUL */;
-			
+
 			delete [] m_name;
 			m_name = new Byte [length];
 			if (!m_name)
@@ -259,6 +262,9 @@ namespace MSWrite
 
 		FormatCharProperty &operator= (const FormatCharProperty &rhs)
 		{
+			if (this == &rhs)
+				return *this;
+
 			FormatCharPropertyGenerated::operator= (rhs);
 
 			m_afterEndCharByte = rhs.m_afterEndCharByte;
@@ -399,6 +405,9 @@ namespace MSWrite
 
 		FormatParaProperty &operator= (const FormatParaProperty &rhs)
 		{
+			if (this == &rhs)
+				return *this;
+
 			FormatParaPropertyGenerated::operator= (rhs);
 			
 			m_afterEndCharByte = rhs.m_afterEndCharByte;
@@ -543,6 +552,9 @@ namespace MSWrite
 
 		Image &operator= (const Image &rhs)
 		{
+			if (this == &rhs)
+				return *this;
+
 			ImageGenerated::operator= (rhs);
 
 			m_externalImageSize = rhs.m_externalImageSize;
@@ -650,6 +662,9 @@ namespace MSWrite
 
 		OLE &operator= (const OLE &rhs)
 		{
+			if (this == &rhs)
+				return *this;
+
 			OLEGenerated::operator= (rhs);
 
 			m_externalObjectSize = rhs.m_externalObjectSize;

@@ -230,6 +230,9 @@ namespace MSWrite
 
 	FontTable &FontTable::operator= (const FontTable &rhs)
 	{
+		if (this == &rhs)
+			return *this;
+
 		FontTableGenerated::operator= (rhs);
 		NeedsHeader::operator= (rhs);
 
