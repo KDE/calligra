@@ -41,6 +41,8 @@ QString lineEndBeginName( LineEnd type );
 LineEnd lineEndBeginFromString( const QString & name );
 KoPointArray getCloseObject( KoPointArray points, bool close, bool objClosed );
 QString lineEndBeginSvg( LineEnd element );
+QString saveOasisTimer( int second );
+int loadOasisTimer( const QString & timer );
 
 class KPresenterUtils
 {

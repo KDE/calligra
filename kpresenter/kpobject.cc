@@ -358,7 +358,7 @@ void KPObject::saveOasisObjectStyle( KoGenStyle &styleobjectauto )
 
 bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int objectId )
 {
-    if ( effect == EF_NONE && effect3==EF3_NONE && a_fileName.isEmpty() && d_fileName.isEmpty())
+    if ( effect == EF_NONE && effect3==EF3_NONE && a_fileName.isEmpty() && d_fileName.isEmpty() && ( appearTimer!=1 ) && ( disappearTimer!=1 ))
         return false;
     if ( effect != EF_NONE || !a_fileName.isEmpty() )
     {
@@ -417,6 +417,10 @@ bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int object
             animation.addAttribute( "presentation:effect", "fade" );
             animation.addAttribute( "presentation:direction", "from-bottom" );
             break;
+        }
+        if ( appearTimer!=1 )
+        {
+            animation.addAttribute( "presentation:animation-delay", saveOasisTimer( appearTimer ) );
         }
         if( !a_fileName.isEmpty() )
         {
@@ -489,6 +493,10 @@ bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int object
             animation.addAttribute( "presentation:direction", "from-bottom" );
             break;
         }
+        if ( disappearTimer!=1 )
+        {
+            animation.addAttribute( "presentation:animation-delay", saveOasisTimer( disappearTimer ) );
+        }
         if( !d_fileName.isEmpty() )
         {
             //store sound into file ?
@@ -497,8 +505,6 @@ bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int object
             animation.addAttribute( "xlink:href", a_fileName );
             animation.endElement();
         }
-        animation.endElement();
-
         animation.endElement();
     }
     return true;
@@ -561,6 +567,10 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         else
             kdDebug()<<" speed argument is not defined :"<<speed<<endl;
 
+        if ( animation->hasAttribute("presentation:animation-delay" ) )
+        {
+            appearTimer = loadOasisTimer(animation->attribute("presentation:animation-delay" ) );
+        }
         if (effectStr=="fade")
         {
             if (dir=="from-right")
@@ -618,6 +628,10 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         QString effectStr = animation->attribute("presentation:effect");
         QString dir = animation->attribute("presentation:direction");
         kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<endl;
+        if ( animation->hasAttribute("presentation:animation-delay" ) )
+        {
+            disappearTimer = loadOasisTimer(animation->attribute("presentation:animation-delay" ) );
+        }
         if (effectStr=="fade")
         {
             if (dir=="from-right")
