@@ -265,522 +265,527 @@ void XMLTree::getDate(int date, int& year, int& month, int& day)
 
 const QDomElement XMLTree::getFormat(Q_UINT16 xf)
 {
-  QString s;
-  QDomElement format = root->createElement("format");
+    QString s;
+    QDomElement format = root->createElement("format");
 
-  Q_UINT16 fontid = xfs[xf]->ifnt;
+    Q_UINT16 fontid = xfs[xf]->ifnt;
 
-  if (fontid > 3)
-    --fontid;
+    if (fontid > 3)
+        --fontid;
 
-  format.setAttribute("bgcolor", palette[xfs[xf]->cellColor & 0x7f]);
+    format.setAttribute("bgcolor", palette[xfs[xf]->cellColor & 0x7f]);
 
-  format.setAttribute("align", (xfs[xf]->align & 0x07) == 0 ? 4 : xfs[xf]->align & 0x07);
-  format.setAttribute("alignY", ((xfs[xf]->align >> 4) & 0x07) == 3 ? 2 : ((xfs[xf]->align >> 4) & 0x07) + 1);
+    format.setAttribute("align", (xfs[xf]->align & 0x07) == 0 ? 4 : xfs[xf]->align & 0x07);
+    format.setAttribute("alignY", ((xfs[xf]->align >> 4) & 0x07) == 3 ? 2 : ((xfs[xf]->align >> 4) & 0x07) + 1);
 
-  int angle = xfs[xf]->align >> 8;
-  format.setAttribute("angle", angle < 91 ? angle * (-1) : angle - 90);
+    int angle = xfs[xf]->align >> 8;
+    format.setAttribute("angle", angle < 91 ? angle * (-1) : angle - 90);
 
-  if ((xfs[xf]->align >> 3) & 0x01 == 1)
-    format.setAttribute("multirow", "yes");
+    if ((xfs[xf]->align >> 3) & 0x01 == 1)
+        format.setAttribute("multirow", "yes");
 
-  switch (xfs[xf]->ifmt) {
-  case 0x00:  // We need this to avoid 'default'
-    break;
-  case 0x01:  // Number 0
-    format.setAttribute("precision", "0");
-    break;
-  case 0x02:  // Number       0.00
-    format.setAttribute("precision", "2");
-    break;
-  case 0x03:  // Number w/comma       0,000
-    format.setAttribute("precision", "0");
-    break;
-  case 0x04:  // Number w/comma       0,000.00
-    format.setAttribute("precision", "2");
-    break;
-  case 0x05:  // Number currency
-  case 0x06:
-  case 0x07:
-  case 0x08:
-    format.setAttribute("precision", "2");
-    format.setAttribute("format", "10");
-    break;
-  case 0x09:  // Percent 0%
-    format.setAttribute("precision", "0");
-    format.setAttribute("format", "25");
-    format.setAttribute("faktor", "100");
-    break;
-  case 0x0A:  // Percent 0.00%
-    format.setAttribute("precision", "2");
-    format.setAttribute("format", "25");
-    format.setAttribute("faktor", "100");
-    break;
-  case 0x0B:  // Scientific 0.00+E00
-    format.setAttribute("precision", "2");
-    format.setAttribute("format", "30");
-    break;
-  case 0x0C:  // Fraction 1 number  e.g. 1/2, 1/3
-    format.setAttribute("precision", "-1");
-    format.setAttribute("format", "0");
-    break;
-  case 0x0D:  // Fraction 2 numbers  e.g. 1/50, 25/33
-    format.setAttribute("precision", "-1");
-    format.setAttribute("format", "0");
-    break;
-  case 0x0E:	// Date
-    format.setAttribute("format", "35");
-    break;
-  case 0x0F:	// Date
-    format.setAttribute("format", "200");
-    break;
-  case 0x10:	// Date
-    format.setAttribute("format", "35");
-    break;
-  case 0x11:	// Date
-    format.setAttribute("format", "206");
-    break;
-  case 0x12:  // Time: h:mm AM/PM
-    format.setAttribute("format", "50");
-    break;
-  case 0x13:  // Time: h:mm:ss AM/PM
-    format.setAttribute("format", "51");
-    break;
-  case 0x14:  // Time: h:mm
-    format.setAttribute("format", "50");
-    break;
-  case 0x15:  // Time: h:mm:ss
-    format.setAttribute("format", "51");
-    break;
-  case 0x2a:  // Number currency
-  case 0x2c:
-    format.setAttribute("precision", "2");
-    format.setAttribute("format", "10");
-    format.setAttribute("faktor", "1");
-    break;
-  case 0x2D:  // Time: mm:ss
-    format.setAttribute("format", "51");
-    break;
-  case 0x2E:  // Time: [h]:mm:ss
-    format.setAttribute("format", "51");
-    break;
-  case 0x2F:  // Time: mm:ss.0
-    format.setAttribute("format", "51");
-    break;
-  case 0xA4:	// Date
-    format.setAttribute("format", "215");
-    break;
-  case 0xA5:	// Date
-    format.setAttribute("format", "204");
-    break;
-  case 0xA6:	// Date
-    format.setAttribute("format", "200");
-    break;
-  case 0xA7:	// Date
-    format.setAttribute("format", "212");
-    break;
-  case 0xA8:	// Date
-    format.setAttribute("format", "203");
-    break;
-  case 0xA9:	// Date
-    format.setAttribute("format", "202");
-    break;
-  case 0xAA:	// Date
-    format.setAttribute("format", "207");
-    break;
-  case 0xAB:	// Date
-    format.setAttribute("format", "209");
-    break;
-  default:
-    s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
-			    formats[xfs[xf]->ifmt]->cch);
-  }
+    switch (xfs[xf]->ifmt)
+    {
+        case 0x00:  // We need this to avoid 'default'
+            break;
+        case 0x01:  // Number 0
+            format.setAttribute("precision", "0");
+            break;
+        case 0x02:  // Number       0.00
+            format.setAttribute("precision", "2");
+            break;
+        case 0x03:  // Number w/comma       0,000
+            format.setAttribute("precision", "0");
+            break;
+        case 0x04:  // Number w/comma       0,000.00
+            format.setAttribute("precision", "2");
+            break;
+        case 0x05:  // Number currency
+        case 0x06:
+        case 0x07:
+        case 0x08:
+            format.setAttribute("precision", "2");
+            format.setAttribute("format", "10");
+            break;
+        case 0x09:  // Percent 0%
+            format.setAttribute("precision", "0");
+            format.setAttribute("format", "25");
+            format.setAttribute("faktor", "100");
+            break;
+        case 0x0A:  // Percent 0.00%
+            format.setAttribute("precision", "2");
+            format.setAttribute("format", "25");
+            format.setAttribute("faktor", "100");
+            break;
+        case 0x0B:  // Scientific 0.00+E00
+            format.setAttribute("precision", "2");
+            format.setAttribute("format", "30");
+            break;
+        case 0x0C:  // Fraction 1 number  e.g. 1/2, 1/3
+            format.setAttribute("precision", "-1");
+            format.setAttribute("format", "0");
+            break;
+        case 0x0D:  // Fraction 2 numbers  e.g. 1/50, 25/33
+            format.setAttribute("precision", "-1");
+            format.setAttribute("format", "0");
+            break;
+        case 0x0E:	// Date
+            format.setAttribute("format", "35");
+            break;
+        case 0x0F:	// Date
+            format.setAttribute("format", "200");
+            break;
+        case 0x10:	// Date
+            format.setAttribute("format", "35");
+            break;
+        case 0x11:	// Date
+            format.setAttribute("format", "206");
+            break;
+        case 0x12:  // Time: h:mm AM/PM
+            format.setAttribute("format", "50");
+            break;
+        case 0x13:  // Time: h:mm:ss AM/PM
+            format.setAttribute("format", "51");
+            break;
+        case 0x14:  // Time: h:mm
+            format.setAttribute("format", "50");
+            break;
+        case 0x15:  // Time: h:mm:ss
+            format.setAttribute("format", "51");
+            break;
+        case 0x2a:  // Number currency
+        case 0x2c:
+            format.setAttribute("precision", "2");
+            format.setAttribute("format", "10");
+            format.setAttribute("faktor", "1");
+            break;
+        case 0x2D:  // Time: mm:ss
+            format.setAttribute("format", "51");
+            break;
+        case 0x2E:  // Time: [h]:mm:ss
+            format.setAttribute("format", "51");
+            break;
+        case 0x2F:  // Time: mm:ss.0
+            format.setAttribute("format", "51");
+            break;
+        case 0xA4:	// Date
+            format.setAttribute("format", "215");
+            break;
+        case 0xA5:	// Date
+            format.setAttribute("format", "204");
+            break;
+        case 0xA6:	// Date
+            format.setAttribute("format", "200");
+            break;
+        case 0xA7:	// Date
+            format.setAttribute("format", "212");
+            break;
+        case 0xA8:	// Date
+            format.setAttribute("format", "203");
+            break;
+        case 0xA9:	// Date
+            format.setAttribute("format", "202");
+            break;
+        case 0xAA:	// Date
+            format.setAttribute("format", "207");
+            break;
+        case 0xAB:	// Date
+            format.setAttribute("format", "209");
+            break;
+        default:
+            s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
+                                    formats[xfs[xf]->ifmt]->cch);
+    }
 
-  getFont(xf, format, fontid);
-  getPen(xf, format, fontid);
+    getFont(xf, format, fontid);
+    getPen(xf, format, fontid);
 
-  return format;
+    return format;
 }
 
 const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rgce)
 {
-  double number;
-  Q_UINT8 byte, ptg;
-  Q_UINT16 integer;
-  Q_INT16 refRow, refColumn, refRowLast, refColumnLast;
-  QString str;
-  QStringList parsedFormula;
-  QStringList::Iterator stringPtr;
+    double number;
+    Q_UINT8 byte, ptg;
+    Q_UINT16 integer;
+    Q_INT16 refRow, refColumn, refRowLast, refColumnLast;
+    QString str;
+    QStringList parsedFormula;
+    QStringList::Iterator stringPtr;
 
-  parsedFormula.append("=");
+    parsedFormula.append("=");
 
-  while (!rgce.eof()) {
-    rgce >> ptg;
-    switch (ptg) {
-    case 0x03:  // ptgAdd
-      stringPtr = parsedFormula.fromLast();
-      do {
-	--stringPtr;
-	--stringPtr;
-      } while (!(*stringPtr).isEmpty());
-      *stringPtr = "+";
-      break;
-    case 0x04:  // ptgSub
-      stringPtr = parsedFormula.fromLast();
-      do {
-	--stringPtr;
-	--stringPtr;
-      } while (!(*stringPtr).isEmpty());
-      *stringPtr = "-";
-      break;
-    case 0x05:  // ptgMul
-      stringPtr = parsedFormula.fromLast();
-      do {
-	--stringPtr;
-	--stringPtr;
-      } while (!(*stringPtr).isEmpty());
-      *stringPtr = "*";
-      break;
-    case 0x06:  // ptgDiv
-      stringPtr = parsedFormula.fromLast();
-      do {
-	--stringPtr;
-	--stringPtr;
-      } while (!(*stringPtr).isEmpty());
-      *stringPtr = "/";
-      break;
-    case 0x07:  // ptgPower
-      stringPtr = parsedFormula.fromLast();
-      do {
-	--stringPtr;
-	--stringPtr;
-      } while (!(*stringPtr).isEmpty());
-      *stringPtr = "^"; // Hmmm, not supported by kspread.
-      break;
-    case 0x08:  // ptgConcat
-      stringPtr = parsedFormula.fromLast();
-      do {
-	--stringPtr;
-	--stringPtr;
-      } while (!(*stringPtr).isEmpty());
-      *stringPtr = "&";
-      break;
-    case 0x09:  // ptgLT
-      stringPtr = parsedFormula.fromLast();
-      do {
-	--stringPtr;
-	--stringPtr;
-      } while (!(*stringPtr).isEmpty());
-      *stringPtr = "<";
-      break;
-    case 0x0a:  // ptgLE
-      stringPtr = parsedFormula.fromLast();
-      do {
-	--stringPtr;
-	--stringPtr;
-      } while (!(*stringPtr).isEmpty());
-      *stringPtr = "<=";
-      break;
-    case 0x0b:  // ptgEQ
-      stringPtr = parsedFormula.fromLast();
-      do {
-	--stringPtr;
-	--stringPtr;
-      } while (!(*stringPtr).isEmpty());
-      *stringPtr = "==";
-      break;
-    case 0x0c:  // ptgGE
-      stringPtr = parsedFormula.fromLast();
-      do {
-	--stringPtr;
-	--stringPtr;
-      } while (!(*stringPtr).isEmpty());
-      *stringPtr = ">=";
-      break;
-    case 0x0d:  // ptgGT
-      stringPtr = parsedFormula.fromLast();
-      do {
-	--stringPtr;
-	--stringPtr;
-      } while (!(*stringPtr).isEmpty());
-      *stringPtr = ">";
-      break;
-    case 0x0e:  // ptgNE
-      stringPtr = parsedFormula.fromLast();
-      do {
-	--stringPtr;
-	--stringPtr;
-      } while (!(*stringPtr).isEmpty());
-      *stringPtr = "!=";
-      break;
-    case 0x15:  // ptgParen
-      stringPtr = parsedFormula.fromLast();
-      --stringPtr;
-      *stringPtr += ")";
-      ++stringPtr;
-      do {
-	--stringPtr;
-	--stringPtr;
-      } while (!(*stringPtr).isEmpty() && (*stringPtr) != "=");
-      ++stringPtr;
-      (*stringPtr).prepend("(");
-      break;
-    case 0x19:  // ptgAttr
-      rgce >> byte >> integer;
-      if (byte & 0x10) {
-	stringPtr = parsedFormula.fromLast();
-	--stringPtr;
-	*stringPtr += ")";
-	(*stringPtr).prepend("sum(");
-	}
-      break;
-    case 0x1d:  // ptgBool
-      rgce >> byte;
-      if (byte == 1)
-	parsedFormula.append("True");
-      else
-	parsedFormula.append("False");
-      parsedFormula.append("");
-      break;
-    case 0x1e:  // ptgInt
-      rgce >> integer;
-      parsedFormula.append(QString::number((int) integer));
-      parsedFormula.append("");
-      break;
-    case 0x1f:  // ptgNum
-      rgce >> number;
-      parsedFormula.append(QString::number(number));
-      parsedFormula.append("");
-      break;
-    case 0x21:  // ptgFunc
-    case 0x41:
-      rgce >> integer;
-      stringPtr = parsedFormula.fromLast();
-      --stringPtr;
-      *stringPtr += ")";
+    while (!rgce.atEnd())
+    {
+        rgce >> ptg;
+        switch (ptg)
+        {
+            case 0x03:  // ptgAdd
+                stringPtr = parsedFormula.fromLast();
+                do {
+                    --stringPtr;
+                    --stringPtr;
+                } while (!(*stringPtr).isEmpty());
+                *stringPtr = "+";
+                break;
+            case 0x04:  // ptgSub
+                stringPtr = parsedFormula.fromLast();
+                do {
+                    --stringPtr;
+                    --stringPtr;
+                } while (!(*stringPtr).isEmpty());
+                *stringPtr = "-";
+                break;
+            case 0x05:  // ptgMul
+                stringPtr = parsedFormula.fromLast();
+                do {
+                    --stringPtr;
+                    --stringPtr;
+                } while (!(*stringPtr).isEmpty());
+                *stringPtr = "*";
+                break;
+            case 0x06:  // ptgDiv
+                stringPtr = parsedFormula.fromLast();
+                do {
+                    --stringPtr;
+                    --stringPtr;
+                } while (!(*stringPtr).isEmpty());
+                *stringPtr = "/";
+                break;
+            case 0x07:  // ptgPower
+                stringPtr = parsedFormula.fromLast();
+                do {
+                    --stringPtr;
+                    --stringPtr;
+                } while (!(*stringPtr).isEmpty());
+                *stringPtr = "^"; // Hmmm, not supported by kspread.
+                break;
+            case 0x08:  // ptgConcat
+                stringPtr = parsedFormula.fromLast();
+                do {
+                    --stringPtr;
+                    --stringPtr;
+                } while (!(*stringPtr).isEmpty());
+                *stringPtr = "&";
+                break;
+            case 0x09:  // ptgLT
+                stringPtr = parsedFormula.fromLast();
+                do {
+                    --stringPtr;
+                    --stringPtr;
+                } while (!(*stringPtr).isEmpty());
+                *stringPtr = "<";
+                break;
+            case 0x0a:  // ptgLE
+                stringPtr = parsedFormula.fromLast();
+                do {
+                    --stringPtr;
+                    --stringPtr;
+                } while (!(*stringPtr).isEmpty());
+                *stringPtr = "<=";
+                break;
+            case 0x0b:  // ptgEQ
+                stringPtr = parsedFormula.fromLast();
+                do {
+                    --stringPtr;
+                    --stringPtr;
+                } while (!(*stringPtr).isEmpty());
+                *stringPtr = "==";
+                break;
+            case 0x0c:  // ptgGE
+                stringPtr = parsedFormula.fromLast();
+                do {
+                    --stringPtr;
+                    --stringPtr;
+                } while (!(*stringPtr).isEmpty());
+                *stringPtr = ">=";
+                break;
+            case 0x0d:  // ptgGT
+                stringPtr = parsedFormula.fromLast();
+                do {
+                    --stringPtr;
+                    --stringPtr;
+                } while (!(*stringPtr).isEmpty());
+                *stringPtr = ">";
+                break;
+            case 0x0e:  // ptgNE
+                stringPtr = parsedFormula.fromLast();
+                do {
+                    --stringPtr;
+                    --stringPtr;
+                } while (!(*stringPtr).isEmpty());
+                *stringPtr = "!=";
+                break;
+            case 0x15:  // ptgParen
+                stringPtr = parsedFormula.fromLast();
+                --stringPtr;
+                *stringPtr += ")";
+                ++stringPtr;
+                do {
+                    --stringPtr;
+                    --stringPtr;
+                } while (!(*stringPtr).isEmpty() && (*stringPtr) != "=");
+                ++stringPtr;
+                (*stringPtr).prepend("(");
+                break;
+            case 0x19:  // ptgAttr
+                rgce >> byte >> integer;
+                if (byte & 0x10)
+                {
+                    stringPtr = parsedFormula.fromLast();
+                    --stringPtr;
+                    *stringPtr += ")";
+                    (*stringPtr).prepend("sum(");
+                }
+                break;
+            case 0x1d:  // ptgBool
+                rgce >> byte;
+                if (byte == 1)
+                    parsedFormula.append("True");
+                else
+                    parsedFormula.append("False");
+                parsedFormula.append("");
+                break;
+            case 0x1e:  // ptgInt
+                rgce >> integer;
+                parsedFormula.append(m_locale.formatNumber((double) integer));
+                parsedFormula.append("");
+                break;
+            case 0x1f:  // ptgNum
+                rgce >> number;
+                parsedFormula.append(m_locale.formatNumber(number));
+                parsedFormula.append("");
+                break;
+            case 0x21:  // ptgFunc
+            case 0x41:
+                rgce >> integer;
+                stringPtr = parsedFormula.fromLast();
+                --stringPtr;
+                *stringPtr += ")";
 
-      switch (integer) {
-      case 15:  // sin
-	(*stringPtr).prepend("sin(");
-	break;
-      case 16:  // cos
-	(*stringPtr).prepend("cos(");
-	break;
-      case 17:  // tan
-	(*stringPtr).prepend("tan(");
-	break;
-      case 18:  // atan
-	(*stringPtr).prepend("atan(");
-	break;
-      case 19:  // pi
-	parsedFormula.append("PI()");
-	parsedFormula.append("");
-	break;
-      case 20:  // sqrt
-	(*stringPtr).prepend("sqrt(");
-	break;
-      case 21:  // exp
-	(*stringPtr).prepend("exp(");
-	break;
-      case 22:  // ln
-	(*stringPtr).prepend("ln(");
-	break;
-      case 23:  // log
-	(*stringPtr).prepend("log(");
-	break;
-      case 24:  // fabs
-	(*stringPtr).prepend("fabs(");
-	break;
-      case 25:  // floor
-	(*stringPtr).prepend("floor(");
-	break;
-      case 26:  // sign
-	(*stringPtr).prepend("sign(");
-	break;
-      case 39:  // mod
-	--stringPtr;
-	*stringPtr = ",";
-	--stringPtr;
-	(*stringPtr).prepend("MOD(");
-	break;
-      case 97:  // atan2
-	--stringPtr;
-	*stringPtr = ",";
-	--stringPtr;
-	(*stringPtr).prepend("atan2(");
-	break;
-      case 98:  // asin
-	(*stringPtr).prepend("asin(");
-	break;
-      case 99:  // acos
-	(*stringPtr).prepend("acos(");
-	break;
-      case 184:  // fact
-	(*stringPtr).prepend("fact(");
-	break;
-      case 212:  // ceil
-	*stringPtr = ""; // no exact match, so we have to workaround
-	--stringPtr;
-	*stringPtr = "";
-	--stringPtr;
-	*stringPtr += ")";
-	(*stringPtr).prepend("ceil(");
-	break;
-      case 229:  // sinh
-	(*stringPtr).prepend("sinh(");
-	break;
-      case 230:  // cosh
-	(*stringPtr).prepend("cosh(");
-	break;
-      case 231:  // tanh
-	(*stringPtr).prepend("tanh(");
-	break;
-      case 232:  // asinh
-	(*stringPtr).prepend("asinh(");
-	break;
-      case 233:  // acosh
-	(*stringPtr).prepend("acosh(");
-	break;
-      case 337:  // pow
-	--stringPtr;
-	*stringPtr = ",";
-	--stringPtr;
-	(*stringPtr).prepend("pow(");
-	break;
-      case 342:  // radian
-	(*stringPtr).prepend("radian(");
-	break;
-      case 343:  // degree
-	(*stringPtr).prepend("degree(");
-	break;
-      default:
-	kdDebug(30511) << "Formula contains unhandled function " << integer << endl;
-	break;
-      }
-      break;
-    case 0x22:  // ptgFuncVar
-    case 0x42:
-      rgce >> byte >> integer;
-      stringPtr = parsedFormula.fromLast();
-      --stringPtr;
-      *stringPtr += ")";
-      ++stringPtr;
-      for (; byte > 1; --byte) {
-	--stringPtr;
-	--stringPtr;
-	*stringPtr = ",";
-      }
-      --stringPtr;
+                switch (integer) {
+                    case 15:  // sin
+                        (*stringPtr).prepend("sin(");
+                        break;
+                    case 16:  // cos
+                        (*stringPtr).prepend("cos(");
+                        break;
+                    case 17:  // tan
+                        (*stringPtr).prepend("tan(");
+                        break;
+                    case 18:  // atan
+                        (*stringPtr).prepend("atan(");
+                        break;
+                    case 19:  // pi
+                        parsedFormula.append("PI()");
+                        parsedFormula.append("");
+                        break;
+                    case 20:  // sqrt
+                        (*stringPtr).prepend("sqrt(");
+                        break;
+                    case 21:  // exp
+                        (*stringPtr).prepend("exp(");
+                        break;
+                    case 22:  // ln
+                        (*stringPtr).prepend("ln(");
+                        break;
+                    case 23:  // log
+                        (*stringPtr).prepend("log(");
+                        break;
+                    case 24:  // fabs
+                        (*stringPtr).prepend("fabs(");
+                        break;
+                    case 25:  // floor
+                        (*stringPtr).prepend("floor(");
+                        break;
+                    case 26:  // sign
+                        (*stringPtr).prepend("sign(");
+                        break;
+                    case 39:  // mod
+                        --stringPtr;
+                        *stringPtr = ";";
+                        --stringPtr;
+                        (*stringPtr).prepend("MOD(");
+                        break;
+                    case 97:  // atan2
+                        --stringPtr;
+                        *stringPtr = ";";
+                        --stringPtr;
+                        (*stringPtr).prepend("atan2(");
+                        break;
+                    case 98:  // asin
+                        (*stringPtr).prepend("asin(");
+                        break;
+                    case 99:  // acos
+                        (*stringPtr).prepend("acos(");
+                        break;
+                    case 184:  // fact
+                        (*stringPtr).prepend("fact(");
+                        break;
+                    case 212:  // ceil
+                        *stringPtr = ""; // no exact match, so we have to workaround
+                        --stringPtr;
+                        *stringPtr = "";
+                        --stringPtr;
+                        *stringPtr += ")";
+                        (*stringPtr).prepend("ceil(");
+                        break;
+                    case 229:  // sinh
+                        (*stringPtr).prepend("sinh(");
+                        break;
+                    case 230:  // cosh
+                        (*stringPtr).prepend("cosh(");
+                        break;
+                    case 231:  // tanh
+                        (*stringPtr).prepend("tanh(");
+                        break;
+                    case 232:  // asinh
+                        (*stringPtr).prepend("asinh(");
+                        break;
+                    case 233:  // acosh
+                        (*stringPtr).prepend("acosh(");
+                        break;
+                    case 337:  // pow
+                        --stringPtr;
+                        *stringPtr = ";";
+                        --stringPtr;
+                        (*stringPtr).prepend("pow(");
+                        break;
+                    case 342:  // radian
+                        (*stringPtr).prepend("radian(");
+                        break;
+                    case 343:  // degree
+                        (*stringPtr).prepend("degree(");
+                        break;
+                    default:
+                        kdDebug(30511) << "Formula contains unhandled function " << integer << endl;
+                        break;
+                }
+                break;
+            case 0x22:  // ptgFuncVar
+            case 0x42:
+                rgce >> byte >> integer;
+                stringPtr = parsedFormula.fromLast();
+                --stringPtr;
+                *stringPtr += ")";
+                ++stringPtr;
+                for (; byte > 1; --byte) {
+                    --stringPtr;
+                    --stringPtr;
+                    *stringPtr = ";";
+                }
+                --stringPtr;
 
-      switch (integer) {
-      case 4:  // sum
-	(*stringPtr).prepend("sum(");
-	break;
-      case 5:  // average
-	(*stringPtr).prepend("average(");
-	break;
-      case 6:  // min
-	(*stringPtr).prepend("min(");
-	break;
-      case 7:  // max
-	(*stringPtr).prepend("max(");
-	break;
-      case 183:  // multiply
-	(*stringPtr).prepend("multiply(");
-	break;
-      case 197:  // ent
-	(*stringPtr).prepend("ENT(");
-	*stringPtr += ")"; // no exact match, so we have to workaround
-	++stringPtr;
-	*stringPtr = "";
-	++stringPtr;
-	*stringPtr = "";
-	break;
-      default:
-	kdDebug(30511) << "Formula contains unhandled function " << integer << endl;
-	break;
-      }
-      break;
-    case 0x24:  // ptgRef
-    case 0x44:
-      if (biff == BIFF_8) {
-	rgce >> refRow >> refColumn;
-	if (refColumn & 0x8000)
-	  refRow += -1*row;
-	if (refColumn & 0x4000) {
-	  refColumn &= 0x3fff;
-	  refColumn += -1*column;
-	}
-      } else {
-	rgce >> refRow >> byte;
-	refColumn = byte;
-	if (refRow & 0x8000)
-	  refRow += -1*row;
-	if (refRow & 0x4000) {
-	  refRow &= 0x3fff;
-	  refColumn += -1*column;
-	}
-      }
-      str = "#";
-      str += QString::number((int) refColumn);
-      str += "#";
-      str += QString::number((int) refRow);
-      str += "#";
-      parsedFormula.append(str);
-      parsedFormula.append("");
-      break;
-    case 0x25:  // ptgArea
-    case 0x45:
-      if (biff == BIFF_8) {
-	rgce >> refRow >> refRowLast >> refColumn >> refColumnLast;
-	if (refColumn & 0x8000)
-	  refRow += -1*row;
-	if (refColumn & 0x4000) {
-	  refColumn &= 0x3fff;
-	  refColumn += -1*column;
-	}
-	if (refColumnLast & 0x8000)
-	  refRowLast += -1*row;
-	if (refColumnLast & 0x4000) {
-	  refColumnLast &= 0x3fff;
-	  refColumnLast += -1*column;
-	}
-      } else {
-	rgce >> refRow >> refRowLast >> byte;
-	refColumn = byte;
-	rgce >> byte;
-	refColumnLast = byte;
-	if (refRow & 0x8000)
-	  refRow += -1*row;
-	if (refRow & 0x4000) {
-	  refColumn &= 0x3fff;
-	  refColumn += -1*column;
-	}
-	if (refRowLast & 0x8000)
-	  refRowLast += -1*row;
-	if (refRowLast & 0x4000) {
-	  refColumnLast &= 0x3fff;
-	  refColumnLast += -1*column;
-	}
-      }
-      str = "#";
-      str += QString::number((int) refColumn);
-      str += "#";
-      str += QString::number((int) refRow);
-      str += "#:#";
-      str += QString::number((int) refColumnLast);
-      str += "#";
-      str += QString::number((int) refRowLast);
-      str += "#";
-      parsedFormula.append(str);
-      parsedFormula.append("");
-      break;
-    default:
-      kdDebug(30511) << "Formula contains unhandled ptg " << ptg << endl;
-      break;
+                switch (integer) {
+                    case 4:  // sum
+                        (*stringPtr).prepend("sum(");
+                        break;
+                    case 5:  // average
+                        (*stringPtr).prepend("average(");
+                        break;
+                    case 6:  // min
+                        (*stringPtr).prepend("min(");
+                        break;
+                    case 7:  // max
+                        (*stringPtr).prepend("max(");
+                        break;
+                    case 183:  // multiply
+                        (*stringPtr).prepend("multiply(");
+                        break;
+                    case 197:  // ent
+                        (*stringPtr).prepend("ENT(");
+                        *stringPtr += ")"; // no exact match, so we have to workaround
+                        ++stringPtr;
+                        *stringPtr = "";
+                        ++stringPtr;
+                        *stringPtr = "";
+                        break;
+                    default:
+                        kdDebug(30511) << "Formula contains unhandled function " << integer << endl;
+                        break;
+                }
+                break;
+            case 0x24:  // ptgRef
+            case 0x44:
+                if (biff == BIFF_8) {
+                    rgce >> refRow >> refColumn;
+                    if (refColumn & 0x8000)
+                        refRow += -1*row;
+                    if (refColumn & 0x4000) {
+                        refColumn &= 0x3fff;
+                        refColumn += -1*column;
+                    }
+                } else {
+                    rgce >> refRow >> byte;
+                    refColumn = byte;
+                    if (refRow & 0x8000)
+                        refRow += -1*row;
+                    if (refRow & 0x4000) {
+                        refRow &= 0x3fff;
+                        refColumn += -1*column;
+                    }
+                }
+                str = "#";
+                str += QString::number((int) refColumn);
+                str += "#";
+                str += QString::number((int) refRow);
+                str += "#";
+                parsedFormula.append(str);
+                parsedFormula.append("");
+                break;
+            case 0x25:  // ptgArea
+            case 0x45:
+                if (biff == BIFF_8) {
+                    rgce >> refRow >> refRowLast >> refColumn >> refColumnLast;
+                    if (refColumn & 0x8000)
+                        refRow += -1*row;
+                    if (refColumn & 0x4000) {
+                        refColumn &= 0x3fff;
+                        refColumn += -1*column;
+                    }
+                    if (refColumnLast & 0x8000)
+                        refRowLast += -1*row;
+                    if (refColumnLast & 0x4000) {
+                        refColumnLast &= 0x3fff;
+                        refColumnLast += -1*column;
+                    }
+                } else {
+                    rgce >> refRow >> refRowLast >> byte;
+                    refColumn = byte;
+                    rgce >> byte;
+                    refColumnLast = byte;
+                    if (refRow & 0x8000)
+                        refRow += -1*row;
+                    if (refRow & 0x4000) {
+                        refColumn &= 0x3fff;
+                        refColumn += -1*column;
+                    }
+                    if (refRowLast & 0x8000)
+                        refRowLast += -1*row;
+                    if (refRowLast & 0x4000) {
+                        refColumnLast &= 0x3fff;
+                        refColumnLast += -1*column;
+                    }
+                }
+                str = "#";
+                str += QString::number((int) refColumn);
+                str += "#";
+                str += QString::number((int) refRow);
+                str += "#:#";
+                str += QString::number((int) refColumnLast);
+                str += "#";
+                str += QString::number((int) refRowLast);
+                str += "#";
+                parsedFormula.append(str);
+                parsedFormula.append("");
+                break;
+            default:
+                kdDebug(30511) << "Formula contains unhandled ptg " << ptg << endl;
+                break;
+        }
     }
-  }
-  return parsedFormula.join("");
+    kdDebug() << "XMLTree::formula: " << parsedFormula.join("") << endl;
+    return parsedFormula.join("");
 }
 
 bool XMLTree::_1904(Q_UINT16, QDataStream& body)
@@ -1034,7 +1039,6 @@ bool XMLTree::_footer(Q_UINT16, QDataStream& body)
 
         body >> cch;
         if (!cch) return true;
-        kdDebug() << "XMLTree::_footer length" << cch << endl;
         char *name = new char[cch];
         body.readRawBytes(name, cch);
 
@@ -1252,7 +1256,7 @@ bool XMLTree::_mulrk(Q_UINT16 size, QDataStream& body)
       s.sprintf("%d/%d/%d", year, month, day);
       break;
     default: // Number
-      s = QString::number(value, 'f');
+      s = m_locale.formatNumber(value);
       break;
     }
 
@@ -1290,9 +1294,11 @@ bool XMLTree::_number(Q_UINT16, QDataStream& body)
 
   QDomElement e = root->createElement("cell");
   e.appendChild(getFormat(xf));
-  s = QString::number(value, 'f');
   e.setAttribute("row", (int) ++row);
   e.setAttribute("column", (int) ++column);
+
+  s = m_locale.formatNumber(value);
+
   QDomElement text = root->createElement("text");
   text.appendChild(root->createTextNode(s));
   e.appendChild(text);
@@ -1388,7 +1394,7 @@ bool XMLTree::_rk(Q_UINT16, QDataStream& body)
     s.sprintf("%d/%d/%d", year, month, day);
     break;
   default: // Number
-    s = QString::number(value, 'f');
+    s = m_locale.formatNumber(value);
     break;
   }
 
@@ -1573,9 +1579,10 @@ bool XMLTree::_wsbool(Q_UINT16, QDataStream&)
 bool XMLTree::_xf(Q_UINT16, QDataStream& body)
 {
   xf_rec *x = new xf_rec;
+
   body >> x->ifnt >> x->ifmt >> x->attr >> x->align >> x->indent;
   body >> x->borderStyle >> x->sideBColor >> x->topBColor >> x->cellColor;
-  //qDebug("%x %x %x %x %x %x %x %x %x\n",x->ifnt, x->ifmt, x->attr, x->align, x->indent, x->borderStyle, x->sideBColor, x->topBColor, x->cellColor);
+
   xfs.insert(xfCount++, x);
 
   return true;
