@@ -3026,9 +3026,9 @@ void KPresenterView::setupActions()
                                       "ungroup", 0, this, SLOT( extraUnGroup() ),
                                       actionCollection(), "extra_ungroup" );
 
-    // ----------------- screenpresentation actions
+    // ----------------- slideshow actions
 
-    actionScreenConfigPages = new KAction( i18n( "&Configure Pages..." ), 0,
+    actionScreenConfigPages = new KAction( i18n( "&Configure Slide Show..." ), 0,
                                            this, SLOT( screenConfigPages() ),
                                            actionCollection(), "screen_configpages" );
 
@@ -3869,7 +3869,6 @@ void KPresenterView::styleOk()
 /*=================== page configuration ok ======================*/
 void KPresenterView::pgConfOk()
 {
-    KPrPage *page=m_canvas->activePage();
     PgConfCmd *pgConfCmd = new PgConfCmd( i18n( "Configure Slide Show" ),
 					  pgConfDia->getManualSwitch(), pgConfDia->getInfiniteLoop(),
                                           pgConfDia->getPresentationDuration(),
