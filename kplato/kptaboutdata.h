@@ -34,6 +34,7 @@ KAboutData * newKPTAboutData()
 					   "http://www.koffice.org/kplato/" );
     aboutData->addAuthor("Thomas Zander", 0, "zander@kde.org");
     aboutData->addAuthor("Bo Thorsen", 0, "bo@sonofthor.dk");
+    aboutData->addAuthor("Dag Andersen", 0, "danders@get2net.dk");
     return aboutData;
 }
 
