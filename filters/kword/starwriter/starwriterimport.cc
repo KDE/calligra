@@ -299,7 +299,6 @@ bool StarWriterImport::parseTable(QByteArray n)
 
     // Skip useless sections and retrieve the right point
     p = 0x13;
-    p += 0x10;
     while (n[p] != 'L') {
         len = readU24(n, p+1);
         p += len;
