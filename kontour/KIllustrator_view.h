@@ -70,8 +70,6 @@ public:
     GDocument *activeDocument();
     Canvas *getCanvas() { return canvas; }
 
-    bool printDlg();
-
     virtual void setZoom( double zoom );
     virtual double zoom() const;
 
@@ -262,8 +260,7 @@ protected:
     ToolDockManager *mToolDockManager;
     LayerPanel *mLayerPanel;
     ToolDockBase *mLayerDockBase;
-    QString lastOpenDir, lastSaveDir, lastBitmapDir, lastClipartDir,
-            lastExportDir, lastImportDir, lastPaletteDir;
+    QString lastExportDir,lastClipartDir,lastBitmapDir;
     QString lastExport;
 };
 
