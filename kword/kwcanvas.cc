@@ -1541,7 +1541,6 @@ void KWCanvas::deleteFrameSetEditTable( KWTableFrameSet *table )
         delete m_currentFrameSetEdit;
         m_currentFrameSetEdit = 0L;
         repaintAll();
-        kdDebug()<<"delete current----------------------------\n";
     }
 }
 
