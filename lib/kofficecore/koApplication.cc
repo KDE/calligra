@@ -21,11 +21,13 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <koMainWindow.h>
 
-KoApplication::KoApplication(int &argc, char **argv, 
-			     const QString& rAppName)
-    : OPApplication(argc, argv, rAppName),
-      kded( argc, argv, opapp_orb )
+KoApplication::KoApplication(int &argc, char **argv, const QString& rAppName)
+    : OPApplication(argc, argv, rAppName)
+    , kded( argc, argv, opapp_orb )
+    , m_params( argc, argv )
+    , m_bWithGUI( true )
 {
     KGlobal::locale()->insertCatalogue("koffice");
     KGlobal::iconLoader()->insertDirectory(0, kde_datadir() + 
@@ -34,6 +36,48 @@ KoApplication::KoApplication(int &argc, char **argv,
 				     "/share/apps/koffice/toolbar");
 }
 
-KoApplication::~KoApplication() {}
+KoApplication::~KoApplication()
+{
+  // checking wether start the app as server or not
+  QStringList::Iterator it;
+  if( m_params.find( "--server", "-s", true, it ) )
+  {
+    m_bWithGUI = false;
+    m_params.del( it );
+  }                                                                                     }
     
+void KoApplication::start()
+{
+  KoMainWindow* pShell;
+  QStringList openFiles;
+ 
+  if( m_bWithGUI )
+  {
+    for( uint i = 0; i < m_params.count(); i++ )
+    {
+      if( m_params.get( i ).left( 1 ) != "-" )
+      {
+        openFiles.append( m_params.get( i ) );
+      }
+    }
+    if( openFiles.isEmpty() )
+    {
+      pShell = createNewShell();
+      pShell->show();
+      pShell->newDocument();
+    }
+    else
+    {
+      QStringList::Iterator it;
+ 
+      for( it = openFiles.begin() ; it != openFiles.end() ; ++it )
+      {
+        pShell = createNewShell();
+        pShell->show();
+        pShell->openDocument( *it, "" );
+      }
+    }
+  }
+}                                                                                       
+
 #include "koApplication.moc"
