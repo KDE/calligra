@@ -1152,9 +1152,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
     case Key_Right:
 
-      if ( !m_bChoose && markerColumn() == 26*26)//0xFFFF )
+      if ( !m_bChoose && markerColumn() >= 26*26)//0xFFFF )
         return;
-      if ( m_bChoose && chooseMarkerColumn() == 26*26)//0xFFFF )
+      if ( m_bChoose && chooseMarkerColumn() >= 26*26)//0xFFFF )
         return;
 
       if ( m_bChoose )
@@ -1535,21 +1535,26 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
 
   	if(activeTable()->getLcMode())
   		{
- 	 	buffer="L"+tmp.setNum(m_iMarkerRow);
-	  	buffer+="C"+tmp.setNum(m_iMarkerColumn);
+ 	 	//buffer="L"+tmp.setNum(m_iMarkerRow);
+	  	//buffer+="C"+tmp.setNum(m_iMarkerColumn);
+                buffer=tmp.setNum( (selection.bottom()-selection.top()+1) )+"Lx";
+                if(selection.right()==0x7FFF)
+                        buffer+=tmp.setNum((26*26-selection.left()+1))+"C";
+                else
+                        buffer+=tmp.setNum((selection.right()-selection.left()+1))+"C";
   		}
   	else
   		{
 	  	//Problem columnLabel return @@@@ when column >26*26
  	 	//=> it's not a good display
   		//=> for the moment I display pos of marker
-  		//buffer=activeTable()->columnLabel( selection.left() );
-  		//buffer+=tmp.setNum(selection.top());
-  		//buffer+=":";
-  		//buffer+=activeTable()->columnLabel( selection.right() );
-  		//buffer+=tmp.setNum(selection.bottom());
-  		buffer=activeTable()->columnLabel( m_iMarkerColumn );
-  		buffer+=tmp.setNum(m_iMarkerRow);
+  		buffer=activeTable()->columnLabel( selection.left() );
+  		buffer+=tmp.setNum(selection.top());
+  		buffer+=":";
+  		buffer+=activeTable()->columnLabel( selection.right() );
+  		buffer+=tmp.setNum(selection.bottom());
+  		//buffer=activeTable()->columnLabel( m_iMarkerColumn );
+  		//buffer+=tmp.setNum(m_iMarkerRow);
   		}
   	}
 
@@ -2260,7 +2265,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     m_iResizePos = _ev->pos().x();
     
     int x = table->columnPos( m_iResizeAnchor, m_pCanvas );
- 
+
     QString tmpSize,tmp2;
     tmpSize=i18n("Width : ");
     tmpSize+=tmp2.setNum(m_iResizePos-x);

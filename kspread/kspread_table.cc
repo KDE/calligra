@@ -4469,7 +4469,8 @@ const char *KSpreadTable::columnLabel(int column)
   else if ( column <= 26 * 26 )
     sprintf( m_arrColumnLabel, "%c%c",'A'+((column-1)/26)-1,'A'+((column-1)%26));
   else
-    strcpy( m_arrColumnLabel,"@@@");
+    sprintf( m_arrColumnLabel, "%c%c",'Y','Z');
+    //strcpy( m_arrColumnLabel,"@@@");
 
   return m_arrColumnLabel;
 }
