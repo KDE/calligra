@@ -2421,10 +2421,11 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
 
   // color
   tbColor = black;
-  OpenPartsUI::Pixmap colpix;
-  colpix.data = CORBA::string_dup(colorToPixString(tbColor,TXT_COLOR));
+  OpenPartsUI::Pixmap* colpix = new OpenPartsUI::Pixmap;
+  colpix->data = CORBA::string_dup(colorToPixString(tbColor,TXT_COLOR));
+  pix = colpix;
   toolTip = Q2C( i18n("Text Color") );
-  m_idButtonText_Color = m_vToolBarText->insertButton2(colpix,ID_TEXT_COLOR,SIGNAL(clicked()),this,"textColor",
+  m_idButtonText_Color = m_vToolBarText->insertButton2(pix,ID_TEXT_COLOR,SIGNAL(clicked()),this,"textColor",
 							true,toolTip,-1);
 
   m_vToolBarText->insertSeparator(-1);
@@ -2548,9 +2549,11 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
 
   // border color
   tmpBrd.color = black;
-  colpix.data = CORBA::string_dup(colorToPixString(tmpBrd.color,FRAME_COLOR));
+  colpix = new OpenPartsUI::Pixmap; 
+  colpix->data = CORBA::string_dup(colorToPixString(tmpBrd.color,FRAME_COLOR));
+  pix = colpix;
   toolTip = Q2C( i18n("Paragraph Border Color") );
-  m_idButtonText_BorderColor = m_vToolBarText->insertButton2(colpix,ID_BORDER_COLOR,SIGNAL(clicked()),this,"textBorderColor",
+  m_idButtonText_BorderColor = m_vToolBarText->insertButton2(pix,ID_BORDER_COLOR,SIGNAL(clicked()),this,"textBorderColor",
 							      true,toolTip,-1);
 
   // border width combobox
@@ -2621,9 +2624,11 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
 
   // border color
   tmpBrd.color = black;
-  colpix.data = CORBA::string_dup(colorToPixString(frmBrd.color,FRAME_COLOR));
+  colpix = new OpenPartsUI::Pixmap;
+  colpix->data = CORBA::string_dup(colorToPixString(frmBrd.color,FRAME_COLOR));
+  pix = colpix;
   toolTip = Q2C( i18n("Frame Border Color") );
-  m_idButtonFrame_BorderColor = m_vToolBarFrame->insertButton2(colpix,ID_FBORDER_COLOR,SIGNAL(clicked()),this,"frameBorderColor",
+  m_idButtonFrame_BorderColor = m_vToolBarFrame->insertButton2(pix,ID_FBORDER_COLOR,SIGNAL(clicked()),this,"frameBorderColor",
 							      true,toolTip,-1);
 
   toolTip = Q2C( i18n("Frame Border Width") );
@@ -2638,9 +2643,11 @@ bool KWordView::mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory)
 
   // frame back color
   backColor.setColor(white);
-  colpix.data = CORBA::string_dup(colorToPixString(backColor.color(),BACK_COLOR));
+  colpix = new OpenPartsUI::Pixmap;
+  colpix->data = CORBA::string_dup(colorToPixString(backColor.color(),BACK_COLOR));
+  pix = colpix;
   toolTip = Q2C( i18n("Frame Background Color") );
-  m_idButtonFrame_BackColor = m_vToolBarFrame->insertButton2(colpix,ID_FBACK_COLOR,SIGNAL(clicked()),this,"frameBackColor",
+  m_idButtonFrame_BackColor = m_vToolBarFrame->insertButton2(pix,ID_FBACK_COLOR,SIGNAL(clicked()),this,"frameBackColor",
 							      true,toolTip,-1);
 
   m_vToolBarFrame->enable(OpenPartsUI::Hide);
@@ -2705,7 +2712,7 @@ QString KWordView::colorToPixString(QColor c,PType _type)
 	pix += "\"............aee##ffa\",\n";
 	pix += "\"............agghhiia\",\n";
 	pix += "\"............agghhiia\",\n";
-	pix += "\"............aaaaaaaa\"};";
+	pix += "\"............aaaaaaaa\"};\n";
 
 //        pix += "\" 20 20 3 1 \",\n";
 	
