@@ -193,6 +193,12 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     bool drawCursor = edit!=0L;
     QTextCursor * cursor = edit ? static_cast<KWTextFrameSetEdit *>(edit)->getCursor() : 0;
 
+    // QRT forgets to paint the first two pixels....
+    QRect blank( 0, 0, textdoc->width(), 2 );
+    blank &= r;
+    if ( !blank.isEmpty() )
+        painter->fillRect( blank, cg.brush( QColorGroup::Base ) );
+
     QTextParag * lastFormatted = textdoc->draw( painter, r.x(), r.y(), r.width(), r.height(),
                                                 cg, onlyChanged, drawCursor, cursor, resetChanged );
 
@@ -232,7 +238,6 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
 
         QRect blank( 0, docHeight, frameRect.width(), totalHeight+frameRect.height() - docHeight );
         //kdDebug(32002) << this << " Blank area: " << DEBUGRECT(blank) << endl;
-        //bool printing = painter->device()->devType() == QInternal::Printer;
         painter->fillRect( blank, cg.brush( QColorGroup::Base ) );
         // for debugging :)
         //painter->setPen( QPen(Qt::blue, 1, DashLine) );  painter->drawRect( blank );
