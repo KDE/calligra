@@ -54,12 +54,10 @@ public:
 	virtual void setState( const VState state ) { m_state = state; }
 
 	const VFill& fill() const { return m_fill; }
-	VFill& fill() { return m_fill; }
 	const VStroke& stroke() const { return m_stroke; }
-	VStroke& stroke() { return m_stroke; }
 
-	virtual void setFill( const VFill &fill ) { m_fill = fill; }
-	virtual void setStroke( const VStroke &stroke ) { m_stroke = stroke; }
+	virtual void setFill( const VFill& fill ) { m_fill = fill; }
+	virtual void setStroke( const VStroke& stroke ) { m_stroke = stroke; }
 
 	virtual VObject* clone() = 0;
 
