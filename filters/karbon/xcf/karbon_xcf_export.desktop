@@ -1,0 +1,9 @@
+[Desktop Entry]
+Icon=
+Name=Karbon14 Gimp Export Filter
+ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Export=image/x-xcf-gimp
+X-KDE-Import=application/x-karbon
+X-KDE-Library=libkarbonxcfexport
+X-KDE-Weight=1

@@ -129,9 +129,11 @@ EpsExport::convert( const QCString& from, const QCString& to )
 
 		m_stream = new QTextStream( &fileOut );
 
-		// Load the document and export it:
+		// Load the document.
 		VDocument doc;
 		doc.load( docNode );
+
+		// Process the document.
 		doc.accept( *this );
 
 		delete m_stream;
@@ -161,19 +163,19 @@ EpsExport::visitVDocument( VDocument& document )
 	// Print a header:
 	*m_stream <<
 		"%!PS-Adobe-3.0 EPSF-3.0\n"
-		"%%BoundingBox: "
+		"%%BoundingBox: " <<
 		// Round down:
-			<< qRound( rect.left()   - 0.5 ) << " "
-			<< qRound( rect.top()    - 0.5 ) << " "
+			qRound( rect.left()   - 0.5 ) << " " <<
+			qRound( rect.top()    - 0.5 ) << " " <<
 		// Round up:
-			<< qRound( rect.right()  + 0.5 ) << " "
-			<< qRound( rect.bottom() + 0.5 ) << "\n"
+			qRound( rect.right()  + 0.5 ) << " " <<
+			qRound( rect.bottom() + 0.5 ) << "\n" <<
 		"%%HiResBoundingBox: "
-			<< rect.left()   << " "
-			<< rect.top()    << " "
-			<< rect.right()  << " "
-			<< rect.bottom() << "\n"
-		"%%Creator: Karbon14 EPS 0.5"
+			rect.left()   << " " <<
+			rect.top()    << " " <<
+			rect.right()  << " " <<
+			rect.bottom() << "\n"
+		"%%Creator: Karbon14 EPS Exportfilter 0.5"
 	<< endl;
 
 	// We dont need the selection anymore:
