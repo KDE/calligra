@@ -109,7 +109,7 @@ KexiRelationView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 	QRect clipping(cx, cy, cw, ch);
 	for(cview = m_connectionViews.first(); cview; cview = m_connectionViews.next())
 	{
-		p->drawRect(cview->connectionRect());
+//		p->drawRect(cview->connectionRect());
 		if(clipping.intersects(cview->connectionRect()))
 			cview->drawConnection(p, this);
 	}
@@ -361,7 +361,10 @@ KexiRelationView::containerMoved(KexiRelationViewTableContainer *c)
 	for(cview = m_connectionViews.first(); cview; cview = m_connectionViews.next())
 	{
 		if(cview->srcTable() == c || cview->rcvTable() == c)
+		{
+			updateContents(cview->oldRect());
 			updateContents(cview->connectionRect());
+		}
 	}
 }
 

@@ -47,6 +47,8 @@ class KexiRelationViewConnection
 		void		drawConnection(QPainter *p, QWidget *parent);
 		const QRect	connectionRect();
 
+		const QRect	oldRect() { return m_oldRect; }
+
 		KexiRelationViewTableContainer	*srcTable() { return m_srcTable; }
 		KexiRelationViewTableContainer	*rcvTable() { return m_rcvTable; }
 
@@ -55,6 +57,8 @@ class KexiRelationViewConnection
 		KexiRelationViewTableContainer	*m_rcvTable;
 		QString				m_srcField;
 		QString				m_rcvField;
+
+		QRect				m_oldRect;
 };
 
 #endif
