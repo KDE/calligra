@@ -830,9 +830,10 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QVBox *box , char *
   defaultUnit=new QComboBox( tmpQGroupBox);
   label->setBuddy(defaultUnit);
   listType.clear();
-  listType=i18n( "Millimeters (mm)" ) ;
-  listType+=i18n( "Points (pt)" ) ;
-  listType+=i18n( "Inches (in)" );
+  listType=KoUnit::unitDescription( KoUnit::U_MM );
+  listType+=KoUnit::unitDescription( KoUnit::U_PT );
+  listType+=KoUnit::unitDescription( KoUnit::U_INCH );
+  listType+=KoUnit::unitDescription( KoUnit::U_CM );
   defaultUnit->insertStringList(listType);
   defaultUnit->setCurrentItem(0);
   grid1->addWidget(defaultUnit,5,0);
@@ -869,8 +870,13 @@ void configureLayoutPage::initCombo()
             unit=1;
             break;
         case KoUnit::U_INCH:
-        default:
             unit=2;
+            break;
+        case KoUnit::U_CM:
+            unit=3;
+            break;
+        default:
+            unit=3;
     }
   defaultUnit->setCurrentItem(unit);
 
