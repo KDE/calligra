@@ -33,7 +33,25 @@ public:
     KChartParamsIface( KChartParams *_params );
 
 k_dcop:
-    void setChartType( /*ChartType chartType*/ );
+    virtual void setChartType( /*ChartType chartType*/ );
+    
+    //bar chart config
+    virtual bool threeDBars();
+    virtual void setThreeDBars( bool threeDBars );
+    virtual void setThreeDBarsShadowColors( bool shadow );
+    virtual bool threeDBarsShadowColors() const;
+    virtual void setThreeDBarAngle( uint angle );
+    virtual uint threeDBarAngle() const;
+    virtual void setThreeDBarDepth( double depth );
+    virtual double threeDBarDepth() const;
+    
+    
+    //pie config
+    virtual bool threeDPies();
+    virtual void setThreeDPieHeight( int pixels );
+    virtual int threeDPieHeight();
+    virtual void setPieStart( int degrees );
+    virtual int pieStart();
 
 private:
     KChartParams *params;

@@ -33,3 +33,71 @@ void KChartParamsIface::setChartType( /*ChartType chartType*/ )
 {
     //todo
 }
+
+
+bool KChartParamsIface::threeDBars()
+{
+    return params->threeDBars();
+}
+
+void KChartParamsIface::setThreeDBars( bool threeDBars )
+{
+    params->setThreeDBars(threeDBars);
+}
+
+void KChartParamsIface::setThreeDBarsShadowColors( bool shadow )
+{
+    params->setThreeDBarsShadowColors(shadow);
+}
+
+bool KChartParamsIface::threeDBarsShadowColors() const
+{
+    return params->threeDBarsShadowColors();
+}
+
+void KChartParamsIface::setThreeDBarAngle( uint angle )
+{
+    params->setThreeDBarAngle(angle);
+}
+
+uint KChartParamsIface::threeDBarAngle() const
+{
+    return params->threeDBarAngle();
+}
+
+void KChartParamsIface::setThreeDBarDepth( double depth )
+{
+    params->setThreeDBarDepth(depth);
+}
+
+double KChartParamsIface::threeDBarDepth() const
+{
+    return params->threeDBarDepth();
+}
+
+
+bool KChartParamsIface::threeDPies()
+{
+    return params->threeDPies();
+}
+
+void KChartParamsIface::setThreeDPieHeight( int pixels )
+{
+    params->setThreeDPieHeight(pixels);
+}
+
+int KChartParamsIface::threeDPieHeight()
+{
+    return params->threeDPieHeight();
+}
+
+void KChartParamsIface::setPieStart( int degrees )
+{
+    params->setPieStart(degrees);
+}
+
+int KChartParamsIface::pieStart()
+{
+    return params->pieStart();
+}
+
