@@ -3823,30 +3823,58 @@ void KSpreadCell::checkValue()
         return;
     }
 
-    QDate tmpDate;
-    if((tmpDate=locale()->readDate(m_strText)).isValid())
+    QDate tmpDate = locale()->readDate(m_strText);
+    if (!tmpDate.isValid())
     {
-        //KLocale::readDate( QString ) doesn't support long dates... _If_ the input is a long date,
-        //check if the first character isn't a number...
-        if ( m_strText.contains( " " ) == 0 )  //No spaces " " in short dates...
+        // Try without the year
+        // The tricky part is that we need to remove any separator around the year
+        // For instance %Y-%m-%d becomes %m-%d and %d/%m/%Y becomes %d/%m
+        // If the year is in the middle, say %m-%Y/%d, we'll remove the sep. before it (%m/%d).
+        QString fmt = locale()->shortDateFormat();
+        int yearPos = fmt.find( "%Y", 0, false );
+        if ( yearPos > -1 )
         {
-                m_bDate = true;
-                m_dValue = 0;
-                formatNumber tmpFormat=getFormatNumber(column(),row());
-                if(tmpFormat!=TextDate &&
-                !(tmpFormat>=200&&tmpFormat<=216))
-                        {
-                        //test if it's a short date or text date.
-                        if( (locale()->formatDate(tmpDate,true)==m_strText))
-                                setFormatNumber(ShortDate);
-                        else if((locale()->formatDate(tmpDate,false)==m_strText))
-                                setFormatNumber(TextDate);
-                        else
-                                setFormatNumber(ShortDate);
-                        }
-                m_Date=tmpDate;
-                m_strText=locale()->formatDate(m_Date,true); //short format date
-                return;
+            if ( yearPos == 0 )
+            {
+                fmt.remove( 0, 2 );
+                while ( fmt[0] != '%' )
+                    fmt.remove( 0, 1 );
+            } else
+            {
+                fmt.remove( yearPos, 2 );
+                for ( ; yearPos > 0 && fmt[yearPos-1] != '%'; --yearPos )
+                    fmt.remove( yearPos, 1 );
+            }
+            //kdDebug() << "KSpreadCell::checkValue short format w/o date: " << fmt << endl;
+            tmpDate = locale()->readDate( m_strText, fmt );
+        }
+    }
+    if (tmpDate.isValid())
+    {
+        //KLocale::readDate( QString ) doesn't support long dates...
+        // (David: it does now...)
+        // _If_ the input is a long date, check if the first character isn't a number...
+        // (David: why? this looks specific to some countries)
+
+        if ( m_strText.contains( ' ' ) == 0 )  //No spaces " " in short dates...
+        {
+            m_bDate = true;
+            m_dValue = 0;
+            formatNumber tmpFormat=getFormatNumber(column(),row());
+            if(tmpFormat!=TextDate &&
+               !(tmpFormat>=200&&tmpFormat<=216))
+            {
+                //test if it's a short date or text date.
+                if( (locale()->formatDate(tmpDate,true)==m_strText))
+                    setFormatNumber(ShortDate);
+                else if((locale()->formatDate(tmpDate,false)==m_strText))
+                    setFormatNumber(TextDate);
+                else
+                    setFormatNumber(ShortDate);
+            }
+            m_Date=tmpDate;
+            m_strText=locale()->formatDate(m_Date,true); //short format date
+            return;
         }
     }
 
