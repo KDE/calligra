@@ -667,10 +667,14 @@ void KWDeleteFrameCommand::execute()
 
     KWFrame *frame = frameSet->getFrame( frameIndex.m_iFrameIndex );
     ASSERT( frame );
+
+    FrameType type=frameSet->getFrameType();
+
     frameSet->delFrame( frameIndex.m_iFrameIndex );
     //when you delete a frame frame pointor is deleted
     //so used frameChanged with a null pointor.
     m_pDoc->frameChanged( 0L );
+    m_pDoc->refreshDocStructure(type);
 }
 
 void KWDeleteFrameCommand::unexecute()
@@ -687,6 +691,7 @@ void KWDeleteFrameCommand::unexecute()
         textfs->formatMore();
 
     m_pDoc->frameChanged( frame );
+    m_pDoc->refreshDocStructure(frameSet->getFrameType());
 }
 
 KWCreateFrameCommand::KWCreateFrameCommand( const QString &name, KWDocument *_doc, KWFrame * frame ):
@@ -712,6 +717,8 @@ void KWCreateFrameCommand::execute()
     if ( textfs )
         textfs->formatMore();
     m_pDoc->frameChanged( frame );
+    kdDebug()<<"frameSet->getFrameType( :"<<frameSet->getFrameType()<<endl;
+    m_pDoc->refreshDocStructure( frameSet->getFrameType());
 }
 
 void KWCreateFrameCommand::unexecute()
@@ -720,9 +727,12 @@ void KWCreateFrameCommand::unexecute()
     ASSERT( frameSet );
     KWFrame *frame = frameSet->getFrame( frameIndex.m_iFrameIndex );
     ASSERT( frame );
+    FrameType type=frameSet->getFrameType();
     kdDebug() << "KWCreateFrameCommand::unexecute delFrame " << frameIndex.m_iFrameIndex << endl;
     frameSet->delFrame( frameIndex.m_iFrameIndex );
 
     m_pDoc->frameChanged( 0L );
+    m_pDoc->refreshDocStructure(type);
+
 }
 

@@ -42,6 +42,11 @@ class KCommandHistory;
 class KWVariable;
 class KWVariableFormat;
 
+class QFont;
+class QStringList;
+class QRect;
+
+
 #include <koDocument.h>
 #include <koGlobal.h>
 #include <koRect.h>
@@ -50,13 +55,10 @@ class KWVariableFormat;
 #include "kwimage.h"
 #include "kwanchorpos.h"
 #include "kwunit.h"
+#include "defs.h"
 
-#include <qlist.h>
 #include <qmap.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qrect.h>
-#include <qfont.h>
+#include <qlist.h>
 
 /******************************************************************/
 /* Class: KWChild                                              */
@@ -461,10 +463,14 @@ public:
     // make zoom, add header, add footer etc...
     void updateResizeHandles();
 
+    void refreshDocStructure(FrameType);
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
     void sig_newContentsSize( int width, int height );
     void pageNumChanged();
+
+    void docStructureChanged(TypeStructDocItem);
 
 public slots:
     void slotRepaintChanged( KWFrameSet * frameset );

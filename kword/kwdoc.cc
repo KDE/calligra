@@ -2559,4 +2559,31 @@ void KWDocument::slotDocumentInfoModifed()
     recalcVariables( VT_FIELD );
 }
 
+
+void KWDocument::refreshDocStructure(FrameType _type)
+{
+    TypeStructDocItem typeItem;
+    switch(_type)
+    {
+        case FT_TEXT:
+            typeItem=TextFrames;
+            break;
+        case FT_PICTURE:
+            typeItem=Pictures;
+            break;
+        case FT_PART:
+            typeItem=Embedded;
+            break;
+        case FT_FORMULA:
+            typeItem=FormulaFrames;
+            break;
+        case FT_TABLE:
+            typeItem=Tables;
+            break;
+        default:
+            typeItem=TextFrames;
+    }
+    emit docStructureChanged(typeItem);
+}
+
 #include "kwdoc.moc"

@@ -126,7 +126,10 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     initConfig();
 
     connect( doc, SIGNAL( pageNumChanged() ),
-             this, SLOT( pageNumChanged() ) );
+             this, SLOT( pageNumChanged()) );
+
+    connect( doc, SIGNAL( docStructureChanged(TypeStructDocItem) ),
+             this, SLOT( docStructChanged(TypeStructDocItem)) );
 
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
