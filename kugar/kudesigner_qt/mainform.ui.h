@@ -550,7 +550,7 @@ void fmMain::helpAboutQT()
 void fmMain::addDetail()
 {
     bool Ok = false;
-    unsigned int level = QInputDialog::getInteger(tr("Add detail"), tr("Enter detail level:"),
+    unsigned int level = QInputDialog::getInteger(tr("Add Detail"), tr("Enter detail level:"),
 				    0, 0, 100, 1, &Ok, this);
     if (!Ok) return;
     if ( ((level == 0) && (canvas->templ->detailsCount == 0))
@@ -570,7 +570,7 @@ void fmMain::addDetail()
 void fmMain::addDetailFooter()
 {
     bool Ok = false;
-    unsigned int level = QInputDialog::getInteger(tr("Add detail footer"), tr("Enter detail level:"),
+    unsigned int level = QInputDialog::getInteger(tr("Add Detail Footer"), tr("Enter detail level:"),
 				    0, 0, 100, 1, &Ok, this);
     if (!Ok) return;
     if (canvas->templ->detailsCount >= level)
@@ -588,7 +588,7 @@ void fmMain::addDetailFooter()
 void fmMain::addDetailHeader()
 {
     bool Ok = false;
-    unsigned int level = QInputDialog::getInteger(tr("Add detail header"), tr("Enter detail level:"),
+    unsigned int level = QInputDialog::getInteger(tr("Add Detail Header"), tr("Enter detail level:"),
 				    0, 0, 100, 1, &Ok, this);
     if (!Ok) return;
     if (canvas->templ->detailsCount >= level)

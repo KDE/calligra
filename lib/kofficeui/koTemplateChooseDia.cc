@@ -379,7 +379,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout 
     d->textedit->setMaximumHeight(50);
 
     // Hide the widget if there is no template available. This should never happen ;-)
-    if (!entriesnumber)		
+    if (!entriesnumber)
 	d->m_jwidget->hide();
 
     // Set the initially shown page, possibly from the last usage of the dialog
@@ -625,14 +625,14 @@ bool KoTemplateChooseDia::collectInfo()
 //private
 QString KoTemplateChooseDia::descriptionText(const QString &name, const QString &description)
 {
-	QString descrText(i18n("Name : "));
-	descrText += name;
+	QString descrText(i18n("Name:"));
+	descrText += " " + name;
 	descrText += "\n";
-	descrText += i18n("Description : ");
+	descrText += i18n("Description:");
 	if (description.isEmpty())
-	      descrText += i18n("No description available");
+	      descrText += " " + i18n("No description available");
 	else
-              descrText += description;
+              descrText += " " + description;
 	return descrText;
 }
 

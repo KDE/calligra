@@ -509,8 +509,8 @@ QString EffectDia::getSoundFileFilter() const
         full += QString( "*.") + (*it) + ' ';
     }
 
-    str = full + '|' + i18n( "All supported files" ) + '\n' + str;
-    str += "\n*|" + i18n( "All files" );
+    str = full + '|' + i18n( "All Supported Files" ) + '\n' + str;
+    str += "\n*|" + i18n( "All Files" );
 
     return str;
 }
