@@ -42,7 +42,7 @@ public:
     bool whileMovingBorderTop, whileMovingBorderBottom;
     QPixmap pmFirst, pmLeft;
     KoTabChooser *tabChooser;
-    QList<KoTabulator> tabList;
+    KoTabulatorList tabList;
     bool removeTab;     // Do we have to remove a tab in the DC Event?
     int currTab;
     QPopupMenu *rb_menu;
@@ -97,7 +97,6 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
     d->pmLeft = UserIcon( "koRulerLeft" );
     d->currTab = -1;
 
-    d->tabList.setAutoDelete(true);
     d->removeTab=false;
     frameStart = -1;
 
@@ -240,16 +239,15 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 /*================================================================*/
 void KoRuler::drawTabs( QPainter &_painter )
 {
-    KoTabulator *_tab = 0L;
     int ptPos = 0;
 
     _painter.setPen( QPen( black, 2, SolidLine ) );
 
-    for ( unsigned int i = 0;i < d->tabList.count();i++ ) {
-        _tab = d->tabList.at( i );
-        ptPos = double2Int(zoomIt(_tab->ptPos)) - diffx + ( frameStart == -1 ? double2Int( zoomIt(layout.ptLeft) ) :
+    KoTabulatorList::Iterator it = d->tabList.begin();
+    for ( ; it != d->tabList.end() ; it++ ) {
+        ptPos = double2Int(zoomIt((*it).ptPos)) - diffx + ( frameStart == -1 ? double2Int( zoomIt(layout.ptLeft) ) :
                                                             frameStart );
-        switch ( _tab->type ) {
+        switch ( (*it).type ) {
         case T_LEFT: {
             ptPos -= 4;
             _painter.drawLine( ptPos + 4, height() - 4, ptPos + 20 - 4, height() - 4 );
@@ -429,7 +427,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
             p.begin( d->canvas );
             p.setRasterOp( NotROP );
             p.setPen( QPen( black, 1, SolidLine ) );
-            double pt=zoomIt(d->tabList.at(d->currTab)->ptPos);
+            double pt=zoomIt(d->tabList[d->currTab].ptPos);
             pt+= (frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(frameStart));
             int i_pt=double2Int(pt);
             p.drawLine( i_pt, 0, i_pt, d->canvas->height() );
@@ -444,29 +442,27 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 
         if( e->x()-left < 0 || right-e->x() < 0 )
             return;
-        KoTabulator *_tab = new KoTabulator;
+        KoTabulator tab;
         switch ( d->tabChooser->getCurrTabType() ) {
         case KoTabChooser::TAB_LEFT:
-            _tab->type = T_LEFT;
+            tab.type = T_LEFT;
             break;
         case KoTabChooser::TAB_CENTER:
-            _tab->type = T_CENTER;
+            tab.type = T_CENTER;
             break;
         case KoTabChooser::TAB_RIGHT:
-            _tab->type = T_RIGHT;
+            tab.type = T_RIGHT;
             break;
         case KoTabChooser::TAB_DEC_PNT:
-            _tab->type = T_DEC_PNT;
+            tab.type = T_DEC_PNT;
             break;
         default: break;
         }
-        _tab->ptPos = static_cast<double>(unZoomIt(e->x() + diffx - (frameStart == -1 ? double2Int(zoomIt(layout.ptLeft)) : frameStart) ) );
-        _tab->mmPos = POINT_TO_MM( _tab->ptPos );
-        _tab->inchPos = POINT_TO_INCH( _tab->ptPos );
+        tab.ptPos = static_cast<double>(unZoomIt(e->x() + diffx - (frameStart == -1 ? double2Int(zoomIt(layout.ptLeft)) : frameStart) ) );
 
-        d->tabList.append( _tab );
+        d->tabList.append( tab );
         d->removeTab=true;
-        emit tabListChanged( &d->tabList );
+        emit tabListChanged( d->tabList );
         repaint( false );
     }
 }
@@ -543,20 +539,20 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
             p.begin( d->canvas );
             p.setRasterOp( NotROP );
             p.setPen( QPen( black, 1, SolidLine ) );
-            double pt=zoomIt(d->tabList.at(d->currTab)->ptPos);
+            double pt=zoomIt(d->tabList[d->currTab].ptPos);
             pt+= (frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(frameStart));
             int i_pt=double2Int(pt);
             p.drawLine( i_pt, 0, i_pt, d->canvas->height() );
             p.end();
         }
-        if ( /*tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
+        if ( /*tabList[ currTab ].ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
                frameStart ) < layout.ptLeft ||
-              tabList.at( currTab )->ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
+              tabList[ currTab ].ptPos + ( frameStart == -1 ? static_cast<int>( layout.ptLeft ) :
               frameStart ) > layout.ptWidth -
               ( layout.ptRight + layout.ptLeft ) || */e->y() < -50 || e->y() > height() + 50 )
-            d->tabList.remove( d->currTab );
+            d->tabList.remove( d->tabList.at(d->currTab) );
 
-        emit tabListChanged( &d->tabList );
+        emit tabListChanged( d->tabList );
         repaint( false );
     }
 }
@@ -612,9 +608,10 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                 if ( d->flags & F_TABS ) {
                     int pos;
                     d->currTab = -1;
-                    for ( unsigned int i = 0; i < d->tabList.count(); i++ ) {
-                        pos = double2Int(zoomIt(d->tabList.at( i )->ptPos)) - diffx + ( frameStart == -1 ?
-                                                                             double2Int(zoomIt(layout.ptLeft)) : frameStart);
+                    KoTabulatorList::Iterator it = d->tabList.begin();
+                    for ( unsigned int i = 0; it != d->tabList.end() ; ++it, ++i ) {
+                        pos = double2Int(zoomIt((*it).ptPos)) - diffx + ( frameStart == -1 ?
+                                                                          double2Int(zoomIt(layout.ptLeft)) : frameStart);
                         if ( mx > pos - 5 && mx < pos + 5 ) {
                             setCursor( sizeHorCursor );
                             d->action = A_TAB;
@@ -739,14 +736,12 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                             p.begin( d->canvas );
                             p.setRasterOp( NotROP );
                             p.setPen( QPen( black, 1, SolidLine ) );
-                            double pt=zoomIt(d->tabList.at( d->currTab )->ptPos);
+                            double pt=zoomIt(d->tabList[ d->currTab ].ptPos);
                             double fr=(frameStart == -1 ? zoomIt(layout.ptLeft) : static_cast<double>(frameStart) );
                             int pt_fr=double2Int(pt+fr);
                             p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
-                            d->tabList.at( d->currTab )->ptPos = unZoomIt(static_cast<double>(mx) - fr );
-                            d->tabList.at( d->currTab )->mmPos = POINT_TO_MM( d->tabList.at( d->currTab )->ptPos );
-                            d->tabList.at( d->currTab )->inchPos = POINT_TO_INCH( d->tabList.at( d->currTab )->ptPos );
-                            pt=zoomIt(d->tabList.at( d->currTab )->ptPos);
+                            d->tabList[ d->currTab ].ptPos = unZoomIt(static_cast<double>(mx) - fr );
+                            pt=zoomIt(d->tabList[ d->currTab ].ptPos);
                             pt_fr=double2Int(pt+fr);
                             p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
                             p.end();
@@ -833,8 +828,8 @@ void KoRuler::mouseDoubleClickEvent( QMouseEvent* )
     if(!d->m_bReadWrite)
         return;
     if ( d->tabChooser && ( d->flags & F_TABS ) && d->tabChooser->getCurrTabType() != 0 && d->removeTab ) {
-        d->tabList.remove( d->tabList.count() - 1 );
-        emit tabListChanged( &d->tabList );
+        d->tabList.remove( d->tabList.fromLast() );
+        emit tabListChanged( d->tabList );
         repaint( false );
         d->removeTab=false;
     }
@@ -843,18 +838,9 @@ void KoRuler::mouseDoubleClickEvent( QMouseEvent* )
 }
 
 /*================================================================*/
-void KoRuler::setTabList( const QList<KoTabulator>* _tabList )
+void KoRuler::setTabList( const KoTabulatorList & _tabList )
 {
-    d->tabList.clear();
-    QListIterator<KoTabulator> it( *_tabList );
-    for ( it.toFirst(); it.current(); ++it ) {
-        KoTabulator *t = new KoTabulator;
-        t->type = it.current()->type;
-        t->mmPos = it.current()->mmPos;
-        t->inchPos = it.current()->inchPos;
-        t->ptPos = it.current()->ptPos;
-        d->tabList.append( t );
-    }
+    d->tabList = _tabList;
     repaint( false );
 }
 
@@ -921,8 +907,8 @@ void KoRuler::setZoom( const double& zoom )
 
 void KoRuler::rbRemoveTab() {
 
-    d->tabList.remove( d->currTab );
-    emit tabListChanged( &d->tabList );
+    d->tabList.remove( d->tabList.at( d->currTab ) );
+    emit tabListChanged( d->tabList );
     repaint(false);
 }
 

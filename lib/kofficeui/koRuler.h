@@ -50,16 +50,21 @@
 
 /******************************************************************/
 /* Struct: KoTabulator                                            */
+/* Defines the position of a tabulation (in pt), and its type     */
 /******************************************************************/
 
 enum KoTabulators { T_LEFT = 0, T_CENTER = 1, T_RIGHT = 2, T_DEC_PNT = 3 };
 
 struct KoTabulator {
     double ptPos;
-    double mmPos;
-    double inchPos;
     KoTabulators type;
+
+    bool operator==( const KoTabulator & t ) const {
+        return ptPos == t.ptPos && type == t.type;
+    }
 };
+
+typedef QValueList<KoTabulator> KoTabulatorList;
 
 class KoRulerPrivate;
 
@@ -101,7 +106,7 @@ public:
     void setFirstIndent( double _first )
     { i_first = makeIntern( _first ); repaint( false ); }
 
-    void setTabList( const QList<KoTabulator>* _tabList );
+    void setTabList( const KoTabulatorList & tabList );
     void setFrameStart( int _frameStart ) { frameStart = _frameStart; repaint( false ); }
 
     void setAllowUnits( bool _allow ) { allowUnits = _allow; }
@@ -116,7 +121,7 @@ signals:
     void newLeftIndent( double );
     void newFirstIndent( double );
     void openPageLayoutDia();
-    void tabListChanged( QList<KoTabulator>* );
+    void tabListChanged( const KoTabulatorList & );
     void unitChanged( QString );
 
 protected:
