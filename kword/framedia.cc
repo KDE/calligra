@@ -631,10 +631,11 @@ void KWFrameDia::setupTab2() { // TAB Text Runaround
     tabLayout->addWidget( runSideGroup );
 
     m_raDistConfigWidget = new KWFourSideConfigWidget( doc, i18n("Distance between frame and text (%1)").arg(doc->getUnitName()), tab2 );
-    m_raDistConfigWidget->setValues( QMAX(0.00, frame->runAroundLeft()),
-                                     QMAX(0.00, frame->runAroundRight()),
-                                     QMAX(0.00, frame->runAroundTop()),
-                                     QMAX(0.00, frame->runAroundBottom()) );
+    if ( frame )
+        m_raDistConfigWidget->setValues( QMAX(0.00, frame->runAroundLeft()),
+                                         QMAX(0.00, frame->runAroundRight()),
+                                         QMAX(0.00, frame->runAroundTop()),
+                                         QMAX(0.00, frame->runAroundBottom()) );
     tabLayout->addWidget( m_raDistConfigWidget );
 
 
@@ -1067,7 +1068,6 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         lh->setEnabled( false );
         grp1->setEnabled( false );
         floating->setEnabled( false );
-        protectSize->setEnabled( false );
     }
 
     if ( isMainFrame )
@@ -1659,7 +1659,7 @@ bool KWFrameDia::applyChanges()
             typedef KoSetBasicPropCommand<bool, KWPictureFrameSet, &KWPictureFrameSet::setKeepAspectRatio> FramesetSetKeepAspectRatioCommand;
             if(frame) {
                 KWPictureFrameSet * frm=static_cast<KWPictureFrameSet *>( frame->frameSet() );
-                if(frm->keepAspectRatio()!=cbAspectRatio->isChecked())
+                if ( frm->keepAspectRatio() != cbAspectRatio->isChecked() )
                 {
                     if(!macroCmd)
                         macroCmd = new KMacroCommand( i18n("Frame Properties") );
@@ -1833,7 +1833,9 @@ bool KWFrameDia::applyChanges()
             KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
 
             // Floating
-            if ( floating->isChecked() && !parentFs->isFloating() )
+            if ( floating->isChecked() &&
+                 floating->state() != QButton::NoChange &&
+                 !parentFs->isFloating() )
             {
                 if(!macroCmd)
                     macroCmd = new KMacroCommand( i18n("Make Frameset Inline") );
@@ -1855,7 +1857,9 @@ bool KWFrameDia::applyChanges()
                 macroCmd->addCommand(cmdMoveFrame);
                 macroCmd->addCommand(cmd);
             }
-            else if ( !floating->isChecked() && parentFs->isFloating() )
+            else if ( !floating->isChecked() &&
+                      floating->state() != QButton::NoChange &&
+                      parentFs->isFloating() )
             {
                 if(!macroCmd)
                     macroCmd = new KMacroCommand( i18n("Make Frameset Non-Inline") );
@@ -1864,7 +1868,8 @@ bool KWFrameDia::applyChanges()
                 macroCmd->addCommand(cmd);
                 cmd->execute();
             }
-            if ( fs->isProtectSize() != protectSize->isChecked() )
+            if ( fs->isProtectSize() != protectSize->isChecked()
+                 && protectSize->state() != QButton::NoChange )
             {
                 if(!macroCmd)
                     macroCmd = new KMacroCommand( i18n("Protect Size") );
