@@ -195,7 +195,10 @@ void KWView::initGui()
     actionFrameBrdColor->setColor( Qt::black );
     actionFrameBackColor->setColor( Qt::white );
 
-    actionViewZoom->setCurrentItem( 1 );
+    //refresh zoom combobox
+    QStringList list=actionViewZoom->items();
+    QString zoomStr=QString::number(doc->zoom())+'%';
+    actionViewZoom->setCurrentItem(list.findIndex(zoomStr)  );
 
     showFormulaToolbar( FALSE );
 
