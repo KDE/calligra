@@ -1319,3 +1319,7 @@ Reggie, 18.6.1999:
 ------------------
 - Cleanups
 - ASCII import works :-)
+
+Reggie, 19.6.1999:
+------------------
+- Fixed initial repaint problem

@@ -137,11 +137,7 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
 
     viewport()->setBackgroundColor( white );
     viewport()->setBackgroundMode( NoBackground );
-    
-    QPainter p;
-    p.begin( viewport() );
-    p.fillRect( 0, 0, width(), height(), QBrush( Qt::white ) );
-    p.end();
+
     repaintScreen( true );
 }
 
@@ -712,7 +708,7 @@ bool KWPage::vmpEdit( unsigned int mx, unsigned int my )
         }
 
         startKeySelection();
-        
+
         if ( doc->getProcessingType() == KWordDocument::DTP )
         {
             int frame = doc->getFrameSet( frameset )->getFrame( mx, my );
@@ -4533,7 +4529,7 @@ void KWPage::doAutoScroll()
         _painter.begin( viewport() );
         doc->drawMarker( *fc, &_painter, contentsX(), contentsY() );
         _painter.end();
-       
+
         if ( doc->getProcessingType() == KWordDocument::DTP )
             setRuler2Frame( fc->getFrameSet() - 1, fc->getFrame() - 1 );
 

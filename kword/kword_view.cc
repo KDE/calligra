@@ -1310,7 +1310,7 @@ void KWordView::tableInsertCol()
     else
     {
         if ( grpMgr->getBoundingRect().right() + 62 > static_cast<int>( m_pKWordDoc->getPTPaperWidth() ) )
-            QMessageBox::critical( this, i18n( "Error" ), i18n( "There is not enough space at the right of the table\nto insert a new column." ), 
+            QMessageBox::critical( this, i18n( "Error" ), i18n( "There is not enough space at the right of the table\nto insert a new column." ),
                                    i18n( "OK" ) );
         else
         {
@@ -2684,6 +2684,8 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     clipboardDataChanged();
     selectionOnOff();
 
+    gui->getPaperWidget()->repaintScreen( true );
+    
     return true;
 }
 
