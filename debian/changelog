@@ -1,9 +1,15 @@
-koffice-cvs (2.0-20000303-1.0) experimental; urgency=low
+koffice-cvs (2.0-20000308-1.0) experimental; urgency=low
+ 
+  * new CVS version
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Wed, 08 Mar 2000 22:30:00 -0700
+
+koffice-cvs (2.0-20000306-1.1) experimental; urgency=low
  
   * new CVS version
   * Adding in shlibs file to take care of self depends
  
- -- Ivan E. Moore II <rkrusty@debian.org>  Fri, 03 Mar 2000 22:00:00 -0700
+ -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 06 Mar 2000 22:30:00 -0700
 
 koffice-cvs (2.0-20000302-1.0) experimental; urgency=low
 
