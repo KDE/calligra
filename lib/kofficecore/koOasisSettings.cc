@@ -63,119 +63,83 @@ bool KoOasisSettings::mapItem( const QString &mapItemName)
     return false;
 }
 
-QString KoOasisSettings::parseConfigItemString( const QString & configName ) const
+QString KoOasisSettings::parseConfigItem( const QString &item ) const
 {
-    QDomNode item = m_element.firstChild(); //<config:config-item-map-entry>
-    for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
-    {
-        QDomElement viewItem = item2.toElement();
-        if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")==configName ) )
-        {
-            return viewItem.text();
+    if ( !m_element.isNull() ) {
+        QDomNode n = m_element.firstChild();
+        for ( ; !n.isNull() ; n = n.nextSibling() ) {
+            const QDomElement element = n.toElement();
+            if ( element.isNull() ) continue;
+            if ( element.tagName() ==  "config:config-item-map-entry" )
+            {
+                QDomNode tmp = element.firstChild();
+                for ( ; !tmp.isNull() ; tmp = tmp.nextSibling() )
+                {
+                    const QDomElement viewItem = tmp.toElement();
+                    if ( viewItem.isNull() ) continue;
+                    if ( viewItem.tagName() == "config:config-item" && viewItem.attribute("config:name")==item)
+                    {
+                        return viewItem.text();
+                    }
+                }
+            }
         }
     }
     return QString::null;
 }
 
+
+QString KoOasisSettings::parseConfigItemString( const QString & configName ) const
+{
+    return parseConfigItem( configName );
+}
+
 int KoOasisSettings::parseConfigItemInt( const QString & configName ) const
 {
     int value=0;
-    QDomNode item = m_element.firstChild(); //<config:config-item-map-entry>
-    for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
-    {
-        QDomElement viewItem = item2.toElement();
-        //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
-        if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")==configName ) )
-        {
-            bool ok;
-            QString str = viewItem.text();
-            value = str.toInt( &ok );
-            if ( ok )
-                return value;
-            return 0;
-        }
-    }
+    bool ok;
+    QString str = parseConfigItem( configName );
+    value = str.toInt( &ok );
+    if ( ok )
+        return value;
     return 0;
 }
-
 
 double KoOasisSettings::parseConfigItemDouble( const QString & configName ) const
 {
     double value=0.0;
-    QDomNode item = m_element.firstChild(); //<config:config-item-map-entry>
-    for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
-    {
-        QDomElement viewItem = item2.toElement();
-        //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
-        if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")==configName ) )
-        {
-            bool ok;
-            QString str = viewItem.text();
-            value = str.toDouble( &ok );
-            if ( ok )
-                return value;
-            return 0.0;
-        }
-    }
+    bool ok;
+    QString str = parseConfigItem( configName );
+    value = str.toDouble( &ok );
+    if ( ok )
+        return value;
     return 0.0;
 }
 
-
 bool KoOasisSettings::parseConfigItemBool( const QString & configName ) const
 {
-    QDomNode item = m_element.firstChild(); //<config:config-item-map-entry>
-    for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
-    {
-        QDomElement viewItem = item2.toElement();
-        //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
-        if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")==configName ) )
-        {
-            return ( viewItem.text()=="true"  ? true : false );
-        }
-    }
-    return false;
+    QString str = parseConfigItem( configName );
+    return ( str == "true"  ? true : false );
 }
-
-
 
 short KoOasisSettings::parseConfigItemShort( const QString & configName ) const
 {
     short value=0;
-    QDomNode item = m_element.firstChild(); //<config:config-item-map-entry>
-    for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
-    {
-        QDomElement viewItem = item2.toElement();
-        //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
-        if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")==configName ) )
-        {
-            bool ok;
-            QString str = viewItem.text();
-            value = str.toShort( &ok );
-            if ( ok )
-                return value;
-            return 0;
-        }
-    }
+    bool ok;
+    QString str = parseConfigItem( configName );
+    value = str.toShort( &ok );
+    if ( ok )
+        return value;
     return 0;
 }
 
 long KoOasisSettings::parseConfigItemLong( const QString & configName ) const
 {
     long value=0;
-    QDomNode item = m_element.firstChild(); //<config:config-item-map-entry>
-    for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
-    {
-        QDomElement viewItem = item2.toElement();
-        //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
-        if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")==configName ) )
-        {
-            bool ok;
-            QString str = viewItem.text();
-            value = str.toLong( &ok );
-            if ( ok )
-                return value;
-            return 0;
-        }
-    }
+    bool ok;
+    QString str = parseConfigItem( configName );
+    value = str.toLong( &ok );
+    if ( ok )
+        return value;
     return 0;
 }

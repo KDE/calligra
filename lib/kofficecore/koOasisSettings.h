@@ -71,6 +71,9 @@ public:
 
 
 private:
+    // internal
+    QString parseConfigItem( const QString &item ) const;
+
     //store it to change config item
     QDomDocument m_doc;
     QDomElement m_element;
