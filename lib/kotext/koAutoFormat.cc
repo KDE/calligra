@@ -63,6 +63,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_minCompletionWordLength( 5 ),
       m_nbMaxCompletionWord( 500 ),
       m_addCompletionWord(true),
+      m_includeTwoUpperLetterException( false),
       m_ignoreUpperCase(false)
 {
     m_listCompletion=new KCompletion();
@@ -90,6 +91,7 @@ void KoAutoFormat::readConfig()
     KConfigGroupSaver cgs( &config, "AutoFormat" );
     m_convertUpperCase = config.readBoolEntry( "ConvertUpperCase", false );
     m_convertUpperUpper = config.readBoolEntry( "ConvertUpperUpper", false );
+    m_includeTwoUpperLetterException = config.readBoolEntry( "includeTwoLetterException", false );
     m_advancedAutoCorrect = config.readBoolEntry( "AdvancedAutocorrect", true );
     m_autoDetectUrl = config.readBoolEntry("AutoDetectUrl",false);
     m_ignoreDoubleSpace = config.readBoolEntry("IgnoreDoubleSpace",false);
@@ -198,6 +200,7 @@ void KoAutoFormat::saveConfig()
     KConfigGroupSaver cgs( &config, "AutoFormat" );
     config.writeEntry( "ConvertUpperCase", m_convertUpperCase );
     config.writeEntry( "ConvertUpperUpper", m_convertUpperUpper );
+    config.writeEntry( "includeTwoLetterException", m_includeTwoUpperLetterException );
     config.writeEntry( "TypographicQuotesBegin", QString( m_typographicDoubleQuotes.begin ) );
     config.writeEntry( "TypographicQuotesEnd", QString( m_typographicDoubleQuotes.end ) );
     config.writeEntry( "TypographicQuotesEnabled", m_typographicDoubleQuotes.replace );
@@ -397,6 +400,8 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
             doUseBulletStyle(textEditCursor, parag, txtObj );
         if( m_useAutoNumberStyle && index > 3 )
             doUseNumberStyle(textEditCursor, parag, txtObj );
+        if( m_convertUpperUpper && m_includeTwoUpperLetterException )
+            doAutoIncludeUpperUpper(textEditCursor, parag, txtObj );
     }
 
     //kdDebug() << "KoAutoFormat::doAutoFormat ch=" << QString(ch) << endl;
@@ -679,6 +684,35 @@ void KoAutoFormat::doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *pa
     }
 
 }
+
+void KoAutoFormat::doAutoIncludeUpperUpper(QTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj )
+{
+    KoTextDocument * textdoc = parag->textDocument();
+    KoTextString *s = parag->string();
+
+    if( s->length() < 2 )
+        return;
+
+    for (int i=0; i<=(s->length() - 1);i++)
+    {
+        QString word;
+        for ( int j = i ; j < s->length() - 1; j++ )
+        {
+            QChar ch = s->at( j ).c;
+            if ( ch.isSpace() )
+                break;
+            word.append( ch );
+        }
+        if( word.length() > 2 && word.left(2)==word.left(2).upper() && word.at(3)!=word.at(3).upper() )
+        {
+            if ( twoUpperLetterException.findIndex(word )==-1)
+                twoUpperLetterException.append( word);
+        }
+        i+=word.length();
+    }
+
+}
+
 
 void KoAutoFormat::doAutoChangeFormat( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj )
 {
@@ -1058,3 +1092,8 @@ QStringList KoAutoFormat::listCompletion()
    return m_listCompletion->items();
 }
 
+
+void KoAutoFormat::configIncludeTwoUpperUpperLetterException( bool b)
+{
+    m_includeTwoUpperLetterException = b;
+}

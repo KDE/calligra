@@ -52,7 +52,6 @@ void KoCommentDia::slotAddAuthorName()
     QString time = KGlobal::locale()->formatTime( QTime::currentTime() );
     QString result = QString("--------%1 ,%2, %3------\n").arg(authorName).arg(date).arg(time);
     m_multiLine->insertLine( result, m_multiLine->numLines() );
-
 }
 
 #include "koCommentDia.moc"

@@ -402,6 +402,9 @@ void KoAutoFormatDia::setupTab4()
     ( void )new QWidget( tab4 );
     twoUpperLetter=new KoAutoFormatExceptionWidget(tab4,i18n("Accept two uppercase letters in:"),m_autoFormat.listTwoUpperLetterException());
     ( void )new QWidget( tab4 );
+    cbAutoIncludeUpperUpperException = new QCheckBox( i18n("Auto includes"), tab4 );
+    cbAutoIncludeUpperUpperException->setChecked( m_autoFormat.getConfigIncludeTwoUpperUpperLetterException());
+
 }
 
 void KoAutoFormatDia::setupTab5()
@@ -649,6 +652,8 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->configMinWordLength( m_minWordLength->value() );
     m_docAutoFormat->configNbMaxCompletionWord( m_maxNbWordCompletion->value () );
     m_docAutoFormat->configAddCompletionWord( cbAddCompletionWord->isChecked());
+
+    m_docAutoFormat->configIncludeTwoUpperUpperLetterException( cbAutoIncludeUpperUpperException->isChecked());
 
     // Save to config file
     m_docAutoFormat->saveConfig();

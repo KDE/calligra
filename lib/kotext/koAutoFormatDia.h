@@ -110,7 +110,7 @@ protected:
                 *pbSpecialChar1, *pbSpecialChar2, *pbBulletStyle, *pbDefaultBulletStyle;
 
     QPushButton *pbSimpleQuote1, *pbSimpleQuote2, *pbSimpleDefault;
-
+    QCheckBox *cbAutoIncludeUpperUpperException;
     QPushButton *pbRemoveCompletionEntry;
     QPushButton *pbSaveCompletionEntry;
 
