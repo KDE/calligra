@@ -886,16 +886,8 @@ void KWView::updatePageInfo()
         m_currentPage = QMIN( m_currentPage, m_doc->getPages()-1 );
 
         m_sbPageLabel->setText( QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(m_doc->getPages())+' ' );
-        slotUpdateRuler();
     }
-    setFrameStartEnd();
-}
-
-void KWView::slotUpdateRuler()
-{
-    QPoint rulerTopLeft = m_gui->canvasWidget()->rulerPos();
-    m_gui->getHorzRuler()->setOffset( rulerTopLeft.x(), 0 );
-    m_gui->getVertRuler()->setOffset( 0, rulerTopLeft.y() );
+    slotUpdateRuler();
 }
 
 void KWView::pageNumChanged()
@@ -1574,7 +1566,7 @@ void KWView::viewPageMode()
             m_zoomViewModePreview = m_doc->zoom();
         showZoom( m_zoomViewModeNormal );
         setZoom( m_zoomViewModeNormal, false );
-        setFrameStartEnd();
+        slotUpdateRuler();
         m_gui->canvasWidget()->switchViewMode( new KWViewModeNormal( m_gui->canvasWidget()) );
     }
     else
@@ -1588,7 +1580,7 @@ void KWView::viewPreviewMode()
         m_zoomViewModeNormal = m_doc->zoom();
         showZoom( m_zoomViewModePreview );
         setZoom( m_zoomViewModePreview, false );
-        setFrameStartEnd();
+        slotUpdateRuler();
         m_gui->canvasWidget()->switchViewMode( new KWViewModePreview( m_gui->canvasWidget(),m_doc->getNbPagePerRow() ) );
     }
     else
@@ -3227,10 +3219,10 @@ void KWView::slotFrameSetEditChanged()
     actionInsertExpression->setEnabled(state);
     actionInsertFrameBreak->setEnabled(state);
 
-    setFrameStartEnd();
+    slotUpdateRuler();
 }
 
-void KWView::setFrameStartEnd()
+void KWView::slotUpdateRuler()
 {
     // Set the "frame start" in the ruler (tabs are relative to that position)
     KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
@@ -3238,12 +3230,12 @@ void KWView::setFrameStartEnd()
     {
         QRect r = m_doc->zoomRect( *edit->currentFrame() );
         r = m_gui->canvasWidget()->viewMode()->normalToView( r );
-
-        QPoint rulerTopLeft = m_gui->canvasWidget()->rulerPos();
-        m_gui->getHorzRuler()->setFrameStartEnd(  r.left()+rulerTopLeft.x()-canvasXOffset(), r.right()+rulerTopLeft.x()-canvasXOffset() );
-
+        // Now we need to make those coordinates relative to the page corner
+        QPoint pc = m_gui->canvasWidget()->pageCorner();
+        m_gui->getHorzRuler()->setFrameStartEnd( r.left() - pc.x(), r.right() - pc.x() );
+        m_gui->getVertRuler()->setFrameStartEnd( r.top() - pc.y(), r.bottom() - pc.y() );
     }
-
+    m_gui->canvasWidget()->updateRulerOffsets();
 }
 
 void KWView::frameSelectedChanged()

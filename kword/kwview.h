@@ -276,7 +276,6 @@ public slots:
     void slotSpecialCharDlgClosed();
 
     void refreshCustomMenu();
-    void setFrameStartEnd();
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );

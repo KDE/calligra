@@ -1908,7 +1908,7 @@ void KWTableFrameSetEdit::setCurrentCell( KWFrameSet * fs )
     m_currentCell =  fs->createFrameSetEdit( m_canvas );
     m_currentFrame = fs->getFrame( 0 );
     //refresh koruler
-    m_canvas->gui()->getView()->setFrameStartEnd();
+    m_canvas->gui()->getView()->slotUpdateRuler();
 }
 
 KWFrameSetEdit* KWTableFrameSetEdit::currentTextEdit()

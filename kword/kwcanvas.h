@@ -149,9 +149,6 @@ public:
     //move canvas to show point dPoint (in doc coordinates)
     void scrollToOffset( const KoPoint & dPoint );
 
-    //koruler position
-    QPoint rulerPos(int x=-1, int y=-1);
-
     //for KWTextFrameSetEdit
     void dragStarted() { m_mousePressed = false; }
 
@@ -160,6 +157,9 @@ public:
     void emitFrameSelectedChanged();
 
     void setXimPosition( int x, int y, int w, int h );
+
+    QPoint pageCorner();
+    void updateRulerOffsets();
 
 protected:
     void applyGrid( KoPoint &p );

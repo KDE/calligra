@@ -3029,7 +3029,7 @@ void KWDocument::updateZoomRuler()
     {
         it.current()->getGUI()->getHorzRuler()->setZoom( zoomedResolutionX() );
         it.current()->getGUI()->getVertRuler()->setZoom( zoomedResolutionY() );
-        it.current()->setFrameStartEnd();
+        it.current()->slotUpdateRuler();
     }
 }
 
@@ -3037,7 +3037,7 @@ void KWDocument::updateRulerFrameStartEnd()
 {
     QListIterator<KWView> it( m_lstViews );
     for ( ; it.current() ; ++it )
-        it.current()->setFrameStartEnd();
+        it.current()->slotUpdateRuler();
 }
 
 #include "kwdoc.moc"
