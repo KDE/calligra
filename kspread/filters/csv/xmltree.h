@@ -26,10 +26,15 @@ public:
   // Return the whole XML
   const QString part();
 
+
   // Create a new cell
   bool cell( const QString & contents ); 
+
+  // Tell about an empty cell (doesn't create it, just skips)
+  void emptycell() { column ++; } // easy heh ? ;)
+
   // Go to new line
-  void newline();
+  void newline() { row ++; column = 1; }
   
 private:
 

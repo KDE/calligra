@@ -76,7 +76,7 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
     // Create Text Stream
     QByteArray a;
     a.setRawData( (char*) buffer, (int) len );
-    QTextStream inputStream (a, IO_ReadOnly);
+    QTextIStream inputStream( a );
 
     // Create Filter
     // "CSV File" will be the table name. I would have preferred to set
@@ -129,6 +129,7 @@ int main(int argc,char **argv) {
 #undef TEST_ONLY // define this to enable using the filter on standard input/output
 
 #ifdef TEST_ONLY
+    KApplication a(argc,argv); // needed for klocale
     QTextIStream inputStream( stdin );
     CSVFilter * myCSVFilter = new CSVFilter(inputStream, "standard input");
 

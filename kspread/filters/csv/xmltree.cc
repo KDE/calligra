@@ -72,9 +72,3 @@ bool XMLTree::cell( const QString & contents )
   return true;
 }
 
-void XMLTree::newline()
-{
-  row ++;
-  column = 1;
-}
-
