@@ -692,7 +692,7 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
     {
         QString dataStyleName = tag.attribute( "style:data-style-name" );
         QString dateFormat = "locale";
-        const KoOasisStyles::DataFormatsMap& map = context.oasisStyles().dateTimeFormats();
+        const KoOasisStyles::DataFormatsMap& map = context.oasisStyles().dataFormats();
         KoOasisStyles::DataFormatsMap::const_iterator it = map.find( dataStyleName );
         if ( it != map.end() )
             dateFormat = (*it);

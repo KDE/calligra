@@ -129,19 +129,14 @@ void KoOasisStyles::insertStyle( const QDomElement& e )
         QDomElement* ep = new QDomElement( e );
         m_listStyles.insert( name, ep );
         //kdDebug(30003) << "List style: '" << name << "' loaded " << endl;
-    } else if ( tagName == "number:number-style" ) {
-        // TODO
-    } else if ( tagName == "number:currency-style" ) {
-        // TODO
-    } else if ( tagName == "number:percentage-style" ) {
-        // TODO
-    } else if ( tagName == "number:boolean-style" ) {
-        // TODO
-    } else if ( tagName == "number:text-style" ) {
-        // TODO
-    } else if ( tagName == "number:date-style"
+    } else if ( tagName == "number:number-style"
+                || tagName == "number:currency-style"
+                || tagName == "number:percentage-style"
+                || tagName == "number:boolean-style"
+                || tagName == "number:text-style"
+                || tagName == "number:date-style"
                 || tagName == "number:time-style" ) {
-        importDateTimeStyle( e );
+        importDataStyle( e );
     }
     // The rest (text:*-configuration and text:outline-style) is to be done by the apps.
 }
@@ -149,9 +144,16 @@ void KoOasisStyles::insertStyle( const QDomElement& e )
 // OO spec 2.5.4. p68. Conversion to Qt format: see qdate.html
 // OpenCalcImport::loadFormat has similar code, but slower, intermixed with other stuff,
 // lacking long-textual forms.
-void KoOasisStyles::importDateTimeStyle( const QDomElement& parent )
+void KoOasisStyles::importDataStyle( const QDomElement& parent )
 {
     QString format;
+    int precision = 0;
+    int leadingZ  = 1;
+    bool thousandsSep = false;
+    //todo negred
+    bool negRed = false;
+    bool ok = false;
+    int i = 0;
     for( QDomNode node( parent.firstChild() ); !node.isNull(); node = node.nextSibling() )
     {
         const QDomElement e( node.toElement() );
@@ -186,7 +188,128 @@ void KoOasisStyles::importDateTimeStyle( const QDomElement& parent )
             format += "ap";
         } else if ( tagName == "text" ) { // litteral
             format += e.text();
-        } // TODO number:decimal-places
+        } else if ( tagName == "currency-symbol" ) {
+            format += e.text();
+            //todo
+            // number:language="de" number:country="DE">€</number:currency-symbol>
+        } else if ( tagName == "number:number" ) {
+            // TODO: number:grouping="true"
+            if ( e.hasAttribute( "number:decimal-places" ) )
+            {
+                int d = e.attribute( "number:decimal-places" ).toInt( &ok );
+                if ( ok )
+                    precision = d;
+            }
+            if ( e.hasAttribute( "number:min-integer-digits" ) )
+            {
+                int d = e.attribute( "number:min-integer-digits" ).toInt( &ok );
+                if ( ok )
+                    leadingZ = d;
+            }
+            if ( thousandsSep && leadingZ <= 3 )
+            {
+                format += "#,";
+                for ( i = leadingZ; i <= 3; ++i )
+                    format += '#';
+            }
+            for ( i = 1; i <= leadingZ; ++i )
+            {
+                format +=  '0';
+                if ( ( i % 3 == 0 ) && thousandsSep )
+                    format =+ ',' ;
+            }
+            format += '.';
+            for ( i = 0; i < precision; ++i )
+                format += '0';
+        }
+        else if ( tagName == "scientific-number" ) {
+            int exp = 2;
+
+            if ( e.hasAttribute( "number:decimal-places" ) )
+            {
+                int d = e.attribute( "number:decimal-places" ).toInt( &ok );
+                if ( ok )
+                    precision = d;
+            }
+
+            if ( e.hasAttribute( "number:min-integer-digits" ) )
+            {
+                int d = e.attribute( "number:min-integer-digits" ).toInt( &ok );
+                if ( ok )
+                    leadingZ = d;
+            }
+
+            if ( e.hasAttribute( "number:min-exponent-digits" ) )
+            {
+                int d = e.attribute( "number:min-exponent-digits" ).toInt( &ok );
+                if ( ok )
+                    exp = d;
+                if ( exp <= 0 )
+                    exp = 1;
+            }
+
+            if ( thousandsSep && leadingZ <= 3 )
+            {
+                format += "#,";
+                for ( i = leadingZ; i <= 3; ++i )
+                    format += '#';
+            }
+
+            for ( i = 1; i <= leadingZ; ++i )
+            {
+                format+='0';
+                if ( ( i % 3 == 0 ) && thousandsSep )
+                    format+=',';
+            }
+
+            format+='.';
+            for ( i = 0; i < precision; ++i )
+                format+='0';
+
+            format+="E+";
+            for ( i = 0; i < exp; ++i )
+                format+='0';
+        } else if ( tagName == "fraction" ) {
+                int integer = 0;
+                int numerator = 1;
+                int denominator = 1;
+
+                if ( e.hasAttribute( "number:min-integer-digits" ) )
+                {
+                    int d = e.attribute( "number:min-integer-digits" ).toInt( &ok );
+                    if ( ok )
+                        integer = d;
+                }
+                if ( e.hasAttribute( "number:min-numerator-digits" ) )
+                {
+                    int d = e.attribute( "number:min-numerator-digits" ).toInt( &ok );
+                    if ( ok )
+                        numerator = d;
+                }
+                if ( e.hasAttribute( "number:min-denominator-digits" ) )
+                {
+                    int d = e.attribute( "number:min-denominator-digits" ).toInt( &ok );
+                    if ( ok )
+                        denominator = d;
+                }
+
+                for ( i = 0; i <= integer; ++i )
+                    format+='#';
+
+                format+=' ';
+
+                for ( i = 0; i <= numerator; ++i )
+                    format+='?';
+
+                format+='/';
+
+                for ( i = 0; i <= denominator; ++i )
+                    format+='?';
+            }
+        // Not needed:
+        //  <style:map style:condition="value()&gt;=0" style:apply-style-name="N106P0"/>
+        // we handle painting negative numbers in red differently
+
     }
 
 #if 0
@@ -236,5 +359,5 @@ void KoOasisStyles::importDateTimeStyle( const QDomElement& parent )
 
     QString styleName = parent.attribute( "style:name" );
     kdDebug(30518) << "datetime style: " << styleName << " qt format=" << format << endl;
-    m_dateTimeFormats.insert( styleName, format );
+    m_dataFormats.insert( styleName, format );
 }

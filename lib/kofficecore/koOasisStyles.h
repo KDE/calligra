@@ -41,9 +41,9 @@ public:
 
 
     typedef QMap<QString, QString> DataFormatsMap;
-    /// Date and time formats found while parsing styles. Used e.g. for fields.
+    /// Value (date/time/number...) formats found while parsing styles. Used e.g. for fields.
     /// Key: format name. Value:
-    const DataFormatsMap& dateTimeFormats() const { return m_dateTimeFormats; }
+    const DataFormatsMap& dataFormats() const { return m_dataFormats; }
 
 protected:
     /// Add styles to styles map
@@ -52,7 +52,7 @@ protected:
 private:
     void insertOfficeStyles( const QDomElement& styles );
     void insertStyle( const QDomElement& style );
-    void importDateTimeStyle( const QDomElement& parent );
+    void importDataStyle( const QDomElement& parent );
 
     KoOasisStyles( const KoOasisStyles & ); // forbidden
     KoOasisStyles& operator=( const KoOasisStyles & ); // forbidden
@@ -66,7 +66,7 @@ private:
     QDict<QDomElement>   m_listStyles;
 
     QDict<QDomElement>   m_drawStyles;
-    DataFormatsMap m_dateTimeFormats; // maybe generalize to include number formats.
+    DataFormatsMap m_dataFormats; // maybe generalize to include number formats.
 
     class Private;
     Private *d;
