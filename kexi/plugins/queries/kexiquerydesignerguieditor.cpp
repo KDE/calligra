@@ -439,7 +439,7 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode, bool &cancelled)
 
 
 KexiDB::SchemaData*
-KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata)
+KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
 	buildSchema();
 	KexiQueryPart::TempData * temp = tempData();
@@ -460,9 +460,9 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata)
 	return query;
 }
 
-bool KexiQueryDesignerGuiEditor::storeData()
+bool KexiQueryDesignerGuiEditor::storeData(bool &cancel)
 {
-	bool ok = KexiViewBase::storeData();
+	bool ok = KexiViewBase::storeData(cancel);
 	if (ok) {
 		buildSchema();
 		ok = storeLayout();

@@ -210,17 +210,17 @@ KexiDBForm::slotDirty(KFormDesigner::Form *dirtyForm)
 }
 
 KexiDB::SchemaData*
-KexiDBForm::storeNewData(const KexiDB::SchemaData& sdata)
+KexiDBForm::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
-	KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata);
+	KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata, cancel);
 	kdDebug() << "KexiDBForm::storeNewData(): new id:" << s->id() << endl;
 
-	storeData();
+	storeData(cancel);
 	return s;
 }
 
 bool
-KexiDBForm::storeData()
+KexiDBForm::storeData(bool &cancel)
 {
 	kdDebug(44000) << "KexiDBForm::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 	QByteArray data;

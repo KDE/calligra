@@ -198,7 +198,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 to the backend.
 		 \sa storeNewData()
 		 \return true on success. */
-		bool storeData();
+		bool storeData(bool &cancel);
 
 		/*! Internal. Called by KexiMainWindowImpl::saveObject().
 		 Tells this dialog to create and store data of the new object
@@ -208,7 +208,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 form part item. On success, part item's ID is updated to new value,
 		 and m_schemaData is set. \sa schemaData().
 		 \return true on success. */
-		bool storeNewData();
+		bool storeNewData(bool &cancel);
 
 	signals:
 		void updateContextHelp();

@@ -399,8 +399,9 @@ bool KexiDialogBase::neverSaved() const
 	return m_item ? m_item->neverSaved() : true;
 }
 
-bool KexiDialogBase::storeNewData()
+bool KexiDialogBase::storeNewData(bool &cancel)
 {
+	cancel = false;
 	if (!neverSaved())
 		return false;
 	KexiViewBase *v = selectedView();
@@ -414,7 +415,9 @@ bool KexiDialogBase::storeNewData()
 	sdata.setCaption( m_item->caption() );
 	sdata.setDescription( m_item->description() );
 
-	m_schemaData = v->storeNewData(sdata);
+	m_schemaData = v->storeNewData(sdata, cancel);
+	if (cancel)
+		return true;
 	if (!m_schemaData) {
 		setStatus(i18n("Saving object's definition failed."),""); 
 		return false;
@@ -427,15 +430,21 @@ bool KexiDialogBase::storeNewData()
 	return true;
 }
 
-bool KexiDialogBase::storeData()
+bool KexiDialogBase::storeData(bool &cancel)
 {
+	cancel = false;
 	if (neverSaved())
 		return false;
 	KexiViewBase *v = selectedView();
 	if (!v)
 		return false;
-	if (!v->storeData())
+	const bool r = v->storeData(cancel);
+	if (cancel)
+		return true;
+	if (!r) {
+		setStatus(i18n("Saving object's data failed."),""); 
 		return false;
+	}
 	v->setDirty(false);
 	return true;
 }

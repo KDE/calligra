@@ -398,7 +398,7 @@ KexiQueryDesignerSQLView::tempData() const
 }
 
 KexiDB::SchemaData*
-KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata)
+KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
 	//here: we won't store query layout: it will be recreated 'by hand' in GUI Query Editor
 	bool queryOK = slotCheckQuery();
@@ -450,7 +450,7 @@ KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata)
 }
 
 //TODO
-//virtual bool KexiQueryDesignerSQLView::storeData()
+//virtual bool KexiQueryDesignerSQLView::storeData(bool &cancel)
 //{
 //}
 

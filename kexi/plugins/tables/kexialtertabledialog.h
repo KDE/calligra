@@ -82,10 +82,10 @@ class KexiAlterTableDialog : public KexiDataTable
 		void removeCurrentPropertyBuffer();
 
 		/*! Reimplemented from KexiViewBase, because tables creation is more complex. */
-		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata);
+		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 
 		/*! Reimplemented from KexiViewBase, because table storage is more complex. */
-		virtual bool storeData();
+		virtual bool storeData(bool &cancel);
 
 	protected slots:
 //		void slotCellSelected(int col, int row);

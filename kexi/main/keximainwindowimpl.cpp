@@ -1792,7 +1792,9 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled,
 	cancelled=false;
 	if (!dlg->neverSaved()) {
 		//data was saved in the past -just save again
-		const bool r = dlg->storeData();
+		const bool r = dlg->storeData(cancelled);
+		if (cancelled)
+			return true;
 		if (!r)
 			showErrorMessage(i18n("Saving \"%1\" object failed.").arg(dlg->partItem()->name()),
 				d->curDialog);
@@ -1837,8 +1839,13 @@ bool KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, bool &cancelled,
 	//update name and caption
 	dlg->partItem()->setName( d->nameDialog->widget()->nameText() );
 	dlg->partItem()->setCaption( d->nameDialog->widget()->captionText() );
+	bool cancel = false;
 
-	if (!dlg->storeNewData()) {
+	const bool r = dlg->storeNewData(cancelled);
+	if (cancelled)
+		return true;
+
+	if (!r) {
 		showErrorMessage(i18n("Saving new \"%1\" object failed.").arg(dlg->partItem()->name()),
 			d->curDialog);
 		return false;

@@ -50,7 +50,7 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 
 		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
 		virtual bool afterSwitchFrom(int mode, bool &cancelled);
-		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata);
+		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 
 		void setStatusOk();
 		void setStatusError(const QString& msg);

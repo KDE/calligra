@@ -164,7 +164,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		   just a schem adata. You should use such subclasses if needed.
 		 Should return newly created schema data object on success. 
 		 In this case, do not store schema object yourself (make deep copy if needed). */
-		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata);
+		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 
 		/*! Tells this view to store data changes on the backend. 
 		 Called by KexiDialogBase::storeData().
@@ -174,7 +174,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		   using Connection::storeObjectSchemaData().
 		 Reimpelment this for your needs. Should return true on success. 
 		 \sa storeNewData() */
-		virtual bool storeData();
+		virtual bool storeData(bool &cancel);
 
 		//luci:temporary copy from KexiDialogBase
 		/*! Stores large string data \a dataString, block (e.g. xml form's representation) 

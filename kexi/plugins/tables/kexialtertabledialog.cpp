@@ -198,6 +198,8 @@ void KexiAlterTableDialog::initData()
 	m_view->adjustColumnWidthToContents(0); //adjust column width
 	m_view->setColumnWidth(1, m_maxTypeNameTextWidth + 2*m_view->rowHeight());
 	m_view->setColumnStretchEnabled( true, 2 ); //last column occupies the rest of the area
+
+	setDirty(false);
 }
 
 static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiPropertyBuffer& buf)
@@ -326,6 +328,12 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled, bool &dontS
 				"First, please create your design.") );
 			return true;
 		}
+//<temporary>
+		else if (dirty() && !parentDialog()->neverSaved()) {
+			cancelled = (KMessageBox::No == KMessageBox::questionYesNo(this, i18n("Saving changes for existing table design is not yet supported.\nDo you want to discard your changes now?")));
+			dontStore = !cancelled;
+		}
+//</temporary>
 		//todo
 		return true;
 	}
@@ -338,7 +346,7 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled, bool &dontS
 bool
 KexiAlterTableDialog::afterSwitchFrom(int mode, bool &cancelled)
 {
-	if (mode==Kexi::NoViewMode) {
+	if (mode==Kexi::NoViewMode || mode==Kexi::DataViewMode) {
 		initData();
 	}
 	return true;
@@ -559,7 +567,7 @@ void KexiAlterTableDialog::slotEmptyRowInserted(KexiTableItem*, uint /*index*/)
 }
 #endif
 
-KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData& sdata)
+KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
 	if (m_table || m_dialog->schemaData()) //must not be
 		return 0;
@@ -571,6 +579,8 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 	m_table->setName( sdata.name() );
 	m_table->setCaption( sdata.caption() );
 	m_table->setDescription( sdata.description() );
+
+	bool ok = true;
 
 	//check for duplicates
 	KexiPropertyBuffer *b = 0;
@@ -587,7 +597,9 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 				m_view->setCursor(i, 0);
 				m_view->startEditCurrentCell();
 				KMessageBox::information(this, i18n("You should enter field name.") );
-				return 0;
+				cancel = true;
+				ok = false;
+				break;
 			}
 			if (names[name]) {
 				break;
@@ -595,96 +607,99 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 			names.insert( name, &dummy ); //remember
 		}
 	}
-	if (no_fields) {//no fields added
+	if (ok && no_fields) {//no fields added
 		KMessageBox::information(this, i18n("You have added no fields.\nEvery table should have at least one field.") );
-		return 0;
+		cancel = true;
+		ok = false;
 	}
-	if (b && i<(int)m_buffers->size()) {//found a duplicate
+	if (ok && b && i<(int)m_buffers->size()) {//found a duplicate
 		m_view->setCursor(i, 0);
 		m_view->startEditCurrentCell();
 		KMessageBox::information(this, i18n("You have added \"%1\" field name twice.\nField names cannot be repeated. Correct name of the field.")
 			.arg((*b)["name"]->value().toString()) );
-		return 0;
+		cancel = true;
+		ok = false;
 	}
+	if (ok) {
+		//for every field, create KexiDB::Field definition
+		for (i=0;i<(int)m_buffers->size();i++) {
+			KexiPropertyBuffer *b = m_buffers->at(i);
+			if (!b)
+				continue;
+			KexiPropertyBuffer &buf = *b;
+			uint constraints = 0;
+			uint options = 0;
+			if (buf["primaryKey"]->value().toBool())
+				constraints |= KexiDB::Field::PrimaryKey;
+			if (buf["unique"]->value().toBool())
+				constraints |= KexiDB::Field::Unique;
+			if (buf["notnull"]->value().toBool())
+				constraints |= KexiDB::Field::NotNull;
+			if (buf["notEmpty"]->value().toBool())
+				constraints |= KexiDB::Field::NotEmpty;
 
-	//for every field, create KexiDB::Field definition
-	for (i=0;i<(int)m_buffers->size();i++) {
-		KexiPropertyBuffer *b = m_buffers->at(i);
-		if (!b)
-			continue;
-		KexiPropertyBuffer &buf = *b;
-		uint constraints = 0;
-		uint options = 0;
-		if (buf["primaryKey"]->value().toBool())
-			constraints |= KexiDB::Field::PrimaryKey;
-		if (buf["unique"]->value().toBool())
-			constraints |= KexiDB::Field::Unique;
-		if (buf["notnull"]->value().toBool())
-			constraints |= KexiDB::Field::NotNull;
-		if (buf["notEmpty"]->value().toBool())
-			constraints |= KexiDB::Field::NotEmpty;
+			if (buf["unsigned"]->value().toBool())
+				options |= KexiDB::Field::Unsigned;
+				
+	//		int type = buf["type"]->value().toInt();
+	//		if (type < 0 || type > (int)KexiDB::Field::LastType)
+	//			type = KexiDB::Field::Text;
+			kdDebug() << buf["subType"]->value().toString() << endl;
+	//		int typeGroup = KexiDB::typeGroup(type);
+			QString typeString = buf["subType"]->value().toString();
+			KexiDB::Field::Type type = KexiDB::Field::typeForString(typeString);
+			if (type==KexiDB::Field::InvalidType)
+				type = KexiDB::Field::Text;
 
-		if (buf["unsigned"]->value().toBool())
-			options |= KexiDB::Field::Unsigned;
-			
-//		int type = buf["type"]->value().toInt();
-//		if (type < 0 || type > (int)KexiDB::Field::LastType)
-//			type = KexiDB::Field::Text;
-		kdDebug() << buf["subType"]->value().toString() << endl;
-//		int typeGroup = KexiDB::typeGroup(type);
-		QString typeString = buf["subType"]->value().toString();
-		KexiDB::Field::Type type = KexiDB::Field::typeForString(typeString);
-		if (type==KexiDB::Field::InvalidType)
-			type = KexiDB::Field::Text;
-
-		KexiDB::Field *f = new KexiDB::Field( 
-			buf["name"]->value().toString(),
-			type,
-			constraints,
-			options,
-			buf["length"]->value().toInt(),
-			buf["precision"]->value().toInt(),
-			buf["defaultValue"]->value(),
-			buf["caption"]->value().toString(),
-			buf["description"]->value().toString(),
-			buf["width"]->value().toInt()
-		);
-		m_table->addField(f);
+			KexiDB::Field *f = new KexiDB::Field( 
+				buf["name"]->value().toString(),
+				type,
+				constraints,
+				options,
+				buf["length"]->value().toInt(),
+				buf["precision"]->value().toInt(),
+				buf["defaultValue"]->value(),
+				buf["caption"]->value().toString(),
+				buf["description"]->value().toString(),
+				buf["width"]->value().toInt()
+			);
+			m_table->addField(f);
+		}
 	}
 
 	//todo
-
 	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 
 	//FINALLY: create table:
-	if (!conn->createTable(m_table)) {
-		//todo: show err...
+	if (ok) {
+		ok = conn->createTable(m_table);
+		//todo: show err...?
+	}
+
+	if (!ok) {
 		delete m_table;
 		m_table = 0;
-	}
-	else {
-		//finally, we've got a table schema
-		setDirty(false);
 	}
 	return m_table;
 }
 
-bool KexiAlterTableDialog::storeData()
+bool KexiAlterTableDialog::storeData(bool &cancel)
 {
 //	KexiDB::TableSchema *ts = static_cast<KexiDB::TableSchema*>(m_dialog->schemaData());
 	m_view->acceptRowEdit();
 
 //<TODO: remove this in the future>
-	if (!m_dialog->neverSaved()) {
-		return KMessageBox::Yes == KMessageBox::questionYesNo(this, i18n("Saving changes for existing table design are not yet supported.\nDo you want to discard your changes now?"));
-	}
+//	if (!m_dialog->neverSaved()) {
+		KMessageBox::information(this, i18n("Saving changes for existing table design is not yet supported."));
+//		return KMessageBox::Yes == KMessageBox::questionYesNo(this, i18n("Saving changes for existing table design are not yet supported.\nDo you want to discard your changes now?"));
+		cancel = true;
+//	}
 //</TODO>
 
 /*** TODO: ALTER TABLE CODE IN KEXIDB!
 	if (!ts || !mainWin()->project()->dbConnection()->alterTable(ts))
 		return 0;
 */
-	setDirty(false);
 	return true;
 }
 

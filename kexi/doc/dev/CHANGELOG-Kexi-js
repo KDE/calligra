@@ -329,6 +329,8 @@ TODO: Kate Part: call qApp->processEvents() on highlighting schema loading,
  so 'wait' cursor can be visible on 1st loading.
 TODO: SQL Query designer: allow saving invalid queries (KexiQueryDesignerSQLView::storeNewData())
        (for invelid queries, after opening SQL view should be shown automatically)
+TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * in 'table' column
+      -this should also work when we're recreating field rows on switching from SQL view to design view
 
 === KexiDB Parser TODO ===
 - add clever query relatins parsing 
@@ -338,14 +340,19 @@ TODO: SQL Query designer: allow saving invalid queries (KexiQueryDesignerSQLView
 ===================== Kexi 0.1 Beta 4 =====================
 
 2004-07-14
+Kexi
 - polish translation updated (also for KFormDesigner)
 Core
 - "current mode" member is now reverted if afterSwitchFrom() failed
 - removed one (I hope unnecessary?) shared-action invalidation
+- storeNewData() and storeData() new have 'bool &cancel' parameter
 Query Designer
 - storing and mode switching fixed
 - KexiQueryDesignerSQLView::storeNewData():
     we won't store query layout: it is recreated 'by hand' in GUI Query Editor
+Table Designer
+- temporary behaviour: altering data is cancelled
+- fixed switching between Data and Design view
 
 2004-07-12..13
 KexiDB

@@ -139,7 +139,7 @@ void KexiViewBase::setDirty(bool set)
 	return true;
 }*/
 
-KexiDB::SchemaData* KexiViewBase::storeNewData(const KexiDB::SchemaData& sdata)
+KexiDB::SchemaData* KexiViewBase::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
 	KexiDB::SchemaData *new_schema = new KexiDB::SchemaData();
 	*new_schema = sdata;
@@ -154,7 +154,7 @@ KexiDB::SchemaData* KexiViewBase::storeNewData(const KexiDB::SchemaData& sdata)
 	return new_schema;
 }
 
-bool KexiViewBase::storeData()
+bool KexiViewBase::storeData(bool &cancel)
 {
 	if (!m_dialog || !m_dialog->schemaData())
 		return false;

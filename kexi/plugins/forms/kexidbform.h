@@ -74,8 +74,8 @@ class KexiDBForm : public KexiViewBase, public KFormDesigner::FormWidget
 		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
 		virtual bool afterSwitchFrom(int mode, bool &cancelled);
 
-		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata);
-		virtual bool storeData();
+		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+		virtual bool storeData(bool &cancel);
 
 		KexiFormPart::TempData* tempData() const {
 			return static_cast<KexiFormPart::TempData*>(parentDialog()->tempData()); }
