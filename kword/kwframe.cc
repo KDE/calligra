@@ -222,6 +222,10 @@ KWFrame *KWFrame::getCopy() {
     frm->setNewFrameBehaviour(getNewFrameBehaviour());
     frm->setSheetSide(getSheetSide());
     frm->setPageNum(pageNum());
+    frm->setLeftBorder(getLeftBorder());
+    frm->setRightBorder(getRightBorder());
+    frm->setTopBorder(getTopBorder());
+    frm->setBottomBorder(getBottomBorder());
     if(anchor())
         frm->setAnchor(anchor());
     return frm;
