@@ -179,15 +179,25 @@ QColor KoTextFormat::defaultTextColor( QPainter * painter )
 float KoTextFormat::screenPointSize( const KoZoomHandler* zh ) const
 {
     int pointSizeLU = font().pointSize();
+    if ( m_attributeFont== ATT_SMALL_CAPS )
+    {
+        QFontMetrics fm( font() );
+        pointSizeLU = (int)( pointSizeLU * ((double)fm.boundingRect("x").height()/(double)fm.height()));
+    }
+
     if ( vAlign() != KoTextFormat::AlignNormal )
         pointSizeLU = (int)( pointSizeLU *relativeTextSize() );
-
     return zh->layoutUnitToFontSize( pointSizeLU, false /* forPrint */ );
 }
 
 float KoTextFormat::refPointSize() const
 {
     int pointSizeLU = font().pointSize();
+    if ( m_attributeFont== ATT_SMALL_CAPS )
+    {
+        QFontMetrics fm( font() );
+        pointSizeLU = (int)( pointSizeLU * ((double)fm.boundingRect("x").height()/(double)fm.height()));
+    }
     if ( vAlign() != KoTextFormat::AlignNormal )
         pointSizeLU = (int)( pointSizeLU * relativeTextSize());
     return KoTextZoomHandler::layoutUnitPtToPt( pointSizeLU );
