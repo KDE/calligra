@@ -39,13 +39,14 @@ const int borderStyles[] = {1, 1, 2, 3, 1, 0, 1, 0, 4, 0, 5, 0, 0, 0};
 const int ndays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 const int ldays[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-XMLTree::XMLTree():QObject(),table(0L), fontCount(0), footerCount(0),
+XMLTree::XMLTree() : QObject(),table(0L), fontCount(0), footerCount(0),
                     headerCount(0), xfCount(0)
 {
     biff = 0;
     date1904 = 0;
     m_streamDepth = 0;
-
+    mergelist.setAutoDelete(true);
+    
     root = new QDomDocument("spreadsheet");
 
     root->appendChild(root->createProcessingInstruction
@@ -133,7 +134,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
         penWidth = 1;
     pen.setAttribute("width", penWidth);
     if(borderStyles[penStyle-1]==0)
-      kdDebug()<<"Border style not supported\n";
+      kdDebug(s_area)<<"Border style not supported\n";
     pen.setAttribute("style", borderStyles[penStyle-1]);
     pen.setAttribute("color", ((xfs[xf]->sideBColor ) & 0x7f) == 64 ?
 		     "#000000" : palette[(xfs[xf]->sideBColor  ) & 0x7f]);
@@ -155,7 +156,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
     pen.setAttribute("width", penWidth);
     pen.setAttribute("style", borderStyles[penStyle-1]);
     if(borderStyles[penStyle-1]==0)
-      kdDebug()<<"Border style not supported\n";
+      kdDebug(s_area)<<"Border style not supported\n";
     pen.setAttribute("color", ((xfs[xf]->sideBColor >>7 ) & 0x7f) == 64 ?
 		     "#000000" : palette[(xfs[xf]->sideBColor >>7 ) & 0x7f]);
 
@@ -177,7 +178,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
         penWidth = 1;
     pen.setAttribute("width", penWidth);
     if(borderStyles[penStyle-1]==0)
-      kdDebug()<<"Border style not supported\n";
+      kdDebug(s_area)<<"Border style not supported\n";
     pen.setAttribute("style", borderStyles[penStyle-1]);
     pen.setAttribute("color", ((xfs[xf]->topBColor ) & 0x7f) == 64 ?
 		     "#000000" : palette[(xfs[xf]->topBColor ) & 0x7f]);
@@ -198,7 +199,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
         penWidth = 1;
     pen.setAttribute("width", penWidth);
     if(borderStyles[penStyle-1]==0)
-      kdDebug()<<"Border style not supported\n";
+      kdDebug(s_area)<<"Border style not supported\n";
     pen.setAttribute("style", borderStyles[penStyle-1]);
     pen.setAttribute("color",  ((xfs[xf]->topBColor >> 7) & 0x7f) == 64 ?
 		     "#000000" : palette[(xfs[xf]->topBColor >> 7) & 0x7f]);
@@ -233,7 +234,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
               pen.setAttribute("width", penWidth);
               pen.setAttribute("style", borderStyles[penStyle-1]);
 	      if(borderStyles[penStyle-1]==0)
-		kdDebug()<<"Border style not supported\n";
+		kdDebug(s_area)<<"Border style not supported\n";
               pen.setAttribute("color", ((xfs[xf]->topBColor >> 14) & 0x7f) == 64 ?
                                "#000000" : palette[(xfs[xf]->topBColor >> 14) & 0x7f]);
               border.appendChild(pen);
@@ -253,7 +254,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
           penWidth = 1;
       pen.setAttribute("width", penWidth);
       if(borderStyles[penStyle-1]==0)
-	kdDebug()<<"Border style not supported\n";
+	kdDebug(s_area)<<"Border style not supported\n";
       pen.setAttribute("style", borderStyles[penStyle-1]);
       // the following is necessary to handle Excels "Automatic" color option
       // somehow this is only needed for diagonal borders
@@ -535,7 +536,7 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
         switch (ptg)
         {
 	    case 0x01:  // ptgExpr
-		kdDebug() << "WARNING: ptgExpr formula not supported, yet" << endl;
+		kdDebug(s_area) << "WARNING: ptgExpr formula not supported, yet" << endl;
                 return ""; // Return empty formula-string on error
 		break;
             case 0x03:  // ptgAdd
@@ -635,15 +636,15 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
                 *stringPtr = "!=";
                 break;
 	    case 0x12:  // ptgUPlus
-		kdDebug() << "WARNING: ptgUPlus formula not supported, yet" << endl;
+		kdDebug(s_area) << "WARNING: ptgUPlus formula not supported, yet" << endl;
                 return ""; // Return empty formula-string on error
 		break;
 	    case 0x13:  // ptgUMinus
-		kdDebug() << "WARNING: ptgUMinus formula not supported, yet" << endl;
+		kdDebug(s_area) << "WARNING: ptgUMinus formula not supported, yet" << endl;
                 return ""; // Return empty formula-string on error
 		break;
 	    case 0x14:  // ptgPercent
-		kdDebug() << "WARNING: ptgPercent formula not supported, yet" << endl;
+		kdDebug(s_area) << "WARNING: ptgPercent formula not supported, yet" << endl;
                 return ""; // Return empty formula-string on error
 		break;	    
             case 0x15:  // ptgParen
@@ -659,15 +660,15 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
                 (*stringPtr).prepend("(");
                 break;
 	    case 0x16:  // ptgMissArg
-		kdDebug() << "WARNING: ptgMissArg formula not supported, yet" << endl;
+		kdDebug(s_area) << "WARNING: ptgMissArg formula not supported, yet" << endl;
                 return ""; // Return empty formula-string on error
 		break;
 	    case 0x17:  // ptgStr
-		kdDebug() << "WARNING: ptgStr formula not supported, yet" << endl;
+		kdDebug(s_area) << "WARNING: ptgStr formula not supported, yet" << endl;
                 return ""; // Return empty formula-string on error
 		break;
 	    case 0x18:  // ptgExtended
-		kdDebug() << "WARNING: ptgExtended formula not supported, yet" << endl;
+		kdDebug(s_area) << "WARNING: ptgExtended formula not supported, yet" << endl;
                 return ""; // Return empty formula-string on error
 		break;
             case 0x19:  // ptgAttr
@@ -681,7 +682,7 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
                 }
                 break;
 	    case 0x1c:  // ptgErr
-		kdDebug() << "WARNING: ptgErr formula not supported, yet" << endl;
+		kdDebug(s_area) << "WARNING: ptgErr formula not supported, yet" << endl;
                 return ""; // Return empty formula-string on error
 		break;
             case 0x1d:  // ptgBool
@@ -935,7 +936,7 @@ const QString XMLTree::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream& rg
                 break;
         }
     }
-    kdDebug() << "XMLTree::formula: " << parsedFormula.join("") << endl;
+    kdDebug(s_area) << "XMLTree::formula: " << parsedFormula.join("") << endl;
     return parsedFormula.join("");
 }
 
@@ -1300,6 +1301,29 @@ bool XMLTree::_boundsheet(Q_UINT32, QDataStream &body)
         map.appendChild(*e);
         tables.enqueue(e);
     }
+
+    if ((grbit & 0x0f) == 1)
+    {
+        char *name = new char[cch];
+        body.readRawBytes(name, cch);
+        QString s = QString::fromLatin1(name, cch);
+        delete [] name;
+
+	// Macrosheet
+	kdDebug(s_area) << "Macrosheet: " << s << " at: " << lbPlyPos << "! UNIMPLEMENTED" << endl;
+    }
+
+    if ((grbit & 0x0f) == 2)
+    {
+        char *name = new char[cch];
+        body.readRawBytes(name, cch);
+        QString s = QString::fromLatin1(name, cch);
+        delete [] name;
+
+	// Chart
+	kdDebug(s_area) << "Chart: " << s << " at: " << lbPlyPos << "! UNIMPLEMENTED" << endl;
+    }
+
     return true;
 }
 
@@ -1375,6 +1399,53 @@ bool XMLTree::_dimensions(Q_UINT32, QDataStream &)
 
 bool XMLTree::_eof(Q_UINT32, QDataStream &)
 {
+    bool foundcell = false;
+    MergeInfo *merge;
+    for(merge = mergelist.first(); merge != 0; merge = mergelist.next())
+    {
+	foundcell = false;
+	QDomElement map = root->documentElement().namedItem("map").toElement();
+	QDomNode n = map.firstChild();
+	while (!n.isNull() && !foundcell)
+	{
+	    QDomElement e = n.toElement();
+	    if (!e.isNull() && e.tagName() == "table")
+	    {
+		QDomNode n2 = e.firstChild();  
+		while (!n2.isNull() && !foundcell)
+		{
+		    QDomElement e2 = n2.toElement();
+		    if (!e2.isNull() && e2.tagName() == "cell")
+		    {
+			QDomNode n3 = e2.firstChild();
+			while (!n3.isNull() && !foundcell)
+			{
+			    QDomElement e3 = n3.toElement();
+			    if (!e3.isNull() && e3.tagName() == "format")
+			    {
+				int row = e2.attribute("row").toInt();
+				int col = e2.attribute("column").toInt();
+				if (row == merge->row() && col == merge->col())
+				{
+				    e3.setAttribute("rowspan", QString::number(merge->rowspan()));
+		    		    e3.setAttribute("colspan", QString::number(merge->colspan()));
+				    foundcell = true;
+				}
+			    }
+			    n3 = n3.nextSibling();
+			}
+		    }
+		    n2 = n2.nextSibling();
+		}
+	    }
+	    n = n.nextSibling();
+	}
+
+	if(!foundcell)
+	    kdWarning(s_area) << "WARNING: Cell " << merge->row() << " " << merge->col() << " not found!" << endl;
+    }
+
+    mergelist.clear();
     m_streamDepth--;
     return true;
 }
@@ -1532,12 +1603,12 @@ bool XMLTree::_hcenter(Q_UINT32, QDataStream &body)
     if(hcenter)
     {
 	// FIXME: Add functionality to kspread
-	kdDebug() << "Printing Information: Center horizontally when printing!" << endl;
+	kdDebug(s_area) << "Printing Information: Center horizontally when printing!" << endl;
     }
     else
     {
 	// FIXME: Add functionality to kspread
-	kdDebug() << "Printing Information: Don't center horizontally when printing!" << endl;
+	kdDebug(s_area) << "Printing Information: Don't center horizontally when printing!" << endl;
     }
     
     return true;
@@ -1636,51 +1707,13 @@ bool XMLTree::_leftmargin(Q_UINT32, QDataStream &body)
 bool XMLTree::_mergecell(Q_UINT32, QDataStream &body)
 {
   Q_UINT16 count, firstrow, lastrow, firstcol, lastcol;
-  bool foundcell = false;
   body >> count;
-  
+    
   for (int i=0; i < count; ++i) {
-    foundcell = false;
-    body >> firstrow >> lastrow >> firstcol >> lastcol;    
-    QDomElement map = root->documentElement().namedItem("map").toElement();
-    QDomNode n = map.firstChild();
-    while (!n.isNull() && !foundcell)
-    {
-	QDomElement e = n.toElement();
-	if (!e.isNull() && e.tagName() == "table")
-	{
-	    QDomNode n2 = e.firstChild();  
-	    while (!n2.isNull() && !foundcell)
-	    {
-		QDomElement e2 = n2.toElement();
-		if (!e2.isNull() && e2.tagName() == "cell")
-		{
-		    QDomNode n3 = e2.firstChild();
-		    while (!n3.isNull() && !foundcell)
-		    {
-			QDomElement e3 = n3.toElement();
-			if (!e3.isNull() && e3.tagName() == "format")
-			{
-			    int row = e2.attribute("row").toInt();
-			    int col = e2.attribute("column").toInt();
-			    if (row == (firstrow + 1) && col == (firstcol + 1))
-			    {
-				e3.setAttribute("rowspan", QString::number(lastrow - firstrow));
-		    		e3.setAttribute("colspan", QString::number(lastcol - firstcol));
-				foundcell = true;
-			    }
-			}
-			n3 = n3.nextSibling();
-		    }
-		}
-		n2 = n2.nextSibling();
-	    }
-	}
-	n = n.nextSibling();
-    }
-    if(!foundcell)
-	kdWarning() << "WARNING: Cell " << firstrow + 1 << " " << firstcol + 1 << " not found!" << endl;
+    body >> firstrow >> lastrow >> firstcol >> lastcol; 
+    mergelist.append(new MergeInfo(firstrow, lastrow, firstcol, lastcol));
   }
+
   return true;
 }
 
@@ -1786,11 +1819,11 @@ bool XMLTree::_name(Q_UINT32, QDataStream &)
 
 bool XMLTree::_note(Q_UINT32, QDataStream &body)
 {
-  kdDebug() <<"Note\n";
+  kdDebug(s_area) <<"Note\n";
   Q_UINT16 row,col;
 
   body >> row >>col;
-  kdDebug() <<"col :"<<++col <<"row :"<<++row<<endl;
+  kdDebug(s_area) <<"col :"<<++col <<"row :"<<++row<<endl;
 
   return true;
 }
@@ -1984,12 +2017,12 @@ bool XMLTree::_setup(Q_UINT32, QDataStream &body)
 	    if((flags & 0x2) == 0x2)
 	    {
 		paper.setAttribute("orientation", "portrait");
-	    	kdDebug() << "Printing Information: Orientation: Vertical!" << endl;
+	    	kdDebug(s_area) << "Printing Information: Orientation: Vertical!" << endl;
 	    }
 	    else
 	    {
 		paper.setAttribute("orientation", "landscape");
-	    	kdDebug() << "Printing Information: Orientation: Horizontal!" << endl;
+	    	kdDebug(s_area) << "Printing Information: Orientation: Horizontal!" << endl;
 	    }
 	}
     }
@@ -1997,35 +2030,35 @@ bool XMLTree::_setup(Q_UINT32, QDataStream &body)
     if((flags & 0x1) == 0x1)
     {
 	// FIXME: Add functionality to kspread
-	kdDebug() << "Printing Information: Print Order: Right then Down" << endl;
+	kdDebug(s_area) << "Printing Information: Print Order: Right then Down" << endl;
     }
     else
     {
 	// FIXME: Add functionality to kspread
-	kdDebug() << "Printing Information: Print Order: Down then Right" << endl;
+	kdDebug(s_area) << "Printing Information: Print Order: Down then Right" << endl;
     }
 
     if((flags & 0x8) == 0x8)
     {
 	// FIXME: Add functionality to kspread
-	kdDebug() << "Printing Information: Black and White only!" << endl;
+	kdDebug(s_area) << "Printing Information: Black and White only!" << endl;
     }
     else
     {
 	// FIXME: Add functionality to kspread
-	kdDebug() << "Printing Information: Color Printing!" << endl;
+	kdDebug(s_area) << "Printing Information: Color Printing!" << endl;
     }
 
     if((flags & 0x10) == 0x10)
     {
 	// FIXME: Add functionality to kspread
-	kdDebug() << "Printing Information: Print as Draft!" << endl;
+	kdDebug(s_area) << "Printing Information: Print as Draft!" << endl;
     }
 
     if((flags & 0x20) == 0x20)
     {
 	// FIXME: Add functionality to kspread
-	kdDebug() << "Printing Information: Printing Comments allowed!" << endl;
+	kdDebug(s_area) << "Printing Information: Printing Comments allowed!" << endl;
     }
     
     return true;
@@ -2090,8 +2123,8 @@ bool XMLTree::_standardwidth(Q_UINT32, QDataStream &body)
 {
   Q_UINT16 width;
   body >> width;
-  //kdDebug()<<"Standard width :"<<width<<endl;
-  kdDebug()<<"Standard width not implemented in kspread\n";
+  //kdDebug(s_area)<<"Standard width :"<<width<<endl;
+  kdDebug(s_area)<<"Standard width not implemented in kspread\n";
   return true;
 }
 
@@ -2134,12 +2167,12 @@ bool XMLTree::_vcenter(Q_UINT32, QDataStream &body)
     if(vcenter)
     {
 	// FIXME: Add functionality to ksprad
-	kdDebug() << "Printing Information: Center vertically when printing!" << endl;
+	kdDebug(s_area) << "Printing Information: Center vertically when printing!" << endl;
     }
     else
     {
 	// FIXME: Add functionality to ksprad
-	kdDebug() << "Printing Information: Don't center vertically when printing!" << endl;
+	kdDebug(s_area) << "Printing Information: Don't center vertically when printing!" << endl;
     }
     
     return true;
@@ -2165,41 +2198,41 @@ bool XMLTree::_window2(Q_UINT32, QDataStream &body)
 	{
 	  table->setAttribute("formular",1);
 	  // Display Formulas
-	  //kdDebug()<<"Show formular\n";
+	  //kdDebug(s_area)<<"Show formular\n";
 	}
       else
 	{
 	  table->setAttribute("formular",0);
-	  //kdDebug()<<"Hide formular\n";
+	  //kdDebug(s_area)<<"Hide formular\n";
 	}
 
       if( nOpt & 0x0002 )
 	{
 	  // Display Gridlines
-	  //kdDebug()<<"Show grid\n";
+	  //kdDebug(s_area)<<"Show grid\n";
 	  table->setAttribute("grid",1);
 	}
       else
 	{
 	  // Display No Gridlines
-	  //kdDebug()<<"Hide grid\n";
+	  //kdDebug(s_area)<<"Hide grid\n";
 	  table->setAttribute("grid",0);
 	}
 
       if( nOpt & 0x0004 )
-	kdDebug()<<"Show col/row hearder\n";
+	kdDebug(s_area)<<"Show col/row hearder\n";
       else
-	kdDebug()<<"Hide col/row hearder. Not store in table\n";
+	kdDebug(s_area)<<"Hide col/row hearder. Not store in table\n";
 
       if( nOpt & 0x0010 )
 	{
 	  table->setAttribute("hidezero",0);
-	  //kdDebug()<<"Show zero value\n";
+	  //kdDebug(s_area)<<"Show zero value\n";
 	}
       else
 	{
 	table->setAttribute("hidezero",1);
-	//kdDebug()<<"Hide zero value\n";
+	//kdDebug(s_area)<<"Hide zero value\n";
 	}
     }
   return true;

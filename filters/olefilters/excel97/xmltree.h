@@ -22,11 +22,35 @@
 #include <qdom.h>
 #include <qarray.h>
 #include <qqueue.h>
+#include <qlist.h>
 #include <qobject.h>
 #include <qintdict.h>
 #include <klocale.h>
 
-class XMLTree:public QObject
+class MergeInfo : public QObject
+{
+Q_OBJECT
+public:
+    MergeInfo(int fr, int lr, int fc, int lc)
+	{ m_fr = fr; m_lr = lr; m_fc = fc; m_lc = lc; }
+    MergeInfo()
+	{ }
+
+    int row()
+	{ return m_fr + 1; }
+    int col()
+	{ return m_fc + 1; } 
+	
+    int rowspan()
+	{ return m_lr - m_fr; }
+    int colspan()
+	{ return m_lc - m_fc; } 
+
+private:
+    int m_fr, m_lr, m_fc, m_lc;
+};
+
+class XMLTree : public QObject
 {
 Q_OBJECT
 public:
@@ -97,7 +121,8 @@ private:
   QIntDict<format_rec> formats;
 
   QQueue<QDomElement> tables;
-
+  QList<MergeInfo> mergelist;
+  
   KLocale m_locale;
 
   QDomElement doc, paper, map, borders, *table;
