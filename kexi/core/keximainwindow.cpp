@@ -34,6 +34,8 @@
 #include <kdebug.h>
 #include <kkeydialog.h>
 #include <kedittoolbar.h>
+#include <kdeversion.h>
+#include <kglobalsettings.h>
 
 #include "kexibrowser.h"
 #include "kexidialogbase.h"
