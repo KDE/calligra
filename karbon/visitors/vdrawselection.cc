@@ -19,12 +19,11 @@
 
 
 #include "vdrawselection.h"
+#include "vcomposite.h"
 #include "vsegment.h"
 #include "vcolor.h"
 #include "vstroke.h"
 #include "vpainter.h"
-
-#include <qcolor.h>
 
 void
 VDrawSelection::visitVComposite( VComposite &composite )
@@ -102,31 +101,31 @@ VDrawSelection::visitVComposite( VComposite &composite )
 					m_painter->newPath();
 
 					// Draw control lines:
-					if(
-						jtr.current()->prev() /*&&
-						( jtr.current()->ctrlPoint1Selected() ||
-						  jtr.current()->prev()->knotSelected() )*/ )
-					{
-						m_painter->moveTo(
-							jtr.current()->prev()->knot() );
-						m_painter->lineTo(
-							jtr.current()->point( 0 ) );
-
-						m_painter->strokePath();
-					}
-
-/*					if(
-						jtr.current()->ctrlPoint2Selected() ||
-						jtr.current()->knotSelected() )
-					{
-						m_painter->moveTo(
-							jtr.current()->point( 1 ) );
-						m_painter->lineTo(
-							jtr.current()->knot() );
-
-						m_painter->strokePath();
-					}
-*/
+//					if(
+//						jtr.current()->prev() /*&&
+//						( jtr.current()->ctrlPoint1Selected() ||
+//						  jtr.current()->prev()->knotSelected() )*/ )
+//					{
+//						m_painter->moveTo(
+//							jtr.current()->prev()->knot() );
+//						m_painter->lineTo(
+//							jtr.current()->point( 0 ) );
+//
+//						m_painter->strokePath();
+//					}
+//
+//					if(
+//						jtr.current()->ctrlPoint2Selected() ||
+//						jtr.current()->knotSelected() )
+//					{
+//						m_painter->moveTo(
+//							jtr.current()->point( 1 ) );
+//						m_painter->lineTo(
+//							jtr.current()->knot() );
+//
+//						m_painter->strokePath();
+//					}
+//
 
 					// Draw control node1:
 					m_painter->newPath();

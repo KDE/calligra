@@ -20,23 +20,22 @@
 #ifndef __VDRAWSELECTION_H__
 #define __VDRAWSELECTION_H__
 
-#include "vcomposite.h"
 #include "vgroup.h"
 #include "vvisitor.h"
 
-
+/**
+ *  Helper class to draw the outline of a composite path, including (?)
+ *  optionally its bezier helper lines, depending on the state.
+ */
 class VDrawSelection : public VVisitor
 {
 public:
-	VDrawSelection( const VObjectList& selection, VPainter *painter ) : m_selection( selection ), m_painter( painter )
-	{
-	}
+	VDrawSelection( const VObjectList& selection, VPainter *painter ) : m_selection( selection ), m_painter( painter ) {}
 
 	virtual void visitVComposite( VComposite& composite );
 
 private:
 	VObjectList		m_selection;
-
 	VPainter		*m_painter;
 };
 
