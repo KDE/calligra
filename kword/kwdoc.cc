@@ -2513,6 +2513,7 @@ void KWDocument::deleteTable( KWTableFrameSet *table )
               << " anchor:" << table->anchor() << endl;
     if ( table->anchor() )
     {
+        emit sig_terminateEditing( table ); // to unselect its cells, especially
         table->anchorFrameset()->deleteAnchoredFrame( table->anchor() );
     }
     else
