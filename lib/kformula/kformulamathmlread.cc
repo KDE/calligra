@@ -66,9 +66,9 @@ public:
     // Script and Limit Schemata
     void msub_msup( QDomElement element, QDomNode docnode );
     void msubsup( QDomElement element, QDomNode docnode );
-    void munder( QDomElement element, QDomNode docnode );
-    void mover( QDomElement element, QDomNode docnode );
-    void munderover( QDomElement element, QDomNode docnode );
+    void munder( QDomElement element, QDomNode docnode, bool oasisFormat );
+    void mover( QDomElement element, QDomNode docnode, bool oasisFormat );
+    void munderover( QDomElement element, QDomNode docnode, bool oasisFormat );
     // mmultiscripts not supported
 
     // Tables and Matrices
@@ -81,8 +81,8 @@ public:
 protected:
     void createTextElements( QString text, QDomNode docnode );
     double convertToPoint( QString value, bool* ok );
-    bool isEmbellishedOperator( QDomNode node, QDomElement* mo );
-    bool isSpaceLike( QDomNode node );
+    bool isEmbellishedOperator( QDomNode node, QDomElement* mo, bool oasisFormat );
+    bool isSpaceLike( QDomNode node, bool oasisFormat );
 
     enum MathVariant {
         normal,
@@ -841,7 +841,7 @@ void MathML2KFormulaPrivate::msub_msup( QDomElement element, QDomNode docnode )
     docnode.appendChild( root );
 }
 
-void MathML2KFormulaPrivate::munder( QDomElement element, QDomNode docnode )
+void MathML2KFormulaPrivate::munder( QDomElement element, QDomNode docnode, bool oasisFormat )
 {
     bool accentunder;
 
@@ -855,7 +855,7 @@ void MathML2KFormulaPrivate::munder( QDomElement element, QDomNode docnode )
 
         QDomElement mo;
         // is underscript an embellished operator?
-        if ( isEmbellishedOperator( element.childNodes().item( 1 ), &mo ) ) {
+        if ( isEmbellishedOperator( element.childNodes().item( 1 ), &mo, oasisFormat ) ) {
             if ( mo.attribute( "accent" ) == "true" )
                 accentunder = true;
             else
@@ -890,7 +890,7 @@ void MathML2KFormulaPrivate::munder( QDomElement element, QDomNode docnode )
                 }
 
                 QDomElement mo; QDomElement index;
-                if ( isEmbellishedOperator( n.previousSibling(), &mo ) &&
+                if ( isEmbellishedOperator( n.previousSibling(), &mo, oasisFormat ) &&
                      !previousStyle.displaystyle &&
                      mo.attribute( "movablelimits" ) == "true" )
                 {
@@ -919,7 +919,7 @@ void MathML2KFormulaPrivate::munder( QDomElement element, QDomNode docnode )
     docnode.appendChild( root );
 }
 
-void MathML2KFormulaPrivate::mover( QDomElement element, QDomNode docnode )
+void MathML2KFormulaPrivate::mover( QDomElement element, QDomNode docnode, bool oasisFormat )
 {
     bool accent;
 
@@ -933,7 +933,7 @@ void MathML2KFormulaPrivate::mover( QDomElement element, QDomNode docnode )
 
         QDomElement mo;
         // is overscript an embellished operator?
-        if ( isEmbellishedOperator( element.childNodes().item( 1 ), &mo ) ) {
+        if ( isEmbellishedOperator( element.childNodes().item( 1 ), &mo, oasisFormat ) ) {
             if ( mo.attribute( "accent" ) == "true" )
                 accent = true;
             else
@@ -968,7 +968,7 @@ void MathML2KFormulaPrivate::mover( QDomElement element, QDomNode docnode )
                 }
 
                 QDomElement mo; QDomElement index;
-                if ( isEmbellishedOperator( n.previousSibling(), &mo ) &&
+                if ( isEmbellishedOperator( n.previousSibling(), &mo, oasisFormat ) &&
                      !previousStyle.displaystyle &&
                      mo.attribute( "movablelimits" ) == "true" )
                 {
@@ -998,7 +998,7 @@ void MathML2KFormulaPrivate::mover( QDomElement element, QDomNode docnode )
 }
 
 void MathML2KFormulaPrivate::munderover( QDomElement element,
-                                         QDomNode docnode )
+                                         QDomNode docnode, bool oasisFormat )
 {
     bool accent;
     bool accentunder;
@@ -1013,7 +1013,7 @@ void MathML2KFormulaPrivate::munderover( QDomElement element,
 
         QDomElement mo;
         // is underscript an embellished operator?
-        if ( isEmbellishedOperator( element.childNodes().item( 1 ), &mo ) ) {
+        if ( isEmbellishedOperator( element.childNodes().item( 1 ), &mo, oasisFormat ) ) {
             if ( mo.attribute( "accent" ) == "true" )
                 accentunder = true;
             else
@@ -1032,7 +1032,7 @@ void MathML2KFormulaPrivate::munderover( QDomElement element,
 
         QDomElement mo;
         // is overscript an embellished operator?
-        if ( isEmbellishedOperator( element.childNodes().item( 2 ), &mo ) ) {
+        if ( isEmbellishedOperator( element.childNodes().item( 2 ), &mo,oasisFormat ) ) {
             kdDebug( DEBUGID ) << "embellished operator" << endl;
             if ( mo.attribute( "accent" ) == "true" )
                 accent = true;
@@ -1071,7 +1071,7 @@ void MathML2KFormulaPrivate::munderover( QDomElement element,
 
                 QDomElement mo; QDomElement index;
                 // is the base an embellished operator?
-                if ( isEmbellishedOperator( element.firstChild(), &mo ) &&
+                if ( isEmbellishedOperator( element.firstChild(), &mo, oasisFormat ) &&
                      !previousStyle.displaystyle &&
                      mo.attribute( "movablelimits" ) == "true" )
                 {
@@ -1098,7 +1098,7 @@ void MathML2KFormulaPrivate::munderover( QDomElement element,
                 }
 
                 QDomElement mo; QDomElement index;
-                if ( isEmbellishedOperator( element.firstChild(), &mo ) &&
+                if ( isEmbellishedOperator( element.firstChild(), &mo, oasisFormat ) &&
                      !previousStyle.displaystyle &&
                      mo.attribute( "movablelimits" ) == "true" )
                 {
@@ -1247,7 +1247,7 @@ double MathML2KFormulaPrivate::convertToPoint( QString value, bool* ok )
 }
 
 bool MathML2KFormulaPrivate::isEmbellishedOperator( QDomNode node,
-                                                    QDomElement* mo )
+                                                    QDomElement* mo, bool oasisFormat )
 {
     // See MathML 2.0 specification: 3.2.5.7
 
@@ -1257,32 +1257,32 @@ bool MathML2KFormulaPrivate::isEmbellishedOperator( QDomNode node,
     QDomElement element = node.toElement();
     QString tag = element.tagName();
 
-    if ( tag == "mo" )
+    if ( tag == ( oasisFormat ? "math:mo": "mo" ))
     {
         *mo = element;
         return true;
     }
-    if ( tag == "msub" || tag == "msup" || tag == "msubsup" ||
-         tag == "munder" || tag == "mover" || tag == "munderover" ||
-         tag == "mmultiscripts" || tag == "mfrac" || tag == "semantics" )
+    if ( tag == ( oasisFormat ? "math:msub" : "msub" ) || tag == ( oasisFormat ? "math:msup" : "msup" ) || tag == ( oasisFormat ? "math:msubsup" : "msubsup" ) ||
+         tag == ( oasisFormat ? "math:munder" : "munder" ) || tag == ( oasisFormat ? "math:mover" : "mover" ) || tag == ( oasisFormat ? "math:munderover" : "munderover" ) ||
+         tag == ( oasisFormat ? "math:mmultiscripts" : "mmultiscripts" ) || tag == ( oasisFormat ? "math:mfrac" : "mfrac" ) || tag == ( oasisFormat ? "math:semantics" : "semantics" ) )
     {
-        return isEmbellishedOperator( element.firstChild(), mo );
+        return isEmbellishedOperator( element.firstChild(), mo,oasisFormat );
     }
-    if ( tag == "maction" )
+    if ( tag ==  ( oasisFormat ? "math:maction" : "maction" ) )
     {
         return false; // not supported
     }
-    if ( tag == "mrow" || tag == "mstyle" || tag == "mphantom" ||
-         tag == "mpadded" ) {
+    if ( tag == ( oasisFormat ? "math:mrow" : "mrow" )  || tag == ( oasisFormat ? "math:mstyle" :  "mstyle" ) || tag == ( oasisFormat ? "math:mphantom" : "mphantom" ) ||
+         tag == ( oasisFormat ? "math:mpadded" : "mpadded" )) {
         QDomNode n = element.firstChild();
         int i = 0;
 
         while ( !n.isNull() ) {
-            if ( isEmbellishedOperator( n, mo ) ) {
+            if ( isEmbellishedOperator( n, mo,oasisFormat ) ) {
                 if ( ++i > 1 ) // one (only one) embellished operator
                     return false;
             }
-            else if ( !isSpaceLike( n ) ) { // zero or more space-like elements
+            else if ( !isSpaceLike( n, oasisFormat ) ) { // zero or more space-like elements
                 return false;
             }
             n = n.nextSibling();
@@ -1292,7 +1292,7 @@ bool MathML2KFormulaPrivate::isEmbellishedOperator( QDomNode node,
     return false;
 }
 
-bool MathML2KFormulaPrivate::isSpaceLike( QDomNode node )
+bool MathML2KFormulaPrivate::isSpaceLike( QDomNode node, bool oasisFormat )
 {
     // See MathML 2.0 specification: 3.2.7.3
 
@@ -1302,22 +1302,22 @@ bool MathML2KFormulaPrivate::isSpaceLike( QDomNode node )
     QDomElement element = node.toElement();
     QString tag = element.tagName();
 
-    if ( tag == "mtext" || tag == "mspace" ||
-         tag == "maligngroup" || tag == "malignmark" ) {
+    if ( tag == ( oasisFormat ? "math:mtext" : "mtext" ) || tag == ( oasisFormat ? "math:mspace" : "mspace" ) ||
+         tag == ( oasisFormat ? "math:maligngroup" : "maligngroup" ) || tag == ( oasisFormat ? "math:malignmark" : "malignmark" )) {
         return true;
     }
-    if ( tag == "mstyle" || tag == "mphantom" || tag == "mpadded" ||
-         tag == "mrow" ) {
+    if ( tag == ( oasisFormat ? "math:mstyle" : "mstyle" ) || tag == ( oasisFormat ? "math:mphantom" : "mphantom" ) || tag == ( oasisFormat ? "math:mpadded" : "mpadded" ) ||
+         tag == ( oasisFormat ? "math:mrow" : "mrow" )) {
         QDomNode n = element.firstChild();
         while ( !n.isNull() ) {
-            if ( isSpaceLike( n ) )
+            if ( isSpaceLike( n,oasisFormat ) )
                 n = n.nextSibling();
             else
                 return false;
         }
         return true;
     }
-    if ( tag == "maction" ) {
+    if ( tag == ( oasisFormat ? "math:maction" : "maction" )) {
         return false; // not supported
     }
 
@@ -1430,15 +1430,15 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument doc,
 
 	else if ( tag ==( oasisFormat ? "math:munder" :  "munder" ) ) {
 	    type = SCRIPT;
-            impl->munder( element, docnode );
+            impl->munder( element, docnode,oasisFormat );
 	}
         else if ( tag == ( oasisFormat ? "math:mover" : "mover" ) ) {
 	    type = SCRIPT;
-            impl->mover( element, docnode );
+            impl->mover( element, docnode,oasisFormat );
 	}
         else if ( tag == ( oasisFormat ? "math:munderover" : "munderover" ) ) {
             type = SCRIPT;
-            impl->munderover( element, docnode );
+            impl->munderover( element, docnode, oasisFormat );
         }
 	else if ( tag == ( oasisFormat ? "math:msubsup" : "msubsup" )) {
 	    type = SCRIPT;
