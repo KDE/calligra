@@ -20,6 +20,8 @@
 */
 
 #include <kexidb/drivermanager.h>
+#include <kexidb/drivermanager_p.h>
+
 #include <kexidb/driver.h>
 #include <kexidb/error.h>
 
@@ -32,57 +34,7 @@
 
 #include <assert.h>
 
-namespace KexiDB {
-
-/*!
-
-*/
-class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Object
-{
-	public:
-		~DriverManagerInternal();
-
-		/*! Tries to load db driver \a name.
-			\return db driver, or 0 if error (then error message is also set) */
-		KexiDB::Driver* driver(const QString& name);
-
-		static DriverManagerInternal *self();
-
-		/*! returns list of available drivers names. That drivers can be loaded
-			by first use of driver() method. */
-//		const QStringList driverNames();
-
-		/*! \return info. about driver (service info) */
-//		KService::Ptr serviceInfo(const QString &name);
-
-		//! Returns a map structure of the services. Not necessary for everyday use.
-//		const ServicesMap& services() { return m_services; }
-
-		/*! increments the refcount for the manager*/
-		void incRefCount();
-		/*! decrements the refcount for the manager
-			if the refcount reaches a value less than 1 the manager is freed */
-		void decRefCount();
-	protected:
-		/*! Used by self() */
-		DriverManagerInternal();
-
-		bool lookupDrivers();
-
-		static KexiDB::DriverManagerInternal* s_self;
-
-		KexiDB::DriverManager::ServicesMap m_services; //! services map
-		KexiDB::DriverManager::ServicesMap m_services_lcase; //! as above but service names in lowercase
-		KexiDB::DriverManager::ServicesMap m_services_by_mimetype;
-		KexiDB::Driver::InfoMap m_driversInfo; //! used to store drivers information
-		QDict<KexiDB::Driver> m_drivers;
-		ulong m_refCount;
-		
-		bool lookupDriversNeeded : 1;
-
-	friend class DriverManager;
-};
-} //KexiDB
+#include <qapplication.h>
 
 using namespace KexiDB;
 
@@ -104,6 +56,12 @@ DriverManagerInternal::~DriverManagerInternal()
 	KexiDBDbg << "DriverManagerInternal::~DriverManagerInternal() ok" << endl;
 }
 
+void DriverManagerInternal::slotAppQuits()
+{
+	KexiDBDbg << "DriverManagerInternal::slotAppQuits(): let's clear drivers..." << endl;
+	m_drivers.clear();
+}
+
 DriverManagerInternal *DriverManagerInternal::self()
 {
 	if (!s_self)
@@ -116,6 +74,14 @@ bool DriverManagerInternal::lookupDrivers()
 {
 	if (!lookupDriversNeeded)
 		return true;
+
+	if (qApp) {
+		connect(qApp,SIGNAL(aboutToQuit()),this,SLOT(slotAppQuits()));
+	}
+//TODO: for QT-only version check for KInstance wrapper
+//		KexiDBWarning << "DriverManagerInternal::lookupDrivers(): cannot work without KInstance (KGlobal::instance()==0)!" << endl;
+//		setError("Driver Manager cannot work without KInstance (KGlobal::instance()==0)!");
+
 	lookupDriversNeeded = false;
 	clearError();
 	KTrader::OfferList tlist = KTrader::self()->query("Kexi/DBDriver");
@@ -196,11 +162,13 @@ Driver* DriverManagerInternal::driver(const QString& name)
 void DriverManagerInternal::incRefCount()
 {
 	m_refCount++;
+	KexiDBDbg << "DriverManagerInternal::incRefCount(): " << m_refCount << endl;
 }
 
 void DriverManagerInternal::decRefCount()
 {
 	m_refCount--;
+	KexiDBDbg << "DriverManagerInternal::decRefCount(): " << m_refCount << endl;
 //	if (m_refCount<1) {
 //		KexiDBDbg<<"KexiDB::DriverManagerInternal::decRefCount(): reached m_refCount<1 -->deletelater()"<<endl;
 //		s_self=0;
@@ -327,4 +295,6 @@ Driver* DriverManager::driver(const QString& name)
 		setError(d_int);
 	return drv;
 }
+
+#include "drivermanager_p.moc"
 
