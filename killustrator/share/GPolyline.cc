@@ -166,7 +166,7 @@ void GPolyline::draw (Painter& p, bool withBasePoints, bool /*outline*/) {
   p.save ();
   if (withBasePoints) {
     p.setPen (black);
-    p.setBrush (white);
+    // p.setBrush (white);
     for (i = 0; i < num; i++) {
       Coord c = points.at (i)->transform (tmpMatrix);
       int x = (int) c.x ();

@@ -69,7 +69,7 @@ GOval::GOval (const list<XmlAttribute>& attribs, bool cFlag)
     first++;
   }
   sPoint.x (x - rx); sPoint.y (y - ry);
-  ePoint.x (x + rx - 1); ePoint.y (y + ry - 1);
+  ePoint.x (x + rx); ePoint.y (y + ry);
   circleFlag = cFlag;
   calcBoundingBox ();
 }

@@ -62,7 +62,7 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       if (newObj) {
         // for a new object we have to remove the last point
         line->removePoint (last);
-        if (line->numOfPoints () >= 2) {
+        if (line->numOfPoints () > 2) { // XXXXX ??
           // it's a regular line
           CreatePolylineCmd *cmd = new CreatePolylineCmd (doc, line);
           history->addCommand (cmd);
@@ -200,7 +200,14 @@ void PolylineTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       return;
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
-    canvas->snapPositionToGrid (xpos, ypos);
+    if (me->state () & ControlButton) {
+      Coord oldp = line->getPoint (last > 0 ? last - 1 : 0);
+      if (fabs (xpos - oldp.x ()) > fabs (ypos - oldp.y ()))
+        ypos = oldp.y ();
+      else
+        xpos = oldp.x ();
+    } 
+    canvas->snapPositionToGrid (xpos, ypos); 
 
     line->setPoint (last, Coord (xpos, ypos));
 

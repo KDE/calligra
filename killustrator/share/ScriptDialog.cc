@@ -32,8 +32,10 @@
 #include <kapp.h>
 #include <kbuttonbox.h>
 #include <kseparator.h>
+#include "version.h"
+#ifdef NEWKDE
 #include <kstddirs.h>
-
+#endif
 #include "ScriptDialog.h"
 #include "ScriptDialog.moc"
 
@@ -89,7 +91,7 @@ void ScriptDialog::loadScripts () {
   }
   lastSystemScript = scriptLst.count() - 1;
 #else
-  QString systemScripts = KGlobal::dirs()->kde_default( "data" ) + "killustrator/scripts";
+  QString systemScripts =  kapp->kde_datadir () + "/killustrator/scripts";
   QDir systemDir (systemScripts.data (), "*.py", QDir::Name,
 		  QDir::Files);
   if (systemDir.exists ()) {

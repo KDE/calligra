@@ -4,7 +4,7 @@ make acinclude.m4
 rm -rf killustrator.dist
 cp -rp killustrator killustrator.dist
 rm -rf killustrator.dist/etc killustrator.dist/koffice
-cp -p admin/install-sh admin/ltmain.sh admin/ltconfig admin/missing admin/mkinstalldirs acinclude.m4 killustrator/etc/configure.in COPYING INSTALL killustrator/kil.dtd admin/config.guess admin/config.sub admin/am_edit killustrator.dist
+cp -p admin/install-sh admin/ltmain.sh admin/ltconfig admin/missing admin/mkinstalldirs killustrator/etc/acinclude.m4 killustrator/etc/configure.in COPYING INSTALL killustrator/kil.dtd admin/config.guess admin/config.sub admin/am_edit killustrator.dist
 mkdir killustrator.dist/po
 cp -p ../kde-i18n/templates/koffice/killustrator.pot killustrator.dist/po
 cp -p killustrator/etc/po_Makefile.am killustrator.dist/po/Makefile.am
@@ -50,6 +50,7 @@ perl am_edit
 autoconf
 
 # if the following fails, try it by hand.
+echo "CONFIGURE"
 ./configure --with-qt-dir=/usr/local/qt-1.44
 make dist
 

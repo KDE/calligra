@@ -109,7 +109,7 @@ QWidget* PolygonConfigDialog::createWidget (QWidget* parent) {
   label->setText (i18n ("Sharpness:"));
   label->move (10, 130);
 
-  slider = new QSlider( Horizontal, w );
+  slider = new QSlider( QSlider::Horizontal, w );
   slider->setRange (0, 100);
   slider->setSteps (10, 50);
   slider->move (90, 130);

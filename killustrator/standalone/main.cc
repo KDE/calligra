@@ -57,9 +57,13 @@ int main (int argc, char** argv) {
   KApplication* app = new KApplication (argc, argv, APP_NAME);
 
   if (PStateManager::instance ()->showSplashScreen ())
+#ifdef NEWKDE
     new StartupScreen( KGlobal::dirs()->findResource( "appdata",
                 "pics/killustrator-intro.gif" ), 5 );
-
+#else
+    new StartupScreen (kapp->kde_datadir() + 
+		       "/killustrator/pics/killustrator-intro.gif", 5);
+#endif
   QObject::connect (app, SIGNAL(saveYourself ()),
 		    PStateManager::instance (), SLOT(saveDefaultSettings ()));
 

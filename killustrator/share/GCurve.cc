@@ -195,7 +195,7 @@ void GSegment::draw (Painter& p, bool withBasePoints, bool /*outline*/,
   if (withBasePoints) {
     p.save ();
     p.setPen (QT_PRFX::black);
-    p.setBrush (QT_PRFX::white);
+//    p.setBrush (QT_PRFX::white);
     if (drawFirst)
       p.drawRect (points[0].x () - 2, points[0].y () - 2, 4, 4);
     if (skind == sk_Line)

@@ -90,11 +90,11 @@
 #include <ktoolbar.h>
 #include <kmenubar.h>
 //#include <kglobal.h>
-#include <kstddirs.h>
 #include <kconfig.h>
 #include "version.h"
 
 #ifdef NEWKDE
+#include <kstddirs.h>
 #include <kio_job.h>
 #include <kglobal.h>
 #endif
@@ -470,7 +470,13 @@ void KIllustrator::initToolBars () {
 
   /* the color toolbar */
   colorPalette = new KToolBar (this);
+#ifdef NEWKDE
   QString palFile = KGlobal::dirs()->findResource( "appdata", DEFAULT_PALETTE );
+#else
+  QString palFile = kapp->kde_datadir ().copy ();
+  palFile += "/killustrator/";
+  palFile += DEFAULT_PALETTE;
+#endif
 
   parseColorPalette ((const char *) palFile, palette);
 
