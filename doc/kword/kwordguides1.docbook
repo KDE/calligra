@@ -268,45 +268,7 @@ function, a dialog appears.</para>
 </mediaobject>
 </screenshot>
 
-<para>Lets look at this dialog more closely:</para>
-
-<para>This dialog shows my current directory is <filename
-class="directory">/home/mmcbride/kword</filename>.  You can see this by
-the textbox at the top of the dialog</para>
-
-<para>The large box below that shows I currently have 1 folders in this
-directory, entitled <emphasis>Past Work</emphasis>, and 2 files
-(<emphasis>Job Description</emphasis> and
-<emphasis>Resume</emphasis>).</para>
-
-<para>In the upper left corner, is a blue arrow pointed up.  This arrow
-will take you up one level in the directory structure.</para>
-
-<para>The next two buttons are backwards and forward buttons.  These
-buttons work just like a browser, where you can use the back button to
-travel to the previous directory, and the forward button to advance into
-a directory you just came from.</para>
-
-<para>Next to the arrow buttons, is a button that looks like a house.
-Clicking this will take you to your home directory.</para>
-
-<para>Next to the home button, is a reload button.  Clicking this
-button, causes &kword; to reload the current directory in the event
-things have changed.</para>
-
-<para>Next to the reload button, is a button with a grey ribbon on it.
-This button allows you to set and navigate through bookmarks.  This is a
-quick way to jump to commonly accessed directories.  By clicking this
-button, a submenu appears which allows you to add bookmarks or jump to a
-new bookmark.</para>
-
-<para>Next to the bookmark button, is a new folder button.  If you want
-to create a new folder, simply click the button.  &kword; will ask for a
-name for the folder.  Then the folder will be created and you will
-automatically be placed in the new folder.</para>
-
-<para>The text box labled <guilabel>Location</guilabel> is blank, which
-indicates this file does not currently have a filename at all.</para>
+&filedlg;
 
 <para>The text box labled <guilabel>Filter</guilabel> shows we intend to
 save this as a &kword; file.  Using &kword;, you can save the file as other
@@ -331,6 +293,7 @@ click the blue up arrow button.</para>
 <guilabel>Location</guilabel> box. There is no need to put a <literal
 role="extension">.kwd</literal> at the end of your filename, &kword;
 will do this for you.</para>
+
 
 <note>
 <para>&UNIX; filenames are more flexible than many other operating
@@ -407,7 +370,8 @@ on the toolbar.</para>
 </itemizedlist>
 
 <para>Any of these methods results in the same action by &kword;.</para>
-
+<sect3 id="command-open-dlg">
+<title>Using the dialog box</title>
 <para>When trying to open a file, a dialog appears.</para>
 
 <screenshot>
@@ -417,61 +381,18 @@ on the toolbar.</para>
 </mediaobject>
 </screenshot>
 
-<para>Lets look at this dialog more closely:</para>
+&filedlg;
 
-<para>This dialog shows my current directory is
-<filename class="directory">/home/mmcbride/kword</filename>.  You can see this by the
-textbox at the top of the dialog</para>
-
-<para>The large box below that shows I currently have 1 folder in this
-directory, entitled <filename>Past Work</filename>, and 2 files
-(<filename>Job Description</filename> and
-<filename>Resume</filename>).</para>
-
-<para>In the upper left corner, is a blue arrow pointed up.  This arrow
-will take you up one level in the directory structure.</para>
-
-<para>The next two buttons are backwards and forward buttons.  These
-buttons work just like a browser, where you can use the back button to
-travel to the previous directory, and the forward button to advance into
-a directory you just came from.</para>
-
-<para>Next to the arrow buttons, is a button that looks like a house.
-Clicking this will take you to your home directory.</para>
-
-<para>Next to the home button, is a reload button.  Clicking this
-button, causes &kword; to reload the current directory in the event
-things have changed.</para>
-
-<para>Next to the reload button, is a button with a grey ribbon on it.
-This button allows you to set and navigate through bookmarks.  This is a
-quick way to jump to commonly accessed directories.  By clicking this
-button, a submenu appears which allows you to add bookmarks or jump to a
-new bookmark.</para>
-
-<para>Next to the bookmark button, is a new folder button.  If you want
-to create a new folder, simply click the button.  &kword; will ask for a
-name for the folder.  Then the folder will be created and you will
-automatically be placed in the new folder.</para>
-
-<para>The text box labled <guilabel>Location</guilabel> is blank.  Once
-you click on a filename, that filename will appear in this blank.
-Alternativly, you can simply type the filename in the blank.</para>
-
-<para>The text box labled <guilabel>Filter</guilabel> shows we intend to
-load all file types.  Using KWord, you can load files from other
-formats.  For information on this, see the section on <link
-linkend="filters">Filters</link>.</para>
+<para>The text box labled <guilabel>Filter</guilabel> says we are showing all
+supported file types.  This allows &kword; to load multiple file types.</para>
 
 <tip>
 <para>Another function of the <guilabel>Filter</guilabel> box, is to act
 as a file mask. A file mask hides all the files that &kword; believes
 are unimportant to your current task.  When the &kword; filetype is set
-to &kword; file, the dialog box only shows Folders, and files ending in
-<literal role="extension">.kwd</literal>.  If you file does not end in
-<literal role="extension">.kwd</literal>, you need to change the file
-type box to read <guilabel>All files</guilabel>, by selecting the drop
-down box.  Now all files will be displayed.</para>
+to &kword; file, the dialog box only shows folders, and files ending in
+<literal role="extension">.kwd</literal>.  If it says <guilabel>All supported
+files</guilabel>, all files will be displayed.</para>
 </tip>
 
 <para>Using this dialog, you can move through the directory tree to find
@@ -484,9 +405,8 @@ folder click the blue up arrow button.</para>
 button, the load will be aborted.</para>
 
 <para>There is a <guibutton>OK</guibutton> button, which will be used
-when we have selected the correct location, correct format and correct
-filename.</para>
-
+when we have selected the correct filename.</para>
+</sect3>
 </sect1>
 
 <sect1 id="printing">
@@ -528,22 +448,47 @@ currently selected printer.  To configure this printer click on the
 <para>To select a different printer, click on the dropdown box and
 select the desired printer.</para>
 
-<para>If you want to print your output into a postscript file, select
-Print to File.  You can now use the <guibutton>Browse</guibutton> button
-to locate the files destination.  As an alternative, you can enter the
-absolute path and filename for your new file.</para>
+<para>If you want to print your output into a postscript file, to a PDF file, 
+a fax modem (to send it as a fax) or email the file as a PDF file, select
+the appropriate option from the dropdown box. Once that option has been selected, enter
+the filename into the text box labled <guilabel>Output File</guilabel>.</para>
+
+<para>The line labled <guilabel>Print system currently used</guilabel> determines how
+&kword; interacts with your computer and any attached printers.  Complete setup of the
+printing system is beyond the scope of this document.  For more information see the KDE 
+print web site at <ulink url="http://printing.kde.org">http://printing.kde.org</ulink>.</para>
+
+<para>If you want to print all pages of your document and only one copy, you can click 
+<guibutton>OK</guibutton>.  If you want to change the number of copies or only print selected
+pages, click <guibutton>Expand</guibutton></para>
+
+<note><para>Depending on which printing system your computer uses, you may find that you have 
+more printing options then those described below.  What is described here, is available on 
+<emphasis>all</emphasis> systems.</para></note>
+
+<para>Once you click <guibutton>Expand</guibutton>, the dialog box changes to:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="pntdlg1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
 
 <para>Under <guilabel>Page Selection</guilabel>, you can select either
 to print the whole document (the default), print the page the cursor is
-located on, or print a range of pages.  If you select the
-<guilabel>Print Range</guilabel> option, you will be given the
-opportunity to select your start and end pages in the text boxe
-provided.</para>
+located on (simply select <guilabel>Current</guilabel>), or print a range of pages.  If you select the
+<guilabel>Print Range</guilabel> option, enter your page range in the text boxe
+provided. (Example:  3-13)</para>
 
-<para>In the box in the lower right, you should set the number of copies
+<para>In the drop down box labeled <guilabel>Page Set</guilabel> you can tell &kword; to
+print the <guilabel>Even pages</guilabel>, the <guilabel>Odd pages</guilabel> or 
+<guilabel>All pages</guilabel>.</para>
+
+<para>In the box on the right labeled <guilabel>Copies</guilabel>, you should set the number of copies
 you want printed.  You can either enter the number directly into the
 box, or use the arrows to adjust the number. &kword; can print a maximum
-of 9999 copies at once.</para>
+of 999 copies at once.</para>
 
 <para>You can have &kde; collate your documents by clicking on the
 <guilabel>Collate</guilabel> check box.  If selected, &kde; will print
@@ -555,9 +500,8 @@ then all of the copies of the second page, &etc;</para>
 (print first page first), or reverse order (print last page
 first).</para>
 
-
-<para>Just above the <guibutton>OK</guibutton> you can tell &kde; to
-print the Even pages, the Odd pages or All pages.</para>
+<para>If you click on <guibutton>Collapse</guibutton>, the print dialog will
+compress down to the previous view.</para>
 
 <para>When you are satisfied with your selections, you can click
 <guibutton>OK</guibutton> to print.</para>

@@ -31,10 +31,9 @@
 
 <row><entry>DG:Document Storage and Printing </entry><entry></entry><entry></entry></row>
 <row><entry></entry><entry>Beginning a New Document </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Open an existing document </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Saving a Document </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Retrieving a Saved Document </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Printing A Document </entry><entry>Needs Updates</entry></row>
+<row><entry></entry><entry>Saving a Document </entry><entry>Done</entry></row>
+<row><entry></entry><entry>Retrieving a Saved Document </entry><entry>Done</entry></row>
+<row><entry></entry><entry>Printing A Document </entry><entry>Done</entry></row>
 <row><entry></entry></row>
 
 <row><entry>DG: Editing your Document </entry><entry></entry><entry></entry></row>
@@ -148,4 +147,9 @@
 </tbody>
 </tgroup>
 </informaltable>
+
+<sect1 id="deleteme-misc">
+<title>Misc issues</title>
+<para>"Collate" option in print dialog is always greyed out.....Jan 26</para>
+</sect1>
 </chapter>

@@ -13,6 +13,7 @@
   <!ENTITY guides4 SYSTEM "kwordguides4.docbook">
   <!ENTITY mbtb SYSTEM "kwordmbtb.docbook">
   <!ENTITY opt SYSTEM "kwordopt.docbook">
+  <!ENTITY filedlg SYSTEM "kwordfiledlg.docbook">
   <!ENTITY deleteme SYSTEM "do_not_translate.docbook">
 
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
@@ -31,8 +32,14 @@
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup> 
+<copyright>
+<year>2000</year> <year>2001</year>
+<holder>Michael McBride</holder>
+</copyright>
 
-<date>2002-19-01</date>
+<legalnotice>&FDLNotice;</legalnotice>
+
+<date>2002-26-01</date>
 <releaseinfo>1.01.00</releaseinfo>
 
 <abstract>
@@ -40,12 +47,15 @@
 &kword; is a complete word-processing program. It is part of the
 &koffice; suite of utilities.
 </para>
+<para>
+This documentation describes KWord 1.2.
+</para>
 </abstract>
 
 <keywordset>
 <keyword>KDE</keyword>
 <keyword>KWord</keyword>
-<keyword>kOffice</keyword>
+<keyword>KOffice</keyword>
 <keyword>word processing</keyword>
 </keywordset>
 
