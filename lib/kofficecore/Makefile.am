@@ -3,7 +3,7 @@
 SUBDIRS = . tests
 KDE_CXXFLAGS = $(USE_RTTI) $(WOVERLOADED_VIRTUAL)
 INCLUDES= $(KSTORE_INCLUDES) $(KWMF_INCLUDES) $(all_includes)
-libkofficecore_la_LIBADD  = $(LIB_KSTORE) $(LIB_KWMF) $(LIB_KPARTS) \
+libkofficecore_la_LIBADD  = $(LIB_KSTORE) $(LIB_KOWMF) $(LIB_KPARTS) \
 	$(LIB_KDEPRINT)
 
 ####### Files

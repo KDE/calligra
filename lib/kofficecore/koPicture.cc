@@ -25,7 +25,6 @@
 #include <kurl.h>
 #include <kio/netaccess.h>
 
-#include <qwmf.h>
 #include "koPictureKey.h"
 #include "koPictureBase.h"
 #include "koPictureShared.h"

@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <kdebugclasses.h>
 
-#include <qwmf.h>
+#include <kowmfpaint.h>
 #include "koPictureKey.h"
 #include "koPictureBase.h"
 #include "koPictureWmf.h"
@@ -83,20 +83,16 @@ void KoPictureWmf::draw(QPainter& painter, int x, int y, int width, int height, 
 bool KoPictureWmf::load(const QByteArray& array, const QString& /* extension */)
 {
     // Second, create the original clipart
-    kdDebug(30003) << "Trying to load clipart... (Size:" << m_rawData.size() << ")" << endl;
+    kdDebug(30003) << "Trying to load clipart... (Size:" << array.size() << ")" << endl;
     m_rawData=array;
     
-    QBuffer buffer(array);
-    buffer.open(IO_ReadOnly);
-    QWinMetaFile wmf;
-    if (!wmf.load(buffer))
+    KoWmfPaint wmf;
+    if (!wmf.load(array))
     {
         kdWarning(30003) << "Loading WMF has failed! (KoPictureWmf::load)" << endl;
-        buffer.close();
         return false;
     }
-    buffer.close();
-    wmf.paint(&m_clipart);
+    wmf.play(m_clipart, true);
     
     return true;
 }
@@ -113,15 +109,12 @@ bool KoPictureWmf::saveAsKOffice1Dot1(QIODevice* io, const QString& /* extension
     QPicture picture(3); //compatibility with QT 2.1 and later (KOffice 1.1.x was with QT 2.3.1 or QT 3.0.x)
 
     bool result=false;
-    QBuffer buffer(m_rawData);
-    buffer.open(IO_ReadOnly);
-    QWinMetaFile wmf;
-    if (wmf.load(buffer))
+    KoWmfPaint wmf;
+    if (wmf.load(m_rawData))
     {
-        wmf.paint(&picture);
+        wmf.play(picture, true);
         result=picture.save(io,NULL);
     }
-    buffer.close();
     return result;
 }
 
