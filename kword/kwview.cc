@@ -5114,10 +5114,11 @@ void KWView::slotFrameSetEditChanged()
         }
     }
     actionEditCut->setEnabled( hasSelection && rw );
+    if ( edit && edit->textFrameSet()->protectContent())
+        actionEditCut->setEnabled( false );
+
     actionEditCopy->setEnabled( hasSelection );
-    //actionEditFind->setEnabled(  rw );
     actionEditReplace->setEnabled( /*edit &&*/ rw );
-    //actionFormatDefault->setEnabled( hasSelection && rw);
     clipboardDataChanged(); // for paste
 
     bool state = (edit != 0L) && rw;
