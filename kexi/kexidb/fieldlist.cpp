@@ -201,7 +201,7 @@ QStringList FieldList::names() const
 	return r;
 }
 
-QString FieldList::sqlFieldsList(Field::List* list)
+QString FieldList::sqlFieldsList(Field::List* list, Driver *driver)
 {
 	if (!list)
 		return QString::null;
@@ -214,17 +214,17 @@ QString FieldList::sqlFieldsList(Field::List* list)
 			result += ",";
 		else
 			start = false;
-		result += it.current()->name();
+		result += driver->escapeIdentifier( it.current()->name() );
 	}
 	return result;
 }
 
-QString FieldList::sqlFieldsList()
+QString FieldList::sqlFieldsList(Driver *driver)
 {
 	if (!m_sqlFields.isEmpty())
 		return m_sqlFields;
 
-	m_sqlFields = FieldList::sqlFieldsList( &m_fields );
+	m_sqlFields = FieldList::sqlFieldsList( &m_fields, driver );
 	return m_sqlFields;
 }
 

@@ -96,6 +96,7 @@ class QuerySchemaPrivate
 		
 		/*! A cache for autoIncrementSQLFieldsList(). */
 		QString autoIncrementSQLFieldsList;
+		QGuardedPtr<Driver> lastUsedDriverForAutoIncrementSQLFieldsList;
 
 		/*! A map for fast lookup of query fields' order.
 		 This is exactly opposite information compared to vector returned 
@@ -545,7 +546,7 @@ QueryFieldInfo::List* QuerySchema::autoIncrementFields()
 	return d->autoincFields;
 }
 
-QString QuerySchema::sqlFieldsList(QueryFieldInfo::List* infolist)
+QString QuerySchema::sqlFieldsList(QueryFieldInfo::List* infolist, Driver *driver)
 {
 	if (!infolist)
 		return QString::null;
@@ -558,15 +559,19 @@ QString QuerySchema::sqlFieldsList(QueryFieldInfo::List* infolist)
 			result += ",";
 		else
 			start = false;
-		result += it.current()->field->name();
+		result += driver->escapeIdentifier( it.current()->field->name() );
 	}
 	return result;
 }
 
-QString QuerySchema::autoIncrementSQLFieldsList()
+QString QuerySchema::autoIncrementSQLFieldsList(Driver *driver)
 {
-	if (d->autoIncrementSQLFieldsList.isEmpty())
-		d->autoIncrementSQLFieldsList = QuerySchema::sqlFieldsList( autoIncrementFields() );
+	if ((Driver *)d->lastUsedDriverForAutoIncrementSQLFieldsList != driver
+		|| d->autoIncrementSQLFieldsList.isEmpty())
+	{
+		d->autoIncrementSQLFieldsList = QuerySchema::sqlFieldsList( autoIncrementFields(), driver );
+		d->lastUsedDriverForAutoIncrementSQLFieldsList = driver;
+	}
 	return d->autoIncrementSQLFieldsList;
 }
 

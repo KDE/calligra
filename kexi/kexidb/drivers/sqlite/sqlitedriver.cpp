@@ -115,5 +115,12 @@ QCString SQLiteDriver::escapeString(const QCString& str) const
 	return QCString("'")+QCString(str).replace( '\'', "''" )+"'";
 }
 
-#include "sqlitedriver.moc"
+QString SQLiteDriver::escapeIdentifier( const QString& str) const {
+	return QString("\"") + QString(str).replace( '"', "\"\"" ) + "\"";
+}
 
+QCString SQLiteDriver::escapeIdentifier( const QCString& str) const {
+	return QCString("\"") + QCString(str).replace( '"', "\"\"" ) + "\"";
+}
+
+#include "sqlitedriver.moc"

@@ -35,6 +35,7 @@
 #include <kexidb/tableschema.h>
 #include <kexidb/queryschema.h>
 #include <kexidb/transaction.h>
+#include <kexidb/driver.h>
 
 namespace KexiDB {
 
@@ -42,7 +43,6 @@ namespace KexiDB {
 typedef QValueVector<QVariant> RowData; 
 
 class Cursor;
-class Driver;
 class ConnectionPrivate;
 class RowEditBuffer;
 
@@ -364,14 +364,16 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 //		QString valueToSQL( const Field *field, const QVariant& v ) const;
 
 		/*! Executes \a sql query and stores first record's data inside \a data.
-		 This is convenient method when we need only first recors from query result,
+		 This is convenient method when we need only first record from query result,
 		 or when we know that query result has only one record.
+		 Adds a LIMIT clause to the query, \a sql should not include one already.
 		 \return true if query was successfully executed and first record has been found. */
 		bool querySingleRecord(const QString& sql, RowData &data);
 
 		/*! Executes \a sql query and stores first record's first field's string value 
 		 inside \a value. Therefore, for efficiency it's recommended that a query defined by \a sql
 		 should have just one field (SELECT one_field FROM ....). 
+		 Adds a LIMIT clause to the query, \a sql should not include one already.
 		 \return true if query was successfully executed and first record has been found.
 		 */
 		bool querySingleString(const QString& sql, QString &value);
@@ -846,6 +848,23 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		TableSchema* newKexiDBSystemTableSchema(const QString& tsname);
 
+		//! Identifier escaping function in the associated Driver.
+		/*! Calls the identifier escaping function in the associated Driver to
+		 escape table and column names.  This should be used when explicitly
+		 constructing SQL strings (e.g. "FROM " + escapeIdentifier(tablename)).
+		 It should not be used for other functions (e.g. don't do
+		 useDatabase(escapeIdentifier(database))), because the identifier will
+		 be escaped when the called function generates, for example, "USE " +
+		 escapeIdentifier(database).
+		 
+		 For efficiency, kexi__* system tables and columns therein are not escaped
+		 - we assume these are valid identifiers for all drivers.
+		*/
+		inline QString escapeIdentifier(const QString& id) const {
+			return m_driver->escapeIdentifier(id);
+		}
+		
+		
 		/*! Called by TableSchema -- signals destruction to Connection object
 		 To avoid having deleted table object on its list. */
 		void removeMe(TableSchema *ts);

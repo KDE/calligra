@@ -257,11 +257,11 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 This method is similar to FieldList::sqlFieldsList() it just uses
 		 QueryFieldInfo::List instead of Field::List.
 		*/
-		static QString sqlFieldsList(QueryFieldInfo::List* infolist);
+		static QString sqlFieldsList(QueryFieldInfo::List* infolist, Driver *driver);
 
 		/*! \return cached sql list created using sqlFieldsList() on a list returned
 		 by autoIncrementFields(). */
-		QString autoIncrementSQLFieldsList();
+		QString autoIncrementSQLFieldsList(Driver *driver);
 		
 	protected:
 		void init();

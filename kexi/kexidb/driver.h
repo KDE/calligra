@@ -176,9 +176,13 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 			return valueToSQL( (field ? field->type() : Field::InvalidType), v );
 		}
 
-		/*! Driver-specific string escaping. */
+		//! Driver-specific SQL string escaping.
 		virtual QString escapeString(const QString& str) const = 0;
 		virtual QCString escapeString(const QCString& str) const = 0;
+		
+		//! Driver-specific identifier escaping (e.g. for a table name, or db)
+		virtual QString escapeIdentifier( const QString& str) const = 0;
+		virtual QCString escapeIdentifier( const QCString& str) const = 0;
 
 		QVariant propertyValue( const QCString& propName ) const;
 

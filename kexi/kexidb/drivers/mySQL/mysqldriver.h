@@ -39,8 +39,13 @@ class KEXIDB_MYSQL_DRIVER_EXPORT MySqlDriver : public Driver
 		virtual bool isSystemDatabaseName( const QString &n ) const;
 		virtual bool isSystemFieldName( const QString& n ) const;
 
+		//! Escape a string for use as a value
 		virtual QString escapeString(const QString& str) const;
 		virtual QCString escapeString(const QCString& str) const;
+
+		//! Escape a string for use as an identifier (e.g. of a table name, or db)
+		virtual QString escapeIdentifier( const QString& str) const;
+		virtual QCString escapeIdentifier( const QCString& str) const;
 
 	protected:
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );

@@ -765,9 +765,10 @@ QString Connection::valueToSQL( const Field *field, const QVariant& v ) const
 
 QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema ) const
 {
+// Each SQL identifier needs to be escaped in the generated query.	
 	QString sql;
 	sql.reserve(4096);
-	sql = "CREATE TABLE " + tableSchema.name() + " (";
+	sql = "CREATE TABLE " + escapeIdentifier(tableSchema.name()) + " (";
 	bool first=true;
 	Field::ListIterator it( tableSchema.m_fields );
 	Field *field;
@@ -776,7 +777,7 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 			first = false;
 		else
 			sql += ", ";
-		QString v = field->m_name + " ";
+		QString v = escapeIdentifier(field->m_name) + " ";
 		if (field->isAutoIncrement() && m_driver->beh->SPECIAL_AUTO_INCREMENT_DEF) {
 			v += m_driver->beh->AUTO_INCREMENT_FIELD_OPTION;
 		}
@@ -816,9 +817,11 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 
 #define C_INS_REC(args, vals) \
 	bool Connection::insertRecord(KexiDB::TableSchema &tableSchema args) {\
-		KexiDBDbg<<"******** "<< QString("INSERT INTO ") + tableSchema.name() + " VALUES (" + vals + ")" <<endl; \
+		KexiDBDbg << "******** " << QString("INSERT INTO ") + \
+			escapeIdentifier(tableSchema.name()) + \
+			" VALUES (" + vals + ")" <<endl; \
 		return executeSQL( \
-		 QString("INSERT INTO ") + tableSchema.name() + " VALUES (" + vals + ")" \
+		 QString("INSERT INTO ") + escapeIdentifier(tableSchema.name()) + " VALUES (" + vals + ")" \
 		); \
 	}
 
@@ -842,6 +845,7 @@ C_INS_REC_ALL
 #define V_A( a ) value += ("," + m_driver->valueToSQL( flist->next(), c ## a ));
 //#define V_ALAST( a ) valueToSQL( flist->last(), c ## a )
 
+
 #define C_INS_REC(args, vals) \
 	bool Connection::insertRecord(FieldList& fields args) \
 	{ \
@@ -850,8 +854,10 @@ C_INS_REC_ALL
 		vals \
 		return executeSQL( \
 			QString("INSERT INTO ") + \
-		((fields.fields()->first() && fields.fields()->first()->table()) ? fields.fields()->first()->table()->name() : "??") \
-		+ "(" + fields.sqlFieldsList() + ") VALUES (" + value + ")" \
+		((fields.fields()->first() && fields.fields()->first()->table()) ? \
+			escapeIdentifier(fields.fields()->first()->table()->name()) : \
+			"??") \
+		+ "(" + fields.sqlFieldsList(m_driver) + ") VALUES (" + value + ")" \
 		); \
 	}
 
@@ -865,6 +871,7 @@ C_INS_REC_ALL
 
 bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& values)
 {
+// Each SQL identifier needs to be escaped in the generated query.
 	Field::List *fields = tableSchema.fields();
 	Field *f = fields->first();
 //	QString s_val; 
@@ -874,7 +881,9 @@ bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& va
 	int i=0;
 	while (f && (it!=values.end())) {
 		if (m_sql.isEmpty())
-			m_sql = QString("INSERT INTO ") + tableSchema.name() + " VALUES (";
+			m_sql = QString("INSERT INTO ") + 
+				escapeIdentifier(tableSchema.name()) +
+				" VALUES (";
 		else
 			m_sql += ",";
 		m_sql += m_driver->valueToSQL( f, *it );
@@ -890,6 +899,7 @@ bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& va
 
 bool Connection::insertRecord(FieldList& fields, QValueList<QVariant>& values)
 {
+// Each SQL identifier needs to be escaped in the generated query.
 	Field::List *flist = fields.fields();
 	Field *f = flist->first();
 	if (!f)
@@ -901,8 +911,9 @@ bool Connection::insertRecord(FieldList& fields, QValueList<QVariant>& values)
 	int i=0;
 	while (f && (it!=values.end())) {
 		if (m_sql.isEmpty())
-			m_sql = QString("INSERT INTO ") + flist->first()->table()->name() + "("
-				+ fields.sqlFieldsList() + ") VALUES (";
+			m_sql = QString("INSERT INTO ") + 
+				escapeIdentifier(flist->first()->table()->name()) + "(" +
+				fields.sqlFieldsList(m_driver) + ") VALUES (";
 		else
 			m_sql += ",";
 		m_sql += m_driver->valueToSQL( f, *it );
@@ -931,6 +942,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 //"SELECT FROM ..." is theoretically allowed "
 //if (querySchema.fieldCount()<1)
 //		return QString::null;
+// Each SQL identifier needs to be escaped in the generated query.
 
 	if (!querySchema.statement().isEmpty())
 		return querySchema.statement();
@@ -948,14 +960,14 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 
 			if (f->isQueryAsterisk()) {
 				if (static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) //single-table *
-					sql += (f->table()->name() + ".*");
+					sql += (escapeIdentifier(f->table()->name() + ".*"));
 				else //all-tables *
 					sql += "*";
 			}
 			else {
 				if (!f->table()) //sanity check
 					return QString::null;
-				sql += (f->table()->name() + "." + f->name());
+				sql += (escapeIdentifier(f->table()->name()) + "." + escapeIdentifier(f->name()));
 			}
 		}
 	}
@@ -968,7 +980,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 		for (TableSchema::ListIterator it(*tables); (table = it.current()); ++it) {
 			if (!s_from.isEmpty())
 				s_from += ", ";
-			s_from += table->name();
+			s_from += escapeIdentifier(table->name());
 		}
 		sql += s_from;
 	}
@@ -991,8 +1003,10 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 		for (QPtrListIterator<Field::Pair> p_it(*rel->fieldPairs()); (pair = p_it.current()); ++p_it) {
 			if (!s_where_sub.isEmpty())
 				s_where_sub += " AND ";
-			s_where_sub += (pair->first->table()->name() + "." + pair->first->name() + " = " 
-				+ pair->second->table()->name() + "." + pair->second->name());
+			s_where_sub += (pair->first->table()->name() + "." + 
+				escapeIdentifier(pair->first->name()) + " = "  +
+				escapeIdentifier(pair->second->table()->name()) + "." +
+				escapeIdentifier(pair->second->name()));
 		}
 		if (rel->fieldPairs()->count()>1) {
 			s_where_sub.prepend("(");
@@ -1024,6 +1038,7 @@ Field* Connection::findSystemFieldName(KexiDB::FieldList* fieldlist)
 	return 0;
 }
 
+/*! TODO: ? This goes pear-shaped if the query doesn't manage to fill rdata[0]. */
 int Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName)
 {
 	int row_id = drv_lastInsertRowID();
@@ -1050,6 +1065,14 @@ int Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const KexiD
 	  setError( errorNum(), i18n("Creating table failed.") + " " + errorMsg()); \
 	  return false; }
 
+//! Creates a table according to the given schema
+/*! Creates a table according to the given TableSchema, adding the table and
+    column definitions to kexi__* tables.  Checks that a database is in use,
+    that the table name is not that of a system table, and that the schema
+    defines at least one column.
+    If the table exists, and replaceExisting is true, the table is replaced.
+    Otherwise, the table is not replaced.
+*/
 bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExisting )
 {
 	if (!tableSchema || !checkIsDatabaseUsed())
@@ -1211,8 +1234,16 @@ bool Connection::removeObject( uint objId )
 	return true;
 }
 
+//! Drops a table corresponding to the name in the given schema
+/*! Drops a table according to the name given by the TableSchema, removing the
+    table and column definitions to kexi__* tables.  Checks first that the
+    table is not a system table.
+
+    TODO: Should check that a database is currently in use? (c.f. createTable)
+*/
 bool Connection::dropTable( KexiDB::TableSchema* tableSchema )
 {
+// Each SQL identifier needs to be escaped in the generated query.
 	clearError();
 	if (!tableSchema)
 		return false;
@@ -1229,7 +1260,7 @@ bool Connection::dropTable( KexiDB::TableSchema* tableSchema )
 		return false;
 	TransactionGuard tg(trans);
 
-	m_sql = "DROP TABLE " + tableSchema->name();
+	m_sql = "DROP TABLE " + escapeIdentifier(tableSchema->name());
 	if (!executeSQL(m_sql))
 		return false;
 
@@ -1448,7 +1479,7 @@ bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive
 		t = d->m_default_trans;
 		d->m_default_trans = Transaction::null; //now: no default tr.
 	}
-	bool ret;
+	bool ret = true;
 	if (! (m_driver->d->features & Driver::IgnoreTransactions) )
 		ret = drv_commitTransaction(t.m_data);
 	if (t.m_data)
@@ -1714,6 +1745,7 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 		.arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.description())) );
 }
 
+//! Query database for a single record, storing entire row
 bool Connection::querySingleRecord(const QString& sql, RowData &data)
 {
 	KexiDB::Cursor *cursor;
@@ -1731,6 +1763,7 @@ bool Connection::querySingleRecord(const QString& sql, RowData &data)
 	return deleteCursor(cursor);
 }
 
+//! Query database for a single record, storing one string field
 bool Connection::querySingleString(const QString& sql, QString &value)
 {
 	KexiDB::Cursor *cursor;
@@ -1748,6 +1781,7 @@ bool Connection::querySingleString(const QString& sql, QString &value)
 	return deleteCursor(cursor);
 }
 
+//! Query database for a single integer
 bool Connection::querySingleNumber(const QString& sql, int &number)
 {
 	static QString str;
@@ -1996,7 +2030,8 @@ TableSchema* Connection::newKexiDBSystemTableSchema(const QString& tsname)
 	m_tables_byname.insert(ts->name(),ts);
 	return ts;
 }
-	
+
+//! Creates kexi__* tables.	
 bool Connection::setupKexiDBSystemSchema()
 {
 	if (!m_kexiDBSystemtables.isEmpty())
@@ -2098,6 +2133,7 @@ void Connection::setAvailableDatabaseName(const QString& dbName)
 
 bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf)
 {
+// Each SQL identifier needs to be escaped in the generated query.
 	KexiDBDrvDbg << "Connection::updateRow.." << endl;
 	clearError();
 	//--get PKEY
@@ -2116,7 +2152,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		return false;
 	}
 	//update the record:
-	m_sql = "UPDATE " + query.parentTable()->name() + " SET ";
+	m_sql = "UPDATE " + escapeIdentifier(query.parentTable()->name()) + " SET ";
 	QString sqlset, sqlwhere;
 	sqlset.reserve(1024);
 	sqlwhere.reserve(1024);
@@ -2124,7 +2160,8 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
 		if (!sqlset.isEmpty())
 			sqlset+=",";
-		sqlset += (it.key()->field->name() + "=" + m_driver->valueToSQL(it.key()->field,it.data()));
+		sqlset += (escapeIdentifier(it.key()->field->name()) + "=" +
+			m_driver->valueToSQL(it.key()->field,it.data()));
 	}
 	QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
 	if (pkey->fieldCount()>0) {
@@ -2138,8 +2175,8 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 //js todo: pass the field's name somewhere!
 				return false;
 			}
-			sqlwhere += ( it.current()->name() + "=" 
-				+ m_driver->valueToSQL( it.current(), val ) );
+			sqlwhere += ( escapeIdentifier(it.current()->name()) + "=" +
+				m_driver->valueToSQL( it.current(), val ) );
 		}
 	}
 	m_sql += (sqlset + " WHERE " + sqlwhere);
@@ -2162,6 +2199,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 
 bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf)
 {
+// Each SQL identifier needs to be escaped in the generated query.
 	KexiDBDrvDbg << "Connection::updateRow.." << endl;
 	clearError();
 	//--get PKEY
@@ -2178,7 +2216,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		KexiDBDrvDbg << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
 
 	//insert the record:
-	m_sql = "INSERT INTO " + query.parentTable()->name() + " (";
+	m_sql = "INSERT INTO " + escapeIdentifier(query.parentTable()->name()) + " (";
 	QString sqlcols, sqlvals;
 	sqlcols.reserve(1024);
 	sqlvals.reserve(1024);
@@ -2188,7 +2226,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			sqlcols+=",";
 			sqlvals+=",";
 		}
-		sqlcols += it.key()->field->name();
+		sqlcols += escapeIdentifier(it.key()->field->name());
 		sqlvals += m_driver->valueToSQL(it.key()->field,it.data());
 	}
 	m_sql += (sqlcols + ") VALUES (" + sqlvals + ")");
@@ -2218,11 +2256,12 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			return false;
 		}
 		RowData aif_data;
-//		if (!querySingleRecord(QString("SELECT ")+ FieldList::sqlFieldsList( aif_list ) + " FROM " 
-		if (!querySingleRecord(QString("SELECT ")+ query.autoIncrementSQLFieldsList() + " FROM " 
-			+ id_fieldinfo->field->table()->name() + " WHERE "+ id_fieldinfo->field->name() + "=" + QString::number(last_id),
-			aif_data))
-		{
+		QString getAutoIncForInsertedValue =
+			QString("SELECT ") + query.autoIncrementSQLFieldsList(m_driver) + " FROM " + 
+			escapeIdentifier(id_fieldinfo->field->table()->name()) + " WHERE " + 
+			escapeIdentifier(id_fieldinfo->field->name()) + "=" +
+			QString::number(last_id);
+		if (!querySingleRecord(getAutoIncForInsertedValue, aif_data)) {
 			//err...
 			return false;
 		}
@@ -2239,6 +2278,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 
 bool Connection::deleteRow(QuerySchema &query, RowData& data)
 {
+// Each SQL identifier needs to be escaped in the generated query.
 	KexiDBDrvDbg << "Connection::deleteRow.." << endl;
 	clearError();
 	if (!query.parentTable()) {
@@ -2250,7 +2290,7 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 		KexiDBDrvDbg << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
 	
 	//update the record:
-	m_sql = "DELETE FROM " + query.parentTable()->name() + " WHERE ";
+	m_sql = "DELETE FROM " + escapeIdentifier(query.parentTable()->name()) + " WHERE ";
 	QString sqlwhere;
 	sqlwhere.reserve(1024);
 	QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
@@ -2265,8 +2305,8 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 //js todo: pass the field's name somewhere!
 				return false;
 			}
-			sqlwhere += ( it.current()->name() + "=" 
-				+ m_driver->valueToSQL( it.current(), val ) );
+			sqlwhere += ( escapeIdentifier(it.current()->name()) + "=" +
+				m_driver->valueToSQL( it.current(), val ) );
 		}
 	}
 	m_sql += sqlwhere;

@@ -34,7 +34,6 @@ Boston, MA 02111-1307, USA.
 #include <kdebug.h>
 
 #include "mysqldriver.h"
-#include "mysqldriver.moc"
 #include "mysqlconnection.h"
 #include <kexidb/field.h>
 #include <kexidb/driver_p.h>
@@ -121,4 +120,17 @@ QCString MySqlDriver::escapeString(const QCString& str) const
 {
 	return QCString("'")+QCString(str).replace( '\'', "''" )+"'";
 }
+
+/*! Add back-ticks to an identifier, and replace any back-ticks within
+ * the name with single quotes.
+ */
+QString MySqlDriver::escapeIdentifier( const QString& str) const {
+	return QString("`") + QString(str).replace('`', "'") + "`";
+}
+
+QCString MySqlDriver::escapeIdentifier( const QCString& str) const {
+	return QCString("`") + QCString(str).replace('`', "'") + "`";
+}
+
+#include "mysqldriver.moc"
 

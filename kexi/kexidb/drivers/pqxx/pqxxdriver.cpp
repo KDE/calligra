@@ -119,4 +119,17 @@ QCString pqxxSqlDriver::escapeString( const QCString& str) const
 {
     return QCString(pqxx::Quote(QString(str).ascii()).c_str());
 }
+
+//==================================================================================
+//
+QString pqxxSqlDriver::escapeIdentifier( const QString& str) const {
+	return QString("\"") + QString(str).replace( '"', "\"\"" ) + "\"";
+}
+
+//==================================================================================
+//
+QCString pqxxSqlDriver::escapeIdentifier( const QCString& str) const {
+	return QCString("\"") + QCString(str).replace( '"', "\"\"" ) + "\"";
+}
+
 #include "pqxxdriver.moc"

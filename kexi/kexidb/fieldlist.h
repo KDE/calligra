@@ -25,6 +25,7 @@
 #include <qstring.h>
 
 #include <kexidb/field.h>
+#include <kexidb/driver.h>
 
 namespace KexiDB {
 
@@ -124,10 +125,10 @@ class KEXI_DB_EXPORT FieldList
 		 and it is invalidated when set of fields changes (e.g. using clear() 
 		 or addField()).
 		*/
-		QString sqlFieldsList();
+		QString sqlFieldsList(Driver *driver);
 
 		/*! Like above, but thsi is convenient static function, so you can pass any \a list here. */
-		static QString sqlFieldsList(Field::List* list);
+		static QString sqlFieldsList(Field::List* list, Driver *driver);
 
 	protected:
 		Field::List m_fields;
