@@ -1,21 +1,15 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes)
-#liblateximport_la_LDFLAGS	= -module -avoid-version -no-undefined
-#liblateximport_la_LIBADD = $(KOFFICE_LIBS)
 liblatexexport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
 liblatexexport_la_LIBADD    = $(KOFFICE_LIBS) $(LIB_KFORMULA)
 
 ####### Files
 
 kde_module_LTLIBRARIES = liblatexexport.la
-#		liblateximport.la
-
-#liblateximport_la_SOURCES = lateximport.cc lateximport_factory.cc
-# elementt.cc listetextzone.cc listefootnote.cc listepara.cc 
 
 liblatexexport_la_SOURCES = anchor.cc config.cc document.cc element.cc fileheader.cc footnote.cc \
-format.cc formula.cc latexexport.cc latexexport.moc latexexportdia.cc latexexportdia.skel \
+format.cc formula.cc latexexport.cc latexexportdia.cc latexexportdia.skel \
 layout.cc listtable.cc para.cc \
 pixmap.cc table.cc texte.cc textformat.cc textzone.cc variableformat.cc variablezone.cc \
 xml2latexparser.cc xmlparser.cc
@@ -38,7 +32,6 @@ xml2latexparser.h xmlparser.h
 METASOURCES = AUTO
 
 service_DATA = kword_latex_export.desktop
-#kword_latex_import.desktop
 servicedir = $(kde_servicesdir)
 
 messages: rc.cpp

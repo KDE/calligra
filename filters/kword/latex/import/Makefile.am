@@ -2,7 +2,7 @@ SUBDIRS = parser
 
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes) -I${srcdir}/parser
+INCLUDES= -I$(srcdir) -I$(srcdir)/parser $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes)
 liblateximport_la_LDFLAGS	= -module -avoid-version -no-undefined
 liblateximport_la_LIBADD = $(KOFFICE_LIBS) -Lparser -llatexparser
 
@@ -10,7 +10,7 @@ liblateximport_la_LIBADD = $(KOFFICE_LIBS) -Lparser -llatexparser
 
 kde_module_LTLIBRARIES = liblateximport.la
 
-liblateximport_la_SOURCES = config.cc lateximport.cc lateximport.moc lateximportdia.cc lateximportdia.skel
+liblateximport_la_SOURCES = config.cc lateximport.cc lateximportdia.cc lateximportdia.skel
 
 noinst_HEADERS = config.h lateximport.h lateximportdia.h
 
