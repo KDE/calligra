@@ -6,5 +6,5 @@ sleep 1
 
 trap "kill $micod_pid" 0
 
-kformula.bin -ORBImplRepoAddr inet:localhost:8888 -ORBIIOPAddr inet:localhost:9999
+./kformula.bin -ORBImplRepoAddr inet:localhost:8888 -ORBIIOPAddr inet:localhost:9999
 

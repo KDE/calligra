@@ -18,54 +18,54 @@
  **********************************************************/
 
 KFormulaView::KFormulaView( QWidget *_parent = 0L, const char *_name = 0L ) :
-  QWidget( _parent, _name ), View_impl(), KFormula::View_skel()
+    QWidget( _parent, _name ), View_impl(), KFormula::View_skel()
 {
-  setWidget( this );
+    setWidget( this );
   
-  setBackgroundColor( white );
+    setBackgroundColor( white );
   
-  Control_impl::setFocusPolicy( OPControls::Control::ClickFocus );
+    Control_impl::setFocusPolicy( OPControls::Control::ClickFocus );
  
-  m_pDoc = 0L;
+    m_pDoc = 0L;
 
-  setGeometry( 5000, 5000, 100, 100 );
+    setGeometry( 5000, 5000, 100, 100 );
 }
 
 KFormulaView::~KFormulaView()
 {
-  cleanUp();
+    cleanUp();
 }
 
 void KFormulaView::cleanUp()
 {
-  if ( m_bIsClean )
-    return;
+    if ( m_bIsClean )
+	return;
   
-  m_pDoc->removeView( this );
+    m_pDoc->removeView( this );
   
-  m_rMenuBar = 0L;
-  m_vMenuBarFactory = 0L;
+    m_rMenuBar = 0L;
+    m_vMenuBarFactory = 0L;
 
-  m_rToolBarFormula = 0L;
-  m_rToolBarFont = 0L;
-  m_rToolBarType = 0L;
-  m_vToolBarFactory = 0L;
+    m_rToolBarFormula = 0L;
+    m_rToolBarFont = 0L;
+    m_rToolBarType = 0L;
+    m_vToolBarFactory = 0L;
 
-  View_impl::cleanUp();
+    View_impl::cleanUp();
 }
   
 void KFormulaView::setDocument( KFormulaDocument *_doc )
 {
-  if ( m_pDoc )
-    m_pDoc->removeView( this );
+    if ( m_pDoc )
+	m_pDoc->removeView( this );
 
-  View_impl::setDocument( _doc );
+    View_impl::setDocument( _doc );
   
-  m_pDoc = _doc;
+    m_pDoc = _doc;
 
-  m_pDoc->addView( this );
+    m_pDoc->addView( this );
 
-  QObject::connect( m_pDoc, SIGNAL( sig_modified() ), this, SLOT( slotModified() ) );
+    QObject::connect( m_pDoc, SIGNAL( sig_modified() ), this, SLOT( slotModified() ) );
 }
 
 void KFormulaView::paintEvent( QPaintEvent *_ev )
@@ -78,7 +78,7 @@ void KFormulaView::resizeEvent( QResizeEvent *_ev )
 
 void KFormulaView::slotModified()
 {
-  update();
+    update();
 }
 
 CORBA::Long KFormulaView::addToolButton (ToolBar_ref toolbar,
@@ -95,7 +95,7 @@ CORBA::Long KFormulaView::addToolButton (ToolBar_ref toolbar,
     CORBA::Long id = toolbar->insertButton( CORBA::string_dup( pix ), 
 					    CORBA::string_dup(tooltip),
 					    this,
-					    CORBA::string_dup(func));
+					    func);
     return id;
 }
 
@@ -143,69 +143,145 @@ void KFormulaView::createGUI()
 					    i18n( "Add/change a block with symbols" ), "addB5" );
     }
 
-  if ( !CORBA::is_nil( m_vToolBarFactory ) )
-  {
-      m_rToolBarFont = m_vToolBarFactory->createToolBar( this, i18n( "Font" ) );
+    if ( !CORBA::is_nil( m_vToolBarFactory ) )
+	{
+	    m_rToolBarFont = m_vToolBarFactory->createToolBar( this, i18n( "Font" ) );
 
-      m_idButtonFont_0 = addToolButton(m_rToolBarFont, "reduce.xpm",
-				       i18n( "Reduce the font of active block" ), "reduce");
+	    m_idButtonFont_0 = addToolButton(m_rToolBarFont, "reduce.xpm",
+					     i18n( "Reduce the font of active block" ), "reduce");
 
-      m_idButtonFont_1 = addToolButton(m_rToolBarFont, "enlarge.xpm",
-				       i18n( "Enlarge the font of active block" ), "enlarge");
+	    m_idButtonFont_1 = addToolButton(m_rToolBarFont, "enlarge.xpm",
+					     i18n( "Enlarge the font of active block" ), "enlarge");
 
-      m_idButtonFont_2 = addToolButton(m_rToolBarFont, "reduceall.xpm",
-				       i18n( "Reduce the font of active block & children" ), "reduceRecur");
+	    m_idButtonFont_2 = addToolButton(m_rToolBarFont, "reduceall.xpm",
+					     i18n( "Reduce the font of active block & children" ), "reduceRecur");
       
-      m_idButtonFont_3 = addToolButton(m_rToolBarFont, "enlargeall.xpm",
-				       i18n( "Enlarge the font of active block & children" ), "enlargeRecur" );
+	    m_idButtonFont_3 = addToolButton(m_rToolBarFont, "enlargeall.xpm",
+					     i18n( "Enlarge the font of active block & children" ), "enlargeRecur" );
 
-      m_idButtonFont_4 = addToolButton(m_rToolBarFont, "enlargenext.xpm",
-				       i18n( "Reduce the font of active block, children & next blocks" ), "enlargeAll");
+	    m_idButtonFont_4 = addToolButton(m_rToolBarFont, "enlargenext.xpm",
+					     i18n( "Reduce the font of active block, children & next blocks" ), "enlargeAll");
 
-      m_idButtonFont_5 = addToolButton(m_rToolBarFont, "greek.xpm",
-				       i18n( "Set greek font" ), "setGreek" );
-      m_rToolBarFont->setToggle( m_idButtonFont_5, true );
-  }
+	    m_idButtonFont_5 = addToolButton(m_rToolBarFont, "greek.xpm",
+					     i18n( "Set greek font" ), "setGreek" );
+	    m_rToolBarFont->setToggle( m_idButtonFont_5, true );
+	}
   
-  if ( !CORBA::is_nil( m_vToolBarFactory ) )
-      {
-	  m_rToolBarType = m_vToolBarFactory->createToolBar( this, i18n( "Type" ) );
+    if ( !CORBA::is_nil( m_vToolBarFactory ) )
+	{
+	    m_rToolBarType = m_vToolBarFactory->createToolBar( this, i18n( "Type" ) );
 	  
-	  m_idButtonType_0 = addToolButton(m_rToolBarType, "kformula1-0.xpm", 
-					   i18n( "Add exponent" ), "addCh1" );
+	    m_idButtonType_0 = addToolButton(m_rToolBarType, "kformula1-0.xpm", 
+					     i18n( "Add exponent" ), "addCh1" );
 
-	  m_idButtonType_1 = addToolButton(m_rToolBarType, "kformula2-0.xpm", 
-					   i18n( "Add index" ), "addCh2" );
+	    m_idButtonType_1 = addToolButton(m_rToolBarType, "kformula2-0.xpm", 
+					     i18n( "Add index" ), "addCh2" );
 
-	  m_idButtonType_2 = addToolButton(m_rToolBarType, "kformula2-1.xpm", 
-					   i18n( "Add root index" ), "addCh2" );
+	    m_idButtonType_2 = addToolButton(m_rToolBarType, "kformula2-1.xpm", 
+					     i18n( "Add root index" ), "addCh2" );
 
-	  m_idButtonType_3 = addToolButton(m_rToolBarType, "kformula2-2.xpm", 
-					   i18n( "Add high limit" ), "addCh2" );
+	    m_idButtonType_3 = addToolButton(m_rToolBarType, "kformula2-2.xpm", 
+					     i18n( "Add high limit" ), "addCh2" );
 
-	  m_idButtonType_4 = addToolButton(m_rToolBarType, "kformula3-2.xpm", 
-					   i18n( "Add low limit" ), "addCh3" );
+	    m_idButtonType_4 = addToolButton(m_rToolBarType, "kformula3-2.xpm", 
+					     i18n( "Add low limit" ), "addCh3" );
 
-	  // TODO check, why two exponents button exist!
-	  m_idButtonType_5 = addToolButton(m_rToolBarType, "kformula2-3.xpm", 
-					   i18n( "Add exponent" ), "addCh2" );
+	    // TODO check, why two exponents button exist!
+	    m_idButtonType_5 = addToolButton(m_rToolBarType, "kformula2-3.xpm", 
+					     i18n( "Add exponent" ), "addCh2" );
 
-	  // TODO insert Line Edit control
-      }  
+	    // TODO insert Line Edit control
+	}  
 }
 
 void KFormulaView::newView()
 {
-  assert( (m_pDoc != 0L) );
+    assert( (m_pDoc != 0L) );
 
-  KFormulaShell* shell = new KFormulaShell;
-  shell->enableMenuBar();
-  shell->PartShell_impl::enableStatusBar();
-  shell->enableToolBars();
-  shell->show();
-  shell->setDocument( m_pDoc );
+    KFormulaShell* shell = new KFormulaShell;
+    shell->enableMenuBar();
+    shell->PartShell_impl::enableStatusBar();
+    shell->enableToolBars();
+    shell->show();
+    shell->setDocument( m_pDoc );
   
-  CORBA::release( shell );
+    CORBA::release( shell );
+}
+
+void KFormulaView::addB0()
+{
+    debug("addB0");
+    m_pDoc->addB0();
+    m_pDoc->emitModified();
+}
+
+void KFormulaView::addB1()
+{ 
+    debug("addB1");
+    m_pDoc->addB1();
+    m_pDoc->emitModified();
+}
+
+void KFormulaView::addB4()
+{
+    debug("addB4");
+    m_pDoc->addB4();
+    m_pDoc->emitModified();
+}
+
+void KFormulaView::addB4bis()
+{
+    debug("addB4bis");
+    m_pDoc->addB4bis();
+    m_pDoc->emitModified();
+}
+
+void KFormulaView::addB3()
+{
+}
+
+void KFormulaView::addB2()
+{
+}
+
+void KFormulaView::addB5()
+{
+}
+
+void KFormulaView::reduce()
+{
+}
+
+void KFormulaView::enlarge()
+{
+}
+
+void KFormulaView::reduceRecur()
+{
+}
+
+void KFormulaView::enlargeRecur()
+{
+}
+
+void KFormulaView::enlargeAll()
+{
+}
+
+void KFormulaView::setGreek()
+{
+}
+
+void KFormulaView::addCh1()
+{
+}
+
+void KFormulaView::addCh2()
+{
+}
+
+void KFormulaView::addCh3()
+{
 }
 
 #include "kformula_view.moc"

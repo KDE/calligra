@@ -16,15 +16,15 @@ class KFormulaApp;
  */
 class KFormulaApp : public OPApplication
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  KFormulaApp( int argc, char** argv );
-  ~KFormulaApp();
-  
-  /**
-   * Startup function.
-   */
-  virtual void start();
+    KFormulaApp( int argc, char** argv );
+    ~KFormulaApp();
+    
+    /**
+     * Startup function.
+     */
+    virtual void start();
 };
 
 #endif
