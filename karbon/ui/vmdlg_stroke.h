@@ -38,10 +38,11 @@ private:
 	KarbonPart *m_part;
 
 private slots:
-	void slotUpdateFromRGBSpinBoxes();
-	void slotUpdateFromHSVSpinBoxes();
+	void slotUpdateFromRGBSpinBoxes( int );
+	void slotUpdateFromHSVSpinBoxes( int );
 	void slotApplyButtonPressed();
 	void slotUpdate( QColor *color = 0L );
+	void slotUpdate( int newVal );
 };
 
 #endif
