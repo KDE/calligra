@@ -106,6 +106,16 @@ KexiBrowser::slotItemListChanged(KexiProjectPart *parent)
 	ItemList *plist = parent->items();
 
 	kdDebug() << "KexiBrowser::slotItemListChanged() " << plist->count() << " items" << endl;
+	
+	if(m_mime == "kexi/db")
+	{
+		KexiBrowserItem *group = m_baseItems.find(parent->mime());
+		group->clearChildren();
+	}
+	else
+	{
+		clear();
+	}
 
 	
 	for(KexiProjectPartItem *item = plist->first(); item; item = plist->next())

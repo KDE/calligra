@@ -25,6 +25,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <klineeditdlg.h>
+#include <kmessagebox.h>
 
 #include "kexitablepart.h"
 #include "kexiprojectpartitem.h"
@@ -78,8 +79,8 @@ KexiTablePart::itemContext(KexiView* view)
 	kdDebug() << "KexiTablePart::itemContext()" << endl;
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
 	m->insertAction(i18n("Open Table"), SLOT(slotOpen(QString)));
-	m->insertAction(i18n("Alter Table"), SLOT(slotAlter()));
-	m->insertAction(i18n("Delete Table"), SLOT(slotDrop()));
+	m->insertAction(i18n("Alter Table"), SLOT(slotAlter(QString)));
+	m->insertAction(i18n("Delete Table"), SLOT(slotDrop(QString)));
 	
 	return m;
 }
@@ -110,7 +111,6 @@ QPixmap
 KexiTablePart::groupPixmap()
 {
 	return kapp->iconLoader()->loadIcon(QString("tables"), KIcon::Small);
-//	return QPixmap();
 }
 
 QPixmap
@@ -123,6 +123,7 @@ void
 KexiTablePart::getTables()
 {
 	QStringList tables = m_project->db()->tables();
+	m_items->clear();
 
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it )
 	{
@@ -145,8 +146,8 @@ KexiTablePart::slotCreate()
 		{
 			KexiAlterTable* kat = new KexiAlterTable(currentView(), 0, name, "alterTable");
 			kat->show();
-//			KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, parent, name);
-//			item->setPixmap(0, iconLoader->loadIcon("table", KIcon::Small));
+			m_items->append(new KexiProjectPartItem(this, name, "kexi/table", name));
+			emit itemListChanged(this);
 		}
 	}
 }
@@ -167,6 +168,29 @@ KexiTablePart::slotOpen(QString identifier)
 	else
 	{
 		delete kt;
+	}
+}
+
+void
+KexiTablePart::slotAlter(QString identifier)
+{
+	KexiAlterTable* kat = new KexiAlterTable(currentView(), 0, identifier, "alterTable");
+	kat->show();
+}
+
+void
+KexiTablePart::slotDrop(QString identifier)
+{
+	int ans = KMessageBox::questionYesNo(currentView(),
+		i18n("Do you realy want to delete %1?").arg(identifier), i18n("Delete Table?"));
+
+	if(ans == KMessageBox::Yes)
+	{
+		if(m_project->db()->query("DROP TABLE " + identifier))
+		{
+			// FIXME: Please implement a less costly solution.
+			getTables();
+		}
 	}
 }
 

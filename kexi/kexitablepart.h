@@ -56,6 +56,8 @@ class KexiTablePart : public KexiProjectPart
 	public slots:
 		void				slotCreate();
 		void				slotOpen(QString identifier);
+		void				slotAlter(QString identifier);
+		void				slotDrop(QString identifier);
 };
 
 #endif

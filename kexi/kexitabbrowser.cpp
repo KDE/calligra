@@ -141,6 +141,8 @@ KexiTabBrowser::slotUpdateBrowsers()
 			m_db->addGroup(part);
 			addBrowser(new KexiBrowser(m_stack, part->mime(), part), part->groupPixmap(), part->name());
 			kdDebug() << "KexiTabBrowser::slotUpdateBrowsers(): added " << part->name() << endl;
+			// Update the databasetab
+			connect(part, SIGNAL(itemListChanged(KexiProjectPart*)), m_db, SLOT(slotItemListChanged(KexiProjectPart*)));
 		}
 	}
 }

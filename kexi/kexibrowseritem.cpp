@@ -45,7 +45,7 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectPart *part)
 }
 
 KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectPartItem *item)
- : KListViewItem(parent, item->mime())
+ : KListViewItem(parent, item->name())
 {
 	m_mime = item->mime();
 	m_name = item->name();
@@ -102,6 +102,17 @@ QString
 KexiBrowserItem::identifier()
 {
 	return m_identifier;
+}
+
+void
+KexiBrowserItem::clearChildren()
+{
+	KexiBrowserItem* child;
+	
+	while(child = firstChild())
+	{
+		delete child;
+	}
 }
 
 #include "kexibrowseritem.moc"

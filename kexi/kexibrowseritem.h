@@ -44,6 +44,8 @@ class KexiBrowserItem : public KListViewItem
 		QString			mime();
 		QString			name();
 		QString			identifier();
+		
+		void			clearChildren();
 
 	protected:
 		KexiProjectPart		*m_part;
