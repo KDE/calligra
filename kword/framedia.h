@@ -130,7 +130,7 @@ private:
 
     // TAB 4:
     QWidget *tab4;
-    QGroupBox *grp1, *grp2;
+    QGroupBox *grp1;
     QGridLayout *grid4, *pGrid, *mGrid;
     QLabel *lx, *lml, *lmr, *lmt, *lmb, *ly, *lw, *lh;
     KDoubleNumInput *sx, *sy, *sw, *sh;
