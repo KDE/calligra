@@ -49,6 +49,7 @@ VShearTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Shear" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
+	view()->part()->document().selection()->setState( VObject::selected );
 }
 
 void

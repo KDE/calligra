@@ -65,6 +65,8 @@ VTool::eventFilter( QEvent* event )
 
 	if( event->type() == QEvent::MouseMove )
 	{
+		setCursor();
+
 		if( m_mouseButtonIsDown )
 		{
 			mouseDrag();

@@ -138,6 +138,12 @@ VSelectTool::mouseButtonPress()
 	m_activeNode = view()->part()->document().selection()->handleNode( first() );
 
 	recalc();
+
+	//view()->part()->document().selection()->setState( VObject::edit );
+	//view()->painterFactory()->painter()->end();
+
+	draw();
+
 /*
 	m_fp.setX( mouse_event->pos().x() );
 	m_fp.setY( mouse_event->pos().y() );
