@@ -371,11 +371,12 @@ bool KformViewerDoc::completeLoading( KOStore::Store_ptr  )
   CORBA::String_var str = url();
   QString u = str.in();
   u += "/image";
-  _store->open( u, 0L );
+  if ( _store->open( u, 0L ) )
   {
     istorestream in( _store );
+    in >> ...
+    _store->close();
   }
-  _store->close();
 */
 
   m_bEmpty = false;
