@@ -1,14 +1,12 @@
 # KDE Config File
 [KDE Desktop Entry]
 Name=KDiagramm
-Name[no]=Diagram
 Exec=kdiagramm.bin --server
 Comment=Torben's Chart
-Comment[no]=Torbens graf
 Comment[pt_BR]=Programa para confecção de diagramas
 MimeTypes=application/x-kdiagramm,
-RepoID=IDL:KDiagramm/DocumentFactory:1.0,
+RepoID=IDL:KDiagramm/DocumentFactory:1.0,IDL:Chart/SimpleChart:1.0,
 ActivationMode=shared
 Type=OpenPart
-Icon=unknown.xpm
-MiniIcon=unknown.xpm
+Icon=$KDEDIR/share/apps/kdiagramm/pics/bars.xpm
+MiniIcon=$KDEDIR/share/apps/kdiagramm/pics/bars.xpm
