@@ -38,7 +38,9 @@
 #include <kppieobject.h>
 #include <kprectobject.h>
 #include <kpresenter_view.h>
-
+#include <kotextobject.h>
+using namespace Qt3;
+#include <kdebug.h>
 
 /******************************************************************/
 /* Class: TextCmd						  */
@@ -1420,4 +1422,153 @@ void ResizeCmd::unexecute( bool _repaint )
 	doc->repaint( oldRect );
 	doc->repaint( object );
     }
+}
+
+
+KPrPasteTextCommand::KPrPasteTextCommand( QTextDocument *d, int parag, int idx,
+                                const QCString & data )
+    : QTextCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data )
+{
+}
+
+QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
+{
+    Qt3::QTextParag *firstParag = doc->paragAt( m_parag );
+    if ( !firstParag ) {
+        qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
+        return 0;
+    }
+    //kdDebug() << "KWPasteTextCommand::execute m_parag=" << m_parag << " m_idx=" << m_idx
+    //          << " firstParag=" << firstParag << " " << firstParag->paragId() << endl;
+    cursor.setParag( firstParag );
+    cursor.setIndex( m_idx );
+    QDomDocument domDoc;
+    domDoc.setContent( m_data );
+    QDomElement elem = domDoc.documentElement();
+    // We iterate twice over the list of paragraphs.
+    // First time to gather the text,
+    // second time to apply the character & paragraph formatting
+    QString text;
+
+    QValueList<QDomElement> listParagraphs;
+    QDomElement paragraph = elem.firstChild().toElement();
+    bool first = true;
+    for ( ; !paragraph.isNull() ; paragraph = paragraph.nextSibling().toElement() )
+    {
+        if ( paragraph.tagName() == "TEXTOBJ" )
+        {
+            QString s = paragraph.namedItem( "TEXT" ).toElement().text();
+            if ( !first )
+                text += '\n';
+            else
+                first = false;
+            text += s;
+            listParagraphs.append( paragraph );
+        }
+    }
+    //kdDebug() << "KWPasteTextCommand::execute Inserting text: '" << text << "'" << endl;
+    KoTextDocument * textdoc = static_cast<KoTextDocument *>(c->parag()->document());
+
+    cursor.insert( text, true );
+
+    // Move cursor to the end
+    c->setParag( firstParag );
+    c->setIndex( m_idx );
+    for ( int i = 0; i < (int)text.length(); ++i )
+        c->gotoRight();
+#if 0
+    // Redo the parag lookup because if firstParag was empty, insert() has
+    // shifted it down (side effect of splitAndInsertEmptyParag)
+    firstParag = doc->paragAt( m_parag );
+    KoTextParag * parag = static_cast<KoTextParag *>(firstParag);
+    //kdDebug() << "KPrPasteTextCommand::execute starting at parag " << parag << " " << parag->paragId() << endl;
+    uint count = listParagraphs.count();
+    QValueList<QDomElement>::Iterator it = listParagraphs.begin();
+    QValueList<QDomElement>::Iterator end = listParagraphs.end();
+    for ( uint item = 0 ; it != end ; ++it, ++item )
+    {
+        if (!parag)
+        {
+            kdWarning() << "KWPasteTextCommand: parag==0L ! KWord bug, please report." << endl;
+            break;
+        }
+        QDomElement paragElem = *it;
+        // First line (if appending to non-empty line) : apply offset to formatting, don't apply parag layout
+        if ( item == 0 && m_idx > 0 )
+        {
+            // First load the default format, but only apply it to our new chars
+            QDomElement layout = paragElem.namedItem( "LAYOUT" ).toElement();
+            if ( !layout.isNull() )
+            {
+                QDomElement formatElem = layout.namedItem( "FORMAT" ).toElement();
+                if ( !formatElem.isNull() )
+                {
+                    QTextFormat f = parag->loadFormat( formatElem, 0L, QFont() );
+                    QTextFormat * defaultFormat = doc->formatCollection()->format( &f );
+                    // Last paragraph (i.e. only one in all) : some of the text might be from before the paste
+                    int endIndex = (item == count-1) ? c->index() : parag->string()->length() - 1;
+                    parag->setFormat( m_idx, endIndex - m_idx, defaultFormat, TRUE );
+                }
+            }
+
+            parag->loadFormatting( paragElem, m_idx );
+        }
+        else
+        {
+            if ( item == 0 ) // This paragraph existed, store its parag layout
+                m_oldParagLayout = parag->paragLayout();
+            parag->loadLayout( paragElem );
+            // Last paragraph: some of the text might be from before the paste
+            int len = (item == count-1) ? c->index() : parag->string()->length();
+            // Apply default format
+            parag->setFormat( 0, len, parag->paragFormat(), TRUE );
+            parag->loadFormatting( paragElem );
+        }
+        parag->format();
+        parag->setChanged( TRUE );
+        parag = static_cast<KoTextParag *>(parag->next());
+        //kdDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
+    }
+#endif
+#if 0
+    // In case loadFormatting queued any image request
+    KWDocument * doc = textFs->kWordDocument();
+    doc->processImageRequests();
+
+    // In case of any inline frameset
+    doc->pasteFrames( elem, 0 );
+#endif
+    m_lastParag = c->parag()->paragId();
+    m_lastIndex = c->index();
+    return c;
+}
+
+
+QTextCursor * KPrPasteTextCommand::unexecute( QTextCursor *c )
+{
+    Qt3::QTextParag *firstParag = doc->paragAt( m_parag );
+    if ( !firstParag ) {
+        qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
+        return 0;
+    }
+    cursor.setParag( firstParag );
+    cursor.setIndex( m_idx );
+    doc->setSelectionStart( QTextDocument::Temp, &cursor );
+
+    Qt3::QTextParag *lastParag = doc->paragAt( m_lastParag );
+    if ( !lastParag ) {
+        qWarning( "can't locate parag at %d, last parag: %d", m_lastParag, doc->lastParag()->paragId() );
+        return 0;
+    }
+    cursor.setParag( lastParag );
+    cursor.setIndex( m_lastIndex );
+    doc->setSelectionEnd( QTextDocument::Temp, &cursor );
+    // Delete all custom items
+
+    doc->removeSelectedText( QTextDocument::Temp, c /* sets c to the correct position */ );
+#if 0
+    if ( m_idx == 0 )
+        static_cast<KoTextParag *>( firstParag )->setParagLayout( m_oldParagLayout );
+#endif
+    return c;
 }

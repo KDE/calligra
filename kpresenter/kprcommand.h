@@ -34,7 +34,9 @@
 #include <qbrush.h>
 #include <qmap.h>
 #include <koPageLayoutDia.h>
-
+#include <koparaglayout.h>
+#include <qrichtext_p.h>
+#include <kocommand.h>
 class KPresenterDoc;
 
 class KPresenterDoc;
@@ -44,6 +46,7 @@ class KPPixmapObject;
 class KPGroupObject;
 class KPresenterView;
 class KPClipartObject;
+class KoParagLayout;
 
 /******************************************************************/
 /* Class: TextCmd                                               */
@@ -611,5 +614,28 @@ protected:
     RectValues newValues;
 
 };
+
+/******************************************************************/
+/* Class: KPrPasteTextCommand                                     */
+/******************************************************************/
+class KPrPasteTextCommand : public Qt3::QTextCommand
+{
+public:
+    KPrPasteTextCommand( QTextDocument *d, int parag, int idx,
+                    const QCString & data );
+    ~KPrPasteTextCommand() {}
+    Qt3::QTextCursor *execute( Qt3::QTextCursor *c );
+    Qt3::QTextCursor *unexecute( Qt3::QTextCursor *c );
+protected:
+    int m_parag;
+    int m_idx;
+    QCString m_data;
+    // filled in by execute(), for unexecute()
+    int m_lastParag;
+    int m_lastIndex;
+    KoParagLayout m_oldParagLayout;
+};
+
+
 
 #endif

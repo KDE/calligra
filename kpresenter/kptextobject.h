@@ -38,6 +38,7 @@ class KCommand;
 class Page;
 class KoPoint;
 class KoVariable;
+class KPrTextDrag;
 
 /******************************************************************/
 /* Class: KPTextObject                                            */
@@ -95,6 +96,14 @@ public:
 
     void removeHighlight ();
     void highlightPortion( Qt3::QTextParag * parag, int index, int length, Page */*_page*/ );
+
+    KCommand * pasteKPresenter( QTextCursor * cursor, const QCString & data, bool removeSelected );
+
+    void saveParagraph( QDomDocument& doc, 
+			KoTextParag * parag,
+			QDomElement &parentElem,
+			int from /* default 0 */,
+			int to /* default length()-2 */ );
 
 signals:
     void repaintChanged( KPTextObject* );
@@ -177,6 +186,8 @@ public slots:
 
 protected slots:
     virtual void startDrag();
+
+    KPrTextDrag * newDrag( QWidget * parent ) const ;
 
 protected:
     // Reimplemented from KoTextView

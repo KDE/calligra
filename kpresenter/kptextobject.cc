@@ -55,6 +55,8 @@
 #include <koVariableDlgs.h>
 #include "kprvariable.h"
 #include <koRuler.h>
+#include "kprdrag.h"
+#include <qclipboard.h>
 
 using namespace std;
 
@@ -381,47 +383,7 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
     KoTextParag *parag = static_cast<KoTextParag*> (textDocument()->firstParag());
     // ### fix this loop (Werner)
     while ( parag ) {
-        QDomElement paragraph=doc.createElement(tagP);
-        int tmpAlign=0;
-        switch(parag->alignment())
-        {
-        case Qt::AlignLeft:
-            tmpAlign=1;
-            break;
-        case Qt::AlignRight:
-            tmpAlign=2;
-            break;
-        case Qt::AlignCenter:
-            tmpAlign=4;
-            break;
-        default:
-            tmpAlign=1;
-        }
-        if(tmpAlign!=1)
-            paragraph.setAttribute(attrAlign, tmpAlign);
-
-        saveParagLayout( parag->paragLayout(), paragraph );
-#if 0
-        paragraph.setAttribute(attrType, (int)parag->type());
-        paragraph.setAttribute(attrDepth, parag->listDepth());
-        KTextEditFormat *lastFormat = 0;
-#endif
-        KoTextFormat *lastFormat = 0;
-        QString tmpText;
-        for ( int i = 0; i < parag->length(); ++i ) {
-            QTextStringChar &c = parag->string()->at(i);
-            if ( !lastFormat || c.format()->key() != lastFormat->key() ) {
-                if ( lastFormat )
-                    paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
-                lastFormat = static_cast<KoTextFormat*> (c.format());
-                tmpText="";
-            }
-            tmpText+=c.c;
-        }
-        if ( lastFormat ) {
-            paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
-        }
-        textobj.appendChild(paragraph);
+        saveParagraph( doc,parag,textobj,0,parag->length()-1 );
         parag = static_cast<KoTextParag*>( parag->next());
     }
     return textobj;
@@ -950,6 +912,38 @@ void KPTextObject::highlightPortion( Qt3::QTextParag * parag, int index, int len
 #endif
 }
 
+KCommand * KPTextObject::pasteKPresenter( QTextCursor * cursor, const QCString & data, bool removeSelected )
+{
+    // Having data as a QCString instead of a QByteArray seems to fix the trailing 0 problem
+    // I tried using QDomDocument::setContent( QByteArray ) but that leads to parse error at the end
+
+    //kdDebug(32001) << "KWTextFrameSet::pasteKWord" << endl;
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Paste Text") );
+    if ( removeSelected && textDocument()->hasSelection( QTextDocument::Standard ) )
+        macroCmd->addCommand( m_textobj->removeSelectedTextCommand( cursor, QTextDocument::Standard ) );
+    m_textobj->emitHideCursor();
+    // correct but useless due to unzoom/zoom
+    // (which invalidates everything and sets lastformatted to firstparag)
+    //setLastFormattedParag( cursor->parag()->prev() ?
+    //                       cursor->parag()->prev() : cursor->parag() );
+
+    // We have our own command for this.
+    // Using insert() wouldn't help storing the parag stuff for redo
+    KPrPasteTextCommand * cmd = new KPrPasteTextCommand( textDocument(), cursor->parag()->paragId(), cursor->index(), data );
+    textDocument()->addCommand( cmd );
+
+    macroCmd->addCommand( new KoTextCommand( m_textobj, /*cmd, */QString::null ) );
+    *cursor = *( cmd->execute( cursor ) );
+
+    m_textobj->formatMore();
+    emit repaintChanged( this );
+    m_textobj->emitEnsureCursorVisible();
+    m_textobj->emitUpdateUI( true );
+    m_textobj->emitShowCursor();
+    m_textobj->selectionChangedNotify();
+    return macroCmd;
+}
+
 
 KPTextView::KPTextView( KPTextObject * txtObj,Page *_page )
     : KoTextView( txtObj->textObject() )
@@ -996,19 +990,39 @@ void KPTextView::cut()
 
 void KPTextView::copy()
 {
-    kdDebug()<<"KPTextView::copy()\n";
-    //todo
+    if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
+        KPrTextDrag *kd = newDrag( 0L );
+        QApplication::clipboard()->setData( kd );
+    }
 }
 
 void KPTextView::paste()
 {
     kdDebug()<<"KPTextView::paste()\n";
-    //todo
+
+    QMimeSource *data = QApplication::clipboard()->data();
+    if ( data->provides( KPrTextDrag::selectionMimeType() ) )
+    {
+        QByteArray arr = data->encodedData( KPrTextDrag::selectionMimeType() );
+        if ( arr.size() )
+        {
+            //todo
+            kdDebug()<<"QCString( arr ) :"<<QCString( arr )<<endl;
+            kpTextObject()->kPresenterDocument()->addCommand(kpTextObject()->pasteKPresenter( cursor(), QCString( arr ), true ));
+        }
+    }
+    else
+    {
+        // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
+        // In particular it handles charsets (in the mimetype).
+        QString text = QApplication::clipboard()->text();
+        if ( !text.isEmpty() )
+            textObject()->pasteText( cursor(), text, currentFormat(), true );
+    }
 }
 
 void KPTextView::updateUI( bool updateFormat, bool force  )
 {
-    kdDebug()<<"updateUI( bool updateFormat, bool force  )\n";
     KoTextView::updateUI( updateFormat, force  );
     // Paragraph settings
     KoTextParag * parag = static_cast<KoTextParag*>( cursor()->parag());
@@ -1072,7 +1086,6 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
 
 void KPTextView::ensureCursorVisible()
 {
-
     kdDebug()<<"KPTextView::ensureCursorVisible()\n";
 }
 
@@ -1275,4 +1288,86 @@ void KPTextView::insertVariable( KoVariable *var )
         kpTextObject()->kPresenterDocument()->refreshMenuCustomVariable();
         kpTextObject()->kPresenterDocument()->repaint( kpTextObject() );
     }
+}
+
+KPrTextDrag * KPTextView::newDrag( QWidget * parent ) const
+{
+    QTextCursor c1 = textDocument()->selectionStartCursor( QTextDocument::Standard );
+    QTextCursor c2 = textDocument()->selectionEndCursor( QTextDocument::Standard );
+
+    QString text;
+
+    QDomDocument domDoc( "PARAGRAPHS" );
+    QDomElement elem = domDoc.createElement( "TEXTOBJ" );
+    domDoc.appendChild( elem );
+    if ( c1.parag() == c2.parag() )
+    {
+        text = c1.parag()->string()->toString().mid( c1.index(), c2.index() - c1.index() );
+        m_kptextobj->saveParagraph( domDoc,static_cast<KoTextParag*>(c1.parag()),elem, c1.index(), c2.index()-1);
+    }
+    else
+    {
+        text += c1.parag()->string()->toString().mid( c1.index() ) + "\n";
+        m_kptextobj->saveParagraph( domDoc,static_cast<KoTextParag*>(c1.parag()),elem, c1.index(), c1.parag()->length()-1);
+        Qt3::QTextParag *p = c1.parag()->next();
+        while ( p && p != c2.parag() ) {
+            text += p->string()->toString() + "\n";
+            m_kptextobj->saveParagraph( domDoc,static_cast<KoTextParag*>(p),elem, 0, p->length()-1);
+            p = p->next();
+        }
+        text += c2.parag()->string()->toString().left( c2.index() );
+        m_kptextobj->saveParagraph( domDoc,static_cast<KoTextParag*>(c2.parag()),elem, 0, c2.index()-1);
+    }
+    KPrTextDrag *kd = new KPrTextDrag( parent );
+    kd->setPlain( text );
+    kd->setKPresenter( domDoc.toCString() );
+    kdDebug() << "KPTextView::newDrag " << domDoc.toCString() << endl;
+    kdDebug()<<" KPTextView::text plain :"<<text<<endl;
+    return kd;
+}
+
+
+
+void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElement &parentElem,
+                         int from /* default 0 */,
+                         int to /* default length()-2 */ )
+{
+    if(!parag)
+        return;
+    QDomElement paragraph=doc.createElement(tagP);
+    int tmpAlign=0;
+    switch(parag->alignment())
+    {
+    case Qt::AlignLeft:
+        tmpAlign=1;
+        break;
+    case Qt::AlignRight:
+        tmpAlign=2;
+        break;
+    case Qt::AlignCenter:
+        tmpAlign=4;
+        break;
+    default:
+        tmpAlign=1;
+    }
+    if(tmpAlign!=1)
+        paragraph.setAttribute(attrAlign, tmpAlign);
+
+    saveParagLayout( parag->paragLayout(), paragraph );
+    KoTextFormat *lastFormat = 0;
+    QString tmpText;
+    for ( int i = from; i < to; ++i ) {
+        QTextStringChar &c = parag->string()->at(i);
+        if ( !lastFormat || c.format()->key() != lastFormat->key() ) {
+            if ( lastFormat )
+                paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
+            lastFormat = static_cast<KoTextFormat*> (c.format());
+            tmpText="";
+        }
+        tmpText+=c.c;
+    }
+    if ( lastFormat ) {
+        paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
+    }
+    parentElem.appendChild(paragraph);
 }
