@@ -50,6 +50,15 @@ struct KoTabulator {
     bool operator==( const KoTabulator & t ) const {
         return ptPos == t.ptPos && type == t.type;
     }
+    bool operator < ( const KoTabulator & t ) const {
+        return ptPos < t.ptPos;
+    }
+    bool operator <= ( const KoTabulator & t ) const {
+        return ptPos <= t.ptPos;
+    }
+    bool operator > ( const KoTabulator & t ) const {
+        return ptPos > t.ptPos;
+    }
 };
 
 typedef QValueList<KoTabulator> KoTabulatorList;
