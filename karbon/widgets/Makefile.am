@@ -22,7 +22,8 @@ noinst_HEADERS = \
 	vtranslate.h \
 	vselecttoolbar.h \
 	vstatebutton.h \
-	vtoolbox.h
+	vtoolbox.h \
+	vtypebuttonbox.h
 
 libkarbonwidgets_la_SOURCES = \
 	dummy.cc \
@@ -36,7 +37,8 @@ libkarbonwidgets_la_SOURCES = \
 	vtranslate.cc \
 	vselecttoolbar.cc \
 	vstatebutton.cc \
-	vtoolbox.cc
+	vtoolbox.cc \
+	vtypebuttonbox.cc
 
 libkarbonwidgets_la_METASOURCES = \
 	AUTO
