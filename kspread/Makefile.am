@@ -84,7 +84,7 @@ parser:
 	bison -p dep -b dep -d yacc.dep.y
 
 messages: rc.cpp
-	perl extracti18n *.xml > xml_doc.cc
+	perl extracti18n extensions/*.xml > xml_doc.cc
 	$(XGETTEXT) rc.cpp *.cc -o $(podir)/kspread.pot
 	-rm xml_doc.cc
 
