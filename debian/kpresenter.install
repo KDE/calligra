@@ -1,0 +1,14 @@
+debian/tmp/usr/bin/kpresenter
+debian/tmp/usr/bin/kprconverter.pl
+debian/tmp/usr/lib/kpresenter.*
+debian/tmp/usr/lib/kde3/libkpresenterpart.*
+debian/tmp/usr/share/applnk/Office/kpresenter.desktop
+debian/tmp/usr/share/apps/kpresenter
+debian/tmp/usr/share/doc/kde/HTML/en/kpresenter/*.bz2
+debian/tmp/usr/share/doc/kde/HTML/en/kpresenter/*.docbook
+debian/tmp/usr/share/doc/kde/HTML/en/kpresenter/*.png
+debian/tmp/usr/share/doc/kde/HTML/en/kpresenter/common
+debian/tmp/usr/share/icons/hicolor/16x16/apps/kpresenter.png
+debian/tmp/usr/share/icons/hicolor/32x32/apps/kpresenter.png
+debian/tmp/usr/share/icons/hicolor/48x48/apps/kpresenter.png
+debian/kpresenter.xpm usr/share/pixmaps

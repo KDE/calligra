@@ -1,3 +1,10 @@
+koffice (1:1.2.0-2) unstable; urgency=low
+
+  * Moved *.la files into koffice-dev.
+  * Moved to Chris Cheney's style of debian/rules.
+
+ -- Ben Burton <benb@acm.org>  Mon, 23 Sep 2002 22:18:01 +1000
+
 koffice (1:1.2.0-1) unstable; urgency=low
 
   * New upstream release.

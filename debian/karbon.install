@@ -1,0 +1,10 @@
+debian/tmp/usr/bin/karbon
+debian/tmp/usr/lib/karbon.*
+debian/tmp/usr/lib/libkarbonpart.*
+debian/tmp/usr/lib/kde3/libkarbon*
+debian/tmp/usr/share/applnk/Office/karbon.desktop
+debian/tmp/usr/share/apps/karbon
+debian/tmp/usr/share/icons/hicolor/16x16/apps/karbon.png
+debian/tmp/usr/share/icons/hicolor/32x32/apps/karbon.png
+debian/tmp/usr/share/icons/hicolor/48x48/apps/karbon.png
+debian/karbon.xpm usr/share/pixmaps

@@ -1,200 +1,241 @@
 #!/usr/bin/make -f
-# Made with the aid of debmake, by Christoph Lameter,
-# based on the sample debian/rules file for GNU hello by Ian Jackson.
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
 
-export DH_COMPAT=3
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
 
-INSTALL_DIR = install -p -d -o root -g root -m 755
-INSTALL_FILE = install -p -o root -g root -m 644
-INSTALL_SCRIPT = install -p -o root -g root -m 755
+# This is the debhelper compatibility version to use.
+export DH_COMPAT=4
 
-tmp = debian/tmp
-overrides = $(tmp)/usr/share/lintian/overrides
-pixmaps = $(tmp)/usr/share/pixmaps
-icons = $(tmp)/usr/share/icons
-kdedocs = $(tmp)/usr/share/doc/kde/HTML
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
 
-ARCH = $(shell dpkg-architecture -qDEB_BUILD_ARCH)
-ifeq ($(ARCH),alpha)
-  COMPILER_FLAGS=CFLAGS="-O0 -mieee" CXXFLAGS="-O0 -mieee"
-else
-  ifeq ($(ARCH),hppa)
-    COMPILER_FLAGS=CFLAGS="-Os -ffunction-sections -Wl,--stub-group-size=50000" CXXFLAGS="-Os -ffunction-sections -Wl,--stub-group-size=50000"
-  else
-    COMPILER_FLAGS=CXX=g++ CC=gcc
-  endif
+# These are used for cross-compiling and for saving the configure script
+# from having to guess our platform (since we know it already)
+DEB_HOST_GNU_TYPE	?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE	?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+objdir = $(CURDIR)/obj-$(DEB_BUILD_GNU_TYPE)
+
+ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -g
+endif
+ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+	INSTALL_PROGRAM += -s
 endif
 
-build: build-stamp
+ifeq ($(DEB_BUILD_GNU_TYPE),alpha-linux)
+  export CFLAGS +=-O0 -mieee
+  export CXXFLAGS +=-O0 -mieee
+endif
+
+ifeq ($(DEB_BUILD_GNU_TYPE),i386-linux)
+  # Uncomment the following 2 lines to enable i686 optimziation
+  # You may want to tweak the settings to your likings
+  #export CFLAGS=-O3 -march=i686 -ffast-math -finline-functions
+  #export CXXFLAGS=-O3 -march=i686 -ffast-math -finline-functions
+  XINERAMA=--with-xinerama
+endif
 
 -include debian/debiandirs
 
 debian/debiandirs: admin/debianrules
 	perl -w admin/debianrules echodirs > debian/debiandirs
 
-build-stamp:
+configure: configure-stamp
+configure-stamp:
 	dh_testdir
-	if test ! -f configure; then \
-	  $(MAKE) -f admin/Makefile.common ;\
-	fi 
-	$(COMPILER_FLAGS) ./configure $(configkde) \
-	  --libdir=$(kde_libdir) --includedir=$(kde_includedir)
-	$(MAKE) KDE_PLUGIN_DEBIAN="-module -no-undefined"
-	touch build-stamp
 
-clean: debian-clean
-	dh_clean
+	# Apply Debian specific patches
+	if test ! -f patch-stamp; then \
+		for patch in $(CURDIR)/debian/patches/*.diff ;\
+		do \
+			echo APPLYING PATCH\: $${patch##*/};\
+			patch -p1 < $$patch ;\
+		done ;\
+		touch patch-stamp ;\
+	fi
+
+	# KDE CVS does not have aclocal.m4 or configure
+	if test ! -f configure; then \
+		$(MAKE) -f admin/Makefile.common ;\
+	fi
+
+	# make build directory
+	mkdir $(objdir)
+
+	# run configure with build tree $(objdir)
+	cd $(objdir) && \
+	../configure $(configkde) $(XINERAMA)
+
+	touch configure-stamp
+
+build: build-stamp
+build-stamp: configure-stamp 
+	dh_testdir
+
+	cd $(objdir) && \
+	$(MAKE)
+
+	touch build-stamp
 
 debian-clean:
 	dh_testdir
 	dh_testroot
-	-rm -f build-stamp install-stamp debian/debiandirs
-	if test -d CVS; then \
-	  $(MAKE) -f admin/Makefile.common cvs-clean ;\
+
+	dh_clean
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp configure-stamp debian/debiandirs
+
+	# Remove Debian specific patches
+	if test -f patch-stamp; then \
+		for patch in $(CURDIR)/debian/patches/*.diff ;\
+		do \
+			echo REMOVING PATCH\: $${patch##*/};\
+			patch -p1 -R < $$patch ;\
+		done ;\
+		rm -f patch-stamp ;\
 	fi
-	-$(MAKE) distclean
 
-install: install-stamp
+	# Remove build tree
+	rm -rf $(objdir)
 
-install-stamp: build
+	# if Makefile exists run distclean
+	if test -f Makefile; then \
+		$(MAKE) distclean; \
+	fi
+
+	if test -d CVS; then \
+		$(MAKE) -f admin/Makefile.common cvs-clean ;\
+	fi
+
+	dh_clean
+
+install: DH_OPTIONS=
+install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
 
-	# Install overrides.
-	$(INSTALL_DIR) $(overrides)
-	$(INSTALL_FILE) debian/*.override $(overrides)
-	for i in `ls $(overrides)/`; do \
-		mv $(overrides)/$$i $(overrides)/`echo $$i | sed -e 's#.override##'`; \
-	done
-
-	# Install pixmaps.
-	$(INSTALL_DIR) $(pixmaps)
-	$(INSTALL_FILE) debian/*.xpm $(pixmaps)
-
-	# Main install.
-	$(MAKE) install DESTDIR=`pwd`/$(tmp)
-
-	# Add "#!/usr/bin/perl" to the head of kprconverter.pl.
-	echo "#!/usr/bin/perl -w" > $(tmp)/usr/bin/kprconverter.pl.new
-	echo -n "# -- Was: " >> $(tmp)/usr/bin/kprconverter.pl.new
-	cat $(tmp)/usr/bin/kprconverter.pl >> $(tmp)/usr/bin/kprconverter.pl.new
-	mv $(tmp)/usr/bin/kprconverter.pl.new $(tmp)/usr/bin/kprconverter.pl
-	chmod 755 $(tmp)/usr/bin/kprconverter.pl
-
-	# Deal with kivio's straight_connector.ksp.
-	$(INSTALL_DIR) $(tmp)/usr/lib/kde3
-	mv $(tmp)/usr/lib/straight_connector.ksp \
-		$(tmp)/usr/lib/kde3/straight_connector_ksp.so
-	chmod a-x $(tmp)/usr/lib/kde3/straight_connector_ksp.so
+	cd $(objdir) && \
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
 
 	# Generate HTML docs.
-	for i in `find $(tmp) -name "index.docbook"`; do \
+	for i in `find debian/tmp -name "index.docbook"`; do \
 	  pushd . > /dev/null; cd `dirname $$i`; meinproc `basename $$i`; \
 	  popd > /dev/null; done
 
-	# Make common links for docs.
-	for p in `dh_listpackages` thesaurus; do \
-	  for i in `find $(kdedocs) -type d -name $$p`; do \
-	    ln -f -n -s ../common $$i/common; done; done
+	# Split into separate binary packages.
+	dh_install --list-missing
 
-	perl -w admin/debianrules cleanup
+	# Install standard documentation links.
+	for pkg in `dh_listpackages`; do \
+	  if test -d debian/$$pkg/usr/share/doc/kde/HTML/en/$$pkg; then \
+	    dh_link -p$$pkg usr/share/doc/kde/HTML/en/$$pkg \
+	      usr/share/doc/$$pkg/html; \
+	  fi; \
+	done
 
-	touch install-stamp
-	
-binary-indep: build install
+	# Install lintian overrides.
+	for i in debian/*.override; do \
+	  pkg=`basename $$i | sed -e 's#.override##'`; \
+	  dh_install -p$$pkg $$i usr/share/lintian/overrides; \
+	  mv debian/$$pkg/usr/share/lintian/overrides/$$pkg.override \
+	    debian/$$pkg/usr/share/lintian/overrides/$$pkg; \
+	done
+
+	# Fix the kivio straight_connector.ksp mess.
+	# This *must* come after all dh_installs have been done.
+	mv debian/kivio/usr/lib/kde3/straight_connector.ksp \
+	  debian/kivio/usr/lib/kde3/straight_connector_ksp.so
+	chmod a-x debian/kivio/usr/lib/kde3/straight_connector_ksp.so
+
+# This single target is used to build all the packages, all at once, or
+# one at a time. So keep in mind: any options passed to commands here will
+# affect _all_ packages. Anything you want to only affect one package
+# should be put in another target, such as the install target.
+binary-common:
 	dh_testdir
 	dh_testroot
-	dh_movefiles -i
-	dh_installdocs -i
-	dh_installexamples -i
-	dh_installmenu -i
-	dh_installmime -i
-	dh_installman -i
-	dh_installchangelogs -pkoffice
-	dh_installchangelogs -pkoffice-doc-html
-	dh_link -i
-	#dh_strip -i
-	dh_compress -i
-	dh_fixperms -i
-	dh_installdeb -i
-	dh_perl -i
-	#dh_shlibdeps -i
-	dh_gencontrol -i
-	dh_md5sums -i
-	dh_builddeb -i
+	dh_installchangelogs
+	dh_installdocs
+	dh_installexamples
 
-binary-arch: build install
-	dh_testdir
-	dh_testroot
-	dh_movefiles -a
-	dh_installdebconf -a
-	dh_installdocs -a
-	dh_installexamples -a
-	# Rename a couple of newly installed files.
-	mv debian/kugar/usr/share/doc/kugar/examples/kugar.examples.README \
-	  debian/kugar/usr/share/doc/kugar/examples/README.examples
-	# Ensure all demo files are once compressed.
-	for i in kword kspread; do \
-	  for j in debian/$$i/usr/share/doc/$$i/examples/*.k??; do \
-	    if ! gzip -t $$j > /dev/null 2>&1; then \
-	      gzip -9 $$j; mv $$j.gz $$j; fi; done; done
-	dh_installmenu -a
-	dh_installmime -a
-	dh_installman -a
+	# Rename some newly installed files, and ensure all demo files
+	# are once compressed.
+	for pkg in `dh_listpackages`; do \
+	  case "$$pkg" in \
+	    kugar ) \
+	      mv debian/kugar/usr/share/doc/kugar/examples/kugar.examples.README \
+	        debian/kugar/usr/share/doc/kugar/examples/README.examples \
+	    ;; \
+	    kword | kspread ) \
+	      for eg in debian/$$pkg/usr/share/doc/$$pkg/examples/*.k??; do \
+	        if ! gzip -t $$eg > /dev/null 2>&1; then \
+	          gzip -9 $$eg; \
+	          mv $$eg.gz $$eg; \
+	        fi; \
+	      done; \
+	    ;; \
+	  esac; \
+	done
+
+	dh_installman
+
 	# Move some incorrectly installed man pages.
-	mv debian/kpresenter/usr/share/man/pl/man1/kprconverter.1 \
-	  debian/kpresenter/usr/share/man/man1/kprconverter.pl.1
-	dh_undocumented -a
-	dh_installchangelogs -pkoffice-libs
-	dh_installchangelogs -pkoffice-dev
-	dh_installchangelogs -pkarbon
-	dh_installchangelogs -pkchart kchart/CHANGES
-	dh_installchangelogs -pkformula
-	dh_installchangelogs -pkivio kivio/CHANGELOG
-	dh_installchangelogs -pkontour
-	dh_installchangelogs -pkoshell
-	dh_installchangelogs -pkpresenter kpresenter/CHANGES
-	dh_installchangelogs -pkspread kspread/CHANGES
-	dh_installchangelogs -pkugar kugar/ChangeLog
-	dh_installchangelogs -pkword kword/CHANGES
-	dh_link -a
-	dh_strip -a
-	dh_compress -a -X.docbook -X.bz2 -X.ksp -X.kwd -X.kwt
-	dh_fixperms -a
-	dh_makeshlibs -a -V
-	dh_installdeb -a
-	dh_perl -a
-	dh_shlibdeps -pkoffice-dev \
-	  -ldebian/koffice-libs/usr/lib
-	dh_shlibdeps -pkoffice-libs \
-	  -ldebian/koffice-libs/usr/lib
-	dh_shlibdeps -pkarbon \
-	  -ldebian/koffice-libs/usr/lib:debian/karbon/usr/lib
-	dh_shlibdeps -pkchart \
-	  -ldebian/koffice-libs/usr/lib:debian/kchart/usr/lib
-	dh_shlibdeps -pkformula \
-	  -ldebian/koffice-libs/usr/lib:debian/kformula/usr/lib
-	dh_shlibdeps -pkontour \
-	  -ldebian/koffice-libs/usr/lib:debian/kontour/usr/lib
-	dh_shlibdeps -pkivio \
-	  -ldebian/koffice-libs/usr/lib:debian/kivio/usr/lib
-	dh_shlibdeps -pkoshell \
-	  -ldebian/koffice-libs/usr/lib:debian/koshell/usr/lib
-	dh_shlibdeps -pkpresenter \
-	  -ldebian/koffice-libs/usr/lib:debian/kpresenter/usr/lib
-	dh_shlibdeps -pkspread \
-	  -ldebian/koffice-libs/usr/lib:debian/kspread/usr/lib
-	dh_shlibdeps -pkugar \
-	  -ldebian/koffice-libs/usr/lib:debian/kugar/usr/lib
-	dh_shlibdeps -pkword \
-	  -ldebian/koffice-libs/usr/lib:debian/kword/usr/lib
-	dh_gencontrol -a
-	dh_md5sums -a
-	dh_builddeb -a
+	if [ -e debian/kpresenter/usr/share/man/pl ]; then \
+	  mv debian/kpresenter/usr/share/man/pl/man1/kprconverter.1 \
+	    debian/kpresenter/usr/share/man/man1/kprconverter.pl.1; \
+	  rm -rf debian/kpresenter/usr/share/man/pl; \
+	fi
+	
+	dh_installmenu
+	dh_installmime
+	dh_strip
+	dh_link
+	dh_compress -X.docbook -X.css -X-license -X.dcl -X.bz2 -X.ksp -X.kwd -X.kwt
+	dh_fixperms
+	dh_makeshlibs -V
+	dh_installdeb
+	dh_perl
 
-# Below here is fairly generic really
+	# Run dh_shlibdeps with package-specific library search paths.
+	for pkg in `dh_listpackages`; do \
+	  echo "Checking dependencies for $$pkg..."; \
+	  case "$$pkg" in \
+	    koffice | koffice-doc-html ) \
+	      DH_OPTIONS='' dh_shlibdeps -p$$pkg \
+	    ;; \
+	    koffice-* ) \
+	      DH_OPTIONS='' dh_shlibdeps -p$$pkg -ldebian/koffice-libs/usr/lib \
+	    ;; \
+	    * ) \
+	      DH_OPTIONS='' dh_shlibdeps -p$$pkg \
+	        -ldebian/koffice-libs/usr/lib:debian/$$pkg/usr/lib \
+	    ;; \
+	  esac; \
+	done
+
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+# Build architecture independant packages using the common target.
+binary-indep: build install
+	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+
+# Build architecture dependant packages using the common target.
+binary-arch: build install
+	$(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
+
+# Any other binary targets build just one binary package at a time.
+binary-%: build install
+	$(MAKE) -f debian/rules binary-common DH_OPTIONS=-p$*
 
 binary: binary-indep binary-arch
-.PHONY: binary binary-arch binary-indep clean debian-clean build install
+.PHONY: build clean binary-indep binary-arch binary install configure

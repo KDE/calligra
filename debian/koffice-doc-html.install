@@ -1,0 +1,10 @@
+debian/tmp/usr/share/doc/kde/HTML/en/kchart/*.html
+debian/tmp/usr/share/doc/kde/HTML/en/kformula/*.html
+debian/tmp/usr/share/doc/kde/HTML/en/koffice/*.html
+debian/tmp/usr/share/doc/kde/HTML/en/kontour/*.html
+debian/tmp/usr/share/doc/kde/HTML/en/koshell/*.html
+debian/tmp/usr/share/doc/kde/HTML/en/kpresenter/*.html
+debian/tmp/usr/share/doc/kde/HTML/en/kspread/*.html
+debian/tmp/usr/share/doc/kde/HTML/en/kugar/*.html
+debian/tmp/usr/share/doc/kde/HTML/en/kword/*.html
+debian/tmp/usr/share/doc/kde/HTML/en/thesaurus/*.html

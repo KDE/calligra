@@ -1,0 +1,6 @@
+debian/tmp/usr/bin/koshell
+debian/tmp/usr/lib/koshell.*
+debian/tmp/usr/share/applnk/Office/koshell.desktop
+debian/tmp/usr/share/doc/kde/HTML/en/koshell/*.bz2
+debian/tmp/usr/share/doc/kde/HTML/en/koshell/*.docbook
+debian/tmp/usr/share/doc/kde/HTML/en/koshell/common

@@ -1,0 +1,16 @@
+debian/tmp/usr/bin/kword
+debian/tmp/usr/lib/kword.*
+debian/tmp/usr/lib/libkwmailmerge_interface.so.*
+debian/tmp/usr/lib/kde3/libkwordpart.*
+debian/tmp/usr/lib/kde3/kwmailmerge*
+debian/tmp/usr/share/applnk/Office/kword.desktop
+debian/tmp/usr/share/apps/kword
+debian/tmp/usr/share/doc/kde/HTML/en/kword/*.bz2
+debian/tmp/usr/share/doc/kde/HTML/en/kword/*.docbook
+debian/tmp/usr/share/doc/kde/HTML/en/kword/*.png
+debian/tmp/usr/share/doc/kde/HTML/en/kword/common
+debian/tmp/usr/share/icons/hicolor/16x16/apps/kword.png
+debian/tmp/usr/share/icons/hicolor/32x32/apps/kword.png
+debian/tmp/usr/share/icons/hicolor/48x48/apps/kword.png
+debian/tmp/usr/share/services/kwserialletter*
+debian/kword.xpm usr/share/pixmaps
