@@ -119,7 +119,9 @@ struct RTFLayout
     Alignment alignment;
     int style;
     int firstIndent, leftIndent, rightIndent;
-    int spaceBefore, spaceAfter, spaceBetween;
+    int spaceBefore, spaceAfter;
+    int spaceBetween; ///< Line spacing
+    bool spaceBetweenMultiple; ///< Is the linespacing defined as multiple of line height (true) or by a height in 1/20 pt (false)?
     bool inTable;
     bool keep, keepNext;
     bool pageBB, pageBA;
