@@ -39,7 +39,7 @@
 #include <kfilterdev.h>
 
 typedef KGenericFactory<SvgImport, KoFilter> SvgImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkarbonsvgimport, SvgImportFactory( "karbonsvgimport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkarbonsvgimport, SvgImportFactory( "karbonsvgimport" ) )
 
 SvgImport::SvgImport(KoFilter *, const char *, const QStringList&) :
     KoFilter(),
