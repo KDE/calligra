@@ -69,9 +69,7 @@ protected:
 
     KoPointArray getQuadricBezierPointsFrom( const KoPointArray &_pointArray );
 
-    KoPointArray origControlPoints, controlPoints;
-    KoPointArray origAllPoints, allPoints;
-    KoSize origSize;
+    KoPointArray controlPoints, allPoints;
     LineEnd lineBegin, lineEnd;
 };
 

@@ -98,6 +98,8 @@ public:
     KoPicture picture() const { return image;}
     void loadImage( const QString & fileName );
 
+    virtual void flip(bool horizontal );
+
 protected:
     KPPixmapObject() {}
 

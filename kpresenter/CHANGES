@@ -9,6 +9,7 @@ Changes after KPresenter 1.2
 - Added support for global language
 - Use new kospell API
 - Added support for naming objects
+- Added flipping support for most objects (not yet for text autoform and kpart)
 
 Visual stuff:
 - objects use "forbidden" cursor when they're protected (new)

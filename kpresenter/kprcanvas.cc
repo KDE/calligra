@@ -962,7 +962,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         deSelectAllObj();
                     selectObj( kpobject );
                     m_view->openPopupMenuObject( "piemenu_popup", pnt );
-                } else if ( objectType == OT_RECT ) {
+                } else if ( objectType == OT_RECT || objectType == OT_ELLIPSE ) {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
@@ -1045,7 +1045,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( obj && oneObjectTextSelected())
                         m_view->openPopupMenuObject( "textobject_popup", pnt );
                     else
-                        m_view->openPopupMenuObject( "graphmenu_popup", pnt );
+                        m_view->openPopupMenuObject( "flip_popup", pnt );
 
                 } else {
                     if ( state )
@@ -6198,24 +6198,24 @@ void KPrCanvas::flipObject( bool _horizontal )
     QPtrList<KPObject> lst;
     QPtrListIterator<KPObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected()
-             && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE
-                 || it.current()->getType() == OT_CUBICBEZIERCURVE || it.current()->getType() == OT_QUADRICBEZIERCURVE
-                 || it.current()->getType() == OT_FREEHAND || it.current()->getType() == OT_PIE
-                 || it.current()->getType() == OT_CLOSED_LINE) )
-            lst.append( it.current()  );
+        if ( it.current()->isSelected() && 
+             it.current()->getType() != OT_AUTOFORM &&
+             it.current()->getType() != OT_PART &&
+             it.current()->getType() != OT_TEXT ) {
+            lst.append( it.current() );
+        }
     }
     //get sticky obj
     it=stickyPage()->objectList();
     for ( ; it.current(); ++it ) {
-        if ( it.current()->isSelected()
-             && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_LINE
-                 || it.current()->getType() == OT_CUBICBEZIERCURVE || it.current()->getType() == OT_QUADRICBEZIERCURVE
-                 || it.current()->getType() == OT_FREEHAND || it.current()->getType() == OT_PIE
-                 || it.current()->getType() == OT_CLOSED_LINE))
-            lst.append(  it.current() );
+        if ( it.current()->isSelected() && 
+             it.current()->getType() != OT_AUTOFORM &&
+             it.current()->getType() != OT_PART &&
+             it.current()->getType() != OT_TEXT ) {
+            lst.append( it.current() );
+        }
     }
-    if ( lst.isEmpty())
+    if ( lst.isEmpty() )
         return;
 
     KMacroCommand *macro = new KMacroCommand( i18n("Flip Objects"));

@@ -164,6 +164,7 @@ void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 
 void KPPieObject::flip( bool horizontal )
 {
+    KP2DObject::flip( horizontal );
     if ( horizontal )
     {
         if ( p_angle <= 90*16 )

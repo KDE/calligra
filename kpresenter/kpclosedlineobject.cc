@@ -44,8 +44,7 @@ KPClosedLineObject::KPClosedLineObject( const KoPointArray &_points, const KoSiz
     : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
 {
     points = KoPointArray( _points );
-    origPoints = points;
-    origSize = _size;
+    ext = _size;
     typeString = _typeString;
 
     redrawPix = false;
@@ -127,14 +126,13 @@ double KPClosedLineObject::load( const QDomElement &element )
             elemPoint = elemPoint.nextSibling().toElement();
             ++index;
         }
-        origPoints = points;
-        origSize = ext;
     }
     return offset;
 }
 
 void KPClosedLineObject::setSize( double _width, double _height )
 {
+    KoSize origSize( ext );
     KPObject::setSize( _width, _height );
 
     double fx = ext.width() / origSize.width();
@@ -148,7 +146,7 @@ void KPClosedLineObject::updatePoints( double _fx, double _fy )
     int index = 0;
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
-    for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
+    for ( it = points.begin(); it != points.end(); ++it ) {
         KoPoint point = (*it);
         double tmpX = point.x() * _fx;
         double tmpY = point.y() * _fy;
@@ -225,15 +223,17 @@ void KPClosedLineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
     }
 }
 
-void KPClosedLineObject::flip(bool horizontal )
+void KPClosedLineObject::flip( bool horizontal )
 {
+    KP2DObject::flip( horizontal );
+    // flip the points
     KoPointArray tmpPoints;
     int index = 0;
     if ( horizontal )
     {
         KoPointArray::ConstIterator it;
         double horiz = getSize().height()/2;
-        for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
+        for ( it = points.begin(); it != points.end(); ++it ) {
             KoPoint point = (*it);
             if ( point.y()> horiz )
                 tmpPoints.putPoints( index, 1, point.x(),point.y()- 2*(point.y()-horiz) );
@@ -246,7 +246,7 @@ void KPClosedLineObject::flip(bool horizontal )
     {
         KoPointArray::ConstIterator it;
         double vert = getSize().width()/2;
-        for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
+        for ( it = points.begin(); it != points.end(); ++it ) {
             KoPoint point = (*it);
             if ( point.x()> vert )
                 tmpPoints.putPoints( index, 1, point.x()- 2*(point.x()-vert), point.y() );
@@ -255,7 +255,10 @@ void KPClosedLineObject::flip(bool horizontal )
             ++index;
         }
     }
-    origPoints = tmpPoints;
-    updatePoints( 1.0, 1.0 );
+    points = tmpPoints;
+
+    if ( fillType == FT_GRADIENT ) {
+        redrawPix = true;
+    }
 }
 

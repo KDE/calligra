@@ -87,6 +87,8 @@ public:
     virtual void doSpecificEffects( bool _specEffects, bool _onlyCurrStep = true );
     virtual void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force=false );
 
+    virtual void flip( bool horizontal );
+    
 protected:
     void updateSizes( double fx, double fy );
     void updateCoords( double dx, double dy );

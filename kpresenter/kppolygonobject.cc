@@ -47,8 +47,7 @@ KPPolygonObject::KPPolygonObject( const KoPointArray &_points, const KoSize &_si
     : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
 {
     points = KoPointArray( _points );
-    origPoints = points;
-    origSize = _size;
+    ext = _size;
 
     checkConcavePolygon = _checkConcavePolygon;
     cornersValue = _cornersValue;
@@ -145,14 +144,13 @@ double KPPolygonObject::load( const QDomElement &element )
             elemPoint = elemPoint.nextSibling().toElement();
             ++index;
         }
-        origPoints = points;
-        origSize = ext;
     }
     return offset;
 }
 
 void KPPolygonObject::setSize( double _width, double _height )
 {
+    KoSize origSize( ext );
     KPObject::setSize( _width, _height );
 
     double fx = ext.width() / origSize.width();
@@ -166,7 +164,7 @@ void KPPolygonObject::updatePoints( double _fx, double _fy )
     int index = 0;
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
-    for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
+    for ( it = points.begin(); it != points.end(); ++it ) {
         KoPoint point = (*it);
         double tmpX = point.x() * _fx;
         double tmpY = point.y() * _fy;
@@ -311,9 +309,46 @@ void KPPolygonObject::drawPolygon()
     }
 
     points = tmpPoints;
-    origPoints = points;
-    origSize = ext;
 
     if ( fillType == FT_GRADIENT && gradient )
         redrawPix = true;
+}
+
+void KPPolygonObject::flip( bool horizontal ) 
+{
+    KP2DObject::flip( horizontal );
+    // flip the points
+    KoPointArray tmpPoints;
+    int index = 0;
+    if ( horizontal )
+    {
+        KoPointArray::ConstIterator it;
+        double horiz = getSize().height()/2;
+        for ( it = points.begin(); it != points.end(); ++it ) {
+            KoPoint point = (*it);
+            if ( point.y()> horiz )
+                tmpPoints.putPoints( index, 1, point.x(),point.y()- 2*(point.y()-horiz) );
+            else
+                tmpPoints.putPoints( index, 1, point.x(),point.y()+ 2*(horiz - point.y()) );
+            ++index;
+        }
+    }
+    else
+    {
+        KoPointArray::ConstIterator it;
+        double vert = getSize().width()/2;
+        for ( it = points.begin(); it != points.end(); ++it ) {
+            KoPoint point = (*it);
+            if ( point.x()> vert )
+                tmpPoints.putPoints( index, 1, point.x()- 2*(point.x()-vert), point.y() );
+            else
+                tmpPoints.putPoints( index, 1, point.x()+ 2*(vert - point.x()),point.y() );
+            ++index;
+        }
+    }
+    points = tmpPoints;
+
+    if ( fillType == FT_GRADIENT ) {
+        redrawPix = true;
+    }
 }

@@ -50,8 +50,7 @@ KPPolylineObject::KPPolylineObject(  const KoPointArray &_points, const KoSize &
     : KPShadowObject( _pen )
 {
     points = KoPointArray( _points );
-    origPoints = KoPointArray( _points );
-    origSize = _size;
+    ext = _size;
     lineBegin = _lineBegin;
     lineEnd = _lineEnd;
 }
@@ -111,8 +110,6 @@ double KPPolylineObject::load(const QDomElement &element)
             elemPoint = elemPoint.nextSibling().toElement();
             ++index;
         }
-        origPoints = points;
-        origSize = ext;
     }
 
     e = element.namedItem( "LINEBEGIN" ).toElement();
@@ -196,6 +193,7 @@ void KPPolylineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 
 void KPPolylineObject::setSize( double _width, double _height )
 {
+    KoSize origSize( ext );
     KPObject::setSize( _width, _height );
 
     double fx = (double)( (double)ext.width() / (double)origSize.width() );
@@ -209,7 +207,7 @@ void KPPolylineObject::updatePoints( double _fx, double _fy )
     int index = 0;
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
-    for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
+    for ( it = points.begin(); it != points.end(); ++it ) {
         KoPoint point = (*it);
         double tmpX = (int)( (double)point.x() * _fx );
         double tmpY = (int)( (double)point.y() * _fy );
@@ -221,15 +219,17 @@ void KPPolylineObject::updatePoints( double _fx, double _fy )
 }
 
 
-void KPPolylineObject::flip(bool horizontal )
+void KPPolylineObject::flip( bool horizontal )
 {
+    KPObject::flip( horizontal );
+
     KoPointArray tmpPoints;
     int index = 0;
     if ( horizontal )
     {
         KoPointArray::ConstIterator it;
         double horiz = getSize().height()/2;
-        for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
+        for ( it = points.begin(); it != points.end(); ++it ) {
             KoPoint point = (*it);
             if ( point.y()> horiz )
                 tmpPoints.putPoints( index, 1, point.x(),point.y()- 2*(point.y()-horiz) );
@@ -243,7 +243,7 @@ void KPPolylineObject::flip(bool horizontal )
     {
         KoPointArray::ConstIterator it;
         double vert = getSize().width()/2;
-        for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
+        for ( it = points.begin(); it != points.end(); ++it ) {
             KoPoint point = (*it);
             if ( point.x()> vert )
                 tmpPoints.putPoints( index, 1, point.x()- 2*(point.x()-vert), point.y() );
@@ -253,18 +253,15 @@ void KPPolylineObject::flip(bool horizontal )
         }
 
     }
-    origPoints = tmpPoints;
-    updatePoints( 1.0, 1.0 );
-
+    points = tmpPoints;
 }
 
 void KPPolylineObject::closeObject(bool _close)
 {
-    origPoints=getCloseObject( origPoints, _close, isClosed() );
-    updatePoints( 1.0, 1.0 );
+    points = getCloseObject( points, _close, isClosed() );
 }
 
 bool KPPolylineObject::isClosed()const
 {
-    return (origPoints.at(0)==origPoints.at(origPoints.count()-1));
+    return ( points.at(0) == points.at(points.count()-1) );
 }

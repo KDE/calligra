@@ -41,8 +41,7 @@ KPFreehandObject::KPFreehandObject( const KoPointArray &_points, const KoSize &_
     : KPShadowObject( _pen )
 {
     points = KoPointArray( _points );
-    origPoints = KoPointArray( _points );
-    origSize = _size;
+    ext = _size;
     lineBegin = _lineBegin;
     lineEnd = _lineEnd;
 }
@@ -107,8 +106,6 @@ double KPFreehandObject::load( const QDomElement &element )
             elemPoint = elemPoint.nextSibling().toElement();
             ++index;
         }
-        origPoints = points;
-        origSize = ext;
     }
 
     e = element.namedItem( "LINEBEGIN" ).toElement();
@@ -193,6 +190,7 @@ void KPFreehandObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 
 void KPFreehandObject::setSize( double _width, double _height )
 {
+    KoSize origSize( ext );
     KPObject::setSize( _width, _height );
 
     double fx = ext.width() / origSize.width();
@@ -206,7 +204,7 @@ void KPFreehandObject::updatePoints( double _fx, double _fy )
     unsigned int index = 0;
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
-    for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
+    for ( it = points.begin(); it != points.end(); ++it ) {
         KoPoint point = (*it);
         double tmpX = point.x() * _fx;
         double tmpY = point.y() * _fy;
@@ -219,13 +217,14 @@ void KPFreehandObject::updatePoints( double _fx, double _fy )
 
 void KPFreehandObject::flip(bool horizontal )
 {
+    KPObject::flip( horizontal );
     KoPointArray tmpPoints;
     int index = 0;
     if ( horizontal )
     {
         KoPointArray::ConstIterator it;
         double horiz = getSize().height()/2;
-        for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
+        for ( it = points.begin(); it != points.end(); ++it ) {
             KoPoint point = (*it);
             if ( point.y()> horiz )
                 tmpPoints.putPoints( index, 1, point.x(),point.y()- 2*(point.y()-horiz) );
@@ -239,7 +238,7 @@ void KPFreehandObject::flip(bool horizontal )
     {
         KoPointArray::ConstIterator it;
         double vert = getSize().width()/2;
-        for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
+        for ( it = points.begin(); it != points.end(); ++it ) {
             KoPoint point = (*it);
             if ( point.x()> vert )
                 tmpPoints.putPoints( index, 1, point.x()- 2*(point.x()-vert), point.y() );
@@ -249,18 +248,16 @@ void KPFreehandObject::flip(bool horizontal )
         }
 
     }
-    origPoints = tmpPoints;
-    updatePoints( 1.0, 1.0 );
+    points = tmpPoints;
 
 }
 
 void KPFreehandObject::closeObject(bool _close)
 {
-    origPoints=getCloseObject( origPoints, _close, isClosed() );
-    updatePoints( 1.0, 1.0 );
+    points = getCloseObject( points, _close, isClosed() );
 }
 
 bool KPFreehandObject::isClosed()const
 {
-    return (origPoints.at(0)==origPoints.at(origPoints.count()-1));
+    return ( points.at(0) == points.at(points.count()-1) );
 }

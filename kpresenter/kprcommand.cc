@@ -488,27 +488,13 @@ void GroupObjCmd::execute()
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
-        it.current()->setOrigPointInGroup( it.current()->getOrig() );
-        it.current()->setOrigSizeInGroup( it.current()->getSize() );
-
         it.current()->setSelected( false );
         m_page->takeObject(it.current() );
         it.current()->removeFromObjList();
         r |= it.current()->getBoundingRect();
-
-        if ( it.current()->getType() == OT_GROUP ) {
-            KPGroupObject *_groupObj = static_cast<KPGroupObject*>( it.current() );
-            QPtrListIterator<KPObject> it2( _groupObj->objectList() );
-            for ( ; it2.current(); ++it2 ) {
-                it2.current()->setOrigPointInGroup( it2.current()->getOrig() );
-                it2.current()->setOrigSizeInGroup( it2.current()->getSize() );
-            }
-        }
     }
 
     grpObj->setUpdateObjects( false );
-    grpObj->setOrigPointInGroup( r.topLeft() );
-    grpObj->setOrigSizeInGroup( r.size() );
     grpObj->setOrig( r.x(), r.y() );
     grpObj->setSize( r.width(), r.height() );
     m_page->appendObject( grpObj );
@@ -599,27 +585,13 @@ void UnGroupObjCmd::unexecute()
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
-        it.current()->setOrigPointInGroup( it.current()->getOrig() );
-        it.current()->setOrigSizeInGroup( it.current()->getSize() );
-
         it.current()->setSelected( false );
         m_page->takeObject( it.current() );
         it.current()->removeFromObjList();
         r |= it.current()->getBoundingRect();
-
-        if ( it.current()->getType() == OT_GROUP ) {
-            KPGroupObject *_groupObj = static_cast<KPGroupObject*>( it.current() );
-            QPtrListIterator<KPObject> it2( _groupObj->objectList() );
-            for ( ; it2.current(); ++it2 ) {
-                it2.current()->setOrigPointInGroup( it2.current()->getOrig() );
-                it2.current()->setOrigSizeInGroup( it2.current()->getSize() );
-            }
-        }
     }
 
     grpObj->setUpdateObjects( false );
-    grpObj->setOrigPointInGroup( r.topLeft() );
-    grpObj->setOrigSizeInGroup( r.size() );
     grpObj->setOrig( r.x(), r.y() );
     grpObj->setSize( r.width(), r.height() );
     m_page->appendObject( grpObj );
@@ -2283,71 +2255,8 @@ void KPrFlipObjectCommand::unexecute()
 
 void KPrFlipObjectCommand::flipObject()
 {
-    ObjType tmpType = m_object->getType();
-
-    if ( tmpType == OT_LINE)
-    {
-        KPLineObject *obj=dynamic_cast<KPLineObject *>(m_object);
-        if ( obj)
-        {
-            obj->flip(horizontal );
-            m_doc->repaint( obj );
-        }
-    }
-    else if ( tmpType == OT_POLYLINE)
-    {
-        KPPolylineObject *obj=dynamic_cast<KPPolylineObject *>(m_object);
-        if ( obj)
-        {
-            obj->flip(horizontal);
-            m_doc->repaint( obj );
-        }
-    }
-    else if ( tmpType == OT_CUBICBEZIERCURVE)
-    {
-        KPCubicBezierCurveObject *obj=dynamic_cast<KPCubicBezierCurveObject *>(m_object);
-        if ( obj)
-        {
-            obj->flip(horizontal);
-            m_doc->repaint( obj );
-        }
-    }
-    else if ( tmpType == OT_QUADRICBEZIERCURVE)
-    {
-        KPQuadricBezierCurveObject *obj=dynamic_cast<KPQuadricBezierCurveObject *>(m_object);
-        if ( obj)
-        {
-            obj->flip(horizontal);
-            m_doc->repaint( obj );
-        }
-    }
-    else if ( tmpType == OT_FREEHAND )
-    {
-        KPFreehandObject *obj=dynamic_cast<KPFreehandObject *>(m_object);
-        if ( obj)
-        {
-            obj->flip(horizontal);
-            m_doc->repaint( obj );
-        }
-    }
-    else if ( tmpType == OT_PIE )
-    {
-        KPPieObject *obj=dynamic_cast<KPPieObject *>(m_object);
-        if ( obj)
-        {
-            obj->flip(horizontal);
-            m_doc->repaint( obj );
-        }
-    }
-    else if ( tmpType == OT_CLOSED_LINE )
-    {
-        KPClosedLineObject *obj=dynamic_cast<KPClosedLineObject *>(m_object);
-        if ( obj)
-        {
-            obj->flip(horizontal);
-            m_doc->repaint( obj );
-        }
-    }
+    m_object->flip( horizontal );
+    m_doc->repaint( m_object );
 
     int pos=m_doc->pageList().findRef(m_page);
     m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );

@@ -66,8 +66,7 @@ protected:
 
     void updatePoints( double _fx, double _fy );
 
-    KoPointArray origPoints, points;
-    KoSize origSize;
+    KoPointArray points;
     LineEnd lineBegin, lineEnd;
 };
 

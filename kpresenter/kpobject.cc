@@ -197,7 +197,6 @@ double KPObject::load(const QDomElement &element) {
             offset=e.attribute(attrY).toDouble();
             orig.setY(0);
         }
-        origTopLeftPointInGroup = KoPoint( orig.x(), offset );
     }
     e=element.namedItem(tagSIZE).toElement();
     if(!e.isNull()) {
@@ -205,8 +204,6 @@ double KPObject::load(const QDomElement &element) {
             ext.setWidth(e.attribute(attrWidth).toDouble());
         if(e.hasAttribute(attrHeight))
             ext.setHeight(e.attribute(attrHeight).toDouble());
-
-        origSizeInGroup = ext;
     }
     e=element.namedItem(tagSHADOW).toElement();
     if(!e.isNull()) {
@@ -316,6 +313,13 @@ double KPObject::load(const QDomElement &element) {
     }
 
     return offset;
+}
+
+void KPObject::flip( bool horizontal ) {
+    // flip the angle
+    if ( angle ) {
+        angle = 360.0 - angle;
+    }
 }
 
 KoRect KPObject::getBoundingRect() const
@@ -928,4 +932,29 @@ double KP2DObject::load(const QDomElement &element)
         yfactor=100;
     }
     return offset;
+}
+
+void KP2DObject::flip( bool horizontal ) {
+    KPObject::flip( horizontal );
+  
+    // flip the gradient
+    if ( fillType == FT_GRADIENT ) {
+        if ( gType == BCT_GDIAGONAL1 ) {
+            gType = BCT_GDIAGONAL2;
+        }
+        else if ( gType == BCT_GDIAGONAL2 ) {
+            gType = BCT_GDIAGONAL1;
+        }
+        if ( ( horizontal && gType == BCT_GDIAGONAL1 ) ||
+             ( horizontal && gType == BCT_GDIAGONAL2 ) ||
+             ( horizontal && gType == BCT_GHORZ ) ||
+             ( ! horizontal && gType == BCT_GVERT ) ) {
+            QColor gColorTemp;
+            gColorTemp = gColor1;
+            gColor1 = gColor2;
+            gColor2 = gColorTemp;
+        }
+        delete gradient;
+        gradient = new KPGradient( gColor1, gColor2, gType, unbalanced, xfactor, yfactor );
+    }
 }

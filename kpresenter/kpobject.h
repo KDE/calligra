@@ -121,6 +121,8 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
 
+    virtual void flip(bool horizontal );
+
     virtual ObjType getType() const
         { return OT_UNDEFINED; }
     virtual QString getTypeString() const
@@ -209,11 +211,6 @@ public:
 
     static void setupClipRegion( QPainter *painter, const QRegion &clipRegion );
 
-    virtual void setOrigPointInGroup( const KoPoint &_point ) { origTopLeftPointInGroup = _point; }
-    virtual KoPoint getOrigPointInGroup()const { return origTopLeftPointInGroup; }
-
-    virtual void setOrigSizeInGroup( const KoSize &_size ) { origSizeInGroup = _size; }
-    virtual KoSize getOrigSizeInGroup() const{ return origSizeInGroup; }
     void paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler,
                          SelectionMode selectionMode );
 
@@ -386,6 +383,8 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
+
+    virtual void flip(bool horizontal );
 
 protected:
     QColor gColor1, gColor2;

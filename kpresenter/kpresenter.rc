@@ -353,6 +353,10 @@
   <Separator/>
   <Action name="screen_assigneffect"/>
   <Separator/>
+  <Menu name="Flip Objects"><text>Flip Objects</text>
+   <Action name="horizontal_flip"/>
+   <Action name="vertical_flip"/>
+  </Menu>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
    <Action name="extra_aligncenterh"/>
@@ -429,7 +433,6 @@
    <Action name="horizontal_flip"/>
    <Action name="vertical_flip"/>
   </Menu>
-  <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
    <Action name="extra_aligncenterh"/>
@@ -456,7 +459,6 @@
    <Action name="horizontal_flip"/>
    <Action name="vertical_flip"/>
   </Menu>
-  <Separator/>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
    <Action name="extra_aligncenterh"/>
@@ -508,6 +510,10 @@
   <Action name="screen_assigneffect"/>
   <Action name="image_effect"/>
   <Separator/>
+  <Menu name="Flip Objects"><text>Flip Objects</text>
+   <Action name="horizontal_flip"/>
+   <Action name="vertical_flip"/>
+  </Menu>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
    <Action name="extra_aligncenterh"/>
@@ -640,6 +646,10 @@
   <Separator/>
   <Action name="screen_assigneffect"/>
   <Separator/>
+  <Menu name="Flip Objects"><text>Flip Objects</text>
+   <Action name="horizontal_flip"/>
+   <Action name="vertical_flip"/>
+  </Menu>
   <Menu name="Align Objects"><text>&amp;Align Objects</text>
    <Action name="extra_alignleft"/>
    <Action name="extra_aligncenterh"/>

@@ -45,12 +45,9 @@ KPQuadricBezierCurveObject::KPQuadricBezierCurveObject( const KoPointArray &_con
     : KPShadowObject( _pen )
 {
     controlPoints = KoPointArray( _controlPoints );
-    origControlPoints = KoPointArray( _controlPoints );
-
     allPoints = KoPointArray( _allPoints );
-    origAllPoints = KoPointArray( _allPoints );
 
-    origSize = _size;
+    ext = _size;
     lineBegin = _lineBegin;
     lineEnd = _lineEnd;
 }
@@ -114,10 +111,7 @@ double KPQuadricBezierCurveObject::load(const QDomElement &element)
             elemPoint = elemPoint.nextSibling().toElement();
             ++index;
         }
-        origControlPoints = controlPoints;
         allPoints = getQuadricBezierPointsFrom( controlPoints );
-        origAllPoints = allPoints;
-        origSize = ext;
     }
 
     e = element.namedItem( "LINEBEGIN" ).toElement();
@@ -200,6 +194,7 @@ void KPQuadricBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHa
 
 void KPQuadricBezierCurveObject::setSize( double _width, double _height )
 {
+    KoSize origSize( ext );
     KPObject::setSize( _width, _height );
 
     double fx = ext.width() / origSize.width();
@@ -213,7 +208,7 @@ void KPQuadricBezierCurveObject::updatePoints( double _fx, double _fy )
     int index = 0;
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
-    for ( it = origAllPoints.begin(); it != origAllPoints.end(); ++it ) {
+    for ( it = allPoints.begin(); it != allPoints.end(); ++it ) {
         KoPoint point = (*it);
         double tmpX = point.x() * _fx;
         double tmpY = point.y() * _fy;
@@ -225,7 +220,7 @@ void KPQuadricBezierCurveObject::updatePoints( double _fx, double _fy )
 
     index = 0;
     tmpPoints = KoPointArray();
-    for ( it = origControlPoints.begin(); it != origControlPoints.end(); ++it ) {
+    for ( it = controlPoints.begin(); it != controlPoints.end(); ++it ) {
         KoPoint point = (*it);
         double tmpX = point.x() * _fx;
         double tmpY = point.y() * _fy;
@@ -297,15 +292,16 @@ KoPointArray KPQuadricBezierCurveObject::getQuadricBezierPointsFrom( const KoPoi
     return _allPoints;
 }
 
-void KPQuadricBezierCurveObject::flip(bool horizontal )
+void KPQuadricBezierCurveObject::flip( bool horizontal )
 {
+    KPObject::flip( horizontal );
     KoPointArray tmpPoints;
     int index = 0;
     if ( horizontal )
     {
         KoPointArray::ConstIterator it;
         double horiz = getSize().height()/2;
-        for ( it = origControlPoints.begin(); it != origControlPoints.end(); ++it )
+        for ( it = controlPoints.begin(); it != controlPoints.end(); ++it )
         {
             KoPoint point = (*it);
             if ( point.y()> horiz )
@@ -314,10 +310,10 @@ void KPQuadricBezierCurveObject::flip(bool horizontal )
                 tmpPoints.putPoints( index, 1, point.x(),point.y()+ 2*(horiz - point.y()) );
             ++index;
         }
-        origControlPoints = tmpPoints;
+        controlPoints = tmpPoints;
 
         index=0;
-        for ( it = origAllPoints.begin(); it != origAllPoints.end(); ++it )
+        for ( it = allPoints.begin(); it != allPoints.end(); ++it )
         {
             KoPoint point = (*it);
             if ( point.y()> horiz )
@@ -326,14 +322,13 @@ void KPQuadricBezierCurveObject::flip(bool horizontal )
                 tmpPoints.putPoints( index, 1, point.x(),point.y()+ 2*(horiz - point.y()) );
             ++index;
         }
-        origAllPoints = tmpPoints;
-
+        allPoints = tmpPoints;
     }
     else
     {
         KoPointArray::ConstIterator it;
         double vert = getSize().width()/2;
-        for ( it = origControlPoints.begin(); it != origControlPoints.end(); ++it )
+        for ( it = controlPoints.begin(); it != controlPoints.end(); ++it )
         {
             KoPoint point = (*it);
             if ( point.x()> vert )
@@ -342,10 +337,10 @@ void KPQuadricBezierCurveObject::flip(bool horizontal )
                 tmpPoints.putPoints( index, 1, point.x()+ 2*(vert - point.x()),point.y() );
             ++index;
         }
-        origControlPoints = tmpPoints;
+        controlPoints = tmpPoints;
 
         index = 0;
-        for ( it = origAllPoints.begin(); it != origAllPoints.end(); ++it )
+        for ( it = allPoints.begin(); it != allPoints.end(); ++it )
         {
             KoPoint point = (*it);
             if ( point.y()> vert )
@@ -354,19 +349,17 @@ void KPQuadricBezierCurveObject::flip(bool horizontal )
                 tmpPoints.putPoints( index, 1, point.x()+ 2*(vert - point.x()),point.y() );
             ++index;
         }
-        origAllPoints = tmpPoints;
+        allPoints = tmpPoints;
 
     }
-    updatePoints( 1.0, 1.0 );
 }
 
 void KPQuadricBezierCurveObject::closeObject(bool _close)
 {
-    origAllPoints=getCloseObject( origAllPoints, _close, isClosed() );
-    updatePoints( 1.0, 1.0 );
+    allPoints = getCloseObject( allPoints, _close, isClosed() );
 }
 
 bool KPQuadricBezierCurveObject::isClosed()const
 {
-    return (origAllPoints.at(0)==origAllPoints.at(origAllPoints.count()-1));
+    return ( allPoints.at(0) == allPoints.at(allPoints.count()-1) );
 }

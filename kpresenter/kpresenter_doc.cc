@@ -2734,19 +2734,6 @@ void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
     }
     _obj->setOrig(_obj->getOrig().x(),newPos);
 
-    if ( _obj->getType() == OT_GROUP ) {
-        KPGroupObject *_groupObj = static_cast<KPGroupObject*>( _obj );
-        QPtrListIterator<KPObject> it( _groupObj->getObjects() );
-        for ( ; it.current(); ++it ) {
-            double xPos = it.current()->getOrig().x();
-            double yPos = it.current()->getOrig().y() - page * __pgLayout.ptHeight;
-            it.current()->setOrig( xPos, yPos );
-        }
-
-        // Hmmm... strange. I don't understand why this is necessary.
-        // If there is not this, group object is not displayed correctly when after 1 page.
-        _obj->setSize( _obj->getSize() );
-    }
     m_pageList.at(page)->appendObject(_obj);
 }
 
