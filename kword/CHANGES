@@ -1508,7 +1508,7 @@ Reggie, 18.9.1999:
 Reggie, 19.9.1999:
 ------------------
 - Ooops, internally KWord used QChar for unicode stuff since quite
-  some time, but for printing/painting it was converted to char all 
+  some time, but for printing/painting it was converted to char all
   the time. Fixed that now.
 - More work on flicker freeness and fixes
 - When creating a formula frame, libkformula is used now
@@ -1522,10 +1522,10 @@ Reggie, 20.9.1999:
 ------------------
 - When you are in text edit mode and click on an editable frame, which
   is not a text frame (e.g. formula or OpenPart), you can edit
-  this frame (no switch to frame edit mode + double click needed 
+  this frame (no switch to frame edit mode + double click needed
   anymore)
 - More integration of libkformula:
-  - A KWord toolbar for furmula editing is now shown/hidden when 
+  - A KWord toolbar for furmula editing is now shown/hidden when
     activating/deactivating a formula frame
   - Formatting (font, color, etc.) for formulas works now
 
@@ -1537,8 +1537,13 @@ Reggie, 21.9.1999:
     should be smart when updating styles or if the user
     wants to set the options for updating itself
 - Code cleanups
-- Updating text-toolbar when acivating/deactivating a formula 
+- Updating text-toolbar when acivating/deactivating a formula
   frame works now
 - Undo/Redo of the formula editor can be used now
 - font and color of formulas is saved/loaded now
 - some more fixes for formula editing
+
+Reggie, 28.9.1999:
+------------------
+- Started with online spellchecking. Doesn't do anything
+  useful yet.

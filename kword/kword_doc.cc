@@ -140,6 +140,8 @@ KWordDocument::KWordDocument()
 
     QObject::connect( &history, SIGNAL( undoRedoChanged( QString, QString ) ), this,
 		      SLOT( slotUndoRedoChanged( QString, QString ) ) );
+
+    spellCheck = FALSE;
 }
 
 /*================================================================*/
@@ -1038,7 +1040,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     if ( !_first_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_FIRST_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), 
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
@@ -1048,7 +1050,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     if ( !_even_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_EVEN_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), 
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
@@ -1058,7 +1060,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     if ( !_odd_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_ODD_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), 
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
@@ -1101,7 +1103,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	fs->setName( "Footnotes" );
 
 	for ( int i = 0; i < pages; i++ ) {
-	    KWFrame *frame = new KWFrame( getPTLeftBorder(), 
+	    KWFrame *frame = new KWFrame( getPTLeftBorder(),
 					  i * getPTPaperHeight() + getPTPaperHeight() - getPTTopBorder() - 20,
 					  getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	    fs->addFrame( frame );
@@ -1588,8 +1590,7 @@ void KWordDocument::insertObject( const QRect& _rect, KoDocumentEntry& _e, int d
     if ( CORBA::is_nil( doc ) )
 	return;
 
-    if ( !doc->initDoc() )
-    {
+    if ( !doc->initDoc() ) {
 	QMessageBox::critical( ( QWidget* )0L, i18n( "KWord Error" ), i18n( "Could not init" ), i18n( "OK" ) );
 	return;
     }
@@ -1640,8 +1641,7 @@ QPen KWordDocument::setBorderPen( KWParagLayout::Border _brd )
     pen.setWidth( _brd.ptWidth );
     pen.setColor( _brd.color );
 
-    switch ( _brd.style )
-    {
+    switch ( _brd.style ) {
     case KWParagLayout::SOLID:
 	pen.setStyle( SolidLine );
 	break;
@@ -1665,16 +1665,13 @@ QPen KWordDocument::setBorderPen( KWParagLayout::Border _brd )
 /*================================================================*/
 KWUserFont* KWordDocument::findUserFont( QString _userfontname )
 {
-    if ( cUserFont )
-    {
+    if ( cUserFont ) {
 	if ( cUserFont->getFontName() == _userfontname ) return cUserFont;
     }
 
     KWUserFont* font = 0L;
-    for ( font = userFontList.first(); font != 0L; font = userFontList.next() )
-    {
-	if ( font->getFontName() == _userfontname )
-	{
+    for ( font = userFontList.first(); font != 0L; font = userFontList.next() ) {
+	if ( font->getFontName() == _userfontname ) {
 	    cUserFont = font;
 	    return font;
 	}
@@ -1687,21 +1684,20 @@ KWUserFont* KWordDocument::findUserFont( QString _userfontname )
 }
 
 /*================================================================*/
-KWDisplayFont* KWordDocument::findDisplayFont( KWUserFont* _font, unsigned int _size, int _weight, bool _italic, bool _underline )
+KWDisplayFont* KWordDocument::findDisplayFont( KWUserFont* _font, unsigned int _size, int _weight,
+					       bool _italic, bool _underline )
 {
-    if ( cDisplayFont )
-    {
+    if ( cDisplayFont ) {
 	if ( cDisplayFont->getUserFont()->getFontName() == _font->getFontName() && cDisplayFont->getPTSize() == _size &&
-	     cDisplayFont->weight() == _weight && cDisplayFont->italic() == _italic && cDisplayFont->underline() == _underline )
+	     cDisplayFont->weight() == _weight && cDisplayFont->italic() == _italic && 
+	     cDisplayFont->underline() == _underline )
 	    return cDisplayFont;
     }
 
     KWDisplayFont* font = 0L;
-    for ( font = displayFontList.first(); font != 0L; font = displayFontList.next() )
-    {
+    for ( font = displayFontList.first(); font != 0L; font = displayFontList.next() ) {
 	if ( font->getUserFont()->getFontName() == _font->getFontName() && font->getPTSize() == _size &&
-	     font->weight() == _weight && font->italic() == _italic && font->underline() == _underline )
-	{
+	     font->weight() == _weight && font->italic() == _italic && font->underline() == _underline ) {
 	    cDisplayFont = font;
 	    return font;
 	}
@@ -1716,16 +1712,13 @@ KWDisplayFont* KWordDocument::findDisplayFont( KWUserFont* _font, unsigned int _
 /*================================================================*/
 KWParagLayout* KWordDocument::findParagLayout( QString _name )
 {
-    if ( cParagLayout )
-    {
+    if ( cParagLayout ) {
 	if ( cParagLayout->getName() == _name ) return cParagLayout;
     }
 
     KWParagLayout* p;
-    for ( p = paragLayoutList.first(); p != 0L; p = paragLayoutList.next() )
-    {
-	if ( p->getName() == _name )
-	{
+    for ( p = paragLayoutList.first(); p != 0L; p = paragLayoutList.next() ) {
+	if ( p->getName() == _name ) {
 	    cParagLayout = p;
 	    return p;
 	}
@@ -1746,8 +1739,7 @@ KWParag* KWordDocument::findFirstParagOfPage( unsigned int _page, unsigned int _
     if ( frames.at( _frameset )->getFrameType() != FT_TEXT ) return 0L;
 
     KWParag *p = dynamic_cast<KWTextFrameSet*>( frames.at( _frameset ) )->getFirstParag();
-    while ( p )
-    {
+    while ( p ) {
 	if ( p->getEndPage() == _page || p->getStartPage() == _page || ( p->getEndPage() > _page &&
 									 p->getStartPage() < _page ) )
 	    return p;
@@ -1766,8 +1758,7 @@ KWParag* KWordDocument::findFirstParagOfRect( unsigned int _ypos, unsigned int _
 	return dynamic_cast<KWTextFrameSet*>( frames.at( _frameset ) )->getFirstParag();
 
     KWParag *p = dynamic_cast<KWTextFrameSet*>( frames.at( _frameset ) )->getFirstParag();
-    while ( p )
-    {
+    while ( p ) {
 	if ( p->getPTYEnd() >= _ypos || p->getPTYStart() >= _ypos || ( p->getPTYEnd() >= _ypos &&
 								       p->getPTYStart() <= _ypos )
 	     || ( p->getPTYEnd() <= _ypos && p->getPTYStart() <= _ypos && p->getPTYStart() > p->getPTYEnd() &&
@@ -1819,13 +1810,13 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
     }
 
     _painter.setClipRegion( cr );
-    
+
     // paint it character for character. Provisionally! !!HACK!!
     _fc.cursorGotoLineStart();
 
     if ( dbx != -1 )
  	_painter.fillRect( dbx, dby, dbw, dbh, dbback );
-    
+
     if ( _fc.isCursorInFirstLine() && _fc.getParag()->getParagLayout()->getTopBorder().ptWidth > 0 ) {
 	unsigned int _x1 = getFrameSet( _fc.getFrameSet() - 1 )->getFrame( _fc.getFrame() - 1 )->left() - xOffset;
 	unsigned int _y = _fc.getPTY() - yOffset + _fc.getParag()->getParagLayout()->getTopBorder().ptWidth / 2;
@@ -2077,7 +2068,7 @@ bool KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOf
 	_painter.drawPixmap( _fc.getPTPos() + 3, _fc.getPTY() + _fc.getPTMaxAscender() - ret_pix.height(), ret_pix );
 
     _painter.restore();
-    
+
     return TRUE;
 }
 
@@ -2141,7 +2132,7 @@ void KWordDocument::printBorders( QPainter &_painter, int xOffset, int yOffset, 
 		_painter.drawLine( frame.x(), frame.y() + tmp->getTopBorder().ptWidth / 2,
 				   frame.right() + ( isRight ? 0 : 1 ), frame.y() + tmp->getTopBorder().ptWidth / 2 );
 	    }
-	    if ( tmp->getBottomBorder().ptWidth > 0 && 
+	    if ( tmp->getBottomBorder().ptWidth > 0 &&
 		 tmp->getBottomBorder().color != tmp->getBackgroundColor().color() ) {
 		QPen p( setBorderPen( tmp->getBottomBorder() ) );
 		_painter.setPen( p );
@@ -2175,7 +2166,7 @@ void KWordDocument::drawMarker( KWFormatContext &_fc, QPainter *_painter, int xO
     _painter->drawLine( _fc.getPTPos() - xOffset + diffx1,
 			_fc.getPTY() - yOffset,
 			_fc.getPTPos() - xOffset + diffx2,
-			_fc.getPTY() + _fc.getLineHeight() - _fc.getParag()->getParagLayout()->getLineSpacing().pt() 
+			_fc.getPTY() + _fc.getLineHeight() - _fc.getParag()->getParagLayout()->getLineSpacing().pt()
 			- yOffset );
 
     _painter->setRasterOp( rop );
@@ -2277,13 +2268,13 @@ void KWordDocument::drawAllBorders( bool back )
 		if ( viewPtr->getGUI() ) {
 		    if ( !_painter ) {
 			p.begin( viewPtr->getGUI()->getPaperWidget()->viewport() );
-			viewPtr->getGUI()->getPaperWidget()->drawBorders( p, 
-									  viewPtr->getGUI()->getPaperWidget()->rect(), 
+			viewPtr->getGUI()->getPaperWidget()->drawBorders( p,
+									  viewPtr->getGUI()->getPaperWidget()->rect(),
 									  back );
 			p.end();
 		    } else
-			viewPtr->getGUI()->getPaperWidget()->drawBorders( *_painter, 
-									  viewPtr->getGUI()->getPaperWidget()->rect(), 
+			viewPtr->getGUI()->getPaperWidget()->drawBorders( *_painter,
+									  viewPtr->getGUI()->getPaperWidget()->rect(),
 									  back );
 		}
 	    }
@@ -3157,7 +3148,7 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 		painter->save();
 		QRect r = painter->viewport();
 		painter->setViewport( frame->x(), frame->y() - i * getPTPaperHeight(), r.width(), r.height() );
-		if ( pic ) 
+		if ( pic )
 		    painter->drawPicture( *pic );
 		painter->setViewport( r );
 		painter->restore();
@@ -3167,7 +3158,7 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 		bool reinit = TRUE;
 		fc = fcList.at(j - minus);
 		if ( frames.at( j )->getFrameInfo() != FI_BODY ) {
-		    if ( frames.at( j )->getFrameInfo() == FI_EVEN_HEADER || 
+		    if ( frames.at( j )->getFrameInfo() == FI_EVEN_HEADER ||
 			 frames.at( j )->getFrameInfo() == FI_FIRST_HEADER ||
 			 frames.at( j )->getFrameInfo() == FI_ODD_HEADER ) {
 			if ( !hasHeader() ) continue;
@@ -3181,7 +3172,7 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 				continue;
 			    if ( ( ( i + 1 ) / 2 ) * 2 == i + 1 && frames.at( j )->getFrameInfo() == FI_ODD_HEADER )
 				continue;
-			    if ( ( ( i + 1 ) / 2 ) * 2 != i + 1 && frames.at( j )->getFrameInfo() == FI_EVEN_HEADER ) 
+			    if ( ( ( i + 1 ) / 2 ) * 2 != i + 1 && frames.at( j )->getFrameInfo() == FI_EVEN_HEADER )
 				continue;
 			} break;
 			case HF_FIRST_DIFF: {
@@ -3193,7 +3184,7 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 			default: break;
 			}
 		    }
-		    if ( frames.at( j )->getFrameInfo() == FI_EVEN_FOOTER || 
+		    if ( frames.at( j )->getFrameInfo() == FI_EVEN_FOOTER ||
 			 frames.at( j )->getFrameInfo() == FI_FIRST_FOOTER ||
 			 frames.at( j )->getFrameInfo() == FI_ODD_FOOTER ) {
 			if ( !hasFooter() ) continue;
@@ -3207,22 +3198,22 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 				continue;
 			    if ( ( ( i + 1 ) / 2 ) * 2 == i + 1 && frames.at( j )->getFrameInfo() == FI_ODD_FOOTER )
 				continue;
-			    if ( ( ( i + 1 ) / 2 ) * 2 != i + 1 && frames.at( j )->getFrameInfo() == FI_EVEN_FOOTER ) 
+			    if ( ( ( i + 1 ) / 2 ) * 2 != i + 1 && frames.at( j )->getFrameInfo() == FI_EVEN_FOOTER )
 				continue;
 			} break;
 			case HF_FIRST_DIFF: {
-			    if ( i == 0 && frames.at( j )->getFrameInfo() != FI_FIRST_FOOTER ) 
+			    if ( i == 0 && frames.at( j )->getFrameInfo() != FI_FIRST_FOOTER )
 				continue;
-			    if ( i > 0 && frames.at( j )->getFrameInfo() != FI_EVEN_FOOTER ) 
+			    if ( i > 0 && frames.at( j )->getFrameInfo() != FI_EVEN_FOOTER )
 				continue;
 			} break;
-			default: 
+			default:
 			    break;
 			}
 		    }
 		    fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( j ) )->getFirstParag(), TRUE,
 			      frames.at( j )->getCurrent() + 1, i + 1 );
-		    if ( static_cast<int>( frames.at( j )->getNumFrames() - 1 ) > 
+		    if ( static_cast<int>( frames.at( j )->getNumFrames() - 1 ) >
 			 static_cast<int>( frames.at( j )->getCurrent() ) )
 			frames.at( j )->setCurrent( frames.at( j )->getCurrent() + 1 );
 		    reinit = FALSE;
@@ -3230,12 +3221,12 @@ void KWordDocument::print( QPainter *painter, QPrinter *printer,
 		if ( reinit )
 		    fc->init( dynamic_cast<KWTextFrameSet*>( frames.at( fc->getFrameSet() - 1 ) )->getFirstParag(), TRUE );
 		while ( !bend ) {
-		    printLine( *fc, *painter, 0, i * getPTPaperHeight(), getPTPaperWidth(), 
+		    printLine( *fc, *painter, 0, i * getPTPaperHeight(), getPTPaperWidth(),
 			       getPTPaperHeight(), FALSE, FALSE );
 		    bend = !fc->makeNextLineLayout();
 		}
 	    } break;
-	    default: minus++; 
+	    default: minus++;
 		break;
 	    }
 	}

@@ -98,7 +98,7 @@ KWFormatContext &KWFormatContext::operator=( const KWFormatContext &fc )
     emptyRegion = fc.emptyRegion;
     pFrameSet = fc.pFrameSet;
     pFrame = fc.pFrame;
-    
+
     return *this;
 }
 
@@ -1127,6 +1127,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs, bo
 
 	// do the autoformat stuff
 	if ( c != KWSpecialChar ) {
+	    doc->getAutoFormat().doSpellCheck( parag, this );
 	    doc->getAutoFormat().doTypographicQuotes( parag, this );
 	    doc->getAutoFormat().doAutoFormat( parag, this );
 	    doc->getAutoFormat().doUpperCase( parag, this );
@@ -1273,7 +1274,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs, bo
     } else if ( parag->getParagLayout()->getFlow() == KWParagLayout::RIGHT ) {
 	ptPos = xShift + ( pFrame->width() -
 			   pFrame->getBLeft().pt() -
-			   pFrame->getBRight().pt() ) - 
+			   pFrame->getBRight().pt() ) -
 		right - ptTextLen - indent - _right;
 	ptStartPos = ptPos;
     }
@@ -1296,12 +1297,12 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs, bo
     if ( !doc->isPTYInFrame( frameSet - 1, frame - 1, ptY + getLineHeight() ) ||
 	 ( parag->hasHardBreak() && isCursorInFirstLine() ) && parag->getPrev() && parag->getPrev()->getEndPage() == page ) {
 	// Are we a header or footer?
-	if ( isAHeader( pFrameSet->getFrameInfo() ) || 
+	if ( isAHeader( pFrameSet->getFrameInfo() ) ||
 	     isAFooter( pFrameSet->getFrameInfo() ) ) {
 	    int diff = ( ptY + getLineHeight() ) - ( pFrame->bottom() -
 						     pFrame->getBBottom().pt() );
 
-	    if ( doc->canResize( pFrameSet, 
+	    if ( doc->canResize( pFrameSet,
 				      pFrame,
 				      pFrameSet->getPageOfFrame( frame - 1 ), diff + 1 ) ) {
 		pFrame->setHeight( pFrame->height() + diff + 1 );
@@ -1333,7 +1334,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs, bo
 		int diff = ( ptY + getLineHeight() ) - ( pFrame->bottom() -
 							 pFrame->getBBottom().pt() );
 
-		if ( doc->canResize( pFrameSet, 
+		if ( doc->canResize( pFrameSet,
 					  pFrame,
 					  pFrameSet->getPageOfFrame( frame - 1 ), diff + 1 ) ) {
 		    pFrame->setHeight( pFrame->height() + diff + 1 );
@@ -1476,21 +1477,21 @@ bool KWFormatContext::selectWord( KWFormatContext &_fc1, KWFormatContext &_fc2 )
 }
 
 /*================================================================*/
-void KWFormatContext::setFrameSet( unsigned int _frameSet ) 
-{ 
+void KWFormatContext::setFrameSet( unsigned int _frameSet )
+{
     // #### just a bad workaround. Fix the source of the problem!
     if ( _frameSet == 0 )
 	++_frameSet;
-    
-    frameSet = _frameSet; 
+
+    frameSet = _frameSet;
     if ( doc )
 	pFrameSet = doc->getFrameSet( frameSet - 1 );
     else
 	pFrameSet = 0;
-    
+
     if ( !pFrameSet )
 	qWarning( "KWFormatContext::setFrameSet: pFrameSet is NULL, KWord will crash soon or at least behave strange!" );
-        
+
     setFrame( 1 );
 }
 

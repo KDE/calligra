@@ -99,7 +99,7 @@ public:
     static const int U_FONT_ALL_ALL_SIZE = 256;
     static const int U_TABS = 512;
     static const int U_SMART = 1024;
-    
+
 protected:
     virtual bool hasToWriteMultipart();
 
@@ -374,6 +374,13 @@ public:
     int getSerialLetterRecord() const;
     void setSerialLetterRecord( int r );
 
+    bool onLineSpellCheck() const {
+	return spellCheck;
+    }
+    void setOnLineSpellCheck( bool b ) {
+	spellCheck = b;
+    }
+    
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
@@ -461,6 +468,8 @@ protected:
     KWSerialLetterDataBase *slDataBase;
     int slRecordNum;
 
+    bool spellCheck;
+    
 };
 
 #endif

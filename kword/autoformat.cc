@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
-/* Version: 0.0.1                                                 */
-/* Author: Reginald Stadlbauer, Torben Weis                       */
-/* E-Mail: reggie@kde.org, weis@kde.org                           */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998	  */
+/* Version: 0.0.1						  */
+/* Author: Reginald Stadlbauer, Torben Weis			  */
+/* E-Mail: reggie@kde.org, weis@kde.org				  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: KWAutoFormat (header)                                  */
+/* Module: KWAutoFormat (header)				  */
 /******************************************************************/
 
 #include "autoformat.h"
@@ -21,7 +21,7 @@
 #include "parag.h"
 
 /******************************************************************/
-/* Class: KWAutoFormatEntry                                       */
+/* Class: KWAutoFormatEntry					  */
 /******************************************************************/
 
 /*================================================================*/
@@ -229,141 +229,156 @@ bool KWAutoFormatEntry::getVertAlign()
 }
 
 /******************************************************************/
-/* Class: KWAutoFormat                                            */
+/* Class: KWAutoFormat						  */
 /******************************************************************/
 
 /*================================================================*/
 KWAutoFormat::KWAutoFormat( KWordDocument *_doc )
     : typographicQuotes(), enabled( false ), lastWasDotSpace( false ),
-      convertUpperCase( true ), lastWasUpper( false ), convertUpperUpper( false ), 
+      convertUpperCase( true ), lastWasUpper( false ), convertUpperUpper( false ),
       maxlen( 0 )
 {
     doc = _doc;
-    tmpBuffer = 0L;
+    tmpBuffer = 0;
+    spBuffer = QString::null;
 }
 
 /*================================================================*/
-void KWAutoFormat::startAutoFormat( KWParag */*parag*/, 
+void KWAutoFormat::startAutoFormat( KWParag */*parag*/,
 				    KWFormatContext */*fc*/ )
 {
     if ( !enabled )
-        return;
+	return;
 
     lastWasDotSpace = false;
     lastWasUpper = false;
 
     tmpBuffer = new KWString( doc );
+    spBuffer == QString::null;
 }
 
 /*================================================================*/
 bool KWAutoFormat::doAutoFormat( KWParag *parag, KWFormatContext *fc )
 {
     if ( !enabled )
-        return false;
+	return false;
 
     if ( begins.contains( parag->getKWString()->data()[ fc->getTextPos() ].c ) ||
-         tmpBuffer->size() > 0 )
-        tmpBuffer->append( parag->getKWString()->data()[ fc->getTextPos() ] );
+	 tmpBuffer->size() > 0 )
+	tmpBuffer->append( parag->getKWString()->data()[ fc->getTextPos() ] );
     else
-        return false;
+	return false;
 
     QMap< QString, KWAutoFormatEntry >::Iterator it = entries.find( tmpBuffer->toString() );
 
-    if ( it != entries.end()  )
-    {
-        unsigned int len = it.key().length();
-        KWFormat format;
-        format = *( dynamic_cast<KWCharFormat*>( parag->getKWString()->data()[ fc->getTextPos() ].attrib )->getFormat() );
-        parag->getKWString()->remove( fc->getTextPos() - ( len - 1 ), len );
+    if ( it != entries.end()  ) {
+	unsigned int len = it.key().length();
+	KWFormat format;
+	format = *( dynamic_cast<KWCharFormat*>( parag->getKWString()->data()[ fc->getTextPos() ].attrib )->getFormat() );
+	parag->getKWString()->remove( fc->getTextPos() - ( len - 1 ), len );
 
-        QString txt = it.data().getReplace();
-        if ( len > txt.length() )
-        {
-            bool before = false;
-            while ( txt.length() < len )
-            {
-                before = !before;
-                if ( before )
-                    txt.prepend( " " );
-                else
-                    txt.append( " " );
-            }
-        }
-        parag->insertText( fc->getTextPos() - ( len - 1 ), txt );
-        parag->setFormat( fc->getTextPos() - ( len - 1 ), txt.length(), format );
-        tmpBuffer->clear();
+	QString txt = it.data().getReplace();
+	if ( len > txt.length() ) {
+	    bool before = false;
+	    while ( txt.length() < len ) {
+		before = !before;
+		if ( before )
+		    txt.prepend( " " );
+		else
+		    txt.append( " " );
+	    }
+	}
+	parag->insertText( fc->getTextPos() - ( len - 1 ), txt );
+	parag->setFormat( fc->getTextPos() - ( len - 1 ), txt.length(), format );
+	tmpBuffer->clear();
 
-        return true;
+	return true;
     }
 
     if ( static_cast<int>( tmpBuffer->size() ) == maxlen )
-        tmpBuffer->clear();
-    
+	tmpBuffer->clear();
+
     return false;
+}
+
+/*================================================================*/
+void KWAutoFormat::doSpellCheck( KWParag *parag, KWFormatContext *fc )
+{
+    if ( !enabled || !doc->onLineSpellCheck() )
+	return;
+    
+    if ( isSeparator( parag->getKWString()->data()[ fc->getTextPos() ].c ) ) {
+	if ( !spBuffer.isEmpty() && spBegin ) {
+	    qDebug( "spellcheck: %s", spBuffer.latin1() );
+	    spBuffer = QString::null;
+	    spBegin = 0;
+	}
+	return;
+    }
+    
+    if ( spBuffer.isEmpty() )
+	spBegin = &parag->getKWString()->data()[ fc->getTextPos() ];
+    spBuffer += parag->getKWString()->data()[ fc->getTextPos() ].c;
 }
 
 /*================================================================*/
 void KWAutoFormat::endAutoFormat( KWParag */*parag*/, KWFormatContext */*fc*/ )
 {
     if ( !enabled )
-        return;
+	return;
 
     if ( tmpBuffer )
-        delete tmpBuffer;
-    tmpBuffer = 0L;
+	delete tmpBuffer;
+    tmpBuffer = 0;
+    spBuffer = QString::null;
 }
 
 /*================================================================*/
 bool KWAutoFormat::doTypographicQuotes( KWParag *parag, KWFormatContext *fc )
 {
     if ( !enabled )
-        return false;
+	return false;
 
-    if ( !typographicQuotes.replace )
-    {
-        if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat &&
-             parag->getKWString()->data()[ fc->getTextPos() ].autoformat->type == AT_TypographicQuotes )
-        {
-            parag->getKWString()->data()[ fc->getTextPos() ].c = QChar( parag->getKWString()->data()[ fc->getTextPos() ].autoformat->c );
-            delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
-            parag->getKWString()->data()[ fc->getTextPos() ].autoformat = 0L;
-        }
-        return true;
+    if ( !typographicQuotes.replace ) {
+	if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat &&
+	     parag->getKWString()->data()[ fc->getTextPos() ].autoformat->type == AT_TypographicQuotes ) {
+	    parag->getKWString()->data()[ fc->getTextPos() ].c 
+		= QChar( parag->getKWString()->data()[ fc->getTextPos() ].autoformat->c );
+	    delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
+	    parag->getKWString()->data()[ fc->getTextPos() ].autoformat = 0L;
+	}
+	return true;
     }
 
     if ( parag->getKWString()->data()[ fc->getTextPos() ].c == QChar( '\"' ) ||
-         parag->getKWString()->data()[ fc->getTextPos() ].c == typographicQuotes.begin ||
-         parag->getKWString()->data()[ fc->getTextPos() ].c == typographicQuotes.end )
-    {
-        if ( fc->getTextPos() == 0 || fc->getTextPos() > 0 &&
-             parag->getKWString()->data()[ fc->getTextPos() - 1 ].c == QChar( ' ' ) )
-        {
-            if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat )
-                delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
+	 parag->getKWString()->data()[ fc->getTextPos() ].c == typographicQuotes.begin ||
+	 parag->getKWString()->data()[ fc->getTextPos() ].c == typographicQuotes.end ) {
+	if ( fc->getTextPos() == 0 || fc->getTextPos() > 0 &&
+	     parag->getKWString()->data()[ fc->getTextPos() - 1 ].c == QChar( ' ' ) ) {
+	    if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat )
+		delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
 
-            AutoformatInfo *info = new AutoformatInfo;
-            info->c = QChar( '\"' );
-            info->type = AT_TypographicQuotes;
+	    AutoformatInfo *info = new AutoformatInfo;
+	    info->c = QChar( '\"' );
+	    info->type = AT_TypographicQuotes;
 
-            parag->getKWString()->data()[ fc->getTextPos() ].autoformat = info;
+	    parag->getKWString()->data()[ fc->getTextPos() ].autoformat = info;
 
-            parag->getKWString()->data()[ fc->getTextPos() ].c = typographicQuotes.begin;
-        }
-        else
-        {
-            if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat )
-                delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
+	    parag->getKWString()->data()[ fc->getTextPos() ].c = typographicQuotes.begin;
+	} else {
+	    if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat )
+		delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
 
-            AutoformatInfo *info = new AutoformatInfo;
-            info->c = QChar( '\"' );
-            info->type = AT_TypographicQuotes;
+	    AutoformatInfo *info = new AutoformatInfo;
+	    info->c = QChar( '\"' );
+	    info->type = AT_TypographicQuotes;
 
-            parag->getKWString()->data()[ fc->getTextPos() ].autoformat = info;
+	    parag->getKWString()->data()[ fc->getTextPos() ].autoformat = info;
 
-            parag->getKWString()->data()[ fc->getTextPos() ].c = typographicQuotes.end;
-        }
+	    parag->getKWString()->data()[ fc->getTextPos() ].c = typographicQuotes.end;
+	}
 
-        return true;
+	return true;
     }
 
     return false;
@@ -373,79 +388,74 @@ bool KWAutoFormat::doTypographicQuotes( KWParag *parag, KWFormatContext *fc )
 bool KWAutoFormat::doUpperCase( KWParag *parag, KWFormatContext *fc )
 {
     if ( !enabled )
-        return false;
+	return false;
 
     bool converted = false;
 
-    if ( convertUpperCase )
-    {
-        if ( lastWasDotSpace &&
-             !isMark( parag->getKWString()->data()[ fc->getTextPos() ].c ) &&
-             parag->getKWString()->data()[ fc->getTextPos() ].c != QChar( ' ' ) &&
-             isLower( parag->getKWString()->data()[ fc->getTextPos() ].c ) )
-        {
-            if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat )
-                delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
+    if ( convertUpperCase ) {
+	if ( lastWasDotSpace &&
+	     !isMark( parag->getKWString()->data()[ fc->getTextPos() ].c ) &&
+	     parag->getKWString()->data()[ fc->getTextPos() ].c != QChar( ' ' ) &&
+	     isLower( parag->getKWString()->data()[ fc->getTextPos() ].c ) ) {
+	    if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat )
+		delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
 
-            AutoformatInfo *info = new AutoformatInfo;
-            info->c = QChar( parag->getKWString()->data()[ fc->getTextPos() ].c );
-            info->type = AT_UpperCase;
+	    AutoformatInfo *info = new AutoformatInfo;
+	    info->c = QChar( parag->getKWString()->data()[ fc->getTextPos() ].c );
+	    info->type = AT_UpperCase;
 
-            parag->getKWString()->data()[ fc->getTextPos() ].autoformat = info;
+	    parag->getKWString()->data()[ fc->getTextPos() ].autoformat = info;
 
-            parag->getKWString()->data()[ fc->getTextPos() ].c = parag->getKWString()->data()[ fc->getTextPos() ].c.upper();
-            converted = true;
-        }
-    }
-    else if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat &&
-              parag->getKWString()->data()[ fc->getTextPos() ].autoformat->type == AT_UpperCase )
-    {
-        parag->getKWString()->data()[ fc->getTextPos() ].c = QChar( parag->getKWString()->data()[ fc->getTextPos() ].autoformat->c );
-        delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
-        parag->getKWString()->data()[ fc->getTextPos() ].autoformat = 0L;
+	    parag->getKWString()->data()[ fc->getTextPos() ].c 
+		= parag->getKWString()->data()[ fc->getTextPos() ].c.upper();
+	    converted = true;
+	}
+    } else if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat &&
+		parag->getKWString()->data()[ fc->getTextPos() ].autoformat->type == AT_UpperCase ) {
+	parag->getKWString()->data()[ fc->getTextPos() ].c
+	    = QChar( parag->getKWString()->data()[ fc->getTextPos() ].autoformat->c );
+	delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
+	parag->getKWString()->data()[ fc->getTextPos() ].autoformat = 0L;
     }
 
-    if ( convertUpperUpper )
-    {
-        if ( !lastWasDotSpace && lastWasUpper &&
-             isUpper( parag->getKWString()->data()[ fc->getTextPos() ].c ) )
-        {
-            if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat )
-                delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
+    if ( convertUpperUpper ) {
+	if ( !lastWasDotSpace && lastWasUpper &&
+	     isUpper( parag->getKWString()->data()[ fc->getTextPos() ].c ) ) {
+	    if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat )
+		delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
 
-            AutoformatInfo *info = new AutoformatInfo;
-            info->c = QChar( parag->getKWString()->data()[ fc->getTextPos() ].c );
-            info->type = AT_UpperUpper;
+	    AutoformatInfo *info = new AutoformatInfo;
+	    info->c = QChar( parag->getKWString()->data()[ fc->getTextPos() ].c );
+	    info->type = AT_UpperUpper;
 
-            parag->getKWString()->data()[ fc->getTextPos() ].autoformat = info;
+	    parag->getKWString()->data()[ fc->getTextPos() ].autoformat = info;
 
-            parag->getKWString()->data()[ fc->getTextPos() ].c = parag->getKWString()->data()[ fc->getTextPos() ].c.lower();
-            converted = true;
-        }
-    }
-    else if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat &&
-              parag->getKWString()->data()[ fc->getTextPos() ].autoformat->type == AT_UpperUpper )
-    {
-        parag->getKWString()->data()[ fc->getTextPos() ].c = QChar( parag->getKWString()->data()[ fc->getTextPos() ].autoformat->c );
-        delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
-        parag->getKWString()->data()[ fc->getTextPos() ].autoformat = 0L;
-    }
-
-    if ( convertUpperUpper || convertUpperCase )
-    {
-        if ( isMark( parag->getKWString()->data()[ fc->getTextPos() ].c ) )
-            lastWasDotSpace = true;
-        else if ( !isMark( parag->getKWString()->data()[ fc->getTextPos() ].c ) &&
-                  parag->getKWString()->data()[ fc->getTextPos() ].c != QChar( ' ' ) )
-            lastWasDotSpace = false;
+	    parag->getKWString()->data()[ fc->getTextPos() ].c
+		= parag->getKWString()->data()[ fc->getTextPos() ].c.lower();
+	    converted = true;
+	}
+    } else if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat &&
+	      parag->getKWString()->data()[ fc->getTextPos() ].autoformat->type 
+		== AT_UpperUpper ) {
+	parag->getKWString()->data()[ fc->getTextPos() ].c 
+	    = QChar( parag->getKWString()->data()[ fc->getTextPos() ].autoformat->c );
+	delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
+	parag->getKWString()->data()[ fc->getTextPos() ].autoformat = 0L;
     }
 
-    if ( convertUpperUpper )
-    {
-        if ( isUpper( parag->getKWString()->data()[ fc->getTextPos() ].c ) )
-            lastWasUpper = true;
-        else
-            lastWasUpper = false;
+    if ( convertUpperUpper || convertUpperCase ) {
+	if ( isMark( parag->getKWString()->data()[ fc->getTextPos() ].c ) )
+	    lastWasDotSpace = true;
+	else if ( !isMark( parag->getKWString()->data()[ fc->getTextPos() ].c ) &&
+		  parag->getKWString()->data()[ fc->getTextPos() ].c != QChar( ' ' ) )
+	    lastWasDotSpace = false;
+    }
+
+    if ( convertUpperUpper ) {
+	if ( isUpper( parag->getKWString()->data()[ fc->getTextPos() ].c ) )
+	    lastWasUpper = true;
+	else
+	    lastWasUpper = false;
     }
 
     return converted;
@@ -476,9 +486,9 @@ bool KWAutoFormat::isUpper( const QChar &c )
     c2 = c2.lower();
 
     if ( c2 != c )
-        return true;
+	return true;
     else
-        return false;
+	return false;
 }
 
 /*================================================================*/
@@ -488,25 +498,31 @@ bool KWAutoFormat::isLower( const QChar &c )
     c2 = c2.upper();
 
     if ( c2 != c )
-        return true;
+	return true;
     else
-        return false;
+	return false;
 }
 
 /*================================================================*/
 bool KWAutoFormat::isMark( const QChar &c )
 {
     return ( c == QChar( '.' ) ||
-             c == QChar( '?' ) ||
-             c == QChar( '!' ) );
+	     c == QChar( '?' ) ||
+	     c == QChar( '!' ) );
+}
+
+/*================================================================*/
+bool KWAutoFormat::isSeparator( const QChar &c )
+{
+    return ( !c.isLetter() && !c.isNumber() && !c.isDigit() );
 }
 
 /*================================================================*/
 void KWAutoFormat::buildMaxLen()
 {
     QValueListIterator< int > it = lengths.begin();
-    
+
     maxlen = 0;
     for ( ; it != lengths.end(); ++it )
-        maxlen = QMAX( maxlen, *it );
+	maxlen = QMAX( maxlen, *it );
 }

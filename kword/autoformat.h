@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
-/* Version: 0.0.1                                                 */
-/* Author: Reginald Stadlbauer, Torben Weis                       */
-/* E-Mail: reggie@kde.org, weis@kde.org                           */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998	  */
+/* Version: 0.0.1						  */
+/* Author: Reginald Stadlbauer, Torben Weis			  */
+/* E-Mail: reggie@kde.org, weis@kde.org				  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: KWAutoFormat (header)                                  */
+/* Module: KWAutoFormat (header)				  */
 /******************************************************************/
 
 #ifndef kwautoformat_h
@@ -27,9 +27,10 @@ class KWordDocument;
 class KWFormatContext;
 class KWParag;
 class KWString;
+struct KWChar;
 
 /******************************************************************/
-/* Class: KWAutoFormatEntry                                       */
+/* Class: KWAutoFormatEntry					  */
 /******************************************************************/
 
 class KWAutoFormatEntry
@@ -87,7 +88,7 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWAutoFormat                                            */
+/* Class: KWAutoFormat						  */
 /******************************************************************/
 
 class KWAutoFormat
@@ -95,30 +96,30 @@ class KWAutoFormat
 public:
     struct TypographicQuotes
     {
-        TypographicQuotes() : begin( ( char )'»' ), end( ( char )'«' ), replace( true )
-        {}
-        TypographicQuotes( const TypographicQuotes &t ) {
-                begin = t.begin;
-                end = t.end;
-                replace = t.replace;
-        }
-        TypographicQuotes &operator=( const TypographicQuotes &t ) {
-            begin = t.begin;
-            end = t.end;
-            replace = t.replace;
-            return *this;
-        }
+	TypographicQuotes() : begin( ( char )'»' ), end( ( char )'«' ), replace( true )
+	{}
+	TypographicQuotes( const TypographicQuotes &t ) {
+	    begin = t.begin;
+	    end = t.end;
+	    replace = t.replace;
+	}
+	TypographicQuotes &operator=( const TypographicQuotes &t ) {
+	    begin = t.begin;
+	    end = t.end;
+	    replace = t.replace;
+	    return *this;
+	}
 
-        QChar begin, end;
-        bool replace;
+	QChar begin, end;
+	bool replace;
     };
 
     enum AutoformatType {AT_TypographicQuotes, AT_UpperCase, AT_UpperUpper};
 
     struct AutoformatInfo
     {
-        QChar c;
-        AutoformatType type;
+	QChar c;
+	AutoformatType type;
     };
 
     KWAutoFormat( KWordDocument *_doc );
@@ -128,7 +129,8 @@ public:
     void endAutoFormat( KWParag *parag, KWFormatContext *fc );
     bool doTypographicQuotes( KWParag *parag, KWFormatContext *fc );
     bool doUpperCase( KWParag *parag, KWFormatContext *fc );
-
+    void doSpellCheck( KWParag *parag, KWFormatContext *fc );
+    
     void setEnabled( bool e ) { enabled = e; }
     bool isEnabled() { return enabled; }
 
@@ -146,20 +148,21 @@ public:
     static bool isUpper( const QChar &c );
     static bool isLower( const QChar &c );
     static bool isMark( const QChar &c );
+    static bool isSeparator( const QChar &c );
 
     void addAutoFormatEntry( KWAutoFormatEntry *entry ) {
-        if ( !entry )
-            return;
-        entries.insert( entry->getFind(), *entry );
-        begins.append( entry->getFind()[ 0 ] );
-        lengths.append( entry->getFind().length() );
-        buildMaxLen();
+	if ( !entry )
+	    return;
+	entries.insert( entry->getFind(), *entry );
+	begins.append( entry->getFind()[ 0 ] );
+	lengths.append( entry->getFind().length() );
+	buildMaxLen();
     }
 
     void removeAutoFormatEntry( const QString &key ) {
-        if ( entries.contains( key ) )
-            entries.remove( key );
-        buildMaxLen();
+	if ( entries.contains( key ) )
+	    entries.remove( key );
+	buildMaxLen();
     }
 
     QMap< QString, KWAutoFormatEntry >::Iterator firstAutoFormatEntry()
@@ -175,6 +178,8 @@ protected:
     TypographicQuotes typographicQuotes;
     bool enabled;
     KWString *tmpBuffer;
+    QString spBuffer;
+    KWChar *spBegin;
     bool lastWasDotSpace, convertUpperCase;
     bool lastWasUpper, convertUpperUpper;
     QMap< QString, KWAutoFormatEntry > entries;

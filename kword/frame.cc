@@ -280,7 +280,7 @@ QCursor KWFrame::getMouseCursor( int mx, int my, bool table )
 	    return Qt::sizeVerCursor;
 	if ( mx >= x() + width() - 6 && my >= y() && mx <= x() + width() && my <= y() + 6 )
 	    return Qt::sizeBDiagCursor;
-	if ( mx >= x() + width() - 6 && my >= y() + height() / 2 - 3 && mx <= x() + width() && 
+	if ( mx >= x() + width() - 6 && my >= y() + height() / 2 - 3 && mx <= x() + width() &&
 	     my <= y() + height() / 2 + 3 )
 	    return Qt::sizeHorCursor;
 	if ( mx >= x() + width() - 6 && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height() )
@@ -377,7 +377,7 @@ void KWFrameSet::addFrame( KWFrame _frame )
 /*================================================================*/
 void KWFrameSet::addFrame( KWFrame *_frame )
 {
-    if ( frames.findRef( _frame ) != -1 ) 
+    if ( frames.findRef( _frame ) != -1 )
 	return;
 
     frames.append( _frame );
@@ -496,7 +496,7 @@ QCursor KWFrameSet::getMouseCursor( unsigned int mx, unsigned int my )
     if ( frame == -1 )
 	return Qt::arrowCursor;
 
-    if ( !getFrame( frame )->isSelected() && !grpMgr ) 
+    if ( !getFrame( frame )->isSelected() && !grpMgr )
 	return Qt::arrowCursor;
 
     return getFrame( frame )->getMouseCursor( mx, my, grpMgr ? true : false );
@@ -517,9 +517,9 @@ void KWFrameSet::save( ostream &out )
 	    << "\" runaGapINCH=\"" << frame->getRunAroundGap().inch() << "\" "
 	    << correctQString( frame->leftBrd2String() ).latin1() << correctQString( frame->rightBrd2String() ).latin1()
 	    << correctQString( frame->topBrd2String() ).latin1()
-	    << correctQString( frame->bottomBrd2String() ).latin1() << "bkRed=\"" 
+	    << correctQString( frame->bottomBrd2String() ).latin1() << "bkRed=\""
 	    << frame->getBackgroundColor().color().red()
-	    << "\" bkGreen=\"" << frame->getBackgroundColor().color().green() 
+	    << "\" bkGreen=\"" << frame->getBackgroundColor().color().green()
 	    << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue()
 
 	    << "\" bleftpt=\"" << frame->getBLeft().pt() << "\" bleftmm=\"" << frame->getBLeft().mm()
@@ -787,7 +787,7 @@ void KWTextFrameSet::insertParag( KWParag *_parag, InsertPos _pos )
 
     switch ( _pos ) {
     case I_AFTER: {
-	_new = new KWParag( this, doc, _parag, _next, 
+	_new = new KWParag( this, doc, _parag, _next,
 			    doc->findParagLayout( _parag->getParagLayout()->getFollowingParagLayout() ) );
 	if ( _new->getParagLayout()->getName() == _parag->getParagLayout()->getName() )
 	    _new->setParagLayout( _parag->getParagLayout() );
@@ -838,7 +838,7 @@ void KWTextFrameSet::save( ostream &out )
 
     out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() )
 	<< "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\""
-	<< static_cast<int>( frameInfo ) << correctQString( grp ).latin1() << "\" removeable=\"" 
+	<< static_cast<int>( frameInfo ) << correctQString( grp ).latin1() << "\" removeable=\""
 	<< static_cast<int>( removeableHeader )
 	<< "\" visible=\"" << static_cast<int>( visible ) << "\" name=\"" << correctQString( name ).latin1()
 	<< "\">" << endl;
@@ -1512,12 +1512,12 @@ KWFormat *KWFormulaFrameSet::getFormat()
     f->setItalic( font.italic() );
     f->setVertAlign( KWFormat::VA_NORMAL );
     f->setColor( color );
-    
+
     return f;
 }
 
 /*================================================================*/
-void KWFormulaFrameSet::activate( QWidget *_widget, int diffx, int diffy, int /*diffxx*/ )
+void KWFormulaFrameSet::activate( QWidget *_widget, int /*diffx*/, int /*diffy*/, int /*diffxx*/ )
 {
     if ( formulaEdit->parent() != ( (QScrollView*)_widget )->viewport() )
 	formulaEdit->reparent( ( (QScrollView*)_widget )->viewport(), 0, QPoint( 0, 0 ), FALSE );
@@ -1537,7 +1537,7 @@ void KWFormulaFrameSet::activate( QWidget *_widget, int diffx, int diffy, int /*
 void KWFormulaFrameSet::deactivate()
 {
     formulaEdit->hide();
-    
+
     if ( pic )
 	delete pic;
     pic = new QPicture;
@@ -1561,7 +1561,7 @@ void KWFormulaFrameSet::create( QWidget *parent )
 	update();
 	return;
     }
-    
+
     formulaEdit = new KFormulaEdit( ( (QScrollView*)parent )->viewport() );
     ( (QScrollView*)parent )->addChild( formulaEdit );
     formulaEdit->getFormula()->setFont( font );
@@ -1604,7 +1604,7 @@ void KWFormulaFrameSet::save( ostream &out )
     out << otag << "<FORMAT>" << endl;
     getFormat()->save( out );
     out << etag << "</FORMAT>" << endl;
-    
+
     out << etag << "</FRAMESET>" << endl;
 }
 
@@ -1614,7 +1614,7 @@ void KWFormulaFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
     string tag;
     string name;
     string tmp;
-    
+
     while ( parser.open( 0L, tag ) ) {
 	KOMLParser::parseTag( tag.c_str(), name, lst );
 
@@ -1631,9 +1631,9 @@ void KWFormulaFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    f.load( parser, lst, doc );
 	    font = QFont( f.getUserFont()->getFontName() );
 	    font.setPointSize( f.getPTFontSize() );
-	    font.setWeight( f.getWeight() ); 
-	    font.setUnderline( f.getUnderline() ); 
-	    font.setItalic( f.getItalic() ); 
+	    font.setWeight( f.getWeight() );
+	    font.setUnderline( f.getUnderline() );
+	    font.setItalic( f.getItalic() );
 	    color = f.getColor();
 	} else if ( name == "FRAME" ) {
 	    KWFrame rect;
@@ -1981,7 +1981,7 @@ void KWGroupManager::recalcRows()
 
 	if ( doc->getProcessingType() == KWordDocument::DTP ) {
 	    if ( j > 0 && y + getFrameSet( j, i )->getFrame( 0 )->height() >
-		 ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) * 
+		 ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) *
 		 doc->getPTPaperHeight() - doc->getPTBottomBorder() ) {
 		y = ( getFrameSet( j - 1, i )->getPageOfFrame( 0 ) + 1 ) * doc->getPTPaperHeight() + doc->getPTTopBorder();
 		_addRow = true;
@@ -2187,7 +2187,7 @@ void KWGroupManager::insertRow( unsigned int _idx, bool _recalc, bool _removeabl
 
     int ww = 0;
     for ( i = 0; i < getCols(); i++ ) {
-	KWFrame *frame = new KWFrame( r.x() + ww, r.y(), *w.at( i ), 
+	KWFrame *frame = new KWFrame( r.x() + ww, r.y(), *w.at( i ),
 				      doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10 );
 	KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
 	_frameSet->addFrame( frame );
@@ -2383,7 +2383,7 @@ bool KWGroupManager::joinCells()
 		else
 		    cell = 0L;
 	    }
-	    if ( col + 1 > cols - 1 ) 
+	    if ( col + 1 > cols - 1 )
 		break;
 
 	    cell = getCell( row, col + 1 );
