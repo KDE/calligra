@@ -26,6 +26,8 @@
 #include <qiconset.h>
 #include <qpainter.h>
 #include <qtoolbutton.h>
+#include <qapplication.h>
+#include <qclipboard.h>
 
 #include <kaction.h>
 #include <kcolordrag.h>
@@ -430,36 +432,68 @@ KarbonView::print( KPrinter &printer )
 
 void
 KarbonView::editCut()
-{}
+{
+	addSelectionToClipboard();
+	// remove selection
+	editDeleteSelection();
+}
 
 void
 KarbonView::editCopy()
-{}
+{
+	addSelectionToClipboard();
+}
+
+void
+KarbonView::addSelectionToClipboard() const
+{
+	QClipboard *clipboard = QApplication::clipboard();
+	VObjectListIterator itr( part()->document().selection()->objects() );
+	// build a xml fragment containing the selection as karbon xml
+	QDomDocument doc( "clip" );
+	QDomElement elem = doc.createElement( "clip" );
+	QString result;
+	QTextStream ts( &result, IO_WriteOnly );
+	for( ; itr.current() ; ++itr )
+		itr.current()->save( elem );
+	ts << elem;
+	// push to clipbaord
+	clipboard->setText( result.latin1() );
+
+}
 
 void
 KarbonView::editPaste()
 {
-	VObjectListIterator itr( part()->document().selection()->objects() );
-	VObjectList selection;
-
-	for( ; itr.current() ; ++itr )
+	QClipboard *clipboard = QApplication::clipboard();
+	QDomDocument doc( "clip" );
+	doc.setContent( clipboard->text() );
+	QDomElement clip = doc.documentElement();
+	// Try to parse the clipboard data
+	if( clip.tagName() == "clip" )
 	{
-		VObject *temp = itr.current()->clone();
-//		temp->transform( QWMatrix().translate( VGlobal::copyOffset, VGlobal::copyOffset ) );
-		selection.append( temp );
+		VObjectList selection;
+		// Use group to assemble the xml contents
+		// TODO : maybe not clone() so much
+		VGroup grp( 0L );
+		grp.load( clip );
+		VObjectListIterator itr( grp.objects() );
+		for( ; itr.current() ; ++itr )
+			selection.append( itr.current()->clone() );
+
+		part()->document().selection()->clear();
+
+		// Calc new selection
+		VObjectListIterator itr2( selection );
+
+		for( ; itr2.current() ; ++itr2 )
+		{
+			part()->insertObject( itr2.current() );
+			part()->document().selection()->append( itr2.current() );
+		}
+
+		part()->repaintAllViews();
 	}
-
-	part()->document().selection()->clear();
-	// Calc new selection
-	VObjectListIterator itr2( selection );
-
-	for( ; itr2.current() ; ++itr2 )
-	{
-		part()->insertObject( itr2.current() );
-		part()->document().selection()->append( itr2.current() );
-	}
-
-	part()->repaintAllViews();
 }
 
 void

@@ -241,6 +241,7 @@ protected:
 	//KXMLGUIBuilder
 	virtual QWidget *createContainer( QWidget *parent, int index, const QDomElement &element, int &id );
 	virtual void removeContainer( QWidget *container, QWidget *parent, QDomElement &element, int id );
+	void addSelectionToClipboard() const;
 
 private:
 	void initActions();
