@@ -373,12 +373,14 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
         ++pos; // Get over the previous line end (CR or LF)
         line = readLine( m_rawData,  m_psStreamStart, m_psStreamLength, pos, lastWasCr );
         kdDebug(30003) << "Checking line: " << line << endl;
-        // ### TODO: it seems that the bounding box can be delayed in the trailer (GhostScript 7.07 does not support it either.)
+        // ### TODO: it seems that the bounding box can be delayed with "(atend)" in the trailer (GhostScript 7.07 does not support it either.)
         if (line.startsWith("%%BoundingBox:"))
         {
             lineIsBoundingBox = true;
             break;
         }
+        // ### TODO: also abort on %%EndComments
+        // ### TODO: %? , where ? is non-white-space printable, does not end the comment!
         else if (!line.startsWith("%%"))
             break; // Not a EPS comment anymore, so abort as we are not in the EPS header anymore
     }
@@ -387,11 +389,13 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
         kdError(30003) << "KoPictureEps::load: could not find a bounding box!" << endl;
         return false;
     }
+    // Floating point values are not allowed in a Bounding Box, but ther are many such files out there...
     QRegExp exp("(\\-?[0-9]+\\.?[0-9]*)\\s(\\-?[0-9]+\\.?[0-9]*)\\s(\\-?[0-9]+\\.?[0-9]*)\\s(\\-?[0-9]+\\.?[0-9]*)");
     if ( exp.search(line) == -1 )
     {
-        // ### TODO: it might be an "(atend)" and the bounding box is in the trailer 
+        // ### TODO: it might be an "(atend)" and the bounding box is in the trailer
         // (but GhostScript 7.07 does not support a bounding box in the trailer.)
+        // Note: in Trailer, it is the last BoundingBox that counts not the first!
         kdError(30003) << "Not standard bounding box: " << line << endl;
         return false;
     }
