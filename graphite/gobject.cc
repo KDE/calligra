@@ -157,7 +157,7 @@ KDialogBase *GObjectM9r::createPropertyDialog(QWidget *parent) {
     grid->addWidget(label, 3, 0);
     label=new QLabel(i18n("%1 rad").arg(m_object->angle()), information);
     grid->addWidget(label, 3, 2);
-    
+
     grid->setRowStretch(4, 1);
 
     label=new QLabel(i18n("Bounding Rectangle:"), information);
@@ -207,7 +207,7 @@ KDialogBase *G1DObjectM9r::createPropertyDialog(QWidget *parent) {
 				    BarIcon("exec", 32, KIcon::DefaultState, GraphiteFactory::global()));
 
     QGridLayout *grid=new QGridLayout(frame, 4, 4, KDialog::marginHint(), KDialog::spacingHint());
-    
+
     QLabel *label=new QLabel(i18n("Width:"), frame);
     grid->addWidget(label, 0, 0);
 
@@ -221,7 +221,7 @@ KDialogBase *G1DObjectM9r::createPropertyDialog(QWidget *parent) {
 
     m_color=new KColorButton(m_object->pen().color(), frame);
     connect(m_color, SIGNAL(changed(const QColor &)), this,
-	    SLOT(setChanged(const QColor &)));
+	    SLOT(slotChanged(const QColor &)));
     grid->addWidget(m_color, 1, 2);
 
     label=new QLabel(i18n("Style:"), frame);
@@ -305,14 +305,16 @@ KDialogBase *G2DObjectM9r::createPropertyDialog(QWidget *parent) {
 
     QVGroupBox *previewbox=new QVGroupBox(i18n("Preview:"), fill);
     m_preview=new QWidget(previewbox);
-    m_preview->setBackgroundMode(QWidget::FixedPixmap);
     leftbox->addWidget(previewbox);
     leftbox->setStretchFactor(previewbox, 1);
 
+    QBoxLayout *rightbox=new QVBoxLayout(mainbox);
+    rightbox->addSpacing(previewbox->fontMetrics().height()/2);
     m_stack=new QWidgetStack(fill);
     m_stack->setFrameStyle(QFrame::Box | QFrame::Sunken);
-    mainbox->addWidget(m_stack);
-    mainbox->setStretchFactor(m_stack, 1);
+    rightbox->addWidget(m_stack);
+
+    mainbox->setStretchFactor(rightbox, 1);
 
     // none
     QWidget *widget=new QWidget(m_stack);
@@ -328,7 +330,7 @@ KDialogBase *G2DObjectM9r::createPropertyDialog(QWidget *parent) {
     grid->addWidget(label, 0, 0);
     m_brushColor=new KColorButton(m_object->brush().color(), widget);
     connect(m_brushColor, SIGNAL(changed(const QColor &)), this,
-	    SLOT(setChanged(const QColor &)));
+	    SLOT(slotChanged(const QColor &)));
     grid->addWidget(m_brushColor, 0, 1);
     label=new QLabel(i18n("Style:"), widget);
     grid->addWidget(label, 1, 0);
@@ -358,18 +360,18 @@ KDialogBase *G2DObjectM9r::createPropertyDialog(QWidget *parent) {
 
     // gradient
     widget=new QWidget(m_stack);
-    QBoxLayout *wbox=new QVBoxLayout(m_stack, KDialog::marginHint(), KDialog::spacingHint());
+    QBoxLayout *wbox=new QVBoxLayout(widget, KDialog::marginHint(), KDialog::spacingHint());
     grid=new QGridLayout(wbox, 3, 2, KDialog::spacingHint());
 
     label=new QLabel(i18n("Colors:"), widget);
     grid->addWidget(label, 0, 0);
     m_gradientCA=new KColorButton(m_object->gradient().ca, widget);
     connect(m_gradientCA, SIGNAL(changed(const QColor &)), this,
-	    SLOT(setChanged(const QColor &)));
+	    SLOT(slotChanged(const QColor &)));
     grid->addWidget(m_gradientCA, 0, 1);
     m_gradientCB=new KColorButton(m_object->gradient().cb, widget);
     connect(m_gradientCB, SIGNAL(changed(const QColor &)), this,
-	    SLOT(setChanged(const QColor &)));
+	    SLOT(slotChanged(const QColor &)));
     grid->addWidget(m_gradientCB, 1, 1);
     label=new QLabel(i18n("Style:"), widget);
     grid->addWidget(label, 2, 0);
@@ -392,7 +394,7 @@ KDialogBase *G2DObjectM9r::createPropertyDialog(QWidget *parent) {
     m_unbalanced=new QCheckBox(i18n("Unbalanced Gradient"), widget);
     m_unbalanced->setChecked(false);
     wbox->addWidget(m_unbalanced);
-    connect(m_unbalanced, SIGNAL(toggled()), this,
+    connect(m_unbalanced, SIGNAL(clicked()), this,
 	    SLOT(slotBalance()));
 
     QGridLayout *factorgrid=new QGridLayout(wbox, 2, 2, KDialog::spacingHint());
