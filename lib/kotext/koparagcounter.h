@@ -21,6 +21,7 @@
 class KoTextParag;
 class QDomElement;
 class KoTextFormat;
+class KoOasisContext;
 
 #ifndef koparagcounter_h
 #define koparagcounter_h
@@ -66,6 +67,7 @@ public:
     /** XML support. */
     void load( QDomElement & element );
     void save( QDomElement & element );
+    void loadOasis( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level );
 
     bool operator==( const KoParagCounter & c2 ) const;
     bool operator!=( const KoParagCounter & c2 ) const { return !(*this == c2); }

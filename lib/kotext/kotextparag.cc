@@ -130,6 +130,9 @@ void KoTextParag::invalidateCounters()
     if ( m_layout.counter )
         m_layout.counter->invalidate();
     KoTextParag *s = next();
+    // #### Possible optimization: since any invalidation propagates down,
+    // it's enough to stop at the first paragraph with an already-invalidated counter, isn't it?
+    // This is only true if nobody else calls counter->invalidate...
     while ( s ) {
         if ( s->m_layout.counter )
             s->m_layout.counter->invalidate();
@@ -1650,7 +1653,6 @@ QString KoTextParag::toString( int from, int length ) const
 
 void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos )
 {
-    kdDebug() << k_funcinfo << endl;
     // parse every child node of the parent
     for( QDomNode node ( parent.firstChild() ); !node.isNull(); node = node.nextSibling() )
     {
@@ -1662,10 +1664,10 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         // Try to keep the order of the tag names by probability of happening
         if ( tagName == "text:span" )
         {
-            context.m_styleStack.save();
+            context.styleStack().save();
             context.fillStyleStack( ts, "text:style-name" );
             loadOasisSpan( ts, context, pos ); // recurse
-            context.m_styleStack.restore();
+            context.styleStack().restore();
         }
         else if ( textFoo && tagName == "text:s" )
         {
@@ -1828,7 +1830,7 @@ KoParagLayout KoTextParag::loadParagLayout( KoOasisContext& context, KoStyleColl
         KoStyle *style;
         // Name of the style. If there is no style, then we do not supply
         // any default!
-        QString styleName = context.m_styleStack.userStyleName();
+        QString styleName = context.styleStack().userStyleName();
         if ( !styleName.isEmpty() )
         {
             style = styleCollection->findStyle( styleName );
@@ -1868,6 +1870,14 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
 
     setChanged( true );
     invalidate( 0 );
+}
+
+void KoTextParag::applyListStyle( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level )
+{
+    delete m_layout.counter;
+    m_layout.counter = new KoParagCounter;
+    m_layout.counter->loadOasis( context, restartNumbering, orderedList, heading, level );
+    // need to call invalidateCounters() ? Not during loading at least.
 }
 
 int KoTextParag::documentWidth() const

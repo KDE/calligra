@@ -23,6 +23,7 @@
 #include "kotextdocument.h"
 #include <kdebug.h>
 #include <qdom.h>
+#include "kooasiscontext.h"
 
 static KoTextParag * const INVALID_PARAG = (KoTextParag *)-1;
 
@@ -139,6 +140,82 @@ void KoParagCounter::load( QDomElement & element )
     m_align = element.attribute("align", "0").toInt(); //AlignAuto as defeult
     QString restart = element.attribute("restart");
     m_restartCounter = (restart == "true") || (restart == "1");
+    invalidate();
+}
+
+static int importCounterType( QChar numFormat )
+{
+    if ( numFormat == '1' )
+        return 1;
+    if ( numFormat == 'a' )
+        return 2;
+    if ( numFormat == 'A' )
+        return 3;
+    if ( numFormat == 'i' )
+        return 4;
+    if ( numFormat == 'I' )
+        return 5;
+    return 0;
+}
+
+void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level )
+{
+    const QDomElement listStyle = context.listStyleStack().currentListStyle();
+    //const QDomElement listStyleProperties = context.listStyleStack().currentListStyleProperties();
+    m_numbering = heading ? 1 : 0;
+    m_depth = level - 1; // depth start at 0
+    m_startNumber = restartNumbering;
+    m_restartCounter = restartNumbering != -1;
+    if ( orderedList || heading ) {
+        m_style = importCounterType( listStyle.attribute("style:num-format")[0] );
+        m_prefix = listStyle.attribute( "style:num-prefix" );
+        m_suffix = listStyle.attribute( "style:num-suffix" );
+        QString dl = listStyle.attribute( "text:display-levels" );
+        m_displayLevels = dl.isEmpty() ? 1 : dl.toInt();
+    } else { // bullets, see 3.3.6 p138
+        m_style = STYLE_CUSTOMBULLET;
+        QString bulletChar = listStyle.attribute( "text:bullet-char" );
+        if ( !bulletChar.isEmpty() ) {
+#if 0 // doesn't work well. Fonts lack those symbols!
+            m_customBulletChar = bulletChar[0];
+            kdDebug() << "bullet code " << m_customBulletChar.unicode() << endl;
+            m_customBulletFont = listStyleProperties.attribute( "style:font-name" );
+#endif
+            // Reverse engineering, I found those codes:
+            switch( bulletChar[0].unicode() ) {
+            case 8226: // small disc
+                m_style = STYLE_DISCBULLET;
+                break;
+            case 9679: // large disc
+                m_style = STYLE_DISCBULLET;
+                break;
+            case 57356: // losange - TODO in KWord
+                m_style = STYLE_DISCBULLET;
+                break;
+            case 57354: // square
+                m_style = STYLE_SQUAREBULLET;
+                break;
+            case 10132: // arrow
+            case 10146: // two-colors right-pointing triangle (TODO)
+                m_customBulletChar = 206; // simpler arrow symbol
+                m_customBulletFont = "symbol";
+                break;
+            case 10007: // cross
+                m_customBulletChar = 212; // simpler cross symbol
+                m_customBulletFont = "symbol";
+                break;
+            case 10004: // checkmark
+                m_customBulletChar = 246; // hmm that's sqrt
+                m_customBulletFont = "symbol";
+                break;
+            default:
+                m_style = STYLE_CIRCLEBULLET;
+                break;
+            }
+        } else { // can never happen
+            m_style = STYLE_DISCBULLET;
+        }
+    }
     invalidate();
 }
 

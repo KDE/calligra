@@ -245,7 +245,7 @@ void KoStyle::loadStyle( QDomElement & parentElem, int docVersion )
 
 void KoStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
 {
-    context.m_styleStack.push( styleElem );
+    context.styleStack().push( styleElem );
     KoParagLayout layout;
     KoParagLayout::loadOasisParagLayout( layout, context );
 
@@ -256,8 +256,16 @@ void KoStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
     // Load name
     m_name = styleElem.attribute( "style:name" );
 
-    m_bOutline = styleElem.attribute( "outline" ) == "true";
-    context.m_styleStack.pop();
+    // TODO load format
+
+    // ### In KWord the style says "I'm part of the outline" (TOC)
+    // ### In OOo the paragraph says that (text:h)
+    // Hence this hack...
+    // This needs to be reviewed/understood. Can a paragraph's belonging
+    // to the outline be switched on/off? If not, why is it a parag property?
+    m_bOutline = m_name.startsWith( "Heading" );
+
+    context.styleStack().pop();
 }
 
 const KoParagLayout & KoStyle::paragLayout() const

@@ -143,11 +143,13 @@ public:
     /** a bit more clever than KoTextString::toString, e.g. with numbered lists */
     QString toString( int from = 0, int length = 0xffffffff ) const;
 
-    /** The app should call this during formatting - e.g. in formatVertically */
+    /// The app should call this during formatting - e.g. in formatVertically
     void fixParagWidth( bool viewFormattingChars );
 
-    /** Load from XML */
+    /// Load from XML
     void loadOasis( const QDomElement& e, KoOasisContext& context, KoStyleCollection *styleCollection );
+
+    void applyListStyle( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level );
 
 #ifndef NDEBUG
     void printRTDebug( int );
