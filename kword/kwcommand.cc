@@ -518,6 +518,10 @@ void KWTableStyleCommand::execute()
         textObject->textDocument()->removeSelection( KoTextDocument::Temp );
     }
 
+    m_frame->frameBordersChanged();
+    if (m_frame->isSelected())
+        m_frame->updateResizeHandles();
+
     if ( repaintViews )
         m_frame->frameSet()->kWordDocument()->repaintAllViews();
     m_frame->frameSet()->kWordDocument()->refreshFrameBorderButton();
@@ -530,6 +534,10 @@ void KWTableStyleCommand::unexecute()
         m_fsc->unexecute();
     if (m_sc)
         m_sc->unexecute();
+
+    m_frame->frameBordersChanged();
+    if (m_frame->isSelected())
+        m_frame->updateResizeHandles();
 
     if ( repaintViews )
         m_frame->frameSet()->kWordDocument()->repaintAllViews();
