@@ -66,7 +66,7 @@ makes a formula look like a formula.</para>
 <para>But most of the time you won't want to use &kformula; itself.
 Instead you might choose to use it from within &kword; or any other
 &koffice; application. That is &kformula; is not a useful application
-on its own but an extention to all the other &koffice; applications
+on its own but an extension to all the other &koffice; applications
 you've fallen in love with.</para>
 
 <para>Where ever &kformula; gets embedded, it will
@@ -93,8 +93,8 @@ instead. New characters are always put at the current cursor
 position.</para>
 
 <para>There is a toolbar called <guilabel>Add</guilabel> that allows
-you to create more complex elements. There are indexes, fractions,
-roots and matrices to name a few. All those elements
+you to create more complex elements. There are indices, fractions,
+roots and matrices to name a few. All these elements
 consist of at least one list, you can move the cursor into and insert
 new items.</para>
 
@@ -102,7 +102,12 @@ new items.</para>
 
 <chapter id="using-kformula">
 <title>Using &kformula;</title>
-
+<para> Below is a typical formula entry in &kformula;. To enter the partial
+derivatives and Greek letters click on the symbol combo box, on the
+right, and select the appropriate symbol. The symbol combo box, in the figure 
+below, has the word
+<quote>Cap</quote> on it. Click on the return key symbol to the right of it,
+to enter a symbol.</para>
 <screenshot>
 <screeninfo>Screenshot of &kformula;</screeninfo>
 	<mediaobject>
@@ -134,7 +139,7 @@ Here is what the the resulting &PostScript; file should look
 like:</para>
 
 <screenshot>
-<screeninfo>Here is the &PostScript; output from &kappname;</screeninfo>
+<screeninfo>Here is the &PostScript; output from &kformula;</screeninfo>
 	<mediaobject>
 	  <imageobject>
 	    <imagedata fileref="greens.png" format="PNG"/>
@@ -153,9 +158,23 @@ get these results
 <title>More &kformula; features</title>
 
 <para>More on formulas</para>
-<para>
+<para>To enter matrices, click on the <guiicon>[ ]</guiicon> and then click
+on the matrix symbol <inlinemediaobject><imageobject>
+	    <imagedata fileref="matrix.png" format="PNG"/>
+	  </imageobject></inlinemediaobject>.
+You can move from matrix element to matrix element using the arrow
+keys <keysym>Right arrow</keysym>, <keysym>Up arrow</keysym>,
+<keysym>Down arrow</keysym> and  <keysym>Left arrow</keysym>. An example matrix 
+is shown below.
 </para>
-
+<screenshot>
+<screeninfo>Here is the resulting matrix;</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="matrix-view.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
 </sect1>
 </chapter>
 
@@ -177,7 +196,8 @@ get these results
 <guimenu>File</guimenu>
 <guimenuitem>New</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Creates a new &kformula; document</action></para></listitem>
+<listitem><para><action>Creates a new &kformula; 
+document</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -188,7 +208,8 @@ get these results
 <guimenu>File</guimenu>
 <guimenuitem>Open</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens a previously saved document</action></para></listitem>
+<listitem><para><action>Opens a previously saved 
+document</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -386,6 +407,9 @@ This action takes place on the braces just outside the cursor.</action></para></
 
 </variablelist>
 
+<para>See the <link linkend="advanced"> Advanced editing</link> 
+section for details.</para>
+
 </sect2>
 
 <sect2>
@@ -423,7 +447,8 @@ This action takes place on the braces just outside the cursor.</action></para></
 <guisubmenu>Add...</guisubmenu>
 <guimenuitem>Add bracket</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Inserts a pair of brackets, i.e. ( ).</action></para></listitem>
+<listitem><para><action>Inserts a pair of brackets, &ie; ( ). You can also just 
+type ( to insert a pair of brackets.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -459,7 +484,8 @@ This action takes place on the braces just outside the cursor.</action></para></
 <guisubmenu>Add...</guisubmenu>
 <guimenuitem>Add sum</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Inserts the summation sign (sigma).</action></para></listitem>
+<listitem><para><action>Inserts the summation sign 
+(sigma).</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -616,7 +642,8 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <guimenu>Element</guimenu>
 <guimenuitem>Left delimiter</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Allows insertion of various delimiters i.e. (, {, and [.</action></para></listitem>
+<listitem><para><action>Allows insertion of various delimiters &ie; (, {, and 
+[.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -624,7 +651,8 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <guimenu>Element</guimenu>
 <guimenuitem>Right delimiter</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Allows insertion of various delimiters i.e. ), }, and ].</action></para></listitem>
+<listitem><para><action>Allows insertion of various delimiters &ie; ), }, and 
+].</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -635,7 +663,8 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <guimenu>Element</guimenu>
 <guimenuitem>Insert symbol</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Inserts the symbol, selected in the symbol toolbar.</action></para></listitem>
+<listitem><para><action>Inserts the symbol, selected in the symbol 
+toolbar.</action></para></listitem>
 </varlistentry>
 </variablelist>
 
@@ -644,7 +673,8 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <sect2>
 <title>The <guimenu>Settings</guimenu> Menu</title>
 <para>Here you can choose how &kformula; is configured.
- You can select the toolbars you want displayed or the type of fonts to be used.</para>
+ You can select the toolbars you want displayed or the type of fonts to be 
+used.</para>
 
 <variablelist>
 
@@ -653,7 +683,8 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <guimenu>Settings</guimenu>
 <guimenuitem>Syntax highlighting</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Checking this item detremines if the numbers will be displayed in color</action></para></listitem>
+<listitem><para><action>Checking this item determines if the numbers will be 
+displayed in color</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -661,7 +692,8 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <guimenu>Settings</guimenu>
 <guimenuitem>Show file toolbar</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Toggles the toolbar that contains clickable icons for new, open and save files.
+<listitem><para><action>Toggles the toolbar that contains clickable icons for 
+new, open and save files.
 Print and print preview are here also.</action></para></listitem>
 </varlistentry>
 
@@ -670,8 +702,8 @@ Print and print preview are here also.</action></para></listitem>
 <guimenu>Settings</guimenu>
 <guimenuitem>Show edit toolbar</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Toggles the edit toolbar.Here are clickable icons for cut
- and paste as well as Undo and Redo.</action></para></listitem>
+<listitem><para><action>Toggles the edit toolbar.Here are clickable icons for 
+cut and paste as well as Undo and Redo.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -679,8 +711,8 @@ Print and print preview are here also.</action></para></listitem>
 <guimenu>Settings</guimenu>
 <guimenuitem>Show add toolbar</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>This toolbar contains all the mathematical elements such as Sum,
-Integral, Exponent etc.</action></para></listitem>
+<listitem><para><action>This toolbar contains all the mathematical elements such 
+as Sum, Integral, Exponent &etc;.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -688,7 +720,8 @@ Integral, Exponent etc.</action></para></listitem>
 <guimenu>Settings</guimenu>
 <guimenuitem>Show symbol toolbar</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>This toogles the combo box that contains Del, the partial derivative symbol, limit arrows, 
+<listitem><para><action>This toogles the combo box that contains Del, the 
+partial derivative symbol, limit arrows, 
 boolean operators and other mathematical symbols.</action></para></listitem>
 </varlistentry>
 
@@ -698,12 +731,64 @@ boolean operators and other mathematical symbols.</action></para></listitem>
 <guimenu>Settings</guimenu>
 <guimenuitem>Show matrix toolbar</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>This toggles the matrix toolbar. It contains clickable icons
-that pertain to matrix creation and editing.</action></para></listitem>
+<listitem><para><action>This toggles the matrix toolbar. It contains clickable 
+icons that pertain to matrix creation and editing.</action></para></listitem>
 </varlistentry>
 
 </variablelist>
 
+</sect2>
+
+<sect2>
+<title>Configuring Shortcuts</title>
+
+<para>The <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...</guimenuitem></menuchoice>
+allows you to specify key bindings</para>
+
+
+<para>Below is an example of how to configure a short cut for making a
+thick space.
+</para>
+
+<screenshot>
+<screeninfo>Picture of shortcut dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="shortcut0.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<itemizedlist>
+<listitem><para>
+Click on the custom button.
+</para></listitem>
+
+<listitem><para>
+Next click on the primary button.
+</para></listitem>
+
+<listitem><para>
+Do <userinput><keycombo
+action="seq"><keycap>CTRL</keycap><keycap>Space</keycap></keycombo></userinput>
+and the dialog should disappear. The keybinding is now entered. 
+</para></listitem>
+</itemizedlist>
+
+<screenshot>
+<screeninfo>Picture of keybinding  dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="shortcut1.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<para>Pressing the keys <userinput><keycombo
+action="seq"><keycap>CTRL</keycap><keycap>Space</keycap></keycombo></userinput>
+now produces a thick space.
+</para>
 </sect2>
 
 <sect2>
@@ -717,39 +802,50 @@ that pertain to matrix creation and editing.</action></para></listitem>
 </chapter>
 
 <chapter id="advanced">
-<title>Advanced editing</title>
+<title>Advanced Editing</title>
 
-<para>There is a lot to say about what can be done...</para>
-<para>A special feature is the name insertion. When you type a
-backslash (<literal>\</literal>) you get a new empty list right away. But this one is
-special. It uses a different font and is meant to insert things like
-function names. There is, however, a second idea here. Your keyboard
-only has a limited number of keys. The wealth of mathematical symbols
-on the other side is overwhelming. To get one of those you can type
-its name and press the space key afterwards. The name you typed will
-be replaced by the symbol then. By the way, normally the
+<sect1 id="insertion">
+<title>Name insertion</title>
+<para>
+A special feature is the name insertion. The blue square you
+type into is actual a list. Furthermore, that list can contain other
+lists. When you type a backslash (<literal>\</literal>) you get a new
+empty list right away. But this one is special. It uses a different
+font and is meant to insert things like function names. There is,
+however, a second idea here. Your keyboard only has a limited number of keys. 
+The wealth of mathematical symbols on the other side is overwhelming. To get one 
+of those you can type its name and press the space key afterwards. The name you 
+typed will be replaced by the symbol then. In this context, the
 <keycap>Space</keycap> key means <quote>get out of here</quote>, that
-is move the cursor to the containing list.
+is move the cursor to the containing list. The cursor will be
+positioned at the end of what you just entered but will also enclose part of the original
+formula, after pressing the space bar.
 </para>
 
 <para>Another thing you might want to insert are spaces. We all know,
 printing formulae is all about the right spacing. And you can do just
 that using a <quote>name list</quote>.</para>
 <para>
-Inside the blue square do: <userinput><keycombo action="seq"><keycap>\</keycap><keycap>,</keycap><keycap>SPACE</keycap></keycombo></userinput> to get a small space.
+Inside the blue square do: <userinput><keycombo 
+action="seq"><keycap>\</keycap><keycap>,</keycap><keycap>SPACE</keycap></keycombo></userinput> to get a small space.
 </para>
 <para>
-Do: <userinput><keycombo action="seq"><keycap>\</keycap><keycap>&lt;</keycap><keycap>Space</keycap></keycombo></userinput> to get a medium space.
+Do: <userinput><keycombo 
+action="seq"><keycap>\</keycap><keycap>&lt;</keycap><keycap>Space</keycap></keycombo></userinput> to get a medium space.
 </para>
 <para>
-Do: <userinput><keycombo action="seq"><keycap>\</keycap><keycap>;</keycap><keycap>Space</keycap></keycombo></userinput> to get a thick space.
+Do: <userinput><keycombo 
+action="seq"><keycap>\</keycap><keycap>;</keycap><keycap>Space</keycap></keycombo></userinput> to get a thick space.
 </para>
 <para>
-Do: <userinput><keycap>\</keycap> quad <keycap>Space</keycap></userinput> to get a quadruple wide space.
+Do: <userinput><keycap>\</keycap> quad <keycap>Space</keycap></userinput> to get 
+a quadruple wide space.
 </para>
 <para>
 In the same way, specific mathematical symbols can be inserted.  
-<userinput><keycap>\</keycap> oint <keycap>Space</keycap></userinput> inserts the path integral about a closed contour. Below is the result of <userinput><keycap>\</keycap> oint <keycap>Space</keycap></userinput>:</para>
+<userinput><keycap>\</keycap> oint <keycap>Space</keycap></userinput> inserts 
+the path integral about a closed contour. Below is the result of 
+<userinput><keycap>\</keycap> oint <keycap>Space</keycap></userinput>:</para>
 <screenshot>
 <screeninfo>Picture of path integral</screeninfo>
 	<mediaobject>
@@ -758,6 +854,113 @@ In the same way, specific mathematical symbols can be inserted.
 	  </imageobject>
 	</mediaobject>
 </screenshot>
+</sect1>
+
+<sect1 id="formula-strings">
+<title>Editing Formulas</title>
+
+<para>The <menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Edit Formula String</guimenuitem>
+</menuchoice> allows the user to edit the ascii formulas that have been copied from other applications,
+such as Scilab, and  transform them directly into mathematical type. An example will make this clear. Below 
+is a screenshot of <literal>INRIA</literal> Scilab.
+</para>
+
+<screenshot>
+<screeninfo>Scilab picture</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="scilab.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+<para> Copy and paste the text beginning with <literal>x*sin(30*x)</literal> into the formula editor as 
+shown below:</para>
+
+<screenshot>
+<screeninfo>Scilab formula edit picture</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="scilab-edit.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<para>If you click on <guilabel>OK</guilabel>, the editor will complain about aborted parsing. It cannot
+recognize one of the symbols in the formula. The displayed formula would show that the Pi symbol is
+not correctly rendered. This means that the <literal>%</literal> must be deleted. Do this and &kformula; will 
+render the mathematical font properly, as shown below.</para>
+
+<screenshot>
+<screeninfo>Scilab formula rendered in &kformula;</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="sin.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<para> The formula editor will accept most C language mathematical expressions, like the formulas from a 
+Runge-Kutta program below:</para>
+<programlisting><function>void derivs(float x, float y[], float dydx[])
+{
+ dydx[1] = y[2];
+ dydx[2] = -0.8*x*y[2] - sin(x)*y[1];
+}</function></programlisting>
+
+<para>Here <literal>dydx[1]</literal> is the first order derivative and <literal>dydx[2]</literal> is the second order
+derivative. After copying the formula, you will have to edit the derivatives with &kformula;. Here is how it is done.
+First copy and paste the bottom expression into the formula editor.</para>
+
+<screenshot>
+<screeninfo>Runge-Kutta in editor;</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="rk-edit0.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<para>Next remove the <literal>[ ]</literal>, leaving just y's.</para>
+
+<screenshot>
+<screeninfo>Runge-Kutta edited</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="rk-edit1.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<para>Now click OK and place the cursor by a <literal>y</literal> and delete it. Insert the appropriate symbols as
+shown below.</para>
+
+<screenshot>
+<screeninfo>Runge-Kutta in &kformula;</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="rk-edit2.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<para>Not every expression that &kformula; is capable of translates into a valid C expression. For example the
+superscript expression:</para>
+
+<screenshot>
+<screeninfo>Superscript in &kformula;</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="ambiguous-string.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<para>is displayed as <literal>()**()</literal>, which is not a valid C statement for exponentiation. Similarly the 1 by 2
+matrix displays as <literal>()/()</literal>. This is not a valid array in C.</para>
+
+</sect1>
 
 </chapter>
 
@@ -788,7 +991,8 @@ the &kde; application &ark;. <mousebutton>Right</mousebutton> click on
 <filename>esstix.zip</filename> and select <guimenuitem>Extract
 here...</guimenuitem>.   
 Then start the &kde; font installer by going to the K menu and
-selecting the command <menuchoice><guimenu>Control Center</guimenu><guimenuitem>System</guimenuitem><guimenuitem>
+selecting the command <menuchoice><guimenu>Control 
+Center</guimenu><guimenuitem>System</guimenuitem><guimenuitem>
 Font Installer</guimenuitem></menuchoice> You should get the following
 screen:</para>
 
@@ -805,8 +1009,11 @@ screen:</para>
 <para>
 You will need to run the font installer with <systemitem
 class="username">root</systemitem> privileges. Click on the button
-<guibutton>Administrator Mode</guibutton> and enter your <systemitem class="username">root</systemitem> password. Click on the button <guibutton>Change Folder</guibutton>. 
-This should bring up a pane from where you can select the folder your fonts are stored in. In
+<guibutton>Administrator Mode</guibutton> and enter your <systemitem 
+class="username">root</systemitem> password. Click on the button 
+<guibutton>Change Folder</guibutton>. 
+This should bring up a pane from where you can select the folder your fonts are 
+stored in. In
 this example they are stored in <filename
 class="directory">/home/poincare/esstix</filename>.</para>
 
@@ -831,7 +1038,8 @@ result.</para>
 	  <imageobject>
 	    <imagedata fileref="kfontinst3.png" format="PNG"/>
 	  </imageobject>
-<textobject><phrase>Picture of font installer ready to install</phrase></textobject>
+<textobject><phrase>Picture of font installer ready to 
+install</phrase></textobject>
 	</mediaobject>
 </screenshot>
 
@@ -846,7 +1054,8 @@ this.</para>
 	  <imageobject>
 	    <imagedata fileref="kfontinst4.png" format="PNG"/>
 	  </imageobject>
-<textobject><phrase>Picture of the font installer installing</phrase></textobject>
+<textobject><phrase>Picture of the font installer 
+installing</phrase></textobject>
 	</mediaobject>
 </screenshot>
 
@@ -863,12 +1072,14 @@ the change.</para>
 	  <imageobject>
 	    <imagedata fileref="esstix-kfo1.png" format="PNG"/>
 	  </imageobject>
-<textobject><phrase>Picture of the font installer installing</phrase></textobject>
+<textobject><phrase>Picture of the font installer 
+installing</phrase></textobject>
 	</mediaobject>
 </screenshot>
 
 <para>
-After clicking on <guibutton>Ok</guibutton>, your <guilabel>Advanced</guilabel> table should contain the Esstix font addition.
+After clicking on <guibutton>Ok</guibutton>, your <guilabel>Advanced</guilabel> 
+table should contain the Esstix font addition.
 Here it is at the top:</para>
 
 <screenshot>
@@ -894,7 +1105,8 @@ Here it is at the top:</para>
 </screenshot>
 
 <para>You should use the native <acronym>AFM</acronym> files. Set up
-your <menuchoice><guimenu>Settings</guimenu><guimenuitem>System</guimenuitem></menuchoice> as shown below. The <guilabel>Generate AFM's, with</guilabel> box 
+your 
+<menuchoice><guimenu>Settings</guimenu><guimenuitem>System</guimenuitem></menuchoice> as shown below. The <guilabel>Generate AFM's, with</guilabel> box 
 should be unchecked:</para>
 
 <screenshot>
@@ -918,7 +1130,8 @@ appear:</para>
 	  <imageobject>
 	    <imagedata fileref="kfontinst5.png" format="PNG"/>
 	  </imageobject>
-<textobject><phrase>Picture of &kcontrol; applying the fonts</phrase></textobject>
+<textobject><phrase>Picture of &kcontrol; applying the 
+fonts</phrase></textobject>
 	</mediaobject>
 </screenshot>
 
@@ -927,6 +1140,12 @@ changes now</guilabel> dialog. You are done installing the esstix fonts.
 </para>
 
 </sect1>
+
+<sect1>
+<title>Additional Math Fonts</title>
+<para>Description for including additional math fonts goes here </para>
+</sect1>
+
 </chapter>
 
 <chapter id="credits-and-licenses">
@@ -956,14 +1175,13 @@ changes now</guilabel> dialog. You are done installing the esstix fonts.
 <title>Requirements</title>
 
 <para>
-All required libraries as well as &kformula; itself can be found
-on <ulink url="ftp://ftp.kapp.org">The &kformula; home page</ulink>.
+&kformula; is part of &koffice; 
+on <ulink url="http://www.koffice.org/kformula ">The &kformula; home 
+page</ulink>
+You must have &koffice; installed. &kformula; will not work without the rest of 
+&koffice;
 </para>
 
-<para>
-You can find a list of changes at <ulink
-url="http://apps.kde.org/kformula">http://apps.kde.org/kapp</ulink>.
-</para>
 </sect1>
 
 <sect1 id="compilation">
