@@ -18,21 +18,20 @@
 */
 
 #include <klocale.h>
-#include "kwdoc.h"
 #include <qvbox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlistbox.h>
-#include "kweditpath.h"
+#include "koeditpath.h"
 #include <keditlistbox.h>
 #include <kfiledialog.h>
 #include <kurlrequester.h>
 #include <qhbox.h>
 #include <klineedit.h>
-KWEditPathDia::KWEditPathDia( const QString & _path, bool _multiPath, QWidget *parent, const char *name )
+
+KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
-    m_multiPath = _multiPath;
     setCaption( i18n("Edit Path") );
     QWidget *page = new QWidget( this );
     setMainWidget(page);
@@ -52,7 +51,7 @@ KWEditPathDia::KWEditPathDia( const QString & _path, bool _multiPath, QWidget *p
     resize( 500, 300);
 }
 
-QString KWEditPathDia::newPath()const
+QString KoEditPathDia::newPath()const
 {
     QString tmp;
     for (int i = 0; i <(int)m_listpath->listBox()->count(); i++)
@@ -64,4 +63,4 @@ QString KWEditPathDia::newPath()const
     return tmp;
 }
 
-#include "kweditpath.moc"
+#include "koeditpath.moc"

@@ -17,25 +17,24 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KWEditPathDia__
-#define __KWEditPathDia__
+#ifndef __KOEditPathDia__
+#define __KOEditPathDia__
 
 #include <kdialogbase.h>
 #include <qstringlist.h>
 class KEditListBox;
 class KURLRequester;
 
-class KWEditPathDia : public KDialogBase
+class KoEditPathDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KWEditPathDia( const QString & _path, bool _multiPath, QWidget *parent, const char *name );
+    KoEditPathDia( const QString & _path, QWidget *parent, const char *name );
     QString newPath()const;
 
 private:
     KEditListBox *m_listpath;
     KURLRequester *urlReq;
-    bool m_multiPath;
 };
 
 #endif

@@ -41,7 +41,7 @@
 #include "kwviewmode.h"
 #include "kwcommand.h"
 #include "kwvariable.h"
-#include "kweditpath.h"
+#include "koeditpath.h"
 
 #include <koVariable.h>
 #include <kformulaconfigpage.h>
@@ -894,7 +894,7 @@ void ConfigurePathPage::slotModifyPath()
     QListViewItem *item = m_pPathView->currentItem ();
     if ( item && (item->text(0)==i18n("Personal Expression")))
     {
-        KWEditPathDia * dlg = new KWEditPathDia( item->text( 1), true/*multi path*/,  0L, "editpath");
+        KoEditPathDia * dlg = new KoEditPathDia( item->text( 1),   0L, "editpath");
         if (dlg->exec() )
         {
             item->setText(1, dlg->newPath());
