@@ -29,6 +29,7 @@
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
 
+#include <ExportDialog.h>
 #include <asciiexport.h>
 #include <asciiexport.moc>
 
@@ -44,6 +45,11 @@ public:
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
     virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
+public:
+    inline bool isUTF8 (void) const { return m_utf8; }
+    inline void setUTF8 (const bool flag ) { m_utf8=flag; }
+    inline QString getEndOfLine(void) const {return m_eol;}
+    inline void setEndOfLine(const QString& str) {m_eol=str;}
 private:
     void ProcessParagraphData (const QString& paraText, ValueListFormatData& paraFormatDataList);
 private:
@@ -54,6 +60,7 @@ private:
     bool m_inList; // Are we currently in a list?
     bool m_orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
     int  m_counterList; // Counter for te lists
+    bool m_utf8;
 };
 
 bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& to)
@@ -80,8 +87,15 @@ bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& to)
         return false;
     }
 
-    // TODO: ask the user for the encoding!
-    m_streamOut->setEncoding( QTextStream::Locale );
+    if (isUTF8())
+    {
+        m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
+    }
+    else
+    {
+        m_streamOut->setEncoding( QTextStream::Locale );
+    }
+
     return true;
 }
 
@@ -272,14 +286,34 @@ bool ASCIIExport::filter(const QString  &filenameIn,
         return false;
     }
 
+    AsciiExportDialog* dialog = new AsciiExportDialog();
+
+    if (!dialog)
+    {
+        kdError(30502) << "Dialog has not been created! Aborting!" << endl;
+        return false;
+    }
+
+    if (!dialog->exec())
+    {
+        kdError(30502) << "Dialog was aborted! Aborting filter!" << endl;
+        return false;
+    }
+
     ASCIIWorker* worker=new ASCIIWorker();
 
     if (!worker)
     {
         kdError(30502) << "Cannot create Worker! Aborting!" << endl;
+        delete dialog;
         return false;
     }
 
+    worker->setUTF8(dialog->isEncodingUTF8());
+    worker->setEndOfLine(dialog->getEndOfLine());
+
+    delete dialog;
+    
     KWEFKWordLeader* leader=new KWEFKWordLeader(worker);
 
     if (!leader)
