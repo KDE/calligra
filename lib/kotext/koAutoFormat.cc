@@ -159,7 +159,7 @@ KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
       m_typographicDefaultDoubleQuotes( format.m_typographicDefaultDoubleQuotes),
       m_typographicDefaultSimpleQuotes( format.m_typographicDefaultSimpleQuotes),
       m_listCompletion( 0L ), // don't copy it!
-      m_entries( format.m_entries ),
+      m_entries( ),//don't copy it.
       m_superScriptEntries ( format.m_superScriptEntries ),
       m_upperCaseExceptions( format.m_upperCaseExceptions ),
       m_twoUpperLetterException( format.m_twoUpperLetterException ),
@@ -175,8 +175,8 @@ KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
 KoAutoFormat::~KoAutoFormat()
 {
     delete m_listCompletion;
-    // ########################### FIXME !
-    //m_entries.clear();
+    m_entries.setAutoDelete( true );
+    m_entries.clear();
 }
 
 void KoAutoFormat::loadListOfWordCompletion()

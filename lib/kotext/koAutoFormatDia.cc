@@ -595,7 +595,7 @@ void KoAutoFormatDia::initTab3()
     cbAutoCorrectionWithFormat->setChecked( m_autoFormat.getConfigCorrectionWithFormat());
     m_pListView->clear();
 
-    QDictIterator<KoAutoFormatEntry> it( m_autoFormat.getAutoFormatEntries());
+    QDictIterator<KoAutoFormatEntry> it( m_docAutoFormat->getAutoFormatEntries());
     for( ; it.current(); ++it )
     {
         ( void )new QListViewItem( m_pListView, it.currentKey(), it.current()->replace() );
@@ -612,14 +612,14 @@ void KoAutoFormatDia::initTab3()
 void KoAutoFormatDia::changeAutoformatLanguage(const QString & text)
 {
     if ( text==i18n("Default"))
-        m_autoFormat.configAutoFormatLanguage( QString::null);
+        m_docAutoFormat->configAutoFormatLanguage( QString::null);
     else
-        m_autoFormat.configAutoFormatLanguage( text);
+        m_docAutoFormat->configAutoFormatLanguage( text);
 
     if ( !noSignal )
     {
         changeLanguage=true;
-        m_autoFormat.readConfig( true );
+        m_docAutoFormat->readConfig( true );
         initTab3();
         initTab4();
         changeLanguage=false;
@@ -664,7 +664,7 @@ void KoAutoFormatDia::slotClearTextFormatEntry()
 {
     if ( m_pListView->currentItem() )
     {
-        KoAutoFormatEntry *entry = m_autoFormat.findFormatEntry(m_pListView->currentItem()->text(0));
+        KoAutoFormatEntry *entry = m_docAutoFormat->findFormatEntry(m_pListView->currentItem()->text(0));
         entry->clearFormatEntryContext( );
     }
 }
@@ -673,7 +673,7 @@ void KoAutoFormatDia::slotChangeTextFormatEntry()
 {
     if ( m_pListView->currentItem() )
     {
-        KoAutoFormatEntry *entry = m_autoFormat.findFormatEntry(m_pListView->currentItem()->text(0));
+        KoAutoFormatEntry *entry = m_docAutoFormat->findFormatEntry(m_pListView->currentItem()->text(0));
         KoSearchContext *tmpFormat = entry->formatEntryContext();
         bool createNewFormat = false;
 
@@ -704,7 +704,7 @@ void KoAutoFormatDia::slotRemoveEntry()
     //find entry in listbox
    if(m_pListView->currentItem())
     {
-        m_autoFormat.removeAutoFormatEntry(m_pListView->currentItem()->text(0));
+        m_docAutoFormat->removeAutoFormatEntry(m_pListView->currentItem()->text(0));
         pbAdd->setText(i18n("&Add"));
         refreshEntryList();
     }
@@ -713,7 +713,7 @@ void KoAutoFormatDia::slotRemoveEntry()
 
 void KoAutoFormatDia::slotfind( const QString & )
 {
-    KoAutoFormatEntry *entry = m_autoFormat.findFormatEntry(m_find->text());
+    KoAutoFormatEntry *entry = m_docAutoFormat->findFormatEntry(m_find->text());
     if ( entry )
     {
         m_replace->setText(entry->replace().latin1());
@@ -732,7 +732,7 @@ void KoAutoFormatDia::slotfind( const QString & )
 void KoAutoFormatDia::slotfind2( const QString & )
 {
     bool state = !m_replace->text().isEmpty() && !m_find->text().isEmpty();
-    KoAutoFormatEntry * entry=m_autoFormat.findFormatEntry(m_find->text());
+    KoAutoFormatEntry * entry=m_docAutoFormat->findFormatEntry(m_find->text());
     pbRemove->setEnabled(state && entry);
     pbChangeFormat->setEnabled(state && entry);
     pbClearFormat->setEnabled(state && entry);
@@ -743,7 +743,7 @@ void KoAutoFormatDia::slotfind2( const QString & )
 void KoAutoFormatDia::refreshEntryList()
 {
     m_pListView->clear();
-    QDictIterator<KoAutoFormatEntry> it( m_autoFormat.getAutoFormatEntries());
+    QDictIterator<KoAutoFormatEntry> it( m_docAutoFormat->getAutoFormatEntries());
     for( ; it.current(); ++it )
     {
         ( void )new QListViewItem( m_pListView, it.currentKey(), it.current()->replace() );
@@ -761,15 +761,15 @@ void KoAutoFormatDia::refreshEntryList()
 
 void KoAutoFormatDia::addEntryList(const QString &key, KoAutoFormatEntry *_autoEntry)
 {
-    m_autoFormat.addAutoFormatEntry( key, _autoEntry );
+    m_docAutoFormat->addAutoFormatEntry( key, _autoEntry );
 }
 
 
 
 void KoAutoFormatDia::editEntryList(const QString &key,const QString &newFindString, KoAutoFormatEntry *_autoEntry)
 {
-    m_autoFormat.removeAutoFormatEntry( key );
-    m_autoFormat.addAutoFormatEntry( newFindString, _autoEntry );
+    m_docAutoFormat->removeAutoFormatEntry( key );
+    m_docAutoFormat->addAutoFormatEntry( newFindString, _autoEntry );
 }
 
 
@@ -876,7 +876,7 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->configAutoSuperScript ( cbAutoSuperScript->isChecked() );
 
     // Second tab
-    m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );
+    //m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );
     m_docAutoFormat->copyListException(abbreviation->getListException());
     m_docAutoFormat->copyListTwoUpperCaseException(twoUpperLetter->getListException());
     m_docAutoFormat->configAdvancedAutocorrect( cbAdvancedAutoCorrection->isChecked() );
