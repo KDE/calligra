@@ -776,6 +776,8 @@ void KivioCanvas::endSpawnerDragDraw()
     delete m_pDragStencil;
     m_pDragStencil = 0L;
   }
+
+  setFocus();
 }
 
 
