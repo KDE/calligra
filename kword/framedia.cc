@@ -93,43 +93,37 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame,KWordDocument *_doc,Fra
 void KWFrameDia::init() {
     tab1 = tab2 = tab3 = tab4 = 0;
     if (frame) {
-	QRect r = frame->normalize();
-	frame->setRect( r.x(), r.y(), r.width(), r.height() );
-	if(!doc && frame->getFrameSet())
-	    doc=frame->getFrameSet()->getDocument();
-
-	if(doc && doc->getProcessingType() != KWordDocument::DTP &&
-	   frame->getFrameSet() == doc->getFrameSet(0)) {
-	    setupTab2();
-	    setupTab4();
-	} else if(frameType == FT_TEXT) {
-	    if(frame->getFrameSet()) { // first creation
-		setupTab1();
-		if(doc) {
-		    setupTab2();
-		    setupTab3();
-		    setupTab4();
-		}
-	    } else {
-		if(doc) setupTab3();
-		setupTab1();
-		if(doc) {
-		    setupTab2();
-		    setupTab4();
-		}
-	    }
-	} else if(frameType == FT_PICTURE) {
-	    setupTab1();
-	    if(doc) setupTab4();
-	} else if(frameType == FT_PART) {
-	    if(doc) setupTab4();
-	} else if(frameType == FT_FORMULA) {
-	    setupTab1();
-	    if(doc) setupTab4();
-	}
-    } else
-	kdDebug() << "ERROR: KWFrameDia::KWFrameDia  no frame.."<<endl;
-
+        QRect r = frame->normalize();
+        frame->setRect( r.x(), r.y(), r.width(), r.height() );
+        if(!doc && frame->getFrameSet())
+            doc=frame->getFrameSet()->getDocument();
+        if(!doc) {
+            kdDebug() << "ERROR: KWFrameDia::init frame has no reference to doc.."<<endl;
+            return;
+        } 
+        if(doc->getProcessingType() != KWordDocument::DTP && 
+              frame->getFrameSet() == doc->getFrameSet(0)) {
+            setupTab2();
+            setupTab4();
+        } else if(frameType == FT_TEXT) {
+            setupTab1();
+            setupTab2();
+            setupTab3();
+            setupTab4();
+            if(! frame->getFrameSet()) // first creation
+               showPage(2);
+        } else if(frameType == FT_PICTURE) {
+            setupTab1();
+            setupTab4();
+        } else if(frameType == FT_PART) {
+            setupTab2();
+            setupTab4();
+        } else if(frameType == FT_FORMULA) {
+            setupTab1();
+            setupTab4();
+        }
+    } else 
+        kdDebug() << "ERROR: KWFrameDia::init  no frame.."<<endl;
     setInitialSize( QSize(550, 400) );
 }
 
@@ -456,26 +450,29 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     lFrameSList->setAllColumnsShowFocus( true );
     lFrameSList->header()->setMovingEnabled( false );
 
+    int numTxtFrameSets=0;
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
-	if ( i == 0 && doc->getProcessingType() == KWordDocument::WP )
-	    continue;
-	if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT ||
-	     dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( i ) )->getFrameInfo() != FI_BODY )
-	    continue;
-	if ( doc->getFrameSet( i )->getGroupManager() )
-	    continue;
-	QListViewItem *item = new QListViewItem( lFrameSList );
-	item->setText( 0, QString( "%1" ).arg( i + 1 ) );
-	item->setText( 1, doc->getFrameSet( i )->getName() );
+        if ( i == 0 && doc->getProcessingType() == KWordDocument::WP )
+            continue;
+        if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT ||
+             dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( i ) )->getFrameInfo() != FI_BODY )
+            continue;
+        if ( doc->getFrameSet( i )->getGroupManager() )
+            continue;
+        QListViewItem *item = new QListViewItem( lFrameSList );
+        item->setText( 0, QString( "%1" ).arg( i + 1 ) );
+        item->setText( 1, doc->getFrameSet( i )->getName() );
+        if(frame->getFrameSet() && frame->getFrameSet()==doc->getFrameSet(i))
+            lFrameSList->setSelected(item, TRUE );
+        numTxtFrameSets++;
     }
 
     if (! frame->getFrameSet()) {
-	QListViewItem *item = new QListViewItem( lFrameSList );
-	item->setText( 0, QString( "*%1" ).arg( doc->getNumFrameSets() + 1 ) );
-	item->setText( 1, i18n( "Create a new frameset with this frame" ) );
+        QListViewItem *item = new QListViewItem( lFrameSList );
+        item->setText( 0, QString( "*%1" ).arg( doc->getNumFrameSets()+1 ) );
+        item->setText( 1, i18n( "Create a new frameset with this frame" ) );
+        lFrameSList->setSelected( lFrameSList->firstChild(), TRUE );
     }
-
-    lFrameSList->setSelected( lFrameSList->firstChild(), TRUE );
 
     connect( lFrameSList, SIGNAL( currentChanged( QListViewItem * ) ),
 	     this, SLOT( connectListSelected( QListViewItem * ) ) );
@@ -499,8 +496,23 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
 
     grid3->activate();
 
-    eFrameSetName->setText( i18n( "Frameset %1" ).arg( doc->getNumFrameSets() + 1 ) );
+    bool found=true;
+    while (found) {
+        numTxtFrameSets++;
+
+        bool same = FALSE;
+        for ( unsigned int i = 0;!same && i < doc->getNumFrameSets(); ++i ) {
+            if ( doc->getFrameSet( i )->getName() == i18n("Frameset %1" ).arg(numTxtFrameSets)){
+                same = TRUE;
+                break;
+            }
+        }
+        if(!same) found=false;
+    }
+                
+    eFrameSetName->setText( i18n( "Frameset %1" ).arg( numTxtFrameSets ) );
     connectListSelected( lFrameSList->firstChild() );
+
     //kdDebug() << "setup tab 3 exit"<<endl;
 }
 
