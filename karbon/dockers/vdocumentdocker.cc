@@ -56,15 +56,54 @@ VDocumentPreview::VDocumentPreview( KarbonView* view, QWidget* parent )
 		: QWidget( parent, "DocumentPreview" ), m_document( &view->part()->document() ), m_view( view )
 {
 	update();
+	installEventFilter( this );
+	setBackgroundMode( Qt::NoBackground );
 } // VDocumentPreview::VDocumentPreview
   
 VDocumentPreview::~VDocumentPreview()
 {
 } // VDocumentPreview::~VDocumentPreview
 
+bool
+VDocumentPreview::eventFilter( QObject* object, QEvent* event )
+{
+	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
+	if( event->type() == QEvent::MouseButtonPress )
+	{
+		m_firstPoint.setX( mouseEvent->pos().x() );
+		m_firstPoint.setY( mouseEvent->pos().y() );
+		m_lastPoint = m_firstPoint;
+	}
+	else if( event->type() == QEvent::MouseButtonRelease )
+	{
+		m_lastPoint.setX( mouseEvent->pos().x() );
+		m_lastPoint.setY( mouseEvent->pos().y() );
+		double dx = m_lastPoint.x() - m_firstPoint.x();
+		double dy = m_lastPoint.y() - m_firstPoint.y();
+		double scaleFactor;
+		if ( ( height() - 4 ) / m_document->height() > ( width() - 4 ) / m_document->width() )
+			scaleFactor = ( width() - 4 ) / m_document->width();
+		else
+			scaleFactor = ( height() - 4 ) / m_document->height();
+		scaleFactor /= m_view->zoom();
+		m_view->canvasWidget()->scrollBy( int( dx / scaleFactor ), int( dy / scaleFactor ) );
+		m_firstPoint = m_lastPoint;
+	}
+	else if( event->type() == QEvent::MouseMove )
+	{
+		m_lastPoint.setX( mouseEvent->pos().x() );
+		m_lastPoint.setY( mouseEvent->pos().y() );
+		update();
+	}
+
+	QWidget::eventFilter( object, event );
+}
+
 void VDocumentPreview::paintEvent( QPaintEvent* )
 {
-	VKoPainter p( this, width(), height() );
+	// TODO : use NotROP, otherwise too slow
+	QPixmap pixmap( width(), height() );
+	VKoPainter p( &pixmap, width(), height() );
 	double xoffset = 0.;
 	double yoffset = 0.;
 	double scaleFactor;
@@ -89,9 +128,11 @@ void VDocumentPreview::paintEvent( QPaintEvent* )
 	VStroke stroke( c, 0L, 1.0 / scaleFactor );
 	p.setPen( stroke );
 	p.newPath();
-	KoPoint p1( 0, 0 );
+	double dx = ( m_lastPoint.x() - m_firstPoint.x() ) * m_view->zoom();
+	double dy = ( m_lastPoint.y() - m_firstPoint.y() ) * m_view->zoom();
+	KoPoint p1( dx / scaleFactor, dy / scaleFactor );
 	p1 = m_view->canvasWidget()->toContents( p1 );
-	KoPoint p2( m_view->canvasWidget()->width(), m_view->canvasWidget()->height() );
+	KoPoint p2( dx / scaleFactor + m_view->canvasWidget()->width(), dy / scaleFactor + m_view->canvasWidget()->height() );
 	p2 = m_view->canvasWidget()->toContents( p2 );
 	p.moveTo( p1 );
 	p.lineTo( KoPoint( p2.x(), p1.y() ) );
@@ -100,7 +141,7 @@ void VDocumentPreview::paintEvent( QPaintEvent* )
 	p.lineTo( p1 );
 	p.strokePath();
 	p.end();
-	QPainter pw( this );
+	QPainter pw( &pixmap );
 	pw.setPen( colorGroup().light() );
 	pw.drawLine( 1, 1, 1, height() - 2 );
 	pw.drawLine( 1, 1, width() - 2, 1 );
@@ -112,6 +153,7 @@ void VDocumentPreview::paintEvent( QPaintEvent* )
 	pw.drawLine( width() - 2, height() - 2, width() - 2, 1 );
 	pw.drawLine( width() - 2, height() - 2, 1, height() - 2 );
 	pw.end();
+	bitBlt( this, 0, 0, &pixmap, 0, 0, width(), height() );
 } // VDocumentPreview::paintEvent
 
 VDocumentTab::VDocumentTab( KarbonView* view, QWidget* parent )

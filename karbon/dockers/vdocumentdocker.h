@@ -46,13 +46,16 @@ class VDocumentPreview : public QWidget
 	public:
 		VDocumentPreview( KarbonView* view, QWidget* parent = 0 );
 		~VDocumentPreview();
-		
+
 	protected:
 		void paintEvent( QPaintEvent* e );
-		
+		virtual bool eventFilter( QObject* object, QEvent* event );
+
 	private:
 		VDocument* m_document;
 		KarbonView* m_view;
+		KoPoint m_firstPoint;
+		KoPoint m_lastPoint;
 }; // VDocumentPreview
 
 class VDocumentTab : public QWidget
