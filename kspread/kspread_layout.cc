@@ -594,7 +594,16 @@ void KSpreadLayout::setFaktor( double _d )
 
 void KSpreadLayout::setPrefix( const QString& _prefix )
 {
-    setProperty( PPrefix );
+       if(_prefix.isEmpty())
+        {
+        clearProperty( PPrefix );
+        setNoFallBackProperties( PPrefix );
+        }
+    else
+        {
+        setProperty( PPrefix );
+        clearNoFallBackProperties( PPrefix );
+        }
 
     m_strPrefix = _prefix;
     layoutChanged();
@@ -602,7 +611,16 @@ void KSpreadLayout::setPrefix( const QString& _prefix )
 
 void KSpreadLayout::setPostfix( const QString& _postfix )
 {
-    setProperty( PPostfix );
+   if(_postfix.isEmpty())
+        {
+        clearProperty( PPostfix );
+        setNoFallBackProperties( PPostfix );
+        }
+    else
+        {
+        setProperty( PPostfix );
+        clearNoFallBackProperties( PPostfix );
+        }
 
     m_strPostfix = _postfix;
     layoutChanged();
@@ -610,7 +628,7 @@ void KSpreadLayout::setPostfix( const QString& _postfix )
 
 void KSpreadLayout::setPrecision( int _p )
 {
-    if(_p!=-1)
+    if(_p==-1)
         {
         clearProperty( PPrecision );
         setNoFallBackProperties( PPrecision );

@@ -295,8 +295,6 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
         m_time=obj->valueTime();
         }
 
-
-
     RowLayout *rl;
     ColumnLayout *cl;
     widthSize = 0;
@@ -323,61 +321,11 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     //select column(s)
     if( _bottom==0x7FFF)
     {
-     //todo
-
-    }
-    else if( _right==0x7FFF)
-    {
-      //todo
-      int x=1;
-      for(int y=_top;y<=_bottom;y++)
+      int y=1;
+      for(int x=_left;x<=_right;x++)
         {
-                RowLayout *obj=table->nonDefaultRowLayout(y);
-                if ( fallDiagonalStyle != obj->fallDiagonalStyle( x, y ) )
-                        bFallDiagonalStyle = FALSE;
-                if ( fallDiagonalWidth != obj->fallDiagonalWidth( x, y ) )
-                        bFallDiagonalStyle = FALSE;
-                if ( fallDiagonalColor != obj->fallDiagonalColor( x, y ) )
-                        bfallDiagonalColor = FALSE;
-                if ( goUpDiagonalStyle != obj->goUpDiagonalStyle( x, y ) )
-                        bGoUpDiagonalStyle = FALSE;
-                if ( goUpDiagonalWidth != obj->goUpDiagonalWidth( x, y ) )
-                        bGoUpDiagonalStyle = FALSE;
-                if ( goUpDiagonalColor != obj->goUpDiagonalColor( x, y ) )
-                        bGoUpDiagonalColor = FALSE;
-                if ( strike != obj->textFontStrike( x, y ) )
-                        bStrike = FALSE;
-                if ( underline != obj->textFontUnderline( x, y ) )
-                        bUnderline = FALSE;
-                if ( prefix != obj->prefix( x, y ) )
-                        prefix = QString::null;
-                if ( postfix != obj->postfix( x, y ) )
-                        postfix = QString::null;
-                /*if ( precision != obj->precision( x, y ) )
-                        precision = -2;*/
-                if ( floatFormat != obj->floatFormat( x, y ) )
-                        bFloatFormat = FALSE;
-                if ( floatColor != obj->floatColor( x, y ) )
-                        bFloatColor = FALSE;
-                if ( textColor != obj->textColor( x, y ) )
-                        bTextColor = FALSE;
-                if ( textFontFamily != obj->textFontFamily( x, y ) )
-                        bTextFontFamily = FALSE;
-                if ( textFontSize != obj->textFontSize( x, y ) )
-                        bTextFontSize = FALSE;
-                if ( textFontBold != obj->textFontBold( x, y ) )
-                        bTextFontBold = FALSE;
-                if ( textFontItalic != obj->textFontItalic( x, y ) )
-                        bTextFontItalic = FALSE;
-                if ( bgColor != obj->bgColor( x, y ) )
-                        bBgColor = FALSE;
-                if( textRotation != obj->getAngle(_left, _top) )
-                        bTextRotation = FALSE;
-                if( formatNumber != obj->getFormatNumber(_left, _top) )
-                        bFormatNumber = FALSE;
-                //if ( eStyle != obj->style() )
-                  //      eStyle = KSpreadCell::ST_Undef;
-
+                ColumnLayout *obj=table->nonDefaultColumnLayout(x);
+                initParameters( obj,x,y);
         }
       KSpreadCell* c = table->firstCell();
       for( ;c; c = c->nextCell() )
@@ -386,7 +334,33 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
         if ( _left <= col && _right >= col
         &&!c->isObscuringForced())
                 {
+                initParameters( c ,col,c->row());
+                if ( eStyle != c->style() )
+                        eStyle = KSpreadCell::ST_Undef;
+                }
+        }
 
+    }
+    else if( _right==0x7FFF)
+    {
+      int x=1;
+      for(int y=_top;y<=_bottom;y++)
+        {
+                RowLayout *obj=table->nonDefaultRowLayout(y);
+                initParameters( obj,x,y);
+
+        }
+
+      KSpreadCell* c = table->firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int row = c->row();
+        if ( _top <= row && _bottom >= row
+        &&!c->isObscuringForced())
+                {
+                initParameters( c ,c->column(),row);
+                if ( eStyle != c->style() )
+                        eStyle = KSpreadCell::ST_Undef;
                 }
         }
     }
@@ -400,48 +374,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
             KSpreadCell *obj = table->cellAt( x, y );
             if(!obj->isObscuringForced())
                 {
-                if ( fallDiagonalStyle != obj->fallDiagonalStyle( x, y ) )
-                        bFallDiagonalStyle = FALSE;
-                if ( fallDiagonalWidth != obj->fallDiagonalWidth( x, y ) )
-                        bFallDiagonalStyle = FALSE;
-                if ( fallDiagonalColor != obj->fallDiagonalColor( x, y ) )
-                        bfallDiagonalColor = FALSE;
-                if ( goUpDiagonalStyle != obj->goUpDiagonalStyle( x, y ) )
-                        bGoUpDiagonalStyle = FALSE;
-                if ( goUpDiagonalWidth != obj->goUpDiagonalWidth( x, y ) )
-                        bGoUpDiagonalStyle = FALSE;
-                if ( goUpDiagonalColor != obj->goUpDiagonalColor( x, y ) )
-                        bGoUpDiagonalColor = FALSE;
-                if ( strike != obj->textFontStrike( x, y ) )
-                        bStrike = FALSE;
-                if ( underline != obj->textFontUnderline( x, y ) )
-                        bUnderline = FALSE;
-                if ( prefix != obj->prefix( x, y ) )
-                        prefix = QString::null;
-                if ( postfix != obj->postfix( x, y ) )
-                        postfix = QString::null;
-                /*if ( precision != obj->precision( x, y ) )
-                        precision = -2;*/
-                if ( floatFormat != obj->floatFormat( x, y ) )
-                        bFloatFormat = FALSE;
-                if ( floatColor != obj->floatColor( x, y ) )
-                        bFloatColor = FALSE;
-                if ( textColor != obj->textColor( x, y ) )
-                        bTextColor = FALSE;
-                if ( textFontFamily != obj->textFontFamily( x, y ) )
-                        bTextFontFamily = FALSE;
-                if ( textFontSize != obj->textFontSize( x, y ) )
-                        bTextFontSize = FALSE;
-                if ( textFontBold != obj->textFontBold( x, y ) )
-                        bTextFontBold = FALSE;
-                if ( textFontItalic != obj->textFontItalic( x, y ) )
-                        bTextFontItalic = FALSE;
-                if ( bgColor != obj->bgColor( x, y ) )
-                        bBgColor = FALSE;
-                if( textRotation != obj->getAngle(_left, _top) )
-                        bTextRotation = FALSE;
-                if( formatNumber != obj->getFormatNumber(_left, _top) )
-                        bFormatNumber = FALSE;
+                initParameters( obj,x,y);
                 if ( eStyle != obj->style() )
                         eStyle = KSpreadCell::ST_Undef;
                 }
@@ -593,6 +526,50 @@ CellLayoutDlg::~CellLayoutDlg()
   delete formatRedNeverSignedPixmap;
   delete formatAlwaysSignedPixmap;
   delete formatRedAlwaysSignedPixmap;
+}
+
+void CellLayoutDlg::initParameters(KSpreadLayout *obj,int x,int y)
+{
+        if ( fallDiagonalStyle != obj->fallDiagonalStyle( x, y ) )
+                bFallDiagonalStyle = FALSE;
+        if ( fallDiagonalWidth != obj->fallDiagonalWidth( x, y ) )
+                bFallDiagonalStyle = FALSE;
+        if ( fallDiagonalColor != obj->fallDiagonalColor( x, y ) )
+                bfallDiagonalColor = FALSE;
+        if ( goUpDiagonalStyle != obj->goUpDiagonalStyle( x, y ) )
+                bGoUpDiagonalStyle = FALSE;
+        if ( goUpDiagonalWidth != obj->goUpDiagonalWidth( x, y ) )
+                bGoUpDiagonalStyle = FALSE;
+        if ( goUpDiagonalColor != obj->goUpDiagonalColor( x, y ) )
+                bGoUpDiagonalColor = FALSE;
+        if ( strike != obj->textFontStrike( x, y ) )
+                bStrike = FALSE;
+        if ( underline != obj->textFontUnderline( x, y ) )
+                bUnderline = FALSE;
+        if ( prefix != obj->prefix( x, y ) )
+                prefix = QString::null;
+        if ( postfix != obj->postfix( x, y ) )
+                postfix = QString::null;
+        if ( floatFormat != obj->floatFormat( x, y ) )
+                bFloatFormat = FALSE;
+        if ( floatColor != obj->floatColor( x, y ) )
+                bFloatColor = FALSE;
+        if ( textColor != obj->textColor( x, y ) )
+                bTextColor = FALSE;
+        if ( textFontFamily != obj->textFontFamily( x, y ) )
+                bTextFontFamily = FALSE;
+        if ( textFontSize != obj->textFontSize( x, y ) )
+                bTextFontSize = FALSE;
+        if ( textFontBold != obj->textFontBold( x, y ) )
+                bTextFontBold = FALSE;
+        if ( textFontItalic != obj->textFontItalic( x, y ) )
+                bTextFontItalic = FALSE;
+        if ( bgColor != obj->bgColor( x, y ) )
+                bBgColor = FALSE;
+        if( textRotation != obj->getAngle(left, top) )
+                bTextRotation = FALSE;
+        if( formatNumber != obj->getFormatNumber(left, top) )
+                bFormatNumber = FALSE;
 }
 
 void CellLayoutDlg::init()
@@ -759,10 +736,22 @@ void CellLayoutDlg::slotApply()
         {
         RowLayout *rw=table->nonDefaultRowLayout(i);
         floatPage->apply(rw );
-        miscPage->apply(rw );
         fontPage->apply( rw );
         positionPage->apply( rw );
         patternPage->apply(rw);
+        }
+      miscPage->applyRow( );
+      if(positionPage->getSizeHeight()!=heigthSize)
+        {
+        if ( !table->doc()->undoBuffer()->isLocked())
+                {
+                QRect rect;
+                rect.setCoords( left, top, right , bottom  );
+                KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( table->doc(),table , rect );
+                table->doc()->undoBuffer()->appendUndo( undo2 );
+                }
+        for ( int x = top; x <= bottom; x++ )
+                m_pView->vBorderWidget()->resizeRow(positionPage->getSizeHeight(),x,false );
         }
     }
     else if( bottom==0x7FFF)
@@ -771,10 +760,23 @@ void CellLayoutDlg::slotApply()
         {
         ColumnLayout *cl=table->nonDefaultColumnLayout(i);
         floatPage->apply(cl );
-        miscPage->apply(cl );
         fontPage->apply( cl );
         positionPage->apply( cl );
         patternPage->apply(cl);
+        }
+    miscPage->applyColumn( );
+
+    if( positionPage->getSizeWidth()!=widthSize)
+        {
+        if ( !table->doc()->undoBuffer()->isLocked())
+                {
+                QRect rect;
+                rect.setCoords( left, top, right , bottom  );
+                KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( table->doc(),table , rect );
+                table->doc()->undoBuffer()->appendUndo( undo2 );
+                }
+        for ( int x = left; x <= right; x++ )
+                m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x,false );
         }
     }
 
@@ -1690,7 +1692,29 @@ void CellLayoutPageFloat::apply( ColumnLayout *_obj )
            c->clearNoFallBackProperties( KSpreadCell::PFaktor );
         }
       }
-applyLayout(_obj);
+      applyLayout(_obj);
+
+      RowLayout* rw =dlg->getTable()->firstRow();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PPrecision) || rw->hasProperty(KSpreadCell::PPostfix)
+        || rw->hasProperty(KSpreadCell::PPrefix) || rw->hasProperty(KSpreadCell::PFloatFormat)
+        || rw->hasProperty(KSpreadCell::PFloatColor) || rw->hasProperty(KSpreadCell::PFormatNumber)
+        || rw->hasProperty(KSpreadCell::PFaktor) ))
+                {
+                for(int i=dlg->left;i<=dlg->right;i++)
+                        {
+                        KSpreadCell *cell = dlg->getTable()->cellAt( i,  rw->row());
+                        if ( cell->isDefault() )
+                                {
+                                cell = new KSpreadCell( dlg->getTable(), i,  rw->row() );
+                                dlg->getTable()->insertCell( cell);
+                                }
+                        applyLayout(cell );
+                        }
+                }
+        }
+
 }
 
 
@@ -1757,6 +1781,36 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
 
 void CellLayoutPageMisc::apply( KSpreadCell *_obj )
 {
+ applyLayout(_obj);
+}
+
+void CellLayoutPageMisc::applyColumn( )
+{
+  KSpreadCell*c= dlg->getTable()->firstCell();
+  for( ;c; c = c->nextCell() )
+      {
+        int col = c->column();
+        if ( dlg->left <= col && dlg->right >= col
+        &&!c->isObscuringForced())
+                applyLayout(c);
+      }
+}
+
+void CellLayoutPageMisc::applyRow(  )
+{
+  KSpreadCell*c= dlg->getTable()->firstCell();
+  for( ;c; c = c->nextCell() )
+      {
+        int row = c->row();
+        if ( dlg->top <= row && dlg->bottom >= row
+        &&!c->isObscuringForced())
+                applyLayout(c);
+      }
+}
+
+
+void CellLayoutPageMisc::applyLayout( KSpreadCell *_obj )
+{
     if ( styleButton->currentItem() == idStyleNormal )
       _obj->setStyle( KSpreadCell::ST_Normal );
     else if ( styleButton->currentItem() == idStyleButton )
@@ -1765,47 +1819,6 @@ void CellLayoutPageMisc::apply( KSpreadCell *_obj )
       _obj->setStyle( KSpreadCell::ST_Select );
     if ( actionText->isEnabled() )
       _obj->setAction( actionText->text() );
-//applyLayout(_obj);
-}
-
-void CellLayoutPageMisc::apply( ColumnLayout */*_col*/ )
-{
-  KSpreadCell*c= dlg->getTable()->firstCell();
-  for( ;c; c = c->nextCell() )
-      {
-        int col = c->column();
-        if ( dlg->left <= col && dlg->right >= col
-        &&!c->isObscuringForced())
-        {
-           c->clearProperty(KSpreadCell::PBackgroundBrush);
-           c->clearNoFallBackProperties( KSpreadCell::PBackgroundBrush );
-           c->clearProperty(KSpreadCell::PBackgroundColor);
-           c->clearNoFallBackProperties( KSpreadCell::PBackgroundColor );
-        }
-      }
-
-}
-
-void CellLayoutPageMisc::apply( RowLayout */*_row*/ )
-{
-  KSpreadCell*c= dlg->getTable()->firstCell();
-  for( ;c; c = c->nextCell() )
-      {
-        int row = c->row();
-        if ( dlg->top <= row && dlg->bottom >= row
-        &&!c->isObscuringForced())
-        {
-           c->clearProperty(KSpreadCell::PBackgroundBrush);
-           c->clearNoFallBackProperties( KSpreadCell::PBackgroundBrush );
-           c->clearProperty(KSpreadCell::PBackgroundColor);
-           c->clearNoFallBackProperties( KSpreadCell::PBackgroundColor );
-        }
-      }
-}
-
-
-void CellLayoutPageMisc::applyLayout( KSpreadLayout */*_obj*/ )
-{
 }
 
 void CellLayoutPageMisc::slotStyle( int _i )
@@ -2025,12 +2038,33 @@ void CellLayoutPageFont::apply( ColumnLayout *_obj)
         if ( dlg->left <= col && dlg->right >= col
         &&!c->isObscuringForced())
         {
+           c->clearProperty(KSpreadCell::PTextPen);
+           c->clearNoFallBackProperties( KSpreadCell::PTextPen );
            c->clearProperty(KSpreadCell::PFont);
            c->clearNoFallBackProperties( KSpreadCell::PFont );
         }
       }
 
       applyLayout(_obj);
+      RowLayout* rw =dlg->getTable()->firstRow();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PFont) ))
+                {
+                for(int i=dlg->left;i<=dlg->right;i++)
+                        {
+                        KSpreadCell *cell = dlg->getTable()->cellAt( i,  rw->row());
+                        if ( cell->isDefault() )
+                                {
+                                cell = new KSpreadCell( dlg->getTable(), i,  rw->row() );
+                                dlg->getTable()->insertCell( cell );
+                                }
+                        applyLayout(cell );
+                        }
+                }
+        }
+
+
 }
 
 void CellLayoutPageFont::apply( RowLayout *_obj)
@@ -2042,6 +2076,8 @@ void CellLayoutPageFont::apply( RowLayout *_obj)
         if ( dlg->top <= row && dlg->bottom >= row
         &&!c->isObscuringForced())
         {
+           c->clearProperty(KSpreadCell::PTextPen);
+           c->clearNoFallBackProperties( KSpreadCell::PTextPen );
            c->clearProperty(KSpreadCell::PFont);
            c->clearNoFallBackProperties( KSpreadCell::PFont );
         }
@@ -2057,7 +2093,7 @@ applyLayout(_obj);
 
 void CellLayoutPageFont::applyLayout( KSpreadLayout *_obj )
 {
-    if ( !bTextColorUndefined )
+    //if ( !bTextColorUndefined )
         _obj->setTextColor( textColor );
     if ( size_combo->currentItem() != 0 )
         _obj->setTextFontSize( selFont.pointSize() );
@@ -2456,7 +2492,28 @@ void CellLayoutPagePosition::apply( ColumnLayout *_obj )
            c->clearNoFallBackProperties( KSpreadCell::PAngle );
         }
       }
-applyLayout(_obj);
+      applyLayout(_obj);
+
+      RowLayout* rw =dlg->getTable()->firstRow();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PAngle) || rw->hasProperty(KSpreadCell::PVerticalText)
+        || rw->hasProperty(KSpreadCell::PMultiRow) || rw->hasProperty(KSpreadCell::PAlignY)
+        || rw->hasProperty(KSpreadCell::PAlign) || rw->hasProperty(KSpreadCell::PIndent) ))
+                {
+                for(int i=dlg->left;i<=dlg->right;i++)
+                        {
+                        KSpreadCell *cell = dlg->getTable()->cellAt( i,  rw->row());
+                        if ( cell->isDefault() )
+                                {
+                                cell = new KSpreadCell( dlg->getTable(), i,  rw->row() );
+                                dlg->getTable()->insertCell( cell);
+                                }
+                        applyLayout(cell );
+                        }
+                }
+        }
+
 }
 
 void CellLayoutPagePosition::apply( RowLayout *_obj )
@@ -3950,8 +4007,26 @@ void CellLayoutPagePattern::apply( ColumnLayout *_obj )
            c->clearNoFallBackProperties( KSpreadCell::PBackgroundColor );
         }
       }
-
       applyLayout(_obj);
+
+      RowLayout* rw =dlg->getTable()->firstRow();
+      for( ; rw; rw = rw->next() )
+        {
+        if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PBackgroundColor) || rw->hasProperty(KSpreadCell::PBackgroundBrush)))
+                {
+                for(int i=dlg->left;i<=dlg->right;i++)
+                        {
+                        KSpreadCell *cell = dlg->getTable()->cellAt( i,  rw->row());
+                        if ( cell->isDefault() )
+                                {
+                                cell = new KSpreadCell( dlg->getTable(), i,  rw->row() );
+                                dlg->getTable()->insertCell( cell);
+                                }
+                        applyLayout(cell );
+                        }
+                }
+        }
+
 }
 
 void CellLayoutPagePattern::apply( RowLayout *_obj )

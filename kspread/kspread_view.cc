@@ -2525,10 +2525,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
     else
         m_tableFormat->setEnabled( TRUE );
 
-    if(n.right() ==0x7FFF ||n.bottom()==0x7FFF)
-        m_cellLayout->setEnabled( false );
-    else
-        m_cellLayout->setEnabled( true );
+    m_cellLayout->setEnabled( true );
 
     // Send some event around. This is read for example
     // by the calculator plugin.

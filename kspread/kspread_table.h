@@ -253,6 +253,10 @@ public:
      */
     KSpreadCell* firstCell();
 
+    RowLayout* firstRow();
+
+    ColumnLayout* firstCol();
+
     const KSpreadCell* cellAt( int _column, int _row ) const;
     /**
      * @param _no_scrollbar_update won't change the scrollbar if set to true disregarding

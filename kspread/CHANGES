@@ -1065,3 +1065,7 @@ compatibility with old function you can used against DECHEX, DECOCT, DECBIN
 ----------------------------------------------------
 -Fix bug when we copy/paste cell and row/column has layout parameters
 -Bug fix
+
+2000-11-11-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Now kspread_dlg_layout works when you select an entire column/row(s)

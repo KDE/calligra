@@ -412,6 +412,16 @@ KSpreadCell* KSpreadTable::firstCell()
     return m_cells.firstCell();
 }
 
+RowLayout* KSpreadTable::firstRow()
+{
+    return m_rows.first();
+}
+
+ColumnLayout* KSpreadTable::firstCol()
+{
+    return m_columns.first();
+}
+
 const KSpreadCell* KSpreadTable::cellAt( int _column, int _row ) const
 {
     const KSpreadCell *p = m_cells.lookup( _column, _row );

@@ -171,9 +171,10 @@ public:
     CellLayoutPageMisc( QWidget *parent, CellLayoutDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
-    void apply( ColumnLayout *_col );
-    void apply( RowLayout *_row );
-    void applyLayout( KSpreadLayout *_obj );
+    void applyColumn();
+    void applyRow();
+    void applyLayout( KSpreadCell *_obj );
+
 public slots:
     void slotStyle( int );
 protected:
@@ -455,6 +456,7 @@ public:
     ~CellLayoutDlg();
 
     void init();
+    void initParameters(KSpreadLayout *_obj,int column,int row);
     /**
      * Run the dialogs event loop and return when closed.
      */
