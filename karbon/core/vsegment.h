@@ -65,26 +65,45 @@ public:
 	void setCtrlPointFixing( VCtrlPointFixing fixing )
 		{ m_ctrlPointFixing = fixing; }
 
-	const KoPoint& ctrlPoint1() const
-		{ return m_point[0]; }
-	const KoPoint& ctrlPoint2() const
-		{ return m_point[1]; }
-	const KoPoint& knot() const
-		{ return m_point[2]; }
-
-	void setCtrlPoint1( const KoPoint& p )
-		{ m_point[0] = p; }
-	void setCtrlPoint2( const KoPoint& p )
-		{ m_point[1] = p; }
-	void setKnot( const KoPoint& p )
-		{ m_point[2] = p; }
+	/**
+	 * Returns node with 1 <= index <= 3.
+	 */
+	const KoPoint& node( uint index ) const
+		{ return m_node[--index]; }
 
 	/**
-	 * Returns a reverted version of this segment.
+	 * Sets node with 1 <= index <= 3 to point.
+	 */
+	void setNode( uint index, const KoPoint& point )
+		{ m_node[--index] = point; }
+
+	const KoPoint& ctrlPoint1() const
+		{ return m_node[0]; }
+	const KoPoint& ctrlPoint2() const
+		{ return m_node[1]; }
+	const KoPoint& knot() const
+		{ return m_node[2]; }
+
+	void setCtrlPoint1( const KoPoint& p )
+		{ m_node[0] = p; }
+	void setCtrlPoint2( const KoPoint& p )
+		{ m_node[1] = p; }
+	void setKnot( const KoPoint& p )
+		{ m_node[2] = p; }
+
+	/**
+	 * Returns index of the node at point p. Returns 0 of none
+	 * matches.
+	 */
+	uint nodeNear( const KoPoint& p,
+		double isNearRange = VGlobal::isNearRange ) const;
+
+	/**
+	 * Returns a reverted version of this segment. For example:
+	 * if this segment is a line from A to B, the result is a line from
+	 * B to A.
 	 */
 	VSegment* revert() const;
-
-	void transform( const QWMatrix& m );
 
 	/**
 	 * Returns a pointer to the previous segment, if stored in a
@@ -100,7 +119,8 @@ public:
 		{ return m_next; }
 
 	/**
-	 * Returns true if the segment is flat.
+	 * Returns true if the segment is flat. That means it's height is
+	 * smaller than flatness.
 	 */
 	bool isFlat( double flatness = VGlobal::flatnessTolerance ) const;
 
@@ -164,7 +184,7 @@ public:
 
 	/**
 	 * Makes the segment a bezier curve. Lines will have control points at
-	 * t and 1 - t.
+	 * parameters t and 1 - t.
 	 */
 	void convertToCurve( double t = 1.0 / 3.0 );
 
@@ -177,12 +197,48 @@ public:
 		const KoPoint& b0,
 		const KoPoint& b1 );
 
-	// set up node selection depending on p
-	bool selectNode( const KoPoint &p );
-	bool checkNode( const KoPoint &p );
-	bool selectNode( const KoRect &r );
-	void selectNode();
-	bool isSelected() const { return m_isSelected[ 0 ] || m_isSelected[ 1 ] || m_isSelected[ 2 ]; }
+	/**
+	 * Select the node at point p.
+	 */
+	bool select(
+		const KoPoint& p,
+		double isNearRange = VGlobal::isNearRange,
+		bool select = true );
+
+	/**
+	 * Deselect the node at point p.
+	 */
+	bool deselect( const KoPoint& p,
+		double isNearRange = VGlobal::isNearRange )
+	{
+		return select( p, isNearRange, false );
+	}
+
+	/**
+	 * Select all nodes inside rect.
+	 */
+	bool select( const KoRect& rect );
+
+	/**
+	 * Deselect all nodes inside rect.
+	 */
+	void deselect( const KoRect& rect );
+
+	/**
+	 * Deselect all nodes.
+	 */
+	void deselect();
+
+	/**
+	 * Returns true if node with 1 <= index <= 3 is selected.
+	 */
+	bool selected( uint index ) const
+		{ return m_nodeSelected[--index]; }
+
+	/**
+	 * Returns true if at least one node is selected.
+	 */
+	bool hasSelectedNodes() const;
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
@@ -193,8 +249,8 @@ public:
 	VSegment* clone() const;
 
 private:
-	KoPoint m_point[3];
-	bool m_isSelected[3];
+	KoPoint m_node[3];
+	bool m_nodeSelected[3];
 
 	VSegment* m_prev;
 	VSegment* m_next;

@@ -10,24 +10,26 @@ void
 VNodeSelector::visitVSegmentList( VSegmentList& segmentList )
 {
 	segmentList.first();
+
 	// skip "begin":
-	do
+	while( segmentList.next() )
 	{
-		if( m_all )
-			segmentList.current()->selectNode();
+		if( m_deselect )
+			segmentList.current()->deselect();
 		else if( !m_point.isNull() )
 		{
-			bool selected =	segmentList.current()->checkNode( m_point );
-			if( selected )
+			if( segmentList.current()->nodeNear( m_point, 2.0 ) )
+			{
 				m_segments.append( segmentList.current() );
+			}
 		}
 		else
 		{
-			bool selected =	segmentList.current()->selectNode( m_rect );
-			if( selected )
+			if( segmentList.current()->select( m_rect ) )
+			{
 				m_segments.append( segmentList.current() );
+			}
 		}
 	}
-	while( segmentList.next() );
 }
 

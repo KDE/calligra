@@ -149,30 +149,33 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 		}
 
 		// draw a "knot" at the center:
-		const KoPoint center = boundingBox().center();
+		if( m_drawCenterNode )
+		{
+			const KoPoint center = boundingBox().center();
 
-		painter->newPath();
-		painter->setRasterOp( Qt::XorROP );
-		painter->setPen( Qt::NoPen );
-		painter->setBrush( Qt::yellow );
+			painter->newPath();
+			painter->setRasterOp( Qt::XorROP );
+			painter->setPen( Qt::NoPen );
+			painter->setBrush( Qt::yellow );
 
-		painter->moveTo(
-			KoPoint(
-				center.x() - 2 / zoomFactor,
-				center.y() - 2 / zoomFactor ) );
-		painter->lineTo(
-			KoPoint(
-				center.x() + 2 / zoomFactor,
-				center.y() - 2 / zoomFactor ) );
-		painter->lineTo(
-			KoPoint(
-				center.x() + 2 / zoomFactor,
-				center.y() + 2 / zoomFactor ) );
-		painter->lineTo(
-			KoPoint(
-				center.x() - 2 / zoomFactor,
-				center.y() + 2 / zoomFactor ) );
-		painter->fillPath();
+			painter->moveTo(
+				KoPoint(
+					center.x() - 2 / zoomFactor,
+					center.y() - 2 / zoomFactor ) );
+			painter->lineTo(
+				KoPoint(
+					center.x() + 2 / zoomFactor,
+					center.y() - 2 / zoomFactor ) );
+			painter->lineTo(
+				KoPoint(
+					center.x() + 2 / zoomFactor,
+					center.y() + 2 / zoomFactor ) );
+			painter->lineTo(
+				KoPoint(
+					center.x() - 2 / zoomFactor,
+					center.y() + 2 / zoomFactor ) );
+			painter->fillPath();
+		}
 	}
 
 	// draw small boxes for path nodes:
@@ -186,14 +189,15 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 				painter->newPath();
 				painter->setRasterOp( Qt::NotROP );
 				painter->setPen( Qt::NoPen );
-				if( jtr.current()->isSelected() )
+
+				if( jtr.current()->hasSelectedNodes() )
 					painter->setBrush( Qt::blue.light() );
 				else
 					painter->setBrush( Qt::NoBrush );
 
 				if( jtr.current()->type() == VSegment::curve )
 				{
-					if( jtr.current()->isSelected() )
+					if( jtr.current()->hasSelectedNodes() )
 					{
 						if( jtr.current()->ctrlPointFixing() == VSegment::none ||
 							jtr.current()->ctrlPointFixing() == VSegment::second )

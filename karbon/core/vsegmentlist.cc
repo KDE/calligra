@@ -462,10 +462,45 @@ VSegmentList::clone() const
 void
 VSegmentList::transform( const QWMatrix& m )
 {
+	bool noNodeSelected;
+
 	VSegment* segment = m_first;
 	while( segment )
 	{
-		segment->transform( m );
+		noNodeSelected = true;
+
+		// Transform selected nodes:
+		if( segment->m_nodeSelected[0] )
+		{
+			segment->m_node[0] = segment->m_node[0].transform( m );
+
+			noNodeSelected = false;
+		}
+
+		if( segment->m_nodeSelected[1] )
+		{
+			segment->m_node[1] = segment->m_node[1].transform( m );
+
+			noNodeSelected = false;
+		}
+
+		if( segment->m_nodeSelected[2] )
+		{
+			segment->m_node[1] = segment->m_node[1].transform( m );
+			segment->m_node[2] = segment->m_node[2].transform( m );
+
+			noNodeSelected = false;
+		}
+
+		// Transform all nodes, when none is selected. The whole segment
+		// is meant in this case:
+		if( noNodeSelected )
+		{
+			segment->m_node[0] = segment->m_node[0].transform( m );
+			segment->m_node[1] = segment->m_node[1].transform( m );
+			segment->m_node[2] = segment->m_node[2].transform( m );
+		}
+
 		segment = segment->m_next;
 	}
 

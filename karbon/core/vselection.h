@@ -98,7 +98,7 @@ public:
 
 	bool appendNode( const KoPoint& p );
 	bool checkNode( const KoPoint& p );
-	void appendNodes();
+//	void appendNodes();
 	void clearNodes();
 
 

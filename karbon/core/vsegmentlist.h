@@ -59,6 +59,9 @@ public:
 
 	virtual void draw( VPainter*, const KoRect& ) {}
 
+	/**
+	 * Applies an affine transformation matrix to all segments.
+	 */
 	virtual void transform( const QWMatrix& m );
 
 	virtual const KoRect& boundingBox() const;
