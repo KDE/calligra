@@ -79,7 +79,7 @@ void Text::generatePSTRICKS(QTextStream& out)
 {
 	double x, y;
 
-	out << "\\put";
+	out << "\\rput";
 	
 	/* Options */
 	QString param = getBaseContentAttr();

@@ -35,6 +35,16 @@ Document::Document(QString fileIn, QString fileOut): XmlParser(fileIn), _file(fi
 }
 
 /*******************************************/
+/* Constructor                             */
+/*******************************************/
+Document::Document(QByteArray in, QString fileOut): XmlParser(in), _file(fileOut)
+{
+	kdDebug() << fileOut.latin1() << endl;
+	_filename = fileOut;
+	setLatexType(LT_PSTRICKS);
+}
+
+/*******************************************/
 /* Destructor                              */
 /*******************************************/
 Document::~Document()

@@ -24,6 +24,7 @@
 
 #include <qfile.h>		/* for QFile classe */
 #include <qtextstream.h>	/* for QTextStream classe */
+//#include <qbytearray.h>
 
 #include "header.h"		/* class header file.      */
 //#include "layer.h"		/* Layer contains all elements. */
@@ -70,6 +71,13 @@ class Document: public XmlParser
 		 * Creates a new instance of Document.
 		 */
 		Document(QString, QString);
+
+		/**
+		 * Constructor
+		 *
+		 * Creates a new instance of Document.
+		 */
+		Document(QByteArray, QString);
 
 		/**
 		 * Destructor

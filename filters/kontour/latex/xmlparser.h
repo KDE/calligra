@@ -23,8 +23,9 @@
 #ifndef __KILLU_XMLPARSER_H__
 #define __KILLU_XMLPARSER_H__
 
-#include "qstring.h"
-#include "qdom.h"
+#include <qstring.h>
+#include <qdom.h>
+//#include <qbytearray.h>
 
 class Header;
 
@@ -44,6 +45,7 @@ class XmlParser
 
 	public:
 		XmlParser(QString);
+		XmlParser(QByteArray);
 		XmlParser();
 		virtual ~XmlParser();
 

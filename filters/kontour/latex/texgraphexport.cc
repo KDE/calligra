@@ -22,7 +22,6 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
-//#include <qtextcodec.h>
 
 TEXGRAPHExport::TEXGRAPHExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
@@ -42,23 +41,11 @@ bool TEXGRAPHExport::filter(const QString &fileIn, const QString &fileOut,
         return false;
     }
     // input file Reading
-    QByteArray array=in.read(0xffffffff);
-    QString buf = QString::fromUtf8((const char*)array, array.size());
+    QByteArray array = in.read(in.size());
     in.close();
 
-    QString fileIn2 = QString("/tmp/tmp-latexexport.xml");
-
-    QFile tempIn(fileIn2);
-    if(tempIn.open(IO_WriteOnly))
-    {
-        QTextStream tempStream(&tempIn);
-	tempStream.setEncoding(QTextStream::UnicodeUTF8);
-	tempStream << buf;
-    }
-    tempIn.close();
-
     kdDebug() << "TEXGRAPH FILTER --> BEGIN" << endl;
-    Document TEXGRAPHParser(fileIn2, fileOut);
+    Document TEXGRAPHParser(array, fileOut);
     TEXGRAPHParser.analyse();
     kdDebug() << "---------- generate file -------------" << endl;
     TEXGRAPHParser.generate();
