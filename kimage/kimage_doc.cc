@@ -75,7 +75,7 @@ CORBA::Boolean KImageDoc::init()
 
 void KImageDoc::cleanUp()
 {
-  debug( "CleanUp KImageDoc" );
+  kdebug( KDEBUG_INFO, 0, "CleanUp KImageDoc" );
 
   if ( m_bIsClean )
     return;
@@ -170,7 +170,7 @@ bool KImageDoc::completeSaving( KOStore::Store_ptr _store )
 
 bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 {
-  debug( "------------------------ LOADING --------------------" );
+  kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );
 
   string tag;
   vector<KOMLAttrib> lst;
@@ -179,7 +179,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
   // DOC
   if ( !parser.open( "DOC", tag ) )
   {
-    debug( "Missing DOC" );
+    kdebug( KDEBUG_INFO, 0, "Missing DOC" );
     return false;
   }
 
@@ -191,7 +191,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     {
       if ( it->m_strValue != "application/x-kimage" )
       {
-		debug( "Unknown mime type %s", it->m_strValue.c_str() );
+		kdebug( KDEBUG_INFO, 0, "Unknown mime type %s", it->m_strValue.c_str() );
 		return false;
       }
     }
@@ -222,7 +222,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 		  orientation = it->m_strValue.c_str();
 		}
 		else
-		  debug( "Unknown attrib PAPER:'%s'",it->m_strName.c_str() );
+		  kdebug( KDEBUG_INFO, 0, "Unknown attrib PAPER:'%s'",it->m_strName.c_str() );
       }
 
       // PAPERBORDERS, HEAD, FOOT
@@ -253,7 +253,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 		      bottom = atof( it->m_strValue.c_str() );
 		    }
 		    else
-		      debug( "Unknown attrib 'PAPERBORDERS:%s'", it->m_strName.c_str() );
+		      kdebug( KDEBUG_INFO, 0, "Unknown attrib 'PAPERBORDERS:%s'", it->m_strName.c_str() );
 		  }
 		}
       	else if ( name == "HEAD" )
@@ -275,7 +275,7 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 		      hr = it->m_strValue.c_str();
 		    }
 	        else
-	          debug( "Unknown attrib 'HEAD:%s'", it->m_strName.c_str() );
+	          kdebug( KDEBUG_INFO, 0, "Unknown attrib 'HEAD:%s'", it->m_strName.c_str() );
 	      }
 	    }
         else if ( name == "FOOT" )
@@ -297,25 +297,25 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	          fr = it->m_strValue.c_str();
 	        }
 	        else
-	          debug( "Unknown attrib 'FOOT:%s'", it->m_strName.c_str() );
+	          kdebug( KDEBUG_INFO, 0, "Unknown attrib 'FOOT:%s'", it->m_strName.c_str() );
 	      }
 	    }
 	    else
-		  debug( "Unknown tag '%s' in PAPER", tag.c_str() );
+		  kdebug( KDEBUG_INFO, 0, "Unknown tag '%s' in PAPER", tag.c_str() );
 	
 	    if ( !parser.close( tag ) )
         {
-	      debug( "ERR: Closing PAPER" );
+	      kdebug( KDEBUG_INFO, 0, "ERROR: Closing PAPER" );
 	      return false;
 	    }
       }
     }
     else
-      debug( "Unknown tag '%s' in DOC", tag.c_str() );
+      kdebug( KDEBUG_INFO, 0, "Unknown tag '%s' in DOC", tag.c_str() );
 
     if ( !parser.close( tag ) )
     {
-      debug( "ERR: Closing DOC" );
+      kdebug( KDEBUG_INFO, 0, "ERROR: Closing DOC" );
       return false;
     }
   }
@@ -325,14 +325,14 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
   setPaperLayout( left, top, right, bottom, format, orientation );
   setHeadFootLine( hl, hm, hr, fl, fm, fr );
 
-  debug( "------------------------ LOADING DONE --------------------" );
+  kdebug( KDEBUG_INFO, 0, "------------------------ LOADING DONE --------------------" );
 
   return true;
 }
 
 bool KImageDoc::completeLoading( KOStore::Store_ptr _store )
 {
-  debug( "------------------------ COMPLETION DONE --------------------" );
+  kdebug( KDEBUG_INFO, 0, "------------------------ COMPLETION DONE --------------------" );
 
   CORBA::String_var str = url();
   QString u = str.in();
@@ -412,7 +412,7 @@ void KImageDoc::print( QPaintDevice* _dev )
 void KImageDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
 		      CORBA::Float _scale )
 {
-  debug( "DRAWING w=%li h=%li", _width, _height );
+  kdebug( KDEBUG_INFO, 0, "DRAWING w=%li h=%li", _width, _height );
 
   QPainter painter;
   painter.begin( _dev );
@@ -732,7 +732,7 @@ void KImageDoc::transformImage( const QWMatrix& matrix )
   m_bModified = true;
   m_bEmpty = false;
 
-  debug( "Image manipulated with matrix" );
+  kdebug( KDEBUG_INFO, 0, "Image manipulated with matrix" );
 }
 
 char* KImageDoc::mimeType()

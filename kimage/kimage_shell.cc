@@ -50,7 +50,7 @@ KImageShell::KImageShell()
 
 KImageShell::~KImageShell()
 {
-  debug( "KImageShell::~KImageShell()" );
+  kdebug( KDEBUG_INFO, 0, "KImageShell::~KImageShell()" );
 
   cleanUp();
 
@@ -127,14 +127,14 @@ bool KImageShell::newDocument()
   if ( !m_pDoc->init() )
   {
     releaseDocument();
-    debug( "ERROR: Could not initialize document" );
+    kdebug( KDEBUG_FATAL, 0, "ERROR: Could not initialize document" );
     return false;
   }
 
   m_pView = m_pDoc->createImageView( getFrame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
-  debug( "*1) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
+  kdebug( KDEBUG_INFO, 0, "*1) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
   m_pView->setMainWindow( interface() );
 
   setRootPart( m_pView );
@@ -151,7 +151,7 @@ bool KImageShell::newDocument()
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
 
-  debug( "*2) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
+  kdebug( KDEBUG_INFO, 0, "*2) VIEW void KOMBase::refcnt() = %li", m_pView->_refcnt() );
 
   return true;
 }
@@ -170,7 +170,7 @@ bool KImageShell::openDocument( const char *_url, const char *_format )
     return s->openDocument( _url, _format );
   }
 
-  debug( "Creating new document" );
+  kdebug( KDEBUG_INFO, 0, "Creating new document" );
 
   m_pDoc = new KImageDoc;
   if ( !m_pDoc->loadFromURL( _url, _format ) )
@@ -373,12 +373,12 @@ void KImageShell::slotFilePrint()
 
 void KImageShell::slotFileQuit()
 {
-  debug( "EXIT 1" );
+  kdebug( KDEBUG_INFO, 0, "EXIT 1" );
 
   if ( !closeAllDocuments() )
     return;
 
-  debug( "EXIT 2" );
+  kdebug( KDEBUG_INFO, 0, "EXIT 2" );
 
   delete this;
   kapp->exit();

@@ -77,9 +77,11 @@ void KImageApp::start()
 int main( int argc, char** argv )
 {
   int i = 1;
-  FormatManager* formatManager = new FormatManager();
+  FormatManager* formatManager;
   KImageAutoLoader loader( "IDL:KImage/DocumentFactory:1.0", "KImage" );
   KImageApp app( argc, argv );
+
+  formatManager = new FormatManager();
 
   if( strcmp( argv[ i ], "-s" ) == 0 || strcmp( argv[ i ], "--server" ) == 0 )
   {

@@ -82,13 +82,13 @@ void KImageView::init()
    * Menu
    ******************************************************/
 
-  debug( "Registering menu as %li", id() );
+  kdebug( KDEBUG_INFO, 0, "Registering menu as %li", id() );
 
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
   if ( !CORBA::is_nil( menu_bar_manager ) )
     menu_bar_manager->registerClient( id(), this );
   else
-    debug( "Did not get a menu bar manager" );
+    kdebug( KDEBUG_ERROR, 0, "Did not get a menu bar manager" );
 
   /******************************************************
    * Toolbar
@@ -98,26 +98,26 @@ void KImageView::init()
   if ( !CORBA::is_nil( tool_bar_manager ) )
     tool_bar_manager->registerClient( id(), this );
   else
-    debug( "Did not get a tool bar manager" );
+    kdebug( KDEBUG_ERROR, 0, "Did not get a tool bar manager" );
 }
 
 KImageView::~KImageView()
 {
-  debug( "KImageView::~KImageView() %li", _refcnt() );
+  kdebug( KDEBUG_INFO, 0, "KImageView::~KImageView() %li", _refcnt() );
 
   cleanUp();
 }
 
 void KImageView::cleanUp()
 {
-  debug( "void KImageView::cleanUp() " );
+  kdebug( KDEBUG_INFO, 0, "void KImageView::cleanUp() " );
 
   if ( m_bIsClean )
   {
     return;
   }
   
-  debug( "1b) Unregistering menu and toolbar" );
+  kdebug( KDEBUG_INFO, 0, "1b) Unregistering menu and toolbar" );
 
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
   if ( !CORBA::is_nil( menu_bar_manager ) )
@@ -151,11 +151,11 @@ bool KImageView::event( const char* _event, const CORBA::Any& _value )
 
 bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 {
-  debug( "bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" );
+  kdebug( KDEBUG_INFO, 0, "bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" );
 
   if ( CORBA::is_nil( _factory ) )
   {
-    debug( "Setting to nil" );
+    kdebug( KDEBUG_INFO, 0, "Setting to nil" );
     m_vToolBarEdit = 0L;
     return true;
   }
@@ -191,11 +191,11 @@ bool KImageView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory 
 
 bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 {
-  debug( "bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )" );
+  kdebug( KDEBUG_INFO, 0, "bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )" );
 
   if ( CORBA::is_nil( _menubar ) )
   {
-	debug( "Setting to nil" );
+	kdebug( KDEBUG_INFO, 0, "Setting to nil" );
     m_vMenuEdit = 0L;
     m_vMenuView = 0L;
     m_vMenuTransform = 0L;
@@ -297,10 +297,9 @@ void KImageView::editEditImage()
 
 void KImageView::editImportImage()
 {
-  debug( "import this=%i", (int) this );
+  kdebug( KDEBUG_INFO, 0, "import this=%i", (int) this );
 
   QString filter = i18n( "*.*|All files\n*.bmp|BMP\n*.jpg|JPEG\n*.png|PNG" );
-  
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
 
   if( file.isNull() )
@@ -412,7 +411,7 @@ void KImageView::viewZoomFactor()
   {
     return;
   }
-  debug( "zoom factor: X: %i, Y: %i", m_zoomFactor.x(), m_zoomFactor.y() );
+  kdebug( KDEBUG_INFO, 0, "zoom factor: X: %i, Y: %i", m_zoomFactor.x(), m_zoomFactor.y() );
   m_drawMode = ZoomFactor;
   slotUpdateView();
 }
@@ -448,7 +447,7 @@ void KImageView::transformRotateRight()
 {
   CHECK_ALL;
 
-  debug( "Rotate Right" );
+  kdebug( KDEBUG_INFO, 0, "Rotate Right" );
 
   QWMatrix matrix;
   matrix.rotate( 90 );
@@ -463,7 +462,7 @@ void KImageView::transformRotateLeft()
 {
   CHECK_ALL;
 
-  debug( "Rotate Left" );
+  kdebug( KDEBUG_INFO, 0, "Rotate Left" );
 
   QWMatrix matrix;
   matrix.rotate( -90 );
@@ -478,7 +477,7 @@ void KImageView::transformRotateAngle()
 {
   CHECK_ALL;
 
-  debug( "Rotate Angle" );
+  kdebug( KDEBUG_INFO, 0, "Rotate Angle" );
 
   int angle = 0;
   KIntegerInputDialog dlg( NULL, "KImage", i18n( "Enter angle:" ) ); 
@@ -501,7 +500,7 @@ void KImageView::transformFlipVertical()
 {
   CHECK_ALL;
 
-  debug( "flipVertical" );
+  kdebug( KDEBUG_INFO, 0, "flipVertical" );
 
   QWMatrix matrix;
   QWMatrix matrix2( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
@@ -517,7 +516,7 @@ void KImageView::transformFlipHorizontal()
 {
   CHECK_ALL;
 
-  debug( "flipHorizontal" );
+  kdebug( KDEBUG_INFO, 0, "flipHorizontal" );
 
   QWMatrix matrix;
   QWMatrix matrix2( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
@@ -531,7 +530,7 @@ void KImageView::transformZoomFactor()
 {
   CHECK_ALL;
 
-  debug( "Zoom Factor" );
+  kdebug( KDEBUG_INFO, 0, "Zoom Factor" );
 
   QWMatrix matrix;
   int factor = (int)(matrix.m11() * 100 );
@@ -550,7 +549,7 @@ void KImageView::transformZoomIn10()
 {
   CHECK_ALL;
 
-  debug( "Zoom In 10" );
+  kdebug( KDEBUG_INFO, 0, "Zoom In 10" );
 
   QWMatrix matrix;
   matrix.scale( 1.1, 1.1 );
@@ -562,7 +561,7 @@ void KImageView::transformZoomOut10()
 {
   CHECK_ALL;
 
-  debug( "Zoom Out 10" );
+  kdebug( KDEBUG_INFO, 0, "Zoom Out 10" );
 
   QWMatrix matrix;
   matrix.scale( 0.9, 0.9 );
@@ -574,7 +573,7 @@ void KImageView::transformZoomDouble()
 {
   CHECK_ALL;
 
-  debug( "Zoom Double" );
+  kdebug( KDEBUG_INFO, 0, "Zoom Double" );
 
   QWMatrix matrix;
   matrix.scale( 2.0, 2.0 );
@@ -586,7 +585,7 @@ void KImageView::transformZoomHalf()
 {
   CHECK_ALL;
 
-  debug( "Zoom Half" );
+  kdebug( KDEBUG_INFO, 0, "Zoom Half" );
 
   QWMatrix matrix;
   matrix.scale( 0.5, 0.5 );
@@ -598,7 +597,7 @@ void KImageView::transformZoomMax()
 {
   CHECK_ALL;
 
-  debug( "Zoom Max" );
+  kdebug( KDEBUG_INFO, 0, "Zoom Max" );
 
   QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
   m_pDoc->transformImage( matrix );
@@ -609,7 +608,7 @@ void KImageView::transformZoomMaxAspect()
 {
   CHECK_ALL;
 
-  debug( "Zoom Max Aspect" );
+  kdebug( KDEBUG_INFO, 0, "Zoom Max Aspect" );
 
   QWMatrix matrix( 1.0F, 0.0F, 0.0F, -1.0F, 0.0F, 0.0F);
   m_pDoc->transformImage( matrix );
@@ -621,7 +620,7 @@ QString KImageView::tmpFilename()
   QString file;
 
   file.sprintf( "/tmp/kimage_%i.image", getpid() );
-  debug( file );
+  kdebug( KDEBUG_INFO, 0, file );
   return file;
 }
 
@@ -638,7 +637,7 @@ void KImageView::slotCommandExecuted( KProcess* )
   // Funktionsaufruf: es wird kein Prozess mehr ausgeführt.
   m_pDoc->m_executeCommand = false;
 
-  debug( "ending process" );
+  kdebug( KDEBUG_INFO, 0, "ending process" );
 }
 
 void KImageView::executeCommand( KProcess& proc )
@@ -647,7 +646,7 @@ void KImageView::executeCommand( KProcess& proc )
   // Funktionsaufruf: es wird Prozeß ausgeführt  
   m_pDoc->m_executeCommand = true;
 
-  debug( "starting process" );
+  kdebug( KDEBUG_INFO, 0, "starting process" );
 
   m_tmpFile = tmpFilename();
 
