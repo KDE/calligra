@@ -1616,7 +1616,7 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
             {
                 QString filename = filenameElement.attribute( "value" );
                 m_image.clear();
-                m_image.setKey( KoPictureKey( filename, QDateTime::currentDateTime() ) );
+                m_image.setKey( KoPictureKey( filename, QDateTime() ) );
                 m_doc->addImageRequest( this );
             }
             else
