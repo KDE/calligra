@@ -664,8 +664,8 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 		return false;
 	}
 	else {
-		if (current)
-			d->pCurrentItem = m_data->current();
+//setCursor() wil lset this!		if (current)
+			//d->pCurrentItem = m_data->current();
 	}
 
 //	repaintAfterDelete();
@@ -740,7 +740,7 @@ void KexiTableView::slotRowDeleted()
 {
 	if (d->rowWillBeDeleted >= 0) {
 //		if (!isInsertingEnabled() && d->rowWillBeDeleted>=rows())
-		if (d->rowWillBeDeleted >= rows())//+(isInsertingEnabled()?1:0) ))
+		if (d->rowWillBeDeleted > 0 && d->rowWillBeDeleted >= rows())//+(isInsertingEnabled()?1:0) ))
 			d->rowWillBeDeleted--; //move up
 		QSize s(tableSize());
 		resizeContents(s.width(),s.height());
@@ -2044,7 +2044,6 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			cancelRowEdit();
 			return;
 		}
-		break;
 	default:
 		//others:
 		if (nobtn && (e->key()==Key_Tab || e->key()==Key_Right)) {
@@ -2089,7 +2088,8 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			qDebug("KexiTableView::KeyPressEvent(): default");
 			if (e->text().isEmpty() || !e->text().isEmpty() && !e->text()[0].isPrint() ) {
 				kdDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(e->key(),0,16) <<endl;
-				e->ignore();
+//				e->ignore();
+				QScrollView::keyPressEvent(e);
 				return;
 			}
 
@@ -2792,6 +2792,8 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 				if (!acceptEditor()) {
 					return;
 				}
+				//update row num. again
+				newrow = QMIN( rows() - 1 + (isInsertingEnabled()?1:0), newrow);
 			}
 		}
 

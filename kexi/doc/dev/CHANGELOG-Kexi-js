@@ -314,12 +314,31 @@ KexiDB Drivers
 - move to SQLITE3 (later it will be harder to do)
 -....
 
+2004-08-24
+Table View
+- redraw fixed -very special case: If you're during editing a new row, and click 
+ on last (empty) row, and your newly entered row has no data in its cells,
+ (what ends up with cancelRowEdit()), cursor is now moved one line up.
+- unknown, non-printable key events are not ignored now, but passed to superclass;
+  this e.g. fixes blocking ESC key in dialogs
+- fixed setting cursor on row removing
+Kexi Properties, Property Editor
+- icon added as optional property member
+Form Designer
+- Connection editor implementation cleaned a bit (bug #44)
+Table Designer
+- "autonumber" property is now visible
+- icons added to propertybuffer
+
 2004-08-23
 Table Designer
 - fixed code because of new column has been prepended
 KexiDB
 - KexiDB::Field::Type defaultTypeForGroup(KexiDB::Field::TypeGroup typeGroup)
   added and used in Table Designer.
+- KexiDB::idForObjectName() convenience function added
+Table View
+- fixed methods for 'visible' flag in KexiTableViewColumn
 
 2004-08-21
 Table View
