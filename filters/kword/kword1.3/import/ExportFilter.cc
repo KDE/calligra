@@ -923,10 +923,10 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 
 #define ALLOW_TABLE
 
-#ifdef ALLOW_TABLE
 // ### TODO: make it a member of OOWriterWorker (when table support will work)
-static QString cellToProperties( const TableCell& cell, QString& key)
+QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) const
 {
+#ifdef ALLOW_TABLE
     const FrameData& frame = cell.frame;
     QString properties;
 
@@ -1003,8 +1003,10 @@ static QString cellToProperties( const TableCell& cell, QString& key)
     properties += "\"";
 
     return properties;
-}
+#else
+    return QString::null;
 #endif
+}
 
 bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 {
