@@ -707,7 +707,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		{
 #ifdef Q_WS_WIN
 			x = 5;
-			y_offset = 0;
+			y_offset = -1;
 #else
 			x = 5;
 			y_offset = 0;
@@ -1253,8 +1253,14 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 
 #ifdef Q_WS_WIN
 //TODO
-	moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow)-1);
-	d->pEditor->resize(columnWidth(d->curCol)-1, rowHeight());
+	if (columnType(col)==QVariant::Date) {
+		moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow)-1);
+		d->pEditor->resize(columnWidth(d->curCol)-1, rowHeight()+1);
+	}
+	else {
+		moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow)-1);
+		d->pEditor->resize(columnWidth(d->curCol)-1, rowHeight());
+	}
 #else
 //	if (columnType(col)==QVariant::String) {
 		//moveChild(d->pEditor, columnPos(d->curCol)+5, rowPos(d->curRow));
@@ -1765,6 +1771,5 @@ QVariant KexiTableView::columnDefault(int col)
 {
 	return *d->pColumnDefaults.at(col);
 }
-
 
 #include "kexitableview.moc"
