@@ -1,0 +1,41 @@
+
+dnl without this order in this file, autoconf will not work!
+dnl the argument is a source file out of your sources. But
+dnl acinclude.m4 makes the job for all programs ;-)
+AC_INIT(acinclude.m4)
+
+dnl without this order in this file, automake will be confused!
+dnl the argument 
+AM_CONFIG_HEADER(config.h)
+AC_CHECK_COMPILERS
+AM_INIT_AUTOMAKE(koffice, 0.1)
+
+dnl make $KDEDIR the default for the installation
+AC_PREFIX_DEFAULT(${KDEDIR:-/usr/local/kde})
+
+AM_ENABLE_SHARED(yes)
+AM_ENABLE_STATIC(no)
+KDE_PROG_LIBTOOL
+AC_PATH_KDE 
+
+idldir="\$(prefix)/idl"
+AC_SUBST(idldir)
+
+dnl add here all your Makefiles. This are created by configure
+AC_OUTPUT(Makefile \
+	kimage/Makefile \
+	kspread/pics/Makefile \
+	kspread/Makefile \
+	kspread/python/Makefile \
+	kspread/scripts/Makefile \
+	lib/Makefile \
+	lib/kofficecore/Makefile \
+	lib/kofficeui/pics/Makefile \
+	lib/kofficeui/test/Makefile \
+	lib/kofficeui/Makefile \
+	lib/koml/Makefile \
+	kpresenter/Makefile \
+	kpresenter/autoformEdit/Makefile \
+	kpresenter/autoforms/Makefile \
+	kpresenter/pics/Makefile \
+	kpresenter/toolbar/Makefile )

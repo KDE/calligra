@@ -1,0 +1,2 @@
+
+SUBDIRS = koml kofficecore kofficeui

@@ -1,0 +1,6 @@
+
+all:
+	aclocal
+	autoconf
+	autoheader
+	automake
