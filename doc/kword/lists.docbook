@@ -6,39 +6,41 @@ For easy, simple lists, &kword; offers
 a toolbar button for both enumerated and bulleted lists.</para>
 
 <para>An enumerating style is a series of letters or
-numbers which proposes an order or heirarchy within the list. Bullets 
+numbers which proposes an order or hierarchy within the list. Bullets 
 simply mark the item as part of the list and usually consist of a symbol or shape.</para>
 
 <sect2 id="list-simpl"><title>Simple lists</title>
 
 <para>To quickly create a single level list, &kword; provides two toolbar buttons.</para>
 <para>To create a simple enumerated list, simply select <inlinemediaobject><imageobject><imagedata
-fileref="enumlist.png" format="PNG"/></imageobject></inlinemediaobject> from the paragraph toolbar.
+fileref="enumlist.png" format="PNG"/></imageobject></inlinemediaobject> from the 
+<link linkend="paragraph-toolbar">paragraph toolbar</link>.
 A small menu will list different enumerated list styles.  Select the appropriate style and the selected
 paragraphs are converted into a list of that style.</para>
 <para>To create a simple bulleted list, select <inlinemediaobject><imageobject><imagedata
-fileref="bullist.png" format="PNG"/></imageobject></inlinemediaobject> from the paragraph toolbar.
+fileref="bullist.png" format="PNG"/></imageobject></inlinemediaobject> from the 
+<link linkend="paragraph-toolbar">paragraph toolbar</link>.
 A small menu will list different bulleted list styles.  Select the appropriate style and the selected
 paragraphs are converted into a bulleted list of that style.</para>
 <tip><para>You are still able to make changes to the list styles by <link linkend="list-complex">using the dialog</link>.</para></tip>
 </sect2>
 
 <sect2 id="list-complex"><title>Complex lists</title>
-<para>All complex list formatting is done through the Paragraph Formatting dialog.  To get to the Paragraph Formatting Dialog you can:</para>
+<para>All complex list formatting is done through the Paragraph Formatting dialog.  To get to the paragraph formatting dialog you can:</para>
 
 <itemizedlist>
 <listitem>
 <para>Select <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
 from the menubar</para>
 </listitem>
 
-<listitem><para>Type <keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo></para></listitem>
+<listitem><para>Type <keycombo action="simul">&Alt;&Ctrl;<keycap>P</keycap></keycombo></para></listitem>
 
 <listitem>
 <para>Place the mouse pointer in the paragraphs that will become the list and click once
 with the &RMB;.  A small menu
-will appear.  Select <guimenuitem>Paragraph</guimenuitem>.</para>
+will appear.  Select <guimenuitem>Paragraph...</guimenuitem>.</para>
 </listitem>
 
 </itemizedlist>
@@ -69,11 +71,11 @@ the enumeration or bullet.</para>
 <para>For example:  If <quote>Step</quote> is typed into the <guilabel>Prefix Text</guilabel>
 box, and <quote>-</quote> is typed into the <guilabel>Suffix Text</guilabel> text box, the list will look like this:</para>
 
-<simplelist>
+<informalexample><simplelist>
 <member>Step 1 - Place 1 cup of flour in a large mixing bowl.</member>
 <member>Step 2 - Add 1/4 tablespoon of yeast.</member>
 <member>Step 3 - ....</member>
-</simplelist>
+</simplelist></informalexample>
 </sect3>
 <sect3 id="list-count"><title>Changing the start point of the list</title>
 
@@ -113,7 +115,7 @@ this will look.</para>
 </sect3>
 <sect3 id="lists-multiline"><title> Multiple paragraphs in one list element</title>
 <para>Each new paragraph represents a new list element.  Sometimes, however, it will be desireable to have multiple 
-paragraphs on a single list element.  This is acomplished by inserting a New Line character instead of a Paragraph Break.</para>
+paragraphs on a single list element.  This is accomplished by inserting a New Line character instead of a Paragraph Break.</para>
 
 <para>To insert a New Line, type <keycombo action="simul">&Shift;<keycap>Return</keycap></keycombo>.</para>
 

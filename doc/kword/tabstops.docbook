@@ -12,7 +12,7 @@ indent paragraphs.</para>
 
 <para>Tab stops are part of the properties of a paragraph.  Each
 paragraph keeps track of its own set of tab stops.  To view the tab
-stops of a particular paragraph, place the mouse cursor within a
+stops of a particular paragraph, place the mouse pointer within a
 paragraph, click once, and check the top ruler.  The tab stops are
 marked as symbols in black. </para>
 
@@ -33,7 +33,7 @@ ruler.</para>
 <row><entry>Center Tab Stop</entry>
 <entry align="left"><mediaobject><imageobject><imagedata fileref="ctab2.png" format="PNG" align="center"/></imageobject></mediaobject></entry>
 <entry><mediaobject><imageobject><imagedata fileref="ctab.png" format="PNG" align="center"/></imageobject></mediaobject></entry>
-<entry>With a right tab stop, the text is centered at the tab stop. </entry></row>
+<entry>With a center tab stop, the text is centered at the tab stop. </entry></row>
 
 <row><entry>Left Tab Stop</entry>
 <entry align="left"><mediaobject><imageobject><imagedata fileref="ltab2.png" format="PNG" align="center"/></imageobject></mediaobject></entry>
@@ -82,15 +82,15 @@ menu.</para>
 different types of tab stops.  </para>
 
 <para>Click once on the current tab character, and the tab stop changes
-from <quote>Left Tab Stop</quote>, to <quote>Center Tab Stop</quote>.
+from left tab stop, to center tab stop.
 If you continue to click with the left mouse button, you will change to
-<quote>Right Tab Stop</quote>, then to <quote>Decimal Tab Stop</quote>,
-then back to <quote>Left Tab Stop</quote>. </para> 
+right tab stop, then to decimal tab stop,
+then back to left tab stop. </para>
 </tip>
 
 <para>Once you have the correct type of tab stop, you can simply place
-the mouse cursor on the top ruler bar at the desired position, and click once with the
-<mousebutton>left</mousebutton> mouse button.  This will place a tab
+the mouse pointer on the top ruler bar at the desired position, and click once with the
+&LMB;.  This will place a tab
 stop at that position.</para>
 
 </sect3>
@@ -99,7 +99,7 @@ stop at that position.</para>
 <title>Using the Dialog Box</title>
 
 <para>The fastest way to get to the tab stop dialog panel, is to select
-<menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
 from the menubar or type <keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo>.  This will bring up a dialog box with 6 tabs. Click on the tab
 labeled <guilabel>Tabulators</guilabel>. </para>
 
@@ -159,7 +159,7 @@ panel.</link></para>
 <orderedlist numeration="arabic">
 <listitem>
 <para>To move a tab stop with the ruler, place the mouse over the
-desired tab stop.  The mouse cursor will change to a double
+desired tab stop.  The mouse pointer will change to a double
 arrow.</para>
 </listitem>
 
@@ -180,7 +180,7 @@ button.</para>
 <title>Using the Dialog Box</title>
 
 <para>The fastest way to get to the tab stop dialog panel, is to select
-<menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
 from the menubar or type <keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo>.  
 This will bring up a dialog box with 6 tabs. </para>
 
@@ -238,7 +238,7 @@ panel.</link></para>
 <orderedlist numeration="arabic">
 <listitem>
 <para>To delete a tab stop with the ruler, place the mouse over the
-desired tab stop.  The mouse cursor will change to a double
+desired tab stop.  The mouse pointer will change to a double
 arrow.</para>
 </listitem>
 <listitem>
@@ -252,7 +252,7 @@ the mouse. A submenu will appear.  Select <guimenuitem>Remove Tabulator</guimenu
 <title>Using the Dialog Box</title>
 
 <para>The fastest way to get to the tab stop dialog panel, is to select
-<menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
 from the menubar or type <keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo>.  This will bring up a dialog box with 6 tabs. </para>
 
 <para>Click on the tab labeled <guilabel>Tabulators</guilabel></para>

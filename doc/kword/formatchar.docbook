@@ -5,11 +5,11 @@
 blocks of characters including:</para>
 
 <itemizedlist>
-<listitem><para><link linkend="change-font">Size</link></para></listitem>
+<listitem><para><link linkend="change-font">Character size</link></para></listitem>
 <listitem><para><link linkend="change-font">Font</link></para></listitem>
-<listitem><para><link linkend="change-font">Font Style</link></para></listitem>
+<listitem><para><link linkend="change-font">Font style (italic, bold, etc)</link></para></listitem>
 <listitem><para><link linkend="change-font">Underlines, superscript, subscript, strikeout, etc.</link></para></listitem>
-<listitem><para><link linkend="change-font">Character Color/Background Color.</link></para></listitem>
+<listitem><para><link linkend="change-font">Character color and background color.</link></para></listitem>
 <listitem><para><link linkend="change-font-case">Character case.</link></para></listitem>
 
 </itemizedlist>
@@ -44,7 +44,8 @@ Button</entry><entry align="center">Key Combo</entry></row>
 <row><entry align="right">Strikethrough</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="stkout.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
 <row><entry align="right">Superscript</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="supscbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
 <row><entry align="right">Subscript</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="subscbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
-<row><entry align="right">Text Background Color</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="bdcolorbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Font Color</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chcolorbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Background Color</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="bdcolorbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
 
 </tbody></tgroup></informaltable>
 
@@ -68,19 +69,19 @@ ways:</para>
 <itemizedlist>
 <listitem>
 <para>Select <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Font</guimenuitem></menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Font...</guimenuitem></menuchoice>
 from the menubar.</para>
 </listitem>
 
 <listitem>
-<para>Click on the selected text with the &RMB;.  A small menu will appear.  Select <guimenuitem>Font</guimenuitem> from the
+<para>Click on the selected text with the &RMB;.  A small menu will appear.  Select <guimenuitem>Font...</guimenuitem> from the
 menu.</para>
 </listitem>
 
 
 <listitem>
 <para>You can use the keyboard shortcut:
-<keycombo><keycap>&Ctrl;&Alt;</keycap><keycap>F</keycap></keycombo></para>
+<keycombo>&Alt;&Ctrl;<keycap>F</keycap></keycombo></para>
 </listitem>
 </itemizedlist>
 
@@ -132,7 +133,7 @@ no underline (Without), Single, Simple Bold or Double underlining.  </para>
 <mediaobject>
 <imageobject>
 <imagedata fileref="exul.png" format="PNG"/></imageobject>
-<caption><para>Examples of three underline styles</para></caption>
+<!--<caption><para>Examples of three underline styles</para></caption>-->
 </mediaobject>
 </screenshot>
 
@@ -140,9 +141,16 @@ no underline (Without), Single, Simple Bold or Double underlining.  </para>
 <para>Use the <guibutton>Change Color</guibutton> button to select a color for the underline using the
 <link linkend="select-colors">color selection dialog box</link>.  </para>
 
-<para>The subsection labeled <guilabel>Strikethrough</guilabel> has two drop down boxes.  
+<para>The subsection labeled <guilabel>Strikethrough</guilabel> has two drop down boxes.
 Use the left drop down box to select between
-none (Without), Single or Double strikethrough.  Use the right drop down box to select the line style.</para>
+no strikethrough (Without), Single or Double strikethrough.  Use the right drop down box to select the line style.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="exst.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
 
 <para>Clicking <guibutton>OK</guibutton> will commit your changes to the
 document.</para>
@@ -156,7 +164,7 @@ made.</para>
 <sect2 id="change-font-case">
 <title>Changing Font Case</title>
 
-<para>&kword; can change the case (uppercase or lowercase) of large blocks of text to one of 4 pre-defined styles.  
+<para>&kword; can change the case (uppercase or lowercase) of large blocks of text to one of five pre-defined styles.  
 Begin by selecting the block of text you want changed.  Select <menuchoice>
 <guimenu>Tools</guimenu><guimenuitem>Change Case...</guimenuitem></menuchoice>
 from the menubar.</para>
