@@ -92,10 +92,14 @@ private:
         const char *blue,
         unsigned defaultColour = 1) const;
 
-    // Convert from Word number format codes to our own number format.
+    // Number format codes.
 
     const char *list(unsigned nfc) const;
     char numbering(unsigned nfc) const;
+
+    // Justification codes.
+
+    const char *justification(unsigned jc) const;
 
     // Convert from Word character format to our own format.
     QString generateFormat(

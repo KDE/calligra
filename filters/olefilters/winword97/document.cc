@@ -313,6 +313,42 @@ QString Document::cleanText(
     return cleantext;
 }
 
+// Return the name of a font. We have to convert the Microsoft font names to something that
+// might just be present under X11.
+
+QString Document::getFont(unsigned fc)
+{
+    QString msFont = MsWord::getFont(fc).xstzName;
+    static const unsigned ENTRIES = 6;
+    static QString lookup[ENTRIES][2] =
+    {
+        // Since most fonts are sans-serif, we default to
+        // helvetica. Thus, this table need contain no entries
+        // that map to helvetica.
+        // Ms               X11
+        { "times",          "times" },
+        { "courier",        "courier" },
+        { "andale",         "monotype" },
+        { "monotype.com",   "monotype" },
+        { "georgia",        "times" },
+        // Default entry, guaranteed to match! This must be the
+        // last entry...
+        { "",               "helvetica" }
+    };
+    unsigned i;
+    QString font;
+
+    // How to translate a Microsoft font name to one known by us?
+
+    for (i = 0; i < ENTRIES; i++)
+    {
+        if (msFont.find(lookup[i][0], 0, FALSE) != -1)
+            break;
+    }
+    kdError() << "converting " <<msFont<< " to " << lookup[i][1]<< endl;
+    return lookup[i][1];
+}
+
 void Document::gotParagraph(
     const QString &text,
     const PAP &pap,

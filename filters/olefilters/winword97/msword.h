@@ -97,6 +97,51 @@ public:
     } CHPXFKP;
     unsigned read(const U8 *in, CHPXFKP *out);
 
+    // Font Family Name (FFN)
+    typedef struct FFN
+    {
+
+        // total length of FFN - 1.
+        U8 cbFfnM1;
+
+        // pitch request
+        U8 prq:2;
+
+        // when 1, font is a TrueType font
+        U8 fTrueType:1;
+
+        // reserved
+        U8 unused1_3:1;
+
+        // font family id
+        U8 ff:3;
+
+        // reserved
+        U8 unused1_7:1;
+
+        // base weight of font
+        U16 wWeight;
+
+        // character set identifier
+        U8 chs;
+
+        // index into ffn.szFfn to the name of the alternate font
+        U8 ixchSzAlt;
+
+        // ? This is supposed to be of type PANOSE.
+        U8 panose[10];
+
+        // ? This is supposed to be of type FONTSIGNATURE.
+        U8 fs[24];
+
+        // zero terminated string that records name of font. Possibly
+        // followed by a second xsz which records the name of an alternate
+        // font to use if the first named font does not exist on this system.
+        // Maximal size of xszFfn is 65 characters.
+        QString xstzName;
+    } FFN;
+    unsigned read(const U8 *in, FFN *out);
+
     typedef struct PAPXFKP
     {
         U16 istd;
@@ -315,6 +360,10 @@ protected:
         U32 *pictureLength,
         const U8 **pictureData);
 
+    // Font access by font code.
+
+    const FFN &getFont(unsigned fc);
+
     // Cache for styles in stylesheet. This is an array of fully "decoded"
     // PAPs - that will help performance with lots of paragraphs.
 
@@ -404,5 +453,15 @@ private:
 
     LVLF ***m_listStyles;
     void readListStyles();  // Fetch the list styles.
+
+
+    // Cache for fonts.
+
+    struct
+    {
+        U16 count;
+        FFN *data;
+    } m_fonts;
+    void readFonts();
 };
 #endif

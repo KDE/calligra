@@ -533,6 +533,18 @@ void MsWord::getField(
     }
 }
 
+// Get a font.
+
+const MsWord::FFN &MsWord::getFont(unsigned fc)
+{
+    if (fc >= m_fonts.count)
+    {
+        kdError(s_area) << "MsWord::getFont: invalid font code: " << fc << endl;
+        fc = 0;
+    }
+    return m_fonts.data[fc];
+}
+
 // Embedded object access.
 
 void MsWord::getObject(
@@ -959,6 +971,7 @@ MsWord::MsWord(
     // Word 2000.
 
     readStyles();
+    readFonts();
     //readAssociatedStrings();
     readListStyles();
 }
@@ -1162,8 +1175,6 @@ void MsWord::readAssociatedStrings()
 
     const U8 *ptr = m_tableStream + m_fib.fcSttbfAssoc; //lcbSttbfAssoc.
 
-    kdDebug(s_area) << "MsWord::getAssociatedStrings" << endl;
-
     // Failsafe for simple documents.
 
     if (!m_fib.lcbSttbfAssoc)
@@ -1186,6 +1197,39 @@ void MsWord::readAssociatedStrings()
     m_lastRevisedBy = data.strings[ibstAssocLastRevBy];
 }
 
+// Create a cache of information about fonts. The information is indexed by font code.
+
+void MsWord::readFonts()
+{
+    const U8 *ptr = m_tableStream + m_fib.fcSttbfffn; //lcbSttbfffn.
+    const U8 *ptr2 = ptr + m_fib.lcbSttbfffn;
+
+    // Failsafe for simple documents.
+
+    m_fonts.count = 0;
+    m_fonts.data = NULL;
+    if (!m_fib.lcbSttbfffn)
+    {
+        kdDebug(s_area) << "MsWord::readFonts: no data " << endl;
+        return;
+    }
+
+    // Find the number of LSTFs from the STTBF header.
+
+    ptr += MsWordGenerated::read(ptr, &m_fonts.count);
+    ptr += sizeof(U16);
+
+    // Construct the array of styles, and then walk the array reading in the style definitions.
+
+    m_fonts.data = new FFN [m_fonts.count];
+    unsigned i = 0;
+    while (ptr < ptr2)
+    {
+        ptr += read(ptr, &m_fonts.data[i]);
+        i++;
+    }
+}
+
 // Create a cache of information about lists.
 //
 //    m_listStyles: an array of arrays of pointers to LVLFs for each list style in the
@@ -1196,8 +1240,6 @@ void MsWord::readListStyles()
     const U8 *ptr = m_tableStream + m_fib.fcPlcfLst; //lcbPlcfLst.
     const U8 *ptr2;
     U16 lstfCount;
-
-    kdDebug(s_area) << "MsWord::readListStyles" << endl;
 
     // Failsafe for simple documents.
 
@@ -1706,6 +1748,43 @@ unsigned MsWord::read(const U8 *in, BTE *out)
     }
     return bytes;
 } // BTE
+
+unsigned MsWord::read(const U8 *in, FFN *out)
+{
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
+    unsigned bytes = 0;
+
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
+
+    bytes += MsWordGenerated::read(in + bytes, &out->cbFfnM1);
+    bytes += MsWordGenerated::read(in + bytes, &shifterU8);
+    out->prq = shifterU8;
+    shifterU8 >>= 2;
+    out->fTrueType = shifterU8;
+    shifterU8 >>= 1;
+    out->unused1_3 = shifterU8;
+    shifterU8 >>= 1;
+    out->ff = shifterU8;
+    shifterU8 >>= 3;
+    out->unused1_7 = shifterU8;
+    shifterU8 >>= 1;
+    bytes += MsWordGenerated::read(in + bytes, &out->wWeight);
+    bytes += MsWordGenerated::read(in + bytes, &out->chs);
+    bytes += MsWordGenerated::read(in + bytes, &out->ixchSzAlt);
+    bytes += MsWordGenerated::read(in + bytes, &out->panose[0], sizeof(out->panose));
+    bytes += MsWordGenerated::read(in + bytes, &out->fs[0], sizeof(out->fs));
+    unsigned count = (out->cbFfnM1 + 1 - bytes) / 2;
+    bytes += read(m_fib.lid, in + bytes, &out->xstzName, count - 1, true);
+
+    // Set the length to the offset of the last stored byte.
+
+    bytes = out->cbFfnM1 + 1;
+    return bytes;
+} // FFN
 
 unsigned MsWord::read(const U8 *in, FLD *out)
 {

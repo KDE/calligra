@@ -135,6 +135,10 @@ protected:
         const Attributes styles[],
         MsWordGenerated::TAP &row) = 0;
 
+    // Return the name of a font.
+
+    QString getFont(unsigned fc);
+
 private:
     Document(const Document &);
     const Document &operator=(const Document &);

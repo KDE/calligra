@@ -226,9 +226,12 @@ QString WinWordDoc::generateFormat(
     const CHP *chp)
 {
     QString formatDef;
-
+kdError() <<"------ftc="<<chp->ftc<<endl;
+kdError() <<"      ascii="<<chp->ftcAscii<<" fe="<<chp->ftcFE<<" other="<<chp->ftcOther<<endl;
     formatDef.append("<COLOR red=\"0\" green=\"0\" blue=\"0\"/>\n");
-    formatDef.append("<FONT name=\"times\"/>\n");
+    formatDef.append("<FONT name=\"");
+    formatDef.append(getFont(chp->ftc));
+    formatDef.append("\"/>\n");
     formatDef.append("<SIZE value=\"");
     // TBD: where should we really get the size?
     formatDef.append(QString::number(chp->hps / 2));
@@ -546,7 +549,9 @@ void WinWordDoc::gotStyle(
         styleDef.append(m_styles.names[stiNormal]);
         styleDef.append("\"/>\n");
         styleDef.append(
-            "   <FLOW align=\"left\" />\n");
+            "   <FLOW align=\"");
+        styleDef.append(justification(style.getPap()->jc));
+        styleDef.append("\" />\n");
         styleDef.append(
             "   <COUNTER numberingtype=\"1\" type=\"1\" bullet=\"45\" lefttext=\"\" bulletfont=\"\" righttext=\".\" start=\"1\" depth=\"");
         styleDef.append(QString::number(styleIndex - stiLev1));
@@ -568,7 +573,9 @@ void WinWordDoc::gotStyle(
         styleDef.append(name);
         styleDef.append("\"/>\n");
         styleDef.append(
-            "   <FLOW align=\"left\" />\n");
+            "   <FLOW align=\"");
+        styleDef.append(justification(style.getPap()->jc));
+        styleDef.append("\" />\n");
         styleDef.append(
             "   <COUNTER numberingtype=\"0\" type=\"");
         styleDef.append(numbering(anld.nfc));
@@ -590,7 +597,9 @@ void WinWordDoc::gotStyle(
         styleDef.append(m_styles.names[stiNormal]);
         styleDef.append("\"/>\n");
         styleDef.append(
-            "   <FLOW align=\"left\" />\n");
+            "   <FLOW align=\"");
+        styleDef.append(justification(style.getPap()->jc));
+        styleDef.append("\" />\n");
 //        styleDef.append(
 //            "   <COUNTER numberingtype=\"2\" type=\"0\" bullet=\"45\" lefttext=\"\" bulletfont=\"\" righttext=\"\" start=\"1\" depth=\"0\" customdef=\"\"/>\n");
     }
@@ -801,6 +810,26 @@ QString WinWordDoc::colour(
     return result;
 }
 
+const char *WinWordDoc::justification(unsigned jc) const
+{
+    // Word justification codes are:
+    //
+    // 0 left justify
+    // 1 center
+    // 2 right justify
+    // 3 left and right justify
+
+    static const char *justificationTypes[4] =
+    {
+        "left",
+        "center",
+        "right",
+        "justify"
+    };
+
+    return justificationTypes[jc];
+}
+
 const char *WinWordDoc::list(unsigned nfc) const
 {
     static const char *listStyle[6] =
@@ -827,7 +856,7 @@ char WinWordDoc::numbering(unsigned nfc) const
     // 4 Lower case letter
     // 5 Ordinal
 
-    static unsigned numberingTypes[6] =
+    static char numberingTypes[6] =
     {
         '1', '5', '4', '3', '2', '6'
     };
