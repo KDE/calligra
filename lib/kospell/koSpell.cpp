@@ -57,7 +57,7 @@ KOSpell *KOSpell::createKoSpell( QWidget *parent, const QString &caption, QObjec
     }
 #endif
 #if 0
-    //for the futur :)
+    //for the future :)
     else if( clt == KOS_CLIENT_MYSPELL)
         getAvailDictsMyspell();
 #endif
