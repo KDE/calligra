@@ -36,6 +36,7 @@
 #include <koRect.h>
 #include <koSize.h>
 #include <koPoint.h>
+#include <kdebug.h>
 
 /******************************************************************/
 /* Class: KPObject                                                */
@@ -692,7 +693,7 @@ KP2DObject::KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillTy
     yfactor = _yfactor;
 
     if ( fillType == FT_GRADIENT )
-        gradient = new KPGradient( gColor1, gColor2, gType, QSize( 1, 1 ), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, KoSize( 1, 1 ), unbalanced, xfactor, yfactor );
     else
         gradient = 0;
 }
@@ -707,7 +708,7 @@ void KP2DObject::setSize( double _width, double _height )
     KPObject::setSize( _width, _height );
 
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize().toQSize() );
+        gradient->setSize( getSize());
 }
 
 void KP2DObject::resizeBy( double _dx, double _dy )
@@ -715,7 +716,7 @@ void KP2DObject::resizeBy( double _dx, double _dy )
     KPObject::resizeBy( _dx, _dy );
 
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize().toQSize() );
+        gradient->setSize( getSize() );
 }
 
 void KP2DObject::setFillType( FillType _fillType )
@@ -728,7 +729,7 @@ void KP2DObject::setFillType( FillType _fillType )
         gradient = 0;
     }
     if ( fillType == FT_GRADIENT && !gradient )
-        gradient = new KPGradient( gColor1, gColor2, gType, getSize().toQSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
 }
 
 QDomDocumentFragment KP2DObject::save( QDomDocument& doc,int offset )
@@ -865,7 +866,8 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
         _painter->setWorldMatrix( m, true );
         paint( _painter,_zoomHandler );
     }
-
+    if( gradient)
+        gradient->paint(_painter, _zoomHandler);
     _painter->restore();
 
     KPObject::draw( _painter, _zoomHandler, drawSelection );

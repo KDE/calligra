@@ -50,7 +50,7 @@ KPEllipseObject::KPEllipseObject( const QPen &_pen, const QBrush &_brush, FillTy
 
     if ( fillType == FT_GRADIENT )
     {
-        gradient = new KPGradient( gColor1, gColor2, gType, QSize( 1, 1 ), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, KoSize( 1, 1 ), unbalanced, xfactor, yfactor );
         redrawPix = true;
         pix.resize( getSize().toQSize() );
     }
@@ -71,7 +71,7 @@ void KPEllipseObject::setSize( double _width, double _height )
 
     if ( fillType == FT_GRADIENT && gradient )
     {
-        gradient->setSize( getSize().toQSize() );
+        gradient->setSize( getSize() );
         redrawPix = true;
         pix.resize( getSize().toQSize() );
     }
@@ -84,7 +84,7 @@ void KPEllipseObject::resizeBy( double _dx, double _dy )
 
     if ( fillType == FT_GRADIENT && gradient )
     {
-        gradient->setSize( getSize().toQSize() );
+        gradient->setSize( getSize() );
         redrawPix = true;
         pix.resize( getSize().toQSize() );
     }
@@ -102,7 +102,7 @@ void KPEllipseObject::setFillType( FillType _fillType )
     }
     if ( fillType == FT_GRADIENT && !gradient )
     {
-        gradient = new KPGradient( gColor1, gColor2, gType, getSize().toQSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
         redrawPix = true;
         pix.resize( getSize().toQSize() );
     }

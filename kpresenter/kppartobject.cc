@@ -57,7 +57,7 @@ void KPPartObject::rotate( float _angle )
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
                              getOrig().y() + getSize().height() / 2 ) );
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize().toQSize() );
+        gradient->setSize( getSize() );
 }
 
 /*======================== draw ==================================*/
@@ -68,7 +68,7 @@ void KPPartObject::setSize( double _width, double _height )
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
                                      getOrig().y() + getSize().height() / 2 ) );
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize().toQSize() );
+        gradient->setSize( getSize() );
 }
 
 /*======================== draw ==================================*/
@@ -109,7 +109,7 @@ void KPPartObject::resizeBy( double _dx, double _dy )
     child->setRotationPoint( QPoint( getOrig().x() + getSize().width() / 2,
                                      getOrig().y() + getSize().height() / 2 ) );
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize().toQSize() );
+        gradient->setSize( getSize() );
 }
 
 /*======================== draw ==================================*/
@@ -187,8 +187,10 @@ void KPPartObject::slot_changed(KoChild *child)
     QRect g = child->geometry();
     KPObject::setOrig( g.x(), g.y() );
     KPObject::setSize( g.width(), g.height() );
+#if 0 //FIXME
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( g.size() );
+#endif
 }
 
 /*================================================================*/

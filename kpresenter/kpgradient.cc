@@ -21,19 +21,25 @@
 #include <qpainter.h>
 #include <kpixmapeffect.h>
 #include <kdebug.h>
+#include <kozoomhandler.h>
+#include <koRect.h>
+#include <koSize.h>
+#include <koPoint.h>
+
 /******************************************************************/
 /* Class: KPGradient						  */
 /******************************************************************/
 
 /*======================= constructor ============================*/
 KPGradient::KPGradient( const QColor &_color1, const QColor &_color2, BCType _bcType,
-                        const QSize &_size, bool _unbalanced, int _xfactor, int _yfactor )
+                        const KoSize &_size, bool _unbalanced, int _xfactor, int _yfactor )
     : color1( _color1 ), color2( _color2 ), pixmap(), refCount( 0 ), unbalanced( _unbalanced ),
       xFactor( _xfactor ), yFactor( _yfactor )
 {
     bcType = _bcType;
-    pixmap.resize( _size );
-    paint();
+    gradientSize=_size;
+
+    pixmap.resize( _size.toQSize() );
 }
 
 
@@ -45,7 +51,6 @@ void KPGradient::init(const QColor &c1, const QColor &c2, BCType _type,
     unbalanced=_unbalanced;
     xFactor=xf;
     yFactor=yf;
-    paint();
 }
 
 /*====================== add reference ==========================*/
@@ -61,16 +66,17 @@ bool KPGradient::removeRef()
 }
 
 /*====================== paint ===================================*/
-void KPGradient::paint()
+void KPGradient::paint(QPainter */*_painter*/, KoZoomHandler*_zoomHandler)
 {
     QPainter painter;
+    pixmap.resize ( _zoomHandler->zoomItX(gradientSize.width()),_zoomHandler->zoomItY(gradientSize.height()) );
     switch ( bcType ) {
     case BCT_PLAIN:
 	painter.begin( &pixmap );
 
 	painter.setPen( Qt::NoPen );
 	painter.setBrush( color1 );
-	painter.drawRect( QRect( 0, 0, pixmap.size().width(), pixmap.size().height() ) );
+	painter.drawRect( QRect( 0, 0, _zoomHandler->zoomItX(gradientSize.width()), _zoomHandler->zoomItY(gradientSize.height() ) ));
 
 	painter.end();
 	break;
@@ -131,4 +137,9 @@ void KPGradient::paint()
 					       KPixmapEffect::PyramidGradient, xFactor, yFactor );
     } break;
     }
+}
+
+void KPGradient::setSize( const KoSize &_size )
+{
+        gradientSize=_size;
 }

@@ -69,8 +69,8 @@ PBPreview::PBPreview( QWidget* parent, const char* name, PaintType _paintType )
 void PBPreview::resizeEvent( QResizeEvent *e )
 {
     QFrame::resizeEvent( e );
-    if ( gradient )
-	gradient->setSize( QSize( contentsRect().width(),
+    if ( gradient )//FIXME
+	gradient->setSize( KoSize( contentsRect().width(),
 				  contentsRect().height() ) );
 }
 
@@ -361,7 +361,7 @@ void StyleDia::setupTab2()
     connect( yfactor, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( updateBrushConfiguration() ) );
 
-    gradient = new KPGradient( Qt::red, Qt::green, BCT_GHORZ, QSize( chooseBCol->width(), 25 ),
+    gradient = new KPGradient( Qt::red, Qt::green, BCT_GHORZ, KoSize( chooseBCol->width(), 25 ),
 			       false, 100, 100 );
 
     (void)new QWidget( gradientConfig );

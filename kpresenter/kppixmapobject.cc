@@ -72,7 +72,7 @@ void KPPixmapObject::setSize( double _width, double _height )
     //image = image.scale( ext.toQSize() );
     // TODO: copy create-gradient-on-demand from KPBackground
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize().toQSize() );
+        gradient->setSize( getSize() );
 }
 
 /*======================= set size ===============================*/
@@ -87,7 +87,7 @@ void KPPixmapObject::resizeBy( double _dx, double _dy )
 #endif
 
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize().toQSize() );
+        gradient->setSize( getSize() );
 }
 
 /*================================================================*/

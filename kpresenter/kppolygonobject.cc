@@ -60,7 +60,7 @@ KPPolygonObject::KPPolygonObject( const KoPointArray &_points, const KoSize &_si
     redrawPix = false;
 
     if ( fillType == FT_GRADIENT ) {
-        gradient = new KPGradient( gColor1, gColor2, gType, QSize( 1, 1 ), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, KoSize( 1, 1 ), unbalanced, xfactor, yfactor );
         redrawPix = true;
         pix.resize( getSize().toQSize() );
     }
@@ -162,7 +162,7 @@ void KPPolygonObject::setSize( double _width, double _height )
     updatePoints( fx, fy );
 
     if ( fillType == FT_GRADIENT && gradient ) {
-        gradient->setSize( getSize().toQSize() );
+        gradient->setSize( getSize() );
         redrawPix = true;
         pix.resize( getSize().toQSize() );
     }
@@ -184,7 +184,7 @@ void KPPolygonObject::resizeBy( double _dx, double _dy )
     updatePoints( fx, fy );
 
     if ( fillType == FT_GRADIENT && gradient ) {
-        gradient->setSize( getSize().toQSize() );
+        gradient->setSize( getSize() );
         redrawPix = true;
         pix.resize( getSize().toQSize() );
     }
@@ -217,7 +217,7 @@ void KPPolygonObject::setFillType( FillType _fillType )
     }
 
     if ( fillType == FT_GRADIENT && !gradient ) {
-        gradient = new KPGradient( gColor1, gColor2, gType, getSize().toQSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
         redrawPix = true;
         pix.resize( getSize().toQSize() );
     }

@@ -148,7 +148,7 @@ void KPTextObject::setSize( double _width, double _height )
     slotAvailableHeightNeeded();
     m_textobj->formatMore();
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize().toQSize() );
+        gradient->setSize( getSize() );
 }
 
 /*======================= set size ===============================*/
@@ -161,7 +161,7 @@ void KPTextObject::resizeBy( double _dx, double _dy )
     slotAvailableHeightNeeded();
     m_textobj->formatMore();
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize().toQSize() );
+        gradient->setSize( getSize() );
 }
 
 /*========================= save =================================*/
