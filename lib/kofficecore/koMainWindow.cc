@@ -693,17 +693,19 @@ void KoMainWindow::slotConfigureKeys()
 void KoMainWindow::slotConfigureToolbars()
 {
   KEditToolbar edit(factory());
-  edit.exec();
-  //refresh menubar
-  KXMLGUIFactory *factory = guiFactory();
-  // This gets plugged in even for embedded views
-  factory->plugActionList(d->m_activeView, "view_closeallviews",
-                          d->m_veryHackyActionList);
-  // This one only for root views
-  if(d->m_rootViews.findRef(d->m_activeView)!=-1)
-    factory->plugActionList(d->m_activeView, "view_split",
-                           d->m_splitViewActionList );
-  plugActionList( "toolbarlist", d->m_toolbarList );
+  if(edit.exec())
+    {
+      //refresh menubar
+      KXMLGUIFactory *factory = guiFactory();
+      // This gets plugged in even for embedded views
+      factory->plugActionList(d->m_activeView, "view_closeallviews",
+			      d->m_veryHackyActionList);
+      // This one only for root views
+      if(d->m_rootViews.findRef(d->m_activeView)!=-1)
+	factory->plugActionList(d->m_activeView, "view_split",
+				d->m_splitViewActionList );
+      plugActionList( "toolbarlist", d->m_toolbarList );
+    }
 }
 
 void KoMainWindow::slotToolbarToggled( bool toggle )
