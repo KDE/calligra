@@ -6479,7 +6479,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, QDomElement * rowStyle
         if ( height != -1 )
         {
             kdDebug() << "Setting row height to " << height << endl;
-            rowL->setMMHeight( height );
+            rowL->setHeight( height );
         }
         ++rowIndex;
     }

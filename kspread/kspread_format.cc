@@ -781,6 +781,7 @@ bool KSpreadFormat::loadOasisStyleProperties( const QDomElement & property, cons
             setAngle( -a + 1 );
     }
 
+    kdDebug()<<"property.hasAttribute( fo:text-align ) :"<<property.hasAttribute( "fo:text-align" )<<endl;
     if ( property.hasAttribute( "fo:text-align" ) )
     {
         QString s = property.attribute( "fo:text-align" );
@@ -793,6 +794,8 @@ bool KSpreadFormat::loadOasisStyleProperties( const QDomElement & property, cons
         else if ( s == "justify" ) // TODO in KSpread!
             setAlign( KSpreadFormat::Center );
     }
+
+    kdDebug()<<"property.hasAttribute( fo:background-color ) :"<<property.hasAttribute( "fo:background-color" )<<endl;
 
     if ( property.hasAttribute( "fo:background-color" ) )
         setBgColor( QColor( property.attribute( "fo:background-color" ) ) );
@@ -846,6 +849,8 @@ bool KSpreadFormat::loadOasisStyleProperties( const QDomElement & property, cons
 
     if ( property.hasAttribute( "fo:padding-left" ) )
         setIndent(  KoUnit::parseValue(property.attribute( "fo:padding-left" ) ) );
+
+    kdDebug()<<"property.hasAttribute( fo:vertical-align ) :"<<property.hasAttribute( "fo:vertical-align" )<<endl;
 
     if ( property.hasAttribute( "fo:vertical-align" ) )
     {
