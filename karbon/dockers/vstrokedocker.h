@@ -41,7 +41,7 @@ public:
 	 VStroke stroke() { return *m_stroke; }
   
 public slots:
-	virtual void setStroke( VStroke * );
+	virtual void setStroke( const VStroke * );
 
 private:
 	QHButtonGroup *m_capGroup;

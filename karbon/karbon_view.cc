@@ -1134,8 +1134,11 @@ KarbonView::selectionChanged()
 		m_groupObjects->setEnabled( !group && ( count > 1 ) );
 		m_ungroupObjects->setEnabled( group && ( count == 1 ) );
 		if( count == 1 )
+		{
 			m_strokeFillPreview->update( *part()->document().selection()->objects().getFirst()->stroke(),
 													*part()->document().selection()->objects().getFirst()->fill() );
+			m_strokeDocker->setStroke( part()->document().selection()->objects().getFirst()->stroke() );
+		}
 		else
 		{
 			VStroke stroke;

@@ -181,7 +181,7 @@ void VStrokeDocker::widthChanged()
 	updateCanvas();
 }
 
-void VStrokeDocker::setStroke( VStroke *stroke )
+void VStrokeDocker::setStroke( const VStroke *stroke )
 {
 	m_stroke = stroke;
 	updateDocker();
