@@ -93,16 +93,12 @@ void KPLineObject::loadOasis(const QDomElement &element, const KoStyleStack & st
     ext.setHeight( fabs( y1 - y2 ) );
 
     kdDebug()<<"KPLineObject::loadOasis(const QDomElement &element) : real position x :"<<x<<" y "<<y<< " width :"<<ext.width()<<" height :"<<ext.height()<<endl;
-#if 0
-    QDomElement linetype = doc.createElement( "LINETYPE" );
-    if ( ( x1 < x2 && y1 < y2 ) || ( x1 > x2 && y1 > y2 ) )
-        linetype.setAttribute( "value", 2 );
-    else
-        linetype.setAttribute( "value", 3 );
 
-    e.appendChild( linetype );
-    //todo line type
-#endif
+    if ( ( x1 < x2 && y1 < y2 ) || ( x1 > x2 && y1 > y2 ) )
+         lineType=LT_LU_RD;
+    else
+        lineType=LT_LD_RU;
+
     if ( styleStack.hasAttribute( "draw:marker-start" ) )
     {
         QString type = styleStack.attribute( "draw:marker-start" );
