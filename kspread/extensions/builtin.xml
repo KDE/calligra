@@ -1153,6 +1153,26 @@ parameters. You can multiply values given by a range multiply(A1:B5) or list of 
     </Function>
 
     <Function>
+      <Name>LOGn</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>A floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Base</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The LOGn() function returns the logarithm of x on base n.</Text>
+	<Syntax>LOGn( value ; base )</Syntax>
+	<Example>LOGn(12;10) equals 1.07918125</Example>
+	<Example>LOGn(12;2) equals 3.5849625</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
       <Name>log</Name>
       <Type>Float</Type>
       <Parameter>

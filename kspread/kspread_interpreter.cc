@@ -261,6 +261,7 @@ static bool kspreadfunc_atan( KSContext& context )
 
   return true;
 }
+
 static bool kspreadfunc_ln( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -275,6 +276,24 @@ static bool kspreadfunc_ln( KSContext& context )
 
   return true;
 }
+
+static bool kspreadfunc_logn( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "LOGn", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+
+  context.setValue( new KSValue( log( args[0]->doubleValue() ) /log(args[1]->intValue() )) );
+
+  return true;
+}
+
 
 static bool kspreadfunc_asin( KSContext& context )
 {
@@ -3843,6 +3862,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "EVEN", new KSValue( new KSBuiltinFunction( module, "EVEN", kspreadfunc_even ) ) );
   module->addObject( "ODD", new KSValue( new KSBuiltinFunction( module, "ODD", kspreadfunc_odd ) ) );
   module->addObject( "RANDBETWEEN", new KSValue( new KSBuiltinFunction( module, "RANDBETWEEN", kspreadfunc_randbetween ) ) );
+  module->addObject( "LOGn", new KSValue( new KSBuiltinFunction( module, "LOGn", kspreadfunc_logn ) ) );
   return module;
 }
 
