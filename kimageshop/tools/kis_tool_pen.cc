@@ -62,20 +62,19 @@ void PenTool::mousePress(QMouseEvent *e)
 }
 
 bool PenTool::paint(QPoint pos)
-{
-  /*
-  KisImage * img = m_pDoc->current();
+{  KisImage * img = m_pDoc->current();
+  KisLayer *lay = img->getCurrentLayer();
   if (!img)	return false;
+  if (!lay) return false;
+  if (!m_pBrush) return false;
 
-  if ( m_pDoc->isEmpty() )
-    return false;
+  // FIXME: Implement this for non-RGB modes.
+  if (!img->colorMode() == cm_RGB 
+	  && !img->colorMode() == cm_RGBA)
+	return false;
 
-  if (!m_pBrush)
-    return false;
-
-  QPoint start = pos - m_pBrush->hotSpot();
-  int startx = start.x();
-  int starty = start.y();
+  int startx = (pos - m_pBrush->hotSpot()).x();
+  int starty = (pos - m_pBrush->hotSpot()).y();
 
   QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->height());
 
@@ -89,46 +88,36 @@ bool PenTool::paint(QPoint pos)
   int ex = clipRect.right() - startx;
   int ey = clipRect.bottom() - starty;
 
-  KisLayer *lay = img->getCurrentLayer();
- 
-  uint dstPix;
-  uchar *sl, *ptr;
-  uchar bv, srcA, dstA;
-  int v;
+  uchar *sl;
+  uchar bv, invbv;
+  uchar r, g, b, a;
+  int   v;
 
   int red = m_pView->fgColor().R();
   int green = m_pView->fgColor().G();
   int blue = m_pView->fgColor().B();
 
+  bool alpha = (img->colorMode() == cm_RGBA);
+  
   for (int y = sy; y <= ey; y++)
     {
       sl = m_pBrush->scanline(y);
 
       for (int x = sx; x <= ex; x++)
-	{
-	  bv = *(sl + x);
-	  if (bv < 5) continue;
-
-	  ptr = (uchar*)&dstPix;
-	  *ptr++ = blue;
-	  *ptr++ = green;
-	  *ptr++ = red;
-
-	  lay->setPixel(startx + x, starty + y, dstPix);
-
-	  if (lay->hasAlphaChannel())
-	    {
-	      srcA = (uchar) lay->getAlpha(startx + x, starty + y);
-	      v = srcA + bv;
-	      if (v < 0 ) v = 0;
-	      if (v > 255 ) v = 255;
-	      dstA = (uchar) v;
-
-	      lay->setAlpha(startx + x, starty + y, (uint)dstA);
-	    }
-	}
+		{
+		  bv = *(sl + x);
+		  if (bv < 5) continue;
+		  
+		  invbv = 255 - bv;
+		  
+		  lay->setPixel(0, startx + x, starty + y, red);
+		  lay->setPixel(1, startx + x, starty + y, green);
+		  lay->setPixel(2, startx + x, starty + y, blue);
+		  
+		  if (alpha)
+			  lay->setPixel(3, startx + x, starty + y, 255);
+		} 
     }
-*/
   return true;
 }
 

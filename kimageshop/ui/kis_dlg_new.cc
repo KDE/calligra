@@ -67,7 +67,6 @@ NewDialog::NewDialog( QWidget *parent, const char *name )
 	cmode[cm_Greyscale] = new QRadioButton( "&Greyscale", cmodeg );
     cmode[cm_Greyscale]->setEnabled(false);
     cmode[cm_RGB] = new QRadioButton( "&RGB", cmodeg );
-    cmode[cm_RGB]->setEnabled(false);
 	cmode[cm_RGBA] = new QRadioButton( "RGB + &alpha channel", cmodeg );
 	cmode[cm_RGBA]->setChecked( true );
 	cmode[cm_CMYK] = new QRadioButton( "&CMYK", cmodeg );

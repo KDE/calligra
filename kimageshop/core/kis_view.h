@@ -25,7 +25,6 @@
 
 #include <koView.h>
 
-#include "kfloatingdialogowner.h"
 #include "kis_color.h"
 
 class KAction;

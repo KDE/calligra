@@ -334,18 +334,18 @@ void KisImage::compositeTile(int x, int y, KisLayer *dstLay, int dstTile)
 void KisImage::compositeImage(QRect r)
 {
   //KisTimer::start();
-  for(int y=0;y<yTiles;y++)
-    for(int x=0;x<xTiles;x++)
-      if (r.isNull() ||
-	  r.intersects(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE))) {
-		// set the alpha channel to opaque
-		memset(compose->channelMem(3, 0, 0, 0),255, TILE_SIZE*TILE_SIZE);
-		compositeTile(x,y, compose, 0);
-	
-		convertTileToPixmap(compose, 0, tiles[y*xTiles+x]);
-      }
-  //KisTimer::stop("compositeImage");
 
+  for(int y = 0; y < yTiles; y++)
+    for(int x = 0; x < xTiles; x++)
+      if (r.isNull() || r.intersects(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE)))
+		{
+		  if (m_cMode == cm_RGBA) // set the alpha channel to opaque
+			memset(compose->channelMem(3, 0, 0, 0),255, TILE_SIZE*TILE_SIZE);
+		  compositeTile(x,y, compose, 0);
+		  convertTileToPixmap(compose, 0, tiles[y*xTiles+x]);
+		}
+
+  //KisTimer::stop("compositeImage");
   emit updated(r);
 }
 
@@ -524,36 +524,45 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
 	sptr3 = srcLay->channelMem(3, srcTile, srcX, srcY);
 
 
-	uchar opac,invOpac;
-	for(int y = h; y; y--)
-	  {
-		for(int x = w; x; x--)
-		  {
-			// for prepultiply => invOpac=255-(*alpha*opacity)/255;
-			
-			if (m_cMode == cm_RGBA)
-			  {
-				opac = (*sptr3*opacity)/255;
-				invOpac=255-opac;
-			  }
-			else
+  uchar opac,invOpac;
+  for(int y = h; y; y--)
+	{
+	  for(int x = w; x; x--)
+		{
+		  // for prepultiply => invOpac=255-(*alpha*opacity)/255;
+		  
+		  if (m_cMode == cm_RGBA)
+			{
+			  opac = (*sptr3*opacity)/255;
 			  invOpac=255-opac;
 
-			*dptr0++ = (((*dptr0 * *dptr3)/255) * invOpac + *sptr0++ * opac)/255;
-			*dptr1++ = (((*dptr1 * *dptr3)/255) * invOpac + *sptr1++ * opac)/255;
-			*dptr2++ = (((*dptr2 * *dptr3)/255) * invOpac + *sptr2++ * opac)/255;
-			*dptr3++ = *sptr3 + *dptr3 - (*sptr3 * *dptr3)/255;
+			  *dptr0++ = (((*dptr0 * *dptr3)/255) * invOpac + *sptr0++ * opac)/255;
+			  *dptr1++ = (((*dptr1 * *dptr3)/255) * invOpac + *sptr1++ * opac)/255;
+			  *dptr2++ = (((*dptr2 * *dptr3)/255) * invOpac + *sptr2++ * opac)/255;
+			  *dptr3++ = *sptr3 + *dptr3 - (*sptr3 * *dptr3)/255;
 
+			}
+		  else
+			{
+			  invOpac = 255-opacity;
+			  *dptr0++ = (*dptr0  * invOpac + *sptr0++ * opacity)/255;
+			  *dptr1++ = (*dptr1  * invOpac + *sptr1++ * opacity)/255;
+			  *dptr2++ = (*dptr2  * invOpac + *sptr2++ * opacity)/255;
+			}		  
 		}
-		dptr0 += leadIn;
-		dptr1 += leadIn;
-		dptr2 += leadIn;
-		dptr3 += leadIn;
-		sptr0 += leadIn;
-		sptr1 += leadIn;
-		sptr2 += leadIn;
-		sptr3 += leadIn;
-	  }
+	  dptr0 += leadIn;
+	  dptr1 += leadIn;
+	  dptr2 += leadIn;
+	  sptr0 += leadIn;
+	  sptr1 += leadIn;
+	  sptr2 += leadIn;
+
+	  if (m_cMode == cm_RGBA)
+		{
+		  dptr3 += leadIn;
+		  sptr3 += leadIn;
+		}
+	}
 }
 
 KisLayer* KisImage::layerPtr( KisLayer *_layer )
