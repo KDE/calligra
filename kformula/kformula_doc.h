@@ -26,8 +26,6 @@ public:
     KFormulaDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
     ~KFormulaDoc();
 
-    virtual KoMainWindow* createShell();
-
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
 
     virtual bool initDoc();
@@ -51,7 +49,7 @@ public:
     QString name;
 
     /*    BasicElement *activeElement,*firstElement;
-	  KFormulaDoc *theFormula;
+          KFormulaDoc *theFormula;
     */
     /**
      * This is just a hack til view and doc are really split

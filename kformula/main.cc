@@ -18,26 +18,20 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kformula_doc.h"
-#include "kformula_shell.h"
-
 #include <koApplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
-#include "kformula_factory.h"
+#include <dcopclient.h>
+
+#include <kformula_factory.h>
 
 
 static const KCmdLineOptions options[]=
 {
-	{"+[file]", I18N_NOOP("File To Open"),0},
-	{0,0,0}
+        {"+[file]", I18N_NOOP("File To Open"),0},
+        {0,0,0}
 };
-
-extern "C"
-{
-    void* init_libkformulapart();
-}
 
 int main( int argc, char **argv )
 {
@@ -45,11 +39,10 @@ int main( int argc, char **argv )
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;
-
-    init_libkformulapart();
+    app.dcopClient()->attach();
+    app.dcopClient()->registerAs("kformula");
 
     if (!app.start())
-	return 1;
-
+        return 1;
     return app.exec();
 }
