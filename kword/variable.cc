@@ -81,7 +81,7 @@ void KWVariable::resize()
     QTextFormat *fmt = format();
     QString txt = text();
     width = 0;
-    for ( int i = 0 ; i < txt.length() ; ++i )
+    for ( int i = 0 ; i < (int)txt.length() ; ++i )
         width += fmt->width( txt, i );
     height = fmt->height();
     kdDebug() << "KWVariable::resize text=" << txt << " width=" << width << endl;
@@ -102,10 +102,25 @@ void KWVariable::draw( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*
         p->setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
         p->fillRect( x, y, width, h, cg.color( QColorGroup::Highlight ) );
     }
-
     p->setFont( f->font() );
+    int offset=0;
+    //code from qt3stuff
+    if ( f->vAlign() == QTextFormat::AlignSuperScript )
+    {
+        QFont tmpFont( p->font() );
+        tmpFont.setPointSize( ( tmpFont.pointSize() * 2 ) / 3 );
+        p->setFont( tmpFont );
+        offset=- ( h - p->fontMetrics().height() );
+    }
+    else if ( f->vAlign() == QTextFormat::AlignSubScript )
+    {
+        QFont tmpFont( p->font() );
+        tmpFont.setPointSize( ( tmpFont.pointSize() * 2 ) / 3 );
+        p->setFont( tmpFont );
+    }
+
     //kdDebug() << "KWVariable::draw bl=" << bl << " _y=" << _y << endl;
-    p->drawText( x, y /*+ _y*/ + bl, text() );
+    p->drawText( x, y /*+ _y*/ + bl+offset, text() );
     p->restore();
 }
 
