@@ -40,7 +40,7 @@
   <!ENTITY migrating SYSTEM "migrating.docbook">
   <!ENTITY chapnumb SYSTEM "chapnumb.docbook">
   <!ENTITY hline SYSTEM "horizline.docbook">
-  
+
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
 ]>
 
@@ -110,7 +110,7 @@ TODO:
 - Insert Page/Delete Page
 - wv2 for filters in installation
 - Create linked copy (MB and text)
-- create text box (MB and text) 
+- create text box (MB and text)
 - Convert table to text (MB and text)
 - Sort text (MB and text)
 - type anywhere cursor
@@ -303,7 +303,7 @@ formula editor.</para>
 <para>&kword; has support for Internet hyperlinks and email addresses.</para>
 </listitem>
 <listitem>
-<para>&kword; has the ability for proofreaders to make comments about portions of the text.  These 
+<para>&kword; has the ability for proofreaders to make comments about portions of the text.  These
 comments are stored in the &kword; file, and can be changed or deleted easily.</para>
 </listitem>
 <listitem>
@@ -403,7 +403,7 @@ or <application>Applixware</application>.)</entry>
 <para>These sections will help with the basic information. As other specific questions or situations arise, the
 other sections of this manual can be used as a reference.</para>
 
-<para>Obviously this will not cover everyones needs.  Please use it as a guide to help 
+<para>Obviously this will not cover everyones needs.  Please use it as a guide to help
 determine which parts of the manual will be helpful to read before you begin using &kword;.</para>
 
 </sect1>
@@ -423,7 +423,7 @@ determine which parts of the manual will be helpful to read before you begin usi
 <para>This section of the guide is designed to help the user with the format and layout of their
 documents.  The section will begin with information on changing the size and shape of the page
 and the margins, and work progressively through smaller and smaller
-blocks of text (frames, then paragraphs, then characters). At each level, all of the format and 
+blocks of text (frames, then paragraphs, then characters). At each level, all of the format and
 layout options will be explained.</para>
 
 <para>After discussing the formatting of individual characters, the manual will elaborate on styles
@@ -456,7 +456,7 @@ insert other types of &koffice; data into a document.</para>
 <para>&kword; can store information about the author and the document in the same file as the text and data of the document.</para>
 <para>Entering this information into &kword;, you can do two things:</para>
 <orderedlist>
-<listitem><para>This information will always be available for reference.  This is especially important in situations where 
+<listitem><para>This information will always be available for reference.  This is especially important in situations where
 there are many possible authors (employees) and hundreds (or thousands) of documents.</para></listitem>
 <listitem><para>The information supplied here, can be inserted automatically into the document as a
 <link linkend="variables">document variable</link>.</para></listitem>
@@ -491,7 +491,7 @@ If any document variables were changed, &kword; will update their values through
 
 <!-- **************************************************************************************************** -->
 <chapter id="advanced-topics"><title>Advanced Topics</title>
-<para>The sections that are included in this chapter are for advanced users.  The instructions for these sections 
+<para>The sections that are included in this chapter are for advanced users.  The instructions for these sections
 will assume you are familiar with the basic operation of &kword;.</para>
 &struct;
 &chapnumb;
@@ -592,7 +592,7 @@ on the toolbar.</para></listitem>
 the page numbers on the outside corners of the pages.  </para>
 <para>If you want page numbers on the bottom of the pages, you can use <link linkend="headers-and-footers">Footers</link> instead of
 headers in your document.</para>
-<para>To adjust the look of the tables, including where their margins are, see the section entitled 
+<para>To adjust the look of the tables, including where their margins are, see the section entitled
 <link linkend="tables">Tables</link>.</para>
 </sect1>
 
@@ -601,7 +601,7 @@ headers in your document.</para>
 <indexterm><primary>creating a PDF file</primary></indexterm>
 <indexterm><primary>PDF, creating</primary></indexterm>
 
-<para>&kword; differs slightly from other word processors here.  Instead of saving your file as a 
+<para>&kword; differs slightly from other word processors here.  Instead of saving your file as a
 <literal role="extension">.pdf</literal> file, you <emphasis>print</emphasis> your file to create the
 <literal role="extension">.pdf</literal> file.</para>
 <para>When you are ready to create a <literal role="extension">.pdf</literal> file from your document:</para>
@@ -619,7 +619,7 @@ from the menubar.</para>
 <para>Your PDF file will be created and saved at the location specified in <guilabel>Output file</guilabel>.  This file can be uploaded
 onto any website.</para>
 <para>For more information on printing in &kde;, visit <ulink url="http://printing.kde.org">The KDE Print web page</ulink>.</para>
-<para>For more information on <literal role="extension">.pdf</literal> files, visit 
+<para>For more information on <literal role="extension">.pdf</literal> files, visit
 <ulink url="http://www.pdfzone.com/resources/index.html">The PDFZone Resources page</ulink></para>
 </sect1>
 
@@ -630,7 +630,7 @@ onto any website.</para>
 <link linkend="template-delete-group">Removing template group</link>.</para>
 </sect1>
 
-<!-- 
+<!--
 <sect1 id="qd-watermark">
 <title>How do I create a watermark for my document</title>
 <para>To be written</para>
@@ -654,7 +654,7 @@ onto any website.</para>
 box, but I know I saved it there. Why can I not see it?</para>
 </question>
 <answer>
-<para>Check to make sure that you have selected the correct file type in the <link linkend="file-dialog">open dialog box</link>.  
+<para>Check to make sure that you have selected the correct file type in the <link linkend="file-dialog">open dialog box</link>.
 If you save a file in one format, but ask
 &kword; to show you the files from another format, you will not see your saved file.</para>
 </answer>
@@ -679,7 +679,7 @@ What is a <literal role="extension">kwt</literal> file?</para>
 <para>For updates to &kword; you should always check the following sites:</para>
 <para>The &koffice; website (<ulink url="http://koffice.kde.org">http://koffice.kde.org</ulink>) is the first place to look for updates.
 Any software updates, bug fixes or announcements of new releases of &koffice; will be found here. </para>
-<para>KDE Apps (<ulink url="http://apps.kde.com">http://apps.kde.com</ulink>) is a good place to find software for &kde; in general. 
+<para>KDE Apps (<ulink url="http://kde-apps.org">http://kde-apps.org</ulink>) is a good place to find software for &kde; in general.
 To locate updates and additions to &kword; choose the category <emphasis>Office: Suites: KOffice</emphasis>.  Here you can find
 additional templates, and other updates that are developed outside of the &kword; development team.</para>
 </answer>
@@ -699,8 +699,8 @@ additional templates, and other updates that are developed outside of the &kword
 <para>Can I use &kword; to read &Microsoft; Word files?</para>
 </question>
 <answer>
-<para>&kword; does have the ability to import &Microsoft; Word files.  The conversion process is not perfect, 
-and some formatting information will be lost.  For more details please refer to the 
+<para>&kword; does have the ability to import &Microsoft; Word files.  The conversion process is not perfect,
+and some formatting information will be lost.  For more details please refer to the
 <link linkend="filters-msword97">&Microsoft; Word 97/2000</link> filter.</para>
 </answer>
 </qandaentry>
@@ -710,10 +710,10 @@ and some formatting information will be lost.  For more details please refer to 
 <para>Can I save my &kword; document as a &Microsoft; Word file?</para>
 </question>
 <answer>
-<para>At the moment, &kword; does not yet provide support for exporting to &Microsoft; Word 
-documents. If you need to exchange documents with MS Word, 
-you should use <link linkend="filters-rtf">Rich Text Format</link> as an intermediate file format.  
-Rich Text Format files 
+<para>At the moment, &kword; does not yet provide support for exporting to &Microsoft; Word
+documents. If you need to exchange documents with MS Word,
+you should use <link linkend="filters-rtf">Rich Text Format</link> as an intermediate file format.
+Rich Text Format files
 are converted well by both &Microsoft; Word and &kword;,</para>
 </answer>
 </qandaentry>
@@ -723,18 +723,18 @@ are converted well by both &Microsoft; Word and &kword;,</para>
 <para>Can I save my &kword; document as a PDF file?</para>
 </question>
 <answer>
-<para>Yes.  Instructions on creating a PDF file are found 
+<para>Yes.  Instructions on creating a PDF file are found
 <link linkend="qd-pdf">here</link>.</para>
 </answer>
 </qandaentry>
 
 <qandaentry>
 <question id="exchangedoc">
-<para>I have to exchange documents with a friend who does not have &kword;; what is 
+<para>I have to exchange documents with a friend who does not have &kword;; what is
 the best way to do this ?</para>
 </question>
 <answer>
-<para>What you and your friend need to do is agree on a file format that both word processors 
+<para>What you and your friend need to do is agree on a file format that both word processors
 can read and write effectively.  <link linkend="filters-rtf">Rich Text Font</link> is probably a good choice.</para>
 </answer>
 </qandaentry>
@@ -866,7 +866,7 @@ QT 3.0.5 to take advantage of all the bug fixes that have occurred.</para></tip>
 url="http://www.kde.org">&kde; web page.</ulink></para>
 <tip><para>While &koffice; will compile and run with any version of &kde; 3.0.0 or later, it is recommended that you compile and install
 &kde; 3.0.2 to take advantage of all the bug fixes that have occurred.</para>
-<para>It is also recommended that you install the arts package 1.0 from the 
+<para>It is also recommended that you install the arts package 1.0 from the
 <ulink url="ftp://ftp.kde.org/pub/kde/">&kde; &FTP; site</ulink>.</para></tip>
 </listitem>
 
@@ -890,7 +890,7 @@ the QT toolkit compiled with SQL support.  To add SQL support (as a plugin), sim
 <sect1 id="compilation">
 <title>Compilation and Installation</title>
 
-<para>Complete instructions on installing &koffice; from source are located at 
+<para>Complete instructions on installing &koffice; from source are located at
 <ulink url="http://koffice.org/install-source.phtml">http://koffice.org/install-source.phtml</ulink>.</para>
 
 </sect1>
@@ -986,94 +986,94 @@ file format, it is <emphasis>exporting</emphasis> the data.</para>
 
 <para>&kword; comes with the following filters:</para>
 <sect2 id="filters-abiword"><title>Abiword</title>
-<para>&kword; can open and save AbiWord documents. Most AbiWord features are 
+<para>&kword; can open and save AbiWord documents. Most AbiWord features are
 supported.</para>
 
 <para>Bookmarks (and the references to them), headers/footers, lists, columns and language settings are not supported.</para>
 
-<para>Character styles and styles defined by other styles are not supported in the export filter, and have only partial support in the 
+<para>Character styles and styles defined by other styles are not supported in the export filter, and have only partial support in the
 import filter.  Default tabulator settings and fields are only partially supported.</para>
 
 
-<para> For more detailed information see the 
+<para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/abiword.phtml">Abiword filter table</ulink></para>
 </sect2>
 
 <sect2 id="filters-amipro"><title>AmiPro</title>
 
-<para>&kword; can read and write simple AmiPro documents. 
+<para>&kword; can read and write simple AmiPro documents.
 Only formatted text, paragraph, and styles are supported. </para>
 
-<para>More advanced features such as frames, embedded images and equations are not 
+<para>More advanced features such as frames, embedded images and equations are not
 supported.</para>
 
-<note><para>WordPro, the latest wordprocessor from Lotus, uses a different 
-format than AmiPro. Therefore, if you want to read WordPro documents from 
+<note><para>WordPro, the latest wordprocessor from Lotus, uses a different
+format than AmiPro. Therefore, if you want to read WordPro documents from
 &kword;, you should save it in AmiPro format.</para></note>
 
-<para> For more detailed information see the 
+<para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/amipro.phtml">AmiPro filter table</ulink></para>
 </sect2>
 
 <sect2 id="filters-applixword"><title>Applix Word</title>
 
-<para>&kword; can read ApplixWord documents quite well; however, there are limitations: 
-text formatting, colors, paragraphs, and special characters are 
+<para>&kword; can read ApplixWord documents quite well; however, there are limitations:
+text formatting, colors, paragraphs, and special characters are
 supported; styles and inline images, though, will be lost during the conversion.</para>
 
-<para> For more detailed information see the 
+<para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/applixword.phtml">Applix Word filter table</ulink></para>
 </sect2>
 
 <sect2 id="filters-docbook"><title>Docbook</title>
 
-<para>&kword; can save DocBook documents in the SGML version only. It saves texts, 
-lists, pictures, tables and hyperlinks.  Only the simplest formatting (bold 
+<para>&kword; can save DocBook documents in the SGML version only. It saves texts,
+lists, pictures, tables and hyperlinks.  Only the simplest formatting (bold
 and italic) are supported. Pictures are saved into a sub-directory.</para>
 
 <para>&kword; cannot load any DocBook document. </para>
 
-<para> For more detailed information see the 
+<para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/docbook.phtml">Docbook filter table</ulink></para>
 </sect2>
 
 <sect2 id="filters-hancom"><title>Hancom Word</title>
 
-<para>&kword; can read HancomWord document produced with HancomWord 5.2 or 6. However, 
-&kword; does not yet recognize text formatting inside the document, hence the 
+<para>&kword; can read HancomWord document produced with HancomWord 5.2 or 6. However,
+&kword; does not yet recognize text formatting inside the document, hence the
 text will be imported but without formatting at all.</para>
 
-<para> For more detailed information see the 
+<para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/hancomword.phtml">Hancom Word filter table</ulink></para>
 </sect2>
 
 <sect2 id="filters-html"><title>HTML</title>
 
-<para>&kword; can read simple HTML documents. Only simple formatting is 
+<para>&kword; can read simple HTML documents. Only simple formatting is
 supported.</para>
 
-<para>&kword; can save HTML documents. There will be a dialog to specify which kind of 
+<para>&kword; can save HTML documents. There will be a dialog to specify which kind of
 HTML should be used. In this dialog you can choose one of three modes:</para>
 <itemizedlist>
 <listitem><para>Basic</para></listitem>
 <listitem><para>Normal</para></listitem>
 <listitem><para>Enhanced</para></listitem>
 </itemizedlist>
- 
- <para> All three modes support text, tables, 
+
+ <para> All three modes support text, tables,
 images, hyperlinks and lists.</para>
- 
-<para>The <emphasis>Basic</emphasis> mode supports only the most basic 
+
+<para>The <emphasis>Basic</emphasis> mode supports only the most basic
 formatting, and it is intended for exporting only the document structure.</para>
- 
+
 <para>The <emphasis>Normal</emphasis> mode supports common formatting of text. </para>
- 
-<para>The <emphasis>Enhanced</emphasis> mode is the most 
-complete mode and uses also CSS2; hence, styles and more-advanced formatting are 
+
+<para>The <emphasis>Enhanced</emphasis> mode is the most
+complete mode and uses also CSS2; hence, styles and more-advanced formatting are
 supported.</para>
 
 
-<para> For more detailed information see the 
+<para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/html.phtml">HTML filter table</ulink></para>
 </sect2>
 
@@ -1084,60 +1084,60 @@ supported.</para>
 <para>&kword; can export to text to LaTeX documents.  Formulas, pictures, and simple tables are partially supported.  </para>
 <para>Kword is used only as a text editor and does not function as a WYSIWYG editor for LaTeX documents. </para>
 
-<para> For more detailed information see the 
+<para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/latex.phtml">LaTeX filter table</ulink></para>
 </sect2>
 
 <sect2 id="filters-msword97"><title>&Microsoft; Word 97/2000</title>
 
-<para>&kword; can read all text from &Microsoft; Word files.  Basic text formatting 
-(bold, italics, etc) are preserved.  Numbered headings, lists, built-in colors, tables, and internationalization support 
+<para>&kword; can read all text from &Microsoft; Word files.  Basic text formatting
+(bold, italics, etc) are preserved.  Numbered headings, lists, built-in colors, tables, and internationalization support
 are nearly complete.</para>
 
 <para>Many other features (headers, footers, embedded objects, etc) are not supported.</para>
 <para>&kword; cannot write &Microsoft; Word 97/200 files.</para>
 
-<para> For more detailed information see the 
+<para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/msword97.phtml">&Microsoft; Word 97/2000 filter table</ulink></para>
 </sect2>
 
 <sect2 id="filters-mswrite"><title>&Microsoft; Write</title>
 
-<para>&Microsoft; Write files usually end with extension .WRI.  It is the format used by &Microsoft; Write, 
-a very simple word processor which first appears in &Microsoft; &Windows; 3.1. &kword; can 
-read &Microsoft; Write documents fairly well.</para> 
+<para>&Microsoft; Write files usually end with extension .WRI.  It is the format used by &Microsoft; Write,
+a very simple word processor which first appears in &Microsoft; &Windows; 3.1. &kword; can
+read &Microsoft; Write documents fairly well.</para>
 
-<para>&kword; is not able to save 
+<para>&kword; is not able to save
 the document to &Microsoft; Write format.</para>
 
-<para> For more detailed information see the 
+<para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/mswrite.phtml">&Microsoft; Write filter table</ulink></para>
 </sect2>
 
 <sect2 id="filters-palmdoc"><title>PalmDoc</title>
 
-<para>PalmDoc is the standard compressed document format for use with 
+<para>PalmDoc is the standard compressed document format for use with
 Palm-compatible device. </para>
 
 <para>&kword; is able to read and write PalmDoc files, even with compression. The PalmDoc
-format does not specify text formatting, so all character formatting (bold, italics, etc) is lost when exporting to 
+format does not specify text formatting, so all character formatting (bold, italics, etc) is lost when exporting to
 this format.</para>
 
-<note><para>In order to read PalmDoc files on your handheld, you will need a reader.  Three common readers are the 
-<ulink url="http://gutenpalm.sourceforge.net">Weasel Reader</ulink>, <ulink url="http://www.aportis.com">AportisDoc</ulink>, 
+<note><para>In order to read PalmDoc files on your handheld, you will need a reader.  Three common readers are the
+<ulink url="http://gutenpalm.sourceforge.net">Weasel Reader</ulink>, <ulink url="http://www.aportis.com">AportisDoc</ulink>,
 or <ulink url="http://www.isilo.com">iSilo</ulink>.</para></note>
 
-<para> For more detailed information see the 
+<para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/palmdoc.phtml">PalmDoc filter table</ulink></para>
 </sect2>
 
 <sect2 id="filters-plaintext"><title>Plain Text (<glossterm linkend="defascii">ASCII</glossterm> Text)</title>
 
-<para>&kword; can save the document in plain text format, and also load plain text 
-document. When saving or loading, there will be a dialog to specify text 
+<para>&kword; can save the document in plain text format, and also load plain text
+document. When saving or loading, there will be a dialog to specify text
 encoding options.</para>
 
-<para> For more detailed information see the 
+<para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/plaintext.phtml">Plain Text filter table</ulink></para>
 </sect2>
 
@@ -1146,39 +1146,39 @@ encoding options.</para>
 <para>&kword; can open and save RTF documents. Most RTF features are already supported.</para>
 <para>Links, footnotes, multiple columns, and inline images are not supported.</para>
 
-<para> For more detailed information see the 
+<para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/rtf.phtml">Rich Text Format filter table</ulink></para>
 </sect2>
 
 <sect2 id="filters-wml"><title>Wireless Markup Language</title>
 
-<para>WML (Wireless Mark-up Language) is the mark-up language used to deliver 
-content to mobile devices. WML is like a mobile 
+<para>WML (Wireless Mark-up Language) is the mark-up language used to deliver
+content to mobile devices. WML is like a mobile
 version of HTML.</para>
 
-<para>&kword; can read from and save to WML format files and already understand most WML 
+<para>&kword; can read from and save to WML format files and already understand most WML
 tags.</para>
- 
-<para>There is no support for WBMP (Wireless Bitmap), which is the 
+
+<para>There is no support for WBMP (Wireless Bitmap), which is the
 monochrome image format used as inline image inside WML documents.</para>
 
-<para> For more detailed information see the 
+<para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/wml.phtml">Wireless Markup Language filter table</ulink></para>
 </sect2>
 
 <sect2 id="filters-wp5"><title>&Wordperfect;</title>
 
-<para>&kword; can read and write &Wordperfect; documents, starting from &Wordperfect; 
+<para>&kword; can read and write &Wordperfect; documents, starting from &Wordperfect;
 version 5.1, and including the latest &Wordperfect; 2002.</para>
 
-<para>The filter is still in development, only a subset of 
-&Wordperfect; features are supported including text formatting, &Wordperfect; 
+<para>The filter is still in development, only a subset of
+&Wordperfect; features are supported including text formatting, &Wordperfect;
 character sets, and paragraph settings.</para>
 
-<para>&Wordperfect; 4.x format or earlier versions are not supported. There is no support 
+<para>&Wordperfect; 4.x format or earlier versions are not supported. There is no support
 for styles, frames, or graphics (WPG).</para>
 
-<para> For more detailed information see the 
+<para> For more detailed information see the
 <ulink url="http://www.koffice.org/filters/1.2/kword/wp.phtml">&Wordperfect; filter table</ulink></para>
 </sect2>
 
@@ -1572,7 +1572,7 @@ refer to <emphasis>binaries</emphasis> we mean the executable &kword;
 program.  While computers have no difficulties reading binary files,
 they are not easily understood by people.  Compare to <glossterm
 linkend="defsourcecode">Source Code</glossterm>.</para>
-</glossdef> 
+</glossdef>
 </glossentry>
 
 <glossentry id="defbitmap">
@@ -1582,7 +1582,7 @@ linkend="defsourcecode">Source Code</glossterm>.</para>
 file is very good for photographs and complex drawings. The downside of
 using bitmap images, is that when you change the size of the image on
 the page, there is a loss of detail. The file names of such pictures
-often end in <emphasis>jpeg</emphasis>, <emphasis>png</emphasis> or 
+often end in <emphasis>jpeg</emphasis>, <emphasis>png</emphasis> or
 <emphasis>gif</emphasis>. Compare to <glossterm
 linkend="defclipart">Clipart</glossterm>.</para>
 </glossdef>
@@ -1650,7 +1650,7 @@ linkend="variables">Inserting Variables</link>.</para>
 <glossterm>DEB</glossterm>
 <glossdef>
 <para>This is a binary file format that is used by Debian and Debian-based
-distributions.  This will be the suffix of a file 
+distributions.  This will be the suffix of a file
 specifically for
 these distributions.  An example would be
 <filename>koffice-1.2.deb</filename>. For more information on installing
@@ -1716,7 +1716,7 @@ mask will try to filter out all files that are not for
 <application>Word</application>), and <emphasis>filters</emphasis> out
 the text and formatting information and converts that information into a
 &kword; document.  Filters are used to read and write files for other
-programs.  More information on the filters included with &kword; 
+programs.  More information on the filters included with &kword;
 is available in the section entitled <link linkend="filters">Import/Export Filters</link>.</para>
 </glossdef>
 </glossentry>
@@ -1804,12 +1804,12 @@ Web.</para>
 <glossentry id="definlineframe">
 <glossterm>Inline frame</glossterm>
 <glossdef>
-<para>An inline frame is a special frame type in &kword;.  Inline frames are associated with a position in a text frame.  
-&kword; will keep the inline frame near the specified text.  You will not be able to determine where exactly on a page the 
+<para>An inline frame is a special frame type in &kword;.  Inline frames are associated with a position in a text frame.
+&kword; will keep the inline frame near the specified text.  You will not be able to determine where exactly on a page the
 frame will appear, but it will be located close to the specified text.</para>
-<para>If you insert or delete text in front of the specified text, the inline image will move up or down the page to follow the 
+<para>If you insert or delete text in front of the specified text, the inline image will move up or down the page to follow the
 specified text</para>
-<para><tip><para>Inline frames are very useful when they contain a picture, graph or figure.  Simply place the inline frame within the 
+<para><tip><para>Inline frames are very useful when they contain a picture, graph or figure.  Simply place the inline frame within the
 text which describes the object, and &kword; will make sure both the text and the inline frame are always near each other.</para></tip></para>
 </glossdef>
 </glossentry>
@@ -1822,7 +1822,7 @@ required for &kword; to operate.  The K Desktop Environment is a user
 interface which allows users to manipulate files and operate programs
 graphically.  For more information, please visit <ulink
 url="http://www.kde.org">www.kde.org</ulink>.</para>
-</glossdef> 
+</glossdef>
 </glossentry>
 
 <glossentry id="defkeybinding">
@@ -1858,7 +1858,7 @@ with <glossterm linkend="defportrait">Portrait</glossterm>.</para>
 <glossterm>Menubar</glossterm>
 <glossdef>
 <para>The menubar is located at the top of the &kword; screen.  You can
-use it to access all features of &kword;.</para> 
+use it to access all features of &kword;.</para>
 <para>Menubar: <inlinemediaobject><imageobject> <imagedata
 fileref="basic.png" format="PNG"
 align="center"/></imageobject></inlinemediaobject></para>
@@ -1971,7 +1971,7 @@ align="center"/></imageobject></inlinemediaobject></para>
 <glossentry id="defurl">
 <glossterm>&URL;</glossterm>
 <glossdef>
-<para>&URL; is an abbreviation for Universal Resource Locater.  A universal resource locater is 
+<para>&URL; is an abbreviation for Universal Resource Locater.  A universal resource locater is
 the technical term for what is commonly referred to as a websites address.</para>
 <para>Examples of &URL;s include <ulink url="http://www.koffice.org">http://www.koffice.org</ulink> and
 <ulink url="http://www.kde.org">http://www.kde.org</ulink></para>
@@ -1981,7 +1981,7 @@ the technical term for what is commonly referred to as a websites address.</para
 <glossentry id="defvalue">
 <glossterm><acronym>Value (color)</acronym></glossterm>
 <glossdef>
-<para>Color value refers to how bright or dark a color is.  Colors with low value are more black in appearance.  Colors with high 
+<para>Color value refers to how bright or dark a color is.  Colors with low value are more black in appearance.  Colors with high
 value are more richly colored.</para>
 <para>This is a set of four red dots which increase in value from left to right.
 <inlinemediaobject><imageobject><imagedata
