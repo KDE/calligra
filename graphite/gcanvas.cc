@@ -29,7 +29,7 @@
 //#define GRAPHITE_DEBUG_PAINTING 1
 
 GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
-    : QScrollView(view, "GCanvas", Qt::WNorthWestGravity | Qt::WResizeNoErase | Qt::WRepaintNoErase),
+    : QScrollView(view, "GCanvas", Qt::WStaticContents/*WNorthWestGravity*/ | Qt::WResizeNoErase | Qt::WRepaintNoErase),
       m_doc(doc), m_view(view), m_vertical(0L), m_horizontal(0L), m_eraseWidth(0), m_eraseHeight(0),
       m_haveFocus(false) {
 

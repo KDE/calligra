@@ -22,7 +22,7 @@
 
 #include <qstring.h>
 #include "kptduration.h"
-#include <qlist.h>
+#include <qptrlist.h>
 #include "defs.h"
 
 class KPTRisk;
@@ -81,9 +81,9 @@ class KPTResourceGroup {
 	
     private:
         QString m_name;
-        QList<KPTResource> m_resources;
-        QList<KPTRisk> m_risks;
-        QList<KPTResourceGroup> m_requires;
+        QPtrList<KPTResource> m_resources;
+        QPtrList<KPTRisk> m_risks;
+        QPtrList<KPTResourceGroup> m_requires;
 };
 
 /**
@@ -116,11 +116,11 @@ class KPTResource {
         KPTDuration *getBestAvailableTime(KPTDuration duration);
 
     private:
-        QList<KPTAppointment> m_appointments;
+        QPtrList<KPTAppointment> m_appointments;
         QString m_name;
         KPTDuration m_availableFrom;
         KPTDuration m_availableUntil;
-        QList<KPTDuration> m_workingHours;
+        QPtrList<KPTDuration> m_workingHours;
 };
 
 /**
@@ -158,8 +158,8 @@ class KPTAppointment {
         KPTResource *m_resource;
         KPTDuration m_repeatInterval;
         int m_repeatCount;
-        QList<KPTDuration> m_extraRepeats;
-        QList<KPTDuration> m_skipRepeats;
+        QPtrList<KPTDuration> m_extraRepeats;
+        QPtrList<KPTDuration> m_skipRepeats;
 };
 
 

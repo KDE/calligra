@@ -31,13 +31,13 @@ KPTProject::~KPTProject() {
 
 KPTDuration *KPTProject::getExpectedDuration() {
     KPTDuration *ed= new KPTDuration();
-    QListIterator<KPTNode> it(m_nodes); // iterator for employee list
+    QPtrListIterator<KPTNode> it(m_nodes); // iterator for employee list
     for ( ; it.current(); ++it ) {
         KPTNode *node = it.current();
         KPTDuration *childDuration = node->getExpectedDuration();
         ed->add(*childDuration);
         delete childDuration;
-    } 
+    }
     return ed;
 }
 
@@ -87,7 +87,7 @@ void KPTProject::forward_pass( std::list<KPTNode*> nodelist ){
      * should not be followed for a start node */
     if( (*i_node)->owner_node()->end_node() == *i_node )
       /* Go through relations from n, propagating values */
-      for( QListIterator<KPTRelation> i( n.owner_node()->m_dependChildNodes );
+      for( QPtrListIterator<KPTRelation> i( n.owner_node()->m_dependChildNodes );
        i.current(); ++i ){
     /* add new nodes if necessary */
     if( i.current()->child()->start_node()->predecessors.unvisited
@@ -153,7 +153,7 @@ void KPTProject::backward_pass( std::list<KPTNode*> nodelist ){
      * should not be followed for a end node */
     if( (*i_node)->owner_node()->start_node() == *i_node )
       /* Go through relations from n, propagating values */
-      for( QListIterator<KPTRelation> i( n.owner_node()->m_dependParentNodes );
+      for( QPtrListIterator<KPTRelation> i( n.owner_node()->m_dependParentNodes );
        i.current(); ++i ){
     /* add new nodes if necessary */
     if( i.current()->parent()->end_node()->successors.unvisited

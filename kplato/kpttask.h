@@ -64,14 +64,14 @@ class KPTTask : public KPTNode {
         /** The resources are provided as a list, each having an associated risk.
             we return the resource here which has a pointer to the risk
          */
-        const QList<KPTResourceGroup> &resourceIterator() const { return m_resource; }
+        const QPtrList<KPTResourceGroup> &resourceIterator() const { return m_resource; }
         virtual void addResource( KPTResourceGroup *resource );
         virtual void insertResource( unsigned int index, KPTResourceGroup *resource );
         void removeResource( KPTResourceGroup *resource );
         void removeResource( int number );
 
   private:
-        QList<KPTResourceGroup> m_resource;
+        QPtrList<KPTResourceGroup> m_resource;
 
 };
 #endif

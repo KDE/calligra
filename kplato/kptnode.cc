@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 #include "kptnode.h"
-#include <qlist.h>
+#include <qptrlist.h>
 
 KPTNode::KPTNode() : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
     m_name="";
@@ -155,14 +155,14 @@ void KPTNode::initialise_arcs() {
     end_node()->predecessors.number = 0;
   }
   // Now do the same for each subnode
-  for( QListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
+  for( QPtrListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
       i.current()->initialise_arcs();
 }
 
 void KPTNode::set_up_arcs() {
   // Call this function for all nodes by recursive descent
   // and set up implicit arcs.
-  for( QListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
+  for( QPtrListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
     {
       i.current()->set_up_arcs();
       // Now add implicit arcs:
@@ -187,7 +187,7 @@ void KPTNode::set_up_arcs() {
 
 void KPTNode::set_unvisited_values() {
   // Call this function for all nodes by recursive descent
-  for( QListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
+  for( QPtrListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
     {
       i.current()->set_unvisited_values();
     }
@@ -211,7 +211,7 @@ void KPTNode::set_pert_values( const KPTDuration& time,
   start_node()->*start = time;
   if( start_node() != end_node() )
     end_node()->*start = time;
-  for( QListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
+  for( QPtrListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
     i.current()->set_pert_values( time, start );
 }
 

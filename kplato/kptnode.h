@@ -20,8 +20,8 @@
 #ifndef kptnode_h
 #define kptnode_h
 
-#include<vector>
-#include <qlist.h> 
+#include <vector>
+#include <qptrlist.h> 
 #include <qstring.h> 
 #include "defs.h"
 #include "kptrelation.h"
@@ -51,7 +51,7 @@ class KPTNode {
         // Child nodes are things like subtasks, basically a task can exists of several sub-tasks, 
         // creating a table has 4 subtasks, 1) measuring 2) cutting 3) building 4) painting.
         KPTNode *getParent() const {return m_parent; }
-        const QList<KPTNode> &childNodeIterator() const { return m_nodes; }
+        const QPtrList<KPTNode> &childNodeIterator() const { return m_nodes; }
         int numChildren() const { return m_nodes.count(); }
         virtual void addChildNode( KPTNode *node);
         virtual void insertChildNode( unsigned int index, KPTNode *node);
@@ -186,9 +186,9 @@ class KPTNode {
     void set_pert_values( const KPTDuration& time,
                   start_type start );
     protected:
-        QList<KPTNode> m_nodes;
-        QList<KPTRelation> m_dependChildNodes;
-        QList<KPTRelation> m_dependParentNodes;
+        QPtrList<KPTNode> m_nodes;
+        QPtrList<KPTRelation> m_dependChildNodes;
+        QPtrList<KPTRelation> m_dependParentNodes;
         KPTNode *m_parent;
         NodeType m_nodeType;
         QString m_name;

@@ -386,8 +386,8 @@ QFont KoGlobal::defaultFont()
     QFont font;
     font = KGlobalSettings::generalFont();
     // we have to use QFontInfo, in case the font was specified with a pixel size
-    kdDebug()<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize()<<endl;
-    kdDebug()<<"font.name() :"<<font.family ()<<endl;
+    //kdDebug()<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize()<<endl;
+    //kdDebug()<<"font.name() :"<<font.family ()<<endl;
     font.setPointSize( QFontInfo(font).pointSize() );
     return font;
 }
