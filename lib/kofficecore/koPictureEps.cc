@@ -100,13 +100,17 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
     cmdBuf += QString::number( wantedWidth );
     cmdBuf += "x";
     cmdBuf += QString::number( wantedHeight );
-    
+
     if ( ( resolutionx > 0) && ( resolutiony > 0) )
     {
+#if 0
+        // Do not play with resolution for now.
+        // It brings more problems at print than solutions
         cmdBuf += " -r";
         cmdBuf += QString::number( resolutionx );
         cmdBuf += "x";
         cmdBuf += QString::number( resolutiony );
+#endif
     }
     
     cmdBuf += " -dNOPAUSE -sDEVICE=png16m "; // Device was formally ppm
