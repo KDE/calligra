@@ -40,6 +40,7 @@ KoSize getOffset( LineEnd figure, int _w, float angle );
 QString lineEndBeginName( LineEnd type );
 LineEnd lineEndBeginFromString( const QString & name );
 KoPointArray getCloseObject( KoPointArray points, bool close, bool objClosed );
+QString lineEndBeginSvg( LineEnd element );
 
 class KPresenterUtils
 {
