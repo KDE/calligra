@@ -60,8 +60,8 @@ namespace KoPictureType
  * @short Structure describing a picture on disk
  *
  * @note We use the *nix epoch (1970-01-01) as a time base because it is a valid date.
- * That way we do not depend on a behaviour of the current QDateTime that might change in future versions of QT
- * and we are also nice to non-QT programs wanting to read KOffice's files.
+ * That way we do not depend on a behaviour of the current QDateTime that might change in future versions of Qt
+ * and we are also nice to non-Qt programs wanting to read KOffice's files.
  *
  * @note This behaviour is also needed for re-saving KWord files having \<FORMAT id="2"\>. When saving again,
  * these files get a \<KEY\> element as child of \<PIXMAPS\> but not one as child of \<FORMAT\> and \<IMAGE\>.

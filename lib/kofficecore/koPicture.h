@@ -34,9 +34,9 @@ class KURL;
 class KoPictureShared;
 
 /**
- * KoPicture is a container class for various types of pictures supported by KOffice.
+ * KoPicture is a container class for various types of pictures supported by %KOffice.
  *
- * @short An picture container class
+ * @short A picture container class
  */
 class KoPicture
 {

@@ -105,7 +105,7 @@ public:
     bool save(QIODevice* io);
 
     /**
-     *  Save picture in the format supported by KOffice 1,1
+     *  Save picture in the format supported by %KOffice 1.1
      */
     bool saveAsKOffice1Dot1(QIODevice* io);
 
@@ -151,7 +151,7 @@ public:
 
     /**
      * Helper function for saving
-     * @return true if it is a clipart in KOffice 1.1, false if not
+     * @return true if it is a clipart in %KOffice 1.1, false if not
      */
     bool isClipartAsKOffice1Dot1(void) const;
 
@@ -174,14 +174,15 @@ public:
      * Clear any cache
      *
      * It is used to avoid using too much memory
-     * especially if the application somehow also caches the KoPicture's output.
+     * especially if the application somehow caches the KoPicture too.
      */
     void clearCache(void);
 
 protected:
     /**
      * @internal
-     * Load a WMF file (a .wmf file could be a QPicture file)
+     * Load a WMF file 
+     * \note In %KOffice 1.1, a .wmf file was a QPicture file
      */
     bool loadWmf(QIODevice* io);
 
