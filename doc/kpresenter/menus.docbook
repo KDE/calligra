@@ -1674,7 +1674,7 @@ Begin the slideshow from the current slide.
 </term>
 <listitem>
 <para>
-
+Begin the slideshow from the first slide.
 </para>
 </listitem>
 </varlistentry>
