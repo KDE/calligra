@@ -4,4 +4,8 @@ KARBONDIR = karbon
 KONTOURDIR = kontour
 endif
 
-SUBDIRS = kspread kword kpresenter olefilters $(KONTOURDIR) xsltfilter kformula $(KARBONDIR)
+if include_XSLTFILTERS
+XSLTFILTERDIR = xsltfilter
+endif
+
+SUBDIRS = kspread kword kpresenter olefilters $(KONTOURDIR) $(XSLTFILTERDIR) kformula $(KARBONDIR)
