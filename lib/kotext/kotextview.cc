@@ -761,10 +761,10 @@ void KoTextView::insertParagraph(const QPoint &pos)
     KoStyle *style = last->style();
     KoParagCounter *counter = last->counter();
     int diff = (pos.y()- textDocument()->height());
-    kdDebug()<<" diff :"<<diff<<endl;
     f = last->at( last->length()-1 )->format();
-    //todo add kotextparag.
-    for (int i = 0; i < 3 ;i++)
+    int height =f->height();
+    int nbParag = (diff / height);
+    for (int i = 0; i < nbParag ;i++)
     {
         KoTextParag *s=textDocument()->createParag( textDocument(), last );
         if ( f )
@@ -778,13 +778,9 @@ void KoTextView::insertParagraph(const QPoint &pos)
 
 void KoTextView::placeCursor( const QPoint &pos, bool insertDirectCursor )
 {
-    if ( insertDirectCursor && (pos.y()>textDocument()->height()) )
-    {
-        kdDebug()<<" pos.x() !"<<pos.x()<<" pos.y() :!"<<pos.y()<<endl;
-        kdDebug()<<" textDocument()->height() :"<<textDocument()->height()<<endl;
-        insertParagraph(pos);
-    }
     m_cursor->restoreState();
+    if ( insertDirectCursor && (pos.y()>textDocument()->height()) )
+        insertParagraph(pos);
     KoTextParag *s = textDocument()->firstParag();
     m_cursor->place( pos, s, false, &variablePosition );
     updateUI( true );
