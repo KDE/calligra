@@ -69,15 +69,15 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     setMainWidget(page);
 
     topLayout = new QVBoxLayout(page);
-    topLayout->setSpacing(6);
-    topLayout->setMargin(11);
+    topLayout->setSpacing( KDialog::spacingHint() );
+    topLayout->setMargin( KDialog::marginHint() );
 
     m_findGrp = new QGroupBox(0, Qt::Vertical, i18n("Find"), page);
-    m_findGrp->layout()->setSpacing(0);
-    m_findGrp->layout()->setMargin(0);
+    m_findGrp->layout()->setSpacing(KDialog::spacingHint());
+    m_findGrp->layout()->setMargin(KDialog::marginHint());
     m_findLayout = new QGridLayout(m_findGrp->layout());
-    m_findLayout->setSpacing(6);
-    m_findLayout->setMargin(11);
+    m_findLayout->setSpacing( KDialog::spacingHint() );
+    m_findLayout->setMargin( KDialog::marginHint() );
 
     m_findLabel = new QLabel(i18n("&Text To Find"), m_findGrp);
     m_find = new KHistoryCombo(true, m_findGrp);
@@ -96,11 +96,11 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     topLayout->addWidget(m_findGrp);
 
     m_replaceGrp = new QGroupBox(0, Qt::Vertical, i18n("Replace With"), page);
-    m_replaceGrp->layout()->setSpacing(0);
-    m_replaceGrp->layout()->setMargin(0);
+    m_replaceGrp->layout()->setSpacing(KDialog::spacingHint());
+    m_replaceGrp->layout()->setMargin(KDialog::marginHint());
     m_replaceLayout = new QGridLayout(m_replaceGrp->layout());
-    m_replaceLayout->setSpacing(6);
-    m_replaceLayout->setMargin(11);
+    m_replaceLayout->setSpacing( KDialog::spacingHint() );
+    m_replaceLayout->setMargin( KDialog::marginHint() );
 
     m_replaceLabel = new QLabel(i18n("&Replacement Text"), m_replaceGrp);
     m_replace = new KHistoryCombo(true, m_replaceGrp);
@@ -119,11 +119,11 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
     topLayout->addWidget(m_replaceGrp);
 
     m_optionGrp = new QGroupBox(0, Qt::Vertical, i18n("Options"), page);
-    m_optionGrp->layout()->setSpacing(0);
-    m_optionGrp->layout()->setMargin(0);
+    m_optionGrp->layout()->setSpacing(KDialog::spacingHint());
+    m_optionGrp->layout()->setMargin(KDialog::marginHint());
     optionsLayout = new QGridLayout(m_optionGrp->layout());
-    optionsLayout->setSpacing(6);
-    optionsLayout->setMargin(11);
+    optionsLayout->setSpacing( KDialog::spacingHint() );
+    optionsLayout->setMargin( KDialog::marginHint() );
 
     m_caseSensitive = new QCheckBox(i18n("C&ase Sensitive"), m_optionGrp);
     m_wholeWordsOnly = new QCheckBox(i18n("&Whole Words Only"), m_optionGrp);
