@@ -151,7 +151,7 @@ DRect Document::paperSize(KoFormat &format) const
     double best = 2;
     double width = w;
     double height = h;
-    for (uint i=0; i<22/*PG_LAST_FORMAT*/; i++) { // #### koffice 1.2
+    for (uint i=0; i<=PG_LAST_FORMAT; i++) {
         if ( i==PG_CUSTOM || i==PG_SCREEN ) continue; // #### koffice 1.2
         w = mmToPoint(KoPageFormat::width(KoFormat(i), orientation));
         h = mmToPoint(KoPageFormat::height(KoFormat(i), orientation));
