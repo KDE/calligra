@@ -23,6 +23,7 @@
 #include <kapp.h>
 #include <kcolorbtn.h>
 #include <krect.h>
+#include <kglobal.h>
 
 #include <qlabel.h>
 #include <qpushbt.h>

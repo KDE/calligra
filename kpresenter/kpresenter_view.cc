@@ -58,6 +58,7 @@
 #include <klocale.h>
 #include <kcolordlg.h>
 #include <kfontdialog.h>
+#include <kglobal.h>
 
 #include <opUIUtils.h>
 #include <opToolBarIf.h>
@@ -1124,7 +1125,7 @@ void KPresenterView::screenStart()
             float _presFakt = 1.0;
             page->setPresFakt( _presFakt );
         }
-    
+
         _xOffset = xOffset;
         _yOffset = yOffset;
         xOffset = 0;
@@ -2678,7 +2679,7 @@ void KPresenterView::search( QString text, bool sensitive, bool direction )
                 found = page->kTxtObj()->searchFirstRev( text, &from, &to, sensitive );
             else
                 found = page->kTxtObj()->searchNextRev( text, &from, &to, sensitive );
-    
+
             if ( found )
                 searchFirst = false;
             else
@@ -2708,7 +2709,7 @@ void KPresenterView::replace( QString search, QString replace, bool sensitive, b
                 found = page->kTxtObj()->replaceFirst( search, replace, &from, &to, sensitive );
             else
                 found = page->kTxtObj()->replaceNext( search, replace, &from, &to, sensitive );
-    
+
             if ( found )
                 searchFirst = false;
             else
@@ -2726,7 +2727,7 @@ void KPresenterView::replace( QString search, QString replace, bool sensitive, b
                 found = page->kTxtObj()->replaceFirstRev( search, replace, &from, &to, sensitive );
             else
                 found = page->kTxtObj()->replaceNextRev( search, replace, &from, &to, sensitive );
-    
+
             if ( found )
                 searchFirst = false;
             else

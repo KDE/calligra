@@ -53,6 +53,7 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
 #include <stdlib.h>
 
@@ -255,10 +256,10 @@ void Page::mousePressEvent( QMouseEvent *e )
                 bool overObject = false;
                 bool deSelAll = true;
                 KPObject *kpobject = 0;
-        
+
                 firstX = e->x();
                 firstY = e->y();
-        
+
                 if ( objectList()->count() - 1 >= 0 )
                 {
                     for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0 ; i-- )
@@ -277,10 +278,10 @@ void Page::mousePressEvent( QMouseEvent *e )
                         }
                     }
                 }
-        
+
                 if ( deSelAll && !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                     deSelectAllObj();
-        
+
                 if ( overObject )
                 {
                     selectObj( kpobject );
@@ -392,7 +393,7 @@ void Page::mousePressEvent( QMouseEvent *e )
         oldMx = e->x();
         oldMy = e->y();
         if ( e->button() == LeftButton )
-        {   
+        {
             if ( presMenu->isVisible() )
             {
                 presMenu->hide();
@@ -454,7 +455,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 p.drawRect( rubber );
                 p.end();
                 drawRubber = false;
-        
+
                 rubber = rubber.normalize();
                 KPObject *kpobject = 0;
                 if ( objectList()->count() - 1 >= 0 )
@@ -782,7 +783,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
             {
                 oldMx = ( oldMx / rastX() ) * rastX();
                 oldMy = ( oldMy / rastY() ) * rastY();
-        
+
                 if ( modType == MT_NONE )
                 {
                     if ( drawRubber )
@@ -802,7 +803,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
                 {
                     QPainter p;
                     p.begin( this );
-        
+
                     if ( objectList()->count() - 1 >= 0 )
                     {
                         for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- )
@@ -817,20 +818,20 @@ void Page::mouseMoveEvent( QMouseEvent *e )
                             }
                         }
                     }
-        
+
                     p.end();
                 }
                 else if ( modType != MT_NONE && resizeObjNum != -1 )
                 {
                     QPainter p;
                     p.begin( this );
-        
+
                     KRect oldRect;
                     kpobject = objectList()->at( resizeObjNum );
                     oldRect = kpobject->getBoundingRect( 0, 0 );
                     kpobject->setMove( true );
                     kpobject->draw( &p, diffx(), diffy() );
-        
+
                     switch ( modType )
                     {
                     case MT_RESIZE_LU:
@@ -1002,7 +1003,7 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
                 if ( kpobject->getType() == OT_TEXT )
                 {
                     KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-        
+
                     kpobject->activate( this, diffx(), diffy() );
                     kptextobject->getKTextObject()->setBackgroundColor( txtBackCol() );
                     //setFocusProxy( kptextobject->getKTextObject() );
@@ -2102,7 +2103,7 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
                 _y = _pix2.height() / 2;
 
                 bitBlt( this, 0, _y - _h / 2, &_pix2, 0, _y - _h / 2, width(), _h );
-    
+
                 _time.restart();
             }
             if ( ( _pix2.height() / _steps ) * _step >= _pix2.height() ) break;
@@ -2125,7 +2126,7 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
                 _x = _pix2.width() / 2;
 
                 bitBlt( this, _x - _w / 2, 0, &_pix2, _x - _w / 2, 0, _w, height() );
-    
+
                 _time.restart();
             }
             if ( ( _pix2.width() / _steps ) * _step >= _pix2.width() ) break;
@@ -2153,7 +2154,7 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
                 _y = _pix2.height() / 2;
 
                 bitBlt( this, _x - _w / 2, _y - _h / 2, &_pix2, _x - _w / 2, _y - _h / 2, _w, _h );
-    
+
                 _time.restart();
             }
             if ( ( _pix2.width() / _steps ) * _step >= _pix2.width() &&
@@ -2350,7 +2351,7 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
         KRect oldRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() );
         KSize ps;
         QPixmap pix3;
-            
+
         for ( ; ; )
         {
             kapp->processEvents();
@@ -2363,17 +2364,17 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
                     QPixmap pix4( _pix2 );
                     float dw = static_cast<float>( _step * ( ( pix3.width() - ( pix3.width() / 10 ) ) / ( 2 * _psteps ) ) );
                     float dh = static_cast<float>( _step * ( ( pix3.height() - ( pix3.height() / 10 ) ) / ( 2 * _psteps ) ) );
-    
+
                     dw *= 2;
                     dh *= 2;
-    
+
                     QWMatrix m;
                     m.scale( static_cast<float>( pix3.width() - dw ) / static_cast<float>( pix3.width() ),
                              static_cast<float>( pix3.height() - dh ) / static_cast<float>( pix3.height() ) );
                     pix3 = pix3.xForm( m );
                     //pix3.resize( pix3.width() - dw, pix3.height() - dh );
                     ps = pix3.size();
-        
+
                     bitBlt( &pix4, ( pix4.width() - pix3.width() ) / 2, ( pix4.height() - pix3.height() ) / 2,
                             &pix3, 0, 0, pix3.width(), pix3.height() );
                     KRect newRect( ( pix4.width() - pix3.width() ) / 2, ( pix4.height() - pix3.height() ) / 2,
@@ -2537,17 +2538,17 @@ void Page::doObjEffects()
         {
             kapp->processEvents();
             if ( nothingHappens ) break; // || _step >= _steps1 && _step >= _steps2 ) break;
-    
+
             QList<KRect> changes;
             changes.setAutoDelete( true );
-    
+
             if ( _time.elapsed() >= 1 )
             {
                 nothingHappens = true;
                 _step++;
-    
+
                 changes.clear();
-    
+
                 for ( i = 0; i < static_cast<int>( _objList.count() ); i++ )
                 {
                     kpobject = _objList.at( i );
@@ -2564,10 +2565,10 @@ void Page::doObjEffects()
                     int by = br.y();
                     int bw = br.width();
                     int bh = br.height();
-        
+
                     KRect oldRect;
                     KRect newRect;
-        
+
                     if ( static_cast<int>( xy.count() - 1 ) < i )
                     {
                         xy.append( new KRect( 0, 0, 0, 0 ) );
@@ -2575,7 +2576,7 @@ void Page::doObjEffects()
                     }
                     else
                         oldRect.setRect( bx - ( diffx() - xy.at( i )->x() ), by - ( diffy() - xy.at( i )->y() ), bw - xy.at( i )->width(), bh - xy.at( i )->height() );
-        
+
                     switch ( kpobject->getEffect() )
                     {
                     case EF_NONE:
@@ -2763,7 +2764,7 @@ void Page::doObjEffects()
                     } break;
                     default: break;
                     }
-        
+
                     newRect.setRect( bx - ( diffx() - xy.at( i )->x() ), by - ( diffy() - xy.at( i )->y() ), bw - xy.at( i )->width(), bh - xy.at( i )->height() );
                     newRect = newRect.unite( oldRect );
 
@@ -2776,32 +2777,32 @@ void Page::doObjEffects()
                             int s1 = r.width() * r.height();
                             int s2 = newRect.width() * newRect.height();
                             int s3 = changes.at( j )->width() * changes.at( j )->height();
-            
+
                             if ( s1 > ( s2 / 100 ) * 50 || s1 > ( s3 / 100 ) * 50 )
                             {
                                 KRect rr = changes.at( j )->unite( newRect );
                                 changes.at( j )->setRect( rr.x(), rr.y(), rr.width(), rr.height() );
-                                append = false;             
+                                append = false;
                             }
-            
+
                             break;
                         }
                     }
-        
+
                     if ( append )
                         changes.append( new KRect( newRect ) );
                 }
-    
+
                 KRect *changed;
                 for ( i = 0; i < static_cast<int>( changes.count() ); i++ )
                 {
                     changed = changes.at( i );
                     bitBlt( this, changed->x(), changed->y(), screen, changed->x(), changed->y(), changed->width(), changed->height() );
                 }
-    
+
                 delete screen;
                 screen = new QPixmap( screen_orig );
-    
+
                 _time.restart();
             }
         }
@@ -2963,7 +2964,7 @@ void Page::editSelectedTextArea()
                 if ( kpobject->getType() == OT_TEXT )
                 {
                     KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-        
+
                     kpobject->activate( this, diffx(), diffy() );
                     kptextobject->getKTextObject()->setBackgroundColor( txtBackCol() );
                     //setFocusProxy( kptextobject->getKTextObject() );
@@ -3272,10 +3273,10 @@ void Page::dropEvent( QDropEvent *e )
 // //     num.setNum( objectList()->count() );
 // //     uid += "_";
 // //     uid += num;
-        
+
 // //     QString filename = "/tmp/kpresenter";
 // //     filename += uid;
-        
+
 // //     KIOJob *job = new KIOJob( "kpresenter job" );
 // //     job->copy( str, filename );
 
@@ -3285,7 +3286,7 @@ void Page::dropEvent( QDropEvent *e )
 
 //    QString filename = url.path();
 //        KMimeMagicResult *res = KMimeMagic::self()->findFileType( filename );
-    
+
 //    if ( res && res->isValid() )
 //      {
 //        QString mimetype = res->mimeType();
@@ -3296,10 +3297,10 @@ void Page::dropEvent( QDropEvent *e )
 //        view->kPresenterDoc()->insertPicture( filename, e->pos().x(), e->pos().y() );
 //                setCursor( c );
 //        continue;
-//      }   
-    
 //      }
-    
+
+//      }
+
 //    // open any non-picture as text
 //    // in the future we should open specific mime types with "their" programms and embed them
 //    QFile f( filename );
@@ -3321,7 +3322,7 @@ void Page::dropEvent( QDropEvent *e )
 // //     QString cmd = "rm -f ";
 // //     cmd += filename;
 // //     system( cmd.ascii() );
-    
+
 // //     delete job;
 //  }
 //     }

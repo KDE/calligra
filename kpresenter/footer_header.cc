@@ -36,6 +36,7 @@
 #include <kapp.h>
 #include <kcolordlg.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
 #include <stdlib.h>
 

@@ -48,6 +48,7 @@
 #include <ktoolbar.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
 /******************************************************************/
 /* Class: PVTimeTable                                             */
@@ -144,7 +145,7 @@ void PVTimeTable::paintCell( QPainter *painter, int row, int col )
             unsigned int wid = fm.width( str );
             unsigned int hei = fm.height();
 
-            painter->drawText( ( cellWidth() - wid ) / 2, ( cellHeight() - hei ) / 2 + fm.ascent(), str );  
+            painter->drawText( ( cellWidth() - wid ) / 2, ( cellHeight() - hei ) / 2 + fm.ascent(), str );
         }
         else if ( col == 0 && row > 0 )
         {
@@ -153,7 +154,7 @@ void PVTimeTable::paintCell( QPainter *painter, int row, int col )
             unsigned int wid = fm.width( obj_name );
             unsigned int hei = fm.height();
 
-            painter->drawText( ( cellWidth() - wid ) / 2, ( cellHeight() - hei ) / 2 + fm.ascent(), obj_name );     
+            painter->drawText( ( cellWidth() - wid ) / 2, ( cellHeight() - hei ) / 2 + fm.ascent(), obj_name );
         }
         else if ( col > 0 && row > 0 )
         {
@@ -515,7 +516,7 @@ void PresStructViewer::fillWithObjInfo( KPObject *_obj, int _num )
                 list->changeItemPart( "no brush", list->count() - 1, 1 );
             else
                 list->changeItemPart( getColor( dynamic_cast<KPRectObject*>( _obj )->getBrush().color() ), list->count() - 1, 1 );
-    
+
             list->appendItem( i18n( "Brush Style" ) );
             list->changeItemPart( i18n( BrushStyleName[ static_cast<int>( dynamic_cast<KPRectObject*>( _obj )->getBrush().style() ) ] ),
                                   list->count() - 1, 1 );
@@ -535,11 +536,11 @@ void PresStructViewer::fillWithObjInfo( KPObject *_obj, int _num )
 
         int rndx, rndy;
         dynamic_cast<KPRectObject*>( _obj )->getRnds( rndx, rndy );
-    
+
         list->appendItem( i18n( "Roundedness X" ) );
         str.sprintf( "%d", rndx );
         list->changeItemPart( str, list->count() - 1, 1 );
-    
+
         list->appendItem( i18n( "Roundedness Y" ) );
         str.sprintf( "%d", rndy );
         list->changeItemPart( str, list->count() - 1, 1 );
@@ -567,7 +568,7 @@ void PresStructViewer::fillWithObjInfo( KPObject *_obj, int _num )
                 list->changeItemPart( "no brush", list->count() - 1, 1 );
             else
                 list->changeItemPart( getColor( dynamic_cast<KPEllipseObject*>( _obj )->getBrush().color() ), list->count() - 1, 1 );
-    
+
             list->appendItem( i18n( "Brush Style" ) );
             list->changeItemPart( i18n( BrushStyleName[ static_cast<int>( dynamic_cast<KPEllipseObject*>( _obj )->getBrush().style() ) ] ),
                                   list->count() - 1, 1 );
@@ -611,7 +612,7 @@ void PresStructViewer::fillWithObjInfo( KPObject *_obj, int _num )
                 list->changeItemPart( "no brush", list->count() - 1, 1 );
             else
                 list->changeItemPart( getColor( dynamic_cast<KPPieObject*>( _obj )->getBrush().color() ), list->count() - 1, 1 );
-    
+
             list->appendItem( i18n( "Brush Style" ) );
             list->changeItemPart( i18n( BrushStyleName[ static_cast<int>( dynamic_cast<KPPieObject*>( _obj )->getBrush().style() ) ] ),
                                   list->count() - 1, 1 );
@@ -711,7 +712,7 @@ void PresStructViewer::fillWithObjInfo( KPObject *_obj, int _num )
                 list->changeItemPart( "no brush", list->count() - 1, 1 );
             else
                 list->changeItemPart( getColor( dynamic_cast<KPAutoformObject*>( _obj )->getBrush().color() ), list->count() - 1, 1 );
-    
+
             list->appendItem( i18n( "Brush Style" ) );
             list->changeItemPart( i18n( BrushStyleName[ static_cast<int>( dynamic_cast<KPAutoformObject*>( _obj )->getBrush().style() ) ] ),
                                   list->count() - 1, 1 );
