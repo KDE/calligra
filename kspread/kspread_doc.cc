@@ -515,15 +515,15 @@ const char* KSpreadDoc::orientationString()
 QString KSpreadDoc::completeHeading( const QString &_data, int _page, const QString &_table )
 {
     QString page=QString::number(_page);
-    QString f = m_strFileURL; // huh!?!
-    if ( f.isNull() )
-        f = "";
-    QString n = "";
-    if ( f != "" )
-    {
-        KURL u( f );
-        n = u.filename();
-    }
+    QString pathFileName = url().path();
+
+    if ( pathFileName.isNull() )
+        pathFileName = "";
+
+    QString fileName = url().filename();
+    if( fileName.isNull())
+        fileName="";
+
     QString t = QTime::currentTime().toString().copy();
     QString d = QDate::currentDate().toString().copy();
     QString ta = "";
@@ -570,10 +570,10 @@ QString KSpreadDoc::completeHeading( const QString &_data, int _page, const QStr
         tmp.replace( pos, 6, page );
     pos = 0;
     while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
-        tmp.replace( pos, 6, f );
+        tmp.replace( pos, 6, pathFileName );
     pos = 0;
     while ( ( pos = tmp.find( "<name>", pos ) ) != -1 )
-        tmp.replace( pos, 6, n );
+        tmp.replace( pos, 6, fileName );
     pos = 0;
     while ( ( pos = tmp.find( "<time>", pos ) ) != -1 )
         tmp.replace( pos, 6, t );
