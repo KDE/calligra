@@ -215,13 +215,12 @@ KexiAlterTable::changeTable()
 	{
 		if(!i->getValue(0).toString().isEmpty() && i->getValue(1).toInt() != 0)
 		{
-			kdDebug() << "Create new field!" << endl;
+			kdDebug() << "KexiAlterTable::changeTable: Create new field!" << endl;
 			ok = kexiProject()->db()->createField(*field, m_tableFields, m_create);
-			m_create = !ok;
 
 			if(ok)
 			{
-				kdDebug() << "New field created!" << endl;
+				kdDebug() << "KexiAlterTable::changeTable: New field created!" << endl;
 				i->setInsertItem(false);
 				m_tableFields.append(field);
 				// Insert item
@@ -229,29 +228,36 @@ KexiAlterTable::changeTable()
 				insert->setValue(1, KexiDBField::SQLVarchar - 1);
 				insert->setHint(QVariant(i->getHint().toInt() + 1));
 				insert->setInsertItem(true);
+				m_create = false;
+			}
+			else
+			{
+				i->setValue(0, "");
+				i->setValue(1, KexiDBField::SQLVarchar - 1);
+				i->setValue(2, QVariant(false, 1));
 			}
 		}
 	}
 	else
 	{
 		int index = i->getHint().toInt();
-		kdDebug() << "KexiAlterTable::changeTable(" << index <<
-			")" << endl;
+		kdDebug() << "KexiAlterTable::changeTable: Field index:" << index << endl;
+
 		ok = kexiProject()->db()->alterField(*field, index, m_tableFields);
 
 		if(ok)
 		{
-			kdDebug() << "Field changed!" << endl;
+			kdDebug() << "KexiAlterTable::changeTable: Field changed!" << endl;
 			m_tableFields.replace(index, field);
-			changeShownField(i);
 		}
 		else
 		{
 			i->setValue(0, field->name());
 			i->setValue(1, field->sqlType() - 1);
 			i->setValue(2, QVariant(field->primary_key(), 1));
-			changeShownField(i);
 		}
+
+		changeShownField(i);
 	}
 
 	if(!ok)
