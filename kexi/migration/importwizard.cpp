@@ -128,7 +128,7 @@ void importWizard::setupintro()
     QLabel *lblIntro = new QLabel(introPage);
     lblIntro->setText(i18n("This wizard will guide you through the\n"
                       "process of converting an existing data\n"
-                      "set into a kexi database"));
+                      "set into a Kexi database"));
 }
 
 //===========================================================

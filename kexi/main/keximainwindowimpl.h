@@ -295,7 +295,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void slotProjectProperties();
 		void slotProjectClose();
 		void slotProjectRelations();
-		void slotImportProject();
+		void slotToolsProjectMigration();
 		void slotQuit();
 
 		void slotTipOfTheDay();

@@ -546,7 +546,8 @@ KexiMainWindowImpl::initActions()
 	d->action_project_relations = d->dummy_action;
 #endif
 #ifndef KEXI_NO_MIGRATION
-	d->action_tools_data_migration = new KAction(i18n("Project..."), "", 0, this, SLOT(slotImportProject()), actionCollection(), "project_import_project");
+	d->action_tools_data_migration = new KAction(i18n("&Import Database..."), "", 0, 
+		this, SLOT(slotToolsProjectMigration()), actionCollection(), "tools_import_project");
 #endif	
 
 	//EDIT MENU
@@ -3031,7 +3032,7 @@ KexiMainWindowImpl::initUserActions()
 
 #include <kreplacedialog.h>
 
-void KexiMainWindowImpl::slotImportProject()
+void KexiMainWindowImpl::slotToolsProjectMigration()
 {
 #ifndef KEXI_NO_MIGRATION
 	QDialog *d = KexiInternalPart::createModalDialogInstance("migration", this, this);
