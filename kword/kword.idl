@@ -54,6 +54,7 @@ module KWord
       slot void extraSpelling();
       slot void extraAutoFormat();
       slot void extraStylist();
+      slot void extraContents();
       slot void extraOptions();
 
       slot void toolsEdit();

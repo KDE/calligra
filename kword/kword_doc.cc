@@ -34,6 +34,7 @@
 #include "char.h"
 #include "kword_utils.h"
 #include "serialletter.h"
+#include "contents.h"
 
 #include <komlMime.h>
 #include <koStream.h>
@@ -142,6 +143,7 @@ KWordDocument::KWordDocument()
 		      SLOT( slotUndoRedoChanged( QString, QString ) ) );
 
     spellCheck = FALSE;
+    contents = new KWContents( this );
 }
 
 /*================================================================*/
@@ -741,7 +743,50 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     lay->setCounterRightText( "" );
     lay->setNumberingType( KWParagLayout::NT_LIST );
 
-    if (TRUE /*no variable formats were loaded*/) {
+    f.setUserFont( findUserFont( "helvetica" ) );
+    f.setWeight( 75 );
+    f.setPTFontSize( 20 );
+    lay = new KWParagLayout( this );
+    lay->setName( "Contents Title" );
+    lay->setFollowingParagLayout( "Standard" );
+    lay->setCounterType( KWParagLayout::CT_NONE );
+    lay->setCounterDepth( 0 );
+    lay->setTopBorder( KWParagLayout::Border() );
+    lay->setBottomBorder( KWParagLayout::Border() );
+    lay->setFlow( KWParagLayout::CENTER );
+    lay->setFormat( f );
+
+    f.setUserFont( findUserFont( "helvetica" ) );
+    f.setWeight( 75 );
+    f.setPTFontSize( 16 );
+    lay = new KWParagLayout( this );
+    lay->setName( "Contents Head 1" );
+    lay->setFollowingParagLayout( "Standard" );
+    lay->setCounterType( KWParagLayout::CT_NONE );
+    lay->setCounterDepth( 0 );
+    lay->setFormat( f );
+
+    f.setUserFont( findUserFont( "helvetica" ) );
+    f.setWeight( 75 );
+    f.setPTFontSize( 12 );
+    lay = new KWParagLayout( this );
+    lay->setName( "Contents Head 2" );
+    lay->setFollowingParagLayout( "Standard" );
+    lay->setCounterType( KWParagLayout::CT_NONE );
+    lay->setCounterDepth( 0 );
+    lay->setFormat( f );
+
+    f.setUserFont( findUserFont( "helvetica" ) );
+    f.setItalic( TRUE );
+    f.setPTFontSize( 12 );
+    lay = new KWParagLayout( this );
+    lay->setName( "Contents Head 3" );
+    lay->setFollowingParagLayout( "Standard" );
+    lay->setCounterType( KWParagLayout::CT_NONE );
+    lay->setCounterDepth( 0 );
+    lay->setFormat( f );
+
+    if ( TRUE /*no variable formats were loaded*/) {
 	varFormats.insert( VT_DATE_FIX, new KWVariableDateFormat() );
 	varFormats.insert( VT_DATE_VAR, new KWVariableDateFormat() );
 	varFormats.insert( VT_TIME_FIX, new KWVariableTimeFormat() );
@@ -1004,6 +1049,32 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	    }
 	}
 
+	else if ( name == "CPARAGS" ) {
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ ) {
+	    }
+
+	    while ( parser.open( 0L, tag ) ) {
+		KOMLParser::parseTag( tag.c_str(), name, lst );
+		if ( name == "PARAG" ) {
+		    KOMLParser::parseTag( tag.c_str(), name, lst );
+		    vector<KOMLAttrib>::const_iterator it = lst.begin();
+		    for( ; it != lst.end(); it++ ) {
+			if ( ( *it ).m_strName == "name" )
+			    contents->addParagName( ( *it ).m_strValue.c_str() ); 
+		    }
+		} else
+		    cerr << "Unknown tag '" << tag << "' in CPARAGS" << endl;
+
+		if ( !parser.close( tag ) ) {
+		    cerr << "ERR: Closing Child" << endl;
+		    QApplication::restoreOverrideCursor();
+		    return FALSE;
+		}
+	    }
+	}
+
 	else
 	    cerr << "Unknown tag '" << tag << "' in the DOCUMENT" << endl;
 
@@ -1129,6 +1200,20 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	emit sig_insertObject( ch, frameset );
     }
 
+    if ( contents->numParags() > 0 ) {
+	QString name = *( --contents->ending() );
+	KWParag *p = ( (KWTextFrameSet*)getFrameSet( 0 ) )->getFirstParag();
+	KWParag *end = p;
+	while ( p ) {
+	    if ( p->getParagName() == name ) {
+		end = p;
+		break;
+	    }
+	    p = p->getNext();
+	}
+	contents->setEnd( end );
+    }
+    
     KWAutoFormatEntry *entry;
 
     entry = new KWAutoFormatEntry;
@@ -1437,6 +1522,15 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
     }
     out << etag << "</PIXMAPS>" << endl;
 
+    if ( contents->hasContents() ) {
+	out << otag << "<CPARAGS>" << endl;
+	QStringList::Iterator it = contents->begin();
+	for ( ; it != contents->ending(); ++it )
+	    out << indent << "<PARAG name=\"" << correctQString( *it ).latin1() << "\"/>" << endl;
+	out << etag << "</CPARAGS>" << endl;
+    }
+	
+    
     // Write "OBJECT" tag for every child
     QListIterator<KWordChild> chl( m_lstChildren );
     for( ; chl.current(); ++chl )
@@ -1689,7 +1783,7 @@ KWDisplayFont* KWordDocument::findDisplayFont( KWUserFont* _font, unsigned int _
 {
     if ( cDisplayFont ) {
 	if ( cDisplayFont->getUserFont()->getFontName() == _font->getFontName() && cDisplayFont->getPTSize() == _size &&
-	     cDisplayFont->weight() == _weight && cDisplayFont->italic() == _italic && 
+	     cDisplayFont->weight() == _weight && cDisplayFont->italic() == _italic &&
 	     cDisplayFont->underline() == _underline )
 	    return cDisplayFont;
     }
@@ -1724,7 +1818,8 @@ KWParagLayout* KWordDocument::findParagLayout( QString _name )
 	}
     }
 
-    return 0L;
+    qWarning( "Parag Layout: '%s` is unknown, using default parag layout", _name.latin1() ); 
+    return defaultParagLayout;
 }
 
 /*================================================================*/
@@ -1762,8 +1857,9 @@ KWParag* KWordDocument::findFirstParagOfRect( unsigned int _ypos, unsigned int _
 	if ( p->getPTYEnd() >= _ypos || p->getPTYStart() >= _ypos || ( p->getPTYEnd() >= _ypos &&
 								       p->getPTYStart() <= _ypos )
 	     || ( p->getPTYEnd() <= _ypos && p->getPTYStart() <= _ypos && p->getPTYStart() > p->getPTYEnd() &&
-		  ( p->getEndPage() == _page || p->getStartPage() == _page || ( p->getEndPage() >
-										_page && p->getStartPage() < _page ) ) ) )
+		  ( p->getEndPage() == _page || 
+		    p->getStartPage() == _page || ( p->getEndPage() >
+						    _page && p->getStartPage() < _page ) ) ) )
 	    return p;
 	p = p->getNext();
     }
@@ -3705,4 +3801,13 @@ int KWordDocument::getSerialLetterRecord() const
 void KWordDocument::setSerialLetterRecord( int r )
 {
     slRecordNum = r;
+}
+
+/*================================================================*/
+void KWordDocument::createContents()
+{
+    contents->createContents();
+    recalcWholeText();
+    updateAllCursors();
+    updateAllViews( 0, TRUE );
 }

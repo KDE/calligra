@@ -287,7 +287,7 @@ bool KWordView::printDlg()
 	qWarning( i18n( "You use the page layout SCREEN. I print it in DIN A4 LANDSCAPE!" ) );
 	prt.setPageSize( QPrinter::A4 );
 	makeLandscape = TRUE;
-    }	break;
+    } break;
     default: {
 	warning( i18n( "The used page layout is not supported by QPrinter. I set it to DIN A4." ) );
 	prt.setPageSize( QPrinter::A4 );
@@ -1078,6 +1078,12 @@ void KWordView::extraStylist()
 }
 
 /*===============================================================*/
+void KWordView::extraContents()
+{
+    m_pKWordDoc->createContents();
+}
+
+/*===============================================================*/
 void KWordView::extraOptions()
 {
 }
@@ -1107,12 +1113,10 @@ void KWordView::toolsCreatePix()
     QString file = KFilePreviewDialog::getOpenFileName( QString::null,
 							KImageIO::pattern(KImageIO::Reading), 0);
 
-    if ( !file.isEmpty() )
-    {
+    if ( !file.isEmpty() ) {
 	gui->getPaperWidget()->mmCreatePix();
 	gui->getPaperWidget()->setPixmapFilename( file );
-    }
-    else
+    } else
 	gui->getPaperWidget()->mmEdit();
 }
 
@@ -1125,8 +1129,7 @@ void KWordView::toolsClipart()
 /*===============================================================*/
 void KWordView::toolsTable()
 {
-    if ( tableDia )
-    {
+    if ( tableDia ) {
 	tableDia->close();
 	delete tableDia;
 	tableDia = 0L;
@@ -1143,8 +1146,7 @@ void KWordView::toolsKSpreadTable()
     gui->getPaperWidget()->mmKSpreadTable();
 
     QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'IDL:KSpread/DocumentFactory:1.0#KSpread' in RepoIds", 1 );
-    if ( vec.isEmpty() )
-    {
+    if ( vec.isEmpty() ) {
 	cout << "Got no results" << endl;
 	QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no table component registered" ), i18n( "OK" ) );
 	return;
@@ -1233,13 +1235,11 @@ void KWordView::tableDeleteRow()
     if ( !grpMgr )
 	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
 			       i18n( "OK" ) );
-    else
-    {
+    else {
 	if ( grpMgr->getRows() == 1 )
 	    QMessageBox::critical( this, i18n( "Error" ),
 				   i18n( "The table has only one row. You can't delete the last one!" ), i18n( "OK" ) );
-	else
-	{
+	else {
 	    KWDeleteDia dia( this, "", grpMgr, m_pKWordDoc, KWDeleteDia::ROW, gui->getPaperWidget() );
 	    dia.setCaption( i18n( "Delete Row" ) );
 	    dia.show();
@@ -1256,13 +1256,11 @@ void KWordView::tableDeleteCol()
     if ( !grpMgr )
 	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
 			       i18n( "OK" ) );
-    else
-    {
+    else {
 	if ( grpMgr->getCols() == 1 )
 	    QMessageBox::critical( this, i18n( "Error" ),
 				   i18n( "The table has only one column. You can't delete the last one!" ), i18n( "OK" ) );
-	else
-	{
+	else {
 	    KWDeleteDia dia( this, "", grpMgr, m_pKWordDoc, KWDeleteDia::COL, gui->getPaperWidget() );
 	    dia.setCaption( i18n( "Delete Column" ) );
 	    dia.show();
@@ -1279,8 +1277,7 @@ void KWordView::tableJoinCells()
     if ( !grpMgr )
 	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to select some cells in a table to join them!" ),
 			       i18n( "OK" ) );
-    else
-    {
+    else {
 	QPainter painter;
 	painter.begin( gui->getPaperWidget() );
 	if ( !grpMgr->joinCells() )
@@ -1305,8 +1302,7 @@ void KWordView::tableSplitCells()
     if ( !grpMgr )
 	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to select a cell in a table to split it!" ),
 			       i18n( "OK" ) );
-    else
-    {
+    else {
 	QPainter painter;
 	painter.begin( gui->getPaperWidget() );
 	if ( !grpMgr->splitCell() )
@@ -1330,12 +1326,10 @@ void KWordView::tableUngroupTable()
     if ( !grpMgr )
 	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
 			       i18n( "OK" ) );
-    else
-    {
+    else {
 	if ( QMessageBox::warning( this, i18n( "Warning" ), i18n( "Ungrouping a table is an irrevesible action!\n"
 								  "Do you really want to do that?" ), i18n( "Yes" ),
-				   i18n( "No" ) ) == 0 )
-	{
+				   i18n( "No" ) ) == 0 ) {
 	    grpMgr->ungroup();
 	    QRect r = grpMgr->getBoundingRect();
 	    r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
@@ -1439,8 +1433,7 @@ void KWordView::textUnderline()
 /*=========================== text color ========================*/
 void KWordView::textColor()
 {
-    if ( KColorDialog::getColor( tbColor ) )
-    {
+    if ( KColorDialog::getColor( tbColor ) ) {
 	OpenPartsUI::Pixmap_var pix = KOUIUtils::colorPixmap( tbColor, KOUIUtils::TXT_COLOR );
 	m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR, pix );
 	format.setColor( tbColor );
@@ -2087,13 +2080,17 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
     m_vMenuExtra->insertSeparator( -1 );
 
+    text = i18n( "&Create Table of Contents..." ) ;
+    m_idMenuExtra_Contents = m_vMenuExtra->insertItem4( text, this, "extraContents", 0, -1, -1 );
+
+    m_vMenuExtra->insertSeparator( -1 );
+
     text = i18n( "&Options..." ) ;
     m_idMenuExtra_Options = m_vMenuExtra->insertItem4( text, this, "extraOptions", ALT + Key_O, -1, -1 );
 
     // help menu
     m_vMenuHelp = _menubar->helpMenu();
-    if ( CORBA::is_nil( m_vMenuHelp ) )
-    {
+    if ( CORBA::is_nil( m_vMenuHelp ) ) {
 	_menubar->insertSeparator( -1 );
 	text = i18n( "&Help" ) ;
 	_menubar->setHelpMenu( _menubar->insertMenu( text, m_vMenuHelp, -1, -1 ) );

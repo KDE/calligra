@@ -29,13 +29,16 @@ class KWParagLayout
 {
 public:
     enum Flow {LEFT, RIGHT, CENTER, BLOCK};
-    //enum CounterFlow { C_LEFT, C_RIGHT };
-    enum CounterType {CT_NONE = 0, CT_NUM = 1, CT_ALPHAB_L = 2, CT_ALPHAB_U = 3, CT_ROM_NUM_L = 4, CT_ROM_NUM_U = 5, CT_BULLET = 6};
+    enum CounterType {CT_NONE = 0, CT_NUM = 1, CT_ALPHAB_L = 2, CT_ALPHAB_U = 3, 
+		      CT_ROM_NUM_L = 4, CT_ROM_NUM_U = 5, CT_BULLET = 6};
     enum NumType {NT_LIST = 0, NT_CHAPTER = 1};
 
     enum BorderStyle {SOLID = 0, DASH = 1, DOT = 2, DASH_DOT = 3, DASH_DOT_DOT = 4};
     struct Border
     {
+	Border()
+	    : color( Qt::black ), style( SOLID ), ptWidth( 1 ) {
+	}
 	QColor color;
 	BorderStyle style;
 	unsigned int ptWidth;
@@ -113,7 +116,7 @@ public:
     int getCounterDepth() const { return counter.counterDepth; }
     QString getCounterLeftText() const { return counter.counterLeftText; }
     QString getCounterRightText() const { return counter.counterRightText.data(); }
-    
+
     QString getFollowingParagLayout() { return followingParagLayout; }
 
     void save( ostream &out );
@@ -125,9 +128,10 @@ public:
     const QList<KoTabulator> *getTabList() const { return &tabList; }
     void setTabList( const QList<KoTabulator> *tabList );
 
-    bool getNextTab( unsigned int _ptPos, unsigned int _lBorder, unsigned int _rBorder, unsigned int &_tabPos, KoTabulators &_tabType );
+    bool getNextTab( unsigned int _ptPos, unsigned int _lBorder, unsigned int _rBorder, 
+		     unsigned int &_tabPos, KoTabulators &_tabType );
     bool hasSpecialTabs() const { return specialTabs; }
-
+    
 protected:
     KWFormat format;
 

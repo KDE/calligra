@@ -235,7 +235,7 @@ bool KWAutoFormatEntry::getVertAlign()
 /*================================================================*/
 KWAutoFormat::KWAutoFormat( KWordDocument *_doc )
     : typographicQuotes(), enabled( false ), lastWasDotSpace( false ),
-      convertUpperCase( true ), lastWasUpper( false ), convertUpperUpper( false ),
+      convertUpperCase( FALSE ), lastWasUpper( false ), convertUpperUpper( false ),
       maxlen( 0 )
 {
     doc = _doc;
@@ -306,7 +306,7 @@ void KWAutoFormat::doSpellCheck( KWParag *parag, KWFormatContext *fc )
 {
     if ( !enabled || !doc->onLineSpellCheck() )
 	return;
-    
+
     if ( isSeparator( parag->getKWString()->data()[ fc->getTextPos() ].c ) ) {
 	if ( !spBuffer.isEmpty() && spBegin ) {
 	    qDebug( "spellcheck: %s", spBuffer.latin1() );
@@ -315,7 +315,7 @@ void KWAutoFormat::doSpellCheck( KWParag *parag, KWFormatContext *fc )
 	}
 	return;
     }
-    
+
     if ( spBuffer.isEmpty() )
 	spBegin = &parag->getKWString()->data()[ fc->getTextPos() ];
     spBuffer += parag->getKWString()->data()[ fc->getTextPos() ].c;
@@ -342,7 +342,7 @@ bool KWAutoFormat::doTypographicQuotes( KWParag *parag, KWFormatContext *fc )
     if ( !typographicQuotes.replace ) {
 	if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat &&
 	     parag->getKWString()->data()[ fc->getTextPos() ].autoformat->type == AT_TypographicQuotes ) {
-	    parag->getKWString()->data()[ fc->getTextPos() ].c 
+	    parag->getKWString()->data()[ fc->getTextPos() ].c
 		= QChar( parag->getKWString()->data()[ fc->getTextPos() ].autoformat->c );
 	    delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
 	    parag->getKWString()->data()[ fc->getTextPos() ].autoformat = 0L;
@@ -406,7 +406,7 @@ bool KWAutoFormat::doUpperCase( KWParag *parag, KWFormatContext *fc )
 
 	    parag->getKWString()->data()[ fc->getTextPos() ].autoformat = info;
 
-	    parag->getKWString()->data()[ fc->getTextPos() ].c 
+	    parag->getKWString()->data()[ fc->getTextPos() ].c
 		= parag->getKWString()->data()[ fc->getTextPos() ].c.upper();
 	    converted = true;
 	}
@@ -435,9 +435,9 @@ bool KWAutoFormat::doUpperCase( KWParag *parag, KWFormatContext *fc )
 	    converted = true;
 	}
     } else if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat &&
-	      parag->getKWString()->data()[ fc->getTextPos() ].autoformat->type 
+	      parag->getKWString()->data()[ fc->getTextPos() ].autoformat->type
 		== AT_UpperUpper ) {
-	parag->getKWString()->data()[ fc->getTextPos() ].c 
+	parag->getKWString()->data()[ fc->getTextPos() ].c
 	    = QChar( parag->getKWString()->data()[ fc->getTextPos() ].autoformat->c );
 	delete parag->getKWString()->data()[ fc->getTextPos() ].autoformat;
 	parag->getKWString()->data()[ fc->getTextPos() ].autoformat = 0L;

@@ -37,6 +37,7 @@
 #include "docstruct.h"
 #include "variabledlgs.h"
 #include "serialletter.h"
+#include "contents.h"
 
 #include <qtextstream.h>
 #include <qevent.h>
@@ -155,6 +156,27 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     formatFC = new KWFormatContext( doc, 1 );
 
     pasteLaterData = 0;
+
+    // HACK
+    if ( doc && doc->getContents()->hasContents() ) {
+	KWParag *p = ( (KWTextFrameSet*)doc->getFrameSet( 0 ) )->getFirstParag();
+	QList<KoTabulator> tabList;
+	KoTabulator *tab = new KoTabulator;
+	tab->ptPos = ( (KWTextFrameSet*)doc->getFrameSet( 0 ) )->getFrame( 0 )->width() - 10;
+	tab->mmPos = POINT_TO_MM( tab->ptPos );
+	tab->inchPos = POINT_TO_INCH( tab->ptPos );
+	tab->type = T_RIGHT;
+	tabList.append( tab );
+	bool didCont = FALSE;
+	while ( p ) {
+	    if ( p->getInfo() == KWParag::PI_CONTENTS ) {
+		didCont = TRUE;
+		p->getParagLayout()->setTabList( &tabList );
+	    } else if ( didCont )
+		break;
+	    p = p->getNext();
+	}
+    }
 }
 
 /*================================================================*/
@@ -686,7 +708,7 @@ bool KWPage::vmpEdit( int mx, int my )
 	editNum = frameset;
 	return TRUE;
     }
-    
+
     selectedFrameSet = selectedFrame = -1;
     if ( frameset != -1 && doc->getFrameSet( frameset )->getFrameType() == FT_TEXT ) {
 	fc->setFrameSet( frameset + 1 );
@@ -1810,7 +1832,7 @@ void KWPage::paintPart( QPainter &painter, int i )
     painter.save();
     QRect r = painter.viewport();
     painter.setViewport( frame->x() - contentsX(), frame->y() - contentsY(), r.width(), r.height() );
-    if ( pic ) 
+    if ( pic )
 	painter.drawPicture( *pic );
     painter.setViewport( r );
     painter.restore();
@@ -1829,7 +1851,7 @@ void KWPage::paintFormula( QPainter &painter, int i )
     painter.save();
     QRect r = painter.viewport();
     painter.setViewport( frame->x() - contentsX(), frame->y() - contentsY(), r.width(), r.height() );
-    if ( pic ) 
+    if ( pic )
 	painter.drawPicture( *pic );
     painter.setViewport( r );
     painter.restore();
@@ -1888,7 +1910,7 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
 		emptyRegion = emptyRegion.subtract( QRect( _x + li, paintfc->getPTY(),
 							   _wid - li - re, paintfc->getLineHeight() ) );
 		doc->printLine( *paintfc, painter, contentsX(), contentsY(), width(), height(),
-				gui->getView()->getViewFormattingChars(), TRUE, fr.x(), fr.y(), fr.width(), fr.height(), 
+				gui->getView()->getViewFormattingChars(), TRUE, fr.x(), fr.y(), fr.width(), fr.height(),
 				QBrush( frame->getBackgroundColor() ));
 		bend = !paintfc->makeNextLineLayout();
 		if ( paintfc->getPage() > lastVisiblePage )
@@ -2165,8 +2187,8 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool /*full*/, bool exi
 						   paintfc.getLineHeight() ) );
 	if ( drawIt || forceDraw ) {
 	    doc->printLine( paintfc, painter, contentsX(), contentsY(), width(), height(),
-			    gui->getView()->getViewFormattingChars(), TRUE, 
-			    _x + li, paintfc.getPTY() - contentsY(), _wid - li - re, paintfc.getLineHeight(), 
+			    gui->getView()->getViewFormattingChars(), TRUE,
+			    _x + li, paintfc.getPTY() - contentsY(), _wid - li - re, paintfc.getLineHeight(),
 			    QBrush( frame->getBackgroundColor() ) );
 	}
 
@@ -2936,7 +2958,7 @@ void KWPage::formatChanged( KWFormat &_format, bool _redraw )
 	    f.setItalic( _format.getItalic() );
 	    f.setUnderline( _format.getUnderline() );
 	    QColor c( _format.getColor() );
-	    ( ( KWFormulaFrameSet* )doc->getFrameSet( editNum ) )->setFormat( f, c );	    
+	    ( ( KWFormulaFrameSet* )doc->getFrameSet( editNum ) )->setFormat( f, c );	
 	}
 	return;
     }
@@ -3763,7 +3785,7 @@ bool KWPage::find( QString _expr, KWSearchDia::KWSearchEntry *_format,
 {
     if ( _first || !currFindParag ) {
 	for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
-	    if ( doc->getFrameSet( i )->getFrameType() == FT_TEXT && 
+	    if ( doc->getFrameSet( i )->getFrameType() == FT_TEXT &&
 		 doc->getFrameSet( i )->getFrameInfo() == FI_BODY ) {
 		currFindParag = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( i ) )->getFirstParag();
 		currFindPos = 0;
@@ -4943,6 +4965,6 @@ void KWPage::insertFormulaChar( int c )
 /*================================================================*/
 bool KWPage::formulaIsActive() const
 {
-    return ( editNum != -1 && 
+    return ( editNum != -1 &&
 	     doc->getFrameSet( editNum )->getFrameType() == FT_FORMULA );
 }

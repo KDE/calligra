@@ -96,7 +96,7 @@ class KWAutoFormat
 public:
     struct TypographicQuotes
     {
-	TypographicQuotes() : begin( ( char )'»' ), end( ( char )'«' ), replace( true )
+	TypographicQuotes() : begin( ( char )'»' ), end( ( char )'«' ), replace( FALSE )
 	{}
 	TypographicQuotes( const TypographicQuotes &t ) {
 	    begin = t.begin;
@@ -130,7 +130,7 @@ public:
     bool doTypographicQuotes( KWParag *parag, KWFormatContext *fc );
     bool doUpperCase( KWParag *parag, KWFormatContext *fc );
     void doSpellCheck( KWParag *parag, KWFormatContext *fc );
-    
+
     void setEnabled( bool e ) { enabled = e; }
     bool isEnabled() { return enabled; }
 

@@ -304,7 +304,7 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 void KWParag::save( ostream &out )
 {
     out << indent << "<TEXT>" << ( const char* )text.utf8() << "</TEXT>" << endl;
-    if ( info == PI_FOOTNOTE )
+    if ( info == PI_FOOTNOTE || info == PI_CONTENTS )
 	out << indent << "<NAME name=\"" << correctQString( paragName ).latin1() << "\"/>" << endl;
     out << indent << "<INFO info=\"" << static_cast<int>( info ) << "\"/>" << endl;
     out << indent << "<HARDBRK frame=\"" << static_cast<int>( hardBreak ) << "\"/>" << endl;
@@ -434,7 +434,7 @@ void KWParag::applyStyle( QString _style )
     KWParagLayout *tmp = document->findParagLayout( _style );
     if ( !tmp )
 	return;
-    
+
     KWParagLayout *pl = new KWParagLayout( document, false );
     *pl = *tmp;
 
@@ -461,9 +461,9 @@ void KWParag::applyStyle( QString _style )
 
     if ( document->getApplyStyleTemplate() & KWordDocument::U_SMART ) {
 	KWFormat nf( document );
-	nf = pl->getFormat(); 
+	nf = pl->getFormat();
 	KWFormat of( document );
-	of = paragLayout->getFormat(); 
+	of = paragLayout->getFormat();
 	KWFormat f( document );
 	KWFormat *f2;
 
@@ -583,7 +583,7 @@ void KWParag::applyStyle( QString _style )
 	    pl->getFormat().setColor( c );
 	}
     }
-    
+
     if ( !document->getApplyStyleTemplate() & KWordDocument::U_TABS )
 	pl->setTabList( paragLayout->getTabList() );
 

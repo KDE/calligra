@@ -143,6 +143,7 @@ public:
     virtual void extraSpelling();
     virtual void extraAutoFormat();
     virtual void extraStylist();
+    virtual void extraContents();
     virtual void extraOptions();
 
     virtual void toolsEdit();
@@ -212,7 +213,7 @@ public:
     virtual void formulaMatrix();
     virtual void formulaLeftSuper();
     virtual void formulaLeftSub();
-    
+
     virtual void setMode( KOffice::View::Mode _mode );
     virtual void setFocus( bool mode );
 
@@ -246,7 +247,7 @@ public:
     OpenParts::Id getID() { return OPPartIf::m_id; }
 
     void showFormulaToolbar( bool show );
-    
+
 public slots:
     void slotInsertObject( KWordChild *_child, KWPartFrameSet *_kwpf );
     void slotUpdateChildGeometry( KWordChild *_child );
@@ -351,6 +352,7 @@ protected:
     long int m_idMenuExtra_Spelling;
     long int m_idMenuExtra_AutoFormat;
     long int m_idMenuExtra_Stylist;
+    long int m_idMenuExtra_Contents;
     long int m_idMenuExtra_Options;
 
     // tools menu

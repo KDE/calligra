@@ -22,6 +22,7 @@ class QPrinter;
 class KWCharImage;
 class KWPictureFrameSet;
 class KWSerialLetterDataBase;
+class KWContents;
 
 #include <koDocument.h>
 #include <koPrintExt.h>
@@ -380,6 +381,11 @@ public:
     void setOnLineSpellCheck( bool b ) {
 	spellCheck = b;
     }
+
+    void createContents();
+    KWContents *getContents() {
+	return contents;
+    }
     
 signals:
     void sig_imageModified();
@@ -469,6 +475,7 @@ protected:
     int slRecordNum;
 
     bool spellCheck;
+    KWContents *contents;
     
 };
 

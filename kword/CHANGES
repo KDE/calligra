@@ -1547,3 +1547,8 @@ Reggie, 28.9.1999:
 ------------------
 - Started with online spellchecking. Doesn't do anything
   useful yet.
+
+Reggie, 1.10.1999
+------------------
+- Implemented automatic generation of Table of Contents
+- Some fixes
