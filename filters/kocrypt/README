@@ -40,6 +40,8 @@ Payload [exactly n blocks]:
                (are your documents really that big?!?)
     - Random data is _not_ padded to the nearest blocksize.  
       The file data will start immediately after the final "size" byte.
+    - Immediately following the payload is a little-endian SHA hash of the
+      unencrypted payload to verify that the file decrypted properly.
     - File is padded with random data at the end of the file.
 
 

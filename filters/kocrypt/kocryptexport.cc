@@ -76,6 +76,7 @@ int rc;
 
     if (cbc->blockSize() > 0) blocksize = cbc->blockSize();
 
+    // FIXME: check for error codes here!!!
     // create the output file, open the input file.
     outf.open(IO_WriteOnly);
     inf.open(IO_ReadOnly);
@@ -103,26 +104,32 @@ int rc;
     outf.writeBlock(p, 5);
 
     // write the data
-    int previous_rand = rand() % 0x10000;
+    unsigned int previous_rand = rand() % 0x10000;
 
     while ((previous_rand % 5120) < blocksize)
        previous_rand = rand() % 0x10000;
 
     for (char *t = p+2; t-p < (previous_rand % 5120)+2; t += sizeof(int)) {
-       ((int *)t) = rand();
+       *((int *)t) = rand();
     }
 
     // NOTE: we _don't_ want to write previous_rand%5120 but previous_rand itself.  This
     // just makes the crypto that much stronger.
     p[0] = previous_rand & 0x00ff;
-    p[1] = previous_rand & 0xff00;
+    p[1] = (previous_rand >> 8) & 0x00ff;
 
+    // Write the size of the file out.
     unsigned int filelen = inf.size();
 
-    p[(previous_rand % 5120)+2] = filelen & 0x000000ff;
-    p[(previous_rand % 5120)+3] = filelen & 0x0000ff00;
-    p[(previous_rand % 5120)+4] = filelen & 0x00ff0000;
-    p[(previous_rand % 5120)+5] = filelen & 0xff000000;
+    p[(previous_rand % 5120)+2] = filelen         & 0x00ff;
+    p[(previous_rand % 5120)+3] = (filelen >> 8)  & 0x00ff;
+    p[(previous_rand % 5120)+4] = (filelen >> 16) & 0x00ff;
+    p[(previous_rand % 5120)+5] = (filelen >> 24) & 0x00ff;
+
+    kdDebug() << "previous_rand = " << previous_rand % 5120
+              << " fsize = " << filelen << endl;
+    kdDebug() <<  "p[0] = " << p[0]
+              << " p[1] = " << p[1] << endl;
 
     // pad up to the nearest blocksize.
     bool done = false;
