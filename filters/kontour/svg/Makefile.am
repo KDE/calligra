@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) -I$(top_srcdir)/killustrator $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES= -I$(srcdir) -I$(top_srcdir)/kontour $(KOFFICE_INCLUDES) $(all_includes)
 
 ####### Files
 
@@ -8,11 +8,11 @@ kde_module_LTLIBRARIES = libsvgimport.la libsvgexport.la
 
 libsvgimport_la_SOURCES = svgimport.cc svgimport_factory.cc basicshapes.h basicshapes.cc datatypes.h datatypes.cc path.h path.cc transform.h transform.cc style.h style.cc text.h text.cc svgmain.h svgmain.cc
 libsvgimport_la_LDFLAGS	= -module -avoid-version -no-undefined
-libsvgimport_la_LIBADD  = $(KOFFICE_LIBS) ../../../killustrator/libkillustratorpart.la
+libsvgimport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kontour/libkontourpart.la
 
 libsvgexport_la_SOURCES = svgexport.cc svgexport_factory.cc
 libsvgexport_la_LDFLAGS	= -module -avoid-version -no-undefined
-libsvgexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../killustrator/libkillustratorpart.la
+libsvgexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kontour/libkontourpart.la
 
 METASOURCES = AUTO
 
