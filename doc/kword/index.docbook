@@ -23,10 +23,17 @@ need them for translation coordination !
 Please respect the format of the date (DD/MM/YYYY) and of the version
 (Major.minor.lesser), it could be used by automation scripts -->
 
-<date>7/3/2000</date>
+<date>20/5/2000</date>
 <releaseinfo>0.1.6</releaseinfo>
 
 <revhistory>
+<revision>
+<revnumber>0.1.7</revnumber>
+<date>20/5/2000</date>
+<authorinitials>MPM</authorinitials>
+<revremark>Started from the begining again, trying to update/improve.</revremark>
+</revision>
+<!-- *************** --> 
 <revision>
 <revnumber>0.1.6</revnumber>
 <date>7/3/2000</date>
@@ -41,7 +48,8 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 <revremark>Working on "Detailed Guides" (Document layout).</revremark>
 </revision>
 <!-- *************** -->   
-<revision><revnumber>1.4</revnumber>
+<revision>
+<revnumber>1.4</revnumber>
 <date>29/01/2000</date>
 <authorinitials>MPM</authorinitials>
 <revremark>Additional work on Detailed Guides.  All screenshots/icons work now.</revremark>
@@ -81,25 +89,26 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 
 </bookinfo>
 <!-- **************************************************************************************************** -->   
-<chapter ID="TODO"><title>Still to be done on this manual</title>
-
+<chapter ID="TODO"><title>Current status of this manual</title>
+<Sect1 id="todo1"><title>Whats done and what needs to be done</title>
+<sect2 id="done"><title>What is done</title>
+<para>Sections 1-4 have been reviewed, snapshots updated, icons correct, etc.  These sections are up to date</para>
+</sect2>
+<sect2 id="notdone"><title>What is not done</title>
 <para>This is a list (a rather long list) of things which still need work in this manual:</para>
 <itemizedlist>
-
-<listitem><para>Write "What parts of this guide should I read?"</para></listitem>
-<listitem><para>Finish Tutorial.-- First pass done -- </para></listitem>
-<listitem><para>Write Working with Frames -- section merged into other areas</para></listitem>
+<listitem><para>Continue to review previously written sections.</para></listitem>
 <listitem><para>Write "Character Formatting Toolbars"</para></listitem>
-<listitem><para>Write Kword Options -- not coded yet </para></listitem>
-<listitem><para>Organize "Detailed Guides" into subjects...Then write the dang things - in progress</para></listitem>
+<listitem><para>Write Kword Options</para></listitem>
+<listitem><para>Write Zoom</para></listitem>
+<listitem><para>Finish Detailed Guides</para></listitem>
 <listitem><para>Write Answers to Questions in Q and A</para></listitem>
-<listitem><para>Add to Glossary where needed. Some terms are undefined.  Most are poorly defined.</para></listitem>
-<listitem><para>Write "Using tab stops" - in progress</para></listitem>
-<listitem><para>If Open template dialog continues to not need an ok, rework tutorial.</para></listitem>
+<listitem><para>Add to Glossary where needed. Some terms are undefined.  Most are poorly defined.- This is much better thanks to Jost.</para></listitem>
 <listitem><para>Organize "Keyboard shortcuts" into subjects, then organize table by subject</para></listitem>
 <listitem><para>KWord now uses different open/save dialogs.   Review all sections relating to this.</para></listitem>
 </itemizedlist>
-<para>Just before release of KOffice.......</para>
+</sect2>
+<sect2><title>Just before release of KOffice.......</title>
 <itemizedlist>
 <listitem><para>Complete section on authors.....</para></listitem>
 <listitem><para>Write a section for each of the inport/export filters (ASCII, HTML, Word97, etc).</para></listitem>
@@ -109,10 +118,9 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 <para>I want to make this very clear.  This is a first draft (of many).  My initial goal, is to get a good start on every section of this documentation.  After this first draft is complete, I will rework each section again for more clairity/completeness.  </para>
 <para>I would be very interested in any part of KWord that people find particularly difficult or confusing.  You can either write me directly, or post your comments on the koffice mailing list (which I faithfully read).  These comments will help me focus the documentation better.</para>
 <para>You may also notice (if you are reading this closely at all), that sections of this guide will often end abruptly with "STUFF".  This is a marker to remind myself that more needs to be added, or the section needs to be worked on again.</para>
-<para>If anyone wants to help me write this monster, I will erect a temple in your honor.  Please drop me a note and let me know what you would like to work on.</para>
 <para>Thanks</para>
 <para>Mike <email>mmcbride@ematic.com</email> </para>
-
+</sect2></sect1>
 </chapter>
 <!-- **************************************************************************************************** -->   
 
@@ -120,111 +128,141 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 
 <sect1 id="Introduction1">
 <title>Introduction</title>
-<para>KWord, is a full featured WYSIWYG (What You See Is What You Get) Wordprocessor/Desktop Publishing Program. </para>
+<para><application>KWord</application>, is a full featured <indexterm><primary>WYSIWYG</primary></indexterm>WYSIWYG (What You See Is What You Get) Wordprocessor/Desktop Publishing Program. </para>
 <para> KWord is part of the KOffice productivity suite for the K Dekstop Environment.  Other applications in KOffice include</para>
 <simplelist type=vert columns=1>
-<member>KSpread (spreadsheet)</> 
-<member>KPresenter (presentation creator)</>
-<member>KIllustrator (a vector drawing program)</>
-<member>KImageShop (a bitmap image editor)</>
-<member>Katabase (database)</>
-<member>KFormula (formula editor)</>
-<member>KChart (for charts/graphs)</>
-<member>and KImage (an image viewer).  </>
+<member><application>KOShell</application> (toolbar/program starter)</>
+<member><application>KSpread</application> (spreadsheet)</> 
+<member><application>KPresenter</application> (presentation creator)</>
+<member><application>KIllustrator</application> (a vector drawing program)</>
+<member><application>KImageShop</application> (a bitmap image editor)</>
+<!--<member>Katabase (database)</> ****Put this back in if it does become a reality**** -->
+<member><application>KChart</application> (for charts/graphs)</>
+<member>and <application>KImage</application> (an image viewer).  </>
 </simplelist>
-<para>All KOffice applications were designed from the beginning to take advantage KDE 2.0. Because of this, KWord (like all of KOffice), supports drag and drop, themes, and many other advanced features.</para>
+<para>All KOffice applications were designed from the beginning to take advantage KDE 2.0. Because of this, <application>KWord</application> (like all of KOffice), supports drag and drop, themes, and many other advanced features you expect from todays desktop environment.</para>
 
-<para>KWord is a wordprocessor which can work either as a traditional word processor, or as a simple Desktop Publishing Application.  This is possible because KWord is a frame oriented word processor, not a page oriented word processor (Microsoft Word, Word Perfect and Applixware are all page oriented word processors).</para>
+<para><application>KWord</application> is a wordprocessor which can work either as a traditional word processor, or as a simple desktop publishing application.  This is possible because <application>KWord</application> is a frame oriented word processor, not a page oriented word processor (<application>Microsoft Word</application>, <application>Word Perfect</application> and <application>Applixware</application> are all page oriented word processors).</para>
 
-<para>Frame oriented word processors work by creating one or more "frames" per page.  Each frame acts as a boundry, which limits the text within the frame.  You can move and reshape these boundries, to define where on the page the text will be placed.  As you resize frames, the text layout is reworked to fit within these frames.  You can easily "connect" one frame to the next.  When you connect two frames, any text which does not fit within the first frame, flows easily and automatically into the next.  In addition to text, you can include virtually anything inside a frame.  A frame can contain a spreadsheet, clipart, pictures, a database form, or nearly any piece of data.  Since each page can have any number of frames, documents can appear quite sophisticated while still remaining easy to edit. Kword users also benefit from the auto wrap featurs in KWord.  When you place one frame on top of part of another frame, the text from the "lowest" frame can be automatically wrapped around the newly created frame.  This reformating all occurs in a WYSIWYG Graphical User interface, and occurs as you edit.</para>
+<para>Frame oriented word processors work by creating one or more "frames" per page.  Each frame acts as a boundry (like a frame which surrounds a photograph), which limits the text to the boundries of the frame.  You can move and reshape these boundries, to define exactly where on the page the text will be placed.  As you resize frames, the text layout is reworked to fit within these frames.  You can easily "connect" one frame to the next.  When you connect two frames, any text which does not fit within the first frame, flows easily and automatically into the next.  In addition to text, you can include virtually anything inside a frame.  A frame can contain a spreadsheet, clipart, pictures, a database form, or nearly any piece of data.  Since each page can have any number of frames, documents can appear quite sophisticated while still remaining easy to edit.</para>
+<para> Kword users also benefit from the auto wrap featurs in KWord.  When you place one frame on top of part of another frame, the text from the "lowest" frame can be automatically wrapped around the newly created frame.  This reformating all occurs in a WYSIWYG Graphical User Interface, and occurs as you edit.</para>
 
-<para>KWord simplifies the creation of new pages (at the users option), by automatically creating frames for the next page, using the previous page as a blueprint. This eliminates the need for the user to re-define the frame boundries for each page.</para>
+<para>KWord simplifies the creation of new pages (at the users option), by automatically creating frames for the next page, using the current page as a blueprint. This eliminates the need for the user to re-define the frame boundries for each page.</para>
 
 <para>As a wordprocessor, KWord includes the most used options of many other word processors, while maintaing a simple interface.  In addition to the features you expect from a modern wordprocessing package (text entry, bold face, italics, text alignment, text printing, etc), KWord can:</para>
 
 <itemizedlist>
-<listitem><para>Templates.  Using predefined templates, complex document layout becomes a one step process.  As a user, you can build your own templates, or use the current document to create a new template.</para></listitem> 
-<listitem><para>KWord allows very complicated numbering of lists.  You are not limited to numbers or letters, you can define your own!</para></listitem>
-<listitem><para>paragraph layout styles</para></listitem>
-<listitem><para>Editing headers and footers to maintain a consistant look for your documents</para></listitem>
-<listitem><para>You can search through you document for text and limit your search to text with specific formatting.  By adding wildcards, the search and replace functions can become very powerful</para></listitem>
-<listitem><para>Complete footnote and endnote support</para></listitem>
-<listitem><para>Tables</para></listitem>
-<listitem><para>Incorporation of Pictures, Tables and other components from KOffice</para></listitem>
-<listitem><para>STUFF....  </para></listitem>
+<listitem><para>Use predefined templates, to generate complex document layout with one click of the mouse. As a user, you can build your own templates, download templates from the web, or use the current document to create a new template.</para></listitem> 
+<listitem><para><application>KWord</application> allows very complicated numbering of lists.  You are not limited to numbers or letters, you can define your own series for your special lists.</para></listitem>
+<listitem><para>Define paragraph layout styles, to shorten the editing time of your document, and ensure consistancy throughout a long document.</para></listitem>
+<listitem><para>Edit headers and footers for your documents.  You can have different headers for even and odd pages, or the same headers throughout.</para></listitem>
+<listitem><para>Search through you document for text.  You can further refine your search by specifying font, format, font size and many other features of the text. By adding wildcards to your search, the search and replace functions can become very powerful.</para></listitem>
+<listitem><para>Complete footnote and endnote support.</para></listitem>
+<listitem><para>Tables.  You can either use the table formatting capabilities of KWord, or you can import any spreadsheet from KSpread.</para></listitem>
+<listitem><para><application>KWord</application> has built in support for KParts.  KParts allows you to insert any spreadsheet, picture, chart, graph, document, or any other data type from any KOffice application.  You are free to edit that KPart using the tools designed for that task, without needing to start the application at all.</para></listitem>
+<listitem><para><application>KWord</application> can zoom in or out to make the editing of your documents easier on any computer, and with any font size. </para></listitem>
+<listitem><para><application>KWord</application> supports customizable toolbars and menus.</para></listitem>
+<listitem><para><application>KWord</application> has extensive multilanguage support.</para></listitem>
+<listitem><para>You can embed formulas directly into <application>KWord</application> using the integrated formula editor.</para></listitem>
 </itemizedlist>
+<para>The best part about KWord, is the effort that has been placed to make KWord a productive tool for all your needs from the simplest letter, to the most complex document you might need to work on.</para>
+
 </sect1>
 <sect1 id="Conventions"><title>Conventions Used Throughout this User Guide</title>
-<para>
+<para>Right Mouse Click
 </para>
+<para>Left Mouse Click</para>
+<para>Not sure I still need this section.....</para>
 </sect1>
 <sect1 id="WhoReads"><title>What parts of this guide should I read?</title>
-<para>
-</para>
-</sect1>
-</chapter> 
+<para>Anyone who has looked at the table of contents has surely come to the conclusion that reading this manual from cover to cover, is an unreasonable (and fortunately unecessary) task.</para>
+<para>This user guide is designed to be helpful to a wide variety of users, from the very experienced, to the novice user.  Each user will have different needs from this manual.  To help you determine what you should read and what you can wait on, I have prepared a suggested reading list for three levels of user.</para>
+<para>If you read each of these sections <emphasis>before</emphasis> you start using KWord, you will find that using <application>KWord</application> is easy.</para><para></para><informaltable>
+<tgroup cols=3 align=left><thead>
+<row><entry>Experience Level</entry><entry>Previous Experience</entry><entry>What you should read</entry></row>
+</thead><tbody>
+<row><entry>Novice</entry><entry>No previous computer expierience</entry><entry><para><simplelist type=vert columns=1>
+<member><link linkend="Fundimental">Fundimentals</link></member>
+<member><link linkend="Tutorial">Step by Step Tutorial</link></member>
+<member><link linkend="KWordScreen">The KWord Screen</link></member>
+<member><link linkend="Guides">Document Storage and Printing</link></member>
+<member><link linkend="Guides2">Editing Your Document</link></member>
+<member><link linkend="menuintro">Introduction to Menu Bars and Tool Bars</link></member>
+</simplelist></para></entry></row>
+<row><entry>Intermediate</entry><entry>Comfortable with other page based wordprocessors (Microsoft Word, Word Perfect and Applixware.)  </entry>
+<entry><para><simplelist type=vert columns=1>
+<member><link linkend="Fundimental">Fundimentals</link></member>
+<member><link linkend="Tutorial">Step by Step Tutorial</link></member>
+</simplelist></para></entry></row>
+<row><entry>Advanced User</entry><entry>Comortable with other frames based word processors (Frame Maker, etc).</entry>
+<entry><para><simplelist type=vert columns=1>
+<member><link linkend="WPVSDTP">The differenct between Wordprocessing and DTP templates</link></member>
+<member><link linkend="textandframe"> The difference between Text Edit mode and Frame Edit mode</link></member>
+</simplelist></para></entry></row>
+</tbody></tgroup></informaltable>
+<para>Obviously this will not cover everyones needs.  What it should do, however, is help you figure out which parts of the manual you need to read before you begin using <application>KWord</application>.</para>
+</sect1></chapter> 
 <!-- **************************************************************************************************** -->   
-
-<chapter id="Fundimental"><title>Fundimentals</title><para>This next section is designed to introduce you to:
-<orderedlist Numeration="Arabic">
-<listitem><para><link linkend="StartingKword">How to start KWord</link></para></listitem>
-<listitem><para><link linkend="TemplateIntro">The concepts of Templates in KWord</link> (not to be confused with templates in Microsoft Office)</para></listitem>
-<listitem><para><link linkend="KWordScreen">The basic parts of the KWord Screen</link></para></listitem>
-</orderedlist></para>
+<chapter id="Fundimental"><title>Fundimentals</title><para>This next section is designed to show you how to start <application>KWord</application>and some basic but important concepts you should understand when using KW</para>
 <sect1 id="StartingKword"><title>Starting Kword</title><para>
-KWord can be started one of three ways:
+KWord can be started one of four ways:
 <orderedlist>
-<listitem><para>You can select Kword through the system menus, under "Koffice"</para></listitem>
+<listitem><para>You can select Kword through the system menus, under:  <menuchoice>
+    <guimenu>K-Button</guimenu><guimenuitem>Applications</guimenuitem><guimenuitem>KOffice</guimenuitem>
+  <guimenuitem>KWord</guimenuitem>
+</menuchoice>.</para> </listitem>
 <listitem><para>If you are in a terminal program (KVT, Xterm, etc), you can type:
 <screen><prompt>$</prompt> <command>KWord &amp</command></screen></para>
 <para>Or</para>
 <para><screen><prompt>$</prompt> <command>KWord <replaceable>filename</replaceable> &amp</command></screen></para></listitem>
-<listitem><para>Using Konqerer, you can click on your data file (KWord documents end in .kwd).  This will automatically start KWord and begin editing the file.</para></listitem>
+<listitem><para>Using <application>Konqerer</application>, you can click on your data file (KWord documents end in .kwd).  This will automatically start <application>KWord</application> and begin editing the file.</para></listitem>
+<listitem><para>Using <application>KOShell</application></para></listitem>
 </orderedlist></para></sect1>
 <sect1 id="TemplateIntro"><title>An Introduction to Templates</title>
 <para>OK, so the first question you may have is:</para>
-<para>Why do I need to use a frames based word processor, when I am perfectly happy writing my letters on my current, page oriented, word processor? </para>
-<para>Well the good news is, adjusting to a frames based word processor is easy and once you select a template, Kword will act just like the page oriented wordprocessor you are used to.  There are templates available for simple correspondance and day to day use. </para>
+<para><emphasis>Why do I need to use a frames based word processor, when I am perfectly happy writing my letters on my current, page oriented, word processor? </emphasis></para>
+<para>Well the good news is, adjusting to a frames based word processor is easy and once you select a template, <application>KWord</application>will act just like the page oriented wordprocessor you are used to.  There are templates available for simple correspondance and day to day use. </para>
 <para>When you need to generate a more complex document (newsletters, posters, etc), however, you will not need to switch to a different program to generate these special documents.  There are templates which will help you generate your newsletters or other more complicated documents. </para>
 <para>OK. So now that you are willing to give this a try, we should talk briefly about what templates are, what templates can do for you and how you work with templates. </para>
 <para><Emphasis>What are templates and what can they do for me</Emphasis></para>
 <para>A template can be thought of as an initial mold for your document.  When we sit down to write a document, we already have an idea of what the final product will look like.  If you are writing a letter to a business, you want a document with only one column, which goes all the way accross the page, and from top to bottom of the page.
 When you sit down to author a newsletter for a local organization, however, you may want a large title accross the top, and several columns for quick news articles. </para>
-<para>With KWord, you can use this preconceived notion of how your document should look and using a template, you can create a set of frames to approximate this final layout.  For your business letter, you can select one large frame that covers the page from top to bottom and side to side (excluding margins of course).  For that newsletter, however, you may decide that a two column document is more to your liking.  Once you select this template, KWord will create the frames for you. </para>
+<para>With KW, you can use this preconceived notion of how your document should look and using a template, you can create a set of frames to approximate this final layout.  For your business letter, you can select one large frame that covers the page from top to bottom and side to side (excluding margins of course).  For that newsletter, however, you may decide that a two or three column document is more to your liking.  Once you select this template, KWord will create the frames for you. </para>
 <para><Emphasis>What if I decide later to change my layout</Emphasis></para>
 <para>This is not a problem.  If you begin your document as a single column document and decide later that two columns is better for your needs, you can add another column.  The purpose of templates is not to limit your ability to change your format, but rather to take some of the work load off you whenever possible.
-I think it is fair to say that choosing the correct template when you begin your document, will simplify the formating (as opposed to always selecting the default template and making your changes later.), but it is also important to remember that choosing the wrong template will not increase your work when compared to page-oriented word processors. </para>
+Choosing the correct template when you begin your document will simplify the formating (as opposed to always selecting the default template and making your changes later.), but it is also important to remember that choosing the wrong template will not increase your work when compared to page-oriented word processors. </para>
 <para><Emphasis>Working with frames (aka Your First Document) </Emphasis></para>
-<para>The following section, consists of two fundimental topics which you should understand before we condinue, and a step by step walk through of the most common things you will need to understand to manipulate multiple frames in the document.  We will generate a quick newsletter using this tutorial.  If you do not want to complete the tutorial, or have questions about a specific aspect of frames, you can use the following to jump directly to that section of the tutorial: </para>
+<para>The following section, consists of two fundimental topics which you should understand before we continue, and a step by step walk through of the most important functions you will need to understand to complete a complex document.  We will generate the start of a newsletter using this tutorial.  If you do not want to complete the tutorial, or have questions about a specific aspect of frames, you can use the following to jump directly to that section of the tutorial: </para>
 <orderedlist Numeration="Arabic">
-<listitem><para><link linkend="WPVSDTP">The differenct between Wordprocessing and DTP templates</link></para></listitem>
-<listitem><para><link linkend="TextandFrame">The difference between Text edit mode and frame edit mode</link></para></listitem>
+<listitem><para><link linkend="WPVSDTP">The difference between Wordprocessing and DTP templates</link></para></listitem>
+<listitem><para><link linkend="TextandFrame">The difference between text edit mode and frame edit mode</link></para></listitem>
 <listitem><para><link linkend="ChooseTemplate">Choosing the initial template</link></para></listitem>
 <listitem><para><link linkend="FrameSelect">Selecting a frame and entering text into that frame</link></para></listitem>
 <listitem><para><link linkend="ResizeFrame">Changing the size of a frame</link></para></listitem>
 <listitem><para><link linkend="MoveFrame">Moving a frame on the page</link></para></listitem>
-<listitem><para><link linkend="AddFrame">Adding a new frameMaking text flow between two frames</link></para></listitem>
+<listitem><para><link linkend="AddFrame">Adding a new frame and making text flow between two frames</link></para></listitem>
 <listitem><para><link linkend="DelFrame">Deleting a frame</link></para></listitem>
-
 </orderedlist>
+<para>This tutorial is designed to be done in order, starting with <link linkend="WPVSDTP">The difference between Wordprocessing and DTP templates</link></para>
 </sect1>
 <sect1 id="WPVSDTP"> 
 <title>The differenct between Wordprocessing and DTP templates</title>
-<para>Before we begin with the tutorial, it is important, before we begin, that the difference between DTP (DeskTop Publishing) and Wordprocessing templates is explained. </para>
+<para>Before we begin with the tutorial, it is important that the difference between DTP (DeskTop Publishing) and Wordprocessing templates is clear in your mind. </para>
 <variablelist>
-<varlistentry><Term>Wordprocessing</Term><listitem><para>The Wordprocessing templates are designed to act like page-oriented wordprocessors.  When you select a Wordprocessing template, you will create a template with one or more frames.  The first frameset is distinctly tied to the paper size of your document.  When you increase or decrease the paper size, the frame size is automatically adjusted.  You are NOT able to move this frame around on the page and you cannot delete this frame. If you need to adjust the size or position of this frame, you must <link linkend="PageFormat">adjust the margins</link> to adjust the framesize.  On top of the first frame, you can, of course, add additional frames.  These frames can contain pictures, text or whatever you want.  These new frames can be moved, resized and deleted suit your needs. If you want it, KWord will even wrap the text from the first frame around any information in any subsiquent frames.
+<varlistentry><Term>Wordprocessing</Term><listitem><para>The Wordprocessing templates are designed to act like page-oriented wordprocessors.  When you select a Wordprocessing template, you will create a template with one or more frames.  The first frameset is distinctly tied to the paper size of your document.  When you increase or decrease the paper size, the frame size is automatically adjusted.  You are NOT able to move this frame around on the page and you cannot delete this frame. If you need to adjust the size or position of this frame, you must <link linkend="PageFormat">adjust the margins</link> to adjust the frame position or size.  On top of the first frame, you can, of course, add additional frames.  These frames can contain pictures, text or whatever you want.  These new frames can be moved, resized and deleted to suit your needs. If you want it, KWord will even wrap the text from the first frame around any information in any subsiquent frames.
 </para></listitem></varlistentry>
-<varlistentry><Term>DTP</Term><listitem><para>These templates are designed for simple Desktop Publishing.  When you select a template from this class, all of the frames are "created equal".  This is where the difference between DTP and Wordprocessing template lies.  None of the frames in a DTP template are tied to the page as tightly as the main frame in a Wordprocessing template is. Each of the frames is independent of the page size, and can be moved or resized without changing margins, etc.  Of course this also means that altering the margins or papersize of your document requires that you individually move/resize each frame.
+<varlistentry><Term>DTP</Term><listitem><para>These templates are designed for Desktop Publishing.  When you select a template from this class, all of the frames are "created equal".  This is where the difference between DTP and Wordprocessing template lies.  None of the frames in a DTP template are tied to the page as tightly as the main frame in a Wordprocessing template is. Each of the frames is independent of the page size, and can be moved or resized without changing margins, etc.  Of course this also means that altering the margins or papersize of your document requires that you individually move/resize each frame.
 </para></listitem></varlistentry>
 </variablelist>
 <para>As you can see, the choice between DTP and Wordprocessing templates is a choice between flexibility (DTP) and convenince (Wordrocessing).  You can create any document you like with either type of template.
 </para>
 <para>If this concept is unclear, please follow along with the following step by step.  The first document you will create will use a DTP template.  This should help clairify exactly how templates function.</para></sect1>
 <sect1 id="TextandFrame"> <title>The difference between Text Edit mode and Frame Edit mode</title>
-<para>It is important to realize that most documents consist of two separate but often interrelated components:
+<para>Before we begin the tutorial, there is one other feature of <application>KWord</application>we should cover.</para>
+<para>If you think about it, most documents consist of two separate but often interrelated components:
 <orderedlist Numeration="Arabic">
 <listitem><para>The content: Which consists of text you enter through the keyboard, the pictures you have on your hard disk, the data in your spreadsheet, etc.  </para></listitem>
-<listitem><para>The layout: Which consists of how the information is given to the reader.  Multiple columns, boxes surrounding text. italics for emphasis, etc.  </para></listitem>
+<listitem><para>The layout: Which consists of how the information is given to the reader.  Multiple columns, boxes surrounding text, italics for emphasis, etc.  </para></listitem>
 </orderedlist></para>
 <para>This same division exists when using KWord. </para>
 <para>KWord has two modes of operations:</para>
@@ -233,41 +271,40 @@ I think it is fair to say that choosing the correct template when you begin your
 <listitem><para>Frame Edit Mode</para></listitem>
 </itemizedlist>
 <para>Text Edit Mode is most commonly used for the <emphasis>entry of the content</emphasis> of the document.  In Text Edit Mode, you enter text from the keyboard, cut and paste from other applications, build tables for your data, etc.   </para>
-<para>Frame Edit Mode is most commonly used for the <emphasis>layout</emphasis> of the document.  Using Frame Edit mode, you can adjust the width of text, resize pictures, etc.</para>
-<para>This is not to say that you will never enter content from Frame Edit Mode, and never alter layout in the Text edit mode, but most of the time, you can consider the STUFF</para>
-<para>You can enter Text Edit Mode by: <menuchoice><guimenu>Tools</guimenu><guimenuitem>Edit Text</guimenuitem></menuchoice>
-or by pressing F4 
-or by clicking on the Text Edit toolbar button (<inlinegraphic fileref="pics/textmode" format="png" align="center"></inlinegraphic>)</para>
-<para>You can enter Frame Edit Mode by: <menuchoice><guimenu>Tools</guimenu><guimenuitem>Edit Frame</guimenuitem></menuchoice>
-or by pressing F5 
-or by clicking on the Frame  Edit toolbar button (<inlinegraphic fileref="pics/framemode" format="png" align="center"></inlinegraphic>)</para>
-<para> Now that we have discussed the differences between DTP and Wordprocessing templates and introduced the differences between Text Edit Mode and Frame Edit Mode, we can begin the tutorial</para></sect1>
+<para>Frame Edit Mode is most commonly used for the <emphasis>layout</emphasis> of the document.  Using Frame Edit Mode, you can adjust the width of text, resize pictures, etc.</para>
+<para>This is not to say that you will never enter content from Frame Edit Mode, and never alter layout in the Text edit mode, but you will find that most often the previous guides will serve you well.</para>
+<para>You can enter Text Edit Mode using the menu by selecting: <menuchoice><guimenu>Tools</guimenu><guimenuitem>Edit Text</guimenuitem></menuchoice>, by pressing F4, or by clicking on the Text Edit toolbar button 
+<inlinemediaobject><imageobject><imagedata format="PNG" fileref="pics/textmode.png" align="center"></imageobject><textobject><phrase>Button</phrase></textobject></inlinemediaobject></para>
+<para>You can enter Frame Edit Mode using the menu by selecting: <menuchoice><guimenu>Tools</guimenu><guimenuitem>Edit Frame</guimenuitem></menuchoice>, by pressing F5, or by clicking on the Frame  Edit toolbar button <inlinemediaobject><imageobject><imagedata format="PNG" fileref="pics/framemode.png"></imageobject><textobject><phrase>Button</phrase></textobject></inlinemediaobject> </para>
+<para> Now that we have discussed the differences between DTP and Wordprocessing templates and introduced the differences between Text Edit Mode and Frame Edit Mode, we will begin the tutorial</para></sect1>
 </chapter>
 <chapter id="Tutorial"><title>Step by Step Tutorial</title>
 <sect1 id="ChooseTemplate"> <title>Choosing the initial template</title>
-<note><para>NOTE:  The steps to this tutorial are numbered from 1 thru 21.  Beneath each step, is text in <Emphasis>italics</Emphasis>.  This text will explain what the previous step in the tutorial acomplished.</para>  </note>
+<note><para>NOTE:  The steps to this tutorial are numbered from 1 thru 21.  Beneath each step, is text in <Emphasis>italics</Emphasis>.  This text will explain what the previous step in the tutorial acomplished.</para> 
+<para>Also, you will notice a red rectangle on each screenshot.  This rectangle outlines the next object you will need to push/change/click/etc.  Obviously a red rectangle will not appear when you are running KW</para></note>
 
 <para>When you first start KWord (or <link linkend="File">start a new document</link> after KWord is running), a dialog appears.</para>
-<screenshot><graphic fileref="./pics/ChooseTempDia" format="png" align="center"></graphic></screenshot>
-<para>This dialog box is used to:
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/ChooseTempDia.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
+
+<para><emphasis>This dialog box is used to:</emphasis>
 <orderedlist numeration="arabic">
-<listitem><para>To select the initial template for your new document</para></listitem>
-<listitem><para>Open a KWord Document saved to your hard drive or network.</para></listitem>
-<listitem><para>Start KWord without any document started.</para></listitem>
+<listitem><para><emphasis>To select the initial template for your new document</emphasis></para></listitem>
+<listitem><para><emphasis>Open a <application>KWord</application>Document saved to your hard drive or network.</emphasis></para></listitem>
+<listitem><para><emphasis>Start <application>KWord</application>without any document started.</emphasis></para></listitem>
 
 </orderedlist></para>
 <para>For your first document: </para>
 
 <para>Step 1: Click on the DTP tab. </para>
-<screenshot><graphic fileref="pics/Tut1" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut1.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>This will list the Desktop Publishing icons available on your system.</Emphasis></para>
 
 <para>Step 2: Now select the "Simple Layout" icon by clicking once with the left button of your mouse. </para>
-<screenshot><graphic fileref="pics/Tut2" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut2.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>This is the template we will use for the tutorial</Emphasis></para>
 
 <para>Step 3: Now confirm your selection by clicking on "OK" </para>
-<screenshot><graphic fileref="pics/Tut3" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut3.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>To complete your selection</Emphasis></para>
 
 <para><Emphasis>KWord will open a new document with 3 frames.  The frames are outlined on the white background, as grey boxes.  Each box is a separate frame.</Emphasis></para>
@@ -275,74 +312,73 @@ or by clicking on the Frame  Edit toolbar button (<inlinegraphic fileref="pics/f
 <sect1 id="FrameSelect"> <title>Selecting a frame and entering text into that frame</title>
 <para><Emphasis>To begin entering text (or adding any sort of data for that matter), to a document, you must first let the computer know which frame to put the data in.</Emphasis></para>
 <para>Step 4: place the mouse cursor over the upper-left frame</para>
-<screenshot><graphic fileref="pics/Tut4" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut4.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para>Step 5: Click once with the left mouse button.</para>
 
 <para><Emphasis>This selects frame.  You can tell this is the current frame because a cursor appears in the upper left corner. </Emphasis></para>
-<para>Step 6: Enter the following text into the keyboard: "The KWord Reader".</para>
-
-<screenshot><graphic fileref="pics/Tut6" format="png" align="center"></graphic></screenshot>
+<para>Step 6: Enter the following text into the keyboard: "International Pepper Society".</para>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut6.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>This is some sample text for our newsletter.</Emphasis></para>
-<para>Step 7: Select "The KWord Reader" by left clicking and holding down to the left of the text, and draging to the right.  Selected text will be white text on black background.</para>
-<screenshot><graphic fileref="pics/Tut7" format="png" align="center"></graphic></screenshot>
+<para>Step 7: Select "International Pepper Society" by left clicking and holding down to the left of the text, and draging to the right.  Selected text will be white text on black background.</para>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut7.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 
 <para>Step 8: Click inside the text size drop down box.  Change this number to 50.</para>
-<screenshot><graphic fileref="pics/Tut8" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut8.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>This changes the size of the text to one more appropriate for a title.</Emphasis></para>
 
 </sect1>
 <sect1 id="ResizeFrame"> <title>Changing the size of a frame</title>
 <para><Emphasis>Now that we have entered some text, we can see that the frame is too large for the text. </Emphasis></para>
 <para>Step 9: Select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Edit Frame</guimenuitem></menuchoice></para>
-<screenshot><graphic fileref="pics/Tut9" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut9.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>This will switch us into Frame Edit Mode.</Emphasis></para>
 <para>Step 10: Click once in the upper-left frame</para>
-<screenshot><graphic fileref="pics/Tut10" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut10.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>This will select this frame for editing.</Emphasis></para>
 <para><Emphasis>You will now notice the frame is outlined in black, with 8 black squares on the outline.  These squares are used for resizing the frame.</Emphasis></para>
 <para>Step 11: Place the mouse cursor over the black square in the lower right corner of the frame. Click with the left mouse button and hold it down. Drage the mouse up and to the left.</para>
-<screenshot><graphic fileref="pics/Tut11a" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut11a.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>Notice how the frame changes shape.  Adjust the size and shape of the frame until it looks like this:</Emphasis></para>
-<screenshot><graphic fileref="pics/Tut11b" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut11b.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para>When it does, release the mouse button.</para>
 </sect1>
 <sect1 id="MoveFrame"> <title>Moving a frame on the page</title>
 <para>Now that we have created a title block, we will center it at the top of the page.</para>
 <para>Step 12: Place the mouse cursor over the frame.</para>
-<screenshot><graphic fileref="pics/Tut12" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut12.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>The cursor will now change to a "4 way arrow".  This indicates KWord is ready to move the frame on the page.</Emphasis></para>
 <para>Step 13: Click and hold with the left mouse button. Drag the mouse, and the frame will follow it.  Position the frame in the center of the page near the top.</para>
-<screenshot><graphic fileref="pics/Tut13" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut13.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 </sect1>
 <sect1 id="AddFrame"> <title>Adding a new frame/Making text flow between two frames</title>
 <para>Step 14: Begin by selecting <menuchoice><guimenu>Tools</guimenu><guimenuitem>Create Text Frame</guimenuitem></menuchoice></para>
-<screenshot><graphic fileref="pics/Tut14" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut14.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>The cursor will now change to cross-hairs.  You can now "draw" your new text box.  Start by placing the cursor at one corner.  Click and hold
 the left mouse button.  Drag the mouse diagonally.  An outline will appear which represents your new text frame.  When you have a text frame of reasonable size, release the left mouse button.</Emphasis></para>
-<screenshot><graphic fileref="pics/Tut14a" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut14a.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>It is not important if your text box does not resemble the example for the purposes of this tutorial.</Emphasis></para>
 <para>When you release the left mouse button, a new dialog box appears.</para>
-<screenshot><graphic fileref="pics/Tut15" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut15.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para>This dialog box lists all the current framesets.  The default value is highlighted.  By selecting the default value, you will create a new framset (text will not flow from any other frame into this frame)</para>
 <para>Step 15: For the purposes of this tutorial, select "Frameset 2"</para>
-<screenshot><graphic fileref="pics/Tut15a" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut15a.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para>Step 16: Select "OK"</para>
-<screenshot><graphic fileref="pics/Tut16" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut16.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>What you have just done, is connect frameset 1 to your new text frame.  To test this:</Emphasis></para>
-<para>Step 17: Click once inside the lower left frame.</para>
+<para>Step 17: Click once inside the upper left frame.</para>
 <para>Step 18: Begin typing.  You will need to type quite a bit, but keep typing.  When you run out of space in the text frame, you will see your new text is moved immediatly into your new text frame.</para>
-<screenshot><graphic fileref="pics/Tut18" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut18.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para></para></sect1>
 <sect1 id="DelFrame"> <title>Deleting a frame</title>
 <para>Now we will delete an unneeded frame. (Yes I know, we just created a new frame).  We will delete the long text frame on the right side of the page.</para>
 <para>Step 19: Select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Edit Frame</guimenuitem></menuchoice></para>
-<screenshot><graphic fileref="pics/Tut19" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut19.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>This will switch us into Frame Edit Mode.</Emphasis></para>
 <para>Step 20: Place the mouse cursor over the right hand text column, and click with the left mouse button.</para>
-<screenshot><graphic fileref="pics/Tut20" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut20.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>This selects the frame.</Emphasis></para>
 <para>Step 21: Select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Delete Frame</guimenuitem></menuchoice></para>
-<screenshot><graphic fileref="pics/Tut21" format="png" align="center"></graphic></screenshot>
+<para><mediaobject><imageobject><imagedata format="PNG" fileref="pics/Tut21.png" align="center"></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 <para><Emphasis>This deletes the frame.</Emphasis></para>
 <para>Hopefully this tutorial has introduced you to the basics of using frames in KWord.</para>
 </sect1>
@@ -2625,53 +2661,7 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 </chapter>
 <!-- **************************************************************************************************** -->   
 <chapter id="Appendix"><title>Appendix</title>
-
-<glossary id="Glossery"><title>Glossary</title><para></para>
-<glossentry><glossterm><anchor id="defascii">ASCII</glossterm><glossdef><para>Stands for "American standard code for information interchange".  This is what many people mean when they say "plain text". KWord can read and write documents in ASCII format.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defaspectratio">Aspect Ratio</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defbinarycode">Binary code</glossterm><glossdef><para>Binary code is the actual instructions for the computer.  So if we refer to "binaries" we mean the executable &KWord; program.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defbitmap">Bitmap Image</glossterm><glossdef><para>Bit mapped images are composed of individual dots.  The filenames of such pictures often end in jpeg, png or gif.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defcell">Cells</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defclipart">Clipart</glossterm><glossdef><para>Clip art refers to vector based graphics.  </para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defclipboard">Clipboard</glossterm><glossdef><para>The clipboard is where you're cut or copied selection is stored, so it later can be "pasted".  </para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defcompiling">Compiling</glossterm><glossdef><para>When you compile a program, you are converting it from a source file (which is easily edited by a programmer) into a binary file (which the computer uses).  If you are planning on compiling KWord, please try to find a binary verison of KOffice first.  Compiling programs is not for the beginner.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defcustomvariables">Custom Variables</glossterm><glossdef><para>Using custom variables you can store certain values (e.g. numbers or text) for later use in your document or in a script.  If you want to find out more about custom variables, see STUFF (link to manual).</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defdeb">DEB</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defdialogbox">Dialog Box</glossterm><glossdef><para>A dialog box is a window where you </para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defdtp">DTP</glossterm><glossdef><para>Stands for DeskTop Publishing.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deffaq">FAQ</glossterm><glossdef><para>Stands for "Frequently Asked Questions" and normally means a document, where those questions are answered. If you have a question to the developers of KOffice, you should always have a look at the FAQ first. You'll find the latest version <ulink url="http://koffice.kde.org/faq/koffice-faq.html">here</ulink>.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deffilemask">File Mask</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deffilter">Filter</glossterm><glossdef><para>A filter takes a document file from one program (Microsoft Word), and "filters" out the text and formatting information and converts that information into a KWord document.  Filters are used to read and write files for other programs.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deffooter">Footer</glossterm><glossdef><para>The footer of a page is an area below the normal text area. Often it contains the page numbering and maybe some additional information. The contents of the footer normally are the same for most pages, and changing the footer on one page will change all other pages as well. See <link linkend="defheader">Header</link>.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defframe">Frame</glossterm><glossdef><para>Well, about everything in &KWord; is a frame. Text is always in a text frame. Pictures are in picture frames. Parts are in part frames. A frame is basically just a rectangle that can contain something and often can be moved, resized, deleted etc.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defframeset">Frameset</glossterm><glossdef><para>A frameset is a group of frames which "belong together". If you're writing text that doesn't fit into the first frame of a frameset, it will continue in the next frame belonging to that frameset.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defframeeditmode">Frame Edit Mode</glossterm><glossdef><para>In the "frame edit mode" &KWord; will act on whole <link linkend="defframe">frames</link>, rather than on their content. For example, if you click into a text frame when you're in "frame edit mode", the frame will be selected and can be moved, resized etc. If you're in <link linkend="deftexteditmode">"text edit mode"</link>, the cursor will be placed inside the frame (so "text edit mode" is the way your old word processor probably reacted).</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defftp">FTP</glossterm><glossdef><para>FTP is the "File Transfer Protocol". It's an internet protocol that allows you to retrieve files from so-called FTP servers. If you want to download KOffice from the internet, you'll probably use FTP.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defhardframebreak">Hard Frame Break</glossterm><glossdef><para>Normally, only when your text reaches the end of a frame, &KWord; will automatically continue with the next frame in your current <link linkend="defframeset">frameset</link>. By inserting a hard frame break you can force &KWord; to continue with the next frame at a certain position in your text.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defheader">Header</glossterm><glossdef><para>The header of a page is an area above the normal text area. Often it contains the page numbering and maybe some additional information. The contents of the header normally are the same for most pages, and changing the header on one page will change all other pages as well. See <link linkend="deffooter">Footer</link>.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defhtml">HTML</glossterm><glossdef><para>Stands for HyperText Markup Language.  KWord can read and write HTML documents for publishing on the World Wide Web.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defkde2">KDE 2.0</glossterm><glossdef><para>Stands for the K Desktop Environment version 2.0 which is required for KWord to operate.  The KDesktop Environment is user interface which allows users to manipulate files and operate programs graphically.  For more information, please visit <ulink url="http://www.kde.org">www.kde.org</ulink>  </para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defkeybinding">Key Binding</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deflandscape">Landscape</glossterm><glossdef><para>Landscape is a page orientation with greater width than height, i.e. just how you don't want to print your letters. See <link linkend="defportrait">Portrait</link>(STUFF: maybe insert a small pixmap? :)</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defmaximize">Maximize</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defmenubar">Menubar</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defminimize">Minimize</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defpicture">Picture</glossterm><glossdef><para>Yes, I know what your thinking--Who doesn't know what a picture is?  When we speak of pictures with KWord, however, the term has a very specific meaning and should not be confused with clip-art.  Pictures are bit-mapped images. See Clipart for more information..</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defportrait">Portrait</glossterm><glossdef><para>Portrait is a page orientation with greater height than width, i.e. the orientation that's normally used for letters. See <link linkend="deflandscape">Landscape</link>(STUFF: maybe insert a small pixmap? :)</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defrpm">RPM</glossterm><glossdef><para>RPM is the RedHat package manager, a widely used packaging tool for the linux operating system.  If you still have to get KOffice and your system supports RPM packages, you should get KOffice packages ending in ".rpm". They're very easy to use.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defscalingpicture">Scaling Pictures</glossterm><glossdef><para>Whenever you change the size of a graphics image, you are scaling that image.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defserialletter">Serial Letters</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defsourcecode">Source Code</glossterm><glossdef><para>Source code is the human readable version of an application (such as KWord).  Computers cannot use source code directly.  Instead, source code must be compiled into binary code, before use.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deftar">TAR</glossterm><glossdef><para>Tar is a tool used for the archiving of files in so-called "tar-files" which you recognize by their suffix ".tar".  You'll find KOffice source and binary distributions as <link linkend="deftgz">gzipped tar-files</link>. However, you shouldn't use them if there are special packages for your system and package manager. See <link linkend="defrpm">RPM</link>, <link linkend="defdeb">DEB</link>.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deftargz">tar.gz</glossterm><glossdef><para>See <link linkend="deftgz">TGZ</link>.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deftexteditmode">Text Edit Mode</glossterm><glossdef><para>In the "text edit mode" &KWord; will act on the contents of a <link linkend="defframe">frame</link>, rather than on the frame itself. This probably is the way your old word processor worked. See <link linkend="defframeeditmode">frame edit mode</link>.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deftgz">TGZ</glossterm><glossdef><para>Files ending in ".tar.gz" or ".tgz" are <link linkend="deftar">tar-files</link> compressed with the gzip program.  You'll find KOffice source and binary distributions in this format. However, you shouldn't use them if there are special packages for your system and package manager. See <link linkend="defrpm">RPM</link>, <link linkend="defdeb">DEB</link>.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="deftoolbar">Toolbar</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defvectorimage">Vector Image</glossterm><glossdef><para>A vector based graphic is described in terms of lines and shapes, not in terms of dots.  Because of this, Clipart usually scales better than bit-mapped images. </para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defviews">Views</glossterm><glossdef><para></para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defwysiwyg">WYSIWYG</glossterm><glossdef><para>Stands for What You See Is What You Get.  KWord is a WYSIWYG word processor, which means that the document will appear the same on the screen while you are editing it, as it will on the printed page.</para></glossdef></glossentry>
-<glossentry><glossterm><anchor id="defx">X Windows system</glossterm><glossdef><para>The X Windows System (also known simply as 'X') is required for KOffice to operate.  More information on X windows for linux can be found at <ulink url="">STUFF</ulink></para></glossdef></glossentry>
-</glossary>
+<sect1 id="commandline"><title>KWord Command LIne Options</title><para>filename</para></sect1>
 
 
 <sect1 id="PredefinedStyles"><title>Pre-defined Styles in KWord</title>
@@ -2762,6 +2752,52 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 This program is licensed under the terms of the <ulink url="common/gpl-license.html">GNU GPL</ulink>.
 </para>
 </chapter>
+<glossary id="Glossery"><title>Glossary</title><para></para>
+<glossentry><glossterm><anchor id="defascii">ASCII</glossterm><glossdef><para>Stands for "American standard code for information interchange".  This is what many people mean when they say "plain text". KWord can read and write documents in ASCII format.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defaspectratio">Aspect Ratio</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defbinarycode">Binary code</glossterm><glossdef><para>Binary code is the actual instructions for the computer.  So if we refer to "binaries" we mean the executable &KWord; program.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defbitmap">Bitmap Image</glossterm><glossdef><para>Bit mapped images are composed of individual dots.  The filenames of such pictures often end in jpeg, png or gif.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defcell">Cells</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defclipart">Clipart</glossterm><glossdef><para>Clip art refers to vector based graphics.  </para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defclipboard">Clipboard</glossterm><glossdef><para>The clipboard is where you're cut or copied selection is stored, so it later can be "pasted".  </para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defcompiling">Compiling</glossterm><glossdef><para>When you compile a program, you are converting it from a source file (which is easily edited by a programmer) into a binary file (which the computer uses).  If you are planning on compiling KWord, please try to find a binary verison of KOffice first.  Compiling programs is not for the beginner.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defcustomvariables">Custom Variables</glossterm><glossdef><para>Using custom variables you can store certain values (e.g. numbers or text) for later use in your document or in a script.  If you want to find out more about custom variables, see STUFF (link to manual).</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defdeb">DEB</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defdialogbox">Dialog Box</glossterm><glossdef><para>A dialog box is a window where you </para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defdtp">DTP</glossterm><glossdef><para>Stands for DeskTop Publishing.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deffaq">FAQ</glossterm><glossdef><para>Stands for "Frequently Asked Questions" and normally means a document, where those questions are answered. If you have a question to the developers of KOffice, you should always have a look at the FAQ first. You'll find the latest version <ulink url="http://koffice.kde.org/faq/koffice-faq.html">here</ulink>.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deffilemask">File Mask</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deffilter">Filter</glossterm><glossdef><para>A filter takes a document file from one program (Microsoft Word), and "filters" out the text and formatting information and converts that information into a KWord document.  Filters are used to read and write files for other programs.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deffooter">Footer</glossterm><glossdef><para>The footer of a page is an area below the normal text area. Often it contains the page numbering and maybe some additional information. The contents of the footer normally are the same for most pages, and changing the footer on one page will change all other pages as well. See <link linkend="defheader">Header</link>.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defframe">Frame</glossterm><glossdef><para>Well, about everything in &KWord; is a frame. Text is always in a text frame. Pictures are in picture frames. Parts are in part frames. A frame is basically just a rectangle that can contain something and often can be moved, resized, deleted etc.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defframeset">Frameset</glossterm><glossdef><para>A frameset is a group of frames which "belong together". If you're writing text that doesn't fit into the first frame of a frameset, it will continue in the next frame belonging to that frameset.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defframeeditmode">Frame Edit Mode</glossterm><glossdef><para>In the "frame edit mode" &KWord; will act on whole <link linkend="defframe">frames</link>, rather than on their content. For example, if you click into a text frame when you're in "frame edit mode", the frame will be selected and can be moved, resized etc. If you're in <link linkend="deftexteditmode">"text edit mode"</link>, the cursor will be placed inside the frame (so "text edit mode" is the way your old word processor probably reacted).</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defftp">FTP</glossterm><glossdef><para>FTP is the "File Transfer Protocol". It's an internet protocol that allows you to retrieve files from so-called FTP servers. If you want to download KOffice from the internet, you'll probably use FTP.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defhardframebreak">Hard Frame Break</glossterm><glossdef><para>Normally, only when your text reaches the end of a frame, &KWord; will automatically continue with the next frame in your current <link linkend="defframeset">frameset</link>. By inserting a hard frame break you can force &KWord; to continue with the next frame at a certain position in your text.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defheader">Header</glossterm><glossdef><para>The header of a page is an area above the normal text area. Often it contains the page numbering and maybe some additional information. The contents of the header normally are the same for most pages, and changing the header on one page will change all other pages as well. See <link linkend="deffooter">Footer</link>.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defhtml">HTML</glossterm><glossdef><para>Stands for HyperText Markup Language.  KWord can read and write HTML documents for publishing on the World Wide Web.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defkde2">KDE 2.0</glossterm><glossdef><para>Stands for the K Desktop Environment version 2.0 which is required for KWord to operate.  The KDesktop Environment is user interface which allows users to manipulate files and operate programs graphically.  For more information, please visit <ulink url="http://www.kde.org">www.kde.org</ulink>  </para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defkeybinding">Key Binding</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deflandscape">Landscape</glossterm><glossdef><para>Landscape is a page orientation with greater width than height, i.e. just how you don't want to print your letters. See <link linkend="defportrait">Portrait</link>(STUFF: maybe insert a small pixmap? :)</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defmaximize">Maximize</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defmenubar">Menubar</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defminimize">Minimize</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defpicture">Picture</glossterm><glossdef><para>Yes, I know what your thinking--Who doesn't know what a picture is?  When we speak of pictures with KWord, however, the term has a very specific meaning and should not be confused with clip-art.  Pictures are bit-mapped images. See Clipart for more information..</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defportrait">Portrait</glossterm><glossdef><para>Portrait is a page orientation with greater height than width, i.e. the orientation that's normally used for letters. See <link linkend="deflandscape">Landscape</link>(STUFF: maybe insert a small pixmap? :)</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defrpm">RPM</glossterm><glossdef><para>RPM is the RedHat package manager, a widely used packaging tool for the linux operating system.  If you still have to get KOffice and your system supports RPM packages, you should get KOffice packages ending in ".rpm". They're very easy to use.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defscalingpicture">Scaling Pictures</glossterm><glossdef><para>Whenever you change the size of a graphics image, you are scaling that image.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defserialletter">Serial Letters</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defsourcecode">Source Code</glossterm><glossdef><para>Source code is the human readable version of an application (such as KWord).  Computers cannot use source code directly.  Instead, source code must be compiled into binary code, before use.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deftar">TAR</glossterm><glossdef><para>Tar is a tool used for the archiving of files in so-called "tar-files" which you recognize by their suffix ".tar".  You'll find KOffice source and binary distributions as <link linkend="deftgz">gzipped tar-files</link>. However, you shouldn't use them if there are special packages for your system and package manager. See <link linkend="defrpm">RPM</link>, <link linkend="defdeb">DEB</link>.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deftargz">tar.gz</glossterm><glossdef><para>See <link linkend="deftgz">TGZ</link>.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deftexteditmode">Text Edit Mode</glossterm><glossdef><para>In the "text edit mode" &KWord; will act on the contents of a <link linkend="defframe">frame</link>, rather than on the frame itself. This probably is the way your old word processor worked. See <link linkend="defframeeditmode">frame edit mode</link>.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deftgz">TGZ</glossterm><glossdef><para>Files ending in ".tar.gz" or ".tgz" are <link linkend="deftar">tar-files</link> compressed with the gzip program.  You'll find KOffice source and binary distributions in this format. However, you shouldn't use them if there are special packages for your system and package manager. See <link linkend="defrpm">RPM</link>, <link linkend="defdeb">DEB</link>.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="deftoolbar">Toolbar</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defvectorimage">Vector Image</glossterm><glossdef><para>A vector based graphic is described in terms of lines and shapes, not in terms of dots.  Because of this, Clipart usually scales better than bit-mapped images. </para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defviews">Views</glossterm><glossdef><para></para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defwysiwyg">WYSIWYG</glossterm><glossdef><para>Stands for What You See Is What You Get.  KWord is a WYSIWYG word processor, which means that the document will appear the same on the screen while you are editing it, as it will on the printed page.</para></glossdef></glossentry>
+<glossentry><glossterm><anchor id="defx">X Windows system</glossterm><glossdef><para>The X Windows System (also known simply as 'X') is required for KOffice to operate.  More information on X windows for linux can be found at <ulink url="">STUFF</ulink></para></glossdef></glossentry>
+</glossary>
 
 <![ %addindex; [ &kdedocindex; ]]>
 </book>
