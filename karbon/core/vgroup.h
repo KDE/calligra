@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,14 +24,8 @@
 
 #include "vobject.h"
 
-class KoRect;
-class QDomElement;
-class VPainter;
-
-
 typedef QPtrList<VObject> VObjectList;
 typedef QPtrListIterator<VObject> VObjectListIterator;
-
 
 /**
  * Base class for all sort of VObject conglomerats.

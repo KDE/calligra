@@ -23,8 +23,6 @@
 
 #include <qdom.h>
 
-#include <koRect.h>
-
 #include "vcomposite.h"
 #include "shapes/vellipse.h"
 #include "shapes/vrectangle.h"
