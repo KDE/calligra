@@ -142,7 +142,7 @@ void KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QCString &
 bool KexiStartupHandler::init()
 {
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs(0);
-	if (!args || args->count()==0)
+	if (!args)
 		return true;
 
 	m_forcedFinalMode = args->isSet("final-mode");
@@ -158,12 +158,16 @@ bool KexiStartupHandler::init()
 	for (int i=0;i<args->count();i++) {
 		kdDebug() << "ARG" <<i<< "= " << args->arg(i) <<endl;
 	}
-	QString fname;
-	fname = args->arg(0);
-	m_projectData = KexiStartupHandler::detectProjectData( fname, 0 );
-	if (!m_projectData)
-		return false;
-	if (args->count()>1) {
+
+	//database files
+	if (args->count()==1) {
+		QString fname;
+		fname = args->arg(0);
+		m_projectData = KexiStartupHandler::detectProjectData( fname, 0 );
+		if (!m_projectData)
+			return false;
+	}
+	else if (args->count()>1) {
 		//TODO: KRun another Kexi instances
 	}
 
