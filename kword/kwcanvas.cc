@@ -1668,6 +1668,17 @@ void KWCanvas::pasteFrames()
         }
     }
     m_doc->repaintAllViews();
+    //we can't know what type of frame is pasted
+    //so refresh all type in docstruct
+    int ref=0;
+    ref|=Arrangement;
+    ref|=Tables;
+    ref|=Pictures;
+    ref|=Cliparts;
+    ref|=TextFrames;
+    ref|=Embedded;
+    ref|=FormulaFrames;
+    m_doc->refreshDocStructure(ref);
 }
 
 KWTableFrameSet *KWCanvas::getTable()
