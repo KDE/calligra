@@ -29,20 +29,20 @@ class KisDoc;
 class KisView;
 class KisCanvas;
 
-class PolyGonTool : public KisTool
-{
+class PolyGonTool : public KisTool {
 public:
+	PolyGonTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
+	virtual ~PolyGonTool();
 
-    PolyGonTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
-    ~PolyGonTool();
+	virtual QString toolName() { return QString( "Polygon Tool" ); }
 
-    virtual QString toolName() { return QString( "Polygon Tool" ); }
-
-    virtual void mousePress( QMouseEvent* event );
-    virtual void mouseMove( QMouseEvent* event );
-    virtual void mouseRelease( QMouseEvent* event );
-    
-    virtual void optionsDialog();
+public slots:
+	virtual void toolSelect();
+	virtual void mousePress( QMouseEvent* event );
+	virtual void mouseMove( QMouseEvent* event );
+	virtual void mouseRelease( QMouseEvent* event );
+	virtual void optionsDialog();
+	virtual void setupAction(QObject *collection);
     
 protected:
 
@@ -70,7 +70,6 @@ private:
     bool        m_done;
     
     KisCanvas   *pCanvas;
-    KisDoc      *m_pDoc;
 
     QPointArray drawPoints;
 };

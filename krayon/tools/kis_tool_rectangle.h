@@ -29,20 +29,20 @@ class KisDoc;
 class KisView;
 class KisCanvas;
 
-class RectangleTool : public KisTool
-{
+class RectangleTool : public KisTool {
 public:
+	RectangleTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas);
+	virtual ~RectangleTool();
 
-    RectangleTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas);
-    ~RectangleTool();
+	virtual QString toolName() { return QString( "Rectangle Tool" ); }
 
-    virtual QString toolName() { return QString( "Rectangle Tool" ); }
-
-    virtual void mousePress( QMouseEvent* event );
-    virtual void mouseMove( QMouseEvent* event );
-    virtual void mouseRelease( QMouseEvent* event );
-
-    virtual void optionsDialog();
+public slots:
+	virtual void toolSelect();
+	virtual void mousePress( QMouseEvent* event );
+	virtual void mouseMove( QMouseEvent* event );
+	virtual void mouseRelease( QMouseEvent* event );
+	virtual void optionsDialog();
+	virtual void setupAction(QObject *collection);
     
 protected:
 

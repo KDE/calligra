@@ -21,6 +21,7 @@
 #ifndef __pentool_h__
 #define __pentool_h__
 
+#include <qpen.h>
 #include <qpoint.h>
 #include "kis_view.h"
 #include "kis_canvas.h"
@@ -42,13 +43,13 @@ class PenTool : public KisTool
     void setBrush(KisBrush *_brush);
     bool paint(QPoint pos);
 
- public slots:
+public slots:
+	virtual void mousePress(QMouseEvent*); 
+	virtual void mouseMove(QMouseEvent*);
+	virtual void mouseRelease(QMouseEvent*);
+	virtual void optionsDialog();
+	virtual void setupAction(QObject *collection);
 
-    virtual void mousePress(QMouseEvent*); 
-    virtual void mouseMove(QMouseEvent*);
-    virtual void mouseRelease(QMouseEvent*);
-
-  virtual void optionsDialog();
 
  protected:
 

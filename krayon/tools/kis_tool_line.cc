@@ -27,7 +27,6 @@
 #include "kis_color.h"
 #include "kis_canvas.h"
 #include "kis_tool_line.h"
-//#include "opts_line_dlg.h"
 #include "kis_dlg_toolopts.h"
 
 LineTool::LineTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas)
@@ -178,5 +177,27 @@ void LineTool::optionsDialog()
             m_pDoc->setModified( true );
         }
     }
+}
+
+void LineTool::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Line tool"), "line", 0, this, SLOT(toolSelect()), collection, "tool_line");
+
+	toggle -> setExclusiveGroup("tools");
+}
+
+void LineTool::toolSelect()
+{
+	if (m_pView) {
+		KisDoc::LineToolSettings s = m_pDoc -> getLineToolSettings();
+		KisPainter *gc = m_pView -> kisPainter();
+
+		gc -> setLineThickness(s.thickness);
+		gc -> setLineOpacity(s.opacity);
+		gc -> setPatternFill(s.useCurrentPattern);
+		gc -> setGradientFill(s.fillWithGradient);
+
+		m_pView -> activateTool(this);
+	}
 }
 

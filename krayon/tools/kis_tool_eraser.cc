@@ -310,3 +310,10 @@ void EraserTool::optionsDialog()
     }
 }
 
+void EraserTool::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Eraser tool"), "eraser", 0, this, SLOT(toolSelect()), collection, "tool_eraser");
+
+	toggle -> setExclusiveGroup("tools");
+}
+

@@ -59,6 +59,7 @@ class FillTool : public KisTool
   public slots:
     virtual void mousePress(QMouseEvent*); 
     virtual void optionsDialog();
+	virtual void setupAction(QObject *collection);
       
   protected:
 

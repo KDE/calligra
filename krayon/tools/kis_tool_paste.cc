@@ -23,6 +23,7 @@
 #include <qpainter.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 
 #include "kis_doc.h"
@@ -419,4 +420,28 @@ void PasteTool::mouseRelease(QMouseEvent *e)
     m_dragging = false;
 }
 
+void PasteTool::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Paste tool"), "editpaste", 0, this, SLOT(toolSelect()), collection, "tool_paste");
+
+	toggle -> setExclusiveGroup("tools");
+}
+
+void PasteTool::toolSelect()
+{
+	if (m_pView) {
+		    if(m_pDoc -> getClipImage()) {
+			    setClip();
+			    m_pView -> activateTool(this);
+			    m_pView -> slotUpdateImage();
+		    }
+		    else
+			    KMessageBox::sorry(NULL, i18n("Nothing to paste!"), "", false);
+	}
+}
+
+bool PasteTool::shouldRepaint()
+{
+	return true;
+}
 

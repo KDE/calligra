@@ -252,3 +252,28 @@ void PolyGonTool::optionsDialog()
         }
     }
 }
+
+void PolyGonTool::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Polygon tool"), "polygon", 0, this, SLOT(toolSelect()), collection, "tool_polygon");
+
+	toggle -> setExclusiveGroup("tools");
+}
+
+void PolyGonTool::toolSelect()
+{
+	if (m_pView) {
+		KisDoc::PolylineToolSettings s = m_pDoc -> getPolyLineToolSettings();
+		KisPainter *gc = m_pView -> kisPainter();
+
+		gc -> setLineThickness(s.thickness);
+		gc -> setLineOpacity(s.opacity);
+		gc -> setPatternFill(s.useCurrentPattern);
+		gc -> setGradientFill(s.fillWithGradient);
+
+		m_pView -> activateTool(this);
+	}
+}
+
+
+

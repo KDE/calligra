@@ -297,3 +297,11 @@ void EllipticalSelectTool::drawEllipse( const QPoint& start, const QPoint& end )
     p.end();
 }
 
+void EllipticalSelectTool::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Elliptical select"), "elliptical" , 0, this, SLOT(toolSelect()),
+			collection, "tool_select_elliptical" );
+
+	toggle -> setExclusiveGroup("tools");
+}
+

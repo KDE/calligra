@@ -211,3 +211,27 @@ void RectangleTool::optionsDialog()
         }
     }
 }
+
+void RectangleTool::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Rectangle tool"), "rectangle", 0, this, SLOT(toolSelect()), collection, "tool_rectangle");
+
+	toggle -> setExclusiveGroup("tools");
+}
+
+void RectangleTool::toolSelect()
+{
+	if (m_pView) {
+		KisDoc::RectangleToolSettings s = m_pDoc -> getRectangleToolSettings();
+		KisPainter *gc = m_pView -> kisPainter();
+
+		gc -> setLineThickness(s.thickness);
+		gc -> setLineOpacity(s.opacity);
+		gc -> setFilledRectangle(s.fillInteriorRegions);
+		gc -> setGradientFill(s.useCurrentPattern);
+		gc -> setPatternFill(s.useCurrentPattern);
+
+		m_pView -> activateTool(this);
+	}
+}
+

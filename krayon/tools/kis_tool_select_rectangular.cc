@@ -30,7 +30,6 @@
 #include "kis_cursor.h"
 #include "kis_tool_select_rectangular.h"
 
-
 RectangularSelectTool::RectangularSelectTool( KisDoc* _doc, KisView* _view, 
     KisCanvas* _canvas )
   : KisTool( _doc, _view)
@@ -309,5 +308,13 @@ void RectangularSelectTool::drawRect( const QPoint& start, const QPoint& end )
                       end.x() - start.x(), 
                       end.y() - start.y()) );
     p.end();
+}
+
+void RectangularSelectTool::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Rectangular select"), "rectangular", 0, this,  
+			SLOT(toolSelect()), collection, "tool_select_rectangular");
+
+	toggle -> setExclusiveGroup("tools");
 }
 

@@ -48,6 +48,7 @@ public slots:
     virtual void mouseMove(QMouseEvent*);
     virtual void mouseRelease(QMouseEvent*);
     virtual void optionsDialog();
+	virtual void setupAction(QObject *collection);
     
     void timeoutPaint();  
 

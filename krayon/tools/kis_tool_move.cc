@@ -150,3 +150,11 @@ void MoveTool::setCursor()
     m_pView->kisCanvas()->setCursor( KisCursor::moveCursor() );
     m_Cursor = KisCursor::moveCursor();
 }
+
+void MoveTool::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Move tool"), "move", 0, this, SLOT(toolSelect()), collection, "tool_move");
+
+        toggle -> setExclusiveGroup("tools");
+}
+

@@ -29,49 +29,51 @@
 
 class KisSelection;
 
-class PasteTool : public KisTool
-{
- public:
-    PasteTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
-    ~PasteTool();
+class PasteTool : public KisTool {
+public:
+	PasteTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
+	virtual ~PasteTool();
   
-    QString toolName() { return QString("Paste Tool"); }
-    void setOpacity(int opacity);
-    bool pasteMonochrome(QPoint pos);
-    bool pasteColor(QPoint pos);
-    bool pasteToCanvas(QPoint pos);
-    bool setClip();
-    
- public slots:
- 
-    virtual void mousePress(QMouseEvent*); 
-    virtual void mouseMove(QMouseEvent*);
-    virtual void mouseRelease(QMouseEvent*);
+	virtual void setupAction(QObject *collection);
+	virtual bool shouldRepaint();
 
- protected:
- 
-    /* contains selection rectangle definition, status, etc. 
-    This will also contain effects and raster operations to
-    be performed on selection and/or area pasted to */
-    
-    KisView     *m_pView;
-    KisCanvas   *m_pCanvas;
-    QImage      clipImage;
-    QPixmap     clipPix;   
+	QString toolName() { return QString("Paste Tool"); }
+	void setOpacity(int opacity);
+	bool pasteMonochrome(QPoint pos);
+	bool pasteColor(QPoint pos);
+	bool pasteToCanvas(QPoint pos);
+	bool setClip();
 
-    QPoint      oldp;
-    QPoint      mHotSpot;
-    int         mHotSpotX;
-    int         mHotSpotY;
-    
-    QSize       mClipSize;
-    int         clipWidth;
-    int         clipHeight;
+public slots:
+	virtual void mousePress(QMouseEvent*); 
+	virtual void mouseMove(QMouseEvent*);
+	virtual void mouseRelease(QMouseEvent*);
+	virtual void toolSelect();
 
-    QPoint 	    m_dragStart;
-    bool        m_dragging;
-    float       m_dragdist;
-    
+protected:
+
+	/* contains selection rectangle definition, status, etc. 
+	   This will also contain effects and raster operations to
+	   be performed on selection and/or area pasted to */
+
+	KisView     *m_pView;
+	KisCanvas   *m_pCanvas;
+	QImage      clipImage;
+	QPixmap     clipPix;   
+
+	QPoint      oldp;
+	QPoint      mHotSpot;
+	int         mHotSpotX;
+	int         mHotSpotY;
+
+	QSize       mClipSize;
+	int         clipWidth;
+	int         clipHeight;
+
+	QPoint 	    m_dragStart;
+	bool        m_dragging;
+	float       m_dragdist;
+
 };
 
 #endif //__pastetool_h__

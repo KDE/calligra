@@ -38,14 +38,15 @@ public:
 
     virtual QString toolName() { return QString( "Polyline Tool" ); }
 
-    virtual void mousePress( QMouseEvent* event );
-    virtual void mouseMove( QMouseEvent* event );
-    virtual void mouseRelease( QMouseEvent* event );
-    
-    virtual void optionsDialog();
-    
     void start(QPoint p);
     void finish(QPoint p); 
+
+public slots:
+	virtual void mousePress( QMouseEvent* event );
+	virtual void mouseMove( QMouseEvent* event );
+	virtual void mouseRelease( QMouseEvent* event );
+	virtual void optionsDialog();
+	virtual void setupAction(QObject *collection);
     
 protected:
 

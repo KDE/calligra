@@ -214,4 +214,27 @@ void EllipseTool::optionsDialog()
     }    
 }
 
+void EllipseTool::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Ellipse tool"), "ellipse", 0, this, SLOT(toolSelect()), collection, "tool_ellipse");
+
+	toggle -> setExclusiveGroup("tools");
+}
+
+void EllipseTool::toolSelect()
+{
+	if (m_pView) {
+		KisDoc::EllipseToolSettings s = m_pDoc -> getEllipseToolSettings();
+		KisPainter *gc = m_pView -> kisPainter();
+
+		gc -> setLineThickness(s.thickness);
+	        gc -> setLineOpacity(s.opacity);
+		gc -> setFilledEllipse(s.useCurrentPattern);
+		gc -> setGradientFill(s.fillWithGradient);
+		gc -> setPatternFill(s.fillInteriorRegions);
+
+		m_pView -> activateTool(this);
+	}
+}
+
 

@@ -62,3 +62,10 @@ void ZoomTool::setCursor()
     m_pView->kisCanvas()->setCursor( KisCursor::zoomCursor() );
     m_Cursor = KisCursor::zoomCursor();
 }
+
+void ZoomTool::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Zoom tool"), "viewmag", 0, this, SLOT(toolSelect()), collection, "tool_zoom");
+
+	toggle -> setExclusiveGroup("tools");
+}

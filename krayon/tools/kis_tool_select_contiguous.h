@@ -37,11 +37,12 @@ public:
 
     virtual QString toolName() { return QString( "SelectTool" ); }
 
-    virtual void mousePress( QMouseEvent *_event );
-    virtual void mouseMove( QMouseEvent *_event );
-    virtual void mouseRelease( QMouseEvent *_event );
-
-    virtual void clearOld();
+public slots:
+	virtual void mousePress( QMouseEvent *_event );
+	virtual void mouseMove( QMouseEvent *_event );
+	virtual void mouseRelease( QMouseEvent *_event );
+	virtual void clearOld();
+	virtual void setupAction(QObject *collection);
 
 protected:
     void drawRect( const QPoint&, const QPoint& ); 

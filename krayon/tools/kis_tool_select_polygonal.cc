@@ -313,3 +313,11 @@ void PolygonalSelectTool::drawLine( const QPoint& start, const QPoint& end )
     p.end();
 }
 
+void PolygonalSelectTool::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Polygonal select"), "handdrawn" , 0, this, SLOT(toolSelect()),
+			collection, "tool_select_polygonal");
+
+	toggle -> setExclusiveGroup("tools");
+}
+

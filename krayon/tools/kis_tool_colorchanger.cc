@@ -228,3 +228,11 @@ void ColorChangerTool::setCursor()
     m_pView->kisCanvas()->setCursor( KisCursor::colorChangerCursor() );
     m_Cursor = KisCursor::colorChangerCursor();
 }
+
+void ColorChangerTool::setupAction(QObject *collection)
+{
+	KToggleAction * toggle = new KToggleAction(i18n("Color changer"), "colorize", 0, this, SLOT(toolSelect()), collection, "tool_colorchanger");
+
+	toggle -> setExclusiveGroup("tools");
+}
+

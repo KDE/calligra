@@ -336,3 +336,11 @@ void FillTool::setCursor()
     m_pView->kisCanvas()->setCursor( KisCursor::fillerCursor() );
     m_Cursor = KisCursor::fillerCursor();
 }
+
+void FillTool::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Filler tool"), "fill", 0, this, SLOT(toolSelect()), collection, "tool_fill");
+
+	toggle -> setExclusiveGroup("tools");
+}
+

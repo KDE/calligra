@@ -25,19 +25,19 @@
 
 #include "kis_tool.h"
 
-class ZoomTool : public KisTool
-{
- public:
+class ZoomTool : public KisTool {
+public:
+	ZoomTool(KisView *view);
+	virtual ~ZoomTool();
 
-  ZoomTool(KisView *view);
-  ~ZoomTool();
+	virtual QString toolName() { return QString("ZoomTool"); }
 
-  virtual QString toolName() { return QString("ZoomTool"); }
-  virtual void mousePress(QMouseEvent *e);
-  virtual void mouseMove(QMouseEvent *e);
-  virtual void mouseRelease(QMouseEvent *e);
-
+public slots:
+	virtual void mousePress(QMouseEvent *e);
+	virtual void mouseMove(QMouseEvent *e);
+	virtual void mouseRelease(QMouseEvent *e);
 	virtual void setCursor();
+	virtual void setupAction(QObject *collection);
 };
 
 #endif //__zoomtool_h__

@@ -39,6 +39,8 @@ class ColorPicker : public KisTool
 
  public slots:
   virtual void mousePress(QMouseEvent*); 
+	virtual void setupAction(QObject *collection);
+
 };
 
 #endif //__colorpicker_h__

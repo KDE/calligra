@@ -29,24 +29,23 @@ class KisDoc;
 class KisView;
 class KisCanvas;
 
-class EllipseTool : public KisTool
-{
+class EllipseTool : public KisTool {
 public:
+	EllipseTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
+	virtual ~EllipseTool();
 
-    EllipseTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
-    ~EllipseTool();
+	virtual QString toolName() { return QString( "LineTool" ); }
 
-    virtual QString toolName() { return QString( "LineTool" ); }
+public slots:
+	virtual void mousePress( QMouseEvent* event );
+	virtual void mouseMove( QMouseEvent* event );
+	virtual void mouseRelease( QMouseEvent* event );
+	virtual void optionsDialog();
+	virtual void toolSelect();
+	virtual void setupAction(QObject *collection);
 
-    virtual void mousePress( QMouseEvent* event );
-    virtual void mouseMove( QMouseEvent* event );
-    virtual void mouseRelease( QMouseEvent* event );
-
-    virtual void optionsDialog();
-    
 protected:
-
-    void drawEllipse( const QPoint&, const QPoint& );
+	void drawEllipse( const QPoint&, const QPoint& );
 
 protected:
 

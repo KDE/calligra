@@ -29,40 +29,39 @@ class KisDoc;
 class KisView;
 class KisCanvas;
 
-class LineTool : public KisTool
-{
+class LineTool : public KisTool {
 public:
+	LineTool(KisDoc *_doc, KisView *_view, KisCanvas *_canvas);
+	virtual ~LineTool();
 
-  LineTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
-  ~LineTool();
+	virtual QString toolName() { return QString( "Line Tool" ); }
 
-  virtual QString toolName() { return QString( "Line Tool" ); }
-
-  virtual void mousePress( QMouseEvent* event );
-  virtual void mouseMove( QMouseEvent* event );
-  virtual void mouseRelease( QMouseEvent* event );
-  virtual void optionsDialog();
+public slots:
+	virtual void mousePress( QMouseEvent* event );
+	virtual void mouseMove( QMouseEvent* event );
+	virtual void mouseRelease( QMouseEvent* event );
+	virtual void optionsDialog();
+	virtual void setupAction(QObject *collection);
+	virtual void toolSelect();
   
 protected:
-
-    void drawLine( const QPoint&, const QPoint& );
+	void drawLine( const QPoint&, const QPoint& );
     
 protected:
 
-    int         lineThickness;
-    int         lineOpacity;
+	int         lineThickness;
+	int         lineOpacity;
 
-    bool        usePattern;
-    bool        useGradient;
-    bool        useRegions;
-                
-    QPoint      m_dragStart;
-    QPoint      m_dragEnd;
+	bool        usePattern;
+	bool        useGradient;
+	bool        useRegions;
 
-    bool        m_dragging;
+	QPoint      m_dragStart;
+	QPoint      m_dragEnd;
 
-    KisCanvas   *pCanvas;
-    KisDoc      *m_pDoc;
+	bool        m_dragging;
+
+	KisCanvas   *pCanvas;
 };
 
 #endif //__linetool_h__

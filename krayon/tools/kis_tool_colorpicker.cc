@@ -75,3 +75,10 @@ void ColorPicker::mousePress(QMouseEvent *e)
         m_pView->slotSetBGColor(pick(pos.x(), pos.y()));
 }
 
+void ColorPicker::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Color picker"), "colorpicker", 0, this, SLOT(toolSelect()), collection, "tool_colorpicker");
+
+        toggle -> setExclusiveGroup("tools");
+}
+

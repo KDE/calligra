@@ -166,3 +166,12 @@ void ContiguousSelectTool::drawRect( const QPoint& start, const QPoint& end )
                       end.y() - start.y()) );
     p.end();
 }
+
+void ContiguousSelectTool::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Contiguous select"), "contiguous" , 0, this, SLOT(toolSelect()), 
+			collection, "tool_select_contiguous" );
+
+	toggle -> setExclusiveGroup("tools");
+}
+

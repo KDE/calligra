@@ -31,53 +31,50 @@
 class KisPattern;
 class KisDoc;
 
-class StampTool : public KisTool
-{
- public:
-    StampTool(KisDoc *doc, KisView *view, KisCanvas *canvas, 
-    KisPattern *pattern);
-    ~StampTool();
+class StampTool : public KisTool {
+public:
+	StampTool(KisDoc *doc, KisView *view, KisCanvas *canvas, KisPattern *pattern);
+	virtual ~StampTool();
   
-    QString toolName() { return QString("Stamp Tool"); }
+	virtual QString toolName() { return QString("Stamp Tool"); }
+	virtual bool shouldRepaint();
+	virtual void setupAction(QObject *collection);
 
-    void setOpacity(int opacity);
-    bool stampMonochrome(QPoint pos);
-    bool stampColor(QPoint pos);
-    bool stampToCanvas(QPoint pos);
-    void setPattern(KisPattern *pattern);
+	void setOpacity(int opacity);
+	bool stampMonochrome(QPoint pos);
+	bool stampColor(QPoint pos);
+	bool stampToCanvas(QPoint pos);
+	virtual void setPattern(KisPattern *pattern);
 
- public slots:
- 
-    virtual void mousePress(QMouseEvent*); 
-    virtual void mouseMove(QMouseEvent*);
-    virtual void mouseRelease(QMouseEvent*);
-    virtual void optionsDialog();
-    
- protected:
- 
-    KisView     *m_pView;
-    KisCanvas   *m_pCanvas;
-    KisPattern  *m_pPattern;
-    KisDoc      *m_pDoc;
-    
-    QPoint      oldp;
-    QPoint      mHotSpot;
-    int         mHotSpotX;
-    int         mHotSpotY;
-    QSize       mPatternSize;
-    int         patternWidth;
-    int         patternHeight;
-        
-    QPoint      m_dragStart;
-    bool        m_dragging;
-    float       m_dragdist;
-    int         spacing;
-    
-    // options
-    int         opacity;
-    bool        useGradient;
-    bool        useBlend;
-    
+public slots:
+	virtual void mousePress(QMouseEvent*); 
+	virtual void mouseMove(QMouseEvent*);
+	virtual void mouseRelease(QMouseEvent*);
+	virtual void optionsDialog();
+
+protected:
+
+	KisView     *m_pView;
+	KisCanvas   *m_pCanvas;
+	KisDoc      *m_pDoc;
+
+	QPoint      oldp;
+	QPoint      mHotSpot;
+	int         mHotSpotX;
+	int         mHotSpotY;
+	QSize       mPatternSize;
+	int         patternWidth;
+	int         patternHeight;
+
+	QPoint      m_dragStart;
+	bool        m_dragging;
+	float       m_dragdist;
+	int         spacing;
+
+	// options
+	int         opacity;
+	bool        useGradient;
+	bool        useBlend;
 };
 
 #endif //__stamptool_h__

@@ -41,14 +41,15 @@ public:
 
     virtual QString toolName() { return QString( "Freehand Select Tool" ); }
 
-    virtual void mousePress( QMouseEvent *_event );
-    virtual void mouseMove( QMouseEvent *_event );
-    virtual void mouseRelease( QMouseEvent *_event );
+public slots:
+	virtual void mousePress( QMouseEvent *_event );
+	virtual void mouseMove( QMouseEvent *_event );
+	virtual void mouseRelease( QMouseEvent *_event );
+	virtual void setupAction(QObject *collection);
+	virtual void clearOld();
 
-    virtual void clearOld();
-
-    void start( QPoint p );
-    void finish( QPoint p ); 
+	void start( QPoint p );
+	void finish( QPoint p ); 
 
 protected:
 

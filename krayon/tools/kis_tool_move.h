@@ -54,11 +54,12 @@ public:
 
   virtual QString toolName() { return QString( "MoveTool" ); }
 
-  virtual void mousePress( QMouseEvent *e ); 
-  virtual void mouseMove( QMouseEvent *e );
-  virtual void mouseRelease(QMouseEvent *e );
-
+public slots:
+	virtual void mousePress(QMouseEvent *e); 
+	virtual void mouseMove(QMouseEvent *e);
+	virtual void mouseRelease(QMouseEvent *e);
 	virtual void setCursor();
+	virtual void setupAction(QObject *collection);
 
 protected:
 

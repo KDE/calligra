@@ -491,4 +491,16 @@ void StampTool::optionsDialog()
     }
 }
 
+void StampTool::setupAction(QObject *collection)
+{
+	KToggleAction *toggle = new KToggleAction(i18n("&Stamp (Pattern) tool"), "stamp", 0, this, SLOT(toolSelect()), collection, "tool_stamp");
+
+	toggle -> setExclusiveGroup("tools");
+
+}
+
+bool StampTool::shouldRepaint()
+{
+	return true;
+}
 
