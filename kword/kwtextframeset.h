@@ -403,13 +403,14 @@ protected:
     virtual void doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index );
 
     virtual void startDrag();
-    KWTextDrag * newDrag( QWidget * parent ) const;
+    KWTextDrag * newDrag( QWidget * parent );
 
 private slots:
     void slotFrameDeleted(KWFrame *);
 
 private:
     bool enterCustomItem( KoTextCustomItem* customItem, bool fromRight );
+    QString realSelectedText( KoTextParag *_parag, int start, int len);
 
     KoParagLayout m_paragLayout;
     bool m_rtl; // maybe make part of KoParagLayout later

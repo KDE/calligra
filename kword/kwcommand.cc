@@ -170,7 +170,7 @@ public:
             if ( ch->isCustom() )
 	    {
 	       KoTextCustomItem* item = ch->customItem();
-	       item->setDeleted( true );
+       item->setDeleted( true );
             parag->removeCustomItem(i);
 	       KCommand* itemCmd = item->deleteCommand();
 	       if ( itemCmd ) itemCmd->execute();

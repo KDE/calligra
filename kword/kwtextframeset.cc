@@ -2788,7 +2788,7 @@ void KWTextFrameSetEdit::startDrag()
     }
 }
 
-KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
+KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent )
 {
     textFrameSet()->unzoom();
     KoTextCursor c1 = textDocument()->selectionStartCursor( KoTextDocument::Standard );
@@ -2800,31 +2800,57 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
     domDoc.appendChild( elem );
     if ( c1.parag() == c2.parag() )
     {
-        text = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
+        //text = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
+        text = realSelectedText( c1.parag(), c1.index(), c2.index() - c1.index());
         static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c2.index()-1, true );
     }
     else
     {
-        text += c1.parag()->toString( c1.index() ) + "\n";
+        //text += c1.parag()->toString( c1.index() ) + "\n";
+        text += realSelectedText( c1.parag(), c1.index(), c1.parag()->length())+"\n";
+
         static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c1.parag()->length()-2, true );
         KoTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
-            text += p->toString() + "\n";
+            text += realSelectedText( p, 0, p->length())+"\n";
+
+            //text += p->toString() + "\n";
             static_cast<KWTextParag *>(p)->save( elem, 0, p->length()-2, true );
             p = p->next();
         }
-        text += c2.parag()->toString( 0, c2.index() );
+        text += realSelectedText( c2.parag(), 0, c2.index());
+        //text += c2.parag()->toString( 0, c2.index() );
         static_cast<KWTextParag *>(c2.parag())->save( elem, 0, c2.index()-1, true );
     }
     textFrameSet()->zoom( false );
 
     KWTextDrag *kd = new KWTextDrag( parent );
     kd->setPlain( text );
-    //kd->setFrameSetNumber( textFrameSet()->kWordDocument()->frameSetNum(textFrameSet()) );
     kd->setFrameSetNumber( textFrameSet()->kWordDocument()->numberOfTextFrameSet( textFrameSet(), true) );
     kd->setKWord( domDoc.toCString() );
     kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << domDoc.toCString() << endl;
     return kd;
+}
+
+QString KWTextFrameSetEdit::realSelectedText( KoTextParag *_parag, int start, int len)
+{
+    QString str;
+    if ( start == 0 && _parag->paragLayout().counter )
+        str += _parag->paragLayout().counter->text( _parag ) + ' ';
+    // ### is this correct for RTL text?
+    for ( int i = start ; i < len+start ; ++i )
+    {
+        KoTextStringChar *ch = _parag->at( i );
+        if ( ch->isCustom() )
+        {
+            KoVariable * var = dynamic_cast<KoVariable *>(ch->customItem());
+            if ( var )
+                str += var->text(true);
+        }
+        else
+            str += ch->c;
+    }
+    return str;
 }
 
 void KWTextFrameSetEdit::ensureCursorVisible()
