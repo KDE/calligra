@@ -22,8 +22,7 @@
 */
 
 #include <qdom.h>
-#include <stdlib.h>
-#include <iostream>
+//#include <stdlib.h>
 #include <math.h>
 #include <time.h>
 #include <utility>

@@ -28,7 +28,6 @@
 #include <list>
 
 #include <qobject.h>
-//#include <GObject.h>
 
 class GDocument;
 class GObject;

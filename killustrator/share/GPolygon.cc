@@ -21,18 +21,14 @@
 
 */
 
-//#include <stdlib.h>
-//#include <iostream.h>
-//#include <math.h>
-//#include <assert.h>
 #include <GPolygon.h>
-#include <GradientShape.h>
-#include <GCurve.h>
 
 #include <qpointarray.h>
 #include <qdom.h>
 #include <klocale.h>
-//#include <kapp.h>
+
+#include <GradientShape.h>
+#include <GCurve.h>
 
 #define Roundness outlineInfo.roundness
 
@@ -562,7 +558,7 @@ void GPolygon::getPath (vector<Coord>& path) {
 }
 
 // Check for a valid polygon
-//  (1) more than 3 points
+//  (1) more than 2 points
 //  (2) dimension greater or equal 1
 bool GPolygon::isValid () {
   if (points.count () >= 3)

@@ -21,8 +21,6 @@
 
 */
 
-#include <stdlib.h>
-#include <iostream.h>
 #include <math.h>
 #include <GOval.h>
 #include <GPolyline.h>

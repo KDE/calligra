@@ -25,17 +25,6 @@
 #ifndef GPolygon_h_
 #define GPolygon_h_
 
-//#include <qobject.h>
-//#include <qcolor.h>
-//#include <qfont.h>
-//#include <qwmatrix.h>
-//#include <qpainter.h>
-//#include <qdatastream.h>
-//#include <qdict.h>
-//#include <qlist.h>
-
-#include <Coord.h>
-#include <GObject.h>
 #include  <GPolyline.h>
 
 class GPolygon : public GPolyline {
@@ -52,7 +41,7 @@ public:
   virtual void movePoint (int idx, float dx, float dy);
 
   virtual void draw (QPainter& p, bool withBasePoints = false,
-		     bool outline = false);
+                     bool outline = false);
   virtual bool contains (const Coord& p);
   virtual int getNeighbourPoint (const Coord& p);
 
@@ -65,7 +54,7 @@ public:
   void setEndPoint (const Coord& p);
 
   void setSymmetricPolygon (const Coord& sp, const Coord& ep, int nCorners,
-			    bool concave, int sharpness);
+                            bool concave, int sharpness);
 
   virtual void getPath (vector<Coord>& path);
 

@@ -25,16 +25,6 @@
 #ifndef GOval_h_
 #define GOval_h_
 
-#include <qobject.h>
-//#include <qcolor.h>
-//#include <qfont.h>
-//#include <qwmatrix.h>
-//#include <qpainter.h>
-//#include <qdatastream.h>
-//#include <qdict.h>
-//#include <qlist.h>
-
-#include <Coord.h>
 #include <GObject.h>
 
 class GOval : public GObject {
@@ -46,7 +36,7 @@ public:
   ~GOval () {}
 
   virtual void draw (QPainter& p, bool withBasePoints = false,
-		     bool outline = false);
+                     bool outline = false);
   virtual bool contains (const Coord& p);
 
   void setStartPoint (const Coord& p);

@@ -23,11 +23,12 @@
 */
 
 #include <GPixmap.h>
-#include <qwmf.h>
 
+#include <qwmf.h>
 #include <qdom.h>
+
 #include <klocale.h>
-//#include <kapp.h>
+#include <kdebug.h>
 
 GPixmap::GPixmap () {
   pix = 0L;
@@ -39,7 +40,7 @@ GPixmap::GPixmap (const char* filename) : url (filename) {
     if (pix->isNull ()) {
       delete pix;
       pix = 0L;
-      cout << "pixmap is null !!!" << endl;
+      kdWarning() << "pixmap is null !!!" << endl;
     }
   }
   if (pix) {
@@ -125,7 +126,7 @@ QDomElement GPixmap::writeToXml (QDomDocument &document) {
 
     // FIXME (Werner): Let the user decide where to pit the image (intern/extern)
     QDomElement element=document.createElement("pixmap");
-    element.setAttribute ("src", (const char *) url.url ());
+    element.setAttribute ("src", url.url ());
     element.appendChild(GObject::writeToXml(document));
     return element;
 }

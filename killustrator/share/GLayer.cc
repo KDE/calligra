@@ -23,7 +23,6 @@
 */
 
 #include <algorithm>
-#include <stdio.h>
 
 #include <klocale.h>
 #include <GLayer.h>
@@ -37,12 +36,8 @@ GLayer::GLayer (GDocument* doc, const char* text) :
   visibleFlag (true), printableFlag (true),
   editableFlag (true), wasEditable (true), internalFlag (false),
   document (doc) {
-  if (text == 0L) {
-    char buf[20];
-
-    sprintf (buf, "%s #%d", i18n("Layer"), lastID++);
-    ident = buf;
-  }
+  if (text == 0L)
+    ident=i18n("Layer #") + QString::number(lastID++);
 }
 
 GLayer::~GLayer () {

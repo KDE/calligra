@@ -26,8 +26,6 @@
 #define GPixmap_h_
 
 #include <kurl.h>
-
-#include <Coord.h>
 #include <GObject.h>
 
 class GPixmap : public GObject {
@@ -41,7 +39,7 @@ public:
   ~GPixmap ();
 
   virtual void draw (QPainter& p, bool withBasePoints = false,
-		     bool outline = false);
+                     bool outline = false);
 
   virtual QString typeName () const;
 

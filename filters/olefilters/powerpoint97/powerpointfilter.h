@@ -29,8 +29,9 @@ class PowerPointFilter : public FilterBase {
 public:
     PowerPointFilter() : FilterBase() {}
     virtual ~PowerPointFilter() {}
+    virtual const bool filter() { return true; }
     virtual const QDomDocument * const part();
-    
+
 private:
     PowerPointFilter(const PowerPointFilter &);
     const PowerPointFilter &operator=(const PowerPointFilter &);
