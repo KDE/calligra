@@ -413,6 +413,7 @@ OoDrawImport::appendBrush( VObject &obj )
 		else if( fill == "gradient" )
 		{
 			VGradient gradient;
+			gradient.clearStops();
 			QString style = m_styleStack.attribute( "draw:fill-gradient-name" );
 
 			QDomElement* draw = m_draws[style];
@@ -467,29 +468,22 @@ OoDrawImport::appendBrush( VObject &obj )
 
 				// Hard to map between x- and y-center settings of oodraw
 				// and (un-)balanced settings of kpresenter. Let's try it.
-				int x, y;
+				double x, y;
 				if( draw->hasAttribute( "draw:cx" ) )
-					x = draw->attribute( "draw:cx" ).remove( '%' ).toInt();
+					x = draw->attribute( "draw:cx" ).remove( '%' ).toDouble() / 100.0;
 				else
-					x = 50;
+					x = 0.5;
 
 				if( draw->hasAttribute( "draw:cy" ) )
-					y = draw->attribute( "draw:cy" ).remove( '%' ).toInt();
+					y = draw->attribute( "draw:cy" ).remove( '%' ).toDouble() / 100.0;
 				else
-					y = 50;
+					y = 0.5;
 
-				//if( x == 50 && y == 50 )
-				//{
-				//	gradient.setAttribute( "xfactor", 100 );
-				//	gradient.setAttribute( "yfactor", 100 );
-				//}
-				//else
-				//{
-				//	gradient.setAttribute( "unbalanced", 1 );
-				//	// map 0 - 100% to -200 - 200
-				//	gradient.setAttribute( "xfactor", 4 * x - 200 );
-				//	gradient.setAttribute( "yfactor", 4 * y - 200 );
-				//}
+				KoRect rect = obj.boundingBox();
+				gradient.setOrigin( KoPoint( rect.x() + x * rect.width(),
+											 rect.y() + y * rect.height() ) );
+				gradient.setVector( KoPoint( rect.x() + rect.width(),
+											 rect.y() + y * rect.height() ) );
 				f.gradient() = gradient;
 				f.setType( VFill::grad );
 			}
