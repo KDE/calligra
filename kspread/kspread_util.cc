@@ -859,6 +859,11 @@ util_dateFormat(KLocale * locale, const QDate &date,
 }
 
 
+QString util_dateTimeFormat( KLocale * locale, double date, KSpreadCell::FormatType fmtType, QString const & format )
+{
+  
+}
+
 int util_decodeColumnLabelText( const QString &_col )
 {
     int col = 0;
@@ -954,10 +959,19 @@ void
 	return;
     }
 
+    QString str( _str );
+    int n = _str.find( '!' );
+    if ( n != 1 )
+    {
+      tableName = _str.left( n );
+      str = _str.right( len - n - 1 ); // remove the '!'
+      len = str.length();
+    }
+
     uint p = 0;
 
     // Fixed ?
-    if ( _str[0] == '$' )
+    if ( str[0] == '$' )
     {
 	columnFixed = true;
 	p++;
@@ -968,28 +982,28 @@ void
     // Malformed ?
     if ( p == len )
     {
-	kdDebug(36001) << "KSpreadPoint::init: no point after '$' (str: '" << _str.mid( p ) << "'" << endl;
+	kdDebug(36001) << "KSpreadPoint::init: no point after '$' (str: '" << str.mid( p ) << "'" << endl;
 	return;
     }
-    if ( _str[p] < 'A' || _str[p] > 'Z' )
+    if ( str[p] < 'A' || str[p] > 'Z' )
     {
-	if ( _str[p] < 'a' || _str[p] > 'z' )
+	if ( str[p] < 'a' || str[p] > 'z' )
 	{
-	    kdDebug(36001) << "KSpreadPoint::init: wrong first character in point (str: '" << _str.mid( p ) << "'" << endl;
+	    kdDebug(36001) << "KSpreadPoint::init: wrong first character in point (str: '" << str.mid( p ) << "'" << endl;
 	    return;
 	}
     }
     //default is error
     int x = -1;
     //search for the first character != text
-    int result = _str.find( QRegExp("[^A-Za-z]+"), p );
+    int result = str.find( QRegExp("[^A-Za-z]+"), p );
 
     //get the colomn number for the character between actual position and the first non text charakter
     if ( result != -1 )
-	x = util_decodeColumnLabelText( _str.mid( p, result - p ) ); // x is defined now
+	x = util_decodeColumnLabelText( str.mid( p, result - p ) ); // x is defined now
     else  // If there isn't any, then this is not a point -> return
     {
-	kdDebug(36001) << "KSpreadPoint::init: no number in string (str: '" << _str.mid( p, result ) << "'" << endl;
+	kdDebug(36001) << "KSpreadPoint::init: no number in string (str: '" << str.mid( p, result ) << "'" << endl;
 	return;
     }
     p = result;
@@ -1008,7 +1022,7 @@ void
 	return;
     }
 
-    if (_str[p] == '$')
+    if (str[p] == '$')
     {
 	rowFixed = true;
 	p++;
@@ -1025,19 +1039,19 @@ void
     uint p2 = p;
     while ( p < len )
     {
-	if ( !isdigit(_str[p++]) )
+	if ( !isdigit( QChar(str[p++]) ) )
 	{
 	    kdDebug(36001) << "KSpreadPoint::init: no number" << endl;
 	    return;
 	}
     }
 
-    //int y = atoi( _str.mid( p2, p-p2 ).latin1() );
+    //int y = atoi( str.mid( p2, p-p2 ).latin1() );
     bool ok;
-    int y = _str.mid( p2, p-p2 ).toInt( &ok );
+    int y = str.mid( p2, p-p2 ).toInt( &ok );
     if ( !ok )
     {
-	kdDebug(36001) << "KSpreadPoint::init: Invalid number (str: '" << _str.mid( p2, p-p2 ) << "'" << endl;
+	kdDebug(36001) << "KSpreadPoint::init: Invalid number (str: '" << str.mid( p2, p-p2 ) << "'" << endl;
 	return;
     }
     if ( y > KS_rowMax )
@@ -1094,6 +1108,7 @@ KSpreadRange::KSpreadRange(const QString & _str)
     KSpreadPoint ul(_str.left(p));
     KSpreadPoint lr(_str.mid(p + 1));
     range = QRect(ul.pos, lr.pos);
+    tableName = ul.tableName;
 
     leftFixed = ul.columnFixed;
     rightFixed = lr.columnFixed;
