@@ -29,12 +29,27 @@ KFMView::KFMView()
 	w->show();
 
 	KFormDesigner::FormManager *manager = new KFormDesigner::FormManager(w, this, "manager");
-	KexiPropertyEditor *editor = new KexiPropertyEditor();
-	editor->show();
-	KFormDesigner::ObjectTreeView *view = new KFormDesigner::ObjectTreeView();
-	view->show();
-	manager->setEditors(editor, view);
+
+	//editor->show();
+
+	QDockWindow *dockTree = new QDockWindow(this);
+	KFormDesigner::ObjectTreeView *view = new KFormDesigner::ObjectTreeView(dockTree);
+	dockTree->setWidget(view);
+	dockTree->setCaption(i18n("Objects"));
+	dockTree->setResizeEnabled(true);
+	dockTree->setFixedExtentWidth(256);
+	moveDockWindow(dockTree, DockRight);
+
+	QDockWindow *dockEditor = new QDockWindow(this);
+	KexiPropertyEditor *editor = new KexiPropertyEditor(dockEditor);
+	dockEditor->setWidget(editor);
+	dockEditor->setCaption(i18n("Properties"));
+	dockEditor->setResizeEnabled(true);
+	moveDockWindow(dockEditor, DockRight);
+
 	connect(w, SIGNAL(windowActivated(QWidget*)), manager, SLOT(windowChanged(QWidget*)));
+
+	manager->setEditors(editor, view);
 
 	new KAction(i18n("Print object tree"), "view_tree", KShortcut(0), manager, SLOT(debugTree()), actionCollection(), "dtree");
 	KStdAction::save(manager, SLOT(saveForm()), actionCollection());
