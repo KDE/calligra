@@ -29,6 +29,8 @@ BUILTSOURCES = KIllustrator_main.moc \
 	KIllustrator_doc.moc \
 	KIllustrator_view.moc
 
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(BUILTSOURCES)
+
 idl_DATA = KIllustrator.idl
 idl_HEADERS = KIllustrator.h
 

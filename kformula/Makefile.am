@@ -22,10 +22,12 @@ noinst_HEADERS = kformula_main.h kformula_doc.h kformula_view.h \
 SRCMETA = kformula_main.moc kformula_view.moc kformula_doc.moc \
 	kformula_shell.moc
 
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+
 IDL_INCLUDES = -I$(idldir)
 
 idl_DATA = kformula.idl
-idl_HEADER = kformula.h
+idl_HEADERS = kformula.h
 
 kdelnk_DATA = kformula_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk

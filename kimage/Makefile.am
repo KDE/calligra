@@ -15,8 +15,10 @@ kimage_bin_SOURCES = img_main.cc img_doc.cc img_view.cc img.cc img_shell.cc
 noinst_HEADERS = img_main.h img_doc.h img_view.h img.h img_shell.h
 SRCMETA =	img_main.moc img_view.moc img_doc.moc img_shell.moc
 
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+
 idl_DATA = img.idl
-idl_HEADER =  img.h
+idl_HEADERS =  img.h
 
 kdelnk_DATA = kimage_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk

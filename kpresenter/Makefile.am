@@ -32,7 +32,9 @@ SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		optiondia.moc pgconfdia.moc effectdia.moc
 
 idl_DATA =	kpresenter.idl
-idl_HEADER =    kpresenter.h
+idl_HEADERS =    kpresenter.h
+
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
 
 kdelnk_DATA = kpresenter.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
