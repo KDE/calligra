@@ -1,4 +1,6 @@
 REAL BUGS:
+-	scale gradient coords while zooming as well
+-	fix i18n singular/plural
 -	zooming has problems (zoom out: shapes and selection coords are different. zoom back:
 	canvas is "fragmented")
 -	canvas doesn't repaint correctly while scrolling with the scrollbar
@@ -22,11 +24,6 @@ TODO:
 -	printing
 -	change flatness test in intersection code to a estimation used in gems code. otherwise
 	if the 2 input curves are the same our code runs forever.
--	painting (NotROP) while shape creation isnt good. creation should instead
-	insert a temporary object (state "edit") right from the start.
-	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
--	fix i18n singular/plural
-
 
 WISHLIST:
 -	Ctrl or Shift (pressed) while dragging a shape should make the shape move along only one axis
@@ -41,11 +38,11 @@ OPTIMIZATION:
 
 MAKE IT NICE:
 -	being a kde/koffice app, we should use the global selection color for selections
--	use SVG's path notation natively (?)
+-	use SVG's path notation natively?
 -	vroundcorners needs to be improved for beziers and big radii (lenny)
 -	can't we pass VTool::draw() a painter inseatd of each tool creating a painter itself?
 -	remove V*Tool::refreshUnit(). call this directly via dialog() instead
 -	pass all dialogs a parent
--	introduce centerOfMass() for vsegmentlist. problem: CM for beziers?
+-	introduce centroid() for vsegmentlist. problem: CM for beziers?
 -	think about using ghostscript's flatten algo (see comments in vflatten.cc)
 
