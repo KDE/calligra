@@ -1102,7 +1102,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
     getMargins( yp, hp, 0L, 0L, &breakBegin, &breakEnd, parag ? QMAX( parag->firstLineMargin(), parag->leftMargin() ) : 0 );
     if ( breakEnd )
     {
-        kdDebug(32002) << "KWTextFrameSet::formatVertically no-space case. breakBegin=" << breakBegin
+        kdDebug(32002) << "KWTextFrameSet("<<getName()<<")::formatVertically no-space case. breakBegin=" << breakBegin
                        << " breakEnd=" << breakEnd << " hp=" << hp << endl;
         Q_ASSERT( breakBegin <= breakEnd );
         if ( checkVerticalBreak( yp, hp, parag, linesTogether, breakBegin, breakEnd ) )
@@ -1238,7 +1238,7 @@ void KWTextFrameSet::updateFrames()
     }
 
     m_textobj->setAvailableHeight( m_doc->ptToLayoutUnitPixY( availHeight ) );
-    //kdDebugBody(32002) << this << " KWTextFrameSet::updateFrames availHeight=" << availHeight << endl;
+    //kdDebug(32002) << this << " (" << getName() << ") KWTextFrameSet::updateFrames availHeight=" << availHeight << " (LU: " << availableHeight() << ")" << endl;
     frames.setAutoDelete( true );
 
     KWFrameSet::updateFrames();
@@ -1583,12 +1583,19 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                     // The Y position doesn't matter much, recalcFrames will reposition the frame
                     // But the point of this code is set the correct height for the frame.
                     double maxFooterSize = footerHeaderSizeMax( theFrame );
-                    wantedPosition = theFrame->top() - m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
+                    double diffPt = m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
+                    wantedPosition = theFrame->top() - diffPt;
+#ifdef DEBUG_FORMAT_MORE
+                    kdDebug() << "  diffPt=" << diffPt << " -> wantedPosition=" << wantedPosition << endl;
+#endif
                     if ( wantedPosition != theFrame->top() &&
                          ( theFrame->frameSet()->isFootEndNote() ||
                            theFrame->bottom() - maxFooterSize <= wantedPosition ) ) // Apply maxFooterSize for footers only
                     {
                         theFrame->setTop( wantedPosition);
+#ifdef DEBUG_FORMAT_MORE
+                        kdDebug() << "  ok: frame=" << *theFrame << " bottom=" << theFrame->bottom() << " height=" << theFrame->height() << endl;
+#endif
                         frameResized( theFrame, true );
                         // We only got room for the next paragraph, we still have to keep the formatting going...
                         m_textobj->formatMore();
@@ -1797,7 +1804,10 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
 
 void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
 {
-    kdDebug() << "KWTextFrameSet::frameResized " << theFrame << endl;
+    kdDebug(32002) << "KWTextFrameSet::frameResized " << theFrame << " " << *theFrame << " invalidateLayout=" << invalidateLayout << endl;
+
+    m_doc->updateAllFrames();
+
     if ( theFrame->frameSet()->frameSetInfo() != KWFrameSet::FI_BODY )
         m_doc->recalcFrames();
 
@@ -1812,8 +1822,6 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
     // m_doc->frameChanged( theFrame );
     // Warning, can't call layout() (frameChanged calls it)
     // from here, since it calls formatMore() !
-
-    m_doc->updateAllFrames();
     if ( invalidateLayout )
         m_doc->invalidate();
     theFrame->updateRulerHandles();
@@ -2176,7 +2184,7 @@ protected:
     }
 };
 
-void KWTextFrameSet::renumberFootNotes()
+void KWTextFrameSet::renumberFootNotes( bool repaint )
 {
     KWFootNoteVarList lst;
     QPtrListIterator<KoTextCustomItem> cit( textDocument()->allCustomItems() );
@@ -2226,7 +2234,7 @@ void KWTextFrameSet::renumberFootNotes()
             needRepaint = true;
         }
     }
-    if ( needRepaint )
+    if ( needRepaint && repaint )
         m_doc->slotRepaintChanged( this );
 }
 

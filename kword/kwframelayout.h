@@ -3,17 +3,18 @@
 
 #include <qptrlist.h>
 #include <kdebug.h>
+#include <koRect.h>
 
 class KWDocument;
 class KWFrameSet;
 class KWTextFrameSet;
 class KoRect;
 
-namespace KWFrameLayout
+class KWFrameLayout
 {
-
-    // All that data should go into a KWHeaderFooterFrameSet
-    // (hmm, KWHeaderFooterFootNoteEndNoteFrameSet? TODO: find a shorter name ;)
+public:
+    // Maybe all that data should go into a KWHeaderFooterFrameSet
+    // (or rather a base class shared by KWFootNoteFrameSet....)
     struct HeaderFooterFrameset {
         enum OddEvenAll { Odd, Even, All };
 
@@ -32,10 +33,18 @@ namespace KWFrameLayout
 
         // Height in pt
         double m_height;
+
         // Space between this frame and the next one
         // (the one at bottom for headers, the one on top for footers/footnotes).
         // e.g. ptHeaderBodySpacing for headers/footers
         double m_spacing;
+
+        // Minimum Y value - for footnotes
+        double m_minY;
+
+        // True once the footnote has been correctly positionned and
+        // shouldn't be moved by checkFootNotes anymore.
+        bool m_positioned;
 
         // frame number for the given page.... -1 if no frame on that page
         int frameNumberForPage( int page ) const
@@ -81,19 +90,37 @@ namespace KWFrameLayout
                     return -1;
                 }
             }
+
+        void debug();
+        void deleteFramesAfterLast( int lastPage );
     };
+
+    /**
+     * Constructor
+     */
+    KWFrameLayout( KWDocument* doc, QPtrList<HeaderFooterFrameset>& headersFooters, QPtrList<HeaderFooterFrameset>& footnotes )
+        : m_headersFooters( headersFooters ), m_footnotes( footnotes ), m_doc( doc )
+        {}
 
     /**
      * The main method of this file. Do the frame layout.
      * @param mainTextFrameSet if set, its frames will be resized. Usually: set in WP mode, not set in DTP mode.
      * @param numColumns number of columns to create for the main textframeset. Only relevant if mainTextFrameSet!=0.
-     * TODO: use fromPage/toPage to reduce the re-calc to the right page(s).
      */
-    void layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int numColumns,
-                 QPtrList<HeaderFooterFrameset>& info,
+    void layout( KWFrameSet* mainTextFrameSet, int numColumns,
                  int fromPage, int toPage );
-//protected:
+
+protected:
     void resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, uint frameNumber, const KoRect& rect );
+    KoRect firstColumnRect( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns ) const;
+    bool resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns, double ptColumnWidth, double ptColumnSpacing, double left, double top, double bottom, bool updateFrames );
+    void checkFootNotes();
+
+private:
+    // A _ref_ to a list. Must remain alive as long as this object.
+    QPtrList<HeaderFooterFrameset>& m_headersFooters;
+    QPtrList<HeaderFooterFrameset>& m_footnotes;
+    KWDocument* m_doc;
 };
 
 #endif

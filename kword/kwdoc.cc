@@ -676,19 +676,27 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
     // Footer
     // In the list it will have to be from top and from bottom:
     // Header, Footer, Footnote from bottom to top
+    QPtrList<KWFrameLayout::HeaderFooterFrameset> footnotesHFList;
+    footnotesHFList.setAutoDelete( true );
 
     footnotesList.sort();
     QPtrListIterator<KWFootNoteFrameSet> fnfsIt( footnotesList );  // fnfs == "footnote frameset"
     for ( ; fnfsIt.current() ; ++fnfsIt )
     {
         KWFootNoteFrameSet* fnfs = fnfsIt.current();
-        //KWFrame* frame = fnfs->getNumFrames() > 0 ? fnfs->frame(0) : 0L;
-        //int pageNum = frame ? frame->pageNum() : 0;
-        int pageNum = fnfs->footNoteVariable()->pageNum();
-        headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                     fnfs, pageNum, pageNum /*TODO overflows*/,
+        int pageNum = -42; //fnfs->footNoteVariable()->pageNum(); // determined by KWFrameLayout
+        KWFrameLayout::HeaderFooterFrameset* hff = new KWFrameLayout::HeaderFooterFrameset(
+                                     fnfs, pageNum, pageNum,
                                      m_pageHeaderFooter.ptFooterBodySpacing, // do we need another var?
-                                     KWFrameLayout::HeaderFooterFrameset::All ) );
+                                     KWFrameLayout::HeaderFooterFrameset::All );
+
+        // With other kind of framesets, the height is simply frame->height.
+        // But for footnotes, the height to pass to KWFrameLayout is the sum of the frame heights.
+        hff->m_height = 0;
+        for (QPtrListIterator<KWFrame> f = fnfs->frameIterator(); f.current() ; ++f )
+            hff->m_height += f.current()->height();
+
+        footnotesHFList.append( hff );
     }
 
     if ( m_processingType == WP ) { // In WP mode the pages are created automatically. In DTP not...
@@ -752,8 +760,8 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
 
     if ( toPage == -1 )
         toPage = m_pages - 1;
-    KWFrameLayout::layout( this, frameset, m_pageColumns.columns, headerFooterList, fromPage, toPage );
-
+    KWFrameLayout frameLayout( this, headerFooterList, footnotesHFList );
+    frameLayout.layout( frameset, m_pageColumns.columns, fromPage, toPage );
 }
 
 bool KWDocument::loadChildren( KoStore *_store )
@@ -1483,6 +1491,12 @@ bool KWDocument::processFootNoteRequests()
         }
     }
     m_footnoteVarRequests.clear();
+    // Renumber footnotes
+    if ( ret ) {
+        KWFrameSet *frameset = m_lstFrameSet.getFirst();
+        if ( frameset && frameset->type() == FT_TEXT )
+            static_cast<KWTextFrameSet *>(frameset)->renumberFootNotes( false /*no repaint*/ );
+    }
     return ret;
 }
 
@@ -1611,10 +1625,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
     processAnchorRequests();
     if ( processFootNoteRequests() )
     {
-        // We pasted footnotes. Renumber them, and relayout frames.
-        KWFrameSet *frameset = m_lstFrameSet.getFirst();
-        if ( frameset && frameset->type() == FT_TEXT )
-            static_cast<KWTextFrameSet *>(frameset)->renumberFootNotes();
+        // We pasted footnotes. Relayout frames.
         recalcFrames();
     }
 

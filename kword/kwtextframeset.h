@@ -231,7 +231,7 @@ public:
     virtual KCommand *setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type);
 
     /** (Assuming this==main frameset), recalc the foot note numbers */
-    void renumberFootNotes();
+    void renumberFootNotes( bool repaint = true );
 
 signals:
     /** Tell the Edit object that this frame got deleted */

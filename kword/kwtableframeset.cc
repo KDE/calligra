@@ -95,6 +95,9 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
     double dy = position.y() - m_rowPositions[0];
 
     moveBy( dx, dy);
+
+    if ( dx || dy )
+        m_doc->updateAllFrames();
 }
 
 QRect KWTableFrameSet::floatingFrameRect( int /*frameNum TODO */ )

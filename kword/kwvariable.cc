@@ -153,8 +153,7 @@ KWFootNoteVariable::KWFootNoteVariable( KoTextDocument *textdoc, KoVariableForma
     : KoVariable( textdoc, varFormat, varColl ),
       m_doc(doc),
       m_frameset( 0L ),
-      m_numberingType( Auto ),
-      m_pageNum( 0 )
+      m_numberingType( Auto )
 {
     m_varValue = QVariant( QString::null );
 }
@@ -302,31 +301,23 @@ void KWFootNoteVariable::finalize()
     if ( m_frameset->isDeleted() )
         return;
 
-    // Find out the position of the footnote variable in document coordinates.
-    int paragy = paragraph()->rect().y();
-    KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
-    KoPoint dPoint;
-    kdDebug(32001) << "KWFootNoteVariable::finalize position of variable (LU): " << QPoint( x(), paragy + y() + height ) << endl;
-    KWFrame* containingFrame = fs->internalToDocument( QPoint( x(), paragy + y() + height ), dPoint );
-    if ( containingFrame )
-    {
-        kdDebug(32001) << " found containingFrame " << containingFrame << " page:" << containingFrame->pageNum() << endl;
-        // Ok, the (bottom of the) footnote variable is at dPoint.
-        m_pageNum = containingFrame->pageNum(); // and at page m_pageNum
+    kdDebug() << "KWFootNoteVariable::finalize" << endl;
 
-        KWFrame* footNoteFrame = m_frameset->frame( 0 );
-        int framePage = footNoteFrame->pageNum();
-        if ( framePage != m_pageNum )
-        {
-            kdDebug(32001) << "Footnote var at page " << m_pageNum << ", footnote frame at page " << framePage << " -> recalcFrames()" << endl;
-            fs->kWordDocument()->recalcFrames( QMIN( m_pageNum, framePage ), -1 );
-        }
+    int pageNum = this->pageNum();
+    if ( pageNum == -1 )
+        return;
 
-        // TODO handle the case where dPoint is too far down to be on top of the associated footnote.... somehow
-    } else
+    KWFrame* footNoteFrame = m_frameset->frame( 0 );
+    int framePage = footNoteFrame->pageNum();
+    if ( framePage != pageNum )
     {
-        // This can happen if the page hasn't been created yet
-        //kdDebug(32001) << "KWFootNoteVariable::move internalToDocument returned 0L for " << x << ", " << y+paragy << endl;
+        kdDebug(32001) << "Footnote var at page " << pageNum << ", footnote frame at page " << framePage << " -> abortFormatting() and recalcFrames()" << endl;
+        KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
+        fs->textObject()->abortFormatting();
+
+        m_doc->recalcFrames( QMIN( pageNum, framePage ), -1 );
+
+        QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );
     }
 }
 
@@ -369,7 +360,8 @@ void KWFootNoteVariable::setDeleted( bool del )
         if ( m_frameset ) {
             kdDebug() << "Making frameset " << m_frameset << " visible" << endl;
             m_frameset->setVisible( true );
-            m_frameset->createInitialFrame( 0 ); // Page number shouldn't matter (see recalcFrames below).
+            if ( m_frameset->isDeleted() )
+                m_frameset->createInitialFrame( 0 ); // Page number shouldn't matter (see recalcFrames below).
             Q_ASSERT( m_frameset->isVisible() );
         }
     }
@@ -392,3 +384,32 @@ void KWFootNoteVariable::setDeleted( bool del )
     QTimer::singleShot( 0, m_doc, SLOT( slotRepaintAllViews() ) );
 }
 
+int KWFootNoteVariable::pageNum() const
+{
+    int page = static_cast<int>(varY() / m_doc->ptPaperHeight());
+    Q_ASSERT( page <= m_doc->getPages()-1 );
+    return page;
+}
+
+double KWFootNoteVariable::varY() const
+{
+    // Find out the position of the footnote variable in document coordinates.
+    int paragy = paragraph()->rect().y();
+    KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
+    KoPoint dPoint;
+    //kdDebug(32001) << "KWFootNoteVariable::pageNum position of variable (LU): " << QPoint( x(), paragy + y() + height ) << endl;
+    KWFrame* containingFrame = fs->internalToDocument( QPoint( x(), paragy + y() + height ), dPoint );
+    if ( containingFrame )
+    {
+        //kdDebug(32001) << " found containingFrame " << containingFrame << " page:" << containingFrame->pageNum() << endl;
+        // Ok, the (bottom of the) footnote variable is at dPoint.
+        double varY = dPoint.y();
+        //int pageNum = containingFrame->pageNum(); // and at page pageNum
+        return varY;
+    } else
+    {
+        // This can happen if the page hasn't been created yet
+        //kdDebug(32001) << "KWFootNoteVariable::pageNum internalToDocument returned 0L for " << x << ", " << y+paragy << endl;
+        return 0;
+    }
+}

@@ -135,7 +135,9 @@ public:
     virtual void finalize();
 
     // The page this var is on
-    int pageNum() const { return m_pageNum; }
+    int pageNum() const;
+    // The current Y position of the var (in doc pt)
+    double varY() const;
 
     virtual void setDeleted( bool del );
 
@@ -151,7 +153,6 @@ private:
     Numbering m_numberingType;
     int m_num;
     int m_numDisplay;
-    int m_pageNum; // the current page this var is on
 };
 
 #endif
