@@ -206,9 +206,10 @@ bool AbiWordWorker::doOpenDocument(void)
 
 bool AbiWordWorker::doCloseDocument(void)
 {
-    // We need to create all <data> elements here
+    // Before writing the <data> element,
+    //  we must be sure that we have data and that we can retrieve it.
 
-    if (m_kwordLeader)
+    if (m_kwordLeader && (!m_mapData.isEmpty()))
     {
         *m_streamOut << "<data>\n";
 
