@@ -261,16 +261,16 @@ void KudesignerView::slotAddDetailFooter(){
     
     if (m_doc->canvas()->templ->detailsCount >= level)
     {
-        CanvasDetailFooter *df = new CanvasDetailFooter(((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
+/*        CanvasDetailFooter *df = new CanvasDetailFooter(((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
             0, ((KudesignerDoc *)(koDocument()))->canvas()->templ->width() - ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
             ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
             50, ((KudesignerDoc *)(koDocument()))->canvas());
         df->props["Level"]->setValue(QString("%1").arg(level));
         ((KudesignerDoc *)(koDocument()))->canvas()->templ->details[level].first.second = df;
         ((KudesignerDoc *)(koDocument()))->canvas()->templ->arrangeSections();
-  
-      
-//        m_doc->addCommand( new AddDetailFooterCommand(level, i18n("Insert Detail Footer Section"), m_doc) );
+*/
+
+        m_doc->addCommand( new AddDetailFooterCommand(level, i18n("Insert Detail Footer Section"), m_doc) );
     }
 }
 
