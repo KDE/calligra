@@ -1434,7 +1434,7 @@ bool KWFrameDia::applyChanges()
                     f->frameSet()->delFrame( f, false );
             }
         } else if(rExistingFrameset->isChecked()) { // rename and/or reconnect a new frameset for this frame.
-            if(fs->getName() != frameSetItem->text( 1 )) { // rename FS.
+            if(frameSetItem && (fs->getName() != frameSetItem->text( 1 ))) { // rename FS.
                 if(!macroCmd)
                     macroCmd = new KMacroCommand( i18n("Rename Frameset") );
                 // Rename frameset
@@ -1442,7 +1442,6 @@ bool KWFrameDia::applyChanges()
                 macroCmd->addCommand(cmd);
                 cmd->execute();
             }
-
             if(frame) {
                 if(frame->frameSet() != fs)  {
                     if(frame->frameSet()!=0) {
@@ -1461,13 +1460,16 @@ bool KWFrameDia::applyChanges()
                             return false;
                     }
                 }
-                // then do the reconnects.
-                for(KWFrame *f=allFrames.first();f; f=allFrames.next()) {
-                    KWFrameSet *fs2=f->frameSet();
-                    if(! (fs2->isHeaderOrFooter() || fs2->isMainFrameset()) ) {
-                        if(fs2 != fs) {  // reconnect.
-                            f->frameSet()->delFrame( f, false );
-                            fs->addFrame(f);
+                if ( fs )
+                {
+                    // then do the reconnects.
+                    for(KWFrame *f=allFrames.first();f; f=allFrames.next()) {
+                        KWFrameSet *fs2=f->frameSet();
+                        if(! (fs2->isHeaderOrFooter() || fs2->isMainFrameset()) ) {
+                            if(fs2 != fs) {  // reconnect.
+                                f->frameSet()->delFrame( f, false );
+                                fs->addFrame(f);
+                            }
                         }
                     }
                 }
@@ -1777,7 +1779,7 @@ bool KWFrameDia::applyChanges()
             }
             if ( frame ) {
                 if ( frame->frameSet()->isMainFrameset() &&
-                        (oldX != sx->value() || oldY != sy->value() || oldW != sw->value() || oldH != sh->value() )) {
+                     (oldX != sx->value() || oldY != sy->value() || oldW != sw->value() || oldH != sh->value() )) {
                     //kdDebug() << "Old geom: " << oldX << ", " << oldY<< " " << oldW << "x" << oldH << endl;
                     //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
                     //          << " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;
