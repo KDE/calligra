@@ -625,15 +625,14 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             int num = getObjectAt( docPoint );
             if ( num != -1 ) {
                 kpobject = objectList().at( num );
+		QPoint pnt = QCursor::pos();
+		mousePressed = false;
                 bool state=!( e->state() & ShiftButton ) && !( e->state() & ControlButton ) && !kpobject->isSelected();
-                QPoint pnt = QCursor::pos();
                 if ( kpobject->getType() == OT_PICTURE ) {
-                    mousePressed = false;
                     deSelectAllObj();
                     selectObj( kpobject );
                     m_view->openPopupMenuPicObject(pnt);
                 } else if ( kpobject->getType() == OT_CLIPART ) {
-                    mousePressed = false;
                     deSelectAllObj();
                     selectObj( kpobject );
                     m_view->openPopupMenuClipObject(pnt);
@@ -642,45 +641,39 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         deSelectAllObj();
                     selectObj( kpobject );
                     m_view->openPopupMenuTextObject(pnt);
-                    mousePressed = false;
                 } else if ( kpobject->getType() == OT_PIE ) {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
                     m_view->openPopupMenuPieObject( pnt );
-                    mousePressed = false;
                 } else if ( kpobject->getType() == OT_RECT ) {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
                     m_view->openPopupMenuRectangleObject( pnt );
-                    mousePressed = false;
                 } else if ( kpobject->getType() == OT_PART ) {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
                     m_view->openPopupMenuPartObject( pnt );
-                    mousePressed = false;
                 } else if ( kpobject->getType() == OT_POLYGON ) {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
                     m_view->openPopupMenuPolygonObject( pnt );
-                    mousePressed = false;
                 } else {
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
                     m_view->openPopupMenuGraphMenu( pnt );
-                    mousePressed = false;
                 }
-                modType = MT_NONE;
             } else {
                 QPoint pnt = QCursor::pos();
                 m_view->openPopupMenuMenuPage( pnt );
                 mousePressed = false;
-                modType = MT_NONE;
             }
+	    modType = MT_NONE;
+
         }
         else if( e->button() == RightButton && toolEditMode != TEM_MOUSE ) {
             //deactivate tools when you click on right button
@@ -3523,9 +3516,12 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     /*if ( printer->fromPage() > 1 )
         m_view->setDiffY( ( printer->fromPage() - 1 ) * ( getPageRect( 1, 1.0, false ).height() ) -
                         (int)MM_TO_POINT( top_margin ) );*/
-
-    for ( i = printer->fromPage(); i <= printer->toPage(); i++ )
+    QValueList<int> list=printer->pageList();
+    QValueList<int>::iterator it;
+    for( it=list.begin();it!=list.end();++it)
     {
+      i=(*it);
+
         progress.setProgress( ++j );
         kapp->processEvents();
 
@@ -4591,11 +4587,7 @@ void KPrCanvas::moveObject( int x, int y, bool key )
             oldKoBoundingRect.setRect( _dx, _dy, _dw, _dh );
             QRect oldBoundingRect = m_view->zoomHandler()->zoomRect( oldKoBoundingRect );
 
-            //it.current()->moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
-            it.current()->paintSelection( &p, m_view->zoomHandler() );
             it.current()->moveBy( _move );
-            it.current()->paintSelection( &p, m_view->zoomHandler() );
-            //it.current()->moveBy(m_view->zoomHandler()->unzoomItX(-diffx()),m_view->zoomHandler()->unzoomItY(-diffy()));
             p.end();
             _objects.append( it.current() );
             _repaint( oldBoundingRect );

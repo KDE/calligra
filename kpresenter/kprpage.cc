@@ -1408,45 +1408,67 @@ bool KPrPage::setLineEnd( LineEnd le )
 	    switch ( kpobject->getType() )
 	    {
 	    case OT_LINE: {
-		ptmp->pen = QPen( dynamic_cast<KPLineObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPLineObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPLineObject*>( kpobject )->getLineEnd();
-		ret = true;
+	      if( dynamic_cast<KPLineObject *>(kpobject))
+		{
+		  ptmp->pen = QPen( static_cast<KPLineObject*>( kpobject )->getPen() );
+		  ptmp->lineBegin = static_cast<KPLineObject*>( kpobject )->getLineBegin();
+		  ptmp->lineEnd = static_cast<KPLineObject*>( kpobject )->getLineEnd();
+		  ret = true;
+		}
 	    } break;
 	    case OT_AUTOFORM: {
-		ptmp->pen = QPen( dynamic_cast<KPAutoformObject*>( kpobject )->getPen() );
-		btmp->brush = QBrush( dynamic_cast<KPAutoformObject*>( kpobject )->getBrush() );
-		ptmp->lineBegin = dynamic_cast<KPAutoformObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPAutoformObject*>( kpobject )->getLineEnd();
-		btmp->fillType = dynamic_cast<KPAutoformObject*>( kpobject )->getFillType();
-		btmp->gColor1 = dynamic_cast<KPAutoformObject*>( kpobject )->getGColor1();
-		btmp->gColor2 = dynamic_cast<KPAutoformObject*>( kpobject )->getGColor2();
-		btmp->gType = dynamic_cast<KPAutoformObject*>( kpobject )->getGType();
+	      if( dynamic_cast<KPAutoformObject *>(kpobject))
+		{
+
+		ptmp->pen = QPen( static_cast<KPAutoformObject*>( kpobject )->getPen() );
+		btmp->brush = QBrush( static_cast<KPAutoformObject*>( kpobject )->getBrush() );
+		ptmp->lineBegin = static_cast<KPAutoformObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = static_cast<KPAutoformObject*>( kpobject )->getLineEnd();
+		btmp->fillType = static_cast<KPAutoformObject*>( kpobject )->getFillType();
+		btmp->gColor1 = static_cast<KPAutoformObject*>( kpobject )->getGColor1();
+		btmp->gColor2 = static_cast<KPAutoformObject*>( kpobject )->getGColor2();
+		btmp->gType = static_cast<KPAutoformObject*>( kpobject )->getGType();
 		ret = true;
+		}
 	    } break;
             case OT_FREEHAND: {
-		ptmp->pen = QPen( dynamic_cast<KPFreehandObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPFreehandObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPFreehandObject*>( kpobject )->getLineEnd();
+	      if( dynamic_cast<KPFreehandObject *>(kpobject))
+		{
+
+		ptmp->pen = QPen( static_cast<KPFreehandObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = static_cast<KPFreehandObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = static_cast<KPFreehandObject*>( kpobject )->getLineEnd();
 		ret = true;
+		}
 	    } break;
             case OT_POLYLINE: {
-		ptmp->pen = QPen( dynamic_cast<KPPolylineObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPPolylineObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
+	      if( dynamic_cast<KPPolylineObject *>(kpobject))
+		{
+		ptmp->pen = QPen( static_cast<KPPolylineObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = static_cast<KPPolylineObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = static_cast<KPPolylineObject*>( kpobject )->getLineEnd();
 		ret = true;
+		}
 	    } break;
             case OT_QUADRICBEZIERCURVE: {
-		ptmp->pen = QPen( dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineEnd();
-		ret = true;
+	      if( dynamic_cast<KPQuadricBezierCurveObject *>(kpobject))
+		{
+
+		  ptmp->pen = QPen( static_cast<KPQuadricBezierCurveObject*>( kpobject )->getPen() );
+		  ptmp->lineBegin = static_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineBegin();
+		  ptmp->lineEnd = static_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineEnd();
+		  ret = true;
+		}
 	    } break;
             case OT_CUBICBEZIERCURVE: {
-		ptmp->pen = QPen( dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineEnd();
-		ret = true;
+	      if( dynamic_cast<KPCubicBezierCurveObject *>(kpobject))
+		{
+
+		  ptmp->pen = QPen( static_cast<KPCubicBezierCurveObject*>( kpobject )->getPen() );
+		  ptmp->lineBegin = static_cast<KPCubicBezierCurveObject*>( kpobject )->getLineBegin();
+		  ptmp->lineEnd = static_cast<KPCubicBezierCurveObject*>( kpobject )->getLineEnd();
+		  ret = true;
+		}
 	    } break;
 	    default: continue; break;
 	    }
@@ -1499,45 +1521,63 @@ bool KPrPage::setLineBegin( LineEnd lb )
 	    ptmp = new PenBrushCmd::Pen;
 	    switch ( kpobject->getType() ) {
 	    case OT_LINE: {
-		ptmp->pen = QPen( dynamic_cast<KPLineObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPLineObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPLineObject*>( kpobject )->getLineEnd();
-		ret = true;
+	      if(dynamic_cast<KPLineObject*>( kpobject ))
+		{
+		  ptmp->pen = QPen(static_cast<KPLineObject*>( kpobject )->getPen() );
+		  ptmp->lineBegin = static_cast<KPLineObject*>( kpobject )->getLineBegin();
+		  ptmp->lineEnd = static_cast<KPLineObject*>( kpobject )->getLineEnd();
+		  ret = true;
+		}
 	    } break;
 	    case OT_AUTOFORM: {
-		ptmp->pen = QPen( dynamic_cast<KPAutoformObject*>( kpobject )->getPen() );
-		btmp->brush = QBrush( dynamic_cast<KPAutoformObject*>( kpobject )->getBrush() );
-		ptmp->lineBegin = dynamic_cast<KPAutoformObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPAutoformObject*>( kpobject )->getLineEnd();
-		btmp->fillType = dynamic_cast<KPAutoformObject*>( kpobject )->getFillType();
-		btmp->gColor1 = dynamic_cast<KPAutoformObject*>( kpobject )->getGColor1();
-		btmp->gColor2 = dynamic_cast<KPAutoformObject*>( kpobject )->getGColor2();
-		btmp->gType = dynamic_cast<KPAutoformObject*>( kpobject )->getGType();
-		ret = true;
+	      if(dynamic_cast<KPAutoformObject*>( kpobject ))
+		{
+		  ptmp->pen = QPen( static_cast<KPAutoformObject*>( kpobject )->getPen() );
+		  btmp->brush = QBrush( static_cast<KPAutoformObject*>( kpobject )->getBrush() );
+		  ptmp->lineBegin = static_cast<KPAutoformObject*>( kpobject )->getLineBegin();
+		  ptmp->lineEnd = static_cast<KPAutoformObject*>( kpobject )->getLineEnd();
+		  btmp->fillType = static_cast<KPAutoformObject*>( kpobject )->getFillType();
+		  btmp->gColor1 = static_cast<KPAutoformObject*>( kpobject )->getGColor1();
+		  btmp->gColor2 = static_cast<KPAutoformObject*>( kpobject )->getGColor2();
+		  btmp->gType = static_cast<KPAutoformObject*>( kpobject )->getGType();
+		  ret = true;
+		}
 	    } break;
             case OT_FREEHAND: {
-		ptmp->pen = QPen( dynamic_cast<KPFreehandObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPFreehandObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPFreehandObject*>( kpobject )->getLineEnd();
-		ret = true;
+	      if(dynamic_cast<KPFreehandObject*>( kpobject ))
+		{
+		  ptmp->pen = QPen( static_cast<KPFreehandObject*>( kpobject )->getPen() );
+		  ptmp->lineBegin = static_cast<KPFreehandObject*>( kpobject )->getLineBegin();
+		  ptmp->lineEnd = static_cast<KPFreehandObject*>( kpobject )->getLineEnd();
+		  ret = true;
+		}
 	    } break;
             case OT_POLYLINE: {
-		ptmp->pen = QPen( dynamic_cast<KPPolylineObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPPolylineObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
-		ret = true;
+	      if(dynamic_cast<KPPolylineObject*>( kpobject ))
+		{
+		  ptmp->pen = QPen( static_cast<KPPolylineObject*>( kpobject )->getPen() );
+		  ptmp->lineBegin = static_cast<KPPolylineObject*>( kpobject )->getLineBegin();
+		  ptmp->lineEnd = static_cast<KPPolylineObject*>( kpobject )->getLineEnd();
+		  ret = true;
+		}
 	    } break;
             case OT_QUADRICBEZIERCURVE: {
-		ptmp->pen = QPen( dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineEnd();
-		ret = true;
+	      if(dynamic_cast<KPQuadricBezierCurveObject*>( kpobject ))
+		{
+		  ptmp->pen = QPen( static_cast<KPQuadricBezierCurveObject*>( kpobject )->getPen() );
+		  ptmp->lineBegin = static_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineBegin();
+		  ptmp->lineEnd = static_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineEnd();
+		  ret = true;
+		}
 	    } break;
             case OT_CUBICBEZIERCURVE: {
-		ptmp->pen = QPen( dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineEnd();
-		ret = true;
+	      if(dynamic_cast<KPCubicBezierCurveObject*>( kpobject ))
+		{
+		  ptmp->pen = QPen( static_cast<KPCubicBezierCurveObject*>( kpobject )->getPen() );
+		  ptmp->lineBegin = static_cast<KPCubicBezierCurveObject*>( kpobject )->getLineBegin();
+		  ptmp->lineEnd = static_cast<KPCubicBezierCurveObject*>( kpobject )->getLineEnd();
+		  ret = true;
+		}
 	    } break;
 	    default: continue; break;
 	    }
@@ -1568,193 +1608,211 @@ bool KPrPage::setLineBegin( LineEnd lb )
 bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft, const QColor &g1, const QColor &g2,
 				 BCType gt, bool unbalanced, int xfactor, int yfactor, bool sticky )
 {
-    KPObject *kpobject = 0;
-    bool ret = false;
+  KPObject *kpobject = 0;
+  bool ret = false;
 
-    QPtrList<KPObject> _objects;
-    QPtrList<PenBrushCmd::Pen> _oldPen;
-    QPtrList<PenBrushCmd::Brush> _oldBrush;
-    PenBrushCmd::Pen _newPen, *ptmp;
-    PenBrushCmd::Brush _newBrush, *btmp;
+  QPtrList<KPObject> _objects;
+  QPtrList<PenBrushCmd::Pen> _oldPen;
+  QPtrList<PenBrushCmd::Brush> _oldBrush;
+  PenBrushCmd::Pen _newPen, *ptmp;
+  PenBrushCmd::Brush _newBrush, *btmp;
 
-    _newPen.pen = QPen( pen );
-    _newPen.lineBegin = lb;
-    _newPen.lineEnd = le;
+  _newPen.pen = QPen( pen );
+  _newPen.lineBegin = lb;
+  _newPen.lineEnd = le;
 
-    _newBrush.brush = QBrush( brush );
-    _newBrush.fillType = ft;
-    _newBrush.gColor1 = g1;
-    _newBrush.gColor2 = g2;
-    _newBrush.gType = gt;
-    _newBrush.unbalanced = unbalanced;
-    _newBrush.xfactor = xfactor;
-    _newBrush.yfactor = yfactor;
+  _newBrush.brush = QBrush( brush );
+  _newBrush.fillType = ft;
+  _newBrush.gColor1 = g1;
+  _newBrush.gColor2 = g2;
+  _newBrush.gType = gt;
+  _newBrush.unbalanced = unbalanced;
+  _newBrush.xfactor = xfactor;
+  _newBrush.yfactor = yfactor;
 
-    _objects.setAutoDelete( false );
-    _oldPen.setAutoDelete( false );
-    _oldBrush.setAutoDelete( false );
+  _objects.setAutoDelete( false );
+  _oldPen.setAutoDelete( false );
+  _oldBrush.setAutoDelete( false );
 
-    QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it )
+  QPtrListIterator<KPObject> it( m_objectList );
+  for ( ; it.current() ; ++it )
     {
-        if(it.current()->isSelected())
+      if(it.current()->isSelected())
         {
-            kpobject=it.current();
-    	    kpobject->setSticky( sticky );
-	    ptmp = new PenBrushCmd::Pen;
-	    btmp = new PenBrushCmd::Brush;
-	    switch ( kpobject->getType() ) {
-	    case OT_LINE:
-		ptmp->pen = QPen( dynamic_cast<KPLineObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPLineObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPLineObject*>( kpobject )->getLineEnd();
+	  kpobject=it.current();
+	  kpobject->setSticky( sticky );
+	  ptmp = new PenBrushCmd::Pen;
+	  btmp = new PenBrushCmd::Brush;
+	  switch ( kpobject->getType() ) {
+	  case OT_LINE:
+	    if(dynamic_cast<KPLineObject*>( kpobject ))
+	      {
+		ptmp->pen = QPen( static_cast<KPLineObject*>( kpobject )->getPen() );
+		ptmp->lineBegin = static_cast<KPLineObject*>( kpobject )->getLineBegin();
+		ptmp->lineEnd = static_cast<KPLineObject*>( kpobject )->getLineEnd();
 		ret = true;
-		break;
-	    case OT_RECT:
-		ptmp->pen = QPen( dynamic_cast<KPRectObject*>( kpobject )->getPen() );
-		btmp->brush = QBrush( dynamic_cast<KPRectObject*>( kpobject )->getBrush() );
-		btmp->fillType = dynamic_cast<KPRectObject*>( kpobject )->getFillType();
-		btmp->gColor1 = dynamic_cast<KPRectObject*>( kpobject )->getGColor1();
-		btmp->gColor2 = dynamic_cast<KPRectObject*>( kpobject )->getGColor2();
-		btmp->gType = dynamic_cast<KPRectObject*>( kpobject )->getGType();
-		btmp->unbalanced = dynamic_cast<KPRectObject*>( kpobject )->getGUnbalanced();
-		btmp->xfactor = dynamic_cast<KPRectObject*>( kpobject )->getGXFactor();
-		btmp->yfactor = dynamic_cast<KPRectObject*>( kpobject )->getGYFactor();
+	      }
+	    break;
+	  case OT_RECT:
+	    if(dynamic_cast<KPRectObject*>( kpobject ))
+	      {
+		ptmp->pen = QPen( static_cast<KPRectObject*>( kpobject )->getPen() );
+		btmp->brush = QBrush( static_cast<KPRectObject*>( kpobject )->getBrush() );
+		btmp->fillType = static_cast<KPRectObject*>( kpobject )->getFillType();
+		btmp->gColor1 = static_cast<KPRectObject*>( kpobject )->getGColor1();
+		btmp->gColor2 = static_cast<KPRectObject*>( kpobject )->getGColor2();
+		btmp->gType = static_cast<KPRectObject*>( kpobject )->getGType();
+		btmp->unbalanced = static_cast<KPRectObject*>( kpobject )->getGUnbalanced();
+		btmp->xfactor = static_cast<KPRectObject*>( kpobject )->getGXFactor();
+		btmp->yfactor = static_cast<KPRectObject*>( kpobject )->getGYFactor();
 		ret = true;
-		break;
-	    case OT_ELLIPSE:
-		ptmp->pen = QPen( dynamic_cast<KPEllipseObject*>( kpobject )->getPen() );
-		btmp->brush = dynamic_cast<KPEllipseObject*>( kpobject )->getBrush();
-		btmp->fillType = dynamic_cast<KPEllipseObject*>( kpobject )->getFillType();
-		btmp->gColor1 = dynamic_cast<KPEllipseObject*>( kpobject )->getGColor1();
-		btmp->gColor2 = dynamic_cast<KPEllipseObject*>( kpobject )->getGColor2();
-		btmp->gType = dynamic_cast<KPEllipseObject*>( kpobject )->getGType();
-		btmp->unbalanced = dynamic_cast<KPEllipseObject*>( kpobject )->getGUnbalanced();
-		btmp->xfactor = dynamic_cast<KPEllipseObject*>( kpobject )->getGXFactor();
-		btmp->yfactor = dynamic_cast<KPEllipseObject*>( kpobject )->getGYFactor();
+	      }
+	    break;
+	  case OT_ELLIPSE:
+	    if(dynamic_cast<KPEllipseObject*>( kpobject ))
+	      {
+		ptmp->pen = QPen( static_cast<KPEllipseObject*>( kpobject )->getPen() );
+		btmp->brush = static_cast<KPEllipseObject*>( kpobject )->getBrush();
+		btmp->fillType = static_cast<KPEllipseObject*>( kpobject )->getFillType();
+		btmp->gColor1 = static_cast<KPEllipseObject*>( kpobject )->getGColor1();
+		btmp->gColor2 = static_cast<KPEllipseObject*>( kpobject )->getGColor2();
+		btmp->gType = static_cast<KPEllipseObject*>( kpobject )->getGType();
+		btmp->unbalanced = static_cast<KPEllipseObject*>( kpobject )->getGUnbalanced();
+		btmp->xfactor = static_cast<KPEllipseObject*>( kpobject )->getGXFactor();
+		btmp->yfactor = static_cast<KPEllipseObject*>( kpobject )->getGYFactor();
 		ret = true;
-		break;
-	    case OT_AUTOFORM:
-		ptmp->pen = QPen( dynamic_cast<KPAutoformObject*>( kpobject )->getPen() );
-		btmp->brush = QBrush( dynamic_cast<KPAutoformObject*>( kpobject )->getBrush() );
-		ptmp->lineBegin = dynamic_cast<KPAutoformObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPAutoformObject*>( kpobject )->getLineEnd();
-		btmp->fillType = dynamic_cast<KPAutoformObject*>( kpobject )->getFillType();
-		btmp->gColor1 = dynamic_cast<KPAutoformObject*>( kpobject )->getGColor1();
-		btmp->gColor2 = dynamic_cast<KPAutoformObject*>( kpobject )->getGColor2();
-		btmp->gType = dynamic_cast<KPAutoformObject*>( kpobject )->getGType();
-		btmp->unbalanced = dynamic_cast<KPAutoformObject*>( kpobject )->getGUnbalanced();
-		btmp->xfactor = dynamic_cast<KPAutoformObject*>( kpobject )->getGXFactor();
-		btmp->yfactor = dynamic_cast<KPAutoformObject*>( kpobject )->getGYFactor();
-		ret = true;
-		break;
-	    case OT_PIE:
-		ptmp->pen = QPen( dynamic_cast<KPPieObject*>( kpobject )->getPen() );
-		btmp->brush = QBrush( dynamic_cast<KPPieObject*>( kpobject )->getBrush() );
-		ptmp->lineBegin = dynamic_cast<KPPieObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPPieObject*>( kpobject )->getLineEnd();
-		btmp->fillType = dynamic_cast<KPPieObject*>( kpobject )->getFillType();
-		btmp->gColor1 = dynamic_cast<KPPieObject*>( kpobject )->getGColor1();
-		btmp->gColor2 = dynamic_cast<KPPieObject*>( kpobject )->getGColor2();
-		btmp->gType = dynamic_cast<KPPieObject*>( kpobject )->getGType();
-		btmp->unbalanced = dynamic_cast<KPPieObject*>( kpobject )->getGUnbalanced();
-		btmp->xfactor = dynamic_cast<KPPieObject*>( kpobject )->getGXFactor();
-		btmp->yfactor = dynamic_cast<KPPieObject*>( kpobject )->getGYFactor();
-		ret = true;
-		break;
-	    case OT_PART:
-		ptmp->pen = QPen( dynamic_cast<KPPartObject*>( kpobject )->getPen() );
-		btmp->brush = QBrush( dynamic_cast<KPPartObject*>( kpobject )->getBrush() );
-		btmp->fillType = dynamic_cast<KPPartObject*>( kpobject )->getFillType();
-		btmp->gColor1 = dynamic_cast<KPPartObject*>( kpobject )->getGColor1();
-		btmp->gColor2 = dynamic_cast<KPPartObject*>( kpobject )->getGColor2();
-		btmp->gType = dynamic_cast<KPPartObject*>( kpobject )->getGType();
-		btmp->unbalanced = dynamic_cast<KPPartObject*>( kpobject )->getGUnbalanced();
-		btmp->xfactor = dynamic_cast<KPPartObject*>( kpobject )->getGXFactor();
-		btmp->yfactor = dynamic_cast<KPPartObject*>( kpobject )->getGYFactor();
-		ret = true;
-		break;
-	    case OT_TEXT:
-		ptmp->pen = QPen( dynamic_cast<KPTextObject*>( kpobject )->getPen() );
-		btmp->brush = QBrush( dynamic_cast<KPTextObject*>( kpobject )->getBrush() );
-		btmp->fillType = dynamic_cast<KPTextObject*>( kpobject )->getFillType();
-		btmp->gColor1 = dynamic_cast<KPTextObject*>( kpobject )->getGColor1();
-		btmp->gColor2 = dynamic_cast<KPTextObject*>( kpobject )->getGColor2();
-		btmp->gType = dynamic_cast<KPTextObject*>( kpobject )->getGType();
-		btmp->unbalanced = dynamic_cast<KPTextObject*>( kpobject )->getGUnbalanced();
-		btmp->xfactor = dynamic_cast<KPTextObject*>( kpobject )->getGXFactor();
-		btmp->yfactor = dynamic_cast<KPTextObject*>( kpobject )->getGYFactor();
-		ret = true;
-		break;
-	    case OT_PICTURE:
-		ptmp->pen = QPen( dynamic_cast<KPPixmapObject*>( kpobject )->getPen() );
-		btmp->brush = QBrush( dynamic_cast<KPPixmapObject*>( kpobject )->getBrush() );
-		btmp->fillType = dynamic_cast<KPPixmapObject*>( kpobject )->getFillType();
-		btmp->gColor1 = dynamic_cast<KPPixmapObject*>( kpobject )->getGColor1();
-		btmp->gColor2 = dynamic_cast<KPPixmapObject*>( kpobject )->getGColor2();
-		btmp->gType = dynamic_cast<KPPixmapObject*>( kpobject )->getGType();
-		btmp->unbalanced = dynamic_cast<KPPixmapObject*>( kpobject )->getGUnbalanced();
-		btmp->xfactor = dynamic_cast<KPPixmapObject*>( kpobject )->getGXFactor();
-		btmp->yfactor = dynamic_cast<KPPixmapObject*>( kpobject )->getGYFactor();
-		ret = true;
-		break;
-	    case OT_CLIPART:
-		ptmp->pen = QPen( dynamic_cast<KPClipartObject*>( kpobject )->getPen() );
-		btmp->brush = QBrush( dynamic_cast<KPClipartObject*>( kpobject )->getBrush() );
-		btmp->fillType = dynamic_cast<KPClipartObject*>( kpobject )->getFillType();
-		btmp->gColor1 = dynamic_cast<KPClipartObject*>( kpobject )->getGColor1();
-		btmp->gColor2 = dynamic_cast<KPClipartObject*>( kpobject )->getGColor2();
-		btmp->gType = dynamic_cast<KPClipartObject*>( kpobject )->getGType();
-		btmp->unbalanced = dynamic_cast<KPClipartObject*>( kpobject )->getGUnbalanced();
-		btmp->xfactor = dynamic_cast<KPClipartObject*>( kpobject )->getGXFactor();
-		btmp->yfactor = dynamic_cast<KPClipartObject*>( kpobject )->getGYFactor();
-		ret = true;
-		break;
-             case OT_FREEHAND:
-		ptmp->pen = QPen( dynamic_cast<KPFreehandObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPFreehandObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPFreehandObject*>( kpobject )->getLineEnd();
-		ret = true;
-		break;
-             case OT_POLYLINE:
-		ptmp->pen = QPen( dynamic_cast<KPPolylineObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPPolylineObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
-		ret = true;
-		break;
-             case OT_QUADRICBEZIERCURVE:
-		ptmp->pen = QPen( dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineEnd();
-		ret = true;
-		break;
-             case OT_CUBICBEZIERCURVE:
-		ptmp->pen = QPen( dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getPen() );
-		ptmp->lineBegin = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineBegin();
-		ptmp->lineEnd = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineEnd();
-		ret = true;
-		break;
-	    default: break;
-	    }
-	    _oldPen.append( ptmp );
-	    _oldBrush.append( btmp );
-	    _objects.append( kpobject );
+	      }
+	    break;
+	  case OT_AUTOFORM:
+	    if(dynamic_cast<KPAutoformObject*>( kpobject ))
+	      {
+	    ptmp->pen = QPen( static_cast<KPAutoformObject*>( kpobject )->getPen() );
+	    btmp->brush = QBrush( static_cast<KPAutoformObject*>( kpobject )->getBrush() );
+	    ptmp->lineBegin = static_cast<KPAutoformObject*>( kpobject )->getLineBegin();
+	    ptmp->lineEnd = static_cast<KPAutoformObject*>( kpobject )->getLineEnd();
+	    btmp->fillType = static_cast<KPAutoformObject*>( kpobject )->getFillType();
+	    btmp->gColor1 = static_cast<KPAutoformObject*>( kpobject )->getGColor1();
+	    btmp->gColor2 = static_cast<KPAutoformObject*>( kpobject )->getGColor2();
+	    btmp->gType = static_cast<KPAutoformObject*>( kpobject )->getGType();
+	    btmp->unbalanced = static_cast<KPAutoformObject*>( kpobject )->getGUnbalanced();
+	    btmp->xfactor = static_cast<KPAutoformObject*>( kpobject )->getGXFactor();
+	    btmp->yfactor = static_cast<KPAutoformObject*>( kpobject )->getGYFactor();
+	    ret = true;
+	      }
+	    break;
+	  case OT_PIE:
+	    if(dynamic_cast<KPPieObject*>( kpobject ))
+	      {
+	    ptmp->pen = QPen(static_cast<KPPieObject*>( kpobject )->getPen() );
+	    btmp->brush = QBrush( static_cast<KPPieObject*>( kpobject )->getBrush() );
+	    ptmp->lineBegin = static_cast<KPPieObject*>( kpobject )->getLineBegin();
+	    ptmp->lineEnd = static_cast<KPPieObject*>( kpobject )->getLineEnd();
+	    btmp->fillType = static_cast<KPPieObject*>( kpobject )->getFillType();
+	    btmp->gColor1 = static_cast<KPPieObject*>( kpobject )->getGColor1();
+	    btmp->gColor2 = static_cast<KPPieObject*>( kpobject )->getGColor2();
+	    btmp->gType = static_cast<KPPieObject*>( kpobject )->getGType();
+	    btmp->unbalanced = static_cast<KPPieObject*>( kpobject )->getGUnbalanced();
+	    btmp->xfactor = static_cast<KPPieObject*>( kpobject )->getGXFactor();
+	    btmp->yfactor = static_cast<KPPieObject*>( kpobject )->getGYFactor();
+	    ret = true;
+	      }
+	    break;
+	  case OT_PART:
+	    if(dynamic_cast<KPPartObject*>( kpobject ))
+	      {
+	    ptmp->pen = QPen( static_cast<KPPartObject*>( kpobject )->getPen() );
+	    btmp->brush = QBrush( static_cast<KPPartObject*>( kpobject )->getBrush() );
+	    btmp->fillType = static_cast<KPPartObject*>( kpobject )->getFillType();
+	    btmp->gColor1 = static_cast<KPPartObject*>( kpobject )->getGColor1();
+	    btmp->gColor2 = static_cast<KPPartObject*>( kpobject )->getGColor2();
+	    btmp->gType = static_cast<KPPartObject*>( kpobject )->getGType();
+	    btmp->unbalanced = static_cast<KPPartObject*>( kpobject )->getGUnbalanced();
+	    btmp->xfactor = static_cast<KPPartObject*>( kpobject )->getGXFactor();
+	    btmp->yfactor = static_cast<KPPartObject*>( kpobject )->getGYFactor();
+	    ret = true;
+	      }
+	    break;
+	  case OT_TEXT:
+	    ptmp->pen = QPen( dynamic_cast<KPTextObject*>( kpobject )->getPen() );
+	    btmp->brush = QBrush( dynamic_cast<KPTextObject*>( kpobject )->getBrush() );
+	    btmp->fillType = dynamic_cast<KPTextObject*>( kpobject )->getFillType();
+	    btmp->gColor1 = dynamic_cast<KPTextObject*>( kpobject )->getGColor1();
+	    btmp->gColor2 = dynamic_cast<KPTextObject*>( kpobject )->getGColor2();
+	    btmp->gType = dynamic_cast<KPTextObject*>( kpobject )->getGType();
+	    btmp->unbalanced = dynamic_cast<KPTextObject*>( kpobject )->getGUnbalanced();
+	    btmp->xfactor = dynamic_cast<KPTextObject*>( kpobject )->getGXFactor();
+	    btmp->yfactor = dynamic_cast<KPTextObject*>( kpobject )->getGYFactor();
+	    ret = true;
+	    break;
+	  case OT_PICTURE:
+	    ptmp->pen = QPen( dynamic_cast<KPPixmapObject*>( kpobject )->getPen() );
+	    btmp->brush = QBrush( dynamic_cast<KPPixmapObject*>( kpobject )->getBrush() );
+	    btmp->fillType = dynamic_cast<KPPixmapObject*>( kpobject )->getFillType();
+	    btmp->gColor1 = dynamic_cast<KPPixmapObject*>( kpobject )->getGColor1();
+	    btmp->gColor2 = dynamic_cast<KPPixmapObject*>( kpobject )->getGColor2();
+	    btmp->gType = dynamic_cast<KPPixmapObject*>( kpobject )->getGType();
+	    btmp->unbalanced = dynamic_cast<KPPixmapObject*>( kpobject )->getGUnbalanced();
+	    btmp->xfactor = dynamic_cast<KPPixmapObject*>( kpobject )->getGXFactor();
+	    btmp->yfactor = dynamic_cast<KPPixmapObject*>( kpobject )->getGYFactor();
+	    ret = true;
+	    break;
+	  case OT_CLIPART:
+	    ptmp->pen = QPen( dynamic_cast<KPClipartObject*>( kpobject )->getPen() );
+	    btmp->brush = QBrush( dynamic_cast<KPClipartObject*>( kpobject )->getBrush() );
+	    btmp->fillType = dynamic_cast<KPClipartObject*>( kpobject )->getFillType();
+	    btmp->gColor1 = dynamic_cast<KPClipartObject*>( kpobject )->getGColor1();
+	    btmp->gColor2 = dynamic_cast<KPClipartObject*>( kpobject )->getGColor2();
+	    btmp->gType = dynamic_cast<KPClipartObject*>( kpobject )->getGType();
+	    btmp->unbalanced = dynamic_cast<KPClipartObject*>( kpobject )->getGUnbalanced();
+	    btmp->xfactor = dynamic_cast<KPClipartObject*>( kpobject )->getGXFactor();
+	    btmp->yfactor = dynamic_cast<KPClipartObject*>( kpobject )->getGYFactor();
+	    ret = true;
+	    break;
+	  case OT_FREEHAND:
+	    ptmp->pen = QPen( dynamic_cast<KPFreehandObject*>( kpobject )->getPen() );
+	    ptmp->lineBegin = dynamic_cast<KPFreehandObject*>( kpobject )->getLineBegin();
+	    ptmp->lineEnd = dynamic_cast<KPFreehandObject*>( kpobject )->getLineEnd();
+	    ret = true;
+	    break;
+	  case OT_POLYLINE:
+	    ptmp->pen = QPen( dynamic_cast<KPPolylineObject*>( kpobject )->getPen() );
+	    ptmp->lineBegin = dynamic_cast<KPPolylineObject*>( kpobject )->getLineBegin();
+	    ptmp->lineEnd = dynamic_cast<KPPolylineObject*>( kpobject )->getLineEnd();
+	    ret = true;
+	    break;
+	  case OT_QUADRICBEZIERCURVE:
+	    ptmp->pen = QPen( dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getPen() );
+	    ptmp->lineBegin = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineBegin();
+	    ptmp->lineEnd = dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getLineEnd();
+	    ret = true;
+	    break;
+	  case OT_CUBICBEZIERCURVE:
+	    ptmp->pen = QPen( dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getPen() );
+	    ptmp->lineBegin = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineBegin();
+	    ptmp->lineEnd = dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getLineEnd();
+	    ret = true;
+	    break;
+	  default: break;
+	  }
+	  _oldPen.append( ptmp );
+	  _oldBrush.append( btmp );
+	  _objects.append( kpobject );
 	}
     }
 
-    if ( !_objects.isEmpty() ) {
-	PenBrushCmd *penBrushCmd = new PenBrushCmd( i18n( "Apply Styles" ), _oldPen, _oldBrush,
-						    _newPen, _newBrush, _objects, m_doc );
-	m_doc->addCommand( penBrushCmd );
-	penBrushCmd->execute();
-    } else {
-	_oldPen.setAutoDelete( true );
-	_oldPen.clear();
-	_oldBrush.setAutoDelete( true );
-	_oldBrush.clear();
-    }
-    m_doc->setModified(true);
-    return ret;
+  if ( !_objects.isEmpty() ) {
+    PenBrushCmd *penBrushCmd = new PenBrushCmd( i18n( "Apply Styles" ), _oldPen, _oldBrush,
+						_newPen, _newBrush, _objects, m_doc );
+    m_doc->addCommand( penBrushCmd );
+    penBrushCmd->execute();
+  } else {
+    _oldPen.setAutoDelete( true );
+    _oldPen.clear();
+    _oldBrush.setAutoDelete( true );
+    _oldBrush.clear();
+  }
+  m_doc->setModified(true);
+  return ret;
 }
 
 int KPrPage::getPenBrushFlags() const

@@ -369,6 +369,7 @@ void KPresenterView::setupPrinter( KPrinter &prt )
     prt.setMinMax( 1, m_pKPresenterDoc->getPageNums() );
     prt.setFromTo( 1, m_pKPresenterDoc->getPageNums() );
     prt.setOption( "kde-range", m_pKPresenterDoc->selectedForPrinting() );
+    prt.setPageSelection(KPrinter::ApplicationSide);
     KoFormat pageFormat = m_pKPresenterDoc->pageLayout().format;
     prt.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
 

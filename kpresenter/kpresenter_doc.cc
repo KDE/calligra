@@ -1262,8 +1262,6 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
             default: break;
             }
 #if 0
-            if ( objStartY > 0 )
-                _objectList->last()->moveBy( 0, objStartY );
             if ( !ignoreSticky )
                 _objectList->last()->setSticky( sticky );
 #endif
@@ -1464,7 +1462,8 @@ void KPresenterDoc::setRasters( unsigned int rx, unsigned int ry, bool _replace 
     _orastY = _rastY;
     _rastX = rx;
     _rastY = ry;
-    if ( _replace ) replaceObjs();
+    if ( _replace ) 
+      replaceObjs();
 }
 
 /*=================== repaint all views =========================*/
@@ -1665,9 +1664,10 @@ void KPresenterDoc::replaceObjs( bool createUndoRedo )
 {
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Set new options") );
     bool addMacroCommand=false;
-    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
-    {
-        KCommand *cmd=m_pageList.at(i)->replaceObjs( createUndoRedo, _orastX,_orastY,_txtBackCol, _otxtBackCol);
+    QPtrListIterator<KPrPage> oIt(m_pageList);
+    for (; oIt.current(); ++oIt )
+      {
+        KCommand *cmd=oIt.current()->replaceObjs( createUndoRedo, _orastX,_orastY,_txtBackCol, _otxtBackCol);
         if(cmd && createUndoRedo)
         {
             macroCmd->addCommand(cmd);
