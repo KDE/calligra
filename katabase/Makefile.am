@@ -1,3 +1,3 @@
 
-SUBDIRS = kformviewer kformeditor
+SUBDIRS = kdb ktables kformviewer kformeditor
 
