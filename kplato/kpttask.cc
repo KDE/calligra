@@ -293,7 +293,6 @@ void KPTTask::drawGanttBar(QCanvas* canvas,KPTTimeScale* ts, int y, int h) {
 }
 
 void KPTTask::drawPert(KPTPertCanvas *view, QCanvas* canvas, int col) {
-	kdDebug()<<k_funcinfo<<" checking ("<<col<<"): "<<m_name<<endl;
 	if ( numChildren() > 0 ) {
 	    QPtrListIterator<KPTNode> nit(m_nodes); 
 		for ( ; nit.current(); ++nit ) {
@@ -310,17 +309,31 @@ void KPTTask::drawPert(KPTPertCanvas *view, QCanvas* canvas, int col) {
 				view->setRow(row+1, col);
 			}
 		} else {
-		    int row = view->row(col);
-            m_pertItem = new KPTPertCanvasItem(canvas, *this, row, col);
+		    if (!allParentsDrawn()) {
+			    return;
+			}
+            col = parentColumn() + 1;
+			int row = view->row(col);
+			m_pertItem = new KPTPertCanvasItem(canvas, *this, row, col);
 			m_pertItem->show();
 			m_drawn = true;
 			view->setRow(row+1, col);
+        	kdDebug()<<k_funcinfo<<" draw ("<<row<<","<<col<<"): "<<m_name<<endl;
 	    }
         QPtrListIterator<KPTRelation> cit(m_dependChildNodes);
 		for ( ; cit.current(); ++cit ) {
 		    cit.current()->child()->drawPert(view, canvas, col+1);
 		}
 	}
+}
+
+bool KPTTask::allParentsDrawn() {
+    QPtrListIterator<KPTRelation> it(m_dependParentNodes);
+	for ( ; it.current(); ++it ) {
+		if (!it.current()->parent()->isDrawn())
+		    return false;
+	}
+	return true;
 }
 
 void KPTTask::drawPertRelations(QCanvas* canvas) {

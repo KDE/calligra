@@ -200,6 +200,30 @@ KPTRelation *KPTNode::findRelation(KPTNode *node) {
     return (KPTRelation *)0;
 }
 
+bool KPTNode::isChildOf(KPTNode *node) {
+    //kdDebug()<<k_funcinfo<<" '"<<m_name<<"' checking against '"<<node->name()<<"'"<<endl;
+    for (int i=0; i<numDependParentNodes(); i++) {
+        KPTRelation *rel = getDependParentNode(i);
+        if (rel->parent() == node)
+            return true;
+		if (rel->parent()->isChildOf(node))
+		    return true;
+    }
+	return false;
+}
+
+int KPTNode::parentColumn() {
+    //kdDebug()<<k_funcinfo<<endl;
+	int col = -1;
+    for (int i=0; i<numDependParentNodes(); i++) {
+        KPTRelation *rel = getDependParentNode(i);
+        KPTPertCanvasItem *item = rel->parent()->pertItem();
+        if (item)
+		    col = QMAX(col,item->column());
+	}
+	return col;
+}
+
 void KPTNode::initialize_arcs() {
   // Clear all lists of arcs and set unvisited to zero
   start_node()->successors.list.clear();

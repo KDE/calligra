@@ -115,19 +115,19 @@ int KPTTimeScale::calcTotalWidth()
     {
         int t = m_startTime.daysTo(m_endTime);
         tot = QMAX( (m_pointsPrUnit * 7), (t * m_pointsPrUnit) );
-        kdDebug()<<k_funcinfo<<"Days="<<t<<endl;
+        //kdDebug()<<k_funcinfo<<"Days="<<t<<endl;
         break;
     }
     default:
         break;
     }
-    kdDebug()<<k_funcinfo<<" total width= "<<tot<<endl;
+    //kdDebug()<<k_funcinfo<<" total width= "<<tot<<endl;
     return tot;
 }
 
 void KPTTimeScale::draw(const KPTDuration &startTime,  const KPTDuration &endTime, int height )
 {
-    kdDebug()<<k_funcinfo<<" start="<<startTime.dateTime().toString()<<" end="<<endTime.dateTime().toString()<<endl;
+    //kdDebug()<<k_funcinfo<<" start="<<startTime.dateTime().toString()<<" end="<<endTime.dateTime().toString()<<endl;
     m_startTime = startTime.dateTime();
     m_startTime = m_startTime.addDays( 1 - m_startTime.date().dayOfWeek()); // start of week
     m_endTime = endTime.dateTime();
@@ -155,7 +155,7 @@ void KPTTimeScale::draw()
     int x = getX(&KPTDuration(t));
     do
     {
-        kdDebug()<<k_funcinfo<<" time="<<t.date().toString()<<" x="<<x<<" width="<<m_totalWidth<<endl;
+        //kdDebug()<<k_funcinfo<<" time="<<t.date().toString()<<" x="<<x<<" width="<<m_totalWidth<<endl;
         QCanvasText *text = new QCanvasText(t.date().toString(),m_canvas);
         text->setX(x+2);
         text->setY(0);
@@ -171,8 +171,7 @@ void KPTTimeScale::draw()
         l->show();
     } while (t < m_endTime);
     
-    update();
-    kdDebug()<<k_funcinfo<<" end"<<endl;
+	update();
 }
 
 void KPTTimeScale::addWeekDays(int x, int size)

@@ -54,21 +54,20 @@ KPTPertCanvasItem::KPTPertCanvasItem( QCanvas *canvas, KPTNode &node, int row, i
 	m_leader->setX(left + 3);
 	m_leader->setY(top + 15);
 	m_leader->setZ(60);
-    kdDebug()<<k_funcinfo<<"Rect: "<<DEBUGRECT(rect())<<" h="<<height()<<endl;
 }
 
 KPTPertCanvasItem::~KPTPertCanvasItem()
 {
     hide();
-/*    QCanvasItemList list = canvas()->allItems();
+    QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it) 
     {
         if ( *it == m_name )
-		    delete m_name;
+		    m_name->hide();
         if ( *it == m_leader )
-		    delete m_leader;
-    }*/
+		    m_leader->hide();
+    }
 }
 
 int KPTPertCanvasItem::rtti() const { return RTTI; }
@@ -76,7 +75,7 @@ int KPTPertCanvasItem::RTTI = 2001;
 
 void KPTPertCanvasItem::setVisible(bool yes)
 {
-    kdDebug()<<k_funcinfo<<m_node.name()<<endl;
+    //kdDebug()<<k_funcinfo<<m_node.name()<<endl;
 	QCanvasRectangle::setVisible(yes);
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
@@ -146,14 +145,14 @@ KPTRelationCanvasItem::KPTRelationCanvasItem( QCanvas *canvas, KPTRelation *rel)
     : QCanvasPolygon(canvas),
 	m_rel(rel)
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 	QPoint parentPoint = m_rel->parent()->pertItem()->exitPoint(FINISH_START);
 	QPoint childPoint = m_rel->child()->pertItem()->entryPoint(FINISH_START);
 	// could not use ...rect() here, don't know why
 	int parentTop = (int)(m_rel->parent()->pertItem()->y());
-	int parentBottom = (int)parentTop + m_rel->parent()->pertItem()->height();
-	int childTop = (int)m_rel->child()->pertItem()->x();
-	int childBottom = (int)(parentTop + m_rel->child()->pertItem()->height());
+	int parentBottom = parentTop + (int)(m_rel->parent()->pertItem()->height());
+	int childTop = (int)(m_rel->child()->pertItem()->y());
+	int childBottom = childTop + (int)(m_rel->child()->pertItem()->height());
 	
 	int childRow = m_rel->child()->pertItem()->row();
 	int childCol =  m_rel->child()->pertItem()->column();
@@ -187,7 +186,7 @@ KPTRelationCanvasItem::KPTRelationCanvasItem( QCanvas *canvas, KPTRelation *rel)
     	            childPoint.x()-(wgap/2)+3, childPoint.y(),                      // right/up
     	            childPoint.x(), childPoint.y());
 			
-			left = a[0].x(); top = a[0].y(); right = childPoint.x(); bottom = childPoint.y()+3;
+			left = a[0].x(); top = a[0].y(); right = childPoint.x(); bottom = a[4].y();
 		}
 	} 
 	else if ( parentRow > childRow )
@@ -230,7 +229,7 @@ KPTRelationCanvasItem::KPTRelationCanvasItem( QCanvas *canvas, KPTRelation *rel)
     	            parentPoint.x()+(wgap/2)+3, childPoint.y(),
     	            childPoint.x(), childPoint.y());
 			
-			left = a[0].x(); top = a[3].y(); right = childPoint.x(); bottom = childPoint.y()+3;
+			left = a[0].x(); top = a[0].y(); right = childPoint.x(); bottom = childPoint.y()+3;
 		}
 		else
 		{
@@ -254,8 +253,9 @@ KPTRelationCanvasItem::KPTRelationCanvasItem( QCanvas *canvas, KPTRelation *rel)
 	setZ(45);
 
 /*#ifndef NDEBUG
+	kdDebug()<<" Relation from parent: "<<m_rel->parent()->name()<<" to child: "<<m_rel->child()->name()<<endl;
     for (int i = 0; i < a.size(); ++i)
-        kdDebug()<<"    a["<<i<<"]="<<a[i].x()<<","<<a[i].y()<<endl;
+        kdDebug()<<"            a["<<i<<"]="<<a[i].x()<<","<<a[i].y()<<endl;
 #endif*/
 }
 
@@ -269,7 +269,7 @@ int KPTRelationCanvasItem::RTTI = 2002;
 
 void KPTRelationCanvasItem::drawShape(QPainter &p)
 {
-    kdDebug()<<k_funcinfo<<" "<<m_rel->parent()->name()<<" to "<<m_rel->child()->name()<<endl;
+    //kdDebug()<<k_funcinfo<<" "<<m_rel->parent()->name()<<" to "<<m_rel->child()->name()<<endl;
     // cannot use polygon's drawShape() as it doesn't use the pen
 	setBrush(Qt::NoBrush);
 	QPointArray a = poly;

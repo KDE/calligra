@@ -114,46 +114,44 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 	            if ( (*it)->rtti() == KPTPertCanvasItem::RTTI )
 				{
 				    KPTPertCanvasItem *item = (KPTPertCanvasItem *)(*it);
-					if (m_linkMode)
+					KPTPertCanvasItem *par = selectedItem();
+					if ( !par)
 					{
-						m_linkParentNode->pertItem()->setSelected(false);
-						if (item->node().name() == m_linkParentNode->name())
-						{
-							m_linkMode = false;
-							break;
-						}
-						kdDebug()<<k_funcinfo<<" Second node="<<item->node().name()<<endl;
-						// open relation dialog
-						KPTRelationDialog *dia;
-						KPTRelation *rel = item->node().findRelation(m_linkParentNode);
-						if (rel)
-							dia = new KPTRelationDialog(rel, this);
-						else
-							dia = new KPTRelationDialog(m_linkParentNode, &(item->node()), this);
-
-						if (dia->exec())
-						{
-							kdDebug()<<k_funcinfo<<" Linked node="<<item->node().name()<<" to "<<m_linkParentNode->name()<<endl; 
-							emit updateView(true);
-						}
-						delete dia;
-						m_linkMode = false;
-						break;
-					}
-					else
-					{
-						kdDebug()<<k_funcinfo<<" First node="<<item->node().name()<<endl;
+						//kdDebug()<<k_funcinfo<<" First node="<<item->node().name()<<endl;
 						item->setSelected(true);
-						m_linkParentNode = &(item->node());
-						m_linkMode = true;
 						canvas()->update();
 						return;
 					}
+					par->setSelected(false);
+					if (&(item->node()) == &(par->node()))
+					{
+						break;
+					}
+					//kdDebug()<<k_funcinfo<<" Second node="<<item->node().name()<<endl;
+					// open relation dialog
+					if (par->node().isChildOf(&(item->node())))
+					{
+						KMessageBox::sorry(this, i18n("Cannot link to a node which is already my parent"));
+					}
+					else
+					{
+						KPTRelationDialog *dia;
+						KPTRelation *rel = item->node().findRelation(&(par->node()));
+						if (rel)
+							dia = new KPTRelationDialog(rel, this);
+						else
+							dia = new KPTRelationDialog(&(par->node()), &(item->node()), this);
+
+						if (dia->exec())
+						{
+							//kdDebug()<<k_funcinfo<<" Linked node="<<item->node().name()<<" to "<<par->node().name()<<endl; 
+							emit updateView(true);
+						}
+						delete dia;
+					}
+					break;
 				}
-				m_linkMode = false;
 			}
-            if (m_linkMode)
-                m_linkParentNode->pertItem()->setSelected(false);
             canvas()->update();
             break;
         }
@@ -196,6 +194,21 @@ int KPTPertCanvas::row(int col)
 	    setRow(0, col);
 	kdDebug()<<k_funcinfo<<"m_rows["<<col<<"]="<<m_rows[col]<<endl;
     return m_rows[col];
+}
+
+KPTPertCanvasItem *KPTPertCanvas::selectedItem()
+{
+    QCanvasItemList list = canvas()->allItems();
+    QCanvasItemList::Iterator it = list.begin();
+    for (; it != list.end(); ++it) 
+    {
+        if ( (*it)->isSelected() )
+		{
+            if ( (*it)->rtti() == KPTPertCanvasItem::RTTI )
+                return (KPTPertCanvasItem *)(*it);
+		}
+    }
+	return 0;
 }
 
 #ifndef NDEBUG

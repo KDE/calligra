@@ -48,6 +48,7 @@ public:
 	
 	void setRow(int row, int col);
 	int row(int col);
+	KPTPertCanvasItem *selectedItem();
 	
 protected:
     void contentsMouseReleaseEvent ( QMouseEvent * e );
@@ -62,10 +63,6 @@ private:
     QTimer *m_scrollTimer;
     bool m_mousePressed;
     bool m_printing;
-    
-    
-    bool m_linkMode;
-    KPTNode *m_linkParentNode;
     
 	QMemArray<int> m_rows;
 	

@@ -27,6 +27,7 @@
 #include <qscrollview.h>
 #include <qvbox.h>
 #include <qdatetime.h>
+#include <qcolor.h>
 
 class KPTNode;
 
@@ -53,6 +54,7 @@ public:
     
     void draw(const KPTDuration &startTime,  const KPTDuration &endTime, int height );
     void draw();
+	void setCanvasBackgroundColor(const QColor &c) { m_canvas->setBackgroundColor(c); }
     
 public slots:
     void slotSetContents(int x, int /*y*/);

@@ -118,6 +118,7 @@ void KPTMilestone::drawPert(KPTPertCanvas *view, QCanvas* canvas, int col) {
 		}
     } else {
 		if (!m_drawn) {
+            col = parentColumn() +1;
 		    int row = view->row(col);
             m_pertItem = new KPTPertCanvasItem(canvas, *this, row, col);
 			m_pertItem->show();

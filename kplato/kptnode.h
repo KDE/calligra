@@ -125,7 +125,9 @@ public:
     }
     
     KPTRelation *findRelation(KPTNode *node);
-
+    bool isChildOf(KPTNode *node);
+	int parentColumn();
+	
     // These are calculated, or set manually if node is MustStartOn
     void setStartTime(KPTDuration startTime) { m_startTime=startTime; }
     const KPTDuration &startTime() const { return m_startTime; }

@@ -57,6 +57,7 @@ void KPTGanttView::init(QLayout *layout)
                                                             m_mainview->getPart()->getProject().getLatestFinish(), 
                                                             m_projectlist->header()->height());
     gl->addWidget(m_timescale,0,0);
+	m_timescale->setCanvasBackgroundColor(m_projectlist->header()->paletteBackgroundColor());
 
     m_canvasview = new KPTGanttCanvas(g);
     gl->addWidget(m_canvasview,1,0);
