@@ -33,7 +33,7 @@
 #include <gprimitivecmds.h>
 #include <gline.h>
 
-// uncomment that to see some more colors and a line by default
+// uncomment that to see some more colors and lines by default
 //#define GRAPHITE_TEST 1
 
 GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode)
@@ -304,7 +304,7 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
             return;
         }
         else {
-            kdDebug() << "GraphitePart::mousePressEvent  --- false" << endl;
+            //kdDebug() << "GraphitePart::mousePressEvent  --- false" << endl;
             m_m9rMap.remove(view);
             delete manager;
             manager=0;
@@ -313,10 +313,53 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     }
 }
 
-void GraphitePart::mouseReleaseEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
+void GraphitePart::mouseReleaseEvent(QMouseEvent *e, GraphiteView *view) {
+
+    setGlobalZoom(view->zoom());  // safety
     m_mouse.lbPressed=false;
-    //kdDebug(37001) << "MR x=" << e->x() << " y=" << e->y() << endl;
-    // ### setGlobalZoom()
+
+    GObjectM9r *manager=m_m9rMap[view];
+    if(manager) {
+        QRect dirty;
+        bool accepted=manager->mouseReleaseEvent(e, dirty);
+        if(accepted) {
+            // no need to clean up if the m9r didn't accept the event
+            kdDebug() << "GraphitePart::mouseReleaseEvent -- manager accepted" << endl;
+            // ### erase and rewind :)
+        }
+        if(!accepted || !manager->sticky()) {
+            kdDebug() << "GraphitePart::mouseReleaseEvent  --- not accepted/sticky" << endl;
+            m_m9rMap.remove(view);
+            delete manager;
+            manager=0;
+        }
+        return;
+    }
+
+    if(m_mouse.haveToErase) {
+        if(!view) {
+            kdWarning(37001) << "Better give me some view to work on." << endl;
+            return;
+        }
+        QWidget *canvas=view->canvas();
+        if(!canvas || !canvas->isA("GCanvas")) {
+            kdWarning(37001) << "Huh? What did you do behind my back?" << endl;
+            return;
+        }
+        QScrollView *scrollview=static_cast<QScrollView*>(canvas);
+        QPainter p(scrollview->viewport());
+        p.setRasterOp(Qt::NotROP);
+
+        if(m_mouse.startSelectionX>m_mouse.oldMX) // right to left selection
+            p.setPen(QPen(Qt::black, 0, Qt::DashLine));
+        else
+            p.setPen(QPen(Qt::black, 0, Qt::DotLine));
+        p.drawRect(Graphite::min(m_mouse.startSelectionX, m_mouse.oldMX)-scrollview->contentsX(),
+                   Graphite::min(m_mouse.startSelectionY, m_mouse.oldMY)-scrollview->contentsY(),
+                   Graphite::abs(m_mouse.startSelectionX-m_mouse.oldMX),
+                   Graphite::abs(m_mouse.startSelectionY-m_mouse.oldMY));
+        m_mouse.haveToErase=false;
+    }
 }
 
 void GraphitePart::mouseDoubleClickEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {

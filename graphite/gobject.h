@@ -56,9 +56,9 @@ class PWidget;
 // The M9r is used every time a user wants to create or change an object
 // interactively.
 // First the object is "hit" - then a M9r is created and this M9r is used as
-// a kind of EventFilter. Every Event is forwarded to the M9r. If the M9r
-// decides to handle the event, it returns true afterwards. If the Event
-// remains unhandled, the M9r returns false and the Event has to be processed
+// a kind of  event filter. Every event is forwarded to the M9r. If the M9r
+// decides to handle the event, it returns true afterwards. If the event
+// remains unhandled, the M9r returns false and the event has to be processed
 // by the calling method.
 // Note: The M9r is bound to a specific view and it won't work (correctly)
 // if you use one M9r for more than one view.
@@ -66,9 +66,14 @@ class PWidget;
 // set (i.e. to make isNull() false).
 // Some of the M9rs can be in two different "modes": Create and Manipulate
 // General rule: simple M9rs support Create, complex ones do not :)
+// Most of the simple "tools" (line, rect, ellipse,...) will have an additional
+// mode which tells them to be sticky (i.e. the tool will still be selected
+// after a mouse press->move->release cycle to be able to create more
+// than one object in a row. Note that this only works on creation, though!
 class GObjectM9r : public KDialogBase {
 
     Q_OBJECT
+
 public:
     enum Mode { Create, Manipulate };
 
@@ -76,6 +81,11 @@ public:
 
     const Mode &mode() const { return m_mode; }
     void setMode(const Mode &mode) { m_mode=mode; }
+
+    // Is that tool sticky for Create-mode?
+    bool sticky() const { return m_sticky; }
+    // If this tool doesn't support a sticky mode it will return false here
+    virtual bool setSticky(bool /*sticky*/) { return false; }
 
     const GraphiteView *view() const { return m_view; }
     const GraphitePart *document() const { return m_part; }
@@ -139,6 +149,7 @@ private:
     bool m_pressed;           // mouse button pressed?
     bool m_changed;           // true, if the Apply button is "active"
     bool m_created;           // dia created?
+    bool m_sticky;            // do we want to create more than one object?
 
     QString m_type;         // Type of object (e.g. "Line", "Rectangle")
     QLineEdit *m_line;      // line ed. for the name field
