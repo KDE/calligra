@@ -178,9 +178,10 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		      KWFrame *frame;
 		      for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
 			{
-			  if (doc->getProcessingType() == KWordDocument::WP && i == 0) continue;
-
 			  frameset = doc->getFrameSet(i);
+			  if (doc->getProcessingType() == KWordDocument::WP && i == 0 ||
+			      frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() != FI_BODY) continue;
+
 			  for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 			    {
 			      frame = frameset->getFrame(j);
@@ -220,6 +221,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		  
 		  if (my < frame->top() + frame->height() / 2)
 		    {
+		      if (doc->getFrameSet(frameset)->getFrameInfo() == FI_HEADER) break;
 		      frame->setHeight(frame->height() + (oldMy - my)); 
 		      frame->moveBy(0,my - oldMy);
 		      if (frame->x() < 0 || 
@@ -236,6 +238,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		    }
 		  else
 		    {
+		      if (doc->getFrameSet(frameset)->getFrameInfo() == FI_FOOTER) break;
 		      frame->setHeight(frame->height() + (my - oldMy)); 
 		      if (frame->x() < 0 || 
 			  frame->y() < getPageOfRect(KRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
@@ -254,6 +257,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		{
 		  int frameset = 0;
 		  KWFrame *frame = doc->getFirstSelectedFrame(frameset);
+		  if (doc->getFrameSet(frameset)->getFrameInfo() != FI_BODY) break;
 		  if (frameset < 1) break;
 
 		  QPainter p;
@@ -301,6 +305,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		{
 		  int frameset = 0;
 		  KWFrame *frame = doc->getFirstSelectedFrame(frameset);
+		  if (doc->getFrameSet(frameset)->getFrameInfo() != FI_BODY) break;
 		  if (frameset < 1) break;
 
 		  QPainter p;
@@ -354,6 +359,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		{
 		  int frameset = 0;
 		  KWFrame *frame = doc->getFirstSelectedFrame(frameset);
+		  if (doc->getFrameSet(frameset)->getFrameInfo() != FI_BODY) break;
 		  if (frameset < 1) break;
 
 		  QPainter p;
@@ -685,6 +691,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MM_EDIT_FRAME:
       {
+	doc->recalcFrames();
 	doc->updateAllFrames();
 	recalcAll = true;
 	recalcText();
@@ -1064,12 +1071,13 @@ void KWPage::paintEvent(QPaintEvent* e)
  	    painter.drawPicture(*pic);
 	    painter.setViewport(r);
 	    painter.restore();
-
-// 	    if (frame->isSelected() && mouseMode == MM_EDIT_FRAME)
-// 	      drawFrameSelection(painter,frame);
 	  } break;
 	case FT_TEXT:
 	  {
+	    if ((dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(i))->getFrameInfo() == FI_HEADER && !doc->hasHeader()) ||
+		(dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(i))->getFrameInfo() == FI_FOOTER && !doc->hasFooter()))
+	      break;
+
 	    KWParag *p = 0L;
 	    p = doc->findFirstParagOfRect(e->rect().y() + yOffset,firstVisiblePage,i);
 
@@ -2191,6 +2199,10 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
 	    _painter.setPen(blue);
 	  
 	  frameset = doc->getFrameSet(i);
+	  if (frameset->getFrameType() == FT_TEXT && 
+	      (dynamic_cast<KWTextFrameSet*>(frameset)->getFrameInfo() == FI_HEADER && !doc->hasHeader()) ||
+	      (dynamic_cast<KWTextFrameSet*>(frameset)->getFrameInfo() == FI_FOOTER && !doc->hasFooter()))
+	    continue;
 	  for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 	    {
 	      tmp = frameset->getFrame(j);

@@ -85,8 +85,8 @@ KWordDocument::KWordDocument()
   applyStyleTemplate = 0;
   applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT | U_NUMBERING | U_ALIGN | U_TABS;
   _loaded = false;
-  _head = false;
-  _foot = false;
+  _header = false;
+  _footer = false;
 }
 
 /*================================================================*/
@@ -127,6 +127,39 @@ CORBA::Boolean KWordDocument::init()
       QFileInfo fileInfo(_template);
       QString fileName(fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kwt");
       loadTemplate(fileName.data());
+      
+//       bool __footer = false,__header = false;
+
+//       for (unsigned int k = 0;k < getNumFrameSets();k++)
+// 	{
+// 	  if (getFrameSet(k)->getFrameInfo() == FI_HEADER) __header = true;
+// 	  if (getFrameSet(k)->getFrameInfo() == FI_FOOTER) __footer = true;
+// 	}
+
+//       if (!__header)
+// 	{
+// 	  KWTextFrameSet *fs = new KWTextFrameSet(this);
+// 	  fs->setFrameInfo(FI_HEADER);
+// 	  KWFrame *frame = new KWFrame(getFrameSet(0)->getFrame(0)->left(),getFrameSet(0)->getFrame(0)->top(),
+// 				       getFrameSet(0)->getFrame(0)->width(),20);
+// 	  fs->setAutoCreateNewFrame(false);
+// 	  fs->addFrame(frame);
+// 	  frames.append(fs);
+// 	}
+
+//       if (!__footer)
+// 	{
+// 	  KWTextFrameSet *fs = new KWTextFrameSet(this);
+// 	  fs->setFrameInfo(FI_FOOTER);
+// 	  KWFrame *frame = new KWFrame(getFrameSet(0)->getFrame(0)->left(),getFrameSet(0)->getFrame(0)->top() + 
+// 				       getFrameSet(0)->getFrame(0)->height() - 20,
+// 				       getFrameSet(0)->getFrame(0)->width(),20);
+// 	  fs->setAutoCreateNewFrame(false);
+// 	  fs->addFrame(frame);
+// 	  frames.append(fs);
+// 	}
+
+//       recalcFrames();
     }
   else
     debug("no template chosen");
@@ -197,6 +230,8 @@ void KWordDocument::setPageLayout(KoPageLayout _layout,KoColumns _cl)
 /*================================================================*/
 void KWordDocument::recalcFrames()
 {
+  if (processingType == DTP) return;
+
   pages = 1;
   KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet*>(frames.at(0));
 
@@ -206,16 +241,23 @@ void KWordDocument::recalcFrames()
     / pageColumns.columns;
 
   int headOffset = 0,footOffset = 0;
-//   if (hasHead() || hasFoot())
-//     {
-//       for (unsigned int k = 0;k < getNumFrameSets();k++)
-// 	{
-// 	  if (getFrameSet(k)->getFrameInfo() == FI_HEAD)
-// 	    headOffset = 20 + getFrameSet(k)->gerFrame(0)->height(); 
-// 	  if (getFrameSet(k)->getFrameInfo() == FI_FOOT)
-// 	    footOffset = 20 + getFrameSet(k)->gerFrame(0)->height(); 
-// 	}
-//     }
+  KWTextFrameSet *header = 0L,*footer = 0L;
+  if (hasHeader() || hasFooter())
+    {
+      for (unsigned int k = 0;k < getNumFrameSets();k++)
+	{
+	  if (getFrameSet(k)->getFrameInfo() == FI_HEADER && hasHeader())
+	    {
+	      header = dynamic_cast<KWTextFrameSet*>(getFrameSet(k));
+	      headOffset = 10 + getFrameSet(k)->getFrame(0)->height(); 
+	    }
+	  if (getFrameSet(k)->getFrameInfo() == FI_FOOTER && hasFooter())
+	    {
+	      footer = dynamic_cast<KWTextFrameSet*>(getFrameSet(k));
+	      footOffset = 10 + getFrameSet(k)->getFrame(0)->height(); 
+	    }
+	}
+    }
  
   for (unsigned int j = 0;j < static_cast<unsigned int>(ceil(static_cast<double>(frms) / static_cast<double>(pageColumns.columns)));j++)
     {
@@ -224,14 +266,14 @@ void KWordDocument::recalcFrames()
 	  if (j * pageColumns.columns + i < frameset->getNumFrames())
 	    {
 	      frameset->getFrame(j * pageColumns.columns + i)->setRect(getPTLeftBorder() + i * (ptColumnWidth + getPTColumnSpacing()),
-								       j * getPTPaperHeight() + getPTTopBorder(),ptColumnWidth,
+								       j * getPTPaperHeight() + getPTTopBorder() + headOffset,ptColumnWidth,
 								       getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder() -
 								       headOffset - footOffset);
 	    }
 	  else
 	    {
 	      frameset->addFrame(new KWFrame(getPTLeftBorder() + i * (ptColumnWidth + getPTColumnSpacing()),
-					     j * getPTPaperHeight() + getPTTopBorder(),
+					     j * getPTPaperHeight() + getPTTopBorder() + headOffset,
 					     ptColumnWidth,getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder() -
 					     headOffset - footOffset));
 	    }
@@ -239,6 +281,34 @@ void KWordDocument::recalcFrames()
     }
 
   pages = static_cast<int>(ceil(static_cast<double>(frms) / static_cast<double>(pageColumns.columns)));
+
+  if (headOffset > 0 && hasHeader())
+    {
+      int h = header->getFrame(0)->height();
+      bool selected = header->getFrame(0)->isSelected();
+      header->clear();
+      for (int l = 0;l < pages;l++)
+	{
+	  KWFrame *frame = new KWFrame(getFrameSet(0)->getFrame(0)->left(),l * getPTPaperHeight() + getPTTopBorder(),
+				       getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h);
+	  frame->setSelected(selected);
+	  header->addFrame(frame);
+	}
+    }
+
+  if (footOffset > 0 && hasFooter())
+    {
+      int h = footer->getFrame(0)->height();
+      bool selected = footer->getFrame(0)->isSelected();
+      footer->clear();
+      for (int l = 0;l < pages;l++)
+	{
+	  KWFrame *frame = new KWFrame(getFrameSet(0)->getFrame(0)->left(),(l + 1) * getPTPaperHeight() - getPTBottomBorder() - h,
+				       getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h);
+	  frame->setSelected(selected);
+	  footer->addFrame(frame);
+	}
+    }
 
   recalcWholeText();
   updateAllRanges();
@@ -434,7 +504,6 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	}
       else if (name == "PAPER")
 	{
-	  debug("here");
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
@@ -552,6 +621,37 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 
   setPageLayout(__pgLayout,__columns);
 
+  bool __footer = false,__header = false;
+  
+  for (unsigned int k = 0;k < getNumFrameSets();k++)
+    {
+      if (getFrameSet(k)->getFrameInfo() == FI_HEADER) __header = true;
+      if (getFrameSet(k)->getFrameInfo() == FI_FOOTER) __footer = true;
+    }
+  
+  if (!__header)
+    {
+      KWTextFrameSet *fs = new KWTextFrameSet(this);
+      fs->setFrameInfo(FI_HEADER);
+      KWFrame *frame = new KWFrame(getFrameSet(0)->getFrame(0)->left(),getFrameSet(0)->getFrame(0)->top(),
+				   getFrameSet(0)->getFrame(0)->width(),20);
+      fs->setAutoCreateNewFrame(false);
+      fs->addFrame(frame);
+      frames.append(fs);
+    }
+  
+  if (!__footer)
+    {
+      KWTextFrameSet *fs = new KWTextFrameSet(this);
+      fs->setFrameInfo(FI_FOOTER);
+      KWFrame *frame = new KWFrame(getFrameSet(0)->getFrame(0)->left(),getFrameSet(0)->getFrame(0)->top() + 
+				   getFrameSet(0)->getFrame(0)->height() - 20,
+				   getFrameSet(0)->getFrame(0)->width(),20);
+      fs->setAutoCreateNewFrame(false);
+      fs->addFrame(frame);
+      frames.append(fs);
+    }
+  
   return true;
 }
 
@@ -1177,13 +1277,8 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 		    }
 		  lastPTPos = _fc.getPTPos();
 		  if (!goneForward) _fc.cursorGotoNextChar(_painter);
-		  QPen _pen = QPen(_painter.pen());
-		  _painter.setPen(QPen(blue,1,SolidLine));
 		  if (_viewFormattingChars)
-		    _painter.drawLine(lastPTPos + (_fc.getPTPos() - lastPTPos) / 2,_fc.getPTY() + _fc.getPTMaxAscender() - 1,
-				      lastPTPos + (_fc.getPTPos() - lastPTPos) / 2,_fc.getPTY() + _fc.getPTMaxAscender());
-		  _painter.setPen(_pen);
-		  //lastPTPos = _fc.getPTPos();
+		    _painter.fillRect(lastPTPos + (_fc.getPTPos() - lastPTPos) / 2,_fc.getPTY() + _fc.getPTMaxAscender() / 2,1,1,blue);
 		}
 	    }
 	}
@@ -1761,7 +1856,14 @@ int KWordDocument::getFrameSet(unsigned int mx,unsigned int my)
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
       frameSet = getFrameSet(getNumFrameSets() - 1 - i);
-      if (frameSet->contains(mx,my)) return getNumFrameSets() - 1 - i;
+      if (frameSet->contains(mx,my)) 
+	{
+	  if (frameSet->getFrameType() == FT_TEXT && 
+	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
+	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter()))
+	    continue;
+	  return getNumFrameSets() - 1 - i;
+	}
     }
   
   return -1;
@@ -1777,6 +1879,10 @@ int KWordDocument::selectFrame(unsigned int mx,unsigned int my)
       frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       if (frameSet->contains(mx,my))
 	{
+	  if (frameSet->getFrameType() == FT_TEXT && 
+	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
+	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter()))
+	    continue;
 	  return frameSet->selectFrame(mx,my);
 	}
     }
@@ -1821,6 +1927,10 @@ QCursor KWordDocument::getMouseCursor(unsigned int mx,unsigned int my)
       frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       if (frameSet->contains(mx,my))
 	{
+	  if (frameSet->getFrameType() == FT_TEXT && 
+	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
+	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter()))
+	    continue;
 	  return frameSet->getMouseCursor(mx,my);
 	}
     }
@@ -1838,6 +1948,10 @@ KWFrame *KWordDocument::getFirstSelectedFrame()
       frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
 	{	
+	  if (frameSet->getFrameType() == FT_TEXT && 
+	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
+	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter()))
+	    continue;
 	  if (frameSet->getFrame(j)->isSelected())
 	    return frameSet->getFrame(j);
 	}
@@ -1858,6 +1972,10 @@ KWFrame *KWordDocument::getFirstSelectedFrame(int &_frameset)
       frameSet = getFrameSet(getNumFrameSets() - 1 - i);
       for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
 	{	
+	  if (frameSet->getFrameType() == FT_TEXT && 
+	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_HEADER && !hasHeader()) ||
+	      (dynamic_cast<KWTextFrameSet*>(frameSet)->getFrameInfo() == FI_FOOTER && !hasFooter()))
+	    continue;
 	  if (frameSet->getFrame(j)->isSelected())
 	    return frameSet->getFrame(j);
 	}

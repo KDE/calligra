@@ -109,6 +109,8 @@ public:
   virtual void newView();
   virtual void viewFormattingChars();
   virtual void viewFrameBorders();
+  virtual void viewHeader();
+  virtual void viewFooter();
 
   virtual void insertPicture();
   virtual void insertClipart();
@@ -237,6 +239,8 @@ protected:
   CORBA::Long m_idMenuView_NewView;
   CORBA::Long m_idMenuView_FormattingChars;
   CORBA::Long m_idMenuView_FrameBorders;
+  CORBA::Long m_idMenuView_Header;
+  CORBA::Long m_idMenuView_Footer;
  
   // insert menu
   OpenPartsUI::Menu_var m_vMenuInsert;

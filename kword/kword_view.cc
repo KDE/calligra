@@ -187,7 +187,7 @@ void KWordView::hideAllFrames()
 void KWordView::cleanUp()
 {
   cerr << "void KWordView::cleanUp()" << endl;
- 
+  
   if ( m_bIsClean )
     return;
   
@@ -644,6 +644,20 @@ void KWordView::viewFrameBorders()
   m_vMenuView->setItemChecked(m_idMenuView_FrameBorders,!m_vMenuView->isItemChecked(m_idMenuView_FrameBorders));
   _viewFrameBorders = m_vMenuView->isItemChecked(m_idMenuView_FrameBorders);
   gui->getPaperWidget()->repaint(false);
+}
+
+/*===============================================================*/
+void KWordView::viewHeader()
+{
+  m_vMenuView->setItemChecked(m_idMenuView_Header,!m_vMenuView->isItemChecked(m_idMenuView_Header));
+  m_pKWordDoc->setHeader(m_vMenuView->isItemChecked(m_idMenuView_Header));
+}
+
+/*===============================================================*/
+void KWordView::viewFooter()
+{
+  m_vMenuView->setItemChecked(m_idMenuView_Footer,!m_vMenuView->isItemChecked(m_idMenuView_Footer));
+  m_pKWordDoc->setFooter(m_vMenuView->isItemChecked(m_idMenuView_Footer));
 }
 
 /*===============================================================*/
@@ -1245,6 +1259,9 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuView->insertSeparator(-1);
   m_idMenuView_FormattingChars = m_vMenuView->insertItem4( i18n("&Formatting Chars"), this, "viewFormattingChars", 0, -1, -1 );
   m_idMenuView_FrameBorders = m_vMenuView->insertItem4( i18n("Frame &Borders"), this, "viewFrameBorders", 0, -1, -1 );
+  m_vMenuView->insertSeparator(-1);
+  m_idMenuView_Header = m_vMenuView->insertItem4( i18n("&Header"), this, "viewHeader", 0, -1, -1 );
+  m_idMenuView_Footer = m_vMenuView->insertItem4( i18n("F&ooter"), this, "viewFooter", 0, -1, -1 );
 
   m_vMenuView->setCheckable(true);
   m_vMenuView->setItemChecked(m_idMenuView_FormattingChars,true);

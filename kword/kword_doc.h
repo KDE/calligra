@@ -333,10 +333,12 @@ public:
 
   bool loaded() { return _loaded; }
 
-  bool hasHead() { return _head; }
-  bool hasFoot() { return _foot; }
-  void setHead(bool h) { _head = h; recalcFrames(); }
-  void setFoot(bool f) { _foot = f; recalcFrames(); }
+  bool hasHeader() { return _header; }
+  bool hasFooter() { return _footer; }
+  void setHeader(bool h) { _header = h; recalcFrames(); recalcWholeText(); updateAllViews(0L);}
+  void setFooter(bool f) { _footer = f; recalcFrames(); recalcWholeText(); updateAllViews(0L); }
+
+  void recalcFrames();
 
 signals:
   void sig_imageModified();
@@ -353,7 +355,6 @@ protected:
 
   void loadFrameSets(KOMLParser&,vector<KOMLAttrib>&);
   void loadStyleTemplates(KOMLParser&,vector<KOMLAttrib>&);
-  void recalcFrames();
 
   void addStyleTemplate(KWParagLayout *pl);
 
@@ -422,7 +423,7 @@ protected:
 
   QPixmap ret_pix;
 
-  bool _head,_foot;
+  bool _header,_footer;
   
 };
 
