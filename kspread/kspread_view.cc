@@ -115,6 +115,7 @@
 #include "kspread_style_manager.h"
 #include "handler.h"
 #include "digest.h"
+#include "damages.h"
 
 #include "KSpreadViewIface.h"
 #include "kspread_dlg_paperlayout.h"
@@ -287,6 +288,7 @@ class KSpreadSpell : public KSpell
   }
 };
 
+using namespace KSpread;
 
 class ViewActions;
 
@@ -1586,7 +1588,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QObject::connect( d->doc, SIGNAL( sig_addAreaName( const QString & ) ), d->posWidget, SLOT( slotAddAreaName( const QString & ) ) );
 
     QObject::connect( d->doc, SIGNAL( sig_removeAreaName( const QString & ) ), d->posWidget, SLOT( slotRemoveAreaName( const QString & ) ) );
-
+    
+    QObject::connect( d->doc, SIGNAL( damagesFlushed( const QValueList<KSpread::Damage*>& ) ), 
+        this, SLOT( handleDamages( const QValueList<KSpread::Damage*>& ) ) );
+    
     KoView::setZoom( d->doc->zoomedResolutionY() /* KoView only supports one zoom */ ); // initial value
     //when kspread is embedded into konqueror apply a zoom=100
     //in konqueror we can't change zoom -- ### TODO ?
@@ -3610,8 +3615,7 @@ void KSpreadView::sheetProperties()
         d->activeSheet->setLcMode( dlg->lcMode() );
         d->activeSheet->setFirstLetterUpper( dlg->capitalizeFirstLetter() );
 
-        slotUpdateView( d->activeSheet );
-        refreshView();
+        d->doc->addDamage( new SheetDamage( d->activeSheet, SheetDamage::PropertiesChanged ) );
 
         // FIXME create command & undo object
     }
@@ -6620,6 +6624,35 @@ void KSpreadView::saveCurrentSheetSelection()
         kdDebug() << " Current scrollbar vert value: " << d->canvas->vertScrollBar()->value() << endl;
         kdDebug() << "Saving marker pos: " << selectionInfo()->marker() << endl;
         d->savedMarkers.replace(d->activeSheet, selectionInfo()->marker());
+    }
+}
+
+void KSpreadView::handleDamages( const QValueList<Damage*>& damages )
+{
+    QValueList<Damage*>::ConstIterator it;
+    for( it = damages.begin(); it != damages.end(); ++it )
+    {
+        Damage* damage = *it;
+        if( !damage ) continue;
+        
+        if( damage->type() == Damage::Sheet )
+        {
+            SheetDamage* sd = static_cast<SheetDamage*>( damage );
+            KSpreadSheet* damagedSheet = sd->sheet();
+            
+            if( sd->action() == SheetDamage::PropertiesChanged )
+            {
+                CellBinding  * b = 0;
+                for ( b = damagedSheet->firstCellBinding(); b != 0; 
+                    b = damagedSheet->nextCellBinding() )
+                        b->cellChanged( 0 );
+
+                paintUpdates();
+                refreshView();
+            }
+        
+        }
+        
     }
 }
 

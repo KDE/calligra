@@ -30,6 +30,7 @@
 #include <qpoint.h>
 #include <qptrlist.h>
 #include <qstringlist.h>
+#include <qvaluelist.h>
 
 #include <koDocument.h>
 #include <koView.h>
@@ -53,6 +54,11 @@ class KSpreadVBorder;
 class KSpreadView;
 class KSpreadComboboxLocationEditWidget;
 class ViewPrivate;
+
+namespace KSpread
+{
+class Damage;
+};
 
 /**
  * \brief
@@ -480,6 +486,8 @@ public slots:
      * Shows context menu when tabbar is double-clicked.
      */
     void popupTabBarMenu( const QPoint& );
+    
+    void handleDamages( const QValueList<KSpread::Damage*>& damages );
 
 protected slots:
     /**
