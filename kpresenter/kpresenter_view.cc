@@ -79,7 +79,6 @@
 #include <koDocument.h>
 #include <koPageLayoutDia.h>
 #include <koRuler.h>
-#include <koUIUtils.h>
 #include <koTemplateCreateDia.h>
 #include <kcoloractions.h>
 #include <kaction.h>
@@ -127,6 +126,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     setXMLFile( "kpresenter.rc" );
 
     dcop = 0;
+    dcopObject(); // build it
 
     m_pKPresenterDoc = 0L;
     //m_bKPresenterModified = false;
