@@ -70,6 +70,10 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc )
         m_lastFormatted->setFormat( 0, m_lastFormatted->string()->length(), & style->format() );
     }
 
+    textdoc->addSelection( HighlightSelection );
+    textdoc->setSelectionColor( HighlightSelection,
+                                QApplication::palette().color( QPalette::Active, QColorGroup::Dark ) );
+
     interval = 0;
     changeIntervalTimer = new QTimer( this );
     connect( changeIntervalTimer, SIGNAL( timeout() ),
@@ -2107,6 +2111,35 @@ QRect KWTextFrameSet::paragRect( QTextParag * parag ) const
     QPoint bottomRight;
     (void)internalToContents( parag->rect().bottomRight(), bottomRight );
     return QRect( topLeft, bottomRight );
+}
+
+void KWTextFrameSet::highlightPortion( QTextParag * parag, int index, int length, KWCanvas * canvas )
+{
+    removeHighlight(); // remove previous highlighted selection
+    QTextCursor cursor( textdoc );
+    cursor.setParag( parag );
+    cursor.setIndex( index );
+    textdoc->setSelectionStart( HighlightSelection, &cursor );
+    cursor.setIndex( index + length );
+    textdoc->setSelectionEnd( HighlightSelection, &cursor );
+    parag->setChanged( true );
+    emit repaintChanged( this );
+    QRect expose = paragRect( parag );
+    canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
+                           (expose.top()+expose.bottom()) / 2,
+                           (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
+                           (expose.bottom()-expose.top()) / 2);
+}
+
+void KWTextFrameSet::removeHighlight()
+{
+    if ( textdoc->hasSelection( HighlightSelection ) )
+    {
+        QTextParag * oldParag = textdoc->selectionStart( HighlightSelection );
+        oldParag->setChanged( true );
+        textdoc->removeSelection( HighlightSelection );
+    }
+    emit repaintChanged( this );
 }
 
 #ifndef NDEBUG

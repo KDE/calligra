@@ -165,13 +165,11 @@ public:
 protected:
     bool findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int firstIndex,
                          QTextParag * lastParag, int lastIndex );
-    void terminateFind( KWTextFrameSet * fs );
-    bool process( const QString &_text, const QRect &expose);
-    void selectMatch( int index, int length );
+    bool process( const QString &_text );
 
 protected slots:
-    void highlight( const QString &text, int matchingIndex, int matchingLength, const QRect &expose );
-    void replace( const QString &text, int replacementIndex, int replacedLength, const QRect &expose );
+    void highlight( const QString &text, int matchingIndex, int matchingLength, const QRect & );
+    void replace( const QString &text, int replacementIndex, int replacedLength, const QRect & );
 
 private:
     // Only one of those two will be set

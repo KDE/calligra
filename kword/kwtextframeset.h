@@ -120,6 +120,10 @@ public:
     void selectionChangedNotify( bool enableActions = true );
     QRect paragRect( QTextParag * parag ) const;
 
+    // Highlighting support (for search/replace, spellchecking etc.)
+    void highlightPortion( QTextParag * parag, int index, int length, KWCanvas * canvas );
+    void removeHighlight();
+
     /** Set format changes on selection or current cursor */
     void setFormat( QTextCursor * cursor, KWTextFormat * & currentFormat, KWTextFormat *format, int flags, bool zoomFont = false );
 

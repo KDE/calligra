@@ -392,10 +392,11 @@ protected:
 
     // Spell-checking
     KSpell *kspell;
-    KWTextParag *currParag;
-    int currFrameSetNum;
+    QTextParag *m_spellCurrParag;
+    int m_spellCurrFrameSetNum;
+    int m_spellLastTextPos;
+
     int m_currentPage; // 0-based current page number
-    int lastTextPos;
 
     // Statusbar items
     enum StatusBarIds {
