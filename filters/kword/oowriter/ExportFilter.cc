@@ -75,7 +75,7 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
 
     for (uint i=0; i<strText.length(); i++)
     {
-        ch=strText[i];
+        ch=strText[i]; // ###TODO: would it be not better to define a QCharRef instead? (no need to copy anymore.)
 
         if (ch!=' ')
         {
@@ -274,8 +274,8 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
 
     zipWriteData(" office:class=\"text\"");
 
-    // We are using an (OASIS) )extension compared to version 1.0, so we cannot write the version string.
-    // (We do not even write it for context.xml and meta.xml, as OOWriter 1.0..1 does not like it in this case.)
+    // We are using an (rejected draft OASIS) extension compared to version 1.0, so we cannot write the version string.
+    // (We do not even write it for context.xml and meta.xml, as OOWriter 1.0.1 does not like it in this case.)
     //zipWriteData("office:version=\"1.0\"");
 
     zipWriteData(">\n");
@@ -322,7 +322,7 @@ void OOWriterWorker::writeStylesXml(void)
     zipWriteData(m_styles);
 
     zipWriteData(" <office:automatic-styles>\n");
-    zipWriteData("  <style:page-master style:name=\"pm1\">\n");
+    zipWriteData("  <style:page-master style:name=\"pm1\">\n"); // ### TODO: verify if style name is unique
 
     zipWriteData("   <style:properties ");
 
@@ -740,7 +740,7 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
         *m_streamOut << "<text:span";
 
         QString styleKey;
-        QString props ( textFormatToStyle(formatLayout,formatData.text,false,styleKey) );
+        QString props ( textFormatToStyle(formatLayout,formatData.text,false,styleKey) ); // ### TODO: make const
 
         QMap<QString,QString>::ConstIterator it ( m_mapTextStyleKeys.find(styleKey) );
         kdDebug(30518) << "Searching text key: " << styleKey << endl;
@@ -925,7 +925,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
         else if (layout.alignment == "auto")
         {
             props += "fo:text-align=\"left\" ";
-            props += "style:text-auto-align=\"true\" "; // OASIS extension
+            props += "style:text-auto-align=\"true\" "; // rejected draft OASIS extension
             styleKey += 'A';
         }
         else
@@ -995,6 +995,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
         props += QString("fo:line-height=\"%1pt\" ").arg(layout.lineSpacing);
         styleKey += QString::number(layout.lineSpacing);
     }
+    // ### FIXME: it seems that it should be fo:line-height="normal"
     else if ( 10==layout.lineSpacingType  )
     {
         styleKey += "100%"; // One
