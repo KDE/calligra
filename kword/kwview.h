@@ -252,6 +252,8 @@ public slots:
 
     void changeCaseOfText();
 
+    void editPersonalExpr();
+
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
@@ -378,6 +380,8 @@ private:
     KAction *actionExtraCreateTemplate;
 
     KAction * actionChangeCase;
+
+    KAction *actionEditPersonnalExpr;
 
     KAction *actionConfigure;
 

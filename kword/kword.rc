@@ -94,6 +94,7 @@
   <Action name="edit_customvars"/>
   <Action name="extra_autocorrection"/>
   <Action name="change_case"/>
+  <Action name="personnal_expr"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
   <Action name="configure" group="settings_configure"/>

@@ -61,6 +61,7 @@
 #include "fontdia.h"
 #include "counter.h"
 #include "kwChangeCaseDia.h"
+#include "kweditpersonnalexpressiondia.h"
 
 #include <koMainWindow.h>
 #include <koDocument.h>
@@ -390,7 +391,11 @@ void KWView::setupActions()
                                             actionCollection(), "insert_expression" );
     loadexpressionActions( actionInsertExpression);
 
-    actionChangeCase=new KAction( i18n( "Change case ..." ), 0,
+    actionEditPersonnalExpr=new KAction( i18n( "Edit personnal expression..." ), 0,
+                                         this, SLOT( editPersonalExpr() ),
+                                     actionCollection(), "personnal_expr" );
+
+    actionChangeCase=new KAction( i18n( "Change case..." ), 0,
                                      this, SLOT( changeCaseOfText() ),
                                      actionCollection(), "change_case" );
 
@@ -2234,6 +2239,14 @@ void KWView::changeCaseOfText()
     }
     delete caseDia;
 }
+
+void KWView::editPersonalExpr()
+{
+   KWEditPersonnalExpression *personalDia=new KWEditPersonnalExpression( this,"personnal" );
+   personalDia->exec();
+   delete personalDia;
+}
+
 
 void KWView::textIncreaseIndent()
 {
