@@ -71,6 +71,9 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_bMultiRow = FALSE;
     m_bVerticalText = FALSE;
     m_textPen.setColor( QApplication::palette().active().text() );
+    
+    QFont font( "Helvetica", 12 );
+    m_textFont = font;
 }
 
 KSpreadLayout::~KSpreadLayout()

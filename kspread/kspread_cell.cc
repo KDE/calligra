@@ -76,9 +76,6 @@ KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
 
   m_bLayoutDirtyFlag= FALSE;
 
-  QFont font( "Times", 12 );
-  m_textFont = font;
-
   m_style = KSpreadCell::ST_Normal;
   m_content = Text;
 
@@ -370,7 +367,7 @@ bool KSpreadCell::needsPrinting() const
 	 hasProperty( PFallDiagonal ) || hasProperty( PGoUpDiagonal ) ||
 	 hasProperty( PBackgroundBrush ) || hasProperty( PBackgroundColor ) )
 	return TRUE;
-    
+
     return FALSE;
 }
 
@@ -2099,7 +2096,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     // Dont draw any selection when printing.
     if ( _painter.device()->isExtDev() )
 	selected = FALSE;
-    
+
     QColorGroup defaultColorGroup = QApplication::palette().active();
 
     QRect m = m_pTable->marker();
@@ -2535,7 +2532,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     // Dont draw page borders or the marker when printing
     if ( _painter.device()->isExtDev() )
 	return;
-    
+
     // Draw page borders
     if ( m_pTable->isShowPageBorders() )
     {
@@ -3517,84 +3514,109 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
     //
     QDomElement format = doc.createElement( "format" );
     cell.appendChild( format );
-    format.setAttribute( "align", (int)m_eAlign );
-    format.setAttribute( "alignY", (int)m_eAlignY );
+    
+    if ( hasProperty( PAlign ) )
+	format.setAttribute( "align", (int)m_eAlign );
+    if ( hasProperty( PAlignY ) )
+	format.setAttribute( "alignY", (int)m_eAlignY );
 
-    if ( m_bgColor.isValid() )
+    if ( hasProperty( PBackgroundColor ) && m_bgColor.isValid() )
 	format.setAttribute( "bgcolor", m_bgColor.name() );
-    if ( m_bMultiRow )
+    if ( hasProperty( PMultiRow ) &&  m_bMultiRow )
 	format.setAttribute( "multirow", "yes" );
+    // ### always saved
     if ( m_style )
 	format.setAttribute( "style", (int)m_style );
-    if ( m_bVerticalText )
+    if ( hasProperty( PVerticalText ) && m_bVerticalText )
 	format.setAttribute( "verticaltext", "yes" );
     if ( isForceExtraCells() )
     {
-	format.setAttribute( "colspan", extraXCells() );
-	format.setAttribute( "rowspan", extraYCells() );
+	if ( extraXCells() )
+	    format.setAttribute( "colspan", extraXCells() );
+	if ( extraYCells() )
+	    format.setAttribute( "rowspan", extraYCells() );
     }
 
-    format.setAttribute( "precision", m_iPrecision );
-    if ( !m_strPrefix.isEmpty() )
+    if ( hasProperty( PPrecision ) )
+	format.setAttribute( "precision", m_iPrecision );
+    if ( hasProperty( PPrefix ) && !m_strPrefix.isEmpty() )
 	format.setAttribute( "prefix", m_strPrefix );
-    if ( !m_strPostfix.isEmpty() )
+    if ( hasProperty( PPostfix ) && !m_strPostfix.isEmpty() )
 	format.setAttribute( "postfix", m_strPostfix );
 
-    format.setAttribute( "float", (int)m_eFloatFormat );
-    format.setAttribute( "floatcolor", (int)m_eFloatColor );
-    format.setAttribute( "faktor", m_dFaktor );
+    if ( hasProperty( PFloatFormat ) )
+	format.setAttribute( "float", (int)m_eFloatFormat );
+    if ( hasProperty( PFloatColor ) )
+	format.setAttribute( "floatcolor", (int)m_eFloatColor );
+    if ( hasProperty( PFaktor ) )
+	format.setAttribute( "faktor", m_dFaktor );
 
+    // ### always saved and bad name for the attribute
     format.setAttribute( "format",(int) getFormatNumber() );
 
+    // ### always saved
     if( m_rotateAngle != 0 )
 	format.setAttribute( "angle", m_rotateAngle );
 
-    // if ( m_textFont != m_pTable->defaultCell()->textFont() )
-    format.appendChild( createElement( "font", m_textFont, doc ) );
+    if ( hasProperty( PFont ) )
+	format.appendChild( createElement( "font", m_textFont, doc ) );
 
-    // if ( m_textPen != m_pTable->defaultCell()->textPen() )
-    {
-	// if( m_conditionIsTrue )
-        // {
-	// m_textPen.setColor( m_textColor );
-	// }
+    if ( hasProperty( PTextPen ) )
 	format.appendChild( createElement( "pen", m_textPen, doc ) );
+
+    if ( hasProperty( PBackgroundBrush ) )
+    {
+	format.setAttribute( "brushcolor", m_backGroundBrush.color().name() );
+	format.setAttribute( "brushstyle",(int)m_backGroundBrush.style() );
     }
-    format.setAttribute( "brushcolor", m_backGroundBrush.color().name() );
-    format.setAttribute( "brushstyle",(int)m_backGroundBrush.style() );
-
-    QDomElement left = doc.createElement( "left-border" );
-    left.appendChild( createElement( "pen", m_leftBorderPen, doc ) );
-    format.appendChild( left );
-
-    QDomElement top = doc.createElement( "top-border" );
-    top.appendChild( createElement( "pen", m_topBorderPen, doc ) );
-    format.appendChild( top );
-
-    QDomElement right = doc.createElement( "right-border" );
-    right.appendChild( createElement( "pen", m_rightBorderPen, doc ) );
-    format.appendChild( right );
-
-    QDomElement bottom = doc.createElement( "bottom-border" );
-    bottom.appendChild( createElement( "pen", m_bottomBorderPen, doc ) );
-    format.appendChild( bottom );
-
-    QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
-    fallDiagonal.appendChild( createElement( "pen", m_fallDiagonalPen, doc ) );
-    format.appendChild( fallDiagonal );
-
-    QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
-    goUpDiagonal.appendChild( createElement( "pen", m_goUpDiagonalPen, doc ) );
-    format.appendChild( goUpDiagonal );
-
-    if(m_rotateAngle!=0)
-	format.setAttribute( "angle",m_rotateAngle);
-
-    if((m_firstCondition!=0)||(m_secondCondition!=0)||(m_thirdCondition!=0))
+    
+    if ( hasProperty( PLeftBorder ) )
+    {
+	QDomElement left = doc.createElement( "left-border" );
+	left.appendChild( createElement( "pen", m_leftBorderPen, doc ) );
+	format.appendChild( left );
+    }
+    
+    if ( hasProperty( PTopBorder ) )
+    {
+	QDomElement top = doc.createElement( "top-border" );
+	top.appendChild( createElement( "pen", m_topBorderPen, doc ) );
+	format.appendChild( top );
+    }
+    
+    if ( hasProperty( PRightBorder ) )
+    {
+	QDomElement right = doc.createElement( "right-border" );
+	right.appendChild( createElement( "pen", m_rightBorderPen, doc ) );
+	format.appendChild( right );
+    }
+    
+    if ( hasProperty( PBottomBorder ) )
+    {
+	QDomElement bottom = doc.createElement( "bottom-border" );
+	bottom.appendChild( createElement( "pen", m_bottomBorderPen, doc ) );
+	format.appendChild( bottom );
+    }
+    
+    if ( hasProperty( PFallDiagonal ) )
+    {
+	QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
+	fallDiagonal.appendChild( createElement( "pen", m_fallDiagonalPen, doc ) );
+	format.appendChild( fallDiagonal );
+    }
+    
+    if ( hasProperty( PGoUpDiagonal ) )
+    {
+	QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
+	goUpDiagonal.appendChild( createElement( "pen", m_goUpDiagonalPen, doc ) );
+	format.appendChild( goUpDiagonal );
+    }
+    
+    if( ( m_firstCondition != 0 ) || ( m_secondCondition != 0 ) || ( m_thirdCondition != 0 ) )
     {
   	QDomElement condition = doc.createElement("condition");
 
-  	if(m_firstCondition!=0)
+  	if( m_firstCondition != 0 )
         {
 	    QDomElement first=doc.createElement("first");
 	    first.setAttribute("cond",(int)m_firstCondition->m_cond);
@@ -3605,7 +3627,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 
 	    condition.appendChild(first);
 	}
-  	if(m_secondCondition!=0)
+  	if( m_secondCondition != 0 )
         {
 	    QDomElement second=doc.createElement("second");
 	    second.setAttribute("cond",(int)m_secondCondition->m_cond);
@@ -3617,7 +3639,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 
 	    condition.appendChild(second);
 	}
-	if(m_thirdCondition!=0)
+	if( m_thirdCondition != 0 )
         {
 	    QDomElement third=doc.createElement("third");
 	    third.setAttribute("cond",(int)m_thirdCondition->m_cond);
@@ -3631,6 +3653,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 	}
   	cell.appendChild( condition );
     }
+
     if ( !m_strComment.isEmpty() )
     {
         QDomElement comment = doc.createElement( "comment" );
@@ -3749,6 +3772,9 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    setAlignY( a );
 	}
 
+	if ( f.hasAttribute( "angle" ) )
+	    setAngle( f.attribute( "angle" ).toInt() );
+    
 	if ( f.hasAttribute( "bgcolor" ) )
 	    setBgColor( QColor( f.attribute( "bgcolor" ) ) );
 
