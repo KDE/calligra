@@ -688,10 +688,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       // Hmm we should use QChar here and QString a lot more around
       // here... (David)
       debug( "decimal_point is '%c'", decimal_point );
-
-      // HACK
-      // ok set it to '.' since kscript relies on that for now :(
-      decimal_point = '.';
     }
 
     QString f2;
@@ -1096,7 +1092,20 @@ bool KSpreadCell::makeFormular()
     delete m_pCode;
 
   KSContext context;
-  m_pCode = m_pTable->doc()->interpreter()->parse( context, m_pTable, m_strText, m_lstDepends );
+
+  // We have to transform the numerical values back into a non-localized form,
+  // so that they can be parsed by kscript (David)
+  // To be moved to a separate function when it is properly implemented...
+  // or should we use strtod on each number found ? Impossible since kscript
+  // would have to parse the localized version...
+  // HACK (only handles decimal point)
+  QString sDelocalizedText ( m_strText );
+  int pos;
+  while ( ( pos = sDelocalizedText.find( decimal_point ) ) >= 0 )
+    sDelocalizedText.replace( pos, 1, "." );
+  // At least,  =2,5+3,2  is turned into =2.5+3.2, which can get parsed...
+
+  m_pCode = m_pTable->doc()->interpreter()->parse( context, m_pTable, sDelocalizedText, m_lstDepends );
   // Did a syntax error occur ?
   if ( context.exception() )
   {
@@ -1235,14 +1244,16 @@ bool KSpreadCell::calc( bool _makedepend )
     m_dValue = context.value()->doubleValue();
     m_bValue = true;
     m_bBool = false;
-    m_strFormularOut.sprintf( "%f", m_dValue );
+    // m_strFormularOut.sprintf( "%f", m_dValue );
+    m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
   }
   else if ( context.value()->type() == KSValue::IntType )
   {
     m_dValue = (double)context.value()->intValue();
     m_bValue = true;
     m_bBool = false;
-    m_strFormularOut.sprintf( "%f", m_dValue );
+    // m_strFormularOut.sprintf( "%f", m_dValue );
+    m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
   }
   else if ( context.value()->type() == KSValue::BoolType )
   {

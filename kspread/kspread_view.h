@@ -575,7 +575,7 @@ protected:
      QColor tbColor;
      QColor bgColor;
     /**
-     * Tells wether the user modfied the current cell.
+     * Tells whether the user modfied the current cell.
      * Some key events are passed to the @ref EditWindow. When this flag is set and you
      * want to leave the cell with the marker then you must first save the new text
      * in the cell before moving the marker.
@@ -590,20 +590,20 @@ protected:
     KSpreadDoc *m_pDoc;
 
     /**
-     * Tells wether undo is possible right now or not.
+     * Tells whether undo is possible right now or not.
      *
      * @see #enableUndo
      */
     bool m_bUndo;
     /**
-     * Tells wether redo is possible right now or not.
+     * Tells whether redo is possible right now or not.
      *
      * @see #enableRedo
      */
     bool m_bRedo;
 
     /**
-     * Flags that indicate wether we should display additional
+     * Flags that indicate whether we should display additional
      * GUI stuff like rulers and scrollbars.
      *
      * @see #showGUI

@@ -138,7 +138,7 @@ protected:
     int activeTab;
 
 	/**
-	 * Indicates wether a tab may be scrolled while moving a table.
+	 * Indicates whether a tab may be scrolled while moving a table.
 	 * Used to provide a timeout.
 	 */
 	bool m_mayScroll;
@@ -150,7 +150,7 @@ protected:
 	int m_moveTab;
 	
 	/**
-	 * Indicates wether a tab is being moved using the mouse and in which
+	 * Indicates whether a tab is being moved using the mouse and in which
 	 * direction.
 	 */ 	
 	int m_moveTabFlag;

@@ -23,6 +23,9 @@
 #include "kspread_main.h"
 #include "kspread_doc.h"
 
+#include <kglobal.h>
+#include <klocale.h>
+
 // HACK: For KScript
 extern CORBA::ORB* orb()
 {
@@ -35,6 +38,9 @@ typedef OPAutoLoader<KSpreadFactory> KSpreadAutoLoader;
 KSpreadApp::KSpreadApp( int &argc, char** argv ) : 
   KoApplication( argc, argv, "kspread" )
 {
+  // Tell klocale that we can handle localized numeric and monetary
+  // Well not yet, but that will come :))
+  KGlobal::locale()->enableNumericLocale( true );
 }
 
 KSpreadApp::~KSpreadApp()

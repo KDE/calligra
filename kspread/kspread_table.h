@@ -271,7 +271,7 @@ public:
     RowLayout* nonDefaultRowLayout( int _row );
     /**
      * @param _no_scrollbar_update wont change the scrollbar if set to true disregarding
-     *                             wether _column/_row are bigger than
+     *                             whether _column/_row are bigger than
      *                             m_iMaxRow/m_iMaxColumn. May be overruled by
      *                             @ref #m_bScrollbarUpdates.
      */
@@ -286,7 +286,7 @@ public:
      *          at this position is obscured then the obscuring cell is returned.
      *
      * @param _no_scrollbar_update wont change the scrollbar if set to true disregarding
-     *                             wether _column/_row are bigger than
+     *                             whether _column/_row are bigger than
      *                             m_iMaxRow/m_iMaxColumn. May be overruled by
      *                             @ref #m_bScrollbarUpdates.
      */
@@ -295,7 +295,7 @@ public:
      * If no special KSpreadCell exists for this position then a new one is created.
      *
      * @param _no_scrollbar_update wont change the scrollbar if set to true disregarding
-     *                             wether _column/_row are bigger than
+     *                             whether _column/_row are bigger than
      *                             m_iMaxRow/m_iMaxColumn. May be overruled by
      *                             @ref #m_bScrollbarUpdates.
      *
@@ -384,7 +384,7 @@ public:
     QWidget* widget() { return m_pWidget; }
   
     /**
-     * @return a flag that indicates wether the table should paint the page breaks.
+     * @return a flag that indicates whether the table should paint the page breaks.
      *
      * @see #setShowPageBorders
      * @see #bShowPageBorders
@@ -400,14 +400,14 @@ public:
     void setShowPageBorders( bool _b );
 	
     /**
-     * Tests wether _column is the first column of a new page. In this
+     * Tests whether _column is the first column of a new page. In this
      * case the left border of this column may be drawn highlighted to show
      * that this is a page break.
      */
     bool isOnNewPageX( int _column );
 
     /**
-     * Tests wether _row is the first row of a new page. In this
+     * Tests whether _row is the first row of a new page. In this
      * case the top border of this row may be drawn highlighted to show
      * that this is a page break.
      */
@@ -580,7 +580,7 @@ protected:
     /**
      * The rectangular area that is currently selected.
      * If all 4 coordinates are 0 then no selection is made at all.
-     * But testing only selection.left() == 0 will tell you wether a selection
+     * But testing only selection.left() == 0 will tell you whether a selection
      * is currently active or not.
      * If complete columns are selected, then selection.bottom() == 0x7FFF.
      * If complete rows are selected, then selection.right() == 0x7FFF.
@@ -588,7 +588,7 @@ protected:
     QRect m_rctSelection;
 
     /**
-     * Indicates wether the table should paint the page breaks.
+     * Indicates whether the table should paint the page breaks.
      * Doing so costs some time, so by default it should be turned off.
      */
     bool m_bShowPageBorders;

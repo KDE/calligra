@@ -680,11 +680,11 @@ void KSpreadTable::setSelection( const QRect &_sel, KSpreadCanvas *_canvas )
   if ( _sel == m_rctSelection )
     return;
 
-  // We want to see wether a single cell was clicked like a button.
+  // We want to see whether a single cell was clicked like a button.
   // This is only of interest if no cell was selected before
   if ( _sel.left() == 0 )
   {
-    // So we test first wether only a single cell was selected
+    // So we test first whether only a single cell was selected
     KSpreadCell *cell = cellAt( m_rctSelection.left(), m_rctSelection.top() );
     // Did we mark only a single cell ?
     // Take care: One cell may obscure other cells ( extra size! ).

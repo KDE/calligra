@@ -142,7 +142,7 @@ void KSpreadConsolidate::slotOk()
   else
     desc = D_NONE;
 
-  // Check wether all ranges have same size
+  // Check whether all ranges have same size
   ASSERT( ranges.count() > 0 );
   QValueList<KSpreadRange>::Iterator it = ranges.begin();
   int w = (*it).range.right() - (*it).range.left() + 1;
@@ -173,7 +173,7 @@ void KSpreadConsolidate::slotOk()
   // Create the consolidation table
   if ( desc == D_NONE )
   {
-    // Check wether the destination is part of the source ...
+    // Check whether the destination is part of the source ...
     QRect dest;
     dest.setCoords( dx, dy, dx + w - 1, dy + h - 1 );
     it = ranges.begin();
@@ -270,7 +270,7 @@ void KSpreadConsolidate::slotOk()
     }
     lst.sort();
 
-    // Check wether the destination is part of the source ...
+    // Check whether the destination is part of the source ...
     QRect dest;
     dest.setCoords( dx, dy, dx + lst.count() - 1, dy + h - 1 );
     it = ranges.begin();
@@ -382,7 +382,7 @@ void KSpreadConsolidate::slotOk()
     }
     lst.sort();
 
-    // Check wether the destination is part of the source ...
+    // Check whether the destination is part of the source ...
     QRect dest;
     dest.setCoords( dx, dy, dx + w - 1, dy + lst.count() - 1 );
     it = ranges.begin();
@@ -515,7 +515,7 @@ void KSpreadConsolidate::slotOk()
     }
     rows.sort();
 
-    // Check wether the destination is part of the source ...
+    // Check whether the destination is part of the source ...
     QRect dest;
     dest.setCoords( dx, dy, dx + cols.count(), dy + rows.count() );
     it = ranges.begin();

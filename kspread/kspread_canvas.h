@@ -246,7 +246,7 @@ private:
     KoDocumentEntry m_actionArgument;
   
     /**
-     * Used to indicate wether the user started drawing a rubber band rectangle.
+     * Used to indicate whether the user started drawing a rubber band rectangle.
      */
     bool m_bGeometryStarted;
     QPoint m_ptGeometryStart;
@@ -262,7 +262,7 @@ private:
     int m_iMouseStartRow;
 
     /**
-     * Tells wether the user selected more than one cell.
+     * Tells whether the user selected more than one cell.
      * If the user presses the left mouse button and if he marks more
      * than one cell until he releases the button again, then this flag
      * is set. If this flag is set, then one should repaint all visible
@@ -346,7 +346,7 @@ protected:
     KSpreadCanvas *m_pCanvas;
     KSpreadView *m_pView;
     /**
-     * Flag that inidicates wether the user wants to mark columns.
+     * Flag that inidicates whether the user wants to mark columns.
      * The user may mark columns by dragging the mouse around in th XBorder widget.
      * If he is doing that right now, this flag is TRUE. Mention that the user may
      * also resize columns by dragging the mouse. This case is not covered by this flag.
@@ -361,7 +361,7 @@ protected:
     int m_iSelectionAnchor;
     
     /**
-     * Flag that indicates wether the user resizes a column
+     * Flag that indicates whether the user resizes a column
      * The user may resize columns by dragging the mouse around in th XBorder widget.
      * If he is doing that right now, this flag is TRUE. Mention that the user may
      */

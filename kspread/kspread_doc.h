@@ -419,7 +419,7 @@ protected:
   QString m_strFileURL;
   
   /**
-   * Indicates wether the user should save the document before deleting it.
+   * Indicates whether the user should save the document before deleting it.
    *
    * @see #isModified
    */

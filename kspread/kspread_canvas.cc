@@ -387,12 +387,12 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   int row = table->topRow( _ev->pos().y(), ypos, this );
   int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
-  // Test wether the mouse is over some anchor
+  // Test whether the mouse is over some anchor
   KSpreadCell* cell = table->visibleCellAt( col, row );
   if ( cell )
     m_strAnchor = cell->testAnchor( _ev->pos().x() - xpos, _ev->pos().y() - ypos, this );
 
-  // Test wether we are in the lower right corner of the marker
+  // Test whether we are in the lower right corner of the marker
   // if so => change the cursor
   {
     int xpos;
@@ -645,7 +645,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
   QRect selection( table->selectionRect() );
 
-  // Check wether we clicked in the little marker in the lower right
+  // Check whether we clicked in the little marker in the lower right
   // corner of a cell or a marked area.
   {
     // Get the position and size of the marker/marked-area
@@ -742,7 +742,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     cell = table->cellAt( markerColumn(), markerRow() );
   }
 
-  // Test wether the mouse is over some anchor
+  // Test whether the mouse is over some anchor
   {
     KSpreadCell *cell = table->visibleCellAt( markerColumn(), markerRow() );
     QString anchor = cell->testAnchor( _ev->pos().x() - xpos,

@@ -309,7 +309,7 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::EventKeyPressed& _event )
   RowLayout *rl;
   ColumnLayout *cl;
   KSpreadCell *cell;
-  // Flag that indicates wether we make a selection right now
+  // Flag that indicates whether we make a selection right now
   bool make_select = FALSE;
 
   QRect selection( m_pTable->selectionRect() );

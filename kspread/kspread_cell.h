@@ -158,7 +158,7 @@ public:
     virtual bool isDefault() { return ( m_iColumn == 0 ); }
 
     /**
-     * Tells wether this cell has any content.
+     * Tells whether this cell has any content.
      * An cell has no content if is has no text and no formular.
      *
      * @return TRUE if there is no content.
@@ -166,7 +166,7 @@ public:
     virtual bool isEmpty();
 
     /**
-     * Tells wether the cell contains, text, a formula, richtext or a visual formula.
+     * Tells whether the cell contains, text, a formula, richtext or a visual formula.
      */
     Content content() { return m_content; }
 
@@ -332,13 +332,13 @@ public:
     /**
      * Starts calculating.
      * If a table is ok and you change this cell only, then you dont need to
-     * calculate all cells this one depends on. If you dont know wether all cells
+     * calculate all cells this one depends on. If you dont know whether all cells
      * are caculated properly right now, you must set '_makedepend' to TRUE.
      * If cell c1 changed you can call 'c1->calc(FALSE)', but all cells depending
      * on c1 muts be called with dep_on_c1->calc(TRUE) because the table is not ok
      * any more.
      *
-     * @param _makedepend tells wether all other cells are calculated properly or not.
+     * @param _makedepend tells whether all other cells are calculated properly or not.
      *
      * @return TRUE on success and FALSE on error.
      */
@@ -531,14 +531,14 @@ protected:
     bool m_bError;
 
     /**
-     * Flag showing wether the current layout is OK.
+     * Flag showing whether the current layout is OK.
      * If you change for example the fonts point size, set this flag. When the cell
      * must draw itself on the screen it will first recalculate its layout.
      */
     bool m_bLayoutDirtyFlag;
 
     /**
-     * Shows wether recalculation is neccessary.
+     * Shows whether recalculation is neccessary.
      * If this cell must be recalculated for some reason, for example the user entered
      * a new formular, then this flag is set. If @ref #bFormular is FALSE nothing will happen
      * at all.
@@ -554,7 +554,7 @@ protected:
     QString m_strFormularOut;
 
     /**
-     * Tells wether this cell it currently under calculation.
+     * Tells whether this cell it currently under calculation.
      * If a cell thats 'progressFlag' is set is told to calculate we
      * have detected a circel reference and we must stop calulating.
      */
@@ -592,7 +592,7 @@ protected:
     int m_iExtraHeight;
 
     /**
-     * Tells wether the cell is forced to exceed its size.
+     * Tells whether the cell is forced to exceed its size.
      * Cells may occupy other cells space on demand. But you may force
      * a cell to do so by setting this flag. Forcing the cell to have
      * no extra size will disable this flag!

@@ -148,7 +148,7 @@ public:
 
 protected:
     /**
-     * Tells wether text may be broken into multiple lines.
+     * Tells whether text may be broken into multiple lines.
      */
     bool m_bMultiRow;
 
@@ -297,7 +297,7 @@ protected:
      */
     int m_iTime;
     /**
-     * Flag that indicates wether this is the default layout.
+     * Flag that indicates whether this is the default layout.
      *
      * @see #isDefault
      * @see #setDefault
@@ -386,7 +386,7 @@ protected:
      */
     int m_iTime;
     /**
-     * Flag that indicates wether this is the default layout.
+     * Flag that indicates whether this is the default layout.
      *
      * @see #isDefault
      * @see #setDefault
