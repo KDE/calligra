@@ -2384,6 +2384,8 @@ void KWView::editDeleteFrame()
 
 void KWView::deleteFrame( bool _warning )
 {
+    if ( !m_doc->isReadWrite() )
+        return;
     QPtrList<KWFrame> frames=m_doc->getSelectedFrames();
     Q_ASSERT( frames.count() >= 1 );
     if( frames.count() < 1)
