@@ -26,6 +26,9 @@
 
 #include "basicelement.h"
 
+class SymbolTable;
+
+
 KFORMULA_NAMESPACE_BEGIN
 
 /**
@@ -34,7 +37,7 @@ KFORMULA_NAMESPACE_BEGIN
 class TextElement : public BasicElement {
 public:
 
-    TextElement(QChar ch = ' ', BasicElement* parent = 0);
+    TextElement(QChar ch = ' ', bool beSymbol = false, BasicElement* parent = 0);
 
 
     /**
@@ -90,11 +93,6 @@ public:
     bool isSymbol() const { return symbol; }
 
     /**
-     * Sets the element to be a symbol.
-     */
-    void setSymbol(bool s);
-
-    /**
      * @returns the latex representation of the element and
      * of the element's children
      */
@@ -147,6 +145,8 @@ protected:
      * Sets up the painter to be used for drawing.
      */
     void setUpPainter(const ContextStyle& context, QPainter& painter);
+
+    const SymbolTable& getSymbolTable() const;
 
 private:
 

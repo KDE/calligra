@@ -692,18 +692,16 @@ void SequenceElement::normalize(FormulaCursor* cursor, Direction)
  * Returns the child at the cursor.
  * Does not care about the selection.
  */
-BasicElement* SequenceElement::getChild(FormulaCursor* cursor, Direction direction)
+BasicElement* SequenceElement::getChild( FormulaCursor* cursor, Direction direction )
 {
-    if (direction == beforeCursor) {
-        int pos = cursor->getPos()-1;
-        if (pos >= 0) {
-            return children.at(pos);
+    if ( direction == beforeCursor ) {
+        if ( cursor->getPos() > 0 ) {
+            return children.at( cursor->getPos() - 1 );
         }
     }
     else {
-        uint pos = cursor->getPos();
-        if (pos < children.count()) {
-            return children.at(pos);
+        if ( cursor->getPos() < static_cast<int>( children.count() ) ) {
+            return children.at( cursor->getPos() );
         }
     }
     return 0;

@@ -150,7 +150,6 @@ Term::Term(SequenceParser* parser)
             break;
         case TEXT:
         case NUMBER:
-        case SYMBOL:
         case ELEMENT:
             // assume mul if no operator
             rhs = new Term(parser);
@@ -197,12 +196,6 @@ bool NameType::isPhantom(const TextElement& element) const
     // Only this first char of a name might be a backslash.
     return element.getCharacter() == QChar('\\');
 }
-
-TextSymbolType::TextSymbolType(SequenceParser* parser)
-        : MultiElementType(parser)
-{
-}
-
 
 NumberType::NumberType(SequenceParser* parser)
         : MultiElementType(parser)
@@ -289,11 +282,6 @@ void ErrorType::setUpPainter(const ContextStyle& context, QPainter& painter)
 QFont NameType::getFont(const ContextStyle& context)
 {
     return context.getNameFont();
-}
-
-QFont TextSymbolType::getFont(const ContextStyle& context)
-{
-    return context.getSymbolFont();
 }
 
 QFont NumberType::getFont(const ContextStyle& context)

@@ -162,8 +162,6 @@ ElementType* SequenceParser::getPrimitive()
         }
         case NUMBER:
             return new NumberType(this);
-        case SYMBOL:
-            return new TextSymbolType(this);
         case ELEMENT:
             return new ComplexElementType(this);
         case END:

@@ -22,30 +22,119 @@
 #define SYMBOLTABLE_H
 
 #include <qdict.h>
+#include <qfont.h>
+#include <qmap.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qvector.h>
 
 #include "formuladefs.h"
 
 KFORMULA_NAMESPACE_BEGIN
+
+
+/**
+ * font/char/class triples.
+ */
+class CharTableEntry {
+public:
+
+    /**
+     * Defaults for all arguments are provided so it can be used in a QMap.
+     *
+     * @param font a value between 0 and 15 that corresponds with a font
+     *             from the @ref FontTable .
+     * @param ch the char pos inside that font.
+     * @param cl the chars class. That is its type.
+     */
+    CharTableEntry( char font = 0, unsigned char ch = '?', CharClass cl = UNKNOWN );
+
+    char font() const { return static_cast<char>( value >> 16 ); }
+    uchar character() const { return static_cast<unsigned char>( value ); }
+    CharClass charClass() const { return static_cast<CharClass>( value >> 24 ); }
+
+private:
+
+    int value;
+};
+
+
+/**
+ * A table of character information.
+ * This is meant to be customizable someday.
+ */
+class CharTable {
+public:
+
+    CharTable() {}
+
+    CharTableEntry operator[]( QChar unicode ) const { return unicodeTable[ unicode ]; }
+
+    char font( QChar unicode ) const { return unicodeTable[ unicode ].font(); }
+    uchar character( QChar unicode ) const { return unicodeTable[ unicode ].character(); }
+    CharClass charClass( QChar unicode ) const { return unicodeTable[ unicode ].charClass(); }
+
+protected:
+
+    QMap<QChar, CharTableEntry>& table() { return unicodeTable; }
+
+private:
+
+    /**
+     * The chars from unicode we have a font for.
+     */
+    QMap<QChar, CharTableEntry> unicodeTable;
+};
+
+
+/**
+ * The table that contains chars from the symbol font.
+ * This is the one buildin table.
+ */
+class SymbolFontCharTable : public CharTable {
+public:
+
+    SymbolFontCharTable();
+
+    /**
+     * @returns a string with all greek letters.
+     */
+    QString greekLetters() const { return greek; }
+
+    /**
+     * @returns the unicode value of the symbol font char.
+     */
+    QChar unicodeFromSymbolFont( QChar pos ) const;
+
+private:
+
+    /**
+     * symbol font char -> unicode mapping.
+     */
+    QMap<uchar, QChar> compatibility;
+
+    /**
+     * All greek letters that are known.
+     */
+    QString greek;
+};
+
 
 /**
  * An entry of our symbol table.
  */
 class SymbolTableEntry {
 public:
-    SymbolTableEntry(QString name, QChar ch = QChar::null);
+    SymbolTableEntry(QString n, QChar unicode = 0) : _name(n), _char(unicode) {}
 
-    QString getName() const { return name; }
-
-    bool matches(QString n) { return name == n; }
-
-    QChar getSymbolChar() const { return symbolChar; }
+    QString name() const { return _name; }
+    bool matches(QString n) { return _name == n; }
+    QChar unicode() const { return _char; }
 
 private:
 
-    QString name;
-    QChar symbolChar;
+    QString _name;
+    QChar _char;
 };
 
 
@@ -59,36 +148,56 @@ public:
 
     SymbolTable();
 
-    bool contains(QString name) const;
+    bool contains( QString name ) const;
 
     /**
      * @returns the char in the symbol font that belongs to
      * the given name.
      */
-    QChar getSymbolChar(QString name) const;
+    QChar unicode( QString name ) const;
 
-    QString getSymbolName(QChar symbol) const;
+    QString name( QChar symbol ) const;
+
+    QFont font( QChar symbol ) const;
+    uchar character( QChar symbol ) const;
+    CharClass charClass( QChar symbol ) const;
+
+    /**
+     * @returns the unicode value of the symbol font char.
+     */
+    QChar unicodeFromSymbolFont( QChar pos ) const;
 
     /**
      * @returns a string with all greek letters.
      */
-    QString getGreekLetters() const { return greekLetters; }
+    QString greekLetters() const;
 
     /**
      * @returns all known names as strings.
      */
-    QStringList getAllNames() const;
+    QStringList allNames() const;
 
 private:
 
     void addEntry(QString name, QChar ch = QChar::null);
 
+    /**
+     * Name -> unicode mapping.
+     * Note that there are names that don't have a unicode value
+     * and therefore no char.
+     */
     QDict<SymbolTableEntry> entries;
 
     /**
-     * All greek letters that are known.
+     * Symbol fonts in use.
+     * There must not be more than 256 fonts.
      */
-    QString greekLetters;
+    QVector<QFont> fontTable;
+
+    /**
+     * The one CharTable that is supported right now.
+     */
+    SymbolFontCharTable symbolFontCharTable;
 };
 
 KFORMULA_NAMESPACE_END

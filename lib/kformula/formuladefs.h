@@ -62,11 +62,24 @@ enum MoveFlag { NormalMovement = 0, SelectMovement = 1, WordMovement = 2 };
  * The token types the sequence parser knows.
  */
 enum TokenType {
-    TEXT, SYMBOL, NUMBER, ELEMENT, ERROR, END,
+    TEXT, NUMBER, ELEMENT, ERROR, END,
     PLUS='+', MINUS='-', MUL='*', DIV='/',
     ASSIGN='=', LESS='<', GREATER='>', SEPARATOR='\\',
     COMMA=',', COLON=':', SEMICOLON=';'
 };
+
+
+/**
+ * TeX like char classes
+ */
+enum CharClass {
+    ORDINARY = 0,
+    BINOP = 1,
+    RELATION = 2,
+    PUNCTUATION = 3,
+    UNKNOWN = 4
+};
+
 
 KFORMULA_NAMESPACE_END
 

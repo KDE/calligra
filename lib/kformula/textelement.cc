@@ -33,16 +33,29 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-TextElement::TextElement(QChar ch, BasicElement* parent)
-        : BasicElement(parent), character(ch), symbol(false)
+TextElement::TextElement(QChar ch, bool beSymbol, BasicElement* parent)
+        : BasicElement(parent), character(ch), symbol(beSymbol)
 {
 }
 
 
 TokenType TextElement::getTokenType() const
 {
-    if (isSymbol())
-        return SYMBOL;
+    if (isSymbol()) {
+        // Hack
+        switch ( getSymbolTable().charClass(character) ) {
+        case ORDINARY:
+            return TEXT;
+        case BINOP:
+            return MUL;
+        case RELATION:
+            return ASSIGN;
+        case PUNCTUATION:
+            return COMMA;
+        case UNKNOWN:
+            return ERROR;
+        }
+    }
 
     char latin1 = character.latin1();
     switch (latin1) {
@@ -95,9 +108,16 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
 
     QFontMetrics fm(font);
     //QRect bound = fm.boundingRect(character);
-    QRect bound = fm.boundingRect(QString(character));
+    QChar ch;
+    if ( !isSymbol() ) {
+        ch = character;
+    }
+    else {
+        ch = getSymbolTable().character(character);
+    }
+    QRect bound = fm.boundingRect(QString(ch));
 
-    setWidth(fm.width(character) + spaceBefore + spaceAfter);
+    setWidth(fm.width(ch) + spaceBefore + spaceAfter);
     setHeight(bound.height());
     setBaseline(-bound.top());
     setMidline(getBaseline() - fm.strikeOutPos());
@@ -129,8 +149,16 @@ void TextElement::draw(QPainter& painter, const QRect& r,
     //int spaceAfter = getSpaceAfter(context, tstyle);
 
     painter.setFont(font);
+
+    QChar ch;
+    if ( !isSymbol() ) {
+        ch = character;
+    }
+    else {
+        ch = getSymbolTable().character(character);
+    }
     painter.drawText(myPos.x()+spaceBefore,
-                     myPos.y()+getBaseline(), character);
+                     myPos.y()+getBaseline(), ch);
 
     // Debug
     //painter.setBrush(Qt::NoBrush);
@@ -142,27 +170,17 @@ void TextElement::draw(QPainter& painter, const QRect& r,
 }
 
 
-void TextElement::setSymbol(bool s)
-{
-    symbol = s;
-    SequenceElement* sequence = dynamic_cast<SequenceElement*>(getParent());
-    if (sequence != 0) {
-        sequence->parse();
-    }
-    if (getParent() != 0) {
-        formula()->changed();
-    }
-}
-
-
 QFont TextElement::getFont(const ContextStyle& context)
 {
-    if (getElementType() != 0) {
-        return getElementType()->getFont(context);
+    if ( !isSymbol() ) {
+        if (getElementType() != 0) {
+            return getElementType()->getFont(context);
+        }
+        else {
+            return context.getDefaultFont();
+        }
     }
-    else {
-        return context.getDefaultFont();
-    }
+    return getSymbolTable().font(character);
 }
 
 double TextElement::getSpaceBefore(const ContextStyle& context, ContextStyle::TextStyle tstyle)
@@ -195,6 +213,11 @@ void TextElement::setUpPainter(const ContextStyle& context, QPainter& painter)
     }
 }
 
+const SymbolTable& TextElement::getSymbolTable() const
+{
+    return formula()->getSymbolTable();
+}
+
 
 /**
  * Appends our attributes to the dom element.
@@ -203,7 +226,7 @@ void TextElement::writeDom(QDomElement& element)
 {
     BasicElement::writeDom(element);
     element.setAttribute("CHAR", QString(character));
-    if (symbol) element.setAttribute("SYMBOL", "1");
+    if (symbol) element.setAttribute("SYMBOL", "2");
 }
 
 /**
@@ -221,7 +244,11 @@ bool TextElement::readAttributesFromDom(QDomElement& element)
     }
     QString symbolStr = element.attribute("SYMBOL");
     if(!symbolStr.isNull()) {
-        symbol = symbolStr.toInt() != 0;
+        int symbolInt = symbolStr.toInt();
+        if ( symbolInt == 1 ) {
+            character = getSymbolTable().unicodeFromSymbolFont(character);
+        }
+        symbol = symbolInt != 0;
     }
     return true;
 }
@@ -239,7 +266,7 @@ bool TextElement::readContentFromDom(QDomNode& node)
 QString TextElement::toLatex()
 {
     if (isSymbol()) {
-        return formula()->getSymbolTable().getSymbolName(character);
+        return getSymbolTable().name(character);
     }
     else {
         return character;

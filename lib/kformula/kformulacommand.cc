@@ -37,7 +37,6 @@ int KFormulaCommand::evilDestructionCount = 0;
 KFormulaCommand::KFormulaCommand(const QString &name, KFormulaContainer* document)
         : KCommand(name), cursordata(0), undocursor(0), doc(document)
 {
-    removedList.setAutoDelete(true);
     evilDestructionCount++;
 }
 
@@ -86,13 +85,14 @@ void KFormulaCommand::setUnexecuteCursor(FormulaCursor* cursor)
 KFCAdd::KFCAdd(const QString &name, KFormulaContainer *document)
         : KFormulaCommand(name, document)
 {
+    addList.setAutoDelete( true );
 }
 
 
 void KFCAdd::execute()
 {
     FormulaCursor* cursor = getExecuteCursor();
-    cursor->insert(removedList, BasicElement::beforeCursor);
+    cursor->insert(addList, BasicElement::beforeCursor);
     setUnexecuteCursor(cursor);
     cursor->setSelection(false);
     testDirty();
@@ -102,7 +102,7 @@ void KFCAdd::execute()
 void KFCAdd::unexecute()
 {
     FormulaCursor* cursor = getUnexecuteCursor();
-    cursor->remove(removedList, BasicElement::beforeCursor);
+    cursor->remove(addList, BasicElement::beforeCursor);
     //cursor->setSelection(false);
     cursor->normalize();
     testDirty();
@@ -117,6 +117,7 @@ KFCRemoveSelection::KFCRemoveSelection(KFormulaContainer *document,
         : KFormulaCommand(i18n("Remove selected text"), document),
           dir(direction)
 {
+    removedList.setAutoDelete( true );
 }
 
 void KFCRemoveSelection::execute()
@@ -173,6 +174,7 @@ KFCRemove::KFCRemove(KFormulaContainer *document,
         : KFormulaCommand(i18n("Remove selected text"), document),
           element(0), simpleRemoveCursor(0), dir(direction)
 {
+    removedList.setAutoDelete( true );
 }
 
 KFCRemove::~KFCRemove()
@@ -277,23 +279,6 @@ void KFCAddReplacing::unexecute()
 }
 
 
-// ******  Add matrix command
-
-KFCAddMatrix::KFCAddMatrix(KFormulaContainer* document, int r, int c)
-        : KFCReplace(i18n("Add matrix"), document)
-{
-    matrix = new MatrixElement(r, c);
-    addElement(matrix);
-}
-
-void KFCAddMatrix::execute()
-{
-    KFCReplace::execute();
-    FormulaCursor* cursor = getActiveCursor();
-    cursor->goInsideElement(matrix);
-}
-
-
 // ******  Add index command
 
 KFCAddGenericIndex::KFCAddGenericIndex(KFormulaContainer* document, ElementIndexPtr _index)
@@ -331,36 +316,6 @@ void KFCAddIndex::unexecute()
 {
     addIndex.unexecute();
     KFCAddReplacing::unexecute();
-}
-
-
-KFCMakeSymbol::KFCMakeSymbol(KFormulaContainer* document, TextElement* element)
-        : KFormulaCommand(i18n("Changes the char to a symbol"), document),
-          textElement(element)
-{
-}
-
-void KFCMakeSymbol::execute()
-{
-    //FormulaCursor* cursor = getExecuteCursor();
-    textElement->setSymbol(true);
-    //setUnexecuteCursor(cursor);
-    //cursor->setSelection(false);
-    testDirty();
-}
-
-void KFCMakeSymbol::unexecute()
-{
-    //FormulaCursor* cursor = getUnexecuteCursor();
-    textElement->setSymbol(false);
-    //cursor->setSelection(false);
-    //cursor->normalize();
-    testDirty();
-}
-
-bool KFCMakeSymbol::isSenseless()
-{
-    return !textElement->isSymbol();
 }
 
 KFORMULA_NAMESPACE_END

@@ -90,6 +90,11 @@ public:
     virtual FormulaElement* formula() { return parent->formula(); }
 
     /**
+     * Provide fast access to the rootElement for each child.
+     */
+    virtual const FormulaElement* formula() const { return parent->formula(); }
+
+    /**
      * @returns the character that represents this element. Used for
      * parsing a sequence.
      * This is guaranteed to be QChar::null for all non-text elements.

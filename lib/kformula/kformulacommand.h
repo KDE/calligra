@@ -123,14 +123,6 @@ protected:
      */
     KFormulaContainer* getDocument() const { return doc; }
 
-    // I would prefer to have private attributes.
-
-    /**
-     * the list where all elements are stored that are removed
-     * from the tree. Nearly each command needs it.
-     */
-    QList<BasicElement> removedList;
-
 private:
 
     void destroyUndoCursor() { delete undocursor; undocursor = 0; }
@@ -175,7 +167,15 @@ public:
     /**
      * Collects all elements that are to be added.
      */
-    void addElement(BasicElement* element) { removedList.append(element); }
+    void addElement(BasicElement* element) { addList.append(element); }
+
+private:
+
+    /**
+     * the list where all elements are stored that are removed
+     * from the tree.
+     */
+    QList<BasicElement> addList;
 };
 
 
@@ -197,6 +197,13 @@ public:
     virtual void unexecute();
 
 private:
+
+    /**
+     * the list where all elements are stored that are removed
+     * from the tree.
+     */
+    QList<BasicElement> removedList;
+
     BasicElement::Direction dir;
 };
 
@@ -248,6 +255,12 @@ public:
     virtual bool isSenseless() { return removedList.isEmpty(); }
 
 private:
+
+    /**
+     * the list where all elements are stored that are removed
+     * from the tree.
+     */
+    QList<BasicElement> removedList;
 
     /**
      * The element we might have extracted.
@@ -310,20 +323,6 @@ private:
 };
 
 
-class MatrixElement;
-
-class KFCAddMatrix : public KFCReplace
-{
-public:
-    KFCAddMatrix(KFormulaContainer* document, int r, int c);
-
-    virtual void execute();
-
-private:
-    MatrixElement* matrix;
-};
-
-
 /**
  * Add an index. The element that gets the index needs to be there
  * already.
@@ -358,27 +357,6 @@ public:
 
 private:
     KFCAddGenericIndex addIndex;
-};
-
-
-class TextElement;
-
-class KFCMakeSymbol : public KFormulaCommand
-{
-public:
-    KFCMakeSymbol(KFormulaContainer* document, TextElement* element);
-
-    virtual void execute();
-    virtual void unexecute();
-
-    /**
-     * A command might have no effect.
-     * @returns true if nothing happened.
-     */
-    virtual bool isSenseless();
-
-private:
-    TextElement* textElement;
 };
 
 KFORMULA_NAMESPACE_END

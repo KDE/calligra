@@ -58,6 +58,11 @@ public:
     virtual FormulaElement* formula() { return this; }
 
     /**
+     * Provide fast access to the rootElement for each child.
+     */
+    virtual const FormulaElement* formula() const { return this; }
+
+    /**
      * Gets called just before the child is removed from
      * the element tree.
      */

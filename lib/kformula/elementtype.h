@@ -181,17 +181,6 @@ private:
 };
 
 
-class TextSymbolType : public MultiElementType {
-public:
-    TextSymbolType(SequenceParser* parser);
-
-    /**
-     * @returns the font to be used for this kind of element
-     */
-    virtual QFont getFont(const ContextStyle& context);
-};
-
-
 /**
  * A element that doesn't fit into the syntax.
  */

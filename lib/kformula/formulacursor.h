@@ -255,6 +255,11 @@ public:
      */
     TextElement* getActiveTextElement();
 
+    /**
+     * Selects the element the cursor points to (stands after)
+     * if there is such an element and if there is no selection.
+     */
+    void selectActiveElement();
 
     /**
      * @returns the name of the name element the cursor is inside

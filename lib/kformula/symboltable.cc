@@ -22,15 +22,43 @@
 
 KFORMULA_NAMESPACE_BEGIN
 
-SymbolTableEntry::SymbolTableEntry(QString n, QChar ch)
-        : name(n), symbolChar(ch)
+
+// get the generated table
+#include "symbolfontmapping.cc"
+
+
+CharTableEntry::CharTableEntry( char font, unsigned char ch, CharClass cl )
 {
+    value = ( cl << 24 ) + ( font << 16 ) + ch;
+}
+
+
+SymbolFontCharTable::SymbolFontCharTable()
+    : greek("abgdezhqiklmnxpvrstufjcywGDQLXPSUFYVW")
+{
+    for ( uint i = 0; symbolFontMap[ i ].unicode != 0; i++ ) {
+        table()[ symbolFontMap[ i ].unicode ] =
+            CharTableEntry( 0, symbolFontMap[ i ].pos, symbolFontMap[ i ].cl );
+        compatibility[ symbolFontMap[ i ].pos ] = symbolFontMap[ i ].unicode;
+    }
+}
+
+
+QChar SymbolFontCharTable::unicodeFromSymbolFont( QChar pos ) const
+{
+    if ( compatibility.contains( pos ) ) {
+        return compatibility[ pos ];
+    }
+    return '?';
 }
 
 
 SymbolTable::SymbolTable()
-        : greekLetters("abgdezhqiklmnxpvrstufjcywGDQLXPSUFYVW")
+    : fontTable( 1 )
 {
+    fontTable.setAutoDelete( true );
+    fontTable.insert( 0, new QFont( "symbol", 12, QFont::Normal, false, QFont::AnyCharSet ) );
+
     entries.setAutoDelete(true);
 
     // constants
@@ -64,107 +92,11 @@ SymbolTable::SymbolTable()
     addEntry("\\min");
     addEntry("\\max");
 
-    // symbols
-    addEntry("\\alpha", 'a');
-    addEntry("\\beta", 'b');
-    addEntry("\\gamma", 'g');
-    addEntry("\\delta", 'd');
-    addEntry("\\epsilon");
-    addEntry("\\varepsilon", 'e');
-    addEntry("\\zeta", 'z');
-    addEntry("\\eta", 'h');
-    addEntry("\\theta", 'q');
-    addEntry("\\vartheta");
-    addEntry("\\iota", 'i');
-    addEntry("\\kappa", 'k');
-    addEntry("\\lambda", 'l');
-    addEntry("\\mu", 'm');
-    addEntry("\\nu", 'n');
-    addEntry("\\xi", 'x');
-    addEntry("\\pi", 'p');
-    addEntry("\\varpi", 'v');
-    addEntry("\\rho", 'r');
-    addEntry("\\varrho");
-    addEntry("\\sigma", 's');
-    addEntry("\\varsigma", 'V');
-    addEntry("\\varsigma");
-    addEntry("\\tau", 't');
-    addEntry("\\upsilon", 'u');
-    addEntry("\\phi", 'f');
-    addEntry("\\varphi", 'j');
-    addEntry("\\chi", 'c');
-    addEntry("\\psi", 'y');
-    addEntry("\\omega", 'w');
-
-    addEntry("\\Gamma", 'G');
-    addEntry("\\Delta", 'D');
-    addEntry("\\Theta", 'Q');
-    addEntry("\\Lambda", 'L');
-    addEntry("\\Xi", 'X');
-    addEntry("\\Pi", 'P');
-    addEntry("\\Sigma", 'S');
-    addEntry("\\Upsilon", 'U');
-    addEntry("\\Phi", 'F');
-    addEntry("\\Psi", 'Y');
-    addEntry("\\Omega", 'W');
-
-    addEntry("\\rightarrow", static_cast<char>(174));
-    addEntry("\\leftarrow", static_cast<char>(172));
-    addEntry("\\uparrow", static_cast<char>(173));
-    addEntry("\\downarrow", static_cast<char>(175));
-    addEntry("\\leftrightarrow", static_cast<char>(171));
-
-    addEntry("\\Rightarrow", static_cast<char>(222));
-    addEntry("\\Leftarrow", static_cast<char>(220));
-    addEntry("\\Uparrow", static_cast<char>(221));
-    addEntry("\\Downarrow", static_cast<char>(223));
-    addEntry("\\Leftrightarrow", static_cast<char>(219));
-
-    // these should be operators
-    addEntry("\\leq", static_cast<char>(163));
-    addEntry("\\geq", static_cast<char>(179));
-    addEntry("\\neq", static_cast<char>(185));
-    addEntry("\\approx", static_cast<char>(187));
-    addEntry("\\equiv", static_cast<char>(186));
-    addEntry("\\cong", '@');
-    addEntry("\\perp", '^');
-    addEntry("\\subset", static_cast<char>(204));
-    addEntry("\\subseteq", static_cast<char>(205));
-    addEntry("\\supset", static_cast<char>(201));
-    addEntry("\\supseteq", static_cast<char>(202));
-    addEntry("\\in", static_cast<char>(206));
-    addEntry("\\ni", static_cast<char>(39));
-    addEntry("\\oplus", static_cast<char>(197));
-    addEntry("\\otimes", static_cast<char>(196));
-    addEntry("\\cap", static_cast<char>(199));
-    addEntry("\\cup", static_cast<char>(200));
-    addEntry("\\div", static_cast<char>(184));
-    addEntry("\\times", static_cast<char>(180));
-    addEntry("\\propto", static_cast<char>(181));
-    addEntry("\\bullet", static_cast<char>(183));
-    addEntry("\\circ", static_cast<char>(176));
-    addEntry("\\pm", static_cast<char>(177));
-    addEntry("\\cdot", static_cast<char>(215));
-
-    addEntry("\\infty", static_cast<char>(165));
-    addEntry("\\wp", static_cast<char>(195));
-    addEntry("\\aleph", static_cast<char>(192));
-    addEntry("\\Im", static_cast<char>(193));
-    addEntry("\\Re", static_cast<char>(194));
-    addEntry("\\ldots", static_cast<char>(188));
-    addEntry("\\partial", static_cast<char>(182));
-    addEntry("\\clubsuit", static_cast<char>(167));
-    addEntry("\\diamondsuit", static_cast<char>(168));
-    addEntry("\\heartsuit", static_cast<char>(169));
-    addEntry("\\spadesuit", static_cast<char>(170));
-    addEntry("\\exists", '$');
-    addEntry("\\forall", '"');
-    addEntry("\\angle", static_cast<char>(208));
-    addEntry("\\nabla", static_cast<char>(209));
-    addEntry("\\neg", static_cast<char>(216));
-    addEntry("\\vee", static_cast<char>(218));
-    addEntry("\\wedge", static_cast<char>(217));
-    addEntry("\\Diamond", static_cast<char>(224));
+    for ( uint i = 0; symbolFontMap[ i ].unicode != 0; i++ ) {
+        if ( symbolFontMap[ i ].latexName != 0 ) {
+            addEntry( symbolFontMap[ i ].latexName, symbolFontMap[ i ].unicode );
+        }
+    }
 }
 
 
@@ -173,21 +105,22 @@ bool SymbolTable::contains(QString name) const
     return entries.find(name) != 0;
 }
 
-QChar SymbolTable::getSymbolChar(QString name) const
+QChar SymbolTable::unicode(QString name) const
 {
     SymbolTableEntry* entry = entries.find(name);
     if (entry != 0) {
-        return entry->getSymbolChar();
+        return entry->unicode();
     }
     return QChar::null;
 }
 
-QString SymbolTable::getSymbolName(QChar symbol) const
+
+QString SymbolTable::name(QChar symbol) const
 {
     QDictIterator<SymbolTableEntry> it(entries);
 
     while (it.current()) {
-        if (it.current()->getSymbolChar() == symbol) {
+        if (it.current()->unicode() == symbol) {
             return it.currentKey();
         }
         ++it;
@@ -195,17 +128,49 @@ QString SymbolTable::getSymbolName(QChar symbol) const
     return "";
 }
 
-void SymbolTable::addEntry(QString name, QChar ch)
+
+QFont SymbolTable::font( QChar symbol ) const
 {
-    entries.insert(name, new SymbolTableEntry(name, ch));
+    return *fontTable[ symbolFontCharTable.font( symbol ) ];
 }
 
-QStringList SymbolTable::getAllNames() const
+
+uchar SymbolTable::character( QChar symbol ) const
+{
+    return symbolFontCharTable.character( symbol );
+}
+
+
+CharClass SymbolTable::charClass( QChar symbol ) const
+{
+    return symbolFontCharTable.charClass( symbol );
+}
+
+
+QChar SymbolTable::unicodeFromSymbolFont( QChar pos ) const
+{
+    return symbolFontCharTable.unicodeFromSymbolFont( pos );
+}
+
+
+QString SymbolTable::greekLetters() const
+{
+    return symbolFontCharTable.greekLetters();
+}
+
+
+void SymbolTable::addEntry(QString name, QChar ch)
+{
+    entries.insert( name, new SymbolTableEntry( name, ch ) );
+}
+
+
+QStringList SymbolTable::allNames() const
 {
     QStringList list;
 
     for (QDictIterator<SymbolTableEntry> iter = entries; iter.current() != 0; ++iter) {
-        list.append(iter.current()->getName());
+        list.append(iter.current()->name());
     }
     list.sort();
     return list;

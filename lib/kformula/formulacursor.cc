@@ -450,6 +450,16 @@ BasicElement* FormulaCursor::getSelectedChild()
     }
 }
 
+
+void FormulaCursor::selectActiveElement()
+{
+    if ( !isSelection() && getPos() > 0 ) {
+        setSelection( true );
+        setMark( getPos() - 1 );
+    }
+}
+
+
 /**
  * Tells whether we currently point to the given elements
  * main child and to the place behind its last child.

@@ -379,7 +379,7 @@ void KFormulaDocument::createActions(KActionCollection* collection)
                                         CTRL + Key_I,
                                         this, SLOT(insertSymbol()),
                                         collection, "formula_insertsymbol");
-    QStringList names = impl->table.getAllNames();
+    QStringList names = impl->table.allNames();
     impl->symbolNamesAction = new KSelectAction(i18n("Symbol names"),
                                           0, this, SLOT(symbolNames()),
                                           collection, "formula_symbolnames");
@@ -545,13 +545,13 @@ void KFormulaDocument::makeGreek()
 
 void KFormulaDocument::insertSymbol()
 {
-    if (hasFormula() && impl->table.contains(impl->selectedName)) {
-        QChar ch = impl->table.getSymbolChar(impl->selectedName);
-        if (ch != QChar::null) {
-            formula()->addText(ch, true);
+    if ( hasFormula() && impl->table.contains( impl->selectedName ) ) {
+        QChar ch = impl->table.unicode( impl->selectedName );
+        if ( ch != QChar::null ) {
+            formula()->addText( ch, true );
         }
         else {
-            formula()->addText(impl->selectedName);
+            formula()->addText( impl->selectedName );
         }
     }
 }

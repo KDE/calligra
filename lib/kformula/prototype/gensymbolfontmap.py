@@ -39,7 +39,7 @@ def main():
         if len(latexName) > 0:
             f.write('char symbolFontMap_' + latexName.replace('\\', '') + '[] = "' +
                     latexName.replace('\\', '\\\\') + '";\n' )
-    f.write('\nstruct { int unicode; char pos; CharClass cl; char* latexName; } symbolFontMap[] = {\n')
+    f.write('\nstruct { int unicode; uchar pos; CharClass cl; char* latexName; } symbolFontMap[] = {\n')
     for key in table.keys():
         pos, latexName, charClass = table[key]
         if len(latexName) > 0:

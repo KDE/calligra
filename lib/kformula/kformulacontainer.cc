@@ -233,8 +233,7 @@ void KFormulaContainer::addText(QChar ch, bool isSymbol)
     if (!hasValidCursor())
         return;
     KFCReplace* command = new KFCReplace(i18n("Add text"), this);
-    TextElement* element = new TextElement(ch);
-    element->setSymbol(isSymbol);
+    TextElement* element = new TextElement( ch, isSymbol );
     command->addElement(element);
     execute(command);
 }
@@ -504,11 +503,10 @@ void KFormulaContainer::compactExpression()
     FormulaCursor* cursor = getActiveCursor();
     QString name = cursor->getCurrentName();
     if (!name.isNull()) {
-        QChar ch = document()->getSymbolTable().getSymbolChar(name);
+        QChar ch = document()->getSymbolTable().unicode( name );
         if (!ch.isNull()) {
             KFCReplace* command = new KFCReplace(i18n("Add symbol"), this);
-            TextElement* element = new TextElement(ch);
-            element->setSymbol(true);
+            TextElement* element = new TextElement( ch, true );
             command->addElement(element);
             execute(command);
             return;
@@ -527,9 +525,12 @@ void KFormulaContainer::makeGreek()
     FormulaCursor* cursor = getActiveCursor();
     TextElement* element = cursor->getActiveTextElement();
     if ((element != 0) && !element->isSymbol()) {
+        cursor->selectActiveElement();
         const SymbolTable& table = document()->getSymbolTable();
-        if (table.getGreekLetters().find(element->getCharacter()) != -1) {
-            KFCMakeSymbol* command = new KFCMakeSymbol(this, element);
+        if (table.greekLetters().find(element->getCharacter()) != -1) {
+            KFCReplace* command = new KFCReplace(i18n("Changes the char to a symbol"), this);
+            TextElement* symbol = new TextElement( table.unicodeFromSymbolFont( element->getCharacter() ), true );
+            command->addElement( symbol );
             execute(command);
         }
     }
