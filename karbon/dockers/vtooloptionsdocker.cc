@@ -47,7 +47,7 @@ void VToolOptionsDocker::manageTool( VTool* tool )
 	widget()->reparent( 0L, QPoint( 0, 0 ) );
 	resize( 0, 0 );
 	QWidget* w;
-	if ( !( w = tool->optionsWidget() ) )
+	if( !( w = tool->optionsWidget() ) )
 		w = noOptionLabel;
 	w->reparent( this, QPoint( 0, 0 ) );
 	resize( 0, 0 );

@@ -53,6 +53,7 @@ VTool::registerTool( VTool *tool )
 
 void VTool::activateAll()
 {
+	refreshUnit();
 	view()->toolOptionsDocker()->manageTool( this );
 	QPixmap Icon = BarIcon( icon() );
 	view()->contextHelpAction()->updateHelp( name(), contextHelp(), &Icon );

@@ -94,6 +94,8 @@ public:
 	bool mouseEvent( QMouseEvent* event, const KoPoint& );
 	bool keyEvent( QEvent* event );
 
+	virtual void refreshUnit() {}
+
 protected:
 	bool isDragging() const { return m_isDragging; }
 
