@@ -1610,9 +1610,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	      }
       case Key_Down:
 
-	  if ( !m_bChoose && markerRow() == 0xFFFF )
+	  if ( !m_bChoose && markerRow() == 0x7FFF )
 	      return;
-	  if ( m_bChoose && chooseMarkerRow() == 0xFFFF )
+	  if ( m_bChoose && chooseMarkerRow() == 0x7FFF )
 	      return;
 
                    if(m_bChoose)
@@ -1661,9 +1661,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
       case Key_Right:
       case Key_Tab:
-	  if ( !m_bChoose && markerColumn() >= 26*26)//0xFFFF )
+	  if ( !m_bChoose && markerColumn() >= 26*26)//0x7FFF )
 	      return;
-	  if ( m_bChoose && chooseMarkerColumn() >= 26*26)//0xFFFF )
+	  if ( m_bChoose && chooseMarkerColumn() >= 26*26)//0x7FFF )
 	      return;
                    if(m_bChoose)
                         moveHide=chooseMarkerColumn();
@@ -1902,9 +1902,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  return;
 
       case Key_Right:
-	  if ( !m_bChoose && markerColumn() >= 26*26)//0xFFFF )
+	  if ( !m_bChoose && markerColumn() >= 26*26)//0x7FFF )
 	      return;
-	  if ( m_bChoose && chooseMarkerColumn() >= 26*26)//0xFFFF )
+	  if ( m_bChoose && chooseMarkerColumn() >= 26*26)//0x7FFF )
 	      return;
 
 	  if ( m_bChoose )
