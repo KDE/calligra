@@ -501,6 +501,9 @@ GBool XRef::checkEncrypted(GString *ownerPassword, GString *userPassword) {
 	} else {
 	  keyLength = 5;
 	}
+	if (keyLength < 1) {
+	  keyLength = 1;
+	}
 	if (keyLength > 16) {
 	  keyLength = 16;
 	}
