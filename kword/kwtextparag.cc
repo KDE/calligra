@@ -503,7 +503,7 @@ int KoTextParag::nextTab( int chnum, int x )
         int * tArray = tabArray();
         int i = 0;
         while ( tArray[ i ] ) {
-            //kdDebug() << "KoTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type" << m_layout.tabList()[i].type << endl;
+            //kdDebug() << "KoTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type " << m_layout.tabList()[i].type << endl;
             if ( tArray[ i ] >= x ) {
                 int type = m_layout.tabList()[i].type;
                 switch ( type ) {
@@ -513,7 +513,8 @@ int KoTextParag::nextTab( int chnum, int x )
                     // Look for the next tab (or EOL)
                     int c = chnum + 1;
                     int w = 0;
-                    while ( c < string()->length()-1 && string()->at( c ).c != '\t' )
+                    // We include the trailing space in the calculation because QRT actually formats it
+                    while ( c < string()->length() - 1 && string()->at( c ).c != '\t' )
                     {
                         QTextStringChar & ch = string()->at( c );
                         // Determine char width (same code as the one in QTextFormatterBreak[In]Words::format())
@@ -524,9 +525,9 @@ int KoTextParag::nextTab( int chnum, int x )
                         ++c;
                     }
                     if ( type == T_RIGHT )
-                        return tArray[ i ] - w;
+                        return tArray[ i ] - w - 1; // -1 is due to qrt's nx-x+1
                     else // T_CENTER
-                        return tArray[ i ] - w/2;
+                        return tArray[ i ] - w/2 - 1; // -1 is due to qrt's nx-x+1
                 }
                 case T_DEC_PNT:
                 {
@@ -557,10 +558,10 @@ int KoTextParag::nextTab( int chnum, int x )
 
                         ++c;
                     }
-                    return tArray[ i ] - w;
+                    return tArray[ i ] - w - 1; // -1 is due to qrt's nx-x+1
                 }
                 default: // case T_LEFT:
-                    return tArray[ i ];
+                    return tArray[ i ] - 1; // -1 is due to qrt's nx-x+1
                 }
             }
             ++i;
