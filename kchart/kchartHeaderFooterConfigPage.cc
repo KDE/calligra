@@ -27,7 +27,7 @@ KChartHeaderFooterConfigPage::KChartHeaderFooterConfigPage( KChartParams* params
     QButtonGroup* gb1 = new QButtonGroup( i18n("Header/Footer"), this );
     QGridLayout *grid1 = new QGridLayout(gb1,3,4,15,8);
 
-    QLabel *lab=new QLabel(i18n("Title"),gb1);
+    QLabel *lab=new QLabel(i18n("Title:"),gb1);
     grid1->addWidget(lab,0,0);
 
     titleEdit=new QLineEdit(gb1);
@@ -40,20 +40,20 @@ KChartHeaderFooterConfigPage::KChartHeaderFooterConfigPage( KChartParams* params
     grid1->addWidget(titleFontButton,0,3);
     connect( titleFontButton, SIGNAL(clicked()), this, SLOT(changeTitleFont()));
 
-    lab=new QLabel(i18n("Header"),gb1);
+    lab=new QLabel(i18n("Subtitle:"),gb1);
     grid1->addWidget(lab,1,0);
 
-    headerEdit=new QLineEdit(gb1);
-    grid1->addWidget(headerEdit,1,1);
+    subtitleEdit=new QLineEdit(gb1);
+    grid1->addWidget(subtitleEdit,1,1);
 
-    headerColorButton=new KColorButton(gb1);
-    grid1->addWidget(headerColorButton,1,2);
+    subtitleColorButton=new KColorButton(gb1);
+    grid1->addWidget(subtitleColorButton,1,2);
 
-    headerFontButton=new QPushButton(i18n("Font"),gb1);
-    grid1->addWidget(headerFontButton,1,3);
-    connect( headerFontButton, SIGNAL(clicked()), this, SLOT(changeHeaderFont()));
+    subtitleFontButton=new QPushButton(i18n("Font"),gb1);
+    grid1->addWidget(subtitleFontButton,1,3);
+    connect( subtitleFontButton, SIGNAL(clicked()), this, SLOT(changeSubtitleFont()));
 
-    lab=new QLabel(i18n("Footer"),gb1);
+    lab=new QLabel(i18n("Footer:"),gb1);
     grid1->addWidget(lab,2,0);
 
     footerEdit=new QLineEdit(gb1);
@@ -73,10 +73,10 @@ KChartHeaderFooterConfigPage::KChartHeaderFooterConfigPage( KChartParams* params
 void KChartHeaderFooterConfigPage::init()
 {
     titleColorButton->setColor(_params->headerFooterColor( KDChartParams::HdFtPosHeader ) );
-    headerColorButton->setColor(_params->headerFooterColor( KDChartParams::HdFtPosHeader2 ));
+    subtitleColorButton->setColor(_params->headerFooterColor( KDChartParams::HdFtPosHeader2 ));
     footerColorButton->setColor(_params->headerFooterColor( KDChartParams::HdFtPosFooter ) );
     titleEdit->setText(_params->header1Text());
-    headerEdit->setText(_params->header2Text());
+    subtitleEdit->setText(_params->header2Text());
     footerEdit->setText(_params->footerText());
 
 
@@ -87,12 +87,12 @@ void KChartHeaderFooterConfigPage::init()
     if( QButton::On == titleFontIsRelative )
         titleFont.setPointSize( _params->headerFooterFontRelSize(KDChartParams::HdFtPosHeader) );
 
-    headerFont = _params->header2Font();
-    headerFontIsRelative = _params->headerFooterFontUseRelSize(KDChartParams::HdFtPosHeader2)
+    subtitleFont = _params->header2Font();
+    subtitleFontIsRelative = _params->headerFooterFontUseRelSize(KDChartParams::HdFtPosHeader2)
                           ? QButton::On
                           : QButton::Off;
-    if( QButton::On == headerFontIsRelative )
-        headerFont.setPointSize( _params->headerFooterFontRelSize(KDChartParams::HdFtPosHeader2) );
+    if( QButton::On == subtitleFontIsRelative )
+        subtitleFont.setPointSize( _params->headerFooterFontRelSize(KDChartParams::HdFtPosHeader2) );
 
     footerFont = _params->footerFont();
     footerFontIsRelative = _params->headerFooterFontUseRelSize(KDChartParams::HdFtPosFooter)
@@ -106,21 +106,21 @@ void KChartHeaderFooterConfigPage::init()
 void KChartHeaderFooterConfigPage::apply()
 {
     _params->setHeaderFooterColor( KDChartParams::HdFtPosHeader,titleColorButton->color() );
-    _params->setHeaderFooterColor( KDChartParams::HdFtPosHeader2,headerColorButton->color() );
+    _params->setHeaderFooterColor( KDChartParams::HdFtPosHeader2,subtitleColorButton->color() );
     _params->setHeaderFooterColor( KDChartParams::HdFtPosFooter, footerColorButton->color() );
 
 
     _params->setHeader1Text(titleEdit->text());
-    _params->setHeader2Text(headerEdit->text());
+    _params->setHeader2Text(subtitleEdit->text());
     _params->setFooterText(footerEdit->text());
 
 
     _params->setHeaderFooterFont( KDChartParams::HdFtPosHeader, titleFont,
                                   titleFontIsRelative,
                                   titleFont.pointSize() );
-    _params->setHeaderFooterFont( KDChartParams::HdFtPosHeader2, headerFont,
-                                  headerFontIsRelative,
-                                  headerFont.pointSize() );
+    _params->setHeaderFooterFont( KDChartParams::HdFtPosHeader2, subtitleFont,
+                                  subtitleFontIsRelative,
+                                  subtitleFont.pointSize() );
     _params->setHeaderFooterFont( KDChartParams::HdFtPosFooter, footerFont,
                                   footerFontIsRelative,
                                   footerFont.pointSize() );
@@ -134,12 +134,12 @@ void KChartHeaderFooterConfigPage::changeTitleFont()
         titleFontIsRelative = state;
 }
 
-void KChartHeaderFooterConfigPage::changeHeaderFont()
+void KChartHeaderFooterConfigPage::changeSubtitleFont()
 {
-    QButton::ToggleState state = headerFontIsRelative;
-    if (    KFontDialog::getFont( headerFont,false,this, true,&state ) != QDialog::Rejected
+    QButton::ToggleState state = subtitleFontIsRelative;
+    if (    KFontDialog::getFont( subtitleFont,false,this, true,&state ) != QDialog::Rejected
             && QButton::NoChange != state )
-        headerFontIsRelative = state;
+        subtitleFontIsRelative = state;
 }
 
 void KChartHeaderFooterConfigPage::changeFooterFont()

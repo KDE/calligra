@@ -23,7 +23,7 @@ public:
     void apply();
 protected slots:
     void changeTitleFont();
-    void changeHeaderFont();
+    void changeSubtitleFont();
     void changeFooterFont();
 private:
     KChartParams* _params;
@@ -34,11 +34,11 @@ private:
     QFont titleFont;
     QButton::ToggleState titleFontIsRelative;
     
-    QLineEdit *headerEdit;
-    KColorButton *headerColorButton;	
-    QPushButton *headerFontButton;
-    QFont headerFont;
-    QButton::ToggleState headerFontIsRelative;
+    QLineEdit *subtitleEdit;
+    KColorButton *subtitleColorButton;	
+    QPushButton *subtitleFontButton;
+    QFont subtitleFont;
+    QButton::ToggleState subtitleFontIsRelative;
 
     QLineEdit *footerEdit;
     KColorButton *footerColorButton;
