@@ -1250,12 +1250,12 @@ KPTextView * KPTextObject::createKPTextView( KPrCanvas * _canvas )
 
 void KPTextObject::removeHighlight ()
 {
-    m_textobj->removeHighlight();
+    m_textobj->removeHighlight( true /*repaint*/ );
 }
 
 void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas* m_canvas )
 {
-    m_textobj->highlightPortion( parag, index, length );
+    m_textobj->highlightPortion( parag, index, length, true /*repaint*/ );
     QRect rect = m_doc->zoomHandler()->zoomRect( getRect());
     QRect expose = m_doc->zoomHandler()->layoutUnitToPixel( parag->rect() );
     expose.moveBy( rect.x(), rect.y());
