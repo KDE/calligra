@@ -27,6 +27,7 @@
 #include <qdom.h>
 #include <qfile.h>
 #include <qregexp.h>
+#include <qvaluelist.h>
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -41,6 +42,9 @@
 #include <kspread_format.h>
 #include <kspread_map.h>
 #include <kspread_sheet.h>
+#include <kspread_util.h>
+
+typedef QValueList<Reference> AreaList;
 
 typedef KGenericFactory<OpenCalcExport, KoFilter> OpenCalcExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libopencalcexport, 
@@ -264,6 +268,64 @@ bool OpenCalcExport::exportContent( KoStore * store, KSpreadDoc const * const ks
   return true;
 }
 
+QString convertRefToBase( QString const & table, QRect const & rect )
+{
+  QPoint bottomRight( rect.bottomRight() );
+
+  QString s( "$" );
+  s += table;
+  s += ".$";
+  s += util_encodeColumnLabelText( bottomRight.x() );
+  s += '$';
+  s += QString::number( bottomRight.y() );
+
+  return s;
+}
+
+QString convertRefToRange( QString const & table, QRect const & rect )
+{
+  QPoint topLeft( rect.topLeft() );
+  QPoint bottomRight( rect.bottomRight() );
+
+  if ( topLeft == bottomRight )
+    return convertRefToBase( table, rect );
+
+  QString s( "$" );
+  s += table;
+  s += ".$";
+  s += util_encodeColumnLabelText( topLeft.x() );
+  s += '$';
+  s += QString::number( topLeft.y() );
+  s += ":.$";
+  s += util_encodeColumnLabelText( bottomRight.x() );
+  s += '$';
+  s += QString::number( bottomRight.y() );
+  
+  return s;
+}
+
+void exportNamedExpr( QDomDocument & doc, QDomElement & parent, 
+                      AreaList const & namedAreas )
+{
+  AreaList::const_iterator it  = namedAreas.begin();
+  AreaList::const_iterator end = namedAreas.end();
+
+  while ( it != end )
+  {
+    QDomElement namedRange = doc.createElement( "table:named-range" );
+
+    Reference ref = *it;
+
+    namedRange.setAttribute( "table:name", ref.ref_name );
+    namedRange.setAttribute( "table:base-cell-address", convertRefToBase( ref.table_name, ref.rect ) );
+    namedRange.setAttribute( "table:cell-range-address", convertRefToRange( ref.table_name, ref.rect ) );
+
+    parent.appendChild( namedRange );
+
+    ++it;
+  }
+}
+
 bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpreadDoc const * const ksdoc )
 {
   QDomElement fontDecls  = doc.createElement( "office:font-decls" );
@@ -303,6 +365,18 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
     body.appendChild( tabElem );
   }
 
+  KoDocument * document   = m_chain->inputDocument();
+  KSpreadDoc * kspreadDoc = static_cast<KSpreadDoc *>( document );
+  
+  AreaList namedAreas = kspreadDoc->listArea();
+  if ( namedAreas.count() > 0 )
+  {
+    QDomElement namedExpr = doc.createElement( "table:named-expressions" );
+    exportNamedExpr( doc, namedExpr, namedAreas );
+    
+    body.appendChild( namedExpr );
+  }
+
   m_styles.writeStyles( doc, autoStyles );
   m_styles.writeFontDecl( doc, fontDecls );
 
@@ -335,6 +409,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
       ColumnStyle cs1;
       cs1.breakB = Style::automatic;
       cs1.size   = c->mmWidth() / 10;
+
       if ( ColumnStyle::isEqual( &cs, cs1 ) && ( hide == c->isHide() ) )
         ++repeated;
       else
@@ -345,6 +420,8 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
     QDomElement colElem = doc.createElement( "table:table-column" );
     colElem.setAttribute( "table:style-name", m_styles.columnStyle( cs ) );
     colElem.setAttribute( "table:default-cell-style-name", "Default" );
+    if ( hide )
+      colElem.setAttribute( "table:visibility", "collapse" );
 
     if ( repeated > 1 )
       colElem.setAttribute( "table:number-columns-repeated", QString::number( repeated ) );
@@ -362,6 +439,8 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
 
     QDomElement rowElem = doc.createElement( "table:table-row" );
     rowElem.setAttribute( "table:style-name", m_styles.rowStyle( rs ) );
+    if ( row->isHide() )
+      rowElem.setAttribute( "table:visibility", "collapse" );
 
     exportCells( doc, rowElem, sheet, i, maxCols );
 
@@ -976,7 +1055,7 @@ QString OpenCalcExport::convertFormula( QString const & formula ) const
     }
     if ( formula[i] == '\'' )
     {
-      s += formula[i];
+      // named area
       inQuote2 = !inQuote2;
       ++i;
       continue;
