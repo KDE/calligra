@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 		VERSION, description, KAboutData::License_GPL,
 		"(c) 2002, Alexander Dymo", 0, 0, "cloudtemple@mksat.net");
 	aboutData.addAuthor("Alexander Dymo",
-     i18n("Maintainer, Report Designer, Kugar library enhancements") ,
+     I18N_NOOP("Maintainer, Report Designer, Kugar library enhancements") ,
      "cloudtemple@mksat.net", "http://www.cloudtemple.mksat.net");
 	KCmdLineArgs::init( argc, argv, &aboutData );
 	KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
