@@ -544,10 +544,10 @@ VSegment::select( const KoPoint& p, double isNearRange, bool select )
 		m_node[0].isNear( p, isNearRange ) )
 	{
 		// Select first control point, when previous knot is selected:
-		if(
-			m_prev &&
-			m_prev->m_nodeSelected[2] )
-		{
+		//if(
+		//	m_prev &&
+		//	m_prev->m_nodeSelected[2] )
+		//{
 			m_nodeSelected[0] = select;
 			m_nodeEdited[0] = select;
 
@@ -559,7 +559,7 @@ VSegment::select( const KoPoint& p, double isNearRange, bool select )
 			}
 
 			success = true;
-		}
+		//}
 	}
 
 	if(
@@ -567,8 +567,8 @@ VSegment::select( const KoPoint& p, double isNearRange, bool select )
 		m_node[1].isNear( p, isNearRange ) )
 	{
 		// Select second control point, when knot is selected:
-		if( m_nodeSelected[2] )
-		{
+		//if( m_nodeSelected[2] )
+		//{
 			m_nodeSelected[1] = select;
 			m_nodeEdited[1] = select;
 
@@ -580,7 +580,7 @@ VSegment::select( const KoPoint& p, double isNearRange, bool select )
 			}
 
 			success = true;
-		}
+		//}
 	}
 
 	if( m_node[2].isNear( p, isNearRange ) )
