@@ -24,7 +24,7 @@ class KSAttribute;
 class KSTypeCode;
 
 typedef bool (KSObject::*KSBuiltinMethod)( KSContext& );
-typedef bool (KSStruct::*KSStructBuiltinMethod)( KSContext& );
+typedef bool (KSStruct::*KSStructBuiltinMethod)( KSContext&, const QString& );
 typedef bool (KSProxy::*KSProxyBuiltinMethod)( KSContext&, const QString& );
 
 /**

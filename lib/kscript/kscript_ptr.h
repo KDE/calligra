@@ -50,6 +50,8 @@ public:
   T* operator->() { return ptr; }
 
   uint count() const { return ptr->count; } // for debugging purposes
+  bool isNull() const { return ( ptr == 0 ); }
+    
 private:
   T* ptr;
 };

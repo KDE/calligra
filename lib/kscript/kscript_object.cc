@@ -33,7 +33,7 @@ KSObject::~KSObject()
 bool KSObject::kill()
 {
     bool b = destructor();
-    
+
     return b;
 }
 
@@ -41,7 +41,7 @@ bool KSObject::destructor()
 {
     if ( m_status == Dead )
 	return TRUE;
-    
+
     qDebug("KSObject::destructor");
     QListIterator<KSObject> it( m_sender );
     for( ; it.current(); ++it )
@@ -380,7 +380,7 @@ bool KSScriptObject::destructor()
       return TRUE;
 
   qDebug("KSScriptObject::destructor");
-    
+
   if ( !KSObject::destructor() )
     return false;
 
@@ -472,7 +472,7 @@ bool KSMethod::call( KSContext& context )
   {
     KSStructBuiltinMethod m = m_func->structBuiltinMethodValue();
     KSStruct* o = m_object->structValue();
-    if ( ! (o->*m)( context ) )
+    if ( ! (o->*m)( context, name() ) )
       return false;
   }
   else if ( m_func->type() == KSValue::ProxyBuiltinMethodType )
