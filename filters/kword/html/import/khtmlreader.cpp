@@ -85,7 +85,18 @@ HTMLReader_state *KHTMLReader::pushNewState() {
 void KHTMLReader::popState() {
 
 	HTMLReader_state *s=_state.pop();
-	state()->paragraph=s->paragraph;
+
+	if (s->frameset == state()->frameset)
+		{
+			qWarning((tr("before ") + _writer->getLayoutAttribute(state()->paragraph,"FLOW","align")).latin1());
+			state()->paragraph=s->paragraph;
+			qWarning((tr("after ") + _writer->getLayoutAttribute(state()->paragraph,"FLOW","align")).latin1());
+			_writer->setLayout(state()->paragraph,state()->layout);
+			qWarning((tr("final ") + _writer->getLayoutAttribute(state()->paragraph,"FLOW","align")).latin1());
+		}
+	else
+		startNewParagraph(true,true);
+
 	state()->format=_writer->startFormat(state()->paragraph,state()->format);
 	delete(s);
 }
@@ -310,8 +321,8 @@ bool KHTMLReader::parse_TABLE(DOM::Element e) {
 
 			    	pushNewState();
 	 	    	    	QRect colrect=cols.getRect();
-	 	    	    	state()->frameset=_writer->createTableCell(tableno,nrow,ncol,1,0,0,
-	 	    	     		colrect.right()-colrect.left(),(colrect.bottom()-colrect.top())/2);
+	 	    	    	state()->frameset=_writer->createTableCell(tableno,nrow,ncol,1,colrect.left(),colrect.top(),
+	 	    	     		colrect.right(),colrect.bottom());
 	 	    	     	state()->frameset.firstChild().toElement().setAttribute("bkRed",bgcolor.red());
 	 	    	     	state()->frameset.firstChild().toElement().setAttribute("bkGreen",bgcolor.green());
 	 	    	     	state()->frameset.firstChild().toElement().setAttribute("bkBlue",bgcolor.blue());

@@ -56,7 +56,7 @@ public:
 	 * creates a table cell
 	 **/
 	QDomElement createTableCell(int tableno, int nrow,
-				int ncol, int colspan, int x, int y, int w, int h);
+				int ncol, int colspan, int x, int y, int right, int bottom);
 	
 				
 				
@@ -146,6 +146,7 @@ public:
 	 **/
         QDomElement currentFrameset();
         QDomElement currentParagraph(QDomElement frameset);
+	void setLayout(QDomElement paragraph, QDomElement layout);
 
         /**
          * returns the document root

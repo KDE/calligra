@@ -111,7 +111,7 @@ QDomElement KWDWriter::currentLayout(QDomElement paragraph) {
 
 
 QDomElement KWDWriter::createTableCell(int tableno, int nrow,
-				int ncol, int colspan, int x, int y, int w, int h) {
+				int ncol, int colspan, int x, int y, int right, int bottom) {
 	QDomElement parent=docroot().elementsByTagName("FRAMESETS").item(0).toElement();
 
 	QDomElement fs=addFrameSet(parent,1,0,
@@ -124,7 +124,7 @@ QDomElement KWDWriter::createTableCell(int tableno, int nrow,
 					 // so we don't have to give it as an argument
 	fs.setAttribute("rows",1);	// FIXME support rowspan ?
 	addFrame(fs,0/*runaround*/,0/*copy*/,
-		y,x,h+y,w+x); // FIXME
+		y,x,bottom,right); // FIXME
 	return fs;
 }
 
@@ -220,6 +220,13 @@ QDomElement KWDWriter::addFrameSet(QDomElement parent, int frametype,
 QDomElement KWDWriter::addParagraph(QDomElement parent) {
 	QDomElement k;
 	return addParagraph(parent,k);
+}
+void KWDWriter::setLayout(QDomElement paragraph, QDomElement layout) {
+
+	QDomElement theLayout=layout.cloneNode().toElement();
+	QDomElement oldLayout=currentLayout(paragraph);
+	paragraph.removeChild(oldLayout);
+	paragraph.appendChild(theLayout);
 }
 
 QDomElement KWDWriter::addParagraph(QDomElement parent, QDomElement layoutToClone) {
