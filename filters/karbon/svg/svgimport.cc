@@ -524,9 +524,14 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			base.moveTo( KoPoint( x, y ) );
 			base.lineTo( KoPoint( x + 10, y ) );
 			text->setBasePath( base );
-			obj = text;
-			parseStyle( obj, b );
+			parseStyle( text, b );
 			text->setFont( m_gc.current()->font );
+			if( text )
+				grp->append( text );
+			else
+				m_document.append( text );
+			m_gc.pop();
+			continue;
 		}
 		if( !obj ) continue;
 		parseStyle( obj, b );
