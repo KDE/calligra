@@ -29,8 +29,7 @@ public:
 
 	virtual void transform( const QWMatrix& m );
 
-    virtual const KoRect& boundingBox() const
-		{ return m_objects.boundingBox(); }
+    virtual const KoRect& boundingBox() const;
 
     virtual bool isInside( const KoRect& rect ) const;
 
