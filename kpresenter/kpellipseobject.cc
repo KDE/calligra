@@ -21,6 +21,7 @@
 #include "kpgradient.h"
 
 #include <kdebug.h>
+#include <qbitmap.h>
 #include <qregion.h>
 #include <qpicture.h>
 #include <qpainter.h>
@@ -475,49 +476,23 @@ void KPEllipseObject::paint( QPainter* _painter )
     }
     else
     {
-        int ox = _painter->viewport().x() + static_cast<int>( _painter->worldMatrix().dx() ) + pw;
-        int oy = _painter->viewport().y() + static_cast<int>( _painter->worldMatrix().dy() ) + pw;
-
-        if ( angle == 0 || angle==360 )
+        if ( redrawPix )
         {
-            _painter->save();
+            redrawPix = false;
+            QRegion clipregion( 0, 0, ow - 2 * pw, oh - 2 * pw, QRegion::Ellipse );
 
-            QRegion clipregion( ox, oy, ow - 2 * pw, oh - 2 * pw, QRegion::Ellipse );
+            pix.fill( Qt::white );
 
-            if ( _painter->hasClipping() )
-                clipregion = _painter->clipRegion().intersect( clipregion );
+            QPainter p;
+            p.begin( &pix );
+            p.setClipRegion( clipregion );
+            p.drawPixmap( 0, 0, *gradient->getGradient() );
+            p.end();
 
-            setupClipRegion( _painter, clipregion );
-
-            _painter->drawPixmap( pw, pw, *gradient->getGradient() );
-
-            _painter->restore();
+            pix.setMask( pix.createHeuristicMask() );
         }
-        else    //lukas: fixme; drawing of gradient backgrounds for rotated ellipses
-        {
-            if ( redrawPix )
-            {
-                redrawPix = false;
-                QRegion clipregion( 0, 0, ow - 2 * pw, oh - 2 * pw, QRegion::Ellipse );
 
-                QPicture pic;
-                QPainter p;
-
-                p.begin( &pic );
-                p.setClipRegion( clipregion );
-                setupClipRegion( &p, clipregion );
-                p.drawPixmap( 0, 0, *gradient->getGradient() );
-                p.end();
-
-                pix.fill( Qt::white );          //kinda hack... does not work with other page backgrounds (like pixmap)
-                QPainter p2;
-                p2.begin( &pix );
-                p2.drawPicture( pic );
-                p2.end();
-            }
-
-            _painter->drawPixmap( pw, pw, pix, 0, 0, ow - 2 * pw, oh - 2 * pw );
-        }
+        _painter->drawPixmap( pw, pw, pix, 0, 0, ow - 2 * pw, oh - 2 * pw );
 
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
