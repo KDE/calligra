@@ -102,12 +102,27 @@ Manager::part(Info *i)
 	
 	if(!p) {
 		kdDebug() << "Manager::part().." << endl;
-		p = KParts::ComponentFactory::createInstanceFromService<Part>(i->ptr(), this, 0, QStringList());
+		int error=0;
+		p = KParts::ComponentFactory::createInstanceFromService<Part>(i->ptr(), this, 0, QStringList(), &error);
 		if(!p) {
-			kdDebug() << "Manager::part(): failed :(" << endl;
+			kdDebug() << "Manager::part(): failed :( (ERROR #" << error << ")" << endl;
+			kdDebug() << "  " << KLibLoader::self()->lastErrorMessage() << endl;
 			i->setBroken(true);
 			return 0;
 		}
+
+		DataSource *ds = p->dataSource();
+
+		if(ds)
+		{
+			kdDebug() << "Manager::part(): " << i->groupName() << " provides data" << endl;
+			m_datasources.append(ds);
+		}
+		else
+		{
+			kdDebug() << "Manager::part(): " << i->groupName() << " doesn't provide data" << endl;
+		}
+
 		p->setInfo(i);
 		m_parts.insert(i->projectPartID(),p);
 		emit partLoaded(p);

@@ -38,7 +38,7 @@ namespace KexiPart
 {
 	class Info;
 	class Part;
-
+	class DataSource;
 
 	struct Missing
 	{
@@ -52,6 +52,7 @@ namespace KexiPart
 	typedef QValueList<Missing> MissingList;
 	typedef QPtrList<Info> PartInfoList;
 	typedef QIntDict<Part> PartDict;
+	typedef QPtrList<DataSource> DataSourceList;
 
 /**
  * queries parts and dlopens them when needed, they aren't dlopened at startup tough
@@ -70,24 +71,24 @@ class KEXICORE_EXPORT Manager : public QObject
 		/**
 		 * queries ktrader and creates a list of available parts
 		 */
-		void		lookup();
+		void lookup();
 
 		/**
 		 * \return a part object for specified mime type. Dlopens a part using KexiPart::Info
 		 * if needed. Return 0 if loading failed.
 		 */
-		Part		*part(const QCString &mime);
+		Part *part(const QCString &mime);
 
 		/**
 		 * \return a part object for specified info. Dlopens a part using KexiPart::Info
 		 * if needed. Return 0 if loading failed.
 		 */
-		Part		*part(Info *);
+		Part *part(Info *);
 
 		/**
 		 * \return the info for a coresponding internal mime
 		 */
-		Info		*info(const QCString &mime);
+		Info *info(const QCString &mime);
 
 		/**
 		 * checks project's kexi__part table, creates one if nessesary
@@ -95,20 +96,21 @@ class KEXICORE_EXPORT Manager : public QObject
 		 *
 		 * use @ref missingParts() to get a list of missing parts
 		 */
-		bool		checkProject(KexiDB::Connection *conn);
+		bool checkProject(KexiDB::Connection *conn);
 
 		/**
 		 * @returns parts metioned in the project meta tables but not available locally
 		 */
-		MissingList	missingParts() const { return m_missing; }
+		MissingList missingParts() const { return m_missing; }
 
 
 		/**
 		 * @returns a list of the available KexiParts
 		 */
-		PartInfoList		*partInfoList() { return &m_partlist; }
+		PartInfoList *partInfoList() { return &m_partlist; }
 
 
+		DataSourceList *dataSources() { return &m_datasources; }
 #if 0
 		void unloadPart(Info *i);
 		void unloadAllParts();
@@ -118,9 +120,10 @@ class KEXICORE_EXPORT Manager : public QObject
 
 	private:
 		PartDict m_parts;
-		PartInfoList	m_partlist;
-		PartInfoDict	m_partsByMime;
-		MissingList	m_missing;
+		PartInfoList m_partlist;
+		PartInfoDict m_partsByMime;
+		MissingList m_missing;
+		DataSourceList m_datasources;
 
 		bool m_lookupDone : 1;
 };

@@ -9,7 +9,7 @@ libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp kexivalidator.cpp \
 	kexipartmanager.cpp kexipartinfo.cpp kexipartitem.cpp kexipart.cpp \
 	kexiprojectdata.cpp kexiinternalpart.cpp \
 	kexidragobjects.cpp \
-	kexiproperty.cpp kexipropertybuffer.cpp
+	kexiproperty.cpp kexipropertybuffer.cpp kexipartdatasource.cpp
 
 libkexicore_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) -Wnounresolved -no-undefined
 

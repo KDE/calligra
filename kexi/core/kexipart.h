@@ -36,6 +36,7 @@ namespace KexiPart
 	class Info;
 	class Item;
 	class GUIClient;
+	class DataSource;
 
 /**
  * The main class for kexi frontend parts like tables, queries, relations
@@ -73,6 +74,13 @@ class KEXICORE_EXPORT Part : public QObject
 
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
 
+		/**
+		 * @returns the datasource object of this part
+		 * reeimplement it to make a part work as dataprovider ;)
+		 */
+		virtual DataSource *dataSource() { return 0; }
+
+		
 	signals: 
 		void newObjectRequest( KexiPart::Info *info );
 

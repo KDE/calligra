@@ -1,0 +1,72 @@
+/* This file is part of the KDE project
+   Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+#ifndef KEXIPARTDATASOURCE_H
+#define KEXIPARTDATASOURCE_H
+
+#include "kexi.h"
+
+
+class KexiProject;
+namespace KexiDB
+{
+	class FieldList;
+}
+
+namespace KexiPart
+{
+
+	class Item;
+/**
+ * this class provides a datasource framework for e.g. tables and queries
+ * using this framework one can query for
+ *  - a list of datasources
+ *  - the fileds in datasources
+ *  - variables (e.g. query variables)
+ */
+class DataSource
+{
+	public:
+		DataSource(Part *part);
+		virtual ~DataSource();
+
+		/**
+		 * @returns a list of fileds for the datasource
+		 * @arg id is the document id for the source
+		 */
+		virtual KexiDB::FieldList *fields(KexiProject *project, const KexiPart::Item &i)=0;
+
+		/**
+		 * @returns the cursor
+		 */
+		virtual KexiDB::Cursor *cursor(KexiProject *project, const KexiPart::Item &i, bool buffer)=0;
+
+		/**
+		 * @returns the part providing this datasource
+		 */
+		Part *part() { return m_part; }
+
+	private:
+		Part *m_part;
+};
+
+};
+
+#endif
+
