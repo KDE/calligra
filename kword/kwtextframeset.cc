@@ -2068,9 +2068,7 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame )
     // from here, since it calls formatMore() !
     m_doc->updateAllFrames();
     m_doc->invalidate();
-
-    if ( theFrame->isSelected() )
-        theFrame->updateResizeHandles();
+    theFrame->updateRulerHandles();
 
     // Can't call this directly, we might be in a paint event already
     //m_doc->repaintAllViews();
