@@ -48,14 +48,22 @@ class KEXI_DB_EXPORT DriverBehaviour
 	
 	//! "AUTO_INCREMENT" by default, used as add-in word to field definition
 	//! May be also used as full definition if SPECIAL_AUTO_INCREMENT_DEF is true.
-	QString AUTO_INCREMENT_FIELD_OPTION; 
-	
+	QString AUTO_INCREMENT_FIELD_OPTION;
+
+	//! "AUTO_INCREMENT PRIMARY KEY" by default, used as add-in word to field definition
+	//! May be also used as full definition if SPECIAL_AUTO_INCREMENT_DEF is true.
+	QString AUTO_INCREMENT_PK_FIELD_OPTION;
+
 	/*! True if autoincrement field has special definition 
 	 e.g. like "INTEGER PRIMARY KEY" for SQLite.
 	 Special definition string should be stored in AUTO_INCREMENT_FIELD_OPTION.
 	 False by default. */
 	bool SPECIAL_AUTO_INCREMENT_DEF : 1;
-	
+
+	/*! True if autoincrement requires field to be declared as primary key.
+	 This is true for SQLite. False by default. */
+	bool AUTO_INCREMENT_REQUIRES_PK : 1;
+
 	/*! Name of a field (or built-in function) with autoincremented unique value,
 	 typically returned by Connection::drv_lastInsertRowID().
 

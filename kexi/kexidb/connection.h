@@ -461,6 +461,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 //TODO(js): update any structure (e.g. query) that depend on this table!
 		bool alterTable( TableSchema& tableSchema, TableSchema& newTableSchema );
 
+		/*! Alters table's described \a tableSchema name to \a newName. 
+		 \return true on success. */
+		bool alterTableName(TableSchema& tableSchema, const QString& newName);
+
 		/*! Drops a query defined by \a querySchema. 
 		 If true is returned, schema information \a querySchema is destoyed 
 		 (because it's owned), so don't keep this anymore!
@@ -774,6 +778,22 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 \sa drv_beginTransaction(), autoCommit(), setAutoCommit()
 		*/
 		virtual bool drv_setAutoCommit(bool on);
+
+		/*! Physically drops table named with \a name. 
+		 Default impelmentation executes "DROP TABLE.." command,
+		 so you rarely want to change this. */
+		virtual bool drv_dropTable( const QString& name );
+
+		/*! Alters table's described \a tableSchema name to \a newName. 
+		 Default implementation is ineffective: 
+		 - creates a copy of the table
+		 - copies all rows
+		 - drops old table.
+		 This is how SQLite driver work.
+		 \return true on success.
+		 More advanced server backends should reinplement this using "ALTER TABLE". 
+		*/
+		virtual bool drv_alterTableName(TableSchema& tableSchema, const QString& newName);
 
 		/*! Internal, for handling autocommited transactions:
 		 begins transaction is one is supported.

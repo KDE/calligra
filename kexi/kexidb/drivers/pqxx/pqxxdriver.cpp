@@ -41,10 +41,11 @@ pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringLi
 
 	beh->UNSIGNED_TYPE_KEYWORD = "";
 	beh->ROW_ID_FIELD_NAME = "oid";
-	beh->SPECIAL_AUTO_INCREMENT_DEF = true;
+	beh->SPECIAL_AUTO_INCREMENT_DEF = false;
 	beh->AUTO_INCREMENT_FIELD_OPTION = "serial";
+	beh->AUTO_INCREMENT_PK_FIELD_OPTION = "serial primary key";
 	beh->ALWAYS_AVAILABLE_DATABASE_NAME = "template1";
-	beh->QUOTATION_MARKS_FOR_IDENTIFIER='"';
+	beh->QUOTATION_MARKS_FOR_IDENTIFIER = '"';
 
 	//predefined properties
 	d->properties["client_library_version"] = "";//TODO

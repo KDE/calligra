@@ -732,8 +732,12 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 		else
 			sql += ", ";
 		QString v = escapeIdentifier(field->m_name) + " ";
+		const bool pk = field->isPrimaryKey() || m_driver->beh->AUTO_INCREMENT_REQUIRES_PK;
 		if (field->isAutoIncrement() && m_driver->beh->SPECIAL_AUTO_INCREMENT_DEF) {
-			v += m_driver->beh->AUTO_INCREMENT_FIELD_OPTION;
+			if (pk)
+				v += m_driver->beh->AUTO_INCREMENT_PK_FIELD_OPTION;
+			else
+				v += m_driver->beh->AUTO_INCREMENT_FIELD_OPTION;
 		}
 		else {
 			v += m_driver->sqlTypeName(field->type());
@@ -742,16 +746,18 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 			if (field->m_length>0)
 				v += QString("(%1)").arg(field->m_length);
 			if (field->isAutoIncrement())
-				v += (" " + m_driver->beh->AUTO_INCREMENT_FIELD_OPTION);
+				v += (" " + 
+				(pk ? m_driver->beh->AUTO_INCREMENT_PK_FIELD_OPTION : m_driver->beh->AUTO_INCREMENT_FIELD_OPTION));
+			else
 	//TODO: here is automatically a single-field key created
-			if (field->isPrimaryKey())
-				v += " PRIMARY KEY";
-			if (!field->isPrimaryKey() && field->isUniqueKey())
+				if (pk)
+					v += " PRIMARY KEY";
+			if (!pk && field->isUniqueKey())
 				v += " UNIQUE";
 #ifndef Q_WS_WIN
 #warning IS this ok for all engines?: if (!field->isAutoIncrement() && !field->isPrimaryKey() && field->isNotNull()) 
 #endif
-			if (!field->isAutoIncrement() && !field->isPrimaryKey() && field->isNotNull()) 
+			if (!field->isAutoIncrement() && !pk && field->isNotNull()) 
 				v += " NOT NULL"; //only add not null option if no autocommit is set
 			if (field->defaultValue().isValid())
 				v += QString(" DEFAULT ") + m_driver->valueToSQL( field, field->m_defaultValue );
@@ -1220,6 +1226,12 @@ bool Connection::removeObject( uint objId )
 	return true;
 }
 
+bool Connection::drv_dropTable( const QString& name )
+{
+	m_sql = "DROP TABLE " + escapeIdentifier(name);
+	return executeSQL(m_sql);
+}
+
 //! Drops a table corresponding to the name in the given schema
 /*! Drops a table according to the name given by the TableSchema, removing the
     table and column definitions to kexi__* tables.  Checks first that the
@@ -1246,8 +1258,7 @@ bool Connection::dropTable( KexiDB::TableSchema* tableSchema )
 		return false;
 	TransactionGuard tg(trans);
 
-	m_sql = "DROP TABLE " + escapeIdentifier(tableSchema->name());
-	if (!executeSQL(m_sql))
+	if (!drv_dropTable(tableSchema->name()))
 		return false;
 
 	TableSchema *ts = m_tables_byname["kexi__fields"];
@@ -1298,6 +1309,30 @@ bool Connection::alterTable( TableSchema& tableSchema, TableSchema& newTableSche
 		ok = createTable(&newTableSchema, true/*replace*/);
 	}
 	return ok;
+}
+
+bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName)
+{
+	clearError();
+	if (newName.isEmpty() || !Kexi::isIdentifier(newName)) {
+		setError(ERR_INVALID_IDENTIFIER);
+		return false;
+	}
+	const QString& newTableName = newName.lower().stripWhiteSpace();
+	if (tableSchema.name().lower().stripWhiteSpace() == newTableName) {
+		setError(ERR_OBJECT_THE_SAME);//i18n(...)
+		return false;
+	}
+	return drv_alterTableName(tableSchema, newName);
+}
+
+bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& newName)
+{
+//TODO: alter table name for server DB backends!
+//TODO: what about objects (queries/forms) that use old name?
+//	dropTable
+//TODO	
+	return true;
 }
 
 bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )
