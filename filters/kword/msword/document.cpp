@@ -211,6 +211,10 @@ void Document::paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperti
     m_paragStyle = styles.styleByIndex( paragraphProperties->pap().istd );
     Q_ASSERT( m_paragStyle );
     m_shadowTextFound = false;
+    // If the style's format includes shadowtext, then we need a <SHADOW> tag
+    // in the parag layout
+    if ( m_paragStyle && m_paragStyle->chp().fShadow )
+        m_shadowTextFound = true;
 }
 
 void Document::paragraphEnd()
