@@ -1,0 +1,183 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>KugarMainBase</class>
+<widget class="QMainWindow">
+    <property name="name">
+        <cstring>KugarMainBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Kugar</string>
+    </property>
+</widget>
+<menubar>
+    <property name="name">
+        <cstring>menubar</cstring>
+    </property>
+    <item text="&amp;File" name="fileMenu">
+        <action name="filePrintAction"/>
+        <separator/>
+        <action name="fileExitAction"/>
+    </item>
+    <item text="&amp;View" name="PopupMenu">
+        <action name="viewPrevPageAction"/>
+        <action name="viewNextPageAction"/>
+        <separator/>
+        <action name="viewFirstPageAction"/>
+        <action name="viewLastPageAction"/>
+    </item>
+    <item text="&amp;Help" name="helpMenu">
+        <action name="helpAboutAction"/>
+    </item>
+</menubar>
+<toolbars>
+</toolbars>
+<actions>
+    <action>
+        <property name="name">
+            <cstring>filePrintAction</cstring>
+        </property>
+        <property name="text">
+            <string>Print</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Print...</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+P</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileExitAction</cstring>
+        </property>
+        <property name="text">
+            <string>Exit</string>
+        </property>
+        <property name="menuText">
+            <string>E&amp;xit</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpAboutAction</cstring>
+        </property>
+        <property name="text">
+            <string>About</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;About</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewNextPageAction</cstring>
+        </property>
+        <property name="text">
+            <string>Next Page</string>
+        </property>
+        <property name="accel">
+            <string>PgDown</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewPrevPageAction</cstring>
+        </property>
+        <property name="text">
+            <string>Previous Page</string>
+        </property>
+        <property name="accel">
+            <string>PgUp</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewFirstPageAction</cstring>
+        </property>
+        <property name="text">
+            <string>First Page</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+Home</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewLastPageAction</cstring>
+        </property>
+        <property name="text">
+            <string>Last Page</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+End</string>
+        </property>
+    </action>
+</actions>
+<connections>
+    <connection>
+        <sender>filePrintAction</sender>
+        <signal>activated()</signal>
+        <receiver>KugarMainBase</receiver>
+        <slot>filePrint()</slot>
+    </connection>
+    <connection>
+        <sender>fileExitAction</sender>
+        <signal>activated()</signal>
+        <receiver>KugarMainBase</receiver>
+        <slot>fileExit()</slot>
+    </connection>
+    <connection>
+        <sender>helpAboutAction</sender>
+        <signal>activated()</signal>
+        <receiver>KugarMainBase</receiver>
+        <slot>helpAbout()</slot>
+    </connection>
+    <connection>
+        <sender>viewNextPageAction</sender>
+        <signal>activated()</signal>
+        <receiver>KugarMainBase</receiver>
+        <slot>viewNextPage()</slot>
+    </connection>
+    <connection>
+        <sender>viewPrevPageAction</sender>
+        <signal>activated()</signal>
+        <receiver>KugarMainBase</receiver>
+        <slot>viewPrevPage()</slot>
+    </connection>
+    <connection>
+        <sender>viewFirstPageAction</sender>
+        <signal>activated()</signal>
+        <receiver>KugarMainBase</receiver>
+        <slot>viewFirstPage()</slot>
+    </connection>
+    <connection>
+        <sender>viewLastPageAction</sender>
+        <signal>activated()</signal>
+        <receiver>KugarMainBase</receiver>
+        <slot>viewLastPage()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>filePrint()</slot>
+    <slot>fileExit()</slot>
+    <slot>helpAbout()</slot>
+    <slot>viewNextPage()</slot>
+    <slot>viewPrevPage()</slot>
+    <slot>viewFirstPage()</slot>
+    <slot>viewLastPage()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
