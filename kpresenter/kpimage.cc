@@ -18,6 +18,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+// TODO: delete this file
+
+#if 0
 #include "kpimage.h"
 
 KPImage KPImageCollection::findOrLoad( const QString & fileName, const QDateTime & dateTime )
@@ -52,3 +55,4 @@ KPImage KPImageCollection::loadXPMImage( const KPImageKey &key, const QString &r
 
     return insertImage( key, img );
 }
+#endif

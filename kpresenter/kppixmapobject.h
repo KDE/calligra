@@ -23,7 +23,7 @@
 #include <qdatetime.h>
 
 #include <kpobject.h>
-#include <kpimage.h>
+#include <koPictureCollection.h>
 #include <koSize.h>
 class KPGradient;
 class QPixmap;
@@ -37,8 +37,8 @@ class KPPixmapObject : public KP2DObject
     friend class KPrCanvas;
 
 public:
-    KPPixmapObject( KPImageCollection *_imageCollection );
-    KPPixmapObject( KPImageCollection *_imageCollection, const KPImageKey & key );
+    KPPixmapObject( KoPictureCollection *_imageCollection );
+    KPPixmapObject( KoPictureCollection *_imageCollection, const KoPictureKey & key );
     virtual ~KPPixmapObject() {}
 
     KPPixmapObject &operator=( const KPPixmapObject & );
@@ -48,18 +48,18 @@ public:
     // Only used as a default value in the filedialog, in changePicture
     // Don't use for anything else
     QString getFileName() const
-    { return image.key().filename(); }
+    { return image.getKey().filename(); }
 
-    KPImageKey getKey() const
-    { return image.key(); }
+    KoPictureKey getKey() const
+    { return image.getKey(); }
 
     QSize originalSize() const
-    { return image.originalSize(); }
+    { return image.getOriginalSize(); }
 
-    void setPixmap( const KPImageKey & key );
+    void setPixmap( const KoPictureKey & key );
 
     void reload()
-    { setPixmap( image.key() ); }
+    { setPixmap( image.getKey() ); }
 
     virtual ObjType getType() const
     { return OT_PICTURE; }
@@ -75,8 +75,8 @@ public:
 protected:
     KPPixmapObject() {}
 
-    KPImageCollection *imageCollection;
-    KPImage image;
+    KoPictureCollection *imageCollection;
+    KoPicture image;
     KPGradient *gradient;
 };
 

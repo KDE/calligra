@@ -21,15 +21,16 @@
 #define kpbackground_h
 
 #include <qsize.h>
-#include <global.h>
-#include <kpimage.h>
-#include <kpclipartcollection.h> // for KPClipartKey
+#include <qdatetime.h>
+
+#include <koPictureCollection.h>
+
+#include "global.h"
 
 class KPresenterDoc;
 class QPainter;
 class QPixmap;
 class KPGradientCollection;
-class QPicture;
 class QDomDocument;
 class QDomElement;
 class KoZoomHandler;
@@ -83,10 +84,10 @@ public:
     { return backColor2; }
     BCType getBackColorType() const
     { return bcType; }
-    KPImageKey getBackPixKey() const
-    { return backImage.key(); }
-    KPClipartKey getBackClipKey() const
-    { return backClipart.key(); }
+    KoPictureKey getBackPixKey() const
+    { return backImage.getKey(); }
+    KoPictureKey getBackClipKey() const
+    { return backClipart.getKey(); }
 
     PageEffect getPageEffect() const
     { return pageEffect; }
@@ -125,9 +126,9 @@ protected:
     // Generate a new gradient pixmap, for the given size
     void generateGradient( const QSize& size );
 
-    KPImageCollection *imageCollection() const;
+    KoPictureCollection *imageCollection() const;
     KPGradientCollection *gradientCollection() const;
-    KPClipartCollection *clipartCollection() const;
+    KoPictureCollection *clipartCollection() const;
 
 private:
     BackType backType;
@@ -140,8 +141,8 @@ private:
     QString soundFileName;
 
     // Background image or clipart
-    KPImage backImage;
-    KPClipart backClipart;
+    KoPicture backImage;
+    KoPicture backClipart;
     // Pixmap used to cache the drawing of the gradient, at the current size
     const QPixmap *gradientPixmap;
 

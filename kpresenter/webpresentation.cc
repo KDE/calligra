@@ -43,6 +43,7 @@
 #include <qwmatrix.h>
 #include <qtextcodec.h>
 #include <qregexp.h>
+#include <qimage.h>
 
 #include <kdebug.h>
 #include <klocale.h>

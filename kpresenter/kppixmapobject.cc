@@ -22,6 +22,7 @@
 
 #include "KPPixmapObjectIface.h"
 
+#include <qbuffer.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qfileinfo.h>
@@ -38,7 +39,7 @@
 /******************************************************************/
 
 /*================ default constructor ===========================*/
-KPPixmapObject::KPPixmapObject( KPImageCollection *_imageCollection )
+KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection )
     : KP2DObject()
 {
     imageCollection = _imageCollection;
@@ -47,7 +48,7 @@ KPPixmapObject::KPPixmapObject( KPImageCollection *_imageCollection )
 }
 
 /*================== overloaded constructor ======================*/
-KPPixmapObject::KPPixmapObject( KPImageCollection *_imageCollection, const KPImageKey & key )
+KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection, const KoPictureKey & key )
     : KP2DObject()
 {
     imageCollection = _imageCollection;
@@ -74,9 +75,9 @@ KPPixmapObject &KPPixmapObject::operator=( const KPPixmapObject & )
 }
 
 /*================================================================*/
-void KPPixmapObject::setPixmap( const KPImageKey & key )
+void KPPixmapObject::setPixmap( const KoPictureKey & key )
 {
-    image = imageCollection->findImage( key );
+    image = imageCollection->findPicture( key );
 }
 
 /*========================= save =================================*/
@@ -84,7 +85,7 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
     QDomElement elem=doc.createElement("KEY");
-    image.key().saveAttributes(elem);
+    image.getKey().saveAttributes(elem);
     fragment.appendChild(elem);
     return fragment;
 }
@@ -95,9 +96,10 @@ double KPPixmapObject::load(const QDomElement &element)
     double offset=KP2DObject::load(element);
     QDomElement e=element.namedItem("KEY").toElement();
     if(!e.isNull()) {
-        KPImageKey key;
-        key.loadAttributes(e, imageCollection->tmpDate(), imageCollection->tmpTime());
-        image = KPImage( key, QImage() );
+        KoPictureKey key;
+        key.loadAttributes(e, QDate( 1970, 1, 1 ), QTime( 0, 0 ) ); // We need a valid date
+        image.clear();
+        image.setKey(key);
     }
     else {
         // try to find a PIXMAP tag if the KEY is not available...
@@ -126,12 +128,17 @@ double KPPixmapObject::load(const QDomElement &element)
 
             if ( openPic )
                 // !! this loads it from the disk (unless it's in the image collection already)
-                image = imageCollection->loadImage( _fileName );
+                image = imageCollection->loadPicture( _fileName );
             else
             {
-                QDateTime dateTime( imageCollection->tmpDate(), imageCollection->tmpTime() );
-                KPImageKey key( _fileName, dateTime );
-                image = imageCollection->loadXPMImage( key, _data );
+                QDateTime dateTime(  QDate( 1970, 1, 1 ) ); // We need a valid date
+                KoPictureKey key( _fileName, dateTime );
+                image.clear();
+                image.setKey(key);
+                QByteArray rawData=_data.utf8(); // XPM is normally ASCII, therefore UTF-8
+                rawData[rawData.size()-1]=char(10); // Replace the NULL character by a LINE FEED
+                QBuffer buffer(rawData);
+                image.loadXpm(&buffer);
             }
         }
     }
@@ -181,7 +188,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         {
             _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
 
-            QSize bs = image.size();
+            QSize bs = image.getSize();
             QRect br = QRect( 0, 0, bs.width(), bs.height() );
             int pw = br.width();
             int ph = br.height();
@@ -247,7 +254,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     } else {
         _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
 
-        QSize bs = image.size();
+        QSize bs = image.getSize();
         QRect br = QRect( 0, 0, bs.width(), bs.height() );
         int pw = br.width();
         int ph = br.height();

@@ -17,6 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+// TODO: delete this file
+
+#if 0
 #ifndef kpclipartcollection_h
 #define kpclipartcollection_h
 
@@ -66,4 +69,5 @@ protected:
     bool allowChangeRef;
 };
 
+#endif
 #endif

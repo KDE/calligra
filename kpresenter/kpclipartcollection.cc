@@ -17,6 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+// TODO: delete the file
+
+#if 0
 #include <kpclipartcollection.h>
 #include <qwmf.h>
 #include <qdom.h>
@@ -64,4 +67,5 @@ void KPClipartCollection::removeRef( const Key &key )
         }
     }
 }
+#endif
 #endif

@@ -159,11 +159,11 @@ void SetOptionsCmd::unexecute()
 /*======================== constructor ===========================*/
 SetBackCmd::SetBackCmd( const QString &_name, const QColor &_backColor1, const QColor &_backColor2, BCType _bcType,
 			bool _backUnbalanced, int _backXFactor, int _backYFactor,
-			const KoImageKey & _backPix, const KPClipartKey & _backClip,
+			const KoPictureKey & _backPix, const KoPictureKey & _backClip,
                         BackView _backView, BackType _backType,
 			const QColor &_oldBackColor1, const QColor &_oldBackColor2, BCType _oldBcType,
 			bool _oldBackUnbalanced, int _oldBackXFactor, int _oldBackYFactor,
-			const KPClipartKey & _oldBackPix, const KPClipartKey & _oldBackClip,
+			const KoPictureKey & _oldBackPix, const KoPictureKey & _oldBackClip,
                         BackView _oldBackView, BackType _oldBackType,
 			bool _takeGlobal, KPresenterDoc *_doc, KPrPage *_page )
     : KNamedCommand( _name ), backColor1( _backColor1 ), backColor2( _backColor2 ), unbalanced( _backUnbalanced ),
@@ -291,8 +291,8 @@ void RotateCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-ChgClipCmd::ChgClipCmd( const QString &_name, KPClipartObject *_object, KPClipartCollection::Key _oldKey,
-                        KPClipartCollection::Key _newKey, KPresenterDoc *_doc )
+ChgClipCmd::ChgClipCmd( const QString &_name, KPClipartObject *_object, KoPictureKey _oldKey,
+                        KoPictureKey _newKey, KPresenterDoc *_doc )
     : KNamedCommand( _name ), oldKey( _oldKey ), newKey( _newKey )
 {
     object = _object;

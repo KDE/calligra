@@ -126,8 +126,8 @@ KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
 /*====================== constructor =============================*/
 KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-      _gradientCollection(), _clipartCollection(), _hasHeader( false ),
-      _hasFooter( false ), m_unit( KoUnit::U_MM )
+      _gradientCollection(), _hasHeader( false ), _hasFooter( false ),
+      m_pixmapMap( NULL ), m_clipartMap( NULL ), m_unit( KoUnit::U_MM )
 {
     setInstance( KPresenterFactory::global() );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
@@ -539,10 +539,10 @@ QDomDocument KPresenterDoc::saveXML()
     // Save the PIXMAPS and CLIPARTS list
     QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
 
-    QDomElement pixmaps = _imageCollection.saveXML( doc, usedPixmaps, prefix );
+    QDomElement pixmaps = _imageCollection.saveXML( KoPictureCollection::CollectionImage, doc, usedPixmaps, prefix );
     presenter.appendChild( pixmaps );
 
-    QDomElement cliparts = _clipartCollection.saveXML( doc, usedCliparts, prefix );
+    QDomElement cliparts = _clipartCollection.saveXML( KoPictureCollection::CollectionClipart, doc, usedCliparts, prefix );
     presenter.appendChild( cliparts );
 
     // Save sound file list.
@@ -679,8 +679,8 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
     if ( !_store )
 	return true;
     QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
-    _imageCollection.saveToStore( _store, usedPixmaps, prefix );
-    _clipartCollection.saveToStore( _store, usedCliparts, prefix );
+    _imageCollection.saveToStore( KoPictureCollection::CollectionImage, _store, usedPixmaps, prefix );
+    _clipartCollection.saveToStore( KoPictureCollection::CollectionClipart, _store, usedCliparts, prefix );
     saveUsedSoundFileToStore( _store, usedSoundFile, prefix );
     return true;
 }
@@ -806,9 +806,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     emit sigProgress( 0 );
     int activePage=0;
     delete m_pixmapMap;
-    m_pixmapMap = 0L;
-    clipartCollectionKeys.clear();
-    clipartCollectionNames.clear();
+    m_pixmapMap = NULL;
+    delete m_clipartMap;
+    m_clipartMap = NULL;
     lastObj = -1;
     bool allSlides = false;
 
@@ -856,6 +856,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     while(!elem.isNull()) {
         uint base = childCount;
 
+        kdDebug() << "Element name: " << elem.tagName() << endl;
         if(elem.tagName()=="EMBEDDED") {
             KPresenterChild *ch = new KPresenterChild( this );
             KPPartObject *kppartobject = 0L;
@@ -1041,22 +1042,11 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 }
             }
         } else if(elem.tagName()=="PIXMAPS") {
-            QDateTime defaultDateTime( _imageCollection.tmpDate(), _imageCollection.tmpTime() );
-            m_pixmapMap = new QMap<KoImageKey, QString>( _imageCollection.readXML( elem, defaultDateTime ) );
+            QDateTime defaultDateTime( QDate ( 1970, 1, 1 ) );
+            m_pixmapMap = new QMap<KoPictureKey, QString>( _imageCollection.readXML( elem, defaultDateTime ) );
         } else if(elem.tagName()=="CLIPARTS") {
-            QDomElement keyElement=elem.firstChild().toElement();
-            while(!keyElement.isNull()) {
-                if(keyElement.tagName()=="KEY") {
-                    KPClipartCollection::Key key;
-                    QString n;
-                    key.loadAttributes(keyElement, QDate(), QTime());
-                    if(keyElement.hasAttribute("name"))
-                        n=keyElement.attribute("name");
-                    clipartCollectionKeys.append( key );
-                    clipartCollectionNames.append( n );
-                }
-                keyElement=keyElement.nextSibling().toElement();
-            }
+            QDateTime defaultDateTime( QDate ( 1970, 1, 1 ) );
+            m_clipartMap = new QMap<KoPictureKey, QString>( _clipartCollection.readXML( elem, defaultDateTime ) );
         } else if ( elem.tagName() == "SOUNDS" ) {
             loadUsedSoundFileFromXML( elem );
         }
@@ -1533,47 +1523,16 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
     if ( _store ) {
         QString prefix = urlIntern.isEmpty() ? url().path() : urlIntern;
         prefix += '/';
-        _imageCollection.readFromStore( _store, *m_pixmapMap, prefix );
-        delete m_pixmapMap;
-        m_pixmapMap = 0L;
-
-	QValueListIterator<KPClipartCollection::Key> it2 = clipartCollectionKeys.begin();
-	QStringList::ConstIterator nit2 = clipartCollectionNames.begin();
-
-	for ( ; it2 != clipartCollectionKeys.end(); ++it2, ++nit2 ) {
-	    QString u = QString::null;
-
-	    if ( !( *nit2 ).isEmpty() )
-		u = *nit2;
-	    else {
-		u = prefix + it2.node->data.toString();
-	    }
-
-	    QPicture pic;
-
-	    if ( _store->open( u ) ) {
-		KoStoreDevice dev(_store );
-		int size = _store->size();
-		char * data = new char[size];
-		dev.readBlock( data, size );
-		pic.setData( data, size );
-		delete data;
-		_store->close();
-	    } else {
-		u.prepend( "file:" );
-		if ( _store->open( u ) ) {
-		    KoStoreDevice dev(_store );
-		    int size = _store->size();
-		    char * data = new char[size];
-		    dev.readBlock( data, size );
-		    pic.setData( data, size );
-		    delete data;
-		    _store->close();
-		}
-	    }
-
-	    _clipartCollection.insertClipart( it2.node->data, pic );
-	}
+        if ( m_pixmapMap ) {
+            _imageCollection.readFromStore( _store, *m_pixmapMap, prefix );
+            delete m_pixmapMap;
+            m_pixmapMap = NULL;
+        }
+        if ( m_clipartMap ) {
+            _clipartCollection.readFromStore( _store, *m_clipartMap, prefix );
+            delete m_clipartMap;
+            m_clipartMap = NULL;
+        }
 
         loadUsedSoundFileFromStore( _store, usedSoundFile, prefix );
 
@@ -2405,13 +2364,13 @@ void KPresenterDoc::insertObjectInPage(double offset, KPObject *_obj)
     m_pageList.at(page)->appendObject(_obj);
 }
 
-void KPresenterDoc::insertPixmapKey( KPImageKey key )
+void KPresenterDoc::insertPixmapKey( KoPictureKey key )
 {
     if ( !usedPixmaps.contains( key ) )
         usedPixmaps.append( key );
 }
 
-void KPresenterDoc::insertClipartKey( KPClipartKey key )
+void KPresenterDoc::insertClipartKey( KoPictureKey key )
 {
     if ( !usedCliparts.contains( key ) )
         usedCliparts.append( key );

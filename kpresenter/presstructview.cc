@@ -35,6 +35,7 @@
 #include <qcheckbox.h>
 #include <kdebug.h>
 #include <qlayout.h>
+#include <qimage.h>
 
 /******************************************************************
  *

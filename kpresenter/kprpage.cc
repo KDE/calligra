@@ -1344,7 +1344,7 @@ KCommand * KPrPage::alignObjsBottom()
 
 void KPrPage::insertClipart( const QString &filename )
 {
-    KPClipartKey key = m_doc->getClipartCollection()->loadClipart( filename ).key();
+    KoPictureKey key = m_doc->getClipartCollection()->loadPicture( filename ).getKey();
     kdDebug(33001) << "KPresenterDoc::insertClipart key=" << key.toString() << endl;
 
     KPClipartObject *kpclipartobject = new KPClipartObject(m_doc->getClipartCollection() , key );
@@ -2528,14 +2528,14 @@ void KPrPage::changePicture( const QString & filename )
 {
     // filename has been chosen in KPresenterView with a filedialog,
     // so we know it exists
-    KPImage image = m_doc->getImageCollection()->loadImage( filename );
+    KoPicture image = m_doc->getImageCollection()->loadPicture( filename );
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
         if(it.current()->isSelected() && it.current()->getType()==OT_PICTURE)
         {
-    	    KPPixmapObject *pix = new KPPixmapObject( m_doc->getImageCollection(), image.key() );
+    	    KPPixmapObject *pix = new KPPixmapObject( m_doc->getImageCollection(), image.getKey() );
 
 	    ChgPixCmd *chgPixCmd = new ChgPixCmd( i18n( "Change pixmap" ), dynamic_cast<KPPixmapObject*>( it.current() ),pix, m_doc,this );
 	    chgPixCmd->execute();
@@ -2551,7 +2551,7 @@ void KPrPage::changeClipart( const QString & filename )
 {
     // filename has been chosen in KPresenterView with a filedialog,
     // so we know it exists
-    KPClipart clipart = m_doc->getClipartCollection()->loadClipart( filename );
+    KoPicture clipart = m_doc->getClipartCollection()->loadPicture( filename );
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -2561,7 +2561,7 @@ void KPrPage::changeClipart( const QString & filename )
 	    ChgClipCmd *chgClipCmd = new ChgClipCmd( i18n( "Change clipart" ),
 						     dynamic_cast<KPClipartObject*>( it.current() ),
 						     dynamic_cast<KPClipartObject*>( it.current() )->getKey(),
-						     clipart.key(), m_doc);
+						     clipart.getKey(), m_doc);
 	    chgClipCmd->execute();
 	    m_doc->addCommand( chgClipCmd );
 	    break;
@@ -2574,7 +2574,7 @@ void KPrPage::changeClipart( const QString & filename )
 
 void KPrPage::insertPicture( const QString &filename, int _x , int _y )
 {
-    KPImageKey key = m_doc->getImageCollection()->loadImage( filename ).key();
+    KoPictureKey key = m_doc->getImageCollection()->loadPicture( filename ).getKey();
     KPPixmapObject *kppixmapobject = new KPPixmapObject(m_doc->getImageCollection() , key );
     double x=m_doc->zoomHandler()->unzoomItX(_x);
     double y=m_doc->zoomHandler()->unzoomItY(_y);
@@ -2605,7 +2605,7 @@ void KPrPage::insertPicture( const QString &filename, int _x , int _y )
 
 void KPrPage::insertPicture( const QString &_file, const KoRect &_rect )
 {
-    KPImageKey key = m_doc->getImageCollection()->loadImage( _file ).key();
+    KoPictureKey key = m_doc->getImageCollection()->loadPicture( _file ).getKey();
     KPPixmapObject *kppixmapobject = new KPPixmapObject( m_doc->getImageCollection() , key );
 
     kppixmapobject->setOrig( _rect.x(), _rect.y() );
@@ -2621,7 +2621,7 @@ void KPrPage::insertPicture( const QString &_file, const KoRect &_rect )
 
 void KPrPage::insertClipart( const QString &_file, const KoRect &_rect )
 {
-    KPClipartKey key = m_doc->getClipartCollection()->loadClipart( _file ).key();
+    KoPictureKey key = m_doc->getClipartCollection()->loadPicture( _file ).getKey();
     kdDebug(33001) << "KPresenterDoc::insertClipart key=" << key.toString() << endl;
 
     KPClipartObject *kpclipartobject = new KPClipartObject( m_doc->getClipartCollection() , key );
@@ -2670,7 +2670,7 @@ void KPrPage::setBackColor(const  QColor &backColor1, const QColor &backColor2, 
     kpbackground->setBackYFactor( yfactor );
 }
 
-void KPrPage::setBackPixmap( const KPImageKey & key )
+void KPrPage::setBackPixmap( const KoPictureKey & key )
 {
     kpbackground->setBackPixmap( key.filename(), key.lastModified() );
 }
@@ -2680,7 +2680,7 @@ bool KPrPage::getBackUnbalanced(  )const
     return kpbackground->getBackUnbalanced();
 }
 
-void KPrPage::setBackClipart( const KPClipartKey & key )
+void KPrPage::setBackClipart( const KoPictureKey & key )
 {
     kpbackground->setBackClipart( key.filename(), key.lastModified() );
 }
@@ -2726,12 +2726,12 @@ BackView KPrPage::getBackView( )const
     return kpbackground->getBackView();
 }
 
-KoImageKey KPrPage::getBackPixKey( )const
+KoPictureKey KPrPage::getBackPixKey( )const
 {
     return kpbackground->getBackPixKey();
 }
 
-KPClipartKey KPrPage::getBackClipKey(  )const
+KoPictureKey KPrPage::getBackClipKey(  )const
 {
     return kpbackground->getBackClipKey();
 }

@@ -26,8 +26,7 @@
 #include <qcolor.h>
 #include <qsize.h>
 #include <global.h>
-#include <kpimage.h>
-#include <kpclipartcollection.h>
+#include <koPictureCollection.h>
 #include <global.h>
 #include <qvaluelist.h>
 #include <qpen.h>
@@ -116,11 +115,11 @@ class SetBackCmd : public KNamedCommand
 public:
     SetBackCmd( const QString &_name, const QColor &_backColor1, const QColor &_backColor2, BCType _bcType,
 		bool _backUnbalanced, int _backXFactor, int _backYFactor,
-		const KPImageKey & _backPix, const KPClipartKey & _backClip,
+		const KoPictureKey & _backPix, const KoPictureKey & _backClip,
                 BackView _backView, BackType _backType,
 		const QColor &_oldBackColor1, const QColor &_oldBackColor2, BCType _oldBcType,
 		bool _oldBackUnbalanced, int _oldBackXFactor, int _oldBackYFactor,
-		const KPImageKey & _oldBackPix, const KPClipartKey & _oldBackClip,
+		const KoPictureKey & _oldBackPix, const KoPictureKey & _oldBackClip,
                 BackView _oldBackView, BackType _oldBackType,
 		bool _takeGlobal, KPresenterDoc *_doc, KPrPage *_page );
 
@@ -132,16 +131,16 @@ protected:
     QColor backColor1, backColor2;
     bool unbalanced;
     int xfactor, yfactor;
-    KPImageKey backPix;
-    KPClipartKey backClip;
+    KoPictureKey backPix;
+    KoPictureKey backClip;
     BCType bcType;
     BackView backView;
     BackType backType;
     QColor oldBackColor1, oldBackColor2;
     bool oldUnbalanced;
     int oldXFactor, oldYFactor;
-    KPImageKey oldBackPix;
-    KPClipartKey oldBackClip;
+    KoPictureKey oldBackPix;
+    KoPictureKey oldBackClip;
     BCType oldBcType;
     BackView oldBackView;
     BackType oldBackType;
@@ -208,8 +207,8 @@ protected:
 class ChgClipCmd : public KNamedCommand
 {
 public:
-    ChgClipCmd( const QString &_name, KPClipartObject *_object, KPClipartCollection::Key _oldName,
-                KPClipartCollection::Key _newName, KPresenterDoc *_doc );
+    ChgClipCmd( const QString &_name, KPClipartObject *_object, KoPictureKey _oldName,
+                KoPictureKey _newName, KPresenterDoc *_doc );
     ~ChgClipCmd();
 
     virtual void execute();
@@ -219,7 +218,7 @@ protected:
 
     KPClipartObject *object;
     KPresenterDoc *doc;
-    KPClipartCollection::Key oldKey, newKey;
+    KoPictureKey oldKey, newKey;
 };
 
 /******************************************************************/

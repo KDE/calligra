@@ -20,10 +20,11 @@
 #ifndef kpclipartobject_h
 #define kpclipartobject_h
 
-#include <kpobject.h>
-#include <kpclipartcollection.h>
-
 #include <qdatetime.h>
+
+#include <koPictureCollection.h>
+
+#include <kpobject.h>
 
 class QPicture;
 
@@ -34,15 +35,15 @@ class QPicture;
 class KPClipartObject : public KP2DObject
 {
 public:
-    KPClipartObject( KPClipartCollection *_clipartCollection );
-    KPClipartObject( KPClipartCollection *_clipartCollection, const KPClipartKey & key );
+    KPClipartObject( KoPictureCollection *_clipartCollection );
+    KPClipartObject( KoPictureCollection *_clipartCollection, const KoPictureKey & key );
     virtual ~KPClipartObject() {}
 
     KPClipartObject &operator=( const KPClipartObject & );
 
-    void setClipart( const KPClipartKey & key );
+    void setClipart( const KoPictureKey & key );
 
-    void reload() { setClipart( m_clipart.key() ); }
+    void reload() { setClipart( m_clipart.getKey() ); }
 
     virtual ObjType getType() const
     { return OT_CLIPART; }
@@ -50,7 +51,7 @@ public:
     { return i18n("Clipart"); }
 
     QString getFileName() const
-    { return m_clipart.key().filename(); }
+    { return m_clipart.getKey().filename(); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
@@ -58,13 +59,13 @@ public:
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 		       SelectionMode selectionMode, bool drawContour = FALSE );
 
-    KPClipartCollection::Key getKey() const
-    { return m_clipart.key(); }
+    KoPictureKey getKey() const
+    { return m_clipart.getKey(); }
 
 protected:
-    KPClipart m_clipart;
+    KoPicture m_clipart;
 
-    KPClipartCollection *clipartCollection;
+    KoPictureCollection *clipartCollection;
 
 };
 

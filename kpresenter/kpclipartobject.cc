@@ -34,7 +34,7 @@ using namespace std;
 /******************************************************************/
 
 /*================ default constructor ===========================*/
-KPClipartObject::KPClipartObject( KPClipartCollection *_clipartCollection )
+KPClipartObject::KPClipartObject( KoPictureCollection *_clipartCollection )
     : KP2DObject()
 {
     clipartCollection = _clipartCollection;
@@ -43,7 +43,7 @@ KPClipartObject::KPClipartObject( KPClipartCollection *_clipartCollection )
 }
 
 /*================== overloaded constructor ======================*/
-KPClipartObject::KPClipartObject( KPClipartCollection *_clipartCollection, const KPClipartKey & key )
+KPClipartObject::KPClipartObject( KoPictureCollection *_clipartCollection, const KoPictureKey & key )
     : KP2DObject()
 {
     clipartCollection = _clipartCollection;
@@ -60,7 +60,7 @@ KPClipartObject &KPClipartObject::operator=( const KPClipartObject & )
 }
 
 /*================================================================*/
-void KPClipartObject::setClipart( const KPClipartKey & key )
+void KPClipartObject::setClipart( const KoPictureKey & key )
 {
     /*if ( !_lastModified.isValid() )
     {
@@ -71,7 +71,7 @@ void KPClipartObject::setClipart( const KPClipartKey & key )
     //if ( picture )
     //    clipartCollection->removeRef( key );
 
-    m_clipart = clipartCollection->findClipart( key );
+    m_clipart = clipartCollection->findPicture( key );
     if ( m_clipart.isNull() )
         kdWarning() << "Clipart not found in collection " << key.toString() << endl;
 }
@@ -81,7 +81,7 @@ QDomDocumentFragment KPClipartObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
     QDomElement elem=doc.createElement("KEY");
-    m_clipart.key().saveAttributes(elem);
+    m_clipart.getKey().saveAttributes(elem);
     fragment.appendChild(elem);
     return fragment;
 }
@@ -92,9 +92,10 @@ double KPClipartObject::load(const QDomElement &element)
     double offset=KP2DObject::load(element);
     QDomElement e=element.namedItem("KEY").toElement();
     if(!e.isNull()) {
-        KPClipartKey key;
-        key.loadAttributes(e, clipartCollection->tmpDate(), clipartCollection->tmpTime());
-        m_clipart = KPClipart( key, QPicture() );
+        KoPictureKey key;
+        key.loadAttributes(e, QDate( 1970, 1, 1 ), QTime( 0, 0 ) );
+        m_clipart.clear();
+        m_clipart.setKey( key );
     }
     else {
         // try to find a FILENAME tag if the KEY is not available...
@@ -104,7 +105,7 @@ double KPClipartObject::load(const QDomElement &element)
                            QDateTime( clipartCollection->tmpDate(),
                            clipartCollection->tmpTime() ) );*/
             // Loads from the disk directly (unless it's in the collection already?)
-            m_clipart = clipartCollection->loadClipart( e.attribute("filename") );
+            m_clipart = clipartCollection->loadPicture( e.attribute("filename") );
         }
     }
     return offset;
@@ -154,17 +155,25 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         }
 
 	if ( !drawContour ) {
+#if 1
+            // TODO: verify!
+            m_clipart.draw(*_painter,
+                _zoomHandler->zoomItX(ox) /*+1*/, _zoomHandler->zoomItY(oy) /*+1*/,
+                _zoomHandler->zoomItX( ext.width()), _zoomHandler->zoomItY( ext.height()),
+                0, 0, 0, 0);
+#else
 	    _painter->save();
 	    QRect br = m_clipart.picture()->boundingRect();
 	    _painter->translate( _zoomHandler->zoomItX(ox) /*+1*/,
 				 _zoomHandler->zoomItY(oy) /*+1*/ );
 	    if ( br.width() && br.height() )
-		_painter->scale( (double)(_zoomHandler->zoomItX( ext.width()))
+		_painter->scale( (double)()
 				 / (double) br.width(),
-				 (double)(_zoomHandler->zoomItY( ext.height()))
+				 (double))
 				 / (double) br.height() );
 	    _painter->drawPicture( *m_clipart.picture() );
 	    _painter->restore();
+#endif
 	}
 
         _painter->setPen( pen2 );
@@ -212,6 +221,14 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         }
 
 	if ( !drawContour ) {
+#if 1
+            // TODO: verify!
+            m_clipart.draw(*_painter,
+                0, 0,
+                _zoomHandler->zoomItX( ext.width()), _zoomHandler->zoomItY( ext.height()),
+                0, 0, 0, 0);
+#else
+
 	    _painter->save();
 	    QRect _boundingRect = m_clipart.picture()->boundingRect();
 	    if ( _boundingRect.width() && _boundingRect.height() )
@@ -221,6 +238,7 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 				 / (double) _boundingRect.height() );
 	    _painter->drawPicture( *m_clipart.picture() );
 	    _painter->restore();
+#endif
 	}
 
         _painter->setPen( pen2 );

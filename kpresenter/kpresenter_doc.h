@@ -52,9 +52,8 @@ class KPrBgSpellCheck;
 #include <kpobject.h>
 #include <global.h>
 
-#include <kpimage.h>
+#include <koPictureCollection.h>
 #include <kpgradientcollection.h>
-#include <kpclipartcollection.h>
 #include <koUnit.h>
 #include <kozoomhandler.h>
 
@@ -134,8 +133,8 @@ public:
     // We need one that's not const, due to QPtrList::at() not being const
     QPtrList<KPrPage>& pageList() { return m_pageList;}
 
-    void insertPixmapKey( KPImageKey key );
-    void insertClipartKey( KPClipartKey key );
+    void insertPixmapKey( KoPictureKey key );
+    void insertClipartKey( KoPictureKey key );
 
     void insertObjectInPage(double offset, KPObject *_obj);
 
@@ -198,9 +197,9 @@ public:
     void deSelectObj(KPObject *obj);
     void updateHeaderFooterButton();
 
-    KPImageCollection *getImageCollection() { return &_imageCollection; }
+    KoPictureCollection *getImageCollection() { return &_imageCollection; }
     KPGradientCollection *getGradientCollection() { return &_gradientCollection; }
-    KPClipartCollection *getClipartCollection() { return &_clipartCollection; }
+    KoPictureCollection *getClipartCollection() { return &_clipartCollection; }
 
     KoAutoFormat * getAutoFormat() { return m_autoFormat; }
 
@@ -430,24 +429,22 @@ protected:
 
     QPen _presPen;
 
-    KPImageCollection _imageCollection;
+    KoPictureCollection _imageCollection;
     KPGradientCollection _gradientCollection;
-    KPClipartCollection _clipartCollection;
+    KoPictureCollection _clipartCollection;
 
     KPTextObject *_header, *_footer;
     bool _hasHeader, _hasFooter;
 
-    QMap<KoImageKey, QString> * m_pixmapMap;
-
-    QValueList<KPClipartCollection::Key> clipartCollectionKeys;
-    QStringList clipartCollectionNames;
+    QMap<KoPictureKey, QString> * m_pixmapMap;
+    QMap<KoPictureKey, QString> * m_clipartMap;
     KoPageLayout __pgLayout;
     int lastObj;
 
     QString urlIntern;
 
-    QValueList<KPImageKey> usedPixmaps;
-    QValueList<KPClipartKey> usedCliparts;
+    QValueList<KoPictureKey> usedPixmaps;
+    QValueList<KoPictureKey> usedCliparts;
     QStringList usedSoundFile, haveNotOwnDiskSoundFile;
     QPtrList<KTempFile> tmpSoundFileList;
     DCOPObject *dcop;

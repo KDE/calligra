@@ -17,6 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+// TODO: delete this file
+
+#if 0
 #ifndef __kpimage_h__
 #define __kpimage_h__
 
@@ -54,4 +57,5 @@ private:
     QTime m_tmpTime;
 };
 
+#endif
 #endif

@@ -117,12 +117,17 @@ void KPBackGround::draw( QPainter *_painter, const QSize& ext, const QRect& crec
         drawBackColor( _painter, ext, crect );
         if ( !backClipart.isNull() )
         {
+#if 1
+            // TODO: verify!
+            backClipart.draw(*_painter, 0, 0, ext.width(), ext.height(), 0, 0, 0, 0);
+#else
             _painter->save();
             QRect br = backClipart.picture()->boundingRect();
             if ( br.width() && br.height() )
                 _painter->scale( (double)ext.width() / (double)br.width(), (double)ext.height() / (double)br.height() );
             _painter->drawPicture( *backClipart.picture() );
             _painter->restore();
+#endif
         }
     } break;
     }
@@ -136,14 +141,14 @@ void KPBackGround::draw( QPainter *_painter, const QSize& ext, const QRect& crec
 void KPBackGround::reload()
 {
     if ( backType == BT_PICTURE )
-        setBackPixmap( backImage.key().filename(), backImage.key().lastModified() );
+        setBackPixmap( backImage.getKey().filename(), backImage.getKey().lastModified() );
     else
-        backImage = KPImage();
+        backImage.clear();
 
     if ( backType == BT_CLIPART )
-	setBackClipart( backClipart.key().filename(), backClipart.key().lastModified() );
+	setBackClipart( backClipart.getKey().filename(), backClipart.getKey().lastModified() );
     else
-        backClipart = KPClipart();
+        backClipart.clear();
 }
 
 /*================================================================*/
@@ -193,14 +198,14 @@ QDomElement KPBackGround::save( QDomDocument &doc )
     if ( !backImage.isNull() && backType == BT_PICTURE )
     {
         element = doc.createElement( "BACKPIXKEY" );
-        backImage.key().saveAttributes( element );
+        backImage.getKey().saveAttributes( element );
         page.appendChild( element );
     }
 
     if ( !backClipart.isNull() && backType == BT_CLIPART )
     {
         element=doc.createElement( "BACKCLIPKEY" );
-        backClipart.key().saveAttributes( element );
+        backClipart.getKey().saveAttributes( element );
         page.appendChild( element );
     }
 
@@ -301,13 +306,15 @@ void KPBackGround::load( const QDomElement &element )
     }
     e=element.namedItem("BACKPIXKEY").toElement();
     if(!e.isNull()) {
-        KPImageKey key;
-        key.loadAttributes(e, imageCollection()->tmpDate(), imageCollection()->tmpTime());
-        backImage = KPImage( key, QImage() ); // Image will be set by reload(), called by completeLoading()
+        KoPictureKey key;
+        key.loadAttributes(e, QDate( 1970, 1, 1 ), QTime( 0,0 ) );
+        backImage.clear();
+        backImage.setKey( key );
+        // Image will be set by reload(), called by completeLoading()
     }
     else {
         // try to find a BACKPIX tag if the BACKPIXKEY is not available...
-        KPImageKey key;
+        KoPictureKey key;
         e=element.namedItem("BACKPIX").toElement();
         if(!e.isNull()) {
             bool openPic = true;
@@ -332,13 +339,18 @@ void KPBackGround::load( const QDomElement &element )
             }
             if ( openPic )
                 // !! this loads it from the disk (unless it's in the image collection already)
-                backImage = imageCollection()->loadImage( _fileName );
+                backImage = imageCollection()->loadPicture( _fileName );
             else
             {
-                QDateTime dateTime( imageCollection()->tmpDate(), imageCollection()->tmpTime() );
-                KPImageKey key( _fileName, dateTime );
-                backImage = imageCollection()->loadXPMImage( key, _data );
-            }
+                QDateTime dateTime(  QDate( 1970, 1, 1 ) ); // We need a valid date
+                KoPictureKey key( _fileName, dateTime );
+                backImage.clear();
+                backImage.setKey(key);
+                QByteArray rawData=_data.utf8(); // XPM is normally ASCII, therefore UTF-8
+                rawData[rawData.size()-1]=char(10); // Replace the NULL character by a LINE FEED
+                QBuffer buffer(rawData);
+                backImage.loadXpm(&buffer);
+           }
 
 #if 0
             if ( ext == orig_size.toQSize() )
@@ -350,9 +362,11 @@ void KPBackGround::load( const QDomElement &element )
     }
     e=element.namedItem("BACKCLIPKEY").toElement();
     if(!e.isNull()) {
-        KPClipartKey clipKey;
-        clipKey.loadAttributes(e, clipartCollection()->tmpDate(), clipartCollection()->tmpTime());
-        backClipart = KPClipart( clipKey, QPicture() ); // Picture will be set by reload(), called by completeLoading()
+        KoPictureKey clipKey;
+        clipKey.loadAttributes(e, QDate( 1970, 1, 1 ), QTime ( 0, 0 ) );
+        backClipart.clear();
+        backClipart.setKey(clipKey);
+        // Picture will be set by reload(), called by completeLoading()
     }
     else {
         // try to find a BACKCLIP tag if the BACKCLIPKEY is not available...
@@ -372,7 +386,7 @@ void KPBackGround::load( const QDomElement &element )
             }
             //KPClipartKey clipKey( _fileName, QDateTime( clipartCollection()->tmpDate(),
             //                                            clipartCollection()->tmpTime() ) );
-            backClipart = clipartCollection()->loadClipart( _fileName ); // load from disk !
+            backClipart = clipartCollection()->loadPicture( _fileName ); // load from disk !
         }
     }
     e=element.namedItem("PGTIMER").toElement();
@@ -427,31 +441,34 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
     if ( !backImage.isNull() )
     {
         // depend on page size and desktop size
-        QSize _origSize = backImage.originalSize();
-        double faktX = (double)_origSize.width() / (double)QApplication::desktop()->width();
-        double faktY = (double)_origSize.height() / (double)QApplication::desktop()->height();
-        double w = (double)ext.width() * faktX;
-        double h = (double)ext.height() * faktY;
-        QSize _pixSize = QSize( (int)w, (int)h );
+        const QSize _origSize = backImage.getOriginalSize();
+        // NOTE: make all multiplications before any division
+        double w = _origSize.width();
+        w *= ext.width();
+        w /= QApplication::desktop()->width();
+        double h = _origSize.height();
+        h *= ext.height();
+        h /= QApplication::desktop()->height();
+        const QSize _pixSize = QSize( (int)w, (int)h );
+        QPixmap backPix;
 
         switch ( backView )
         {
         case BV_ZOOM:
-            _painter->drawPixmap( QRect( 0, 0, ext.width(), ext.height() ), backImage.pixmap() );
+            backPix=backImage.generatePixmap( _origSize );
+            _painter->drawPixmap( QRect( 0, 0, ext.width(), ext.height() ), backPix );
             break;
         case BV_TILED:
-            backImage = backImage.scale( _pixSize );
-            _painter->drawTiledPixmap( 0, 0, ext.width(), ext.height(), backImage.pixmap() );
+            backPix=backImage.generatePixmap( _pixSize );
+            _painter->drawTiledPixmap( 0, 0, ext.width(), ext.height(), backPix );
             break;
         case BV_CENTER:
         {
-	    backImage = backImage.scale( _pixSize );
+            backPix=backImage.generatePixmap( _pixSize );
 
             QPixmap *pix = new QPixmap( ext.width(), ext.height() );
             bool delPix = true;
             int _x = 0, _y = 0;
-
-            QPixmap backPix = backImage.pixmap();
 
             if ( backPix.width() > pix->width() && backPix.height() > pix->height() )
                 bitBlt( pix, 0, 0, &backPix, backPix.width() - pix->width(), backPix.height() - pix->height(),
@@ -517,7 +534,7 @@ void KPBackGround::removeGradient()
     }
 }
 
-KPImageCollection * KPBackGround::imageCollection() const
+KoPictureCollection * KPBackGround::imageCollection() const
 {
     return m_page->kPresenterDoc()->getImageCollection();
 }
@@ -527,7 +544,7 @@ KPGradientCollection * KPBackGround::gradientCollection() const
     return m_page->kPresenterDoc()->getGradientCollection();
 }
 
-KPClipartCollection * KPBackGround::clipartCollection() const
+KoPictureCollection * KPBackGround::clipartCollection() const
 {
     return m_page->kPresenterDoc()->getClipartCollection();
 }

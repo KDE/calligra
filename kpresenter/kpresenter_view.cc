@@ -3082,9 +3082,9 @@ void KPresenterView::backOk( bool takeGlobal )
 					     backDia->getBackColor2(), backDia->getBackColorType(),
 					     backDia->getBackUnbalanced(),
 					     backDia->getBackXFactor(), backDia->getBackYFactor(),
-					     KPImageKey( backDia->getBackPixFilename(),
+					     KoPictureKey( backDia->getBackPixFilename(),
                                                          backDia->getBackPixLastModified() ),
-                                             KPClipartKey( backDia->getBackClipFilename(),
+                                             KoPictureKey( backDia->getBackClipFilename(),
                                                            backDia->getBackClipLastModified() ),
 					     backDia->getBackView(), backDia->getBackType(),
 					     page->getBackColor1(  ),
@@ -3972,6 +3972,8 @@ void KPresenterView::setTool( ToolEditMode toolEditMode )
     case INS_AUTOFORM:
 	actionToolsAutoform->setChecked( true );
 	break;
+    default: // Shut up gcc -Wall
+        break; // Shut up gcc 3.x
     }
 }
 
