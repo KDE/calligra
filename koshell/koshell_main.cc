@@ -34,6 +34,7 @@ int main( int argc, char **argv )
   KAboutData * aboutData = new KAboutData( "koshell", I18N_NOOP("KOffice Workspace"),
      version, description, KAboutData::License_GPL,
        "(c) 1998-2001, Torben Weis");
+  aboutData->addAuthor("Sven Lüppken", I18N_NOOP("Current Maintainer"), "sven@kde.org");
   aboutData->addAuthor("Torben Weis", 0, "weis@kde.org");
   aboutData->addAuthor("David Faure", 0, "david@mandrakesoft.com");
 
