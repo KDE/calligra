@@ -981,3 +981,8 @@ Montel laurent <montell@club-internet.fr>
 * bugs fixes :
 -close editor when you switch/insert/remove table
 -others bugs (I don't remember )
+
+2000-09-17-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+* Implemented Undo for "Paste"
+* Bugs fixes
