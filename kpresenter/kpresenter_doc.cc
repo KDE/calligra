@@ -1280,8 +1280,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	if ( _clean )
 	    setPageLayout( __pgLayout );
 	else {
-	    QRect r = m_pageList.last()->getZoomPageRect();
-            m_pageList.last()->background()->setBgSize(r.size());
+            m_pageList.last()->updateBackgroundSize();
 	}
 
 
@@ -1309,7 +1308,7 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout )
     _pageLayout = pgLayout;
 
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
-        m_pageList.at( i )->background()->setBgSize( m_pageList.at( i )->getZoomPageRect().size() );
+        m_pageList.at( i )->updateBackgroundSize();
 
     repaint( false );
     // don't setModified(true) here, since this is called on startup
@@ -1320,7 +1319,7 @@ unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore )
 {
     if ( _restore ) {
 	QRect r = m_pageList.last()->getZoomPageRect();
-        m_pageList.last()->background()->setBgSize(r.size());
+        m_pageList.last()->updateBackgroundSize();
 	repaint( false );
     }
 

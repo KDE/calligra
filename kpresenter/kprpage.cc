@@ -78,10 +78,9 @@ KPrPage::~KPrPage()
     delete kpbackground;
 }
 
-void KPrPage::setPageLayout(KoPageLayout /*pgLayout*/)
+void KPrPage::updateBackgroundSize()
 {
-    //refresh background
-    //FIXME
+    kpbackground->setBgSize( getZoomPageRect().size() );
 }
 
 void KPrPage::appendObject(KPObject *_obj)

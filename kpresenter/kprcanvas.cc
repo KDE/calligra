@@ -2047,10 +2047,10 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
         //FIXME
         QPtrListIterator<KPrPage> it(doc->pageList());
         for (  ; it.current(); ++it )
-	    it.current()->background()->setBgSize( it.current()->getZoomPageRect().size() );
+	    it.current()->updateBackgroundSize();
     }
     else
-        doc->pageList().at( m_showOnlyPage-1 )->background()->setBgSize( doc->pageList().at(m_showOnlyPage-1)->getZoomPageRect().size() );
+        doc->pageList().at( m_showOnlyPage-1 )->updateBackgroundSize();
 
 
     //kdDebug(33001) << "Page::startScreenPresentation Zooming objects" << endl;
@@ -2178,10 +2178,10 @@ void KPrCanvas::stopScreenPresentation()
     {
         QPtrListIterator<KPrPage> it(doc->pageList());
         for ( ; it.current(); ++it )
-	    it.current()->background()->setBgSize( it.current()->getZoomPageRect().size() );
+	    it.current()->updateBackgroundSize();
     }
     else
-        doc->pageList().at( m_showOnlyPage-1 )->background()->setBgSize( doc->pageList().at( m_showOnlyPage-1 )->getZoomPageRect().size() );
+        doc->pageList().at( m_showOnlyPage-1 )->updateBackgroundSize();
 
 #if 0
     if ( doc->hasHeader() && doc->header() )

@@ -44,7 +44,7 @@ public:
 
     KPresenterDoc * kPresenterDoc() const {return m_doc; }
 
-    void setPageLayout(KoPageLayout pgLayout);
+    void updateBackgroundSize();
 
     QString getManualTitle();
     void insertManualTitle(const QString & title);
