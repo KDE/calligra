@@ -192,7 +192,7 @@ void KisLayer::clear(const KisColor& c )
       {
 		// set the alpha channel to opaque
 		if (alpha)
-		  memset(channelMem(3, y * xTiles() + x, 0, 0),255 , TILE_SIZE*TILE_SIZE);
+		  memset(channelMem(3, y * xTiles() + x, 0, 0), 255 , TILE_SIZE*TILE_SIZE);
 	
 		uchar* ptr0 = channelMem(0, y * xTiles() + x, 0, 0);
 		uchar* ptr1 = channelMem(1, y * xTiles() + x, 0, 0);

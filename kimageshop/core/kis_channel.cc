@@ -49,8 +49,7 @@ void KisChannel::setPixel(uint x, uint y, uchar pixel)
   int tileNo = (y / TILE_SIZE) * m_xTiles + x / TILE_SIZE;
   
   // does the tile exist?
-  if (m_tiles[tileNo] == 0)
-    return;
+  if (m_tiles[tileNo] == 0) return;
   
   // get a pointer to the points tile data
   uchar *ptr = m_tiles[tileNo] + ((y % TILE_SIZE) * TILE_SIZE + x % TILE_SIZE);

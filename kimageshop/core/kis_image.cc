@@ -97,7 +97,7 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
 		*(ptr1 + (y * TILE_SIZE + x)) = v;
 		*(ptr2 + (y * TILE_SIZE + x)) = v;
 		if (m_cMode == cm_RGBA)
-		  *(ptr3 + (y * TILE_SIZE + x)) = v;
+		  *(ptr3 + (y * TILE_SIZE + x)) = 255;
 	  }
 
   compositeImage(QRect());
@@ -533,7 +533,7 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
 		  
 		  if (m_cMode == cm_RGBA)
 			{
-			  opac = (*sptr3*opacity)/255;
+			  opac = (*sptr3 * opacity)/255;
 			  invOpac=255-opac;
 
 			  *dptr0++ = (((*dptr0 * *dptr3)/255) * invOpac + *sptr0++ * opac)/255;
@@ -541,6 +541,9 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
 			  *dptr2++ = (((*dptr2 * *dptr3)/255) * invOpac + *sptr2++ * opac)/255;
 			  *dptr3++ = *sptr3 + *dptr3 - (*sptr3 * *dptr3)/255;
 
+			  sptr3++;
+			  dptr3 += leadIn;
+			  sptr3 += leadIn;
 			}
 		  else
 			{
@@ -556,12 +559,6 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
 	  sptr0 += leadIn;
 	  sptr1 += leadIn;
 	  sptr2 += leadIn;
-
-	  if (m_cMode == cm_RGBA)
-		{
-		  dptr3 += leadIn;
-		  sptr3 += leadIn;
-		}
 	}
 }
 

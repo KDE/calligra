@@ -65,7 +65,6 @@ void EraserTool::mousePress(QMouseEvent *e)
 
 bool EraserTool::paint(QPoint pos)
 {
-  /*
   KisImage * img = m_pDoc->current();
   KisLayer *lay = img->getCurrentLayer();
   if (!img)	return false;
@@ -111,13 +110,13 @@ bool EraserTool::paint(QPoint pos)
 			  bv = *(sl + x);
 			  if (bv == 0) continue;
 
-			  a = lay->pixel(3, x, y);
+			  a = lay->pixel(3, startx + x, starty + y);
 			  v = a - bv;
 			  if (v < 0 ) v = 0;
 			  if (v > 255 ) v = 255;
 			  a = (uchar) v;
 			  
-			  lay->setPixel(3, x, y, a);
+			  lay->setPixel(3, startx + x, starty + y, a);
 			}
 		}
     }
@@ -153,7 +152,6 @@ bool EraserTool::paint(QPoint pos)
 			} 
 		}
 	}
-  */
   return true;
 }
 
