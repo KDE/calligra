@@ -700,36 +700,35 @@ bool ABIWORDExport::filter(const QString  &filenameIn,
         strExt=filenameOut.mid(result);
     }
 
-#if 0
     QString strMime; // Mime type of the compressor (default: unknown)
 
     if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (logical extension)
         ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
     {
         // Compressed with gzip
-        strMime="application/x-gzip";
         kdDebug(30506) << "Compression: gzip" << endl;
+        // FIXME: Use KQIODeviceGZip, as KFilterDev seems to produce huge gzipped files (WHY?)
+# if 1
+        ioDevice = new KQIODeviceGZip(filenameOut);
+# else
+        ioDevice = KFilterDev::deviceForFile(filenameOut,"application/x-gzip");
+# endif
     }
     else if ((strExt==".bz2")||(strExt==".BZ2") //in case of .abw.bz2 (logical extension)
         ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
     {
-        // Compressed with bzip2
-        strMime="application/x-bzip2";
+        // Compressed with bzip2 (TODO: activate me in the .desktop file and test me!)
         kdDebug(30506) << "Compression: bzip2" << endl;
-    }
-
-    ioDevice = KFilterDev::deviceForFile(filenameOut,strMime);
-#else
-    if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (standard extension)
-        ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
-    {// GZipped
-        ioDevice=new KQIODeviceGZip(filenameOut);
+        ioDevice = KFilterDev::deviceForFile(filenameOut,"application/x-bzip2");
     }
     else
-    {// Uncompressed
-        ioDevice=new QFile(filenameOut);
+    {
+        // Uncompressed, we cannot use KFiterDev
+        //   KFilterBase is uncooperative for writing uncompressed files
+        //   (as it defaults to "application/x-gzip" if no filter is found)
+        kdDebug(30506) << "No compression" << endl;
+        ioDevice = new QFile(filenameOut);
     }
-#endif
 
     if (!ioDevice)
     {
