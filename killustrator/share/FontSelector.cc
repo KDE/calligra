@@ -55,7 +55,7 @@
 #define BUTTONHEIGHT 25
 
 #define CHARSETS_COUNT 9
-static char *charsetsStr[CHARSETS_COUNT]={"ISO-8859-1","Any",
+static const char *charsetsStr[CHARSETS_COUNT]={"ISO-8859-1","Any",
                                    "ISO-8859-2",
                                    "ISO-8859-3",
                                    "ISO-8859-4",

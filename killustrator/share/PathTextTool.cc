@@ -81,7 +81,7 @@ void PathTextTool::deactivate (GDocument*, Canvas* canvas) {
   canvas->setCursor (oldCursor);
 }
 
-void PathTextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
+void PathTextTool::processEvent (QEvent* e, GDocument *doc, Canvas* /*canvas*/) {
   if (e->type () == 
 #if QT_VERSION >= 199
       QEvent::KeyPress

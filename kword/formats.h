@@ -12,8 +12,8 @@ class FormatRecord {
 public:
     const char *formatName;
     unsigned int flags; // Internal? / Read? / Write?
-    char *magic; // NULL for formats kpaint should not register
-    char *glob;
+    const char *magic; // NULL for formats kpaint should not register
+    const char *glob;
     image_io_handler read_format; // NULL for internal formats
     image_io_handler write_format; // NULL for internal formats
 

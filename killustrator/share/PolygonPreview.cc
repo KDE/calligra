@@ -41,7 +41,7 @@ PolygonPreview::PolygonPreview (QWidget* parent, const char* name) :
   setFixedSize (WIDTH, HEIGHT);
 }
 
-void PolygonPreview::paintEvent (QPaintEvent *e) {
+void PolygonPreview::paintEvent (QPaintEvent *) {
   QPainter p;
   double a, angle = 2 * M_PI / nCorners;
   double xp, yp;

@@ -97,7 +97,7 @@ const char* GPixmap::typeName () {
   return I18N ("Pixmap object");
 }
 
-void GPixmap::draw (Painter& p, bool withBasePoints, bool outline) {
+void GPixmap::draw (Painter& p, bool /*withBasePoints*/, bool outline) {
   p.save ();
   p.setWorldMatrix (tmpMatrix, true);
   if (outline) {

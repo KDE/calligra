@@ -347,8 +347,8 @@ public:
   /**
    * At the moment only valid for lines and bezier curves.
    */
-  virtual bool findNearestPoint (const Coord& p, float max_dist, 
-				 float& dist, int& pidx, bool all = false) { 
+  virtual bool findNearestPoint (const Coord& , float /*max_dist*/, 
+				 float& /*dist*/, int& /*pidx*/, bool /*all*/ = false) { 
     return false; 
   }
 

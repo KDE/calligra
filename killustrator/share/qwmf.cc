@@ -33,9 +33,8 @@ bool qwmfDebug = FALSE;
 #include "qwmf.h"
 #include "wmfstruct.h"
 #include "metafuncs.h"
+#include <kautoarray.h>
 
-
-#define MIN(a,b) ((a)<(b)?(a):(b))
 #define ABS(x) ((x)>=0?(x):-(x))
 
 class WmfCmd
@@ -176,8 +175,8 @@ bool QWinMetaFile::load(const QString aFileName)
 
     mCalcBBox = FALSE;
     mDpi = pheader.inch;
-    mBBox.setLeft(MIN(pheader.bbox.left,pheader.bbox.right));
-    mBBox.setTop(MIN(pheader.bbox.top,pheader.bbox.bottom));
+    mBBox.setLeft(QMIN(pheader.bbox.left,pheader.bbox.right));
+    mBBox.setTop(QMIN(pheader.bbox.top,pheader.bbox.bottom));
     mBBox.setWidth(ABS(pheader.bbox.right - pheader.bbox.left));
     mBBox.setHeight(ABS(pheader.bbox.bottom - pheader.bbox.top));
   }
@@ -380,11 +379,11 @@ bool QWinMetaFile::paint(const QPaintDevice* aTarget)
     int a, b;
     a = mBBox.left();
     b = mBBox.right();
-    mBBox.setLeft(MIN(a, b));
+    mBBox.setLeft(QMIN(a, b));
     mBBox.setWidth(ABS(b - a));
     a = mBBox.top();
     b = mBBox.bottom();
-    mBBox.setTop(MIN(a, b));
+    mBBox.setTop(QMIN(a, b));
     mBBox.setHeight(ABS(b - a));
   }
 
@@ -496,7 +495,7 @@ QColor QWinMetaFile::color(short* parm)
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::setWindowOrg(short num, short* parm)
+void QWinMetaFile::setWindowOrg(short , short* parm)
 {
   QRect r = mPainter.window();
   mPainter.setWindow(parm[1],parm[0],r.width(),r.height());
@@ -509,7 +508,7 @@ void QWinMetaFile::setWindowOrg(short num, short* parm)
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::setWindowExt(short num, short* parm)
+void QWinMetaFile::setWindowExt(short, short* parm)
 {
   QRect r = mPainter.window();
   mPainter.setWindow(r.left(),r.top(),parm[1],parm[0]);
@@ -522,21 +521,21 @@ void QWinMetaFile::setWindowExt(short num, short* parm)
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::lineTo(short num, short* parm)
+void QWinMetaFile::lineTo(short, short* parm)
 {
   mPainter.lineTo(parm[0],parm[1]);
 }
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::moveTo(short num, short* parm)
+void QWinMetaFile::moveTo(short, short* parm)
 {
   mPainter.moveTo(parm[0],parm[1]);
 }
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::selectObject(short num, short* parm)
+void QWinMetaFile::selectObject(short, short* parm)
 {
   int idx = parm[0];
   if (idx>=0 && idx < MAX_OBJHANDLE && mObjHandleTab[idx])
@@ -545,26 +544,26 @@ void QWinMetaFile::selectObject(short num, short* parm)
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::deleteObject(short num, short* parm)
+void QWinMetaFile::deleteObject(short, short* parm)
 {
   deleteHandle(parm[0]);
 }
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::ellipse(short num, short* parm)
+void QWinMetaFile::ellipse(short, short* parm)
 {
   mPainter.drawEllipse(parm[0],parm[1],parm[2]-parm[0],parm[3]-parm[1]);
 }
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::polypolygon(short num, short* parm)
+void QWinMetaFile::polypolygon(short, short* parm)
 {
   QPointArray* pa;
   int i;
   int polyCount = parm[0];
-  int vertices[polyCount];
+  kauto_array<int> vertices(polyCount);
   bool bgMode = FALSE;
   QT_PRFX::RasterOp rop = mPainter.rasterOp();
   QBrush fgBrush(mPainter.brush());

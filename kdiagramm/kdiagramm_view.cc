@@ -28,7 +28,7 @@
  *****************************************************************************/
 
 KDiagrammView::KDiagrammView( QWidget *_parent, const char *_name, KDiagrammDoc* _doc ) :
-  KoDiagrammView( _parent ), KoViewIf( _doc ), OPViewIf( _doc ), KDiagramm::View_skel()
+  KoDiagrammView( _parent, _name ), KoViewIf( _doc ), OPViewIf( _doc ), KDiagramm::View_skel()
 {
   setWidget( this );
 

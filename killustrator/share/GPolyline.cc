@@ -119,7 +119,7 @@ const char* GPolyline::typeName () {
   return I18N ("Polyline");
 }
 
-void GPolyline::draw (Painter& p, bool withBasePoints, bool outline) {
+void GPolyline::draw (Painter& p, bool withBasePoints, bool /*outline*/) {
   unsigned int i;
   QPen pen;
   int sdx = 0;
@@ -322,7 +322,7 @@ void GPolyline::calcBoundingBox () {
   updateBoundingBox (r);
 }
 
-void GPolyline::updateProperties (GObject::Property prop, int mask) {
+void GPolyline::updateProperties (GObject::Property prop, int /*mask*/) {
     if (prop == GObject::Prop_Fill)
 	return;
   if ((sArrow == 0L && outlineInfo.startArrowId > 0) ||

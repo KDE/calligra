@@ -145,7 +145,7 @@ bool GSegment::contains (const Coord& p) {
   return false;
 }
   
-void GSegment::draw (Painter& p, bool withBasePoints, bool outline, 
+void GSegment::draw (Painter& p, bool withBasePoints, bool /*outline*/, 
 		     bool drawFirst) {
   if (skind == sk_Line)
     p.drawLine (points[0].x (), points[0].y (),
@@ -284,7 +284,7 @@ void GCurve::writeToXml (XmlWriter& xml) {
   xml.endTag ();
 }
 
-void GCurve::getPath (vector<Coord>& path) {
+void GCurve::getPath (vector<Coord>& ) {
 }
 
 void GCurve::calcBoundingBox () {
@@ -302,7 +302,7 @@ void GCurve::calcBoundingBox () {
   box = r.transform (tmpMatrix);
 }
 
-void GCurve::updateGradientShape (QPainter& p) {
+void GCurve::updateGradientShape (QPainter& ) {
 }
 
 void GCurve::setClosed (bool flag) {

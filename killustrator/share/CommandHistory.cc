@@ -35,7 +35,7 @@ CommandHistory::CommandHistory () {
   history.setAutoDelete (true);
 }
 
-void CommandHistory::addCommand (Command *cmd, bool exec = false) {
+void CommandHistory::addCommand (Command *cmd, bool exec) {
   if (exec)
     cmd->execute ();
   // remove all command objects "behind" the current command 

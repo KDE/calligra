@@ -62,8 +62,8 @@ void KChartAxesPainter::setupLegend( QPaintDevice* paintdev, table_t* table )
 
   int maxlen = 0;
   uint num = 0;
-  QPaintDeviceMetrics pdm( paintdev );
-
+  // QPaintDeviceMetrics pdm( paintdev );
+  
   const char* curlegend  = _chart->_legends.first();
   while( curlegend ) {
 	// Check whether there is a legend defined at this position
@@ -183,7 +183,7 @@ bool KChartAxesPainter::setupCoords( QPaintDevice* paintdev, table_t* table )
 	( _chart->_xaxisfontheight ? 1 : 0 );
 
   // calculate top and bottom of bounding box
-  QPaintDeviceMetrics pdm( paintdev );
+  // QPaintDeviceMetrics pdm( paintdev );
   _chart->_bottom = _chart->_height - _chart->_bottommargin - 1 -
 	( _chart->_xlabelfontheight ? _chart->_xlabelfontheight : 0 ) -
 	( _chart->_xaxisfontheight ? _chart->_xaxisfontheight : 0 ) -
@@ -394,7 +394,7 @@ void KChartAxesPainter::drawText( QPainter* painter, table_t* table )
   if( _chart->_xlabelfontheight ) {
 	int xlabelx = 3 * ( _chart->_left  + _chart->_right ) / 4 -
 	  _chart->_xlabel.length() * _chart->_xlabelfontwidth / 2;
-	QPaintDeviceMetrics pdm( painter->device() );
+	// QPaintDeviceMetrics pdm( painter->device() );
 	int xlabely = _chart->_height - _chart->_xlabelfontheight - _chart->_bottommargin;
 
 	painter->setFont( _chart->xLabelFont() );
@@ -423,7 +423,7 @@ void KChartAxesPainter::drawText( QPainter* painter, table_t* table )
 
   // ylabel 2 (if needed)
   if( _chart->_twoaxes && _chart->_ylabelfontheight2 ) {
-	QPaintDeviceMetrics pdm( painter->device() );
+        // QPaintDeviceMetrics pdm( painter->device() );
 	int ylabel2x = _chart->_width - _chart->_ylabelfontheight - _chart->_rightmargin;
 	int ylabel2y = ( _chart->_bottom - _chart->_top ) / 2 +
 	  _chart->_y2label.length() * _chart->_ylabelfontwidth / 2;
@@ -441,7 +441,7 @@ void KChartAxesPainter::drawText( QPainter* painter, table_t* table )
 }
 
 
-void KChartAxesPainter::drawAxes( QPainter* painter, table_t* table )
+void KChartAxesPainter::drawAxes( QPainter* painter, table_t*  )
 {
   if( _chart->_boxaxis ) {
 	painter->setPen( _chart->_fgcolor );
@@ -589,7 +589,7 @@ void KChartAxesPainter::drawLegend( QPainter* painter, table_t* table )
 
 
 void KChartAxesPainter::drawLegendMarker( QPainter* painter, int number,
-										  int x, int y, table_t* table )
+					  int x, int y, table_t*  )
 {
   QColor datacolor = chooseDataColor( number );
 

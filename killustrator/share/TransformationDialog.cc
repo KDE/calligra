@@ -582,7 +582,7 @@ void TransformationDialog::update () {
   raise ();
 }
 
-void TransformationDialog::updateProportionalDimension (float value) {
+void TransformationDialog::updateProportionalDimension (float /*value*/) {
   if (proportional->isChecked ()) {
     if (sender () == horizDim) {
       if (percent->isChecked ())

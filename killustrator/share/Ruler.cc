@@ -87,7 +87,7 @@ void Ruler::initMarker (int w, int h) {
   p.end ();
 }
 
-void Ruler::recalculateSize (QResizeEvent *e) {
+void Ruler::recalculateSize (QResizeEvent *) {
   if (buffer != 0L) {
     delete buffer;
     buffer = 0L;

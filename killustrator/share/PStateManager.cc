@@ -82,7 +82,8 @@ void PStateManager::readDefaultSettings () {
   GObject::setDefaultFillInfo (fInfo);
 
   GText::TextInfo tInfo;
-  tInfo.font = config->readFontEntry ("Font", &QFont::defaultFont ());
+  QFont tmp(QFont::defaultFont ());
+  tInfo.font = config->readFontEntry ("Font", &tmp);
   tInfo.mask = GText::TextInfo::Font;
   GText::setDefaultTextInfo (tInfo);
 
