@@ -208,20 +208,6 @@
 	</Help>
     </Function>
 
-    <Function>
-      <Name>COUNTBLANK</Name>
-      <Type>Int</Type>
-      <Parameter>
-	<Comment>Any value</Comment>
-	<Type>Any</Type>
-      </Parameter>
-      <Help>
-	<Text>The COUNTBLANK() function returns the number of blank cells in the given parameter list.</Text>
-	<Syntax>COUNTBLANK(x)</Syntax>
-	<Example>COUNTBLANK(A1:A4) returns 4 if nothing is in the cells</Example>
-      </Help>
-    </Function>
-    
   </Group>
 
 </KSpreadFunctions>
