@@ -33,12 +33,6 @@ toolbar consists of a collection of icons. A toolbar icon often presents
 a convenient shortcut to a command that is found in one of the menus.
 </para>
 
-<para>
-Each toolbar has a thin stippled area, which acts as a handle for that
-toolbar. The stippled area is shown highlighted in red in the screenshot
-below:
-</para>
-
 <!-- FIXME: Update this screenshot -->
 <screenshot>
 <screeninfo>The toolbars</screeninfo>
@@ -49,31 +43,12 @@ below:
 </mediaobject>
 </screenshot>
 
-<para>
-Clicking on the toolbar handle results in that toolbar being
-<quote>flattened</quote> so that you have some extra space for viewing
-the main editing window:
-</para>
 
-
-<!-- FIXME: Update this screenshot -->
-<screenshot>
-<screeninfo>Flattened toolbar</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="barstyle2.png" format="PNG"/></imageobject>
-<textobject><phrase>Flattened toolbar</phrase></textobject>
-</mediaobject>
-</screenshot>
-
-<para>
-Clicking on the toolbar handle a second time brings the toolbar
-back. You can also move the toolbar around by dragging the
-handle. Toolbars can be <quote>docked</quote> or attached to any side of
-the &kpresenter; window. If you like, you can also have the toolbar
-<quote>float</quote> in its own window, separated from the main
-&kpresenter; window as shown in the screenshot below:
-</para>
+<para>You can move the toolbar around by dragging the handle. Toolbars can
+be <quote>docked</quote> or attached to any side of the &kpresenter;
+window. If you like, you can also have the toolbar <quote>float</quote> in
+its own window, separated from the main &kpresenter; window as shown in the
+screenshot below: </para>
 
 <screenshot>
 <screeninfo>Floating toolbar</screeninfo>
@@ -84,11 +59,9 @@ the &kpresenter; window. If you like, you can also have the toolbar
 </mediaobject>
 </screenshot>
 
-<para>
-If you don't like dragging toolbars around,
-<mousebutton>right</mousebutton> click on the handle and a menu pops up
-as shown in the screenshot below:
-</para>
+<para> If you don't like dragging toolbars around,
+<mousebutton>right</mousebutton> click on the handle and a menu pops up as
+shown in the screenshot below: </para>
 
 <screenshot>
 <screeninfo>Toolbar context menu</screeninfo>

@@ -37,7 +37,6 @@ information located elsewhere in the &kword; Handbook.</para>
 <sect1 id="toolbars">
 <title>Hiding, Changing, and Moving Tool Bars</title>
 <indexterm><primary>toolbars</primary><secondary>hiding</secondary></indexterm>
-<indexterm><primary>toolbars</primary><secondary>flattening</secondary></indexterm>
 
 <para>&kword; offers the user great flexibility when it comes to
 toolbars.  This first section will show you some of the many options
@@ -45,61 +44,16 @@ you have for relocating, reformatting and removing toolbars from your
 desktop.</para>
 
 <sect2 id="hide-toolbar">
-<title>Hiding and Flattening Tool Bars </title>
+<title>Hiding Tool Bars </title>
 
-<para>When you start &kword; for the first time, all the several
-toolbars are visible.  If you don't think you will need a toolbar, and
-want to reclaim that desktop space, you have two options. You can hide
-the toolbars or you can temporarily flatten the toolbars.</para>
-
-<sect3>
-<title>Flattening Toolbars</title>
-
-<para>Each toolbar has a striped area to the left (or on top) of the
-toolbar buttons.  By clicking on this area, the toolbar will be
-minimized (flattened).</para>
-
-<mediaobject>
-<imageobject>
-<imagedata fileref="tbmin.png" format="PNG"/></imageobject>
-</mediaobject>
-
-<para>Once a toolbar is flat, this striped area moves up near the
-menubar.</para>
-
-<mediaobject>
-<imageobject>
-<imagedata fileref="tbmax.png" format="PNG"/></imageobject>
-</mediaobject>
-
-<para>Clicking on this area will restore the toolbar to its original
-size.</para>
-
-<note>
-<para>Alternatively place the mouse pointer over on the toolbar you want to
-flatten, and click with the &RMB;.</para>
-
-<para>A small menu will appear at the mouse pointer.  Select
-<guimenuitem>Flat</guimenuitem>.</para>
-
-<para>To restore this menu to its original size and position, place
-the mouse pointer over the stripped area near the menubar, and click
-with the &LMB;.</para>
-</note>
-
-</sect3>
-
-<sect3>
-<title>Hiding/Restoring Toolbars</title>
-
-<para>If you want to eliminate the toolbar entirely from the window,
-you should hide the toolbar.</para>
+<para>When you start &kword; for the first time, all the several toolbars
+are visible.  If you don't think you will need a toolbar, and want to
+reclaim that desktop space, you can hide the toolbars</para>
 
 <para>To hide a toolbar, Select <guimenu>Settings</guimenu> from the
 menubar.  This will bring up a submenu.  All of the toolbars are
 listed.  Simply select the toolbar you want to hide or restore.</para>
 
-</sect3>
 </sect2>
 
 <sect2 id="move-toolbar">
