@@ -462,7 +462,7 @@ bool KSpreadLayout::loadLayout( const QDomElement& f,PasteMode pm )
     }
     if(f.hasAttribute( "dontprinttext" ) )
       setDontPrintText(true);
-    
+
     if ( f.hasAttribute( "brushcolor" ) )
 	setBackGroundBrushColor( QColor( f.attribute( "brushcolor" ) ) );
 

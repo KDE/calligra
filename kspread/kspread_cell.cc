@@ -3985,9 +3985,13 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
     // Save the formatting information
     //
     QDomElement format;
-    if( !fallBack)
+
+    //we must save all format otherwise format number is not saved
+    //and kspread doesn't restore format number
+    //fix this hack after koffice 1.1
+    /*if( !fallBack)
         format = KSpreadLayout::save( doc );
-    else
+        else*/
         format=saveParameters( doc );
     cell.appendChild( format );
 
