@@ -233,7 +233,7 @@ void KHTMLReader::parse_head(DOM::Element e) {
 bool KHTMLReader::parseTag(DOM::Element e) {
 	_PP(p);
 	_PP(br);
-	//_PP(table); <- disabled for koffice 1.2 beta.
+	_PP(table);
 	_PP(pre);
 	_PP(ul);
 	_PP(ol);
