@@ -289,3 +289,4 @@ Changes after KWord-1.2
 - Add support for font attribute ( lowercase/uppercase )
 - Add double click on frame => open frame dialogbox
 - Add autocorrection : "Capitalize name of days"
+- Add new font attribute : small caps

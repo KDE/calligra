@@ -134,3 +134,5 @@ Changes after KPresenter 1.2
 - Now we can copy text of comment.
 - Add support for font attribute ( Uppercase/lowercase )
 - Add autocorrection : "Capitalize name of days"
+- Add new font attribute : small caps
+
