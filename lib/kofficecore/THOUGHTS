@@ -69,6 +69,11 @@ Pressing Alt+Shift is allowed, too, if you can do that :p
  
 As you already know we'll support a zoom factor for
 each axe here. (i.e. x/y zoom factors)
+
+Related to that is child-panning. Indepenent of the zoom factor
+the child shouldn't just show the left/top corner, but it should
+"remember" the position inside the document when it's repainted
+as inactive child.
 ###
 
 If a part doesn't support zooming natively we have to fall back to WMartix
