@@ -3329,7 +3329,7 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
     // HACK
     if ( doc->viewCount() == 1 && !doc->loaded() )
     {
-        QKeyEvent e(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Key_Delete,0,0);
+        QKeyEvent e( static_cast<QEvent::Type>( 6 ) /*QEvent::KeyPress*/ , Key_Delete, 0 ,0 );
         paperWidget->keyPressEvent( &e );
         scrollH( 0 );
         scrollV( 0 );

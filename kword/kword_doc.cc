@@ -203,7 +203,9 @@ bool KWordDocument::loadTemplate( const char *_url )
 
 //     _loaded = false;
 //     return true;
-    return loadFromURL( _url, "application/x-kword" );
+    bool ok = loadFromURL( _url, "application/x-kword" );
+    _loaded = false;
+    return ok;
 }
 
 /*================================================================*/
@@ -1568,7 +1570,7 @@ QListIterator<KWordChild> KWordDocument::childIterator()
 }
 
 /*================================================================*/
-void KWordDocument::draw( QPaintDevice* , CORBA::Long, 
+void KWordDocument::draw( QPaintDevice* , CORBA::Long,
 			  CORBA::Long ,
                           CORBA::Float )
 {
@@ -3119,7 +3121,7 @@ KWFrameSet *KWordDocument::getFirstSelectedFrameSet()
 }
 
 /*================================================================*/
-void KWordDocument::print( QPainter *painter, QPrinter *printer, 
+void KWordDocument::print( QPainter *painter, QPrinter *printer,
 			   float /*left_margin*/, float /*top_margin*/ )
 {
     QList<KWFormatContext> fcList;
@@ -3645,8 +3647,8 @@ void KWordDocument::setFrameCoords( unsigned int x, unsigned int y, unsigned int
 }
 
 /*================================================================*/
-void KWordDocument::saveParagInUndoBuffer( QList<KWParag> /*parags*/, 
-					   int /*frameset*/, 
+void KWordDocument::saveParagInUndoBuffer( QList<KWParag> /*parags*/,
+					   int /*frameset*/,
 					   KWFormatContext */*_fc*/ )
 {
 }

@@ -501,7 +501,7 @@ void KWFrameSet::save( ostream &out )
             << "\" runaGapMM=\"" << frame->getRunAroundGap().mm()
             << "\" runaGapINCH=\"" << frame->getRunAroundGap().inch() << "\" "
             << correctQString( frame->leftBrd2String() ).latin1() << correctQString( frame->rightBrd2String() ).latin1()
-            << correctQString( frame->topBrd2String() ).latin1() 
+            << correctQString( frame->topBrd2String() ).latin1()
             << correctQString( frame->bottomBrd2String() ).latin1() << "bkRed=\"" << frame->getBackgroundColor().color().red()
             << "\" bkGreen=\"" << frame->getBackgroundColor().color().green() << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue()
 
