@@ -210,8 +210,39 @@ public slots:
     void elementWillVanish(BasicElement* element);
 
     
-private:
+    // undo/redo support
+    
+    /**
+     * A black box that is supposed to contain everything
+     * which is needed to describe a cursor. Only the cursor
+     * itself is allowed to read it.
+     */
+    class CursorData {
+        friend class FormulaCursor;
+        BasicElement* current;
+        int cursorPos;
+        int markPos;
+        bool selectionFlag;
 
+        CursorData(BasicElement* c, int pos, int mark, bool selection)
+            : current(c), cursorPos(pos), markPos(mark), selectionFlag(selection) {}
+
+    };
+
+    /**
+     * Creates a new CursorData object that describes the cursor.
+     * It's up to the caller to delete this object.
+     */
+    CursorData* getCursorData();
+
+    /**
+     * Sets the cursor to where the CursorData points to. No checking is done
+     * so you better make sure the point exists.
+     */
+    void setCursorData(CursorData* data);
+    
+private:
+    
     /**
      * Returns the sequence the cursor is in if we are normal. If not returns 0.
      */

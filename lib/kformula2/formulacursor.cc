@@ -350,6 +350,28 @@ void FormulaCursor::elementWillVanish(BasicElement* element)
 
 
 /**
+ * Creates a new CursorData object that describes the cursor.
+ * It's up to the caller to delete this object.
+ */
+CursorData* FormulaCursor::getCursorData()
+{
+    return new CursorData(current, cursorPos, markPos, selectionFlag);
+}
+
+/**
+ * Sets the cursor to where the CursorData points to. No checking is done
+ * so you better make sure the point exists.
+ */
+void FormulaCursor::setCursorData(CursorData* data)
+{
+    current = data->current;
+    cursorPos = data->cursorPos;
+    markPos = data->markPos;
+    selectionFlag = data->selectionFlag;
+}
+
+
+/**
  * Returns the sequence the cursor is in if we are normal. If not returns 0.
  */
 SequenceElement* FormulaCursor::getNormal()
