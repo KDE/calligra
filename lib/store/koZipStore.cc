@@ -62,7 +62,7 @@ bool KoZipStore::init( Mode _mode, const QCString& appIdentification )
         (void)m_pZip->writeFile( "mimetype", "", "", appIdentification.length(), appIdentification.data() );
         m_pZip->setCompression( KZip::DeflateCompression );
     }
-    return true;
+    return good;
 }
 
 bool KoZipStore::openWrite( const QString& name )
