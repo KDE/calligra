@@ -649,3 +649,8 @@ void KoTextViewIface::insertNonbreakingSpace()
 {
     m_textView->insertNonbreakingSpace();
 }
+
+void KoTextViewIface::insertNonbreakingHyphen()
+{
+    m_textView->insertNonbreakingHyphen();
+}

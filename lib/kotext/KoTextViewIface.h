@@ -37,6 +37,7 @@ public:
 k_dcop:
     void insertSoftHyphen();
     void insertNonbreakingSpace();
+    void insertNonbreakingHyphen();
     void insertText( const QString &text );
     void newParagraph();
     void setBold(bool b);
