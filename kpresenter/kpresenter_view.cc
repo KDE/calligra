@@ -243,6 +243,19 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     connect(this, SIGNAL(embeddImage(const QString &)), SLOT(insertPicture(const QString &)));
     connect( m_pKPresenterDoc, SIGNAL( sig_refreshMenuCustomVariable()),
              this, SLOT( refreshCustomMenu()));
+
+    // Cut and copy are directly connected to the selectionChanged signal
+    if ( m_pKPresenterDoc->isReadWrite() )
+    {
+        connect( page, SIGNAL(selectionChanged(bool)),
+                 actionEditCut, SLOT(setEnabled(bool)) );
+    }
+    else
+    {
+        actionEditCut->setEnabled( false );
+    }
+    connect( page, SIGNAL(selectionChanged(bool)),
+             actionEditCopy, SLOT(setEnabled(bool)) );
 }
 
 /*=============================================================*/
@@ -2581,9 +2594,11 @@ void KPresenterView::objectSelectedChanged()
     actionFormatParag->setEnabled(val);
     actionInsertVariable->setEnabled(val);
 
-    state=state || isText;
-    actionEditCopy->setEnabled(state);
-    actionEditCut->setEnabled(state);
+    if(!edit)
+    {
+        actionEditCopy->setEnabled(state);
+        actionEditCut->setEnabled(state);
+    }
 
     actionExtraShadow->setEnabled(!page->haveASelectedPictureObj());
 

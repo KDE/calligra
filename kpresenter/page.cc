@@ -1139,7 +1139,11 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
 	    if ( kpobject->contains( QPoint( e->x(), e->y() ), diffx(), diffy() ) ) {
 		if ( kpobject->getType() == OT_TEXT ) {
 		    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-                    delete m_currentTextObjectView;
+                    if(m_currentTextObjectView)
+                    {
+                        m_currentTextObjectView->terminate();
+                        delete m_currentTextObjectView;
+                    }
                     m_currentTextObjectView=kptextobject->createKPTextView(this);
 
 		    setTextBackground( kptextobject );
@@ -3757,6 +3761,7 @@ void Page::exitEditMode()
                 m_currentTextObjectView->clearSelection();
                 //hide cursor when we desactivate textObjectView
                 m_currentTextObjectView->drawCursor( false );
+                m_currentTextObjectView->terminate();
                 delete m_currentTextObjectView;
                 m_currentTextObjectView=0L;
             }

@@ -181,6 +181,8 @@ signals:
 
     void mouseWheelEvent( QWheelEvent * );
 
+    void selectionChanged( bool hasSelection );
+
 protected:
 
     struct PicCache

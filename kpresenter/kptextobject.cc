@@ -733,14 +733,27 @@ KPTextView::KPTextView( KPTextObject * txtObj,Page *_page )
 {
     m_page=_page;
     m_kptextobj=txtObj;
+    connect( txtObj->textObject(), SIGNAL( selectionChanged(bool) ), m_page, SIGNAL( selectionChanged(bool) ) );
     KoTextView::setReadWrite( txtObj->kPresenterDocument()->isReadWrite() );
     connect( textView(), SIGNAL( cut() ), SLOT( cut() ) );
     connect( textView(), SIGNAL( copy() ), SLOT( copy() ) );
     connect( textView(), SIGNAL( paste() ), SLOT( paste() ) );
     updateUI( true, true );
     m_actionList.setAutoDelete( true );
+
 }
 
+KPTextView::~KPTextView()
+{
+
+}
+
+void KPTextView::terminate()
+{
+    kdDebug()<<"KPTextView::terminate()****************************************************************************************************\n";
+    disconnect( textView()->textObject(), SIGNAL( selectionChanged(bool) ), m_page, SIGNAL( selectionChanged(bool) ) );
+    textView()->terminate();
+}
 
 void KPTextView::cut()
 {

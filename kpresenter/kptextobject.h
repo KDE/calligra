@@ -136,7 +136,7 @@ class KPTextView : public KoTextView
 Q_OBJECT
 public:
     KPTextView( KPTextObject * txtObj, Page *_page );
-    virtual ~KPTextView(){};
+    virtual ~KPTextView();
     KoTextView * textView() { return this; }
     KPTextObject * kpTextObject() { return m_kptextobj; }
 
@@ -162,7 +162,7 @@ public:
     void insertVariable( int type, int subtype = 0 );
     void insertCustomVariable( const QString &name);
     void insertVariable( KoVariable *var);
-
+    void terminate();
 
 public slots:
     void cut();
