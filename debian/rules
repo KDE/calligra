@@ -112,10 +112,10 @@ binary-arch: build install
 	dh_installdocs -a
 	dh_installexamples -a
 	# Rename a couple of newly installed files.
-	-mv debian/koffice-libs/usr/share/doc/HOWTO \
-	  debian/koffice-libs/usr/share/doc/filters.HOWTO
-	-mv debian/kugar/usr/share/doc/examples/kugar.examples.README \
-	  debian/kugar/usr/share/doc/examples/README.examples
+	-mv debian/koffice-libs/usr/share/doc/koffice-libs/HOWTO \
+	  debian/koffice-libs/usr/share/doc/koffice-libs/filters.HOWTO
+	-mv debian/kugar/usr/share/doc/kugar/examples/kugar.examples.README \
+	  debian/kugar/usr/share/doc/kugar/examples/README.examples
 	dh_installmenu -a
 	dh_installmime -a
 	dh_installman -a
@@ -135,8 +135,6 @@ binary-arch: build install
 	dh_strip -a
 	dh_compress -a --exclude=index.docbook
 	dh_fixperms -a
-	-chmod 644 debian/kivio/usr/share/apps/kivio/autoloadStencils/*ksp
-	# Leave debian/kpresenter/usr/bin/kprconverter.pl with execute perms.
 	dh_makeshlibs -a -V
 	dh_installdeb -a
 	dh_perl -a

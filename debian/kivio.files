@@ -5,6 +5,7 @@ usr/lib/libkivioconnectortool.*
 usr/lib/libkivioselecttool.*
 usr/lib/libkiviotexttool.*
 usr/lib/libkiviozoomtool.*
+usr/lib/kivio/*
 usr/share/applnk/Office/kivio.desktop
 usr/share/apps/kivio/*
 usr/share/mimelnk/application/x-kivio.desktop
