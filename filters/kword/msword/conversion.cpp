@@ -164,8 +164,8 @@ int Conversion::numberFormatCode( int nfc )
         return 2;
     case 5: // ordinal - not supported by KWord
     case 0: // arabic
-        return 0;
+        return 1;
     }
     kdWarning() << k_funcinfo << "Unknown NFC: " << nfc << endl;
-    return 0;
+    return 1;
 }
