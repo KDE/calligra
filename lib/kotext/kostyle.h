@@ -91,29 +91,23 @@ public:
     const KoTextFormat & format() const { return m_format; }
     KoTextFormat & format() { return m_format; }
 
-    KoStyle *followingStyle() { return m_followingStyle; }
+    KoStyle *followingStyle() const { return m_followingStyle; }
     void setFollowingStyle( KoStyle *fst ) { m_followingStyle = fst; }
 
     void save( QDomElement parentElem, KoZoomHandler* zh );
     void saveStyle( QDomElement & parentElem );
     static KoParagLayout loadStyle( QDomElement & parentElem, int docVersion=2 );
 
-    static int getAttribute(QDomElement &element, const char *attributeName, int defaultValue)
+    static int getAttribute(const QDomElement &element, const char *attributeName, int defaultValue)
       {
-	QString value;
-	if ( ( value = element.attribute( attributeName ) ) != QString::null )
-	  return value.toInt();
-	else
-	  return defaultValue;
+	QString value = element.attribute( attributeName );
+	return value.isNull() ? defaultValue : value.toInt();
       }
 
-    static double getAttribute(QDomElement &element, const char *attributeName, double defaultValue)
+    static double getAttribute(const QDomElement &element, const char *attributeName, double defaultValue)
       {
-	QString value;
-	if ( ( value = element.attribute( attributeName ) ) != QString::null )
-	  return value.toDouble();
-	else
-	  return defaultValue;
+	QString value = element.attribute( attributeName );
+	return value.isNull() ? defaultValue : value.toDouble();
       }
 
 private:
