@@ -1242,6 +1242,17 @@ void Formula::compile( const Tokens& tokens ) const
   }
 }
 
+RangeList Formula::getDependencies () const
+{
+  RangeList rl;
+  
+  //return an empty list if the formula isn't valid
+  if (!isValid())
+    return rl;
+  
+  
+}
+
 // Convert any value to integer or float
 
 KSpreadValue Formula::convertToNumber( const KSpreadValue& value ) const

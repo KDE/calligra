@@ -26,6 +26,10 @@
 #include "kspread_cell.h"
 #include "kspread_value.h"
 
+//we need RangeList structure from here - when RangeList moves to a separate
+//file, this should change accordingly...
+#include "dependencies.h"
+
 namespace KSpread
 {
 
@@ -281,6 +285,9 @@ class Formula
      */     
     static Tokens scan( const QString& expr );
 
+    /** return dependencies of this expression */
+    RangeList getDependencies () const;
+    
     /**
      * Returns an assembler dump of the formula.
      * Should be used only to assist debugging.

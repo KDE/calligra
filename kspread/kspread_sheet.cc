@@ -1079,12 +1079,13 @@ void KSpreadSheet::valueChanged (KSpreadCell *cell)
   return;  //DELETE THIS LINE WHEN THE DEPENDENCY MANAGER IS READY !!!
   
   //prepare the CellInfo object
-  KSpread::CellInfo ci;
-  ci.row = cell->row();
-  ci.column = cell->column();
+  KSpreadPoint c;
+  c.setRow (cell->row());
+  c.setColumn (cell->column());
+  c.table = this;
   
   //update dependencies
-  d->dependencies->cellChanged (ci);
+  d->dependencies->cellChanged (c);
 }
 
 /*

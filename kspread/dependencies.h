@@ -22,6 +22,8 @@
 
 #include <qvaluelist.h>
 
+#include "kspread_util.h"
+
 class KSpreadSheet;
 
 // KSpread namespace
@@ -30,46 +32,12 @@ namespace KSpread {
 
 struct DependencyList;
 
-/**
-Cell dependency - stores information about one dependency of a cell.
-*/
-
-struct CellInfo {
-  int row, column;
-  
-  inline bool operator== (const CellInfo &cell) const;
-  inline bool operator< (const CellInfo &cell) const;
-};
-
-/** one range */
-struct Range {
-  int startrow, startcol;
-  int rows, cols;
-  
-  /** does this range contain the given cell? */
-  inline bool contains (const CellInfo &cell);
-  /** do these two ranges have at least one common cell? */
-  bool intersects (const Range &range);
-};
-
-/**
-range-list and cell-list
-TODO: move to a separate file, improve structure, add iterators and all that 
-TODO: use this class instead of other means of range-walking all over KSpread
-TODO: use this as selection
-TODO: anything I forgot ;)
-*/
-struct RangeList {
-  QValueList<CellInfo> cells;
-  QValueList<Range> ranges;
-};
-
 /** Range dependency - stores information about one dependency of one cell on
 one range of cells. */
 
 struct RangeDependency {
   int cellrow, cellcolumn;
-  Range range;
+  KSpreadRange range;
 };
 
 
@@ -89,49 +57,49 @@ class DependencyManager {
   void reset ();
   
   /** handle the fact that cell's contents have changed */
-  void cellChanged (const CellInfo &cell);
+  void cellChanged (const KSpreadPoint &cell);
   /** handle the fact that a range has been changed */
-  void rangeChanged (const Range &range);
+  void rangeChanged (const KSpreadRange &range);
   /** handle the fact that a range list has been changed */
   void rangeListChanged (const RangeList &rangeList);
  protected:
   /** update structures: cell 1 depends on cell 2 */
-  void addDependency (const CellInfo &cell1, const CellInfo &cell2);
+  void addDependency (const KSpreadPoint &cell1, const KSpreadPoint &cell2);
   /** update structures: cell depends on a range */
   void addRangeDependency (const RangeDependency &rd);
   /** remove all dependencies of a cell */
-  void removeDependencies (const CellInfo &cell);
+  void removeDependencies (const KSpreadPoint &cell);
 
   /** generate list of dependencies of a cell */
-  void generateDependencies (const CellInfo &cell);
+  void generateDependencies (const KSpreadPoint &cell);
   /** generate list of dependencies of a range */
-  void generateDependencies (const Range &range);
+  void generateDependencies (const KSpreadRange &range);
   /** generate list of dependencies of a range list */
   void generateDependencies (const RangeList &rangeList);
 
   /** update cells dependending on a given cell */
-  void processDependencies (const CellInfo &cell) const;
+  void processDependencies (const KSpreadPoint &cell) const;
   /** update all cells depending on a range containing this cell */
-  void processRangeDependencies (const CellInfo &cell) const;
+  void processRangeDependencies (const KSpreadPoint &cell) const;
 
   /** update cells dependending on a cell in a given range */
-  void processDependencies (const Range &range) const;
+  void processDependencies (const KSpreadRange &range) const;
   /** update all cells depending on a range intersecting with this range */
-  void processRangeDependencies (const Range &range) const;
+  void processRangeDependencies (const KSpreadRange &range) const;
   
   /** update cells dependending on a given range-list */
   void processDependencies (const RangeList &rangeList) const;
 
   /** update one cell due to changed dependencies */
-  void updateCell (const CellInfo &cell) const;
+  void updateCell (const KSpreadPoint &cell) const;
 
   /** return a leading cell for a given cell (used to store range
   dependencies effectively) */
-  CellInfo leadingCell (const CellInfo &cell) const;
+  KSpreadPoint leadingCell (const KSpreadPoint &cell) const;
   /** list of leading cells of all cell chunks that this range belongs to */
-  QValueList<CellInfo> leadingCells (const Range &range) const;
+  QValueList<KSpreadPoint> leadingCells (const KSpreadRange &range) const;
   /** retrieve a list of cells that a given cell depends on */
-  RangeList getDependencies (const CellInfo &cell) const;
+  RangeList getDependencies (const KSpreadPoint &cell) const;
   
   /** KSpreadSheet whose dependencies are managed by this instance */
   KSpreadSheet *sheet;

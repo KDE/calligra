@@ -838,6 +838,21 @@ KSpreadCell *KSpreadPoint::cell()
     return table->cellAt(pos);
 }
 
+bool KSpreadPoint::operator== (const KSpreadPoint &cell) const
+{
+  if (table != cell.table)
+    return false;
+  return (pos == cell.pos);
+}
+
+bool KSpreadPoint::operator< (const KSpreadPoint &cell) const
+{
+  if (table != cell.table)
+    return false;  //not really relevant, as this doesn't make any sense
+  return (pos.y() < cell.pos.y()) ? true :
+      ((pos.y() == cell.pos.y()) && (pos.x() < cell.pos.x()));
+}
+
 KSpreadRange::KSpreadRange(const QString & _str)
 {
     range.setLeft(-1);
@@ -917,6 +932,16 @@ KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
     rightFixed = lr.columnFixed;
     topFixed = ul.rowFixed;
     bottomFixed = lr.rowFixed;
+}
+
+bool KSpreadRange::contains (const KSpreadPoint &cell) const
+{
+  return range.contains (cell.pos);
+}
+
+bool KSpreadRange::intersects (const KSpreadRange &r) const
+{
+  return range.intersects (r.range);
 }
 
 double util_fact( double val, double end )

@@ -52,6 +52,14 @@ public:
 
   KSpreadCell* cell();
 
+  bool operator== (const KSpreadPoint &cell) const;
+  bool operator< (const KSpreadPoint &cell) const;
+  
+  int row () const { return pos.y(); };
+  int column () const { return pos.x(); };
+  void setRow (int r) { pos.setY (r); };
+  void setColumn (int c) { pos.setX (c); };
+  
   /*
     TODO
   bool columnFixed() const { return m_columnFixed; }
@@ -101,6 +109,16 @@ struct KSpreadRange
   bool isValid() const { return ( range.left() >= 0 && range.right() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
   bool isTableKnown() const { return ( !tableName.isEmpty() && table != 0 ); }
 
+  int startRow () const { return range.top(); };
+  int startCol () const { return range.left(); };
+  int endRow () const { return range.bottom(); };
+  int endCol () const { return range.right(); };
+  
+  /** does this range contain the given cell? */
+  bool contains (const KSpreadPoint &cell) const;
+  /** do these two ranges have at least one common cell? */
+  bool intersects (const KSpreadRange &r) const;
+
   KSpreadSheet* table;
   QString tableName;
   QRect range;
@@ -109,6 +127,19 @@ struct KSpreadRange
   bool topFixed;
   bool bottomFixed;
 };
+
+/**
+range-list and cell-list
+TODO: move to a separate file, improve structure, add iterators and all that 
+TODO: use this class instead of other means of range-walking all over KSpread
+TODO: use this as selection
+TODO: anything I forgot ;)
+*/
+struct RangeList {
+  QValueList<KSpreadPoint> cells;
+  QValueList<KSpreadRange> ranges;
+};
+
 
 /**
  * KSpreadRangeIterator
