@@ -58,9 +58,11 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &t, QWidget *p, const char *n)
     layout->addWidget(effort, 2, 1);
     
 
-    layout->addMultiCellWidget(constraints = new QButtonGroup(i18n("Scheduling"),settings), 3, 7, 0, 1);
-    QGridLayout *constraintsLayout = new QGridLayout(constraints, 5, 2, marginHint()+5, spacingHint());
-    
+    layout->addMultiCellWidget(constraints = new QButtonGroup(0, Qt::Vertical, i18n("Scheduling"), settings), 3, 7, 0, 1);
+    constraints->layout()->setSpacing(KDialog::spacingHint());
+    constraints->layout()->setMargin(KDialog::marginHint());
+    QGridLayout *constraintsLayout = new QGridLayout(constraints->layout(), 5, 2);
+
     QRadioButton *b = new QRadioButton(i18n("ASAP"), constraints);
     constraintsLayout->addWidget(b, 1, 0);
     b = new QRadioButton(i18n("ALAP"), constraints);
