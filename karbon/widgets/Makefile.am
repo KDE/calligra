@@ -14,7 +14,6 @@ noinst_LTLIBRARIES = \
 noinst_HEADERS = \
 	vcanvas.h \
 	vcolorslider.h \
-	vcolordlg.h \
 	vgradientwidget.h \
 	vgradienttabwidget.h \
 	vreference.h \
@@ -30,7 +29,6 @@ libkarbonwidgets_la_SOURCES = \
 	dummy.cc \
 	vcanvas.cc \
 	vcolorslider.cc \
-	vcolordlg.cc \
 	vgradientwidget.cc \
 	vgradienttabwidget.cc \
 	vreference.cc \
