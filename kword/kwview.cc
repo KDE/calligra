@@ -231,9 +231,12 @@ void KWView::clearSelection()
     if(m_spell.kspell)
     {
         KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
-        Q_ASSERT( fs );
-        if ( fs )
-            fs->removeHighlight();
+        if(m_spell.spellCurrFrameSetNum!=-1)
+        {
+            Q_ASSERT( fs );
+            if ( fs )
+                fs->removeHighlight();
+        }
         delete m_spell.kspell;
     }
     delete m_searchEntry;
@@ -3475,9 +3478,12 @@ void KWView::spellCheckerFinished()
         KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
     }
     KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
-    Q_ASSERT( fs );
-    if ( fs )
-        fs->removeHighlight();
+    if(m_spell.spellCurrFrameSetNum!=-1)
+    {
+        Q_ASSERT( fs );
+        if ( fs )
+            fs->removeHighlight();
+    }
     m_doc->setReadWrite(true);
     m_spell.textFramesets.clear();
     m_ignoreWord.clear();
