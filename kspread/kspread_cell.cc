@@ -1400,7 +1400,7 @@ bool KSpreadCell::calc()
         SelectPrivate *s = (SelectPrivate*)m_pPrivate;
         s->parse( m_strFormulaOut );
     }
-    DO_UPDATE;
+//    DO_UPDATE;
     return false;
   }
 

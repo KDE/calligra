@@ -345,7 +345,7 @@ class CellLayoutPageBorder : public QWidget
 public:
     CellLayoutPageBorder( QWidget *parent, CellLayoutDlg *_dlg );
 
-    void applyOutline( int _left, int _top, int _right, int _bottom );
+    void applyOutline();
     void invertState(KSpreadBorderButton *_button);
     QPixmap paintFormatPixmap(PenStyle _style);
 
@@ -363,7 +363,7 @@ public slots:
 
 protected:
 
-
+  KSpreadTable* table;
   KSpreadBorderButton* borderButtons[BorderType_END];
   KSpreadBorderButton* shortcutButtons[BorderShortcutType_END];
 #define NUM_BORDER_PATTERNS 10
@@ -387,13 +387,13 @@ private:
   void InitializeBorderButtons();
   void InitializePatterns();
   void SetConnections();
-  void applyTopOutline( int _left, int _top, int _right, int _bottom );
-  void applyBottomOutline( int _left, int _top, int _right, int _bottom );
-  void applyLeftOutline( int _left, int _top, int _right, int _bottom );
-  void applyRightOutline( int _left, int _top, int _right, int _bottom );
-  void applyVerticalOutline( int _left, int _top, int _right, int _bottom );
-  void applyHorizontalOutline( int _left, int _top, int _right, int _bottom );
-  void applyDiagonalOutline( int _left, int _top, int _right, int _bottom );
+  void applyTopOutline();
+  void applyBottomOutline();
+  void applyLeftOutline();
+  void applyRightOutline();
+  void applyVerticalOutline();
+  void applyHorizontalOutline();
+  void applyDiagonalOutline();
 };
 
 class KSpreadBrushSelect : public QFrame
