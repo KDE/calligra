@@ -10,7 +10,7 @@
 VStroke::VStroke( const double width, const VLineCap cap, const VLineJoin join,
 			const double miterLimit )
 	: m_lineWidth( width ), m_lineCap( cap ), m_lineJoin( join ),
-		m_miterLimit( miterLimit )
+		m_miterLimit( miterLimit ), m_opacity( 255 )
 {
 }
 

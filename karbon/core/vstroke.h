@@ -39,6 +39,10 @@ public:
 	VLineJoin lineJoin() const { return m_lineJoin; }
 	void setLineJoin( const VLineJoin join ) { m_lineJoin = join; }
 
+	// opacity in the range 0-255
+	unsigned short opacity() const { return m_opacity; }
+	void setOpacity( unsigned  short opacity ) { m_opacity = opacity; }
+
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
@@ -48,6 +52,7 @@ private:
 	VLineCap m_lineCap;
 	VLineJoin m_lineJoin;
 	double m_miterLimit;
+	unsigned short m_opacity;
 	// TODO: dash
 };
 
