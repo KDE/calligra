@@ -27,6 +27,7 @@
 KIllustratorShell::KIllustratorShell( const char* name )
     : KoMainWindow( KIllustratorFactory::global(), name )
 {
+    resize( 800, 600 );
 }
 
 KIllustratorShell::~KIllustratorShell()
