@@ -117,12 +117,8 @@ class DocBookWorker : public KWEFBaseWorker
 void DocBookWorker::ProcessPictureData ( const Picture  &picture )
 {
     QByteArray byteArray;
-    bool isImage = false;
 
-    if ( m_kwordLeader )
-        isImage=m_kwordLeader->loadKoStoreFile ( picture.koStoreName,byteArray );
-
-    if ( isImage )
+    if ( loadKoStoreFile ( picture.koStoreName,byteArray ) )
     {
         QFileInfo fileInfo (exportFileName);
         QDir dir ( fileInfo.dirPath () );
@@ -718,8 +714,11 @@ bool DocBookWorker::doCloseFile ( void )
 {
     if ( !fileOut ) return true;
 
-    // FIXME: the count is wrong, as a QChar can be transformed in many char
-    fileOut->writeBlock ( (const char *) outputText.local8Bit (), outputText.length () );
+    // As a QChar can be transformed into many bytes,
+    //  we need to use QCString::length instead of QString::length
+    QCString cstr = outputText.local8Bit ();
+    fileOut->writeBlock ( cstr, cstr.length () );
+    
     fileOut->close ();
     delete fileOut;
     fileOut = NULL;
