@@ -3282,6 +3282,10 @@ KTextEditFormatCollection::KTextEditFormatCollection()
     cachedFormat = 0;
 }
 
+KTextEditFormatCollection::~KTextEditFormatCollection()
+{
+}
+
 KTextEditFormat *KTextEditFormatCollection::format( KTextEditFormat *f )
 {
     if ( f->parent() == this ) {

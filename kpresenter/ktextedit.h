@@ -587,7 +587,7 @@ class KTextEditFormatCollection
 {
 public:
     KTextEditFormatCollection();
-    ~KTextEditFormatCollection() {     qDebug( "KTextEditFormatCommand::~KTextEditFormatCommand" ); }
+    ~KTextEditFormatCollection();
 
 
     void setDefaultFormat( KTextEditFormat *f );
@@ -995,7 +995,7 @@ inline KTextEditFormat::KTextEditFormat( const QFont &f, const QColor &c )
 
 inline KTextEditFormat::KTextEditFormat( const KTextEditFormat &f ) : collection( 0L )
 {
-    qDebug("constructing a format from another one");
+    //qDebug("constructing a format from another one");
     fn = f.fn;
     col = f.col;
     fm = new QFontMetrics( fn );
