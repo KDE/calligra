@@ -1,11 +1,13 @@
 #ifndef __kformula_idl__
 #define __kformula_idl__
 
-#include <parts.idl>
+#include <openparts.idl>
+#include <koffice.idl>
+#include <openparts_ui.idl>
 
 module KFormula
 {
-       interface View : OPParts::View
+       interface View : KOffice::View
 	{
 	  slot void newView();
 	  slot void addText();
@@ -60,11 +62,7 @@ module KFormula
 //	  slot void insertIndex(in unsigned long i);
 	};
 
-	interface Document : OPParts::Document
-	{
-	};
-
-	interface Factory : OPParts::Factory
+	interface Document : KOffice::Document
 	{
 	};
 };

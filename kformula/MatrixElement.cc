@@ -14,7 +14,7 @@
 #include "formuladef.h"
 #include "kformula_doc.h"
 
-MatrixElement::MatrixElement(KFormulaDocument *Formula,
+MatrixElement::MatrixElement(KFormulaDoc *Formula,
 			     BasicElement *Prev,
 			     int Relation,
 			     BasicElement *Next,

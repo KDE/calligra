@@ -13,7 +13,7 @@
 #include "formuladef.h"
 #include "kformula_doc.h"
 
-PrefixedElement::PrefixedElement(KFormulaDocument *Formula,
+PrefixedElement::PrefixedElement(KFormulaDoc *Formula,
 			 BasicElement *Prev,
 			 int Relation,
 			 BasicElement *Next,

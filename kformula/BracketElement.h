@@ -23,7 +23,7 @@ class BracketElement : public BasicElement
     /*
      * Normal constructor, Get font from prev element
      */
-    BracketElement(KFormulaDocument *Formula,
+    BracketElement(KFormulaDoc *Formula,
 		   BasicElement *Prev=NULL,
 		   int Relation=-1,
 		   BasicElement *Next=NULL,

@@ -24,11 +24,9 @@
 
 #include <unistd.h>
 
-#include <component_impl.h>
-
 //#define FIXEDSPACE 1             // Space between 2 blocks
 
-KFormulaDocument::KFormulaDocument()
+KFormulaDoc::KFormulaDoc()
 {
     thePainter = new QPainter();
     
@@ -43,40 +41,43 @@ KFormulaDocument::KFormulaDocument()
 
     // Use CORBA mechanism for deleting views
     m_lstViews.setAutoDelete( false );
+
     m_bModified = false;
+    m_bEmpty = true;
+
     theFirstElement= new BasicElement(this,0L,-1,0L,"");
     setActiveElement(0L);
     warning("SIZE OF:  basic:%i,text:%i,root:%i",sizeof(BasicElement),
 	    sizeof(TextElement),sizeof(RootElement));
 }
 
-CORBA::Boolean KFormulaDocument::init()
+CORBA::Boolean KFormulaDoc::init()
 {
     return true;
 }
 
-KFormulaDocument::~KFormulaDocument()
+KFormulaDoc::~KFormulaDoc()
 {
     cleanUp();
 }
 
-void KFormulaDocument::cleanUp()
+void KFormulaDoc::cleanUp()
 {
     if ( m_bIsClean )
 	return;
 
     assert( m_lstViews.count() == 0 );
   
-    Document_impl::cleanUp();
+    KoDocument::cleanUp();
 }
 
-bool KFormulaDocument::load( KOMLParser&  )
+bool KFormulaDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 {
     // HACK
     return false;
 }
 
-bool KFormulaDocument::save( ostream &out )
+bool KFormulaDoc::save( ostream& out, const char* /* format */ )
 {
     out << "<?xml version=\"1.0\"?>" << endl;
     out << otag << "<DOC author=\"" << "Andrea Rizzi" << "\" email=\"" 
@@ -87,7 +88,12 @@ bool KFormulaDocument::save( ostream &out )
     return true;
 }
 
-void KFormulaDocument::viewList( OPParts::Document::ViewList*& _list )
+int KFormulaDoc::viewCount()
+{
+  return m_lstViews.count();
+}
+
+void KFormulaDoc::viewList( OpenParts::Document::ViewList*& _list )
 {
     (*_list).length( m_lstViews.count() );
 
@@ -95,37 +101,46 @@ void KFormulaDocument::viewList( OPParts::Document::ViewList*& _list )
     QListIterator<KFormulaView> it( m_lstViews );
     for( ; it.current(); ++it )
 	{
-	    (*_list)[i++] = OPParts::View::_duplicate( it.current() );
+	    (*_list)[i++] = OpenParts::View::_duplicate( it.current() );
 	}
 }
 
-void KFormulaDocument::addView( KFormulaView *_view )
+void KFormulaDoc::addView( KFormulaView *_view )
 {
     m_lstViews.append( _view );
 }
 
-void KFormulaDocument::removeView( KFormulaView *_view )
+void KFormulaDoc::removeView( KFormulaView *_view )
 {
     m_lstViews.setAutoDelete( false );
     m_lstViews.removeRef( _view );
     m_lstViews.setAutoDelete( true );
 }
 
-OPParts::View_ptr KFormulaDocument::createView()
+KFormulaView* KFormulaDoc::createFormulaView()
 {
-    KFormulaView *p = new KFormulaView( 0L );
-    p->setDocument( this );
+  KFormulaView *p = new KFormulaView( 0L, 0L, this );
+  p->QWidget::show();
+  m_lstViews.append( p );
   
-    return OPParts::View::_duplicate( p );
+  return p;
 }
 
-void KFormulaDocument::emitModified()
+OpenParts::View_ptr KFormulaDoc::createView()
 {
-    emit sig_changeType(theActiveElement);
-    emit sig_modified();
+  return OpenParts::View::_duplicate( createFormulaView() );
 }
 
-void KFormulaDocument::addRootElement()
+void KFormulaDoc::emitModified()
+{
+  m_bModified = true;
+  m_bEmpty = false;
+  
+  emit sig_changeType( theActiveElement );
+  emit sig_modified();
+}
+
+void KFormulaDoc::addRootElement()
 {   
     BasicElement *newElement;
     if(theActiveElement==0L)
@@ -153,7 +168,7 @@ void KFormulaDocument::addRootElement()
     emitModified();
 }
 
-void KFormulaDocument::addPrefixedElement(QString cont)
+void KFormulaDoc::addPrefixedElement(QString cont)
 {   
     BasicElement *newElement;
     if(theActiveElement==0L)
@@ -181,7 +196,7 @@ void KFormulaDocument::addPrefixedElement(QString cont)
     emitModified();
 }
 
-void KFormulaDocument::addFractionElement(QString cont)
+void KFormulaDoc::addFractionElement(QString cont)
 {   
     BasicElement *nextElement;
     BasicElement *newElement;
@@ -213,7 +228,7 @@ void KFormulaDocument::addFractionElement(QString cont)
     
 }
 
-void KFormulaDocument::addMatrixElement(QString cont)
+void KFormulaDoc::addMatrixElement(QString cont)
 {   
     int rows=atoi(cont.mid(3,3));
     int cols=atoi(cont.mid(6,3));
@@ -249,7 +264,7 @@ void KFormulaDocument::addMatrixElement(QString cont)
     
 }
 
-void KFormulaDocument::addBracketElement(QString cont)
+void KFormulaDoc::addBracketElement(QString cont)
 {   
     BasicElement *nextElement;
     BasicElement *newElement;
@@ -284,7 +299,7 @@ void KFormulaDocument::addBracketElement(QString cont)
  * If activeElement is a BasicElement it "substitute"
  *  this basicElement with a TextElement
  */
-BasicElement * KFormulaDocument::addIndex(int index)
+BasicElement * KFormulaDoc::addIndex(int index)
 {
     BasicElement *oldIndexElement;
     BasicElement *newElement;
@@ -303,7 +318,7 @@ BasicElement * KFormulaDocument::addIndex(int index)
     emitModified();
     return(newElement);
 } 
-BasicElement * KFormulaDocument::addChild(int child)
+BasicElement * KFormulaDoc::addChild(int child)
 {
     BasicElement *oldChildElement;
     BasicElement *newElement;
@@ -322,7 +337,7 @@ BasicElement * KFormulaDocument::addChild(int child)
     emitModified();
     return(newElement);
 } 
-void KFormulaDocument::addTextElement()
+void KFormulaDoc::addTextElement()
 {   
     BasicElement *nextElement;
     BasicElement *newElement;
@@ -346,7 +361,7 @@ void KFormulaDocument::addTextElement()
     emitModified();
 }
 
-void KFormulaDocument::mousePressEvent( QMouseEvent *a,QWidget *wid)
+void KFormulaDoc::mousePressEvent( QMouseEvent *a,QWidget *wid)
 {
  
     setActiveElement(theFirstElement->isInside(a->pos()));  
@@ -374,7 +389,7 @@ void KFormulaDocument::mousePressEvent( QMouseEvent *a,QWidget *wid)
     }
 }
 
-void KFormulaDocument::keyPressEvent( QKeyEvent *k )
+void KFormulaDoc::keyPressEvent( QKeyEvent *k )
 {
 
     /*
@@ -447,7 +462,7 @@ void KFormulaDocument::keyPressEvent( QKeyEvent *k )
 }
 
 
-void KFormulaDocument::paintEvent( QPaintEvent *, QWidget *paintGround )
+void KFormulaDoc::paintEvent( QPaintEvent *, QWidget *paintGround )
 {
     
     thePainter->begin(paintGround);    
@@ -459,7 +474,7 @@ void KFormulaDocument::paintEvent( QPaintEvent *, QWidget *paintGround )
     thePainter->end();
 }
 
-void KFormulaDocument::setActiveElement(BasicElement* c)
+void KFormulaDoc::setActiveElement(BasicElement* c)
 { 
     if(theActiveElement) 
 	theActiveElement->setActive(false);
@@ -468,7 +483,7 @@ void KFormulaDocument::setActiveElement(BasicElement* c)
 	theActiveElement->setActive(true);
 }
 
-void KFormulaDocument::setFirstElement(BasicElement* c)
+void KFormulaDoc::setFirstElement(BasicElement* c)
 { 
   
     if (c) 

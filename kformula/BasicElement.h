@@ -24,7 +24,7 @@
  * It show a simple SQUARE 
  *
  */
-class KFormulaDocument;
+class KFormulaDoc;
 
 class BasicElement 
 {
@@ -32,7 +32,7 @@ class BasicElement
     /*
      * Normal constructor, Get font from prev element
      */
-    BasicElement(KFormulaDocument *Formula,
+    BasicElement(KFormulaDoc *Formula,
 		 BasicElement *Prev=NULL,
 		 int Relation=-1,
 		 BasicElement *Next=NULL,
@@ -181,7 +181,7 @@ class BasicElement
     /*
      * I know nothing about the future of this member
      */
-    KFormulaDocument *formula;
+    KFormulaDoc *formula;
   
     /*
      * realtionship with prev

@@ -23,7 +23,7 @@ class FractionElement : public BasicElement
     /*
      * Normal constructor, Get font from prev element
      */
-    FractionElement(KFormulaDocument *Formula,
+    FractionElement(KFormulaDoc *Formula,
 		    BasicElement *Prev=NULL,
 		    int Relation=-1,
 		    BasicElement *Next=NULL,

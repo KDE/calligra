@@ -14,7 +14,7 @@
 #include "formuladef.h"
 #include "kformula_doc.h"
 
-TextElement::TextElement(KFormulaDocument *Formula,
+TextElement::TextElement(KFormulaDoc *Formula,
 			 BasicElement *Prev,
 			 int Relation,
 			 BasicElement *Next,

@@ -23,7 +23,7 @@ class TextElement : public BasicElement
    /*
     * Normal constructor, Get font from prev element
     */
-     TextElement(KFormulaDocument *Formula,
+     TextElement(KFormulaDoc *Formula,
 		 BasicElement *Prev=0,
 		 int Relation=-1,
 		 BasicElement *Next=0,

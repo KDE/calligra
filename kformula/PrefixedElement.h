@@ -23,7 +23,7 @@ class PrefixedElement : public BasicElement
     /*
      * Normal constructor, Get font from prev element
      */
-    PrefixedElement(KFormulaDocument *Formula,BasicElement *Prev=NULL,
+    PrefixedElement(KFormulaDoc *Formula,BasicElement *Prev=NULL,
 		int Relation=-1,BasicElement *Next=NULL,
 		QString Content="");
        

@@ -1,27 +1,29 @@
+#include <qprinter.h>
 #include "kformula_main.h"
-
-#include <string.h>
-
-#include <factory_impl.h>
-
 #include <koScanParts.h>
+#include <koScanTools.h>
+#include <koIMR.h>
+#include <koFactory.h>
+#include <koDocument.h>
+#include <opAutoLoader.h>
+#include "kformula_shell.h"
+#include "kformula_doc.h"
+
+// DEBUG
+#include <iostream>
 
 bool g_bWithGUI = true;
 
-FACTORY( KFormulaDocument, KFormula::Factory_skel, KFormulaFactory )
-// This line is for convenience.
-typedef AutoLoader<KFormulaFactory> KFormulaAutoLoader;
+list<string> g_openFiles;
 
-/*******************************************************************
- *
- * KFormulaApp
- *
- *******************************************************************/
+KOFFICE_DOCUMENT_FACTORY( KFormulaDoc, KFormulaFactory )
+typedef OPAutoLoader<KFormulaFactory> KFormulaAutoLoader;
 
-KFormulaApp::KFormulaApp( int argc, char** argv ) : 
-    OPApplication( argc, argv, "kformula" )
+KFormulaApp::KFormulaApp( int &argc, char** argv ) : 
+  OPApplication( argc, argv, "kformula" )
 {
-    getLocale()->insertCatalogue("koffice");
+  getLocale()->insertCatalogue("koffice");
+  m_pShell = 0L;
 }
 
 KFormulaApp::~KFormulaApp()
@@ -30,41 +32,52 @@ KFormulaApp::~KFormulaApp()
 
 void KFormulaApp::start()
 {
+  if ( g_bWithGUI )
+  {
+    imr_init();
     koScanParts();
+    koScanTools();
 
-    // Are we going to create a GUI ?
-    if ( g_bWithGUI )
-	{
-	    KFormulaShell* m_pShell;
-	    // Create a GUI
-	    m_pShell = new KFormulaShell;
-	    // Allow status/menu/toolbars
-	    m_pShell->enableMenuBar();
-	    m_pShell->PartShell_impl::enableStatusBar();
-	    m_pShell->enableToolBars();
-	    // Display
-	    m_pShell->show();
-	}
+    if ( g_openFiles.size() == 0 )
+    {
+      m_pShell = new KFormulaShell;
+      m_pShell->show();
+      m_pShell->newDocument();
+    }
+    else
+    {
+      list<string>::iterator it = g_openFiles.begin();
+      for( ; it != g_openFiles.end(); ++it )
+      {
+	m_pShell = new KFormulaShell;
+	m_pShell->show();
+	m_pShell->openDocument( it->c_str(), "" );
+      }
+    }
+  }
 }
 
 int main( int argc, char **argv )
 {
-    // Parse command line parameters.
-    for( int i = 1; i < argc; i++ ) {
-	// Are we started as server? => Someones wants to embed us
-	// => We dont create a shell
-	if ( strcmp( argv[i], "-s" ) == 0 || strcmp( argv[i], "--server" ) == 0 )
-	    g_bWithGUI = false;
-    }
-    
-    // Publish our factory
-    KFormulaAutoLoader loader( "IDL:KFormula/Factory:1.0" );
-    
-    // Lets rock
-    KFormulaApp app( argc, argv );
-    app.exec();
-    
-    return 0;
+  KFormulaAutoLoader loader( "IDL:KOffice/DocumentFactory:1.0", "KFormula" );
+
+  KFormulaApp app( argc, argv );
+
+  int i = 1;
+  if ( strcmp( argv[i], "-s" ) == 0 || strcmp( argv[i], "--server" ) == 0 )
+  {
+    i++;
+    g_bWithGUI = false;
+  }
+
+  for( ; i < argc; i++ )
+    g_openFiles.push_back( (const char*)argv[i] );
+  
+  app.exec();
+
+  cerr << "============ BACK from event loop ===========" << endl;
+
+  return 0;
 }
 
 #include "kformula_main.moc"

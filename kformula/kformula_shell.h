@@ -3,33 +3,61 @@
 
 class KFormulaShell_impl;
 
-#include "kformula.h"
-#include "kformula_doc.h"
+#include <koMainWindow.h>
 
-#include <default_shell_impl.h>
-#include <document_impl.h>
+class KFormulaDoc;
+class KFormulaView;
 
-class KFormulaShell : public DefaultShell_impl
+#include <qlist.h>
+#include <qtimer.h>
+#include <qstring.h>
+
+class KFormulaShell : public KoMainWindow
 {
   Q_OBJECT
 public:
   // C++
   KFormulaShell();
   ~KFormulaShell();
-  
-  // IDL
-  void fileNew();
 
   // C++
-  virtual void setDocument( KFormulaDocument *_doc );
-  
-  virtual bool openDocument( const char *_filename );
-  virtual bool saveDocument( const char *_file, const char *_format );
-
   virtual void cleanUp();
-  
+  void setDocument( KFormulaDoc *_doc );
+
+  // C++
+  virtual bool newDocument();
+  virtual bool openDocument( const char *_filename, const char* _format );
+  virtual bool saveDocument( const char *_file, const char *_format );
+  virtual bool closeDocument();
+  virtual bool closeAllDocuments();
+
+protected slots:
+  void slotFileNew();
+  void slotFileOpen();
+  void slotFileSave();
+  void slotFileSaveAs();
+  void slotFilePrint();
+  void slotFileClose();
+  void slotFileQuit();
+
 protected:
-  Document_ref m_rDoc;
+  // C++
+  virtual KoDocument* document();
+  virtual KoViewIf* view();
+
+  virtual bool printDlg();
+  virtual void helpAbout();
+  virtual int documentCount();
+
+  bool isModified();
+  bool requestClose();
+
+  void releaseDocument();
+  
+  KFormulaDoc* m_pDoc;
+  KFormulaView* m_pView;
+
+  static QList<KFormulaShell>* s_lstShells;
 };
 
 #endif

@@ -1,30 +1,24 @@
 #ifndef __kformula_main_h__
 #define __kformula_main_h__
 
-class PartShell_impl;
-class KFormulaApp;
-
-#include <op_app.h>
-#include <part_shell_impl.h>
-#include <parts.h>
+#include <opApplication.h>
 
 #include "kformula_doc.h"
 #include "kformula_shell.h"
 
-/**
- * The framework.
- */
+class KFormulaShell;
+
 class KFormulaApp : public OPApplication
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    KFormulaApp( int argc, char** argv );
-    ~KFormulaApp();
-    
-    /**
-     * Startup function.
-     */
-    virtual void start();
+  KFormulaApp( int &argc, char** argv );
+  ~KFormulaApp();
+  
+  virtual void start();
+  
+protected:
+  KFormulaShell *m_pShell;
 };
 
 #endif

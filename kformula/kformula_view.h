@@ -2,13 +2,14 @@
 #define __kformula_view_h__
 
 class KFormulaView;
-class KFormulaDocument;
+class KFormulaDoc;
 
-#include <view_impl.h>
-#include <document_impl.h>
-#include <part_frame_impl.h>
-#include <menu_impl.h>
-#include <toolbar_impl.h>
+#include <koFrame.h>
+#include <koView.h>
+#include <opMenu.h>
+#include <opToolBar.h>
+#include <koFrame.h>
+#include <openparts_ui.h>
 
 #include "kformula.h"
 
@@ -20,22 +21,18 @@ class KFormulaDocument;
 class BasicElement;
 
 class KFormulaView : public QWidget,
-		     virtual public View_impl,
+		     virtual public KoViewIf,
 		     virtual public KFormula::View_skel
 {
     Q_OBJECT
  public:
     // C++
-    KFormulaView( QWidget *_parent = 0, const char *_name = 0 );
+    KFormulaView( QWidget *_parent, const char *_name, KFormulaDoc* _doc );
     virtual ~KFormulaView();
 
     // IDL
     virtual void newView();
-
-    // C++
-    virtual void setDocument( KFormulaDocument *_doc );
-    virtual void createGUI();
-
+  
 public slots:
     // Document signals
     void modifyMatrix(QString str);
@@ -44,36 +41,45 @@ public slots:
     void slotTypeChanged( const BasicElement *elm);
 
 protected:
+    // C++
+    virtual void init();
+    // IDL
+    virtual bool event( const char* _event, const CORBA::Any& _value );
+    // C++
+    virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
+    virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
+
     virtual void cleanUp();
 
-    CORBA::Long addToolButton (ToolBar_ref toolbar,
+    CORBA::Long addToolButton( OpenPartsUI::ToolBar_ptr toolbar,
 			       const char* pictname,
 			       const char* tooltip,
-			       const char* func);
+			       const char* func,
+			       CORBA::Long id );
 
     void mousePressEvent(QMouseEvent *a);
     void paintEvent( QPaintEvent *_ev );
     void resizeEvent( QResizeEvent *_ev );
     void keyPressEvent( QKeyEvent *k );
 
-    KFormulaDocument *m_pDoc;
+    KFormulaDoc *m_pDoc;
+
     QPopupMenu *mn_indexList;
-    OPParts::MenuBarFactory_var m_vMenuBarFactory;
-    MenuBar_ref m_rMenuBar;
-    CORBA::Long m_idMenuView;
+
+    OpenPartsUI::Menu_var m_vMenuView;
     CORBA::Long m_idMenuView_NewView;
     CORBA::Long m_idMenuView_FontToolbar;
     CORBA::Long m_idMenuView_TypeToolbar;
     CORBA::Long m_idMenuView_TextToolbar;
     
-    CORBA::Long m_idMenuElement;
-    CORBA::Long m_idMenuElement_AddIndex;    
+    OpenPartsUI::Menu_var m_vMenuElement;
+    OpenPartsUI::Menu_var m_vMenuElement_AddIndex;    
     CORBA::Long m_idMenuElement_AddIndex_TL;
     CORBA::Long m_idMenuElement_AddIndex_BL;
     CORBA::Long m_idMenuElement_AddIndex_TR;
     CORBA::Long m_idMenuElement_AddIndex_BR;
 
-    CORBA::Long m_idMenuElement_AddElement;    
+    OpenPartsUI::Menu_var m_vMenuElement_AddElement;
     CORBA::Long m_idMenuElement_AddElement_T;  // text    
     CORBA::Long m_idMenuElement_AddElement_R;  // root
     CORBA::Long m_idMenuElement_AddElement_F;  // fraction 
@@ -83,25 +89,25 @@ protected:
     CORBA::Long m_idMenuElement_AddElement_D;  // decoration
     CORBA::Long m_idMenuElement_AddElement_S;  // symbol
     CORBA::Long m_idMenuElement_AddElement_M;  // matrix
-    CORBA::Long m_idMenuElement_Text;
+    OpenPartsUI::Menu_var m_vMenuElement_Text;
     CORBA::Long m_idMenuElement_Text_Font;
     CORBA::Long m_idMenuElement_Text_Split;
-    CORBA::Long m_idMenuElement_Root;
+    OpenPartsUI::Menu_var m_vMenuElement_Root;
     CORBA::Long m_idMenuElement_Root_Pixmap;
     CORBA::Long m_idMenuElement_Root_Index;
-    CORBA::Long m_idMenuElement_Integral;
+    OpenPartsUI::Menu_var m_vMenuElement_Integral;
     CORBA::Long m_idMenuElement_Integral_Pixmap;
     CORBA::Long m_idMenuElement_Integral_Lower;
     CORBA::Long m_idMenuElement_Integral_Higher;
-    CORBA::Long m_idMenuElement_Bracket;
+    OpenPartsUI::Menu_var m_vMenuElement_Bracket;
     CORBA::Long m_idMenuElement_Bracket_Type;
-    CORBA::Long m_idMenuElement_Matrix;
+    OpenPartsUI::Menu_var m_vMenuElement_Matrix;
     CORBA::Long m_idMenuElement_Matrix_Set;
     CORBA::Long m_idMenuElement_Matrix_InsRow;
     CORBA::Long m_idMenuElement_Matrix_InsCol;
     CORBA::Long m_idMenuElement_Matrix_RemRow;
     CORBA::Long m_idMenuElement_Matrix_RemCol;
-    CORBA::Long m_idMenuElement_Fraction;
+    OpenPartsUI::Menu_var m_vMenuElement_Fraction;
     CORBA::Long m_idMenuElement_Fraction_VA;  //Vert Allign
     CORBA::Long m_idMenuElement_Fraction_VA_U; 
     CORBA::Long m_idMenuElement_Fraction_VA_D; 
@@ -112,20 +118,22 @@ protected:
     CORBA::Long m_idMenuElement_Fraction_HA_R;
     CORBA::Long m_idMenuElement_Fraction_Dist;
     CORBA::Long m_idMenuElement_Fraction_MidLine;
-    CORBA::Long m_idMenuElement_Decoration;
+    OpenPartsUI::Menu_var m_vMenuElement_Decoration;
     CORBA::Long m_idMenuElement_Decoration_Set;
-    CORBA::Long m_idMenuElement_Symbol;        
+    OpenPartsUI::Menu_var m_vMenuElement_Symbol;
     CORBA::Long m_idMenuElement_Symbol_Set;
     CORBA::Long m_idMenuElement_Color;
-    CORBA::Long m_idMenuElement_Remove;    
-    CORBA::Long m_idMenuFormula;
+    CORBA::Long m_idMenuElement_Remove;
+    OpenPartsUI::Menu_var m_vMenuFormula;
     CORBA::Long m_idMenuFormula_Color;    
     CORBA::Long m_idMenuFormula_Font;    
 
-    OPParts::ToolBarFactory_var m_vToolBarFactory;
-    ToolBar_ref m_rToolBarFormula;
-    ToolBar_ref m_rToolBarFont;
-    ToolBar_ref m_rToolBarType;
+    OpenPartsUI::Menu_var m_vMenuHelp;
+    CORBA::Long m_idMenuHelp_Using;
+  
+    OpenPartsUI::ToolBar_var m_vToolBarFormula;
+    OpenPartsUI::ToolBar_var m_vToolBarFont;
+    OpenPartsUI::ToolBar_var m_vToolBarType;
     CORBA::Long m_idButtonFormula_0;
     CORBA::Long m_idButtonFormula_1;
     CORBA::Long m_idButtonFormula_2;

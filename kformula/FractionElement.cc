@@ -15,7 +15,7 @@
 #include "formuladef.h"
 
 
-FractionElement::FractionElement(KFormulaDocument *Formula,
+FractionElement::FractionElement(KFormulaDoc *Formula,
 				 BasicElement *Prev,
 				 int Relation,
 				 BasicElement *Next,
