@@ -188,6 +188,22 @@ protected:
     KivioPage *m_page;
 };
 
+class KivioMoveStencilCommand : public KNamedCommand
+{
+public:
+    KivioMoveStencilCommand(const QString &_name, KivioStencil *_stencil, KivioRect _initSize, KivioRect _endSize, KivioPage *_page );
+    ~KivioMoveStencilCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioStencil *m_stencil;
+    KivioRect initSize;
+    KivioRect endSize;
+    KivioPage *m_page;
+};
+
 
 #endif
 

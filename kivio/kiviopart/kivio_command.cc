@@ -254,11 +254,41 @@ KivioResizeStencilCommand::~KivioResizeStencilCommand()
 void KivioResizeStencilCommand::execute()
 {
     m_stencil->setDimensions( endSize.w(), endSize.h() );
+    m_stencil->setPosition( endSize.x(), endSize.y() );
     m_page->doc()->updateView(m_page);
 }
 
 void KivioResizeStencilCommand::unexecute()
 {
     m_stencil->setDimensions( initSize.w(), initSize.h() );
+    m_stencil->setPosition( initSize.x(), initSize.y() );
+    m_page->doc()->updateView(m_page);
+}
+
+
+KivioMoveStencilCommand::KivioMoveStencilCommand( const QString &_name, KivioStencil *_stencil, KivioRect _initSize, KivioRect _endSize, KivioPage *_page)
+    :KNamedCommand( _name ),
+     m_stencil( _stencil),
+     initSize( _initSize),
+     endSize( _endSize ),
+     m_page( _page)
+{
+}
+
+KivioMoveStencilCommand::~KivioMoveStencilCommand()
+{
+}
+
+void KivioMoveStencilCommand::execute()
+{
+    m_stencil->setDimensions( endSize.w(), endSize.h() );
+    m_stencil->setPosition( endSize.x(), endSize.y() );
+    m_page->doc()->updateView(m_page);
+}
+
+void KivioMoveStencilCommand::unexecute()
+{
+    m_stencil->setDimensions( initSize.w(), initSize.h() );
+    m_stencil->setPosition( initSize.x(), initSize.y() );
     m_page->doc()->updateView(m_page);
 }

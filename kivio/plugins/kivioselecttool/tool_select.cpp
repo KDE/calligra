@@ -890,6 +890,21 @@ void SelectTool::endRubberBanding(const QPoint &pos)
 
 void SelectTool::endDragging(const QPoint&)
 {
+    KMacroCommand *macro=new KMacroCommand( i18n("Move Stencil"));
+    KivioStencil *pStencil = m_pCanvas->activePage()->selectedStencils()->first();
+    KivioSelectDragData *pData = m_lstOldGeometry.first();
+
+    while( pStencil && pData )
+    {
+        KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"), pStencil, pData->rect, pStencil->rect(), m_pCanvas->activePage());
+        macro->addCommand( cmd);
+        pData = m_lstOldGeometry.next();
+        pStencil = m_pCanvas->activePage()->selectedStencils()->next();
+
+    }
+
+    m_pCanvas->doc()->addCommand( macro );
+
     m_pCanvas->drawSelectedStencilsXOR();
 
     m_pCanvas->endUnclippedSpawnerPainter();
