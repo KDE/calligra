@@ -146,7 +146,7 @@ bool EffectHandler::doEffect()
             {
                 bool next = true;
 
-                double speedFactor = speed[object->getAppearSpeed()];
+                double speedFactor = speed[object->getDisappearSpeed()];
                 
                 m_stepWidth = static_cast<int>( m_src->width() / speedFactor );
                 m_stepHeight = static_cast<int>( m_src->height() / speedFactor );

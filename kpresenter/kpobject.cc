@@ -517,11 +517,11 @@ bool KPObject::saveOasisObjectStyleHideAnimation( KoXmlWriter &animation, int ob
             break;
         }
 
-        if ( m_appearSpeed == ES_SLOW )
+        if ( m_disappearSpeed == ES_SLOW )
         {
             animation.addAttribute( "presentation:speed", "slow" );
         }
-        else if ( m_appearSpeed == ES_FAST )
+        else if ( m_disappearSpeed == ES_FAST )
         {
             animation.addAttribute( "presentation:speed", "fast" );
         }
@@ -589,7 +589,7 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         QString dir = animation->attribute("presentation:direction");
         QString speed = animation->attribute( "presentation:speed" );
         appearStep = tmp->order;
-        kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<" speed :"<<speed<<endl;
+        kdDebug()<<" appear direction : "<<dir<<" effect :"<< effectStr <<" speed :"<<speed<<endl;
 
         //kpresenter have three state (medium/slow/fast)
         //not implemented into kpresenter
@@ -675,20 +675,20 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         QString effectStr = animation->attribute("presentation:effect");
         QString dir = animation->attribute("presentation:direction");
         QString speed = animation->attribute( "presentation:speed" );
-        kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<endl;
+        kdDebug()<<" appear direction : "<<dir<<" effect :"<< effectStr <<" speed :"<<speed<<endl;
         disappearStep = tmp->order;
         
         if ( speed =="medium" )
         {
-            m_appearSpeed = ES_MEDIUM;
+            m_disappearSpeed = ES_MEDIUM;
         }
         else if ( speed=="slow" )
         {
-            m_appearSpeed = ES_SLOW;
+            m_disappearSpeed = ES_SLOW;
         }
         else if ( speed=="fast" )
         {
-            m_appearSpeed = ES_FAST;
+            m_disappearSpeed = ES_FAST;
         }
         else
             kdDebug()<<" speed argument is not defined :"<<speed<<endl;
