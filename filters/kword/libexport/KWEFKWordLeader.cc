@@ -1,8 +1,8 @@
-// $Header$
+// 
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
    Copyright (c) 2001 IABG mbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
@@ -235,7 +235,7 @@ static void ProcessImageTag ( QDomNode         myNode,
                               KWEFKWordLeader *leader )
 { // <PICTURE>
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "keepAspectRatio", NULL, NULL );
+    attrProcessingList << AttrProcessing ( "keepAspectRatio" );
     ProcessAttributes (myNode, attrProcessingList);
 
     QValueList<TagProcessing> tagProcessingList;
@@ -267,14 +267,14 @@ static void ProcessFramesetTag ( QDomNode        myNode,
     attrProcessingList << AttrProcessing ( "name",        "QString", (void *) &name      )
                        << AttrProcessing ( "frameType",   "int",     (void *) &frameType )
                        << AttrProcessing ( "frameInfo",   "int",     (void *) &frameInfo )
-                       << AttrProcessing ( "removable",   "",        NULL                )
-                       << AttrProcessing ( "visible",     "",        NULL                )
+                       << AttrProcessing ( "removable" )
+                       << AttrProcessing ( "visible" )
                        << AttrProcessing ( "grpMgr",      "QString", (void *) &grpMgr    )
                        << AttrProcessing ( "row",         "int",     (void *) &row       )
                        << AttrProcessing ( "col",         "int",     (void *) &col       )
                        << AttrProcessing ( "rows",        "int",     (void *) &rows      )
                        << AttrProcessing ( "cols",        "int",     (void *) &cols      )
-                       << AttrProcessing ( "protectSize", "",        NULL                )
+                       << AttrProcessing ( "protectSize" )
                         ;
     ProcessAttributes (myNode, attrProcessingList);
 
@@ -289,7 +289,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 {
                     // Normal Text
                     QValueList<TagProcessing> tagProcessingList;
-                    tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+                    tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) paraList ));
                     ProcessSubtags (myNode, tagProcessingList, leader);
                 }
@@ -299,7 +299,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     HeaderData header;
                     header.page = HeaderData::PAGE_FIRST;
                     QValueList<TagProcessing> tagProcessingList;
-                    tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+                    tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &header.para ));
 
                     ProcessSubtags (myNode, tagProcessingList, leader);
@@ -311,7 +311,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     HeaderData header;
                     header.page = HeaderData::PAGE_EVEN;
                     QValueList<TagProcessing> tagProcessingList;
-                    tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+                    tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &header.para ));
                     ProcessSubtags (myNode, tagProcessingList, leader);
                     leader->doHeader( header );
@@ -322,7 +322,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     HeaderData header;
                     header.page = (leader->headerType() != 0 ) ? HeaderData::PAGE_ODD : HeaderData::PAGE_ALL;
                     QValueList<TagProcessing> tagProcessingList;
-                    tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+                    tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &header.para ));
                     ProcessSubtags (myNode, tagProcessingList, leader);
                     leader->doHeader( header );
@@ -333,7 +333,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     FooterData footer;
                     footer.page = FooterData::PAGE_FIRST;
                     QValueList<TagProcessing> tagProcessingList;
-                    tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+                    tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &footer.para ));
                     ProcessSubtags (myNode, tagProcessingList, leader);
                     leader->doFooter( footer );
@@ -344,7 +344,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     FooterData footer;
                     footer.page = FooterData::PAGE_EVEN;
                     QValueList<TagProcessing> tagProcessingList;
-                    tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+                    tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &footer.para ));
                     ProcessSubtags (myNode, tagProcessingList, leader);
                     leader->doFooter( footer );
@@ -355,7 +355,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     FooterData footer;
                     footer.page = (leader->footerType() != 0) ? FooterData::PAGE_ODD : FooterData::PAGE_ALL;
                     QValueList<TagProcessing> tagProcessingList;
-                    tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+                    tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &footer.para ));
                     ProcessSubtags (myNode, tagProcessingList, leader);
                     leader->doFooter( footer );
@@ -464,7 +464,7 @@ static void ProcessStyleTag (QDomNode myNode, void *, KWEFKWordLeader *leader )
 {
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList
-        << AttrProcessing ( "outline",   "", NULL );
+        << AttrProcessing ( "outline" );
     ProcessAttributes (myNode, attrProcessingList);
 
     LayoutData layout;
@@ -526,18 +526,18 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
                        << AttrProcessing ( "width",               "double", (void *) &width       )
                        << AttrProcessing ( "height",              "double", (void *) &height      )
                        << AttrProcessing ( "orientation",         "int",    (void *) &orientation )
-                       << AttrProcessing ( "columns",             "",       NULL                  )
-                       << AttrProcessing ( "columnspacing",       "",       NULL                  )
-                       << AttrProcessing ( "pages",               "",       NULL                  )
+                       << AttrProcessing ( "columns" )
+                       << AttrProcessing ( "columnspacing" )
+                       << AttrProcessing ( "pages" )
                        << AttrProcessing ( "hType",               "int",    (void*) &hType        )
                        << AttrProcessing ( "fType",               "int",    (void*) &fType        )
-                       << AttrProcessing ( "spHeadBody",          "",       NULL                  )
-                       << AttrProcessing ( "spFootBody",          "",       NULL                  )
-                       << AttrProcessing ( "spFootNoteBody",      "",       NULL                  )
-                       << AttrProcessing ( "slFootNotePosition",  "",       NULL                  )
-                       << AttrProcessing ( "slFootNoteLength",    "",       NULL                  )
-                       << AttrProcessing ( "slFootNoteWidth",     "",       NULL                  )
-                       << AttrProcessing ( "slFootNoteType",      "",       NULL                  );
+                       << AttrProcessing ( "spHeadBody" )
+                       << AttrProcessing ( "spFootBody" )
+                       << AttrProcessing ( "spFootNoteBody" )
+                       << AttrProcessing ( "slFootNotePosition" )
+                       << AttrProcessing ( "slFootNoteLength" )
+                       << AttrProcessing ( "slFootNoteWidth" )
+                       << AttrProcessing ( "slFootNoteType" );
     ProcessAttributes (myNode, attrProcessingList);
 
     leader->setHeaderType( hType );
@@ -712,14 +712,14 @@ static void ProcessFootnoteFramesetTag ( QDomNode myNode, void *tagData, KWEFKWo
         << AttrProcessing ( "name",        "QString", (void *) &frameName      )
         << AttrProcessing ( "frameType",   "int",     (void *) &frameType )
         << AttrProcessing ( "frameInfo",   "int",     (void *) &frameInfo )
-        << AttrProcessing ( "removable",   "",        NULL                )
+        << AttrProcessing ( "removable" )
         << AttrProcessing ( "visible",     "bool",    (void *) &visible )
         << AttrProcessing ( "grpMgr",      "QString", NULL    )
         << AttrProcessing ( "row",         "int",     NULL    )
         << AttrProcessing ( "col",         "int",     NULL    )
         << AttrProcessing ( "rows",        "int",     NULL    )
         << AttrProcessing ( "cols",        "int",     NULL    )
-        << AttrProcessing ( "protectSize",  "",        NULL    )
+        << AttrProcessing ( "protectSize" )
         ;
     ProcessAttributes (myNode, attrProcessingList);
 
@@ -729,7 +729,7 @@ static void ProcessFootnoteFramesetTag ( QDomNode myNode, void *tagData, KWEFKWo
         FootnoteData footnote;
         footnote.frameName = frameName;
         QValueList<TagProcessing> tagProcessingList;
-        tagProcessingList.append(TagProcessing ( "FRAME",     NULL,                NULL              ));
+        tagProcessingList.append(TagProcessing ( "FRAME" ));
         tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag, (void *) &footnote.para ));
         ProcessSubtags (myNode, tagProcessingList, leader);
         leader->footnoteList.append( footnote );
@@ -753,10 +753,10 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
 
     QValueList<AttrProcessing> attrProcessingList;
 
-    attrProcessingList << AttrProcessing ( "xmlns",         "QString", 0  )
-                       << AttrProcessing ( "editor",        "QString", 0  )
-                       << AttrProcessing ( "mime",          "QString", 0  )
-                       << AttrProcessing ( "syntaxVersion", "int",     0  );
+    attrProcessingList << AttrProcessing ( "xmlns" )
+                       << AttrProcessing ( "editor" )
+                       << AttrProcessing ( "mime" )
+                       << AttrProcessing ( "syntaxVersion" );
 
     ProcessAttributes( myNode, attrProcessingList );
     // TODO: verify syntax version and perhaps mime
@@ -802,19 +802,19 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
     QValueList<ParaData> paraList;
 
     tagProcessingList
-        << TagProcessing ( "PAPER",       NULL,                   NULL      ) // Already done
-        << TagProcessing ( "ATTRIBUTES",  NULL,                   NULL      )
+        << TagProcessing ( "PAPER" ) // Already done
+        << TagProcessing ( "ATTRIBUTES" )
         << TagProcessing ( "FRAMESETS",   ProcessFramesetsTag,    &paraList )
-        << TagProcessing ( "STYLES",      NULL,                   NULL      ) // Already done
+        << TagProcessing ( "STYLES" ) // Already done
         << TagProcessing ( "PICTURES",    ProcessPixmapsTag,      &paraList )
         << TagProcessing ( "PIXMAPS",     ProcessPixmapsTag,      &paraList )
         << TagProcessing ( "CLIPARTS",    ProcessPixmapsTag,      &paraList )
-        << TagProcessing ( "EMBEDDED",    NULL,                   NULL      )
+        << TagProcessing ( "EMBEDDED" )
         ;
 
     // TODO: why are the followings used by KWord 1.2 but are not in its DTD?
-    tagProcessingList << TagProcessing ( "SERIALL",     NULL,                   NULL               );
-    tagProcessingList << TagProcessing ( "FOOTNOTEMGR", NULL,                   NULL               );
+    tagProcessingList << TagProcessing ( "SERIALL" );
+    tagProcessingList << TagProcessing ( "FOOTNOTEMGR" );
 
     ProcessSubtags (myNode, tagProcessingList, leader);
 

@@ -115,7 +115,7 @@ void ProcessDocumentInfoTag ( QDomNode         myNode,
     KWEFDocumentInfo docInfo;
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "log",    NULL,             NULL              ) );
+    tagProcessingList.append ( TagProcessing ( "log" ) );
     tagProcessingList.append ( TagProcessing ( "author", ProcessAuthorTag, &docInfo ) );
     tagProcessingList.append ( TagProcessing ( "about",  ProcessAboutTag,  &docInfo ) );
     ProcessSubtags (myNode, tagProcessingList, leader);
@@ -419,10 +419,10 @@ static void ProcessVariableTag (QDomNode myNode, void* tagData, KWEFKWordLeader*
     tagProcessingList
         << TagProcessing ( "TYPE",          ProcessTypeTag,         variable )
         << TagProcessing ( "PGNUM",         ProcessPgNumTag,        variable )
-        << TagProcessing ( "DATE",          NULL,                   NULL     )
-        << TagProcessing ( "TIME",          NULL,                   NULL     )
-        << TagProcessing ( "CUSTOM",        NULL,                   NULL     )
-        << TagProcessing ( "SERIALLETTER",  NULL,                   NULL     )
+        << TagProcessing ( "DATE" )
+        << TagProcessing ( "TIME" )
+        << TagProcessing ( "CUSTOM" )
+        << TagProcessing ( "SERIALLETTER" )
         << TagProcessing ( "FIELD",         ProcessFieldTag,        variable )
         << TagProcessing ( "LINK",          ProcessLinkTag,         variable )
         << TagProcessing ( "FOOTNOTE",      ProcessFootnoteTag,     variable )
@@ -441,15 +441,15 @@ static void AppendTagProcessingFormatOne(QValueList<TagProcessing>& tagProcessin
         << TagProcessing ( "UNDERLINE",           ProcessUnderlineTag,    &formatData.text                   )
         << TagProcessing ( "STRIKEOUT",           ProcessStrikeoutTag,    &formatData.text                   )
         << TagProcessing ( "VERTALIGN",           ProcessIntValueTag,     &formatData.text.verticalAlignment )
-        << TagProcessing ( "SHADOW",              NULL,                   NULL                               )
+        << TagProcessing ( "SHADOW" )
         << TagProcessing ( "FONTATTRIBUTE",       ProcessStringValueTag,  &formatData.text.fontAttribute     )
-        << TagProcessing ( "LANGUAGE",            NULL,                   NULL                               )
-        << TagProcessing ( "ANCHOR",              NULL,                   NULL                               )
-        << TagProcessing ( "IMAGE",               NULL,                   NULL                               )
-        << TagProcessing ( "PICTURE",             NULL,                   NULL                               )
-        << TagProcessing ( "VARIABLE",            NULL,                   NULL                               )
+        << TagProcessing ( "LANGUAGE" )
+        << TagProcessing ( "ANCHOR" )
+        << TagProcessing ( "IMAGE" )
+        << TagProcessing ( "PICTURE" )
+        << TagProcessing ( "VARIABLE" )
         << TagProcessing ( "TEXTBACKGROUNDCOLOR", ProcessColorAttrTag,    &formatData.text.bgColor           )
-        << TagProcessing ( "OFFSETFROMBASELINE",  NULL,                   NULL                               )
+        << TagProcessing ( "OFFSETFROMBASELINE" )
         ;
 }
 
@@ -512,7 +512,7 @@ static void SubProcessFormatSixTag(QDomNode myNode,
         // TODO: We can have all layout information as in regular texts
         //       They simply apply to the table frames
         //       FONT is just the first that we've come across so far
-        tagProcessingList << TagProcessing ( "FONT",   NULL,             NULL               )
+        tagProcessingList << TagProcessing ( "FONT" )
                             << TagProcessing ( "ANCHOR", ProcessAnchorTag, (void *) &instance );
         ProcessSubtags (myNode, tagProcessingList, leader);
 #if 0
@@ -600,10 +600,10 @@ static void ProcessCounterTag ( QDomNode myNode, void *tagData, KWEFKWordLeader 
     attrProcessingList << AttrProcessing ( "lefttext",        "QString", (void *) &counter->lefttext        );
     attrProcessingList << AttrProcessing ( "righttext",       "QString", (void *) &counter->righttext       );
     attrProcessingList << AttrProcessing ( "bulletfont",      "QString", (void *) &counter->customFont      );
-    attrProcessingList << AttrProcessing ( "customdef",       "",        (void *) NULL                      );
+    attrProcessingList << AttrProcessing ( "customdef"  );
     attrProcessingList << AttrProcessing ( "text",            "QString", (void *) &counter->text            );
-    attrProcessingList << AttrProcessing ( "display-levels",  "",                 NULL                      );
-    attrProcessingList << AttrProcessing ( "align",           "",                 NULL                      );
+    attrProcessingList << AttrProcessing ( "display-levels" );
+    attrProcessingList << AttrProcessing ( "align" );
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode, leader);
