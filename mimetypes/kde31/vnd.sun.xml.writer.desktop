@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=OpenOffice.org Text Document
+MimeType=application/vnd.sun.xml.writer
+Type=MimeType
+Icon=002_text_document.xpm
+Patterns=*.sxw;*.SXW;

@@ -1,4 +1,4 @@
-application_DATA = x-magicpoint.desktop x-oowriter.desktop x-ooimpress.desktop
+application_DATA = x-magicpoint.desktop vnd.sun.xml.impress.desktop vnd.sun.xml.writer.desktop
 
 applicationdir = $(kde_mimedir)/application
 

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=OpenOffice.org Presentation
+MimeType=application/vnd.sun.xml.impress
+Type=MimeType
+Icon=008_presentation_document.xpm
+Patterns=*.sxi;*.SXI;
