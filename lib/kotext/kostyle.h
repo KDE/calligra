@@ -22,7 +22,7 @@
 
 #include "kotextparag.h"
 #include "kotextformat.h"
-
+#include <qdom.h>
 /**
  * A style is a combination of formatting attributes (font, color, etc.)
  * and paragraph-layout attributes, all grouped under a name.
@@ -58,6 +58,26 @@ public:
     void setFollowingStyle( KoStyle *fst ) { m_followingStyle = fst; }
 
     void save( QDomElement parentElem, KoZoomHandler* zh );
+    static void saveStyle( const KoParagLayout& layout,KoStyle *sty, QDomElement & parentElem );
+    static KoParagLayout loadStyle( QDomElement & parentElem, int docVersion=2 );
+
+    static int getAttribute(QDomElement &element, const char *attributeName, int defaultValue)
+      {
+	QString value;
+	if ( ( value = element.attribute( attributeName ) ) != QString::null )
+	  return value.toInt();
+	else
+	  return defaultValue;
+      }
+
+    static double getAttribute(QDomElement &element, const char *attributeName, double defaultValue)
+      {
+	QString value;
+	if ( ( value = element.attribute( attributeName ) ) != QString::null )
+	  return value.toDouble();
+	else
+	  return defaultValue;
+      }
 
 private:
     KoParagLayout m_paragLayout;
