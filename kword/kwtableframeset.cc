@@ -790,13 +790,13 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
                 needFinetune=true;
                 for( int rowspan=cell->m_cols; rowspan>0; rowspan--)
                 {
-
                     colStart.append(cell->getFrame( 0 )->left() + (cell->getFrame( 0 )->width() / cell->m_cols)*(rowspan - 1) );
                 }
             }
         }
         // also move all cells beneath the new row.
-        if ( cell->m_row >= _idx ) cell->m_row++;
+        if ( cell->m_row >= _idx )
+            cell->m_row++;
     }
     if(needFinetune) {
         for( unsigned int col = 0; col < colStart.count(); col++) {
@@ -809,6 +809,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
         }
     }
 
+    //add right position of table.
     colStart.append(br.right());
     QList<KWTableFrameSet::Cell> nCells;
     nCells.setAutoDelete( false );
@@ -816,11 +817,10 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
         copyFromRow=1;
 
     double height = getCell(copyFromRow,0)->getFrame(0)->height();
-
-    for ( i = 0; i < /*getCols()*/nbCols; i++ ) {
+    for ( i = 0; i < getCols(); i++ ) {
         int colSpan = getCell(copyFromRow,i)->m_cols;
         double tmpWidth= colStart[i+colSpan] - colStart[i];
-        if(i+colSpan != /*getCols()*/nbCols)
+        if(i+colSpan != getCols())
             tmpWidth-=tableCellSpacing;
         else
             tmpWidth+=1;
@@ -834,6 +834,11 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
         newCell->addFrame( frame, _recalc );
         nCells.append( newCell );
         newCell->m_cols = getCell(copyFromRow,i)->m_cols;
+
+
+        if(colSpan>1)
+            i+=colSpan-1;
+
     }
     m_rows = ++_rows;
 
