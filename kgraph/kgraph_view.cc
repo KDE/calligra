@@ -23,7 +23,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <kgraph_global.h>
 #include <kgraph_part.h>
 #include <kgraph_view.h>
 

@@ -43,7 +43,7 @@
 #include "kimage_doc.h"
 #include "kimage_view.h"
 #include "kimage_shell.h"
-#include "kimage_global.h"
+#include "kimage_factory.h"
 
 KImageView::KImageView( KImageDocument* _doc, QWidget* _parent, const char* _name )
   : KoView( _doc, _parent, _name )

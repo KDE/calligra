@@ -1,8 +1,8 @@
 
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
-example_LDFLAGS = $(KDE_RPATH) 
-example_LDADD = ../lib/kofficeui/libkofficeui.la ./libexample.la 
+example_LDFLAGS = $(KDE_RPATH)
+example_LDADD = ../lib/kofficeui/libkofficeui.la ./libexample.la
 
 libexample_la_LDFLAGS = -module -avoid-version
 
@@ -18,8 +18,7 @@ libexample_la_SOURCES = example_shell.cc example_part.cc \
 
 example_SOURCES = main.cc
 
-noinst_HEADERS =  example_global.h \
-		  example_shell.h example_part.h \
+noinst_HEADERS =  example_shell.h example_part.h \
 		  example_view.h example_factory.h
 
 libexample_la_METASOURCES = example_shell.moc example_part.moc \

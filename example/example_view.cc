@@ -1,5 +1,5 @@
 #include "example_view.h"
-#include "example_global.h"
+#include "example_factory.h"
 #include "example_part.h"
 
 #include <qpainter.h>

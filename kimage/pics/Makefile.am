@@ -1,5 +1,5 @@
 
-datadir = $(prefix)/share/apps/kimage/pics
+datadir = $(kde_datadir)/kimage/pics
 
 data_DATA = add_point.png airbrush.png areaselect.png centrejust.png \
 	    circle.png delete.png edit_point.png editcopy.png editcut.png \
