@@ -873,9 +873,6 @@ bool kspreadfunc_text( KSContext& context )
   if( KSUtil::checkType( context, args[0], KSValue::StringType, false ) )
     result = args[0]->stringValue();
 
-  else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
-    result = args[0]->boolValue() ? i18n("True") : i18n("False");
-
   else if( KSUtil::checkType( context, args[0], KSValue::DoubleType, false ) )
     result = KGlobal::locale()->formatNumber( args[0]->doubleValue() );
 
@@ -888,6 +885,8 @@ bool kspreadfunc_text( KSContext& context )
   else if( KSUtil::checkType( context, args[0], KSValue::IntType, false ) )
     result = KGlobal::locale()->formatNumber( args[0]->intValue() );
 
+  else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
+    result = args[0]->boolValue() ? i18n("True") : i18n("False");
   context.setValue( new KSValue( result ));
   return true;
 }
