@@ -138,9 +138,9 @@ KoDocument *KoView::hitTest( const QPoint &pos )
 */
 
   KoViewChild *viewChild;
-  KoDocumentChild *docChild;
-
-  if ( ( docChild = selectedChild() ) )
+  
+  KoDocumentChild *docChild = selectedChild();
+  if ( docChild )
   {
     if ( ( viewChild = child( docChild->document() ) ) )
     {
@@ -152,7 +152,8 @@ KoDocument *KoView::hitTest( const QPoint &pos )
         return 0;
   }
 
-  if ( ( docChild = activeChild() ) )
+  docChild = activeChild();
+  if ( docChild )
   {
     if ( ( viewChild = child( docChild->document() ) ) )
     {
