@@ -162,6 +162,27 @@ void ProcessAttributes ( QDomNode                     myNode,
                         {
                             *((double *) (*attrProcessingIt).data) = myAttrib.value ().toDouble ();
                         }
+                        else if ( (*attrProcessingIt).type == "bool" )
+                        {
+                            QString strAttr=myAttrib.value().simplifyWhiteSpace();
+                            bool flag;
+                            if ((strAttr=="yes")||(strAttr=="1")||(strAttr=="true"))
+                            {
+                                flag=true;
+                            }
+                            else if ((strAttr=="no")||(strAttr=="0")||(strAttr=="false"))
+                            {
+                                flag=false;
+                            }
+                            else
+                            {
+                                flag=false;
+                                kdWarning(30508) << "Unknown value for a boolean: " << strAttr
+                                    << " in tag " << myNode.nodeName () << ", attribute "
+                                    << myAttrib.name() << endl;
+                            }
+                            *((bool *) (*attrProcessingIt).data) = flag;
+                        }
                         else
                         {
                             kdWarning(30508) << "Unexpected data type " << (*attrProcessingIt).type

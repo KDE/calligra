@@ -170,30 +170,7 @@ static void ProcessBoolIntAttrTag ( QDomNode  myNode,
                                     void     *attrData,
                                     KWEFKWordLeader *leader )
 {
-    bool *boolValue = (bool *) attrData;
-
-    int intValue = -1;
-    ProcessOneAttrTag (myNode, attrName, "int", &intValue, leader);
-
-    switch ( intValue )
-    {
-        case 0:
-            *boolValue = false;
-            break;
-
-        case 1:
-            *boolValue = true;
-            break;
-
-        case -1:
-            kdWarning(30508) << "Bad attribute " << attrName << " in "
-                << myNode.nodeName () << " tag!" << endl;
-            break;
-
-        default:
-            kdWarning(30508) << "Unexpected " << myNode.nodeName () << " attribute "
-                                            << attrName << " value " << intValue << "!" << endl;
-    }
+    ProcessOneAttrTag (myNode, attrName, "bool", attrData, leader);
 }
 
 
@@ -556,13 +533,10 @@ static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, KWEFKWordLe
     QString strBefore, strAfter;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "linesTogether",       "",        NULL                );
-    attrProcessingList << AttrProcessing ( "hardFrameBreak",      "QString", (void *) &strBefore );
-    attrProcessingList << AttrProcessing ( "hardFrameBreakAfter", "QString", (void *) &strAfter  );
+    attrProcessingList << AttrProcessing ( "linesTogether",       "",     NULL                     );
+    attrProcessingList << AttrProcessing ( "hardFrameBreak",      "bool", &layout->pageBreakBefore );
+    attrProcessingList << AttrProcessing ( "hardFrameBreakAfter", "bool", &layout->pageBreakAfter  );
     ProcessAttributes (myNode, attrProcessingList);
-
-    layout->pageBreakBefore = (strBefore == "true");
-    layout->pageBreakAfter  = (strAfter  == "true");
 
     AllowNoSubtags (myNode, leader);
 }
