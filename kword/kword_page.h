@@ -377,6 +377,9 @@ protected:
     void selectAllFrames( bool select );
     void selectFrame( int mx, int my, bool select );
 
+    void cursorGotoNextTableCell();
+    void cursorGotoPrevTableCell();
+    
     KWordDocument *doc;
     bool markerIsVisible;
 

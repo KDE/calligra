@@ -2443,12 +2443,18 @@ bool KWPage::kLeft( QKeyEvent *e, int , int , KWParag *, KWTextFrameSet * )
 }
 
 /*================================================================*/
-bool KWPage::kUp( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet * )
+bool KWPage::kUp( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs )
 {
     if ( !doc->has_selection() && e->state() & ShiftButton )
 	startKeySelection();
     else
 	*oldFc = *fc;
+
+    bool gotoPrevTableCell = FALSE;
+    if ( fs->getGroupManager() && !parag->getPrev() ) {
+	if ( fc->isCursorInFirstLine() )
+	    gotoPrevTableCell = TRUE;
+    }
 
     fc->cursorGotoUp();
     gui->getView()->setFormat( *( ( KWFormat* )fc ) );
@@ -2462,17 +2468,25 @@ bool KWPage::kUp( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet * )
     if ( continueSelection || e->state() & ShiftButton ) {
 	continueKeySelection();
 	return FALSE;
-    }
+    } else if ( gotoPrevTableCell )
+	cursorGotoPrevTableCell();
+
     return TRUE;
 }
 
 /*================================================================*/
-bool KWPage::kDown( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet * )
+bool KWPage::kDown( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs )
 {
     if ( !doc->has_selection() && e->state() & ShiftButton )
 	startKeySelection();
     else
 	*oldFc = *fc;
+
+    bool gotoNextTableCell = FALSE;
+    if ( fs->getGroupManager() && !parag->getNext() ) {
+	if ( fc->isCursorInLastLine() )
+	    gotoNextTableCell = TRUE;
+    }
 
     fc->cursorGotoDown();
     gui->getView()->setFormat( *( ( KWFormat* )fc ) );
@@ -2486,7 +2500,9 @@ bool KWPage::kDown( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet * )
     if ( continueSelection || e->state() & ShiftButton ) {
 	continueKeySelection();
 	return FALSE;
-    }
+    } else if ( gotoNextTableCell )
+	cursorGotoNextTableCell();
+    
     return TRUE;
 }
 
@@ -5198,4 +5214,122 @@ void KWResizeHandle::updateGeometry()
 	break;
     }
     resize( 6, 6 );
+}
+
+/*================================================================*/
+void KWPage::cursorGotoNextTableCell()
+{
+    KWTextFrameSet *fs = (KWTextFrameSet*)doc->getFrameSet( fc->getFrameSet() - 1 );
+    KWGroupManager::Cell *cell;
+    for ( unsigned int i = 0; i < fs->getGroupManager()->getNumCells(); ++i ) {
+	if ( fs->getGroupManager()->getCell( i )->frameSet == fs ) {
+	    cell = fs->getGroupManager()->getCell( i );
+	    break;
+	}
+    }
+    
+    if ( !cell )
+	return;
+
+    if ( cell->col < fs->getGroupManager()->getCols() - 1 )
+	fs = (KWTextFrameSet*)fs->getGroupManager()->getCell( cell->row, cell->col + 1 )->frameSet;
+    else if ( cell->row < fs->getGroupManager()->getRows() - 1 ) 
+	fs = (KWTextFrameSet*)fs->getGroupManager()->getCell( cell->row + 1, 0 )->frameSet;
+    else
+	fs = (KWTextFrameSet*)fs->getGroupManager()->getCell( 0, 0 )->frameSet;
+    
+    int frameset = doc->getFrameSetNum( fs );
+
+    fc->setFrameSet( frameset + 1 );
+    fc->init( fs->getFirstParag() );
+    fc->cursorGotoLineStart();
+    scrollToCursor( *fc );
+    if ( doc->getProcessingType() == KWordDocument::DTP ) {
+	int frame = 0;
+	if ( frame != -1 ) {
+	    if ( doc->getProcessingType() == KWordDocument::DTP )
+		setRuler2Frame( frameset, frame );
+	}
+	selectedFrame = frame;
+	selectedFrameSet = frameset;
+    }
+
+    gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
+
+    if ( fc->getParag() ) {
+	gui->getView()->updateStyle( fc->getParag()->getParagLayout()->getName(), FALSE );
+	gui->getView()->setFormat( *( ( KWFormat* )fc ), TRUE, FALSE );
+	gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
+	gui->getView()->setLineSpacing( fc->getParag()->getParagLayout()->getLineSpacing().pt() );
+	gui->getView()->setParagBorders( fc->getParag()->getParagLayout()->getLeftBorder(),
+					 fc->getParag()->getParagLayout()->getRightBorder(),
+					 fc->getParag()->getParagLayout()->getTopBorder(),
+					 fc->getParag()->getParagLayout()->getBottomBorder() );
+	setRulerFirstIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getFirstLineLeftIndent() );
+	setRulerLeftIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getLeftIndent() );
+	gui->getHorzRuler()->setFrameStart( doc->getFrameSet( fc->getFrameSet() - 1 )->
+					    getFrame( fc->getFrame() - 1 )->x() );
+	gui->getHorzRuler()->setTabList( fc->getParag()->getParagLayout()->getTabList() );
+	format = *( ( KWFormat* )fc );
+    }
+}
+
+/*================================================================*/
+void KWPage::cursorGotoPrevTableCell()
+{
+    KWTextFrameSet *fs = (KWTextFrameSet*)doc->getFrameSet( fc->getFrameSet() - 1 );
+    KWGroupManager::Cell *cell;
+    for ( unsigned int i = 0; i < fs->getGroupManager()->getNumCells(); ++i ) {
+	if ( fs->getGroupManager()->getCell( i )->frameSet == fs ) {
+	    cell = fs->getGroupManager()->getCell( i );
+	    break;
+	}
+    }
+    
+    if ( !cell )
+	return;
+
+    if ( cell->col > 0 )
+	fs = (KWTextFrameSet*)fs->getGroupManager()->getCell( cell->row, cell->col - 1 )->frameSet;
+    else if ( cell->row > 0 )
+	fs = (KWTextFrameSet*)fs->getGroupManager()->getCell( cell->row - 1, 
+							      fs->getGroupManager()->getCols() - 1 )->frameSet;
+    else
+	fs = (KWTextFrameSet*)fs->getGroupManager()->getCell( fs->getGroupManager()->getRows() - 1, 
+							      fs->getGroupManager()->getCols() - 1 )->frameSet;
+    
+    int frameset = doc->getFrameSetNum( fs );
+
+    fc->setFrameSet( frameset + 1 );
+    fc->init( fs->getFirstParag() );
+    fc->cursorGotoLineStart();
+    scrollToCursor( *fc );
+    if ( doc->getProcessingType() == KWordDocument::DTP ) {
+	int frame = 0;
+	if ( frame != -1 ) {
+	    if ( doc->getProcessingType() == KWordDocument::DTP )
+		setRuler2Frame( frameset, frame );
+	}
+	selectedFrame = frame;
+	selectedFrameSet = frameset;
+    }
+
+    gui->getVertRuler()->setOffset( 0, -getVertRulerPos() );
+
+    if ( fc->getParag() ) {
+	gui->getView()->updateStyle( fc->getParag()->getParagLayout()->getName(), FALSE );
+	gui->getView()->setFormat( *( ( KWFormat* )fc ), TRUE, FALSE );
+	gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
+	gui->getView()->setLineSpacing( fc->getParag()->getParagLayout()->getLineSpacing().pt() );
+	gui->getView()->setParagBorders( fc->getParag()->getParagLayout()->getLeftBorder(),
+					 fc->getParag()->getParagLayout()->getRightBorder(),
+					 fc->getParag()->getParagLayout()->getTopBorder(),
+					 fc->getParag()->getParagLayout()->getBottomBorder() );
+	setRulerFirstIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getFirstLineLeftIndent() );
+	setRulerLeftIndent( gui->getHorzRuler(), fc->getParag()->getParagLayout()->getLeftIndent() );
+	gui->getHorzRuler()->setFrameStart( doc->getFrameSet( fc->getFrameSet() - 1 )->
+					    getFrame( fc->getFrame() - 1 )->x() );
+	gui->getHorzRuler()->setTabList( fc->getParag()->getParagLayout()->getTabList() );
+	format = *( ( KWFormat* )fc );
+    }
 }

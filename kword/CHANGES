@@ -1603,3 +1603,4 @@ Reggie, 26.10.1999:
 Reggie, 30.10.1999:
 -----------------
 - KRestrictedLine -> QLineEdit + QValidator
+- Improved cursor navigation inside tables
