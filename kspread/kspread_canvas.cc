@@ -85,7 +85,8 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
  *
  ****************************************************************/
 
-KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* _doc ) : QWidget( _parent )
+KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* _doc ) 
+    : QWidget( _parent, "", WNorthWestGravity )
 {
   m_pHorzScrollBar = 0;
   m_pVertScrollBar = 0;
@@ -1175,7 +1176,8 @@ void KSpreadCanvas::drawCell( QPainter &painter, KSpreadCell *_cell, int _col, i
  *
  ****************************************************************/
 
-KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas ) : QWidget( _parent )
+KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas ) 
+    : QWidget( _parent, "", WNorthWestGravity )
 {
   m_pCanvas = _canvas;
 
@@ -1404,7 +1406,8 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
  *
  ****************************************************************/
 
-KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas ) : QWidget( _parent )
+KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas ) 
+    : QWidget( _parent, "", WNorthWestGravity )
 {
   m_pCanvas = _canvas;
 
