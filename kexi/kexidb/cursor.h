@@ -162,6 +162,8 @@ class KEXI_DB_EXPORT Cursor: public Object
 		 Note: For reimplementation in driver's code. */
 		virtual void storeCurrentRecord(RecordData &data) const = 0;
 
+		void debug();
+
 	protected:
 		/*! Cursor will operate on \a conn, raw \a statement will be used to execute query. */
 		Cursor(Connection* conn, const QString& statement, uint options = NoOptions );

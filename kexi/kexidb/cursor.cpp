@@ -101,6 +101,10 @@ bool Cursor::open()
 			return false;
 		}
 		statement = m_conn->queryStatement( *m_query );
+		if (statement.isEmpty()) {
+			KexiDBDbg << "Cursor::open(): empty statement!" << endl;
+			return false;
+		}
 	}
 #ifndef Q_WS_WIN
 #warning TODO
@@ -314,3 +318,17 @@ void Cursor::clearBuffer()
 	drv_clearBuffer();
 }
 
+void Cursor::debug()
+{
+	QString dbg = "CURSOR( ";
+	if (!m_query) {
+		dbg += "RAW STATEMENT: ";
+		dbg += m_rawStatement;
+	}
+	else {
+		dbg += "QuerySchema: ";
+		dbg += m_conn->queryStatement( *m_query );
+	}
+	dbg += " )";
+	KexiDBDbg << dbg << endl;
+}
