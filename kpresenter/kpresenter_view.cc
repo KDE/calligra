@@ -7085,11 +7085,28 @@ void KPresenterView::importStyle()
     if ( dia.exec() ) {
         QPtrList<KoStyle>list(dia.listOfStyleImported());
         QPtrListIterator<KoStyle> style(  list );
+        QMap<QString, QString>*followStyle = new QMap<QString, QString>();
+
         for ( ; style.current() ; ++style )
         {
-            m_pKPresenterDoc->styleCollection()->addStyleTemplate(style.current());
+            followStyle->insert( style.current()->translatedName(), style.current()->followingStyle()->translatedName());
+            m_pKPresenterDoc->styleCollection()->addStyleTemplate(new KoStyle(*style.current()));
+            m_pKPresenterDoc->setModified( true );
         }
         m_pKPresenterDoc->updateAllStyleLists();
+        //update followingStyle.
+
+        QMapIterator<QString, QString> itFollow = followStyle->begin();
+        for ( ; itFollow != followStyle->end(); ++itFollow )
+        {
+            KoStyle * style = m_pKPresenterDoc->styleCollection()->findStyle(itFollow.key());
+            QString newName =(*followStyle)[ itFollow.key() ];
+            KoStyle * styleFollow = m_pKPresenterDoc->styleCollection()->findStyle(newName);
+            if (styleFollow )
+                style->setFollowingStyle( styleFollow );
+        }
+
+        delete followStyle;
     }
 }
 

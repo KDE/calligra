@@ -58,3 +58,4 @@ KPresenter 1.2beta1 -> 1.2 beta 2
   an appropriate drop-down menu
 - Add support for autocorrect with format
 - Add option "Allow cursor in text object protected content"
+- Add import text style support
