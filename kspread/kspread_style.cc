@@ -442,7 +442,13 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
 #endif
 }
 
-void KSpreadStyle::saveOasisStyle( KoGenStyle &style )
+QString KSpreadStyle::saveOasisStyleNumeric( KoGenStyles &mainStyles )
+{
+    //todo
+    return "";
+}
+
+QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
 {
     if ( featureSet( SAlignX ) && alignX() != KSpreadFormat::Undefined )
     {
@@ -611,6 +617,7 @@ void KSpreadStyle::saveOasisStyle( KoGenStyle &style )
         format.appendChild( goUpDiagonal );
     }
 #endif
+    return saveOasisStyleNumeric( mainStyles );
 }
 
 
@@ -1995,7 +2002,9 @@ void KSpreadCustomStyle::saveOasis( KoGenStyles &mainStyles )
     if ( m_parent )
         gs.addAttribute( "style:parent-style-name", m_parent->name() );
     gs.addAttribute( "style:display-name", m_name );
-    saveOasisStyle( gs );
+    QString numericStyle = saveOasisStyle( gs, mainStyles );
+    if ( !numericStyle.isEmpty() )
+        gs.addAttribute( "style:data-style-name", numericStyle );
     mainStyles.lookup( gs, "custom-style" );
 }
 

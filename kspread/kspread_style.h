@@ -103,7 +103,7 @@ class KSpreadStyle
   void saveXML( QDomDocument & doc, QDomElement & format ) const;
   bool loadXML( QDomElement & format );
 
-    void saveOasisStyle( KoGenStyle &style );
+    QString saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles );
     void loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & element );
 
 
@@ -301,6 +301,8 @@ class KSpreadStyle
   uint m_rightPenValue;
   uint m_leftPenValue;
   uint m_topPenValue;
+
+    QString saveOasisStyleNumeric( KoGenStyles &mainStyles );
 
   bool featureSet( FlagsSet f ) const { return ( !m_parent || ( m_featuresSet & (uint) f ) ); }
 };
