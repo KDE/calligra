@@ -40,6 +40,7 @@
 #include "penbrushcmd.h"
 #include "commandhistory.h"
 #include "styledia.h"
+#include "inspagedia.h"
 
 #include <qrect.h>
 #include <qpainter.h>
@@ -109,6 +110,7 @@ KPresenterDoc::KPresenterDoc( QObject* parent, const char* name )
       _hasFooter( false ), urlIntern()
 {
     // init
+    docAlreadyOpen = FALSE;
     _clean = true;
     _objectList = new QList<KPObject>;
     _objectList->setAutoDelete( false );
@@ -488,26 +490,30 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	presentSlides = PS_ALL;
     }
 
-    // DOC
-    if ( !parser.open( "DOC", tag ) ) {
-	cerr << "Missing DOC" << endl;
-	QApplication::restoreOverrideCursor();
-	return false;
-    }
+    if ( !docAlreadyOpen ) {
+	// DOC
+	if ( !parser.open( "DOC", tag ) ) {
+	    cerr << "Missing DOC" << endl;
+	    QApplication::restoreOverrideCursor();
+	    return false;
+	}
 
-    KOMLParser::parseTag( tag.c_str(), name, lst );
-    vector<KOMLAttrib>::const_iterator it = lst.begin();
-    for( ; it != lst.end(); it++ ) {
-	if ( ( *it ).m_strName == "mime" ) {
-	    if ( ( *it ).m_strValue != "application/x-kpresenter" ) {
-		cerr << "Unknown mime type " << ( *it ).m_strValue << endl;
-		QApplication::restoreOverrideCursor();
-		return false;
-	    }
-	} else if ( ( *it ).m_strName == "url" )
-	    urlIntern = KURL( ( *it ).m_strValue.c_str() ).path();
+	KOMLParser::parseTag( tag.c_str(), name, lst );
+	vector<KOMLAttrib>::const_iterator it = lst.begin();
+	for( ; it != lst.end(); it++ ) {
+	    if ( ( *it ).m_strName == "mime" ) {
+		if ( ( *it ).m_strValue != "application/x-kpresenter" ) {
+		    cerr << "Unknown mime type " << ( *it ).m_strValue << endl;
+		    QApplication::restoreOverrideCursor();
+		    return false;
+		}
+	    } else if ( ( *it ).m_strName == "url" )
+		urlIntern = KURL( ( *it ).m_strValue.c_str() ).path();
+	}
     }
-
+    
+    docAlreadyOpen = FALSE;
+    
     // PAPER
     while ( parser.open( 0L, tag ) ) {
 	KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -1285,7 +1291,8 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 								"*.kpr", "KPresenter",
 								FALSE );
 
-    ret = KoTemplateChooseDia::chooseTemplate( "kpresenter_template", KPresenterFactory::global(), _template, true, false, filter,
+    ret = KoTemplateChooseDia::chooseTemplate( "kpresenter_template", 
+					       KPresenterFactory::global(), _template, true, false, filter,
 					       "application/x-kpresenter" );
 
     if ( ret == KoTemplateChooseDia::Template ) {
@@ -3151,7 +3158,8 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
 
     QString _template;
 
-    if ( KoTemplateChooseDia::chooseTemplate( "kpresenter_template", KPresenterFactory::global(), _template, true, true ) !=
+    if ( KoTemplateChooseDia::chooseTemplate( "kpresenter_template", KPresenterFactory::global(), 
+					      _template, true, true ) !=
 	 KoTemplateChooseDia::Cancel ) {
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt" );
@@ -3319,19 +3327,66 @@ void KPresenterDoc::loadStream( istream &in )
 	return;
     }
 
+    bool insertPage = FALSE;
+    bool ok = FALSE;
+    
     KOMLParser::parseTag( tag.c_str(), name, lst );
     vector<KOMLAttrib>::const_iterator it = lst.begin();
     for( ; it != lst.end(); it++ ) {
 	if ( ( *it ).m_strName == "mime" ) {
-	    if ( ( *it ).m_strValue != "application/x-kpresenter-selection" ) {
-		cerr << "Unknown mime type " << ( *it ).m_strValue << endl;
-		return;
+	    if ( ( *it ).m_strValue == "application/x-kpresenter-selection" ) {
+		ok = TRUE;
+	    } else if ( ( *it ).m_strValue == "application/x-kpresenter-page-selection" ) {
+		ok = TRUE;
+		insertPage = TRUE;
 	    }
 	}
     }
 
-    loadObjects( parser, lst, true );
+    if ( !ok )
+	return;
+    
+    if ( !insertPage )
+	loadObjects( parser, lst, true );
+    else {
+	InsPageDia *dia = new InsPageDia( 0, 0, this, 1 );
+	if ( dia->exec() == QDialog::Accepted ) {
+	    KPObject *kpobject = 0;
+	    int _h = getPageSize( 0, 0, 0 ).height();
+	    InsertPos _insPos = dia->getInsertPos();
+	    int _page = dia->getPageNum();
+	    InsPageMode _insPageMode = dia->getInsPageMode();
+	    
+	    if ( _insPos == IP_BEFORE ) 
+		_page--;
 
+	    if ( _insPageMode == IPM_MOVE_OBJS ) {
+		for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
+		    kpobject = objectList()->at( i );
+		    if ( getPageOfObj( i, 0, 0 ) - 1 > _page )
+			kpobject->setOrig( kpobject->getOrig().x(), kpobject->getOrig().y() + _h );
+		}
+	    }
+
+	    if ( _insPos == IP_BEFORE ) 
+		_page++;
+	    pasting = FALSE;
+	    _clean = FALSE;
+
+	    if ( _insPos == IP_AFTER ) 
+		_page++;
+	    objStartY = getPageSize( _page - 1, 0, 0 ).y() + getPageSize( _page - 1, 0, 0 ).height();
+	    docAlreadyOpen = TRUE;
+	    loadXML( parser, 0 );
+	    objStartY = 0;
+	    _clean = TRUE;
+	    KPBackGround *kpbackground = _backgroundList.at( _backgroundList.count() - 1 );	
+	    _backgroundList.take( _backgroundList.count() - 1 );
+	    _backgroundList.insert( _page, kpbackground );
+	}
+	delete dia;
+    }
+    
     repaint( false );
     m_bModified = true;
 }
@@ -3658,4 +3713,46 @@ QString KPresenterDoc::configFile() const
 void KPresenterDoc::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/ )
 {
     qDebug("------------------ ::paintContent still unimplemented ----------" );
+}
+
+/*================================================================*/
+void KPresenterDoc::copyPage( int num )
+{
+    num--;
+    if ( num < 0 || num >= _backgroundList.count() )
+	return;
+    
+    QClipboard *cb = QApplication::clipboard();
+    string clip_str;
+    tostrstream out( clip_str );
+    KPObject *kpobject = 0;
+    KPBackGround *kpbackground = _backgroundList.at( num );
+    
+    out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
+    out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org"
+	<< "\" editor=\"" << "KPresenter"
+	<< "\" mime=\"" << "application/x-kpresenter-page-selection" << "\">" << endl;
+    out << otag << "<BACKGROUND>" << endl;
+    out << otag << "<PAGE>" << endl;
+    kpbackground->save( out );
+    out << etag << "</PAGE>" << endl;
+    out << etag << "</BACKGROUND>" << endl;
+
+    out << otag << "<OBJECTS>" << endl;
+    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
+	kpobject = objectList()->at( i );
+	if ( getPageOfObj( i, 0, 0 ) == num + 1 ) {
+	    out << otag << "<OBJECT type=\"" << static_cast<int>( kpobject->getType() ) << "\">" << endl;
+	    int y = kpobject->getOrig().y();
+	    kpobject->setOrig( kpobject->getOrig().x(), kpobject->getOrig().y() - 
+			      kpbackground->getSize().height() * num );
+	    kpobject->save( out );
+	    kpobject->setOrig( kpobject->getOrig().x(), y );
+	    out << etag << "</OBJECT>" << endl;
+	}
+    }
+    out << etag << "</OBJECTS>" << endl;
+    out << etag << "</DOC>" << endl;
+
+    cb->setText( clip_str.c_str() );
 }

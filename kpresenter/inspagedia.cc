@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KPresenter - (c) by Reginald Stadlbauer 1997-1998              */
-/* Version: 0.1.0                                                 */
-/* Author: Reginald Stadlbauer                                    */
-/* E-Mail: reggie@kde.org                                         */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* written for KDE (http://www.kde.org)                           */
-/* License: GNU GPL                                               */
+/* KPresenter - (c) by Reginald Stadlbauer 1997-1998		  */
+/* Version: 0.1.0						  */
+/* Author: Reginald Stadlbauer					  */
+/* E-Mail: reggie@kde.org					  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: insert page dialog                                     */
+/* Module: insert page dialog					  */
 /******************************************************************/
 
 #include "kpresenter_doc.h"
@@ -26,7 +26,7 @@
 #include <klocale.h>
 
 /******************************************************************/
-/* class InsPageDia                                               */
+/* class InsPageDia						  */
 /******************************************************************/
 
 /*==================== constructor ===============================*/
@@ -58,7 +58,7 @@ InsPageDia::InsPageDia( QWidget* parent, const char* name, KPresenterDoc *_doc, 
     grid->addMultiCellWidget( leave, 2, 2, 0, 4 );
 
     _move = new QRadioButton( i18n( "&Move the objects which are behind the inserted page \n"
-                                    "one page forward, so that they stay on their current page." ), this );
+				    "one page forward, so that they stay on their current page." ), this );
     _move->resize( _move->sizeHint() );
     connect( _move, SIGNAL( clicked() ), this, SLOT( moveClicked() ) );
     grid->addMultiCellWidget( _move, 3, 3, 0, 4 );
@@ -86,24 +86,24 @@ InsPageDia::InsPageDia( QWidget* parent, const char* name, KPresenterDoc *_doc, 
     after->setChecked( true );
     _move->setChecked( true );
 
-//   grid->addRowSpacing( 0, before->height() / 2 );
-//   grid->addRowSpacing( 1, after->height() / 2 );
-//   grid->addRowSpacing( 2, leave->height() );
-//   grid->addRowSpacing( 3, _move->height() );
-//   grid->addRowSpacing( 4, 0 );
-//   grid->addRowSpacing( 5, ok->height() );
-//   grid->setRowStretch( 4, 1 );
+    //   grid->addRowSpacing( 0, before->height() / 2 );
+    //   grid->addRowSpacing( 1, after->height() / 2 );
+    //   grid->addRowSpacing( 2, leave->height() );
+    //   grid->addRowSpacing( 3, _move->height() );
+    //   grid->addRowSpacing( 4, 0 );
+    //   grid->addRowSpacing( 5, ok->height() );
+    //   grid->setRowStretch( 4, 1 );
 
-//   grid->addColSpacing(0,max(before->width(),after->width()));
-//   grid->addColSpacing( 1, spinBox->width() );
-//   grid->addColSpacing(2,max(leave->width(),_move->width()) -
-//            (max(before->width(),after->width()) + spinBox->width() +
-//             ok->width() + cancel->width() + 30 ) );
-//   grid->addColSpacing( 3, ok->width() );
-//   grid->addColSpacing( 4, cancel->width() );
-//   grid->setColStretch( 2, 1 );
+    //   grid->addColSpacing(0,max(before->width(),after->width()));
+    //   grid->addColSpacing( 1, spinBox->width() );
+    //   grid->addColSpacing(2,max(leave->width(),_move->width()) -
+    //	      (max(before->width(),after->width()) + spinBox->width() +
+    //	       ok->width() + cancel->width() + 30 ) );
+    //   grid->addColSpacing( 3, ok->width() );
+    //   grid->addColSpacing( 4, cancel->width() );
+    //   grid->setColStretch( 2, 1 );
 
-//   grid->activate();
+    //   grid->activate();
 }
 
 /*================================================================*/
@@ -154,17 +154,21 @@ void InsPageDia::okClicked()
     InsPageMode ipm = IPM_LET_OBJS;
 
     if ( leave->isChecked() )
-        ipm = IPM_LET_OBJS;
+	ipm = IPM_LET_OBJS;
     else if ( _move->isChecked() )
-        ipm = IPM_MOVE_OBJS;
+	ipm = IPM_MOVE_OBJS;
 
     InsertPos ip = IP_AFTER;
 
     if ( before->isChecked() )
-        ip = IP_BEFORE;
+	ip = IP_BEFORE;
     else if ( after->isChecked() )
-        ip = IP_AFTER;
+	ip = IP_AFTER;
 
+    pageNum = spinBox->value() - 1;
+    insPageMode = ipm;
+    insertPos = ip;
+    
     emit insertPage( spinBox->value() - 1, ipm, ip );
 }
 

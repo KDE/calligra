@@ -41,6 +41,16 @@ class InsPageDia : public QDialog
 public:
     InsPageDia( QWidget* parent, const char* name, KPresenterDoc *_doc, int _currPage );
 
+    InsPageMode getInsPageMode() {
+	return insPageMode;
+    }
+    InsertPos getInsertPos() {
+	return insertPos;
+    }
+    int getPageNum() {
+	return pageNum;
+    }
+    
 protected:
     void uncheckAllPos();
     void uncheckAllMode();
@@ -50,7 +60,10 @@ protected:
     QSpinBox *spinBox;
     QRadioButton *before, *after, *leave, *_move;
     QPushButton *ok, *cancel;
-
+    InsertPos insertPos;
+    InsPageMode insPageMode;
+    int pageNum;
+    
 protected slots:
     void leaveClicked();
     void moveClicked();

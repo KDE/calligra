@@ -1416,7 +1416,7 @@ void Page::setupMenus()
     pageMenu->insertItem( i18n( "&Open presentation structure viewer..." ), this, SLOT( presStructView() ) );
     pageMenu->insertSeparator();
     pageMenu->insertItem( BarIcon( "filenew" ), i18n( "&Insert Page..." ), this, SLOT( pageInsert() ) );
-    pageMenu->insertItem( BarIcon( "newslide" ), i18n( "&Copy Page..." ), this, SLOT( pageCopy() ) );
+    pageMenu->insertItem( BarIcon( "newslide" ), i18n( "&Copy Page to Clipboard" ), this, SLOT( pageCopy() ) );
     pageMenu->insertItem( i18n( "&Delete Page..." ), this, SLOT( pageDelete() ) );
     pageMenu->insertSeparator();
     pageMenu->insertItem( i18n( "Edit &Header/Footer..." ), this, SLOT( slotEditHF() ) );

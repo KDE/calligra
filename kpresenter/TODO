@@ -14,7 +14,6 @@ MISSING FEATURES, todo :
 - Window title : kpresenter - filename
 - Current "align objects" aligns in relation with the page, is there a
   way to align the h or v centers of several objects ?
-- Copy page
 - use libkformula
 - seperate the general configuration and page/slide specific config dialog
   and make 2 out of them (currently it's one, which is confusing)

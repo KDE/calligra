@@ -285,6 +285,7 @@ void KPresenterView::editPaste()
     } else {
 	page->kTxtObj()->paste();
     }
+   setRanges();
 }
 
 /*===============================================================*/
@@ -308,6 +309,7 @@ void KPresenterView::editSelectAll()
 /*===============================================================*/
 void KPresenterView::editCopyPage()
 {
+    m_pKPresenterDoc->copyPage( getCurrPgNum() );
 }
 
 /*===============================================================*/
@@ -1537,7 +1539,7 @@ void KPresenterView::setupActions()
     actionEditSelectAll = new KAction( i18n( "&Select All" ), CTRL + Key_A,
 				       this, SLOT( editDelete() ),
 				       actionCollection(), "edit_selectall" );
-    actionEditCopyPage = new KAction( i18n( "Copy &Page..." ), KPBarIcon( "newslide" ), 0,
+    actionEditCopyPage = new KAction( i18n( "Copy &Page to Clipboard" ), KPBarIcon( "newslide" ), 0,
 				      this, SLOT( editCopyPage() ),
 				      actionCollection(), "edit_copypage" );
     actionEditDelPage = new KAction( i18n( "Delete &Page..." ), KPBarIcon( "delslide"), 0,
