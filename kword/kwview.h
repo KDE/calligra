@@ -716,6 +716,7 @@ private:
     KAction *actionConvertToTextBox;
 
     KAction *actionSpellIgnoreAll;
+    KAction *actionSpellCheck;
 
 #if 0 // KWORD_HORIZONTAL_LINE
     // MOC_SKIP_BEGIN

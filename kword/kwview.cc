@@ -437,7 +437,7 @@ void KWView::setupActions()
     actionEditFindPrevious = KStdAction::findPrev( this, SLOT( editFindPrevious() ), actionCollection(), "edit_findprevious" );
     actionEditReplace = KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
-    /*actionSpellCheck =*/ KStdAction::spelling( this, SLOT( slotSpellCheck() ), actionCollection(), "extra_spellcheck" );
+    actionSpellCheck = KStdAction::spelling( this, SLOT( slotSpellCheck() ), actionCollection(), "extra_spellcheck" );
     actionDeletePage = new KAction( i18n( "Delete Page" ), "delslide", 0,
                                     this, SLOT( deletePage() ),
                                     actionCollection(), "delete_page" );
@@ -5591,6 +5591,7 @@ void KWView::slotFrameSetEditChanged()
     actionFormatSub->setEnabled(rw);
     actionFormatParag->setEnabled(state);
     actionInsertSpecialChar->setEnabled(state);
+    actionSpellCheck->setEnabled(state);
 
     actionChangeCase->setEnabled( (rw && !edit)|| (state && hasSelection) );
 
