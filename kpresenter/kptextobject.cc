@@ -574,7 +574,6 @@ KPTextView::KPTextView( KPTextObject * txtObj )
 {
 
     m_textobj=txtObj;
-    kdDebug()<<"KPTextView::KPTextView( KPTextObject * txtObj )\n";
     KoTextView::setReadWrite( txtObj->kPresenterDocument()->isReadWrite() );
     connect( textView(), SIGNAL( cut() ), SLOT( cut() ) );
     connect( textView(), SIGNAL( copy() ), SLOT( copy() ) );
@@ -653,4 +652,21 @@ void KPTextView::clearSelection()
     {
         textDocument()->removeSelection(QTextDocument::Standard );
     }
+}
+
+void KPTextView::insertSpecialChar(QChar _c)
+{
+    if(textObject()->hasSelection() )
+        m_textobj->kPresenterDocument()->addCommand(textObject()->replaceSelectionCommand(
+            cursor(), _c, QTextDocument::Standard, i18n("Insert Special Char")));
+    else
+        textObject()->insert( cursor(), currentFormat(), _c, false /* no newline */, true, i18n("Insert Special Char") );
+}
+
+void KPTextView::insertLink(const QString &_linkName, const QString & hrefName)
+{
+    KoTextFormat format=*currentFormat();
+    format.setAnchorName(_linkName);
+    format.setAnchorHref( hrefName);
+    textObject()->insert( cursor(), &format, _linkName+" " , false , true, i18n("Insert Link") );
 }

@@ -98,7 +98,8 @@
 #include <kotextobject.h>
 #include <kprcommand.h>
 #include <koFontDia.h>
-
+#include <koCharSelectDia.h>
+#include <koInsertLink.h>
 #define DEBUG
 
 static const char *pageup_xpm[] = {
@@ -223,7 +224,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     createGUI();
 
     setKeyCompression( true );
-
+    m_specialCharDlg=0L;
     connect(this, SIGNAL(embeddImage(const QString &)), SLOT(insertPicture(const QString &)));
 }
 
@@ -256,6 +257,7 @@ KPresenterView::~KPresenterView()
     delete dcop;
     delete page; // it's a child widget, but it emits a signal on destruction
     delete m_zoomHandler;
+    delete m_specialCharDlg;
 }
 
 /*=========================== file print =======================*/
@@ -2349,6 +2351,16 @@ void KPresenterView::setupActions()
     actionFormatSub->setExclusiveGroup( "valign" );
 
 
+    actionInsertSpecialChar = new KAction( i18n( "Sp&ecial Character..." ), "char",
+                        ALT + SHIFT + Key_C,
+                        this, SLOT( insertSpecialChar() ),
+                        actionCollection(), "insert_specialchar" );
+
+     actionInsertLink = new KAction( i18n( "Insert link" ), 0,
+                                        this, SLOT( insertLink() ),
+                                        actionCollection(), "insert_link" );
+
+
 #if 0
     //code from page.cc
     //not implemented
@@ -2416,6 +2428,8 @@ void KPresenterView::objectSelectedChanged()
     actionFormatStrikeOut->setEnabled(isText);
     actionFormatSuper->setEnabled(isText);
     actionFormatSub->setEnabled(isText);
+    actionInsertSpecialChar->setEnabled(isText);
+    actionInsertLink->setEnabled(isText);
     actionEditFind->setEnabled(isText && page->kTxtObj());
 
     state=state || isText;
@@ -3501,6 +3515,54 @@ void KPresenterView::autoScreenPresStopTimer()
 {
     automaticScreenPresSpeed.stop();
     automaticScreenPresWaitTime += automaticScreenPresTime.elapsed();
+}
+
+
+void KPresenterView::insertSpecialChar()
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if ( !edit )
+        return;
+    QString f = edit->textFontFamily();
+    QChar c=' ';
+    if (m_specialCharDlg==0)
+    {
+        m_specialCharDlg = new KoCharSelectDia( this, "insert special char", f, c, false );
+        connect( m_specialCharDlg, SIGNAL(insertChar(QChar,const QString &)),
+                 this, SLOT(slotSpecialChar(QChar,const QString &)));
+        connect( m_specialCharDlg, SIGNAL( finished() ),
+                 this, SLOT( slotSpecialCharDlgClosed() ) );
+    }
+    m_specialCharDlg->show();
+}
+
+void KPresenterView::slotSpecialCharDlgClosed()
+{
+    m_specialCharDlg = 0L;
+}
+
+void KPresenterView::slotSpecialChar(QChar c, const QString &_font)
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if ( !edit )
+        return;
+    edit->setFamily( _font );
+    edit->insertSpecialChar(c);
+
+}
+
+void KPresenterView::insertLink()
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if ( !edit )
+        return;
+    QString link;
+    QString ref;
+    if(KoInsertLinkDia::createLinkDia(link, ref))
+    {
+        if(!link.isEmpty() && !ref.isEmpty())
+            edit->insertLink(link, ref);
+    }
 }
 
 #include <kpresenter_view.moc>

@@ -144,6 +144,8 @@ public:
     void dragLeaveEvent( QDragLeaveEvent * );
 
     void clearSelection();
+    void insertSpecialChar(QChar _c);
+    void insertLink(const QString &_linkName, const QString & hrefName);
 
 public slots:
     void cut();

@@ -611,3 +611,8 @@ Reggie, 28.12.1999:
 Reggie, 2.1.2000:
 --------------
 - If there is nothing to copy to the clipboard, copy noting
+
+
+Changes after Kpresenter-1.1
+============================
+- Port to kotext

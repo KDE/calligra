@@ -51,6 +51,8 @@ class KToggleAction;
 class TKSelectColorAction;
 class KoPartSelectAction;
 
+class KoCharSelectDia;
+
 class PageBase : public QWidget
 {
 public:
@@ -119,6 +121,7 @@ public slots:
     void insertPicture();
     void insertPicture(const QString &file);
     void insertClipart();
+    void insertSpecialChar();
 
     // tools menu
     void toolsMouse();
@@ -231,6 +234,11 @@ public slots:
 
     void textSubScript();
     void textSuperScript();
+
+    void slotSpecialChar(QChar , const QString &);
+    void slotSpecialCharDlgClosed();
+
+    void insertLink();
 
 public:
     // create GUI
@@ -611,10 +619,15 @@ private:
     KToggleAction *actionFormatSuper;
     KToggleAction *actionFormatSub;
 
+    KAction* actionInsertSpecialChar;
+    KAction *actionInsertLink;
+
+
     QTimer automaticScreenPresSpeed;
     QTime automaticScreenPresTime;
     int automaticScreenPresWaitTime;
     bool automaticScreenPresFirstTimer;
+    KoCharSelectDia *m_specialCharDlg;
 
 };
 

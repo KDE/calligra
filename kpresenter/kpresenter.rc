@@ -33,6 +33,9 @@
   <Action name="view_showsidebar"/>
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
+  <Action name="insert_specialchar"/>
+  <Action name="insert_link"/>
+  <Separator/>
   <Action name="insert_page"/>
   <Separator/>
   <Action name="insert_picture"/>
