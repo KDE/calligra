@@ -210,9 +210,12 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
                        qRound (p2.y () - p1.y () + ycorr),
                        Roundness, Roundness);
     else
+    {
       Painter::drawRect (p, p1.x (), p1.y (),
                          qRound (p2.x () - p1.x () + xcorr),
                          qRound (p2.y () - p1.y () + ycorr));
+      //kdDebug()<<"( "<<p1.x()<<" | "<<p1.y()<<" )    ( "<<p2.x()<<" | "<<p2.y()<<" )"<<endl;
+    };
   }
 
   p.restore ();
@@ -220,7 +223,8 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline) {
   if (withBasePoints) {
     p.setPen (black);
     // p.setBrush (white);
-    if (kind == PK_Polygon || Roundness == 0) {
+    if (kind == PK_Polygon || Roundness == 0)
+    {
       for (i = 0; i < num; i++) {
         Coord c = points.at (i)->transform (tmpMatrix);
         int x = (int) c.x ();

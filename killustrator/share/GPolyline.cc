@@ -145,11 +145,12 @@ void GPolyline::draw (QPainter& p, bool withBasePoints, bool /*outline*/) {
 
   // highly inefficient - FIXME (Werner)
   unsigned int num = points.count ();
-  for (i = 1; i < num; i++) {
-    Painter::drawLine (p, points.at (i - 1)->x () + ((i==1) ? sdx : 0),
-                       points.at (i - 1)->y () + ((i==1) ? sdy : 0),
-                       points.at (i)->x () - ((i==num-1) ? edx : 0),
-                       points.at (i)->y () - ((i==num-1) ? edy : 0));
+  for (i = 1; i < num; i++)
+  {
+     Painter::drawLine (p, points.at (i - 1)->x () + ((i==1) ? sdx : 0),
+                        points.at (i - 1)->y () + ((i==1) ? sdy : 0),
+                        points.at (i)->x () - ((i==num-1) ? edx : 0),
+                        points.at (i)->y () - ((i==num-1) ? edy : 0));
   }
 
   p.restore ();

@@ -27,6 +27,7 @@
 
 #include <qdom.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 float seg_angle (const Coord& c1, const Coord& c2) {
   float dx = c2.x () - c1.x ();
@@ -58,6 +59,7 @@ GText::GText () {
   cursorActive = false;
   text.append(QString (""));
   pathObj = 0L;
+  cmatrices.setAutoDelete(true);
 }
 
 GText::GText (const QDomElement &element) : GObject (element.namedItem("gobject").toElement()) {
@@ -90,6 +92,7 @@ GText::GText (const QDomElement &element) : GObject (element.namedItem("gobject"
         iMatrix = tMatrix.invert ();
         initTmpMatrix ();
     }
+  cmatrices.setAutoDelete(true);
 }
 
 GText::GText (const GText& obj) : GObject (obj) {
@@ -102,6 +105,7 @@ GText::GText (const GText& obj) : GObject (obj) {
     setPathObject (obj.pathObj);
   setText(obj.getText());
   calcBoundingBox ();
+  cmatrices.setAutoDelete(true);
 }
 
 GText::~GText () {
@@ -474,78 +478,97 @@ QDomElement GText::writeToXml (QDomDocument &document) {
     return element;
 }
 
-void GText::updateMatricesForPath () {
-  if (pathObj) {
-    QStringList::Iterator it;
-    int i;
-    int num_chars = 0;
+void GText::updateMatricesForPath ()
+{
+   if (pathObj)
+   {
+      QStringList::Iterator it;
+      int i;
+      int num_chars = 0;
 
-    // initialize transformation matrices for characters
-    for (it = text.begin (); it != text.end (); it++)
-      num_chars += (*it).length ();
-    cmatrices.clear ();
-    cmatrices.resize (num_chars);
+      // initialize transformation matrices for characters
+      for (it = text.begin (); it != text.end (); it++)
+         num_chars += (*it).length ();
+      cmatrices.clear ();
+      //kdDebug()<<"updateMatrices...   num_chars: "<<num_chars<<endl;
 
-    if (pathObj->inherits ("GPolyline") || pathObj->isA ("GOval")) {
-      // get path for aligning
-      QValueList<Coord> path;
-      pathObj->getPath (path);
+      cmatrices.resize (num_chars);
+      //kdDebug()<<"cmatrices size(): "<<cmatrices.size()<<" count(): "<<cmatrices.count()<<endl;
+      for (int i=0; i<num_chars; i++)
+         cmatrices.insert(i,new QWMatrix);
+      //kdDebug()<<"cmatrices size(): "<<cmatrices.size()<<" count(): "<<cmatrices.count()<<endl;
 
-      // map path from world coordinates to object coordinates
-      for (i = 0; i < (int) path.count(); i++)
-        path[i] = path[i].transform (iMatrix);
+      if (pathObj->inherits ("GPolyline") || pathObj->isA ("GOval"))
+      {
+         // get path for aligning
+         QValueList<Coord> path;
+         pathObj->getPath (path);
 
-      // now compute character matrices according the path
-      float len, angle;
-      float lpos = 0; // width of string at current segment
+         // map path from world coordinates to object coordinates
+         for (i = 0; i < (int) path.count(); i++)
+            path[i] = path[i].transform (iMatrix);
 
-      int max_pos = path.count() - 1;
-      int s_pos = 0, e_pos = 1;
-      len = seg_length (path[s_pos], path[e_pos]);
-      angle = seg_angle (path[s_pos], path[e_pos]);
-      if (path[e_pos].x () - path[s_pos].x () < 0)
-        angle += 180;
+         // now compute character matrices according the path
+         float len, angle;
+         float lpos = 0; // width of string at current segment
 
-      for (it = text.begin (); it != text.end (); it++) {
-        QString s = *it;
-        int slen = s.length();
-        i = 0;
-        while (i < slen) {
-          int cwidth = fm->width (s[i]);
-          if (e_pos < max_pos && lpos + cwidth > len) {
-            e_pos += 1;
-            float nlen = seg_length (path[e_pos - 1], path[e_pos]);
-            angle = seg_angle (path[s_pos], path[e_pos]);
-            if (path[e_pos].x () - path[s_pos].x () < 0)
-              angle += 180;
-            len += nlen;
-          }
-          else {
-            if (e_pos - s_pos > 1) {
-              lpos = 0;
-              int pidx = (e_pos + s_pos) / 2;
-              cmatrices[i]->translate (path[pidx].x (), path[pidx].y ());
-              cmatrices[i]->rotate (angle);
-              cmatrices[i]->translate (-cwidth/2, 0);
-              s_pos = e_pos - 1;
-              len = seg_length (path[s_pos], path[e_pos]);
-              angle = seg_angle (path[s_pos], path[e_pos]);
-              if (path[e_pos].x () - path[s_pos].x () < 0)
-                angle += 180;
+         int max_pos = path.count() - 1;
+         int s_pos = 0, e_pos = 1;
+         len = seg_length (path[s_pos], path[e_pos]);
+         angle = seg_angle (path[s_pos], path[e_pos]);
+         if (path[e_pos].x () - path[s_pos].x () < 0)
+            angle += 180;
+
+         for (it = text.begin (); it != text.end (); it++)
+         {
+            QString s = *it;
+            int slen = s.length();
+            i = 0;
+            while (i < slen)
+            {
+               int cwidth = fm->width (s[i]);
+               if (e_pos < max_pos && lpos + cwidth > len)
+               {
+                  e_pos += 1;
+                  float nlen = seg_length (path[e_pos - 1], path[e_pos]);
+                  angle = seg_angle (path[s_pos], path[e_pos]);
+                  if (path[e_pos].x () - path[s_pos].x () < 0)
+                     angle += 180;
+                  len += nlen;
+               }
+               else
+               {
+                  if (e_pos - s_pos > 1)
+                  {
+                     lpos = 0;
+                     int pidx = (e_pos + s_pos) / 2;
+                     //kdDebug()<<"updateMatricesForPath() pidx: "<<pidx<<" pathlength: "<<path.count()-1<<endl;
+                     cmatrices[i]->translate (path[pidx].x (), path[pidx].y ());
+                     cmatrices[i]->rotate (angle);
+                     cmatrices[i]->translate (-cwidth/2, 0);
+                     s_pos = e_pos - 1;
+                     len = seg_length (path[s_pos], path[e_pos]);
+                     angle = seg_angle (path[s_pos], path[e_pos]);
+                     if (path[e_pos].x () - path[s_pos].x () < 0)
+                        angle += 180;
+                  }
+                  else
+                  {
+                     //kdDebug()<<"updateMatricesForPath() s_pos: "<<s_pos<<" pathlength: "<<path.count()-1<<" x: "<<path[s_pos].x ()<<" y: "<<path[s_pos].y ()<<endl;
+                     //kdDebug()<<"updateMatricesForPath() i: "<<i<<" vector size: "<<cmatrices.count()-1<<endl;
+                     cmatrices[i]->translate (path[s_pos].x (), path[s_pos].y ());
+                     //kdDebug()<<"updateMatricesForPath() succeeded"<<endl;
+                     cmatrices[i]->rotate (angle);
+                     cmatrices[i]->translate (lpos, 0);
+                     lpos += cwidth;
+                  }
+                  i++;
+               }
             }
-            else {
-              cmatrices[i]->translate (path[s_pos].x (), path[s_pos].y ());
-              cmatrices[i]->rotate (angle);
-              cmatrices[i]->translate (lpos, 0);
-              lpos += cwidth;
-            }
-            i++;
-          }
-        }
+         }
       }
-    }
-    updateRegion ();
-  }
+      updateRegion ();
+   }
 }
 
 void GText::deletePathObject () {
