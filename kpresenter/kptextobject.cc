@@ -136,6 +136,8 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
 
 KPTextObject::~KPTextObject()
 {
+    textDocument()->takeFlow();
+    m_doc = 0L;
 }
 
 DCOPObject* KPTextObject::dcopObject()
