@@ -344,12 +344,12 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
                 }
 		else
                     it.current()->draw( painter, m_view->zoomHandler(), drawSelection,
-				    (it.current() == rotateNum) && drawContour );
+					((it.current())->isSelected()) && drawContour );
             }
             else
             {
                 it.current()->draw( painter, m_view->zoomHandler(), drawSelection,
-				    (it.current() == rotateNum) && drawContour );
+				    ((it.current())->isSelected()) && drawContour );
 
             }
 	    it.current()->setSubPresStep( 0 );
@@ -560,6 +560,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                             selectObj( kpobject );
                             modType = MT_NONE;
                             raiseObject( kpobject );
+			    drawContour = TRUE;
                         }
                     }
                     else {
@@ -884,6 +885,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
     switch ( toolEditMode ) {
     case TEM_MOUSE: {
+	drawContour = FALSE;
         switch ( modType ) {
         case MT_NONE: {
             if ( drawRubber ) {
@@ -965,7 +967,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             _repaint( kpobject );
         } break;
         case MT_RESIZE_DN: {
-            if ( !resizeObjNum ) break;
+	    if ( !resizeObjNum ) break;
 	    kpobject =  resizeObjNum;
             if ( firstX != mx || firstY != my ) {
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object down" ), mv, sz,
@@ -978,7 +980,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             _repaint( kpobject );
         } break;
         case MT_RESIZE_LF: {
-            if ( !resizeObjNum ) break;
+	    if ( !resizeObjNum ) break;
 	    kpobject = resizeObjNum;
             if ( firstX != mx || firstY != my ) {
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left" ), mv, sz,
@@ -1018,7 +1020,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             _repaint( kpobject );
         } break;
         case MT_RESIZE_LD: {
-            if ( !resizeObjNum ) break;
+	    if ( !resizeObjNum ) break;
 	    kpobject =  resizeObjNum;
             if ( firstX != mx || firstY != my ) {
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left and down" ), mv, sz,
@@ -1043,8 +1045,8 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
-        case MT_RESIZE_RD: {
-            if ( !resizeObjNum ) break;
+	case MT_RESIZE_RD: {
+	    if ( !resizeObjNum ) break;
 	    kpobject = resizeObjNum;
             if ( firstX != mx || firstY != my ) {
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right and down" ), mv, sz,
@@ -1072,10 +1074,9 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         }
     } break;
     case TEM_ROTATE: {
+	drawContour = FALSE;
 	if ( !rotateNum )
 	    break;
-
-	drawContour = FALSE;
 	if ( startAngle != rotateNum->getAngle() ) {
 	    QPtrList<RotateCmd::RotateValues> list;
 	    RotateCmd::RotateValues *v = new RotateCmd::RotateValues;
@@ -3631,7 +3632,8 @@ void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y,
         kpobject->setOwnClipping( ownClipping );
     }
     p.translate(_x,_y);
-    kpobject->draw( &p, m_view->zoomHandler(), false /*no selection*/ );
+    kpobject->draw( &p, m_view->zoomHandler(), false /*no selection*/,
+		    ( kpobject->isSelected()) && drawContour );
     kpobject->setSubPresStep( 0 );
     kpobject->doSpecificEffects( false );
     kpobject->setOwnClipping( true );
@@ -3642,7 +3644,8 @@ void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y,
         if ( kpobject->getBoundingRect(m_view->zoomHandler() ).intersects( obj->getBoundingRect( m_view->zoomHandler() ) ) &&
              obj->getPresNum() < static_cast<int>( currPresStep ) )
         {
-            obj->draw( &p, m_view->zoomHandler(), false /*no selection*/ );
+            obj->draw( &p, m_view->zoomHandler(), false /*no selection*/,
+		       (obj->isSelected()) && drawContour);
         }
     }
 
@@ -4789,7 +4792,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     QPainter p;
     p.begin( this );
     kpobject->moveBy(m_view->zoomHandler()->unzoomItX(-diffx()),m_view->zoomHandler()->unzoomItY(-diffy()));
-    kpobject->draw( &p, m_view->zoomHandler(), true );
+    kpobject->draw( &p, m_view->zoomHandler(), true,
+		    (kpobject->isSelected()) && drawContour);
     switch ( _modType ) {
     case MT_RESIZE_LU: {
         if( (point.x()+dx) <(pageRect.left()-1))
@@ -4878,7 +4882,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     } break;
     default: break;
     }
-    kpobject->draw( &p, m_view->zoomHandler(), true );
+    kpobject->draw( &p, m_view->zoomHandler(), true,
+		    (kpobject->isSelected()) && drawContour );
     kpobject->moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
     p.end();
 
