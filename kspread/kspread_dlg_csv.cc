@@ -225,6 +225,12 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
     QString file = KFileDialog::getOpenFileName(":",
                                                 "text/plain",
                                                 this);
+    //cancel action !
+    if ( file.isEmpty() )
+    {
+        buttonOk->setEnabled( false );
+        return;
+    }
     QFile in(file);
     if (!in.open(IO_ReadOnly))
     {
