@@ -29,7 +29,9 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+#include <qstring.h>
 
+#include <kstddirs.h>
 #include <klocale.h>
 #include <knuminput.h>
 
@@ -179,7 +181,7 @@ void LayerView::slotMenuAction( int _id )
       slotRemoveLayer();
       break;
     case UPPERLAYER:
-      slotUpperLayer();
+      slotRaiseLayer();
       break;
     case LOWERLAYER:
       slotLowerLayer();
@@ -242,14 +244,47 @@ void LayerView::mouseDoubleClickEvent( QMouseEvent *_event )
 
 void LayerView::slotAddLayer()
 {
+  cout << "LayerView::slotAddLayer()" << endl;
+
+  QString image = locate( "appdata", "images/cam9b.jpg" );	
+  m_doc->addRGBLayer( image );
+  m_doc->setLayerOpacity( 255 );
+
+  QRect updateRect = m_doc->layerList().at( m_doc->layerList().count() - 1 )->imageExtents();
+  m_doc->compositeImage( updateRect );
+  m_doc->slotUpdateViews( updateRect );
+
+  m_selected = m_doc->layerList().count() - 1;
+
+  updateTable();
+  updateAllCells();
 }
 
 void LayerView::slotRemoveLayer()
 {
+  cout << "LayerView::slotRemoveLayer()" << endl;
+
+  if( m_doc->layerList().count() != 0 )
+  {
+    QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
+
+    m_doc->removeLayer( m_selected );
+
+    m_doc->compositeImage( updateRect );
+    m_doc->slotUpdateViews( updateRect );
+
+    if( m_selected == m_doc->layerList().count() )
+      m_selected--;
+
+    updateTable();
+    updateAllCells();
+  }
 }
 
 void LayerView::swapLayers( int a, int b )
 {
+  cout << "LayerView::swapLayers" << endl;
+
   if( ( m_doc->layerList().at( a )->isVisible() ) &&
       ( m_doc->layerList().at( b )->isVisible() ) )
   {
@@ -266,8 +301,10 @@ void LayerView::swapLayers( int a, int b )
   }
 }
 
-void LayerView::slotUpperLayer()
+void LayerView::slotRaiseLayer()
 {
+  cout << "LayerView::slotRaiseLayer()" << endl;
+
   int newpos = m_selected > 0 ? m_selected - 1 : 0;
 
   if( m_selected != newpos )
@@ -283,6 +320,8 @@ void LayerView::slotUpperLayer()
 
 void LayerView::slotLowerLayer()
 {
+  cout << "LayerView::slotLowerLayer()" << endl;
+
   int newpos = ( m_selected + 1 ) < m_doc->layerList().count() ? m_selected + 1 : m_selected;
 
   if( m_selected != newpos )
@@ -338,6 +377,8 @@ void LayerView::updateAllCells()
 
 void LayerView::slotProperties()
 {
+  cout << "LayerView::slotProperties()" << endl;
+
   if( PropertyDialog::editProperties( *( m_doc->layerList().at( m_selected ) ) ) )
   {
     QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
@@ -393,4 +434,11 @@ bool PropertyDialog::editProperties( Layer &_layer )
 }
 
 #include "layerview.moc"
+
+
+
+
+
+
+
 

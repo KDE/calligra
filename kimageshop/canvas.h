@@ -83,9 +83,6 @@ public:
 
   void upperLayer( int _layer );
   void lowerLayer( int _layer );
-  void frontLayer( int _layer );
-  void backgroundLayer( int _layer );
-
   void setFrontLayer( int _layer );
   void setBackgroundLayer( int _layer );
 
@@ -94,6 +91,7 @@ public:
   int width();
 
   void addRGBLayer( QString _file );
+  void removeLayer( int _layer );
   void compositeImage( QRect _rect );
   Layer* layerPtr( Layer *_layer );
   void setLayerOpacity( uchar _opacity, Layer *_layer = 0 );
@@ -138,4 +136,5 @@ private:
 };
 
 #endif
+
 

@@ -59,7 +59,7 @@ public slots:
   void slotMenuAction( int );
   void slotAddLayer();
   void slotRemoveLayer();
-  void slotUpperLayer();
+  void slotRaiseLayer();
   void slotLowerLayer();
   void slotFrontLayer();
   void slotBackgroundLayer();

@@ -47,10 +47,12 @@ LayerTab::LayerTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , W
   QPushButton* pbAddLayer = new QPushButton( this, "addlayer" );
   pbAddLayer->setPixmap( BarIcon( "newlayer" ) );
   buttonlayout->addWidget( pbAddLayer );
+  connect( pbAddLayer, SIGNAL( clicked() ), layerview, SLOT( slotAddLayer() ) );
  
   QPushButton* pbRemoveLayer = new QPushButton( this, "removelayer" );
   pbRemoveLayer->setPixmap( BarIcon( "deletelayer" ) );
   buttonlayout->addWidget( pbRemoveLayer );
+  connect( pbRemoveLayer, SIGNAL( clicked() ), layerview, SLOT( slotRemoveLayer() ) );
 
 /* 
   QPushButton* pbAddMask = new QPushButton( this, "addmask" );
@@ -65,7 +67,7 @@ LayerTab::LayerTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name , W
   QPushButton* pbUp = new QPushButton( this, "up" );
   pbUp->setPixmap( BarIcon( "raiselayer" ) );
   buttonlayout->addWidget( pbUp );
-  connect( pbUp, SIGNAL( clicked() ), layerview, SLOT( slotUpperLayer() ) );
+  connect( pbUp, SIGNAL( clicked() ), layerview, SLOT( slotRaiseLayer() ) );
 
   QPushButton* pbDown = new QPushButton( this, "down" );
   pbDown->setPixmap( BarIcon( "lowerlayer" ) );
@@ -134,5 +136,6 @@ LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent, const char *_na
 }
 
 #include "layerdlg.moc"
+
 
 

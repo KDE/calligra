@@ -237,6 +237,24 @@ void Canvas::addRGBLayer(QString file)
   currentLayer=lay;
 }
 
+void Canvas::removeLayer( int _layer )
+{
+  if( _layer >= layers.count() )
+    return;
+
+  Layer* lay = layers.take( _layer );
+
+  if( currentLayer == lay )
+  {
+    if( layers.count() != 0 )
+      currentLayer = layers.at( 0 );
+    else
+      currentLayer = NULL;
+  }
+
+  delete lay;
+}
+
 
 // Constructs the composite image in the tile at x,y and updates the relevant
 // pixmap
@@ -619,8 +637,6 @@ void Canvas::upperLayer( int _layer )
 
   if( _layer > 0 )
   {
-    cerr << "Michael : move layer " << _layer << " to " << _layer - 1 << endl;
-
     Layer *pLayer = layers.take( _layer );
     layers.insert( _layer - 1, pLayer );
   }
@@ -632,21 +648,9 @@ void Canvas::lowerLayer( int _layer )
 
   if( _layer < ( layers.count() - 1 ) )
   {
-    cerr << "Michael : move layer " << _layer << " to " << _layer + 1 << endl;
-
     Layer *pLayer = layers.take( _layer );
     layers.insert( _layer + 1, pLayer );
   }
-}
-
-// TODO: remove this two methods
-
-void Canvas::frontLayer( int _layer )
-{
-}
-
-void Canvas::backgroundLayer( int _layer )
-{
 }
 
 void Canvas::setFrontLayer( int _layer )
@@ -672,3 +676,5 @@ void Canvas::setBackgroundLayer( int _layer )
 }
 
 #include "canvas.moc"
+
+
