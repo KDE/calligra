@@ -1,4 +1,4 @@
-// GENERATED FILE. Do not edit! Generated from kzip.h by ./update_kzip.sh
+// GENERATED FILE. Do not edit! Generated from kzip.h by update_kzip.sh
 /* This file is part of the KDE libraries
    Copyright (C) 2002 Holger Schroeder <holger-kde@holgis.net>
 
@@ -54,6 +54,7 @@ class KoZipFilter : public QIODevice
 
 public:
     KoZipFilter(const QString& filename);
+    KoZipFilter(QIODevice * dev);
 
     bool open(int);
     void close();
