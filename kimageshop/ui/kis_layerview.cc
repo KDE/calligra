@@ -183,8 +183,8 @@ void LayerTable::init( KisDoc* doc)
 
     submenu->insertItem( i18n( "Upper" ), UPPERLAYER );
     submenu->insertItem( i18n( "Lower" ), LOWERLAYER );
-    submenu->insertItem( i18n( "Most front" ), FRONTLAYER );
-    submenu->insertItem( i18n( "Most back" ), BACKLAYER );
+    submenu->insertItem( i18n( "Foremost" ), FRONTLAYER );
+    submenu->insertItem( i18n( "Hindmost" ), BACKLAYER );
 
     m_contextmenu = new QPopupMenu();
 
