@@ -160,6 +160,7 @@ KarbonView::editPurgeHistory()
 void
 KarbonView::objectMoveToTop()
 {
+	m_part->moveSelectionToTop();
 }
 
 void
@@ -175,8 +176,8 @@ KarbonView::objectMoveDown()
 void
 KarbonView::objectMoveToBottom()
 {
+	m_part->moveSelectionToBottom();
 }
-
 
 void
 KarbonView::objectTrafoTranslate()

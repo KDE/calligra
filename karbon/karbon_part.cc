@@ -160,6 +160,66 @@ KarbonPart::selectAllObjects()
 }
 
 void
+KarbonPart::moveSelectionToTop()
+{
+	VLayer *topLayer = m_layers.getLast();
+	// 
+	VObjectListIterator itr( m_selection );
+	for ( ; itr.current() ; ++itr )
+	{
+		// remove from old layer
+		VObjectList objects;
+		VLayerListIterator litr( m_layers );
+
+		for ( ; litr.current(); ++litr )
+		{
+			objects = litr.current()->objects();
+			VObjectListIterator itr2( objects );
+			for ( ; itr2.current(); ++itr2 )
+				if( itr2.current() == itr.current() )
+				{
+					litr.current()->removeRef( itr2.current() );
+					// add to new top layer
+					topLayer->insertObject( itr.current() );
+					break;
+				}
+		}
+	}
+
+	m_activeLayer = topLayer;
+}
+
+void
+KarbonPart::moveSelectionToBottom()
+{
+	VLayer *bottomLayer = m_layers.getFirst();
+	// 
+	VObjectListIterator itr( m_selection );
+	for ( ; itr.current() ; ++itr )
+	{
+		// remove from old layer
+		VObjectList objects;
+		VLayerListIterator litr( m_layers );
+
+		for ( ; litr.current(); ++litr )
+		{
+			objects = litr.current()->objects();
+			VObjectListIterator itr2( objects );
+			for ( ; itr2.current(); ++itr2 )
+				if( itr2.current() == itr.current() )
+				{
+					litr.current()->removeRef( itr2.current() );
+					// add to new top layer
+					bottomLayer->prependObject( itr.current() );
+					break;
+				}
+		}
+	}
+
+	m_activeLayer = bottomLayer;
+}
+
+void
 KarbonPart::selectObjectsWithinRect( const QRect& rect,
 	const double zoomFactor, bool exclusive )
 {

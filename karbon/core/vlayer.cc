@@ -45,6 +45,20 @@ VLayer::insertObject( const VObject* object )
 	m_objects.append( object );
 }
 
+void
+VLayer::prependObject( const VObject* object )
+{
+	// prepend object
+	m_objects.prepend( object );
+}
+
+void
+VLayer::removeRef( const VObject* object )
+{
+	//
+	m_objects.removeRef( object );
+}
+
 VObjectList
 VLayer::objectsWithinRect( const QRect& rect,
 	const double zoomFactor ) const

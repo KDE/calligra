@@ -26,6 +26,8 @@ public:
 		const double zoomFactor );
 
 	void insertObject( const VObject* object );
+	void prependObject( const VObject* object );
+	void removeRef( const VObject* object );
 
 	VObjectList objectsWithinRect( const QRect& rect,
 		const double zoomFactor ) const;

@@ -54,6 +54,8 @@ public:
 	const QPtrList<VLayer>& layers() const { return m_layers; }	// r/o access.
 	// TODO: still needed?
 	VLayer* activeLayer() const { return m_activeLayer; }	// active layer.
+	void moveSelectionToTop();
+	void moveSelectionToBottom();
 
 public slots:
     void repaintAllViews( bool erase = false );
