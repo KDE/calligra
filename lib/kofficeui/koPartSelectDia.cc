@@ -58,7 +58,7 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
     }
 
     selectionChanged( 0 );
-
+    setFocus();
     resize( listview->sizeHint().width() + 20, 300 );
 }
 
@@ -84,7 +84,7 @@ KoDocumentEntry KoPartSelectDia::selectPart( QWidget *parent )
     KoDocumentEntry e;
 
     KoPartSelectDia *dlg = new KoPartSelectDia( parent, "PartSelect" );
-
+    dlg->setFocus();
     if (dlg->exec() == QDialog::Accepted)
 	e = dlg->entry();
 
