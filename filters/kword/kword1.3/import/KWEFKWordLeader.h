@@ -44,7 +44,6 @@ class KWEFKWordLeader
     public: // public leader/worker functions (DO NOT use in your own code!)
         virtual bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
         virtual bool doVariableSettings (const VariableSettingsData &varSettings);
-        virtual bool doFullDocument (const QValueList<ParaData> &);
         virtual bool doPageInfo (const int headerType, const int footerType);
         virtual bool doFullPaperFormat (const int format, const double width, const double height, const int orientation);
         virtual bool doFullPaperBorders (const double top, const double left, const double bottom, const double right);
@@ -68,12 +67,20 @@ class KWEFKWordLeader
         virtual int headerType() { return m_hType; }
         virtual int footerType() { return m_fType; }
 
+        virtual bool doFullDocument (const QValueList<ParaData> &);
+        virtual bool doFullAllParagraphs (const QValueList<ParaData>& paraList);
+
     protected: // leader/worker functions
         virtual bool doOpenFile (const QString& filenameOut, const QString& to)=0;
         virtual bool doCloseFile (void)=0;
         virtual bool doAbortFile (void);
         virtual bool doOpenDocument (void)=0;
         virtual bool doCloseDocument (void)=0;
+        virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
+            const ValueListFormatData& paraFormatDataList)=0;
+        virtual bool doOpenTextFrameSet (void); // Like AbiWord's <section>
+        virtual bool doCloseTextFrameSet (void); // Like AbiWord's </section>
+
     private:
         KoFilterChain* m_chain;
         int m_hType, m_fType;

@@ -39,14 +39,8 @@ class KWEFBaseWorker : public KWEFKWordLeader
         QImage loadAndConvertToImage(const QString& strName, const QString& inExtension) const;
         bool loadAndConvertToImage(const QString& strName, const QString& inExtension, const QString& outExtension, QByteArray& image) const;
     public: // leader/worker functions
-        virtual bool doOpenTextFrameSet (void); // Like AbiWord's <section>
-        virtual bool doCloseTextFrameSet (void); // Like AbiWord's </section>
         virtual bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
-	virtual bool doVariableSettings (const VariableSettingsData &varSettings);
-        virtual bool doFullDocument (const QValueList<ParaData> &);
-        virtual bool doFullAllParagraphs (const QValueList<ParaData>& paraList);
-        virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
-            const ValueListFormatData& paraFormatDataList);
+    	virtual bool doVariableSettings (const VariableSettingsData &varSettings);
         virtual bool doFullPaperFormat (const int format,
             const double width, const double height, const int orientation); // Like AbiWord's <papersize>
         virtual bool doFullPaperBorders (const double top, const double left,

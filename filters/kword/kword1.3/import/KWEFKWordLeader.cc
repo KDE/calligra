@@ -852,6 +852,8 @@ DO_VOID_DEFINITION (doOpenBody)
 DO_VOID_DEFINITION (doCloseBody)
 DO_VOID_DEFINITION (doOpenSpellCheckIgnoreList)
 DO_VOID_DEFINITION (doCloseSpellCheckIgnoreList)
+DO_VOID_DEFINITION (doOpenTextFrameSet)
+DO_VOID_DEFINITION (doCloseTextFrameSet)
 
 bool KWEFKWordLeader::doFullDocumentInfo (const KWEFDocumentInfo &docInfo)
 {
@@ -860,12 +862,6 @@ bool KWEFKWordLeader::doFullDocumentInfo (const KWEFDocumentInfo &docInfo)
 
 
 bool KWEFKWordLeader::doVariableSettings (const VariableSettingsData &varSettings)
-{
-    return false;
-}
-
-
-bool KWEFKWordLeader::doFullDocument (const QValueList<ParaData> &paraList)
 {
     return false;
 }
@@ -1046,3 +1042,28 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
 
     return KoFilter::OK;
 }
+
+bool KWEFKWordLeader::doFullDocument (const QValueList<ParaData>& paraList)
+{
+    if (!doOpenTextFrameSet())
+        return false;
+    if (!doFullAllParagraphs(paraList))
+        return false;
+    if (!doCloseTextFrameSet())
+        return false;
+
+    return true;
+}
+
+bool KWEFKWordLeader::doFullAllParagraphs (const QValueList<ParaData>& paraList)
+{
+    QValueList<ParaData>::ConstIterator it;
+    for (it=paraList.begin();it!=paraList.end();it++)
+    {
+        if (!doFullParagraph((*it).text,(*it).layout,(*it).formattingList))
+            return false;
+    }
+    return true;
+}
+
+
