@@ -821,28 +821,64 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
        props += QString("margin-top:%1pt; ").arg(layout.marginTop);
     }
 
-    if (!force
-        && (layoutOrigin.lineSpacingType==layoutOrigin.lineSpacingType)
-        && (layoutOrigin.lineSpacing==layoutOrigin.lineSpacing))
+    if (force
+        || ( layoutOrigin.lineSpacingType != layout.lineSpacingType )
+        || ( layoutOrigin.lineSpacing != layout.lineSpacing ) )
     {
-        // Do nothing!
-    }
-    else if (!layout.lineSpacingType)
-    {
-        // We have a custom line spacing (in points)
-        props += QString("line-height:%1pt; ").arg(layout.lineSpacing);
-    }
-    else if ( 15==layout.lineSpacingType  )
-    {
-        props += "line-height:1.5; "; // One-and-half
-    }
-    else if ( 20==layout.lineSpacingType  )
-    {
-        props += "line-height:2.0; "; // Two
-    }
-    else if ( layout.lineSpacingType!=10  )
-    {
-        kdWarning(30506) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+        switch ( layout.lineSpacingType )
+        {
+        case LayoutData::LS_CUSTOM:
+            {
+                // We have a custom line spacing (in points). However AbiWord cannot do it, so transform in "at-least"
+                props += "line-height=:";
+                props += QString::number( layout.lineSpacing ); // ### TODO: rounding?
+                props += "pt+; ";
+                break;
+            }
+        case LayoutData::LS_SINGLE:
+            {
+                props += "line-height:1.0; "; // One
+                break;
+            }
+        case LayoutData::LS_ONEANDHALF:
+            {
+                props += "line-height:1.5; "; // One-and-half
+                break;
+            }
+        case LayoutData::LS_DOUBLE:
+            {        
+                props += "line-height:2.0; "; // Two
+                break;
+            }
+        case LayoutData::LS_MULTIPLE:
+            {
+                props += "line-height:";
+                props += QString::number( layout.lineSpacing ); // ### TODO: rounding?
+                props += "; ";
+                break;
+            }
+        case LayoutData::LS_FIXED:
+            {
+                // We have a fixed line height (in points)
+                props += "line-height:";
+                props += QString::number( layout.lineSpacing ); // ### TODO: rounding?
+                props += "pt; ";
+                break;
+            }
+        case LayoutData::LS_ATLEAST:
+            {
+                // We have an "at-least" line height (in points)
+                props += "line-height=:";
+                props += QString::number( layout.lineSpacing ); // ### TODO: rounding?
+                props += "pt+; "; // The + makes the difference
+                break;
+            }
+        default:
+            {
+                kdWarning(30506) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+                break;
+            }
+        }
     }
 
     // Add all AbiWord properties collected in the <FORMAT> element
