@@ -24,9 +24,15 @@
 
 #include <qpainter.h>
 #include "Gradient.h"
+#include <math.h>
 
-Gradient::Gradient (const QColor& c1, const QColor& c2, Style s) 
+Gradient::Gradient (const QColor& c1, const QColor& c2, Style s, int a) 
   : color1 (c1), color2 (c2), style (s) {
+  angle = a;
+}
+
+void Gradient::setAngle (int a){
+  angle = a;
 }
 
 void Gradient::setColor1 (const QColor& c) {
@@ -53,14 +59,17 @@ Gradient::Style Gradient::getStyle () const {
   return style;
 }
 
+int Gradient::getAngle(){
+  return angle;
+}
+
 QPixmap Gradient::createPixmap (unsigned int width, unsigned int height) {
   QPixmap pix (width, height);
   QPainter p;
   p.begin (&pix);
   switch (style) {
-  case Horizontal:
-  case Vertical:
-    createHVGradient (p, width, height);
+  case Linear:
+    createLinGradient (p, width, height);
     break;
   case Radial:
     pix.fill (color2);
@@ -76,25 +85,55 @@ QPixmap Gradient::createPixmap (unsigned int width, unsigned int height) {
   return pix;
 }
 
-void Gradient::createHVGradient (QPainter& p, unsigned int width, 
+void Gradient::createLinGradient (QPainter& p, unsigned int width, 
 				 unsigned int height) {
   QColor col;
   QPen pen;
   double delta, dd;
   int r, g, b;
-
-  if (style == Horizontal) {
+  double tga; // used for non-horizontal/vertiacal shading only
+  unsigned int x2, y;  // dito
+  if(angle == 0 || angle == 180) { // horizontal
     delta = 1.0 / (double) width;
     dd = width;
   }
-  else {
+  else if (angle == 270 || angle == 90) { //vertiacal
     delta = 1.0 / (double) height;
     dd = height;
   }
-  int rdiff = color1.red () - color2.red ();
-  int gdiff = color1.green () - color2.green ();
-  int bdiff = color1.blue () - color2.blue ();
+  // so we don't encounter singularities with tan!
+  else
+    if(angle < 90 || ( angle > 180 && angle < 270) ){
+      if (angle < 90){
+         dd = width + height/tan(M_PI/2-angle*2*M_PI/360);
+	 tga = tan(angle*M_PI/360);
+      }
+      else{
+         dd = width + height/tan(M_PI/2-(angle-180)*2*M_PI/360);
+	 tga = tan((angle-180)*M_PI/360);
+      }
+      delta = 1.0/dd;
+      pen.setWidth(3);
+    }
+    else{
+      if (angle < 180)
+         tga = tan((angle-90)*2*M_PI/360);
+      else
+         tga = tan((angle-270)*2*M_PI/360);
+      dd = width + height/tga;
+      delta = 1.0/dd;
+      pen.setWidth(3);
+    }
+  if(angle < 270 && angle >= 90){
+    QColor tmp = color1;
+    color1 = color2;
+    color2 = tmp;
+  }
 
+  int rdiff = color1.red ()   - color2.red ();
+  int gdiff = color1.green () - color2.green ();
+  int bdiff = color1.blue ()  - color2.blue ();
+  
   for (double d = 0.0; d < 1.0; d += delta) {
     r = color1.red () - qRound (rdiff * d);
     g = color1.green () - qRound (gdiff * d);
@@ -103,10 +142,29 @@ void Gradient::createHVGradient (QPainter& p, unsigned int width,
     pen.setColor (col);
     p.setPen (pen);
     int x = qRound (dd * d);
-    if (style == Horizontal)
+    if (angle == 0 || angle == 180)
       p.drawLine (x, 0, x, height);
-    else
+    else if(angle == 90 || angle == 270)
       p.drawLine (0, x, width, x);
+    else if(angle < 90 || (angle > 180 && angle < 270 )){
+      y = (unsigned int) (x/tga);
+      if(y > height){
+        x2 = (unsigned int)((y-height)*tga);
+        y  = 0;
+      }
+      else x2 = 0;
+      p.drawLine(x2, y,  x, width);
+    }
+    else{
+      y = (unsigned int)(height*tga);
+      if(y > height){
+        x2 = (unsigned int)((y-height)/tga);
+        y  = height;
+      }
+      else
+        x2 = 0;
+      p.drawLine(x,0, x2, y);
+    }
   }
 }
 

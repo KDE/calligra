@@ -34,6 +34,7 @@
 #include <ktabctl.h>
 #include <kcolordlg.h>
 #include <kcolorbtn.h>
+#include <qspinbox.h>
 
 class QComboBox;
 class GDocument;
@@ -66,6 +67,7 @@ private slots:
   void fillColor1Changed (const QColor&);
   void gradientColorChanged (const QColor&);
   void gradientStyleChanged (int);
+  void gradientAngleChanged (int);
 
 private:
   void readProperties ();
@@ -101,6 +103,7 @@ private:
   QWidgetStack *wstack;
   Gradient *gradient;
   BrushCells *brushCells;
+  QSpinBox *gradientAngle;
 
   // Font Tab
   FontSelector* fontSelector;

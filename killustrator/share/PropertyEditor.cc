@@ -473,18 +473,24 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
   label->move (10, 85);
   gradStyleCombo = new QComboBox (box);
   gradStyleCombo->move (80, 85);
-  gradStyleCombo->insertItem (i18n ("Horizontal"));
-  gradStyleCombo->insertItem (i18n ("Vertical"));
+  gradStyleCombo->insertItem (i18n ("Linear"));
   gradStyleCombo->insertItem (i18n ("Radial"));
   gradStyleCombo->insertItem (i18n ("Rectangular"));
-  //  gradStyleCombo->insertItem (i18n ("Diagonal 1"));
-  //  gradStyleCombo->insertItem (i18n ("Diagonal 2"));
   connect (gradStyleCombo, SIGNAL(activated(int)),
 	   this, SLOT(gradientStyleChanged(int)));
+  label = new QLabel (box);
+  label->setAlignment (AlignLeft | AlignVCenter);
+  label->setText (i18n ("Angle:"));
+  label->move (10, 120);
+  gradientAngle = new QSpinBox(0,359,1,box);
+  gradientAngle->move(80,120);
+  gradientAngle->setSuffix("°");
+  connect (gradientAngle, SIGNAL(valueChanged(int)),
+	   this, SLOT(gradientAngleChanged(int)));
   QFrame* frame = new QFrame (box);
   frame->setLineWidth (1);
   frame->setFrameStyle (QFrame::Panel | QFrame::Sunken);
-  frame->move (10, 130);
+  frame->move (10, 165);
   gradPreview = new QLabel (frame);
   gradPreview->move (2, 2);
   gradPreview->resize (170, 150);
@@ -666,6 +672,8 @@ void PropertyEditor::readProperties () {
 	  fillColorBtn1->setColor (g.getColor1 ());
 	  fillColorBtn2->setColor (g.getColor2 ());
 	  gradStyleCombo->setCurrentItem ((int) g.getStyle ());
+	  gradientAngle->setEnabled(((int) g.getStyle ()== 0)?true:false);
+//	  gradientAngle->setValue(g.getAngle());
 	  updateGradient ();
 	  wstack->raiseWidget (GRADIENT_BOX);
 	}
@@ -765,25 +773,34 @@ void PropertyEditor::gradientColorChanged (const QColor&) {
   updateGradient ();
 }
 
-void PropertyEditor::gradientStyleChanged (int) {
+void PropertyEditor::gradientAngleChanged (int a) {
+  gradient->setAngle(a);
+  updateGradient ();
+}
+
+void PropertyEditor::gradientStyleChanged (int i) {
+  if(i == 0)
+    gradientAngle->setEnabled(true);
+  else
+    gradientAngle->setEnabled(false);
   updateGradient ();
 }
 
 void PropertyEditor::updateGradient () {
   static Gradient::Style styles[] = {
-    Gradient::Horizontal, Gradient::Vertical, Gradient::Radial,
-    Gradient::Rectangular, Gradient::Diagonal1, Gradient::Diagonal2
+    Gradient::Linear, Gradient::Radial,
+    Gradient::Rectangular
   };
 
   if (gradient == 0L) {
       gradient = new Gradient (fillColorBtn1->color (),
-			       fillColorBtn2->color (), Gradient::Horizontal);
+			       fillColorBtn2->color (), Gradient::Linear,0);
       gradient->setStyle (styles[gradStyleCombo->currentItem ()]);
   }
   else {
     gradient->setColor1 (fillColorBtn1->color ());
     gradient->setColor2 (fillColorBtn2->color ());
-    gradient->setStyle (styles[gradStyleCombo->currentItem ()]);
+    gradient->setStyle  (styles[gradStyleCombo->currentItem ()]);
   }
   gradPreview->setPixmap (gradient->createPixmap (gradPreview->width (),
 						  gradPreview->height ()));

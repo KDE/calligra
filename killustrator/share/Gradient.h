@@ -31,24 +31,26 @@
 class Gradient {
 public:
   enum Style { 
-    Horizontal, Vertical, Radial, Rectangular, Diagonal1, Diagonal2 
+    Linear, Radial, Rectangular
   };
 
-  Gradient (const QColor& c1, const QColor& c2, Style s);
-  Gradient () : style (Horizontal) {}
+  Gradient (const QColor& c1, const QColor& c2, Style s, int angle);
+  Gradient () : style (Linear) {angle = 0;}
 
   void setColor1 (const QColor& c);
   void setColor2 (const QColor& c);
+  void setAngle (int);
   void setStyle (Style s);
 
   const QColor& getColor1 () const;
   const QColor& getColor2 () const;
+  int getAngle();
   Style getStyle () const;
 
   QPixmap createPixmap (unsigned int width, unsigned int height);
 
 private:
-  void createHVGradient (QPainter& p, unsigned int width, 
+  void createLinGradient (QPainter& p, unsigned int width, 
 			 unsigned int height);
   void createRadGradient (QPainter& p, unsigned int width, 
 			  unsigned int height);
@@ -57,6 +59,7 @@ private:
 
   QColor color1, color2;
   Style style;
+  int angle; // (for style=linear) the angle measured in deg 0=horiz;
 };
 
 #endif
