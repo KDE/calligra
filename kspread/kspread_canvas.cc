@@ -1952,6 +1952,8 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  if ( m_bChoose && chooseMarkerColumn() == 1 )
 		      return;
                   int col = table->getFirstCellRow(markerRow())->column();
+                  while ( table->cellAt(col, markerRow())->isEmpty() )
+                    col = table->getNextCellRight( col, markerRow() )->column();
                   if ( col == markerColumn() )
                     col = 1;
 		  if ( m_bChoose )
