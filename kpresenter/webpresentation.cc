@@ -49,7 +49,6 @@
 #include <qpixmap.h>
 #include <qsize.h>
 #include <qdatetime.h>
-#include <qmessagebox.h>
 #include <qdir.h>
 #include <qheader.h>
 #include <qwmatrix.h>
@@ -675,10 +674,10 @@ void KPWebPresentationWizard::pageChanged()
 {
     if ( currentPage() != page3 ) {
 	if ( !isPathValid() ) {
-	    QMessageBox::critical( 0, i18n( "Invalid Path" ),
-				   i18n( "The path you entered is not a valid directory!\n"
-					 "Please correct this." ),
-				   i18n( "OK" ) );
+	    KMessageBox::error( this,
+				i18n( "The path you entered is not a valid directory!\n"
+				      "Please correct this." ),
+ 				i18n( "Invalid Path" ) );
 	    showPage( page1 );
 	    path->setFocus();
 	}

@@ -59,7 +59,6 @@
 #include <qpen.h>
 #include <qpopupmenu.h>
 #include <qcursor.h>
-#include <qmessagebox.h>
 #include <qclipboard.h>
 #include <qregexp.h>
 #include <qfileinfo.h>
@@ -76,6 +75,7 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <kconfig.h>
+#include <kmessagebox.h>
 
 #include <koTemplateChooseDia.h>
 #include <koRuler.h>
@@ -1222,7 +1222,6 @@ void KPresenterDoc::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _
 
     KoDocument* doc = _e.createDoc( this );
     if ( !doc || !doc->initDoc() ) {
-	QMessageBox::critical( ( QWidget* )0L, i18n( "KPresenter Error" ), i18n( "Could not init" ), i18n( "OK" ) );
 	return;
     }
 
@@ -1243,34 +1242,6 @@ void KPresenterDoc::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _
     //emit sig_insertObject( ch, kppartobject );
 
     repaint( false );
-
-    // ############# Torben
-    /* KOffice::Document_var doc = _e.createDoc();
-    if ( CORBA::is_nil( doc ) )
-	return;
-
-    if ( !doc->initDoc() ) {
-	QMessageBox::critical( ( QWidget* )0L, i18n( "KPresenter Error" ), i18n( "Could not init" ), i18n( "OK" ) );
-	return;
-    }
-
-    KPresenterChild* ch = new KPresenterChild( this, _rect, doc, _diffx, _diffy );
-
-    insertChild( ch );
-    m_bModified = true;
-
-    KPPartObject *kppartobject = new KPPartObject( ch );
-    kppartobject->setOrig( _rect.x() + _diffx, _rect.y() + _diffy );
-    kppartobject->setSize( _rect.width(), _rect.height() );
-    kppartobject->setSelected( true );
-
-    InsertCmd *insertCmd = new InsertCmd( i18n( "Embed Object" ), kppartobject, this );
-    insertCmd->execute();
-    _commands.addCommand( insertCmd );
-
-    //emit sig_insertObject( ch, kppartobject );
-
-    repaint( false ); */
 }
 
 /*======================= change child geometry ==================*/
@@ -3924,10 +3895,11 @@ void KPresenterDoc::groupObjects()
     }
 
     if ( objs.count() < 2 )
-	QMessageBox::information( 0, i18n( "KPresenter - Group Objects" ),
+        // Shouldn't the action be disabled, to prevent this? (David)
+	KMessageBox::information( 0,  // TODO: provide a parent widget
 				  i18n( "You have to select at least 2 objects\n"
-				      "which should be grouped together!"),
-				  i18n( "OK" ) );
+				        "which should be grouped together!"),
+				  i18n( "KPresenter - Group Objects" ) );
     else {
 	GroupObjCmd *groupObjCmd = new GroupObjCmd( i18n( "Group Objects" ), objs, this );
 	_commands.addCommand( groupObjCmd );

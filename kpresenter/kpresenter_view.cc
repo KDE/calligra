@@ -20,7 +20,6 @@
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qstring.h>
-#include <qmessagebox.h>
 #include <qkeycode.h>
 #include <qscrollbar.h>
 #include <qevent.h>
@@ -350,11 +349,11 @@ void KPresenterView::editDelPage()
 	delPageDia = 0;
     }
 
+    // David - shouldn't the action be disabled, to prevent this ?
     if ( m_pKPresenterDoc->getPageNums() < 2 ) {
-	QMessageBox::critical( this, i18n( "KPresenter Error" ),
-			       i18n( "Every document has to have at least one page. Because this document \n"
-				     "has not more that one page you can't delete this one." ),
-			       i18n( "OK" ) );
+	KMessageBox::sorry( this,
+			    i18n( "Every document has to have at least one page. Because this document \n"
+			          "has not more that one page you can't delete this one." ) );
     } else {
 	delPageDia = new DelPageDia( this, "", m_pKPresenterDoc, getCurrPgNum() );
 	delPageDia->setCaption( i18n( "KPresenter - Delete Page" ) );
@@ -480,7 +479,7 @@ void KPresenterView::insertPicture()
 
     if( !url.isLocalFile() )
     {
-      KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
+      KMessageBox::sorry( this, i18n( "Only local files supported yet." ) );
       return;
     }
 
@@ -521,7 +520,7 @@ void KPresenterView::insertClipart()
 
     if( !url.isLocalFile() )
     {
-      KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
+      KMessageBox::sorry( this, i18n( "Only local files supported yet." ) );
       return;
     }
 
@@ -588,7 +587,7 @@ void KPresenterView::toolsDiagramm()
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kchart" );
     if (entry.isEmpty())
     {
-      KMessageBox::sorry( 0, i18n( "Sorry, no chart component registered" ) );
+      KMessageBox::sorry( this, i18n( "Sorry, no chart component registered" ) );
       page->setToolEditMode( TEM_MOUSE );
     }
     else
@@ -606,7 +605,7 @@ void KPresenterView::toolsTable()
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kspread" );
     if (entry.isEmpty())
     {
-      KMessageBox::sorry( 0, i18n( "Sorry, no table component registered" ) );
+      KMessageBox::sorry( this, i18n( "Sorry, no table component registered" ) );
       page->setToolEditMode( TEM_MOUSE );
     }
     else
@@ -624,7 +623,7 @@ void KPresenterView::toolsFormula()
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kformula" );
     if (entry.isEmpty())
     {
-      KMessageBox::sorry( 0, i18n( "Sorry, no formula component registered" ) );
+      KMessageBox::sorry( this, i18n( "Sorry, no formula component registered" ) );
       page->setToolEditMode( TEM_MOUSE );
     }
     else
@@ -910,10 +909,10 @@ void KPresenterView::extraWebPres()
 
     KURL url;
     QString config = QString::null;
-    if ( QMessageBox::information( this, i18n( "Create Web-Presentation" ),
-				   i18n( "Do you want to load a configuration which should be used for this\n"
-					 "Web-Presentation, which you have already saved earlier?" ),
-				   i18n( "&Yes" ), i18n( "&No" ), QString::null, 1, 1 ) == 0 )
+    if ( KMessageBox::questionYesNo( this,
+	   i18n( "Do you want to load a configuration which should be used for this\n"
+		 "Web-Presentation, which you have already saved earlier?" ),
+	   i18n( "Create Web-Presentation" ) ) == KMessageBox::Yes )
     {		
 #ifdef USE_QFD
 	config = QFileDialog::getOpenFileName( QString::null, "KPresenter Web-Presentation (*.kpweb)" );
@@ -925,7 +924,7 @@ void KPresenterView::extraWebPres()
 
 	if( !url.isLocalFile() )
 	{
-	  KMessageBox::sorry( 0L, i18n( "Only local files supprted yet." ) );
+	  KMessageBox::sorry( this, i18n( "Only local files supprted yet." ) );
 	  return;
 	}
 
@@ -2463,8 +2462,7 @@ void KPresenterView::search( QString text, bool sensitive, bool direction )
 	    else {
 		searchFirst = false;
 		page->kTxtObj()->setSearchIndexToBegin();
-		QMessageBox::warning( this, i18n( "Warning" ),
-				      i18n( "The search string '" + text + "' couldn't be found!" ), i18n("OK"));
+		KMessageBox::sorry( this, i18n( "The search string '%1' couldn't be found!" ).arg(text));
 	    }
 	} else {
 	    if ( searchFirst )
@@ -2477,8 +2475,7 @@ void KPresenterView::search( QString text, bool sensitive, bool direction )
 	    else {
 		searchFirst = false;
 		page->kTxtObj()->setSearchIndexToEnd();
-		QMessageBox::warning( this, i18n( "Warning" ),
-				      i18n( "The search string '" + text + "' couldn't be found!" ), i18n("OK"));
+		KMessageBox::sorry( this, i18n( "The search string '%1' couldn't be found!" ).arg(text));
 	    }
 	}
     }
@@ -2504,9 +2501,7 @@ void KPresenterView::replace( QString search, QString replace, bool sensitive, b
 	    else {
 		searchFirst = false;
 		page->kTxtObj()->setSearchIndexToBegin();
-		QMessageBox::warning( this, i18n( "Warning" ),
-				      i18n( "The search string '" + search + "' couldn't be found"
-					    " and replaced with '" + replace + "'!" ), i18n("OK"));
+		KMessageBox::sorry( this, i18n( "The search string '%1' couldn't be found!" ).arg(search));
 	    }
 	} else {
 	    if ( searchFirst )
@@ -2519,9 +2514,7 @@ void KPresenterView::replace( QString search, QString replace, bool sensitive, b
 	    else {
 		searchFirst = false;
 		page->kTxtObj()->setSearchIndexToEnd();
-		QMessageBox::warning( this, i18n( "Warning" ),
-				      i18n( "The search string '" + search + "' couldn't be found"
-					    " and replaced with '" + replace + "'!" ), i18n("OK"));
+		KMessageBox::sorry( this, i18n( "The search string '%1' couldn't be found!" ).arg(search));
 	    }
 	}
     }
@@ -2593,7 +2586,7 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
 
     if( !url.isLocalFile() )
     {
-      KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
+      KMessageBox::sorry( this, i18n( "Only local files supported yet." ) );
       return;
     }
 
@@ -2631,7 +2624,7 @@ void KPresenterView::changeClipart( unsigned int, QString filename )
 
     if( !url.isLocalFile() )
     {
-      KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
+      KMessageBox::sorry( this, i18n( "Only local files supported yet." ) );
       return;
     }
 
