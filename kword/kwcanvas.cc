@@ -376,9 +376,13 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
             // If one cell belongs to a table, we are in fact moving the whole table
             KWTableFrameSet *table = fs->getGroupManager();
             // We'll have to do better in the long run
-            if ( table )
-                m_boundingRect |= table->boundingRect();
-            else
+            if ( table ) {
+                KWTableFrameSet::Cell *theCell=dynamic_cast<KWTableFrameSet::Cell *>(fs);
+                for(unsigned int col=0; col < table->getCols(); col++) {
+                    KWTableFrameSet::Cell *c = table->getCell(theCell->m_row, col);
+                    m_boundingRect |= *c->frame(0);
+                }
+            } else
                 m_boundingRect |= *frame;
 
             FrameIndex *index=new FrameIndex( frame );
