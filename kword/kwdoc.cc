@@ -757,12 +757,15 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
                 firstHeader->setVisible( true );
                 evenHeader->setVisible( true );
                 oddHeader->setVisible( true );
+
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
                                              firstHeader, 0, 0, m_pageHeaderFooter.ptHeaderBodySpacing ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             evenHeader, 2, -1, m_pageHeaderFooter.ptHeaderBodySpacing, KWFrameLayout::HeaderFooterFrameset::Even ) );
+                                             evenHeader, 2, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
+					     KWFrameLayout::HeaderFooterFrameset::Even ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             oddHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing, KWFrameLayout::HeaderFooterFrameset::Odd ) );
+                                             oddHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
+					     KWFrameLayout::HeaderFooterFrameset::Odd ) );
                 break;
             case HF_FIRST_DIFF:
                 evenHeader->setVisible( true );
@@ -782,9 +785,11 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
                 firstHeader->deleteAllCopies();
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             evenHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing, KWFrameLayout::HeaderFooterFrameset::Even ) );
+                                             evenHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
+					     KWFrameLayout::HeaderFooterFrameset::Even ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             oddHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing, KWFrameLayout::HeaderFooterFrameset::Odd ) );
+                                             oddHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
+					     KWFrameLayout::HeaderFooterFrameset::Odd ) );
                 break;
         }
     }
@@ -804,12 +809,12 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
                                              evenFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
                 break;
             case HF_FIRST_EO_DIFF: // added for koffice-1.2-beta2
+                firstFooter->setVisible( true );
                 evenFooter->setVisible( true );
                 oddFooter->setVisible( true );
-                firstFooter->setVisible( true );
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             firstFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
+                                             firstFooter, 0, 0, m_pageHeaderFooter.ptFooterBodySpacing ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
                                              evenFooter, 2, -1, m_pageHeaderFooter.ptFooterBodySpacing,
                                              KWFrameLayout::HeaderFooterFrameset::Even ) );
@@ -824,9 +829,9 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
                 firstFooter->setVisible( true );
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             evenFooter, 0, 0, m_pageHeaderFooter.ptFooterBodySpacing ) );
+                                             firstFooter, 0, 0, m_pageHeaderFooter.ptFooterBodySpacing ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             firstFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
+                                             evenFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
                 break;
             case HF_EO_DIFF:
                 evenFooter->setVisible( true );
