@@ -263,7 +263,7 @@ void MDatabaseReportEngine::initDatabase()
 			db->lastError().driverText() + 
 			db->lastError().databaseText() ;
 		//QMessageBox::critical( this, tr("Database connection Error"), strError );
-		qWarning( strError );
+		qWarning( "%s", strError.local8Bit().data() );
 		return;
     }
 }
@@ -274,16 +274,16 @@ bool MDatabaseReportEngine::createReportDataFile( QIODevice* dev, const QString&
 
 	if (ft.open(IO_ReadOnly)) {
 		if (!setReportTemplate(&ft)){
-			qWarning( "Invalid data file: %s", templateFile.latin1() );
+			qWarning( "Invalid data file: %s", QFile::encodeName( templateFile ).data() );
 			return false;
 		}
 		ft.close();
 	} else {
-		qWarning( "Unable to open data file: %s", templateFile.latin1() );
+		qWarning( "Unable to open data file: %s", QFile::encodeName( templateFile ).data() );
 		return false;
 	}
 
-	m_strDataBuffer.setDevice( dev );        
+	m_strDataBuffer.setDevice( dev );
 	initDatabase();
 	setHeaderDataFile();
 	setSQLQuery();

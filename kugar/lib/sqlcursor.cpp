@@ -55,14 +55,14 @@ CSqlCursor::CSqlCursor( const QString & strSql, bool autopopulate, QSqlDatabase*
 	}else {
 		// an error occured if the cursor is not active
 		if ( !isActive() ) {
-			QSqlError& err = lastError();
+			QSqlError err = lastError();
 			QString errStr ( "The database reported an error\n" );
 			if ( !err.databaseText().isEmpty() )
 				errStr += err.databaseText();
 			if ( !err.driverText().isEmpty() )
 				errStr += err.driverText();
 			//QMessageBox::critical( 0, tr("report engine error"), errStr );
-			qWarning( errStr );
+			qWarning( "%s", errStr.local8Bit().data() );
 		} else {
 			// we have not a select query statement
 			//QMessageBox::critical( 0, tr("report engine error"), tr("The string query is not a select sql statement.") );
