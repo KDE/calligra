@@ -50,11 +50,11 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 	{
 		// rotate operation
 		QWMatrix mat;
-		mat.translate( m_fp.x(), m_fp.y() );
+		mat.translate( m_fp.x() / view->zoomFactor(), m_fp.y() / view->zoomFactor() );
 		m_s1 = ( m_lp.x() - m_fp.x() ) / double( rect.width() / 2 );
 		m_s2 = ( m_lp.y() - m_fp.y() ) / double( rect.height() / 2 );
 		mat.shear( m_s1, m_s2 );
-		mat.translate( - m_fp.x(), - m_fp.y() );
+		mat.translate( - m_fp.x() / view->zoomFactor(), - m_fp.y() / view->zoomFactor() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->selection();
@@ -108,7 +108,7 @@ VMToolShear::eventFilter( KarbonView* view, QEvent* event )
 		part()->addCommand(
 			new VMCmdShear(
 				part(),
-				part()->selection(), m_fp, m_s1, m_s2 ),
+				part()->selection(), m_fp / view->zoomFactor(), m_s1, m_s2 ),
 			true );
 
 //			part()->repaintAllViews();
