@@ -44,7 +44,7 @@ ConnectionDataLVItem::ConnectionDataLVItem(KexiDB::ConnectionData *d,
 	: QListViewItem(list)
 	, data(d)
 {
-	setText(0, data->name+"  ");
+	setText(0, data->connName+"  ");
 	const QString &sfile = i18n("File");
 	QString drvname = info.caption.isEmpty() ? data->driverName : info.caption;
 	if (info.fileBased)
