@@ -7397,7 +7397,8 @@ void KWStatisticsDialog::addBoxGeneral( QFrame *page, QLabel **resultLabel )
     // Layout Managers
     QVBoxLayout *topLayout = new QVBoxLayout( page, 0, 7 );
     QGroupBox *box = new QGroupBox( i18n( "Statistics" ), page );
-    QGridLayout *grid = new QGridLayout( box, 8, 3, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( box, 9, 3, KDialog::marginHint(), KDialog::spacingHint() );
+    grid->setRowStretch (9, 1);
     // margins
     int fHeight = box->fontMetrics().height();
     grid->setMargin( fHeight );
@@ -7445,14 +7446,18 @@ void KWStatisticsDialog::addBox( QFrame *page, QLabel **resultLabel, bool calcWi
     QVBoxLayout *topLayout = new QVBoxLayout( page, 0, 7 );
     if ( calcWithFootNoteCheckbox )
     {
-        QCheckBox *calcWithFootNote = new QCheckBox( i18n("Calc with foot/endnote"), page);
-        topLayout->addWidget( calcWithFootNote );
+        QWidget *w = new QWidget(page);
+        topLayout->addWidget( w );
+        QVBoxLayout *noteLayout = new QVBoxLayout( w, KDialog::marginHint(), 0 );
+        QCheckBox *calcWithFootNote = new QCheckBox( i18n("&Include text from foot- and end-notes"), w);
+        noteLayout->addWidget( calcWithFootNote );
         connect( calcWithFootNote, SIGNAL(toggled ( bool )), this, SLOT( slotRefreshValue(bool)));
     }
 
 
     QGroupBox *box = new QGroupBox( i18n( "Statistics" ), page );
-    QGridLayout *grid = new QGridLayout( box, 8, 3, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( box, 9, 3, KDialog::marginHint(), KDialog::spacingHint() );
+    grid->setRowStretch (9, 1);
 
     // margins
     int fHeight = box->fontMetrics().height();
