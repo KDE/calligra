@@ -159,8 +159,7 @@ KontourImport::convert()
 			parseGObject( ellipse, object );
 			m_document.append( ellipse );
 		}
-		else
-		if ( b.tagName() == "polyline" )
+		else if( b.tagName() == "polyline" )
 		{
 			/**
 			* Kontour is much simpler because it doesn't support curves, so
@@ -181,6 +180,28 @@ KontourImport::convert()
 			}
 			path->close();
 			QDomElement object = b.namedItem( "gobject" ).toElement();
+			parseGObject( path, object );
+			m_document.append( path );	
+		}
+		else if( b.tagName() == "polygon" )
+		{
+			QDomElement point = b.namedItem( "polyline" ).firstChild().toElement();
+			VComposite *path = new VComposite( &m_document );
+			int firstx, firsty, x, y;
+			firstx = point.attribute( "x" ).toInt();
+			firsty = point.attribute( "y" ).toInt();
+			path->moveTo( KoPoint( firstx, firsty ) );
+			point = point.nextSibling().toElement();
+			for( ; !point.isNull(); point = point.nextSibling().toElement() )
+			{
+				x = point.attribute( "x" ).toInt();
+				y = point.attribute( "y" ).toInt();
+				path->lineTo( KoPoint( x, y ) );
+			}
+			// back to first point
+			path->lineTo( KoPoint( firstx, firsty ) );
+			path->close();
+			QDomElement object = b.namedItem( "polyline" ).namedItem( "gobject" ).toElement();
 			parseGObject( path, object );
 			m_document.append( path );	
 		}
