@@ -554,7 +554,7 @@ bool KIllustratorView::mappingCreateToolbar (OpenPartsUI::ToolBarFactory_ptr
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_CUT, SIGNAL (clicked ()),
 				   this, "editCut", true, toolTip, -1);
 
-  pix = OPUIUtils::convertPixmap (BarIcon("editcut"));
+  pix = OPUIUtils::convertPixmap (BarIcon("editcopy"));
   toolTip = i18n ("Copy") ;
   m_idEditCopy =
     m_vToolBarEdit->insertButton2 (pix, ID_EDIT_COPY, SIGNAL (clicked ()),
