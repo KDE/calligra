@@ -46,6 +46,9 @@ k_dcop:
     virtual int yGradientFactor() const;
     virtual QString gradientFillType() const;
     virtual void setGradientType( const QString & );
+    virtual void setFillType( const QString & );
+    virtual void setGradientColor1( const QColor &col );
+    virtual void setGradientColor2( const QColor &col );
 
 private:
     KP2DObject *obj;

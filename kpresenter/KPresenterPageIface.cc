@@ -406,3 +406,30 @@ DCOPRef KPresenterPageIface::insertClipart( const QString & file,int x,int y, in
     view->getCanvas()->insertClipart( QRect(x,y,h,w));
     return selectedObject();
 }
+
+void KPresenterPageIface::setBackGroundColor1(const QColor &col)
+{
+    const QColor col2=backColor2();
+    m_page->setBackColor( col, col2, m_page->getBackColorType(),m_page->getBackUnbalanced(), backXFactor(), backYFactor() );
+}
+
+void KPresenterPageIface::setBackGroundColor2(const QColor &col)
+{
+    const QColor col1=backColor1();
+    m_page->setBackColor( col1, col, m_page->getBackColorType(),m_page->getBackUnbalanced(), backXFactor(), backYFactor() );
+}
+
+int KPresenterPageIface::rndY()
+{
+    int ret=-1;
+    m_page->getRndY( ret );
+    return ret;
+}
+
+int KPresenterPageIface::rndX()
+{
+    int ret=-1;
+    m_page->getRndX( ret );
+    return ret;
+
+}

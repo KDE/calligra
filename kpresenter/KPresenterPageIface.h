@@ -100,6 +100,13 @@ k_dcop:
     virtual void changePicture( const QString & );
     virtual void changeClipart( const QString & );
 
+    //return -1 if there is not a rndY or rndX defined
+    virtual int rndY();
+    virtual int rndX();
+    virtual void setBackGroundColor1(const QColor &col);
+    virtual void setBackGroundColor2(const QColor &col);
+
+
     DCOPRef insertRectangle(int x,int y, int h, int w);
     DCOPRef insertEllipse(int x,int y, int h, int w );
     DCOPRef insertPie( int x,int y, int h, int w );
