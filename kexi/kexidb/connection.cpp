@@ -52,6 +52,7 @@ class ConnectionPrivate
 		 , m_versionMinor(-1)
 		 , m_dont_remove_transactions(false)
 		 , m_skip_databaseExists_check_in_useDatabase(false)
+		 , m_kexi_db_used(true)
 		{
 		}
 		~ConnectionPrivate() { }
@@ -76,6 +77,10 @@ class ConnectionPrivate
 		//! used to avoid endless recursion between useDatabase() and databaseExists()
 		//! when useTemporaryDatabaseIfNeeded() works
 		bool m_skip_databaseExists_check_in_useDatabase : 1;
+
+		//! true only while kexi-compatible database 
+		//! is used (temporary db is not such a db)
+		bool m_kexi_db_used : 1;
 
 		void errorInvalidDBContents(const QString& details) {
 			m_conn->setError( ERR_INVALID_DATABASE_CONTENTS, i18n("Invalid database contents. ")+details);
@@ -449,35 +454,36 @@ bool Connection::useDatabase( const QString &dbName )
 	if (!setupKexiDBSystemSchema())
 		return false;
 
-	//-get global database information
-	int num;
-	static QString notfound_str = i18n("\"%1\" database property not found");
-	if (!querySingleNumber(
-		"select db_value from kexi__db where db_property=\"kexidb_major_ver\"", num)) {
-		d->errorInvalidDBContents(notfound_str.arg("kexidb_major_ver"));
-		return false;
-	}
-	d->m_versionMajor = num;
-	if (!querySingleNumber(
-		"select db_value from kexi__db where db_property=\"kexidb_minor_ver\"", num)) {
-		d->errorInvalidDBContents(notfound_str.arg("kexidb_minor_ver"));
-		return false;
-	}
-	d->m_versionMinor = num;
+	if (d->m_kexi_db_used) {
+		//-get global database information
+		int num;
+		static QString notfound_str = i18n("\"%1\" database property not found");
+		if (!querySingleNumber(
+			"select db_value from kexi__db where db_property=\"kexidb_major_ver\"", num)) {
+			d->errorInvalidDBContents(notfound_str.arg("kexidb_major_ver"));
+			return false;
+		}
+		d->m_versionMajor = num;
+		if (!querySingleNumber(
+			"select db_value from kexi__db where db_property=\"kexidb_minor_ver\"", num)) {
+			d->errorInvalidDBContents(notfound_str.arg("kexidb_minor_ver"));
+			return false;
+		}
+		d->m_versionMinor = num;
 
-	//** error if major version does not match
-	if (m_driver->versionMajor()!=KexiDB::versionMajor()) {
-		setError(ERR_INCOMPAT_DATABASE_VERSION, 
-			i18n("Database version (%1) does not match Kexi application's version (%2)")
-			.arg( QString("%1.%2").arg(versionMajor()).arg(versionMinor()) )
-			.arg( QString("%1.%2").arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor()) ) );
-		return false;
+		//** error if major version does not match
+		if (m_driver->versionMajor()!=KexiDB::versionMajor()) {
+			setError(ERR_INCOMPAT_DATABASE_VERSION, 
+				i18n("Database version (%1) does not match Kexi application's version (%2)")
+				.arg( QString("%1.%2").arg(versionMajor()).arg(versionMinor()) )
+				.arg( QString("%1.%2").arg(KexiDB::versionMajor()).arg(KexiDB::versionMinor()) ) );
+			return false;
+		}
+		if (m_driver->versionMinor()!=KexiDB::versionMinor()) {
+			//js TODO: COMPATIBILITY CODE HERE!
+			//js TODO: CONVERSION CODE HERE (or signal that conversion is needed)
+		}
 	}
-	if (m_driver->versionMinor()!=KexiDB::versionMinor()) {
-		//js TODO: COMPATIBILITY CODE HERE!
-		//js TODO: CONVERSION CODE HERE (or signal that conversion is needed)
-	}
-
 	m_usedDatabase = my_dbName;
 	return true;
 }
@@ -521,6 +527,7 @@ bool Connection::closeDatabase()
 		return false;
 
 	m_usedDatabase = "";
+	d->m_kexi_db_used = true;
 	KexiDBDbg << "Connection::closeDatabase(): " << ret << endl;
 	return ret;
 }
@@ -535,9 +542,11 @@ bool Connection::useTemporaryDatabaseIfNeeded(QString &tmpdbName)
 			setError(ERR_NO_DB_USED, i18n("Cannot find any database for temporary connection.") );
 			return false;
 		}
+		d->m_kexi_db_used = false;
 		if (!useDatabase(tmpdbName)) {
 			setError(errorNum(), i18n("Error during starting temporary connection using \"%1\" database name.")
 				.arg(tmpdbName) );
+			d->m_kexi_db_used = true;
 			return false;
 		}
 	}
