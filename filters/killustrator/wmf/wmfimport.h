@@ -26,10 +26,10 @@ DESCRIPTION
 #include <koFilter.h>
 #include <qobject.h>
 #include <qstring.h>
-#include <wmf.h>
+#include <kwmf.h>
 
 class WMFImport :
-    public KoFilter, protected Wmf
+    public KoFilter, protected KWmf
 {
     Q_OBJECT
 

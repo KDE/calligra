@@ -1,8 +1,8 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES= -I$(srcdir) $(KWMF_INCLUDES) $(all_includes)
 libmsodimport_la_LDFLAGS	= -module -avoid-version -no-undefined
-libmsodimport_la_LIBADD = $(KOFFICE_LIBS)
+libmsodimport_la_LIBADD = $(KOFFICE_LIBS) $(LIB_KWMF)
 
 ####### Files
 

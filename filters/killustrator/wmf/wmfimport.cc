@@ -29,7 +29,7 @@ DESCRIPTION
 WMFImport::WMFImport(
     KoFilter *parent,
     const char *name) :
-        KoFilter(parent, name), Wmf(100)
+        KoFilter(parent, name), KWmf(100)
 {
 }
 

@@ -31,7 +31,8 @@ DESCRIPTION
 #include <zlib.h>
 
 Msod::Msod(
-    unsigned dpi)
+    unsigned dpi) :
+        KWmf(dpi)
 {
     m_dpi = dpi;
     m_images.setAutoDelete(true);
@@ -162,37 +163,44 @@ QSize Msod::normaliseSize(
 
 bool Msod::parse(
     unsigned shapeId,
-    const QString &fileIn,
+    const QString &file,
     const char *delayStream)
 {
-    QFile in(fileIn);
+    QFile in(file);
     if (!in.open(IO_ReadOnly))
     {
-        kdError(s_area) << "Unable to open: " << fileIn << endl;
+        kdError(s_area) << "Unable to open input file!" << endl;
         in.close();
         return false;
     }
-    QDataStream st(&in);
-    st.setByteOrder(QDataStream::LittleEndian); // Great, I love Qt !
+    QDataStream stream(&in);
+    bool result = parse(shapeId, stream, in.size(), delayStream);
+    in.close();
+    return result;
+}
+
+bool Msod::parse(
+    unsigned shapeId,
+    QDataStream &stream,
+    unsigned size,
+    const char *delayStream)
+{
+    stream.setByteOrder(QDataStream::LittleEndian); // Great, I love Qt !
     m_requestedShapeId = shapeId;
     m_isRequiredDrawing = false;
     m_delayStream = delayStream;
 
     // Read bits.
 
-//    while (!st.eof())
+    if (size & 1)
     {
-        if (in.size() & 1)
-        {
-            m_dggError = 1;
-        }
-        else
-        {
-            m_dggError = 0;
-        }
-        walk(in.size() - m_dggError, st);
+        m_dggError = 1;
     }
-    in.close();
+    else
+    {
+        m_dggError = 0;
+    }
+    walk(size - m_dggError, stream);
     return true;
 }
 
@@ -666,11 +674,26 @@ void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
                 if (m_isRequiredDrawing)
                 {
                     Image *image = m_images[m_pib - 1];
-                    gotPicture(
-                        m_pib,
-                        image->extension,
-                        image->length,
-                        image->data);
+
+                    // If it is an embedded WMF we don't bother with the
+                    // part; we just extract it as more vector graphics.
+
+                    if (image->extension == "wmf")
+                    {
+                        QByteArray  a;
+                        a.setRawData(image->data, image->length);
+                        QDataStream s(a, IO_ReadOnly);
+                        KWmf::parse(s, image->length);
+                        a.resetRawData(image->data, image->length);
+                    }
+                    else
+                    {
+                        gotPicture(
+                            m_pib,
+                            image->extension,
+                            image->length,
+                            image->data);
+                    }
                 }
             }
             else
@@ -1211,14 +1234,4 @@ void Msod::walk(U32 byteOperands, QDataStream &stream)
         invokeHandler(op, op.cbLength, stream);
         length += op.cbLength + 8;
     }
-}
-
-Msod::DrawContext::DrawContext()
-{
-    // TBD: initalise with proper values.
-    m_brushColour = 0x808080;
-    m_brushStyle = 1;
-    m_penColour = 0x808080;
-    m_penStyle = 1;
-    m_penWidth = 1;
 }

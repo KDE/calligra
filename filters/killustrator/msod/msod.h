@@ -30,9 +30,11 @@ DESCRIPTION
 
 class QString;
 class QPointArray;
+#include <kwmf.h>
 #include <qvector.h>
 
-class Msod
+class Msod :
+    private KWmf
 {
 public:
 
@@ -47,20 +49,15 @@ public:
 
     bool parse(
         unsigned shapeId,
-        const QString &fileIn,
-        const char *delayStream);
+        const QString &file,
+        const char *delayStream = 0L);
+    bool parse(
+        unsigned shapeId,
+        QDataStream &stream,
+        unsigned size,
+        const char *delayStream = 0L);
 
-    class DrawContext
-    {
-    public:
-        DrawContext();
-        bool m_winding;
-        unsigned m_brushColour;
-        unsigned m_brushStyle;
-        unsigned m_penColour;
-        unsigned m_penStyle;
-        unsigned m_penWidth;
-    };
+    typedef KWmf::DrawContext DrawContext;
 
     // Should be protected...
 
@@ -164,10 +161,14 @@ private:
     };
     QVector<Image> m_images;
 
-    // Opcode handling and Metafile painter methods.
+    // Opcode handling and painter methods.
 
-    void walk(U32 byteOperands, QDataStream &stream);
-    void skip(U32 byteOperands, QDataStream &operands);
+    void walk(
+        U32 byteOperands,
+        QDataStream &stream);
+    void skip(
+        U32 byteOperands,
+        QDataStream &operands);
     void invokeHandler(
         MSOFBH &op,
         U32 wordOperands,

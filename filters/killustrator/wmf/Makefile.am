@@ -1,16 +1,16 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES= -I$(srcdir) $(KWMF_INCLUDES) $(all_includes)
 libwmfimport_la_LDFLAGS	= -module -avoid-version -no-undefined
-libwmfimport_la_LIBADD = $(KOFFICE_LIBS)
+libwmfimport_la_LIBADD = $(KOFFICE_LIBS) $(LIB_KWMF)
 
 ####### Files
 
 lib_LTLIBRARIES = libwmfimport.la
 
-libwmfimport_la_SOURCES = wmfimport.cc wmfimport_factory.cc wmf.cc
+libwmfimport_la_SOURCES = wmfimport.cc wmfimport_factory.cc
 
-noinst_HEADERS = wmfimport.h wmfimport_factory.h wmf.h
+noinst_HEADERS = wmfimport.h wmfimport_factory.h
 
 METASOURCES = AUTO
 
