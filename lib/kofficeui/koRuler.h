@@ -105,6 +105,11 @@ public:
     void setFrameStart( int _frameStart ) { frameStart = _frameStart; repaint( false ); }
 
     void setAllowUnits( bool _allow ) { allowUnits = _allow; }
+    /**
+     * put m_bReadWrite to true as default
+     * and used setReadWrite(false) to make in readOnly mode
+     */
+    void setReadWrite(bool _readWrite);
 
 signals:
     void newPageLayout( KoPageLayout );
@@ -156,6 +161,8 @@ protected:
     int mposX, mposY;
     int frameStart;
     bool allowUnits;
+
+    bool m_bReadWrite;
 
 protected slots:
     void rbPT() { setUnit( QString::fromLatin1("pt") ); emit unitChanged( QString::fromLatin1("pt") ); }

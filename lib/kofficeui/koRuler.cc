@@ -47,6 +47,7 @@ public:
     int currTab;
     QPopupMenu *rb_menu;
     int mMM, mPT, mINCH, mRemoveTab;
+    bool m_bReadWrite;
 };
 
 
@@ -71,6 +72,8 @@ KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
     orientation = _orientation;
     layout = _layout;
     d->flags = _flags;
+
+    d->m_bReadWrite=true;
 
     diffx = 0;
     diffy = 0;
@@ -359,6 +362,9 @@ void KoRuler::drawVertical( QPainter *_painter )
 /*================================================================*/
 void KoRuler::mousePressEvent( QMouseEvent *e )
 {
+    if( !d->m_bReadWrite)
+        return;
+
     d->oldMx = e->x();
     d->oldMy = e->y();
     d->mousePressed = true;
@@ -918,4 +924,8 @@ void KoRuler::rbRemoveTab() {
     repaint(false);
 }
 
+void KoRuler::setReadWrite(bool _readWrite)
+{
+    d->m_bReadWrite=_readWrite;
+}
 #include <koRuler.moc>
