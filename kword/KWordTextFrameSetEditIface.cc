@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, Laurent MONTEL <lmontel@mandrakesoft.com>
+   Copyright (C) 2002 Laurent MONTEL <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,35 +17,19 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KWORD_FRAMETEXT_IFACE_H
-#define KWORD_FRAMETEXT_IFACE_H
+#include "KWordTextFrameSetEditIface.h"
 
-#include <KoDocumentIface.h>
-#include <dcopref.h>
+#include "kwtextframeset.h"
+#include <kapplication.h>
+#include <dcopclient.h>
 
-#include <qstring.h>
-#include <qcolor.h>
-class KWTextFrameSet;
-
-class KWordFrameTextIface :  virtual public DCOPObject
+KWordTextFrameSetEditIface::KWordTextFrameSetEditIface( KWTextFrameSetEdit *_framesetedit )
+    :KoTextViewIface(_framesetedit)
 {
-    K_DCOP
-public:
-    KWordFrameTextIface( KWTextFrameSet *_frametext );
+   m_framesetedit = _framesetedit;
+}
 
-k_dcop:
-    bool hasSelection() const;
-    int numberOfParagraphs();
-    QString name() const;
-    bool isVisible() const;
-    bool isFloating() const;
-    bool isAHeader() const;
-    bool isAFooter() const;
-    QString selectedText() const;
-    void selectAll( bool select );
-private:
-    KWTextFrameSet *m_frametext;
-
-};
-
-#endif
+void KWordTextFrameSetEditIface::insertExpression(const QString &_c)
+{
+    m_framesetedit->insertExpression(_c);
+}

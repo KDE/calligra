@@ -255,6 +255,8 @@ public:
     KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas );
     virtual ~KWTextFrameSetEdit();
 
+    virtual KoTextViewIface* dcopObject();
+
     virtual KWFrameSetEdit* currentTextEdit(){return this;}
 
     virtual void terminate(bool removeselection=true);

@@ -48,7 +48,8 @@
 #include <kmessagebox.h>
 #include "variable.h"
 #include <koChangeCaseDia.h>
-#include "KWordFrameTextIface.h"
+#include "KWordTextFrameSetIface.h"
+#include "KWordTextFrameSetEditIface.h"
 
 #include <kdebug.h>
 #include <assert.h>
@@ -129,7 +130,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
 DCOPObject* KWTextFrameSet::dcopObject()
 {
     if ( !dcop )
-	dcop = new KWordFrameTextIface( this );
+	dcop = new KWordTextFrameSetIface( this );
 
     return dcop;
 }
@@ -2114,6 +2115,14 @@ KWTextFrameSetEdit::~KWTextFrameSetEdit()
 {
     //kdDebug(32001) << "KWTextFrameSetEdit::~KWTextFrameSetEdit" << endl;
     m_canvas->gui()->getHorzRuler()->changeFlags(0);
+}
+
+KoTextViewIface* KWTextFrameSetEdit::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KWordTextFrameSetEditIface( this );
+
+    return dcop;
 }
 
 void KWTextFrameSetEdit::terminate(bool removeSelection)

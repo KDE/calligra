@@ -17,60 +17,60 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "KWordFrameTextIface.h"
+#include "KWordTextFrameSetIface.h"
 
 #include "kwtextframeset.h"
 #include <kotextobject.h>
 #include <kapplication.h>
 #include <dcopclient.h>
 
-KWordFrameTextIface::KWordFrameTextIface( KWTextFrameSet *_frame )
+KWordTextFrameSetIface::KWordTextFrameSetIface( KWTextFrameSet *_frame )
     : DCOPObject()
 {
    m_frametext = _frame;
 }
 
-bool KWordFrameTextIface::hasSelection() const
+bool KWordTextFrameSetIface::hasSelection() const
 {
     return m_frametext->hasSelection();
 }
 
-int KWordFrameTextIface::numberOfParagraphs()
+int KWordTextFrameSetIface::numberOfParagraphs()
 {
     return m_frametext->paragraphs();
 }
 
-QString KWordFrameTextIface::name() const
+QString KWordTextFrameSetIface::name() const
 {
     return m_frametext->getName();
 }
 
-bool KWordFrameTextIface::isVisible() const
+bool KWordTextFrameSetIface::isVisible() const
 {
     return m_frametext->isVisible();
 }
 
-bool KWordFrameTextIface::isFloating() const
+bool KWordTextFrameSetIface::isFloating() const
 {
     return m_frametext->isFloating();
 }
 
-bool KWordFrameTextIface::isAHeader() const
+bool KWordTextFrameSetIface::isAHeader() const
 {
     return m_frametext->isAHeader();
 }
 
-bool KWordFrameTextIface::isAFooter() const
+bool KWordTextFrameSetIface::isAFooter() const
 {
     return m_frametext->isAFooter();
 }
 
-QString KWordFrameTextIface::selectedText() const
+QString KWordTextFrameSetIface::selectedText() const
 {
     return m_frametext->selectedText();
 }
 
-void KWordFrameTextIface::selectAll( bool select )
+void KWordTextFrameSetIface::selectAll( bool select )
 {
     m_frametext->textObject()->selectAll(select);
 }
