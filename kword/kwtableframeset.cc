@@ -2200,6 +2200,18 @@ void KWTableFrameSet::finalize( ) {
     KWFrameSet::finalize();
 }
 
+void KWTableFrameSet::layout()
+{
+    for (TableIter cell(this) ; cell ; ++cell)
+        cell->layout();
+}
+
+void KWTableFrameSet::invalidate()
+{
+    for (TableIter cell(this) ; cell ; ++cell)
+        cell->invalidate();
+}
+
 void KWTableFrameSet::setVisible( bool v )
 {
     for (TableIter cell(this) ; cell ; ++cell)

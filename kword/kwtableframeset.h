@@ -92,7 +92,7 @@ public:
 
         void setFirstRow(uint row) { m_row = row; }
         void setFirstCol(uint col) { m_col = col; }
-        void setRowSpan(uint rows) { 
+        void setRowSpan(uint rows) {
 	    m_rows = rows;
             calcIfJoinedCell();
        	}
@@ -100,15 +100,15 @@ public:
             m_cols = cols;
             calcIfJoinedCell();
         }
-	       
+
         bool isFirstGridPosn(uint row, uint col) const {
 		return (row == m_row) && (col == m_col);
-	}	
-	
+	}
+
 	bool isFirstGridPosnFast(uint row, uint col) const {
 		if(!m_isJoinedCell) return true;
 		return (row == m_row) && (col == m_col);
-	}	
+	}
         virtual void addFrame(KWFrame *_frame, bool recalc = true);
 
         KWTableFrameSet *table() const { return grpMgr; }
@@ -162,11 +162,11 @@ public:
 
     /**
       All the TableIterator templates are the same, except for the pre-increment
-      operator (operator++). There is a specialised version of this 
+      operator (operator++). There is a specialised version of this
       operator method for each iterator type:
 
       VISIT_GRID: This iterator visits each grid position once, ie every
-      location in the m_rowArray rows. When some cells are joined, this 
+      location in the m_rowArray rows. When some cells are joined, this
       iterator will visit those cells more than once.
 
       VISIT_CELL: This iterator visits each cell in the table once, whether
@@ -175,17 +175,17 @@ public:
 
       CHECKED: Also visits each cell once, but has some other benefits. Slower.
 
-      Note that all the iterators have restrictions on the state that the 
-      table data structures are in before and while they are being used. 
+      Note that all the iterators have restrictions on the state that the
+      table data structures are in before and while they are being used.
       This includes m_rowArray, the Rows and Cells but not m_colPositions and
       m_rowPositions, as they are not used during the traversal.
-      The conditions include: 
+      The conditions include:
       ( A ) All positions in m_rowArray must be occupied by a valid cell, ie must
       not be null.
-      ( B ) The Cell instance variables (m_row, m_rows, etc) must correctly 
+      ( B ) The Cell instance variables (m_row, m_rows, etc) must correctly
       correspond to where the cells are in m_rowArray.
       ( C ) The m_rows and m_cols instance variables of the table are also correct.
-      Taken together, these conditions are pretty much equivalent to the 
+      Taken together, these conditions are pretty much equivalent to the
       validate() function passing. These conditions may not hold in the middle
       of a method when table data structures are being manipulated.
 
@@ -197,9 +197,9 @@ public:
       TableIterator<CHECKED>       |      |      |  x   |
       MarkedIterator               |  x   |      |  x   |
 
-      The only iterator that can be used when their are null positions in the 
+      The only iterator that can be used when their are null positions in the
       table is the checked iterator.
-      Note that both the Checked and Marked Iterators traverse the table twice, 
+      Note that both the Checked and Marked Iterators traverse the table twice,
       once to clear the m_marked members in the cells (done in constructor) and
       then again to do the actual traversal. Because they use m_marked, only one
       of these iterators can be used at once.
@@ -214,7 +214,7 @@ public:
 	/**
 	 *	@param The table to iterate over. The current item is set to the Cell
 	 *	at row 0, column 0
-	 */	
+	 */
 	TableIterator (KWTableFrameSet *table);
 
 	Cell* toFirstCell ();
@@ -235,13 +235,13 @@ public:
             m_limit[LOW] = low;
 	}
     private:
-	
+
 	Cell *m_cell;
 	uint m_row;
 	uint m_col;
 
 	enum Direction {LEFT, RIGHT, HIGH, LOW};
-	static const uint DIRECTION_SIZE = 4;	
+	static const uint DIRECTION_SIZE = 4;
 	uint m_limit[DIRECTION_SIZE];
     };
 
@@ -249,22 +249,22 @@ public:
     typedef TableIterator<VISIT_GRID> GridIter;
     typedef TableIterator<CHECKED> CheckedIter;
 
-    /** 
-     * This iterator does not look at the Cell instance variables 
-     * during traversal, (except m_marker), so they can be safely 
-     * changed during the traversal. However, to the user it does 
+    /**
+     * This iterator does not look at the Cell instance variables
+     * during traversal, (except m_marker), so they can be safely
+     * changed during the traversal. However, to the user it does
      * not visit every grid position, it visits each cell once.
      * (in spite of the fact that it inherits from a grid-visiting
      * iterator .
      * Only one MarkedIterator can be used at once.  See TableIterator
-     */    
+     */
     class MarkedIterator : public GridIter {
     public:
         MarkedIterator(KWTableFrameSet *table);
-        Cell *operator++();	// overridden from base but not virtual   
+        Cell *operator++();	// overridden from base but not virtual
 
     };
-    
+
 
     /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
@@ -410,14 +410,14 @@ public:
 
     /** Remove all the cells in a certain row */
     void deleteRow( uint _idx, RemovedRow &rr, bool _recalc = true);
-    
+
     /** remove all the cells in a certain column */
     void deleteCol( uint _idx, RemovedColumn &rc);
 
     /** replace a row that was removed with deleteRow() */
     void reInsertRow(RemovedRow &row);
     /** replace a column that was removed with deleteCol() */
-    void reInsertCol(RemovedColumn &col);	
+    void reInsertCol(RemovedColumn &col);
 
     // the boolean actually works, but is not saved (to xml) yet :(
     void setShowHeaderOnAllPages( bool s ) { m_showHeaderOnAllPages = s; }
@@ -471,6 +471,8 @@ public:
         ulong & sentences, ulong & syllables,ulong & lines, bool selected );
 
     virtual void finalize();
+    virtual void invalidate();
+    virtual void layout();
 
     virtual void updateFrames( int flags = 0xff );
 
@@ -547,8 +549,8 @@ private:
     double getPositionOfRow(unsigned int row, bool bottom=false);
 
     void insertEmptyColumn(uint index);
-    /** 
-     *  insert a row in m_rowArray at position index. rows after 
+    /**
+     *  insert a row in m_rowArray at position index. rows after
      *  the inserted row are moved back.
      */
     void insertRowVector(uint index, Row *row);
@@ -578,15 +580,15 @@ private:
 
 
 // all three templates specialise operator++
-template<>	
+template<>
 KWTableFrameSet::Cell*
 KWTableFrameSet::TableIterator<KWTableFrameSet::VISIT_CELL>::operator++ ();
 
-template<>	
+template<>
 KWTableFrameSet::Cell*
 KWTableFrameSet::TableIterator<KWTableFrameSet::VISIT_GRID>::operator++ ();
 
-template<>	
+template<>
 KWTableFrameSet::Cell*
 KWTableFrameSet::TableIterator<KWTableFrameSet::CHECKED>::operator++ ();
 
@@ -599,13 +601,13 @@ KWTableFrameSet::TableIterator<VisitStyle>::TableIterator(KWTableFrameSet *table
 	toFirstCell();
 }
 
-// CHECKED specialises the constructor 
+// CHECKED specialises the constructor
 template<>
 KWTableFrameSet::TableIterator<KWTableFrameSet::CHECKED>::TableIterator(KWTableFrameSet *table);
 
-	
+
 template<int VisitStyle>
-KWTableFrameSet::Cell* 
+KWTableFrameSet::Cell*
 KWTableFrameSet::TableIterator<VisitStyle>::toFirstCell (){
 	m_cell = m_table->getCell(m_limit[HIGH], m_limit[LEFT]);
 	Q_ASSERT(m_cell);
@@ -615,7 +617,7 @@ KWTableFrameSet::TableIterator<VisitStyle>::toFirstCell (){
 }
 
 template<int VisitStyle>
-void 
+void
 KWTableFrameSet::TableIterator<VisitStyle>::goToCell(KWTableFrameSet::Cell *cell)
 {
 	m_cell = cell;
@@ -625,12 +627,12 @@ KWTableFrameSet::TableIterator<VisitStyle>::goToCell(KWTableFrameSet::Cell *cell
 
 // CHECKED specialises to first cell
 template<>
-KWTableFrameSet::Cell* 
+KWTableFrameSet::Cell*
 KWTableFrameSet::TableIterator<KWTableFrameSet::CHECKED>::toFirstCell ();
 
 
 template<int VisitStyle>
-KWTableFrameSet::Cell* 
+KWTableFrameSet::Cell*
 KWTableFrameSet::TableIterator<VisitStyle>::current() const {
 	return m_cell;
 }
