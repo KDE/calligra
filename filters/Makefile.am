@@ -31,4 +31,8 @@ if ! do_not_compile_KFORMULA
 KFORMULADIR = kformula
 endif
 
-SUBDIRS = generic_wrapper $(KSPREADDIR) $(KWORDDIR) $(KPRESENTERDIR) olefilters $(KONTOURDIR) $(XSLTFILTERDIR) $(KFORMULADIR) $(KARBONDIR) kugar
+if ! do_not_compile_KUGAR
+KUGARDIR = kugar
+endif
+
+SUBDIRS = generic_wrapper $(KSPREADDIR) $(KWORDDIR) $(KPRESENTERDIR) olefilters $(KONTOURDIR) $(XSLTFILTERDIR) $(KFORMULADIR) $(KARBONDIR) $(KUGARDIR)
