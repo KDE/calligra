@@ -336,7 +336,7 @@ VComposite::save( QDomElement& element ) const
 		saveSvgPath( d );
 		me.setAttribute( "d", d );
 
-		writeTransform( me );
+		//writeTransform( me );
 
 		// save fill rule if necessary:
 		if( !( m_fillRule == evenOdd ) )

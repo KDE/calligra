@@ -54,17 +54,17 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 	QBoxLayout::Direction d = orientation() == Qt::Vertical ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom;
 	QWidget *base = new QWidget( this );
 	columnsLayouter = new QBoxLayout( base, d );
-	columnsLayouter->setSpacing( 2 );
+	//columnsLayouter->setSpacing( 2 );
 
 	d = orientation() == Qt::Horizontal ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom;
 	left = new QWidget( base );
 	leftLayout = new QBoxLayout( left, d );
-	leftLayout->setSpacing( 2 );
+	//leftLayout->setSpacing( 2 );
 	columnsLayouter->addWidget( left );
 
 	right = new QWidget( base );
 	rightLayout = new QBoxLayout( right, d );
-	rightLayout->setSpacing( 2 );
+	//rightLayout->setSpacing( 2 );
 	columnsLayouter->addWidget( right );
 
 	insertLeft = true;
