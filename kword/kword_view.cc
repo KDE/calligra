@@ -997,7 +997,7 @@ void KWordView::setTool( MouseMode _mouseMode )
 
     if ( factory() )
     {
-      tbFormat = factory()->container( "format_toolbar", this );
+      tbFormat = factory()->container( "border_toolbar", this );
       tbFrame = factory()->container( "frame_toolbar", this );
     }
     if ( tbFrame && tbFormat )

@@ -159,7 +159,8 @@
   <Separator/>
   <Action name="format_super"/>
   <Action name="format_sub"/>
-  <Separator/>
+</ToolBar>
+<ToolBar name="border_toolbar" position="top"><Text>Borders</Text>
   <Action name="format_brdleft"/>
   <Action name="format_brdright"/>
   <Action name="format_brdtop"/>
