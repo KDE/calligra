@@ -6,4 +6,10 @@
   <item find="(c)" replace="©" />
   <item find="(r)" replace="®" />
  </items>
+ <SuperScript>
+  <superscript find="1st" super="st" />
+  <superscript find="2nd" super="nd" />
+  <superscript find="3rd" super="rd" />
+  <superscript find="othernb" super="th" />
+ </SuperScript>
 </Word>

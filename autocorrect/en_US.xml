@@ -1044,4 +1044,10 @@
  <item find="ytou" replace="you" />
  <item find="yuo" replace="you" />
 </items>
+ <SuperScript>
+  <superscript find="1st" super="st" />
+  <superscript find="2nd" super="nd" />
+  <superscript find="3rd" super="rd" />
+  <superscript find="othernb" super="th" />
+ </SuperScript>
 </Word>

@@ -1266,4 +1266,8 @@
   <word exception="MJ" />
   <word exception="MT" />
  </TwoUpperLetterExceptions>
+ <SuperScript>
+  <superscript find="1ier" super="ier" />
+  <superscript find="2ième" super="ième" />
+ </SuperScript>
 </Word>
