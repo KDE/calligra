@@ -499,17 +499,14 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
     if ( lastFormat->strikeOutLineType()!= KoTextFormat::S_NONE )
     {
         if ( lastFormat->doubleStrikeOut() )
-        {
             element.setAttribute(attrStrikeOut, "double");
-            QString strLineType=KoTextFormat::strikeOutStyleToString( lastFormat->strikeOutLineStyle() );
-            element.setAttribute( "strikeoutstyleline", strLineType );
-        }
+        else if ( lastFormat->strikeOutLineType()== KoTextFormat::S_SIMPLE_BOLD)
+            element.setAttribute(attrStrikeOut, "single-bold");
         else if(tmpStrikeOut)
-        {
             element.setAttribute(attrStrikeOut, tmpStrikeOut);
-            QString strLineType=KoTextFormat::strikeOutStyleToString( lastFormat->strikeOutLineStyle() );
-            element.setAttribute( "strikeoutstyleline", strLineType );
-        }
+        QString strLineType=KoTextFormat::strikeOutStyleToString( lastFormat->strikeOutLineStyle() );
+        element.setAttribute( "strikeoutstyleline", strLineType );
+
     }
     element.setAttribute(attrColor, tmpColor);
 
@@ -750,6 +747,8 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
             format.setStrikeOutLineType ( KoTextFormat::S_DOUBLE);
         else if ( value == "single" )
             format.setStrikeOutLineType ( KoTextFormat::S_SIMPLE);
+        else if ( value == "single-bold" )
+            format.setStrikeOutLineType ( KoTextFormat::S_SIMPLE_BOLD);
         else
             format.setStrikeOutLineType ( (bool)value.toInt() ? KoTextFormat::S_SIMPLE :KoTextFormat::S_NONE);
     }

@@ -322,12 +322,12 @@
 <!ATTLIST TEXT
 		family	CDATA	#REQUIRED
 		pointSize NMTOKEN #REQUIRED
-		underline ( 0 | 1 | single | double ) #REQUIRED
+		underline ( 0 | 1 | single | double|single-bold ) #REQUIRED
                 underlinestyleline CDATA #REQUIRED
                 underlinecolor CDATA #REQUIRED
                 bold ( 0 | 1 ) #REQUIRED
                 italic ( 0 | 1 ) #REQUIRED
-                strikeOut (0 | 1) #REQUIRED
+                strikeOut (0 | 1| single | double|single-bold) #REQUIRED
                 strikeoutstyleline CDATA #REQUIRED
                 whitespace NMTOKEN #IMPLIED
 		color	CDATA	#REQUIRED
