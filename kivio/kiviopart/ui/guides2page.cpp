@@ -17,7 +17,7 @@
 #include <qlabel.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
-
+/*
 GuidesTwoPositionPage::GuidesTwoPositionPage(KivioView* view, QWidget* parent, const char* name)
 : GuidesTwoPositionPageBase(parent, name)
 {
@@ -257,3 +257,4 @@ void GuidesTwoPositionPage::apply(QWidget*)
 }
 
 #include "guides2page.moc"
+*/

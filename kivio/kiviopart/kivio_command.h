@@ -24,12 +24,13 @@
 #include <qfont.h>
 #include <qcolor.h>
 #include "kivio_rect.h"
-#include "tkpagelayout.h"
+
 class KivioPage;
 class KivioLayer;
 class KivioPage;
 class KivioLayer;
 class KivioStencil;
+struct KoPageLayout;
 
 class KivioChangePageNameCommand : public KNamedCommand
 {
@@ -210,7 +211,7 @@ protected:
 class KivioChangeLayoutCommand : public KNamedCommand
 {
 public:
-    KivioChangeLayoutCommand(const QString &_name, KivioPage *_page, TKPageLayout _oldLayout, TKPageLayout _newLayout);
+    KivioChangeLayoutCommand(const QString &_name, KivioPage *_page, KoPageLayout _oldLayout, KoPageLayout _newLayout);
     ~KivioChangeLayoutCommand();
 
     virtual void execute();
@@ -218,8 +219,8 @@ public:
 
 protected:
     KivioPage *m_page;
-    TKPageLayout oldLayout;
-    TKPageLayout newLayout;
+    KoPageLayout oldLayout;
+    KoPageLayout newLayout;
 };
 
 

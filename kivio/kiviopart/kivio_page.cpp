@@ -42,6 +42,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
+#include <koUnit.h>
 
 #include "kivio_page.h"
 #include "kivio_map.h"
@@ -61,6 +62,7 @@
 #include "kivio_stencil.h"
 #include "KIvioPageIface.h"
 #include "kivio_command.h"
+#include "kivioglobal.h"
 
 int KivioPage::s_id = 0L;
 QIntDict<KivioPage>* KivioPage::s_mapPages;
@@ -111,8 +113,8 @@ DCOPObject* KivioPage::dcopObject()
 
 KivioPage::~KivioPage()
 {
-    kdDebug()<<" KivioPage::~KivioPage()************ :"<<this<<endl;
-    delete gLines;
+  kdDebug()<<" KivioPage::~KivioPage()************ :"<<this<<endl;
+  delete gLines;
   s_mapPages->remove(m_id);
   delete m_dcop;
 }
@@ -185,30 +187,14 @@ QDomElement KivioPage::save( QDomDocument& doc )
 QDomElement KivioPage::saveLayout( QDomDocument &doc )
 {
     QDomElement e = doc.createElement("PageLayout");
-
-    XmlWriteInt( e, "unit", m_pPageLayout.unit );
-    XmlWriteFloat( e, "width", m_pPageLayout.width );
-    XmlWriteFloat( e, "height", m_pPageLayout.height );
-
-    XmlWriteFloat( e, "left", m_pPageLayout.marginLeft );
-    XmlWriteFloat( e, "right", m_pPageLayout.marginRight );
-    XmlWriteFloat( e, "top", m_pPageLayout.marginTop );
-    XmlWriteFloat( e, "bottom", m_pPageLayout.marginBottom );
+    Kivio::savePageLayout(e, m_pPageLayout);
 
     return e;
 }
 
 bool KivioPage::loadLayout( const QDomElement &e )
 {
-    m_pPageLayout.unit = XmlReadInt( e, "unit", 0 );
-    m_pPageLayout.width = XmlReadFloat( e, "width", 0.0 );
-    m_pPageLayout.height = XmlReadFloat( e, "height", 0.0 );
-
-    m_pPageLayout.marginLeft = XmlReadFloat( e, "left", 0.0 );
-    m_pPageLayout.marginRight = XmlReadFloat( e, "right", 0.0 );
-    m_pPageLayout.marginTop = XmlReadFloat( e, "top", 0.0 );
-    m_pPageLayout.marginBottom = XmlReadFloat( e, "bottom", 0.0 );
-
+    m_pPageLayout = Kivio::loadPageLayout(e);
     return true;
 }
 
@@ -1182,8 +1168,8 @@ void KivioPage::alignStencils(AlignData d)
     if(!pStencil)
         return;
     if (d.centerOfPage) {
-      float w = m_pPageLayout.ptWidth();
-      float h = m_pPageLayout.ptHeight();
+      float w = m_pPageLayout.ptWidth;
+      float h = m_pPageLayout.ptHeight;
       while( pStencil )
       {
           pStencil->setPosition((w-pStencil->w())/2,(h-pStencil->h())/2);
@@ -1283,10 +1269,10 @@ void KivioPage::distributeStencils(DistributeData d)
 
   switch (d.extent) {
     case DistributeData::Page:
-      x = m_pPageLayout.ptLeft();
-      y = m_pPageLayout.ptTop();
-      x1 = m_pPageLayout.ptWidth() - m_pPageLayout.ptRight();
-      y1 = m_pPageLayout.ptHeight() - m_pPageLayout.ptBottom();
+      x = m_pPageLayout.ptLeft;
+      y = m_pPageLayout.ptTop;
+      x1 = m_pPageLayout.ptWidth - m_pPageLayout.ptRight;
+      y1 = m_pPageLayout.ptHeight - m_pPageLayout.ptBottom;
       break;
     case DistributeData::Selection:
       pStencil = m_lstSelection.first();
@@ -1527,7 +1513,7 @@ KivioRect KivioPage::getRectForAllStencils()
     return rTotal;
 }
 
-void KivioPage::setPaperLayout(const TKPageLayout &l)
+void KivioPage::setPaperLayout(const KoPageLayout &l)
 {
   m_pPageLayout = l;
   doc()->updateView(this);

@@ -14,11 +14,13 @@ class KivioGuideLineData
 friend class KivioGuideLines;
 public:
   KivioGuideLineData(Qt::Orientation);
-  ~KivioGuideLineData();
 
   Qt::Orientation orientation() { return orient; }
   double position(){ return pos; }
   bool isSelected() { return selected; }
+  
+  void setOrientation(Qt::Orientation o);
+  void setPosition(double p);
 
 private:
   double pos;

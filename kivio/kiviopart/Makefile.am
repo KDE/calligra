@@ -1,7 +1,3 @@
-#1########################################################!@#$
-####   Makefile.am generated automatically by KDEStudio   ####
-#### WARNING! All changes made in this part will be lost! ####
-##############################################################
 SUBDIRS = ui kiviosdk tklib tools pics tiles stencils .
 
 kde_module_LTLIBRARIES = libkiviopart.la
@@ -22,8 +18,7 @@ INCLUDES = -I$(srcdir)/ui\
 	$(all_includes)
 
 libkiviopart_la_METASOURCES = AUTO
-libkiviopart_la_SOURCES = \
-		kivio_canvas.cpp\
+libkiviopart_la_SOURCES = kivio_canvas.cpp \
 		kivio_doc.cpp\
 		kivio_factory.cpp\
 		kivio_tabbar.cpp\
@@ -50,13 +45,20 @@ libkiviopart_la_SOURCES = \
 		kivio_grid_data.cpp\
 		kivio_guidelines.cpp\
 		kivio_stencil_geometry_panel.cpp\
-		kivio_viewmanager_panel.cpp \
-		KIvioViewIface.skel KIvioViewIface.cc \
-		KIvioDocIface.skel KIvioDocIface.cc \
-		KIvioMapIface.skel KIvioMapIface.cc \
-		KIvioPageIface.skel KIvioPageIface.cc \
-		kivio_command.cc \
-		KIvioLayerIface.skel KIvioLayerIface.cc
+		kivio_viewmanager_panel.cpp\
+		KIvioViewIface.skel\
+		KIvioViewIface.cc\
+		KIvioDocIface.skel\
+		KIvioDocIface.cc\
+		KIvioMapIface.skel\
+		KIvioMapIface.cc\
+		KIvioPageIface.skel\
+		KIvioPageIface.cc\
+		kivio_command.cc\
+		KIvioLayerIface.skel\
+		KIvioLayerIface.cc\
+		kivioglobal.cpp
+
 EXTRA_DIST = \
 		main.cpp\
 		kivio_canvas.cpp\
@@ -134,11 +136,10 @@ EXTRA_DIST = \
 		KIvioMapIface.skel KIvioMapIface.cc KIvioMapIface.h \
 		KIvioPageIface.skel KIvioPageIface.cc KIvioPageIface.h \
 		kivio_command.cc kivio_command.h KIvioLayerIface.cc \
-		KIvioLayerIface.h
+		KIvioLayerIface.h \
+		kivioglobal.h
 		
-##############################################################
-####                  END KDEStudio part                  ####
-#2########################################################!@#$
+
 lib_LTLIBRARIES = kivio.la
 kivio_la_SOURCES = main.cpp
 kivio_la_LDFLAGS = $(all_libraries) -module -avoid-version

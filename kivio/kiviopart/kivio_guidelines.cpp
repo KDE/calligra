@@ -27,9 +27,17 @@ KivioGuideLineData::KivioGuideLineData(Qt::Orientation o)
   selected = false;
 }
 
-KivioGuideLineData::~KivioGuideLineData()
+void KivioGuideLineData::setOrientation(Qt::Orientation o)
 {
+  orient = o;
 }
+
+void KivioGuideLineData::setPosition(double p)
+{
+  pos = p;
+}
+
+/**************************************************************************/
 
 KivioGuideLines::KivioGuideLines(KivioPage* page)
 {

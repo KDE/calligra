@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 #include <kcommand.h>
+#include <koGlobal.h>
 #include "kivio_command.h"
 #include "kivio_page.h"
 #include "kivio_map.h"
@@ -289,7 +290,7 @@ void KivioMoveStencilCommand::unexecute()
     m_page->doc()->updateView(m_page);
 }
 
-KivioChangeLayoutCommand::KivioChangeLayoutCommand( const QString &_name, KivioPage *_page, TKPageLayout _oldLayout, TKPageLayout _newLayout)
+KivioChangeLayoutCommand::KivioChangeLayoutCommand( const QString &_name, KivioPage *_page, KoPageLayout _oldLayout, KoPageLayout _newLayout)
     :KNamedCommand( _name),
      m_page(_page),
      oldLayout( _oldLayout),

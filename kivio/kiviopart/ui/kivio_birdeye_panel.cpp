@@ -13,6 +13,7 @@
 #include <ktoolbar.h>
 #include <kaction.h>
 #include <klocale.h>
+#include <koGlobal.h>
 
 #include <kiconloader.h>
 
@@ -162,10 +163,11 @@ void KivioBirdEyePanel::updateView()
   float zc = m_pCanvas->zoom();
   QSize s1 = canvas->size();
   QSize s2;
+  KoPageLayout pl = m_pView->activePage()->paperLayout();
+  
   if (m_bPageOnly) {
-    TKPageLayout pl = m_pView->activePage()->paperLayout();
-    int pw = (int)(pl.ptWidth()*zc);
-    int ph = (int)(pl.ptHeight()*zc);
+    int pw = (int)(pl.ptWidth*zc);
+    int ph = (int)(pl.ptHeight*zc);
     s2 = QSize(pw,ph);
   } else {
     s2 = m_pCanvas->actualSize();
@@ -177,9 +179,8 @@ void KivioBirdEyePanel::updateView()
 
   zoom = zc*zxy;
 
-  TKPageLayout pl = m_pView->activePage()->paperLayout();
-  int pw = (int)(pl.ptWidth()*zoom);
-  int ph = (int)(pl.ptHeight()*zoom);
+  int pw = (int)(pl.ptWidth*zoom);
+  int ph = (int)(pl.ptHeight*zoom);
   int px0 = (s1.width()-pw)/2;
   int py0 = (s1.height()-ph)/2;
 
@@ -251,9 +252,9 @@ void KivioBirdEyePanel::updateVisibleArea()
 
   KivioRect vr = m_pCanvas->visibleArea();
   QSize s1 = canvas->size();
-  TKPageLayout pl = m_pView->activePage()->paperLayout();
-  int pw = (int)(pl.ptWidth()*zoom);
-  int ph = (int)(pl.ptHeight()*zoom);
+  KoPageLayout pl = m_pView->activePage()->paperLayout();
+  int pw = (int)(pl.ptWidth*zoom);
+  int ph = (int)(pl.ptHeight*zoom);
   int px0 = (s1.width()-pw)/2;
   int py0 = (s1.height()-ph)/2;
 
@@ -370,9 +371,9 @@ void KivioBirdEyePanel::handleMousePress(QPoint p)
     return;
 
   QSize s1 = canvas->size();
-  TKPageLayout pl = m_pView->activePage()->paperLayout();
-  int pw = (int)(pl.ptWidth()*zoom);
-  int ph = (int)(pl.ptHeight()*zoom);
+  KoPageLayout pl = m_pView->activePage()->paperLayout();
+  int pw = (int)(pl.ptWidth*zoom);
+  int ph = (int)(pl.ptHeight*zoom);
   int px0 = (s1.width()-pw)/2;
   int py0 = (s1.height()-ph)/2;
 

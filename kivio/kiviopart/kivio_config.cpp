@@ -19,8 +19,11 @@
 #include "kivio_config.h"
 #include "kivio_view.h"
 #include "kiviooptionsdialog.h"
-
-#include "tkunits.h"
+#include "kivio_page.h"
+#include "kivio_command.h"
+#include "kivio_doc.h"
+#include "kivio_map.h"
+#include "kivioglobal.h"
 
 #include <qfile.h>
 #include <qtextstream.h>
@@ -28,6 +31,9 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <koPageLayoutDia.h>
+#include <koUnit.h>
+#include <klocale.h>
 
 KivioOptions::KivioOptions()
 {
@@ -48,14 +54,14 @@ void KivioOptions::initGlobalConfig()
   QString path = locateLocal("appdata", "globalconfig");
   QFile f(path);
   if ( !f.open(IO_ReadOnly) ) {
-    globalDefPageLayout.setDefault();
+    globalDefPageLayout = KoPageLayoutDia::standardLayout();
     globalDefStencilBarVisual.setDefault();
   } else {
     doc->setContent(&f);
     root = doc->documentElement();
 
     QDomElement ple = root.namedItem("PaperLayout").toElement();
-    globalDefPageLayout.load(ple);
+    globalDefPageLayout = Kivio::loadPageLayout(ple);
 
     QDomElement sbe = root.namedItem("StencilsBar").toElement();
     globalDefStencilBarVisual.load(sbe);
@@ -72,13 +78,25 @@ void KivioOptions::initDefaultConfig()
 
 void KivioOptions::paperLayoutSetup(KivioView* view)
 {
-  KivioOptionsDialog dlg(view, KivioOptionsDialog::PageSize);
-  dlg.exec();
+  KivioPage* page = view->activePage();
+  KoPageLayout l = page->paperLayout();
+  KoHeadFoot headfoot;
+  int tabs = FORMAT_AND_BORDERS | DISABLE_UNIT;
+  KoUnit::Unit unit = convToKoUnit(view->doc()->units());
+  
+  if(KoPageLayoutDia::pageLayout(l, headfoot, tabs, unit))
+  {
+    KivioDoc* doc = page->doc();
+    KivioChangeLayoutCommand * cmd = new KivioChangeLayoutCommand(
+      i18n("Change Page Layout"),page ,page->paperLayout(), l);
+    doc->addCommand( cmd );
+    page->setPaperLayout(l);
+  }
 }
 
 void KivioOptions::setup(KivioView* view)
 {
-  KivioOptionsDialog dlg(view);
+  KivioOptionsDialog dlg(view, "setupDialog");
   dlg.exec();
 }
 
@@ -90,7 +108,7 @@ void KivioOptions::saveGlobalConfig()
 
   QDomElement ple = doc->createElement("PaperLayout");
   root.appendChild(ple);
-  globalDefPageLayout.save(ple);
+  Kivio::savePageLayout(ple, globalDefPageLayout);
 
   QDomElement sbe = doc->createElement("StencilsBar");
   root.appendChild(sbe);
@@ -114,12 +132,12 @@ void KivioOptions::setGlobalStencilsBarVisual(KivioIconViewVisual v)
   saveGlobalConfig();
 }
 
-void KivioOptions::setDefaultPageLayout(const TKPageLayout &pl)
+void KivioOptions::setDefaultPageLayout(const KoPageLayout &pl)
 {
   defPageLayout = pl;
 }
 
-void KivioOptions::setGlobalDefaultPageLayout(const TKPageLayout &pl)
+void KivioOptions::setGlobalDefaultPageLayout(const KoPageLayout &pl)
 {
   globalDefPageLayout = pl;
   saveGlobalConfig();
@@ -129,14 +147,15 @@ void KivioOptions::save(QDomElement& element)
 {
   QDomElement e = element.ownerDocument().createElement("DefPaperLayout");
   element.appendChild(e);
-  defPageLayout.save(e);
+  Kivio::savePageLayout(e, defPageLayout);
 }
 
 void KivioOptions::load(const QDomElement& element)
 {
   QDomElement ple = element.namedItem("DefPaperLayout").toElement();
-  defPageLayout.load(ple);
+  defPageLayout = Kivio::loadPageLayout(ple);
 }
+
 /**********************************************************************************/
 static const char * connectorTarget_xpm[] = {
 "7 7 3 1",

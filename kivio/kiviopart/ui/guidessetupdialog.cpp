@@ -6,6 +6,7 @@
 #include <qcheckbox.h>
 #include <kiconloader.h>
 
+/*
 GuidesListViewItem::GuidesListViewItem(QListView* parent, KivioGuideLineData* gd, bool isTwoColumn)
 : QListViewItem(parent), d(gd), twoColumn(isTwoColumn)
 {
@@ -33,7 +34,7 @@ void GuidesListViewItem::setUnit(int u)
   } else {
     setText(1,s);
   }
-}
+}*/
 /****************************************************************************************/
 GuidesSetupDialog::GuidesSetupDialog(KivioView* view, QWidget* parent, const char* name)
 : GuidesSetupDialogBase(parent, name)

@@ -9,6 +9,7 @@
 class KivioView;
 class KivioGuideLineData;
 
+/*
 class GuidesListViewItem : public QListViewItem
 {
 public:
@@ -21,7 +22,7 @@ public:
 private:
   KivioGuideLineData* d;
   bool twoColumn;
-};
+};*/
 /****************************************************************************************/
 class GuidesSetupDialog : public GuidesSetupDialogBase
 { Q_OBJECT

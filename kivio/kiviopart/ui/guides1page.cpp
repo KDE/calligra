@@ -17,7 +17,7 @@
 #include <qlayout.h>
 
 #include <kiconloader.h>
-
+/*
 GuidesOnePositionPage::GuidesOnePositionPage(Orientation o, KivioView* view, QWidget* parent, const char* name)
 : GuidesOnePositionPageBase(parent, name)
 {
@@ -266,3 +266,4 @@ void GuidesOnePositionPage::apply(QWidget*)
 }
 
 #include "guides1page.moc"
+*/

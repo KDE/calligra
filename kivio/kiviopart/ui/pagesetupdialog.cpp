@@ -55,7 +55,7 @@ static const PaperSizeDef PapersTable[] = {
 PageSetupDialog::PageSetupDialog(KivioView* view, QWidget* parent, const char* name)
 : PageSetupDialogBase(parent, name)
 {
-  m_pPage = view->activePage();
+/*  m_pPage = view->activePage();
 
   TKPageLayout l = m_pPage->paperLayout();
 
@@ -96,7 +96,7 @@ PageSetupDialog::PageSetupDialog(KivioView* view, QWidget* parent, const char* n
   orientation->setCurrentItem(orient);
   format->setCurrentItem(cur);
 
-  update();
+  update();*/
 }
 
 PageSetupDialog::~PageSetupDialog()
@@ -137,7 +137,7 @@ void PageSetupDialog::update()
 
 void PageSetupDialog::apply(QWidget* page)
 {
-    if (page != this)
+/*    if (page != this)
         return;
 
     TKPageLayout l;
@@ -177,7 +177,7 @@ void PageSetupDialog::apply(QWidget* page)
         doc->config()->setDefaultPageLayout(l);
 
     if (globalDefault->isChecked())
-        doc->config()->setGlobalDefaultPageLayout(l);
+        doc->config()->setGlobalDefaultPageLayout(l);*/
 }
 
 #include "pagesetupdialog.moc"

@@ -53,10 +53,6 @@ class KPrinter;
 
 #define BORDER_SPACE 1
 
-#include "tkunits.h"
-#include "tkpagelayout.h"
-
-
 struct AlignData
 {
   enum Align { None, Left, Center, Right, Top, Bottom };
@@ -107,8 +103,8 @@ public:
   int id()const { return m_id; }
   static KivioPage* find( int _id );
 
-  TKPageLayout paperLayout()const { return m_pPageLayout; }
-  void setPaperLayout(const TKPageLayout&);
+  KoPageLayout paperLayout()const { return m_pPageLayout; }
+  void setPaperLayout(const KoPageLayout&);
 
   void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, float, bool );
   void printContent( KivioPainter& painter );
@@ -144,7 +140,7 @@ public:
   void addLayer( KivioLayer * );
   void insertLayer( int, KivioLayer * );
   KivioLayer *layerAt( int );
-    void takeLayer( KivioLayer *pLayer );
+  void takeLayer( KivioLayer *pLayer );
   KivioGuideLines* guideLines()const{ return gLines; }
 
   /*
@@ -155,7 +151,7 @@ public:
   void distributeStencils( DistributeData );
 
   KivioConnectorTarget *connectPointToTarget( KivioConnectorPoint *, float );
-    void setHidePage(bool _hide);
+  void setHidePage(bool _hide);
 public slots:
   void deleteSelectedStencils();
   void groupSelectedStencils();
@@ -173,8 +169,8 @@ signals:
   void sig_updateView( KivioPage *_page, const QRect& );
   void sig_nameChanged( KivioPage* page, const QString& old_name );
 
-    void sig_PageHidden(KivioPage *_page);
-    void sig_PageShown(KivioPage *_page);
+  void sig_PageHidden(KivioPage *_page);
+  void sig_PageShown(KivioPage *_page);
 
 protected:
   void printPage( QPainter &_painter, const QRect& page_range, const QRect& view );
@@ -197,10 +193,10 @@ protected:
   static int s_id;
   static QIntDict<KivioPage>* s_mapPages;
 
-  TKPageLayout m_pPageLayout;
+  KoPageLayout m_pPageLayout;
 
   KivioGuideLines* gLines;
-    DCOPObject* m_dcop;
+  DCOPObject* m_dcop;
 
 };
 

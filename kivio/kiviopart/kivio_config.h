@@ -20,11 +20,11 @@
 #define KIVIO_CONFIG_H
 
 #include <ksimpleconfig.h>
+#include <koGlobal.h>
 #include <qcolor.h>
 #include <qstring.h>
 #include <qpixmap.h>
 
-#include "tkpagelayout.h"
 #include "kivio_icon_view.h"
 
 class KivioView;
@@ -43,11 +43,11 @@ public:
   void save(QDomElement&);
   void load(const QDomElement&);
 
-  TKPageLayout defaultPageLayout()const  { return defPageLayout; }
-  TKPageLayout globalDefaultPageLayout()const { return globalDefPageLayout; }
+  KoPageLayout defaultPageLayout()const  { return defPageLayout; }
+  KoPageLayout globalDefaultPageLayout()const { return globalDefPageLayout; }
 
-  void setDefaultPageLayout(const TKPageLayout&);
-  void setGlobalDefaultPageLayout(const TKPageLayout&);
+  void setDefaultPageLayout(const KoPageLayout&);
+  void setGlobalDefaultPageLayout(const KoPageLayout&);
 
   void setup(KivioView*);
   void paperLayoutSetup(KivioView*);
@@ -56,8 +56,8 @@ public:
   KivioIconViewVisual stencilsBarVisual()const { return globalDefStencilBarVisual; }
 
 private:
-  TKPageLayout defPageLayout;
-  TKPageLayout globalDefPageLayout;
+  KoPageLayout defPageLayout;
+  KoPageLayout globalDefPageLayout;
   KivioIconViewVisual globalDefStencilBarVisual;
 };
 
