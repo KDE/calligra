@@ -4467,7 +4467,7 @@ bool KSpreadCell::testValidity() const
       switch (d->extra()->validity->m_action)
       {
         case Stop:
-	  KMessageBox::error((QWidget*)0L, d->extra()->validity->message,
+            KMessageBox::error((QWidget*)0L, d->extra()->validity->message,
 			     d->extra()->validity->title);
 	  break;
         case Warning:

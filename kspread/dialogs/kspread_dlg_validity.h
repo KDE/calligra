@@ -58,7 +58,7 @@ protected:
   QComboBox *chooseAction;
   QComboBox *chooseType;
   QLineEdit * title;
-  QLineEdit *message;
+  QMultiLineEdit *message;
   KSpreadValidity result;
 };
 

@@ -159,8 +159,8 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   tmpQLabel->setText(i18n("Message:" ));
   grid2->addWidget(tmpQLabel,2,0);
 
-  message =new QLineEdit( tmpQButtonGroup);
-  grid2->addWidget(message,2,1);
+  message =new QMultiLineEdit( tmpQButtonGroup);
+  grid2->addMultiCellWidget(message,2, 3,1, 1);
   lay1->addWidget(tmpQButtonGroup);
 
   connect(choose,SIGNAL(activated(int )),this,SLOT(changeIndexCond(int)));
