@@ -24,11 +24,11 @@ class KSpell;
 
 #include <qobject.h>
 
-#include <koDataTool.h>
+#include <kdatatool.h>
 
 #include <klibloader.h>
 
-class SpellChecker : public KoDataTool
+class SpellChecker : public KDataTool
 {
     Q_OBJECT
 public:

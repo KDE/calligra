@@ -57,6 +57,7 @@ Comment[af]=bevestig hierdie word's spelling
 Comment[ara]=تحقق من املاء هذه الكلمة
 Comment[az]=Bu kəlməyə imla yoxlaması apar
 Comment[bg]=Проверете този правопис
+Comment[bs]=Provjerite ovu riječ
 Comment[cs]=Zkontrolovat pravopis tohoto slova
 Comment[da]=Tjek dette ords stavning
 Comment[de]=Die Schreibung des ausgewählten Wortes überprüfen
@@ -88,7 +89,7 @@ Comment[vi]=Kiểm tra lỗi chỉnh tả cho từ này
 Comment[xxx]=xx
 Comment[zh_CN.GB2312]=检查拼写
 Comment[zh_TW.Big5]=拼字檢查
-ServiceTypes=KoDataTool
+ServiceTypes=KDataTool
 Icon=spellcheck
 # This tool should only appear for single words, in KWord.
 DataType=QString

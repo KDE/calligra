@@ -642,8 +642,11 @@ void KSpreadCell::freeAllObscuredCells()
 void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 {
     // Let's see ;-)
-    Q_ASSERT( _col == m_iColumn );
-    Q_ASSERT( _row == m_iRow );
+    if ( _col != m_iColumn || _row != m_iRow )
+    {
+        kdWarning() << "KSpreadCell::makeLayout _col=" << _col << " _row=" << _row
+                    << "  but m_iColumn=" << m_iColumn << " m_iRow=" << m_iRow << endl;
+    }
 
     /*m_leftBorderPen.setWidth(leftBorderWidth( _col, _row ));
     m_topBorderPen.setWidth(topBorderWidth( _col, _row ));

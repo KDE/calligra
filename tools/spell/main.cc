@@ -61,7 +61,7 @@ QObject* SpellCheckerFactory::createObject( QObject* parent, const char* name, c
  ***************************************************/
 
 SpellChecker::SpellChecker( QObject* parent, const char* name )
-    : KoDataTool( parent, name )
+    : KDataTool( parent, name )
 {
 }
 
