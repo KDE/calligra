@@ -412,6 +412,14 @@ void KoAutoFormat::loadEntry( const QDomElement &nl)
         tmp->formatEntryContext()->m_size = nl.attribute("SIZE" ).toInt();
         tmp->formatEntryContext()->m_optionsMask |= KoSearchContext::Size;
     }
+    if (nl.hasAttribute("BOLD" ))
+    {
+        tmp->createNewEntryContext();
+        tmp->formatEntryContext()->m_optionsMask |= KoSearchContext::Bold;
+        QString value = nl.attribute("ITALIC");
+        if ( value.toInt() == 1 )
+            tmp->formatEntryContext()->m_options |= KoSearchContext::Bold;
+    }
     if (nl.hasAttribute("ITALIC" ))
     {
         tmp->createNewEntryContext();
@@ -429,6 +437,8 @@ void KoAutoFormat::loadEntry( const QDomElement &nl)
             tmp->formatEntryContext()->m_underline = KoTextFormat::U_SIMPLE;
         else if ( value =="double" )
             tmp->formatEntryContext()->m_underline = KoTextFormat::U_DOUBLE;
+        else if ( value =="single-bold" )
+            tmp->formatEntryContext()->m_underline = KoTextFormat::U_SIMPLE_BOLD;
         else
             tmp->formatEntryContext()->m_underline = KoTextFormat::U_NONE;
     }
@@ -619,7 +629,11 @@ QDomElement KoAutoFormat::saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QD
         }
         if ( tmp->m_optionsMask & KoSearchContext::Italic )
         {
-            data.setAttribute("ITALIC", static_cast<int>(tmp->m_options & KoSearchContext::Italic));
+            data.setAttribute("ITALIC", static_cast<bool>(tmp->m_options & KoSearchContext::Italic));
+        }
+        if ( tmp->m_optionsMask & KoSearchContext::Bold )
+        {
+            data.setAttribute("BOLD", static_cast<bool>(tmp->m_options & KoSearchContext::Bold));
         }
         if ( tmp->m_optionsMask & KoSearchContext::Underline )
         {
@@ -630,6 +644,9 @@ QDomElement KoAutoFormat::saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QD
                 break;
             case KoTextFormat::U_DOUBLE:
                 data.setAttribute("UNDERLINE", "double");
+                break;
+            case KoTextFormat::U_SIMPLE_BOLD:
+                data.setAttribute("UNDERLINE", "single-bold");
                 break;
             case KoTextFormat::U_NONE:
                 data.setAttribute("UNDERLINE", "none");
@@ -1854,12 +1871,15 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
 
 void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat * format, int & flags )
 {
+    kdDebug()<<" entre 2222222222222\n";
     if (formatOptions )
     {
+        kdDebug()<<" fffffffffffffffffffffffffffffffff\n";
         if (formatOptions->m_optionsMask & KoSearchContext::Bold)
         {
             format->setBold( formatOptions->m_options & KoSearchContext::Bold);
             flags |=KoTextFormat::Bold;
+            kdDebug()<<" bold*************************************\n";
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::Size)
         {
