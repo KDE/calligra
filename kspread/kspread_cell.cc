@@ -743,7 +743,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // in which case m_iRow and m_iColumn are 0 and 0, but col and row
     // are the real coordinates of the cell.
 
-    if ( !testFlag( Flag_LayoutDirty ) )
+    // due to QSimpleRichText, always make layout for QML
+    if ( !testFlag( Flag_LayoutDirty ) && !m_pQML )
       return;
 
     m_nbLines = 0;
@@ -762,11 +763,43 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         return;
     }
 
+    setOutputText();
+
+    // Empty text?
+    if ( m_strOutText.isEmpty() )
+    {
+        m_strOutText = QString::null;
+        if ( isDefault() )
+        {
+            clearFlag( Flag_LayoutDirty );
+            return;
+        }
+    }
+
+    //
+    // Determine the correct font
+    //
+    applyZoomedFont( _painter, _col, _row );
+
     /**
      * RichText
      */
-    if ( m_pQML )
+    if ( m_pQML  )
     {
+        delete m_pQML;
+
+        // TODO: more formatting as QStyleSheet supports
+        QString qml_text;
+        qml_text += QString("<font face=\"%1\">").arg( _painter.font().family() );
+        //if( _painter.font().bold() ) qml_text += "<b>";
+        //if( _painter.font().italic() ) qml_text += "<i>";
+        //if( _painter.font().underline() ) qml_text += "<u>";
+
+        qml_text += m_strText.mid(1);
+        m_pQML = new QSimpleRichText( qml_text, _painter.font() );
+
+        setFlag( Flag_LayoutDirty );
+
         // Calculate how many cells we could use in addition right hand
         // Never use more then 10 cells.
         int right = 0;
@@ -830,20 +863,26 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             m_dExtraWidth = max_width;
         }
         // Occupy the needed extra cells in vertical direction
-        double max_height = dblHeight( 0 );
+        double max_height = dblHeight( _row );
         int r = _row;
         ende = ( max_height >= h );
         for( r = _row + 1; !ende && r < _row + 500; ++r )
         {
             bool empty = true;
-            for( c = _col; !empty && c <= _col + m_iExtraXCells; ++c )
+            for( c = _col; c <= _col + m_iExtraXCells; ++c )
             {
                 KSpreadCell *cell = m_pTable->cellAt( c, r );
                 if ( cell && !cell->isEmpty() )
+                {
                     empty = false;
+                    break;
+                }
             }
             if ( !empty )
+            {
                 ende = true;
+                break;
+            }
             else
             {
                 // Occupy this row
@@ -871,26 +910,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
             m_dExtraHeight = max_height;
         }
         clearFlag( Flag_LayoutDirty );
+
+        textSize( _painter );
+
+        offsetAlign( _col, _row );
+
         return;
     }
-
-    setOutputText();
-
-    // Empty text?
-    if ( m_strOutText.isEmpty() )
-    {
-        m_strOutText = QString::null;
-        if ( isDefault() )
-        {
-            clearFlag( Flag_LayoutDirty );
-            return;
-        }
-    }
-
-    //
-    // Determine the correct font
-    //
-    applyZoomedFont( _painter, _col, _row );
 
     // Calculate text dimensions
     textSize( _painter );
@@ -1481,7 +1507,10 @@ void KSpreadCell::offsetAlign( int _col, int _row )
 
      case KSpreadCell::Bottom:
       if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle )
+      {
         m_dTextY = h - BORDER_SPACE - effBottomBorderPen( _col, _row ).width();
+        if( m_pQML ) m_dTextY = m_dTextY - m_pQML->height();
+      }
       else if ( tmpAngle != 0 )
       {
         if ( h - BORDER_SPACE - m_dOutTextHeight - effBottomBorderPen( _col, _row ).width() > 0 )
@@ -1522,6 +1551,7 @@ void KSpreadCell::offsetAlign( int _col, int _row )
       break;
 
      case KSpreadCell::Middle:
+     case KSpreadCell::UndefinedY:
       if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle )
       {
         m_dTextY = ( h - m_dOutTextHeight ) / 2 + (double) m_fmAscent / m_pTable->doc()->zoomedResolutionY();
@@ -1627,6 +1657,13 @@ void KSpreadCell::textSize( QPainter &_paint )
       fontUnderlined = textFontUnderline( _col, _row );
     }
 
+    if( m_pQML )
+    {
+     m_dOutTextWidth = m_pTable->doc()->unzoomItX( m_pQML->widthUsed() );
+     m_dOutTextHeight = m_pTable->doc()->unzoomItY( m_pQML->height() );
+     return;
+    }
+
     if ( !tmpVerticalText && !tmpAngle )
     {
         m_dOutTextWidth = m_pTable->doc()->unzoomItX( fm.width( m_strOutText ) );
@@ -1660,6 +1697,7 @@ void KSpreadCell::textSize( QPainter &_paint )
         m_dOutTextHeight = m_pTable->doc()->unzoomItY( ( fm.ascent() + fm.descent() ) *
                                                        m_strOutText.length() );
     }
+
 }
 
 
@@ -2068,7 +2106,6 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
 
   if ( !isObscuringForced() )
     paintBackground( painter, cellRect, cellRef, selected, backgroundColor );
-
   if( painter.device()->devType() != QInternal::Printer )
     paintDefaultBorders( painter, rect, cellRect, cellRef, paintBorderRight, paintBorderBottom,
                          paintBorderLeft, paintBorderTop, rightPen, bottomPen, leftPen, topPen );
@@ -2112,19 +2149,13 @@ void KSpreadCell::paintCell( const KoRect & rect, QPainter & painter,
          && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(), cellRef.y() ) )
          && !( m_pTable->isProtected() && isHideAll( cellRef.x(), cellRef.y() ) ) )
     {
-      KSpreadDoc* doc = table()->doc();
-      painter.save();
-      m_pQML->draw( &painter,
-                    doc->zoomItX( cellRect.x() ), doc->zoomItY( cellRect.y() ),
-                    QRegion( doc->zoomRect( KoRect( cellRect.x(),     cellRect.y(),
-                                                    cellRect.width(), cellRect.height() ) ) ),
-                    QApplication::palette().active(), 0 );
-      painter.restore();
+      paintText( painter, cellRect, cellRef );
     }
     /**
      * Usual Text
      */
-    else if ( !m_strOutText.isEmpty()
+    else
+    if ( !m_strOutText.isEmpty()
               && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(), cellRef.y() ) )
               && !( m_pTable->isProtected() && isHideAll( cellRef.x(), cellRef.y() ) ) )
     {
@@ -2780,8 +2811,16 @@ void KSpreadCell::paintText( QPainter& painter,
 
   if ( !tmpMultiRow && !tmpVerticalText && !tmpAngle )
   {
-    painter.drawText( doc->zoomItX( indent + cellRect.x() + m_dTextX - offsetCellTooShort ),
+    if( !m_pQML )
+       painter.drawText( doc->zoomItX( indent + cellRect.x() + m_dTextX - offsetCellTooShort ),
                       doc->zoomItY( cellRect.y() + m_dTextY - offsetFont ), m_strOutText );
+    else
+        m_pQML->draw( &painter,
+                    doc->zoomItX( indent + cellRect.x() + m_dTextX ),
+                    doc->zoomItY( cellRect.y() + m_dTextY - offsetFont ),
+                    QRegion( doc->zoomRect( KoRect( cellRect.x(),     cellRect.y(),
+                                                    cellRect.width(), cellRect.height() ) ) ),
+                    QApplication::palette().active(), 0 );
   }
   else if ( tmpAngle != 0 )
   {
