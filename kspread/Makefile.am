@@ -80,6 +80,7 @@ datatools.h: $(idldir)/datatools.idl $(micodir)/include/CORBA.h
 
 datatools.cc: datatools.h
 kspread.cc: kspread.h
+kspread_canvas.cc: kspread.h chart.h
 kspread_doc.cc: kspread.h 
 kspread_main.cc: kspread.h kspread_table.h 
 kspread_part.cc: kspread.h 
