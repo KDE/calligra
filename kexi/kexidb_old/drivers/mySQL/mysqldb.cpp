@@ -239,9 +239,9 @@ KexiDBTable * MySqlDB::createTableDef(const QString& name)
 
 	kdDebug()<<"MySQLDB::createTableDef: connection exists"<<endl;
 
-	kdDebug()<<"MySQLDB::createTableDef: querying"<< ("select * from "+name+" limit 0")<<endl;
+	kdDebug()<<"MySQLDB::createTableDef: querying"<< ("select * from `"+name+"` limit 0")<<endl;
 
-	query("select * from "+name+" limit 0");
+	query("select * from `"+name+"` limit 0");
 	MySqlResult *result = storeResult();
 
 	if(!result)
@@ -395,8 +395,8 @@ MySqlDB::alterField(const QString& table, const QString& field, const QString& n
 {
 	kdDebug() << "MySqlDB::alterField: Table: " << table << " Field: " << field << endl;
 	kdDebug() << "MySqlDB::alterField: DataType: " << nativeDataType(dtype) << "ColumnType: " << dtype << endl;
-	QString qstr = "ALTER TABLE " + table + " CHANGE " + field + " " + newFieldName;
-	qstr += " " + createDefinition(newFieldName, dtype, length, precision, constraints, binary,
+	QString qstr = "ALTER TABLE `" + table + "` CHANGE `" + field + "` `" + newFieldName;
+	qstr += "` " + createDefinition(newFieldName, dtype, length, precision, constraints, binary,
 		unsignedType, defaultVal);
 
 	kdDebug() << "MySqlDB::alterField: Query: " << qstr << endl;
@@ -410,8 +410,8 @@ MySqlDB::createField(const QString& table, const QString& field, KexiDBField::Co
 {
 	kdDebug() << "MySqlDB::createField: Table: " << table << " Field: " << field << endl;
 	kdDebug() << "MySqlDB::createField: DataType: " << nativeDataType(dtype) << "ColumnType: " << dtype << endl;
-	QString qstr = "ALTER TABLE " + table + " ADD " + field;
-	qstr += " " + createDefinition(field, dtype, length, precision, constraints, binary, unsignedType, defaultVal);
+	QString qstr = "ALTER TABLE `" + table + "` ADD `" + field;
+	qstr += "` " + createDefinition(field, dtype, length, precision, constraints, binary, unsignedType, defaultVal);
 
 	kdDebug() << "MySqlDB::createField: Query: " << qstr << endl;
 	return uhQuery(qstr);
@@ -623,9 +623,9 @@ MySqlDB::alterField(const KexiDBField& changedField, unsigned int index,
 	kdDebug() << "MySqlDB::alterField: Table: " << changedField.table() << " Field: " << fields.at(index)->name() << endl;
 	kdDebug() << "MySqlDB::alterField: DataType: " << nativeDataType(
 		changedField.sqlType()) << "ColumnType: " << changedField.sqlType() << endl;
-	QString qstr = "ALTER TABLE " + changedField.table() + " CHANGE " +
-		fields.at(index)->name() + " " + changedField.name();
-	qstr += " " + createDefinition(changedField, index, fields);
+	QString qstr = "ALTER TABLE `" + changedField.table() + "` CHANGE `" +
+		fields.at(index)->name() + "` `" + changedField.name();
+	qstr += "` " + createDefinition(changedField, index, fields);
 	kdDebug() << "MySqlDB::alterField: Query: " << qstr << endl;
 	bool ok = uhQuery(qstr);
 
@@ -648,13 +648,13 @@ MySqlDB::createField(const KexiDBField& newField, KexiDBTableStruct fields,
 
 	if(!createTable)
 	{
-		qstr = "ALTER TABLE " + newField.table() + " ADD " + newField.name();
-		qstr += " " + createDefinition(newField, -1, fields);
+		qstr = "ALTER TABLE `" + newField.table() + "` ADD `" + newField.name();
+		qstr += "` " + createDefinition(newField, -1, fields);
 	}
 	else
 	{
-		qstr = "CREATE TABLE " + newField.table() + " (" + newField.name();
-		qstr += " " + createDefinition(newField, -1, fields);
+		qstr = "CREATE TABLE `" + newField.table() + "` (`" + newField.name();
+		qstr += "` " + createDefinition(newField, -1, fields);
 		qstr += ")";
 	}
 
@@ -752,7 +752,7 @@ MySqlDB::changeKeys(const KexiDBField& field, int index,
 	KexiDBTableStruct fields)
 {
 	bool noPrimary = false;
-	QString qstr = "ALTER TABLE " + field.table();
+	QString qstr = "ALTER TABLE `" + field.table() + "`";
 
 	if(index >= 0)
 	{
@@ -781,7 +781,7 @@ MySqlDB::changeKeys(const KexiDBField& field, int index,
 					j++;
 				}
 
-				fstr += f->name();
+				fstr += "`" + f->name() + "`";
 			}
 
 			i++;
@@ -794,7 +794,7 @@ MySqlDB::changeKeys(const KexiDBField& field, int index,
 				fstr += ",";
 			}
 
-			fstr += field.name();
+			fstr += "`" + field.name() + "`";
 		}
 
 		if(!fstr.isEmpty())
