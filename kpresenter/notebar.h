@@ -35,13 +35,15 @@ class NoteBar : public QWidget
     Q_OBJECT
 
 public:
-    NoteBar( QWidget *_parent, KPresenterDoc *_doc, KPresenterView *_view );
+    NoteBar( QWidget *_parent, KPresenterView *_view );
     ~NoteBar();
 
     void setCurrentNoteText( const QString &_text );
 
     // print
     void printNote( QPainter *_painter, KPrinter *_printer );
+
+    QString getAllNoteTextForPrinting() const;
 
 private slots:
     void slotTextChanged();
@@ -51,11 +53,8 @@ private slots:
     void slotRedoAvailable( bool );
 
 private:
-    QString getAllNoteTextForPrinting();
-
     ::QTextEdit *textEdit;
 
-    KPresenterDoc *doc;
     KPresenterView *view;
 
     bool initialize;

@@ -2129,7 +2129,7 @@ void KPresenterView::createGUI()
     if ( !m_pKPresenterDoc->isEmbedded()
          && !m_pKPresenterDoc->isSingleViewMode() ) // No notebar if the document is embedded
     {
-        notebar = new NoteBar( splitterVertical, m_pKPresenterDoc, this );
+        notebar = new NoteBar( splitterVertical, this );
 
         QValueList<int> tmpList;
         tmpList << 100 << 10;

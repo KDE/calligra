@@ -3531,7 +3531,6 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     for( it=list.begin();it!=list.end();++it)
     {
       i=(*it);
-      kdDebug()<<" i :" <<i<<endl;
         progress.setProgress( ++j );
         kapp->processEvents();
 
@@ -3555,7 +3554,8 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     }
 
     NoteBar *noteBar = m_view->getNoteBar();
-    if ( noteBar ) {
+    //don't printing note when there is not note to print
+    if ( noteBar && !noteBar->getAllNoteTextForPrinting().isEmpty()) {
         printer->newPage();
         painter->resetXForm();
         noteBar->printNote( painter, printer );

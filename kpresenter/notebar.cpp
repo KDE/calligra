@@ -34,8 +34,10 @@
 #include "kprpage.h"
 
 
-NoteBar::NoteBar( QWidget *_parent, KPresenterDoc *_doc, KPresenterView *_view )
-    : QWidget( _parent ), doc( _doc ), view( _view ), initialize( true )
+NoteBar::NoteBar( QWidget *_parent, KPresenterView *_view )
+    : QWidget( _parent ),
+      view( _view ),
+      initialize( true )
 {
     QBoxLayout *topLayout = new QVBoxLayout( this, 2 );
     textEdit = new QTextEdit( this );
@@ -46,7 +48,7 @@ NoteBar::NoteBar( QWidget *_parent, KPresenterDoc *_doc, KPresenterView *_view )
     int currentPageNum = view->getCurrentPresPage(); // 1 base.
     QString text=QString::null;
     if( currentPageNum!=-1)
-        text= doc->pageList().at(currentPageNum - 1)->noteText( );
+        text= view->kPresenterDoc()->pageList().at(currentPageNum - 1)->noteText( );
     textEdit->setText( text );
 
     connect( textEdit, SIGNAL( textChanged() ),
@@ -82,7 +84,7 @@ void NoteBar::slotTextChanged()
 {
     int currentPageNum = view->getCurrPgNum(); // 1 base.
     if ( currentPageNum > 0 && !initialize ) {
-        doc->pageList().at(currentPageNum - 1)->setNoteText(textEdit->text() );
+        view->kPresenterDoc()->pageList().at(currentPageNum - 1)->setNoteText(textEdit->text() );
         textEdit->setModified( true );
     }
 
@@ -148,11 +150,13 @@ void NoteBar::printNote( QPainter *_painter, KPrinter *_printer )
     _painter->restore();
 }
 
-QString NoteBar::getAllNoteTextForPrinting()
+QString NoteBar::getAllNoteTextForPrinting() const
 {
     QString allText = QString::null;
     bool firstText = true;
+    bool noteIsEmpty = true;
     int pageCount = 1;
+    KPresenterDoc *doc=view->kPresenterDoc();
     // laurent todo test me
     for ( int i = 0; i < static_cast<int>( doc->pageList().count() ); i++ )
     {
@@ -160,12 +164,15 @@ QString NoteBar::getAllNoteTextForPrinting()
             allText += QString("\n\n");
 
         allText += i18n( "Page Note %1:\n" ).arg( pageCount );
+        if(noteIsEmpty && !doc->pageList().at(i)->noteText().isEmpty())
+            noteIsEmpty = false;
         allText += doc->pageList().at(i)->noteText();
 
         firstText = false;
         ++pageCount;
     }
-
+    if( noteIsEmpty )
+        return QString::null;
     return allText;
 }
 
