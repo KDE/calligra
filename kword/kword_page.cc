@@ -1253,19 +1253,27 @@ void KWPage::vmdEdit( int mx, int my )
 void KWPage::vmdEditFrame( int mx, int my )
 {
     int frameset = doc->getFrameSet( mx, my );
-    if ( doc->getFrameSet( frameset )->getFrameType() == FT_PART ) {
-	KWPartFrameSet *fs = dynamic_cast<KWPartFrameSet*>( doc->getFrameSet( frameset ) );
+
+    if(frameset==-1)
+	return;
+    KWFrameSet *fset = doc->getFrameSet( frameset );
+    if( !fset )
+	return;
+
+    if( fset->getFrameType() == FT_PART ) {
+	KWPartFrameSet *fs = dynamic_cast<KWPartFrameSet*>( fset );
 	fs->activate( gui->getView() );
 	editNum = frameset;
-    } else if ( doc->getFrameSet( frameset )->getFrameType() == FT_FORMULA ) {
-	gui->getView()->showFormulaToolbar( TRUE );
-	KWFormulaFrameSet *fs = dynamic_cast<KWFormulaFrameSet*>( doc->getFrameSet( frameset ) );
+    }
+    else if( fset->getFrameType() == FT_FORMULA ) {
+	gui->getView()->showFormulaToolbar( true );
+	KWFormulaFrameSet *fs = dynamic_cast<KWFormulaFrameSet*>( fset );
 	fs->activate( this );
 	editNum = frameset;
 	KWFormat *f = fs->getFormat();
 	fc->apply( *f );
 	//formatChanged( *f, FALSE );
-	gui->getView()->setFormat( *f, TRUE, FALSE );
+	gui->getView()->setFormat( *f, true, false );
 	delete f;
     }
 }
