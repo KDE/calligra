@@ -45,6 +45,7 @@
 #include <qwhatsthis.h>
 #include <qwidget.h>
 #include <qdict.h>
+#include <qtl.h>
 
 #include <kapp.h>
 #include <kbuttonbox.h>
@@ -1630,28 +1631,11 @@ void KWParagTabulatorsWidget::updateAlign(int selected) {
 void KWParagTabulatorsWidget::sortLists() {
 
     noSignals=true;
+    qHeapSort( m_tabList );
+
+    // we could just sort the listView, but to make sure we never have any problems with
+    // incosistent lists, just re-add..
     QString curValue=lstTabs->currentText();
-    bool done=false;
-    while(! done) {
-        done=true;
-        //double top=0.0;
-
-        KoTabulatorList::Iterator sort = m_tabList.begin();
-        for ( ; sort != m_tabList.end() && done; ++sort ) {
-            if((*sort).ptPos > m_tabList.last().ptPos) {
-                // greater then last, place at end.
-                m_tabList.remove(*sort);
-                m_tabList.append(*sort);
-                done=false;
-            } else if(sort != m_tabList.begin() && (*sort).ptPos < (*m_tabList.begin()).ptPos) {
-                // smaller then first; place at begin.
-                m_tabList.remove(*sort);
-                m_tabList.prepend(*sort);
-                done=false;
-            }
-        }
-    }
-
     lstTabs->clear();
     KoTabulatorList::ConstIterator it = m_tabList.begin();
     for ( ; it != m_tabList.end(); ++it )
