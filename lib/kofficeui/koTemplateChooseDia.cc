@@ -140,7 +140,7 @@ void KoTemplateChooseDia::setupTabs()
 		{
 			grpPtr->tab = new QVBox(tabs);
 			grpPtr->loadWid = new MyIconCanvas(grpPtr->tab);
-			grpPtr->loadWid->loadDir(grpPtr->dir.absFilePath(),"*.xpm");
+			grpPtr->loadWid->loadDir(grpPtr->dir.absFilePath(),"*.png");
 			grpPtr->loadWid->setBackgroundColor(colorGroup().base());
 			grpPtr->loadWid->show();
 			connect(grpPtr->loadWid,SIGNAL(nameChanged(const QString &)),

@@ -1,3 +1,3 @@
-templates_DATA = SimpleLayout.xpm SimpleLayout.kwt Test.xpm Test.kwt
+templates_DATA = SimpleLayout.png SimpleLayout.kwt Test.png Test.kwt
 templatesdir = $(kde_datadir)/kword/templates/DTP
 
