@@ -341,6 +341,7 @@ QString Document::getFont(unsigned fc)
 
     QFont xFont(msFont);
     QFontInfo info(xFont);
+    kdDebug() << "FONT: Original: " << msFont << endl;
     kdDebug() << "FONT: Requested: " << xFont.family() << endl;
     kdDebug() << "FONT: Got: " << info.family() << endl;
     return info.family();
