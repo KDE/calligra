@@ -27,7 +27,7 @@
 #include <qregexp.h>
 #include <stdio.h>
 
-Brush::Brush(QString file) : Layer(3, true), IconItem()
+Brush::Brush(QString file) : Layer(3), IconItem()
 {
   validVal=true;
   loadBrush(file);

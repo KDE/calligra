@@ -1,5 +1,5 @@
 /*
- *  channel.cc - part of KImageShop
+ *  channeldata.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
  *
@@ -24,9 +24,9 @@
 #include <stdio.h>
 #include "misc.h"
 
-Channel::Channel()
+ChannelData::ChannelData(int _numChannels, enum cSpace _cspace)
 {
-  // puts("new channel");
+	puts("new ChannelData");
   xTilesNo=0;
   yTilesNo=0;
   tileInfo=0;
@@ -34,29 +34,30 @@ Channel::Channel()
   tilesRect=QRect();
 	lastTileXOffset=0;
 	lastTileYOffset=0;
+	channels=_numChannels;
+	colorSpace=_cspace;
 }
 
-void Channel::loadViaQImage(QImage img, int channel)
+void ChannelData::loadViaQImage(QImage img)
 {
-  // printf("loadViaQImage %dx%d\n",img.width(),img.height());
+  printf("loadViaQImage %dx%d c=%d\n",img.width(),img.height(), channels);
   // slow but simple - speed it up.
   int w=img.width();
   int h=img.height();
   
   allocateRect(QRect(0,0, w,h));
   
-  uchar *imgPtr;
+  uint *imgPtr;
   for(int y=0;y<h;y++) {
-	  imgPtr=img.scanLine(y)+channel;
+	  imgPtr=(uint*)img.scanLine(y);
 	  for(int x=0;x<w;x++) {
-		  setPixel(x,y, *imgPtr);
-		  imgPtr+=4;
+		  setPixel(x,y, *imgPtr++);
 		}
 	}
 }
 
 
-void Channel::setPixel(int x, int y, uchar val)
+void ChannelData::setPixel(int x, int y, uint pixel)
 {
 	//resizeChannel(QRect(x,y,1,1));
  	x=x-tilesRect.x(); // Find the point in tile coordinates
@@ -64,11 +65,29 @@ void Channel::setPixel(int x, int y, uchar val)
 
 	// Find the tile
   int tileNo=(y/TILE_SIZE)*xTilesNo + x/TILE_SIZE;
-  *(tileInfo[tileNo]+(y%TILE_SIZE)*TILE_SIZE + x%TILE_SIZE)=val;
+	uchar *ptr=tileInfo[tileNo]+((y%TILE_SIZE)*TILE_SIZE + x%TILE_SIZE)*channels;
+	switch (channels) {
+	case 1:
+		*ptr=pixel;
+		break;
+	case 2:
+		*((short*)ptr)=pixel;
+	case 3: {
+		uchar *pptr=(uchar*)&pixel;
+		*ptr++=*pptr++;
+		*ptr++=*pptr++;
+		*ptr++=*pptr++;
+		break;
+	}
+	case 4:
+		*((uint*)ptr)=pixel;
+		break;
+	}
 }
 
-uchar Channel::getPixel(int x, int y)
+uint ChannelData::getPixel(int x, int y)
 {
+	int pixel;
 	//	assumes imageRect.contains(QPoint(x,y)) for speed
 		x=x-tilesRect.x(); // Find the point in tile coordinates
 		y=y-tilesRect.y();
@@ -78,15 +97,34 @@ uchar Channel::getPixel(int x, int y)
 		if (tileInfo[tileNo]==0)
 			return(0); // XXX fix this return some sort of undef (or bg) via KColor
 		//		return(*(tileInfo[tileNo]+(y%TILE_SIZE)*TILE_SIZE + x%TILE_SIZE));
-		return(*(tileInfo[tileNo]+
-						 (y & (TILE_SIZE-1))*TILE_SIZE + (x & (TILE_SIZE-1))));
+		uchar *ptr=tileInfo[tileNo]+ ((y & (TILE_SIZE-1))*TILE_SIZE + 
+			(x & (TILE_SIZE-1)))*channels;
+
+	switch (channels) {
+	case 1:
+		pixel=(int)*ptr;
+		break;
+	case 2:
+		pixel=*((short*)ptr);
+	case 3: {
+		uchar *pptr=(uchar*)&pixel;
+		*pptr=*ptr++;
+		*pptr=*ptr++;
+		*pptr=*ptr++;
+		break;
+	}
+	case 4:
+		pixel=*((uint*)ptr);
+		break;
+	}
+	return(pixel);
 }
 
 
 // Resize the channel so that it includes the rectangle newRect (canvasCoords)
 // and allocates space for all the pixels in newRect
 
-void Channel::allocateRect(QRect newRect)
+void ChannelData::allocateRect(QRect newRect)
 {
   if (newRect.isNull())
 		return;
@@ -170,10 +208,10 @@ void Channel::allocateRect(QRect newRect)
 			yTilesNo=newYTiles;
 			tilesRect=newTileExtents;
 			
-			dumpTileBlock();
-			SHOW_RECT(imageRect);
-			SHOW_RECT(tilesRect);
-			puts("resizeChannel2: fin");
+			//dumpTileBlock();
+			//SHOW_RECT(imageRect);
+			//SHOW_RECT(tilesRect);
+			//puts("resizeChannel2: fin");
 		}
 		else {
 			imageRect=imageRect.unite(newRect);
@@ -191,8 +229,11 @@ void Channel::allocateRect(QRect newRect)
 	for(int y=minYTile; y<=maxYTile; y++)
 		for(int x=minXTile; x<=maxXTile; x++)
 			if (tileInfo[(y*xTilesNo)+x]==0) {
-				tileInfo[(y*xTilesNo)+x]=new uchar [TILE_SIZE*TILE_SIZE];
-				memset(tileInfo[(y*xTilesNo)+x], 255, TILE_SIZE*TILE_SIZE);
+				tileInfo[(y*xTilesNo)+x]=new uchar [channels*TILE_SIZE*TILE_SIZE];
+				if (colorSpace==ALPHA)
+					memset(tileInfo[(y*xTilesNo)+x], 0, channels*TILE_SIZE*TILE_SIZE);
+				else
+					memset(tileInfo[(y*xTilesNo)+x], 255, channels*TILE_SIZE*TILE_SIZE);
 			}
 
 	lastTileXOffset=(imageRect.width()+offset().x())%TILE_SIZE;
@@ -202,7 +243,7 @@ void Channel::allocateRect(QRect newRect)
 }
 
 
-void Channel::dumpTileBlock()
+void ChannelData::dumpTileBlock()
 {
   puts("====dumpTileBlock====");
   SHOW_RECT(imageRect);
@@ -219,13 +260,13 @@ void Channel::dumpTileBlock()
 	printf("mx=%d my=%d\n", lastTileXOffset, lastTileYOffset);
 }
 
-void Channel::moveBy(int dx, int dy)
+void ChannelData::moveBy(int dx, int dy)
 {
   imageRect.moveBy(dx, dy);
   tilesRect.moveBy(dx, dy);
 }
 
-void Channel::moveTo(int x, int y)
+void ChannelData::moveTo(int x, int y)
 {
 	int dx=x-imageRect.x();
 	int dy=y-imageRect.y();
@@ -233,7 +274,7 @@ void Channel::moveTo(int x, int y)
 	tilesRect.moveBy(dx,dy);
 }
 
-QRect Channel::tileRect(int tileNo)
+QRect ChannelData::tileRect(int tileNo)
 {
 	int xTile=tileNo%xTilesNo;
 	int yTile=tileNo/xTilesNo;

@@ -6,19 +6,23 @@ SUBDIRS   = pics data
 
 ####### Files
 
-bin_PROGRAMS = kimageshop
+bin_PROGRAMS = kimageshop 
 
-kimageshop_SOURCES = integerwidget.cc kimageshop.idl kimageshop_main.cc \
-	kimageshop_shell.cc kimageshop_doc.cc kimageshop_view.cc \
-	kimageshop_undo.cc kimageshop_config.cc kvector.cc canvas.cc canvasview.cc \
-	layer.cc layerview.cc layerdlg.cc brush.cc \
-	channel.cc channelview.cc misc.cc tool.cc movetool.cc \
+#canvastest
+#canvastest_SOURCES = canvastest.cc channeldata.cc layer.cc canvas.cc misc.cc
+
+kimageshop_SOURCES = channeldata.cc layer.cc canvas.cc brush.cc \
+	layerview.cc layerdlg.cc channelview.cc misc.cc \
+	kimageshop_undo.cc kimageshop_config.cc kvector.cc canvasview.cc \
+	integerwidget.cc tool.cc movetool.cc \
 	brushtool.cc zoomtool.cc kfloatingdialog.cc \
 	colordialog.cc kfloatingtabdialog.cc kcolor.cc \
 	brusheswidget.cc brushdialog.cc \
 	iconchooser.cc kfloatingdialogowner.cc preferencesdlg.cc \
 	gradientdlg.cc gradienteditordlg.cc gradientview.cc \
-	newdialog.cc colorframe.cc colorslider.cc
+	newdialog.cc colorframe.cc colorslider.cc \
+	kimageshop_shell.cc kimageshop_doc.cc kimageshop_view.cc \
+	kimageshop.idl kimageshop_main.cc
 
 noinst_HEADERS = kimageshop_main.h kimageshop_shell.h \
 	kimageshop_doc.h kimageshop_view.h kimageshop_undo.h kimageshop_config.h \

@@ -25,7 +25,7 @@
 #include <qobject.h>
 #include <qlist.h>
 
-#include "channel.h"
+#include "channeldata.h"
 
 class Layer;
 
@@ -35,7 +35,7 @@ class Layer : public QObject {
 	Q_OBJECT;
 
  public:
-	Layer(int ch, bool hasAlpha=true);
+	Layer(int ch);
 	~Layer();
 	
 	void    loadRGBImage(QImage img, QImage alpha);
@@ -48,7 +48,7 @@ class Layer : public QObject {
 	void    findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const;
 	void    findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const;
 	QRect   tileRect(int tileNo);
-	uchar   *channelMem(int channel, int tileNo, int ox, int oy) const;
+	uchar   *channelMem(int tileNo, int ox, int oy, bool alpha=false) const;
 	void    moveBy(int dx, int dy);
 	void    moveTo(int x, int y) const;
 	bool    hasAlphaChannel() const { return alphaChannel; }
@@ -67,18 +67,18 @@ class Layer : public QObject {
 	bool    boundryTileX(int tile) const;
 	bool    boundryTileY(int tile) const;
 	void    allocateRect(QRect _r);
-	void    setPixel(int x, int y, uchar val);
+	void    setPixel(int x, int y, uint val);
 
  signals:
 	void layerPropertiesChanged();
 
  private:
 	uchar opacityVal;
-	Channel *channelPtrs[5];
+	ChannelData *alphaChannel, *dataChannels;
 	int channels;
 	QString nameVal;
 	bool visible, linked;
-	bool alphaChannel;
+	bool alpha;
 };
 
 #endif

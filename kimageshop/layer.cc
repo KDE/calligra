@@ -21,23 +21,22 @@
 #include "layer.h"
 #include "misc.h"
 
-Layer::Layer(int ch, bool hasAlpha)
+Layer::Layer(int ch)
 	: QObject()
 {
 	channels=ch;
 	opacityVal=255;
 	visible=true;
 	linked=false;
-  alphaChannel=hasAlpha;
 
-     for(int c=(alphaChannel ? 0 : 1); c<=channels; c++) {
-			 channelPtrs[c]=new Channel;
-     }
+	dataChannels=new ChannelData(ch, ChannelData::RGB);
+  alphaChannel=new ChannelData( 1, ChannelData::ALPHA);
 }
 
 Layer::~Layer()
 {
-
+	delete dataChannels;
+	delete alphaChannel;
 }
 
 void
@@ -47,34 +46,28 @@ Layer::setOpacity(uchar o)
 	//	emit layerPropertiesChanged();
 }
 
+
 void
 Layer::loadRGBImage(QImage img, QImage alpha)
 {
+	printf("loadRGBImage img=(%d,%d) alpha=(%d,%d)\n",img.width(),img.height(),
+				 alpha.width(),alpha.height());
 	if (img.depth()!=32)
 		img=img.convertDepth(32);
 
 	if (!alpha.isNull()) {
 		if (alpha.depth()!=32)
 			alpha=alpha.convertDepth(32);
-		channelPtrs[0]->loadViaQImage(alpha,0);  // ie assume R=B=G as above
-		alphaChannel=true;
+		alphaChannel->loadViaQImage(alpha);
+	} else {
+		alphaChannel->allocateRect(QRect(QPoint(0,0),img.size()));
+		for(int y=0;y<img.height();y++)
+			for(int x=0;x<img.width();x++)
+				alphaChannel->setPixel(x,y,255);
 	}
-	channelPtrs[1]->loadViaQImage(img,0);
-	channelPtrs[2]->loadViaQImage(img,1);
-	channelPtrs[3]->loadViaQImage(img,2);
-
-// 	if (alphaChannel) {puts("premultiplying alpha");
-// 		for(int y=0;y<alpha.height();y++) {
-// 			for(int x=0;x<alpha.width();x++) {
-// 				uchar alpha=channelPtrs[0]->getPixel(x,y);
-// 				channelPtrs[1]->setPixel(x,y, channelPtrs[1]->getPixel(x,y)*alpha/255);
-// 				channelPtrs[2]->setPixel(x,y, channelPtrs[2]->getPixel(x,y)*alpha/255);
-// 				channelPtrs[3]->setPixel(x,y, channelPtrs[3]->getPixel(x,y)*alpha/255);
-// 			}
-// 		}
-// 	}
-
+	dataChannels->loadViaQImage(img);
 }
+
 
 void
 Layer::loadGrayImage(QImage img, QImage alpha)
@@ -85,22 +78,22 @@ Layer::loadGrayImage(QImage img, QImage alpha)
 	if (!alpha.isNull()) {
 		if (alpha.depth()!=32)
 			alpha=alpha.convertDepth(32);
-		channelPtrs[0]->loadViaQImage(alpha,0);  // ie assume R=B=G as above
+		alphaChannel->loadViaQImage(alpha);  // ie assume R=B=G as above
 	}
-	channelPtrs[1]->loadViaQImage(img,0);
+	dataChannels->loadViaQImage(img);
 }
 
 
 void Layer::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
 {
-	pt=pt-channelPtrs[1]->tileExtents().topLeft();
+	pt=pt-dataChannels->tileExtents().topLeft();
 	*tileNo=(pt.y()/TILE_SIZE)*xTiles() + pt.x()/TILE_SIZE;
 	*offset=(pt.y()%TILE_SIZE)*TILE_SIZE + pt.x()%TILE_SIZE;
 }
 
 void Layer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const
 {
-	pt=pt-channelPtrs[1]->tileExtents().topLeft();
+	pt=pt-dataChannels->tileExtents().topLeft();
 	*tileNo=(pt.y()/TILE_SIZE)*xTiles() + pt.x()/TILE_SIZE;
 	*y=pt.y()%TILE_SIZE;
 	*x=pt.x()%TILE_SIZE;
@@ -108,62 +101,66 @@ void Layer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const
 
 QRect Layer::tileRect(int tileNo)
 {
-	return(channelPtrs[1]->tileRect(tileNo));
+	return(dataChannels->tileRect(tileNo));
 }
 
-uchar* Layer::channelMem(int channel, int tileNo, int ox, int oy) const
+uchar* Layer::channelMem(int tileNo, int ox, int oy, bool alpha) const
 {
-	return channelPtrs[channel]->tileBlock()[tileNo]+oy*TILE_SIZE+ox;
+	if (alpha)
+		return alphaChannel->tileBlock()[tileNo]+(oy*TILE_SIZE+ox);
+
+	return dataChannels->tileBlock()[tileNo]+(oy*TILE_SIZE+ox)*channels;
 }
 
 
 QRect Layer::imageExtents() const // Extents of the image in canvas coords
 {
-	return channelPtrs[1]->imageExtents();
+	return dataChannels->imageExtents();
 }
 
 QRect Layer::tileExtents() const// Extents of the image in canvas coords
 {
-	return channelPtrs[1]->tileExtents();
+	return dataChannels->tileExtents();
 }
 
-QPoint Layer::channelOffset() const // TopLeft of the image in the channel (not always 0,0)
+// TopLeft of the image in the channel (not always 0,0)
+QPoint Layer::channelOffset() const 
 {
-	return channelPtrs[1]->offset();
+	return dataChannels->offset();
 }
 
 int Layer::xTiles() const
 {
-	return channelPtrs[1]->xTiles();
+	return dataChannels->xTiles();
 }
 
 int Layer::yTiles() const
 {
-	return channelPtrs[1]->yTiles();
+	return dataChannels->yTiles();
 }
 
 
 void
 Layer::moveBy(int dx, int dy)
 {
-	for(int c=(alphaChannel ? 0 : 1); c<=channels; c++)
-		channelPtrs[c]->moveBy(dx, dy);	
+	alphaChannel->moveBy(dx, dy);	
+	dataChannels->moveBy(dx, dy);	
 }
 
 void Layer::moveTo(int x, int y) const
 {
-	for(int c=(alphaChannel ? 0 : 1); c<=channels; c++)
-		channelPtrs[c]->moveTo(x, y);	
+	alphaChannel->moveTo(x, y);	
+	dataChannels->moveTo(x, y);	
 }
 
 int Layer::channelLastTileOffsetX() const
 {
-	return channelPtrs[1]->lastTileOffsetX();
+	return dataChannels->lastTileOffsetX();
 }
 
 int Layer::channelLastTileOffsetY() const
 {
-	return channelPtrs[1]->lastTileOffsetY();
+	return dataChannels->lastTileOffsetY();
 }
 
 bool Layer::boundryTileX(int tile) const
@@ -179,21 +176,16 @@ bool Layer::boundryTileY(int tile) const
 void
 Layer::allocateRect(QRect _r)
 {
-	for(int c=(alphaChannel ? 0 : 1); c<=channels; c++)
-		channelPtrs[c]->allocateRect(_r);
+	alphaChannel->allocateRect(_r);
+	dataChannels->allocateRect(_r);
 }
 
 void
-Layer::setPixel(int x, int y, uchar val)
+Layer::setPixel(int x, int y, uint pixel)
 {
-	printf("layer::setPixel(%d,%d, %d)\n",x,y,val);
-	for(int c=1; c<=channels; c++)
-		channelPtrs[c]->setPixel(x,y, val);
+	printf("layer::setPixel(%d,%d, %d)\n",x,y,pixel);
+	dataChannels->setPixel(x,y, pixel);
 }
 
 
 #include "layer.moc"
-
-
-
-

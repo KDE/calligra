@@ -92,7 +92,9 @@ CORBA::Boolean KImageShopDoc::initDoc()
   addRGBLayer(_image);
   setLayerOpacity(80);
   
-  compositeImage(QRect());
+	puts("pre compositeImage");
+	compositeImage(QRect());
+	puts("post compositeImage");
   return true;
 }
 

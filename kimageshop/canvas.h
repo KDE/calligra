@@ -134,7 +134,7 @@ private:
   QPixmap   **tiles;
   bool      dragging;
   QPoint    dragStart;
-  uchar     *background[5];
+  uchar     *background;
   char      *imageData;
   XImage    *xi;
 };
