@@ -133,12 +133,12 @@
     </LAYOUT>
    </PARAGRAPH>
    <PARAGRAPH>
-    <TEXT>kword (form</TEXT>
+    <TEXT>This is a line of text.</TEXT>
     <LAYOUT>
      <NAME value="Standard" />
      <FLOW align="left" />
      <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
-     <FORMAT id="1" pos="0" len="11" >
+     <FORMAT id="1" pos="0" len="23" >
       <WEIGHT value="50" />
       <COLOR blue="0" red="0" green="0" />
       <FONT name="times" />
@@ -151,12 +151,12 @@
     </LAYOUT>
    </PARAGRAPH>
    <PARAGRAPH>
-    <TEXT>atting): KWTe</TEXT>
+    <TEXT>And here is another line, which aims to be a little bit longer.</TEXT>
     <LAYOUT>
      <NAME value="Standard" />
      <FLOW align="left" />
      <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
-     <FORMAT id="1" pos="0" len="13" >
+     <FORMAT id="1" pos="0" len="63" >
       <WEIGHT value="50" />
       <COLOR blue="0" red="0" green="0" />
       <FONT name="times" />
@@ -169,12 +169,12 @@
     </LAYOUT>
    </PARAGRAPH>
    <PARAGRAPH>
-    <TEXT>xtFrameSe</TEXT>
+    <TEXT>Short one.</TEXT>
     <LAYOUT>
      <NAME value="Standard" />
      <FLOW align="left" />
      <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
-     <FORMAT id="1" pos="0" len="9" >
+     <FORMAT id="1" pos="0" len="10" >
       <WEIGHT value="50" />
       <COLOR blue="0" red="0" green="0" />
       <FONT name="times" />
@@ -187,12 +187,12 @@
     </LAYOUT>
    </PARAGRAPH>
    <PARAGRAPH>
-    <TEXT>t::updateFrames 0x821</TEXT>
+    <TEXT>I am afraid that somehow the lack of inspiration for what to write in this document must surely show :)</TEXT>
     <LAYOUT>
      <NAME value="Standard" />
      <FLOW align="left" />
      <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
-     <FORMAT id="1" pos="0" len="21" >
+     <FORMAT id="1" pos="0" len="103" >
       <WEIGHT value="50" />
       <COLOR blue="0" red="0" green="0" />
       <FONT name="times" />
@@ -205,12 +205,12 @@
     </LAYOUT>
    </PARAGRAPH>
    <PARAGRAPH>
-    <TEXT>6170 setWidth</TEXT>
+    <TEXT>Well, it's quite fun to have all those frames floating around us. Maybe this document will also have a table later... Why not.</TEXT>
     <LAYOUT>
      <NAME value="Standard" />
      <FLOW align="left" />
      <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
-     <FORMAT id="1" pos="0" len="13" >
+     <FORMAT id="1" pos="0" len="126" >
       <WEIGHT value="50" />
       <COLOR blue="0" red="0" green="0" />
       <FONT name="times" />
@@ -223,12 +223,12 @@
     </LAYOUT>
    </PARAGRAPH>
    <PARAGRAPH>
-    <TEXT>kworudy (formyattying): KWTextyFyrameSet::updateFrames m_avail</TEXT>
+    <TEXT>Here is another paragraph, shorter than the previous one.</TEXT>
     <LAYOUT>
      <NAME value="Standard" />
      <FLOW align="left" />
      <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
-     <FORMAT id="1" pos="0" len="62" >
+     <FORMAT id="1" pos="0" len="57" >
       <WEIGHT value="50" />
       <COLOR blue="0" red="0" green="0" />
       <FONT name="times" />
@@ -241,12 +241,48 @@
     </LAYOUT>
    </PARAGRAPH>
    <PARAGRAPH>
-    <TEXT>kofficyet sdfgsdfgsdfgsdfg(libty koffitcecore): KoMainWindow::setRootDocument this = [KoMainWindow pointer (0x813ff28) to widget kword-mainwindow#1, geometry=894x723+0+0] doc = 0x8133470</TEXT>
+    <TEXT>Hey this stuff seems to work. Very cool, if you ask me.</TEXT>
     <LAYOUT>
      <NAME value="Standard" />
      <FLOW align="left" />
      <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
-     <FORMAT id="1" pos="0" len="186" >
+     <FORMAT id="1" pos="0" len="55" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT></TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="0" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="times" />
+      <SIZE value="12" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+   <PARAGRAPH>
+    <TEXT>acbdefghijklmnopqrstuvwxyz. 1234567890. kofficyet sdfgsdfgsdfgsdfg(libty koffitcecore): KoMainWindow::setRootDocument this = [KoMainWindow pointer (0x813ff28) to widget kword-mainwindow#1, geometry=894x723+0+0] doc = 0x8133470</TEXT>
+    <LAYOUT>
+     <NAME value="Standard" />
+     <FLOW align="left" />
+     <COUNTER bullet="176" lefttext="" numberingtype="1" bulletfont="times" righttext="" type="0" start="1" depth="0" customdef="" />
+     <FORMAT id="1" pos="0" len="226" >
       <WEIGHT value="50" />
       <COLOR blue="0" red="0" green="0" />
       <FONT name="times" />
@@ -443,7 +479,8 @@
    </PARAGRAPH>
   </FRAMESET>
   <FRAMESET removable="0" frameType="1" frameInfo="0" name="NORA (through)" visible="1" >
-   <FRAME right="401" left="171" bottom="204" runaroundGap="0" top="127" />
+   <FRAME right="356" left="126" bottom="168" runaroundGap="0" top="91" />
+   <FRAME right="356" left="126" bottom="1009" runaroundGap="0" top="932" />
    <PARAGRAPH>
     <TEXT>Run through (RA_NO)</TEXT>
     <LAYOUT>
@@ -464,7 +501,8 @@
    </PARAGRAPH>
   </FRAMESET>
   <FRAMESET removable="0" frameType="1" frameInfo="0" name="RunAround rect" visible="1" >
-   <FRAME runaround="1" right="303" left="97" bottom="400" runaroundGap="0" top="302" />
+   <FRAME runaround="1" right="542" left="412" bottom="391" runaroundGap="0" top="329" />
+   <FRAME runaround="1" right="524" left="394" bottom="1223" runaroundGap="0" top="1161" />
    <PARAGRAPH>
     <TEXT>Runaround rect (RA_BOUNDINGRECT)</TEXT>
     <LAYOUT>
@@ -485,7 +523,8 @@
    </PARAGRAPH>
   </FRAMESET>
   <FRAMESET removable="0" frameType="1" frameInfo="0" name="H" visible="1" >
-   <FRAME runaround="2" right="418" left="90" bottom="605" runaroundGap="0" top="479" />
+   <FRAME runaround="2" right="427" left="99" bottom="569" runaroundGap="0" top="443" />
+   <FRAME runaround="2" right="427" left="99" bottom="1410" runaroundGap="0" top="1284" />
    <PARAGRAPH>
     <TEXT>No runaround (RA_SKIP)</TEXT>
     <LAYOUT>
@@ -493,6 +532,27 @@
      <FLOW align="left" />
      <COUNTER bullet="176" lefttext="" numberingtype="0" bulletfont="times" righttext="" type="0" start="0" depth="0" customdef="" />
      <FORMAT id="1" pos="0" len="22" >
+      <WEIGHT value="50" />
+      <COLOR blue="0" red="0" green="0" />
+      <FONT name="Arial" />
+      <SIZE value="11" />
+      <ITALIC value="0" />
+      <UNDERLINE value="0" />
+      <STRIKEOUT value="0" />
+      <VERTALIGN value="0" />
+     </FORMAT>
+    </LAYOUT>
+   </PARAGRAPH>
+  </FRAMESET>
+  <FRAMESET removable="0" frameType="1" frameInfo="0" name="Runaround 2" visible="1" >
+   <FRAME runaround="1" right="172" left="48" bottom="395" top="288" />
+   <FRAME runaround="1" right="217" left="48" bottom="1236" top="1129" />
+   <PARAGRAPH>
+    <TEXT>Runaround rect (RA_BOUNDINGRECT)</TEXT>
+    <LAYOUT>
+     <NAME value="" />
+     <FLOW align="left" />
+     <FORMAT id="1" pos="0" len="32" >
       <WEIGHT value="50" />
       <COLOR blue="0" red="0" green="0" />
       <FONT name="Arial" />
