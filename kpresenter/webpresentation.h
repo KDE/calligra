@@ -26,7 +26,7 @@
 class KPresenterDoc;
 class KPresenterView;
 class Page;
-
+class KURLRequester;
 class KColorButton;
 
 class QVBox;
@@ -172,18 +172,19 @@ protected:
     KPWebPresentation webPres;
 
     QHBox *page1, *page2, *page3;
-    QLineEdit *author, *title, *email, *path;
+    QLineEdit *author, *title, *email;//, *path;
     KColorButton *textColor, *titleColor, *backColor;
     QComboBox *format;
     QSpinBox *zoom;
-    QPushButton *choosePath;
+    KURLRequester *path;
+    //QPushButton *choosePath;
     QListView *slideTitles;
     QLineEdit *slideTitle;
 
 protected slots:
     virtual void finish();
-    void slotChoosePath();
     void pageChanged();
+    void slotChoosePath(const QString &); 
     void slideTitleChanged( const QString & );
     void slideTitleChanged( QListViewItem * );
 

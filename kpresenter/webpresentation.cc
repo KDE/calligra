@@ -60,6 +60,9 @@
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kcharsets.h>
+#include <kurlrequester.h>
+#include <klineedit.h>
+#include <kfiledialog.h>
 
 #include "koDocumentInfo.h"
 
@@ -493,16 +496,18 @@ void KPWebPresentationWizard::setupPage1()
     title = new QLineEdit( webPres.getTitle(), row2 );
     email = new QLineEdit( webPres.getEmail(), row3 );
 
-    QHBox *hbox = new QHBox( row4 );
-    path = new QLineEdit( webPres.getPath(), hbox );
-    choosePath = new QPushButton( i18n("Choose..."), hbox );
-    choosePath->setMaximumSize( choosePath->sizeHint() );
+    path=new KURLRequester( row4 );
+    path->fileDialog()->setMode( KFile::Directory);
+    path->lineEdit()->setText(webPres.getPath());
+    connect(path, SIGNAL(textChanged(const QString&)),
+           this,SLOT(slotChoosePath(const QString&)));
+    connect(path, SIGNAL(urlSelected( const QString& )),
+           this,SLOT(slotChoosePath(const QString&)));
 
     addPage( page1, i18n( "General Information" ) );
 
     setHelpEnabled(page1, false);  //doesn't do anything currently
 
-    connect( choosePath, SIGNAL( clicked() ), this, SLOT( slotChoosePath() ) );
 }
 
 /*================================================================*/
@@ -645,31 +650,18 @@ void KPWebPresentationWizard::finish()
     webPres.setTitleColor( titleColor->color() );
     webPres.setTextColor( textColor->color() );
     webPres.setImageFormat( static_cast<KPWebPresentation::ImageFormat>( format->currentItem() ) );
-    webPres.setPath( path->text() );
+    webPres.setPath( path->lineEdit()->text() );
     webPres.setZoom( zoom->value() );
 
     close();
     KPWebPresentationCreateDialog::createWebPresentation( doc, view, webPres );
 }
 
-/*================================================================*/
-void KPWebPresentationWizard::slotChoosePath()
-{
-    QFileInfo fi( path->text() );
-    QString url = QString::null;
-    if ( fi.exists() && fi.isDir() )
-        url = path->text();
-
-    url = KFileDialog::getExistingDirectory( url );
-
-    if ( QFileInfo( url ).exists() && QFileInfo( url ).isDir() )
-        path->setText( url );
-}
 
 /*================================================================*/
 bool KPWebPresentationWizard::isPathValid()
 {
-    QFileInfo fi( path->text() );
+    QFileInfo fi( path->lineEdit()->text() );
 
     if ( fi.exists() && fi.isDir() )
         return true;
@@ -714,6 +706,11 @@ void KPWebPresentationWizard::closeEvent( QCloseEvent *e )
 {
     view->enableWebPres();
     QWizard::closeEvent( e );
+}
+
+void KPWebPresentationWizard::slotChoosePath(const QString &text)
+{
+    webPres.setPath(text);
 }
 
 /******************************************************************/
