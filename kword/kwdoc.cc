@@ -108,7 +108,7 @@ KoDocument *KWChild::hitTest( const QPoint &, const QWMatrix & )
 /*================================================================*/
 KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-      unit( "mm" ), // footNoteManager( this ),
+      m_unit( KWUnit::U_MM ), // footNoteManager( this ),
       urlIntern()
 {
     m_lstViews.setAutoDelete( false );
@@ -119,7 +119,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     setInstance( KWFactory::global(), false );
 
     m_gridX = m_gridY = 10;
-    m_indent.setMM(10.0);
+    m_indent = MM_TO_POINT( 10.0 );
 
     _viewFormattingChars = FALSE;
     _viewFrameBorders = TRUE;
@@ -874,26 +874,27 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     // <ATTRIBUTES>
     QDomElement attributes = word.namedItem( "ATTRIBUTES" ).toElement();
+    QString unitName;
     if ( !attributes.isNull() )
     {
         m_processingType = static_cast<ProcessingType>( KWDocument::getAttribute( attributes, "processing", 0 ) );
         //KWDocument::getAttribute( attributes, "standardpage", QString::null );
         m_headerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasHeader", 0 ) );
         m_footerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasFooter", 0 ) );
-        unit = correctQString( KWDocument::getAttribute( attributes, "unit", "pt" ) );
+        unitName = correctQString( KWDocument::getAttribute( attributes, "unit", "pt" ) );
     } else {
         m_processingType = WP;
         m_headerVisible = false;
         m_footerVisible = false;
-        unit = "pt";
+        unitName = "pt";
     }
-
-    switch ( KWUnit::unitType( unit ) ) {
-    case U_MM: __pgLayout.unit = PG_MM;
+    m_unit = KWUnit::unit( unitName );
+    switch ( m_unit ) {
+    case KWUnit::U_MM: __pgLayout.unit = PG_MM;
         break;
-    case U_PT: __pgLayout.unit = PG_PT;
+    case KWUnit::U_PT: __pgLayout.unit = PG_PT;
         break;
-    case U_INCH: __pgLayout.unit = PG_INCH;
+    case KWUnit::U_INCH: __pgLayout.unit = PG_INCH;
         break;
     }
     setPageLayout( __pgLayout, __columns, __hf );
@@ -1766,19 +1767,22 @@ void KWDocument::updateAllViewportSizes()
 }
 
 /*================================================================*/
-void KWDocument::setUnitToAll()
+void KWDocument::setUnit( KWUnit::Unit _unit )
 {
-    if ( unit == "mm" )
-        m_pageLayout.unit = PG_MM;
-    else if ( unit == "pt" )
-        m_pageLayout.unit = PG_PT;
-    else if ( unit == "inch" )
-        m_pageLayout.unit = PG_INCH;
+    m_unit = _unit;
+    switch ( m_unit ) {
+    case KWUnit::U_MM: m_pageLayout.unit = PG_MM;
+        break;
+    case KWUnit::U_PT: m_pageLayout.unit = PG_PT;
+        break;
+    case KWUnit::U_INCH: m_pageLayout.unit = PG_INCH;
+        break;
+    }
 
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
-        if ( viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget() ) {
-            viewPtr->getGUI()->getHorzRuler()->setUnit( getUnit() );
-            viewPtr->getGUI()->getVertRuler()->setUnit( getUnit() );
+        if ( viewPtr->getGUI() ) {
+            viewPtr->getGUI()->getHorzRuler()->setUnit( KWUnit::unitName( m_unit ) );
+            viewPtr->getGUI()->getVertRuler()->setUnit( KWUnit::unitName( m_unit ) );
         }
     }
 }
@@ -2150,7 +2154,7 @@ void KWDocument::setRunAroundGap( KWUnit _gap )
 #endif
 
 /*================================================================*/
-void KWDocument::getFrameMargins( KWUnit &l, KWUnit &r, KWUnit &t, KWUnit &b )
+void KWDocument::getFrameMargins( double &l, double &r, double &t, double &b )
 {
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
         if ( getFrameSet( i )->hasSelectedFrame() ) {
@@ -2196,7 +2200,7 @@ KWFrameSet *KWDocument::getFrameCoords( unsigned int &x, unsigned int &y,
 }
 
 /*================================================================*/
-void KWDocument::setFrameMargins( KWUnit l, KWUnit r, KWUnit t, KWUnit b )
+void KWDocument::setFrameMargins( double l, double r, double t, double b )
 {
     // todo, make this more OO, and update the tableheaders as well..
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {

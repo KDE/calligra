@@ -863,26 +863,30 @@ void KWCanvas::mrEditFrame() // Can be called from KWCanvas and from KWResizeHan
         if ( frameResized )
         {
             KWFrame *frame = doc->getFirstSelectedFrame();
-            FrameIndex index;
-            FrameResizeStruct tmpResize;
-            tmpResize.sizeOfBegin = m_resizedFrameInitialSize;
-            tmpResize.sizeOfEnd = frame->normalize();
-
-            if(table)
+            ASSERT( frame );
+            if ( frame )
             {
-                index.m_iFrameSetIndex=doc->getFrameSetNum(table);
-                index.m_iFrameIndex=table->getFrameFromPtr(frame);
-            }
-            else
-            {
-                index.m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
-                index.m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
-            }
+                FrameIndex index;
+                FrameResizeStruct tmpResize;
+                tmpResize.sizeOfBegin = m_resizedFrameInitialSize;
+                tmpResize.sizeOfEnd = frame->normalize();
 
-            KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), doc, index, tmpResize ) ;
-            doc->addCommand(cmd);
+                if(table)
+                {
+                    index.m_iFrameSetIndex=doc->getFrameSetNum(table);
+                    index.m_iFrameIndex=table->getFrameFromPtr(frame);
+                }
+                else
+                {
+                    index.m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+                    index.m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+                }
 
-            doc->frameChanged( frame, m_gui->getView() ); // repaint etc.
+                KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), doc, index, tmpResize ) ;
+                doc->addCommand(cmd);
+
+                doc->frameChanged( frame, m_gui->getView() ); // repaint etc.
+            }
             delete cmdMoveFrame; // Unused after all
             cmdMoveFrame = 0L;
         }

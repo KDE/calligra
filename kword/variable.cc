@@ -126,6 +126,7 @@ KWVariable::KWVariable( KWTextFrameSet *fs, KWVariableFormat *_varFormat )
     varFormat = _varFormat;
     doc = fs->kWordDocument();
     doc->registerVariable( this );
+    adjustToPainter( 0L ); // just a way to compute the width from the start
 }
 
 
@@ -142,7 +143,7 @@ void KWVariable::adjustToPainter( QPainter* )
 void KWVariable::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
 {
     // todo much stuff
-    p->drawText( x, y, getText() );
+    p->drawText( x, y+20 /* Autsch, as someone would say */, getText() );
 }
 
 

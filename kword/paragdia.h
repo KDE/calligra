@@ -27,7 +27,6 @@
 
 
 #include "kwtextparag.h"
-#include "kwunit.h"
 #include "counter.h"
 
 class KWDocument;
@@ -72,23 +71,25 @@ public:
 
     int getFlags() { return flags; }
 
-    void setLeftIndent( KWUnit _left );
-    void setRightIndent( KWUnit _right );
-    void setFirstLineIndent( KWUnit _first );
-    void setSpaceAfterParag( KWUnit _after );
-    void setSpaceBeforeParag( KWUnit _before );
-    void setLineSpacing( KWUnit _spacing );
+    // Set values (in pt)
+    void setLeftIndent( double _left );
+    void setRightIndent( double _right );
+    void setFirstLineIndent( double _first );
+    void setSpaceAfterParag( double _after );
+    void setSpaceBeforeParag( double _before );
+    void setLineSpacing( double _spacing );
 
     void setAlign( int align );
 
     void setTabList( const KoTabulatorList & tabList );
 
-    KWUnit leftIndent() const;
-    KWUnit rightIndent() const;
-    KWUnit firstLineIndent() const;
-    KWUnit spaceBeforeParag() const;
-    KWUnit spaceAfterParag() const;
-    KWUnit lineSpacing() const;
+    // Get values (in pt)
+    double leftIndent() const;
+    double rightIndent() const;
+    double firstLineIndent() const;
+    double spaceBeforeParag() const;
+    double spaceAfterParag() const;
+    double lineSpacing() const;
 
     int align() const;
 
@@ -118,12 +119,12 @@ public:
 
     bool isPageBreakingChanged() const { return  m_bPageBreakingChanged;}
 
-    bool isLineSpacingChanged() const {return oldLayout.lineSpacing.pt()!=lineSpacing().pt();}
-    bool isLeftMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginLeft].pt()!=leftIndent().pt(); }
-    bool isRightMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginRight].pt()!=rightIndent().pt();}
-    bool isFirstLineChanged() const {return oldLayout.margins[ QStyleSheetItem::MarginFirstLine].pt()!=firstLineIndent().pt();}
-    bool isSpaceBeforeChanged() const { return oldLayout.margins[QStyleSheetItem::MarginTop].pt()!=spaceBeforeParag().pt();}
-    bool isSpaceAfterChanged() const {return oldLayout.margins[QStyleSheetItem::MarginBottom].pt()!=spaceAfterParag().pt();}
+    bool isLineSpacingChanged() const {return oldLayout.lineSpacing!=lineSpacing();}
+    bool isLeftMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginLeft]!=leftIndent(); }
+    bool isRightMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginRight]!=rightIndent();}
+    bool isFirstLineChanged() const {return oldLayout.margins[ QStyleSheetItem::MarginFirstLine]!=firstLineIndent();}
+    bool isSpaceBeforeChanged() const { return oldLayout.margins[QStyleSheetItem::MarginTop]!=spaceBeforeParag();}
+    bool isSpaceAfterChanged() const {return oldLayout.margins[QStyleSheetItem::MarginBottom]!=spaceAfterParag();}
     bool isBulletChanged() const;
 
     bool isBorderChanged() const { return (oldLayout.leftBorder!=leftBorder() ||
@@ -141,7 +142,7 @@ protected:
     void setupTab5();
     void clearAligns();
     void updateBorders();
-    void setActifItem(double value);
+    void setActiveItem(double value);
     bool findExistingValue(double val);
 //    void enableUIForCounterType();
 
@@ -183,7 +184,6 @@ protected:
     QStringList fontList;
     KWDocument *doc;
     KoTabulatorList _tabList;
-    KWUnits unit;
     KWParagLayout oldLayout;
 
     bool m_bAfterInitBorder;

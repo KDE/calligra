@@ -139,10 +139,10 @@ public:
     // -- Paragraph settings --
     void setCounter( QTextCursor * cursor, const Counter & counter );
     void setAlign( QTextCursor * cursor, int align );
-    void setLineSpacing( QTextCursor * cursor, KWUnit spacing );
+    void setLineSpacing( QTextCursor * cursor, double spacing );
     void setPageBreaking( QTextCursor * cursor, bool linesTogether );
     void setBorders( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder );
-    void setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, KWUnit margin );
+    void setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin );
     void applyStyle( QTextCursor * cursor, const KWStyle * style, int selectionId = QTextDocument::Standard );
     void applyStyleChange( const QString & changedStyle );
 
@@ -315,10 +315,10 @@ public:
     void setCounter( const Counter & counter ) { textFrameSet()->setCounter( cursor, counter ); }
     void setAlign( int align ) { textFrameSet()->setAlign( cursor, align ); }
     void setPageBreaking( bool linesTogether ) { textFrameSet()->setPageBreaking( cursor, linesTogether ); }
-    void setLineSpacing( KWUnit spacing ) { textFrameSet()->setLineSpacing( cursor, spacing ); }
+    void setLineSpacing( double spacing ) { textFrameSet()->setLineSpacing( cursor, spacing ); }
     void setBorders( Border leftBorder, Border rightBorder, Border bottomBorder, Border topBorder )
           { textFrameSet()->setBorders( cursor, leftBorder, rightBorder, bottomBorder, topBorder ); }
-    void setMargin( QStyleSheetItem::Margin m, KWUnit margin )
+    void setMargin( QStyleSheetItem::Margin m, double margin )
           { textFrameSet()->setMargin( cursor, m, margin ); }
     void setTabList( const KoTabulatorList & tabList ){ textFrameSet()->setTabList( cursor, tabList ); }
     void applyStyle( const KWStyle * style ) { textFrameSet()->applyStyle( cursor, style ); }

@@ -20,117 +20,78 @@
 #ifndef kwunit_h
 #define kwunit_h
 
-enum KWUnits {
-    U_MM,
-    U_PT,
-    U_INCH
-};
-
+/**
+ * KWord stores everthing in pt (using "double") internally.
+ * When displaying a value to the user, the value is converted to the user's unit
+ * of choice, and rounded to a reasonable precision to avoid 0.999999
+ */
 class KWUnit
 {
 public:
-    KWUnit() { _pt = 0.0; _mm = 0.0; _inch = 0.0; }
-    KWUnit( double __pt, double ___mm, double __inch )
-    { _pt = __pt; _mm = ___mm; _inch = __inch; }
-    KWUnit( double ___mm )
-    { setMM( ___mm ); }
-    KWUnit( const KWUnit &unit ) {
-        _pt = unit._pt;
-        _mm = unit._mm;
-        _inch = unit._inch;
+    enum Unit {
+        U_MM,
+        U_PT,
+        U_INCH
+    };
+
+    // Prepare ptValue to be displayed in pt
+    static double toPoint( double ptValue ) {
+        // No conversion, only rounding (to 0.001 precision)
+        return qRound( ptValue * 1000 ) / 1000;
     }
 
-    inline void setPT( double __pt )
-    { _pt = __pt; _mm = POINT_TO_MM( _pt ); _inch = POINT_TO_INCH( _pt ); }
-    inline void setMM( double ___mm )
-    { _mm = ___mm; _pt = MM_TO_POINT( _mm ); _inch = MM_TO_INCH( _mm ); }
-    inline void setINCH( double __inch )
-    { _inch = __inch; _mm = INCH_TO_MM( _inch ); _pt = INCH_TO_POINT( _inch ); }
-    inline void setPT_MM( double __pt, double ___mm )
-    { _pt = __pt; _mm = ___mm; _inch = MM_TO_INCH( _mm ); }
-    inline void setPT_INCH( double __pt, double __inch )
-    { _pt = __pt; _inch = __inch; _mm = INCH_TO_MM( _inch ); }
-    inline void setMM_INCH( double ___mm, double __inch )
-    { _mm = ___mm; _inch = __inch; _pt = MM_TO_POINT( _mm ); }
-    inline void setPT_MM_INCH( double __pt, double ___mm, double __inch )
-    { _pt = __pt; _mm = ___mm; _inch = __inch; }
+    // Prepare ptValue to be displayed in mm
+    static double toMM( double ptValue ) {
+        // "mm" values are rounded to 0.0001 millimeters
+        return qRound( POINT_TO_MM( ptValue ) * 10000 ) / 10000;
+    }
 
-    inline double pt() const { return _pt; }
-    inline double mm() const { return _mm; }
-    inline double inch() const { return _inch; }
+    // Prepare ptValue to be displayed in inch
+    static double toInch( double ptValue ) {
+        // "in" values are rounded to 0.00001 inches
+        return qRound( POINT_TO_INCH( ptValue ) * 100000 ) / 100000;
+    }
 
-    // Return the value for this measure, converted to @p unitType
-    inline double value( KWUnits _unitType );
+    // This method is the one to use to display a value in a dialog
+    // Return the value @ptValue converted to @p unit and rounded, ready to be displayed
+    static double userValue( double ptValue, Unit unit ) {
+        switch ( unit ) {
+        case U_MM:
+            return toMM( ptValue );
+        case U_INCH:
+            return toInch( ptValue );
+        case U_PT:
+        default:
+            return toPoint( ptValue );
+        }
+    }
 
-    KWUnit &operator=( const KWUnit &unit );
+    // This method is the one to use to read a value from a dialog
+    // Return the value in @p unit, converted to points for internal use
+    static double fromUserValue( double value, Unit unit ) {
+        switch ( unit ) {
+        case U_MM:
+            return MM_TO_POINT( value );
+        case U_INCH:
+            return INCH_TO_POINT( value );
+        case U_PT:
+        default:
+            return value;
+        }
+    }
 
-    // Convert a unit name into a KWUnits enum
-    static KWUnits unitType( const QString &_unit );
-
-    // Create a measure using a given @p value in a given @p unitType
-    static KWUnit createUnit( double value, KWUnits unitType );
-
-    // Rounding methods
-    // > - All "in" values will be rounded to 0.00001 inches
-    // > - All "mm" values will be rounded to 0.0001 millimeters
-    // TODO
-
-protected:
-    double _pt;
-    double _mm;
-    double _inch;
-
+    // Convert a unit name into a Unit enum
+    static Unit unit( const QString &_unitName ) {
+        if ( _unitName == "mm" ) return U_MM;
+        if ( _unitName == "inch" ) return U_INCH;
+        return U_PT;
+    }
+    // Get the name of a unit
+    static QString unitName( Unit _unit ) {
+        if ( _unit == U_MM ) return "mm";
+        if ( _unit == U_INCH ) return "inch";
+        return "pt";
+    }
 };
-
-inline KWUnit &KWUnit::operator=( const KWUnit &unit )
-{
-    _pt = unit._pt;
-    _mm = unit._mm;
-    _inch = unit._inch;
-    return *this;
-}
-
-inline QTextStream& operator<<( QTextStream&out, const KWUnit &unit )
-{
-    out << "pt=\"" << unit.pt() << "\" mm=\"" << unit.mm() << "\" inch=\"" << unit.inch() << "\"";
-    return out;
-}
-
-inline double KWUnit::value( KWUnits _unitType )
-{
-    switch ( _unitType ) {
-        case U_MM:
-            return _mm;
-        case U_INCH:
-            return _inch;
-        case U_PT:
-        default:
-            return _pt;
-    }
-}
-
-inline KWUnit KWUnit::createUnit( double value, KWUnits unitType )
-{
-    KWUnit u;
-    switch ( unitType ) {
-        case U_MM:
-            u.setMM(value);
-            break;
-        case U_INCH:
-            u.setINCH(value);
-            break;
-        case U_PT:
-        default:
-            u.setPT(value);
-    }
-    return u;
-}
-
-inline KWUnits KWUnit::unitType( const QString & _unit )
-{
-    if ( _unit == "mm" ) return U_MM;
-    if ( _unit == "inch" ) return U_INCH;
-    return U_PT;
-}
 
 #endif

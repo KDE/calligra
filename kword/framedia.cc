@@ -97,10 +97,9 @@ void KWFrameDia::init() {
         QRect r = frame->normalize();
         frame->setRect( r.x(), r.y(), r.width(), r.height() );
         if(!doc && frame->getFrameSet())
-            {
+        {
             doc=frame->getFrameSet()->kWordDocument();
-            frameUnits=KWUnit::unitType( doc->getUnit() );
-            }
+        }
         if(!doc)
         {
             kdDebug() << "ERROR: KWFrameDia::init frame has no reference to doc.."<<endl;
@@ -317,13 +316,13 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         grid1->addWidget(sideHeads,2,0);
 
         sideGrid = new QGridLayout (sideHeads,3,2,15,7);
-        sideTitle1 = new QLabel ( i18n("Size ( %1 ):").arg(doc->getUnit()),sideHeads);
+        sideTitle1 = new QLabel ( i18n("Size ( %1 ):").arg(doc->getUnitName()),sideHeads);
         sideTitle1->resize(sideTitle1->sizeHint());
         sideGrid->addWidget(sideTitle1,0,0);
         sideWidth= new QLineEdit(sideHeads,"");
         sideWidth->setMaxLength(6);
         sideGrid->addWidget(sideWidth,0,1);
-        sideTitle2 = new QLabel( i18n("Gap size ( %1 ):").arg(doc->getUnit()),sideHeads);
+        sideTitle2 = new QLabel( i18n("Gap size ( %1 ):").arg(doc->getUnitName()),sideHeads);
         sideTitle2->resize(sideTitle2->sizeHint());
         sideGrid->addWidget(sideTitle2,1,0);
         sideGap = new QLineEdit(sideHeads,"");
@@ -425,16 +424,13 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
     grid2->addWidget( runGroup, 0, 0 );
     grid2->addMultiCellWidget( runGroup, 0, 0, 0, 1 );
 
-    lRGap = new QLabel( i18n( "Run around gap ( %1 ):" ).arg(doc->getUnit()), tab2 );
+    lRGap = new QLabel( i18n( "Run around gap ( %1 ):" ).arg(doc->getUnitName()), tab2 );
     lRGap->resize( lRGap->sizeHint() );
     lRGap->setAlignment( AlignRight | AlignVCenter );
     grid2->addWidget( lRGap, 1, 0 );
 
     eRGap = new QLineEdit( tab2 );
-    if ( frameUnits == U_PT )
-        eRGap->setValidator( new QIntValidator( eRGap ) );
-    else
-        eRGap->setValidator( new QDoubleValidator( eRGap ) );
+    eRGap->setValidator( new QDoubleValidator( eRGap ) );
     eRGap->setText( "0.00" );
     eRGap->setMaxLength( 5 );
     eRGap->setEchoMode( QLineEdit::Normal );
@@ -470,7 +466,7 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
         break;
     }
 
-    KWUnit ragap;
+    double ragap;
     if ( frame )
         ragap = frame->getRunAroundGap();
     else
@@ -481,7 +477,7 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
     }
 
     QString str;
-    str.sprintf( "%.2f", ragap.value(frameUnits  ) );
+    str.setNum( KWUnit::userValue( ragap, doc->getUnit() ) );
     eRGap->setText( str );
 
     //kdDebug() << "setup tab 2 exit"<<endl;
@@ -584,7 +580,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     tab4 = addPage( i18n( "Geometry" ) );
     grid4 = new QGridLayout( tab4, 3, 1, 15, 7 );
 
-    grp1 = new QGroupBox( i18n("Position in %1").arg(doc->getUnit()), tab4 );
+    grp1 = new QGroupBox( i18n("Position in %1").arg(doc->getUnitName()), tab4 );
     pGrid = new QGridLayout( grp1, 5, 2, 7, 7 );
 
     lx = new QLabel( i18n( "Left:" ), grp1 );
@@ -669,7 +665,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     pGrid->activate();
     grid4->addWidget( grp1, 0, 0 );
 
-    grp2 = new QGroupBox( i18n("Margins in %1").arg(doc->getUnit()), tab4 );
+    grp2 = new QGroupBox( i18n("Margins in %1").arg(doc->getUnitName()), tab4 );
     mGrid = new QGridLayout( grp2, 5, 2, 7, 7 );
 
     lml = new QLabel( i18n( "Left:" ), grp2 );
@@ -765,71 +761,37 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     grid4->activate();
 
-
-    KWUnit l, r, t, b;
+    double l, r, t, b;
     doc->getFrameMargins( l, r, t, b );
-    sml->setText( QString().setNum( l.value(frameUnits)));
-    smr->setText( QString().setNum( r.value(frameUnits)));
-    smt->setText( QString().setNum( t.value(frameUnits)));
-    smb->setText( QString().setNum( b.value(frameUnits)));
+    sml->setText( QString::number( KWUnit::userValue( l, doc->getUnit() ) ) );
+    smr->setText( QString::number( KWUnit::userValue( r, doc->getUnit() ) ) );
+    smt->setText( QString::number( KWUnit::userValue( t, doc->getUnit() ) ) );
+    smb->setText( QString::number( KWUnit::userValue( b, doc->getUnit() ) ) );
 
-    if ( frameUnits == U_PT )
-    {
-        sx->setValidator( new QIntValidator( sx ) );
-        sy->setValidator( new QIntValidator( sy ) );
-        smb->setValidator( new QIntValidator( smb ) );
-        sml->setValidator( new QIntValidator( sml ) );
-        smr->setValidator( new QIntValidator( smr ) );
-        smt->setValidator( new QIntValidator( smt ) );
-        sh->setValidator( new QIntValidator( sh ) );
-        sw->setValidator( new QIntValidator( sw ) );
-    }
-    else
-    {
-        sx->setValidator( new QDoubleValidator( sx ) );
-        sy->setValidator( new QDoubleValidator( sy ) );
-        smb->setValidator( new QDoubleValidator( smb ) );
-        sml->setValidator( new QDoubleValidator( sml ) );
-        smr->setValidator( new QDoubleValidator( smr ) );
-        smt->setValidator( new QDoubleValidator( smt ) );
-        sh->setValidator( new QDoubleValidator( sh ) );
-        sw->setValidator( new QDoubleValidator( sw ) );
-    }
-
+    sx->setValidator( new QDoubleValidator( sx ) );
+    sy->setValidator( new QDoubleValidator( sy ) );
+    smb->setValidator( new QDoubleValidator( smb ) );
+    sml->setValidator( new QDoubleValidator( sml ) );
+    smr->setValidator( new QDoubleValidator( smr ) );
+    smt->setValidator( new QDoubleValidator( smt ) );
+    sh->setValidator( new QDoubleValidator( sh ) );
+    sw->setValidator( new QDoubleValidator( sw ) );
 
     if (doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
                                            ( doc->processingType() == KWDocument::WP &&
                                              doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
         unsigned int x, y, w, h, _num;
-
         doc->getFrameCoords( x, y, w, h, _num );
-        QString _x, _y, _w, _h;
 
-        switch ( frameUnits ) {
-            case U_MM:
-                _x.sprintf( "%.2f", POINT_TO_MM( x ) );
-                _y.sprintf( "%.2f", POINT_TO_MM( y ) );
-                _w.sprintf( "%.2f", POINT_TO_MM( w ) );
-                _h.sprintf( "%.2f", POINT_TO_MM( h ) );
-                break;
-            case U_INCH:
-                _x.sprintf( "%.2f", POINT_TO_INCH( x ) );
-                _y.sprintf( "%.2f", POINT_TO_INCH( y ) );
-                _w.sprintf( "%.2f", POINT_TO_INCH( w ) );
-                _h.sprintf( "%.2f", POINT_TO_INCH( h ) );
-                break;
-            case U_PT:
-                _x.sprintf( "%d", x );
-                _y.sprintf( "%d", y );
-                _w.sprintf( "%d", w );
-                _h.sprintf( "%d", h );
-                break;
-        }
+        oldX = KWUnit::userValue( x, doc->getUnit() );
+        oldY = KWUnit::userValue( y, doc->getUnit() );
+        oldW = KWUnit::userValue( w, doc->getUnit() );
+        oldH = KWUnit::userValue( h, doc->getUnit() );
 
-        oldX = _x.toFloat();
-        oldY = _y.toFloat();
-        oldW = _w.toFloat();
-        oldH = _h.toFloat();
+        QString _x = QString::number( oldX );
+        QString _y = QString::number( oldY );
+        QString _w = QString::number( oldW );
+        QString _h = QString::number( oldH );
 
         sx->setText( _x );
         sy->setText( _y );
@@ -1026,8 +988,7 @@ bool KWFrameDia::applyChanges()
             else if ( rRunContur->isChecked() )
                 frame->setRunAround( RA_SKIP );
 
-            KWUnit u=KWUnit::createUnit( eRGap->text().toDouble(),frameUnits  );
-            frame->setRunAroundGap( u );
+            frame->setRunAroundGap( KWUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() ) );
         }
 
         doc->repaintAllViews();
@@ -1036,36 +997,19 @@ bool KWFrameDia::applyChanges()
                                                 ( doc->processingType() == KWDocument::WP &&
                                                   doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
             if ( oldX != sx->text().toDouble() || oldY != sy->text().toDouble() || oldW != sw->text().toDouble() || oldH != sh->text().toDouble() ) {
-                unsigned int px=0, py=0, pw=0, ph=0;
-                switch ( frameUnits ) {
-                    case U_MM:
-                        px = static_cast<int>(MM_TO_POINT( QMAX(sx->text().toDouble(),0) ));
-                        py = static_cast<int>(MM_TO_POINT( QMAX(sy->text().toDouble(),0) ));
-                        pw = static_cast<int>(MM_TO_POINT( QMAX(sw->text().toDouble(),0) ));
-                        ph = static_cast<int>(MM_TO_POINT( QMAX(sh->text().toDouble(),0) ));
-                        break;
-                    case U_INCH:
-                        px = static_cast<int>(INCH_TO_POINT( QMAX(sx->text().toDouble(),0) ));
-                        py = static_cast<int>(INCH_TO_POINT( QMAX(sy->text().toDouble(),0) ));
-                        pw = static_cast<int>(INCH_TO_POINT( QMAX(sw->text().toDouble(),0) ));
-                        ph = static_cast<int>(INCH_TO_POINT( QMAX(sh->text().toDouble(),0) ));
-                        break;
-                    case U_PT:
-                        px = QMAX(sx->text().toInt(),0);
-                        py = QMAX(sy->text().toInt(),0);
-                        pw = QMAX(sw->text().toInt(),0);
-                        ph = QMAX(sh->text().toInt(),0);
-                        break;
-                }
+                unsigned int px = static_cast<uint>( KWUnit::fromUserValue( QMAX( sx->text().toDouble(), 0 ), doc->getUnit() ) );
+                unsigned int py = static_cast<uint>( KWUnit::fromUserValue( QMAX( sy->text().toDouble(), 0 ), doc->getUnit() ) );
+                unsigned int pw = static_cast<uint>( KWUnit::fromUserValue( QMAX( sw->text().toDouble(), 0 ), doc->getUnit() ) );
+                unsigned int ph = static_cast<uint>( KWUnit::fromUserValue( QMAX( sh->text().toDouble(), 0 ), doc->getUnit() ) );
                 doc->setFrameCoords( px, py, pw, ph );
             }
         }
 
-        KWUnit u1, u2, u3, u4;
-        u1=KWUnit::createUnit(QMAX(sml->text().toDouble(),0),frameUnits );
-        u2=KWUnit::createUnit(QMAX(smr->text().toDouble(),0),frameUnits );
-        u3=KWUnit::createUnit(QMAX(smt->text().toDouble(),0),frameUnits );
-        u4=KWUnit::createUnit(QMAX(smb->text().toDouble(),0),frameUnits );
+        double u1, u2, u3, u4;
+        u1=KWUnit::fromUserValue( QMAX(sml->text().toDouble(),0), doc->getUnit() );
+        u2=KWUnit::fromUserValue( QMAX(smr->text().toDouble(),0), doc->getUnit() );
+        u3=KWUnit::fromUserValue( QMAX(smt->text().toDouble(),0), doc->getUnit() );
+        u4=KWUnit::fromUserValue( QMAX(smb->text().toDouble(),0), doc->getUnit() );
         doc->setFrameMargins( u1, u2, u3, u4 );
     }
 

@@ -80,15 +80,15 @@ void KWPagePreview::drawContents( QPainter* p )
 {
     int wid = 148;
     int hei = 210;
-    int _x = ( width() - wid ) / 2;
-    int _y = ( height() - hei ) / 2;
+    int _x = ( width() - wid ) / 5;
+    int _y = ( height() - hei ) / 5;
 
-    int dl = static_cast<int>( left / 2 );
-    int dr = static_cast<int>( right / 2 );
+    int dl = static_cast<int>( left / 5 );
+    int dr = static_cast<int>( right / 5 );
     //first+left because firstlineIndent is relative to leftIndent
-    int df = static_cast<int>( (first+left) / 2 );
+    int df = static_cast<int>( (first+left) / 5 );
 
-    int spc = static_cast<int>( POINT_TO_MM( spacing ) / 5 );
+    int spc = static_cast<int>( spacing / 15 );
 
     // draw page
     p->setPen( QPen( black ) );
@@ -309,7 +309,6 @@ KWParagDia::KWParagDia( QWidget* parent, const char* name, QStringList _fontList
     flags = _flags;
     fontList = _fontList;
     doc = _doc;
-    unit=KWUnit::unitType( doc->getUnit() );
     if ( _flags & PD_SPACING )
         setupTab1();
     if ( _flags & PD_ALIGN )
@@ -329,53 +328,53 @@ KWParagDia::~KWParagDia()
 }
 
 /*================================================================*/
-void KWParagDia::setLeftIndent( KWUnit _left )
+void KWParagDia::setLeftIndent( double _left )
 {
-    kdDebug() << "KWParagDia::setLeftIndent mm=" << _left.mm() << " pt=" << _left.pt() << endl;
-    QString str = QString::number( _left.value( unit ) );
+    kdDebug() << "KWParagDia::setLeftIndent pt=" << _left << endl;
+    QString str = QString::number( KWUnit::userValue( _left, doc->getUnit() ) );
     eLeft->setText( str );
-    prev1->setLeft( _left.mm() );
+    prev1->setLeft( _left );
 }
 
 /*================================================================*/
-void KWParagDia::setRightIndent( KWUnit _right )
+void KWParagDia::setRightIndent( double _right )
 {
-    kdDebug() << "KWParagDia::setRightIndent mm=" << _right.mm() << " pt=" << _right.pt() << endl;
-    QString str = QString::number( _right.value( unit ) );
+    kdDebug() << "KWParagDia::setRightIndent pt=" << _right << endl;
+    QString str = QString::number( KWUnit::userValue( _right, doc->getUnit() )  );
     eRight->setText( str );
-    prev1->setRight( _right.mm() );
+    prev1->setRight( _right );
 }
 
 /*================================================================*/
-void KWParagDia::setFirstLineIndent( KWUnit _first )
+void KWParagDia::setFirstLineIndent( double _first )
 {
-    QString str = QString::number( _first.value( unit ) );
+    QString str = QString::number( KWUnit::userValue( _first, doc->getUnit() )  );
     eFirstLine->setText( str );
-    prev1->setFirst( _first.mm() );
+    prev1->setFirst( _first  );
 }
 
 /*================================================================*/
-void KWParagDia::setSpaceBeforeParag( KWUnit _before )
+void KWParagDia::setSpaceBeforeParag( double _before )
 {
-    QString str = QString::number( _before.value( unit ) );
+    QString str = QString::number( KWUnit::userValue( _before, doc->getUnit() ) );
     eBefore->setText( str );
-    prev1->setBefore( _before.mm() );
+    prev1->setBefore( _before );
 }
 
 /*================================================================*/
-void KWParagDia::setSpaceAfterParag( KWUnit _after )
+void KWParagDia::setSpaceAfterParag( double _after )
 {
-    QString str = QString::number( _after.value( unit ) );
+    QString str = QString::number( KWUnit::userValue( _after, doc->getUnit() ) );
     eAfter->setText( str );
-    prev1->setAfter( _after.mm() );
+    prev1->setAfter( _after );
 }
 
 /*================================================================*/
-void KWParagDia::setLineSpacing( KWUnit _spacing )
+void KWParagDia::setLineSpacing( double _spacing )
 {
-    QString str = QString::number( _spacing.value( unit ) );
+    QString str = QString::number( KWUnit::userValue( _spacing, doc->getUnit() ) );
     eSpacing->setText( str );
-    prev1->setSpacing( _spacing.mm() );
+    prev1->setSpacing( _spacing );
 }
 
 /*================================================================*/
@@ -427,15 +426,12 @@ void KWParagDia::setupTab1()
     indentFrame = new QGroupBox( i18n( "Indent" ), tab );
     indentGrid = new QGridLayout( indentFrame, 4, 2, 15, 7 );
 
-    lLeft = new QLabel( i18n("Left ( %1 ):").arg(doc->getUnit()), indentFrame );
+    lLeft = new QLabel( i18n("Left ( %1 ):").arg(doc->getUnitName()), indentFrame );
     lLeft->setAlignment( AlignRight );
     indentGrid->addWidget( lLeft, 1, 0 );
 
     eLeft = new QLineEdit( indentFrame );
-    if ( unit == U_PT )
-        eLeft->setValidator( new QIntValidator( eLeft ) );
-    else
-        eLeft->setValidator( new QDoubleValidator( eLeft ) );
+    eLeft->setValidator( new QDoubleValidator( eLeft ) );
     eLeft->setText( i18n("0.00") );
     eLeft->setMaxLength( 5 );
     eLeft->setEchoMode( QLineEdit::Normal );
@@ -443,15 +439,12 @@ void KWParagDia::setupTab1()
     indentGrid->addWidget( eLeft, 1, 1 );
     connect( eLeft, SIGNAL( textChanged( const QString & ) ), this, SLOT( leftChanged( const QString & ) ) );
 
-    lRight = new QLabel( i18n("Right ( %1 ):").arg(doc->getUnit()), indentFrame );
+    lRight = new QLabel( i18n("Right ( %1 ):").arg(doc->getUnitName()), indentFrame );
     lRight->setAlignment( AlignRight );
     indentGrid->addWidget( lRight, 2, 0 );
 
     eRight = new QLineEdit( indentFrame );
-    if ( unit == U_PT )
-        eRight->setValidator( new QIntValidator( eRight ) );
-    else
-        eRight->setValidator( new QDoubleValidator( eRight ) );
+    eRight->setValidator( new QDoubleValidator( eRight ) );
     eRight->setText( i18n("0.00") );
     eRight->setMaxLength( 5 );
     eRight->setEchoMode( QLineEdit::Normal );
@@ -459,15 +452,12 @@ void KWParagDia::setupTab1()
     indentGrid->addWidget( eRight, 2, 1 );
     connect( eRight, SIGNAL( textChanged( const QString & ) ), this, SLOT( rightChanged( const QString & ) ) );
 
-    lFirstLine = new QLabel( i18n("First Line ( %1 ):").arg(doc->getUnit()), indentFrame );
+    lFirstLine = new QLabel( i18n("First Line ( %1 ):").arg(doc->getUnitName()), indentFrame );
     lFirstLine->setAlignment( AlignRight );
     indentGrid->addWidget( lFirstLine, 3, 0 );
 
     eFirstLine = new QLineEdit( indentFrame );
-    if ( unit == U_PT )
-        eFirstLine->setValidator( new QIntValidator( eFirstLine ) );
-    else
-        eFirstLine->setValidator( new QDoubleValidator( eFirstLine ) );
+    eFirstLine->setValidator( new QDoubleValidator( eFirstLine ) );
     eFirstLine->setText( i18n("0.00") );
     eFirstLine->setMaxLength( 5 );
     eFirstLine->setEchoMode( QLineEdit::Normal );
@@ -488,15 +478,12 @@ void KWParagDia::setupTab1()
     cSpacing->insertItem( i18n( "1.0 line" ) );
     cSpacing->insertItem( i18n( "1.5 lines" ) );
     cSpacing->insertItem( i18n( "2.0 lines" ) );
-    cSpacing->insertItem( i18n( "Space ( %1 )" ).arg(doc->getUnit()) );
+    cSpacing->insertItem( i18n( "Space ( %1 )" ).arg(doc->getUnitName()) );
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
     spacingGrid->addWidget( cSpacing, 1, 0 );
 
     eSpacing = new QLineEdit( spacingFrame );
-    if ( unit == U_PT )
-        eSpacing->setValidator( new QIntValidator( eSpacing ) );
-    else
-        eSpacing->setValidator( new QDoubleValidator( eSpacing ) );
+    eSpacing->setValidator( new QDoubleValidator( eSpacing ) );
     eSpacing->setText( i18n("0") );
     eSpacing->setMaxLength( 2 );
     eSpacing->setEchoMode( QLineEdit::Normal );
@@ -527,15 +514,12 @@ void KWParagDia::setupTab1()
     pSpaceFrame = new QGroupBox( i18n( "Paragraph Space" ), tab );
     pSpaceGrid = new QGridLayout( pSpaceFrame, 3, 2, 15, 7 );
 
-    lBefore = new QLabel( i18n("Before ( %1 ):").arg(doc->getUnit()), pSpaceFrame );
+    lBefore = new QLabel( i18n("Before ( %1 ):").arg(doc->getUnitName()), pSpaceFrame );
     lBefore->setAlignment( AlignRight );
     pSpaceGrid->addWidget( lBefore, 1, 0 );
 
     eBefore = new QLineEdit( pSpaceFrame );
-    if ( unit == U_PT )
-        eBefore->setValidator( new QIntValidator( eBefore ) );
-    else
-        eBefore->setValidator( new QDoubleValidator( eBefore ) );
+    eBefore->setValidator( new QDoubleValidator( eBefore ) );
     eBefore->setText( i18n("0.00") );
     eBefore->setMaxLength( 5 );
     eBefore->setEchoMode( QLineEdit::Normal );
@@ -543,15 +527,12 @@ void KWParagDia::setupTab1()
     connect( eBefore, SIGNAL( textChanged( const QString & ) ), this, SLOT( beforeChanged( const QString & ) ) );
     pSpaceGrid->addWidget( eBefore, 1, 1 );
 
-    lAfter = new QLabel( i18n("After ( %1 ):").arg(doc->getUnit()), pSpaceFrame );
+    lAfter = new QLabel( i18n("After ( %1 ):").arg(doc->getUnitName()), pSpaceFrame );
     lAfter->setAlignment( AlignRight );
     pSpaceGrid->addWidget( lAfter, 2, 0 );
 
     eAfter = new QLineEdit( pSpaceFrame );
-    if ( unit == U_PT )
-        eAfter->setValidator( new QIntValidator( eAfter ) );
-    else
-        eAfter->setValidator( new QDoubleValidator( eAfter ) );
+    eAfter->setValidator( new QDoubleValidator( eAfter ) );
     eAfter->setText( i18n("0.00") );
     eAfter->setMaxLength( 5 );
     eAfter->setEchoMode( QLineEdit::Normal );
@@ -912,26 +893,24 @@ void KWParagDia::setupTab5()
 
     eTabPos = new QLineEdit( tab );
 
-    if ( unit == U_PT )
-        eTabPos->setValidator( new QIntValidator( eTabPos ) );
-    else
-        eTabPos->setValidator( new QDoubleValidator( eTabPos ) );
+    eTabPos->setValidator( new QDoubleValidator( eTabPos ) );
     grid->addWidget( eTabPos, 1, 0 );
 
+    // ## move to KWUnit
     QString unitText;
-    switch ( unit )
-      {
-      case U_MM:
-	unitText=i18n("in Millimeters (mm)");
+    switch ( doc->getUnit() )
+    {
+      case KWUnit::U_MM:
+	unitText=i18n("Millimeters (mm)");
 	break;
-      case U_INCH:
-	unitText=i18n("in Inches (inch)");
+      case KWUnit::U_INCH:
+	unitText=i18n("Inches (inch)");
 	break;
-      case U_PT:
+      case KWUnit::U_PT:
       default:
-	unitText=i18n("in points ( pt )" );
-      }
-    lTab->setText(i18n( "Tabulator positions are given %1" ).arg(unitText));
+	unitText=i18n("Points (pt)" );
+    }
+    lTab->setText(i18n( "1 is a unit name", "Tabulator positions are given in %1" ).arg(unitText));
 
     KButtonBox * bbTabs = new KButtonBox( tab );
     bAdd = bbTabs->addButton( i18n( "Add" ), false );
@@ -1009,32 +988,19 @@ void KWParagDia::addClicked()
 	tab.type=T_DEC_PNT;
       else
 	tab.type=T_LEFT;
-      double val=eTabPos->text().toDouble();
-      switch ( unit )
-	{
-	case U_MM:
-	  tab.ptPos=MM_TO_POINT(val);
-	  break;
-	case U_INCH:
-	  tab.ptPos= INCH_TO_POINT(val);
-	  break;
-	case U_PT:
-	default:
-	  tab.ptPos=val;
-	}
+      tab.ptPos = KWUnit::fromUserValue( eTabPos->text().toDouble(), doc->getUnit() );
       _tabList.append(tab);
       eTabPos->setText("");
     }
 }
 
-bool KWParagDia::findExistingValue(double val)
+bool KWParagDia::findExistingValue(double val /* user value */)
 {
+    KWUnit::Unit unit = doc->getUnit();
     KoTabulatorList::Iterator it = _tabList.begin();
     for ( ; it != _tabList.end(); ++it )
     {
-        KWUnit u;
-        u.setPT( ( *it ).ptPos );
-        if ( u.value( unit ) == val )
+        if ( KWUnit::userValue( ( *it ).ptPos, unit ) == val )
             return true;
     }
     return false;
@@ -1070,20 +1036,18 @@ void KWParagDia::delClicked()
         else
 	{
             lTabs->setCurrentItem(0);
-            setActifItem(lTabs->currentText().toDouble());
+            setActiveItem(lTabs->currentText().toDouble());
 	}
     }
 }
 
-void KWParagDia::setActifItem(double value)
+void KWParagDia::setActiveItem(double value /* user value */)
 {
     KoTabulatorList::Iterator it = _tabList.begin();
     for ( ; it != _tabList.end(); ++it )
     {
-        KWUnit u;
-        u.setPT( ( *it ).ptPos );
-        if ( u.value( unit ) == value )
-        {
+       if ( KWUnit::userValue( ( *it ).ptPos, doc->getUnit() ) == value )
+       {
             switch(( *it ).type)
             {
             case T_CENTER:
@@ -1100,8 +1064,8 @@ void KWParagDia::setActifItem(double value)
                 rtLeft->setChecked(true);
                 break;
             }
-        }
-        break;
+       }
+       break;
     }
 }
 
@@ -1114,7 +1078,7 @@ void KWParagDia::slotDoubleClicked( QListBoxItem * )
       double value=lTabs->currentText().toDouble();
       bDel->setEnabled(true);
       bModify->setEnabled(true);
-      setActifItem(value);
+      setActiveItem(value);
     }
 }
 
@@ -1201,7 +1165,7 @@ void KWParagDia::spacingActivated( int _index )
 /*================================================================*/
 void KWParagDia::spacingChanged( const QString & _text )
 {
-  prev1->setSpacing( _text.toDouble() );
+    prev1->setSpacing( _text.toDouble() );
 }
 
 /*================================================================*/
@@ -1446,56 +1410,45 @@ void KWParagDia::setTabList( const KoTabulatorList & tabList )
 {
     _tabList = tabList;
     KoTabulatorList::ConstIterator it = tabList.begin();
-    for ( ; it != tabList.end(); ++it ) {
-        switch ( unit )
-        {
-            case U_MM:
-                lTabs->insertItem(QString::number(POINT_TO_MM( (*it).ptPos )) );
-                break;
-            case U_INCH:
-                lTabs->insertItem(QString::number(POINT_TO_INCH( (*it).ptPos )) );
-                break;
-            case U_PT:
-                lTabs->insertItem(QString::number((*it).ptPos));
-                break;
-        }
-    }
+    KWUnit::Unit unit = doc->getUnit();
+    for ( ; it != tabList.end(); ++it )
+        lTabs->insertItem( QString::number( KWUnit::userValue( (*it).ptPos, unit ) ) );
 }
 
 /*================================================================*/
-KWUnit KWParagDia::leftIndent() const
+double KWParagDia::leftIndent() const
 {
-    return KWUnit::createUnit( QMAX(eLeft->text().toDouble(),0), unit );
+    return KWUnit::fromUserValue( QMAX(eLeft->text().toDouble(),0), doc->getUnit() );
 }
 
 /*================================================================*/
-KWUnit KWParagDia::rightIndent() const
+double KWParagDia::rightIndent() const
 {
-    return KWUnit::createUnit( QMAX(eRight->text().toDouble(),0), unit );
+    return KWUnit::fromUserValue( QMAX(eRight->text().toDouble(),0), doc->getUnit() );
 }
 
 /*================================================================*/
-KWUnit KWParagDia::firstLineIndent() const
+double KWParagDia::firstLineIndent() const
 {
-  return KWUnit::createUnit( eFirstLine->text().toDouble(), unit );
+    return KWUnit::fromUserValue( eFirstLine->text().toDouble(), doc->getUnit() );
 }
 
 /*================================================================*/
-KWUnit KWParagDia::spaceBeforeParag() const
+double KWParagDia::spaceBeforeParag() const
 {
-    return KWUnit::createUnit( QMAX(eBefore->text().toDouble(),0), unit );
+    return KWUnit::fromUserValue( QMAX(eBefore->text().toDouble(),0), doc->getUnit() );
 }
 
 /*================================================================*/
-KWUnit KWParagDia::spaceAfterParag() const
+double KWParagDia::spaceAfterParag() const
 {
-    return KWUnit::createUnit( QMAX(eAfter->text().toDouble(),0), unit );
+    return KWUnit::fromUserValue( QMAX(eAfter->text().toDouble(),0), doc->getUnit() );
 }
 
 /*================================================================*/
-KWUnit KWParagDia::lineSpacing() const
+double KWParagDia::lineSpacing() const
 {
-    return KWUnit::createUnit( QMAX(eSpacing->text().toDouble(),0), unit );
+    return KWUnit::fromUserValue( QMAX(eSpacing->text().toDouble(),0), doc->getUnit() );
 }
 
 bool KWParagDia::isBulletChanged() const

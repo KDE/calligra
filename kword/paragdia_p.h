@@ -39,23 +39,23 @@ public:
     KWPagePreview( QWidget*, const char* = 0L );
     ~KWPagePreview() {}
 
-    void setLeft( float _left )
+    void setLeft( double _left )
     { left = _left; repaint( false ); }
-    void setRight( float _right )
+    void setRight( double _right )
     { right = _right; repaint( false ); }
-    void setFirst( float _first )
+    void setFirst( double _first )
     { first = _first; repaint( false ); }
-    void setSpacing( float _spacing )
+    void setSpacing( double _spacing )
     { spacing = _spacing; repaint( false ); }
-    void setBefore( float _before )
+    void setBefore( double _before )
     { before = _before; repaint( false ); }
-    void setAfter( float _after )
+    void setAfter( double _after )
     { after = _after; repaint( false ); }
 
 protected:
     void drawContents( QPainter* );
 
-    float left, right, first, spacing, before, after;
+    double left, right, first, spacing, before, after;
 
 };
 

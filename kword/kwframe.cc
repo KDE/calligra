@@ -31,21 +31,12 @@
 
 #include <kdebug.h>
 
-#undef getPointBasedAttribute
-#define getPointBasedAttribute(attribute, element, attributeName, defaultValue) \
-do \
-{ \
-    attribute##pt = KWDocument::getAttribute( element, attributeName, defaultValue ); \
-    attribute##mm = POINT_TO_MM( attribute##pt ); \
-    attribute##inch = POINT_TO_INCH( attribute##pt ); \
-} while (0)
-
 /******************************************************************/
 /* Class: KWFrame                                                 */
 /******************************************************************/
 
 /*================================================================*/
-KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAround _ra, KWUnit _gap )
+KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAround _ra, double _gap )
     : QRect( left, top, width, height )
 {
     //kdDebug() << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
@@ -111,7 +102,7 @@ int KWFrame::getLeftIndent( int y, int h )
     for ( unsigned int i = 0; i < reg.rects().size(); ++i )
         left = QMAX( left, reg.rects()[ i ].left() - x() );
     if ( left > 0 )
-        left += static_cast<int>(runAroundGap.pt());
+        left += static_cast<int>(runAroundGap);
     if ( left > 0 && runAround == RA_SKIP )
         left = width();
 
@@ -140,7 +131,7 @@ int KWFrame::getRightIndent( int _y, int _h )
         }
     }
     if ( _right > 0 )
-        _right += static_cast<int>(runAroundGap.pt());
+        _right += static_cast<int>(runAroundGap);
     if ( _right > 0 && runAround == RA_SKIP )
         _right = width();
 
@@ -618,8 +609,8 @@ void KWFrameSet::save( QDomElement &parentElem )
         if(frame->getRunAround()!=RA_NO)
             frameElem.setAttribute( "runaround", static_cast<int>( frame->getRunAround() ) );
 
-        if(frame->getRunAroundGap().mm()!=1)
-            frameElem.setAttribute( "runaroundGap", frame->getRunAroundGap().pt() );
+        if(frame->getRunAroundGap()!=0)
+            frameElem.setAttribute( "runaroundGap", frame->getRunAroundGap() );
 
         if(frame->getLeftBorder().ptWidth!=0)
             frameElem.setAttribute( "lWidth", frame->getLeftBorder().ptWidth );
@@ -674,17 +665,17 @@ void KWFrameSet::save( QDomElement &parentElem )
             frameElem.setAttribute( "bkGreen", frame->getBackgroundColor().color().green() );
             frameElem.setAttribute( "bkBlue", frame->getBackgroundColor().color().blue() );
         }
-        if(frame->getBLeft().pt() != 0)
-            frameElem.setAttribute( "bleftpt", frame->getBLeft().pt() );
+        if(frame->getBLeft() != 0)
+            frameElem.setAttribute( "bleftpt", frame->getBLeft() );
 
-        if(frame->getBRight().pt()!=0)
-            frameElem.setAttribute( "brightpt", frame->getBRight().pt() );
+        if(frame->getBRight()!=0)
+            frameElem.setAttribute( "brightpt", frame->getBRight() );
 
-        if(frame->getBTop().pt()!=0)
-            frameElem.setAttribute( "btoppt", frame->getBTop().pt() );
+        if(frame->getBTop()!=0)
+            frameElem.setAttribute( "btoppt", frame->getBTop() );
 
-        if(frame->getBBottom().pt()!=0)
-            frameElem.setAttribute( "bbottompt", frame->getBBottom().pt() );
+        if(frame->getBBottom()!=0)
+            frameElem.setAttribute( "bbottompt", frame->getBBottom() );
 
         if(frame->getFrameBehaviour()!=AutoCreateNewFrame)
             frameElem.setAttribute( "autoCreateNewFrame", static_cast<int>( frame->getFrameBehaviour()) );
@@ -721,14 +712,8 @@ void KWFrameSet::load( QDomElement &attributes )
     {
         if ( frameElem.tagName() == "FRAME" )
         {
-            QRect rect;
-            NewFrameBehaviour newFrameBehaviour = Reconnect;
-            FrameBehaviour autoCreateNewValue = AutoCreateNewFrame;
             SheetSide sheetSide = AnySide;
             Border l, r, t, b;
-            double lmm = 0.0, linch = 0.0, rmm = 0.0, rinch = 0.0, tmm = 0.0, tinch = 0.0, bmm = 0.0, binch = 0.0, ramm = 1.0, rainch = 0.0393701;
-            double lpt = 0.0, rpt = 0.0, tpt = 0.0, bpt = 0.0, rapt = 2.0;
-
             l.color = Qt::white;
             l.style = Border::SOLID;
             l.ptWidth = 0;
@@ -741,16 +726,16 @@ void KWFrameSet::load( QDomElement &attributes )
             b.color = Qt::white;
             b.style = Border::SOLID;
             b.ptWidth = 0;
-            QColor c( Qt::white );
 
+            QRect rect;
             rect.setLeft( KWDocument::getAttribute( frameElem, "left", 0 ) );
             rect.setTop( KWDocument::getAttribute( frameElem, "top", 0 ) );
             rect.setRight( KWDocument::getAttribute( frameElem, "right", 0 ) );
             rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0 ) );
             RunAround runaround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", 0 ) );
-            KWUnit runAroundGap;
-            runAroundGap.setPT( KWDocument::getAttribute( frameElem, "runaroundGap", 0.0 ) );
-            getPointBasedAttribute( ra, frameElem, "runaGapPT", 0.0 );
+            double runAroundGap = ( frameElem.hasAttribute( "runaroundGap" ) )
+                                  ? frameElem.attribute( "runaroundGap" ).toDouble()
+                                  : frameElem.attribute( "runaGapPT" ).toDouble();
             l.ptWidth = KWDocument::getAttribute( frameElem, "lWidth", 0.0 );
             r.ptWidth = KWDocument::getAttribute( frameElem, "rWidth", 0.0 );
             t.ptWidth = KWDocument::getAttribute( frameElem, "tWidth", 0.0 );
@@ -775,19 +760,21 @@ void KWFrameSet::load( QDomElement &attributes )
             r.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "rStyle", Border::SOLID ) );
             t.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "tStyle", Border::SOLID ) );
             b.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "bStyle", Border::SOLID ) );
+            QColor c;
             c.setRgb(
                 KWDocument::getAttribute( frameElem, "bkRed", 0xff ),
                 KWDocument::getAttribute( frameElem, "bkGreen", 0xff ),
                 KWDocument::getAttribute( frameElem, "bkBlue", 0xff ) );
-            getPointBasedAttribute( l, frameElem, "bleftpt", 0.0 );
-            getPointBasedAttribute( r, frameElem, "brightpt", 0.0 );
-            getPointBasedAttribute( t, frameElem, "btoppt", 0.0 );
-            getPointBasedAttribute( b, frameElem, "bbottompt", 0.0 );
-            autoCreateNewValue = static_cast<FrameBehaviour>( KWDocument::getAttribute( frameElem, "autoCreateNewFrame", AutoCreateNewFrame ) );
-            newFrameBehaviour = static_cast<NewFrameBehaviour>( KWDocument::getAttribute( frameElem, "newFrameBehaviour", Reconnect ) );
+
+            double lpt = frameElem.attribute( "bleftpt" ).toDouble();
+            double rpt = frameElem.attribute( "brightpt" ).toDouble();
+            double tpt = frameElem.attribute( "btoppt" ).toDouble();
+            double bpt = frameElem.attribute( "bbottompt" ).toDouble();
+            FrameBehaviour autoCreateNewValue = static_cast<FrameBehaviour>( KWDocument::getAttribute( frameElem, "autoCreateNewFrame", AutoCreateNewFrame ) );
+            NewFrameBehaviour newFrameBehaviour = static_cast<NewFrameBehaviour>( KWDocument::getAttribute( frameElem, "newFrameBehaviour", Reconnect ) );
             sheetSide = static_cast<SheetSide>( KWDocument::getAttribute( frameElem, "sheetSide", AnySide ) );
 
-            KWFrame * frame = new KWFrame(this, rect.x(), rect.y(), rect.width(), rect.height(), runaround, rainch == -1 ? runAroundGap : KWUnit( rapt, ramm, rainch ) );
+            KWFrame * frame = new KWFrame(this, rect.x(), rect.y(), rect.width(), rect.height(), runaround, runAroundGap );
 //            if(c==l.color && l.ptWidth==1 && l.style==0 )
 //                l.ptWidth=0;
             frame->setLeftBorder( l );
@@ -801,10 +788,10 @@ void KWFrameSet::load( QDomElement &attributes )
 //                b.ptWidth=0;
             frame->setBottomBorder( b );
             frame->setBackgroundColor( QBrush( c ) );
-            frame->setBLeft( KWUnit( lpt, lmm, linch ) );
-            frame->setBRight( KWUnit( rpt, rmm, rinch ) );
-            frame->setBTop( KWUnit( tpt, tmm, tinch ) );
-            frame->setBBottom( KWUnit( bpt, bmm, binch ) );
+            frame->setBLeft( lpt );
+            frame->setBRight( rpt );
+            frame->setBTop( tpt );
+            frame->setBBottom( bpt );
             frame->setFrameBehaviour( autoCreateNewValue );
             frame->setSheetSide( sheetSide );
             frame->setNewFrameBehaviour( newFrameBehaviour);

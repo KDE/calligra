@@ -92,7 +92,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
 {
     m_pView=_view;
     config = KWFactory::global()->config();
-    KWUnits unit=KWUnit::unitType( m_pView->getGUI()->getDocument()->getUnit() );
+    KWUnit::Unit unit = m_pView->getGUI()->getDocument()->getUnit();
     QVBoxLayout *box = new QVBoxLayout( this );
     box->setMargin( 5 );
     box->setSpacing( 10 );
@@ -103,22 +103,19 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     lay1->setMargin( 20 );
     lay1->setSpacing( 10 );
 
+    // ### m_ is for member variables !
     int m_iGridX=10;
     int m_iGridY=10;
-    int m_iIndent=10;
+    double ptIndent = MM_TO_POINT(10.0);
     int m_iNumOfRecentFile=10;
-    KWUnit tmpIndent;
-    tmpIndent.setMM(10.0);
-    if( config->hasGroup("Interface" ))
-        {
-            config->setGroup( "Interface" );
-            m_iGridX=config->readNumEntry("GridX",10);
-            m_iGridY=config->readNumEntry("GridY",10);
-            double val=config->readDoubleNumEntry("Indent",POINT_TO_MM(10.0));
-            tmpIndent.setPT(val);
-            m_iNumOfRecentFile=config->readNumEntry("NbRecentFile",10);
-        }
-    m_iIndent=(int)tmpIndent.value( unit );
+    if( config->hasGroup("Interface") )
+    {
+        config->setGroup( "Interface" );
+        m_iGridX=config->readNumEntry("GridX",10);
+        m_iGridY=config->readNumEntry("GridY",10);
+        ptIndent = config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0));
+        m_iNumOfRecentFile=config->readNumEntry("NbRecentFile",10);
+    }
 
     gridX=new KIntNumInput(m_iGridX, tmpQGroupBox , 10);
     gridX->setRange(1, 50, 1);
@@ -131,23 +128,25 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     gridY->setLabel(i18n("Y grid space"));
     lay1->addWidget(gridY);
 
+    // ### move this to KWUnit
     QString unitText;
     switch ( unit )
       {
-      case U_MM:
-	unitText=i18n("in Millimeters (mm)");
+      case KWUnit::U_MM:
+	unitText=i18n("Millimeters (mm)");
 	break;
-      case U_INCH:
-	unitText=i18n("in Inches (inch)");
+      case KWUnit::U_INCH:
+	unitText=i18n("Inches (inch)");
 	break;
-      case U_PT:
+      case KWUnit::U_PT:
       default:
-	unitText=i18n("in points ( pt )" );
+	unitText=i18n("points (pt)" );
       }
 
-    indent=new KIntNumInput(m_iIndent, tmpQGroupBox , 10);
+    double val = KWUnit::userValue( ptIndent, unit );
+    indent = new KIntNumInput( val, tmpQGroupBox , 10);
     indent->setRange(1, 50, 1);
-    indent->setLabel(i18n("Indent %1").arg(unitText));
+    indent->setLabel(i18n("1 is a unit name", "Indent in %1").arg(unitText));
     lay1->addWidget(indent);
 
 
@@ -165,24 +164,25 @@ void configureInterfacePage::apply()
     int valX=gridX->value();
     int valY=gridY->value();
     int nbRecent=recentFiles->value();
+    KWDocument * doc = m_pView->getGUI()->getDocument();
 
-    KWUnit tmpIndent = KWUnit::createUnit( (double)indent->value(), KWUnit::unitType( m_pView->getGUI()->getDocument()->getUnit() ));
     config->setGroup( "Interface" );
-    if(valX!=m_pView->getGUI()->getDocument()->gridX())
+    if(valX!=doc->gridX())
     {
         config->writeEntry( "GridX",valX );
-        m_pView->getGUI()->getDocument()->setGridX(valX);
+        doc->setGridX(valX);
     }
-    if(valY!=m_pView->getGUI()->getDocument()->gridY())
+    if(valY!=doc->gridY())
     {
         config->writeEntry( "GridY",valY );
-        m_pView->getGUI()->getDocument()->setGridY(valY);
+        doc->setGridY(valY);
     }
-    KWUnit _ind=m_pView->getGUI()->getDocument()->getIndentValue();
-    if(tmpIndent.pt()!=_ind.pt())
+
+    double newIndent = KWUnit::fromUserValue( indent->value(), doc->getUnit() );
+    if( newIndent != doc->getIndentValue() )
     {
-        config->writeEntry( "Indent", tmpIndent.pt());
-        m_pView->getGUI()->getDocument()->setIndentValue( tmpIndent );
+        config->writeEntry( "Indent", newIndent );
+        doc->setIndentValue( newIndent );
     }
     if(nbRecent!=oldNbRecentFiles)
     {
@@ -195,9 +195,10 @@ void configureInterfacePage::slotDefault()
 {
     gridX->setValue(10);
     gridY->setValue(10);
-    KWUnit tmpIndent;
-    tmpIndent.setMM(10);
-    int m_iIndent=(int)tmpIndent.value( KWUnit::unitType( m_pView->getGUI()->getDocument()->getUnit() ) );
-    indent->setValue(m_iIndent);
+    KWDocument * doc = m_pView->getGUI()->getDocument();
+    double newIndent = KWUnit::fromUserValue( MM_TO_POINT( 10 ), doc->getUnit() );
+    indent->setValue( newIndent );
+    // ## and recent files ?
 }
+
 #include "kwconfig.moc"

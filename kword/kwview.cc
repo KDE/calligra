@@ -169,10 +169,9 @@ void KWView::initConfig()
       config->setGroup( "Interface" );
       getGUI()->getDocument()->setGridY(config->readNumEntry("GridY",10));
       getGUI()->getDocument()->setGridX(config->readNumEntry("GridX",10));
-      KWUnit indent;
-      double val=config->readDoubleNumEntry("Indent",POINT_TO_MM(10.0));
-      indent.setPT(val);
-      getGUI()->getDocument()->setIndentValue(indent);
+      // Config-file value in mm, default 10 pt
+      double indent = MM_TO_POINT( config->readDoubleNumEntry("Indent", POINT_TO_MM(10.0) ) );
+      doc->setIndentValue(indent);
       changeNbOfRecentFiles(config->readNumEntry("NbRecentFile",10));
     }
 }
@@ -840,15 +839,13 @@ void KWView::showFormat( const QTextFormat &currentFormat )
 }
 
 
-void KWView::showRulerIndent( KWUnit _leftMargin, KWUnit _firstLine )
+void KWView::showRulerIndent( double _leftMargin, double _firstLine )
 {
-  KWUnits unit = KWUnit::unitType( doc->getUnit() );
-  KWUnit relativeValue = KWUnit::createUnit((_firstLine.value( unit )+_leftMargin.value( unit )) , unit );
   KoRuler * hRuler = gui ? gui->getHorzRuler() : 0;
   if ( hRuler )
   {
-      hRuler->setFirstIndent( relativeValue.value( unit ) );
-      hRuler->setLeftIndent( _leftMargin.value( unit ) );
+      hRuler->setFirstIndent( KWUnit::userValue( _firstLine + _leftMargin, doc->getUnit() ) );
+      hRuler->setLeftIndent( KWUnit::userValue( _leftMargin, doc->getUnit() ) );
   }
 }
 
@@ -2183,16 +2180,17 @@ void KWView::textIncreaseIndent()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
+    {
+        double leftMargin = edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
+        double indent = doc->getIndentValue();
+        double newVal = leftMargin + indent;
+        // Test commented out. This breaks with the DTP case... The user can put
+        // a frame anywhere, even closed to the edges than left/right border allows (DF).
+        //if( newVal <= (doc->ptPaperWidth()-doc->ptRightBorder()-doc->ptLeftBorder()))
         {
-            KWUnit u=edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-            KWUnit indent=getGUI()->getDocument()->getIndentValue();
-            double val=(u.pt()+indent.pt());
-            if(val <=(doc->ptPaperWidth()-doc->ptRightBorder()-doc->ptLeftBorder()))
-                {
-                    u.setPT( val );
-                    edit->setMargin( QStyleSheetItem::MarginLeft, u );
-                }
+            edit->setMargin( QStyleSheetItem::MarginLeft, newVal );
         }
+    }
 }
 
 /*===============================================================*/
@@ -2200,16 +2198,15 @@ void KWView::textDecreaseIndent()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
+    {
+        double leftMargin = edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
+        if ( leftMargin > 0 )
         {
-             KWUnit u=edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-             KWUnit indent=getGUI()->getDocument()->getIndentValue();
-             double val=(u.pt()-indent.pt());
-             if(u.pt()!=0)
-                 {
-                     u.setPT( QMAX(val,0.0) );
-                     edit->setMargin( QStyleSheetItem::MarginLeft, u );
-                 }
+            double indent = doc->getIndentValue();
+            double newVal = leftMargin - indent;
+            edit->setMargin( QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ) );
         }
+    }
 }
 
 /*================================================================*/
@@ -2521,21 +2518,22 @@ void KWView::paragDiaOk()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (!edit) return;
-    KWUnits unit = KWUnit::unitType( doc->getUnit() );
+    // #### eeeeeek ! We should pass the KWParagDia * as argument.
     const KWParagDia * paragDia = static_cast<const KWParagDia*>(sender());
+
     // TODO a macro command with all the changes in it !
     // undo should do all in one step.
     if(paragDia->isLeftMarginChanged())
     {
 	edit->setMargin( QStyleSheetItem::MarginLeft, paragDia->leftIndent() );
-	gui->getHorzRuler()->setLeftIndent( paragDia->leftIndent().value( unit ) );
+	gui->getHorzRuler()->setLeftIndent( KWUnit::userValue( paragDia->leftIndent(), doc->getUnit() ) );
     }
 
     if(paragDia->isRightMarginChanged())
     {
 	edit->setMargin( QStyleSheetItem::MarginRight, paragDia->rightIndent() );
 	//koRuler doesn't support setRightIndent
-	//gui->getHorzRuler()->setRightIndent( paragDia->rightIndent().value( unit ) );
+	//gui->getHorzRuler()->setRightIndent( KWUnit::userValue( paragDia->rightIndent(), doc->getUnit() ) );
     }
     if(paragDia->isSpaceBeforeChanged())
         edit->setMargin( QStyleSheetItem::MarginTop, paragDia->spaceBeforeParag() );
@@ -2546,8 +2544,8 @@ void KWView::paragDiaOk()
     if(paragDia->isFirstLineChanged())
     {
 	edit->setMargin( QStyleSheetItem::MarginFirstLine, paragDia->firstLineIndent());
-	KWUnit relativeValue = KWUnit::createUnit((paragDia->leftIndent().value( unit )+paragDia->firstLineIndent().value( unit )) , unit );
-	gui->getHorzRuler()->setFirstIndent( relativeValue.value( unit ) );
+	gui->getHorzRuler()->setFirstIndent(
+            KWUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), doc->getUnit() ) );
     }
 
     if(paragDia->isAlignChanged())
@@ -2557,7 +2555,7 @@ void KWView::paragDiaOk()
         edit->setCounter( paragDia->counter() );
 
     if(paragDia->listTabulatorChanged())
-        edit->setTabList(paragDia->tabListTabulator());
+        edit->setTabList( paragDia->tabListTabulator() );
 
     if(paragDia->isLineSpacingChanged())
         edit->setLineSpacing( paragDia->lineSpacing() );
@@ -2630,20 +2628,16 @@ void KWView::newFirstIndent( double _firstIndent )
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (!edit) return;
-    KWUnit u;
-    double val = _firstIndent - edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft].pt();
-    u.setPT( val );
-    edit->setMargin( QStyleSheetItem::MarginFirstLine, u);
+    double val = _firstIndent - edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
+    edit->setMargin( QStyleSheetItem::MarginFirstLine, val );
 }
 
 /*================================================================*/
 void KWView::newLeftIndent( double _leftIndent)
 {
-    KWUnit u;
-    u.setPT( _leftIndent );
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
-        edit->setMargin( QStyleSheetItem::MarginLeft, u );
+        edit->setMargin( QStyleSheetItem::MarginLeft, _leftIndent );
 }
 
 /*================================================================*/
@@ -2925,8 +2919,8 @@ KWGUI::KWGUI( QWidget *parent, KWDocument *_doc, KWView *_view )
     connect( r_vert, SIGNAL( openPageLayoutDia() ), view, SLOT( openPageLayoutDia() ) );
     connect( r_vert, SIGNAL( unitChanged( QString ) ), this, SLOT( unitChanged( QString ) ) );
 
-    r_horz->setUnit( doc->getUnit() );
-    r_vert->setUnit( doc->getUnit() );
+    r_horz->setUnit( doc->getUnitName() );
+    r_vert->setUnit( doc->getUnitName() );
 
     r_horz->hide();
     r_vert->hide();
@@ -2983,8 +2977,7 @@ void KWGUI::reorganize()
 /*================================================================*/
 void KWGUI::unitChanged( QString u )
 {
-    doc->setUnit( u );
-    doc->setUnitToAll();
+    doc->setUnit( KWUnit::unit( u ) );
 }
 
 /*================================================================*/

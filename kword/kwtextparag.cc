@@ -79,7 +79,7 @@ Counter *KWTextParag::counter()
     return m_layout.counter;
 }
 
-void KWTextParag::setMargin( QStyleSheetItem::Margin m, KWUnit _i )
+void KWTextParag::setMargin( QStyleSheetItem::Margin m, double _i )
 {
     //kdDebug() << "KWTextParag::setMargin " << m << " margin " << _i.pt() << endl;
     m_layout.margins[m] = _i;
@@ -88,7 +88,7 @@ void KWTextParag::setMargin( QStyleSheetItem::Margin m, KWUnit _i )
     invalidate(0);
 }
 
-void KWTextParag::setMargins( const KWUnit * margins )
+void KWTextParag::setMargins( const double * margins )
 {
     for ( int i = 0 ; i < 5 ; ++i )
         m_layout.margins[i] = margins[i];
@@ -103,7 +103,7 @@ void KWTextParag::setAlign( int align )
     m_layout.alignment = align;
 }
 
-void KWTextParag::setLineSpacing( KWUnit _i )
+void KWTextParag::setLineSpacing( double _i )
 {
     m_layout.lineSpacing = _i;
     invalidate(0);
@@ -259,7 +259,7 @@ int KWTextParag::topMargin() const
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
     return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItY(
-        m_layout.margins[ QStyleSheetItem::MarginTop ].pt()
+        m_layout.margins[ QStyleSheetItem::MarginTop ]
         + m_layout.topBorder.ptWidth ) );
 }
 
@@ -267,7 +267,7 @@ int KWTextParag::bottomMargin() const
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
     return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItY(
-        m_layout.margins[ QStyleSheetItem::MarginBottom ].pt()
+        m_layout.margins[ QStyleSheetItem::MarginBottom ]
         + m_layout.bottomBorder.ptWidth ) );
 }
 
@@ -275,7 +275,7 @@ int KWTextParag::leftMargin() const
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
     return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItX(
-        m_layout.margins[ QStyleSheetItem::MarginLeft ].pt()
+        m_layout.margins[ QStyleSheetItem::MarginLeft ]
         + m_layout.leftBorder.ptWidth )
         + counterWidth() /* shouldn't be zoomed, it depends on the font sizes */);
 }
@@ -284,7 +284,7 @@ int KWTextParag::rightMargin() const
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
     return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItX(
-        m_layout.margins[ QStyleSheetItem::MarginRight ].pt()
+        m_layout.margins[ QStyleSheetItem::MarginRight ]
         + m_layout.rightBorder.ptWidth ) );
 }
 
@@ -292,14 +292,14 @@ int KWTextParag::firstLineMargin() const
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
     return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItX(
-        m_layout.margins[ QStyleSheetItem::MarginFirstLine ].pt() ) );
+        m_layout.margins[ QStyleSheetItem::MarginFirstLine ] ) );
 }
 
 int KWTextParag::lineSpacing() const
 {
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
     return static_cast<int>( textdoc->textFrameSet()->kWordDocument()->zoomItY(
-        m_layout.lineSpacing.pt() ) );
+        m_layout.lineSpacing ) );
 }
 
 // Reimplemented from QTextParag
@@ -317,7 +317,7 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
         int leftX = 0;
         int rightX = documentWidth()-1;
         int topY = lineY( 0 ); // Maybe this is always 0. Not sure.
-        int bottomY = static_cast<int>( lineY( lines() -1 ) + lineHeight( lines() -1 ) - m_layout.lineSpacing.pt() );
+        int bottomY = static_cast<int>( lineY( lines() -1 ) + lineHeight( lines() -1 ) - m_layout.lineSpacing );
         //kdDebug() << "KWTextParag::paint bottomY=" << bottomY << endl;
         if ( m_layout.topBorder.ptWidth > 0 )
         {
@@ -366,7 +366,7 @@ void KWTextParag::copyParagData( QTextParag *_parag )
         }
     }
     else if (!style)
-        kdWarning() << "Paragraph style " << parag->styleName() << " not found" << endl;
+        kdWarning() << "Paragraph style '" << parag->styleName() << "' not found" << endl;
 
     // No "following style" setting, or same style -> copy layout & format of previous paragraph
     if (!styleApplied)
@@ -881,42 +881,42 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
 
     element = parentElem.namedItem( "OHEAD" ).toElement(); // used by KWord-0.8
     if ( !element.isNull() )
-        margins[QStyleSheetItem::MarginTop].setPT( KWDocument::getAttribute( element, "pt", 0.0 ) );
+        margins[QStyleSheetItem::MarginTop] = KWDocument::getAttribute( element, "pt", 0.0 );
 
     element = parentElem.namedItem( "OFOOT" ).toElement(); // used by KWord-0.8
     if ( !element.isNull() )
-        margins[QStyleSheetItem::MarginBottom].setPT( KWDocument::getAttribute( element, "pt", 0.0 ) );
+        margins[QStyleSheetItem::MarginBottom] = KWDocument::getAttribute( element, "pt", 0.0 );
 
     element = parentElem.namedItem( "IFIRST" ).toElement(); // used by KWord-0.8
     if ( !element.isNull() )
-        margins[QStyleSheetItem::MarginFirstLine].setPT( KWDocument::getAttribute( element, "pt", 0.0 ) );
+        margins[QStyleSheetItem::MarginFirstLine] = KWDocument::getAttribute( element, "pt", 0.0 );
 
     element = parentElem.namedItem( "ILEFT" ).toElement(); // used by KWord-0.8
     if ( !element.isNull() )
-        margins[QStyleSheetItem::MarginLeft].setPT( KWDocument::getAttribute( element, "pt", 0.0 ) );
+        margins[QStyleSheetItem::MarginLeft] = KWDocument::getAttribute( element, "pt", 0.0 );
 
     // KWord-1.0 DTD
     element = parentElem.namedItem( "INDENTS" ).toElement();
     if ( !element.isNull() )
     {
-        margins[QStyleSheetItem::MarginFirstLine].setPT( KWDocument::getAttribute( element, "first", 0.0 ) );
-        margins[QStyleSheetItem::MarginLeft].setPT( KWDocument::getAttribute( element, "left", 0.0 ) );
-        margins[QStyleSheetItem::MarginRight].setPT( KWDocument::getAttribute( element, "right", 0.0 ) );
+        margins[QStyleSheetItem::MarginFirstLine] = KWDocument::getAttribute( element, "first", 0.0 );
+        margins[QStyleSheetItem::MarginLeft] = KWDocument::getAttribute( element, "left", 0.0 );
+        margins[QStyleSheetItem::MarginRight] = KWDocument::getAttribute( element, "right", 0.0 );
     }
     element = parentElem.namedItem( "OFFSETS" ).toElement();
     if ( !element.isNull() )
     {
-        margins[QStyleSheetItem::MarginTop].setPT( KWDocument::getAttribute( element, "before", 0.0 ) );
-        margins[QStyleSheetItem::MarginBottom].setPT( KWDocument::getAttribute( element, "after", 0.0 ) );
+        margins[QStyleSheetItem::MarginTop] = KWDocument::getAttribute( element, "before", 0.0 );
+        margins[QStyleSheetItem::MarginBottom] = KWDocument::getAttribute( element, "after", 0.0 );
     }
 
     element = parentElem.namedItem( "LINESPACE" ).toElement(); // used by KWord-0.8
     if ( !element.isNull() )
-        lineSpacing.setPT( KWDocument::getAttribute( element, "pt", 0.0 ) );
+        lineSpacing = KWDocument::getAttribute( element, "pt", 0.0 );
 
     element = parentElem.namedItem( "LINESPACING" ).toElement(); // KWord-1.0 DTD
     if ( !element.isNull() )
-        lineSpacing.setPT( KWDocument::getAttribute( element, "value", 0.0 ) );
+        lineSpacing = KWDocument::getAttribute( element, "value", 0.0 );
 
 
     element = parentElem.namedItem( "PAGEBREAKING" ).toElement();
@@ -984,36 +984,36 @@ void KWParagLayout::save( QDomElement & parentElem )
     parentElem.appendChild( element );
     int a = alignment;
     element.setAttribute( "align", a==Qt::AlignRight ? "right" : a==Qt::AlignCenter ? "center" : a==Qt3::AlignJustify ? "justify" : "left" );
-    if ( margins[QStyleSheetItem::MarginFirstLine].pt() != 0 ||
-         margins[QStyleSheetItem::MarginLeft].pt() != 0 ||
-         margins[QStyleSheetItem::MarginRight].pt() != 0 )
+    if ( margins[QStyleSheetItem::MarginFirstLine] != 0 ||
+         margins[QStyleSheetItem::MarginLeft] != 0 ||
+         margins[QStyleSheetItem::MarginRight] != 0 )
     {
         element = doc.createElement( "INDENTS" );
         parentElem.appendChild( element );
-        if ( margins[QStyleSheetItem::MarginFirstLine].pt() != 0 )
-            element.setAttribute( "first", margins[QStyleSheetItem::MarginFirstLine].pt() );
-        if ( margins[QStyleSheetItem::MarginLeft].pt() != 0 )
-            element.setAttribute( "left", margins[QStyleSheetItem::MarginLeft].pt() );
-        if ( margins[QStyleSheetItem::MarginRight].pt() != 0 )
-            element.setAttribute( "right", margins[QStyleSheetItem::MarginRight].pt() );
+        if ( margins[QStyleSheetItem::MarginFirstLine] != 0 )
+            element.setAttribute( "first", margins[QStyleSheetItem::MarginFirstLine] );
+        if ( margins[QStyleSheetItem::MarginLeft] != 0 )
+            element.setAttribute( "left", margins[QStyleSheetItem::MarginLeft] );
+        if ( margins[QStyleSheetItem::MarginRight] != 0 )
+            element.setAttribute( "right", margins[QStyleSheetItem::MarginRight] );
     }
 
-    if ( margins[QStyleSheetItem::MarginTop].pt() != 0 ||
-         margins[QStyleSheetItem::MarginBottom].pt() != 0 )
+    if ( margins[QStyleSheetItem::MarginTop] != 0 ||
+         margins[QStyleSheetItem::MarginBottom] != 0 )
     {
         element = doc.createElement( "OFFSETS" );
         parentElem.appendChild( element );
-        if ( margins[QStyleSheetItem::MarginTop].pt() != 0 )
-            element.setAttribute( "before", margins[QStyleSheetItem::MarginTop].pt() );
-        if ( margins[QStyleSheetItem::MarginBottom].pt() != 0 )
-            element.setAttribute( "after", margins[QStyleSheetItem::MarginBottom].pt() );
+        if ( margins[QStyleSheetItem::MarginTop] != 0 )
+            element.setAttribute( "before", margins[QStyleSheetItem::MarginTop] );
+        if ( margins[QStyleSheetItem::MarginBottom] != 0 )
+            element.setAttribute( "after", margins[QStyleSheetItem::MarginBottom] );
     }
 
-    if ( lineSpacing.pt() != 0 )
+    if ( lineSpacing != 0 )
     {
         element = doc.createElement( "LINESPACING" );
         parentElem.appendChild( element );
-        element.setAttribute( "value", lineSpacing.pt() );
+        element.setAttribute( "value", lineSpacing );
     }
 
     if ( linesTogether )

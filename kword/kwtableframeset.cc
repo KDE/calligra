@@ -493,13 +493,12 @@ void KWTableFrameSet::setBoundingRect( QRect rect )
         baseHeight = (rect.height() - (m_rows-1) * tableCellSpacing) / m_rows;
 
     // I will create 1 mm margins, this will recalculate the actual size needed for the frame.
-    KWUnit oneMm;
-    oneMm.setMM( 1 );
-    double minBaseHeight = 22;// m_doc->getDefaultParagLayout()->getFormat().ptFontSize() + oneMm.pt() * 2; // TODO
-    if(baseHeight < minBaseHeight + oneMm.pt() * 2)
-        baseHeight =minBaseHeight + oneMm.pt() * 2;
-    if(baseWidth < minFrameWidth + oneMm.pt() * 2)
-        baseWidth = minFrameWidth +  oneMm.pt() * 2;
+    double oneMm = MM_TO_POINT( 1.0 );
+    double minBaseHeight = 22;// m_doc->getDefaultParagLayout()->getFormat().ptFontSize() + oneMm * 2; // TODO
+    if(baseHeight < minBaseHeight + oneMm * 2)
+        baseHeight =minBaseHeight + oneMm * 2;
+    if(baseWidth < minFrameWidth + oneMm * 2)
+        baseWidth = minFrameWidth +  oneMm * 2;
     // cast them only one time up here..
     unsigned int frameWidth = static_cast<unsigned int> (baseWidth + 0.5);
     unsigned int frameHeight = static_cast<unsigned int> (baseHeight + 0.5);
@@ -714,7 +713,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
         int tmpWidth= colStart[i+colSpan] - colStart[i];
         if(i+colSpan != getCols())
             tmpWidth-=tableCellSpacing;
-        else 
+        else
             tmpWidth+=1;
 
         KWFrame *frame = new KWFrame(0L, colStart[i], r.y(), tmpWidth, height);
@@ -745,13 +744,12 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
     m_rows = ++_rows;
 
     for ( i = 0; i < nCells.count(); i++ ) {
-        KWUnit u;
-        u.setMM( 1 );
+        double oneMm = MM_TO_POINT( 1.0 );
         KWFrame *frame = nCells.at( i )->getFrame( 0 );
-        frame->setBLeft( u );
-        frame->setBRight( u );
-        frame->setBTop( u );
-        frame->setBBottom( u );
+        frame->setBLeft( oneMm );
+        frame->setBRight( oneMm );
+        frame->setBTop( oneMm );
+        frame->setBBottom( oneMm );
     }
 
 
@@ -814,7 +812,7 @@ void KWTableFrameSet::insertCol( unsigned int col )
 
     if(col < m_cols-1) m_cols++;
 
-    recalcCols(); 
+    recalcCols();
     finalize();
 }
 

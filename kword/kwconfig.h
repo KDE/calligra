@@ -37,7 +37,7 @@ private:
   KWView* m_pView;
   KSpellConfig *_spellConfig;
   KConfig* config;
-} ;
+};
 
 class configureInterfacePage : public QWidget
 {

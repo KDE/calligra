@@ -22,7 +22,6 @@
 
 #include "qrichtext_p.h"
 #include "defs.h"
-#include "kwunit.h"
 #include "border.h"
 
 #include <qstring.h>
@@ -56,8 +55,8 @@ public:
 
     // This class is used as a struct, which explains the public vars :)
     int alignment;
-    KWUnit margins[5]; // left, right, top, bottom, firstLineSpacing
-    KWUnit lineSpacing;
+    double margins[5]; // left, right, top, bottom, firstLineSpacing - in pt
+    double lineSpacing;
     Border leftBorder, rightBorder, topBorder, bottomBorder;
     Counter* counter; // can be 0 if no counter set
     bool linesTogether; // whether to keep all lines on the same page if the parag is at the end of a frame
@@ -93,13 +92,13 @@ public:
     void setParagLayout( const KWParagLayout &layout );
 
     // Margins
-    KWUnit margin( QStyleSheetItem::Margin m ) { return m_layout.margins[m]; }
-    const KWUnit * margins() const { return m_layout.margins; }
-    KWUnit kwLineSpacing() const { return m_layout.lineSpacing; }
+    double margin( QStyleSheetItem::Margin m ) { return m_layout.margins[m]; }
+    const double * margins() const { return m_layout.margins; }
+    double kwLineSpacing() const { return m_layout.lineSpacing; }
 
-    void setMargin( QStyleSheetItem::Margin m, KWUnit _i );
-    void setMargins( const KWUnit * _i );
-    void setLineSpacing( KWUnit _i );
+    void setMargin( QStyleSheetItem::Margin m, double _i );
+    void setMargins( const double * _i );
+    void setLineSpacing( double _i );
     void setAlign( int align ); // use this, not QTextParag::setAlignment !
 
     // Borders

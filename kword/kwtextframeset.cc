@@ -1587,12 +1587,12 @@ void KWTextFrameSet::setAlign( QTextCursor * cursor, int align )
     emit updateUI();
 }
 
-void KWTextFrameSet::setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, KWUnit margin ) {
+void KWTextFrameSet::setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin ) {
     QTextDocument * textdoc = textDocument();
     //kdDebug(32001) << "KWTextFrameSet::setMargin " << m << " to value " << margin.pt() << endl;
     //kdDebug(32001) << "Current margin is " << static_cast<KWTextParag *>(cursor->parag())->margin(m).pt() << endl;
     if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
-         static_cast<KWTextParag *>(cursor->parag())->margin(m).pt() == margin.pt() /*hack*/ )
+         static_cast<KWTextParag *>(cursor->parag())->margin(m) == margin )
         return; // No change needed.
 
     emit hideCursor();
@@ -1625,15 +1625,15 @@ void KWTextFrameSet::setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m,
     emit updateUI();
 }
 
-void KWTextFrameSet::setLineSpacing( QTextCursor * cursor, KWUnit spacing )
+void KWTextFrameSet::setLineSpacing( QTextCursor * cursor, double spacing )
 {
     QTextDocument * textdoc = textDocument();
-    //kdDebug(32001) << "KWTextFrameSet::setLineSpacing to value " << spacing.pt() << endl;
-    //kdDebug(32001) << "Current spacing is " << static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing().pt() << endl;
-    //kdDebug(32001) << "Comparison says " << ( static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing().pt() == spacing.pt() ) << endl;
+    //kdDebug(32001) << "KWTextFrameSet::setLineSpacing to value " << spacing << endl;
+    //kdDebug(32001) << "Current spacing is " << static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing() << endl;
+    //kdDebug(32001) << "Comparison says " << ( static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing() == spacing ) << endl;
     //kdDebug(32001) << "hasSelection " << textdoc->hasSelection( QTextDocument::Standard ) << endl;
     if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
-         static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing().pt() == spacing.pt() /*...*/ )
+         static_cast<KWTextParag *>(cursor->parag())->kwLineSpacing() == spacing )
         return; // No change needed.
 
     emit hideCursor();
@@ -2975,8 +2975,8 @@ void KWTextFrameSetEdit::updateUI()
         m_canvas->gui()->getView()->showStyle( m_paragLayout.styleName() );
     }
 
-    if( m_paragLayout.margins[QStyleSheetItem::MarginLeft].pt() != parag->margin(QStyleSheetItem::MarginLeft).pt()
-	|| m_paragLayout.margins[QStyleSheetItem::MarginFirstLine].pt() != parag->margin(QStyleSheetItem::MarginFirstLine).pt() )
+    if( m_paragLayout.margins[QStyleSheetItem::MarginLeft] != parag->margin(QStyleSheetItem::MarginLeft)
+	|| m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] != parag->margin(QStyleSheetItem::MarginFirstLine) )
     {
 	m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] = parag->margin(QStyleSheetItem::MarginFirstLine);
 	m_paragLayout.margins[QStyleSheetItem::MarginLeft] = parag->margin(QStyleSheetItem::MarginLeft);

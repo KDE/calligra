@@ -178,7 +178,6 @@ public:
     //update koRuler in each view
     void updateRuler();
 
-    void setUnitToAll();
     void repaintAllViews( bool erase = false );
     void repaintAllViewsExcept( KWView *_view, bool _erase = false );
     /**
@@ -253,17 +252,19 @@ public:
     //void enableEmbeddedParts( bool f );
 
     //void setRunAround( RunAround _ra );
-    //void setRunAroundGap( KWUnit _gap );
+    //void setRunAroundGap( double _gap );
 
-    void getFrameMargins( KWUnit &l, KWUnit &r, KWUnit &t, KWUnit &b );
+    void getFrameMargins( double &l, double &r, double &t, double &b );
     bool isOnlyOneFrameSelected();
     KWFrameSet *getFrameCoords( unsigned int &x, unsigned int &y, unsigned int &w, unsigned int &h, unsigned int &num );
 
-    void setFrameMargins( KWUnit l, KWUnit r, KWUnit t, KWUnit b );
+    void setFrameMargins( double l, double r, double t, double b );
     void setFrameCoords( unsigned int x, unsigned int y, unsigned int w, unsigned int h );
 
-    QString getUnit() { return unit; }
-    void setUnit( QString _unit ) { unit = _unit; }
+    // The user-chosen global unit
+    QString getUnitName() { return KWUnit::unitName( m_unit ); }
+    KWUnit::Unit getUnit() { return m_unit; }
+    void setUnit( KWUnit::Unit _unit );
 
     void addCommand( KCommand * cmd );
 
@@ -423,8 +424,9 @@ public:
     bool getViewTableGrid() { return _viewTableGrid; }
     void setViewTableGrid(bool _b) { _viewTableGrid=_b;}
 
-    KWUnit getIndentValue() { return m_indent; }
-    void setIndentValue(KWUnit _ind) { m_indent=_ind; }
+    // in pt
+    double getIndentValue() { return m_indent; }
+    void setIndentValue(double _ind) { m_indent=_ind; }
 
     /**
      * @returns the document for the formulas
@@ -488,7 +490,7 @@ private:
 
  //   KWDisplayFont *cDisplayFont;
 
-    QString unit;
+    KWUnit::Unit m_unit;
 
     KCommandHistory * m_commandHistory;
 //    KWFootNoteManager footNoteManager;
@@ -529,7 +531,7 @@ private:
     // The document that is used by all formulas
     KFormulaDocument* m_formulaDocument;
 
-    KWUnit m_indent;
+    double m_indent; // in pt
 };
 
 

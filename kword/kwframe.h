@@ -21,7 +21,6 @@
 #define frame_h
 
 #include "defs.h"
-#include "kwunit.h"
 #include "kwimage.h"
 
 #include <qrect.h>
@@ -71,7 +70,7 @@ public:
      * around the frame, or avoiding the frame on the whole horizontal band.
      * @param gap ...
      */
-    KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAround ra = RA_BOUNDINGRECT, KWUnit gap = 1.0 /*mm*/);
+    KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAround ra = RA_BOUNDINGRECT, double gap = MM_TO_POINT( 1.0 ));
     /* Destructor */
     virtual ~KWFrame();
 
@@ -125,8 +124,8 @@ public:
 
     QCursor getMouseCursor( int mx, int my, bool table );
 
-    KWUnit getRunAroundGap() { return runAroundGap; }
-    void setRunAroundGap( KWUnit gap ) { runAroundGap = gap; }
+    double getRunAroundGap() { return runAroundGap; }
+    void setRunAroundGap( double gap ) { runAroundGap = gap; }
 
     void setRunAround( RunAround _ra ) { runAround = _ra; }
     RunAround getRunAround() { return runAround; }
@@ -177,22 +176,22 @@ public:
     void setBackgroundColor( QBrush _color ) { backgroundColor = _color; }
 
     /** set left margin size */
-    void setBLeft( KWUnit b ) { bleft = b; }
+    void setBLeft( double b ) { bleft = b; }
     /** set right margin size */
-    void setBRight( KWUnit b ) { bright = b; }
+    void setBRight( double b ) { bright = b; }
     /** set top margin size */
-    void setBTop( KWUnit b ) { btop = b; }
+    void setBTop( double b ) { btop = b; }
     /** set bottom margin size */
-    void setBBottom( KWUnit b ) { bbottom = b; }
+    void setBBottom( double b ) { bbottom = b; }
 
     /** get left margin size */
-    KWUnit getBLeft() { return bleft; }
+    double getBLeft() { return bleft; }
     /** get right margin size */
-    KWUnit getBRight() { return bright; }
+    double getBRight() { return bright; }
     /** get top margin size */
-    KWUnit getBTop() { return btop; }
+    double getBTop() { return btop; }
     /** get bottom margin size */
-    KWUnit getBBottom() { return bbottom; }
+    double getBBottom() { return bbottom; }
 
     /** returns a copy of self */
     KWFrame *getCopy();
@@ -203,7 +202,7 @@ private:
     FrameBehaviour frameBehaviour;
     NewFrameBehaviour newFrameBehaviour;
     bool selected;
-    KWUnit runAroundGap;
+    double runAroundGap;
     bool mostRight;
     int m_pageNum;
 
@@ -214,7 +213,7 @@ private:
     Border brd_left, brd_right, brd_top, brd_bottom;
     QBrush backgroundColor;
 
-    KWUnit bleft, bright, btop, bbottom; // margins
+    double bleft, bright, btop, bbottom; // margins
 
     QList<KWResizeHandle> handles;
     KWFrame &operator=( const KWFrame &_frame );

@@ -97,10 +97,10 @@ protected:
     //KWCanvas *canvas;
     FrameType frameType;
 
-    float oldX, oldY, oldW, oldH;
+    double oldX, oldY, oldW, oldH;
 
     FrameBehaviour frameBehaviour;
-    KWUnits frameUnits;
+    KWUnit::Unit frameUnits;
     QString oldFrameName;
 
 protected slots:

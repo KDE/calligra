@@ -90,7 +90,7 @@ public:
                           Border _top, Border _bottom );
 
     void showStyle( const QString & styleName );
-    void showRulerIndent( KWUnit _leftMargin, KWUnit _firstLine );
+    void showRulerIndent( double _leftMargin, double _firstLine );
 
 //    virtual void setNoteType(KWFootNoteManager::NoteType nt, bool change=true);
 
@@ -167,7 +167,7 @@ public slots:
     void insertVariablePageNum();
     void insertVariableCustom();
     void insertVariableSerialLetter();
-    void insertVariableFileName();	
+    void insertVariableFileName();
     void insertFootNoteEndNote();
     void insertContents();
 
