@@ -1267,6 +1267,9 @@ void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, c
     //partFrameSet()->activate( m_canvas->gui()->getView() );
 }
 
+
+using namespace KFormula;
+
 /******************************************************************/
 /* Class: KWFormulaFrameSet                                       */
 /******************************************************************/

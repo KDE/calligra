@@ -37,7 +37,6 @@ class KoDocumentEntry;
 class QPainter;
 class KSpellConfig;
 class KWAutoFormat;
-class KFormulaDocument;
 class KCommand;
 class KCommandHistory;
 class KWVariable;
@@ -46,6 +45,10 @@ class KWVariableFormat;
 class QFont;
 class QStringList;
 class QRect;
+
+namespace KFormula {
+    class KFormulaDocument;
+}
 
 
 #include <koDocument.h>
@@ -464,7 +467,7 @@ public:
     /**
      * @returns the document for the formulas
      */
-    KFormulaDocument* getFormulaDocument();
+    KFormula::KFormulaDocument* getFormulaDocument();
 
 
     void setShowRuler(bool _ruler){m_bShowRuler=_ruler;}
@@ -583,7 +586,7 @@ private:
     bool _viewFormattingChars, _viewFrameBorders, _viewTableGrid;
 
     // The document that is used by all formulas
-    KFormulaDocument* m_formulaDocument;
+    KFormula::KFormulaDocument* m_formulaDocument;
 
     double m_indent; // in pt
 

@@ -28,10 +28,15 @@
 #include <formuladefs.h>
 #include <kformulaview.h>
 
-class BasicElement;
+KFORMULA_NAMESPACE_BEGIN
+
 class FormulaCursor;
 class FormulaElement;
 class KFormulaContainer;
+
+KFORMULA_NAMESPACE_END
+
+using namespace KFormula;
 
 
 /**

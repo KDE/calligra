@@ -140,7 +140,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
 
-    m_formulaDocument = new KFormulaDocument(actionCollection(), m_commandHistory);
+    m_formulaDocument = new KFormula::KFormulaDocument(actionCollection(), m_commandHistory);
 
     setEmpty();
     setModified(false);
@@ -2495,7 +2495,7 @@ void KWDocument::layout()
         it.current()->layout();
 }
 
-KFormulaDocument* KWDocument::getFormulaDocument()
+KFormula::KFormulaDocument* KWDocument::getFormulaDocument()
 {
     return m_formulaDocument;
 }

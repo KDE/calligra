@@ -58,8 +58,8 @@ KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject*
     //kdDebug(39001) << "General Settings" << endl;
 
     history = new KCommandHistory(actionCollection());
-    document = new KFormulaDocument(actionCollection(), history);
-    formula = new KFormulaContainer(document);
+    document = new KFormula::KFormulaDocument(actionCollection(), history);
+    formula = new KFormula::KFormulaContainer(document);
 
     document->setResolution( POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiX() ) ),
                              POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiY() ) ) );
