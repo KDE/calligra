@@ -399,6 +399,59 @@ void MsWord::Fkp<T1, T2>::startIteration(const U8 *fkp)
     m_i = 0;
 }
 
+//
+// Get various strings which are associated with the document.
+//
+void MsWord::getAssociatedStrings()
+{
+    typedef enum
+    {
+        ibstAssocFileNext,      // unused.
+        ibstAssocDot,           // filename of associated template.
+        ibstAssocTitle,         // title of document.
+        ibstAssocSubject,       // subject of document.
+        ibstAssocKeyWords,      // keywords of document.
+        ibstAssocComments,      // comments of document.
+        ibstAssocAuthor,        // author of document.
+        ibstAssocLastRevBy,     // name of person who last revised the
+                                // document.
+        ibstAssocDataDoc,       // filename of data document.
+        ibstAssocHeaderDoc,     // filename of header document.
+        ibstAssocCriteria1,     // packed strings used by print merge record
+        ibstAssocCriteria2,     // selection.
+        ibstAssocCriteria3,
+        ibstAssocCriteria4,
+        ibstAssocCriteria5,
+        ibstAssocCriteria6,
+        ibstAssocCriteria7
+    } ibst;
+
+    const U8 *ptr = m_tableStream + m_fib.fcSttbfAssoc; //lcbSttbfAssoc.
+
+    kdDebug(s_area) << "MsWord::getAssociatedStrings" << endl;
+
+    // Failsafe for simple documents.
+
+    if (!m_fib.lcbSttbfAssoc)
+    {
+        kdDebug(s_area) << "MsWord::getAssociatedStrings: no data " << endl;
+        return;
+    }
+
+    STTBF data;
+    ptr += read(ptr, &data);
+
+    if (data.stringCount < ibstAssocCriteria1)
+    {
+        kdError(s_area) << "MsWord::getAssociatedStrings: insufficient data " << endl;
+        return;
+    }
+    m_title = data.strings[ibstAssocTitle];
+    m_subject = data.strings[ibstAssocSubject];
+    m_author = data.strings[ibstAssocAuthor];
+    m_lastRevisedBy = data.strings[ibstAssocLastRevBy];
+}
+
 // Get the character property exceptions for a range of file positions by walking the BTEs.
 // The result is an array of CHPXs which start and end at the given range.
 void MsWord::getChpxs(U32 startFc, U32 endFc, CHPXarray &result)
@@ -784,7 +837,7 @@ void MsWord::getStyles()
         ptr += MsWordGenerated::read(ptr, &cbStd);
         if (cbStd)
         {
-            read(m_fib.lid, ptr, stshi.cbSTDBaseInFile, &std);
+            read(ptr, stshi.cbSTDBaseInFile, &std);
             kdDebug(s_area) << "MsWord::getStyles: style: " << std.xstzName <<
                 ", types: " << std.cupx <<
                 endl;
@@ -899,6 +952,7 @@ MsWord::MsWord(
         kdDebug(s_area) << "MsWord::MsWord: no data stream" << endl;
         m_dataStream = m_mainStream;
     }
+    //getAssociatedStrings();
     getStyles();
     getListStyles();
 }
@@ -1143,6 +1197,33 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool 
     return bytes;
 }
 
+// Read a Pascal string, converting to unicode if needed.
+unsigned MsWord::read(U16 lid, const U8 *in, QString *out, bool unicode)
+{
+    unsigned bytes = 0;
+
+    *out = QString("");
+    if (unicode)
+    {
+        U16 length;
+        U16 terminator;
+
+        bytes += MsWordGenerated::read(in + bytes, &length);
+        bytes += read(lid, in + bytes, out, length, true);
+        bytes += MsWordGenerated::read(in + bytes, &terminator);
+    }
+    else
+    {
+        U8 length;
+        U8 terminator;
+
+        bytes += MsWordGenerated::read(in + bytes, &length);
+        bytes += read(lid, in + bytes, out, length, false);
+        bytes += MsWordGenerated::read(in + bytes, &terminator);
+    }
+    return bytes;
+}
+
 //
 // Read a CHPX as stored in a FKP.
 //
@@ -1191,7 +1272,7 @@ unsigned MsWord::read(const U8 *in, PAPXFKP *out)
     return bytes;
 }
 
-unsigned MsWord::read(U16 lid, const U8 *in, unsigned baseInFile, STD *out)
+unsigned MsWord::read(const U8 *in, unsigned baseInFile, STD *out)
 {
     U32 shifterU32;
     U16 shifterU16;
@@ -1214,7 +1295,7 @@ unsigned MsWord::read(U16 lid, const U8 *in, unsigned baseInFile, STD *out)
     out->fMassCopy = shifterU16;
     shifterU16 >>= 1;
     bytes += MsWordGenerated::read(in + bytes, &shifterU16);
-    out->sgc = shifterU16;             
+    out->sgc = shifterU16;
     shifterU16 >>= 4;
     out->istdBase = shifterU16;
     shifterU16 >>= 12;
@@ -1243,22 +1324,12 @@ unsigned MsWord::read(U16 lid, const U8 *in, unsigned baseInFile, STD *out)
     in -= offset;
     if (offset > 0)
     {
-        U8 nameLength;
-        U8 terminator;
-
         memset(ptr + baseInFile, 0, offset);
-        bytes += MsWordGenerated::read(in + bytes, &nameLength);
-        bytes += read(lid, in + bytes, &out->xstzName, nameLength, false);
-        bytes += MsWordGenerated::read(in + bytes, &terminator);
+        bytes += read(m_fib.lid, in + bytes, &out->xstzName, false);
     }
     else
     {
-        U16 nameLength;
-        U16 terminator;
-
-        bytes += MsWordGenerated::read(in + bytes, &nameLength);
-        bytes += read(lid, in + bytes, &out->xstzName, nameLength, true);
-        bytes += MsWordGenerated::read(in + bytes, &terminator);
+        bytes += read(m_fib.lid, in + bytes, &out->xstzName, true);
     }
     out->grupx = in + bytes;
 
@@ -1485,3 +1556,59 @@ unsigned MsWord::read(const U8 *in, PHE *out)
     }
     return bytes;
 } // PHE
+
+unsigned MsWord::read(const U8 *in, STTBF *out)
+{
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
+    unsigned bytes = 0;
+    bool unicode = false;
+
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
+
+    // Get the string count. A value of 0xffff switchesus into unicode mode.
+
+    bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 1);
+    if (out->stringCount == 0xffff)
+    {
+        unicode = true;
+
+        // Get the real string count.
+
+        ptr -= sizeof(U16);
+        bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 1);
+    }
+
+    // Get the length of extra data.
+
+    bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 1);
+
+    // Now read each string and the associated data.
+
+    out->strings = new QString[out->stringCount];
+    out->extraData = new const U8 *[out->stringCount];
+    for (unsigned i = 0; i < out->stringCount; i++)
+    {
+        bytes += read(m_fib.lid, in + bytes, &out->strings[i], unicode);
+        out->extraData[i] = in + bytes;
+        bytes += out->extraDataLength;
+    }
+    return bytes;
+}
+
+MsWord::STTBF::STTBF()
+{
+    stringCount = 0;
+    extraDataLength = 0;
+    strings = (QString *)0;
+    extraData = (const U8 **)0;
+}
+
+MsWord::STTBF::~STTBF()
+{
+    delete [] extraData;
+    delete [] strings;
+}

@@ -192,7 +192,7 @@ void WinWordDoc::gotHeadingParagraph(const QString &text, PAP &style)
 
 void WinWordDoc::gotListParagraph(const QString &text, PAP &style)
 {
-    static char *listStyle[6] =
+    static const char *listStyle[6] =
     {
         "Enumerated List",
         "Enumerated List",

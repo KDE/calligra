@@ -49,6 +49,13 @@ public:
         const U8 *dataStream);
     virtual ~MsWord();
 
+    // Metadata.
+
+    QString m_title;
+    QString m_subject;
+    QString m_author;
+    QString m_lastRevisedBy;
+
     // Call the parse() function to process the document. The callbacks return
     // the text along with any relevant attributes.
 
@@ -69,12 +76,19 @@ public:
     // prototypes are also declared for inherited structure definitions
     // which are OK, but where the inherited reader must be overridden.
 
+    // Strings and Pascal strings.
+
     static unsigned read(
         U16 lid,
         const U8 *in,
         QString *out,
-        unsigned count = 1,
-        bool unicode = false);
+        unsigned length,
+        bool unicode);
+    static unsigned read(
+        U16 lid,
+        const U8 *in,
+        QString *out,
+        bool unicode);
 
     typedef struct CHPXFKP
     {
@@ -141,7 +155,19 @@ public:
         //
         const U8 *grupx;
     } STD;
-    unsigned read(U16 lid, const U8 *in, unsigned baseInFile, STD *out);
+    unsigned read(const U8 *in, unsigned baseInFile, STD *out);
+
+    // STTBF (STring TaBle stored in File)
+    typedef struct STTBF
+    {
+        U16 stringCount;
+        U16 extraDataLength;
+        QString *strings;
+        const U8 **extraData;
+        STTBF();
+        ~STTBF();
+    } STTBF;
+    unsigned read(const U8 *in, STTBF *out);
 
     static unsigned read(const U8 *in, FIB *out);
     unsigned read(const U8 *in, BTE *out);
@@ -292,6 +318,10 @@ private:
     unsigned m_tableColumn;
     QString m_tableText[64];
     PAP m_tableStyle[64];
+
+    // Get the metadata for the file.
+
+    void getAssociatedStrings();
 
     // Fetch the styles in the style sheet.
 
