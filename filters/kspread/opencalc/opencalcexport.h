@@ -77,6 +77,9 @@ class OpenCalcExport : public KoFilter
 
   void createDefaultStyles();
   QString convertFormula( QString const & formula ) const;
+private:
+    /// Pointer to the KSpread locale
+    KLocale* m_locale;
 };
 
 #endif
