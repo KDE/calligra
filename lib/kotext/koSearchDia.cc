@@ -39,10 +39,14 @@ KoSearchContext::KoSearchContext()
 {
     m_family = "times";
     m_color = Qt::black;
+    m_backGroungColor = Qt::black;
+
     m_size = 12;
     m_vertAlign = KoTextFormat::AlignNormal;
     m_optionsMask = 0;
     m_options = KoFindDialog::FromCursor | KoReplaceDialog::PromptOnReplace;
+    m_underline = KoTextFormat::U_NONE;
+    m_strikeOut = KoTextFormat::S_NONE;
 }
 
 KoSearchContextUI::KoSearchContextUI( KoSearchContext *ctx, QWidget *parent )
