@@ -74,6 +74,8 @@ protected slots:
      */
     void slotFormulaChanged(int width, int height);
 
+    void slotCursorChanged(bool visible, bool selecting);
+
 protected:
 
     virtual void mousePressEvent(QMouseEvent* event);

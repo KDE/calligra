@@ -91,7 +91,7 @@ public:
     /**
      * Draws the whole thing.
      */
-    void draw(QPainter& painter);
+    void draw(QPainter& painter, const QRect& r);
 
     /**
      * This function return all the data contained in

@@ -75,9 +75,12 @@ public:
      * The `parentOrigin' is the point this element's parent starts.
      * We can use our parentPosition to get our own origin then.
      */
-    virtual void draw(QPainter& painter, const ContextStyle& context,
+    virtual void draw(QPainter& painter, const QRect& r,
+                      const ContextStyle& context,
                       int parentSize, const QPoint& parentOrigin);
 
+    void calcCursorSize(FormulaCursor* cursor, bool smallCursor);
+    
     /**
      * If the cursor is inside a sequence it needs to be drawn.
      */
@@ -272,29 +275,6 @@ protected:
      * @returns the child at position i.
      */
     BasicElement* getChild(uint i) { return children.at(i); }
-
-    /**
-     * draws the cursor if it is in selection mode.
-     *
-     * @param painter the painter
-     * @param point the elements upper left corner corner
-     * @param pos the position the cursor points to
-     * @param mark the position the mark points to
-     * @param smallCursor whether the cursor might be bigger that the formula
-     */
-    virtual void drawSelectionCursor(QPainter& painter, QPoint& point,
-                                     uint pos, uint mark, bool smallCursor);
-
-    /**
-     * draws the cursor if it is not selecting.
-     *
-     * @param painter the painter
-     * @param point the elements upper left corner corner
-     * @param pos the position the cursor points to
-     * @param smallCursor whether the cursor might be bigger that the formula
-     */
-    virtual void drawSingleCursor(QPainter& painter, QPoint& point,
-                                  uint pos, bool smallCursor);
 
     /**
      * @returns the position where the child starts.

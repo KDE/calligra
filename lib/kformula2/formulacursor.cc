@@ -63,6 +63,15 @@ void FormulaCursor::setMark(int mark)
     markPos = mark;
 }
 
+void FormulaCursor::calcCursorSize(bool smallCursor)
+{
+    // We only draw the cursor if its normalized.
+    SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
+
+    if (sequence != 0) {
+        sequence->calcCursorSize(this, smallCursor);
+    }
+}
 
 void FormulaCursor::draw(QPainter& painter, bool smallCursor)
 {

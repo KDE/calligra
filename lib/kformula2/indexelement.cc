@@ -310,30 +310,33 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void IndexElement::draw(QPainter& painter, const ContextStyle& contextStyle,
+void IndexElement::draw(QPainter& painter, const QRect& r,
+                        const ContextStyle& contextStyle,
                         int parentSize, const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
     int mySize = parentSize;
+    if (!QRect(myPos, getSize()).intersects(r))
+        return;
     
-    content->draw(painter, contextStyle, mySize, myPos);
+    content->draw(painter, r, contextStyle, mySize, myPos);
     if (hasUpperLeft()) {
-        upperLeft->draw(painter, contextStyle, mySize, myPos);
+        upperLeft->draw(painter, r, contextStyle, mySize, myPos);
     }
     if (hasUpperMiddle()) {
-        upperMiddle->draw(painter, contextStyle, mySize, myPos);
+        upperMiddle->draw(painter, r, contextStyle, mySize, myPos);
     }
     if (hasUpperRight()) {
-        upperRight->draw(painter, contextStyle, mySize, myPos);
+        upperRight->draw(painter, r, contextStyle, mySize, myPos);
     }
     if (hasLowerLeft()) {
-        lowerLeft->draw(painter, contextStyle, mySize, myPos);
+        lowerLeft->draw(painter, r, contextStyle, mySize, myPos);
     }
     if (hasLowerMiddle()) {
-        lowerMiddle->draw(painter, contextStyle, mySize, myPos);
+        lowerMiddle->draw(painter, r, contextStyle, mySize, myPos);
     }
     if (hasLowerRight()) {
-        lowerRight->draw(painter, contextStyle, mySize, myPos);
+        lowerRight->draw(painter, r, contextStyle, mySize, myPos);
     }
 
     // Debug

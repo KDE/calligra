@@ -25,8 +25,7 @@
 
 // Qt Include
 #include <qlist.h>
-#include <qpoint.h>
-#include <qsize.h>
+#include <qrect.h>
 #include <qstring.h>
 #include <qdom.h>
 
@@ -139,7 +138,8 @@ public:
      * The `parentOrigin' is the point this element's parent starts.
      * We can use our parentPosition to get our own origin then.
      */
-    virtual void draw(QPainter& painter, const ContextStyle& context,
+    virtual void draw(QPainter& painter, const QRect& r,
+                      const ContextStyle& context,
                       int parentSize, const QPoint& parentOrigin) = 0;
 
     
@@ -313,7 +313,9 @@ public:
     
 protected:
 
-    void setWidth(int width) { size.setWidth(width); }
+    QSize& getSize() { return size; }
+    
+    void setWidth(int width)   { size.setWidth(width); }
     void setHeight(int height) { size.setHeight(height); }
     
     void setBaseline(int line) { baseline = line; }
@@ -389,7 +391,7 @@ private:
      * Our position relative to our parent.
      */
     QPoint position;
-
+    
     /**
      * The position of our base line from
      * the upper border. A sequence aligns its elements
@@ -403,6 +405,8 @@ private:
     /**
      * The position of our middle line from
      * the upper border. The strike out position.
+     *
+     * This will have to go.
      */
     int midline;
 

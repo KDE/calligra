@@ -88,7 +88,12 @@ public:
      */
     void setSelection(bool selection) { selectionFlag = selection; hasChangedFlag = true; }
 
-
+    /**
+     * Calculates the size of the cursor. Needs to be called before
+     * the cursor can be drawn.
+     */
+    void calcCursorSize(bool smallCursor);
+    
     /**
      * Draws the cursor at its current position.
      * The cursor will always be drawn in xor mode.
@@ -315,6 +320,11 @@ public:
     QPoint getCursorPoint() const { return cursorPoint; }
 
     /**
+     * @returns the area the cursor is currently on.
+     */
+    QRect getCursorSize() const { return cursorSize; }
+    
+    /**
      * @returns whether we are allowed to alter the document.
      */
     bool isReadOnly() const { return readOnly; }
@@ -398,6 +408,12 @@ private:
      * each time the cursor is drawn.
      */
     QPoint cursorPoint;
+
+    /**
+     * The area that is covered by the cursor. Gets updated
+     * each time the cursor is drawn.
+     */
+    QRect cursorSize;
 
     /**
      * Tells whether the cursor has been changed. This is set

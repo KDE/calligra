@@ -118,14 +118,17 @@ void BracketElement::calcSizes(const ContextStyle& style, int parentSize)
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void BracketElement::draw(QPainter& painter, const ContextStyle& style,
+void BracketElement::draw(QPainter& painter, const QRect& r,
+                          const ContextStyle& style,
                           int parentSize, const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
     int mySize = parentSize;
+    if (!QRect(myPos, getSize()).intersects(r))
+        return;
 
     left->draw(painter, style, mySize, myPos);
-    content->draw(painter, style, mySize, myPos);
+    content->draw(painter, r, style, mySize, myPos);
     right->draw(painter, style, mySize, myPos);
 }
 

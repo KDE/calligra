@@ -201,11 +201,14 @@ void SequenceElement::setChildrenPositions()
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void SequenceElement::draw(QPainter& painter, const ContextStyle& context,
+void SequenceElement::draw(QPainter& painter, const QRect& r,
+                           const ContextStyle& context,
                            int parentSize, const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x() + getX(),
                  parentOrigin.y() + getY());
+    if (!QRect(myPos, getSize()).intersects(r))
+        return;
     
     if (!isEmpty()) {
         int mySize = parentSize - relativeSize;
@@ -213,7 +216,7 @@ void SequenceElement::draw(QPainter& painter, const ContextStyle& context,
         for (uint i = 0; i < count; i++) {
             BasicElement* child = children.at(i);
             if (!child->isPhantom()) {
-                child->draw(painter, context, mySize, myPos);
+                child->draw(painter, r, context, mySize, myPos);
             }
             // Debug
             //painter.setPen(Qt::green);
@@ -229,60 +232,64 @@ void SequenceElement::draw(QPainter& painter, const ContextStyle& context,
 }
 
 
+void SequenceElement::calcCursorSize(FormulaCursor* cursor, bool smallCursor)
+{
+    QPoint point = widgetPos();
+    uint pos = cursor->getPos();
+
+    int posX = getChildPosition(pos);
+    int height = getHeight();
+
+    if (cursor->isSelection()) {
+        uint mark = cursor->getMark();
+        int markX = getChildPosition(mark);
+        int x = QMIN(posX, markX);
+        int width = abs(posX - markX);
+        
+        if (smallCursor) {
+            cursor->cursorSize.setRect(point.x()+x, point.y(), width, height);
+        }
+        else {
+            cursor->cursorSize.setRect(point.x()+x, point.y()-2, width, height+4);
+        }
+    }
+    else {
+        if (smallCursor) {
+            cursor->cursorSize.setRect(point.x()+posX, point.y(), 1, height);
+        }
+        else {
+            cursor->cursorSize.setRect(point.x(), point.y()-2, getWidth()+1, height+6);
+        }
+    }
+
+    cursor->cursorPoint.setX(point.x()+posX);
+    cursor->cursorPoint.setY(point.y()+height/2);
+}
+
+
 /**
  * If the cursor is inside a sequence it needs to be drawn.
  */
 void SequenceElement::drawCursor(FormulaCursor* cursor, QPainter& painter, bool smallCursor)
 {
-    QPoint point = widgetPos();
-    uint pos = cursor->getPos();
-
+    painter.setRasterOp(Qt::XorROP);
     if (cursor->isSelection()) {
-        uint mark = cursor->getMark();
-        drawSelectionCursor(painter, point, pos, mark, smallCursor);
+        painter.fillRect(cursor->cursorSize, Qt::white);
     }
     else {
-        drawSingleCursor(painter, point, pos, smallCursor);
-    }
-
-    int posX = getChildPosition(pos);
-    cursor->cursorPoint.setX(point.x()+posX);
-    cursor->cursorPoint.setY(point.y()+getHeight()/2);
-}
-
-
-void SequenceElement::drawSelectionCursor(QPainter& painter, QPoint& point, uint pos, uint mark, bool smallCursor)
-{
-    int posX = getChildPosition(pos);
-    int markX = getChildPosition(mark);
-    int height = getHeight();
-    int x = QMIN(posX, markX);
-    int width = abs(posX - markX);
-    painter.setRasterOp(Qt::XorROP);
-    if (smallCursor) {
-        painter.fillRect(point.x()+x, point.y(), width, height, Qt::white);
-    }
-    else {
-        painter.fillRect(point.x()+x, point.y()-2, width, height+4, Qt::white);
-    }
-    painter.setRasterOp(Qt::CopyROP);
-}
-
-void SequenceElement::drawSingleCursor(QPainter& painter, QPoint& point, uint pos, bool smallCursor)
-{
-    int posX = getChildPosition(pos);
-    int height = getHeight();
-    painter.setRasterOp(Qt::XorROP);
-    painter.setPen(Qt::white);
-    if (smallCursor) {
-        painter.drawLine(point.x()+posX, point.y(),
-                         point.x()+posX, point.y()+height);
-    }
-    else {
-        painter.drawLine(point.x()+posX, point.y()-2,
-                         point.x()+posX, point.y()+height+2);
-        painter.drawLine(point.x(), point.y()+height+3,
-                         point.x()+getWidth(), point.y()+height+3);
+        painter.setPen(Qt::white);
+        QPoint point = cursor->cursorPoint;
+        QRect size = cursor->cursorSize;
+        if (smallCursor) {
+            painter.drawLine(point.x(), size.top(),
+                             point.x(), size.bottom());
+        }
+        else {
+            painter.drawLine(point.x(), size.top(),
+                             point.x(), size.bottom()-1);
+            painter.drawLine(size.left(), size.bottom(),
+                             size.right(), size.bottom());
+        }
     }
     painter.setRasterOp(Qt::CopyROP);
 }

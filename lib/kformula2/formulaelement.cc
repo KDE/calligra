@@ -71,9 +71,10 @@ void FormulaElement::calcSizes(const ContextStyle& context)
 /**
  * Draws the whole thing.
  */
-void FormulaElement::draw(QPainter& painter, const ContextStyle& context)
+void FormulaElement::draw(QPainter& painter, const QRect& r,
+                          const ContextStyle& context)
 {
-    inherited::draw(painter, context, context.getBaseSize(), QPoint());
+    inherited::draw(painter, r, context, context.getBaseSize(), QPoint());
 }
 
 

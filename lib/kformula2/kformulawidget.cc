@@ -36,14 +36,12 @@
 
 KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const char* name, WFlags f)
     : QWidget(parent, name, f | WRepaintNoErase | WResizeNoErase),
-      formulaView(doc, this)
+      formulaView(doc)
 {
-    
-    // This is buggy. We do need more/other messages.
     connect(doc, SIGNAL(formulaChanged(int, int)),
             this, SLOT(slotFormulaChanged(int, int)));
     connect(&formulaView, SIGNAL(cursorChanged(bool, bool)),
-            this, SIGNAL(cursorChanged(bool, bool)));
+            this, SLOT(slotCursorChanged(bool, bool)));
 
     setFocusPolicy(QWidget::StrongFocus);
     setBackgroundMode(QWidget::PaletteBase);
@@ -61,7 +59,6 @@ QPoint KFormulaWidget::getCursorPoint() const
 {
     return formulaView.getCursorPoint();
 }
-
 
 void KFormulaWidget::setReadOnly(bool ro)
 {
@@ -145,6 +142,12 @@ FormulaCursor* KFormulaWidget::getCursor()
 void KFormulaWidget::slotSelectAll()
 {
     formulaView.slotSelectAll();
+}
+
+void KFormulaWidget::slotCursorChanged(bool visible, bool selecting)
+{
+    emit cursorChanged(visible, selecting);
+    update(formulaView.getDirtyArea());
 }
 
 #include "kformulawidget.moc"

@@ -71,7 +71,7 @@ public:
     /**
      * Draws the whole thing.
      */
-    void draw(QPainter& painter, const ContextStyle& context);
+    void draw(QPainter& painter, const QRect& r, const ContextStyle& context);
 
     /**
      * @returns our documents symbol table

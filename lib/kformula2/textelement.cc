@@ -97,10 +97,14 @@ void TextElement::calcSizes(const ContextStyle& context, int parentSize)
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void TextElement::draw(QPainter& painter, const ContextStyle& context,
+void TextElement::draw(QPainter& painter, const QRect& r,
+                       const ContextStyle& context,
                        int parentSize, const QPoint& parentOrigin)
 {
+    QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
     int mySize = QMAX(parentSize, context.getMinimumSize());
+    if (!QRect(myPos, getSize()).intersects(r))
+        return;
 
     QFont font = getFont(context);
     font.setPointSize(mySize);

@@ -140,15 +140,18 @@ void RootElement::calcSizes(const ContextStyle& style, int parentSize)
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void RootElement::draw(QPainter& painter, const ContextStyle& style,
+void RootElement::draw(QPainter& painter, const QRect& r,
+                       const ContextStyle& style,
                        int parentSize, const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
     int mySize = parentSize;
+    if (!QRect(myPos, getSize()).intersects(r))
+        return;
 
-    content->draw(painter, style, mySize, myPos);
+    content->draw(painter, r, style, mySize, myPos);
     if (hasIndex()) {
-        index->draw(painter, style, mySize, myPos);
+        index->draw(painter, r, style, mySize, myPos);
     }
 
     int x = myPos.x() + rootOffset.x();

@@ -71,7 +71,8 @@ public:
      * The `parentOrigin' is the point this element's parent starts.
      * We can use our parentPosition to get our own origin then.
      */
-    virtual void draw(QPainter& painter, const ContextStyle& context,
+    virtual void draw(QPainter& painter, const QRect& r,
+                      const ContextStyle& context,
                       int parentSize, const QPoint& parentOrigin);
 
     /**

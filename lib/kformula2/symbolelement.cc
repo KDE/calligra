@@ -168,19 +168,22 @@ void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void SymbolElement::draw(QPainter& painter, const ContextStyle& style,
+void SymbolElement::draw(QPainter& painter, const QRect& r,
+                         const ContextStyle& style,
                          int parentSize, const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
     int mySize = parentSize;
+    if (!QRect(myPos, getSize()).intersects(r))
+        return;
 
     symbol.draw(painter, style, mySize, myPos);
-    content->draw(painter, style, mySize, myPos);
+    content->draw(painter, r, style, mySize, myPos);
     if (hasUpper()) {
-        upper->draw(painter, style, mySize, myPos);
+        upper->draw(painter, r, style, mySize, myPos);
     }
     if (hasLower()) {
-        lower->draw(painter, style, mySize, myPos);
+        lower->draw(painter, r, style, mySize, myPos);
     }
 }
 

@@ -109,14 +109,17 @@ void FractionElement::calcSizes(const ContextStyle& style, int parentSize)
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void FractionElement::draw(QPainter& painter, const ContextStyle& style,
+void FractionElement::draw(QPainter& painter, const QRect& r,
+                           const ContextStyle& style,
                            int parentSize, const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
     int mySize = parentSize;
+    if (!QRect(myPos, getSize()).intersects(r))
+        return;
 
-    numerator->draw(painter, style, mySize, myPos);
-    denominator->draw(painter, style, mySize, myPos);
+    numerator->draw(painter, r, style, mySize, myPos);
+    denominator->draw(painter, r, style, mySize, myPos);
 
     painter.setPen(style.getDefaultColor());
     painter.drawLine(myPos.x(), myPos.y() + getMidline(),

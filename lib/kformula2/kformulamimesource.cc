@@ -79,7 +79,7 @@ QByteArray KFormulaMimeSource::encodedData ( const char *format ) const
 	pm.fill();
 	QPainter paint;
 	paint.begin(&pm);
-	tmpContainer.draw(paint);
+	tmpContainer.draw(paint, rect);
 	paint.end();
 	QByteArray d;
 	QBuffer buff(d);

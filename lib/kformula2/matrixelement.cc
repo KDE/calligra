@@ -210,18 +210,21 @@ void MatrixElement::calcSizes(const ContextStyle& style, int parentSize)
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void MatrixElement::draw(QPainter& painter, const ContextStyle& style,
+void MatrixElement::draw(QPainter& painter, const QRect& rect,
+                         const ContextStyle& style,
                          int parentSize, const QPoint& parentOrigin)
 {
     QPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
     int mySize = parentSize;
+    if (!QRect(myPos, getSize()).intersects(rect))
+        return;
 
     uint rows = getRows();
     uint columns = getColumns();
 
     for (uint r = 0; r < rows; r++) {
         for (uint c = 0; c < columns; c++) {
-            getElement(r, c)->draw(painter, style, mySize, myPos);
+            getElement(r, c)->draw(painter, rect, style, mySize, myPos);
         }
     }
 

@@ -135,6 +135,7 @@ void KFormulaContainer::testDirty()
     if (dirty) {
         dirty = false;
         rootElement->calcSizes(getDocument()->getContextStyle());
+        emit cursorMoved(getActiveCursor());
         emit formulaChanged(rootElement->getWidth(), rootElement->getHeight());
     }
 }
@@ -148,9 +149,9 @@ bool KFormulaContainer::isEmpty()
 /**
  * Draws the whole thing.
  */
-void KFormulaContainer::draw(QPainter& painter)
+void KFormulaContainer::draw(QPainter& painter, const QRect& r)
 {
-    rootElement->draw(painter, getDocument()->getContextStyle());
+    rootElement->draw(painter, r, getDocument()->getContextStyle());
 }
 
 
@@ -604,10 +605,10 @@ bool KFormulaContainer::load(QDomNode doc)
         if (root->buildFromDom(fe)) {
             delete rootElement;
             rootElement = root;
+            emit formulaLoaded(rootElement);
+
             dirty = true;
             testDirty();
-
-            emit formulaLoaded(rootElement);
             return true;
         }
         else {
@@ -624,7 +625,7 @@ void KFormulaContainer::print(KPrinter& printer)
     //printer.setFullPage(true);
     QPainter painter;
     if (painter.begin(&printer)) {
-        rootElement->draw(painter, getDocument()->getContextStyle());
+        rootElement->draw(painter, boundingRect(), getDocument()->getContextStyle());
     }
 }
 #include "kformulacontainer.moc"

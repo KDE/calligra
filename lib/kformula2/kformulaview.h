@@ -32,7 +32,6 @@ class FormulaCursor;
 class FormulaElement;
 class KFormulaContainer;
 class QColorGroup;
-class QWidget;
 
 
 /**
@@ -48,7 +47,7 @@ class KFormulaView : public QObject {
     Q_OBJECT
 
 public:
-    KFormulaView(KFormulaContainer*, QWidget*);
+    KFormulaView(KFormulaContainer*);
     ~KFormulaView();
 
     /**
@@ -56,6 +55,11 @@ public:
      */
     QPoint getCursorPoint() const;
 
+    /**
+     * @returns the area the cursor is currently on.
+     */
+    QRect getDirtyArea() const { return dirtyArea; }
+    
     /**
      * Puts the widget in read only mode.
      */
@@ -130,10 +134,7 @@ protected:
      * movement flags.
      */
     MoveFlag movementFlag(int state);
-
-    void hideCursor(QPainter* painter = 0);
-    void showCursor(QPainter* painter = 0);
-
+    
 private:
 
     /**
@@ -159,6 +160,11 @@ private:
     bool cursorHasChanged;
 
     /**
+     * The area that needs an update because the cursor moved.
+     */
+    QRect dirtyArea;
+    
+    /**
      * The formula we show.
      */
     KFormulaContainer* document;
@@ -167,11 +173,6 @@ private:
      * Out cursor.
      */
     FormulaCursor* cursor;
-
-    /**
-     * The widget that is used for drawing.
-     */
-    QWidget* widget;
 };
 
 #endif // __KFORMULAVIEW_H
