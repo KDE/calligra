@@ -29,8 +29,10 @@
 #include <qmap.h>
 #include <qvaluelist.h>
 
+class QVBox;
+class QIconView;
+class QIconViewItem;
 class QSplitter;
-class KoKoolBar;
 class KoDocumentEntry;
 class KoView;
 class KoShellGUIClient;
@@ -60,8 +62,17 @@ protected slots:
   virtual void slotFileNew();
   virtual void slotFileClose();
   virtual void slotFileOpen();
-  void slotKoolBar( int _grp, int _item );
+  
+  /**
+    Used for showing or hiding the sidebar and the components-label.
+  */
   void slotShowSidebar();
+  /**
+    This slot is called whenever the user clicks on a "component" in the sidebar. It loads a new
+    document which can be edited with the chosen component.
+    @param item The component the user clicked on
+  */
+  void slotSidebarItemClicked( QIconViewItem *item );
   void slotKSLoadCompleted();
   void slotKSLoadCanceled (const QString &);
   void slotNewDocumentName();
@@ -91,9 +102,11 @@ private:
   QValueList<Page> m_lstPages;
   QValueList<Page>::Iterator m_activePage;
 
-  KoKoolBar* m_pKoolBar;
-
-  int m_grpFile;
+  QIconView *m_pSidebar;
+  QLabel *m_pComponentsLabel;
+  QSplitter *m_pLayout;
+  KTabWidget *m_pFrame;
+  QVBox *m_pSidebarSplit;
 
   // Map of available parts (the int is the koolbar item id)
   QMap<int,KoDocumentEntry> m_mapComponents;
@@ -103,12 +116,8 @@ private:
   // Saved between openDocument and setRootDocument
   KoDocumentEntry m_documentEntry;
 
-  KTabWidget *m_pFrame;
-
   KoShellGUIClient *m_client;
   void createShellGUI( bool create = true );
-
-  QSplitter *m_pLayout;
 };
 
 //////// class KoShellGUIClient //////////

@@ -34,7 +34,7 @@ extern "C" KOSHELL_EXPORT int kdemain( int argc, char **argv )
 {
   KAboutData * aboutData = new KAboutData( "koshell", I18N_NOOP("KOffice Workspace"),
      version, description, KAboutData::License_GPL,
-       "(c) 1998-2002, Torben Weis");
+       "(c) 1998-2002, Torben Weis\n(c) 2002-2005, David Faure\n(c) 2005, Sven Lüppken");
   aboutData->addAuthor("Sven Lüppken", I18N_NOOP("Current Maintainer"), "sven@kde.org");
   aboutData->addAuthor("Torben Weis", 0, "weis@kde.org");
   aboutData->addAuthor("David Faure", 0, "faure@kde.org");

@@ -21,6 +21,10 @@
 */
 
 #include <qsplitter.h>
+#include <qiconview.h>
+#include <qlabel.h>
+#include <qvbox.h>
+
 #include <assert.h>
 
 #include "koshell_shell.h"
@@ -41,7 +45,6 @@
 #include <kdeversion.h>
 
 #include <koQueryTrader.h>
-#include <koKoolBar.h>
 #include <koDocumentInfo.h>
 #include <koDocument.h>
 #include <koView.h>
@@ -55,28 +58,34 @@ KoShellWindow::KoShellWindow()
   m_activePage = m_lstPages.end();
 
   m_pLayout = new QSplitter( centralWidget() );
-  m_pKoolBar = new KoKoolBar( m_pLayout );
+  m_pSidebarSplit = new QVBox( m_pLayout );
+  m_pComponentsLabel = new QLabel( i18n( "Components" ), m_pSidebarSplit );
+  m_pComponentsLabel->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+  m_pComponentsLabel->setAlignment( Qt::AlignCenter );
+
+  m_pSidebar = new QIconView( m_pSidebarSplit );
+  // Setup the QIconView
+  m_pSidebar->setItemsMovable( false );
+  m_pSidebar->setWordWrapIconText( false );
+  m_pSidebar->setShowToolTips( true );
+  m_pSidebar->setResizeMode( QIconView::Adjust );
 
   m_pFrame = new KTabWidget( m_pLayout );
   m_pFrame->setTabPosition( KTabWidget::Bottom );
 
-  m_grpFile = m_pKoolBar->insertGroup(i18n("Components"));
-
   QValueList<KoDocumentEntry> lstComponents = KoDocumentEntry::query(false,QString());
   QValueList<KoDocumentEntry>::Iterator it = lstComponents.begin();
+  int id = 0;
+
   for( ; it != lstComponents.end(); ++it )
   {
-      //kdDebug() << "Inserting into koolbar : " << (*it).name() << endl;
-      int id;
       if (!(*it).service()->genericName().isEmpty()) //skip the unavailable part
-          id = m_pKoolBar->insertItem( m_grpFile,
-                                       DesktopIcon((*it).service()->icon()),
-                                       (*it).name(),
-                                       this, SLOT( slotKoolBar( int, int ) ) );
+          m_pSidebar->insertItem( new QIconViewItem( m_pSidebar, (*it).name(),
+                                  DesktopIcon((*it).service()->icon())) );
       else
           continue;
 
-      m_mapComponents[ id ] = *it;
+      m_mapComponents[ id++ ] = *it;
 
       // Build list of patterns for all supported KOffice documents...
       QString nativeMimeType = (*it).service()->property( "X-KDE-NativeMimeType" ).toString();
@@ -93,8 +102,6 @@ KoShellWindow::KoShellWindow()
       }
   }
 
-  //m_pKoolBar->insertGroup("Snippets"); //?
-
   QValueList<int> list;
   list.append( KoShellSettings::sidebarWidth() );
   list.append( this->width() - KoShellSettings::sidebarWidth() );
@@ -105,10 +112,9 @@ KoShellWindow::KoShellWindow()
 
   connect( m_pFrame, SIGNAL( currentChanged( QWidget* ) ),
            this, SLOT( slotUpdatePart( QWidget* ) ) );
-
-   // Not implemented yet
-  actionCollection()->action("view_split")->setEnabled(false);
-  actionCollection()->action("view_splitter_orientation")->setEnabled(false);
+  
+  connect( m_pSidebar, SIGNAL( pressed( QIconViewItem* ) ), 
+           this, SLOT( slotSidebarItemClicked( QIconViewItem* ) ) );
 
   m_client = new KoShellGUIClient( this );
   createShellGUI();
@@ -238,6 +244,31 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
   return true;
 }
 
+void KoShellWindow::slotSidebarItemClicked( QIconViewItem *item )
+{
+  //kdDebug() << "slotSidebarItemClicked called!" << endl;
+  if( item != 0 )
+  {
+    int index = item->index();
+  
+    // Create new document from a KoDocumentEntry
+     m_documentEntry = m_mapComponents[ index ];
+    KoDocument *doc = m_documentEntry.createDoc();
+    if (doc)
+    {
+        // koshell isn't starting, but this is like starting a new app:
+        // offer both "open existing file" and "open new file".
+        if ( doc->initDoc( KoDocument::InitDocAppStarting) )
+        {
+            partManager()->addPart( doc, false );
+            setRootDocument( doc );
+        }
+        else
+            delete doc;
+    }
+  }
+}
+
 // Separate from openDocument to handle async loading (remote URLs)
 void KoShellWindow::slotKSLoadCompleted()
 {
@@ -348,37 +379,18 @@ void KoShellWindow::updateCaption()
     }
 }
 
-void KoShellWindow::slotKoolBar( int _grp, int _item )
-{
-  kdDebug() << "KoShellWindow::slotKoolBar "  << _grp << " " << _item << endl;
-  if ( _grp == m_grpFile )
-  {
-    // Create new document from a KoDocumentEntry
-    m_documentEntry = m_mapComponents[ _item ];
-    kdDebug() << "Service:" << m_documentEntry.service() << endl;
-    kdDebug() << "Name: " << m_documentEntry.name() << endl;
-    KoDocument *doc = m_documentEntry.createDoc();
-    if (doc)
-    {
-        // koshell isn't starting, but this is like starting a new app:
-        // offer both "open existing file" and "open new file".
-        if ( doc->initDoc( KoDocument::InitDocAppStarting) )
-        {
-            partManager()->addPart( doc, false );
-            setRootDocument( doc );
-        }
-        else
-            delete doc;
-    }
-  }
-}
-
 void KoShellWindow::slotShowSidebar()
 {
-	if( m_pKoolBar->isShown() )
-		m_pKoolBar->hide();
-	else
-		m_pKoolBar->show();
+  if( m_pSidebar->isShown() )
+  {
+    m_pSidebar->hide();
+    m_pComponentsLabel->hide();
+  }
+  else
+  {
+    m_pSidebar->show();
+    m_pComponentsLabel->show();
+  }
 }
 
 void KoShellWindow::slotUpdatePart( QWidget* widget )
@@ -557,7 +569,7 @@ bool KoShellWindow::saveAllPages()
 
 void KoShellWindow::saveSettings()
 {
-  KoShellSettings::setSidebarWidth( m_pKoolBar->width() );	
+  KoShellSettings::setSidebarWidth( m_pSidebar->width() );	
   KoShellSettings::writeConfig();
 }
 
