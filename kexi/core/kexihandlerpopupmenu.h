@@ -30,7 +30,7 @@ class KexiPartPopupMenu : public QPopupMenu
 	Q_OBJECT
 
 	public:
-		KexiPartPopupMenu(QObject *recever);
+		KexiPartPopupMenu(QObject *receiver);
 		~KexiPartPopupMenu();
 
 		void	insertAction(QString label, const char *slot);
@@ -45,7 +45,7 @@ class KexiPartPopupMenu : public QPopupMenu
 
 	protected:
 		QString	m_identifier;
-		QObject	*m_recever;
+		QObject	*m_receiver;
 		Slots	m_slots;
 };
 
