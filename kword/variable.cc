@@ -362,7 +362,8 @@ QStringList KWPgNumVariable::actionTexts()
 
 void KWPgNumVariable::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
 {
-    recalc();
+    if ( m_subtype == VST_PGNUM_CURRENT )
+        recalc();
     KWVariable::draw( p, x, y,cx,cy, cw, ch, cg );
 }
 
