@@ -700,8 +700,11 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 	b = loadXML( doc );
 	ignoreSticky = TRUE;
     }
-    initConfig();
-    setModified(false);
+    if(_clean)
+    {
+        initConfig();
+        setModified(false);
+    }
 
     kdDebug() << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
 
@@ -968,22 +971,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
 
     if ( _rastX == 0 ) _rastX = 10;
     if ( _rastY == 0 ) _rastY = 10;
-#if 0 //not necessary
-    if ( _clean ) {
-
-        // Fix the selectedslides list (for all docs)
-        while ( m_selectedSlides.count() < getPageNums() )
-            m_selectedSlides.append(true);
-
-        // Not sure this is necessary anymore.
-        if ( allSlides ) {
-            //kdDebug(33001) << "KPresenterDoc::loadXML allSlides" << endl;
-            QValueList<bool>::Iterator sit = m_selectedSlides.begin();
-            for ( ; sit != m_selectedSlides.end(); ++sit )
-                (*sit) = true;
-        }
-    }
-#endif
 
     if(activePage!=-1)
         m_initialActivePage=m_pageList.at(activePage);
@@ -1574,16 +1561,6 @@ void KPresenterDoc::insertPage( KPrPage *_page, int position)
     m_pageList.insert( position,_page);
     //active this page
     emit sig_changeActivePage(_page );
-/*
-    if ( position < (int)m_selectedSlides.count() )
-    {
-        kdDebug(33001) << "KPresenterDoc::insertPage inserting in m_selectedSlides at position " << position << endl;
-        m_selectedSlides.insert( m_selectedSlides.at(position), true );
-        kdDebug(33001) << "KPresenterDoc::insertPage count is now " << m_selectedSlides.count() << endl;
-    }
-    else
-        m_selectedSlides.append( true );
-*/
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->skipToPage(position);
