@@ -263,7 +263,7 @@ bool KWordParser :: endElement( const QString&, const QString& , const QString& 
         }
         if ( !success)
         {
-            qDebug("Something when wrong when closing paragraph. Probably mismatched tags!");
+            qDebug("Something went wrong when closing paragraph. Probably mismatched tags!");
         }
         delete stackItem->m_paragraph;
         stackItem->m_paragraph = 0;

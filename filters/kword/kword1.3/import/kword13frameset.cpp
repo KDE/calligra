@@ -18,6 +18,14 @@ bool KWordFrameset::addParagraph(const KWordParagraph&)
     return false;
 }
 
+void KWordFrameset::xmldump( QTextStream& iostream )
+{
+    iostream << "  <frameset variant=\"None\" type=\"" << m_frameType
+         << "\" info=\"" << m_frameType
+         << "\" name=\"" << m_name <<"\"/>\n";
+}
+
+
 KWordNormalTextFrameset::KWordNormalTextFrameset( int frameType, int frameInfo, const QString& name )
     : KWordFrameset( frameType, frameInfo, name )
 {    
@@ -33,3 +41,11 @@ bool KWordNormalTextFrameset::addParagraph(const KWordParagraph& para)
     return true;
 }
 
+void KWordNormalTextFrameset::xmldump( QTextStream& iostream )
+{
+    iostream << "  <frameset variant=\"Text\" type=\"" << m_frameType
+         << "\" info=\"" << m_frameType
+         << "\" name=\"" << m_name <<"\">\n";
+    // ### TODO: text
+    iostream << "  </frameset>\n";
+}

@@ -8,7 +8,7 @@ class KWordFrameset;
 /**
  * Type of element
  *
- * Note: we do not care of: \<FRAMESETS\>
+ * Note: we do not care of the tags: \<FRAMESETS\>
  */
 enum StackItemElementType
 {

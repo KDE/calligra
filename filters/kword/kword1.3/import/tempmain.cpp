@@ -10,10 +10,13 @@ int main( int argc, char **argv )
     QApplication a( argc, argv );		// QApplication required!
 
     const char* orig = "maindoc.xml";
+    const char* dest = "compiled.xml";
 
     if ( argc >= 2 )				// use argument as file name
-	orig = argv[1];
+        orig = argv[1];
 
+    if ( argc >= 3 )				// use argument as file name
+        dest = argv[2];
 
     KWordDocument kwordDocument;
     
@@ -36,4 +39,10 @@ int main( int argc, char **argv )
         return 1;
     }
 
+    qDebug("Extracting...");
+    
+    QFile fileOut(dest);
+    fileOut.open(IO_WriteOnly);
+    kwordDocument.xmldump( &fileOut );
+    fileOut.close();
 }
