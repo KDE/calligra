@@ -63,4 +63,4 @@ ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-kpresenter
 X-DCOP-ServiceType=multi
 DocPath=kpresenter/index.html
-KDE-X-StartupNotify=true
+X-KDE-StartupNotify=true

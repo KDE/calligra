@@ -57,4 +57,4 @@ ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart,text/x-csv,app
 X-KDE-NativeMimeType=application/x-kspread
 X-DCOP-ServiceType=multi
 DocPath=kspread/index.html
-KDE-X-StartupNotify=true
+X-KDE-StartupNotify=true
