@@ -876,6 +876,20 @@
     </Function>
 
     <Function>
+      <Name>trim</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>String</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The trim() function returns text with only single spaces between words.</Text>
+	<Syntax>trim(text)</Syntax>
+	<Example>len(" hello    kspread   ") returns hello kspread</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>join</Name>
       <Type>String</Type>
       <Parameter optional="true">

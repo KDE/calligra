@@ -1297,6 +1297,20 @@ static bool kspreadfunc_mid( KSContext& context )
     return true;
 }
 
+static bool kspreadfunc_trim(KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkArgumentsCount( context, 1, "trim", true ) )
+        return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+        return false;
+    QString text=args[0]->stringValue().simplifyWhiteSpace();
+    context.setValue( new KSValue(text));
+    return true;
+}
+
 static bool kspreadfunc_len( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -4463,6 +4477,8 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "seconds", new KSValue( new KSBuiltinFunction( module, "seconds", kspreadfunc_seconds) ) );
   module->addObject( "ROMAN", new KSValue( new KSBuiltinFunction( module, "ROMAN", kspreadfunc_roman) ) );
   module->addObject( "shortcurrentDate", new KSValue( new KSBuiltinFunction( module, "shortcurrentDate", kspreadfunc_shortcurrentDate) ) );
+  module->addObject( "trim", new KSValue( new KSBuiltinFunction( module, "trim", kspreadfunc_trim) ) );
+
   return module;
 }
 
