@@ -4849,7 +4849,7 @@ void KPresenterView::viewZoom( const QString &s )
     }
 
     m_canvas->setFocus();
-
+    m_canvas->repaint();
 }
 
 
