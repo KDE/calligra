@@ -11,7 +11,7 @@
 
 #include <string.h>
 #include <qstring.h>
-#include <qstrlist.h>
+#include <qarray.h>
 #include <qlist.h>
 #include <kdebug.h>
 #include "myfile.h"
@@ -62,7 +62,7 @@ public:
 
     bool enterDir(long handle);
     bool leaveDir();
-    QList<long> currentPath();
+    QArray<long> currentPath();
 
     OLEInfo streamInfo(long handle);
     QString stream(long handle);       // Note: 512 byte blocks!
@@ -88,7 +88,7 @@ private:
 
     QList<QList<OLETree> > treeList;
     QList<OLEInfo> ppsList;
-    QList<long> path;
+    QArray<long> path;
 
     unsigned char *data;
     unsigned char *bigBlockDepot;

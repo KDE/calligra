@@ -32,8 +32,6 @@ KLaola::KLaola(myFile file) {
 
 KLaola::~KLaola() {
 
-    kdebug(KDEBUG_INFO, 31000, "DTOR");
-
     if(bigBlockDepot) {
         delete [] bigBlockDepot;
         bigBlockDepot=0L;
@@ -47,8 +45,6 @@ KLaola::~KLaola() {
         smallBlockFile=0L;
     }
 
-    kdebug(KDEBUG_INFO, 31000, "vor Liste 1");
-
     QList<OLETree> *tmpList;
     OLETree *node;
     for(tmpList=treeList.first();tmpList!=0;tmpList=treeList.next()) {
@@ -60,31 +56,26 @@ KLaola::~KLaola() {
         tmpList=0L;
     }
 
-    kdebug(KDEBUG_INFO, 31000, "nach Liste 1");
-
     OLEInfo *info;
     for(info=ppsList.first();info!=0;info=ppsList.next()) {
         delete info;
         info=0L;
     }
-
-    kdebug(KDEBUG_INFO, 31000, "DTOR-ENDE :)");
 }
 
 QList<OLENode> KLaola::parseRootDir() {
 
     QList<OLENode> tmpOLENodeList;
-    QList<long> tmp;
-    tmp=path;
+    QArray<long> tmp;
 
-    path.clear();
+    tmp=path.copy();
 
-    long p=0;
-    path.append(&p);
+    path.resize(1);
+    path[0]=0;       // just to be sure...
 
     tmpOLENodeList=parseCurrentDir();
 
-    path=tmp;
+    path=tmp.copy();
 
     return tmpOLENodeList;
 }
@@ -96,17 +87,31 @@ QList<OLENode> KLaola::parseCurrentDir() {
     QList<OLENode> nodeList;
     OLETree *tree;
     OLEInfo *info;
+    unsigned int i;
+    bool found;
 
-    kdebug(KDEBUG_INFO, 31000, "parseCurrentDir, Anfang");
+    for(i=0, tmpList=treeList.first();i<path.size();++i) {
+        tree=tmpList->first();
+        found=false;
 
-    tmpList=treeList.take(*(path.getLast()));   // this line is strange...
+        do {
+            if(tree==0) {
+                kdebug(KDEBUG_ERROR, 31000, "path seems to be corrupted!");
+                exit(-1);
+            }
+            else if(tree->handle==path[i] && tree->subtree!=-1)
+                found=true;
+            else
+                tree=tmpList->next();
+        } while(!found);
 
-    kdebug(KDEBUG_INFO, 31000, "parseCurrentDir, Liste geholt");
+        tmpList=treeList.at(tree->subtree);
+    }
 
     for(tree=tmpList->first();tree!=0;tree=tmpList->next()) {
         node=new OLENode;
 
-        info=ppsList.take(tree->handle);
+        info=ppsList.at(tree->handle);
         node->handle=info->handle;
         node->name=info->name;
         node->type=info->type;
@@ -126,13 +131,8 @@ bool KLaola::enterDir(long handle) {
     node=dir.first();
     while(node!=0) {
         if(node->handle==handle && node->type==1) {
-            long *tmp=new long[1];
-            tmp[0]=handle;
-
-            path.append(tmp);
-
-            delete [] tmp;
-
+            path.resize(path.size()+1);
+            path[path.size()-1]=node->handle;
             return true;
         }
         node=dir.next();
@@ -141,14 +141,14 @@ bool KLaola::enterDir(long handle) {
 }
 
 bool KLaola::leaveDir() {
-    if(path.count()>1) {
-        path.removeLast();
+    if(path.size()>1) {
+        path.resize(path.size()-1);
         return true;
     }
     return false;
 }
 
-QList<long> KLaola::currentPath() {
+QArray<long> KLaola::currentPath() {
     return path;
 }
 
@@ -156,7 +156,7 @@ OLEInfo KLaola::streamInfo(long handle) {
 
     OLEInfo *tmp, ret;
 
-    tmp=ppsList.take(handle);
+    tmp=ppsList.at(handle);
 
     ret.handle=tmp->handle;
     ret.name=tmp->name;
@@ -181,7 +181,7 @@ QString KLaola::stream(long handle) {
     QString ret;
     char *p;
 
-    info=ppsList.take(handle);
+    info=ppsList.at(handle);
 
     if(info->size>=0x1000)
         p=(char*)readBBStream(info->sb);
@@ -200,6 +200,8 @@ void KLaola::testIt() {
     OLENode *node;
     OLEInfo info;
     QString foo, tmp;
+
+    kdebug(KDEBUG_INFO, 31000, "testIt()");
 
     dir=parseRootDir();
 
@@ -234,8 +236,9 @@ bool KLaola::parseHeader() {
     root_startblock=read32(0x30);
     sbd_startblock=read32(0x3c);
 
-    for(unsigned int i=0;i<num_of_bbd_blocks;++i)
-        bbd_list[i]=read32(0x4c+i);
+    unsigned int i, j;
+    for(i=0, j=0;i<num_of_bbd_blocks;++i, j=j+4)
+        bbd_list[i]=read32(0x4c+j);
 
     return true;
 }
@@ -259,7 +262,7 @@ void KLaola::readSmallBlockFile() {
 void KLaola::readRootList() {
 
     long pos=root_startblock;
-    long handle=-1;
+    long handle=0;
 
     while(pos!=-2 && pos>=0 && pos<=(long)maxblock) {
         for(int i=0;i<4;++i, ++handle)
@@ -273,16 +276,8 @@ void KLaola::readRootList() {
 
     createTree(0, 0);   // build the tree with a recursive method :)
 
-    long *p=new long[1];
-    p[0]=0;
-
-    path.setAutoDelete(true);
-    path.append(p);    // current dir == root dir
-
-    if(p) {
-        delete [] p;
-        p=0L;
-    }
+    path.resize(1);
+    path[0]=0;   // current path=root dir
 }
 
 void KLaola::readPPSEntry(long pos, long handle) {
@@ -294,7 +289,7 @@ void KLaola::readPPSEntry(long pos, long handle) {
 
     if(info->nameSize!=0) {      // PPS Entry seems to be OK
 
-        for(int i=0;i<(info->nameSize/2);++i)
+        for(int i=0;i<(info->nameSize/2)-1;++i)
             info->name+=data[pos+2*i];
 
         info->type=data[pos+0x42];
@@ -317,7 +312,7 @@ void KLaola::readPPSEntry(long pos, long handle) {
 
 void KLaola::createTree(long handle, short index) {
 
-    OLEInfo *info=ppsList.take(handle);
+    OLEInfo *info=ppsList.at(handle);
     QList<OLETree> *tmpList;
 
     OLETree *node=new OLETree;
@@ -335,7 +330,7 @@ void KLaola::createTree(long handle, short index) {
         createTree(info->dir, node->subtree);
     }
 
-    tmpList=treeList.take(index);
+    tmpList=treeList.at(index);
     tmpList->append(node);
 
     if(info->next!=-1)
@@ -346,19 +341,12 @@ unsigned char *KLaola::readBBStream(long start) {
 
     long i=0, tmp;
     unsigned char *p=0;
-    QString foo;
 
     tmp=start;
 
-    kdebug(KDEBUG_INFO, 31000, "BB-in");
-    foo.setNum(tmp);
-    kdebug(KDEBUG_INFO, 31000, (const char*)foo);
-    
     while(tmp!=-2 && tmp>=0 && tmp<=(long)maxblock) {
         ++i;
         tmp=nextBigBlock(tmp);
-        foo.setNum(tmp);
-        kdebug(KDEBUG_INFO, 31000, (const char*)foo);
     }
 
     if(i!=0) {
@@ -373,7 +361,6 @@ unsigned char *KLaola::readBBStream(long start) {
             ++i;
         }
     }
-    kdebug(KDEBUG_INFO, 31000, "BB-out");
     return p;
 }
 
@@ -381,19 +368,12 @@ unsigned char *KLaola::readSBStream(long start) {
 
     long i=0, tmp;
     unsigned char *p=0;
-    QString foo;
 
     tmp=start;
-
-    kdebug(KDEBUG_INFO, 31000, "SB-in");
-    foo.setNum(tmp);
-    kdebug(KDEBUG_INFO, 31000, (const char*)foo);
 
     while(tmp!=-2 && tmp>=0 && tmp<=(long)maxblock) {
         ++i;
         tmp=nextSmallBlock(tmp);
-        foo.setNum(tmp);
-        kdebug(KDEBUG_INFO, 31000, (const char*)foo);
     }
 
     if(i!=0) {
@@ -408,7 +388,6 @@ unsigned char *KLaola::readSBStream(long start) {
             ++i;
         }
     }
-    kdebug(KDEBUG_INFO, 31000, "SB-out");
     return p;
 }
 
