@@ -55,6 +55,7 @@ void
 VShearTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();
+	view()->canvasWidget()->setYMirroring( true );
 	painter->setRasterOp( Qt::NotROP );
 
 	VObjectListIterator itr = m_objects;
@@ -240,8 +241,8 @@ VShearTool::recalc()
 		QWMatrix mat;
 		mat.translate( first().x() / view()->zoom(), first().y() / view()->zoom() );
 		mat.shear( m_s1, m_s2 );
-		mat.translate(	- ( first().x() + view()->canvasWidget()->contentsX() ) / view()->zoom(),
-						- ( first().y() + view()->canvasWidget()->contentsY() ) / view()->zoom() );
+		mat.translate(	- first().x() / view()->zoom(),
+						- first().y() / view()->zoom() );
 
 
 	// Copy selected objects and transform:
