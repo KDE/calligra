@@ -939,12 +939,14 @@ void KWView::updateFrameStatusBarItem()
 
 void KWView::clipboardDataChanged()
 {
+    kdDebug() << "KWView::clipboardDataChanged" << endl;
     if ( !m_gui || !m_doc->isReadWrite() )
     {
         actionEditPaste->setEnabled(false);
         return;
     }
     KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
+    kdDebug() << "KWView::clipboardDataChanged checking for plain text" << endl;
     // Is there plain text in the clipboard ?
     if ( edit && !QApplication::clipboard()->text().isEmpty() )
     {
@@ -952,14 +954,37 @@ void KWView::clipboardDataChanged()
         return;
     }
     QMimeSource *data = QApplication::clipboard()->data();
+    kdDebug() << "KWView::clipboardDataChanged checking for image" << endl;
+    //QTime dt;
+    //dt.start();
+    // if ( QImageDrag::canDecode( data ) )  is very very slow in Qt 2 (n*m roundtrips)
+    // Workaround...
+    QValueList<QCString> formats;
+    const char* fmt;
+    for (int i=0; (fmt = data->format(i)); i++)
+        formats.append( QCString( fmt ) );
+
+    bool providesImage = false;
+    QStrList fileFormats = QImageIO::inputFormats();
+    for ( fileFormats.first() ; fileFormats.current() && !providesImage ; fileFormats.next() )
+    {
+        QCString format = fileFormats.current();
+        QCString type = "image/" + format.lower();
+        providesImage = ( formats.findIndex( type ) != -1 );
+    }
+
     // Is there an image in the clipboard ?
-    if ( QImageDrag::canDecode( data ) )
+    if ( providesImage )
         actionEditPaste->setEnabled( true );
     else
+    {
+        kdDebug() << "KWView::clipboardDataChanged checking for kword XML" << endl;
         // Is there kword XML in the clipboard ?
-        actionEditPaste->setEnabled( ( edit && KWTextDrag::canDecode( data ) )
-                                     || KWDrag::canDecode( data ) );
-
+        actionEditPaste->setEnabled( ( edit &&
+                                       formats.findIndex( KWTextDrag::selectionMimeType() ) != -1 )
+                                     || formats.findIndex( KWDrag::selectionMimeType() ) != -1 );
+    }
+    //kdDebug() << "KWView::clipboardDataChanged total time : " << (float)dt.elapsed()/1000.0 << " seconds" << endl;
 }
 
 /*=========================== file print =======================*/
