@@ -3549,7 +3549,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
           s->parse( m_strFormularOut );
       else
           s->parse( m_strText );
-      printf("SELECT %s\n", s->text().latin1() );
+      printf("SELECT %s\n",(const char*) s->text().local8Bit());//s->text().latin1() );
       checkValue();
       // m_bLayoutDirtyFlag = true;
   }

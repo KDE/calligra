@@ -85,7 +85,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   {
       QString tmp( "Document%1" );
       tmp = tmp.arg( s_docId++ );
-      setName( tmp.latin1() );
+      setName( tmp.local8Bit());//tmp.latin1() );
   }
 
   m_iTableId = 1;
@@ -291,7 +291,8 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
     float bottom = borders.attribute( "bottom" ).toFloat( &ok );
     if ( !ok ) { m_bLoading = false; return false; }
 
-    setPaperLayout( left, top, right, bottom, format.latin1(), orientation.latin1() );
+    //setPaperLayout( left, top, right, bottom, format.latin1(), orientation.latin1() );
+    setPaperLayout( left, top, right, bottom, format.local8Bit(), orientation.local8Bit() );
 
     QString hleft, hright, hcenter;
     QString fleft, fright, fcenter;
@@ -367,7 +368,8 @@ KSpreadTable* KSpreadDoc::createTable()
   QString s( i18n("Table%1") );
   s = s.arg( m_iTableId++ );
 
-  KSpreadTable *t = new KSpreadTable( m_pMap, s.latin1() );
+  //KSpreadTable *t = new KSpreadTable( m_pMap, s.latin1() );
+  KSpreadTable *t = new KSpreadTable( m_pMap, s.local8Bit() );
   t->setTableName( s, TRUE );
   return t;
 }
