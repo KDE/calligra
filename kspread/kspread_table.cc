@@ -4687,7 +4687,7 @@ bool ChartChild::loadDocument( KoStore* _store )
 
     // Did we see a cell rectangle ?
     if ( !m_pBinding )
-	return;
+	return false;
 
     update();
 
