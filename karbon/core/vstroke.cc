@@ -120,6 +120,13 @@ VStroke::saveOasis( KoGenStyle &style ) const
 		style.addProperty( "draw:stroke", "gradient" );
 	else if( m_type == patt )
 		style.addProperty( "draw:stroke", "hatch" );*/
+
+	if( m_lineJoin == joinRound )
+		style.addProperty( "draw:stroke-linejoin", "round" );
+	else if( m_lineJoin == joinBevel )
+		style.addProperty( "draw:stroke-linejoin", "bevel" );
+	else if( m_lineJoin == joinMiter )
+		style.addProperty( "draw:stroke-linejoin", "miter" );
 }
 
 void
@@ -133,6 +140,16 @@ VStroke::loadOasis( const KoStyleStack &stack )
 			setColor( QColor( stack.attribute( "svg:stroke-color" ) ) );
 			if( stack.hasAttribute( "svg:stroke-opacity" ) )
 				m_color.setOpacity( stack.attribute( "svg:stroke-opacity" ).remove( '%' ).toFloat() / 100. );
+			QString join = stack.attribute( "draw:stroke-linejoin" );
+			if( !join.isEmpty() )
+			{
+				if( join == "round" )
+					m_lineJoin = joinRound;
+				else if( join == "bevel" )
+					m_lineJoin = joinBevel;
+				else
+					m_lineJoin = joinMiter;
+			}
 		}
 		else if( stack.attribute( "draw:stroke" ) == "none" )
 			setType( VStroke::none );
