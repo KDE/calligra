@@ -1642,14 +1642,15 @@ void KPTextObject::setVerticalAligment( VerticalAlignmentType _type)
 
 void KPTextObject::recalcVerticalAlignment()
 {
-    double txtHeight = m_doc->zoomHandler()->layoutUnitPtToPt( textDocument()->height() ) + btop + bbottom;
-    double diffy = getRect().height() - txtHeight;
+    double txtHeight = m_doc->zoomHandler()->layoutUnitPtToPt( m_doc->zoomHandler()->pixelYToPt( textDocument()->height() ) ) + btop + bbottom;
+    double diffy = getSize().height() - txtHeight;
 
-    //kdDebug(33001) << k_funcinfo << "txtHeight: " << txtHeight << endl;
-    //kdDebug(33001) << k_funcinfo << "diffy: " << diffy << endl;
+    //kdDebug(33001) << k_funcinfo << "txtHeight: " << txtHeight << " rectHeight:" << getSize().height() << " -> diffy=" << diffy << endl;
 
-    if ( diffy <= 0.0 )
+    if ( diffy <= 0.0 ) {
+        alignVertical = 0.0;
         return;
+    }
     switch( m_textVertAlign )
     {
     case KP_CENTER:
