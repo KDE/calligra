@@ -472,7 +472,9 @@ int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
   if ( isCursorAtLineEnd() )
     return -2;
   
-  if ( parag->getText()[ textPos ].c != 0 && parag->getText()[ textPos ].attrib == 0 )
+  if ( parag->getText()[ textPos ].c != 0 && parag->getText()[ textPos ].attrib == 0 ||
+       textPos - 1 >= 0 && parag->getText()[ textPos -1 ].c != 0 && 
+       *parag->getText()[ textPos - 1 ].attrib == *parag->getText()[ textPos ].attrib)
     return 1;
   
   if ( parag->getText()[ textPos ].c != 0 )

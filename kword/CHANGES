@@ -57,3 +57,4 @@ Reggie, 14.9.1998:
 - Fixed a bug with joining paragraphs
 - Fixed a redraw problem with delete/backspace, but there are still
   problems with setting the cursor.
+- Bugfix in printLine

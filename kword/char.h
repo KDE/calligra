@@ -16,6 +16,8 @@ public:
 
   int getClassId()
     { return classId; }
+  virtual bool operator==(const KWCharAttribute &_attrib)
+    { return classId == const_cast<KWCharAttribute>(_attrib).getClassId(); }
 
 protected:
   int classId;
@@ -33,6 +35,8 @@ public:
     { return format; }
   virtual void setFormat(KWFormat *_format)
     { format = _format; }
+  virtual bool operator==(const KWCharFormat &_attrib)
+    { return classId == const_cast<KWCharFormat>(_attrib).getClassId() && *format == *const_cast<KWCharFormat>(_attrib).getFormat(); }
 
 protected:
   KWFormat *format;
