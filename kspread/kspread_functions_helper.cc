@@ -115,6 +115,43 @@ bool getDate( KSContext & context, KSValue::Ptr & arg, QDate & date )
   return false;
 }
 
+bool getTime( KSContext & context, KSValue::Ptr & arg, QTime & time )
+{
+  if ( !KSUtil::checkType( context, arg, KSValue::TimeType, true ) )
+  {
+    if ( !KSUtil::checkType( context, arg, KSValue::StringType, true ) )
+    {
+      if ( !KSUtil::checkType( context, arg, KSValue::DoubleType, true ) )
+        return false;
+
+      double d = arg->doubleValue();
+
+      KSpreadValue v(d);
+      time = v.asDateTime().time();
+
+      return true;
+    }
+    else
+    {
+      QString s = arg->stringValue();
+      bool valid = false;
+
+      time = KGlobal::locale()->readTime( s, &valid );
+      if ( !valid )
+        return false;
+
+      return true;
+    }
+  }
+  else
+  {
+    time = arg->timeValue();
+    return true;
+  }
+
+  return false;
+}
+
 void addMonths( QDate & date, int months )
 {
   int d = date.day();

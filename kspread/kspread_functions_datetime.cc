@@ -37,6 +37,7 @@
 #include <kspread_functions_helper.h>
 #include <kspread_interpreter.h>
 #include <kspread_util.h>
+#include <kspread_value.h>
 
 // prototypes, sorted
 bool kspreadfunc_currentDate( KSContext& context );
@@ -130,11 +131,8 @@ bool kspreadfunc_edate( KSContext & context )
 
   QDate date;
 
-  kdDebug() << "EDATE 0" << endl;
   if ( !getDate( context, args[0], date ) )
     return false;
-
-  kdDebug() << "EDATE" << endl;
 
   int months;
 
@@ -183,8 +181,6 @@ bool kspreadfunc_eomonth( KSContext & context )
     months = (int) args[1]->doubleValue();
   }
 
-  kdDebug() << "EOMONTH" << endl;
-
   if ( !getDate( context, args[0], date ) )
     return false;
 
@@ -224,8 +220,6 @@ bool kspreadfunc_days360( KSContext & context )
 
     european = args[2]->boolValue();
   }
-
-  kdDebug() << "DAYS360" << endl;
 
   if ( !getDate( context, args[0], date1 ) )
     return false;
@@ -296,8 +290,6 @@ bool kspreadfunc_year( KSContext & context )
     return true;
   }
 
-  kdDebug() << "YEAR" << endl;
-
   QDate date;
   if ( !getDate( context, args[0], date ) )
     return false;
@@ -316,8 +308,6 @@ bool kspreadfunc_month( KSContext & context )
     context.setValue( new KSValue( QDate::currentDate().month() ) );
     return true;
   }
-
-  kdDebug() << "Month"<< endl;
 
   QDate date;
   if ( !getDate( context, args[0], date ) )
@@ -338,7 +328,6 @@ bool kspreadfunc_day( KSContext & context )
     return true;
   }
 
-  kdDebug() << "Day"<< endl;
   QDate date;
   if ( !getDate( context, args[0], date ) )
     return false;
@@ -498,7 +487,6 @@ bool kspreadfunc_weekday( KSContext & context )
 
   QDate date;
 
-  kdDebug() << "Weekday"<< endl;
   if ( !getDate( context, args[0], date ) )
     return false;
 
@@ -526,11 +514,8 @@ bool kspreadfunc_datevalue( KSContext & context )
 
   QDate date;
 
-  kdDebug() << "Datevalue"<< endl;
   if ( !getDate( context, args[0], date ) )
     return false;
-
-  kdDebug() << "Date: " << date.day() << "." << date.month() << "." << date.year() << endl;
 
   long int result = (long int) EDate::greg2jul( date );
 
@@ -548,23 +533,8 @@ bool kspreadfunc_timevalue( KSContext & context )
 
   QTime time;
 
-  if ( !KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
-  {
-    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-      return false;
-
-    QString s = args[0]->stringValue();
-    bool valid = false;
-    QTime tmpTime = KGlobal::locale()->readTime( s, &valid );
-    if ( valid )
-      time = tmpTime;
-    else
-      return false;
-  }
-  else
-    time = args[0]->timeValue();
-
-  kdDebug() << "Time: " << time.hour() << ":" << time.minute() << ":" << time.second() << endl;
+  if ( !getTime( context, args[0], time ) )
+    return false;
 
   double result = time.hour() * 3600 + time.minute() * 60 + time.second();
   result = result / (double) SECSPERDAY;
@@ -588,7 +558,6 @@ bool kspreadfunc_years( KSContext& context )
   if (!KSUtil::checkType( context, args[2], KSValue::IntType, true ))
     return false;
 
-  kdDebug() << "years"<< endl;
   if ( !getDate( context, args[0], date1 ) )
     return false;
 
@@ -658,7 +627,6 @@ bool kspreadfunc_months( KSContext& context )
   if (!KSUtil::checkType( context, args[2], KSValue::IntType, true ))
     return false;
 
-  kdDebug() << "Months"<< endl;
   if ( !getDate( context, args[0], date1 ) )
     return false;
 
@@ -721,7 +689,6 @@ bool kspreadfunc_weeks( KSContext& context )
   if (!KSUtil::checkType( context, args[2], KSValue::IntType, true ))
     return false;
 
-  kdDebug() << "Weeks"<< endl;
   if ( !getDate( context, args[0], date1 ) )
     return false;
 
@@ -781,7 +748,6 @@ bool kspreadfunc_days( KSContext& context )
   QDate date1;
   QDate date2;
 
-  kdDebug() << "Days"<< endl;
   if ( !getDate( context, args[0], date1 ) )
     return false;
 
@@ -804,75 +770,54 @@ bool kspreadfunc_days( KSContext& context )
 bool kspreadfunc_hours( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context,1, "hours",true ) )
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "hours", true ) )
     return false;
-  if (!KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
-    {
-      if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-	return false;
-      QTime tmp=KGlobal::locale()->readTime(args[0]->stringValue());
-      if(tmp.isValid())
-	context.setValue(new KSValue(tmp.hour()));
-      else
-	context.setValue(new KSValue(i18n("Err")));
-      return true;
-    }
-  else
-    {
-      QTime tmp=args[0]->timeValue();
-      context.setValue(new KSValue(tmp.hour()));
-    }
-   return true;
+
+  QTime tmpTime;
+
+  if (!getTime(context, args[0], tmpTime))
+    return false;
+
+  context.setValue( new KSValue( tmpTime.hour() ) );
+
+  return true;
 }
 
 // Function: minutes
 bool kspreadfunc_minutes( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context,1, "minutes",true ) )
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "minutes", true ) )
     return false;
-  if (!KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
-    {
-      if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-	return false;
-      QTime tmp=KGlobal::locale()->readTime(args[0]->stringValue());
-      if(tmp.isValid())
-	context.setValue(new KSValue(tmp.minute()));
-      else
-	context.setValue(new KSValue(i18n("Err")));
-      return true;
-    }
-  else
-    {
-      QTime tmp=args[0]->timeValue();
-      context.setValue(new KSValue(tmp.minute()));
-    }
-   return true;
+
+  QTime tmpTime;
+
+  if (!getTime(context, args[0], tmpTime))
+    return false;
+
+  context.setValue( new KSValue( tmpTime.minute() ) );
+
+  return true;
 }
 
 // Function: seconds
 bool kspreadfunc_seconds( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  if ( !KSUtil::checkArgumentsCount( context,1, "seconds",true ) )
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "seconds", true ) )
     return false;
-  if (!KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
-    {
-      if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-	return false;
-      QTime tmp=KGlobal::locale()->readTime(args[0]->stringValue());
-      if(tmp.isValid())
-	context.setValue(new KSValue(tmp.second()));
-      else
-	context.setValue(new KSValue(i18n("Err")));
-      return true;
-    }
-  else
-    {
-      QTime tmp=args[0]->timeValue();
-      context.setValue(new KSValue(tmp.second()));
-    }
-   return true;
+
+  QTime tmpTime;
+
+  if (!getTime(context, args[0], tmpTime))
+    return false;
+
+  context.setValue( new KSValue( tmpTime.second() ) );
+
+  return true;
 }
 
 // Function: date

@@ -43,6 +43,7 @@ class EDate : public QDate
 };
 
 bool getDate( KSContext & context, KSValue::Ptr & arg, QDate & date );
+bool getTime( KSContext & context, KSValue::Ptr & arg, QTime & time );
 
 void addMonths( QDate & date, int months );
 
