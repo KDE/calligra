@@ -38,10 +38,10 @@ VMDlgSolidFill::VMDlgSolidFill() : QTabDialog ( 0L, 0, true )
 	QGroupBox* groupbox = new QGroupBox(2, Vertical, i18n("Reference"), mRGBWidget);
 	QLabel *mOldText = new QLabel(i18n("Old:"), groupbox);
 	QLabel *mNewText = new QLabel(i18n("New:"), groupbox);
-	mColorPreview = new KColorPatch(groupbox);
-	mColorPreview->setColor(QColor( "black" ) );
 	mOldColor = new KColorPatch(groupbox);
 	mOldColor->setColor(QColor( "black" ) );
+	mColorPreview = new KColorPatch(groupbox);
+	mColorPreview->setColor(QColor( "black" ) );
 	mainLayout->addWidget( groupbox, 0, 2);
 
 	//Components
@@ -54,6 +54,9 @@ VMDlgSolidFill::VMDlgSolidFill() : QTabDialog ( 0L, 0, true )
 	mRed = new QSpinBox( 0, 255, 1, cgroupbox);
 	mGreen = new QSpinBox( 0, 255, 1, cgroupbox);
 	mBlue = new QSpinBox( 0, 255, 1, cgroupbox);
+	connect( mRed, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
+	connect( mGreen, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
+	connect( mBlue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 
 	//--->HSV
 	QLabel *mHueText = new QLabel(i18n("H:"), cgroupbox);
@@ -62,16 +65,28 @@ VMDlgSolidFill::VMDlgSolidFill() : QTabDialog ( 0L, 0, true )
 	mHue = new QSpinBox( 0, 359, 1, cgroupbox);
 	mSaturation = new QSpinBox( 0, 255, 1, cgroupbox);
 	mValue = new QSpinBox( 0, 255, 1, cgroupbox);
-	
-	mainLayout->addWidget( cgroupbox, 1, 2);
+	connect( mHue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
+	connect( mSaturation, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
+	connect( mValue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromHSVSpinBoxes() ) );
 
+	mainLayout->addWidget( cgroupbox, 1, 2);
 	mainLayout->setSpacing(2);
 	mainLayout->setMargin(5);
 	mainLayout->activate();
-
 	addTab(mRGBWidget, i18n("RGB"));
-
 	setFixedSize(baseSize());
+}
+
+void VMDlgSolidFill::slotUpdateFromRGBSpinBoxes()
+{
+	mColorPreview->setColor( QColor( mRed->value(), mGreen->value(), mBlue->value(), QColor::Rgb) );
+	mColorPreview->update();
+}
+
+void VMDlgSolidFill::slotUpdateFromHSVSpinBoxes()
+{
+	mColorPreview->setColor( QColor( mHue->value(), mSaturation->value(), mValue->value(), QColor::Hsv) );
+	mColorPreview->update();
 }
 
 #include "vmdlg_solidfill.moc"

@@ -31,6 +31,10 @@ private:
 	KGradientSelector* mSelector;
 	KColorPatch* mOldColor;
 	KColorPatch* mColorPreview;
+
+private slots:
+	void slotUpdateFromRGBSpinBoxes();
+	void slotUpdateFromHSVSpinBoxes();
 };
 
 #endif
