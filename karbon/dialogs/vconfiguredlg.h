@@ -26,9 +26,10 @@
 class KarbonView;
 class KConfig;
 class KIntNumInput;
+class KColorButton;
+class KoUnitDoubleSpinBox;
 class QCheckBox;
 class QComboBox;
-
 
 class VConfigInterfacePage : public QObject
 {
@@ -80,7 +81,6 @@ private:
 	QComboBox *m_unit;
 };
 
-
 class VConfigDefaultPage : public QObject
 {
 	Q_OBJECT
@@ -106,6 +106,29 @@ private:
 	bool m_oldSaveAsPath;
 };
 
+class VConfigGridPage : public QObject
+{
+	Q_OBJECT
+
+public:
+	VConfigGridPage(
+		KarbonView* view, QVBox* box, char* name = 0L );
+
+	void apply();
+
+public slots:
+	void slotDefault();
+
+private:
+	KarbonView* m_view;
+	KoUnitDoubleSpinBox* m_spaceHorizUSpin;
+	KoUnitDoubleSpinBox* m_spaceVertUSpin;
+	KoUnitDoubleSpinBox* m_snapHorizUSpin;
+	KoUnitDoubleSpinBox* m_snapVertUSpin;
+	QCheckBox* m_gridChBox;
+	QCheckBox* m_snapChBox;
+	KColorButton* m_gridColorBtn;
+};
 
 class VConfigureDlg : public KDialogBase
 {
@@ -121,6 +144,7 @@ public slots:
 private:
 	VConfigInterfacePage* m_interfacePage;
 	VConfigMiscPage* m_miscPage;
+	VConfigGridPage* m_gridPage;
 	VConfigDefaultPage* m_defaultDocPage;
 };
 

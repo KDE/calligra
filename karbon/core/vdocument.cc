@@ -74,7 +74,7 @@ VDocument::drawPage( VPainter *p ) const
 	if( m_gridData.isShow )
 	{
 		VStroke s( 0, 0.5 );
-		s.setColor( Qt::blue );
+		s.setColor( m_gridData.color);
 		p->setPen( s );
 		p->setBrush( Qt::NoBrush );
 		KoPoint p0( 40, 40 );

@@ -26,12 +26,15 @@
 #include <qvbox.h>
 #include <qvgroupbox.h>
 #include <qcombobox.h>
+#include <qgrid.h>
 
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kdialogbase.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <kcolorbutton.h>
+#include <koUnitWidgets.h>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
@@ -59,6 +62,12 @@ VConfigureDlg::VConfigureDlg( KarbonView* parent )
 	m_miscPage = new VConfigMiscPage( parent, page );
 
 	page = addVBoxPage(
+			   i18n( "Grid" ), i18n( "Grid" ),
+			   BarIcon( "grid", KIcon::SizeMedium ) );
+
+	m_gridPage = new VConfigGridPage( parent, page );
+
+	page = addVBoxPage(
 			   i18n( "Document" ), i18n( "Document Settings" ),
 			   BarIcon( "document", KIcon::SizeMedium ) );
 
@@ -71,6 +80,7 @@ void VConfigureDlg::slotApply()
 {
 	m_interfacePage->apply();
 	m_miscPage->apply();
+	m_gridPage->apply();
 	m_defaultDocPage->apply();
 }
 
@@ -332,6 +342,71 @@ void VConfigMiscPage::slotDefault()
 {
     m_undoRedo->setValue( 30 );
     m_unit->setCurrentItem( 0 );
+}
+
+VConfigGridPage::VConfigGridPage( KarbonView* view, QVBox* page, char* name )
+		: QObject( page->parent(), name )
+{
+	m_view = view;
+	KoUnit::Unit unit = view->part()->document().unit();
+	KarbonGridData &gd = view->part()->document().grid();
+	double pgw = view->part()->document().width();
+	double pgh = view->part()->document().height();
+	double fw = KoUnit::ptToUnit( gd.freq.width(), unit );
+	double fh = KoUnit::ptToUnit( gd.freq.height(), unit );
+	double sw = KoUnit::ptToUnit( gd.snap.width(), unit );
+	double sh = KoUnit::ptToUnit( gd.snap.height(), unit );
+
+	m_gridChBox = new QCheckBox( i18n( "Show &grid" ), page );
+	m_gridChBox->setChecked( gd.isShow );
+	m_snapChBox = new QCheckBox( i18n( "Snap to g&rid" ), page );
+	m_snapChBox->setChecked( gd.isSnap );
+	QLabel* gridColorLbl = new QLabel( i18n( "Grid &color:" ), page);
+	m_gridColorBtn = new KColorButton( gd.color, page );
+	gridColorLbl->setBuddy( m_gridColorBtn );
+	QGroupBox* spacingGrp = new QGroupBox( 2, Qt::Horizontal, i18n( "Spacing" ), page );
+	QLabel* spaceHorizLbl = new QLabel( i18n( "&Horizontal:" ), spacingGrp );
+	m_spaceHorizUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgw, 0.1, fw, unit );
+	spaceHorizLbl->setBuddy( m_spaceHorizUSpin );
+	QLabel* spaceVertLbl = new QLabel( i18n( "&Vertical:" ), spacingGrp );
+	m_spaceVertUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgh, 0.1, fh, unit );
+	spaceVertLbl->setBuddy( m_spaceVertUSpin );
+	QGroupBox* snapGrp = new QGroupBox( 2, Qt::Horizontal, i18n( "Snap Distance" ), page );
+	QLabel* snapHorizLbl = new QLabel( i18n( "H&orizontal:" ), snapGrp );
+	m_snapHorizUSpin = new KoUnitDoubleSpinBox( snapGrp, 0.0, fw, 0.1, sw, unit );
+	snapHorizLbl->setBuddy( m_snapHorizUSpin );
+	QLabel* snapVertLbl = new QLabel( i18n( "V&ertical:" ), snapGrp );
+	m_snapVertUSpin = new KoUnitDoubleSpinBox( snapGrp, 0.0, fh, 0.1, sh, unit );
+	snapVertLbl->setBuddy( m_snapVertUSpin );
+
+	QGridLayout* gl = new QGridLayout( page );
+	gl->setSpacing( KDialog::spacingHint() );
+	gl->addMultiCellWidget( m_gridChBox, 0, 0, 0, 2 );
+	gl->addMultiCellWidget( m_snapChBox, 1, 1, 0, 2 );
+	gl->addWidget( gridColorLbl, 2, 0) ;
+	gl->addWidget( m_gridColorBtn, 2, 1 );
+	gl->addItem( new QSpacerItem( 0, 0 ), 2, 2 );
+	gl->addMultiCellWidget( spacingGrp, 3, 3, 0, 2 );
+	gl->addMultiCellWidget( snapGrp, 4, 4, 0, 2 );
+	gl->addMultiCell( new QSpacerItem( 0, 0 ), 5, 5, 0, 2 );
+}
+
+void VConfigGridPage::apply()
+{
+	KoUnit::Unit unit = m_view->part()->document().unit();
+	KarbonGridData &gd = m_view->part()->document().grid();
+	gd.freq.setWidth( KoUnit::ptFromUnit( m_spaceHorizUSpin->value(), unit ) );
+	gd.freq.setHeight( KoUnit::ptFromUnit( m_spaceVertUSpin->value(), unit ) );
+	gd.snap.setWidth( KoUnit::ptFromUnit( m_snapHorizUSpin->value(), unit ) );
+	gd.snap.setHeight( KoUnit::ptFromUnit( m_snapVertUSpin->value(), unit ) );
+	gd.isShow = m_gridChBox->isChecked();
+	gd.isSnap = m_snapChBox->isChecked();
+	gd.color = m_gridColorBtn->color();
+	m_view->repaintAll();
+}
+
+void VConfigGridPage::slotDefault()
+{
 }
 
 VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
