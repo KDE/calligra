@@ -374,7 +374,9 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
         kdDebug()<<" load animation style **************************************\n";
         QString effectStr = animation->attribute("presentation:effect");
         QString dir = animation->attribute("presentation:direction");
+        QString speed = animation->attribute( "presentation:speed" );
         kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<endl;
+        kdDebug()<<" speed :"<<speed<<endl;
         if (effectStr=="fade")
         {
             if (dir=="from-right")

@@ -306,6 +306,7 @@ QString KPBackGround::saveOasisPageEffect() const
     case PEF_LAST_MARKER://don't use it !!!
         break;
     case PEF_RANDOM:
+        transition="random";
         break;
 
     }
@@ -324,6 +325,7 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
 
     if ( !m_page->isSlideSelected() )
         stylepageauto.addProperty( "presentation:visibility", "hidden" );
+
 
     switch ( backType )
     {
@@ -561,6 +563,11 @@ void KPBackGround::loadOasis(KoOasisContext & context )
             }
         }
     }
+    if ( styleStack.hasAttribute("presentation:duration" , QString::null, "drawing-page"))
+    {
+        kdDebug()<<"styleStack.hasAttribute(presentation:duration , QString::null, drawing-page ) :"<<styleStack.hasAttribute("presentation:duration" , QString::null, "drawing-page")<<endl;
+        //convert date duration
+    }
     if ( styleStack.hasAttribute("presentation:transition-style", QString::null, "drawing-page"))
     {
         kdDebug()<<" have a presentation:transition-style------------\n";
@@ -616,6 +623,8 @@ void KPBackGround::loadOasis(KoOasisContext & context )
             pef=PEF_UNCOVER_UP;
         else if (effect=="roll-from-top") // PEF_UNCOVER_DOWN
             pef=PEF_UNCOVER_DOWN;
+        else if ( effect=="random" )
+            pef=PEF_RANDOM;
         else         // we choose a random transition instead of the unsupported ones ;)
             pef=PEF_RANDOM;
         setPageEffect( pef );
