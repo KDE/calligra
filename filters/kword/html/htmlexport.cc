@@ -340,13 +340,15 @@ class FormatData
         FormatData ()
         { init(); }
         FormatData ( int p,
-                     int l  ) : pos (p), len (l)
+                     int l  ) : pos (p), len (l), realLen (l)
         { init(); }
 
         QString fontName;
 
         int  pos; // Start of text to which this format applies
         int  len; // Len of text to which this format applies
+        int  realLen; //Real length of text (in case "len" is not the truth!)
+
         int  weight;
         int  fontSize;
         int  colourRed;
@@ -356,6 +358,8 @@ class FormatData
 
         bool italic;
         bool underline;
+
+        bool missing;
     private:
         void init()
         {
@@ -370,6 +374,7 @@ class FormatData
             italic=false;
             underline=false;
             fontName="times";
+            missing=false;
         }
 };
 
@@ -496,6 +501,16 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &, ClassEx
         kdError(30503) << "Missing formatting!" << endl;
     }
 
+    if ( 6 == formatId )
+    {// <FORMAT id=6> have no length but has one character in <TEXT>
+        //TODO: verifiy that KWord 0.9 still does it!
+        formatData.realLen=1;
+    }
+    else
+    {
+        formatData.realLen=formatData.len;
+    }
+
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "ITALIC",    ProcessItalicTag,   (void*) &formatData ) );
     tagProcessingList.append ( TagProcessing ( "UNDERLINE", ProcessUnderlineTag,(void*) &formatData ) );
@@ -565,6 +580,33 @@ class ClassExportFilterBase
         QDomDocument qDomDocumentIn;
 };
 
+static void CreateMissingFormatData(QString &paraText, QValueList<FormatData> &paraFormatDataList)
+{
+    QValueList<FormatData>::Iterator  paraFormatDataIt;
+    int lastPos=0; // last position
+
+    paraFormatDataIt = paraFormatDataList.begin ();
+    while (paraFormatDataIt != paraFormatDataList.end ())
+    {
+        if ((*paraFormatDataIt).pos>lastPos)
+        {
+            //We must add a FormatData
+            FormatData formatData(lastPos,(*paraFormatDataIt).pos-lastPos);
+            formatData.missing=true;
+            paraFormatDataList.insert(paraFormatDataIt,formatData);
+        }
+        lastPos=(*paraFormatDataIt).pos+(*paraFormatDataIt).realLen;
+        paraFormatDataIt++; // To the next one, please!
+    }
+    // Add the last one if needed
+    if (paraText.length()>lastPos)
+    {
+        FormatData formatData(lastPos,paraText.length()-lastPos);
+        formatData.missing=true;
+        paraFormatDataList.append(formatData);
+    }
+}
+
 // ProcessParagraphData () mangles the pure text through the
 // formatting information stored in the FormatData list and prints it
 // out to the export file.
@@ -572,21 +614,9 @@ class ClassExportFilterBase
 static void ProcessParagraphDataTransitional ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText,
                                                  ClassExportFilterBase* exportFilter)
 {
-    if (paraFormatDataList.isEmpty())
+    if (! paraText.isEmpty() )
     {
-        // No <FORMAT> tags were found, it is just normal text!
-        if ((paraText==" ") || (paraText.isEmpty()))
-        {//Just a space as text. Therefore we must use a non-breaking space.
-            outputText += "&nbsp;";
-        }
-        else
-        {
-            //Code all possible predefined HTML entities
-            outputText += exportFilter->escapeText(paraText);
-        }
-    }
-    else if (! paraText.isEmpty() )
-    {
+        CreateMissingFormatData(paraText,paraFormatDataList);
 
         QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
 
@@ -598,6 +628,21 @@ static void ProcessParagraphDataTransitional ( QString &paraText, QValueList<For
         {
             //Retrieve text
             partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
+
+            if ((*paraFormatDataIt).missing)
+            {   //Format is not issued from KWord. Therefore is only tha layout
+                // So it is only the text
+                if (outputText==" ")
+                {//Just a space as text. Therefore we must use a non-breaking space.
+                    outputText += "&nbsp;";
+                }
+                else
+                {
+                    //Code all possible predefined HTML entities
+                    outputText += exportFilter->escapeText(partialText);
+                }
+                continue; // And back to the loop
+            }
 
             // TODO: first and last characters of partialText should not be a space (white space problems!)
             // TODO: replace multiples spaces in non-breaking spaces!
@@ -704,21 +749,10 @@ static void ProcessParagraphDataTransitional ( QString &paraText, QValueList<For
 static void ProcessParagraphDataStyle ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText,
                                                  ClassExportFilterBase* exportFilter)
 {
-    if (paraFormatDataList.isEmpty())
+    if (! paraText.isEmpty() )
     {
-        // No <FORMAT> tags were found, it is just normal text!
-        if ((paraText==" ") || (paraText.isEmpty()))
-        {//Just a space as text. Therefore we must use a non-breaking space.
-            outputText += "&nbsp;";
-        }
-        else
-        {
-            //Code all possible predefined HTML entities
-            outputText += exportFilter->escapeText(paraText);
-        }
-    }
-    else if (! paraText.isEmpty() )
-    {
+
+        CreateMissingFormatData(paraText,paraFormatDataList);
 
         QValueList<FormatData>::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
 
@@ -730,6 +764,21 @@ static void ProcessParagraphDataStyle ( QString &paraText, QValueList<FormatData
         {
             //Retrieve text
             partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
+
+            if ((*paraFormatDataIt).missing)
+            {   //Format is not issued from KWord. Therefore is only tha layout
+                // So it is only the text
+                if (outputText==" ")
+                {//Just a space as text. Therefore we must use a non-breaking space.
+                    outputText += "&nbsp;";
+                }
+                else
+                {
+                    //Code all possible predefined HTML entities
+                    outputText += exportFilter->escapeText(partialText);
+                }
+                continue; // And back to the loop
+            }
 
             // TODO: first and last characters of partialText should not be a space (white space problems!)
             // TODO: replace multiples spaces in non-breaking spaces!
