@@ -25,7 +25,7 @@
 #include "definitions.h"
 
 Helper::Helper(QDomDocument *root, QPtrList<QDomElement> *tables)
-: m_locale("koffice") 
+: m_locale("koffice")
 {
 	// ### David: I added m_locale to xmltree.h to make this compile
 	//     But setting the language on that locale isn't done at all in here...
@@ -33,7 +33,7 @@ Helper::Helper(QDomDocument *root, QPtrList<QDomElement> *tables)
 
 	m_root = root;
 	m_tables = tables;
-	
+
 	m_todoFormula.setAutoDelete(true);
 	m_formulaList.setAutoDelete(true);
 
@@ -71,7 +71,7 @@ void Helper::done()
 							QDomElement e2 = n2.toElement();
 							if(!e2.isNull() && e2.tagName() == "cell")
 							{
-								if(e2.attribute("row").toInt() == todo->row() + 1 && 
+								if(e2.attribute("row").toInt() == todo->row() + 1 &&
 								   e2.attribute("column").toInt() == todo->col() + 1)
 								{
 									QDomNode n3 = e2.firstChild();
@@ -86,7 +86,7 @@ void Helper::done()
 
 											finished = true;
 										}
-										
+
 										n3 = n3.nextSibling();
 									}
 								}
@@ -97,7 +97,7 @@ void Helper::done()
 					}
 
 					n = n.nextSibling();
-				}  			
+				}
 			}
 		}
 	}
@@ -139,7 +139,7 @@ void Helper::getFont(Q_UINT16, QDomElement &f, Q_UINT16 fontid)
 	QDomElement font = m_root->createElement("font");
 
 	fontrec *fwork = m_fontrec[fontid];
-	
+
 	font.setAttribute("family", fwork->rgch);
 	font.setAttribute("size", fwork->dyHeight / 20);
 	font.setAttribute("weight", fwork->bls / 8);
@@ -163,7 +163,7 @@ PenFormat Helper::borderStyleToQtStyle(int penStyle)
 {
 	PenFormat pen;
 	int penWidth = 1, qtPenStyle = 0;
-	
+
 	switch(penStyle)
 	{
 		case STYLE_BORDER_NONE:
@@ -232,7 +232,7 @@ void Helper::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 
 	fontrec *fwork = m_fontrec[fontid];
 	xfrec *xwork = m_xfrec[xf];
-	
+
 	pen = m_root->createElement("pen");
 	pen.setAttribute("width", 0);
 	pen.setAttribute("style", 1);
@@ -249,7 +249,7 @@ void Helper::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 
 		pen.setAttribute("width", qtpen.width());
 		pen.setAttribute("style", qtpen.style());
-		
+
 		if((xwork->sideBColor) & 0x7f > 65)
 		{
 			kdDebug() << "Weird workaround needed for this problem! WEIRD!" << endl;
@@ -257,7 +257,7 @@ void Helper::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 		}
 		else
 			pen.setAttribute("color", ((xwork->sideBColor) & 0x7f) == 64 ? "#000000" : palette[(xwork->sideBColor) & 0x7f]);
-		
+
 		/*palette[m_xfrec[xf]->sideBColor & 0x7f]);*/
 		border.appendChild(pen);
 		f.appendChild(border);
@@ -291,7 +291,7 @@ void Helper::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 		pen.setAttribute("width", qtpen.width());
 		pen.setAttribute("style", qtpen.style());
 		pen.setAttribute("color", ((xwork->topBColor) & 0x7f) == 64 ? "#000000" : palette[(xwork->topBColor) & 0x7f]);
-		
+
 		/*palette[m_xfrec[xf]->topBColor & 0x7f]);*/
 		border.appendChild(pen);
 		f.appendChild(border);
@@ -346,7 +346,7 @@ void Helper::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 
 		pen.setAttribute("width", qtpen.width());
 		pen.setAttribute("style", qtpen.style());
-		
+
 		// the following is necessary to handle Excels "Automatic" color option
 		// somehow this is only needed for diagonal borders
 		pen.setAttribute("color", ((xwork->topBColor >> 14) & 0x7f) == 64 ?	"#000000" : palette[(xwork->topBColor >> 14) & 0x7f]);
@@ -360,7 +360,7 @@ QDate Helper::getDate(double _numdays)
 	long numdays = (long) _numdays;
 
 	QDate date;
-      
+
         /* Excel's strange 1900/1904 modes:
 	 *  1900: day#1 starts at 01.jan.1900,
 	 *  1904: day#1 starts at 02.jan.1904 */
@@ -368,7 +368,7 @@ QDate Helper::getDate(double _numdays)
 		date = QDate(1899, 12, 31);
 	else
 		date = QDate(1903, 12, 31);
-	
+
 	date = date.addDays(numdays);
 
 	if (date.year() >= 1904)
@@ -392,7 +392,7 @@ void Helper::getTime(double time, int &hour,int  &min, int &second)
 
 
 
-		
+
 #define EXC_RK_INTFLAG 0x02
 #define EXC_RK_100FLAG 0x01
 
@@ -432,10 +432,10 @@ QString Helper::formatValue( double value, Q_UINT16 xf )
 		case 15:
 		case 16:
 		case 17:
-		
+
 		case 26: // assume Date-format (normally defined by file)
 		case 28:
-		
+
 			s = locale().formatDate(getDate(value),true);
 			break;
 		default: // Number
@@ -454,10 +454,10 @@ const QDomElement Helper::getFormat(Q_UINT16 xf)
 	QDomElement format = m_root->createElement("format");
 
 	xfrec *xwork = m_xfrec[xf];
-	
+
 	if(!xwork)
 		return format;
-	
+
 	Q_UINT16 fontid = xwork->ifnt;
 
 	if(fontid > 3)
@@ -467,12 +467,12 @@ const QDomElement Helper::getFormat(Q_UINT16 xf)
 	format.setAttribute("align", (xwork->align & 0x07) == 0 ? 4 : xwork->align & 0x07);
 	format.setAttribute("alignY", ((xwork->align >> 4) & 0x07) == 3 ? 2 : ((xwork->align >> 4) & 0x07) + 1);
 
-	int angle = xwork->align >> 8;	
+	int angle = xwork->align >> 8;
 	if(angle != 255 && angle != 0)
 		format.setAttribute("angle", angle < 91 ? angle * (-1) : angle - 90);
 	else if(angle == 255)
 		format.setAttribute("verticaltext", "yes");
-	
+
 	int indent = xwork->indent & 0x0f;
 	if(indent != 0)
 		format.setAttribute("indent", (indent * 10));
@@ -653,7 +653,7 @@ const QDomElement Helper::getFormat(Q_UINT16 xf)
 				kdWarning() << "Formatting IFMT 0x" << QString::number(xwork->ifmt, 16) << " NOT implemented!" << endl;
 				break;
 			}
-			
+
 			s = QString::fromLatin1(m_formatrec[xwork->ifmt]->rgch, m_formatrec[xwork->ifmt]->cch);
 	}
 
@@ -680,7 +680,7 @@ void getReference(Q_UINT16 row, Q_UINT16 column, Q_INT16 &refRow, Q_INT16 &refCo
 		if( colRelative )
                 {
 			// column is int8 in shared, i.e 128 to 255 becomes  -128 to -1
-			if( shared ) 
+			if( shared )
                             refColumn = (refColumn<128) ? refColumn : refColumn-256;
                         else
 			refColumn -= column;
@@ -689,7 +689,7 @@ void getReference(Q_UINT16 row, Q_UINT16 column, Q_INT16 &refRow, Q_INT16 &refCo
 	else
 	{
 		// TODO: Test this part!
-	
+
 		rowSign = (refRow & 0x8000) ? "#" : "$";
 		colSign = (refRow & 0x4000) ? "#" : "$";
 
@@ -702,7 +702,7 @@ void getReference(Q_UINT16 row, Q_UINT16 column, Q_INT16 &refRow, Q_INT16 &refCo
 			else
 				refRow -= row;
 		}
-		
+
 		if(refRow & 0x4000)
 		{
 			if(!shared)
@@ -856,10 +856,10 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "VARP",             194,  0 },
 	{ "DSTDEVP",          195,  3 },
 	{ "DVARP",            196,  3 },
-	{ "TRUNC",            197,  0 },  
+	{ "TRUNC",            197,  0 },
 	{ "ISLOGICAL",        198,  1 },
 	{ "DCOUNTA",          199,  3 },
-	{ "ROUNDUP",          212,  2 }, 
+	{ "ROUNDUP",          212,  2 },
 	{ "ROUNDDOWN",        213,  2 },
 	{ "RANK",             216,  0 },
 	{ "ADDRESS",          219,  0 },
@@ -944,8 +944,8 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "TINV",             332,  2 },
 	{ "CONCATENATE",      336,  0 },  /* EXCEL: CONCAT */
 	{ "POW",              337,  2 },  /* EXCEL: POWER */
-	{ "RADIANS",          342,  1 },  
-	{ "DEGREES",          343,  1 },  
+	{ "RADIANS",          342,  1 },
+	{ "DEGREES",          343,  1 },
 	{ "SUBTOTAL",         344,  0 },
 	{ "SUMIF",            345,  0 },
 	{ "COUNTIF",          346,  2 },
@@ -992,7 +992,7 @@ static QString Excel_ErrorString(Q_UINT8 no)
 		case 0x2A:
 			return "#N/A!";
 	}
-	
+
 	return "#UNKNOWN!";
 }
 
@@ -1006,13 +1006,13 @@ const QString &concatValues(QStringList *parsedFormula, int count, QString joinV
 
 		if(count)
 			sum.prepend(joinVal);
-		
+
 		parsedFormula->pop_back();
 	}
-	
+
 	if(!prefix.isNull())
 		sum.prepend(prefix);
-	
+
 	if(!postfix.isNull())
 		sum.append(postfix);
 
@@ -1037,16 +1037,16 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 	parsedFormula.append("=");
 
 	// kdWarning(30511) << "Entering " << __FUNCTION__ << endl;
-	
+
 	while (!rgce.atEnd())
 	{
 		rgce >> ptg;
-		
+
 		// Correct ptg parsing!
 		ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
-		
+
 		// kdWarning(30511) << "Parsing ptg " << QString::number(ptg, 16)  << endl;
-		
+
 		switch (ptg)
 		{
 			case 0x01:  // ptgExpr
@@ -1054,7 +1054,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				rgce >> tlrow >> tlcol;
 
 				found = false;
-				
+
 				SharedFormula *formula;
 				for(formula = m_formulaList.first(); formula != 0; formula = m_formulaList.next())
 				{
@@ -1063,7 +1063,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 						found = true;
 						QString temp = getFormula(row, column, *formula->stream(), biff, true);
 						formula->stream()->device()->reset();
-						
+
 						parsedFormula.append(temp.mid(1));
 					}
 				}
@@ -1133,12 +1133,12 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				char *buffer8bit;
 				Q_UINT16 cch;
 				rgce >> cch;
-				
+
 				buffer8bit = new char[cch + 1];
-				
+
 				rgce.readRawBytes(buffer8bit, cch);
 				buffer8bit[cch] = '\0';
-				
+
 				parsedFormula.append(QString("\"%1\"").arg(buffer8bit));
 
 				delete []buffer8bit;
@@ -1169,7 +1169,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				break;
 			case 0x1e:  // ptgInt
 				rgce >> integer;
-				parsedFormula.append(m_locale.formatNumber(integer));
+				parsedFormula.append(m_locale.formatNumber((long int)integer));
 				break;
 			case 0x1f:  // ptgNum
 				rgce >> number;
@@ -1180,7 +1180,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				break;
 			case 0x20:  // ptgArray
 				parsedFormula.append("ConstArray");
-				break;				
+				break;
 			case 0x22:  // ptgFuncVar
 				rgce >> byte;
 				// fall through....
@@ -1207,9 +1207,9 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 
 				else
 				{
-	
+
 					excelFunc = ExcelFunction(index);
-	
+
 					if(excelFunc)
 					{
 						newop = QString(excelFunc->name) + "(";
@@ -1221,7 +1221,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 						kdWarning(30511) << "Formula contains unhandled function "  << index << endl;
 						count = 1;
 					}
-				
+
 				if(ptg == 0x22) // variable count of arguments
 					count = byte & 0x7F;
 				concatValues(&parsedFormula, count, ";", newop, ")");
@@ -1239,7 +1239,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 			case 0x2a:  // ptgRef (deleted)
 			case 0x2c:
 				rgce >> refRow;
-				
+
 				if(biff == BIFF_8)
 					rgce >> refColumn;
 				else
@@ -1247,16 +1247,16 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 					rgce >> byte;
 					refColumn = byte;
 				}
-	
+
 				getReference(row, column, refRow, refColumn, biff, shared, rowSign1, colSign1);
-				
+
 				str = QString("%1%2%3%4#").arg(colSign1).arg(refColumn).arg(rowSign1).arg(refRow);
 				parsedFormula.append(str);
 				break;
 			case 0x25:  // ptgArea
 			case 0x2b:
 				rgce >> refRow >> refRowLast;
-				
+
 				if(biff == BIFF_8)
 					rgce >> refColumn >> refColumnLast;
 				else
@@ -1304,9 +1304,9 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				{
 					Q_UINT16 sheetNumber;
 					rgce >> sheetNumber >> refRow >> refColumn;
-	
+
 					getReference(row, column, refRow, refColumn, biff, shared, rowSign1, colSign1);
-					
+
 					QDomElement *sheet = m_tables->at(sheetNumber);
 
 					if (sheet)
@@ -1321,8 +1321,8 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				{
 					kdDebug() << "WARNING: External sheet references not done for Excel 95!" << endl;
 					return NA("Excel95_sheet");
-				}				
-				break;			
+				}
+				break;
 			case 0x3b:  // AreaRef3d
 			case 0x3d:  // AreaRef3dErr
 				if(biff == BIFF_8)
@@ -1331,7 +1331,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 					rgce >> sheetNumber;
 				        rgce >> refRow >> refRowLast;
 					rgce >> refColumn >> refRowLast;
-	
+
 					QDomElement *sheet = m_tables->at(sheetNumber);
 					if (sheet)
 						str = sheet->attribute("name");
@@ -1344,23 +1344,23 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 					str = QString("%1!%2%3%4%5#:%6%7%8%9#").arg(str).arg(colSign1).arg(refColumn)
 							.arg(rowSign1).arg(refRow).arg(colSign2).arg(refColumnLast)
 							.arg(rowSign2).arg(refRowLast);
-					parsedFormula.append(str);					
+					parsedFormula.append(str);
 				}
 				else
 				{
 					kdDebug() << "WARNING: External sheet references not done for Excel 95!" << endl;
 					return NA("Excel95_sheet");
-				}				
-				break;			
+				}
+				break;
 			default:
 				kdWarning(30511) << "Formula contains unhandled ptg 0x" << QString::number(ptg, 16) << endl;
 				return NA(QString("unhandled_ptg_0x%1)").arg(QString::number(ptg,16)));
 				break;
 		}
 	}
-	
+
 	// kdWarning(30511) << "Leaving " << __FUNCTION__ << endl;
-	
+
 	return parsedFormula.join("");
 }
 
