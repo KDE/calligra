@@ -43,7 +43,8 @@ ring charts and more.
 <para>
 &kchart; is a &koffice; component and is very well integrated with &kspread;
 to allow visualization of spreadsheet data. But it is also possible to use
-&kchart; as a stand alone application.
+&kchart; as a standalone application or integrate it in other &koffice;
+components.
 </para>
 </abstract>
 
@@ -70,8 +71,13 @@ uses the &kchart; component for charts and diagrams. &kspread;
 can be seen as a very powerful data provider for &kchart; input.
 </para>
 <para>
+But embedding is not limited to &kspread;. A &kchart; chart can
+be embedded in many of the &koffice; components like &kword;,
+&kpresenter; or &kivio;.
+</para>
+<para>
 To start with we will look at the user interface of &kchart;
-and how it can be used as a stand alone application. When we
+and how it can be used as a standalone application. When we
 are familiar with &kchart; we will investigate the charting
 capabilities it offers together with &kspread;.
 </para>
@@ -86,6 +92,8 @@ capabilities it offers together with &kspread;.
 <title>Main Application Interface</title>
 <para>
 We will take a look at a simple example to get to know &kchart;.
+Along the way we will also discuss the user interface at length
+so you will learn about many details of the component.
 </para>
 <para>
 Start &kchart; with the default settings and you will see the main
@@ -126,7 +134,7 @@ The &dataeditor; can be reached by selecting <menuchoice>
 </menuchoice> from the menu.
 </para>
 <screenshot>
-<screeninfo>&dataeditor; in stand alone mode</screeninfo>
+<screeninfo>&dataeditor; in standalone mode</screeninfo>
   <mediaobject>
     <imageobject>
       <imagedata fileref="kchart-dataeditor.png" format="PNG"/>
@@ -157,6 +165,14 @@ eliminated.
 <sect2 id="configurationinterface">
 <title>Chart Configuration</title>
 <para>
+&kchart; offers many configuration options for the chart. These are
+available in standalone mode and when embedded in &kspread;
+</para>
+<para>
+To get to the chart configuration dialog, select <menuchoice>
+<guimenu>Edit</guimenu><guisubmenu>Chart</guisubmenu>
+<guimenuitem>Configure Chart...</guimenuitem>
+</menuchoice> from the menu.
 </para>
 </sect2>
 </sect1>
@@ -164,7 +180,7 @@ eliminated.
 
 <chapter id="kchartinkspread">
 
-<title>Using KChart in KSpread</title>
+<title>Using &kchart; in &kspread;</title>
 
 <para>
 &kchart; is intended primarily for use with &kspread;. It is currently
