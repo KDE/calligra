@@ -23,7 +23,6 @@
 
 #include <qpixmap.h>
 
-class KListViewItem;
 class QListViewItem;
 
 namespace Kivio {
@@ -46,7 +45,7 @@ namespace Kivio {
     
     protected:
       void loadCollections(const QString& dir);
-      void loadStencilSet(KListViewItem* li, const QString& dir);
+      void loadStencilSet(QListViewItem* li, const QString& dir);
       QPixmap loadIcon(const QString& name, const QString& dir);
     
     private:

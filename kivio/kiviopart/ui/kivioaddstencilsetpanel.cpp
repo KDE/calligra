@@ -74,13 +74,30 @@ namespace Kivio {
     const QFileInfoList *colList = rootDir.entryInfoList();
     QFileInfoListIterator colIt( *colList );
     QFileInfo *colFInfo;
+    QString cId;
   
     while((colFInfo = colIt.current()))
     {
       if((colFInfo->fileName() != "..") && (colFInfo->fileName() != "."))
       {
-        KListViewItem* li = new KListViewItem(m_stencilSetLView, KivioStencilSpawnerSet::readTitle(colFInfo->absFilePath()));
-        li->setPixmap(0, loadIcon("icon", colFInfo->absFilePath()));
+        cId = KivioStencilSpawnerSet::readId(colFInfo->absFilePath());
+        QListViewItem* li = m_stencilSetLView->firstChild();
+        
+        while(li) {
+          if(li->text(1) == cId) {
+            break;
+          }
+          
+          li = li->nextSibling();
+        }
+        
+        if(!li) {
+          li = new KListViewItem(m_stencilSetLView,
+            KivioStencilSpawnerSet::readTitle(colFInfo->absFilePath()),
+            KivioStencilSpawnerSet::readId(colFInfo->absFilePath()));
+          li->setPixmap(0, loadIcon("icon", colFInfo->absFilePath()));
+        }
+        
         loadStencilSet(li, dir + "/" + colFInfo->fileName());
       }
       
@@ -88,7 +105,7 @@ namespace Kivio {
     }
   }
   
-  void AddStencilSetPanel::loadStencilSet(KListViewItem* li, const QString& dir)
+  void AddStencilSetPanel::loadStencilSet(QListViewItem* li, const QString& dir)
   {
     QDir rootDir( dir );
   

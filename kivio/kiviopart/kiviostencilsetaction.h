@@ -25,6 +25,8 @@
 #include <kaction.h>
 
 #include <qptrlist.h>
+#include <qvaluelist.h>
+#include <qstringlist.h>
 
 class KPopupMenu;
 class QPixmap;
@@ -56,12 +58,14 @@ class KivioStencilSetAction : public KAction
     QPixmap dirtPixmap( const QString& dir );
     void loadCollections( const QString& rootDirStr );
     void loadSet( KPopupMenu* menu, const QString& rootDirStr );
+    void clearCollectionMenuList();
 
   protected:
     KPopupMenu* m_popup;
-    uint m_id;
-    QPtrList<KPopupMenu> m_childMenuList;
+    uint m_ssId;
     QPtrList<QString> m_pathList;
+    QStringList m_collectionIdList;
+    QValueList<KPopupMenu*> m_collectionMenuList;
 };
 
 #endif
