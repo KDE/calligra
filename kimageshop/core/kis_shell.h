@@ -45,9 +45,9 @@ public:
 public slots:
 
   virtual void slotFileNew();
-  virtual void slotFileOpen();
-  virtual void slotFileSave();
-  virtual void slotFileSaveAs();
+  //virtual void slotFileOpen();
+  //virtual void slotFileSave();
+  //virtual void slotFileSaveAs();
   virtual void slotFilePrint();
   virtual void slotFileClose();
 

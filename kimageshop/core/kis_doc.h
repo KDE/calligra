@@ -45,9 +45,13 @@ public:
     KisDoc( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
     ~KisDoc();
 
-    virtual bool loadFromURL( const QString& );
 
-    // document
+	virtual bool save( ostream&, const char *_format );
+	virtual bool load( istream& in, KoStore* _store );
+	virtual bool loadXML( const QDomDocument& doc, KoStore* store );
+
+	virtual bool hasToWriteMultipart();
+
     virtual KoView* createView( QWidget* parent = 0, const char* name = 0 );
     virtual KoMainWindow* createShell();
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );

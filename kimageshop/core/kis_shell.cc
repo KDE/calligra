@@ -73,7 +73,7 @@ void KisShell::slotFileNew()
       doc->slotNewImage();
     }
 }
-
+/*
 void KisShell::slotFileOpen()
 {
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), KisCore::readFilters() );
@@ -113,7 +113,7 @@ void KisShell::slotFileSaveAs()
       KMessageBox::error( 0L, tmp, i18n( "IO Error" ) );
     }
 }
-
+*/
 void KisShell::slotFilePrint()
 {
   // TODO

@@ -75,7 +75,7 @@ class KisImage : public QObject
     void removeLayer( unsigned int _layer );
 
     KisLayer* layerPtr( KisLayer *_layer );
-    LayerList layerList() { return layers; };
+    QList<KisLayer> layerList() { return layers; };
  
     void compositeImage( QRect _rect );
      
@@ -113,7 +113,7 @@ class KisImage : public QObject
     QRect       viewportRect;
     int         xTiles;
     int         yTiles;
-    LayerList   layers;
+    QList<KisLayer>   layers;
     KisLayer    *compose;
     QImage      img;
     KisLayer    *currentLayer;

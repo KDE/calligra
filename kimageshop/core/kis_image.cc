@@ -86,31 +86,6 @@ KisImage::KisImage( const QString& _name, int width, int height )
       *(background+channels*(y*TILE_SIZE+x)+2)=128+63*((x/16+y/16)%2);
     }
 
-  // load some test layers
-  //QString _image = locate("kis_images", "cam9b.jpg", KisFactory::global());
-  //addRGBLayer(_image);
-  //setLayerOpacity(255);
-
-  //_image = locate("kis_images", "cambw12.jpg", KisFactory::global());
-  //addRGBLayer(_image);
-  //moveLayer(256,384);
-  //setLayerOpacity(180);
-
-  /*
-  _image = locate("kis_images", "cam05.jpg", KisFactory::global());
-  addRGBLayer(_image);
-  setLayerOpacity(255);
-
-  _image = locate("kis_images", "cam6.jpg", KisFactory::global());
-  addRGBLayer(_image);
-  moveLayer(240,280);
-  setLayerOpacity(255);
-
-  _image = locate("kis_images", "img2.jpg", KisFactory::global());
-  addRGBLayer(_image);
-   setLayerOpacity(80);
-  */
-
   compositeImage(QRect());
 }
 

@@ -1,4 +1,4 @@
-<!--	$Id:$
+<!--	$Id$
 
 		This is an XML document type definition (DTD) for the KImageShop
 		image format. 
@@ -40,20 +40,20 @@
         Attributes:
 
         name:       The channel's name.
-        width:      The channel's width in pixels.
-        height:     The channel's height in pixels.
         x:          The channel's horizontal positon in the image.
         y:          The channel's vertical position in the image.
+        width:      The channel's width in pixels.
+        height:     The channel's height in pixels.
         opacity:    The channel's opactiy. A value betwenn 0 and 255.
         isVisible   Is the channel visible? (yes or no)
         isLinked    Is the channel linked? (yes or no)
 -->
 <!ELEMENT LAYER (CHANNEL)*>
 <!ATTLIST LAYER name      CDATA #REQUIRED
-                width     CDATA #REQUIRED
-                height    CDATA #REQUIRED
                 x         CDATA #REQUIRED
                 y         CDATA #REQUIRED
+                width     CDATA #REQUIRED
+                height    CDATA #REQUIRED
                 opacity   CDATA #REQUIRED
                 isVisible CDATA #REQUIRED
                 isLinked  CDATA #REQUIRED>

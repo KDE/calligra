@@ -29,6 +29,9 @@
 #include <qwidget.h>
 #include <qregexp.h>
 #include <qfileinfo.h>
+#include <qdom.h>
+#include <qtextstream.h>
+#include <qbuffer.h>
 
 #include <kstddirs.h>
 #include <kglobal.h>
@@ -70,6 +73,116 @@ bool KisDoc::initDoc()
   setCurrentImage(img);
 
   emit imageListUpdated();
+  return true;
+}
+
+bool KisDoc::hasToWriteMultipart()
+{
+  return true; // Always save to a KoStore, never to a plain XML file.
+}
+
+bool KisDoc::save( ostream& out, const char* )
+{
+  cout << " --- KisDoc::save --- " << endl;
+  KisImage *img = m_pCurrent;
+  if (!img)
+	return false;
+
+  QDomDocument doc( "image" );
+  doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+
+  // image element
+  QDomElement image = doc.createElement( "image" );
+  image.setAttribute( "author", "Matthias Elter" ); // FIXME
+  image.setAttribute( "email", "elter@kde.org" ); // FIXME
+  image.setAttribute( "editor", "KImageShop" );
+  image.setAttribute( "mime", "application/x-kimageshop" );
+  image.setAttribute( "width", img->width() );
+  image.setAttribute( "height", img->height() );
+  image.setAttribute( "bitDepth", "8" ); // FIXME
+  image.setAttribute( "cMode", "3" ); // FIXME
+  doc.appendChild( image );
+
+  // layer elements
+  QList<KisLayer> layers = img->layerList();
+  for (KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
+	{
+	  QDomElement layer = doc.createElement( "layer" );
+	  layer.setAttribute( "name", lay->name() );
+	  layer.setAttribute( "x", lay->imageExtents().x() );
+	  layer.setAttribute( "y", lay->imageExtents().y() );
+	  layer.setAttribute( "width", lay->imageExtents().width() );
+	  layer.setAttribute( "height", lay->imageExtents().height() );
+	  layer.setAttribute( "opacity", static_cast<int>(lay->opacity()) );
+
+	  if (lay->isVisible())
+		layer.setAttribute( "isVisible", "true" );
+	  else
+		layer.setAttribute( "isVisible", "false" );
+
+	  if (lay->isLinked())
+		layer.setAttribute( "isLinked", "true" );
+	  else
+		layer.setAttribute( "isLinked", "false" );
+
+	  image.appendChild( layer );
+
+	  // channel elements // FIXME
+	  QDomElement c1 = doc.createElement( "channel" );
+	  c1.setAttribute( "id", "R" );
+	  layer.appendChild( c1 );
+	  QDomElement c2 = doc.createElement( "channel" );
+	  c2.setAttribute( "id", "G" );
+	  layer.appendChild( c2 );
+	  QDomElement c3 = doc.createElement( "channel" );
+	  c3.setAttribute( "id", "B" );
+	  layer.appendChild( c3 );
+	  QDomElement c4 = doc.createElement( "channel" );
+	  c4.setAttribute( "id", "A" );
+	  layer.appendChild( c4 );
+	}
+
+  // Save to buffer
+  QBuffer buffer;
+  buffer.open( IO_WriteOnly );
+  QTextStream str( &buffer );
+  str << doc;
+  buffer.close();
+
+  out.write( buffer.buffer().data(), buffer.buffer().size() );
+
+  setModified( false );
+
+  return true;
+}
+
+bool KisDoc::load( istream& in, KoStore* store )
+{
+  QBuffer buffer;
+  buffer.open( IO_WriteOnly );
+  
+  char buf[ 4096 ];
+  int anz;
+  do
+    {
+	  in.read( buf, 4096 );
+	  anz = in.gcount();
+	  buffer.writeBlock( buf, anz );
+    } while( anz > 0 );
+  
+  buffer.close();
+  
+  buffer.open( IO_ReadOnly );
+  QDomDocument doc( &buffer );
+  
+  bool b = loadXML( doc, store );
+  
+  buffer.close();
+  return b;
+}
+
+bool KisDoc::loadXML( const QDomDocument& , KoStore* )
+{
   return true;
 }
 
@@ -243,6 +356,7 @@ bool KisDoc::saveCurrentImage( const QString& file )
 
 bool KisDoc::loadImage( const QString& file )
 {
+  cout << " --- KisDoc::loadImage ---" << endl;
   QImage img(file);
 
   if (img.isNull())
@@ -271,6 +385,7 @@ bool KisDoc::loadImage( const QString& file )
 
 void KisDoc::slotNewImage()
 {
+  cout << " --- isDoc::slotNewImage ---" << endl;
   if (!m_pNewDialog)
     m_pNewDialog = new NewDialog();
   m_pNewDialog->show();
@@ -295,25 +410,6 @@ void KisDoc::slotNewImage()
   img->setLayerOpacity(255);
   img->compositeImage(QRect(0, 0, w, h));
   setCurrentImage(img);
-}
-
-bool KisDoc::loadFromURL( const QString& _url )
-{
-  cout << "KisDoc::loadFromURL" << endl;
-
-  QString mimetype = KMimeType::findByURL( _url )->mimeType();
-
-  if( ( mimetype == "image/png" ) ||
-      ( mimetype == "image/jpeg" ) ||
-      ( mimetype == "image/bmp" ) ||
-      ( mimetype == "image/gif" ) )
-    {
-      // if( !m_image.load( _url ) )
-      //	return false;
-
-      return false;
-    }
-  return KoDocument::loadFromURL( _url );
 }
 
 QCString KisDoc::mimeType() const
