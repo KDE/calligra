@@ -482,8 +482,21 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode, bool &cancelled)
 				//(todo: instead of hiding all tables and showing some tables, 
 				// show only these new and hide these unncecessary; the same for connections)
 				KexiDB::QuerySchema *q = tempData()->query;
-				for (QPtrListIterator<KexiDB::TableSchema> it(*q->tables()); it.current(); ++it) {
+				for (KexiDB::TableSchema::ListIterator it(*q->tables()); it.current(); ++it) {
 					m_relations->addTable( it.current() );
+				}
+				//-show relationships:
+				KexiDB::Relationship *rel;
+				for (KexiDB::Relationship::ListIterator it(*q->relationships()); (rel=it.current()); ++it) {
+					SourceConnection conn;
+//@todo: now only sigle-field relationships are implemented!
+					KexiDB::Field *masterField = rel->masterIndex()->fields()->first();
+					KexiDB::Field *detailsField = rel->detailsIndex()->fields()->first();
+					conn.masterTable = masterField->table()->name(); //<<<TODO
+					conn.masterField = masterField->name();
+					conn.detailsTable = detailsField->table()->name();
+					conn.detailsField = detailsField->name();
+					m_relations->addConnection( conn );
 				}
 			}
 		}
