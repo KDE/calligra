@@ -40,7 +40,7 @@ KPresenterFrame::KPresenterFrame(KPresenterView_impl* _view,KPresenterChild* _ch
 /*****************************************************************/
 
 /*======================= constructor ===========================*/
-KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name = 0L)
+KPresenterView_impl::KPresenterView_impl(QWidget *_parent,const char *_name)
   : QWidget(_parent,_name), View_impl(), KPresenter::KPresenterView_skel()
 {
   setWidget(this);
@@ -2560,7 +2560,8 @@ void KPresenterView_impl::setupEditToolbar()
     {
       // toolbar
       m_rToolBarEdit = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Edit")));
- 
+      m_rToolBarEdit->setFullWidth(false);
+
       // cut
       QString tmp = kapp->kde_toolbardir().copy();
       tmp += "/editcut.xpm";
@@ -2600,6 +2601,7 @@ void KPresenterView_impl::setupInsertToolbar()
     {
       // toolbar
       m_rToolBarInsert = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Insert")));
+      m_rToolBarInsert->setFullWidth(false);
  
       // picture
       QString tmp = kapp->kde_datadir().copy();
@@ -2675,7 +2677,8 @@ void KPresenterView_impl::setupTextToolbar()
     {
       // toolbar
       m_rToolBarText = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Text")));
- 
+      m_rToolBarText->setFullWidth(false);
+
       // size combobox
       m_idComboText_FontSize = m_rToolBarText->insertCombo(true,CORBA::string_dup(i18n("Font Size")),60,
 							   this,CORBA::string_dup("sizeSelected"));
@@ -2800,7 +2803,8 @@ void KPresenterView_impl::setupExtraToolbar()
     {
       // toolbar
       m_rToolBarExtra = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Extra")));
- 
+      m_rToolBarExtra->setFullWidth(false);
+
       // pen and brush
       QString tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/style.xpm";
@@ -2850,8 +2854,9 @@ void KPresenterView_impl::setupScreenToolbar()
   if (!CORBA::is_nil(m_vToolBarFactory))
     {
       // toolbar
-      m_rToolBarScreen = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Screen Presentations")));
- 
+      m_rToolBarScreen = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Screen Presentations"))); 
+      m_rToolBarScreen->setFullWidth(false);
+
       // stop
 //       QString tmp = kapp->kde_datadir().copy();
 //       tmp += "/kpresenter/toolbar/stop.xpm";

@@ -238,14 +238,19 @@ void KIllustratorView::setupMenu () {
       m_rMenuBar->insertItem (CORBA::string_dup (i18n ("&Copy")), 
 			      m_idMenuEdit, this, 
 			      CORBA::string_dup ("editCopy"));
+    m_rMenuBar->setAccel(CTRL + Key_C, m_idMenuEdit_Copy);
+
     m_idMenuEdit_Paste = 
       m_rMenuBar->insertItem (CORBA::string_dup (i18n ("&Paste")), 
 			      m_idMenuEdit, this, 
 			      CORBA::string_dup ("editPaste"));
+    m_rMenuBar->setAccel(CTRL + Key_V, m_idMenuEdit_Paste);
+
     m_idMenuEdit_Cut = 
       m_rMenuBar->insertItem (CORBA::string_dup (i18n ("C&ut")), 
 			      m_idMenuEdit, this, 
 			      CORBA::string_dup ("editCut"));
+    m_rMenuBar->setAccel(CTRL + Key_X, m_idMenuEdit_Cut);
 
     m_rMenuBar->insertSeparator (m_idMenuEdit);
 
@@ -253,6 +258,7 @@ void KIllustratorView::setupMenu () {
       m_rMenuBar->insertItem (CORBA::string_dup (i18n ("&Delete")), 
 			      m_idMenuEdit, this, 
 			      CORBA::string_dup ("editDelete"));
+    m_rMenuBar->setAccel(Key_Delete, m_idMenuEdit_Delete);
 
     m_rMenuBar->insertSeparator (m_idMenuEdit);
 
@@ -348,31 +354,44 @@ void KIllustratorView::setupMenu () {
       m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Align")), 
 			      m_idMenuArrange, this, 
 			      CORBA::string_dup ("arrangeAlign"));
+    m_rMenuBar->setAccel (CTRL + Key_A, m_idMenuArrange_Align);
+
     m_idMenuArrange_ToFront =
       m_rMenuBar->insertItem (CORBA::string_dup (i18n ("To Front")), 
 			      m_idMenuArrange, this, 
 			      CORBA::string_dup ("arrangeToFront"));
+    m_rMenuBar->setAccel (SHIFT + Key_PageUp, m_idMenuArrange_ToFront);
+
     m_idMenuArrange_ToBack =
       m_rMenuBar->insertItem (CORBA::string_dup (i18n ("To Back")), 
 			      m_idMenuArrange, this, 
 			      CORBA::string_dup ("arrangeToBack"));
+    m_rMenuBar->setAccel (SHIFT + Key_PageDown, m_idMenuArrange_ToBack);
+
     m_idMenuArrange_1Forward =
       m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Forward One")), 
 			      m_idMenuArrange, this, 
 			      CORBA::string_dup ("arrangeOneForward"));
+    m_rMenuBar->setAccel (CTRL + Key_PageUp, m_idMenuArrange_1Forward);
+
     m_idMenuArrange_1Back =
       m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Back One")), 
 			      m_idMenuArrange, this, 
 			      CORBA::string_dup ("arrangeOneBack"));
+    m_rMenuBar->setAccel (CTRL + Key_PageDown, m_idMenuArrange_1Back);
+
     m_rMenuBar->insertSeparator (m_idMenuArrange);
     m_idMenuArrange_Group =
       m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Group")), 
 			      m_idMenuArrange, this, 
 			      CORBA::string_dup ("arrangeGroup"));
+    m_rMenuBar->setAccel (CTRL + Key_G, m_idMenuArrange_Group);
+
     m_idMenuArrange_Ungroup =
       m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Ungroup")), 
 			      m_idMenuArrange, this, 
 			      CORBA::string_dup ("arrangeUngroup"));
+    m_rMenuBar->setAccel (CTRL + Key_U, m_idMenuArrange_Ungroup);
 
     /* ------------- Arrange->Transform Menu ------------- */
     m_idMenuTransform_Position =
@@ -431,33 +450,35 @@ CORBA::Long KIllustratorView::addToolButton (const char* pictname,
 }
 
 void KIllustratorView::setupToolsToolbar () {
-  m_vToolBarFactory = m_vPartShell->toolBarFactory ();
-  if (! CORBA::is_nil (m_vToolBarFactory)) {
-    m_rToolBarTools = 
-      m_vToolBarFactory->createToolBar (this, 
-					CORBA::string_dup (i18n ("Tools")));
-    m_idSelectionTool = addToolButton ("selecttool.xpm", i18n("Selection Mode"),
-				       "activateSelectionTool");
-    m_idEditPointTool = addToolButton ("pointtool.xpm", i18n("Edit Point"),
-				       "activateEditPointTool");
-    m_idPolylineTool = addToolButton ("linetool.xpm", i18n("Create Polyline"),
-				      "activateLineTool");
-    m_idBezierTool = addToolButton ("beziertool.xpm", i18n("Create Bezier Curve"),
-				    "activateBezierTool");
-    m_idRectangleTool = addToolButton ("recttool.xpm", i18n("Create Rectangle"),
-				       "activateRectangleTool");
-    m_idPolygonTool = addToolButton ("polygontool.xpm", i18n("Create Polygon"),
-				     "activatePolygonTool");
-    m_idEllipseTool = addToolButton ("ellipsetool.xpm", i18n("Create Ellipse"),
-				     "activateEllipseTool");
-    m_idTextTool = addToolButton ("texttool.xpm", i18n("Create/Edit Text"),
-				  "activateTextTool");
-    m_idZoomTool = addToolButton ("zoomtool.xpm", i18n("Zoom In"),
-				  "activateZoomTool");
+    m_vToolBarFactory = m_vPartShell->toolBarFactory ();
+    if (! CORBA::is_nil (m_vToolBarFactory)) {
+	m_rToolBarTools = 
+	    m_vToolBarFactory->createToolBar (this, 
+					      CORBA::string_dup (i18n ("Tools")));
+	m_idSelectionTool = addToolButton ("selecttool.xpm", i18n("Selection Mode"),
+					   "activateSelectionTool");
+	m_idEditPointTool = addToolButton ("pointtool.xpm", i18n("Edit Point"),
+					   "activateEditPointTool");
+	m_idPolylineTool = addToolButton ("linetool.xpm", i18n("Create Polyline"),
+					  "activateLineTool");
+	m_idBezierTool = addToolButton ("beziertool.xpm", i18n("Create Bezier Curve"),
+					"activateBezierTool");
+	m_idRectangleTool = addToolButton ("recttool.xpm", i18n("Create Rectangle"),
+					   "activateRectangleTool");
+	m_idPolygonTool = addToolButton ("polygontool.xpm", i18n("Create Polygon"),
+					 "activatePolygonTool");
+	m_idEllipseTool = addToolButton ("ellipsetool.xpm", i18n("Create Ellipse"),
+					 "activateEllipseTool");
+	m_idTextTool = addToolButton ("texttool.xpm", i18n("Create/Edit Text"),
+				      "activateTextTool");
+	m_idZoomTool = addToolButton ("zoomtool.xpm", i18n("Zoom In"),
+				      "activateZoomTool");
+	
+	m_rToolBarTools->setButton (m_idSelectionTool, true);
+	m_idActiveTool = m_idSelectionTool;
 
-    m_rToolBarTools->setButton (m_idSelectionTool, true);
-    m_idActiveTool = m_idSelectionTool;
-  }
+	m_rToolBarTools->setPos(KToolBar::Left);
+    }
 }
 
 void KIllustratorView::cleanUp () {
