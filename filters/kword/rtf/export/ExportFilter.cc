@@ -1011,20 +1011,21 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
        strLayout += QString::number(int(layout.indentRight)*20, 10);
     }
 
-    if (force || (layoutOrigin.indentLeft!=layout.indentLeft))
+    if (force || (layoutOrigin.indentFirst!=layout.indentFirst))
     {
        strLayout += "\\fi";
        strLayout += QString::number(int(layout.indentFirst)*20, 10);
     }
+
     if ((layout.marginBottom>=0.0)
-        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
+        && (force || (layoutOrigin.marginBottom!=layout.marginBottom)))
     {
        strLayout += "\\sa";
        strLayout += QString::number(int(layout.marginBottom)*20 ,10);
     }
 
     if ((layout.marginTop>=0.0)
-        && (force || (layoutOrigin.indentRight!=layout.indentRight)))
+        && (force || (layoutOrigin.marginTop!=layout.marginTop)))
     {
        strLayout += "\\sb";
        strLayout += QString::number(int(layout.marginTop)*20, 10);
