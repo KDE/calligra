@@ -810,9 +810,9 @@ QString escapeRTFsymbols(const QString& text)
 {
    QString text1(text);
 
-   text1 = text1.replace( QRegExp( "\\"), "\\\\");
-   text1 = text1.replace( QRegExp( "{"), "\\{");
-   text1 = text1.replace( QRegExp( "}"), "\\}");
+   text1.replace( QRegExp( "\\\\"), "\\\\");
+   text1.replace( QRegExp( "\\{"), "\\{");
+   text1.replace( QRegExp( "\\}"), "\\}");
    return text1;
 }  // end escapeRTFsymbols()
 
