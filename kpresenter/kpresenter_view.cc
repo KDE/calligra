@@ -2961,6 +2961,8 @@ void KPresenterView::updateSideBarItem( int pagenr )
 
 void KPresenterView::viewShowSideBar()
 {
+    if ( !sidebar )
+        return;
     if ( sidebar->isVisible() )
         sidebar->hide();
     else
