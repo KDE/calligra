@@ -1346,7 +1346,7 @@ void KWView::insertPicture()
     file = url.path();
 #endif
     // TODO disable this action if currentframeset not a text frameset
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
+    KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->insertPicture( file );
 }
@@ -2805,7 +2805,7 @@ void KWView::configure( )
 
 KWTextFrameSetEdit *KWView::currentTextEdit()
 {
-    if(gui->canvasWidget()->currentFrameSetEdit())
+    if(gui && gui->canvasWidget()->currentFrameSetEdit())
     {
         return  dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
     }
