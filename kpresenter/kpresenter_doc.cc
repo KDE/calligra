@@ -2597,7 +2597,7 @@ void KPresenterDoc::saveStyle( KoStyle *sty, QDomElement parentElem )
     QDomElement styleElem = doc.createElement( "STYLE" );
     parentElem.appendChild( styleElem );
 
-    KoStyle::saveStyle( sty->paragLayout(), sty->followingStyle() ,styleElem );
+    sty->saveStyle( styleElem );
 #if 0 //fixme
     QDomElement formatElem = KWTextParag::saveFormat( doc, &sty->format(), 0L, 0, 0 );
     styleElem.appendChild( formatElem );
