@@ -2560,25 +2560,37 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   // MENU Edit  
   _menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
 
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap(ICON("undo.xpm"));
+  QString tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/undo.xpm";
+  OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
   m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, i18n("No Undo possible"), this,"editUndo", CTRL + Key_Z, -1, -1 );
   m_vMenuEdit->setItemEnabled(m_idMenuEdit_Undo,false);
 
-  pix = OPUIUtils::convertPixmap(ICON("redo.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/redo.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, i18n("No Redo possible"), this,"editRedo", 0, -1, -1 );
   m_vMenuEdit->setItemEnabled(m_idMenuEdit_Redo,false);
   m_vMenuEdit->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("editcut.xpm"));
+  tmp = kapp->kde_toolbardir().copy();
+  tmp += "/editcut.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuEdit_Cut = m_vMenuEdit->insertItem6(pix, i18n("&Cut"), this,"editCut", CTRL + Key_X, -1, -1);
 
-  pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
+  tmp = kapp->kde_toolbardir().copy();
+  tmp += "/editcopy.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuEdit_Copy = m_vMenuEdit->insertItem6(pix, i18n("&Copy"), this,"editCopy", CTRL + Key_C, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("editpaste.xpm"));
+  tmp = kapp->kde_toolbardir().copy();
+  tmp += "/editpaste.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuEdit_Paste = m_vMenuEdit->insertItem6(pix, i18n("&Paste"), this,"editPaste", CTRL + Key_V, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("delete.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/delete.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuEdit_Delete = m_vMenuEdit->insertItem6(pix, i18n("&Delete"), this,"editDelete", Key_Delete, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
@@ -2587,7 +2599,9 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("delslide.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/delslide.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuEdit_DelPage = m_vMenuEdit->insertItem6(pix, i18n("&Delete Page..."), this, "editDelPage", 0, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
@@ -2604,17 +2618,25 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   // MENU Insert
   _menubar->insertMenu( i18n( "&Insert" ), m_vMenuInsert, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("newslide.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/newslide.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuInsert_Page = m_vMenuInsert->insertItem6(pix, i18n("Pa&ge..."), this,"insertPage", 0, -1, -1 );
   m_vMenuInsert->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("picture.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/picture.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuInsert_Picture = m_vMenuInsert->insertItem6(pix, i18n("&Picture..."), this,"insertPicture", Key_F2, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/clipart.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuInsert_Clipart = m_vMenuInsert->insertItem6(pix, i18n("&Clipart..."), this,"insertClipart", Key_F3, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("autoform.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/autoform.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuInsert_Autoform = m_vMenuInsert->insertItem6(pix, i18n("&Autoform..."), this,"insertAutoform", Key_F4, -1, -1 );
 
   m_vMenuInsert->setCheckable(true);
@@ -2622,25 +2644,39 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   // MENU Tools
   _menubar->insertMenu( i18n( "&Tools" ), m_vMenuTools, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("mouse.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/mouse.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuTools_Mouse = m_vMenuTools->insertItem6(pix, i18n("&Mouse"), this,"toolsMouse", Key_F5, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("line.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/line.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuTools_Line = m_vMenuTools->insertItem6(pix, i18n("&Line"), this,"toolsLine", Key_F6, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("rectangle.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/rectangle.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuTools_Rectangle = m_vMenuTools->insertItem6(pix, i18n("&Rectangle"), this,"toolsRectangle", Key_F7, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("circle.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/circle.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuTools_Circle = m_vMenuTools->insertItem6(pix, i18n("C&ircle or Ellipse"), this,"toolsCircleOrEllipse", Key_F8, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("pie.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/pie.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuTools_Pie = m_vMenuTools->insertItem6(pix, i18n("Pie/&Arc/Chord"), this,"toolsPie", Key_F9, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("text.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/text.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuTools_Text = m_vMenuTools->insertItem6(pix, i18n("&Text"), this,"toolsText", Key_F10, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/parts.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuTools_Part = m_vMenuTools->insertItem6(pix, i18n("&Object..."), this,"toolsObject", Key_F11, -1, -1 );
 
   m_vMenuTools->setCheckable( true );
@@ -2655,88 +2691,134 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuText->insertItem8( i18n("Text &Alignment"), m_vMenuText_TAlign, -1, -1 );
   m_vMenuText_TAlign->setCheckable( true );
 
-  pix = OPUIUtils::convertPixmap(ICON("alignLeft.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/alignLeft.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuText_TAlign_Left = m_vMenuText_TAlign->insertItem6(pix, i18n("Align &Left"), this,"mtextAlignLeft", 0, -1, -1 );
   // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Left,true);
-
-  pix = OPUIUtils::convertPixmap(ICON("alignCenter.xpm"));
+      
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/alignCenter.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuText_TAlign_Center = m_vMenuText_TAlign->insertItem6(pix, i18n("Align &Center"), this,"mtextAlignCenter", 0, -1, -1 );
   // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Center,true);
 
-  pix = OPUIUtils::convertPixmap(ICON("alignRight.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/alignRight.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuText_TAlign_Right = m_vMenuText_TAlign->insertItem6(pix, i18n("Align &Right"), this,"mtextAlignRight", 0, -1, -1 );
   // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Right,true);
 
   m_vMenuText->insertItem8( i18n("Text &Type"), m_vMenuText_TType, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("enumList.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/enumList.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuText_TType_EnumList = m_vMenuText_TType->insertItem6(pix, i18n("&Enumerated List"), this,"textEnumList", 0, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("unsortedList.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/unsortedList.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuText_TType_UnsortList = m_vMenuText_TType->insertItem6(pix, i18n("&Unsorted List"), this,"textUnsortList", 0, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("normalText.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/normalText.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuText_TType_NormalText = m_vMenuText_TType->insertItem6(pix, i18n("&Normal Text"), this,"textNormalText", 0, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("depth+.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/depth+.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuText_TDepthPlus = m_vMenuText->insertItem6(pix, i18n("&Increase Depth"), this,"textDepthPlus", 0, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("depth-.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/depth-.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuText_TDepthMinus = m_vMenuText->insertItem6(pix, i18n("&Decrease Depth"), this,"textDepthMinus", 0, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("spacing.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/spacing.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuText_TSpacing = m_vMenuText->insertItem6(pix, i18n("Paragraph &Spacing..."), this,"textSpacing", 0, -1, -1 );
 
 
   // MENU Extra
   _menubar->insertMenu( i18n( "&Extra" ), m_vMenuExtra, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("style.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/style.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_PenBrush = m_vMenuExtra->insertItem6(pix, i18n("&Pen and Brush..."), this,"extraPenBrush", ALT + Key_P, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("edit_pie.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/edit_pie.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_Pie = m_vMenuExtra->insertItem6(pix, i18n("&Configure Pie/Arc/Chord..."), this,"extraConfigPie", ALT + Key_A, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("rectangle2.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/rectangle2.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_Rect = m_vMenuExtra->insertItem6(pix, i18n("C&onfigure Rectangle..."), this,"extraConfigRect", ALT + Key_R, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("raise.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/raise.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_Raise = m_vMenuExtra->insertItem6(pix, i18n("&Raise object(s)"), this,"extraRaise", CTRL + Key_Plus, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("lower.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/lower.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_Lower = m_vMenuExtra->insertItem6(pix, i18n("&Lower object(s)"), this,"extraLower", CTRL + Key_Minus, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("rotate.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/rotate.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_Rotate = m_vMenuExtra->insertItem6(pix, i18n("Rot&ate object(s)..."), this,"extraRotate", ALT + Key_R, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("shadow.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/shadow.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_Shadow = m_vMenuExtra->insertItem6(pix, i18n("&Shadow object(s)..."), this,"extraShadow", ALT + Key_S, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("alignobjs.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/alignobjs.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_vMenuExtra->insertItem12( pix, i18n("Text &Alignment"), m_vMenuExtra_AlignObj, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("aoleft.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/aoleft.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_AlignObj_Left = m_vMenuExtra_AlignObj->insertItem6(pix, i18n("Align &Left"), this,"extraAlignObjLeftidl", 0, -1, -1 );
 
   m_vMenuExtra_AlignObj->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("aocenterh.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/aocenterh.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_AlignObj_CenterH = m_vMenuExtra_AlignObj->insertItem6(pix, i18n("Align Center (&horizontal)"), this,"extraAlignObjCenterHidl", 0, -1, -1);
   m_vMenuExtra_AlignObj->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("aoright.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/aoright.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_AlignObj_Right = m_vMenuExtra_AlignObj->insertItem6(pix, i18n("Align &Right"), this,"extraAlignObjRightidl", 0, -1, -1 );
   m_vMenuExtra_AlignObj->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("aotop.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/aotop.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_AlignObj_Top = m_vMenuExtra_AlignObj->insertItem6(pix, i18n("Align &Top"), this,"extraAlignObjTopidl", 0, -1, -1 );
   m_vMenuExtra_AlignObj->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("aocenterv.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/aocenterv.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_AlignObj_CenterV = m_vMenuExtra_AlignObj->insertItem6(pix, i18n("Align Center (&vertical)"), this,"extraAlignObjCenterVidl", 0, -1, -1 );
   m_vMenuExtra_AlignObj->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("aobottom.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/aobottom.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuExtra_AlignObj_Bottom = m_vMenuExtra_AlignObj->insertItem6(pix, i18n("Align &Bottom"), this,"extraAlignObjBottomidl", 0, -1, -1);
 
   m_vMenuExtra->insertSeparator( -1 );
@@ -2755,33 +2837,49 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuScreen_ConfigPage = m_vMenuScreen->insertItem(i18n("&Configure pages..."), this,"screenConfigPages", 0 );
   m_idMenuScreen_PresStructView = m_vMenuScreen->insertItem(i18n("&Open presentation structure viewer..."), this,"screenPresStructView", 0 );
 
-  pix = OPUIUtils::convertPixmap(ICON("effect.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/effect.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuScreen_AssignEffect = m_vMenuScreen->insertItem6(pix, i18n("&Assign effect..."), this,"screenAssignEffect", 0, -1, -1);
   m_vMenuScreen->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("start.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/start.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuScreen_Start = m_vMenuScreen->insertItem6(pix, i18n("&Start"), this,"screenStart", CTRL + Key_G, -1, -1 );
 
-  //       pix = OPUIUtils::convertPixmap(ICON("stop.xpm"));
+  //       tmp = kapp->kde_datadir().copy();
+  //       tmp += "/kpresenter/toolbar/stop.xpm";
+  //       pix = OPUIUtils::loadPixmap(tmp);
   //       m_idMenuScreen_Stop = m_vMenuScreen->insertItem6(pix, 
   // 						    i18n("St&op"),m_idMenuScreen,
   // 						    this,"screenStop");
-  //       pix = OPUIUtils::convertPixmap(ICON("pause.xpm"));
+  //       tmp = kapp->kde_datadir().copy();
+  //       tmp += "/kpresenter/toolbar/pause.xpm";
+  //       pix = OPUIUtils::loadPixmap(tmp);
   //       m_idMenuScreen_Pause = m_vMenuScreen->insertItem6(pix, 
   // 						     i18n("Pa&use"),m_idMenuScreen,
   // 						     this,"screenPause");
   m_vMenuScreen->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("first.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/first.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuScreen_First = m_vMenuScreen->insertItem6(pix, i18n("&Go to start"), this,"screenFirst", Key_Home, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("prev.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/prev.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuScreen_Prev = m_vMenuScreen->insertItem6(pix, i18n("&Previous step"), this,"screenPrev", Key_Prior, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("next.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/next.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuScreen_Next = m_vMenuScreen->insertItem6(pix, i18n("&Next step"), this,"screenNext", Key_Next, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("last.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/last.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuScreen_Last = m_vMenuScreen->insertItem6(pix, i18n("&Go to end"), this,"screenLast", Key_End, -1, -1 );
 
 //   m_idMenuScreen_Skip = m_vMenuScreen->insertItem(i18n("Goto &page"),m_idMenuScreen,
@@ -2789,7 +2887,9 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_vMenuScreen->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("pen.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/pen.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_vMenuScreen->insertItem12( pix, i18n("&Choose Pen"), m_vMenuScreen_Pen, -1, -1 );
   m_vMenuScreen_Pen->setCheckable( true );
 
@@ -2950,33 +3050,45 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarEdit->setFullWidth(false);
 
   // undo
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap(ICON("undo.xpm"));
+  QString tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/undo.xpm";
+  OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2( pix, ID_UNDO, SIGNAL( clicked() ), this, "editUndo", true, i18n("Undo"), -1 );
   m_vToolBarEdit->setItemEnabled(ID_UNDO,false);
   
   // redo
-  pix = OPUIUtils::convertPixmap(ICON("redo.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/redo.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2( pix, ID_REDO, SIGNAL( clicked() ), this, "editRedo", true, i18n("Redo"), -1 );
   m_vToolBarEdit->setItemEnabled(ID_REDO,false);
 
   m_vToolBarEdit->insertSeparator( -1 );
 
   // cut
-  pix = OPUIUtils::convertPixmap(ICON("editcut.xpm"));
+  tmp = kapp->kde_toolbardir().copy();
+  tmp += "/editcut.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editCut", true, i18n("Cut"), -1 );
 
   // copy
-  pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
+  tmp = kapp->kde_toolbardir().copy();
+  tmp += "/editcopy.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editCopy", true, i18n("Copy"), -1 );
 
   // paste
-  pix = OPUIUtils::convertPixmap(ICON("editpaste.xpm"));
+  tmp = kapp->kde_toolbardir().copy();
+  tmp += "/editpaste.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editPaste", true, i18n("Paste"), -1 );
 
   m_vToolBarEdit->insertSeparator( -1 );
   
   // delete
-  pix = OPUIUtils::convertPixmap(ICON("delete.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/delete.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonEdit_Delete = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editDelete", true, i18n("Delete"), -1 );
 
   m_vToolBarEdit->enable( OpenPartsUI::Show );
@@ -2988,20 +3100,28 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarInsert->setFullWidth(false);
  
   // page
-  pix = OPUIUtils::convertPixmap(ICON("newslide.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/newslide.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonInsert_Page = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPage", true, i18n("Insert Page"), -1 );
   m_vToolBarInsert->insertSeparator( -1 );
 
   // picture
-  pix = OPUIUtils::convertPixmap(ICON("picture.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/picture.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonInsert_Picture = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPicture", true, i18n("Insert Picture"), -1 );
       
   // clipart
-  pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/clipart.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertClipart", true, i18n("Insert Clipart"), -1 );
   
   // autoform
-  pix = OPUIUtils::convertPixmap(ICON("autoform.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/autoform.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonInsert_Autoform = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertAutoform", true, i18n("Insert Autoform"), -1 );
   
   m_vToolBarInsert->enable( OpenPartsUI::Show );
@@ -3013,7 +3133,9 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarTools->setFullWidth(false);
 
   // mouse
-  pix = OPUIUtils::convertPixmap(ICON("mouse.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/mouse.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonTools_Mouse = m_vToolBarTools->insertButton2( pix, ID_TOOL_MOUSE, SIGNAL( clicked() ), this, "toolsMouse", 
 							   true, i18n("Mouse Tool"), -1 );
 
@@ -3021,7 +3143,9 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarTools->setButton(ID_TOOL_MOUSE,true);
 
   // line
-  pix = OPUIUtils::convertPixmap(ICON("line.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/line.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonTools_Line = m_vToolBarTools->insertButton2( pix, ID_TOOL_LINE, SIGNAL( clicked() ), this, "toolsLine", 
 							   true, i18n("Create Line"), -1 );
 
@@ -3029,35 +3153,45 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarTools->setButton(ID_TOOL_LINE,false);
 
   // rectangle
-  pix = OPUIUtils::convertPixmap(ICON("rectangle.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/rectangle.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonTools_Rectangle = m_vToolBarTools->insertButton2( pix, ID_TOOL_RECT, SIGNAL( clicked() ), this, "toolsRectangle", 
 								true, i18n("Create Rectangle"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_RECT,true);
   m_vToolBarTools->setButton(ID_TOOL_RECT,false);
 
   // circle or ellipse
-  pix = OPUIUtils::convertPixmap(ICON("circle.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/circle.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonTools_Circle = m_vToolBarTools->insertButton2( pix, ID_TOOL_ELLIPSE, SIGNAL( clicked() ), this, "toolsCircleOrEllipse", 
 							     true, i18n("Create Circle or Ellipse"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_ELLIPSE,true);
   m_vToolBarTools->setButton(ID_TOOL_ELLIPSE,false);
 
   // circle or ellipse
-  pix = OPUIUtils::convertPixmap(ICON("pie.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/pie.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonTools_Pie = m_vToolBarTools->insertButton2( pix, ID_TOOL_PIE, SIGNAL( clicked() ), this, "toolsPie", 
 							  true, i18n("Create Pie/Arc/Chord"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_PIE,true);
   m_vToolBarTools->setButton(ID_TOOL_PIE,false);
 
   // text
-  pix = OPUIUtils::convertPixmap(ICON("text.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/text.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonTools_Text = m_vToolBarTools->insertButton2( pix, ID_TOOL_TEXT, SIGNAL( clicked() ), this, "toolsText", 
 							   true, i18n("Create Text"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_TEXT,true);
   m_vToolBarTools->setButton(ID_TOOL_TEXT,false);
 
   // parts
-  pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/parts.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonTools_Part = m_vToolBarTools->insertButton2( pix, ID_TOOL_OBJECT, SIGNAL( clicked() ), this, "toolsObject", 
 							   true, i18n("Create Object"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_OBJECT,true);
@@ -3101,21 +3235,27 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarText->insertSeparator( -1 );
 
   // bold
-  pix = OPUIUtils::convertPixmap(ICON("bold.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/bold.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_Bold = m_vToolBarText->insertButton2( pix, ID_BOLD, SIGNAL( clicked() ), this, "textBold", true, i18n("Bold"), -1 );
   m_vToolBarText->setToggle(ID_BOLD,true);
   m_vToolBarText->setButton(ID_BOLD,false);
   tbFont.setBold(false);
 
   // italic
-  pix = OPUIUtils::convertPixmap(ICON("italic.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/italic.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_Italic = m_vToolBarText->insertButton2( pix, ID_ITALIC, SIGNAL( clicked() ), this, "textItalic", true, i18n("Italic"), -1 );
   m_vToolBarText->setToggle(ID_ITALIC,true);
   m_vToolBarText->setButton(ID_ITALIC,false);
   tbFont.setItalic(false);
 
   // underline
-  pix = OPUIUtils::convertPixmap(ICON("underl.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/underl.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_Underline = m_vToolBarText->insertButton2( pix, ID_UNDERLINE, SIGNAL( clicked() ), this, "textUnderline", 
 							    true, i18n("Underline"), -1 );
   m_vToolBarText->setToggle(ID_UNDERLINE,true);
@@ -3132,7 +3272,9 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarText->insertSeparator( -1 );
   
   // align left
-  pix = OPUIUtils::convertPixmap(ICON("alignLeft.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/alignLeft.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_ALeft = m_vToolBarText->insertButton2( pix, ID_ALEFT, SIGNAL( clicked() ), this, "textAlignLeft", 
 							true, i18n("Align Left"), -1 );
   m_vToolBarText->setToggle(ID_ALEFT,true);
@@ -3140,14 +3282,18 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   tbAlign = TxtParagraph::LEFT;
   
   // align center
-  pix = OPUIUtils::convertPixmap(ICON("alignCenter.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/alignCenter.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_ACenter = m_vToolBarText->insertButton2( pix, ID_ACENTER, SIGNAL( clicked() ), this, "textAlignCenter", 
 							  true, i18n("Align Center"), -1 );
   m_vToolBarText->setToggle(ID_ACENTER,true);
   m_vToolBarText->setButton(ID_ACENTER,false);
   
   // align right
-  pix = OPUIUtils::convertPixmap(ICON("alignRight.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/koffice/toolbar/alignRight.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_ARight = m_vToolBarText->insertButton2( pix, ID_ARIGHT, SIGNAL( clicked() ), this, "textAlignRight", 
 							 true, i18n("Align Right"), -1 );
   m_vToolBarText->setToggle(ID_ARIGHT,true);
@@ -3156,30 +3302,42 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarText->insertSeparator( -1 );
   
   // enum list
-  pix = OPUIUtils::convertPixmap(ICON("enumList.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/enumList.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textEnumList", 
 							   true, i18n("Enumerated List"), -1 );
   
   // unsorted list
-  pix = OPUIUtils::convertPixmap(ICON("unsortedList.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/unsortedList.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_UnsortList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textUnsortList", true, i18n("Unsorted List"), -1 );
   
   // normal text
-  pix = OPUIUtils::convertPixmap(ICON("normalText.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/normalText.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_NormalText = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textNormalText", true, i18n("Normal Text"), -1 );
 
   m_vToolBarText->enable( OpenPartsUI::Show );
 
   // depth plus
-  pix = OPUIUtils::convertPixmap(ICON("depth+.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/depth+.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_DepthPlus = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textDepthPlus", true, i18n("Increase Depth"), -1 );
 
   // depth minus
-  pix = OPUIUtils::convertPixmap(ICON("depth-.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/depth-.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_DepthPlus = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textDepthMinus", true, i18n("Decrease Depth"), -1 );
 
   // spacing
-  pix = OPUIUtils::convertPixmap(ICON("spacing.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/spacing.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_Spacing = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textSpacing", true, i18n("Paragraph Spacing"), -1 );
 
   m_vToolBarText->enable( OpenPartsUI::Show );
@@ -3191,49 +3349,69 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarExtra->setFullWidth(false);
 
   // pen and brush
-  pix = OPUIUtils::convertPixmap(ICON("style.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/style.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonExtra_Style = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraPenBrush", true, i18n("Pen & Brush"), -1 );
   m_vToolBarExtra->insertSeparator( -1 );
 
   // pie
-  pix = OPUIUtils::convertPixmap(ICON("edit_pie.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/edit_pie.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonExtra_Pie = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraConfigPie", true, i18n("Configure Pie"), -1 );
 
   // rect
-  pix = OPUIUtils::convertPixmap(ICON("rectangle2.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/rectangle2.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonExtra_Rect = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraConfigRect", true, 
 							 i18n("Configure Rectangle"), -1 );
   m_vToolBarExtra->insertSeparator( -1 );
 
   // raise
-  pix = OPUIUtils::convertPixmap(ICON("raise.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/raise.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonExtra_Raise = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraRaise", true, i18n("Raise object"), -1 );
   
   // lower
-  pix = OPUIUtils::convertPixmap(ICON("lower.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/lower.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonExtra_Lower = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLower", true, i18n("Lower object"), -1 );
   m_vToolBarExtra->insertSeparator( -1 );
   
   // rotate
-  pix = OPUIUtils::convertPixmap(ICON("rotate.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/rotate.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonExtra_Rotate = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraRotate", true, i18n("Rotate object"), -1 );
   
   // shadow
-  pix = OPUIUtils::convertPixmap(ICON("shadow.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/shadow.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonExtra_Shadow = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraShadow", true, i18n("Shadow object"), -1 );
   m_vToolBarExtra->insertSeparator( -1 );
   
   // align
-  pix = OPUIUtils::convertPixmap(ICON("alignobjs.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/alignobjs.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonExtra_Align = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraAlignObj", true, i18n("Align object"), -1 );
   m_vToolBarExtra->insertSeparator( -1 );
 
   // line begin
-  pix = OPUIUtils::convertPixmap(ICON("line_begin.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/line_begin.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonExtra_LineBegin = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLineBegin", 
 							      true, i18n("Line Begin"), -1 );
   // line end
-  pix = OPUIUtils::convertPixmap(ICON("line_end.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/line_end.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonExtra_LineEnd = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLineEnd", 
 							      true, i18n("Line End"), -1 );
 
@@ -3246,34 +3424,48 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarScreen->setFullWidth(false);
 
   // start
-  pix = OPUIUtils::convertPixmap(ICON("start.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/start.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonScreen_Start = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenStart", true, i18n("Start"), -1 );
   m_vToolBarScreen->insertSeparator( -1 );
   
   // first
-  pix = OPUIUtils::convertPixmap(ICON("first.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/first.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonScreen_First = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenFirst", true, i18n("First"), -1 );
 
   // previous
-  pix = OPUIUtils::convertPixmap(ICON("prev.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/prev.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonScreen_Prev = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenPrev", true, i18n("Previous"), -1 );
 
   // next
-  pix = OPUIUtils::convertPixmap(ICON("next.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/next.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonScreen_Next = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenNext", true, i18n("Next"), -1 );
 
   // last
-  pix = OPUIUtils::convertPixmap(ICON("last.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/last.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonScreen_Last = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenLast", true, i18n("Last"), -1 );
   m_vToolBarScreen->insertSeparator( -1 );
   
   // effect
-  pix = OPUIUtils::convertPixmap(ICON("effect.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/effect.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonScreen_Effect = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenAssignEffect", true, i18n("Assign Effect"), -1 );
   m_vToolBarScreen->insertSeparator( -1 );
 
   // pen
-  pix = OPUIUtils::convertPixmap(ICON("pen.xpm"));
+  tmp = kapp->kde_datadir().copy();
+  tmp += "/kpresenter/toolbar/pen.xpm";
+  pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonScreen_Pen = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenPen", true, i18n("choose Pen"), -1 );
 
   m_vToolBarScreen->enable( OpenPartsUI::Show );
