@@ -29,6 +29,12 @@
 
 class KoUnitDoubleBase;
 
+// ### TODO: put it out of the public header file (if possible)
+/**
+ * Validator for the unit widget classes
+ * \internal
+ * \since 1.4 (change of behavior)
+ */
 class KoUnitDoubleValidator : public KDoubleValidator
 {
 public:
@@ -40,6 +46,11 @@ private:
 	KoUnitDoubleBase	*m_base;
 };
 
+
+/**
+ * Base for the unit widgets
+ * \since 1.4 (change of behavior)
+ */
 class KoUnitDoubleBase
 {
 public:
@@ -77,6 +88,10 @@ protected:
 	unsigned int			m_precision;
 };
 
+/**
+ * Spin box for double precision numbers with unit display
+ * \since 1.4 (change of behavior)
+ */
 class KoUnitDoubleSpinBox : public KDoubleSpinBox, public KoUnitDoubleBase
 {
 public:
@@ -94,6 +109,10 @@ private:
     double m_stepInPoints;  //< step in points
 };
 
+/**
+ * Line edit for double precision numbers with unit display
+ * \since 1.4 (change of behavior)
+ */
 class KoUnitDoubleLineEdit : public KLineEdit, public KoUnitDoubleBase
 {
 public:
@@ -116,6 +135,10 @@ private:
     double m_upperInPoints; ///< highest value in points
 };
 
+/**
+ * Combo box for double precision numbers with unit display
+ * \since 1.4 (change of behavior)
+ */
 class KoUnitDoubleComboBox : public KComboBox, public KoUnitDoubleBase
 {
 Q_OBJECT
@@ -147,6 +170,10 @@ protected:
     double m_upperInPoints; ///< highest value in points
 };
 
+/**
+ * Combo box (with spin control) for double precision numbers with unit display
+ * \since 1.4 (change of behavior)
+ */
 class KoUnitDoubleSpinComboBox : public QWidget
 {
 Q_OBJECT
