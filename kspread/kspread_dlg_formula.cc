@@ -2,7 +2,7 @@
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 1999, 2000 Montel Laurent <montell@club-internet.fr>
    This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
+   mod*ify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
 
@@ -1377,7 +1377,7 @@ void KSpreadDlgFormula::changeFunction()
     {
         tmp.nb_param=1;
         tmp.firstElementLabel=i18n("Month (Int)");
-        QString tmp1=i18n("The month() function returns name\n"
+        tmp1=i18n("The month() function returns name\n"
                         "of the month (1...12).\n");
         tmp1+=i18n("Syntax : %1(Int)\n").arg(m_funcName);
         tmp1+=i18n("Example : \n");

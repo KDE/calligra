@@ -1170,10 +1170,16 @@ static bool kspreadfunc_mod( KSContext& context )
 
   if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
     return false;
+  if( args[1]->doubleValue()!=0)
+  {
+        result=(int)args[0]->doubleValue() % (int)args[1]->doubleValue();
+        context.setValue( new KSValue(  result  ) );
+  }
+  else
+  {
+        context.setValue( new KSValue( i18n("#DIV/0") ) );
 
-  result=(int)args[0]->doubleValue() % (int)args[1]->doubleValue();
-  context.setValue( new KSValue(  result  ) );
-
+  }
   return true;
 }
 
