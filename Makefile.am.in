@@ -33,3 +33,6 @@ $(top_srcdir)/acinclude.m4: $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/ad
 	@cd $(top_srcdir) && cat admin/acinclude.m4.in admin/libtool.m4.in > acinclude.m4
 
 MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 SUBDIRS
+
+include admin/Doxyfile.am
+
