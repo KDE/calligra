@@ -170,6 +170,7 @@ bool kspreadfunc_mid( KSContext& context );
 bool kspreadfunc_proper(KSContext & context);
 bool kspreadfunc_replace( KSContext& context );
 bool kspreadfunc_rept( KSContext& context );
+bool kspreadfunc_rot( KSContext& context );
 bool kspreadfunc_right( KSContext& context );
 bool kspreadfunc_search( KSContext& context ); 
 bool kspreadfunc_sleek( KSContext& context );
@@ -669,6 +670,7 @@ static const functionEntry funcTab[] = {
   { "PROPER", kspreadfunc_proper },
   { "REPLACE", kspreadfunc_replace },
   { "REPT", kspreadfunc_rept },
+  { "ROT", kspreadfunc_rot }, // KSpread-specific, like OpenOffice's ROT13
   { "RIGHT", kspreadfunc_right },
   { "SEARCH", kspreadfunc_search },
   { "SLEEK", kspreadfunc_sleek },  // KSpread-specific

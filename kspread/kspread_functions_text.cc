@@ -541,6 +541,32 @@ bool kspreadfunc_right( KSContext& context )
     return true;
 }
 
+// Function: ROT
+bool kspreadfunc_rot( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "ROT", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+
+  QString text = args[0]->stringValue();
+
+  for( unsigned i=0; i<text.length(); i++ )
+  {
+    unsigned c = text[i].upper().unicode();
+    if( ( c >= 'A' ) && ( c <= 'M' ) ) 
+      text[i] = QChar( text[i].unicode() + 13);  
+    if( ( c >= 'N' ) && ( c <= 'Z' ) )
+      text[i] = QChar( text[i].unicode() - 13);  
+  }
+
+  context.setValue( new KSValue( text ) );
+  return true;
+}
+
 // Function: SEARCH
 bool kspreadfunc_search( KSContext& context )
 {

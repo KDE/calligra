@@ -429,6 +429,22 @@
     </Function>
 
     <Function>
+      <Name>ROT</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Text</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The ROT() function encrypts a text by moving each charatecters 13 positions in the alpahbet. After the letter Z, the alphabet begins again (rotation).</Text>
+        <Text>By appyling the encryption function again to the resulting text, you can decrypt the text.</Text>
+	<Syntax>ROT(Text)</Syntax>
+	<Example>ROT("KSpread") returns "XFcernq"</Example>
+	<Example>ROT("XFcernq") returns "KSpread"</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>TOGGLE</Name>
       <Type>String</Type>
       <Parameter>
