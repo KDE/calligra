@@ -120,10 +120,19 @@ KPTDateTime KPTProject::calculateForward(int use) {
         // Follow *parent* relations back and
         // calculate forwards following the child relations
         KPTDateTime finish;
+        KPTDateTime time;
+        // First do summarytasks and their children
+        QPtrListIterator<KPTNode> summarytasks(m_summarytasks);
+        for (; summarytasks.current(); ++summarytasks) {
+            time = summarytasks.current()->calculateForward(use);
+            if (!finish.isValid() || time > finish)
+                finish = time;
+        }
+        // Now do the rest of the tasks
         QPtrListIterator<KPTNode> endnodes = m_endNodes;
         for (; endnodes.current(); ++endnodes) {
             KPTDateTime time = endnodes.current()->calculateForward(use);
-            if (time > finish || !finish.isValid())
+            if (!finish.isValid() || time > finish)
                 finish = time;
         }
         //kdDebug()<<k_funcinfo<<m_name<<" finish="<<finish.toString()<<endl;
@@ -142,10 +151,19 @@ KPTDateTime KPTProject::calculateBackward(int use) {
         // Follow *child* relations back and
         // calculate backwards following parent relation
         KPTDateTime start;
+        KPTDateTime time;
+        // First do summarytasks and their children
+        QPtrListIterator<KPTNode> summarytasks(m_summarytasks);
+        for (; summarytasks.current(); ++summarytasks) {
+            time = summarytasks.current()->calculateBackward(use);
+            if (!start.isValid() || time < start)
+                start = time;
+        }
+        // Now do the rest of the tasks
         QPtrListIterator<KPTNode> startnodes = m_startNodes;
         for (; startnodes.current(); ++startnodes) {
             KPTDateTime time = startnodes.current()->calculateBackward(use);
-            if (time < start || !start.isValid())
+            if (!start.isValid() || time < start)
                 start = time;
         }
         //kdDebug()<<k_funcinfo<<m_name<<" start="<<start.toString()<<endl;
@@ -160,14 +178,18 @@ KPTDateTime &KPTProject::scheduleForward(KPTDateTime &earliest, int use) {
     if (isDeleted())
         return m_endTime;
     resetVisited();
+    // First do summarytasks and their children
+    QPtrListIterator<KPTNode> summarytasks(m_summarytasks);
+    for (; summarytasks.current(); ++summarytasks) {
+        summarytasks.current()->scheduleForward(earliest, use);
+    }
+    // Now do the rest of the tasks
     QPtrListIterator<KPTNode> it(m_endNodes);
     for (; it.current(); ++it) {
         it.current()->scheduleForward(earliest, use);
     }
-    QPtrListIterator<KPTNode> ms(m_milestones);
-    for (; ms.current(); ++ms) {
-        static_cast<KPTTask*>(ms.current())->scheduleMilestone();
-    }
+    // Fix summarytasks (with milestones)
+    adjustSummarytask();
     return m_endTime;
 }
 
@@ -175,15 +197,28 @@ KPTDateTime &KPTProject::scheduleBackward(KPTDateTime &latest, int use) {
     if (isDeleted())
         return m_startTime;
     resetVisited();
+    // First do summarytasks and their children
+    QPtrListIterator<KPTNode> ss(m_summarytasks);
+    for (; ss.current(); ++ss) {
+        ss.current()->scheduleBackward(latest, use);
+    }
+    // Now do the rest of the tasks
     QPtrListIterator<KPTNode> it(m_startNodes);
     for (; it.current(); ++it) {
         it.current()->scheduleBackward(latest, use);
     }
-    QPtrListIterator<KPTNode> ms(m_milestones);
-    for (; ms.current(); ++ms) {
-        static_cast<KPTTask*>(ms.current())->scheduleMilestone();
-    }
+    // Fix summarytasks (with milestones)
+    adjustSummarytask();
     return m_startTime;
+}
+
+void KPTProject::adjustSummarytask() {
+    if (isDeleted())
+        return;
+    QPtrListIterator<KPTNode> it(m_summarytasks);
+    for (; it.current(); ++it) {
+        it.current()->adjustSummarytask();
+    }
 }
 
 void KPTProject::initiateCalculation() {
@@ -191,16 +226,16 @@ void KPTProject::initiateCalculation() {
     KPTNode::initiateCalculation();
     m_startNodes.clear();
     m_endNodes.clear();
-    m_milestones.clear();
-    initiateCalculationLists(m_startNodes, m_endNodes, m_milestones);
+    m_summarytasks.clear();
+    initiateCalculationLists(m_startNodes, m_endNodes, m_summarytasks);
 }
 
-void KPTProject::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &milestones) {
+void KPTProject::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
     if (type() == KPTNode::Type_Project) {
         QPtrListIterator<KPTNode> it = childNodeIterator();
         for (; it.current(); ++it) {
-            it.current()->initiateCalculationLists(startnodes, endnodes, milestones);
+            it.current()->initiateCalculationLists(startnodes, endnodes, summarytasks);
         }
     } else {
         //TODO: subproject

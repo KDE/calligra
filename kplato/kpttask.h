@@ -101,7 +101,7 @@ public:
     int plannedWork(QDateTime &dt);
     int actualWork();
 
-    void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &milestones);
+    void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks);
     /**
      * Calculate @ref m_durationForward from @ref earliestStart and
      * return the resulting end time, 
@@ -138,11 +138,10 @@ public:
     KPTDateTime &scheduleBackward(KPTDateTime &latest, int use);
     
     /**
-     * Milestones need special treatment because the are 'glued'
-     * to their predecessors even when calculating backwards.
-     * (Other tasks are dependent on successors in that case.)
+     * Summarytasks (with milestones) need special treatment because 
+     * milestones are always 'glued' to their predecessors.
      */
-    void scheduleMilestone();
+    void adjustSummarytask();
     
     /**
      * Returns the duration from latestFinish of the 'latest subtask' 
@@ -165,11 +164,6 @@ public:
      * Return the duration calculated on bases of the requested resources
      */
     virtual KPTDuration workbasedDuration(const KPTDateTime &time, const KPTDuration &effort, bool backward);
-
-    //HACK: Temporary fix
-    void milestoneMoveStartTime(KPTTask *parent, const KPTDateTime &time);
-    void milestoneMoveEndTime(KPTTask *parent, const KPTDateTime &time);
-    void milestoneSetDuration();
 
 private:
     QPtrList<KPTResourceGroup> m_resource;

@@ -144,11 +144,12 @@ protected:
     
     KPTDateTime calculateForward(int use);
     KPTDateTime calculateBackward(int use);
-    virtual KPTDateTime &scheduleForward(KPTDateTime &earliest, int use);
-    virtual KPTDateTime &scheduleBackward(KPTDateTime &latest, int use);
+    KPTDateTime &scheduleForward(KPTDateTime &earliest, int use);
+    KPTDateTime &scheduleBackward(KPTDateTime &latest, int use);
+    void adjustSummarytask();
 
     void initiateCalculation();
-    void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &milestones);
+    void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks);
 
 private:
     // we need unique id's for referencing objects when saving/loading
@@ -161,7 +162,7 @@ private:
 
     QPtrList<KPTNode> m_startNodes;
     QPtrList<KPTNode> m_endNodes;
-    QPtrList<KPTNode> m_milestones;
+    QPtrList<KPTNode> m_summarytasks;
     
 #ifndef NDEBUG
 #include <qcstring.h>

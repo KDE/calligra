@@ -291,11 +291,12 @@ public:
     virtual void setDeleted(bool on) { m_deleted = on; }
     bool allChildrenDeleted() const;
     
-    virtual void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &milestones) = 0;
+    virtual void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks) = 0;
     virtual KPTDateTime calculateForward(int /*use*/) = 0;
     virtual KPTDateTime calculateBackward(int /*use*/) = 0;
     virtual KPTDateTime &scheduleForward(KPTDateTime &, int /*use*/) = 0;
     virtual KPTDateTime &scheduleBackward(KPTDateTime &, int /*use*/) = 0;
+    virtual void adjustSummarytask() = 0;
 
     virtual void initiateCalculation();
     virtual void resetVisited();

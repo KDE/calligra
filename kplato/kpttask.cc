@@ -118,7 +118,7 @@ void KPTTask::makeAppointments() {
             nit.current()->makeAppointments();
         }
     } else if (type() == KPTNode::Type_Milestone) {
-        kdDebug()<<k_funcinfo<<"Milestone not implemented"<<endl;
+        //kdDebug()<<k_funcinfo<<"Milestone not implemented"<<endl;
         // Well, shouldn't have resources anyway...
     }
 }
@@ -328,34 +328,12 @@ int KPTTask::actualWork() {
     return 0;
 }
 
-void KPTTask::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &milestones) {
+void KPTTask::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks/*, QPtrList<KPTNode> &milestones*/) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
     if (isDeleted())
          return;
     if (type() == KPTNode::Type_Summarytask) {
-        if (numDependChildNodes() == 0) {
-            endnodes.insert(0, this); // Summarytasks go first in list
-            //kdDebug()<<k_funcinfo<<"endnodes insert: "<<m_name<<endl;
-        }
-        if (numDependParentNodes() == 0) {
-            startnodes.insert(0, this); // Summarytasks go first in list
-            //kdDebug()<<k_funcinfo<<"startnodes insert: "<<m_name<<endl;
-        }
-        QPtrListIterator<KPTNode> it = childNodeIterator();
-        for (; it.current(); ++it) {
-            it.current()->initiateCalculationLists(startnodes, endnodes, milestones);
-        }
-    } else if (type() == KPTNode::Type_Milestone) {
-        milestones.append(this);
-        //kdDebug()<<k_funcinfo<<"milestones append: "<<m_name<<endl;
-        if (numDependChildNodes() == 0) {
-            endnodes.append(this);
-            //kdDebug()<<k_funcinfo<<"endnodes append: "<<m_name<<endl;
-        }
-        if (numDependParentNodes() == 0) {
-            startnodes.append(this);
-            //kdDebug()<<k_funcinfo<<"startnodes append: "<<m_name<<endl;
-        }
+        summarytasks.append(this);
     } else {
         if (numDependChildNodes() == 0) {
             endnodes.append(this);
@@ -367,6 +345,7 @@ void KPTTask::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<K
         }
     }
 }
+
 KPTDateTime KPTTask::calculateForward(int use) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
     if (isDeleted())
@@ -500,6 +479,7 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
         m_duration = KPTDuration::zeroDuration;
     } else if (type() == KPTNode::Type_Summarytask) {
         m_endTime = m_startTime;
+        KPTDateTime startTime = latestFinish;
         KPTDateTime time = m_endTime;
         QPtrListIterator<KPTNode> it(m_nodes);
         for (; it.current(); ++it) {
@@ -509,9 +489,10 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
                 m_endTime = time;
             // now start time
             time = it.current()->startTime();
-            if (time < m_startTime)
-                m_startTime = time;
+            if (time < startTime)
+                startTime = time;
         }
+        m_startTime = startTime;
         m_duration = m_endTime - m_startTime;
     }
     //kdDebug()<<k_funcinfo<<m_name<<": "<<m_startTime.toString()<<" : "<<m_endTime.toString()<<endl;
@@ -520,7 +501,7 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
 }
 
 KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
-    kdDebug()<<k_funcinfo<<m_name<<": latest="<<latest<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<": latest="<<latest<<endl;
     if (m_visitedBackward || m_deleted)
         return m_startTime;
     m_endTime = latest < latestFinish ? latest : latestFinish;
@@ -588,57 +569,42 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
         m_endTime = end;
         m_duration = m_endTime - m_startTime;
     }
-    kdDebug()<<k_funcinfo<<m_name<<": "<<m_startTime.toString()<<" : "<<m_endTime.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<": "<<m_startTime.toString()<<" : "<<m_endTime.toString()<<endl;
     m_visitedBackward = true;
     return m_startTime;
 }
 
-void KPTTask::scheduleMilestone() {
-    //kdDebug()<<k_funcinfo<<m_name<<endl;
-    if (m_deleted)
+void KPTTask::adjustSummarytask() {
+    if (isDeleted())
         return;
-    m_startTime = earliestStart;
-    QPtrListIterator<KPTRelation> it = dependParentNodes();
-    for (; it.current(); ++it) {
-        KPTDateTime time = it.current()->parent()->endTime();
-        if (time > m_startTime)
-            m_startTime = time;
+    if (type() == Type_Summarytask) {
+        KPTDateTime start = latestFinish;
+        KPTDateTime end = earliestStart;
+        QPtrListIterator<KPTNode> it(m_nodes);
+        for (; it.current(); ++it) {
+            it.current()->adjustSummarytask();
+            if (it.current()->startTime() < start)
+                start = it.current()->startTime();
+            if (it.current()->endTime() > end)
+                end = it.current()->endTime();
+        }
+        m_startTime = start;
+        m_endTime = end;
+        m_duration = end - start;
+        //kdDebug()<<k_funcinfo<<m_name<<": "<<m_startTime.toString()<<" : "<<m_endTime.toString()<<endl;
+    } else if (type() == Type_Milestone && numDependParentNodes() > 0) {
+        KPTDateTime time;
+        KPTDateTime start = earliestStart;
+        QPtrListIterator<KPTRelation> it = dependParentNodes();
+        for (; it.current(); ++it) {
+            // get the predecessors endtime
+            time = it.current()->parent()->endTime();
+            if (time > start)
+                start = time;
+        }
+        m_startTime = m_endTime = start;
     }
-    m_endTime = m_startTime;
-    
-    //HACK: temporary fix
-    KPTTask *parent = dynamic_cast<KPTTask*>(m_parent);
-    parent->milestoneMoveStartTime(parent, m_startTime);
-    parent->milestoneMoveEndTime(parent, m_startTime);
 }
-//HACK: temporary fix
-void KPTTask::milestoneMoveStartTime(KPTTask *parent, const KPTDateTime &time) {
-    if (!parent || 
-        (parent->type() != Type_Summarytask && parent->type() != Type_Subproject)) {
-        return;
-    }
-    if (parent->startTime() > time) {
-        parent->setStartTime(time);
-        parent->milestoneSetDuration();
-    }
-    parent->milestoneMoveStartTime(dynamic_cast<KPTTask*>(parent->getParent()), time);
-}
-
-void KPTTask::milestoneMoveEndTime(KPTTask *parent, const KPTDateTime &time) {
-    if (!parent || 
-        (parent->type() != Type_Summarytask && parent->type() != Type_Subproject)) {
-        return;
-    }
-    if (parent->endTime() < time) {
-        parent->setEndTime(time);
-        parent->milestoneSetDuration();
-    }
-    parent->milestoneMoveEndTime(dynamic_cast<KPTTask*>(parent->getParent()), time);
-}
-void KPTTask::milestoneSetDuration() {
-    m_duration = m_endTime - m_startTime;
-}
-
 
 // Assumes all subtasks are calculated
 KPTDuration KPTTask::summarytaskDurationForward(const KPTDateTime &time) {
