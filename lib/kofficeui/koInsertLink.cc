@@ -34,11 +34,12 @@
 #include <krecentdocument.h>
 
 
-KoInsertLinkDia::KoInsertLinkDia( QWidget */*parent*/, const char */*name*/ )
+KoInsertLinkDia::KoInsertLinkDia( QWidget */*parent*/, const char */*name*/,bool displayBookmarkLink )
     : KDialogBase( KDialogBase::IconList, i18n("Insert Link"),
 		   KDialogBase::Ok | KDialogBase::Cancel,
 		   KDialogBase::Ok)
 {
+    bookmarkLink = 0L;
   QVBox *page=addVBoxPage(i18n("Internet"), QString::null,BarIcon("html",KIcon::SizeMedium));
   internetLink = new  internetLinkPage(page );
   connect(internetLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged (  )));
@@ -51,9 +52,12 @@ KoInsertLinkDia::KoInsertLinkDia( QWidget */*parent*/, const char */*name*/ )
   fileLink = new  fileLinkPage(page );
   connect(fileLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
 
-  page=addVBoxPage(i18n("Bookmark"), QString::null,BarIcon("bookmark",KIcon::SizeMedium));
-  bookmarkLink = new  bookmarkLinkPage(page );
-  connect(bookmarkLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
+  if ( displayBookmarkLink)
+  {
+      page=addVBoxPage(i18n("Bookmark"), QString::null,BarIcon("bookmark",KIcon::SizeMedium));
+      bookmarkLink = new  bookmarkLinkPage(page );
+      connect(bookmarkLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
+  }
 
   slotTextChanged ( );
   resize(400,300);
@@ -65,11 +69,11 @@ void KoInsertLinkDia::slotTextChanged ( )
     enableButtonOK( !(linkName().isEmpty()  || hrefName().isEmpty()));
 }
 
-bool KoInsertLinkDia::createLinkDia(QString & _linkName, QString & _hrefName, QStringList bkmlist)
+bool KoInsertLinkDia::createLinkDia(QString & _linkName, QString & _hrefName, QStringList bkmlist, bool displayBookmarkLink)
 {
     bool res = false;
 
-    KoInsertLinkDia *dlg = new KoInsertLinkDia( 0L, "Insert Link" );
+    KoInsertLinkDia *dlg = new KoInsertLinkDia( 0L, "Insert Link", displayBookmarkLink );
     dlg->setHrefLinkName(_hrefName,_linkName, bkmlist);
     if ( dlg->exec() == Accepted )
     {
@@ -84,7 +88,8 @@ bool KoInsertLinkDia::createLinkDia(QString & _linkName, QString & _hrefName, QS
 
 void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link, const QStringList & bkmlist)
 {
-    bookmarkLink->setBookmarkList(bkmlist);
+    if ( bookmarkLink)
+        bookmarkLink->setBookmarkList(bkmlist);
     if( _href.isEmpty())
         return;
     if(_href.find("http://")!=-1 ||_href.find("ftp://")!=-1 )
@@ -107,9 +112,12 @@ void KoInsertLinkDia::setHrefLinkName(const QString &_href, const QString &_link
     }
     else if(_href.find("bkm://")!=-1)
     {
-        bookmarkLink->setHrefName(_href.mid(6));
-        bookmarkLink->setLinkName(_link);
-        showPage(3);
+        if ( bookmarkLink )
+        {
+            bookmarkLink->setHrefName(_href.mid(6));
+            bookmarkLink->setLinkName(_link);
+            showPage(3);
+        }
     }
     slotTextChanged ( );
 }
@@ -129,8 +137,11 @@ QString KoInsertLinkDia::linkName()const
       result=fileLink->linkName();
       break;
     case 3:
-      result=bookmarkLink->linkName();
-      break;
+    {
+        if ( bookmarkLink)
+            result=bookmarkLink->linkName();
+    }
+    break;
     default:
       kdDebug()<<"Error in linkName\n";
     }
@@ -152,8 +163,11 @@ QString KoInsertLinkDia::hrefName()
       result=fileLink->hrefName();
       break;
     case 3:
-      result=bookmarkLink->hrefName();
-      break;
+    {
+        if ( bookmarkLink )
+            result=bookmarkLink->hrefName();
+    }
+    break;
     default:
       kdDebug()<<"Error in hrefName\n";
     }

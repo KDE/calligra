@@ -108,8 +108,8 @@ class KoInsertLinkDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KoInsertLinkDia( QWidget *parent, const char *name = 0 );
-    static bool createLinkDia(QString & linkName, QString & hrefName, QStringList bkmlist);
+    KoInsertLinkDia( QWidget *parent, const char *name = 0,bool displayBookmarkLink=true );
+    static bool createLinkDia(QString & linkName, QString & hrefName, QStringList bkmlist, bool displayBookmarkLink = true );
 
     //internal
     QString linkName()const;
