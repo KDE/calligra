@@ -8,6 +8,7 @@
 #include "vcommand.h"
 
 // Select object(s)
+// TODO : is this command really necessary ?
 
 class VPath;
 
@@ -19,13 +20,12 @@ public:
 	virtual ~VMCmdSelect() {}
 
 	virtual void execute();
-	virtual void unexecute();
+	//virtual void unexecute();
 
 	// for complex shapes. needed to draw while creation (creation tool):
-	VPath* createPath();
+	//VPath* createPath();
 
 private:
-	VPath* m_object;
 	double m_tlX;
 	double m_tlY;
 	double m_brX;

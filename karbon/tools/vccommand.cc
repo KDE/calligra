@@ -4,6 +4,7 @@
 
 #include "vccommand.h"
 #include <vpath.h>
+#include <vhandle.h>
 
 void
 VCCommand::execute()
@@ -17,6 +18,7 @@ VCCommand::execute()
 		m_part->unselectObjects();
 		m_part->insertObject( m_object );
 		m_object->setState( VObject::selected );
+		//m_part->handle()->addObject( m_object );
 	}
 }
 

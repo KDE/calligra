@@ -46,8 +46,11 @@ VTool::eventFilter( KarbonView* view, QEvent* event )
 		if( cmd )
 			m_part->addCommand( cmd );
 		else
+		{
 			// erase old object:
 			drawTemporaryObject( view, m_p, m_d1, m_d2 );
+			m_part->repaintAllViews();
+		}
 
 		m_isDragging = false;
 		m_isSquare = false;
