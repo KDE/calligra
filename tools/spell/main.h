@@ -23,29 +23,16 @@
 class KSpell;
 
 #include <qobject.h>
-
 #include <kdatatool.h>
-
 #include <klibloader.h>
 
 class SpellChecker : public KDataTool
 {
     Q_OBJECT
-public:
-    SpellChecker( QObject* parent = 0, const char* name = 0 );
 
+public:
+    SpellChecker( QObject* parent, const char* name, const QStringList & );
     virtual bool run( const QString& command, void* data, const QString& datatype, const QString& mimetype);
-};
-
-class SpellCheckerFactory : public KLibFactory
-{
-    Q_OBJECT
-public:
-    SpellCheckerFactory( QObject* parent = 0, const char* name = 0 );
-    ~SpellCheckerFactory();
-
-    virtual QObject* createObject( QObject* parent = 0, const char* name = 0, 
-			     const char* classname = "QObject", const QStringList &args = QStringList() );
 };
 
 #endif

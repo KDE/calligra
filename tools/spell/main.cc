@@ -24,6 +24,8 @@
 #include <kdebug.h>
 #include <kinstance.h>
 #include <kconfig.h>
+#include <kgenericfactory.h>
+#include <klibloader.h>
 
 /***************************************************
  *
@@ -31,28 +33,7 @@
  *
  ***************************************************/
 
-extern "C"
-{
-    void* init_libkspelltool()
-    {
-	return new SpellCheckerFactory;
-    }
-};
-
-SpellCheckerFactory::SpellCheckerFactory( QObject* parent, const char* name )
-    : KLibFactory( parent, name )
-{
-}
-
-SpellCheckerFactory::~SpellCheckerFactory()
-{
-}
-
-QObject* SpellCheckerFactory::createObject( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
-{
-    SpellChecker *checker = new SpellChecker( parent, name );
-    return checker;
-}
+K_EXPORT_COMPONENT_FACTORY( libkspelltool, KGenericFactory<SpellChecker> );
 
 /***************************************************
  *
@@ -60,7 +41,7 @@ QObject* SpellCheckerFactory::createObject( QObject* parent, const char* name, c
  *
  ***************************************************/
 
-SpellChecker::SpellChecker( QObject* parent, const char* name )
+SpellChecker::SpellChecker( QObject* parent, const char* name, const QStringList & )
     : KDataTool( parent, name )
 {
 }
@@ -83,7 +64,7 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
 
     if ( mimetype != "text/plain" && mimetype != "application/x-singleword" )
     {
-	kdDebug(31000) << "SpellChecker only accepts mimetype text/plain" << endl;
+	kdDebug(31000) << "SpellChecker only accepts mimetype text/plain and application/x-singleword" << endl;
 	return FALSE;
     }
 
@@ -118,12 +99,12 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
 
     if (status == KSpell::Error)
     {
-        KMessageBox::sorry(0L, i18n("ISpell could not be started.\n"
-                                    "Please make sure you have ISpell properly configured and in your PATH."));
+        KMessageBox::sorry(0L, i18n("KSpell could not be started.\n"
+                                    "Please make sure you have ISpell or ASpell properly configured and in your PATH."));
     }
     else if (status == KSpell::Crashed)
     {
-        KMessageBox::sorry(0L, i18n("ISpell seems to have crashed."));
+        KMessageBox::sorry(0L, i18n("KSpell seems to have crashed."));
     }
     else
     {
