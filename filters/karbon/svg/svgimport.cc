@@ -110,6 +110,28 @@ SvgImport::convert()
 }
 
 void
+SvgImport::parseStyle( VObject *obj, const QDomElement &e )
+{
+	VFill fill;
+	GraphicsContext *gc = new GraphicsContext;
+	// set as default
+	if( m_gc.current() )
+	{
+		obj->setFill( m_gc.current()->fill );
+		*gc = *( m_gc.current() );
+	}
+	QColor c;
+	if( !e.attribute( "fill" ).isEmpty() )
+	{
+		c.setNamedColor( e.attribute( "fill" ) );
+		VColor color( c );
+		fill.setColor( color );
+		gc->fill = fill;
+	}
+	m_gc.push( gc );
+}
+
+void
 SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 {
 	QDomElement b = e.firstChild().toElement();
@@ -118,11 +140,13 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		if( b.tagName() == "g" )
 		{
 			VGroup *group = new VGroup( grp );
+			parseStyle( group, b );
 			parseGroup( group, b );
 			if( grp )
 				grp->append( group );
 			else
 				m_document.append( group );
+			m_gc.pop();
 		}
 		else if( b.tagName() == "rect" )
 		{
@@ -188,11 +212,12 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 					path->lineTo( KoPoint( (*(it++)).toDouble(), (*it).toDouble() ) );
 			}
 			if( b.tagName() == "polygon" ) path->close();
-			//parseGObject( path, object );
+			parseStyle( path, b );
 			if( grp )
 				grp->append( path );
 			else
 				m_document.append( path );	
+			m_gc.pop();
 		}
 	}
 	

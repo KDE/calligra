@@ -22,6 +22,8 @@
 
 #include <koFilter.h>
 #include <qdom.h>
+#include <qptrstack.h>
+#include <core/vfill.h>
 #include <core/vpath.h>
 #include <core/vdocument.h>
 
@@ -38,13 +40,20 @@ public:
 	virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
 
 protected:
+	struct GraphicsContext
+	{
+		VFill fill;
+	};
+
 	void parseGroup( VGroup *, const QDomElement & );
+	void parseStyle( VObject *, const QDomElement & );
 	QDomDocument inpdoc;
 	QDomDocument outdoc;
 	void convert();
 
 private:
 	VDocument m_document;
+	QPtrStack<GraphicsContext> m_gc;
 };
 
 #endif
