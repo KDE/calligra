@@ -888,9 +888,9 @@ void KWTextFrameSet::formatMore()
     }
     m_lastFormatted = lastFormatted;
 
-    if ( lastFormatted && bottom != -1 && bottom + lastFormatted->rect().height() > m_availableHeight )
+    if ( lastFormatted && bottom != -1 && bottom + lastFormatted->rect().height() > (m_availableHeight*kWordDocument()->zoomedResolutionY()) )
     {
-        kdDebug(32002) << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " next parag's height=" << lastFormatted->rect().height() << " m_availableHeight=" << m_availableHeight << endl;
+        kdDebug(32002) << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " next parag's height=" << lastFormatted->rect().height() << " m_availableHeight=" << (m_availableHeight*kWordDocument()->zoomedResolutionY()) << endl;
         // #### KWFormatContext::makeLineLayout had much code about this,
         // especially for tables. TODO.
 
