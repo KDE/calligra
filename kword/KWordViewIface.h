@@ -40,7 +40,11 @@ k_dcop:
     virtual void editSerialLetterDataBase();
     virtual void viewPageMode();
     virtual void viewPreviewMode();
-
+    virtual void configure();
+    virtual void extraSpelling();
+    virtual void extraAutoFormat();
+    virtual void extraStylist();
+    virtual void extraCreateTemplate();
 
 private:
     KWView *view;

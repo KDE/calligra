@@ -65,3 +65,28 @@ void KWordViewIface::viewPreviewMode()
 {
     view->viewPreviewMode();
 }
+
+void KWordViewIface::configure()
+{
+    view->configure();
+}
+
+void KWordViewIface::extraSpelling()
+{
+    view->extraSpelling();
+}
+
+void KWordViewIface::extraAutoFormat()
+{
+    view->extraAutoFormat();
+}
+
+void KWordViewIface::extraStylist()
+{
+    view->extraStylist();
+}
+
+void KWordViewIface::extraCreateTemplate()
+{
+    view->extraCreateTemplate();
+}
