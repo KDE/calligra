@@ -17,6 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <config.h>
+#ifdef HAVE_PATHS_H
+#include <paths.h>
+#endif
+#ifndef _PATH_TMP
+#define _PATH_TMP "/tmp/"
+#endif
+
 #include "koMainWindow.h"
 #include "koFrame.h"
 #include "koDocument.h"
@@ -41,6 +49,11 @@
 #include <kglobal.h>
 #include <kmimetypes.h>
 #include <kfiledialog.h>
+
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+#include <stdlib.h>
 
 KoMainWindow::KoMainWindow( const char * )
 {
@@ -230,6 +243,7 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
     CORBA::String_var url = pDoc->url();
     const char* _url = url.in();
     QString file;
+    QString outputMimeType ( _native_format );
 
     if ( _url == 0L || *_url == 0 ) {
 	QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
@@ -240,14 +254,7 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
             return false;
 
 	KMimeType *t = KMimeType::findByURL( KURL( file ), 0, TRUE );
-	if ( t->mimeType() != _native_format ) {
-            // TODO : use mk[s]temp
-	    if ( pDoc->saveToURL( "/tmp/kofficefilter", _native_format ) ) {
-                KoFilterManager::self()->export_( "/tmp/kofficefilter", file, _native_format );
-                return true;
-            } else
-                return false;
-	}
+        outputMimeType = t->mimeType();
 
         _url = file.latin1(); // careful, shallow copy
         pDoc->setURL( _url );
@@ -255,10 +262,27 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
 
     KURL u( _url );
     if ( QFile::exists( u.path() ) ) {
-	system( QString( "rm -rf %1~" ).arg( u.path() ) );
+        // TODO : if we choose _url with the file selector, ask before overwrite
+	system( QString( "rm -rf %1~" ).arg( u.path() ).latin1() );
 	QString cmd = "cp %1 %2~";
 	cmd = cmd.arg( u.path() ).arg( u.path() );
 	system( cmd.latin1() );
+    }
+    
+    if ( outputMimeType != _native_format ) {
+        char tempfname[256];
+        int fildes; 
+        sprintf(tempfname, _PATH_TMP"/kofficefilterXXXXXX");
+        if ((fildes = mkstemp(tempfname)) == -1 )
+            return false;
+        ::close( fildes );
+        if ( pDoc->saveToURL( tempfname, _native_format ) ) {
+            KoFilterManager::self()->export_( tempfname, file, _native_format );
+            unlink( tempfname );
+            return true;
+        } else
+            unlink( tempfname );
+            return false;
     }
 
     if ( !pDoc->saveToURL( _url, _native_format ) ) {
