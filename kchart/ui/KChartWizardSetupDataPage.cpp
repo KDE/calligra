@@ -3,6 +3,7 @@
 #include "KChartWizardSetupDataPage.h"
 #include "KChart.h"
 #include "KChartWidget.h"
+#include "KChartWizard.h"
 
 #include <qradiobt.h>
 #include <qchkbox.h>
@@ -12,7 +13,8 @@
 KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
 													  KChart* chart) :
   QWidget( parent ),
-  _chart( chart )
+  _chart( chart ),
+  _parent( (KChartWizard*)parent )
 {
   QButtonGroup* tmpQGroupBox;
   tmpQGroupBox = new QButtonGroup( this, "GroupBox_1" );
@@ -91,22 +93,34 @@ KChartWizardSetupDataPage::~KChartWizardSetupDataPage()
 
 void KChartWizardSetupDataPage::dataInRowsClicked()
 {
-  debug( "Sorry, not implemented: changing KChartData" );
+  _parent->emitNeedNewData( _parent->dataArea(), KChartWizard::Row,
+								 coldescript->isChecked(), 
+								 rowdescript->isChecked() );
 }
 
 void KChartWizardSetupDataPage::dataInColsClicked()
 {
-  debug( "Sorry, not implemented: changing KChartData" );
+  _parent->emitNeedNewData( _parent->dataArea(), KChartWizard::Col,
+							coldescript->isChecked(),
+							rowdescript->isChecked() );
 }
 
 void KChartWizardSetupDataPage::firstColumnIsDescriptionToggled( bool )
 {
-  debug( "Sorry, not implemented: changing KChartData" );
+  _parent->emitNeedNewData( _parent->dataArea(), 
+							( datarow->isChecked() ? KChartWizard::Row :
+							  KChartWizard::Col ),
+							coldescript->isChecked(),
+							rowdescript->isChecked() );
 }
 
 void KChartWizardSetupDataPage::firstRowIsDescriptionToggled( bool )
 {
-  debug( "Sorry, not implemented: changing KChartData" );
+  _parent->emitNeedNewData( _parent->dataArea(), 
+							( datarow->isChecked() ? KChartWizard::Row :
+							  KChartWizard::Col ),
+							coldescript->isChecked(),
+							rowdescript->isChecked() );
 }
 
 

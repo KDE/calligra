@@ -407,77 +407,75 @@ bool KChart::yPlotValues() const
 
 void KChart::setYMaxValue( double value )
 {
-  _ymaxs[0] = value;
-  _ymaxs[1] = value;
+  _ymax = value;
 
   doAutoUpdate();
 }
 
 double KChart::yMaxValue() const
 {
-  return _ymaxs[0];
+  return _ymax;
 }
 
 
 void KChart::setYMinValue( double value )
 {
-  _ymins[0] = value;
-  _ymins[1] = value;
+  _ymin = value;
 
   doAutoUpdate();
 }
 
 double KChart::yMinValue() const
 {
-  return _ymins[0];
+  return _ymin;
 }
 
 void KChart::setY1MaxValue( double value )
 {
-  _ymaxs[0] = value;
+  _y1max = value;
 
   doAutoUpdate();
 }
 
 double KChart::y1MaxValue() const
 {
-  return _ymaxs[0];
+  return _y1max;
 }
 
 void KChart::setY1MinValue( double value )
 {
-  _ymins[0] = value;
+  _y1min = value;
 
   doAutoUpdate();
 }
 
 double KChart::y1MinValue() const
 {
-  return _ymins[0];
+  return _y1min;
 }
 
 void KChart::setY2MaxValue( double value )
 {
-  _ymaxs[1] = value;
+  _y2max = value;
 
   doAutoUpdate();
 }
 
 double KChart::y2MaxValue() const
 {
-  return _ymaxs[1];
+  return _y2max;
 }
 
 void KChart::setY2MinValue( double value )
 {
-  _ymins[1] = value;
+  _y2min = value;
 
   doAutoUpdate();
 }
 
 double KChart::y2MinValue() const
 {
-  return _ymins[1];
+  return _y2min;
 }
 
 

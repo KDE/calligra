@@ -25,6 +25,9 @@ public:
 
   enum RowCol { Row, Col };
 
+  void emitNeedNewData( const char* area, int rowcol, bool firstRowIsLegend,
+						bool firstColIsLabel );
+
 signals:
   // valid values for rowcol: Row: data is in rows, Col: data is in cols
   void needNewData( const char* area, int rowcol, bool firstRowIsLegend,

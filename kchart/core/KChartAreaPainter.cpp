@@ -27,7 +27,7 @@ void KChartAreaPainter::drawData( QPainter* painter )
 	QColor datacolor = chooseDataColor( ds );
 	
 	// Create a new point array
-	QPointArray points( _chart->chartData()->maxPos() + 1 );
+	QPointArray points( _chart->chartData()->maxPos() + 3 );
 
 	// Add the first 'zero' point
 	QPoint xy = valToPixel( 1, 0, ds );
@@ -44,7 +44,7 @@ void KChartAreaPainter::drawData( QPainter* painter )
 	}
 
 	// Add the last zero point
-	xy = valToPixel( pointno, 0, ds );
+	xy = valToPixel( pointno-1, 0, ds );
 	points.setPoint( pointno, xy );
 
 	// Draw a filled line and a line polygon

@@ -7,6 +7,7 @@ class QRadioButton;
 class QCheckBox;
 class KChartWidget;
 class KChart;
+class KChartWizard;
 
 class KChartWizardSetupDataPage : public QWidget
 {
@@ -24,6 +25,7 @@ private slots:
 
 private:
   KChart* _chart;
+  KChartWizard* _parent;
   KChartWidget* preview;
   QRadioButton* datacol;
   QRadioButton* datarow;

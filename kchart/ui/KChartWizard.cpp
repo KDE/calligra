@@ -102,6 +102,14 @@ QString KChartWizard::dataArea() const
 }
 
 
+void KChartWizard::emitNeedNewData( const char* area, int rowcol, 
+									bool firstRowIsLegend, 
+									bool firstColIsLabel )
+{
+  emit needNewData( area, rowcol, firstRowIsLegend, firstColIsLabel );
+}
+
+
 #ifdef INCLUDE_MOC_BULLSHIT
 #include "KChartWizard.moc"
 #endif

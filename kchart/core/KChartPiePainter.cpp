@@ -9,6 +9,7 @@
 #include <qstrlist.h>
 
 #include <math.h>
+#include <stdio.h>
 
 KChartPiePainter::KChartPiePainter( KChart* chart ) :
   KChartPainter( chart )
@@ -138,7 +139,7 @@ void KChartPiePainter::drawData( QPainter* painter )
   double total = 0;
 
   for( uint i = 0; i <= _chart->chartData()->maxPos(); i++ ) 
-	total += _chart->chartData()->yValue( 1, i ); // only first dataset
+	total += _chart->chartData()->yValue( 0, i ); // only first dataset
 
   int pb = _angleoffset;
 
@@ -152,13 +153,36 @@ void KChartPiePainter::drawData( QPainter* painter )
 
 	// Set the angle of the pie slice
 	int pa = pb;
-	pb += (int)rint( 360*_chart->chartData()->yValue( 1, i ) / total );
+	pb += (int)rint( 360*_chart->chartData()->yValue( 0, i ) / total );
+	if( pb  > 360 )
+	  pb -= 360;
 
+	// calculate the end points of the lines at the boundaries of the
+	// pie slice  
+// 	QPoint e = cartesian( _chart->_width/2, pa, 
+// 						  _xcenter, _ycenter,
+// 						  _chart->_height/_chart->_width );
+	
+// 	painter->setPen( _chart->_accentcolor );
+// 	painter->drawLine( _xcenter, _ycenter, e.x(), e.y() );
+
+	// Make an estimate of a point in the middle of the pie slice and
+	// fill it.
+	//	e = cartesian( 3*_chart->_width/8, (pa+px)/2,
+	//		   _xcenter, _ycenter, _chart->_height/_chart->_width
+	//		   );
+
+	
 	// draw the pie slice
 	painter->setBrush( filledbrush );
 	painter->setPen( _chart->_accentcolor );
-	painter->drawChord( _chart->_left, _chart->_top,
+	if( pa< pb )
+	painter->drawPie( _chart->_left, _chart->_top,
 						_chart->_width, _chart->_height,
-						pa*360, pb*360 );
+						pa*16, pb*16 );
+
+	fprintf( stderr, "filling (%d,%d) to (%d,%d) angle %d-%d\n",
+			 _chart->_left, _chart->_top, _chart->_width,
+			 _chart->_height, pa, pb );
   }
 }

@@ -143,9 +143,9 @@ void KChartData::minMaxOverallYValue( double& max, double& min ) const
 
   for( uint i = 0; i <= _maxpos; i++ )
 	for( int j = 0; j < _datasets; j++ ) {
-	  if( yValue( j, i ) > max )
+	  if( hasYValue( j, i ) && ( yValue( j, i ) > max ) )
 		max = yValue( j, i );
-	  if( yValue( j, i ) < min )
+	  if( hasYValue( j, i ) && ( yValue( j, i ) < min ) )
 		min = yValue( j, i );
 	}
 }
