@@ -23,7 +23,7 @@
 #include <qstring.h>
 #include <qdom.h>
 
-#include <paragraph.h>
+#include <properties.h>
 #include <myfile.h>
 #include <msword.h>
 

@@ -8,10 +8,10 @@ LDFLAGS = $(all_libraries)
 noinst_LTLIBRARIES = libwinword97.la
 
 libwinword97_la_SOURCES = wordfilter.cc winworddoc.cc \
-msword.cc mswordgenerated.cc paragraph.cc
+msword.cc mswordgenerated.cc properties.cc
 
 noinst_HEADERS = wordfilter.h winworddoc.h \
-msword.h mswordgenerated.h paragraph.h
+msword.h mswordgenerated.h properties.h
 
 METASOURCES = AUTO
 

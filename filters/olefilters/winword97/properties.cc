@@ -23,7 +23,7 @@ DESCRIPTION
     Word documents. In other words, it is an abstraction for the PAP structure.
 */
 
-#include <paragraph.h>
+#include <properties.h>
 
 // Create a paragraph with default properties.
 Paragraph::Paragraph(MsWord &document) :

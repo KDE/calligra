@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 #include <msword.h>
-#include <paragraph.h>
+#include <properties.h>
 #include <qtextcodec.h>
 
 // We currently only take note of the document's main non-Far Eastern
