@@ -56,6 +56,7 @@ protected:
     QString getPropertyInternal( const QString& name ) const;
 public:
     QMap<QString, QString> m_documentProperties;
+    QMap<QString, QString> m_documentInfo; ///< From documentinfo.xml
     QValueList<KWord13Layout> m_styles;
     QPtrList<KWordTextFrameset> m_normalTextFramesetList; ///< List of \<FRAMESET\> having normal text
     QPtrList<KWordTextFrameset> m_tableFramesetList; ///< List of \<FRAMESET\> being part of tables

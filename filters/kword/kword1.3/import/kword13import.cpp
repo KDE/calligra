@@ -20,6 +20,7 @@
 */
 
 #include <qxml.h>
+#include <qdom.h>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -40,6 +41,43 @@ K_EXPORT_COMPONENT_FACTORY( libkwordkword1dot3import, KWord13ImportFactory( "kof
 KWord13Import::KWord13Import(KoFilter */*parent*/, const char */*name*/, const QStringList &)
      : KoFilter()
 {
+}
+
+bool KWord13Import::parseInfo( QIODevice* io, KWord13Document& kwordDocument )
+{
+    kdDebug(30520) << "Starting KWord13Import::parseInfo" << endl;
+    QDomDocument doc;
+    // Error variables for QDomDocument::setContent
+    QString errorMsg;
+    int errorLine, errorColumn;
+    if ( ! doc.setContent( io, &errorMsg, &errorLine, &errorColumn ) )
+    {
+        kdError(30520) << "Parsing error in documentinfo.xml! Aborting!" << endl
+            << " In line: " << errorLine << ", column: " << errorColumn << endl
+            << " Error message: " << errorMsg << endl;
+        // ### TODO: user message
+        return false;
+    }
+    QDomElement docElement( doc.documentElement() );
+    // In documentinfo.xml, the text data is in the grand-children of the document element
+    for ( QDomNode node = docElement.firstChild(); !node.isNull(); node = node.nextSibling() )
+    {
+        kdDebug(30520) << "Child " << node.nodeName() << endl;
+        if ( !node.isElement() )
+            continue; // Comment, PI...
+        const QString nodeName( node.nodeName() );
+        for ( QDomNode node2 = node.firstChild(); !node2.isNull(); node2 = node2.nextSibling() )
+        {
+            kdDebug(30520) << "Grand-child " << node2.nodeName() << endl;
+            if ( !node2.isElement() )
+                continue;
+            const QString nodeName2 ( nodeName + ':' + node2.nodeName() );
+            QDomElement element( node2.toElement() );
+            kwordDocument.m_documentInfo[ nodeName2 ] = element.text();
+        }
+    }
+    kdDebug(30520) << "Quitting KWord13Import::parseInfo" << endl;
+    return true;
 }
 
 bool KWord13Import::parseRoot( QIODevice* io, KWord13Document& kwordDocument )
@@ -75,7 +113,12 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
     
     KoStoreDevice* subFile;
 
-    // ### TODO: process documentinfo.xml
+    subFile = m_chain->storageFile( "documentinfo.xml", KoStore::Read );
+    kdDebug (30520) << "Processing documentinfo... " << ((void*) subFile) << endl;
+    if ( ! parseInfo ( subFile, kwordDocument ) )
+    {
+        kdWarning(30520) << "Opening documentinfo.xml has failed. Ignoring!" << endl;
+    }
 
     subFile = m_chain->storageFile( "root", KoStore::Read );
     kdDebug (30520) << "Processing root... " << ((void*) subFile) << endl;

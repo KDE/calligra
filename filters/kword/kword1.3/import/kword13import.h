@@ -40,6 +40,7 @@ public:
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 protected:
+    bool KWord13Import::parseInfo( QIODevice* io, KWord13Document& kwordDocument );
     bool KWord13Import::parseRoot( QIODevice* io, KWord13Document& kwordDocument );
 };
 #endif // KWORD_1_3_IMPORT_H

@@ -55,6 +55,15 @@ void KWord13Document::xmldump( QIODevice* io )
         iostream << " <param key=\"" << it.key() << "\" data=\"" << EscapeXmlDump( it.data() ) << "\"/>\n";
     }
     
+    iostream << " <documentinfo>\n";
+    for ( QMap<QString,QString>::ConstIterator it11 = m_documentInfo.begin();
+        it11 != m_documentInfo.end();
+        ++it11)
+    {
+        iostream << "  <param key=\"" << it11.key() << "\" data=\"" << EscapeXmlDump( it11.data() ) << "\"/>\n";
+    }
+    iostream << " </documentinfo>\n";
+    
     iostream << " <normalframesets>\n";
     for ( KWordTextFrameset* item = m_normalTextFramesetList.first();
         item;
