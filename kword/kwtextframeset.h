@@ -361,6 +361,7 @@ public:
 
     void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
 
+    void insertFile( const QString & );
 public slots:
     // Reimplemented from KWFrameSet and connected to KoTextView's signals
     virtual void cut();

@@ -53,7 +53,7 @@
 #include <kdebug.h>
 #include <kdebugclasses.h>
 #include <assert.h>
-
+#include <koStore.h>
 //#define DEBUG_MARGINS
 //#define DEBUG_FORMATVERTICALLY
 //#define DEBUG_FORMATS
@@ -3301,6 +3301,62 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
         }
     }
 }
+
+void KWTextFrameSetEdit::insertFile(const QString & file )
+{
+    KoStore* store=KoStore::createStore( file, KoStore::Read );
+    bool state = store->open("maindoc.xml");
+    if ( state )
+    {
+        QDomDocument doc;
+        doc.setContent( store->device() );
+        QDomElement word = doc.documentElement();
+
+        QDomElement framesets = word.namedItem( "FRAMESETS" ).toElement();
+        if ( !framesets.isNull() )
+        {
+            QDomElement framesetElem = framesets.firstChild().toElement();
+            // Workaround the slowness of QDom's elementsByTagName
+            QValueList<QDomElement> framesetsList;
+            for ( ; !framesetElem.isNull() ; framesetElem = framesetElem.nextSibling().toElement() )
+            {
+                if ( framesetElem.tagName() == "FRAMESET" )
+                {
+                    framesetsList.append( framesetElem );
+                }
+            }
+
+            QDomDocument domDoc( "PARAGRAPHS" );
+            QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
+            domDoc.appendChild( elem );
+
+
+            QValueList<QDomElement>::Iterator it = framesetsList.begin();
+            QValueList<QDomElement>::Iterator end = framesetsList.end();
+            for ( ; it != end ; ++it )
+            {
+                //(void) loadFrameSet( *it );
+                QDomElement frame = (*it).firstChild().toElement();
+                for ( ; !frame.isNull() ; frame = frame.nextSibling().toElement() )
+                {
+                    if ( frame.tagName() == "PARAGRAPH" )
+                    {
+                        elem.appendChild( frame );
+                    }
+                }
+            }
+            KCommand *cmd =textFrameSet()->pasteKWord( cursor(), domDoc.toCString(), true );
+        if ( cmd )
+            frameSet()->kWordDocument()->addCommand(cmd);
+
+        }
+
+    }
+    store->close();
+    delete store;
+}
+
+
 //////
 
 bool KWFootNoteFrameSet::isFootNote() const

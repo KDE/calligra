@@ -611,7 +611,6 @@ public:
 
     bool cursorInProtectedArea()const;
     void setCursorInProtectedArea( bool b );
-    void insertFile(const QString & file );
 
     SeparatorLinePos footNoteSeparatorLinePosition()const { return m_footNoteSeparatorLinePos;}
     void setFootNoteSeparatorLinePosition(SeparatorLinePos _pos) {m_footNoteSeparatorLinePos = _pos;}

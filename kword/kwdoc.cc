@@ -37,7 +37,6 @@
 #include <kotextobject.h>
 #include <koAutoFormat.h>
 #include <koVariable.h>
-
 #include <kformuladocument.h>
 #include <unistd.h>
 #include <math.h>
@@ -3891,12 +3890,5 @@ void KWDocument::setCursorInProtectedArea( bool b )
 {
     m_cursorInProtectectedArea=b;
 }
-
-
-void KWDocument::insertFile(const QString & file )
-{
-    //todo
-}
-
 
 #include "kwdoc.moc"

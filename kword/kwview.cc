@@ -5645,24 +5645,26 @@ void KWView::editFrameSet()
 
 void KWView::insertFile()
 {
-    KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
-    fd.setMimeFilter( "application/x-kword" );
-    fd.setCaption(i18n("Insert File"));
-    KURL url;
-    if ( fd.exec() == QDialog::Accepted )
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
     {
-        url = fd.selectedURL();
-        if( url.isEmpty() )
+        KFileDialog fd( QString::null, QString::null, 0, 0, TRUE );
+        fd.setMimeFilter( "application/x-kword" );
+        fd.setCaption(i18n("Insert File"));
+        KURL url;
+        if ( fd.exec() == QDialog::Accepted )
         {
-            KMessageBox::sorry( this,
-                                i18n("File name is empty"),
-                                i18n("Insert File"));
-            return;
+            url = fd.selectedURL();
+            if( url.isEmpty() )
+            {
+                KMessageBox::sorry( this,
+                                    i18n("File name is empty"),
+                                    i18n("Insert File"));
+                return;
+            }
+            edit->insertFile(url.path());
         }
-        m_doc->insertFile(url.path());
     }
-    else
-        return;
 }
 
 
