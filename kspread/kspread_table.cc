@@ -2473,15 +2473,16 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
     QPen pen( _color,2,SolidLine);
+
+        // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
+    {
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
             KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
             m_pDoc->undoBuffer()->appendUndo( undo );
         }
 
-        // Complete rows selected ?
-    if ( selected && m_rctSelection.right() == 0x7FFF )
-    {
       KSpreadCell* c = m_cells.firstCell();
       for( ;c; c = c->nextCell() )
       {
@@ -2507,6 +2508,12 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
     }
     else
     {
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
     for ( int x = r.left(); x <= r.right(); x++ )
         {
         int y = r.bottom();
@@ -2525,11 +2532,6 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
     if ( m_rctSelection.left() == 0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
-    if ( !m_pDoc->undoBuffer()->isLocked() )
-    {
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-        m_pDoc->undoBuffer()->appendUndo( undo );
-    }
     QPen pen( _color,2,SolidLine);
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
@@ -2540,6 +2542,12 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
       KSpreadCell* c = m_cells.firstCell();
       for( ;c; c = c->nextCell() )
       {
@@ -2558,6 +2566,12 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
     }
     else
     {
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
     for ( int y = r.top(); y <= r.bottom(); y++ )
         {
         int x = r.right();
@@ -2576,16 +2590,19 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
-    if ( !m_pDoc->undoBuffer()->isLocked() )
-    {
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-        m_pDoc->undoBuffer()->appendUndo( undo );
-    }
 
     QPen pen( _color,2,SolidLine);
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
+    QRect rect;
+    rect.setCoords(r.left(),r.top(),1,r.bottom());
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, rect );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
     for ( int y = r.top(); y <= r.bottom(); y++ )
         {
         int x = r.left();
@@ -2593,14 +2610,18 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
         if(!cell->isObscuringForced())
                 cell->setLeftBorderPen(pen);
         }
-    QRect rect;
-    rect.setCoords(r.left(),r.top(),1,r.bottom());
     emit sig_updateView( this, rect );
     return;
     }
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
       KSpreadCell* c = m_cells.firstCell();
       for( ;c; c = c->nextCell() )
       {
@@ -2618,6 +2639,12 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
     }
     else
     {
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
     for ( int y = r.top(); y <= r.bottom(); y++ )
         {
         int x = r.left();
@@ -2636,15 +2663,16 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
+    QPen pen( _color,2,SolidLine);
+    // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
+    {
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
             KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
             m_pDoc->undoBuffer()->appendUndo( undo );
         }
-    QPen pen( _color,2,SolidLine);
-    // Complete rows selected ?
-    if ( selected && m_rctSelection.right() == 0x7FFF )
-    {
+
       KSpreadCell* c = m_cells.firstCell();
       for( ;c; c = c->nextCell() )
       {
@@ -2665,6 +2693,15 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
+    QRect rect;
+    rect.setCoords(r.left(),r.top(),r.right(),1);
+
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, rect );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
     for ( int x = r.left(); x <= r.right(); x++ )
         {
         int y = r.top();
@@ -2672,13 +2709,17 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
         if(!cell->isObscuringForced())
                 cell->setTopBorderPen(pen);
         }
-    QRect rect;
-    rect.setCoords(r.left(),r.top(),r.right(),1);
     emit sig_updateView( this,rect );
     return;
     }
     else
     {
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
     for ( int x = r.left(); x <= r.right(); x++ )
         {
         int y = r.top();
