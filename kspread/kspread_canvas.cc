@@ -3585,14 +3585,14 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
                                             m_pView->activeTable() );
 
     if ( _ev->pos().y() < 0 )
-      m_pCanvas->vertScrollBar()->setValue( m_pCanvas->doc()->zoomItY( m_pCanvas->yOffset() + y ) );
+      m_pCanvas->vertScrollBar()->setValue( m_pCanvas->doc()->zoomItY( ev_PosY ) );
     else if ( _ev->pos().y() > m_pCanvas->height() )
     {
       if ( row < KS_rowMax )
       {
         RowLayout *rl = table->rowLayout( row + 1 );
         y = table->dblRowPos( row + 1 );
-        m_pCanvas->vertScrollBar()->setValue( (m_pCanvas->doc()->zoomItY( m_pCanvas->yOffset() + y
+        m_pCanvas->vertScrollBar()->setValue( (m_pCanvas->doc()->zoomItY( ev_PosY
                                                               + rl->dblHeight() )
                                                               - dHeight ));
       }
@@ -4157,14 +4157,14 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
                                             m_pView->activeTable() );
 
     if ( _ev->pos().x() < 0 )
-      m_pCanvas->horzScrollBar()->setValue( m_pCanvas->doc()->zoomItX( m_pCanvas->xOffset() + x ) );
+      m_pCanvas->horzScrollBar()->setValue( m_pCanvas->doc()->zoomItX( ev_PosX ) );
     else if ( _ev->pos().x() > m_pCanvas->width() )
     {
       if ( col < KS_colMax )
       {
         ColumnLayout *cl = table->columnLayout( col + 1 );
         x = table->dblColumnPos( col + 1 );
-        m_pCanvas->horzScrollBar()->setValue( (m_pCanvas->doc()->zoomItX( m_pCanvas->xOffset() + x
+        m_pCanvas->horzScrollBar()->setValue( (m_pCanvas->doc()->zoomItX( ev_PosX
                                               + cl->dblWidth() ) - dWidth) );
       }
     }
