@@ -56,6 +56,11 @@ public:
     int getRastY() { return eRastY->value(); }
     QColor getBackCol() { return bBackCol->color(); }
 
+protected slots:
+    void slotOkClicked();
+
+signals:
+ void applyButtonPressed();
 private:
 
     // dialog objects

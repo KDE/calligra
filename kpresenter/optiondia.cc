@@ -47,13 +47,13 @@ OptionDia::OptionDia( QWidget *parent, const char *name )
     QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setMargin( 5 );
     layout->setSpacing( 5 );
-    
+
     QVBoxLayout *vbox = new QVBoxLayout( layout );
     vbox->setSpacing( 5 );
 
     QTabWidget *tabWidget = new QTabWidget( this );
     vbox->addWidget( tabWidget );
-    
+
     QVBox *general = new QVBox( tabWidget );
     general->setMargin( 5 );
     general->setSpacing( 5 );
@@ -61,27 +61,29 @@ OptionDia::OptionDia( QWidget *parent, const char *name )
     (void) new QLabel( i18n( "Horizontal Raster: " ), general );
 
     eRastX = new KIntNumInput(20, general);
-      
+    eRastX->setRange(1, 400);
+
     (void) new QLabel( i18n( "Vertical Raster: " ), general );
-  
-    eRastY = new KIntNumInput(20, general); 
+
+    eRastY = new KIntNumInput(20, general);
+    eRastY->setRange(1, 400);
 
     tabWidget->addTab(general, i18n( "General" ));
-    
+
     /* Tab: Objects */
-    
+
     QVBox *objects = new QVBox( tabWidget );
     objects->setMargin( 5 );
     objects->setSpacing( 5 );
-    
+
     gbObjects = new QGroupBox( 2, Qt::Horizontal, i18n( "Objects in editing mode" ), objects );
-        
+
     (void) new QLabel( i18n( "Background color:" ), gbObjects );
-    
+
     bBackCol = new KColorButton( white, gbObjects );
 
-    tabWidget->addTab(objects, i18n( "Objects" )); 
-    
+    tabWidget->addTab(objects, i18n( "Objects" ));
+
     /* Buttons */
     KButtonBox *bb = new KButtonBox( this );
     bb->addStretch();
@@ -91,7 +93,7 @@ OptionDia::OptionDia( QWidget *parent, const char *name )
     okBut->setDefault( true );
 
     connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
+    connect( okBut, SIGNAL( clicked() ), this, SLOT( slotOkClicked() ) );
 
     bb->layout();
 
@@ -101,4 +103,10 @@ OptionDia::OptionDia( QWidget *parent, const char *name )
 /*===================== destructor ===============================*/
 OptionDia::~OptionDia()
 {
+}
+
+void OptionDia::slotOkClicked()
+{
+    emit applyButtonPressed();
+    accept();
 }
