@@ -1,0 +1,47 @@
+// Copyright (c) 2000 Phil Thompson <phil@river-bank.demon.co.uk>
+//
+// This file contains the definition of the interface to the Kugar KPart.
+
+
+#ifndef _KUGAR_VIEW_H
+#define _KUGAR_VIEW_H
+
+
+#include <koView.h>
+
+#include "kugar.h"
+
+class KugarPart;
+
+class KugarView: public KoView
+{
+	Q_OBJECT
+
+public:
+        KugarView( KugarPart *part, QWidget *parent, const char *name);
+	virtual ~KugarView();
+
+	void setForcedUserTemplate(const QString &name);
+	
+	void updateReadWrite(bool) {;}
+
+	bool renderReport(const QString& data);
+	
+	bool setReportTemplate(const QString &data)
+	{
+		return view -> setReportTemplate(data);
+	}
+
+//protected:
+//	virtual bool openFile();
+//	virtual bool closeURL();
+
+private slots:
+	void slotPreferedTemplate(const QString &);
+
+private:
+	MReportViewer *view;
+	QString m_forcedUserTemplate;
+};
+
+#endif 
