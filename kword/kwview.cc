@@ -154,6 +154,15 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     m_gui->setGeometry( 0, 0, width(), height() );
     m_gui->show();
 
+    KStatusBar * sb = statusBar();
+    m_sbPageLabel = 0L;
+    if ( sb ) // No statusbar in e.g. konqueror
+    {
+        m_sbPageLabel = new KStatusBarLabel( QString::null, 0, sb );
+        addStatusBarItem( m_sbPageLabel, 0 );
+    }
+    m_sbFramesLabel = 0L; // Only added when frames are selected
+
     connect( m_doc, SIGNAL( pageNumChanged() ),
              this, SLOT( pageNumChanged()) );
 
@@ -222,16 +231,6 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
         textedit->ensureCursorVisible();
     else
         m_gui->canvasWidget()->setContentsPos( 0, 0 );
-
-
-    KStatusBar * sb = statusBar();
-    m_sbPageLabel = 0L;
-    if ( sb ) // No statusbar in e.g. konqueror
-    {
-        m_sbPageLabel = new KStatusBarLabel( QString::null, 0, sb );
-        addStatusBarItem( m_sbPageLabel, 0 );
-    }
-    m_sbFramesLabel = 0L; // Only added when frames are selected
 
     //when kword is embedded into konqueror apply a zoom=100
     //in konqueror we can't change zoom -- ### TODO ?
