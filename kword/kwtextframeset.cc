@@ -297,25 +297,22 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
 {
     //kdDebug() << "KWTextFrameSet::drawFrame crect(r)=" << DEBUGRECT( r ) << endl;
     //m_currentDrawnFrame = frame;
-    if ( frame->isCopy() )
+    // Update variables for each frame (e.g. for page-number)
+    // If more than KWPgNumVariable need this functionality, create an intermediary base class
+    QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
+    for ( ; cit.current() ; ++cit )
     {
-        // Update variables for each frame (e.g. for page-number)
-        // If more than KWPgNumVariable need this functionality, create an intermediary base class
-        QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
-        for ( ; cit.current() ; ++cit )
+        KWPgNumVariable * var = dynamic_cast<KWPgNumVariable *>( cit.current() );
+        if ( var && var->subtype() == KWPgNumVariable::VST_PGNUM_CURRENT )
         {
-            KWPgNumVariable * var = dynamic_cast<KWPgNumVariable *>( cit.current() );
-            if ( var && var->subtype() == KWPgNumVariable::VST_PGNUM_CURRENT )
-            {
-                //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << frame->pageNum()+1 << endl;
-                var->setPgNum( frame->pageNum() + 1 );
-                var->resize();
-                var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
-                var->paragraph()->setChanged( true );
-            }
+            //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << frame->pageNum()+1 << endl;
+            var->setPgNum( frame->pageNum() + 1 );
+            var->resize();
+            var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
+            var->paragraph()->setChanged( true );
         }
-
     }
+
     // Do we draw a cursor ?
     bool drawCursor = edit!=0L;
     QTextCursor * cursor = edit ? static_cast<KWTextFrameSetEdit *>(edit)->getCursor() : 0;
