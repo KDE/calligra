@@ -54,7 +54,7 @@ VStrokeFillPreview::VStrokeFillPreview(
 		: QFrame( parent, name ), m_part( part )
 {
 	setFocusPolicy( QWidget::NoFocus );
-	setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+	setFrameShape( QFrame::GroupBoxPanel );
 	installEventFilter( this );
 
 	m_pixmap.resize( 50, 50 );
@@ -67,9 +67,10 @@ VStrokeFillPreview::~VStrokeFillPreview()
 }
 
 void
-VStrokeFillPreview::paintEvent( QPaintEvent* /* event */ )
+VStrokeFillPreview::paintEvent( QPaintEvent* event )
 {
 	bitBlt( this, 0, 0, &m_pixmap, 0, 0, 50, 50 );
+	QFrame::paintEvent( event );
 }
 
 bool
