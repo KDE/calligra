@@ -281,50 +281,105 @@ QPen KPrPage::getPen( const QPen &pen )
     {
         if(it.current()->isSelected())
         {
-            kpobject=it.current();
-	    switch ( kpobject->getType() ) {
+	    switch ( it.current()->getType() ) {
 	    case OT_LINE:
-		return dynamic_cast<KPLineObject*>( kpobject )->getPen();
-		break;
+            {
+                kpobject=dynamic_cast<KPLineObject*>( it.current() );
+                if(kpobject)
+                    return dynamic_cast<KPLineObject*>( kpobject )->getPen();
+            }
+            break;
 	    case OT_RECT:
-		return dynamic_cast<KPRectObject*>( kpobject )->getPen();
-		break;
+            {
+                kpobject=dynamic_cast<KPRectObject*>( it.current() );
+                if(kpobject)
+                    return dynamic_cast<KPRectObject*>( kpobject )->getPen();
+            }
+            break;
 	    case OT_ELLIPSE:
-		return dynamic_cast<KPEllipseObject*>( kpobject )->getPen();
-		break;
+            {
+                kpobject=dynamic_cast<KPEllipseObject*>( it.current() );
+                if(kpobject)
+                    return dynamic_cast<KPEllipseObject*>( kpobject )->getPen();
+            }
+            break;
 	    case OT_PIE:
-		return dynamic_cast<KPPieObject*>( kpobject )->getPen();
-		break;
+            {
+                kpobject=dynamic_cast<KPPieObject*>( it.current() );
+                if(kpobject)
+                    return dynamic_cast<KPPieObject*>( kpobject )->getPen();
+            }
+            break;
 	    case OT_AUTOFORM:
-		return dynamic_cast<KPAutoformObject*>( kpobject )->getPen();
-		break;
+            {
+                kpobject=dynamic_cast<KPAutoformObject*>( it.current() );
+                if(kpobject)
+                    return dynamic_cast<KPAutoformObject*>( kpobject )->getPen();
+            }
+            break;
 	    case OT_PART:
-		return dynamic_cast<KPPartObject*>( kpobject )->getPen();
-		break;
+            {
+                kpobject=dynamic_cast<KPPartObject*>( it.current() );
+                if(kpobject)
+                    return dynamic_cast<KPPartObject*>( kpobject )->getPen();
+            }
+            break;
 	    case OT_PICTURE:
-		return dynamic_cast<KPPixmapObject*>( kpobject )->getPen();
-		break;
+            {
+                kpobject=dynamic_cast<KPPixmapObject*>( it.current() );
+                if(kpobject)
+                    return dynamic_cast<KPPixmapObject*>( kpobject )->getPen();
+            }
+            break;
 	    case OT_CLIPART:
-		return dynamic_cast<KPClipartObject*>( kpobject )->getPen();
-		break;
+            {
+                kpobject=dynamic_cast<KPClipartObject*>( it.current() );
+                if(kpobject)
+                    return dynamic_cast<KPClipartObject*>( kpobject )->getPen();
+            }
+            break;
 	    case OT_TEXT:
-		return dynamic_cast<KPTextObject*>( kpobject )->getPen();
-		break;
+            {
+                kpobject=dynamic_cast<KPTextObject*>( it.current() );
+                if(kpobject)
+                    return dynamic_cast<KPTextObject*>( kpobject )->getPen();
+            }
+            break;
             case OT_FREEHAND:
-		return dynamic_cast<KPFreehandObject*>( kpobject )->getPen();
-		break;
+            {
+                kpobject=dynamic_cast<KPFreehandObject*>( it.current() );
+                if(kpobject)
+                    return dynamic_cast<KPFreehandObject*>( kpobject )->getPen();
+            }
+            break;
             case OT_POLYLINE:
-		return dynamic_cast<KPPolylineObject*>( kpobject )->getPen();
-		break;
+            {
+                kpobject=dynamic_cast<KPPolylineObject*>( it.current() );
+                if(kpobject)
+                    return dynamic_cast<KPPolylineObject*>( kpobject )->getPen();
+            }
+            break;
             case OT_QUADRICBEZIERCURVE:
-		return dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getPen();
-		break;
+            {
+                kpobject=dynamic_cast<KPQuadricBezierCurveObject*>( it.current() );
+                if(kpobject)
+                    return dynamic_cast<KPQuadricBezierCurveObject*>( kpobject )->getPen();
+            }
+            break;
             case OT_CUBICBEZIERCURVE:
-		return dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getPen();
-		break;
+            {
+                kpobject=dynamic_cast<KPCubicBezierCurveObject*>( it.current() );
+                if(kpobject)
+                    return dynamic_cast<KPCubicBezierCurveObject*>( kpobject )->getPen();
+            }
+            break;
             case OT_POLYGON:
-                return dynamic_cast<KPPolygonObject*>( kpobject )->getPen();
-                break;
+            {
+                kpobject=dynamic_cast<KPPolygonObject*>( it.current() );
+                if(kpobject)
+                    return dynamic_cast<KPPolygonObject*>( kpobject )->getPen();
+            }
+            break;
 	    default: break;
 	    }
 	}

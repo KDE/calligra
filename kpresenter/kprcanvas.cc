@@ -3942,7 +3942,6 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
             setCursor( obj->getCursor( pos, modType ) );
         else
         {
-            kdDebug() << "KPrCanvas::setToolEditMode" << endl;
             obj=m_view->kPresenterDoc()->stickyPage()->getCursor( pos );
             if(obj)
                 setCursor( obj->getCursor( pos, modType ) );
