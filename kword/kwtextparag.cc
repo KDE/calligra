@@ -257,11 +257,11 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         elem.setAttribute( "value", static_cast<int>(curFormat->font().italic()) );
     }
     if( !refFormat
-        || curFormat->underlineNbLineType() != refFormat->underlineNbLineType()
+        || curFormat->underlineLineType() != refFormat->underlineLineType()
         || curFormat->textUnderlineColor() !=refFormat->textUnderlineColor()
         || curFormat->underlineLineStyle() !=refFormat->underlineLineStyle())
     {
-        if ( curFormat->underlineNbLineType()!= KoTextFormat::NONE )
+        if ( curFormat->underlineLineType()!= KoTextFormat::U_NONE )
         {
             elem = doc.createElement( "UNDERLINE" );
             formatElem.appendChild( elem );
@@ -269,17 +269,17 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
                 elem.setAttribute( "value", "double" );
             else
                 elem.setAttribute( "value", static_cast<int>(curFormat->underline()) );
-            QString strLineType=lineStyleToString( curFormat->underlineLineStyle() );
+            QString strLineType=underlineStyleToString( curFormat->underlineLineStyle() );
             elem.setAttribute( "styleline", strLineType );
             if ( curFormat->textUnderlineColor().isValid() )
                 elem.setAttribute( "underlinecolor", curFormat->textUnderlineColor().name() );
         }
     }
     if( !refFormat
-        || curFormat->strikeOutNbLineType() != refFormat->strikeOutNbLineType()
+        || curFormat->strikeOutLineType() != refFormat->strikeOutLineType()
         || curFormat->strikeOutLineStyle()!= refFormat->strikeOutLineStyle())
     {
-        if ( curFormat->strikeOutNbLineType()!= KoTextFormat::NONE )
+        if ( curFormat->strikeOutLineType()!= KoTextFormat::S_NONE )
         {
             elem = doc.createElement( "STRIKEOUT" );
             formatElem.appendChild( elem );
@@ -287,7 +287,7 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
                 elem.setAttribute( "value", "double" );
             else
                 elem.setAttribute( "value", static_cast<int>(curFormat->strikeOut()) );
-            QString strLineType=lineStyleToString( curFormat->strikeOutLineStyle() );
+            QString strLineType=strikeOutStyleToString( curFormat->strikeOutLineStyle() );
             elem.setAttribute( "styleline", strLineType );
         }
     }
@@ -473,15 +473,15 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     if ( !elem.isNull() ) {
         QString value = elem.attribute("value");
         if ( value == "0" || value == "1" )
-            format.setUnderlineNbLineType( (value.toInt() == 1)?KoTextFormat::SIMPLE: KoTextFormat::NONE );
+            format.setUnderlineLineType( (value.toInt() == 1)?KoTextFormat::U_SIMPLE: KoTextFormat::U_NONE );
         else if ( value == "single" ) // value never used when saving, but why not support it? ;)
-            format.setUnderlineNbLineType ( KoTextFormat::SIMPLE);
+            format.setUnderlineLineType ( KoTextFormat::U_SIMPLE);
         else if ( value == "double" )
-            format.setUnderlineNbLineType ( KoTextFormat::DOUBLE);
+            format.setUnderlineLineType ( KoTextFormat::U_DOUBLE);
         if ( elem.hasAttribute("styleline" ))
         {
             QString strLineType = elem.attribute("styleline");
-            format.setUnderlineLineStyle( stringToLineStyle( strLineType ));
+            format.setUnderlineLineStyle( stringToUnderlineStyle( strLineType ));
         }
         if ( elem.hasAttribute("underlinecolor"))
         {
@@ -494,15 +494,15 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     {
         QString value = elem.attribute("value");
         if ( value == "0" || value == "1" )
-            format.setStrikeOutNbLineType( (value.toInt() == 1)?KoTextFormat::SIMPLE: KoTextFormat::NONE );
+            format.setStrikeOutLineType( (value.toInt() == 1)?KoTextFormat::S_SIMPLE: KoTextFormat::S_NONE );
         else if ( value == "single" ) // value never used when saving, but why not support it? ;)
-            format.setStrikeOutNbLineType ( KoTextFormat::SIMPLE);
+            format.setStrikeOutLineType ( KoTextFormat::S_SIMPLE);
         else if ( value == "double" )
-            format.setStrikeOutNbLineType ( KoTextFormat::DOUBLE);
+            format.setStrikeOutLineType ( KoTextFormat::S_DOUBLE);
         if ( elem.hasAttribute("styleline" ))
         {
             QString strLineType = elem.attribute("styleline");
-            format.setStrikeOutLineStyle( stringToLineStyle( strLineType ));
+            format.setStrikeOutLineStyle( stringToStrikeOutStyle( strLineType ));
         }
 
     }
@@ -1036,42 +1036,82 @@ void KWTextParag::join( KoTextParag *parag )
     KoTextParag::join( parag );
 }
 
-QString KWTextParag::lineStyleToString( KoTextFormat::LineStyle _lineType )
+QString KWTextParag::underlineStyleToString( KoTextFormat::UnderlineLineStyle _lineType )
 {
     QString strLineType;
     switch ( _lineType )
     {
-    case KoTextFormat::SOLID:
+    case KoTextFormat::U_SOLID:
         strLineType ="solid";
         break;
-    case KoTextFormat::DASH:
+    case KoTextFormat::U_DASH:
         strLineType ="dash";
         break;
-    case KoTextFormat::DOT:
+    case KoTextFormat::U_DOT:
         strLineType ="dot";
         break;
-    case KoTextFormat::DASH_DOT:
+    case KoTextFormat::U_DASH_DOT:
         strLineType="dashdot";
         break;
-    case KoTextFormat::DASH_DOT_DOT:
+    case KoTextFormat::U_DASH_DOT_DOT:
         strLineType="dashdotdot";
         break;
     }
     return strLineType;
 }
 
-KoTextFormat::LineStyle KWTextParag::stringToLineStyle( const QString & _str )
+QString KWTextParag::strikeOutStyleToString( KoTextFormat::StrikeOutLineStyle _lineType )
+{
+    QString strLineType;
+    switch ( _lineType )
+    {
+    case KoTextFormat::S_SOLID:
+        strLineType ="solid";
+        break;
+    case KoTextFormat::S_DASH:
+        strLineType ="dash";
+        break;
+    case KoTextFormat::S_DOT:
+        strLineType ="dot";
+        break;
+    case KoTextFormat::S_DASH_DOT:
+        strLineType="dashdot";
+        break;
+    case KoTextFormat::S_DASH_DOT_DOT:
+        strLineType="dashdotdot";
+        break;
+    }
+    return strLineType;
+}
+
+KoTextFormat::UnderlineLineStyle KWTextParag::stringToUnderlineStyle( const QString & _str )
 {
     if ( _str =="solid")
-        return KoTextFormat::SOLID;
+        return KoTextFormat::U_SOLID;
     else if ( _str =="dash" )
-        return KoTextFormat::DASH;
+        return KoTextFormat::U_DASH;
     else if ( _str =="dot" )
-        return KoTextFormat::DOT;
+        return KoTextFormat::U_DOT;
     else if ( _str =="dashdot")
-        return KoTextFormat::DASH_DOT;
+        return KoTextFormat::U_DASH_DOT;
     else if ( _str=="dashdotdot")
-        return KoTextFormat::DASH_DOT_DOT;
+        return KoTextFormat::U_DASH_DOT_DOT;
     else
-        return KoTextFormat::SOLID;
+        return KoTextFormat::U_SOLID;
+}
+
+KoTextFormat::StrikeOutLineStyle KWTextParag::stringToStrikeOutStyle( const QString & _str )
+{
+    if ( _str =="solid")
+        return KoTextFormat::S_SOLID;
+    else if ( _str =="dash" )
+        return KoTextFormat::S_DASH;
+    else if ( _str =="dot" )
+        return KoTextFormat::S_DOT;
+    else if ( _str =="dashdot")
+        return KoTextFormat::S_DASH_DOT;
+    else if ( _str=="dashdotdot")
+        return KoTextFormat::S_DASH_DOT_DOT;
+    else
+        return KoTextFormat::S_SOLID;
 }

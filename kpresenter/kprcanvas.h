@@ -98,7 +98,7 @@ public:
     void deSelectAllObj();
     void selectObj( KPObject* );
     void deSelectObj( KPObject* );
-    void setFont(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor & underlineColor, KoTextFormat::NbLine nblineType, KoTextFormat::LineStyle underlineType, KoTextFormat::LineStyle strikeOutType , KoTextFormat::NbLine strikeOutNblineType, int flags);
+    void setFont(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor & underlineColor, KoTextFormat::UnderlineLineType nblineType, KoTextFormat::UnderlineLineStyle underlineType, KoTextFormat::StrikeOutLineType strikeOutType , KoTextFormat::StrikeOutLineStyle strikeOutNblineType, int flags);
 
     void setTextColor( const QColor & );
     void setTextBackgroundColor( const QColor & );

@@ -2713,10 +2713,10 @@ void KWView::formatFont()
                                textIface->textColor(),
                                col,
                                textIface->textUnderlineColor(),
-                               textIface->underlineNbLineType(),
                                textIface->underlineLineStyle(),
-                               textIface->strikeOutLineStyle(),
-                               textIface->strikeOutNbLineType());
+                               textIface->underlineLineType(),
+                               textIface->strikeOutLineType(),
+                               textIface->strikeOutLineStyle());
 
     connect( m_fontDlg, SIGNAL( apply() ),
                  this, SLOT( slotApplyFont() ) );
@@ -2744,10 +2744,10 @@ void KWView::slotApplyFont()
                                                          m_fontDlg->color(),
                                                          m_fontDlg->backGroundColor(),
                                                          m_fontDlg->underlineColor(),
-                                                         m_fontDlg->getUnderlineNbLineType(),
                                                          m_fontDlg->getUnderlineLineStyle(),
+                                                         m_fontDlg->getUnderlineLineType(),
+                                                         m_fontDlg->getStrikeOutLineType(),
                                                          m_fontDlg->getStrikeOutLineStyle(),
-                                                         m_fontDlg->getStrikeOutNbLineType(),
                                                          flags);
             if (cmd)
                 globalCmd->addCommand(cmd);

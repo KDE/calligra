@@ -89,8 +89,13 @@ protected:
                                       KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
                                       const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft );
 
-    static QString lineStyleToString( KoTextFormat::LineStyle _lineType );
-    static KoTextFormat::LineStyle stringToLineStyle( const QString & _str );
+    static QString underlineStyleToString( KoTextFormat::UnderlineLineStyle _lineType );
+    static QString strikeOutStyleToString( KoTextFormat::StrikeOutLineStyle _lineType );
+
+    static KoTextFormat::UnderlineLineStyle stringToUnderlineStyle( const QString & _str );
+    static KoTextFormat::StrikeOutLineStyle stringToStrikeOutStyle( const QString & _str );
+
+
 };
 
 #endif
