@@ -197,7 +197,7 @@ bool AbiWordWorker::doCloseDocument(void)
     
     if (m_kwordLeader)
     {
-        *m_streamOut << "<!--\n"; // PROVISORY
+        *m_streamOut << "<data>\n";
 
         QMap<QString,QString>::ConstIterator it;
 
@@ -205,18 +205,46 @@ bool AbiWordWorker::doCloseDocument(void)
         {
             QByteArray image;
             m_kwordLeader->loadKoStoreFile(it.key(),image);
-            *m_streamOut << "<data name=\"" << it.data() << "\" type=\"base64\" mime=\"????\">\n";
-            *m_streamOut << "<d>\n";
+
+            QString strExtension=it.key();
+            const int result=it.key().findRev(".");
+            if (result>=0)
+            {
+                strExtension=it.key().mid(result+1);
+            }
+
+            QString strMime;
+            if (strExtension=="png")
+            {
+                strMime="image/png";
+            }
+            else if ((strExtension=="jpg") || (strExtension=="jpeg"))
+            {
+                strMime="image/jpeg";
+            }
+            // TODO: mathml and svg
+            else
+            {
+                kdWarning(30506) << "Unknown extension! Image type not supported!" << endl;
+                strMime="application/octet-stream"; // AbiWord eats this without crashing
+            }
+
+            kdDebug(30506) << "Image " << it.key() << " Type: " << strMime << endl;
+
+            // WARNING: the attributes base64 and mime are only defined in AbiWord's source code
+            //   not in AbiWord's DTD!
+            *m_streamOut << "<d name=\"" << it.data() << "\""
+                << " base64=\"yes\"" // For now, we always encode (TODO: not for mathml and svg)
+                << " mime=\"" << strMime << "\">\n";
 
             QCString base64=KCodecs::base64Encode(image,true);
 
             *m_streamOut << base64 << "\n"; // QCString is taken as Latin1 by QTextStream
 
             *m_streamOut << "</d>\n";
-            *m_streamOut << "</data>\n";
         }
 
-        *m_streamOut << "-->\n"; // PROVISORY
+        *m_streamOut << "</data>\n";
     }
 
     *m_streamOut << "</abiword>\n"; //Close the file for XML
@@ -358,6 +386,10 @@ bool AbiWordWorker::makeImage(const FrameAnchor& anchor)
     // PROVISORY
     kdDebug(30506) << "New image: " << anchor.picture.koStoreName
         << " , " << anchor.picture.key << endl;
+        
+    *m_streamOut << "<image dataid=\"" << anchor.picture.key
+        << "\"/>"; // NO end of line!
+        // TODO: props for image!
 
     m_mapData[anchor.picture.koStoreName]=anchor.picture.key;
 
@@ -561,7 +593,8 @@ bool AbiWordWorker::doFullDefineStyle(LayoutData& layout)
     // TODO: cook the style name to the standard style names in AbiWord
     *m_streamOut << " name=\"" << EscapeXmlText(layout.styleName,true,true) << "\"";
 
-    if ( layout.counter.numbering == CounterData::NUM_CHAPTER )
+    if ( (layout.counter.numbering == CounterData::NUM_CHAPTER)
+        && (layout.counter.depth<10) )
     {
         *m_streamOut << " level=\"";
         *m_streamOut << QString::number(layout.counter.depth+1,10);
