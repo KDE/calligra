@@ -361,6 +361,9 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         return;
     }
 
+    _painter->save();
+    _painter->setClipRect( getBoundingRect( _diffx, _diffy ) );
+    
     int ox = orig.x() - _diffx;
     int oy = orig.y() - _diffy;
     int ow = ext.width();
@@ -510,7 +513,8 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
     _painter->setViewport( r );
     _painter->restore();
-
+    _painter->restore();
+    
     KPObject::draw( _painter, _diffx, _diffy );
 }
 
