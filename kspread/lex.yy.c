@@ -4,6 +4,12 @@
  * $Header$
  */
 
+/* Reggie: this is needed at least on alpha/linux */
+#include <math.h>
+#ifndef PI
+#define PI M_PI
+#endif
+
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
