@@ -191,6 +191,7 @@ private slots:
     void slotSettingsChanged();
     void slotZoomIn();
     void slotZoomOut();
+    void slotViewResize();
     
 protected:
     KIllustratorDocument *m_pDoc;

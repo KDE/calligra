@@ -362,6 +362,10 @@ void KIllustratorView::setupCanvas()
                       vRuler, SLOT(updatePointer(int, int)));
     QObject::connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
                       this, SLOT(popupForSelection (int, int)));
+    
+    QObject::connect (scrollview, SIGNAL( viewportResize ()),
+                      this, SLOT( slotViewResize ()));
+    
     connect(PStateManager::instance(), SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
 
     // helpline creation
@@ -1239,6 +1243,17 @@ void KIllustratorView::slotZoomIn()
 void KIllustratorView::slotZoomOut()
  {
   canvas->zoomOut ();
+ }
+
+void KIllustratorView::slotViewResize()
+ {
+  int x = scrollview->viewport()->width()-canvas->width();
+  int y = scrollview->viewport()->height()-canvas->height();
+  if(x < 0)
+   x = 0;
+  if(y < 0)
+   y = 0;
+  canvas->move(x/2,y/2);
  }
 
 #include <KIllustrator_view.moc>
