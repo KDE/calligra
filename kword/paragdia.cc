@@ -413,15 +413,19 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
 
     // --------------- End of page /frame ---------------
     QGroupBox * endFramePage = new QGroupBox( i18n( "Behaviour at end of frame/page" ), this );
-    QGridLayout * endFramePageGrid = new QGridLayout( endFramePage, 2, 1,
+    QGridLayout * endFramePageGrid = new QGridLayout( endFramePage, 3, 1,
                                                       KDialog::marginHint(), KDialog::spacingHint() );
 
-    cEndOfFramePage = new QCheckBox( i18n("Keep lines together"),endFramePage);
-    endFramePageGrid->addWidget( cEndOfFramePage, 1, 0 );
-    endFramePageGrid->addRowSpacing( 0, 12 );
+    cKeepLinesTogether = new QCheckBox( i18n("Keep lines together"),endFramePage);
+    endFramePageGrid->addWidget( cKeepLinesTogether, 1, 0 );
+    cHardBreak = new QCheckBox( i18n("Insert Break Before Paragraph"),endFramePage);
+    endFramePageGrid->addWidget( cHardBreak, 2, 0 );
+    endFramePageGrid->addRowSpacing( 0, 12 ); // groupbox title
     endFramePageGrid->setRowStretch( 0, 0 );
-    endFramePageGrid->setRowStretch( 1, 1 );
+    endFramePageGrid->setRowStretch( 1, 0 );
+    endFramePageGrid->setRowStretch( 2, 1 );
     mainGrid->addWidget( endFramePage, 2, 0 );
+
 
     // --------------- line spacing ---------------
     QGroupBox * spacingFrame = new QGroupBox( i18n( "Line Spacing" ), this );
@@ -531,9 +535,14 @@ double KWIndentSpacingWidget::lineSpacing() const
     return KWUnit::fromUserValue( QMAX(eSpacing->text().toDouble(),0), m_unit );
 }
 
-bool KWIndentSpacingWidget::linesTogether() const
+int KWIndentSpacingWidget::pageBreaking() const
 {
-    return cEndOfFramePage->isChecked();
+    int pb = 0;
+    if ( cKeepLinesTogether->isChecked() )
+        pb |= KWParagLayout::KeepLinesTogether;
+    if ( cHardBreak->isChecked() )
+        pb |= KWParagLayout::HardFrameBreak;
+    return pb;
 }
 
 void KWIndentSpacingWidget::display( const KWParagLayout & lay )
@@ -568,7 +577,8 @@ void KWIndentSpacingWidget::display( const KWParagLayout & lay )
     eSpacing->setText( str );
     prev1->setSpacing( _spacing );
 
-    cEndOfFramePage->setChecked( lay.linesTogether );
+    cKeepLinesTogether->setChecked( lay.pageBreaking & KWParagLayout::KeepLinesTogether );
+    cHardBreak->setChecked( lay.pageBreaking & KWParagLayout::HardFrameBreak );
     // ## preview support for end-of-frame ?
 }
 
@@ -579,7 +589,7 @@ void KWIndentSpacingWidget::save( KWParagLayout & lay )
     lay.margins[QStyleSheetItem::MarginFirstLine] = firstLineIndent();
     lay.margins[QStyleSheetItem::MarginTop] = spaceBeforeParag();
     lay.margins[QStyleSheetItem::MarginBottom] = spaceAfterParag();
-    lay.linesTogether = linesTogether();
+    lay.pageBreaking = pageBreaking();
 }
 
 QString KWIndentSpacingWidget::tabName()

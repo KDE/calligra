@@ -70,13 +70,19 @@ public:
            All = Alignment | BulletNumber | Margins | LineSpacing | Borders | Tabulator | PageBreaking
     } Flags;
 
+    enum {
+        BreakBetweenLines = 0, // default
+        KeepLinesTogether = 1,
+        HardFrameBreak = 2
+    }; // Page breaking flags - actually a bitfield
+
     // This class is used as a struct, which explains the public vars :)
     int alignment;
     double margins[5]; // left, right, top, bottom, firstLineSpacing - in pt
     double lineSpacing;
     Border leftBorder, rightBorder, topBorder, bottomBorder;
     Counter* counter; // can be 0 if no counter set
-    bool linesTogether; // whether to keep all lines on the same page if the parag is at the end of a frame
+    int pageBreaking;
 
     KWStyle* style;
 
@@ -153,9 +159,11 @@ public:
     KWStyle *style() const { return m_layout.style; }
     void setStyle( KWStyle * style ) { m_layout.style = style; } // doesn't _apply_ the style
 
-    // Whether to keep all lines on the same page if the parag is at the end of a frame
-    void setLinesTogether( bool b );
-    bool linesTogether() const { return m_layout.linesTogether; }
+    // The type of page-breaking-behaviour( BreakBetweenLines[default], KeepLinesTogether and/or HardFrameBreak )
+    void setPageBreaking( int pb );
+    int pageBreaking() const { return m_layout.pageBreaking; }
+    bool linesTogether() const { return m_layout.pageBreaking & KWParagLayout::KeepLinesTogether; }
+    bool hardFrameBreak() const { return m_layout.pageBreaking & KWParagLayout::HardFrameBreak; }
 
     // Get and set tabulator positions
     KoTabulatorList tabList() const { return m_layout.tabList(); }

@@ -166,7 +166,7 @@ public:
     void setCounter( QTextCursor * cursor, const Counter & counter );
     void setAlign( QTextCursor * cursor, int align );
     void setLineSpacing( QTextCursor * cursor, double spacing );
-    void setPageBreaking( QTextCursor * cursor, bool linesTogether );
+    void setPageBreaking( QTextCursor * cursor, int pageBreaking );
     void setBorders( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder );
     void setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin );
     void applyStyle( QTextCursor * cursor, const KWStyle * style, KWTextFormat * & currentFormat,
@@ -328,6 +328,7 @@ public:
 
     void drawCursor( bool b );
 
+    void insertParagraph();
     void insertPicture( const QString & file );
     void insertVariable( int type, int subtype = 0 );
     void insertSpecialChar(QChar _c);
@@ -352,7 +353,7 @@ public:
     // -- Paragraph settings --
     void setCounter( const Counter & counter ) { textFrameSet()->setCounter( cursor, counter ); }
     void setAlign( int align ) { textFrameSet()->setAlign( cursor, align ); }
-    void setPageBreaking( bool linesTogether ) { textFrameSet()->setPageBreaking( cursor, linesTogether ); }
+    void setPageBreaking( int pageBreaking ) { textFrameSet()->setPageBreaking( cursor, pageBreaking ); }
     void setLineSpacing( double spacing ) { textFrameSet()->setLineSpacing( cursor, spacing ); }
     void setBorders( Border leftBorder, Border rightBorder, Border bottomBorder, Border topBorder )
           { textFrameSet()->setBorders( cursor, leftBorder, rightBorder, bottomBorder, topBorder ); }

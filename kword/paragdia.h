@@ -109,7 +109,7 @@ public:
     double spaceBeforeParag() const;
     double spaceAfterParag() const;
     double lineSpacing() const;
-    bool linesTogether() const;
+    int pageBreaking() const;
 
 private slots:
     void leftChanged( const QString & );
@@ -122,7 +122,7 @@ private slots:
 private:
     QLineEdit *eLeft, *eRight, *eFirstLine, *eBefore, *eAfter, *eSpacing;
     QComboBox *cSpacing;
-    QCheckBox *cEndOfFramePage;
+    QCheckBox *cKeepLinesTogether, *cHardBreak;
     KWPagePreview *prev1;
     KWUnit::Unit m_unit;
 };
@@ -312,7 +312,7 @@ public:
     double spaceBeforeParag() const { return m_indentSpacingWidget->spaceBeforeParag(); }
     double spaceAfterParag() const { return m_indentSpacingWidget->spaceAfterParag(); }
     double lineSpacing() const { return m_indentSpacingWidget->lineSpacing(); }
-    bool linesTogether() const { return m_indentSpacingWidget->linesTogether(); }
+    int pageBreaking() const { return m_indentSpacingWidget->pageBreaking(); }
 
     // tab 2
     int align() const { return m_alignWidget->align(); }
@@ -337,7 +337,7 @@ public:
     bool isFirstLineChanged() const {return oldLayout.margins[ QStyleSheetItem::MarginFirstLine]!=firstLineIndent();}
     bool isSpaceBeforeChanged() const { return oldLayout.margins[QStyleSheetItem::MarginTop]!=spaceBeforeParag();}
     bool isSpaceAfterChanged() const {return oldLayout.margins[QStyleSheetItem::MarginBottom]!=spaceAfterParag();}
-    bool isPageBreakingChanged() const { return oldLayout.linesTogether!=linesTogether(); }
+    bool isPageBreakingChanged() const { return oldLayout.pageBreaking!=pageBreaking(); }
     bool isCounterChanged() const;
 
     bool isBorderChanged() const { return (oldLayout.leftBorder!=leftBorder() ||

@@ -110,9 +110,9 @@ void KWTextParag::setLineSpacing( double _i )
     invalidate(0);
 }
 
-void KWTextParag::setLinesTogether( bool b )
+void KWTextParag::setPageBreaking( int pb )
 {
-    m_layout.linesTogether = b;
+    m_layout.pageBreaking = pb;
     invalidate(0);
 }
 
@@ -378,6 +378,8 @@ void KWTextParag::copyParagData( QTextParag *_parag )
     if (!styleApplied)
     {
         setParagLayout( parag->paragLayout() );
+        // Don't copy the hard-frame-break setting though
+        m_layout.pageBreaking &= ~KWParagLayout::HardFrameBreak;
         setFormat( parag->paragFormat() );
         // QTextCursor::splitAndInsertEmptyParag takes care of setting the format
         // for the chars in the new parag
@@ -873,7 +875,7 @@ void KWTextParag::setParagLayout( const KWParagLayout & layout, int flags )
     if ( flags & KWParagLayout::Margins )
          setMargins( layout.margins );
     if ( flags & KWParagLayout::PageBreaking )
-        setLinesTogether( layout.linesTogether );
+        setPageBreaking( layout.pageBreaking );
     if ( flags & KWParagLayout::LineSpacing )
         setLineSpacing( layout.lineSpacing );
     if ( flags & KWParagLayout::Borders )
@@ -973,7 +975,7 @@ void KWParagLayout::operator=( const KWParagLayout &layout )
     alignment = layout.alignment;
     for ( int i = 0 ; i < 5 ; ++i )
         margins[i] = layout.margins[i];
-    linesTogether = layout.linesTogether;
+    pageBreaking = layout.pageBreaking;
     leftBorder = layout.leftBorder;
     rightBorder = layout.rightBorder;
     topBorder = layout.topBorder;
@@ -998,7 +1000,7 @@ int KWParagLayout::compare( const KWParagLayout & layout ) const
             flags |= Margins;
             break;
         }
-    if ( linesTogether != layout.linesTogether )
+    if ( pageBreaking != layout.pageBreaking )
         flags |= PageBreaking;
     if ( leftBorder != layout.leftBorder
          || rightBorder != layout.rightBorder
@@ -1142,9 +1144,18 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
         lineSpacing = KWDocument::getAttribute( element, "value", 0.0 );
 
 
+    pageBreaking = 0;
     element = parentElem.namedItem( "PAGEBREAKING" ).toElement();
     if ( !element.isNull() )
-        linesTogether = element.attribute( "linesTogether" ) == "true";
+    {
+        if ( element.attribute( "linesTogether" ) == "true" )
+            pageBreaking |= KeepLinesTogether;
+        if ( element.attribute( "hardFrameBreak" ) == "true" )
+            pageBreaking |= HardFrameBreak;
+    }
+    element = parentElem.namedItem( "HARDBRK" ).toElement(); // KWord-0.8
+    if ( !element.isNull() )
+        pageBreaking |= HardFrameBreak;
 
 
     element = parentElem.namedItem( "LEFTBORDER" ).toElement();
@@ -1190,7 +1201,7 @@ void KWParagLayout::initialise()
     rightBorder.ptWidth = 0;
     topBorder.ptWidth = 0;
     bottomBorder.ptWidth = 0;
-    linesTogether = false;
+    pageBreaking = 0;
     style = 0L;
     m_tabList.clear();
 }
@@ -1243,11 +1254,14 @@ void KWParagLayout::save( QDomElement & parentElem )
         element.setAttribute( "value", lineSpacing );
     }
 
-    if ( linesTogether )
+    if ( pageBreaking != 0 )
     {
         element = doc.createElement( "PAGEBREAKING" );
         parentElem.appendChild( element );
-        element.setAttribute( "linesTogether", linesTogether ? "true" : "false" );
+        if ( pageBreaking & KeepLinesTogether )
+            element.setAttribute( "linesTogether",  "true" );
+        if ( pageBreaking & HardFrameBreak )
+            element.setAttribute( "hardFrameBreak", "true" );
     }
 
     if ( leftBorder.ptWidth > 0 )

@@ -354,7 +354,6 @@ void KWView::setupActions()
     actionInsertFrameBreak = new KAction( i18n( "&Hard Frame Break" ), CTRL + Key_Return,
                                           this, SLOT( insertFrameBreak() ),
                                           actionCollection(), "insert_framebreak" );
-    actionInsertFrameBreak->setEnabled( false ); // ### TODO
 
     actionInsertFootEndNote = new KAction( i18n( "&Footnote or Endnote..." ), 0,
                                            this, SLOT( insertFootNoteEndNote() ),
@@ -1489,14 +1488,14 @@ void KWView::slotSpecialChar(QChar c, const QString &_font)
 
 void KWView::insertFrameBreak()
 {
-#if 0
-    if ( gui->canvasWidget()->getTable() )
-	return;
+    KWTextFrameSetEdit *edit=currentTextEdit();
+    if ( !edit )
+        return;
 
-    // boy what a hack
-    QKeyEvent e(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Key_Return,0,ControlButton);
-    gui->canvasWidget()->keyPressEvent( &e );
-#endif
+    // insert a paragraph first
+    edit->insertParagraph();
+
+    edit->setPageBreaking( KWParagLayout::HardFrameBreak ); // ## TODO bit-OR with current setting, or add an enum !
 }
 
 void KWView::insertVariable()
@@ -1627,7 +1626,7 @@ void KWView::formatParagraph()
                               paragDia->topBorder(), paragDia->bottomBorder() );
 
         if ( paragDia->isPageBreakingChanged() )
-            edit->setPageBreaking( paragDia->linesTogether() );
+            edit->setPageBreaking( paragDia->pageBreaking() );
 
         delete paragDia;
     }
@@ -2743,6 +2742,7 @@ void KWView::updateButtons()
     actionInsertFormula->setEnabled(state);
     actionInsertContents->setEnabled(state);
     actionInsertVariable->setEnabled(state);
+    actionInsertFrameBreak->setEnabled(state);
     actionBackgroundColor->setEnabled( (edit == 0) && gui->canvasWidget()->getMouseMode()==MM_EDIT_FRAME);
 
     bool table = ( gui->canvasWidget()->getTable() != 0 ) && rw;

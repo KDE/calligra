@@ -46,7 +46,7 @@
 
 //#define DEBUG_FLOW
 //#define DEBUG_FORMATS
-#define DEBUG_FORMAT_MORE
+//#define DEBUG_FORMAT_MORE
 
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc ), undoRedoInfo( this )
@@ -579,9 +579,12 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
 
     int breaked = false;
     bool linesTogether = parag ? static_cast<KWTextParag *>(parag)->linesTogether() : false;
-    //kdDebugBody(32002) << "KWTextFrameSet::adjustFlow parag=" << parag
-    //                   << " linesTogether=" << linesTogether << " yp=" << yp
-    //                   << " h=" << h << endl;
+    bool hardFrameBreak = parag ? static_cast<KWTextParag *>(parag)->hardFrameBreak() : false;
+#ifdef DEBUG_FLOW
+    kdDebugBody(32002) << "KWTextFrameSet::adjustFlow parag=" << parag
+                       << " linesTogether=" << linesTogether << " yp=" << yp
+                       << " h=" << h << endl;
+#endif
 
     int totalHeight = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
@@ -598,6 +601,13 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
             breaked = ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) );
             if ( breaked )
                 break;
+
+            if ( hardFrameBreak && yp > totalHeight )
+            {
+                kdDebug() << "KWTextFrameSet::adjustFlow -> HARD FRAME BREAK" << endl;
+                yp = bottom + 2;
+                break;
+            }
         }
         if ( yp+h < bottom )
             break; // we've been past the parag, so stop here
@@ -1483,7 +1493,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, const QPoint & nPointBottom )
     else // not found, assume worse
         maxY = m_availableHeight;
 
-    kdDebug(32002) << "KWTextFrameSet (" << getName() << ")::updateViewArea maxY now " << maxY << endl;
+    //kdDebug(32002) << "KWTextFrameSet (" << getName() << ")::updateViewArea maxY now " << maxY << endl;
     // Update map
     m_mapViewAreas.replace( w, maxY );
 
@@ -2022,11 +2032,11 @@ void KWTextFrameSet::setTabList( QTextCursor * cursor, const KoTabulatorList &ta
     emit updateUI();
 }
 
-void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, bool linesTogether )
+void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, int pageBreaking )
 {
     QTextDocument * textdoc = textDocument();
     if ( !textdoc->hasSelection( QTextDocument::Standard ) &&
-         static_cast<KWTextParag *>(cursor->parag())->linesTogether() == linesTogether )
+         static_cast<KWTextParag *>(cursor->parag())->pageBreaking() == pageBreaking )
         return; // No change needed.
 
     emit hideCursor();
@@ -2036,7 +2046,7 @@ void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, bool linesTogether )
     undoRedoInfo.name = i18n("Change paragraph attribute"); // bleh
 
     if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
-        static_cast<KWTextParag *>(cursor->parag())->setLinesTogether( linesTogether );
+        static_cast<KWTextParag *>(cursor->parag())->setPageBreaking( pageBreaking );
     }
     else
     {
@@ -2044,12 +2054,12 @@ void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, bool linesTogether )
         QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
         setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
-            static_cast<KWTextParag *>(start)->setLinesTogether( linesTogether );
+            static_cast<KWTextParag *>(start)->setPageBreaking( pageBreaking );
     }
 
     emit repaintChanged( this );
     formatMore();
-    undoRedoInfo.newParagLayout.linesTogether = linesTogether;
+    undoRedoInfo.newParagLayout.pageBreaking = pageBreaking;
     undoRedoInfo.clear();
     emit showCursor();
     emit updateUI();
@@ -2553,7 +2563,7 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
         else
             textFrameSet()->doKeyboardAction( cursor, m_currentFormat, KWTextFrameSet::ActionDelete );
 
-       clearUndoRedoInfo = FALSE;
+        clearUndoRedoInfo = FALSE;
         break;
     case Key_Backspace:
         if ( textDocument()->hasSelection( QTextDocument::Standard ) ) {
@@ -2580,7 +2590,7 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
         else
             textFrameSet()->doKeyboardAction( cursor, m_currentFormat, KWTextFrameSet::ActionBackspace );
 
-       clearUndoRedoInfo = FALSE;
+        clearUndoRedoInfo = FALSE;
         break;
     case Key_F16: // Copy key on Sun keyboards
         copy();
@@ -3280,6 +3290,13 @@ void KWTextFrameSetEdit::setTextSuperScript(bool on)
     else
         format.setVAlign(QTextFormat::AlignSuperScript);
     textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::VAlign );
+}
+
+void KWTextFrameSetEdit::insertParagraph()
+{
+    if ( textDocument()->hasSelection( QTextDocument::Standard ) )
+        textFrameSet()->removeSelectedText( cursor );
+    textFrameSet()->doKeyboardAction( cursor, m_currentFormat, KWTextFrameSet::ActionReturn );
 }
 
 void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
