@@ -59,3 +59,20 @@ void KWBgSpellCheck::objectForSpellChecking(KoTextObject *obj)
     currObj=obj;
     m_bgSpell.currentTextObj=obj;
 }
+
+void KWBgSpellCheck::nextTextFrameSet( KoTextObject *obj )
+{
+    if( m_currentFrame->textObject()==obj)
+    {
+        m_currentFrame=m_doc->nextTextFrameSet(m_currentFrame);
+        if(!m_currentFrame)
+            objectForSpellChecking(0L);
+        else
+            objectForSpellChecking(m_currentFrame->textObject());
+    }
+    else
+    {
+        m_currentFrame=0L;
+        objectForSpellChecking(0L);
+    }
+}

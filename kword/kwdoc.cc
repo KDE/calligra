@@ -3265,4 +3265,61 @@ bool KWDocument::backgroundSpellCheckEnabled() const
     return m_bgSpellCheck->backgroundSpellCheckEnabled();
 }
 
+void KWDocument::reactivateBgSpellChecking()
+{
+    QPtrList<KWTextFrameSet> textFramesets;
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit ) {
+        fit.current()->addTextFrameSets(textFramesets);
+    }
+
+    KWTextFrameSet *frm;
+    for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
+        frm->textObject()->setBeedSpellCheck(true);
+    }
+    startBackgroundSpellCheck();
+}
+
+KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
+{
+    bool actif=false;
+    if(m_lstViews.first() && m_lstViews.first()->getGUI() &&m_lstViews.first()->getGUI()->canvasWidget())
+    {
+        KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_lstViews.first()->getGUI()->canvasWidget()->currentFrameSetEdit());
+        if(edit)
+        {
+            if(edit->textFrameSet()!=obj)
+                obj->textObject()->setBeedSpellCheck(false);
+            else
+                actif=true;
+        }
+    }
+    QPtrList<KWTextFrameSet> textFramesets;
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit ) {
+        fit.current()->addTextFrameSets(textFramesets);
+    }
+    int pos=textFramesets.findNextRef(obj);
+    if(pos !=-1)
+    {
+        KWTextFrameSet *frm=0L;
+        for ( frm=textFramesets.at(pos); frm != 0; frm=textFramesets.next() ){
+            if(frm->textObject()->beedSpellCheck())
+                return frm;
+        }
+    }
+    else
+    {
+        //return to 0
+        KWTextFrameSet *frm=0L;
+        for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
+            if(frm->textObject()->beedSpellCheck())
+                return frm;
+        }
+    }
+    if(actif)
+        return obj;
+    return 0L;
+}
+
 #include "kwdoc.moc"

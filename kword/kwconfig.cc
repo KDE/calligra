@@ -179,6 +179,8 @@ void ConfigureSpellPage::apply()
   config->writeEntry("KSpell_dont_check_title_case",(int)state);
   doc->setDontCheckTitleCase(state);
 
+  //FIXME reactivate just if there is a changes.
+  doc->reactivateBgSpellChecking();
   doc->enableBackgroundSpellCheck( cbBackgroundSpellCheck->isChecked() );
 }
 

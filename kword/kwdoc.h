@@ -508,7 +508,8 @@ public:
     void saveConfig();
     void initUnit();
     void startBackgroundSpellCheck();
-
+    void reactivateBgSpellChecking();
+    KWTextFrameSet* nextTextFrameSet(KWTextFrameSet *obj);
 
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );

@@ -41,6 +41,8 @@ public:
 
     KWTextFrameSet *currentCheckSpellingFrame(){ return m_currentFrame;}
 
+    virtual void nextTextFrameSet( KoTextObject *obj );
+
 private:
     KWDocument *m_doc;
     KWTextFrameSet *m_currentFrame;

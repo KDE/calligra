@@ -2082,6 +2082,11 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
 
     if( canvas->gui() && canvas->gui()->getHorzRuler())
         canvas->gui()->getHorzRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
+
+    //active new bg spell
+    textobj->setBeedSpellCheck(true);
+    fs->kWordDocument()->startBackgroundSpellCheck();
+
 }
 
 KWTextFrameSetEdit::~KWTextFrameSetEdit()
