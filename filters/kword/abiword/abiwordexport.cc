@@ -499,28 +499,24 @@ bool AbiWordWorker::doFullParagraph(const QString& paraText, const LayoutData& l
         props += "; ";
     }
 
-    // FIXME/TODO: H'm, why is 0.0 not a valid value?
-
-    if ( layout.indentLeft!=0.0 )
+    if ( layout.indentLeft>=0.0 )
     {
         props += QString("margin-left:%1pt; ").arg(layout.indentLeft);
     }
 
-    if ( layout.indentRight!=0.0 )
+    if ( layout.indentRight>=0.0 )
     {
         props += QString("margin-right:%1pt; ").arg(layout.indentRight);
     }
 
-    if ( layout.indentFirst!=0.0 )
-    {
-        props += QString("text-indent:%1pt; ").arg(layout.indentFirst);
-    }
+    props += QString("text-indent:%1pt; ").arg(layout.indentFirst);
 
-    if( layout.marginBottom!=0.0)
+    if( layout.marginBottom>=0.0)
     {
        props += QString("margin-bottom:%1pt; ").arg(layout.marginBottom);
     }
-    if( layout.marginTop!=0.0  )
+
+    if( layout.marginTop>=0.0  )
     {
        props += QString("margin-top:%1pt; ").arg(layout.marginTop);
     }
