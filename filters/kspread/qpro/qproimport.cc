@@ -129,7 +129,7 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
 
     if( !lIn )
     {
-        KMessageBox::sorry( 0L, i18n("QPRO filter can't open input file - please report.") );
+        KMessageBox::sorry( 0L, i18n("QPRO filter cannot open input file - please report.") );
         return KoFilter::FileNotFound;
     }
 
@@ -137,7 +137,7 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
 //    KSpreadSheet *table=ksdoc->createTable();
 //    ksdoc->addTable(table);
 
-    QString field = "";
+    QString field;
     int value=0;
     emit sigProgress(value);
 

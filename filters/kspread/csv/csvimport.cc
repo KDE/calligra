@@ -87,12 +87,12 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
 
     QFile in(file);
     if(!in.open(IO_ReadOnly)) {
-        KMessageBox::sorry( 0L, i18n("CSV filter can't open input file - please report.") );
+        KMessageBox::sorry( 0L, i18n("CSV filter cannot open input file - please report.") );
         in.close();
         return KoFilter::FileNotFound;
     }
 
-    QString csv_delimiter = QString::null;
+    QString csv_delimiter;
     // ###### FIXME: disabled for now
     //if (!config.isNull())
     //    csv_delimiter = config[0];
