@@ -140,7 +140,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_tabStop = MM_TO_POINT( 15.0 );
     m_styleColl=new KoStyleCollection();
     m_insertFilePage = 0;
-    m_refreshSideBar = false;
+    m_refreshSideBar = true;
     KoStyle* m_standardStyle = new KoStyle( "Standard" );
     m_styleColl->addStyleTemplate( m_standardStyle );
 
