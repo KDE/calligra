@@ -28,6 +28,7 @@
 #include <qpushbutton.h>
 #include <qheader.h>
 
+#include <ktempfile.h>
 #include <klineedit.h>
 #include <klistview.h>
 #include <klocale.h>
@@ -47,6 +48,7 @@
 class KoTemplateCreateDiaPrivate {
 public:
     KoTemplateCreateDiaPrivate()
+    : m_tempFile( QString::null, ".png" )
     {
         m_tree=0L;
         m_name=0L;
@@ -57,6 +59,7 @@ public:
         m_groups=0L;
         m_add=0L;
         m_remove=0L;
+        m_tempFile.setAutoDelete( true );
     }
     ~KoTemplateCreateDiaPrivate() {
         delete m_tree;
@@ -72,6 +75,7 @@ public:
     KListView *m_groups;
     QPushButton *m_add, *m_remove;
     bool m_changed;
+    KTempFile m_tempFile;
 };
 
 
@@ -329,11 +333,25 @@ void KoTemplateCreateDia::slotSelect() {
         return;
     }
 
-    if(!url.isLocalFile()) {
-        KMessageBox::sorry(0L, i18n( "Only local files are currently supported."));
-        return;
+    if ( url.isLocalFile() )
+    {
+        d->m_customFile = url.path();
     }
-    d->m_customFile=url.path();
+    else
+    {
+        QString target ( d->m_tempFile.name() );
+        if ( KIO::NetAccess::download( url, target ) )
+        {
+            d->m_customFile = target;
+        }
+        else
+        {
+            // ### TODO: find a better error message (but message freeze!)
+            KMessageBox::sorry(0L, i18n( "Only local files are currently supported."));
+            return;
+        }
+    }
+    
     d->m_customPixmap=QPixmap();
     updatePixmap();
 }
