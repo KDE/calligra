@@ -24,6 +24,7 @@
 #include "kexiview.h"
 #include "kexicreateproject.h"
 #include "kexirelation.h"
+#include "kexiprojectpart.h"
 
 #include <koStore.h>
 
@@ -34,6 +35,9 @@
 #include <qpainter.h>
 #include <koTemplateChooseDia.h>
 #include "KexiProjectIface.h"
+
+#include "kexiquerypart.h"
+#include "kexitablepart.h"
 
 KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject* parent,
          const char* name, bool singleViewMode )
@@ -46,6 +50,8 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
 	m_formManager=new KexiFormManager(this);
 	m_relationManager=new KexiRelation(this);
 	
+	m_parts = new PartList();
+
 	if ( name )
 		dcopObject();
 }
@@ -321,8 +327,10 @@ bool KexiProject::initDbConnection(const Credentials &cred, const bool create)
 		kdDebug() << "KexiProject::initDbConnection(): loading succeeded" << endl;
                 setModified( false );
 		emit dbAvaible();
-		emit updateBrowsers();
+//		emit updateBrowsers();
 		m_dbAvaible = true;
+		new KexiTablePart(this);
+		new KexiQueryPart(this);
 		kdDebug() << "KexiProject::initDbConnection(): db is avaible now..." << endl;
 		return true;
 	}
@@ -366,6 +374,20 @@ KexiProject::clear()
 {
         setModified( false);
 //	kexi->mainWindow()->slotProjectModified();
+}
+
+void
+KexiProject::registerProjectPart(KexiProjectPart *part)
+{
+	kdDebug() << "KexiProject::registerProjectPart()" << endl;
+	m_parts->append(part);
+	emit partListUpdated();
+}
+
+PartList*
+KexiProject::getParts()
+{
+	return m_parts;
 }
 
 void

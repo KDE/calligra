@@ -49,7 +49,7 @@ class KexiTabBrowser : public KexiDialogBase
 		virtual KXMLGUIClient *guiClient();
 
 	protected:
-		void			addBrowser(KexiBrowser *browser, QString icon,QString text);
+		void			addBrowser(KexiBrowser *browser, QPixmap icon,QString text);
 		KexiProject*    kexiProject() const {return m_project;};
 
 		void			generateTables();
@@ -76,10 +76,7 @@ class KexiTabBrowser : public KexiDialogBase
 
 	protected slots:
 		void			slotTabActivated(int id);
-		
-	public slots:
-		void			generateView();
-
+		void			slotUpdateBrowsers();
 };
 
 #endif

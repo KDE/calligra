@@ -711,7 +711,7 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 			boolToggled();
 			updateCell( m_curRow, m_curCol );
 		}
-		else if(columnType(QVariant::StringList) && columnEditable(m_curCol))
+		else if(columnType(m_curCol) == QVariant::StringList && columnEditable(m_curCol))
 		{
 			createEditor(m_curRow, m_curCol);
 		}

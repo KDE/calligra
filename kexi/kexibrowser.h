@@ -20,6 +20,8 @@
 
 #include <klistview.h>
 
+#include <qdict.h>
+
 /**
   *@author lucijan busch
   */
@@ -29,56 +31,33 @@ class QListViewItem;
 class KIconLoader;
 class KexiBrowserItem;
 class KexiView;
+class KexiProjectPart;
+class KexiProjectPartItem;
 
-class KexiBrowser : public KListView {
+typedef QDict<KexiBrowserItem> BaseItemList;
+
+class KexiBrowser : public KListView
+{
 	Q_OBJECT
-public:
-	enum Section
-	{
-		SectionDB,
-		SectionTable,
-		SectionQuery,
-		SectionForm,
-		SectionReport
-	};
 
-	KexiBrowser(KexiView *project,QWidget *parent=0, Section s=SectionDB, const char *name=0);
-	~KexiBrowser();
-	
-	Section			section();
-	
-private:
-	KexiView *m_view;
-protected:
-	void			createForm();
+	public:
+		KexiBrowser(QWidget *parent, QString mime, KexiProjectPart *part, const char *name=0);
+		~KexiBrowser();
 
-	KexiBrowserItem*	m_tables;
-	KexiBrowserItem*	m_queries;
-	KexiBrowserItem*	m_forms;
-	KexiBrowserItem*	m_reports;
+	private:
+		KexiView	*m_view;
+		KexiProjectPart	*m_part;
+		QString		m_mime;
 
-	KIconLoader		*iconLoader;
-	
+		BaseItemList	m_baseItems;
 
-	KexiBrowserItem*	m_database;
+	public slots:
+		void		addGroup(KexiProjectPart *part);
+		void		addItem(KexiProjectPartItem *item);
 
-	Section			m_section;
-	
-protected slots:
-	void		slotContextMenu(KListView*, QListViewItem *i, const QPoint &point);
-	void		slotCreate(QListViewItem* i);
-	void		slotDelete();
-	void		slotEdit();
-	
-	void		slotCreateTable();
-	void		slotAlterTable();
-	void		slotDeleteTable();
-
-	void		slotCreateNewForm();
-
-	void		slotCreateQuery();
-
-	void		slotShowReport();
+	protected slots:
+		void		slotContextMenu(KListView*, QListViewItem *i, const QPoint &point);
+		void		slotItemListChanged(KexiProjectPart *);
 };
 
 #endif

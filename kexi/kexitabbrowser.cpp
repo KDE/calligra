@@ -26,6 +26,7 @@
 
 #include <qtabwidget.h>
 #include <qlayout.h>
+#include <qptrlist.h>
 #include <qwidgetstack.h>
 
 #include "kexiDB/kexidb.h"
@@ -34,22 +35,15 @@
 #include "kexibrowseritem.h"
 #include "kexitabbrowser.h"
 #include "kexiproject.h"
+#include "kexiprojectpart.h"
 #include <kexiview.h>
 
 KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 	: KexiDialogBase(view,parent,name)
-//	: QDockWindow(view->mainWindow(), name)
 {
 	setCaption(i18n("Project"));
 	m_project = view->project();
 	
-	kdDebug() << "KexiTabBrowser::KexiTabBrowser()" << endl;
-	//QBoxLayout *layout = boxLayout();  that one changes the orientation dynamically :(
-
-//	setResizeEnabled(true);
-//	setCloseMode(Always);
-
-//	QWidget *box=new QWidget(this);
 	QGridLayout *layout=new QGridLayout(this);
 	m_tabBar = new KMultiTabBar(this, KMultiTabBar::Vertical);
 	m_tabBar->setPosition(KMultiTabBar::Left);
@@ -57,49 +51,50 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 
 	m_stack = new QWidgetStack(this);
 
-	layout->addWidget(m_tabBar,     0,      0);
-	layout->addWidget(m_stack,      0,      1);
-	layout->setColStretch(1, 1);
-//	box->show();
+        layout->addWidget(m_tabBar,     0,      0);
+        layout->addWidget(m_stack,      0,      1);
+        layout->setColStretch(1, 1);
+	
 	m_stack->show();
 	m_tabBar->show();
-//	setWidget(box);
 
 
 	m_activeTab = -1;
 
-	m_db = new KexiBrowser(view,m_stack, KexiBrowser::SectionDB);
+	m_db = new KexiBrowser(m_stack, "kexi/db", 0);
+	addBrowser(m_db, kapp->iconLoader()->loadIcon("db", KIcon::Small), i18n("Database"));
+
+/*	m_db = new KexiBrowser(view,m_stack, KexiBrowser::SectionDB);
 	m_tables = new KexiBrowser(view,m_stack, KexiBrowser::SectionTable);
 	m_forms = new KexiBrowser(view,m_stack, KexiBrowser::SectionForm);
 	m_queries = new KexiBrowser(view,m_stack, KexiBrowser::SectionQuery);
 	m_reports = new KexiBrowser(view,m_stack, KexiBrowser::SectionReport);
+*/
 
-	addBrowser(m_db, "db",i18n("Database project"));
+/*	addBrowser(m_db, "db",i18n("Database project"));
 	addBrowser(m_tables, "tables",i18n("Tables"));
 	addBrowser(m_forms, "forms",i18n("Forms"));
 	addBrowser(m_queries, "queries",i18n("Queries"));
 	addBrowser(m_reports, "reports",i18n("Reports"));
-
+*/
 //	layout->addWidget(m_tabBar);
 //	layout->addWidget(m_stack);
 	
 	
 //	view->mainWindow()->moveDockWindow(this, DockLeft);
 
-	connect(kexiProject(),SIGNAL(updateBrowsers()),this,SLOT(generateView()));
-	kdDebug() << "KexiTabBrowser::KexiTabBrowser(): connecting to " << kexiProject() << endl;
-
-	if(kexiProject()->dbIsAvaible())
-		generateView();
+	slotUpdateBrowsers();
+	connect(kexiProject(),SIGNAL(partListUpdated()),this,SLOT(slotUpdateBrowsers()));
 
 	registerAs(KexiDialogBase::ToolWindow);
 }
 
 void
-KexiTabBrowser::addBrowser(KexiBrowser *browser, QString icon, QString text)
+KexiTabBrowser::addBrowser(KexiBrowser *browser, QPixmap icon, QString text)
 {
 	m_tabs++;
-	m_tabBar->appendTab(kapp->iconLoader()->loadIcon(icon, KIcon::Small), m_tabs,text);
+//	m_tabBar->appendTab(kapp->iconLoader()->loadIcon(icon, KIcon::Small), m_tabs,text);
+	m_tabBar->appendTab(icon, m_tabs,text);
 
 	connect(m_tabBar->getTab(m_tabs), SIGNAL(clicked(int)), this, SLOT(slotTabActivated(int)));
 	m_stack->addWidget(browser);
@@ -110,65 +105,6 @@ KexiTabBrowser::addBrowser(KexiBrowser *browser, QString icon, QString text)
 		m_tabBar->setTab(m_tabs, true);
 		m_activeTab = m_tabs;
 		m_stack->raiseWidget(browser);
-	}
-}
-
-void
-KexiTabBrowser::generateView()
-{
-	kdDebug() << "KexiTabBrowser::generateView()" << endl;
-	m_db->clear();
-	m_tables->clear();
-	m_queries->clear();
-	m_forms->clear();
-	m_reports->clear();
-	
-	KexiBrowserItem* database = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Table, m_db, i18n("Database"));
-	m_dbTables = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Table, database, i18n("Tables"));
-	m_dbQueries = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Query, database, i18n("Queries"));
-	m_dbForms = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Form, database, i18n("Forms"));
-	m_dbReports = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Report, database, i18n("Reports"));
-	database->setPixmap(0, kapp->iconLoader()->loadIcon("db", KIcon::Small));
-	m_dbTables->setPixmap(0, kapp->iconLoader()->loadIcon("tables", KIcon::Small));
-	m_dbQueries->setPixmap(0, kapp->iconLoader()->loadIcon("queries", KIcon::Small));
-	m_dbForms->setPixmap(0, kapp->iconLoader()->loadIcon("forms", KIcon::Small));
-	m_dbReports->setPixmap(0, kapp->iconLoader()->loadIcon("reports", KIcon::Small));
-	m_db->setOpen(database, true);
-	
-	if(kexiProject()->dbIsAvaible())
-	{
-		//m_db->generateView();
-
-		generateTables();
-		generateQueries();
-	}
-}
-
-void
-KexiTabBrowser::generateTables()
-{
-	QStringList tables = kexiProject()->db()->tables();
-
-	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it )
-	{
-		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, m_tables, (*it) );
-		KexiBrowserItem *item2 = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, m_dbTables, (*it) );
-		item->setPixmap(0, kapp->iconLoader()->loadIcon("table", KIcon::Small));
-		item2->setPixmap(0, kapp->iconLoader()->loadIcon("table", KIcon::Small));
-	}
-}
-
-void
-KexiTabBrowser::generateQueries()
-{
-	References fileRefs = kexiProject()->fileReferences("Queries");
-
-	for(References::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
-	{
-		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, m_queries, (*it).name);
-		KexiBrowserItem *item2 = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, m_dbQueries, (*it).name);
-		item->setPixmap(0, kapp->iconLoader()->loadIcon("queries", KIcon::Small));
-		item2->setPixmap(0, kapp->iconLoader()->loadIcon("queries", KIcon::Small));
 	}
 }
 
@@ -184,6 +120,27 @@ KexiTabBrowser::slotTabActivated(int id)
 	else
 	{
 		m_tabBar->setTab(id, true);
+	}
+}
+
+void
+KexiTabBrowser::slotUpdateBrowsers()
+{
+	kdDebug() << "KexiTabBrowser::slotUpdateBrowsers()" << endl;
+	PartList *plist = m_project->getParts();
+	kdDebug() << "KexiTabBrowser::slotUpdateBrowsers() found " << plist->count() << " items" << endl;
+
+	
+	
+	for(KexiProjectPart *part = plist->first(); part; part = plist->next())
+	{
+	kdDebug() << "KexiTabBrowser::slotUpdateBrowsers(): showing " << part->name() << endl;
+		if(part->visible())
+		{
+			addBrowser(new KexiBrowser(m_stack, part->mime(), part), part->groupPixmap(), part->name());
+			m_db->addGroup(part);
+			kdDebug() << "KexiTabBrowser::slotUpdateBrowsers(): added " << part->name() << endl;
+		}
 	}
 }
 

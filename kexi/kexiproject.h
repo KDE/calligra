@@ -19,6 +19,7 @@
 #define KEXI_PART_H
 
 #include <qobject.h>
+#include <qptrlist.h>
 
 #include <koDocument.h>
 #include <kexiDB/kexidb.h>
@@ -27,6 +28,7 @@
 class KexiDoc;
 class DCOPObject;
 class KexiRelation;
+class KexiProjectPart;
 
 struct FileReference
 {
@@ -49,6 +51,7 @@ struct Credentials
 
 typedef QMap<QString, QDomElement> Groups;
 typedef QValueList<FileReference> References;
+typedef QPtrList<KexiProjectPart> PartList;
 
 class KexiProject : public KoDocument
 {
@@ -74,6 +77,8 @@ public:
 	bool initHostConnection(const Credentials &cred);
 	void clear();
 
+	void registerProjectPart(KexiProjectPart *part);
+	PartList *getParts();
 
 	KexiDB* db()const { return m_db; };
 	KexiFormManager *formManager()const {return m_formManager;}
@@ -84,7 +89,7 @@ public:
 signals:
 	void dbAvaible();
 	void saving(KoStore *);
-	void updateBrowsers();
+	void partListUpdated();
 
 /*
 #undef signals
@@ -115,6 +120,7 @@ private:
 	References      m_fileReferences;
 	Groups          m_refGroups;
 	KexiRelation	*m_relationManager;
+	PartList	*m_parts;
 	DCOPObject *dcop;
 };
 

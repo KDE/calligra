@@ -9,7 +9,8 @@ libkexipart_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 	kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp kexialtertable.cpp kexiquerydesigner.cpp \
 	kexiquerydesignerguieditor.cpp kexirelation.cpp kexirelationdialog.cpp kexirelationview.cpp kexirelationviewtable.cpp kexiformbase.cpp \
 	kexicomboboxtableedit.cpp kexitableedit.cpp KexiViewIface.skel KexiViewIface.cpp KexiProjectIface.skel \
-	KexiProjectIface.cpp
+	KexiProjectIface.cpp kexipartpopupmenu.cpp kexiprojectpart.cpp kexitablepart.cpp kexiquerypart.cpp \
+	kexiprojectpartitem.cpp
 
 libkexipart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkexipart_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  kexiDB/libkexidb.la formeditor/libkformeditor.la

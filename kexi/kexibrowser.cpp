@@ -43,241 +43,107 @@
 #include "kexiquerydesigner.h"
 //#include "kexikugarwrapper.h"
 #include "kexiproject.h"
+#include "kexiprojectpart.h"
+#include "kexiprojectpartitem.h"
+#include "kexipartpopupmenu.h"
 
-KexiBrowser::KexiBrowser(KexiView *view,QWidget *parent, Section s, const char *name ) : KListView(parent,name)
+KexiBrowser::KexiBrowser(QWidget *parent, QString mime, KexiProjectPart *part, const char *name )
+ : KListView(parent,name)
 {
-	m_view=view;
-	m_section = s;
-
-	iconLoader = KGlobal::iconLoader();
+//	iconLoader = KGlobal::iconLoader();
+	m_mime = mime;
 
 	header()->hide();
-//	setRootIsDecorated(true);
 
-	addColumn(i18n("Database Content"));
+	addColumn("");
 	setResizeMode(QListView::LastColumn);
 
 	connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
 		SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
 
-	connect(this, SIGNAL(executed(QListViewItem *)), SLOT(slotCreate(QListViewItem *)));
+	if(part)
+	{
+		connect(part, SIGNAL(itemListChanged(KexiProjectPart *)), this, SLOT(slotItemListChanged(KexiProjectPart *)));
+		
+//		if(mime != "kexi/db")
+//		{
+			slotItemListChanged(part);
+//		}
+	}
+
 }
 
-void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p)
+void
+KexiBrowser::addGroup(KexiProjectPart *part)
 {
-	// TODO: look up the type, wich we have to create
-	KexiBrowserItem *r = static_cast<KexiBrowserItem *>(i);
-	kdDebug() << "context menu requested..." << endl;
+	KexiBrowserItem *item = new KexiBrowserItem(this, part);
+	
+	item->setPixmap(0, part->groupPixmap());
+	m_baseItems.insert(part->mime(), item);
+	slotItemListChanged(part);
+}
 
-	if(i)
+void
+KexiBrowser::addItem(KexiProjectPartItem *item)
+{
+	kdDebug() << "KexiBrowser::addItem() looking for " << item->mime() << endl;
+	if(m_mime == "kexi/db" && m_baseItems.find(item->mime()))
 	{
-		KPopupMenu *m = new KPopupMenu();
-		switch(r->content())
-		{
-			case KexiBrowserItem::Table:
-			{
-				m->insertItem(i18n("Create Table"), this, SLOT(slotCreateTable()));
-
-				if ( r->type() == KexiBrowserItem::Child )
-				{
-					m->insertItem(i18n("Alter Table"), this, SLOT(slotAlterTable()));
-					m->insertItem(i18n("Delete Table"), this, SLOT(slotDeleteTable()));
-				}
-				break;
-			}
-			case KexiBrowserItem::Query:
-			{
-				m->insertItem(i18n("Create Query"), this, SLOT(slotCreateQuery()));
-				break;
-			}
-			case KexiBrowserItem::Form:
-			{
-				{
-					m->insertItem(i18n("Create Form"), this, SLOT(slotCreate()));
-					m->insertItem(i18n("Delete Form"), this, SLOT(slotDelete()));
-					m->insertItem(i18n("Edit Form"), this, SLOT(slotEdit()));
-				}
-				break;
-			}
-			case KexiBrowserItem::Report:
-			{
-				m->insertItem(i18n("Show Report"), this, SLOT(slotShowReport()));
-				break;
-			}
-			default:
-			{
-				break;
-			}
-		}
-		m->exec(p);
+		KexiBrowserItem *parent = m_baseItems.find(item->mime());
+		kdDebug() << "KexiBrowser::addItem() found " << item->mime() << " @ " << parent << endl;	
+		KexiBrowserItem *iview = new KexiBrowserItem(parent, item);
+		/*parent->*/insertItem(iview);
+	
+	}
+	else if(m_baseItems.find(item->mime()))
+	{
+		kdDebug() << "KexiBrowser::addItem() adding as parent" << endl;
+		KexiBrowserItem *iview = new KexiBrowserItem(this, item);
 	}
 }
 
-
-void KexiBrowser::slotCreate(QListViewItem *i)
+void
+KexiBrowser::slotItemListChanged(KexiProjectPart *parent)
 {
-	KexiBrowserItem* r = static_cast<KexiBrowserItem *>(i);
+	ItemList *plist = parent->items();
 
-	switch (r->content())
+	kdDebug() << "KexiBrowser::slotItemListChanged() " << plist->count() << " items" << endl;
+
+	
+	for(KexiProjectPartItem *item = plist->first(); item; item = plist->next())
 	{
-		case KexiBrowserItem::Form:
-		{
-			if ( r->type() == KexiBrowserItem::Child)
-			{
-				m_view->project()->formManager()->showForm(r->identifier(), KexiFormManager::View,
-					m_view);
-
-			}
-			break;
-		}
-
-		case KexiBrowserItem::Table:
-		{
-			if ( r->type() == KexiBrowserItem::Child )
-			{
-				KexiDataTable *kt = new KexiDataTable(m_view,0, r->text(0), "table");
-				if(kt->executeQuery("select * from " + r->text(0)))
-				{
-					kt->show();
-				}
-				else
-				{
-					delete kt;
-				}
-			}
-			break;
-		}
-
-		case KexiBrowserItem::Query:
-		{
-			if ( r->type() == KexiBrowserItem::Child )
-			{
-				KexiQueryDesigner *kqd = new KexiQueryDesigner(m_view, 0,r->text(0), "oq");
-				kqd->show();
-			}
-			break;
-		}
-
-		default:
-		break;
+		kdDebug() << "KexiBrowser::slotItemListChanged() adding " << item->mime() << endl;
+		addItem(item);
 	}
 }
 
-
-void KexiBrowser::slotCreateNewForm()
+void
+KexiBrowser::slotContextMenu(KListView *, QListViewItem *item, const QPoint &pos)
 {
-	QString name=m_view->project()->formManager()->newForm();
+	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(item);
+	if(!it)
+		return;
 
-	KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Form, m_forms,name,name);
-	item->setPixmap(0, iconLoader->loadIcon("form", KIcon::Small));
-	slotCreate(item);
-}
-
-void KexiBrowser::slotDelete()
-{
-}
-
-void KexiBrowser::slotEdit()
-{
-}
-
-void KexiBrowser::slotCreateTable()
-{
-	bool ok = false;
-	QString name = KLineEditDlg::getText(i18n("New Table"), i18n("Table Name:"), "", &ok, this);
-
-	if(ok && name.length() > 0)
+	if(it->part() || it->item())
 	{
-		if(m_view->project()->db()->query("CREATE TABLE " + name + " (id INT(10))"))
+		KexiPartPopupMenu *pg = 0;
+		if(it->identifier() == QString::null)
 		{
-			KexiBrowserItem* r = static_cast<KexiBrowserItem *>(selectedItems().first());
-			KexiBrowserItem* parent;
-
-			if (r->type() == KexiBrowserItem::Child)
-			{
-				parent = static_cast<KexiBrowserItem *>(r->parent());
-			}
-			else
-			{
-				parent = r;
-			}
-			
-			KexiAlterTable* kat = new KexiAlterTable(m_view, 0,name, "alterTable");
-			kat->show();
-			KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, parent, name);
-			item->setPixmap(0, iconLoader->loadIcon("table", KIcon::Small));
-		}
-	}
-}
-
-void KexiBrowser::slotAlterTable()
-{
-	KexiBrowserItem* r = static_cast<KexiBrowserItem *>(selectedItems().first());
-
-	if (r->type() == KexiBrowserItem::Child)
-	{
-		KexiAlterTable* kat = new KexiAlterTable(m_view,0,r->text(0), "alterTable");
-		kat->show();
-	}
-}
-
-void KexiBrowser::slotShowReport()
-{
-//	new KexiKugarWrapper(m_view,0,"blah","report");
-}
-
-void KexiBrowser::slotCreateQuery()
-{
-	bool ok = false;
-	QString name = KLineEditDlg::getText(i18n("New Query"), i18n("Query Name:"), "", &ok, this);
-
-	if(ok && name.length() > 0)
-	{
-		KexiBrowserItem* r = static_cast<KexiBrowserItem *>(selectedItems().first());
-		KexiBrowserItem* parent;
-
-		if (r->type() == KexiBrowserItem::Child)
-		{
-			parent = static_cast<KexiBrowserItem *>(r->parent());
+			pg = it->part()->groupContext();
 		}
 		else
 		{
-			parent = r;
+			kdDebug() << "KexiBrowser::slotContextMenu() item @ " << it->item() << endl;
+			pg = it->part()->itemContext();
 		}
-		
-		KexiQueryDesigner *kqd = new KexiQueryDesigner(m_view, 0,name, "query");
-		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, parent, name);
-//		kexi->project()->addFileReference("/query/" + name + ".query");
-
-		m_view->project()->setModified(true);
-
-		item->parent()->setOpen(true);
-		kqd->show();
-
-		m_view->project()->setModified(true);
+	
+		pg->setIdentifier(it->identifier());
+		pg->exec(pos);
 	}
 }
 
-void KexiBrowser::slotDeleteTable()
+KexiBrowser::~KexiBrowser()
 {
-	KexiBrowserItem* r = static_cast<KexiBrowserItem *>(selectedItems().first());
-
-	if ( r->type() == KexiBrowserItem::Child )
-	{
-		int ans = KMessageBox::questionYesNo(this,
-			i18n("Do you realy want to delete %1?").arg(r->text(0)), i18n("Delete Table?"));
-
-		if(ans == KMessageBox::Yes)
-		{
-			if(m_view->project()->db()->query("DROP TABLE " + r->text(0)))
-			{
-				delete r;
-			}
-		}
-	}
-}
-
-KexiBrowser::~KexiBrowser(){
 }
 
 #include "kexibrowser.moc"
