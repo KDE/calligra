@@ -40,15 +40,15 @@ KFloatingDialog::KFloatingDialog(QWidget *parent, const char* name) : QFrame(par
   setMouseTracking(true);
   setFrameStyle(QFrame::Panel | QFrame::Raised);
   setLineWidth(FRAMEBORDER);
-  
+
   m_pParent = parent;
   m_shaded = false;
   m_dragging = false;
   m_resizing = false;
   m_cursor = false;
-  
+
   m_pBase = 0L;
-  
+
   if (m_pParent)
     {
       m_docked = true;
@@ -59,26 +59,26 @@ KFloatingDialog::KFloatingDialog(QWidget *parent, const char* name) : QFrame(par
       m_docked = false;
       m_dockedPos = QPoint(0,0);
     }
-  
+
   // setup title buttons
   m_pCloseButton = new QPushButton(this);
   QPixmap close_pm( locate("kis_pics", "close.png", KisFactory::global()));
   m_pCloseButton->setPixmap(close_pm);
   m_pCloseButton->setGeometry(width()-FRAMEBORDER-13, FRAMEBORDER+1, 12, 12);
   connect(m_pCloseButton, SIGNAL(clicked()), this, SLOT(slotClose()));
-  
+
   m_pMinButton = new QPushButton(this);
   QPixmap min_pm( locate("kis_pics", "minimize.png", KisFactory::global()));
   m_pMinButton->setPixmap(min_pm);
   m_pMinButton->setGeometry(width()-FRAMEBORDER-26, FRAMEBORDER+1, 12, 12);
   connect(m_pMinButton, SIGNAL(clicked()), this, SLOT(slotMinimize()));
-  
+
   m_pDockButton = new QPushButton(this);
   QPixmap dock_pm( locate("kis_pics", "dock.png", KisFactory::global()));
   m_pDockButton->setPixmap(dock_pm);
   m_pDockButton->setGeometry(width()-FRAMEBORDER-39, FRAMEBORDER+1, 12, 12);
   connect(m_pDockButton, SIGNAL(clicked()), this, SLOT(slotDock()));
-  
+
   // read config
   readSettings();
 }
@@ -94,19 +94,19 @@ void KFloatingDialog::readSettings()
 {
   // query kwmrc for the titlebar look
   KConfig* config = new KConfig("kwmrc", true);
-  
+
   config->setGroup("WM");
-  
+
   m_activeBlend = config->readColorEntry("activeBlend" , &(Qt::black));
   m_inactiveBlend = config->readColorEntry("inactiveBlend" , &palette().normal().background());
-  
+
   config->setGroup("General");
-  
+
   QString key = config->readEntry("TitlebarLook");
-  
+
   m_titleLook = gradient;
   m_gradientType = KPixmapEffect::HorizontalGradient;
-  
+
   if( key == "shadedHorizontal")
     m_gradientType = KPixmapEffect::HorizontalGradient;
   else if( key == "shadedVertical")
@@ -127,20 +127,20 @@ void KFloatingDialog::readSettings()
     m_titleLook = plain;
   else if( key == "pixmap")
     m_titleLook = pixmap;
-  
+
   if (m_titleLook == pixmap )
     {
       m_pActivePm = new QPixmap;
       m_pInactivePm = new QPixmap;
-      
+
       KIconLoader iconLoader("kwm");
-      
-      *(m_pActivePm) = iconLoader.reloadIcon("activetitlebar");
-      *(m_pInactivePm) = iconLoader.reloadIcon("inactivetitlebar");
-      
+
+      *(m_pActivePm) = iconLoader.loadIcon("activetitlebar");
+      *(m_pInactivePm) = iconLoader.loadIcon("inactivetitlebar");
+
       if (m_pInactivePm->size() == QSize(0,0))
 		*m_pInactivePm = *m_pActivePm;
-      
+
       if (m_pActivePm->size() == QSize(0,0))
 		m_titleLook = plain;
    }
@@ -178,9 +178,9 @@ void KFloatingDialog::setShaded(bool value)
 {
   if (m_shaded == value)
     return;
-  
+
   m_shaded = value;
-  
+
   if (m_shaded)
     {
       m_unshadedHeight = height();
@@ -194,9 +194,9 @@ void KFloatingDialog::setDocked(bool value)
 {
   if (m_docked == value)
     return;
-  
+
   m_docked = value;
-  
+
   if (m_docked) // dock
     {
       if (!m_pParent)
@@ -231,20 +231,20 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
 {
   if (!isVisible())
     return;
-  
+
   QRect r(FRAMEBORDER, FRAMEBORDER, _width(), GRADIENT_HEIGHT);
-  
+
   QPainter p;
-  
+
   p.begin(this);
   p.setClipRect(r);
   p.setClipping(true);
-  
+
   // pixmap
   if (m_titleLook == pixmap)
     {
       QPixmap *pm = hasFocus() ? m_pActivePm : m_pInactivePm;
-      
+
       for (int x = r.x(); x < r.x() + r.width(); x+=pm->width())
 		p.drawPixmap(x, r.y(), *pm);
     }
@@ -252,7 +252,7 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
   else if (m_titleLook == gradient)
     {
       QPixmap* pm = 0;
-      
+
       if (hasFocus())
 		{
 		  if (m_activeShadePm.size() != r.size())
@@ -268,7 +268,7 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
 		  if (m_inactiveShadePm.size() != r.size())
 			{
 			  m_inactiveShadePm.resize(r.width(), r.height());
-			  KPixmapEffect::gradient(m_inactiveShadePm, kapp->inactiveTitleColor(), 
+			  KPixmapEffect::gradient(m_inactiveShadePm, kapp->inactiveTitleColor(),
 									  m_inactiveBlend, m_gradientType);
 			}
 		  pm = &m_inactiveShadePm;
@@ -278,25 +278,25 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
   // plain
   else
     {
-      p.setBackgroundColor(hasFocus() ? kapp->activeTitleColor() 
+      p.setBackgroundColor(hasFocus() ? kapp->activeTitleColor()
 						   : kapp->inactiveTitleColor());
       p.eraseRect(r);
     }
-  
+
   // paint caption
   p.setPen(hasFocus() ? kapp->activeTextColor() : kapp->inactiveTextColor());
-  
+
   // FIXME: we need a global KIS config class that provides for example a KIS-global small font
   // p.setFont(tinyFont);
-  
+
   // adjust cliprect (don't draw caption text under the buttons)
   r.setRight(r.width() - 41);
   p.setClipRect(r);
   p.drawText(r.x(), r.y() + (r.height()-p.fontMetrics().height())/2+p.fontMetrics().ascent(),
 			 QString(" ")+caption()+" ");
-  
+
   // TODO: Should we add title animation? ;-)
-  
+
   p.setClipping(false);
   p.end();
   QFrame::paintEvent(e);
@@ -309,7 +309,7 @@ void KFloatingDialog::mouseDoubleClickEvent (QMouseEvent *e)
       QRect title(0,0, width(), TITLE_HEIGHT);
       if(!title.contains(e->pos()))
 		return;
-      
+
       if (m_shaded)
 		setShaded(false);
       else
@@ -322,15 +322,15 @@ void KFloatingDialog::mouseDoubleClickEvent (QMouseEvent *e)
 void KFloatingDialog::mousePressEvent(QMouseEvent *e)
 {
   raise();
-  
+
   if(!m_docked)
     setActiveWindow();
-  
+
   if (e->button() & LeftButton)
     {
       QPoint pos = e->pos();
       QRect title(0, 0, width(), TITLE_HEIGHT);
-      
+
       if(bottomRect().contains(pos))
 		{
 		  m_resizing = true;
@@ -348,10 +348,10 @@ void KFloatingDialog::mousePressEvent(QMouseEvent *e)
 		}
       else if(title.contains(pos))
 		m_dragging = true;
-      
+
       if(m_dragging)
 		m_pos = e->pos();
-      
+
       if(m_resizing)
 		m_oldSize = QPoint(width(), height());
     }
@@ -396,7 +396,7 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
       QApplication::restoreOverrideCursor();
       m_cursor = false;
     }
-  
+
   if (m_dragging)
     {
       if(m_pParent && m_docked)
@@ -418,29 +418,29 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
   else if (m_resizing)
     {
       QPoint cursorPos;
-      
+
       if(m_pParent && m_docked)
 		cursorPos = m_pParent->mapFromGlobal(QCursor::pos());
       else
 		cursorPos = (QCursor::pos());
-      
+
       // pos() does not work here
       QPoint newSize = cursorPos - QPoint(geometry().left(), geometry().top());
-      
+
       if (m_resizeMode == vertical)
 		newSize.setX(m_oldSize.x());
       else if (m_resizeMode == horizontal)
 		newSize.setY(m_oldSize.y());
-	  
+	
       if (newSize.x() < MIN_WIDTH)
 		newSize.setX(MIN_WIDTH);
-	  
+	
       if (newSize.y() < MIN_HEIGHT)
 		newSize.setY(MIN_HEIGHT);
-      
+
       if(m_shaded)
 		newSize.setY(height());
-      
+
       if (m_pParent && m_docked)
 		resize(newSize.x(), newSize.y());
       else
@@ -449,7 +449,7 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
       qDebug("resize to w %d h %d", newSize.x(), newSize.y());
     }
   else
-    QFrame::mouseMoveEvent(e);  
+    QFrame::mouseMoveEvent(e);
 }
 
 void KFloatingDialog::mouseReleaseEvent(QMouseEvent *e)
@@ -468,7 +468,7 @@ void KFloatingDialog::resizeEvent(QResizeEvent *)
   m_pCloseButton->setGeometry(width()-FRAMEBORDER-13, FRAMEBORDER+1, 12, 12);
   m_pMinButton->setGeometry(width()-FRAMEBORDER-26, FRAMEBORDER+1, 12, 12);
   m_pDockButton->setGeometry(width()-FRAMEBORDER-39, FRAMEBORDER+1, 12, 12);
-  
+
   if (m_pBase)
     m_pBase->setGeometry(_left(), _top(), _width(), _height());
 }

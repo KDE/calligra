@@ -23,6 +23,7 @@
 #include <qvbox.h>
 #include <qtextstream.h>
 #include <kstddirs.h>
+#include <qdir.h>
 #include "../kpresenter_factory.h"
 
 /******************************************************************/
@@ -79,7 +80,12 @@ void AFChoose::setupTabs()
 	    grpPtr->tab = new QVBox(this);
 	    grpPtr->loadWid = new KIconLoaderCanvas(grpPtr->tab);
 	    qDebug( "%s", grpPtr->dir.absFilePath().latin1() );
-	    grpPtr->loadWid->loadDir(grpPtr->dir.absFilePath(),"*.png");
+	    // Changes for the new KIconLoaderCanvas (Werner)
+	    QDir d( grpPtr->dir.absFilePath() );
+	    d.setNameFilter( "*.png" );
+	    if( d.exists() )
+		grpPtr->loadWid->loadFiles(d.entryList( QDir::Files | QDir::Readable, QDir::Name ));
+	    //grpPtr->loadWid->loadDir(grpPtr->dir.absFilePath(),"*.png");
 	    grpPtr->loadWid->setBackgroundColor(colorGroup().base());
 	    grpPtr->loadWid->show();
 	    connect(grpPtr->loadWid,SIGNAL(nameChanged(const QString &)),

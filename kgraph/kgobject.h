@@ -52,6 +52,7 @@ public:
     // Zoom ja/nein?
     // Rotation ja/nein?
     // Linieneigenschaften (Farbe, Style, Breite,...)
+    // Double buffering
     // ...
 
 //signals:
@@ -60,7 +61,7 @@ public:
 protected:
     KGObject(const QString &name=QString::null);
     KGObject(const KGObject &rhs);
-    KGObject(const QDomElement &element);         // create an object from xml (loading)
+    KGObject(const QDomElement &element);        // create an object from xml (loading)
 
     STATE m_state;                               // are there handles to draw or not?
 
