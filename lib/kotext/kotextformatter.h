@@ -42,6 +42,29 @@ public:
     // Called after formatting a paragraph
     virtual void postFormat( KoTextParag* parag );
 
+    KoHyphenator* hyphenator() {
+        return m_hyphenator;
+    }
+private:
+    KoHyphenator* m_hyphenator;
+};
+
+// Internal class for KoTextFormatter, holds all the temporary data
+// KoTextFormatter is basically the settings and the algorithm being used
+// KoTextFormatterCore is where the formatting really happens
+class KoTextFormatterCore
+{
+public:
+    KoTextFormatterCore( KoTextFormatter* settings, KoTextDocument *doc, KoTextParag *parag, int start );
+
+    int format();
+
+    // widthUsed is the width of the wider line (with the current
+    // word-breaking, margins included, but e.g. centering not included).
+    // Unused in KWord currently, this is however used by KPresenter's
+    // "resize object to fit contents" feature.
+    int widthUsed() const { return wused; }
+
 protected:
     KoTextParagLineStart *koFormatLine(
         KoZoomHandler *zh,
@@ -57,7 +80,17 @@ protected:
                    int deltaX, int deltaPixelX );
 
 private:
-    KoHyphenator* m_hyphenator;
+    KoTextFormatter* settings;
+    KoTextDocument* doc;
+    KoTextParag* parag;
+    int start; // always 0 currently
+    int wused; // see widthUsed
+    int maxY;
+
+    // When moving a big item down, we might want to rollback
+    // to the 'best position for it' if we can't make it fit anywhere else.
+    QPair<int,int> maxAvailableWidth; // first=y  second=available width
+
 };
 
 #endif

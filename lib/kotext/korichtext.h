@@ -1029,6 +1029,9 @@ public:
     void setDirection( QChar::Direction d );
     QChar::Direction direction() const;
 
+    // For KoTextFormatter only
+    void insertLineStart( int index, KoTextParagLineStart *ls );
+
 protected:
     void drawLabel( QPainter* p, int x, int y, int w, int h, int base, const QColorGroup& cg );
     void drawCursorDefault( QPainter &painter, KoTextCursor *cursor, int curx, int cury, int curh, const QColorGroup &cg );
@@ -1108,6 +1111,9 @@ public:
     void setViewFormattingChars( bool b ) { m_bViewFormattingChars = b; }
     bool viewFormattingChars() const { return m_bViewFormattingChars; }
 
+    /*virtual*/ bool isBreakable( KoTextString *string, int pos ) const;
+    /*virtual*/ bool isStretchable( KoTextString *string, int pos ) const;
+
 protected:
     //virtual KoTextParagLineStart *formatLine( KoTextParag *parag, KoTextString *string, KoTextParagLineStart *line, KoTextStringChar *start,
     //					       KoTextStringChar *last, int align = AlignAuto, int space = 0 );
@@ -1117,10 +1123,6 @@ protected:
     virtual KoTextParagLineStart *bidiReorderLine( KoTextParag *parag, KoTextString *string, KoTextParagLineStart *line, KoTextStringChar *start,
 						    KoTextStringChar *last, int align, int space );
 #endif
-    virtual bool isBreakable( KoTextString *string, int pos ) const;
-    virtual bool isStretchable( KoTextString *string, int pos ) const;
-    void insertLineStart( KoTextParag *parag, int index, KoTextParagLineStart *ls );
-
     int thisminw;
     int thiswused;
 

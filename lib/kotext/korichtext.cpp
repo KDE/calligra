@@ -4347,24 +4347,24 @@ bool KoTextFormatterBase::isBreakable( KoTextString *string, int pos ) const
     return FALSE;
 }
 
-void KoTextFormatterBase::insertLineStart( KoTextParag *parag, int index, KoTextParagLineStart *ls )
+void KoTextParag::insertLineStart( int index, KoTextParagLineStart *ls )
 {
     // This tests if we break at the same character in more than one line,
     // i.e. there no space even for _one_ char in a given line.
     // However this shouldn't happen, KoTextFormatter prevents it, otherwise
     // we could loop forever (e.g. if one char is wider than the page...)
-#ifdef NDEBUG
+#ifndef NDEBUG
     QMap<int, KoTextParagLineStart*>::Iterator it;
-    if ( ( it = parag->lineStartList().find( index ) ) == parag->lineStartList().end() ) {
-	parag->lineStartList().insert( index, ls );
+    if ( ( it = lineStarts.find( index ) ) == lineStarts.end() ) {
+	lineStarts.insert( index, ls );
     } else {
         kdWarning(32500) << "insertLineStart: there's already a line for char index=" << index << endl;
 	delete *it;
-	parag->lineStartList().remove( it );
-	parag->lineStartList().insert( index, ls );
+	lineStarts.remove( it );
+	lineStarts.insert( index, ls );
     }
 #else // non-debug code, take the fast route
-    parag->lineStartList().insert( index, ls );
+    lineStarts.insert( index, ls );
 #endif
 }
 
