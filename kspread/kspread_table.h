@@ -1005,7 +1005,7 @@ protected:
     QPoint m_oldPos;
     int m_iScrollPosX;
     int m_iScrollPosY;
-
+public:
     // see kspread_table.cc for an explanation of this
     // this is for type B and also for type A (better use CellWorkerTypeA for that)
     struct CellWorker {
@@ -1036,6 +1036,7 @@ protected:
 	class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r );
     };
 
+protected:    
     typedef enum { CompleteRows, CompleteColumns, CellRegion } SelectionType;
 
     SelectionType workOnCells( const QPoint& _marker, CellWorker& worker );
