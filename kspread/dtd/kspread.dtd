@@ -142,10 +142,10 @@
 -->
 <!ELEMENT reference (tabname,refname,rect)>
 
-<!ELEMENT tabname #PCDATA>
+<!ELEMENT tabname (#PCDATA)>
 
 
-<!ELEMENT refname #PCDATA>
+<!ELEMENT refname (#PCDATA)>
 
 <!--	Describe the area selected.
         Attributes:
@@ -160,6 +160,10 @@
                 right-rect     CDATA #IMPLIED
                 bottom-rect    CDATA #IMPLIED
                 top-rect       CDATA #IMPLIED>
+<!ATTLIST rect  x              CDATA #REQUIRED
+                y              CDATA #REQUIRED
+                w              CDATA #REQUIRED
+                h              CDATA #REQUIRED>
 
 <!--	Contains the table data for the various tables.
 
@@ -223,13 +227,13 @@
 <!--    Describes the contents of the cell.
         For instance, <text>My string</text> or
 	<text>=A4+B5</text>
-        Date data is stored in a locale independant way -- 
+        Date data is stored in a locale independant way -
           <text>yyyy/mm/dd</text>
 
         The dataType attribute may be any of "Str", "Bool" "Num", "Date",
         "Time", or "Other".
 -->
-<!ELEMENT text #PCDATA>
+<!ELEMENT text (#PCDATA)>
 <!ATTLIST text dataType CDATA #IMPLIED>
 
 
@@ -237,7 +241,7 @@
         only found in cells with formulas, and the format is identical
         to a 'text' attribute of a cell with just data.
 -->
-<!ELEMENT result #PCDATA>
+<!ELEMENT result (#PCDATA)>
 <!ATTLIST result dataType CDATA #IMPLIED>
  
 <!--	Describes the format of one cell.
@@ -292,13 +296,13 @@
                         allow            CDATA #REQUIRED
                         action           CDATA #REQUIRED>
 
-<!ELEMENT title #PCDATA>
+<!ELEMENT title (#PCDATA)>
 
-<!ELEMENT message #PCDATA>
+<!ELEMENT message (#PCDATA)>
 
-<!ELEMENT timemin #PCDATA>
+<!ELEMENT timemin (#PCDATA)>
 
-<!ELEMENT timemax #PCDATA>
+<!ELEMENT timemax (#PCDATA)>
 
 <!--   Describes conditional cell attribut format.
 -->
@@ -341,7 +345,7 @@
 		column	the column number
 		width	the width of the column in points
 -->
-<!ELEMENT column format>
+<!ELEMENT column (format)>
 <!ATTLIST column  column  CDATA #REQUIRED
                   width   CDATA #REQUIRED>
 
@@ -353,7 +357,7 @@
 		row	the row number
 		height	the height of the row in points
 -->
-<!ELEMENT row format>
+<!ELEMENT row (format)>
 <!ATTLIST row  row  CDATA #REQUIRED
                height   CDATA #REQUIRED>
 
@@ -406,12 +410,6 @@
 <!ELEMENT chart (rect|binding)*>
 <!ATTLIST chart         url     CDATA #REQUIRED
                         mime    CDATA #REQUIRED>
-
-<!ELEMENT rect EMPTY>
-<!ATTLIST rect  x        CDATA #REQUIRED
-                y        CDATA #REQUIRED
-                w        CDATA #REQUIRED
-                h        CDATA #REQUIRED>
 
 <!ELEMENT binding (rect)>
 
