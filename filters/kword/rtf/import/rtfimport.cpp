@@ -387,6 +387,10 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     doccomm.clear();
 
     stateStack.push( state );
+
+    // Add a security item for the destination stack
+    destination.name = "!stackbottom";
+    
     changeDestination( destinationProperties["@rtf"] );
 
     flddst = -1;
@@ -432,7 +436,16 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	    {
 		// Close the current destination
 		(this->*destination.destproc)(0L);
-		destination = destinationStack.pop();
+                //kdDebug(30515) << "Closing destination... " << destinationStack.count() << endl;
+                if ( destinationStack.count() <= 1 )
+                {
+                    kdWarning(30515) << "Destination stack is nearly empty! Document might be buggy!" << endl;
+                    destination = destinationStack.top(); // Try to save what can still be saved!
+                }
+                else
+                {
+                    destination = destinationStack.pop();
+                }
 	    }
 	    if (stateStack.count() > 1)
 	    {
@@ -479,6 +492,13 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 		    changeDestination( destinationProperties["@*"] );
 		    debugUnknownKeywords[token.text]++;
 		}
+                else if ( !property )
+                {
+                    kdWarning(30515) << "Unknown first non-ignorable token of a group: " << token.text << endl; kdDebug(30515) << "Destination: " << ( (void*) destination.name ) << " Destination stack depth: " << destinationStack.count() << endl;
+                    // Put the second warning separately, as it can crash if destination.name is dangling
+                    kdWarning(30515) << " Assuming destination: " << destination.name << endl;
+                    debugUnknownKeywords[token.text]++;
+                }
 	    }
             else
             {
@@ -1145,7 +1165,7 @@ void RTFImport::insertSymbol( RTFProperty *property )
 
 void RTFImport::insertHexSymbol( RTFProperty * )
 {
-    kdDebug(30515) << "insertHexSymbol: " << token.value << endl;
+    //kdDebug(30515) << "insertHexSymbol: " << token.value << endl;
     // Be careful, the value given in \' could be only one byte of a multi-byte character.
     // So it cannot be assumed that it will result in one character.
     char tmpch[2] = {token.value, '\0'};
@@ -1186,12 +1206,16 @@ void RTFImport::insertUnicodeSymbol( RTFProperty * )
 	    }
 	}
     }
+    if (token.type == RTFTokenizer::PlainText) // DEBUG
+    {
+        kdDebug(30515) << "insertUnicodeSymbol: unskipable plain text!" << endl;
+    }
     if (token.type != RTFTokenizer::PlainText)
     {
 	token.type = RTFTokenizer::PlainText;
 	token.text[0] = 0;
     }
-    insertUTF8( ch );
+    insertUTF8( ch ); // ### TODO: put it higher in this function
     (this->*destination.destproc)(0L);
 }
 
@@ -1686,6 +1710,7 @@ void RTFImport::parseField( RTFProperty * )
 
 		    if (ch > 0)
 		    {
+                        // ### TODO: some error control (the destination might be invalid!)
 			destination = destinationStack[flddst];
 			state.format = fldfmt;
 			insertUTF8( ch );
@@ -1746,6 +1771,7 @@ void RTFImport::parseFldrslt( RTFProperty * )
     {
 	if (token.type == RTFTokenizer::OpenGroup)
 	{
+            // ### TODO: why is this destination change not done with the corresponding procedure "changeDestination"?
 	    destination = destinationStack[flddst];
 	    destination.destproc = &RTFImport::parseFldrslt;
 	}
@@ -1932,6 +1958,7 @@ void RTFImport::resetState()
  */
 void RTFImport::changeDestination( RTFProperty *property )
 {
+    kdDebug(30515) << "changeDestination: " << property->name << endl;
     destinationStack.push( destination );
     destination.name	 = property->name;
     destination.destproc = property->cwproc;
