@@ -2620,15 +2620,20 @@ void KWTextFrameSet::renumberFootNotes( bool repaint )
             lst.append( fnv );
     }
     lst.sort();
-    short int varNumber = 0; // absolute order number [internal, not saved nor displayed]
-    short int numDisplay = 1; // the number being displayed
+    short int footNoteVarNumber = 0; // absolute order number [internal, not saved nor displayed]
+    short int endNoteVarNumber = 0;
+    short int footNoteNumDisplay = 1; // the number being displayed
+    short int endNoteNumDisplay = 1;
     bool needRepaint = false;
     QPtrListIterator< KWFootNoteVariable > vit( lst );
-    for ( ; vit.current() ; ++vit, ++varNumber )
+    for ( ; vit.current() ; ++vit )
     {
+        KWFootNoteVariable* var = vit.current();
+        bool endNote = var->noteType() == EndNote;
+        short int & varNumber = endNote ? endNoteVarNumber : footNoteVarNumber;
+        short int & numDisplay = endNote ? endNoteNumDisplay : footNoteNumDisplay;
         ++varNumber;
         bool changed = false;
-        KWFootNoteVariable* var = vit.current();
         if ( varNumber != var->num() )
         {
             changed = true;
@@ -2647,10 +2652,11 @@ void KWTextFrameSet::renumberFootNotes( bool repaint )
         {
             if ( var->frameSet() ) //safety
             {
+                QString fsName = endNote ? i18n("Endnote %1") : i18n("Footnote %1");
                 if ( var->numberingType()== KWFootNoteVariable::Manual)
-                    var->frameSet()->setName( m_doc->generateFramesetName(i18n("Footnote %1")));
+                    var->frameSet()->setName( m_doc->generateFramesetName(fsName));
                 else
-                    var->frameSet()->setName( i18n("Footnote %1").arg( var->text() ) );
+                    var->frameSet()->setName( fsName.arg( var->text() ) );
                 var->frameSet()->setCounterText( var->text() );
             }
             var->resize();
