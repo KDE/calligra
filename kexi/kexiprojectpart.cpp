@@ -18,25 +18,59 @@
 */
 
 #include "kexiprojectpart.h"
+#include "kexiproject.h"
+#include "kexiprojectpartproxy.h"
+
+#include <kdebug.h>
 
 KexiProjectPart::KexiProjectPart(KexiProject *project)
  : QObject(project)
 {
-	m_currentView = 0;
+	m_project=project;
 	m_items = new ItemList();
 	
 	if(project)
-	{
 		project->registerProjectPart(this);
-		m_project = project;
-	}
-	else
+}
+
+KexiProjectPartProxy *KexiProjectPart::proxy(KexiView *view)
+{
+	ViewProxyMap::iterator it=m_viewProxyMap.find(view);
+	return ((it==m_viewProxyMap.end())?0:(*it));
+}
+
+void KexiProjectPart::insertIntoViewProxyMap(KexiView* view, KexiProjectPartProxy* proxy)
+{
+	if (m_viewProxyMap.find(view)!=m_viewProxyMap.end())
 	{
-		m_project = 0;
+		kdError()<<"You must not add a proxy for a view, which already has one for this part. **** Be prepared for a crash"<<endl;
+		return;
+	}
+	m_viewProxyMap.insert(view,proxy);
+}
+
+void KexiProjectPart::deleteFromViewProxyMap(KexiView* view)
+{
+        ViewProxyMap::iterator it=m_viewProxyMap.find(view);
+	if (it!=m_viewProxyMap.end())
+	{
+		delete (*it);
+		m_viewProxyMap.remove(it);
 	}
 }
 
-ItemList*
+KexiProject *KexiProjectPart::kexiProject()
+{
+	return m_project;
+}
+
+void KexiProjectPart::unhookFromView(KexiView* view)
+{
+	deleteFromViewProxyMap(view);
+}
+
+
+KexiProjectPart::ItemList*
 KexiProjectPart::items()
 {
 	return m_items;

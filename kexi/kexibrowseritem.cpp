@@ -18,6 +18,7 @@
 */
 
 #include "kexiprojectpart.h"
+#include "kexiprojectpartproxy.h"
 #include "kexiprojectpartitem.h"
 
 #include "kexibrowseritem.h"
@@ -29,18 +30,18 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, QString mime, QString name, 
 	m_name = name;
 	m_identifier = identifier;
 
-	m_part = 0;
+	m_proxy = 0;
 	m_item = 0;
 }
 
-KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectPart *part)
- : KListViewItem(parent, part->name())
+KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectPartProxy *proxy)
+ : KListViewItem(parent, proxy->part()->name())
 {
-	m_mime = part->mime();
-	m_name = part->name();
+	m_mime = proxy->part()->mime();
+	m_name = proxy->part()->name();
 	m_identifier = QString::null;
 
-	m_part = part;
+	m_proxy = proxy;
 	m_item = 0;
 }
 
@@ -51,7 +52,7 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiProjectPartItem *item)
 	m_name = item->name();
 	m_identifier = item->identifier();
 	m_item = item;
-	m_part = 0;
+	m_proxy = 0;
 }
 
 KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, QString mime, QString name, QString identifier)
@@ -60,7 +61,7 @@ KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, QString mime, QString na
 	m_mime = mime;
 	m_name = name;
 	m_identifier = identifier;
-	m_part = 0;
+	m_proxy = 0;
 	m_item = 0;
 }
 
@@ -71,13 +72,13 @@ KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiProjectPartItem *ite
 	m_name = item->name();
 	m_identifier = item->identifier();
 	m_item = item;
-	m_part = 0;
+	m_proxy = 0;
 }
 
-KexiProjectPart*
-KexiBrowserItem::part()
+KexiProjectPartProxy*
+KexiBrowserItem::proxy()
 {
-	return m_part;
+	return m_proxy;
 }
 
 KexiProjectPartItem*
@@ -109,10 +110,10 @@ KexiBrowserItem::clearChildren()
 {
 	KexiBrowserItem* child;
 	
-	while(child = static_cast<KexiBrowserItem*>(firstChild()))
+	while((child = static_cast<KexiBrowserItem*>(firstChild())))
 	{
 		delete child;
 	}
 }
 
-#include "kexibrowseritem.moc"
+//#include "kexibrowseritem.moc"

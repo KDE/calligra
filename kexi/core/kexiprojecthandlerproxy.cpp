@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002   Joseph Wenninger<jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -17,41 +17,25 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIQUERYPART_H
-#define KEXIQUERYPART_H
-
-class QPixmap;
-
+#include "kexiprojectpartproxy.h"
 #include "kexiprojectpart.h"
+#include "kexiview.h"
 
-class KexiQueryPart : public KexiProjectPart
+KexiProjectPartProxy::KexiProjectPartProxy(KexiProjectPart *part,KexiView *view)
+ : QObject(part)
 {
-	Q_OBJECT
+	m_part=part;
+	m_view=view;
+}
 
-	public:
-		KexiQueryPart(KexiProject *project);
+KexiProjectPart *KexiProjectPartProxy::part()
+{
+	return m_part;
+}
 
-		QString				name();
-		QString				mime();
-		bool				visible();
+KexiView *KexiProjectPartProxy::kexiView()
+{
+	return m_view;
+}
 
-
-                void hookIntoView(KexiView *view);
-
-                void store (KoStore *){;}
-                void load  (KoStore *){;}
-
-		void executeItem(KexiView* view, QString identifier);
-
-		QPixmap				groupPixmap();
-		QPixmap				itemPixmap();
-	
-	protected:
-		friend class KexiQueryPartProxy;
-		void				 getQueries();
-
-	signals:
-		void				itemListChanged(KexiProjectPart*);
-};
-
-#endif
+#include "kexiprojectpartproxy.moc"

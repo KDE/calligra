@@ -28,6 +28,7 @@
 #include <kmessagebox.h>
 
 #include "kexitablepart.h"
+#include "kexitablepartproxy.h"
 #include "kexiprojectpartitem.h"
 #include "kexidatatable.h"
 #include "kexialtertable.h"
@@ -38,6 +39,12 @@ KexiTablePart::KexiTablePart(KexiProject *project)
 	kdDebug() << "KexiTablePart::KexiTablePart()" << endl;
 
 	getTables();
+}
+
+void KexiTablePart::hookIntoView(KexiView *view)
+{
+	KexiTablePartProxy *prx=new KexiTablePartProxy(this,view);
+	insertIntoViewProxyMap(view,prx);
 }
 
 QString
@@ -58,45 +65,6 @@ KexiTablePart::visible()
 	return true;
 }
 
-KexiPartPopupMenu*
-KexiTablePart::groupContext(KexiView* view)
-{
-	setCurrentView(view);
-	kdDebug() << "KexiTablePart::groupContext()" << endl;
-	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
-	m->insertAction(i18n("Create Table"), SLOT(slotCreate()));
-
-	return m;
-}
-
-KexiPartPopupMenu*
-KexiTablePart::itemContext(KexiView* view)
-{
-	setCurrentView(view);
-	kdDebug() << "KexiTablePart::itemContext()" << endl;
-	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
-	m->insertAction(i18n("Open Table"), SLOT(slotOpen(QString)));
-	m->insertAction(i18n("Alter Table"), SLOT(slotAlter(QString)));
-	m->insertAction(i18n("Delete Table"), SLOT(slotDrop(QString)));
-	
-	return m;
-}
-
-/*
-KexiBrowserItem*
-KexiTablePart::group()
-{
-	return 0;
-}
-
-
-KexiBrowserItem*
-KexiTablePart::itemTemplate()
-{
-	return 0;
-}
-*/
-
 QPixmap
 KexiTablePart::groupPixmap()
 {
@@ -112,83 +80,17 @@ KexiTablePart::itemPixmap()
 void
 KexiTablePart::getTables()
 {
-	QStringList tables = m_project->db()->tables();
-	m_items->clear();
+	QStringList tables = kexiProject()->db()->tables();
+	ItemList *list=items();
+	list->clear();
 
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it )
 	{
 		kdDebug() << "KexiTablePart::getTables() added " << (*it) << endl;
-		m_items->append(new KexiProjectPartItem(this, (*it), "kexi/table", (*it)));
+		list->append(new KexiProjectPartItem(this, (*it), "kexi/table", (*it)));
 	}
 
 	emit itemListChanged(this);
-}
-
-void
-KexiTablePart::slotCreate()
-{
-	bool ok = false;
-	QString name = KLineEditDlg::getText(i18n("New Table"), i18n("Table Name:"), "", &ok, 0);
-
-	if(ok && name.length() > 0)
-	{
-		if(m_project->db()->query("CREATE TABLE " + name + " (id INT(10))"))
-		{
-			KexiAlterTable* kat = new KexiAlterTable(currentView(), 0, name, "alterTable");
-			kat->show();
-			m_items->append(new KexiProjectPartItem(this, name, "kexi/table", name));
-			emit itemListChanged(this);
-		}
-	}
-}
-
-void
-KexiTablePart::slotOpen(QString identifier)
-{
-	kdDebug() << "KexiTablePart::slotOpen(): indentifier = " << identifier << endl;
-	kdDebug() << "KexiTablePart::slotOpen(): currentView = " << currentView() << endl;
-	
-	KexiDataTable *kt = new KexiDataTable(currentView(), 0, identifier, "table");
-	kdDebug() << "KexiTablePart::slotOpen(): indentifier = " << identifier << endl;
-	
-	if(kt->executeQuery("select * from " + identifier))
-	{
-		kt->show();
-	}
-	else
-	{
-		delete kt;
-	}
-}
-
-void
-KexiTablePart::slotAlter(QString identifier)
-{
-	KexiAlterTable* kat = new KexiAlterTable(currentView(), 0, identifier, "alterTable");
-	kat->show();
-}
-
-void
-KexiTablePart::slotDrop(QString identifier)
-{
-	int ans = KMessageBox::questionYesNo(currentView(),
-		i18n("Do you realy want to delete %1?").arg(identifier), i18n("Delete Table?"));
-
-	if(ans == KMessageBox::Yes)
-	{
-		if(m_project->db()->query("DROP TABLE " + identifier))
-		{
-			// FIXME: Please implement a less costly solution.
-			getTables();
-		}
-	}
-}
-
-void
-KexiTablePart::executeItem(KexiView* view, QString identifier)
-{
-	setCurrentView(view);
-	slotOpen(identifier);
 }
 
 #include "kexitablepart.moc"

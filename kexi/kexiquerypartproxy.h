@@ -17,41 +17,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIQUERYPART_H
-#define KEXIQUERYPART_H
+#ifndef KEXIQUERYPARTPROXY_H
+#define KEXIQUERYPARTPROXY_H
 
 class QPixmap;
 
-#include "kexiprojectpart.h"
+#include "kexiquerypart.h"
+#include "kexiprojectpartproxy.h"
 
-class KexiQueryPart : public KexiProjectPart
+class KexiView;
+
+class KexiQueryPartProxy : public KexiProjectPartProxy
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryPart(KexiProject *project);
+		KexiQueryPartProxy(KexiQueryPart *part, KexiView*view);
 
-		QString				name();
-		QString				mime();
-		bool				visible();
+                virtual KexiPartPopupMenu       *groupContext();
+                virtual KexiPartPopupMenu       *itemContext(const QString& identifier);
 
+		virtual void executeItem(const QString& identifier);
 
-                void hookIntoView(KexiView *view);
+	protected slots:
+		void				slotCreateQuery();
+		void				slotOpen(QString identifier);
+		void				slotDelete(QString identifier);
 
-                void store (KoStore *){;}
-                void load  (KoStore *){;}
-
-		void executeItem(KexiView* view, QString identifier);
-
-		QPixmap				groupPixmap();
-		QPixmap				itemPixmap();
-	
-	protected:
-		friend class KexiQueryPartProxy;
-		void				 getQueries();
-
-	signals:
-		void				itemListChanged(KexiProjectPart*);
+	private:
+		KexiQueryPart *m_queryPart;
 };
 
 #endif

@@ -23,7 +23,7 @@
 #include <klistview.h>
 #include <qstring.h>
 
-class KexiProjectPart;
+class KexiProjectPartProxy;
 class KexiProjectPartItem;
 
 class KexiBrowserItem : public KListViewItem
@@ -31,7 +31,7 @@ class KexiBrowserItem : public KListViewItem
 	public:
 		/*constructor for listviews in seperated lists */
 		KexiBrowserItem(KListView *parent, QString mime, QString name, QString identifier);
-		KexiBrowserItem(KListView *parent, KexiProjectPart *part);
+		KexiBrowserItem(KListView *parent, KexiProjectPartProxy  *proxy);
 		KexiBrowserItem(KListView *parent, KexiProjectPartItem *item);
 		/*constructor for main db listing */
 		KexiBrowserItem(KListViewItem *parent, QString mime, QString name, QString identifier);
@@ -39,17 +39,17 @@ class KexiBrowserItem : public KListViewItem
 
 		~KexiBrowserItem() {};
 
-		KexiProjectPart		*part();
 		KexiProjectPartItem	*item();
+		KexiProjectPartProxy	*proxy();
 		QString			mime();
 		QString			name();
 		QString			identifier();
-		
+				
 		void			clearChildren();
 
 	protected:
-		KexiProjectPart		*m_part;
 		KexiProjectPartItem	*m_item;
+		KexiProjectPartProxy	*m_proxy;
 		QString			m_mime;
 		QString			m_name;
 		QString			m_identifier;

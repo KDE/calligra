@@ -44,6 +44,7 @@
 //#include "kexikugarwrapper.h"
 #include "kexiproject.h"
 #include "kexiprojectpart.h"
+#include "kexiprojectpartproxy.h"
 #include "kexiprojectpartitem.h"
 #include "kexipartpopupmenu.h"
 #include "kexidialogbase.h"
@@ -74,7 +75,10 @@ KexiBrowser::KexiBrowser(QWidget *parent, QString mime, KexiProjectPart *part, c
 void
 KexiBrowser::addGroup(KexiProjectPart *part)
 {
-	KexiBrowserItem *item = new KexiBrowserItem(this, part);
+	//A littlebit hacky at the moment
+	KexiBrowserItem *item = new KexiBrowserItem(this, 
+		part->proxy(static_cast<KexiDialogBase*>(parent()->parent())->kexiView())
+	);
 	setRootIsDecorated(true);
 	
 	item->setPixmap(0, part->groupPixmap());
@@ -103,7 +107,7 @@ KexiBrowser::addItem(KexiProjectPartItem *item)
 void
 KexiBrowser::slotItemListChanged(KexiProjectPart *parent)
 {
-	ItemList *plist = parent->items();
+	KexiProjectPart::ItemList *plist = parent->items();
 
 	kdDebug() << "KexiBrowser::slotItemListChanged() " << plist->count() << " items" << endl;
 	
@@ -132,24 +136,26 @@ KexiBrowser::slotContextMenu(KListView *, QListViewItem *item, const QPoint &pos
 	if(!it)
 		return;
 
-	if(it->part() || it->item())
+	if(it->proxy() || it->item())
 	{
 		KexiPartPopupMenu *pg = 0;
 		if(it->identifier() == QString::null)
 		{
 			// FIXME: Make this less hacky please :)
-			pg = it->part()->groupContext(static_cast<KexiDialogBase*>(parent()->parent())->kexiView());
+			pg = it->proxy()->groupContext();
 		}
 		else
 		{
 			kdDebug() << "KexiBrowser::slotContextMenu() item @ " << it->item() << endl;
-			// FIXME: Make this less hacky please :)
-			pg = static_cast<KexiProjectPart*>(it->item()->parent())->itemContext(
-				static_cast<KexiDialogBase*>(parent()->parent())->kexiView());
+			//a littlebit hacky
+			pg = it->item()->projectPart()->proxy(
+			static_cast<KexiDialogBase*>(parent()->parent())->kexiView()
+			)->itemContext(it->identifier());
 		}
 	
 		pg->setIdentifier(it->identifier());
 		pg->exec(pos);
+		delete pg;
 	}
 }
 
@@ -160,12 +166,16 @@ KexiBrowser::slotExecuteItem(QListViewItem *item)
 	if(!it)
 		return;
 
-	if(it->part() || it->item())
+	if(it->proxy() || it->item())
 	{
 		if(it->identifier() != QString::null)
 		{
-			static_cast<KexiProjectPart*>(it->item()->parent())->executeItem(
-				static_cast<KexiDialogBase*>(parent()->parent())->kexiView(), it->identifier());
+			if (it->proxy())
+				it->proxy()->executeItem(it->identifier());
+			else
+				it->item()->projectPart()->proxy(
+	                        static_cast<KexiDialogBase*>(parent()->parent())->kexiView()
+        	                )->executeItem(it->identifier());
 		}
 	}
 }

@@ -10,7 +10,7 @@ libkexipart_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 	kexiquerydesignerguieditor.cpp kexirelation.cpp kexirelationdialog.cpp kexirelationview.cpp kexirelationviewtable.cpp kexiformbase.cpp \
 	kexicomboboxtableedit.cpp kexitableedit.cpp KexiViewIface.skel KexiViewIface.cpp KexiProjectIface.skel \
 	KexiProjectIface.cpp kexipartpopupmenu.cpp kexiprojectpart.cpp kexitablepart.cpp kexiquerypart.cpp \
-	kexiprojectpartitem.cpp
+	kexiprojectpartitem.cpp kexiprojectpartproxy.cpp kexitablepartproxy.cpp kexiquerypartproxy.cpp
 
 libkexipart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkexipart_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  kexiDB/libkexidb.la formeditor/libkformeditor.la
@@ -31,7 +31,7 @@ dummy.cc:
 	echo > dummy.cc
 
 
-SUBDIRS = kexiDB formeditor . interfaces pics
+SUBDIRS = kexiDB formeditor . pics data interfaces
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
@@ -73,10 +73,6 @@ uninstall-local:
 INCLUDES= $(KOFFICE_INCLUDES) $(all_includes)
 
 METASOURCES = AUTO
-
-
-rcdir = $(kde_datadir)/kexi
-rc_DATA = kexiui.rc kexiformeditorui.rc kexiquerydesignerui.rc
 
 messages: rc.cpp
 	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \

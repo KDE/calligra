@@ -23,10 +23,13 @@
 #include "kexiprojectpart.h"
 
 class QPixmap;
+class KexiTablePartProxy;
 
 class KexiTablePart : public KexiProjectPart
 {
 	Q_OBJECT
+
+	friend class KexiTablePartProxy;
 
 	public:
 		KexiTablePart(KexiProject *project);
@@ -35,23 +38,19 @@ class KexiTablePart : public KexiProjectPart
 		QString				mime();
 		bool				visible();
 
-		KexiPartPopupMenu		*groupContext(KexiView* view);
-		KexiPartPopupMenu		*itemContext(KexiView* view);
+		void hookIntoView(KexiView *view);
+
+		void store (KoStore *){;}
+		void load  (KoStore *){;}
+
 		void executeItem(KexiView* view, QString identifier);
 
-//		KexiBrowserItem	*group();
-//		KexiBrowserItem	*itemTemplate();
 
 		QPixmap				groupPixmap();
 		QPixmap				itemPixmap();
 
 		void				getTables();
 
-	public slots:
-		void				slotCreate();
-		void				slotOpen(QString identifier);
-		void				slotAlter(QString identifier);
-		void				slotDrop(QString identifier);
 };
 
 #endif

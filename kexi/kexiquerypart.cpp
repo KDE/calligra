@@ -29,6 +29,7 @@
 
 #include "kexiquerydesigner.h"
 #include "kexiquerypart.h"
+#include "kexiquerypartproxy.h"
 
 KexiQueryPart::KexiQueryPart(KexiProject *project)
  : KexiProjectPart(project)
@@ -54,42 +55,6 @@ KexiQueryPart::visible()
 	return true;
 }
 
-KexiPartPopupMenu*
-KexiQueryPart::groupContext(KexiView* view)
-{
-	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
-	m->insertAction(i18n("Create Query"), SLOT(slotCreateQuery()));
-	setCurrentView(view);
-
-	return m;
-}
-
-KexiPartPopupMenu*
-KexiQueryPart::itemContext(KexiView* view)
-{
-	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
-	m->insertAction(i18n("Open Query"), SLOT(slotOpen(QString)));
-	m->insertAction(i18n("Delete Query"), SLOT(slotDelete(QString)));
-	setCurrentView(view);
-	
-	return m;
-}
-
-/*
-KexiBrowserItem*
-KexiQueryPart::group()
-{
-	return 0;
-}
-
-
-KexiBrowserItem*
-KexiQueryPart::itemTemplate()
-{
-	return 0;
-}
-*/
-
 QPixmap
 KexiQueryPart::groupPixmap()
 {
@@ -103,55 +68,27 @@ KexiQueryPart::itemPixmap()
 }
 
 void
-KexiQueryPart::executeItem(KexiView* view, QString identifier)
-{
-	setCurrentView(view);
-	slotOpen(identifier);
-}
-
-void
 KexiQueryPart::getQueries()
 {
-	References fileRefs = project()->fileReferences("Queries");
-	m_items->clear();
+	References fileRefs = kexiProject()->fileReferences("Queries");
+	ItemList *list=items();
+	list->clear();
 
 	for(References::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
 	{
 		kdDebug() << "KexiQueryPart::getQueries() added " << (*it).name << endl;
-		m_items->append(new KexiProjectPartItem(this, (*it).name, "kexi/query", (*it).name));
+		list->append(new KexiProjectPartItem(this, (*it).name, "kexi/query", (*it).name));
 	}
 	
 	emit itemListChanged(this);
 }
 
-void
-KexiQueryPart::slotCreateQuery()
+
+void KexiQueryPart::hookIntoView(KexiView *view)
 {
-	bool ok = false;
-	QString name = KLineEditDlg::getText(i18n("New Query"), i18n("Query Name:"), "", &ok, currentView());
-
-	if(ok && name.length() > 0)
-	{
-		KexiQueryDesigner *kqd = new KexiQueryDesigner(currentView(), 0, name, "query");
-		m_items->append(new KexiProjectPartItem(this, name, "kexi/query", name));
-		emit itemListChanged(this);
-//		project()->addFileReference("/query/" + name + ".query");
-
-		kqd->show();
-		project()->setModified(true);
-	}
+        KexiQueryPartProxy *prx=new KexiQueryPartProxy(this,view);
+        insertIntoViewProxyMap(view,prx);
 }
 
-void
-KexiQueryPart::slotOpen(QString identifier)
-{
-	KexiQueryDesigner *kqd = new KexiQueryDesigner(currentView(), 0, identifier, "oq");
-	kqd->show();
-}
-
-void
-KexiQueryPart::slotDelete(QString identifier)
-{
-}
 
 #include "kexiquerypart.moc"

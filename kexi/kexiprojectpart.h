@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002   Joseph Wenninger <jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -30,17 +31,10 @@
 #include "kexiprojectpartitem.h"
 #include "kexiview.h"
 
-/*struct ProjectPartItem
-{
-	QString name;
-	QString identifier;
-	QString mime;
-};*/
-
 class KexiProjectPartItem;
+class KexiProjectPartProxy;
 
-typedef QPtrList<KexiProjectPartItem> ItemList;
- 
+
 /*!
  *  this is a baseclass for project parts like:
  *  queries, tables, forms, reports
@@ -51,35 +45,42 @@ class KexiProjectPart : public QObject
 	Q_OBJECT
 
 	public:
+		typedef QPtrList<KexiProjectPartItem> ItemList;
+
+
 		KexiProjectPart(KexiProject *project);
 		virtual ~KexiProjectPart() {};
 
 		//general information about parthandler
 		virtual QString			name() = 0;
-//		virtual QString			identifier() = 0;
 		virtual QString			mime() = 0;
 		virtual bool			visible() = 0;
 
-		virtual KexiPartPopupMenu	*groupContext(KexiView* view) = 0;
-		virtual KexiPartPopupMenu	*itemContext(KexiView* view) = 0;
-		virtual void executeItem(KexiView* view, QString identifier) = 0;
+		KexiProjectPartProxy		*proxy(KexiView *);
+		virtual void hookIntoView(KexiView*)=0;
+		virtual void unhookFromView(KexiView*);		
+
 
 		virtual QPixmap			groupPixmap() = 0;
 		virtual QPixmap			itemPixmap() = 0;
 
+		virtual void store (KoStore*)=0;
+		virtual void load (KoStore*)=0;
 		virtual ItemList		*items();
 		
-		void setCurrentView(KexiView* view) { m_currentView = view; }
-		KexiView* currentView() { return m_currentView; }
-		KexiProject* project() { return m_project; }
+		KexiProject *kexiProject();
 
 	signals:
-		void				itemListChanged(KexiProjectPart*);
+		void itemListChanged(KexiProjectPart*);
 		
 	protected:
-		KexiView* m_currentView;
+		void insertIntoViewProxyMap(KexiView*,KexiProjectPartProxy*);
+		void deleteFromViewProxyMap(KexiView*);
+	private:
+		typedef QMap<KexiView*,KexiProjectPartProxy*> ViewProxyMap; 
+		ViewProxyMap m_viewProxyMap;
+		KexiProject *m_project;					
 		ItemList* m_items;
-		KexiProject* m_project;
 };
 
 #endif
