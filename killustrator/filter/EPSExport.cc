@@ -26,7 +26,6 @@
 #include "config.h"
 #endif
 
-#include "version.h"
 
 #include <stdio.h>
 #include <unistd.h>

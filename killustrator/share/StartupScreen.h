@@ -28,7 +28,6 @@
 #ifndef StartupScreen_h_
 #define StartupScreen_h_
 
-#include <qpixmap.h>
 #include <qwidget.h>
 #include <qlabel.h>
 #include <qpixmap.h>

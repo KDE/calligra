@@ -27,7 +27,6 @@
 #endif
 
 #ifdef HAVE_UNISTD_H
-#include <unistd.h>
 #include <sys/param.h>
 #endif
 

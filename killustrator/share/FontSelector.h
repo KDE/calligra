@@ -30,7 +30,6 @@
 #include <qmsgbox.h>
 #include <qpixmap.h>
 #include <qapp.h>
-#include <qframe.h> 
 #include <qbttngrp.h>
 #include <qchkbox.h>
 #include <qcombo.h>

@@ -30,8 +30,6 @@
 #include <qclipboard.h>
 #include <qmessagebox.h>
 #include <qcombobox.h>
-#include <qlayout.h>
-#include <unistd.h>
 #include "KIllustrator.h"
 #include "KIllustrator.moc"
 #include "QwViewport.h"

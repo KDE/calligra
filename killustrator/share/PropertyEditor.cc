@@ -35,7 +35,6 @@
 #include <ktabctl.h>
 #include <kcolorbtn.h>
 
-#include <qpushbt.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qwidgetstack.h>
