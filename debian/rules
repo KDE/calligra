@@ -176,12 +176,10 @@ binary-common:
 	# Install the correct upstream changelogs.
 	for pkg in `dh_listpackages`; do \
 	  case "$$pkg" in \
-	    kivio ) \
-	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/CHANGELOG ;; \
-	    kugar ) \
-	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/ChangeLog ;; \
-	    kchart | kexi | kpresenter | kspread | kword ) \
+	    karbon | kchart | kexi | kivio | kpresenter | kspread | kugar | kword ) \
 	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/CHANGES ;; \
+	    koffice-libs ) \
+	      DH_OPTIONS='' dh_installchangelogs -p$$pkg lib/CHANGES ;; \
 	    * ) \
 	      DH_OPTIONS='' dh_installchangelogs -p$$pkg ;; \
 	  esac; \
