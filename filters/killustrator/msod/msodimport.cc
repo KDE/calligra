@@ -20,12 +20,15 @@
 DESCRIPTION
 */
 
-#include <config.h>
 #include <kdebug.h>
+#include <koFilterManager.h>
+#include <koQueryTrader.h>
 #include <koStore.h>
+#include <ktempfile.h>
 #include <msodimport.h>
 #include <msodimport.moc>
 #include <qpointarray.h>
+#include <unistd.h>
 
 MSODImport::MSODImport(
     KoFilter *parent,
@@ -74,6 +77,8 @@ const bool MSODImport::filter1(
             return false;
         }
     }
+    m_prefixOut = prefixOut;
+    m_nextPart = 0;
 
     m_text = "";
     m_text += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -94,14 +99,32 @@ const bool MSODImport::filter1(
 
     emit sigProgress(100);
 
-kdError(s_area) << "prefixout:" <<prefixOut<< endl;
-    KoStore out = KoStore(QString(fileOut), KoStore::Write);
-    if (!out.open(prefixOut /*"root"*/))
+    KoStore out = KoStore(fileOut, KoStore::Write);
+    if (!out.open("root"))
     {
         kdError(s_area) << "Unable to open output file!" << endl;
         out.close();
         return false;
     }
+
+    // Now add in the data for all embedded parts.
+
+    QMap<unsigned, Part>::Iterator it;
+
+    for (it = m_parts.begin(); it != m_parts.end(); ++it)
+    {
+        kdError(s_area) << "file: " << it.data().file << endl;
+        kdError(s_area) << "storageName: " << it.data().storageName << endl;
+        kdError(s_area) << "mime: " << it.data().mimeType << endl;
+
+        // Now fetch out the elements from the resulting KoStore and embed them in our KoStore.
+
+        KoStore storedPart(it.data().file, KoStore::Read);
+        if (!out.embed(it.data().storageName, storedPart))
+            kdError(s_area) << "Could not embed in KoStore!" << endl;
+        unlink(it.data().file.local8Bit());
+    }
+
     QCString cstring = m_text.utf8();
     out.write((const char*)cstring, cstring.length());
     out.close();
@@ -121,23 +144,53 @@ void MSODImport::pointArray(
 }
 
 void MSODImport::gotPicture(
-    unsigned id,
+    unsigned key,
     QString extension,
     unsigned length,
     const char *data)
 {
-    QString ourKey;
-    QString uid;
+    Part part;
+    QMap<unsigned, Part>::Iterator it = m_parts.find(key);
 
-    ourKey = "image" + QString::number(id) + "." + extension;
-/*
-    emit signalSavePic(
-            ourKey,
-            uid,
-            extension,
-            length,
-            picture);
-*/
+    if (it != m_parts.end())
+    {
+        // This part is already known! Extract the duplicate part.
+
+        part = m_parts[key];
+    }
+    else
+    {
+        KoFilterManager *mgr = KoFilterManager::self();
+        KTempFile tempFile(QString::null, "." + extension);
+
+        // It's not here, so let's generate one.
+
+        part.storageName = m_prefixOut + '/' + QString::number(m_nextPart);
+
+        // Save the data supplied into a temporary file, then run the filter
+        // on it.
+
+        tempFile.file()->writeBlock(data, length);
+        tempFile.close();
+        part.file = mgr->import(tempFile.name(), part.mimeType, "", part.storageName.mid(sizeof("tar:") - 1));
+        if (part.file != QString::null)
+        {
+        kdError(s_area) << "file: " << part.file << endl;
+            unlink(tempFile.name().local8Bit());
+            m_parts.insert(key, part);
+            m_nextPart++;
+        }
+        else
+        {
+            // Whoops. We could not import it as a part. Try as an image.
+
+            m_text += "<pixmap src=\"" + tempFile.name() + "\">\n"
+                        " <gobject fillstyle=\"0\" linewidth=\"1\" strokecolor=\"#000000\" strokestyle=\"1\">\n"
+                        "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n"
+                        " </gobject>\n"
+                        "</pixmap>\n";
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------

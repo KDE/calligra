@@ -275,52 +275,10 @@ void Msod::opBse(MSOFBH &op, U32 byteOperands, QDataStream &operands)
     } data;
     unsigned i;
 
-    // Blip signature as encoded in the MSOFBH.inst
-
-    typedef enum
-    {
-        msobiUNKNOWN = 0,
-        msobiWMF = 0x216,       // Metafile header then compressed WMF
-        msobiEMF = 0x3D4,       // Metafile header then compressed EMF
-        msobiPICT = 0x542,      // Metafile header then compressed PICT
-        msobiPNG = 0x6E0,       // One byte tag then PNG data
-        msobiJFIF = 0x46A,      // One byte tag then JFIF data
-        msobiJPEG = msobiJFIF,
-        msobiDIB = 0x7A8,       // One byte tag then DIB data
-        msobiClient = 0x800     // Clients should set this bit
-    } MSOBI;
+    // Work out the type of the BLIP,and whether it has a primary header.
 
     m_blipType = static_cast<MSOBLIPTYPE>(op.opcode.fields.inst);
-    switch (m_blipType)
-    {
-    case msoblipEMF:
-        m_blipHasPrimaryId = (op.opcode.fields.inst ^ msobiEMF) == 1;
-        break;
-    case msoblipWMF:
-        m_blipHasPrimaryId = (op.opcode.fields.inst ^ msobiWMF) == 1;
-        break;
-    case msoblipPICT:
-        m_blipHasPrimaryId = (op.opcode.fields.inst ^ msobiPICT) == 1;
-        break;
-    case msoblipJPEG:
-        m_blipHasPrimaryId = (op.opcode.fields.inst ^ msobiJPEG) == 1;
-        break;
-    case msoblipPNG:
-        m_blipHasPrimaryId = (op.opcode.fields.inst ^ msobiPNG) == 1;
-        break;
-    case msoblipDIB:
-        m_blipHasPrimaryId = (op.opcode.fields.inst ^ msobiDIB) == 1;
-        break;
-    default:
-        kdWarning(s_area) << "opBlip: unknown Blip signature: " <<
-            m_blipType << endl;
-        m_blipHasPrimaryId = (op.opcode.fields.inst ^ msobiClient) == 1;
-        break;
-    }
-    if (m_blipHasPrimaryId)
-    {
-        kdWarning(s_area) << "opBlip: Blip has primary header!" << endl;
-    }
+    m_blipHasPrimaryId = ((op.opcode.fields.inst ^ op.opcode.fields.fbt) & 1) == 1;
 
     operands >> data.btWin32 >> data.btMacOS;
     for (i = 0; i < sizeof(data.rgbUid); i++)
@@ -483,6 +441,7 @@ void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
     bool m_pictureBiLevel = false;
     bool m_pictureActive = false;
 
+    U32 m_shapePath = 1;
     bool m_fFilled = true;
     bool m_fHitTestFill = true;
     bool m_fillShape = true;
@@ -560,6 +519,9 @@ void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
             m_pictureGray = (option.value & 0x0004) != 0;
             m_pictureBiLevel = (option.value & 0x0002) != 0;
             m_pictureActive = (option.value & 0x0001) != 0;
+            break;
+        case 324:
+            m_shapePath = option.value;
             break;
         case 447:
             m_fFilled = (option.value & 0x0010) != 0;

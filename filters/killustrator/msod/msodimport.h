@@ -24,6 +24,7 @@ DESCRIPTION
 #define MSODIMPORT_H
 
 #include <koFilter.h>
+#include <qmap.h>
 #include <qobject.h>
 #include <qstring.h>
 #include <msod.h>
@@ -76,6 +77,20 @@ private:
     void pointArray(
         const QPointArray &points);
     QString m_text;
+
+    // Embedded objects.
+
+    class Part
+    {
+    public:
+        QString mimeType;
+        QString storageName;
+        QString file;
+    };
+
+    QMap<unsigned, Part> m_parts;
+    QString m_prefixOut;
+    int m_nextPart;
 };
 
 #endif
