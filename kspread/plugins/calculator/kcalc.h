@@ -208,6 +208,7 @@ public:
     void keyReleaseEvent( QKeyEvent *e );
     void closeEvent( QCloseEvent *e );
     void readSettings();
+    void writeSettings();
     void set_precision();
     void set_style();
     void set_display_font();

@@ -32,16 +32,9 @@
 #include <kglobalsettings.h>
 #include <qstyle.h>
 #include <kdialog.h>
-
-// What's that?!? (Werner)
-//#define i18n( x ) x
-
-// Undefine HAVE_LONG_DOUBLE for Beta 4 since RedHat 5.0 comes with a borken
-// glibc
-
-#ifdef HAVE_LONG_DOUBLE
-#undef HAVE_LONG_DOUBLE
-#endif
+#include <kconfig.h>
+#include <kglobal.h>
+#include "kcalc.h"
 
 extern last_input_type last_input;
 extern item_contents   display_data;
@@ -111,10 +104,6 @@ QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *n
     // create angle button group
 
     QAccel *accel = new QAccel( this );
-#if 0
-    accel->connectItem( accel->insertItem(Key_Q+ALT),this,SLOT(quitCalc()) );
-    accel->connectItem( accel->insertItem(Key_X+ALT),this,SLOT(quitCalc()) );
-#endif
 
     QButtonGroup *angle_group = new QButtonGroup( 3, Horizontal,this, "AngleButtons" );
     angle_group->setTitle(i18n( "Angle") );
@@ -1594,22 +1583,42 @@ void QtCalculator::set_style(){
 
 void QtCalculator::readSettings()
 {
-    QColor tmpC(189, 255, 222);
+    QColor tmpC(189, 255, 180);
     QColor blackC(0,0,0);
-    kcalcdefaults.forecolor = blackC;
-    kcalcdefaults.backcolor = tmpC;
+
+    KConfig *config = KGlobal::config();
+	config->setGroup("CalcPlugin");
+    kcalcdefaults.forecolor = config->readColorEntry("ForeColor", &blackC);
+	kcalcdefaults.backcolor = config->readColorEntry("BackColor", &tmpC);
 
 #ifdef HAVE_LONG_DOUBLE
-    kcalcdefaults.precision = 14;
+	kcalcdefaults.precision	= config->readNumEntry("precision", (int)14);
 #else
-    kcalcdefaults.precision = 10;
+	kcalcdefaults.precision	= config->readNumEntry("precision", (int)10);
 #endif
+    kcalcdefaults.fixedprecision = config->readNumEntry("fixedprecision", (int)2);
+	kcalcdefaults.fixed = config->readBoolEntry("fixed", false);
 
-    kcalcdefaults.fixedprecision =  2;
-    kcalcdefaults.fixed = FALSE;
-    kcalcdefaults.style = 2;
-    kcalcdefaults.beep = 1;
+	kcalcdefaults.style	= config->readNumEntry("style", (int)0);
+	kcalcdefaults.beep	= config->readBoolEntry("beep", true);
+}
 
+void QtCalculator::writeSettings()
+{
+    KConfig *config = KGlobal::config();
+
+	config->setGroup("CalcPlugin");
+	config->writeEntry("ForeColor",kcalcdefaults.forecolor);
+	config->writeEntry("BackColor",kcalcdefaults.backcolor);
+
+	config->writeEntry("precision",  kcalcdefaults.precision);
+	config->writeEntry("fixedprecision",  kcalcdefaults.fixedprecision);
+	config->writeEntry("fixed",  kcalcdefaults.fixed);
+
+	config->writeEntry("style",(int)kcalcdefaults.style);
+	config->writeEntry("beep", kcalcdefaults.beep);
+
+	config->sync();
 }
 
 void QtCalculator::display_selected(){
@@ -1691,7 +1700,7 @@ void QtCalculator::invertColors(){
 
 void QtCalculator::closeEvent( QCloseEvent*e )
 {
-    // quitCalc();
+    writeSettings();
     e->accept();
 }
 
