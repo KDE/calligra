@@ -242,22 +242,17 @@ StyleDia::StyleDia( QWidget* parent, const char* name, int flags )
     gradients->resize( chooseBStyle->size() );
     connect( gradients, SIGNAL( activated( int ) ), this, SLOT( gcStyle( int ) ) );
 
-    unbalanced = new QRadioButton( i18n( "Unbalanced" ), brushFrame );
+    unbalanced = new QCheckBox( i18n( "Unbalanced" ), brushFrame );
     unbalanced->resize( unbalanced->sizeHint() );
     unbalanced->move( gradients->x(), gradients->y() + gradients->height() + 20 );
     connect( unbalanced, SIGNAL( clicked() ),
 	     this, SLOT( rUnbalanced() ) );
     
-    xfactor = new QSpinBox( -200, 200, 10, brushFrame );
-    xfactor->resize( gradients->width() / 2 - 5, xfactor->sizeHint().height() );
-    xfactor->move( gradients->x(), unbalanced->y() + unbalanced->height() + 10 );
-    connect( xfactor, SIGNAL( valueChanged( int ) ),
-	     this, SLOT( gXFactor( int ) ) );
-    
-    yfactor = new QSpinBox( -200, 200, 10, brushFrame );
-    yfactor->resize( gradients->width() / 2 - 5, yfactor->sizeHint().height() );
-    yfactor->move( xfactor->x() + xfactor->width() + 10 , 
-		   unbalanced->y() + unbalanced->height() + 10 );
+    yfactor = new QSlider( -200, 200, 1, 100, QSlider::Vertical, brushFrame );
+    yfactor->resize( yfactor->sizeHint().width(),
+		     gradients->width() - yfactor->sizeHint().width() - 10 );
+    yfactor->move( gradients->x() + gradients->width() - yfactor->sizeHint().width() ,
+		   unbalanced->y() + unbalanced->height() + 20 );
     connect( yfactor, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( gYFactor( int ) ) );
 
@@ -265,9 +260,17 @@ StyleDia::StyleDia( QWidget* parent, const char* name, int flags )
 			       FALSE, 100, 100 );
 
     gPrev = new PBPreview( brushFrame, "", 2 );
-    gPrev->move( gradients->x(), yfactor->y() + yfactor->height() + 20 );
-    gPrev->resize( chooseBCol->width(), 25 );
+    gPrev->move( gradients->x(), unbalanced->y() + unbalanced->height() + 20 );
+    gPrev->resize( chooseBCol->width() - yfactor->width() - 10 , 
+		   gradients->width() - yfactor->sizeHint().width() - 10 );
     gPrev->setGradient( gradient );
+
+    xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, brushFrame );
+
+    xfactor->resize( gPrev->width(), xfactor->sizeHint().height() );
+    xfactor->move( gPrev->x(), gPrev->y() + gPrev->height() );
+    connect( xfactor, SIGNAL( valueChanged( int ) ),
+	     this, SLOT( gXFactor( int ) ) );
 
     chooseBCol->move( chooseBCol->x(), gradient1->y() );
     brushStyle->move( brushStyle->x(), gStyle->y() );
@@ -279,7 +282,7 @@ StyleDia::StyleDia( QWidget* parent, const char* name, int flags )
     else
 	brushFrame->hide();
 
-    resize( 400, 450 );
+    resize( 400, 525 );
 
     setCancelButton( i18n( "Cancel" ) );
     setOKButton( i18n( "OK" ) );

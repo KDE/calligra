@@ -20,6 +20,7 @@
 #include <qcolor.h>
 #include <qstring.h>
 #include <qradiobutton.h>
+#include <qcheckbox.h>
 
 #include "qwmf.h"
 #include "global.h"
@@ -103,20 +104,21 @@ public:
     bool getBackUnbalanced() { return unbalanced->isChecked(); }
     int getBackXFactor();
     int getBackYFactor();
-    
+
 private:
 
     // dialog objects
     QLabel *lPicName, *picPreview, *lClipName, *colorPreview;
     QGroupBox *grp1, *grp2, *grp3;
-    QRadioButton *radioColor, *radioPic, *vTiled, *vCenter, *vZoom, *radioClip, *unbalanced;
+    QRadioButton *radioColor, *radioPic, *vTiled, *vCenter, *vZoom, *radioClip;
+    QCheckBox *unbalanced;
     QComboBox *cType;
     QPushButton *okBut, *applyBut, *applyGlobalBut, *cancelBut;
     QPushButton *picChoose, *clipChoose;
     QButtonGroup *buttGrp, *buttGrp2, *buttGrp3;
     KColorButton *color1Choose, *color2Choose;
     QSlider *xfactor, *yfactor;
-    
+
     // values
     QString chosenPic;
     QString chosenClip;
@@ -132,10 +134,10 @@ private slots:
     void openPic( const QString & );
     void openClip( const QString & );
     void colChanged( const QColor& ) { selectCType( bcType ); }
-    void unbalancedChanged() ; 
+    void unbalancedChanged() ;
     void xFactorChanged( int ) { selectCType( bcType ); }
     void yFactorChanged( int ) { selectCType( bcType ); }
-    
+
     void Ok() { emit backOk( false ); }
     void Apply() { emit backOk( false ); }
     void ApplyGlobal() { emit backOk( true ); }

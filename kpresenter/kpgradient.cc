@@ -24,7 +24,7 @@
 /******************************************************************/
 
 /*======================= constructor ============================*/
-KPGradient::KPGradient( QColor _color1, QColor _color2, BCType _bcType, QSize _size, 
+KPGradient::KPGradient( QColor _color1, QColor _color2, BCType _bcType, QSize _size,
 			bool _unbalanced, int _xfactor, int _yfactor )
     : color1( _color1 ), color2( _color2 ), pixmap(), refCount( 0 ), unbalanced( _unbalanced ),
       xFactor( _xfactor ), yFactor( _yfactor )
@@ -50,10 +50,10 @@ bool KPGradient::removeRef()
 void KPGradient::paint()
 {
     QPainter painter;
-    
+
     switch ( bcType )
     {
-    case BCT_PLAIN: 
+    case BCT_PLAIN:
 	painter.begin( &pixmap );
 
 	painter.setPen( Qt::NoPen );
@@ -64,51 +64,51 @@ void KPGradient::paint()
 	break;
     case BCT_GHORZ: {
 	if ( !unbalanced )
-	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::HorizontalGradient );
+	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::VerticalGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::HorizontalGradient, xFactor, yFactor ); 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::VerticalGradient, xFactor, yFactor );
     } break;
     case BCT_GVERT: {
 	if ( !unbalanced )
-	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::VerticalGradient );
+	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::HorizontalGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::VerticalGradient, xFactor, yFactor ); 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::HorizontalGradient, xFactor, yFactor );
     } break;
     case BCT_GDIAGONAL1: {
 	if ( !unbalanced )
 	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::DiagonalGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::DiagonalGradient, xFactor, yFactor ); 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::DiagonalGradient, xFactor, yFactor );
     } break;
     case BCT_GDIAGONAL2: {
 	if ( !unbalanced )
 	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::CrossDiagonalGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::CrossDiagonalGradient,  xFactor, yFactor ); 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::CrossDiagonalGradient,  xFactor, yFactor );
     } break;
     case BCT_GCIRCLE: {
 	if ( !unbalanced )
 	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::EllipticGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::EllipticGradient, xFactor, yFactor ); 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::EllipticGradient, xFactor, yFactor );
     } break;
     case BCT_GRECT: {
 	if ( !unbalanced )
 	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::RectangleGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::RectangleGradient, xFactor, yFactor ); 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::RectangleGradient, xFactor, yFactor );
     } break;
     case BCT_GPIPECROSS: {
 	if ( !unbalanced )
 	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::PipeCrossGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::PipeCrossGradient, xFactor, yFactor ); 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::PipeCrossGradient, xFactor, yFactor );
     } break;
     case BCT_GPYRAMID: {
 	if ( !unbalanced )
 	    KPixmapEffect::gradient( pixmap, color1, color2, KPixmapEffect::PyramidGradient );
 	else
-	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::PyramidGradient, xFactor, yFactor ); 
+	    KPixmapEffect::unbalancedGradient( pixmap, color1, color2, KPixmapEffect::PyramidGradient, xFactor, yFactor );
     } break;
     }
 }

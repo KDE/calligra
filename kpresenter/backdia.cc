@@ -137,32 +137,32 @@ BackDia::BackDia( QWidget* parent, const char* name, BackType backType,
     cType->move( 10, color2Choose->y()+color2Choose->height()+20 );
     connect( cType, SIGNAL( activated( int ) ), this, SLOT( selectCType( int ) ) );
 
-    unbalanced = new QRadioButton( i18n( "Unbalanced" ), grp1 );
+    unbalanced = new QCheckBox( i18n( "Unbalanced" ), grp1 );
     unbalanced->resize( unbalanced->sizeHint() );
     unbalanced->move( 10, cType->y() + cType->height() + 20 );
     connect( unbalanced, SIGNAL( clicked() ),
 	     this, SLOT( unbalancedChanged() ) );
-    
+
     yfactor = new QSlider( -200, 200, 1, 100, QSlider::Vertical, grp1 );
-    yfactor->resize( yfactor->sizeHint().width(), 
+    yfactor->resize( yfactor->sizeHint().width(),
 		     cType->width() - yfactor->sizeHint().width() - 10 );
-    yfactor->move( cType->width() - yfactor->sizeHint().width() , 
+    yfactor->move( cType->width() - yfactor->sizeHint().width() ,
 		   unbalanced->y() + unbalanced->height() + 20 );
     connect( yfactor, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( yFactorChanged( int ) ) );
 
     colorPreview = new QLabel( grp1 );
-    colorPreview->resize( cType->width() - yfactor->width() - 10, 
+    colorPreview->resize( cType->width() - yfactor->width() - 10,
 			  cType->width() - yfactor->width() - 10 );
     colorPreview->move( 10, unbalanced->y() + unbalanced->height()+20 );
 
-    xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, grp1 ); 
+    xfactor = new QSlider( -200, 200, 1, 100, QSlider::Horizontal, grp1 );
 
     xfactor->resize( colorPreview->width(), xfactor->sizeHint().height() );
     xfactor->move( 10, colorPreview->y() + colorPreview->height() );
     connect( xfactor, SIGNAL( valueChanged( int ) ),
 	     this, SLOT( xFactorChanged( int ) ) );
-  
+
     cType->setCurrentItem( bcType );
 
     color1Choose->resize( cType->width(), color1Choose->height() );
@@ -323,7 +323,7 @@ BackView BackDia::getBackView()
 
 /*==================== unbalanced toggled ========================*/
 void BackDia::unbalancedChanged()
-{ 
+{
   selectCType( bcType );
   xfactor->setEnabled(unbalanced->isChecked());
   yfactor->setEnabled(unbalanced->isChecked());
@@ -333,20 +333,18 @@ void BackDia::unbalancedChanged()
 /*==================== select color type =========================*/
 void BackDia::selectCType( int i )
 {
-
-  // let's be smart about what plain does :-)
-  if (!i) {
-    color2Choose->setEnabled(false);
-    unbalanced->setEnabled(false);
-    xfactor->setEnabled(false);
-    yfactor->setEnabled(false);
-  }
-  else {
-    color2Choose->setEnabled(true);
-    unbalanced->setEnabled(true);
-    xfactor->setEnabled(true);
-    yfactor->setEnabled(true);
-  }    
+    // let's be smart about what plain does :-)
+    if (!i) {
+	color2Choose->setEnabled(false);
+	unbalanced->setEnabled(false);
+	xfactor->setEnabled(false);
+	yfactor->setEnabled(false);
+    } else {
+	color2Choose->setEnabled(true);
+	unbalanced->setEnabled(true);
+	xfactor->setEnabled(true);
+	yfactor->setEnabled(true);
+    }
     radioPic->setChecked( false );
     radioColor->setChecked( true );
     radioClip->setChecked( false );
@@ -412,13 +410,13 @@ void BackDia::openClip( const QString &clipName )
     QApplication::restoreOverrideCursor();
 }
 
-int BackDia::getBackXFactor() 
-{ 
-    return xfactor->value(); 
+int BackDia::getBackXFactor()
+{
+    return xfactor->value();
 }
 
-int BackDia::getBackYFactor() 
+int BackDia::getBackYFactor()
 {
-    return yfactor->value(); 
+    return yfactor->value();
 }
 

@@ -65,11 +65,11 @@ public:
     virtual void setBackColorType( BCType _type )
     { bcType = _type; paint(); }
     virtual void setUnbalanced( bool b )
-    { unbalanced = b; }
+    { unbalanced = b; paint(); }
     virtual void setXFactor( int i )
-    { xFactor = i; }
+    { xFactor = i; paint(); }
     virtual void setYFactor( int i )
-    { yFactor = i; }    
+    { yFactor = i; paint(); }    
     
     virtual QPixmap* getGradient()
     { return (QPixmap*)&pixmap; }

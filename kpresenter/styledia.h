@@ -30,7 +30,9 @@
 #include <qcolor.h>
 #include <qsize.h>
 #include <qradiobutton.h>
+#include <qslider.h>
 #include <qspinbox.h>
+#include <qcheckbox.h>
 
 #include <kcolordlg.h>
 #include <kcolorbtn.h>
@@ -60,11 +62,11 @@ public:
     PBPreview( QWidget* parent=0, const char* name=0, int _paintType=0 );
 
     // set values
-    void setPen( QPen _pen ) {pen = _pen; repaint( true ); }
-    void setBrush( QBrush _brush ) {brush = _brush; repaint( true ); }
-    void setLineBegin( LineEnd lb ) {lineBegin = lb; repaint( true ); }
-    void setLineEnd( LineEnd le ) {lineEnd = le; repaint( true ); }
-    void setGradient( KPGradient *g ) {gradient = g; repaint( true ); }
+    void setPen( QPen _pen ) {pen = _pen; repaint( FALSE ); }
+    void setBrush( QBrush _brush ) {brush = _brush; repaint( FALSE ); }
+    void setLineBegin( LineEnd lb ) {lineBegin = lb; repaint( FALSE ); }
+    void setLineEnd( LineEnd le ) {lineEnd = le; repaint( FALSE ); }
+    void setGradient( KPGradient *g ) {gradient = g; repaint( FALSE ); }
 
 protected:
 
@@ -126,15 +128,17 @@ private:
     QPushButton *choosePCol, *chooseBCol;
     QLabel *penStyle, *brushStyle, *penWidth, *llineBegin, *llineEnd;
     QComboBox *choosePStyle, *chooseBStyle, *clineBegin, *clineEnd;
-    QSpinBox *choosePWidth, *xfactor, *yfactor;
+    QSpinBox *choosePWidth;
     QPushButton *okBut, *applyBut, *cancelBut;
     PBPreview *penPrev, *brushPrev, *gPrev;
-    QRadioButton *fillStyle, *fillGradient, *unbalanced;
+    QRadioButton *fillStyle, *fillGradient;
+    QCheckBox *unbalanced;
     QComboBox *gradients;
     KColorButton *gradient1, *gradient2;
     QLabel *gColors, *gStyle;
     QFrame *line;
-
+    QSlider *xfactor, *yfactor;
+    
     // pen and brush
     QBrush brush;
     QPen pen;

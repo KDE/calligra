@@ -346,3 +346,10 @@ Reggie, 31.7.1999:
 - Using the new and cool gradients in the demo
 - KPresenter supports now unbalanced gradients too (thanx to KPixmapEffects!!!!)
 
+Reggie, 2.7.1999:
+-------------
+- Swapped horizontal - vertical gradients back
+- Using sliders in property dialog for configuration of unbalanced gradients too
+- Switching unbalanced gradients on/off using a checkbox (not a radiobutton)
+- Some gradient update fixes
+- Some fixes

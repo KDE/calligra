@@ -62,9 +62,9 @@ KPAutoformObject::KPAutoformObject( QPen _pen, QBrush _brush, QString _filename,
     fillType = _fillType;
     drawShadow = false;
     redrawPix = true;
-    unbalanced = FALSE;
-    xfactor = 100;
-    yfactor = 100;
+    unbalanced = _unbalanced;
+    xfactor = _xfactor;
+    yfactor = _yfactor;
 
     if ( fillType == FT_GRADIENT )
     {
