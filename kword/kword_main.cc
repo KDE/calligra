@@ -63,6 +63,9 @@ void KWordApp::start()
 /*================================================================*/
 int main(int argc,char **argv)
 {
+  FormatManager *formatMngr;
+  formatMngr = new FormatManager();
+
   // Parse command line parameters.
   for(int i = 1;i < argc;i++)
     {

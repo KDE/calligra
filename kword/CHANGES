@@ -132,3 +132,8 @@ Reggie, 26.9.1998:
   linebreaking
 - Improved KFormatContext::makeLineLayout() to make the linebreaking more
   precise and to make it work correctly with special characters (like pictures)
+
+Reggie, 28.9.1998:
+------------------
+- Added JPEG filter
+- some fixes

@@ -63,6 +63,15 @@ unsigned int KWPage::ptColumnWidth() { return doc->getPTColumnWidth(); }
 unsigned int KWPage::ptColumnSpacing() { return doc->getPTColumnSpacing(); }
 
 /*================================================================*/
+void KWPage::mousePressEvent(QMouseEvent *e)
+{
+  int mx = e->x() + xOffset;
+  int my = e->y() + yOffset;
+
+  debug("mx: %d, my: %d",mx,my);
+}
+
+/*================================================================*/
 void KWPage::recalcCursor(bool _repaint = true,int _pos = -1)
 {
   QPainter _painter;

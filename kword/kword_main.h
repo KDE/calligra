@@ -26,6 +26,7 @@ class ImageDocument_impl;
 
 #include "kword_doc.h"
 #include "kword_shell.h"
+#include "formats.h"
 
 /******************************************************************/
 /* Class: KWordApp                                                */
