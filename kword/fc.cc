@@ -336,7 +336,7 @@ void KWFormatContext::cursorGotoLeft( QPainter &_painter )
 
 void KWFormatContext::cursorGotoUp( QPainter &_painter )
 {
-  int frm = frame;
+  unsigned int frm = frame;
 
     if (!during_vertical_cursor_movement){
 	WantedPtPos = ptPos;
@@ -395,7 +395,7 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
 
 void KWFormatContext::cursorGotoDown( QPainter &_painter )
 {
-  int frm = frame;
+  unsigned int frm = frame;
     // Save the position where we started going down
     if ( !during_vertical_cursor_movement)
     {

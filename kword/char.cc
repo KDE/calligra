@@ -419,6 +419,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 				      case VT_PGNUM:
 					var = new KWPgNumVariable(_doc);
 					break;
+				      default: break;
 				      }
 				
 				    var->setVariableFormat(_doc->getVarFormats().find(static_cast<int>(vart)));

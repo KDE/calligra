@@ -118,10 +118,10 @@ public:
   KWCharFootNote(KWFootNote *_fn) : KWCharFormat() { fn = _fn; classId = ID_KWCharFootNote; }
   ~KWCharFootNote() { if (fn) delete fn; if (format) format->decRef(); format = 0L; }
 
-  QString getText() { return QString(); }
+  QString getText() { return fn->getText(); }
 
   KWFootNote *getFootNote() { return fn; }
-  
+
   virtual void save(ostream &out) {
     //fn->save(out);
     out << otag << "<FRMAT>" << endl;

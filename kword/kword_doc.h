@@ -39,6 +39,7 @@ class QPrinter;
 #include "frame.h"
 #include "kword_undo.h"
 #include "variable.h"
+#include "footnote.h"
 
 #include <qlist.h>
 #include <qobject.h>
@@ -391,13 +392,15 @@ public:
 
   long int getPageNum(int bottom);
 
+  KWFootNoteManager &getFootNoteManager() { return footNoteManager; }
+  
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child,KWPartFrameSet*);
   void sig_updateChildGeometry(KWordChild *_child);
   void sig_removeObject(KWordChild *_child);
   void selectionOnOff();
-  
+
 protected slots:
   void slotUndoRedoChanged(QString,QString);
 
@@ -491,9 +494,9 @@ protected:
   int numParags;
 
   KWCommandHistory history;
-
   QIntDict<KWVariableFormat> varFormats;
-
+  KWFootNoteManager footNoteManager;
+  
 };
 
 #endif

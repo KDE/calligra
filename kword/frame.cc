@@ -2118,7 +2118,7 @@ bool KWGroupManager::joinCells(QPainter &_painter)
 		if (cell->rows > 1 || cell->cols > 1)
 		  return false;
 		_cells.append(cell);
-		if (++tmpCol <= cols - 1)
+		if (++tmpCol <= static_cast<int>(cols - 1))
 		  cell = getCell(row,tmpCol);
 		else
 		  cell = 0L;
@@ -2147,7 +2147,7 @@ bool KWGroupManager::joinCells(QPainter &_painter)
 		if (cell->rows > 1 || cell->cols > 1)
 		  return false;
 		_cells.append(cell);
-		if (++tmpRow <= rows - 1)
+		if (++tmpRow <= static_cast<int>(rows - 1))
 		  cell = getCell(tmpRow,col);
 		else
 		  cell = 0L;

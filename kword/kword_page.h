@@ -200,8 +200,9 @@ public:
   KWGroupManager *getTable();
   KWGroupManager *getCurrentTable()
   { return curTable; }
-  
+
   void insertVariable(VariableType type);
+  void insertFootNote(KWFootNote *fn);
 
 public slots:
   void newLeftIndent(int _left);
@@ -340,7 +341,7 @@ protected:
   EditMode editMode;
 
   KWGroupManager *curTable;
-  
+
 };
 
 #endif

@@ -18,6 +18,7 @@
 #include "kword_page.h"
 #include "kword_page.moc"
 #include "kword_view.h"
+#include "footnote.h"
 
 /******************************************************************/
 /* Class: KWPage                                                  */
@@ -709,7 +710,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 		      if (!(e->state() & ControlButton || e->state() & ShiftButton))
 			doc->deSelectAllFrames();
 		      doc->selectFrame(mx,my);
-		      curTable = doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager();		      
+		      curTable = doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager();		
 		    }
 		  else if (r == 2)
 		    {
@@ -722,7 +723,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 			{
 			  doc->deSelectAllFrames();
 			  doc->selectFrame(mx,my);
-			  curTable = doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager();			  
+			  curTable = doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager();			
 			}
 		    }
 		}
@@ -796,12 +797,12 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	if (mouseMode != MM_EDIT_FRAME)
 	  {
 	    KWCharAttribute *attrib = 0L;
-	    
+	
 	    QPainter painter;	
 	    painter.begin(this);
 	    attrib = fc->getObjectType(mx,my,painter);
 	    painter.end();
-	    
+	
 	    if (attrib)
 	      debug("ObjectType: %d, %p",attrib->getClassId(),attrib);
 	    break;
@@ -1174,7 +1175,7 @@ void KWPage::recalcText()
   while (!bend)
     {
       bend = !_fc.makeNextLineLayout(painter);
-      if (doc->getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->y() > yOffset + height() + 20)
+      if (doc->getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->y() > static_cast<int>(yOffset + height() + 20))
 	bend = true;
     }
 
@@ -1203,7 +1204,7 @@ void KWPage::recalcWholeText(bool _cursor = false,bool _fast = false)
       while (!bend)
 	{
 	  bend = !_fc.makeNextLineLayout(painter);
-	  if (/*_fast &&*/ doc->getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->y() > yOffset + height() + 20)
+	  if (/*_fast &&*/ doc->getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->y() > static_cast<int>(yOffset + height() + 20))
 	    bend = true;
 	}
     }
@@ -2399,7 +2400,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 /*================================================================*/
 void KWPage::resizeEvent(QResizeEvent *)
 {
-  buffer.resize(width() < doc->getPTPaperWidth() + 20 ? width() : doc->getPTPaperWidth() + 20,
+  buffer.resize(width() < static_cast<int>(doc->getPTPaperWidth() + 20) ? width() : static_cast<int>(doc->getPTPaperWidth() + 20),
 		height());
   buffer.fill(white);
   calcVisiblePages();
@@ -4003,4 +4004,17 @@ void KWPage::insertVariable(VariableType type)
 
   recalcPage(0L);
   recalcCursor(true);
+}
+
+/*================================================================*/
+void KWPage::insertFootNote(KWFootNote *fn)
+{
+  fc->getParag()->insertFootNote(fc->getTextPos(),fn);
+  KWFormat fmt(doc,format);
+  if (doc->getFootNoteManager().showFootNotesSuperscript())
+    fmt.setVertAlign(KWFormat::VA_SUPER);
+  else
+    fmt.setVertAlign(KWFormat::VA_NORMAL);
+  
+  fc->getParag()->setFormat(fc->getTextPos(),1,fmt);
 }

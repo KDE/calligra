@@ -16,8 +16,12 @@
 #ifndef footnote_h
 #define footnote_h
 
+#include <qlist.h>
+#include <qpainter.h>
+
 class KWFootNote;
 class KWordDocument;
+class KWFormatContext;
 
 /******************************************************************/
 /* Class: KWFootNoteManager                                       */
@@ -27,10 +31,23 @@ class KWFootNoteManager
 {
 public:
   KWFootNoteManager(KWordDocument *_doc);
+
+  int getStart() { return start; }
+  void setStart(int s) { start = s; recalc(); }
+  
+  void recalc();
+
+  int findStart(KWFormatContext *_fc,QPainter &p);
+  
+  bool showFootNotesSuperscript() { return superscript; }
+  void setShowFootNotesSuperscript(bool _s) { superscript = _s; }
   
 protected:
   KWordDocument *doc;
-
+  int start;
+  QList<KWFootNote> footNotes;
+  bool superscript;
+  
 };
 
 /******************************************************************/
@@ -40,13 +57,35 @@ protected:
 class KWFootNote
 {
 public:
-  KWFootNote(KWordDocument *_doc);
+  struct KWFootNoteInternal
+  {
+    int from;
+    int to;
+    QString space;
+  };
+  
+  KWFootNote(KWordDocument *_doc,QList<KWFootNoteInternal> *_parts);
 
-  KWFootNote *copy() { return new KWFootNote(doc); }
+  KWFootNote *copy() { return new KWFootNote(doc,new QList<KWFootNoteInternal>(parts)); }
+
+  int getStart() { return start; }
+  int getEnd() { return end; }
+  
+  QString getText() { return text; }
+  
+  /**
+   * returns new end
+   */
+  int setStart(int _start);
   
 protected:
+  void makeText();
+  
   KWordDocument *doc;
-
+  int start,end;
+  QList<KWFootNoteInternal> parts;
+  QString before,after,text;
+  
 };
 
 #endif

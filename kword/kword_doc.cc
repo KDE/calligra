@@ -72,7 +72,7 @@ KWordChild::~KWordChild()
 /*================================================================*/
 KWordDocument::KWordDocument()
   : formatCollection(this), imageCollection(this), selStart(this,1), selEnd(this,1),
-    ret_pix(ICON("return.xpm")), unit("mm"), numParags(0)
+    ret_pix(ICON("return.xpm")), unit("mm"), numParags(0), footNoteManager(this)
 {
   ADD_INTERFACE("IDL:KOffice/Print:1.0");
 
@@ -3546,7 +3546,7 @@ long int KWordDocument::getPageNum(int bottom)
   int num = 0;
   while (true)
     {
-      if (bottom < (num + 1) * getPTPaperHeight())
+      if (bottom < (num + 1) * static_cast<int>(getPTPaperHeight()))
 	return num;
 
       num++;

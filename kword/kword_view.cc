@@ -968,7 +968,42 @@ void KWordView::insertVariableOther()
 /*===============================================================*/
 void KWordView::insertFootNoteEndNote()
 {
-
+  QPainter p;
+  p.begin(gui->getPaperWidget());
+  int start = m_pKWordDoc->getFootNoteManager().findStart(gui->getPaperWidget()->getCursor(),p);
+  p.end();
+							  
+  if (start == -1)
+    QMessageBox::critical(0L,i18n("Error"),i18n("Currently you can only insert footnotes or\n"
+						"endotes into the first frameset!"),i18n("OK"));
+  else
+    {
+      debug("NUMBER: %d",start);
+     
+      /**************
+       * 
+       * Dialog for crating the footnote/endnote must be called here!
+       *
+       **************/
+      
+      // Remove this later >>>>>>>>>>>>>>
+      
+      KWFootNote::KWFootNoteInternal *fi = new KWFootNote::KWFootNoteInternal;
+      fi->from = start;
+      fi->to = -1;
+      fi->space = "-";
+      
+      QList<KWFootNote::KWFootNoteInternal> *lfi = new QList<KWFootNote::KWFootNoteInternal>();
+      lfi->setAutoDelete(false);
+      lfi->append(fi);
+      
+      KWFootNote *fn = new KWFootNote(m_pKWordDoc,lfi);
+      
+      // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+      
+      //gui->getPaperWidget()->insertFootNote(fn);
+    }
+      
   sendFocusEvent();
 }
 
@@ -1910,7 +1945,7 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_vMenuInsert->insertSeparator(-1);
 
-  m_idMenuInsert_FootNoteEndNote = m_vMenuInsert->insertItem4(i18n("&Footnote/Endnote..."),this,"insertFootNoteEndNote", 0, -1, -1 );
+  m_idMenuInsert_FootNoteEndNote = m_vMenuInsert->insertItem4(i18n("&Footnote or Endnote..."),this,"insertFootNoteEndNote", 0, -1, -1 );
 
   m_idMenuInsert_VariableDateFix = m_vMenuInsert_Variable->insertItem4(i18n("Date (fix)"), this,"insertVariableDateFix", 0, -1, -1 );
   m_idMenuInsert_VariableDateVar = m_vMenuInsert_Variable->insertItem4(i18n("Date (variable)"), this,"insertVariableDateVar", 0, -1, -1 );
