@@ -38,8 +38,8 @@ class KoRect;
 class VKoPainter : public VPainter
 {
 public:
-	VKoPainter( QPaintDevice *target, unsigned int w = 0, unsigned int h = 0 );
-	VKoPainter( unsigned char *buffer, unsigned int w = 0, unsigned int h = 0 );
+	VKoPainter( QPaintDevice *target, unsigned int w = 0, unsigned int h = 0, bool = true );
+	VKoPainter( unsigned char *buffer, unsigned int w = 0, unsigned int h = 0, bool = true );
 	virtual ~VKoPainter();
 
     //
@@ -110,6 +110,8 @@ private:
 	VFill *m_fill;
 	double m_zoomFactor;
 	KoRect m_bbox;
+
+	bool m_bDrawNodes;
 
 	GC gc;
 };

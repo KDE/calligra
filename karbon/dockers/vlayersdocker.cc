@@ -48,7 +48,7 @@ void VLayerListViewItem::update()
 	KIconLoader il;
 	QPixmap preview;
 	preview.resize( 16, 16 );
-	VKoPainter p( &preview, 16, 16 );
+	VKoPainter p( &preview, 16, 16, false );
 	// Y mirroring
 	QWMatrix mat;
 	mat.scale( 1, -1 );

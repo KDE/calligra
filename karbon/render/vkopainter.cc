@@ -63,7 +63,8 @@
 #define INITIAL_ALLOC	300
 #define ALLOC_INCREMENT	100
 
-VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h ) : VPainter( target, w, h ), m_target( target )
+VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h, bool bDrawNodes )
+: VPainter( target, w, h ), m_target( target ), m_bDrawNodes( bDrawNodes )
 {
 	kdDebug() << "w : " << w << endl;
 	kdDebug() << "h : " << h << endl;
@@ -86,7 +87,8 @@ VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h ) :
 	m_zoomFactor = 1;
 }
 
-VKoPainter::VKoPainter( unsigned char *buffer, unsigned int w, unsigned int h ) : VPainter( 0L, w, h ), m_buffer( buffer )
+VKoPainter::VKoPainter( unsigned char *buffer, unsigned int w, unsigned int h, bool bDrawNodes )
+: VPainter( 0L, w, h ), m_buffer( buffer ), m_bDrawNodes( bDrawNodes )
 {
 	kdDebug() << "w : " << w << endl;
 	kdDebug() << "h : " << h << endl;
@@ -822,6 +824,8 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 void
 VKoPainter::drawNode( const KoPoint& p, int width )
 {
+	if( !m_bDrawNodes ) return;
+
 	QPoint _p = m_matrix.map( QPoint( p.x() * m_zoomFactor, p.y() * m_zoomFactor ) );
 	int x1 = _p.x() - width * m_zoomFactor;
 	int x2 = _p.x() + width * m_zoomFactor;
