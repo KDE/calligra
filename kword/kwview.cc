@@ -1883,6 +1883,7 @@ void KWView::tableJoinCells()
         //KoRect r = doc->zoomRect( table->boundingRect() );
         //gui->canvasWidget()->repaintScreen( r, TRUE );
         gui->canvasWidget()->repaintAll();
+        doc->layout();
     }
 }
 
@@ -1917,8 +1918,9 @@ void KWView::tableSplitCells()
     painter.end();
     //KoRect r = doc->zoomRect( table->boundingRect() );
     //gui->canvasWidget()->repaintScreen( r, TRUE );
-     gui->canvasWidget()->repaintAll();
-
+    gui->canvasWidget()->repaintAll();
+    doc->updateAllFrames();
+    doc->layout();
 }
 
 void KWView::tableUngroupTable()
