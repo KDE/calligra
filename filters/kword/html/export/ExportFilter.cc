@@ -63,7 +63,7 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
         }
 
         *m_streamOut << "<td>\n";
-        
+
         if (!doFullAllParagraphs(*(*itCell).paraList))
         {
             return false;
@@ -75,7 +75,7 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
     *m_streamOut << "</tr>\n";
     *m_streamOut << "</tbody>\n";
     *m_streamOut << "</table>\n";
-    
+
     return true;
 }
 
@@ -247,9 +247,9 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
                 {
                     // A link
                     *m_streamOut << "<a href=\""
-                        << escapeHtmlText((*paraFormatDataIt).variable.m_linkName)
-                        << "\">"
                         << escapeHtmlText((*paraFormatDataIt).variable.m_hrefName)
+                        << "\">"
+                        << escapeHtmlText((*paraFormatDataIt).variable.m_linkName)
                         << "</a>";
                 }
                 else
