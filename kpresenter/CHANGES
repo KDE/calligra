@@ -3,3 +3,5 @@ Changes after KPresenter 1.1
 - Port to kotext
 - New effect : kpresenter can play sounds
 - Thumbnail mode for the sidebar
+- Add notebar
+- Add a real statusbar

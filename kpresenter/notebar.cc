@@ -36,7 +36,7 @@ NoteBar::NoteBar( QWidget *_parent, KPresenterDoc *_doc, KPresenterView *_view )
     QBoxLayout *topLayout = new QVBoxLayout( this, 2 );
     textEdit = new QTextEdit( this );
 
-    QFont font = KGlobalSettings::generalFont();
+    QFont font = KoGlobal::defaultFont();
     textEdit->setCurrentFont( font );
 
     int currentPageNum = view->getCurrentPresPage(); // 1 base.
