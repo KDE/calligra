@@ -990,12 +990,10 @@ void KoTimeVariable::resize()
 {
     KoTextFormat * fmt = format();
     QString oldLanguage;
-    kdDebug()<<" fmt->language().isEmpty() :"<<fmt->language()<<endl;
     if ( !fmt->language().isEmpty())
     {
          oldLanguage=KGlobal::locale()->language();
          bool changeLanguage = KGlobal::locale()->setLanguage( fmt->language() );
-         kdDebug()<<"changeLanguage :"<<changeLanguage<<endl;
          KoVariable::resize();
          if ( changeLanguage )
              KGlobal::locale()->setLanguage( oldLanguage );
