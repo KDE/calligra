@@ -53,7 +53,8 @@ KLaola::KLaola(const myFile &file) {
 
     // current path=root dirHandle
     m_currentPath.clear();
-    m_currentPath.append(m_nodeTree.getFirst()->getFirst()->node);
+    if ( !m_nodeTree.isEmpty() )
+        m_currentPath.append(m_nodeTree.getFirst()->getFirst()->node);
 }
 
 KLaola::~KLaola() {
