@@ -2658,7 +2658,7 @@ void KPresenterView::setupActions()
     actionToolsMouse->setExclusiveGroup( "tools" );
     actionToolsMouse->setChecked( true );
 
-    actionToolsRotate = new KToggleAction( i18n( "&Rotate" ), "rotate_cw", 0,
+    actionToolsRotate = new KToggleAction( i18n( "&Rotate" ), "rotate", 0,
 					   this, SLOT( toolsRotate() ),
 					   actionCollection(), "tools_rotate" );
     actionToolsRotate->setExclusiveGroup( "tools" );
