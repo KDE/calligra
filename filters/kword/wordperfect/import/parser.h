@@ -49,7 +49,7 @@ namespace WP
       Linespace, Justification, ParagraphIndent, LeftMarginAdjust,
         RightMarginAdjust,
       TabSet, TabLeft, TabHardFlushRight,
-      FontColor, FontSize, FontFace,
+      FontColor, FontSize, FontFace, HighlightOn, HighlightOff,
       TableOn, TableColumn, TableEnd, TableCell, TableRow, TableOff
     };
 

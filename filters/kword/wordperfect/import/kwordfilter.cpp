@@ -40,7 +40,9 @@ class KWordFormat
   public:
     bool bold, italic, underline, doubleunderline;
     bool striked, superscript, subscript, redline;
+    bool color, highlight;
     int red, green, blue;
+    int bgred, bggreen, bgblue;
     double fontsize;
     QString fontface;
 
@@ -52,7 +54,9 @@ KWordFormat::KWordFormat()
 {
   bold = italic = underline = doubleunderline = FALSE;
   striked = superscript = subscript = redline = FALSE;
+  color = highlight = FALSE;
   red = green = blue = 0;
+  bgred = bggreen = bgblue = 255;
   fontsize = 12.0;
   fontface = "Helvetica";
 }
@@ -73,9 +77,15 @@ QString KWordFormat::asXML()
 
   result.append( "    <SIZE value=\"" + QString::number(fontsize) + "\" />\n" );
 
-  result.append( "    <COLOR red=\"" + QString::number(red) +
-		"\" green=\"" + QString::number(green) +
-		"\" blue=\"" + QString::number(blue) + "\" />\n" );
+  if( color )
+    result.append( "    <COLOR red=\"" + QString::number(red) +
+                   "\" green=\"" + QString::number(green) +
+                   "\" blue=\"" + QString::number(blue) + "\" />\n" );
+  
+  if( highlight )
+    result.append( "    <TEXTBACKGROUNDCOLOR red=\"" + QString::number(bgred) +
+                   "\" green=\"" + QString::number(bggreen) +
+                   "\" blue=\"" + QString::number(bgblue) + "\" />\n" );
 
   return result;
 }
@@ -162,12 +172,31 @@ KWordFilter::parse (const QString & filename)
         case Token::FontColor:
         case Token::FontSize:
         case Token::FontFace:
+        case Token::HighlightOn:
+        case Token::HighlightOff:
 
           if( type == Token::FontColor )
           {
+            flag.color = true;
             flag.red = t->red();
             flag.green = t->green();
             flag.blue= t->blue();
+          }
+          else if( type == Token::HighlightOn )
+          {
+            flag.highlight = true;
+            flag.bgred = t->red();
+            flag.bggreen = t->green();
+            flag.bgblue = t->blue();
+          }
+          else if( type == Token::HighlightOff )
+          {
+            // RGB in the data is last used highlight color
+            // to go back to normal color, simply XOR would do the trick
+            flag.highlight = false;
+            flag.bgred ^= t->red();
+            flag.bggreen ^= t->green();
+            flag.bgblue ^= t->blue();
           }
           else if( type == Token::FontSize )
           {

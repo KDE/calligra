@@ -896,6 +896,17 @@ Parser::parseDocWP6 (const QString & filename, int start)
               // FIXME unknown functions
               break;
 
+            case 0xfb00:
+              // text highlight (or background color)
+              tokens.append (new Token (Token::HighlightOn,
+                                        data[0], data[1], data[2]));
+              break;
+
+            case 0xfc00:
+              // turn off highlight, data is last highlight color
+              tokens.append (new Token (Token::HighlightOff,
+                                        data[0], data[1], data[2]));
+              break;
 
             default:
               tokens.append (new Token (Token::Function, function));
