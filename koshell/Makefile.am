@@ -1,7 +1,7 @@
 
-INCLUDES  = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes)
+INCLUDES  = $(KOFFICE_INCLUDES) $(MICO_INCLUDES) $(all_includes)
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = $(LIB_KOFFICEUI)
+LDADD = $(LIB_KOFFICEUI) $(LIBMICO) -lkded
 
 ####### Files
 
@@ -9,13 +9,14 @@ bin_PROGRAMS = koshell
 
 koshell_SOURCES = koshell_main.cc koshell_shell.cc
 
-noinst_HEADERS = koshell_main.h koshell_shell.h
+noinst_HEADERS = koshell_shell.h
 
-METASOURCES = koshell_main.moc koshell_shell.moc
+METASOURCES = koshell_shell.moc
+
+rcdir = $(kde_datadir)/koshell
+rc_DATA = koshell_shell.rc
 
 ####### Implicit rules
-
-IDL_FLAGS = --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(top_srcdir)/lib/interfaces -I$(idldir)
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/koshell.pot

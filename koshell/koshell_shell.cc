@@ -27,28 +27,25 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kded_instance.h>
-
-#include <opMainWindowIf.h>
-#include <opMenuBarManager.h>
-#include <opToolBar.h>
-#include <opMenu.h>
-#include <opApplication.h>
+#include <kstddirs.h>
+#include <klibloader.h>
 
 #include <koAboutDia.h>
-#include <koFrame.h>
 #include <koQueryTypes.h>
 #include <koKoolBar.h>
+#include <koDocument.h>
+#include <koTrader.h>
+#include <view.h>
 
 QList<KoShellWindow>* KoShellWindow::s_lstShells = 0L;
 
 KoShellWindow::KoShellWindow()
 {
-  m_activePage = m_lstPages.end();
-  
+  m_konqueror = m_activePage = m_lstPages.end();
+
   if ( s_lstShells == 0L )
     s_lstShells = new QList<KoShellWindow>;
-  
+
   s_lstShells->append( this );
 
   m_pLayout = new QHBox( this );
@@ -57,8 +54,8 @@ KoShellWindow::KoShellWindow()
 
   setView( m_pLayout );
 
-  m_pFrame->reparent( m_pLayout, 0, QPoint( 80, 0 ), true );
-  
+  m_pFrame = new KoShellFrame( m_pLayout );
+
   m_grpFile = m_pKoolBar->insertGroup("Parts");
   m_lstComponents = KoDocumentEntry::query();
   QValueList<KoDocumentEntry>::Iterator it = m_lstComponents.begin();
@@ -69,24 +66,24 @@ KoShellWindow::KoShellWindow()
 				       this, SLOT( slotKoolBar( int, int ) ) );
       m_mapComponents[ id ] = &*it;
     }
-  
+
   m_grpDocuments = m_pKoolBar->insertGroup("Documents");
   m_pKoolBar->insertGroup("Snippets");
 
   m_pKoolBar->setFixedWidth( 80 );
   m_pKoolBar->setMinimumHeight( 300 );
-  
-  m_vKfm = 0L;
 
   this->resize(550, 400);
+
+  initShell();
 }
 
 KoShellWindow::~KoShellWindow()
-{ 
+{
   kdebug( KDEBUG_INFO, 0, "KoShellWindow::~KoShellWindow()" );
-  
-  cleanUp();
-  
+
+//  cleanUp();
+
   s_lstShells->removeRef( this );
 }
 
@@ -101,30 +98,34 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
     if ( m_activePage != m_lstPages.end() &&
          (*m_activePage).m_id == _item )
       return;
-  
+
     QValueList<Page>::Iterator it = m_lstPages.begin();
     while( it != m_lstPages.end() )
     {
       if ( (*it).m_id == _item )
       {
+        (*m_activePage).m_pView->reparent( 0L, 0, QPoint( 0, 0 ), FALSE );
 	m_activePage = it;
-        m_pFrame->detach();
-        m_pFrame->attachView( (*it).m_vView );
-	interface()->setActivePart( (*it).m_vView->id() );
+//        m_pFrame->detach();
+//        m_pFrame->attachView( (*it).m_vView );
+//	interface()->setActivePart( (*it).m_vView->id() );
+        (*m_activePage).m_pView->reparent( m_pFrame, 0, QPoint( 0, 0 ), TRUE );
+	m_pFrame->setView( (*m_activePage).m_pView );
+	setActiveView( (*m_activePage).m_pView );
 	return;
       }
       ++it;
     }
   }
 }
-
+/*
 bool KoShellWindow::isModified()
 {
   QValueList<Page>::Iterator it = m_lstPages.begin();
   for( ; it != m_lstPages.end(); ++it )
     if ( (*it).m_vDoc->isModified() )
       return true;
-  
+
   return false;
 }
 
@@ -132,13 +133,13 @@ bool KoShellWindow::requestClose()
 {
   int res = QMessageBox::warning( 0L, i18n("Warning"), i18n("The document has been modified\nDo you want to save it ?" ),
 				  i18n("Yes"), i18n("No"), i18n("Cancel") );
-  
+
   if ( res == 0 )
     return saveAllPages();
-  
+
   if ( res == 1 )
     return true;
-  
+
   return false;
 }
 
@@ -148,20 +149,20 @@ void KoShellWindow::cleanUp()
 
   KoMainWindow::cleanUp();
 }
-
+*/
 /*
 void KoShellWindow::setDocument( KImageDoc *_doc )
 {
   if ( m_pDoc )
     releaseDocument();
-  
+
   m_pDoc = _doc;
   m_pDoc->_ref();
   m_pView = _doc->createImageView();
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
-  
+
   setRootPart( m_pView->id() );
   interface()->setActivePart( m_pView->id() );
 
@@ -172,7 +173,7 @@ void KoShellWindow::setDocument( KImageDoc *_doc )
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
-  
+
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
 }
@@ -180,42 +181,17 @@ void KoShellWindow::setDocument( KImageDoc *_doc )
 bool KoShellWindow::newPage( KoDocumentEntry& _e )
 {
   // Create document
-  KOffice::DocumentFactory_var factory = KOffice::DocumentFactory::_narrow( _e.reference );
-  if( CORBA::is_nil( factory ) )
-  {
-    QString tmp;
-    tmp.sprintf( i18n("Server %s is not document factory" ), _e.name.data() );
-    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( "Ok" ) );
-    return false;
-  }
-  
-  KOffice::Document_var doc = factory->create();
-  if( CORBA::is_nil( doc ) )
-  {
-    QString tmp;
-    tmp.sprintf( i18n("Server %s did not create a document" ), _e.name.data() );
-    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( "Ok" ) );
-    return false;
-  }
-  
-  doc->incRef();
+  KoDocument *doc = _e.createDoc();
+
   doc->initDoc();
 
-  // Create a view
-  OpenParts::View_var v = doc->createView();
-  if ( CORBA::is_nil( v ) )
-  {
-    QMessageBox::critical( 0L, i18n("KOffice Error"), i18n("Could not create a view") );
-    return false;
-  }
-  
-  KOffice::View_var view;
-  view = KOffice::View::_narrow( v );
-  if ( CORBA::is_nil( view ) )
-  {
-    QMessageBox::critical( 0L, i18n("KOffice Error"), i18n("Could not create a koffice compliant view") );
-    return false;
-  }
+  View *v;
+
+  if ( m_activePage != m_lstPages.end() )
+    (*m_activePage).m_pView->reparent( 0L, 0, QPoint( 0, 0 ), FALSE );
+
+  v = doc->createView( m_pFrame );
+/*
   view->incRef();
   view->setMode( KOffice::View::RootMode );
   view->setMainWindow( this->koInterface() );
@@ -223,18 +199,26 @@ bool KoShellWindow::newPage( KoDocumentEntry& _e )
   m_pFrame->detach();
   m_pFrame->attachView( view );
   interface()->setActivePart( view->id() );
-  
+*/
+  setActiveView( v );
+  v->show();
+  m_pFrame->setView( v );
+
+  // HACK (Simon)
+  m_pFrame->resize( m_pFrame->width() + 1, m_pFrame->height() );
+  m_pFrame->resize( m_pFrame->width() - 1, m_pFrame->height() );
+
   // Create a new page
   Page page;
-  page.m_vDoc = KOffice::Document::_duplicate( doc );
-  page.m_vView = KOffice::View::_duplicate( view );
+  page.m_pDoc = doc;
+  page.m_pView = v;
   page.m_id = m_pKoolBar->insertItem( m_grpDocuments, _e.icon, i18n("No name"), this,
 				      SLOT( slotKoolBar( int, int ) ) );
-  
+
   m_lstPages.append( page );
   m_activePage = m_lstPages.end();
   m_activePage--;
-  
+/*
   if( m_pFileMenu )
   {
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
@@ -242,11 +226,11 @@ bool KoShellWindow::newPage( KoDocumentEntry& _e )
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
-  
+
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
   opToolBar()->setFullWidth(false);
-
+*/
   return true;
 }
 /*
@@ -263,37 +247,37 @@ bool KoShellWindow::openDocument( const char *_url, const char *_format )
     s->show();
     return s->openDocument( _url, _format );
   }
-  
+
   cerr << "Creating new document" << endl;
-  
+
   m_pDoc = new KImageDoc;
   if ( !m_pDoc->loadFromURL( _url, _format ) )
     return false;
-  
+
   m_pView = m_pDoc->createImageView();
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
-  
+
   setRootPart( m_pView->id() );
   interface()->setActivePart( m_pView->id() );
-  
+
   if ( m_pFileMenu )
-  {    
+  {
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
-  
+
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
-  
+
   return true;
 }
 
 */
-
+/*
 bool KoShellWindow::saveAllPages()
 {
   // TODO
@@ -323,7 +307,7 @@ bool KoShellWindow::closeApplication()
 	return false;
     }
   }
-  
+
   return true;
 }
 
@@ -343,6 +327,11 @@ void KoShellWindow::releasePages()
   }
   m_lstPages.clear();
 }
+*/
+QString KoShellWindow::configFile() const
+{
+  return readConfigFile( locate( "data", "koshell/koshell_shell.rc" ) );
+}
 
 /*
 void KoShellWindow::releaseDocument()
@@ -351,7 +340,7 @@ void KoShellWindow::releaseDocument()
   if ( m_pDoc )
     views = m_pDoc->viewCount();
   cerr << "############## VIEWS=" << views << " #####################" << endl;
-  
+
   cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
   setRootPart( 0 );
@@ -361,10 +350,10 @@ void KoShellWindow::releaseDocument()
   interface()->setActivePart( 0 );
 
   // cerr << "-3) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
-  
+
   if ( m_pView )
     m_pView->decRef();
-  
+
   // cerr << "-4) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   if ( m_pDoc && views <= 1 )
     m_pDoc->cleanUp();
@@ -379,20 +368,21 @@ void KoShellWindow::releaseDocument()
   m_pDoc = 0L;
 }
 */
-
+/*
 void KoShellWindow::slotFileNew()
 {
-  /*  if ( !newDocument() )    
+  /*  if ( !newDocument() )
       QMessageBox::critical( this, i18n("KImage Error"), i18n("Could not create new document"), i18n("OK") ); */
+/*
 }
-
+*/
 //void KoShellWindow::slotFileOpen()
 //{
   /* QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
 
   if ( file.isNull() )
     return;
-  
+
   if ( !openDocument( file, "" ) )
   {
     QString tmp;
@@ -401,6 +391,50 @@ void KoShellWindow::slotFileNew()
     } */
 //}
 
+void KoShellWindow::slotFileOpen()
+{
+  if ( m_konqueror != m_lstPages.end() )
+  {
+    if ( m_konqueror == m_activePage )
+      return;
+
+    if ( m_activePage != m_lstPages.end() )
+      (*m_activePage).m_pView->reparent( 0L, 0, QPoint( 0, 0 ), FALSE );
+
+    m_activePage = m_konqueror;
+    (*m_activePage).m_pView->reparent( m_pFrame, 0, QPoint( 0, 0 ), TRUE );
+    setActiveView( (*m_activePage).m_pView );
+    return;
+  }
+
+  KService::Ptr service = KoTrader::self()->serviceByName( "Konqueror" );
+
+  if ( !service )
+    return;
+
+  KLibFactory *factory = KLibLoader::self()->factory( service->library() );
+
+  if ( !factory )
+    return;
+
+  if ( m_activePage != m_lstPages.end() )
+    (*m_activePage).m_pView->reparent( 0L, 0, QPoint( 0, 0 ), FALSE );
+
+  Part *part = (Part *)factory->create();
+
+  Page p;
+  p.m_pDoc = 0L;
+  p.m_pView = part->createView();
+  p.m_id = -1;
+
+  m_activePage = m_konqueror = m_lstPages.append( p );
+
+  (*m_activePage).m_pView->reparent( m_pFrame, 0, QPoint( 0, 0 ), TRUE );
+  setActiveView( (*m_activePage).m_pView );
+  m_pFrame->setView( p.m_pView );
+}
+
+/*
 void KoShellWindow::slotFileSave()
 {
 }
@@ -410,18 +444,18 @@ void KoShellWindow::slotFileSaveAs()
 }
 
 void KoShellWindow::slotFileClose()
-{
+{*/
   /* if ( documentCount() <= 1 )
   {
     slotFileQuit();
     return;
   }
-  
+
   if ( isModified() )
     if ( !requestClose() )
       return;
-  
-      delete this; */
+
+      delete this; */ /*
 }
 
 void KoShellWindow::slotFilePrint()
@@ -437,7 +471,7 @@ void KoShellWindow::slotFileQuit()
     return;
 
   cerr << "EXIT 2" << endl;
-  
+
   delete this;
   kapp->exit();
 }
@@ -446,7 +480,7 @@ KOffice::Document_ptr KoShellWindow::document()
 {
   if ( m_activePage == m_lstPages.end() )
     return 0L;
-  
+
   return KOffice::Document::_duplicate( (*m_activePage).m_vDoc );
 }
 
@@ -468,7 +502,7 @@ void KoShellWindow::slotFileOpen()
     interface()->setActivePart( m_vKfm->id() );
     return;
   }
-  
+
   KActivator *activator = KdedInstance::self()->kactivator();
   CORBA::Object_var obj = activator->activateService( "Konqueror", "IDL:Konqueror/Application:1.0", "App" );
 
@@ -481,7 +515,7 @@ void KoShellWindow::slotFileOpen()
   m_pFrame->detach();
   m_pFrame->OPFrame::attach( m_vKfm );
   interface()->setActivePart( m_vKfm->id() );
-  
+
   if( m_pFileMenu )
   {
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
@@ -489,10 +523,28 @@ void KoShellWindow::slotFileOpen()
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
-  
+
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
   opToolBar()->setFullWidth(false);
+}
+*/
+
+KoShellFrame::KoShellFrame( QWidget *parent )
+ : QWidget( parent )
+{
+  m_pView = 0L;
+}
+
+void KoShellFrame::setView( View *view )
+{
+  m_pView = view;
+}
+
+void KoShellFrame::resizeEvent( QResizeEvent * )
+{
+  if ( m_pView )
+    m_pView->setGeometry( 0, 0, width(), height() );
 }
 
 #include "koshell_shell.moc"

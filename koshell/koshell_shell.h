@@ -21,12 +21,15 @@
 #define __koshell_window_h__
 
 #include <koMainWindow.h>
+#include <koQueryTypes.h>
 #include <qlist.h>
+#include <qmap.h>
 #include <qvaluelist.h>
 
 class QHBox;
 class KoKoolBar;
 class KoDocumentEntry;
+class KoShellFrame;
 
 class KoShellWindow : public KoMainWindow
 {
@@ -36,36 +39,45 @@ public:
 
   // C++
   KoShellWindow();
-  ~KoShellWindow();
-
+  virtual ~KoShellWindow();
+/*
   virtual void cleanUp();
-
+*/
   virtual bool newPage( KoDocumentEntry& _e );
-  virtual bool closeApplication();
+/*  virtual bool closeApplication();
   virtual bool saveAllPages();
   virtual void releasePages();
+*/  
+  virtual QString configFile() const;
+
+  virtual QString nativeFormatMimeType() const {}
+  virtual QString nativeFormatPattern() const {}
+  virtual QString nativeFormatName() const {}
   
 protected slots:
-
-  void slotFileNew();
+/*
+  void slotFileNew();*/
   void slotFileOpen();
-  void slotFileSave();
+/*  void slotFileSave();
   void slotFileSaveAs();
   void slotFilePrint();
   void slotFileClose();
   void slotFileQuit();
-
+*/
   void slotKoolBar( int _grp, int _item );
   
 protected:
 
+  virtual KoDocument* createDoc() {}
+
   struct Page
   {
-    KOffice::Document_var m_vDoc;
-    KOffice::View_var m_vView;
+    KoDocument *m_pDoc;
+    View *m_pView;
     int m_id;
   };
-
+  
+/*
   virtual KOffice::Document_ptr document();
   virtual KOffice::View_ptr view();
 
@@ -75,7 +87,7 @@ protected:
 
   bool isModified();
   bool requestClose();
-
+*/
   QValueList<Page> m_lstPages;
   QValueList<Page>::Iterator m_activePage;
 
@@ -87,11 +99,28 @@ protected:
   QValueList<KoDocumentEntry> m_lstComponents;
   QMap<int,KoDocumentEntry*> m_mapComponents;
 
-  OpenParts::Part_var m_vKfm;
-  
+  QValueList<Page>::Iterator m_konqueror;
+
+  KoShellFrame *m_pFrame;
+
   QHBox *m_pLayout;
   
   static QList<KoShellWindow>* s_lstShells;
+};
+
+class KoShellFrame : public QWidget
+{
+  Q_OBJECT
+public:
+  KoShellFrame( QWidget *parent );
+  
+  void setView( View *view );
+  
+protected:
+  virtual void resizeEvent( QResizeEvent * );
+  
+private:
+  View *m_pView;
 };
 
 #endif // __koshell_window_h__
