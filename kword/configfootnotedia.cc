@@ -38,6 +38,7 @@ KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWD
     setCaption( i18n("Configure Endnote/Footnote") );
     m_doc = _doc;
 
+    resize( 510, 310 );
     setupTab1();
     setupTab2();
     setupTab3();
@@ -62,43 +63,74 @@ void KWConfigFootNoteDia::setupTab2()
 
 void KWConfigFootNoteDia::setupTab3()
 {
-    QVBox * page = addVBoxPage( i18n( "Separator Line" ) );
-    QVButtonGroup *bgSeparatorPosition = new QVButtonGroup( i18n( "Separator Line Position" ), page );
-    rbPosLeft = new QRadioButton( i18n("Left"), bgSeparatorPosition);
-    rbPosCentered = new QRadioButton( i18n("Centered"), bgSeparatorPosition);
-    rbPosRight = new QRadioButton( i18n("Right"), bgSeparatorPosition);
-    QVButtonGroup *bgSeparatorLength = new QVButtonGroup( i18n( "Separator Line Length" ), page );
+    QFrame * page = addPage( i18n( "Separator Line" ) );
+    QVBoxLayout *pageLayout= new QVBoxLayout( page, 11, 6);
 
-    QLabel *lab = new QLabel(i18n("Length:"), bgSeparatorLength);
+    // use this when the message freeze is lifted.
+    //QButtonGroup *positionGroupBox = new QButtonGroup( i18n( "Position"), page );
+    QButtonGroup *positionGroupBox = new QButtonGroup( i18n( "Separator Line Position"), page );
+    positionGroupBox->setColumnLayout(0, Qt::Vertical );
+    QVBoxLayout *positionLayout = new QVBoxLayout( positionGroupBox->layout() );
+    positionLayout->setAlignment( Qt::AlignTop );
 
-    spLength = new KIntNumInput( 1, bgSeparatorLength );
+    rbPosLeft = new QRadioButton( i18n("Left"), positionGroupBox, "rbPosLeft" );
+    positionLayout->addWidget( rbPosLeft );
+
+    rbPosCentered = new QRadioButton( i18n("Centered"), positionGroupBox, "rbPosCentered" );
+    positionLayout->addWidget( rbPosCentered );
+
+    rbPosRight = new QRadioButton( i18n("Right"), positionGroupBox, "rbPosRight" );
+    positionLayout->addWidget( rbPosRight );
+    pageLayout->addWidget( positionGroupBox );
+    switch( m_doc->footNoteSeparatorLinePosition() ) {
+        case SLP_LEFT:
+            rbPosLeft->setChecked( true);
+            break;
+        case SLP_CENTERED:
+            rbPosCentered->setChecked( true);
+            break;
+        case SLP_RIGHT:
+            rbPosRight->setChecked( true);
+            break;
+    }
+
+    QGridLayout *layout = new QGridLayout( 0, 1, 1, 0, 6);
+
+    spWidth = new KDoubleNumInput( 1, page );
+    spWidth->setRange( 0, 5, 0.5 ,false );
+    spWidth->setValue( m_doc->footNoteSeparatorLineWidth());
+    layout->addWidget( spWidth, 1, 1 );
+
+    spLength = new KIntNumInput( page, "spLength" );
     spLength->setRange( 1, 100, 1,false );
     spLength->setValue( m_doc->footNoteSeparatorLineLength());
     spLength->setSuffix(i18n(" %"));
-    switch( m_doc->footNoteSeparatorLinePosition() )
-    {
-    case SLP_LEFT:
-        rbPosLeft->setChecked( true);
-        break;
-    case SLP_CENTERED:
-        rbPosCentered->setChecked( true);
-        break;
-    case SLP_RIGHT:
-        rbPosRight->setChecked( true);
-        break;
-    }
+    layout->addWidget( spLength, 0, 1 );
 
-    QVButtonGroup *bgSeparatorWidth = new QVButtonGroup( i18n( "Separator Line Width" ), page );
+    // use this when the message freeze is lifted.
+    //QLabel *lSize = new QLabel( i18n("arg is a unit such as pt", "&Width (%1)").arg("pt"), page );
+    //lSize->setBuddy( spWidth );
+    QLabel *lSize = new QLabel( i18n("Separator Line Length")+QString(" (pt)"), page );
+    layout->addWidget( lSize, 1, 0 );
 
-    lab = new QLabel(i18n("Width(pt):"), bgSeparatorWidth);
-    spWidth = new KDoubleNumInput( 1, bgSeparatorWidth );
-    spWidth->setRange( 0, 5, 0.5 ,false );
-    spWidth->setValue( m_doc->footNoteSeparatorLineWidth());
+    QSpacerItem* spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    layout->addMultiCell( spacer, 0, 1, 2, 2 );
 
-    QVButtonGroup *bgSeparatorType = new QVButtonGroup( i18n( "Separator Line Type" ), page );
+    // use this when the message freeze is lifted.
+    //QLabel *lWidth = new QLabel( i18n("&Size on page:"), page, "lWidth" );
+    //lWidth->setBuddy( spLength );
+    QLabel *lWidth = new QLabel( i18n("Separator Line Width"), page, "lWidth" );
+    layout->addWidget( lWidth, 0, 0 );
+    pageLayout->addLayout( layout );
 
-    lab = new QLabel(i18n("Type of line:"), bgSeparatorType);
-    m_cbLineType = new QComboBox( bgSeparatorType );
+    QHBoxLayout *styleLayout = new QHBoxLayout( 0, 0, 6, "styleLayout");
+
+    // use this when the message freeze is lifted.
+    //QLabel *styleLabel = new QLabel( i18n("Style:"), page );
+    QLabel *styleLabel = new QLabel( i18n("Separator Line Type"), page );
+    styleLayout->addWidget( styleLabel );
+
+    m_cbLineType = new QComboBox( page );
     QStringList lst;
     lst <<i18n("Solid");
     lst <<i18n("Dash Line");
@@ -107,6 +139,13 @@ void KWConfigFootNoteDia::setupTab3()
     lst <<i18n("Dash Dot Dot Line");
     m_cbLineType->insertStringList( lst );
     m_cbLineType->setCurrentItem( static_cast<int>(m_doc->footNoteSeparatorLineType()));
+    styleLayout->addWidget( m_cbLineType );
+
+    QSpacerItem* spacer_2 = new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    styleLayout->addItem( spacer_2 );
+    pageLayout->addLayout( styleLayout );
+    QSpacerItem* spacer_3 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    pageLayout->addItem( spacer_3 );
 }
 
 
