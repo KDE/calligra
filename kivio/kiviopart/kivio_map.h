@@ -27,6 +27,7 @@ class KoStore;
 
 class QDomElement;
 class QDomDocument;
+class DCOPObject;
 
 #include <qintdict.h>
 #include <qobject.h>
@@ -95,9 +96,13 @@ public:
 
   KivioDoc* doc();
 
+    virtual DCOPObject* dcopObject();
+
 private:
   QPtrList<KivioPage> m_lstPages;
   KivioDoc* m_pDoc;
+    DCOPObject* m_dcop;
+
 };
 
 #endif

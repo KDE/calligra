@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, Laurent MONTEL <lmontel@mandrakesoft.com>
+   Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,29 +17,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KIVIO_DOC_IFACE_H
-#define KIVIO_DOC_IFACE_H
+#include "KIvioPageIface.h"
 
-#include <KoDocumentIface.h>
-#include <dcopref.h>
+#include "kivio_page.h"
 
-#include <qstring.h>
+#include <dcopclient.h>
 
-class KivioDoc;
-
-class KIvioDocIface : virtual public KoDocumentIface
+KIvioPageIface::KIvioPageIface( KivioPage *page_ )
+    : DCOPObject( page_ )
 {
-    K_DCOP
-public:
-    KIvioDocIface(  KivioDoc *doc_ );
+    m_page = page_;
+}
 
-k_dcop:
-    virtual void aboutKivio();
-    virtual DCOPRef map();
+bool KIvioPageIface::isHidden()
+{
+    return m_page->isHidden();
+}
 
-private:
-    KivioDoc *doc;
+void KIvioPageIface::deleteSelectedStencils()
+{
+    m_page->deleteSelectedStencils();
+}
 
-};
+void KIvioPageIface::groupSelectedStencils()
+{
+    m_page->groupSelectedStencils();
+}
 
-#endif
+void KIvioPageIface::ungroupSelectedStencils()
+{
+    m_page->ungroupSelectedStencils();
+}
+

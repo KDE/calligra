@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, Laurent MONTEL <lmontel@mandrakesoft.com>
+   Copyright (C) 2002 Laurent MONTEL <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,29 +17,36 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KIVIO_DOC_IFACE_H
-#define KIVIO_DOC_IFACE_H
+#ifndef KIVIO_MAP_IFACE_H
+#define KIVIO_MAP_IFACE_H
 
-#include <KoDocumentIface.h>
+#include <dcopobject.h>
 #include <dcopref.h>
 
-#include <qstring.h>
+#include <qvaluelist.h>
+#include <qstringlist.h>
 
-class KivioDoc;
+class KivioMap;
 
-class KIvioDocIface : virtual public KoDocumentIface
+class KIvioMapIface : virtual public DCOPObject
 {
     K_DCOP
 public:
-    KIvioDocIface(  KivioDoc *doc_ );
+    KIvioMapIface( KivioMap* );
+
+    virtual bool processDynamic(const QCString &fun, const QByteArray &data,
+				QCString& replyType, QByteArray &replyData);
 
 k_dcop:
-    virtual void aboutKivio();
-    virtual DCOPRef map();
+    virtual DCOPRef page( const QString& name );
+    virtual DCOPRef pageByIndex( int index );
+    virtual int pageCount() const;
+    virtual QStringList pageNames() const;
+    virtual QValueList<DCOPRef> pages();
+    virtual DCOPRef insertPage( const QString& name );
 
 private:
-    KivioDoc *doc;
-
+    KivioMap* m_map;
 };
 
 #endif

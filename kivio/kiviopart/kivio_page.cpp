@@ -59,11 +59,12 @@
 #include "kivio_point.h"
 #include "kivio_ps_printer.h"
 #include "kivio_stencil.h"
+#include "KIvioPageIface.h"
 
 int KivioPage::s_id = 0L;
 QIntDict<KivioPage>* KivioPage::s_mapPages;
 
-KivioPage::KivioPage( KivioMap *_map, const char *_name )
+KivioPage::KivioPage( KivioMap *_map, const QString &pageName, const char *_name )
 : QObject( _map, _name ),
   m_pCurLayer(NULL)
 {
@@ -71,6 +72,8 @@ KivioPage::KivioPage( KivioMap *_map, const char *_name )
     s_mapPages = new QIntDict<KivioPage>;
   m_id = s_id++;
   s_mapPages->insert( m_id, this );
+
+  m_dcop = 0;
 
   m_pMap = _map;
   m_pDoc = _map->doc();
@@ -83,7 +86,7 @@ KivioPage::KivioPage( KivioMap *_map, const char *_name )
 
   m_lstSelection.setAutoDelete(false);
 
-  m_strName = _name;
+  m_strName = pageName;
 
   setHidden(false);
   // Get a unique name so that we can offer scripting
@@ -97,10 +100,19 @@ KivioPage::KivioPage( KivioMap *_map, const char *_name )
   gLines = new KivioGuideLines(this);
 }
 
+DCOPObject* KivioPage::dcopObject()
+{
+    if ( !m_dcop )
+        m_dcop = new KIvioPageIface( this );
+    return m_dcop;
+}
+
+
 KivioPage::~KivioPage()
 {
   delete gLines;
   s_mapPages->remove(m_id);
+  delete m_dcop;
 }
 
 KivioPage* KivioPage::find( int _id )

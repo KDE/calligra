@@ -27,6 +27,7 @@
 #include "kivio_view.h"
 #include "kivio_canvas.h"
 #include "kivio_page.h"
+#include "KIvioMapIface.h"
 
 #include <time.h>
 #include <stdlib.h>
@@ -36,10 +37,14 @@ KivioMap::KivioMap( KivioDoc* doc, const char* name )
 {
   m_pDoc = doc;
   m_lstPages.setAutoDelete(true);
+  m_dcop = 0;
+
 }
 
 KivioMap::~KivioMap()
 {
+    delete m_dcop;
+
 }
 
 void KivioMap::addPage( KivioPage* page )
@@ -159,4 +164,12 @@ KivioPage* KivioMap::nextPage()
 int KivioMap::count()
 {
   return m_lstPages.count();
+}
+
+DCOPObject* KivioMap::dcopObject()
+{
+    if ( !m_dcop )
+        m_dcop = new KIvioMapIface( this );
+
+    return m_dcop;
 }

@@ -33,6 +33,7 @@ class QDomElement;
 class KivioLayer;
 class KivioPoint;
 class KivioGuideLines;
+class DCOPObject;
 
 #include <koDocument.h>
 
@@ -78,8 +79,10 @@ class KivioPSPrinter;
 class KivioPage : public QObject
 { Q_OBJECT
 public:
-  KivioPage( KivioMap *_map, const char *_name );
+  KivioPage( KivioMap *_map, const QString &pageName,  const char *_name=0L );
   ~KivioPage();
+
+    virtual DCOPObject* dcopObject();
 
   QString pageName() { return m_strName; }
   bool setPageName( const QString& name, bool init = FALSE );
@@ -194,6 +197,8 @@ protected:
   TKPageLayout m_pPageLayout;
 
   KivioGuideLines* gLines;
+    DCOPObject* m_dcop;
+
 };
 
 #endif

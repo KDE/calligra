@@ -20,9 +20,9 @@
 #include "KIvioDocIface.h"
 
 #include "kivio_doc.h"
-
+#include "kivio_map.h"
 #include <dcopclient.h>
-
+#include <kapplication.h>
 KIvioDocIface::KIvioDocIface( KivioDoc *doc_ )
     : KoDocumentIface( doc_ )
 {
@@ -32,4 +32,10 @@ KIvioDocIface::KIvioDocIface( KivioDoc *doc_ )
 void KIvioDocIface::aboutKivio()
 {
     doc->aboutKivio();
+}
+
+DCOPRef KIvioDocIface::map()
+{
+    return DCOPRef( kapp->dcopClient()->appId(),
+                    doc->map()->dcopObject()->objId() );
 }
