@@ -66,6 +66,7 @@
 
 #include <klocale.h>
 #include <kcolordlg.h>
+#include <kconfig.h>
 #include <kfontdialog.h>
 #include <kglobal.h>
 #include <kimageio.h>
@@ -228,6 +229,11 @@ DCOPObject* KPresenterView::dcopObject()
 /*======================= destructor ============================*/
 KPresenterView::~KPresenterView()
 {
+    if(sidebar) {
+        KConfig *config=KGlobal::config();
+        config->setGroup("Global");
+        config->writeEntry("Sidebar", sidebar->isVisible());
+    }
     delete rb_oalign;
     delete rb_lbegin;
     delete rb_lend;
@@ -1425,8 +1431,6 @@ void KPresenterView::textSettings()
     }
 }
 
-
-
 /*===============================================================*/
 void KPresenterView::textContentsToHeight()
 {
@@ -1660,6 +1664,12 @@ void KPresenterView::createGUI()
     {
         sidebar->setCurrentItem( sidebar->firstChild() );
         sidebar->setSelected( sidebar->firstChild(), TRUE );
+        KConfig *config=KGlobal::config();
+        config->setGroup("Global");
+        if(!config->readBoolEntry("Sidebar", true)) {
+            sidebar->hide();
+            actionViewShowSideBar->setChecked(false);
+        }
     }
 }
 

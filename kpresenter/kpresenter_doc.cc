@@ -58,7 +58,6 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kstddirs.h>
-#include <kconfig.h>
 #include <kmessagebox.h>
 
 #include <koTemplateChooseDia.h>
