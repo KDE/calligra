@@ -14,9 +14,7 @@ libkopainter_la_SOURCES = art_rgb.c \
 	koFrameButton.cc \
 	koColorSlider.cc \
 	koColorChooser.cc \
-	koIconChooser.cc \
-	koCanvasRuler.cc \
-	koCanvasGuide.cc
+	koIconChooser.cc
 
 libkopainter_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
 
