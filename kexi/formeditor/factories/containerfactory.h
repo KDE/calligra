@@ -120,7 +120,7 @@ class KFORMEDITOR_EXPORT MyTabWidget : public KTabWidget
 class KFORMEDITOR_EXPORT SubForm : public QScrollView
 {
 	Q_OBJECT
-	Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true);
+	Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true)
 
 	public:
 		SubForm(KFormDesigner::FormManager *manager, QWidget *parent, const char *name);

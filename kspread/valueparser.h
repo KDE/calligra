@@ -76,7 +76,7 @@ class ValueParser {
 };
 
 
-};  //namespace KSpread
+}  //namespace KSpread
 
 
 #endif  //KSPREAD_VALUEPARSER

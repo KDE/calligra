@@ -89,7 +89,7 @@ class KSpreadPlugin
 namespace KSpread
 {
 class Damage;
-};
+}
 
 
 class DocPrivate;

@@ -29,7 +29,7 @@
 namespace KexiPart
 {
 	class Info;
-};
+}
 
 class KEXIMAIN_EXPORT KexiBrowserItem : public KListViewItem
 {

@@ -37,7 +37,7 @@ using KFormDesigner::Form;
 class KexiSubForm : public QScrollView
 {
 	Q_OBJECT
-	Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true);
+	Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true)
 
 	public:
 		KexiSubForm(KFormDesigner::FormManager *manager, QWidget *parent, const char *name);
@@ -59,7 +59,7 @@ class KexiSubForm : public QScrollView
 class KexiDBLineEdit : public KLineEdit, public KexiDataItemInterface
 {
 	Q_OBJECT
-	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true);
+	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 
 	public:
 		KexiDBLineEdit(QWidget *parent, const char *name=0);

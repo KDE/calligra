@@ -44,6 +44,6 @@ class PolyLineConnectorSpawner : public KivioStencilSpawner
     KivioStencilSpawnerInfo m_info;
 };
 
-};
+}
 
 #endif

@@ -72,7 +72,7 @@ class SQLiteDriver : public Driver
 
 };
 
-};
+}
 
 #endif
 

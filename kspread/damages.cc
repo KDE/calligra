@@ -33,7 +33,7 @@ public:
   int action;
 };
 
-};
+}
 
 
 using namespace KSpread;

@@ -66,7 +66,7 @@ class KEXICORE_EXPORT DataSource
 		DataSourcePrivate *d;
 };
 
-};
+}
 
 #endif
 

@@ -46,7 +46,7 @@ class QDomElement;
 
 namespace KSpread {
   class DependencyManager;
-};
+}
 
 class DCOPObject;
 class KPrinter;
@@ -241,8 +241,8 @@ class KSpreadSheet : public QObject
 
 
     Q_PROPERTY( QString sheetName READ sheetName )
-    Q_PROPERTY( bool autoCalc READ getAutoCalc WRITE setAutoCalc );
-    Q_PROPERTY( bool showGrid READ getShowGrid WRITE setShowGrid );
+    Q_PROPERTY( bool autoCalc READ getAutoCalc WRITE setAutoCalc )
+    Q_PROPERTY( bool showGrid READ getShowGrid WRITE setShowGrid )
 
 public:
     enum Direction { Right, Left, Up, Down };

@@ -112,7 +112,7 @@ public:
     QDomElement saveFormat( QDomDocument& doc, int _col, int _row, bool force = false, bool copy = false ) const;
     virtual bool loadOasisStyleProperties(KoStyleStack & styleStack, const KoOasisStyles& oasisStyles );
     virtual void saveOasisCellStyle( KoGenStyle &currentCellStyle, int _col, int _row );
-    virtual void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle );
+    virtual void saveOasisCellStyle( KoGenStyle &currentCellStyle );
     void saveOasisFontCellStyle( KoGenStyle &currentCellStyle, const QFont &_font );
 
     bool loadFontOasisStyle( KoStyleStack & font );

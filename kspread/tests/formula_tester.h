@@ -49,6 +49,6 @@ private:
   void checkEval( const char *file, int line, const char* msg, const QString&, const KSpreadValue& );
 };
 
-}; // namespace KSpread
+} // namespace KSpread
 
 #endif // KSPREAD_FORMULA_TESTER

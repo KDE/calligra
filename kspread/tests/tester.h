@@ -45,6 +45,6 @@ protected:
   QStringList errorList;
 };
 
-};
+}
 
 #endif // KSPREAD_TESTER

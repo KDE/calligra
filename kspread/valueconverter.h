@@ -53,7 +53,7 @@ class ValueConverter {
 };
 
 
-};  //KSpread namespace
+}  //KSpread namespace
 
 #endif  //KSPREAD_VALUECONVERTER
 

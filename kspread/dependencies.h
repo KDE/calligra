@@ -75,7 +75,7 @@ protected:
 };
 
 //end of namespace
-};
+}
 
 #endif // KSPREAD_DEPENDENCIES
 

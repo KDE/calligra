@@ -111,7 +111,7 @@ private:
   unsigned topIndex;
 };
 
-};
+}
 
 using namespace KSpread;
 

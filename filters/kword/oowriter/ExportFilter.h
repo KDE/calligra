@@ -112,7 +112,7 @@ private:
         const LayoutData& layout, const bool force, QString& styleKey);
     QString escapeOOText(const QString& strText) const;
     QString escapeOOSpan(const QString& strText) const;
-    QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) const;
+    QString cellToProperties( const TableCell& cell, QString& key) const;
     bool makeTableRows( const QString& tableName, const Table& table, int firstRowNumber );
     bool makeTable( const FrameAnchor& anchor, const AnchorType anchorType );
     bool makePicture( const FrameAnchor& anchor, const AnchorType anchorType );

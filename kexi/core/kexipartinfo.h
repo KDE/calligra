@@ -23,6 +23,9 @@
 
 #include "kexipartmanager.h"
 
+class KexiMainWindowImpl;
+class KexiProject;
+
 namespace KexiPart
 {
 
@@ -95,8 +98,8 @@ class KEXICORE_EXPORT Info
 #endif
 	protected:
 		friend class Manager;
-		friend class KexiProject;
-		friend class KexiMainWindowImpl;
+		friend class ::KexiProject;
+		friend class ::KexiMainWindowImpl;
 
 		/**
 		 * @sets the project-part-id

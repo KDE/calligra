@@ -112,6 +112,6 @@ namespace Kivio {
       
       QValueList<KoPoint> m_points;
   };
-};
+}
 
 #endif

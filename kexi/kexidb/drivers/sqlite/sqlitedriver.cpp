@@ -31,9 +31,9 @@
 using namespace KexiDB;
 
 #ifdef SQLITE2
-KEXIDB_DRIVER_INFO( SQLiteDriver, sqlite2 );
+KEXIDB_DRIVER_INFO( SQLiteDriver, sqlite2 )
 #else
-KEXIDB_DRIVER_INFO( SQLiteDriver, sqlite3 );
+KEXIDB_DRIVER_INFO( SQLiteDriver, sqlite3 )
 #endif
 
 //! driver specific private data

@@ -30,7 +30,7 @@ class KexiMainWindow;
 namespace KexiPart
 {
 	class DataSource;
-};
+}
 
 typedef QPair<KexiPart::DataSource*, KexiPart::Item> DSInfo;
 

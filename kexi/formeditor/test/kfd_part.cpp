@@ -634,7 +634,7 @@ FormWidgetBase::closeEvent(QCloseEvent *ev)
 	}
 }
 
-K_EXPORT_COMPONENT_FACTORY(libkformdesigner_part, KFDFactory);
+K_EXPORT_COMPONENT_FACTORY(libkformdesigner_part, KFDFactory)
 
 #include "kfd_part.moc"
 

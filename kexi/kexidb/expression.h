@@ -64,7 +64,7 @@ public:
 	virtual ~BaseExpr();
 	int token() const { return m_token; }
 	virtual Field::Type type();
-	BaseExpr *BaseExpr::parent() const { return m_par; }
+	BaseExpr* parent() const { return m_par; }
 	virtual void setParent(BaseExpr *p) { m_par = p; }
 	virtual bool validate(ParseInfo& parseInfo);
 	virtual QString toString() = 0;

@@ -49,7 +49,7 @@ namespace KexiDB
 	class QuerySchema;
 	class TableSchema;
 	class ResultInfo;
-};
+}
 
 class KexiQueryDesignerGuiEditorPrivate;
 

@@ -88,6 +88,6 @@ class SQLiteConnection : public Connection
 	friend class SQLiteCursor;
 };
 
-};
+}
 
 #endif

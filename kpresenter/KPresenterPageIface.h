@@ -135,7 +135,7 @@ k_dcop:
     void setFooter( bool b );
 #if MASTERPAGE
     void setUseMasterBackground( bool useMasterBackground );
-    bool KPresenterPageIface::useMasterBackground() const;
+    bool useMasterBackground() const;
 #endif
 
 private:

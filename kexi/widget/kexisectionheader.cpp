@@ -34,7 +34,7 @@ class BoxLayout : public QBoxLayout
 	public:
 		BoxLayout( KexiSectionHeader* parent, Direction d, int margin = 0, 
 			int spacing = -1, const char * name = 0 );
-		virtual void BoxLayout::addItem( QLayoutItem * item );
+		virtual void addItem( QLayoutItem * item );
 		QGuardedPtr<KexiViewBase> view;
 };
 

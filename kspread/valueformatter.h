@@ -85,7 +85,7 @@ class ValueFormatter {
 };
 
 
-};  //namespace KSpread
+}  //namespace KSpread
 
 
 #endif  //KSPREAD_VALUEFORMATTER

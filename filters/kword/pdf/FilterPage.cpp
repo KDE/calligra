@@ -599,4 +599,4 @@ void Page::dump()
     TIME_END;
 }
 
-}; // namespace
+} // namespace

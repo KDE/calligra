@@ -98,7 +98,7 @@ class DependencyList {
   QMap<KSpreadPoint, QValueList<RangeDependency> > rangeDeps;
 };
 
-};
+}
 
 using namespace KSpread;
 

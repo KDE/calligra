@@ -319,7 +319,7 @@ class Formula
     Formula& operator=( const Formula& );
 };
 
-}; // namespace KSpread
+} // namespace KSpread
 
 #endif // KSPREAD_FORMULA
 

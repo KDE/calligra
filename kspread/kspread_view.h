@@ -57,7 +57,7 @@ class ViewPrivate;
 namespace KSpread
 {
 class Damage;
-};
+}
 
 /**
  * \brief

@@ -84,7 +84,7 @@ class SQLiteCursor : public Cursor
 	friend class SQLiteConnection;
 };
 
-}; //namespace KexiDB
+} //namespace KexiDB
 
 #endif
 

@@ -139,7 +139,7 @@ public:
 
 	/*! Convenience function. 
 	 \return field object that define column \a colNum or NULL if there is no such column */
-	KexiDB::Field* KexiTableView::field(int colNum) const;
+	KexiDB::Field* field(int colNum) const;
 
 	bool isSortingEnabled() const;
 

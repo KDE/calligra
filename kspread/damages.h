@@ -73,6 +73,6 @@ class SheetDamage : public Damage
 };
 
 
-}; // namespace KSpread
+} // namespace KSpread
 
 #endif // KSPREAD_DAMAGES

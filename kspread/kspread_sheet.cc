@@ -542,7 +542,7 @@ KSpreadCell* KSpreadSheet::defaultCell() const
 KSpreadFormat* KSpreadSheet::defaultFormat()
 {
     return d->defaultFormat;
-};
+}
 
 const KSpreadFormat* KSpreadSheet::defaultFormat() const
 {

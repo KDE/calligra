@@ -45,7 +45,7 @@ public:
   QTextEdit* logView;
 };
 
-};
+}
 
 using namespace KSpread;
 

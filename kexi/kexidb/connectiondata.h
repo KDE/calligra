@@ -195,6 +195,6 @@ class KEXI_DB_EXPORT ConnectionData : public QObject, public ConnectionDataBase
 	friend class Connection;
 };
 
-}; //namespace KexiDB
+} //namespace KexiDB
 
 #endif

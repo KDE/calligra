@@ -26,12 +26,13 @@
 
 #include "kexi.h"
 #include "tristate.h"
+#include "keximainwindow.h"
 
-class KexiMainWindow;
 class KActionCollection;
 class KexiDialogBase;
 class KexiDialogTempData;
 class KexiViewBase;
+class KexiMainWindowImpl;
 class KAction;
 class KShortcut;
 
@@ -237,8 +238,8 @@ class KEXICORE_EXPORT Part : public QObject
 		PartPrivate *d;
 
 	friend class Manager;
-	friend class KexiMainWindow;
-	friend class KexiMainWindowImpl;
+	friend class ::KexiMainWindow;
+	friend class ::KexiMainWindowImpl;
 	friend class GUIClient;
 };
 

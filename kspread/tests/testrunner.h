@@ -45,7 +45,7 @@ private:
   Private* d;
 };
 
-};
+}
 
 #endif // KSPREAD_TEST_RUNNER
 

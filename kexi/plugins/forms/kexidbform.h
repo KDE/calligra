@@ -31,7 +31,7 @@
 class KexiDBForm : public QWidget, public KFormDesigner::FormWidget, public KexiDataItemInterface
 {
 	Q_OBJECT
-	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true);
+	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	//Q_PROPERTY(bool RecordNavigator READ navigatorShown WRITE showRecordNavigator DESIGNABLE true)
 
 	public:

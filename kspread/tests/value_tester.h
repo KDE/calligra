@@ -39,6 +39,6 @@ private:
   void check( const char *file, int line, const char* msg, bool result, bool expected );
 };
 
-}; // namespace KSpread
+} // namespace KSpread
 
 #endif // KSPREAD_VALUE_TESTER
