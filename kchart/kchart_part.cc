@@ -40,39 +40,14 @@ KChartPart::~KChartPart()
 
 bool KChartPart::initDoc()
 {
-    /*
-    // Set some hardcoded parameters
-    GDC_BGColor   = &Qt::white;                   backgound color (white)
-    GDC_LineColor = &Qt::black;                   line color      (black)
-    GDC_SetColor  = &(sc[0]);                    assign set colors
-    GDC_stack_type = GDC_STACK_BESIDE;
-
-    // Fake data, remove when data feeding from KSpread or own table works
-    KChartData* d = new KChartData( 3, 6 );
-    for( int i = 0; i < 6; i++ ) {
-        KChartValue w2;
-        w2.value = QVariant( a[i] );
-        w2.exists = true;
-        d->setCell( 0, i, w2 );
-        KChartValue w3;
-        w3.value = QVariant( b[i] );
-        w3.exists = true;
-        d->setCell( 1, i, w3 );
-    }
-    currentData = *d;
-
-    debug( "currentData set, rows = %d, cols = %d", currentData.rows(), currentData.cols() );
-    */
-    // If nothing is loaded, do initialize here
-
-    // Initialize the parameter set for this chart document
-	// PENDING(kalle,torben) Where to delete this?
-    _params = new KChartParameters;
-    initRandomData();
-    // PENDING(lotzi) This is where to start the wizard and fill the
-    // params struct with the data the users enters there.
-    
-    return TRUE;
+  // Initialize the parameter set for this chart document
+  // PENDING(kalle,torben) Where to delete this?
+  _params = new KChartParameters;
+  initRandomData();
+  // PENDING(lotzi) This is where to start the wizard and fill the
+  // params struct with the data the users enters there.
+  
+  return TRUE;
 }
 
 void KChartPart::initRandomData() {
@@ -85,7 +60,6 @@ void KChartPart::initRandomData() {
       currentData.expand(4,4);
       for (row = 0;row < 4;row++)
 	for (col = 0;col < 4;col++) {
-	  //	  _widget->fillCell(row,col,row+col);
 	  KChartValue t; 
 	  t.exists= true;
 	  t.value.setValue((double)row+col);
@@ -170,6 +144,10 @@ void KChartPart::saveConfig( KConfig *conf ) {
 
 /**
  * $Log$
+ * Revision 1.3  1999/11/14 18:02:06  boloni
+ * auto-initialization for standalone startup
+ * separate class for the kchart data editor
+ *
  * Revision 1.2  1999/10/25 04:52:52  boloni
  * -ok, the gray rectangle which Reggie got was due to the fact that the
  * rc files were hardcoded so it worked only from the kchart dir.

@@ -2,6 +2,7 @@
 
 #include "kchartWizardSetupAxesPage.h"
 #include "kchart_view.h"
+#include "kchartparams.h"
 
 #include <qlabel.h>
 #include <qframe.h>
@@ -29,33 +30,28 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
 				   tmpQFrame->contentsRect().height() );
   */
 
-  QCheckBox* usetwoaxesCB = new QCheckBox( i18n( "Use two Y axes" ), this );
-  usetwoaxesCB->setGeometry( 70, 250, 110, 30 );
+  QCheckBox* grid = new QCheckBox( i18n( "Has grid" ), this );
+  grid->setGeometry( 70, 250, 110, 30 );
+  grid->setChecked( _chart->params()->grid );
+  connect( grid, SIGNAL( toggled( bool ) ),
+	   this, SLOT( setGrid( bool ) ) );
 
-  //  usetwoaxesCB->setChecked( _chart->twoAxes() );
-
-  // two axes mode is only possible if there are exactly two datasets
   /*
-  usetwoaxesCB->setEnabled( _chart->chartData()->numDatasets() == 2 );
-
-  connect( usetwoaxesCB, SIGNAL( toggled( bool ) ),
-		   _chart, SLOT( setTwoAxes( bool ) ) );
-
   QGroupBox* ticksettingsGB = new QGroupBox( i18n( "Tick settings" ), this );
   ticksettingsGB->setGeometry( 260, 10, 330, 120 );
   
   QCheckBox* showfullgridCB = new QCheckBox( i18n( "Show full grid" ), this );
   showfullgridCB->setGeometry( 270, 30, 100, 30 );
-  showfullgridCB->setChecked( _chart->longTicks() );
-  connect( showfullgridCB, SIGNAL( toggled( bool ) ),
-		   _chart, SLOT( setLongTicks( bool ) ) );
+  //  showfullgridCB->setChecked( _chart->longTicks() );
+  //  connect( showfullgridCB, SIGNAL( toggled( bool ) ),
+  //		   _chart, SLOT( setLongTicks( bool ) ) );
 
   QCheckBox* showxticksCB = new QCheckBox( i18n( "Show ticks on X axis" ), 
 										   this );
   showxticksCB->setGeometry( 270, 60, 140, 30 );
-  showxticksCB->setChecked( _chart->xTicks() );
-  connect( showxticksCB, SIGNAL( toggled( bool ) ),
-		   _chart, SLOT( setXTicks( bool ) ) );
+  showxticksCB->setChecked( _chart->params()->xTicks() );
+  // connect( showxticksCB, SIGNAL( toggled( bool ) ),
+  //		   _chart, SLOT( setXTicks( bool ) ) );
 
   QLabel* ticklengthLA = new QLabel( i18n( "Tick length:" ), this );
   ticklengthLA->setGeometry( 270, 90, 70, 30 );
@@ -111,13 +107,13 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
 
   QLineEdit* showeveryyED = new QLineEdit( this ); // todo KFloatValidator
   showeveryyED->setGeometry( 340, 250, 20, 30 );
-  showeveryyED->setText( QString().setNum(_chart->yLabelSkip()) );
+  //  showeveryyED->setText( QString().setNum(_chart->yLabelSkip()) );
   connect( showeveryyED, SIGNAL( textChanged( const QString & ) ),
 		   this, SLOT( setYLabelSkip( const QString & ) ) );
 
   QLabel* showeveryy2KA = new QLabel( i18n( ". value on Y axis" ), this );
   showeveryy2KA->setGeometry( 360, 250, 100, 30 );
-  */
+  */  
 }
 
 
@@ -126,11 +122,12 @@ kchartWizardSetupAxesPage::~kchartWizardSetupAxesPage()
   //  _chart->removeAutoUpdate( preview );
 }
 
-void kchartWizardSetupAxesPage::setTickLength( const QString & newValue )
+void kchartWizardSetupAxesPage::setGrid( bool value )
 {
-  //  _chart->setTickLength( newValue.toInt() );
+  _chart->params()->grid = value;
 }
 
+/*
 void kchartWizardSetupAxesPage::setYTicksNum( const QString & newValue )
 {
   //  _chart->setYTicksNum( newValue.toInt() );
@@ -146,4 +143,5 @@ void kchartWizardSetupAxesPage::setYLabelSkip( const QString & newValue )
   //  _chart->setYLabelSkip( newValue.toInt() );
 }
   
+*/
 #include "kchartWizardSetupAxesPage.moc"

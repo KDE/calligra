@@ -32,6 +32,8 @@ public:
   // grid plotting functions
   // implementation in kchartEngine_Grid.cc
   void drawGridAndLabels(bool do_ylbl_fractions);
+  void drawYAxisTitle();
+  void drawVYAxisTitle();
   void draw3DGrids();
   void drawShelfGrids();
   void drawXTicks();

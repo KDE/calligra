@@ -48,8 +48,8 @@ kchartWizard::kchartWizard ( KChartPart* chart, QWidget *parent, const char* nam
   //addPage( _labelslegendpage, i18n( "Labels and legend" ) );
 
   // Sixth page: axes setup
-  //_axespage = new kchartWizardSetupAxesPage( this, _chart );
-  //addPage( _axespage, i18n( "Setup axes" ) );
+  _axespage = new kchartWizardSetupAxesPage( this, _chart );
+  addPage( _axespage, i18n( "Setup axes" ) );
   
   //resize( 620, 380 );
   cerr << "kchartwizard created\n";

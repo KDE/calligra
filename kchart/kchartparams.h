@@ -128,8 +128,8 @@ struct KChartParameters
     void saveConfig(KConfig *conf);
     void loadConfig(KConfig *conf);
 
-	QString title;
-	QString xtitle;
+    QString title;
+    QString xtitle;
 	QString ytitle;
 	QString ytitle2;
 	QString ylabel_fmt;

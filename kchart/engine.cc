@@ -53,7 +53,6 @@ int kchartEngine::compute_yintervals() {
 //
 /*************************************************************/
 int kchartEngine::out_graph() {
-  int i,j,k;
   if (init()== -1) {
     return -1;
   }
@@ -113,7 +112,7 @@ int kchartEngine::out_graph() {
     qDebug( "Title text is coming" );   
     titleText();
     qDebug( "start drawing, first the grids" );
-    //    drawGridAndLabels(do_ylbl_fractions);
+    drawGridAndLabels(do_ylbl_fractions);
     qDebug("more advanced grids");
     /* interviening set grids */
     /*  0 < setno < num_sets   non-inclusive, they've already been covered */

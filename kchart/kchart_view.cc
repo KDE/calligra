@@ -91,72 +91,7 @@ void KChartView::edit()
     return;
   }
   ed.getData(dat);
-  
-
-  /*
-    qDebug("EDIT called");
-    QDialog *_dlg = new QDialog(0,"SheetDlg",true);
-    SheetDlg *_widget = new SheetDlg(_dlg,"SheetWidget");
-    _widget->setGeometry(0,0,520,400);
-    _widget->show();
-    _dlg->resize(520,400);
-    _dlg->setMaximumSize(_dlg->size());
-    _dlg->setMinimumSize(_dlg->size());
-    
-    // maybe the call for initRandomData here
-    cerr << "Now display \n";
-    KChartData *dat = (( (KChartPart*)part())->data());
-    for (int row = 0;row != dat->rows();row++)
-      for (int col = 0; col !=dat->cols(); col++) {
-	cerr << "Set dialog cell for " << row << "," << col << "\n";
-	KChartValue t = dat->cell(row,col);
-	// fill it in from the part
-	if (t.exists) {
-	  switch(t.value.type()) {
-	  case QVariant::Double:
-	    _widget->fillCell(row, col, t.value.doubleValue());
-	    break;
-	  case QVariant::String:
-	    cerr << "A string in the table I cannot handle this yet\n";
-	    break;
-	  default:
-	      break;
-	  }
-	}
-      }
-    cerr << "Here comes the dialog!\n";
-    // OK pressed
-  
-    if (_dlg->exec() != QDialog::Accepted) {
-      return;
-    }
-    //KChartData *m_pData = new KChartData(_widget->rows());
-      for (col = 0;col < _widget->cols();col++) {
-      m_pData->setXValue( col, (const char*)_widget->getX(col));
-      }
-    for (int row = 0;row < _widget->rows();row++) {
-      for (int col = 0;col < _widget->cols();col++) {
-	// m_pData->setYValue( row, col, _widget->getCell(row,col) );
-	KChartValue t; 
-	double val =  _widget->getCell(row,col);
-	t.exists= true;
-	t.value.setValue(val);
-	cerr << "Set cell for " << row << "," << col << "\n";
-	dat->setCell(row,col,t);
-	//   maxY = _widget->getCell(row,col) > maxY ? _widget->getCell(row,col) : maxY;
-      }
-    }
-      maxY++;
-      
-      m_pDoc->setChartData(m_pData);
-      m_pDoc->chart().setYMaxValue(maxY);
-      m_pDoc->chart().setYTicksNum(maxY);
-      m_pDoc->chart().repaintChart( this );    
-    */ 
-      
-  // delete dialog
-    //  delete _widget; _widget = 0;
-    //delete _dlg; _dlg = 0;
+  repaint();
 }
 
 void KChartView::wizard()
@@ -166,6 +101,7 @@ void KChartView::wizard()
       new kchartWizard((KChartPart*)part(), this, "KChart Wizard", true);
     qDebug("Executed. Now, display it");
     wiz->exec();
+    repaint();
     qDebug("Ok, executed...");
 }
 

@@ -16,11 +16,7 @@ public:
   ~kchartWizardSetupAxesPage();
 
 public slots:
-  void setTickLength( const QString & newValue );
-  void setYTicksNum( const QString & newValue );
-  void setXLabelSkip( const QString & newValue );
-  void setYLabelSkip( const QString & newValue );
-
+      void setGrid(bool value);
 private:
   kchartWidget* preview;
   KChartPart* _chart;
