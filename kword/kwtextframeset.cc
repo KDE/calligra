@@ -2873,6 +2873,8 @@ KCommand* KWTextFrameSet::replaceSelectionCommand( QTextCursor * cursor, const Q
     emit ensureCursorVisible();
     emit updateUI( true );
     emit showCursor();
+    if(selectionId==QTextDocument::Standard)
+        selectionChangedNotify();
     return macroCmd;
 }
 
