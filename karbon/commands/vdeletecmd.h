@@ -15,7 +15,7 @@
 class VDeleteCmd : public VCommand
 {
 public:
-	VDeleteCmd( KarbonPart* part );
+	VDeleteCmd( VDocument *part );
 	virtual ~VDeleteCmd() {}
 
 	virtual void execute();

@@ -15,7 +15,7 @@ class VObject;
 class VStarCmd : public VShapeCmd
 {
 public:
-	VStarCmd( KarbonPart* part, double centerX, double centerY,
+	VStarCmd( VDocument *doc, double centerX, double centerY,
 		double outerR, double innerR, uint edges, double angle = 0.0 );
 	virtual ~VStarCmd() {}
 

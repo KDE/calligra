@@ -15,7 +15,7 @@ class VObject;
 class VRectangleCmd : public VShapeCmd
 {
 public:
-	VRectangleCmd( KarbonPart* part, const double tlX, const double tlY,
+	VRectangleCmd( VDocument *doc, const double tlX, const double tlY,
 		 const double brX, const double brY );
 	virtual ~VRectangleCmd() {}
 

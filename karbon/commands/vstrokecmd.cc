@@ -9,10 +9,10 @@
 #include "vstrokecmd.h"
 
 
-VStrokeCmd::VStrokeCmd( KarbonPart* part, const VColor& color, float opacity )
-	: VCommand( part, i18n( "Stroke Objects" ) ), m_color( color ), m_opacity( opacity )
+VStrokeCmd::VStrokeCmd( VDocument *doc, const VColor& color, float opacity )
+	: VCommand( doc, i18n( "Stroke Objects" ) ), m_color( color ), m_opacity( opacity )
 {
-	m_objects = m_part->document().selection();
+	m_objects = m_doc->selection();
 	//m_part->deselectAllObjects();
 
 	if( m_objects.count() == 1 )

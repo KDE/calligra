@@ -14,10 +14,10 @@
 #include "vpolygoncmd.h"
 
 
-VPolygonCmd::VPolygonCmd( KarbonPart* part,
+VPolygonCmd::VPolygonCmd( VDocument *doc,
 		double centerX, double centerY,
 		double radius, uint edges, double angle )
-	: VShapeCmd( part, i18n( "Insert Polygon" ) ), m_centerX( centerX ), m_centerY( centerY ),
+	: VShapeCmd( doc, i18n( "Insert Polygon" ) ), m_centerX( centerX ), m_centerY( centerY ),
 		m_angle( angle )
 {
 	// a polygon should have at least 3 edges:

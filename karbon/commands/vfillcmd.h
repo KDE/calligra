@@ -19,7 +19,7 @@ class VPath;
 class VFillCmd : public VCommand
 {
 public:
-	VFillCmd( KarbonPart* part, const VColor& color, float opacity = -1 );
+	VFillCmd( VDocument *doc, const VColor& color, float opacity = -1 );
 	virtual ~VFillCmd() {}
 
 	virtual void execute();

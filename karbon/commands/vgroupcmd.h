@@ -16,7 +16,7 @@ class VGroup;
 class VGroupCmd : public VCommand
 {
 public:
-	VGroupCmd( KarbonPart* part );
+	VGroupCmd( VDocument *doc );
 	virtual ~VGroupCmd() {}
 
 	virtual void execute();

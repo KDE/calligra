@@ -19,7 +19,7 @@ class VPath;
 class VStrokeCmd : public VCommand
 {
 public:
-	VStrokeCmd( KarbonPart* part, const VColor& color, float opacity = -1 );
+	VStrokeCmd( VDocument *doc, const VColor& color, float opacity = -1 );
 	virtual ~VStrokeCmd() {}
 
 	virtual void execute();

@@ -15,8 +15,8 @@ class VObject;
 class VShapeCmd : public VCommand
 {
 public:
-	VShapeCmd( KarbonPart* part, const QString& name )
-		: VCommand( part, name ), m_object( 0L ) {}
+	VShapeCmd( VDocument *doc, const QString& name )
+		: VCommand( doc, name ), m_object( 0L ) {}
 	virtual ~VShapeCmd() {}
 
 	virtual void execute();

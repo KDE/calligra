@@ -14,10 +14,10 @@
 #include "vspiralcmd.h"
 
 
-VSpiralCmd::VSpiralCmd( KarbonPart* part,
+VSpiralCmd::VSpiralCmd( VDocument *doc,
 		double centerX, double centerY,
 		double radius, uint segments, double fade, bool cw, double angle )
-	: VShapeCmd( part, i18n( "Insert Spiral" ) ), m_centerX( centerX ), m_centerY( centerY ),
+	: VShapeCmd( doc, i18n( "Insert Spiral" ) ), m_centerX( centerX ), m_centerY( centerY ),
 		m_clockWise( cw ), m_angle( angle )
 {
 	// it makes sense to have at least one segment:

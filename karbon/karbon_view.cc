@@ -210,7 +210,7 @@ KarbonView::editDeselectAll()
 void
 KarbonView::editDeleteSelection()
 {
-	m_part->addCommand( new VDeleteCmd( m_part ), true );
+	m_part->addCommand( new VDeleteCmd( &m_part->document() ), true );
 
 	selectTool();
 }
@@ -262,7 +262,7 @@ KarbonView::selectionMoveToBottom()
 void
 KarbonView::groupSelection()
 {
-	m_part->addCommand( new VGroupCmd( m_part ), true );
+	m_part->addCommand( new VGroupCmd( &m_part->document() ), true );
 }
 
 void
@@ -478,7 +478,7 @@ KarbonView::pathInsertKnots()
 
 	if( dialog->exec() )
 		m_part->addCommand( new VInsertKnotsCmd(
-			m_part, m_part->document().selection(), dialog->knots() ), true );
+			&m_part->document(), m_part->document().selection(), dialog->knots() ), true );
 
 	delete( dialog );
 }
@@ -491,7 +491,7 @@ KarbonView::pathPolygonize()
 
 	if( dialog->exec() )
 		m_part->addCommand( new VPolygonizeCmd(
-			m_part, m_part->document().selection(), dialog->flatness() ), true );
+			&m_part->document(), m_part->document().selection(), dialog->flatness() ), true );
 
 	delete( dialog );
 }
@@ -551,9 +551,9 @@ KarbonView::slotStrokeColorChanged( const QColor &c )
 	float r = float( c.red() ) / 255.0, g = float( c.green() ) / 255.0, b = float( c.blue() ) / 255.0;
 
 	color.setValues( &r, &g, &b, 0L );
-	m_part->setDefaultStrokeColor( color );
+	m_part->document().setDefaultStrokeColor( color );
 
-	m_part->addCommand( new VStrokeCmd( m_part, color ), true );
+	m_part->addCommand( new VStrokeCmd( &m_part->document(), color ), true );
 }
 
 void
@@ -564,9 +564,9 @@ KarbonView::slotFillColorChanged( const QColor &c )
 	float r = float( c.red() ) / 255.0, g = float( c.green() ) / 255.0, b = float( c.blue() ) / 255.0;
 
 	color.setValues( &r, &g, &b, 0L );
-	m_part->setDefaultFillColor( color );
+	m_part->document().setDefaultFillColor( color );
 
-	m_part->addCommand( new VFillCmd( m_part, color ), true );
+	m_part->addCommand( new VFillCmd( &m_part->document(), color ), true );
 }
 
 void

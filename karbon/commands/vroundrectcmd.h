@@ -15,7 +15,7 @@ class VObject;
 class VRoundRectCmd : public VShapeCmd
 {
 public:
-	VRoundRectCmd( KarbonPart* part, const double tlX, const double tlY,
+	VRoundRectCmd( VDocument *doc, const double tlX, const double tlY,
 		 const double brX, const double brY, const double edgeR );
 	virtual ~VRoundRectCmd() {}
 

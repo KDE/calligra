@@ -172,7 +172,7 @@ void VFillDlg::slotApplyButtonPressed()
 	color.setOpacity( op );
 
 	if( m_part )
-		m_part->addCommand( new VFillCmd( m_part, color ), true );
+		m_part->addCommand( new VFillCmd( &m_part->document(), color ), true );
 }
 
 void VFillDlg::slotUpdate(QColor *color)

@@ -8,11 +8,11 @@
 #include "vdeletecmd.h"
 
 
-VDeleteCmd::VDeleteCmd( KarbonPart* part )
-	: VCommand( part, i18n( "Delete Objects" ) )
+VDeleteCmd::VDeleteCmd( VDocument *doc )
+	: VCommand( doc, i18n( "Delete Objects" ) )
 {
-	m_objects = m_part->document().selection();
-	m_part->document().deselectAllObjects();
+	m_objects = m_doc->selection();
+	m_doc->deselectAllObjects();
 
 	if( m_objects.count() == 1 )
 		setName( i18n( "Delete Object" ) );

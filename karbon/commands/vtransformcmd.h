@@ -16,7 +16,7 @@ class VPath;
 class VTransformCmd : public VCommand
 {
 public:
-	VTransformCmd( KarbonPart* part, const VObjectList& objects,
+	VTransformCmd( VDocument *doc, const VObjectList& objects,
 		const QWMatrix& mat );
 	virtual ~VTransformCmd() {}
 
@@ -24,7 +24,7 @@ public:
 	virtual void unexecute();
 
 protected:
-	VTransformCmd( KarbonPart* part, const VObjectList& objects,
+	VTransformCmd( VDocument *doc, const VObjectList& objects,
 		const QString& name );
 
 	VObjectList m_objects;
@@ -34,28 +34,28 @@ protected:
 class VTranslateCmd : public VTransformCmd
 {
 public:
-	VTranslateCmd( KarbonPart* part, const VObjectList& objects,
+	VTranslateCmd( VDocument *doc, const VObjectList& objects,
 		double d1, double d2 );
 };
 
 class VScaleCmd : public VTransformCmd
 {
 public:
-	VScaleCmd( KarbonPart* part, const VObjectList& objects,
+	VScaleCmd( VDocument *doc, const VObjectList& objects,
 		const KoPoint& p, double s1, double s2 );
 };
 
 class VShearCmd : public VTransformCmd
 {
 public:
-	VShearCmd( KarbonPart* part, const VObjectList& objects,
+	VShearCmd( VDocument *doc, const VObjectList& objects,
 		const KoPoint& p, double s1, double s2 );
 };
 
 class VRotateCmd : public VTransformCmd
 {
 public:
-	VRotateCmd( KarbonPart* part, const VObjectList& objects,
+	VRotateCmd( VDocument *doc, const VObjectList& objects,
 		const KoPoint& p, double angle );
 };
 

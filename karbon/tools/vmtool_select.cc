@@ -133,7 +133,7 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 			m_state = normal;
 			part()->addCommand(
 				new VTranslateCmd(
-					part(),
+					&part()->document(),
 					part()->document().selection(),
 					qRound( ( lp.x() - fp.x() ) * ( 1.0 / view->zoom() ) ),
 					qRound( ( lp.y() - fp.y() ) * ( 1.0 / view->zoom() ) ) ),

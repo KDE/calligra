@@ -55,6 +55,11 @@ public:
 	void moveSelectionDown();
 	void moveSelectionUp();
 
+	void setDefaultStrokeColor( const VColor &color ) { m_defaultStrokeColor = color; }
+	void setDefaultFillColor( const VColor &color ) { m_defaultFillColor = color; }
+	/// all newly created shapes in this document get the default color by using this method
+	void applyDefaultColors( VObject & ) const;
+
 	void insertObject( VObject* object ); // insert a new vobject
 
 	VLayer* activeLayer() const { return m_activeLayer; }   // active layer.
@@ -63,6 +68,9 @@ private:
 	VLayerList m_layers;			// all layers in this document
 	VObjectList m_selection;        // a list of selected objects.
 	VLayer* m_activeLayer;			// the active/current layer.
+
+	VColor m_defaultStrokeColor;        /// keep track of a default stroke color for created shapes
+	VColor m_defaultFillColor;          /// keep track of a default fill color for created shapes
 
 	QString m_mime;
 	QString m_version;

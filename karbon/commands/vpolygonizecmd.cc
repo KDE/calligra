@@ -8,9 +8,9 @@
 #include "vpolygonizecmd.h"
 
 
-VPolygonizeCmd::VPolygonizeCmd( KarbonPart* part, const VObjectList& objects,
+VPolygonizeCmd::VPolygonizeCmd( VDocument *doc, const VObjectList& objects,
 	double flatness )
-		: VCommand( part, i18n( "Polygonize" ) ), m_objects( objects )
+		: VCommand( doc, i18n( "Polygonize" ) ), m_objects( objects )
 {
 	m_flatness = flatness > 0.0 ? flatness : 1.0;
 }

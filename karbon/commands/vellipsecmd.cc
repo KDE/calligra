@@ -11,10 +11,10 @@
 #include "vpath.h"
 
 
-VEllipseCmd::VEllipseCmd( KarbonPart* part,
+VEllipseCmd::VEllipseCmd( VDocument *doc,
 		const double tlX, const double tlY,
 		const double brX, const double brY )
-	: VShapeCmd( part, i18n( "Insert Ellipse" ) )
+	: VShapeCmd( doc, i18n( "Insert Ellipse" ) )
 {
 	// make sure that tl is really top-left and br is bottom-right:
 	if ( tlX < brX )

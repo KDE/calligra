@@ -14,10 +14,10 @@
 #include "vstarcmd.h"
 
 
-VStarCmd::VStarCmd( KarbonPart* part,
+VStarCmd::VStarCmd( VDocument *doc,
 		double centerX, double centerY,
 		double outerR, double innerR, uint edges, double angle )
-	: VShapeCmd( part, i18n( "Insert Star" ) ), m_centerX( centerX ), m_centerY( centerY ),
+	: VShapeCmd( doc, i18n( "Insert Star" ) ), m_centerX( centerX ), m_centerY( centerY ),
 		m_angle( angle )
 {
 	// a star should have at least 3 edges:

@@ -8,9 +8,9 @@
 #include "vinsertknotscmd.h"
 
 
-VInsertKnotsCmd::VInsertKnotsCmd( KarbonPart* part, const VObjectList& objects,
+VInsertKnotsCmd::VInsertKnotsCmd( VDocument *doc, const VObjectList& objects,
 	uint knots )
-		: VCommand( part, i18n( "Insert Knots" ) ), m_objects( objects )
+		: VCommand( doc, i18n( "Insert Knots" ) ), m_objects( objects )
 {
 	m_knots = knots > 0 ? knots : 1;
 }

@@ -15,7 +15,7 @@ class VObject;
 class VSpiralCmd : public VShapeCmd
 {
 public:
-	VSpiralCmd( KarbonPart* part, double centerX, double centerY,
+	VSpiralCmd( VDocument *doc, double centerX, double centerY,
 		double radius, uint segments, double fade, bool cw = true, double angle = 0.0 );
  	virtual ~VSpiralCmd() {}
 

@@ -9,10 +9,10 @@
 #include "vgroupcmd.h"
 
 
-VGroupCmd::VGroupCmd( KarbonPart* part )
-	: VCommand( part, i18n( "Group Objects" ) )
+VGroupCmd::VGroupCmd( VDocument *doc )
+	: VCommand( doc, i18n( "Group Objects" ) )
 {
-	m_objects = m_part->document().selection();
+	m_objects = m_doc->selection();
 	m_group = 0L;
 }
 
@@ -25,23 +25,23 @@ VGroupCmd::execute()
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
-		m_part->document().activeLayer()->removeRef( itr.current() );
+		m_doc->activeLayer()->removeRef( itr.current() );
 		m_group->insertObject( itr.current() );
 	}
-	m_part->insertObject( m_group );
-	m_part->document().selectObject( *m_group, true );
+	m_doc->insertObject( m_group );
+	m_doc->selectObject( *m_group, true );
 }
 
 void
 VGroupCmd::unexecute()
 {
-	m_part->document().deselectAllObjects();
+	m_doc->deselectAllObjects();
 	VObjectListIterator itr( m_group->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
 		//m_part->insertObject( itr.current() );
-		m_part->document().selectObject( *( itr.current() ) );
+		m_doc->selectObject( *( itr.current() ) );
 	}
 	// TODO : remove from corresponding VLayer
 	//static_cast<VLayer *>( m_group->parent() )->removeRef( m_group );

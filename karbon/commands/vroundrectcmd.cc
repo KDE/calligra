@@ -9,10 +9,10 @@
 #include "vroundrectcmd.h"
 
 
-VRoundRectCmd::VRoundRectCmd( KarbonPart* part,
+VRoundRectCmd::VRoundRectCmd( VDocument *doc,
 		const double tlX, const double tlY,
 		const double brX, const double brY, const double edgeR )
-	: VShapeCmd( part, i18n( "Insert Round Rectangle" ) )
+	: VShapeCmd( doc, i18n( "Insert Round Rectangle" ) )
 {
 	m_edgeR = edgeR < 0.0 ? 0.0 : edgeR;
 

@@ -49,7 +49,7 @@ VCToolSpiral::drawTemporaryObject(
 	VPainter *painter = view->painterFactory()->editpainter();
 	
 	VSpiralCmd* cmd =
-		new VSpiralCmd( part(),
+		new VSpiralCmd( &part()->document(),
 			p.x(), p.y(),
 			d1,
 			m_dialog->segments(),
@@ -72,7 +72,7 @@ VCToolSpiral::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VSpiralCmd( part(),
+				new VSpiralCmd( &part()->document(),
 					x, y,
 					m_dialog->radius(),
 					m_dialog->segments(),
@@ -84,7 +84,7 @@ VCToolSpiral::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VSpiralCmd( part(),
+			new VSpiralCmd( &part()->document(),
 				x, y,
 				d1,
 				m_dialog->segments(),

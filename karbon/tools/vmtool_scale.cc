@@ -190,7 +190,7 @@ VMToolScale::eventFilter( KarbonView* view, QEvent* event )
 
 		part()->addCommand(
 			new VScaleCmd(
-				part(), part()->document().selection(),
+				&part()->document(), part()->document().selection(),
 				m_sp * ( 1.0 / view->zoom() ), m_s1, m_s2 ),
 			true );
 

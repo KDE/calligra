@@ -11,7 +11,7 @@
 class VPolygonizeCmd : public VCommand
 {
 public:
-	VPolygonizeCmd( KarbonPart* part, const VObjectList& objects,
+	VPolygonizeCmd( VDocument *doc, const VObjectList& objects,
 		double flatness );
 	virtual ~VPolygonizeCmd() {}
 

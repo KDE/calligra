@@ -8,10 +8,10 @@
 #include "vpath.h"
 #include "vrectanglecmd.h"
 
-VRectangleCmd::VRectangleCmd( KarbonPart* part,
+VRectangleCmd::VRectangleCmd( VDocument *doc,
 		const double tlX, const double tlY,
 		const double brX, const double brY )
-	: VShapeCmd( part, i18n( "Insert Rectangle" ) ),
+	: VShapeCmd( doc, i18n( "Insert Rectangle" ) ),
 	  m_tlX( tlX ), m_tlY( tlY ), m_brX( brX ), m_brY( brY )
 {
 }

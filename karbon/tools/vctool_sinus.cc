@@ -48,7 +48,7 @@ VCToolSinus::drawTemporaryObject(
 	VPainter *painter = view->painterFactory()->editpainter();
 	
 	VSinusCmd* cmd =
-		new VSinusCmd( part(), p.x(), p.y(), p.x() + d1, p.y() + d2,
+		new VSinusCmd( &part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2,
 			m_dialog->periods() );
 
 	VObject* path = cmd->createPath();
@@ -66,7 +66,7 @@ VCToolSinus::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VSinusCmd( part(),
+				new VSinusCmd( &part()->document(),
 					x, y,
 					x + m_dialog->width(),
 					y + m_dialog->height(),
@@ -76,7 +76,7 @@ VCToolSinus::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VSinusCmd( part(),
+			new VSinusCmd( &part()->document(),
 				x, y,
 				x + d1,
 				y + d2,

@@ -47,7 +47,7 @@ VCToolPolygon::drawTemporaryObject(
 	VPainter *painter = view->painterFactory()->editpainter();
 	
 	VPolygonCmd* cmd =
-		new VPolygonCmd( part(),
+		new VPolygonCmd( &part()->document(),
 			p.x(), p.y(),
 			d1,
 			m_dialog->edges(),
@@ -68,7 +68,7 @@ VCToolPolygon::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VPolygonCmd( part(),
+				new VPolygonCmd( &part()->document(),
 					x, y,
 					m_dialog->radius(),
 					m_dialog->edges() );
@@ -77,7 +77,7 @@ VCToolPolygon::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VPolygonCmd( part(),
+			new VPolygonCmd( &part()->document(),
 				x, y,
 				d1,
 				m_dialog->edges(),

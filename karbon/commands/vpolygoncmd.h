@@ -15,7 +15,7 @@ class VObject;
 class VPolygonCmd : public VShapeCmd
 {
 public:
-	VPolygonCmd( KarbonPart* part, double centerX, double centerY,
+	VPolygonCmd( VDocument *doc, double centerX, double centerY,
 		double radius, uint edges, double angle = 0.0 );
 	virtual ~VPolygonCmd() {}
 

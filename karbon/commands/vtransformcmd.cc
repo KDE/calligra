@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* This file is doc of the KDE project
    Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 */
@@ -8,18 +8,18 @@
 #include "vtransformcmd.h"
 
 
-VTransformCmd::VTransformCmd( KarbonPart* part, const VObjectList& objects,
+VTransformCmd::VTransformCmd( VDocument *doc, const VObjectList& objects,
 	const QWMatrix& mat )
-		: VCommand( part, i18n( "Transform Objects" ) ), m_objects( objects ),
+		: VCommand( doc, i18n( "Transform Objects" ) ), m_objects( objects ),
 			m_mat( mat )
 {
 	if( m_objects.count() == 1 )
 		setName( i18n( "Transform Object" ) );
 }
 
-VTransformCmd::VTransformCmd( KarbonPart* part, const VObjectList& objects,
+VTransformCmd::VTransformCmd( VDocument *doc, const VObjectList& objects,
 	const QString& name )
-		: VCommand( part, name ), m_objects( objects )
+		: VCommand( doc, name ), m_objects( objects )
 {
 }
 
@@ -47,9 +47,9 @@ VTransformCmd::unexecute()
 }
 
 
-VTranslateCmd::VTranslateCmd( KarbonPart* part, const VObjectList& objects,
+VTranslateCmd::VTranslateCmd( VDocument *doc, const VObjectList& objects,
 	double d1, double d2 )
-		: VTransformCmd( part, objects, i18n( "Translate Objects" ) )
+		: VTransformCmd( doc, objects, i18n( "Translate Objects" ) )
 {
 	if( m_objects.count() == 1 )
 		setName( i18n( "Translate Object" ) );
@@ -58,9 +58,9 @@ VTranslateCmd::VTranslateCmd( KarbonPart* part, const VObjectList& objects,
 }
 
 
-VScaleCmd::VScaleCmd( KarbonPart* part, const VObjectList& objects,
+VScaleCmd::VScaleCmd( VDocument *doc, const VObjectList& objects,
 	const KoPoint& p, double s1, double s2 )
-		: VTransformCmd( part, objects, i18n( "Scale Objects" ) )
+		: VTransformCmd( doc, objects, i18n( "Scale Objects" ) )
 {
 	if( m_objects.count() == 1 )
 		setName( i18n( "Scale Object" ) );
@@ -71,9 +71,9 @@ VScaleCmd::VScaleCmd( KarbonPart* part, const VObjectList& objects,
 }
 
 
-VShearCmd::VShearCmd( KarbonPart* part, const VObjectList& objects,
+VShearCmd::VShearCmd( VDocument *doc, const VObjectList& objects,
 	const KoPoint& p, double s1, double s2 )
-		: VTransformCmd( part, objects, i18n( "Shear Objects" ) )
+		: VTransformCmd( doc, objects, i18n( "Shear Objects" ) )
 {
 	if( m_objects.count() == 1 )
 		setName( i18n( "Shear Object" ) );
@@ -83,9 +83,9 @@ VShearCmd::VShearCmd( KarbonPart* part, const VObjectList& objects,
 	m_mat.translate( -p.x(), -p.y() );
 }
 
-VRotateCmd::VRotateCmd( KarbonPart* part, const VObjectList& objects,
+VRotateCmd::VRotateCmd( VDocument *doc, const VObjectList& objects,
 	const KoPoint& p, double angle )
-		: VTransformCmd( part, objects, i18n( "Rotate Objects" ) )
+		: VTransformCmd( doc, objects, i18n( "Rotate Objects" ) )
 {
 	if( m_objects.count() == 1 )
 		setName( i18n( "Rotate Object" ) );

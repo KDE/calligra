@@ -47,7 +47,7 @@ VCToolRectangle::drawTemporaryObject(
 	VPainter *painter = view->painterFactory()->editpainter();
 	
 	VRectangleCmd* cmd =
-		new VRectangleCmd( part(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
+		new VRectangleCmd( &part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
 
 	VObject* path = cmd->createPath();
 	path->setState( state_edit );
@@ -64,7 +64,7 @@ VCToolRectangle::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VRectangleCmd( part(),
+				new VRectangleCmd( &part()->document(),
 					x, y,
 					x + m_dialog->width(),
 					y + m_dialog->height() );
@@ -73,7 +73,7 @@ VCToolRectangle::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VRectangleCmd( part(),
+			new VRectangleCmd( &part()->document(),
 				x, y,
 				x + d1,
 				y + d2 );

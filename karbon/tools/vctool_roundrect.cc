@@ -48,7 +48,7 @@ VCToolRoundRect::drawTemporaryObject(
 	VPainter *painter = view->painterFactory()->editpainter();
 	
 	VRoundRectCmd* cmd =
-		new VRoundRectCmd( part(), p.x(), p.y(), p.x() + d1, p.y() + d2,
+		new VRoundRectCmd( &part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2,
 			m_dialog->round() );
 
 	VObject* path = cmd->createPath();
@@ -66,7 +66,7 @@ VCToolRoundRect::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VRoundRectCmd( part(),
+				new VRoundRectCmd( &part()->document(),
 					x, y,
 					x + m_dialog->width(),
 					y + m_dialog->height(),
@@ -76,7 +76,7 @@ VCToolRoundRect::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VRoundRectCmd( part(),
+			new VRoundRectCmd( &part()->document(),
 				x, y,
 				x + d1,
 				y + d2,

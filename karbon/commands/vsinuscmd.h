@@ -15,7 +15,7 @@ class VObject;
 class VSinusCmd : public VShapeCmd
 {
 public:
-	VSinusCmd( KarbonPart* part, const double tlX, const double tlY,
+	VSinusCmd( VDocument *doc, const double tlX, const double tlY,
 		 const double brX, const double brY, const uint periods = 1 );
 	virtual ~VSinusCmd() {}
 

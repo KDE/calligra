@@ -58,11 +58,6 @@ public:
 	// remove all vobjects which are marked "deleted" and clear command-history:
 	void purgeHistory();
 
-	void setDefaultStrokeColor( const VColor &color ) { m_defaultStrokeColor = color; }
-	void setDefaultFillColor( const VColor &color ) { m_defaultFillColor = color; }
-	/// all newly created shapes in this document get the default color by using this method
-	void applyDefaultColors( VObject & ) const;
-
 	bool showStatusBar() const { return m_bShowStatusBar; }
 	void setShowStatusBar( bool b );
 	/// update attached view(s) on the current doc settings
@@ -87,9 +82,6 @@ private:
 	VDocument m_doc;					/// store non-visual doc info
 
 	VCommandHistory* m_commandHistory;	/// maintain a command history for undo/redo
-
-	VColor m_defaultStrokeColor;		/// keep track of a default stroke color for created shapes
-	VColor m_defaultFillColor;			/// keep track of a default fill color for created shapes
 
 	bool m_bShowStatusBar;				/// enable/disable status bar in attached view(s)
 	int m_maxRecentFiles;				/// max. number of files shown in open recent menu item

@@ -170,7 +170,7 @@ VMToolShear::eventFilter( KarbonView* view, QEvent* event )
 
 		part()->addCommand(
 			new VShearCmd(
-				part(), part()->document().selection(),
+				&part()->document(), part()->document().selection(),
 				fp * (1.0 / view->zoom() ), m_s1, m_s2 ),
 			true );
 

@@ -11,7 +11,7 @@
 class VInsertKnotsCmd : public VCommand
 {
 public:
-	VInsertKnotsCmd( KarbonPart* part, const VObjectList& objects,
+	VInsertKnotsCmd( VDocument *doc, const VObjectList& objects,
 		uint knots );
 	virtual ~VInsertKnotsCmd() {}
 

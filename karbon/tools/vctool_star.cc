@@ -48,7 +48,7 @@ VCToolStar::drawTemporaryObject(
 	VPainter *painter = view->painterFactory()->editpainter();
 	
 	VStarCmd* cmd =
-		new VStarCmd( part(),
+		new VStarCmd( &part()->document(),
 			p.x(), p.y(),
 			d1,
 			m_dialog->innerR() * d1 / m_dialog->outerR(),
@@ -70,7 +70,7 @@ VCToolStar::createCmd( double x, double y, double d1, double d2 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VStarCmd( part(),
+				new VStarCmd( &part()->document(),
 					x, y,
 					m_dialog->outerR(),
 					m_dialog->innerR(),
@@ -80,7 +80,7 @@ VCToolStar::createCmd( double x, double y, double d1, double d2 )
 	}
 	else
 		return
-			new VStarCmd( part(),
+			new VStarCmd( &part()->document(),
 				x, y,
 				d1,
 				m_dialog->innerR() * d1 / m_dialog->outerR(),

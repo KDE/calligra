@@ -16,7 +16,7 @@ class VObject;
 class VEllipseCmd : public VShapeCmd
 {
 public:
-	VEllipseCmd( KarbonPart* part, const double tlX, const double tlY,
+	VEllipseCmd( VDocument *part, const double tlX, const double tlY,
 		 const double brX, const double brY );
 	virtual ~VEllipseCmd() {}
 

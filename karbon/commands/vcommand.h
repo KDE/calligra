@@ -11,13 +11,15 @@
 
 #include "karbon_part.h"
 
+class VDocument;
+
 class VCommand : public KNamedCommand
 {
 public:
-	VCommand( KarbonPart* part, const QString& name )
-		: KNamedCommand( name ), m_part( part )
+	VCommand( VDocument *doc, const QString& name )
+		: KNamedCommand( name ), m_doc( doc )
 	{
-		assert( part );
+		assert( doc );
 	}
 	virtual ~VCommand() {}
 
@@ -25,7 +27,7 @@ public:
 	virtual void unexecute() {}
 
 protected:
-	KarbonPart* m_part;
+	VDocument *m_doc;
 };
 
 
