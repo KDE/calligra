@@ -17,10 +17,6 @@
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
   <Separator group="settings_show"/>
-  <Action name="loadconfig" group="settings_show"/>
-  <Action name="saveconfig" group="settings_show"/>
-  <Action name="defaultconfig" group="settings_show"/>
-  <Separator group="settings_show"/>
  </Menu>
 </MenuBar>
 <ToolBar name="KChartToolBar"><Text>Chart</Text>

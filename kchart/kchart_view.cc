@@ -53,18 +53,6 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     m_config = new KAction( i18n( "&Configure Chart..." ), "configure", 0,
                             this, SLOT( slotConfig() ),
                             actionCollection(), "config" );
-    m_loadconfig = new KAction( i18n("&Load Config"),
-                                "fileopen", 0, this,
-                                SLOT( loadConfig() ),
-                                actionCollection(), "loadconfig");
-    m_saveconfig = new KAction( i18n("&Save Config"),
-                                "filesave",	0, this,
-                                SLOT( saveConfig() ),
-                                actionCollection(), "saveconfig");
-    m_defaultconfig = new KAction( i18n("&Default Config"),
-                                   "defaultconfig", 0, this,
-                                   SLOT( defaultConfig() ),
-                                   actionCollection(), "defaultconfig");
 
     // One KToggleAction per chart type
     m_chartpie = new KToggleAction( i18n("&Pie"), "cakes", 0, this,

@@ -1,5 +1,11 @@
 2004-11-05  Inge Wallin  <inge@lysator.liu.se>
 
+	Fix bug 90895: save config is not needed
+	* kchart_view.cc (KChartView): Remove actions "loadconfig",
+	"saveconfig" and "defaultconfig".
+	* kchart.rc: Remove reference to them in the definition of the
+	Settings menu.
+	
 	Fix bug 90904: edit/configure is confusingly named 
 	* kchart.rc: Add a sub menu for editing only one aspect of the
 	chart.
