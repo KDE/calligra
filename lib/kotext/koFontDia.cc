@@ -350,8 +350,8 @@ KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSu
     : QTabWidget( parent, name )
 {
     d = new KoFontChooserPrivate;
-    setupTab1(_withSubSuperScript, fontListCriteria );
-    setupTab2();
+    setupTab1( fontListCriteria );
+    setupTab2( _withSubSuperScript );
     // More modular solution: one widget per tab....
     d->m_shadowWidget = new KoTextShadowWidget( this );
     connect( d->m_shadowWidget, SIGNAL(changed()), this, SLOT(slotShadowChanged()) );
@@ -369,7 +369,7 @@ QColor KoFontChooser::color() const
     return d->m_textColor;
 }
 
-void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
+void KoFontChooser::setupTab1( uint fontListCriteria )
 {
     QWidget *page = new QWidget( this );
     addTab( page, i18n( "&Fonts" ) );
@@ -378,51 +378,6 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
     KFontChooser::getFontList(list,fontListCriteria);
     m_chooseFont = new KFontChooser(page, "FontList", false, list);
     lay1->addWidget(m_chooseFont);
-
-    QVGroupBox *grp = new QVGroupBox(i18n("Position"), page);
-    lay1->addWidget(grp);
-    QWidget* grpBox = new QWidget( grp ); // container for the grid - laid out inside the QVGroupBox
-    QGridLayout *grid = new QGridLayout( grpBox, 2, 3, 0, KDialog::spacingHint() );
-    grid->setColStretch( 1, 1 ); // better stretch labels than spinboxes.
-
-    // superscript/subscript need to be checkboxes, not radiobuttons.
-    // otherwise it's not possible to disable both, and there's no room for a 3rd one like 'none'
-    m_superScript = new QCheckBox(i18n("Su&perscript"),grpBox);
-    grid->addWidget(m_superScript,0,0);
-
-    m_subScript = new QCheckBox(i18n("Su&bscript"),grpBox);
-    grid->addWidget(m_subScript,1,0);
-
-    d->m_lRelativeSize = new QLabel ( i18n("Relative &size:"), grpBox);
-    d->m_lRelativeSize->setAlignment( Qt::AlignRight );
-    grid->addWidget(d->m_lRelativeSize,0,1);
-
-    // ## How to make this widget smaller? Sounds like the [minimum]sizeHint for KIntNumInput is big...
-    d->m_relativeSize = new KIntNumInput( grpBox );
-    d->m_lRelativeSize->setBuddy( d->m_relativeSize );
-    grid->addWidget(d->m_relativeSize,0,2);
-
-    d->m_relativeSize-> setRange(1, 100, 1,false);
-    d->m_relativeSize->setSuffix("%");
-
-    QLabel *lab = new QLabel ( i18n("Offse&t from baseline:"), grpBox);
-    lab->setAlignment( Qt::AlignRight );
-    grid->addWidget(lab,1,1);
-
-    d->m_offsetBaseLine= new KIntNumInput( grpBox );
-    lab->setBuddy( d->m_offsetBaseLine );
-    grid->addWidget(d->m_offsetBaseLine,1,2);
-
-    d->m_offsetBaseLine->setRange(-9, 9, 1,false);
-    d->m_offsetBaseLine->setSuffix("pt");
-
-    if(!_withSubSuperScript)
-    {
-        m_subScript->setEnabled(false);
-        m_superScript->setEnabled(false);
-        d->m_relativeSize->setEnabled( false );
-        d->m_lRelativeSize->setEnabled( false );
-    }
 
     QHGroupBox* colorsGrp = new QHGroupBox(i18n("Colors"), page);
     lay1->addWidget(colorsGrp);
@@ -433,8 +388,6 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
     m_backGroundColorButton = new QPushButton( i18n( "Change Bac&kground Color..." ), colorsGrp );
     //grid->addWidget(m_backGroundColorButton,0,1);
 
-    connect( m_subScript, SIGNAL(clicked()), this, SLOT( slotSubScriptClicked() ) );
-    connect( m_superScript, SIGNAL(clicked()), this, SLOT( slotSuperScriptClicked() ) );
     connect( m_colorButton, SIGNAL(clicked()), this, SLOT( slotChangeColor() ) );
 
     connect( m_backGroundColorButton,  SIGNAL(clicked()), this, SLOT( slotChangeBackGroundColor() ) );
@@ -442,14 +395,9 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
     connect( m_chooseFont, SIGNAL( fontSelected( const QFont & )),
              this, SLOT( slotFontChanged(const QFont &) ) );
 
-    connect( d->m_relativeSize, SIGNAL( valueChanged(int) ), this, SLOT( slotRelativeSizeChanged( int )));
-    connect( d->m_offsetBaseLine, SIGNAL( valueChanged(int) ), this, SLOT( slotOffsetFromBaseLineChanged( int )));
-
-    updatePositionButton();
-
 }
 
-void KoFontChooser::setupTab2()
+void KoFontChooser::setupTab2( bool _withSubSuperScript )
 {
     QWidget *page = new QWidget( this );
     addTab( page, i18n( "Font &Effects" ) );
@@ -493,7 +441,53 @@ void KoFontChooser::setupTab2()
     m_strikeOutType->insertStringList( KoTextFormat::strikeOutStyleList() );
 
     d->m_wordByWord = new QCheckBox( i18n("&Word by word"), grp);
-    grid->addWidget( d->m_wordByWord, 5, 0);
+    grid->addWidget( d->m_wordByWord, 4, 0);
+       
+    QVGroupBox *grp1 = new QVGroupBox(i18n("Position"), page);
+    grid->addMultiCellWidget( grp1, 5, 5, 0, grid->numCols()-1 );
+    QWidget* grpBox = new QWidget( grp1 ); // container for the grid - laid out inside the QVGroupBox
+    QGridLayout *grid1 = new QGridLayout( grpBox, 2, 3, 0, KDialog::spacingHint() );
+    grid1->setColStretch( 1, 1 ); // better stretch labels than spinboxes.
+
+    // superscript/subscript need to be checkboxes, not radiobuttons.
+    // otherwise it's not possible to disable both, and there's no room for a 3rd one like 'none'
+    m_superScript = new QCheckBox(i18n("Su&perscript"),grpBox);
+    grid1->addWidget(m_superScript,0,0);
+
+    m_subScript = new QCheckBox(i18n("Su&bscript"),grpBox);
+    grid1->addWidget(m_subScript,1,0);
+
+    d->m_lRelativeSize = new QLabel ( i18n("Relative &size:"), grpBox);
+    d->m_lRelativeSize->setAlignment( Qt::AlignRight );
+    grid1->addWidget(d->m_lRelativeSize,0,1);
+
+    // ## How to make this widget smaller? Sounds like the [minimum]sizeHint for KIntNumInput is big...
+    d->m_relativeSize = new KIntNumInput( grpBox );
+    d->m_lRelativeSize->setBuddy( d->m_relativeSize );
+    grid1->addWidget(d->m_relativeSize,0,2);
+
+    d->m_relativeSize-> setRange(1, 100, 1,false);
+    d->m_relativeSize->setSuffix("%");
+
+    QLabel *lab5 = new QLabel ( i18n("Offse&t from baseline:"), grpBox);
+    lab5->setAlignment( Qt::AlignRight );
+    grid1->addWidget(lab5,1,1);
+
+    d->m_offsetBaseLine= new KIntNumInput( grpBox );
+    lab5->setBuddy( d->m_offsetBaseLine );
+    grid1->addWidget(d->m_offsetBaseLine,1,2);
+
+    d->m_offsetBaseLine->setRange(-9, 9, 1,false);
+    d->m_offsetBaseLine->setSuffix("pt");
+
+    if(!_withSubSuperScript)
+    {
+        m_subScript->setEnabled(false);
+        m_superScript->setEnabled(false);
+        d->m_relativeSize->setEnabled( false );
+        d->m_lRelativeSize->setEnabled( false );
+    }
+    
 
 #ifdef ATTRCOMBO
     QLabel * lab3 = new QLabel( i18n("A&ttribute:"), grp);
@@ -538,6 +532,14 @@ void KoFontChooser::setupTab2()
     connect( d->m_wordByWord, SIGNAL(clicked()), this, SLOT( slotWordByWordClicked() ) );
     connect( d->m_language,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeLanguage( int )));
     connect( d->m_hyphenation, SIGNAL( clicked()), this, SLOT( slotHyphenationClicked()));
+    connect( m_subScript, SIGNAL(clicked()), this, SLOT( slotSubScriptClicked() ) );
+    connect( m_superScript, SIGNAL(clicked()), this, SLOT( slotSuperScriptClicked() ) );
+    connect( d->m_relativeSize, SIGNAL( valueChanged(int) ), this, SLOT( slotRelativeSizeChanged( int )));
+    connect( d->m_offsetBaseLine, SIGNAL( valueChanged(int) ), this, SLOT( slotOffsetFromBaseLineChanged( int )));
+
+    updatePositionButton();
+
+
 }
 
 void KoFontChooser::updatePositionButton()

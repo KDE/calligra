@@ -108,8 +108,8 @@ protected:
     int offsetFromBaseLine() const;
     void setOffsetFromBaseLine(int _offset);
 
-    void setupTab1(bool _withSubSuperScript, uint fontListCriteria );
-    void setupTab2();
+    void setupTab1( uint fontListCriteria );
+    void setupTab2( bool _withSubSuperScript );
     void updatePositionButton();
 
 protected slots:
