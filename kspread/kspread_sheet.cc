@@ -6983,6 +6983,14 @@ bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, 
         QCString str = KCodecs::base64Encode( m_strPassword );
         xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );/* FIXME !!!!*/
     }
+    QRect _printRange = m_pPrint->printRange();
+    if ( _printRange != ( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) ) )
+    {
+        QString range= convertRangeToRef( m_strName, _printRange );
+        kdDebug()<<" range : "<<range<<endl;
+        xmlWriter.addAttribute( "table:print-ranges", range );
+    }
+
     maxRowCols( maxCols, maxRows );
     saveOasisColRowCell( xmlWriter, mainStyles, maxCols, maxRows, valStyle );
     xmlWriter.endElement();

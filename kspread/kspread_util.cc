@@ -1097,3 +1097,9 @@ void insertBracket( QString & s )
     --i;
   }
 }
+
+ // e.g.: Sheet4.A1:Sheet4.E28
+QString convertRangeToRef( const QString & tableName, const QRect & _area )
+{
+    return tableName + "." + KSpreadCell::name( _area.left(), _area.top() ) + ":" + tableName + "."+ KSpreadCell::name( _area.right(), _area.bottom() );
+}
