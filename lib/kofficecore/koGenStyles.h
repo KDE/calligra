@@ -139,7 +139,11 @@ public:
            STYLE_LIST = 4,
            STYLE_NUMERIC_DATE = 5,
 	   STYLE_NUMERIC_TIME = 6,
-           STYLE_NUMERIC_FRACTION = 7};
+           STYLE_NUMERIC_FRACTION = 7,
+           STYLE_NUMERIC_PERCENTAGE =8,
+           STYLE_NUMERIC_SCIENTIFIC = 9,
+           STYLE_NUMERIC_CURRENCY = 10};
+
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),
      * but first you must define its properties and attributes.

@@ -870,3 +870,71 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
     return mainStyles.lookup( currentStyle, "N" );
 }
 
+
+//TODO
+QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format )
+{
+    kdDebug()<<"QString saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    QString format( _format );
+
+    KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_PERCENTAGE );
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+    QString text;
+    do
+    {
+        format.remove( 0,1 );
+    }
+    while ( format.length() > 0 );
+
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    currentStyle.addChildElement( "number", elementContents );
+    return mainStyles.lookup( currentStyle, "N" );
+
+}
+
+//TODO
+QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format )
+{
+    kdDebug()<<"QString saveOasisScientificStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    QString format( _format );
+
+    KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_SCIENTIFIC );
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+    QString text;
+    do
+    {
+        format.remove( 0,1 );
+    }
+    while ( format.length() > 0 );
+
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    currentStyle.addChildElement( "number", elementContents );
+    return mainStyles.lookup( currentStyle, "N" );
+}
+
+//TODO
+QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format )
+{
+    kdDebug()<<"QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format ) :"<<_format<<endl;
+    QString format( _format );
+
+    KoGenStyle currentStyle( KoGenStyle::STYLE_NUMERIC_CURRENCY );
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+    QString text;
+    do
+    {
+        format.remove( 0,1 );
+    }
+    while ( format.length() > 0 );
+
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    currentStyle.addChildElement( "number", elementContents );
+    return mainStyles.lookup( currentStyle, "N" );
+}
+

@@ -577,7 +577,6 @@ QString KSpreadStyle::saveOasisStyleNumericText( KoGenStyles&mainStyles )
 
 QString KSpreadStyle::saveOasisStyleNumericMoney( KoGenStyles&mainStyles )
 {
-    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_CURRENCY );
     return "";
 }
 
@@ -587,20 +586,8 @@ QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles )
     //<number:number number:decimal-places="6" number:min-integer-digits="1"/>
     //<number:text>%</number:text>
     //</number:percentage-style>
-    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_PERCENTAGE );
-    QBuffer buffer;
-    buffer.open( IO_WriteOnly );
-    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
-    elementWriter.startElement( "number:number" );
 
-    if ( featureSet( SPrecision ) )
-        elementWriter.addAttribute( "number:decimal-places", m_precision );
-    elementWriter.endElement();
-
-    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
-    currentCellStyle.addChildElement( "number", elementContents );
-
-    return mainStyles.lookup( currentCellStyle, "N" );
+    return "";
 }
 
 
@@ -610,22 +597,7 @@ QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles )
     //  <number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
     //</number:number-style>
 
-    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_SCIENTIFIC );
-    QBuffer buffer;
-    buffer.open( IO_WriteOnly );
-    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
-    elementWriter.startElement( "number:scientific-number" );
-    if ( featureSet( SPrecision ) )
-        elementWriter.addAttribute( "number:decimal-places", m_precision );
-    //todo add "number:min-integer-digits" ????????
-
-    elementWriter.addAttribute("number:min-exponent-digits", "2" );
-    elementWriter.endElement();
-
-    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
-    currentCellStyle.addChildElement( "number", elementContents );
-
-    return mainStyles.lookup( currentCellStyle, "N" );
+    return "";
 }
 
 QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
