@@ -1,6 +1,7 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula2 -I$(top_srcdir)/qt3stuff $(all_includes)
+INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula2 -I$(top_srcdir)/lib/kformula \
+	-I$(top_srcdir)/qt3stuff $(all_includes)
 
 lib_LTLIBRARIES = libkwordpart.la kword.la
 
