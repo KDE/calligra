@@ -27,7 +27,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   layout->addWidget(gb,0,0);
 
 
-  noLegend=new QRadioButton(i18n("No Legend"),gb);
+  noLegend=new QRadioButton(i18n("No legend"),gb);
   grid1->addWidget(noLegend,0,0);
 
   lTop=new QRadioButton(i18n("Top"),gb);
@@ -42,16 +42,16 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   lRight=new QRadioButton(i18n("Right"),gb);
   grid1->addWidget(lRight,1,1);
 
-  lTopLeft=new QRadioButton(i18n("Top-Left"),gb);
+  lTopLeft=new QRadioButton(i18n("Top-left"),gb);
   grid1->addWidget(lTopLeft,2,1);
 
-  lTopRight=new QRadioButton(i18n("Top-Right"),gb);
+  lTopRight=new QRadioButton(i18n("Top-right"),gb);
   grid1->addWidget(lTopRight,0,2);
 
-  lBottomRight=new QRadioButton(i18n("Bottom-Right"),gb);
+  lBottomRight=new QRadioButton(i18n("Bottom-right"),gb);
   grid1->addWidget(lBottomRight,1,2);
 
-  lBottomLeft=new QRadioButton(i18n("Bottom-Left"),gb);
+  lBottomLeft=new QRadioButton(i18n("Bottom-left"),gb);
   grid1->addWidget(lBottomLeft,2,2);
 
   gb->setAlignment(Qt::AlignLeft);
@@ -102,7 +102,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   lab=new QLabel(i18n("Legend text font:"),gb);
   grid4->addWidget(lab,2,0);
   textLegendFontButton=new QPushButton(gb);
-  textLegendFontButton->setText(i18n("Text legend"));
+  textLegendFontButton->setText(i18n("Text Legend"));
   grid4->addWidget(textLegendFontButton,3,0);
 
   connect( titleLegendFontButton, SIGNAL(clicked()), this, SLOT(changeTitleLegendFont()));

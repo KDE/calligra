@@ -79,7 +79,7 @@ void SetOutlineCmd::execute()
 
 
 SetOutlineOpacityCmd::SetOutlineOpacityCmd(GDocument *aGDoc, int o):
-SetPropertyCmd(aGDoc, i18n("Set outline opacity"))
+SetPropertyCmd(aGDoc, i18n("Set Outline Opacity"))
 {
   opacity = o;
 }
@@ -93,7 +93,7 @@ void SetOutlineOpacityCmd::execute()
 
 
 SetOutlineColorCmd::SetOutlineColorCmd(GDocument *aGDoc, const KoColor &c):
-SetPropertyCmd(aGDoc, i18n("Set outline color"))
+SetPropertyCmd(aGDoc, i18n("Set Outline Color"))
 {
   color = c;
 }
@@ -107,7 +107,7 @@ void SetOutlineColorCmd::execute()
 
 
 SetOutlineWidthCmd::SetOutlineWidthCmd(GDocument *aGDoc, int w):
-SetPropertyCmd(aGDoc, i18n("Set outline width"))
+SetPropertyCmd(aGDoc, i18n("Set Outline Width"))
 {
   width = w;
 }
@@ -124,7 +124,7 @@ void SetOutlineWidthCmd::execute()
 
 
 SetJoinStyleCmd::SetJoinStyleCmd(GDocument *aGDoc, KoOutline::Join j):
-SetPropertyCmd(aGDoc, i18n("Set join style"))
+SetPropertyCmd(aGDoc, i18n("Set Join Style"))
 {
   join = j;
 }
@@ -138,7 +138,7 @@ void SetJoinStyleCmd::execute()
 
 
 SetCapStyleCmd::SetCapStyleCmd(GDocument *aGDoc, KoOutline::Cap c):
-SetPropertyCmd(aGDoc, i18n("Set cap style"))
+SetPropertyCmd(aGDoc, i18n("Set Cap Style"))
 {
   cap = c;
 }
@@ -152,7 +152,7 @@ void SetCapStyleCmd::execute()
 
 
 SetFillCmd::SetFillCmd(GDocument *aGDoc, int f):
-SetPropertyCmd(aGDoc, i18n("Set fill opacity"))
+SetPropertyCmd(aGDoc, i18n("Set Fill Opacity"))
 {
   fill = f;
 }
@@ -166,7 +166,7 @@ void SetFillCmd::execute()
 
 
 SetFillOpacityCmd::SetFillOpacityCmd(GDocument *aGDoc, int o):
-SetPropertyCmd(aGDoc, i18n("Set fill opacity"))
+SetPropertyCmd(aGDoc, i18n("Set Fill Opacity"))
 {
   opacity = o;
 }
@@ -180,7 +180,7 @@ void SetFillOpacityCmd::execute()
 
 
 SetFillColorCmd::SetFillColorCmd(GDocument *aGDoc, const KoColor &c):
-SetPropertyCmd(aGDoc, i18n("Set fill color"))
+SetPropertyCmd(aGDoc, i18n("Set Fill Color"))
 {
   color = c;
 }

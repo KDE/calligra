@@ -42,7 +42,7 @@
 #include "UnitBox.h"
 
 OptionsDialog::OptionsDialog(KontourView *aView, GDocument *aGDoc, QWidget *parent, const char *name):
-KDialogBase(KDialogBase::TreeList, i18n("Option"), Ok|Apply|Cancel, Ok, parent, name, true)
+KDialogBase(KDialogBase::TreeList, i18n("Configure Kontour"), Ok|Apply|Cancel, Ok, parent, name, true)
 {
   mView = aView;
   mGDoc = aGDoc;
@@ -162,7 +162,7 @@ void OptionsDialog::createEditWidget (QWidget* parent)
 void OptionsDialog::createBGWidget(QWidget *parent)
 {
   QBoxLayout *layout = new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
-  QLabel* clabel = new QLabel(i18n("Background Color"), parent);
+  QLabel* clabel = new QLabel(i18n("Background color:"), parent);
   bgbutton = new KColorButton(parent);
   connect(bgbutton, SIGNAL(changed(const QColor &)), this, SLOT(slotSetDocModified()));
   connect(bgbutton, SIGNAL(changed(const QColor &)), this, SLOT(slotSetViewUpdate()));
@@ -224,7 +224,7 @@ void OptionsDialog::createGridWidget(QWidget *parent)
 
   cbutton = new KColorButton(parent);
   cbutton->setColor(mGDoc->gridColor());
-  QLabel* clabel = new QLabel(i18n("Grid Color"), parent);
+  QLabel* clabel = new QLabel(i18n("Grid color:"), parent);
   connect(cbutton, SIGNAL(changed(const QColor&)), this, SLOT(slotSetDocModified()));
   connect(cbutton, SIGNAL(changed(const QColor&)), this, SLOT(slotSetViewUpdate()));
   layout->addWidget(cbutton, 2, 1);

@@ -54,7 +54,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     QButtonGroup* gb2 = new QButtonGroup( i18n("Title"), this );
     QGridLayout *grid2 = new QGridLayout(gb2,8,2,15,8);
 
-    QLabel *tmpLabel = new QLabel( i18n( "Y-Title" ), gb2 );
+    QLabel *tmpLabel = new QLabel( i18n( "Y-Title:" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
     grid2->addWidget(tmpLabel,2,0);
 
@@ -63,7 +63,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid2->addWidget(ytitle,3,0);
     ytitle->setEnabled(false);
 
-    tmpLabel = new QLabel( i18n( "X-Title" ), gb2 );
+    tmpLabel = new QLabel( i18n( "X-Title:" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
     grid2->addWidget(tmpLabel,4,0);
 
@@ -72,7 +72,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid2->addWidget(xtitle,5,0);
     xtitle->setEnabled(false);
 
-    tmpLabel = new QLabel( i18n( "Y-Label format" ), gb2 );
+    tmpLabel = new QLabel( i18n( "Y-Label format:" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
     grid2->addWidget(tmpLabel,0,1);
 
@@ -81,7 +81,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid2->addWidget(ylabel_fmt,1,1);
     ylabel_fmt->setEnabled(false);
 
-    tmpLabel = new QLabel( i18n( "Y-Title 2" ), gb2 );
+    tmpLabel = new QLabel( i18n( "Y-Title 2:" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
     grid2->addWidget(tmpLabel,2,1);
 
@@ -89,7 +89,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     ytitle2->setMaximumWidth(130);
     grid2->addWidget(ytitle2,3,1);
 
-    tmpLabel = new QLabel( i18n( "Y-Label format 2" ), gb2 );
+    tmpLabel = new QLabel( i18n( "Y-Label format 2:" ), gb2 );
     tmpLabel->setAlignment(Qt::AlignCenter);
     grid2->addWidget(tmpLabel,4,1);
 

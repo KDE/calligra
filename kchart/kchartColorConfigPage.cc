@@ -27,7 +27,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
     QString wtstr;
     QGridLayout* grid = new QGridLayout( gb,7, 4, 15,7);
 
-    QLabel* gridLA = new QLabel( i18n( "&Grid color" ), gb );
+    QLabel* gridLA = new QLabel( i18n( "&Grid color:" ), gb );
     gridLA->setAlignment( AlignRight | AlignVCenter );
     grid->addWidget( gridLA, 0, 2 );
     _gridCB = new KColorButton( gb );
@@ -39,7 +39,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
     QWhatsThis::add( gridLA, wtstr );
     QWhatsThis::add( _gridCB, wtstr );
 
-    QLabel* lineLA = new QLabel( i18n( "&Line color" ), gb );
+    QLabel* lineLA = new QLabel( i18n( "&Line color:" ), gb );
     lineLA->setAlignment( AlignRight | AlignVCenter );
     grid->addWidget( lineLA, 0, 0 );
     _lineCB = new KColorButton( gb );
@@ -49,7 +49,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
     QWhatsThis::add( lineLA, wtstr );
     QWhatsThis::add( _lineCB, wtstr );
 
-    QLabel* plotLA = new QLabel( i18n( "&Plot color" ), gb );
+    QLabel* plotLA = new QLabel( i18n( "&Plot color:" ), gb );
     plotLA->setAlignment( AlignRight | AlignVCenter );
     grid->addWidget( plotLA, 1, 2 );
     _plotCB = new KColorButton( gb );
@@ -60,7 +60,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
     QWhatsThis::add( plotLA, wtstr );
     QWhatsThis::add( _plotCB, wtstr );
 
-    QLabel* volLA = new QLabel( i18n( "&Volume color" ), gb );
+    QLabel* volLA = new QLabel( i18n( "&Volume color:" ), gb );
     volLA->setAlignment( AlignRight | AlignVCenter );
     grid->addWidget( volLA, 1, 0 );
     _volCB = new KColorButton( gb );
@@ -71,7 +71,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
     QWhatsThis::add( _volCB, wtstr );
 
 
-    QLabel* xtitleLA = new QLabel( i18n("&X title color" ), gb );
+    QLabel* xtitleLA = new QLabel( i18n("&X title color:" ), gb );
     xtitleLA->setAlignment( AlignRight | AlignVCenter );
     grid->addWidget( xtitleLA, 2, 0 );
     _xtitleCB = new KColorButton( gb );
@@ -83,7 +83,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
     QWhatsThis::add( xtitleLA, wtstr );
     QWhatsThis::add( _xtitleCB, wtstr );
 
-    QLabel* ytitleLA = new QLabel( i18n("&Y title color" ), gb );
+    QLabel* ytitleLA = new QLabel( i18n("&Y title color:" ), gb );
     ytitleLA->setAlignment( AlignRight | AlignVCenter );
     grid->addWidget( ytitleLA, 2, 2 );
     _ytitleCB = new KColorButton( gb );
@@ -95,7 +95,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
     QWhatsThis::add( ytitleLA, wtstr );
     QWhatsThis::add( _ytitleCB, wtstr );
 
-    QLabel* ytitle2LA = new QLabel( i18n( "Y title color (2nd axis)" ), gb );
+    QLabel* ytitle2LA = new QLabel( i18n( "Y title color (2nd axis):" ), gb );
     ytitle2LA->setAlignment( AlignRight | AlignVCenter );
     grid->addWidget( ytitle2LA, 3, 0 );
     _ytitle2CB = new KColorButton( gb );
@@ -108,7 +108,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
     QWhatsThis::add( ytitle2LA, wtstr );
     QWhatsThis::add( _ytitle2CB, wtstr );
 
-    QLabel* xlabelLA = new QLabel( i18n( "X label color" ), gb );
+    QLabel* xlabelLA = new QLabel( i18n( "X label color:" ), gb );
     xlabelLA->setAlignment( AlignRight | AlignVCenter );
     grid->addWidget( xlabelLA, 3, 2 );
     _xlabelCB = new KColorButton( gb );
@@ -119,7 +119,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
     QWhatsThis::add( xlabelLA, wtstr );
     QWhatsThis::add( _xlabelCB, wtstr );
 
-    QLabel* ylabelLA = new QLabel( i18n( "Y label color" ), gb );
+    QLabel* ylabelLA = new QLabel( i18n( "Y label color:" ), gb );
     ylabelLA->setAlignment( AlignRight | AlignVCenter );
     grid->addWidget( ylabelLA, 4, 0 );
     _ylabelCB = new KColorButton( gb );
@@ -130,7 +130,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
     QWhatsThis::add( ylabelLA, wtstr );
     QWhatsThis::add( _ylabelCB, wtstr );
 
-    QLabel* ylabel2LA = new QLabel( i18n( "Y label color (2nd axis)" ), gb );
+    QLabel* ylabel2LA = new QLabel( i18n( "Y label color (2nd axis):" ), gb );
     ylabel2LA->setAlignment( AlignRight | AlignVCenter );
     grid->addWidget( ylabel2LA, 4, 2 );
     _ylabel2CB = new KColorButton( gb );
@@ -159,7 +159,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
 
 //     for( int i = 0; i < NUMDATACOLORS; i++ ) {
 // 	QString labeltext;
-// 	labeltext.sprintf( i18n( "Data color #%d"), i );
+// 	labeltext.sprintf( i18n( "Data color #%d:"), i );
 // 	QLabel* dataLA = new QLabel( labeltext, this );
 // 	dataLA->setAlignment(AlignRight | AlignVCenter);
 // 	dataLA->resize( dataLA->sizeHint() );

@@ -38,7 +38,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 
     QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,2,2,15,7);
 
-    grid = new QCheckBox( i18n( "Has grid" ),tmpQGroupBox  );
+    grid = new QCheckBox( i18n( "Has grid:" ),tmpQGroupBox  );
 
     grid->setChecked(_chart->params()->showGrid());
     grid2->addWidget(grid,0,0);
@@ -49,7 +49,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     gridColor->setColor( colorGrid );
     grid2->addWidget(gridColor,0,1);
 
-    border = new QCheckBox( i18n( "Border" ), tmpQGroupBox );
+    border = new QCheckBox( i18n( "Border:" ), tmpQGroupBox );
     // PENDING(kalle) Put back in
     //     border->setChecked( _chart->params()->border );
     grid2->addWidget(border,1,0);
@@ -72,14 +72,14 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 
     QLabel *tmpLabel;
     tmpLabel=new QLabel(tmpQGroupBox);
-    tmpLabel->setText(i18n("Angle 3D: "));
+    tmpLabel->setText(i18n("Angle 3D:"));
     grid2->addWidget(tmpLabel,0,0);
     angle = new QSpinBox(1, 90, 1,tmpQGroupBox );
     angle->setValue( _chart->params()->threeDBarAngle() );
     grid2->addWidget(angle,0,1);
 
     tmpLabel=new QLabel(tmpQGroupBox);
-    tmpLabel->setText(i18n("Depth 3D: "));
+    tmpLabel->setText(i18n("Depth 3D:"));
     grid2->addWidget(tmpLabel,1,0);
     depth = new QSpinBox(1, 40, 1, tmpQGroupBox);
     depth->setValue( static_cast<int>( _chart->params()->threeDBarDepth() ) );
@@ -88,7 +88,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     // Bar width is computed automatically in KDChart (and can be
     //     changed via gaps)
     //     tmpLabel=new QLabel(tmpQGroupBox);
-//     tmpLabel->setText(i18n("bar width: "));
+//     tmpLabel->setText(i18n("Bar width:"));
 //     grid2->addWidget(tmpLabel,2,0);
 //     barWidth = new QSpinBox(1, 200, 1, tmpQGroupBox);
 //     barWidth->setValue(_chart->params()->bar_width);
@@ -102,7 +102,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     grid2 = new QGridLayout(tmpQGroupBox,3,2,15,7);
 
     tmpLabel=new QLabel(tmpQGroupBox);
-    tmpLabel->setText(i18n("Y interval: "));
+    tmpLabel->setText(i18n("Y interval:"));
     grid2->addWidget(tmpLabel,0,0);
 
     QString tmp;
@@ -114,7 +114,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 //         y_interval->setText( tmp.setNum(_chart->params()->requested_yinterval));
 
     tmpLabel=new QLabel(tmpQGroupBox);
-    tmpLabel->setText(i18n("Y min: "));
+    tmpLabel->setText(i18n("Y min:"));
     grid2->addWidget(tmpLabel,1,0);
     y_min=new QLineEdit(tmpQGroupBox);
     y_min->setValidator(new KFloatValidator( y_min));
@@ -124,7 +124,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 //         y_min->setText( tmp.setNum(_chart->params()->requested_ymin));
 
     tmpLabel=new QLabel(tmpQGroupBox);
-    tmpLabel->setText(i18n("Y max: "));
+    tmpLabel->setText(i18n("Y max:"));
     grid2->addWidget(tmpLabel,2,0);
     y_max=new QLineEdit(tmpQGroupBox);
     y_max->setValidator(new KFloatValidator( y_max));
@@ -142,7 +142,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     grid2 = new QGridLayout(tmpQGroupBox,3,2,15,7);
 
     tmpLabel=new QLabel(tmpQGroupBox);
-    tmpLabel->setText(i18n("YLabel format: "));
+    tmpLabel->setText(i18n("YLabel format:"));
     grid2->addWidget(tmpLabel,0,0);
     ylabel_fmt=new QLineEdit(tmpQGroupBox);
     grid2->addWidget(ylabel_fmt,0,1);
@@ -166,7 +166,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 
 
     tmpLabel=new QLabel(tmpQGroupBox);
-    tmpLabel->setText(i18n("YLabel2 format: "));
+    tmpLabel->setText(i18n("YLabel2 format:"));
     grid2->addWidget(tmpLabel,2,0);
 
     ylabel2_fmt=new QLineEdit(tmpQGroupBox);

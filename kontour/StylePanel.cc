@@ -60,7 +60,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   QWidget *mOutline = new QWidget(mTab);
   QGridLayout *mOutlineLayout = new QGridLayout(mOutline, 4, 2);
 
-  mStroked = new QCheckBox(i18n("stroked"), mOutline);
+  mStroked = new QCheckBox(i18n("Stroked"), mOutline);
   connect(mStroked, SIGNAL(toggled(bool)), this, SLOT(slotChangeStroked(bool)));
 
   QLabel *mStartArrowText = new QLabel(i18n("Start Arrow"), mOutline);

@@ -28,7 +28,7 @@
 #include <GText.h>
 
 TextAlongPathCmd::TextAlongPathCmd (GDocument* doc, GText* obj, GObject* path)
-  : Command(i18n("Text along path"))
+  : Command(i18n("Text Along Path"))
 {
   document = doc;
   object = obj;

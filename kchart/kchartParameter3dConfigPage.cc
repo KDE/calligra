@@ -32,7 +32,7 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
   drawShadowColor=new QCheckBox(i18n("Draw shadow color"),gb);
   grid1->addWidget(drawShadowColor,1,0);
 
-  QLabel *tmpLabel = new QLabel( i18n( "Angle" ), gb );
+  QLabel *tmpLabel = new QLabel( i18n( "Angle:" ), gb );
   tmpLabel->resize( tmpLabel->sizeHint() );
   tmpLabel->setAlignment(Qt::AlignCenter);
   grid1->addWidget(tmpLabel,2,0);
@@ -43,7 +43,7 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
 
 
 
-  tmpLabel = new QLabel( i18n( "Depth" ), gb );
+  tmpLabel = new QLabel( i18n( "Depth:" ), gb );
   tmpLabel->resize( tmpLabel->sizeHint() );
   tmpLabel->setAlignment(Qt::AlignCenter);
   grid1->addWidget(tmpLabel,3,0);

@@ -110,7 +110,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
     //   ylabel=_chart->params()->yTitleFont();
 
 
-    QLabel* lab = new QLabel( i18n( "Legend Title:" ), tmpQGroupBox );
+    QLabel* lab = new QLabel( i18n( "Legend title:" ), tmpQGroupBox );
     grid2->addWidget(lab,4,0);
 
     _legendTitleText = new QLineEdit( tmpQGroupBox );
