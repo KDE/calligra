@@ -1999,8 +1999,13 @@ void KWPage::finishPainting( QPaintEvent *e, QPainter &painter )
     KWFormatContext _fc( doc, fc->getFrameSet() );
     _fc = *fc;
     KWFrameSet *frameSet = doc->getFrameSet( _fc.getFrameSet() - 1 );
-    unsigned int _x = frameSet->getFrame( _fc.getFrame() - 1 )->x() - contentsX();
-    unsigned int _wid = frameSet->getFrame( _fc.getFrame() - 1 )->width();
+    KWFrame *frame = frameSet->getFrame( _fc.getFrame() - 1 );
+    unsigned int _x = frame->x() - contentsX();
+    unsigned int _wid = frame->width();
+
+#if 0
+    // WABA: What is this doing? Why would you want to paint outside the
+    // e->rect() ?
     if ( e->rect().intersects( QRect( _x + frameSet->getFrame( _fc.getFrame() - 1 )->
 				      getLeftIndent( _fc.getPTY(), _fc.getLineHeight() ),
 				      _fc.getPTY() - contentsY(),
@@ -2009,7 +2014,8 @@ void KWPage::finishPainting( QPaintEvent *e, QPainter &painter )
 				      frameSet->getFrame( _fc.getFrame() - 1 )->
 				      getRightIndent( _fc.getPTY(),
 						      _fc.getLineHeight() ),
-				      _fc.getLineHeight() ) ) ) {
+				      _fc.getLineHeight() ) ) ) 
+    {
 	if ( !e->rect().contains( QRect( _x + frameSet->getFrame( _fc.getFrame() - 1 )->
 					 getLeftIndent( _fc.getPTY(), _fc.getLineHeight() ),
 					 _fc.getPTY() - contentsY(),
@@ -2018,10 +2024,11 @@ void KWPage::finishPainting( QPaintEvent *e, QPainter &painter )
 					 - frameSet->getFrame( _fc.getFrame() - 1 )->
 					 getRightIndent( _fc.getPTY(), _fc.getLineHeight() ),
 					 _fc.getLineHeight() ) ) )
+        {					 
 	    painter.setClipping( FALSE );
+	}
     }
-
-    KWFrame *frame = frameSet->getFrame( _fc.getFrame() - 1 );
+#endif
     QRect fr( _x + frame->getLeftIndent( _fc.getPTY(), _fc.getLineHeight() ),
 	      _fc.getPTY() - contentsY(),
 	      _wid - frame->getLeftIndent( _fc.getPTY(), _fc.getLineHeight() ) -
@@ -2033,7 +2040,9 @@ void KWPage::finishPainting( QPaintEvent *e, QPainter &painter )
     drawFrameBorder( painter, frame );
 
     if ( doc->has_selection() )
+    {
 	doc->drawSelection( painter, contentsX(), contentsY() );
+    }
 
     if ( cursorIsVisible )
     {
@@ -2323,13 +2332,17 @@ bool KWPage::kContinueSelection( QKeyEvent *e )
 	 ( e->key() == Key_Left || e->key() == Key_Right ||
 	   e->key() == Key_Up || e->key() == Key_Down  ||
 	   e->key() == Key_End || e->key() == Key_Home ) )
+    {	   
 	continueSelection = TRUE;
-    else if ( doc->has_selection() && *doc->getSelStart() != *doc->getSelEnd() ) {
+    }
+    else if ( doc->has_selection() && *doc->getSelStart() != *doc->getSelEnd() ) 
+    {
 	doc->setSelection( FALSE );
 	doc->drawSelection( painter, contentsX(), contentsY() );
 	painter.end();
 	if ( e->key() == Key_Delete || e->key() == Key_Backspace || e->key() == Key_Return ||
-	     e->key() == Key_Enter || e->ascii() >= 32 ) {
+	     e->key() == Key_Enter || e->ascii() >= 32 ) 
+	{
 	    doc->deleteSelectedText( fc );
 	    recalcCursor();
 	    if ( e->key() == Key_Delete || e->key() == Key_Backspace || e->key() == Key_Return ||
@@ -4866,21 +4879,15 @@ void KWPage::continueKeySelection()
 	doc->setSelEnd( *fc );
 	doc->setSelection( FALSE );
 	painter.end();
-
 	scrollToCursor();
-
 	doc->setSelection( TRUE );
 	painter.begin( viewport() );
 	doc->drawSelection( painter, contentsX(), contentsY() );
 	painter.end();
     } else {
+	scrollToCursor(); // WABA
 	doc->setSelEnd( *fc );
-	doc->setSelection( FALSE );
-
-	scrollToCursor();
-
 	QPainter painter;
-	doc->setSelection( TRUE );
 	painter.begin( viewport() );
 	doc->drawSelection( painter, contentsX(), contentsY(),
 			    oldFc, fc );
