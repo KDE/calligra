@@ -3107,7 +3107,8 @@ void KSpreadCell::checkValue()
         }
     */
     QTime tmpTime;
-    if((tmpTime=KGlobal::locale()->readTime(m_strText)).isValid())
+
+    /*if((tmpTime=KGlobal::locale()->readTime(m_strText)).isValid())
         {
         m_bTime = true;
         m_dValue = 0;
@@ -3116,7 +3117,7 @@ void KSpreadCell::checkValue()
         m_Time=tmpTime;
         m_strText=KGlobal::locale()->formatTime(m_Time,true);
         return;
-        }
+        }*/
 
     QDate tmpDate;
     if((tmpDate=KGlobal::locale()->readDate(m_strText)).isValid())
