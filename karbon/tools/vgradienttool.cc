@@ -156,6 +156,9 @@ VGradientTool::mouseDragRelease()
 		VFill fill;
 		fill.gradient() = m_gradient;
 		fill.setType( VFill::grad );
+		VColor c = fill.color();
+		c.setOpacity( m_optionsWidget->opacity() );
+		fill.setColor( c, false );
 		view()->part()->addCommand(
 			new VFillCmd( &view()->part()->document(), fill, "14_gradient" ), true );
 	}

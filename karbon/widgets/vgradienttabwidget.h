@@ -30,6 +30,7 @@
 class KComboBox;
 class VGradientWidget;
 class KListBox;
+class KIntNumInput;
 class QPushButton;
 class QGroupBox;
 class KarbonResourceServer;
@@ -91,6 +92,8 @@ class VGradientTabWidget : public QTabWidget
 		VGradientTarget target();
 		void setTarget( VGradientTarget target );
 
+		double opacity() const;
+
 	public slots:
 		void combosChange( int );
 		void addGradientToPredefs();
@@ -104,16 +107,17 @@ class VGradientTabWidget : public QTabWidget
 		void setupConnections();
 		
 	private:
-		QGroupBox*            m_editGroup;
-		VGradientWidget*      m_gradientWidget;
-		KComboBox*            m_gradientTarget;
-		KComboBox*            m_gradientRepeat;
-		KComboBox*            m_gradientType;
-		VGradientPreview*     m_gradientPreview;
-		KListBox*             m_predefGradientsView;
-		QPushButton*          m_predefDelete;
-		QPushButton*          m_predefImport;
-		QPushButton*          m_addToPredefs;
+		QGroupBox				*m_editGroup;
+		VGradientWidget			*m_gradientWidget;
+		KComboBox				*m_gradientTarget;
+		KComboBox				*m_gradientRepeat;
+		KComboBox				*m_gradientType;
+		VGradientPreview		*m_gradientPreview;
+		KListBox				*m_predefGradientsView;
+		QPushButton				*m_predefDelete;
+		QPushButton				*m_predefImport;
+		QPushButton				*m_addToPredefs;
+		KIntNumInput			*m_opacity;
 
 		VGradient*            m_gradient;
 			/** The predefined gradients list. */

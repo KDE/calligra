@@ -37,6 +37,7 @@
 #include <qfileinfo.h>
 #include <qpixmap.h>
 #include <kiconloader.h>
+#include <knuminput.h>
 
 #include "vgradientwidget.h"
 #include "vgradienttabwidget.h"
@@ -185,7 +186,7 @@ VGradientTabWidget::~VGradientTabWidget()
 void VGradientTabWidget::setupUI()
 {
 	m_editGroup = new QGroupBox( i18n( "Edit Gradient" ) );
-	QGridLayout* editLayout = new QGridLayout( m_editGroup, 6, 3 );
+	QGridLayout* editLayout = new QGridLayout( m_editGroup, 7, 3 );
 	editLayout->setSpacing( 3 );
 	editLayout->setMargin( 6 );
 	editLayout->addRowSpacing( 0, 12 );
@@ -204,8 +205,13 @@ void VGradientTabWidget::setupUI()
 	editLayout->addWidget( m_gradientTarget = new KComboBox( false, m_editGroup ), 3, 2 );
 	m_gradientTarget->insertItem( i18n( "Stroke" ), 0 );
 	m_gradientTarget->insertItem( i18n( "Fill" ), 1 );
-	editLayout->addMultiCellWidget( m_addToPredefs = new QPushButton( i18n( "&Add to Predefined Gradients" ), m_editGroup ), 5, 5, 0, 2 );
+	editLayout->addMultiCellWidget( m_addToPredefs = new QPushButton( i18n( "&Add to Predefined Gradients" ), m_editGroup ), 6, 6, 0, 2 );
 	editLayout->addMultiCellWidget( m_gradientWidget = new VGradientWidget( m_gradient, m_editGroup ), 4, 4, 0, 2 );
+	editLayout->addWidget( new QLabel( i18n( "Overall opacity:" ), m_editGroup ), 5, 0 );
+	m_opacity = new KIntNumInput( 100, m_editGroup );
+	m_opacity->setRange( 0, 100, 1, true );
+	m_opacity->setValue( 100 );
+	editLayout->addMultiCellWidget( m_opacity, 5, 5, 1, 2 );
 	addTab( m_editGroup, i18n( "Edit" ) );
 
 	QGroupBox* predefGroup  = new QGroupBox( i18n( "Predefined Gradients" ) );
@@ -242,7 +248,14 @@ void VGradientTabWidget::initUI()
 			m_predefGradientsView->insertItem( new VGradientListItem( *g ) );
 } // VGradientTabWidget::initUI
 
-const VGradient* VGradientTabWidget::gradient()
+double
+VGradientTabWidget::opacity() const
+{
+	return m_opacity->value() / 100.0;
+}
+
+const VGradient*
+VGradientTabWidget::gradient()
 {
 	return m_gradient;
 } // VGradientTabWidget::gradient
