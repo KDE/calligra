@@ -3715,6 +3715,17 @@ void KWTextFrameSetEdit::changeCaseOfText(TypeOfCase _type)
                 }
                 text=text.replace(i, 1, text.at(i).upper() );
                 break;
+            case ToggleCase:
+                for(i=0;i<text.length();i++)
+                {
+                    QString repl;
+                    if(text.at(i).upper()!=text.at(i))
+                        repl=text.at(i).upper();
+                    else if(text.at(i).lower()!=text.at(i))
+                        repl=text.at(i).lower();
+                    text=text.replace(i, 1, repl );
+                }
+                break;
             default:
                 kdDebug()<<"Error in changeCaseOfText !\n";
                 break;

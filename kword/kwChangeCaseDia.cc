@@ -49,6 +49,8 @@ KWChangeCaseDia::KWChangeCaseDia( QWidget *parent, const char *name )
 
     m_titleCase=new QRadioButton( i18n("Title Case"), grp );
 
+    m_toggleCase=new QRadioButton( i18n("Toggle Case"), grp );
+
     m_upperCase->setChecked(true);
     grp->setRadioButtonExclusive( TRUE );
 
@@ -63,6 +65,8 @@ TypeOfCase KWChangeCaseDia::getTypeOfCase()
         type=LowerCase;
     else if(m_titleCase->isChecked())
         type=TitleCase;
+    else if( m_toggleCase->isChecked())
+        type=ToggleCase;
     return type;
 }
 

@@ -39,6 +39,7 @@ protected:
     QRadioButton *m_upperCase;
     QRadioButton *m_titleCase;
     QRadioButton *m_lowerCase;
+    QRadioButton *m_toggleCase;
 };
 
 #endif
