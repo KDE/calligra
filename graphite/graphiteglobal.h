@@ -121,6 +121,11 @@ public:
     // note: set the dpi resolution!
     void setResoltuion(const int &resolution);
 
+    // To avoid uncounted zoom*resolution calculations we cache this
+    // value here...
+    // There's no way to set it, of course, but it will be kept up to date ;)
+    const double &zoomedResolution() const { return m_zoomedResolution; }
+
     QDomElement createElement(const QString &tagName, const QPen &pen, QDomDocument &doc) const;
     QPen toPen(const QDomElement &element) const;
 
@@ -147,6 +152,7 @@ private:
     QString m_unitString;
     double m_zoom;
     double m_resolution;
+    double m_zoomedResolution;
 };
 
 

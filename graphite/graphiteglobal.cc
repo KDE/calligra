@@ -207,10 +207,12 @@ void GraphiteGlobal::setUnit(const Unit &unit) {
 
 void GraphiteGlobal::setZoom(const double &zoom) {
     m_zoom=zoom;
+    m_zoomedResolution=m_zoom*m_resolution;
 }
 
 void GraphiteGlobal::setResoltuion(const int &resolution) {
     m_resolution=static_cast<double>(resolution)/25.399956;
+    m_zoomedResolution=m_zoom*m_resolution;
 }
 
 QDomElement GraphiteGlobal::createElement(const QString &tagName, const QPen &pen, QDomDocument &doc) const {
@@ -293,6 +295,7 @@ GraphiteGlobal::GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4),
                                    m_handleOffset(2), m_rotHandleOffset(2),
                                    m_unit(MM), m_zoom(1.0), m_resolution(2.8346457) {
     m_unitString=QString::fromLatin1("mm");
+    m_zoomedResolution=m_zoom*m_resolution;
 }
 
 
@@ -309,7 +312,7 @@ void FxValue::setValue(const double &value) {
 }
 
 void FxValue::setPxValue(const int &pixel) {
-    m_value=static_cast<double>(m_pixel)/GraphiteGlobal::self()->zoom();
+    m_value=static_cast<double>(pixel)/GraphiteGlobal::self()->zoomedResolution();
     m_pixel=pixel;
 }
 
@@ -324,13 +327,13 @@ const double FxValue::valueUnit() const {
 }
 
 const double FxValue::valueInch() const {
-    return m_value; // *
+    return Graphite::mm2inch(m_value);
 }
 
 const double FxValue::valuePt() const {
-    return m_value; // *
+    return Graphite::mm2pt(m_value);
 }
 
 void FxValue::recalculate() {
-
+    m_pixel=Graphite::double2Int(m_value*GraphiteGlobal::self()->zoomedResolution());
 }

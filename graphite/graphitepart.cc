@@ -48,6 +48,19 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
     KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut" );
 
     // Settings -> Configure... (nice dialog to configure e.g. units)
+    // Tests ###################################
+    FxValue v(100);
+    kdDebug() << "value: " << v.value() << " (inch: " << v.valueInch() << " pt: "
+              << v.valuePt() << ") -- px value: " << v.pxValue() << endl;
+    FxValue w(v);
+    if(w==v) kdDebug() << "equal" << endl;
+    w.setValue(v.value()*10);
+    kdDebug() << "value: " << w.value() << " (inch: " << w.valueInch() << " pt: "
+              << w.valuePt() << ") -- px value: " << w.pxValue() << endl;
+    w.setPxValue(1000);
+    kdDebug() << "value: " << w.value() << " (inch: " << w.valueInch() << " pt: "
+              << w.valuePt() << ") -- px value: " << w.pxValue() << endl;
+    // #########################################
 }
 
 GraphitePart::~GraphitePart() {
