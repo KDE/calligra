@@ -8,7 +8,7 @@ libabiwordexport_la_LIBADD = $(KOFFICE_LIBS)
 
 ####### Files
 
-lib_LTLIBRARIES = libabiwordimport.la libabiwordexport.la
+kde_module_LTLIBRARIES = libabiwordimport.la libabiwordexport.la
 
 libabiwordimport_la_SOURCES = abiwordimport.cc abiwordimport_factory.cc \
 processors.cc kqiodevicegzip.cc

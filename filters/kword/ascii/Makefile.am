@@ -8,7 +8,7 @@ libasciiexport_la_LIBADD = $(KOFFICE_LIBS)
 
 ####### Files
 
-lib_LTLIBRARIES = libasciiimport.la libasciiexport.la
+kde_module_LTLIBRARIES = libasciiimport.la libasciiexport.la
 
 libasciiimport_la_SOURCES = asciiimport.cc asciiimport_factory.cc
 libasciiexport_la_SOURCES = asciiexport.cc asciiexport_factory.cc

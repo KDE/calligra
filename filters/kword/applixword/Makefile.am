@@ -5,7 +5,7 @@ libapplixwordimport_la_LDFLAGS	= -module -avoid-version -no-undefined
 
 ####### Files
 
-lib_LTLIBRARIES = libapplixwordimport.la
+kde_module_LTLIBRARIES = libapplixwordimport.la
 
 libapplixwordimport_la_SOURCES = applixwordimport.cc applixwordimport_factory.cc
 libapplixwordimport_la_LIBADD = $(KOFFICE_LIBS)

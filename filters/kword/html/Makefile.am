@@ -10,7 +10,7 @@ libhtmlexportdia_la_LIBADD = $(KOFFICE_LIBS)
 
 ####### Files
 
-lib_LTLIBRARIES = libhtmlimport.la libhtmlexport.la \
+kde_module_LTLIBRARIES = libhtmlimport.la libhtmlexport.la \
 libhtmlexportdia.la
 
 libhtmlimport_la_SOURCES = htmlimport.cc htmlimport_factory.cc

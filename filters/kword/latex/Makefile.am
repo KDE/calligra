@@ -8,7 +8,7 @@ liblatexexport_la_LIBADD = $(KOFFICE_LIBS)
 
 ####### Files
 
-lib_LTLIBRARIES = liblatexexport.la
+kde_module_LTLIBRARIES = liblatexexport.la
 #		liblateximport.la
 
 #liblateximport_la_SOURCES = lateximport.cc lateximport_factory.cc

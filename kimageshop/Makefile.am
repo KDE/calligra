@@ -1,21 +1,22 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
-#### files ####
-
-bin_PROGRAMS = krayon
-lib_LTLIBRARIES = libkrayonpart.la krayon.la
-
+## The part
+kde_module_LTLIBRARIES = libkrayonpart.la
 libkrayonpart_la_SOURCES = dummy.cc
 
-libkrayonpart_la_LDFLAGS = -avoid-version -module -no-undefined
-libkrayonpart_la_LIBADD = $(all_libraries) core/libkiscore.la ui/libkisui.la tools/libkistools.la \
+libkrayonpart_la_LDFLAGS = $(KDE_PLUGIN)
+libkrayonpart_la_LIBADD = core/libkiscore.la ui/libkisui.la tools/libkistools.la \
 	../lib/kofficeui/libkofficeui.la
-libkrayonpart_la_METASOURCES = AUTO
+METASOURCES = AUTO
 
+## The kdeinit loadable module
+lib_LTLIBRARIES = krayon.la
 krayon_la_SOURCES = main.cc
 krayon_la_LDFLAGS = $(all_libraries) -avoid-version -module
 krayon_la_LIBADD = libkrayonpart.la
 
+## The executable
+bin_PROGRAMS = krayon
 krayon_SOURCES = dummy.cc
 krayon_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 krayon_LDADD = krayon.la

@@ -6,7 +6,7 @@ libmsodimport_la_LIBADD = $(KOFFICE_LIBS) $(LIB_KWMF)
 
 ####### Files
 
-lib_LTLIBRARIES = libmsodimport.la
+kde_module_LTLIBRARIES = libmsodimport.la
 
 libmsodimport_la_SOURCES = msodimport.cc msodimport_factory.cc msod.cc
 

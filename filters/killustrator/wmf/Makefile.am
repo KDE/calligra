@@ -6,7 +6,7 @@ libwmfimport_la_LIBADD = $(KOFFICE_LIBS) $(LIB_KWMF)
 
 ####### Files
 
-lib_LTLIBRARIES = libwmfimport.la
+kde_module_LTLIBRARIES = libwmfimport.la
 
 libwmfimport_la_SOURCES = wmfimport.cc wmfimport_factory.cc
 

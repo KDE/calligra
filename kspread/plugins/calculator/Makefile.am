@@ -1,13 +1,7 @@
 INCLUDES  = -I$(srcdir)/../../../kspread $(KOFFICE_INCLUDES) $(all_includes) \
 -I$(top_srcdir)/lib/koscript -I$(top_builddir)/lib/koscript
 
-libkspreadcalc_la_LDFLAGS = -avoid-version -module -no-undefined
-
-libkspreadcalc_la_LIBADD = $(all_libraries) ../../libkspreadpart.la
-
-####### Files
-
-lib_LTLIBRARIES = libkspreadcalc.la
+kde_module_LTLIBRARIES = libkspreadcalc.la
 
 libkspreadcalc_la_SOURCES = configdlg.cpp \
 			dlabel.cpp \
@@ -16,21 +10,10 @@ libkspreadcalc_la_SOURCES = configdlg.cpp \
 			kcalc_core.cpp \
 			main.cpp \
 			stats.cpp
+libkspreadcalc_la_LDFLAGS = -avoid-version -module -no-undefined
+libkspreadcalc_la_LIBADD = $(all_libraries) ../../libkspreadpart.la
 
-noinst_HEADERS = configdlg.h \
-		 dlabel.h \
-		 fontdlg.h \
-		 kcalc.h \
-		 kcalctype.h \
-		 main.h \
-		 stats.h \
-		 version.h
-
-libkspreadcalc_la_METASOURCES = configdlg.moc \
-			    dlabel.moc \
-			    fontdlg.moc \
-			    kcalc.moc \
-			    main.moc
+METASOURCES = AUTO
 
 desktop_DATA = kspreadcalc.desktop
 desktopdir = $(kde_servicesdir)

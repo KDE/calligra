@@ -1,10 +1,7 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(top_srcdir)/interfaces -I$(interfacedir) $(all_includes)
 
-####### Files
-
-bin_PROGRAMS = kchart
-lib_LTLIBRARIES = libkchartpart.la kchart.la
-
+## The part
+kde_module_LTLIBRARIES = libkchartpart.la
 libkchartpart_la_SOURCES = kchart_part.cc \
 	kchart_view.cc kchart_factory.cc \
 	engine.cc \
@@ -45,14 +42,18 @@ libkchartpart_la_SOURCES = kchart_part.cc \
 	sheet.cc \
 	sheetdlg.cc \
 	table.cc
-libkchartpart_la_LDFLAGS = -avoid-version -module -no-undefined
+libkchartpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
                           $(top_builddir)/lib/kofficeui/libkofficeui.la
 
+## The kdeinit loadable module
+lib_LTLIBRARIES = kchart.la
 kchart_la_SOURCES = main.cc
 kchart_la_LDFLAGS = $(all_libraries) -avoid-version -module
 kchart_la_LIBADD = libkchartpart.la
 
+## The executable
+bin_PROGRAMS = kchart
 kchart_SOURCES = dummy.cc
 kchart_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kchart_LDADD = kchart.la

@@ -1,7 +1,7 @@
 INCLUDES = -I$(srcdir)/../core -I$(srcdir)/../ui -I$(srcdir)/../tools $(KOFFICE_INCLUDES) $(all_includes)
 
 LDFLAGS = $(all_libraries) $(KDE_RPATH) 
-LDADD =  -lqt -lkdeui ../core/libkiscore.la
+LDADD =  $(LIB_KDEUI) ../core/libkiscore.la
 
 bin_PROGRAMS = kis_color_test kis_brush_test
 

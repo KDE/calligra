@@ -5,7 +5,7 @@ libapplixgraphicimport_la_LDFLAGS	= -module -avoid-version -no-undefined
 
 ####### Files
 
-lib_LTLIBRARIES = libapplixgraphicimport.la
+kde_module_LTLIBRARIES = libapplixgraphicimport.la
 
 libapplixgraphicimport_la_SOURCES = applixgraphicimport.cc applixgraphicimport_factory.cc
 libapplixgraphicimport_la_LIBADD = $(KOFFICE_LIBS)

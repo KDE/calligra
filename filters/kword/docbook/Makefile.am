@@ -6,7 +6,7 @@ libdocbookexport_la_LIBADD = $(KOFFICE_LIBS)
 
 ####### Files
 
-lib_LTLIBRARIES = libdocbookexport.la
+kde_module_LTLIBRARIES = libdocbookexport.la
 
 libdocbookexport_la_SOURCES = docbookexport.cc docbookexport_factory.cc
 

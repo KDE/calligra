@@ -12,7 +12,7 @@ libolefilter_la_LIBADD = ./lib/libfilterbase.la ./lib/libklaola.la \
 
 SUBDIRS = lib excel97 powerpoint97 winword97
 
-lib_LTLIBRARIES = libolefilter.la
+kde_module_LTLIBRARIES = libolefilter.la
 
 libolefilter_la_SOURCES = olefilter_factory.cc olefilter.cc
 

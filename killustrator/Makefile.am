@@ -18,10 +18,14 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/killustrator
 rc_DATA = KIllustrator.rc
 
+## The kdeinit loadable module
+lib_LTLIBRARIES = killustrator.la
 killustrator_la_SOURCES = main.cc
 killustrator_la_LDFLAGS = $(all_libraries) -avoid-version -module
 killustrator_la_LIBADD = libkillustratorpart.la
 
+## The executable
+bin_PROGRAMS = killustrator
 killustrator_SOURCES = dummy.cc
 killustrator_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 killustrator_LDADD = killustrator.la
@@ -29,9 +33,8 @@ killustrator_LDADD = killustrator.la
 dummy.cc:
 	echo > dummy.cc
 
-bin_PROGRAMS = killustrator
-lib_LTLIBRARIES = libkillustratorpart.la killustrator.la
- 
+## The part
+kde_module_LTLIBRARIES = libkillustratorpart.la
 libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
         KIllustrator_view.cc \
         InsertPartTool.cc GPart.cc KIllustrator_factory.cc \
@@ -74,7 +77,7 @@ libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
        	BlendDialog.cc BlendCmd.cc stencilbarmovemanager.cc \
        	filter_utils.cc LayerPanel.cc TabBar.cc tooldockbase.cc
 
-libkillustratorpart_la_LDFLAGS = $(all_libraries) -avoid-version -module -no-undefined
+libkillustratorpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkillustratorpart_la_LIBADD = $(top_builddir)/killustrator/filter/libfilter.la $(top_builddir)/lib/kofficeui/libkofficeui.la
 
 METASOURCES = AUTO

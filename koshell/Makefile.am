@@ -1,15 +1,14 @@
 
 INCLUDES  = $(KOFFICE_INCLUDES) $(all_includes)
 
-####### Files
-
-bin_PROGRAMS = koshell
+## The kdeinit loadable module
 lib_LTLIBRARIES = koshell.la
-
 koshell_la_SOURCES = koshell_main.cc koshell_shell.cc
 koshell_la_LDFLAGS = $(all_libraries) -avoid-version -module
 koshell_la_LIBADD = $(LIB_KOFFICEUI)
 
+## The executable
+bin_PROGRAMS = koshell
 koshell_SOURCES = dummy.cc
 koshell_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 koshell_LDADD = koshell.la
@@ -27,8 +26,6 @@ METASOURCES = AUTO
 
 applnk_DATA = koshell.desktop
 applnkdir = $(kde_appsdir)/Office
-
-####### Implicit rules
 
 messages:
 	$(XGETTEXT) *.cc -o $(podir)/koshell.pot

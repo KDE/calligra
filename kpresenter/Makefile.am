@@ -1,10 +1,10 @@
 KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 
-bin_PROGRAMS = kpresenter
 bin_SCRIPTS = kprconverter.pl
-lib_LTLIBRARIES = libkpresenterpart.la kpresenter.la 
 
+## The part
+kde_module_LTLIBRARIES = libkpresenterpart.la
 libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
 	kpresenter_doc.cc \
 	page.cc ktextedit.cc styledia.cc \
@@ -30,14 +30,18 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	textdialog.cc sidebar.cc koStream.cc \
 	insertpagedia.ui generalconfig.ui
 
-libkpresenterpart_la_LDFLAGS = -avoid-version -module -no-undefined
+libkpresenterpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkpresenterpart_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la ../lib/koml/libkoml.la
 libkpresenterpart_la_METASOURCES = AUTO
 
+## The kdeinit loadable module
+lib_LTLIBRARIES = kpresenter.la 
 kpresenter_la_SOURCES = main.cc
 kpresenter_la_LDFLAGS = $(all_libraries) -avoid-version -module
 kpresenter_la_LIBADD = libkpresenterpart.la
 
+## The executable
+bin_PROGRAMS = kpresenter
 kpresenter_SOURCES = dummy.cc
 kpresenter_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kpresenter_LDADD = kpresenter.la

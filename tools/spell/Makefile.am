@@ -4,7 +4,7 @@ libkspelltool_la_LIBADD = ../../lib/kofficecore/libkofficecore.la -lkspell
 
 ####### Files
 
-lib_LTLIBRARIES = libkspelltool.la
+kde_module_LTLIBRARIES = libkspelltool.la
 
 libkspelltool_la_SOURCES = main.cc
 

@@ -5,7 +5,7 @@ INCLUDES= -I$(srcdir) -I$(top_srcdir)/kspread $(KOFFICE_INCLUDES) \
 
 ####### Files
 
-lib_LTLIBRARIES = libcsvimport.la libcsvfilterdia.la \
+kde_module_LTLIBRARIES = libcsvimport.la libcsvfilterdia.la \
 libcsvexport.la
 
 libcsvimport_la_SOURCES = csvimport.cc xmltree.cc csvimport_factory.cc
