@@ -1077,7 +1077,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                    << endl;
 #endif
     m_currentDrawnCanvas = canvas;
-    if ( viewMode->hasFrames() )
+    if ( viewMode->hasFrames() || !isMainFrameset() )
     {
         QPtrListIterator<KWFrame> frameIt( frameIterator() );
         KWFrame * lastRealFrame = 0L;

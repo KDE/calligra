@@ -1375,6 +1375,10 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
 #ifdef DEBUG_ITD
     kdDebug() << getName() << " ITD called for iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
 #endif
+    if ( !m_doc->viewMode()->hasFrames() ) { // text viewmode
+        dPoint = m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) );
+        return frames.getFirst();
+    }
     // This does a binary search in the m_framesInPage array, with internalY as criteria
     // We only look at the first frame of each page. Refining is done later on.
     Q_ASSERT( !m_framesInPage.isEmpty() );

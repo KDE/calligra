@@ -125,8 +125,8 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     // Now ensure the containing frame is the one actually containing our text
     // (for copies, e.g. headers and footers, we need to go back until finding a real frame)
 
-    KWFrame* containingFrame = fs->currentDrawnFrame();
-    if ( containingFrame->isCopy() )
+    KWFrame* containingFrame = fs->currentDrawnFrame(); // always set, except in the textviewmode
+    if ( containingFrame && containingFrame->isCopy() )
     {
         // Find last real frame, in case we are in a copied frame
         QPtrListIterator<KWFrame> frameIt( fs->frameIterator() );
@@ -154,8 +154,13 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 #endif
 
     // Same calculation as in internalToDocument, but we know the frame already
-    KoPoint topLeftParagPt( containingFrame->innerRect().topLeft() );
-    topLeftParagPt.ry() += zh->layoutUnitPtToPt( zh->pixelYToPt( paragy ) ) - containingFrame->internalY();
+    KoPoint topLeftParagPt( 0, 0 );
+    if ( containingFrame ) // 0 in the textviewmode
+        topLeftParagPt = containingFrame->innerRect().topLeft();
+
+    topLeftParagPt.ry() += zh->layoutUnitPtToPt( zh->pixelYToPt( paragy ) );
+    if ( containingFrame ) // 0 in the textviewmode
+        topLeftParagPt.ry() -= containingFrame->internalY();
 
     QPoint topLeftParag = fs->currentViewMode()->normalToView( zh->zoomPoint( topLeftParagPt ) );
 
@@ -167,6 +172,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 #ifdef DEBUG_DRAWING
     kdDebug() << "KWAnchor::draw translating by " << -topLeftParag.x() << "," << -topLeftParag.y() << endl;
 #endif
+
     QColorGroup cg2( cg );
     m_frameset->drawContents( p, crect, cg2, false, true, 0L, fs->currentViewMode(), fs->currentDrawnCanvas() );
 
