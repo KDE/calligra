@@ -1790,6 +1790,7 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
 
 void KoTextParag::writeSpanText( KoXmlWriter& writer, const QString& text ) const
 {
+    kdDebug() << k_funcinfo << text << endl;
     uint len = text.length();
     int nrSpaces = 0; // number of consecutive spaces
     QString str;
@@ -1843,14 +1844,14 @@ void KoTextParag::writeSpanText( KoXmlWriter& writer, const QString& text ) cons
     }
     // either we still have text in str or we have spaces in nrSpaces
     if ( nrSpaces > 0 ) {
-        Q_ASSERT( str.isEmpty() );
-        str = ' ';
+        str += ' ';
         --nrSpaces;
     }
     if ( !str.isEmpty() ) {
         writer.addTextNode( str );
     }
     if ( nrSpaces > 0 ) { // there are more spaces
+        Q_ASSERT( str.isEmpty() );
         writer.startElement( "text:s" );
         if ( nrSpaces > 1 ) // it's 1 by default
             writer.addAttribute( "text:c", nrSpaces );
@@ -1889,17 +1890,18 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     //kdDebug() << k_funcinfo << "'" << text << "' from=" << from << " to=" << to << endl;
 
     // A helper method would need no less than 7 params...
-#define WRITESPAN( next ) \
-    if ( curFormat == paragFormat() ) { \
-        writeSpanText( writer, text.mid( startPos, next - startPos ) ); \
-    } else { \
-        KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text", autoParagStyleName ); \
-        curFormat->save( gs ); \
-        QString autoStyleName = mainStyles.lookup( gs, "T" ); \
-        writer.startElement( "text:span" ); \
-        writer.addAttribute( "text:style-name", autoStyleName ); \
-        writeSpanText( writer, text.mid( startPos, next - startPos ) ); \
-        writer.endElement(); \
+#define WRITESPAN( next ) { \
+        if ( curFormat == paragFormat() ) {                             \
+            writeSpanText( writer, text.mid( startPos, next - startPos ) ); \
+        } else {                                                        \
+            KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text", autoParagStyleName ); \
+            curFormat->save( gs );                                      \
+            QString autoStyleName = mainStyles.lookup( gs, "T" );       \
+            writer.startElement( "text:span" );                         \
+            writer.addAttribute( "text:style-name", autoStyleName );    \
+            writeSpanText( writer, text.mid( startPos, next - startPos ) ); \
+            writer.endElement();                                        \
+        }                                                               \
     }
 
     KoTextFormat *curFormat = 0;
@@ -1910,13 +1912,13 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     for ( int i = from; i <= to; ++i ) {
         KoTextStringChar & ch = string()->at(i);
         KoTextFormat * newFormat = static_cast<KoTextFormat *>( ch.format() );
+        if ( !curFormat )
+            curFormat = newFormat;
         if ( ch.isCustom() ) {
             // TODO implement saving custom items
         } else {
-            if ( newFormat != curFormat ) { // Format changed, save.
-                if ( i > startPos && curFormat) { // Save former format
-                    WRITESPAN( i )
-                }
+            if ( newFormat != curFormat ) { // Format changed, save previous one.
+                WRITESPAN( i )
                 startPos = i;
                 curFormat = newFormat;
             }
@@ -1925,7 +1927,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
 
     //kdDebug() << k_funcinfo << "startPos=" << startPos << " to=" << to << " curFormat=" << curFormat << endl;
 
-    if ( to > startPos && curFormat) { // Save last format
+    if ( to > startPos ) { // Save last format
         WRITESPAN( to + 1 )
     }
 

@@ -1514,7 +1514,11 @@ bool KoDocument::loadAndParse(KoStore* store, const QString& filename, QDomDocum
     QString errorMsg;
     int errorLine, errorColumn;
 
-#if 0 // this was a test, but it leads to spurious whitespace text nodes between indented tags
+    // We need to be able to see the space in <text:span> </text:span>, this is why
+    // we activate the "report-whitespace-only-CharData" feature.
+    // Unfortunately this leads to lots of whitespace text nodes in between real
+    // elements in the rest of the document, watch out for that.
+#if 1
     QXmlInputSource source( store->device() );
     // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
     QXmlSimpleReader reader;
