@@ -224,7 +224,7 @@ VComposite::combinePath( const VPath& path )
 
 // TODO: do complex inside tests instead:
 	// Make new segments clock wise oriented:
-	if( m_paths.count() > 0 )
+	/*if( m_paths.count() > 0 )
 	{
 		if( p->counterClockwise() )
 		{
@@ -237,9 +237,16 @@ VComposite::combinePath( const VPath& path )
 		{
 			p->revert();
 		}
-	}
+	}*/
 
 	m_paths.append( p );
+	m_fill->setFillRule( fillMode() );
+}
+
+VFill::VFillRule
+VComposite::fillMode() const
+{
+	return ( m_paths.count() > 1 ) ? VFill::evenOdd : VFill::winding;
 }
 
 const KoRect&

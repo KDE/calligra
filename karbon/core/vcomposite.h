@@ -29,13 +29,13 @@
 #include "vobject.h"
 #include "vpath.h"
 #include "svgpathparser.h"
+#include "vfill.h"
 
 
 class QDomElement;
 class VPainter;
 class VSegment;
 class VVisitor;
-
 
 typedef QPtrList<VPath> VPathList;
 typedef QPtrListIterator<VPath> VPathListIterator;
@@ -134,6 +134,8 @@ public:
 	 * Adds a path to the composite path.
 	 */
 	void combinePath( const VPath& path );
+
+	VFill::VFillRule fillMode() const;
 
 	virtual void draw( VPainter *painter, const KoRect* rect = 0L ) const;
 
