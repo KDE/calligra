@@ -53,11 +53,11 @@ QString VPolylineTool::contextHelp()
 {
 	QString s = i18n( "<qt><b>Polyline tool:</b><br>" );
 	s += i18n( "- <i>Click</i> to add a node and <i>drag</i> to set its bezier vector.<br>" );
-	s += i18n( "- Press <i>CTRL</i> while dragging to edit the previous bezier vector.<br>" );
-	s += i18n( "- Press <i>SHIFT</i> while dragging to change the curve in a strait line.<br>" );
-	s += i18n( "- Press <i>BACKSPACE</i> to cancel the last curve.<br>" );
-	s += i18n( "- Press <i>ESC</i> to cancel the whole polyline.<br>" );
-	s += i18n( "- Press <i>RETURN</i> or <i>double click</i> to end the polyline.</qt>" );
+	s += i18n( "- Press <i>Ctrl</i> while dragging to edit the previous bezier vector.<br>" );
+	s += i18n( "- Press <i>Shift</i> while dragging to change the curve in a straight line.<br>" );
+	s += i18n( "- Press <i>Backspace</i> to cancel the last curve.<br>" );
+	s += i18n( "- Press <i>Esc</i> to cancel the whole polyline.<br>" );
+	s += i18n( "- Press <i>Enter</i> or <i>double click</i> to end the polyline.</qt>" );
 	return s;
 } // VPolylineTool::contextHelp
 

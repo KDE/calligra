@@ -30,7 +30,7 @@
 VContextHelpDocker::VContextHelpDocker( KarbonView* view )
 		: VDocker( view->shell() )
 {
-	helpLabel = new QLabel( i18n( "Here will appear context help." ), this );
+	helpLabel = new QLabel( i18n( "Context help will appear here." ), this );
 	helpLabel->setMargin( 4 );
 	helpLabel->setFrameStyle( Sunken | Box );
 	helpLabel->setBackgroundMode( PaletteLight );

@@ -28,9 +28,9 @@
 VToolOptionsDocker::VToolOptionsDocker( KarbonView* view )
 		: VDocker( view->shell() )
 {
-	noOptionLabel = new QLabel( i18n( "There are no options for the selected tool" ), this );
+	noOptionLabel = new QLabel( i18n( "There are no options for the selected tool." ), this );
 	
-	setCaption( "Karbon tool" );
+	setCaption( "Karbon Tool" );
 	setWidget( noOptionLabel );
 } // VToolOptionsDocker::VToolOptionsDocker
 
