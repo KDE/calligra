@@ -69,11 +69,12 @@ EpsExport::convert( const QCString& from, const QCString& to )
 
 	QTextStream s( &fileOut );
 
+
 	// header:
 	s <<
 		"%!PS-Adobe-2.0\n"
-		"%%Creator: Karbon14\n"
-		"%%BoundingBox: 0 0 100 100" << endl;
+		"%%Creator: Karbon14 0.0.1\n"
+		"%%BoundingBox: 0 0 800 800" << endl;	// TODO
 
 	// defs:
 	s <<
@@ -82,8 +83,109 @@ EpsExport::convert( const QCString& from, const QCString& to )
 		"/l {lineto} def" << endl;
 
 
+	// parse dom-tree:
+	QDomNodeList list = domIn.childNodes();
+	for( uint i = 0; i < list.count(); ++i )
+	{
+		if( list.item( i ).isElement() )
+		{
+			QDomElement e = list.item( i ).toElement();
+
+			if( e.tagName() == "DOC" )
+				exportDocument( s, e );
+		}
+	}
+
 	fileOut.close();
 	return KoFilter::OK;
+}
+
+void
+EpsExport::exportDocument( QTextStream& s, const QDomElement& node )
+{
+	QDomNodeList list = node.childNodes();
+	for( uint i = 0; i < list.count(); ++i )
+	{
+		if( list.item( i ).isElement() )
+		{
+			QDomElement e = list.item( i ).toElement();
+
+			if( e.tagName() == "LAYER" )
+				exportLayer( s, e );
+		}
+	}
+}
+
+void
+EpsExport::exportLayer( QTextStream& s, const QDomElement& node )
+{
+	QDomNodeList list = node.childNodes();
+	for( uint i = 0; i < list.count(); ++i )
+	{
+		if( list.item( i ).isElement() )
+		{
+			QDomElement e = list.item( i ).toElement();
+
+			if( e.tagName() == "PATH" )
+				exportPath( s, e );
+		}
+	}
+}
+
+void
+EpsExport::exportPath( QTextStream& s, const QDomElement& node )
+{
+	s << "newpath" << endl;
+
+	QDomNodeList list = node.childNodes();
+	for( uint i = 0; i < list.count(); ++i )
+	{
+		if( list.item( i ).isElement() )
+		{
+			QDomElement e = list.item( i ).toElement();
+
+			if( e.tagName() == "SEGMENTS" )
+				exportSegments( s, e );
+		}
+	}
+
+	s << "stroke" << endl;
+}
+
+void
+EpsExport::exportSegments( QTextStream& s, const QDomElement& node )
+{
+	QDomNodeList list = node.childNodes();
+	for( uint i = 0; i < list.count(); ++i )
+	{
+		if( list.item( i ).isElement() )
+		{
+			QDomElement e = list.item( i ).toElement();
+
+			if( e.tagName() == "CURVE" )
+			{
+				s <<
+					e.attribute( "x1" ) << " " <<
+					e.attribute( "y1" ) << " " <<
+					e.attribute( "x2" ) << " " <<
+					e.attribute( "y2" ) << " " <<
+					e.attribute( "x3" ) << " " <<
+					e.attribute( "y3" ) << " c" << endl;
+			}
+			else if( e.tagName() == "LINE" )
+			{
+				s <<
+					e.attribute( "x" ) << " " <<
+					e.attribute( "y" ) << " l" << endl;
+			}
+			else if( e.tagName() == "MOVE" )
+			{
+				s <<
+					e.attribute( "x" ) << " " <<
+					e.attribute( "y" ) << " m" << endl;
+			}
+		}
+	}
 }
 
 #include "epsexport.moc"

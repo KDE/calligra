@@ -8,7 +8,9 @@
 #include <qobject.h>
 
 #include <koFilter.h>
-#include <koStore.h>
+
+class QDomElement;
+class QTextStream;
 
 class EpsExport : public KoFilter
 {
@@ -19,6 +21,12 @@ public:
 	virtual ~EpsExport() {}
 
 	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+
+private:
+	void exportDocument( QTextStream& s, const QDomElement& node );
+	void exportLayer( QTextStream& s, const QDomElement& node );
+	void exportPath( QTextStream& s, const QDomElement& node );
+	void exportSegments( QTextStream& s, const QDomElement& node );
 };
 
 #endif
