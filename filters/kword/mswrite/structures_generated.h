@@ -14,6 +14,9 @@
    Version 2 along with this library; see the file COPYING.LIB.  If not,
    write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
+
+   LibMSWrite Project Website:
+   http://sourceforge.net/projects/libmswrite/
 */
 
 /*
@@ -29,7 +32,7 @@
 
 namespace MSWrite
 {
-	// $Id
+	// $Id$
 	// 
 	//    This file is part of the LibMSWrite Library
 	//    Copyright (C) 2001-2003 Clarence Dang <clarencedang@users.sourceforge.net>
@@ -47,6 +50,9 @@ namespace MSWrite
 	//    Version 2 along with this library; see the file COPYING.LIB.  If not,
 	//    write to  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 	//    Boston, MA 02111-1307, USA.
+	// 
+	//    LibMSWrite Project Website:
+	//    http://sourceforge.net/projects/libmswrite/
 	// 
 	// DESCRIPTION
 	// 

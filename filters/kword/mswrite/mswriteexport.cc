@@ -1,4 +1,4 @@
-/* $Id */
+/* $Id$ */
 
 /* This file is part of the KDE project
    Copyright (C) 2002-2003 Clarence Dang <dang@kde.org>
@@ -2088,7 +2088,7 @@ MSWriteExport::~MSWriteExport ()
 
 KoFilter::ConversionStatus MSWriteExport::convert (const QCString &from, const QCString &to)
 {
-	kdDebug (30509) << "MSWriteExport $Date using LibMSWrite "
+	kdDebug (30509) << "MSWriteExport $Date$ using LibMSWrite "
 			  				<< MSWrite::Version << endl;
 	
 	if (to != "application/x-mswrite" || from != "application/x-kword")

@@ -14,6 +14,9 @@
    Version 2 along with this library; see the file COPYING.LIB.  If not,
    write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
+
+   LibMSWrite Project Website:
+   http://sourceforge.net/projects/libmswrite/
 */
 
 #ifndef __LIBMSWRITE_DEFS_H__
