@@ -1801,6 +1801,12 @@ void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement co
       layout->setAngle( -a + 1 );
   }
 
+  if (  property.hasAttribute( "fo:margin-left" ) )
+  {
+      kdDebug()<<"margin-left :"<<KoUnit::parseValue( property.attribute( "fo:margin-left" ),0.0 )<<endl;
+      layout->setIndent( KoUnit::parseValue( property.attribute( "fo:margin-left" ),0.0 ) );
+  }
+  
   if ( property.hasAttribute( "fo:text-align" ) )
   {
     QString s = property.attribute( "fo:text-align" );
