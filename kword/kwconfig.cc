@@ -320,6 +320,7 @@ void ConfigureInterfacePage::apply()
     {
         config->writeEntry( "AutoSave", autoSaveVal );
         doc->setAutoSave(autoSaveVal*60);
+        oldAutoSaveValue=autoSaveVal;
     }
     int nbPageByRow=m_nbPagePerRow->value();
     if(nbPageByRow!=doc->getNbPagePerRow())
@@ -438,6 +439,7 @@ void ConfigureMiscPage::apply()
     {
         config->writeEntry("UndoRedo",newUndo);
         doc->setUndoRedoLimit(newUndo);
+        m_oldNbRedo=newUndo;
     }
     int newStartingPage=m_variableNumberOffset->text().toInt();
     KMacroCommand * macroCmd=0L;
@@ -447,6 +449,7 @@ void ConfigureMiscPage::apply()
         KWChangeStartingPageCommand *cmd = new KWChangeStartingPageCommand( i18n("Change starting page number"), doc, m_oldStartingPage,newStartingPage );
         cmd->execute();
         macroCmd->addCommand(cmd);
+        m_oldStartingPage=newStartingPage;
     }
     bool b=m_displayLink->isChecked();
     if(doc->getVariableCollection()->variableSetting()->displayLink()!=b)
