@@ -286,7 +286,6 @@ void KWTableFrameSet::recalcCols()
 /*================================================================*/
 void KWTableFrameSet::recalcRows()
 {
-kdDebug() << "KWTableFrameSet::recalcRows : " << m_cells.count() << endl;
     // remove automatically added headers
     for ( unsigned int j = 0; j < m_rows; j++ ) {
         if ( getCell( j, 0 )->isRemoveableHeader() ) {
@@ -1226,6 +1225,7 @@ void KWTableFrameSet::validate()
 }
 
 bool KWTableFrameSet::contains( unsigned int mx, unsigned int my ) {
+if(m_pageBoundaries.count() ==0)  recalcRows();
     QRect rect;
     KWFrame *first, *last;
     for (unsigned int i=1 ; i < m_pageBoundaries.count(); i++) {

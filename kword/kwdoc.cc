@@ -1174,7 +1174,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         if(! getFrameSet(i)) {
             kdWarning () << "frameset " << i << " is NULL!!" << endl;
             frames.remove(i);
-        } else if(false && getFrameSet(i)->getFrameType()==FT_TABLE) {
+        } else if( getFrameSet(i)->getFrameType()==FT_TABLE) {
             static_cast<KWTableFrameSet *>( getFrameSet(i))->validate();
         } else if(! getFrameSet(i)->getFrame(0)) {
             kdWarning () << "frameset " << i << " has no frames" << endl;
@@ -1369,6 +1369,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                     KWTableFrameSet *table = 0L;
                     for ( unsigned int i = 0; i < frames.count(); i++ ) {
                         KWFrameSet *f = frames.at(i);
+                        if(! f->isVisible()) continue;
                         if(f->getName() == tableName) {
                             table = static_cast<KWTableFrameSet *> (f);
                             break;

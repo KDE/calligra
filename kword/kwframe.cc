@@ -792,7 +792,7 @@ void KWFrameSet::load( QDomElement &attributes )
             frame->setFrameBehaviour( autoCreateNewValue );
             frame->setSheetSide( sheetSide );
             frame->setNewFrameBehaviour( newFrameBehaviour);
-            frames.append( frame );
+            addFrame( frame );
             m_doc->progressItemLoaded();
         }
     }
