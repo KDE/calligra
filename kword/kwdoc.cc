@@ -1128,7 +1128,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     // TODO variable settings
     // By default display real variable value
     if ( !isReadWrite())
-        getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
+        m_varColl->variableSetting()->setDisplayFieldCode(false);
 
     // TODO MAILMERGE
 
@@ -1137,6 +1137,8 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
 
     // Load all styles before the corresponding paragraphs try to use them!
     m_styleColl->loadOasisStyleTemplates( context );
+    static_cast<KWVariableSettings *>( m_varColl->variableSetting() )
+        ->loadOasis( oasisStyles.officeStyle() );
 
     // TODO framestyles and tablestyles
 
@@ -2735,6 +2737,7 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
     m_styleColl->saveOasisOutlineStyles( *stylesWriter );
+    static_cast<KWVariableSettings *>( m_varColl->variableSetting() )->saveOasis( *stylesWriter );
     stylesWriter->endElement(); // office:styles
 
     stylesWriter->startElement( "office:automatic-styles" );

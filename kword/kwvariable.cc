@@ -34,15 +34,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <qdom.h>
-#include <qtimer.h>
-
-//TODO saving kwvariablesetting into style.xml
-
-//<text:notes-configuration text:note-class="footnote" text:default-style-name="Footnote" text:citation-style-name="Footnote_20_Symbol" text:citation-body-style-name="Footnote_20_anchor" text:master-page-name="Footnote" style:num-prefix="vbnvn" style:num-suffix="vbncvbncv" style:num-format="1" text:start-value="0" text:footnotes-position="page" text:start-numbering-at="document"/>
-//  <text:notes-configuration text:note-class="endnote" text:default-style-name="Endnote" text:citation-style-name="Endnote_20_Symbol" text:citation-body-style-name="Endnote_20_anchor" text:master-page-name="Endnote" style:num-format="i" text:start-value="0"/>
-//  <text:linenumbering-configuration text:number-lines="false" text:offset="0.499cm" style:num-format="1" text:number-position="left" text:increment="5"/>
-
 KWVariableSettings::KWVariableSettings() : KoVariableSettings()
 {
     m_footNoteCounter.setSuffix( QString::null );
@@ -61,6 +52,44 @@ void KWVariableSettings::changeEndNoteCounter( KoParagCounter _c )
     m_endNoteCounter = _c;
 }
 
+void KWVariableSettings::saveOasis( KoXmlWriter& writer ) const
+{
+    writer.startElement( "text:notes-configuration" );
+    writer.addAttribute( "text:note-class", "footnote" );
+    // let the counter save: num-prefix num-suffix num-format start-value
+    m_footNoteCounter.saveOasisListLevel( writer, false );
+    writer.addAttribute( "text:footnotes-position", "page" ); // tell OO what we do
+    writer.addAttribute( "text:start-numbering-at", "document" ); // tell OO what we do
+    writer.endElement();
+    writer.startElement( "text:notes-configuration" );
+    writer.addAttribute( "text:note-class", "endnote" );
+    // let the counter save: num-prefix num-suffix num-format start-value
+    m_endNoteCounter.saveOasisListLevel( writer, false );
+    writer.addAttribute( "text:start-numbering-at", "document" ); // tell OO what we do
+    writer.endElement();
+}
+
+void KWVariableSettings::loadOasis( const QDomElement& parent )
+{
+    QDomElement e;
+    forEachElement( e, parent )
+    {
+        if ( e.localName() == "notes-configuration" && e.namespaceURI() == KoXmlNS::text )
+        {
+            const QString noteClass = e.attributeNS( KoXmlNS::text, "note-class", QString::null );
+            if ( noteClass == "footnote" ) {
+                m_footNoteCounter.loadOasisListStyle( e, QDomElement(), -1, true, false, 1 );
+                m_footNoteCounter.setNumbering( KoParagCounter::NUM_FOOTNOTE );
+                m_footNoteCounter.setRestartCounter( false );
+            }
+            else if ( noteClass == "endnote" ) {
+                m_endNoteCounter.loadOasisListStyle( e, QDomElement(), -1, true, false, 1 );
+                m_endNoteCounter.setNumbering( KoParagCounter::NUM_FOOTNOTE );
+                m_endNoteCounter.setRestartCounter( false );
+            }
+        }
+    }
+}
 
 void KWVariableSettings::save( QDomElement &parentElem )
 {
@@ -246,7 +275,7 @@ void KWFootNoteVariable::setNumberingType( Numbering _type )
     setVariableFormat(m_doc->variableFormatCollection()->format("STRING"));
 }
 
-void KWFootNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+void KWFootNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& )
 {
     const QString tagName( elem.tagName() );
     Q_ASSERT( tagName == "text:note" );
@@ -681,5 +710,3 @@ QString KWStatisticVariable::text(bool realValue)
     else
         return m_varFormat->convert( m_varValue );
 }
-
-
