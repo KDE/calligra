@@ -181,6 +181,8 @@ void Document::init()
 
 void Document::treatPage(uint i)
 {
+    if (i == 0)
+        i = 1;
     _document->displayPage(_device, i, int(72*1), 0, gTrue);
 }
 
