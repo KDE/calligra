@@ -250,37 +250,32 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 {
 	if( element.attribute( "name" ) == "toolbox" )
 	{
-		//QWidget *toolbar = KXMLGUIBuilder::createContainer( parent, index, element, id );
-		//if( !m_toolbox )
-		//{
-		//kdDebug() << "GOT IT! toolbar :" << toolbar << endl;
-			m_toolbox = new VToolBox( m_part, mainWindow(), "toolbox");
-			connect( m_toolbox, SIGNAL( selectToolActivated() ),		this, SLOT( selectTool() ) );
-			connect( m_toolbox, SIGNAL( selectNodesToolActivated() ),	this, SLOT( selectNodesTool() ) );
-			connect( m_toolbox, SIGNAL( rotateToolActivated() ),		this, SLOT( rotateTool() ) );
-			connect( m_toolbox, SIGNAL( shearToolActivated() ),			this, SLOT( shearTool() ) );
-			connect( m_toolbox, SIGNAL( rectangleToolActivated() ),		this, SLOT( rectangleTool() ) );
-			connect( m_toolbox, SIGNAL( roundRectToolActivated() ),		this, SLOT( roundRectTool() ) );
-			connect( m_toolbox, SIGNAL( ellipseToolActivated() ),		this, SLOT( ellipseTool() ) );
-			connect( m_toolbox, SIGNAL( polygonToolActivated() ),		this, SLOT( polygonTool() ) );
-			connect( m_toolbox, SIGNAL( starToolActivated() ),			this, SLOT( starTool() ) );
-			connect( m_toolbox, SIGNAL( sinusToolActivated() ),			this, SLOT( sinusTool() ) );
-			connect( m_toolbox, SIGNAL( spiralToolActivated() ),		this, SLOT( spiralTool() ) );
-			connect( m_toolbox, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
-			connect( m_toolbox, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
-			connect( m_toolbox, SIGNAL( clipartToolActivated() ),		this, SLOT( clipartTool() ) );
-			if( shell() )
-			{
-				m_strokeFillPreview = m_toolbox->strokeFillPreview();
-				connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
-				connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
+		m_toolbox = new VToolBox( m_part, mainWindow(), "toolbox");
+		connect( m_toolbox, SIGNAL( selectToolActivated() ),		this, SLOT( selectTool() ) );
+		connect( m_toolbox, SIGNAL( selectNodesToolActivated() ),	this, SLOT( selectNodesTool() ) );
+		connect( m_toolbox, SIGNAL( rotateToolActivated() ),		this, SLOT( rotateTool() ) );
+		connect( m_toolbox, SIGNAL( shearToolActivated() ),			this, SLOT( shearTool() ) );
+		connect( m_toolbox, SIGNAL( rectangleToolActivated() ),		this, SLOT( rectangleTool() ) );
+		connect( m_toolbox, SIGNAL( roundRectToolActivated() ),		this, SLOT( roundRectTool() ) );
+		connect( m_toolbox, SIGNAL( ellipseToolActivated() ),		this, SLOT( ellipseTool() ) );
+		connect( m_toolbox, SIGNAL( polygonToolActivated() ),		this, SLOT( polygonTool() ) );
+		connect( m_toolbox, SIGNAL( starToolActivated() ),			this, SLOT( starTool() ) );
+		connect( m_toolbox, SIGNAL( sinusToolActivated() ),			this, SLOT( sinusTool() ) );
+		connect( m_toolbox, SIGNAL( spiralToolActivated() ),		this, SLOT( spiralTool() ) );
+		connect( m_toolbox, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
+		connect( m_toolbox, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
+		connect( m_toolbox, SIGNAL( clipartToolActivated() ),		this, SLOT( clipartTool() ) );
+		if( shell() )
+		{
+			m_strokeFillPreview = m_toolbox->strokeFillPreview();
+			connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
+			connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
 
-				connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
-				connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
-				selectionChanged();
-			}
-		//}
-        mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0);
+			connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
+			connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
+			selectionChanged();
+		}
+		mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0);
 		return m_toolbox;
 	}
 
