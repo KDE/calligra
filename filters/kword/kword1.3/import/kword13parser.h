@@ -110,6 +110,15 @@ protected:
     /// Process opening tag of some elements that are children of \<DOC\> and which only define document properties
     bool startElementDocumentAttributes( const QString& name, const QXmlAttributes& attributes,
         StackItem *stackItem, const StackItemElementType& allowedParentType, const StackItemElementType& newType );
+    /**
+     * Get a picture key out of the individual \<KEY\> attributes
+     *
+     * \note The generated key is different that one of the class KoPictureKey
+     */
+    QString KWord13Parser::calculatePictureKey( const QString& filename,
+     const QString& year,  const QString& month,  const QString& day,
+     const QString& hour,  const QString& minute,  const QString& second,
+     const QString& microsecond ) const;
 protected:
     QString indent; //DEBUG
     StackItemStack parserStack;

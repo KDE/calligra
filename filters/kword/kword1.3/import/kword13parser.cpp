@@ -485,7 +485,16 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
         {
             ( (KWord13FormatFour*) m_currentFormat ) -> m_text =  attributes.value( "text" );
         }
-        
+        success = true;
+    }
+    else if ( name == "KEY" )
+    {
+        // ### TODO: provisory
+        kdDebug(30520) << "Key: " << calculatePictureKey( attributes.value( "filename" ),
+            attributes.value( "year" ), attributes.value( "month" ),  attributes.value( "day" ),
+            attributes.value( "hour" ), attributes.value( "minute" ), attributes.value( "second" ),
+            attributes.value( "msec" ) ) << endl;
+        success = true;
     }
     else if ( name == "FRAME" )
     {
@@ -750,3 +759,67 @@ bool KWord13Parser::fatalError (const QXmlParseException& exception)
     return false; // Stop parsing now, we do not need further errors.
 }
 
+QString KWord13Parser::calculatePictureKey( const QString& filename,
+     const QString& year,  const QString& month,  const QString& day,
+     const QString& hour,  const QString& minute,  const QString& second,
+     const QString& microsecond ) const
+{
+    bool ok;
+    bool globalOk = true;
+    
+    ok = false;
+    const int iYear = year.toInt( & ok );
+    globalOk = globalOk && ok; 
+
+    ok = false;
+    const int iMonth = month.toInt( & ok );
+    globalOk = globalOk && ok; 
+
+    ok = false;
+    const int iDay = day.toInt( & ok );
+    globalOk = globalOk && ok; 
+
+    ok = false;
+    const int iHour = hour.toInt( & ok );
+    globalOk = globalOk && ok; 
+
+    ok = false;
+    const int iMinute = minute.toInt( & ok );
+    globalOk = globalOk && ok; 
+
+    ok = false;
+    const int iSecond = second.toInt( & ok );
+    globalOk = globalOk && ok; 
+
+    ok = false;
+    const int iMicrosecond = microsecond.toInt( & ok );
+    globalOk = globalOk && ok; 
+    
+    if ( globalOk )
+    {
+        // No error until then, so check if the date/time is valid at all
+        globalOk = globalOk && QDate::isValid( iYear, iMonth, iDay );
+        globalOk = globalOk && QTime::isValid( iHour, iMinute, iSecond, iMicrosecond ); 
+    }
+
+    QDateTime dt;
+    if ( globalOk )
+    {
+        // The date/time seems correct
+        dt = QDateTime( QDate( iYear, iMonth, iDay ), QTime( iHour, iMinute, iSecond, iMicrosecond ) );
+    }
+    else
+    {
+        // *NIX epoch (We do not really care if it is UTC or local time)
+        dt = QDateTime( QDate( 1970, 1, 1 ), QTime( 0, 0, 0, 0 ) );
+    }
+    
+    // We put the date/time first, as if the date is useful, it will have faster a difference than a path
+    // where the common pth might be very long.
+    
+    // Output the date/time as compact as possible
+    QString result ( dt.toString( "yyyyMMddhhmmsszzz" ) );
+    result += '@'; // A separator
+    result += filename;
+    return result;
+}
