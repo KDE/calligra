@@ -80,6 +80,41 @@ KPStartEndLine::KPStartEndLine( LineEnd _start, LineEnd _end )
 {
 }
 
+void KPStartEndLine::save( QDomDocumentFragment &fragment, QDomDocument& doc )
+{
+    if (lineBegin!=L_NORMAL)
+        fragment.appendChild(KPStartEndLine::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
+    if (lineEnd!=L_NORMAL)
+        fragment.appendChild(KPStartEndLine::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
+}
+
+QDomElement KPStartEndLine::createValueElement(const QString &tag, int value, QDomDocument &doc)
+{
+    QDomElement elem=doc.createElement(tag);
+    elem.setAttribute("value", value);
+    return elem;
+}
+
+
+void KPStartEndLine::load( const QDomElement &element )
+{
+    QDomElement e=element.namedItem("LINEBEGIN").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        lineBegin=static_cast<LineEnd>(tmp);
+    }
+    e=element.namedItem("LINEEND").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        lineEnd=static_cast<LineEnd>(tmp);
+    }
+}
+
+
 void KPStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto )
 {
     //TODO

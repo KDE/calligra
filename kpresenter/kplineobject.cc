@@ -107,10 +107,7 @@ QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
     QDomDocumentFragment fragment=KPShadowObject::save(doc, offset);
     if (lineType!=LT_HORZ)
         fragment.appendChild(KPObject::createValueElement("LINETYPE", static_cast<int>(lineType), doc));
-    if (lineBegin!=L_NORMAL)
-        fragment.appendChild(KPObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
-    if (lineEnd!=L_NORMAL)
-        fragment.appendChild(KPObject::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
+    KPStartEndLine::save( fragment, doc );
     return fragment;
 }
 
@@ -189,20 +186,7 @@ double KPLineObject::load(const QDomElement &element)
             tmp=e.attribute("value").toInt();
         lineType=static_cast<LineType>(tmp);
     }
-    e=element.namedItem("LINEBEGIN").toElement();
-    if(!e.isNull()) {
-        int tmp=0;
-        if(e.hasAttribute("value"))
-            tmp=e.attribute("value").toInt();
-        lineBegin=static_cast<LineEnd>(tmp);
-    }
-    e=element.namedItem("LINEEND").toElement();
-    if(!e.isNull()) {
-        int tmp=0;
-        if(e.hasAttribute("value"))
-            tmp=e.attribute("value").toInt();
-        lineEnd=static_cast<LineEnd>(tmp);
-    }
+    KPStartEndLine::load( element );
     return offset;
 }
 

@@ -454,9 +454,15 @@ class KPStartEndLine
 {
 public:
     KPStartEndLine( LineEnd _start, LineEnd _end );
+    void save( QDomDocumentFragment &fragment, QDomDocument& doc );
+    void load( const QDomElement &element );
+
     void saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto );
     QString saveOasisMarkerStyle( KoGenStyles &mainStyles );
 protected:
+    //duplicate from kpobject
+    QDomElement createValueElement(const QString &tag, int value, QDomDocument &doc);
+
     LineEnd lineBegin, lineEnd;
 };
 
