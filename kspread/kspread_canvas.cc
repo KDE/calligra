@@ -2872,6 +2872,9 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
                 rl->setHide(true );
         }
 
+        if(height==0)
+            table->emitHideColumn();
+
         delete m_lSize;
         m_lSize = 0;
     }
@@ -3352,6 +3355,10 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
             else
                 cl->setHide(true);
         }
+
+        if(width==0)
+            table->emitHideRow();
+
         delete m_lSize;
         m_lSize=0;
     }

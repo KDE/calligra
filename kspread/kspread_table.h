@@ -502,11 +502,13 @@ public:
     * hide row
     */
     void hideRow( int row,int nbRow=0,QValueList<int>list=QValueList<int>() );
+    void emitHideRow();
     void showRow( int row,int NbRow=0,QValueList<int>list=QValueList<int>() );
     /**
     * hide column
     */
     void hideColumn( int col,int NbCol=0,QValueList<int>list=QValueList<int>() );
+    void emitHideColumn();
     void showColumn( int col,int NbCol=0,QValueList<int>list=QValueList<int>() );
 
     int adjustColumn( const QPoint &_marker, int _col = -1 );
