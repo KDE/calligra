@@ -143,12 +143,6 @@ protected:
   CORBA::Long m_idMenuTransform_ZoomMax;
   CORBA::Long m_idMenuTransform_ZoomMaxAspect;
 
-  // filter menu
-  OpenPartsUI::Menu_var m_vMenuFilter;
-
-  // plugins menu
-  OpenPartsUI::Menu_var m_vMenuPlugIns;
-
   // extras menu
   OpenPartsUI::Menu_var m_vMenuExtras;
   CORBA::Long m_idMenuExtras_RunGimp;
