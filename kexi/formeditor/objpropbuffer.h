@@ -32,6 +32,7 @@ class FormManager;
 class Container;
 class PropertyCommand;
 class GeometryPropertyCommand;
+class ObjectTreeItem;
 
 //! A buffer which holds the property of the selected widget
 /*! This class inherits KexiPropertyBuffer and holds the properties of the selected widget, which are shown in
@@ -103,17 +104,18 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		/*! Saves the properties related to alignment (ie hAlign, vAlign and WordBreak) and modifies the "alignment" property of
 		  the widget. ( called by changeProperty() )
 		 */
-		void    saveAlignProperty();
+		void    saveAlignProperty(const QString &property);
 		/*! Creates the "layout" property, for the Container \a container. ( called by setObject() ) */
 		void    createLayoutProperty(Container *container);
 		/*! Saves the "layout" property and changes the Container 's layout (using Container::setLayout() ). ( called by changeProperty() )*/
-		void    saveLayoutProperty(const QString &value);
+		void    saveLayoutProperty(const QString &property, const QVariant &value);
 		/*! \return The i18n'ed name of the property whose name is \a name, that will be displayed in PropertyEditor. */
 		QString      descFromName(const QString &name);
 		/*! \return The i18n'ed name of the property's vale whose name is \a name. */
 		QString      descFromValue(const QString &name);
 		/*! \return The i18n'ed list of values, that will be shown by Property Editor (using descFromValue()).*/
 		QStringList  descList(const QStringList &list);
+		void   updateOldValue(ObjectTreeItem *tree, const char *property);
 
 	private:
 		QObject		*m_object;

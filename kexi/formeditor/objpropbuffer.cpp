@@ -23,6 +23,7 @@
 #include <qmetaobject.h>
 #include <qvariant.h>
 #include <qevent.h>
+#include <qlayout.h>
 
 #include <klocale.h>
 
@@ -65,11 +66,11 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty 
 
 	if((property == "hAlign") || (property == "vAlign") || (property == "wordbreak"))
 	{
-		saveAlignProperty();
+		saveAlignProperty(property);
 	}
-	else if(property == "layout")
+	else if((property == "layout") || (property == "layoutMargin") || (property == "layoutSpacing"))
 	{
-		saveLayoutProperty(value.toString());
+		saveLayoutProperty(property, value);
 	}
 	else
 	{
@@ -206,16 +207,7 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 			return;
 		ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(widg->name());
 		if(!tree)  return;
-		if(tree->modifProp()->contains(meta->name()))
-		{
-			blockSignals(true);
-			if(!(*this)[meta->name()])
-				continue;
-			QVariant v = (*this)[meta->name()]->value();
-			(*this)[meta->name()]->setValue( tree->modifProp()->find(meta->name()).data() , false);
-			(*this)[meta->name()]->setValue(v, true);
-			blockSignals(false);
-		}
+		updateOldValue(tree, meta->name());
 	}
 
 	if(m_manager->activeForm())
@@ -293,26 +285,7 @@ ObjectPropertyBuffer::showProperty(const QString &property, const QString &class
 	}
 
 	return m_manager->lib()->showProperty(m_object->className(), (QWidget*)m_object, property, m_multiple);
-/*
-	if(obj->isA("KFormDesigner::Spacer"))
-		return Spacer::showProperty(property);
-	return true;
-*/
 }
-/*
-bool
-ObjectPropertyBuffer::showMultipleProperty(const QString &property, const QString &className)
-{
-//	if(className.isNull())
-//	{
-		QStringList list;
-		list << "font" << "paletteBackgroundColor" << "enabled" << "paletteForegroundColor" << "cursor" << "paletteBackgroundPixmap";
-		if(!(list.grep(property)).isEmpty())
-			return true;
-//	}
-	return false;
-	// TODO : Filter properties following class name (ie : "alignment" for labels or line edits ...) (maybe using WidgetFactory ?)
-}*/
 
 bool
 ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
@@ -463,15 +436,7 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QObject *ob
 
 	list << "AlignAuto" << "AlignLeft" << "AlignRight" << "AlignHCenter" << "AlignJustify";
 	add(new KexiProperty("hAlign", value, list, descList(list), i18n("Horizontal alignment")));
-
-	if(tree->modifProp()->contains("hAlign"))
-	{
-		blockSignals(true);
-		QVariant v = (*this)["hAlign"]->value();
-		(*this)["hAlign"]->setValue( tree->modifProp()->find("hAlign").data() , false);
-		(*this)["hAlign"]->setValue(v, true);
-		blockSignals(false);
-	}
+	updateOldValue(tree, "hAlign");
 	list.clear();
 
 	// Create the ver alignment property
@@ -485,29 +450,15 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QObject *ob
 
 	list << "AlignTop" << "AlignVCenter" << "AlignBottom";
 	add(new KexiProperty("vAlign", value, list, descList(list), i18n("Vertical Alignment")));
-	if(tree->modifProp()->contains("vAlign"))
-	{
-		blockSignals(true);
-		QVariant v = (*this)["vAlign"]->value();
-		(*this)["vAlign"]->setValue( tree->modifProp()->find("vAlign").data() , false);
-		(*this)["vAlign"]->setValue(v, true);
-		blockSignals(false);
-	}
+	updateOldValue(tree, "vAlign");
 
 	// Create the wordbreak property
 	add(new KexiProperty("wordbreak", QVariant(false, 3), i18n("Word Break")));
-	if(tree->modifProp()->contains("wordbreak"))
-	{
-		blockSignals(true);
-		QVariant v = (*this)["wordbreak"]->value();
-		(*this)["wordbreak"]->setValue( tree->modifProp()->find("wordbreak").data() , false);
-		(*this)["wordbreak"]->setValue(v, true);
-		blockSignals(false);
-	}
+	updateOldValue(tree, "wordbreak");
 }
 
 void
-ObjectPropertyBuffer::saveAlignProperty()
+ObjectPropertyBuffer::saveAlignProperty(const QString &property)
 {
 	if (!m_manager->activeForm())
 		return;
@@ -528,6 +479,10 @@ ObjectPropertyBuffer::saveAlignProperty()
 		m_lastcom = new PropertyCommand(this, QString(m_object->name()), m_object->property("alignment"), meta->keysToValue(list), "alignment");
 		m_manager->activeForm()->addCommand(m_lastcom, false);
 	}
+
+	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_object->name());
+	if(tree && (*this)[property.latin1()]->changed())
+		tree->addModProperty(property, (*this)[property.latin1()]->oldValue());
 }
 
 // Layout-related functions  //////////////////////////
@@ -569,18 +524,22 @@ ObjectPropertyBuffer::createLayoutProperty(Container *container)
 	add(new KexiProperty("layout", value, list, descList(list), i18n("Container's layout")));
 
 	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(container->widget()->name());
-	if(tree->modifProp()->contains("layout"))
-	{
-		blockSignals(true);
-		QVariant v = (*this)["layout"]->value();
-		(*this)["layout"]->setValue( tree->modifProp()->find("layout").data() , false);
-		(*this)["layout"]->setValue(v, true);
-		blockSignals(false);
-	}
+	updateOldValue(tree, "layout");
+
+	add(new KexiProperty("layoutMargin", container->layoutMargin(), i18n("Layout margin")));
+	updateOldValue(tree, "layoutMargin");
+	if(container->layoutType() == Container::NoLayout)
+		(*this)["layoutMargin"]->setVisible(false);
+
+	add(new KexiProperty("layoutSpacing", container->layoutSpacing(), i18n("Layout spacing")));
+	updateOldValue(tree, "layoutSpacing");
+	if(container->layoutType() == Container::NoLayout)
+		(*this)["layoutSpacing"]->setVisible(false);
+
 }
 
 void
-ObjectPropertyBuffer::saveLayoutProperty(const QString &value)
+ObjectPropertyBuffer::saveLayoutProperty(const QString &prop, const QVariant &value)
 {
 	Container *cont=0;
 	if(m_manager->activeForm() && m_manager->activeForm()->objectTree()) {
@@ -592,21 +551,70 @@ ObjectPropertyBuffer::saveLayoutProperty(const QString &value)
 		return;
 	}
 
-	Container::LayoutType type;
-	if(value == "NoLayout")    type = Container::NoLayout;
-	if(value == "HBox")        type = Container::HBox;
-	if(value == "VBox")        type = Container::VBox;
-	if(value == "Grid")        type = Container::Grid;
+	if(prop == "layout")
+	{
+		Container::LayoutType type;
+		if(value == "NoLayout")    type = Container::NoLayout;
+		if(value == "HBox")        type = Container::HBox;
+		if(value == "VBox")        type = Container::VBox;
+		if(value == "Grid")        type = Container::Grid;
 
-	if(m_lastcom && !m_undoing)
+		if(m_lastcom && m_lastcom->property() == "layout" && !m_undoing)
+			m_lastcom->setValue(value);
+		else if(!m_undoing)
+		{
+			m_lastcom = new LayoutPropertyCommand(this, m_object->name(), (*this)["layout"]->oldValue(), value);
+			m_manager->activeForm()->addCommand(m_lastcom, false);
+		}
+
+		cont->setLayout(type);
+		bool show = !(type == Container::NoLayout);
+		if(show != (*this)["layoutMargin"]->isVisible())
+		{
+			(*this)["layoutMargin"]->setVisible(show);
+			(*this)["layoutSpacing"]->setVisible(show);
+			m_manager->showPropertyBuffer(this);
+		}
+		return;
+	}
+
+	if(m_lastcom && (QString(m_lastcom->property()) == prop) && !m_undoing)
 		m_lastcom->setValue(value);
 	else if(!m_undoing)
 	{
-		m_lastcom = new LayoutPropertyCommand(this, m_object->name(), (*this)["layout"]->oldValue(), value);
+		m_lastcom = new PropertyCommand(this, m_object->name(), (*this)[prop.latin1()]->oldValue(), value, prop.latin1());
 		m_manager->activeForm()->addCommand(m_lastcom, false);
 	}
 
-	cont->setLayout(type);
+	if(prop == "layoutMargin" && cont->layout())
+	{
+		cont->setLayoutMargin(value.toInt());
+		cont->layout()->setMargin(value.toInt());
+	}
+	else if(prop == "layoutSpacing" && cont->layout())
+	{
+		cont->setLayoutSpacing(value.toInt());
+		cont->layout()->setSpacing(value.toInt());
+	}
+
+	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(m_object->name());
+	if(tree && (*this)[prop.latin1()]->changed())
+		tree->addModProperty(prop, (*this)[prop.latin1()]->oldValue());
+}
+
+void
+ObjectPropertyBuffer::updateOldValue(ObjectTreeItem *tree, const char *property)
+{
+	if(tree->modifProp()->contains(property))
+	{
+		if(!(*this)[property])
+			return;
+		blockSignals(true);
+		QVariant v = (*this)[property]->value();
+		(*this)[property]->setValue( tree->modifProp()->find(property).data() , false);
+		(*this)[property]->setValue(v, true);
+		blockSignals(false);
+	}
 }
 
 ObjectPropertyBuffer::~ObjectPropertyBuffer()

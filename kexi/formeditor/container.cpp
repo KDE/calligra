@@ -60,6 +60,19 @@ void installRecursiveEventFilter(QObject *object, QObject *container)
 		installRecursiveEventFilter(obj, container);
 }
 
+void removeRecursiveEventFilter(QObject *object, QObject *container)
+{
+	object->removeEventFilter(container);
+	if(!object->isWidgetType())
+		return;
+	if(!object->children())
+		return;
+
+	QObjectList list = *(object->children());
+	for(QObject *obj = list.first(); obj; obj = list.next())
+		removeRecursiveEventFilter(obj, container);
+}
+
 EventEater::EventEater(QWidget *widget, Container *container)
  : QObject(container)
 {
@@ -75,7 +88,7 @@ EventEater::eventFilter(QObject *o, QEvent *ev)
 	if(!m_container)
 		return false;
 
-	// When the user click the empty part of tab bar, only MouseReleaseEvent is sent, we need to simulate the Presss event
+	// When the user click the empty part of tab bar, only MouseReleaseEvent is sent, we need to simulate the Press event
 	if((m_widget->inherits("QTabWidget")) && (ev->type() == QEvent::MouseButtonRelease))
 	{
 		QMouseEvent *mev = static_cast<QMouseEvent*>(ev);
@@ -89,6 +102,12 @@ EventEater::eventFilter(QObject *o, QEvent *ev)
 	}
 
 	return m_container->eventFilter(m_widget, ev);
+}
+
+EventEater::~EventEater()
+{
+	if(m_widget)
+		removeRecursiveEventFilter(m_widget, this);
 }
 
 // Container itself
@@ -106,6 +125,13 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 	m_layType = NoLayout;
 	m_toplevel = toplevel;
 
+	QString classname = container->className();
+	if((classname == "HBox") || (classname == "Grid") || (classname == "VBox"))
+		m_margin = 2;
+	else
+		m_margin = Form::defaultMargin();
+	m_spacing = Form::defaultSpacing();
+
 	if(toplevel)
 	{
 		Container *pc = static_cast<Container *>(parent);
@@ -113,7 +139,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 		m_form = toplevel->form();
 
 		EventEater *eater = new EventEater(container, this);
-		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(widget()->className()), widget()->name(), widget(), eater, this);
+		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(classname), widget()->name(), widget(), eater, this);
 		setObjectTree(it);
 		if(parent->isWidgetType())
 		{
@@ -163,7 +189,6 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if((mev->button() == RightButton) && (m_selected.count() > 1))
 			{
-				kdDebug() << "Container here " << (m_selected.findRef(m_moving) == -1) << endl;
 				if(m_selected.findRef(m_moving) == -1)
 					setSelectedWidget(m_moving, true);
 			}
@@ -223,8 +248,11 @@ Container::eventFilter(QObject *s, QEvent *e)
 						list.append(w);
 				}
 
-				//if(list.isEmpty())
-				//	return true;
+				if(list.isEmpty())
+				{
+					setSelectedWidget(m_container, false);
+					return true;
+				}
 				setSelectedWidget(list.first(), false);
 				w = list.first();
 				for(w = list.next(); w; w = list.next())
@@ -455,13 +483,13 @@ Container::setLayout(LayoutType type)
 		}
 		case HBox:
 		{
-			m_layout = (QLayout*) new QHBoxLayout(m_container, 6);
+			m_layout = (QLayout*) new QHBoxLayout(m_container, m_margin, m_spacing);
 			createBoxLayout(new HorWidgetList());
 			break;
 		}
 		case VBox:
 		{
-			m_layout = (QLayout*) new QVBoxLayout(m_container, 6);
+			m_layout = (QLayout*) new QVBoxLayout(m_container, m_margin, m_spacing);
 			createBoxLayout(new VerWidgetList());
 			break;
 		}
@@ -626,7 +654,7 @@ Container::createGridLayout()
 	kdDebug() << "the new grid will have n columns: n == " << cols.size() << endl;
 
 	// We create the layout ..
-	QGridLayout *layout = new QGridLayout(m_container, rows.size(), cols.size(), 6, 2, "grid");
+	QGridLayout *layout = new QGridLayout(m_container, rows.size(), cols.size(), m_margin, m_spacing, "grid");
 	m_layout = (QLayout*)layout;
 
 	// .. and we fill it with widgets
@@ -709,8 +737,6 @@ Container::createGridLayout()
 Container::~Container()
 {
 	kdDebug() << " Container being deleted this == " << name() << endl;
-	if(m_container)
-		m_container->removeEventFilter(this);
 }
 
 }

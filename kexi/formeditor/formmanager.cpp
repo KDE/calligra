@@ -140,13 +140,13 @@ FormManager::windowChanged(QWidget *w)
 		return;
 	}
 
-	if(m_forms.count() >= 1)
-	{
+//	if(m_forms.count() >= 1)
+//	{
 	if(m_collection && m_collection->action( KStdAction::name(KStdAction::Undo)))
 		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Undo) ) );
 	if(m_collection && m_collection->action( KStdAction::name(KStdAction::Redo)))
 		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Redo) ) );
-	}
+//	}
 
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())

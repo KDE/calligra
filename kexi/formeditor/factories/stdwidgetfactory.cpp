@@ -533,30 +533,32 @@ StdWidgetFactory::showProperty(const QString &classname, QWidget *w, const QStri
 QStringList
 StdWidgetFactory::autoSaveProperties(const QString &classname)
 {
-	if(classname == "QLabel")
-		return QStringList("text");
-	else if(classname == "MyPicLabel")
-		return QStringList("pixmap");
-	else if(classname == "KComboBox")
-		return QStringList("list_items");
-	else if(classname == "KListBox")
-		return QStringList("list_items");
-	else if(classname == "Line")
-		return QStringList("orientation");
-	else if(classname == "KTimeWidget")
-		return QStringList("time");
-	else if(classname == "KDateWidget")
-		return QStringList("date");
-	else if(classname == "KDateTimeWidget")
-		return QStringList("dateTime");
-	else if(classname == "Spacer")
-	{
-		QStringList l;
-		l << "sizeType" << "orientation";
-		return l;
-	}
+	QStringList l;
 
-	return QStringList();
+	if(classname == "QLabel")
+		l << "text";
+	if(classname == "KPushButton")
+		l << "text";
+	else if(classname == "MyPicLabel")
+		l << "pixmap";
+	else if(classname == "KComboBox")
+		l << "list_items";
+	else if(classname == "KListBox")
+		l << "list_items";
+	else if(classname == "Line")
+		l << "orientation";
+	else if(classname == "KTimeWidget")
+		l << "time";
+	else if(classname == "KDateWidget")
+		l << "date";
+	else if(classname == "KDateTimeWidget")
+		l << "dateTime";
+	else if(classname == "Spacer")
+		l << "sizeType" << "orientation";
+	else if(classname == "KTextEdit")
+		l << "textFormat" << "text";
+
+	return l;
 }
 
 void

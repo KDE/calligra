@@ -325,9 +325,16 @@ WidgetFactory::changeProperty(const char *name, const QVariant &value, Container
 {
 	if (!container->form()->manager())
 		return;
-	KFormDesigner::ObjectPropertyBuffer *buff = container->form()->manager()->buffer();
-	if((*buff)[name])
-		(*buff)[name]->setValue(value, true);
+	if(container->form()->selectedWidgets()->count() > 1)
+	{
+		container->form()->selectedWidgets()->first()->setProperty(name, value);
+	}
+	else
+	{
+		KFormDesigner::ObjectPropertyBuffer *buff = container->form()->manager()->buffer();
+		if((*buff)[name])
+			(*buff)[name]->setValue(value, true);
+	}
 }
 
 void

@@ -705,7 +705,9 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	else
 		tclass.setAttribute("class", item->widget()->className());
 	prop(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
-	prop(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
+
+	if((parent.tagName() == "widget") || (parent.tagName() == "UI"))
+		prop(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());
 
 	WidgetLibrary *lib=0;
 	if(item->container())
@@ -760,6 +762,10 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		{
 			layout = domDoc.createElement(nodeName);
 			prop(layout, domDoc, "name", "unnamed", item->widget());
+			if(item->modifProp()->contains("layoutMargin"))
+				saveProperty(layout, domDoc, "property", "margin", item->container()->layoutMargin());
+			if(item->modifProp()->contains("layoutSpacing"))
+				saveProperty(layout, domDoc, "property", "spacing", item->container()->layoutSpacing());
 			tclass.appendChild(layout);
 		}
 	}
@@ -820,7 +826,6 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 		for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
 		{
 			QString tagName = n.toElement().tagName();
-			kdDebug() << "Next tag Name read is " << tagName << endl;
 			if(tagName == "property")
 				continue;
 			if(tagName == "hbox")
@@ -866,10 +871,17 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 		if(!layout)
 			kdDebug() << "FormIO::ERROR:: the layout == 0" << endl;
 		if(el.hasAttribute("rowspan"))
+		{
 			layout->addMultiCellWidget(w, el.attribute("row").toInt(), el.attribute("row").toInt() + el.attribute("rowspan").toInt()-1,
 			 el.attribute("column").toInt(),  el.attribute("column").toInt() + el.attribute("colspan").toInt()-1);
+			 tree->setGridPos(el.attribute("row").toInt(),  el.attribute("column").toInt(), el.attribute("rowspan").toInt(),
+			   el.attribute("colspan").toInt());
+		}
 		else
+		{
 			layout->addWidget(w, el.attribute("row").toInt(), el.attribute("column").toInt());
+			tree->setGridPos(el.attribute("row").toInt(),  el.attribute("column").toInt(), 0, 0);
+		}
 	}
 
 	readChildNodes(tree, container, lib, el, w);
@@ -903,27 +915,50 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 
 	readChildNodes(form->objectTree(), form->toplevelContainer(), form->manager()->lib(), el, container);
 
-	//w->show();
 	form->setInteractiveMode(true);
 }
 
 void
 FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *w)
 {
+	bool hasGeometryProp = false;
+	QString eltag = el.tagName();
+
 	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
 		QString tag = n.toElement().tagName();
-		QString eltag = el.tagName();
 		QDomElement node = n.toElement();
 
 		if((tag == "property") || (tag == "attribute"))
 		{
 			QString name = node.attribute("name");
-			if( ((eltag == "grid") || (eltag== "hbox") || (eltag == "vbox")) &&
+			if(name == "geometry")
+				hasGeometryProp = true;
+			if( ((eltag == "grid") || (eltag == "hbox") || (eltag == "vbox")) &&
 			      (name == "name"))
 				continue;
 
-			if(w->metaObject()->findProperty(name.latin1(), true) == -1)
+			if((name == "margin") && ((eltag == "grid") || (eltag == "hbox") || (eltag == "vbox")))
+			{
+				int margin = readProp(node.firstChild(), w, name).toInt();
+				if(tree->container())
+				{
+					tree->container()->setLayoutMargin(margin);
+					if(tree->container()->layout())
+						tree->container()->layout()->setMargin(margin);
+				}
+			}
+			else if((name == "spacing") && ((eltag == "grid") || (eltag == "hbox") || (eltag == "vbox")))
+			{
+				int spacing = readProp(node.firstChild(), w, name).toInt();
+				if(tree->container())
+				{
+					tree->container()->setLayoutSpacing(spacing);
+					if(tree->container()->layout())
+						tree->container()->layout()->setSpacing(spacing);
+				}
+			}
+			else if(w->metaObject()->findProperty(name.latin1(), true) == -1)
 				lib->readSpecialProperty(w->className(), node, w, tree);
 			else
 			{
@@ -952,6 +987,16 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 		}
 		else
 			lib->readSpecialProperty(w->className(), node, w, tree);
+	}
+
+	if((!hasGeometryProp) && ((eltag == "widget") || (eltag == "spacer")))
+	{
+		QString parentTag = el.parentNode().toElement().tagName();
+		kdDebug() << "Moving the widget" << w->name() << " by " << tree->parent()->children()->count() << endl;
+		if(parentTag == "hbox")
+			w->move(w->x() + tree->parent()->children()->count(), w->y());
+		else if(parentTag == "vbox")
+			w->move(w->x(), w->y() + tree->parent()->children()->count());
 	}
 }
 

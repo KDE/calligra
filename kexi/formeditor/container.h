@@ -79,7 +79,7 @@ class KFORMEDITOR_EXPORT EventEater : public QObject
 
 	public:
 		EventEater(QWidget *widget, Container *container);
-		~EventEater(){;}
+		~EventEater();
 
 		void  setContainer(QObject *container)  { m_container = container; }
 		bool  eventFilter(QObject *o, QEvent *ev);
@@ -125,10 +125,14 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		QLayout*        layout() const { return m_layout; }
 		//! \return the type of the layout associated to this Container's widget (see LayoutType enum).
 		LayoutType      layoutType() const { return m_layType; }
+		int             layoutMargin() { return m_margin; }
+		int             layoutSpacing() { return m_spacing; }
 		/*! Sets this Container to use \a type of layout. The widget are inserted automatically in the layout
 		  following their positions.
 		 */
 		void            setLayout(LayoutType type);
+		void            setLayoutSpacing(int spacing) { m_spacing = spacing;}
+		void            setLayoutMargin(int margin) { m_margin = margin;}
 
 	public slots:
 		//! \return The watched widget.
@@ -170,10 +174,13 @@ class KFORMEDITOR_EXPORT Container : public QObject
 
 	private:
 		// the watched container and it's toplevel one...
-		QWidget		*m_container;
+		QGuardedPtr<QWidget>	m_container;
 		Container 	*m_toplevel;
+
+		// Layout
 		QLayout		*m_layout;
 		LayoutType	m_layType;
+		int		m_margin, m_spacing;
 
 		// selection
 		QPtrList<QWidget> m_selected;

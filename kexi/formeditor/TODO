@@ -1,7 +1,5 @@
 ^^^^^^^^^^^^^^^  IMPORTANT  ^^^^^^^^^^^^^^^^^^^^^^
 **** New Features : ******
-* Allow to select multiple widgets by drawing a rectangle on form
-* Add a "Lay out Vertcally / horizontally " menu item when multiple widgets are selected
 * Handle tab stops (maybe in ObjectTreeView)
 * Create an event editor and manage signals/slots (EventBuffer ?)
 	HOWEVER, SIGNAL/SLOT ISSUES (js):
@@ -51,3 +49,5 @@
 * Icons in ObjectTreeView(in branch) + context menu (4/14/04)
 * Modify Spacer for better compatibility (save orientation and expanding) (4/19/04)
 * Rich text editor (see BasKet source) (4/20/04)
+* Allow to select multiple widgets by drawing a rectangle on form (4/22/04)
+* Add a "Lay out Vertcally / horizontally " menu item when multiple widgets are selected (4/22/04)
