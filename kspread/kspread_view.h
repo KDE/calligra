@@ -177,6 +177,8 @@ public:
 
     void initCalcMenu();
 
+    void changeNbOfRecentFiles(int _nb);
+
 public slots:
     void initialPosition();
     /**

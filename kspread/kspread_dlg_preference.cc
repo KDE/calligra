@@ -89,7 +89,7 @@ void KSpreadpreference::slotDefault()
   _layoutPage->slotDefault();
 }
 
- preference::preference( KSpreadView* _view,QWidget *parent , char *name )
+preference::preference( KSpreadView* _view,QWidget *parent , char *name )
  :QWidget ( parent,name)
  {
 
@@ -229,6 +229,7 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   lay1->setSpacing( 10 );
   config = KSpreadFactory::global()->config();
   int _page=1;
+  int _recent=10;
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
@@ -240,12 +241,18 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
 	tabbar=config->readBoolEntry("Tabbar",true);
 	formulaBar=config->readBoolEntry("Formula bar",true);
         statusBar=config->readBoolEntry("Status bar",true);
+        _recent=config->readNumEntry( "NbRecentFile" ,10);
         }
-
+  oldRecent=_recent;
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
   nbPage->setRange(1, 10, 1);
   nbPage->setLabel(i18n("Number of pages open at the beginning:"));
   lay1->addWidget(nbPage);
+
+  nbRecentFile=new KIntNumInput(_recent, tmpQGroupBox , 10);
+  nbRecentFile->setRange(1, 20, 1);
+  nbRecentFile->setLabel(i18n("Number of recent file:"));
+  lay1->addWidget(nbRecentFile);
 
   showVScrollBar=new QCheckBox(i18n("Show vertical scrollbar"),tmpQGroupBox);
   lay1->addWidget(showVScrollBar);
@@ -290,6 +297,7 @@ void configure::slotDefault()
   showFormulaBar->setChecked(true);
   showStatusBar->setChecked(true);
   nbPage->setValue(1);
+  nbRecentFile->setValue(10);
 }
 
 
@@ -372,6 +380,12 @@ void configure::apply()
         else
             m_pView->statusBar()->hide();
         m_pView->doc()->setShowStatusBar(active);
+    }
+    int val=nbRecentFile->value();
+    if( oldRecent!= val)
+    {
+       config->writeEntry( "NbRecentFile",val);
+       m_pView->changeNbOfRecentFiles(val);
     }
 }
 
@@ -632,7 +646,7 @@ void miscParameters::apply()
         m_pView->initCalcMenu();
     }
 
-    double val=valIndent->value();
+    int val=valIndent->value();
     if(val!=m_pView->doc()->getIndentValue())
     {
         m_pView->doc()->setIndentValue( val);

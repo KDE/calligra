@@ -523,6 +523,8 @@ if( config->hasGroup("Parameters" ))
 
 	m_pDoc->setShowFormularBar(config->readBoolEntry("Formula bar",true));
         m_pDoc->setShowStatusBar(config->readBoolEntry("Status bar",true));
+
+        changeNbOfRecentFiles(config->readNumEntry("NbRecentFile",10));
 	}
 
  if(  config->hasGroup("KSpread Color" ) )
@@ -559,6 +561,11 @@ if( config->hasGroup("KSpread Page Layout" ) )
  }
  initCalcMenu();
  resultOfCalc();
+}
+
+void KSpreadView::changeNbOfRecentFiles(int _nb)
+{
+    shell()->setMaxRecentItems( _nb );
 }
 
 void KSpreadView::initCalcMenu()

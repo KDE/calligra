@@ -69,7 +69,7 @@ public:
 protected:
   KSpreadView* m_pView;
   KIntNumInput  *nbPage;
-
+  KIntNumInput* nbRecentFile;
   QCheckBox *showVScrollBar;
   QCheckBox *showHScrollBar;
   QCheckBox *showColHeader;
@@ -78,6 +78,7 @@ protected:
   QCheckBox *showFormulaBar;
   QCheckBox *showStatusBar;
   KConfig* config;
+  int oldRecent;
 } ;
 
 
