@@ -306,8 +306,9 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
     QPtrListIterator<KPObject> it( obj );
     for ( ; it.current() ; ++it )
     {
+        if ( (m_view->kPresenterDoc()->header()==it.current() && !m_view->kPresenterDoc()->hasHeader()) ||(m_view->kPresenterDoc()->footer()==it.current() && !m_view->kPresenterDoc()->hasFooter()) )
+            continue;
 
-        //if (i<10) kdDebug(33001) << "Page::drawObjects object " << i << " page " << pg << " getPresNum=" << kpobject->getPresNum() << endl;
 	if ( it.current()->isSticky() || editMode ||
 	     ( rect2.intersects( it.current()->getBoundingRect(m_view->zoomHandler() ) ) && editMode ) ||
 	     ( !editMode &&
@@ -324,21 +325,14 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
 		it.current()->setSubPresStep( subPresStep );
 		it.current()->doSpecificEffects( true, false );
 	    }
-#if 0 //not necessary all sticky obj are stored in stickyPage
-	    KoPoint op;
-	    if ( it.current()->isSticky() ) {
-		op = it.current()->getOrig();
-		it.current()->setOrig( op.x(), op.y() );
-	    }
-#endif
             //kdDebug(33001) << "                 drawing object at " << diffx() << "," << diffy() << "  and setting subpresstep to 0 !" << endl;
             if ( drawCursor && it.current()->getType() == OT_TEXT && m_currentTextObjectView )
             {
                 KPTextObject* textObject = static_cast<KPTextObject*>( it.current() );
                 if ( m_currentTextObjectView->kpTextObject() == textObject ) // This is the object we are editing
                     textObject->draw( painter,m_view->zoomHandler(),
-                                       false /*onlyChanged. Pass as param ?*/,
-                                       m_currentTextObjectView->cursor(), true /* idem */, drawSelection );
+                                      false /*onlyChanged. Pass as param ?*/,
+                                      m_currentTextObjectView->cursor(), true /* idem */, drawSelection );
             }
             else
             {
@@ -346,10 +340,6 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
             }
 	    it.current()->setSubPresStep( 0 );
 	    it.current()->doSpecificEffects( false );
-#if 0
-	    if ( it.current()->isSticky() )
-		it.current()->setOrig( op );
-#endif
 	}
     }
 
