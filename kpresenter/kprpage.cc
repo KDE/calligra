@@ -1957,10 +1957,9 @@ int KPrPage::getPenBrushFlags() const
 }
 
 
-bool KPrPage::setPieSettings( PieType pieType, int angle, int len )
+KCommand* KPrPage::setPieSettings( PieType pieType, int angle, int len )
 {
-    bool ret = false;
-
+    PieValueCmd *pieValueCmd=0L;
     KPObject *kpobject = 0;
     QPtrList<KPObject> _objects;
     QPtrList<PieValueCmd::PieValues> _oldValues;
@@ -1977,10 +1976,9 @@ bool KPrPage::setPieSettings( PieType pieType, int angle, int len )
     {
         if(it.current()->getType()==OT_PIE)
         {
-            kpobject=it.current();
-	    if ( kpobject->isSelected() ) {
+	    if ( it.current()->isSelected() ) {
 		tmp = new PieValueCmd::PieValues;
-                KPPieObject *obj= dynamic_cast<KPPieObject*>( kpobject );
+                KPPieObject *obj= dynamic_cast<KPPieObject*>( it.current() );
                 if(obj)
                 {
                     tmp->pieType = obj->getPieType();
@@ -1989,15 +1987,13 @@ bool KPrPage::setPieSettings( PieType pieType, int angle, int len )
                     _oldValues.append( tmp );
                     _objects.append( obj );
                 }
-		ret = true;
 	    }
 	}
     }
 
     if ( !_objects.isEmpty() ) {
-	PieValueCmd *pieValueCmd = new PieValueCmd( i18n( "Change Pie/Arc/Chord Values" ),
+	pieValueCmd = new PieValueCmd( i18n( "Change Pie/Arc/Chord Values" ),
 						    _oldValues, _newValues, _objects, m_doc );
-	m_doc->addCommand( pieValueCmd );
 	pieValueCmd->execute();
     } else {
 	_oldValues.setAutoDelete( true );
@@ -2005,12 +2001,12 @@ bool KPrPage::setPieSettings( PieType pieType, int angle, int len )
     }
 
     m_doc->setModified(true);
-    return ret;
+    return pieValueCmd;
 }
 
-bool KPrPage::setRectSettings( int _rx, int _ry )
+KCommand* KPrPage::setRectSettings( int _rx, int _ry )
 {
-    bool ret = false;
+    RectValueCmd *rectValueCmd=0L;
     bool changed=false;
     QPtrList<KPObject> _objects;
     QPtrList<RectValueCmd::RectValues> _oldValues;
@@ -2039,16 +2035,14 @@ bool KPrPage::setRectSettings( int _rx, int _ry )
                     if(!changed && (tmp->xRnd!=_newValues.xRnd
                                 ||tmp->yRnd!=_newValues.yRnd) )
                         changed=true;
-                    ret = true;
                 }
 	    }
 	}
     }
 
     if ( !_objects.isEmpty() && changed ) {
-	RectValueCmd *rectValueCmd = new RectValueCmd( i18n( "Change Rectangle values" ), _oldValues,
+	rectValueCmd = new RectValueCmd( i18n( "Change Rectangle values" ), _oldValues,
 						       _newValues, _objects, m_doc );
-	m_doc->addCommand( rectValueCmd );
 	rectValueCmd->execute();
     } else {
 	_oldValues.setAutoDelete( true );
@@ -2056,14 +2050,13 @@ bool KPrPage::setRectSettings( int _rx, int _ry )
     }
 
     m_doc->setModified(true);
-    return ret;
+    return rectValueCmd;
 }
 
-bool KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
+KCommand* KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
 {
-    bool ret = false;
     bool changed = false;
-
+    PolygonSettingCmd *polygonSettingCmd=0L;
     KPObject *kpobject = 0;
     QPtrList<KPObject> _objects;
     QPtrList<PolygonSettingCmd::PolygonSettings> _oldSettings;
@@ -2081,10 +2074,9 @@ bool KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, 
     {
         if(it.current()->getType()==OT_POLYGON)
         {
-            kpobject=it.current();
-            if ( kpobject->isSelected() ) {
+            if ( it.current()->isSelected() ) {
                 tmp = new PolygonSettingCmd::PolygonSettings;
-                dynamic_cast<KPPolygonObject*>( kpobject )->getPolygonSettings( &tmp->checkConcavePolygon,
+                dynamic_cast<KPPolygonObject*>( it.current() )->getPolygonSettings( &tmp->checkConcavePolygon,
                                                                                 &tmp->cornersValue,
                                                                                 &tmp->sharpnessValue );
                 _oldSettings.append( tmp );
@@ -2094,15 +2086,13 @@ bool KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, 
                                   || tmp->cornersValue != _newSettings.cornersValue
                                   || tmp->sharpnessValue != _newSettings.sharpnessValue ) )
                     changed = true;
-                ret = true;
             }
         }
     }
 
     if ( !_objects.isEmpty() && changed ) {
-        PolygonSettingCmd *polygonSettingCmd = new PolygonSettingCmd( i18n( "Change Polygon Settings" ), _oldSettings,
+        polygonSettingCmd = new PolygonSettingCmd( i18n( "Change Polygon Settings" ), _oldSettings,
                                                                       _newSettings, _objects, m_doc );
-        m_doc->addCommand( polygonSettingCmd );
         polygonSettingCmd->execute();
     }
     else {
@@ -2112,14 +2102,13 @@ bool KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, 
 
     m_doc->setModified( true );
 
-    return ret;
+    return polygonSettingCmd;
 }
 
-bool KPrPage::setPenColor( const QColor &c, bool fill )
+KCommand* KPrPage::setPenColor( const QColor &c, bool fill )
 {
     KPObject *kpobject = 0;
-    bool ret = false;
-
+    PenBrushCmd *penBrushCmd=0L;
     QPtrList<KPObject> _objects;
     QPtrList<PenBrushCmd::Pen> _oldPen;
     QPtrList<PenBrushCmd::Brush> _oldBrush;
@@ -2153,7 +2142,6 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
                     ptmp->pen = QPen( obj->getPen() );
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
-                    ret = true;
                 }
 	    } break;
 	    case OT_RECT: {
@@ -2167,7 +2155,6 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
 	    case OT_ELLIPSE: {
@@ -2181,7 +2168,6 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
 	    case OT_AUTOFORM: {
@@ -2197,7 +2183,6 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
 	    case OT_PIE: {
@@ -2213,7 +2198,6 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
 	    case OT_PART: {
@@ -2227,7 +2211,6 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
 	    case OT_TEXT: {
@@ -2240,7 +2223,6 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
 	    case OT_PICTURE: {
@@ -2254,7 +2236,6 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
 	    case OT_CLIPART: {
@@ -2268,7 +2249,6 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
             case OT_FREEHAND: {
@@ -2279,7 +2259,6 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
                     ptmp->pen = QPen( obj->getPen() );
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
-                    ret = true;
                 }
 	    } break;
             case OT_POLYLINE: {
@@ -2290,7 +2269,6 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
                     ptmp->pen = QPen( obj->getPen() );
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
-                    ret = true;
                 }
 	    } break;
             case OT_QUADRICBEZIERCURVE: {
@@ -2300,7 +2278,6 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
                     ptmp->pen = QPen( obj->getPen() );
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
-                    ret = true;
                 }
 	    } break;
             case OT_CUBICBEZIERCURVE: {
@@ -2310,7 +2287,6 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
                     ptmp->pen = QPen( obj->getPen() );
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
-                    ret = true;
                 }
 	    } break;
             case OT_POLYGON: {
@@ -2323,7 +2299,6 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
             } break;
 	    default: break;
@@ -2335,9 +2310,8 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
     }
 
     if ( !_objects.isEmpty() ) {
-	PenBrushCmd *penBrushCmd = new PenBrushCmd( i18n( "Change Pen" ), _oldPen, _oldBrush, _newPen,
+	penBrushCmd = new PenBrushCmd( i18n( "Change Pen" ), _oldPen, _oldBrush, _newPen,
 						    _newBrush, _objects, m_doc, PenBrushCmd::PEN_ONLY );
-	m_doc->addCommand( penBrushCmd );
 	penBrushCmd->execute();
     } else {
 	_oldPen.setAutoDelete( true );
@@ -2347,14 +2321,13 @@ bool KPrPage::setPenColor( const QColor &c, bool fill )
     }
 
     m_doc->setModified(true);
-    return ret;
+    return penBrushCmd;
 }
 
-bool KPrPage::setBrushColor( const QColor &c, bool fill )
+KCommand* KPrPage::setBrushColor( const QColor &c, bool fill )
 {
     KPObject *kpobject = 0;
-    bool ret = false;
-
+    PenBrushCmd *penBrushCmd=0L;
     QPtrList<KPObject> _objects;
     QPtrList<PenBrushCmd::Pen> _oldPen;
     QPtrList<PenBrushCmd::Brush> _oldBrush;
@@ -2394,7 +2367,6 @@ bool KPrPage::setBrushColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
 	    case OT_ELLIPSE: {
@@ -2408,7 +2380,6 @@ bool KPrPage::setBrushColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
 	    case OT_AUTOFORM: {
@@ -2424,7 +2395,6 @@ bool KPrPage::setBrushColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
 	    case OT_PIE: {
@@ -2440,7 +2410,6 @@ bool KPrPage::setBrushColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
 	    case OT_PART: {
@@ -2454,7 +2423,6 @@ bool KPrPage::setBrushColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
 	    case OT_TEXT: {
@@ -2467,7 +2435,6 @@ bool KPrPage::setBrushColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
 	    case OT_PICTURE: {
@@ -2481,7 +2448,6 @@ bool KPrPage::setBrushColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
 	    case OT_CLIPART: {
@@ -2495,7 +2461,6 @@ bool KPrPage::setBrushColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
 	    } break;
             case OT_POLYGON: {
@@ -2509,7 +2474,6 @@ bool KPrPage::setBrushColor( const QColor &c, bool fill )
                     btmp->gColor1 = obj->getGColor1();
                     btmp->gColor2 = obj->getGColor2();
                     btmp->gType = obj->getGType();
-                    ret = true;
                 }
             } break;
 	    default: continue; break;
@@ -2521,9 +2485,8 @@ bool KPrPage::setBrushColor( const QColor &c, bool fill )
     }
 
     if ( !_objects.isEmpty() ) {
-	PenBrushCmd *penBrushCmd = new PenBrushCmd( i18n( "Change Brush" ), _oldPen, _oldBrush, _newPen,
+	penBrushCmd = new PenBrushCmd( i18n( "Change Brush" ), _oldPen, _oldBrush, _newPen,
 						    _newBrush, _objects, m_doc, PenBrushCmd::BRUSH_ONLY );
-	m_doc->addCommand( penBrushCmd );
 	penBrushCmd->execute();
     } else {
 	_oldPen.setAutoDelete( true );
@@ -2533,7 +2496,7 @@ bool KPrPage::setBrushColor( const QColor &c, bool fill )
     }
 
     m_doc->setModified(true);
-    return ret;
+    return penBrushCmd;
 }
 
 void KPrPage::slotRepaintVariable()

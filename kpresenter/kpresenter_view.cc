@@ -3196,10 +3196,30 @@ void KPresenterView::psvClosed()
 /*================================================================*/
 void KPresenterView::confPieOk()
 {
-    if ( !m_canvas->activePage()->setPieSettings( confPieDia->getType(),
-					    confPieDia->getAngle(), confPieDia->getLength() ) ) {
-	pieType = confPieDia->getType();
-	pieAngle = confPieDia->getAngle();
+    bool createMacro=false;
+    KMacroCommand *macro=new KMacroCommand(i18n( "Change Pie/Arc/Chord Values" ));
+
+    KCommand *cmd=m_canvas->activePage()->setPieSettings( confPieDia->getType(),
+                                                          confPieDia->getAngle(), confPieDia->getLength() );
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->setPieSettings( confPieDia->getType(),
+                                      confPieDia->getAngle(), confPieDia->getLength() );
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        kPresenterDoc()->addCommand(macro);
+    else
+    {
+        delete macro;
+        pieType = confPieDia->getType();
+        pieAngle = confPieDia->getAngle();
 	pieLength = confPieDia->getLength();
     }
     updateObjectStatusBarItem();  //the type might have changed
@@ -3208,21 +3228,59 @@ void KPresenterView::confPieOk()
 /*================================================================*/
 void KPresenterView::confRectOk()
 {
-    if ( !m_canvas->activePage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() ) ) {
-	rndX = confRectDia->getRndX();
+    bool createMacro=false;
+    KMacroCommand *macro=new KMacroCommand(i18n( "Change Pie/Arc/Chord Values" ));
+    KCommand *cmd=m_canvas->activePage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() );
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() );
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        kPresenterDoc()->addCommand(macro);
+    else
+    {
+        rndX = confRectDia->getRndX();
 	rndY = confRectDia->getRndY();
+        delete macro;
     }
 }
 
 /*================================================================*/
 void KPresenterView::confPolygonOk()
 {
-    if ( !m_canvas->activePage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
+    bool createMacro=false;
+    KMacroCommand *macro=new KMacroCommand(i18n( "Change Pie/Arc/Chord Values" ));
+    KCommand *cmd=m_canvas->activePage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
                                                 confPolygonDia->getCornersValue(),
-                                                confPolygonDia->getSharpnessValue() ) ) {
+                                                confPolygonDia->getSharpnessValue() );
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
+                                          confPolygonDia->getCornersValue(),
+                                          confPolygonDia->getSharpnessValue() );
+    if( cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        kPresenterDoc()->addCommand(macro);
+    else
+    {
         checkConcavePolygon = confPolygonDia->getCheckConcavePolygon();
         cornersValue = confPolygonDia->getCornersValue();
         sharpnessValue = confPolygonDia->getSharpnessValue();
+        delete macro;
     }
 }
 

@@ -152,11 +152,11 @@ public:
     KCommand *alignObjsBottom();
 
     int getPenBrushFlags()const;
-    bool setPieSettings( PieType pieType, int angle, int len );
-    bool setRectSettings( int _rx, int _ry );
-    bool setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
-    bool setPenColor( const QColor &c, bool fill );
-    bool setBrushColor( const QColor &c, bool fill );
+    KCommand* setPieSettings( PieType pieType, int angle, int len );
+    KCommand* setRectSettings( int _rx, int _ry );
+    KCommand* setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
+    KCommand* setPenColor( const QColor &c, bool fill );
+    KCommand* setBrushColor( const QColor &c, bool fill );
 
     void slotRepaintVariable();
     void recalcPageNum();
