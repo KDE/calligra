@@ -266,7 +266,7 @@ util_dateFormat(KLocale * locale, QDate m_Date,
 }
 
 
-int util_decodeColumnText(QString _col)
+int util_decodeColumnLabelText( QString _col )
 {
     int col = 0;
     int offset='a'-'A';
@@ -279,12 +279,12 @@ int util_decodeColumnText(QString _col)
         else if( _col[i] >= 'a' && _col[i] <= 'z' )
             col += counterColumn * ( _col[i].latin1() - 'A' - offset + 1 );
         else
-            kdDebug(36001) << "util_decodeColumnLabel: Wrong label text '" << _col << "'" << endl;
+            kdDebug(36001) << "util_decodeColumnLabelText: Wrong characters in label text for col:'" << _col << "'" << endl;
     }
     return col;
 }
 
-QString util_columnLabel(int column)
+QString util_encpdeColumnLabelText( int column )
 {
     int tmp;
 
@@ -320,7 +320,7 @@ QString util_columnLabel(int column)
 QString util_cellName(int _col, int _row)
 {
     return QString("%1%2")
-	    .arg(util_columnLabel(_col))
+	    .arg(util_encodeColumnLabelText( _col ))
 	    .arg(_row);
 }
 
@@ -328,7 +328,7 @@ QString util_cellName(KSpreadTable * table, int _col, int _row)
 {
     return QString("%1!%2%3")
 	    .arg(table->tableName())
-	    .arg(util_columnLabel(_col))
+	    .arg(util_encodeColumnLabelText(_col))
 	    .arg(_row);
 }
 

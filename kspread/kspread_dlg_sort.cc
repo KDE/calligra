@@ -72,7 +72,7 @@ void KSpreadSortDlg::init()
 	rb_column->setChecked(true);
 
 	for(int i=r.left();i<=r.right();i++)
-	    list_column += i18n("Column %1").arg(util_columnLabel(i));
+	    list_column += i18n("Column %1").arg(util_encodeColumnLabelText(i));
     }
     // Entire rows selected ?
     else if ( r.right() == 0x7fff )
@@ -103,7 +103,7 @@ void KSpreadSortDlg::init()
 	}
 
 	for(int i=r.left();i<=r.right();i++)
-	    list_column += i18n("Column %1").arg(util_columnLabel(i));
+	    list_column += i18n("Column %1").arg(util_encodeColumnLabelText(i));
 
 	for(int i=r.top();i<=r.bottom();i++)
 	    list_row += i18n("Row %1").arg(i);

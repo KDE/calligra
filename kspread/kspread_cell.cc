@@ -541,15 +541,7 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
             }
             if ( fix1 )
                 erg += "$";
-/* Replaced by existing function - Philipp
-            if ( col > 26 )
-                erg += (char)('A' + ( (col-1) / 26 ) - 1);
-            if( col % 26 )
-                erg += (char)('A' + ( col % 26 ) - 1);
-            else
-                erg += 'Z';
-*/
-	    erg += util_columnLabel(col); //Get column text
+            erg += util_encodeColumnLabelText(col); //Get column text
 
             if ( fix2 )
                 erg += "$";

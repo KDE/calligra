@@ -2062,7 +2062,7 @@ void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
               int row = point.pos.y();
               // Update column
               if ( point.columnFixed )
-                newText += '$' + util_columnLabel( col );
+                newText += '$' + util_encodeColumnLabelText( col );
               else
               {
                 if(ref==ColumnInsert
@@ -2070,17 +2070,17 @@ void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
                    && col>=pos.x()     // Column after the new one : +1
                    && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
                 {
-                  newText += util_columnLabel(col+nbCol);
+                  newText += util_encodeColumnLabelText( col+nbCol );
                 }
                 else if(ref==ColumnRemove
                         && correctTableName
                         && col > pos.x() // Column after the deleted one : -1
                         && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
                 {
-                  newText += util_columnLabel(col-nbCol);
+                  newText += util_encodeColumnLabelText( col-nbCol );
                 }
                 else
-                  newText += util_columnLabel(col);
+                  newText += util_encodeColumnLabelText( col );
               }
               // Update row
               if ( point.rowFixed )

@@ -86,13 +86,13 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     case Key_Escape:
         // #### Torben says: This is duplicated code. Bad.
         if ( m_pView->activeTable()->selectionRect().left() == 0 ) {
-            setText( util_columnLabel( m_pView->canvasWidget()->markerColumn() )
+            setText( util_encodeColumnLabelText( m_pView->canvasWidget()->markerColumn() )
                      + QString::number( m_pView->canvasWidget()->markerRow() ) );
         } else {
-            setText( util_columnLabel( m_pView->activeTable()->selectionRect().left() )
+            setText( util_encodeColumnLabelText( m_pView->activeTable()->selectionRect().left() )
                      + QString::number( m_pView->activeTable()->selectionRect().top() )
                      + ":"
-                     + util_columnLabel( m_pView->activeTable()->selectionRect().right() )
+                     + util_encodeColumnLabelText( m_pView->activeTable()->selectionRect().right() )
                      + QString::number( m_pView->activeTable()->selectionRect().bottom() ) );
         }
         m_pView->canvasWidget()->setFocus();
@@ -2577,7 +2577,7 @@ void KSpreadCanvas::updatePosWidget()
         }
         else
         {
-            buffer=util_columnLabel( markerColumn() );
+            buffer=util_encodeColumnLabelText( markerColumn() );
             buffer+=tmp.setNum( markerRow() );
         }
     }
@@ -2590,10 +2590,10 @@ void KSpreadCanvas::updatePosWidget()
                 }
         else
                 {
-                buffer=util_columnLabel( m_iMarkerColumn );
+                buffer=util_encodeColumnLabelText( m_iMarkerColumn );
                 buffer+=tmp.setNum(m_iMarkerRow);
                 buffer+=":";
-                buffer+=util_columnLabel( selection.right() );
+                buffer+=util_encodeColumnLabelText( selection.right() );
                 buffer+=tmp.setNum(selection.bottom());
                 }
         }*/
@@ -2612,10 +2612,10 @@ void KSpreadCanvas::updatePosWidget()
                 //Problem columnLabel return @@@@ when column >26*26
                 //=> it's not a good display
                 //=> for the moment I display pos of marker
-                buffer=util_columnLabel( selection.left() );
+                buffer=util_encodeColumnLabelText( selection.left() );
                 buffer+=tmp.setNum(selection.top());
                 buffer+=":";
-                buffer+=util_columnLabel( QMIN(26*26,selection.right()) );
+                buffer+=util_encodeColumnLabelText( QMIN(26*26,selection.right()) );
                 buffer+=tmp.setNum(selection.bottom());
                 //buffer=activeTable()->columnLabel( m_iMarkerColumn );
                 //buffer+=tmp.setNum(m_iMarkerRow);
@@ -3747,12 +3747,12 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
       painter.setFont( boldFont );
     if(!m_pView->activeTable()->getShowColumnNumber())
         {
-        int len = painter.fontMetrics().width( util_columnLabel(x) );
+        int len = painter.fontMetrics().width( util_encodeColumnLabelText( x ) );
         if(!col_lay->isHide())
                 painter.drawText( xpos + ( col_lay->width( m_pCanvas ) - len ) / 2,
                       ( XBORDER_HEIGHT + painter.fontMetrics().ascent() -
                         painter.fontMetrics().descent() ) / 2,
-                      util_columnLabel(x) );
+                      util_encodeColumnLabelText( x ) );
         }
     else
         {
