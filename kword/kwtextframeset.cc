@@ -1302,25 +1302,17 @@ void KWTextFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progre
 {
     //textdoc->doLayout( painter, textdoc->width() );
     textdoc->setWithoutDoubleBuffer( painter != 0 );
-    if ( painter )
-    {
-	textdoc->formatCollection()->setPainter( painter );
-        QTextParag *parag = textdoc->firstParag();
-        while ( parag ) {
-            parag->invalidate( 0 );
-            if ( painter )
-                parag->setPainter( painter );
+
+    textdoc->formatCollection()->setPainter( painter );
+    QTextParag *parag = textdoc->firstParag();
+    while ( parag ) {
+        parag->invalidate( 0 );
+        parag->setPainter( painter );
+        if ( painter )
             parag->format();
-            parag = parag->next();
-            if ( progress )
-                progress->setProgress( ++processedParags );
-        }
-	textdoc->formatCollection()->setPainter( 0 );
-	parag = textdoc->firstParag();
-	while ( parag ) {
-	    parag->setPainter( 0 );
-	    parag = parag->next();
-	}
+        parag = parag->next();
+        if ( progress )
+            progress->setProgress( ++processedParags );
     }
 }
 
@@ -2115,11 +2107,14 @@ void KWTextFrameSet::copyCharFormatting( QTextStringChar * ch, int index /*in te
         ch->format()->addRef();
         undoRedoInfo.text.at( index ).setFormat( ch->format() );
     }
-    if ( moveCustomItems && ch->isCustom() )
+    if ( ch->isCustom() )
     {
         kdDebug(32001) << "KWTextFrameSet::copyCharFormatting moving custom item " << ch->customItem() << " to text's " << index << " char"  << endl;
         undoRedoInfo.customItemsMap.insert( index, static_cast<KWTextCustomItem *>( ch->customItem() ) );
-        ch->loseCustomItem();
+        // We copy the custom item to customItemsMap in all cases (see setFormat)
+        // We only remove from 'ch' if moveCustomItems was specified
+        if ( moveCustomItems )
+            ch->loseCustomItem();
     }
 }
 
@@ -2632,7 +2627,8 @@ KCommand * KWTextFrameSet::removeSelectedTextCommand( QTextCursor * cursor, int 
 
     QTextCommand * cmd = new KWTextDeleteCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
                                                   undoRedoInfo.text.rawData(),
-                                                  CustomItemsMap(), undoRedoInfo.oldParagLayouts );
+                                                  undoRedoInfo.customItemsMap,
+                                                  undoRedoInfo.oldParagLayouts );
     textdoc->addCommand( cmd );
     undoRedoInfo.type = UndoRedoInfo::Invalid; // we don't want clear() to create a command
     undoRedoInfo.clear();
@@ -2947,9 +2943,16 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, KWTextFormat * & currentFo
         readFormats( c1, c2, 0 ); // read previous formatting info
         undoRedoInfo.format = format;
         undoRedoInfo.flags = flags;
-        undoRedoInfo.clear();
         //kdDebug(32001) << "KWTextFrameSet::setFormat undoredo info done" << endl;
         textdoc->setFormat( QTextDocument::Standard, format, flags );
+        if ( !undoRedoInfo.customItemsMap.isEmpty() )
+        {
+            // Some custom items (e.g. variables) depend on the format
+            CustomItemsMap::Iterator it = undoRedoInfo.customItemsMap.begin();
+            for ( ; it != undoRedoInfo.customItemsMap.end(); ++it )
+                it.data()->resize();
+        }
+        undoRedoInfo.clear();
         setLastFormattedParag( c1.parag() );
         formatMore();
         emit repaintChanged( this );
