@@ -647,10 +647,10 @@ void KoMainWindow::buildMainWindowGUI()
   QValueList<KXMLGUIClient *>::ConstIterator pIt, pEnd;
   if ( !d->bMainWindowGUIBuilt )
   {
+    factory->addClient( this );
+
     KParts::GUIActivateEvent ev( true );
     QApplication::sendEvent( this, &ev );
-
-    factory->addClient( this );
 
     plugins = KParts::Plugin::pluginClients( this );
     pIt = plugins.begin();
@@ -692,6 +692,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
   {
     KParts::GUIActivateEvent ev( false );
     QApplication::sendEvent( d->m_activePart, &ev );
+    QApplication::sendEvent( d->m_activeView, &ev );
 
     plugins = KParts::Plugin::pluginClients( d->m_activeView );
     pIt = plugins.fromLast();
@@ -703,7 +704,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     if ( pIt != plugins.end() )
       factory->removeClient( *pIt );
 
-    factory->removeClient( (KXMLGUIClient *)d->m_activeView );
+    factory->removeClient( d->m_activeView );
 
     unplugActionList( "toolbarlist" );
     d->m_toolbarList.clear(); // deletes the actions
@@ -717,10 +718,11 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     d->m_activePart = newPart;
     kdDebug(30003) <<  "new active part is " << d->m_activePart << endl;
 
+    factory->addClient( d->m_activeView );
+
     KParts::GUIActivateEvent ev( true );
     QApplication::sendEvent( d->m_activePart, &ev );
-
-    factory->addClient( (KXMLGUIClient *)d->m_activeView );
+    QApplication::sendEvent( d->m_activeView, &ev );
 
     plugins = KParts::Plugin::pluginClients( d->m_activeView );
     pIt = plugins.begin();
@@ -729,7 +731,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
       factory->addClient( *pIt );
 
     if(d->m_rootViews->findRef(d->m_activeView)!=-1)
-	factory->plugActionList((KXMLGUIClient*)d->m_activeView, "view_split", *d->m_splitViewActionList );
+	factory->plugActionList(d->m_activeView, "view_split", *d->m_splitViewActionList );
 
     // Create and plug toolbar list for Settings menu
     QListIterator<KToolBar> it = toolBarIterator();

@@ -62,7 +62,7 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
   //kdDebug(30003) << "KoView::KoView " << this << endl;
   d = new KoViewPrivate;
   d->m_doc = document;
-  PartBase::setObject( this );
+  PartBase::setPartObject( this );
 
   setFocusPolicy( StrongFocus );
 
@@ -70,7 +70,7 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
 
   connect( d->m_doc, SIGNAL( childChanged( KoDocumentChild * ) ),
 	   this, SLOT( slotChildChanged( KoDocumentChild * ) ) );
-  
+
   QValueList<KAction*> docActions = document->actionCollection()->actions();
   QValueList<KAction*>::ConstIterator it = docActions.begin();
   QValueList<KAction*>::ConstIterator end = docActions.end();
