@@ -613,6 +613,11 @@ void KTextEdit::drawCursor( bool visible )
     p.drawPixmap( cursor->parag()->rect().topLeft() + QPoint( chr->x, y ), *doubleBuffer,
 		  QRect( chr->x, y, cw, h ) );
     p.end();
+
+    // XIM position
+    QPoint pt = cursor->parag()->rect().topLeft() + QPoint( chr->x, y );
+    QWidget::setMicroFocusHint( pt.x(), pt.y(), cw, h - 5 );
+    QWidget::setFont( currentFormat->font() );
 }
 
 void KTextEdit::mousePressEvent( QMouseEvent *e )
