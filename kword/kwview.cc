@@ -206,9 +206,22 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
 KWView::~KWView()
 {
+    clearSelection();
     // Delete gui while we still exist ( it needs documentDeleted() )
     delete m_gui;
     delete m_sbPageLabel;
+}
+
+void KWView::clearSelection()
+{
+    if(m_spell.kspell)
+    {
+        KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
+        ASSERT( fs );
+        if ( fs )
+            fs->removeHighlight();
+        delete m_spell.kspell;
+    }
 }
 
 void KWView::changeNbOfRecentFiles(int _nb)

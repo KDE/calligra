@@ -146,6 +146,8 @@ public:
 
     void deleteFrame(bool _warning=true);
 
+    void clearSelection();
+
 public slots:
     void fileStatistics();
     void editCut();
