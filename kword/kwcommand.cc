@@ -40,6 +40,21 @@ void KWTextCommand::unexecute()
 }
 
 
+/*void KWPlaceHolderCommand::execute()
+{
+    ASSERT( m_command );
+    if ( m_command )
+        m_command->execute();
+}
+
+void KWPlaceHolderCommand::unexecute()
+{
+    ASSERT( m_command );
+    if ( m_command )
+        m_command->unexecute();
+}*/
+
+
 KWTextDeleteCommand::KWTextDeleteCommand(
     QTextDocument *d, int i, int idx, const QArray<QTextStringChar> &str,
     const CustomItemsMap & customItemsMap,

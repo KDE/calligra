@@ -294,6 +294,10 @@ void KWView::setupActions()
     */
 
     // -------------- View menu
+    actionViewTextMode = new KToggleAction( /*i18n TODO*/( "Text mode" ), 0,
+                                            this, SLOT( viewTextMode() ),
+                                            actionCollection(), "view_textmode" );
+    actionViewTextMode->setExclusiveGroup( "viewmodes" );
     actionViewPageMode = new KToggleAction( i18n( "&Page mode" ), 0,
                                             this, SLOT( viewPageMode() ),
                                             actionCollection(), "view_pagemode" );
@@ -867,11 +871,13 @@ void KWView::updatePageInfo()
     if ( m_sbPageLabel )
     {
         KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
-        if ( edit )
+        if ( edit && edit->currentFrame() )
+        {
             m_currentPage = edit->currentFrame()->pageNum();
-        /*kdDebug() << (void*)this << " KWView::updatePageInfo m_currentPage=" << m_currentPage
-                  << " m_sbPageLabel=" << m_sbPageLabel
-                  << endl;*/
+        }
+        //kdDebug() << (void*)this << " KWView::updatePageInfo m_currentPage=" << m_currentPage
+        //          << " m_sbPageLabel=" << m_sbPageLabel
+        //          << endl;
 
         // ### TODO what's the current page when we have no edit object (e.g. frames are selected) ?
         // To avoid bugs, apply max page number in case a page was removed.
@@ -1181,9 +1187,9 @@ void KWView::showAlign( int align ) {
     }
 }
 
-void KWView::showCounter( Counter &c )
+void KWView::showCounter( KoParagCounter &c )
 {
-    actionFormatList->setChecked( c.numbering() == Counter::NUM_LIST );
+    actionFormatList->setChecked( c.numbering() == KoParagCounter::NUM_LIST );
 }
 
 void KWView::showFrameBorders( Border _left, Border _right,
@@ -1516,11 +1522,26 @@ void KWView::editSerialLetterDataBase()
 #endif
 }
 
+void KWView::viewTextMode()
+{
+    if ( actionViewTextMode->isChecked() )
+    {
+        if ( dynamic_cast<KWViewModePreview *>(m_gui->canvasWidget()->viewMode()) )
+            m_zoomViewModePreview = m_doc->zoom();
+        showZoom( m_zoomViewModeNormal ); // share the same zoom
+        setZoom( m_zoomViewModeNormal, false );
+        m_gui->canvasWidget()->switchViewMode( new KWViewModeText( m_gui->canvasWidget() ) );
+    }
+    else
+        actionViewTextMode->setChecked( true ); // always one has to be checked !
+}
+
 void KWView::viewPageMode()
 {
     if ( actionViewPageMode->isChecked() )
     {
-        m_zoomViewModePreview = m_doc->zoom();
+        if ( dynamic_cast<KWViewModePreview *>(m_gui->canvasWidget()->viewMode()) )
+            m_zoomViewModePreview = m_doc->zoom();
         showZoom( m_zoomViewModeNormal );
         setZoom( m_zoomViewModeNormal, false );
         m_gui->canvasWidget()->switchViewMode( new KWViewModeNormal( m_gui->canvasWidget()) );
@@ -2445,15 +2466,15 @@ void KWView::textAlignBlock()
 
 void KWView::textList()
 {
-    Counter c;
+    KoParagCounter c;
     if ( actionFormatList->isChecked() )
     {
-        c.setNumbering( Counter::NUM_LIST );
-        c.setStyle( Counter::STYLE_NUM );
+        c.setNumbering( KoParagCounter::NUM_LIST );
+        c.setStyle( KoParagCounter::STYLE_NUM );
     }
     else
     {
-        c.setNumbering( Counter::NUM_NONE );
+        c.setNumbering( KoParagCounter::NUM_NONE );
     }
     KWTextFrameSetEdit * edit = currentTextEdit();
     ASSERT(edit);

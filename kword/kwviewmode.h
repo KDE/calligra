@@ -24,6 +24,8 @@
 class KWCanvas;
 class QPainter;
 class QRegion;
+class KWTextFrameSet;
+
 /**
  * Abstract base class for KWCanvas's view modes.
  *
@@ -112,6 +114,22 @@ public:
 private:
     int m_pagesPerRow;
     int m_spacing;
+};
+
+// The 'edit only one text frameset' view mode
+class KWViewModeText : public KWViewMode
+{
+public:
+    KWViewModeText( KWCanvas * canvas ) : KWViewMode( canvas ) {}
+    virtual ~KWViewModeText() {}
+
+    KWTextFrameSet *textFrameSet() const;
+
+    virtual QPoint normalToView( const QPoint & nPoint );
+    virtual QPoint viewToNormal( const QPoint & vPoint );
+    virtual QSize contentsSize();
+
+    virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
 };
 
 #endif

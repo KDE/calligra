@@ -23,9 +23,9 @@
 #include <kdebug.h>
 #include <qdom.h>
 
-static KWTextParag * const INVALID_PARAG = (KWTextParag *)-1;
+static KoTextParag * const INVALID_PARAG = (KoTextParag *)-1;
 
-Counter::Counter()
+KoParagCounter::KoParagCounter()
 {
     m_numbering = NUM_NONE;
     m_style = STYLE_NONE;
@@ -38,7 +38,7 @@ Counter::Counter()
     invalidate();
 }
 
-bool Counter::operator==( const Counter & c2 ) const
+bool KoParagCounter::operator==( const KoParagCounter & c2 ) const
 {
     // ## This is kinda wrong. Unused fields (depending on the counter style) shouldn't be compared.
     return (m_numbering==c2.m_numbering &&
@@ -53,27 +53,27 @@ bool Counter::operator==( const Counter & c2 ) const
 
 }
 
-QString Counter::custom() const
+QString KoParagCounter::custom() const
 {
     return m_custom;
 }
 
-QChar Counter::customBulletCharacter() const
+QChar KoParagCounter::customBulletCharacter() const
 {
     return m_customBullet.character;
 }
 
-QString Counter::customBulletFont() const
+QString KoParagCounter::customBulletFont() const
 {
     return m_customBullet.font;
 }
 
-unsigned int Counter::depth() const
+unsigned int KoParagCounter::depth() const
 {
     return m_depth;
 }
 
-void Counter::invalidate()
+void KoParagCounter::invalidate()
 {
     m_cache.number = -1;
     m_cache.text = QString::null;
@@ -82,7 +82,7 @@ void Counter::invalidate()
     m_cache.counterFormat = 0;
 }
 
-bool Counter::isBullet() const
+bool KoParagCounter::isBullet() const
 {
     switch ( style() )
     {
@@ -96,7 +96,7 @@ bool Counter::isBullet() const
     }
 }
 
-void Counter::load( QDomElement & element )
+void KoParagCounter::load( QDomElement & element )
 {
     m_numbering = static_cast<Numbering>( element.attribute("numberingtype", "2").toInt() );
     m_style = static_cast<Style>( element.attribute("type").toInt() );
@@ -119,15 +119,15 @@ void Counter::load( QDomElement & element )
     invalidate();
 }
 
-int Counter::number( const KWTextParag *paragraph )
+int KoParagCounter::number( const KoTextParag *paragraph )
 {
     // Return cached value if possible.
     if ( m_cache.number != -1 )
         return m_cache.number;
 
     // Go looking for another paragraph at the same level or higher level.
-    KWTextParag *otherParagraph = static_cast<KWTextParag *>( paragraph->prev() );
-    Counter *otherCounter;
+    KoTextParag *otherParagraph = static_cast<KoTextParag *>( paragraph->prev() );
+    KoParagCounter *otherCounter;
 
     switch ( m_numbering )
     {
@@ -158,7 +158,7 @@ int Counter::number( const KWTextParag *paragraph )
                 }
                 break;
             }
-            otherParagraph = static_cast<KWTextParag *>( otherParagraph->prev() );
+            otherParagraph = static_cast<KoTextParag *>( otherParagraph->prev() );
         }
         break;
     case NUM_LIST:
@@ -198,27 +198,27 @@ int Counter::number( const KWTextParag *paragraph )
                 m_cache.number = m_startNumber;
                 break;
             }
-            otherParagraph = static_cast<KWTextParag *>( otherParagraph->prev() );
+            otherParagraph = static_cast<KoTextParag *>( otherParagraph->prev() );
         }
         break;
     }
     return m_cache.number;
 }
 
-Counter::Numbering Counter::numbering() const
+KoParagCounter::Numbering KoParagCounter::numbering() const
 {
     return m_numbering;
 }
 
 // Go looking for another paragraph at a higher level.
-KWTextParag *Counter::parent( const KWTextParag *paragraph )
+KoTextParag *KoParagCounter::parent( const KoTextParag *paragraph )
 {
     // Return cached value if possible.
     if ( m_cache.parent != INVALID_PARAG )
         return m_cache.parent;
 
-    KWTextParag *otherParagraph = static_cast<KWTextParag *>( paragraph->prev() );
-    Counter *otherCounter;
+    KoTextParag *otherParagraph = static_cast<KoTextParag *>( paragraph->prev() );
+    KoParagCounter *otherCounter;
 
     switch ( m_numbering )
     {
@@ -237,7 +237,7 @@ KWTextParag *Counter::parent( const KWTextParag *paragraph )
             {
                 break;
             }
-            otherParagraph = static_cast<KWTextParag *>( otherParagraph->prev() );
+            otherParagraph = static_cast<KoTextParag *>( otherParagraph->prev() );
         }
         break;
     case NUM_LIST:
@@ -259,7 +259,7 @@ KWTextParag *Counter::parent( const KWTextParag *paragraph )
                     break;
                 }
             }
-            otherParagraph = static_cast<KWTextParag *>( otherParagraph->prev() );
+            otherParagraph = static_cast<KoTextParag *>( otherParagraph->prev() );
         }
         break;
     }
@@ -267,12 +267,12 @@ KWTextParag *Counter::parent( const KWTextParag *paragraph )
     return m_cache.parent;
 }
 
-QString Counter::prefix() const
+QString KoParagCounter::prefix() const
 {
     return m_prefix;
 }
 
-void Counter::save( QDomElement & element )
+void KoParagCounter::save( QDomElement & element )
 {
     element.setAttribute( "type", static_cast<int>( m_style ) );
     element.setAttribute( "depth", m_depth );
@@ -294,65 +294,65 @@ void Counter::save( QDomElement & element )
         element.setAttribute( "customdef", m_custom );
 }
 
-void Counter::setCustom( QString c )
+void KoParagCounter::setCustom( QString c )
 {
     m_custom = c;
     invalidate();
 }
 
-void Counter::setCustomBulletCharacter( QChar c )
+void KoParagCounter::setCustomBulletCharacter( QChar c )
 {
     m_customBullet.character = c;
     invalidate();
 }
 
-void Counter::setCustomBulletFont( QString f )
+void KoParagCounter::setCustomBulletFont( QString f )
 {
     m_customBullet.font = f;
     invalidate();
 }
 
-void Counter::setDepth( unsigned int d )
+void KoParagCounter::setDepth( unsigned int d )
 {
     m_depth = d;
     invalidate();
 }
 
-void Counter::setNumbering( Numbering n )
+void KoParagCounter::setNumbering( Numbering n )
 {
     m_numbering = n;
     invalidate();
 }
 
-void Counter::setPrefix( QString p )
+void KoParagCounter::setPrefix( QString p )
 {
     m_prefix = p;
     invalidate();
 }
-void Counter::setStartNumber( int s )
+void KoParagCounter::setStartNumber( int s )
 {
     m_startNumber = s;
     invalidate();
 }
 
-void Counter::setStyle( Style s )
+void KoParagCounter::setStyle( Style s )
 {
     m_style = s;
     invalidate();
 }
 
-void Counter::setSuffix( QString s )
+void KoParagCounter::setSuffix( QString s )
 {
     m_suffix = s;
     invalidate();
 }
 
-int Counter::startNumber() const
+int KoParagCounter::startNumber() const
 {
     return m_startNumber;
 }
 
-Counter::Style Counter::style() const
+KoParagCounter::Style KoParagCounter::style() const
 {
     switch ( m_style )
     {
@@ -372,12 +372,12 @@ Counter::Style Counter::style() const
     return m_style;
 }
 
-QString Counter::suffix() const
+QString KoParagCounter::suffix() const
 {
     return m_suffix;
 }
 
-QString Counter::text( const KWTextParag *paragraph )
+QString KoParagCounter::text( const KoTextParag *paragraph )
 {
     // Return cached value if possible.
     if ( !m_cache.text.isNull() )
@@ -424,10 +424,10 @@ QString Counter::text( const KWTextParag *paragraph )
         ////// TODO
         tmp.setNum( m_cache.number );
         break;
-    case Counter::STYLE_DISCBULLET:
-    case Counter::STYLE_SQUAREBULLET:
-    case Counter::STYLE_CIRCLEBULLET:
-    case Counter::STYLE_CUSTOMBULLET:
+    case KoParagCounter::STYLE_DISCBULLET:
+    case KoParagCounter::STYLE_SQUAREBULLET:
+    case KoParagCounter::STYLE_CIRCLEBULLET:
+    case KoParagCounter::STYLE_CUSTOMBULLET:
         // Allow space for bullet!
         tmp = ' ';
         break;
@@ -455,7 +455,7 @@ QString Counter::text( const KWTextParag *paragraph )
     return m_cache.text;
 }
 
-int Counter::width( const KWTextParag *paragraph )
+int KoParagCounter::width( const KoTextParag *paragraph )
 {
     // Return cached value if possible.
     if ( m_cache.width != -1 && paragraph->at( 0 )->format() == m_cache.counterFormat )
@@ -470,9 +470,9 @@ int Counter::width( const KWTextParag *paragraph )
     m_cache.width = 0;
     QString text = m_cache.text;
     if ( !text.isEmpty() )
-        text.append( ' ' ); // append a trailing space, see KWTextParag::drawLabel
+        text.append( ' ' ); // append a trailing space, see KoTextParag::drawLabel
     for ( unsigned int i = 0; i < text.length(); i++ )
         m_cache.width += m_cache.counterFormat->width( text, i );
-    //kdDebug() << "Counter::width recalculated parag=" << paragraph << " text='" << text << "' width=" << m_cache.width << endl;
+    //kdDebug() << "KoParagCounter::width recalculated parag=" << paragraph << " text='" << text << "' width=" << m_cache.width << endl;
     return m_cache.width;
 }

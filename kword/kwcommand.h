@@ -54,6 +54,30 @@ protected:
     KWTextFrameSet * m_textfs;
 };
 
+/**
+ * Place holder for a command that will be completed later on
+ * This is used for the insert and delete text commands, which are
+ * build delayed (see KWTextFrameSet::UndoRedoInfo), in order to
+ * have an entry in the undo/redo history asap
+ */
+/*class KWPlaceHolderCommand : public KCommand
+{
+public:
+    KWPlaceHolderCommand( KWTextFrameSet * textfs, const QString & name ) :
+        KCommand( name ), m_textfs(textfs), m_command(0L) {}
+    ~KWPlaceHolderCommand() {}
+
+    KCommand *command() const { return m_command; }
+    void setCommand(KCommand *c) { ASSERT(!m_command); m_command = c; }
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KCommand *m_command;
+    KWTextFrameSet *m_textfs;
+};*/
+
 ////// Extensions to qrichtext_p.h
 #include <qrichtext_p.h>
 #include <kwtextparag.h>
@@ -450,7 +474,7 @@ public:
 protected:
     KWTableFrameSet *m_pTable;
     QList<KWFrameSet> m_ListFrameSet;
-    QList<KWFrame> m_copyFrame;	
+    QList<KWFrame> m_copyFrame;
     unsigned int m_colPos;
 };
 
@@ -468,7 +492,7 @@ public:
 protected:
     KWTableFrameSet *m_pTable;
     unsigned int m_colBegin;
-    unsigned int m_rowBegin; 
+    unsigned int m_rowBegin;
     unsigned int m_colEnd;
     unsigned int m_rowEnd;
     QList<KWFrameSet> m_ListFrameSet;
@@ -488,7 +512,7 @@ public:
 protected:
     KWTableFrameSet *m_pTable;
     unsigned int m_colBegin;
-    unsigned int m_rowBegin; 
+    unsigned int m_rowBegin;
     unsigned int m_colEnd;
     unsigned int m_rowEnd;
     QList<KWFrameSet> m_ListFrameSet;

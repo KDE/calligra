@@ -1971,15 +1971,17 @@ void KWCanvas::scrollToOffset( const KoPoint & d )
 
 QPoint KWCanvas::rulerPos(int x, int y)
 {
-    int pageNum=1;
+    int pageNum = 0;
     if( m_currentFrameSetEdit && m_currentFrameSetEdit->currentFrame() )
-        pageNum = m_currentFrameSetEdit->currentFrame()->pageNum() + 1;
-    QPoint nPoint( 0, m_doc->pageTop(pageNum - 1) + 1 );
+        pageNum = m_currentFrameSetEdit->currentFrame()->pageNum();
+    QPoint nPoint( 0, m_doc->pageTop(pageNum) + 1 );
     QPoint cPoint( m_viewMode->normalToView( nPoint ) );
     QPoint p( (x==-1 ? contentsX() : x) - cPoint.x(),
               (y==-1 ? contentsY() : y) - cPoint.y() );
-    //kdDebug() << "KWCanvas::rulerPos cPoint=" << cPoint.x() << "," << cPoint.y() << endl;
-    //kdDebug() << "KWCanvas::rulerPos p=" << p.x() << "," << p.y() << endl;
+    kdDebug() << "KWCanvas::rulerPos pagenum=" << pageNum
+              << " nPoint=" << nPoint.x() << "," << nPoint.y()
+              << " cPoint=" << cPoint.x() << "," << cPoint.y() << endl;
+    kdDebug() << "KWCanvas::rulerPos p=" << p.x() << "," << p.y() << endl;
     return p;
 }
 

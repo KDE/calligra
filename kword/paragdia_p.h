@@ -148,16 +148,14 @@ public:
     KWNumPreview( QWidget*, const char* = 0L );
     ~KWNumPreview();
 
-    void setCounter( const Counter & counter );
+    void setCounter( const KoParagCounter & counter );
     void setStyle(KWStyle *style);
 
 protected:
     void drawContents( QPainter* );
 
-    //Counter m_counter;
-    //KWStyle *m_style;
     KWTextDocument *m_textdoc;
-    KWZoomHandler *m_zoomHandler;
+    KoZoomHandler *m_zoomHandler;
 };
 
 #endif

@@ -23,26 +23,53 @@
 #include "qrichtext_p.h"
 using namespace Qt3;
 class KWTextFrameSet;
-class KWZoomHandler;
+class KoZoomHandler;
 class KWTextFormatCollection;
 class KCommand;
 class QDomElement;
 class KMacroCommand;
 
 /**
+ * This is our QTextDocument reimplementation, to create KoTextParags instead of QTextParags,
+ */
+class KoTextDocument : public QTextDocument
+{
+    Q_OBJECT
+public:
+    // don't mind p (we don't use parent documents)
+    KoTextDocument( KoZoomHandler * zoomHandler, QTextDocument *p, KWTextFormatCollection *fc );
+
+    ~KoTextDocument();
+
+    // Factory method for paragraphs
+    virtual QTextParag * createParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE );
+
+    // Return the zoom handler associated with this document.
+    // (Usually the KWDocument, but a simple zoom handler in the paragdia preview)
+    KoZoomHandler * zoomHandler() const { return m_zoomHandler; }
+
+    // Used by ~KoTextParag to know if it should die quickly
+    bool isDestroying() const { return m_bDestroying; }
+
+private:
+    KoZoomHandler * m_zoomHandler;
+    bool m_bDestroying;
+};
+
+/**
  * This is our QTextDocument reimplementation, to create KWTextParag instead of QTextParags,
  * and to relate it to the text frameset it's in.
  */
-class KWTextDocument : public QTextDocument
+class KWTextDocument : public KoTextDocument
 {
     Q_OBJECT
 public:
     // A real text document inside a frameset
     KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTextFormatCollection *fc );
     // A standalone text document, for a preview
-    KWTextDocument( KWZoomHandler * zoomHandler );
+    KWTextDocument( KoZoomHandler * zoomHandler );
 
-    ~KWTextDocument();
+    ~KWTextDocument() { }
 
     virtual QTextParag * createParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE );
 
@@ -50,18 +77,10 @@ public:
     // Note that this can be 0L (e.g. for paragraphs in the paragdia preview)
     KWTextFrameSet * textFrameSet() const { return m_textfs; }
 
-    // Return the zoom handler associated with this document.
-    // (Usually the KWDocument, but a simple zoom handler in the paragdia preview)
-    KWZoomHandler * zoomHandler() const { return m_zoomHandler; }
-
-    // Used by ~KWTextParag to know if it should die quickly
-    bool isDestroying() const { return m_bDestroying; }
 protected:
     void init();
 private:
     KWTextFrameSet * m_textfs;
-    KWZoomHandler * m_zoomHandler;
-    bool m_bDestroying;
 };
 
 /**

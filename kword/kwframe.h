@@ -694,7 +694,7 @@ public:
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void mousePressEvent( QMouseEvent *, const QPoint &, const KoPoint & );
     virtual void mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & );
-    
+
 
 protected slots:
     void slotChildChanged();

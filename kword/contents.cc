@@ -70,7 +70,7 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
         // This way, we don't rely on a particular name (breaks when renaming)
         // nor on whether the user used styles or not.
         // It even lets a user create two styles for the same level of chapter.
-        if ( p->counter() && p->counter()->numbering() == Counter::NUM_CHAPTER )
+        if ( p->counter() && p->counter()->numbering() == KoParagCounter::NUM_CHAPTER )
         {
             parag = static_cast<KWTextParag *>(textdoc->createParag( textdoc, prevTOCParag /*prev*/, body /*next*/, true ));
             QString txt = p->string()->toString();

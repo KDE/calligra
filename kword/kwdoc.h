@@ -90,7 +90,7 @@ protected:
 /* Class: KWDocument                                           */
 /******************************************************************/
 
-class KWDocument : public KoDocument, public KWZoomHandler
+class KWDocument : public KoDocument, public KoZoomHandler
 {
     Q_OBJECT
 

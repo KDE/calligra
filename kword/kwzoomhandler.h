@@ -28,11 +28,11 @@
  * without a KWDocument (for instance, for the previews), and in case another KOffice
  * app wants to reuse this class.
  */
-class KWZoomHandler
+class KoZoomHandler
 {
 public:
-    KWZoomHandler();
-    virtual ~KWZoomHandler();
+    KoZoomHandler();
+    virtual ~KoZoomHandler();
 
     virtual void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint );
 

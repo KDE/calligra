@@ -129,21 +129,21 @@ QString Border::getStyle( const BorderStyle &style )
     return "_________";
 }
 
-int Border::zoomWidthX( double ptWidth, KWZoomHandler * zoomHandler, int minborder )
+int Border::zoomWidthX( double ptWidth, KoZoomHandler * zoomHandler, int minborder )
 {
     // If a border was set, then zoom it and apply a minimum of 1, so that it's always visible.
     // If no border was set, apply minborder ( 0 for paragraphs, 1 for frames )
     return ptWidth > 0 ? QMAX( 1, zoomHandler->zoomItX( ptWidth ) /*applies qRound*/ ) : minborder;
 }
 
-int Border::zoomWidthY( double ptWidth, KWZoomHandler * zoomHandler, int minborder )
+int Border::zoomWidthY( double ptWidth, KoZoomHandler * zoomHandler, int minborder )
 {
     // If a border was set, then zoom it and apply a minimum of 1, so that it's always visible.
     // If no border was set, apply minborder ( 0 for paragraphs, 1 for frames )
     return ptWidth > 0 ? QMAX( 1, zoomHandler->zoomItY( ptWidth ) /*applies qRound*/ ) : minborder;
 }
 
-void Border::drawBorders( QPainter& painter, KWZoomHandler * zoomHandler, QRect rect, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder, int minborder, QPen defaultPen )
+void Border::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRect rect, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder, int minborder, QPen defaultPen )
 {
     int topBorderWidth = zoomWidthY( topBorder.ptWidth, zoomHandler, minborder );
     int bottomBorderWidth = zoomWidthY( bottomBorder.ptWidth, zoomHandler, minborder );

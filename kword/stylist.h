@@ -105,7 +105,7 @@ protected:
     void drawContents( QPainter *painter );
 
     KWTextDocument *m_textdoc;
-    KWZoomHandler *m_zoomHandler;
+    KoZoomHandler *m_zoomHandler;
 };
 
 class KWStyleManagerTab : public QWidget {
@@ -137,8 +137,8 @@ public:
     // not a constructor parameter since 'this' is the parent of the widget
     void setWidget( KWParagLayoutWidget * widget );
 
-    virtual void update() { m_widget->display( m_style->paragLayout() ); }
-    virtual void save() { m_widget->save( m_style->paragLayout() ); }
+    virtual void update();
+    virtual void save();
     virtual QString tabName() { return m_widget->tabName(); }
 protected:
     virtual void resizeEvent( QResizeEvent *e );

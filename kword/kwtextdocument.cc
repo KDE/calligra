@@ -25,20 +25,44 @@
 #include <kcommand.h>
 #include <kdebug.h>
 
+KoTextDocument::KoTextDocument( KoZoomHandler * zoomHandler, QTextDocument *p, KWTextFormatCollection *fc )
+    : QTextDocument( p, fc ), m_zoomHandler( zoomHandler ), m_bDestroying( false )
+{
+    setAddMargins( true );                 // top margin and bottom are added, not max'ed
+    QTextFormatter * formatter = new QTextFormatterBreakWords;
+    formatter->setAllowBreakInWords( true ); // Necessary for lines without a single space
+    setFormatter( formatter );
+
+    // TODO clear(true) here if kpresenter uses kotextdocument directly,
+    // otherwise in the derived constructor [virtual method call is the problem]
+}
+
+KoTextDocument::~KoTextDocument()
+{
+    m_bDestroying = true;
+    clear( false );
+}
+
+QTextParag * KoTextDocument::createParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds )
+{
+    return new KoTextParag( d, pr, nx, updateIds );
+}
+
+////
+
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTextFormatCollection *fc )
-    : QTextDocument( p, fc ), m_textfs( textfs ), m_zoomHandler( textfs->kWordDocument() ), m_bDestroying( false )
+    : KoTextDocument( textfs->kWordDocument(), p, fc ), m_textfs( textfs )
 {
     init();
 }
 
-KWTextDocument::KWTextDocument( KWZoomHandler * zoomHandler )
-    : QTextDocument( 0, new KWTextFormatCollection( QFont("helvetica") /*unused*/ ) ),
-      m_textfs( 0 ), m_zoomHandler( zoomHandler ), m_bDestroying( false )
+KWTextDocument::KWTextDocument( KoZoomHandler * zoomHandler )
+    : KoTextDocument( zoomHandler, 0, new KWTextFormatCollection( QFont("helvetica") /*unused*/ ) ),
+      m_textfs( 0 )
 {
     init();
     setWidth( 1000 );
 }
-
 
 void KWTextDocument::init()
 {
@@ -46,17 +70,6 @@ void KWTextDocument::init()
     // So we have to get rid of it.
     clear( true );
     // Using clear( false ) is a bit dangerous, since we don't always check cursor->parag() for != 0
-
-    setAddMargins( true );                 // top margin and bottom are added, not max'ed
-    QTextFormatter * formatter = new QTextFormatterBreakWords;
-    formatter->setAllowBreakInWords( true ); // Necessary for lines without a single space
-    setFormatter( formatter );
-}
-
-KWTextDocument::~KWTextDocument()
-{
-    m_bDestroying = true;
-    clear( false );
 }
 
 QTextParag * KWTextDocument::createParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds )

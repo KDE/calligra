@@ -101,8 +101,8 @@ void KWVariable::draw( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*
     {
         p->setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
         p->fillRect( x, y, width, h, cg.color( QColorGroup::Highlight ) );
-    } else if ( parag->textDocument()->textFrameSet() &&
-                parag->textDocument()->textFrameSet()->kWordDocument()->viewFormattingChars() && p->device()->devType() != QInternal::Printer )
+    } else if ( parag->kwTextDocument()->textFrameSet() &&
+                parag->kwTextDocument()->textFrameSet()->kWordDocument()->viewFormattingChars() && p->device()->devType() != QInternal::Printer )
     {
         p->setPen( QPen( cg.color( QColorGroup::Highlight ), 0, Qt::DotLine ) );
         p->drawRect( x, y, width, h );
@@ -354,7 +354,7 @@ void KWPgNumVariable::recalc()
         KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
         if ( !parag ) // too early
             return;
-        KWTextFrameSet * fs = parag->textDocument()->textFrameSet();
+        KWTextFrameSet * fs = parag->kwTextDocument()->textFrameSet();
         QPoint iPoint = parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
         QPoint cPoint;
         KWFrame * frame = fs->internalToNormal( iPoint, cPoint );

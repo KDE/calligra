@@ -59,7 +59,7 @@ void KWDocStructParagItem::slotDoubleClicked( QListViewItem *_item )
 {
     if ( _item == this )
     {
-        KWTextFrameSet * fs = parag->textDocument()->textFrameSet();
+        KWTextFrameSet * fs = parag->kwTextDocument()->textFrameSet();
         QPoint iPoint = parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
         QPoint cPoint;
         fs->internalToNormal( iPoint, cPoint );
@@ -275,8 +275,8 @@ void KWDocStructRootItem::setupArrangement()
             parag = static_cast<KWTextParag *>(textdoc->firstParag());
             while ( parag )
             {
-                Counter *tmpCounter=parag->counter();
-                if (tmpCounter!=0 && (tmpCounter->style() != Counter:: STYLE_NONE) &&  (tmpCounter->numbering() == Counter::NUM_CHAPTER) )
+                KoParagCounter *tmpCounter=parag->counter();
+                if (tmpCounter!=0 && (tmpCounter->style() != KoParagCounter::STYLE_NONE) &&  (tmpCounter->numbering() == KoParagCounter::NUM_CHAPTER) )
                 {
                     int _depth = tmpCounter->depth();
                     if ( _depth == 0 )

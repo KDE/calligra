@@ -335,7 +335,7 @@ QPen KWBorderPreview::setBorderPen( Border _brd )
 KWNumPreview::KWNumPreview( QWidget* parent, const char* name )
     : QGroupBox( i18n( "Preview" ), parent, name ) {
     setMinimumHeight(80);
-    m_zoomHandler = new KWZoomHandler;
+    m_zoomHandler = new KoZoomHandler;
     m_textdoc = new KWTextDocument( m_zoomHandler );
     KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
     parag->insert( 0, i18n("Normal paragraph text") );
@@ -347,7 +347,7 @@ KWNumPreview::~KWNumPreview()
     delete m_zoomHandler;
 }
 
-void KWNumPreview::setCounter( const Counter & counter )
+void KWNumPreview::setCounter( const KoParagCounter & counter )
 {
     KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
     parag->setCounter( counter );
@@ -1073,16 +1073,16 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
     rNone->setText( i18n( "&None" ) );
     numberingGroupLayout->addWidget( rNone );
 
-    gNumbering->insert( rNone , Counter::NUM_NONE);
+    gNumbering->insert( rNone , KoParagCounter::NUM_NONE);
 
     QRadioButton *rList = new QRadioButton( gNumbering, "rList" );
     rList->setText( i18n( "List" ) );
-    gNumbering->insert( rList , Counter::NUM_LIST);
+    gNumbering->insert( rList , KoParagCounter::NUM_LIST);
     numberingGroupLayout->addWidget( rList );
 
     QRadioButton *rChapter = new QRadioButton( gNumbering, "rChapter" );
     rChapter->setText( i18n( "Chapter" ) );
-    gNumbering->insert( rChapter , Counter::NUM_CHAPTER);
+    gNumbering->insert( rChapter , KoParagCounter::NUM_CHAPTER);
     numberingGroupLayout->addWidget( rChapter );
     Form1Layout->addWidget( gNumbering );
     connect( gNumbering, SIGNAL( clicked( int ) ), this, SLOT( numTypeChanged( int ) ) );
@@ -1097,25 +1097,25 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
     layout8->setSpacing( 6 );
     layout8->setMargin( 11 );
 
-    stylesList.append( new StyleRepresenter(i18n( "None" ) , Counter::STYLE_NONE));
+    stylesList.append( new StyleRepresenter(i18n( "None" ) , KoParagCounter::STYLE_NONE));
     stylesList.append( new StyleRepresenter(i18n( "Arabic Numbers" )
-            ,  Counter::STYLE_NUM));
+            ,  KoParagCounter::STYLE_NUM));
     stylesList.append( new StyleRepresenter(i18n( "Lower Alphabetical" )
-            ,  Counter::STYLE_ALPHAB_L ));
+            ,  KoParagCounter::STYLE_ALPHAB_L ));
     stylesList.append( new StyleRepresenter(i18n( "Upper Alphabetical" )
-            ,  Counter::STYLE_ALPHAB_U ));
+            ,  KoParagCounter::STYLE_ALPHAB_U ));
     stylesList.append( new StyleRepresenter(i18n( "Lower Roman Numbers" )
-            ,  Counter::STYLE_ROM_NUM_L ));
+            ,  KoParagCounter::STYLE_ROM_NUM_L ));
     stylesList.append( new StyleRepresenter(i18n( "Upper Roman Numbers" )
-            ,  Counter::STYLE_ROM_NUM_U ));
+            ,  KoParagCounter::STYLE_ROM_NUM_U ));
     stylesList.append( new StyleRepresenter(i18n( "Disc Bullet" )
-            ,  Counter::STYLE_DISCBULLET , true));
+            ,  KoParagCounter::STYLE_DISCBULLET , true));
     stylesList.append( new StyleRepresenter(i18n( "Square Bullet" )
-            ,  Counter::STYLE_SQUAREBULLET , true));
+            ,  KoParagCounter::STYLE_SQUAREBULLET , true));
     stylesList.append( new StyleRepresenter(i18n( "Circle Bullet" )
-            ,  Counter::STYLE_CIRCLEBULLET , true));
+            ,  KoParagCounter::STYLE_CIRCLEBULLET , true));
     stylesList.append( new StyleRepresenter(i18n( "Custom Bullet" )
-            ,  Counter::STYLE_CUSTOMBULLET , true));
+            ,  KoParagCounter::STYLE_CUSTOMBULLET , true));
 
     lstStyle = new QListBox( gStyle, "styleListBox" );
     fillStyleCombo();
@@ -1195,7 +1195,7 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
     connect( spnDepth, SIGNAL( valueChanged (int) ), this, SLOT( depthChanged(int) ) );
 }
 
-void KWParagCounterWidget::fillStyleCombo(Counter::Numbering type) {
+void KWParagCounterWidget::fillStyleCombo(KoParagCounter::Numbering type) {
     if(lstStyle==NULL) return;
     noSignals=true;
     unsigned int cur = lstStyle->currentItem();
@@ -1204,7 +1204,7 @@ void KWParagCounterWidget::fillStyleCombo(Counter::Numbering type) {
 
     QListIterator<StyleRepresenter> style( stylesList );
     while ( style.current() ) {
-        if(type == Counter::NUM_LIST || !style.current()->listStyle())
+        if(type == KoParagCounter::NUM_LIST || !style.current()->listStyle())
             lstStyle->insertItem( style.current()->name() );
         ++style;
     }
@@ -1227,7 +1227,7 @@ QString KWParagCounterWidget::tabName() {
 
 void KWParagCounterWidget::selectCustomBullet() {
     unsigned int i;
-    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != Counter::STYLE_CUSTOMBULLET; i++);
+    for (i=0; stylesList.count() > i && stylesList.at(i)->style() != KoParagCounter::STYLE_CUSTOMBULLET; i++);
     lstStyle->setCurrentItem(i);
     //numStyleChanged( i );
 
@@ -1254,7 +1254,7 @@ void KWParagCounterWidget::numStyleChanged() {
     StyleRepresenter *sr = stylesList.at(lstStyle->currentItem());
     m_counter.setStyle(sr->style());
 
-    bool hasStart = !sr->listStyle() && !sr->style() == Counter::STYLE_NONE;
+    bool hasStart = !sr->listStyle() && !sr->style() == KoParagCounter::STYLE_NONE;
     lStart->setEnabled( hasStart );
     spnStart->setEnabled( hasStart );
     changeKWSpinboxType();
@@ -1264,22 +1264,22 @@ void KWParagCounterWidget::numStyleChanged() {
 void KWParagCounterWidget::changeKWSpinboxType() {
     switch(m_counter.style())
     {
-        case Counter::STYLE_NONE:
+        case KoParagCounter::STYLE_NONE:
             spnStart->setCounterType(KWSpinBox::NONE);
             break;
-        case Counter::STYLE_NUM:
+        case KoParagCounter::STYLE_NUM:
             spnStart->setCounterType(KWSpinBox::NUM);
             break;
-        case Counter::STYLE_ALPHAB_L:
+        case KoParagCounter::STYLE_ALPHAB_L:
             spnStart->setCounterType(KWSpinBox::ALPHAB_L);
             break;
-        case Counter::STYLE_ALPHAB_U:
+        case KoParagCounter::STYLE_ALPHAB_U:
             spnStart->setCounterType(KWSpinBox::ALPHAB_U);
             break;
-        case Counter::STYLE_ROM_NUM_L:
+        case KoParagCounter::STYLE_ROM_NUM_L:
             spnStart->setCounterType(KWSpinBox::ROM_NUM_L);
             break;
-        case Counter::STYLE_ROM_NUM_U:
+        case KoParagCounter::STYLE_ROM_NUM_U:
             spnStart->setCounterType(KWSpinBox::ROM_NUM_U);
             break;
         default:
@@ -1288,13 +1288,13 @@ void KWParagCounterWidget::changeKWSpinboxType() {
 }
 
 void KWParagCounterWidget::numTypeChanged( int nType ) {
-    m_counter.setNumbering( static_cast<Counter::Numbering>( nType ) );
+    m_counter.setNumbering( static_cast<KoParagCounter::Numbering>( nType ) );
 
-    preview->setEnabled( m_counter.numbering() != Counter::NUM_NONE );
-    gStyle->setEnabled( m_counter.numbering() != Counter::NUM_NONE );
+    preview->setEnabled( m_counter.numbering() != KoParagCounter::NUM_NONE );
+    gStyle->setEnabled( m_counter.numbering() != KoParagCounter::NUM_NONE );
 
     fillStyleCombo(m_counter.numbering());
-    bool state=m_counter.numbering()==Counter::NUM_LIST;
+    bool state=m_counter.numbering()==KoParagCounter::NUM_LIST;
     bCustom->setEnabled(state);
     lCustom->setEnabled(state);
 }
@@ -1303,7 +1303,7 @@ void KWParagCounterWidget::display( const KWParagLayout & lay ) {
     if ( lay.counter )
         m_counter = *lay.counter;
     else
-        m_counter = Counter();
+        m_counter = KoParagCounter();
     preview->setCounter( m_counter );
     preview->setStyle(lay.style);
     styleBuffer = 999;
@@ -1340,7 +1340,7 @@ void KWParagCounterWidget::save( KWParagLayout & lay ) {
     if ( lay.counter )
         *lay.counter = m_counter;
     else
-        lay.counter = new Counter( m_counter );
+        lay.counter = new KoParagCounter( m_counter );
 }
 
 KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, QWidget * parent, const char * name )
@@ -1613,7 +1613,7 @@ bool KWParagDia::isCounterChanged() const
     if ( oldLayout.counter ) // We had a counter
         return ! ( *oldLayout.counter == counter() );
     else // We had no counter -> changed if we have one now
-        return counter().numbering() != Counter::NUM_NONE;
+        return counter().numbering() != KoParagCounter::NUM_NONE;
 }
 
 #include "paragdia.moc"

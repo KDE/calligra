@@ -22,7 +22,7 @@
 #include "kwdoc.h"
 #include <kdebug.h>
 #include <qpainter.h>
-
+#include <kwtextframeset.h>
 
 QSize KWViewModeNormal::contentsSize()
 {
@@ -199,7 +199,8 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
                         m_spacing + row * ( paperHeight + m_spacing ),
                         paperWidth, paperHeight );
         drawOnePageBorder( painter, crect, pageRect, emptySpaceRegion );
-        grayRegion -= pageRect;
+        if ( pageRect.intersects( crect ) )
+            grayRegion -= pageRect;
         QRect rightShadow = drawRightShadow( painter, crect, pageRect, s_shadowOffset );
         if ( !rightShadow.isEmpty() )
             grayRegion -= rightShadow;
@@ -215,5 +216,98 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
         //kdDebug() << "KWViewModePreview::drawPageBorders grayRegion's bounding Rect = " << DEBUGRECT( grayRegion.boundingRect() ) << endl;
         m_canvas->kWordDocument()->eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
     }
+    painter->restore();
+}
+
+//////////////////
+
+KWTextFrameSet * KWViewModeText::textFrameSet() const
+{
+    KWDocument * doc = m_canvas->kWordDocument();
+    KWFrameSet * fs = doc->getFrameSet( 0 );
+    if ( !fs || fs->type() != FT_TEXT )
+        return 0L;
+    return static_cast<KWTextFrameSet *>(fs);
+}
+
+QPoint KWViewModeText::normalToView( const QPoint & nPoint )
+{
+    KWTextFrameSet * textfs = textFrameSet();
+    if (!textfs || !QRect(0,0,textfs->textDocument()->width(), textfs->availableHeight()).contains(nPoint))
+        return nPoint;
+    else
+    {
+        QPoint iPoint;
+        if ( textfs->normalToInternal( nPoint, iPoint, true ) )
+            return iPoint;
+        else
+        {
+            kdWarning() << "KWViewModeText: normalToInternal returned 0L for"
+                        << nPoint.x() << "," << nPoint.y() << endl;
+            return nPoint;
+        }
+    }
+}
+
+QPoint KWViewModeText::viewToNormal( const QPoint & vPoint )
+{
+    KWTextFrameSet * textfs = textFrameSet();
+    if (!textfs || !QRect(0,0,textfs->textDocument()->width(), textfs->availableHeight()).contains(vPoint))
+        return vPoint;
+    else
+    {
+        QPoint nPoint;
+        if ( textfs->internalToNormal( vPoint, nPoint ) )
+            return nPoint;
+        else
+        {
+            kdWarning() << "KWViewModeText: internalToNormal returned 0L for "
+                        << vPoint.x() << "," << vPoint.y() << endl;
+            return vPoint;
+        }
+    }
+}
+
+QSize KWViewModeText::contentsSize()
+{
+    KWTextFrameSet * textfs = textFrameSet();
+    if (!textfs)
+        return QSize();
+    return QSize( textfs->textDocument()->width(), textfs->availableHeight() + 1 /*bottom line*/ );
+}
+
+/// ### TODO for this view mode: replace all frameset->isVisible with
+// viewMode->isFramesetVisible( KWFrameSet * )
+// (except for a few in kwdoc.cc)
+
+void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
+                                      const QRegion & /*emptySpaceRegion*/ )
+{
+    KWTextFrameSet * textfs = textFrameSet();
+    if (!textfs)
+        return;
+    painter->save();
+    KWDocument * doc = m_canvas->kWordDocument();
+    QRegion grayRegion( crect );
+    QListIterator<KWFrame> it( textfs->frameIterator() );
+    painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
+    // Draw a line on the right of every frame
+    for ( ; it.current() ; ++it )
+    {
+        QRect frameRect( doc->zoomRect( *it.current() ) );
+        painter->drawLine( frameRect.topRight(), frameRect.bottomRight() );
+        if ( frameRect.intersects( crect ) )
+            grayRegion -= frameRect;
+    }
+    if ( crect.bottom() >= textfs->availableHeight() )
+    {
+        // And draw a line at the bottom.
+        painter->drawLine( 0, textfs->availableHeight(),
+                           textfs->textDocument()->width(), textfs->availableHeight() );
+        grayRegion -= QRect( 0, textfs->availableHeight(),
+                           textfs->textDocument()->width(), textfs->availableHeight() );
+    }
+    if ( !grayRegion.isEmpty() )
+        doc->eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
     painter->restore();
 }

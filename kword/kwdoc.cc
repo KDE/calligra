@@ -273,7 +273,7 @@ void KWDocument::saveConfig()
 
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint )
 {
-    KWZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY, updateViews, forPrint );
+    KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY, updateViews, forPrint );
     newZoomAndResolution( updateViews, forPrint );
 }
 

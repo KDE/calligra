@@ -202,7 +202,7 @@ bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *para
         KWAutoFormatEntryMap::ConstIterator it = m_entries.find(wordArray[i]);
         if ( wordArray[i]!=0 && it!=m_entries.end() )
         {
-            KWTextDocument * textdoc = parag->textDocument();
+            KWTextDocument * textdoc = parag->kwTextDocument();
             unsigned int length = wordArray[i].length();
             int start = index - length;
             QTextCursor cursor( parag->document() );
@@ -231,7 +231,7 @@ bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *para
 
 void KWAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KWTextParag *parag, int index )
 {
-    KWTextDocument * textdoc = parag->textDocument();
+    KWTextDocument * textdoc = parag->kwTextDocument();
     QTextCursor cursor( parag->document() );
     cursor.setParag( parag );
     cursor.setIndex( index );
@@ -257,7 +257,7 @@ void KWAutoFormat::doTypographicQuotes( QTextCursor* textEditCursor, KWTextParag
 void KWAutoFormat::doUpperCase( QTextCursor *textEditCursor, KWTextParag *parag,
                                 int index, const QString & word )
 {
-    KWTextDocument * textdoc = parag->textDocument();
+    KWTextDocument * textdoc = parag->kwTextDocument();
     unsigned int length = word.length();
     int start = index - length;
     QTextCursor backCursor( parag->document() );

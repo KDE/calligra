@@ -22,17 +22,17 @@
 #include <qpaintdevice.h>
 #include <koGlobal.h>
 
-KWZoomHandler::KWZoomHandler()
+KoZoomHandler::KoZoomHandler()
 {
     // Note that this calls the method below, not the derived one
     setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
 }
 
-KWZoomHandler::~KWZoomHandler()
+KoZoomHandler::~KoZoomHandler()
 {
 }
 
-void KWZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool, bool )
+void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool, bool )
 {
     m_zoom = zoom;
     // m_resolution[XY] is in pixel per pt
@@ -40,7 +40,7 @@ void KWZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool, bo
     m_resolutionY = POINT_TO_INCH( static_cast<double>(dpiY) );
     m_zoomedResolutionX = static_cast<double>(m_zoom) * m_resolutionX / 100.0;
     m_zoomedResolutionY = static_cast<double>(m_zoom) * m_resolutionY / 100.0;
-    kdDebug(32002) << "KWZoomHandler::setZoomAndResolution " << zoom << " " << dpiX << "," << dpiY
+    kdDebug(32002) << "KoZoomHandler::setZoomAndResolution " << zoom << " " << dpiX << "," << dpiY
                    << " m_resolutionX=" << m_resolutionX
                    << " m_zoomedResolutionX=" << m_zoomedResolutionX
                    << " m_resolutionY=" << m_resolutionY

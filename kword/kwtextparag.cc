@@ -35,29 +35,29 @@
 #include <qtl.h>
 #include <assert.h>
 
-KWTextParag::KWTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds)
+KoTextParag::KoTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds)
     : QTextParag( d, pr, nx, updateIds )
 {
-    //kdDebug() << "KWTextParag::KWTextParag " << this << endl;
+    //kdDebug() << "KoTextParag::KoTextParag " << this << endl;
     m_item = 0L;
 }
 
-KWTextParag::~KWTextParag()
+KoTextParag::~KoTextParag()
 {
     if ( !textDocument()->isDestroying() )
         invalidateCounters();
-    //kdDebug() << "KWTextParag::~KWTextParag " << this << endl;
+    //kdDebug() << "KoTextParag::~KoTextParag " << this << endl;
     delete m_item;
 }
 
-KWTextDocument * KWTextParag::textDocument() const
+KoTextDocument * KoTextParag::textDocument() const
 {
-    return static_cast<KWTextDocument *>( document() );
+    return static_cast<KoTextDocument *>( document() );
 }
 
 // There is one QStyleSheetItems per paragraph, created on demand,
 // in order to set the DisplayMode for counters.
-void KWTextParag::checkItem( QStyleSheetItem * & item, const char * name )
+void KoTextParag::checkItem( QStyleSheetItem * & item, const char * name )
 {
     if ( !item )
     {
@@ -65,121 +65,112 @@ void KWTextParag::checkItem( QStyleSheetItem * & item, const char * name )
         QVector<QStyleSheetItem> vec = styleSheetItems();
         vec.resize( vec.size() + 1 );
         vec.insert( vec.size() - 1, item );
-        //kdDebug() << "KWTextParag::checkItem inserting QStyleSheetItem " << name << " at position " << vec.size()-1 << endl;
+        //kdDebug() << "KoTextParag::checkItem inserting QStyleSheetItem " << name << " at position " << vec.size()-1 << endl;
         setStyleSheetItems( vec );
     }
 }
 
 // Return the counter associated with this paragraph.
-Counter *KWTextParag::counter()
+KoParagCounter *KoTextParag::counter()
 {
     if ( !m_layout.counter )
-        return m_layout.counter;
+        return 0L;
 
     // Garbage collect unnneeded counters.
-    if ( m_layout.counter->numbering() == Counter::NUM_NONE )
+    if ( m_layout.counter->numbering() == KoParagCounter::NUM_NONE )
         setNoCounter();
     return m_layout.counter;
 }
 
-void KWTextParag::setMargin( QStyleSheetItem::Margin m, double _i )
+void KoTextParag::setMargin( QStyleSheetItem::Margin m, double _i )
 {
-    //kdDebug() << "KWTextParag::setMargin " << m << " margin " << _i << endl;
+    //kdDebug() << "KoTextParag::setMargin " << m << " margin " << _i << endl;
     m_layout.margins[m] = _i;
     if ( m == QStyleSheetItem::MarginTop && prev() )
-        prev()->invalidate(0);     // for top margin
+        prev()->invalidate(0);     // for top margin (post-1.1: remove this, not necessary anymore)
     invalidate(0);
 }
 
-void KWTextParag::setMargins( const double * margins )
+void KoTextParag::setMargins( const double * margins )
 {
     for ( int i = 0 ; i < 5 ; ++i )
         m_layout.margins[i] = margins[i];
     if ( prev() )
-        prev()->invalidate(0);     // for top margin
+        prev()->invalidate(0);     // for top margin (post-1.1: remove this, not necessary anymore)
     invalidate(0);
 }
 
-void KWTextParag::setAlign( int align )
+void KoTextParag::setAlign( int align )
 {
     setAlignment( align );
     m_layout.alignment = align;
 }
 
-void KWTextParag::setLineSpacing( double _i )
+void KoTextParag::setLineSpacing( double _i )
 {
     m_layout.lineSpacing = _i;
     invalidate(0);
 }
 
-void KWTextParag::setPageBreaking( int pb )
-{
-    m_layout.pageBreaking = pb;
-    invalidate(0);
-    if ( next() && ( pb & KWParagLayout::HardFrameBreakAfter ) )
-        next()->invalidate(0);
-}
-
-void KWTextParag::setTopBorder( const Border & _brd )
+void KoTextParag::setTopBorder( const Border & _brd )
 {
     m_layout.topBorder = _brd;
     if ( prev() )
-        prev()->invalidate(0);     // for top margin
+        prev()->invalidate(0);     // for top margin (post-1.1: remove this, not necessary anymore)
     invalidate(0);
 }
 
-void KWTextParag::setBottomBorder( const Border & _brd )
+void KoTextParag::setBottomBorder( const Border & _brd )
 {
     m_layout.bottomBorder = _brd;
     invalidate(0);
 }
 
-void KWTextParag::setNoCounter()
+void KoTextParag::setNoCounter()
 {
     delete m_layout.counter;
     m_layout.counter = 0L;
     invalidateCounters();
 }
 
-void KWTextParag::setCounter( const Counter & counter )
+void KoTextParag::setCounter( const KoParagCounter & counter )
 {
     // Garbage collect unnneeded counters.
-    if ( counter.numbering() == Counter::NUM_NONE )
+    if ( counter.numbering() == KoParagCounter::NUM_NONE )
     {
         setNoCounter();
     }
     else
     {
         delete m_layout.counter;
-        m_layout.counter = new Counter( counter );
+        m_layout.counter = new KoParagCounter( counter );
 
         checkItem( m_item, "m_item" );
         // Set the display mode (in order for drawLabel to get called by QTextParag)
         m_item->setDisplayMode( QStyleSheetItem::DisplayListItem );
-        //m_item->setSelfNesting( FALSE ); // Not sure why this is necessary.. to be investigated
 
         // Invalidate the counters
         invalidateCounters();
     }
 }
 
-void KWTextParag::invalidateCounters()
+void KoTextParag::invalidateCounters()
 {
     // Invalidate this paragraph and all the following ones
     // (Numbering may have changed)
     invalidate( 0 );
     if ( m_layout.counter )
         m_layout.counter->invalidate();
-    KWTextParag *s = static_cast<KWTextParag *>( next() );
+    KoTextParag *s = static_cast<KoTextParag *>( next() );
     while ( s ) {
         if ( s->m_layout.counter )
             s->m_layout.counter->invalidate();
         s->invalidate( 0 );
-        s = static_cast<KWTextParag *>( s->next() );
+        s = static_cast<KoTextParag *>( s->next() );
     }
 }
 
-int KWTextParag::counterWidth() const
+int KoTextParag::counterWidth() const
 {
     if ( !m_layout.counter )
         return 0;
@@ -188,12 +179,12 @@ int KWTextParag::counterWidth() const
 }
 
 // Draw the counter/bullet for a paragraph
-void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int base, const QColorGroup& /*cg*/ )
+void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int base, const QColorGroup& /*cg*/ )
 {
     if ( !m_layout.counter ) // shouldn't happen
         return;
 
-    if ( m_layout.counter->numbering() == Counter::NUM_NONE )
+    if ( m_layout.counter->numbering() == KoParagCounter::NUM_NONE )
     {   // Garbage collect unnneeded counter.
         delete m_layout.counter;
         m_layout.counter = 0L;
@@ -227,18 +218,18 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
         // Draw the bullet.
         switch ( m_layout.counter->style() )
         {
-            case Counter::STYLE_DISCBULLET:
+            case KoParagCounter::STYLE_DISCBULLET:
                 p->setBrush( QBrush(newColor) );
                 p->drawEllipse( er );
                 p->setBrush( Qt::NoBrush );
                 break;
-            case Counter::STYLE_SQUAREBULLET:
+            case KoParagCounter::STYLE_SQUAREBULLET:
                 p->fillRect( er , QBrush(newColor) );
                 break;
-            case Counter::STYLE_CIRCLEBULLET:
+            case KoParagCounter::STYLE_CIRCLEBULLET:
                 p->drawEllipse( er );
                 break;
-            case Counter::STYLE_CUSTOMBULLET:
+            case KoParagCounter::STYLE_CUSTOMBULLET:
                 // The user has selected a symbol from a special font. Override the paragraph
                 // font with the given family. This conserves the right size etc.
                 if ( !m_layout.counter->customBulletFont().isEmpty() )
@@ -264,63 +255,63 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     p->restore();
 }
 
-int KWTextParag::topMargin() const
+int KoTextParag::topMargin() const
 {
-    KWZoomHandler * zh = textDocument()->zoomHandler();
+    KoZoomHandler * zh = textDocument()->zoomHandler();
     return zh->zoomItY( m_layout.margins[ QStyleSheetItem::MarginTop ] )
         + Border::zoomWidthY( m_layout.topBorder.ptWidth, zh, 0 );
 }
 
-int KWTextParag::bottomMargin() const
+int KoTextParag::bottomMargin() const
 {
-    KWZoomHandler * zh = textDocument()->zoomHandler();
+    KoZoomHandler * zh = textDocument()->zoomHandler();
     return zh->zoomItY( m_layout.margins[ QStyleSheetItem::MarginBottom ] )
         + Border::zoomWidthY( m_layout.bottomBorder.ptWidth, zh, 0 );
 }
 
-int KWTextParag::leftMargin() const
+int KoTextParag::leftMargin() const
 {
-    KWZoomHandler * zh = textDocument()->zoomHandler();
+    KoZoomHandler * zh = textDocument()->zoomHandler();
     return zh->zoomItX( m_layout.margins[ QStyleSheetItem::MarginLeft ] )
         + Border::zoomWidthX( m_layout.leftBorder.ptWidth, zh, 0 )
         + counterWidth() /* shouldn't be zoomed, it depends on the font sizes */;
 }
 
-int KWTextParag::rightMargin() const
+int KoTextParag::rightMargin() const
 {
-    KWZoomHandler * zh = textDocument()->zoomHandler();
+    KoZoomHandler * zh = textDocument()->zoomHandler();
     return zh->zoomItX( m_layout.margins[ QStyleSheetItem::MarginRight ] )
         + Border::zoomWidthX( m_layout.rightBorder.ptWidth, zh, 0 );
 }
 
-int KWTextParag::firstLineMargin() const
+int KoTextParag::firstLineMargin() const
 {
     return textDocument()->zoomHandler()->zoomItX(
         m_layout.margins[ QStyleSheetItem::MarginFirstLine ] );
 }
 
-int KWTextParag::lineSpacing( int line ) const
+int KoTextParag::lineSpacing( int line ) const
 {
     if ( m_layout.lineSpacing >= 0 )
         return textDocument()->zoomHandler()->zoomItY(
             m_layout.lineSpacing );
     else {
-        KWTextParag * that = const_cast<KWTextParag *>(this);
+        KoTextParag * that = const_cast<KoTextParag *>(this);
         ASSERT( line < (int)that->lineStartList().count() );
-        //kdDebug() << "KWTextParag::lineSpacing line=" << line << " lines=" << that->lineStartList().count() << endl;
+        //kdDebug() << "KoTextParag::lineSpacing line=" << line << " lines=" << that->lineStartList().count() << endl;
         QMap<int, QTextParagLineStart*>::ConstIterator it = that->lineStartList().begin();
         while ( line-- > 0 )
             ++it;
         int height = ( *it )->h;
         //kdDebug() << " line height=" << height << " valid=" << isValid() << endl;
 
-        if ( m_layout.lineSpacing == KWParagLayout::LS_ONEANDHALF )
+        if ( m_layout.lineSpacing == KoParagLayout::LS_ONEANDHALF )
         {
             // Tricky. During formatting height doesn't include the linespacing,
             // but afterwards (e.g. when drawing the cursor), it does !
             return isValid() ? height / 3 : height / 2;
         }
-        else if ( m_layout.lineSpacing == KWParagLayout::LS_DOUBLE )
+        else if ( m_layout.lineSpacing == KoParagLayout::LS_DOUBLE )
         {
             return isValid() ? height / 2 : height;
         }
@@ -330,15 +321,15 @@ int KWTextParag::lineSpacing( int line ) const
 }
 
 // Reimplemented from QTextParag
-void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *cursor, bool drawSelections,
+void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *cursor, bool drawSelections,
                          int clipx, int clipy, int clipw, int cliph )
 {
-    //qDebug("KWTextParag::paint %p", this);
+    //qDebug("KoTextParag::paint %p", this);
     QTextParag::paint( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
 
     if ( m_layout.hasBorder() )
     {
-        KWZoomHandler * zh = textDocument()->zoomHandler();
+        KoZoomHandler * zh = textDocument()->zoomHandler();
 
         QRect r;
         // Old solution: stick to the text
@@ -357,7 +348,7 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
         if ( m_layout.bottomBorder.ptWidth > 0 )
             r.rBottom() -= lineSpacing( lastLine ) + 1;
 
-        //kdDebug() << "KWTextParag::paint documentWidth=" << documentWidth() << " r=" << DEBUGRECT( r ) << endl;
+        //kdDebug() << "KoTextParag::paint documentWidth=" << documentWidth() << " r=" << DEBUGRECT( r ) << endl;
         Border::drawBorders( painter, zh, r,
                              m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
                              0, QPen() );
@@ -383,7 +374,7 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
                                  lastFormat, i, selectionStarts,
                                  selectionEnds, cg, rightToLeft );
 
-    KWTextFrameSet * textfs = textDocument()->textFrameSet();
+    KWTextFrameSet * textfs = kwTextDocument()->textFrameSet();
     if ( textfs )
     {
         KWDocument * doc = textfs->kWordDocument();
@@ -411,7 +402,7 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
             }
             else
             {
-                //kdDebug() << "KWTextParag::drawParagString start=" << start << " len=" << len << " length=" << length() << endl;
+                //kdDebug() << "KoTextParag::drawParagString start=" << start << " len=" << len << " length=" << length() << endl;
                 if ( start + len == length() )
                 {
                     // drawing the end of the parag
@@ -422,7 +413,7 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
                     // x,y is the bottom right corner of the reversed L
                     int x = startX + bw + w - 1;
                     int y = lastY + baseLine - arrowsize;
-                    //kdDebug() << "KWTextParag::drawParagString drawing CR at " << x << "," << y << endl;
+                    //kdDebug() << "KoTextParag::drawParagString drawing CR at " << x << "," << y << endl;
                     painter.drawLine( x, y - size, x, y );
                     painter.drawLine( x, y, x - size, y );
                     // Now the arrow
@@ -465,98 +456,13 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
     }
 }
 
-// Reimplemented from QTextParag
-void KWTextParag::copyParagData( QTextParag *_parag )
-{
-    KWTextParag * parag = static_cast<KWTextParag *>(_parag);
-    // Style of the previous paragraph
-    KWStyle * style = parag->style();
-    // Obey "following style" setting
-    bool styleApplied = false;
-    if ( style )
-    {
-        KWStyle * newStyle = style->followingStyle();
-        if ( newStyle && style != newStyle ) // if same style, keep paragraph-specific changes as usual
-        {
-            setParagLayout( newStyle->paragLayout() );
-            KWTextFrameSet * textfs = textDocument()->textFrameSet();
-            ASSERT( textfs );
-            if ( textfs )
-            {
-                QTextFormat * format = textfs->zoomFormatFont( &newStyle->format() );
-                setFormat( format );
-                format->addRef();
-                string()->setFormat( 0, format, true ); // prepare format for text insertion
-            }
-            styleApplied = true;
-        }
-    }
-    else
-        kdWarning() << "Paragraph has no style " << paragId() << endl;
-
-    // No "following style" setting, or same style -> copy layout & format of previous paragraph
-    if (!styleApplied)
-    {
-        setParagLayout( parag->paragLayout() );
-        // Don't copy the hard-frame-break setting though
-        m_layout.pageBreaking &= ~KWParagLayout::HardFrameBreakBefore;
-        m_layout.pageBreaking &= ~KWParagLayout::HardFrameBreakAfter;
-        // set parag format to the format of the trailing space of the previous parag
-        setFormat( parag->at( parag->length()-1 )->format() );
-        // QTextCursor::splitAndInsertEmptyParag takes care of setting the format
-        // for the chars in the new parag
-    }
-
-    // Note: we don't call QTextParag::copyParagData on purpose.
-    // We don't want setListStyle to get called - it ruins our stylesheetitems
-    // And we don't care about copying the stylesheetitems directly,
-    // applying the parag layout will create them
-}
-
-void KWTextParag::setCustomItem( int index, KWTextCustomItem * custom, QTextFormat * currentFormat )
-{
-    kdDebug(32001) << "KWTextParag::setCustomItem " << index << "  " << (void*)custom
-                   << "  currentFormat=" << (void*)currentFormat << endl;
-    if ( currentFormat )
-        setFormat( index, 1, currentFormat );
-    at( index )->setCustomItem( custom );
-    addCustomItem();
-    document()->registerCustomItem( custom, this );
-    custom->resize();
-    invalidate( 0 );
-}
-
-void KWTextParag::removeCustomItem( int index )
-{
-    ASSERT( at( index )->isCustom() );
-    QTextCustomItem * item = at( index )->customItem();
-    at( index )->loseCustomItem();
-    QTextParag::removeCustomItem();
-    document()->unregisterCustomItem( item, this );
-}
-
-
-int KWTextParag::findCustomItem( const QTextCustomItem * custom ) const
-{
-    int len = string()->length();
-    for ( int i = 0; i < len; ++i )
-    {
-        QTextStringChar & ch = string()->at(i);
-        if ( ch.isCustom() && ch.customItem() == custom )
-            return i;
-    }
-    kdWarning() << "KWTextParag::findCustomItem custom item " << (void*)custom
-              << " not found in paragraph " << paragId() << endl;
-    return 0;
-}
-
-void KWTextParag::setTabList( const KoTabulatorList &tabList )
+void KoTextParag::setTabList( const KoTabulatorList &tabList )
 {
     KoTabulatorList lst( tabList );
     m_layout.setTabList( lst );
     if ( !tabList.isEmpty() )
     {
-        KWZoomHandler * zh = textDocument()->zoomHandler();
+        KoZoomHandler * zh = textDocument()->zoomHandler();
         int * tabs = new int[ tabList.count() + 1 ]; // will be deleted by ~QTextParag
         KoTabulatorList::Iterator it = lst.begin();
         unsigned int i = 0;
@@ -572,7 +478,7 @@ void KWTextParag::setTabList( const KoTabulatorList &tabList )
     invalidate( 0 );
 }
 
-int KWTextParag::nextTab( int chnum, int x )
+int KoTextParag::nextTab( int chnum, int x )
 {
     if ( !m_layout.tabList().isEmpty() )
     {
@@ -581,7 +487,7 @@ int KWTextParag::nextTab( int chnum, int x )
         int * tArray = tabArray();
         int i = 0;
         while ( tArray[ i ] ) {
-            //kdDebug() << "KWTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type" << m_layout.tabList()[i].type << endl;
+            //kdDebug() << "KoTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type" << m_layout.tabList()[i].type << endl;
             if ( tArray[ i ] >= x ) {
                 int type = m_layout.tabList()[i].type;
                 switch ( type ) {
@@ -646,6 +552,104 @@ int KWTextParag::nextTab( int chnum, int x )
     }
     // No tab list (or no more tabs), use tab-stop-width. QTextParag has the code :)
     return QTextParag::nextTab( chnum, x );
+}
+
+// Reimplemented from QTextParag
+void KWTextParag::copyParagData( QTextParag *_parag )
+{
+    KoTextParag * parag = static_cast<KoTextParag *>(_parag);
+    // Style of the previous paragraph
+    KWStyle * style = parag->style();
+    // Obey "following style" setting
+    bool styleApplied = false;
+    if ( style )
+    {
+        KWStyle * newStyle = style->followingStyle();
+        if ( newStyle && style != newStyle ) // if same style, keep paragraph-specific changes as usual
+        {
+            setParagLayout( newStyle->paragLayout() );
+            KWTextFrameSet * textfs = kwTextDocument()->textFrameSet();
+            ASSERT( textfs );
+            if ( textfs )
+            {
+                QTextFormat * format = textfs->zoomFormatFont( &newStyle->format() );
+                setFormat( format );
+                format->addRef();
+                string()->setFormat( 0, format, true ); // prepare format for text insertion
+            }
+            styleApplied = true;
+        }
+    }
+    else
+        kdWarning() << "Paragraph has no style " << paragId() << endl;
+
+    // No "following style" setting, or same style -> copy layout & format of previous paragraph
+    if (!styleApplied)
+    {
+        setParagLayout( parag->paragLayout() );
+        // Don't copy the hard-frame-break setting though
+        m_layout.pageBreaking &= ~KoParagLayout::HardFrameBreakBefore;
+        m_layout.pageBreaking &= ~KoParagLayout::HardFrameBreakAfter;
+        // set parag format to the format of the trailing space of the previous parag
+        setFormat( parag->at( parag->length()-1 )->format() );
+        // QTextCursor::splitAndInsertEmptyParag takes care of setting the format
+        // for the chars in the new parag
+    }
+
+    // Note: we don't call QTextParag::copyParagData on purpose.
+    // We don't want setListStyle to get called - it ruins our stylesheetitems
+    // And we don't care about copying the stylesheetitems directly,
+    // applying the parag layout will create them
+}
+
+void KWTextParag::setPageBreaking( int pb )
+{
+    m_layout.pageBreaking = pb;
+    invalidate(0);
+    if ( next() && ( pb & KoParagLayout::HardFrameBreakAfter ) )
+        next()->invalidate(0);
+}
+
+void KWTextParag::setCustomItem( int index, KWTextCustomItem * custom, QTextFormat * currentFormat )
+{
+    kdDebug(32001) << "KWTextParag::setCustomItem " << index << "  " << (void*)custom
+                   << "  currentFormat=" << (void*)currentFormat << endl;
+    if ( currentFormat )
+        setFormat( index, 1, currentFormat );
+    at( index )->setCustomItem( custom );
+    addCustomItem();
+    document()->registerCustomItem( custom, this );
+    custom->resize();
+    invalidate( 0 );
+}
+
+void KWTextParag::removeCustomItem( int index )
+{
+    ASSERT( at( index )->isCustom() );
+    QTextCustomItem * item = at( index )->customItem();
+    at( index )->loseCustomItem();
+    QTextParag::removeCustomItem();
+    document()->unregisterCustomItem( item, this );
+}
+
+
+int KWTextParag::findCustomItem( const QTextCustomItem * custom ) const
+{
+    int len = string()->length();
+    for ( int i = 0; i < len; ++i )
+    {
+        QTextStringChar & ch = string()->at(i);
+        if ( ch.isCustom() && ch.customItem() == custom )
+            return i;
+    }
+    kdWarning() << "KWTextParag::findCustomItem custom item " << (void*)custom
+              << " not found in paragraph " << paragId() << endl;
+    return 0;
+}
+
+KWTextDocument * KWTextParag::kwTextDocument() const
+{
+    return static_cast<KWTextDocument *>( document() );
 }
 
 //static
@@ -857,8 +861,8 @@ void KWTextParag::loadLayout( QDomElement & attributes )
     QDomElement layout = attributes.namedItem( "LAYOUT" ).toElement();
     if ( !layout.isNull() )
     {
-        KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
-        KWParagLayout paragLayout( layout, doc, true );
+        KWDocument * doc = kwTextDocument()->textFrameSet()->kWordDocument();
+        KoParagLayout paragLayout( layout, doc, true );
         setParagLayout( paragLayout );
 
         // Load default format from style.
@@ -905,7 +909,7 @@ void KWTextParag::load( QDomElement &attributes )
 
 void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
 {
-    KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
+    KWDocument * doc = kwTextDocument()->textFrameSet()->kWordDocument();
     QDomElement formatsElem = attributes.namedItem( "FORMATS" ).toElement();
     if ( !formatsElem.isNull() )
     {
@@ -929,7 +933,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                 case 2: // Picture
                 {
                     ASSERT( len == 1 );
-                    KWTextImage * custom = new KWTextImage( textDocument(), QString::null );
+                    KWTextImage * custom = new KWTextImage( kwTextDocument(), QString::null );
                     kdDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
                     paragFormat()->addRef();
                     setCustomItem( index, custom, paragFormat() );
@@ -956,7 +960,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                     {
                         int type = typeElem.attribute( "type" ).toInt();
                         kdDebug() << "KWTextParag::loadFormatting variable type=" << type << endl;
-                        KWVariable * var = KWVariable::createVariable( type, -1, textDocument()->textFrameSet() );
+                        KWVariable * var = KWVariable::createVariable( type, -1, kwTextDocument()->textFrameSet() );
                         var->load( varElem );
                         KWTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont() );
                         setCustomItem( index, var, document()->formatCollection()->format( &f ) );
@@ -974,7 +978,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                         {
                             QString framesetName = anchorElem.attribute( "instance" );
                             KWAnchorPosition pos;
-                            pos.textfs = textDocument()->textFrameSet();
+                            pos.textfs = kwTextDocument()->textFrameSet();
                             pos.paragId = paragId();
                             pos.index = index;
                             doc->addAnchorRequest( framesetName, pos );
@@ -995,7 +999,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
     }
 }
 
-void KWTextParag::applyStyle( KWStyle *style )
+void KoTextParag::applyStyle( KWStyle *style )
 {
     setParagLayout( style->paragLayout() );
     KWTextFormat *newFormat = &style->format();
@@ -1003,32 +1007,38 @@ void KWTextParag::applyStyle( KWStyle *style )
     setFormat( newFormat );
 }
 
-void KWTextParag::setParagLayout( const KWParagLayout & layout, int flags )
+void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags )
 {
-    //kdDebug() << "KWTextParag::setParagLayout flags=" << flags << endl;
-    if ( flags & KWParagLayout::Alignment )
+    //kdDebug() << "KoTextParag::setParagLayout flags=" << flags << endl;
+    if ( flags & KoParagLayout::Alignment )
         setAlign( layout.alignment );
-    if ( flags & KWParagLayout::Margins )
+    if ( flags & KoParagLayout::Margins )
          setMargins( layout.margins );
-    if ( flags & KWParagLayout::PageBreaking )
-        setPageBreaking( layout.pageBreaking );
-    if ( flags & KWParagLayout::LineSpacing )
+    if ( flags & KoParagLayout::LineSpacing )
         setLineSpacing( layout.lineSpacing );
-    if ( flags & KWParagLayout::Borders )
+    if ( flags & KoParagLayout::Borders )
     {
         setLeftBorder( layout.leftBorder );
         setRightBorder( layout.rightBorder );
         setTopBorder( layout.topBorder );
         setBottomBorder( layout.bottomBorder );
     }
-    if ( flags & KWParagLayout::BulletNumber )
+    if ( flags & KoParagLayout::BulletNumber )
         setCounter( layout.counter );
-    if ( flags & KWParagLayout::Tabulator )
+    if ( flags & KoParagLayout::Tabulator )
         setTabList( layout.tabList() );
 
-    if ( flags == KWParagLayout::All )
+    if ( flags == KoParagLayout::All )
         // Don't call setStyle from here, it would overwrite any paragraph-specific settings
         setStyle( layout.style );
+}
+
+void KWTextParag::setParagLayout( const KoParagLayout & layout, int flags )
+{
+    KoTextParag::setParagLayout( layout, flags );
+
+    if ( flags & KoParagLayout::PageBreaking )
+        setPageBreaking( layout.pageBreaking );
 }
 
 #ifndef NDEBUG
@@ -1106,13 +1116,13 @@ void KWTextParag::printRTDebug( int info )
 
 //////////
 
-// Create a default KWParagLayout.
-KWParagLayout::KWParagLayout()
+// Create a default KoParagLayout.
+KoParagLayout::KoParagLayout()
 {
     initialise();
 }
 
-void KWParagLayout::operator=( const KWParagLayout &layout )
+void KoParagLayout::operator=( const KoParagLayout &layout )
 {
     alignment = layout.alignment;
     for ( int i = 0 ; i < 5 ; ++i )
@@ -1123,7 +1133,7 @@ void KWParagLayout::operator=( const KWParagLayout &layout )
     topBorder = layout.topBorder;
     bottomBorder = layout.bottomBorder;
     if ( layout.counter )
-        counter = new Counter( *layout.counter );
+        counter = new KoParagCounter( *layout.counter );
     else
         counter = 0L;
     lineSpacing = layout.lineSpacing;
@@ -1131,7 +1141,7 @@ void KWParagLayout::operator=( const KWParagLayout &layout )
     setTabList( layout.tabList() );
 }
 
-int KWParagLayout::compare( const KWParagLayout & layout ) const
+int KoParagLayout::compare( const KoParagLayout & layout ) const
 {
     int flags = 0;
     if ( alignment != layout.alignment )
@@ -1157,11 +1167,11 @@ int KWParagLayout::compare( const KWParagLayout & layout ) const
             if ( ! ( *layout.counter == *counter ) )
                 flags |= BulletNumber;
         } else
-            if ( layout.counter->numbering() != Counter::NUM_NONE )
+            if ( layout.counter->numbering() != KoParagCounter::NUM_NONE )
                 flags |= BulletNumber;
     }
     else
-        if ( counter && counter->numbering() != Counter::NUM_NONE )
+        if ( counter && counter->numbering() != KoParagCounter::NUM_NONE )
             flags |= BulletNumber;
 
     if ( lineSpacing != layout.lineSpacing )
@@ -1173,13 +1183,13 @@ int KWParagLayout::compare( const KWParagLayout & layout ) const
     return flags;
 }
 
-// Create a KWParagLayout from XML.
+// Create a KoParagLayout from XML.
 //
 // If a document is supplied, default values are taken from the style in the
 // document named by the layout. This allows for simplified import filters,
 // and also looks to the day that redundant data can be eliminated from the
 // saved XML.
-KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc, bool useRefStyle )
+KoParagLayout::KoParagLayout( QDomElement & parentElem, KWDocument *doc, bool useRefStyle )
 {
     initialise();
 
@@ -1196,7 +1206,7 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc, bool us
             style = doc->findStyle( styleName );
             if (style)
             {
-                //kdDebug() << "KWParagLayout::KWParagLayout setting style to " << style << " " << style->name() << endl;
+                //kdDebug() << "KoParagLayout::KoParagLayout setting style to " << style << " " << style->name() << endl;
                 *this = style->paragLayout();
             }
             else
@@ -1342,12 +1352,12 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc, bool us
     element = parentElem.namedItem( "COUNTER" ).toElement();
     if ( !element.isNull() )
     {
-        counter = new Counter;
+        counter = new KoParagCounter;
         counter->load( element );
     }
 }
 
-void KWParagLayout::initialise()
+void KoParagLayout::initialise()
 {
     alignment = Qt::AlignLeft;
     for ( int i = 0 ; i < 5 ; ++i ) // use memset ?
@@ -1363,12 +1373,12 @@ void KWParagLayout::initialise()
     m_tabList.clear();
 }
 
-KWParagLayout::~KWParagLayout()
+KoParagLayout::~KoParagLayout()
 {
     delete counter;
 }
 
-void KWParagLayout::save( QDomElement & parentElem )
+void KoParagLayout::save( QDomElement & parentElem )
 {
     QDomDocument doc = parentElem.ownerDocument();
     QDomElement element = doc.createElement( "NAME" );
@@ -1376,7 +1386,7 @@ void KWParagLayout::save( QDomElement & parentElem )
     if ( style )
         element.setAttribute( "value", style->name() );
     else
-        kdWarning() << "KWParagLayout::save: style==0L!" << endl;
+        kdWarning() << "KoParagLayout::save: style==0L!" << endl;
 
     element = doc.createElement( "FLOW" );
     parentElem.appendChild( element );
@@ -1455,7 +1465,7 @@ void KWParagLayout::save( QDomElement & parentElem )
         parentElem.appendChild( element );
         bottomBorder.save( element );
     }
-    if ( counter && counter->numbering() != Counter::NUM_NONE )
+    if ( counter && counter->numbering() != KoParagCounter::NUM_NONE )
     {
         element = doc.createElement( "COUNTER" );
         parentElem.appendChild( element );

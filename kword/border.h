@@ -23,7 +23,7 @@
 #include <qcolor.h>
 #include <qpen.h>
 class QDomElement;
-class KWZoomHandler;
+class KoZoomHandler;
 class QPainter;
 
 /**
@@ -52,8 +52,8 @@ public:
     static QString getStyle( const BorderStyle &style );
 
     // Zoom the border width. If ptWidth is 0, minborder is returned.
-    static int zoomWidthX( double ptWidth, KWZoomHandler * zoomHandler, int minborder ); // For left/right borders
-    static int zoomWidthY( double ptWidth, KWZoomHandler * zoomHandler, int minborder ); // For top/bottom borders
+    static int zoomWidthX( double ptWidth, KoZoomHandler * zoomHandler, int minborder ); // For left/right borders
+    static int zoomWidthY( double ptWidth, KoZoomHandler * zoomHandler, int minborder ); // For top/bottom borders
 
     // Get a ready-to-use QPen for this border.
     static QPen borderPen( const Border & brd, int width, QColor defaultColor );
@@ -62,7 +62,7 @@ public:
     // Draws in @p painter the 4 borders on the _outside_ of @p rect.
     // If a border is of size 0, minborder will be applied (no border if 0, defaultPen otherwise)
     // defaultColor is the color to use for QColor() - either defaultTextColor() or defaultBgColor().
-    static void drawBorders( QPainter& painter, KWZoomHandler * zoomHandler, QRect rect,
+    static void drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRect rect,
                              Border left, Border right, Border top, Border bottom,
                              int minborder, QPen defaultPen );
 };

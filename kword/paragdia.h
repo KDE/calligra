@@ -38,7 +38,6 @@ class KWDocument;
 class KWNumPreview;
 class KWPagePreview2;
 class KWPagePreview;
-class KWParagLayout;
 class KWSpinBox;
 class QButtonGroup;
 class QCheckBox;
@@ -210,18 +209,18 @@ public:
 
     class StyleRepresenter {
         public:
-            StyleRepresenter (const QString name, Counter::Style style, bool listStyle=false) { 
-                m_name=name; 
-                m_style=style; 
-                m_listStyle=listStyle; 
+            StyleRepresenter (const QString name, KoParagCounter::Style style, bool listStyle=false) {
+                m_name=name;
+                m_style=style;
+                m_listStyle=listStyle;
             }
             QString name() { return m_name; }
-            Counter::Style style() { return m_style; }
+            KoParagCounter::Style style() { return m_style; }
             bool listStyle() { return m_listStyle; }
 
         private:
             QString m_name;
-            Counter::Style m_style;
+            KoParagCounter::Style m_style;
             bool m_listStyle;
     };
 
@@ -233,7 +232,7 @@ public:
     //virtual bool isModified();
     virtual QString tabName();
 
-    const Counter & counter() const { return m_counter; }
+    const KoParagCounter & counter() const { return m_counter; }
 
 protected slots:
     void selectCustomBullet();
@@ -249,12 +248,12 @@ protected slots:
 private:
     void updatePreview();
     QList <StyleRepresenter> stylesList;
-    void fillStyleCombo(Counter::Numbering type = Counter::NUM_LIST);
+    void fillStyleCombo(KoParagCounter::Numbering type = KoParagCounter::NUM_LIST);
 
     QGroupBox *gStyle;
-    QButtonGroup *gNumbering; 
+    QButtonGroup *gNumbering;
     QListBox *lstStyle;
-    Counter m_counter; 
+    KoParagCounter m_counter;
     QLineEdit *sSuffix, *sPrefix;
     QPushButton *bCustom;
     KWSpinBox *spnStart;
@@ -348,7 +347,7 @@ public:
     Border bottomBorder() const { return m_borderWidget->bottomBorder(); }
 
     // tab 4
-    const Counter & counter() const { return m_counterWidget->counter(); }
+    const KoParagCounter & counter() const { return m_counterWidget->counter(); }
 
     // tab 5
     KoTabulatorList tabListTabulator() const { return m_tabulatorsWidget->tabList(); }

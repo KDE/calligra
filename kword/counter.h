@@ -18,7 +18,7 @@
 */
 
 #include <qstring.h>
-class KWTextParag;
+class KoTextParag;
 class QDomElement;
 namespace Qt3 { class QTextFormat; }
 using namespace Qt3;
@@ -26,32 +26,36 @@ using namespace Qt3;
 #ifndef counter_h
 #define counter_h
 
-class Counter
+/**
+ * This is the structure associated with a paragraph (KoTextParag),
+ * to define the bullet or numbering of the paragraph.
+ */
+class KoParagCounter
 {
 public:
-    Counter();
+    KoParagCounter();
 
     // Invalidate the internal cache. Use it whenever the number associated with this
     // counter may have changed.
     void invalidate();
 
     // Return the current value of the counter either as a number or text.
-    int number( const KWTextParag *paragraph );
-    QString text( const KWTextParag *paragraph );
+    int number( const KoTextParag *paragraph );
+    QString text( const KoTextParag *paragraph );
 
     // Work out the width of the text required for this counter.
-    int width( const KWTextParag *paragraph );
+    int width( const KoTextParag *paragraph );
 
     // XML support.
     void load( QDomElement & element );
     void save( QDomElement & element );
 
-    bool operator==( const Counter & c2 ) const;
+    bool operator==( const KoParagCounter & c2 ) const;
 
     enum Numbering
     {
         NUM_NONE = 2,       // Unnumbered. Equivalent to there being
-                            // no Counter structure associated with a
+                            // no counter structure associated with a
                             // paragraph.
         NUM_LIST = 0,       // Numbered as a list item.
         NUM_CHAPTER = 1     // Numbered as a heading.
@@ -105,7 +109,7 @@ private:
 
     // Return our parent paragraph, if there is such a thing. For a paragraph "1.1.",
     // the parent is the paragraph numbered "1.".
-    KWTextParag *parent( const KWTextParag *paragraph );
+    KoTextParag *parent( const KoTextParag *paragraph );
 
     Numbering m_numbering;
     Style m_style;
@@ -126,14 +130,14 @@ private:
     //  number of this counter                           -1
     //  text of this counter                             QString::null
     //  width of the label                               -1
-    //  parent                                           (KWTextParag *)-1
+    //  parent                                           (KoTextParag *)-1
     //  the format that was used to calculate the width  0
     struct
     {
         int number;
         QString text;
         int width;
-        KWTextParag *parent;
+        KoTextParag *parent;
         QTextFormat * counterFormat;
     } m_cache;
 };

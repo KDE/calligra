@@ -396,7 +396,7 @@ void KWStyleManager::renameStyle(const QString &theText) {
 KWStylePreview::KWStylePreview( const QString &title, QWidget *parent )
     : QGroupBox( title, parent, "" )
 {
-    m_zoomHandler = new KWZoomHandler;
+    m_zoomHandler = new KoZoomHandler;
     m_textdoc = new KWTextDocument( m_zoomHandler );
     KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
     parag->insert( 0, i18n( "KWord, KOffice's Word Processor" ) );
@@ -420,6 +420,7 @@ void KWStylePreview::drawContents( QPainter *painter )
     // see also KWNumPreview::drawContents
     painter->save();
     QRect r = contentsRect();
+    kdDebug() << "KWStylePreview::drawContents contentsRect=" << DEBUGRECT(r) << endl;
 
     QRect whiteRect( r.x() + 10, r.y() + 10,
                      r.width() - 20, r.height() - 20 );
@@ -427,12 +428,22 @@ void KWStylePreview::drawContents( QPainter *painter )
     painter->fillRect( whiteRect, cg.brush( QColorGroup::Base ) );
 
     KWTextParag * parag = static_cast<KWTextParag *>(m_textdoc->firstParag());
+    if ( m_textdoc->width() != whiteRect.width() )
+    {
+        // For centering to work, and to even get word wrapping when the thing is too big :)
+        m_textdoc->setWidth( whiteRect.width() );
+        parag->invalidate(0);
+    }
+
     parag->format();
     QRect textRect = parag->rect();
-    textRect.moveTopLeft( QPoint( r.x() + ( r.width() - textRect.width() ) / 2,
-                                  r.y() + ( r.height() - textRect.height() ) / 2 ) );
-    //kdDebug() << "KWStylePreview::drawContents textRect=" << DEBUGRECT(textRect) << endl;
-    painter->setClipRect( textRect );
+
+    // Center vertically, but not horizontally, to keep the parag alignment working,
+    textRect.moveTopLeft( QPoint( whiteRect.x() + 10,
+                                  whiteRect.y() + ( whiteRect.height() - textRect.height() ) / 2 ) );
+    //kdDebug() << "KWStylePreview::drawContents textRect=" << DEBUGRECT(textRect)
+    //          << " textSize=" << textSize.width() << "," << textSize.height() << endl;
+    painter->setClipRect( textRect.intersect( whiteRect ) );
     painter->translate( textRect.x(), textRect.y() );
 
     m_textdoc->draw( painter, 0, 0, textRect.width(), textRect.height(), cg );
@@ -440,6 +451,16 @@ void KWStylePreview::drawContents( QPainter *painter )
 }
 
 /////////////
+
+void KWStyleParagTab::update()
+{
+     m_widget->display( m_style->paragLayout() );
+}
+
+void KWStyleParagTab::save()
+{
+     m_widget->save( m_style->paragLayout() );
+}
 
 void KWStyleParagTab::setWidget( KWParagLayoutWidget * widget )
 {

@@ -34,7 +34,7 @@ class KAction;
 class KoDataToolInfo;
 class KWVariable;
 class QProgressDialog;
-
+class KMacroCommand;
 //#define TIMING_FORMAT
 //#include <qdatetime.h>
 
@@ -85,6 +85,9 @@ public:
     // Return true if the last frame is empty
     bool isFrameEmpty( KWFrame * frame );
     virtual bool canRemovePage( int num );
+    // reimp for internal reasons
+    virtual void delFrame( KWFrame *frm, bool remove = true );
+    virtual void delFrame( unsigned int num ) { KWFrameSet::delFrame( num ); } // stupid C++
 
     // Views notify the KWTextFrameSet of which area of the text
     // they're looking at, so that formatMore() ensures it's always formatted
@@ -185,7 +188,7 @@ public:
     void doKeyboardAction( QTextCursor * cursor, KWTextFormat * & currentFormat, KeyboardAction action );
 
     // -- Paragraph settings --
-    void setCounter( QTextCursor * cursor, const Counter & counter );
+    void setCounter( QTextCursor * cursor, const KoParagCounter & counter );
     void setAlign( QTextCursor * cursor, int align );
     void setLineSpacing( QTextCursor * cursor, double spacing );
     void setPageBreaking( QTextCursor * cursor, int pageBreaking );
@@ -193,7 +196,7 @@ public:
     void setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin );
     void applyStyle( QTextCursor * cursor, const KWStyle * style,
                      int selectionId = QTextDocument::Standard,
-                     int paragLayoutFlags = KWParagLayout::All, int formatFlags = QTextFormat::Format,
+                     int paragLayoutFlags = KoParagLayout::All, int formatFlags = QTextFormat::Format,
                      bool zoomFormats = true, bool createUndoRedo = true, bool interactive = true );
 
     void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged );
@@ -254,6 +257,8 @@ signals:
     void ensureCursorVisible();
     // Tell the views that the selection changed (for cut/copy...)
     void selectionChanged( bool hasSelection );
+    // Tell Edit object that this frame got deleted
+    void frameDeleted( KWFrame* frame );
 
 private slots:
     void doChangeInterval();
@@ -278,31 +283,32 @@ private:
      * call clear(), it's at that point that the command is created.
      */
     struct UndoRedoInfo { // borrowed from QTextEdit
-        enum Type { Invalid, Insert, Delete, Return, RemoveSelected, Format,
-                    Alignment, Counter, Margin, LineSpacing, Borders, Tabulator, PageBreaking };
+        enum Type { Invalid, Insert, Delete, Return, RemoveSelected };
         UndoRedoInfo( KWTextFrameSet * fs );
-        ~UndoRedoInfo();
+        ~UndoRedoInfo() {}
         void clear();
         bool valid() const;
 
-        QString name;
-        QTextString text;
-        int id;
-        int index;
-        int eid;
-        int eindex;
-        QTextFormat *format;
-        int flags;
-        Type type;
-        QStyleSheetItem::Margin margin; // if type==Margin
-        KWTextFrameSet *textfs;
+        QTextString text; // storage for formatted text
+        int id; // id of first parag
+        int eid; // id of last parag
+        int index; // index (for insertion/deletion)
+        Type type; // type of command
+        KWTextFrameSet *textfs; // parent
+        CustomItemsMap customItemsMap; // character position -> qtextcustomitem
+        QValueList<KoParagLayout> oldParagLayouts;
+        KoParagLayout newParagLayout;
         QTextCursor *cursor; // basically a "mark" of the view that started this undo/redo info
         // If the view changes, the next call to checkUndoRedoInfo will terminate the previous view's edition
-
-        CustomItemsMap customItemsMap; // character position -> qtextcustomitem
-        QValueList<KWParagLayout> oldParagLayouts;
-        KWParagLayout newParagLayout;
+        KMacroCommand *placeHolderCmd;
     };
+    /**
+     * Creates a place holder for a command that will be completed later on.
+     * This is used for the insert and delete text commands, which are
+     * build delayed (see the UndoRedoInfo structure), in order to
+     * have an entry in the undo/redo history asap.
+     */
+    void newPlaceHolderCommand( const QString & name );
     void checkUndoRedoInfo( QTextCursor * cursor, UndoRedoInfo::Type t );
 
     KWTextDocument *textdoc;
@@ -405,7 +411,7 @@ public:
     QString textFontFamily()const;
 
     // -- Paragraph settings --
-    void setCounter( const Counter & counter ) { textFrameSet()->setCounter( cursor, counter ); }
+    void setCounter( const KoParagCounter & counter ) { textFrameSet()->setCounter( cursor, counter ); }
     void setAlign( int align ) { textFrameSet()->setAlign( cursor, align ); }
     void setPageBreaking( int pageBreaking ) { textFrameSet()->setPageBreaking( cursor, pageBreaking ); }
     void setLineSpacing( double spacing ) { textFrameSet()->setLineSpacing( cursor, spacing ); }
@@ -416,7 +422,7 @@ public:
     void setTabList( const KoTabulatorList & tabList ){ textFrameSet()->setTabList( cursor, tabList ); }
     void applyStyle( const KWStyle * style );
 
-    const KWParagLayout & currentParagLayout() const { return m_paragLayout; }
+    const KoParagLayout & currentParagLayout() const { return m_paragLayout; }
 
     QList<KAction> dataToolActionList();
 
@@ -441,6 +447,7 @@ private slots:
     void setCursor( QTextCursor * _cursor ) { *cursor = *_cursor; }
     void showCurrentFormat();
     void slotToolActivated( const KoDataToolInfo & info, const QString & command );
+    void slotFrameDeleted(KWFrame *);
 
 private:
 
@@ -468,7 +475,7 @@ private:
 
 private:
     QPoint dragStartPos;
-    KWParagLayout m_paragLayout;
+    KoParagLayout m_paragLayout;
     QTextCursor *cursor;
     KWTextFormat *m_currentFormat;
     QTimer *blinkTimer, *dragStartTimer;
