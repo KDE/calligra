@@ -387,26 +387,21 @@ QTextFormat * KoTextCustomItem::format() const
 }
 
 
-void KoTextCustomItem::draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
+void KoTextCustomItem::draw(QPainter* p, int x, int _y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
     KoZoomHandler *zh=textDocument()->zoomHandler();
     //kdDebug()<<" x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
     x=zh->layoutUnitToPixelX(x);
-    y=zh->layoutUnitToPixelY(y);
+    int y=zh->layoutUnitToPixelY(_y);
     cx=zh->layoutUnitToPixelX(cx);
-    cy=zh->layoutUnitToPixelY(y,cy);
-    ch=zh->layoutUnitToPixelY(y,ch);
+    cy=zh->layoutUnitToPixelY(_y,cy);
+    ch=zh->layoutUnitToPixelY(_y,ch);
     cw=zh->layoutUnitToPixelX(cw);
     //kdDebug()<<"After  x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
 
     QTextFormat * f = format();
 
     QFont newFont(f->font());
-    KoTextParag * parag = static_cast< KoTextParag*>( paragraph() );
-    int bl,_y;
-    int h = parag->lineHeightOfChar( index(), &bl, &_y );
-    h=zh->layoutUnitToPixelX(h);
-    bl=zh->layoutUnitToPixelY(bl);
 
     bool forPrint = ( p->device()->devType() == QInternal::Printer );
     newFont.setPointSizeFloat( zh->layoutUnitToFontSize( newFont.pointSize(), forPrint ) );
@@ -418,12 +413,14 @@ void KoTextCustomItem::draw(QPainter* p, int x, int y, int cx, int cy, int cw, i
     {
         newFont.setPointSize( ( newFont.pointSize() * 2 ) / 3 );
         p->setFont( newFont );
-        offset=- ( h - p->fontMetrics().height() );
+
+        int h = zh->layoutUnitToPixelY( _y, height );
+        offset =- ( h - p->fontMetrics().height() );
     }
     else if ( f->vAlign() == QTextFormat::AlignSubScript )
         newFont.setPointSize( ( newFont.pointSize() * 2 ) / 3 );
 
-    drawCustomItems(p,x, y,cx, cy, cw, ch, cg, selected,newFont, offset);
+    drawCustomItem(p, x, y, cx, cy, cw, ch, cg, selected, newFont, offset);
 }
 
 void CustomItemsMap::insertItems( const QTextCursor & startCursor, int size )

@@ -156,7 +156,7 @@ public:
 
     virtual void draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
 
-    virtual void drawCustomItems(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const QFont & customItemFont, int offset)=0;
+    virtual void drawCustomItem(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, const QFont & customItemFont, int offset)=0;
 
 
 protected:
