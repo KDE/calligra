@@ -94,8 +94,8 @@ KoDocument *KWordChild::hitTest( const QPoint &, const QWMatrix & )
 /******************************************************************/
 
 /*================================================================*/
-KWordDocument::KWordDocument(QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parent, name, singleViewMode ),
+KWordDocument::KWordDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
       formatCollection( this ), imageCollection( this ), selStart( this, 1 ), selEnd( this, 1 ),
       ret_pix( KWBarIcon( "return" ) ), unit( "mm" ), numParags( 0 ), footNoteManager( this ),
       autoFormat( this ), urlIntern(), pglChanged( TRUE )
@@ -1170,7 +1170,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-        fs->setFrameBehaviour(AutoExtendFrame); 
+        fs->setFrameBehaviour(AutoExtendFrame);
     }
 
     if ( !_even_header ) {
@@ -1180,7 +1180,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-        fs->setFrameBehaviour(AutoExtendFrame); 
+        fs->setFrameBehaviour(AutoExtendFrame);
     }
 
     if ( !_odd_header ) {
@@ -1190,7 +1190,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-        fs->setFrameBehaviour(AutoExtendFrame); 
+        fs->setFrameBehaviour(AutoExtendFrame);
     }
 
     if ( !_first_footer ) {
@@ -1200,7 +1200,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-        fs->setFrameBehaviour(AutoExtendFrame); 
+        fs->setFrameBehaviour(AutoExtendFrame);
     }
 
     if ( !_even_footer ) {
@@ -1210,7 +1210,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-        fs->setFrameBehaviour(AutoExtendFrame); 
+        fs->setFrameBehaviour(AutoExtendFrame);
     }
 
     if ( !_odd_footer ) {
@@ -1220,7 +1220,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
-        fs->setFrameBehaviour(AutoExtendFrame); 
+        fs->setFrameBehaviour(AutoExtendFrame);
     }
 
     if ( !_footnotes ) {
@@ -1235,7 +1235,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 	    fs->addFrame( frame );
 	}
 	frames.append( fs );
-    fs->setFrameBehaviour(AutoCreateNewFrame); 
+    fs->setFrameBehaviour(AutoCreateNewFrame);
 	fs->setVisible( FALSE );
     }
 
@@ -1837,7 +1837,6 @@ void KWordDocument::slotChildChanged( KoDocumentChild *child )
             {
                 KWFrame *frame = partFS->getFrame( 0 );
                 QRect r = child->geometry();
-                // ugly: *(static_cast<QRect *>(frame)) = r;
                 frame->setCoords( r.left(), r.top(), r.right(), r.bottom() );
                 break;
             }
@@ -3713,7 +3712,7 @@ FrameBehaviour KWordDocument::getFrameBehaviour() {
         if ( getFrameSet( i )->hasSelectedFrame() && getFrameSet( i )->getFrameType() == FT_TEXT )
             return dynamic_cast<KWTextFrameSet*>( getFrameSet( i ) )->getFrameBehaviour();
     }
-    return AutoCreateNewFrame;                                                      
+    return AutoCreateNewFrame;
 }
 
 void KWordDocument::setFrameBehaviour( FrameBehaviour behaviour )

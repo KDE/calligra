@@ -73,11 +73,11 @@ KisFactory::~KisFactory()
   delete s_global;
 }
 
-KParts::Part* KisFactory::createPart( QWidget *, const char *, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* KisFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-    KisDoc *doc = new KisDoc( parent, name, !bWantKoDocument );
+    KisDoc *doc = new KisDoc( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
     if ( !bWantKoDocument )
       doc->setReadWrite( false );

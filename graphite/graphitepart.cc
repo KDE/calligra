@@ -38,8 +38,8 @@
 #include <math.h>
 
 
-GraphitePart::GraphitePart(QObject *parent, const char *name, bool singleViewMode)
-    : KoDocument(parent, name, singleViewMode) {
+GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObject *parent, const char *name, bool singleViewMode)
+    : KoDocument(parentWidget, widgetName, parent, name, singleViewMode) {
 
     KAction *undo=KStdAction::undo(this, SLOT(edit_undo()), actionCollection(), "edit_undo");
     KAction *redo=KStdAction::redo(this, SLOT(edit_redo()), actionCollection(), "edit_redo");

@@ -49,11 +49,11 @@ GraphiteFactory::~GraphiteFactory() {
     }
 }
 
-KParts::Part* GraphiteFactory::createPart( QWidget *, const char *, QObject* parent, const char* name, const char* classname, const QStringList & ) {
+KParts::Part* GraphiteFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & ) {
 
     bool bWantKoDocument=(strcmp(classname, "KoDocument")==0);
 
-    GraphitePart *part = new GraphitePart(parent, name, !bWantKoDocument);
+    GraphitePart *part = new GraphitePart(parentWidget, widgetName, parent, name, !bWantKoDocument);
 
     if (!bWantKoDocument)
         part->setReadWrite(false);

@@ -49,8 +49,8 @@
 
 #define KIS_DEBUG(AREA, CMD)
 
-KisDoc::KisDoc( QObject* parent, const char* name, bool singleViewMode )
-  : KoDocument( parent, name, singleViewMode )
+KisDoc::KisDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
+  : KoDocument( parentWidget, parent, parent, name, singleViewMode )
   , m_commands()
 {
   setInstance( KisFactory::global() );

@@ -7,7 +7,7 @@ class ExamplePart : public KoDocument
 {
     Q_OBJECT
 public:
-    ExamplePart( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+    ExamplePart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
 
     virtual KoView* createView( QWidget* parent = 0, const char* name = 0 );
     virtual KoMainWindow* createShell();

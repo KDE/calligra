@@ -45,7 +45,7 @@ class KisDoc : public KoDocument
     Q_OBJECT
 
 public:
-    KisDoc( QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+    KisDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
     virtual ~KisDoc();
 
 	/*
@@ -90,7 +90,7 @@ public:
 	/*
 	 * Return apointer to the current image.
 	 */
-	KisImage* current(); 
+	KisImage* current();
 
 	/*
 	 * Return the name of the current image.

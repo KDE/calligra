@@ -95,7 +95,7 @@ class KPresenterDoc : public KoDocument
 public:
 
     // constructor - destructor
-    KPresenterDoc( QObject* doc = 0, const char* name = 0, bool singleViewMode = false );
+    KPresenterDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* doc = 0, const char* name = 0, bool singleViewMode = false );
     ~KPresenterDoc();
 
     KoMainWindow* createShell();

@@ -77,11 +77,11 @@ KWordFactory::~KWordFactory()
     }
 }
 
-KParts::Part* KWordFactory::createPart( QWidget *, const char *, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* KWordFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-    KWordDocument *doc = new KWordDocument( parent, name, !bWantKoDocument );
+    KWordDocument *doc = new KWordDocument( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
     if ( !bWantKoDocument )
       doc->setReadWrite( false );

@@ -4,8 +4,8 @@
 
 #include <qpainter.h>
 
-ExamplePart::ExamplePart( QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parent, name, singleViewMode )
+ExamplePart::ExamplePart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
 }
 

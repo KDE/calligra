@@ -127,16 +127,11 @@ KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
 /******************************************************************/
 
 /*====================== constructor =============================*/
-KPresenterDoc::KPresenterDoc( QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parent, name, singleViewMode ),
+KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
       _pixmapCollection(), _gradientCollection(), _clipartCollection(), _commands(), _hasHeader( false ),
       _hasFooter( false ), urlIntern()
 {
-    // init
-  // make it not empty!!! it should be removed after the modifications
-  // are set correctly
-  //setModified(true);
-
     setInstance( KPresenterFactory::global() );
 
     dcop = 0;

@@ -33,13 +33,14 @@ ExampleFactory::~ExampleFactory()
     }
 }
 
-KParts::Part* ExampleFactory::createPart( QWidget *, const char *, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* ExampleFactory::createPart( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
     // If classname is "KoDocument", our host is a koffice application
-    // otherwise, the host wants us as a simple part, so switch to readonly.
+    // otherwise, the host wants us as a simple part, so switch to readonly and single view.
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-    ExamplePart *part = new ExamplePart( parent, name, !bWantKoDocument );
+    // parentWidget and widgetName are used by KoDocument for the "readonly+singleView" case.
+    ExamplePart *part = new ExamplePart( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
     if ( !bWantKoDocument )
       part->setReadWrite( false );
