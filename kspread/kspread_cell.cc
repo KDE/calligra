@@ -269,8 +269,8 @@ void KSpreadCell::move( int col, int row )
     m_iColumn = col;
     m_iRow = row;
 
-    m_iExtraXCells = 0;
-    m_iExtraYCells = 0;
+    //    m_iExtraXCells = 0;
+    //    m_iExtraYCells = 0;
     m_iMergedXCells = 0;
     m_iMergedYCells = 0;
 
@@ -3106,7 +3106,8 @@ const QColor& KSpreadCell::bgColor( int _col, int _row ) const
 void KSpreadCell::setLeftBorderPen( const QPen& p )
 {
     KSpreadCell* cell = m_pTable->cellAt( column() - 1, row() ); //what happens on column=1
-    if ( cell && cell->hasProperty( PRightBorder ) )
+    if ( cell && cell->hasProperty( PRightBorder )
+         && m_pTable->cellAt( column(), row() ) == this )
         cell->clearProperty( PRightBorder );
 
     KSpreadLayout::setLeftBorderPen( p );
@@ -3115,7 +3116,8 @@ void KSpreadCell::setLeftBorderPen( const QPen& p )
 void KSpreadCell::setTopBorderPen( const QPen& p )
 {
     KSpreadCell* cell = m_pTable->cellAt( column(), row() - 1 ); //what happens on row=1
-    if ( cell && cell->hasProperty( PBottomBorder ) )
+    if ( cell && cell->hasProperty( PBottomBorder )
+         && m_pTable->cellAt( column(), row() ) == this )
         cell->clearProperty( PBottomBorder );
 
     KSpreadLayout::setTopBorderPen( p );
@@ -3127,7 +3129,8 @@ void KSpreadCell::setRightBorderPen( const QPen& p )
     if ( column() < KS_colMax )
         cell = m_pTable->cellAt( column() + 1, row() );
 
-    if ( cell && cell->hasProperty( PLeftBorder ) )
+    if ( cell && cell->hasProperty( PLeftBorder )
+         && m_pTable->cellAt( column(), row() ) == this )
         cell->clearProperty( PLeftBorder );
 
     KSpreadLayout::setRightBorderPen( p );
@@ -3139,7 +3142,8 @@ void KSpreadCell::setBottomBorderPen( const QPen& p )
     if ( row() < KS_rowMax )
         cell = m_pTable->cellAt( column(), row() + 1 );
 
-    if ( cell && cell->hasProperty( PTopBorder ) )
+    if ( cell && cell->hasProperty( PTopBorder ) 
+         && m_pTable->cellAt( column(), row() ) == this )
         cell->clearProperty( PTopBorder );
 
     KSpreadLayout::setBottomBorderPen( p );
@@ -3151,7 +3155,7 @@ const QPen& KSpreadCell::rightBorderPen( int _col, int _row ) const
     if ( !hasProperty( PRightBorder ) && ( _col < KS_colMax ) )
     {
         KSpreadCell * cell = m_pTable->cellAt( _col + 1, _row );
-        if ( cell->hasProperty( PLeftBorder ) )
+        if ( cell && cell->hasProperty( PLeftBorder ) )
             return cell->leftBorderPen( _col + 1, _row );
     }
 
@@ -3163,7 +3167,7 @@ const QPen& KSpreadCell::leftBorderPen( int _col, int _row ) const
     if ( !hasProperty( PLeftBorder ) )
     {
         const KSpreadCell * cell = m_pTable->cellAt( _col - 1, _row );
-        if ( cell->hasProperty( PRightBorder ) )
+        if ( cell && cell->hasProperty( PRightBorder ) )
             return cell->rightBorderPen( _col - 1, _row );
     }
 
@@ -3175,7 +3179,7 @@ const QPen& KSpreadCell::bottomBorderPen( int _col, int _row ) const
     if ( !hasProperty( PBottomBorder ) && ( _row < KS_rowMax ) )
     {
         const KSpreadCell * cell = m_pTable->cellAt( _col, _row + 1 );
-        if ( cell->hasProperty( PTopBorder ) )
+        if ( cell && cell->hasProperty( PTopBorder ) )
             return cell->topBorderPen( _col, _row + 1 );
     }
 
@@ -4152,7 +4156,8 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     // Load formatting information.
     //
     QDomElement f = cell.namedItem( "format" ).toElement();
-    if ( !f.isNull() && ( pm == Normal || pm == Format || pm == NoBorder ) )
+    if ( !f.isNull() 
+         && ( (pm == Normal) || (pm == Format) || (pm == NoBorder) ) )
     {
         // send pm parameter. Didn't load Borders if pm==NoBorder
         if ( !KSpreadLayout::load( f,pm ) )

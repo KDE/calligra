@@ -7,6 +7,9 @@ Bugfixes:
 - Fix display and printout with special files (offset by 1 pixel).
 - Fix printout of thick cell borders on page borders
 - Fix printout of children, when they overlap one page
+- Fix #45967, #31130
+- Fix #45944 (Normal): Paste special->text overwrite borders
+- Fix #42456 (Normal): merged cells with centered text do not survive insert/delete rows
 
 Until RC1:
 ----------

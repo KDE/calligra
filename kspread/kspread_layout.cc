@@ -622,7 +622,7 @@ bool KSpreadLayout::loadLayout( const QDomElement& f, PasteMode pm )
     if ( !font.isNull() )
         setTextFont( toFont(font) );
 
-    if(pm!=NoBorder)
+    if ((pm != NoBorder) && (pm != Text) && (pm != Comment))
     {
         QDomElement left = f.namedItem( "left-border" ).toElement();
         if ( !left.isNull() )

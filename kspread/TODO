@@ -22,6 +22,7 @@ Other things: (please add the things you are working on!)
 
 - MUST: more than one currency!!
 - WYSIWYG
+- insert manual page break
 - "Freeze/Unfreeze Panes", started but had some problems caused by the
         scrollbars, it works, but not very nice (not commited (Norbert))
 - AutoFormat (already exists in a very limited way: Format -> table style)

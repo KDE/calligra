@@ -2921,6 +2921,7 @@ void KSpreadView::mergeCell()
     else
     {
         m_pTable->mergeCells( selection() );
+        m_pCanvas->gotoLocation( selection().topLeft() );
     }
 }
 
