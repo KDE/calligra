@@ -277,8 +277,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 		}
 		case QEvent::Resize:
 		{
-			if(!m_form->interactiveMode())
-				reloadLayout();
+			if(m_form->interactiveMode())
+				m_move = true;
 			break;
 		}
 		case QEvent::MouseButtonDblClick:
