@@ -313,7 +313,7 @@ MySqlDB::createDefinition(KexiDBField::ColumnType dtype, int length, bool notNul
 	}
 	
 	if(autoInc) {
-		qstr += "AUTO_INCREMENT";
+		qstr += " AUTO_INCREMENT";
 	}
 	
 	return qstr;
