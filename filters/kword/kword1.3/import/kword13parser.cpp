@@ -22,6 +22,7 @@
 #include <kdebug.h>
 
 #include "kword13formatone.h"
+#include "kword13formatother.h"
 #include "kword13layout.h"
 #include "kword13frameset.h"
 #include "kword13document.h"
@@ -186,13 +187,18 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
     bool ok = false;
     const int id = attributes.value( "id" ).toInt( &ok );
     
-    if ( id == 1 && ok )
+    if ( id == 1 && ok ) // Normal text
     {
         KWord13FormatOne* one = new KWord13FormatOne;
         const int len = attributes.value( "len" ).toInt( &ok );
         if ( ok )
             one->m_length = len;
         m_currentFormat = one;
+    }
+    else if ( id == 4 && ok ) // Variable
+    {
+        stackItem->elementType = ElementTypeVariable;
+        m_currentFormat = new KWord13FormatFour;
     }
     else
     {
@@ -471,6 +477,15 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
     else if (name == "LAYOUT" )
     {
         success = startElementLayout( name, attributes, stackItem );
+    }
+    else if ( name == "TYPE" )
+    {
+        // ### PROVISORY
+        if ( m_currentFormat && ( stackItem->elementType == ElementTypeVariable ) )
+        {
+            ( (KWord13FormatFour*) m_currentFormat ) -> m_text =  attributes.value( "text" );
+        }
+        
     }
     else if ( name == "FRAME" )
     {

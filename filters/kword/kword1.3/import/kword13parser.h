@@ -53,7 +53,8 @@ enum StackItemElementType
     ElementTypeLayout,      ///< \<STYLE\> and \<LAYOUT\>
     ElementTypeFormat,      ///< \<FORMAT\>, child of \<FORMATS\>
     ElementTypeLayoutFormatOne,///< \<FORMAT id="1"\> as child of \<LAYOUT\>
-    ElementTypeFormatsPlural///< \<FORMATS\>, as child of \<PARAGRAPH\>
+    ElementTypeFormatsPlural,///< \<FORMATS\>, as child of \<PARAGRAPH\>
+    ElementTypeVariable     ///< \<FORMAT id="4"\> or \<VARIABLE\>
 };
 
 class StackItem

@@ -34,6 +34,7 @@
 #include <koxmlwriter.h>
 #include <koGenStyles.h>
 
+#include "kword13formatother.h"
 #include "kword13document.h"
 
 #include "kword13oasisgenerator.h"
@@ -711,12 +712,26 @@ void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordText
             }
             // Now we have to write the text belonging to the format
             KWord13FormatOneData* data = format->getFormatOneData();
-            if ( data )
-            {
+            if ( data && format->m_id == 1 )
+            {    // Normal text
                 writer.startElement( "text:span" );
                 writer.addAttribute( "text:style-name", data->m_autoStyleName );
                 writer.addTextSpan( paragraphText.mid( pos, length ) );
                 writer.endElement();
+            }
+            else if ( format->m_id == 3 )
+            {    // Old tabulator
+                // ### PROVISORY: do it with KWord13FormatOneData
+                writer.addTextSpan("\t"); // Tabulator
+            }
+            else if ( format->m_id == 4 )
+            {    // Variable
+                // ### PROVISORY
+                const QString text ( ( (KWord13FormatFour*) format ) -> m_text );
+                if ( text.isEmpty() )
+                    writer.addTextNode( "#" ); // Placeholder
+                else
+                    writer.addTextSpan( text );
             }
             else
             {
