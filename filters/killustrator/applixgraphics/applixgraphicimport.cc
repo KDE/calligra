@@ -31,7 +31,6 @@
 #include <applixgraphicimport.moc>
 #include <kdebug.h>
 #include <math.h>
-#include <cmath>
 
 
 
@@ -402,8 +401,8 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
             b = agLine.ptY[2] / 2;
             for (int i=0; i<nsides; i++)
 	    {
-              x[i] = qRound (a * std::cos (wink*PI/180));
-              y[i] = qRound (b * std::sin (wink*PI/180));
+              x[i] = qRound (a * cos (wink*PI/180));
+              y[i] = qRound (b * sin (wink*PI/180));
 	      wink += (360/nsides);
 	    }
 
