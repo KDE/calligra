@@ -14,13 +14,13 @@
 VSelection::VSelection( VObject* parent )
 	: VObject( parent )
 {
-	m_qrect = new QRect[9];
+	m_qrect = new QRect[10];
 }
 
 VSelection::VSelection( const VSelection& selection )
 	: VObject( selection )
 {
-	m_qrect = new QRect[9];
+	m_qrect = new QRect[10];
 
 	VObjectListIterator itr = selection.m_objects;
 	for ( ; itr.current() ; ++itr )
