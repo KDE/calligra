@@ -68,9 +68,10 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid1->addWidget(yaxis2,4,0);
 #endif
 
+#if 0 // Moved to the Line page
     lineMarker = new QCheckBox( i18n( "Line marker" ), gb1 );
     grid1->addWidget(lineMarker, 4, 0);
-
+#endif
 #if 0
     llabel = new QCheckBox( i18n( "Legend" ), gb1 );
     grid1->addWidget(llabel,6,0);
@@ -147,7 +148,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
 }
 
 
-void KChartParameterConfigPage::changeXaxisState(bool state)
+    void KChartParameterConfigPage::changeXaxisState(bool /*state*/)
 {
 #if 0
     if(state)
@@ -172,6 +173,7 @@ void KChartParameterConfigPage::init()
     llabel->setChecked(_params->legendPosition()!=KDChartParams::NoLegend);
 #endif
 
+#if 0
     if ( _params->chartType() == KDChartParams::Line ) {
         lineMarker->setEnabled(true);
         lineMarker->setChecked(_params->lineMarker());
@@ -180,6 +182,7 @@ void KChartParameterConfigPage::init()
         lineMarker->setEnabled(false);
         lineMarker->setChecked(false);
     }
+#endif
 
     // PENDING(kalle) Adapt this
     //     if(_params->has_yaxis2())
@@ -272,8 +275,10 @@ void KChartParameterConfigPage::apply()
     //         _params->setAnnotationFont( annotationFont );
     //         }
 
+#if 0
     if( _params->chartType() == KDChartParams::Line )
         _params->setLineMarker(lineMarker->isChecked());
+#endif
 
     // Set the scale for the Y axis (linear / logarithmic)
     {

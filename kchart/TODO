@@ -65,7 +65,7 @@ Item								   Prio Status
   + Labels are no longer generated correctly.			      1	DONE
 
 * Miscellaneous fixes
-  + Make setting of line width nicer / more well-placed		     S1 INGE
+  + Make setting of line width nicer / more well-placed		     S1 DONE
   + Tooltips & What's this help all over the program?		     S1 ----
   + Remove the predefined bar chart?				      2 DONE
       Issue: What is an empty chart document?
@@ -83,6 +83,9 @@ Item								   Prio Status
   + Remove include of kchartDataEditor in a lot of .h files	      2 DONE
   + What is kchartBarConfigDialog.{h,cc}? Remove it if possible.      1 DONE
   + Save position of Actions toolbar in config.			      1 ----
+
+* Newly introduced bugs.
+  + Get the colored lines back.					      1 ----
 
 * Toolbars
   + Separate toolbar for chart types (separate from config, etc).     2 DONE
@@ -109,7 +112,7 @@ Item								   Prio Status
   + Pie settings at the same place as Subtype?			      1 DONE
   + Type specific settings for each type?			      2 INGE
   + Move type specific settings right after subtype (Pie, etc)	      1 DONE
-  + Move Line Marker from Axes page?				      2 INGE
+  + Move Line Marker from Axes page?				      2 DONE
   + Check *all* subpages for uglyness and bugs			     S1 INGE
     - Bar		REMOVE					     S1 done
     - ParameterPie	Ugly -> OK				     S1 done
@@ -125,7 +128,7 @@ Item								   Prio Status
     - Font		Ugly -> OK				     S1 done
     - BackgroundPixmap	Ugly					     S1 --
 
-    - Line3d		UGLY!!  Disabled. Enable again?		     S1 done
+    - Line3d		UGLY -> OK				     S1 done
     - Geometry		REMOVE					     S1 done
     - Combo		For HiLo charts. Never finished. 	     S1 done
     - Pie		disabled. Explode factore to parameterpie    S1 done
@@ -134,7 +137,7 @@ Item								   Prio Status
     - Maybe create a little combination widget that can change        2 --
       both font and color for a text item?
   + Font page should have a buttongroup				      2	INGE
-  + Bring back "line width" for line charts.			      1 INGE
+  + Bring back "line width" for line charts.			      1 DONE
 	Used to be on the Line3d page.
   + Check keyboard shortcuts for all tabs			     S1 INGE
   + Enable titles for axes again.					INGE

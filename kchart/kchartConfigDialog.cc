@@ -60,6 +60,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     m_subTypePage(0),
 
     _parameter3dpage(0),
+    _linepage3d(0),
     _parameterpiepage(0),
     _polarpage(0),
 
@@ -71,7 +72,6 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     _parameterfontpage(0),
     _backgroundpixpage(0)
     //_piepage(0),
-    //_linepage3d(0),
 {
     // Geometry page
     //_geompage = new KChartGeometryConfigPage( this );
@@ -114,7 +114,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
             _parameter3dpage = new KChartParameter3dConfigPage(m_params,this );
             addTab( _parameter3dpage,i18n("Bar"));
         }
-#if 0	// Disabled due to bugs and all around uglyness.
+#if 1	// Disabled due to bugs and all around uglyness.
         else if ( m_params->chartType() == KDChartParams::Line) {
             _linepage3d= new KChartLine3dConfigPage(m_params,this);
             addTab( _linepage3d,i18n("Line"));
@@ -133,7 +133,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
         }
         else if ( m_params->chartType() == KDChartParams::Polar) {
             _polarpage=new KChartParameterPolarConfigPage(m_params,this);
-            addTab( _polarpage,i18n("Polar Parameters"));
+            addTab( _polarpage,i18n("&Polar"));
         }
 
 
@@ -233,10 +233,9 @@ void KChartConfigDialog::init()
     if (_parameter3dpage)
         _parameter3dpage->init();
 
-#if 0
     if ( _linepage3d && m_params->chartType() == KDChartParams::Line)
         _linepage3d->init();
-#endif
+
     if (_parameterfontpage)
         _parameterfontpage->init();
 
@@ -328,10 +327,10 @@ void KChartConfigDialog::apply()
 #endif
     if( _parameter3dpage && m_params->chartType() == KDChartParams::Bar  )
         _parameter3dpage->apply();
-#if 0
+
     if( _linepage3d && m_params->chartType() == KDChartParams::Line)
         _linepage3d->apply();
-#endif
+
     if(_parameterfontpage)
         _parameterfontpage->apply();
 

@@ -77,7 +77,7 @@ protected:
     KChartSubTypeChartPage       *m_subTypePage;
 
     KChartParameter3dConfigPage      *_parameter3dpage;
-    //KChartLine3dConfigPage         *_linepage3d;
+    KChartLine3dConfigPage           *_linepage3d;
     KChartParameterPieConfigPage     *_parameterpiepage;
     KChartParameterPolarConfigPage   *_polarpage;
 

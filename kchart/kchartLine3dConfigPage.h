@@ -48,7 +48,9 @@ private:
     KIntNumInput* lineWidth;
     KDoubleNumInput* depth;
     QCheckBox* line3d, *drawShadowColor;
+    QCheckBox  *lineMarkers;
 };
+
 
 }  //KChart namespace
 

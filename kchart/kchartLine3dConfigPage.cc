@@ -37,14 +37,16 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
                                                           QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-  QGridLayout *grid1 = new QGridLayout(this,8,2,KDialog::marginHint(), KDialog::spacingHint());
+  QGridLayout *grid1 = new QGridLayout(this,8,3,KDialog::marginHint(), KDialog::spacingHint());
 
+#if 0
   // The 3D line on/off button.
   line3d=new QCheckBox(i18n("3D lines"),this);
   grid1->addWidget(line3d,1,0);
 
   connect(line3d, SIGNAL(toggled ( bool )),
 	  this,   SLOT(slotChange3DParameter(bool)));
+#endif
 
   // The line width label and input.
   QLabel *tmpLabel = new QLabel( i18n( "Line width:" ), this );
@@ -52,6 +54,10 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
   lineWidth=new KIntNumInput(0, this, 10);
   grid1->addWidget(lineWidth,2,1);
 
+  lineMarkers = new QCheckBox( i18n( "Line markers" ), this );
+  grid1->addWidget(lineMarkers, 3, 0);
+
+#if 0
   // The "Draw shadow color" checkbox
   drawShadowColor=new QCheckBox(i18n("Draw shadow color"),this);
   grid1->addWidget(drawShadowColor,3,0);
@@ -82,10 +88,12 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
   depth->resize(100,depth->sizeHint().height());
   grid1->addWidget(depth,6,1);
   depth->setRange(0,40, 0.1);
-
+#endif
+#if 0
   grid1->addColSpacing(0,depth->width());
   grid1->addColSpacing(0,angle3dX->width());
-  grid1->setColStretch(0,1);
+#endif
+  grid1->setColStretch(2,1);
   grid1->setRowStretch(7,1);
   grid1->activate();
   //it's not good but I don't know how
@@ -95,33 +103,46 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
 
 void KChartLine3dConfigPage::slotChange3DParameter(bool b)
 {
+#if 0
     angle3dX->setEnabled(b);
     angle3dY->setEnabled(b);
     depth->setEnabled(b);
     drawShadowColor->setEnabled(b);
+#endif
     lineWidth->setEnabled(!b);
 }
 
+
 void KChartLine3dConfigPage::init()
 {
+#if 0
     bool state=_params->threeDLines();
     line3d->setChecked(state);
+
     angle3dX->setValue( _params->threeDLineXRotation() );
     angle3dY->setValue( _params->threeDLineYRotation() );
     depth->setValue( _params->threeDLineDepth() );
     drawShadowColor->setChecked(_params->threeDShadowColors());
+#endif
     lineWidth->setValue(_params->lineWidth());
+    lineMarkers->setChecked(_params->lineMarker());
+#if 0
     slotChange3DParameter(state);
+#endif
 }
 
 void KChartLine3dConfigPage::apply()
 {
+#if 0
     _params->setThreeDLines(line3d->isChecked());
     _params->setThreeDLineXRotation( angle3dX->value() );
     _params->setThreeDLineYRotation( angle3dY->value() );
     _params->setThreeDLineDepth( static_cast<int>( depth->value() ) );
     _params->setThreeDShadowColors( drawShadowColor->isChecked());
+#endif
     _params->setLineWidth( lineWidth->value() );
+    _params->setLineMarker(lineMarkers->isChecked());
 }
+
 
 }  //KChart namespace
