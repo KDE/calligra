@@ -18,8 +18,8 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#ifndef __koFactory_h__
-#define __koFactory_h__
+#ifndef __koDocInfoPropsFactory_h__
+#define __koDocInfoPropsFactory_h__
 
 #include <klibloader.h>
 
