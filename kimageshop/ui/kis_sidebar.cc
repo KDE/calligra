@@ -23,7 +23,8 @@
 #include <kglobalsettings.h>
 #include <kdualcolorbtn.h>
 #include <kstddirs.h>
-#include <kdebug.h> 
+#include <kdebug.h>
+#include <klocale.h> 
 
 #include "kis_sidebar.h"
 #include "kis_krayonwidget.h"
@@ -170,12 +171,12 @@ TopFrame::TopFrame( QWidget* parent, const char* name ) : QFrame( parent, name )
     setLineWidth(1);
 
     // setup buttons
-    m_pHideButton = new KisFrameButton("Hide", this);
-    m_pGreyButton = new KisFrameButton("Grey", this);
-    m_pRGBButton = new KisFrameButton("RGB", this);
-    m_pHSBButton = new KisFrameButton("HSB", this);
-    m_pCMYKButton = new KisFrameButton("CMYK", this);
-    m_pLABButton = new KisFrameButton("LAB", this);
+    m_pHideButton = new KisFrameButton(i18n("Hide"), this);
+    m_pGreyButton = new KisFrameButton(i18n("Grey"), this);
+    m_pRGBButton = new KisFrameButton(i18n("RGB"), this);
+    m_pHSBButton = new KisFrameButton(i18n("HSB"), this);
+    m_pCMYKButton = new KisFrameButton(i18n("CMYK"), this);
+    m_pLABButton = new KisFrameButton(i18n("LAB"), this);
 
     m_pEmptyFrame = new QFrame(this);
     m_pEmptyFrame->setFrameStyle(Panel | Raised);

@@ -32,6 +32,8 @@ const int INITIALHEIGHT = 512;
 #include <qlabel.h>
 #include <qspinbox.h>
 
+#include <klocale.h>
+
 #include "kis_dlg_new_layer.h"
 
 NewLayerDialog::NewLayerDialog( QWidget *parent, const char *name )
