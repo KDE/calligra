@@ -820,6 +820,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
     selection.setCoords( 0, 0, 0, 0 );
     table->setSelection( selection, this );
     m_pView->updateEditWidget();
+    table->recalc(true);
     // m_pView->doc()->setModified( TRUE );
   }
   else if ( m_eMouseAction == AutoFill )

@@ -522,7 +522,10 @@ void KSpreadTable::setCalcDirtyFlag()
 {
     KSpreadCell* c = m_cells.firstCell();
     for( ; c; c = c->nextCell() )
-        c->setCalcDirtyFlag();
+        {
+        if(!(c->isObscured() &&c->isObscuringForced()))
+                c->setCalcDirtyFlag();
+        }
 }
 
 void KSpreadTable::recalc(bool m_depend)
@@ -535,7 +538,10 @@ void KSpreadTable::recalc(bool m_depend)
     // calculating one cell calculates many others, those are not done again.
     KSpreadCell* c = m_cells.firstCell();
     for( ; c; c = c->nextCell() )
-        c->calc( m_depend );
+        {
+        if(!(c->isObscured() &&c->isObscuringForced()))
+                c->calc( m_depend );
+        }
 
     kdDebug(36001) << "KSpreadTable::recalc(" << m_depend << ") DONE" << endl;
 }
@@ -4270,6 +4276,7 @@ void KSpreadTable::mergeCell( const QPoint &_marker)
                            abs(m_rctSelection.bottom() - m_rctSelection.top()));
 
     setMarker(QPoint(x,y));
+    recalc(true);
     emit sig_updateView( this, m_rctSelection );
 }
 

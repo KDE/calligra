@@ -1045,7 +1045,12 @@ int p;
 p = (precision->value() == -1) ? 8 : precision->value();
 QChar decimal_point= KGlobal::locale()->decimalSymbol()[0];
 if(!dlg->m_bValue&&!dlg->m_bDate&&!dlg->m_bTime)
-        exampleLabel->setText(dlg->cellText);
+        {
+        QString tmpText;
+        if( dlg->cellText.length()>50)
+                tmpText=dlg->cellText.left(50);
+        exampleLabel->setText(tmpText);
+        }
 else if(dlg->m_bDate)
         {
         if(date->isChecked())
