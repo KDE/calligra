@@ -77,7 +77,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 				m_painter->setPen( stroke );
 				m_painter->setBrush( Qt::NoBrush );
 
-				/*if( jtr.current()->type() == VSegment::curve )
+				if( jtr.current()->type() == VSegment::curve )
 				{
 					m_painter->newPath();
 
@@ -96,7 +96,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 					}
 
 					if(
-						jtr.current()->pointIsSelected( 2 ) ||
+						//jtr.current()->pointIsSelected( 2 ) ||
 						jtr.current()->knotIsSelected() )
 					{
 						m_painter->moveTo(
@@ -139,7 +139,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 						m_painter->setBrush( Qt::NoBrush );
 
 					m_painter->strokePath();
-				}*/
+				}
 
 				// Draw knot:
 				m_painter->setPen( Qt::NoPen );

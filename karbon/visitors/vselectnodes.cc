@@ -81,7 +81,10 @@ VSelectNodes::visitVPath( VPath& path )
 				setSuccess();
 			}
 			else if( m_exclusive )
-				path.current()->selectKnot( !m_select );
+			{
+				for( int i = 0; i < path.current()->degree(); i++ )
+					path.current()->selectPoint( i, !m_select );
+			}
 		}
 		path.next();
 	}
