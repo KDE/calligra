@@ -60,7 +60,7 @@ OptionDialog::OptionDialog (GDocument *adoc,QWidget* parent, const char* name) :
   list << i18n("Document") << i18n("Helplines") << i18n("Horizontal");
   createHorizLineWidget(addPage(list));
   list.clear();
-  
+
   horizLines = doc->horizHelplines();
   vertLines = doc->vertHelplines();
   initHelplinesLists();
@@ -234,17 +234,17 @@ void OptionDialog::createHorizLineWidget(QWidget* parent)
     layout->addSpacing(KDialogBase::spacingHint()*2);
 
     QBoxLayout *right=new QVBoxLayout(layout);
-    QPushButton *button = new QPushButton (i18n("Add"), parent);
-    connect (button, SIGNAL(clicked ()), this, SLOT(addHorizLine ()));
-    right->addWidget(button);
+    addHorizHelpLine = new QPushButton (i18n("Add"), parent);
+    connect (addHorizHelpLine, SIGNAL(clicked ()), this, SLOT(addHorizLine ()));
+    right->addWidget(addHorizHelpLine);
 
-    button = new QPushButton(i18n("Update"), parent);
-    connect (button, SIGNAL(clicked ()), this, SLOT(updateHorizLine ()));
-    right->addWidget(button);
+    updateHorizHelpLine = new QPushButton(i18n("Update"), parent);
+    connect (updateHorizHelpLine, SIGNAL(clicked ()), this, SLOT(updateHorizLine ()));
+    right->addWidget(updateHorizHelpLine);
 
-    button = new QPushButton(i18n("Delete"), parent);
-    connect (button, SIGNAL(clicked ()), this, SLOT(deleteHorizLine ()));
-    right->addWidget(button);
+    delHorizHelpLine = new QPushButton(i18n("Delete"), parent);
+    connect (delHorizHelpLine, SIGNAL(clicked ()), this, SLOT(deleteHorizLine ()));
+    right->addWidget(delHorizHelpLine);
     right->addStretch();
 }
 
@@ -268,17 +268,17 @@ void OptionDialog::createVertLineWidget(QWidget* parent)
     layout->addSpacing(KDialogBase::spacingHint() * 2);
 
     QBoxLayout *right=new QVBoxLayout(layout);
-    QPushButton *button = new QPushButton(i18n("Add"), parent);
-    connect (button, SIGNAL(clicked ()), this, SLOT(addVertLine ()));
-    right->addWidget(button);
+    addVertHelpLine = new QPushButton(i18n("Add"), parent);
+    connect (addVertHelpLine, SIGNAL(clicked ()), this, SLOT(addVertLine ()));
+    right->addWidget(addVertHelpLine);
 
-    button = new QPushButton(i18n("Update"), parent);
-    connect (button, SIGNAL(clicked ()), this, SLOT(updateVertLine ()));
-    right->addWidget(button);
+    updateVertHelpLine = new QPushButton(i18n("Update"), parent);
+    connect (updateVertHelpLine, SIGNAL(clicked ()), this, SLOT(updateVertLine ()));
+    right->addWidget(updateVertHelpLine);
 
-    button = new QPushButton(i18n("Delete"), parent);
-    connect (button, SIGNAL(clicked ()), this, SLOT(deleteVertLine ()));
-    right->addWidget(button);
+    delVertHelpLine = new QPushButton(i18n("Delete"), parent);
+    connect (delVertHelpLine, SIGNAL(clicked ()), this, SLOT(deleteVertLine ()));
+    right->addWidget(delVertHelpLine);
     right->addStretch();
 }
 
@@ -297,6 +297,11 @@ void OptionDialog::initHelplinesLists()
   }
   if(!horizLines.isEmpty())
     horizValue->setValue(horizLines[0]);
+  else
+  {
+      updateHorizHelpLine->setEnabled(false);
+      delHorizHelpLine->setEnabled(false);
+  }
 
   for (i = vertLines.begin (); i != vertLines.end (); ++i)
   {
@@ -307,6 +312,11 @@ void OptionDialog::initHelplinesLists()
   }
   if(!vertLines.isEmpty())
     vertValue->setValue(vertLines[0]);
+  else
+  {
+      updateVertHelpLine->setEnabled(false);
+      delVertHelpLine->setEnabled(false);
+  }
 }
 
 void OptionDialog::addHorizLine()
@@ -318,6 +328,8 @@ void OptionDialog::addHorizLine()
   buf+=" ";
   buf+=unitToString (unit);
   horizList->insertItem (buf);
+  updateHorizHelpLine->setEnabled(true);
+  delHorizHelpLine->setEnabled(true);
   modified = true;
 }
 
@@ -350,7 +362,13 @@ void OptionDialog::deleteHorizLine()
     horizLines.remove(horizLines.at(idx));
     horizList->removeItem(idx);
     modified = true;
+    if(horizLines.isEmpty())
+    {
+        updateHorizHelpLine->setEnabled(false);
+        delHorizHelpLine->setEnabled(false);
+    }
   }
+
 }
 
 void OptionDialog::addVertLine()
@@ -362,6 +380,8 @@ void OptionDialog::addVertLine()
   buf+=" ";
   buf+=unitToString (unit);
   vertList->insertItem (buf);
+  delVertHelpLine->setEnabled(true);
+  updateVertHelpLine->setEnabled(true);
   modified = true;
 }
 
@@ -394,6 +414,11 @@ void OptionDialog::deleteVertLine()
     vertLines.remove(vertLines.at(idx));
     vertList->removeItem (idx);
     modified = true;
+    if(vertLines.isEmpty())
+    {
+          delVertHelpLine->setEnabled(false);
+          updateVertHelpLine->setEnabled(false);
+    }
   }
 }
 
@@ -413,7 +438,7 @@ void OptionDialog::vertLineSelected(int idx)
 void OptionDialog::slotApply()
 {
   /*Document settings*/
-  
+
   /*Background*/
   doc->activePage()->bgColor(bgbutton->color());
   /*Grid*/
@@ -424,12 +449,11 @@ void OptionDialog::slotApply()
   /*Helplines*/
   doc->setHorizHelplines(horizLines);
   doc->setVertHelplines(vertLines);
-  
+
   if(modified)
-  {
     doc->setModified();
-    doc->emitChanged();
-  }
+
+  doc->emitChanged();
 }
 
 void OptionDialog::slotOk()

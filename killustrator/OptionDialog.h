@@ -51,18 +51,18 @@ protected:
   void createVertLineWidget (QWidget* parent);
 
   void initHelplinesLists();
-    
+
 protected slots:
   void slotApply();
   void slotOk();
-   
+
   void colorChanged(const QColor&);
-  
+
   void addHorizLine ();
   void updateHorizLine ();
   void deleteHorizLine ();
   void horizLineSelected (int idx);
-  
+
   void addVertLine ();
   void updateVertLine ();
   void deleteVertLine ();
@@ -71,20 +71,22 @@ protected slots:
 private:
   GDocument *doc;
   bool modified;
- 
+
   /*General*/
   QComboBox* unit;
   UnitBox *horiz, *vert;
   UnitBox *smallStep, *bigStep;
-  
+
   /*Background*/
   KColorButton *bgbutton;
-  
+
   /*Helplines*/
   UnitBox *horizValue, *vertValue;
   QListBox *horizList, *vertList;
   QValueList<float> horizLines, vertLines;
-  
+    QPushButton *addHorizHelpLine,*updateHorizHelpLine,*delHorizHelpLine;
+    QPushButton *delVertHelpLine, *updateVertHelpLine,*addVertHelpLine;
+
   /*Grid*/
   QCheckBox *gbutton, *sbutton;
   UnitBox *hspinbox, *vspinbox;
