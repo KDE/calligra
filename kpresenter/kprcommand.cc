@@ -1456,7 +1456,7 @@ QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
     bool first = true;
     for ( ; !paragraph.isNull() ; paragraph = paragraph.nextSibling().toElement() )
     {
-        if ( paragraph.tagName() == "TEXTOBJ" )
+        if ( paragraph.tagName() == "P" )
         {
             QString s = paragraph.namedItem( "TEXT" ).toElement().text();
             if ( !first )
@@ -1467,7 +1467,7 @@ QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
             listParagraphs.append( paragraph );
         }
     }
-    //kdDebug() << "KWPasteTextCommand::execute Inserting text: '" << text << "'" << endl;
+    kdDebug() << "KPrPasteTextCommand::execute Inserting text: '" << text << "'" << endl;
     KPrTextDocument * textdoc = static_cast<KPrTextDocument *>(c->parag()->document());
 
     cursor.insert( text, true );
@@ -1477,12 +1477,12 @@ QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
     c->setIndex( m_idx );
     for ( int i = 0; i < (int)text.length(); ++i )
         c->gotoRight();
-#if 0
     // Redo the parag lookup because if firstParag was empty, insert() has
     // shifted it down (side effect of splitAndInsertEmptyParag)
     firstParag = doc->paragAt( m_parag );
     KoTextParag * parag = static_cast<KoTextParag *>(firstParag);
     //kdDebug() << "KPrPasteTextCommand::execute starting at parag " << parag << " " << parag->paragId() << endl;
+
     uint count = listParagraphs.count();
     QValueList<QDomElement>::Iterator it = listParagraphs.begin();
     QValueList<QDomElement>::Iterator end = listParagraphs.end();
@@ -1490,13 +1490,14 @@ QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
     {
         if (!parag)
         {
-            kdWarning() << "KWPasteTextCommand: parag==0L ! KWord bug, please report." << endl;
+            kdWarning() << "KPrPasteTextCommand: parag==0L ! KWord bug, please report." << endl;
             break;
         }
         QDomElement paragElem = *it;
         // First line (if appending to non-empty line) : apply offset to formatting, don't apply parag layout
         if ( item == 0 && m_idx > 0 )
         {
+#if 0
             // First load the default format, but only apply it to our new chars
             QDomElement layout = paragElem.namedItem( "LAYOUT" ).toElement();
             if ( !layout.isNull() )
@@ -1513,9 +1514,11 @@ QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
             }
 
             parag->loadFormatting( paragElem, m_idx );
+#endif
         }
         else
         {
+#if 0
             if ( item == 0 ) // This paragraph existed, store its parag layout
                 m_oldParagLayout = parag->paragLayout();
             parag->loadLayout( paragElem );
@@ -1524,21 +1527,13 @@ QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
             // Apply default format
             parag->setFormat( 0, len, parag->paragFormat(), TRUE );
             parag->loadFormatting( paragElem );
+#endif
         }
         parag->format();
         parag->setChanged( TRUE );
         parag = static_cast<KoTextParag *>(parag->next());
-        //kdDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
+        kdDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
     }
-#endif
-#if 0
-    // In case loadFormatting queued any image request
-    KWDocument * doc = textFs->kWordDocument();
-    doc->processImageRequests();
-
-    // In case of any inline frameset
-    doc->pasteFrames( elem, 0 );
-#endif
     m_lastParag = c->parag()->paragId();
     m_lastIndex = c->index();
     return c;
