@@ -17,39 +17,36 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef PROPERTYEDITOR_H
-#define PROPERTYEDITOR_H
-
-#include <qvariant.h>
+#ifndef PROPERTYEDITORITEM_H
+#define PROPERTYEDITORITEM_H
 
 #include <klistview.h>
 
-#include "propertyeditoreditor.h"
-//PropertyEditorEditor;
-class PropertyEditorItem;
+#include "propertyeditor.h"
 
-class PropertyEditor : public KListView
+class PropertyEditorItem : public KListViewItem
 {
-	Q_OBJECT
-
 	public:
-		PropertyEditor(QWidget *parent=0, const char *name=0);
-		~PropertyEditor();
+		PropertyEditorItem(KListView *parent, QString name, QVariant::Type type, QVariant value, QObject *o);
+		PropertyEditorItem(PropertyEditorItem *parent, QString name, QVariant value);
+		~PropertyEditorItem();
 
-	public slots:
-		void	setObject(QObject *o);
-		void	slotClicked(QListViewItem *i);
+		const QString	name() { return m_name; }
+		QVariant::Type	type() { return m_type; }
+		QVariant	value() { return m_value; }
 
-	protected slots:
-		void	slotEditorAccept(PropertyEditorEditor *editor);
-		void	slotEditorReject(PropertyEditorEditor *editor);
+		void		setValue(QVariant value, bool sync=false);
+
+		static QString	format(const QVariant &s);
 
 	protected:
-		void	createEditor(PropertyEditorItem *i, const QRect &geometry);
+//		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
 
 	private:
-		PropertyEditorEditor	*m_currentEditor;
-		PropertyEditorItem	*m_editItem;
+		QString		m_name;
+		QVariant::Type	m_type;
+		QVariant	m_value;
+		QObject		*m_object;
 };
 
 #endif

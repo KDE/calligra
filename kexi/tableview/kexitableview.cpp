@@ -935,6 +935,25 @@ void KexiTableView::selectPrev()
 	}
 }
 
+void KexiTableView::gotoNext()
+{
+	int oldCol = m_curCol;
+	m_curCol = QMIN( cols() - 1, m_curCol + 1 );
+	
+	if(m_curCol != oldCol)
+	{
+		if (hasFocus() || viewport()->hasFocus())
+		{
+			updateCell(m_curRow, oldCol);
+			updateCell(m_curRow, m_curCol);
+		}
+	}
+	else
+	{
+		selectNext();
+	}
+}
+
 void KexiTableView::createEditor(int row, int col, QString addText/* = QString::null*/, bool backspace/* = false*/)
 {
 //	QString val;

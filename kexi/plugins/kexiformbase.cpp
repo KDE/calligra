@@ -34,6 +34,7 @@
 #include <qpushbutton.h>
 #include <qtimer.h>
 #include <kurlrequester.h>
+#include <qdockwindow.h>
 
 #include <qobjectlist.h>
 
@@ -148,8 +149,17 @@ KexiFormBase::KexiFormBase(KexiView *view, QWidget *parent, const char *name, QS
 	l->setAutoAdd(true);
 	topLevelEditor=new KFormEditor::WidgetContainer(this,"foo","bar");
 
-	PropertyEditor *peditor = new PropertyEditor(0);
+	QDockWindow *editorWindow = new QDockWindow(view->mainWindow(), "edoc");
+	editorWindow->setCaption(i18n("Properties"));
+	editorWindow->setResizeEnabled(true);
+	view->mainWindow()->moveDockWindow(editorWindow, DockRight);
+
+	PropertyEditor *peditor = new PropertyEditor(editorWindow);
+	editorWindow->setWidget(peditor);
 	peditor->show();
+	connect(topLevelEditor, SIGNAL(activated(QObject *)), peditor, SLOT(setObject(QObject *)));
+
+	
 //	mainWindow()->guiFactory()->addClient(guiClient());
 //	activateActions();
 	registerAs(DocumentWindow);

@@ -187,6 +187,7 @@ public slots:
 	void			setCursor(int row, int col = -1);
 	void			selectNext();
 	void			selectPrev();
+	void			gotoNext();
 	int			findString(const QString &string);
 	virtual void		removeRecord();
 	virtual void		addRecord();

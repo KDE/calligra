@@ -17,39 +17,25 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef PROPERTYEDITOR_H
-#define PROPERTYEDITOR_H
-
-#include <qvariant.h>
-
-#include <klistview.h>
+#ifndef PROPERTYEDITORINPUT_H
+#define PROPERTYEDITORINPUT_H
 
 #include "propertyeditoreditor.h"
-//PropertyEditorEditor;
-class PropertyEditorItem;
 
-class PropertyEditor : public KListView
+class QLineEdit;
+
+class PropertyEditorInput : public PropertyEditorEditor
 {
 	Q_OBJECT
 
 	public:
-		PropertyEditor(QWidget *parent=0, const char *name=0);
-		~PropertyEditor();
+		PropertyEditorInput(QWidget *parent, QVariant::Type type, QVariant vlaue, const char *name=0);
+		~PropertyEditorInput() {;}
 
-	public slots:
-		void	setObject(QObject *o);
-		void	slotClicked(QListViewItem *i);
-
-	protected slots:
-		void	slotEditorAccept(PropertyEditorEditor *editor);
-		void	slotEditorReject(PropertyEditorEditor *editor);
+		virtual QVariant	getValue();
 
 	protected:
-		void	createEditor(PropertyEditorItem *i, const QRect &geometry);
-
-	private:
-		PropertyEditorEditor	*m_currentEditor;
-		PropertyEditorItem	*m_editItem;
+		QLineEdit		*m_lineedit;
 };
 
 #endif

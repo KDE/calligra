@@ -17,39 +17,40 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef PROPERTYEDITOR_H
-#define PROPERTYEDITOR_H
+/*
+   this file contains all editor-classes using comboboxes
+*/
 
-#include <qvariant.h>
-
-#include <klistview.h>
+#ifndef PROPERTYEDITORLIST_H
+#define PROPERTYEDITORLIST_H
 
 #include "propertyeditoreditor.h"
-//PropertyEditorEditor;
-class PropertyEditorItem;
 
-class PropertyEditor : public KListView
+class QComboBox;
+
+class PropertyEditorList : public PropertyEditorEditor
 {
 	Q_OBJECT
 
 	public:
-		PropertyEditor(QWidget *parent=0, const char *name=0);
-		~PropertyEditor();
+		PropertyEditorList(QWidget *parent, QVariant::Type type, QVariant vlaue, const char *name=0);
+		~PropertyEditorList() {;}
 
-	public slots:
-		void	setObject(QObject *o);
-		void	slotClicked(QListViewItem *i);
-
-	protected slots:
-		void	slotEditorAccept(PropertyEditorEditor *editor);
-		void	slotEditorReject(PropertyEditorEditor *editor);
+		virtual QVariant	getValue();
 
 	protected:
-		void	createEditor(PropertyEditorItem *i, const QRect &geometry);
+		QComboBox		*m_combo;
+};
 
-	private:
-		PropertyEditorEditor	*m_currentEditor;
-		PropertyEditorItem	*m_editItem;
+class PropertyEditorBool : public PropertyEditorList
+{
+	Q_OBJECT
+
+	public:
+		PropertyEditorBool(QWidget *parent, QVariant::Type type, QVariant vlaue, const char *name=0);
+		~PropertyEditorBool() {;}
+
+		virtual QVariant	getValue();
 };
 
 #endif

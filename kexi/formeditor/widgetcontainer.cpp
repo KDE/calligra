@@ -132,6 +132,13 @@ namespace KFormEditor {
 				QApplication::sendEvent(parent(),ev);
 			}
 		}
+		else
+		{
+			kdDebug() << "WidgetContainer::mousePressEvent(): we are parent!" << endl;
+			m_activeWidget = this;
+			setResizeHandles(this);
+			emit activated(this);
+		}
 	}
 
 	void WidgetContainer::mouseMoveEvent(QMouseEvent *ev)
@@ -271,6 +278,14 @@ namespace KFormEditor {
 			m_topLevelContainer->setResizeHandles(m_activeWidget);
 			return;
 		}
+		
+		
+		if(m_activeWidget == m_topLevelContainer)
+		{
+			delete m_resizeHandleSet;
+			m_resizeHandleSet = 0;
+			return;
+		}
 
 		if (!m_resizeHandleSet)
 		{
@@ -282,7 +297,6 @@ namespace KFormEditor {
 			delete m_resizeHandleSet;
 			m_resizeHandleSet=new ResizeHandleSet(m_activeWidget);
 		}
-
 	}
 
 	void WidgetContainer::activateWidget(QWidget *widget)
