@@ -74,13 +74,13 @@ void SelectionTool::processButtonReleaseForHelpline (QMouseEvent *,
   if (dragHorizHelpline != -1) {
     canvas->updateHelplines ();
     dragHorizHelpline = -1;
-    canvas->setCursor (arrowCursor);
+    canvas->setCursor(Qt::crossCursor);
     ctype = C_Arrow;
   }
   else if (dragVertHelpline != -1) {
     canvas->updateHelplines ();
     dragVertHelpline = -1;
-    canvas->setCursor (arrowCursor);
+    canvas->setCursor(Qt::crossCursor);
     ctype = C_Arrow;
   }
 }
@@ -91,7 +91,7 @@ void SelectionTool::processButtonPressForHelpline (QMouseEvent *me,
   dragHorizHelpline = canvas->indexOfHorizHelpline (ypos);
   if (dragHorizHelpline != -1) {
     if (ctype != C_Vert) {
-      canvas->setCursor (sizeVerCursor);
+      canvas->setCursor(Qt::sizeVerCursor);
       ctype = C_Vert;
     }
     dragVertHelpline = -1;
@@ -99,7 +99,7 @@ void SelectionTool::processButtonPressForHelpline (QMouseEvent *me,
   else {
     dragVertHelpline = canvas->indexOfVertHelpline (xpos);
     if (dragVertHelpline != -1 && ctype != C_Horiz) {
-      canvas->setCursor (sizeHorCursor);
+      canvas->setCursor(Qt::sizeHorCursor);
       ctype = C_Horiz;
     }
   }
@@ -116,19 +116,19 @@ void SelectionTool::processMouseMoveForHelpline (QMouseEvent *me,
   }
   else if (canvas->indexOfHorizHelpline (ypos) != -1) {
     if (ctype != C_Vert) {
-      canvas->setCursor (sizeVerCursor);
+      canvas->setCursor (Qt::sizeVerCursor);
       ctype = C_Vert;
     }
   }
   else if (canvas->indexOfVertHelpline (xpos) != -1) {
     if (ctype != C_Horiz) {
-      canvas->setCursor (sizeHorCursor);
+      canvas->setCursor (Qt::sizeHorCursor);
       ctype = C_Horiz;
     }
   }
   else {
     if (ctype != C_Arrow) {
-      canvas->setCursor (arrowCursor);
+      canvas->setCursor(Qt::crossCursor);
       ctype = C_Arrow;
     }
   }
@@ -137,7 +137,7 @@ void SelectionTool::processMouseMoveForHelpline (QMouseEvent *me,
 void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
                                                GDocument *doc,
                                                Canvas* canvas) {
-  canvas->setCursor (arrowCursor);
+  canvas->setCursor(Qt::crossCursor);
   ctype = C_Arrow;
   Handle::Mode mode = Handle::HMode_Default;
 
@@ -332,12 +332,12 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
       if (hmask && hmask != Handle::HPos_Center) {
         if (ctype != C_Size) {
           ctype = C_Size;
-          canvas->setCursor (crossCursor);
+          canvas->setCursor(Qt::pointingHandCursor);
         }
       }
       else if (ctype != C_Arrow) {
         ctype = C_Arrow;
-        canvas->setCursor (arrowCursor);
+        canvas->setCursor(Qt::crossCursor);
       }
 
       if (me->state () & LeftButton)
@@ -370,14 +370,13 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
       if (hmask) {
         if (ctype != C_Size) {
           ctype = C_Size;
-          canvas->setCursor (crossCursor);
+          canvas->setCursor(Qt::pointingHandCursor);
         }
       }
       else if (ctype != C_Arrow) {
         ctype = C_Arrow;
-        canvas->setCursor (arrowCursor);
+        canvas->setCursor(Qt::crossCursor);
       }
-
     }
     if (me->state () & LeftButton) {
       //      canvas->snapPositionToGrid (xpos, ypos);
@@ -391,7 +390,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
         {
           if (ctype != C_Size) {
             ctype = C_Size;
-            canvas->setCursor (crossCursor);
+            canvas->setCursor(Qt::pointingHandCursor);
           }
           if (me->state () & ControlButton) {
             if (fabs (xoff) > fabs (yoff)) {
@@ -413,7 +412,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
       case S_Translate:
         if (ctype != C_Move) {
           ctype = C_Move;
-          canvas->setCursor (sizeAllCursor);
+          canvas->setCursor(Qt::sizeAllCursor);
         }
         if (me->state () & ControlButton) {
           if (fabs (xoff) > fabs (yoff))

@@ -309,6 +309,7 @@ void KIllustratorView::setupCanvas()
     scrollview->setGeometry(30, 30, width()-30, height()-30);
 
     canvas = new Canvas (m_pDoc->gdoc(), 72.0, scrollview, scrollview->viewport());
+    canvas->setCursor(Qt::crossCursor);
     scrollview->addChild(canvas);
     scrollview->viewport()->setBackgroundMode(QWidget::PaletteBackground);
     QObject::connect (canvas, SIGNAL(sizeChanged ()),

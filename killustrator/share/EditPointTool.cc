@@ -160,7 +160,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       if (isOver)
         canvas->setCursor (*cursor);
       else
-        canvas->setCursor (arrowCursor);
+        canvas->setCursor(Qt::crossCursor);
     }
     else if (pointIdx != -1) {
       float dx = xpos - lastPos.x ();
@@ -234,7 +234,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
         }
       }
     }
-    canvas->setCursor (arrowCursor);
+    canvas->setCursor(Qt::crossCursor);
     obj = 0L;
   }
 }
