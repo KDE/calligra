@@ -18,7 +18,5 @@ kexitest_LDADD = $(LIB_KPARTS) $(LIB_QT) ../cql/sql/libcql.la kexicqlinterface.l
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
-install-data-local:
-	$(mkinstalldirs) $(kde_servicedir)
-	$(INSTALL_DATA) $(srcdir)/cqlinterface.desktop $(kde_servicesdir)/cqlinterface.desktop
+kde_services_DATA = cqlinterface.desktop
 
