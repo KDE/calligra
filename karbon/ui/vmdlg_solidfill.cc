@@ -88,7 +88,7 @@ VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ),
 	mOpacity = new KIntNumInput(100, ogroupBox);
 	mOpacity->setRange(0, 100, 1, true);
 	if( part->selection().count() > 0 ) // there is a selection, so take the opacity of first selected object
-		mOpacity->setValue( part->selection().getFirst()->fill().color().opacity() * 100.0 );
+		mOpacity->setValue( static_cast<int>(part->selection().getFirst()->fill().color().opacity() * 100.0) );
 	mainLayout->addWidget( ogroupBox, 2, 2);
 
 	mainLayout->setSpacing(2);
