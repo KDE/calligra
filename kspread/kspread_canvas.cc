@@ -3883,7 +3883,7 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
 
   const ColumnFormat *columnFormat = table->columnFormat( marker.right() );
   double tw = columnFormat->dblWidth( );
-  double w = ( x - xpos ) + tw;
+  double w = QABS( x - xpos ) + tw;
 
   double y = table->dblRowPos( marker.bottom() ) - yOffset();
   const RowFormat* rowFormat = table->rowFormat( marker.bottom() );
@@ -3916,9 +3916,9 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
     paintSides[0] = (viewRect.left() <= left) && (left - 1 <= viewRect.right()) &&
                   (bottom >= viewRect.top()) && (top <= viewRect.bottom());
     paintSides[1] = (viewRect.top() <= top) && (top <= viewRect.bottom())
-                 && (right >= viewRect.left()) && (left - 1 <= viewRect.right());
+                 && (QABS(right) >= viewRect.left()) && (left - 1 <= viewRect.right());
     paintSides[3] = (viewRect.top() <= bottom) && (bottom <= viewRect.bottom())
-                 && (right >= viewRect.left()) && (left - 1 <= viewRect.right());
+                 && (QABS(right) >= viewRect.left()) && (left - 1 <= viewRect.right());
   }
   else
   {
