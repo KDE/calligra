@@ -713,6 +713,8 @@ void OoImpressExport::appendTextbox( QDomDocument & doc, QDomElement & source, Q
 {
     QDomElement textbox = doc.createElement( "draw:text-box" );
 
+    QDomNode textobject = source.namedItem( "TEXTOBJ" );
+
     // create the graphic style
     QString gs = m_styleFactory.createGraphicStyle( source );
     textbox.setAttribute( "draw:style-name", gs );
@@ -721,7 +723,6 @@ void OoImpressExport::appendTextbox( QDomDocument & doc, QDomElement & source, Q
     set2DGeometry( source, textbox );
 
     // parse every paragraph
-    QDomNode textobject = source.namedItem( "TEXTOBJ" );
     for ( QDomNode paragraph = textobject.firstChild(); !paragraph.isNull();
           paragraph = paragraph.nextSibling() )
     {
