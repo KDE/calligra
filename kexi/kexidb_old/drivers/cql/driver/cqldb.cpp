@@ -57,7 +57,7 @@ CqlDB::load(QString file)
 	try
 	{
 		kdDebug() << "CqlDB::load() directory set to:" << dir << endl;
-		m_db = new SqlHandle(dir);
+		m_db = new SqlHandle(0, 0, dir);
 	}
 	catch(CqlException& ex)
 	{
