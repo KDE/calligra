@@ -2085,7 +2085,8 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
 
     //activate new bg spell
     textobj->setNeedSpellCheck(true);
-    fs->kWordDocument()->startBackgroundSpellCheck();
+    fs->kWordDocument()->changeBackGroundSpellCheckTextFrameSet(fs);
+    //fs->kWordDocument()->startBackgroundSpellCheck();
 
 }
 

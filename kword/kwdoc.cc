@@ -1422,6 +1422,11 @@ void KWDocument::startBackgroundSpellCheck()
 
 }
 
+void KWDocument::changeBackGroundSpellCheckTextFrameSet(KWTextFrameSet *fs)
+{
+    m_bgSpellCheck->objectForSpell(fs);
+}
+
 
 void KWDocument::loadEmbedded( QDomElement embedded )
 {
