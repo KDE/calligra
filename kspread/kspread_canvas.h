@@ -48,7 +48,7 @@ public slots:
 protected:
     virtual void keyPressEvent ( QKeyEvent* _ev );
     virtual void focusOutEvent( QFocusEvent* ev );
-    
+
 private:
     KSpreadView* m_pView;
 };
@@ -89,14 +89,49 @@ public:
     KSpreadCellEditor* editor() { return m_pEditor ; }
 
     // ###### Torben: Many of these functions are not used or can be made private
+    QPoint chooseMarker() const { return QPoint( m_i_chooseMarkerColumn, m_i_chooseMarkerRow ); }
     int chooseMarkerColumn() const { return m_i_chooseMarkerColumn; }
     int chooseMarkerRow() const { return m_i_chooseMarkerRow; }
+    /**
+     * Sets the marker and redraws it if it is visible.
+     * It does not scroll the canvas. If you want to do that, use
+     * @ref #chooseGotoLocation.
+     *
+     * In addition it does not handel selection
+     * of multiple cells. After calling setChooseMarker() the selection will
+     * consist of the single cell given by @p p.
+     */
+    void setChooseMarker( const QPoint& p );
+    /**
+     * Internal. DONT USE.
+     */
     void setChooseMarkerColumn( int _c ) {  m_i_chooseMarkerColumn = _c; }
+    /**
+     * Internal. DONT USE.
+     */
     void setChooseMarkerRow( int _r ) {  m_i_chooseMarkerRow = _r;  }
+    /**
+     * Move the choose selection. That may include switching the table.
+     * The canvas is scrolled to the appropriate position if needed.
+     *
+     * @param make_select determines wether this move if the marker is part of a 
+     *                    selection, that means: The user holds the shift key and
+     *                    moves the cursor keys.
+     */
+    void chooseGotoLocation( int x, int y, KSpreadTable* table = 0, bool make_select = FALSE );
+    /**
+     * Internal. DONT USE.
+     */
     void showChooseMarker(){if(choose_visible==true) {return;}
     			drawChooseMarker();choose_visible=true;}
+    /**
+     * Internal. DONT USE.
+     */
     void hideChooseMarker(){if(choose_visible==false) {return;}
     			drawChooseMarker();choose_visible=false;}			
+    /**
+     * Internal. DONT USE.
+     */
     bool isChooseMarkerVisible() const { return choose_visible; }
 
     /**
@@ -111,26 +146,31 @@ public:
      * returns 12.
      */
     int chooseTextLen() const { return length_namecell; }
+
     /**
-     * If a choose selection is in progress, then the textual representation
-     * of the selection is somewhere inserted in the @ref KSpreadTextEditor and
-     * KSpreadEditWidget. This function tells the cursor position behind
-     * the last insertion or, if there was none until now, the position
-     * where to insert. This corresponds to the cursor position of KSpreadTextEditor
-     * and KSpreadEditWidget.
-     */
-    // int chooseCursorPosition() const { return m_choosePos; }
-    
-    QPoint marker() { return QPoint( m_iMarkerColumn, m_iMarkerRow ); }
+     * Changes the position of the marker. if it is visible, it is hidden, moved and shown again.
+     * This method does not scroll the canvas so that the cell is visible. In this case you may
+     * want to use @ref #gotoLocation
+     */    
+    void setMarker( const QPoint& marker );
+    QPoint marker() const { return QPoint( m_iMarkerColumn, m_iMarkerRow ); }
     bool isMarkerVisible() { return ( m_iMarkerVisible == 1 ); }
     int markerColumn() { return m_iMarkerColumn; }
     int markerRow() { return m_iMarkerRow; }
     /**
      * Changes the position of the marker. if it is visible, it is hidden, moved and shown again.
+     * This method does not scroll the canvas so that the cell is visible. In this case you may
+     * want to use @ref #gotoLocation
+     *
+     * @see #setMarker
      */
     void setMarkerColumn( int _c );
     /**
      * Changes the position of the marker. if it is visible, it is hidden, moved and shown again.
+     * This method does not scroll the canvas so that the cell is visible. In this case you may
+     * want to use @ref #gotoLocation
+     *
+     * @see #setMarker
      */
     void setMarkerRow( int _r );
     /**
@@ -138,6 +178,9 @@ public:
      * to become visible again.
      */
     void hideMarker() { if ( m_iMarkerVisible == 1 ) drawMarker(); m_iMarkerVisible--; }
+    /**
+     * @ref #hideMarker
+     */
     void showMarker() { if ( m_iMarkerVisible == 1 ) return; m_iMarkerVisible++; if ( m_iMarkerVisible == 1 ) drawMarker(); }
 
     /**
@@ -163,8 +206,21 @@ public:
     KSpreadTable* activeTable();
     KSpreadTable* findTable( const QString& _name );
 
+    /**
+     * A convenience function.
+     */
     void gotoLocation( const KSpreadPoint& _cell );
-
+    /**
+     * Move the cursor to the specified cell. This may include switching
+     * the table. In addition @ref #KSpreadView::updateEditWidget is called.
+     *
+     * @param make_select determines wether this move of the marker is part of a 
+     *                    selection, that means: The user holds the shift key and
+     *                    moves the cursor keys. In this case the selection is
+     *                    updated accordingly.
+     */
+    void gotoLocation( int x, int y, KSpreadTable* table = 0, bool make_select = FALSE );
+    
     /**
      * Chooses the correct @ref #EditorType by looking at
      * the current cells value. By default CellEditor is chosen.
@@ -187,7 +243,11 @@ public:
      * lost the focus when the user clicked on the canvas.
      */
     void setLastEditorWithFocus( EditorType type ) { m_focusEditorType = type; }
-    
+
+    /**
+     * Switches to choose mode and sets the inital selection to the
+     * position returned by @ref #marker.
+     */
     void startChoose();
     /**
      * Switches to choose mode and sets the inital @p selection.
@@ -201,7 +261,7 @@ public:
     void adjustArea();
 
     KSpreadView* view() { return m_pView; }
-    
+
 public slots:
     void slotScrollVert( int _value );
     void slotScrollHorz( int _value );
@@ -237,7 +297,7 @@ private:
      * @see #setLastEditorWithFocus
      */
     EditorType lastEditorWithFocus() const { return m_focusEditorType; }
-    
+
     /**
      * Hides the marker. Hiding it multiple times means that it has to be shown ( using @ref #showMarker ) multiple times
      * to become visible again. This function is optimized since it does not create a new painter.
@@ -353,9 +413,14 @@ private:
      * @see KSpreadAssistant2
      */
     bool m_bChoose;
-
-    // int m_choosePos;
+    /**
+     * If a choose selection is started (@ref #startChoose) the current
+     * table is saved here.
+     */
+    KSpreadTable* m_chooseStartTable;
     
+    // int m_choosePos;
+
     /**
      * @see #setLastEditorWithFocus
      * @see #lastEditorWithFocus

@@ -291,7 +291,7 @@ signals:
     void sig_chooseSelectionChanged( KSpreadTable* _table, const QRect& _selection );
 
 protected:
-    bool eventKeyPressed( QKeyEvent* _event, bool choose );
+    // bool eventKeyPressed( QKeyEvent* _event, bool choose );
 	
     virtual void keyPressEvent ( QKeyEvent * _ev );
     virtual void resizeEvent( QResizeEvent *_ev );
@@ -402,7 +402,7 @@ private:
     KAction* m_oszi;
     KAction* m_autoSum;
     KToggleAction* m_showPageBorders;
-    
+
     /**
      * Pointer to the last popup menu.
      * Since only one popup menu can be opened at once, its pointer is stored here.

@@ -320,6 +320,7 @@ KSpreadView::~KSpreadView()
 {
 }
 
+/*
 // ##### TODO: Move that to KSpreadCanvas
 bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
 {
@@ -370,6 +371,8 @@ bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
 	markerColumn = &KSpreadCanvas::markerColumn;
     }
 
+    // Done in KSpreadCanvas::keyPressEvent
+    
     // Are we making a selection right now ? Go thru this only if no selection is made
     // or if we neither selected complete rows nor columns.
     if ( ( _event->state() & ShiftButton ) == ShiftButton &&
@@ -385,7 +388,8 @@ bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
 	else
 	    m_pTable->unselect();
     }
-
+    
+    
     switch( _event->key() )
     {
     case Key_Return:
@@ -580,6 +584,7 @@ bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
 
   return true;
 }
+*/
 
 void KSpreadView::updateEditWidget()
 {
@@ -2218,6 +2223,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
     else if ( _new.left() != 0 || _new.right() != 0 )
 	uni = uni.unite( _new );
 
+    // ########## Torben: Why redraw? Should not we just invert ?
     m_pCanvas->updateCellRect( uni );
 
     if ( _old.right() == 0x7fff || _new.right() == 0x7fff )

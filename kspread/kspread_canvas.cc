@@ -62,12 +62,12 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
     case Key_Enter:
 	
 	slotDoneEdit();
-    
+
 	QApplication::sendEvent( m_pView->canvasWidget(), _ev );
 	
 	_ev->accept();
 	break;
-        
+
     default:
 
 	QLineEdit::keyPressEvent( _ev );
@@ -86,7 +86,7 @@ void KSpreadEditWidget::focusOutEvent( QFocusEvent* ev )
 {
     qDebug("************* EditWidget lost focus");
     m_pView->canvasWidget()->setLastEditorWithFocus( KSpreadCanvas::EditWidget );
-    
+
     QLineEdit::focusOutEvent( ev );
 }
 
@@ -94,7 +94,7 @@ void KSpreadEditWidget::setText( const QString& t )
 {
     if ( t == text() )
 	return;
-    
+
     QLineEdit::setText( t );
 }
 
@@ -108,7 +108,7 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
     : QWidget( _parent, "", WNorthWestGravity )
 {
     length_namecell = 0;
-    
+    m_chooseStartTable = 0;
     m_pEditor = 0;
 
     m_iMarkerColumn = 1;
@@ -153,9 +153,10 @@ void KSpreadCanvas::startChoose()
     m_i_chooseMarkerColumn = markerColumn();
     m_i_chooseMarkerRow = markerRow();
     activeTable()->setChooseRect( QRect( 0, 0, 0, 0 ) );
-    
+
     // It is important to enable this AFTER we set the rect!
     m_bChoose = TRUE;
+    m_chooseStartTable = activeTable();
 }
 
 void KSpreadCanvas::startChoose( const QRect& rect )
@@ -167,18 +168,20 @@ void KSpreadCanvas::startChoose( const QRect& rect )
 
     // It is important to enable this AFTER we set the rect!
     m_bChoose = TRUE;
+    m_chooseStartTable = activeTable();
 }
 
 void KSpreadCanvas::endChoose()
 {
     if ( !m_bChoose )
 	return;
-    
-    activeTable()->setChooseRect( QRect( 0, 0, 0, 0 ) );
 
+    activeTable()->setChooseRect( QRect( 0, 0, 0, 0 ) );
+    m_pView->setActiveTable( m_chooseStartTable );
     qDebug("endChoose len=0");
     length_namecell = 0;
     m_bChoose = FALSE;
+    m_chooseStartTable = 0;
 }
 
 KSpreadHBorder* KSpreadCanvas::hBorderWidget()
@@ -234,33 +237,108 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 	return;
     }
 
-    m_pView->setActiveTable( table );
+    gotoLocation( _cell.pos.x(), _cell.pos.y(), table );
+}
 
-    int xpos = table->columnPos( _cell.pos.x(), this );
-    int ypos = table->rowPos( _cell.pos.y(), this );
+void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_select )
+{
+    if ( table )
+	m_pView->setActiveTable( table );
+    else
+	table = activeTable();
+
+    KSpreadCell* cell = table->cellAt( x, y );
+    if ( cell->isObscured() && cell->isObscuringForced() )
+    {
+	y = cell->obscuringCellsRow();
+	x = cell->obscuringCellsColumn();
+    }
+
+    int xpos = table->columnPos( x, this );
+    int ypos = table->rowPos( y, this );
 
     if ( xpos < 0 || xpos > width()-100 * zoom() )
-    { //bugfix remove width()/2 =>I don't know why width()/2 added
-	//but now it works
-	// slotScrollHorz( xOffset() + xpos );//+width()/2
 	horzScrollBar()->setValue( xOffset() + xpos );
-    }
 
     if ( ypos < 0 || ypos > height() - 50 * zoom() )
-    { //bugfix remove height()/2 =>I don't know why width()/2 added
-	//but now it works
 	vertScrollBar()->setValue( yOffset() + ypos );
-	// slotScrollVert( yOffset() + ypos  ); // +height()/2
+
+    QRect selection = activeTable()->selectionRect();
+	
+    if ( !make_select )
+    {
+	if ( selection.left() != 0 )
+	    activeTable()->unselect();
+	setMarker( QPoint( x, y ) );
+    }
+    else
+    {
+	if ( selection.left() == 0 )
+	    selection.setCoords( markerColumn(), markerRow(), markerColumn(), markerRow() );
+	
+	if ( markerColumn() == selection.left() )
+	    selection.setLeft( x );
+	else
+	    selection.setRight( x );
+
+	if ( markerRow() == selection.top() )
+	    selection.setTop( y );
+	else
+	    selection.setBottom( y );
+	selection = selection.normalize();
+	m_iMarkerColumn = x;
+	m_iMarkerRow = y;
+	activeTable()->setSelection( selection );
+    }
+    
+    // Perhaps the user is entering a value in the cell.
+    // In this case we may not touch the EditWidget
+    if ( !m_pEditor )
+	m_pView->updateEditWidget();
+}
+
+void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool make_select )
+{
+    if ( table )
+	m_pView->setActiveTable( table );
+    else
+	table = activeTable();
+
+    KSpreadCell* cell = table->cellAt( x, y );
+    if ( cell->isObscured() && cell->isObscuringForced() )
+    {
+	x = cell->obscuringCellsRow();
+	y = cell->obscuringCellsColumn();
     }
 
-    setMarkerColumn( _cell.pos.x() );
-    setMarkerRow( _cell.pos.y() );
+    int xpos = table->columnPos( x, this );
+    int ypos = table->rowPos( y, this );
 
-    KSpreadCell *cell = m_pView->activeTable()->cellAt( markerColumn(),markerRow() );
-    if ( cell->text() != 0L )
-	m_pView->editWidget()->setText( cell->text() );
+    if ( xpos < 0 || xpos > width()-100 * zoom() )
+	horzScrollBar()->setValue( xOffset() + xpos );
+
+    if ( ypos < 0 || ypos > height() - 50 * zoom() )
+	vertScrollBar()->setValue( yOffset() + ypos );
+
+    if ( !make_select )
+	setChooseMarker( QPoint( x, y ) );
     else
-	m_pView->editWidget()->setText( "" );
+    {
+	QRect selection = activeTable()->chooseRect();
+	if ( chooseMarkerColumn() == selection.left() )
+	    selection.setLeft( x );
+	else
+	    selection.setRight( x );
+
+	if ( chooseMarkerRow() == selection.top() )
+	    selection.setTop( y );
+	else
+	    selection.setBottom( y );
+	selection = selection.normalize();
+	m_i_chooseMarkerColumn = x;
+	m_i_chooseMarkerRow = y;
+	activeTable()->setChooseRect( selection );
+    }
 }
 
 void KSpreadCanvas::slotScrollHorz( int _value )
@@ -892,7 +970,7 @@ void KSpreadCanvas::focusInEvent( QFocusEvent* )
     // focus to the CellEditor or EditWidget
     if ( !m_pEditor )
 	return;
-    
+
     // Strange focus bug. Lets fix it here!
     if ( lastEditorWithFocus() == EditWidget )
     {
@@ -900,7 +978,7 @@ void KSpreadCanvas::focusInEvent( QFocusEvent* )
 	qDebug("Focus to EditWidget");
 	return;
     }
-    
+
     qDebug("Redirecting focus to editor");
     m_pEditor->setFocus();
 }
@@ -922,6 +1000,23 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	QWidget::keyPressEvent( _ev );
 	return;
     }
+
+    _ev->accept();
+	
+    // Find out about the current selection
+    QRect selection;
+    if ( m_bChoose )
+	selection = activeTable()->chooseRect();
+    else
+	selection = activeTable()->selectionRect();
+
+    // Are we making a selection right now ? Go thru this only if no selection is made
+    // or if we neither selected complete rows nor columns.
+    bool make_select = FALSE;
+    if ( ( _ev->state() & ShiftButton ) == ShiftButton &&
+	 ( _ev->key() == Key_Down || _ev->key() == Key_Up || _ev->key() == Key_Left || _ev->key() == Key_Right ||
+	   _ev->key() == Key_Prior || _ev->key() == Key_Next || _ev->key() == Key_Home || _ev->key() == Key_End ) )
+	make_select = TRUE;
 
     switch( _ev->key() )
     {
@@ -948,8 +1043,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	if ( m_bChoose && chooseMarkerRow() == 0xFFFF )
 	  return;
 
-	break;
-	
+	if ( m_bChoose )
+	    chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select );
+	else
+	    gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select );
+
+	return;
+
     case Key_Up:
 
 	if ( m_pEditor && !m_bChoose )
@@ -965,8 +1065,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	if ( m_bChoose && chooseMarkerRow() == 1 )
 	    return;
 
-	break;
-	
+	if ( m_bChoose )
+	    chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, chooseMarkerRow() - 1 ), 0, make_select );
+	else
+	    gotoLocation( markerColumn(), QMAX( 1, markerRow() - 1 ), 0, make_select );
+
+	return;
+
     case Key_Right:
     	
 	if ( m_pEditor && !m_bChoose )
@@ -981,8 +1086,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	    return;
 	if ( m_bChoose && chooseMarkerColumn() == 0xFFFF )
 	    return;
-		
-	break;
+
+	if ( m_bChoose )
+	    chooseGotoLocation( QMIN( 0x7FFF, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
+	else
+	    gotoLocation( QMIN( 0x7FFF, markerColumn() + 1 ), markerRow(), 0, make_select );
+
+	return;
 	
     case Key_Left:
     		
@@ -998,8 +1108,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	    return;
 	if ( m_bChoose && chooseMarkerColumn() == 1 )
 	    return;
-		
-	break;
+
+	if ( m_bChoose )
+	    chooseGotoLocation( QMAX( 1, chooseMarkerColumn() - 1 ), chooseMarkerRow(), 0, make_select );
+	else
+	    gotoLocation( QMAX( 1, markerColumn() - 1 ), markerRow(), 0, make_select );
+
+	return;
 
 	/**
 	 * Handle here
@@ -1018,13 +1133,11 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
       // We dont get that key while m_pEditor != 0
     case Key_Home:
 	
-    	tmp = m_pView->activeTable()->tableName() + "!A1" ;
-    	hideMarker();
-    	gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
-    	showMarker();
-    	m_pView->updateEditWidget();
-    	setFocus();
-    	break;
+	if ( m_bChoose )
+	    chooseGotoLocation( 1, 1, 0, make_select );
+	else
+	    gotoLocation( 1, 1, 0, make_select );
+    	return;
     	
     case Key_Prior:
 	
@@ -1036,16 +1149,17 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	    m_pView->setText( t );
 	}
 	
-    	if( markerRow() == 1 )
+    	if( !m_bChoose && markerRow() == 1 )
+	    return;
+    	if( m_bChoose && chooseMarkerRow() == 1 )
 	    return;
     		
-	tmp = tmp.setNum( QMAX( 1, markerRow() - 10 ) );
-	tmp = m_pView->activeTable()->tableName() + "!" + util_columnLabel( markerColumn() ) + tmp;
-	hideMarker();
-	gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
-	m_pView->updateEditWidget();
-	showMarker();
-    	break;
+	if ( m_bChoose )
+	    chooseGotoLocation( chooseMarkerColumn(), QMAX( 1, chooseMarkerRow() - 10 ), 0, make_select );
+	else
+	    gotoLocation( markerColumn(), QMAX( 1, markerRow() - 10 ), 0, make_select );
+
+	return;
     	
     case Key_Next:
 	
@@ -1057,16 +1171,17 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	    m_pView->setText( t );
 	}
 
-	if( markerRow() == 0x7FFF )
+	if( !m_bChoose && markerRow() == 0x7FFF )
+	    return;
+	if( m_bChoose && chooseMarkerRow() == 0x7FFF )
 	    return;
 
-	tmp = tmp.setNum( QMIN( 0x7FFF, markerRow() + 10 ) );
-	tmp = m_pView->activeTable()->tableName() + "!" + util_columnLabel( markerColumn() ) + tmp;
-	hideMarker();
-	gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
-	m_pView->updateEditWidget();
-	showMarker();
-    	return;
+	if ( m_bChoose )
+	    chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 10 ), 0, make_select );
+	else
+	    gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 10 ), 0, make_select );
+
+	return;
 
     default:
 	
@@ -1097,9 +1212,9 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
      * Tell the KSpreadView event handler and enable
      * makro recording by the way.
      */
-    _ev->accept();
+    // _ev->accept();
 
-    m_pView->eventKeyPressed( _ev, m_bChoose );
+    // m_pView->eventKeyPressed( _ev, m_bChoose );
 }
 
 void KSpreadCanvas::deleteEditor()
@@ -1360,14 +1475,14 @@ void KSpreadCanvas::updateChooseMarker( const QRect& _old, const QRect& _new )
     QString text = m_pEditor->text();
     QString res = text.left( m_pEditor->cursorPosition() - old ) + name_cell + text.right( text.length() - m_pEditor->cursorPosition() );
     int pos = m_pEditor->cursorPosition() - old;
-    
+
     ((KSpreadTextEditor*)m_pEditor)->blockCheckChoose( TRUE );
     m_pEditor->setText( res );
     ((KSpreadTextEditor*)m_pEditor)->blockCheckChoose( FALSE );
     m_pEditor->setCursorPosition( pos + length_namecell );
     qDebug("old=%i len=%i pos=%i", old, length_namecell, pos );
     // m_pEditor->setText(m_pEditor->text().left(length_text-old)+ name_cell);
-	    
+	
     /*
     //####### Torben: That looks too hacky
     if( m_pEditor->text().right(1)=="=")
@@ -1447,6 +1562,35 @@ void KSpreadCanvas::drawChooseMarker( const QRect& selection )
     painter.setRasterOp( rop );
 
     painter.end();
+}
+
+void KSpreadCanvas::setChooseMarker( const QPoint& p )
+{
+    if ( p.x() == m_i_chooseMarkerColumn && p.y() == m_i_chooseMarkerRow )
+	return;
+
+    m_i_chooseMarkerRow = p.y();
+    m_i_chooseMarkerColumn = p.x();
+    // This will trigger a redraw
+    activeTable()->setChooseRect( QRect( p.x(), p.y(), 1, 1 ) );
+}
+
+void KSpreadCanvas::setMarker( const QPoint& p )
+{
+    if ( p.x() == m_iMarkerColumn && p.y() == m_iMarkerRow )
+	return;
+
+    if ( m_iMarkerVisible < 1 )
+    {
+	m_iMarkerRow = p.y();
+	m_iMarkerColumn = p.x();
+	return;
+    }
+
+    hideMarker();
+    m_iMarkerRow = p.y();
+    m_iMarkerColumn = p.x();
+    showMarker();
 }
 
 void KSpreadCanvas::setMarkerColumn( int _c )

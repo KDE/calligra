@@ -2337,7 +2337,7 @@ QDomElement KSpreadCell::saveRightMostBorder( QDomDocument& doc, int _x_offset, 
     cell.setAttribute( "column", m_iColumn - _x_offset );
 
     cell.appendChild( doc.createElement( "pen", m_leftBorderPen ) );
-  
+
     return cell;
 }
 
@@ -2610,7 +2610,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     }
 
     QDomElement text = cell.namedItem( "text" ).toElement();
-    if ( !text.isNull() && ( pm == Normal || pm == Text || pm == NoBorder ) )
+    if ( !text.isNull() && ( pm == ::Normal || pm == ::Text || pm == ::NoBorder ) )
     {
 	QString t = text.text();
 	t = t.stripWhiteSpace();
