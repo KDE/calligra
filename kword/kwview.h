@@ -83,9 +83,6 @@ class KWTableFrameSet;
 class KoSpell;
 #ifdef HAVE_LIBKSPELL2
 #include <kspell2/dialog.h>
-#include <kspell2/broker.h>
-#include <kspell2/defaultdictionary.h>
-#include "kospell.h"
 using namespace KSpell2;
 class KSpell2::Dialog;
 #endif

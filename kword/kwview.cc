@@ -117,6 +117,14 @@
 
 #include <stdlib.h>
 
+#ifdef HAVE_LIBKSPELL2
+#include <kspell2/broker.h>
+#include <kspell2/defaultdictionary.h>
+#include "kospell.h"
+using namespace KSpell2;
+#endif
+
+
 KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
 {
@@ -5296,18 +5304,17 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
 void KWView::startKSpell()
 {
 #ifdef HAVE_LIBKSPELL2
-    kdDebug()<<"void KWView::startKSpell()**************\n";
     if ( !m_spell.kospell )
         m_spell.kospell = new KoSpell( Broker::openBroker( KSharedConfig::openConfig( "kwordrc" ) ), this  );
 
     // Spell-check the next paragraph
     Q_ASSERT( m_spell.textIterator );
-    kdDebug()<<"void KWView::spellCheckerReady() ******************\n" << m_spell.textIterator->currentText() <<endl;
 
     m_spell.kospell->check( m_spell.textIterator, true );
-
     delete m_spell.dlg;
     m_spell.dlg = new KSpell2::Dialog( m_spell.kospell, this );
+    m_spell.dlg->activeAutoCorrect( true );
+
     QObject::connect( m_spell.dlg, SIGNAL(misspelling(const QString&, int)),
                       this, SLOT(spellCheckerMisspelling(const QString&, int)) );
     QObject::connect( m_spell.dlg, SIGNAL(replace(const QString&, int, const QString&)),
@@ -5319,6 +5326,8 @@ void KWView::startKSpell()
                       this, SLOT( spellCheckerFinished( ) ) );
     QObject::connect( m_spell.dlg, SIGNAL(cancel() ),
                       this, SLOT( spellCheckerCancel() ) );
+    QObject::connect( m_spell.dlg, SIGNAL(autoCorrect(const QString &, const QString & ) ),
+                      this, SLOT( spellAddAutoCorrect (const QString &, const QString &) ) );
 
     m_spell.dlg->show();
 #endif

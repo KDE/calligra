@@ -4837,6 +4837,7 @@ void KPresenterView::startKSpell()
 
     delete m_spell.dlg;
     m_spell.dlg = new KSpell2::Dialog( m_spell.kospell, this );
+    m_spell.dlg->activeAutoCorrect( true );
     QObject::connect( m_spell.dlg, SIGNAL(misspelling(const QString&, int)),
                       this, SLOT(spellCheckerMisspelling(const QString&, int)) );
     QObject::connect( m_spell.dlg, SIGNAL(replace(const QString&, int, const QString&)),
@@ -4847,8 +4848,10 @@ void KPresenterView::startKSpell()
                       this, SLOT( spellCheckerFinished( ) ) );
     QObject::connect( m_spell.dlg, SIGNAL(cancel() ),
                       this, SLOT( spellCheckerCancel() ) );
+    QObject::connect( m_spell.dlg, SIGNAL(autoCorrect(const QString &, const QString & ) ),
+                      this, SLOT( spellAddAutoCorrect (const QString &, const QString &) ) );
+
     m_spell.dlg->show();
-    //clearSpellChecker();
 #endif
 }
 
