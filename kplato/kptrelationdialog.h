@@ -47,6 +47,8 @@ public:
 
 protected slots:
     void slotOk();
+    void lagChanged();
+    void typeClicked(int);
 
 protected:
     RelationPanel *m_panel;

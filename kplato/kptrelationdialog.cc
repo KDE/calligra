@@ -56,7 +56,11 @@ KPTAddRelationDialog::KPTAddRelationDialog(KPTRelation *rel, QWidget *p, QString
     m_panel->lag->setFieldUnit(2, i18n("minutes"));
     m_panel->lag->setValue(rel->lag());
     
-    resize( QSize(350, 300).expandedTo(minimumSizeHint()) ); //FIXME 
+    resize( QSize(370, 300).expandedTo(minimumSizeHint()) ); //FIXME 
+    
+    enableButtonOK(false);
+    connect(m_panel->relationType, SIGNAL(clicked(int)), SLOT(typeClicked(int)));
+    connect(m_panel->lag, SIGNAL(valueChanged()), SLOT(lagChanged()));
 }
 
 KCommand *KPTAddRelationDialog::buildCommand(KPTPart *part) {
@@ -69,6 +73,15 @@ void KPTAddRelationDialog::slotOk() {
         return;
     }
     accept();
+}
+
+void KPTAddRelationDialog::lagChanged() {
+    enableButtonOK(true);
+}
+
+void KPTAddRelationDialog::typeClicked(int id) {
+    if (id != m_relation->type())
+        enableButtonOK(true);
 }
 
 //////////////////
