@@ -30,7 +30,7 @@
   <item find="Széchényi" replace="Széchenyi" />
   <item find="Kosuth" replace="Kossuth" />
   <item find="komunista" replace="kommunista" />
-  <item find="faszista" replace="fasiszta" />
+  <item find="mindíg" replace="mindig" />
   <item find="harmónika" replace="harmonika" />
   <item find="kelett" replace="kellett" />
   <item find="harmónikus" replace="harmonikus" />
@@ -45,6 +45,7 @@
   <item find="htp://" replace="http://" />
   <item find="htpp://" replace="http://" />
   <item find="http:\\" replace="http://" />
+  <item find="meghatjó" replace="meghajtó" />
   </items>
  <UpperCaseExceptions>
   <word exception="dr." />
