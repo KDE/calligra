@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>ExportDialogUI</class>
 <comment>Export dialog for KWord's HTML export filter</comment>
 <author>Nicolas GOUTTE &lt;goutte@kde.org&gt;</author>
@@ -55,31 +55,23 @@
                         <bool>true</bool>
                     </property>
                 </widget>
-                <widget class="QRadioButton" row="2" column="0">
+                <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="3">
                     <property name="name">
-                        <cstring>radioEncodingOther</cstring>
+                        <cstring>radioEncodingLocal</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Other encoding:</string>
+                        <string>&amp;Local encoding</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
                     </property>
-                    <property name="buttonGroupId">
-                        <number>2</number>
-                    </property>
                 </widget>
-                <widget class="QComboBox" row="2" column="1">
+                <widget class="KComboBox" row="2" column="1">
                     <property name="name">
                         <cstring>comboBoxEncoding</cstring>
                     </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>3</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
+                    <property name="editable">
+                        <bool>true</bool>
                     </property>
                 </widget>
                 <spacer row="2" column="2">
@@ -94,20 +86,26 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>20</width>
+                            <width>130</width>
                             <height>20</height>
                         </size>
                     </property>
                 </spacer>
-                <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="3">
+                <widget class="QRadioButton" row="2" column="0">
                     <property name="name">
-                        <cstring>radioEncodingLocal</cstring>
+                        <cstring>radioEncodingOther</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Local encoding</string>
+                        <string>&amp;Other encoding:</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+O</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
+                    </property>
+                    <property name="buttonGroupId">
+                        <number>2</number>
                     </property>
                 </widget>
             </grid>
@@ -199,17 +197,6 @@
                 </widget>
             </vbox>
         </widget>
-        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>CheckBoxAuthorInfo</cstring>
-            </property>
-            <property name="enabled">
-                <bool>false</bool>
-            </property>
-            <property name="text">
-                <string>&amp;Export information about author</string>
-            </property>
-        </widget>
         <widget class="QButtonGroup" row="0" column="0">
             <property name="name">
                 <cstring>buttonGroup1</cstring>
@@ -267,11 +254,13 @@
     <tabstop>radioDocType2</tabstop>
     <tabstop>radioEncodingUTF8</tabstop>
     <tabstop>radioEncodingLocal</tabstop>
-    <tabstop>comboBoxEncoding</tabstop>
     <tabstop>radioModeLight</tabstop>
     <tabstop>radioModeBasic</tabstop>
     <tabstop>radioModeEnhanced</tabstop>
-    <tabstop>CheckBoxAuthorInfo</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+</includehints>
 </UI>

@@ -1,4 +1,4 @@
-// $Header$
+// 
 
 /*
    This file is part of the KDE project
@@ -27,11 +27,11 @@
 #include <kglobal.h>
 #include <kdebug.h>
 #include <kapplication.h>
+#include <kcombobox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qradiobutton.h>
 #include <qvbuttongroup.h>
-#include <qcombobox.h>
 
 #include <ExportDialogUI.h>
 #include <ExportDialog.h>
