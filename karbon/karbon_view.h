@@ -48,9 +48,8 @@ class KToggleAction;
 class KoUnitDoubleSpinComboBox;
 
 class VColorDocker;
-class VLayersDocker;
 class VContextHelpDocker;
-class VHistoryDocker;
+class VDocumentDocker;
 class VToolOptionsDocker;
 
 class VClipartTool;
@@ -129,11 +128,6 @@ public:
 	KarbonPart* part() const
 	{
 		return m_part;
-	}
-
-	VLayersDocker* layersDocker() const
-	{
-		return m_layersDocker;
 	}
 
 	VContextHelpDocker* contextHelpDocker() const
@@ -218,11 +212,11 @@ protected slots:
 	void viewModeChanged();
 	void zoomChanged();
 	void viewColorManager();
-	void viewLayersDocker();
+//	void viewLayersDocker();
 	void viewToolOptions();
 	void viewStrokeDocker();
 	void viewContextHelp();
-	void viewHistory();
+//	void viewHistory();
 
 	// Toolbox dialogs.
 	void solidFillClicked();
@@ -306,11 +300,10 @@ private:
 
 	//dockers
 	VColorDocker* m_ColorManager;
-	VLayersDocker* m_layersDocker;
 	VContextHelpDocker* m_contextHelpDocker;
 	VToolOptionsDocker* m_toolOptionsDocker;
 	VStrokeDocker* m_strokeDocker;
-	VHistoryDocker* m_historyDocker;
+	VDocumentDocker* m_documentDocker;
 
 	//toolbox
 	DCOPObject* m_dcop;

@@ -90,10 +90,9 @@
 #include "vcolordocker.h"
 #include "vcontexthelpdocker.h"
 #include "vstrokedocker.h"
-#include "vlayersdocker.h"
 #include "vtooloptionsdocker.h"
 #include "vcontexthelpdocker.h"
-#include "vhistorydocker.h"
+#include "vdocumentdocker.h"
 
 // ToolBars
 #include "vselecttoolbar.h"
@@ -190,8 +189,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	initActions();
 
 	m_toolbox = 0L;
-
-	m_layersDocker = 0L;
 
 	m_strokeFillPreview = 0L;
 
@@ -317,12 +314,10 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 			connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
 			selectionChanged();
 
-			m_historyDocker = new VHistoryDocker( this );
-			mainWindow()->addDockWindow( m_historyDocker, DockRight );
+			m_documentDocker = new VDocumentDocker( this );
+			mainWindow()->addDockWindow( m_documentDocker, DockRight );
 			m_contextHelpDocker = new VContextHelpDocker( this );
 			mainWindow()->addDockWindow( m_contextHelpDocker, DockRight );
-			m_layersDocker = new VLayersDocker( this );
-			mainWindow()->addDockWindow( m_layersDocker, DockRight );
 			m_toolOptionsDocker = new VToolOptionsDocker( this );
 			m_toolOptionsDocker->show();
 			selectTool();
@@ -342,10 +337,9 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 	if( m_toolbox )
 	{
 		delete m_toolbox;
-		delete m_historyDocker;
 		delete m_contextHelpDocker;
 		delete m_toolOptionsDocker;
-		delete m_layersDocker;
+		delete m_documentDocker;
 		m_toolbox = 0L;
 		return ;
 	}
@@ -1084,16 +1078,6 @@ KarbonView::viewColorManager()
 }
 
 void
-KarbonView::viewLayersDocker()
-{
-	if( m_layersDocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_layersDocker, DockRight );
-		m_layersDocker->show();
-	}
-}
-
-void
 KarbonView::viewToolOptions()
 {
 	if( m_toolOptionsDocker->isVisible() == false )
@@ -1119,16 +1103,6 @@ KarbonView::viewContextHelp()
 	{
 		mainWindow()->addDockWindow( m_contextHelpDocker, DockRight );
 		m_contextHelpDocker->show();
-	}
-}
-
-void
-KarbonView::viewHistory()
-{
-	if( m_historyDocker->isVisible() == false )
-	{
-		mainWindow()->addDockWindow( m_historyDocker, DockRight );
-		m_historyDocker->show();
 	}
 }
 
@@ -1264,9 +1238,9 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&Color Manager" ), "colorman", 0, this,
 		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
-	new KAction(
+/*	new KAction(
 		i18n( "&Layers Manager" ), "layersman", 0, this,
-		SLOT( viewLayersDocker() ), actionCollection(), "view_layers_manager" );
+		SLOT( viewLayersDocker() ), actionCollection(), "view_layers_manager" );*/
 	new KAction(
 		i18n( "&Tool Options" ), "tooloptions", 0, this,
 		SLOT( viewToolOptions() ), actionCollection(), "view_tool_options" );
@@ -1276,9 +1250,9 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "&Stroke" ), "strokedocker", 0, this,
 		SLOT( viewStrokeDocker() ), actionCollection(), "view_stroke_docker" );
-	new KAction(
+/*	new KAction(
 		i18n( "H&istory" ), "historydocker", 0, this,
-		SLOT( viewHistory() ), actionCollection(), "view_history_docker" );
+		SLOT( viewHistory() ), actionCollection(), "view_history_docker" );*/
 	// view <-----
 
 	// line width

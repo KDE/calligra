@@ -39,7 +39,7 @@
 #include "vpainterfactory.h"
 #include "vselection.h"
 #include "vcanvas.h"
-#include "vlayersdocker.h"
+#include "vdocumentdocker.h"
 
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
