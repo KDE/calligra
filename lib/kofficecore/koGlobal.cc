@@ -189,6 +189,17 @@ KoGlobal::KoGlobal()
 
     // Tell the iconloader about share/apps/koffice/icons
     KGlobal::iconLoader()->addAppDir("koffice");
+
+    // Another way to get the DPI of the display would be QPaintDeviceMetrics,
+    // but we have no widget here (and moving this to KoView wouldn't allow
+    // using this from the document easily).
+#ifdef Q_WS_X11
+    m_dpiX = QPaintDevice::x11AppDpiX();
+    m_dpiY = QPaintDevice::x11AppDpiY();
+#else
+    m_dpiX = 75;
+    m_dpiY = 75;
+#endif
 }
 
 KoGlobal::~KoGlobal()
@@ -283,4 +294,12 @@ KConfig* KoGlobal::_kofficeConfig()
         m_kofficeConfig = new KConfig( "kofficerc" );
     }
     return m_kofficeConfig;
+}
+
+void KoGlobal::setDPI( int x, int y )
+{
+    //kdDebug() << k_funcinfo << x << "," << y << endl;
+    KoGlobal* s = self();
+    s->m_dpiX = x;
+    s->m_dpiY = y;
 }

@@ -17,10 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "config.h"
+#include "koApplication.h"
+#include <config.h>
 #include <qfile.h>
+#include <qregexp.h>
 #include <dcopclient.h>
-#include <koApplication.h>
 #include <KoApplicationIface.h>
 #include <koQueryTrader.h>
 #include <koDocument.h>
@@ -39,6 +40,7 @@ static const KCmdLineOptions options[]=
 {
 	{"print", I18N_NOOP("Only print and exit"),0},
 	{"template", I18N_NOOP("Open a new document with a template"), 0},
+	{"dpi <dpiX,dpiY>", I18N_NOOP("Override display DPI"), 0},
 	KCmdLineLastOption
 };
 
@@ -110,6 +112,26 @@ bool KoApplication::start()
     KCmdLineArgs *args= KCmdLineArgs::parsedArgs();
     int argsCount = args->count();
 
+    KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("koffice");
+    QCString dpiValues = koargs->getOption( "dpi" );
+    if ( !dpiValues.isEmpty() ) {
+        int sep = dpiValues.find( QRegExp( "[x, ]" ) );
+        int dpiX;
+        int dpiY = 0;
+        bool ok = true;
+        if ( sep != -1 ) {
+            dpiY = dpiValues.mid( sep+1 ).toInt( &ok );
+            dpiValues.truncate( sep );
+        }
+        if ( ok ) {
+            dpiX = dpiValues.toInt( &ok );
+            if ( ok ) {
+                if ( !dpiY ) dpiY = dpiX;
+                KoGlobal::setDPI( dpiX, dpiY );
+            }
+        }
+    }
+
     // No argument -> create an empty document
     if (!argsCount) {
         KoDocument* doc = entry.createDoc( 0, "Document" );
@@ -132,7 +154,6 @@ bool KoApplication::start()
 
 	QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
     } else {
-        KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("koffice");
         bool print = koargs->isSet("print");
 	bool doTemplate = koargs->isSet("template");
         koargs->clear();

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright 2002, 2003 David Faure <faure@kde.org>
    Copyright 2003 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -272,6 +273,15 @@ public:
         return self()->_kofficeConfig();
     }
 
+    static int dpiX() {
+        return self()->m_dpiX;
+    }
+    static int dpiY() {
+        return self()->m_dpiY;
+    }
+    // For KoApplication
+    static void setDPI( int x, int y );
+
     ///// ##### TODO: document (Laurent?)
 
     static QStringList listOfLanguages() {
@@ -299,12 +309,14 @@ private:
     QStringList m_languageList;
     QStringList m_languageTag;
     KConfig* m_kofficeConfig;
+    int m_dpiX;
+    int m_dpiY;
     // No BC problem here, constructor is private, feel free to add members
 
     // Singleton pattern. Maybe this should even be refcounted, so
     // that it gets cleaned up when closing all koffice parts in e.g. konqueror?
     static KoGlobal* s_global;
-    friend class this_is_a_singleton; // workaround gcc warning
+    friend class this_is_a_singleton; // work around gcc warning
 };
 
 #endif // koGlobal
