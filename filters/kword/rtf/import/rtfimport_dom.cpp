@@ -20,6 +20,41 @@
 
 #include "rtfimport_dom.h"
 
+/**
+ * Escape the special XML characters and be careful to catch any unallowed control character
+ */
+QString CheckAndEscapeXmlText(const QString& strText)
+{
+    QString strReturn(strText);
+    QChar ch;
+
+    for (uint i=0; i<strText.length(); i++)
+    {
+        ch = strText[i];
+        const int test = ch.unicode();
+
+        // The i+= is for the additional characters
+        if (test == 38) { strReturn.replace(i, 1, "&amp;"); i+=4; } // &
+        else if (test == 60) { strReturn.replace(i, 1, "&lt;"); i+=3; } // <
+        else if (test == 62) { strReturn.replace(i, 1, "&gt;"); i+=3; } // >
+        else if (test == 34) { strReturn.replace(i, 1, "&quot;"); i+=5; } // "
+        else if (test == 39) { strReturn.replace(i, 1, "&apos;"); i+=5; } // '
+        else if (test >= 32) continue; // Normal character (from space on)
+        else if ((test == 9) || (test == 10) || (test == 13) ) continue; // Allowed control characters: TAB, LF, CR
+        else
+        {
+            // An unallowed control character:
+            // - could be a bug in the RTF file
+            // - could be not supported encoding.
+            // In any case, we must replace this character.
+            kdDebug(30515) << "Control character in XML stream: " << test << endl;
+            strReturn.replace(i, 1, '?'); // Replacement character
+        }
+    }
+
+    return strReturn;
+}
+
 
 DomNode::DomNode()
 {
@@ -80,13 +115,8 @@ void DomNode::addTextNode( const char *text, QTextCodec* codec )
         return;
     }
 
-    QString unicode(codec->toUnicode(text));
+    str += CheckAndEscapeXmlText(codec->toUnicode(text));
 
-    unicode.replace('&',"&amp;")
-        .replace('<',"&lt;")
-        .replace('>',"&gt;");  // Needed for the sequence ]]>
-
-    str += unicode;
 }
 
 /**

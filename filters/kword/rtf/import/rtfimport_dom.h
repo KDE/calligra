@@ -12,11 +12,13 @@
 #ifndef __RTFIMPORT_DOM_H__
 #define __RTFIMPORT_DOM_H__
 
-#include <qcstring.h>
+#include <qstring.h>
 
 class QColor;
 class QDateTime;
 class QTextCodec;
+
+QString CheckAndEscapeXmlText(const QString& strText);
 
 class DomNode
 {

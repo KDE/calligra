@@ -1050,31 +1050,20 @@ void RTFImport::insertUTF8( int ch )
     token.type = RTFTokenizer::PlainText;
     token.text = buf;
 
-    if (ch > 31)
+    // We do not test if the character is not allowed in XML:
+    // - it will be done later
+    // - list definitions need to use char(1), char(2)...
+    if (ch > 0x007f)
     {
-	if (ch > 0x007f)
-	{
-	    if (ch > 0x07ff)
-	    {
-		*text++ = 0xe0 | (ch >> 12);
-		ch = (ch & 0xfff) | 0x1000;
-	    }
-	    *text++ = ((ch >> 6) | 0x80) ^ 0x40;
-	    ch = (ch & 0x3f) | 0x80;
-	}
-	*text++ = ch;
-    }
-    else
-    {
-        // We have a control character, so we must check if it is XML-compactible
-        if ( ch == 9 || ch == 10 || ch == 13 )
-            *text++ = ch ;
-        else
+        if (ch > 0x07ff)
         {
-            kdWarning(30515) << "RTFImport::insertUTF8: tried to insert control character " << ch << endl;
-            *text++ = '?' ;
+            *text++ = 0xe0 | (ch >> 12);
+            ch = (ch & 0xfff) | 0x1000;
         }
+        *text++ = ((ch >> 6) | 0x80) ^ 0x40;
+        ch = (ch & 0x3f) | 0x80;
     }
+    *text++ = ch;
     *text++ = 0;
 
     QTextCodec* oldCodec=textCodec;
