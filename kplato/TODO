@@ -1,0 +1,112 @@
+Last updated: 29 Oct 2004
+
+Status      Description
+------------------------------------------------------------------
+Done        Requirements specification
+
+Done        Data structuring and class creation 
+
+-           Loading/saving the data structure.
+            Most existing things are saved/loaded,
+            dtd is not up to date/correct, and of course
+            format is open for discussion.
+
+-           Menus       Needs improvements
+            
+-           Toolbars    Needs improvements
+
+Done        Implementing basic view
+
+    
+Done        Implementing basic task/summarytasks
+
+    
+Done        Implementing Gantt view
+            Uses KDGanttView, which needs some improvements:
+            Context menu for links, possibility to present
+            progress in different ways (time-now, double taskbars...),
+            improved layout of links.
+
+Done        Implementing task editor-dialog
+
+Done        Implementing project editor-dialog 
+    
+    
+-           Implementing subproject editor-dialog
+            Subproject is not supported.
+    
+Done        Implementing milestone editor-dialog
+            Uses task dialog. Milestone is a task with 0 duration.
+    
+-           Implementing zooming support for the views
+
+-           Merge Taskjuggler and KPlato
+            
+-           PERT/Network view
+            A basic one exists. It was made 'quick-and-dirty' 
+            for entering/viewing task relations.
+            
+-           Resource view(s)
+            Simple QListView based exists
+                        
+-           Task Details view
+            Exists but needs improvement
+            
+
+Done        Calendars (basic)
+
+Done        Standard worktime. (basic)
+            (Used for estimation, we need to know what the user means 
+            when he says 1 staffday or 3 staffweeks etc)
+            
+Done        Resources (basic)
+            Resource types
+            Resource teams
+            
+            Note: Possibly redesign group/resource so that one resource
+                  can be member of multiple groups.
+                  
+            Calculations:
+Done        From given project start time.
+Done        From given project end time:
+            Based on task relations: 
+Done            Finish to start.
+Taken           Start to start.
+Taken           Finish to finish.
+            Based on constraints.
+Done            As soon as possible.
+Done            As late as possible.
+Taken           Must start on.
+Taken           Start not earlier than.
+Taken           Finish not later than.
+                
+Done        Based on resource requests to specific resources.
+Done        Allocation of resources and calculates durations accordingly.
+-           Based on resource requests to resource groups.
+            
+-           Resource leveling, monte carlo estimation, etc, etc...
+            
+-           Icons
+                A few icons for menu/toolbars created, but a lot missing.
+            
+-           Reports
+                2 test reports implemented. Uses Kugar report library. 
+                On 'feasibility study' level.
+        
+-           Settings/configuration. Nothing done.
+        
+            Templates:
+Done        Plain
+-           All the others :)
+        
+-           Command history. 
+            Most commands done.
+        
+-           Decide on the final KPlato file format.
+            For now we have these options:
+              * leave the format the way it is
+              * create a new (OASIS?) specification
+              * use PMXML - http://www.projectoffice.com/xml/xml.asp
+              * or find a better suited "standard" format
+                  http://proj.chbs.dk/specifications/
+              
