@@ -19,13 +19,14 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup> 
 
-<date>2001-12-01</date>
+<date>2001-12-26</date>
 <releaseinfo>0.90.00</releaseinfo>
 
 <abstract>
 <para>
-&kthesaurus; lists words related to a term and offers a frontend
-to &wordnet;. Only the English language is supported.
+&kthesaurus; lists words related to a word and offers a user interface
+to &wordnet;, an online lexical reference system. Only the English language 
+is supported.
 </para>
 </abstract>
 
@@ -53,11 +54,17 @@ the same meaning, but only with respect to a certain context. So you
 cannot always replace a word with any synonym.</para>
 
 <para>You can doubleclick on a word to search for its synonyms etc.
-You can also type a word directly into the box at the top and press
+You can also type a word directly into the <guilabel>Search for:</guilabel>
+box at the top and press
 <keycap>Return</keycap>. The word which is currently visible in the
 search box is the one that will be used if you click on
-<guibutton>Replace</guibutton>.</para> <!-- TODO: "search" guilabel
--->
+<guibutton>Replace</guibutton>.</para>
+
+<note><para>&kthesaurus; can be used stand alone, but it can also be 
+used from other applications (like &kword;, typically by right clicking
+on a word and selecting <guilabel>Show related words</guilabel>). 
+The <guibutton>Replace</guibutton> button will only be visible
+if &kthesaurus; is called from another application.</para></note>
 
 <para>We have to keep the data file small so that it can be
 included in &koffice; - this introduces several limitations 
@@ -83,17 +90,19 @@ to the &wordnet; project, but to &kde;.</para>
 
 
 <chapter id="frontend">
-<title>The &wordnet; frontend</title>
+<title>The &wordnet; tab</title>
 
-<para>The <guilabel>&wordnet;</guilabel> tab provides a frontend 
+<para>The <guilabel>&wordnet;</guilabel> tab provides a user interface
 to a local installation of <ulink url="http://www.cogsci.princeton.edu/~wn/">&wordnet; 1.7</ulink>.
 &wordnet; is <quote>an online lexical reference
 system whose design is inspired by current psycholinguistic theories
-of human lexical memory.</quote> 
-<!-- TODO: explain more -->
-The frontend offers nearly all options
+of human lexical memory.</quote> The &kthesaurus; user interface offers nearly all options
 which are available on the command line. It calls the <command>wn</command> binary,
 which has to be in your <envar>PATH</envar>.</para>
+
+<para>To learn more about &wordnet;, please see the &wordnet; man pages
+or have a look at the <ulink url="http://www.cogsci.princeton.edu/~wn/">&wordnet; homepage</ulink>.
+</para>
 
 </chapter>
 
