@@ -142,7 +142,7 @@ void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
 	int record = 0;
 	while(m_record->next())
 	{
-		kdDebug() << "KexiDataTable::setDataSet(): next()" << endl;
+//		kdDebug() << "KexiDataTable::setDataSet(): next()" << endl;
 		KexiTableItem *it = new KexiTableItem(m_tableView);
 		for(uint i = 0; i < m_record->fieldCount(); i++)
 		{
