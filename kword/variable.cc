@@ -26,6 +26,23 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+
+KWVariableCollection::KWVariableCollection()
+    : KoVariableCollection()
+{
+}
+
+KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc )
+{
+    KWDocument *m_doc=static_cast<KWDocument*>(doc);
+    KoVariable *var=0L;
+    if(type ==VT_PGNUM)
+        var = new KWPgNumVariable( textdoc,subtype, coll->format( "NUMBER" ),this,m_doc  );
+    else
+        var = KoVariableCollection::createVariable( type, subtype,  coll,varFormat, textdoc,doc);
+    return var;
+}
+
 /******************************************************************/
 /* Class: KWPgNumVariable                                         */
 /******************************************************************/

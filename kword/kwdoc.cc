@@ -184,7 +184,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_clipartMap = 0L;
     m_pasteFramesetsMap = 0L;
     m_varFormatCollection = new KoVariableFormatCollection;
-    m_varColl=new KoVariableCollection;
+    m_varColl=new KWVariableCollection;
 
     m_slDataBase = new KWSerialLetterDataBase( this );
     slRecordNum = -1;

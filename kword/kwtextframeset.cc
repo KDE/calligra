@@ -2623,12 +2623,8 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
             var = new KWSerialLetterVariable( textFrameSet()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection(),doc );
         }
     }
-    else if ( type ==VT_PGNUM)
-    {
-        var = new KWPgNumVariable( textFrameSet()->textDocument(),subtype, doc->variableFormatCollection()->format( "NUMBER" ),doc->getVariableCollection(),doc  );
-    }
     else
-        var = KoVariable::createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textFrameSet()->textDocument(),doc,doc->getVariableCollection());
+        var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textFrameSet()->textDocument(),doc);
 
     insertVariable( var );
 }

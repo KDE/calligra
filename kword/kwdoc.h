@@ -43,7 +43,7 @@ class KCommand;
 class KCommandHistory;
 class KoVariable;
 class KoVariableFormatCollection;
-class KoVariableCollection;
+class KWVariableCollection;
 class KoTextObject;
 
 class DCOPObject;
@@ -66,6 +66,7 @@ namespace KFormula {
 #include "kwanchorpos.h"
 #include <koUnit.h>
 #include "defs.h"
+#include "variable.h"
 
 #include <qmap.h>
 #include <qptrlist.h>
@@ -337,7 +338,7 @@ public:
 
     void recalcVariables( int type );
     
-    KoVariableCollection *getVariableCollection() {return m_varColl;}
+    KWVariableCollection *getVariableCollection() {return m_varColl;}
 
     KWSerialLetterDataBase *getSerialLetterDataBase() const { return m_slDataBase; }
     int getSerialLetterRecord() const;
@@ -619,7 +620,7 @@ private:
     bool m_hasTOC;
 
     QString m_lastModeView;
-    KoVariableCollection *m_varColl;
+    KWVariableCollection *m_varColl;
 };
 
 

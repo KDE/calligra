@@ -538,15 +538,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                         kdDebug() << "KWTextParag::loadFormatting variable type=" << type << " key=" << key << endl;
                         KoVariableFormat * varFormat = key.isEmpty() ? 0 : doc->variableFormatCollection()->format( key.latin1() );
                         // If varFormat is 0 (no key specified), the default format will be used.
-                        KoVariable * var =0L;
-                        if ( type == VT_PGNUM)
-                        {
-                            var= new KWPgNumVariable( kwTextDocument(),0, doc->variableFormatCollection()->format( "NUMBER" ),doc->getVariableCollection(),doc  );
-                        }
-                        else
-                        {
-                            var =KoVariable::createVariable( type, -1, doc->variableFormatCollection(), varFormat,kwTextDocument(),doc,doc->getVariableCollection() );
-                        }
+                        KoVariable * var =doc->getVariableCollection()->createVariable( type, -1, doc->variableFormatCollection(), varFormat,kwTextDocument(),doc );
                         var->load( varElem );
                         KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont() );
                         setCustomItem( index, var, document()->formatCollection()->format( &f ) );
