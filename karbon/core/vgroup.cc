@@ -153,16 +153,19 @@ VGroup::setState( const VState state )
 void
 VGroup::save( QDomElement& element ) const
 {
-	QDomElement me = element.ownerDocument().createElement( "GROUP" );
-	element.appendChild( me );
+	if( state() != deleted )
+	{
+		QDomElement me = element.ownerDocument().createElement( "GROUP" );
+		element.appendChild( me );
 
-	// save objects:
-	VObjectListIterator itr = m_objects;
+		// save objects:
+		VObjectListIterator itr = m_objects;
 
-	for ( ; itr.current(); ++itr )
-		itr.current()->save( me );
+		for ( ; itr.current(); ++itr )
+			itr.current()->save( me );
 
-	VObject::save( me );
+		VObject::save( me );
+	}
 }
 
 void

@@ -106,16 +106,19 @@ VImage::clone() const
 void
 VImage::save( QDomElement& element ) const
 {
-	QDomElement me = element.ownerDocument().createElement( "IMAGE" );
-	element.appendChild( me );
+	if( state() != deleted )
+	{
+		QDomElement me = element.ownerDocument().createElement( "IMAGE" );
+		element.appendChild( me );
 
-	me.setAttribute( "fname", m_fname );
-	me.setAttribute( "m11", m_matrix.m11() );
-	me.setAttribute( "m12", m_matrix.m12() );
-	me.setAttribute( "m21", m_matrix.m21() );
-	me.setAttribute( "m22", m_matrix.m22() );
-	me.setAttribute( "dx", m_matrix.dx() );
-	me.setAttribute( "dy", m_matrix.dy() );
+		me.setAttribute( "fname", m_fname );
+		me.setAttribute( "m11", m_matrix.m11() );
+		me.setAttribute( "m12", m_matrix.m12() );
+		me.setAttribute( "m21", m_matrix.m21() );
+		me.setAttribute( "m22", m_matrix.m22() );
+		me.setAttribute( "dx", m_matrix.dx() );
+		me.setAttribute( "dy", m_matrix.dy() );
+	}
 }
 
 void
