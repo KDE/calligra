@@ -621,9 +621,9 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
 
     KWDocument * doc = m_pView->kWordDocument();
     m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
-    m_variableNumberOffset=new QLineEdit(gbDocumentSettings);
-    m_variableNumberOffset->setValidator(new KIntValidator(0,9999,m_variableNumberOffset));
-    m_variableNumberOffset->setText(QString::number(m_oldStartingPage));
+    m_variableNumberOffset=new KIntNumInput(gbDocumentSettings);
+    m_variableNumberOffset->setRange(1, 9999, 1, false);
+    m_variableNumberOffset->setValue(m_oldStartingPage);
 }
 
 void ConfigureDefaultDocPage::apply()
@@ -648,7 +648,7 @@ void ConfigureDefaultDocPage::apply()
     }
 
     KMacroCommand * macroCmd=0L;
-    int newStartingPage=m_variableNumberOffset->text().toInt();
+    int newStartingPage=m_variableNumberOffset->value();
     if(newStartingPage!=m_oldStartingPage)
     {
         macroCmd=new KMacroCommand(i18n("Change Starting Page Number"));
@@ -663,7 +663,7 @@ void ConfigureDefaultDocPage::slotDefault()
 {
    columnSpacing->setValue(KoUnit::ptToUnit( 3, m_pView->kWordDocument()->getUnit() ));
    autoSave->setValue(KoDocument::defaultAutoSave()/60);
-   m_variableNumberOffset->setText(QString::number(1));
+   m_variableNumberOffset->setValue(1);
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {

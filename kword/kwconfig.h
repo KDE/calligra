@@ -33,6 +33,7 @@ class KDoubleNumInput;
 class KSpellConfig;
 class KConfig;
 class QComboBox;
+class KIntNumInput;
 
 class ConfigureSpellPage : public QObject
 {
@@ -110,7 +111,7 @@ private:
     int oldAutoSaveValue;
 
     int m_oldStartingPage;
-    QLineEdit* m_variableNumberOffset;
+    KIntNumInput* m_variableNumberOffset;
 };
 
 class KWConfig : public KDialogBase
