@@ -170,9 +170,10 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
 void KoCounterStyleWidget::setCounter (KoParagCounter counter )
 {
     noSignals = true;
-    m_counter = counter;
     KoParagCounter::Style st = counter.style();
-    m_counter.setStyle( st );
+    m_counter = counter;
+    // Huh? doesn't the line above do this already?
+    //m_counter.setStyle( st );
     changeKWSpinboxType( st);
     displayStyle( st );
     noSignals = false;
