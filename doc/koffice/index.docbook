@@ -23,7 +23,7 @@
 
 <abstract>
 <para>
-&KOffice; is an integrated office suite for the K Desktop Environment (KDE).
+&koffice; is an integrated office suite for the K Desktop Environment (KDE).
 </para>
 </abstract>
 
@@ -70,8 +70,8 @@ Jost <email>jost@schenck.de</email>
 <title>Introduction</title>
 
 <para>
-&KOffice; is an integrated office suite for the K Desktop Environment (KDE).
-&KOffice; currently consists of the following programs:
+&koffice; is an integrated office suite for the K Desktop Environment (KDE).
+&koffice; currently consists of the following programs:
 </para>
 
 <simplelist type="vert" columns="1">
@@ -88,7 +88,7 @@ Jost <email>jost@schenck.de</email>
 </simplelist>
 
 <para>
-Because they are based on the KParts component model, KOffice
+Because they are based on the KParts component model, &koffice;
 programs are designed to work very well with each other. Any KOffice
 component can be embedded in another KOffice document. For
 instance, you can insert a table which you created in KSpread
@@ -103,7 +103,7 @@ a calculator, which show how this can be done.
 </para>
 
 <para>
-This manual only covers the general features of &KOffice;, those that
+This manual only covers the general features of &koffice;, those that
 are common to most or all programs in the suite. For detailed information
 about the different programs, have a look at the other manuals.
 FIXME LINK!
