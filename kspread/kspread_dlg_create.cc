@@ -130,14 +130,15 @@ void KSpreadcreate::init()
       	lay1->addWidget(tmp_label);
 	f_param = new QLineEdit( this );
   	lay1->addWidget(f_param);
-  	
+
   	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label);
 	exp_funct=m_funcName+"("+"Double"+")";
   	tmp_label->setText(exp_funct);
   	edit[0]=type_double;
     }
-    else if( m_funcName == "PI" )
+    else if( m_funcName == "PI" || m_funcName=="currentDate"
+    	|| m_funcName=="currentTime" ||m_funcName=="currentDateTime")
     {
 	nb_param = 0;
 	exp_funct=m_funcName+"()";
@@ -153,7 +154,7 @@ void KSpreadcreate::init()
         tmp_label->setText(i18n("Text"));
         f_param = new QLineEdit( this );
   	lay1->addWidget(f_param);
-  	
+
   	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label);
         if( m_funcName=="right"||m_funcName=="left")
@@ -163,7 +164,7 @@ void KSpreadcreate::init()
         s_param=new QLineEdit( this );
   	lay1->addWidget(s_param);
   	exp_funct=m_funcName+"("+"String,Double"+")";
-  	
+
   	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label);
   	tmp_label->setText(exp_funct);
@@ -175,14 +176,14 @@ void KSpreadcreate::init()
 	     m_funcName=="fabs" || m_funcName=="floor" || m_funcName=="ceil" || m_funcName=="ENT" )
    {
        nb_param=1;
-   	
+
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Double"));
 
        f_param = new QLineEdit( this );
        lay1->addWidget(f_param);
-  	
+
        exp_funct=m_funcName+"("+"Double"+")";
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
@@ -206,7 +207,7 @@ void KSpreadcreate::init()
   	tmp_label->setText(exp_funct);
   	if(m_funcName=="ISTEXT")
   		edit[0]=type_string;
-  	else	
+  	else
   		edit[0]=type_double;
    	}
    else if( m_funcName=="sum" || m_funcName=="max" || m_funcName=="min" ||
@@ -231,19 +232,19 @@ void KSpreadcreate::init()
   	tmp_label->setText(i18n("Double"));
 	t_param = new QLineEdit( this );
   	lay1->addWidget(t_param);
-  	
+
   	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label);
   	tmp_label->setText(i18n("Double"));
         fo_param = new QLineEdit( this );
   	lay1->addWidget(fo_param);
-  	
+
   	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label);
   	tmp_label->setText(i18n("Double"));
         fi_param = new QLineEdit( this );
   	lay1->addWidget(fi_param);
-  	
+
   	exp_funct=m_funcName+"("+"Double,Double,..."+")";
   	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label,10,0);
@@ -262,19 +263,19 @@ void KSpreadcreate::init()
        tmp_label->setText(i18n("Exp logic"));
        f_param = new QLineEdit( this );
        lay1->addWidget(f_param);
-  	
+
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("if true"));
        s_param = new QLineEdit( this );
        lay1->addWidget(s_param);
-  	
+
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("if false"));
        t_param = new QLineEdit( this );
        lay1->addWidget(t_param);
-  	
+
        exp_funct=m_funcName+"("+"Exp logic,if true,if false"+")";
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
@@ -282,6 +283,94 @@ void KSpreadcreate::init()
        edit[0]=type_logic;
        edit[1]=type_string;
        edit[2]=type_string;
+   }
+   else if (m_funcName=="date" || m_funcName=="dayOfYear")
+   {
+       nb_param=3;
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Year (int)"));
+       f_param = new QLineEdit( this );
+       lay1->addWidget(f_param);
+
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Month (int)"));
+       s_param = new QLineEdit( this );
+       lay1->addWidget(s_param);
+
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Day (int)"));
+       t_param = new QLineEdit( this );
+       lay1->addWidget(t_param);
+
+       exp_funct=m_funcName+"("+"Year,Month,Day"+")";
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(exp_funct);
+       edit[0]=type_double;
+       edit[1]=type_double;
+       edit[2]=type_double;
+   }
+   else if (m_funcName=="time")
+   {
+       nb_param=3;
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Hour (int)"));
+       f_param = new QLineEdit( this );
+       lay1->addWidget(f_param);
+
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Minute (int)"));
+       s_param = new QLineEdit( this );
+       lay1->addWidget(s_param);
+
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Second (int)"));
+       t_param = new QLineEdit( this );
+       lay1->addWidget(t_param);
+
+       exp_funct=m_funcName+"("+"Hour,Minute,Second"+")";
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(exp_funct);
+       edit[0]=type_double;
+       edit[1]=type_double;
+       edit[2]=type_double;
+   }
+   else if (m_funcName=="day")
+   {
+       nb_param=1;
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Day (int)"));
+       f_param = new QLineEdit( this );
+       lay1->addWidget(f_param);
+
+       exp_funct=m_funcName+"("+"Day"+")";
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(exp_funct);
+       edit[0]=type_double;
+   }
+   else if (m_funcName=="month")
+   {
+       nb_param=1;
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(i18n("Month (int)"));
+       f_param = new QLineEdit( this );
+       lay1->addWidget(f_param);
+
+       exp_funct=m_funcName+"("+"Month"+")";
+       tmp_label = new QLabel( this);
+       lay1->addWidget(tmp_label);
+       tmp_label->setText(exp_funct);
+       edit[0]=type_double;
    }
    else if (m_funcName=="not")
    {
@@ -291,7 +380,7 @@ void KSpreadcreate::init()
        tmp_label->setText(i18n("Exp Logic"));
        f_param = new QLineEdit( this );
        lay1->addWidget(f_param);
-  	
+
        exp_funct=m_funcName+"("+"Exp Logic"+")";
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
@@ -307,7 +396,7 @@ void KSpreadcreate::init()
 
        f_param = new QLineEdit( this );
        lay1->addWidget(f_param);
-  	
+
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Text"));
@@ -342,7 +431,7 @@ void KSpreadcreate::init()
        tmp_label->setText(i18n("Text"));
        f_param = new QLineEdit( this );
        lay1->addWidget(f_param);
-  	
+
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Text"));
@@ -415,7 +504,7 @@ void KSpreadcreate::init()
 
        f_param = new QLineEdit( this );
        lay1->addWidget(f_param);
-  	
+
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Double"));

@@ -198,3 +198,19 @@ Then putting C6 in resultY gives you a circle plot on the ozsilloscope.
 
 you can move cursors =>measure
 It's a very good function.
+
+1999-11-28 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add functions time and date
+
+Summary 1999-11-20 ->1999-11-28
+Torben weis had installed possibity to execute directly script
+in kspread => Scripts -> scripts -> callme or widget_kspread (with
+qt-widget)
+
+Add possibity to create extern function ex :
+	-percent(2,5)
+it's not a function in kspread
+it's loading a the begining =>math.ks
+Add a Manual for kscript in koffice/lib/kscript/Manual
+=>Now everybody can create extern function or script

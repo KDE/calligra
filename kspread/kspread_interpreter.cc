@@ -12,6 +12,8 @@
 #include <kscript_synext.h>
 
 #include <math.h>
+#include <klocale.h>
+#include <qdatetime.h>
 
 #include <dcopobject.h>
 #include <dcopclient.h>
@@ -643,7 +645,7 @@ static bool kspreadfunc_stddev_helper( KSContext& context, QValueList<KSValue::P
     {
       if ( !kspreadfunc_stddev_helper( context, (*it)->listValue(), result ,avera) )
 	return false;
-	
+
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
       {
@@ -981,7 +983,7 @@ static bool kspreadfunc_istext( KSContext& context )
   	logic=true;
   else
   	logic=false;
- 	
+
 
   context.setValue( new KSValue(logic)); 	
   return true;
@@ -1001,7 +1003,7 @@ static bool kspreadfunc_isnum( KSContext& context )
   	logic=false;
  	
 
-  context.setValue( new KSValue(logic)); 	
+  context.setValue( new KSValue(logic));
   return true;
 }
 
@@ -1022,6 +1024,139 @@ static bool kspreadfunc_pow( KSContext& context )
 
   return true;
 }
+
+static bool kspreadfunc_date( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,3, "date",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+    return false;
+
+  context.setValue( new KSValue(KGlobal::locale()->formatDate(QDate(args[0]->intValue(),
+  			args[1]->intValue(),args[2]->intValue()) )));
+
+  return true;
+}
+
+static bool kspreadfunc_day( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,1, "day",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  context.setValue( new KSValue(KGlobal::locale()->WeekDayName(args[0]->intValue())));
+
+  return true;
+}
+
+static bool kspreadfunc_month( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,1, "month",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  context.setValue( new KSValue(KGlobal::locale()->MonthName(args[0]->intValue())));
+
+  return true;
+}
+
+static bool kspreadfunc_time( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,3, "time",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+    return false;
+
+  context.setValue( new KSValue(KGlobal::locale()->formatTime(QTime(args[0]->intValue(),
+  			args[1]->intValue(),args[2]->intValue()),true )));
+
+  return true;
+}
+
+static bool kspreadfunc_currentDate( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,0, "currentDate",true ) )
+    return false;
+
+  context.setValue( new KSValue(KGlobal::locale()->formatDate(QDate::currentDate())));
+
+  return true;
+}
+
+static bool kspreadfunc_currentTime( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,0, "currentTime",true ) )
+    return false;
+
+  context.setValue( new KSValue(KGlobal::locale()->formatTime(QTime::currentTime())));
+
+  return true;
+}
+
+static bool kspreadfunc_currentDateTime( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,0, "currentDateTime",true ) )
+    return false;
+
+  context.setValue( new KSValue(KGlobal::locale()->formatDateTime(QDateTime::currentDateTime())));
+
+  return true;
+}
+
+static bool kspreadfunc_dayOfYear( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,3, "dayOfYear",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+    return false;
+
+  context.setValue( new KSValue(QDate(args[0]->intValue(),
+  			args[1]->intValue(),args[2]->intValue()).dayOfYear() ));
+
+  return true;
+}
+
 
 static bool kspreadfunc_cell( KSContext& context )
 {
@@ -1202,7 +1337,14 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "map", new KSValue( new KSBuiltinFunction( module, "map", kspreadfunc_map ) ) );
   module->addObject( "table", new KSValue( new KSBuiltinFunction( module, "table", kspreadfunc_table ) ) );
   module->addObject( "pow", new KSValue( new KSBuiltinFunction( module,"pow",kspreadfunc_pow) ) );
-
+  module->addObject( "date", new KSValue( new KSBuiltinFunction( module,"date",kspreadfunc_date) ) );
+  module->addObject( "day", new KSValue( new KSBuiltinFunction( module,"day",kspreadfunc_day) ) );
+  module->addObject( "month", new KSValue( new KSBuiltinFunction( module,"month",kspreadfunc_month) ) );
+  module->addObject( "time", new KSValue( new KSBuiltinFunction( module,"time",kspreadfunc_time) ) );
+  module->addObject( "currentTime", new KSValue( new KSBuiltinFunction( module,"currentTime",kspreadfunc_currentTime) ) );
+  module->addObject( "currentDate", new KSValue( new KSBuiltinFunction( module,"currentDate",kspreadfunc_currentDate) ) );
+  module->addObject( "currentDateTime", new KSValue( new KSBuiltinFunction( module,"currentDateTime",kspreadfunc_currentDateTime) ) );
+  module->addObject( "dayOfYear", new KSValue( new KSBuiltinFunction( module,"dayOfYear",kspreadfunc_dayOfYear) ) );
   return module;
 }
 

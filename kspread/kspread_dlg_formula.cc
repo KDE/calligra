@@ -69,10 +69,12 @@ KSpreaddlgformula::KSpreaddlgformula( KSpreadView* parent, const char* name )
   type_formula->insertItem(i18n("Analytic"));
   type_formula->insertItem(i18n("Logic"));
   type_formula->insertItem(i18n("Text"));
+  type_formula->insertItem(i18n("Time and Date"));
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   QObject::connect( type_formula, SIGNAL( highlighted(const QString &) ), this, SLOT( slotselected(const QString &) ) );
   QObject::connect( formula, SIGNAL( highlighted(const QString &) ), this, SLOT( slotselected_formula(const QString &) ) );
+  QObject::connect( formula, SIGNAL( doubleClicked(QListBoxItem *)),this ,SLOT( slotOk() ) );
   resize( 350, 300 );
 
 }
@@ -123,8 +125,8 @@ else if(string=="NO")
 	exp->setText("NO(exp logic) :\nif exp==TRUE return FALSE,\nif exp==FALSE return TRUE");
 	}
 else
-	exp->clear();	
-*/	
+	exp->clear();
+*/
 }
 void KSpreaddlgformula::slotselected(const QString & string)
 {
@@ -178,6 +180,16 @@ list_text+="EXACT";
 list_text+="STXT";
 list_text+="REPT";
 
+QStringList list_date_time;
+list_date_time+="date";
+list_date_time+="day";
+list_date_time+="month";
+list_date_time+="time";
+list_date_time+="currentDate";
+list_date_time+="currentTime";
+list_date_time+="currentDateTime";
+list_date_time+="dayOfYear";
+
 if(string== "Statistic" )
 	{
 	formula->clear();
@@ -202,7 +214,12 @@ if(string== "Text" )
 	{
 	formula->clear();
 	formula->insertStringList(list_text);
-	}	
+	}
+if(string== "Time and Date" )
+	{
+	formula->clear();
+	formula->insertStringList(list_date_time);
+	}
 if(string == "All")
 	{
 	formula->clear();
@@ -211,7 +228,8 @@ if(string == "All")
 	formula->insertStringList(list_anal);
 	formula->insertStringList(list_text);
 	formula->insertStringList(list_logic);
-	}		
+	formula->insertStringList(list_date_time);
+	}
 }
 
 #include "kspread_dlg_formula.moc"
