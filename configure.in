@@ -53,6 +53,21 @@ AC_SUBST(KOFFICE_INCLUDES)
 dnl add here all your Makefiles. These are created by configure
 AC_OUTPUT( \
 	Makefile \
+	kchart/Makefile	\
+	kchart/core/Makefile \
+	kchart/pics/Makefile \
+	kchart/ui/Makefile \
+	kformula/Makefile \
+	kformula/pics/Makefile \
+	killustrator/Makefile \
+	killustrator/doc/Makefile \
+	killustrator/filter/Makefile \
+	killustrator/koffice/Makefile \
+	killustrator/pics/Makefile \
+	killustrator/share/Makefile \
+	killustrator/standalone/Makefile \
+	killustrator/xmlutils/Makefile \
+	kimage/Makefile \
 	kpresenter/Makefile \
 	kpresenter/autoformEdit/Makefile \
 	kpresenter/autoforms/Arrows/Makefile \
@@ -84,7 +99,3 @@ AC_OUTPUT( \
 	po/no/Makefile \
 	po/fr/Makefile \
  )
-
-
-
-
