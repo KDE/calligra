@@ -224,10 +224,10 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 
     QDomElement *style = m_styles[master->attribute( "style:page-master-name" )];
     QDomElement properties = style->namedItem( "style:properties" ).toElement();
-    //kdDebug()<<" master->attribute( draw:style-name ) :"<<master->attribute("draw:style-name" )<<endl;
+    //kdDebug(30518)<<" master->attribute( draw:style-name ) :"<<master->attribute("draw:style-name" )<<endl;
     QDomElement *backgroundStyle = m_stylesPresentation[ master->attribute("draw:style-name" ).isEmpty() ? "Standard-background" : master->attribute("draw:style-name" ) ];
 
-    //kdDebug()<<" backgroundStyle :"<<backgroundStyle<<endl;
+    //kdDebug(30518)<<" backgroundStyle :"<<backgroundStyle<<endl;
     double pageHeight;
     QDomElement paperElement = doc.createElement( "PAPER" );
     if ( properties.isNull() )
@@ -298,7 +298,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 m_styleStack.push( *backgroundStyle );
                 appendBackgroundPage( doc, backgroundElement,pictureElement, soundElement );
                 m_styleStack.restore();
-                kdDebug()<<" load standard bacground \n";
+                kdDebug(30518)<<" load standard bacground \n";
             }
             if ( m_styleStack.hasAttribute( "presentation:visibility" ) )
             {
@@ -309,7 +309,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 selSlideElement.appendChild( slide );
 
                 //todo add support
-                kdDebug()<<"m_styleStack.hasAttribute( presentation:visibility ) :"<<str<<" position page "<<pagePos<<endl;
+                kdDebug(30518)<<"m_styleStack.hasAttribute( presentation:visibility ) :"<<str<<" position page "<<pagePos<<endl;
             }
             // set the pagetitle
             QDomElement titleElement = doc.createElement( "Title" );
@@ -352,7 +352,7 @@ QString OoImpressImport::parseConfigItem( const QDomElement& configItem, const Q
     for ( QDomNode item2 = item.firstChild(); !item2.isNull(); item2 = item2.nextSibling() )
     {
         QDomElement viewItem = item2.toElement();
-        //kdDebug()<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
+        //kdDebug(30518)<<"viewItem.tagName() :"<<viewItem.tagName()<<endl;
         if ( viewItem.tagName()=="config:config-item" && ( viewItem.attribute("config:name")==configName ) )
         {
             return viewItem.text();
@@ -370,7 +370,7 @@ QDomElement OoImpressImport::mapItem( const QDomElement &settingElement, const Q
     for ( QDomNode n = tmp.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement e = n.toElement();
-        //kdDebug()<<"e.tagName() :"<<e.tagName()<<endl;
+        //kdDebug(30518)<<"e.tagName() :"<<e.tagName()<<endl;
         if ( e.hasAttribute( "config:name" ) && ( e.attribute( "config:name" )=="view-settings" ) )
         {
             for ( QDomNode viewSetting = n.firstChild(); !viewSetting.isNull(); viewSetting = viewSetting.nextSibling() )
@@ -422,7 +422,7 @@ bool OoImpressImport::parseSettings( QDomDocument &doc,const QDomElement &settin
 
 
 
-    //kdDebug()<<" gridX :"<<gridX<<" gridY :"<<gridY<<" snapToGrid :"<<snapToGrid<<" selectedPage :"<<selectedPage<<endl;
+    //kdDebug(30518)<<" gridX :"<<gridX<<" gridY :"<<gridY<<" snapToGrid :"<<snapToGrid<<" selectedPage :"<<selectedPage<<endl;
     return foundElement;
 }
 
@@ -439,7 +439,7 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
             str = text.mid( pos+1, ( newPos-pos ) );
             QDomElement point=doc.createElement("HelpPoint");
 
-            //kdDebug()<<" point element  :"<< str <<endl;
+            //kdDebug(30518)<<" point element  :"<< str <<endl;
             QStringList listVal = QStringList::split( ",", str );
             int posX = ( listVal[0].toInt()/100 );
             int posY = ( listVal[1].toInt()/100 );
@@ -454,7 +454,7 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
             QDomElement lines=doc.createElement("Vertical");
             //vertical element
             str = text.mid( pos+1, ( newPos-pos ) );
-            //kdDebug()<<" vertical  :"<< str <<endl;
+            //kdDebug(30518)<<" vertical  :"<< str <<endl;
             int posX = ( str.toInt()/100 );
             lines.setAttribute( "value",  MM_TO_POINT( posX ) );
             helpLineElement.appendChild( lines );
@@ -467,7 +467,7 @@ void OoImpressImport::parseHelpLine( QDomDocument &doc,QDomElement &helpLineElem
             //horizontal element
             QDomElement lines=doc.createElement("Horizontal");
             str = text.mid( pos+1, ( newPos-pos ) );
-            //kdDebug()<<" horizontal  :"<< str <<endl;
+            //kdDebug(30518)<<" horizontal  :"<< str <<endl;
             int posY = ( str.toInt()/100 );
             lines.setAttribute( "value", MM_TO_POINT(  posY )  );
             helpLineElement.appendChild( lines );
@@ -718,7 +718,7 @@ void OoImpressImport::appendBackgroundPage( QDomDocument &doc, QDomElement &back
     if ( m_styleStack.hasAttribute( "presentation:duration" ) )
     {
         QString str = m_styleStack.attribute("presentation:duration");
-        kdDebug()<<"styleStack.hasAttribute(presentation:duration ) :"<<str<<endl;
+        kdDebug(30518)<<"styleStack.hasAttribute(presentation:duration ) :"<<str<<endl;
         //convert date duration
 	    int hour( str.mid( 2, 2 ).toInt() );
 	    int minute( str.mid( 5, 2 ).toInt() );
@@ -837,15 +837,15 @@ void OoImpressImport::append2DGeometry( QDomDocument& doc, QDomElement& e, const
     e.appendChild( size );
     if( object.hasAttribute( "draw:transform" ))
         {
-            kdDebug()<<" object transform \n";
+            kdDebug(30518)<<" object transform \n";
             //todo parse it
             QString transform = object.attribute( "draw:transform" );
             if( transform.contains("rotate ("))
                 {
-                    //kdDebug()<<" rotate object \n";
+                    //kdDebug(30518)<<" rotate object \n";
                     transform = transform.remove("rotate (" );
                     transform = transform.left(transform.find(")"));
-                    //kdDebug()<<" transform :"<<transform<<endl;
+                    //kdDebug(30518)<<" transform :"<<transform<<endl;
                     bool ok;
                     double radian = transform.toDouble(&ok);
                     if( ok )
@@ -928,7 +928,7 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
     if ( m_styleStack.hasAttribute( "draw:fill" ) )
     {
         const QString fill = m_styleStack.attribute( "draw:fill" );
-        //kdDebug()<<"void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e ) :"<<fill<<endl;
+        //kdDebug(30518)<<"void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e ) :"<<fill<<endl;
         if (  fill == "solid"  )
         {
             QDomElement brush = doc.createElement( "BRUSH" );
@@ -985,7 +985,7 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
                     if( draw->hasAttribute( "draw:rotation" ))
                         {
                             angle = (draw->attribute( "draw:rotation" ).toInt())/10;
-                            kdDebug()<<"angle :"<<angle<<endl;
+                            kdDebug(30518)<<"angle :"<<angle<<endl;
                         }
                     if( draw->hasAttribute( "draw:style" ))
                         {
@@ -1012,7 +1012,7 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
                                             break;
                                         default:
                                             //todo fixme when we will have a kopaint
-                                            kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
+                                            kdDebug(30518)<<" draw:rotation 'angle' : "<<angle<<endl;
                                             break;
                                         }
                                 }
@@ -1034,14 +1034,14 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
                                             break;
                                         default:
                                             //todo fixme when we will have a kopaint
-                                            kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
+                                            kdDebug(30518)<<" draw:rotation 'angle' : "<<angle<<endl;
                                             break;
                                         }
 
                                 }
                             else if( styleHash == "triple")
                                 {
-                                    kdDebug()<<" it is not implemented :( \n";
+                                    kdDebug(30518)<<" it is not implemented :( \n";
                                 }
 
                         }
@@ -1067,7 +1067,7 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
                 gradient.setAttribute( "color2", draw->attribute( "draw:end-color" ) );
 
                 QString type = draw->attribute( "draw:style" );
-                //kdDebug()<<" type !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<type<<endl;
+                //kdDebug(30518)<<" type !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<type<<endl;
                 if ( type == "linear" )
                 {
                     int angle = draw->attribute( "draw:angle" ).toInt() / 10;
@@ -1089,7 +1089,7 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
                             break;
                         }
                     }
-                    kdDebug()<<"nearAngle :"<<nearAngle<<endl;
+                    kdDebug(30518)<<"nearAngle :"<<nearAngle<<endl;
                     // nearAngle should now be one of: 0, 45, 90, 135, 180...
                     if ( nearAngle == 0 || nearAngle == 180 )
                         gradient.setAttribute( "type", 1 ); // horizontal
@@ -1990,7 +1990,7 @@ void OoImpressImport::fillStyleStack( const QDomElement& object, bool sticky )
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttribute( "presentation:style-name" ) )
     {
-        kdDebug()<<" presentation:style-name **************************** :"<<object.attribute( "presentation:style-name" )<<endl;
+        kdDebug(30518)<<" presentation:style-name **************************** :"<<object.attribute( "presentation:style-name" )<<endl;
         if ( sticky )
             addStyles( m_stylesPresentation[object.attribute( "presentation:style-name" )] );
         else
@@ -2008,14 +2008,14 @@ void OoImpressImport::fillStyleStack( const QDomElement& object, bool sticky )
 
 void OoImpressImport::addStyles( const QDomElement* style )
 {
-    kdDebug()<<" addStyle :"<<style<<endl;
+    kdDebug(30518)<<" addStyle :"<<style<<endl;
     // this function is necessary as parent styles can have parents themself
     if ( style->hasAttribute( "style:parent-style-name" ) )
     {
-        //kdDebug()<<"m_styles[style->attribute( style:parent-style-name )] :"<<m_styles[style->attribute( "style:parent-style-name" )]<<endl;
+        //kdDebug(30518)<<"m_styles[style->attribute( style:parent-style-name )] :"<<m_styles[style->attribute( "style:parent-style-name" )]<<endl;
         addStyles( m_styles[style->attribute( "style:parent-style-name" )] );
     }
-    //kdDebug()<<" void OoImpressImport::addStyles( const QDomElement* style ) :"<<style<<endl;
+    //kdDebug(30518)<<" void OoImpressImport::addStyles( const QDomElement* style ) :"<<style<<endl;
     m_styleStack.push( *style );
 }
 
@@ -2294,7 +2294,7 @@ void OoImpressImport::createPresentationAnimation(const QDomElement& element)
         if ( tagName == "presentation:show-shape" && e.hasAttribute( "draw:shape-id" ) )
         {
             QString name = e.attribute( "draw:shape-id" );
-            //kdDebug()<<" insert animation style : name :"<<name<<endl;
+            //kdDebug(30518)<<" insert animation style : name :"<<name<<endl;
             animationList *lst = new animationList;
             QDomElement* ep = new QDomElement( e );
             lst->element = ep;
@@ -2307,19 +2307,19 @@ void OoImpressImport::createPresentationAnimation(const QDomElement& element)
 
 QDomNode OoImpressImport::findAnimationByObjectID(const QString & id,  int & order)
 {
-    //kdDebug()<<"QDomNode OoImpressImport::findAnimationByObjectID(const QString & id) :"<<id<<endl;
+    //kdDebug(30518)<<"QDomNode OoImpressImport::findAnimationByObjectID(const QString & id) :"<<id<<endl;
     if (m_animations.isEmpty() )
         return QDomNode();
 
     animationList *animation = m_animations[id];
-    //kdDebug()<<"QDomElement *animation = m_animations[id]; :"<<animation<<endl;
+    //kdDebug(30518)<<"QDomElement *animation = m_animations[id]; :"<<animation<<endl;
     if ( !animation )
         return QDomNode();
     for (QDomNode node = *( animation->element ); !node.isNull(); node = node.nextSibling())
     {
         QDomElement e = node.toElement();
         order = animation->order;
-        //kdDebug()<<"e.tagName() :"<<e.tagName()<<" e.attribute(draw:shape-id) :"<<e.attribute("draw:shape-id")<<endl;
+        //kdDebug(30518)<<"e.tagName() :"<<e.tagName()<<" e.attribute(draw:shape-id) :"<<e.attribute("draw:shape-id")<<endl;
         if (e.tagName()=="presentation:show-shape" && e.attribute("draw:shape-id")==id)
                 return node;
     }
@@ -2340,11 +2340,11 @@ void OoImpressImport::appendObjectEffect(QDomDocument& doc, QDomElement& e, cons
     QString effect = origEffect.attribute("presentation:effect");
     QString dir = origEffect.attribute("presentation:direction");
     QString speed = origEffect.attribute("presentation:speed");
-    kdDebug()<<"speed :"<<speed<<endl;
+    kdDebug(30518)<<"speed :"<<speed<<endl;
     //todo implement speed value.
 
     int effVal=0;
-    //kdDebug()<<" effect :"<<effect<<" dir :"<<dir<<endl;
+    //kdDebug(30518)<<" effect :"<<effect<<" dir :"<<dir<<endl;
     if (effect=="fade")
     {
         if (dir=="from-right")

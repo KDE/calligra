@@ -57,11 +57,11 @@ OoImpressExport::~OoImpressExport()
 KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
                                                      const QCString & to )
 {
-    kdDebug() << "Entering Ooimpress Export filter: " << from << " - " << to << endl;
+    kdDebug(30518) << "Entering Ooimpress Export filter: " << from << " - " << to << endl;
 
     if ( ( to != "application/vnd.sun.xml.impress") || (from != "application/x-kpresenter" ) )
     {
-        kdWarning() << "Invalid mimetypes " << to << " " << from << endl;
+        kdWarning(30518) << "Invalid mimetypes " << to << " " << from << endl;
         return KoFilter::NotImplemented;
     }
 
@@ -83,18 +83,18 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
 
     if ( !m_storeout )
     {
-        kdWarning() << "Couldn't open the requested file." << endl;
+        kdWarning(30518) << "Couldn't open the requested file." << endl;
         return KoFilter::FileNotFound;
     }
 
     if ( !m_storeout->open( "meta.xml" ) )
     {
-        kdWarning() << "Couldn't open the file 'meta.xml'." << endl;
+        kdWarning(30518) << "Couldn't open the file 'meta.xml'." << endl;
         return KoFilter::CreationError;
     }
 
     QCString metaString = meta.toCString();
-    //kdDebug() << "meta :" << metaString << endl;
+    //kdDebug(30518) << "meta :" << metaString << endl;
     m_storeout->write( metaString , metaString.length() );
     m_storeout->close();
 
@@ -110,12 +110,12 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
     // store document content
     if ( !m_storeout->open( "content.xml" ) )
     {
-        kdWarning() << "Couldn't open the file 'content.xml'." << endl;
+        kdWarning(30518) << "Couldn't open the file 'content.xml'." << endl;
         return KoFilter::CreationError;
     }
 
     QCString contentString = content.toCString();
-    //kdDebug() << "content :" << contentString << endl;
+    //kdDebug(30518) << "content :" << contentString << endl;
     m_storeout->write( contentString , contentString.length() );
     m_storeout->close();
 
@@ -128,12 +128,12 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
     // store document content
     if ( !m_storeout->open( "settings.xml" ) )
     {
-        kdWarning() << "Couldn't open the file 'settings.xml'." << endl;
+        kdWarning(30518) << "Couldn't open the file 'settings.xml'." << endl;
         return KoFilter::CreationError;
     }
 
     QCString settingsString = settings.toCString();
-    //kdDebug() << "content :" << settingsString << endl;
+    //kdDebug(30518) << "content :" << settingsString << endl;
     m_storeout->write( settingsString , settingsString.length() );
     m_storeout->close();
 
@@ -147,12 +147,12 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
     // store document styles
     if ( !m_storeout->open( "styles.xml" ) )
     {
-        kdWarning() << "Couldn't open the file 'styles.xml'." << endl;
+        kdWarning(30518) << "Couldn't open the file 'styles.xml'." << endl;
         return KoFilter::CreationError;
     }
 
     QCString stylesString = styles.toCString();
-    //kdDebug() << "styles :" << stylesString << endl;
+    //kdDebug(30518) << "styles :" << stylesString << endl;
     m_storeout->write( stylesString , stylesString.length() );
     m_storeout->close();
 
@@ -166,12 +166,12 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
     m_storeout->enterDirectory( "META-INF" );
     if ( !m_storeout->open( "manifest.xml" ) )
     {
-        kdWarning() << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
+        kdWarning(30518) << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
         return KoFilter::CreationError;
     }
 
     QCString manifestString = manifest.toCString();
-    //kdDebug() << "manifest :" << manifestString << endl;
+    //kdDebug(30518) << "manifest :" << manifestString << endl;
     m_storeout->write( manifestString , manifestString.length() );
     m_storeout->close();
 
@@ -184,13 +184,13 @@ KoFilter::ConversionStatus OoImpressExport::openFile()
 
     if ( !m_storeinp )
     {
-        kdWarning() << "Couldn't open the requested file." << endl;
+        kdWarning(30518) << "Couldn't open the requested file." << endl;
         return KoFilter::FileNotFound;
     }
 
     if ( !m_storeinp->open( "maindoc.xml" ) )
     {
-        kdWarning() << "This file doesn't seem to be a valid KPresenter file" << endl;
+        kdWarning(30518) << "This file doesn't seem to be a valid KPresenter file" << endl;
         return KoFilter::WrongFormat;
     }
 
@@ -203,7 +203,7 @@ KoFilter::ConversionStatus OoImpressExport::openFile()
         m_storeinp->close();
     }
     else
-        kdWarning() << "Documentinfo do not exist!" << endl;
+        kdWarning(30518) << "Documentinfo do not exist!" << endl;
 
     emit sigProgress( 10 );
 
@@ -498,11 +498,11 @@ void OoImpressExport::createPictureList( QDomNode &pictures )
             QDomElement element = pictures.toElement();
             if ( element.tagName() ==  "KEY" )
             {
-                //kdDebug()<<"element.attribute( name ) :"<<element.attribute( "name" )<<endl;
+                //kdDebug(30518)<<"element.attribute( name ) :"<<element.attribute( "name" )<<endl;
                 m_kpresenterPictureLst.insert( pictureKey( element ), element.attribute( "name" ) );
             }
             else
-                kdDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
+                kdDebug(30518)<<" Tag not recognize :"<<element.tagName()<<endl;
         }
     }
 }
@@ -548,7 +548,7 @@ void OoImpressExport::createHelpLine( QDomNode &helpline )
             }
         }
     }
-    //kdDebug()<<"m_helpLine :"<<m_helpLine<<endl;
+    //kdDebug(30518)<<"m_helpLine :"<<m_helpLine<<endl;
 }
 
 
@@ -644,22 +644,22 @@ void OoImpressExport::appendObjects(QDomDocument & doccontent, QDomNode &objects
             appendTextbox( doccontent, o, drawPage );
             break;
         case 5:
-            kdDebug()<<" autoform not implemented\n";
+            kdDebug(30518)<<" autoform not implemented\n";
             break;
         case 6:
-            kdDebug()<<" clipart not implemented\n";
+            kdDebug(30518)<<" clipart not implemented\n";
             break;
         case 8: // pie, chord, arc
             appendEllipse( doccontent, o, drawPage, true );
             break;
         case 9: //part
-            kdDebug()<<" part object not implemented \n";
+            kdDebug(30518)<<" part object not implemented \n";
             break;
         case 10:
             appendGroupObject( doccontent, o, drawPage );
             break;
         case 11:
-            kdDebug()<<" free hand not implemented\n";
+            kdDebug(30518)<<" free hand not implemented\n";
             break;
         case 12: // polyline
             appendPolyline( doccontent, o, drawPage );
@@ -690,7 +690,7 @@ void OoImpressExport::appendGroupObject( QDomDocument & doc, QDomElement & sourc
 void OoImpressExport::appendNote( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
     QString noteText = source.attribute("note");
-    //kdDebug()<<"noteText :"<<noteText<<endl;
+    //kdDebug(30518)<<"noteText :"<<noteText<<endl;
     if ( noteText.isEmpty() )
         return;
     QDomElement noteElement = doc.createElement( "presentation:notes" );
@@ -961,7 +961,7 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
                 target.setAttribute( "draw:kind", "cut");
                 break;
             default:
-                kdDebug()<<" type unknown : "<<typePie<<endl;
+                kdDebug(30518)<<" type unknown : "<<typePie<<endl;
                 break;
             }
         }
