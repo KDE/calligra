@@ -216,7 +216,8 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
     // Dont handle special keys and accelerators
     if ( ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
          || ( _ev->state() & Qt::ShiftButton )
-         || ( _ev->key() == Key_Shift ) )
+         || ( _ev->key() == Key_Shift )
+         || ( _ev->key() == Key_Control ) )
     {
         QLineEdit::keyPressEvent( _ev );
         _ev->accept();
