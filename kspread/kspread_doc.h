@@ -440,6 +440,8 @@ public:
   QDomElement saveAreaName( QDomDocument& doc ) ;
   void loadAreaName( const QDomElement& element );
   void loadOasisAreaName( const QDomElement& element );
+  void loadOasisCellValidation( const QDomElement&body );
+
   virtual void addView( KoView *_view );
 
   virtual bool initDoc();

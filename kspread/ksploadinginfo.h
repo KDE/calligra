@@ -28,9 +28,10 @@ public:
     ~KSPLoadingInfo() {}
     void addWordInAreaList( const QString & word) { m_areaNamed.append( word ); }
     bool findWordInAreaList(const QString & word) const { return (m_areaNamed.find( word ) != m_areaNamed.end());}
-
+    void appendValidation( const QString &name, const QDomElement &element){ m_validationList.insert( name, element);}
 private:
     QStringList m_areaNamed;
+    QMap<QString,QDomElement> m_validationList;
 };
 
 #endif /* KPRLOADINGINFO_H */

@@ -587,7 +587,7 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
 
     // TODO check versions and mimetypes etc.
     loadOasisAreaName( body );
-
+    loadOasisCellValidation( body );
     // all <table:table> goes to workbook
     if ( !d->workbook->loadOasis( body, oasisStyles ) )
     {
@@ -1788,6 +1788,24 @@ QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
         element.appendChild(e);
    }
    return element;
+}
+
+void KSpreadDoc::loadOasisCellValidation( const QDomElement&body )
+{
+    QDomNode validation = body.namedItem( "table:content-validations" );
+    if ( !validation.isNull() )
+    {
+        QDomElement element = validation.firstChild().toElement();
+        for ( ; !element.isNull() ; element = element.nextSibling().toElement() ) {
+            if ( element.tagName() ==  "table:content-validation" ) {
+                d->m_loadingInfo->appendValidation(element.attribute("table:name" ), element );
+                kdDebug()<<" validation found :"<<element.attribute("table:name" )<<endl;
+            }
+            else {
+                kdDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
+            }
+        }
+    }
 }
 
 void KSpreadDoc::loadOasisAreaName( const QDomElement& body )

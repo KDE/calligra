@@ -227,6 +227,7 @@ public:
 	       Operation op = OverWrite, bool paste = false );
 
     bool loadOasis( const QDomElement & element, const KoOasisStyles &oasisStyles );
+    void loadOasisValidation( const QString& validationName );
 
     QTime toTime(const QDomElement &element) ;
     QDate toDate(const QDomElement &element);

@@ -5143,6 +5143,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     if ( element.hasAttribute( "table:validation-name" ) )
     {
         kdDebug()<<" Celle has a validation :"<<element.attribute( "table:validation-name" )<<endl;
+        loadOasisValidation( element.attribute( "table:validation-name" ) );
     }
     if( element.hasAttribute( "table:value-type" ) )
     {
@@ -5319,6 +5320,11 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
 
 
     return true;
+}
+
+void KSpreadCell::loadOasisValidation( const QString& validationName )
+{
+    kdDebug()<<"validationName:"<<validationName<<endl;
 }
 
 bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
