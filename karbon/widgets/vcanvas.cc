@@ -153,9 +153,12 @@ KoRect
 VCanvas::boundingBox() const
 {
 	KoPoint p1( 0, 0 );
-	p1 = toContents( p1 );
 	KoPoint p2( width(), height() );
-	p2 = toContents( p2 );
+	if( !m_view->documentDeleted() )
+	{
+		p1 = toContents( p1 );
+		p2 = toContents( p2 );
+	}
 	return KoRect( p1, p2 ).normalize();
 }
 
