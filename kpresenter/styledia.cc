@@ -281,7 +281,7 @@ StyleDia::StyleDia(QWidget* parent = 0,const char* name = 0,int flags = SD_PEN |
   connect(this,SIGNAL(cancelButtonPressed()),this,SLOT(reject()));
 }
 
-/*===================== destructor ===============================*/
+/*=================================================================*/
 StyleDia::~StyleDia()
 {
   delete gradient;
