@@ -200,7 +200,7 @@ public:
     bool load( QDomElement fe );
 
     /**
-     * @retruns a tex string for the formula
+     * @returns Tex string for the formula
      */
     QString texString();
 
