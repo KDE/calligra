@@ -2878,7 +2878,7 @@ namespace KSpreadCurrency_LNS
 {
   typedef struct
   {
-    QString code;
+    char const * code;
     char const * country;
     char const * name;
     char const * display;
@@ -2886,11 +2886,12 @@ namespace KSpreadCurrency_LNS
 
   // codes and names as defined in ISO 3166-1
   // first  column: saved code
-  // second column: contry name (localized)
+  // second column: country name (localized)
   // third column:  currency name (localized)
   // fourth column: displayed currency code (localized but maybe only in
   //                the country language it belongs to)
-  Money lMoney[] = {
+  // WARNING: change the "24" in getChooseString if you change this array
+  static const Money lMoney[] = {
     { "", "", "", ""}, // auto
     { "", "", "", ""}, // extension (codes imported)
     { "$", "", "Dollar", "$" }, // unspecified
@@ -2900,24 +2901,25 @@ namespace KSpreadCurrency_LNS
     { "$", I18N_NOOP("New Zealand"), I18N_NOOP("Dollar"), "$" },
     { "$", I18N_NOOP("United States"), I18N_NOOP("Dollar"), "$" },
 
-    { "¤", "", "¤", "¤" }, // unspecified
-    { "¤", I18N_NOOP("Austria"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Belgium"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Finland"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("France"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Germany"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Greece"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Ireland"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Italy"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Luxembourg"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Monaco"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Netherlands"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Portugal"), I18N_NOOP("Euro"), "¤" },
-    { "¤", I18N_NOOP("Spain"), I18N_NOOP("Euro"), "¤" },
+    // â‚¬ == Euro sign in utf8
+    { "â‚¬", "", "â‚¬", "â‚¬" }, // unspecified
+    { "â‚¬", I18N_NOOP("Austria"), I18N_NOOP("Euro"), "â‚¬" },
+    { "â‚¬", I18N_NOOP("Belgium"), I18N_NOOP("Euro"), "â‚¬" },
+    { "â‚¬", I18N_NOOP("Finland"), I18N_NOOP("Euro"), "â‚¬" },
+    { "â‚¬", I18N_NOOP("France"), I18N_NOOP("Euro"), "â‚¬" },
+    { "â‚¬", I18N_NOOP("Germany"), I18N_NOOP("Euro"), "â‚¬" },
+    { "â‚¬", I18N_NOOP("Greece"), I18N_NOOP("Euro"), "â‚¬" },
+    { "â‚¬", I18N_NOOP("Ireland"), I18N_NOOP("Euro"), "â‚¬" },
+    { "â‚¬", I18N_NOOP("Italy"), I18N_NOOP("Euro"), "â‚¬" },
+    { "â‚¬", I18N_NOOP("Luxembourg"), I18N_NOOP("Euro"), "â‚¬" },
+    { "â‚¬", I18N_NOOP("Monaco"), I18N_NOOP("Euro"), "â‚¬" },
+    { "â‚¬", I18N_NOOP("Netherlands"), I18N_NOOP("Euro"), "â‚¬" },
+    { "â‚¬", I18N_NOOP("Portugal"), I18N_NOOP("Euro"), "â‚¬" },
+    { "â‚¬", I18N_NOOP("Spain"), I18N_NOOP("Euro"), "â‚¬" },
 
-    { "£", I18N_NOOP("United Kingdom"), I18N_NOOP("Pound"), "£" },
+    { "Â£", I18N_NOOP("United Kingdom"), I18N_NOOP("Pound"), "Â£" },
 
-    { "¥", I18N_NOOP("Japan"), I18N_NOOP("Yen"), "¥" },
+    { "Â¥", I18N_NOOP("Japan"), I18N_NOOP("Yen"), "Â¥" },
 
     { "AFA", I18N_NOOP("Afghanistan"), I18N_NOOP("Afghani"), I18N_NOOP("AFA") },
     { "ALL", I18N_NOOP("Albania"), I18N_NOOP("Lek"), I18N_NOOP("Lek") },
@@ -3193,32 +3195,33 @@ namespace KSpreadCurrency_LNS
     {
     }
 
+    // Those return the _untranslated_ strings from the above array
     QString getCode(int t) const
     {
-      return m_List[t].code;
+      return QString::fromUtf8( m_List[t].code );
     }
 
     QString getCountry(int t) const
     {
-      return m_List[t].country;
+      return QString::fromUtf8( m_List[t].country );
     }
 
     QString getName(int t) const
     {
-      return m_List[t].name;
+      return QString::fromUtf8( m_List[t].name );
     }
 
     QString getDisplayCode(int t) const
     {
-      return m_List[t].display;
+      return QString::fromUtf8( m_List[t].display );
     }
 
    private:
-    Money * m_List;
+    const Money * m_List;
   };
 
-  CurrencyMap gCurrencyMap;
-  Money * gMoneyList(lMoney);
+  const CurrencyMap gCurrencyMap;
+  const Money * gMoneyList(lMoney);
 }
 
 
@@ -3253,12 +3256,13 @@ KSpreadCurrency::KSpreadCurrency(QString const & code, currencyFormat format)
 {
   if ( format == Gnumeric )
   {
-    if ( code.find( '¤' ) != -1 )
-      m_code = "¤";
-    else if ( code.find( '£' ) != -1 )
-      m_code = "£";
-    else if ( code.find( '¥' ) != -1 )
-      m_code = "¥";
+    // I use QChar(c,r) here so that this file can be opened in any encoding...
+    if ( code.find( QChar( 172, 32 ) ) != -1 )      // Euro sign
+      m_code = QChar( 172, 32 );
+    else if ( code.find( QChar( 163, 0 ) ) != -1 )  // Pound sign
+      m_code = QChar( 163, 0 );
+    else if ( code.find( QChar( 165, 0 ) ) != -1 )  // Yen sign
+      m_code = QChar( 165, 0 );
     else if ( code[0] == '[' && code[1] == '$' )
     {
       int n = code.find(']');
@@ -3364,38 +3368,42 @@ QString KSpreadCurrency::getChooseString( int type, bool & ok )
   if ( !gMoneyList[type].country )
   {
     ok = false;
-    return "";
+    return QString::null;
   }
-  if ( type < 23 )
+  if ( type < 24 )
   {
     QString ret( i18n( gMoneyList[type].name ) );
-    ret += " (";
-    ret += i18n( gMoneyList[type].country );
-    ret += ")";
-
+    if ( gMoneyList[type].country[0] )
+    {
+      ret += " (";
+      ret += i18n( gMoneyList[type].country );
+      ret += ")";
+    }
     return ret;
   }
   else
   {
     QString ret( i18n( gMoneyList[type].country ) );
-    ret += " (";
-    ret += i18n( gMoneyList[type].name );
-    ret += ")";
+    if ( gMoneyList[type].name[0] )
+    {
+      ret += " (";
+      ret += i18n( gMoneyList[type].name );
+      ret += ")";
+    }
     return ret;
   }
 }
 
 QString KSpreadCurrency::getDisplaySymbol( int type )
 {
-  return gMoneyList[type].display;
+  return i18n( gMoneyList[type].display );
 }
 
+// Currently unused
 QString KSpreadCurrency::getCurrencyCode( int type )
 {
-  return gMoneyList[type].code;
+  return QString::fromUtf8( gMoneyList[type].code );
 }
 
 #undef UPDATE_BEGIN
 #undef UPDATE_END
-
-

@@ -724,8 +724,8 @@ class KSpreadCurrency
 {
  public:
 
-  typedef enum F1 { Gnumeric, OpenCalc, ApplixSpread,
-                    GobeProductiveSpread, HancomSheet } currencyFormat;
+  enum currencyFormat { Gnumeric, OpenCalc, ApplixSpread,
+                        GobeProductiveSpread, HancomSheet };
 
   KSpreadCurrency();
   ~KSpreadCurrency();
