@@ -655,6 +655,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 	ArtRender *render = 0L;
 
 	VGradient gradient = fill ? m_fill->gradient() : m_stroke->gradient();
+	float opa = fill ? m_fill->color().opacity() : m_stroke->color().opacity();
 
 	if( gradient.type() == VGradient::linear )
 	{
@@ -693,8 +694,10 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		if( x0 != x1 && y0 != y1 )
 		{
 			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
+			int opacity = opa * 255.0;
 			art_render_svp( render, svp );
-			art_karbon_render_gradient_linear( render, linear, ART_FILTER_HYPER );
+			art_render_mask_solid (render, (opacity << 8) + opacity + (opacity >> 7));
+			art_karbon_render_gradient_linear( render, linear, ART_FILTER_NEAREST );
 		}
 	}
 	else if( gradient.type() == VGradient::radial )
@@ -744,7 +747,9 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		if( x0 != x1 && y0 != y1 )
 		{
 			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * x0 + m_width * 4 * y0, m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
+			int opacity = opa * 255.0;
 			art_render_svp( render, svp );
+			art_render_mask_solid (render, (opacity << 8) + opacity + (opacity >> 7));
 			art_karbon_render_gradient_radial( render, radial, ART_FILTER_HYPER );
 		}
 	}
@@ -779,7 +784,9 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		if( x0 != x1 && y0 != y1 )
 		{
 			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * x0 + m_width * 4 * y0, m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
+			int opacity = opa * 255.0;
 			art_render_svp( render, svp );
+			art_render_mask_solid (render, (opacity << 8) + opacity + (opacity >> 7));
 			art_karbon_render_gradient_conical( render, conical, ART_FILTER_HYPER );
 		}
 	}
@@ -808,18 +815,19 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 		int r = qRed( qStopColor.rgb() );
 		int g = qGreen( qStopColor.rgb() );
 		int b = qBlue( qStopColor.rgb() );
-		art_u32 stopColor = (r << 24) | (g << 16) | (b << 8) | qAlpha(qStopColor.rgb());
-
-		ArtPixMaxDepth color[ 4 ];
-		color[ 0 ] = ART_PIX_MAX_FROM_8( (stopColor >> 24) & 0xff );
-		color[ 1 ] = ART_PIX_MAX_FROM_8( (stopColor >> 16) & 0xff );
-		color[ 2 ] = ART_PIX_MAX_FROM_8( (stopColor >> 8) & 0xff );
-		color[ 3 ] = ART_PIX_MAX_FROM_8( (stopColor) & 0xff );
-
-		(*stopArray)[ offset * 2 ].color[ 0 ] = color[ 0 ];
-		(*stopArray)[ offset * 2 ].color[ 1 ] = color[ 1 ];
-		(*stopArray)[ offset * 2 ].color[ 2 ] = color[ 2 ];
-		(*stopArray)[ offset * 2 ].color[ 3 ] = color[ 3 ];
+		art_u32 rgba = (r << 24) | (g << 16) | (b << 8) | qAlpha(qStopColor.rgb());
+		/* convert from separated to premultiplied alpha */
+		int a = colorStops[ offset]->color.opacity() * 255.0;//rgba & 0xff;
+		r = (rgba >> 24) * a + 0x80;
+		r = (r + (r >> 8)) >> 8;
+		g = ((rgba >> 16) & 0xff) * a + 0x80;
+		g = (g + (g >> 8)) >> 8;
+		b = ((rgba >> 8) & 0xff) * a + 0x80;
+		b = (b + (b >> 8)) >> 8;
+		(*stopArray)[ offset * 2 ].color[ 0 ] = ART_PIX_MAX_FROM_8(r);
+		(*stopArray)[ offset * 2 ].color[ 1 ] = ART_PIX_MAX_FROM_8(g);
+		(*stopArray)[ offset * 2 ].color[ 2 ] = ART_PIX_MAX_FROM_8(b);
+		(*stopArray)[ offset * 2 ].color[ 3 ] = ART_PIX_MAX_FROM_8(a);
 
 		if( offset + 1 != offsets )
 		{
@@ -830,20 +838,22 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 			//kdDebug() << "(*stopArray)[ offset * 2 + 1 ].offset : " << (*stopArray)[ offset * 2 + 1 ].offset << endl;
 
 			QColor qStopColor2 = colorStops[ offset + 1 ]->color;
-			stopColor = int(r + ((qRed(qStopColor2.rgb()) - r)) * 0.5) << 24 |
+			rgba = int(r + ((qRed(qStopColor2.rgb()) - r)) * 0.5) << 24 |
 						int(g + ((qGreen(qStopColor2.rgb()) - g)) * 0.5) << 16 |
 						int(b + ((qBlue(qStopColor2.rgb()) - b)) * 0.5) << 8 |
 						qAlpha(qStopColor2.rgb());
-
-			color[ 0 ] = ART_PIX_MAX_FROM_8( (stopColor >> 24) & 0xff );
-			color[ 1 ] = ART_PIX_MAX_FROM_8( (stopColor >> 16) & 0xff );
-			color[ 2 ] = ART_PIX_MAX_FROM_8( (stopColor >> 8) & 0xff );
-			color[ 3 ] = ART_PIX_MAX_FROM_8( (stopColor) & 0xff );
-
-			(*stopArray)[ offset * 2 + 1 ].color[ 0 ] = color[ 0 ];
-			(*stopArray)[ offset * 2 + 1 ].color[ 1 ] = color[ 1 ];
-			(*stopArray)[ offset * 2 + 1 ].color[ 2 ] = color[ 2 ];
-			(*stopArray)[ offset * 2 + 1 ].color[ 3 ] = color[ 3 ];
+			/* convert from separated to premultiplied alpha */
+			int a = colorStops[ offset]->color.opacity() * 255.0;//rgba & 0xff;
+			r = (rgba >> 24) * a + 0x80;
+			r = (r + (r >> 8)) >> 8;
+			g = ((rgba >> 16) & 0xff) * a + 0x80;
+			g = (g + (g >> 8)) >> 8;
+			b = ((rgba >> 8) & 0xff) * a + 0x80;
+			b = (b + (b >> 8)) >> 8;
+			(*stopArray)[ offset * 2 + 1 ].color[ 0 ] = ART_PIX_MAX_FROM_8(r);
+			(*stopArray)[ offset * 2 + 1 ].color[ 1 ] = ART_PIX_MAX_FROM_8(g);
+			(*stopArray)[ offset * 2 + 1 ].color[ 2 ] = ART_PIX_MAX_FROM_8(b);
+			(*stopArray)[ offset * 2 + 1 ].color[ 3 ] = ART_PIX_MAX_FROM_8(a);
 		}
 	}
 
