@@ -1044,12 +1044,12 @@
       <Name>eps</Name>
       <Type>Float</Type>
       <Help>
-	<Text>eps() returns the machine epsilon; this is the difference between 1 and the next largest floating-point number.  Because computers use a finite number of digits, roundoff error is inherent (but usually insignificant) in all calculations.</Text>
+	<Text>eps() returns the machine epsilon; this is the difference between 1 and the next largest floating-point number. Because computers use a finite number of digits, roundoff error is inherent (but usually insignificant) in all calculations.</Text>
 	<Syntax>eps()</Syntax>
 	<Example>On most systems, this returns 2^-52=2.2204460492503131e-16</Example>
 	<Example>0.5*eps() returns the "unit round"; this value is interesting because it is the largest number x where (1+x)-1=0 (due to roundoff errors).</Example>
 	<Example>eps() is so small that KSpread displays 1+eps() as 1</Example>
-	<Example>Pick a number x between 0 and eps().  Observe that 1+x rounds x to either 0 or eps() by using the equation (1+x)-1</Example>
+	<Example>Pick a number x between 0 and eps(). Observe that 1+x rounds x to either 0 or eps() by using the equation (1+x)-1</Example>
       </Help>
     </Function>
 
