@@ -143,10 +143,15 @@ public:
      * But this can still be used for ' ' (for parag counters), 'x' (for tabs) etc.
      */
     //int width( const QChar &ch ) const; // already declared in qrichtext_p.h
+
     static QString underlineStyleToString( UnderlineLineStyle _lineType );
     static QString strikeOutStyleToString( StrikeOutLineStyle _lineType );
     static UnderlineLineStyle stringToUnderlineStyle( const QString & _str );
     static StrikeOutLineStyle stringToStrikeOutStyle( const QString & _str );
+
+#ifndef NDEBUG
+    void printDebug();
+#endif
 
 protected:
     QColor m_textBackColor;

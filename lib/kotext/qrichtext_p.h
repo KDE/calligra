@@ -1254,10 +1254,10 @@ public:
     void setAlignmentDirect( int a ) { align = a; }
     int alignment() const;
 
-    void paintDefault( QPainter &painter, const QColorGroup &cg, KoTextCursor *cursor = 0, bool drawSelections = FALSE,
-			int clipx = -1, int clipy = -1, int clipw = -1, int cliph = -1 );
-    virtual void paint( QPainter &painter, const QColorGroup &cg, KoTextCursor *cursor = 0, bool drawSelections = FALSE,
-			int clipx = -1, int clipy = -1, int clipw = -1, int cliph = -1 );
+    void paintDefault( QPainter &painter, const QColorGroup &cg, KoTextCursor *cursor, bool drawSelections,
+                       int clipx, int clipy, int clipw, int cliph );
+    virtual void paint( QPainter &painter, const QColorGroup &cg, KoTextCursor *cursor, bool drawSelections,
+                       int clipx, int clipy, int clipw, int cliph ); // kotextparag.cc
 
     void setStyleSheetItems( const QPtrVector<QStyleSheetItem> &vec );
     QPtrVector<QStyleSheetItem> styleSheetItems() const;

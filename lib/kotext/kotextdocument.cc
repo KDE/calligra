@@ -135,6 +135,8 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 	QRect pr( parag->pixelRect( zoomHandler ) );
         pr.setLeft( 0 );
         pr.setWidth( QWIDGETSIZE_MAX );
+        // The cliprect is checked in layout units, in KoTextParag::paint
+        QRect crect_lu( parag->rect() );
 
 	if ( !cr.isNull() && !cr.intersects( pr ) ) {
 	    parag = parag->next();
@@ -145,7 +147,8 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
         if ( brush != Qt::NoBrush )
 	    p->fillRect( QRect( 0, 0, pr.width(), pr.height() ), brush );
         //p->setBrushOrigin( p->brushOrigin() + QPoint( 0, pr.y() ) );
-	parag->paint( *p, cg, 0, FALSE );
+	parag->paint( *p, cg, 0, FALSE,
+                      crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
 	p->translate( 0, -pr.y() );
         //p->setBrushOrigin( p->brushOrigin() - QPoint( 0, pr.y() ) );
 	parag = parag->next();

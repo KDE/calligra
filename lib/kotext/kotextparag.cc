@@ -1031,9 +1031,13 @@ void KoTextParag::printRTDebug( int info )
                       << " \"" << ch.format()->key() << "\" "
                 //<< " fontsize:" << dynamic_cast<KoTextFormat *>(ch.format())->pointSize()
                       << endl;
-            Q_ASSERT( textDocument()->formatCollection()->dict()[ch.format()->key()] );
+
+	    // Check that the format is in the collection (i.e. its defaultFormat or in the dict)
+	    if ( ch.format() != textDocument()->formatCollection()->defaultFormat() )
+                Q_ASSERT( textDocument()->formatCollection()->dict()[ch.format()->key()] );
+
             if ( !string()->isBidi() && !ch.lineStart )
-                Q_ASSERT( lastX + lastW == pixelx );
+                Q_ASSERT( lastX + lastW == pixelx ); // looks like some rounding problem with justified spaces
             lastX = pixelx;
             lastW = ch.pixelwidth;
             if ( ch.isCustom() )

@@ -373,3 +373,11 @@ void KoTextFormat::setSpellCheckingLanguage( const QString & _lang)
     update();
 }
 
+#ifndef NDEBUG
+void KoTextFormat::printDebug()
+{
+    qDebug( "format '%s' (%p): refcount: %d    realfont: %s",
+            key().latin1(), (void*)this, ref, QFontInfo( font() ).family().latin1() );
+}
+#endif
+

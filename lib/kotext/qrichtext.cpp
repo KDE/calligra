@@ -5847,15 +5847,13 @@ void KoTextFormatCollection::setPainter( QPainter *p )
 void KoTextFormatCollection::debug()
 {
     qDebug( "------------ KoTextFormatCollection: debug --------------- BEGIN" );
+    defFormat->printDebug();
     QDictIterator<KoTextFormat> it( cKey );
     for ( ; it.current(); ++it ) {
          Q_ASSERT(it.currentKey() == it.current()->key());
          if(it.currentKey() != it.current()->key())
              qDebug("**** MISMATCH key=%s (see line below for format)", it.currentKey().latin1());
-         qDebug( "format '%s' (%p): refcount: %d    realfont: %s",
-                it.current()->key().latin1(),
-                (void*)it.current(), it.current()->ref,
-                QFontInfo( it.current()->font() ).family().latin1() );
+	 it.current()->printDebug();
     }
     qDebug( "------------ KoTextFormatCollection: debug --------------- END" );
 }
