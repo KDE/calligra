@@ -483,6 +483,10 @@ void KWView::setupActions()
                                   this,SLOT(editComment()),
                                   actionCollection(), "edit_comment");
 
+    actionRemoveComment = new KAction( i18n("Remove Comment"), 0,
+                                     this,SLOT(removeComment()),
+                                     actionCollection(), "remove_comment");
+
 
     // TODO
     /*actionInsertFootEndNote = new KAction( i18n( "&Footnote or Endnote..." ), 0,
@@ -4612,6 +4616,15 @@ void KWView::fileStatistics()
     if ( !statisticsDialog->wasCanceled() )
         statisticsDialog->exec();
     delete statisticsDialog;
+}
+
+void KWView::removeComment()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+    {
+        edit->removeComment();
+    }
 }
 
 /******************************************************************/

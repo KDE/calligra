@@ -203,6 +203,7 @@ public slots:
     void insertContents();
     void insertLink();
     void insertComment();
+    void removeComment();
 
     void formatFont();
     void formatParagraph();
@@ -402,6 +403,7 @@ private:
     KAction *actionInsertLink;
     KAction *actionInsertComment;
     KAction *actionEditComment;
+    KAction *actionRemoveComment;
 
     KActionMenu *actionInsertVariable;
     struct VariableDef {
