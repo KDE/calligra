@@ -243,14 +243,10 @@ void KoRuler::drawHorizontal( QPainter *_painter )
         dist += lineDistance();
     }
     
-    // Add precision when the zoom level gets higher..
-    while( dist > ( maxwidth * 4 ) ) {
-        dist *= 0.5;
-    }
-    
     for ( double i = 0.0;i <= (double)totalw;i += dist ) {
         str = QString::number( KoUnit::ptToUnit( i / m_zoom, m_unit ) );
         int textwidth = fm.width( str );
+        maxwidth = QMAX( maxwidth, textwidth );
         p.drawText( qRound(i) - diffx - qRound(textwidth * 0.5),
                     qRound(( height() - fm.height() ) * 0.5),
                     textwidth, height(), AlignLeft | AlignTop, str );
@@ -258,7 +254,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 
     // Draw the medium-sized lines
     // Only if we have enough space (i.e. not at 33%)
-    if ( dist > maxwidth + 1 )
+    if ( dist > maxwidth + 2 )
     {
         for ( double i = dist * 0.5;i <= (double)totalw;i += dist ) {
             int ii=qRound(i);
@@ -268,7 +264,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 
     // Draw the small lines
     // Only if we have enough space (i.e. not at 33%)
-    if ( dist * 0.5 > maxwidth + 1 )
+    if ( dist * 0.5 > maxwidth + 2 )
     {
         for ( double i = dist * 0.25;i <= (double)totalw;i += dist * 0.5 ) {
             int ii=qRound(i);
@@ -414,11 +410,6 @@ void KoRuler::drawVertical( QPainter *_painter )
             dist += lineDistance();
         }
         
-        // Add precision when the zoom level gets higher..
-        while( dist > ( maxheight * 4 ) ) {
-            dist *= 0.5;
-        }
-        
         for ( double i = 0.0;i <= (double)totalh;i += dist ) {
             str = QString::number( KoUnit::ptToUnit( i / m_zoom, m_unit ) );
             int textheight = fm.height();
@@ -433,7 +424,7 @@ void KoRuler::drawVertical( QPainter *_painter )
         }
         
         // Draw the medium-sized lines
-        if ( dist > maxheight + 1 )
+        if ( dist > maxheight + 2 )
         {
             for ( double i = dist * 0.5;i <= (double)totalh;i += dist ) {
                 int ii=qRound(i);
@@ -442,7 +433,7 @@ void KoRuler::drawVertical( QPainter *_painter )
         }
 
         // Draw the small lines
-        if ( dist * 0.5 > maxheight + 1 )
+        if ( dist * 0.5 > maxheight + 2 )
         {
             for ( double i = dist * 0.25;i <=(double)totalh;i += dist *0.5 ) {
                 int ii=qRound(i);
