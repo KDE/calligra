@@ -132,6 +132,7 @@ public:
     void apply();
 private slots:
     void slotModifyPath();
+    void slotSelectionChanged(QListViewItem *);
 private:
     KWView* m_pView;
     KConfig* config;

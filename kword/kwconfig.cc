@@ -876,6 +876,13 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
     m_modifyPath = new QPushButton( i18n("Modify path..."), gbPathGroup);
     connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
     connect( m_pPathView, SIGNAL( doubleClicked (QListViewItem *, const QPoint &, int  )), this, SLOT( slotModifyPath()));
+    connect( m_pPathView, SIGNAL( selectionChanged ( QListViewItem * )), this, SLOT( slotSelectionChanged(QListViewItem * )));
+    slotSelectionChanged(m_pPathView->currentItem());
+}
+
+void ConfigurePathPage::slotSelectionChanged(QListViewItem * item)
+{
+    m_modifyPath->setEnabled( item );
 }
 
 void ConfigurePathPage::slotModifyPath()
