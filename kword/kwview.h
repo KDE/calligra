@@ -133,6 +133,7 @@ public:
 
     void updatePopupMenuChangeAction();
 
+
 public slots:
     void editCut();
     void editCopy();
@@ -265,7 +266,7 @@ public slots:
     void updatePageInfo();
 
     void slotSpecialChar(QChar , const QString &);
-
+    void updateButton();
 protected:
 
     KWTextFrameSetEdit *currentTextEdit();

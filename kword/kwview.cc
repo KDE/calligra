@@ -2785,6 +2785,39 @@ KWTextFrameSetEdit *KWView::currentTextEdit()
     return 0L;
 }
 
+/*================================================================*/
+void KWView::updateButton()
+{
+    bool state=false;
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if (edit)
+        state=true;
+
+    actionEditCut->setEnabled(state);
+    actionEditCopy->setEnabled(state);
+    actionEditPaste->setEnabled(state);
+
+    actionEditSelectAll->setEnabled(state);
+    actionFormatFont->setEnabled(state);
+    actionFormatFontSize->setEnabled(state);
+    actionFormatFontFamily->setEnabled(state);
+    actionFormatStyle->setEnabled(state);
+    actionFormatBold->setEnabled(state);
+    actionFormatItalic->setEnabled(state);
+    actionFormatUnderline->setEnabled(state);
+    actionFormatStrikeOut->setEnabled(state);
+    actionFormatColor->setEnabled(state);
+    actionFormatAlignLeft->setEnabled(state);
+    actionFormatAlignCenter->setEnabled(state);
+    actionFormatAlignRight->setEnabled(state);
+    actionFormatAlignBlock->setEnabled(state);
+    actionFormatIncreaseIndent->setEnabled(state);
+    actionFormatDecreaseIndent->setEnabled(state);
+    actionFormatList->setEnabled(state);
+    actionFormatSuper->setEnabled(state);
+    actionFormatSub->setEnabled(state);
+}
+
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */
 /******************************************************************/
@@ -2891,6 +2924,7 @@ KWGUI::KWGUI( QWidget *parent, bool, KWDocument *_doc, KWView *_view )
     setAcceptDrops( TRUE );
     setFocusPolicy( QWidget::NoFocus );
 
+    connect(canvas,SIGNAL(currentFrameSetEditChanged()),view,SLOT(updateButton()));
     canvas->setContentsPos( 0, 0 );
 }
 

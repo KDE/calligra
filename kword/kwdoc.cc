@@ -2477,4 +2477,5 @@ void KWDocument::refreshFrameBorderButton()
     }
 }
 
+
 #include "kwdoc.moc"

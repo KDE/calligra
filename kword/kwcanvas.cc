@@ -466,10 +466,13 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 }
                 // Edit the frameset under the mouse, if any
                 if ( fs && !m_currentFrameSetEdit )
+                {
                     m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+                }
 
                 if ( m_currentFrameSetEdit )
                     m_currentFrameSetEdit->mousePressEvent( e );
+
             }
             break;
         case MM_EDIT_FRAME:
@@ -492,6 +495,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT)
             m_currentFrameSetEdit->paste();
     }
+    emit currentFrameSetEditChanged();
 }
 
 // Called by KWTableDia
@@ -1495,6 +1499,7 @@ void KWCanvas::setMouseMode( MouseMode _mm )
             // Terminate edition of current frameset
             delete m_currentFrameSetEdit;
             m_currentFrameSetEdit = 0L;
+            emit currentFrameSetEditChanged();
             repaintAll();
         }
     }

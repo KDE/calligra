@@ -171,6 +171,9 @@ protected:
     void selectAllFrames( bool select );
     void selectFrame( int mx, int my, bool select );
 
+ signals:
+    void currentFrameSetEditChanged();
+
 private slots:
     void slotContentsMoving( int, int );
     void doAutoScroll();
