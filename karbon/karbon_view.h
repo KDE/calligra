@@ -188,21 +188,6 @@ private:
 	VTool* m_currentTool;
 
 	// tools:
-	KToggleAction* m_ellipseToolAction;
-	KToggleAction* m_polygonToolAction;
-	KToggleAction* m_rectangleToolAction;
-	KToggleAction* m_rotateToolAction;
-	KToggleAction* m_roundRectToolAction;
-	KToggleAction* m_selectToolAction;
-	KToggleAction* m_selectNodesToolAction;
-	KToggleAction* m_shearToolAction;
-	KToggleAction* m_sinusToolAction;
-	KToggleAction* m_spiralToolAction;
-	KToggleAction* m_starToolAction;
-	KToggleAction* m_textToolAction;
-	KToggleAction* m_gradToolAction;
-	KToggleAction* m_polylineToolAction;
-
 	VEllipseTool* m_ellipseTool;
 	VPolygonTool* m_polygonTool;
 	VRectangleTool* m_rectangleTool;
