@@ -33,7 +33,8 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 ToolButton.h Arrow.h Painter.h LineStyle.h \
 		 TransformationDialog.h koPageLayoutDia.h \
 		 MainView.h PStateManager.h OptionDialog.h \
-		 Preview.h units.h UnitBox.h
+		 Preview.h units.h UnitBox.h ScriptDialog.h \
+		 GLayer.h LayerDialog.h
 
 libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  GOval.cc GClipart.cc GBezier.cc \
@@ -64,7 +65,8 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  ToolButton.cc Arrow.cc Painter.cc LineStyle.cc \
 			  TransformationDialog.cc koPageLayoutDia.cc \
 			  PStateManager.cc OptionDialog.cc \
-			  Preview.cc units.cc UnitBox.cc
+			  Preview.cc units.cc UnitBox.cc ScriptDialog.cc \
+			  GLayer.cc LayerDialog.cc
 
 # just to make sure, automake makes them 
 BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
@@ -81,7 +83,8 @@ BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
 		Ruler.moc AboutDialog.moc \
 		ToolButton.moc PolygonPreview.moc \
 		TransformationDialog.moc koPageLayoutDia.moc \
-		PStateManager.moc OptionDialog.moc UnitBox.moc
+		PStateManager.moc OptionDialog.moc UnitBox.moc \
+		ScriptDialog.moc GLayer.moc LayerDialog.moc
 
 DISTCLEANFILES = $(BUILTSOURCES)
 
@@ -261,4 +264,17 @@ OptionDialog.moc: OptionDialog.h
 UnitBox.cc: UnitBox.moc
 UnitBox.moc: UnitBox.h
 	$(MOC) UnitBox.h -o UnitBox.moc
+
+ScriptDialog.cc: ScriptDialog.moc
+ScriptDialog.moc: ScriptDialog.h
+	$(MOC) ScriptDialog.h -o ScriptDialog.moc
+
+LayerDialog.cc: LayerDialog.moc
+LayerDialog.moc: LayerDialog.h
+	$(MOC) LayerDialog.h -o LayerDialog.moc
+
+GLayer.cc: GLayer.moc
+GLayer.moc: GLayer.h
+	$(MOC) GLayer.h -o GLayer.moc
+
 
