@@ -34,7 +34,7 @@ class PixmapCollection;
     \sa KexiPropertyEditor for help on how to use KexiPropertyBuffer.
     \sa KexiProperty to see how to create properties.
 **/
-class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public KexiProperty::Dict
+class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, protected KexiProperty::Dict
 {
 	Q_OBJECT
 
@@ -48,6 +48,13 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public KexiProperty::
 		KexiPropertyBuffer(QObject *parent, const QString &type_name);
 
 		virtual ~KexiPropertyBuffer();
+
+		/*! \return property named with \a name. If no such property is found,
+		 null property (KexiProperty::null) is returned. */
+		KexiProperty& property( const QCString& name ) { KexiProperty *p = find(name); return p ? *p : KexiProperty::null; }
+
+		/*! Equivalent to property(const QCString& name) */
+		KexiProperty& operator[] ( const QCString& name ) { return property(name); }
 
 		/*! \return an ordered list of properties */
 		KexiProperty::List* list() { return &m_list; }
@@ -88,9 +95,8 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public KexiProperty::
 
 	signals:
 		/*! This signal is emitted when \a property has changed
-		   (i.e. when changeProperty() was called).
-		*/
-		void propertyChanged(KexiPropertyBuffer &buf, KexiProperty &property);//const QString &property, const QVariant &value);
+		   (i.e. when changeProperty() was called). */
+		void propertyChanged(KexiPropertyBuffer &buf, KexiProperty &property);
 
 		/*! Parameterless version of the above method. */
 		void propertyChanged();

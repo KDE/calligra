@@ -85,9 +85,6 @@ class KexiAlterTableDialog : public KexiDataTable
 //		void slotCellSelected(int col, int row);
 //		void slotUpdateRowActions(int row);
 
-		//! Called on property changes in property editor.
-		void slotPropertyChanged(KexiPropertyBuffer& buf,KexiProperty& prop);
-
 		//! Called before cell change in tableview.
 		void slotBeforeCellChanged(KexiTableItem *item, int colnum, 
 			QVariant newValue, KexiDB::ResultInfo* result);
@@ -97,6 +94,10 @@ class KexiAlterTableDialog : public KexiDataTable
 
 		//! Called before row inserting in tableview.
 		void slotAboutToInsertRow(KexiTableItem* item, KexiDB::ResultInfo* result);
+
+		/*! Called after any property has been changed in the current property buffer, 
+		 to perform some actions (like updating other dependent properties) */
+		void slotPropertyChanged(KexiPropertyBuffer &buf, KexiProperty &property);
 
 /*		//! Called before row updating in tableview.
 		void slotAboutToUpdateRow(KexiTableItem* item, 

@@ -290,7 +290,7 @@ Form::changeName(const QString &oldname, const QString &newname)
 		i18n("A widget with this name already exists. "
 			"Please choose another name or rename existing widget."));
 		kdDebug() << "Form::changeName() : ERROR : A widget named " << newname << " already exists" << endl;
-		(*(m_manager->buffer()))["name"]->setValue(oldname);
+		(*(m_manager->buffer()))["name"] = oldname;
 	}
 	else
 	{

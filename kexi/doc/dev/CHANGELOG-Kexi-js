@@ -307,6 +307,16 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
 
 === 2004 LT TODO ===
 
+2004-08-06
+Table Designer
+- some rules added: e.g. setting 'indexed' property to false clears 'primaryKey';
+  setting 'primaryKey' to true sets 'indexed', 'unique', etc. to true
+Core
+- KexiPropery, KexiProperyBuffer: some operators added, operator [QCString] now
+  returns KexiPropery, convenient operator = (QVariant) added; KexiPropery::null added
+TODO: KexiProperty: add support for positive integers, "Auto" values e.g. for integer ==0
+ like defined in QSpinBox. Reuse this in PropIntSpinBox.
+
 2004-08-05
 PropertyEditor
 - Bool Editor: toggle button has now without ugly focus (space key still works)

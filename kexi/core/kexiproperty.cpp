@@ -33,6 +33,8 @@
 #include <klocale.h>
 #include <kglobal.h>
 
+QT_STATIC_CONST_IMPL KexiProperty KexiProperty::null;
+
 
 class SPHelper
 {

@@ -842,7 +842,7 @@ FormManager::createLayout(int layoutType)
 		ObjectTreeItem *item = m_active->objectTree()->lookup(list->first()->name());
 		if(!item || !item->container() || !(*m_buffer)["layout"])
 			return;
-		(*m_buffer)["layout"]->setValue(Container::layoutTypeToString(layoutType));
+		(*m_buffer)["layout"] = Container::layoutTypeToString(layoutType);
 		return;
 	}
 
@@ -880,7 +880,7 @@ FormManager::breakLayout()
 	else // normal container
 	{
 		if(activeForm()->selectedWidgets()->count() == 1)
-			(*m_buffer)["layout"]->setValue("NoLayout");
+			(*m_buffer)["layout"] = "NoLayout";
 		else
 			container->setLayout(Container::NoLayout);
 	}

@@ -72,7 +72,7 @@ PropertyCommand::execute()
 		m_buffer->setSelectedWidget(widg, true);
 	}
 
-	(*m_buffer)[m_property]->setValue(m_value);
+	(*m_buffer)[m_property] = m_value;
 	m_buffer->m_undoing = false;
 }
 
@@ -82,7 +82,7 @@ PropertyCommand::unexecute()
 	m_buffer->m_undoing = true;
 	m_buffer->m_manager->activeForm()->resetSelection();
 
-	(*m_buffer)[m_property]->setValue(m_oldvalues.begin().data());
+	(*m_buffer)[m_property] = m_oldvalues.begin().data();
 	m_buffer->m_undoing = false;
 
 	QMap<QString, QVariant>::Iterator it = m_oldvalues.begin();

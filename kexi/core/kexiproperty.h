@@ -57,6 +57,8 @@ class KEXICORE_EXPORT KexiProperty
 		typedef QPtrListIterator<KexiProperty> ListIterator;
 //		typedef QMap<QString,KexiProperty> Map;
 
+		QT_STATIC_CONST KexiProperty null;
+
 //		/*! Creates a simple property with \a name as name and \a value as value. */
 //		KexiProperty(const QString &name, QVariant value);
 
@@ -78,10 +80,16 @@ class KEXICORE_EXPORT KexiProperty
 		//! Copy constructor.
 		KexiProperty(const KexiProperty &property);
 
-		//! Creates an empty property.
+		//! Creates a null property.
 		KexiProperty();
 
 		~KexiProperty();
+
+		/*! \return true if this property is null. Null properties have empty names. */
+		bool isNull() const { return m_name.isEmpty(); }
+
+		/*! Equivalent to !isNull() */
+		operator bool () const { return !isNull(); }
 
 		const KexiProperty& operator=(const KexiProperty &property);
 
@@ -104,10 +112,10 @@ class KEXICORE_EXPORT KexiProperty
 		KexiProperty *child(const QCString& name);
 
 		//! \return property name.
-		QCString		name() const { return m_name; }
+		QCString name() const { return m_name; }
 
 		//! \return property value.
-		QVariant	value() const;
+		QVariant value() const;
 
 		/*! \return property value converted to text that can be displayed.
 		 If this is a list property, name for currently selected key (value) is returned,
@@ -121,6 +129,9 @@ class KEXICORE_EXPORT KexiProperty
 		 It the property has a parent property, the parent has set "changed" flag when needed.
 		*/
 		void setValue(const QVariant &v, bool saveOldValue = true);
+
+		/*! Equivalent to setValue(const QVariant &) */
+		KexiProperty& operator= ( const QVariant& val ) { setValue(val); return *this; }
 
 		/*! For property of type "list of values":
 		 sets \a key_list as a new list of keys and \a name_list as a new list

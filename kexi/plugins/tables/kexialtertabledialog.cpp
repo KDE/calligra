@@ -203,32 +203,32 @@ static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiProper
 	KexiProperty *prop;
 	bool visible;
 	//if there is no more than 1 subType name: hide the property
-	prop = buf["subType"];
+	prop = &buf["subType"];
 	visible = prop->keys() && prop->keys()->count()>1;
 	if (prop->isVisible()!=visible) {
 		prop->setVisible( visible );
 		changed = true;
 	}
-	prop = buf["unsigned"];
+	prop = &buf["unsigned"];
 	visible = KexiDB::Field::isNumericType(fieldType);
 	if (prop->isVisible()!=visible) {
 		prop->setVisible( visible );
 		changed = true;
 	}
-	prop = buf["length"];
+	prop = &buf["length"];
 	visible = (fieldType == KexiDB::Field::Text);
 	if (prop->isVisible()!=visible) {
 		prop->setVisible( visible );
 		prop->setValue( visible ? KexiDB::Field::defaultTextLength() : 0, false );
 		changed = true;
 	}
-	prop = buf["precision"];
+	prop = &buf["precision"];
 	visible = KexiDB::Field::isFPNumericType(fieldType);
 	if (prop->isVisible()!=visible) {
 		prop->setVisible( visible );
 		changed = true;
 	}
-	prop = buf["notEmpty"];
+	prop = &buf["notEmpty"];
 	visible = KexiDB::Field::hasEmptyProperty(fieldType);
 	if (prop->isVisible()!=visible) {
 		prop->setVisible( visible );
@@ -289,6 +289,9 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field, bool 
 	buff->add(new KexiProperty("indexed", QVariant(field->isIndexed(), 4), i18n("Indexed")));
 
 	updatePropertiesVisibility(field->type(), *buff);
+
+	connect(buff, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)),
+		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&, KexiProperty&)));
 
 	m_buffers->insert(row, buff, newOne);
 	return buff;
@@ -396,12 +399,6 @@ void KexiAlterTableDialog::slotUpdateRowActions(int row)
 	setAvailable("data_save_row", m_view->rowEditing());
 }*/
 
-void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer& /*buf*/ ,KexiProperty& /*prop*/)
-{
-//	setDirty();
-	//TODO
-}
-
 static KexiDB::Field::Type firstTypeForSelectedGroup( int typegroup )
 {
 	//take the 1st type for the group
@@ -428,7 +425,7 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		if (propertyBuffer()) {
 			//update field name
 			KexiPropertyBuffer &buf = *propertyBuffer();
-			buf["name"]->setValue(newValue);
+			buf["name"] = newValue;
 		}
 	}
 	else if (colnum==1) {//'type'
@@ -454,12 +451,12 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		KexiDB::Field::Type fieldType = firstTypeForSelectedGroup( i_fieldTypeGroup );
 		if (fieldType==KexiDB::Field::InvalidType)
 			fieldType = KexiDB::Field::Text;
-		buf["type"]->setValue((int)fieldType);
+		buf["type"] = (int)fieldType;
 
 		//-get subtypes for this type: keys (slist) and names (nlist)
 		const QStringList slist = KexiDB::typeStringsForGroup(fieldTypeGroup);
 		const QStringList nlist = KexiDB::typeNamesForGroup(fieldTypeGroup);
-		KexiProperty *subTypeProperty = buf["subType"];
+		KexiProperty *subTypeProperty = &buf["subType"];
 
 		//update subtype list and value
 		subTypeProperty->setList(slist, nlist);
@@ -475,7 +472,7 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 
 		//update field desc.
 		KexiPropertyBuffer &buf = *propertyBuffer();
-		buf["description"]->setValue(item->at(2));
+		buf["description"] = item->at(2);
 	}
 }
 
@@ -535,6 +532,26 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 	}
 }
 
+void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer &buf, KexiProperty &property)
+{
+	if (property.name()=="primaryKey") {
+		if (property.value().toBool()==true) {
+			//primary key implies some rules
+			buf["unique"] = QVariant(true,1);
+			buf["notNull"] = QVariant(true,1);
+			buf["notEmpty"] = QVariant(true,1);
+			buf["indexed"] = QVariant(true,1);
+		}
+	}
+//TODO: perhaps show a hint in help panel telling what happens?
+	else if (property.value().toBool()==false) {
+		if (property.name()=="indexed" || property.name()=="unique" || property.name()=="notNull")
+			buf["primaryKey"] = QVariant(false,1);
+		if (property.name()=="notNull")
+			buf["notEmpty"] = QVariant(false,1);
+	}
+}
+
 void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* item, 
 	KexiDB::ResultInfo* /*result*/)
 {
@@ -559,7 +576,7 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 		b = m_buffers->at(i);
 		if (b) {
 			no_fields = false;
-			const QString name = (*b)["name"]->value().toString();
+			const QString name = (*b)["name"].value().toString();
 			if (name.isEmpty()) {
 				m_view->setCursor(i, 0);
 				m_view->startEditCurrentCell();
@@ -583,7 +600,7 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 		m_view->setCursor(i, 0);
 		m_view->startEditCurrentCell();
 		KMessageBox::information(this, i18n("You have added \"%1\" field name twice.\nField names cannot be repeated. Correct name of the field.")
-			.arg((*b)["name"]->value().toString()) );
+			.arg((*b)["name"].value().toString()) );
 		cancel = true;
 		ok = false;
 	}
@@ -596,39 +613,39 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 			KexiPropertyBuffer &buf = *b;
 			uint constraints = 0;
 			uint options = 0;
-			if (buf["primaryKey"]->value().toBool())
+			if (buf["primaryKey"].value().toBool())
 				constraints |= KexiDB::Field::PrimaryKey;
-			if (buf["unique"]->value().toBool())
+			if (buf["unique"].value().toBool())
 				constraints |= KexiDB::Field::Unique;
-			if (buf["notnull"]->value().toBool())
+			if (buf["notnull"].value().toBool())
 				constraints |= KexiDB::Field::NotNull;
-			if (buf["notEmpty"]->value().toBool())
+			if (buf["notEmpty"].value().toBool())
 				constraints |= KexiDB::Field::NotEmpty;
 
-			if (buf["unsigned"]->value().toBool())
+			if (buf["unsigned"].value().toBool())
 				options |= KexiDB::Field::Unsigned;
 				
-	//		int type = buf["type"]->value().toInt();
+	//		int type = buf["type"].value().toInt();
 	//		if (type < 0 || type > (int)KexiDB::Field::LastType)
 	//			type = KexiDB::Field::Text;
-			kdDebug() << buf["subType"]->value().toString() << endl;
+			kdDebug() << buf["subType"].value().toString() << endl;
 	//		int typeGroup = KexiDB::typeGroup(type);
-			QString typeString = buf["subType"]->value().toString();
+			QString typeString = buf["subType"].value().toString();
 			KexiDB::Field::Type type = KexiDB::Field::typeForString(typeString);
 			if (type==KexiDB::Field::InvalidType)
 				type = KexiDB::Field::Text;
 
 			KexiDB::Field *f = new KexiDB::Field( 
-				buf["name"]->value().toString(),
+				buf["name"].value().toString(),
 				type,
 				constraints,
 				options,
-				buf["length"]->value().toInt(),
-				buf["precision"]->value().toInt(),
-				buf["defaultValue"]->value(),
-				buf["caption"]->value().toString(),
-				buf["description"]->value().toString(),
-				buf["width"]->value().toInt()
+				buf["length"].value().toInt(),
+				buf["precision"].value().toInt(),
+				buf["defaultValue"].value(),
+				buf["caption"].value().toString(),
+				buf["description"].value().toString(),
+				buf["width"].value().toInt()
 			);
 			schema.addField(f);
 		}

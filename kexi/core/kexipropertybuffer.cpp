@@ -42,12 +42,12 @@ KexiPropertyBuffer::~KexiPropertyBuffer()
 void
 KexiPropertyBuffer::changeProperty(const QCString &property, const QVariant &value)
 {
-	KexiProperty *prop = find(property);
-	if (!prop)
+	KexiProperty& prop = this->property(property);
+	if (prop.isNull())
 		return;
 
 	kdDebug() << "KexiPropertyBuffer::changeProperty(): changing: " << property
-		<< " from '" << (prop->value().toString().isNull() ? QString("NULL") : prop->value().toString())
+		<< " from '" << (prop.value().toString().isNull() ? QString("NULL") : prop.value().toString())
 		<< "' to '" << (value.toString().isNull() ? QString("NULL") : value.toString()) << "'" << endl;
 /*
 	bool ch = false;
@@ -71,7 +71,7 @@ KexiPropertyBuffer::changeProperty(const QCString &property, const QVariant &val
 		prop->setValue(value);
 		emit propertyChanged(*this, *prop);
 	}*/
-	prop->setValue(value);
+	prop = value;
 }
 
 void
@@ -114,8 +114,8 @@ KexiPropertyBuffer::addCollectionPixmap(KexiProperty *prop, const QString pixmap
 QString
 KexiPropertyBuffer::pixmapName(const char *name)
 {
-	if(find(name))
-		return find(name)->pixmapName();
+	if(property(name))
+		return property(name).pixmapName();
 	return QString::null;
 }
 

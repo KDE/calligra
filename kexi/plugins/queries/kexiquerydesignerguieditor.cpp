@@ -247,7 +247,7 @@ void KexiQueryDesignerGuiEditor::updateColumsData()
 	for (int r = 0; r<(int)d->buffers->size(); r++) {
 		KexiPropertyBuffer *buf = d->buffers->at(r);
 		if (buf) {
-			QString tableName = (*buf)["table"]->value().toString();
+			QString tableName = (*buf)["table"].value().toString();
 			if (sortedTableNames.end() == qFind( sortedTableNames.begin(), sortedTableNames.end(), tableName )) {
 				//table not found: mark this line for later remove
 				rowsToDelete += r;
@@ -349,13 +349,13 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	for (int i=0; i<(int)d->buffers->size(); i++) {
 		KexiPropertyBuffer *buf = d->buffers->at(i);
 		if (buf) {
-			KexiDB::TableSchema *t = d->conn->tableSchema((*buf)["table"]->value().toString());
+			KexiDB::TableSchema *t = d->conn->tableSchema((*buf)["table"].value().toString());
 			if (!t) {
-				kdWarning() << "query designer: NO TABLE '" << (*buf)["table"]->value().toString() << "'" << endl;
+				kdWarning() << "query designer: NO TABLE '" << (*buf)["table"].value().toString() << "'" << endl;
 				continue;
 			}
-			QString fieldName = (*buf)["field"]->value().toString();
-			bool fieldVisible = (*buf)["visible"]->value().toBool();
+			QString fieldName = (*buf)["field"].value().toString();
+			bool fieldVisible = (*buf)["visible"].value().toBool();
 			if (fieldName=="*") {
 				//all tables asterisk
 				temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, 0 ), fieldVisible );
@@ -748,10 +748,10 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 			//update property
 			if (propertyBuffer()) {
 				KexiPropertyBuffer &buf = *propertyBuffer();
-				buf["field"]->setValue(fieldName.mid(id+1));
-				buf["alias"]->setValue(QString::null);
-				buf["caption"]->setValue(QString::null);
-				buf["table"]->setValue(tableName);
+				buf["field"] = fieldName.mid(id+1);
+				buf["alias"] = QString::null;
+				buf["caption"] = QString::null;
+				buf["table"] = tableName;
 			}
 		}
 	}
@@ -766,8 +766,8 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		//update property
 		if (propertyBuffer()) {
 			KexiPropertyBuffer &buf = *propertyBuffer();
-			buf["table"]->setValue(newValue);
-			buf["caption"]->setValue(QString::null);
+			buf["table"] = newValue;
+			buf["caption"] = QString::null;
 		}
 	}
 	else if (colnum==2) {//'visible'
@@ -779,7 +779,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		}
 		if (propertyBuffer()) {
 			KexiPropertyBuffer &buf = *propertyBuffer();
-			buf["visible"]->setValue(newValue);
+			buf["visible"] = newValue;
 		}
 	}
 	else if (colnum==3) {//'criteria'

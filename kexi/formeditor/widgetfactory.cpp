@@ -266,7 +266,7 @@ WidgetFactory::changeProperty(const char *name, const QVariant &value, Container
 	{
 		KFormDesigner::ObjectPropertyBuffer *buff = container->form()->manager()->buffer();
 		if((*buff)[name])
-			(*buff)[name]->setValue(value, true);
+			(*buff)[name] = value;
 	}
 }
 

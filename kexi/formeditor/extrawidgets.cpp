@@ -458,11 +458,11 @@ EditListViewDialog::updateItemProperties(QListBoxItem *item)
 	if(m_buffer)
 	{
 		m_buffer->blockSignals(true); // we don't want changeProperty to be called
-		(*m_buffer)["caption"]->setValue(m_listview->columnText(id), false);
-		(*m_buffer)["width"]->setValue(m_listview->columnWidth(id), false);
-		(*m_buffer)["clickable"]->setValue(QVariant(m_listview->header()->isClickEnabled(id), 4), false);
-		(*m_buffer)["resizable"]->setValue(QVariant(m_listview->header()->isResizeEnabled(id), 4), false);
-		(*m_buffer)["fullwidth"]->setValue(QVariant(m_listview->header()->isStretchEnabled(id), 4), false);
+		(*m_buffer)["caption"].setValue(m_listview->columnText(id), false);
+		(*m_buffer)["width"].setValue(m_listview->columnWidth(id), false);
+		(*m_buffer)["clickable"].setValue(QVariant(m_listview->header()->isClickEnabled(id), 4), false);
+		(*m_buffer)["resizable"].setValue(QVariant(m_listview->header()->isResizeEnabled(id), 4), false);
+		(*m_buffer)["fullwidth"].setValue(QVariant(m_listview->header()->isStretchEnabled(id), 4), false);
 		m_buffer->blockSignals(false);
 		m_editor->setBuffer(m_buffer);
 	}
@@ -511,11 +511,11 @@ EditListViewDialog::MoveItemUp()
 	m_listview->header()->setStretchEnabled(m_listview->header()->isStretchEnabled(current - 1), current);
 
 	m_listbox->changeItem(text, current - 1);
-	m_listview->setColumnText(current - 1, (*m_buffer)["caption"]->value().toString());
-	m_listview->setColumnWidth(current - 1,(*m_buffer)["width"]->value().toBool());
-	m_listview->header()->setClickEnabled((*m_buffer)["clickable"]->value().toBool(), current - 1);
-	m_listview->header()->setResizeEnabled((*m_buffer)["resizable"]->value().toBool(), current - 1);
-	m_listview->header()->setStretchEnabled((*m_buffer)["fullwidth"]->value().toBool(), current - 1);
+	m_listview->setColumnText(current - 1, (*m_buffer)["caption"].value().toString());
+	m_listview->setColumnWidth(current - 1,(*m_buffer)["width"].value().toBool());
+	m_listview->header()->setClickEnabled((*m_buffer)["clickable"].value().toBool(), current - 1);
+	m_listview->header()->setResizeEnabled((*m_buffer)["resizable"].value().toBool(), current - 1);
+	m_listview->header()->setStretchEnabled((*m_buffer)["fullwidth"].value().toBool(), current - 1);
 
 	m_listbox->blockSignals(false);
 	m_listbox->setCurrentItem(current - 1);
@@ -536,11 +536,11 @@ EditListViewDialog::MoveItemDown()
 	m_listview->header()->setStretchEnabled(m_listview->header()->isStretchEnabled(current + 1), current);
 
 	m_listbox->changeItem(text, current+1);
-	m_listview->setColumnText(current + 1, (*m_buffer)["caption"]->value().toString());
-	m_listview->setColumnWidth(current + 1,(*m_buffer)["width"]->value().toBool());
-	m_listview->header()->setClickEnabled((*m_buffer)["clickable"]->value().toBool(), current + 1);
-	m_listview->header()->setResizeEnabled((*m_buffer)["resizable"]->value().toBool(), current + 1);
-	m_listview->header()->setStretchEnabled((*m_buffer)["fullwidth"]->value().toBool(), current + 1);
+	m_listview->setColumnText(current + 1, (*m_buffer)["caption"].value().toString());
+	m_listview->setColumnWidth(current + 1,(*m_buffer)["width"].value().toBool());
+	m_listview->header()->setClickEnabled((*m_buffer)["clickable"].value().toBool(), current + 1);
+	m_listview->header()->setResizeEnabled((*m_buffer)["resizable"].value().toBool(), current + 1);
+	m_listview->header()->setStretchEnabled((*m_buffer)["fullwidth"].value().toBool(), current + 1);
 
 	m_listbox->blockSignals(false);
 	m_listbox->setCurrentItem(current + 1);
