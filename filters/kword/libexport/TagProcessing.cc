@@ -40,7 +40,7 @@
 
 #include <TagProcessing.h>
 
-#define DEBUG_KWORD_TAGS
+//#define DEBUG_KWORD_TAGS
 
 
 // The class TagProcessing and the two functions ProcessSubtags () and
