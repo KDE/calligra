@@ -48,3 +48,10 @@ Sun Jan 10 21:30:09 1999 Simon Hausmann <tronical@gmx.net>
         * embedded children documents are now painted, too (when KoHTMLDoc::draw() gets called)
 
         * started work on addBookmark() and advanced save/load mode (both not working, yet)
+
+Wed Jan 13 18:36:53 1999 Simon Hausmann <tronical@gmx.net>
+
+        * improved QPicture stuff (fixes and new smart caching method)
+
+        * KoHTML now uses the new window caption handling in OP
+

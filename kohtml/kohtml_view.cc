@@ -69,7 +69,7 @@ KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
   
   OPPartIf::setFocusPolicy(OpenParts::Part::ClickFocus);
 
-  m_strCaptionText = "KoHTML";
+  m_strCaptionText = "KOffice HTML Viewer";
   
   m_pDoc = _doc;
   
@@ -253,6 +253,7 @@ void KoHTMLView::init()
   for (; it.current(); ++it)
       slotInsertObject(it.current());
       
+  m_vMainWindow->setPartCaption( id(), m_strCaptionText );      
 }
 
 bool KoHTMLView::event(const char *event, const CORBA::Any &value)
@@ -300,7 +301,9 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   pix = OPUIUtils::convertPixmap(ICON("reload.xpm"));
   m_idReload = m_vMainToolBar->insertButton2(pix, ID_RELOAD, SIGNAL(clicked()), this, "slotReload", true, i18n("Reload Page"), -1);
 
-  pix = OPUIUtils::convertPixmap(ICON("stop.xpm"));
+  //grmpfl... there's already a stop icon in koffice/pics/toolbar, but we
+  //don't want to use it, we want the original kfm icon
+  pix = OPUIUtils::convertPixmap(ICON( kapp->kde_toolbardir() + "/stop.xpm" ));
   m_idStop = m_vMainToolBar->insertButton2(pix, ID_STOP, SIGNAL(clicked()), this, "slotStop", m_pDoc->documentLoading(), i18n("Stop"), -1);
   
   m_vMainToolBar->insertSeparator(-1);
@@ -872,10 +875,16 @@ void KoHTMLView::scanBookmarks( OpenPartsUI::Menu_var menu, const char * path )
 
 void KoHTMLView::slotSetCaption(const char *title)
 {
-  if (!m_strCaptionText)
-    return;
+  m_strCaptionText = i18n("KOffice HTML Viewer");
     
-  m_strCaptionText = title;
+  if (title)
+    {
+      if (!(strlen(title) == 1 && *title == ':'))
+        m_strCaptionText = QString(title).prepend("KoHTML : ");
+    }  
+
+  if (!CORBA::is_nil( m_vMainWindow ))
+    m_vMainWindow->setPartCaption( id(), m_strCaptionText );
 }
 
 void KoHTMLView::slotShowURL(KHTMLView *view, const char *url)

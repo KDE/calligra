@@ -39,11 +39,16 @@ public:
                     KHTMLView_Patched *parent_view = 0L);
   ~KHTMLView_Patched();
 
-  void draw(SavedPage *p, QPainter *painter, int width, int height, float scale);
+  void draw(QPainter *painter, int width, int height);
+
+  void drawWidget( QWidget *widget );
 
   virtual KHTMLView *newView(QWidget *parent, const char *name = 0L, int flags = 0L);
 
   void setMouseLock(bool flag);  
+  
+private:
+  QPixmap *pixmap;
 };
 
 #endif

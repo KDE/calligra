@@ -100,6 +100,8 @@ public:
 
   virtual void draw( QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
 		     CORBA::Float _scale );
+  virtual void drawDocument( QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
+		             CORBA::Float _scale );
 
   virtual void drawChildren( QPainter *painter, CORBA::Float _scale);
 
@@ -180,6 +182,12 @@ private:
   bool m_bModified;
   bool m_bEmpty;
   bool m_bDocumentDone;
+
+  bool m_bRepaintDocument;
+  QPixmap *m_pDocumentPixmap;
+  CORBA::Long m_lastWidth;
+  CORBA::Long m_lastHeight;
+  CORBA::Float m_lastScale;
 
   bool m_bLoadError;
   QString m_strErrorMsg;

@@ -29,6 +29,7 @@
 
 #include <iostream.h>
 
+#include <qobjectlist.h>
 
 KHTMLView_Patched::KHTMLView_Patched(QWidget *parent = 0L, const char *name = 0L, int flags = 0,
                     KHTMLView_Patched *parent_view = 0L)
@@ -41,30 +42,65 @@ KHTMLView_Patched::~KHTMLView_Patched()
   if (view) delete view;
 }
 
-void KHTMLView_Patched::draw(SavedPage *p, QPainter *painter, int width, int height, float scale)
+void KHTMLView_Patched::draw(QPainter *painter, int width, int height)
 {
-  QPixmap pix(width, height);
+  cerr << "void KHTMLView_Patched::draw(QPainter *painter, int width, int height)" << endl;
 
-  ((KHTMLWidget_Patched*)view)->draw(&pix, width, height);
+  pixmap = new QPixmap( width, height );
 
-//  if (scale != 1.0)
-//     tmpPainter.scale(scale, scale);
-     
-  painter->drawPixmap(0, 0, pix);
+//  pixmap->fill();
+  view->resize( width, height );
 
-/*
-  if (p->frames)
-     {
-       cerr << "iterating" << endl;
-       QListIterator<SavedPage> it(*p->frames);
-       for (; it.current(); ++it)
-           {
-	     KHTMLView *v = findView( it.current()->frameName );
-	     if (v)
-	        ((KHTMLView_Patched*)v)->draw(it.current(), painter, width, height, scale);
-	   }     
-     }     
-*/     
+  cerr << "drawing view" << endl;
+  drawWidget( view );
+  
+  // this does not seem to work :-((
+  cerr << "drawing scrollbars" << endl;
+  if (displayHScroll) drawWidget( horz );
+  if (displayVScroll) drawWidget( vert );
+  
+  painter->drawPixmap( 0, 0, *pixmap );
+  
+  delete pixmap;
+  
+  cerr << "done" << endl;
+}
+
+void KHTMLView_Patched::drawWidget( QWidget *widget )
+{
+  cerr << "trying to paint " << widget->className() << endl;
+
+  int x1 = widget->pos().x() ;//- pos().x();
+  int y1 = widget->pos().y() ;//- pos().y();
+
+  cerr << "coords: " << x1 << " " 
+                     << y1 << " : "
+		     << widget->width() << " "
+		     << widget->height() << endl;
+
+  QPainter::redirect( widget, pixmap );
+  QPaintEvent pe( QRect(x1, y1, widget->width(), widget->height()));
+  QApplication::sendEvent( widget, &pe );
+  QPainter::redirect( widget, 0 );
+
+  const QObjectList *childrenList = widget->children();
+  cerr << "children? " << childrenList << endl;
+  if (childrenList)
+    {
+      QObjectListIt it( *childrenList );
+      for (; it.current(); ++it )
+        {
+	cerr << "className : " << it.current()->className() << endl;
+        if (it.current()->isWidgetType())
+	  {
+	    cerr << "preparing for paint: " << it.current()->className() << endl;
+	    QWidget *w = (QWidget *)it.current();
+	    if (w->parentWidget() == widget /*&& w->isVisible()*/)
+	      drawWidget( w );
+	  }
+	}  
+    }  
+    
 }
 
 KHTMLView *KHTMLView_Patched::newView(QWidget *parent = 0L, const char *name = 0L, int flags = 0L)

@@ -71,21 +71,6 @@ KoHTMLDoc::KoHTMLDoc()
   m_lstJobs.setAutoDelete(false);
 
   m_bModified = false;
-
-  m_eSaveLoadMode = KoHTML::KoHTMLDocument::URLOnly;
-
-  m_strHTMLData = "";  
-  m_strCurrentURL = "";
-  
-  m_pInternalView = new KHTMLView_Patched;
-  
-  addHTMLView(m_pInternalView);
-
-  QObject::connect(this, SIGNAL(contentChanged()),
-                         SLOT(slotUpdateInternalView()));
-  QObject::connect(m_pInternalView, SIGNAL(documentDone(KHTMLView *)),
-                   this, SLOT(slotDocumentDoneInternal(KHTMLView *)));
-  
 }
 
 KoHTMLDoc::~KoHTMLDoc()
@@ -95,6 +80,10 @@ KoHTMLDoc::~KoHTMLDoc()
   cerr << "deleting internal view" << endl;
   delete m_pInternalView;
   cerr << "KoHTMLDoc is finished :)" << endl;
+  
+  if (m_pDocumentPixmap)
+    delete m_pDocumentPixmap;
+    
 //  cleanUp();
 }
 
@@ -156,6 +145,26 @@ int KoHTMLDoc::viewCount()
 
 CORBA::Boolean KoHTMLDoc::init()
 {
+  m_eSaveLoadMode = KoHTML::KoHTMLDocument::URLOnly;
+
+  m_strHTMLData = "";  
+  m_strCurrentURL = "";
+
+  m_bRepaintDocument = true;
+  m_pDocumentPixmap = 0L;
+  m_lastWidth = -1;
+  m_lastHeight = -1;
+  m_lastScale = -1;
+  
+  m_pInternalView = new KHTMLView_Patched;
+  
+  addHTMLView(m_pInternalView);
+
+  QObject::connect(this, SIGNAL(contentChanged()),
+                         SLOT(slotUpdateInternalView()));
+  QObject::connect(m_pInternalView, SIGNAL(documentDone(KHTMLView *)),
+                   this, SLOT(slotDocumentDoneInternal(KHTMLView *)));
+
   return true;
 }
 
@@ -209,6 +218,7 @@ void KoHTMLDoc::feedData(const char *url, const char *data)
   m_bDocumentDone = true;
   documentDone();
   emit contentChanged();
+  m_bRepaintDocument = true;
 }
 
 void KoHTMLDoc::documentStarted()
@@ -241,6 +251,7 @@ void KoHTMLDoc::stopLoading()
       }     
       
   assert( m_lstJobs.count() == 0 );      
+  m_bRepaintDocument = true;
 }
 
 KoHTML::KoHTMLDocument::SaveLoadMode KoHTMLDoc::saveLoadMode()
@@ -264,6 +275,7 @@ void KoHTMLDoc::slotHTMLCodeLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLVi
   cerr << "emitting contentChanged()" << endl;
   emit contentChanged();    
   cerr << "done... now our job should kill itself..." << endl;
+  m_bRepaintDocument = true;
 }
 
 void KoHTMLDoc::slotHTMLLoadError(const char *errMsg)
@@ -278,15 +290,15 @@ void KoHTMLDoc::slotHTMLRedirect(int id, const char *url)
 }
 
 void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
-		     CORBA::Float _scale )
-{ 
-  QPainter painter;
-  painter.begin(dev);
-
-  if (_scale != 1.0) painter.translate(_scale, _scale);
-  
+                     CORBA::Float _scale)
+{
   if (m_strCurrentURL.isEmpty())
      {
+       QPainter painter;
+       painter.begin( dev );
+     
+       if (_scale != 1.0) painter.translate(_scale, _scale);
+       
        const char *msg = i18n("KoHTML: No document loaded!");
        
        QRect r = painter.fontMetrics().boundingRect(msg);
@@ -299,7 +311,37 @@ void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
        
        return;
      }
-     
+
+  if ((!m_pDocumentPixmap) || (m_bRepaintDocument) || (width != m_lastWidth) || 
+      (height != m_lastHeight) || (_scale != m_lastScale))
+     {
+       if (m_pDocumentPixmap)
+         m_pDocumentPixmap->resize( width, height );
+       else
+         m_pDocumentPixmap = new QPixmap( width, height );
+	 
+       drawDocument( m_pDocumentPixmap, width, height, _scale );
+       
+       m_lastWidth = width;
+       m_lastHeight = height;
+       m_lastScale = _scale;	 
+       m_bRepaintDocument = false;
+     }
+
+  QPainter p;
+  p.begin( dev );
+  p.drawPixmap(0, 0, *m_pDocumentPixmap );
+  p.end();
+}
+
+void KoHTMLDoc::drawDocument(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
+		             CORBA::Float _scale )
+{ 
+  QPainter painter;
+  painter.begin(dev);
+
+  if (_scale != 1.0) painter.translate(_scale, _scale);
+  
 //  if (!m_bDocumentDone) return;
 
   if (m_lstHTMLViews.count() > 1)
@@ -313,13 +355,8 @@ void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
 
   cerr << "void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height)" << endl;
 
-  cerr << "saving ourselves ;)" << endl;
-  SavedPage *p = m_pInternalView->saveYourself();
-
   cerr << "drawing" << endl;
-  m_pInternalView->draw(p, &painter, width, height, _scale);
-  
-  delete p;
+  m_pInternalView->draw( &painter, width, height );
   
   drawChildren(&painter, _scale);
   
@@ -334,6 +371,7 @@ void KoHTMLDoc::drawChildren( QPainter *painter, CORBA::Float _scale)
       {
         QRect geom = it.current()->geometry();
 	QPixmap pix(geom.width(), geom.height());
+	pix.fill();
 	QPainter p2;
 	p2.begin(&pix);
         it.current()->draw(_scale, true)->play(&p2);
@@ -491,6 +529,7 @@ void KoHTMLDoc::insertObject(const KRect &rect, KoDocumentEntry &de)
   insertChild(c);    
         
   m_bModified = true;     
+  m_bRepaintDocument = true;
 }
 
 void KoHTMLDoc::insertChild(KoHTMLChild *child)
@@ -500,6 +539,7 @@ void KoHTMLDoc::insertChild(KoHTMLChild *child)
   emit sig_insertObject(child);
 
   m_bModified = true;
+  m_bRepaintDocument = true;
 }
 
 void KoHTMLDoc::changeChildGeometry(KoHTMLChild *child, const KRect &rect)
@@ -510,6 +550,7 @@ void KoHTMLDoc::changeChildGeometry(KoHTMLChild *child, const KRect &rect)
   emit sig_updateChildGeometry(child);
   
   m_bModified = true; 
+  m_bRepaintDocument = true;
 }
 
 QListIterator<KoHTMLChild> KoHTMLDoc::childIterator()
@@ -667,6 +708,7 @@ void KoHTMLDoc::slotDocumentStarted(KHTMLView *view)
      }
      
 //  if (view == topView) documentStarted();
+  m_bRepaintDocument = true;
 }
 
 void KoHTMLDoc::slotDocumentDone(KHTMLView *view)
@@ -682,7 +724,7 @@ void KoHTMLDoc::slotDocumentDone(KHTMLView *view)
   if (view == topView) 
     {
       documentDone();
-      
+
       // BadHack(tm) ... :-((
       if (m_bLoadError)
          {
@@ -690,6 +732,8 @@ void KoHTMLDoc::slotDocumentDone(KHTMLView *view)
            QMessageBox::critical(0L, i18n("KoHTML IO Error"), m_strErrorMsg, i18n("Abort"));
 	 }  
     }  
+
+  m_bRepaintDocument = true;
 }
 
 void KoHTMLDoc::slotDocumentLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *filename)
@@ -710,6 +754,7 @@ void KoHTMLDoc::slotDocumentLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLVi
   parent->end();
   
   m_lstJobs.removeRef(job);
+  m_bRepaintDocument = true;
 }
 
 void KoHTMLDoc::slotImageLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *filename)
@@ -725,6 +770,7 @@ void KoHTMLDoc::slotImageLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView 
   emit imageLoaded(url, filename);
   
   m_lstJobs.removeRef(job);
+  m_bRepaintDocument = true;
 }
 
 void KoHTMLDoc::slotUpdateInternalView()
@@ -742,4 +788,5 @@ void KoHTMLDoc::slotUpdateInternalView()
 void KoHTMLDoc::slotDocumentDoneInternal(KHTMLView *view)
 {
   m_bDocumentDone = true;
+  m_bRepaintDocument = true;
 }
