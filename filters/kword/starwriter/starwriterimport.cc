@@ -51,7 +51,7 @@ StarWriterImport::StarWriterImport(KoFilter *, const char *, const QStringList&)
 {
     hasHeader = false;
     hasFooter = false;
-    framesNumber = 1;
+    tablesNumber = 1;
 }
 
 StarWriterImport::~StarWriterImport()
@@ -280,7 +280,7 @@ bool StarWriterImport::parseText(QByteArray n)
     // Write it to the variable
     text = convertToKWordString(s);
     bodyStuff.append("  <PARAGRAPH>\n");
-    bodyStuff.append("   <TEXT>" + text + "</TEXT>\n");
+    bodyStuff.append("   <TEXT xml:space=\"preserve\">" + text + "</TEXT>\n");
     bodyStuff.append("  </PARAGRAPH>\n");
 
     return true;
@@ -297,9 +297,8 @@ bool StarWriterImport::parseTable(QByteArray n)
     Q_UINT8 row, column;
 
     // Set table name
-    tableName = QString("Table %1").arg(framesNumber);
-
-    framesNumber++;
+    tableName = QString("Table %1").arg(tablesNumber);
+    tablesNumber++;
 
     // Skip useless sections and retrieve the right point
     p = 0x13;
