@@ -3,6 +3,7 @@
 Name=KWordAsciiFilter
 Name[de]=KWord ASCII-Filter
 Name[es]=Filtro Ascii KWord
+Name[hu]=KWordAsciiSzûrõ
 Name[is]=ASCII sía fyrir ritvinnslu
 Name[pl]=Filtr KWorda dla plików ASCII
 Name[pt]=Filtro Ascii para KWord
@@ -14,6 +15,7 @@ Comment[da]=Reggie's KWord Ascii filter
 Comment[de]=Reggies KWord ASCII-Filter
 Comment[es]=Filtro Ascii KWord de Reggie
 Comment[fr]=Filtre Ascii pour le KWord de Reggie
+Comment[hu]=Reggie KWord Ascii Szûrõje
 Comment[is]=ASCII sía fyrir ritvinnslu
 Comment[no]=Reggies KWord Ascii-filter
 Comment[pl]=Filtr KWorda dla plików ASCII (Reggiego)
