@@ -70,6 +70,8 @@ public:
     virtual bool getDrawEmpty() const
     { return drawEmpty; }
 
+    void setShadowParameter(int _distance,ShadowDirection _direction,QColor _color);
+
     virtual QDomDocumentFragment save( QDomDocument& doc );
     virtual void load(const QDomElement &element);
 

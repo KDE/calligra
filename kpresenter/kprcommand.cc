@@ -74,9 +74,7 @@ void ShadowCmd::execute()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-        objects.at( i )->setShadowDistance( newShadow.shadowDistance );
-        objects.at( i )->setShadowDirection( newShadow.shadowDirection );
-        objects.at( i )->setShadowColor( newShadow.shadowColor );
+        objects.at( i )->setShadowParameter(newShadow.shadowDistance,newShadow.shadowDirection,newShadow.shadowColor);
     }
     doc->repaint( false );
 }
@@ -86,9 +84,7 @@ void ShadowCmd::unexecute()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-        objects.at( i )->setShadowDistance( oldShadow.at( i )->shadowDistance );
-        objects.at( i )->setShadowDirection( oldShadow.at( i )->shadowDirection );
-        objects.at( i )->setShadowColor( oldShadow.at( i )->shadowColor );
+        objects.at( i )->setShadowParameter(oldShadow.at(i)->shadowDistance,oldShadow.at(i)->shadowDirection,oldShadow.at(i)->shadowColor);
     }
     doc->repaint( false );
 }

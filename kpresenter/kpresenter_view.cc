@@ -894,9 +894,10 @@ void KPresenterView::extraShadow()
 	shadowDia->setMinimumSize( shadowDia->width(), shadowDia->height() );
 	shadowDia->setCaption( i18n( "KPresenter - Shadow" ) );
 	QObject::connect( shadowDia, SIGNAL( shadowDiaOk() ), this, SLOT( shadowOk() ) );
-	shadowDia->setShadowDirection( m_pKPresenterDoc->getSelectedObj()->getShadowDirection() );
-	shadowDia->setShadowDistance( m_pKPresenterDoc->getSelectedObj()->getShadowDistance() );
-	shadowDia->setShadowColor( m_pKPresenterDoc->getSelectedObj()->getShadowColor() );
+        KPObject *object=m_pKPresenterDoc->getSelectedObj();
+	shadowDia->setShadowDirection( object->getShadowDirection() );
+	shadowDia->setShadowDistance( object->getShadowDistance() );
+	shadowDia->setShadowColor( object->getShadowColor() );
 	page->setToolEditMode( TEM_MOUSE );
 	shadowDia->show();
     }

@@ -69,6 +69,14 @@ public:
     { resizeBy( _size.width(), _size.height() ); }
     virtual void resizeBy( int _dx, int _dy )
     { ext = ext + QSize( _dx + ext.width() > 20 ? _dx : 0, _dy + ext.height() > 20 ? _dy : 0 ); }
+    
+    virtual void setShadowParameter(int _distance,ShadowDirection _direction,QColor _color)
+    {
+	    shadowDistance = _distance;
+	    shadowDirection = _direction;
+	    shadowColor = _color;
+    }
+
     virtual void setShadowDistance( int _distance )
     { shadowDistance = _distance; }
     virtual void setShadowDirection( ShadowDirection _direction )

@@ -279,19 +279,6 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy,
 // Assumes the painter is already set up correctly.
 void KPTextObject::drawText( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged )
 {
-#if 0
-    // HACK: propagate shadow setting from object to paragraphs here (TODO)
-    if ( shadowDistance )
-    {
-        Qt3::QTextParag *parag = textDocument()->firstParag();
-        while ( parag ) {
-            // The double->int conversion for shadowDistance assumes pt=pixel. Bah.
-            static_cast<KoTextParag *>(parag)->setShadow( (int)shadowDistance, shadowDirection, shadowColor );
-            parag = parag->next();
-        }
-    }
-#endif
-
     kdDebug() << "KPTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
     QColorGroup cg = QApplication::palette().active();
     //// ### Transparent background - TODO use configuration ?
@@ -571,9 +558,9 @@ KoTextFormat *KPTextObject::loadFormat( QDomElement &n )
     //todo FIXME : KoTextFormat
 
     KoTextFormat *fm = static_cast<KoTextFormat*> (textDocument()->formatCollection()->format( fn, col ));
-    kdDebug()<<"******************************************\n";
-    kdDebug()<<"format :"<<fm->key()<<endl;
-    kdDebug()<<"******************************************\n";
+    //kdDebug()<<"******************************************\n";
+    //kdDebug()<<"format :"<<fm->key()<<endl;
+    //kdDebug()<<"******************************************\n";
     QString textBackColor=n.attribute(attrTextBackColor);
     if(!textBackColor.isEmpty())
     {
@@ -956,6 +943,20 @@ KCommand * KPTextObject::pasteKPresenter( QTextCursor * cursor, const QCString &
     return macroCmd;
 }
 
+
+void KPTextObject::setShadowParameter(int _distance,ShadowDirection _direction,QColor _color)
+{
+    //todo apply to all parag
+    shadowDistance = _distance;
+    shadowDirection = _direction;
+    shadowColor = _color;
+    Qt3::QTextParag *parag = textDocument()->firstParag();
+    while ( parag ) {
+        // The double->int conversion for shadowDistance assumes pt=pixel. Bah.
+        static_cast<KoTextParag *>(parag)->setShadow( (int)shadowDistance, shadowDirection, shadowColor );
+        parag = parag->next();
+    }
+}
 
 KPTextView::KPTextView( KPTextObject * txtObj,Page *_page )
     : KoTextView( txtObj->textObject() )
