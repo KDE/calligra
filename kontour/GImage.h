@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -23,28 +23,23 @@
 
 */
 
-#ifndef __GRect_h__
-#define __GRect_h__
+#ifndef __GImage_h__
+#define __GImage_h__
 
-#include "GObject.h"
+#include <GObject.h>
 
-class GRect : public GObject
+class QImage;
+
+class GImage : public GObject
 {
   Q_OBJECT
 public:
-  GRect(bool roundness = false);
-  GRect(const QDomElement &element);
-  GRect(const GRect &obj);
+  GImage(const QString &filename);
+  GImage(const QDomElement &element);
+  GImage(const GImage &obj);
+  ~GImage();
 
   GObject *copy() const;
-
-  bool isSquare() const;
-
-  const KoPoint &startPoint() const {return sPoint; }
-  void startPoint(const KoPoint &p);
-
-  const KoPoint &endPoint() const {return ePoint; }
-  void endPoint(const KoPoint &p);
 
   QString typeName () const;
   QDomElement writeToXml(QDomDocument &document);
@@ -61,10 +56,7 @@ public:
   bool isConvertible() const;
 
 private:
-  KoPoint     sPoint;           // Start point
-  KoPoint     ePoint;           // End point
-  double      mXRoundness;      // Rectangle roundness
-  double      mYRoundness;      // Rectangle roundness
+  QImage *mImage;
 };
 
 #endif

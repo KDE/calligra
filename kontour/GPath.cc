@@ -381,7 +381,7 @@ void GPath::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, 
       c = (*seg)->point(0).transform(tmpMatrix);
       x = static_cast<int>(c.x());
       y = static_cast<int>(c.y());
-      drawNode(p, x, y, false);
+      drawNode(p, x + aXOffset, y + aYOffset, false);
     }
   }
 }

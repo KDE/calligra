@@ -121,15 +121,9 @@ QDomElement GObject::writeToXml(QDomDocument &document)
 
 void GObject::drawNode(KoPainter *p, int x, int y, bool active)
 {
-/*  p.save();
-  QWMatrix e;
-  p.scale(1.0, 1.0);
-  QBrush brush(Qt::magenta);
-  p.setBrush(brush);
-  p.setPen(Qt::black);
-  p.drawRect(x - 3, y - 3, 7, 7);
-  p.fillRect(x - 2, y - 2, 5, 5, brush);
-  p.restore();*/
+// TODO Fix!
+  p->fillAreaRGB(QRect(x - 4, y - 4, 9, 9), KoColor::black());
+  p->fillAreaRGB(QRect(x - 3, y - 3, 7, 7), KoColor::magenta());
 }
 
 void GObject::setZoomFactor(double f, double pf)
@@ -296,26 +290,20 @@ void GObject::setPen(KoPainter *p)
 
 void GObject::setBrush(KoPainter *p)
 {
-  // TODO : patterns, gradients, noFill
-/*  QBrush brush;
-  if(mStyle->filled())
-  {
-    brush.setColor(mStyle->fillColor().color());
-    brush.setStyle(mStyle->brushStyle());
-  }
-  p->setBrush(brush);*/
+  p->fill(mStyle->fill());
 }
 
 void GObject::adjustBBox(KoPoint &tleft, KoPoint &tright, KoPoint &bright, KoPoint &bleft)
 {
-  tleft.setX(tleft.x() - mStyle->outlineWidth() / 2);
-  tleft.setY(tleft.y() - mStyle->outlineWidth() / 2);
-  tright.setX(tright.x() + mStyle->outlineWidth() / 2);
-  tright.setY(tright.y() - mStyle->outlineWidth() / 2);
-  bright.setX(bright.x() + mStyle->outlineWidth() / 2);
-  bright.setY(bright.y() + mStyle->outlineWidth() / 2);
-  bleft.setX(bleft.x() - mStyle->outlineWidth() / 2);
-  bleft.setY(bleft.y() + mStyle->outlineWidth() / 2);
+  int t = static_cast<int>(mStyle->outlineWidth() * 0.5) + 1;
+  tleft.setX(tleft.x() -  t);
+  tleft.setY(tleft.y() - t);
+  tright.setX(tright.x() + t);
+  tright.setY(tright.y() - t);
+  bright.setX(bright.x() + t);
+  bright.setY(bright.y() + t);
+  bleft.setX(bleft.x() - t);
+  bleft.setY(bleft.y() + t);
 }
 
 #include "GObject.moc"

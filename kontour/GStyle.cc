@@ -26,17 +26,17 @@
 
 #include <qdom.h>
 
+#include <koFill.h>
+#include <kdebug.h>
+
 GStyle::GStyle()
 {
   mStroked = true;
   mOutline = new KoOutline;
   mOutlineOpacity = static_cast<int>(100.0 * static_cast<double>(mOutline->opacity()) / 255.0);
-/*
-  d->ftype = NoFill;
-  d->fcolor = KoColor::white();
-  d->fopacity = 100;
-  d->pattern = Qt::SolidPattern;
-*/
+  mFilled = NoFill;
+  mFill = new KoFill;
+  mFillOpacity = static_cast<int>(100.0 * static_cast<double>(mFill->opacity()) / 255.0);
 }
 
 GStyle::GStyle(const QDomElement &style)
@@ -57,28 +57,30 @@ GStyle::GStyle(const QDomElement &style)
 
 GStyle::GStyle(GStyle &obj)
 {
-  mOutline = new KoOutline;
   mStroked = obj.mStroked;
-/*  d->ocolor = obj.d->ocolor;
-  d->lwidth = obj.d->lwidth;
-  d->oopacity = obj.d->oopacity;
-  d->join = obj.d->join;
-  d->cap = obj.d->cap;
-  d->ftype = obj.d->ftype;
-  d->fcolor = obj.d->fcolor;*/
-//  d->fopacity = obj.d->fopacity;
-//  d->pattern = obj.d->pattern;
+  mOutline = new KoOutline;
+  mFilled = obj.mFilled;
+  mFill = new KoFill;
 }
 
 GStyle::~GStyle()
 {
   delete mOutline;
+  delete mFill;
 }
 
 KoOutline *GStyle::outline() const
 {
   if(mStroked)
     return mOutline;
+  else
+    return 0L;
+}
+
+KoFill *GStyle::fill() const
+{
+  if(mFilled != NoFill)
+    return mFill;
   else
     return 0L;
 }
@@ -103,9 +105,9 @@ bool GStyle::stroked() const
   return mStroked;
 }
 
-void GStyle::stroked(bool stroked)
+void GStyle::stroked(bool aStroked)
 {
-  mStroked = stroked;
+  mStroked = aStroked;
 }
   
 const KoColor &GStyle::outlineColor() const
@@ -129,12 +131,12 @@ void GStyle::outlineOpacity(int o)
   mOutline->opacity(static_cast<int>(255.0 * static_cast<double>(o) / 100.0));
 }
 
-int GStyle::outlineWidth() const
+double GStyle::outlineWidth() const
 {
-  return static_cast<int>(mOutline->width());
+  return mOutline->width();
 }
 
-void GStyle::outlineWidth(int w)
+void GStyle::outlineWidth(double w)
 {
   mOutline->width(w);
 }
@@ -159,42 +161,44 @@ void GStyle::capStyle(KoOutline::Cap cap)
   mOutline->cap(cap);
 }
 
-void GStyle::fillColor(const KoColor &)
+int GStyle::filled() const
 {
+  return mFilled;
+}
+
+void GStyle::filled(int aFilled)
+{
+  mFilled = aFilled;
+}
+
+int GStyle::fillOpacity() const
+{
+  return mFillOpacity;
+}
+
+void GStyle::fillOpacity(int o)
+{
+  mFillOpacity = o;
+  mFill->opacity(static_cast<int>(255.0 * static_cast<double>(o) / 100.0));
 }
 
 const KoColor &GStyle::fillColor() const
 {
-  return KoColor::red();
+  return mFill->color();
 }
 
-Qt::BrushStyle GStyle::brushStyle() const
+void GStyle::fillColor(const KoColor &c)
 {
-  return Qt::SolidPattern;
-}
-
-void GStyle::brushStyle(Qt::BrushStyle /*brushStyle*/)
-{
-//  d->pattern = brushStyle;
-}
-
-int GStyle::filled() const
-{
-  return 0;
-}
-
-void GStyle::filled(int /*filled*/)
-{
-  //d->ftype = filled;
+  mFill->color(c);
 }
 
 GStyle &GStyle::operator=(const GStyle &s)
 {
   mStroked = s.mStroked;
   *mOutline = *s.mOutline;
-/*  d->ftype = s.d->ftype;
-  d->fcolor = s.d->fcolor;
-  d->fopacity = s.d->fopacity;
-  d->pattern = s.d->pattern;*/
+  mOutlineOpacity = s.mOutlineOpacity;
+  mFilled = s.mFilled;
+  *mFill = *s.mFill;
+  mFillOpacity = s.mFillOpacity;
   return *this;
 }

@@ -48,20 +48,44 @@ Tool(aId, tc)
   ToolSelectAction *zoom = new ToolSelectAction(actionCollection(), "ToolAction");
   KRadioAction *mT1 = new KRadioAction(i18n("Square"), "rect1", 0, actionCollection());
   mT1->setExclusiveGroup("RectTool");
+  connect(mT1,SIGNAL(activated()),SLOT(disableRoundness()));
+  connect(mT1,SIGNAL(activated()),SLOT(enableFill()));
+  connect(mT1,SIGNAL(activated()),SLOT(enableSquare()));
   KRadioAction *mT2 = new KRadioAction(i18n("Rectangle"),"rect2", 0, actionCollection());
   mT2->setExclusiveGroup("RectTool");
+  connect(mT2,SIGNAL(activated()),SLOT(disableRoundness()));
+  connect(mT2,SIGNAL(activated()),SLOT(enableFill()));
+  connect(mT2,SIGNAL(activated()),SLOT(disableSquare()));
   KRadioAction *mT3 = new KRadioAction(i18n("Square"), "rect3", 0, actionCollection());
   mT3->setExclusiveGroup("RectTool");
+  connect(mT3,SIGNAL(activated()),SLOT(enableRoundness()));
+  connect(mT3,SIGNAL(activated()),SLOT(enableFill()));
+  connect(mT3,SIGNAL(activated()),SLOT(enableSquare()));
   KRadioAction *mT4 = new KRadioAction(i18n("Rectangle"), "rect4", 0, actionCollection());
   mT4->setExclusiveGroup("RectTool");
+  connect(mT4,SIGNAL(activated()),SLOT(enableRoundness()));
+  connect(mT4,SIGNAL(activated()),SLOT(enableFill()));
+  connect(mT4,SIGNAL(activated()),SLOT(disableSquare()));
   KRadioAction *mT5 = new KRadioAction(i18n("Square"), "rect5", 0, actionCollection());
   mT5->setExclusiveGroup("RectTool");
+  connect(mT5,SIGNAL(activated()),SLOT(disableRoundness()));
+  connect(mT5,SIGNAL(activated()),SLOT(disableFill()));
+  connect(mT5,SIGNAL(activated()),SLOT(enableSquare()));
   KRadioAction *mT6 = new KRadioAction(i18n("Rectangle"), "rect6", 0, actionCollection());
   mT6->setExclusiveGroup("RectTool");
+  connect(mT6,SIGNAL(activated()),SLOT(disableRoundness()));
+  connect(mT6,SIGNAL(activated()),SLOT(disableFill()));
+  connect(mT6,SIGNAL(activated()),SLOT(disableSquare()));
   KRadioAction *mT7 = new KRadioAction(i18n("Square"), "rect7", 0, actionCollection());
   mT7->setExclusiveGroup("RectTool");
+  connect(mT7,SIGNAL(activated()),SLOT(enableRoundness()));
+  connect(mT7,SIGNAL(activated()),SLOT(disableFill()));
+  connect(mT7,SIGNAL(activated()),SLOT(enableSquare()));
   KRadioAction *mT8 = new KRadioAction(i18n("Rectangle"), "rect8", 0, actionCollection());
   mT8->setExclusiveGroup("RectTool");
+  connect(mT8,SIGNAL(activated()),SLOT(enableRoundness()));
+  connect(mT8,SIGNAL(activated()),SLOT(disableFill()));
+  connect(mT8,SIGNAL(activated()),SLOT(disableSquare()));
   zoom->insert(mT1);
   zoom->insert(mT2);
   zoom->insert(mT3);
@@ -169,7 +193,7 @@ void RectTool::processEvent(QEvent *e)
       }
       else
       {
-        GRect *rect = new GRect();
+        GRect *rect = new GRect(mRoundness);
         kdDebug(38000) << "r.left() : " << r.left() << endl;
         kdDebug(38000) << "r.bottom() : " << r.bottom() << endl;
         kdDebug(38000) << "canvas.xOffset() : " << canvas->xOffset() << endl;
@@ -181,6 +205,8 @@ void RectTool::processEvent(QEvent *e)
         CreateRectCmd *cmd = new CreateRectCmd(toolController()->view()->activeDocument(), rect);
         KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
         rect->style(doc->document()->styles()->style());  // copy current style
+	if(!mFill)
+	  rect->style()->filled(GStyle::NoFill);
         doc->history()->addCommand(cmd);
         canvas->updateBuf(r);
         canvas->repaint(r);
@@ -216,6 +242,36 @@ void RectTool::processEvent(QEvent *e)
       if (ke->key () == Qt::Key_Escape)
          m_toolController->emitOperationDone (m_id);*/
   }
+}
+
+void RectTool::enableRoundness()
+{
+  mRoundness = true;
+}
+
+void RectTool::disableRoundness()
+{
+  mRoundness = false;
+}
+
+void RectTool::enableFill()
+{
+  mFill = true;
+}
+
+void RectTool::disableFill()
+{
+  mFill = false;
+}
+
+void RectTool::enableSquare()
+{
+  mSquare = true;
+}
+
+void RectTool::disableSquare()
+{
+  mSquare = false;
 }
 
 #include "RectTool.moc"

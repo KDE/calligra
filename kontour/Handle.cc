@@ -84,21 +84,14 @@ void Handle::rotCenter(const KoPoint &p)
 
 void Handle::draw(KoPainter *p, int aXOffset, int aYOffset, double zoom)
 {
-/*  if(!mShow)
+  if(!mShow)
     return;
 
   if(mEmpty)
     return;
 
-  QBrush brush;
-  p.save();
-  p.setPen(Qt::black);
-
-  p.drawPoint(qRound(mRotCenter.x()), qRound(mRotCenter.y()));
-  p.drawEllipse(qRound(mRotCenter.x()) - 5, qRound(mRotCenter.y()) - 5, 11, 11);
-
-  brush = QBrush(Qt::black);
-  p.setBrush(brush);*/
+//  p.drawPoint(qRound(mRotCenter.x()), qRound(mRotCenter.y()));
+//  p.drawEllipse(qRound(mRotCenter.x()) - 5, qRound(mRotCenter.y()) - 5, 11, 11);
   /* Top arrow */
 //  p.drawLine(static_cast<int>(pos[1].x()) - 5, static_cast<int>(pos[1].y()) - 5, static_cast<int>(pos[1].x()) + 4, static_cast<int>(pos[1].y()) - 5);
   drawArrow(p, static_cast<int>(pos[1].x()) - 5, static_cast<int>(pos[1].y()) - 5, Arrow_Left);

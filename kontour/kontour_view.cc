@@ -584,6 +584,8 @@ void KontourView::changeSelection()
     return;
   if(mOutlinePanel)
     mOutlinePanel->slotUpdate();
+  if(mPaintPanel)
+    mPaintPanel->slotUpdate();
   if(mTransformPanel)
     mTransformPanel->slotUpdate();
   if(page->selectionIsEmpty())

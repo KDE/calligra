@@ -104,7 +104,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
 
   /* Outline width */
   QLabel *mWidthText = new QLabel(i18n("Width"), mOutlineStyle);
-  mWidthBox = new QSpinBox(0, 100, 1, mOutlineStyle);
+  mWidthBox = new QSpinBox(1, 100, 1, mOutlineStyle);
   connect(mWidthBox, SIGNAL(valueChanged(int)), this, SLOT(slotChangeLineWidth(int)));
 
   QLabel *mLineStyleText = new QLabel(i18n("Line Style"), mOutlineStyle);
@@ -122,16 +122,16 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mJoinBox->setInsideMargin(0);
   mJoinBox->setFixedHeight(20);
   mJoinBox->setExclusive(true);
-  QPushButton *mRoundBtn = new QPushButton(mJoinBox);
-  mRoundBtn->setToggleButton(true);
-  mRoundBtn->setFixedWidth(20);
-  mRoundBtn->setFixedHeight(20);
-  mRoundBtn->setPixmap(SmallIcon("join_round", KontourFactory::global()));
   QPushButton *mMiterBtn = new QPushButton(mJoinBox);
   mMiterBtn->setToggleButton(true);
   mMiterBtn->setFixedWidth(20);
   mMiterBtn->setFixedHeight(20);
   mMiterBtn->setPixmap(SmallIcon("join_miter", KontourFactory::global()));
+  QPushButton *mRoundBtn = new QPushButton(mJoinBox);
+  mRoundBtn->setToggleButton(true);
+  mRoundBtn->setFixedWidth(20);
+  mRoundBtn->setFixedHeight(20);
+  mRoundBtn->setPixmap(SmallIcon("join_round", KontourFactory::global()));
   QPushButton *mBevelBtn = new QPushButton(mJoinBox);
   mBevelBtn->setToggleButton(true);
   mBevelBtn->setFixedWidth(20);
@@ -146,6 +146,12 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mCapBox->setInsideMargin(0);
   mCapBox->setFixedHeight(20);
   mCapBox->setExclusive(true);
+  QPushButton *mFlatBtn = new QPushButton(mCapBox);
+  mFlatBtn->setToggleButton(true);
+  mFlatBtn->setFixedWidth(20);
+  mFlatBtn->setFixedHeight(20);
+  mFlatBtn->setPixmap(SmallIcon("cap_flat", KontourFactory::global()));
+  connect(mCapBox, SIGNAL(pressed(int)), this, SLOT(slotCapPressed(int)));
   QPushButton *mCRoundBtn = new QPushButton(mCapBox);
   mCRoundBtn->setToggleButton(true);
   mCRoundBtn->setFixedWidth(20);
@@ -156,12 +162,6 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mSquareBtn->setFixedWidth(20);
   mSquareBtn->setFixedHeight(20);
   mSquareBtn->setPixmap(SmallIcon("cap_square", KontourFactory::global()));
-  QPushButton *mFlatBtn = new QPushButton(mCapBox);
-  mFlatBtn->setToggleButton(true);
-  mFlatBtn->setFixedWidth(20);
-  mFlatBtn->setFixedHeight(20);
-  mFlatBtn->setPixmap(SmallIcon("cap_flat", KontourFactory::global()));
-  connect(mCapBox, SIGNAL(pressed(int)), this, SLOT(slotCapPressed(int)));
 
   mOutlineStyleLayout->addWidget(mWidthText, 0, 0);
   mOutlineStyleLayout->addWidget(mWidthBox, 0, 1);
@@ -175,7 +175,8 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mTab->insertTab(mOutlineStyle, i18n("Style"));
 
   setWidget(mTab);
-  setCaption(i18n("Outline"));  
+  setCaption(i18n("Outline"));
+  slotUpdate();
 }
 
 void OutlinePanel::slotUpdate()
@@ -193,7 +194,7 @@ void OutlinePanel::slotUpdate()
     mJoinBox->setEnabled(b);
     mCapBox->setEnabled(b);
     mOpacityBox->setValue(mView->activeDocument()->styles()->style()->outlineOpacity());
-    mWidthBox->setValue(mView->activeDocument()->styles()->style()->outlineWidth());
+    mWidthBox->setValue(static_cast<int>(mView->activeDocument()->styles()->style()->outlineWidth()));
     mJoinBox->setButton(mView->activeDocument()->styles()->style()->joinStyle());
     mCapBox->setButton(mView->activeDocument()->styles()->style()->capStyle());
   }
@@ -210,7 +211,7 @@ void OutlinePanel::slotUpdate()
     mJoinBox->setEnabled(b);
     mCapBox->setEnabled(b);
     mOpacityBox->setValue(mView->activeDocument()->activePage()->getSelection().first()->style()->outlineOpacity());
-    mWidthBox->setValue(mView->activeDocument()->activePage()->getSelection().first()->style()->outlineWidth());
+    mWidthBox->setValue(static_cast<int>(mView->activeDocument()->activePage()->getSelection().first()->style()->outlineWidth()));
     mJoinBox->setButton(mView->activeDocument()->activePage()->getSelection().first()->style()->joinStyle());
     mCapBox->setButton(mView->activeDocument()->activePage()->getSelection().first()->style()->capStyle());
   }
@@ -288,40 +289,40 @@ void OutlinePanel::slotChangeLineStyle(int w)
 
 void OutlinePanel::slotJoinPressed(int w)
 {
-  Qt::PenJoinStyle style;
+  KoOutline::Join style;
   switch(w)
   {
-  case 0: style = Qt::RoundJoin; break;
-  case 1: style = Qt::MiterJoin; break;
-  case 2: style = Qt::BevelJoin;
+  case 0: style = KoOutline::JoinMiter; break;
+  case 1: style = KoOutline::JoinRound; break;
+  case 2: style = KoOutline::JoinBevel;
   }
   if(mView->activeDocument()->activePage()->selectionIsEmpty())
   {
-//    mView->activeDocument()->styles()->style()->joinStyle(style);
+    mView->activeDocument()->styles()->style()->joinStyle(style);
   }
   else
   {
-//    mView->activeDocument()->activePage()->getSelection().first()->style()->joinStyle(style);
+    mView->activeDocument()->activePage()->getSelection().first()->style()->joinStyle(style);
   }
   slotUpdate();
 }
 
 void OutlinePanel::slotCapPressed(int w)
 {
-  Qt::PenCapStyle style;
+  KoOutline::Cap style;
   switch(w)
   {
-  case 0: style = Qt::RoundCap; break;
-  case 1: style = Qt::SquareCap; break;
-  case 2: style = Qt::FlatCap;
+  case 0: style = KoOutline::CapButt; break;
+  case 1: style = KoOutline::CapRound; break;
+  case 2: style = KoOutline::CapSquare;
   }
   if(mView->activeDocument()->activePage()->selectionIsEmpty())
   {
-//    mView->activeDocument()->styles()->style()->capStyle(style);
+    mView->activeDocument()->styles()->style()->capStyle(style);
   }
   else
   {
-//    mView->activeDocument()->activePage()->getSelection().first()->style()->capStyle(style);
+    mView->activeDocument()->activePage()->getSelection().first()->style()->capStyle(style);
   }
   slotUpdate();
 }
@@ -349,6 +350,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
 
   QLabel *mOpacityText = new QLabel(i18n("Opacity"), mPainting);
   mOpacityBox = new QSpinBox(0, 100, 5, mPainting);
+  connect(mOpacityBox, SIGNAL(valueChanged(int)), this, SLOT(slotChangeOpacity(int)));
   mOpacityBox->setSuffix("%");
 
   mPaintingLayout->addWidget(mPaintingText, 0, 0);
@@ -359,8 +361,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mTab->insertTab(mPainting, i18n("Painting"));
 
   KoColorChooser *mPaintPanel = new KoColorChooser(mTab);
-//  connect(mPaintPanel, SIGNAL(colorChanged(const KoColor &)), this, SIGNAL(changePaintColor(const KoColor &)));
-//  connect(this, SIGNAL(colorChanged(const KoColor &)), mPaintPanel, SLOT(slotChangeColor(const KoColor &)));
+  connect(mPaintPanel, SIGNAL(colorChanged(const KoColor &)), this, SLOT(slotChangeColor(const KoColor &)));
   mTab->insertTab(mPaintPanel, i18n("Color"));
 
 /*  QGroupBox *pattern = new QGroupBox(1, Qt::Vertical, this);
@@ -381,11 +382,13 @@ void PaintPanel::slotUpdate()
   {
     int f = mView->activeDocument()->styles()->style()->filled();
     mPaintingBox->setCurrentItem(f);
+    mOpacityBox->setValue(mView->activeDocument()->styles()->style()->fillOpacity());
   }
   else
   {
     int f = mView->activeDocument()->activePage()->getSelection().first()->style()->filled();
     mPaintingBox->setCurrentItem(f);
+    mOpacityBox->setValue(mView->activeDocument()->activePage()->getSelection().first()->style()->fillOpacity());
   }
 }
 
@@ -397,7 +400,36 @@ void PaintPanel::slotChangeFilled(int f)
   }
   else
   {
+    mView->activeDocument()->activePage()->getSelection().first()->style()->filled(f);
     //SetPropertyCmd
+  }
+  slotUpdate();
+}
+
+void PaintPanel::slotChangeOpacity(int o)
+{
+  if(mView->activeDocument()->activePage()->selectionIsEmpty())
+  {
+    mView->activeDocument()->styles()->style()->fillOpacity(o);
+  }
+  else
+  {
+    mView->activeDocument()->activePage()->getSelection().first()->style()->fillOpacity(o);
+  }
+  slotUpdate();
+}
+
+void PaintPanel::slotChangeColor(const KoColor &c)
+{
+  if(mView->activeDocument()->activePage()->selectionIsEmpty())
+  {
+    mView->activeDocument()->styles()->style()->fillColor(c);
+  }
+  else
+  {
+    QPtrListIterator<GObject> it(mView->activeDocument()->activePage()->getSelection());
+    for(; it.current(); ++it)
+      (*it)->style()->fillColor(c);
   }
   slotUpdate();
 }

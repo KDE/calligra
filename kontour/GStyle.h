@@ -29,6 +29,7 @@
 
 class QDomDocument;
 class QDomElement;
+class KoFill;
 
 /* Class for drawing style */
 
@@ -46,11 +47,12 @@ public:
   virtual ~GStyle();
 
   KoOutline *outline() const;
+  KoFill *fill() const;
 
   QDomElement writeToXml(QDomDocument &document);
 
   bool stroked() const;
-  void stroked(bool stroked);
+  void stroked(bool aStroked);
 
   const KoColor &outlineColor() const;
   void outlineColor(const KoColor &c);
@@ -58,8 +60,8 @@ public:
   int outlineOpacity() const;
   void outlineOpacity(int o);
 
-  int outlineWidth() const;
-  void outlineWidth(int w);
+  double outlineWidth() const;
+  void outlineWidth(double w);
 
   KoOutline::Join joinStyle() const;
   void joinStyle(KoOutline::Join join);
@@ -68,20 +70,23 @@ public:
   void capStyle(KoOutline::Cap cap);
 
   int filled() const;
-  void filled(int filled);
+  void filled(int aFilled);
+
+  int fillOpacity() const;
+  void fillOpacity(int o);
 
   const KoColor &fillColor() const;
   void fillColor(const KoColor &c);
-
-  Qt::BrushStyle brushStyle() const;
-  void brushStyle(Qt::BrushStyle brushStyle);
 
   GStyle &operator=(const GStyle &s);
 
 private:
   bool         mStroked;
-  int          mOutlineOpacity;
   KoOutline   *mOutline;
+  int          mOutlineOpacity;
+  int          mFilled;
+  KoFill      *mFill;
+  int          mFillOpacity;
 };
 
 #endif

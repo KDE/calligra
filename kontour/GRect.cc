@@ -36,14 +36,22 @@
 #include "kontour_global.h"
 #include "GPath.h"
 
-GRect::GRect(bool sFlag):
+GRect::GRect(bool roundness):
 GObject()
 {
-  squareFlag = sFlag;
-  mType = Rectangle;
+  if(roundness)
+  {
+    mXRoundness = 0.25;
+    mYRoundness = 0.25;
+  }
+  else
+  {
+    mXRoundness = 0.0;
+    mYRoundness = 0.0;
+  }
 }
 
-GRect::GRect(const QDomElement &element, bool sFlag):
+GRect::GRect(const QDomElement &element):
 GObject(element.namedItem("go").toElement())
 {
   double x = 0;
@@ -60,16 +68,16 @@ GObject(element.namedItem("go").toElement())
   sPoint.setY(y);
   ePoint.setX(x + sx);
   ePoint.setY(y + sy);
-  squareFlag = sFlag;
   calcBoundingBox();
 }
 
 GRect::GRect(const GRect &obj):
 GObject(obj)
 {
-  squareFlag = obj.squareFlag;
   ePoint = obj.ePoint;
   sPoint = obj.sPoint;
+  mXRoundness = obj.mXRoundness;
+  mYRoundness = obj.mYRoundness;
   calcBoundingBox();
 }
 
@@ -78,9 +86,12 @@ GObject *GRect::copy() const
   return new GRect(*this);
 }
 
-void GRect::type(Type t)
+bool GRect::isSquare() const
 {
-  mType = t;
+  if(ePoint.x() - sPoint.x() == ePoint.y() - sPoint.y())
+    return true;
+  else
+    return false;
 }
 
 void GRect::startPoint(const KoPoint &p)
@@ -97,7 +108,7 @@ void GRect::endPoint(const KoPoint &p)
 
 QString GRect::typeName() const
 {
-  if(squareFlag)
+  if(isSquare())
     return i18n("Square");
   else
     return i18n("Rectangle");
@@ -121,11 +132,12 @@ void GRect::draw(KoPainter *p, int aXOffset, int aYOffset, bool withBasePoints, 
 {
   setPen(p);
   setBrush(p);
-  KoVectorPath *v = KoVectorPath::rectangle(sPoint.x(), sPoint.y(), ePoint.x() - sPoint.x(), ePoint.y() - sPoint.y(), 0, 0);
+  KoVectorPath *v = KoVectorPath::rectangle(sPoint.x(), sPoint.y(), ePoint.x() - sPoint.x(), ePoint.y() - sPoint.y(), 0.5 * mXRoundness * (ePoint.x() - sPoint.x()), 0.5 * mYRoundness * (ePoint.y() - sPoint.y()));
   QWMatrix m;
   m = m.translate(aXOffset, aYOffset);
   v->transform(m * tmpMatrix);
   p->drawVectorPath(v);
+  delete v;
 }
 
 void GRect::calcBoundingBox()

@@ -82,6 +82,8 @@ public slots:
 
 private slots:
   void slotChangeFilled(int f);
+  void slotChangeOpacity(int o);
+  void slotChangeColor(const KoColor &c);
 
 private:
   KontourView     *mView;

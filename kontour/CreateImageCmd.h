@@ -2,9 +2,8 @@
 
   $Id$
 
-  This file is part of Kontour.
+  This file is part of KIllustrator.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -23,39 +22,25 @@
 
 */
 
-#ifndef __RectTool_h__
-#define __RectTool_h__
+#ifndef InsertPixmapCmd_h_
+#define InsertPixmapCmd_h_
 
-#include "Tool.h"
-#include <qpoint.h>
-#include <qrect.h>
+#include <Command.h>
 
-class RectTool : public Tool
-{
-  Q_OBJECT
+class GDocument;
+
+class InsertPixmapCmd : public Command {
 public:
-  RectTool(QString aId, ToolController *tc);
-  
-  void activate();
-  void deactivate();
-  void processEvent(QEvent *e);
+  InsertPixmapCmd (GDocument* doc, const QString &fname);
+  ~InsertPixmapCmd ();
 
-private slots:
-  void enableRoundness();
-  void disableRoundness();
-  void enableFill();
-  void disableFill();
-  void enableSquare();
-  void disableSquare();
+  void execute ();
+  void unexecute ();
 
 private:
-  enum State{S_Init, S_Resize};
-  State state;
-  QPoint p1;
-  QRect r;
-  bool mRoundness:1;
-  bool mFill:1;
-  bool mSquare:1;
+  QString filename;
+  GDocument* document;
+  GObject* pixmap;
 };
 
 #endif

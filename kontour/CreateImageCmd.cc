@@ -2,9 +2,8 @@
 
   $Id$
 
-  This file is part of Kontour.
+  This file is part of KIllustrator.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -23,39 +22,37 @@
 
 */
 
-#ifndef __RectTool_h__
-#define __RectTool_h__
+#include <InsertPixmapCmd.h>
 
-#include "Tool.h"
-#include <qpoint.h>
-#include <qrect.h>
+#include <klocale.h>
 
-class RectTool : public Tool
+#include <GDocument.h>
+#include <GPixmap.h>
+#include "GPage.h"
+
+InsertPixmapCmd::InsertPixmapCmd (GDocument* doc, const QString &fname) :
+ Command(i18n("Insert Pixmap"))
 {
-  Q_OBJECT
-public:
-  RectTool(QString aId, ToolController *tc);
-  
-  void activate();
-  void deactivate();
-  void processEvent(QEvent *e);
+  document = doc;
+  filename = fname;
+  pixmap = 0L;
+}
 
-private slots:
-  void enableRoundness();
-  void disableRoundness();
-  void enableFill();
-  void disableFill();
-  void enableSquare();
-  void disableSquare();
+InsertPixmapCmd::~InsertPixmapCmd () {
+  if (pixmap)
+    pixmap->unref ();
+}
 
-private:
-  enum State{S_Init, S_Resize};
-  State state;
-  QPoint p1;
-  QRect r;
-  bool mRoundness:1;
-  bool mFill:1;
-  bool mSquare:1;
-};
+void InsertPixmapCmd::execute () {
+  if (pixmap)
+    pixmap->unref ();
 
-#endif
+  pixmap = new GPixmap (document, filename);
+  document->activePage()->insertObject (pixmap);
+}
+
+void InsertPixmapCmd::unexecute () {
+  if (pixmap)
+    document->activePage()->deleteObject (pixmap);
+}
+
