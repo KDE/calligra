@@ -163,34 +163,33 @@ CORBA::Boolean KWordDocument::initDoc()
 /*================================================================*/
 bool KWordDocument::loadTemplate( const char *_url )
 {
-//     KURL u( _url );
+    /*     KURL u( _url );
 
-//     if ( u.isMalformed() )
-//	   return false;
+     if ( u.isMalformed() )
+	   return false;
 
-//     if ( !u.isLocalFile() )
-//     {
-//	   cerr << "Can not open remote URL" << endl;
-//	   return false;
-//     }
+     if ( !u.isLocalFile() )
+     {
+	   qDebug( "Can not open remote URL" );
+	   return false;
+     }
 
-//     ifstream in( u.path().ascii() );
-//     if ( !in )
-//     {
-//	   cerr << "Could not open" << u.path().ascii() << endl;
-//	   return false;
-//     }
+     QFile f( u.path() );
+     if ( !f.open( IO_ReadOnly ) ) {
+	 qDebug( "Could not open %s", u.path().ascii() );
+	 return false;
+     }
 
-//     KOMLStreamFeed feed( in );
-//     KOMLParser parser( &feed );
+     QDomDocument doc( &f );
+     f.close();
 
-//     if ( !loadXML( parser, 0L ) )
-//	   return false;
+    if ( !loadXML( doc, 0L ) )
+	return false;
 
-//     setModified( true );
+    setModified( true );
 
-//     _loaded = false;
-//     return true;
+    _loaded = false;
+     return true; */
     bool ok = loadFromURL( _url, "application/x-kword" );
     _loaded = false;
     return ok;
@@ -1236,15 +1235,21 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
 	    format = "JPEG";
 	if ( QImage::outputFormats().find( format ) == -1 )
 	    format = "BMP";
-	// #### todo
-// 	QString mime = "image/" + format.lower();
-// 	_store->open( u2, mime.lower() );
-// 	ostorestream out( _store );
-// 	writeImageToStream( out, *it.current(), format );
-// 	out.flush();
-// 	_store->close();
-// 	keys.append( it.currentKey() );
-// 	images.append( it.current()->getFilename() );
+
+ 	QString mime = "image/" + format.lower();
+ 	_store->open( u2, mime.lower() );
+	
+	QBuffer buffer;
+	buffer.open( IO_ReadOnly );
+	{
+	    QDataStream str( &buffer );
+	    str << *it.current();
+	}
+	buffer.close();
+	_store.write( buffer.buffer().data(), buffer.buffer().size() );
+	_store.close();
+ 	keys.append( it.currentKey() );
+ 	images.append( it.current()->getFilename() );
     }
 
     return true;
