@@ -1185,14 +1185,16 @@ void KWFrameSet::setVisible( bool v )
         updateFrames();
 }
 
-bool KWFrameSet::isVisible() const
+bool KWFrameSet::isVisible( KWViewMode* viewMode ) const
 {
     return ( m_visible &&
              !frames.isEmpty() &&
              (!isAHeader() || m_doc->isHeaderVisible()) &&
              (!isAFooter() || m_doc->isFooterVisible()) &&
              !isAWrongHeader( m_doc->getHeaderType() ) &&
-             !isAWrongFooter( m_doc->getFooterType() ) );
+             !isAWrongFooter( m_doc->getFooterType() ) &&
+             (!viewMode || viewMode->isFrameSetVisible(this))
+           );
 }
 
 bool KWFrameSet::isAHeader() const
@@ -1286,21 +1288,21 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         // cvs log says this is about frame borders... hmm.
         /// ### if ( onlyChanged )
 
-	// clip inline frames against their 'parent frames' (=the frame containing the anchor of the frame.)
-	KWFrameSet *parentFrameset= this;
-    	KWFrame *parentFrame=frame;
-    	while (parentFrameset->isFloating()) {
-		parentFrameset=parentFrameset->anchorFrameset();
-		KWFrame *oldParentFrame = parentFrame;
-		parentFrame=parentFrameset->frameAtPos(parentFrame->x(), parentFrame->y());
-                if( parentFrame)
-                {
-                    QRect r = painter->xForm( viewMode->normalToView( parentFrame->outerRect() ) );
-                    reg &= r;
-                } else {
-		    parentFrame = oldParentFrame;
-		}
-    	}
+        // clip inline frames against their 'parent frames' (=the frame containing the anchor of the frame.)
+        KWFrameSet *parentFrameset= this;
+        KWFrame *parentFrame=frame;
+        while (parentFrameset->isFloating()) {
+            parentFrameset=parentFrameset->anchorFrameset();
+            KWFrame *oldParentFrame = parentFrame;
+            parentFrame=parentFrameset->frameAtPos(parentFrame->x(), parentFrame->y());
+            if( parentFrame)
+            {
+                QRect r = painter->xForm( viewMode->normalToView( parentFrame->outerRect() ) );
+                reg &= r;
+            } else {
+                parentFrame = oldParentFrame;
+            }
+        }
 
         {
             QPtrListIterator<KWFrame> fIt( frame->framesOnTop() );
@@ -1311,9 +1313,6 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
                 reg -= r; // subtract
             }
         }
-
-
-
         return reg;
     } else return QRegion();
 }

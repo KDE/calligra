@@ -77,9 +77,11 @@ public:
     void clearUndoRedoInfo();
 
     /** Convert the @p dPoint in the normal coordinate system (and in pt)
-     * into a point (@p iPoint) in the internal qtextdoc coordinates (in layout units).
-     * @p mouseSelection tries harder to return a value even if nPoint is out of any frame */
-    KWFrame * documentToInternal( const KoPoint &dPoint, QPoint &iPoint, bool mouseSelection = false ) const;
+     * into a point (@p iPoint) in the internal qtextdoc coordinates (in layout units). */
+    KWFrame * documentToInternal( const KoPoint &dPoint, QPoint &iPoint ) const;
+
+    enum RelativePosition { InsideFrame, LeftOfFrame, TopOfFrame, AtEnd };
+    KWFrame * documentToInternalMouseSelection( const KoPoint &dPoint, QPoint &iPoint, RelativePosition& relPos ) const;
 
     /** Convert the @p in the internal qtextdoc coordinates (in layout units)
      * into a point in the document coordinate system (in pt).
@@ -114,8 +116,9 @@ public:
      * they're looking at, so that formatMore() ensures it's always formatted
      * correctly.
      * @param w the wigdet (usually kwcanvas) that identifies the view
+     * @param w the current viewmode (to make sure the frameset is visible)
      * @param nPointBottom the max the view looks at, in normal coordinates */
-    void updateViewArea( QWidget * w, const QPoint & nPointBottom );
+    void updateViewArea( QWidget * w, KWViewMode* viewMode, const QPoint & nPointBottom );
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true )
     { return saveInternal( parentElem, saveFrames, false ); }

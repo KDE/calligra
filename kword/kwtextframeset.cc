@@ -155,10 +155,10 @@ void KWTextFrameSet::slotAvailableHeightNeeded()
     updateFrames();
 }
 
-KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPoint, bool mouseSelection ) const
+KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPoint ) const
 {
 #ifdef DEBUG_DTI
-    kdDebug() << "KWTextFrameSet::documentToInternal dPoint:" << dPoint.x() << "," << dPoint.y() << " mouseSelection=" << mouseSelection << endl;
+    kdDebug() << "KWTextFrameSet::documentToInternal dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
     // Find the frame that contains dPoint. To go fast, we look them up by page number.
     int pageNum = static_cast<int>( dPoint.y() / m_doc->ptPaperHeight() );
@@ -166,9 +166,6 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *theFrame = frameIt.current();
-        // Due to zooming problems (and to QRect's semantics), be tolerant for one more pixel
-        //frameRect.rRight() += 1;
-        //frameRect.rBottom() += 1;
         if ( theFrame->contains( dPoint ) )
         {
             iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->x() ) );
@@ -180,90 +177,124 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
 #endif
             return theFrame;
         }
-        else if ( mouseSelection ) // try harder if true
-        {
-            KoRect openLeftRect( *theFrame );
-            openLeftRect.setLeft( 0 );
 #ifdef DEBUG_DTI
-            kdDebug() << "documentToInternal: openLeftRect=" << DEBUGRECT( openLeftRect ) << endl;
-#endif
-            if ( openLeftRect.contains( dPoint ) )
-            {
-                // We are at the left of this frame (and not in any other frame of this frameset)
-                iPoint.setX( 0 );
-                iPoint.setY( m_doc->ptToLayoutUnitPixY( dPoint.y() - theFrame->top() + theFrame->internalY() ) );
-#ifdef DEBUG_DTI
-                kdDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
-                          << " internalY=" << theFrame->internalY() << " because openLeftRect=" << DEBUGRECT(openLeftRect)
-                          << " contains dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
-#endif
-                return theFrame;
-            }
-            KoRect openTopRect( KoPoint( 0, 0 ), theFrame->bottomRight() );
-#ifdef DEBUG_DTI
-            kdDebug() << "documentToInternal: openTopRect=" << DEBUGRECT( openTopRect ) << endl;
-#endif
-            if ( openTopRect.contains( dPoint ) )
-            {
-                // We are at the top of this frame (...)
-                iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->left() ) );
-                iPoint.setY( m_doc->ptToLayoutUnitPixY( theFrame->internalY() ) );
-#ifdef DEBUG_DTI
-                kdDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
-                          << " internalY=" << theFrame->internalY() << " because openTopRect=" << DEBUGRECT(openTopRect)
-                          << " contains dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
-#endif
-                return theFrame;
-            }
-        }
-#ifdef DEBUG_NTI
         //else
-        //  kdDebug() << "NTI: " << DEBUGRECT(frameRect)
+        //  kdDebug() << "DTI: " << DEBUGRECT(frameRect)
         //            << " doesn't contain nPoint:" << nPoint.x() << "," << nPoint.y() << endl;
 #endif
     }
-    // Not found. This means either:
-    // if mouseSelection == false : the mouse isn't over any frame, in the page pageNum.
-    // if mouseSelection == true : we are under (or at the right of), the frames in pageNum.
-    if ( mouseSelection ) // in that case, go for the first frame in the next page.
-    {
-        if ( pageNum + 1 >= (int)m_framesInPage.size() + m_firstPage )
-        {
-            // Under last frame of last page!
-            KWFrame *theFrame = frames.getLast();
-            iPoint.setX( m_doc->ptToLayoutUnitPixX( theFrame->width() ) );
-            iPoint.setY( m_doc->ptToLayoutUnitPixY( theFrame->height() ) );
+    // Not found. This means the mouse isn't over any frame, in the page pageNum.
+    iPoint = m_doc->ptToLayoutUnitPix( dPoint ); // bah
+    return 0;
+}
+
+KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoint, QPoint &iPoint, RelativePosition& relPos ) const
+{
 #ifdef DEBUG_DTI
-            kdDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
-                      << " because we are under all frames of the last page" << endl;
+    kdDebug() << "KWTextFrameSet::documentToInternalMouseSelection dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
+    // Find the frame that contains dPoint. To go fast, we look them up by page number.
+    int pageNum = static_cast<int>( dPoint.y() / m_doc->ptPaperHeight() );
+    QPtrListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        KWFrame *theFrame = frameIt.current();
+        if ( theFrame->contains( dPoint ) )
+        {
+            iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->x() ) );
+            iPoint.setY( m_doc->ptToLayoutUnitPixY( dPoint.y() - theFrame->y() + theFrame->internalY() ) );
+#ifdef DEBUG_DTI
+            kdDebug() << "documentToInternal: returning InsideFrame " << iPoint.x() << "," << iPoint.y()
+                      << " internalY=" << theFrame->internalY() << " because frame=" << theFrame
+                      << " contains dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
+#endif
+            relPos = InsideFrame;
             return theFrame;
         }
-        else
-        {
-            QPtrListIterator<KWFrame> frameIt( framesInPage( pageNum + 1 ) );
-            if ( frameIt.current() )
-            {
-                // There is a frame on the next page
-                KWFrame *theFrame = frameIt.current();
-                KoRect openTopRect( *theFrame );
-                openTopRect.setTop( 0 );
-                if ( openTopRect.contains( dPoint ) ) // We are at the top of this frame
-                    iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->left() ) );
-                else
-                    iPoint.setX( 0 ); // We are, hmm, on the left or right of the frames
-                iPoint.setY( m_doc->ptToLayoutUnitPixY( theFrame->internalY() ) );
+    }
+    frameIt.toFirst();
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        KWFrame *theFrame = frameIt.current();
+        KoRect openLeftRect( *theFrame );
+        openLeftRect.setLeft( 0 );
 #ifdef DEBUG_DTI
-                kdDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
-                          << " because we are under all frames of page " << pageNum << endl;
+        kdDebug() << "documentToInternal: openLeftRect=" << DEBUGRECT( openLeftRect ) << endl;
 #endif
-                return theFrame;
-            } // else there is a gap (no frames on that page, but on some other further down)
-            // This case isn't handled (and should be VERY rare I think)
+        if ( openLeftRect.contains( dPoint ) )
+        {
+            // We are at the left of this frame (and not in any other frame of this frameset)
+            iPoint.setX( 0 );
+            iPoint.setY( m_doc->ptToLayoutUnitPixY( dPoint.y() - theFrame->top() + theFrame->internalY() ) );
+#ifdef DEBUG_DTI
+            kdDebug() << "documentToInternal: returning LeftOfFrame " << iPoint.x() << "," << iPoint.y()
+                      << " internalY=" << theFrame->internalY() << " because openLeftRect=" << DEBUGRECT(openLeftRect)
+                      << " contains dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
+#endif
+            relPos = LeftOfFrame;
+            return theFrame;
         }
+        KoRect openTopRect( KoPoint( 0, 0 ), theFrame->bottomRight() );
+#ifdef DEBUG_DTI
+        kdDebug() << "documentToInternal: openTopRect=" << DEBUGRECT( openTopRect ) << endl;
+#endif
+        if ( openTopRect.contains( dPoint ) )
+        {
+            // We are at the top of this frame (...)
+            iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->left() ) );
+            iPoint.setY( m_doc->ptToLayoutUnitPixY( theFrame->internalY() ) );
+#ifdef DEBUG_DTI
+            kdDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
+                      << " internalY=" << theFrame->internalY() << " because openTopRect=" << DEBUGRECT(openTopRect)
+                      << " contains dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
+#endif
+            relPos = TopOfFrame;
+            return theFrame;
+        }
+    }
+    // Not found. This means we are under (or at the right of), the frames in pageNum.
+    // In that case, go for the first frame in the next page.
+    if ( pageNum + 1 >= (int)m_framesInPage.size() + m_firstPage )
+    {
+        // Under last frame of last page!
+        KWFrame *theFrame = frames.getLast();
+        iPoint.setX( m_doc->ptToLayoutUnitPixX( theFrame->width() ) );
+        iPoint.setY( m_doc->ptToLayoutUnitPixY( theFrame->height() ) );
+#ifdef DEBUG_DTI
+        kdDebug() << "documentToInternal: returning AtEnd " << iPoint.x() << "," << iPoint.y()
+                  << " because we are under all frames of the last page" << endl;
+#endif
+        relPos = AtEnd;
+        return theFrame;
+    }
+    else
+    {
+        QPtrListIterator<KWFrame> frameIt( framesInPage( pageNum + 1 ) );
+        if ( frameIt.current() )
+        {
+            // There is a frame on the next page
+            KWFrame *theFrame = frameIt.current();
+            KoRect openTopRect( *theFrame );
+            openTopRect.setTop( 0 );
+            if ( openTopRect.contains( dPoint ) ) // We are at the top of this frame
+                iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->left() ) );
+            else
+                iPoint.setX( 0 ); // We are, hmm, on the left or right of the frames
+            iPoint.setY( m_doc->ptToLayoutUnitPixY( theFrame->internalY() ) );
+#ifdef DEBUG_DTI
+            kdDebug() << "documentToInternal: returning TopOfFrame " << iPoint.x() << "," << iPoint.y()
+                      << " because we are under all frames of page " << pageNum << endl;
+#endif
+            relPos = TopOfFrame;
+            return theFrame;
+        } // else there is a gap (no frames on that page, but on some other further down)
+        // This case isn't handled (and should be VERY rare I think)
     }
 
     iPoint = m_doc->ptToLayoutUnitPix( dPoint ); // bah
+#ifdef DEBUG_DTI
+    kdDebug() << "documentToInternal: returning not found for " << iPoint.x() << "," << iPoint.y() << endl;
+#endif
     return 0;
 }
 
@@ -1836,9 +1867,9 @@ void KWTextFrameSet::delFrame( KWFrame *frm, bool remove )
     KWFrameSet::delFrame( frm, remove );
 }
 
-void KWTextFrameSet::updateViewArea( QWidget * w, const QPoint & nPointBottom )
+void KWTextFrameSet::updateViewArea( QWidget * w, KWViewMode* viewMode, const QPoint & nPointBottom )
 {
-    if (!isVisible())
+    if (!isVisible(viewMode))
         return;
     int ah = availableHeight(); // make sure that it's not -1
 #ifdef DEBUG_VIEWAREA
@@ -2348,12 +2379,16 @@ void KWTextFrameSetEdit::keyReleaseEvent( QKeyEvent* e )
 
 void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const KoPoint & dPoint )
 {
+    if ( dPoint.x() < 0 || dPoint.y() < 0 )
+        return; // Ignore clicks completely outside of the page (e.g. in the gray area, or ruler)
+
     textFrameSet()->textObject()->clearUndoRedoInfo();
     if ( m_currentFrame )
         hideCursor(); // Need to do that with the old m_currentFrame
 
     QPoint iPoint;
-    KWFrame * theFrame = textFrameSet()->documentToInternal( dPoint, iPoint, true );
+    KWTextFrameSet::RelativePosition relPos;
+    KWFrame * theFrame = textFrameSet()->documentToInternalMouseSelection( dPoint, iPoint, relPos );
     if ( theFrame && m_currentFrame != theFrame )
     {
         m_currentFrame = theFrame;
@@ -2362,7 +2397,13 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
 
     if ( m_currentFrame )
     {
-        textView()->handleMousePressEvent( e, iPoint );
+        // Let KoTextView handle the mousepress event - but don't let it start
+        // a drag if clicking on the left of the text (out of the frame itself)
+        textView()->handleMousePressEvent( e, iPoint, relPos != KWTextFrameSet::LeftOfFrame );
+
+        // Clicked on the left of the text -> select the whole paragraph
+        if ( relPos == KWTextFrameSet::LeftOfFrame )
+            textView()->selectParagUnderCursor( *textView()->cursor() );
     }
     // else mightStartDrag = FALSE; necessary?
 }
@@ -2371,11 +2412,18 @@ void KWTextFrameSetEdit::mouseMoveEvent( QMouseEvent * e, const QPoint & nPoint,
 {
     if ( textView()->maybeStartDrag( e ) )
         return;
+    if ( nPoint.x() < 0 || nPoint.y() < 0 )
+        return; // Ignore clicks completely outside of the page (e.g. in the gray area, or ruler)
+
     QPoint iPoint;
     KoPoint dPoint = frameSet()->kWordDocument()->unzoomPoint( nPoint );
-    if ( nPoint.y() > 0 && textFrameSet()->documentToInternal( dPoint, iPoint, true ) )
+    KWTextFrameSet::RelativePosition relPos;
+    if ( nPoint.y() > 0 && textFrameSet()->documentToInternalMouseSelection( dPoint, iPoint, relPos ) )
     {
-        textView()->handleMouseMoveEvent( e, iPoint );
+        if ( relPos == KWTextFrameSet::LeftOfFrame )
+            textView()->extendParagraphSelection( iPoint );
+        else
+            textView()->handleMouseMoveEvent( e, iPoint );
     }
 }
 

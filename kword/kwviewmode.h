@@ -25,6 +25,7 @@ class KWDocument;
 class QPainter;
 class QRegion;
 class KWTextFrameSet;
+class KWFrameSet;
 
 /**
  * Abstract base class for KWCanvas's view modes.
@@ -63,10 +64,17 @@ public:
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion ) = 0;
 
+    // Config option for KWViewModePreview (a bit of a hack)
     virtual void setPagesPerRow(int) {}
     virtual int pagesPerRow() {return 0;}
+
+    // Should selected text be drawn as such?
     virtual bool drawSelections() {return true;}
 
+    // Should this frameset be visible in this viewmode? True by default, all are shown.
+    virtual bool isFrameSetVisible( const KWFrameSet* /*frameset*/ ) { return true; }
+
+    // Return the name of the viewmode, used for loading/saving.
     virtual const QString type() = 0;
 
     static KWViewMode *create( const QString & viewModeType, KWDocument * );
@@ -133,7 +141,7 @@ class KWViewModePreview : public KWViewMode
 {
 public:
     KWViewModePreview( KWDocument * doc, int _nbPagePerRow=4 ) : KWViewMode( doc ),
-        m_pagesPerRow(_nbPagePerRow), // TODO make configurable somehow
+        m_pagesPerRow(_nbPagePerRow),
         m_spacing(10)
     {}
     virtual ~KWViewModePreview() {}
@@ -166,6 +174,8 @@ public:
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
     virtual const QString type() {return "ModeText";}
+
+    virtual bool isFrameSetVisible( const KWFrameSet* fs );
 };
 
 #endif

@@ -4266,7 +4266,7 @@ void KWView::spellCheckerReady()
 {
     for ( unsigned int i = m_spell.spellCurrFrameSetNum + 1; i < m_spell.textFramesets.count(); i++ ) {
         KWTextFrameSet *textfs = m_spell.textFramesets.at( i );
-        if(!textfs->isVisible())
+        if(!textfs->isVisible( m_gui->canvasWidget()->viewMode() ))
             continue;
         m_spell.spellCurrFrameSetNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
         //kdDebug() << "KWView::spellCheckerReady spell-checking frameset " << m_spellCurrFrameSetNum << endl;

@@ -257,7 +257,8 @@ QPoint KWViewModeText::normalToView( const QPoint & nPoint )
     else
     {
         QPoint iPoint;
-        if ( textfs->documentToInternal( textfs->kWordDocument()->unzoomPoint( nPoint ), iPoint, true ) )
+        KWTextFrameSet::RelativePosition relPos;
+        if ( textfs->documentToInternalMouseSelection( textfs->kWordDocument()->unzoomPoint( nPoint ), iPoint, relPos ) )
             return iPoint;
         else
         {
@@ -295,9 +296,21 @@ QSize KWViewModeText::contentsSize()
     return QSize( textfs->textDocument()->width(), textfs->availableHeight() + 1 /*bottom line*/ );
 }
 
-/// ### TODO for this view mode: replace all frameset->isVisible with
-// viewMode->isFramesetVisible( KWFrameSet * )
-// (except for a few in kwdoc.cc)
+bool KWViewModeText::isFrameSetVisible( const KWFrameSet *fs )
+{
+    KWTextFrameSet * textfs = textFrameSet();
+    if ( !textfs || !fs )
+        return false;
+    if ( fs == textfs )
+        return true;
+    const KWFrameSet* parentFrameset = fs;
+    while ( parentFrameset->isFloating() ) {
+        parentFrameset = parentFrameset->anchorFrameset();
+        if ( parentFrameset == textfs )
+            return true;
+    }
+    return false;
+}
 
 void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
                                       const QRegion & /*emptySpaceRegion*/ )
@@ -329,3 +342,4 @@ void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
         m_doc->eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
     painter->restore();
 }
+

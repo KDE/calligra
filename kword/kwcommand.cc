@@ -150,7 +150,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
 // Helper class for deleting all custom items
 // (KWTextFrameset::removeSelectedText and readFormats do that already,
 //  but with undo/redo, and copying all formatting etc.)
-class KWDeleteCustomItemVisitor : public KoParagVisitor // see kwtextdocument.h
+class KWDeleteCustomItemVisitor : public KoParagVisitor // see kotextdocument.h
 {
 public:
     KWDeleteCustomItemVisitor() : KoParagVisitor() { }
@@ -162,7 +162,7 @@ public:
             KoTextStringChar * ch = parag->at( i );
             if ( ch->isCustom() )
 	    {
-	       KoTextCustomItem* item = static_cast<KoTextCustomItem *>( ch->customItem() );
+	       KoTextCustomItem* item = ch->customItem();
 	       item->setDeleted( true );
 	       KCommand* itemCmd = item->deleteCommand();
 	       if ( itemCmd ) itemCmd->execute();
@@ -193,12 +193,12 @@ KoTextCursor * KWPasteTextCommand::unexecute( KoTextCursor *c )
     doc->setSelectionEnd( KoTextDocument::Temp, &cursor );
     // Delete all custom items
     KWDeleteCustomItemVisitor visitor;
-    static_cast<KoTextDocument *>(doc)->visitSelection( KoTextDocument::Temp, &visitor );
+    doc->visitSelection( KoTextDocument::Temp, &visitor );
 
     doc->removeSelectedText( KoTextDocument::Temp, c /* sets c to the correct position */ );
 
     if ( m_idx == 0 )
-        static_cast<KWTextParag *>( firstParag )->setParagLayout( m_oldParagLayout );
+        firstParag->setParagLayout( m_oldParagLayout );
     return c;
 }
 

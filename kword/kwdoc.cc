@@ -1872,6 +1872,7 @@ QDomDocument KWDocument::saveXML()
     QDomElement paper = doc.createElement( "PAPER" );
     kwdoc.appendChild( paper );
     paper.setAttribute( "format", static_cast<int>( m_pageLayout.format ) );
+    paper.setAttribute( "pages", m_pages );
     paper.setAttribute( "width", m_pageLayout.ptWidth );
     paper.setAttribute( "height", m_pageLayout.ptHeight );
     paper.setAttribute( "orientation", static_cast<int>( m_pageLayout.orientation ) );
@@ -2138,7 +2139,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
-        if ( frameset->isVisible() && !frameset->isFloating() )
+        if ( frameset->isVisible( viewMode ) && !frameset->isFloating() )
             frameset->drawContents( &painter, rect, cg, false /*onlyChanged*/, true /*resetChanged*/,
                                     0L, viewMode, 0L );
     }
@@ -2166,7 +2167,7 @@ void KWDocument::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet *frameset = fit.current();
-        if ( frameset->isVisible() )
+        if ( frameset->isVisible( viewMode ) )
             frameset->createEmptyRegion( crect, emptyRegion, viewMode );
     }
 }
@@ -2432,7 +2433,6 @@ KWFrame * KWDocument::frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool
 
     KWFrameSet *fs = frame->frameSet();
     KoPoint docPoint( unzoomPoint( nPoint ) );
-    bool allreadyFoundArgumentFrame=false;
     if (fs->isFloating()) {
         // now lets be smart here; we know that a frame that is floating is embedded
         // inside its hostFrameSet frame. This basically means that the frame directly
@@ -2452,13 +2452,14 @@ KWFrame * KWDocument::frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool
     } else {
         int page = QMIN(m_pages-1, static_cast<int>(docPoint.y() / ptPaperHeight()));
         QPtrList<KWFrame> frames = framesInPage(page);
+        bool alreadyFoundArgumentFrame=false;
 
         for (KWFrame *f = frames.last();f;f=frames.prev()) { // z-order
             // only consider non-inline frames.
             if (f->frameSet()->isFloating())
                 continue;
 
-            if (allreadyFoundArgumentFrame) {
+            if (alreadyFoundArgumentFrame) {
                 if(f->frameAtPos(nPoint, true)) {
                     if ( border ) *border = true;
                     return f;
@@ -2466,7 +2467,7 @@ KWFrame * KWDocument::frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool
                 if(f->frameAtPos(nPoint))
                     return deepestInlineFrame(f,nPoint,border);
             } else if(f == frame)
-                allreadyFoundArgumentFrame=true;
+                alreadyFoundArgumentFrame=true;
         }
     }
     if (border != 0) *border=false;
@@ -2534,6 +2535,19 @@ KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border, bool 
     return candidate;
 }
 
+QCursor KWDocument::getMouseCursor( const QPoint &nPoint, bool controlPressed )
+{
+    bool border=true;
+    KWFrame *frame = frameUnderMouse(nPoint, &border );
+    if (frame) {
+        QCursor cursor;
+        KWFrameSet *frameSet = frame->frameSet();
+        if ( frameSet->getMouseCursor(nPoint, controlPressed, cursor))
+            return cursor;
+    }
+    return ibeamCursor;
+}
+
 QString KWDocument::generateFramesetName( const QString & templateName )
 {
     QString name;
@@ -2547,19 +2561,7 @@ QString KWDocument::generateFramesetName( const QString & templateName )
     return name;
 }
 
-QCursor KWDocument::getMouseCursor( const QPoint &nPoint, bool controlPressed )
-{
-    bool border=true;
-    KWFrame *frame = frameUnderMouse(nPoint, &border );
-    if (frame) {
-        QCursor cursor;
-        KWFrameSet *frameSet = frame->frameSet();
-    if ( frameSet->getMouseCursor(nPoint, controlPressed, cursor))
-            return cursor;
-    }
-    return ibeamCursor;
-}
-
+// TODO pass viewmode for isVisible
 QPtrList<KWFrame> KWDocument::getSelectedFrames() const {
     QPtrList<KWFrame> frames;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
@@ -2580,32 +2582,32 @@ QPtrList<KWFrame> KWDocument::getSelectedFrames() const {
 
 void KWDocument::fixZOrders() {
     bool fixed_something = false;
-	for (int pgnum=0;pgnum<getPages();pgnum++) {
-		QPtrList<KWFrame> frames= framesInPage(pgnum,false);
-		// scan this page to see if we need to fixup.
-		bool need_fixup=true;
-		for (KWFrame *f = frames.last();f;f=frames.prev()) {
-			if (f->zOrder() != 0) { // assumption: old documents come with no zorder=>initialised to 0
-				need_fixup=false;
-				break;
-			}
-		}
-  		if (need_fixup) {
-			int current_zorder=0;
-			kdDebug() << "fixing page " << pgnum << " z-orders " << endl;
-			for (KWFrame *fr = frames.first();fr;fr=frames.next()) {
-				// only consider non-inline framesets.
-			        if (fr->frameSet()->isFloating())
-			            continue;
-				current_zorder++;
-				fr->setZOrder(current_zorder);
-                                fixed_something = true;
-			}
-		}
+    for (int pgnum=0;pgnum<getPages();pgnum++) {
+        QPtrList<KWFrame> frames= framesInPage(pgnum,false);
+        // scan this page to see if we need to fixup.
+        bool need_fixup=true;
+        for (KWFrame *f = frames.last();f;f=frames.prev()) {
+            if (f->zOrder() != 0) { // assumption: old documents come with no zorder=>initialised to 0
+                need_fixup=false;
+                break;
+            }
+        }
+        if (need_fixup) {
+            int current_zorder=0;
+            kdDebug() << "fixing page " << pgnum << " z-orders " << endl;
+            for (KWFrame *fr = frames.first();fr;fr=frames.next()) {
+                // only consider non-inline framesets.
+                if (fr->frameSet()->isFloating())
+                    continue;
+                current_zorder++;
+                fr->setZOrder(current_zorder);
+                fixed_something = true;
+            }
+        }
 
-	}
-        if ( fixed_something )
-            updateAllFrames();
+    }
+    if ( fixed_something )
+        updateAllFrames();
 }
 
 
@@ -2617,12 +2619,12 @@ protected:
            int za = ((KWFrame *)a)->zOrder();
            int zb = ((KWFrame *)b)->zOrder();
            if (za == zb) return 0;
-           if (za <= zb) return -1;
+           if (za < zb) return -1;
            return 1;
     }
 };
 
-
+// TODO pass viewmode for isVisible? Depends on how framesInPage is being used...
 QPtrList<KWFrame> KWDocument::framesInPage( int pageNum, bool sorted) const {
     KWFrameList frames;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
@@ -2981,6 +2983,7 @@ void KWDocument::printDebug()
 }
 #endif
 
+// Currently unused, I think
 void KWDocument::layout()
 {
     QPtrListIterator<KWFrameSet> it = framesetsIterator();
@@ -3319,6 +3322,7 @@ void KWDocument::setGridX(double _gridx) {
         viewPtr->getGUI()->getHorzRuler()->setGridSize(_gridx);
 }
 
+// TODO rename ; pass viewmode
 QPtrList<KoTextObject> KWDocument::frameTextObject() const
 {
     QPtrList<KoTextObject>lst;

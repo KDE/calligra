@@ -98,7 +98,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     // Create the current frameset-edit last, to have everything ready for it
     KWFrameSet * fs = m_doc->frameSet( 0 );
     Q_ASSERT( fs );
-    if ( fs && fs->isVisible() )
+    if ( fs && fs->isVisible( m_viewMode ) )
         m_currentFrameSetEdit = fs->createFrameSetEdit( this );
 }
 
@@ -231,7 +231,7 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect, KWViewMode* 
 void KWCanvas::drawFrameSet( KWFrameSet * frameset, QPainter * painter,
                              const QRect & crect, bool onlyChanged, bool resetChanged, KWViewMode* viewMode )
 {
-    if ( !frameset->isVisible() )
+    if ( !frameset->isVisible( viewMode ) )
         return;
     if ( !onlyChanged && frameset->isFloating() )
         return;
@@ -2013,7 +2013,7 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
         KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>(fit.current());
         if ( fs )
         {
-            fs->updateViewArea( this, nPointBottom );
+            fs->updateViewArea( this, m_viewMode, nPointBottom );
         }
     }
     // cx and cy contain the future values for contentsx and contentsy, so we need to
@@ -2107,10 +2107,12 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
 
         switch ( e->type() ) {
             case QEvent::FocusIn:
+		    kdDebug() << "KWCanvas::eventFilter QEvent::FocusIn" << endl;
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusInEvent();
                 return TRUE;
             case QEvent::FocusOut:
+		    kdDebug() << "KWCanvas::eventFilter QEvent::FocusOut" << endl;
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusOutEvent();
                 if ( m_scrollTimer->isActive() )
@@ -2119,6 +2121,8 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 return TRUE;
             case QEvent::KeyPress:
             {
+		    kdDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
+		    kdDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
                 QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
 #ifndef NDEBUG
                 // Debug keys

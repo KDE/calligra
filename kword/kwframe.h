@@ -586,8 +586,10 @@ public:
      * but also, for a header frameset, if m_doc->isHeaderVisible is true, etc.
      * For an "even pages header" frameset, the corresponding headerType setting
      * must be selected (i.e. different headers for even and odd pages).
+     * @param viewMode pass the current viewmode when using this method for any visual
+     * stuff (drawing, handling input etc.). Frameset visibility depends on the viewmode.
      */
-    bool isVisible() const;
+    bool isVisible( KWViewMode* viewMode = 0L ) const;
 
     /** set the visibility of the frameset. */
     virtual void setVisible( bool v );
