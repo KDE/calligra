@@ -20,6 +20,7 @@
 
 #include <qobjectlist.h>
 #include <qpainter.h>
+#include <qcursor.h>
 
 #include <kdebug.h>
 
@@ -30,23 +31,13 @@ KexiDBForm::KexiDBForm(QWidget *parent, const char *name/*, KexiDB::Connection *
  : QWidget(parent, name)
 {
 	//m_conn = conn;
-	kdDebug() << "KexiDBForm::KexiDBForm(): " << endl;
+	kexipluginsdbg << "KexiDBForm::KexiDBForm(): " << endl;
+	setCursor(QCursor(Qt::ArrowCursor)); //to avoid keeping Size cursor when moving from form's boundaries
 }
 
 KexiDBForm::~KexiDBForm()
 {
-	kdDebug() << "KexiDBForm::~KexiDBForm(): close" << endl;
-}
-
-void
-KexiDBForm::paintEvent(QPaintEvent *ev)
-{
-	QWidget::paintEvent(ev);
-
-	QPainter p(this);
-	p.setPen(QPen(black, 1));
-	p.drawLine(width() - 1, 0, width() - 1, height());
-	p.drawLine(0, height() - 1, width(), height() - 1);
+	kexipluginsdbg << "KexiDBForm::~KexiDBForm(): close" << endl;
 }
 
 //repaint all children widgets

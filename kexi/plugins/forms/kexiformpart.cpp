@@ -41,7 +41,7 @@
 KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
 {
-	kdDebug() << "KexiFormPart::KexiFormPart()" << endl;
+	kexipluginsdbg << "KexiFormPart::KexiFormPart()" << endl;
 	m_names["instance"] = i18n("Form");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
 
@@ -123,7 +123,7 @@ KexiFormPart::createTempData(KexiDialogBase* dialog)
 KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 	KexiPart::Item &item, int viewMode)
 {
-	kdDebug() << "KexiFormPart::createView()" << endl;
+	kexipluginsdbg << "KexiFormPart::createView()" << endl;
 	KexiMainWindow *win = dialog->mainWin();
 	if (!win || !win->project() || !win->project()->dbConnection())
 		return 0;

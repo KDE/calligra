@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +22,8 @@
 #define KEXIFORMVIEW_H
 
 #include <qscrollview.h>
+#include <qtimer.h>
+
 #include <kexiviewbase.h>
 
 #include "kexiformpart.h"
@@ -28,39 +31,57 @@
 class KexiFormPart;
 class KexiMainWindow;
 class KexiDBForm;
-
-using KFormDesigner::Form;
+class QColor;
+class QFont;
+class KexiRecordNavigator;
 
 //! The scrollview which inlcudes KexiDBForm
-/*! It allows to resize its m_widget, following snapToGrid setting. Its contents is resized so the widget can always be resized. */
+/*! It allows to resize its m_widget, following snapToGrid setting. 
+ Its contents is resized so the widget can always be resized. */
 class KexiFormScrollView : public QScrollView
 {
 	Q_OBJECT
 
 	public:
-		KexiFormScrollView(QWidget *parent, const char *name="formpart_kexiformview");
-		~KexiFormScrollView();
+		KexiFormScrollView(QWidget *parent, bool preview);
+		virtual ~KexiFormScrollView();
 
-		void  setWidget(QWidget *w);
-		void  setResizingEnabled(bool enabled) { m_enableResizing = enabled; }
+		void setFormWidget(KexiDBForm *w);
+		void setResizingEnabled(bool enabled) { m_enableResizing = enabled; }
 
-		void  setForm(Form *form) { m_form = form; }
-		/*! Make sure there is a 300 margin around the widget to allow its resizing. */
-		void  refreshContentsSize();
+		void setForm(KFormDesigner::Form *form) { m_form = form; }
+
+		void refreshContentsSizeLater(bool horizontal, bool vertical);
+
+	public slots:
+		/*! Make sure there is a 300px margin around the form contents to allow resizing. */
+		void refreshContentsSize();
+
+		/*! Reimplemented to update resize policy. */
+		virtual void show();
 
 	protected:
 		virtual void contentsMousePressEvent(QMouseEvent * ev);
 		virtual void contentsMouseReleaseEvent(QMouseEvent * ev);
 		virtual void contentsMouseMoveEvent(QMouseEvent * ev);
+		virtual void drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph );
+		virtual void leaveEvent( QEvent *e );
 
 	private:
-		bool    m_resizing;
-		bool    m_enableResizing;
+		bool m_resizing;
+		bool m_enableResizing;
 		QWidget *m_widget;
 
-		Form    *m_form;
-		bool   m_snapToGrid;
-		int    m_gridX, m_gridY;
+		KFormDesigner::Form *m_form;
+		int m_gridX, m_gridY;
+		QFont m_helpFont;
+		QColor m_helpColor;
+		QTimer m_delayedResize;
+		//! for refreshContentsSizeLater()
+		QScrollView::ScrollBarMode m_vsmode, m_hsmode;
+		bool m_snapToGrid : 1;
+		bool m_preview : 1;
+		bool m_smodeSet : 1;
 };
 
 //! The FormPart's view
@@ -70,17 +91,28 @@ class KexiFormView : public KexiViewBase
 	Q_OBJECT
 
 	public:
-		KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, bool preview, KexiDB::Connection *conn);
-		~KexiFormView();
+		enum ResizeMode { 
+			ResizeAuto = 0, 
+			ResizeDefault = ResizeAuto, 
+			ResizeFixed = 1, 
+			NoResize = 2 /*! @todo */
+		};
 
-		KexiDB::Connection*    connection() { return m_conn; }
+		KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, bool preview, KexiDB::Connection *conn);
+		virtual ~KexiFormView();
+
+		KexiDB::Connection* connection() { return m_conn; }
+
+		virtual QSize preferredSizeHint(const QSize& otherSize);
+
+		int resizeMode() const { return m_resizeMode; }
 
 	protected slots:
 		void managerPropertyChanged(KexiPropertyBuffer *b);
 		void slotDirty(KFormDesigner::Form *f, bool isDirty);
 
-		void slotWidgetSelected(Form *form, bool multiple);
-		void slotFormWidgetSelected(Form *form);
+		void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
+		void slotFormWidgetSelected(KFormDesigner::Form *form);
 		void slotNoFormSelected();
 
 		void setUndoEnabled(bool enabled);
@@ -107,12 +139,15 @@ class KexiFormView : public KexiViewBase
 		void initForm();
 		void loadForm();
 
+		virtual void resizeEvent ( QResizeEvent * );
 	private:
-		KexiDBForm   *m_dbform;
-		KexiFormScrollView   *m_scrollView;
-		bool   m_preview;
-		KexiPropertyBuffer  *m_buffer;
-		KexiDB::Connection  *m_conn;
+		KexiDBForm *m_dbform;
+		KexiFormScrollView *m_scrollView;
+		KexiPropertyBuffer *m_buffer;
+		KexiDB::Connection *m_conn;
+		int m_resizeMode;
+		KexiRecordNavigator* m_navPanel;
+		bool m_preview : 1;
 };
 
 #endif

@@ -385,6 +385,32 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 CCMAIL: dkite@shaw.ca
 
+
+TODO: 
+ccpasteur	jstaniek: I don't know why but the editors don't want to fit in their container
+            in kdenonbeta/propertyeditor/test
+
+2004-12-14
+Form Plugin
+- handling form's boundaries improved
+- after switching to/from form in data view mode, its contents position is preserved
+- fixed form's size setting in data view mode
+- two form's resize modes introduced, see 
+  http://www.kexi-project.org/wiki/wikiview/index.php?Forms#Form_Resize_Modes_for_form_windows_inside_Kexi
+- in data view mode, scrollview is properly resized to avoid showing 
+   outer area and without scrollbars flickering
+General
+- version info moved to kexi_version.h; kexi_global.h is auto-included
+
+2004-12-13
+Widgets
+- libkexiguiutils added (KexiDB-independent widgets)
+- KexiRecordNavigator widget added (the old one was unused)
+Core
+- Part::openInstance(): dlg->registerDialog() moved after successful dialog opening
+  to avoid focusing non-exisitng dialog and/or flickering 
+  in a case of obj. loading errors
+
 2004-12-02
 KexiDB
 - version field added to kexidb driver's service files

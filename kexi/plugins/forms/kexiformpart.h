@@ -60,7 +60,9 @@ class KexiFormPart : public KexiPart::Part
 				~TempData();
 				QGuardedPtr<KFormDesigner::Form> form;
 				QGuardedPtr<KFormDesigner::Form> previewForm;
-				QString    tempForm;
+				QString tempForm;
+				QPoint scrollViewContentsPos; //!< to preserve contents pos after switching to other view
+				int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
 		};
 
 	protected:

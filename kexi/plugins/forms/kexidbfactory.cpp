@@ -120,7 +120,7 @@ KexiDBFactory::classes()
 QWidget*
 KexiDBFactory::create(const QString &c, QWidget *p, const char *n, KFormDesigner::Container *container)
 {
-	kdDebug() << "KexiDBFactory::create() " << this << endl;
+	kexipluginsdbg << "KexiDBFactory::create() " << this << endl;
 
 	if(c == "KexiSubForm")
 	{

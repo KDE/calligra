@@ -56,7 +56,7 @@ KexiWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesi
 {
 	if(c == "KexiViewBase")
 	{
-		kdDebug() << "KexiWidgetFactory(): parent: " << parent->className() << endl;
+		kexipluginsdbg << "KexiWidgetFactory(): parent: " << parent->className() << endl;
 //		QWidget *w = new QLabel("Label", p, n);
 //		w->installEventFilter(container);
 //		return w;

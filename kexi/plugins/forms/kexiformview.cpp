@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,8 +21,10 @@
 #include <qlayout.h>
 #include <qcursor.h>
 #include <qobjectlist.h>
+#include <qpainter.h>
 
 #include <kdebug.h>
+#include <kstaticdeleter.h>
 
 #include <form.h>
 #include <formIO.h>
@@ -40,13 +43,29 @@
 
 #define NO_DSWIZARD
 
-KexiFormScrollView::KexiFormScrollView(QWidget *parent, const char *name)
- : QScrollView(parent, name, WStaticContents), m_widget(0), m_form(0)
+// @todo warning: not reentrant!
+static KStaticDeleter<QPixmap> KexiFormScrollView_bufferPm_deleter;
+QPixmap* KexiFormScrollView_bufferPm = 0;
+
+KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
+ : QScrollView(parent, "formpart_kexiformview", WStaticContents)
+ , m_widget(0)
+ , m_form(0)
+ , m_helpFont(font())
+ , m_preview(preview)
 {
 	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
+	QColor fc = palette().active().foreground(),
+		bc = viewport()->paletteBackgroundColor();
+	m_helpColor	= QColor((fc.red()+bc.red()*2)/3, (fc.green()+bc.green()*2)/3, 
+		(fc.blue()+bc.blue()*2)/3);
+	m_helpFont.setPointSize( m_helpFont.pointSize() * 3 );
 
 	setFocusPolicy(WheelFocus);
+
+	//initial resize mode is always manual;
+	//will be changed on show(), if needed
 	setResizePolicy(Manual);
 
 	viewport()->setMouseTracking(true);
@@ -55,23 +74,71 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, const char *name)
 	m_snapToGrid = false;
 	m_gridX = 0;
 	m_gridY = 0;
+
+	connect(&m_delayedResize, SIGNAL(timeout()), this, SLOT(refreshContentsSize()));
+	m_smodeSet = false;
+	if (m_preview)
+		refreshContentsSizeLater(true, true);
+}
+
+KexiFormScrollView::~KexiFormScrollView()
+{
+}
+
+void KexiFormScrollView::show()
+{
+	QScrollView::show();
+
+	//now get resize mode settings for entire form
+	if (m_preview) {
+		KexiFormView* fv = dynamic_cast<KexiFormView*>(parent());
+		int resizeMode = fv ? fv->resizeMode() : KexiFormView::ResizeAuto;
+		if (resizeMode == KexiFormView::ResizeAuto)
+			setResizePolicy(AutoOneFit);
+	}
 }
 
 void
-KexiFormScrollView::setWidget(QWidget *w)
+KexiFormScrollView::setFormWidget(KexiDBForm *w)
 {
 	addChild(w);
 	m_widget = w;
 }
 
+void KexiFormScrollView::refreshContentsSizeLater(bool horizontal, bool vertical)
+{
+	if (!m_smodeSet) {
+		m_smodeSet = true;
+		m_vsmode = vScrollBarMode();
+		m_hsmode = hScrollBarMode();
+	}
+//	if (vertical)
+		setVScrollBarMode(QScrollView::AlwaysOff);
+	//if (horizontal)
+		setHScrollBarMode(QScrollView::AlwaysOff);
+	updateScrollBars();
+	m_delayedResize.start( 100, true );
+}
+
 void
 KexiFormScrollView::refreshContentsSize()
 {
-	// Ensure there is always space to resize Form
-	if(m_widget->width() + 200 > contentsWidth())
-		resizeContents(m_widget->width() + 300, contentsHeight());
-	if(m_widget->height() + 200 > contentsHeight())
-		resizeContents(contentsWidth(), m_widget->height() + 300);
+	if(!m_widget)
+		return;
+	if (m_preview) {
+		resizeContents(m_widget->width(), m_widget->height());
+		setVScrollBarMode(m_vsmode);
+		setHScrollBarMode(m_hsmode);
+		m_smodeSet = false;
+		updateScrollBars();
+	}
+	else {
+		// Ensure there is always space to resize Form
+		if(m_widget->width() + 200 > contentsWidth())
+			resizeContents(m_widget->width() + 300, contentsHeight());
+		if(m_widget->height() + 200 > contentsHeight())
+			resizeContents(contentsWidth(), m_widget->height() + 300);
+	}
 }
 
 void
@@ -115,6 +182,17 @@ KexiFormScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 	if(m_resizing) // resize widget
 	{
 		int tmpx = ev->x(), tmpy = ev->y();
+		const int exceeds_x = (tmpx - contentsX() + 5) - clipper()->width();
+		const int exceeds_y = (tmpy - contentsY() + 5) - clipper()->height();
+		if (exceeds_x > 0)
+			tmpx -= exceeds_x;
+		if (exceeds_y > 0)
+			tmpy -= exceeds_y;
+		if ((tmpx - contentsX()) < 0)
+			tmpx = contentsX();
+		if ((tmpy - contentsY()) < 0)
+			tmpy = contentsY();
+
 		// we look for the max widget right() (or bottom()), which would be the limit for form resizing (not to hide widgets)
 		QObjectList *list = m_widget->queryList("QWidget", 0, true, false /* not recursive*/);
 		for(QObject *o = list->first(); o; o = list->next())
@@ -125,30 +203,39 @@ KexiFormScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 		}
 		delete list;
 
+		int neww = -1, newh;
 		if(cursor().shape() == QCursor::SizeHorCursor)
 		{
 			if(m_snapToGrid)
-				m_widget->resize( int( float(tmpx) / float(m_gridX) + 0.5 ) * m_gridX, m_widget->height());
+				neww = int( float(tmpx) / float(m_gridX) + 0.5 ) * m_gridX;
 			else
-				m_widget->resize(tmpx, m_widget->height());
+				neww = tmpx;
+			newh = m_widget->height();
 		}
 		else if(cursor().shape() == QCursor::SizeVerCursor)
 		{
+			neww = m_widget->width();
 			if(m_snapToGrid)
-				m_widget->resize(m_widget->width(), int( float(tmpy) / float(m_gridY) + 0.5 ) * m_gridY);
+				newh = int( float(tmpy) / float(m_gridY) + 0.5 ) * m_gridY;
 			else
-				m_widget->resize(m_widget->width(), tmpy);
+				newh = tmpy;
 		}
 		else if(cursor().shape() == QCursor::SizeFDiagCursor)
 		{
-			if(m_snapToGrid)
-				m_widget->resize(int( float(tmpx) / float(m_gridX) + 0.5 ) * m_gridX,
-				   int( float(tmpy) / float(m_gridY) + 0.5 ) * m_gridY);
-			else
-				m_widget->resize(tmpx, tmpy);
+			if(m_snapToGrid) {
+				neww = int( float(tmpx) / float(m_gridX) + 0.5 ) * m_gridX;
+				newh = int( float(tmpy) / float(m_gridY) + 0.5 ) * m_gridY;
+			} else {
+				neww = tmpx;
+				newh = tmpy;
+			}
 		}
-
-		refreshContentsSize();
+		//needs update?
+		if (neww!=-1 && m_widget->size() != QSize(neww, newh)) {
+			m_widget->resize( neww, newh );
+			refreshContentsSize();
+			updateContents();
+		}
 	}
 	else // update mouse cursor
 	{
@@ -168,32 +255,88 @@ KexiFormScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 	}
 }
 
-KexiFormScrollView::~KexiFormScrollView()
-{}
+void
+KexiFormScrollView::drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph ) 
+{
+	QScrollView::drawContents(p, clipx, clipy, clipw, cliph);
+	if (m_widget) {
+		if (m_preview)
+			return;
+
+		//draw right and bottom borders
+		const int wx = childX(m_widget);
+		const int wy = childY(m_widget);
+		p->setPen(palette().active().foreground());
+		p->drawLine(wx+m_widget->width(), wy, wx+m_widget->width(), wy+m_widget->height());
+		p->drawLine(wx, wy+m_widget->height(), wx+m_widget->width(), wy+m_widget->height());
+
+
+		if (!KexiFormScrollView_bufferPm) {
+			//create flicker-less buffer
+			QString txt(i18n("Outer area"));
+			QFontMetrics fm(m_helpFont);
+			const int txtw = fm.width(txt), txth = fm.height();
+			KexiFormScrollView_bufferPm_deleter.setObject( KexiFormScrollView_bufferPm, 
+				new QPixmap(txtw, txth) );
+			if (!KexiFormScrollView_bufferPm->isNull()) {
+				//create pixmap once
+				KexiFormScrollView_bufferPm->fill( viewport()->paletteBackgroundColor() );
+				QPainter *pb = new QPainter(KexiFormScrollView_bufferPm, this);
+				pb->setPen(m_helpColor);
+				pb->setFont(m_helpFont);
+				pb->drawText(0, 0, txtw, txth, Qt::AlignLeft|Qt::AlignTop, txt);
+				delete pb;
+			}
+		}
+		if (!KexiFormScrollView_bufferPm->isNull()) {
+			p->drawPixmap((contentsWidth() + m_widget->width() - KexiFormScrollView_bufferPm->width())/2,
+				(m_widget->height()-KexiFormScrollView_bufferPm->height())/2, 
+				*KexiFormScrollView_bufferPm);
+			p->drawPixmap((m_widget->width() - KexiFormScrollView_bufferPm->width())/2,
+				(contentsHeight() + m_widget->height() - KexiFormScrollView_bufferPm->height())/2, 
+				*KexiFormScrollView_bufferPm);
+		}
+	}
+}
+
+void KexiFormScrollView::leaveEvent( QEvent *e )
+{
+	QWidget::leaveEvent(e);
+	m_widget->update(); //update form elements on too fast mouse move
+}
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, bool preview, KexiDB::Connection *conn)
+KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, 
+	bool preview, KexiDB::Connection *conn)
  : KexiViewBase(win, parent, name), m_preview(preview), m_buffer(0), m_conn(conn)
+ , m_resizeMode(KexiFormView::ResizeDefault)
 {
 	QHBoxLayout *l = new QHBoxLayout(this);
 	l->setAutoAdd(true);
 
-	m_scrollView = new KexiFormScrollView(this);
-	m_scrollView->show();
+	m_scrollView = new KexiFormScrollView(this, preview);
+	setViewWidget(m_scrollView);
+//	m_scrollView->show();
 
 	m_dbform = new KexiDBForm(m_scrollView->viewport(), name/*, conn*/);
-	m_dbform->resize(QSize(400, 300));
-	m_scrollView->setWidget(m_dbform);
+//	m_dbform->resize(QSize(400, 300));
+	m_scrollView->setFormWidget(m_dbform);
 	m_scrollView->setResizingEnabled(!preview);
 
 	initForm();
 
-	if(!preview)
+	if (preview) {
+		m_scrollView->viewport()->setPaletteBackgroundColor(m_dbform->palette().active().background());
+		connect(formPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
+	}
+	else
 	{
-		connect(formPart()->manager(), SIGNAL(bufferSwitched(KexiPropertyBuffer *)), this, SLOT(managerPropertyChanged(KexiPropertyBuffer *)));
-		connect(formPart()->manager(), SIGNAL(dirty(KFormDesigner::Form *, bool)), this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
+		connect(formPart()->manager(), SIGNAL(bufferSwitched(KexiPropertyBuffer *)), 
+			this, SLOT(managerPropertyChanged(KexiPropertyBuffer *)));
+		connect(formPart()->manager(), SIGNAL(dirty(KFormDesigner::Form *, bool)), 
+			this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
 
 		// action stuff
 		connect(formPart()->manager(), SIGNAL(widgetSelected(Form*, bool)), SLOT(slotWidgetSelected(Form*, bool)));
@@ -238,9 +381,13 @@ KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *nam
 		plugSharedAction("formpart_adjust_width_small", formPart()->manager(), SLOT(adjustWidthToSmall()) );
 		plugSharedAction("formpart_adjust_width_big", formPart()->manager(), SLOT(adjustWidthToBig()) );
 	}
-	else
-		connect(formPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
 
+	/// @todo skip this if ther're no borders
+//	m_dbform->resize( m_dbform->size()+QSize(m_scrollView->verticalScrollBar()->width(), m_scrollView->horizontalScrollBar()->height()) );
+}
+
+KexiFormView::~KexiFormView()
+{
 }
 
 KFormDesigner::Form*
@@ -294,13 +441,20 @@ KexiFormView::initForm()
 
 	formPart()->manager()->importForm(form(), m_preview);
 	m_scrollView->setForm(form());
+//	QSize s = m_dbform->size();
+//	QApplication::sendPostedEvents();
+//	m_scrollView->resize( s );
+//	m_dbform->resize(s);
 	m_scrollView->refreshContentsSize();
 }
 
 void
 KexiFormView::loadForm()
 {
-	kdDebug() << "KexiDBForm::loadForm() Loading the form with id : " << parentDialog()->id() << endl;
+
+//@todo also load m_resizeMode !
+
+	kexipluginsdbg << "KexiDBForm::loadForm() Loading the form with id : " << parentDialog()->id() << endl;
 	// If we are previewing the Form, use the tempData instead of the form stored in the db
 	if(m_preview && !tempData()->tempForm.isNull() )
 	{
@@ -324,10 +478,17 @@ KexiFormView::managerPropertyChanged(KexiPropertyBuffer *b)
 tristate
 KexiFormView::beforeSwitchTo(int mode, bool &dontStore)
 {
+	if (mode!=viewMode() && !m_preview) {
+		//remember our pos
+		tempData()->scrollViewContentsPos 
+			= QPoint(m_scrollView->contentsX(), m_scrollView->contentsY());
+	}
+
 	// we don't store on db, but in our TempData
 	dontStore = true;
-	if(dirty() && (mode == Kexi::DataViewMode) && form()->objectTree())
+	if(dirty() && (mode == Kexi::DataViewMode) && form()->objectTree()) {
 		KFormDesigner::FormIO::saveFormToString(form(), tempData()->tempForm);
+	}
 
 	return true;
 }
@@ -335,17 +496,32 @@ KexiFormView::beforeSwitchTo(int mode, bool &dontStore)
 tristate
 KexiFormView::afterSwitchFrom(int mode)
 {
+	if (mode != 0 && mode != Kexi::DesignViewMode) {
+		//preserve contents pos after switching to other view
+		m_scrollView->setContentsPos(tempData()->scrollViewContentsPos.x(), 
+			tempData()->scrollViewContentsPos.y());
+	}
+//	if (mode == Kexi::DesignViewMode) {
+		//m_scrollView->move(0,0);
+		//m_scrollView->setContentsPos(0,0);
+		//m_scrollView->moveChild(m_dbform, 0, 0);
+//	}
+
 	if((mode == Kexi::DesignViewMode) && m_preview) //aka !preview
 	{
+
 		// The form may have been modified, so we must recreate the preview
 		delete m_dbform; // also deletes form()
 		m_dbform = new KexiDBForm(m_scrollView->viewport());
-		m_scrollView->setWidget(m_dbform);
+		m_scrollView->setFormWidget(m_dbform);
 
 		initForm();
 		slotNoFormSelected();
-	}
 
+		//reset position
+		m_scrollView->setContentsPos(0,0);
+		m_dbform->move(0,0);
+	}
 	return true;
 }
 
@@ -360,7 +536,7 @@ KexiDB::SchemaData*
 KexiFormView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
 	KexiDB::SchemaData *s = KexiViewBase::storeNewData(sdata, cancel);
-	kdDebug() << "KexiDBForm::storeNewData(): new id:" << s->id() << endl;
+	kexipluginsdbg << "KexiDBForm::storeNewData(): new id:" << s->id() << endl;
 
 	if (!s || cancel) {
 		delete s;
@@ -378,7 +554,7 @@ KexiFormView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 tristate
 KexiFormView::storeData()
 {
-	kdDebug(44000) << "KexiDBForm::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
+	kexipluginsdbg << "KexiDBForm::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 	QString data;
 	KFormDesigner::FormIO::saveFormToString(tempData()->form, data);
 	if (!storeDataBlock(data))
@@ -520,8 +696,26 @@ KexiFormView::setRedoEnabled(bool enabled)
 	setAvailable("edit_redo", enabled);
 }
 
-KexiFormView::~KexiFormView()
-{}
+QSize
+KexiFormView::preferredSizeHint(const QSize& otherSize)
+{
+	return (m_dbform->size()
+			+QSize(m_scrollView->verticalScrollBar()->isVisible() ? m_scrollView->verticalScrollBar()->width()*3/2 : 10, 
+			 m_scrollView->horizontalScrollBar()->isVisible() ? m_scrollView->horizontalScrollBar()->height()*3/2 : 10))
+		.expandedTo( KexiViewBase::preferredSizeHint(otherSize) );
+}
+
+void
+KexiFormView::resizeEvent( QResizeEvent *e )
+{
+	if (m_preview) {
+		m_scrollView->refreshContentsSizeLater( 
+			e->size().width()!=e->oldSize().width(),
+			e->size().height()!=e->oldSize().height()
+		);
+	}
+	KexiViewBase::resizeEvent(e);
+}
 
 #include "kexiformview.moc"
 
