@@ -312,13 +312,13 @@ int KWTextParag::lineSpacing( int line ) const
         while ( line-- > 0 )
             ++it;
         int height = ( *it )->h;
-        //kdDebug() << " line height=" << height << endl;
+        //kdDebug() << " line height=" << height << " valid=" << isValid() << endl;
 
         if ( m_layout.lineSpacing == KWParagLayout::LS_ONEANDHALF )
         {
             // Tricky. During formatting height doesn't include the linespacing,
             // but afterwards (e.g. when drawing the cursor), it does !
-            return isValid() ? height * 2 / 3 : height / 2;
+            return isValid() ? height * 1 / 3 : height / 2;
         }
         else if ( m_layout.lineSpacing == KWParagLayout::LS_DOUBLE )
         {
@@ -349,6 +349,7 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
         r.setRight( rect().width() - rightMargin() - 1 ); /*documentWidth()-1 requires many fixes in QRT*/
         r.setTop( lineY( 0 ) );
         int lastLine = lines() - 1;
+        kdDebug() << "KWTextParag::paint height=" << lineHeight( lastLine ) << " spacing=" << lineSpacing( lastLine ) << endl;
         r.setBottom( static_cast<int>( lineY( lastLine ) + lineHeight( lastLine ) - lineSpacing( lastLine ) ) - 1 );
 
         Border::drawBorders( painter, zh, r, m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
