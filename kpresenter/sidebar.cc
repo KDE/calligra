@@ -875,7 +875,7 @@ void Outline::doMoveItems()
     OutlineSlideItem* dstItem = dynamic_cast<OutlineSlideItem*>(movedAfter);
     if( movedAfter && !dstItem ) return;
 
-    int numNow = movedAfter ? doc->pageList().find( dstItem->page() ) : 0;
+    int numNow = movedAfter ? doc->pageList().find( dstItem->page() ) : -1;
     if ( numNow < num ) numNow++;
     
     if(num!=numNow) {
