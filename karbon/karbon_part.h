@@ -73,7 +73,7 @@ public:
     void initUnit();
 public slots:
 	/// repaint all views attached to this koDocument
-	void repaintAllViews( bool erase = false );
+	void repaintAllViews( bool repaint = true );
 	void slotDocumentRestored();
 	void slotCommandExecuted();
 
