@@ -5393,6 +5393,11 @@ void KWView::spellCheckerReplaceAll( const QString & origword ,  const QString &
     m_spell.replaceAll.append( replacement );
 }
 
+void KWView::spellAddAutoCorrect (const QString & originalword, const QString & newword)
+{
+    m_doc->getAutoFormat()->addAutoFormatEntry( originalword, newword );
+}
+
 void KWView::configure()
 {
     KWConfig configDia( this );

@@ -325,7 +325,7 @@ public slots:
 
     void slotUpdateRuler();
     void slotEmbedImage( const QString &filename );
-    
+
     void insertCustomVariable();
     void insertNewCustomVariable();
     void slotSpecialCharDlgClosed();
@@ -412,6 +412,7 @@ protected slots:
     void spellCheckerFinished( );
     void spellCheckerIgnoreAll( const QString &);
     void spellCheckerReplaceAll( const QString &,  const QString &);
+    void spellAddAutoCorrect (const QString & originalword, const QString & newword);
     void slotApplyFont();
     void slotApplyParag();
     void slotPageLayoutChanged( const KoPageLayout& layout );
