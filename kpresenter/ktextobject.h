@@ -1640,6 +1640,94 @@ public:
    */
   TxtCursor *getTxtCursor() {return txtCursor;}
 
+  /**
+   * Start finding a string at the cursor position and goes forwards. If the string was found, this string gets selected.<br>
+   * Returns <i>true</i> if the string was found, else it returns <i>false</i>. If <i>true</i> is
+   * returned, <i>from</i> to <i>to</i> points to the position, where the string was found. Else <i>from</i> and <i>to</i> are 
+   * undefined.<br>
+   * <i>caseSensitive</i> sets, if the search is case sensitive or not.
+   */
+  bool searchFirst(QString,TxtCursor *from,TxtCursor *to,bool caseSensitive);
+
+  /**
+   * Continue finding a string forwards. If the string was found, this string gets selected.<br>
+   * Returns <i>true</i> if the string was found, else it returns <i>false</i>. If <i>true</i> is
+   * returned, <i>from</i> to <i>to</i> points to the position, where the string was found. Else <i>from</i> and <i>to</i> are
+   * undefined.<br>
+   * <i>caseSensitive</i> sets, if the search is case sensitive or not.
+   */
+  bool searchNext(QString,TxtCursor *from,TxtCursor *to,bool caseSensitive);
+
+  /**
+   * Start finding a string at the cursor position and goes backwards. If the string was found, this string gets selected.<br>
+   * Returns <i>true</i> if the string was found, else it returns <i>false</i>. If <i>true</i> is
+   * returned, <i>from</i> to <i>to</i> points to the position, where the string was found. Else <i>from</i> and <i>to</i> are
+   * undefined.<br>
+   * <i>caseSensitive</i> sets, if the search is case sensitive or not.
+   */
+  bool searchFirstRev(QString,TxtCursor *from,TxtCursor *to,bool caseSensitive);
+
+  /**
+   * Continue finding a string backwards. If the string was found, this string gets selected.<br>
+   * Returns <i>true</i> if the string was found, else it returns <i>false</i>. If <i>true</i> is
+   * returned, <i>from</i> to <i>to</i> points to the position, where the string was found. Else <i>from</i> and <i>to</i> are
+   * undefined.<br>
+   * <i>caseSensitive</i> sets, if the search is case sensitive or not.
+   */
+  bool searchNextRev(QString,TxtCursor *from,TxtCursor *to,bool caseSensitive);
+  
+  /**
+   * Set search index to te beginning.
+   */
+  void setSearchIndexToBegin()
+    { searchIndexFrom.setPositionAbs(0); searchIndexTo.setPositionAbs(0); }
+
+  /**
+   * Set search index to the end.
+   */
+  void setSearchIndexToEnd()
+    { searchIndexFrom.setPositionAbs(textLength()); searchIndexTo.setPositionAbs(textLength()); }
+
+  /**
+   * Start finding a string <i>search</i> and replacing it with <i>replace</i> at the current cursor position and goes forwards. 
+   * If the string was replaced, the replaced string is selected.<br>
+   * Returns <i>true</i> if the string was found and replaced, else it returns <i>false</i>. If <i>true</i> is
+   * returned, <i>from</i> to <i>to</i> points to the position, where the string was replaced. Else <i>from</i> and <i>to</i> are 
+   * undefined.<br>
+   * <i>caseSensitive</i> sets, if the search/replace is case sensitive or not.
+   */
+  bool replaceFirst(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive);
+
+  /**
+   * Continue finding a string <i>search</i> and replacing it with <i>replace</i> at the current cursor position and going forwards. 
+   * If the string was replaced, the replaced string is selected.<br>
+   * Returns <i>true</i> if the string was found and replaced, else it returns <i>false</i>. If <i>true</i> is
+   * returned, <i>from</i> to <i>to</i> points to the position, where the string was replaced. Else <i>from</i> and <i>to</i> are 
+   * undefined.<br>
+   * <i>caseSensitive</i> sets, if the search/replace is case sensitive or not.
+   */
+  bool replaceNext(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive);
+
+  /**
+   * Start finding a string <i>search</i> and replacing it with <i>replace</i> at the current cursor position and goes backwards. 
+   * If the string was replaced, the replaced string is selected.<br>
+   * Returns <i>true</i> if the string was found and replaced, else it returns <i>false</i>. If <i>true</i> is
+   * returned, <i>from</i> to <i>to</i> points to the position, where the string was replaced. Else <i>from</i> and <i>to</i> are 
+   * undefined.<br>
+   * <i>caseSensitive</i> sets, if the search/replace is case sensitive or not.
+   */
+  bool replaceFirstRev(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive);
+
+  /**
+   * Continue finding a string <i>search</i> and replacing it with <i>replace</i> at the current cursor position and going backwards. 
+   * If the string was replaced, the replaced string is selected.<br>
+   * Returns <i>true</i> if the string was found and replaced, else it returns <i>false</i>. If <i>true</i> is
+   * returned, <i>from</i> to <i>to</i> points to the position, where the string was replaced. Else <i>from</i> and <i>to</i> are 
+   * undefined.<br>
+   * <i>caseSensitive</i> sets, if the search/replace is case sensitive or not.
+   */
+  bool replaceNextRev(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive);
+
 signals:
 
   /**
@@ -1756,6 +1844,7 @@ protected:
   //*********** variables ***********
 
   TxtCursor *txtCursor;
+  TxtCursor searchIndexFrom,searchIndexTo;
   bool sCursor;
   bool drawSelection;
 

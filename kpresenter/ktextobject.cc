@@ -1444,6 +1444,8 @@ KTextObject::KTextObject(QWidget *parent=0,const char *name=0,ObjType ot=PLAIN,
   txtCursor = new TxtCursor((KTextObject*)this);
   cursorChanged = true;
   setCursor(ibeamCursor);
+  searchIndexFrom.setPositionAbs(0);
+  searchIndexTo.setPositionAbs(0);
   
   startCursor.setKTextObject((KTextObject*)this);
   stopCursor.setKTextObject((KTextObject*)this);
@@ -3818,6 +3820,190 @@ KTextObject& KTextObject::operator=(KTextObject &txtObj)
   recalc();
 
   return *this;
+}
+
+/*====================== search first ============================*/
+bool KTextObject::searchFirst(QString text,TxtCursor *from,TxtCursor *to,bool caseSensitive)
+{
+  searchIndexFrom.setPositionAbs(txtCursor->positionAbs());
+  searchIndexTo.setPositionAbs(txtCursor->positionAbs());
+
+  return searchNext(text,from,to,caseSensitive);
+}
+
+/*====================== search next =============================*/
+bool KTextObject::searchNext(QString text,TxtCursor *from,TxtCursor *to,bool caseSensitive)
+{
+  QString contents = toASCII(false);
+  contents.replace("\n","");
+
+  if (!contents.isEmpty())
+    {
+      int index = contents.find(text,searchIndexTo.positionAbs(),caseSensitive);
+      if (index == -1) return false;
+
+      cursorChanged = true;
+
+      searchIndexFrom.setPositionAbs(index);
+      searchIndexTo.setPositionAbs(index + text.length());
+
+      from->setPositionAbs(index);
+      to->setPositionAbs(index + text.length());
+
+      if (drawSelection)
+	{
+	  drawSelection = false;
+	  redrawSelection(startCursor,stopCursor);
+	}
+
+      startCursor.setPositionAbs(txtCursor->positionAbs() - 1);
+      stopCursor.setPositionAbs(txtCursor->positionAbs() + 1);
+      txtCursor->setPositionAbs(index);
+      redrawSelection(startCursor,stopCursor);
+
+      startCursor.setPositionAbs(index);
+      stopCursor.setPositionAbs(index + text.length());
+
+      drawSelection = true;
+      redrawSelection(startCursor,stopCursor);
+
+      if ((tableFlags() & Tbl_vScrollBar || tableFlags() & Tbl_hScrollBar) && !rowIsVisible(txtCursor->positionParagraph()))
+	setTopCell(txtCursor->positionParagraph());
+
+      return true;
+    }
+
+  return false;
+}
+
+/*====================== search first reverse ====================*/
+bool KTextObject::searchFirstRev(QString text,TxtCursor *from,TxtCursor *to,bool caseSensitive)
+{
+  searchIndexFrom.setPositionAbs(txtCursor->positionAbs());
+  searchIndexTo.setPositionAbs(txtCursor->positionAbs());
+
+  return searchNextRev(text,from,to,caseSensitive);
+}
+
+/*====================== search next reverse =====================*/
+bool KTextObject::searchNextRev(QString text,TxtCursor *from,TxtCursor *to,bool caseSensitive)
+{
+  QString contents = toASCII(false);
+  contents.replace("\n","");
+
+  if (!contents.isEmpty())
+    {
+      int index = contents.findRev(text,searchIndexFrom.positionAbs() - 1,caseSensitive);
+      if (index == -1) return false;
+
+      cursorChanged = true;
+
+      searchIndexFrom.setPositionAbs(index);
+      searchIndexTo.setPositionAbs(index + text.length());
+
+      from->setPositionAbs(index);
+      to->setPositionAbs(index + text.length());
+
+      if (drawSelection)
+	{
+	  drawSelection = false;
+	  redrawSelection(startCursor,stopCursor);
+	}
+
+      startCursor.setPositionAbs(txtCursor->positionAbs() - 1);
+      stopCursor.setPositionAbs(txtCursor->positionAbs() + 1);
+      txtCursor->setPositionAbs(index);
+      redrawSelection(startCursor,stopCursor);
+
+      startCursor.setPositionAbs(index);
+      stopCursor.setPositionAbs(index + text.length());
+
+      drawSelection = true;
+      redrawSelection(startCursor,stopCursor);
+
+      if ((tableFlags() & Tbl_vScrollBar || tableFlags() & Tbl_hScrollBar) && !rowIsVisible(txtCursor->positionParagraph()))
+	setTopCell(txtCursor->positionParagraph());
+
+      return true;
+    }
+
+  return false;
+}
+ 
+/*====================== replace first ===========================*/
+bool KTextObject::replaceFirst(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive)
+{
+  searchIndexFrom.setPositionAbs(txtCursor->positionAbs());
+  searchIndexTo.setPositionAbs(txtCursor->positionAbs());
+
+  return replaceNext(search,replace,from,to,caseSensitive);
+}
+
+/*====================== replace next ============================*/
+bool KTextObject::replaceNext(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive)
+{
+  bool found = searchNext(search,from,to,caseSensitive);
+
+  if (found)
+    {
+      cutRegion();
+      insertText(replace,txtCursor,currFont,currColor);
+      to->setPositionAbs(from->positionAbs() + replace.length());
+
+      if (drawSelection)
+	{
+	  drawSelection = false;
+	  redrawSelection(startCursor,stopCursor);
+	}
+
+      txtCursor->setPositionAbs(from->positionAbs());
+
+      startCursor.setPositionAbs(from->positionAbs());
+      stopCursor.setPositionAbs(to->positionAbs());
+
+      drawSelection = true;
+      redrawSelection(startCursor,stopCursor);
+    }
+
+  return found;
+}
+
+/*====================== replace first reverse ===================*/
+bool KTextObject::replaceFirstRev(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive)
+{
+  searchIndexFrom.setPositionAbs(txtCursor->positionAbs());
+  searchIndexTo.setPositionAbs(txtCursor->positionAbs());
+
+  return replaceNextRev(search,replace,from,to,caseSensitive);
+}
+
+/*====================== replace next reverse ====================*/
+bool KTextObject::replaceNextRev(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive)
+{
+  bool found = searchNextRev(search,from,to,caseSensitive);
+
+  if (found)
+    {
+      cutRegion();
+      insertText(replace,txtCursor,currFont,currColor);
+      to->setPositionAbs(from->positionAbs() + replace.length());
+
+      if (drawSelection)
+	{
+	  drawSelection = false;
+	  redrawSelection(startCursor,stopCursor);
+	}
+
+      txtCursor->setPositionAbs(from->positionAbs());
+
+      startCursor.setPositionAbs(from->positionAbs());
+      stopCursor.setPositionAbs(to->positionAbs());
+
+      drawSelection = true;
+      redrawSelection(startCursor,stopCursor);
+    }
+
+  return found;
 }
 
 /*====================== paint cell ==============================*/

@@ -61,6 +61,8 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name
   pgConfDia = 0;
   effectDia = 0;
   rotateDia = 0;
+  searchDia = 0;
+  replaceDia = 0;
   xOffset = 0;
   yOffset = 0;
   pen.operator=(QPen(black,1,SolidLine));
@@ -71,6 +73,7 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name
   m_bShowGUI = true;
   m_bRectSelection = false;
   presStarted = false;
+  searchFirst = true;
 }
 
 /*======================= destructor ============================*/
@@ -203,6 +206,54 @@ void KPresenterView_impl::editDelete()
 void KPresenterView_impl::editSelectAll()
 {
   page->selectAllObj();
+}
+
+/*========================== edit find ==========================*/
+void KPresenterView_impl::editFind()
+{
+  if (searchDia)
+    {
+      QObject::disconnect(searchDia,SIGNAL(doSearch(QString,bool,bool)),this,SLOT(search(QString,bool,bool)));
+      searchDia->close();
+      delete searchDia;
+      searchDia = 0;
+    }
+
+  if (page->kTxtObj())
+    {
+      searchDia = new KSearchDialog(0,"SearchDia");
+      searchDia->setMaximumSize(searchDia->width(),searchDia->height());
+      searchDia->setMinimumSize(searchDia->width(),searchDia->height());
+      QObject::connect(searchDia,SIGNAL(doSearch(QString,bool,bool)),this,SLOT(search(QString,bool,bool)));
+      searchDia->show();
+      
+      searchFirst = true;
+    }
+}
+
+/*========================== edit find and replace ==============*/
+void KPresenterView_impl::editFindReplace()
+{
+  if (replaceDia)
+    {
+      QObject::disconnect(replaceDia,SIGNAL(doSearchReplace(QString,QString,bool,bool)),this,SLOT(replace(QString,QString,bool,bool)));
+      QObject::disconnect(replaceDia,SIGNAL(doSearchReplaceAll(QString,QString,bool)),this,SLOT(replaceAll(QString,QString,bool)));
+      replaceDia->close();
+      delete replaceDia;
+      replaceDia = 0;
+    }
+
+  if (page->kTxtObj())
+    {
+      replaceDia = new KSearchReplaceDialog(0,"ReplaceDia");
+      replaceDia->setMaximumSize(replaceDia->width(),replaceDia->height());
+      replaceDia->setMinimumSize(replaceDia->width(),replaceDia->height());
+      QObject::connect(replaceDia,SIGNAL(doSearchReplace(QString,QString,bool,bool)),this,SLOT(replace(QString,QString,bool,bool)));
+      QObject::connect(replaceDia,SIGNAL(doSearchReplaceAll(QString,QString,bool)),this,SLOT(replaceAll(QString,QString,bool)));
+      replaceDia->show();
+      
+      searchFirst = true;
+    }
 }
 
 /*========================= view new view =======================*/
@@ -1735,6 +1786,119 @@ void KPresenterView_impl::insertRoundRectidl()
   m_pKPresenterDoc->insertRectangle(pen,brush,RT_ROUND,xOffset,yOffset);
 }
 
+/*=========================== search =============================*/
+void KPresenterView_impl::search(QString text,bool sensitive,bool direction)
+{
+  if (page->kTxtObj())
+    {
+      TxtCursor from,to;
+      from.setKTextObject(page->kTxtObj());
+      to.setKTextObject(page->kTxtObj());
+      bool found = false;
+      
+      if (!direction)
+	{
+	  if (searchFirst)
+	    found = page->kTxtObj()->searchFirst(text,&from,&to,sensitive);
+	  else
+	    found = page->kTxtObj()->searchNext(text,&from,&to,sensitive);
+      
+	  if (found)
+	    searchFirst = false;
+	  else
+	    {
+	      searchFirst = false;
+	      page->kTxtObj()->setSearchIndexToBegin();
+	      QMessageBox::warning(this,i18n("Warning"),
+				   i18n("The search string '" + text + "' couldn't be found!"));
+	    }
+	}
+      else
+	{
+	  if (searchFirst)
+	    found = page->kTxtObj()->searchFirstRev(text,&from,&to,sensitive);
+	  else
+	    found = page->kTxtObj()->searchNextRev(text,&from,&to,sensitive);
+	  
+	  if (found)
+	    searchFirst = false;
+	  else
+	    {
+	      searchFirst = false;
+	      page->kTxtObj()->setSearchIndexToEnd();
+	      QMessageBox::warning(this,i18n("Warning"),
+				   i18n("The search string '" + text + "' couldn't be found!"));
+	    }
+	}
+    }
+}
+
+/*=========================== search and replace =================*/
+void KPresenterView_impl::replace(QString search,QString replace,bool sensitive,bool direction)
+{
+  if (page->kTxtObj())
+    {
+      TxtCursor from,to;
+      from.setKTextObject(page->kTxtObj());
+      to.setKTextObject(page->kTxtObj());
+      bool found = false;
+      
+      if (!direction)
+	{
+	  if (searchFirst)
+	    found = page->kTxtObj()->replaceFirst(search,replace,&from,&to,sensitive);
+	  else
+	    found = page->kTxtObj()->replaceNext(search,replace,&from,&to,sensitive);
+	  
+	  if (found)
+	    searchFirst = false;
+	  else
+	    {
+	      searchFirst = false;
+	      page->kTxtObj()->setSearchIndexToBegin();
+	      QMessageBox::warning(this,i18n("Warning"),
+				   i18n("The search string '" + search + "' couldn't be found"
+				   " and replaced with '" + replace + "'!"));
+	    }
+	}
+      else
+	{
+	  if (searchFirst)
+	    found = page->kTxtObj()->replaceFirstRev(search,replace,&from,&to,sensitive);
+	  else
+	    found = page->kTxtObj()->replaceNextRev(search,replace,&from,&to,sensitive);
+	  
+	  if (found)
+	    searchFirst = false;
+	  else
+	    {
+	      searchFirst = false;
+	      page->kTxtObj()->setSearchIndexToEnd();
+	      QMessageBox::warning(this,i18n("Warning"),
+				   i18n("The search string '" + search + "' couldn't be found"
+				   " and replaced with '" + replace + "'!"));
+	    }
+	}
+    }
+}
+
+/*=========================== search and replace all =============*/
+void KPresenterView_impl::replaceAll(QString search,QString replace,bool sensitive)
+{
+  if (page->kTxtObj())
+    {
+      TxtCursor from,to;
+      from.setKTextObject(page->kTxtObj());
+      to.setKTextObject(page->kTxtObj());
+      bool found = true;
+      
+      page->kTxtObj()->setSearchIndexToBegin();
+      
+      while (found)
+	found = page->kTxtObj()->replaceNext(search,replace,&from,&to,sensitive);
+    }
+}
+
 /*====================== paint event ============================*/
 void KPresenterView_impl::repaint(bool erase)
 {
@@ -1934,8 +2098,11 @@ void KPresenterView_impl::setupMenu()
 						    CORBA::string_dup(i18n("&Delete")),m_idMenuEdit,
 						    this,CORBA::string_dup("editDelete"));
       m_rMenuBar->insertSeparator(m_idMenuEdit);
-      m_idMenuEdit_SelectAll = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Select &all")),m_idMenuEdit,
-						      this,CORBA::string_dup("editSelectAll"));
+      m_idMenuEdit_Find = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Find...")),m_idMenuEdit,
+						 this,CORBA::string_dup("editFind"));
+      m_rMenuBar->insertSeparator(m_idMenuEdit);
+      m_idMenuEdit_FindReplace = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Replace...")),m_idMenuEdit,
+							this,CORBA::string_dup("editFindReplace"));
 
       // view menu
       m_idMenuView = m_rMenuBar->insertMenu(CORBA::string_dup(i18n("&View")));

@@ -73,6 +73,7 @@ class Page;
 #include "pgconfdia.h"
 #include "effectdia.h"
 #include "rotatedia.h"
+#include "ksearchdialogs.h"
 
 #include <X11/Xlib.h>
 #include <signal.h>
@@ -134,6 +135,8 @@ public:
   virtual void editPaste();
   virtual void editDelete();
   virtual void editSelectAll();
+  virtual void editFind();
+  virtual void editFindReplace();
   
   // view menu
   virtual void newView();
@@ -309,6 +312,11 @@ protected slots:
   void presPen10();
   void presPenColor();
 
+  // search/replace
+  void search(QString,bool,bool);
+  void replace(QString,QString,bool,bool);
+  void replaceAll(QString,QString,bool);
+
 protected:
 
   // ********* functions ***********
@@ -351,6 +359,7 @@ protected:
   // flags
   bool m_bKPresenterModified;
   bool m_bUnderConstruction;
+  bool searchFirst;
   
   // menubar
   OPParts::MenuBarFactory_var m_vMenuBarFactory;
@@ -365,6 +374,8 @@ protected:
   CORBA::Long m_idMenuEdit_Paste;
   CORBA::Long m_idMenuEdit_Delete;
   CORBA::Long m_idMenuEdit_SelectAll;
+  CORBA::Long m_idMenuEdit_Find;
+  CORBA::Long m_idMenuEdit_FindReplace;
 
   // view menu
   CORBA::Long m_idMenuView;
@@ -519,6 +530,8 @@ protected:
   PgConfDia *pgConfDia;
   EffectDia *effectDia;
   RotateDia *rotateDia;
+  KSearchDialog *searchDia;
+  KSearchReplaceDialog *replaceDia;
 
   // default pen and brush
   QPen pen;
