@@ -11,8 +11,9 @@
 #include "BasicElement.h" 
 #include "RootElement.h" 
 #include "formuladef.h"
+#include "kformula_doc.h"
 
-RootElement::RootElement(FormulaClass *Formula,
+RootElement::RootElement(KFormulaDocument *Formula,
 			 BasicElement *Prev,
 			 int Relation,
 			 BasicElement *Next,
@@ -34,8 +35,7 @@ RootElement::~RootElement()
 void RootElement::draw(QPoint drawPoint,int resolution)
 {
   
-    QPainter *pen;
-    pen=formula->painter();
+    QPainter *pen=formula->painter();
     //QRect globalArea;
     int x,y,unit; //unit is familySize.height/4,used to draw proportional roots
     x=drawPoint.x();

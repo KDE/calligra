@@ -22,7 +22,7 @@ class MatrixElement : public BasicElement
    /*
     * Normal constructor, Get font from prev element
     */
-   MatrixElement(FormulaClass *Formula,BasicElement *Prev=NULL,int Relation=-1,BasicElement *Next=NULL,
+   MatrixElement(KFormulaDocument *Formula,BasicElement *Prev=NULL,int Relation=-1,BasicElement *Next=NULL,
                 QString Content="");
        
    /*

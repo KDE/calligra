@@ -14,7 +14,6 @@
 #include <qrect.h> 
 #include <qfont.h>
 #include "formuladef.h"
-#include "FormulaClass.h"
 #ifndef _BASIC_ELEMENT_H_
 #define _BASIC_ELEMENT_H_
 /*
@@ -22,6 +21,7 @@
  * It show a simple SQUARE 
  *
  */
+class KFormulaDocument;
 
 class BasicElement 
 {
@@ -29,7 +29,7 @@ class BasicElement
   /*
    * Normal constructor, Get font from prev element
    */
-  BasicElement(FormulaClass *Formula,BasicElement *Prev=NULL,int Relation=-1,BasicElement *Next=NULL,
+  BasicElement(KFormulaDocument *Formula,BasicElement *Prev=NULL,int Relation=-1,BasicElement *Next=NULL,
 	       QString Content="");
   
   /*
@@ -180,7 +180,7 @@ class BasicElement
   /*
    * I know nothing about the future of this member
    */
-  FormulaClass *formula;
+  KFormulaDocument *formula;
   
   /*
    * realtionship with prev

@@ -11,8 +11,9 @@
 #include <qrect.h> 
 #include "BasicElement.h" 
 #include "formuladef.h"
+#include "kformula_doc.h"
 
-BasicElement::BasicElement(FormulaClass *Formula,
+BasicElement::BasicElement(KFormulaDocument *Formula,
 			   BasicElement *Prev,
 			   int Relation,
 			   BasicElement *Next,

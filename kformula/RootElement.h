@@ -22,7 +22,7 @@ class RootElement : public BasicElement
     /*
      * Normal constructor, Get font from prev element
      */
-    RootElement(FormulaClass *Formula,BasicElement *Prev=NULL,
+    RootElement(KFormulaDocument *Formula,BasicElement *Prev=NULL,
 		int Relation=-1,BasicElement *Next=NULL,
 		QString Content="");
        

@@ -26,32 +26,32 @@ class KFormulaDocument;
 
 
 class KFormulaDocument : public QObject,
-			 public FormulaClass,
 			 virtual public KoDocument,
 			 virtual public KFormula::Document_skel
 {
     Q_OBJECT
- public:
+	public:
     // C++
     KFormulaDocument();
     ~KFormulaDocument();
     
     /*int addBlock( int Type = -1, int ID = -1, int nextID = -1, int prevID = -1,
-		  QString Cont = "", int Child1 = -1, int Child2 = -1, int Child3 = -1 );
-    void checkAndCreate( FormulaBlock *bl );
-    void deleteIt( FormulaBlock *bl );
+      QString Cont = "", int Child1 = -1, int Child2 = -1, int Child3 = -1 );
+      void checkAndCreate( FormulaBlock *bl );
+      void deleteIt( FormulaBlock *bl );
     */
     QString name;
     
-/*    BasicElement *activeElement,*firstElement;
-    FormulaClass *theFormula;
-*/
+    /*    BasicElement *activeElement,*firstElement;
+	  KFormulaDocument *theFormula;
+    */
     /**
      * This is just a hack til view and doc are really split
      */
     void mousePressEvent(QMouseEvent *a,  QWidget *wid); 
     void paintEvent( QPaintEvent *_ev, QWidget *paintGround );
     void keyPressEvent( QKeyEvent *k );
+
  protected:
     virtual void cleanUp();
     /**
@@ -96,10 +96,22 @@ class KFormulaDocument : public QObject,
     void addMatrixElement(QString cont);
     /*void addIntegralElement();
 
-    void addSymbolElement();
-    void addDecorationElement();
-*/    void addBracketElement(QString cont);
+      void addSymbolElement();
+      void addDecorationElement();
+    */    void addBracketElement(QString cont);
 
+
+    void setPainter(QPainter* p) { thePainter=p; }
+    void setActiveElement(BasicElement* c); 
+    void setCursor(QRect r) { theCursor=r; }
+    void setFont(QFont f) { theFont=f;}
+    void setColor(QColor c) { theColor=c;}
+    void setFirstElement(BasicElement* c);
+    QPainter * painter() const { return thePainter; } 
+    BasicElement *activeElement() const { return theActiveElement; } 
+    QRect cursor() const { return theCursor; }
+    QFont generalFont() const { return theFont; }
+    QColor generalColor() const { return theColor; }
     
  signals:
     void sig_modified();
@@ -116,6 +128,12 @@ class KFormulaDocument : public QObject,
     // QTimer *cursorTimer;
     bool showIt;
 
+    QPainter *thePainter;
+    BasicElement *theActiveElement;
+    BasicElement *theFirstElement;
+    QRect theCursor;
+    QFont theFont;
+    QColor theColor;
 };
 
 #endif

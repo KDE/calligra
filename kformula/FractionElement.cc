@@ -9,11 +9,13 @@
 //#define RECT
 #include <qrect.h> 
 #include <stdlib.h>
+#include "kformula_doc.h"
 #include "BasicElement.h" 
 #include "FractionElement.h" 
 #include "formuladef.h"
 
-FractionElement::FractionElement(FormulaClass *Formula,
+
+FractionElement::FractionElement(KFormulaDocument *Formula,
 				 BasicElement *Prev,
 				 int Relation,
 				 BasicElement *Next,

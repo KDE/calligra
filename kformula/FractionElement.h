@@ -22,7 +22,7 @@ class FractionElement : public BasicElement
    /*
     * Normal constructor, Get font from prev element
     */
-   FractionElement(FormulaClass *Formula,BasicElement *Prev=NULL,int Relation=-1,BasicElement *Next=NULL,
+   FractionElement(KFormulaDocument *Formula,BasicElement *Prev=NULL,int Relation=-1,BasicElement *Next=NULL,
                 QString Content="");
        
    /*

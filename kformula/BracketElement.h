@@ -22,7 +22,7 @@ class BracketElement : public BasicElement
     /*
      * Normal constructor, Get font from prev element
      */
-    BracketElement(FormulaClass *Formula,BasicElement *Prev=NULL,int Relation=-1,BasicElement *Next=NULL,
+    BracketElement(KFormulaDocument *Formula,BasicElement *Prev=NULL,int Relation=-1,BasicElement *Next=NULL,
 		   QString Content="");
        
     /*

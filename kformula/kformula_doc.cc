@@ -29,6 +29,17 @@
 
 KFormulaDocument::KFormulaDocument()
 {
+    thePainter = new QPainter();
+    
+    warning("General Settings");
+    theFont.setFamily( "utopia" );
+    theFont.setPointSize(32);
+    theFont.setWeight( QFont::Normal );
+    theFont.setItalic( false ); 
+    theColor=black;
+    warning("General Font OK");
+    theActiveElement = 0;
+
     // Use CORBA mechanism for deleting views
     m_lstViews.setAutoDelete( false );
     m_bModified = false;
@@ -404,5 +415,21 @@ void KFormulaDocument::paintEvent( QPaintEvent *, QWidget *paintGround )
 	    thePainter->drawWinFocusRect(theCursor);
     thePainter->end();
 }
+
+void KFormulaDocument::setActiveElement(BasicElement* c)
+{ 
+    if(theActiveElement!=0L) theActiveElement->setActive(FALSE);
+    theActiveElement=c;
+    if(c!=0L)theActiveElement->setActive(TRUE);    
+}
+
+void KFormulaDocument::setFirstElement(BasicElement* c)
+{ 
+  
+    if(c!=0L) theFirstElement=c;
+    else
+	warning("Try to set first element to 0L");
+}
+
 
 #include "kformula_doc.moc"
