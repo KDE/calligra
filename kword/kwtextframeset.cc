@@ -1212,7 +1212,7 @@ void KWTextFrameSet::formatMore()
     if ( !m_lastFormatted || !isVisible() || m_availableHeight == -1 )
         return;
 
-    int bottom = -1;
+    int bottom = 0;
     int to = !sender() ? 2 : 20; // 20 when it comes from the formatTimer
 
     int viewsBottom = 0;
@@ -1224,6 +1224,7 @@ void KWTextFrameSet::formatMore()
 #ifdef DEBUG_FORMAT_MORE
     kdDebug(32002) << "KWTextFrameSet::formatMore " << name()
                    << " lastFormatted id=" << lastFormatted->paragId()
+                   << " lastFormatted's height=" << lastFormatted->rect().height()
                    << " to=" << to << " viewsBottom=" << viewsBottom
                    << " availableHeight=" << m_availableHeight << endl;
 #endif
@@ -1256,8 +1257,8 @@ void KWTextFrameSet::formatMore()
 #endif
     m_lastFormatted = lastFormatted;
 
-    if ( bottom != -1 && ( ( bottom > m_availableHeight ) ||   // this parag is already off page
-                           ( lastFormatted && bottom + lastFormatted->rect().height() > m_availableHeight ) ) ) // or next parag will be off page
+    if ( ( bottom > m_availableHeight ) ||   // this parag is already off page
+         ( lastFormatted && bottom + lastFormatted->rect().height() > m_availableHeight ) ) // or next parag will be off page
     {
 #ifdef DEBUG_FORMAT_MORE
         if(lastFormatted)
