@@ -25,3 +25,6 @@ No idea if it is usefull; but it is a sin to let a good URL get lost...
 cvs page for file format: (url gave by Jody Goldberg <jody@gnome.org>)
 http://cvs.gnome.org/viewcvs/gnumeric/gnumeric.xsd?rev=1.11&view=markup
 http://cvs.gnome.org/viewcvs/gnumeric/plugins/xml_sax/xml-sax-read.c?rev=1.132&view=markup
+
+Last test with gnumeric -1.4.2 and pango 1.8.1
+
