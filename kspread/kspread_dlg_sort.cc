@@ -43,7 +43,7 @@
 #include <qtabwidget.h>
 #include <qwidget.h>
 
-KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name, 
+KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
                                 bool modal, WFlags fl )
   : QDialog( parent, name, modal, fl ),
     m_pView( parent )
@@ -51,18 +51,18 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   if ( !name )
     setName( "KSpreadSortDlg" );
 
-  resize( 528, 316 ); 
+  resize( 528, 316 );
   setCaption( i18n( "Sort - attention: this is still work in progress!!" ) );
   setSizeGripEnabled( true );
 
-  QVBoxLayout * KSpreadSortDlgLayout 
-    = new QVBoxLayout( this, 11, 6, "KSpreadSortDlgLayout"); 
+  QVBoxLayout * KSpreadSortDlgLayout
+    = new QVBoxLayout( this, 11, 6, "KSpreadSortDlgLayout");
 
   m_tabWidget = new QTabWidget( this, "m_tabWidget" );
 
   m_page1 = new QWidget( m_tabWidget, "m_page1" );
-  QGridLayout * page1Layout 
-    = new QGridLayout( m_page1, 1, 1, 11, 6, "page1Layout"); 
+  QGridLayout * page1Layout
+    = new QGridLayout( m_page1, 1, 1, 11, 6, "page1Layout");
 
   QGroupBox * sort1Box = new QGroupBox( m_page1, "sort1Box" );
   sort1Box->setTitle( i18n( "Sort by" ) );
@@ -100,7 +100,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   m_sortOrder2->insertItem( i18n( "Descending" ) );
   m_sortOrder2->setEnabled ( false );
   sort2BoxLayout->addWidget( m_sortOrder2 );
-  
+
   page1Layout->addWidget( sort2Box, 1, 0 );
 
   QGroupBox * sort3Box = new QGroupBox( m_page1, "sort3Box" );
@@ -129,7 +129,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   // options page
 
   m_page2 = new QWidget( m_tabWidget, "m_page2" );
-  QGridLayout * page2Layout = new QGridLayout( m_page2, 1, 1, 11, 6, "page2Layout"); 
+  QGridLayout * page2Layout = new QGridLayout( m_page2, 1, 1, 11, 6, "page2Layout");
 
   QGroupBox * firstKeyBox = new QGroupBox( m_page2, "firstKeyBox" );
   firstKeyBox->setTitle( i18n( "First key" ) );
@@ -147,7 +147,7 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   m_customList->setEnabled( false );
   m_customList->setMaximumSize( 230, 30 );
   firstKeyBoxLayout->addWidget( m_customList );
-  
+
   page2Layout->addWidget( firstKeyBox, 0, 1 );
 
   QButtonGroup * orientationGroup = new QButtonGroup( m_page2, "orientationGroup" );
@@ -203,11 +203,11 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   m_tabWidget->insertTab( m_page2, i18n( "Options" ) );
   KSpreadSortDlgLayout->addWidget( m_tabWidget );
 
-  QHBoxLayout * Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1"); 
-  QSpacerItem * spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Expanding, 
+  QHBoxLayout * Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
+  QSpacerItem * spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Expanding,
                                             QSizePolicy::Minimum );
   Layout1->addItem( spacer_2 );
-  
+
   m_buttonOk = new QPushButton( this, "m_buttonOk" );
   m_buttonOk->setText( i18n( "&OK" ) );
   m_buttonOk->setAccel( 0 );
@@ -225,9 +225,9 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   connect( m_buttonOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 
-  connect( m_sortKey2, SIGNAL( activated( int ) ), this, 
+  connect( m_sortKey2, SIGNAL( activated( int ) ), this,
            SLOT( sortKey2textChanged( int ) ) );
-  connect( m_useCustomLists, SIGNAL( stateChanged(int) ), this, 
+  connect( m_useCustomLists, SIGNAL( stateChanged(int) ), this,
            SLOT( useCustomListsStateChanged(int) ) );
   connect( orientationGroup, SIGNAL( pressed(int) ), this,
            SLOT( slotOrientationChanged(int) ) );
@@ -257,7 +257,7 @@ void KSpreadSortDlg::init()
   month += i18n("December");
   QStringList lst;
   lst.append(month);
-  
+
   QString day( i18n("Monday") + ", " );
   day += i18n("Tuesday") + ", ";
   day += i18n("Wednesday") + ", ";
@@ -305,7 +305,7 @@ void KSpreadSortDlg::init()
   {
     m_sortRow->setEnabled(false);
     m_sortColumn->setChecked(true);
-    
+
     int right = r.right();
     for (int i = r.left(); i <= right; ++i)
       m_listColumn += i18n("Column %1").arg(util_encodeColumnLabelText(i));
@@ -338,16 +338,16 @@ void KSpreadSortDlg::init()
     {
       m_sortColumn->setChecked(true);
     }
-    
+
     int right  = r.right();
-    int bottom = r.bottom(); 
+    int bottom = r.bottom();
     for (int i = r.left(); i <= right; ++i)
       m_listColumn += i18n("Column %1").arg(util_encodeColumnLabelText(i));
-    
+
     for (int i = r.top(); i <= bottom; ++i)
       m_listRow += i18n("Row %1").arg(i);
   }
-  
+
   // Initialize the combo box
   if ( m_sortRow->isChecked() )
     slotOrientationChanged(1);
@@ -365,7 +365,7 @@ void KSpreadSortDlg::slotOrientationChanged(int id)
     m_sortKey3->clear();
     m_sortKey1->insertStringList(m_listColumn);
     m_sortKey2->insertItem( i18n("None") );
-    m_sortKey2->insertStringList(m_listColumn); 
+    m_sortKey2->insertStringList(m_listColumn);
     m_sortKey3->insertItem( i18n("None") );
     m_sortKey3->insertStringList(m_listColumn);
     break;
@@ -413,14 +413,14 @@ void KSpreadSortDlg::slotOk()
   {
     int t = outputPoint.pos.y() + r.height();
     int l = outputPoint.pos.x() + r.width();
-    if ( r.contains(outputPoint.pos) 
+    if ( r.contains(outputPoint.pos)
          || ( t >= r.left() && t <= r.right() )
          || ( l >= r.top()  && l <= r.bottom() ) )
     {
       KMessageBox::error( this, i18n("The output region must not overlapp with the source region!") );
       m_outputCell->setFocus();
       // TODO: set right tab
-      return;    
+      return;
     }
   }
 
@@ -432,16 +432,16 @@ void KSpreadSortDlg::slotOk()
   KSpreadTable::SortingOrder order2;
   KSpreadTable::SortingOrder order3;
 
-  order1 = ( m_sortOrder1->currentItem() == 0 ? KSpreadTable::Increase 
+  order1 = ( m_sortOrder1->currentItem() == 0 ? KSpreadTable::Increase
              : KSpreadTable::Decrease );
-  order2 = ( m_sortOrder2->currentItem() == 0 ? KSpreadTable::Increase 
+  order2 = ( m_sortOrder2->currentItem() == 0 ? KSpreadTable::Increase
              : KSpreadTable::Decrease );
-  order3 = ( m_sortOrder3->currentItem() == 0 ? KSpreadTable::Increase 
+  order3 = ( m_sortOrder3->currentItem() == 0 ? KSpreadTable::Increase
              : KSpreadTable::Decrease );
 
   if ( m_sortRow->isChecked() )
   {
-    key1 = m_sortKey1->currentItem() + r.top();    
+    key1 = m_sortKey1->currentItem() + r.top();
     if (m_sortKey2->currentItem() > 0)
       key2 = m_sortKey2->currentItem() + r.top() + 1; // cause there is "None"
     if (m_sortKey3->currentItem() > 0)
@@ -449,7 +449,7 @@ void KSpreadSortDlg::slotOk()
   }
   else
   {
-    key1 = m_sortKey1->currentItem() + r.left();    
+    key1 = m_sortKey1->currentItem() + r.left();
     if (m_sortKey2->currentItem() > 0)
       key2 = m_sortKey2->currentItem() + r.left() + 1; // cause there is "None"
     if (m_sortKey3->currentItem() > 0)
@@ -485,7 +485,7 @@ void KSpreadSortDlg::slotOk()
     key3 = 0;
   }
 
-  kdDebug() << key1 << ", " << key2 << ", " << key3 << ", " << order1 << ", " << order2 << ", " << order3 << ", " << m_copyLayout->isChecked() 
+  kdDebug() << key1 << ", " << key2 << ", " << key3 << ", " << order1 << ", " << order2 << ", " << order3 << ", " << m_copyLayout->isChecked()
             << ", " << outputPoint.tableName << ", " << outputPoint.pos.x() << ", " << outputPoint.pos.y() << endl;
 
   if ( m_sortRow->isChecked() )
@@ -530,4 +530,4 @@ void KSpreadSortDlg::useCustomListsStateChanged( int state )
     m_customList->setEnabled(false);
 }
 
-
+#include <kspread_dlg_sort.moc>
