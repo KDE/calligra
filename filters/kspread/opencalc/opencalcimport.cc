@@ -1184,7 +1184,7 @@ void OpenCalcImport::loadOasisMasterLayoutPage( KSpreadSheet * table,KoStyleStac
         }
         if ( str.contains( "formulas" ) )
         {
-            //todo it's not implemented
+            table->setShowFormula(true);
         }
         if ( str.contains( "zero-values" ) )
         {
