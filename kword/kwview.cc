@@ -2846,6 +2846,15 @@ void KWView::updateButtons()
     actionFormatParag->setEnabled(state);
     actionInsertSpecialChar->setEnabled(state);
     actionInsertPicture->setEnabled(state);
+
+    actionInsertVarDateFix->setEnabled(state);
+    actionInsertVarDate->setEnabled(state);
+    actionInsertVarTimeFix->setEnabled(state);
+    actionInsertVarTime->setEnabled(state);
+    actionInsertVarPgNum->setEnabled(state);
+    actionInsertVarCustom->setEnabled(state);
+
+
 }
 
 /******************************************************************/
