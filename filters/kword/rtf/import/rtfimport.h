@@ -345,8 +345,8 @@ public:
     DomNode pictures;
     DomNode author, company, title, doccomm;
     RTFTextState bodyText;
-    QPtrList<RTFTextState> footnotes; //list of footnotes
-    int fnnum; //number of last footnote
+    QPtrList<RTFTextState> footnotes; ///< list of footnotes
+    int fnnum; ///< number of last footnote
     RTFTextState firstPageHeader, oddPagesHeader, evenPagesHeader;
     RTFTextState firstPageFooter, oddPagesFooter, evenPagesFooter;
     QMap<int,QString> fontTable;
@@ -365,7 +365,7 @@ public:
     QAsciiDict<RTFProperty> properties;
     QAsciiDict<RTFProperty> destinationProperties;
     uint table;
-    uint pictureNumber; // Picture number; increse *before* use!
+    uint pictureNumber; ///< Picture number; increase *before* use!
 
     // Color table and document-formatting properties
     int red, green, blue;
@@ -377,8 +377,8 @@ public:
     // Field support
     QCString fldinst, fldrslt;
     RTFFormat fldfmt;
-    int flddst; // support for recursive fields
-    QString inFileName; // File name of the source file.
+    int flddst; ///< support for recursive fields
+    QString inFileName; ///< File name of the source file.
 protected:
     QTextCodec* textCodec; ///< currently used QTextCodec by the RTF file
     QTextCodec* utf8TextCodec; ///< QTextCodec for UTF-8 (used in \u)
