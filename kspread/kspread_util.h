@@ -106,6 +106,40 @@ struct KSpreadRange
   bool bottomFixed;
 };
 
+/**
+ * KSpreadRangeIterator
+ *
+ * Class to simplify the process of iterating through each cell in a
+ * range that has already been allocated
+ */
+class KSpreadRangeIterator
+{
+public:
+  /**
+   * Contstruct the iterator with the rectangular cell area and which
+   * table the area is on
+   */
+  KSpreadRangeIterator(QRect _range, KSpreadTable* _table);
+  ~KSpreadRangeIterator();
+
+  /**
+   * @return the first allocated cell in the area
+   */
+  KSpreadCell* first();
+
+  /**
+   * @return the next allocated cell in the area after the previous one
+   * retrieved, or NULL if it was the last one.
+   */
+  KSpreadCell* next();
+private:
+
+  QRect range;
+  KSpreadTable* table;
+  QPoint current;
+};
+
+
 QString util_cellName( KSpreadTable*, int _col, int _row );
 QString util_cellName( int _col, int _row );
 QString util_rangeName( const QRect &_area );

@@ -144,6 +144,11 @@ public:
      */
     double yOffset() const { return m_dYOffset; }
 
+    /**
+     * Return a rect indicating which cell range is currently visible onscreen
+     */
+    QRect visibleCells();
+
     KSpreadTable* activeTable() const;
     KSpreadTable* findTable( const QString& _name ) const;
 
@@ -181,6 +186,13 @@ public:
     void gotoLocation( int col, int row, KSpreadTable* table = NULL,
                        bool extendSelection = false)
     {gotoLocation(QPoint(col, row), table, extendSelection);}
+
+
+    /**
+     * Paint all visible cells that have a paint dirty flag set
+     */
+    void paintUpdates();
+
 
     /**
      * Makes sure a cell is visible onscreen by scrolling up/down and left/right

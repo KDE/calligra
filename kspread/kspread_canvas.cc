@@ -659,7 +659,7 @@ void KSpreadCanvas::slotScrollVert( int _value )
   }
 
   double ypos = activeTable()->dblRowPos( QMIN( KS_rowMax, m_pView->activeTable()->maxRow()+10 ), this );
-  if( _value > ypos + m_dYOffset ) 
+  if( _value > ypos + m_dYOffset )
       _value = int( ypos + m_dYOffset );
 
   activeTable()->enableScrollBarUpdates( false );
@@ -2856,6 +2856,82 @@ void KSpreadCanvas::equalizeColumn()
   m_pView->hBorderWidget()->equalizeColumn(size);
 }
 
+QRect KSpreadCanvas::visibleCells()
+{
+  QWMatrix m = m_pView->matrix();
+
+  // Which part of the document is visible ? To determine this
+  // just transform the viewport rectangle with the inverse
+  // matrix, since this matrix usually transforms from document
+  // coordinates to view coordinates.
+  m = m.invert();
+  QPoint tl = m.map( QPoint( 0, 0 ) );
+  QPoint br = m.map( QPoint( width(), height() ) );
+
+  double xpos, ypos;
+  int left_col = activeTable()->leftColumn( tl.x(), xpos );
+  int right_col = activeTable()->rightColumn( br.x() );
+  int top_row = activeTable()->topRow( tl.y(), ypos );
+  int bottom_row = activeTable()->bottomRow( br.y() );
+
+  return QRect(left_col, top_row, right_col - left_col + 1,
+               bottom_row - top_row + 1);
+}
+
+void KSpreadCanvas::paintUpdates()
+{
+  QWMatrix m = m_pView->matrix();
+
+  QPainter painter(this);
+  painter.save();
+
+  // Do the view transformation.
+  painter.setWorldMatrix( m );
+
+  // Which part of the document is visible ? To determine this
+  // just transform the viewport rectangle with the inverse
+  // matrix, since this matrix usually transforms from document
+  // coordinates to view coordinates.
+  m = m.invert();
+  QPoint tl = m.map( QPoint( 0, 0 ) );
+  QPoint br = m.map( QPoint( width(), height() ) );
+  QRect view( tl, br );
+
+
+  /* paint any visible cell that has the paintDirty flag */
+  QRect range = visibleCells();
+  KSpreadRangeIterator it(range, activeTable());
+  KSpreadCell* cell = NULL;
+
+  double topPos = activeTable()->dblRowPos(range.top());
+  QPair<double, double> dblCorner =
+    qMakePair(activeTable()->dblColumnPos(range.left()), topPos);
+
+  int x;
+  int y;
+
+  for (x = range.left(); x <= range.right(); x++)
+  {
+    for (y = range.top(); y <= range.bottom(); y++)
+    {
+      if (activeTable()->cellIsPaintDirty(QPoint(x,y)))
+      {
+        cell = activeTable()->cellAt(x, y);
+        cell->calc();
+        cell->makeLayout(painter, x, y);
+        cell->paintCell(view, painter, m_pView, dblCorner,
+                        QPoint(cell->column(), cell->row()));
+
+      }
+      dblCorner.second += activeTable()->rowLayout(y)->dblHeight(this);
+    }
+    dblCorner.second = topPos;
+    dblCorner.first += activeTable()->columnLayout(x)->dblWidth(this);
+  }
+
+  painter.restore();
+}
+
 /****************************************************************
  *
  * KSpreadVBorder
@@ -3201,7 +3277,7 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
       {
         RowLayout *rl = table->rowLayout( row + 1 );
         y = table->dblRowPos( row + 1, m_pCanvas );
-        m_pCanvas->vertScrollBar()->setValue( int( m_pCanvas->yOffset() + y 
+        m_pCanvas->vertScrollBar()->setValue( int( m_pCanvas->yOffset() + y
                                               + rl->dblHeight( m_pCanvas ) )
                                               - m_pCanvas->height() );
       }

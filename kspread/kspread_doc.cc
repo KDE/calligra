@@ -703,13 +703,18 @@ void KSpreadDoc::paintUpdates()
 {
   QPtrListIterator<KoView> it( views() );
   KSpreadView* view = NULL;
+  KSpreadTable* table = NULL;
 
-  /* don't pull focus away from the editor if this is just a background
-     autosave */
   for (; it.current(); ++it )
   {
     view = static_cast<KSpreadView *>( it.current() );
     view->paintUpdates();
+  }
+
+  for (table = m_pMap->firstTable(); table != NULL;
+       table = m_pMap->nextTable())
+  {
+    table->clearPaintDirtyData();
   }
 }
 

@@ -7795,6 +7795,34 @@ void KSpreadTable::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
 }
 
 
+void KSpreadTable::setRegionPaintDirty(QRect region)
+{
+  m_paintDirtyList.append(region);
+}
+
+void KSpreadTable::clearPaintDirtyData()
+{
+  m_paintDirtyList.clear();
+}
+
+bool KSpreadTable::cellIsPaintDirty(QPoint cell)
+{
+  QValueList<QRect>::iterator it;
+  bool found = false;
+
+  /* Yes, this seems an inefficient method....I just want to get it working
+     now then worry about optimization later (hash table?).
+     And it might not matter -- this is going to be cleared every repaint
+     of the screen, so it will never grow large
+  */
+  for (it = m_paintDirtyList.begin(); it != m_paintDirtyList.end() && !found;
+       it++)
+  {
+    found = (*it).contains(cell);
+  }
+  return found;
+}
+
 #ifndef NDEBUG
 void KSpreadTable::printDebug()
 {

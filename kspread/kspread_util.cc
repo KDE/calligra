@@ -228,11 +228,11 @@ QString util_durationFormat(KLocale * locale, const KSpreadDuration & m_Duration
   int second = m_Duration.second();
 
   if (fmtType == KSpreadCell::Duration_format1)  // 28:14:14
-  {	
+  {
     return QString("%1:%2:%3").arg(hour).arg(minute, 2).arg(second, 2);
   }
   else if (fmtType == KSpreadCell::Duration_format2)  // 28:14
-  {	
+  {
     return QString("%1:%2").arg(hour).arg(minute, 2);
   }
   else if (fmtType == KSpreadCell::Duration_format3)  // 128:14
@@ -246,7 +246,7 @@ QString util_durationFormat(KLocale * locale, const KSpreadDuration & m_Duration
     second = second + minute * 60;
     return QString("%1").arg(second, 2);
   }
-  
+
   return locale->formatTime(QTime( (m_Duration.hour() % 24), m_Duration.minute(), m_Duration.second()), false);
 }
 */
@@ -266,119 +266,119 @@ util_dateFormat(KLocale * locale, const QDate &m_Date,
 	tmp = QString().sprintf("%02d", m_Date.day());
 	tmp = tmp + "-" + locale->monthName(m_Date.month(), true) + "-";
 	tmp = tmp + QString::number(m_Date.year()).right(2);
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format2) {	/*18-Feb-1999 */
 	tmp = QString().sprintf("%02d", m_Date.day());
 	tmp = tmp + "-" + locale->monthName(m_Date.month(), true) + "-";
 	tmp = tmp + QString::number(m_Date.year());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format3) {	/*18-Feb */
 	tmp = QString().sprintf("%02d", m_Date.day());
 	tmp = tmp + "-" + locale->monthName(m_Date.month(), true);
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format4) {	/*18-05 */
 	tmp = QString().sprintf("%02d", m_Date.day());
 	tmp = tmp + "-" + QString().sprintf("%02d", m_Date.month());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format5) {	/*18/05/00 */
 	tmp = QString().sprintf("%02d", m_Date.day());
 	tmp = tmp + "/" + QString().sprintf("%02d", m_Date.month()) + "/";
 	tmp = tmp + QString::number(m_Date.year()).right(2);
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format6) {	/*18/05/1999 */
 	tmp = QString().sprintf("%02d", m_Date.day());
 	tmp = tmp + "/" + QString().sprintf("%02d", m_Date.month()) + "/";
 	tmp = tmp + QString::number(m_Date.year());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format7) {	/*Feb-99 */
 	tmp = locale->monthName(m_Date.month(), true) + "-";
 	tmp = tmp + QString::number(m_Date.year()).right(2);
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format8) {	/*February-99 */
 	tmp = locale->monthName(m_Date.month()) + "-";
 	tmp = tmp + QString::number(m_Date.year()).right(2);
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format9) {	/*February-1999 */
 	tmp = locale->monthName(m_Date.month()) + "-";
 	tmp = tmp + QString::number(m_Date.year());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format10) {	/*F-99 */
 	tmp = locale->monthName(m_Date.month()).at(0) + "-";
 	tmp = tmp + QString::number(m_Date.year()).right(2);
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format11) {	/*18/Feb */
 	tmp = QString().sprintf("%02d", m_Date.day()) + "/";
 	tmp += locale->monthName(m_Date.month(), true);
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format12) {	/*18/02 */
 	tmp = QString().sprintf("%02d", m_Date.day()) + "/";
 	tmp += QString().sprintf("%02d", m_Date.month());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format13) {	/*18/Feb/1999 */
 	tmp = QString().sprintf("%02d", m_Date.day());
 	tmp = tmp + "/" + locale->monthName(m_Date.month(), true) + "/";
 	tmp = tmp + QString::number(m_Date.year());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format14) {	/*2000/Feb/18 */
 	tmp = QString::number(m_Date.year());
 	tmp = tmp + "/" + locale->monthName(m_Date.month(), true) + "/";
 	tmp = tmp + QString().sprintf("%02d", m_Date.day());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format15) {	/*2000-Feb-18 */
 	tmp = QString::number(m_Date.year());
 	tmp = tmp + "-" + locale->monthName(m_Date.month(), true) + "-";
 	tmp = tmp + QString().sprintf("%02d", m_Date.day());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format16) {	/*2000-02-18 */
 	tmp = QString::number(m_Date.year());
 	tmp = tmp + "-" + QString().sprintf("%02d", m_Date.month()) + "-";
 	tmp = tmp + QString().sprintf("%02d", m_Date.day());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format17) {	/*2 february 2000 */
 	tmp = QString().sprintf("%d", m_Date.day());
 	tmp = tmp + " " + locale->monthName(m_Date.month()) + " ";
 	tmp = tmp + QString::number(m_Date.year());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format18) {	/*02/18/1999 */
 	tmp = QString().sprintf("%02d", m_Date.month());
 	tmp = tmp + "/" + QString().sprintf("%02d", m_Date.day());
 	tmp = tmp + "/" + QString::number(m_Date.year());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format19) {	/*02/18/99 */
 	tmp = QString().sprintf("%02d", m_Date.month());
 	tmp = tmp + "/" + QString().sprintf("%02d", m_Date.day());
 	tmp = tmp + "/" + QString::number(m_Date.year()).right(2);
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format20) {	/*Feb/18/99 */
 	tmp = locale->monthName(m_Date.month(), true);
 	tmp = tmp + "/" + QString().sprintf("%02d", m_Date.day());
 	tmp = tmp + "/" + QString::number(m_Date.year()).right(2);
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format21) {	/*Feb/18/1999 */
 	tmp = locale->monthName(m_Date.month(), true);
 	tmp = tmp + "/" + QString().sprintf("%02d", m_Date.day());
 	tmp = tmp + "/" + QString::number(m_Date.year());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format22) {	/*Feb-1999 */
 	tmp = locale->monthName(m_Date.month(), true) + "-";
 	tmp = tmp + QString::number(m_Date.year());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format23) {	/*1999 */
 	tmp = QString::number(m_Date.year());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format24) {	/*99 */
 	tmp = QString::number(m_Date.year()).right(2);
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format25) {	/*2000/02/18 */
 	tmp = QString::number(m_Date.year());
 	tmp = tmp + "/" + QString().sprintf("%02d", m_Date.month());
 	tmp = tmp + "/" + QString().sprintf("%02d", m_Date.day());
-    } 
+    }
     else if (fmtType == KSpreadCell::date_format26) {	/*2000/Feb/18 */
 	tmp = QString::number(m_Date.year());
 	tmp = tmp + "/" + locale->monthName(m_Date.month(), true);
 	tmp = tmp + "/" + QString().sprintf("%02d", m_Date.day());
-    } 
+    }
     else
 	tmp = locale->formatDate(m_Date, true);
     // Missing compared with gnumeric:
@@ -755,4 +755,54 @@ bool util_validateTableName(QString name)
     }
   }
   return true;
+}
+
+
+KSpreadRangeIterator::KSpreadRangeIterator(QRect _range, KSpreadTable* _table)
+{
+  range = _range;
+  table = _table;
+  current = QPoint(0,0);
+}
+
+KSpreadRangeIterator::~KSpreadRangeIterator()
+{
+}
+
+KSpreadCell* KSpreadRangeIterator::first()
+{
+  current.setY(range.top());
+
+  /* OK, because even if this equals zero, the 'getNextCellRight' won't
+     try to access it*/
+  current.setX(range.left() - 1);
+  return next();
+}
+
+KSpreadCell* KSpreadRangeIterator::next()
+{
+  if (current.x() == 0 && current.y() == 0)
+  {
+    return first();
+  }
+
+  KSpreadCell* cell = NULL;
+  bool done = false;
+
+  while (cell == NULL && !done)
+  {
+    cell = table->getNextCellRight(current.x(), current.y());
+    if (cell != NULL && cell->column() > range.right())
+    {
+      cell = NULL;
+    }
+
+    if (cell == NULL)
+    {
+      current.setX(range.left() - 1);
+      current.setY(current.y() + 1);
+      done = (current.y() > range.bottom());
+    }
+  }
+  return cell;
 }

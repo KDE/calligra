@@ -195,6 +195,7 @@ public:
    * Repaint any cell with the paintDirty flag that is visible in this view
    */
   void paintUpdates();
+
 public slots:
     void initialPosition();
     /**

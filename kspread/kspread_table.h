@@ -1000,6 +1000,24 @@ public:
 
     void updateLocale();
 
+
+  /**
+   * set a region of the spreadsheet to be 'paint dirty' meaning it
+   * needs repainted.  This is not a flag on the cell itself since quite
+   * often this needs set on a default cell
+   */
+  void setRegionPaintDirty(QRect region);
+
+  /**
+   * Remove all records of 'paint dirty' cells
+   */
+  void clearPaintDirtyData();
+
+  /**
+   * Test whether a cell needs repainted
+   */
+  bool cellIsPaintDirty(QPoint cell);
+
   /**
    * Retrieve the first used cell in a given column.  Can be used in conjunction
    * with getNextCellDown to loop through a column.
@@ -1604,6 +1622,11 @@ protected:
      * Stores the new page columns
      */
      QValueList<int> m_lnewPageListY;
+
+  /**
+   * Stores cells that need repainting
+   */
+  QValueList<QRect> m_paintDirtyList;
 
 public:
     // see kspread_table.cc for an explanation of this

@@ -429,7 +429,7 @@ public:
     QTime valueTime() const { return m_Time; }
 
     void setValue( double _d );
-    void setDate( QDate const & date, FormatType type );  
+    void setDate( QDate const & date, FormatType type );
     void setTime( QTime const & time, FormatType type );
 
     /**
