@@ -334,6 +334,7 @@ QPen KWBorderPreview::setBorderPen( Border _brd )
 KWNumPreview::KWNumPreview( QWidget* parent, const char* name )
     : QGroupBox( i18n( "Preview" ), parent, name ) {
     setMinimumHeight(80);
+    m_style=0;
 }
 
 void KWNumPreview::drawContents( QPainter* painter) {
