@@ -953,7 +953,7 @@ don't put a </?xml...> at the end of the file!).
             type:               0 .. left
                                 1 .. center
                                 2 .. right
-                                3 .. alignment of decimal point
+                                3 .. alignment at specified character
 
             ptpos:              Position of the tabulation, in pt
 
@@ -965,6 +965,9 @@ don't put a </?xml...> at the end of the file!).
                                 5 .. dash-dot-dot
 
             width:              Width of the filling, in pt
+
+            alignchar:		character at which text will be aligned when
+				type==3 (former "decimal point") is set
 -->
 <!ELEMENT TABULATOR
     EMPTY>
@@ -973,6 +976,7 @@ don't put a </?xml...> at the end of the file!).
     ptpos CDATA #REQUIRED
     filling CDATA #IMPLIED
     width CDATA #IMPLIED>
+    alignchar CDATA #IMPLIED>
 
 <!--    Defines the attributes for shadowed text
         Attributes:
