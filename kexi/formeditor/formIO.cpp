@@ -530,10 +530,11 @@ QVariant
 FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 {
 	QDomElement tag = node.toElement();
-	QString type = node.toElement().tagName();
+	QString text = tag.text();
+	QString type = tag.tagName();
 
 	if(type == "string" | type == "cstring")
-		return tag.text();
+		return text;
 	else if(type == "rect")
 	{
 		QDomElement x = node.namedItem("x").toElement();
@@ -562,11 +563,11 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 	}
 	else if(type == "bool")
 	{
-		return QVariant(tag.text().toInt(), 3);
+		return QVariant(text.toInt(), 3);
 	}
 	else if(type == "number")
 	{
-		return tag.text().toInt();
+		return text.toInt();
 	}
 	else if(type == "size")
 	{
@@ -605,7 +606,7 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 	}
 	else if(type == "cursor")
 	{
-		return QCursor(tag.text().toInt());
+		return QCursor(text.toInt());
 	}
 	else if(type == "time")
 	{
@@ -653,10 +654,10 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 	}
 	else if(type == "pixmap")
 	{
-		return loadImage(tag.ownerDocument(), tag.text());
+		return loadImage(tag.ownerDocument(), text);
 	}
 	else if(type == "enum")
-		return tag.text();
+		return text;
 	else if(type == "set")
 	{
 		int count = obj->metaObject()->findProperty(name.latin1(), true);
@@ -665,7 +666,7 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 		if(meta->isSetType())
 		{
 			QStrList keys;
-			QStringList list = QStringList::split("|", tag.text());
+			QStringList list = QStringList::split("|", text);
 			for(QStringList::iterator it = list.begin(); it != list.end(); ++it)
 				keys.append((*it).latin1());
 
@@ -880,11 +881,14 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 {
 	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
 	{
-		if((n.toElement().tagName() == "property") || (n.toElement().tagName() == "attribute"))
+		QString tag = n.toElement().tagName();
+		QString eltag = el.tagName();
+		QDomElement node = n.toElement();
+
+		if((tag == "property") || (tag == "attribute"))
 		{
-			QDomElement node = n.toElement();
 			QString name = node.attribute("name");
-			if( ((el.tagName() == "grid") || (el.tagName() == "hbox") || (el.tagName() == "vbox")) &&
+			if( ((eltag == "grid") || (eltag== "hbox") || (eltag == "vbox")) &&
 			      (name == "name"))
 				continue;
 
@@ -897,31 +901,28 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 				tree->addModProperty(name, val);
 			}
 		}
-		else if(n.toElement().tagName() == "widget")
+		else if(tag == "widget")
 		{
-			bool insideGrid = (el.tagName() == "grid");
+			bool insideGrid = (eltag == "grid");
 			if(tree->container())
-				loadWidget(tree->container(), lib, n.toElement(), 0, insideGrid);
+				loadWidget(tree->container(), lib, node, 0, insideGrid);
 			else
-				loadWidget(container, lib, n.toElement(), w, insideGrid);
+				loadWidget(container, lib, node, w, insideGrid);
 		}
-		else if(n.toElement().tagName() == "spacer")
+		else if(tag == "spacer")
 		{
-			bool insideGrid = (el.tagName() == "grid");
-			loadWidget(container, lib, n.toElement(), w, insideGrid);
+			bool insideGrid = (eltag == "grid");
+			loadWidget(container, lib, node, w, insideGrid);
 		}
-		else if((n.toElement().tagName() == "vbox") || (n.toElement().tagName() == "hbox") || (n.toElement().tagName() == "grid"))
+		else if((tag == "vbox") || (tag == "hbox") || (tag == "grid"))
 		{
-			loadLayout(n.toElement(), tree);
-			readChildNodes(tree, container, lib, n.toElement(), w);
-			if(n.toElement().tagName() != "grid")
+			loadLayout(node, tree);
+			readChildNodes(tree, container, lib, node, w);
+			if(tag != "grid")
 				container->reloadLayout();
 		}
 		else
-		{
-			QDomElement node = n.toElement();
 			lib->readSpecialProperty(w->className(), node, w, tree);
-		}
 	}
 }
 
