@@ -2,7 +2,7 @@ if include_KARBON
 KOPAINTERDIR = kopainter
 endif
 
-SUBDIRS = store kwmf kofficecore kofficeui koscript kotext $(KOPAINTERDIR) kformula
+SUBDIRS = store kwmf kofficecore kofficeui koscript kotext $(KOPAINTERDIR) kformula kospell
 
 messages:
 	$(MAKE) -C kformula -f Makefile.am symbolnames.cc

@@ -9,3 +9,7 @@
    AC_SUBST(LIBASPELL)
    AC_LANG_RESTORE
 
+dnl Don't compile kospell when aspell is not here
+if test -z "$LIBASPELL"; then
+  DO_NOT_COMPILE="$DO_NOT_COMPILE kospell"
+fi
