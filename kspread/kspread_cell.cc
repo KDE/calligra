@@ -1175,7 +1175,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     if(  a==KSpreadCell::Left && !isEmpty())
         indent=getIndent(column(),row());
 
-    if( verticalText( column(), row() ))
+    if( verticalText( column(), row() ) ||getAngle(column(), row())!=0)
     {
        RowLayout *rl = m_pTable->rowLayout( row() );
  
@@ -2719,6 +2719,8 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         //_painter.setFont( textFont(_col,_row ) );
 
         QString tmpText=m_strOutText;
+	int tmpHeight=m_iOutTextHeight;
+	int tmpWidth=m_iOutTextWidth;
         if(m_bCellTooShort)
                 m_strOutText=textDisplaying(_painter);
 
@@ -2742,7 +2744,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         //apply indent if text is align to left not when text is at right or middle
         if(  a==KSpreadCell::Left && !isEmpty())
                 indent=getIndent(column(),row());
-	//made an offset, otherwise ### is undo red triangle
+	//made an offset, otherwise ### is under red triangle
 	if( a==KSpreadCell::Right && !isEmpty() &&m_bCellTooShort )
 	  offsetCellTooShort=4;
 	 
@@ -2831,7 +2833,11 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         }
 
         if(m_bCellTooShort)
-                m_strOutText=tmpText;
+	  {
+	    m_strOutText=tmpText;
+	    m_iOutTextHeight=tmpHeight;
+	    m_iOutTextWidth=tmpWidth;
+	  }
         if(m_pTable->getHideZero() &&  m_bValue &&   m_dValue * faktor(column(),row())==0)
                 m_strOutText=tmpText;
         cl1 = m_pTable->columnLayout( column() );
@@ -2953,7 +2959,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter)
 QFontMetrics fm = _painter.fontMetrics();
 int a=align(column(),row());
 if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined) && !isValue()
-&& !verticalText( column(),row() ))
+    && !verticalText( column(),row() ))
   {
     //not enough space but align to left
     int len=0;
@@ -2972,12 +2978,32 @@ if (( a == KSpreadCell::Left || a == KSpreadCell::Undefined) && !isValue()
 	
 	if((fm.width(tmp)+tmpIndent)<(len-4-1)) //4 equal lenght of red triangle +1 pixel
 	  {
-	    return tmp;
+	    if( getAngle(column(), row())!=0)
+	      {
+		QString tmp2;
+		RowLayout *rl = m_pTable->rowLayout( row() );
+		if(m_iOutTextHeight>rl->height())
+		  {
+		    for (int j=m_strOutText.length();j!=0;j--)
+		      {
+			tmp2=m_strOutText.left(j);
+			if(fm.width(tmp2)<(rl->height()-1)) 
+			  {
+			    return m_strOutText.left(QMIN(tmp.length(),tmp2.length()));
+			  }
+		      }
+		  }
+		else
+		  return tmp;
+		  
+	      }
+	    else
+	      return tmp;
 	  }
       }
     return QString("");
   }
- else if(verticalText( column(),row() ))
+else if(verticalText( column(),row() ))
    {
      RowLayout *rl = m_pTable->rowLayout( row() );
      int tmpIndent=0;
