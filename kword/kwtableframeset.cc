@@ -616,12 +616,12 @@ void KWTableFrameSet::position( Cell *theCell, bool setMinFrameHeight ) {
 
     // Now take the border sizes and make the cell smaller so it still fits inside the grid.
     KWFrame *theFrame = theCell->frame(0);
-    x+=theCell->leftBorder() / (theCell->m_col==0?2:1);
-    width-=theCell->leftBorder() / (theCell->m_col==0?2:1);
-    width-=theCell->rightBorder() / (theCell->m_col+theCell->m_cols == getCols()?2:1);
-    y+=theCell->topBorder() / (theCell->m_row==0?2:1);
-    height-=theCell->topBorder() / (theCell->m_row==0?2:1);
-    height-=theCell->bottomBorder() / (theCell->m_row+theCell->m_rows == getRows()?2:1);
+    x+=theCell->leftBorder();
+    width-=theCell->leftBorder();
+    width-=theCell->rightBorder();
+    y+=theCell->topBorder();
+    height-=theCell->topBorder();
+    height-=theCell->bottomBorder();
 
     theFrame->setRect( x,y,width,height);
     if( setMinFrameHeight ) {
@@ -1409,6 +1409,12 @@ void KWTableFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyReg
 }
 
 void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas ) {
+
+    /*  Draw the borders on top of the lines stores in the m_rowPositions and m_colPositions arrays.
+     *  check the relevant cells for borders and thus line thickness.
+     *  We move the outer lines (on row==0 and col==0 plus on col=getCols() etc) a bit so they will stay 
+     *  inside the boundry of the table!
+     */
     painter.save();
     QPen previewLinePen( lightGray ); // TODO use qcolorgroup
     QColor defaultBorderColor = KoTextFormat::defaultTextColor( &painter );
@@ -1416,15 +1422,10 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
     bool drawPreviewLines = !(painter.device()->devType() == QInternal::Printer ||
          !canvas || !canvas->gui()->getView()->viewFrameBorders());
 
-//for(unsigned int i=0;i<m_colPositions.count();kdDebug(32004) <<"col " << i++ << ": " << m_colPositions[i] << endl);
-//for(unsigned int i=0;i<m_rowPositions.count();kdDebug(32004) <<"row " << i++ << ": " << m_rowPositions[i] << endl);
-
-
     // *** draw horizontal lines *** //
     unsigned int row=0;
     QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
     for (unsigned int i=0 ; i < m_rowPositions.count() ; i++) {
-        //kdDebug(32004) << "i/row: " << i<< "/"<< row << endl;
         bool bottom=false;
         if(pageBound!=m_pageBoundaries.end() && (*pageBound) == row || i == m_rowPositions.count()-1)
             bottom=true;  // at end of page or end of table draw bottom border of cell.
@@ -1438,25 +1439,22 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
             if(cell && cell->m_row != (bottom?row-1:row))
                 cell=0;
 
-            if(startPos!=0 && (!cell || cell->frame(0)->topBorder()!=*border || col == getCols())) {
+            if(startPos!=0 && (!cell || col == getCols() || (
+                    bottom && cell->frame(0)->bottomBorder()!=*border ||
+                    !bottom && cell->frame(0)->topBorder()!=*border
+                    ))) {
                 if(border->ptWidth > 0 || drawPreviewLines) {
-                    double y = m_doc->zoomItY(m_rowPositions[row]);
+                    double y = m_rowPositions[row];
+                    if(row==0)
+                        y+=border->ptWidth / 2; // move slightly down.
+                    else if (row == getRows())
+                        y-=border->ptWidth / 2; // move slightly up.
+                    y = m_doc->zoomItY(y);
                     double offset=0.0;
-                    if(border->ptWidth > 0) {
-                        if(col==getCols()) {
-                            Cell *c=getCell(row,col-1);
-                            if(c) offset=c->rightBorder();
-                            c=getCell(row,col-2);
-                            if(c) offset=QMAX(offset,c->rightBorder());
-                            offset/=2;
-                        } else {
-                            if(cell) offset=cell->leftBorder();
-//if(cell) kdDebug(32004) << "cell: (" << cell->m_row <<","<<cell->m_col << ")" << endl;
-                            Cell *c = getCell(row-1, col);
-//if(c) kdDebug(32004) << "c: (" << c->m_row <<","<<c->m_col << ")" << endl;
-                            if(c) offset=QMAX(offset, c->leftBorder());
-//kdDebug(32004) << "offset: " << offset << endl;
-                        }
+                    if(border->ptWidth > 0 && col!=getCols()) { // offset border when not at right most cell.
+                        if(cell) offset=cell->leftBorder();
+                        Cell *c = getCell(row-1, col);
+                        if(c) offset=QMAX(offset, c->leftBorder());
                     }
                     double x = m_colPositions[col] + offset;
                     QPoint topLeft = viewMode->normalToView(QPoint(m_doc->zoomItX(startPos), y));
@@ -1469,7 +1467,6 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         else {
                             int borderWidth = KoBorder::zoomWidthY( border->ptWidth, m_doc, minborder );
                             painter.setPen( KoBorder::borderPen( *border, borderWidth, defaultBorderColor ) );
-kdDebug(32004) << "Paint: painter.drawHorizontalLine(" << line.left() << ","  << line.top() << "," <<  line.right() << ","  << line.bottom() << ")\n";
                         }
                         //kdDebug(32004) << "Paint: painter.drawHorizontalLine(" << line.left() << ","  << line.top() << "," <<  line.right() << ","  << line.bottom() << ")\n";
                         painter.drawLine( line.left(), line.top(), line.right(), line.bottom());
@@ -1484,14 +1481,17 @@ kdDebug(32004) << "Paint: painter.drawHorizontalLine(" << line.left() << ","  <<
                 else
                     border=&(cell->frame(0)->topBorder());
 
-                double offset=0.0;
-                if(border->ptWidth > 0) { // move line to the left a bit to compensate for the left border
-                    if(cell) offset=cell->leftBorder();
-                    Cell *c = getCell(row-1, col);
-                    if(c) offset=QMAX(offset, c->leftBorder());
-                    if(col==0) offset/=2;
+                if(col==0) // left most cell
+                    startPos = m_colPositions[col];
+                else {
+                    double offset=0.0;
+                    if(border->ptWidth > 0) { // move line to the left a bit to compensate for the left border
+                        if(cell) offset=cell->leftBorder();
+                        Cell *c = getCell(row-1, col);
+                        if(c) offset=QMAX(offset, c->leftBorder());
+                    }
+                    startPos = m_colPositions[col] - offset;
                 }
-                startPos = m_colPositions[col] - offset;
             }
             col+=cell?cell->m_cols:1;
         }
@@ -1518,7 +1518,13 @@ kdDebug(32004) << "Paint: painter.drawHorizontalLine(" << line.left() << ","  <<
 
             if(startRow!=-1 && (!cell || cell->frame(0)->leftBorder()!=*border || row == getRows())) {
                 if(border->ptWidth > 0 || drawPreviewLines) {
-                    double x = m_doc->zoomItX(m_colPositions[col]);
+                    double x = m_colPositions[col];
+                    if(col==0) {
+                        x+=border->ptWidth / 2;
+                    } else if(col==getCols()) {
+                        x-=border->ptWidth / 2;
+                    }
+                    x = m_doc->zoomItX(x);
                     QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
                     unsigned int topRow=startRow;
                     do { // draw minimum of one line per page.
@@ -1537,24 +1543,16 @@ kdDebug(32004) << "Paint: painter.drawHorizontalLine(" << line.left() << ","  <<
                             if(c) offset=c->topBorder();
                             c=getCell(topRow,col-1);
                             if(c) offset=QMAX(offset,c->topBorder());
-                            if(topRow==0) offset/=2;
+                            if(topRow==0) offset=0.0;
                         }
                         double top=m_rowPositions[topRow]-offset;
 
                         int toRow=QMIN(row,bottomRow);
                         offset=0.0;
-                        if(border->ptWidth > 0) {
-                            if(toRow==bottomRow) {
-                                Cell *c=getCell(toRow-1,col);
-                                if(c) offset=c->bottomBorder();
-                                c=getCell(toRow-1,col-1);
-                                if(c) offset=QMAX(offset,c->bottomBorder());
-                                offset/=2;
-                            } else {
-                                if(cell) offset=cell->topBorder();
-                                Cell *c=getCell(toRow,col-1);
-                                if(c) offset=QMAX(offset,c->topBorder());
-                            }
+                        if(border->ptWidth > 0 && toRow!=bottomRow) {
+                            if(cell) offset=cell->topBorder();
+                            Cell *c=getCell(toRow,col-1);
+                            if(c) offset=QMAX(offset,c->topBorder());
                         }
                         double bottom=m_rowPositions[toRow] + offset;
 
