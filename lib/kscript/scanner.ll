@@ -324,7 +324,7 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 const			return T_CONST;
 FALSE			return T_FALSE;
 TRUE			return T_TRUE;
-falsce			return T_FALSE;
+false			return T_FALSE;
 true			return T_TRUE;
 struct			return T_STRUCT;
 switch			return T_SWITCH;
