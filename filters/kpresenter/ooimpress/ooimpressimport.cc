@@ -431,6 +431,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 4 );
                 append2DGeometry( doc, e, o, (int)offset );
+                appendName(doc, e, o);
                 appendPen( doc, e );
                 appendBrush( doc, e );
                 appendRounding( doc, e, o );
@@ -444,6 +445,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 2 );
                 append2DGeometry( doc, e, o, (int)offset );
+                appendName(doc, e, o);
                 appendPen( doc, e );
                 appendBrush( doc, e );
                 appendRounding( doc, e, o );
@@ -456,6 +458,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 fillStyleStack( o );
                 e = doc.createElement( "OBJECT" );
                 append2DGeometry( doc, e, o, (int)offset );
+                appendName(doc, e, o);
                 appendPen( doc, e );
                 appendShadow( doc, e );
                 appendLineEnds( doc, e );
@@ -497,6 +500,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 1 );
                 bool orderEndStartLine = appendLineGeometry( doc, e, o, (int)offset );
+                appendName(doc, e, o);
                 appendPen( doc, e );
                 appendBrush( doc, e );
                 appendShadow( doc, e );
@@ -508,6 +512,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 e = doc.createElement("OBJECT");
                 e.setAttribute("type", 12);
                 append2DGeometry(doc, e, o, (int)offset);
+                appendName(doc, e, o);
                 appendPoints(doc, e, o);
                 appendPen(doc, e);
                 appendBrush(doc, e);
@@ -520,6 +525,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 e = doc.createElement("OBJECT");
                 e.setAttribute("type", 16);
                 append2DGeometry(doc, e, o, (int)offset);
+                appendName(doc, e, o);
                 appendPoints(doc, e, o);
                 appendPen(doc, e);
                 appendBrush(doc, e);
@@ -533,6 +539,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 0 );
                 append2DGeometry( doc, e, o, (int)offset );
+                appendName(doc, e, o);
                 appendImage( doc, e, pictureElement, o );
                 appendObjectEffect(doc, e, o, soundElement);
             }
@@ -578,6 +585,16 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     docElement.appendChild( pictureElement );
 
     doccontent.appendChild( doc );
+}
+
+void OoImpressImport::appendName(QDomDocument& doc, QDomElement& e, const QDomElement& object)
+{
+    if( object.hasAttribute( "draw:name" ))
+        {
+            QDomElement name = doc.createElement( "OBJECTNAME" );
+            name.setAttribute( "objectName", object.attribute( "draw:name" ));
+            e.appendChild( name );
+        }
 }
 
 void OoImpressImport::append2DGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset )

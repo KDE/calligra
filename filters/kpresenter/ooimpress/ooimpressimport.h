@@ -49,6 +49,7 @@ private:
     void insertStyles( const QDomElement& styles );
     void fillStyleStack( const QDomElement& object );
     void addStyles( const QDomElement* style );
+    void appendName(QDomDocument& doc, QDomElement& e, const QDomElement& object);
     void append2DGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
     bool appendLineGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
     void appendPoints(QDomDocument& doc, QDomElement& e, const QDomElement& object);
