@@ -25,10 +25,20 @@ public:
 	virtual bool eventFilter( QEvent* event );
 
 	virtual void showDialog() const {}
-	
+
 	const QString& name() const { return m_name; }
 
 protected:
+	virtual void mousePressed( QMouseEvent * );
+	virtual void mouseMoved( QMouseEvent * );
+	virtual void dragShiftPressed();
+	virtual void dragCtrlPressed();
+	virtual void dragShiftReleased();
+	virtual void dragCtrlReleased();
+	virtual void dragAltPressed();
+	virtual void mouseReleased( QMouseEvent * );
+	virtual void cancel(); // ESC pressed
+
 	// Make it "abstract":
 	virtual ~VShapeTool() {}
 

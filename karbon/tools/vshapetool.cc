@@ -23,164 +23,199 @@ VShapeTool::VShapeTool( KarbonView* view, const QString& name, bool polar )
 	m_isCentered = false;
 }
 
+void
+VShapeTool::mousePressed( QMouseEvent *mouse_event )
+{
+	m_fp.setX( mouse_event->pos().x() );
+	m_fp.setY( mouse_event->pos().y() );
+	m_lp.setX( mouse_event->pos().x() );
+	m_lp.setY( mouse_event->pos().y() );
+		
+	// draw initial object:
+	recalcCoords();
+
+	drawTemporaryObject();
+
+	m_isDragging = true;
+}
+
+void
+VShapeTool::mouseMoved( QMouseEvent *mouse_event )
+{
+	if( !m_isDragging ) return;
+
+	// erase old object:
+	drawTemporaryObject();
+
+	m_lp.setX( mouse_event->pos().x() );
+	m_lp.setY( mouse_event->pos().y() );
+
+	recalcCoords();
+
+	// paint new object:
+	drawTemporaryObject();
+}
+
+void
+VShapeTool::dragShiftPressed()
+{
+	m_isSquare = true;
+
+	// erase old object:
+	drawTemporaryObject();
+	recalcCoords();
+	// draw new old object:
+	drawTemporaryObject();
+}
+
+void
+VShapeTool::dragCtrlPressed()
+{
+	m_isCentered = true;
+
+	// erase old object:
+	drawTemporaryObject();
+	recalcCoords();
+	// draw new old object:
+	drawTemporaryObject();
+}
+
+void
+VShapeTool::dragShiftReleased()
+{
+	m_isSquare = false;
+
+	// erase old object:
+	drawTemporaryObject();
+	recalcCoords();
+	// draw new old object:
+	drawTemporaryObject();
+}
+
+void
+VShapeTool::dragCtrlReleased()
+{
+	m_isCentered = false;
+
+	// erase old object:
+	drawTemporaryObject();
+	recalcCoords();
+	// draw new old object:
+	drawTemporaryObject();
+}
+
+void
+VShapeTool::dragAltPressed()
+{
+}
+
+void
+VShapeTool::mouseReleased( QMouseEvent *mouse_event )
+{
+	if( !m_isDragging ) return;
+
+	m_lp.setX( mouse_event->pos().x() );
+	m_lp.setY( mouse_event->pos().y() );
+
+	recalcCoords();
+
+	// adjust to real viewport contents instead of raw mouse coords:
+	KoPoint p = view()->canvasWidget()->viewportToContents( QPoint( m_p.x(), m_p.y() ) );
+	m_p.setX( m_p.x() / view()->zoom() );
+	m_p.setY( m_p.y() / view()->zoom() );
+	m_d1 /= view()->zoom();
+	if( !m_isPolar )
+		m_d2 /= view()->zoom();
+
+	VShapeCmd* cmd = new VShapeCmd(
+		&view()->part()->document(),
+		name(),
+		shape( true ) );
+
+	view()->part()->addCommand( cmd, true );
+	view()->selectionChanged();
+
+	m_isDragging = false;
+	m_isSquare = false;
+	m_isCentered = false;
+}
+
+void
+VShapeTool::cancel() // ESC pressed
+{
+	m_isDragging = false;
+	m_isSquare = false;
+	m_isCentered = false;
+
+	// erase old object:
+	drawTemporaryObject();
+}
+
+
 bool
 VShapeTool::eventFilter( QEvent* event )
 {
-	if ( event->type() == QEvent::MouseMove && m_isDragging )
+	if( event->type() == QEvent::MouseMove )
 	{
-		// erase old object:
-		drawTemporaryObject();
-
-		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
-
-		recalcCoords();
-
-		// paint new object:
-		drawTemporaryObject();
-
+		mouseMoved( static_cast<QMouseEvent *> ( event ) );
 		return true;
 	}
 
-	if ( event->type() == QEvent::MouseButtonRelease && m_isDragging )
+	if( event->type() == QEvent::MouseButtonRelease )
 	{
-		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
-
-		recalcCoords();
-
-		// adjust to real viewport contents instead of raw mouse coords:
-		KoPoint p = view()->canvasWidget()->viewportToContents( QPoint( m_p.x(), m_p.y() ) );
-		m_p.setX( m_p.x() / view()->zoom() );
-		m_p.setY( m_p.y() / view()->zoom() );
-		m_d1 /= view()->zoom();
-		if( !m_isPolar )
-			m_d2 /= view()->zoom();
-
-		VShapeCmd* cmd = new VShapeCmd(
-			&view()->part()->document(),
-			name(),
-			shape( true ) );
-
-		view()->part()->addCommand( cmd, true );
-		view()->selectionChanged();
-
-
-		m_isDragging = false;
-		m_isSquare = false;
-		m_isCentered = false;
-
+		mouseReleased( static_cast<QMouseEvent *> ( event ) );
 		return true;
 	}
 
 	// handle pressing of keys:
-	if ( event->type() == QEvent::KeyPress )
+	if( event->type() == QEvent::KeyPress )
 	{
 		QKeyEvent* key_event = static_cast<QKeyEvent*> ( event );
 
 		// cancel dragging with ESC-key:
-		if ( key_event->key() == Qt::Key_Escape && m_isDragging )
+		if( key_event->key() == Qt::Key_Escape && m_isDragging )
 		{
-			m_isDragging = false;
-			m_isSquare = false;
-			m_isCentered = false;
-
-			// erase old object:
-			drawTemporaryObject();
-
+			cancel();
 			return true;
 		}
 
 		// if SHIFT is pressed, we want a square:
-		if ( key_event->key() == Qt::Key_Shift )
+		if( key_event->key() == Qt::Key_Shift && m_isDragging )
 		{
-			m_isSquare = true;
-
-			if ( m_isDragging )
-			{
-				// erase old object:
-				drawTemporaryObject();
-				recalcCoords();
-				// draw new old object:
-				drawTemporaryObject();
-			}
-
+			dragShiftPressed();
 			return true;
 		}
 
 		// if Ctrl is pressed, we want a centered path:
-		if ( key_event->key() == Qt::Key_Control )
+		if ( key_event->key() == Qt::Key_Control && m_isDragging )
 		{
-			m_isCentered = true;
-
-			if ( m_isDragging )
-			{
-				// erase old object:
-				drawTemporaryObject();
-				recalcCoords();
-				// draw new old object:
-				drawTemporaryObject();
-			}
-
+			dragCtrlPressed();
 			return true;
 		}
 	}
 
 	// handle releasing of keys:
-	if ( event->type() == QEvent::KeyRelease )
+	if( event->type() == QEvent::KeyRelease )
 	{
 		QKeyEvent* key_event = static_cast<QKeyEvent*> ( event );
 
-		if ( key_event->key() == Qt::Key_Shift )
+		if( key_event->key() == Qt::Key_Shift && m_isDragging )
 		{
-			m_isSquare = false;
-
-			if ( m_isDragging )
-			{
-				// erase old object:
-				drawTemporaryObject();
-				recalcCoords();
-				// draw new old object:
-				drawTemporaryObject();
-			}
-
+			dragShiftReleased();
 			return true;
 		}
 
-		if ( key_event->key() == Qt::Key_Control )
+		if( key_event->key() == Qt::Key_Control && m_isDragging )
 		{
-			m_isCentered = false;
-
-			if ( m_isDragging )
-			{
-				// erase old object:
-				drawTemporaryObject();
-				recalcCoords();
-				// draw new old object:
-				drawTemporaryObject();
-			}
-
+			dragCtrlReleased();
 			return true;
 		}
 	}
 
 	// the whole story starts with this event:
-	if ( event->type() == QEvent::MouseButtonPress )
+	if( event->type() == QEvent::MouseButtonPress )
 	{
-		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
-		m_fp.setX( mouse_event->pos().x() );
-		m_fp.setY( mouse_event->pos().y() );
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
-		
-		// draw initial object:
-		recalcCoords();
-		drawTemporaryObject();
-
-		m_isDragging = true;
-
+		mousePressed( static_cast<QMouseEvent *> ( event ) );
 		return true;
 	}
 
