@@ -38,5 +38,5 @@ SUBDIRS = ksidl
 ####### Build rules
 
 parser:
-	flex -B -8 -oscanner.cc scanner.ll   
+	cd $(srcdir) && flex -B -8 -oscanner.cc scanner.ll  ;\
 	bison -d -t -v -o yacc.cc yacc.yy

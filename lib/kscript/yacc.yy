@@ -1,7 +1,8 @@
 %{
 
-#include "parsenode.h"
-#include "parser.h"
+#include "kscript_parsenode.h"
+#include "kscript_parser.h"
+#include <stdlib.h>
 
 #include <qstring.h>
 

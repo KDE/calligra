@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "parsenode.h"
+#include "kscript_parsenode.h"
 #include "kscript_types.h"
 #include "yacc.cc.h"
 

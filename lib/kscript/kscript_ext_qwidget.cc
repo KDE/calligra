@@ -2,7 +2,7 @@
 #include "kscript_ext_qrect.h"
 #include "kscript_context.h"
 #include "kscript_util.h"
-
+#include <stdio.h>
 #include <qwidget.h>
 
 #define WIDGET ((QWidget*)object())

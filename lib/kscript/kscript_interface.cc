@@ -29,6 +29,7 @@ void KSAttribute::set( KSContext&, KSProxy*, KSValue* )
 KSValue::Ptr KSAttribute::get( KSContext&, KSProxy* )
 {
   // TODO
+    return 0; // to avoid warnings
 }
 
 /**********************************

@@ -1,6 +1,6 @@
 #include "kscript_ext_qapplication.h"
 #include "kscript_context.h"
-
+#include <stdio.h>
 #include <qapplication.h>
 
 KSClass_QApplication::KSClass_QApplication( KSModule* m ) : KSScriptClass( m, "QApplication", 0 )

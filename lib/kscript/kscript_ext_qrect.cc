@@ -90,3 +90,5 @@ bool KSObject_QRect::setMember( KSContext& context, const QString& name, KSValue
 
   return true;
 }
+
+#undef CHECKTYPE

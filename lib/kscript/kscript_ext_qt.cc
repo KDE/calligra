@@ -361,3 +361,4 @@ bool KS_Qt_Object::checkLive( KSContext& context, const QString& name )
 
 
 #include "kscript_ext_qt.moc"
+#undef CHECKTYPE

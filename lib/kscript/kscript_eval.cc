@@ -10,6 +10,7 @@
 #include "kscript_proxy.h"
 #include "kscript.h"
 #include "kscript_parsenode.h"
+#include <stdio.h>
 
 // Get a left and right operand for arithmetic
 // operations like add, mul, div etc. If leftexpr
@@ -320,13 +321,13 @@ bool KSEval_param_dcls( KSParseNode* node, KSContext& context )
   return true;
 }
 
-bool KSEval_t_vertical_line( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_circumflex( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_ampersand( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_shiftright( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_shiftleft( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context ) { return false; }
+bool KSEval_t_vertical_line( KSParseNode*, KSContext& ) { return false; }
+bool KSEval_t_circumflex( KSParseNode*, KSContext& ) { return false; }
+bool KSEval_t_ampersand( KSParseNode*, KSContext& ) { return false; }
+bool KSEval_t_shiftright( KSParseNode*, KSContext& ) { return false; }
+bool KSEval_t_shiftleft( KSParseNode*, KSContext& ) { return false; }
+bool KSEval_t_plus_sign( KSParseNode*, KSContext& ) { return false; }
+bool KSEval_t_minus_sign( KSParseNode*, KSContext& ) { return false; }
 
 bool KSEval_t_asterik( KSParseNode* node, KSContext& context )
 {
@@ -359,9 +360,9 @@ bool KSEval_t_asterik( KSParseNode* node, KSContext& context )
   return false;
 }
 
-bool KSEval_t_solidus( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_percent_sign( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_tilde( KSParseNode* node, KSContext& context ) { return false; }
+bool KSEval_t_solidus( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_percent_sign( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_tilde( KSParseNode* , KSContext& ) { return false; }
 
 bool KSEval_t_integer_literal( KSParseNode* node, KSContext& context )
 {
@@ -496,7 +497,7 @@ bool KSEval_const_dcl( KSParseNode* node, KSContext& context )
   return true;
 }
 
-bool KSEval_t_pragma( KSParseNode* node, KSContext& context ) { return false; }
+bool KSEval_t_pragma( KSParseNode*, KSContext& ) { return false; }
 
 bool KSEval_class_dcl( KSParseNode* node, KSContext& context )
 {
@@ -704,8 +705,8 @@ bool KSEval_t_notequal( KSParseNode* node, KSContext& context )
   return true;
 }
 
-bool KSEval_t_less_or_equal( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_greater_or_equal( KSParseNode* node, KSContext& context ) { return false; }
+bool KSEval_t_less_or_equal( KSParseNode*, KSContext& ) { return false; }
+bool KSEval_t_greater_or_equal( KSParseNode*, KSContext& ) { return false; }
 
 bool KSEval_t_array( KSParseNode* node, KSContext& context )
 {
@@ -1255,8 +1256,8 @@ bool KSEval_t_dict_element( KSParseNode* node, KSContext& context )
   return true;
 }
 
-bool KSEval_t_new( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_delete( KSParseNode* node, KSContext& context ) { return false; }
+bool KSEval_t_new( KSParseNode*, KSContext& ) { return false; }
+bool KSEval_t_delete( KSParseNode*, KSContext& ) { return false; }
 
 bool KSEval_t_while( KSParseNode* node, KSContext& context )
 {
@@ -1283,19 +1284,19 @@ bool KSEval_t_while( KSParseNode* node, KSContext& context )
   return false;
 }
 
-bool KSEval_t_do( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_for( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_if( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_else( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_incr( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_decr( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_for_head( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_less( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_greater( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_foreach( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_match( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_subst( KSParseNode* node, KSContext& context ) { return false; }
-bool KSEval_t_not( KSParseNode* node, KSContext& context ) { return false; }
+bool KSEval_t_do( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_for( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_if( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_else( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_incr( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_decr( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_for_head( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_less( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_greater( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_foreach( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_match( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_subst( KSParseNode* , KSContext& ) { return false; }
+bool KSEval_t_not( KSParseNode* , KSContext& ) { return false; }
 
 bool KSEval_func_call_params( KSParseNode* node, KSContext& context )
 {
@@ -1663,7 +1664,8 @@ extern bool KSEval_t_catch( KSParseNode* node, KSContext& context )
     // Evaluate the catch code
     KSParseNode *right = node->branch2();
     ASSERT( right );
-    bool res = right->eval( context );
+
+    /* bool res = */ right->eval( context );
 
     // Resume namespace
     context.scope()->localScope()->popNamespace();
