@@ -13,5 +13,5 @@ package-messages:
 	$(MAKE) -C po merge
 
 
-messages:
+messages: rc.cpp
 	$(XGETTEXT) `find . -name \*.cpp -not -name \*.moc.*` -o $(podir)/kivio.pot
