@@ -1255,3 +1255,57 @@ bool kspreadfunc_delta( KSContext& context )
   return true;
 }
 
+// Function: BASE
+bool kspreadfunc_base( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  int base = 10;
+  int prec = 0;
+
+  if ( KSUtil::checkArgumentsCount( context, 3, "BASE", false ) )
+  {
+    if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) ) return false;
+    if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) ) return false;
+    base = args[1]->intValue();
+    prec = args[2]->intValue();
+  }
+  else
+  if ( KSUtil::checkArgumentsCount( context, 2, "BASE", false ) )
+  {
+    if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) ) return false;
+    base = args[1]->intValue();
+  }
+  else
+  if ( !KSUtil::checkArgumentsCount( context, 1, "BASE", true ) )
+    return false;
+
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) ) return false;
+
+  if( ( base < 2 ) || ( base > 36 ) ) return false;
+  if( prec < 0 ) prec = 2;
+
+  double value = args[0]->doubleValue();
+  QString result = QString::number( (int)value, base );
+
+  if( prec > 0 )
+  {
+    result += "."; value = value - (int)value;
+
+    int ix;
+    for( int i = 0; i < prec; i++ )
+    {
+      ix = value * base;
+
+kdDebug() << "value " << value << "  ix " << ix << endl;
+
+      result += "0123456789abcdefghijklmnopqrstuvwxyz"[ix];
+      value = base * (value - (double)ix/base);
+    }
+  }
+
+  context.setValue( new KSValue( result.upper() ) );
+
+  return true;
+}

@@ -118,6 +118,7 @@ bool kspreadfunc_imsqrt( KSContext& context );
 bool kspreadfunc_imsub( KSContext& context );
 bool kspreadfunc_imsum( KSContext& context );
 bool kspreadfunc_delta( KSContext& context );
+bool kspreadfunc_base( KSContext& context );
 
 // defined in kspread_functions_datetime.cc
 bool kspreadfunc_years( KSContext& context );
@@ -541,6 +542,7 @@ static const functionEntry funcTab[] = {
   { "HEX2BIN", kspreadfunc_hex2bin },
   { "HEX2DEC", kspreadfunc_hex2dec },
   { "HEX2OCT", kspreadfunc_hex2oct },
+  { "BASE", kspreadfunc_base }, // KSpread-specific, like in Quattro-Pro
 
   // date & time
   { "DATE", kspreadfunc_date },

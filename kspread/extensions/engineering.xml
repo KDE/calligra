@@ -520,6 +520,29 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>BASE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Number</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Base</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Precision</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The BASE() function converts a number from base-10 to a string value in a target base from 2 to 36.</Text>
+	<Syntax>BASE(number;base;prec)</Syntax>
+	<Example>BASE(128;8) returns "200"</Example>
+	<Example>BASE(123.47;16;6) returns "7B.7851EB"</Example>
+      </Help>
+    </Function>
+
   </Group>
 
 </KSpreadFunctions>
