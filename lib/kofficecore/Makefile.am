@@ -20,7 +20,8 @@ include_HEADERS = koffice.h koView.h koFrame.h \
 	koApplication.h koQueryTypes.h \
 	koFilterManager.h koUndo.h
 
-libkofficecore_la_METASOURCES = koFrame.moc koMainWindow.moc koApplication.moc
+libkofficecore_la_METASOURCES = koFrame.moc koMainWindow.moc \
+        koApplication.moc koUndo.moc
 
 idl_DATA = koffice.idl
 
