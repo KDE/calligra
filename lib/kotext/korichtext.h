@@ -82,7 +82,6 @@
 #include "qcomplextext_p.h"
 #include "qapplication.h"
 #endif // QT_H
-#include <kdemacros.h>
 
 class KoTextParag;
 class KoTextString;
@@ -291,7 +290,7 @@ public:
     void gotoWordLeft();
     void gotoWordRight();
 
-    void insert( const QString &s, bool checkNewLine, QMemArray<KoTextStringChar> *formatting = 0 ) KDE_DEPRECATED;
+    void insert( const QString &s, bool checkNewLine, QMemArray<KoTextStringChar> *formatting = 0 );
     void splitAndInsertEmptyParag( bool ind = TRUE, bool updateIds = TRUE );
     bool remove();
     void killLine();
