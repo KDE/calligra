@@ -634,6 +634,9 @@ FormManager::copyWidget()
 	// remove includehints element not needed
 	if(!parent.namedItem("includehints").isNull())
 		parent.removeChild(parent.namedItem("includehints"));
+	// and ensure images is at the end
+	if(!parent.namedItem("images").isNull())
+		parent.insertAfter(parent.namedItem("images"), QDomNode());
 }
 
 void

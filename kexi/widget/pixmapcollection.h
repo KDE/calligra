@@ -52,6 +52,7 @@ class KEXIEXTWIDGETS_EXPORT PixmapCollection : public QObject
 		QString addPixmapName(const QString &name, int size = KIcon::SizeMedium);
 		void removePixmap(const QString &name);
 
+		bool   contains(const QString &name);
 		QPixmap  getPixmap(const QString &name);
 
 		void save(QDomNode parentNode);

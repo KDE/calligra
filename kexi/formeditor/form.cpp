@@ -533,7 +533,7 @@ void
 FormWidgetBase::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
 {
 	QPoint fromPoint, toPoint;
-	if(from->parentWidget())
+	if(from && from->parentWidget() && (from != this))
 		fromPoint = from->parentWidget()->mapTo(this, from->pos());
 	if(to && to->parentWidget() && (to != this))
 		toPoint = to->parentWidget()->mapTo(this, to->pos());

@@ -105,6 +105,12 @@ PixmapCollection::getPixmap(const QString &name)
 		return QPixmap(m_pixmaps[name].first);
 }
 
+bool
+PixmapCollection::contains(const QString &name)
+{
+	return m_pixmaps.contains(name);
+}
+
 void
 PixmapCollection::save(QDomNode parentNode)
 {
@@ -222,7 +228,7 @@ QString LoadIconDialog::iconName()
 
 /// Pixmap Collection Editor Dialog
 PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWidget *parent)
-: KDialogBase(parent, "pixcollection_dialog", true, 
+: KDialogBase(parent, "pixcollection_dialog", true,
 	i18n("Edit Pixmap Collection: %1").arg(collection->collectionName()), Close, Close, false)
 {
 	m_collection = collection;

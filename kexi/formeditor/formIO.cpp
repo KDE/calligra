@@ -717,15 +717,19 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 	}
 	else if(type == "pixmap")
 	{
-		if(m_savePixmapsInline)
+		if(m_savePixmapsInline || !m_currentForm || !m_currentItem || !m_currentForm->pixmapCollection()->contains(text))
 			return loadImage(tag.ownerDocument(), text);
-		else if(m_currentForm)
+		else// if(m_currentForm)
 		{
-			if(m_currentItem)
-				m_currentItem->addPixmapName(name, text);
+			//if(m_currentItem)
+			m_currentItem->addPixmapName(name, text);
 			return m_currentForm->pixmapCollection()->getPixmap(text);
+			/*if(pix.isNull()) // pixmap not in collection
+				return loadImage(tag.ownerDocument(), text);
+			else
+				return pix;*/
 		}
-		else return QVariant(QPixmap());
+		return QVariant(QPixmap());
 	}
 	else if(type == "enum")
 		return text;
