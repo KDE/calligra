@@ -32,7 +32,9 @@ public:
 
 private:
 	double m_zoomFactor;
+	QRect* m_rect;
 	QPointArray m_pa;
+	bool m_quick;		// do the simple calculus
 };
 
 #endif

@@ -409,22 +409,13 @@ VPath::boundingBox( const double zoomFactor ) const
 	QRect rect;
 	VPathBounding bb;
 	bb.calculate( rect, zoomFactor, m_segments );
-kdDebug() << "vpath::boundingbox" << endl;
-kdDebug() << rect.left() << endl;
-kdDebug() << rect.top() << endl;
-kdDebug() << rect.right() << endl;
-kdDebug() << rect.bottom() << endl;
+
 	return rect;
 }
 
 bool
 VPath::intersects( const QRect& rect, const double zoomFactor ) const
 {
-kdDebug() << "vpath::intersects" << endl;
-kdDebug() << rect.left() << endl;
-kdDebug() << rect.top() << endl;
-kdDebug() << rect.right() << endl;
-kdDebug() << rect.bottom() << endl;
 	VPathBounding bb;
 	return bb.intersects( rect, zoomFactor, m_segments );
 }
