@@ -10,7 +10,7 @@ kexihandler_table_la_LIBADD = ../core/libkexicore.la ../tableview/libkexidatatab
 		../widget/libkexiextendedwidgets.la ../kexiDB/libkexidb.la ../formeditor/libkformeditor.la
 
 kexihandler_query_la_SOURCES = kexiquerypart.cpp kexiquerydesigner.cpp kexiquerypartitem.cpp kexiquerypartproxy.cpp \
-				kexiquerydesignerguieditor.cpp kexiquerydesignersql.cpp kexiquerydesignersqleditor.cpp \
+				kexiquerydesignerguieditor.cpp kexiquerydesignersql.cpp  \
 				kexiquerydesignersqlhistory.cpp kexiparameterlisteditor.ui kexiaddparamwidget.ui \
 				kexiaddparamdialog.cpp kexidynamicqueryparameterdialog.cpp
 
