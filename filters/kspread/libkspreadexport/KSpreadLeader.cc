@@ -124,6 +124,7 @@ KoFilter::ConversionStatus KSpreadLeader::convert() {
 KoFilter::ConversionStatus KSpreadLeader::doInfo(KoDocumentInfo *info) {
 	KoFilter::ConversionStatus status;
 
+#if 0 // this was never used, it's been removed now
 	// Gather data about the document log
 	KSpreadFilterProperty docInfoLogProperty;
 	KoDocumentInfoLog *infoLog = (KoDocumentInfoLog *) info->page("log");
@@ -132,6 +133,7 @@ KoFilter::ConversionStatus KSpreadLeader::doInfo(KoDocumentInfo *info) {
 	status = m_worker->startInfoLog(docInfoLogProperty);
 	if (status != KoFilter::OK)
 		return status;
+#endif
 
 	// Gather data about the document author
 	KSpreadFilterProperty docInfoAuthorProperty;
