@@ -51,6 +51,7 @@
 #endif
 
 #include <qfile.h>
+#include <qmap.h>
 #include <qpainter.h>
 #include <qtimer.h>
 #include <qimage.h>
@@ -89,8 +90,9 @@ public:
     Private() :
         m_dcopObject( 0L ),
         filterManager( 0L ),
-        m_confirmNonNativeSave( true ),
         m_specialOutputFlag( 0 ),
+        m_isImporting( false ), m_isExporting( false ),
+        m_filterSettings( m_normalFilterSettings ),
         m_numOperations( 0 ),
         modifiedAfterAutosave( false ),
         m_autosaving( false ),
@@ -101,7 +103,10 @@ public:
         m_doNotSaveExtDoc( false ),
         m_current( false ),
         m_storeInternal( false )
-        {}
+    {
+        m_confirmNonNativeSave[0] = true;
+        m_confirmNonNativeSave[1] = true;
+    }
 
     QPtrList<KoView> m_views;
     QPtrList<KoDocumentChild> m_children;
@@ -116,8 +121,16 @@ public:
 
     QCString mimeType; // The actual mimetype of the document
     QCString outputMimeType; // The mimetype to use when saving
-    bool m_confirmNonNativeSave; // used to pop up a dialog when saving for the first time if the file is in a foreign format
+    bool m_confirmNonNativeSave [2]; // used to pop up a dialog when saving for the
+                                     // first time if the file is in a foreign format
+                                     // (Save/Save As, Export)
     int m_specialOutputFlag; // See KoFileDialog in koMainWindow.cc
+    bool m_isImporting, m_isExporting; // File --> Import/Export vs File --> Open/Save
+
+    QMap <QString, QString> m_normalFilterSettings,
+                            m_exportFilterSettings,
+                            &m_filterSettings;
+
     QTimer m_autoSaveTimer;
     QString lastErrorMessage; // see openFile()
     int m_autoSaveDelay; // in seconds, 0 to disable.
@@ -283,6 +296,60 @@ KoView *KoDocument::createView( QWidget *parent, const char *name )
     return view;
 }
 
+bool KoDocument::exp0rt( const KURL & _url )
+{
+    bool ret;
+
+    d->m_isExporting = true;
+    // d->m_filterSettings is a reference
+    d->m_filterSettings = d->m_exportFilterSettings;
+
+
+    //
+    // Preserve a lot of state here because we need to restore it in order to
+    // be able to fake a File --> Export.  Can't do this in saveFile() because,
+    // for a start, KParts has already set m_url and m_file and because we need
+    // to restore the modified flag etc. and don't want to put a load on anyone
+    // reimplementing saveFile() (Note: import() and export() will remain
+    // non-virtual).
+    //
+    KURL oldURL = m_url;
+    QString oldFile = m_file;
+
+    bool wasModified = isModified ();
+    QCString oldMimeType = mimeType ();
+
+
+    // save...
+    ret = saveAs( _url );
+
+
+    //
+    // This is sooooo hacky :(
+    // Hopefully we will restore enough state.
+    //
+    kdDebug(30003) << "Restoring KoDocument state to before export" << endl;
+
+    // always restore m_url & m_file because KParts has changed them
+    // (regardless of failure or success)
+    m_url = oldURL;
+    m_file = oldFile;
+
+    // on successful export we need to restore modified etc. too
+    // on failed export, mimetype/modified hasn't changed anyway
+    if (ret)
+    {
+        setModified (wasModified);
+        d->mimeType = oldMimeType;
+    }
+
+
+    d->m_filterSettings = d->m_normalFilterSettings;
+    d->m_isExporting = false;
+
+    return ret;
+}
+
 bool KoDocument::saveFile()
 {
     kdDebug(30003) << "KoDocument::saveFile() doc='" << url().url() <<"'"<< endl;
@@ -368,7 +435,7 @@ bool KoDocument::saveFile()
     if ( ret )
     {
         d->mimeType = outputMimeType;
-        d->m_confirmNonNativeSave = false;
+        setConfirmNonNativeSave ( isExporting (), false );
     }
 
     return ret;
@@ -377,11 +444,6 @@ bool KoDocument::saveFile()
 QCString KoDocument::mimeType() const
 {
     return d->mimeType;
-}
-
-void KoDocument::setMimeType( const QCString &mimeType )
-{
-    d->mimeType = mimeType;
 }
 
 void KoDocument::setOutputMimeType( const QCString & mimeType, int specialOutputFlag )
@@ -400,14 +462,41 @@ int KoDocument::specialOutputFlag() const
     return d->m_specialOutputFlag;
 }
 
-bool KoDocument::confirmNonNativeSave() const
+bool KoDocument::confirmNonNativeSave( const bool exporting ) const
 {
-    return d->m_confirmNonNativeSave;
+    // "exporting ? 1 : 0" is different from "exporting" because a bool is
+    // usually implemented like an "int", not "unsigned : 1"
+    return d->m_confirmNonNativeSave [ exporting ? 1 : 0 ];
 }
 
-void KoDocument::setConfirmNonNativeSave( bool b)
+void KoDocument::setConfirmNonNativeSave( const bool exporting, const bool on )
 {
-    d->m_confirmNonNativeSave = b;
+    d->m_confirmNonNativeSave [ exporting ? 1 : 0] = on;
+}
+
+bool KoDocument::isImporting() const
+{
+    return d->m_isImporting;
+}
+
+bool KoDocument::isExporting() const
+{
+    return d->m_isExporting;
+}
+
+QMap <QString, QString> &KoDocument::filterSettings()
+{
+    return d->m_filterSettings;
+}
+
+QMap <QString, QString> &KoDocument::normalFilterSettings()
+{
+    return d->m_normalFilterSettings;
+}
+
+QMap <QString, QString> &KoDocument::exportFilterSettings()
+{
+    return d->m_exportFilterSettings;
 }
 
 void KoDocument::setCheckAutoSaveFile( bool b )
@@ -759,7 +848,9 @@ bool KoDocument::saveChildren( KoStore* _store )
                 //kdDebug(32001) << "KoDocument::saveChildren internal url: /" << i << endl;
                 if ( !childDoc->saveToStore( _store, QString::number( i++ ) ) )
                     return FALSE;
-                childDoc->setModified( false );
+
+                if (!isExporting ())
+                    childDoc->setModified( false );
             }
             //else kdDebug()<<k_funcinfo<<" external (don't save) url:" << childDoc->url().url()<<endl;
         }
@@ -1054,6 +1145,35 @@ bool KoDocument::checkAutoSaveFile()
     return false;
 }
 
+bool KoDocument::import( const KURL & _url )
+{
+    bool ret;
+
+    kdDebug (30003) << "KoDocument::import url=" << _url.url() << endl;
+    d->m_isImporting = true;
+
+    // open...
+    ret = openURL (_url);
+
+    // reset m_url & m_file (kindly? set by KParts::openURL()) to simulate a
+    // File --> Import
+    if (ret)
+    {
+        kdDebug (30003) << "KoDocument::import success, resetting url" << endl;
+        resetURL ();
+        setTitleModified ();
+    }
+
+    // we were using normalFilterSettings - copy them to exportFilterSettings
+    // (they might be useful there for preselecting options in filter dialogs
+    // etc.)
+    d->m_exportFilterSettings = d->m_normalFilterSettings;
+
+    d->m_isImporting = false;
+
+    return ret;
+}
+
 bool KoDocument::openURL( const KURL & _url )
 {
     kdDebug(30003) << "KoDocument::openURL url=" << _url.url() << endl;
@@ -1263,7 +1383,10 @@ bool KoDocument::openFile()
         d->mimeType = typeName.latin1 ();
 
         d->outputMimeType = d->mimeType;
-        d->m_confirmNonNativeSave = d->mimeType != _native_format;
+
+        const bool needConfirm = (d->mimeType != _native_format);
+        setConfirmNonNativeSave ( false, needConfirm  );
+        setConfirmNonNativeSave ( true, needConfirm );
     }
 
     return ok;

@@ -159,8 +159,8 @@ public:
     m_reloadfile = 0L;
     m_importFile = 0;
     m_exportFile = 0;
-    m_importing = false;
-    m_exporting = false;
+    m_isImporting = false;
+    m_isExporting = false;
     m_lastExportSpecialOutputFlag = 0;
   }
   ~KoMainWindowPrivate()
@@ -205,10 +205,10 @@ public:
   KAction *m_importFile;
   KAction *m_exportFile;
 
-  bool m_importing;
-  bool m_exporting;
+  bool m_isImporting;
+  bool m_isExporting;
 
-  QString m_lastExportFilename;
+  KURL m_lastExportURL;
   QCString m_lastExportFormat;
   int m_lastExportSpecialOutputFlag;
 };
@@ -273,7 +273,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_paDocInfo->setEnabled( false );
     d->m_paSaveAs->setEnabled( false );
     d->m_reloadfile->setEnabled( false );
-    d->m_importFile->setEnabled( false );
+    d->m_importFile->setEnabled( true );  // always enabled like File --> Open
     d->m_exportFile->setEnabled( false );
     d->m_paSave->setEnabled( false );
     d->m_paPrint->setEnabled( false );
@@ -434,7 +434,6 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QPtrList<KoView
   d->m_paDocInfo->setEnabled( enable );
   d->m_paSave->setEnabled( enable );
   d->m_paSaveAs->setEnabled( enable );
-  d->m_importFile->setEnabled( enable );
   d->m_exportFile->setEnabled( enable );
   d->m_paPrint->setEnabled( enable );
   d->m_paPrintPreview->setEnabled( enable );
@@ -550,6 +549,7 @@ bool KoMainWindow::openDocument( const KURL & url )
     return openDocumentInternal( url );
 }
 
+// (not virtual)
 bool KoMainWindow::openDocument( KoDocument *newdoc, const KURL & url )
 {
     return openDocumentInternal( url, newdoc );
@@ -566,7 +566,8 @@ bool KoMainWindow::openDocumentInternal( const KURL & url, KoDocument *newdoc )
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     connect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotLoadCanceled( const QString & )));
-    if(!newdoc || !newdoc->openURL(url))
+    bool openRet = (!isImporting ()) ? newdoc->openURL(url) : newdoc->import(url);
+    if(!newdoc || !openRet)
     {
         delete newdoc;
         return false;
@@ -582,8 +583,6 @@ void KoMainWindow::slotLoadCompleted()
     KoDocument* doc = rootDocument();
     KoDocument* newdoc = (KoDocument *)(sender());
 
-    if (d->m_importing) newdoc->resetURL();
-    
     if ( doc && doc->isEmpty() && !doc->isEmbedded() )
     {
         // Replace current empty document
@@ -621,21 +620,26 @@ void KoMainWindow::slotLoadCanceled( const QString & errMsg )
 }
 
 // returns true if we should save, false otherwise.
-static bool exportConfirmation( const QCString &outputFormat, const QCString &nativeFormat )
+bool KoMainWindow::exportConfirmation( const QCString &outputFormat, const QCString &nativeFormat )
 {
     if ( outputFormat != nativeFormat )
     {
         // Warn the user
         KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
-        QString comment = ( mime->name() == KMimeType::defaultMimeType() ) ? i18n( "Unknown file type %1" ).arg( outputFormat )
-                        : mime->comment();
+        const bool neverHeardOfIt = ( mime->name() == KMimeType::defaultMimeType() );
+        QString comment = neverHeardOfIt ?
+                            i18n( "%1 (unknown file type)" ).arg( outputFormat )
+                            : mime->comment();
 
         return KMessageBox::warningContinueCancel(
-            0, i18n( "<qt>You are about to save the document in the %1 format.<p>"
-                    "This might lose parts of the formatting of the document. Proceed?</qt>" )
-            .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
-            i18n( "File Export: Confirmation Required" ),
-            i18n( "Continue" ),
+            0,
+            i18n( "<qt>%1 as a %2 may cause some loss of formatting."
+                  "<p>Do you still want to %3 this format?</qt>" )
+                .arg( isExporting () ? i18n ("Exporting") : i18n ("Saving") )
+                .arg( QString( "<b>%1</b>" ).arg( comment ) ) // in case we want to remove the bold later
+                .arg( isExporting() ? i18n ("export to") : i18n ("save in") ),
+            QString::null,
+            KStdGuiItem::save (),
             "FileExportConfirmation",
             true ) == KMessageBox::Continue;
     }
@@ -650,14 +654,15 @@ bool KoMainWindow::saveDocument( bool saveas )
         return true;
     connect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
+    KURL oldURL = pDoc->url();
+    QString oldFile = pDoc->file();
     QCString _native_format = pDoc->nativeFormatMimeType();
     QCString oldOutputFormat = pDoc->outputMimeType();
     int oldSpecialOutputFlag = pDoc->specialOutputFlag();
-    bool wasModified = pDoc->isModified();
     QString suggestedFilename = pDoc->url().path();
 
     QStringList mimeFilter = KoFilterManager::mimeFilter( _native_format, KoFilterManager::Export );
-    if (mimeFilter.findIndex (oldOutputFormat) < 0)
+    if (mimeFilter.findIndex (oldOutputFormat) < 0 && !isExporting())
     {
         kdDebug(30003) << "KoMainWindow::saveDocument no export filter for " << oldOutputFormat << endl;
 
@@ -678,8 +683,11 @@ bool KoMainWindow::saveDocument( bool saveas )
                 else
                     suggestedFilename = suggestedFilename.left (c) + ext;
             }
-            else
-                suggestedFilename = QString::null; // better than a file with a misleading extension
+            else  // current filename extension wrong anyway
+            {
+                // this assumes that a . signifies an extension, not just a .
+                suggestedFilename = suggestedFilename.left (c);
+            }
         }
 
         // force the user to choose outputMimeType
@@ -694,18 +702,18 @@ bool KoMainWindow::saveDocument( bool saveas )
         // don't want to be reminded about overwriting files etc.
         bool justChangingFilterOptions = false;
 
-        KoFileDialog *dialog = new KoFileDialog(d->m_exporting ? d->m_lastExportFilename : suggestedFilename,
+        KoFileDialog *dialog = new KoFileDialog(isExporting() ? d->m_lastExportURL.path() : suggestedFilename,
                                                 QString::null, 0L, "file dialog", true);
 
-        if (!d->m_exporting)
+        if (!isExporting())
             dialog->setCaption( i18n("Save Document As") );
         else
-            dialog->setCaption( i18n("Export Document") );
+            dialog->setCaption( i18n("Export Document As") );
 
         dialog->setOperationMode( KFileDialog::Saving );
         dialog->setSpecialMimeFilter( mimeFilter,
-                                      d->m_exporting ? d->m_lastExportFormat : pDoc->mimeType(),
-                                      d->m_exporting ? d->m_lastExportSpecialOutputFlag : oldSpecialOutputFlag,
+                                      isExporting() ? d->m_lastExportFormat : pDoc->mimeType(),
+                                      isExporting() ? d->m_lastExportSpecialOutputFlag : oldSpecialOutputFlag,
                                       _native_format );
 
         KURL newURL;
@@ -720,12 +728,12 @@ bool KoMainWindow::saveDocument( bool saveas )
                 specialOutputFlag = dialog->specialEntrySelected();
                 kdDebug(30003) << "KoMainWindow::saveDocument outputFormat = " << outputFormat << endl;
 
-                if (!d->m_exporting)
+                if (!isExporting())
                     justChangingFilterOptions = (newURL == pDoc->url()) &&
                                                 (outputFormat == pDoc->mimeType()) &&
                                                 (specialOutputFlag == oldSpecialOutputFlag);
                 else
-                    justChangingFilterOptions = (newURL.path() == d->m_lastExportFilename) &&
+                    justChangingFilterOptions = (newURL == d->m_lastExportURL) &&
                                                 (outputFormat == d->m_lastExportFormat) &&
                                                 (specialOutputFlag == d->m_lastExportSpecialOutputFlag);
             }
@@ -770,26 +778,19 @@ bool KoMainWindow::saveDocument( bool saveas )
         {
             bool wantToSave = true;
 
-            if (!justChangingFilterOptions || pDoc->confirmNonNativeSave())
+            // don't change this line unless you know what you're doing :)
+            if (!justChangingFilterOptions || pDoc->confirmNonNativeSave (isExporting ()))
                 wantToSave = exportConfirmation (outputFormat, _native_format);
 
             if (wantToSave)
             {
-                // for exporting only
-                QCString oldMimeType = pDoc->mimeType();
-                bool oldConfirmNonNativeSave = pDoc->confirmNonNativeSave();
-
-                KURL oldURL = pDoc->url();
-                QString oldFile = pDoc->file();
-
-
                 //
                 // Note:
                 // If the user is stupid enough to Export to the current URL,
                 // we do _not_ change this operation into a Save As.  Reasons
                 // follow:
                 //
-                // 1. A check like "d->m_exporting && oldURL == newURL"
+                // 1. A check like "isExporting() && oldURL == newURL"
                 //    doesn't _always_ work on case-insensitive filesystems
                 //    and inconsistent behaviour is bad.
                 // 2. It is probably not a good idea to change pDoc->mimeType
@@ -808,59 +809,60 @@ bool KoMainWindow::saveDocument( bool saveas )
                 //
 
 
-                // save!
                 pDoc->setOutputMimeType( outputFormat, specialOutputFlag );
-                ret = pDoc->saveAs( newURL );
-
-                if (ret && !d->m_exporting)
+                if (!isExporting ())   // Save As
                 {
-                    kdDebug(30003) << "Successful Save As (not Export)" << endl;
-                    addRecentURL( newURL );
-                }
-                else // !ret || d->m_exporting
-                {
-                    kdDebug(30003) << "Failed Save As and/or Export" << endl;
+                    ret = pDoc->saveAs( newURL );
 
-                    // on failure or on export, we restore this stuff
-                    pDoc->setOutputMimeType( oldOutputFormat, oldSpecialOutputFlag );
-                    pDoc->setURL( oldURL );
-                    pDoc->setFile( oldFile );
-                    kdDebug(30003) << "Restore URL to " << oldURL << endl;
-
-                    // on successful export we need to restore the mimetype too
-                    // on failed export, mimetype/modified hasn't changed anyway
-                    if (ret && d->m_exporting)
+                    if (ret)
                     {
-                        // Exporting - this is sooooo hacky :(
-                        // We are interested in retaining the format and URL and modified to
-                        // some extent...hopefully we will restore enough state
-                        kdDebug(30003) << "Restoring KoDocument state to before export" << endl;
-                        pDoc->setModified( wasModified );
-                        pDoc->setMimeType( oldMimeType );
-                        pDoc->setConfirmNonNativeSave( oldConfirmNonNativeSave );
+                        kdDebug(30003) << "Successful Save As!" << endl;
+                        addRecentURL( newURL );
+                    }
+                    else
+                    {
+                        kdDebug(30003) << "Failed Save As!" << endl;
+                        pDoc->setURL( oldURL ), pDoc->setFile( oldFile );
+                        pDoc->setOutputMimeType( oldOutputFormat, oldSpecialOutputFlag );
+                    }
+                }
+                else    // Export
+                {
+                    ret = pDoc->exp0rt( newURL );
 
+                    if (ret)
+                    {
                         // a few file dialog convenience things
-                        d->m_lastExportFilename = newURL.path();
+                        d->m_lastExportURL = newURL;
                         d->m_lastExportFormat = outputFormat;
                         d->m_lastExportSpecialOutputFlag = specialOutputFlag;
                     }
+
+                    // always restore output format
+                    pDoc->setOutputMimeType( oldOutputFormat, oldSpecialOutputFlag );
                 }
 
                 pDoc->setTitleModified();
-            }
+            }   // if (wantToSave)  {
             else
                 ret = false;
-        }
+        }   // if (bOk) {
         else
             ret = false;
     }
-    else {
-        bool needConfirm = pDoc->confirmNonNativeSave();
+    else {  // saving
+        bool needConfirm = pDoc->confirmNonNativeSave( false );
         if (!needConfirm ||
                (needConfirm && exportConfirmation ( oldOutputFormat /* not so old :) */, _native_format ))
            )
             // be sure pDoc has the correct outputMimeType!
             ret = pDoc->save();
+
+            if (!ret)
+            {
+                kdDebug(30003) << "Failed Save!" << endl;
+                pDoc->setURL( oldURL ), pDoc->setFile( oldFile );
+            }
         else
             ret = false;
     }
@@ -873,7 +875,7 @@ bool KoMainWindow::saveDocument( bool saveas )
 // here or else it will be reported as a bug by some MSOffice user.
 // You have been warned!  Do not click DoNotAskAgain!!!
 #if 0
-    if (ret && !d->m_exporting)
+    if (ret && !isExporting())
     {
         // When exporting to a non-native format, we don't reset modified.
         // This way the user will be reminded to save it again in the native format,
@@ -1000,10 +1002,11 @@ void KoMainWindow::slotFileNew()
 void KoMainWindow::slotFileOpen()
 {
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
-    if (!d->m_exporting)
+    if (!isImporting())
         dialog->setCaption( i18n("Open Document") );
     else
         dialog->setCaption( i18n("Import Document") );
+
     dialog->setMimeFilter( KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(),
                                                         KoFilterManager::Import ) );
     if(dialog->exec()!=QDialog::Accepted) {
@@ -1525,18 +1528,28 @@ void KoMainWindow::slotImportFile()
 {
     kdDebug(30003) << "slotImportFile()" << endl;
 
-    d->m_importing = true;
+    d->m_isImporting = true;
     slotFileOpen();
-    d->m_importing = false;
+    d->m_isImporting = false;
 }
 
 void KoMainWindow::slotExportFile()
 {
     kdDebug(30003) << "slotExportFile()" << endl;
 
-    d->m_exporting = true;
+    d->m_isExporting = true;
     slotFileSaveAs();
-    d->m_exporting = false;
+    d->m_isExporting = false;
+}
+
+bool KoMainWindow::isImporting() const
+{
+    return d->m_isImporting;
+}
+
+bool KoMainWindow::isExporting() const
+{
+    return d->m_isExporting;
 }
 
 #include <koMainWindow.moc>

@@ -135,6 +135,36 @@ public:
     virtual bool openURL( const KURL & url );
 
     /**
+     * Opens the document given by @param url, without storing the URL
+     * in the KoDocument.
+     * Call this instead of openURL() to implement KoMainWindow's
+     * File --> Import feature.
+     *
+     * Note: This will call openURL().  To differentiate this from an ordinary
+     *       Open operation (in any reimplementation of openURL() or openFile())
+     *       call @ref isImporting().
+     */
+    bool import( const KURL &url );
+
+    /**
+     * Saves the document as @param url without changing the state of the
+     * KoDocument (URL, modified flag etc.).  Call this instead of
+     * KParts::ReadWritePart::saveAs() to implement KoMainWindow's
+     * File --> Export feature.
+     *
+     * Note: This will call KoDocument::saveAs().  To differentiate this
+     *       from an ordinary Save operation (in any reimplementation of
+     *       saveFile()) call @ref isExporting().
+     */
+    bool exp0rt( const KURL &url );
+
+    /**
+     * The current filter settings (used by the filter architecture).
+     * @internal
+     */
+    QMap <QString, QString> &filterSettings();
+
+    /**
      * Sets whether the document can be edited or is read only.
      * This recursively applied to all child documents and
      * @ref KoView::updateReadWrite is called for every attached
@@ -174,12 +204,6 @@ public:
     QCString mimeType() const;
 
     /**
-     * Set the mimetype of the document.  You should _not_ call this.
-     * Support will be dropped.  Used by KoMainWindow to Export files.
-     */
-    void setMimeType( const QCString &mimeType );
-
-    /**
      * Set the format in which the document should be saved.
      * This is called on loading, and in "save as", so you shouldn't
      * have to call it.
@@ -198,9 +222,12 @@ public:
      * CTRL+S to save in the same foreign format, putting all his/her
      * formatting at risk (normally an export confirmation only comes up
      * with Save As).
+     *
+     * @param exporting specifies whether this is the setting for a
+     * File --> Export or File --> Save/Save As operation.
      */
-    bool confirmNonNativeSave() const;
-    void setConfirmNonNativeSave( const bool );
+    bool confirmNonNativeSave( const bool exporting ) const;
+    void setConfirmNonNativeSave( const bool exporting, const bool on );
 
     /**
      * Sets the error message to be shown to the user (use i18n()!)
@@ -588,8 +615,10 @@ public:
     void setURL( const KURL& url ) { m_url = url; }
 
     /**
-     * Do _not_ call file() or setFile().
-     * Future support is not guaranteed.  To quote QT "we mean it"!
+     * _Only_ use these functions to restore m_file (in KoMainWindow) after a
+     * failed save (remember to use setURL() to restore the URL as well).
+     *
+     * Do _not_ use these functions for any other purpose.
      */
     QString &file() { return m_file; }
     void setFile( const QString &file ) { m_file = file; }
@@ -633,6 +662,42 @@ protected:
      *  You should not have to reimplement, except for very special cases.
      */
     virtual bool saveFile();
+
+    /**
+     *  Returns whether or not the current openURL() or openFile() call is
+     *  actually an import operation (like File --> Import).
+     *  This is for informational purposes only.
+     */
+    bool isImporting() const;
+
+    /**
+     *  Returns whether or not the current saveFile() call is actually an export
+     *  operation (like File --> Export).
+     *  If this function returns true during saveFile() and you are changing
+     *  some sort of state, you _must_ restore it before the end of saveFile();
+     *  otherwise, File --> Export will not work properly.
+     */
+    bool isExporting() const;
+
+    /**
+     *  Returns the normal filter settings used with saveFile() and openFile()
+     *  (including when isImporting(), but excluding when isExporting()).  After
+     *  a KoDocument::import(), these filter settings are copied over those used
+     *  for exporting.
+     *
+     *  Modifying the returned settings may have a direct impact on future
+     *  Save operations.
+     */
+    QMap <QString, QString> &normalFilterSettings();
+
+    /**
+     *  Returns the filter settings used with KoDocument::exp0rt (separate from
+     *  the normal filter settings).
+     *
+     *  Modifying the returned settings may have a direct impact on future
+     *  Export operations.
+     */
+    QMap <QString, QString> &exportFilterSettings();
 
     /**
      *  You need to overload this function if your document may contain

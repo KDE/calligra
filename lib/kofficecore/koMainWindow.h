@@ -238,9 +238,19 @@ public slots:
     void slotReloadFile();
 
     /**
-     * Import/Export file
+     * File --> Import
+     *
+     * This will call slotFileOpen().  To differentiate this from an ordinary
+     * call to slotFileOpen() call @ref isImporting().
      */
     void slotImportFile();
+
+    /**
+     * File --> Export
+     *
+     * This will call slotFileSaveAs().  To differentiate this from an ordinary
+     * call to slotFileSaveAs() call @ref isExporting().
+     */
     void slotExportFile();
 
 protected:
@@ -267,6 +277,15 @@ protected:
      */
     virtual bool saveDocument( bool saveas = false );
 
+    /**
+     * Asks the user if they really want to save the document if
+     * outputFormat != nativeFormat.  If outputFormat == nativeFormat, no dialog
+     * is shown and it is assumed that the user wishes to save.
+     *
+     * @return true if the document should be saved
+     */
+    bool exportConfirmation( const QCString &outputFormat, const QCString &nativeFormat );
+
     virtual void closeEvent( QCloseEvent * e );
     virtual void resizeEvent( QResizeEvent * e );
     virtual bool queryClose();
@@ -274,6 +293,26 @@ protected:
     virtual bool openDocumentInternal( const KURL & url, KoDocument * newdoc = 0L );
 
     void saveRecentFiles();
+
+    /**
+     * Returns whether or not the current slotFileOpen() or openDocument()
+     * call is actually an import operation (like File --> Import).
+     *
+     * If this is true, you must call KoDocument::import() instead of
+     * KoDocument::openURL(), in any reimplementation of openDocument() or
+     * openDocumentInternal().
+     */
+    bool isExporting() const;
+
+    /**
+     * Returns whether or not the current slotFileSave[As]() or saveDocument()
+     * call is actually an export operation (like File --> Export).
+     *
+     * If this is true, you must call KoDocument::export() instead of
+     * KoDocument::save() or KoDocument::saveAs(), in any reimplementation of
+     * saveDocument().
+     */
+    bool isImporting() const;
 
     KRecentFilesAction *m_recent;
 
