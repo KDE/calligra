@@ -309,7 +309,12 @@ public:
    * the formatting information of f into the current format.
    * For example, if current format is "Bold, Italic" and f is
    * "Left border", the current format would become "Bold, Italic, left border".
-   *         
+   *
+   * If parts of the formatting information in f are already specified in the
+   * current format, then it will override the current format.
+   * For example, if current format is "Bold, right-aligned" and f is "Italic",
+   * the result is "Italic, right-aligned".
+   *
    */
   Format& apply( const Format& f );
 

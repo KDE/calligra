@@ -317,10 +317,13 @@ FormatAlignment& Format::alignment() const
   return d->alignment;
 }
 
-
+// merge f into current format
 Format& Format::apply( const Format& f )
 {
-  //if( f.hasPiece( Visible ) ) setVisible( f.visible() );
+  if( !f.alignment().isNull() )
+    alignment() = f.alignment();
+  if( !f.font().isNull() )
+    font() = f.font();
   
   return *this;
 }
