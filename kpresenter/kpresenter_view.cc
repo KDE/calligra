@@ -1693,14 +1693,14 @@ void KPresenterView::setupActions()
     actionEditCut = KStdAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
     actionEditCopy = KStdAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
     actionEditPaste = KStdAction::paste( this, SLOT( editPaste() ), actionCollection(), "edit_paste" );
-    actionEditDelete = new KAction( i18n( "&Delete" ), KPBarIcon("delete"), CTRL + Key_Delete,
+    actionEditDelete = new KAction( i18n( "&Delete" ), "delete", CTRL + Key_Delete,
 				    this, SLOT( editDelete() ),
 				    actionCollection(), "edit_delete" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
-    actionEditCopyPage = new KAction( i18n( "Copy &Page to Clipboard" ), KPBarIcon("newslide"),
+    actionEditCopyPage = new KAction( i18n( "Copy &Page to Clipboard" ), "newslide",
 				      0, this, SLOT( editCopyPage() ),
 				      actionCollection(), "edit_copypage" );
-    actionEditDelPage = new KAction( i18n( "Delete &Page..." ), KPBarIcon("delslide"), 0,
+    actionEditDelPage = new KAction( i18n( "Delete &Page..." ), "delslide", 0,
 				     this, SLOT( editDelPage() ),
 				     actionCollection(), "edit_delpage" );
     actionEditFind = KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
@@ -1718,7 +1718,7 @@ void KPresenterView::setupActions()
 
     // ---------------- insert actions
 
-    actionInsertPage = new KAction( i18n( "&Page..." ), KPBarIcon("newslide"), Key_F2,
+    actionInsertPage = new KAction( i18n( "&Page..." ), "newslide", Key_F2,
 				    this, SLOT( insertPage() ),
 				    actionCollection(), "insert_page" );
 
@@ -1732,49 +1732,49 @@ void KPresenterView::setupActions()
 
     // ----------------- tools actions
 
-    actionToolsMouse = new KToggleAction( i18n( "&Mouse" ), KPBarIcon("mouse"), Key_F5,
+    actionToolsMouse = new KToggleAction( i18n( "&Mouse" ), "mouse", Key_F5,
 					  this, SLOT( toolsMouse() ),
 					  actionCollection(), "tools_mouse" );
     ( (KToggleAction*)actionToolsMouse )->setExclusiveGroup( "tools" );
     ( (KToggleAction*)actionToolsMouse )->setChecked( true );
 
-    actionToolsLine = new KToggleAction( i18n( "&Line" ), KPBarIcon("line"), Key_F6,
+    actionToolsLine = new KToggleAction( i18n( "&Line" ), "line", Key_F6,
 					 this, SLOT( toolsLine() ),
 					 actionCollection(), "tools_line" );
     ( (KToggleAction*)actionToolsLine )->setExclusiveGroup( "tools" );
 
-    actionToolsRectangle = new KToggleAction( i18n( "&Rectangle" ), KPBarIcon("rectangle"),
+    actionToolsRectangle = new KToggleAction( i18n( "&Rectangle" ), "rectangle",
 					      Key_F7, this, SLOT( toolsRectangle() ),
 					      actionCollection(), "tools_rectangle" );
     ( (KToggleAction*)actionToolsRectangle )->setExclusiveGroup( "tools" );
 
     actionToolsCircleOrEllipse = new KToggleAction( i18n( "&Circle/Ellipse" ),
-						    KPBarIcon("circle"), Key_F8,
+						    "circle", Key_F8,
 						    this, SLOT( toolsCircleOrEllipse() ),
 						    actionCollection(), "tools_circle" );
     ( (KToggleAction*)actionToolsCircleOrEllipse )->setExclusiveGroup( "tools" );
 
-    actionToolsPie = new KToggleAction( i18n( "&Pie/Arc/Chord" ), KPBarIcon("pie"), Key_F9,
+    actionToolsPie = new KToggleAction( i18n( "&Pie/Arc/Chord" ), "pie", Key_F9,
 					this, SLOT( toolsPie() ),
 					actionCollection(), "tools_pie" );
     ( (KToggleAction*)actionToolsPie )->setExclusiveGroup( "tools" );
 
-    actionToolsText = new KToggleAction( i18n( "&Text" ), KPBarIcon("text"), Key_F10,
+    actionToolsText = new KToggleAction( i18n( "&Text" ), "text", Key_F10,
 					 this, SLOT( toolsText() ),
 					 actionCollection(), "tools_text" );
     ( (KToggleAction*)actionToolsText )->setExclusiveGroup( "tools" );
 
-    actionToolsAutoform = new KToggleAction( i18n( "&Autoform" ), KPBarIcon("autoform"),
+    actionToolsAutoform = new KToggleAction( i18n( "&Autoform" ), "autoform",
 					     Key_F11, this, SLOT( toolsAutoform() ),
 					     actionCollection(), "tools_autoform" );
     ( (KToggleAction*)actionToolsAutoform )->setExclusiveGroup( "tools" );
 
-    actionToolsDiagramm = new KToggleAction( i18n( "&Diagramm" ), KPBarIcon("chart"), Key_F12,
+    actionToolsDiagramm = new KToggleAction( i18n( "&Diagramm" ), "chart", Key_F12,
 					   this, SLOT( toolsDiagramm() ),
 					   actionCollection(), "tools_diagramm" );
     ( (KToggleAction*)actionToolsDiagramm )->setExclusiveGroup( "tools" );
 
-    actionToolsTable = new KToggleAction( i18n( "T&able"), KPBarIcon("table"), CTRL + Key_F1,
+    actionToolsTable = new KToggleAction( i18n( "T&able"), "table", CTRL + Key_F1,
 					   this, SLOT( toolsTable() ),
 					   actionCollection(), "tools_table" );
     ( (KToggleAction*)actionToolsTable )->setExclusiveGroup( "tools" );
@@ -1832,27 +1832,27 @@ void KPresenterView::setupActions()
 					actionCollection(), "text_alignright" );
     ( (KToggleAction*)actionTextAlignRight )->setExclusiveGroup( "align" );
 
-    actionTextTypeEnumList = new KAction( i18n( "&Enumerated List" ), KPBarIcon("enumList"), 0,
+    actionTextTypeEnumList = new KAction( i18n( "&Enumerated List" ), "enumList", 0,
 					  this, SLOT( textEnumList() ),
 					  actionCollection(), "text_enumList" );
 
-    actionTextTypeUnsortList = new KAction( i18n( "&Unsorted List" ), KPBarIcon("unsortedList"),
+    actionTextTypeUnsortList = new KAction( i18n( "&Unsorted List" ), "unsortedList",
 					    0, this, SLOT( textUnsortList() ),
 					    actionCollection(), "text_unsortedList" );
 
-    actionTextTypeNormalText = new KAction( i18n( "&Normal Text" ), KPBarIcon("normalText"), 0,
+    actionTextTypeNormalText = new KAction( i18n( "&Normal Text" ), "normalText", 0,
 					    this, SLOT( textNormalText() ),
 					    actionCollection(), "text_normalText" );
 
-    actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ), KPBarIcon("depth+"),
+    actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ), "depth+",
 				       CTRL + Key_Plus, this, SLOT( textDepthPlus() ),
 				       actionCollection(), "text_depthPlus" );
 
-    actionTextDepthMinus = new KAction( i18n( "&Decrease Depth" ), KPBarIcon("depth-"),
+    actionTextDepthMinus = new KAction( i18n( "&Decrease Depth" ), "depth-",
 					CTRL + Key_Minus, this, SLOT( textDepthMinus() ),
 					actionCollection(), "text_depthMinus" );
 
-    actionTextSpacing = new KAction( i18n( "&Spacing..." ), KPBarIcon("spacing"), 0,
+    actionTextSpacing = new KAction( i18n( "&Spacing..." ), "spacing", 0,
 				     this, SLOT( textSpacing() ),
 				     actionCollection(), "text_spacing" );
 
@@ -1864,65 +1864,65 @@ void KPresenterView::setupActions()
 					    this, SLOT( textObjectToContents() ),
 					    actionCollection(), "text_obj2cont" );
 
-    actionTextInsertPageNum = new KAction( i18n( "&Insert Page Number" ), KPBarIcon("pgnum"), 0,
+    actionTextInsertPageNum = new KAction( i18n( "&Insert Page Number" ), "pgnum", 0,
 					   this, SLOT( textInsertPageNum() ),
 					   actionCollection(), "text_inspgnum" );
 
     // ----------------- extra actions
 
-    actionExtraPenBrush = new KAction( i18n( "&Pen and Brush..." ), KPBarIcon("style"), 0,
+    actionExtraPenBrush = new KAction( i18n( "&Pen and Brush..." ), "style", 0,
 				       this, SLOT( extraPenBrush() ),
 				       actionCollection(), "extra_penbrush" );
 
     actionExtraConfigPie = new KAction( i18n( "Configure Pie/&Arc/Chord..." ),
-					KPBarIcon("edit_pie"), 0,
+					"edit_pie", 0,
 					this, SLOT( extraConfigPie() ),
 					actionCollection(), "extra_configpie" );
 
     actionExtraConfigRect = new KAction( i18n( "Configure &Rectangle..." ),
-					 KPBarIcon("rectangle2"), 0,
+					 "rectangle2", 0,
 					 this, SLOT( extraConfigRect() ),
 					 actionCollection(), "extra_configrect" );
 
-    actionExtraRaise = new KAction( i18n( "Ra&ise object(s)" ), KPBarIcon("raise"),
+    actionExtraRaise = new KAction( i18n( "Ra&ise object(s)" ), "raise",
 				    CTRL + Key_R, this, SLOT( extraRaise() ),
 				    actionCollection(), "extra_raise" );
 
-    actionExtraLower = new KAction( i18n( "&Lower object(s)" ), KPBarIcon("lower"), CTRL + Key_L,
+    actionExtraLower = new KAction( i18n( "&Lower object(s)" ), "lower", CTRL + Key_L,
 				    this, SLOT( extraLower() ),
 				    actionCollection(), "extra_lower" );
 
-    actionExtraRotate = new KAction( i18n( "R&otate object(s)..." ), KPBarIcon("rotate"), 0,
+    actionExtraRotate = new KAction( i18n( "R&otate object(s)..." ), "rotate", 0,
 				     this, SLOT( extraRotate() ),
 				     actionCollection(), "extra_rotate" );
 
-    actionExtraShadow = new KAction( i18n( "&Shadow object(s)..." ), KPBarIcon("shadow"), 0,
+    actionExtraShadow = new KAction( i18n( "&Shadow object(s)..." ), "shadow", 0,
 				     this, SLOT( extraShadow() ),
 				     actionCollection(), "extra_shadow" );
 
-    actionExtraAlignObjLeft = new KAction( i18n( "Align &Left" ), KPBarIcon("aoleft"), 0,
+    actionExtraAlignObjLeft = new KAction( i18n( "Align &Left" ), "aoleft", 0,
 					   this, SLOT( extraAlignObjLeft() ),
 					   actionCollection(), "extra_alignleft" );
 
     actionExtraAlignObjCenterH = new KAction( i18n( "Align Center (&horizontally)" ),
-					      KPBarIcon("aocenterh"), 0,
+					      "aocenterh", 0,
 					      this, SLOT( extraAlignObjCenterH() ),
 					      actionCollection(), "extra_aligncenterh" );
 
-    actionExtraAlignObjRight = new KAction( i18n( "Align &Right" ), KPBarIcon("aoright"), 0,
+    actionExtraAlignObjRight = new KAction( i18n( "Align &Right" ), "aoright", 0,
 					    this, SLOT( extraAlignObjRight() ),
 					    actionCollection(), "extra_alignright" );
 
-    actionExtraAlignObjTop = new KAction( i18n( "Align &Top" ), KPBarIcon("aotop"), 0,
+    actionExtraAlignObjTop = new KAction( i18n( "Align &Top" ), "aotop", 0,
 					  this, SLOT( extraAlignObjTop() ),
 					  actionCollection(), "extra_aligntop" );
 
     actionExtraAlignObjCenterV = new KAction( i18n( "Align Center (&vertically)" ),
-					      KPBarIcon("aocenterv"), 0,
+					      "aocenterv", 0,
 					      this, SLOT( extraAlignObjCenterV() ),
 					      actionCollection(), "extra_aligncenterv" );
 
-    actionExtraAlignObjBottom = new KAction( i18n( "Align &Bottom" ), KPBarIcon("aobottom"), 0,
+    actionExtraAlignObjBottom = new KAction( i18n( "Align &Bottom" ), "aobottom", 0,
 					     this, SLOT( extraAlignObjBottom() ),
 					     actionCollection(), "extra_alignbottom" );
 
@@ -1939,7 +1939,7 @@ void KPresenterView::setupActions()
 				      actionCollection(), "extra_options" );
 
     actionExtraWebPres = new KAction( i18n( "Create &Web-Presentation (HTML SLideshow)..." ),
-				      KPBarIcon("webpres"), 0,
+				      "webpres", 0,
 				      this, SLOT( extraWebPres() ),
 				      actionCollection(), "extra_webpres" );
 
@@ -1947,24 +1947,24 @@ void KPresenterView::setupActions()
 					     this, SLOT( extraCreateTemplate() ),
 					     actionCollection(), "extra_template" );
 
-    actionExtraAlignObjs = new KAction( "", KPBarIcon("alignobjs"), 0,
+    actionExtraAlignObjs = new KAction( "", "alignobjs", 0,
 					this, SLOT( extraAlignObjs() ),
 					actionCollection(), "extra_alignobjs" );
 
-    actionExtraLineBegin = new KAction( "", KPBarIcon("line_begin"), 0,
+    actionExtraLineBegin = new KAction( "", "line_begin", 0,
 					this, SLOT( extraLineBegin() ),
 					actionCollection(), "extra_linebegin" );
 
-    actionExtraLineEnd = new KAction( "", KPBarIcon("line_end"), 0,
+    actionExtraLineEnd = new KAction( "", "line_end", 0,
 				      this, SLOT( extraLineEnd() ),
 				      actionCollection(), "extra_lineend" );
 
-    actionExtraGroup = new KAction( i18n( "&Group Objects" ), KPBarIcon("group"), 0,
+    actionExtraGroup = new KAction( i18n( "&Group Objects" ), "group", 0,
 				    this, SLOT( extraGroup() ),
 				    actionCollection(), "extra_group" );
 
     actionExtraGroup = new KAction( i18n( "&Ungroup Objects" ),
-				    KPBarIcon("ungroup"), 0,
+				    "ungroup", 0,
 				    this, SLOT( extraUnGroup() ),
 				    actionCollection(), "extra_ungroup" );
 
@@ -1981,32 +1981,32 @@ void KPresenterView::setupActions()
 					   actionCollection(), "screen_presstruct" );
 
     actionScreenAssignEffect = new KAction( i18n( "&Assign effect..." ),
-					   KPBarIcon("effect"), 0,
+					   "effect", 0,
 					   this, SLOT( screenAssignEffect() ),
 					   actionCollection(), "screen_assigneffect" );
 
     actionScreenStart = new KAction( i18n( "&Start" ),
-				     KPBarIcon("kpstart"), 0,
+				     "kpstart", 0,
 				     this, SLOT( screenStart() ),
 				     actionCollection(), "screen_start" );
 
     actionScreenFirst = new KAction( i18n( "&Go to Start" ),
-				     KPBarIcon("first"), Key_Home,
+				     "first", Key_Home,
 				     this, SLOT( screenFirst() ),
 				     actionCollection(), "screen_first" );
 
     actionScreenPrev = new KAction( i18n( "&Previous Step" ),
-				     KPBarIcon("kpprev"), Key_Prior,
+				     "kpprev", Key_Prior,
 				     this, SLOT( screenPrev() ),
 				     actionCollection(), "screen_prev" );
 
     actionScreenNext = new KAction( i18n( "&Next Step" ),
-				     KPBarIcon("kpnext"), Key_Next,
+				     "kpnext", Key_Next,
 				     this, SLOT( screenNext() ),
 				     actionCollection(), "screen_next" );
 
     actionScreenLast = new KAction( i18n( "Go to End" ),
-				     KPBarIcon("last"), Key_End,
+				     "last", Key_End,
 				     this, SLOT( screenLast() ),
 				     actionCollection(), "screen_last" );
 

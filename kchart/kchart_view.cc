@@ -30,49 +30,40 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     setXMLFile( "kchart.rc" );
 
     m_wizard = new KAction( i18n("Customize with &Wizard"),
-			    //"wizard", 0,
-			    0, 0,
+			    "wizard", 0,
 			    this, SLOT( wizard() ),
 			    actionCollection(), "wizard");
     m_edit = new KAction( i18n("&Edit Data"), "pencil", 0,
 			 this, SLOT( edit() ),
                          actionCollection(), "edit");
-    m_config = new KAction( i18n( "&Config" ),
-			    BarIcon("options", KChartFactory::global()),
-			    0, this, SLOT( config() ),
+    m_config = new KAction( i18n( "&Config" ), "options", 0,
+			    this, SLOT( config() ),
 			    actionCollection(), "config" );
     m_loadconfig = new KAction( i18n("&Load Config"),
-				//"loadconfig", 0,
-				0, 0,
-				this, SLOT( loadConfig() ),
+				"loadconfig", 0, this,
+				SLOT( loadConfig() ),
 				actionCollection(), "loadconfig");
     m_saveconfig = new KAction( i18n("&Save Config"),
-				//"saveconfig",	0,
-				0, 0,
-				this, SLOT( saveConfig() ),
+				"saveconfig",	0, this,
+				SLOT( saveConfig() ),
 				actionCollection(), "saveconfig");
     m_defaultconfig = new KAction( i18n("&Default Config"),
-				   //"defaultconfig", 0,
-				   0, 0,
-				   this, SLOT( defaultConfig() ),
+				   "defaultconfig", 0, this,
+				   SLOT( defaultConfig() ),
 				   actionCollection(), "defaultconfig");
 
-    m_chartpie = new KAction( i18n("&Pie"),
-			      BarIcon("cakes", KChartFactory::global()),
-			      0, this, SLOT( pieChart() ),
-			      actionCollection(), "piechart");
-    m_chartline = new KAction( i18n("&Line"),
-			       BarIcon("lines", KChartFactory::global()),
-			       0, this, SLOT( lineChart() ),
-			       actionCollection(), "linechart");
-    m_chartareas = new KAction( i18n("&Areas"),
-				BarIcon("areas", KChartFactory::global()),
-				0, this, SLOT( areasChart() ),
-				actionCollection(), "areaschart");
-    m_chartbars = new KAction( i18n("&Bars"),
-			       BarIcon("bars", KChartFactory::global()),
-			       0, this, SLOT( barsChart() ),
-			       actionCollection(), "barschart");
+    m_chartpie = new KAction( i18n("&Pie"), "cakes", 0, this,
+			      SLOT( pieChart() ), actionCollection(),
+			      "piechart");
+    m_chartline = new KAction( i18n("&Line"), "lines", 0, this,
+			       SLOT( lineChart() ), actionCollection(),
+			       "linechart");
+    m_chartareas = new KAction( i18n("&Areas"), "areas", 0, this,
+				SLOT( areasChart() ), actionCollection(),
+				"areaschart");
+    m_chartbars = new KAction( i18n("&Bars"), "bars", 0, this,
+			       SLOT( barsChart() ), actionCollection(),
+			       "barschart");
 
     // initialize the configuration
     //    loadConfig();
