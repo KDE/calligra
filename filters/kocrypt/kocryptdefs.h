@@ -29,7 +29,6 @@
 // The original version of the file format
 #define FID_FVER    0x00
 
-#define 
 // don't define an APPID 0
 #define APPID_KWORD         1
 #define APPID_KSPREAD       2

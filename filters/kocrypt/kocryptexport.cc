@@ -17,11 +17,15 @@
    Boston, MA 02111-1307, USA.
 */
 
-
+////////////////////////////////////////////////////////////////////////////
 // ATTENTION:  If you update the format or crypto algorithm, be sure to
 //             maintain backwards compatibility.
+////////////////////////////////////////////////////////////////////////////
+
+#include <config.h>
 
 #include <kocryptexport.h>
+#include <kocryptdefs.h>
 #include <kdebug.h>
 #include <qdom.h>
 
@@ -66,7 +70,7 @@ int blocksize = 64;  // bytes
     BlockCipher *cipher = new BlowFish;
     BlockCipher *cbc = new CipherBlockChain(cipher);
 
-    if (cbc->blockSize > 0) blocksize = cbc->blockSize();
+    if (cbc->blockSize() > 0) blocksize = cbc->blockSize();
 
     // create the output file, open the input file.
     outf.open(IO_WriteOnly);

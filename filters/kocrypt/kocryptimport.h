@@ -18,7 +18,7 @@
 */
 
 #ifndef KOCRYPTIMPORT_H
-#define KPCRYPTIMPORT_H
+#define KOCRYPTIMPORT_H
 
 #include <qstring.h>
 #include <qfile.h>
