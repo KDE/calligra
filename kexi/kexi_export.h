@@ -136,6 +136,14 @@
 # define KROSS_MAIN_EXPORT //for apps
 #endif
 
+#ifdef MAKE_KEXIFORMUTILS_LIB
+# define KEXIFORMUTILS_EXPORT KDE_EXPORT
+#elif defined(KDE_MAKE_LIB)
+# define KEXIFORMUTILS_EXPORT KDE_IMPORT
+#else
+# define KEXIFORMUTILS_EXPORT //for apps
+#endif
+
 /* additional default options */
 #ifndef KEXI_NO_CTXT_HELP
 # define KEXI_NO_CTXT_HELP

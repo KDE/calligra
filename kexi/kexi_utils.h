@@ -64,6 +64,8 @@ namespace Kexi
 	//! \return true if \a o has parent \a par.
 	inline bool hasParent(QObject* par, QObject* o)
 	{
+		if (!o || !par)
+			return false;
 		while (o && o!=par)
 			o = o->parent();
 		return o==par;
@@ -73,6 +75,8 @@ namespace Kexi
 	template<class type>
 	inline type* findParent(QObject* o, const char* className)
 	{
+		if (!o || !className || className[0]=='\0')
+			return 0;
 		while ( ((o=o->parent())) && !o->inherits(className) )
 			;
 		return static_cast<type*>(o);
@@ -83,6 +87,8 @@ namespace Kexi
 	template<class type>
 	type* findFirstChild(QObject *o, const char* className)
 	{
+		if (!o || !className || className[0]=='\0')
+			return 0;
 		QObjectList *l = o->queryList( className );
 		QObjectListIt it( *l );
 		return static_cast<type*>(it.current());
