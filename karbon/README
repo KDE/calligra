@@ -1,0 +1,7 @@
+You need ksvgs render-engine for karbon.
+1) Check out ksvg
+2) Compile the stuff in ksvg/impl/libs
+3) Change into karbon directory
+4) Do a ln -s ../ksvg/impl/libs/art libart_lgpl
+
+This will be fixed in the future.
