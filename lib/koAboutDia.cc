@@ -19,7 +19,7 @@
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-KoAboutDia::KoAboutDia(QWidget* parent=0,const char* name=0,KoApplication koapp=KDE)
+KoAboutDia::KoAboutDia(QWidget* parent=0,const char* name=0,KoApplication koapp=KDE,QString version)
   :QDialog(parent,name,true)
 {
   switch (koapp)
@@ -82,11 +82,12 @@ KoAboutDia::KoAboutDia(QWidget* parent=0,const char* name=0,KoApplication koapp=
   grid->addWidget(lLogo,0,0);
   
   lInfo = new QLabel(this);
-  lInfo->setText("(c) by " + author + " 1997 - 1998\n\n"
+  lInfo->setText("Version: " + version +"\n\n"
+		 "(c) by " + author + " 1997 - 1998\n\n"
 		 "E-Mail: " + email + "\n\n"
 		 "The KOffice is under GNU GPL");
   if (!add.isEmpty())
-    lInfo->setText(QString(lInfo->text()) + "\n\n\n" + add);
+    lInfo->setText(QString(lInfo->text()) + "\n\n" + add);
   lInfo->resize(lInfo->sizeHint());
   grid->addWidget(lInfo,0,1);
 
@@ -119,11 +120,11 @@ KoAboutDia::~KoAboutDia()
 }
 
 /*======================= about application ======================*/
-void KoAboutDia::about(KoApplication koapp)
+void KoAboutDia::about(KoApplication koapp,QString version=0)
 {
   if (koapp != KDE)
     {
-      KoAboutDia *dlg = new KoAboutDia(0,"About",koapp);
+      KoAboutDia *dlg = new KoAboutDia(0,"About",koapp,version);
       dlg->exec();
       delete dlg;
     }

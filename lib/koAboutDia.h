@@ -38,11 +38,11 @@ public:
   enum KoApplication {KPresenter,KSpread,KCharts,KImage,KAutoformEdit,KOffice,KDE};
 
   // constructor - destructor
-  KoAboutDia(QWidget* parent=0,const char* name=0,KoApplication koapp=KDE); 
+  KoAboutDia(QWidget* parent=0,const char* name=0,KoApplication koapp=KDE,QString version=0); 
   ~KoAboutDia();                                    
 
   // show about dialog
-  static void about(KoApplication koapp);
+  static void about(KoApplication koapp,QString version=0);
 
 protected:
   
