@@ -44,7 +44,7 @@ KoRuler::KoRuler(QWidget *_parent,QWidget *_canvas,Orientation _orientation,
   mposX = 0;
   mposY = 0;
   hasToDelete = false;
-  whileMovingBorderLeft = whileMovingBorderRight = false;
+  whileMovingBorderLeft = whileMovingBorderRight = whileMovingBorderTop = whileMovingBorderBottom = false;
 }
 
 /*================================================================*/
@@ -140,6 +140,12 @@ void KoRuler::drawHorizontal(QPainter *_painter)
   p.setPen(QPen(white));
   p.drawLine(pw - diffx,1,pw - diffx,height() - 1);
 
+  p.setPen(QPen(black));
+  p.drawLine(-diffx - 2,1,-diffx - 2,height() - 1);
+  p.drawLine(-diffx,1,-diffx,height() - 1);
+  p.setPen(QPen(white));
+  p.drawLine(-diffx - 1,1,-diffx - 1,height() - 1);
+
   if (action == A_NONE && showMPos)
     {
       p.setPen(QPen(black,1,SolidLine));
@@ -172,11 +178,18 @@ void KoRuler::drawVertical(QPainter *_painter)
 
   QRect r;
 
-  r.setTop(-diffy + static_cast<int>(layout.top) * static_cast<int>(100 * _MM_TO_POINT) / 100);
+  if (!whileMovingBorderTop)
+    r.setTop(-diffy + static_cast<int>(layout.top) * static_cast<int>(100 * _MM_TO_POINT) / 100);
+  else
+    r.setTop(oldMy);
   r.setLeft(0);
-  r.setBottom(-diffy + ph - static_cast<int>(layout.bottom) * 
-	      static_cast<int>(100 * _MM_TO_POINT) / 100);
+  if (!whileMovingBorderBottom)
+    r.setBottom(-diffy + ph - static_cast<int>(layout.bottom) * 
+		static_cast<int>(100 * _MM_TO_POINT) / 100);
+  else
+    r.setBottom(oldMy);
   r.setRight(width());
+
   p.drawRect(r);
 
   p.setPen(QPen(black,1,SolidLine));
@@ -201,6 +214,12 @@ void KoRuler::drawVertical(QPainter *_painter)
   p.setPen(QPen(white));
   p.drawLine(1,ph - diffy,width() - 1,ph - diffy);
 
+  p.setPen(QPen(black));
+  p.drawLine(1,-diffy - 2,width() - 1,-diffy - 2);
+  p.drawLine(1,-diffy,width() - 1,-diffy);
+  p.setPen(QPen(white));
+  p.drawLine(1,-diffy - 1,width() - 1,-diffy - 1);
+
   if (action == A_NONE && showMPos)
     {
       p.setPen(QPen(black,1,SolidLine));
@@ -215,8 +234,8 @@ void KoRuler::drawVertical(QPainter *_painter)
 /*================================================================*/
 void KoRuler::mousePressEvent(QMouseEvent *e)
 {
-  oldMx = e->x() - diffx;
-  oldMy = e->y() - diffy;
+  oldMx = e->x();
+  oldMy = e->y();
   mousePressed = true;
 
   if (action == A_BR_RIGHT || action == A_BR_LEFT)
@@ -226,12 +245,34 @@ void KoRuler::mousePressEvent(QMouseEvent *e)
       else
 	whileMovingBorderLeft = true;
 
-      QPainter p;
-      p.begin(canvas);
-      p.setRasterOp(NotROP);
-      p.setPen(QPen(black,1,SolidLine));
-      p.drawLine(oldMx,0,oldMx,canvas->height());
-      p.end();
+      if (canvas)
+	{
+	  QPainter p;
+	  p.begin(canvas);
+	  p.setRasterOp(NotROP);
+	  p.setPen(QPen(black,1,SolidLine));
+	  p.drawLine(oldMx,0,oldMx,canvas->height());
+	  p.end();
+	}
+
+      repaint(false);
+    }
+  else if (action == A_BR_TOP || action == A_BR_BOTTOM)
+    {
+      if (action == A_BR_TOP)
+	whileMovingBorderTop = true;
+      else
+	whileMovingBorderBottom = true;
+
+      if (canvas)
+	{
+	  QPainter p;
+	  p.begin(canvas);
+	  p.setRasterOp(NotROP);
+	  p.setPen(QPen(black,1,SolidLine));
+	  p.drawLine(0,oldMy,canvas->width(),oldMy);
+	  p.end();
+	}
 
       repaint(false);
     }
@@ -247,12 +288,33 @@ void KoRuler::mouseReleaseEvent(QMouseEvent *e)
       whileMovingBorderRight = false;
       whileMovingBorderLeft = false;
 
-      QPainter p;
-      p.begin(canvas);
-      p.setRasterOp(NotROP);
-      p.setPen(QPen(black,1,SolidLine));
-      p.drawLine(oldMx,0,oldMx,canvas->height());
-      p.end();
+      if (canvas)
+	{
+	  QPainter p;
+	  p.begin(canvas);
+	  p.setRasterOp(NotROP);
+	  p.setPen(QPen(black,1,SolidLine));
+	  p.drawLine(oldMx,0,oldMx,canvas->height());
+	  p.end();
+	}
+
+      repaint(false);
+      emit newPageLayout(layout);
+    }
+  else if (action == A_BR_TOP || action == A_BR_BOTTOM)
+    {
+      whileMovingBorderTop = false;
+      whileMovingBorderBottom = false;
+
+      if (canvas)
+	{
+	  QPainter p;
+	  p.begin(canvas);
+	  p.setRasterOp(NotROP);
+	  p.setPen(QPen(black,1,SolidLine));
+	  p.drawLine(0,oldMy,canvas->width(),oldMy);
+	  p.end();
+	}
 
       repaint(false);
       emit newPageLayout(layout);
@@ -266,14 +328,19 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 
   int wid = static_cast<int>(layout.width * 100) / 100;
   int pw = wid * static_cast<int>(_MM_TO_POINT * 100) / 100;
+  int hei = static_cast<int>(layout.height * 100) / 100;
+  int ph = hei * static_cast<int>(_MM_TO_POINT * 100) / 100;
   int left = static_cast<int>(layout.left * _MM_TO_POINT * 100) / 100;
   left -= diffx;
+  int top = static_cast<int>(layout.top * _MM_TO_POINT * 100) / 100;
+  top -= diffy;
   int right = static_cast<int>(layout.right * _MM_TO_POINT * 100) / 100;
-  right -= diffx;
-  right = pw - right;
+  right = pw - right - diffx;
+  int bottom = static_cast<int>(layout.bottom * _MM_TO_POINT * 100) / 100;
+  bottom = ph - bottom - diffy;
 
-  int mx = e->x() - diffx;
-  int my = e->y() - diffy;
+  int mx = e->x();
+  int my = e->y();
 
   switch (orientation)
     {
@@ -283,12 +350,12 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 	  {
 	    setCursor(ArrowCursor);
 	    action = A_NONE;
-	    if (mx > left - 5 + diffx && mx < left + 5 + diffx)
+	    if (mx > left - 5 && mx < left + 5)
 	      {
 		setCursor(sizeHorCursor);
 		action = A_BR_LEFT;
 	      }
-	    else if (mx > right - 5 + diffx && mx < right + 5 + diffx)
+	    else if (mx > right - 5 && mx < right + 5)
 	      {
 		setCursor(sizeHorCursor);
 		action = A_BR_RIGHT;
@@ -309,9 +376,9 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      p.drawLine(oldMx,0,oldMx,canvas->height());
 		      p.drawLine(mx,0,mx,canvas->height());
 		      p.end();
-		      layout.left = (static_cast<float>(mx + 1) * _POINT_TO_MM * 100) / 100;
-		      oldMx = e->x() - diffx;
-		      oldMy = e->y() - diffy;
+		      layout.left = (static_cast<float>(mx + 1 + diffx) * _POINT_TO_MM * 100) / 100;
+		      oldMx = e->x();
+		      oldMy = e->y();
 		      repaint(false);
 		    }
 		} break;
@@ -326,24 +393,79 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      p.drawLine(oldMx,0,oldMx,canvas->height());
 		      p.drawLine(mx,0,mx,canvas->height());
 		      p.end();
-		      layout.right = (static_cast<float>(pw - mx - 1) * _POINT_TO_MM * 100) / 100;
-		      oldMx = e->x() - diffx;
-		      oldMy = e->y() - diffy;
+		      layout.right = (static_cast<float>(pw - (mx + 1 + diffx)) * _POINT_TO_MM * 100) / 100;
+		      oldMx = e->x();
+		      oldMy = e->y();
 		      repaint(false);
 		    }
 		} break;
 	      default: break;
 	      }
 	  }
-
       } break;
     case VERTICAL:
       {
+	if (!mousePressed)
+	  {
+	    setCursor(ArrowCursor);
+	    action = A_NONE;
+	    if (my > top - 5 && my < top + 5)
+	      {
+		setCursor(sizeVerCursor);
+		action = A_BR_TOP;
+	      }
+	    else if (my > bottom - 5 && my < bottom + 5)
+	      {
+		setCursor(sizeVerCursor);
+		action = A_BR_BOTTOM;
+	      }
+	  }
+	else
+	  {
+	    switch (action)
+	      {
+	      case A_BR_TOP:
+		{
+		  if (canvas)
+		    {
+		      QPainter p;
+		      p.begin(canvas);
+		      p.setRasterOp(NotROP);
+		      p.setPen(QPen(black,1,SolidLine));
+		      p.drawLine(0,oldMy,canvas->width(),oldMy);
+		      p.drawLine(0,my,canvas->width(),my);
+		      p.end();
+		      layout.top = (static_cast<float>(my + 1 + diffy) * _POINT_TO_MM * 100) / 100;
+		      oldMx = e->x();
+		      oldMy = e->y();
+		      repaint(false);
+		    }
+		} break;
+	      case A_BR_BOTTOM:
+		{
+		  if (canvas)
+		    {
+		      QPainter p;
+		      p.begin(canvas);
+		      p.setRasterOp(NotROP);
+		      p.setPen(QPen(black,1,SolidLine));
+		      p.drawLine(0,oldMy,canvas->width(),oldMy);
+		      p.drawLine(0,my,canvas->width(),my);
+		      p.end();
+		      layout.bottom = (static_cast<float>(ph - (my + 1 + diffy)) * _POINT_TO_MM * 100) / 100;
+		      oldMx = e->x();
+		      oldMy = e->y();
+		      repaint(false);
+		    }
+		} break;
+	      default: break;
+	      }
+	  }
       } break;
     }
 
-  oldMx = e->x() - diffx;
-  oldMy = e->y() - diffy;
+  oldMx = e->x();
+  oldMy = e->y();
 }
 
 /*================================================================*/

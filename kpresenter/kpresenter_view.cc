@@ -532,6 +532,7 @@ void KPresenterView_impl::extraLayout()
     {
       m_pKPresenterDoc->setPageLayout(pgLayout,xOffset,yOffset);
       h_ruler->setPageLayout(pgLayout);
+      v_ruler->setPageLayout(pgLayout);
     }
 
   setRanges();
@@ -1099,6 +1100,8 @@ void KPresenterView_impl::extraAlignObjBottomidl()
 void KPresenterView_impl::newPageLayout(KoPageLayout _layout)
 {
   m_pKPresenterDoc->setPageLayout(_layout,xOffset,yOffset);
+  h_ruler->setPageLayout(_layout);
+  v_ruler->setPageLayout(_layout);
   setRanges();
 }
 
@@ -3253,6 +3256,8 @@ void KPresenterView_impl::setupRulers()
 
   QObject::connect(h_ruler,SIGNAL(newPageLayout(KoPageLayout)),this,SLOT(newPageLayout(KoPageLayout)));
   QObject::connect(h_ruler,SIGNAL(openPageLayoutDia()),this,SLOT(openPageLayoutDia()));
+  QObject::connect(v_ruler,SIGNAL(newPageLayout(KoPageLayout)),this,SLOT(newPageLayout(KoPageLayout)));
+  QObject::connect(v_ruler,SIGNAL(openPageLayoutDia()),this,SLOT(openPageLayoutDia()));
 }
 
 /*===================== set ranges of scrollbars ===============*/

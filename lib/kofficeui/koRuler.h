@@ -66,7 +66,7 @@ signals:
   void openPageLayoutDia();
 
 protected:
-  enum Action {A_NONE,A_BR_LEFT,A_BR_RIGHT};
+  enum Action {A_NONE,A_BR_LEFT,A_BR_RIGHT,A_BR_TOP,A_BR_BOTTOM};
 
   void drawContents(QPainter *_painter)
     { if (orientation == HORIZONTAL) drawHorizontal(_painter); else drawVertical(_painter); }
@@ -95,7 +95,7 @@ protected:
   Action action;
   bool hasToDelete;
   QPixmap buffer;
-  bool whileMovingBorderLeft,whileMovingBorderRight;
+  bool whileMovingBorderLeft,whileMovingBorderRight,whileMovingBorderTop,whileMovingBorderBottom;
 
 };
 
