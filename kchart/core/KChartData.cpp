@@ -3,6 +3,7 @@
 #include "KChartData.h"
 #include "KChartData.moc"
 
+#include <values.h>
 #include <math.h> // MAXDOUBLE
 
 #define INITIALDATASETSIZE 20
