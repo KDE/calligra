@@ -1962,7 +1962,8 @@ bool KSpreadCell::calc( bool _makedepend )
 	    if ( !cell->calc( _makedepend ) )
 	    {
 	      m_strFormularOut = "####";
-	      m_bValue = false;
+              m_bError=true;
+              m_bValue = false;
 	      m_bBool = false;
               m_bDate=false;
               m_bTime=false;
@@ -1972,7 +1973,7 @@ bool KSpreadCell::calc( bool _makedepend )
 		  SelectPrivate *s = (SelectPrivate*)m_pPrivate;
 		  s->parse( m_strFormularOut );
 	      }
-	      // m_bLayoutDirtyFlag = true;
+	      m_bLayoutDirtyFlag = true;
 	      DO_UPDATE;
 	      return false;
 	    }
@@ -1992,7 +1993,7 @@ bool KSpreadCell::calc( bool _makedepend )
           m_bDate = false;
           m_bTime=false;
 	  m_bProgressFlag = false;
-	  // m_bLayoutDirtyFlag = true;
+	  m_bLayoutDirtyFlag = true;
 	  if ( m_style == ST_Select )
           {
 	      SelectPrivate *s = (SelectPrivate*)m_pPrivate;
@@ -2044,6 +2045,7 @@ bool KSpreadCell::calc( bool _makedepend )
   else if ( context.value()->type() == KSValue::DoubleType )
   {
     m_dValue = context.value()->doubleValue();
+    m_bError =false;
     m_bValue = true;
     m_bBool = false;
     m_bDate =false;
@@ -2058,6 +2060,7 @@ bool KSpreadCell::calc( bool _makedepend )
   else if ( context.value()->type() == KSValue::IntType )
   {
     m_dValue = (double)context.value()->intValue();
+    m_bError =false;
     m_bValue = true;
     m_bBool = false;
     m_bDate = false;
@@ -2071,6 +2074,7 @@ bool KSpreadCell::calc( bool _makedepend )
   }
   else if ( context.value()->type() == KSValue::BoolType )
   {
+    m_bError =false;
     m_bValue = false;
     m_bBool = true;
     m_bDate =false;
@@ -2085,6 +2089,7 @@ bool KSpreadCell::calc( bool _makedepend )
   }
   else if ( context.value()->type() == KSValue::TimeType )
   {
+    m_bError =false;
     m_bValue = false;
     m_bBool = false;
     m_bDate =false;
@@ -2104,6 +2109,7 @@ bool KSpreadCell::calc( bool _makedepend )
   }
   else if ( context.value()->type() == KSValue::DateType)
   {
+    m_bError =false;
     m_bValue = false;
     m_bBool = false;
     m_bDate =true;
@@ -2122,6 +2128,7 @@ bool KSpreadCell::calc( bool _makedepend )
   }
   else
   {
+    m_bError =false;
     m_bValue = false;
     m_bBool = false;
     m_bDate=false;
@@ -3311,7 +3318,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
   else if ( !m_strText.isEmpty() && m_strText[0] == '!' )
   {
     m_pQML = new QSimpleRichText( m_strText.mid(1),  QApplication::font() );//, m_pTable->widget() );
-
+    m_bError =false;
     m_bValue = false;
     m_bBool = false;
     m_bDate=false;
@@ -3326,7 +3333,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
   {
     m_pVisualFormula = new KFormula();
     m_pVisualFormula->parse( m_strText.mid( 1 ) );
-
+    m_bError =false;
     m_bValue = false;
     m_bBool = false;
     m_bDate = false;
@@ -3387,7 +3394,7 @@ void KSpreadCell::setValue( double _d )
 	clearFormular();
 
     m_lstDepends.clear();
-
+    m_bError =false;
     m_bValue = true;
     m_bBool = false;
     m_bDate =false;
@@ -3468,6 +3475,7 @@ bool KSpreadCell::updateChart()
 
 void KSpreadCell::checkValue()
 {
+    m_bError =false;
     m_bValue = false;
     m_dValue = 0;
     m_bBool = false;
