@@ -1,11 +1,10 @@
 
 Kexi README
 -----------
+
 2004-01-18
 
-Currently Kexi does not offer all create/open/save actions.
-To play with the app (considering you have already kexi compiled and installed),
-you need to:
+How to test database creation and opening from command line:
 
 1. Create test program:
 
