@@ -36,13 +36,15 @@ protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
     virtual void openParagraph(const QString& strTag,
         const LayoutData& layout);
-    virtual void closeParagraph(const QString& strTag, 
+    virtual void closeParagraph(const QString& strTag,
         const LayoutData& layout);
     virtual void openSpan(const FormatData& formatOrigin, const FormatData& format);
     virtual void closeSpan(const FormatData& formatOrigin, const FormatData& format);
 private:
-    void openFormatData(const FormatData& format);
-    void closeFormatData(const FormatData& format);
+    void openFormatData(const FormatData& formatOrigin,
+        const FormatData& format, const bool force, const bool allowBold);
+    void closeFormatData(const FormatData& formatOrigin,
+        const FormatData& format, const bool force, const bool allowBold);
 };
 
 #endif /* EXPORTDOCSTRUCT_H */

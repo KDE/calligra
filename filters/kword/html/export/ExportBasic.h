@@ -43,8 +43,10 @@ protected:
     virtual bool doOpenBody(void); // HTML's <body>
     virtual void writeDocType(void);
 private:
-    void openFormatData(const FormatData& format, const bool allowBold);
-    void closeFormatData(const FormatData& format, const bool allowBold);
+    void openFormatData(const FormatData& formatOrigin,
+        const FormatData& format, const bool force, const bool allowBold);
+    void closeFormatData(const FormatData& formatOrigin,
+        const FormatData& format, const bool force, const bool allowBold);
     QString textFormatToCss(const TextFormatting& formatData) const;
 };
 

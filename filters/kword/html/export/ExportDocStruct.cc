@@ -64,81 +64,105 @@ QString HtmlDocStructWorker::getStartOfListOpeningTag(const CounterData::Style t
     return strResult;
 }
 
-void HtmlDocStructWorker::openFormatData(const FormatData& format)
+void HtmlDocStructWorker::openFormatData(const FormatData& formatOrigin,
+    const FormatData& format, const bool force, const bool allowBold)
 {
-    // TODO/FIXME: find another way to find fixed fonts 
+    // TODO/FIXME: find another way to find fixed fonts
     // TODO/FIXME: (leaves out "Typewriter", "Monospace", "Mono")
     if (format.text.fontName.contains("ourier"))
     {
         *m_streamOut << "<tt>"; // teletype
     }
-    if (format.text.italic)
+
+    if (force || (formatOrigin.text.italic!=format.text.italic))
     {
-        *m_streamOut << "<i>";
-    }
-    if (format.text.weight >= 75)
-    {
-        *m_streamOut << "<b>";
+        if (format.text.italic)
+        {
+            *m_streamOut << "<i>";
+        }
     }
 
-    if (1==format.text.verticalAlignment)
+    if (force || ((formatOrigin.text.weight>=75)!=(format.text.weight>=75)))
     {
-        *m_streamOut << "<sub>"; //Subscript
+        if (allowBold && (format.text.weight >= 75))
+        {
+            *m_streamOut << "<b>";
+        }
     }
-    else if (2==format.text.verticalAlignment)
+
+    if (force || (formatOrigin.text.verticalAlignment!=format.text.verticalAlignment))
     {
-        *m_streamOut << "<sup>"; //Superscript
+        if (1==format.text.verticalAlignment)
+        {
+            *m_streamOut << "<sub>"; //Subscript
+        }
+        else if (2==format.text.verticalAlignment)
+        {
+            *m_streamOut << "<sup>"; //Superscript
+        }
     }
 
     // Strict (X)HTML gives use also <big> and <small> to play with.
 }
 
-void HtmlDocStructWorker::closeFormatData(const FormatData& format)
+void HtmlDocStructWorker::closeFormatData(const FormatData& formatOrigin,
+    const FormatData& format, const bool force, const bool allowBold)
 {
-    if (2==format.text.verticalAlignment)
+    if (force || (formatOrigin.text.verticalAlignment!=format.text.verticalAlignment))
     {
-        *m_streamOut << "</sup>"; //Superscript
-    }
-    else if (1==format.text.verticalAlignment)
-    {
-        *m_streamOut << "</sub>"; //Subscript
+        if (2==format.text.verticalAlignment)
+        {
+            *m_streamOut << "</sup>"; //Superscript
+        }
+        else if (1==format.text.verticalAlignment)
+        {
+            *m_streamOut << "</sub>"; //Subscript
+        }
     }
 
-    if (format.text.weight >= 75)
+    if (force || ((formatOrigin.text.weight>=75)!=(format.text.weight>=75)))
     {
-        *m_streamOut << "</b>";
+        if (allowBold && (format.text.weight >= 75))
+        {
+            *m_streamOut << "</b>";
+        }
     }
-    if (format.text.italic)
+
+    if (force || (formatOrigin.text.italic!=format.text.italic))
     {
-        *m_streamOut << "</i>";
+        if (format.text.italic)
+        {
+            *m_streamOut << "</i>";
+        }
     }
+
     if (format.text.fontName.contains("ourier")) // Courier?
     {
         *m_streamOut << "</tt>"; // teletype
     }
 }
 
-void HtmlDocStructWorker::openParagraph(const QString& strTag, 
+void HtmlDocStructWorker::openParagraph(const QString& strTag,
     const LayoutData& layout)
 {
     *m_streamOut << '<' << strTag << ">";
-    openFormatData(layout.formatData);
+    openFormatData(layout.formatData,layout.formatData,true,(strTag[0]!='h'));
 }
 
 void HtmlDocStructWorker::closeParagraph(const QString& strTag,
     const LayoutData& layout)
 {
-    closeFormatData(layout.formatData);
+    closeFormatData(layout.formatData,layout.formatData,true,(strTag[0]!='h'));
     *m_streamOut << "</" << strTag << ">\n";
 }
 
-void HtmlDocStructWorker::openSpan(const FormatData&, const FormatData& format)
+void HtmlDocStructWorker::openSpan(const FormatData& formatOrigin, const FormatData& format)
 {
-    openFormatData(format);
+    openFormatData(formatOrigin,format,false,true);
 }
 
-void HtmlDocStructWorker::closeSpan(const FormatData&, const FormatData& format)
+void HtmlDocStructWorker::closeSpan(const FormatData& formatOrigin, const FormatData& format)
 {
-    closeFormatData(format);
+    closeFormatData(formatOrigin,format,false,true);
 }
 

@@ -159,65 +159,164 @@ void HtmlBasicWorker::writeDocType(void)
     }
 }
 
-void HtmlBasicWorker::openFormatData(const FormatData& format, const bool allowBold)
+void HtmlBasicWorker::openFormatData(const FormatData& formatOrigin,
+    const FormatData& format, const bool force,const bool allowBold)
 {
-    // TODO: <font>
+    if ((   // Do we need to write a <font> element?
+            force
+            || (formatOrigin.text.fontName!=format.text.fontName)
+            || (formatOrigin.text.fontSize!=format.text.fontSize)
+            || (formatOrigin.text.fgColor!=format.text.fgColor)
+        )
+        &&
+        (   // Can we write a <font> element?
+            (!format.text.fontName.isEmpty())
+            || (format.text.fontSize>0)
+            || (format.text.fgColor.isValid())
+        ))
+     {
+        *m_streamOut << "<font";
+        if (!format.text.fontName.isEmpty())
+        {
+            *m_streamOut << " face=\"";
+            *m_streamOut << format.text.fontName; // TODO: add alternative font names
+            *m_streamOut << "\"";
+        }
+        // We use absolute font sizes, as relative ones give too many problems.
+        int size=format.text.fontSize;
+        // 12pt is considered the normal size
+        if (size>0)
+        {
+            size /= 4;
+            if (size<1) size=1;
+            if (size>7) size=7;
+            *m_streamOut << " size=\""; // in XML numbers must be quoted!
+            *m_streamOut << QString::number(size,10);
+            *m_streamOut << "\"";
+        }
 
-    if (allowBold && (format.text.weight>=75))
+        if (format.text.fgColor.isValid())
+        {
+            // Give colour
+            *m_streamOut << " color=\"";
+            *m_streamOut << format.text.fgColor.name();
+            *m_streamOut << "\"";
+        }
+
+        *m_streamOut << ">";
+     }
+
+    if (force || ((formatOrigin.text.weight>=75)!=(format.text.weight>=75)))
     {
-        *m_streamOut << "<b>";
+        if (allowBold && (format.text.weight>=75))
+        {
+            *m_streamOut << "<b>";
+        }
     }
-    if (format.text.italic)
+
+    if (force || (formatOrigin.text.italic!=format.text.italic))
     {
-        *m_streamOut << "<i>";
+        if (format.text.italic)
+        {
+            *m_streamOut << "<i>";
+        }
     }
-    if (format.text.underline)
+
+    if (force || (formatOrigin.text.underline!=format.text.underline))
     {
-        *m_streamOut << "<u>";
+        if (format.text.underline)
+        {
+            *m_streamOut << "<u>";
+        }
     }
-    if (format.text.strikeout)
+
+    if (force || (formatOrigin.text.strikeout!=format.text.strikeout))
     {
-        *m_streamOut << "<s>";
+        if (format.text.strikeout)
+        {
+            *m_streamOut << "<s>";
+        }
     }
-    if (1==format.text.verticalAlignment)
+
+    if (force || (formatOrigin.text.verticalAlignment!=format.text.verticalAlignment))
     {
-        *m_streamOut << "<sub>"; //Subscript
-    }
-    else if (2==format.text.verticalAlignment)
-    {
-        *m_streamOut << "<sup>"; //Superscript
+        if (1==format.text.verticalAlignment)
+        {
+            *m_streamOut << "<sub>"; //Subscript
+        }
+        else if (2==format.text.verticalAlignment)
+        {
+            *m_streamOut << "<sup>"; //Superscript
+        }
     }
 }
 
-void HtmlBasicWorker::closeFormatData(const FormatData& format, const bool allowBold)
+void HtmlBasicWorker::closeFormatData(const FormatData& formatOrigin,
+    const FormatData& format, const bool force,const bool allowBold)
 {
-    if (2==format.text.verticalAlignment)
+    if (force || (formatOrigin.text.verticalAlignment!=format.text.verticalAlignment))
     {
-        *m_streamOut << "</sup>"; //Superscript
+        if (2==format.text.verticalAlignment)
+        {
+            *m_streamOut << "</sup>"; //Superscript
+        }
+        else if (1==format.text.verticalAlignment)
+        {
+            *m_streamOut << "</sub>"; //Subscript
+        }
     }
-    else if (1==format.text.verticalAlignment)
+
+    if (force || (formatOrigin.text.strikeout!=format.text.strikeout))
     {
-        *m_streamOut << "</sub>"; //Subscript
+        if (format.text.strikeout)
+        {
+            *m_streamOut << "</s>";
+        }
     }
-    if (format.text.strikeout)
+
+    if (force || (formatOrigin.text.underline!=format.text.underline))
     {
-        *m_streamOut << "</s>";
+        if (format.text.underline)
+        {
+            *m_streamOut << "</u>";
+        }
     }
-    if (format.text.underline)
+
+    if (force || (formatOrigin.text.italic!=format.text.italic))
     {
-        *m_streamOut << "</u>";
+        if (format.text.italic)
+        {
+            *m_streamOut << "</i>";
+        }
     }
-    if (format.text.italic)
+
+    if (force || ((formatOrigin.text.weight>=75)!=(format.text.weight>=75)))
     {
-        *m_streamOut << "</i>";
+        if (allowBold && (format.text.weight >= 75))
+        {
+            *m_streamOut << "</b>";
+        }
     }
-    if (allowBold && (format.text.weight >= 75))
+
+    if ((   // Do we need to write a <font> element?
+            force
+            || (formatOrigin.text.fontName!=format.text.fontName)
+            || (formatOrigin.text.fontSize!=format.text.fontSize)
+            || (formatOrigin.text.fgColor!=format.text.fgColor)
+        )
+        &&
+        (   // Can we write a <font> element?
+            (!format.text.fontName.isEmpty())
+            || (format.text.fontSize>0)
+            || (format.text.fgColor.isValid())
+        ))
     {
-        *m_streamOut << "</b>";
+        *m_streamOut << "</font>";
     }
+
 }
 
-void HtmlBasicWorker::openParagraph(const QString& strTag, 
+void HtmlBasicWorker::openParagraph(const QString& strTag,
     const LayoutData& layout)
 {
     *m_streamOut << '<' << strTag;
@@ -234,25 +333,27 @@ void HtmlBasicWorker::openParagraph(const QString& strTag,
 
     *m_streamOut << ">";
 
-    openFormatData(layout.formatData,(strTag[0]!='h')); // Allow bold only if tag is not a heading!
+    // Allow bold only if tag is not a heading!
+    openFormatData(layout.formatData,layout.formatData,true,(strTag[0]!='h'));
 }
 
 void HtmlBasicWorker::closeParagraph(const QString& strTag,
     const LayoutData& layout)
 {
-    closeFormatData(layout.formatData,(strTag[0]!='h')); // Allow bold only if tag is not a heading!
+     // Allow bold only if tag is not a heading!
+    closeFormatData(layout.formatData,layout.formatData,true,(strTag[0]!='h'));
 
     *m_streamOut << "</" << strTag << ">\n";
 }
 
-void HtmlBasicWorker::openSpan(const FormatData&, const FormatData& format)
+void HtmlBasicWorker::openSpan(const FormatData& formatOrigin, const FormatData& format)
 {
-    openFormatData(format, true);
+    openFormatData(formatOrigin,format,false,true);
 }
 
-void HtmlBasicWorker::closeSpan(const FormatData&, const FormatData& format)
+void HtmlBasicWorker::closeSpan(const FormatData& formatOrigin, const FormatData& format)
 {
-    closeFormatData(format, true);
+    closeFormatData(formatOrigin,format,false,true);
 }
 
 bool HtmlBasicWorker::doOpenBody(void)
