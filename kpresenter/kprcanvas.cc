@@ -3680,7 +3680,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     //m_view->setDiffY( -static_cast<int>( MM_TO_POINT( top_margin ) ) );
 
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
-                              printer->toPage() - printer->fromPage() + 2, this );
+                              printer->pageList().count() + 2, this );
 
     int j = 0;
     progress.setProgress( 0 );
@@ -3735,7 +3735,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     //m_view->setDiffX( _xOffset );
     //m_view->setDiffY( _yOffset );
 
-    progress.setProgress( printer->toPage() - printer->fromPage() + 2 );
+    progress.setProgress( printer->pageList().count() + 2 );
 
     _presFakt = 1.0;
     fillBlack = true;
