@@ -30,7 +30,6 @@ KWTableFrameSet::KWTableFrameSet( KWDocument *doc ) :
     KWFrameSet( doc )
  //: KWCharAnchor(), showHeaderOnAllPages( true ), hasTmpHeaders( false ), active( true )
 {
-    m_doc = doc;
     m_rows = 0;
     m_cols = 0;
     m_name = QString::null;
@@ -158,8 +157,8 @@ void KWTableFrameSet::init( unsigned int x, unsigned int y, unsigned int width, 
                            KWTblCellSize widthScaling, KWTblCellSize heightScaling )
 {
     if ( widthScaling == TblAuto ) {
-        x = (int)doc->ptLeftBorder();
-        width = (int)( doc->ptPaperWidth() - ( doc->ptLeftBorder() + doc->ptRightBorder() ) );
+        x = (int)m_doc->ptLeftBorder();
+        width = (int)( m_doc->ptPaperWidth() - ( m_doc->ptLeftBorder() + m_doc->ptRightBorder() ) );
     }
 
     double baseWidth = (width - (m_cols-1) * tableCellSpacing) / m_cols;
@@ -170,7 +169,7 @@ void KWTableFrameSet::init( unsigned int x, unsigned int y, unsigned int width, 
     // I will create 1 mm margins, this will recalculate the actual size needed for the frame.
     KWUnit oneMm;
     oneMm.setMM( 1 );
-    double minBaseHeight = 22;// doc->getDefaultParagLayout()->getFormat().ptFontSize() + oneMm.pt() * 2; // TODO
+    double minBaseHeight = 22;// m_doc->getDefaultParagLayout()->getFormat().ptFontSize() + oneMm.pt() * 2; // TODO
     if(baseHeight < minBaseHeight + oneMm.pt() * 2)
         baseHeight =minBaseHeight + oneMm.pt() * 2;
     if(baseWidth < minFrameWidth + oneMm.pt() * 2)
@@ -464,8 +463,8 @@ void KWTableFrameSet::recalcRows()
             if(cell->m_row < fromRow)
                 fromRow = cell->m_row;
             if ( fs->getFrame( 0 )->bottom() >  // fits on page?
-                  static_cast<int>((doingPage+1) * doc->ptPaperHeight() - doc->ptBottomBorder())) { // no
-                y = (unsigned)( (doingPage+1) * doc->ptPaperHeight() + doc->ptTopBorder() );
+                  static_cast<int>((doingPage+1) * m_doc->ptPaperHeight() - m_doc->ptBottomBorder())) { // no
+                y = (unsigned)( (doingPage+1) * m_doc->ptPaperHeight() + m_doc->ptTopBorder() );
                 _addRow = true;
             }
         }
@@ -473,8 +472,8 @@ void KWTableFrameSet::recalcRows()
             j=fromRow;
             doingPage++;
 
-            if ( y >=  doc->ptPaperHeight() * doc->getPages() )
-                doc->appendPage( /*doc->getPages() - 1*/ );
+            if ( y >=  m_doc->ptPaperHeight() * m_doc->getPages() )
+                m_doc->appendPage( /*m_doc->getPages() - 1*/ );
 
             if ( m_showHeaderOnAllPages ) {
                 m_hasTmpHeaders = true;
@@ -545,7 +544,7 @@ void KWTableFrameSet::moveBy( int dx, int dy )
         m_cells.at( i )->setVisible(true);
     }
     preRender();
-    doc->updateAllFrames();
+    m_doc->updateAllFrames();
 
     recalcCols();
     recalcRows();
@@ -559,7 +558,7 @@ void KWTableFrameSet::drawAllRects( QPainter &p, int xOffset, int yOffset )
     for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
         frame = m_cells.at( i )->getFrame( 0 );
         QRect tmpRect(frame->x() - xOffset,  frame->y() - yOffset, frame->width(), frame->height());
-        p.drawRect( doc->zoomRect(tmpRect) );
+        p.drawRect( m_doc->zoomRect(tmpRect) );
     }
 }
 
@@ -702,7 +701,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
         int tmpWidth= colStart[i+1] - colStart[i]-tableCellSpacing;
         if((i+1)==getCols())
             tmpWidth= colStart[i+1] - colStart[i]+tableCellSpacing-2;
-        KWFrame *frame = new KWFrame(0L, colStart[i], r.y(), tmpWidth, 20); // TODO  doc->getDefaultParagLayout()->getFormat().ptFontSize() + 10 );
+        KWFrame *frame = new KWFrame(0L, colStart[i], r.y(), tmpWidth, 20); // TODO  m_doc->getDefaultParagLayout()->getFormat().ptFontSize() + 10 );
         frame->setFrameBehaviour(AutoExtendFrame);
         frame->setNewFrameBehaviour(NoFollowup);
 
@@ -894,7 +893,7 @@ void KWTableFrameSet::updateTempHeaders()
                 QPicture pic;
                 p.begin( &pic );
 #if 0
-                KWFormatContext fc( doc, doc->getFrameSetNum( fs ) + 1 );
+                KWFormatContext fc( doc, m_doc->getFrameSetNum( fs ) + 1 );
                 fc.init( dynamic_cast<KWTextFrameSet*>( fs )->getFirstParag(), true );
 
                 bool bend = false;
@@ -976,8 +975,8 @@ bool KWTableFrameSet::joinCells() {
 
     recalcCols();
     recalcRows();
-    doc->updateAllFrames();
-    doc->repaintAllViews();
+    m_doc->updateAllFrames();
+    m_doc->repaintAllViews();
     return true;
 }
 
@@ -1074,8 +1073,8 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
     // select all frames.
     firstFrame->setSelected(true);
     selectUntil(getCell(row+intoRows-1, col+intoCols-1));
-    doc->updateAllFrames();
-    doc->repaintAllViews();
+    m_doc->updateAllFrames();
+    m_doc->repaintAllViews();
     return true;
 }
 
@@ -1107,10 +1106,10 @@ void KWTableFrameSet::viewFormatting( QPainter &/*painter*/, int )
 /*================================================================*/
 void KWTableFrameSet::preRender() {
 #if 0
-    for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
-        if ( doc->getCell( i )->getGroupManager() == this) {
+    for ( unsigned int i = 0; i < m_doc->getNumFrameSets(); i++ ) {
+        if ( m_doc->getCell( i )->getGroupManager() == this) {
             KWFormatContext fc( doc, i + 1 );
-            fc.init( doc->getFirstParag( i ) );
+            fc.init( m_doc->getFirstParag( i ) );
 
             // and render
 /*
@@ -1232,6 +1231,118 @@ bool KWTableFrameSet::contains( unsigned int mx, unsigned int my ) {
     }
 
     return false;
+}
+
+void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &region )
+{
+    painter->save();
+
+    QListIterator<Cell> cells( m_cells );
+    for ( ; cells.current() ; ++cells )
+    {
+        Cell *cell = cells.current();
+        QListIterator<KWFrame> frames = cell->frameIterator();
+        for ( ; frames.current() ; ++frames )
+        {
+            KWFrame *frame = frames.current();
+            QRect frameRect( m_doc->zoomRect(  *frame ) );
+            frameRect.rLeft() -= 1;
+            frameRect.rTop() -= 1;
+            frameRect.rRight() += 1;
+            frameRect.rBottom() += 1;
+            //kdDebug(32002) << "KWCanvas::drawBorders frameRect: " << DEBUGRECT( frameRect ) << endl;
+            if ( !crect.intersects( frameRect ) )
+                continue;
+
+            region = region.subtract( frameRect );
+
+            // Set the background color.
+            painter->setBrush( frame->getBackgroundColor() );
+            painter->setPen( lightGray );
+
+            // Draw default borders using view settings except when printing, or disabled.
+            QPen viewSetting( lightGray );
+            if ( ( painter->device()->devType() == QInternal::Printer ) ||
+                !m_doc->getViewFrameBorders() )
+            {
+                viewSetting.setColor( frame->getBackgroundColor().color() );
+            }
+
+            // Draw borders either as the user defined them, or using the view settings.
+            // Always draw right and bottom:
+        if ( frame->getRightBorder().ptWidth > 0 )
+        {
+            painter->setPen( Border::borderPen( frame->getRightBorder() ) );
+        }
+        else
+        {
+            painter->setPen( viewSetting );
+        }
+        int w = frame->getRightBorder().ptWidth;
+        if ( !( w & 1 ) )
+            w--;
+        w /= 2;
+        painter->drawLine( frameRect.right() - w, frameRect.y(),
+                            frameRect.right() - w, frameRect.bottom() + 1 );
+
+        if ( frame->getBottomBorder().ptWidth > 0 )
+        {
+            painter->setPen( Border::borderPen( frame->getBottomBorder() ) );
+        }
+        else
+        {
+            painter->setPen( viewSetting );
+        }
+        w = frame->getBottomBorder().ptWidth;
+        if ( !( w & 1 ) )
+            w--;
+        painter->drawLine( frameRect.x(), frameRect.bottom() - w,
+                            frameRect.right() + 1,
+                            frameRect.bottom() - w );
+
+        if ( cell->m_col == 0 ) // draw left only for 1st column.
+        {
+            if ( frame->getLeftBorder().ptWidth > 0 )
+            {
+                painter->setPen( Border::borderPen( frame->getLeftBorder() ) );
+            }
+            else
+            {
+                painter->setPen( viewSetting );
+            }
+            painter->drawLine( frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.y(),
+                                frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.bottom() + 1 );
+        }
+
+        if ( cell->m_row == 0 ) // draw top only for 1st row.
+        {
+            if ( frame->getTopBorder().ptWidth > 0 )
+            {
+                painter->setPen( Border::borderPen( frame->getTopBorder() ) );
+            }
+            else
+            {
+                painter->setPen( viewSetting );
+            }
+            painter->drawLine( frameRect.x(), frameRect.y() + frame->getTopBorder().ptWidth / 2,
+                                frameRect.right() + 1,
+                                frameRect.y() + frame->getTopBorder().ptWidth / 2 );
+        }
+/*
+                painter->drawLine( frameRect.right() + 1, frameRect.y() - 1,
+                                frameRect.right() + 1, frameRect.bottom()  + 1 );
+                painter->drawLine( frameRect.x() - 1, frameRect.bottom() + 1,
+                                frameRect.right() + 1, frameRect.bottom() + 1 );
+                if ( cell->m_row == 0 ) // draw top only for 1st row
+                    painter->drawLine( frameRect.x() - 1, frameRect.y() - 1,
+                                    frameRect.right() + 1, frameRect.y() - 1 );
+                if ( cell->m_col == 0 ) // draw left only for 1st column
+                    painter->drawLine( frameRect.x() - 1, frameRect.y() - 1,
+                                    frameRect.x() - 1, frameRect.bottom() + 1 );
+*/
+        }
+    }
+    painter->restore();
 }
 
 void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,

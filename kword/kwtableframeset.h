@@ -90,6 +90,7 @@ public:
 
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * canvas );
 
+    virtual void drawBorders( QPainter *painter, const QRect &crect, QRegion &region );
     virtual void drawContents( QPainter * painter, const QRect & crect,
                                QColorGroup & cg, bool onlyChanged, bool resetChanged );
 
@@ -198,7 +199,6 @@ public:
     virtual bool isVisible();
 
 protected:
-    KWDocument *m_doc;
     unsigned int m_rows, m_cols;
     QString m_name;
     bool m_showHeaderOnAllPages;

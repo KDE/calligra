@@ -169,12 +169,11 @@ protected:
      */
     void drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int cx, int cy, int cw, int ch, bool resetChanged = false );
     /**
-     * Draw the borders of the frames
-     * @param onlyFrameset if 0L, all frames of all frameset, otherwise only those of this particular frameset.
+     * Draw the borders of the frames.
      * @param painter
      * @param crect the area to be repainted, in contents coordinates
      */
-    void drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const QRect &crect );
+    void drawBorders( QPainter *painter, const QRect &crect );
 
     virtual void keyPressEvent( QKeyEvent *e );
     virtual void contentsMousePressEvent( QMouseEvent *e );

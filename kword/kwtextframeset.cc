@@ -98,7 +98,7 @@ QPoint KWTextFrameSet::contentsToInternal( QPoint p, bool onlyY ) const
             p.rx() += -frameRect.left();
             p.ry() += -frameRect.top() + totalHeight;
             return p;
-        } else if ( p.y() < frameRect.top() && doc->processingType() == KWDocument::WP ) // ## WP-only: we've been too far, the point is between two frames
+        } else if ( p.y() < frameRect.top() && m_doc->processingType() == KWDocument::WP ) // ## WP-only: we've been too far, the point is between two frames
         {
             p.rx() += -frameRect.left();
             p.ry() = totalHeight;
@@ -545,8 +545,9 @@ KWTextFrameSet::~KWTextFrameSet()
     //kdDebug(32001) << "KWTextFrameSet::~KWTextFrameSet" << endl;
     // don't let us delete ourselves
 
-    if(doc) doc->delFrameSet(this, false);
-    doc=0L;
+    if ( m_doc )
+        m_doc->delFrameSet(this, false);
+    m_doc = 0L;
 }
 
 /*================================================================*/
@@ -567,9 +568,9 @@ void KWTextFrameSet::updateFrames()
 
     // sort frames of this frameset into l2 on (page, y coord, x coord)
     QRect pageRect;
-    for ( unsigned int i = 0; i < static_cast<unsigned int>( doc->getPages() + 1 ); i++ ) {
+    for ( unsigned int i = 0; i < static_cast<unsigned int>( m_doc->getPages() + 1 ); i++ ) {
         //kdDebug(32002) << "Page " << i << endl;
-        pageRect = QRect( 0, i * doc->ptPaperHeight(), doc->ptPaperWidth(), doc->ptPaperHeight() );
+        pageRect = QRect( 0, i * m_doc->ptPaperHeight(), m_doc->ptPaperWidth(), m_doc->ptPaperHeight() );
         FrameList *l = new FrameList();
         l->setAutoDelete( false );
         for ( unsigned int j = 0; j < frames.count(); j++ ) {
@@ -719,7 +720,7 @@ void KWTextFrameSet::load( QDomElement &attributes )
             if ( !lastParagraph )        // First parag
                 textdoc->setFirstParag( parag );
             lastParagraph = parag;
-            doc->progressItemLoaded();
+            m_doc->progressItemLoaded();
         }
     }
 
@@ -836,7 +837,7 @@ void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
     kdDebug(32001) << "KWTextFrameSet::applyStyleChange " << changedStyle << endl;
     QTextDocument * textdoc = textDocument();
     emit hideCursor();
-    KWStyle * style = doc->findStyle( changedStyle, true );
+    KWStyle * style = m_doc->findStyle( changedStyle, true );
     KWTextParag *p = static_cast<KWTextParag *>(textdoc->firstParag());
     while ( p ) {
         if ( p->styleName() == changedStyle )
@@ -863,30 +864,30 @@ void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
                 end.setIndex( p->string()->length()-1 );
                 textdoc->setSelectionEnd( QTextDocument::Temp+1, &end );
 #if 0
-                if ( (doc->applyStyleChangeMask() & KWDocument::U_BORDER) == 0)
+                if ( (m_doc->applyStyleChangeMask() & KWDocument::U_BORDER) == 0)
                 {
                     styleApplied.paragLayout().leftBorder=p->leftBorder();
                     styleApplied.paragLayout().rightBorder=p->rightBorder();
                     styleApplied.paragLayout().topBorder=p->topBorder();
                     styleApplied.paragLayout().bottomBorder=p->bottomBorder();
                 }
-                if ( (doc->applyStyleChangeMask() & KWDocument::U_ALIGN )==0)
+                if ( (m_doc->applyStyleChangeMask() & KWDocument::U_ALIGN )==0)
                 {
                     styleApplied.setAlign(p->alignment());
                 }
-                if ( (doc->applyStyleChangeMask() & KWDocument::U_NUMBERING)==0 )
+                if ( (m_doc->applyStyleChangeMask() & KWDocument::U_NUMBERING)==0 )
                 {
                     styleApplied.paragLayout().counter=*(p->counter());
                 }
-                if ( (doc->applyStyleChangeMask() & KWDocument::U_COLOR)==0 )
+                if ( (m_doc->applyStyleChangeMask() & KWDocument::U_COLOR)==0 )
                 {
                     styleApplied.format().setColor(p->paragFormat()->color());
                 }
-                if ( (doc->applyStyleChangeMask() & KWDocument::U_TABS)==0 )
+                if ( (m_doc->applyStyleChangeMask() & KWDocument::U_TABS)==0 )
                 {
                     styleApplied.paragLayout().setTabList(p->tabList());
                 }
-                if ( (doc->applyStyleChangeMask() & KWDocument::U_INDENT)==0 )
+                if ( (m_doc->applyStyleChangeMask() & KWDocument::U_INDENT)==0 )
                 {
                     styleApplied.paragLayout().lineSpacing=p->kwLineSpacing();
                     styleApplied.paragLayout().margins[QStyleSheetItem::MarginLeft]=p->margin(QStyleSheetItem::MarginLeft);
@@ -911,7 +912,7 @@ void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
 /*================================================================*/
 KWTextFrameSet *KWTextFrameSet::getCopy() {
     /* returns a deep copy of self */
-    KWTextFrameSet *newFS = new KWTextFrameSet(doc);
+    KWTextFrameSet *newFS = new KWTextFrameSet(m_doc);
     newFS->setFrameInfo(getFrameInfo());
     newFS->setVisible(visible);
     newFS->setName(getName());
@@ -1078,8 +1079,8 @@ void KWTextFrameSet::formatMore()
 
                     uint oldCount = frames.count();
                     // First create a new page for it if necessary
-                    if ( frames.last()->pageNum() == doc->getPages() - 1 )
-                        doc->appendPage();
+                    if ( frames.last()->pageNum() == m_doc->getPages() - 1 )
+                        m_doc->appendPage();
 
                     // Maybe this created the frame, then we're done
                     if ( frames.count() == oldCount )
@@ -1087,7 +1088,7 @@ void KWTextFrameSet::formatMore()
                         // Otherwise, create a new frame on next page
                         KWFrame *frame = frames.last();
                         KWFrame *frm = frame->getCopy();
-                        frm->moveBy( 0, doc->ptPaperHeight() );
+                        frm->moveBy( 0, m_doc->ptPaperHeight() );
                         frm->setPageNum( frame->pageNum()+1 );
                         addFrame( frm );
                     }
@@ -1112,9 +1113,9 @@ void KWTextFrameSet::formatMore()
             kdDebug(32002) << "KWTextFrameSet::formatMore too much space (" << m_availableHeight << ") , trying to remove last frame" << endl;
             // Last frame is empty -> try removing last page, and more if necessary
             while ( frames.count() > 1 && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) &&
-                    doc->canRemovePage( doc->getPages() - 1, frames.last() ) )
+                    m_doc->canRemovePage( m_doc->getPages() - 1, frames.last() ) )
             {
-                doc->removePage( doc->getPages() - 1 );
+                m_doc->removePage( m_doc->getPages() - 1 );
             }
         }
 
@@ -1383,8 +1384,8 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
         emit repaintChanged( this );
         formatMore();
         emit updateUI();
-        doc->addCommand( macroCmd );
-        //doc->setModified(true);
+        m_doc->addCommand( macroCmd );
+        //m_doc->setModified(true);
     }
 
     undoRedoInfo.clear();
@@ -1744,7 +1745,7 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
         c2.gotoRight();
     }
 
-    doc->setModified(true);
+    m_doc->setModified(true);
     if ( !removeSelected ) {
         textdoc->setSelectionStart( QTextDocument::Standard, &oldCursor );
         textdoc->setSelectionEnd( QTextDocument::Standard, cursor );
@@ -1827,8 +1828,8 @@ void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bo
     // Using insert() wouldn't help storing the parag stuff for redo
     KWPasteCommand * cmd = new KWPasteCommand( textDocument(), cursor->parag()->paragId(), cursor->index(), data );
     textDocument()->addCommand( cmd );
-    doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Paste Text") ) ); // the wrapper KCommand
-    //doc->setModified(true);
+    m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Paste Text") ) ); // the wrapper KCommand
+    //m_doc->setModified(true);
     *cursor = *( cmd->execute( cursor ) );
 
     formatMore();

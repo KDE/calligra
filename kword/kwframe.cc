@@ -296,10 +296,10 @@ void KWFrame::setSelected( bool _selected )
 /******************************************************************/
 
 /*================================================================*/
-KWFrameSet::KWFrameSet( KWDocument *_doc )
+KWFrameSet::KWFrameSet( KWDocument *doc )
     : frames(), removeableHeader( false ), visible( true )
 {
-    doc = _doc;
+    m_doc = doc;
     // Send our "repaintChanged" signals to the document.
     connect( this, SIGNAL( repaintChanged( KWFrameSet * ) ),
              doc, SLOT( slotRepaintChanged( KWFrameSet * ) ) );
@@ -365,6 +365,96 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
 }
 
 /*================================================================*/
+void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &region )
+{
+    painter->save();
+
+    QListIterator<KWFrame> frameIt = frameIterator();
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        KWFrame *frame = frameIt.current();
+        QRect frameRect( m_doc->zoomRect( *frame ) );
+        frameRect.rLeft() -= 1;
+        frameRect.rTop() -= 1;
+        frameRect.rRight() += 1;
+        frameRect.rBottom() += 1;
+        //kdDebug(32002) << "KWCanvas::drawBorders frameRect: " << DEBUGRECT( frameRect ) << endl;
+        if ( !crect.intersects( frameRect ) )
+            continue;
+
+        region = region.subtract( frameRect );
+
+        // Set the background color from the main frameset (why?)
+        if ( isAHeader() || isAFooter() )
+            frame = getFrame( 0 );
+        painter->setBrush( frame->getBackgroundColor() );
+
+        // Draw default borders using view settings except when printing, or disabled.
+        QPen viewSetting( lightGray );
+        if ( ( painter->device()->devType() == QInternal::Printer ) ||
+            !m_doc->getViewFrameBorders() )
+        {
+            viewSetting.setColor( frame->getBackgroundColor().color() );
+        }
+
+        // Draw borders either as the user defined them, or using the view settings.
+        if ( frame->getRightBorder().ptWidth > 0 )
+        {
+            painter->setPen( Border::borderPen( frame->getRightBorder() ) );
+        }
+        else
+        {
+            painter->setPen( viewSetting );
+        }
+        int w = frame->getRightBorder().ptWidth;
+        if ( !( w & 1 ) )
+            w--;
+        w /= 2;
+        painter->drawLine( frameRect.right() - w, frameRect.y(),
+                            frameRect.right() - w, frameRect.bottom() + 1 );
+
+        if ( frame->getBottomBorder().ptWidth > 0 )
+        {
+            painter->setPen( Border::borderPen( frame->getBottomBorder() ) );
+        }
+        else
+        {
+            painter->setPen( viewSetting );
+        }
+        w = frame->getBottomBorder().ptWidth;
+        if ( !( w & 1 ) )
+            w--;
+        painter->drawLine( frameRect.x(), frameRect.bottom() - w,
+                            frameRect.right() + 1,
+                            frameRect.bottom() - w );
+
+        if ( frame->getLeftBorder().ptWidth > 0 )
+        {
+            painter->setPen( Border::borderPen( frame->getLeftBorder() ) );
+        }
+        else
+        {
+            painter->setPen( viewSetting );
+        }
+        painter->drawLine( frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.y(),
+                            frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.bottom() + 1 );
+
+        if ( frame->getTopBorder().ptWidth > 0 )
+        {
+            painter->setPen( Border::borderPen( frame->getTopBorder() ) );
+        }
+        else
+        {
+            painter->setPen( viewSetting );
+        }
+        painter->drawLine( frameRect.x(), frameRect.y() + frame->getTopBorder().ptWidth / 2,
+                            frameRect.right() + 1,
+                            frameRect.y() + frame->getTopBorder().ptWidth / 2 );
+    }
+    painter->restore();
+}
+
+/*================================================================*/
 KWFrame * KWFrameSet::getFrame( int _x, int _y )
 {
     QListIterator<KWFrame> frameIt = frameIterator();
@@ -393,7 +483,7 @@ void KWFrameSet::updateFrames()
     // We'll use this information in various methods (adjust[LR]Margin, drawContents etc.)
     // So we want it cached.
     m_framesOnTop.clear();
-    QListIterator<KWFrameSet> framesetIt( doc->framesetsIterator() );
+    QListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
     bool foundThis = false;
     for (; framesetIt.current(); ++framesetIt )
     {
@@ -589,8 +679,8 @@ void KWFrameSet::save( QDomElement &parentElem )
         if(frame->getSheetSide()!= AnySide)
             frameElem.setAttribute( "sheetSide", static_cast<int>( frame->getSheetSide()) );
 
-        if(doc->processingType() == KWDocument::WP) {
-            if(doc->getFrameSet(0) == this) break;
+        if(m_doc->processingType() == KWDocument::WP) {
+            if(m_doc->getFrameSet(0) == this) break;
             if(getFrameInfo() == FI_FIRST_HEADER ||
                getFrameInfo() == FI_ODD_HEADER ||
                getFrameInfo() == FI_EVEN_HEADER ||
@@ -703,7 +793,7 @@ void KWFrameSet::load( QDomElement &attributes )
             frame->setSheetSide( sheetSide );
             frame->setNewFrameBehaviour( newFrameBehaviour);
             frames.append( frame );
-            doc->progressItemLoaded();
+            m_doc->progressItemLoaded();
         }
     }
 }
@@ -735,10 +825,10 @@ bool KWFrameSet::isVisible()
 {
     return ( visible &&
              !frames.isEmpty() &&
-             (!isAHeader() || doc->isHeaderVisible()) &&
-             (!isAFooter() || doc->isFooterVisible()) &&
-             !isAWrongHeader( doc->getHeaderType() ) &&
-             !isAWrongFooter( doc->getFooterType() ) );
+             (!isAHeader() || m_doc->isHeaderVisible()) &&
+             (!isAFooter() || m_doc->isFooterVisible()) &&
+             !isAWrongHeader( m_doc->getHeaderType() ) &&
+             !isAWrongFooter( m_doc->getFooterType() ) );
 }
 
 
@@ -784,7 +874,7 @@ KWPictureFrameSet::~KWPictureFrameSet() {
 /*================================================================*/
 void KWPictureFrameSet::setFileName( const QString &_filename, const QSize &_imgSize )
 {
-    KWImageCollection *collection = doc->imageCollection();
+    KWImageCollection *collection = m_doc->imageCollection();
 
     m_image = collection->image( _filename );
 
@@ -830,7 +920,7 @@ void KWPictureFrameSet::load( QDomElement &attributes )
         if ( !filenameElement.isNull() )
         {
             QString filename = filenameElement.attribute( "value" );
-            doc->addImageRequest( filename, this );
+            m_doc->addImageRequest( filename, this );
         }
         else
         {
@@ -998,7 +1088,7 @@ void KWPartFrameSetEdit::drawContents( QPainter *p, const QRect &r, QColorGroup 
 KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, QWidget */*parent*/ )
     : KWFrameSet( _doc ), m_changed( false )
 {
-    formula = doc->getFormulaDocument()->createFormula();
+    formula = m_doc->getFormulaDocument()->createFormula();
     connect(formula, SIGNAL(formulaChanged(int, int)),
             this, SLOT(slotFormulaChanged(int, int)));
 }
@@ -1074,7 +1164,7 @@ void KWFormulaFrameSet::create( QWidget */*parent*/ )
         return;
     }
 
-    formula = doc->getFormulaDocument()->createFormula();
+    formula = m_doc->getFormulaDocument()->createFormula();
     connect(formula, SIGNAL(formulaChanged(int, int)),
             this, SLOT(slotFormulaChanged(int, int)));
     updateFrames();
@@ -1136,7 +1226,7 @@ void KWFormulaFrameSet::load(QDomElement& attributes)
     QDomElement formulaElem = attributes.namedItem("FORMULA").toElement();
     if (!formulaElem.isNull()) {
         if (formula == 0) {
-            formula = doc->getFormulaDocument()->createFormula();
+            formula = m_doc->getFormulaDocument()->createFormula();
             connect(formula, SIGNAL(formulaChanged(int, int)),
                     this, SLOT(slotFormulaChanged(int, int)));
         }

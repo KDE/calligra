@@ -289,7 +289,7 @@ class KWFrameSet : public QObject
     Q_OBJECT
 public:
     // constructor
-    KWFrameSet( KWDocument *_doc );
+    KWFrameSet( KWDocument *doc );
     // destructor
     virtual ~KWFrameSet() {; }
 
@@ -319,6 +319,15 @@ public:
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * ) { return 0L; }
 
     /**
+     * Paint the borders for this frameset.
+     * @param painter The painter in which to draw the contents of the frameset
+     * @param crect The rectangle (in "contents coordinates") to be painted
+     * @param region The region is modified to subtract the areas painted, thus
+     *               allowing the caller to detrmine which areas remain to be painted.
+     */
+    virtual void drawBorders( QPainter *painter, const QRect &crect, QRegion &region );
+
+    /**
      * Paint this frameset
      * When the frameset is being edited, KWFrameSetEdit's drawContents is called instead.
      * @param painter The painter in which to draw the contents of the frameset
@@ -334,8 +343,8 @@ public:
      * So resetChanged is called with "false" for all views except the last one,
      * and with "true" for the last one, so that it resets the flag.
      */
-    virtual void drawContents( QPainter * painter, const QRect & crect,
-                               QColorGroup & cg, bool onlyChanged, bool resetChanged ) = 0;
+    virtual void drawContents( QPainter *painter, const QRect &crect,
+                               QColorGroup &cg, bool onlyChanged, bool resetChanged ) = 0;
 
     /**
      * Called when our frames change, or when another frameset's frames change.
@@ -369,7 +378,7 @@ public:
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
     virtual void zoom() {}
 
-    KWDocument* kWordDocument() const { return doc; }
+    KWDocument* kWordDocument() const { return m_doc; }
 
     // only used for headers and footers...
     void setCurrent( int i ) { current = i; }
@@ -392,7 +401,7 @@ public:
     /**
      * Returns true if the frameset is visible.
      * A frameset is visible if setVisible(false) wasn't called,
-     * but also, for a header frameset, if doc->isHeaderVisible is true, etc.
+     * but also, for a header frameset, if m_doc->isHeaderVisible is true, etc.
      * For an "even pages header" frameset, the corresponding headerType setting
      * must be selected (i.e. different headers for even and odd pages).
      */
@@ -417,7 +426,7 @@ protected:
     // in the rectangle delimited by @p crect.
     QRegion frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect );
 
-    KWDocument *doc;              // Document
+    KWDocument *m_doc;            // Document
     QList<KWFrame> frames;        // Our frames
     QList<KWFrame> m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
 

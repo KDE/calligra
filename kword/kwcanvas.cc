@@ -181,7 +181,7 @@ void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int c
     bool onlyChanged = (onlyFrameset != 0L);
 
     if ( !onlyFrameset )      // no need for borders if we're only repainting the text
-        drawBorders( 0L /*onlyFrameset*/, painter, crect );
+        drawBorders( painter, crect );
 
     // Draw all framesets
     QListIterator<KWFrameSet> fit = doc->framesetsIterator();
@@ -202,136 +202,25 @@ void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int c
     }
 }
 
-void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const QRect & crect )
+void KWCanvas::drawBorders( QPainter *painter, const QRect & crect )
 {
-    bool clearEmptySpace = onlyFrameset == 0L;
-    bool drawBack = onlyFrameset == 0L;
+    bool clearEmptySpace = true;
     QRegion region( crect );
-    painter->save();
-    painter->setBrush( NoBrush );
 
     QListIterator<KWFrameSet> fit = doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet *frameset = fit.current();
-        if ( !frameset->isVisible() )
-            continue;
-
-        QListIterator<KWFrame> frameIt = frameset->frameIterator();
-        for ( ; frameIt.current(); ++frameIt )
+        if ( frameset->isVisible() )
         {
-            KWFrame * frame = frameIt.current();
-            QRect frameRect( doc->zoomRect(  *frame ) );
-            frameRect.rLeft() -= 1;
-            frameRect.rTop() -= 1;
-            frameRect.rRight() += 1;
-            frameRect.rBottom() += 1;
-            //kdDebug(32002) << "KWCanvas::drawBorders frameRect: " << DEBUGRECT( frameRect ) << endl;
-            if ( !crect.intersects( frameRect ) )
-                continue;
-
-            // set the background color from the main frameset (why?)
-            painter->setBrush( ( frameset->isAHeader() || frameset->isAFooter() ) ?
-                               frameset->getFrame( 0 )->getBackgroundColor() : frame->getBackgroundColor() );
-            painter->setPen( lightGray );
-            bool should_draw = TRUE;
-            if ( frameset->getGroupManager() ) {
-                if ( doc->getViewTableGrid() )
-                    painter->setPen( QPen( black, 1, DotLine ) );
-                else
-                    painter->setPen( NoPen );
-            }
-            if ( FALSE )//static_cast<int>( i ) == hiliteFrameSet )
-                painter->setPen( blue );
-            else if ( !doc->getViewFrameBorders() )
-                should_draw = FALSE;
-
-            if ( should_draw && !frameset->getGroupManager() ) {
-                if ( clearEmptySpace )
-                    region = region.subtract( frameRect );
-                if ( !onlyFrameset || frameset == onlyFrameset )
-                {
-                    if ( !drawBack )
-                        painter->setBrush( Qt::NoBrush );
-                    painter->drawRect( frameRect );
-                }
-            }
-
-            // Draw cell borders
-            painter->setBrush( Qt::NoBrush );
-            if ( frameset->getGroupManager() ) {
-                if ( clearEmptySpace )
-                    region = region.subtract( frameRect );
-                if ( !onlyFrameset || frameset == onlyFrameset )
-                {
-                    if ( drawBack )
-                        painter->fillRect( frameRect, frame->getBackgroundColor() );
-                    // Always draw right and bottom
-                    painter->drawLine( frameRect.right() + 1, frameRect.y() - 1,
-                                       frameRect.right() + 1, frameRect.bottom()  + 1 );
-                    painter->drawLine( frameRect.x() - 1, frameRect.bottom() + 1,
-                                       frameRect.right() + 1, frameRect.bottom() + 1 );
-                    uint row = ((KWTableFrameSet::Cell *)frameset)->m_row;
-                    uint col = ((KWTableFrameSet::Cell *)frameset)->m_col;
-                    if ( row == 0 ) // draw top only for 1st row
-                        painter->drawLine( frameRect.x() - 1, frameRect.y() - 1,
-                                           frameRect.right() + 1, frameRect.y() - 1 );
-                    if ( col == 0 ) // draw left only for 1st column
-                        painter->drawLine( frameRect.x() - 1, frameRect.y() - 1,
-                                           frameRect.x() - 1, frameRect.bottom() + 1 );
-                }
-            }
-
-            if ( !onlyFrameset || frameset == onlyFrameset )
-            {
-                // Draw frame borders
-
-                if ( frameset->isAHeader() || frameset->isAFooter() )
-                    frame = frameset->getFrame( 0 );
-
-                if ( frame->getLeftBorder().ptWidth > 0 && frame->getLeftBorder().color !=
-                     frame->getBackgroundColor().color() ) {
-                    QPen p( Border::borderPen( frame->getLeftBorder() ) );
-                    painter->setPen( p );
-                    painter->drawLine( frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.y(),
-                                       frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.bottom() + 1 );
-                }
-                if ( frame->getRightBorder().ptWidth > 0 && frame->getRightBorder().color !=
-                     frame->getBackgroundColor().color() ) {
-                    QPen p( Border::borderPen( frame->getRightBorder() ) );
-                    painter->setPen( p );
-                    int w = frame->getRightBorder().ptWidth;
-                    if ( ( w / 2 ) * 2 == w ) w--;
-                    w /= 2;
-                    painter->drawLine( frameRect.right() - w, frameRect.y(),
-                                       frameRect.right() - w, frameRect.bottom() + 1 );
-                }
-                if ( frame->getTopBorder().ptWidth > 0 && frame->getTopBorder().color !=
-                     frame->getBackgroundColor().color() ) {
-                    QPen p( Border::borderPen( frame->getTopBorder() ) );
-                    painter->setPen( p );
-                    painter->drawLine( frameRect.x(), frameRect.y() + frame->getTopBorder().ptWidth / 2,
-                                       frameRect.right() + 1,
-                                       frameRect.y() + frame->getTopBorder().ptWidth / 2 );
-                }
-                if ( frame->getBottomBorder().ptWidth > 0 && frame->getBottomBorder().color !=
-                     frame->getBackgroundColor().color() ) {
-                    int w = frame->getBottomBorder().ptWidth;
-                    if ( ( w / 2 ) * 2 == w ) w--;
-                    w /= 2;
-                    QPen p( Border::borderPen( frame->getBottomBorder() ) );
-                    painter->setPen( p );
-                    painter->drawLine( frameRect.x(), frameRect.bottom() - w,
-                                       frameRect.right() + 1,
-                                       frameRect.bottom() - w );
-                }
-            }
+            frameset->drawBorders( painter, crect, region);
         }
     }
 
-    // Draw page borders (red), unless when printing
+    // Draw page borders (red), except when printing.
     if ( painter->device()->devType() != QInternal::Printer )
     {
+        painter->save();
         painter->setPen( red );
         painter->setBrush( Qt::NoBrush );
 
@@ -376,9 +265,8 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
                 }
             }
         }
+        painter->restore();
     }
-
-    painter->restore();
 }
 
 void KWCanvas::keyPressEvent( QKeyEvent *e )
