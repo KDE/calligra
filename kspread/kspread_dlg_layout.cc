@@ -41,7 +41,7 @@ KSpreadPatternSelect::KSpreadPatternSelect( QWidget *parent, const char * ) : QF
 {
     penStyle = NoPen;
     penWidth = 1;
-    penColor = black;
+    penColor = colorGroup().text();
     selected = FALSE;
     undefined = FALSE;
 }
@@ -379,21 +379,23 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 
 void CellLayoutDlg::init()
 {
+    QColorGroup colorGroup = QApplication::palette().active();
     // Did we initialize the bitmaps ?
     if ( formatOnlyNegSignedPixmap == 0L )
     {
+        QColor black = colorGroup.text(); // not necessarily black :)
 	formatOnlyNegSignedPixmap = paintFormatPixmap( "123.456", black, "-123.456", black );
-	formatRedOnlyNegSignedPixmap = paintFormatPixmap( "123.456", black, "-123.456", red );
+	formatRedOnlyNegSignedPixmap = paintFormatPixmap( "123.456", black, "-123.456", Qt::red );
 	formatRedNeverSignedPixmap = paintFormatPixmap( "123.456", black, "123.456", black );
 	formatAlwaysSignedPixmap = paintFormatPixmap( "+123.456", black, "-123.456", black );
-	formatRedAlwaysSignedPixmap = paintFormatPixmap( "+123.456", black, "-123.456", red );
+	formatRedAlwaysSignedPixmap = paintFormatPixmap( "+123.456", black, "-123.456", Qt::red );
 
 	// Make the undefined pixmap
         undefinedPixmap = new QPixmap( 100, 12 );
         QPainter painter;
         painter.begin( undefinedPixmap );
-	painter.setBackgroundColor( white );
-	painter.setPen( black );
+	painter.setBackgroundColor( colorGroup.base() );
+	painter.setPen( colorGroup.text() );
         painter.fillRect( 0, 0, 100, 12, BDiagPattern );
         painter.end();
     }
@@ -437,7 +439,7 @@ QPixmap* CellLayoutDlg::paintFormatPixmap( const char *_string1, const QColor & 
 
     QPainter painter;
     painter.begin( pixmap );
-    painter.fillRect( 0, 0, 150, 14, white );
+    painter.fillRect( 0, 0, 150, 14, QApplication::palette().active().base() );
     painter.setPen( _color1 );
     painter.drawText( 2, 11, _string1 );
     painter.setPen( _color2 );
@@ -521,7 +523,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
     format = new QComboBox( box, "ListBox_1" );
     grid->addWidget(format,3,1);
-    
+
     QLabel* tmpQLabel;
     tmpQLabel = new QLabel( box, "Label_1" );
     grid->addWidget(tmpQLabel,0,0);
@@ -717,26 +719,16 @@ CellLayoutPageMisc::CellLayoutPageMisc( QWidget* parent, CellLayoutDlg *_dlg ) :
       styleButton->setCurrentItem( idStyleUndef );
 
     if ( dlg->bTextColor )
-    {
 	textColor = dlg->textColor;
-        textColorButton->setColor( dlg->textColor);
-    }
     else
-    {
-	textColor = black;
-        textColorButton->setColor( black );
-    }
+	textColor = colorGroup().text();
+    textColorButton->setColor( textColor );
 
     if ( dlg->bBgColor )
-    {
 	bgColor = dlg->bgColor;
-        bgColorButton->setColor(bgColor);
-    }
     else
-    {
-	bgColor = white;
-        bgColorButton->setColor(white);
-    }
+	bgColor = colorGroup().base();
+    bgColorButton->setColor(bgColor);
 
     this->resize( 400, 400 );
 }
@@ -898,7 +890,7 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   example_label = new QLabel(box1,"examples");
   example_label->setFont(selFont);
   example_label->setAlignment(AlignCenter);
-  example_label->setBackgroundColor(white);
+  example_label->setBackgroundColor(colorGroup().base());
   example_label->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
   example_label->setLineWidth( 1 );
   example_label->setText(i18n("Dolor Ipse"));
@@ -1222,7 +1214,7 @@ KSpreadBorderButton::KSpreadBorderButton( QWidget *parent, const char *_name ) :
 {
   penStyle = Qt::NoPen;
   penWidth = 1;
-  penColor = Qt::black;
+  penColor = Qt::black; // ?
   setToggleButton( TRUE );
   setOn( false);
   setChanged(false);
@@ -1238,17 +1230,17 @@ void KSpreadBorderButton::setUndefined()
 {
  setPenStyle(SolidLine );
  setPenWidth(1);
- setColor(Qt::gray);
+ setColor(Qt::gray); // ?
 }
 
 
 void KSpreadBorderButton::unselect()
 {
-setOn(false);
-setPenWidth(1);
-setPenStyle(Qt::NoPen);
-setColor( Qt::black );
-setChanged(true);
+  setOn(false);
+  setPenWidth(1);
+  setPenStyle(Qt::NoPen);
+  setColor( Qt::black ); // ?
+  setChanged(true);
 }
 
 KSpreadBord::KSpreadBord( QWidget *parent, const char *_name )
@@ -1307,7 +1299,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
   area=new KSpreadBord(tmpQGroupBox,"area");
   grid2->addMultiCellWidget(area,1,3,1,3);
-  area->setBackgroundColor( white );
+  area->setBackgroundColor( colorGroup().base() );
 
   top=new KSpreadBorderButton(tmpQGroupBox,"top");
   loadIcon("border_top",top);
@@ -1798,11 +1790,11 @@ QPixmap* CellLayoutPageBorder::paintFormatPixmap(PenStyle _style)
     QPixmap *pixmap = new QPixmap( style->width(), 14 );
     QPainter painter;
     QPen pen;
-    pen.setColor( Qt::black );
+    pen.setColor( colorGroup().text() );
     pen.setStyle( _style );
     pen.setWidth( 1 );
     painter.begin( pixmap );
-    painter.fillRect( 0, 0, style->width(), 14, white );
+    painter.fillRect( 0, 0, style->width(), 14, colorGroup().base() );
     painter.setPen( pen );
     painter.drawLine( 0, 7, style->width(), 7 );
     painter.end();
@@ -2058,7 +2050,7 @@ void CellLayoutPageBorder::changeState( KSpreadBorderButton *_p)
 	{
 	  _p->setPenWidth(1);
 	  _p->setPenStyle(Qt::NoPen);
-	  _p->setColor( Qt::black );
+	  _p->setColor( colorGroup().text() );
 	}
     }
  area->repaint();
@@ -2605,7 +2597,7 @@ void CellLayoutPagePattern::init()
     	brush15->slotSelect();
     	}
     else
-    	kdDebug(36001) << "Error in brushStyle" << endl; 
+    	kdDebug(36001) << "Error in brushStyle" << endl;
 }
 
 void CellLayoutPagePattern::slotSetColorButton( const QColor &_color )

@@ -194,7 +194,7 @@ void KSpreadCell::copyAll( KSpreadCell *cell )
 void KSpreadCell::defaultStyle()
 {
   setBottomBorderStyle( Qt::NoPen );
-  setBottomBorderColor( Qt::black );
+  setBottomBorderColor( Qt::black ); // TODO set to QColor() and change painting to use default colors
   setBottomBorderWidth( 1 );
   setRightBorderStyle( Qt::NoPen );
   setRightBorderColor( Qt::black );
@@ -217,8 +217,8 @@ void KSpreadCell::defaultStyle()
   setBackGroundBrushStyle(Qt::NoBrush);
   QFont font( "Times", 12 );
   m_textFont = font;
-  setTextColor( Qt::black );
-  setBgColor( Qt::white );
+  setTextColor( QColor() );
+  setBgColor( QColor() );
   setFaktor( 1 );
   setPrecision( -1 );
   setPostfix( "" );
@@ -801,9 +801,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       return;
   }
 
+  if ( m_textColor.isValid() )
+    m_textPen.setColor( m_textColor );
+  else
+    m_textPen.setColor( QApplication::palette().active().text() );
+
   if ( m_bBool )
   {
-    m_textPen.setColor( m_textColor );
     if ( m_dValue == 0 )
       m_strOutText = "False";
     else
@@ -887,16 +891,11 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
 	m_textPen.setColor(tmpCondition->colorcond);
  	}
-    else
-      m_textPen.setColor( m_textColor );
-
   }
   else
   {
-    m_textPen.setColor( m_textColor );
     m_strOutText = ptext;
   }
-
 
   _painter.setPen( m_textPen );
   verifyCondition();
@@ -1751,18 +1750,19 @@ QString KSpreadCell::valueString() const
   return m_strText;
 }
 
-void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPainter &_painter,
+// Used by m_pObscuringCell->paintCell, in the next method
+void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 			      int _col, int _row, QRect *_prect )
 {
   RowLayout *rl = m_pTable->rowLayout( _row );
   ColumnLayout *cl = m_pTable->columnLayout( _col );
-  int tx = m_pTable->columnPos( _col, _canvas );
-  int ty = m_pTable->rowPos( _row, _canvas );
+  int tx = m_pTable->columnPos( _col/*, _canvas*/ );
+  int ty = m_pTable->rowPos( _row/*, _canvas*/ );
 
-  paintEvent( _canvas, _rect, _painter, tx, ty, _col, _row, cl, rl, _prect );
+  paintCell( _rect, _painter, tx, ty, _col, _row, cl, rl, _prect );
 }
 
-void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPainter &_painter,
+void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 			      int _tx, int _ty,
 			      int _col, int _row, ColumnLayout *cl, RowLayout *rl, QRect *_prect )
 {
@@ -1771,9 +1771,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
   if ( m_pObscuringCell )
   {
     _painter.save();
-    // QRect rect( 0, 0, _canvas->width(), _canvas->height() );
-    // QRect r;
-    m_pObscuringCell->paintEvent( _canvas, _rect, _painter,
+    m_pObscuringCell->paintCell( _rect, _painter,
 				  m_iObscuringCellsColumn, m_iObscuringCellsRow, _prect );
     _painter.restore();
     m_bLayoutDirtyFlag = FALSE;
@@ -1787,8 +1785,8 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
   if ( m_bLayoutDirtyFlag)
     makeLayout( _painter, _col, _row );
 
-  int w = cl->width( _canvas );
-  int h = rl->height( _canvas );
+  int w = cl->width();
+  int h = rl->height();
   if ( m_iExtraXCells )
     w = m_iExtraWidth;
   if ( m_iExtraYCells )
@@ -1802,26 +1800,33 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
   if ( _prect )
     _prect->setRect( _tx, _ty, w, h );
 
+  QColorGroup defaultColorGroup = QApplication::palette().active();
   if ( selected )
-    _painter.setBackgroundColor( Qt::black );
+    _painter.setBackgroundColor( defaultColorGroup.highlight() );
   else
-    _painter.setBackgroundColor( m_bgColor );
+  {
+    if ( m_bgColor.isValid() )
+      _painter.setBackgroundColor( m_bgColor );
+    else
+      _painter.setBackgroundColor( defaultColorGroup.base() );
+  }
   _painter.eraseRect( _tx, _ty, w, h );
 
   // Draw the border
   if ( m_leftBorderPen.style() == Qt::NoPen )
-  	{
+  {
   	if(!table()->getShowGrid())
-  		{
-  		_painter.setPen(Qt::NoPen);
-  		}
+        {
+          _painter.setPen(Qt::NoPen);
+        }
   	else
-  		{
-    		_painter.setPen( table()->doc()->defaultGridPen() );
-    		}
-    	}
+        {
+          _painter.setPen( table()->doc()->defaultGridPen() );
+        }
+  }
   else
     _painter.setPen( m_leftBorderPen );
+
   // Fix a 'bug' in the pens width setting. We still need the upper left corner
   // of the line but a width > 1 won't work for us.
   //int dx = (int)ceil( (double)( m_leftBorderPen.width() - 1) / 2.0 );
@@ -1832,16 +1837,16 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
   _painter.drawLine( _tx + dx, _ty, _tx + dx, _ty + h );
 
   if ( m_topBorderPen.style() == Qt::NoPen )
-  	{
-    	if(!table()->getShowGrid())
-  		{
-  		_painter.setPen(Qt::NoPen);
-  		}
-  	else
-  		{
-    		_painter.setPen( table()->doc()->defaultGridPen() );
-    		}
-    	}
+  {
+    if(!table()->getShowGrid())
+    {
+      _painter.setPen(Qt::NoPen);
+    }
+    else
+    {
+      _painter.setPen( table()->doc()->defaultGridPen() );
+    }
+  }
   else
     _painter.setPen( m_topBorderPen );
   _painter.drawLine( _tx, _ty + dy, _tx + w, _ty + dy );
@@ -1851,7 +1856,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
       _painter.setPen( m_fallDiagonalPen );
       _painter.drawLine( _tx, _ty + dy, _tx + dx + w, _ty + dy + h );
     }
- if ( m_goUpDiagonalPen.style() != Qt::NoPen )
+  if ( m_goUpDiagonalPen.style() != Qt::NoPen )
     {
       _painter.setPen( m_goUpDiagonalPen );
       _painter.drawLine( _tx, _ty +h , _tx + w, _ty + dy  );
@@ -1874,14 +1879,14 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
     _painter.setPen( Qt::NoPen );
     _painter.drawPolygon( point );
     }
-  static QColorGroup g( Qt::black, Qt::white, Qt::white, Qt::darkGray, Qt::lightGray, Qt::black, Qt::black );
+  //static QColorGroup g( Qt::black, Qt::white, Qt::white, Qt::darkGray, Qt::lightGray, Qt::black, Qt::black );
   static QBrush fill( Qt::lightGray );
   /**
    * Modification for drawing the button
    */
   if ( m_style == KSpreadCell::ST_Button )
   {
-      QApplication::style().drawButton( &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, g, selected, &fill );
+      QApplication::style().drawButton( &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, defaultColorGroup, selected, &fill );
       // qDrawShadePanel( &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, g, selected, 1, &fill );
   }
   /**
@@ -1889,9 +1894,9 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
    */
   else if ( m_style == KSpreadCell::ST_Select )
   {
-      /* qDrawShadePanel( &_painter, _tx + w - dx - 16, _ty + dy + 1, 16, h - 2*dy - 1, g, selected, 1, &fill );
+      /* qDrawShadePanel( &_painter, _tx + w - dx - 16, _ty + dy + 1, 16, h - 2*dy - 1, defaultColorGroup, selected, 1, &fill );
     QPointArray a;
-    // qDrawArrow( &_painter, DownArrow, WindowsStyle, selected, _tx + w - dx - 16, _ty + dy + 1, 16, h - 2*dy - 1, g );
+    // qDrawArrow( &_painter, DownArrow, WindowsStyle, selected, _tx + w - dx - 16, _ty + dy + 1, 16, h - 2*dy - 1, defaultColorGroup );
     int aw = 16;
     int ah = h - 2*dy - 1;
     int ax = _tx + w - dx - 16;
@@ -1901,7 +1906,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
     _painter.setPen( Qt::black );
     _painter.drawLineSegments( a, 0, 3 );
     _painter.drawPoint( a[6] ); */
-      QApplication::style().drawComboButton(  &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, g, selected, TRUE/*, &fill*/ );
+      QApplication::style().drawComboButton(  &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, defaultColorGroup, selected, TRUE/*, &fill*/ );
   }
 
   /**
@@ -1910,7 +1915,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
   if ( m_pQML )
   {
     _painter.save();
-    m_pQML->draw( &_painter, _tx, _ty, QRegion( QRect( _tx, _ty, w, h ) ), g, 0 );
+    m_pQML->draw( &_painter, _tx, _ty, QRegion( QRect( _tx, _ty, w, h ) ), defaultColorGroup, 0 );
     _painter.restore();
   }
   /**
@@ -1919,7 +1924,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
   else if ( m_pVisualFormula )
   {
     _painter.save();
-    _painter.setPen( m_textPen.color() );
+    _painter.setPen( m_textPen/*.color()??*/ );
     _painter.setFont( m_textFont );
     // TODO: No better method to set new font ?
     if ( old_layoutflag )
@@ -1936,7 +1941,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
     if ( selected )
     {
       QPen p( m_textPen );
-      p.setColor( Qt::white );
+      p.setColor( defaultColorGroup.highlightedText() );
       _painter.setPen( p );
     }
     else
@@ -1963,10 +1968,12 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
         m_textPen.setColor( tmpCondition->colorcond );
         }
     else
-  	{
+    {
         _painter.setFont( m_textFont );
-        m_textPen.setColor(m_textColor );
-	}
+        if ( m_textColor.isValid() )
+          m_textPen.setColor( m_textColor );
+        // else keep default painter pen ?
+    }
     //_painter.setFont( m_textFont );
     conditionAlign(_painter,_col,_row);
     if ( !m_bMultiRow && !m_bVerticalText)
@@ -2088,17 +2095,11 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
   if ( m_bLayoutDirtyFlag)
     makeLayout( _painter, _col, _row );
 
-  if ( !_only_left && !_only_top && m_bgColor != Qt::white )
+  if ( !_only_left && !_only_top && m_bgColor.isValid() )
   {
     _painter.setBackgroundColor( m_bgColor );
     _painter.eraseRect( _tx, _ty, cl->width(), rl->height() );
   }
-
-//   if (m_bgColor != white)
-//     {
-//       _painter.setBackgroundColor( m_bgColor );
-//       _painter.eraseRect( _tx, _ty, cl->width(), rl->height() );
-//     }
 
   // Draw the border
   if ( !_only_top )
@@ -3055,7 +3056,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   format.setAttribute( "align", (int)m_eAlign );
   format.setAttribute( "alignY", (int)m_eAlignY );
 
-  if ( m_bgColor != Qt::white )
+  if ( m_bgColor.isValid() )
     format.setAttribute( "bgcolor", m_bgColor.name() );
   if ( multiRow() )
     format.setAttribute( "multirow", "yes" );
@@ -3094,13 +3095,13 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   	format.appendChild( strike );
   	}
   if ( m_textPen != m_pTable->defaultCell()->textPen() )
-    {
+  {
     if(m_conditionIsTrue)
-    	{
+    {
 	m_textPen.setColor( m_textColor );
-	}    	
+    }    	
     format.appendChild( doc.createElement( "pen", m_textPen ) );
-    }
+  }
   format.setAttribute( "brushcolor",m_backGroundBrush.color().name() );
   format.setAttribute( "brushstyle",(int)m_backGroundBrush.style());
 

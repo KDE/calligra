@@ -152,7 +152,7 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
 
   m_iXOffset = 0;
   m_iYOffset = 0;
-  m_fZoom = 1.0;
+  m_fZoom = 1.0; // TODO replace with setScaling/xScaling/yScaling
   m_pView = _view;
   m_pDoc = _doc;
   // m_eAction = DefaultAction;
@@ -164,11 +164,11 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   //m_pEditWidget = m_pView->editWidget();
   m_pPosWidget = m_pView->posWidget();
 
-  setBackgroundColor( white );
-  setMouseTracking( TRUE );
-
+  // let the color scheme set its color!
+  // setBackgroundColor( white );
   setBackgroundMode( NoBackground );
 
+  setMouseTracking( TRUE );
   m_bMousePressed = false;
 
   choose_visible = false;
@@ -1363,8 +1363,10 @@ void KSpreadCanvas::createEditor( EditorType ed )
     int ypos = table->rowPos( markerRow(), this );
     QPalette p = m_pEditor->palette();
     QColorGroup g( p.normal() );
-    g.setColor( QColorGroup::Text, cell->textPen().color() );
-    g.setColor( QColorGroup::Background, cell->KSpreadLayout::bgColor() );
+    if ( cell->textColor().isValid() )
+      g.setColor( QColorGroup::Text, cell->textColor() );
+    if ( cell->bgColor().isValid() )
+      g.setColor( QColorGroup::Background, cell->bgColor() );
     m_pEditor->setPalette( QPalette( g, p.disabled(), g ) );
     m_pEditor->setFont( cell->textFont() );
     m_pEditor->setGeometry( xpos, ypos, w, h );
@@ -1498,7 +1500,7 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
   _painter->drawLine( xpos - 1, ypos + 1, xpos - 1, ypos + h + 3 );
   _painter->drawLine( xpos + 1, ypos + h + 1, xpos + w - 3, ypos + h + 1 );
   _painter->drawLine( xpos + w, ypos + 1, xpos + w, ypos + h - 2 );
-  _painter->fillRect( xpos + w - 2, ypos + h - 1, 5, 5, black );
+  _painter->fillRect( xpos + w - 2, ypos + h - 1, 5, 5, colorGroup().text() );
   _painter->setRasterOp( rop );
 
   if ( own_painter )
@@ -2219,7 +2221,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   QPen pen;
   pen.setWidth( 1 );
   painter.setPen( pen );
-  painter.setBackgroundColor( white );
+  painter.setBackgroundColor( colorGroup().base() );
 
   painter.eraseRect( _ev->rect() );
 
@@ -2245,13 +2247,11 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 
     if ( selected )
     {
-      //       static QColorGroup g2( black, white, white, darkGray, lightGray, black, black );
-      static QBrush fill2( black );
+      static QBrush fill2( colorGroup().brush( QColorGroup::Highlight ) );
       qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, row_lay->height( m_pCanvas ), colorGroup(), FALSE, 1, &fill2 );
     }
     else
     {
-      //       static QColorGroup g( black, white, white, darkGray, lightGray, black, black );
       static QBrush fill( colorGroup().brush( QColorGroup::Background ) );
       qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, row_lay->height( m_pCanvas ), colorGroup(), FALSE, 1, &fill );
     }
@@ -2260,7 +2260,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     sprintf( buffer, "%i", y );
 
     if ( selected )
-      painter.setPen( white );
+      painter.setPen( colorGroup().highlightedText() );
     else
       painter.setPen( colorGroup().text() );
     int len = painter.fontMetrics().width(buffer );
@@ -2615,7 +2615,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
     if ( selected )
     {
       // static QColorGroup g2( black, white, white, darkGray, lightGray, black, black );
-      static QBrush fill2( black );
+      static QBrush fill2( colorGroup().brush( QColorGroup::Button ) );
       qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ),
                        XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill2 );
     }
@@ -2629,7 +2629,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 
 
     if ( selected )
-      painter.setPen( white );
+      painter.setPen( colorGroup().highlightedText() );
     else
       painter.setPen( colorGroup().text() );
     if(!m_pView->activeTable()->getShowColumnNumber())

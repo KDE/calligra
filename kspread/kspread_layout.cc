@@ -42,7 +42,7 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_eFloatColor = KSpreadLayout::AllBlack;
     m_eFloatFormat = KSpreadLayout::OnlyNegSigned;
     m_iPrecision = -1;
-    m_bgColor = Qt::white;
+    m_bgColor = QColor();
     m_eAlign = KSpreadLayout::Undefined;
     m_eAlignY = KSpreadLayout::Middle;
     m_iLeftBorderWidth = 1;
@@ -66,8 +66,8 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_dFaktor = 1.0;
     m_bMultiRow = FALSE;
     m_bVerticalText=FALSE;
-    m_textColor = Qt::black;
-    m_textPen.setColor( m_textColor );
+    m_textColor = QColor();
+    //m_textPen.setColor( m_textColor );
 }
 
 KSpreadLayout::~KSpreadLayout()

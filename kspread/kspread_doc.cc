@@ -871,7 +871,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool transp
 	    ColumnLayout *col_lay = table->columnLayout( x );
 	
 	    KSpreadCell *cell = table->cellAt( x, y );
-	    cell->paintEvent( 0, rect, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
+	    cell->paintCell( rect, painter, xpos, ypos, x, y, col_lay, row_lay, &r );
 	
 	    xpos += col_lay->width();
 	}

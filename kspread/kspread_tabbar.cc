@@ -308,7 +308,7 @@ void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, in
     painter.setClipping( TRUE );
     painter.setClipRegion( reg );
     if ( isactive )
-	painter.setBackgroundColor( white );
+	painter.setBackgroundColor( colorGroup().highlight() );
     else
 	painter.setBackgroundColor( colorGroup().background() );
     painter.eraseRect( x, 0, text_width + 20, height() );

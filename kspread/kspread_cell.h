@@ -168,14 +168,16 @@ public:
     /**
      * Paints the cell.
      */
-    virtual void paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPainter &_painter, int _tx, int _ty,
-			     int _col, int _row, ColumnLayout *cl, RowLayout *rl, QRect *_prect = 0L );
+    void paintCell( const QRect& _rect, QPainter &_painter, int _tx, int _ty,
+                    int _col, int _row, ColumnLayout *cl, RowLayout *rl,
+                    QRect *_prect = 0L );
 
     /**
      * A convenience function
      */
-    virtual void paintEvent( KSpreadCanvas *_canvas, const QRect & _ev, QPainter &_painter, int _col, int _row,
-			     QRect *_prect = 0L );
+    void paintCell( const QRect & _ev, QPainter &_painter,
+                    int _col, int _row,
+                    QRect *_prect = 0L );
 
     /**
      * @return the column this cell is in. May return 0 if the cell is the default cell.

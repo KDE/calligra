@@ -232,7 +232,7 @@ public:
   KoMainWindow* createShell();
   KoView* createView( QWidget* parent, const char* name );
 
-  void paintContent( QPainter& painter, const QRect& rect, bool transparent );
+  virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent );
   void paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadTable* table );
 
   virtual DCOPObject* dcopObject();

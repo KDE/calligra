@@ -2462,6 +2462,7 @@ void KSpreadView::insertChart()
 
 
 /*
+  // TODO Use KoView setScaling/xScaling/yScaling instead
 void KSpreadView::zoomMinus()
 {
   if ( m_fZoom <= 0.25 )

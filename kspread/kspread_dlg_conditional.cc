@@ -56,7 +56,7 @@ KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const char* 
   preview->resize( preview->sizeHint() );
 
   preview->setAlignment(AlignCenter);
-  preview->setBackgroundColor(white);
+  preview->setBackgroundColor(colorGroup().base());
 //  preview->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
 //  preview->setLineWidth( 1 );
   preview->setText(i18n("Preview"));
