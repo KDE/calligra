@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999  Torben Weis <weis@kde.org>
-   Copyright (C) 2000 - 2003 The KSpread Team
+   Copyright (C) 2000 - 2005 The KSpread Team
                               www.koffice.org/kspread
 
    This library is free software; you can redistribute it and/or
@@ -410,6 +410,7 @@ QString KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenSt
     if ( ( hasProperty( PTextPen, true ) || hasNoFallBackProperties( PTextPen ) || force )
          && textPen( _col, _row ).color().isValid() )
     {
+        currentCellStyle.addAttribute( "fo:color", textColor( _col, _row ).name() );
         //format.appendChild( util_createElement( "pen", textPen( _col, _row ), doc ) );
     }
     //FIXME fallback ????
@@ -1336,10 +1337,10 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
 
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
-        kdDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
+        //kdDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
 
         QDomElement * style = oasisStyles.styles()[styleStack.attributeNS( KoXmlNS::draw, "style-name" )];
-        kdDebug()<<" style :"<<style<<endl;
+        //kdDebug()<<" style :"<<style<<endl;
         KoStyleStack drawStyleStack;
         drawStyleStack.push( *style );
         drawStyleStack.setTypeProperties( "graphic" );
@@ -1350,7 +1351,6 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
 
             if ( fill == "solid" || fill == "hatch" )
             {
-                kdDebug()<<" Style ******************************************************\n";
                 QBrush brush=KoOasisStyles::loadOasisFillStyle( drawStyleStack, fill, oasisStyles );
                 setBackGroundBrushColor( brush.color() );
                 setBackGroundBrushStyle( brush.style() );
