@@ -63,6 +63,7 @@ public:
 const int KoRuler::F_TABS = 1;
 const int KoRuler::F_INDENTS = 2;
 const int KoRuler::F_HELPLINES = 4;
+const int KoRuler::F_NORESIZE = 8;
 
 /*================================================================*/
 KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
@@ -798,6 +799,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
             if ( !d->mousePressed ) {
                 setCursor( ArrowCursor );
                 d->action = A_NONE;
+                if ( d->flags & F_NORESIZE )
+                    break;
                 if ( my > top - 5 && my < top + 5 ) {
                     setCursor( Qt::sizeVerCursor );
                     d->action = A_BR_TOP;

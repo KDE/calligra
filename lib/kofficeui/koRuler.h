@@ -97,6 +97,7 @@ public:
     static const int F_TABS;
     static const int F_INDENTS;
     static const int F_HELPLINES;
+    static const int F_NORESIZE;
 
     /**
      * Create a ruler
