@@ -97,5 +97,17 @@ int main( int argc, char** argv ) {
     TEST_BEGIN( 0, 0 );
     writer.addAttribute( "a", longPath );
     TEST_END( "escaping long qstring", expected.data() );
+
+
+    TEST_BEGIN( 0, 0 );
+    bool val = true;
+    int num = 1;
+    double numdouble = 5.0;
+    writer.addConfigItem( "TestConfigBool", val );
+    writer.addConfigItem( "TestConfigInt", num );
+    writer.addConfigItem( "TestConfigDouble", numdouble );
+    TEST_END( "test config", "<r>\n <config:config-item config:name=\"TestConfigDouble\" config:type=\"double\"/>5.0</config:config-item><r>\n"  );
+
+
     speedTest();
 }
