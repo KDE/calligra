@@ -48,7 +48,7 @@ KWEditPathDia::KWEditPathDia( const QString & _path, QWidget *parent, const char
     grid->addMultiCellWidget(m_listpath, 0, 4, 0, 0);
     m_listpath->listBox()->insertStringList(QStringList::split(QString(";"), _path));
     setFocus();
-    resize( 400, 200);
+    resize( 500, 300);
 }
 
 QString KWEditPathDia::newPath()const

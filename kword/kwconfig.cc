@@ -869,11 +869,13 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
     gbPathGroup->setInsideSpacing( KDialog::spacingHint() );
 
     m_pPathView = new KListView( gbPathGroup );
+    m_pPathView->setResizeMode(QListView::NoColumn);
     m_pPathView->addColumn( i18n( "Type" ) );
     m_pPathView->addColumn( i18n( "Path" ) );
     (void) new QListViewItem( m_pPathView, i18n("Personal Expression"), doc->personalExpresssionPath().join(";") );
     m_modifyPath = new QPushButton( i18n("Modify path..."), gbPathGroup);
     connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
+    connect( m_pPathView, SIGNAL( doubleClicked (QListViewItem *, const QPoint &, int  )), this, SLOT( slotModifyPath()));
 }
 
 void ConfigurePathPage::slotModifyPath()
