@@ -40,6 +40,7 @@ VSelectTool::activate()
 	//else
 //		view()->statusMessage()->setText( i18n( "Scale" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
+	view()->part()->document().selection()->setState( VObject::selected );
 }
 
 void
@@ -221,6 +222,8 @@ VSelectTool::eventFilter( QEvent* event )
 		KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
 		KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
+		view()->part()->document().selection()->setState( VObject::selected );
+
 		if( m_state == moving )
 		{
 			m_state = normal;
@@ -299,6 +302,8 @@ VSelectTool::eventFilter( QEvent* event )
 
 		m_activeNode = view()->part()->document().selection()->node( lp );
 		view()->part()->document().selection()->selectNodes();
+		view()->part()->document().selection()->setState( VObject::edit );
+		view()->part()->repaintAllViews();
 
 		// draw initial object:
 		drawTemporaryObject();

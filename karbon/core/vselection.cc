@@ -123,7 +123,7 @@ VSelection::clear()
 void
 VSelection::draw( QPainter* painter, double zoomFactor ) const
 {
-	if( objects().count() == 0 )
+	if( objects().count() == 0 || state() == VObject::edit )
 		return;
 
 
@@ -183,11 +183,14 @@ VSelection::draw( QPainter* painter, double zoomFactor ) const
 
 
 	// draw nodes:
-	painter->setPen( Qt::blue.light() );
-	painter->setBrush( Qt::white );
+	if( state() == VObject::selected )
+	{
+		painter->setPen( Qt::blue.light() );
+		painter->setBrush( Qt::white );
 
-	for( uint i = node_lt; i <= node_rb; ++i )
-		painter->drawRect( m_qrect[i] );
+		for( uint i = node_lt; i <= node_rb; ++i )
+			painter->drawRect( m_qrect[i] );
+	}
 }
 
 const KoRect&

@@ -486,6 +486,7 @@ KarbonView::selectTool()
 	m_currentTool = m_selectTool;
 	m_currentTool->activate();
 	m_selectToolAction->setChecked( true );
+	m_canvas->repaintAll();
 }
 
 void
@@ -495,6 +496,7 @@ KarbonView::editNodeTool()
 	m_currentTool = m_editNodeTool;
 	m_currentTool->activate();
 	m_editNodeToolAction->setChecked( true );
+	m_canvas->repaintAll();
 }
 
 void
