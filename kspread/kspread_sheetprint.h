@@ -188,13 +188,13 @@ public:
      * Return the page limit in X direction.
      * 0 means no limit
      */
-    int pageLimitX() { return m_iPageLimitX; }
+    int pageLimitX() const { return m_iPageLimitX; }
 
     /**
      * Return the page limit in Y direction.
      * 0 means no limit
      */
-    int pageLimitY() { return m_iPageLimitY; }
+    int pageLimitY() const { return m_iPageLimitY; }
 
     /**
      * Sets the page limit in X direction. The zoom factor will be adjusted,
@@ -381,7 +381,7 @@ public:
     /**
      * Returns the zoom level of the printout as double
      */
-    double zoom(){ return m_dZoom; }
+    double zoom() const { return m_dZoom; }
 
     /**
      * Checks wether the page has content to print
@@ -623,16 +623,16 @@ public:
         m_iStartItem( startItem ), m_iEndItem( endItem ), m_dSize( size ),
         m_dOffset( offset ) {}
 
-    int startItem() { return m_iStartItem; } const
+    int startItem() const { return m_iStartItem; }
     void setStartItem( int startItem ) { m_iStartItem = startItem; }
 
-    int endItem() { return m_iEndItem; } const
+    int endItem() const { return m_iEndItem; }
     void setEndItem( int endItem ) { m_iEndItem = endItem; }
 
-    double size() { return m_dSize; } const
+    double size() const { return m_dSize; }
     void setSize( double size ) { m_dSize = size; }
 
-    double offset() { return m_dOffset; }
+    double offset() const { return m_dOffset; }
     void setOffset( double offset ) { m_dOffset = offset; }
 
     bool operator==( KSpreadPrintNewPageEntry const & entry ) const;
