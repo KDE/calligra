@@ -7,6 +7,7 @@
 #include "KRTFFileParser.h"
 
 #include <qfile.h>
+#include <stdlib.h>
 
 int main( int argc, char* argv[] )
 {
@@ -19,11 +20,11 @@ int main( int argc, char* argv[] )
     QFile out( argv[2] );
 
     if( !in.open( IO_ReadOnly ) ) {
-	debug( "Cannot open %s", argv[1] );
+	qDebug( "Cannot open %s", argv[1] );
 	exit( -126 );
     }
     if( !out.open( IO_ReadOnly ) ) {
-	debug( "Cannot open %s", argv[2] );
+	qDebug( "Cannot open %s", argv[2] );
 	exit( -125 );
     }
 	

@@ -11,7 +11,10 @@ kde_module_LTLIBRARIES = librtfimport.la
 librtfimport_la_SOURCES = KRTFTokenizer.cpp KRTFParser.cpp KRTFFileParser.cpp \
                 KRTFHeaderParser.cpp KRTFDocumentParser.cpp
 
-#### Use test_PROGRAMS (and "make check") to create a test program using main.cpp
+check_PROGRAMS = rtfimport
+rtfimport_SOURCES = main.cpp
+rtfimport_LDADD = librtfimport.la
+rtfimport_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 METASOURCES = AUTO
 
