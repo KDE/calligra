@@ -260,6 +260,7 @@ private:
     KWSpinBox *spnStart;
     QSpinBox *spnDepth;
     QLabel *lStart;
+    QLabel *lCustom;
     KWNumPreview *preview;
 
     unsigned int styleBuffer;

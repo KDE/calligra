@@ -1166,7 +1166,7 @@ KWParagCounterWidget::KWParagCounterWidget( QWidget * parent, const char * name 
 
     Layout7->addWidget( spnDepth, 1, 1 );
 
-    QLabel *lCustom = new QLabel( gStyle, "lCustom" );
+    lCustom = new QLabel( gStyle, "lCustom" );
     lCustom->setText( i18n( "Custom character" ) );
 
     Layout7->addWidget( lCustom, 2, 0 );
@@ -1294,7 +1294,9 @@ void KWParagCounterWidget::numTypeChanged( int nType ) {
     gStyle->setEnabled( m_counter.numbering() != Counter::NUM_NONE );
 
     fillStyleCombo(m_counter.numbering());
-    bCustom->setEnabled(m_counter.numbering()==Counter::NUM_LIST);
+    bool state=m_counter.numbering()==Counter::NUM_LIST;
+    bCustom->setEnabled(state);
+    lCustom->setEnabled(state);
 }
 
 void KWParagCounterWidget::display( const KWParagLayout & lay ) {
