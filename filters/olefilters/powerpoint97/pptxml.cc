@@ -76,64 +76,50 @@ void PptXml::encode(QString &text)
 
 const QString PptXml::getXml() const
 {
-    QString body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE DOC >\n"
-        "<DOC author=\"Reginald Stadlbauer\" email=\"reggie@kde.org\" editor=\"Powerpoint import filter\" mime=\"application/x-kpresenter\" syntaxVersion=\"2\">\n"
-        "<PAPER format=\"5\" ptWidth=\"680\" ptHeight=\"510\" mmWidth =\"240\" mmHeight=\"180\" inchWidth =\"9.44882\" inchHeight=\"7.08661\" orientation=\"0\" unit=\"0\">\n"
-        "<PAPERBORDERS mmLeft=\"0\" mmTop=\"0\" mmRight=\"0\" mmBottom=\"0\" ptLeft=\"0\" ptTop=\"0\" ptRight=\"0\" ptBottom=\"0\" inchLeft=\"0\" inchTop=\"0\" inchRight=\"0\" inchBottom=\"0\"/>\n"
-        "</PAPER>\n"
-        "<BACKGROUND rastX=\"10\" rastY=\"10\" bred=\"255\" bgreen=\"255\" bblue=\"255\">\n";
+    QString body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE DOC>\n"
+        "<DOC mime=\"application/x-kpresenter\" email=\"reggie@kde.org\" syntaxVersion=\"2\" author=\"Reginald Stadlbauer\" editor=\"Powerpoint import filter\">\n"
+        " <PAPER ptWidth=\"680\" unit=\"0\" format=\"5\" orientation=\"0\" ptHeight=\"510\">\n"
+        "  <PAPERBORDERS ptRight=\"0\" ptBottom=\"0\" ptLeft=\"0\" ptTop=\"0\"/>\n"
+        " </PAPER>\n"
+        " <BACKGROUND rastX=\"10\" rastY=\"10\" color=\"#ffffff\">\n";
     body += m_pages;
-    body += "</BACKGROUND>\n"
-        "<HEADER show=\"0\">\n"
-        "<ORIG x=\"0\" y=\"0\"/>\n"
-        "<SIZE width=\"20\" height=\"20\"/>\n"
-        "<SHADOW distance=\"0\" direction=\"5\" red=\"160\" green=\"160\" blue=\"164\"/>\n"
-        "<EFFECTS effect=\"0\" effect2=\"0\"/>\n"
-        "<PRESNUM value=\"0\"/>\n"
-        "<ANGLE value=\"0\"/>\n"
-        "<FILLTYPE value=\"0\"/>\n"
-        "<GRADIENT red1=\"255\" green1=\"0\" blue1=\"0\" red2=\"0\" green2=\"255\" blue2=\"0\" type=\"1\" unbalanced=\"0\" xfactor=\"100\" yfactor=\"100\"/>\n"
-        "<PEN red=\"0\" green=\"0\" blue=\"0\" width=\"1\" style=\"0\"/>\n"
-        "<BRUSH red=\"0\" green=\"0\" blue=\"0\" style=\"0\"/>\n"
-        "<DISAPPEAR effect=\"0\" doit=\"0\" num=\"1\"/>\n"
-        "<TEXTOBJ lineSpacing=\"0\" paragSpacing=\"0\" margin=\"0\" bulletType1=\"0\" bulletType2=\"1\" bulletType3=\"2\" bulletType4=\"3\" bulletColor1=\"#000000\" bulletColor2=\"#000000\" bulletColor3=\"#000000\" bulletColor4=\"#000000\">\n"
-        "<P align=\"1\" type=\"0\" depth=\"0\">\n"
-        "<TEXT family=\"utopia\" pointSize=\"20\" bold=\"0\" italic=\"0\" underline=\"0\" color=\"#000000\"> </TEXT>\n"
-        "</P>\n"
-        "</TEXTOBJ>\n"
-        "</HEADER>\n"
-        "<FOOTER show=\"0\">\n"
-        "<ORIG x=\"0\" y=\"0\"/>\n"
-        "<SIZE width=\"20\" height=\"20\"/>\n"
-        "<SHADOW distance=\"0\" direction=\"5\" red=\"160\" green=\"160\" blue=\"164\"/>\n"
-        "<EFFECTS effect=\"0\" effect2=\"0\"/>\n"
-        "<PRESNUM value=\"0\"/>\n"
-        "<ANGLE value=\"0\"/>\n"
-        "<FILLTYPE value=\"0\"/>\n"
-        "<GRADIENT red1=\"255\" green1=\"0\" blue1=\"0\" red2=\"0\" green2=\"255\" blue2=\"0\" type=\"1\" unbalanced=\"0\" xfactor=\"100\" yfactor=\"100\"/>\n"
-        "<PEN red=\"0\" green=\"0\" blue=\"0\" width=\"1\" style=\"0\"/>\n"
-        "<BRUSH red=\"0\" green=\"0\" blue=\"0\" style=\"0\"/>\n"
-        "<DISAPPEAR effect=\"0\" doit=\"0\" num=\"1\"/>\n"
-        "<TEXTOBJ lineSpacing=\"0\" paragSpacing=\"0\" margin=\"0\" bulletType1=\"0\" bulletType2=\"1\" bulletType3=\"2\" bulletType4=\"3\" bulletColor1=\"#000000\" bulletColor2=\"#000000\" bulletColor3=\"#000000\" bulletColor4=\"#000000\">\n"
-        "<P align=\"1\" type=\"0\" depth=\"0\">\n"
-        "<TEXT family=\"utopia\" pointSize=\"20\" bold=\"0\" italic=\"0\" underline=\"0\" color=\"#000000\"> </TEXT>\n"
-        "</P>\n"
-        "</TEXTOBJ>\n"
-        "</FOOTER>\n"
-        "<OBJECTS>\n";
+    body += " </BACKGROUND>\n"
+        " <HEADER show=\"0\">\n"
+        "  <ORIG x=\"0\" y=\"0\"/>\n"
+        "  <SIZE width=\"680\" height=\"20\"/>\n"
+        "  <PEN width=\"1\" style=\"0\" color=\"#000000\"/>\n"
+        "  <TEXTOBJ>\n"
+        "   <P/>\n"
+        "  </TEXTOBJ>\n"
+        " </HEADER>\n"
+        " <FOOTER show=\"0\">\n"
+        "  <ORIG x=\"0\" y=\"430\"/>\n"
+        "  <SIZE width=\"680\" height=\"20\"/>\n"
+        "  <PEN width=\"1\" style=\"0\" color=\"#000000\"/>\n"
+        "  <TEXTOBJ>\n"
+        "   <P/>\n"
+        "  </TEXTOBJ>\n"
+        " </FOOTER>\n"
+        " <PAGETITLES>\n";
+    body += m_titles;
+    body += " </PAGETITLES>\n"
+        " <PAGENOTES>\n";
+    body += m_notes;
+    body += " </PAGENOTES>\n"
+        " <OBJECTS>\n";
     body += m_text;
-    body += "</OBJECTS>\n"
-        "<INFINITLOOP value=\"0\"/>\n"
-        "<MANUALSWITCH value=\"1\"/>\n"
-        "<PRESSPEED value=\"1\"/>\n"
-        "<PRESSLIDES value=\"0\"/>\n"
-        "<SELSLIDES>\n"
-        "<SLIDE nr=\"0\" show=\"1\"/>\n"
-        "</SELSLIDES>\n"
-        "<PIXMAPS>\n"
-        "</PIXMAPS>\n"
-        "<CLIPARTS>\n"
-        "</CLIPARTS>\n";
+    body += " </OBJECTS>\n"
+        " <INFINITLOOP value=\"0\"/>\n"
+        " <MANUALSWITCH value=\"1\"/>\n"
+        " <PRESSPEED value=\"1\"/>\n"
+        " <PRESSLIDES value=\"0\"/>\n"
+        " <SELSLIDES>\n"
+        " <SLIDE nr=\"0\" show=\"1\"/>\n"
+        " </SELSLIDES>\n"
+        " <PIXMAPS>\n"
+        " </PIXMAPS>\n"
+        " <CLIPARTS>\n"
+        " </CLIPARTS>\n";
     body += m_embedded;
     body += "</DOC>\n";
     //kdDebug(s_area) << body << endl;
@@ -172,7 +158,8 @@ void PptXml::gotDrawing(
 
     // Add an entry to the list of embedded objects too. TBD: fix
     // RECT and FRAME settings.
-
+if (mimeType != "application/x-kontour")
+{
     m_embedded += "  <EMBEDDED>\n"
                 "<OBJECT url=\"" +
                 uid +
@@ -192,6 +179,7 @@ void PptXml::gotDrawing(
                 "</SETTINGS>\n"
                 "  </EMBEDDED>\n";
 }
+}
 
 void PptXml::gotSlide(
     const Slide &slide)
@@ -200,56 +188,34 @@ void PptXml::gotSlide(
     QString xml_friendly;
     unsigned i;
 
-    m_pages += "<PAGE>\n"
-            "<BACKTYPE value=\"0\"/>\n"
-            "<BACKVIEW value=\"1\"/>\n"
-            "<BACKCOLOR1 red=\"255\" green=\"255\" blue=\"255\"/>\n"
-            "<BACKCOLOR2 red=\"255\" green=\"255\" blue=\"255\"/>\n"
-            "<BCTYPE value=\"0\"/>\n"
-            "<BGRADIENT unbalanced=\"0\" xfactor=\"100\" yfactor=\"100\"/>\n"
-            "<PGEFFECT value=\"0\"/>\n"
-            "</PAGE>\n";
-    m_text += "<OBJECT type=\"4\">\n"
-            "<ORIG x=\"30\" y=\"" +
-            QString::number(30 + m_y) +
-            "\"/>\n"
-            "<SIZE width=\"610\" height=\"43\"/>\n"
-            "<SHADOW distance=\"0\" direction=\"5\" red=\"160\" green=\"160\" blue=\"164\"/>\n"
-            "<EFFECTS effect=\"0\" effect2=\"0\"/>\n"
-            "<PRESNUM value=\"0\"/>\n"
-            "<ANGLE value=\"0\"/>\n"
-            "<FILLTYPE value=\"0\"/>\n"
-            "<GRADIENT red1=\"255\" green1=\"0\" blue1=\"0\" red2=\"0\" green2=\"255\" blue2=\"0\" type=\"1\" unbalanced=\"0\" xfactor=\"100\" yfactor=\"100\"/>\n"
-            "<PEN red=\"0\" green=\"0\" blue=\"0\" width=\"1\" style=\"0\"/>\n"
-            "<BRUSH red=\"0\" green=\"0\" blue=\"0\" style=\"0\"/>\n"
-            "<DISAPPEAR effect=\"0\" doit=\"0\" num=\"1\"/>\n"
-            "<TEXTOBJ lineSpacing=\"0\" paragSpacing=\"0\" margin=\"0\" bulletType1=\"0\" bulletType2=\"0\" bulletType3=\"0\" bulletType4=\"0\" bulletColor1=\"#ff0000\" bulletColor2=\"#ff0000\" bulletColor3=\"#ff0000\" bulletColor4=\"#ff0000\">\n"
-            "<P align=\"4\" type=\"0\" depth=\"0\">\n"
-            "<TEXT family=\"utopia\" pointSize=\"36\" bold=\"0\" italic=\"0\" underline=\"0\" color=\"#000000\">\n";
+    m_pages += "  <PAGE/>\n";
     xml_friendly = slide.title;
     encode(xml_friendly);
+    m_titles += "  <Title title=\"" + xml_friendly + "\" />\n";
+    m_notes += "  <Note note=\"\" />\n";
+    m_text += "<OBJECT type=\"4\">\n"
+            " <ORIG x=\"30\" y=\"" +
+            QString::number(30 + m_y) +
+            "\"/>\n"
+            " <SIZE width=\"610\" height=\"43\"/>\n"
+            " <PEN width=\"1\" style=\"0\" color=\"#000000\"/>\n"
+            " <TEXTOBJ>\n"
+            "  <P align=\"4\">\n"
+            "   <TEXT family=\"utopia\" pointSize=\"36\" color=\"#000000\">";
     m_text += xml_friendly;
     m_text += "</TEXT>\n"
-            "</P>\n"
-            "</TEXTOBJ>\n"
+            "  </P>\n"
+            " </TEXTOBJ>\n"
             "</OBJECT>\n"
             "<OBJECT type=\"4\">\n"
-            "<ORIG x=\"30\" y=\"" +
+            " <ORIG x=\"30\" y=\"" +
             QString::number(130 + m_y) +
             "\"/>\n"
-            "<SIZE width=\"610\" height=\"24\"/>\n"
-            "<SHADOW distance=\"0\" direction=\"5\" red=\"160\" green=\"160\" blue=\"164\"/>\n"
-            "<EFFECTS effect=\"0\" effect2=\"0\"/>\n"
-            "<PRESNUM value=\"0\"/>\n"
-            "<ANGLE value=\"0\"/>\n"
-            "<FILLTYPE value=\"0\"/>\n"
-            "<GRADIENT red1=\"255\" green1=\"0\" blue1=\"0\" red2=\"0\" green2=\"255\" blue2=\"0\" type=\"1\" unbalanced=\"0\" xfactor=\"100\" yfactor=\"100\"/>\n"
-            "<PEN red=\"0\" green=\"0\" blue=\"0\" width=\"1\" style=\"0\"/>\n"
-            "<BRUSH red=\"0\" green=\"0\" blue=\"0\" style=\"0\"/>\n"
-            "<DISAPPEAR effect=\"0\" doit=\"0\" num=\"1\"/>\n"
-            "<TEXTOBJ lineSpacing=\"0\" paragSpacing=\"0\" margin=\"0\" bulletType1=\"0\" bulletType2=\"0\" bulletType3=\"0\" bulletType4=\"0\" bulletColor1=\"#000000\" bulletColor2=\"#ff0000\" bulletColor3=\"#ff0000\" bulletColor4=\"#ff0000\">\n"
-            "<P align=\"0\" type=\"1\" depth=\"0\">\n"
-            "<TEXT family=\"utopia\" pointSize=\"20\" bold=\"0\" italic=\"0\" underline=\"0\" color=\"#000000\">\n";
+            " <SIZE width=\"610\" height=\"24\"/>\n"
+            " <PEN width=\"1\" style=\"0\" color=\"#000000\"/>\n"
+            " <TEXTOBJ>\n"
+            "  <P>\n"
+            "   <TEXT family=\"utopia\" pointSize=\"20\" color=\"#000000\">";
     for (i = 0; i < slide.body.count(); i++)
     {
         xml_friendly = slide.body[i];
@@ -257,13 +223,13 @@ void PptXml::gotSlide(
         m_text += xml_friendly;
         if (i < slide.body.count() - 1)
             m_text += "</TEXT>\n"
-                "</P>\n"
-                "<P align=\"0\" type=\"1\" depth=\"0\">\n"
-                "<TEXT family=\"utopia\" pointSize=\"20\" bold=\"0\" italic=\"0\" underline=\"0\" color=\"#000000\">\n";
+                "  </P>\n"
+                "  <P>\n"
+                "   <TEXT family=\"utopia\" pointSize=\"20\" color=\"#000000\">";
     }
     m_text += "</TEXT>\n"
-            "</P>\n"
-            "</TEXTOBJ>\n"
+            "  </P>\n"
+            " </TEXTOBJ>\n"
             "</OBJECT>";
     m_y += pageHeight;
 }

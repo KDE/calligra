@@ -285,10 +285,11 @@ bool Powerpoint::parse(
     myFile &mainStream,
     myFile &currentUser)
 {
-    QDataStream stream(currentUser, IO_ReadOnly);
+    unsigned i;
 
-    stream.setByteOrder(QDataStream::LittleEndian); // Great, I love Qt !
     m_mainStream = mainStream;
+    m_documentRef = 0;
+    m_documentRefFound = false;
     m_persistentReferences.clear();
     m_slides.clear();
     m_editDepth = 0;
@@ -296,13 +297,13 @@ bool Powerpoint::parse(
     // Find the slide references.
 
     m_pass = PASS_GET_SLIDE_REFERENCES;
-    walk(currentUser.length, stream);
+    walkRecord(currentUser.length, currentUser.data);
+    walkReference(m_documentRef);
 
     // We should have a complete list of slide persistent references.
 
     m_pass = PASS_GET_SLIDE_CONTENTS;
     kdError(s_area) << "TOTAL SLIDES XXXXXX: " << m_slides.count() << endl;
-    unsigned i;
 
     for (i = 0; i < m_slides.count(); i++)
     {
@@ -370,10 +371,11 @@ void Powerpoint::opCurrentUserAtom(
         Q_UINT16 docFileVersion;
         Q_UINT8 majorVersion;
         Q_UINT8 minorVersion;
+        Q_UINT16 crap;
+        QString userName;
+        Q_UINT16 release;
     } data;
     const Q_UINT32 MAGIC_NUMBER = (Q_UINT32)(-476987297);
-    QString userName;
-    Q_UINT16 release;
     unsigned i;
 
     operands >> data.size >> data.magic >> data.offsetToCurrentEdit >>
@@ -381,24 +383,25 @@ void Powerpoint::opCurrentUserAtom(
         data.minorVersion;
 
     // Skip what appears to be junk. TBD: these two bytes are documented to belong
-    // to a Q_UINT32 "release" rather then the Q_UINT16 release actually encountered.
+    // to a Q_UINT32 "release" rather then the Q_UINT16 actually encountered.
 
-    Q_UINT16 crap;
-    operands >> crap;
+    operands >> data.crap;
     for (i = 0; i < data.lenUserName; i++)
     {
         Q_UINT8 tmp;
 
         operands >> tmp;
-        userName += tmp;
+        data.userName += tmp;
     }
-    operands >> release;
-    skip(bytes - sizeof(data) - sizeof(crap) - data.lenUserName - sizeof(release), operands);
+    operands >> data.release;
+    kdDebug(s_area) << "crap: " << data.crap <<
+        " current user: " << data.userName <<
+        " release: " << data.release << endl;
 
     switch (m_pass)
     {
     case PASS_GET_SLIDE_REFERENCES:
-        if (data.size != sizeof(data))
+        if (data.size != 20)
         {
             kdError(s_area) << "invalid size: " << data.size << endl;
         }
@@ -409,18 +412,18 @@ void Powerpoint::opCurrentUserAtom(
         if ((data.docFileVersion != 1012) ||
             (data.majorVersion != 3) ||
             (data.minorVersion != 0) ||
-            (release < 8) ||
-            (release > 10))
+            (data.release < 8) ||
+            (data.release > 10))
         {
             kdError(s_area) << "invalid version: " << data.docFileVersion <<
                 "." << data.majorVersion <<
                 "." << data.minorVersion <<
-                "." << release << endl;
+                "." << data.release << endl;
         }
 
         // Now walk main stream starting at current edit point.
 
-        walk(data.offsetToCurrentEdit);
+        walkRecord(data.offsetToCurrentEdit);
         break;
     case PASS_GET_SLIDE_CONTENTS:
         break;
@@ -682,14 +685,16 @@ void Powerpoint::opPersistPtrIncrementalBlock(
     {
         unsigned i;
 
-	// Walk references numbered between:
-	//
-	//    offsetNumber..offsetNumber + offsetCount - 1
-	//
+        // Walk references numbered between:
+        //
+        //    offsetNumber..offsetNumber + offsetCount - 1
+        //
         operands >> data.header.info;
         length += sizeof(data.header.info);
         for (i = 0; i < data.header.fields.offsetCount; i++)
         {
+            unsigned reference = data.header.fields.offsetNumber + i;
+
             operands >> data.offset;
             length += sizeof(data.offset);
             switch (m_pass)
@@ -698,9 +703,20 @@ void Powerpoint::opPersistPtrIncrementalBlock(
 
                 // Create a record of this persistent reference.
 
-                kdDebug(s_area) << "persistent reference: " << data.header.fields.offsetNumber + i << ": " <<
-                    data.offset << endl;
-                m_persistentReferences.insert(data.header.fields.offsetNumber + i, data.offset);
+                if (m_persistentReferences.end() == m_persistentReferences.find(reference))
+                {
+                    kdDebug(s_area) << "persistent reference: " << reference <<
+                        ": " << data.offset << endl;
+                    m_persistentReferences.insert(reference, data.offset);
+                }
+                else
+                {
+                    // This reference has already been seen! Since the parse proceeds
+                    // backwards in time form the most recent edit, I assume this means
+                    // that this is an older version of this slide...so just ignore it.
+                    kdDebug(s_area) << "superseded reference: " << reference <<
+                        ": " << data.offset << endl;
+                }
                 break;
             case PASS_GET_SLIDE_CONTENTS:
                 break;
@@ -784,8 +800,8 @@ void Powerpoint::opSlidePersistAtom(
         m_slide = new Slide;
         m_slide->persistentReference = data.psrReference;
         m_slides.append(m_slide);
-                kdDebug(s_area) << "slide: "<<data.psrReference<<" has texts: " <<
-                    data.numberTexts << endl;
+        kdDebug(s_area) << "slide: " << data.psrReference <<
+            " has texts: " << data.numberTexts << endl;
         break;
     case PASS_GET_SLIDE_CONTENTS:
         break;
@@ -977,7 +993,11 @@ void Powerpoint::opUserEditAtom(
     operands >> data.lastSlideID  >> data.version >> data.offsetLastEdit >>
         data.offsetPersistDirectory >> data.documentRef >>
         data.maxPersistWritten >> data.lastViewType;
-
+    if (!m_documentRefFound)
+    {
+        m_documentRef = data.documentRef;
+        m_documentRefFound = true;
+    }
     switch (m_pass)
     {
     case PASS_GET_SLIDE_REFERENCES:
@@ -986,14 +1006,13 @@ void Powerpoint::opUserEditAtom(
         // references which we then use to look up our document.
 
         walkRecord(data.offsetPersistDirectory);
-        walkReference(data.documentRef);
 
         // Now recursively walk the main OLE stream parsing previous edits.
 
         if (data.offsetLastEdit)
         {
             m_editDepth++;
-            walk(data.offsetLastEdit);
+            walkRecord(data.offsetLastEdit);
             m_editDepth--;
         }
         break;
@@ -1072,7 +1091,7 @@ void Powerpoint::walk(Q_UINT32 mainStreamOffset)
     a.resetRawData((const char *)m_mainStream.data + mainStreamOffset, length);
 }
 
-void Powerpoint::walkRecord(Q_UINT32 mainStreamOffset)
+void Powerpoint::walkRecord(Q_UINT32 bytes, const unsigned char *operands)
 {
     // First read what should be the next header using one stream.
 
@@ -1080,20 +1099,25 @@ void Powerpoint::walkRecord(Q_UINT32 mainStreamOffset)
     QByteArray a;
     Header op;
 
-    a.setRawData((const char *)m_mainStream.data + mainStreamOffset, length);
+    a.setRawData((const char *)operands, bytes);
     QDataStream stream1(a, IO_ReadOnly);
     stream1.setByteOrder(QDataStream::LittleEndian);
     stream1 >> op.opcode.info >> op.type >> op.length;
-    a.resetRawData((const char *)m_mainStream.data + mainStreamOffset, length);
+    a.resetRawData((const char *)operands, bytes);
 
     // Armed with the length, parse in the usual way using a second stream.
 
     length += op.length;
-    a.setRawData((const char *)m_mainStream.data + mainStreamOffset, length);
+    a.setRawData((const char *)operands, length);
     QDataStream stream2(a, IO_ReadOnly);
     stream2.setByteOrder(QDataStream::LittleEndian);
     walk(length, stream2);
-    a.resetRawData((const char *)m_mainStream.data + mainStreamOffset, length);
+    a.resetRawData((const char *)operands, length);
+}
+
+void Powerpoint::walkRecord(Q_UINT32 mainStreamOffset)
+{
+    walkRecord(sizeof(Header), m_mainStream.data + mainStreamOffset);
 }
 
 void Powerpoint::walkReference(Q_UINT32 reference)

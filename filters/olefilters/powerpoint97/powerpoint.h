@@ -83,6 +83,8 @@ public:
 
 private:
     myFile m_mainStream;
+    unsigned m_documentRef;
+    bool m_documentRefFound;
     QMap<unsigned, unsigned> m_persistentReferences;
     unsigned m_editDepth;
     enum
@@ -118,6 +120,9 @@ private:
         QDataStream &operands);
     void walk(
         Q_UINT32 mainStreamOffset);
+    void walkRecord(
+        Q_UINT32 bytes,
+        const unsigned char *operands);
     void walkRecord(
         Q_UINT32 mainStreamOffset);
     void walkReference(
