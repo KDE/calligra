@@ -65,3 +65,23 @@ bool KWordFrameSetIface::isFloating() const
 {
     return m_frame->isFloating();
 }
+
+double KWordFrameSetIface::ptWidth() const
+{
+    return m_frame->frame(0)->normalize().width();
+}
+
+double KWordFrameSetIface::ptHeight() const
+{
+    return m_frame->frame(0)->normalize().height();
+}
+
+double KWordFrameSetIface::ptPosX() const
+{
+    return m_frame->frame(0)->normalize().x();
+}
+
+double KWordFrameSetIface::ptPosY() const
+{
+    return m_frame->frame(0)->normalize().y();
+}

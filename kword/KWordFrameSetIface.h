@@ -41,6 +41,10 @@ k_dcop:
     virtual bool isMoveable() const;
     virtual bool isVisible() const;
     virtual bool isFloating() const;
+    virtual double ptWidth() const;
+    virtual double ptHeight() const;
+    virtual double ptPosX() const;
+    virtual double ptPosY() const;
 
 private:
     KWFrameSet *m_frame;
