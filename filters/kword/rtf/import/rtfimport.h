@@ -169,7 +169,7 @@ struct RTFTableCell
 struct RTFTableRow
 {
     QValueList<RTFTableCell> cells;
-    QValueList<QCString> frameSets;
+    QStringList frameSets;
     RTFLayout::Alignment alignment;
     int height;
     int left;
@@ -179,7 +179,7 @@ struct RTFTableRow
 struct KWFormat
 {
     RTFFormat fmt;
-    QCString xmldata;
+    QString xmldata;
     uint id, pos, len;
 };
 
@@ -190,7 +190,7 @@ struct RTFTextState
     DomNode cell;	// table cell(s)
     DomNode text;	// plain text (for paragraph or table cell)
     QValueList<KWFormat> formats;
-    QValueList<QCString> frameSets;
+    QStringList frameSets;
     QValueList<RTFTableRow> rows;
     uint table, length;
 };

@@ -35,10 +35,10 @@ DomNode::DomNode( const char *doctype )
     documentLevel	= 1;
     hasChildren		= false;
     hasAttributes	= false;
-    cstr += "<?xml version = '1.0' encoding = 'UTF-8'?><!DOCTYPE " ;
-    cstr += doctype;
-    cstr += " ><";
-    cstr += doctype;
+    str += "<?xml version = '1.0' encoding = 'UTF-8'?><!DOCTYPE " ;
+    str += doctype;
+    str += " ><";
+    str += doctype;
 }
 
 /**
@@ -47,7 +47,7 @@ DomNode::DomNode( const char *doctype )
  */
 void DomNode::clear( int level )
 {
-    cstr.resize(0);
+    str = QString::null;
     documentLevel	= level;
     hasChildren		= true;
     hasAttributes	= false;
@@ -60,8 +60,8 @@ void DomNode::clear( int level )
 void DomNode::addNode( const char *name )
 {
     closeTag( true );
-    cstr += " <";
-    cstr += name;
+    str += " <";
+    str += name;
     hasChildren = false;
     ++documentLevel;
 }
@@ -86,7 +86,7 @@ void DomNode::addTextNode( const char *text, QTextCodec* codec )
         .replace('<',"&lt;")
         .replace('>',"&gt;");  // Needed for the sequence ]]>
 
-    cstr += unicode.utf8();
+    str += unicode;
 }
 
 /**
@@ -137,11 +137,11 @@ void DomNode::addRect( int left, int top, int right, int bottom )
  */
 void DomNode::addKey( const QDateTime& dt, const char *filename, const char *name )
 {
-    const QDate date = dt.date();
-    const QTime time = dt.time();
+    const QDate date ( dt.date() );
+    const QTime time ( dt.time() );
 
     addNode( "KEY" );
-    setAttribute( "filename", filename );
+    setAttribute( "filename", filename );// ### TODO: escape
     setAttribute( "year", date.year() );
     setAttribute( "month", date.month() );
     setAttribute( "day", date.day() );
@@ -152,7 +152,7 @@ void DomNode::addKey( const QDateTime& dt, const char *filename, const char *nam
 
     if (name)
     {
-	setAttribute( "name", name );
+	setAttribute( "name", name );// ### TODO: escape
     }
     closeNode( "KEY" );
 }
@@ -191,12 +191,12 @@ void DomNode::addFrame( int left, int top, int right, int bottom,
  */
 void DomNode::setAttribute( const char *attribute, const char *value )
 {
-    cstr += ' ';
-    cstr += attribute;
-    cstr += '=';
-    cstr += '"';
-    cstr += value;
-    cstr += '"';
+    str += ' ';
+    str += attribute;
+    str += '=';
+    str += '"';
+    str += value;
+    str += '"';
     hasAttributes = true;
 }
 
@@ -228,22 +228,22 @@ void DomNode::closeNode( const char *name )
 {
     if (!hasChildren)
     {
-	if (hasAttributes)
-	{
-	    cstr += ' ';
-	}
-	cstr += '/';
+        if (hasAttributes)
+        {
+            str += ' ';
+        }
+        str += '/';
     }
     else
     {
-	cstr += "</";
-	cstr += name;
+        str += "</";
+        str += name;
     }
-    cstr += ">\n";
+    str += ">\n";
 
     for (int i=--documentLevel; i > 1; i--)
     {
-	cstr += ' ';
+        str += ' ';
     }
     hasChildren = true;
 }
@@ -256,22 +256,22 @@ void DomNode::closeTag( bool nl )
 {
     if (!hasChildren)
     {
-	if (hasAttributes)
-	{
-	    cstr += ' ';
-	}
-	cstr += '>';
+        if (hasAttributes)
+        {
+            str += ' ';
+        }
+        str += '>';
 
-	if (nl)
-	{
-	    cstr += '\n';
+        if (nl)
+        {
+            str += '\n';
 
-	    for (int i=0; i<documentLevel; i++)
-	    {
-		cstr += ' ';
-	    }
-	}
-	hasChildren = true;
+            for (int i=0; i<documentLevel; i++)
+            {
+                str += ' ';
+            }
+        }
+        hasChildren = true;
     }
     hasAttributes = false;
 }
@@ -282,22 +282,27 @@ void DomNode::closeTag( bool nl )
  */
 void DomNode::appendNode( const DomNode &child )
 {
-    const QCString childCStr ( child.toCString() );
-    closeTag( (childCStr.length() >= 2 && (childCStr[0] == '<' || childCStr[1] == '<')) );
-    cstr += childCStr;
+    const QString childStr ( child.toString() );
+    closeTag( (childStr.length() >= 2 && (childStr[0] == '<' || childStr[1] == '<')) );
+    str += childStr;
 }
 
 /**
  * Appends XML text to node
  */
-void DomNode::append( const QCString& str)
+void DomNode::append( const QString& _str)
 {
-    cstr += str;
+    str += _str;
+}
+
+void DomNode::append( const QCString& cstr)
+{
+    str += QString::fromUtf8(cstr);
 }
 
 void DomNode::append( const char ch)
 {
-    cstr += ch;
+    str += ch;
 }
 
 /**
@@ -305,13 +310,13 @@ void DomNode::append( const char ch)
  */
 bool DomNode::isEmpty( void ) const
 {
-    return cstr.isEmpty();
+    return str.isEmpty();
 }
 
 /**
  * Returns the data of the document node.
  */
-QCString DomNode::toCString( void ) const
+QString DomNode::toString( void ) const
 {
-    return cstr;
+    return str;
 }

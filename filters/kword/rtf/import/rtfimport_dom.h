@@ -41,13 +41,14 @@ public:
     void closeNode( const char *name );
     void closeTag( bool nl );
     void appendNode( const DomNode &child );
-    void append( const QCString& str);
+    void append( const QCString& cstr);
+    void append( const QString& _str);
     void append( const char ch);
     bool isEmpty() const;
-    QCString toCString() const;
+    QString toString() const;
 
 private:
-    QCString cstr;
+    QString str;
     int documentLevel;
     bool hasChildren;
     bool hasAttributes;

@@ -938,7 +938,7 @@ void RTFImport::insertTableCell( RTFProperty * )
     insertParagraph();
     state.layout.inTable = b;
     //}}
-    textState->frameSets << textState->cell.toCString();
+    textState->frameSets << textState->cell.toString();
     textState->cell.clear( 3 );
 }
 
@@ -1720,13 +1720,13 @@ void RTFImport::addVariable(DomNode& spec, int type, QCString key, RTFFormat* fm
     node.closeTag(true);
         node.addNode("TYPE");
         node.setAttribute( "type", type );
-        node.setAttribute( "key", key );
+        node.setAttribute( "key", key ); // ### TODO: escape
         node.setAttribute( "text", 1 );
         node.closeNode("TYPE");
 
 	node.appendNode(spec);
     node.closeNode( "VARIABLE" );
-    kwFormat.xmldata = node.toCString();
+    kwFormat.xmldata = node.toString();
     kwFormat.id  = 4;
     kwFormat.pos = textState->length++;
     kwFormat.len = 1;
@@ -1805,7 +1805,7 @@ void RTFImport::parseRichText( RTFProperty * )
 		kwFormat.pos = textState->length;
 		kwFormat.len = len;
 		textState->formats << kwFormat;
-		kwFormat.xmldata.resize(0);
+		kwFormat.xmldata = QString::null;
 	    }
 	    else
 	    {
@@ -1914,7 +1914,7 @@ void RTFImport::addAnchor( const char *instance )
     node.setAttribute( "type", "frameset" );
     node.setAttribute( "instance", instance );
     node.closeNode( "ANCHOR" );
-    kwFormat.xmldata = node.toCString();
+    kwFormat.xmldata = node.toString();
     kwFormat.id  = 6;
     kwFormat.pos = textState->length++;
     kwFormat.len = 1;
@@ -2469,8 +2469,9 @@ void RTFImport::writeOutPart( const char *name, const DomNode& node )
     KoStoreDevice* dev = m_chain->storageFile( name, KoStore::Write );
     if ( dev )
     {
-        const QCString cstr( node.toCString() );
-        dev->writeBlock( cstr.data(), cstr.length() ); // QCString, so do not use QIODevice::writeBlock(const QByteArray& data)
+        QTextStream stream( dev );
+        stream.setEncoding( QTextStream::UnicodeUTF8 );
+        stream << node.toString();
     }
     else
         kdError(30515) << "Could not write part " << name << endl;
