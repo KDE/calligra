@@ -628,7 +628,13 @@ void GBezier::updateGradientShape (QPainter& p) {
   gShape.updatePixmap ();
 }
 
-void GBezier::getPath (QPointArray& path) {
-  path = tMatrix.map (ppoints);
+void GBezier::getPath (vector<Coord>& path) {
+  unsigned int num = ppoints.size ();
+  path.resize (num);
+  for (unsigned int i = 0; i < num; i++) {
+    const QPoint& p = ppoints.point (i);
+    Coord pi (p.x (), p.y ());
+    path[i] = pi.transform (tMatrix);
+  }
 }
 

@@ -1,7 +1,1 @@
-micod -ORBIIOPAddr inet:localhost:8888 &
-micod_pid=$!
-sleep 1
-
-trap "kill $micod_pid" 0
-
-killustrator.bin -ORBImplRepoAddr inet:localhost:8888 -ORBIIOPAddr inet:localhost:9999
+killustrator.bin

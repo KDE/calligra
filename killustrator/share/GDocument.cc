@@ -833,6 +833,7 @@ bool GDocument::readFromXml (istream& is) {
 }
 
 unsigned int GDocument::findIndexOfObject (GObject *obj) {
+  assert (obj->getLayer () != 0L);
   return obj->getLayer ()->findIndexOfObject (obj);
 }
 

@@ -32,6 +32,17 @@
 #include <klocale.h>
 #include <kapp.h>
 
+float seg_length (const Coord& c1, const Coord& c2) {
+  float dx = c2.x () - c1.x (); 
+  float dy = c2.y () - c1.y ();
+  return sqrt (dx * dx + dy * dy);
+}
+float seg_angle (const Coord& c1, const Coord& c2) {
+  float dx = c2.x () - c1.x (); 
+  float dy = c2.y () - c1.y ();
+  return atan (dy / dx) * RAD_FACTOR;
+}
+
 GText::TextInfo GText::defaultTextInfo; 
 
 void GText::setDefaultTextInfo (const TextInfo& ti) {
@@ -235,6 +246,9 @@ void GText::setText (const QString& s) {
       pos1 = pos2 + 1;
     }
     else {
+      if (s.length () - pos1 == 0)
+	break;
+
       QString sub = s.mid (pos1, s.length () - pos1);
       text.push_back (sub);
     }
@@ -452,7 +466,7 @@ void GText::writeToXml (XmlWriter& xml) {
   int i = 1;
   for (vector<QString>::iterator it = text.begin (); it != text.end (); it++) {
     xml.writeText ((const char *) *it);
-    if (i < lines ())
+    if (i < lines () - 1)
       xml.writeTag ("br");
   }
 
@@ -472,7 +486,7 @@ void GText::updateMatricesForPath () {
     cmatrices.clear ();
     cmatrices.resize (num_chars);
 
-    if (pathObj->isA ("GPolyline") || pathObj->isA ("GPolygon")) {
+    if (pathObj->inherits ("GPolyline")) {
       // get path for aligning
       vector<Coord> path;
       pathObj->getPath (path);
@@ -482,53 +496,54 @@ void GText::updateMatricesForPath () {
 	path[i] = path[i].transform (iMatrix);
 
       // now compute character matrices according the path
-      float xp1, yp1, xp2, yp2;
-      float dx, dy, len, angle;
-      int lpos = 0; // width of string at current segment
-      int seg = 0; // segment of path
-      int idx = 0; // matrix index
-      bool last_segment = (seg + 2 == (int) path.size ());
+      float len, angle;
+      float lpos = 0; // width of string at current segment
+      float off = 0;
 
-      xp1 = path[seg].x (); yp1 = path[seg].y ();
-      xp2 = path[seg + 1].x (); yp2 = path[seg + 1].y ();
-      dx = xp2 - xp1; dy = yp2 - yp1;
-      len = sqrt (dx * dx + dy * dy);
-      angle = atan (dy / dx) * RAD_FACTOR;
-      if (dx < 0) angle = -angle;
+      int max_pos = path.size () - 1;
+      int s_pos = 0, e_pos = 1;
+      len = seg_length (path[s_pos], path[e_pos]);
+      angle = seg_angle (path[s_pos], path[e_pos]);
+      if (path[e_pos].x () - path[s_pos].x () < 0) 
+	angle = -angle;
 
       for (it = text.begin (); it != text.end (); it++) {
 	const char *s = (const char *) *it;
 	int slen = strlen (s);
-	for (i = 0; i < slen; i++) {
+	i = 0;
+	while (i < slen) {
 	  int cwidth = fm->width (s[i]);
-	  if (! last_segment && lpos + cwidth > len) {
-	    // character doesn't fits to current segment
-	    // --> draw on next segment
-	    seg++;
-	    xp1 = path[seg].x (); yp1 = path[seg].y ();
-	    xp2 = path[seg + 1].x (); yp2 = path[seg + 1].y ();
-	    dx = xp2 - xp1; dy = yp2 - yp1;
-	    len = sqrt (dx * dx + dy * dy);
-	    angle = atan (dy / dx) * RAD_FACTOR;
-	    if (dx < 0) angle += 180;
-	    lpos = 0;
-	    last_segment = (seg + 2 == (int) path.size ());
+	  if (e_pos < max_pos && lpos + cwidth > len) {
+	    e_pos += 1;
+	    float nlen = seg_length (path[e_pos - 1], path[e_pos]);
+	    angle = seg_angle (path[s_pos], path[e_pos]);
+	    off = lpos + cwidth - len;
+	    len += nlen;
 	  }
-	  cmatrices[idx].translate (path[seg].x (), path[seg].y ());
-	  cmatrices[idx].rotate (angle);
-	  cmatrices[idx].translate (lpos, 0);
-	  lpos += cwidth;
-	  idx++;
+	  else {
+	    cmatrices[i].translate (path[s_pos].x (), path[s_pos].y ());
+	    cmatrices[i].rotate (angle);
+	    cmatrices[i].translate (lpos, 0);
+	    lpos += cwidth;
+	    if (e_pos - s_pos > 1) {
+	      s_pos = e_pos - 1;
+	      lpos = off;
+	      len = seg_length (path[s_pos], path[e_pos]);
+	      angle = seg_angle (path[s_pos], path[e_pos]);
+	      if (path[e_pos].x () - path[s_pos].x () < 0) 
+		angle = -angle;
+	      off = 0;
+	    }
+	    i++;
+	  }
 	} 
       }
     }
-    //    emit changed ();
     updateRegion ();
   }
 }
 
 void GText::setPathObject (GObject* obj) {
-  cout << "set path object" << endl;
   if (pathObj != 0L) {
     pathObj->unref ();
     disconnect (obj, SIGNAL(changed(const Rect&)), 
@@ -536,7 +551,6 @@ void GText::setPathObject (GObject* obj) {
   }
   pathObj = obj;
   if (pathObj != 0L) {
-    cout << "update matrices" << endl;
     pathObj->ref ();
     // force generation of id for refering in XMLK
     (void) pathObj->getId ();

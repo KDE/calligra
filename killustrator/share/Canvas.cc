@@ -310,6 +310,7 @@ void Canvas::updateRegion (const Rect& r) {
   // compute the clipping region
   QWMatrix m;
   m.scale (s, s);
+
   QRect clip = m.map (QRect (int (r.left ()), int (r.top ()), 
 			     int (r.width ()), int (r.height ())));
 
@@ -319,10 +320,18 @@ void Canvas::updateRegion (const Rect& r) {
   // setup the clip region
   if (clip.x () <= 1) clip.setX (1);
   if (clip.y () <= 1) clip.setY (1);
-  if (clip.right () >= document->getPaperWidth ()) 
-    clip.setRight (document->getPaperWidth ());
-  if (clip.bottom () >= document->getPaperHeight ()) 
-    clip.setBottom (document->getPaperHeight ());
+
+  unsigned int mw = (unsigned int) ((float) document->getPaperWidth () * s);
+  unsigned int mh = (unsigned int) ((float) document->getPaperHeight () * s);
+
+  if (clip.right () >= mw) 
+    clip.setRight (mw);
+  if (clip.bottom () >= mh) 
+    clip.setBottom (mh);
+
+  //  cout << "clip: " << clip.left () << ", " << clip.top ()
+  //       << ", " << clip.width () << ", " << clip.height () << endl;
+
   p.setClipRect (clip);
 
   // clear the canvas

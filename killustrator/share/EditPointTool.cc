@@ -150,15 +150,17 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
     int xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
     if (mode == MovePoint) {
-      float dx = xpos - lastPos.x ();
-      float dy = ypos - lastPos.y ();
-      if (dx != 0 || dy != 0) 
-	obj->movePoint (pointIdx, dx, dy);
-      
-      EditPointCmd *cmd = new EditPointCmd (doc, obj, pointIdx,
-					    xpos - startPos.x (), 
-					    ypos - startPos.y ());
-      history->addCommand (cmd);
+      if (pointIdx != -1) {
+	float dx = xpos - lastPos.x ();
+	float dy = ypos - lastPos.y ();
+	if (dx != 0 || dy != 0) 
+	  obj->movePoint (pointIdx, dx, dy);
+	
+	EditPointCmd *cmd = new EditPointCmd (doc, obj, pointIdx,
+					      xpos - startPos.x (), 
+					      ypos - startPos.y ());
+	history->addCommand (cmd);
+      }
     }
     else if (mode == InsertPoint && obj->inherits ("GPolyline")) {
       GPolyline* pline = (GPolyline *) obj;

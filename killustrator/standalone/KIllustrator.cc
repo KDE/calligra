@@ -429,8 +429,10 @@ void KIllustrator::initToolBars () {
 
   connect (editPointToolbar, SIGNAL (clicked(int)), 
 	   this, SLOT (menuCallback (int)));
-  editPointToolbar->setBarPos (KToolBar::Floating);
   editPointToolbar->enable (KToolBar::Hide);
+  editPointToolbar->move (10000, 10000);
+  editPointToolbar->setBarPos (KToolBar::Floating);
+  editPointToolbar->setFullWidth ();
   addToolBar (editPointToolbar);
 }
 
@@ -1197,7 +1199,11 @@ void KIllustrator::toolSelected (int id) {
     if (! editPointToolbar->isButtonOn (ID_TOOL_EP_MOVE))
       editPointToolbar->toggleButton (ID_TOOL_EP_MOVE);
     editPointToolbar->enable (KToolBar::Show);
+    editPointToolbar->move (QCursor::pos ());
+
   }
-  else
+  else {
+    editPointToolbar->move (10000, 10000);
     editPointToolbar->enable (KToolBar::Hide);
+  }
 }

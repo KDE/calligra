@@ -446,6 +446,8 @@ void SelectionTool::translate (GDocument* doc, int dx, int dy,
     history->addCommand (cmd, true);
   }
   else {
+    if (doc->selectionCount () > 1)
+      doc->setAutoUpdate (false);
     QWMatrix m;
     m.translate (dx, dy);
     for (list<GObject*>::iterator it = doc->getSelection ().begin (); 
@@ -454,6 +456,8 @@ void SelectionTool::translate (GDocument* doc, int dx, int dy,
       (*it)->initTmpMatrix ();
       (*it)->ttransform (m, true);
     }
+    if (doc->selectionCount () > 1)
+      doc->setAutoUpdate (true);
   }
 }
 

@@ -48,16 +48,11 @@ void DistributeCmd::execute () {
   
   ObjectManipCmd::execute ();
 
-#ifdef NO_LAYERS
-  QListIterator<GObject> it = document->getSelection ();
-  firstObj = it.current ();
-  it += (document->selectionCount () - 1);
-  lastObj = it.current ();
-#else
-  firstObj = document->getSelection ().front ();
-  lastObj = document->getSelection ().back ();
-  list<GObject*>::iterator it = document->getSelection ().begin ();
-#endif
+  const list<GObject*>& objs = document->getSelection ();
+
+  firstObj = objs.front ();
+  lastObj = objs.back ();
+  list<GObject*>::const_iterator it = objs.begin ();
 
   switch (hDistrib) {
   case HDistrib_Left: 
@@ -74,13 +69,8 @@ void DistributeCmd::execute () {
   case HDistrib_Distance:
     {
       float w = 0;
-#ifdef NO_LAYERS
-      for (it.toFirst (); it.current (); ++it)
-	w += it.current ()->boundingBox ().width ();
-#else
-      for (; it != document->getSelection ().end (); it++)
+      for (; it != objs.end (); it++)
 	w += (*it)->boundingBox ().width ();
-#endif
       xoff = (box.width () - w) / (document->selectionCount () - 1);
       xpos = box.left ();
       break;
@@ -113,13 +103,8 @@ void DistributeCmd::execute () {
   case VDistrib_Distance:
     {
       float h = 0;
-#ifdef NO_LAYERS
-      for (it.toFirst (); it.current (); ++it)
-	h += it.current ()->boundingBox ().height ();
-#else
-      for (; it != document->getSelection ().end (); it++)
+      for (; it != objs.end (); it++)
 	h += (*it)->boundingBox ().height ();
-#endif
       yoff = (box.height () - h) / (document->selectionCount () - 1);
       ypos = box.top ();
       break;
@@ -128,13 +113,8 @@ void DistributeCmd::execute () {
     break;
   }
 
-#ifdef NO_LAYERS
-  for (it.toFirst (); it.current (); ++it) {
-    GObject *obj = it.current ();
-#else
-  for (; it != document->getSelection ().end (); it++) {
+  for (; it != objs.end (); it++) {
     GObject *obj = *it;
-#endif
     Rect obox = obj->boundingBox ();
     float dx = 0, dy = 0;
     
