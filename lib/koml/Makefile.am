@@ -11,4 +11,4 @@ libkoml_la_SOURCES = komlParser.cc komlFeed.cc komlFileFeed.cc \
 include_HEADERS = komlParser.h komlFeed.h komlFileFeed.h \
 	komlWriter.h torben.h komlStreamFeed.h komlMime.h
 
-libkoml_la_LIBADD = $(LIB_QT)
+libkoml_la_LIBADD = $(LIB_KDECORE)
