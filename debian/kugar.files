@@ -11,6 +11,9 @@ usr/share/icons/hicolor/22x22/mimetypes/kugardata.png
 usr/share/icons/hicolor/32x32/mimetypes/kugardata.png
 usr/share/icons/hicolor/48x48/mimetypes/kugardata.png
 usr/share/mimelnk/application/x-kugar.desktop
-usr/share/doc/kde/HTML/en/kugar/*
+usr/share/doc/kde/HTML/en/kugar/*.bz2
+usr/share/doc/kde/HTML/en/kugar/*.docbook
+usr/share/doc/kde/HTML/en/kugar/*.png
+usr/share/doc/kde/HTML/en/kugar/common
 usr/share/pixmaps/kugar.xpm
 usr/share/lintian/overrides/kugar

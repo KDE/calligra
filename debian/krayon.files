@@ -9,5 +9,8 @@ usr/share/icons/hicolor/16x16/apps/krayon.png
 usr/share/icons/hicolor/32x32/apps/krayon.png
 usr/share/icons/hicolor/48x48/apps/krayon.png
 usr/share/pixmaps/krayon.xpm
-usr/share/doc/kde/HTML/en/krayon/*
+usr/share/doc/kde/HTML/en/krayon/*.bz2
+usr/share/doc/kde/HTML/en/krayon/*.docbook
+usr/share/doc/kde/HTML/en/krayon/*.png
+usr/share/doc/kde/HTML/en/krayon/common
 usr/share/lintian/overrides/krayon

@@ -79,5 +79,8 @@ usr/share/icons/hicolor/32x32/actions/rsub.png
 usr/share/icons/hicolor/32x32/actions/rsup.png
 usr/share/icons/hicolor/32x32/actions/sqrt.png
 usr/share/icons/hicolor/32x32/actions/sum.png
-usr/share/doc/kde/HTML/en/koffice/*
+usr/share/doc/kde/HTML/en/koffice/*.bz2
+usr/share/doc/kde/HTML/en/koffice/*.docbook
+usr/share/doc/kde/HTML/en/koffice/README.documentation
+usr/share/doc/kde/HTML/en/koffice/common
 usr/share/lintian/overrides/koffice-libs

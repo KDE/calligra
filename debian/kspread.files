@@ -27,5 +27,7 @@ usr/share/icons/locolor/16x16/apps/kspreadcalc.png
 usr/share/icons/locolor/22x22/apps/kspreadcalc.png
 usr/share/icons/locolor/32x32/apps/kspreadcalc.png
 usr/share/pixmaps/kspread.xpm
-usr/share/doc/kde/HTML/en/kspread/*
+usr/share/doc/kde/HTML/en/kspread/*.bz2
+usr/share/doc/kde/HTML/en/kspread/*.docbook
+usr/share/doc/kde/HTML/en/kspread/common
 usr/share/lintian/overrides/kspread

@@ -143,6 +143,11 @@ binary-arch: build install
 	# Rename a couple of newly installed files.
 	mv debian/kugar/usr/share/doc/kugar/examples/kugar.examples.README \
 	  debian/kugar/usr/share/doc/kugar/examples/README.examples
+	# Ensure all demo files are once compressed.
+	for i in kword kspread; do \
+	  for j in debian/$$i/usr/share/doc/$$i/examples/*.k??; do \
+	    if ! gzip -t $$j > /dev/null 2>&1; then \
+	      gzip -9 $$j; mv $$j.gz $$j; fi; done; done
 	dh_installmenu -a
 	dh_installmime -a
 	dh_installman -a
@@ -162,7 +167,7 @@ binary-arch: build install
 	dh_installchangelogs -pkword kword/CHANGES
 	dh_link -a
 	dh_strip -a
-	dh_compress -a --exclude=.docbook --exclude=.bz2
+	dh_compress -a -X.docbook -X.bz2 -X.ksp -X.kwd -X.kwt
 	dh_fixperms -a
 	dh_makeshlibs -a -V
 	dh_installdeb -a
