@@ -51,7 +51,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 		~KexiPropertyEditorItem();
 
 		//! \return item's name (ie property's name)
-		const QString	name() { return m_property->name(); }
+		const QCString	name() { return m_property->name(); }
 		//! \return item's QVariant::Type (ie property's QVariant::Type)
 		QVariant::Type	type() { return m_property->type(); }
 //		//! \return item's current value

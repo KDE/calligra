@@ -64,7 +64,8 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 			uint options = KexiDB::Field::NoOptions,
 			uint length=0, uint precision=0,
 			QVariant defaultValue=QVariant(),
-			const QString& caption = QString::null, const QString& helpText = QString::null,
+			const QString& caption = QString::null,
+			const QString& description = QString::null,
 			uint width = 0);
 
 		//! Db-aware version.

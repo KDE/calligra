@@ -56,7 +56,7 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 	uint options,
 	uint length, uint precision,
 	QVariant defaultValue,
-	const QString& caption, const QString& helpText, uint width)
+	const QString& caption, const QString& description, uint width)
 {
 	field = new KexiDB::Field(
 		name, ctype,
@@ -64,7 +64,7 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 		options,
 		length, precision,
 		defaultValue,
-		caption, helpText, width);
+		caption, description, width);
 
 	isDBAware = false;
 	m_nameOrCaption = field->captionOrName();
