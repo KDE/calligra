@@ -65,6 +65,10 @@ bool QTextCustomItem::up( QTextCursor *, QTextDocument *&doc, QTextParag *&parag
     doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return TRUE;
 }
 
+void QTextTableCell::invalidate() { cached_width = -1; cached_sizehint = -1; }
+
+void QTextTable::invalidate() { cachewidth = -1; }
+
 int QTextCursor::x() const
 {
     QTextStringChar *c = string->at( idx );
@@ -99,9 +103,9 @@ QTextParag *QTextDocument::paragAt( int i ) const
 {
     QTextParag *s = fParag;
     while ( s ) {
-        if ( s->paragId() == i )
-            return s;
-        s = s->next();
+	if ( s->paragId() == i )
+	    return s;
+	s = s->next();
     }
     return 0;
 }
@@ -132,9 +136,9 @@ QTextFormat::QTextFormat( const QStyleSheetItem *style )
     ha = AlignNormal;
     collection = 0;
     fn = QFont( style->fontFamily(),
-                style->fontSize(),
-                style->fontWeight(),
-                style->fontItalic() );
+		style->fontSize(),
+		style->fontWeight(),
+		style->fontItalic() );
     fn.setUnderline( style->fontUnderline() );
     col = style->color();
     fm = QFontMetrics( fn );
@@ -296,7 +300,7 @@ void QTextFormat::generateKey()
        << (int)fn.underline() << "/"
        << (int)fn.strikeOut() << "/"
        << (int)fn.italic() << "/"
-       << col.pixel() << "/"
+       << (uint)col.rgb() << "/"
        << fn.family() << "/"
        << (int)isMisspelled() << "/"
        << anchor_href << "/"
@@ -314,7 +318,7 @@ QString QTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelled
        << (int)fn.underline() << "/"
        << (int)fn.strikeOut() << "/"
        << (int)fn.italic() << "/"
-       << col.pixel() << "/"
+       << (uint)col.rgb() << "/"
        << fn.family() << "/"
        << (int)misspelled << "/"
        << lhref << "/"
@@ -365,6 +369,7 @@ void QTextFormat::updateStyle()
 	fn.setUnderline( item->fontUnderline() );
     generateKey();
     update();
+
 }
 
 void QTextFormat::updateStyleFlags()
@@ -460,7 +465,6 @@ int QTextParag::selectionEnd( int id ) const
     return ( *it ).end;
 }
 
-
 bool QTextParag::hasSelection( int id ) const
 {
     QMap<int, QTextParagSelection>::ConstIterator it = selections.find( id );
@@ -476,7 +480,6 @@ bool QTextParag::fullSelected( int id ) const
 	return FALSE;
     return ( *it ).start == 0 && ( *it ).end == str->length() - 1;
 }
-
 
 int QTextParag::lineY( int l ) const
 {
@@ -529,12 +532,12 @@ int QTextParag::lineHeight( int l ) const
 void QTextParag::lineInfo( int l, int &y, int &h, int &bl ) const
 {
     if ( l > (int)lineStarts.count() - 1 ) {
-        qWarning( "QTextParag::lineInfo: line %d out of range!", l );
-        qDebug( "%d %d", (int)lineStarts.count() - 1, l );
-        y = 0;
-        h = 15;
-        bl = 10;
-        return;
+	qWarning( "QTextParag::lineInfo: line %d out of range!", l );
+	qDebug( "%d %d", (int)lineStarts.count() - 1, l );
+	y = 0;
+	h = 15;
+	bl = 10;
+	return;
     }
 
     if ( !isValid() )
@@ -582,20 +585,20 @@ QStyleSheetItem *QTextParag::style() const
 int QTextParag::numberOfSubParagraph() const
 {
     if ( list_val != -1 )
-        return list_val;
+	return list_val;
     if ( numSubParag != -1 )
  	return numSubParag;
     int n = 0;
     QTextParag *p = (QTextParag*)this;
     while ( p && ( styleSheetItemsVec.size() >= p->styleSheetItemsVec.size() &&
-            styleSheetItemsVec[ (int)p->styleSheetItemsVec.size() - 1 ] == p->style() ||
-                   p->styleSheetItemsVec.size() >= styleSheetItemsVec.size() &&
-                   p->styleSheetItemsVec[ (int)styleSheetItemsVec.size() - 1 ] == style() ) ) {
-        if ( p->style() == style() && listStyle() != p->listStyle() )
-            break;
-        if ( p->style()->name() == "li" && p->style() != style() || styleSheetItemsVec.size() == p->styleSheetItemsVec.size() )
-            ++n;
-        p = p->prev();
+	    styleSheetItemsVec[ (int)p->styleSheetItemsVec.size() - 1 ] == p->style() ||
+		   p->styleSheetItemsVec.size() >= styleSheetItemsVec.size() &&
+		   p->styleSheetItemsVec[ (int)styleSheetItemsVec.size() - 1 ] == style() ) ) {
+	if ( p->style() == style() && listStyle() != p->listStyle() )
+	    break;
+	if ( p->style()->name() == "li" && p->style() != style() || styleSheetItemsVec.size() == p->styleSheetItemsVec.size() )
+	    ++n;
+	p = p->prev();
     }
     ( (QTextParag*)this )->numSubParag = n;
     return n;
@@ -646,9 +649,9 @@ void QTextParag::setTabArray( int *a )
 void QTextParag::setTabStops( int tw )
 {
     if ( doc )
-        doc->setTabStops( tw );
+	doc->setTabStops( tw );
     else
-        tabStopWidth = tw;
+	tabStopWidth = tw;
 }
 
 QTextStringChar::~QTextStringChar()
@@ -666,3 +669,4 @@ QTextStringChar::~QTextStringChar()
 	    break;
     }
 }
+

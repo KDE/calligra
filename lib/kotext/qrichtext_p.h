@@ -77,7 +77,6 @@
 #include "qapplication.h"
 #endif // QT_H
 
-// We need this to avoid clashes
 namespace Qt3 {
 
 class QTextDocument;
@@ -251,7 +250,7 @@ public:
     QTextCursor();
     QTextCursor( const QTextCursor &c );
     QTextCursor &operator=( const QTextCursor &c );
-    virtual ~QTextCursor() {};
+    virtual ~QTextCursor() {}
 
     bool operator==( const QTextCursor &c ) const;
     bool operator!=( const QTextCursor &c ) const { return !(*this == c); }
@@ -383,7 +382,6 @@ class Q_EXPORT QTextCustomItem
 public:
     QTextCustomItem( QTextDocument *p );
     virtual ~QTextCustomItem();
-
     virtual void draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected ) = 0;
 
     virtual void move( int x, int y ) { xpos = x; ypos = y; }
@@ -417,10 +415,13 @@ public:
     virtual bool down( QTextCursor *, QTextDocument *&doc, QTextParag *&parag, int &idx, int &ox, int &oy );
     virtual bool up( QTextCursor *, QTextDocument *&doc, QTextParag *&parag, int &idx, int &ox, int &oy );
 
-    QTextDocument *parent; // obsolete?
-
-    QTextParag *paragraph() const { return parag; }
     void setParagraph( QTextParag * p ) { parag = p; }
+    QTextParag *paragraph() const { return parag; }
+
+    virtual void pageBreak( int  y, QTextFlow* flow );
+
+    QTextDocument *parent;
+
 protected:
     int xpos;
     int ypos;
@@ -438,7 +439,7 @@ class Q_EXPORT QTextImage : public QTextCustomItem
 {
 public:
     QTextImage( QTextDocument *p, const QMap<QString, QString> &attr, const QString& context,
-                QMimeSourceFactory &factory);
+		QMimeSourceFactory &factory);
     virtual ~QTextImage();
 
     Placement placement() const { return place; }
@@ -502,7 +503,7 @@ public:
     virtual void registerFloatingItem( QTextCustomItem* item, bool right = FALSE );
     virtual void unregisterFloatingItem( QTextCustomItem* item );
     virtual void drawFloatingItems(QPainter* p, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
-    virtual void adjustFlow( int  &yp, int w, int h, QTextParag *parag, bool pages = TRUE );
+    virtual int adjustFlow( int  y, int w, int h ); // adjusts y according to the defined pagesize. Returns the shift.
 
     virtual bool isEmpty() { return leftItems.isEmpty() && rightItems.isEmpty(); }
     virtual void updateHeight( QTextCustomItem *i );
@@ -511,6 +512,8 @@ public:
     virtual void eraseAfter( QTextParag *, QPainter *, const QColorGroup& ) {}
 
     void clear();
+
+    QSize size() const { return QSize( width, height); }
 
 private:
     int width;
@@ -564,7 +567,7 @@ public:
     void draw( int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
 
     QBrush *backGround() const { return background; }
-    virtual void invalidate() { cached_width = -1; cached_sizehint = -1; }
+    virtual void invalidate();
 
 private:
     QPainter* painter() const;
@@ -602,16 +605,16 @@ public:
     virtual ~QTextTable();
 
     void adjustToPainter( QPainter *p );
-    void verticalBreak( int  y, QTextFlow* flow );
+    void pageBreak( int  y, QTextFlow* flow );
     void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch,
 	       const QColorGroup& cg, bool selected );
 
-    bool noErase() const { return TRUE; };
+    bool noErase() const { return TRUE; }
     bool ownLine() const { return TRUE; }
     Placement placement() const { return place; }
     bool isNested() const { return TRUE; }
     void resize( QPainter*, int nwidth );
-    virtual void invalidate() { cachewidth = -1; };
+    virtual void invalidate();
     /// ## QString anchorAt( QPainter* p, int x, int y );
 
     virtual bool enter( QTextCursor *c, QTextDocument *&doc, QTextParag *&parag, int &idx, int &ox, int &oy, bool atEnd = FALSE );
@@ -647,10 +650,10 @@ private:
     int us_ib, us_b, us_ob, us_cs;
     int lastX, lastY;
     QMap<QString, QString> attributes;
-
     QMap<QTextCursor*, int> currCell;
-
     Placement place;
+    void adjustCells( int y , int shift );
+    int pageBreakFor;
 };
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -755,7 +758,7 @@ public:
     int numSelections() const { return nSelections; }
     void addSelection( int id );
 
-    QString selectedText( int id ) const;
+    QString selectedText( int id, bool withCustom = TRUE ) const;
     void copySelectedText( int id );
     void removeSelectedText( int id, QTextCursor *cursor );
     void indentSelection( int id );
@@ -794,7 +797,7 @@ public:
     QBrush *paper() const { return backBrush; }
 
     void doLayout( QPainter *p, int w );
-    void draw( QPainter *p, const QRect &rect, const QColorGroup &cg, const QBrush *paper = 0 );
+    void draw( QPainter *p, const QRect& rect, const QColorGroup &cg, const QBrush *paper = 0 );
     void drawParag( QPainter *p, QTextParag *parag, int cx, int cy, int cw, int ch,
 		    QPixmap *&doubleBuffer, const QColorGroup &cg,
 		    bool drawCursor, QTextCursor *cursor, bool resetChanged = TRUE );
@@ -811,8 +814,8 @@ public:
     void setFlow( QTextFlow *f );
     void takeFlow();
     QTextFlow *flow() const { return flow_; }
-    bool verticalBreak() const { return pages; }
-    void setVerticalBreak( bool b ) { pages = b; }
+    bool isPageBreakEnabled() const { return pages; }
+    void setPageBreakEnabled( bool b ) { pages = b; }
 
     void setWithoutDoubleBuffer( bool b ) { withoutDoubleBuffer = b; }
     bool isWithoutDoubleBuffer() const { return withoutDoubleBuffer; } // added for KWTextDocument
@@ -853,6 +856,9 @@ public:
 
     void setAddMargins( bool b ) { addMargs = b; }
     int addMargins() const { return addMargs; }
+
+    bool hasFocusParagraph() const;
+    QString focusHref() const;
 
 signals:
     void minimumWidthChanged( int );
@@ -938,7 +944,7 @@ public:
     QTextDeleteCommand( QTextParag *p, int idx, const QMemArray<QTextStringChar> &str );
     virtual ~QTextDeleteCommand();
 
-    Commands type() const { return Delete; };
+    Commands type() const { return Delete; }
     QTextCursor *execute( QTextCursor *c );
     QTextCursor *unexecute( QTextCursor *c );
 
@@ -959,11 +965,12 @@ public:
 			const QValueList< QPtrVector<QStyleSheetItem> > &os,
 			const QValueList<QStyleSheetItem::ListStyle> &ols,
 			const QMemArray<int> &oas )
-	: QTextDeleteCommand( d, i, idx, str, os, ols, oas ) {};
+	: QTextDeleteCommand( d, i, idx, str, os, ols, oas ) {}
     QTextInsertCommand( QTextParag *p, int idx, const QMemArray<QTextStringChar> &str )
-	: QTextDeleteCommand( p, idx, str ) {};
-    virtual ~QTextInsertCommand() {};
-    Commands type() const { return Insert; };
+	: QTextDeleteCommand( p, idx, str ) {}
+    virtual ~QTextInsertCommand() {}
+
+    Commands type() const { return Insert; }
     QTextCursor *execute( QTextCursor *c ) { return QTextDeleteCommand::unexecute( c ); }
     QTextCursor *unexecute( QTextCursor *c ) { return QTextDeleteCommand::execute( c ); }
 
@@ -991,7 +998,7 @@ class Q_EXPORT QTextAlignmentCommand : public QTextCommand
 {
 public:
     QTextAlignmentCommand( QTextDocument *d, int fParag, int lParag, int na, const QMemArray<int> &oa );
-    virtual ~QTextAlignmentCommand() {};
+    virtual ~QTextAlignmentCommand() {}
 
     Commands type() const { return Alignment; }
     QTextCursor *execute( QTextCursor *c );
@@ -1010,7 +1017,8 @@ public:
     QTextParagTypeCommand( QTextDocument *d, int fParag, int lParag, bool l,
 			   QStyleSheetItem::ListStyle s, const QValueList< QPtrVector<QStyleSheetItem> > &os,
 			   const QValueList<QStyleSheetItem::ListStyle> &ols );
-    virtual ~QTextParagTypeCommand() {};
+    virtual ~QTextParagTypeCommand() {}
+
     Commands type() const { return ParagType; }
     QTextCursor *execute( QTextCursor *c );
     QTextCursor *unexecute( QTextCursor *c );
@@ -1037,8 +1045,9 @@ struct Q_EXPORT QTextParagLineStart
     QTextParagLineStart( ushort y_, ushort bl, ushort h_ ) : y( y_ ), baseLine( bl ), h( h_ ),
 	w( 0 ), bidicontext( 0 )  {  }
     QTextParagLineStart( QBidiContext *c, QBidiStatus s ) : y(0), baseLine(0), h(0),
-	status( s ), bidicontext( c ) { if ( bidicontext ) bidicontext->ref();  }
-    virtual ~QTextParagLineStart() { if ( bidicontext && bidicontext->deref() ) delete bidicontext;  }
+	status( s ), bidicontext( c ) { if ( bidicontext ) bidicontext->ref(); }
+    virtual ~QTextParagLineStart() { if ( bidicontext && bidicontext->deref() ) delete bidicontext; }
+
     void setContext( QBidiContext *c ) {
 	if ( c == bidicontext )
 	    return;
@@ -1235,9 +1244,9 @@ public:
     void setBreakable( bool b ) { breakable = b; }
     bool isBreakable() const { return breakable; }
 
-    void setBackgroundColor( const QColor &c ) { delete bgcol; bgcol = new QColor( c ); setChanged( TRUE ); }
+    void setBackgroundColor( const QColor &c );
     QColor *backgroundColor() const { return bgcol; }
-    void clearBackgroundColor() { delete bgcol; bgcol = 0; setChanged( TRUE ); }
+    void clearBackgroundColor();
 
 protected:
     virtual void drawLabel( QPainter* p, int x, int y, int w, int h, int base, const QColorGroup& cg );
@@ -1296,6 +1305,7 @@ public:
     QTextFormatter();
     virtual ~QTextFormatter() {}
     virtual int format( QTextDocument *doc, QTextParag *parag, int start, const QMap<int, QTextParagLineStart*> &oldLineStarts ) = 0;
+    virtual int formatVertically( QTextDocument* doc, QTextParag* parag );
 
     bool isWrapEnabled( QTextParag *p ) const { if ( !wrapEnabled ) return FALSE; if ( p && !p->isBreakable() ) return FALSE; return TRUE;}
     int wrapAtColumn() const { return wrapColumn;}
@@ -1332,7 +1342,7 @@ class Q_EXPORT QTextFormatterBreakInWords : public QTextFormatter
 {
 public:
     QTextFormatterBreakInWords();
-    virtual ~QTextFormatterBreakInWords() {};
+    virtual ~QTextFormatterBreakInWords() {}
 
     int format( QTextDocument *doc, QTextParag *parag, int start, const QMap<int, QTextParagLineStart*> &oldLineStarts );
 
@@ -1344,7 +1354,7 @@ class Q_EXPORT QTextFormatterBreakWords : public QTextFormatter
 {
 public:
     QTextFormatterBreakWords();
-    virtual ~QTextFormatterBreakWords() {};
+    virtual ~QTextFormatterBreakWords() {}
 
     int format( QTextDocument *doc, QTextParag *parag, int start, const QMap<int, QTextParagLineStart*> &oldLineStarts );
 
@@ -1357,7 +1367,7 @@ class Q_EXPORT QTextIndent
 {
 public:
     QTextIndent();
-    virtual ~QTextIndent() {};
+    virtual ~QTextIndent() {}
 
     virtual void indent( QTextDocument *doc, QTextParag *parag, int *oldIndent = 0, int *newIndent = 0 ) = 0;
 
@@ -1373,7 +1383,7 @@ public:
     };
 
     QTextPreProcessor();
-    virtual ~QTextPreProcessor() {};
+    virtual ~QTextPreProcessor() {}
 
     virtual void process( QTextDocument *doc, QTextParag *, int, bool = TRUE ) = 0;
     virtual QTextFormat *format( int id ) = 0;
@@ -1385,6 +1395,7 @@ public:
 class Q_EXPORT QTextFormat
 {
     friend class QTextFormatCollection;
+    friend class QTextDocument;
 
 public:
     enum Flags {
@@ -1405,6 +1416,7 @@ public:
 
     QTextFormat();
     virtual ~QTextFormat() {}
+
     QTextFormat( const QStyleSheetItem *s );
     QTextFormat( const QFont &f, const QColor &c, QTextFormatCollection *parent = 0 );
     QTextFormat( const QTextFormat &fm );
@@ -1465,7 +1477,6 @@ protected:
     void setKey( const QString &key ) { k = key; }
 
 private:
-    QString k;
     QColor col;
     QFontMetrics fm;
     uint missp : 1;
@@ -1476,6 +1487,7 @@ private:
     int hei, asc, dsc;
     QTextFormatCollection *collection;
     int ref;
+    QString k;
     int logicalFontSize;
     int stdPointSize;
     QString anchor_href;
@@ -1882,6 +1894,18 @@ inline void QTextParag::setChanged( bool b, bool recursive )
 	if ( doc && doc->parentParag() )
 	    doc->parentParag()->setChanged( b, recursive );
     }
+}
+
+inline void QTextParag::setBackgroundColor( const QColor & c )
+{
+    delete bgcol;
+    bgcol = new QColor( c );
+    setChanged( TRUE );
+}
+
+inline void QTextParag::clearBackgroundColor()
+{
+    delete bgcol; bgcol = 0; setChanged( TRUE );
 }
 
 inline void QTextParag::append( const QString &s, bool reallyAtEnd )

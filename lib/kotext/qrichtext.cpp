@@ -313,7 +313,7 @@ QTextCursor *QTextFormatCommand::unexecute( QTextCursor *c )
 
     int idx = startIndex;
     int fIndex = 0;
-    while ( TRUE ) {
+    for ( ;; ) {
 	if ( oldFormats.at( fIndex ).c == '\n' ) {
 	    if ( idx > 0 ) {
 		if ( idx < sp->length() && fIndex > 0 )
@@ -562,15 +562,16 @@ void QTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<QText
 		string->setEndState( -1 );
 		string->prev()->format( -1, FALSE );
 		if ( lastFormat && formatting && string->prev() ) {
-		   lastFormat->addRef();
-		   string->prev()->string()->setFormat( string->prev()->length() - 1, lastFormat, TRUE );
-	       }
+		    lastFormat->addRef();
+		    string->prev()->string()->setFormat( string->prev()->length() - 1, lastFormat, TRUE );
+		}
 	    }
 	    lastFormat = 0;
 	    QString s = *it;
 	    ++it;
 	    if ( !s.isEmpty() )
 		string->insert( idx, s );
+
 	    if ( formatting ) {
 		int len = s.length();
 		for ( int i = 0; i < len; ++i ) {
@@ -743,7 +744,10 @@ bool QTextCursor::place( const QPoint &p, QTextParag *s )
     setIndex( curpos, FALSE );
 
     if ( inCustom && doc && parag()->at( curpos )->isCustom() && parag()->at( curpos )->customItem()->isNested() ) {
+	QTextDocument *oldDoc = doc;
 	gotoIntoNested( pos );
+	if ( oldDoc == doc )
+	    return TRUE;
 	QPoint p( pos.x() - offsetX(), pos.y() - offsetY() );
 	if ( !place( p, document()->firstParag() ) )
 	    pop();
@@ -1038,7 +1042,6 @@ void QTextCursor::gotoWordLeft()
 			      s->at( i ).c == ',' || s->at( i ).c == ':' || s->at( i ).c == ';'  ) )
 	    allowSame = TRUE;
     }
-
     idx = 0;
 }
 
@@ -1084,7 +1087,6 @@ void QTextCursor::splitAndInsertEmptyParag( bool ind, bool updateIds )
 {
     if ( !doc )
 	return;
-    //qDebug("QTextCursor::splitAndInsertEmptyParag");
     tmpIndex = -1;
     QTextFormat *f = 0;
     if ( doc->useFormatCollection() ) {
@@ -1173,7 +1175,6 @@ bool QTextCursor::remove()
 	    doc->nextDoubleBuffered = TRUE;
 	return FALSE;
     } else if ( string->next() ) {
-
 	if ( string->length() == 1 ) {
 	    string->next()->setPrev( string->prev() );
 	    if ( string->prev() )
@@ -1388,21 +1389,37 @@ void QTextDocument::setPlainText( const QString &text )
     clear();
     preferRichText = FALSE;
 
-    QString s;
-    lParag = 0;
-    QStringList lst = QStringList::split( '\n', text, TRUE );
-    for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it ) {
+    int lastNl = 0;
+    int nl = text.find( '\n' );
+    if ( nl == -1 ) {
 	lParag = createParag( this, lParag, 0 );
 	if ( !fParag )
 	    fParag = lParag;
-	s = *it;
+	QString s = text;
 	if ( !s.isEmpty() ) {
 	    if ( s[ (int)s.length() - 1 ] == '\r' )
 		s.remove( s.length() - 1, 1 );
 	    lParag->append( s );
 	}
+    } else {
+	while ( TRUE ) {
+	    lParag = createParag( this, lParag, 0 );
+	    if ( !fParag )
+		fParag = lParag;
+	    QString s = text.mid( lastNl, nl - lastNl );
+	    if ( !s.isEmpty() ) {
+		if ( s[ (int)s.length() - 1 ] == '\r' )
+		    s.remove( s.length() - 1, 1 );
+		lParag->append( s );
+	    }
+	    if ( nl == 0xffffff )
+		break;
+	    lastNl = nl + 1;
+	    nl = text.find( '\n', nl + 1 );
+	    if ( nl == -1 )
+		nl = 0xffffff;
+	}
     }
-
     if ( !lParag )
 	lParag = fParag = createParag( this, 0, 0 );
 }
@@ -1416,7 +1433,6 @@ struct Q_EXPORT Tag {
     const QStyleSheetItem* style;
     QStyleSheetItem::WhiteSpaceMode wsm;
     QTextFormat format;
-
 #if defined(Q_FULL_TEMPLATE_INSTANTIATION)
     bool operator==( const Tag& ) const { return FALSE; }
 #endif
@@ -1503,9 +1519,6 @@ void QTextDocument::setRichTextInternal( const QString &text )
 		QString tagname = parseOpenTag(doc, pos, attr, emptyTag);
 		if ( tagname.isEmpty() )
 		    continue; // nothing we could do with this, probably parse error
-		while ( eat( doc, pos, '\n' ) )
-		    ; // eliminate newlines right after openings
-
 		if ( tagname == "pre" || tagname == "nobr" ) {
 		    breakable = FALSE;
 		    if ( lastClose == "pre" || lastClose == "nobr" )
@@ -1530,6 +1543,11 @@ void QTextDocument::setRichTextInternal( const QString &text )
 			depth--;
 		    }
 		    curListStyle = chooseListStyle( nstyle, attr, curListStyle );
+		}
+
+		if ( !nstyle || nstyle->whiteSpaceMode() != QStyleSheetItem::WhiteSpacePre ) {
+		    while ( eat( doc, pos, '\n' ) )
+			; // eliminate newlines right after openings
 		}
 
 		QTextCustomItem* custom =  0;
@@ -1616,8 +1634,24 @@ void QTextDocument::setRichTextInternal( const QString &text )
 			}
 		    }
 		    curtag.name = tagname;
-		    if ( curtag.name == "a" && attr.find( "name" ) != attr.end() && doc[ pos] == '<' )	// hack to be sure
-			doc.insert( pos, " " );						// <a name=".."></a> formats or inserted
+
+		    // hack to be sure <a name=".."></a> formats are inserted
+		    // we try to set the anchor name to the character directly before us
+		    if ( curtag.name == "a" && attr.find( "name" ) != attr.end() && doc[ pos ] == '<' ) {
+			QTextParag *p = curpar;
+			if ( p && p->length() == 0 && p->prev() )
+			    p = p->prev();
+			if ( p && p->length() > 0 ) {
+			    QTextFormat *f = p->at( p->length() - 1 )->format();
+			    if ( f ) {
+				f = fCollection->createFormat( *f );
+				f->anchor_name = attr[ "name" ];
+				f->update();
+				p->setFormat( p->length() - 1, 1, f, TRUE, QTextFormat::Format );
+			    }
+			}
+		    }
+
 		    if ( attr.find( "align" ) != attr.end() &&
 			 ( curtag.name == "p" || curtag.name == "li" || curtag.name[ 0 ] == 'h' ) ) {
 			if ( *attr.find( "align" ) == "center" )
@@ -1631,13 +1665,13 @@ void QTextDocument::setRichTextInternal( const QString &text )
 		}
 	    } else {
 		// close tag
-		 bool fakeHasNewPar = FALSE;
+ 		bool fakeHasNewPar = FALSE;
 		QString tagname = parseCloseTag( doc, pos );
 		if ( tagname == "pre" || tagname == "nobr" )
 		    breakable = TRUE;
 		lastClose = tagname;
-		 if ( tagname == "p" )
-		     fakeHasNewPar = TRUE;
+ 		if ( tagname == "p" )
+ 		    fakeHasNewPar = TRUE;
 		if ( tagname.isEmpty() )
 		    continue; // nothing we could do with this, probably parse error
 		while ( eat( doc, pos, '\n' ) )
@@ -1662,17 +1696,17 @@ void QTextDocument::setRichTextInternal( const QString &text )
 		    depth--;
 		}
 
-		 Tag curtagtmp;
+ 		Tag curtagtmp;
 		bool popIt = TRUE;
-		 if ( !tags.isEmpty() ) {
-		     curtagtmp = tags.pop();
+ 		if ( !tags.isEmpty() ) {
+ 		    curtagtmp = tags.pop();
 		    if ( curtagtmp.name != "li" )
 			tags.push( curtagtmp );
 		    else
 			popIt = FALSE;
 		}
-		 if ( fakeHasNewPar && curtagtmp.name != "li" )
-		     hasNewPar = FALSE;
+ 		if ( fakeHasNewPar && curtagtmp.name != "li" )
+ 		    hasNewPar = FALSE;
 		if ( !hasNewPar && curtag.style->displayMode() != QStyleSheetItem::DisplayInline
 		     && curtag.wsm == QStyleSheetItem::WhiteSpaceNormal ) {
 		    eatSpace( doc, pos );
@@ -1702,7 +1736,7 @@ void QTextDocument::setRichTextInternal( const QString &text )
 		space = c.isSpace();
 		hadNonSpace = hadNonSpace || !space;
 		if ( c == '\n' ) { // happens in WhiteSpacePre mode
-		     if ( curtag.wsm == QStyleSheetItem::WhiteSpacePre )
+ 		    if ( curtag.wsm == QStyleSheetItem::WhiteSpacePre )
 			hasNewPar = FALSE;
 		    break;
 		}
@@ -1955,7 +1989,6 @@ bool QTextDocument::setSelectionEnd( int id, QTextCursor *cursor )
     QMap<int, QTextDocumentSelection>::Iterator it = selections.find( id );
     if ( it == selections.end() )
 	return FALSE;
-
     QTextDocumentSelection &sel = *it;
 
     QTextCursor start = sel.startCursor;
@@ -1968,7 +2001,7 @@ bool QTextDocument::setSelectionEnd( int id, QTextCursor *cursor )
     }
 
     if ( sel.endCursor.parag() == end.parag() ) {
-        setSelectionEndHelper( id, sel, start, end );
+	setSelectionEndHelper( id, sel, start, end );
 	return TRUE;
     }
 
@@ -2027,23 +2060,22 @@ bool QTextDocument::setSelectionEnd( int id, QTextCursor *cursor )
 	    inSelection = TRUE;
 
 	bool noSelectionAnymore = hadOldStart && hadOldEnd && leftSelection && !inSelection && !c.parag()->hasSelection( id ) && c.atParagEnd();
-
-	    c.parag()->removeSelection( id );
-	    if ( inSelection ) {
-		if ( c.parag() == start.parag() && start.parag() == end.parag() ) {
-		    c.parag()->setSelection( id, QMIN( start.index(), end.index() ), QMAX( start.index(), end.index() ) );
-		} else if ( c.parag() == start.parag() && !hadEndParag ) {
-		    c.parag()->setSelection( id, start.index(), c.parag()->length() - 1 );
-		} else if ( c.parag() == end.parag() && !hadStartParag ) {
-		    c.parag()->setSelection( id, end.index(), c.parag()->length() - 1 );
-		} else if ( c.parag() == end.parag() && hadEndParag ) {
-		    c.parag()->setSelection( id, 0, end.index() );
-		} else if ( c.parag() == start.parag() && hadStartParag ) {
-		    c.parag()->setSelection( id, 0, start.index() );
-		} else {
-		    c.parag()->setSelection( id, 0, c.parag()->length() - 1 );
-		}
+	c.parag()->removeSelection( id );
+	if ( inSelection ) {
+	    if ( c.parag() == start.parag() && start.parag() == end.parag() ) {
+		c.parag()->setSelection( id, QMIN( start.index(), end.index() ), QMAX( start.index(), end.index() ) );
+	    } else if ( c.parag() == start.parag() && !hadEndParag ) {
+		c.parag()->setSelection( id, start.index(), c.parag()->length() - 1 );
+	    } else if ( c.parag() == end.parag() && !hadStartParag ) {
+		c.parag()->setSelection( id, end.index(), c.parag()->length() - 1 );
+	    } else if ( c.parag() == end.parag() && hadEndParag ) {
+		c.parag()->setSelection( id, 0, end.index() );
+	    } else if ( c.parag() == start.parag() && hadStartParag ) {
+		c.parag()->setSelection( id, 0, start.index() );
+	    } else {
+		c.parag()->setSelection( id, 0, c.parag()->length() - 1 );
 	    }
+	}
 
 	if ( leftSelection )
 	    inSelection = FALSE;
@@ -2086,6 +2118,14 @@ void QTextDocument::selectAll( int id )
     QTextParag *p = fParag;
     while ( p ) {
 	p->setSelection( id, 0, p->length() - 1 );
+	for ( int i = 0; i < (int)p->length(); ++i ) {
+	    if ( p->at( i )->isCustom() && p->at( i )->customItem()->isNested() ) {
+		QTextTable *t = (QTextTable*)p->at( i )->customItem();
+		QPtrList<QTextTableCell> tableCells = t->tableCells();
+		for ( QTextTableCell *c = tableCells.first(); c; c = tableCells.next() )
+		    c->richText()->selectAll( id );
+	    }
+	}
 	p = p->next();
     }
 
@@ -2141,7 +2181,7 @@ bool QTextDocument::removeSelection( int id )
     return TRUE;
 }
 
-QString QTextDocument::selectedText( int id ) const
+QString QTextDocument::selectedText( int id, bool withCustom ) const
 {
     // ######## TODO: look at textFormat() and return rich text or plain text (like the text() method!)
     QMap<int, QTextDocumentSelection>::ConstIterator it = selections.find( id );
@@ -2164,13 +2204,15 @@ QString QTextDocument::selectedText( int id ) const
 	return c1.parag()->string()->toString().mid( c1.index(), c2.index() - c1.index() );
 
     QString s;
-    s += c1.parag()->string()->toString().mid( c1.index() ) + "\n";
+    s += c1.parag()->string()->toString().mid( c1.index() );
+    s.remove( s.length() - 1, 1 );
+    s += "\n";
     QTextParag *p = c1.parag()->next();
     while ( p ) {
-	int end = p == c2.parag() ? c2.index() : p->length();
+	int end = p == c2.parag() ? c2.index() : p->length() - 1;
 	if ( p == c2.parag() && p->at( QMAX( 0, end - 1 ) )->isCustom() )
 	    ++end;
-	if ( !p->customItems() ) {
+	if ( !withCustom || !p->customItems() ) {
 	    s += p->string()->toString().left( end );
 	    if ( p != c2.parag() )
 		s += "\n";
@@ -2271,8 +2313,7 @@ void QTextDocument::removeSelectedText( int id, QTextCursor *cursor )
     }
 
     bool didGoLeft = FALSE;
-    if (  c1.index() == 0 )
-    {
+    if (  c1.index() == 0 ) {
 	cursor->gotoLeft();
 	didGoLeft = TRUE;
     }
@@ -2298,7 +2339,7 @@ void QTextDocument::removeSelectedText( int id, QTextCursor *cursor )
     c1.parag()->join( c2.parag() );
 
     if ( didGoLeft )
-       cursor->gotoRight();
+	cursor->gotoRight();
 }
 
 void QTextDocument::indentSelection( int id )
@@ -2355,6 +2396,14 @@ bool QTextDocument::find( const QString &expr, bool cs, bool wo, bool forward,
 	    start = *index;
 	else if ( first )
 	    start = cursor->index();
+	if ( !forward && first ) {
+	    start -= expr.length() + 1;
+	    if ( start < 0 ) {
+		first = FALSE;
+		p = p->prev();
+		continue;
+	    }
+	}
 	first = FALSE;
 	int res = forward ? s.find( expr, start, cs ) : s.findRev( expr, start, cs );
 	if ( res != -1 ) {
@@ -2476,7 +2525,9 @@ void QTextDocument::doLayout( QPainter *p, int w )
 QPixmap *QTextDocument::bufferPixmap( const QSize &s )
 {
     if ( !buf_pixmap ) {
-	buf_pixmap = new QPixmap( s );
+	int w = QABS( s.width() );
+	int h = QABS( s.height() );
+	buf_pixmap = new QPixmap( w, h );
     } else {
 	if ( buf_pixmap->width() < s.width() ||
 	     buf_pixmap->height() < s.height() ) {
@@ -2488,7 +2539,7 @@ QPixmap *QTextDocument::bufferPixmap( const QSize &s )
     return buf_pixmap;
 }
 
-void QTextDocument::draw( QPainter *p, const QRect &cr, const QColorGroup &cg, const QBrush *paper )
+void QTextDocument::draw( QPainter *p, const QRect &rect, const QColorGroup &cg, const QBrush *paper )
 {
     if ( !firstParag() )
 	return;
@@ -2500,7 +2551,7 @@ void QTextDocument::draw( QPainter *p, const QRect &cr, const QColorGroup &cg, c
 //			   -(int)p->translationY() );
 	p->setBrushOrigin( -(int)p->worldMatrix().dx(),
 			   -(int)p->worldMatrix().dy() );
-	p->fillRect( cr, bgBrush );
+	p->fillRect( rect, bgBrush );
     }
 
     QTextParag *parag = firstParag();
@@ -2511,12 +2562,15 @@ void QTextDocument::draw( QPainter *p, const QRect &cr, const QColorGroup &cg, c
 	QRect pr( parag->rect() );
 	pr.setX( 0 );
 	pr.setWidth( QWIDGETSIZE_MAX );
-	if ( !cr.isNull() && !cr.intersects( pr ) ) {
+	if ( !rect.isNull() && !rect.intersects( pr ) ) {
 	    parag = parag->next();
 	    continue;
 	}
 	p->translate( 0, y );
-	parag->paint( *p, cg, 0, FALSE );
+	if ( rect.isValid() )
+	    parag->paint( *p, cg, 0, FALSE, rect.x(), rect.y(), rect.width(), rect.height() );
+	else
+	    parag->paint( *p, cg, 0, FALSE );
 	p->translate( 0, -y );
 	parag = parag->next();
     }
@@ -2607,9 +2661,6 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 		     rect.height(), cg.brush( QColorGroup::Base ) );
     }
 
-    //if ( verticalBreak() && parag->lastInFrame && parag->document()->flow() )
-    //    parag->document()->flow()->eraseAfter( parag, p, cg );
-
     parag->document()->nextDoubleBuffered = FALSE;
 }
 
@@ -2644,7 +2695,7 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
     QRect crect( cx, cy, cw, ch );
 
     // Space above first parag
-    if ( parag && cy <= parag->rect().y() && parag->rect().y() > 0 ) {
+    if ( isPageBreakEnabled() && parag && cy <= parag->rect().y() && parag->rect().y() > 0 ) {
 	QRect r( 0, 0,
 		 parag->document()->x() + parag->document()->width(),
 		 parag->rect().y() );
@@ -2659,7 +2710,7 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 	    parag->format();
 
 	QRect ir = parag->rect();
-	if ( verticalBreak() && parag->next() )
+	if ( isPageBreakEnabled() && parag->next() )
 	    if ( ir.y() + ir.height() < parag->next()->rect().y() ) {
 		QRect r( 0, ir.y() + ir.height(),
 			 parag->document()->x() + parag->document()->width(),
@@ -2679,9 +2730,6 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 		    delete buf_pixmap;
 		    buf_pixmap = 0;
 		}
-		if ( verticalBreak() && flow() )
-		    flow()->draw( p, cx, cy, cw, ch );
-
 		return lastFormatted;
 	    }
 	    parag = parag->next();
@@ -2716,9 +2764,6 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
 	buf_pixmap = 0;
     }
 
-    if ( verticalBreak() && flow() )
-	flow()->draw( p, cx, cy, cw, ch );
-
     tmpCursor = 0;
     return lastFormatted;
 }
@@ -2744,7 +2789,16 @@ void QTextDocument::unregisterCustomItem( QTextCustomItem *i, QTextParag *p )
     p->unregisterFloatingItem( i );
     i->setParagraph( 0 );
     customItems.removeRef( i );
-    //qDebug("QTextDocument::unregisterCustomItem %p",(void*)i);
+}
+
+bool QTextDocument::hasFocusParagraph() const
+{
+    return !!focusIndicator.parag;
+}
+
+QString QTextDocument::focusHref() const
+{
+    return focusIndicator.href;
 }
 
 bool QTextDocument::focusNextPrevChild( bool next )
@@ -2781,6 +2835,43 @@ bool QTextDocument::focusNextPrevChild( bool next )
 			focusIndicator.len++;
 			i++;
 		    }
+		} else if ( p->at( i )->isCustom() ) {
+		    if ( p->at( i )->customItem()->isNested() ) {
+			QTextTable *t = (QTextTable*)p->at( i )->customItem();
+			QPtrList<QTextTableCell> cells = t->tableCells();
+			// first try to continue
+			QTextTableCell *c;
+			bool resetCells = TRUE;
+			for ( c = cells.first(); c; c = cells.next() ) {
+			    if ( c->richText()->hasFocusParagraph() ) {
+				if ( c->richText()->focusNextPrevChild( next ) ) {
+				    p->setChanged( TRUE );
+				    focusIndicator.parag = p;
+				    focusIndicator.start = i;
+				    focusIndicator.len = 0;
+				    focusIndicator.href = c->richText()->focusHref();
+				    return TRUE;
+				} else {
+				    resetCells = FALSE;
+				    c = cells.next();
+				    break;
+				}
+			    }
+			}
+			// now really try
+			if ( resetCells )
+			    c = cells.first();
+			for ( ; c; c = cells.next() ) {
+			    if ( c->richText()->focusNextPrevChild( next ) ) {
+				p->setChanged( TRUE );
+				focusIndicator.parag = p;
+				focusIndicator.start = i;
+				focusIndicator.len = 0;
+				focusIndicator.href = c->richText()->focusHref();
+				return TRUE;
+			    }
+			}
+		    }
 		}
 	    }
 	    index = 0;
@@ -2789,6 +2880,8 @@ bool QTextDocument::focusNextPrevChild( bool next )
     } else {
 	QTextParag *p = focusIndicator.parag;
 	int index = focusIndicator.start - 1;
+	if ( focusIndicator.len == 0 && index < focusIndicator.parag->length() - 1 )
+	    index++;
 	while ( p ) {
 	    for ( int i = index; i >= 0; --i ) {
 		if ( p->at( i )->format()->isAnchor() ) {
@@ -2808,6 +2901,47 @@ bool QTextDocument::focusNextPrevChild( bool next )
 			focusIndicator.start--;
 			i--;
 		    }
+		} else if ( p->at( i )->isCustom() ) {
+		    if ( p->at( i )->customItem()->isNested() ) {
+			QTextTable *t = (QTextTable*)p->at( i )->customItem();
+			QPtrList<QTextTableCell> cells = t->tableCells();
+			// first try to continue
+			QTextTableCell *c;
+			bool resetCells = TRUE;
+			for ( c = cells.last(); c; c = cells.prev() ) {
+			    if ( c->richText()->hasFocusParagraph() ) {
+				if ( c->richText()->focusNextPrevChild( next ) ) {
+				    p->setChanged( TRUE );
+				    focusIndicator.parag = p;
+				    focusIndicator.start = i;
+				    focusIndicator.len = 0;
+				    focusIndicator.href = c->richText()->focusHref();
+				    return TRUE;
+				} else {
+				    resetCells = FALSE;
+				    c = cells.prev();
+				    break;
+				}
+			    }
+			    if ( cells.at() == 0 )
+				break;
+			}
+			// now really try
+			if ( resetCells )
+			    c = cells.last();
+			for ( ; c; c = cells.prev() ) {
+			    if ( c->richText()->focusNextPrevChild( next ) ) {
+				p->setChanged( TRUE );
+				focusIndicator.parag = p;
+				focusIndicator.start = i;
+				focusIndicator.len = 0;
+				focusIndicator.href = c->richText()->focusHref();
+				return TRUE;
+			    }
+			    if ( cells.at() == 0 )
+				break;
+			}
+		    }
 		}
 	    }
 	    p = p->prev();
@@ -2815,6 +2949,8 @@ bool QTextDocument::focusNextPrevChild( bool next )
 		index = p->length() - 1;
 	}
     }
+
+    focusIndicator.parag = 0;
 
     return FALSE;
 }
@@ -2857,6 +2993,7 @@ int QTextFormat::width( const QChar &c ) const
 	    return fm_.width( c );
 	}
     }
+
     QFont f( fn );
     if ( ha != AlignNormal )
 	f.setPointSize( ( f.pointSize() * 2 ) / 3 );
@@ -3058,7 +3195,7 @@ void QTextString::basicDirection() const
     int pos = 0;
     ((QTextString *)this)->rightToLeft = FALSE;
     while ( pos < length() ) {
-	switch( at(pos).c.direction() )
+	switch ( at(pos).c.direction() )
 	{
 	case QChar::DirL:
 	case QChar::DirLRO:
@@ -3149,7 +3286,7 @@ void QTextStringChar::loseCustomItem() // setRegular() might be a better name
     }
 }
 
-int QTextString::width(int idx) const
+int QTextString::width( int idx ) const
 {
      int w = 0;
      QTextStringChar *c = &at( idx );
@@ -3168,10 +3305,10 @@ int QTextString::width(int idx) const
 	     // complex text. We need some hacks to get the right metric here
 	     QString str;
 	     int pos = 0;
-	     if( idx > 3 )
-		 pos = idx - 3;
+	     if( idx > 4 )
+		 pos = idx - 4;
 	     int off = idx - pos;
-	     int end = QMIN( length(), idx + 3 );
+	     int end = QMIN( length(), idx + 4 );
 	     while ( pos < end ) {
 		 str += at(pos).c;
 		 pos++;
@@ -3227,7 +3364,7 @@ QTextStringChar *QTextStringChar::clone() const
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 QTextParag::QTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds )
-    : invalid( 0 ), p( pr ), n( nx ), doc( d ), align( -1 ), numSubParag( -1 ),
+    : invalid( 0 ), p( pr ), n( nx ), doc( d ), align( 0 ), numSubParag( -1 ),
       tm( -1 ), bm( -1 ), lm( -1 ), rm( -1 ), flm( -1 ), tc( 0 ),
       numCustomItems( 0 ), pFormatter( 0 ),
       tArray( 0 ), tabStopWidth( 0 ), eData( 0 ), pntr( 0 )
@@ -3359,7 +3496,6 @@ void QTextParag::remove( int index, int len )
 {
     if ( index + len - str->length() > 0 )
 	return;
-    //qDebug("QTextParag::remove index=%d, len=%d", index, len);
     for ( int i = index; i < index + len; ++i ) {
 	QTextStringChar *c = at( i );
 	if ( doc && c->isCustom() ) {
@@ -3440,22 +3576,14 @@ void QTextParag::move( int &dy )
     if ( p )
 	p->lastInFrame = FALSE;
     movedDown = FALSE;
-    if ( doc && doc->verticalBreak() ) {
-	const int oy = r.y();
-	int y = oy;
-	doc->flow()->adjustFlow( y, r.width(), r.height(), this, TRUE );
-	if ( oy != y ) {
-	    if ( p ) {
-		p->lastInFrame = TRUE;
-		p->setChanged( TRUE );
-	    }
-	    movedDown = TRUE;
-	    int oh = r.height();
-	    r.setY( y );
-	    r.setHeight( oh );
-	    dy += y - oy;
-	    //qDebug("QTextParag::move done. paragId=%d dy=%d lastInFrame=true",paragId(),dy);
-	}
+    // do page breaks if required
+    if ( doc && doc->isPageBreakEnabled() ) {
+        int shift;
+        if ( ( shift = doc->formatter()->formatVertically(  doc, this ) ) ) {
+            if ( p )
+                p->setChanged( TRUE );
+            dy += shift;
+        }
     }
 }
 
@@ -3473,10 +3601,8 @@ void QTextParag::format( int start, bool doMove )
     if ( invalid == -1 )
 	return;
 
-#ifdef DEBUG_FORMATTER
-    qDebug("QTextParag::format id=%d invalid, formatting", paragId());
-#endif
     bool formattedAgain = FALSE;
+
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     r.setWidth( documentWidth() );
     if ( p )
@@ -3498,6 +3624,7 @@ void QTextParag::format( int start, bool doMove )
     int y = formatter()->format( doc, this, start, oldLineStarts );
     r.setWidth( QMAX( r.width(), minimumWidth() ) );
     QMap<int, QTextParagLineStart*>::Iterator it = oldLineStarts.begin();
+
     for ( ; it != oldLineStarts.end(); ++it )
 	delete *it;
 
@@ -3510,7 +3637,6 @@ void QTextParag::format( int start, bool doMove )
 	    r.setWidth( lineStarts[0]->w );
 	}
     }
-
     if ( newLinesAllowed ) {
 	it = lineStarts.begin();
 	int usedw = 0;
@@ -3529,24 +3655,13 @@ void QTextParag::format( int start, bool doMove )
     if ( !visible )
 	r.setHeight( 0 );
 
-    if ( doc && doc->verticalBreak() ) {
-	const int oy = r.y();
-	int y = oy;
-	doc->flow()->adjustFlow( y, r.width(), r.height(), this, TRUE );
-	if ( oy != y ) {
-	    if ( p ) {
-		p->lastInFrame = TRUE;
-		p->setChanged( TRUE );
-	    }
-	    movedDown = TRUE;
-	    int oh = r.height();
-	    r.setY( y );
-	    r.setHeight( oh );
-            if ( !formattedAgain ) {
-                formattedAgain = TRUE;
-                goto formatAgain;
-            }
-	}
+    // do page breaks if required
+    if ( doc && doc->isPageBreakEnabled() ) {
+        int shift = doc->formatter()->formatVertically( doc, this );
+        if ( shift && !formattedAgain ) {
+            formattedAgain = TRUE;
+            goto formatAgain;
+        }
     }
 
     if ( n && doMove && n->invalid == -1 && r.y() + r.height() != n->r.y() ) {
@@ -3562,7 +3677,7 @@ void QTextParag::format( int start, bool doMove )
 	    s->move( dy );
 	    if ( s->lastInFrame )
 		makeInvalid = TRUE;
-	    s = s->n;
+  	    s = s->n;
 	}
     }
 
@@ -3932,10 +4047,8 @@ void QTextParag::drawCursor( QPainter &painter, QTextCursor *cursor, int curx, i
 void QTextParag::drawParagString( QPainter &painter, const QString &s, int start, int len, int startX,
 				      int lastY, int baseLine, int bw, int h, bool drawSelections,
 				      QTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
-				      const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool /*rightToLeft*/ )
+				      const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool )
 {
-    if ( start + len == length() ) //// Not in QT3 ???
-	len--;
     QString str( s );
     if ( str[ (int)str.length() - 1 ].unicode() == 0xad )
 	str.remove( str.length() - 1, 1 );
@@ -3965,14 +4078,28 @@ void QTextParag::drawParagString( QPainter &painter, const QString &s, int start
 	    }
 	}
     }
+
     //QT2HACK
-    //QPainter::TextDirection dir = QPainter::LTR;
-    //if ( rightToLeft )
-	//dir = QPainter::RTL;
-    if ( str[start] != '\t' && str[ start ].unicode() != 0xad ) {
+    //QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
+
+    if ( str[ start ] != '\t' && str[ start ].unicode() != 0xad ) {
 	if ( lastFormat->vAlign() == QTextFormat::AlignNormal ) {
 	    //QT2HACK painter.drawText( startX, lastY + baseLine, str, start, len, dir );
 	    painter.drawText( startX, lastY + baseLine, str.mid(start), len );
+#ifdef BIDI_DEBUG
+	    painter.save();
+	    painter.setPen ( Qt::red );
+	    painter.drawLine( startX, lastY, startX, lastY + baseLine );
+	    painter.drawLine( startX, lastY + baseLine/2, startX + 10, lastY + baseLine/2 );
+	    int w = 0;
+	    int i = 0;
+	    while( i < len )
+		w += painter.fontMetrics().charWidth( str, start + i++ );
+	    painter.setPen ( Qt::blue );
+	    painter.drawLine( startX + w - 1, lastY, startX + w - 1, lastY + baseLine );
+	    painter.drawLine( startX + w - 1, lastY + baseLine/2, startX + w - 1 - 10, lastY + baseLine/2 );
+	    painter.restore();
+#endif
 	} else if ( lastFormat->vAlign() == QTextFormat::AlignSuperScript ) {
 	    QFont f( painter.font() );
 	    f.setPointSize( ( f.pointSize() * 2 ) / 3 );
@@ -4014,10 +4141,16 @@ void QTextParag::drawLabel( QPainter* p, int x, int y, int w, int h, int base, c
     QRect r ( x, y, w, h );
     QStyleSheetItem::ListStyle s = listStyle();
 
+    p->save();
+    p->setPen( defFormat->color() );
+
     QFont font = p->font();
-    p->setFont( defFormat->font() );
+    QFont font2( defFormat->font() );
+    font2.setPointSize( length() > 0 && at( 0 )->format() ? at( 0 )->format()->font().pointSize() : defFormat->font().pointSize() );
+    p->setFont( font2 );
     QFontMetrics fm( p->fontMetrics() );
-    int size = fm.lineSpacing() / 3;
+    QFontMetrics dfm( defFormat->font() );
+    int size = dfm.lineSpacing() / 3;
 
     switch ( s ) {
     case QStyleSheetItem::ListDecimal:
@@ -4048,13 +4181,13 @@ void QTextParag::drawLabel( QPainter* p, int x, int y, int w, int h, int base, c
 	break;
     case QStyleSheetItem::ListSquare:
 	{
-	    QRect er( r.right() - size * 2, r.top() + base - fm.boundingRect( 'A' ).height() / 2 - size / 2 - 1, size, size );
+	    QRect er( r.right() - size * 2, r.top() + fm.height() / 2 - size / 2, size, size );
 	    p->fillRect( er , cg.brush( QColorGroup::Foreground ) );
 	}
 	break;
     case QStyleSheetItem::ListCircle:
 	{
-	    QRect er( r.right()-size*2, r.top() + base - fm.boundingRect('A').height()/2 - size/2 - 1, size, size);
+	    QRect er( r.right()-size*2, r.top() + fm.height() / 2 - size / 2, size, size);
 	    p->drawEllipse( er );
 	}
 	break;
@@ -4062,13 +4195,14 @@ void QTextParag::drawLabel( QPainter* p, int x, int y, int w, int h, int base, c
     default:
 	{
 	    p->setBrush( cg.brush( QColorGroup::Foreground ));
-	    QRect er( r.right()-size*2, r.top() + base - fm.boundingRect('A').height()/2 - size/2 - 1, size, size);
+	    QRect er( r.right()-size*2, r.top() + fm.height() / 2 - size / 2, size, size);
 	    p->drawEllipse( er );
 	    p->setBrush( Qt::NoBrush );
 	}
 	break;
     }
 
+    p->restore();
     p->setFont( font );
 }
 
@@ -4208,7 +4342,7 @@ int QTextParag::nextTab( int, int x )
     int *ta = tArray;
     if ( doc ) {
 	if ( !ta )
-	   ta = doc->tabArray();
+	    ta = doc->tabArray();
 	tabStopWidth = doc->tabStopWidth();
     }
     if ( ta ) {
@@ -4567,7 +4701,7 @@ QTextParagLineStart *QTextFormatter::bidiReorderLine( QTextParag *parag, QTextSt
     // fill string with logically ordered chars.
     QTextStringChar *ch = startChar;
     QChar *qch = (QChar *)str.unicode();
-    while( ch <= lastChar ) {
+    while ( ch <= lastChar ) {
 	*qch = ch->c;
 	qch++;
 	ch++;
@@ -4616,8 +4750,10 @@ QTextParagLineStart *QTextFormatter::bidiReorderLine( QTextParag *parag, QTextSt
 		    toAdd += s;
 		    space -= s;
 		    numSpaces--;
-		} else {
+		} else if ( first ) {
 		    first = FALSE;
+		    if ( c->c == ' ' )
+			x -= c->format()->width( ' ' );
 		}
 		c->x = x + toAdd;
 		c->rightToLeft = TRUE;
@@ -4641,8 +4777,10 @@ QTextParagLineStart *QTextFormatter::bidiReorderLine( QTextParag *parag, QTextSt
 		    toAdd += s;
 		    space -= s;
 		    numSpaces--;
-		} else {
+		} else if ( first ) {
 		    first = FALSE;
+		    if ( c->c == ' ' )
+			x -= c->format()->width( ' ' );
 		}
 		c->x = x + toAdd;
 		c->rightToLeft = FALSE;
@@ -4663,7 +4801,7 @@ QTextParagLineStart *QTextFormatter::bidiReorderLine( QTextParag *parag, QTextSt
 	r = runs->next();
     }
 
-    line->w = xmax;
+    line->w = xmax + 10;
     QTextParagLineStart *ls = new QTextParagLineStart( control->context, control->status );
     delete control;
     delete runs;
@@ -4739,6 +4877,42 @@ void QTextFormatter::insertLineStart( QTextParag *parag, int index, QTextParagLi
 	parag->lineStartList().remove( it );
 	parag->lineStartList().insert( index, ls );
     }
+}
+
+/* Standard pagebreak algorithm using QTextFlow::adjustFlow. Returns
+ the shift of the paragraphs bottom line.
+ */
+int QTextFormatter::formatVertically( QTextDocument* doc, QTextParag* parag )
+{
+    int oldHeight = parag->rect().height();
+    QMap<int, QTextParagLineStart*>& lineStarts = parag->lineStartList();
+    QMap<int, QTextParagLineStart*>::Iterator it = lineStarts.begin();
+    int h = doc->addMargins() ? parag->topMargin() : 0;
+    for ( ; it != lineStarts.end() ; ++it  ) {
+        QTextParagLineStart * ls = it.data();
+        ls->y = h;
+        QTextStringChar *c = &parag->string()->at(it.key());
+        if ( c && c->customItem() && c->customItem()->ownLine() ) {
+            int h = c->customItem()->height;
+            c->customItem()->pageBreak( parag->rect().y() + ls->y + ls->baseLine - h, doc->flow() );
+            int delta = c->customItem()->height - h;
+            ls->h += delta;
+            if ( delta )
+                parag->setMovedDown( true );
+        } else {
+            int shift = doc->flow()->adjustFlow( parag->rect().y() + ls->y, ls->w, ls->h );
+            ls->y += shift;
+            if ( shift )
+                parag->setMovedDown( true );
+        }
+        h = ls->y + ls->h;
+    }
+    int m = parag->bottomMargin();
+    if ( parag->next() && doc && !doc->addMargins() )
+        m = QMAX( m, parag->next()->topMargin() );
+    h += m;
+    parag->setHeight( h );
+    return h - oldHeight;
 }
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -5298,6 +5472,9 @@ QTextFormat *QTextFormatCollection::format( const QTextFormat *f )
 	return lastFormat;
     }
 
+    if ( f->key() == defFormat->key() )
+	return defFormat;
+
 #ifdef DEBUG_COLLECTION
     qDebug( " format(f) need '%s', worst case!", f->key().latin1() );
 #endif
@@ -5720,8 +5897,7 @@ QTextFormat QTextFormat::makeTextFormat( const QStyleSheetItem *style, const QMa
 		format.logicalFontSize = style->logicalFontSize();
 		format.fn.setPointSize( format.stdPointSize );
 		style->styleSheet()->scaleFont( format.fn, format.logicalFontSize );
-	    }
-	    else if ( style->logicalFontSizeStep() ) {
+	    } else if ( style->logicalFontSizeStep() ) {
 		format.logicalFontSize += style->logicalFontSizeStep();
 		format.fn.setPointSize( format.stdPointSize );
 		style->styleSheet()->scaleFont( format.fn, format.logicalFontSize );
@@ -5953,7 +6129,6 @@ void QTextImage::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch
 	p->drawPixmap( cx , cy, pm, cx - x, cy - y, cw, ch );
 
     if ( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer ) {
-	p->save();
 #if defined(Q_WS_X11)
 	p->fillRect( QRect( QPoint( x, y ), pm.size() ), QBrush( cg.highlight(), QBrush::Dense4Pattern) );
 #else // in WIN32 Dense4Pattern doesn't work correctly (transparency problem), so work around it
@@ -6420,20 +6595,17 @@ int QTextFlow::adjustRMargin( int yp, int, int margin, int space )
     return margin;
 }
 
-void QTextFlow::adjustFlow( int &yp, int , int h, QTextParag *, bool pages )
+int QTextFlow::adjustFlow( int y, int /*w*/, int h )
 {
-    if ( pages && pagesize > 0 ) { // check pages
-	int ty = yp;
-	int yinpage = ty % pagesize;
-	if ( yinpage < 2 )
-	    yp += 2 - yinpage;
-	else
-	    if ( yinpage + h > pagesize - 2 )
-	    yp += ( pagesize - yinpage ) + 2;
+    if ( pagesize > 0 ) { // check pages
+        int yinpage = y % pagesize;
+        if ( yinpage <= 2 )
+            return 2 - yinpage;
+        else
+            if ( yinpage + h > pagesize - 2 )
+                return ( pagesize - yinpage ) + 2;
     }
-
-    if ( yp + h > height )
-	height = yp + h;
+    return 0;
 }
 
 void QTextFlow::unregisterFloatingItem( QTextCustomItem* item )
@@ -6471,6 +6643,10 @@ void QTextFlow::drawFloatingItems( QPainter* p, int cx, int cy, int cw, int ch, 
 void QTextFlow::updateHeight( QTextCustomItem *i )
 {
     height = QMAX( height, i->y() + i->height );
+}
+
+void QTextCustomItem::pageBreak( int /*y*/ , QTextFlow* /*flow*/ )
+{
 }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -6530,6 +6706,7 @@ QTextTable::QTextTable( QTextDocument *p, const QMap<QString, QString> & attr  )
 	place = PlaceRight;
     cachewidth = 0;
     attributes = attr;
+    pageBreakFor = -1;
 }
 
 QTextTable::~QTextTable()
@@ -6592,27 +6769,49 @@ void QTextTable::adjustToPainter( QPainter* p)
     width = 0;
 }
 
-void QTextTable::verticalBreak( int  yt, QTextFlow* flow )
+void QTextTable::adjustCells( int y , int shift )
 {
-    if ( flow->pageSize() <= 0 )
-	return;
-    int shift = 0;
-    for (QTextTableCell* cell = cells.first(); cell; cell = cells.next() ) {
+    QListIterator<QTextTableCell> it( cells );
+    QTextTableCell* cell;
+    bool enlarge = FALSE;
+    while ( ( cell = it.current() ) ) {
+	++it;
 	QRect r = cell->geometry();
-	r.moveBy(0, shift );
-	cell->setGeometry( r );
-	if ( cell->column() == 0 ) {
-	    int y = yt + outerborder + cell->geometry().y();
-	    int oldy = y;
-	    flow->adjustFlow( y, width, cell->geometry().height() + 2*cellspacing, 0 );
-	    shift += y - oldy;
-	    r = cell->geometry();
-	    r.moveBy(0, y - oldy );
+	if ( y <= r.top() ) {
+	    r.moveBy(0, shift );
 	    cell->setGeometry( r );
+	    enlarge = TRUE;
+	} else if ( y <= r.bottom() ) {
+	    r.rBottom() += shift;
+	    cell->setGeometry( r );
+	    enlarge = TRUE;
 	}
     }
-    height += shift;
+    if ( enlarge )
+	height += shift;
 }
+
+void QTextTable::pageBreak( int  yt, QTextFlow* flow )
+{
+    if ( flow->pageSize() <= 0 )
+        return;
+    if ( layout && pageBreakFor > 0 && pageBreakFor != yt ) {
+        layout->invalidate();
+        int h = layout->heightForWidth( width-2*outerborder );
+        layout->setGeometry( QRect(0, 0, width-2*outerborder, h)  );
+        height = layout->geometry().height()+2*outerborder;
+    }
+    pageBreakFor = yt;
+    QPtrListIterator<QTextTableCell> it( cells );
+    QTextTableCell* cell;
+    while ( ( cell = it.current() ) ) {
+        ++it;
+        int y = yt + outerborder + cell->geometry().y();
+        int shift = flow->adjustFlow( y - cellspacing, width, cell->richText()->height() + 2*cellspacing );
+        adjustCells( y - outerborder - yt, shift );
+    }
+}
+
 
 void QTextTable::draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
@@ -7040,7 +7239,7 @@ QTextTableCell::~QTextTableCell()
 QSize QTextTableCell::sizeHint() const
 {
     if ( cached_sizehint != -1 )
-	return QSize( cached_sizehint, 0 );
+ 	return QSize( cached_sizehint, 0 );
     QTextTableCell *that = (QTextTableCell*)this;
     if ( stretch_ == 100 ) {
 	return QSize( ( that->cached_sizehint = QWIDGETSIZE_MAX ), 0 );
@@ -7159,5 +7358,4 @@ void QTextTableCell::draw( int x, int y, int cx, int cy, int cw, int ch, const Q
 
     painter()->restore();
 }
-
 

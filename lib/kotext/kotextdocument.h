@@ -25,6 +25,7 @@ using namespace Qt3;
 class KoZoomHandler;
 class KoTextFormatCollection;
 class KoParagVisitor;
+class KoTextFormatter;
 
 /**
  * This is our QTextDocument reimplementation, to create KoTextParags instead of QTextParags,
@@ -35,13 +36,17 @@ class KoTextDocument : public QTextDocument
 public:
     /**
      * @param zoomHandler The KoZoomHandler instance, to handle the zooming, as the name says :)
-     * @param p don't mind p (we don't use parent documents)
-     * @param fc a format collectionfor this document. Ownership is transferred to the document.
+     * @param p don't mind p (we don't use parent documents). Pass 0L.
+     * @param fc a format collection for this document. Ownership is transferred to the document.
+     * @param formatter a text formatter for this document. If 0L, a KoTextFormatter is created.
+     *  If not, ownership of the given one is transferred to the document.
      * @param createInitialParag if true, an initial KoTextParag is created. Set to false if you reimplement createParag,
-     * since the constructor can't call the reimplementation. In that case, make sure to call
-     * clear(true) in your constructor; QRT doesn't support documents without paragraphs.
+     *  since the constructor can't call the reimplementation. In that case, make sure to call
+     *  clear(true) in your constructor; QRT doesn't support documents without paragraphs.
      */
-    KoTextDocument( KoZoomHandler *zoomHandler, QTextDocument *p, KoTextFormatCollection *fc, bool createInitialParag = true );
+    KoTextDocument( KoZoomHandler *zoomHandler, QTextDocument *p,
+                    KoTextFormatCollection *fc, KoTextFormatter *formatter = 0L,
+                    bool createInitialParag = true );
 
     ~KoTextDocument();
 

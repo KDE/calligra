@@ -24,7 +24,8 @@
 
 KoZoomHandler::KoZoomHandler()
 {
-    m_layoutUnitFactor = 1;
+    // Layout text at 1440 DPI
+    m_layoutUnitFactor = 20;
     // Note that this calls the method below, not the derived one
     setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
 }

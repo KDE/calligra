@@ -25,11 +25,13 @@
 #include <kdebug.h>
 #include <kcommand.h>
 
-KoTextDocument::KoTextDocument( KoZoomHandler * zoomHandler, QTextDocument *p, KoTextFormatCollection *fc, bool createInitialParag )
+KoTextDocument::KoTextDocument( KoZoomHandler * zoomHandler, QTextDocument *p,
+                                KoTextFormatCollection *fc, KoTextFormatter *formatter, bool createInitialParag )
     : QTextDocument( p, fc ), m_zoomHandler( zoomHandler ), m_bDestroying( false )
 {
     setAddMargins( true );                 // top margin and bottom are added, not max'ed
-    QTextFormatter * formatter = new KoTextFormatter;
+    if ( !formatter )
+        formatter = new KoTextFormatter;
     formatter->setAllowBreakInWords( true ); // Necessary for lines without a single space
     setFormatter( formatter );
 
@@ -117,7 +119,9 @@ static bool is_printer( QPainter *p )
 QPixmap *KoTextDocument::bufferPixmap( const QSize &s )
 {
     if ( !ko_buf_pixmap ) {
-	ko_buf_pixmap = new QPixmap( s );
+	int w = QABS( s.width() );
+	int h = QABS( s.height() );
+	ko_buf_pixmap = new QPixmap( w, h );
     } else {
 	if ( ko_buf_pixmap->width() < s.width() ||
 	     ko_buf_pixmap->height() < s.height() ) {
@@ -251,9 +255,6 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, QTextParag *parag, int cx, i
 		     rect.height(), cg.brush( QColorGroup::Base ) );
     }
 
-    //if ( verticalBreak() && parag->lastInFrame && parag->document()->flow() )
-    //    parag->document()->flow()->eraseAfter( parag, p, cg );
-
     //parag->document()->nextDoubleBuffered = FALSE;
 }
 
@@ -290,7 +291,7 @@ QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, in
 
     // Space above first parag
     QRect pixelRect = parag->pixelRect();
-    if ( parag && cy <= pixelRect.y() && pixelRect.y() > 0 ) {
+    if ( isPageBreakEnabled() && parag && cy <= pixelRect.y() && pixelRect.y() > 0 ) {
         QRect r( 0, 0,
                  m_zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() ),
                  pixelRect.y() );
@@ -306,7 +307,7 @@ QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, in
 
 	QRect ir = parag->pixelRect();
         //kdDebug() << "KoTextDocument::drawWYSIWYG ir=" << DEBUGRECT(ir) << endl;
-	if ( verticalBreak() && parag->next() )
+	if ( isPageBreakEnabled() && parag->next() )
         {
             int nexty = static_cast<KoTextParag *>(parag->next())->pixelRect().y();
 	    if ( ir.y() + ir.height() < nexty ) {
@@ -328,9 +329,6 @@ QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, in
 		    delete ko_buf_pixmap;
 		    ko_buf_pixmap = 0;
 		}
-		//if ( verticalBreak() && flow() )
-		//    flow()->draw( p, cx, cy, cw, ch );
-
 		return lastFormatted;
 	    }
 	}
@@ -361,9 +359,6 @@ QTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, in
 	delete ko_buf_pixmap;
 	ko_buf_pixmap = 0;
     }
-
-    //if ( verticalBreak() && flow() )
-    //	flow()->draw( p, cx, cy, cw, ch );
 
     //tmpCursor = 0;
     return lastFormatted;
