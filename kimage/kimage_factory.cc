@@ -1,7 +1,9 @@
-#include <kinstance.h>
 #include <kglobal.h>
-#include <kstddirs.h>
 #include <klocale.h>
+#include <kstddirs.h>
+#include <kinstance.h>
+#include <kaboutdata.h>
+
 #include "kimage_factory.h"
 #include "kimage_doc.h"
 
@@ -54,12 +56,12 @@ KInstance* KImageFactory::global()
 {
    if ( !s_global )
    {
-        KAboutData *aboutData= new KAboutData( "kimage", I18N_NOOP("KImage"),
-             version, description, KAboutData::License_GPL,
-             "(c) 1998-2000, Michael Koch");
-        aboutData->addAuthor("Michael Koch",0, "koch@kde.org");
+     KAboutData *aboutData= new KAboutData( "kimage", I18N_NOOP("KImage"),
+                                            version, description, KAboutData::License_GPL,
+                                            "(c) 1998-2000, Michael Koch");
+     aboutData->addAuthor("Michael Koch",0, "koch@kde.org");
    
-       s_global = new KInstance(aboutData);
+     s_global = new KInstance(aboutData);
    }
    return s_global;
 }
