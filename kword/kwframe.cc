@@ -1385,7 +1385,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
             parentFrame=parentFrameset->frameAtPos(parentFrame->x(), parentFrame->y());
             if( parentFrame)
             {
-                QRect r = painter->xForm( viewMode->normalToView( parentFrame->outerRect() ) );
+                QRect r = painter->xForm( viewMode->normalToView( doc->zoomRect(parentFrame->innerRect()) ) );
                 reg &= r;
             } else {
                 parentFrame = oldParentFrame;
