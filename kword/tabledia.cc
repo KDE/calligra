@@ -143,7 +143,7 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
     {
         cbReapplyTemplate1 = new QCheckBox( i18n("Re-apply template to table"), tab1 );
         grid->addMultiCellWidget( cbReapplyTemplate1, 9, 9, 0, 2);
-    
+
         connect( cbReapplyTemplate1, SIGNAL( toggled ( bool )  ), this, SLOT( slotSetReapply( bool ) ) );
     }
 
@@ -287,14 +287,14 @@ void KWTableDia::slotOk()
             }
 
             // Apply template
-            if ( ( oldTemplateName!=tableTemplateSelector->getTableTemplate()->name() ) || (cbReapplyTemplate1->isChecked()) ) 
+            if ( tableTemplateSelector->getTableTemplate() && (( oldTemplateName!=tableTemplateSelector->getTableTemplate()->name() ) || (cbReapplyTemplate1->isChecked()) ))
             {
                 KWTableTemplateCommand *ttCmd=new KWTableTemplateCommand( "Apply template to table", table, tableTemplateSelector->getTableTemplate() );
                 doc->addCommand(ttCmd);
                 ttCmd->execute();
                 canvas->setTableTemplateName( tableTemplateSelector->getTableTemplate()->name() );
             }
-        }      
+        }
     }
     KDialogBase::slotOk();
 }
