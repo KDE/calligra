@@ -223,7 +223,7 @@ KexiPropertyEditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w,
 		p->fillRect(0,0,w, item->height(), QBrush(item->backgroundColor()));
 		p->fillRect(-50,0,50, item->height(), QBrush(item->backgroundColor()));
 		p->save();
-		p->setPen(cg.background());
+		p->setPen( QColor(200,200,200) ); //like in t.v.
 		p->drawLine(-50, item->height()-1, w, item->height()-1 );
 		p->restore();
 		
