@@ -25,6 +25,7 @@
 #define __kis_config_h__
 
 #include <qobject.h>
+#include <qlist.h>
 
 class QFont;
 
