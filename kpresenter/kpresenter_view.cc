@@ -1442,18 +1442,11 @@ void KPresenterView::screenConfigPages()
 {
     delete pgConfDia;
     pgConfDia = 0;
-    KPrPage *page=m_canvas->activePage();
     pgConfDia = new PgConfDia( this, "PageConfig",
                                kPresenterDoc()->spInfiniteLoop(),
                                kPresenterDoc()->spManualSwitch(),
-                               getCurrPgNum(),
-                               page->getPageEffect(),
-                               kPresenterDoc()->getPresSpeed(),
-                               page->getPageTimer(),
-                               page->getPageSoundEffect(),
-                               page->getPageSoundFileName(),
                                kPresenterDoc()->presentationDuration() );
-    pgConfDia->setCaption( i18n( "Page Configuration for Screen Presentations" ) );
+    pgConfDia->setCaption( i18n( "Configure Slide Show" ) );
     QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
     pgConfDia->exec();
 
@@ -3877,22 +3870,13 @@ void KPresenterView::styleOk()
 void KPresenterView::pgConfOk()
 {
     KPrPage *page=m_canvas->activePage();
-    PgConfCmd *pgConfCmd = new PgConfCmd( i18n( "Configure Page for Screen Presentations" ),
+    PgConfCmd *pgConfCmd = new PgConfCmd( i18n( "Configure Slide Show" ),
 					  pgConfDia->getManualSwitch(), pgConfDia->getInfiniteLoop(),
-					  pgConfDia->getPageEffect(), pgConfDia->getPresSpeed(),
-					  pgConfDia->getPageTimer(),
-					  pgConfDia->getPageSoundEffect(),
-					  pgConfDia->getPageSoundFileName(),
                                           pgConfDia->getPresentationDuration(),
 					  kPresenterDoc()->spManualSwitch(),
 					  kPresenterDoc()->spInfiniteLoop(),
-					  page->getPageEffect(),
-					  kPresenterDoc()->getPresSpeed(),
-					  page->getPageTimer(),
-					  page->getPageSoundEffect(),
-					  page->getPageSoundFileName(),
                                           kPresenterDoc()->presentationDuration(),
-					  kPresenterDoc(), page );
+					  kPresenterDoc() );
     pgConfCmd->execute();
     kPresenterDoc()->addCommand( pgConfCmd );
 }

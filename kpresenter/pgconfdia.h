@@ -49,52 +49,23 @@ public:
 
     // constructor - destructor
     PgConfDia( QWidget* parent, const char* name,
-               bool infLoop, bool swMan, int pgNum,
-               PageEffect pageEffect, PresSpeed presSpeed, int pageTimer,
-               bool soundEffect, QString fileName, bool showPresentationDuration );
+               bool infLoop, bool swMan, bool showPresentationDuration );
     ~PgConfDia();
     bool getInfiniteLoop() const;
     bool getManualSwitch() const;
-    PageEffect getPageEffect() const;
-    PresSpeed getPresSpeed() const;
-    int getPageTimer() const;
-    bool getPageSoundEffect() const;
-    QString getPageSoundFileName()const;
     bool getPresentationDuration()const;
 
 protected:
-    QString getSoundFileFilter()const;
 
-protected:
-    QButtonGroup *general, *page, *slides;
+    QButtonGroup *general, *slides;
     QCheckBox *infiniteLoop, *manualSwitch, *presentationDuration;
     QRadioButton *slidesAll, *slidesCurrent, *slidesSelected;
     QLabel *label2, *label3, *lTimer;
-    QComboBox *effectCombo;
     QVBoxLayout *back;
     QListView *lSlides;
-    KIntNumInput *timerOfPage, *speedOfObject;
-
-    QCheckBox *checkSoundEffect;
-    QLabel *lSoundEffect;
-    KURLRequester *requester;
-    QPushButton *buttonTestPlaySoundEffect, *buttonTestStopSoundEffect;
-
-    KPresenterSoundPlayer *soundPlayer;
 
 public slots:
     void confDiaOk() { emit pgConfDiaOk(); }
-
-protected slots:
-    void presSlidesChanged( int );
-    void slotManualSwitch();
-
-    void effectChanged( int num );
-    void soundEffectChanged();
-    void slotRequesterClicked( KURLRequester * );
-    void slotSoundFileChanged( const QString& );
-    void playSound();
-    void stopSound();
 
 signals:
     void pgConfDiaOk();

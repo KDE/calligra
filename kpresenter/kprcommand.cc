@@ -1444,32 +1444,19 @@ void BrushCmd::unexecute()
 
 /*================================================================*/
 PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
-                      PageEffect _pageEffect, PresSpeed _presSpeed, int _pageTimer,
-                      bool _soundEffect, const QString &_fileName, bool _showPresentationDuration,
+                      bool _showPresentationDuration,
                       bool _oldManualSwitch, bool _oldInfiniteLoop,
-                      PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, int _oldPageTimer,
-                      bool _oldSoundEffect, const QString &_oldFileName, bool _oldShowPresentationDuration,
-                      KPresenterDoc *_doc, KPrPage *_page )
+                      bool _oldShowPresentationDuration,
+                      KPresenterDoc *_doc )
     : KNamedCommand( _name )
 {
     manualSwitch = _manualSwitch;
     infiniteLoop = _infiniteLoop;
-    pageEffect = _pageEffect;
-    presSpeed = _presSpeed;
-    pageTimer = _pageTimer;
-    soundEffect = _soundEffect;
-    fileName = _fileName;
     showPresentationDuration = _showPresentationDuration;
     oldManualSwitch = _oldManualSwitch;
     oldInfiniteLoop = _oldInfiniteLoop;
-    oldPageEffect = _oldPageEffect;
-    oldPresSpeed = _oldPresSpeed;
-    oldPageTimer = _oldPageTimer;
-    oldSoundEffect = _oldSoundEffect;
-    oldFileName = _oldFileName;
     oldShowPresentationDuration = _oldShowPresentationDuration;
     doc = _doc;
-    m_page=_page;
 }
 
 /*================================================================*/
@@ -1477,11 +1464,6 @@ void PgConfCmd::execute()
 {
     doc->setManualSwitch( manualSwitch );
     doc->setInfiniteLoop( infiniteLoop );
-    m_page->setPageEffect( pageEffect );
-    doc->setPresSpeed( presSpeed );
-    m_page->setPageTimer(  pageTimer );
-    m_page->setPageSoundEffect(  soundEffect );
-    m_page->setPageSoundFileName(  fileName );
     doc->setPresentationDuration( showPresentationDuration );
 }
 
@@ -1490,11 +1472,7 @@ void PgConfCmd::unexecute()
 {
     doc->setManualSwitch( oldManualSwitch );
     doc->setInfiniteLoop( oldInfiniteLoop );
-    m_page->setPageEffect( oldPageEffect );
-    doc->setPresSpeed( oldPresSpeed );
-    m_page->setPageTimer(  oldPageTimer );
-    m_page->setPageSoundEffect(  oldSoundEffect );
-    m_page->setPageSoundFileName(  oldFileName );
+    doc->setPresentationDuration( oldShowPresentationDuration );
 }
 
 /******************************************************************/
