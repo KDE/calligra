@@ -353,6 +353,11 @@ void KoTemplateChooseDia::openEmpty()
 /*================================================================*/
 void KoTemplateChooseDia::chooseFile()
 {
+    // Save current state - in case of Cancel
+    bool bEmpty = d->m_rbEmpty->isChecked();
+    bool bTemplates = (d->m_dialogType!=NoTemplates) && d->m_rbTemplates->isChecked();
+    openFile();
+
     // Use dir from currently selected file
     QString dir = QString::null;
     if ( QFile::exists( d->m_file ) )
@@ -365,7 +370,13 @@ void KoTemplateChooseDia::chooseFile()
     KURL u;
 
     if(dialog->exec()==QDialog::Accepted)
+    {
 	u=dialog->selectedURL();
+    } else //revert state
+    {
+        if (bEmpty) openEmpty();
+        if (bTemplates) openTemplate();
+    }
 
     KoFilterManager::self()->cleanUp();
     delete dialog;
@@ -387,7 +398,6 @@ void KoTemplateChooseDia::chooseFile()
             d->m_file=filename;
         else
             d->m_file=url;
-        openFile();
 	chosen();
     }
 }
