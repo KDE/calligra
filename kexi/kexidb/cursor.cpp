@@ -93,7 +93,7 @@ Cursor::~Cursor()
 	if (!m_query)
 		KexiDBDbg << "Cursor::~Cursor() '" << m_rawStatement.latin1() << "'" << endl;
 	else
-		KexiDBDbg << "Cursor::~Cursor() query '" << m_query->name() << "'" << endl;
+		KexiDBDbg << "Cursor::~Cursor() " << endl;
 
 	//take me if delete was 
 	if (!m_conn->m_destructor_started)
