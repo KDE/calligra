@@ -334,7 +334,7 @@ KarbonView::viewModeChanged()
 	{
 		m_painterFactory->setPainter( canvasWidget()->viewport(), width(), height() );
 	}
-	m_canvas->repaintContents( true );
+	m_canvas->repaintAll();
 }
 
 void
@@ -343,7 +343,7 @@ KarbonView::zoomChanged()
 	bool bOK;
 	double zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
 	m_canvas->setZoomFactor( zoomFactor );
-	m_canvas->repaintContents( true );
+	m_canvas->repaintAll();
 }
 
 void
