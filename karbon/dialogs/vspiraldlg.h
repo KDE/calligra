@@ -17,7 +17,7 @@ class VSpiralDlg : public KDialog
 	Q_OBJECT
 
 public:
-	VSpiralDlg();
+	VSpiralDlg( QWidget* parent = 0L, const char* name = 0L );
 
 	double radius() const;
 	uint segments() const;

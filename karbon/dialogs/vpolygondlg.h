@@ -16,7 +16,7 @@ class VPolygonDlg : public KDialog
 	Q_OBJECT
 
 public:
-	VPolygonDlg();
+	VPolygonDlg( QWidget* parent = 0L, const char* name = 0L );
 
 	double radius() const;
 	uint edges() const;

@@ -17,8 +17,8 @@
 
 #include "vellipsedlg.h"
 
-VEllipseDlg::VEllipseDlg()
-	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
+VEllipseDlg::VEllipseDlg( QWidget* parent, const char* name )
+	: KDialog( parent, name, true, Qt::WStyle_Customize |
 	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
 	setCaption( i18n( "Insert Ellipse" ) );

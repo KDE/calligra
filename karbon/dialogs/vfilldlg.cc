@@ -21,8 +21,8 @@
 #include <kdebug.h>
 
 
-VFillDlg::VFillDlg( KarbonPart *part )
-	: KDialogBase ( 0L, 0, true, i18n( "Uniform Color" ),
+VFillDlg::VFillDlg( KarbonPart* part, QWidget* parent, const char* name )
+	: KDialogBase ( parent, name, true, i18n( "Uniform Color" ),
 		KDialogBase::Ok | KDialogBase::Cancel ), m_part( part )
 {
 	QGridLayout *mainLayout;

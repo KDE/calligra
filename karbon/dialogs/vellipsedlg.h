@@ -15,7 +15,7 @@ class VEllipseDlg : public KDialog
 	Q_OBJECT
 
 public:
-	VEllipseDlg();
+	VEllipseDlg( QWidget* parent = 0L, const char* name = 0L );
 
 	double width() const;
 	double height() const;

@@ -16,7 +16,7 @@ class VSinusDlg : public KDialog
 	Q_OBJECT
 
 public:
-	VSinusDlg();
+	VSinusDlg( QWidget* parent = 0L, const char* name = 0L );
 
 	double width() const;
 	double height() const;

@@ -14,7 +14,7 @@ class VInsertKnotsDlg : public KDialog
 	Q_OBJECT
 
 public:
-	VInsertKnotsDlg();
+	VInsertKnotsDlg( QWidget* parent = 0L, const char* name = 0L );
 
 	uint knots() const;
 	void setKnots( uint value );

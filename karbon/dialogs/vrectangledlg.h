@@ -15,7 +15,7 @@ class VRectangleDlg : public KDialog
 	Q_OBJECT
 
 public:
-	VRectangleDlg();
+	VRectangleDlg( QWidget* parent = 0L, const char* name = 0L );
 
 	double width() const;
 	double height() const;

@@ -17,8 +17,8 @@
 
 #include "vroundrectdlg.h"
 
-VRoundRectDlg::VRoundRectDlg()
-	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
+VRoundRectDlg::VRoundRectDlg( QWidget* parent, const char* name )
+	: KDialog( parent, name, true, Qt::WStyle_Customize |
 	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
 	setCaption( i18n( "Insert Round Rectangle" ) );

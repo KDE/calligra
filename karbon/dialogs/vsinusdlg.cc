@@ -18,8 +18,8 @@
 
 #include "vsinusdlg.h"
 
-VSinusDlg::VSinusDlg()
-	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
+VSinusDlg::VSinusDlg( QWidget* parent, const char* name )
+	: KDialog( parent, name, true, Qt::WStyle_Customize |
 	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
 	setCaption( i18n( "Insert Sinus" ) );

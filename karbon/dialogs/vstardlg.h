@@ -16,7 +16,7 @@ class VStarDlg : public KDialog
 	Q_OBJECT
 
 public:
-	VStarDlg();
+	VStarDlg( QWidget* parent = 0L, const char* name = 0L );
 
 	double innerR() const;
 	double outerR() const;

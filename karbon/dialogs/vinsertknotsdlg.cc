@@ -15,8 +15,8 @@
 
 #include "vinsertknotsdlg.h"
 
-VInsertKnotsDlg::VInsertKnotsDlg()
-	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
+VInsertKnotsDlg::VInsertKnotsDlg( QWidget* parent, const char* name )
+	: KDialog( parent, name, true, Qt::WStyle_Customize |
 	  WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
 	setCaption( i18n( "Insert Knots" ) );

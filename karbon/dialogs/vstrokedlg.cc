@@ -19,7 +19,8 @@
 
 #include <kdebug.h>
 
-VStrokeDlg::VStrokeDlg( KarbonPart* part ) : QTabDialog ( 0L, 0, true ), m_part( part )
+VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
+	: QTabDialog ( parent, name, true ), m_part( part )
 {
 	setCaption( i18n( "Uniform Color" ) );
 	setCancelButton();

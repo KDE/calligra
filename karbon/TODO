@@ -1,4 +1,4 @@
--	should all dialogs have a perent ?
+REAL BUGS:
 -	mirror coordinate-system so origin is bottom-left
 -	replace VObject::isInside() with a polygonizevisitor in vselectool (lenny)
 -	rotate/scale/shear tool dont work
@@ -6,7 +6,6 @@
 -	painting (NotROP) while shape creation isnt good. creation should instead
 	insert a temporary object (state "edit") right from the start.
 	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
--	add validators to all tool-dialog input-fields
 -	examine the problem with non closed paths (polygonize combined.karbon for example
 	to make the inner circles rectangles)
 -	implement gradients after libart code reorganisations (Rob)
@@ -14,3 +13,7 @@
 OPTIMIZATION:
 -	make fill/stroke shared so copying for undo/redo is more efficient
 -	transform() bbox too and dont recalculate it
+
+MAKE IT NICE:
+-	add validators to all tool-dialog input-fields
+-	pass all dialogs a parent

@@ -21,7 +21,7 @@ class VFillDlg : public KDialogBase
 	Q_OBJECT
 
 public:
-	VFillDlg( KarbonPart *part );
+	VFillDlg( KarbonPart* part, QWidget* parent = 0L, const char* name = 0L );
 
 private:
 	QWidget* mRGBWidget;

@@ -21,7 +21,7 @@ class VStrokeDlg : public QTabDialog
 	Q_OBJECT
 
 public:
-	VStrokeDlg( KarbonPart *part );
+	VStrokeDlg( KarbonPart* part, QWidget* parent = 0L, const char* name = 0L );
 
 private:
 	QWidget* mRGBWidget;
