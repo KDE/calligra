@@ -185,6 +185,7 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
     if (pageEffect!=PEF_NONE) {
         element=doc.createElement("PGEFFECT");
         element.setAttribute("value", static_cast<int>( pageEffect ));
+        element.setAttribute("speed", static_cast<int>( m_presSpeed ));
         page.appendChild(element);
     }
 
@@ -816,6 +817,9 @@ void KPBackGround::load( const QDomElement &element )
         if(e.hasAttribute("value"))
             tmp=e.attribute("value").toInt();
         setPageEffect(static_cast<PageEffect>(tmp));
+        if(e.hasAttribute("speed"))
+            tmp=e.attribute("speed").toInt();
+        setPresSpeed(static_cast<PresSpeed>(tmp));
     }
     e=element.namedItem("BGRADIENT").toElement();
     if(!e.isNull()) {

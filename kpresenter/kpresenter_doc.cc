@@ -716,7 +716,7 @@ void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDom
 
 void KPresenterDoc::compatibilityPresSpeed()
 {
-    if ( m_loadingInfo )
+    if ( m_loadingInfo && m_loadingInfo->presSpeed != - 1 )
     {
         int newValue = 5;
         if ( m_loadingInfo->presSpeed < 3 )

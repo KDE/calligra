@@ -24,7 +24,7 @@
 class KPRLoadingInfo
 {
 public:
-    KPRLoadingInfo() { presSpeed = 5; }
+    KPRLoadingInfo() { presSpeed = -1; }
     ~KPRLoadingInfo() {}
 
     QDomElement* animationShowById( const QString& id ) const {
