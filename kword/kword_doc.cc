@@ -3038,7 +3038,7 @@ void KWordDocument::setFormat( KWFormat &_format, int flags )
 void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                            KWFormat *_format, const QString &_mime )
 {
-    QStrList strList;
+    QStringList strList;
     KWParag *firstParag = 0L, *parag = 0L, *parag2 = 0L, *calcParag = 0L;
     int index;
 
@@ -3050,12 +3050,12 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
             if ( index == -1 ) break;
 
             if ( index > 0 && !_string.left( index ).simplifyWhiteSpace().isEmpty() )
-                strList.append( QString( _string.left( index ) ) );
+                strList.append( _string.left( index ) );
             _string.remove( 0, index + 1 );
         }
 
         if ( !_string.isEmpty() && !_string.simplifyWhiteSpace().isEmpty() )
-            strList.append( QString( _string ) );
+            strList.append( _string );
     } else if ( _mime == MIME_TYPE ) {     // -------------- MIME type application/x-kword
 
         QDomDocument doc;
@@ -3111,7 +3111,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                     format = new KWFormat( this );
                     *format = *( (KWFormat*)_fc );
                 }
-                str = QString( strList.at( 0 ) );
+                str = strList[ 0 ];
                 len = str.length();
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
                 _fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
@@ -3139,7 +3139,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                     format = new KWFormat( this );
                     *format = *( (KWFormat*)_fc );
                 }
-                str = QString( strList.at( 0 ) );
+                str = strList[ 0 ];
                 len = str.length();
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
                 _fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
@@ -3150,7 +3150,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 QKeyEvent ev(static_cast<QEvent::Type>(6) /*QEvent::KeyPress*/ ,Qt::Key_Return,13,0);
                 _page->keyPressEvent( &ev );
 
-                str = QString( strList.at( 1 ) );
+                str = strList[ 1 ];
                 len = str.length();
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
                 _fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
@@ -3188,7 +3188,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                     format = new KWFormat( this );
                     *format = *( (KWFormat*)_fc );
                 }
-                str = QString( strList.at( 0 ) );
+                str = strList[ 0 ];
                 len = str.length();
                 _fc->getParag()->insertText( _fc->getTextPos(), str );
                 _fc->getParag()->setFormat( _fc->getTextPos(), len, *format );
@@ -3204,7 +3204,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
                 KWParag *p = _fc->getParag(), *next = _fc->getParag()->getNext();
 
                 for ( unsigned int i = 1; i < strList.count(); i++ ) {
-                    str = QString( strList.at( i ) );
+                    str = strList[ i ];
                     len = str.length();
                     p = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ),
                                      this,
