@@ -2887,18 +2887,32 @@ void KWView::slotFrameSetEditChanged()
 
 void KWView::frameSelectedChanged()
 {
-    int nbFrame=m_doc->getSelectedFrames().count();
-    actionFormatFrameSet->setEnabled( !currentTextEdit() && (nbFrame>=1));
-    if ( !currentTextEdit() && (nbFrame==1) )
+    bool rw = koDocument()->isReadWrite();
+    QList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    int nbFrame = selectedFrames.count();
+
+    actionFormatFrameSet->setEnabled( nbFrame>=1 );
+    if ( rw && nbFrame >= 1 )
     {
-        KWFrameSet * fs = m_doc->getFirstSelectedFrame()->getFrameSet();
-        actionEditDelFrame->setEnabled( !fs->isAHeader() && !fs->isAFooter() );
+        bool okForDelete = true;
+        // Check we didn't select the main text frame (in WP mode)
+        QListIterator<KWFrame> it( selectedFrames );
+        for ( ; it.current() && okForDelete ; ++it )
+        {
+            // Check we selected no footer nor header
+            okForDelete = !it.current()->getFrameSet()->isHeaderOrFooter();
+            if ( okForDelete && m_doc->processingType() == KWDocument::WP )
+                okForDelete = it.current()->getFrameSet() != m_doc->getFrameSet( 0 );
+        }
+        actionEditDelFrame->setEnabled( okForDelete );
+        actionEditCut->setEnabled( okForDelete );
     } else
+    {
         actionEditDelFrame->setEnabled( false );
+        actionEditCut->setEnabled( false );
+    }
 
     actionBackgroundColor->setEnabled( nbFrame >= 1 );
-    bool rw = koDocument()->isReadWrite();
-    actionEditCut->setEnabled( rw && nbFrame >= 1 );
     actionEditCopy->setEnabled( nbFrame >= 1 );
 
 
