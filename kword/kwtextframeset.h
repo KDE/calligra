@@ -97,7 +97,12 @@ public:
     // @param nPointBottom the max the view looks at, in normal coordinates
     void updateViewArea( QWidget * w, const QPoint & nPointBottom );
 
-    virtual void save( QDomElement &parentElem, bool saveFrames = true );
+    virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true )
+    { return saveInternal( parentElem, saveFrames, false ); }
+    /** save to XML - when copying to clipboard (includes floating framesets) */
+    virtual QDomElement toXML( QDomElement &parentElem, bool saveFrames = true )
+    { return saveInternal( parentElem, saveFrames, true ); }
+
     virtual void load( QDomElement &attributes, bool loadFrames = true );
 
     virtual void zoom( bool forPrint );
@@ -201,7 +206,7 @@ public:
                      bool zoomFormats = true, bool createUndoRedo = true, bool interactive = true );
 
     void applyStyleChange( KWStyle * changedStyle, int paragLayoutChanged, int formatChanged );
-    
+
     virtual void addTextFramesets( QList<KWTextFrameSet> & /*lst*/ );
 
     KCommand* setTabListCommand( QTextCursor * cursor,const KoTabulatorList & tabList );
@@ -276,6 +281,7 @@ protected:
     const QList<KWFrame> & framesInPage( int pageNum ) const;
     void frameResized( KWFrame *theFrame );
     double footerHeaderSizeMax( KWFrame *theFrame );
+    QDomElement saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets );
 
 private:
     /**

@@ -1698,21 +1698,23 @@ void KWTableFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progr
     }
 }
 
-void KWTableFrameSet::save( QDomElement &parentElem, bool saveFrames ) {
+QDomElement KWTableFrameSet::save( QDomElement &parentElem, bool saveFrames ) {
     // When saving to a file, we don't have anything specific to the frameset to save.
     // Save the cells only.
     for (unsigned int i =0; i < m_cells.count(); i++) {
         m_cells.at(i)->save(parentElem, saveFrames);
     }
+    return QDomElement(); // No englobing element for tables...
 }
 
-void KWTableFrameSet::toXML( QDomElement &parentElem, bool saveFrames )
+QDomElement KWTableFrameSet::toXML( QDomElement &parentElem, bool saveFrames )
 {
     QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
     parentElem.appendChild( framesetElem );
-    KWFrameSet::save( framesetElem, false ); // Save the frameset attributes
+    KWFrameSet::saveCommon( framesetElem, false ); // Save the frameset attributes
     // Save the cells
     save( framesetElem, saveFrames );
+    return framesetElem;
 }
 
 void KWTableFrameSet::fromXML( QDomElement &framesetElem, bool loadFrames, bool useNames )

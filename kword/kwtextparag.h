@@ -232,10 +232,14 @@ public:
     static QDomElement saveFormat( QDomDocument & doc, KWTextFormat * curFormat, KWTextFormat * refFormat, int pos, int len );
     static KWTextFormat loadFormat( QDomElement &formatElem, KWTextFormat * refFormat, const QFont & defaultFont );
 
-    void save( QDomElement &parentElem )
-    { save( parentElem, 0, length()-2 ); }
+    // Save the whole paragraph
+    void save( QDomElement &parentElem, bool saveAnchorsFramesets = false )
+    { save( parentElem, 0, length()-2, saveAnchorsFramesets ); }
+
+    // Save a portion of the paragraph
     void save( QDomElement &parentElem, int from, int to, bool saveAnchorsFramesets = false );
 
+    // Load the paragraph
     void load( QDomElement &attributes );
 
     // Load and apply <FORMAT> tags (used by KWTextParag::load and by KWPasteCommand)

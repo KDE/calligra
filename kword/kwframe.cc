@@ -972,7 +972,7 @@ bool KWFrameSet::getMouseCursor( const QPoint &nPoint, bool controlPressed, QCur
     return true;
 }
 
-void KWFrameSet::save( QDomElement &parentElem, bool saveFrames )
+void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
@@ -1276,14 +1276,14 @@ void KWPictureFrameSet::setSize( const QSize & _imgSize )
     m_image = m_image.scale( _imgSize );
 }
 
-void KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
+QDomElement KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
-        return;
+        return QDomElement();
     QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
     parentElem.appendChild( framesetElem );
 
-    KWFrameSet::save( framesetElem, saveFrames );
+    KWFrameSet::saveCommon( framesetElem, saveFrames );
 
     QDomElement imageElem = parentElem.ownerDocument().createElement( "IMAGE" );
     framesetElem.appendChild( imageElem );
@@ -1291,6 +1291,7 @@ void KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
     QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );
     imageElem.appendChild( elem );
     m_image.key().saveAttributes( elem );
+    return framesetElem;
 }
 
 void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
@@ -1393,20 +1394,21 @@ void KWClipartFrameSet::loadClipart( const QString & fileName )
     m_clipart = collection->loadClipart( fileName );
 }
 
-void KWClipartFrameSet::save( QDomElement & parentElem, bool saveFrames )
+QDomElement KWClipartFrameSet::save( QDomElement & parentElem, bool saveFrames )
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
-        return;
+        return QDomElement();
     QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
     parentElem.appendChild( framesetElem );
 
-    KWFrameSet::save( framesetElem, saveFrames );
+    KWFrameSet::saveCommon( framesetElem, saveFrames );
 
     QDomElement imageElem = parentElem.ownerDocument().createElement( "CLIPART" );
     framesetElem.appendChild( imageElem );
     QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );
     imageElem.appendChild( elem );
     m_clipart.key().saveAttributes( elem );
+    return framesetElem;
 }
 
 void KWClipartFrameSet::load( QDomElement &attributes, bool loadFrames )
@@ -1516,11 +1518,15 @@ void KWPartFrameSet::updateChildGeometry()
     m_child->setGeometry( frames.first()->toQRect() );
 }
 
-void KWPartFrameSet::save( QDomElement &parentElem, bool saveFrames )
+QDomElement KWPartFrameSet::save( QDomElement &parentElem, bool saveFrames )
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
-        return;
-    KWFrameSet::save( parentElem, saveFrames );
+        return QDomElement();
+    KWFrameSet::saveCommon( parentElem, saveFrames );
+    // Ok, this one is a bit hackish. KWDocument calls us for saving our stuff into
+    // the SETTINGS element, which it creates for us. So our save() doesn't really have
+    // the same behaviour as a normal KWFrameSet::save()....
+    return QDomElement();
 }
 
 void KWPartFrameSet::load( QDomElement &attributes, bool loadFrames )
@@ -1717,18 +1723,19 @@ void KWFormulaFrameSet::updateFrames()
     KWFrameSet::updateFrames();
 }
 
-void KWFormulaFrameSet::save(QDomElement& parentElem, bool saveFrames)
+QDomElement KWFormulaFrameSet::save(QDomElement& parentElem, bool saveFrames)
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
-        return;
+        return QDomElement();
     QDomElement framesetElem = parentElem.ownerDocument().createElement("FRAMESET");
     parentElem.appendChild(framesetElem);
 
-    KWFrameSet::save(framesetElem, saveFrames);
+    KWFrameSet::saveCommon(framesetElem, saveFrames);
 
     QDomElement formulaElem = parentElem.ownerDocument().createElement("FORMULA");
     framesetElem.appendChild(formulaElem);
     formula->save(formulaElem);
+    return framesetElem;
 }
 
 void KWFormulaFrameSet::load(QDomElement& attributes, bool loadFrames)

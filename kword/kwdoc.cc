@@ -1665,7 +1665,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
             fs = getFrameSetByName( frameSetName );
             if ( !fs )
             {
-                kdWarning(32001) << "pastFrames: Frameset '" << frameSetName << "' not found" << endl;
+                kdWarning(32001) << "pasteFrames: Frameset '" << frameSetName << "' not found" << endl;
                 continue;
             }
             frameElem = elem;
@@ -1678,6 +1678,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
             if ( getFrameSetByName( newName ) )
                 newName = generateFramesetName( newName+"-%1" );
             m_pasteFramesetsMap->insert( oldName, newName ); // remember the name transformation
+            kdDebug() << "KWDocument::pasteFrames new frame : " << oldName << "->" << newName << endl;
 
             FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( elem, "frameType", FT_BASE ) );
             switch ( frameSetType ) {
@@ -2289,7 +2290,7 @@ KWFrameSet * KWDocument::getFrameSetByName( const QString & name )
     return 0L;
 }
 
-KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border = 0L )
+KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border )
 {
     KoPoint docPoint( unzoomPoint( nPoint ) );
     QListIterator<KWFrameSet> fit = framesetsIterator();

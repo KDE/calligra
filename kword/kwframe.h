@@ -300,7 +300,7 @@ public:
     virtual FrameSetType type() { return FT_BASE; }
 
     virtual void addTextFramesets( QList<KWTextFrameSet> & /*lst*/ ) {};
-    
+
     /** The different types of textFramesets (that TEXT is important here!)
      * FI_BODY = normal text frames.<br>
      * FI_FIRST_HEADER = Header on page 1<br>
@@ -432,14 +432,14 @@ public:
     virtual QString getPopupName() = 0;
 
     /** save to XML - when saving */
-    virtual void save( QDomElement &parentElem, bool saveFrames = true );
-    /** save to XML - when copying to clipboard (usually the same, but not for tables) */
-    virtual void toXML( QDomElement &parentElem, bool saveFrames = true )
-    { save( parentElem, saveFrames ); }
+    virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true ) = 0;
+    /** save to XML - when copying to clipboard */
+    virtual QDomElement toXML( QDomElement &parentElem, bool saveFrames = true )
+    { return save( parentElem, saveFrames ); }
 
     /** load from XML - when loading */
     virtual void load( QDomElement &framesetElem, bool loadFrames = true );
-    /** load from XML - when pasting from clipboard (usually the same, but not for tables) */
+    /** load from XML - when pasting from clipboard */
     virtual void fromXML( QDomElement &framesetElem, bool loadFrames = true, bool /*useNames*/ = true )
     { load( framesetElem, loadFrames ); }
 
@@ -544,6 +544,9 @@ signals:
 
 protected:
 
+    /** save the common attributes for the frameset */
+    void saveCommon( QDomElement &parentElem, bool saveFrames );
+
     // Determine the clipping rectangle for drawing the contents of @p frame with @p painter
     // in the rectangle delimited by @p crect.
     QRegion frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect,
@@ -592,7 +595,7 @@ public:
     void loadImage( const QString &fileName, const QSize &_imgSize );
     void setSize( const QSize & _imgSize );
 
-    virtual void save( QDomElement &parentElem, bool saveFrames = true );
+    virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
 
     virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect & crect,
@@ -633,7 +636,7 @@ public:
     void loadClipart( const QString &fileName );
     //void setSize( const QSize & _imgSize );
 
-    virtual void save( QDomElement &parentElem, bool saveFrames = true );
+    virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
 
     virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect & crect,
@@ -678,7 +681,7 @@ public:
     // Embedded parts can be transparent
     virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
 
-    virtual void save( QDomElement &parentElem, bool saveFrames = true );
+    virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
 
     // RMB -> normal frame popup
@@ -734,7 +737,7 @@ public:
 
     virtual void updateFrames();
 
-    virtual void save( QDomElement &parentElem, bool saveFrames = true );
+    virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
 
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */

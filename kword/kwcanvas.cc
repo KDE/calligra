@@ -1644,11 +1644,8 @@ void KWCanvas::copySelectedFrames()
                 QDomElement parentElem = topElem;
                 if ( frame == firstFrame || isTable )
                 {
-                    fs->toXML( parentElem, isTable ? true : false );
-                    // Get the last FRAMESET element, the one we just added
-                    QDomNodeList listFramesets = parentElem.elementsByTagName( "FRAMESET" );
-                    // Save the frame inside the frameset tag
-                    parentElem = listFramesets.item( listFramesets.count() - 1 ).toElement();
+                    parentElem = fs->toXML( parentElem, isTable ? true : false );
+                    // We'll save the frame inside that frameset tag
                 }
                 if ( !isTable )
                 {

@@ -790,7 +790,21 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
             // Save the contents of the frameset inside the anchor
             // This is NOT used when saving, but it is used when copying an inline frame
             if ( saveAnchorsFramesets && dynamic_cast<KWAnchor *>( ch.customItem() ) )
-                static_cast<KWAnchor *>( ch.customItem() )->frameSet()->toXML( parentElem );
+            {
+                KWFrameSet* inlineFs = static_cast<KWAnchor *>( ch.customItem() )->frameSet();
+                //inlineFs->toXML( parentElem );
+                // Save inline framesets at the toplevel. Necessary when copying a textframeset that
+                // itself includes an inline frameset - we want all frameset tags at the toplevel.
+
+                // Qt bug! (found by Simon)   QDomElement elem = doc.documentElement();
+                // Workaround:
+                QDomNode n = parentElem;
+                while ( !n.isDocument() && !n.isNull() )
+                    n = n.parentNode();
+                QDomElement elem = n.toDocument().documentElement();
+                kdDebug() << " saving into " << elem.tagName() << endl;
+                inlineFs->toXML( elem );
+            }
         }
         else
         {

@@ -474,7 +474,9 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             cursor->parag()->setChanged( wasChanged );      // Maybe we have more changes to draw!
 
             //XIM Position
-            canvas->setXimPosition( cPoint.x(), cPoint.y(), 0, h );
+            int line;
+            cursor->parag()->lineStartOfChar( cursor->index(), 0, &line );
+            canvas->setXimPosition( cPoint.x(), cPoint.y(), 0, h - cursor->parag()->lineSpacing( line ) );
         }
     }
     m_currentDrawnCanvas = 0L;
@@ -1255,10 +1257,10 @@ void KWTextFrameSet::printDebug()
 }
 #endif
 
-void KWTextFrameSet::save( QDomElement &parentElem, bool saveFrames )
+QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets )
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
-        return;
+        return QDomElement();
     unzoom();
 
     QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
@@ -1275,16 +1277,17 @@ void KWTextFrameSet::save( QDomElement &parentElem, bool saveFrames )
         framesetElem.setAttribute( "removable", static_cast<int>( m_removeableHeader ) );
     }
 
-    KWFrameSet::save( framesetElem, saveFrames );
+    KWFrameSet::saveCommon( framesetElem, saveFrames );
 
     // Save paragraphs
     KWTextParag *start = static_cast<KWTextParag *>( textDocument()->firstParag() );
     while ( start ) {
-        start->save( framesetElem );
+        start->save( framesetElem, saveAnchorsFramesets );
         start = static_cast<KWTextParag *>( start->next() );
     }
 
     zoom( false );
+    return framesetElem;
 }
 
 void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
