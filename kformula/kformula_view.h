@@ -41,7 +41,7 @@ public slots:
     void modifyMatrix(QString str);
     void createMatrix(QString str);
     void slotModified();
-    void slotTypeChanged( BasicElement *elm);
+    void slotTypeChanged( const BasicElement *elm);
 
 protected:
     virtual void cleanUp();

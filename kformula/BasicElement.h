@@ -118,37 +118,37 @@ class BasicElement
     /*
      * Return element font
      */
-    int getNumericFont() { return numericFont; }
+    int getNumericFont() const { return numericFont; }
   
     /*
      * Return globalsize (see globalSize)
      */
-    QRect getSize() { return globalSize; }
+    QRect getSize() const { return globalSize; }
     /*
      * Return next
      */
-    BasicElement * getNext() { return next; }
+    BasicElement * getNext() const { return next; }
     /*
      * Return prev
      */
-    BasicElement * getPrev() { return prev; }
+    BasicElement * getPrev() const { return prev; }
 
     /*
      * Return index
      */
-    BasicElement * getIndex(int ind) { return index[ind]; }
+    BasicElement * getIndex(int ind) const { return index[ind]; }
   
     /*
      * Return child
      */
-    BasicElement * getChild(int chi) { if(chi<childrenNumber) return child[chi]; else return 0L; }
+    BasicElement * getChild(int chi) const { if(chi<childrenNumber) return child[chi]; else return 0L; }
 
     /*
      * Return the default color of element
      */ 
-    QColor *getColor() { return defaultColor; }
+    QColor *getColor() const { return defaultColor; }
   
-    QString getContent() {return content;}  
+    QString getContent() const {return content;}  
     /*
      * Various SetFunction
      */  

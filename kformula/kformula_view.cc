@@ -77,8 +77,8 @@ void KFormulaView::setDocument( KFormulaDocument *_doc )
 		      this, SLOT( slotModified() ) );
 
     QObject::connect( m_pDoc, 
-		      SIGNAL(sig_changeType(BasicElement *)    ),
-		      this, SLOT( slotTypeChanged(BasicElement *)    ) );
+		      SIGNAL(sig_changeType(const BasicElement *)    ),
+		      this, SLOT( slotTypeChanged(const BasicElement *)    ) );
 
 }
 
@@ -579,7 +579,7 @@ void KFormulaView::createGUI()
 }
 
 
-void KFormulaView::slotTypeChanged( BasicElement *elm)
+void KFormulaView::slotTypeChanged( const BasicElement *elm)
 {  
     bool isText, isBracket, isFraction, isPrefixed, isMatrix, isRoot;
     if (elm) {
