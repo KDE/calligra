@@ -71,7 +71,6 @@
 #include <koPartSelectDia.h>
 #include <koQueryTypes.h>
 #include <koDocument.h>
-#include <koAboutDia.h>
 #include <koPageLayoutDia.h>
 #include <koRuler.h>
 #include <koUIUtils.h>

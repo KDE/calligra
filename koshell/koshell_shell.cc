@@ -30,7 +30,6 @@
 #include <kstddirs.h>
 #include <klibloader.h>
 
-#include <koAboutDia.h>
 #include <koQueryTypes.h>
 #include <koKoolBar.h>
 #include <koDocument.h>
