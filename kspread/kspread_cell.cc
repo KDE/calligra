@@ -152,7 +152,44 @@ public:
 
     KSpreadCell* nextCell;
     KSpreadCell* previousCell;
+    
+    CellPrivate();
 };
+
+CellPrivate::CellPrivate()
+{
+  row = 0;
+  column = 0;
+  content= KSpreadCell::Text;
+  value = KSpreadValue::empty();
+  code = 0;
+  style = KSpreadCell::ST_Normal;
+  QML = 0;
+  
+  conditions = 0;
+  validity = 0;
+  
+  textX = 0.0;
+  textY = 0.0;
+  textWidth = 0.0;
+  textHeight = 0.0;
+  extraXCells = 0;
+  extraYCells = 0;
+  mergedXCells = 0;
+  mergedYCells = 0;
+  extraWidth = 0.0;
+  extraHeight = 0.0;
+  fmAscent = 0;
+  nbLines = 0;
+  
+  nextCell = 0;
+  previousCell = 0;
+
+  lstDepends.setAutoDelete( true );
+  lstDependingOnMe.setAutoDelete( true );
+
+  cellPrivate = 0;
+}
 
 
 /*****************************************************************************
@@ -167,35 +204,6 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
   d = new CellPrivate;
   d->row = _row;
   d->column = _column;
-  d->content= Text;
-  d->value = KSpreadValue::empty();
-  d->code = 0;
-  d->style = ST_Normal;
-  d->QML = 0;
-  
-  d->conditions = 0;
-  d->validity = 0;
-  
-  d->textX = 0.0;
-  d->textY = 0.0;
-  d->textWidth = 0.0;
-  d->textHeight = 0.0;
-  d->extraXCells = 0;
-  d->extraYCells = 0;
-  d->mergedXCells = 0;
-  d->mergedYCells = 0;
-  d->extraWidth = 0.0;
-  d->extraHeight = 0.0;
-  d->fmAscent = 0;
-  d->nbLines = 0;
-  
-  d->nextCell = 0;
-  d->previousCell = 0;
-
-  d->lstDepends.setAutoDelete( true );
-  d->lstDependingOnMe.setAutoDelete( true );
-
-  d->cellPrivate = 0;
   
   clearAllErrors();
 }
@@ -206,35 +214,6 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
   d = new CellPrivate;
   d->row = _row;
   d->column = _column;
-  d->content= Text;
-  d->value = KSpreadValue::empty();
-  d->code = 0;
-  d->QML = 0;
-  
-  d->conditions = 0;
-  d->validity  = 0;
-  
-  d->style = ST_Normal;
-  d->textX = 0.0;
-  d->textY = 0.0;
-  d->textWidth = 0.0;
-  d->textHeight = 0.0;
-  d->extraXCells = 0;
-  d->extraYCells = 0;
-  d->mergedXCells = 0;
-  d->mergedYCells = 0;
-  d->extraWidth = 0.0;
-  d->extraHeight = 0.0;
-  d->fmAscent = 0;
-  d->nbLines = 0;
-
-  d->nextCell = 0;
-  d->previousCell = 0;
-
-  d->lstDepends.setAutoDelete( true );
-  d->lstDependingOnMe.setAutoDelete( true );
-
-  d->cellPrivate = 0;
   
   clearAllErrors();
 }
@@ -245,37 +224,7 @@ KSpreadCell::KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _dep
   d = new CellPrivate;
   d->row = _row;
   d->column = _column;
-  d->content= Text;
-  d->value = KSpreadValue::empty();
-  d->code = 0;
-  d->QML = 0;
-  
-  d->conditions = 0;
-  d->validity = 0;
-  
-  d->style = ST_Normal;
-  d->textX = 0.0;
-  d->textY = 0.0;
-  d->textWidth = 0.0;
-  d->textHeight = 0.0;
-  d->extraXCells = 0;
-  d->extraYCells = 0;
-  d->mergedXCells = 0;
-  d->mergedYCells = 0;
-  d->extraWidth = 0.0;
-  d->extraHeight = 0.0;
-  d->fmAscent = 0;
-  d->nbLines = 0;
-
-  d->nextCell = 0;
-  d->previousCell = 0;
-
-
-  d->lstDepends.setAutoDelete( true );
   d->lstDependingOnMe = _deponme ;
-  d->lstDependingOnMe.setAutoDelete( true );
-
-  d->cellPrivate = 0;
   
   clearAllErrors();
 }
