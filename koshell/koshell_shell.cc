@@ -24,6 +24,7 @@
 
 #include "koshell_shell.h"
 
+#include <ktempfile.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -114,27 +115,65 @@ KoShellWindow::~KoShellWindow()
 
 bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
 {
+  // Here we have to distinguish two cases: The passed URL has a native
+  // KOffice mimetype. Then we query the trader and create the document.
+  // The file is loaded and everyone's happy.
+  // The second case is a non-native file. Here we have to create a
+  // filter manager, ask it to convert the file to the "closest" available
+  // KOffice part and open the temporary file.
   KMimeType::Ptr mimeType = KMimeType::findByURL( url );
   m_documentEntry = KoDocumentEntry::queryByMimeType( mimeType->name().latin1() );
-  if ( m_documentEntry.isEmpty() )
-    return false;
+
+  KTempFile* tmpFile = 0;
+  KURL tmpUrl( url );  // we might have to load a converted temp. file
+
+  if ( m_documentEntry.isEmpty() ) { // non-native
+    tmpFile = new KTempFile;
+
+    KoFilterManager *manager = new KoFilterManager( url.path() );
+    QCString mimetype;                                               // an empty mimetype means, that the "nearest"
+    KoFilter::ConversionStatus status = manager->exp0rt( tmpFile->name(), mimetype ); // KOffice part will be chosen
+    delete manager;
+
+    if ( status != KoFilter::OK || mimetype.isEmpty() ) {
+      tmpFile->unlink();
+      delete tmpFile;
+      return false;
+    }
+
+    // If the conversion was successfull we get the mimetype of the
+    // chosen KOffice part back.
+    m_documentEntry = KoDocumentEntry::queryByMimeType( mimetype );
+    if ( m_documentEntry.isEmpty() ) {
+      tmpFile->unlink();
+      delete tmpFile;
+      return false;
+    }
+
+    // Open the temporary file
+    tmpUrl.setPath( tmpFile->name() );
+  }
 
   m_recent->addURL( url );
 
   KoDocument* newdoc = m_documentEntry.createDoc();
 
-  // Pass the filterManager to the document (who will own it from now on)
-  // ###### FIXME
-  //if ( filterManager )
-      //newdoc->setFilterManager( filterManager );
-
   connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
   connect(newdoc, SIGNAL(completed()), this, SLOT(slotKSLoadCompleted()));
   connect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotKSLoadCanceled( const QString & )));
-  if ( !newdoc || !newdoc->openURL( url ) )
+  if ( !newdoc || !newdoc->openURL( tmpUrl ) )
   {
       delete newdoc;
+      if ( tmpFile ) {
+        tmpFile->unlink();
+        delete tmpFile;
+      }
       return false;
+  }
+
+  if ( tmpFile ) {
+    tmpFile->unlink();
+    delete tmpFile;
   }
   return true;
 }
@@ -319,8 +358,6 @@ void KoShellWindow::slotFileNew()
     setRootDocument( newdoc );
 }
 
-// ### This is an ugly copy of KoMainWindow::slotFileOpen, due to the fact
-// that openDocumentInternal isn't virtual
 void KoShellWindow::slotFileOpen()
 {
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
