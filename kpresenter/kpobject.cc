@@ -316,10 +316,11 @@ void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleS
     else if ( styleStack.hasAttribute( "draw:shadow" ) &&
               styleStack.attribute( "draw:shadow" ) == "visible" )
     {
+        kdDebug()<<"shadow object ****************************************\n";
         // use the shadow attribute to indicate an object-shadow
         double x = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-x" ) );
         double y = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-y" ) );
-
+        kdDebug()<<" shadow x : "<<x<<" shadow y :"<<y<<endl;
         if ( x < 0 && y < 0 )
         {
             shadowDirection = SD_LEFT_UP;
@@ -362,6 +363,7 @@ void KPObject::loadOasis(const QDomElement &element, const KoStyleStack & styleS
         }
         if ( styleStack.hasAttribute ( "draw:shadow-color" ) )
             shadowColor= QColor(styleStack.attribute( "draw:shadow-color" ) );
+        kdDebug()<<" shadow color : "<<shadowColor.name()<<endl;
     }
 }
 
