@@ -263,7 +263,7 @@ bool KWordDocument_impl::load(KOMLParser& parser)
 		__pgLayout.height = static_cast<double>(atof((*it).m_strValue.c_str()));
 	      else if ((*it).m_strName == "columns")
 		__columns.columns = atoi((*it).m_strValue.c_str());
-	      else if ((*it).m_strName == "column_spacing")
+	      else if ((*it).m_strName == "columnspacing")
 		__columns.columnSpacing = atoi((*it).m_strValue.c_str());
 	      else
 		cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'" << endl;
@@ -354,6 +354,9 @@ void KWordDocument_impl::loadParagraphs(KOMLParser& parser,vector<KOMLAttrib>& l
 	      delete parags;
 	      parags = new KWParag(this,0L,0L,defaultParagLayout);
 	      parags->insertText(0," ");
+	      KWFormat *format = new KWFormat(this);
+	      format->setDefaults(this);
+	      parags->setFormat(0,1,*format);
 	      parags->load(parser,lst);
 	      last = parags;
 	    }
@@ -382,7 +385,7 @@ bool KWordDocument_impl::save(ostream &out)
   
   out << otag << "<PAPER format=\"" << static_cast<int>(pageLayout.format) << "\" width=\"" << pageLayout.width
       << "\" height=\"" << pageLayout.height << "\" orientation=\"" << static_cast<int>(pageLayout.orientation) 
-      << "\" columns=\"" << pageColumns.columns << "\" column_spacing=\"" << pageColumns.columnSpacing << "\">" << endl;
+      << "\" columns=\"" << pageColumns.columns << "\" columnspacing=\"" << pageColumns.columnSpacing << "\">" << endl;
   out << indent << "<PAPERBORDERS left=\"" << pageLayout.left << "\" top=\"" << pageLayout.top << "\" right=\"" << pageLayout.right
       << "\" bottom=\"" << pageLayout.bottom << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;

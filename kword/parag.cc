@@ -172,7 +172,7 @@ void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  for(;it != lst.end();it++)
 	    {
 	    }
-	  text.loadFormat(parser,lst);
+	  text.loadFormat(parser,lst,document);
 	}
 
       // layout
@@ -187,7 +187,7 @@ void KWParag::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       else
-	cerr << "Unknown tag '" << tag << "' in LINE_OBJECT" << endl;    
+	cerr << "Unknown tag '" << tag << "' in PARAGRAPH" << endl;    
       
       if (!parser.close(tag))
 	{

@@ -20,6 +20,65 @@
 #include "presstructview.moc"
 
 /******************************************************************/
+/* Class: PVTimeTable                                             */
+/******************************************************************/
+
+/*================================================================*/
+PVTimeTable::PVTimeTable(QWidget *parent,KPresenterDocument_impl *_doc)
+  : QTableView(parent)
+{
+  doc = _doc;
+  setCellWidth(100);
+  setCellHeight(30);
+  setBackgroundColor(kapp->windowColor);
+  setNumCols(0);
+  setNumRows(0);
+  page = -1;
+
+  setTableFlags(tableFlags() | Tbl_autoVScrollBar | Tbl_autoHScrollBar | Tbl_clipCellPainting);
+}
+
+/*================================================================*/
+void PVTimeTable::setPageNum(int _num)
+{ 
+  page = _num; 
+
+  QList<int> intList = doc->reorderPage(page + 1,0,0,1.0);
+  setNumCols(intList.count() + 1);
+
+  unsigned int objs = 0;
+  for (unsigned int i = 0;i < doc->objectList()->count();i++)
+    {
+      if (doc->getPageOfObj(i,0,0,1.0) == page + 1)
+	objs++;
+    }
+  objs++;
+  setNumRows(objs);
+
+  repaint(true); 
+}
+
+
+/*================================================================*/
+void PVTimeTable::paintCell(QPainter *painter,int row,int col)
+{
+  if (page >= 0 && page < static_cast<int>(doc->backgroundList()->count()))
+    {
+      painter->setPen(QPen(black));
+
+      if (row == 0 || col == 0)
+	painter->fillRect(0,0,cellWidth(),cellHeight(),kapp->backgroundColor);
+
+      painter->drawLine(cellWidth() - 1,0,cellWidth() - 1,cellHeight());
+      painter->drawLine(0,cellHeight() - 1,cellWidth(),cellHeight() - 1);
+      if (row == 0)
+	painter->drawLine(0,0,cellWidth(),0);
+      if (col == 0)
+	painter->drawLine(0,0,0,cellHeight());
+    }
+}
+
+/******************************************************************/
 /* Class: PresStructViewer                                        */
 /******************************************************************/
 
@@ -34,7 +93,8 @@ PresStructViewer::PresStructViewer(QWidget *parent,const char *name,KPresenterDo
   pageList.setAutoDelete(true);
   objList.setAutoDelete(true);
 
-  panner = new KNewPanner(this,"panner",KNewPanner::Vertical,KNewPanner::Percent,30);
+  h_panner = new KNewPanner(this,"",KNewPanner::Horizontal,KNewPanner::Percent,50);
+  panner = new KNewPanner(h_panner,"panner",KNewPanner::Vertical,KNewPanner::Percent,30);
 
   treelist = new KTreeList(panner,"");
   setupTreeView();
@@ -46,15 +106,19 @@ PresStructViewer::PresStructViewer(QWidget *parent,const char *name,KPresenterDo
 
   setupToolBar();
 
+  timeTable = new PVTimeTable(h_panner,doc);
+
   panner->activate(treelist,list);
+
+  h_panner->activate(panner,timeTable);
 
   resize(600,400);
   
   toolbar->move(0,0);
   toolbar->resize(600,toolbar->height());
 
-  panner->move(0,toolbar->height());
-  panner->resize(600,400 - toolbar->height());
+  h_panner->move(0,toolbar->height());
+  h_panner->resize(600,400 - toolbar->height());
 }
 
 /*================================================================*/
@@ -91,7 +155,7 @@ void PresStructViewer::resizeEvent(QResizeEvent *e)
 {
   QDialog::resizeEvent(e);
   toolbar->resize(width(),toolbar->height());
-  panner->resize(width(),height() - toolbar->height());
+  h_panner->resize(width(),height() - toolbar->height());
 }
 
 /*================================================================*/
@@ -251,6 +315,8 @@ void PresStructViewer::fillWithPageInfo(KPBackGround *_page,int _num)
   disableAllFunctions();
   toolbar->setItemEnabled(B_BACK,true);
   toolbar->setItemEnabled(B_CPAGES,true);
+
+  timeTable->setPageNum(_num);
 }
 
 /*================================================================*/

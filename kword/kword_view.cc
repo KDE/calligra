@@ -691,26 +691,26 @@ void KWordView_impl::textBorderColor()
   if (KColorDialog::getColor(tmpBrd.color))
     m_rToolBarText->setButtonPixmap(m_idButtonText_BorderColor,CORBA::string_dup(colorToPixString(tmpBrd.color)));
 
-  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderLeft))
-    {
-      left = tmpBrd;
-      gui->getPaperWidget()->setParagLeftBorder(left);
-    }
-  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderRight))
-    {
-      right = tmpBrd;
-      gui->getPaperWidget()->setParagRightBorder(right);
-    }
-  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderTop))
-    {
-      top = tmpBrd;
-      gui->getPaperWidget()->setParagTopBorder(top);
-    }
-  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderBottom))
-    {
-      bottom = tmpBrd;
-      gui->getPaperWidget()->setParagBottomBorder(bottom);
-    }
+//   if (m_rToolBarText->isButtonOn(m_idButtonText_BorderLeft))
+//     {
+//       left = tmpBrd;
+//       gui->getPaperWidget()->setParagLeftBorder(left);
+//     }
+//   if (m_rToolBarText->isButtonOn(m_idButtonText_BorderRight))
+//     {
+//       right = tmpBrd;
+//       gui->getPaperWidget()->setParagRightBorder(right);
+//     }
+//   if (m_rToolBarText->isButtonOn(m_idButtonText_BorderTop))
+//     {
+//       top = tmpBrd;
+//       gui->getPaperWidget()->setParagTopBorder(top);
+//     }
+//   if (m_rToolBarText->isButtonOn(m_idButtonText_BorderBottom))
+//     {
+//       bottom = tmpBrd;
+//       gui->getPaperWidget()->setParagBottomBorder(bottom);
+//     }
 }
 
 /*================================================================*/
@@ -718,26 +718,26 @@ void KWordView_impl::textBorderWidth(const char *width)
 {
   tmpBrd.ptWidth = atoi(width);
 
-  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderLeft))
-    {
-      left = tmpBrd;
-      gui->getPaperWidget()->setParagLeftBorder(left);
-    }
-  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderRight))
-    {
-      right = tmpBrd;
-      gui->getPaperWidget()->setParagRightBorder(right);
-    }
-  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderTop))
-    {
-      top = tmpBrd;
-      gui->getPaperWidget()->setParagTopBorder(top);
-    }
-  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderBottom))
-    {
-      bottom = tmpBrd;
-      gui->getPaperWidget()->setParagBottomBorder(bottom);
-    }
+//   if (m_rToolBarText->isButtonOn(m_idButtonText_BorderLeft))
+//     {
+//       left = tmpBrd;
+//       gui->getPaperWidget()->setParagLeftBorder(left);
+//     }
+//   if (m_rToolBarText->isButtonOn(m_idButtonText_BorderRight))
+//     {
+//       right = tmpBrd;
+//       gui->getPaperWidget()->setParagRightBorder(right);
+//     }
+//   if (m_rToolBarText->isButtonOn(m_idButtonText_BorderTop))
+//     {
+//       top = tmpBrd;
+//       gui->getPaperWidget()->setParagTopBorder(top);
+//     }
+//   if (m_rToolBarText->isButtonOn(m_idButtonText_BorderBottom))
+//     {
+//       bottom = tmpBrd;
+//       gui->getPaperWidget()->setParagBottomBorder(bottom);
+//     }
 }
 
 /*================================================================*/
@@ -756,26 +756,26 @@ void KWordView_impl::textBorderStyle(const char *style)
   else if (stl == i18n("dash dot dot line (-**-)"))
     tmpBrd.style = KWParagLayout::DASH_DOT_DOT;
 
-  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderLeft))
-    {
-      left = tmpBrd;
-      gui->getPaperWidget()->setParagLeftBorder(left);
-    }
-  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderRight))
-    {
-      right = tmpBrd;
-      gui->getPaperWidget()->setParagRightBorder(right);
-    }
-  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderTop))
-    {
-      top = tmpBrd;
-      gui->getPaperWidget()->setParagTopBorder(top);
-    }
-  if (m_rToolBarText->isButtonOn(m_idButtonText_BorderBottom))
-    {
-      bottom = tmpBrd;
-      gui->getPaperWidget()->setParagBottomBorder(bottom);
-    }
+//   if (m_rToolBarText->isButtonOn(m_idButtonText_BorderLeft))
+//     {
+//       left = tmpBrd;
+//       gui->getPaperWidget()->setParagLeftBorder(left);
+//     }
+//   if (m_rToolBarText->isButtonOn(m_idButtonText_BorderRight))
+//     {
+//       right = tmpBrd;
+//       gui->getPaperWidget()->setParagRightBorder(right);
+//     }
+//   if (m_rToolBarText->isButtonOn(m_idButtonText_BorderTop))
+//     {
+//       top = tmpBrd;
+//       gui->getPaperWidget()->setParagTopBorder(top);
+//     }
+//   if (m_rToolBarText->isButtonOn(m_idButtonText_BorderBottom))
+//     {
+//       bottom = tmpBrd;
+//       gui->getPaperWidget()->setParagBottomBorder(bottom);
+//     }
 }
 
 /*================================================================*/

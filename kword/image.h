@@ -35,6 +35,8 @@ public:
     { ref = 0; doc = _doc; filename = _filename; }
   KWImage(KWordDocument_impl *_doc,KWImage _image) : QImage((QImage)_image)
     { ref = 0; filename = _image.getFilename(); doc = _doc; }
+  KWImage() : QImage()
+    { ref = 0; doc = 0L; }
 
   void setDocument(KWordDocument_impl *_doc)
     { doc = _doc; }
@@ -48,7 +50,8 @@ public:
     { return filename; }
 
   void save(ostream &out);
-
+  void load(KOMLParser&,vector<KOMLAttrib>&,KWordDocument_impl*);
+  
 protected:
   int ref;
   KWordDocument_impl *doc;

@@ -46,7 +46,7 @@ public:
      * 'dont change'.
      */
     KWFormat(KWordDocument_impl *_doc);
-    KWFormat() { doc = 0L; ref = 0; }
+    KWFormat() { doc = 0L; ref = 0; userFont = 0L; }
     
     /**
      * Creates a new KWFormat instance.
@@ -166,6 +166,7 @@ public:
     KWordDocument_impl *getDocument() { return doc; }
 
     void save(ostream &out);
+    void load(KOMLParser&,vector<KOMLAttrib>&,KWordDocument_impl*);
     
 protected:
     /**

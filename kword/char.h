@@ -11,6 +11,8 @@
 
 #include <koStream.h>
 
+class KWordDocument_impl;
+
 enum ClassIDs {ID_KWCharNone = 0,ID_KWCharFormat = 1,ID_KWCharImage = 2};
  
 class KWCharAttribute
@@ -114,7 +116,7 @@ public:
 
   QString toString(unsigned int _pos,unsigned int _len);
   void saveFormat(ostream &out);
-  void loadFormat(KOMLParser&,vector<KOMLAttrib>&);
+  void loadFormat(KOMLParser&,vector<KOMLAttrib>&,KWordDocument_impl*);
 
 protected:
   KWChar* alloc(unsigned int _size);

@@ -50,3 +50,42 @@ void KWImage::save(ostream &out)
 {
   out << indent << "<FILENAME value=\"" << filename << "\"/>" << endl;
 }
+
+/*================================================================*/
+void KWImage::load(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument_impl *_doc)
+{
+  doc = _doc;
+  ref = 0;
+
+  string tag;
+  string name;
+
+  while (parser.open(0L,tag))
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+	      
+      // filename
+      if (name == "FILENAME")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "value")
+		{		
+		  filename = (*it).m_strValue.c_str();
+		  QImage::load(filename);
+		}
+	    }
+	}
+
+     else
+	cerr << "Unknown tag '" << tag << "' in IMAGE" << endl;    
+      
+      if (!parser.close(tag))
+	{
+	  cerr << "ERR: Closing Child" << endl;
+	  return;
+	}
+    }
+}

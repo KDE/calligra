@@ -19,6 +19,7 @@
 #include <stdlib.h>
 
 #include <qwidget.h>
+#include <qtableview.h>
 #include <qevent.h>
 #include <qdialog.h>
 #include <qstring.h>
@@ -28,6 +29,10 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qfileinfo.h>
+#include <qpainter.h>
+#include <qcolor.h>
+#include <qpen.h>
+#include <qbrush.h>
 
 #include <knewpanner.h>
 #include <ktreelist.h>
@@ -63,6 +68,27 @@ const QString BrushStyleName[] = {"no brush","100% fill pattern","94% fill patte
 				  "vertical lines","crossing lines","diagonal lines (/)","diagonal lines (\\)","diagonal crossing lines"};
 const QString LineTypeName[] = {"Horizontal","Vertical","Left/Top - Right/Bottom","Left/Bottom - Right/Top"};
 const QString LineEndName[] = {"Normal","Arrow","Square","Circle"};
+
+/******************************************************************/
+/* Class: PVTimeTable                                             */
+/******************************************************************/
+
+class PVTimeTable : public QTableView
+{
+  Q_OBJECT
+
+public:
+  PVTimeTable(QWidget *parent,KPresenterDocument_impl *_doc);
+
+  void setPageNum(int _num);
+
+protected:
+  void paintCell(QPainter *painter,int row,int col);
+
+  int page;
+  KPresenterDocument_impl *doc;
+
+};
 
 /******************************************************************/
 /* Class: PresStructViewer                                        */
@@ -123,7 +149,7 @@ protected:
   QString getColor(QColor _color);
   void disableAllFunctions();
 
-  KNewPanner *panner;
+  KNewPanner *panner,*h_panner;
   KTreeList *treelist;
   KTabListBox *list;
   KPresenterDocument_impl *doc;
@@ -131,6 +157,7 @@ protected:
   QList<ItemInfo> pageList,objList;
   KPObject *lastSelected;
   KToolBar *toolbar;
+  PVTimeTable *timeTable;
 
 };
 

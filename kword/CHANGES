@@ -230,3 +230,10 @@ Reggie, 12.10.1998:
 -------------------
 - Fixed a bug with a painter which I forgot to end
 - Started implementing loading of documents (XML)
+
+Reggie, 13.10.1998:
+-------------------
+- Finished implementation of loading documents
+- Fixed some bug in saving documents
+- Fixed a bug in KWParagLayout::operator=()
+- Changed the way to configure the borders of the parags using the toolbar

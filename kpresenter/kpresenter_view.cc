@@ -123,12 +123,16 @@ CORBA::Boolean KPresenterView_impl::printDlg()
 
   switch (m_pKPresenterDoc->pageLayout().format)
     {
+#if QT_VERSION >= 141
     case PG_DIN_A3: prt.setPageSize(QPrinter::A3);
       break;
+#endif
     case PG_DIN_A4: prt.setPageSize(QPrinter::A4);
       break;
+#if QT_VERSION >= 141
     case PG_DIN_A5: prt.setPageSize(QPrinter::A5);
       break;
+#endif
     case PG_US_LETTER: prt.setPageSize(QPrinter::Letter);
       break;
     case PG_US_LEGAL: prt.setPageSize(QPrinter::Legal);

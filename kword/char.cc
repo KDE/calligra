@@ -9,6 +9,8 @@
 #include <fstream>
 #include <unistd.h>
 
+#include "kword_doc.h"
+
 KWString::KWString(const char *_str)
 {
   if (_str == 0L)
@@ -197,7 +199,7 @@ void KWString::saveFormat(ostream &out)
 	    {
 	      out << otag << "<FORMAT id=\"" << _data_[start].attrib->getClassId() << "\" pos=\"" << start 
 		  << "\" len=\"" << i - start << "\">" << endl;
-	      _data_[i].attrib->save(out);
+	      _data_[start].attrib->save(out);
 	      out << etag << "</FORMAT>" << endl;
 	    }
 	  start = i;
@@ -213,8 +215,86 @@ void KWString::saveFormat(ostream &out)
     }
 }
 
-void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst)
+void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument_impl *_doc)
 {
+  string tag;
+  string name;
+
+  unsigned int addToPos = 0;
+  if (!_doc->getFirstParag()->getNext())
+    addToPos = 1;
+
+  while (parser.open(0L,tag))
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+	      
+      // format
+      if (name == "FORMAT")
+	{
+	  ClassIDs _id = ID_KWCharNone;
+	  unsigned int __pos = 0,__len = 0;
+	  KWFormat *_format = 0L,*format = 0L;
+	  KWImage *_image = 0L,*image = 0L;
+	  KWCharImage *_kwimage = 0L;
+	  KWCharFormat *_kwformat = 0L;
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  bool _load = false;
+	  for(;it != lst.end();it++)
+	    {
+	      if ((*it).m_strName == "id")
+		{
+		  _id = static_cast<ClassIDs>(atoi((*it).m_strValue.c_str()));
+		  _load = true;
+		}
+	      else if ((*it).m_strName == "pos")
+		__pos = atoi((*it).m_strValue.c_str()) + addToPos;
+	      else if ((*it).m_strName == "len")
+		__len = atoi((*it).m_strValue.c_str());
+	    }
+	  if (_load)
+	    {
+	      switch (_id)
+		{
+		case ID_KWCharFormat:
+		  {
+		    _format = new KWFormat();
+		    _format->load(parser,lst,_doc);
+		    for (unsigned int i = __pos;i < __pos + __len;i++)
+		      {
+			freeChar(_data_[i]);
+			format = _doc->getFormatCollection()->getFormat(*_format);
+			_kwformat = new KWCharFormat(format);
+			_data_[i].attrib = _kwformat;
+		      }
+		    delete _format;
+		    _format = 0;
+		  } break;
+		case ID_KWCharImage:
+		  {
+		    _image = new KWImage();
+		    _image->load(parser,lst,_doc);
+		    QString key;
+		    image = _doc->getImageCollection()->getImage(*_image,key);
+		    _kwimage = new KWCharImage(image);
+		    freeChar(_data_[__pos]);
+		    _data_[__pos].c = 0;
+		    _data_[__pos].attrib = _kwimage;
+		    delete _image;
+		    _image = 0;
+		  } break;
+		default: break;
+		}
+	      _load = false;
+	    }
+	}
+      
+      if (!parser.close(tag))
+	{
+	  cerr << "ERR: Closing Child" << endl;
+	  return;
+	}
+    }
 }
 
 void KWString::resize(unsigned int _size,bool del = true)
