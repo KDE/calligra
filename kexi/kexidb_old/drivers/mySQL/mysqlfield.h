@@ -32,21 +32,24 @@ class MySqlField : public KexiDBField
 
 		QString				name() const;
 		QString				table() const;
+		/*!
+		 *	@returns the constraints on this column or QString::null if none
+		 */
+		virtual ColumnConstraints		constraints();
 
-		bool				auto_increment();
-
-		//key section
-		bool				primary_key();
-		bool				unique_key();
-		bool				forign_key();
-
-		bool				not_null();
+		/*!
+		 *	@returns the table.column that this field references or QString::null if !foreign_key()
+		 */
+		virtual QString		references();
 
 		QVariant::Type			type();
 		KexiDBField::ColumnType		sqlType();
 		
 		QVariant		defaultValue();
 		int					length();
+		int precision(); // for numeric and other fields that have both length and precision
+		virtual bool unsignedType(); // if the type has the unsigned attribute
+		virtual bool binary();
 	
 		static QString sql2string(KexiDBField::ColumnType sqltype);
 	protected:

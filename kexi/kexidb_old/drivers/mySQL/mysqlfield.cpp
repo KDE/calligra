@@ -40,49 +40,6 @@ MySqlField::table() const
 	return QString::fromLatin1(m_field->table);
 }
 
-bool
-MySqlField::auto_increment()
-{
-	if(m_field->flags & AUTO_INCREMENT_FLAG)
-		return true;
-	else
-		return false;
-}
-
-bool
-MySqlField::primary_key()
-{
-	if(m_field->flags & PRI_KEY_FLAG)
-		return true;
-	else
-		return false;
-
-}
-
-bool
-MySqlField::unique_key()
-{
-	if(m_field->flags & PRI_KEY_FLAG)
-		return true;
-	else
-		return false;
-}
-
-bool
-MySqlField::forign_key()
-{
-	return false; //mySQL doen't know forign keys
-}
-
-bool
-MySqlField::not_null()
-{
-	if(m_field->flags & NOT_NULL_FLAG)
-		return true;
-	else
-		return false;
-}
-
 QVariant::Type
 MySqlField::type()
 {
@@ -187,12 +144,67 @@ MySqlField::sql2string(KexiDBField::ColumnType sqltype)
 		case SQLTimeStamp:
 			return "TIMESTAMP";
 		case SQLBit:
+		case SQLBoolean:
 			return "BOOL";
+		case SQLInterval:
+			return "ENUM";
 		case SQLInvalid:
 			return QString::null;
 	}
 
 	return QString::null;
+}
+
+KexiDBField::ColumnConstraints
+MySqlField::constraints()
+{
+	KexiDBField::ColumnConstraints constraints = KexiDBField::None;
+	
+	if(m_field->flags & NOT_NULL_FLAG)
+	{
+		constraints = static_cast<KexiDBField::ColumnConstraints>(constraints + KexiDBField::NotNull);
+	}
+	
+	if(m_field->flags & UNIQUE_KEY_FLAG)
+	{
+		constraints = static_cast<KexiDBField::ColumnConstraints>(constraints + KexiDBField::Unique);
+	}
+	
+	if(m_field->flags & PRI_KEY_FLAG)
+	{
+		constraints = static_cast<KexiDBField::ColumnConstraints>(constraints + KexiDBField::PrimaryKey);
+	}
+	
+	if(m_field->flags & AUTO_INCREMENT_FLAG)
+	{
+		constraints = static_cast<KexiDBField::ColumnConstraints>(constraints + KexiDBField::AutoInc);
+	}
+	
+	return constraints;
+}
+
+QString
+MySqlField::references()
+{
+	return QString::null;
+}
+
+int
+MySqlField::precision()
+{
+	return m_field->decimals;
+}
+
+bool
+MySqlField::unsignedType()
+{
+	return m_field->flags & UNSIGNED_FLAG;
+}
+
+bool
+MySqlField::binary()
+{
+	return m_field->flags & BINARY_FLAG;
 }
 
 MySqlField::~MySqlField()

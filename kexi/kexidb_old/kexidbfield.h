@@ -34,11 +34,13 @@ class KexiDBField
 			SQLBigInt,
 			SQLBinary,
 			SQLBit,
+			SQLBoolean,
 			SQLDate,
 			SQLDecimal,
 			SQLDouble,
 			SQLFloat,
 			SQLInteger,
+			SQLInterval,
 			SQLLongVarBinary,
 			SQLLongVarChar,
 			SQLNumeric,
@@ -49,6 +51,16 @@ class KexiDBField
 			SQLVarBinary,
 			SQLVarchar
 		};
+
+		enum ColumnConstraints
+		{
+			None = 0,
+			AutoInc = 1,            
+			Unique = 2,
+			PrimaryKey = 4,
+			ForeignKey = 8,
+			NotNull = 16
+ 		};
 
 		KexiDBField(QString table, unsigned int field);
 		virtual ~KexiDBField();
@@ -62,18 +74,40 @@ class KexiDBField
 		/*!
 		 *	@returns true if the field is autoincrement (e.g. integer/numeric)
 		 */
-		virtual bool		auto_increment();
-		//key section
-		virtual	bool		primary_key();
-		virtual bool		unique_key();
-		virtual bool		forign_key();
+		bool		auto_increment() { return constraints() & AutoInc; }
+		/*!
+		 *	@returns true if the field is a primary key
+		 */
+		bool		primary_key() { return constraints() & PrimaryKey; }
+		/*!
+		 *	@returns true if the field is an unique key
+		 */
+		bool		unique_key() { return constraints() & Unique; }
+		/*!
+		 *	@returns true if the field is a foreign key
+		 */
+		bool		foreign_key() { return constraints() & ForeignKey; }
+		/*!
+		 *	@returns true if the field is not allowed to be null
+		 */
+		bool		not_null() { return constraints() & NotNull; }
+		/*!
+		 *	@returns the constraints on this column
+		 */
+		virtual ColumnConstraints		constraints();
 
-		virtual bool		not_null();
+		/*!
+		 *	@returns the table.column that this field references or QString::null if !foreign_key()
+		 */
+		virtual QString		references();
 
 		virtual QVariant::Type	type();
 		virtual ColumnType	sqlType();
 		virtual QVariant defaultValue();
 		virtual int length();
+		virtual int precision(); // for numeric and other fields that have both length and precision
+		virtual bool unsignedType(); // if the type has the unsigned attribute
+		virtual bool binary();
 
 		static QString sql2string(KexiDBField::ColumnType sqltype);
 };

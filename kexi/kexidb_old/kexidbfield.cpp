@@ -29,8 +29,6 @@ KexiDBField::sql2qt(KexiDBField::ColumnType sqltype)
 {
 	switch(sqltype)
 	{
-		case SQLInvalid:
-			return QVariant::Invalid;
 		case SQLLongVarChar:
 		case SQLVarchar:
 			return QVariant::String;
@@ -47,7 +45,7 @@ KexiDBField::sql2qt(KexiDBField::ColumnType sqltype)
 		case SQLBinary:
 		case SQLLongVarBinary:
 		case SQLVarBinary:
-			return QVariant::CString;
+			return QVariant::ByteArray;
 		case SQLDate:
 			return QVariant::Date;
 		case SQLTime:
@@ -55,8 +53,14 @@ KexiDBField::sql2qt(KexiDBField::ColumnType sqltype)
 		case SQLTimeStamp:
 			return QVariant::DateTime;
 		case SQLBit:
+		case SQLBoolean:
 			return QVariant::Bool;
+		case SQLInvalid:
+		default:
+			return QVariant::Invalid;
 	}
+
+	return QVariant::Invalid;
 }
 
 QString
@@ -97,6 +101,7 @@ KexiDBField::typeName(ColumnType sqltype)
 		case SQLTimeStamp:
 			return "Time Stamp";
 		case SQLBit:
+		case SQLBoolean:
 			return "Bool";
 	}
 	
@@ -113,36 +118,6 @@ QString
 KexiDBField::table() const
 {
 	return QString::null;
-}
-
-bool
-KexiDBField::auto_increment()
-{
-	return false;
-}
-
-bool
-KexiDBField::primary_key()
-{
-	return false;
-}
-
-bool
-KexiDBField::unique_key()
-{
-	return false;
-}
-
-bool
-KexiDBField::forign_key()
-{
-	return false;
-}
-
-bool
-KexiDBField::not_null()
-{
-	return false;
 }
 
 QVariant::Type
@@ -173,6 +148,36 @@ QString
 KexiDBField::sql2string(KexiDBField::ColumnType sqltype)
 {
 	return QString::null;
+}
+
+KexiDBField::ColumnConstraints
+KexiDBField::constraints()
+{
+	return KexiDBField::None;
+}
+
+QString
+KexiDBField::references()
+{
+	return QString::null;
+}
+
+int
+KexiDBField::precision()
+{
+	return 0;
+}
+
+bool
+KexiDBField::unsignedType()
+{
+	return false;
+}
+
+bool
+KexiDBField::binary()
+{
+	return false;
 }
 
 KexiDBField::~KexiDBField()
