@@ -229,7 +229,7 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 	QPen pen3( Qt::black, 1, Qt::DotLine );
 	_painter->setPen( pen3 );
         _painter->setRasterOp( Qt::NotXorROP );
-	_painter->drawConvexPolygon( pointArray );
+	_painter->drawPolygon( pointArray );
 	return;
     }
 
@@ -239,7 +239,7 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
     if ( drawingShadow || fillType == FT_BRUSH || !gradient ) {
         _painter->setPen( pen2 );
         _painter->setBrush( brush );
-        _painter->drawConvexPolygon( pointArray );
+        _painter->drawPolygon( pointArray );
     }
     else {
         QSize size( _zoomHandler->zoomSize( ext ) );
@@ -266,7 +266,7 @@ void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 
         _painter->setPen( pen2 );
         _painter->setBrush( Qt::NoBrush );
-        _painter->drawConvexPolygon( pointArray );
+        _painter->drawPolygon( pointArray );
 
     }
 }
@@ -297,6 +297,9 @@ void KPPolygonObject::drawPolygon()
     KoPointArray _points( checkConcavePolygon ? cornersValue * 2 : cornersValue );
     _points.setPoint( 0, 0, qRound( -radius ) );
 
+    double xmin = 0;
+    double ymin = qRound( -radius );
+
     if ( checkConcavePolygon ) {
         angle = angle / 2.0;
         double a = angle;
@@ -313,6 +316,10 @@ void KPPolygonObject::drawPolygon()
             }
             a += angle;
             _points.setPoint( i, xp, yp );
+            if (xp < xmin) 
+               xmin = xp; 
+            if (yp < ymin) 
+               ymin = yp; 
         }
     }
     else {
@@ -322,22 +329,25 @@ void KPPolygonObject::drawPolygon()
             double yp = -radius * cos( a );
             a += angle;
             _points.setPoint( i, xp, yp );
+            if (xp < xmin) 
+               xmin = xp; 
+            if (yp < ymin) 
+               ymin = yp; 
         }
     }
 
+    // calculate the points as offsets to 0,0
     KoRect _changRect = _points.boundingRect();
     double fx = (double)_rect.width() / (double)_changRect.width();
     double fy = (double)_rect.height() / (double)_changRect.height();
 
-    double _diffx = (double)_rect.width() / 2.0;
-    double _diffy = (double)_rect.height() / 2.0;
     int _index = 0;
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
     for ( it = _points.begin(); it != _points.end(); ++it ) {
         KoPoint point = (*it);
-        double tmpX = ( ( point.x() * fx ) + _diffx );
-        double tmpY = ( ( point.y() * fy ) + _diffy );
+        double tmpX = ( ( point.x() - xmin) * fx );
+        double tmpY = ( ( point.y() - ymin) * fy );
 
         tmpPoints.putPoints( _index, 1, tmpX,tmpY );
         ++_index;
