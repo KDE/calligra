@@ -152,7 +152,6 @@ DCOPObject* KPTextObject::dcopObject()
     return dcop;
 }
 
-
 void KPTextObject::slotParagraphDeleted(KoTextParag*_parag)
 {
     m_doc->spellCheckParagraphDeleted( _parag,  this);
@@ -290,7 +289,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 {
     //never draw Shadow.
     //shadow in text obj is a properties from paragraph
-    paint( _painter, _zoomHandler, false, 0L, true, /*drawingShadow*/false,drawContour );
+    paint( _painter, _zoomHandler, false, 0L, true, /*drawingShadow*/false, drawContour );
 }
 
 // Special method for drawing a text object that is being edited
@@ -368,7 +367,8 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     // And now draw the border for text objects.
     // When they are drawn outside of the object, this can be moved to the standard paint() method,
     // so that we don't have to do it while editing the object, maybe.
-    if ( m_doc->firstView() && m_doc->firstView()->getCanvas()->getEditMode() && !drawingShadow && getDrawEditRect() && getPen().style() == Qt::NoPen )
+    if ( m_doc->firstView() && m_doc->firstView()->getCanvas()->getEditMode()
+         && !drawingShadow && getDrawEditRect() && getPen().style() == Qt::NoPen )
     {
         _painter->save();
 
@@ -386,6 +386,7 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged )
 {
     //kdDebug(33001) << "KPTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
+    recalcVerticalAlignment();
     QColorGroup cg = QApplication::palette().active();
     _painter->save();
     _painter->translate( m_doc->zoomHandler()->zoomItX( bLeft()), m_doc->zoomHandler()->zoomItY( bTop()+alignVertical));
@@ -437,7 +438,7 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
 int KPTextObject::getSubPresSteps() const
 {
     int paragraphs = 0;
-    KoTextParag * parag = m_textobj->textDocument()->firstParag();
+    KoTextParag * parag = textDocument()->firstParag();
     for ( ; parag ; parag = parag->next() )
         paragraphs++;
     return paragraphs;
@@ -757,7 +758,6 @@ void KPTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextPa
             }
         }
     }
-
 }
 
 KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont,
@@ -1487,7 +1487,8 @@ void KPTextObject::applyStyleChange( StyleChangeDefMap changed )
 
 void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, bool* abort)
 {
-    int availHeight = availableHeight()-m_doc->zoomHandler()->ptToLayoutUnitPixY(alignmentValue());
+    recalcVerticalAlignment();
+    int availHeight = availableHeight() - m_doc->zoomHandler()->ptToLayoutUnitPixY(alignmentValue());
     if ( ( bottom > availHeight ) ||   // this parag is already below the avail height
          ( lastFormatted && (bottom + lastFormatted->rect().height() > availHeight) ) ) // or next parag will be below it
     {
@@ -1510,7 +1511,8 @@ void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, 
         // We only auto-grow. We don't auto-shrink.
         if(difference > 0 && !isProtect())
         {
-            double wantedPosition = m_doc->zoomHandler()->layoutUnitPtToPt( m_doc->zoomHandler()->pixelYToPt( difference ) ) + getRect().bottom();
+            double wantedPosition = m_doc->zoomHandler()->layoutUnitPtToPt( m_doc->zoomHandler()->pixelYToPt( difference ) )
+                                    + getRect().bottom();
             const KoPageLayout& p = m_doc->pageLayout();
             double pageBottom = p.ptHeight - p.ptBottom;
             double newBottom = QMIN( wantedPosition, pageBottom ); // don't grow bigger than the page
@@ -1540,7 +1542,7 @@ KCommand * KPTextObject::textContentsToHeight()
         return 0L;
 
     // Count total number of lines and sum up their height (linespacing excluded)
-    KoTextParag * parag = m_textobj->textDocument()->firstParag();
+    KoTextParag * parag = textDocument()->firstParag();
     int numLines = 0;
     int textHeightLU = 0;
     bool lineSpacingEqual = false;
@@ -1566,16 +1568,16 @@ KCommand * KPTextObject::textContentsToHeight()
 
     if ( KABS( innerHeight() - textHeight ) < DBL_EPSILON ) // floating-point equality test
         return 0L; // nothing to do
-    bool oneLine =(m_textobj->textDocument()->firstParag() == m_textobj->textDocument()->lastParag() && numLines == 1);
+    bool oneLine =(textDocument()->firstParag() == textDocument()->lastParag() && numLines == 1);
     if ( lineSpacing < 0  || oneLine) // text object is too small
         lineSpacing = 0; // we can't do smaller linespacing than that, but we do need to apply it
                          // (in case there's some bigger linespacing in use)
-    if ( (oneLine || lineSpacingEqual) &&(m_textobj->textDocument()->firstParag()->kwLineSpacing() == lineSpacing))
+    if ( (oneLine || lineSpacingEqual) && (textDocument()->firstParag()->kwLineSpacing() == lineSpacing))
         return 0L;
     // Apply the new linespacing to the whole object
-    m_textobj->textDocument()->selectAll( KoTextDocument::Temp );
+    textDocument()->selectAll( KoTextDocument::Temp );
     KCommand* cmd = m_textobj->setLineSpacingCommand( 0L, lineSpacing, KoParagLayout::LS_CUSTOM, KoTextDocument::Temp );
-    m_textobj->textDocument()->removeSelection( KoTextDocument::Temp );
+    textDocument()->removeSelection( KoTextDocument::Temp );
     return cmd;
 }
 
@@ -1586,13 +1588,13 @@ KCommand * KPTextObject::textObjectToContents()
         return 0L;
     // Calculate max parag width (in case all parags are short, otherwise the width is more or less
     // the current object's width anyway).
-    KoTextParag * parag = m_textobj->textDocument()->firstParag();
+    KoTextParag * parag = textDocument()->firstParag();
     double txtWidth = 10;
     for ( ; parag ; parag = parag->next() )
         txtWidth = QMAX( txtWidth, m_doc->zoomHandler()->layoutUnitPtToPt( parag->rect().right() ));
 
     // Calculate text height
-    int heightLU = m_textobj->textDocument()->height();
+    int heightLU = textDocument()->height();
     double txtHeight = m_doc->zoomHandler()->layoutUnitPtToPt( heightLU );
 
     // Compare with current object's size
@@ -1640,9 +1642,12 @@ void KPTextObject::setVerticalAligment( VerticalAlignmentType _type)
 
 void KPTextObject::recalcVerticalAlignment()
 {
-    //KoTextParag * parag = m_textobj->textDocument()->lastParag();
-    double txtHeight = m_doc->zoomHandler()->layoutUnitPtToPt( m_textobj->textDocument()->height() )+btop+bbottom;
+    double txtHeight = m_doc->zoomHandler()->layoutUnitPtToPt( textDocument()->height() ) + btop + bbottom;
     double diffy = getRect().height() - txtHeight;
+
+    //kdDebug(33001) << k_funcinfo << "txtHeight: " << txtHeight << endl;
+    //kdDebug(33001) << k_funcinfo << "diffy: " << diffy << endl;
+
     if ( diffy <= 0.0 )
         return;
     switch( m_textVertAlign )
@@ -1659,8 +1664,7 @@ void KPTextObject::recalcVerticalAlignment()
     }
 }
 
-
-KPTextView::KPTextView( KPTextObject * txtObj,KPrCanvas *_canvas )
+KPTextView::KPTextView( KPTextObject * txtObj, KPrCanvas *_canvas )
     : KoTextView( txtObj->textObject() )
 {
     m_canvas=_canvas;
@@ -2087,7 +2091,7 @@ void KPTextView::insertCustomVariable( const QString &name)
 {
     KoVariable * var = 0L;
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
-    var = new KoCustomVariable( textObject()->textDocument(), name, doc->variableFormatCollection()->format( "STRING" ),
+    var = new KoCustomVariable( textDocument(), name, doc->variableFormatCollection()->format( "STRING" ),
                                 doc->getVariableCollection());
     insertVariable( var);
 }
@@ -2096,7 +2100,7 @@ void KPTextView::insertLink(const QString &_linkName, const QString & hrefName)
 {
     KoVariable * var = 0L;
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
-    var = new KoLinkVariable( textObject()->textDocument(),_linkName, hrefName,
+    var = new KoLinkVariable( textDocument(),_linkName, hrefName,
                               doc->variableFormatCollection()->format( "STRING" ),
                               doc->getVariableCollection());
     insertVariable( var);
@@ -2108,7 +2112,7 @@ void KPTextView::insertComment(const QString &_comment)
     KoVariable * var = 0L;
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
 
-    var = new KoNoteVariable( textObject()->textDocument(),_comment, doc->variableFormatCollection()->format( "STRING" ),
+    var = new KoNoteVariable( textDocument(),_comment, doc->variableFormatCollection()->format( "STRING" ),
                               doc->getVariableCollection());
     insertVariable( var, 0,false/*don't delete selected text*/);
 }
@@ -2124,7 +2128,7 @@ void KPTextView::insertVariable( int type, int subtype )
         KoCustomVarDialog dia( m_canvas );
         if ( dia.exec() == QDialog::Accepted )
         {
-            KoCustomVariable *v = new KoCustomVariable( textObject()->textDocument(), dia.name(),
+            KoCustomVariable *v = new KoCustomVariable( textDocument(), dia.name(),
                                                         doc->variableFormatCollection()->format( "STRING" ),
                                                         doc->getVariableCollection() );
             v->setValue( dia.value() );
@@ -2133,7 +2137,7 @@ void KPTextView::insertVariable( int type, int subtype )
         }
     }
     else
-        var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textObject()->textDocument(),doc, 0);
+        var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textDocument(),doc, 0);
     if ( var )
     {
         insertVariable( var , 0L, true,refreshCustomMenu);
@@ -2209,6 +2213,7 @@ void KPTextView::dragEnterEvent( QDragEnterEvent *e )
     }
     e->acceptAction();
 }
+
 void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
 {
     KPresenterDoc *doc= kpTextObject()->kPresenterDocument();
