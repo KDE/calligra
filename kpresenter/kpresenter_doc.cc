@@ -2843,6 +2843,10 @@ void KPresenterDoc::loadHelpLines( const QDomElement &element )
         {
             m_horizHelplines.append(helplines.attribute("value").toDouble());
         }
+        else if ( helplines.tagName()=="HelpPoint" )
+        {
+            m_helpPoints.append( KoPoint( helplines.attribute("posX").toDouble(), helplines.attribute("posY").toDouble()));
+        }
         helplines=helplines.nextSibling().toElement();
     }
 
@@ -2865,6 +2869,14 @@ QDomElement KPresenterDoc::saveHelpLines( QDomDocument &doc )
         lines.setAttribute("value", *it);
         helplines.appendChild( lines );
     }
+    for(QValueList<KoPoint>::Iterator it = m_helpPoints.begin(); it != m_helpPoints.end(); ++it)
+    {
+        QDomElement point=doc.createElement("HelpPoint");
+        point.setAttribute("posX", (*it).x());
+        point.setAttribute("posY", (*it).y());
+        helplines.appendChild( point );
+    }
+
     return helplines;
 }
 

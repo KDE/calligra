@@ -385,6 +385,8 @@ protected:
     void moveHelpLine(const QPoint & pos);
     void tmpMoveHelpLine( const QPoint & newPos);
 
+    void moveHelpPoint( const QPoint & newPos );
+
 private:
     QValueList<int> pages(const QString &range);
     bool pagesHelper(const QString &chunk, QValueList<int> &list);

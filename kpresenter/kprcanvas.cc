@@ -713,18 +713,21 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         {
                             m_tmpHorizHelpline = m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()+diffy()));
                             m_tmpVertHelpline = m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()));
+                            m_tmpHelpPoint = m_view->kPresenterDoc()->indexOfHelpPoint( KoPoint(m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()), m_view->zoomHandler()->unzoomItX(e->pos().y()+diffy())) );
                             tmpHelpLinePosX=m_view->zoomHandler()->unzoomItX(e->pos().x());
                             tmpHelpLinePosY=m_view->zoomHandler()->unzoomItY(e->pos().y());
+                            tmpHelpPointPos=m_view->zoomHandler()->unzoomPoint( e->pos());
 
                         }
                         else
                         {
                             m_tmpVertHelpline = -1;
                             m_tmpHorizHelpline = -1;
+                            m_tmpHelpPoint = -1;
                         }
                         if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                             deSelectAllObj();
-                        if (m_tmpHorizHelpline == -1 && m_tmpVertHelpline ==-1)
+                        if (m_tmpHorizHelpline == -1 && m_tmpVertHelpline ==-1 && m_tmpHelpPoint == -1)
                         {
                             drawRubber = true;
                             rubber = QRect( e->x(), e->y(), 0, 0 );
@@ -928,10 +931,14 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 {
                     m_tmpHorizHelpline = m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()+diffy()));
                     m_tmpVertHelpline = m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()));
+                    m_tmpHelpPoint = m_view->kPresenterDoc()->indexOfHelpPoint( KoPoint(m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()), m_view->zoomHandler()->unzoomItX(e->pos().y()+diffy())) );
+
                     if (m_tmpVertHelpline != -1 || m_tmpHorizHelpline != -1)
                     {
                         m_view->openPopupMenuHelpLine( pnt );
                     }
+                    else if( m_tmpHelpPoint != -1 )
+                        m_view->openPopupMenuHelpPoint( pnt );
                     else
                         m_view->openPopupMenuMenuPage( pnt );
                 }
@@ -1100,6 +1107,10 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             if ( m_tmpVertHelpline != -1 || m_tmpHorizHelpline != -1)
             {
                 moveHelpLine( e->pos() );
+            }
+            else if ( m_tmpHelpPoint != -1 )
+            {
+                moveHelpPoint( e->pos() );
             }
         } break;
         case MT_MOVE: {
@@ -1409,6 +1420,11 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     setCursor ( Qt::sizeHorCursor );
                     cursorAlreadySet = true;
                 }
+                else if ( m_view->kPresenterDoc()->indexOfHelpPoint(KoPoint( m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()),m_view->zoomHandler()->unzoomItY(e->pos().y()+diffy())))!=-1)
+                {
+                    setCursor ( Qt::CrossCursor );
+                    cursorAlreadySet = true;
+                }
             }
 
 	    if ( !cursorAlreadySet )
@@ -1431,6 +1447,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     if ( m_tmpVertHelpline !=-1 || m_tmpHorizHelpline !=-1)
                     {
                         tmpMoveHelpLine( e->pos() );
+                    }
+                    else if ( m_tmpHelpPoint != -1 )
+                    {
+                        tmpDrawMoveHelpPoint( e->pos() );
                     }
 		    else if ( drawRubber ) {
 			QPainter p;
@@ -6370,7 +6390,6 @@ void KPrCanvas::moveHelpLine( const QPoint & pos)
     {
         double vi = m_view->kPresenterDoc()->horizHelplines()[m_tmpHorizHelpline];
         m_view->kPresenterDoc()->repaint(QRect( rect.left(), m_view->zoomHandler()->zoomItY(vi) -4 ,  rect.right(), m_view->zoomHandler()->zoomItY(vi) + 4 ));
-        m_view->kPresenterDoc()->updateHorizHelpline( m_tmpHorizHelpline , m_view->zoomHandler()->unzoomItY(pos.y()+diffy()));
         if( pos.y() + diffy() <= 0)
             removeHelpLine();
         else
@@ -6477,7 +6496,8 @@ void KPrCanvas::changeHelpLinePosition( double newPos )
 
 void KPrCanvas::changeHelpPointPosition( KoPoint newPos)
 {
-    //todo
+    if ( m_tmpHelpPoint != -1)
+        m_view->kPresenterDoc()->updateHelpPoint( m_tmpHelpPoint, newPos);
     m_tmpHelpPoint = -1;
     tmpHelpPointPos = KoPoint( -1, -1 );
     m_view->kPresenterDoc()->setModified(true);
@@ -6486,7 +6506,8 @@ void KPrCanvas::changeHelpPointPosition( KoPoint newPos)
 
 void KPrCanvas::removeHelpPoint()
 {
-    //todo
+    if ( m_tmpHelpPoint != -1)
+        m_view->kPresenterDoc()->removeHelpPoint( m_tmpHelpPoint );
     m_tmpHelpPoint = -1;
     tmpHelpPointPos = KoPoint( -1, -1 );
     m_view->kPresenterDoc()->setModified(true);
@@ -6495,5 +6516,42 @@ void KPrCanvas::removeHelpPoint()
 
 void KPrCanvas::tmpDrawMoveHelpPoint( const QPoint & newPos )
 {
-    //todo
+    QPainter p;
+    p.begin( this );
+    p.setRasterOp( NotROP );
+    p.setPen( QPen( black, 0, DotLine ) );
+    QRect rect = m_activePage->getZoomPageRect();
+    KoPoint vi = tmpHelpPointPos;
+
+    QPoint point=m_view->zoomHandler()->zoomPoint( vi );
+    p.drawLine( point.x(), point.y()-10, point.x(), point.y()+10);
+    p.drawLine( point.x()-10, point.y(), point.x()+10, point.y());
+
+    p.setPen( QPen( black, 1, DotLine ) );
+
+    vi = m_view->zoomHandler()->unzoomPoint(newPos);
+
+    point=m_view->zoomHandler()->zoomPoint( vi );
+    p.drawLine( point.x(), point.y()-10, point.x(), point.y()+10);
+    p.drawLine( point.x()-10, point.y(), point.x()+10, point.y());
+
+    tmpHelpPointPos = vi;
+
+    p.end();
+    m_view->kPresenterDoc()->setModified(true);
+}
+
+void KPrCanvas::moveHelpPoint( const QPoint & newPos )
+{
+    QRect rect = m_activePage->getZoomPageRect();
+
+    if ( m_tmpHelpPoint != -1)
+    {
+        KoPoint vi = m_view->kPresenterDoc()->helpPoints()[m_tmpHelpPoint];
+        m_view->kPresenterDoc()->repaint(QRect( m_view->zoomHandler()->zoomItX(vi.x())-20, m_view->zoomHandler()->zoomItY(vi.y())-20,40,40));
+
+        m_view->kPresenterDoc()->updateHelpPoint( m_tmpHelpPoint , m_view->zoomHandler()->unzoomPoint( QPoint( newPos.x()+diffx(),newPos.y()+diffy())));
+    }
+    m_tmpHelpPoint = -1;
+    tmpHelpPointPos = KoPoint( -1, -1);
 }
