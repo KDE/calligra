@@ -644,12 +644,26 @@ void ConfBrushDia::updateBrushConfiguration()
 /******************************************************************/
 
 StyleDia::StyleDia( QWidget* parent, const char* name, KPresenterDoc *_doc, bool _stickyObj, bool _oneObject, bool _alltextobj )
-    : QTabDialog( parent, name, true ), m_doc(_doc), m_confPenDia(0), m_confPieDia(0), m_confRectDia(0),
-      m_confBrushDia(0), m_confPolygonDia(0), m_confPictureDia(0), stickyObj(_stickyObj), oneObject(_oneObject), allTextObj(_alltextobj)
+    : QTabDialog( parent, name, true ),
+      m_doc(_doc),
+      m_confPenDia(0),
+      m_confPieDia(0),
+      m_confRectDia(0),
+      m_confBrushDia(0),
+      m_confPolygonDia(0),
+      m_confPictureDia(0),
+      stickyObj(_stickyObj),
+      oneObject(_oneObject),
+      allTextObj(_alltextobj)
 {
     lockUpdate = true;
     m_canvas = m_doc->getKPresenterView()->getCanvas();
     flags = m_canvas->getPenBrushFlags();
+    oldProtect = false;
+    oldkeepRatiotripleState=false;
+    oldProtectTripleState = false;
+    oldKeepRatio=false;
+    oldRect=KoRect();
 
     // allways create a pen- & brush-dialog or rewrite KPrPage::setPenBrush :-)
     setupTabPen();
@@ -689,8 +703,15 @@ void StyleDia::slotReset()
     if (stickyObj)
         setSticky( oldSticky );
 
-    setProtected( oldProtect );
-    setKeepRatio( oldKeepRatio );
+    if ( !oldProtectTripleState )
+        setProtected( oldProtect );
+    else
+        setProtectTripleState();
+
+    if ( !oldkeepRatiotripleState )
+        setKeepRatio( oldKeepRatio );
+    else
+        setKeepRatioTripleState();
     setSize( oldRect);
 }
 
@@ -933,10 +954,37 @@ bool StyleDia::isProtected() const
     return protect->isChecked();
 }
 
+void StyleDia::setProtectTripleState()
+{
+    oldProtect = false;
+    protect->setTristate( true );
+    protect->setNoChange();
+    oldProtectTripleState =true;
+}
+
+bool StyleDia::protectNoChange()const
+{
+    return protect->state()== QButton::NoChange;
+}
+
 void StyleDia::setKeepRatio( bool p )
 {
     oldKeepRatio = p;
     keepRatio->setChecked( p );
+    oldkeepRatiotripleState = false;
+}
+
+void StyleDia::setKeepRatioTripleState()
+{
+    oldKeepRatio = false;
+    keepRatio->setTristate( true );
+    keepRatio->setNoChange();
+    oldkeepRatiotripleState =true;
+}
+
+bool StyleDia::keepRatioNoChange()const
+{
+    return keepRatio->state()== QButton::NoChange;
 }
 
 bool StyleDia::isKeepRatio()const

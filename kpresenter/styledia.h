@@ -196,11 +196,18 @@ public:
     bool isSticky()const;
 
     bool isOneObject()const {return oneObject;}
+
     void setProtected( bool p );
     bool isProtected()const;
+    void setProtectTripleState();
+    bool protectNoChange()const;
+
 
     void setKeepRatio( bool p );
     bool isKeepRatio()const;
+    void setKeepRatioTripleState();
+    bool keepRatioNoChange()const;
+
 
     KoRect getNewSize() const;
     void setSize(const KoRect &);
@@ -245,7 +252,8 @@ private:
     bool allTextObj;
     bool oldSticky,  oldProtect, oldKeepRatio;
     bool oldProtectContent;
-
+    bool oldkeepRatiotripleState;
+    bool oldProtectTripleState;
 private slots:
     void slotReset();
     void styleDone();

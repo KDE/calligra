@@ -124,10 +124,12 @@ public:
     bool setLineBegin( LineEnd lb );
 
     bool getProtect( bool p );
+    bool differentProtect( bool p);
 
     bool getKeepRatio( bool p );
-    bool getProtectContent(bool prot) const;
+    bool differentKeepRatio( bool p);
 
+    bool getProtectContent(bool prot) const;
 
     KCommand *setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,const  QColor& g1, const QColor &g2,
 			   BCType gt, bool unbalanced, int xfactor, int yfactor,QPtrList<KPObject> list);

@@ -248,7 +248,8 @@ public:
 
     void flipObject( bool _horizontal );
 
-    KCommand *setGeometryPropertiesObj(bool protect, bool ratio);
+    KCommand *setKeepRatioObj( bool p );
+    KCommand *setProtectSizeObj(bool protect);
 
     KoRect zoomAllObject();
 
@@ -268,8 +269,14 @@ public:
     QPtrList<KPTextObject> listOfTextObjs() const;
 
     bool getSticky( bool sticky ) const;
+
     bool getProtect( bool prot ) const;
     bool getKeepRatio( bool _ratio ) const;
+    //return true if we are selected several object and there are not
+    //the same "keep ratio" properties"
+    bool differentKeepRatio( bool p )const;
+    bool differentProtect( bool p )const;
+
     bool getProtectContent(bool prot) const;
     QPen getPen( const QPen & _pen )const;
     QBrush getBrush( const QBrush & _brush )const;

@@ -871,19 +871,19 @@ protected:
 class KPrGeometryPropertiesCommand : public KNamedCommand
 {
 public:
-    KPrGeometryPropertiesCommand( const QString &_name, QValueList<bool> &_protect, QValueList<bool> &_ratio, QPtrList<KPObject> &_objects, bool _newProtect, bool _newRatio, KPresenterDoc *_doc );
+    enum KgpType { ProtectSize, KeepRatio};
+    KPrGeometryPropertiesCommand( const QString &_name, QValueList<bool> &_lst, QPtrList<KPObject> &_objects, bool _newValue, KPresenterDoc *_doc, KgpType _type );
     ~KPrGeometryPropertiesCommand();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-    QValueList<bool> protect;
-    QValueList<bool> ratio;
+    QValueList<bool> list;
     QPtrList<KPObject> objects;
-    bool newProtect;
-    bool newRatio;
+    bool newValue;
     KPresenterDoc *doc;
+    KgpType m_type;
 };
 
 class KPrProtectContentCommand : public KNamedCommand

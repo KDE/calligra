@@ -7066,17 +7066,15 @@ void KPrCanvas::flipObject( bool _horizontal )
     m_view->kPresenterDoc()->addCommand(macro);
 }
 
-KCommand *KPrCanvas::setGeometryPropertiesObj(bool protect, bool ratio)
+KCommand *KPrCanvas::setKeepRatioObj( bool p )
 {
     QPtrList<KPObject> lst;
-    QValueList<bool> listProt;
     QValueList<bool> listKeepRatio;
     QPtrListIterator<KPObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() )
         {
             lst.append( it.current() );
-            listProt.append( it.current()->isProtect());
             listKeepRatio.append( it.current()->isKeepRatio());
         }
     }
@@ -7086,13 +7084,40 @@ KCommand *KPrCanvas::setGeometryPropertiesObj(bool protect, bool ratio)
         if ( it.current()->isSelected() )
         {
             lst.append( it.current() );
-            listProt.append( it.current()->isProtect());
             listKeepRatio.append( it.current()->isKeepRatio());
         }
     }
     if ( lst.isEmpty())
         return 0L;
-    KCommand *cmd= new KPrGeometryPropertiesCommand( i18n("Protect Object"), listProt, listKeepRatio, lst , protect, ratio , m_view->kPresenterDoc() );
+    KCommand *cmd= new KPrGeometryPropertiesCommand( i18n("Keep Ratio"), listKeepRatio, lst , p , m_view->kPresenterDoc(), KPrGeometryPropertiesCommand::KeepRatio);
+    cmd->execute();
+    return cmd;
+}
+
+KCommand *KPrCanvas::setProtectSizeObj(bool protect)
+{
+    QPtrList<KPObject> lst;
+    QValueList<bool> listProt;
+    QPtrListIterator<KPObject> it(getObjectList());
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->isSelected() )
+        {
+            lst.append( it.current() );
+            listProt.append( it.current()->isProtect());
+        }
+    }
+    //get sticky obj
+    it=m_view->kPresenterDoc()->stickyPage()->objectList();
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->isSelected() )
+        {
+            lst.append( it.current() );
+            listProt.append( it.current()->isProtect());
+        }
+    }
+    if ( lst.isEmpty())
+        return 0L;
+    KCommand *cmd= new KPrGeometryPropertiesCommand( i18n("Protect Object"), listProt, lst , protect, m_view->kPresenterDoc(),KPrGeometryPropertiesCommand::ProtectSize );
     cmd->execute();
     return cmd;
 
@@ -7370,12 +7395,28 @@ bool KPrCanvas::getProtect( bool prot ) const
     return stickyPage()->getProtect( prot );
 }
 
+bool KPrCanvas::differentProtect( bool p )const
+{
+    bool result = m_activePage->differentProtect( p );
+    if ( result )
+        return true;
+    return stickyPage()->differentProtect( p );
+}
+
 bool KPrCanvas::getKeepRatio( bool _ratio ) const
 {
     bool result =m_activePage->getKeepRatio( _ratio );
     if ( result != _ratio)
         return result;
     return stickyPage()->getKeepRatio( _ratio );
+}
+
+bool KPrCanvas::differentKeepRatio( bool p )const
+{
+    bool result = m_activePage->differentKeepRatio( p );
+    if ( result )
+        return true;
+    return stickyPage()->differentKeepRatio( p );
 }
 
 QPen KPrCanvas::getPen( const QPen & _pen )const

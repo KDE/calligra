@@ -567,10 +567,6 @@ protected slots:
     void rotateOk();
     void shadowOk();
     void psvClosed();
-    void confPieOk();
-    void confRectOk();
-    void confPolygonOk();
-    void confPictureOk();
     void pddClosed();
 
     // scrolling

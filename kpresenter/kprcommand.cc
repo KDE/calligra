@@ -1735,9 +1735,9 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
             }
             n = n.nextSibling().toElement();
         }
-        textdoc->textObject()->loadVariable( listVariable,parag, 0 );
         parag->format();
         parag->setChanged( TRUE );
+        textdoc->textObject()->loadVariable( listVariable,parag, m_idx );
         parag = static_cast<KoTextParag *>(parag->next());
         //kdDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
     }
@@ -2143,14 +2143,13 @@ void KPrFlipObjectCommand::flipObject()
 
 }
 
-KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &_name, QValueList<bool> &_protect, QValueList<bool> &_ratio, QPtrList<KPObject> &_objects, bool _newProtect, bool _newRatio, KPresenterDoc *_doc ):
+KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &_name, QValueList<bool> &_lst, QPtrList<KPObject> &_objects, bool _newValue,  KPresenterDoc *_doc, KgpType _type):
     KNamedCommand( _name ),
-    protect( _protect ),
-    ratio(_ratio),
+    list( _lst),
     objects( _objects ),
-    newProtect( _newProtect ),
-    newRatio( _newRatio ),
-    doc(_doc)
+    newValue( _newValue ),
+    doc(_doc),
+    m_type( _type )
 {
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
@@ -2169,8 +2168,10 @@ void KPrGeometryPropertiesCommand::execute()
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
-        it.current()->setProtect( newProtect );
-        it.current()->setKeepRatio( newRatio );
+        if ( m_type == ProtectSize )
+            it.current()->setProtect( newValue );
+        else if ( m_type == KeepRatio)
+            it.current()->setKeepRatio( newValue );
     }
 }
 
@@ -2179,8 +2180,10 @@ void KPrGeometryPropertiesCommand::unexecute()
     KPObject *obj = 0;
     for ( unsigned int i = 0; i < objects.count(); ++i ) {
 	obj = objects.at( i );
-        obj->setProtect( *protect.at(i) );
-        obj->setKeepRatio( *ratio.at(i) );
+        if ( m_type == ProtectSize )
+            obj->setProtect( *list.at(i) );
+        else if ( m_type == KeepRatio)
+            obj->setKeepRatio( *list.at(i) );
     }
 }
 

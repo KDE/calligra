@@ -977,8 +977,19 @@ void KPresenterView::extraPenBrush()
     }
     //now all sticky object are stored in sticky page
     styleDia->setSticky( stickyPage()->getSticky( sticky ) );
-    styleDia->setProtected( m_canvas->getProtect( protect ) );
-    styleDia->setKeepRatio( m_canvas->getKeepRatio( keepRatio ) );
+
+    bool result = m_canvas->getProtect( protect );
+    if ( m_canvas->differentProtect( result ) )
+        styleDia->setProtectTripleState();
+    else
+        styleDia->setProtected( result );
+
+    result = m_canvas->getKeepRatio( keepRatio );
+    if ( m_canvas->differentKeepRatio( result ) )
+        styleDia->setKeepRatioTripleState();
+    else
+        styleDia->setKeepRatio( result );
+
     styleDia->setProtectContent( m_canvas->getProtectContent(protectContent));
 
     styleDia->setCaption( i18n( "Properties" ) );
@@ -3278,14 +3289,23 @@ void KPresenterView::styleOk()
         createMacro=true;
     }
 
-    bool prot = styleDia->isProtected();
-    bool keepR = styleDia->isKeepRatio();
-    cmd = m_canvas->setGeometryPropertiesObj(prot, keepR);
-
-    if (cmd)
+    if ( !styleDia->protectNoChange() )
     {
-        createMacro=true;
-        macro->addCommand( cmd );
+        cmd= m_canvas->setProtectSizeObj(styleDia->isProtected());
+        if (cmd)
+        {
+            createMacro=true;
+            macro->addCommand( cmd );
+        }
+    }
+    if ( !styleDia->keepRatioNoChange())
+    {
+        cmd= m_canvas->setKeepRatioObj(styleDia->isKeepRatio());
+        if (cmd)
+        {
+            createMacro=true;
+            macro->addCommand( cmd );
+        }
     }
 
     if ( styleDia->isOneObject())
@@ -3555,132 +3575,6 @@ void KPresenterView::psvClosed()
     presStructView = 0;
 }
 
-/*================================================================*/
-void KPresenterView::confPieOk()
-{
-//     bool createMacro=false;
-//     KMacroCommand *macro=new KMacroCommand(i18n( "Change Pie/Arc/Chord Values" ));
-
-//     KCommand *cmd=m_canvas->activePage()->setPieSettings( confPieDia->getType(),
-//                                                           confPieDia->getAngle(), confPieDia->getLength() );
-//     if( cmd)
-//     {
-//         macro->addCommand(cmd);
-//         createMacro=true;
-//     }
-//     cmd=stickyPage()->setPieSettings( confPieDia->getType(),
-//                                       confPieDia->getAngle(), confPieDia->getLength() );
-//     if( cmd)
-//     {
-//         macro->addCommand(cmd);
-//         createMacro=true;
-//     }
-//     if(createMacro)
-//         kPresenterDoc()->addCommand(macro);
-//     else
-//     {
-//         delete macro;
-//         pieType = confPieDia->getType();
-//         pieAngle = confPieDia->getAngle();
-// 	pieLength = confPieDia->getLength();
-//     }
-//     updateObjectStatusBarItem();  //the type might have changed
-}
-
-/*================================================================*/
-void KPresenterView::confRectOk()
-{
-//     bool createMacro=false;
-//     KMacroCommand *macro=new KMacroCommand(i18n( "Change Rectangle values" ));
-//     KCommand *cmd=m_canvas->activePage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() );
-//     if( cmd)
-//     {
-//         macro->addCommand(cmd);
-//         createMacro=true;
-//     }
-//     cmd=stickyPage()->setRectSettings( confRectDia->getRndX(), confRectDia->getRndY() );
-//     if( cmd)
-//     {
-//         macro->addCommand(cmd);
-//         createMacro=true;
-//     }
-//     if(createMacro)
-//         kPresenterDoc()->addCommand(macro);
-//     else
-//     {
-//         rndX = confRectDia->getRndX();
-// 	rndY = confRectDia->getRndY();
-//         delete macro;
-//     }
-}
-
-/*================================================================*/
-void KPresenterView::confPolygonOk()
-{
-//     bool createMacro=false;
-//     KMacroCommand *macro=new KMacroCommand(i18n( "Change Polygon Settings" ));
-//     KCommand *cmd=m_canvas->activePage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
-//                                                 confPolygonDia->getCornersValue(),
-//                                                 confPolygonDia->getSharpnessValue() );
-//     if( cmd)
-//     {
-//         macro->addCommand(cmd);
-//         createMacro=true;
-//     }
-//     cmd=stickyPage()->setPolygonSettings( confPolygonDia->getCheckConcavePolygon(),
-//                                           confPolygonDia->getCornersValue(),
-//                                           confPolygonDia->getSharpnessValue() );
-//     if( cmd)
-//     {
-//         macro->addCommand(cmd);
-//         createMacro=true;
-//     }
-//     if(createMacro)
-//         kPresenterDoc()->addCommand(macro);
-//     else
-//     {
-//         checkConcavePolygon = confPolygonDia->getCheckConcavePolygon();
-//         cornersValue = confPolygonDia->getCornersValue();
-//         sharpnessValue = confPolygonDia->getSharpnessValue();
-//         delete macro;
-//     }
-}
-
-/*================================================================*/
-void KPresenterView::confPictureOk()
-{
-//     bool createMacro = false;
-//     KMacroCommand *macro = new KMacroCommand( i18n( "Change Picture Settings" ) );
-//     KCommand *cmd = m_canvas->activePage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
-//                                                                 confPictureDia->getPictureDepth(),
-//                                                                 confPictureDia->getPictureSwapRGB(),
-//                                                                 confPictureDia->getPictureGrayscal(),
-//                                                                 confPictureDia->getPictureBright() );
-//     if ( cmd ) {
-//         macro->addCommand( cmd );
-//         createMacro = true;
-//     }
-//     cmd = stickyPage()->setPictureSettings( confPictureDia->getPictureMirrorType(),
-//                                             confPictureDia->getPictureDepth(),
-//                                             confPictureDia->getPictureSwapRGB(),
-//                                             confPictureDia->getPictureGrayscal(),
-//                                             confPictureDia->getPictureBright() );
-//     if ( cmd ) {
-//         macro->addCommand( cmd );
-//         createMacro = true;
-//     }
-//     if ( createMacro )
-//         kPresenterDoc()->addCommand( macro );
-//     else {
-//         mirrorType = confPictureDia->getPictureMirrorType();
-//         depth = confPictureDia->getPictureDepth();
-//         swapRGB = confPictureDia->getPictureSwapRGB();
-//         grayscal = confPictureDia->getPictureGrayscal();
-//         bright = confPictureDia->getPictureBright();
-
-//         delete macro;
-//     }
-}
 
 /*================================================================*/
 unsigned int KPresenterView::getCurrPgNum() const

@@ -3694,6 +3694,41 @@ bool KPrPage::getProtect( bool p )
     return p;
 }
 
+bool KPrPage::differentProtect( bool p)
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        //don't test header/footer all the time sticky
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+        if(it.current()->isSelected())
+        {
+            if ( p != it.current()->isProtect())
+                return true;
+        }
+    }
+    return false;
+}
+
+
+bool KPrPage::differentKeepRatio( bool p)
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        //don't test header/footer all the time sticky
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+        if(it.current()->isSelected())
+        {
+            if ( p != it.current()->isKeepRatio())
+                return true;
+        }
+    }
+    return false;
+}
+
 bool KPrPage::getKeepRatio( bool p )
 {
     QPtrListIterator<KPObject> it( m_objectList );
