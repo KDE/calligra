@@ -31,5 +31,7 @@ linktest_LDADD = $(lib_LTLIBRARIES)
 linktest_LDFLAGS = $(libkimageshop_LDFLAGS)
 
 messages:
+	$(EXTRACTRC) *.rc > parts.cc
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc */*.cc && mv messages.po $(podir)/kimageshop.pot
+	rm parts.cc
 
