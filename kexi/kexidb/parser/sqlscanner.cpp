@@ -6341,18 +6341,24 @@ YY_RULE_SETUP
 case 337:
 /* rule 337 can match eol */
 YY_RULE_SETUP
-#line 1673 "sqlscanner.l"
+#line 1674 "sqlscanner.l"
+{ 
+strcpy(yylval.stringValue, yytext);
 return CHARACTER_STRING_LITERAL;
+}
 	YY_BREAK
 case 338:
 /* rule 338 can match eol */
 YY_RULE_SETUP
-#line 1674 "sqlscanner.l"
+#line 1679 "sqlscanner.l"
+{
+strcpy(yylval.stringValue, yytext);
 return DOUBLE_QUOTED_STRING;
+}
 	YY_BREAK
 case 339:
 YY_RULE_SETUP
-#line 1675 "sqlscanner.l"
+#line 1684 "sqlscanner.l"
 {
 //	BEGIN DelimOrSep;
 	strcpy(yylval.stringValue, yytext);
@@ -6366,12 +6372,12 @@ YY_RULE_SETUP
 case 340:
 /* rule 340 can match eol */
 YY_RULE_SETUP
-#line 1684 "sqlscanner.l"
+#line 1693 "sqlscanner.l"
 ;
 	YY_BREAK
 case 341:
 YY_RULE_SETUP
-#line 1686 "sqlscanner.l"
+#line 1695 "sqlscanner.l"
 {
 	BEGIN 0;
 	return AMPERSAND;
@@ -6379,7 +6385,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 342:
 YY_RULE_SETUP
-#line 1690 "sqlscanner.l"
+#line 1699 "sqlscanner.l"
 {
 	BEGIN 0;
 	return SEMICOLON;
@@ -6387,7 +6393,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 343:
 YY_RULE_SETUP
-#line 1694 "sqlscanner.l"
+#line 1703 "sqlscanner.l"
 {
 	BEGIN 0;
 	return ASTERISK;
@@ -6395,7 +6401,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 344:
 YY_RULE_SETUP
-#line 1698 "sqlscanner.l"
+#line 1707 "sqlscanner.l"
 {
 	BEGIN 0;
 	return ARITHMETIC_PLUS;
@@ -6403,7 +6409,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 345:
 YY_RULE_SETUP
-#line 1702 "sqlscanner.l"
+#line 1711 "sqlscanner.l"
 {
 	BEGIN 0;
 	return ARITHMETIC_MINUS;
@@ -6411,7 +6417,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 346:
 YY_RULE_SETUP
-#line 1706 "sqlscanner.l"
+#line 1715 "sqlscanner.l"
 {
 	BEGIN 0;
 	return SLASH;
@@ -6419,7 +6425,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 347:
 YY_RULE_SETUP
-#line 1710 "sqlscanner.l"
+#line 1719 "sqlscanner.l"
 {
 	BEGIN 0;
 	return LEFTPAREN;
@@ -6427,7 +6433,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 348:
 YY_RULE_SETUP
-#line 1714 "sqlscanner.l"
+#line 1723 "sqlscanner.l"
 {
 	BEGIN 0;
 	return RIGHTPAREN;
@@ -6435,7 +6441,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 349:
 YY_RULE_SETUP
-#line 1718 "sqlscanner.l"
+#line 1727 "sqlscanner.l"
 {
 	BEGIN 0;
 //	yylval.comparisonOp = SetComparisonConstants::SETCOMP_EQUAL;
@@ -6444,7 +6450,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 350:
 YY_RULE_SETUP
-#line 1723 "sqlscanner.l"
+#line 1732 "sqlscanner.l"
 {
 	BEGIN 0;
 //	yylval.comparisonOp = SetComparisonConstants::SETCOMP_NOT_EQUAL;
@@ -6453,7 +6459,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 351:
 YY_RULE_SETUP
-#line 1728 "sqlscanner.l"
+#line 1737 "sqlscanner.l"
 {
 	BEGIN 0;
 //	yylval.comparisonOp = SetComparisonConstants::SETCOMP_GREATER;
@@ -6462,7 +6468,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 352:
 YY_RULE_SETUP
-#line 1733 "sqlscanner.l"
+#line 1742 "sqlscanner.l"
 {
 	BEGIN 0;
 //	yylval.comparisonOp = SetComparisonConstants::SETCOMP_GREATER_OR_EQUAL;
@@ -6471,7 +6477,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 353:
 YY_RULE_SETUP
-#line 1738 "sqlscanner.l"
+#line 1747 "sqlscanner.l"
 {
 	BEGIN 0;
 //	yylval.comparisonOp = SetComparisonConstants::SETCOMP_LESS_OR_EQUAL;
@@ -6480,7 +6486,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 354:
 YY_RULE_SETUP
-#line 1743 "sqlscanner.l"
+#line 1752 "sqlscanner.l"
 {
 	BEGIN 0;
 	//yylval.comparisonOp = SetComparisonConstants::SETCOMP_LESS;
@@ -6489,7 +6495,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 355:
 YY_RULE_SETUP
-#line 1748 "sqlscanner.l"
+#line 1757 "sqlscanner.l"
 {
 	BEGIN 0;
 	return SINGLE_QUOTE;
@@ -6497,7 +6503,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 356:
 YY_RULE_SETUP
-#line 1752 "sqlscanner.l"
+#line 1761 "sqlscanner.l"
 {
 	BEGIN 0;
 	return QUESTION_MARK;
@@ -6505,7 +6511,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 357:
 YY_RULE_SETUP
-#line 1756 "sqlscanner.l"
+#line 1765 "sqlscanner.l"
 {
 	BEGIN 0;
 	return COLON;
@@ -6513,7 +6519,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 358:
 YY_RULE_SETUP
-#line 1760 "sqlscanner.l"
+#line 1769 "sqlscanner.l"
 {
 	BEGIN 0;
 	return COMMA;
@@ -6522,14 +6528,14 @@ YY_RULE_SETUP
 case 359:
 /* rule 359 can match eol */
 YY_RULE_SETUP
-#line 1764 "sqlscanner.l"
+#line 1773 "sqlscanner.l"
 {
 	BEGIN 0;
 }
 	YY_BREAK
 case 360:
 YY_RULE_SETUP
-#line 1767 "sqlscanner.l"
+#line 1776 "sqlscanner.l"
 {
 	BEGIN DelimOrSep;
 //	strcpy( yylval.parserUserName, yytext );
@@ -6539,10 +6545,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 361:
 YY_RULE_SETUP
-#line 1773 "sqlscanner.l"
+#line 1782 "sqlscanner.l"
 ECHO;
 	YY_BREAK
-#line 6546 "lex.yy.c"
+#line 6552 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(DelimOrSep):
 case YY_STATE_EOF(Name):
@@ -7510,7 +7516,7 @@ void yyfree (void * ptr )
 #undef YY_DECL_IS_OURS
 #undef YY_DECL
 #endif
-#line 1773 "sqlscanner.l"
+#line 1782 "sqlscanner.l"
 
 
 

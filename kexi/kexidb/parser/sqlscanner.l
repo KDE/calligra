@@ -1670,8 +1670,17 @@ ABSOLUTE{NondelimiterTerminator} {
 	return EXPONENT;
 }
 [-][-].*$ ;
-['][^']*['] return CHARACTER_STRING_LITERAL;
-["][^"].*["]\n return DOUBLE_QUOTED_STRING;
+
+['][^']*['] { 
+strcpy(yylval.stringValue, yytext);
+return CHARACTER_STRING_LITERAL;
+}
+
+["][^"].*["]\n {
+strcpy(yylval.stringValue, yytext);
+return DOUBLE_QUOTED_STRING;
+}
+
 [ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz][ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_]* {
 //	BEGIN DelimOrSep;
 	strcpy(yylval.stringValue, yytext);

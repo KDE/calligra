@@ -347,6 +347,9 @@
 %token YEARS_BETWEEN
 
 %type <stringValue> USER_DEFINED_NAME
+%type <stringValue> CHARACTER_STRING_LITERAL
+%type <stringValue> DOUBLE_QUOTED_STRING
+
 %type <coltype> SQL_TYPE
 %type <integerValue> UNSIGNED_INTEGER
 %type <integerValue> SIGNED_INTEGER
@@ -358,6 +361,8 @@
 #include <iostream>
 
 #include <qobject.h>
+#include <kdebug.h>
+
 #include <connection.h>
 #include <queryschema.h>
 #include <field.h>
@@ -374,6 +379,7 @@
 
 	KexiDB::Parser *parser;
 	KexiDB::Field *field;
+	bool requiresTable;
 
 	int yyparse();
 	int yylex();
@@ -381,7 +387,7 @@
 
 	void yyerror(const char *str)
 	{
-		std::cerr << "error: " << str << std::endl;
+		kdDebug() << "error: " << str << endl;
 		parser->setOperation(KexiDB::Parser::OP_Error);
 	}
 
@@ -389,8 +395,13 @@
 	{
 		parser = p;
 		field = 0;
+		requiresTable = false;
 		tookenize(data);
 		yyparse();
+		if(requiresTable)
+		{
+			yyerror("No tables used");
+		}
 	}
 
 	extern "C"
@@ -443,7 +454,7 @@ ColDefs COMMA ColDef|ColDef
 ColDef:
 USER_DEFINED_NAME ColType
 {
-	std::cout << "adding field " << $1 << std::endl;
+	kdDebug() << "adding field " << $1 << endl;
 	field->setName($1);
 	parser->table()->addField(field);
 
@@ -452,7 +463,7 @@ USER_DEFINED_NAME ColType
 }
 | USER_DEFINED_NAME ColType ColKeys
 {
-	std::cout << "adding field " << $1 << std::endl;
+	kdDebug() << "adding field " << $1 << endl;
 	field->setName($1);
 	parser->table()->addField(field);
 
@@ -474,17 +485,17 @@ ColKey:
 PRIMARY KEY
 {
 	field->setPrimaryKey(true);
-	std::cout << "primary" << std::endl;
+	kdDebug() << "primary" << endl;
 }
 | NOT SQL_NULL
 {
 	field->setNotNull(true);
-	std::cout << "not_null" << std::endl;
+	kdDebug() << "not_null" << endl;
 }
 | AUTO_INCREMENT
 {
 	field->setAutoIncrement(true);
-	std::cout << "ainc" << std::endl;
+	kdDebug() << "ainc" << endl;
 }
 ;
 
@@ -496,7 +507,7 @@ SQL_TYPE
 }
 | SQL_TYPE LEFTPAREN UNSIGNED_INTEGER RIGHTPAREN
 {
-	std::cout << "sql + length" << std::endl;
+	kdDebug() << "sql + length" << endl;
 	field = new KexiDB::Field();
 	field->setPrecision($3);
 	field->setType($1);
@@ -516,11 +527,9 @@ SQL_TYPE
 ;
 
 SelectStatement:
-Select ColViews FROM USER_DEFINED_NAME
+Select ColViews 
 {
-	std::cout << "FROM: '" << $4 << "'" << std::endl;
-
-#if 0
+/*
 	parser->select()->setBaseTable($4);
 	if(parser->select()->unresolvedWildcard() && parser->db())
 	{
@@ -534,16 +543,19 @@ Select ColViews FROM USER_DEFINED_NAME
 		}
 		parser->select()->setUnresolvedWildcard(false);
 	}
-#endif
-
-	YYACCEPT;
+*/
+}
+| SelectStatement FROM USER_DEFINED_NAME
+{
+	kdDebug() << "FROM: '" << $3 << "'" << endl;
+	requiresTable = false;
 }
 ;
 
 Select:
 SELECT
 {
-	std::cout << "SELECT" << std::endl;
+	kdDebug() << "SELECT" << endl;
 	parser->createSelect();
 	parser->setOperation(KexiDB::Parser::OP_Select);
 }
@@ -558,28 +570,69 @@ ColViews COMMA ColView|ColView
 ColView:
 ASTERISK
 {
-	std::cout << "all columns" << std::endl;
+	kdDebug() << "all columns" << endl;
+	field = new KexiDB::Field();
+	field->setName("*");
+	parser->select()->addField(field);
 //	parser->select()->setUnresolvedWildcard(true);
+	requiresTable = true;
 }
 | USER_DEFINED_NAME
 {
-	std::cout << "  + col " << $1 << std::endl;
-	KexiDB::Field *s = new KexiDB::Field();
-	s->setName($1);
-	parser->select()->addField(s);
+	kdDebug() << "  + col " << $1 << endl;
+	field = new KexiDB::Field();
+	field->setName($1);
+	parser->select()->addField(field);
+	requiresTable = true;
 }
 | USER_DEFINED_NAME DOT USER_DEFINED_NAME
 {
-	std::cout << "  + col " << $3 << " based on " << $1 << std::endl;
-	KexiDB::Field *s = new KexiDB::Field();
+	kdDebug() << "  + col " << $3 << " from " << $1 << endl;
+	field = new KexiDB::Field();
 //	s->setTable($1);
-	s->setName($3);
-	parser->select()->addField(s);
+	field->setName($3);
+	parser->select()->addField(field);
+	requiresTable = true;
 }
 | USER_DEFINED_NAME DOT ASTERISK
 {
-	std::cout << "  + all columns from " << $1 << std::endl;
+	kdDebug() << "  + all columns from " << $1 << endl;
+	field = new KexiDB::Field();
+	field->setName("*");
+	parser->select()->addField(field);
 //	parser->select()->setUnresolvedWildcard(true);
+	requiresTable = true;
+}
+| CHARACTER_STRING_LITERAL
+{
+	field = new KexiDB::Field();
+	field->setName($1);
+	parser->select()->addField(field);
+	kdDebug() << "  + constant " << $1 << endl;
+}
+| SIGNED_INTEGER
+{
+	field = new KexiDB::Field();
+	field->setName(QString::number($1));
+	parser->select()->addField(field);
+	kdDebug() << "  + numerical constant " << $1 << endl;
+}
+| UNSIGNED_INTEGER
+{
+	field = new KexiDB::Field();
+	field->setName(QString::number($1));
+	parser->select()->addField(field);
+	kdDebug() << "  + numerical constant " << $1 << endl;
+}
+| ColView AS USER_DEFINED_NAME
+{
+	kdDebug() << "  => alias: " << $3 << endl;
+	if(field->name() == "*")
+	{
+		kdDebug() << "can't use aliases ond wildcards!" << endl;
+		yyerror("syntax error");
+		YYERROR;
+	}
 }
 ;
 
