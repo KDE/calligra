@@ -4182,7 +4182,7 @@ void KWView::slotFrameSetEditChanged()
     actionFormatAlignRight->setEnabled( rw );
     actionFormatAlignBlock->setEnabled( rw );
     actionFormatIncreaseIndent->setEnabled(state);
-    actionChangeCase->setEnabled( rw);
+    actionChangeCase->setEnabled( (rw && !edit)|| (state && hasSelection) );
     actionInsertLink->setEnabled(state);
 
     bool goodleftMargin=false;
