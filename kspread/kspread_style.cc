@@ -127,10 +127,10 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     QString str;
     if ( element.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
     {
-        kdDebug()<<"styleStack.attribute( style:data-style-name ) :"<<element.attributeNS( KoXmlNS::style, "data-style-name", QString::null )<<endl;
-        kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].formatStr<<endl;
-        kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].prefix<<endl;
-        kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].suffix<<endl;
+        //kdDebug()<<"styleStack.attribute( style:data-style-name ) :"<<element.attributeNS( KoXmlNS::style, "data-style-name", QString::null )<<endl;
+        //kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].formatStr<<endl;
+        //kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].prefix<<endl;
+        //kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].suffix<<endl;
 
         QString tmp = oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].prefix;
         if ( !tmp.isEmpty() )
@@ -144,10 +144,12 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
             m_postfix = tmp;
             m_featuresSet |= SPostfix;
         }
-        //TODO
-        //oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].formatStr
-
-
+        tmp = oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].formatStr;
+        if ( !tmp.isEmpty() )
+        {
+            m_formatType = KSpreadStyle::formatType( tmp );
+            m_featuresSet |= SFormatType;
+        }
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "font-name" ) )
     {
@@ -163,33 +165,33 @@ void KSpreadStyle::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) )
     {
 #if 0
-            QDomElement font = format.namedItem( "font" ).toElement();
-    if ( !font.isNull() )
-    {
-        QFont f( util_toFont( font ) );
-        m_fontFamily = f.family();
-        m_fontSize = f.pointSize();
-        if ( f.italic() )
-            m_fontFlags |= FItalic;
-        if ( f.bold() )
-            m_fontFlags |= FBold;
-        if ( f.underline() )
-            m_fontFlags |= FUnderline;
-        if ( f.strikeOut() )
-            m_fontFlags |= FStrike;
+        QDomElement font = format.namedItem( "font" ).toElement();
+        if ( !font.isNull() )
+        {
+            QFont f( util_toFont( font ) );
+            m_fontFamily = f.family();
+            m_fontSize = f.pointSize();
+            if ( f.italic() )
+                m_fontFlags |= FItalic;
+            if ( f.bold() )
+                m_fontFlags |= FBold;
+            if ( f.underline() )
+                m_fontFlags |= FUnderline;
+            if ( f.strikeOut() )
+                m_fontFlags |= FStrike;
 
-        m_featuresSet |= SFont;
-        m_featuresSet |= SFontFamily;
-        m_featuresSet |= SFontFlag;
-        m_featuresSet |= SFontSize;
-    }
+            m_featuresSet |= SFont;
+            m_featuresSet |= SFontFamily;
+            m_featuresSet |= SFontFlag;
+            m_featuresSet |= SFontSize;
+        }
 
-    if ( format.hasAttribute( "font-family" ) )
-    {
-        m_fontFamily = format.attribute( "font-family" );
-        m_featuresSet |= SFont;
-        m_featuresSet |= SFontFamily;
-    }
+        if ( format.hasAttribute( "font-family" ) )
+        {
+            m_fontFamily = format.attribute( "font-family" );
+            m_featuresSet |= SFont;
+            m_featuresSet |= SFontFamily;
+        }
 #endif
         if ( styleStack.attributeNS( KoXmlNS::fo, "font-style" ) =="italic" )
             m_fontFlags |= FItalic;
