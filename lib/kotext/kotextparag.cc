@@ -1659,6 +1659,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         QDomElement ts ( node.toElement() );
         QString textData;
         QString tagName( ts.tagName() );
+        //kdDebug() << k_funcinfo << tagName << " isText:" << node.isText() << endl;
         bool textFoo = tagName.startsWith( "text:" );
         QString afterText = tagName.mid( 5 );
         KoTextCustomItem* customItem = 0;
@@ -1698,20 +1699,25 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
             textData = '\n';
             //shouldWriteFormat=true;
         }
-        else if ( textFoo )
+        else
         {
-            // Check if it's a variable
-            KoVariable* var = context.variableCollection().loadOasisField( textDocument(), ts, context );
-            if ( var )
+            bool handled = false;
+            if ( textFoo )
             {
-                textData = "#";     // field placeholder
-                customItem = var;
+                // Check if it's a variable
+                KoVariable* var = context.variableCollection().loadOasisField( textDocument(), ts, context );
+                if ( var )
+                {
+                    textData = "#";     // field placeholder
+                    customItem = var;
+                    handled = true;
+                }
             }
-            else
+            if ( !handled )
             {
-                bool handled = textDocument()->loadSpanTag( ts, context,
-                                                            this, pos,
-                                                            textData, customItem );
+                handled = textDocument()->loadSpanTag( ts, context,
+                                                       this, pos,
+                                                       textData, customItem );
                 if ( !handled )
                 {
                     kdWarning(32500) << "Ignoring tag " << ts.tagName() << endl;
