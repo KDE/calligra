@@ -89,6 +89,8 @@ public:
     void changeChildGeometry (KIllustratorChild* child, const QRect& r);
 
     bool insertNewTemplate (int, int, bool clean = false);
+    void setKilluView(KIllustratorView* view) {m_killuView=view;};
+
 
 signals:
     void partInserted (KIllustratorChild* child, GPart* part);
@@ -105,6 +107,7 @@ protected:
 
 private:
     GDocument* m_gdocument;
+    KIllustratorView *m_killuView;
 };
 
 #endif

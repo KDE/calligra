@@ -113,6 +113,8 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     m_bShowRulers = true;
     mParent = parent;
 
+    if (m_pDoc!=0)
+       m_pDoc->setKilluView(this);
     //kdDebug(38000)<<"KIlluView after readConfig: "<<time.elapsed()<<endl;
 
     // restore default settings
@@ -140,6 +142,8 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 
 KIllustratorView::~KIllustratorView()
 {
+    if (m_pDoc!=0)
+       m_pDoc->setKilluView(0);
    writeConfig();
    delete mZoomTool;
    if (objMenu!=0)
