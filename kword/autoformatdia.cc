@@ -53,7 +53,7 @@ KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWordDocume
     page = _page;
 
     setupTab1();
-    setupTab2();
+//    setupTab2();
 
     setInitialSize( QSize(500, 300) );
 }
