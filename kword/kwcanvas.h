@@ -188,7 +188,7 @@ signals:
     //emit when you selected a other frame (disable/enable table button)
     void frameSelectedChanged();
     //emit when you want to refresh docstruct
-    void docStructChanged();
+    void docStructChanged(TypeStructDocItem _type);
 
 private slots:
     void slotContentsMoving( int, int );

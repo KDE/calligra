@@ -56,6 +56,8 @@ enum KWTblCellSize {
     TblManual
 };
 
+enum TypeStructDocItem {Arrangement, Tables, Pictures, Cliparts, TextFrames, Embedded, FormulaFrames};
+
 const QChar KWSpecialChar( static_cast<char>( 0 ) );
 
 #define KWBarIcon( x ) BarIcon( x, KWFactory::global() )

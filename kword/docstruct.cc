@@ -188,7 +188,7 @@ void KWDocStructPartItem::slotDoubleClicked( QListViewItem *_item )
 /******************************************************************/
 
 /*================================================================*/
-KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, KWDocument *_doc, Type _type, KWGUI*__parent )
+KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, KWDocument *_doc, TypeStructDocItem _type, KWGUI*__parent )
     : QListViewItem( _parent )
 {
     doc = _doc;
@@ -546,37 +546,55 @@ void KWDocStructTree::setup()
     setRootIsDecorated( true );
     setSorting( -1 );
 
-    embedded = new KWDocStructRootItem( this, doc, KWDocStructRootItem::Embedded, gui );
+    embedded = new KWDocStructRootItem( this, doc, Embedded, gui );
     QListViewItem *item = new QListViewItem( embedded, i18n ("Empty" ) );
 
-    cliparts = new KWDocStructRootItem( this, doc, KWDocStructRootItem::Cliparts, gui );
+    cliparts = new KWDocStructRootItem( this, doc, Cliparts, gui );
     item = new QListViewItem( cliparts, i18n( "Empty" ) );
 
-    pictures = new KWDocStructRootItem( this, doc, KWDocStructRootItem::Pictures, gui );
+    pictures = new KWDocStructRootItem( this, doc,Pictures, gui );
     item = new QListViewItem( pictures, i18n ("Empty" ) );
 
-    tables = new KWDocStructRootItem( this, doc, KWDocStructRootItem::Tables, gui );
+    tables = new KWDocStructRootItem( this, doc, Tables, gui );
     item = new QListViewItem( tables, i18n ("Empty" ) );
 
-    formulafrms = new KWDocStructRootItem( this, doc, KWDocStructRootItem::FormulaFrames, gui );
+    formulafrms = new KWDocStructRootItem( this, doc, FormulaFrames, gui );
     item = new QListViewItem( formulafrms, i18n ("Empty" ) );
 
-    textfrms = new KWDocStructRootItem( this, doc, KWDocStructRootItem::TextFrames, gui );
+    textfrms = new KWDocStructRootItem( this, doc, TextFrames, gui );
     item = new QListViewItem( textfrms, i18n ("Empty" ) );
 
-    arrangement = new KWDocStructRootItem( this, doc, KWDocStructRootItem::Arrangement, gui );
+    arrangement = new KWDocStructRootItem( this, doc, Arrangement, gui );
     item = new QListViewItem( arrangement, i18n ( "Empty" ) );
 }
 
-void KWDocStructTree::refreshTree()
+void KWDocStructTree::refreshTree(TypeStructDocItem _type)
 {
-    arrangement->setupArrangement();
-    textfrms->setupTextFrames();
-    tables->setupTables();
-    pictures->setupPictures();
-    cliparts->setupCliparts();
-    embedded->setupEmbedded();
-    formulafrms->setupFormulaFrames();
+
+    switch ( _type )
+    {
+        case Arrangement:
+            arrangement->setupArrangement();
+            break;
+        case TextFrames:
+            textfrms->setupTextFrames();
+            break;
+        case FormulaFrames:
+            formulafrms->setupFormulaFrames();
+            break;
+        case Tables:
+            tables->setupTables();
+            break;
+        case Pictures:
+            pictures->setupPictures();
+            break;
+        case Cliparts:
+            cliparts->setupCliparts();
+            break;
+        case Embedded:
+            embedded->setupEmbedded();
+            break;
+    }
 }
 
 /******************************************************************/

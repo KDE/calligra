@@ -166,9 +166,8 @@ protected:
 class KWDocStructRootItem : public QListViewItem
 {
 public:
-    enum Type {Arrangement, Tables, Pictures, Cliparts, TextFrames, Embedded, FormulaFrames};
-
-    KWDocStructRootItem( QListView *_parent, KWDocument *_doc, Type _type, KWGUI*__parent );
+ 
+    KWDocStructRootItem( QListView *_parent, KWDocument *_doc, TypeStructDocItem _type, KWGUI*__parent );
 
     void setupArrangement();
     void setupTextFrames();
@@ -181,7 +180,7 @@ public:
 
 protected:
     KWDocument *doc;
-    Type type;
+    TypeStructDocItem type;
     KWGUI *gui;
 
 };
@@ -198,7 +197,7 @@ public:
     KWDocStructTree( QWidget *_parent, KWDocument *_doc, KWGUI*__parent );
 
     void setup();
-    void refreshTree();
+    void refreshTree(TypeStructDocItem _type);
     QSize	minimumSizeHint() const {
 	return QSize( 0, 0 );
     }

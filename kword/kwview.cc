@@ -148,8 +148,8 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     connect( gui->canvasWidget(), SIGNAL(frameSelectedChanged()),
              this, SLOT(frameSelectedChanged()));
 
-    connect( gui->canvasWidget(), SIGNAL(docStructChanged()),
-             this, SLOT(docStructChanged()));
+    connect( gui->canvasWidget(), SIGNAL(docStructChanged(TypeStructDocItem)),
+             this, SLOT(docStructChanged(TypeStructDocItem)));
 
     gui->canvasWidget()->updateCurrentFormat();
     setFocusProxy( gui->canvasWidget() );
@@ -652,7 +652,7 @@ void KWView::updatePageInfo()
 
 void KWView::totalPageNumChanged()
 {
-     docStructChanged();
+     docStructChanged(TextFrames);
      updatePageInfo();
 }
 
@@ -2649,11 +2649,11 @@ void KWView::frameSelectedChanged()
     actionTableSplitCells->setEnabled( table );
 }
 
-void KWView::docStructChanged()
+void KWView::docStructChanged(TypeStructDocItem _type)
 {
     KWDocStruct *m_pDocStruct=gui->getDocStruct();
     if(m_pDocStruct)
-        m_pDocStruct->getDocStructTree()->refreshTree();
+        m_pDocStruct->getDocStructTree()->refreshTree(_type);
 }
 
 /******************************************************************/

@@ -30,11 +30,11 @@
 #include <koPageLayoutDia.h>
 #include <koView.h>
 
+class KWDocStruct;
 class KoRuler;
 class KWCanvas;
 class KWChild;
 class KWDocument;
-class KWDocStruct;
 class KWGUI;
 class KWParag;
 class KWParagDia;
@@ -236,7 +236,7 @@ public slots:
     void updateButtons();
     void setTool( MouseMode _mouseMode );
     void frameSelectedChanged();
-    void docStructChanged();
+    void docStructChanged(TypeStructDocItem _type);
 
     void totalPageNumChanged();
 
