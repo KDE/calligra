@@ -89,7 +89,7 @@ VComposite::draw( VPainter* painter, const KoRect* rect ) const
 		return;
 	}
 
-	double zoomFactor = painter->zoomFactor();
+	//double zoomFactor = painter->zoomFactor();
 
 	if( rect && !rect->intersects( boundingBox() ) )
 		return;
