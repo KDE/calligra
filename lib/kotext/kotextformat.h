@@ -1,6 +1,9 @@
 // -*- c++ -*-
-// File included by qrichtext_p.h to add our own methods to KoTextFormat
-// Method implementations are in kotextformat.cc
+
+#ifndef _KOTEXTFORMAT_H
+#define _KOTEXTFORMAT_H
+
+// File included by qrichtext_p.h
 
 /* This file is part of the KDE project
    Copyright (C) 2001 David Faure <faure@kde.org>
@@ -314,3 +317,5 @@ private:
     int ref;
     QString k;
 };
+
+#endif
