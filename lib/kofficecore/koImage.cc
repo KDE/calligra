@@ -144,7 +144,7 @@ KoImage KoImage::scale( const QSize &size ) const
     return result;
 }
 
-void KoImage::draw( QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh ) const
+void KoImage::draw( QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh )
 {
     if ( !d )
         return;
@@ -170,15 +170,12 @@ void KoImage::draw( QPainter& painter, int x, int y, int width, int height, int 
         painter.restore();
 
     } else {
-        QPixmap pix;
         QSize screenSize( width, height );
         if ( screenSize != currentSize )
-            pix = scale( screenSize ).pixmap();
-        else
-            pix = pixmap();
+            *this = scale( screenSize );
         // sx,sy,sw,sh is meant to be used as a cliprect on the pixmap, but drawPixmap
         // translates it to the (x,y) point -> we need (x+sx, y+sy).
-        painter.drawPixmap( x + sx, y + sy, pix, sx, sy, sw, sh );
+        painter.drawPixmap( x + sx, y + sy, pixmap(), sx, sy, sw, sh );
     }
 }
 

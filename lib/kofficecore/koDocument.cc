@@ -771,8 +771,9 @@ bool KoDocument::openURL( const KURL & _url )
       m_url = KURL(); // Force save to act like 'Save As'
   else
   {
-      if ( d->m_shells.isEmpty() )
-          kdWarning(30003) << "KoDocument::openURL no shell yet !" << endl;
+      // We have no koffice shell when we are being embedded as a readonly part.
+      //if ( d->m_shells.isEmpty() )
+      //    kdWarning(30003) << "KoDocument::openURL no shell yet !" << endl;
       // Add to recent actions list in our shells
       QPtrListIterator<KoMainWindow> it( d->m_shells );
       for (; it.current(); ++it )
