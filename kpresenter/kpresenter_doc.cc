@@ -936,6 +936,12 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&, KoStore*
             _spManualSwitch = true;
     }
 
+// it seems that ooimpress has different paper-settings for every slide.
+    // we take the settings of the first slide for the whole document.
+    QDomNode drawPage = body.namedItem( "draw:page" );
+    if ( drawPage.isNull() ) // no slides? give up.
+        return false;
+
     //todo load format
     setModified(false);
 
