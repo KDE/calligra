@@ -345,6 +345,7 @@ protected:
      */
     bool isImporting() const;
 
+    KRecentFilesAction *recentAction() const { return m_recent; }
 private:
 
     void saveWindowSettings();
