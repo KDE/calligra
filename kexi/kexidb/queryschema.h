@@ -20,15 +20,10 @@
 #ifndef KEXIDB_QUERY_H
 #define KEXIDB_QUERY_H
 
-#include <qvaluelist.h>
-#include <qvaluevector.h>
 #include <qvaluevector.h>
 #include <qstring.h>
 #include <qmap.h>
 #include <qptrlist.h>
-#include <qptrdict.h>
-#include <qintdict.h>
-#include <qbitarray.h>
 
 #include <kexidb/fieldlist.h>
 #include <kexidb/schemadata.h>
@@ -86,7 +81,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		
 		virtual ~QuerySchema();
 		
-		/*! Inserts \a field to the columns list at \a index position.
+		/*! Inserts \a field to the columns list at \a position.
 		 Inserted field will not be owned by this QuerySchema object,
 		 but still by corresponding TableSchema. 
 		 
@@ -97,26 +92,43 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 added to query's tables list if it is not present there (see tables()).
 		 Field must have its table assigned. 
 		 
-		 Added field will be visible. Use insertField(index, field, false)
+		 Added field will be visible. Use insertField(position, field, false)
 		 to add invisible field.
 		*/
-		virtual FieldList& insertField(uint index, Field *field);
+		virtual FieldList& insertField(uint position, Field *field);
 
-		/* Like above method, but you can also set column's visibility. */
-		virtual FieldList& insertField(uint index, Field *field, bool visible);
+		/* Like above method, but you can also set column's visibility. 
+		 New column isn't bound explicity to any table.
+		*/
+		FieldList& insertField(uint position, Field *field, bool visible);
+
+		/* Like above method, but you can also explicity bound the new column
+		 to specific position on tables list.
+		 @see tableBoundToColumn(uint columnPosition) */
+		FieldList& insertField(uint position, Field *field, 
+			int bindToTable, bool visible = true);
 		
 		/*! Adds \a field to the columns list.
 		 \sa insertField() */
-		virtual KexiDB::FieldList& addField(KexiDB::Field* field, bool visible = true);
+		KexiDB::FieldList& addField(KexiDB::Field* field, bool visible = true);
+		
+		/*! Adds \a field to the columns list. Also binds to a table 
+		 at \a bindToTable position. Use bindToTable==-1 if no table should be bound.
+		 \sa insertField()
+		 \sa tableBoundToColumn(uint columnPosition)
+		*/
+		KexiDB::FieldList& addField(KexiDB::Field* field, int bindToTable, 
+			bool visible = true);
 
 		/*! Removes field from the columns list. Use with care. */
 		virtual void removeField(KexiDB::Field *field);
 
-		/*! \return column's \a number visibility. By default column is visible. */
-		bool isColumnVisible(uint number) const;
+		/*! \return visibility flag for column at \a position. 
+		 By default column is visible. */
+		bool isColumnVisible(uint position) const;
 
-		//! Sets column's \a number visibility to \a v.
-		void setColumnVisible(uint number, bool v);
+		//! Sets visibility flag for column at \a position to \a v.
+		void setColumnVisible(uint position, bool v);
 
 		/*! Adds \a asterisk at the and of columns list. */
 		FieldList& addAsterisk(QueryAsterisk *asterisk, bool visible = true);
@@ -137,7 +149,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		/*! If query was created using a connection, 
 			returns this connection object, otherwise NULL. */
-		Connection* connection();
+		Connection* connection() const;
 		
 		/*! \return table that is parent to this query. 
 		 All potentially-editable columns within this query belong just to this table.
@@ -159,8 +171,11 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 \sa parentTable() */
 		TableSchema::List* tables() const;
 
-		/*! Adds \a table schema as one of tables used in a query. */
-		void addTable(TableSchema *table);
+		/*! Adds \a table schema as one of tables used in a query.
+		 if \a alias is not empty, it will be assigned to this table
+		 using setTableAlias(position, alias)
+		*/
+		void addTable(TableSchema *table, const QCString& alias = QCString());
 
 		/*! Removes \a table schema from this query. 
 		 This does not destroy \a table object but only takes it out of the list. 
@@ -174,38 +189,89 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! \return true if the query uses \a table. */
 		bool contains(TableSchema *table) const;
 
-		/*! \return alias of a column at \a index or null string 
+		/*! \return alias of a column at \a position or null string 
 		 If there is no alias for this column
 		 or if there is no such column within the query defined */
-		QCString columnAlias(uint index) const;
+		QCString columnAlias(uint position) const;
 		
 		/*! Provided for convenience. 
-		 \return true if a column at \a index has non empty alias defined 
+		 \return true if a column at \a position has non empty alias defined 
 		 within the query.
 		 If there is no alias for this column,
 		 or if there is no such column in the query defined, false is returned. */
-		bool hasColumnAlias(uint index) const;
+		bool hasColumnAlias(uint position) const;
 
-		/*! Sets \a alias for a column at \a index, within the query. 
-		 Passing empty sting to \a alias clears alias for a given column. */
-		void setColumnAlias(uint index, const QCString& alias);
+		/*! Sets \a alias for a column at \a position, within the query. 
+		 Passing empty string to \a alias clears alias for a given column. */
+		void setColumnAlias(uint position, const QCString& alias);
 
-		/*! \return alias of a table at \a index or null string (within FROM section)
-		 If there is no alias for this table
-		 or if there is no such table within the query defined */
-		QCString tableAlias(uint index) const;
+		/*! \return a table position (within FROM section), 
+		 that is bound to column at \a columnPosition (within SELECT section).
+		 This information can be used to find if there is alias defined for 
+		 a table that is referenced by a given column.
+		 
+		 For example, for "SELECT t2.id FROM table1 t1, table2 t2" query statement,
+		 columnBoundToTable(0) returns 1, what means that table at position 1 
+		 (within FROM section) is bound to column at position 0, so we can 
+		 now call tableAlias(1) to see if we have used alias for this column (t2.d)
+		 or just a table name (table2.d). 
+		 
+		 These checkings are performed e.g. by Connection::queryStatement() 
+		 to construct a statement string maximally identical to originally 
+		 defined query statement.
+		 
+		 -1 is returned if:
+			- \a columnPosition is out of range (i.e. < 0 or >= fieldCount())
+			- a column at \a columnPosition is not bound to any table (i.e. 
+				no database field is used for this column, 
+				e.g. "1" constant for "SELECT 1 from table" query statement)
+		*/
+		int tableBoundToColumn(uint columnPosition) const;
+
+		/*! \return alias of a table at \a position (within FROM section) 
+		 or null string if there is no alias for this table
+		 or if there is no such table within the query defined. */
+		QCString tableAlias(uint position) const;
 		
+		/*! \return table position (within FROM section) that has attached 
+		 alias \a name.
+		 If there is no such alias, -1 is returned.
+		 Only first table's position attached for this alias is returned.
+		 It is not especially bad, since aliases rarely can be duplicated, 
+		 what leads to ambiguity.
+		 Duplicated aliases are only allowed for trivial queries that have 
+		 no database fields used within their columns, 
+		 e.g. "SELECT 1 from table1 t, table2 t" is ok
+		 but "SELECT t.id from table1 t, table2 t" is not.
+		*/
+		int tablePositionForAlias(const QCString& name) const;
+
+		/*! \return table position (within FROM section) for \a tableName.
+		 -1 is returend if there's no such table declared in the FROM section.
+		 \sa tablePositions()
+		*/
+		int tablePosition(const QString& tableName) const;
+		
+		/*! \return a list of all \a tableName table occurences (within FROM section).
+		 E.g. for "SELECT * FROM table t, table t2" [0, 1] list is returned.
+		 Empty list is returned there's no such table declared 
+		 in the FROM section at all.
+		 \sa tablePosition()
+		*/
+		QValueList<int> tablePositions(const QString& tableName) const;
+
 		/*! Provided for convenience. 
-		 \return true if a table at \a index (within FROM section of the the query)
+		 \return true if a table at \a position (within FROM section of the the query)
 		 has non empty alias defined.
 		 If there is no alias for this table,
 		 or if there is no such table in the query defined, false is returned. */
-		bool hasTableAlias(uint index) const;
+		bool hasTableAlias(uint position) const;
 
-		/*! Sets \a alias for a table at \a index (within FROM section of the the query).
+		/*! Sets \a alias for a table at \a position (within FROM section 
+		 of the the query).
 		 Passing empty sting to \a alias clears alias for a given table
-		 (only for specified \a index). */
-		void setTableAlias(uint index, const QCString& alias);
+		 (only for specified \a position). */
+		void setTableAlias(uint position, const QCString& alias);
 
 		/*! \return a list of relationships defined for this query */
 		Relationship::List* relationships() const;

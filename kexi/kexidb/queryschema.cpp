@@ -23,6 +23,12 @@
 
 #include <assert.h>
 
+#include <qvaluelist.h>
+#include <qasciidict.h>
+#include <qptrdict.h>
+#include <qintdict.h>
+#include <qbitarray.h>
+
 #include <kdebug.h>
 
 using namespace KexiDB;
@@ -40,10 +46,14 @@ class QuerySchemaPrivate
 		 , autoincFields(0)
 		 , fieldsOrder(0)
 		 , pkeyFieldsOrder(0)
+		 , tablesBoundToColumns(64, -1)
+		 , tablePositionsForAliases(67, false)
 		{
 			aliases.setAutoDelete(true);
+			tableAliases.setAutoDelete(true);
 			asterisks.setAutoDelete(true);
 			relations.setAutoDelete(true);
+			tablePositionsForAliases.setAutoDelete(true);
 			visibility.fill(false);
 		}
 		~QuerySchemaPrivate()
@@ -119,6 +129,26 @@ class QuerySchemaPrivate
 
 		/*! Relationships defined for this query. */
 		Relationship::List relations;
+
+		/*! Information about columns bound to tables.
+		 Used a table is used in FROM section more than once
+		 (using table aliases).
+
+		 This list is updated by insertField(uint position, Field *field, 
+		 int bindToTable, bool visible), using bindToTable parameter.
+		 
+		 Example: for this statement: 
+		 SELECT t1.a, othertable.x, t2.b FROM table t1, table t2, othertable; 
+		 tablesBoundToColumns list looks like this:
+		 [ 0, -1, 1 ]
+		 - first column is bound to table 0 "t1"
+		 - second coulmn is not specially bound (othertable.x isn't ambiguous)
+		 - third column is bound to table 1 "t2"
+		*/
+		QValueVector<int> tablesBoundToColumns;
+		
+		/* Collects table positions for aliases: used in tablePositionsForAlias(). */
+		QAsciiDict<int> tablePositionsForAliases;
 };
 }
 
@@ -171,6 +201,7 @@ void QuerySchema::clear()
 	FieldList::clear();
 	SchemaData::clear();
 	d->aliases.clear();
+	d->tableAliases.clear();
 	d->asterisks.clear();
 	d->relations.clear();
 	d->parent_table = 0;
@@ -181,55 +212,105 @@ void QuerySchema::clear()
 		d->pkeyFieldsOrder=0;
 	}
 	d->visibility.fill(false);
+	d->tablesBoundToColumns = QValueVector<int>(64,-1);
+	d->tablePositionsForAliases.clear();
 }
 
-//KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field, bool visible)
-FieldList& QuerySchema::insertField(uint index, Field *field, bool visible)
+FieldList& QuerySchema::insertField(uint position, Field *field, bool visible)
+{
+	return insertField(position, field, -1/*don't bind*/, visible);
+}
+
+/*virtual*/
+FieldList& QuerySchema::insertField(uint position, Field *field)
+{
+	return insertField( position, field, -1/*don't bind*/, true );
+}
+
+FieldList& QuerySchema::insertField(uint position, Field *field, 
+	int bindToTable, bool visible)
 {
 	if (!field)
 		return *this;
-	if (index>m_fields.count()) {
-		kdWarning() << "QuerySchema::insertField(): index (" << index << ") out of range" << endl;
+	if (position>m_fields.count()) {
+		kdWarning() << "QuerySchema::insertField(): position (" << position << ") out of range" << endl;
 		return *this;
 	}
-	if (fieldCount()>=d->visibility.size())
+	if (fieldCount()>=d->visibility.size()) {
 		d->visibility.resize(d->visibility.size()*2);
+		d->tablesBoundToColumns.resize(d->tablesBoundToColumns.size()*2);
+	}
 	d->clearCachedData();
 	if (!field->isQueryAsterisk() && !field->table()) {
-		KexiDBDbg << "QuerySchema::addField(): WARNING: field '"<<field->name()<<"' must contain table information!" <<endl;
+		KexiDBDbg << "QuerySchema::addField(): WARNING: field '"<<field->name()
+			<<"' must contain table information!" <<endl;
 		return *this;
 	}
-	FieldList::insertField(index, field);
+	FieldList::insertField(position, field);
 	if (field->isQueryAsterisk()) {
 		d->asterisks.append(field);
 		//if this is single-table asterisk,
-		//add a table to list if not exists there:
+		//add a table to list if doesn't exist there:
 		if (field->table() && (d->tables.findRef(field->table())==-1))
 			d->tables.append(field->table());
 	}
 	else {
-		//add a table to list if not exists there:
+		//add a table to list if doesn't exist there:
 		if (d->tables.findRef(field->table())==-1)
 			d->tables.append(field->table());
 	}
 //	//visible by default
 //	setFieldVisible(field, true);
 //	d->visibility.setBit(fieldCount()-1, visible);
-	//update visibility (move bits to make a place for new one)
-	for (uint i=fieldCount()-1; i>index; i--)
+	//update visibility
+	//--move bits to make a place for a new one
+	for (uint i=fieldCount()-1; i>position; i--)
 		d->visibility.setBit(i, d->visibility.testBit(i-1));
-	d->visibility.setBit(index, visible);
+	d->visibility.setBit(position, visible);
+
+	//bind to table
+	if (bindToTable < -1 && bindToTable>(int)d->tables.count()) {
+		kdWarning() << "QuerySchema::insertField(): bindToTable (" << bindToTable 
+			<< ") out of range" << endl;
+		bindToTable = -1;
+	}
+	//--move items to make a place for a new one
+	for (uint i=fieldCount()-1; i>position; i--)
+		d->tablesBoundToColumns[i] = d->tablesBoundToColumns[i-1];
+	d->tablesBoundToColumns[ position ] = bindToTable;
+	
+	kdDebug() << "QuerySchema::insertField(): bound to table (" << bindToTable << "): " <<endl;
+	if (bindToTable==-1)
+		kdDebug() << " <NOT SPECIFIED>" << endl; 
+	else
+		kdDebug() << " name=" << d->tables.at(bindToTable)->name() 
+			<< " alias=" << tableAlias(bindToTable) <<  endl;
+	QString s;
+	for (uint i=0; i<fieldCount();i++)
+		s+= (QString::number(d->tablesBoundToColumns[i]) + " ");
+	kdDebug() << "tablesBoundToColumns == [" << s << "]" <<endl;
 	return *this;
 }
 
-FieldList& QuerySchema::insertField(uint index, Field *field)
+int QuerySchema::tableBoundToColumn(uint columnPosition) const
 {
-	return insertField( index, field, true );
+	if (columnPosition > d->tablesBoundToColumns.count()) {
+		kdWarning() << "QuerySchema::tableBoundToColumn(): columnPosition (" << columnPosition
+			<< ") out of range" << endl;
+		return -1;
+	}
+	return d->tablesBoundToColumns[columnPosition];
 }
 
 KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field, bool visible)
 {
 	return insertField(m_fields.count(), field, visible);
+}
+
+KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field, int bindToTable, 
+	bool visible)
+{
+	return insertField(m_fields.count(), field, bindToTable, visible);
 }
 
 void QuerySchema::removeField(KexiDB::Field *field)
@@ -244,30 +325,16 @@ void QuerySchema::removeField(KexiDB::Field *field)
 	FieldList::removeField(field);
 }
 
-bool QuerySchema::isColumnVisible(uint number) const
+bool QuerySchema::isColumnVisible(uint position) const
 {
-	return (number < fieldCount()) ? d->visibility.testBit(number) : false;
+	return (position < fieldCount()) ? d->visibility.testBit(position) : false;
 }
 
-void QuerySchema::setColumnVisible(uint number, bool v)
+void QuerySchema::setColumnVisible(uint position, bool v)
 {
-	d->visibility.setBit(number, v);
+	if (position < fieldCount())
+		d->visibility.setBit(position, v);
 }
-
-#if 0
-bool QuerySchema::isFieldVisible(KexiDB::Field *f) const
-{
-	return d->visibility[f]!=0;
-}
-
-void QuerySchema::setFieldVisible(KexiDB::Field *f, bool v)
-{
-	d->visibility.take(f);
-	if (!v)
-		return;
-	d->visibility.insert(f, f);
-}
-#endif
 
 FieldList& QuerySchema::addAsterisk(QueryAsterisk *asterisk, bool visible)
 {
@@ -279,7 +346,7 @@ FieldList& QuerySchema::addAsterisk(QueryAsterisk *asterisk, bool visible)
 	return addField(asterisk, visible);
 }
 
-Connection* QuerySchema::connection()
+Connection* QuerySchema::connection() const
 {
 	return d->parent_table ? d->parent_table->connection() : 0;
 }
@@ -288,11 +355,32 @@ QString QuerySchema::debugString()
 {
 	QString dbg;
 	dbg.reserve(1024);
+	//fields
 	dbg = QString("QUERY ") + schemaDataDebugString() + "\n"
 		+ "-PARENT_TABLE=" + (d->parent_table ? d->parent_table->name() :"(NULL)")
 		+ "\n-COLUMNS:\n"
 		+ FieldList::debugString();
 
+	//bindings
+	QString dbg2;
+	dbg2.reserve(512);
+	for (uint i = 0; i<fieldCount(); i++) {
+		int tablePos = tableBoundToColumn(i);
+		if (tablePos>=0) {
+			QCString tAlias = tableAlias(tablePos);
+			if (!tAlias.isEmpty()) {
+				dbg2 += (QString::fromLatin1(" field \"") + field(i)->name() 
+					+ "\" uses alias \"" + QString(tAlias) + "\" of table \""
+					+ d->tables.at(tablePos)->name() + "\"\n");
+			}
+		}
+	}
+	if (!dbg2.isEmpty()) {
+		dbg += "\n-BINDINGS:\n";
+		dbg += dbg2;
+	}
+	
+	//tables	
 	TableSchema *table;
 	QString table_names;
 	table_names.reserve(512);
@@ -303,7 +391,7 @@ QString QuerySchema::debugString()
 	}
 	if (d->tables.isEmpty())
 		table_names = "<NONE>";
-	dbg += (QString("\n-TABLES:\n") + table_names);
+	dbg += (QString("-TABLES:\n") + table_names);
 	QString aliases;
 	Field::ListIterator it( m_fields );
 	if (d->aliases.isEmpty())
@@ -317,6 +405,7 @@ QString QuerySchema::debugString()
 					+ " -> " + (const char*)*alias + "\n");
 		}
 	}
+	//aliases
 	dbg += QString("\n-COLUMN ALIASES:\n" + aliases);
 	if (d->tableAliases.isEmpty())
 		aliases = "<NONE>";
@@ -351,13 +440,36 @@ TableSchema::List* QuerySchema::tables() const
 	return &d->tables;
 }
 
-void QuerySchema::addTable(TableSchema *table)
+void QuerySchema::addTable(TableSchema *table, const QCString& alias)
 {
-	kdDebug() << "QuerySchema::addTable() " << (void *)table << endl;
+	kdDebug() << "QuerySchema::addTable() " << (void *)table 
+		<< " alias=" << alias << endl;
 	if (!table)
 		return;
-	if (d->tables.findRef(table)==-1)
-		d->tables.append(table);
+	
+	//only append table if:
+	//-it has alias
+	//-it has no alias but there is no such table on the list
+	if (alias.isEmpty() && d->tables.findRef(table)!=-1) {
+		const QString& tableNameLower = table->name().lower();
+		const QString& aliasLower = QString(alias.lower());
+		int num = 0;
+		for (TableSchema::ListIterator it(d->tables); it.current(); ++it, num++) {
+			if (it.current()->name().lower()==tableNameLower) {
+				const QString& tAlias = tableAlias(num);
+				if (tAlias == aliasLower) {
+					kdWarning() << "QuerySchema::addTable(): table with \"" 
+						<<tAlias<<"\" alias already added!" << endl;
+					return;
+				}
+			}
+		}
+	}
+	
+	d->tables.append(table);
+	
+	if (!alias.isEmpty())
+		setTableAlias(d->tables.count()-1, alias);
 }
 
 void QuerySchema::removeTable(TableSchema *table)
@@ -373,9 +485,10 @@ void QuerySchema::removeTable(TableSchema *table)
 TableSchema* QuerySchema::table(const QString& tableName) const
 {
 //TODO: maybe use tables_byname?
-	for (TableSchema::ListIterator it(d->tables); it.current(); ++it)
+	for (TableSchema::ListIterator it(d->tables); it.current(); ++it) {
 		if (it.current()->name().lower()==tableName.lower())
 			return it.current();
+	}
 	return 0;
 }
 
@@ -384,59 +497,99 @@ bool QuerySchema::contains(TableSchema *table) const
 	return d->tables.find(table)!=-1;
 }
 
-QCString QuerySchema::columnAlias(uint index) const
+QCString QuerySchema::columnAlias(uint position) const
 {
-	QCString *a = d->aliases[index];
+	QCString *a = d->aliases[position];
 	return a ? *a : QCString();
 }
 
-bool QuerySchema::hasColumnAlias(uint index) const
+bool QuerySchema::hasColumnAlias(uint position) const
 {
-	return d->aliases[index]!=0;
+	return d->aliases[position]!=0;
 }
 
-void QuerySchema::setColumnAlias(uint index, const QCString& alias)
+void QuerySchema::setColumnAlias(uint position, const QCString& alias)
 {
-	if (index >= m_fields.count()) {
-		KexiDBWarning << "QuerySchema::setColumnAlias(): index ("  << index << ") out of range!" << endl;
+	if (position >= m_fields.count()) {
+		KexiDBWarning << "QuerySchema::setColumnAlias(): position ("  << position 
+			<< ") out of range!" << endl;
 		return;
 	}
 	QCString fixedAlias = alias.lower().stripWhiteSpace();
 	if (fixedAlias.isEmpty()) {
-		d->aliases.remove(index);
+		d->aliases.remove(position);
 		d->maxIndexWithAlias = -1;
 	}
 	else {
-		d->aliases.replace(index, new QCString(fixedAlias));
-		d->maxIndexWithAlias = QMAX( d->maxIndexWithAlias, (int)index );
+		d->aliases.replace(position, new QCString(fixedAlias));
+		d->maxIndexWithAlias = QMAX( d->maxIndexWithAlias, (int)position );
 	}
 }
 
-QCString QuerySchema::tableAlias(uint index) const
+QCString QuerySchema::tableAlias(uint position) const
 {
-	QCString *a = d->tableAliases[index];
+	QCString *a = d->tableAliases[position];
 	return a ? *a : QCString();
 }
 
-bool QuerySchema::hasTableAlias(uint index) const
+int QuerySchema::tablePositionForAlias(const QCString& name) const
 {
-	return d->tableAliases[index]!=0;
+	int *num = d->tablePositionsForAliases[name];
+	if (!num)
+		return -1;
+	return *num;
 }
 
-void QuerySchema::setTableAlias(uint index, const QCString& alias)
+int QuerySchema::tablePosition(const QString& tableName) const
 {
-	if (index >= d->tables.count()) {
-		KexiDBWarning << "QuerySchema::setTableAlias(): index ("  << index << ") out of range!" << endl;
+	int num = 0;
+	for (TableSchema::ListIterator it(d->tables); it.current(); ++it, num++) {
+		if (it.current()->name().lower()==tableName.lower())
+			return num;
+	}
+	return -1;
+}
+
+QValueList<int> QuerySchema::tablePositions(const QString& tableName) const
+{
+	int num = 0;
+	QValueList<int> result;
+	const QString& tableNameLower = tableName.lower();
+	for (TableSchema::ListIterator it(d->tables); it.current(); ++it, num++) {
+kdDebug() << "::: " << it.current()->name() << endl;
+		if (it.current()->name().lower()==tableNameLower) {
+kdDebug() << "ok" <<endl;
+			result += num;
+		}
+	}
+	return result;
+}
+
+bool QuerySchema::hasTableAlias(uint position) const
+{
+	return d->tableAliases[position]!=0;
+}
+
+void QuerySchema::setTableAlias(uint position, const QCString& alias)
+{
+	if (position >= d->tables.count()) {
+		KexiDBWarning << "QuerySchema::setTableAlias(): position ("  << position 
+			<< ") out of range!" << endl;
 		return;
 	}
 	QCString fixedAlias = alias.lower().stripWhiteSpace();
 	if (fixedAlias.isEmpty()) {
-		d->tableAliases.remove(index);
-		d->maxIndexWithTableAlias = -1;
+		QCString *oldAlias = d->tableAliases.take(position);
+		if (oldAlias) {
+			d->tablePositionsForAliases.remove(*oldAlias);
+			delete oldAlias;
+		}
+//			d->maxIndexWithTableAlias = -1;
 	}
 	else {
-		d->tableAliases.replace(index, new QCString(fixedAlias));
-		d->maxIndexWithTableAlias = QMAX( d->maxIndexWithTableAlias, (int)index );
+		d->tableAliases.replace(position, new QCString(fixedAlias));
+		d->tablePositionsForAliases.replace(fixedAlias, new int(position));
+//		d->maxIndexWithTableAlias = QMAX( d->maxIndexWithTableAlias, (int)index );
 	}
 }
 
@@ -476,15 +629,15 @@ QueryColumnInfo::Vector QuerySchema::fieldsExpanded()
 	//collect all fields in a list (not a vector yet, because we do not know its size)
 	QueryColumnInfo::List list;
 	int i = 0;
-	int fieldNumber = 0;
-	for (Field *f = m_fields.first(); f; f = m_fields.next(), fieldNumber++) {
+	int fieldPosition = 0;
+	for (Field *f = m_fields.first(); f; f = m_fields.next(), fieldPosition++) {
 		if (f->isQueryAsterisk()) {
 			if (static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) {
 				Field::List *ast_fields = static_cast<QueryAsterisk*>(f)->table()->fields();
 				for (Field *ast_f = ast_fields->first(); ast_f; ast_f=ast_fields->next()) {
-//					d->detailedVisibility += isFieldVisible(fieldNumber);
+//					d->detailedVisibility += isFieldVisible(fieldPosition);
 					list.append( new QueryColumnInfo(ast_f, QCString()/*no field for asterisk!*/,
-						isColumnVisible(fieldNumber)) 
+						isColumnVisible(fieldPosition)) 
 					);
 //					list.append(ast_f);
 				}
@@ -495,10 +648,10 @@ QueryColumnInfo::Vector QuerySchema::fieldsExpanded()
 					Field::List *tab_fields = table->fields();
 					for (Field *tab_f = tab_fields->first(); tab_f; tab_f = tab_fields->next()) {
 //! \todo (js): perhaps not all fields should be appended here
-//						d->detailedVisibility += isFieldVisible(fieldNumber);
+//						d->detailedVisibility += isFieldVisible(fieldPosition);
 //						list.append(tab_f);
 						list.append( new QueryColumnInfo(tab_f, QCString()/*no field for asterisk!*/,
-							isColumnVisible(fieldNumber)) 
+							isColumnVisible(fieldPosition)) 
 						);
 					}
 				}
@@ -506,9 +659,9 @@ QueryColumnInfo::Vector QuerySchema::fieldsExpanded()
 		}
 		else {
 			//a single field
-//			d->detailedVisibility += isFieldVisible(fieldNumber);
+//			d->detailedVisibility += isFieldVisible(fieldPosition);
 			list.append(
-				new QueryColumnInfo(f, columnAlias(fieldNumber), isColumnVisible(fieldNumber)) );
+				new QueryColumnInfo(f, columnAlias(fieldPosition), isColumnVisible(fieldPosition)) );
 //			list.append(f);
 		}
 	}
