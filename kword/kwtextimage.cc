@@ -64,8 +64,11 @@ void KWTextImage::resize()
     }
 }
 
-void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int /*ascentpix*/, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, int /*offset*/)
+void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int /*ascentpix*/, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, int /*offset*/,  bool drawingShadow)
 {
+    if ( drawingShadow )
+        return;
+
     // (x,y) is the position of the inline item (in pixels)
     // (wpix,hpix) is the size of the inline item (in pixels)
     // (cx,cy,cw,ch) is the rectangle to be painted, in pixels too

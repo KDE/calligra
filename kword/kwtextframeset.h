@@ -243,7 +243,7 @@ public:
     virtual KoTextFormat * currentFormat() const;
 
     /** Let KoTextFormatInterface set the modified format */
-    virtual KCommand *setFormatCommand( KoTextFormat * newFormat, int flags, bool zoomFont = false );
+    virtual KCommand *setFormatCommand( const KoTextFormat * newFormat, int flags, bool zoomFont = false );
 
     /** Let KoTextFormatInterface access the current parag layout */
     virtual const KoParagLayout * currentParagLayoutFormat() const;

@@ -83,7 +83,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                             zh->layoutUnitToPixelY( ch.ascent() ), // baseline
                             width, zh->layoutUnitToPixelY( ch.height() ), // bw and h
                             drawSelections, &format, selectionStarts,
-                            selectionEnds, cg2, rightToLeft, line, zh );
+                            selectionEnds, cg2, rightToLeft, line, zh, false );
                     }
                     else
                     {
@@ -279,24 +279,24 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         elem.setAttribute( "value", static_cast<int>(curFormat->font().italic()) );
     }
     if( !refFormat
-        || curFormat->underlineLineType() != refFormat->underlineLineType()
+        || curFormat->underlineType() != refFormat->underlineType()
         || curFormat->textUnderlineColor() !=refFormat->textUnderlineColor()
-        || curFormat->underlineLineStyle() !=refFormat->underlineLineStyle()
+        || curFormat->underlineStyle() !=refFormat->underlineStyle()
         || curFormat->wordByWord() != refFormat->wordByWord())
     {
-        if ( curFormat->underlineLineType()!= KoTextFormat::U_NONE )
+        if ( curFormat->underlineType()!= KoTextFormat::U_NONE )
         {
             elem = doc.createElement( "UNDERLINE" );
             formatElem.appendChild( elem );
             if ( curFormat->doubleUnderline() )
                 elem.setAttribute( "value", "double" );
-            else if ( curFormat->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD)
+            else if ( curFormat->underlineType() == KoTextFormat::U_SIMPLE_BOLD)
                 elem.setAttribute( "value", "single-bold" );
-            else if( curFormat->underlineLineType()==KoTextFormat::U_WAVE)
+            else if( curFormat->underlineType()==KoTextFormat::U_WAVE)
                 elem.setAttribute( "value", "wave" );
             else
                 elem.setAttribute( "value", static_cast<int>(curFormat->underline()) );
-            QString strLineType=KoTextFormat::underlineStyleToString( curFormat->underlineLineStyle() );
+            QString strLineType=KoTextFormat::underlineStyleToString( curFormat->underlineStyle() );
             elem.setAttribute( "styleline", strLineType );
             if ( curFormat->textUnderlineColor().isValid() )
                 elem.setAttribute( "underlinecolor", curFormat->textUnderlineColor().name() );
@@ -305,35 +305,26 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         }
     }
     if( !refFormat
-        || curFormat->strikeOutLineType() != refFormat->strikeOutLineType()
-        || curFormat->strikeOutLineStyle()!= refFormat->strikeOutLineStyle()
+        || curFormat->strikeOutType() != refFormat->strikeOutType()
+        || curFormat->strikeOutStyle()!= refFormat->strikeOutStyle()
         || curFormat->wordByWord() != refFormat->wordByWord())
     {
-        if ( curFormat->strikeOutLineType()!= KoTextFormat::S_NONE )
+        if ( curFormat->strikeOutType()!= KoTextFormat::S_NONE )
         {
             elem = doc.createElement( "STRIKEOUT" );
             formatElem.appendChild( elem );
             if ( curFormat->doubleStrikeOut() )
                 elem.setAttribute( "value", "double" );
-            else if ( curFormat->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD)
+            else if ( curFormat->strikeOutType() == KoTextFormat::S_SIMPLE_BOLD)
                 elem.setAttribute( "value", "single-bold" );
             else
                 elem.setAttribute( "value", static_cast<int>(curFormat->strikeOut()) );
-            QString strLineType=KoTextFormat::strikeOutStyleToString( curFormat->strikeOutLineStyle() );
+            QString strLineType=KoTextFormat::strikeOutStyleToString( curFormat->strikeOutStyle() );
             elem.setAttribute( "styleline", strLineType );
             elem.setAttribute( "wordbyword" , static_cast<int>(curFormat->wordByWord()));
 
         }
     }
-    // ######## Not needed in 3.0?
-    /*
-    if( !refFormat || curFormat->font().charSet() != refFormat->font().charSet() )
-    {
-        elem = doc.createElement( "CHARSET" );
-        formatElem.appendChild( elem );
-        elem.setAttribute( "value", static_cast<int>(curFormat->font().charSet()) );
-    }
-    */
     if( !refFormat || (curFormat->vAlign() != refFormat->vAlign())
         || (curFormat->relativeTextSize() != refFormat->relativeTextSize()))
     {
@@ -365,14 +356,14 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             }
         }
     }
-    if( !refFormat || curFormat->shadowText() != refFormat->shadowText())
+    if( !refFormat ||
+        ( curFormat->shadowDistanceX() != refFormat->shadowDistanceX()
+          || ( curFormat->shadowDistanceY() != refFormat->shadowDistanceY() )
+          || ( curFormat->shadowColor() != refFormat->shadowColor() ) ) )
     {
-        if ( !curFormat->shadowText())
-        {
-            elem = doc.createElement( "SHADOWTEXT" );
-            formatElem.appendChild( elem );
-            elem.setAttribute( "value", static_cast<int>(curFormat->shadowText()) );
-        }
+        elem = doc.createElement( "SHADOW" );
+        formatElem.appendChild( elem );
+        elem.setAttribute( "text-shadow", curFormat->shadowAsCss() );
     }
     if( !refFormat || curFormat->offsetFromBaseLine() != refFormat->offsetFromBaseLine())
     {
@@ -553,19 +544,19 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     if ( !elem.isNull() ) {
         QString value = elem.attribute("value");
         if ( value == "0" || value == "1" )
-            format.setUnderlineLineType( (value.toInt() == 1)?KoTextFormat::U_SIMPLE: KoTextFormat::U_NONE );
+            format.setUnderlineType( (value.toInt() == 1)?KoTextFormat::U_SIMPLE: KoTextFormat::U_NONE );
         else if ( value == "single" ) // value never used when saving, but why not support it? ;)
-            format.setUnderlineLineType ( KoTextFormat::U_SIMPLE);
+            format.setUnderlineType ( KoTextFormat::U_SIMPLE);
         else if ( value == "double" )
-            format.setUnderlineLineType ( KoTextFormat::U_DOUBLE);
+            format.setUnderlineType ( KoTextFormat::U_DOUBLE);
         else if ( value == "single-bold" )
-            format.setUnderlineLineType ( KoTextFormat::U_SIMPLE_BOLD);
+            format.setUnderlineType ( KoTextFormat::U_SIMPLE_BOLD);
         else if( value =="wave")
-            format.setUnderlineLineType ( KoTextFormat::U_WAVE);
+            format.setUnderlineType ( KoTextFormat::U_WAVE);
         if ( elem.hasAttribute("styleline" ))
         {
             QString strLineType = elem.attribute("styleline");
-            format.setUnderlineLineStyle( KoTextFormat::stringToUnderlineStyle( strLineType ));
+            format.setUnderlineStyle( KoTextFormat::stringToUnderlineStyle( strLineType ));
         }
         if ( elem.hasAttribute("underlinecolor"))
         {
@@ -580,18 +571,18 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     {
         QString value = elem.attribute("value");
         if ( value == "0" || value == "1" )
-            format.setStrikeOutLineType( (value.toInt() == 1)?KoTextFormat::S_SIMPLE: KoTextFormat::S_NONE );
+            format.setStrikeOutType( (value.toInt() == 1)?KoTextFormat::S_SIMPLE: KoTextFormat::S_NONE );
         else if ( value == "single" ) // value never used when saving, but why not support it? ;)
-            format.setStrikeOutLineType ( KoTextFormat::S_SIMPLE);
+            format.setStrikeOutType ( KoTextFormat::S_SIMPLE);
         else if ( value == "double" )
-            format.setStrikeOutLineType ( KoTextFormat::S_DOUBLE);
+            format.setStrikeOutType ( KoTextFormat::S_DOUBLE);
         else if ( value =="single-bold" )
-            format.setStrikeOutLineType ( KoTextFormat::S_SIMPLE_BOLD);
+            format.setStrikeOutType ( KoTextFormat::S_SIMPLE_BOLD);
 
         if ( elem.hasAttribute("styleline" ))
         {
             QString strLineType = elem.attribute("styleline");
-            format.setStrikeOutLineStyle( KoTextFormat::stringToStrikeOutStyle( strLineType ));
+            format.setStrikeOutStyle( KoTextFormat::stringToStrikeOutStyle( strLineType ));
         }
         if ( elem.hasAttribute( "wordbyword" ))
             format.setWordByWord( elem.attribute("wordbyword").toInt()==1);
@@ -633,9 +624,20 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
         else
             format.setTextBackgroundColor( QColor(red,green,blue) );
     }
-    elem = formatElem.namedItem( "SHADOWTEXT" ).toElement();
+    elem = formatElem.namedItem( "SHADOW" ).toElement();
     if ( !elem.isNull() )
-        format.setShadowText( elem.attribute("value").toInt());
+    {
+        format.parseShadowFromCss( elem.attribute( "text-shadow" ) );
+    } else {
+        // Compat with koffice-1.2
+        elem = formatElem.namedItem( "SHADOWTEXT" ).toElement();
+        if ( !elem.isNull() && elem.attribute("value").toInt() && KoParagLayout::shadowCssCompat )
+        {
+            // Retrieve shadow attributes from KoParagLayout
+            // We don't have its pointer, so shadowCssCompat is static.
+            format.parseShadowFromCss( *KoParagLayout::shadowCssCompat );
+        }
+    }
 
     elem = formatElem.namedItem( "OFFSETFROMBASELINE" ).toElement();
     if ( !elem.isNull() )

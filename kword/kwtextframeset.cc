@@ -2708,7 +2708,7 @@ KCommand *KWTextFrameSet::setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase
 }
 
 
-KCommand *KWTextFrameSet::setFormatCommand( KoTextFormat * newFormat, int flags, bool zoomFont )
+KCommand *KWTextFrameSet::setFormatCommand( const KoTextFormat * newFormat, int flags, bool zoomFont )
 {
     m_textobj->textDocument()->selectAll( KoTextDocument::Temp );
     KCommand *cmd = m_textobj->setFormatCommand( 0L, 0L, newFormat, flags, zoomFont, KoTextDocument::Temp );

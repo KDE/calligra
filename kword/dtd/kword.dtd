@@ -541,7 +541,7 @@ don't put a </?xml...> at the end of the file!).
         When FORMAT is used to specify the format of a style, pos and len are omitted.
 -->
 <!ELEMENT FORMAT
-    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|SHADOWTEXT|FONTATTRIBUTE|LANGUAGE|ANCHOR|IMAGE|PICTURE|VARIABLE|TEXTBACKGROUNDCOLOR|OFFSETFROMBASELINE)*>
+    (COLOR|FONT|SIZE|WEIGHT|ITALIC|UNDERLINE|STRIKEOUT|VERTALIGN|SHADOW|FONTATTRIBUTE|LANGUAGE|ANCHOR|IMAGE|PICTURE|VARIABLE|TEXTBACKGROUNDCOLOR|OFFSETFROMBASELINE)*>
 
 
 <!ATTLIST FORMAT
@@ -559,7 +559,7 @@ don't put a </?xml...> at the end of the file!).
 -->
 <!ENTITY % layout "NAME|FLOW|INDENTS|OFFSETS|LINESPACING|PAGEBREAKING|
     LEFTBORDER|RIGHTBORDER|TOPBORDER|BOTTOMBORDER|COUNTER|FORMAT|
-    SHADOW|TABULATOR*">
+    TABULATOR*">
 <!ELEMENT LAYOUT
     (%layout;)*>
 
@@ -724,15 +724,16 @@ don't put a </?xml...> at the end of the file!).
     value CDATA #REQUIRED
     relativetextsize CDATA #REQUIRED>
 
-<!-- SHADOWTEXT
-        Value is either 0 or 1 with 1=true and 0=false
-        When set to 1, this text will be drawn with a shadow, defined by the
-        paragraph's SHADOW element.
+<!-- SHADOW
+        The value is the CSS specification for text-shadow (also used by XSL-FO).
+        http://www.w3.org/TR/REC-CSS2/text.html#text-shadow-props
+        KWord only supports a single shadow, and no blur radius, so it amounts to
+        either "none" or "color length length".
 -->
-<!ELEMENT SHADOWTEXT
+<!ELEMENT SHADOW
     EMPTY>
-<!ATTLIST SHADOWTEXT
-    value CDATA #REQUIRED>
+<!ATTLIST SHADOW
+    text-shadow CDATA #REQUIRED>
 
 
 <!-- OFFSETFROMBASELINE
@@ -1011,30 +1012,6 @@ don't put a </?xml...> at the end of the file!).
     filling CDATA #IMPLIED
     width CDATA #IMPLIED
     alignchar CDATA #IMPLIED>
-
-<!--    Defines the attributes for shadowed text
-        Attributes:
-
-            distance:           Shadow distance in pt
-
-            direction:          Direction of the shadow
-                                1 = Top Left
-                                2 = Top
-                                3 = Top Right
-                                4 = Right
-                                5 = Bottom Right
-                                6 = Bottom
-                                7 = Bottom Left
-                                8 = Left
-            red, green, blue:   color of shadow
-
--->
-<!ATTLIST SHADOW
-    distance CDATA #REQUIRED
-    direction CDATA #REQUIRED
-    red CDATA #REQUIRED
-    green CDATA #REQUIRED
-    blue CDATA #REQUIRED>
 
 <!--    An anchor describes an object which is anchored.
 

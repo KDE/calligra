@@ -3334,37 +3334,11 @@ void KWView::formatFont()
 {
     KoTextFormatInterface* textIface = applicableTextInterfaces().first();
 
-    if ( !textIface )
+    if ( !textIface || !textIface->currentFormat() )
         return;
-    QColor col=textIface->textBackgroundColor();
-    col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
 
     delete m_fontDlg;
-    uint fontAttributeFlags = 0;
-    if ( actionFormatSub->isChecked() )
-        fontAttributeFlags |= KoFontDia::FontAttributeSubscript;
-    if( actionFormatSuper->isChecked() )
-        fontAttributeFlags |= KoFontDia::FontAttributeSuperScript;
-    if( textIface->textShadow() )
-        fontAttributeFlags |= KoFontDia::FontAttributeShadowText;
-    if( textIface->wordByWord() )
-        fontAttributeFlags |= KoFontDia::FontAttributeWordByWord;
-    if( textIface->hyphenation() )
-        fontAttributeFlags |= KoFontDia::FontAttributeHyphenation;
-
-    m_fontDlg = new KoFontDia( this, "", textIface->textFont(),
-                               (KoFontDia::FontAttributeFlags)fontAttributeFlags,
-                               textIface->textColor(),
-                               col,
-                               textIface->textUnderlineColor(),
-                               textIface->underlineLineStyle(),
-                               textIface->underlineLineType(),
-                               textIface->strikeOutLineType(),
-                               textIface->strikeOutLineStyle(),
-                               textIface->fontAttribute(),
-                               textIface->language(),
-                               textIface->relativeTextSize(),
-                               textIface->offsetFromBaseLine());
+    m_fontDlg = new KoFontDia( *textIface->currentFormat(), this, "" );
 
     connect( m_fontDlg, SIGNAL( applyFont() ),
                  this, SLOT( slotApplyFont() ) );
@@ -3373,7 +3347,7 @@ void KWView::formatFont()
     delete m_fontDlg;
     m_fontDlg=0L;
 
-    m_gui->canvasWidget()->setFocus();
+    //m_gui->canvasWidget()->setFocus();
 }
 
 void KWView::slotApplyFont()
@@ -3381,37 +3355,13 @@ void KWView::slotApplyFont()
     int flags = m_fontDlg->changedFlags();
     if ( flags )
     {
-        uint fontAttributeFlags = 0;
-        if ( m_fontDlg->getSubScript() )
-            fontAttributeFlags |= KoFontDia::FontAttributeSubscript;
-        if( m_fontDlg->getSuperScript() )
-            fontAttributeFlags |= KoFontDia::FontAttributeSuperScript;
-        if( m_fontDlg->getShadowText() )
-            fontAttributeFlags |= KoFontDia::FontAttributeShadowText;
-        if( m_fontDlg->getWordByWord() )
-            fontAttributeFlags |= KoFontDia::FontAttributeWordByWord;
-        if( m_fontDlg->getHyphenation() )
-            fontAttributeFlags |= KoFontDia::FontAttributeHyphenation;
         KMacroCommand *globalCmd = new KMacroCommand(i18n("Change Font"));
         QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
         QPtrListIterator<KoTextFormatInterface> it( lst );
         for ( ; it.current() ; ++it )
         {
-            KCommand *cmd = it.current()->setFontCommand(m_fontDlg->getNewFont(),
-                                                         fontAttributeFlags,
-                                                         m_fontDlg->color(),
-                                                         m_fontDlg->backGroundColor(),
-                                                         m_fontDlg->underlineColor(),
-                                                         m_fontDlg->getUnderlineLineStyle(),
-                                                         m_fontDlg->getUnderlineLineType(),
-                                                         m_fontDlg->getStrikeOutLineType(),
-                                                         m_fontDlg->getStrikeOutLineStyle(),
-                                                         m_fontDlg->getFontAttribute(),
-                                                         m_fontDlg->getRelativeTextSize(),
-                                                         m_fontDlg->getOffsetFromBaseLine(),
-
-                                                         m_fontDlg->getLanguage(),
-                                                         flags);
+            KoTextFormat newFormat = m_fontDlg->newFormat();
+            KCommand *cmd = it.current()->setFormatCommand( &newFormat, flags, true);
             if (cmd)
                 globalCmd->addCommand(cmd);
         }
@@ -3435,7 +3385,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
         m_paragDlg = new KoParagDia( this, "",
                                      KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                      KoParagDia::PD_BORDERS |
-                                     KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS | KoParagDia::PD_SHADOW, m_doc->getUnit(),edit->textFrameSet()->frame(0)->width() ,(!edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager()), edit->frameSet()->isFootEndNote());
+                                     KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, m_doc->getUnit(),edit->textFrameSet()->frame(0)->width() ,(!edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager()), edit->frameSet()->isFootEndNote());
         m_paragDlg->setCaption( i18n( "Paragraph Settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
@@ -3588,18 +3538,6 @@ void KWView::slotApplyParag()
         }
     }
 
-    if( m_paragDlg->isShadowChanged())
-    {
-        cmd = edit->setShadowCommand( m_paragDlg->shadowDistance(),
-                                      m_paragDlg->shadowDirection(),
-                                      m_paragDlg->shadowColor() );
-        if(cmd)
-        {
-            if ( !macroCommand )
-                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
-            macroCommand->addCommand(cmd);
-        }
-    }
     if(macroCommand)
         m_doc->addCommand(macroCommand);
     // Set "oldLayout" in KoParagDia from the current paragraph's settings

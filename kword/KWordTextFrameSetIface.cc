@@ -257,7 +257,7 @@ bool KWordTextFrameSetIface::isProtectContent() const
     return m_frametext->textObject()->protectContent();
 }
 
-
+/*
 bool KWordTextFrameSetIface::textShadow() const
 {
     return m_frametext->textObject()->textShadow();
@@ -268,6 +268,7 @@ void KWordTextFrameSetIface::setTextShadow( bool b )
     KCommand *cmd=m_frametext->textObject()->setShadowTextCommand( b );
     delete cmd;
 }
+*/
 
 double KWordTextFrameSetIface::relativeTextSize() const
 {
@@ -298,10 +299,10 @@ QString KWordTextFrameSetIface::fontAttibute()const
 
 QString KWordTextFrameSetIface::underlineLineStyle() const
 {
-    return KoTextFormat::underlineStyleToString( m_frametext->textObject()->underlineLineStyle() );
+    return KoTextFormat::underlineStyleToString( m_frametext->textObject()->underlineStyle() );
 }
 
 QString KWordTextFrameSetIface::strikeOutLineStyle()const
 {
-    return KoTextFormat::strikeOutStyleToString( m_frametext->textObject()->strikeOutLineStyle() );
+    return KoTextFormat::strikeOutStyleToString( m_frametext->textObject()->strikeOutStyle() );
 }
