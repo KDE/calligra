@@ -5,6 +5,7 @@ libkdchart_a_SOURCES = KDChartAreaPainter.cpp	\
 			KDChartAxisParams.cpp	\
 			KDChartBarPainter.cpp	\
 			KDChart.cpp			\
+			KDChartData.cpp			\
 			KDChartHiLoPainter.cpp	\
 			KDChartLinesPainter.cpp	\
 			KDChartPainter.cpp		\
