@@ -1,32 +1,24 @@
-noinst_LTLIBRARIES = libkrosspythontest.la
+noinst_PROGRAMS = krosspythontest
 
-libkrosspythontest_la_SOURCES = test.cpp
-libkrosspythontest_la_LDFLAGS = $(PYTHON_FLAGS) $(all_libraries) -Wnounresolved
-
-libkrosspythontest_la_LIBADD = \
+krosspythontest_SOURCES = test.cpp
+    
+krosspythontest_LDADD = \
     $(LIB_QT) \
     $(LIB_KDECORE) \
     ../CXX/libkrosspythoncxx.la \
     ../kexidb/libkrosspythonkexidb.la \
     ../main/libkrosspythonmain.la \
-    $(KEXI_LIB) \
+    $(top_builddir)/kexi/kexidb/libkexidb.la \
     $(PYTHON_LIB)
-
+ 
+INCLUDES = -I$(top_srcdir)/kexi $(PYTHON_INCLUDE) $(all_includes)
+    
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
-libkrosspythontest_la_METASOURCES = AUTO
+krosspythontest_LDFLAGS = ${PYTHON_FLAGS} $(all_libraries) $(KDE_RPATH)
+#AM_CPPFLAGS = $(all_includes)
 
 SUBDIRS = .
 
-INCLUDES = \
-    -I$(top_srcdir)/test \
-    -I$(top_srcdir)/CXX \
-    -I$(top_srcdir)/kexidb \
-    -I$(top_srcdir)/main \
-    $(PYTHON_INCLUDE) \
-    $(KEXI_INCLUDE) \
-    $(all_includes)
+METASOURCES = AUTO
 
-clean:
-	@rm -f *.o 2> /dev/null
-	@rm -f $(BIN) 2> /dev/null

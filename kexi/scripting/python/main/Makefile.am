@@ -11,7 +11,7 @@ libkrosspythonmain_la_LIBADD = \
     $(LIB_KDECORE) \
     ../CXX/libkrosspythoncxx.la \
     ../kexidb/libkrosspythonkexidb.la \
-    $(KEXI_LIB) \
+    $(top_builddir)/kexi/kexidb/libkexidb.la \
     $(PYTHON_LIB)
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
@@ -20,13 +20,5 @@ libkrosspythonmain_la_METASOURCES = AUTO
 
 SUBDIRS = .
 
-INCLUDES = \
-    -I$(top_srcdir)/CXX \
-    -I$(top_srcdir)/kexidb \
-    $(PYTHON_INCLUDE) \
-    $(KEXI_INCLUDE) \
-    $(all_includes)
+INCLUDES = -I$(top_srcdir)/kexi $(PYTHON_INCLUDE) $(all_includes)
 
-clean:
-	@rm -f *.o 2> /dev/null
-	@rm -f $(BIN) 2> /dev/null
