@@ -56,7 +56,7 @@ public:
 
 private slots:
     void slotTextChanged( const QString& text );
-
+    void  slotCompletionModeChanged(KGlobalSettings::Completion _completion);
 protected:
     void resizeEvent( QResizeEvent* );
     /**

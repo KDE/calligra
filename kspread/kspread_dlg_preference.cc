@@ -391,7 +391,8 @@ miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name 
   typeCompletion->insertStringList(listType);
   typeCompletion->setCurrentItem(0);
   lay1->addWidget(typeCompletion);
-
+  comboChanged=false;
+  connect(typeCompletion,SIGNAL(activated( const QString & )),this,SLOT(slotTextComboChanged(const QString &)));
 
   valIndent=new KIntNumInput(_indent, tmpQGroupBox , 10);
   valIndent->setRange(1, 100, 1);
@@ -437,9 +438,21 @@ miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name 
 
 }
 
+void miscParameters::slotTextComboChanged(const QString &)
+{
+  comboChanged=true;
+}
+
 void miscParameters::initComboBox()
 {
-switch( m_pView->doc()->completionMode( ))
+  KGlobalSettings::Completion tmpCompletion=KGlobalSettings::CompletionAuto;
+  if( config->hasGroup("Parameters" ))
+    {
+      config->setGroup( "Parameters" );
+      tmpCompletion=( KGlobalSettings::Completion)config->readNumEntry( "Completion Mode" ,KGlobalSettings::CompletionAuto) ;
+      config->writeEntry( "Completion Mode", (int)tmpCompletion);
+    }
+switch(tmpCompletion )
         {
         case  KGlobalSettings::CompletionNone:
                 typeCompletion->setCurrentItem(0);
@@ -539,7 +552,7 @@ switch(typeCompletion->currentItem())
         }
 
 
-if(tmpCompletion!=m_pView->doc()->completionMode())
+if(comboChanged)
         {
         m_pView->doc()->setCompletionMode(tmpCompletion);
         config->writeEntry( "Completion Mode", (int)tmpCompletion);

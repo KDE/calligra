@@ -47,6 +47,8 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
   setPalettePropagation( AllChildren );
 
   connect( m_pEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotTextChanged( const QString& ) ) );
+  connect( m_pEdit, SIGNAL(completionModeChanged( KGlobalSettings::Completion )),this,SLOT (slotCompletionModeChanged(KGlobalSettings::Completion)));
+
   // A choose should always start at the edited cell
   canvas()->setChooseMarkerRow( canvas()->markerRow() );
   canvas()->setChooseMarkerColumn( canvas()->markerColumn() );
@@ -57,6 +59,11 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
 KSpreadTextEditor::~KSpreadTextEditor()
 {
     canvas()->endChoose();
+}
+
+void KSpreadTextEditor::slotCompletionModeChanged(KGlobalSettings::Completion _completion)
+{
+  canvas()->view()->doc()->setCompletionMode( _completion );
 }
 
 void KSpreadTextEditor::slotTextChanged( const QString& t )

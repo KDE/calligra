@@ -89,6 +89,10 @@ public:
   void slotDefault();
 
   void initComboBox();
+
+public slots:
+  void slotTextComboChanged(const QString &);
+
 protected:
   KSpreadView* m_pView;
   KIntNumInput  *valIndent;
@@ -98,6 +102,7 @@ protected:
   QComboBox *typeOfMove;
   QCheckBox *msgError;
   QCheckBox *commentIndicator;
+  bool comboChanged;
 } ;
 
 class colorParameters : public QWidget
