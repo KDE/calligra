@@ -47,8 +47,8 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		TableSchema(const QString & name);
 		TableSchema();
 		virtual ~TableSchema();
-		QStringList primaryKeys() const;
-		bool hasPrimaryKeys() const;
+//		QStringList primaryKeys() const;
+//		bool hasPrimaryKeys() const;
 		
 //		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
 

@@ -32,6 +32,7 @@
 #include <kexidb/connectiondata.h>
 #include <kexidb/tableschema.h>
 #include <kexidb/queryschema.h>
+#include <kexidb/transaction.h>
 
 namespace KexiDB {
 
@@ -74,7 +75,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		bool isDatabaseUsed() { return m_is_connected && m_usedDatabase.isEmpty(); }
 		
 		/*! Disconnects to driver with given parameters. 
-			\return true if successfull. */
+		 Database (if used) is closed, and any active transactions 
+		 (if supported) are rolled back, so commit these before disconnecting,
+		 if you'd like to save your changes. */
 		bool disconnect();
 
 		/*! \return list of database names for opened connection. */
@@ -106,7 +109,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 like SQLite, when we know that dbName is the same as database file name. */
 		bool useDatabase( const QString &dbName = QString::null );
 
-		/*! Closes currently used database for this connection */
+		/*! Closes currently used database for this connection.
+		 Any active transactions (if supported) are rolled back,
+		 so commit these before closing, if you'd like to save your changes. */
 		bool closeDatabase();
 
 		/*! \return name of currently used database for this connection or empty string
@@ -134,10 +139,99 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 that are stored in currently used database. */
 		QValueList<int> objectIds(int objType);
 
-		bool beginTransaction();
-		bool commitTransaction();
-		bool rollbackTransaction();
-		bool duringTransaction();
+		/*! Creates new transaction handle and starts new transaction.
+		 \return KexiDB::Transaction object if transaction has been started 
+		 successfully, otherwise NULL. For drivers that allow single transaction per connection
+		 (Driver::features() && SingleTransactions) this method can be called one time,
+		 and then this single transaction will be default ( setDefaultTransaction() will be called).
+		 For drivers that allow multiple transactions per connection, no default transaction is set
+		 automatically in beginTransaction() method, you could do this by hand.
+		 \sa setDefaultTransaction(), defaultTransaction().
+		*/
+		Transaction beginTransaction();
+
+/*! \todo for nested transactions:
+		Tansaction* beginTransaction(transaction *parent_transaction);
+*/
+		/*! Commits transaction \a trans.
+		 If there is not \a trans argument passed, and there is default transaction 
+		 (obtained from defaultTransaction()) defined, this one will be commited.
+		 If default is not present, or any error occured, false is returned.
+		 
+		 On successfull commit, \a trans object will be destroyed.
+		 If this was default transaction, there is no default transaction for now.
+		*/
+		bool commitTransaction( Transaction trans = Transaction() );
+		
+		/*! Rollbacks transaction \a trans.
+		 If there is not \a trans argument passed, and there is default transaction 
+		 (obtained from defaultTransaction()) defined, this one will be rolled back.
+		 If default is not present, or any error occured, false is returned.
+			
+		 On successfull rollback, \a trans object will be destroyed.
+		 If this was default transaction, there is no default transaction for now.
+		*/
+		bool rollbackTransaction( Transaction trans = Transaction() );
+		
+		/*! \return handle for default transaction for this connection
+		 or NULL if there is no such a transaction defined. 
+		 If transactions are supported: Any operation on database (e.g. inserts)
+		 that is started without specifing transaction context, will be performed
+		 in the context of this transaction.
+		 
+		 Returned NULL doesn't mean that there is no transactions started at all.
+		 Default transaction can be defined automatically for some drivers --
+		 see beginTransaction(). 
+		 \sa KexiDB::Driver::transactionsSupported()
+		*/
+		Transaction& defaultTransaction() const;
+
+		/*! Sets default transaction that will be used as context for operations
+		 on data in opened database for this connection. */
+		void setDefaultTransaction(const Transaction& trans);
+		
+		/*! Returns set of handles of currently active transactions.
+		 Note that in multithreading environment some of these 
+		 transactions can be already inactive after calling this method.
+		 Use Transaction::active() to check that. Inactive transaction 
+		 handle is useless and can be safely dropped.
+		*/
+		const QValueList<Transaction>& transactions();
+//js: PROBABLY REMOVE:		bool duringTransaction();
+
+		/*! \return true if "auto commit" option is on. 
+
+		 When auto commit is on (the default on for any new Conenction object),
+		 every sql functional statement (statement that changes 
+		 data in the database implicitly starts a new transaction. 
+		 This transaction is automatically commited 
+		 after successfull statement execution or rolled back on error.
+		 
+		 For drivers that do not support transactions (see Driver::features())
+		 this method shouldn't be called because it does nothing ans always returns false.
+		 
+		 No internal KexiDB object should changes this option, although auto commit's
+		 behaviour depends on database engine's specifics. Engines that support only single
+		 transaction per connection (see Driver::SingleTransactions),
+		 use this single connection for autocommiting, so if there is already transaction 
+		 started by the KexiDB user program (with beginTransaction()), this transaction 
+		 is commited before any sql functional statement execution. In this situation
+		 default transaction is also affected (see defaultTransaction()).
+		 
+		 Only for drivers that support nested transactions (Driver::NestedTransactions),
+		 autocommiting works independently from previously started transaction,
+		 
+		 For other drivers set this option off if you need use transaction 
+		 for grouping more statements together.
+		  
+		 NOTE: nested transactions are not yet implemented in KexiDB API.
+		*/
+		bool autoCommit() const;
+
+		/*! Changes auto commit option. This does not affect currently started transactions.
+		 This option can be changed even when connection is not established.
+		 \sa autoCommit() */
+		bool setAutoCommit(bool on);
 
 		/*! driver-specific string escaping */
 		virtual QString escapeString(const QString& str) const = 0;
@@ -247,17 +341,60 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		QString queryStatement( const KexiDB::QuerySchema& querySchema );
 
 		virtual bool drv_createTable( const KexiDB::TableSchema& tableSchema );
-		/* Executes query \a statement and returns resulting rows 
-			(used mostly for SELECT query). */
+//		/*! Executes query \a statement and returns resulting rows 
+//			(used mostly for SELECT query). */
 //		virtual bool drv_executeQuery( const QString& statement ) = 0;
 		/* Executes query \a statement, but without returning resulting 
 			rows (used mostly for functional queries). */
 		virtual bool drv_executeSQL( const QString& statement ) = 0;
 
-		virtual bool drv_beginTransaction();
-		virtual bool drv_commitTransaction();
-		virtual bool drv_rollbackTransaction();
-		virtual bool drv_duringTransaction();
+		/*! Note for driver developers: begins new transaction
+		 and returns handle to it. Default implementation just
+		 executes "BEGIN" sql statement and returns just empty data (TransactionData object).
+		 
+		 Drivers that do not support transactions (see Driver::features())
+		 do never call this method.
+		 Reimplement this method if you need to do something more 
+		 (e.g. if you driver will support multiple transactions per connection).
+		 Make subclass of TransactionData (declared in transaction.h)
+		 and return object of this subclass.
+		 You should return NULL if any error occured.
+		 Do not check anything in connection (isConnected(), etc.) - all is already done.
+		*/
+		virtual TransactionData* drv_beginTransaction();
+		
+		/*! Note for driver developers: begins new transaction
+		 and returns handle to it. Default implementation just
+		 executes "COMMIT" sql statement and returns true on success.
+		 
+		 \sa drv_beginTransaction()
+		*/
+		virtual bool drv_commitTransaction(TransactionData* trans);
+		
+		/*! Note for driver developers: begins new transaction
+		 and returns handle to it. Default implementation just
+		 executes "ROLLBACK" sql statement and returns true on success.
+		 
+		 \sa drv_beginTransaction()
+		*/
+		virtual bool drv_rollbackTransaction(TransactionData* trans);
+
+		/*! Changes autocommiting option for established connection.
+		 \return true on success.
+		 
+		 Note for driver developers: reimplement this only if your engine
+		 allows to set special auto commit option (like "SET AUTOCOMMIT=.." in MySQL).
+		 If not, auto commit behaviour will be simulated if at least single 
+		 transactions per connection are supported by the engine.
+		 Do not set any internal flags for autocommiting -- it is already done inside
+		 setAutoCommit().
+		 
+		 Default implementation does nothing with connection, just returns true.
+		 
+		 \sa drv_beginTransaction(), autoCommit(), setAutoCommit()
+		*/
+		virtual bool drv_setAutoCommit(bool on);
+//		virtual bool drv_duringTransaction();
 
 		/*! Creates cursor data and initializes cursor 
 			using \a statement for later data retrieval. */
@@ -274,6 +411,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			corresponding to given object. */
 		bool setupObjectSchemaData( const KexiDB::RecordData &data, SchemaData &sdata );
 //		bool setupObjectSchemaData( const KexiDB::Cursor *cursor, SchemaData *sdata );
+		
 		/*! Setups full table schema for table \a t using 'kexi__*' system tables. 
 			Used internally by tableSchema() methods. */
 		KexiDB::TableSchema* setupTableSchema( const KexiDB::RecordData &data );//KexiDB::Cursor *table_cur );
@@ -282,7 +420,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		ConnectionData m_data;
 		QString m_name;
 		bool m_is_connected : 1;
-		bool m_transaction : 1;
+		bool m_autoCommit : 1;
 
 		QString m_usedDatabase; //! database name that is opened now
 

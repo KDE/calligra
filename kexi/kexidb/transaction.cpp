@@ -17,23 +17,123 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "transaction.h"
+#include <kexidb/transaction.h>
+#include <kexidb/connection.h>
+
+#include <kdebug.h>
 
 #include <assert.h>
 
 using namespace KexiDB;
 
-
-Transaction::Transaction(Connection* conn)
-	: m_conn(conn)
+TransactionData::TransactionData(Connection *conn)
+ : m_conn(conn)
+ , m_active(true)
+ , refcount(1)
 {
-	assert(m_conn);
-	m_conn->beginTransaction();
+	assert(conn);
+}
+
+TransactionData::~TransactionData()
+{
+}
+
+//---------------------------------------------------
+
+/*
+class Transaction::Private
+{
+	public:
+		Transaction::Private()
+		: data(0)
+		{
+		}
+		~Transaction::Private()
+		{
+			delete data;
+		}
+		
+		Connection *conn;
+		TransactionData *data;
+};*/
+//---------------------------------------------------
+
+Transaction::Transaction()
+	: QObject(0,"kexidb_transaction")
+	, m_data(0)
+{
+}
+
+Transaction::Transaction( const Transaction& trans )
+	: QObject(0,"kexidb_transaction")
+	, m_data(trans.m_data)
+{
+	if (m_data)
+		m_data->refcount++;
 }
 
 Transaction::~Transaction()
 {
-	if (m_conn->duringTransaction())
-		m_conn->rollbackTransaction();
+	if (m_data) {
+		m_data->refcount--;
+		KexiDBDbg << "~Transaction(): m_data->refcount==" << m_data->refcount << endl;
+		if (m_data->refcount==0)
+			delete m_data;
+	}
+	else {
+		KexiDBDbg << "~Transaction(): null" << endl;
+	}
+}
+
+Transaction& Transaction::operator=(const Transaction& trans)
+{
+	if (m_data)
+		m_data->refcount--;
+	m_data = trans.m_data;
+	if (m_data)
+		m_data->refcount++;
+	return *this;
+}
+
+bool Transaction::operator==(const Transaction& trans) const
+{
+	return m_data==trans.m_data;
+}
+
+Connection* Transaction::connection() const
+{
+	return m_data ? m_data->m_conn : 0;
+}
+
+bool Transaction::active() const
+{
+	return m_data && m_data->m_active;
+}
+
+//---------------------------------------------------
+
+TransactionGuard::TransactionGuard( Connection* conn )
+ : m_trans( conn->beginTransaction() )
+{
+	assert(conn);
+}
+
+TransactionGuard::TransactionGuard( const Transaction& trans )
+ : m_trans(trans)
+{
+}
+
+TransactionGuard::~TransactionGuard()
+{
+	if (m_trans.active() && m_trans.connection())
+		m_trans.connection()->rollbackTransaction(m_trans);
+}
+
+bool TransactionGuard::commit()
+{
+	if (m_trans.active() && m_trans.connection()) {
+		return m_trans.connection()->commitTransaction(m_trans);
+	}
+	return false;
 }
 

@@ -50,7 +50,8 @@ SQLiteDriver::SQLiteDriver( QObject *parent, const char *name, const QStringList
 {
 	m_driverName = "SQLite";
 	m_isFileDriver = true;
-	m_features = Transactions | CursorForward;
+	m_isDBOpenedAfterCreate = true;
+	m_features = SingleTransactions | CursorForward;
 
 	m_typeNames.resize(Field::LastType + 1);
 	m_typeNames[Field::Byte]="Byte";

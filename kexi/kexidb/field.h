@@ -158,14 +158,14 @@ class KEXI_DB_EXPORT Field
 		 */
 		bool		isNotNull() const { return constraints() & NotNull; }
 		/*!
-		 *	@returns the constraints on this column
+		 *	@returns the constraints on this field
 		 */
 		virtual int		constraints() const;
 
-		/*!
-		 *	@returns the table.column that this field references or QString::null if !foreign_key()
-		 */
-		virtual QString		references() const;
+//js: we have m_table for this		/*!
+//		 *	@returns the table.column that this field references or QString::null if !foreign_key()
+//		 */
+//		virtual QString		references() const;
 
 		int options() const { return m_options; }
 		void setOptions(int options) { m_options = options; }
@@ -206,7 +206,7 @@ class KEXI_DB_EXPORT Field
 //		QString m_table;
 		TableSchema *m_table;
 		QString m_name;
-		QString m_reference;
+//		QString m_reference;
 		Type m_type;
 		int m_constraints;
 		int m_length;

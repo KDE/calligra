@@ -29,6 +29,7 @@
 #include <kexidb/global.h>
 
 #include <qfileinfo.h>
+#include <qguardedptr.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -37,25 +38,41 @@
 
 using namespace KexiDB;
 
+class Connection::Private
+{
+	public:
+		Private() {
+		}
+		/*! Default transaction handle. 
+		If transactions are supported: Any operation on database (e.g. inserts)
+		that is started without specifing transaction context, will be performed
+		in the context of this transaction. */
+		Transaction m_default_trans;
+		QValueList<Transaction> m_transactions;
+};
+		
 Connection::Connection( Driver *driver, const ConnectionData &conn_data )
 	: QObject()
 	,KexiDB::Object()
 	,m_driver(driver)
 	,m_data(conn_data)
 	,m_is_connected(false)
-	,m_transaction(false)
+	,m_autoCommit(true)
+	,d(new Private())
 {
 	m_tables.setAutoDelete(true);
-	m_queries_byname.setAutoDelete(false);
+	m_tables_byname.setAutoDelete(false);//m_tables is owner, not me
 	m_queries.setAutoDelete(true);
-	m_tables_byname.setAutoDelete(false);
+	m_queries_byname.setAutoDelete(false);//m_queries is owner, not me
 	m_cursors.setAutoDelete(true);
+//	d->m_transactions.setAutoDelete(true);
 	//reasonable sizes: TODO
 	m_tables.resize(101);
 	m_queries.resize(101);
 	m_tables_byname.resize(101);
 	m_queries_byname.resize(101);
 	m_cursors.resize(101);
+//	d->m_transactions.resize(101);//woohoo! so many transactions?
 }
 
 void Connection::destroy()
@@ -68,6 +85,7 @@ void Connection::destroy()
 Connection::~Connection()
 {
 	qDebug("Connection::~Connection()");
+	delete d;
 /*	if (m_driver) {
 		if (m_is_connected) {
 			//delete own table schemas
@@ -186,6 +204,15 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 	return drv_databaseExists(dbName, ignoreErrors);
 }
 
+#define createDatabase_CLOSE \
+	{ if (!closeDatabase()) { \
+		setError(i18n("Database '%1' created but could not be closed after creation.").arg(dbName) ); \
+		return false; \
+	} }
+
+#define createDatabase_ERROR \
+	{ createDatabase_CLOSE; return false; }
+
 /*! See doc/dev/kexidb_issues.txt document, chapter "Table schema, query schema, etc. storage"
  for database schema documentation (detailed description of kexi__* 'system' tables).
 */
@@ -214,12 +241,33 @@ bool Connection::createDatabase( const QString &dbName )
 	}
 
 	//low-level create
-	if (!drv_createDatabase( dbName ))
+	if (!drv_createDatabase( dbName )) {
+		setError(i18n("Error creating database '%1' on the server.").arg(dbName) );
 		return false;
+	}
 
-	Transaction trans(this);
-	if (error())
-		return false;
+	if (!m_driver->m_isDBOpenedAfterCreate) {
+		//db need to be opened
+		if (!useDatabase( dbName )) {
+			setError(i18n("Database '%1' created but could not be opened.").arg(dbName) );
+			return false;
+		}
+	}
+	else {
+		//just for the rule
+		m_usedDatabase = my_dbName;
+	}
+		
+	Transaction trans;
+	if (m_driver->transactionsSupported()) {
+		trans = beginTransaction();
+		if (!trans.active())
+			return false;
+	}
+//not needed since closeDatabase() rollbacks transaction: TransactionGuard trans_g(this);
+//	if (error())
+//		return false;
+	
 	//-create system tables
 	KexiDB::TableSchema t_objects("kexi__objects");
 	t_objects.addField( new Field("o_id", Field::Integer, Field::PrimaryKey | Field::AutoInc, Field::Unsigned) )
@@ -228,7 +276,7 @@ bool Connection::createDatabase( const QString &dbName )
 	.addField( new Field("o_caption", Field::Text ) )
 	.addField( new Field("o_help", Field::LongText ) );
 	if (!drv_createTable( t_objects ))
-		return false;
+		createDatabase_ERROR;
 
 	KexiDB::TableSchema t_fields("kexi__fields");
 	t_fields.addField( new Field("t_id", Field::Integer, 0, Field::Unsigned) )
@@ -244,20 +292,20 @@ bool Connection::createDatabase( const QString &dbName )
 	.addField( new Field("f_caption", Field::Text ) )
 	.addField( new Field("f_help", Field::LongText ) );
 	if (!drv_createTable( t_fields ))
-		return false;
+		createDatabase_ERROR;
 
 	KexiDB::TableSchema t_querydata("kexi__querydata");
 	t_querydata.addField( new Field("q_id", Field::Integer, 0, Field::Unsigned) )
 	.addField( new Field("q_sql", Field::LongText ) )
 	.addField( new Field("q_valid", Field::Boolean ) );
 	if (!drv_createTable( t_querydata ))
-		return false;
+		createDatabase_ERROR;
 
 	KexiDB::TableSchema t_db("kexi__db");
 	t_db.addField( new Field("db_property", Field::Text, Field::NoConstraints, Field::NoOptions, 32 ) )
 	.addField( new Field("db_value", Field::LongText ) );
 	if (!drv_createTable( t_db ))
-		return false;
+		createDatabase_ERROR;
 
 	//insert KexiDB version info:
 	//property="kexidb_major_ver", value=<major_version>
@@ -265,11 +313,18 @@ bool Connection::createDatabase( const QString &dbName )
 	//TODO(js)
 	if (   !insertRecord(t_db, "kexidb_major_ver", KexiDB::majorVersion())
 		|| !insertRecord(t_db, "kexidb_minor_ver", KexiDB::minorVersion()))
-		return false;
+		createDatabase_ERROR;
 
-	commitTransaction();
+//not needed	trans_g.commit();
+	if (trans.active() && !commitTransaction(trans))
+		createDatabase_ERROR;
+	
+	createDatabase_CLOSE;
 	return true;
 }
+
+#undef createDatabase_CLOSE
+#undef createDatabase_ERROR
 
 bool Connection::useDatabase( const QString &dbName )
 {
@@ -308,17 +363,33 @@ bool Connection::closeDatabase()
 	if (!checkConnected())
 		return true;
 
+	bool ret = true;
+
+/*! \todo (js) add CLEVER algoright here for nested transactions */
+	if (m_driver->transactionsSupported()) {
+		//rollback all transactions
+		QValueList<Transaction>::iterator it;
+		for (it=d->m_transactions.begin(); it!= d->m_transactions.end(); ++it) {
+			if (!rollbackTransaction(*it)) {//rollback as much as you can, don't stop on prev. errors
+				ret = false;
+			}
+			else {
+				KexiDBDbg << "Connection::closeDatabase(): transaction rolled back!" << endl;
+			}
+		}
+		d->m_transactions.clear(); //free trans. data
+	}
+		
 	if (!drv_closeDatabase())
 		return false;
 
 	m_usedDatabase = "";
-	KexiDBDbg << "Connection::closeDatabase() ok" << endl;
-	return true;
+	KexiDBDbg << "Connection::closeDatabase(): " << ret << endl;
+	return ret;
 }
 
 bool Connection::dropDatabase( const QString &dbName )
 {
-	clearError();
 	QString dbToDrop;
 	if (dbName.isEmpty() && m_usedDatabase.isEmpty()) {
 		if (!m_driver->isFileDriver())
@@ -486,70 +557,156 @@ bool Connection::drv_createTable( const KexiDB::TableSchema& tableSchema )
 	return drv_executeSQL(sql);
 }
 
-bool Connection::beginTransaction()
+#define SET_ERR_TRANS_NOT_SUPP \
+	{ setError(ERR_UNSUPPORTED_DRV_FEATURE, \
+	 i18n("Transactions are not supported for \"%1\" driver.").arg(m_driver->driverName() )); }
+
+#define SET_BEGIN_TR_ERROR \
+	 { if (!error()) \
+		setError(ERR_ROLLBACK_OR_COMMIT_TRANSACTION, i18n("Begin transaction failed")); }
+
+Transaction Connection::beginTransaction()
 {
-	if (!(m_driver->m_features & Driver::Transactions))
-		return true;
-	if (m_transaction) {
-		setError(ERR_TRANSACTION_ACTIVE, i18n("Transaction already started.") );
-		return false;
+	if (!checkConnected())
+		return Transaction();
+	Transaction trans;
+	if (m_driver->m_features & Driver::SingleTransactions) {
+		if (d->m_default_trans.active()) {
+			setError(ERR_TRANSACTION_ACTIVE, i18n("Transaction already started.") );
+			return Transaction();
+		}
+		if (!(trans.m_data = drv_beginTransaction())) {
+			SET_BEGIN_TR_ERROR;
+			return Transaction();
+		}
+		d->m_default_trans = trans;
+		d->m_transactions.append(trans);
+		return trans;
 	}
-	if (drv_beginTransaction()) {
-		m_transaction = true;
-		return true;
+	else if (m_driver->m_features & Driver::MultipleTransactions) {
+		if (!(trans.m_data = drv_beginTransaction())) {
+			SET_BEGIN_TR_ERROR;
+			return Transaction();
+		}
+		d->m_transactions.append(trans);
+		return trans;
 	}
-	return false;
+	
+	SET_ERR_TRANS_NOT_SUPP;
+	return Transaction();
 }
 
-bool Connection::commitTransaction()
+bool Connection::commitTransaction(const Transaction trans)
 {
-	if (!(m_driver->m_features & Driver::Transactions))
-		return true;
-	if (!m_transaction) {
-		setError(ERR_NO_TRANSACTION_ACTIVE, i18n("Transaction not started.") );
+	if (!checkConnected())
 		return false;
+	if (!m_driver->transactionsSupported())
+		SET_ERR_TRANS_NOT_SUPP;
+	Transaction t = trans;
+	if (!t.active()) { //try default tr.
+		if (!d->m_default_trans.active()) {
+			setError(ERR_NO_TRANSACTION_ACTIVE, i18n("Transaction not started.") );
+			return false;
+		}
+		t = d->m_default_trans;
+		d->m_default_trans = Transaction(); //now: no default tr.
 	}
-	bool ret = drv_commitTransaction();
-	m_transaction = false;
+	bool ret = drv_commitTransaction(t.m_data);
+	d->m_transactions.remove(t);
+	if (!ret && !error())
+		setError(ERR_ROLLBACK_OR_COMMIT_TRANSACTION, i18n("Error on commit transaction"));
 	return ret;
 }
 
-bool Connection::rollbackTransaction()
+bool Connection::rollbackTransaction(const Transaction trans)
 {
-	if (!(m_driver->m_features & Driver::Transactions))
-		return true;
-	if (!m_transaction) {
-		setError(ERR_NO_TRANSACTION_ACTIVE, i18n("Transaction not started.") );
+	if (!checkConnected())
 		return false;
+	if (!m_driver->transactionsSupported())
+		SET_ERR_TRANS_NOT_SUPP;
+	Transaction t = trans;
+	if (!t.active()) { //try default tr.
+		if (d->m_default_trans.active()) {
+			setError(ERR_NO_TRANSACTION_ACTIVE, i18n("Transaction not started.") );
+			return false;
+		}
+		t = d->m_default_trans;
+		d->m_default_trans = Transaction(); //now: no default tr.
 	}
-	bool ret = drv_rollbackTransaction();
-	m_transaction = false;
+	bool ret = drv_rollbackTransaction(t.m_data);
+	d->m_transactions.remove(t);
+	if (!ret && !error())
+		setError(ERR_ROLLBACK_OR_COMMIT_TRANSACTION, i18n("Error on rollback transaction"));
 	return ret;
 }
 
-bool Connection::duringTransaction()
+#undef SET_ERR_TRANS_NOT_SUPP
+#undef SET_BEGIN_TR_ERROR
+
+/*bool Connection::duringTransaction()
 {
 	return drv_duringTransaction();
-}
+}*/
 
-bool Connection::drv_beginTransaction()
+Transaction& Connection::defaultTransaction() const
 {
-	return drv_executeSQL( "BEGIN" );
+	return d->m_default_trans;
 }
 
-bool Connection::drv_commitTransaction()
+void Connection::setDefaultTransaction(const Transaction& trans)
+{
+	if (!checkConnected())
+		return;
+	if (!trans.active() || !m_driver->transactionsSupported())
+		return;
+	d->m_default_trans = trans;
+}
+
+const QValueList<Transaction>& Connection::transactions()
+{
+	return d->m_transactions;
+}
+
+bool Connection::autoCommit() const
+{
+	return m_autoCommit;
+}
+
+bool Connection::setAutoCommit(bool on)
+{
+	if (m_autoCommit == on)
+		return true;
+	if (!drv_setAutoCommit(on))
+		return false;
+	m_autoCommit = on;
+	return true;
+}
+
+TransactionData* Connection::drv_beginTransaction()
+{
+	if (!drv_executeSQL( "BEGIN" ))
+		return 0;
+	return new TransactionData(this);
+}
+
+bool Connection::drv_commitTransaction(TransactionData *)
 {
 	return drv_executeSQL( "COMMIT" );
 }
 
-bool Connection::drv_rollbackTransaction()
+bool Connection::drv_rollbackTransaction(TransactionData *)
 {
 	return drv_executeSQL( "ROLLBACK" );
 }
 
-bool Connection::drv_duringTransaction()
+/*bool Connection::drv_duringTransaction()
 {
 	return m_transaction;
+}*/
+
+bool Connection::drv_setAutoCommit(bool on)
+{
+	return true;
 }
 
 Cursor* Connection::executeQuery( const QString& statement, uint cursor_options )

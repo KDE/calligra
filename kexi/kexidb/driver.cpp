@@ -39,6 +39,7 @@ Driver::Driver( QObject *parent, const char *name, const QStringList & )
 	: QObject( parent, name )
 	, Object()
 	, m_isFileDriver(false)
+	, m_isDBOpenedAfterCreate(false)
 	, m_features(NoFeatures)
 {
 	m_connections.setAutoDelete(true);

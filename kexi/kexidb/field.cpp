@@ -35,7 +35,7 @@ Field::Field()
 	m_table = 0;
 	m_name = "";
 	setConstraints(NoConstraints);
-	m_reference = "";
+//	m_reference = "";
 	m_type = InvalidType;
 	m_length = 0;
 	m_precision = 0;
@@ -51,7 +51,7 @@ Field::Field(TableSchema *tableSchema)
 	m_table = tableSchema;
 	m_name = "";
 	setConstraints(NoConstraints);
-	m_reference = "";
+//	m_reference = "";
 	m_type = InvalidType;
 	m_length = 0;
 	m_precision = 0;
@@ -239,11 +239,11 @@ int Field::constraints() const
 	return m_constraints;
 }
 
-QString
+/*QString
 Field::references() const
 {
 	return m_reference;
-}
+}*/
 
 int
 Field::precision() const

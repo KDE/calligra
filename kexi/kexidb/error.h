@@ -34,7 +34,9 @@
 #define ERR_DB_SPECIFIC 9
 #define ERR_CURSOR_NOT_OPEN 10
 #define ERR_SINGLE_DB_NAME_MISMATCH 11
-#define ERR_CURSOR_RECORD_FETCHING 12 //! eg. for Cursor::drv_getNextRecord()
+#define ERR_CURSOR_RECORD_FETCHING 12 //!< eg. for Cursor::drv_getNextRecord()
+#define ERR_UNSUPPORTED_DRV_FEATURE 13 //!< given driver's feature is unsupported (eg. transactins)
+#define ERR_ROLLBACK_OR_COMMIT_TRANSACTION 14 //!< error during transaction rollback or commit
 
-#define ERR_OTHER 0xffff //! use this if you have not (yet?) the name for given error 
+#define ERR_OTHER 0xffff //!< use this if you have not (yet?) the name for given error 
 #endif

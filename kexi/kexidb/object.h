@@ -47,6 +47,12 @@ class KEXI_DB_EXPORT Object
 		but also adviced to set descriptive message \a msg.
 		Use this in KexiDB::Object subclasses. */
 		void setError(int code,  const QString &msg = QString::null );
+
+		/* \overload void setError(int code,  const QString &msg = QString::null )
+		
+			Sets error code to ERR_OTHER. Use this if you don't care about setting error code.
+		*/
+		void setError( const QString &msg );
 		
 		/*! Copies the (localized) error message and code from other KexiDB::Object. */
 		void setError( KexiDB::Object *obj );

@@ -35,6 +35,13 @@ void Object::setError( int code, const QString &msg )
 	m_hasError = code!=ERR_NONE;
 }
 
+void Object::setError( const QString &msg )
+{
+	m_errno=ERR_OTHER;
+	m_errMsg = msg;
+	m_hasError = true;
+}
+
 void Object::setError( KexiDB::Object *obj )
 {
 	if (obj) {

@@ -38,32 +38,53 @@ class ConnectionInternal;
 class DriverManager;
 
 /*! This class is a prototype of the database driver.
-	Driver allows create new connections and groups these as a parent.
-	Before destrucion, connections are destructed.
+ Driver allows create new connections and groups these as a parent.
+ Before destrucion, connections are destructed.
 
 */
 class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 {
 	public:
+		/*! Features supported by driver (sum of few Features enum items). */
+		enum Features {
+			NoFeatures = 0,
+			//! if single trasactions are only supported
+			SingleTransactions = 1,   
+			//! if multiple concurent trasactions are supported
+			//! (this implies !SingleTransactions)
+			MultipleTransactions = 2, 
+//(js) NOT YET IN USE:
+			//! if nested trasactions are supported
+			//! (this implies !SingleTransactions 
+			//! and MultipleTransactions)
+			NestedTransactions = (MultipleTransactions+4),
+			//! if forward moving is supported for cursors
+			//! (if not available, no cursors available at all)
+			CursorForward = 8, 
+			//! if backward moving is supported for cursors
+			//! (this implies CursorForward)
+			CursorBackward = (CursorForward+16)
+		};
+		
 		virtual ~Driver();
 
 //		typedef QPtrList<Connection> ConnectionsList;
 
 		/*! Creates connection using \a conn_data as parameters. 
-			\return 0 and sets error message on error. */
+		 \return 0 and sets error message on error. */
 		Connection *createConnection( ConnectionData &conn_data );
 
 		/*! \return list of created connections. */
 		const QPtrList<Connection> connectionsList();
 
 		/*! \return connection \a conn , do not deletes it nor affect.
-			Returns 0 if \a conn is not owned by this driver.
-			After this, you are owner of \a conn object, so you should
-			eventually delete it. Better use Connection destructor. */
+		 Returns 0 if \a conn is not owned by this driver.
+		 After this, you are owner of \a conn object, so you should
+		 eventually delete it. Better use Connection destructor. */
 		Connection* removeConnection( Connection *conn );
 
 		/*! The name equal to the service name (X-Kexi-DriverName) 
-			stored in given service .desktop file. */
+		 stored in given service .desktop file. */
 		QString driverName() { return m_driverName; }
 
 		/*! Info about the driver as a service. */
@@ -73,31 +94,27 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		bool isFileDriver() { return m_isFileDriver; }
 
 		/*! \return true if \a n is a system object name, 
-			eg. name of build-in system tables that cannot be used by user,
-			and in most cases user even shouldn't see these. The list is specific for 
-			a given driver implementation. By default always returns false. 
-			\sa isSystemFieldName().
+		 eg. name of build-in system tables that cannot be used by user,
+		 and in most cases user even shouldn't see these. The list is specific for 
+		 a given driver implementation. By default always returns false. 
+		 \sa isSystemFieldName().
 		*/
 		virtual bool isSystemObjectName( const QString& n );
 
 		/*! \return true if \a n is a system field names, build-in system 
-			fields that cannot be used by user,
-			and in most cases user even shouldn't see these. The list is specific for 
-			a given driver implementation. By default always returns false.  
-			\sa isSystemObjectName().
+		 fields that cannot be used by user,
+		 and in most cases user even shouldn't see these. The list is specific for 
+		 a given driver implementation. By default always returns false.  
+		 \sa isSystemObjectName().
 		*/
 		virtual bool isSystemFieldName( const QString& n );
 
-		/*! Features supported by driver (sum of few Features enum items). */
-		enum Features {
-			NoFeatures = 0,
-			Transactions = 1, //! if trasactions are supported
-			CursorForward = 2, //! if forward moving is supported for cursors
-			CursorBackward = 4 //! if backward moving is supported for cursors
-		};
-
+		//! \return driver's features that are combination of Driver::Features enum.
 		int features() { return m_features; }
 
+		//! \return true if transaction are supported (single or multiple)
+		bool transactionsSupported() const { return m_features & (SingleTransactions | MultipleTransactions); }
+		
 		/*! SQL-implementation-dependent name of given type */
 		QString sqlTypeName(int id_t) { return m_typeNames[id_t]; }
 
@@ -106,9 +123,9 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 
 	protected:
 		/*! For reimplemenation: creates and returns connection object 
-			with additional structures specific for a given driver.
-			Connection object should inherit Connection and have a destructor 
-			that descructs all allocated specific conenction structures. */
+		 with additional structures specific for a given driver.
+		 Connection object should inherit Connection and have a destructor 
+		 that descructs all allocated specific conenction structures. */
 		virtual Connection *drv_createConnection( ConnectionData &conn_data ) = 0;
 //virtual ConnectionInternal* createConnectionInternalObject( Connection& conn ) = 0;
 
@@ -120,28 +137,33 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		DriverManager *m_manager;
 
 		/*! The name equal to the service name (X-Kexi-DriverName) 
-			stored in given service .desktop file. Set this in subclasses. */
+		 stored in given service .desktop file. Set this in subclasses. */
 		QString m_driverName;
 
 		/*! Info about the driver as a service. */
 		KService *m_service;
 
-		/*! Set this in subclass if driver is a file driver */
+		/*! Internal constant flag: Set this in subclass if driver is a file driver */
 		bool m_isFileDriver : 1;
 
+		/*! Internal constant flag: Set this in subclass if after successfull drv_createDatabased()
+		 database is in opened state (as after useDatabase()). For most engines this is not true. */
+		bool m_isDBOpenedAfterCreate : 1;
+
 		/*! List of system objects names, eg. build-in system tables that cannot be used by user,
-			and in most cases user even shouldn't see these.
-			The list contents is driver dependent (by default is empty) - fill this in subclass ctor. */
+		 and in most cases user even shouldn't see these.
+		 The list contents is driver dependent (by default is empty) - fill this in subclass ctor. */
 //		QStringList m_systemObjectNames;
 
 		/*! List of system fields names, build-in system fields that cannot be used by user,
-			and in most cases user even shouldn't see these.
-			The list contents is driver dependent (by default is empty) - fill this in subclass ctor. */
+		 and in most cases user even shouldn't see these.
+		 The list contents is driver dependent (by default is empty) - fill this in subclass ctor. */
 //		QStringList m_systemFieldNames;
 
-		/*! Features (like transactions, etc.) supported by this driver (sum of selected  Features enum items). 
-			This member should be filled in driver implementation's constructor 
-			(by default m_features==NoFeatures). */
+		/*! Features (like transactions, etc.) supported by this driver
+		 (sum of selected  Features enum items). 
+		 This member should be filled in driver implementation's constructor 
+		 (by default m_features==NoFeatures). */
 		int m_features;
 
 		//! real type names for this engine

@@ -20,23 +20,108 @@
 #ifndef KEXIDB_TRANSACTION_H
 #define KEXIDB_TRANSACTION_H
 
-#include <kexidb/connection.h>
+#include <qguardedptr.h>
 
 namespace KexiDB {
 
-/*! Helper class for using inside methods for given connection. 
-	Starts the transaction on ctor and rollbacks on destruction.
-	If transaction is committed or rolled back outside this class 
-	in the meantime, nothing happens on destruction.
+class Connection;
+
+/*! Internal prototype for storing transaction handles for Transaction object.
+ Note for driver developers: reimplement this class for driver that
+ support transaction handles.
 */
-class KEXI_DB_EXPORT Transaction
+class KEXI_DB_EXPORT TransactionData
 {
 	public:
-		Transaction( Connection* conn );
-		~Transaction();
+		TransactionData(Connection *conn);
+		~TransactionData();
+		
+		Connection *m_conn;
+		bool m_active : 1;
+		uint refcount;
+};
+
+/*! This class encapsulates transaction handle.
+	Transaction handle sql driver-dependent,
+	but on outside Transaction is visible as universal container 
+	for any handler implementation.
+	
+	Transaction is value-based, internal data (handle) structure
+	is reference-counted.
+*/
+class KEXI_DB_EXPORT Transaction : public QObject
+{
+	public:
+		/*! Constructs uninitialised transaction.
+		 Only in Conenction code it can be initialised */
+		Transaction();
+		
+		//! Copy ctor.
+		Transaction( const Transaction& trans );
+		
+		virtual ~Transaction();
+
+		Transaction& operator=(const Transaction& trans);
+
+		bool operator==(const Transaction& trans ) const;
+		
+		Connection* connection() const;
+		
+		/*! \return true if transaction is avtive (ie. started)
+		 Returns false also if transaction is uninitialised. */
+		bool active() const;
+	
+	protected:
+		
+		TransactionData *m_data;
+		
+	friend class Connection;
+};
+
+/*! Helper class for using inside methods for given connection. 
+	It can be used in two ways:
+	- start new transaction in constructor and rollback on destruction (1st constructor),
+	- use already started transaction and rollback on destruction (2nd constructor).
+	In any case, if transaction is committed or rolled back outside this TransactionGuard
+	object in the meantime, nothing happens on TransactionGuard destruction.
+	<code>
+	Example usage:
+	void myclas::my_method()
+	{
+		Transaction *transaction = connection->beginTransaction();
+		TransactionGuard tg(transaction);
+		...some code that operates inside started transaction...
+		if (something)
+			return //after return from this code block: tg will call
+		           //connection->rollbackTransaction() automatically
+		if (something_else)
+			transaction->commit();
+		//for now tg won't do anything because transaction does not exist
+	}
+	</code>
+*/
+class KEXI_DB_EXPORT TransactionGuard
+{
+	public:
+		/*! Constructor #1: Starts new transaction constructor for \a connection.
+		 Started transaction handle is available via transaction().*/
+		TransactionGuard( Connection* conn );
+		
+		/*! Constructor #2: Uses already started transaction. */
+		TransactionGuard( const Transaction& trans );
+
+		/*! Rollbacks not commited transaction. */
+		~TransactionGuard();
+	
+		/*! Comits the guarded transaction. 
+		 It is convenient shortcut to connection->commitTransaction(this->transaction()) */
+		bool commit();
+	
+		/*! Transaction that are controlled by this guard. */
+		const Transaction transaction() const { return m_trans; }
 
 	protected:
-		Connection *m_conn;
+		Transaction m_trans;
 };
 
 } //namespace KexiDB
