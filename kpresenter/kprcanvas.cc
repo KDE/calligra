@@ -1292,7 +1292,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
 	KPObject *kpobject;
 
-	if ( ( !mousePressed || ( !m_tmpHorizHelpline !=-1 && m_tmpVertHelpline != -1 && modType == MT_NONE ) )&&
+	if ( ( !mousePressed || ( m_tmpHorizHelpline !=-1 && m_tmpVertHelpline != -1 && modType == MT_NONE ) )&&
             ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
 	     toolEditMode == TEM_MOUSE  ) {
 	    bool cursorAlreadySet = false;
