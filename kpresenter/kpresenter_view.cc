@@ -6143,10 +6143,10 @@ void KPresenterView::changeZoomMenu( int zoom )
     QStringList lst;
     if(zoom>0)
     {
-        if( lst.contains( i18n( "Zoom to Width" ) ) == 0 )
-            lst << i18n( "Zoom to Width" );
-        if( lst.contains( i18n( "Zoom to Whole Slide" ) )==0)
-            lst << i18n( "Zoom to Whole Slide" );
+        if( lst.contains( i18n( "Width" ) ) == 0 )
+            lst << i18n( "Width" );
+        if( lst.contains( i18n( "Whole Slide" ) )==0)
+            lst << i18n( "Whole Slide" );
         QValueList<int> list;
         QString z;
         int val;
@@ -6173,8 +6173,8 @@ void KPresenterView::changeZoomMenu( int zoom )
     }
     else
     {
-        lst << i18n( "Zoom to Width" );
-        lst << i18n( "Zoom to Whole Slide" );
+        lst << i18n( "Width" );
+        lst << i18n( "Whole Slide" );
         lst << "33%";
         lst << "50%";
         lst << "75%";
@@ -6209,13 +6209,13 @@ void KPresenterView::viewZoom( const QString &s )
     QString z( s );
     bool ok=false;
     int zoom = 0;
-    if ( z == i18n("Zoom to Width") )
+    if ( z == i18n("Width") )
     {
         zoom = qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) /
                        (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth ) );
         ok = true;
     }
-    else if ( z == i18n("Zoom to Whole Slide") )
+    else if ( z == i18n("Whole Slide") )
     {
         zoom = getZoomEntirePage();
         ok = true;
