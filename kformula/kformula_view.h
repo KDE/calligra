@@ -21,7 +21,6 @@
 #ifndef __kformula_view_h__
 #define __kformula_view_h__
 
-class FormulaCursor;
 class KAction;
 class KFormulaDoc;
 class KFormulaPartView;
