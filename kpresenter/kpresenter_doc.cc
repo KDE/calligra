@@ -62,7 +62,8 @@ KPresenterDoc::KPresenterDoc()
 
   // init
   _clean = true;
-  _objectList.setAutoDelete(false);
+  _objectList = new QList<KPObject>;
+  _objectList->setAutoDelete(false);
   _backgroundList.setAutoDelete(true);
   _spInfinitLoop = false;
   _spManualSwitch = true;
@@ -160,7 +161,8 @@ KPresenterDoc::~KPresenterDoc()
 {
   sdeb("KPresenterDoc::~KPresenterDoc()\n");
 
-  _objectList.clear();
+  _objectList->clear();
+  delete _objectList;
   _backgroundList.clear();
   cleanUp();
   edeb("...KPresenterDoc::~KPresenterDoc() %i\n",_refcnt());
@@ -360,8 +362,9 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     {
       if (!_backgroundList.isEmpty())
 	_backgroundList.clear();
-      if (!_objectList.isEmpty())
-	_objectList.clear();
+      delete _objectList;
+      _objectList = new QList<KPObject>;
+      _objectList->setAutoDelete(false);
       _spInfinitLoop = false;
       _spManualSwitch = true;
       _rastX = 20;
@@ -627,59 +630,59 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	      {
 		KPLineObject *kplineobject = new KPLineObject();
 		kplineobject->load(parser,lst);
-		_objectList.append(kplineobject);
+		_objectList->append(kplineobject);
 	      } break;
 	    case OT_RECT:
 	      {
 		KPRectObject *kprectobject = new KPRectObject();
 		kprectobject->load(parser,lst);
 		kprectobject->setRnds(_xRnd,_yRnd);
-		_objectList.append(kprectobject);
+		_objectList->append(kprectobject);
 	      } break;
 	    case OT_ELLIPSE:
 	      {
 		KPEllipseObject *kpellipseobject = new KPEllipseObject();
 		kpellipseobject->load(parser,lst);
-		_objectList.append(kpellipseobject);
+		_objectList->append(kpellipseobject);
 	      } break;
 	    case OT_PIE:
 	      {
 		KPPieObject *kppieobject = new KPPieObject();
 		kppieobject->load(parser,lst);
-		_objectList.append(kppieobject);
+		_objectList->append(kppieobject);
 	      } break;
 	    case OT_AUTOFORM:
 	      {
 		KPAutoformObject *kpautoformobject = new KPAutoformObject();
 		kpautoformobject->load(parser,lst);
-		_objectList.append(kpautoformobject);
+		_objectList->append(kpautoformobject);
 	      } break;
 	    case OT_CLIPART:
 	      {
 		KPClipartObject *kpclipartobject = new KPClipartObject();
 		kpclipartobject->load(parser,lst);
-		_objectList.append(kpclipartobject);
+		_objectList->append(kpclipartobject);
 	      } break;
 	    case OT_TEXT:
 	      {
 		KPTextObject *kptextobject = new KPTextObject();
 		kptextobject->load(parser,lst);
-		_objectList.append(kptextobject);
+		_objectList->append(kptextobject);
 	      } break;
 	    case OT_PICTURE:
 	      {
 		KPPixmapObject *kppixmapobject = new KPPixmapObject(&_pixmapCollection);
 		kppixmapobject->load(parser,lst);
-		_objectList.append(kppixmapobject);
+		_objectList->append(kppixmapobject);
 	      } break;
 	    default: break;
 	    }
 	  
-	  if (objStartY > 0) _objectList.last()->moveBy(0,objStartY);
+	  if (objStartY > 0) _objectList->last()->moveBy(0,objStartY);
 	  if (pasting) 
 	    {
-	      _objectList.last()->moveBy(pasteXOffset,pasteYOffset);
-	      _objectList.last()->setSelected(true);
+	      _objectList->last()->moveBy(pasteXOffset,pasteYOffset);
+	      _objectList->last()->setSelected(true);
 	    }
 	}
       else
@@ -1381,16 +1384,26 @@ void KPresenterDoc::lowerObjs(int diffx,int diffy)
 {
   KPObject *kpobject = 0;
   
-  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+  QList<KPObject> *_new = new QList<KPObject>;
+
+  for (unsigned int j = 0; j < _objectList->count();j++)
+    _new->append(_objectList->at(j));
+
+  _new->setAutoDelete(false);
+
+  for (int i = 0;i < static_cast<int>(_new->count());i++)
     {
-      kpobject = objectList()->at(i);
+      kpobject = _new->at(i);
       if (kpobject->isSelected())
 	{
-	  _objectList.take(i);
-	  _objectList.insert(0,kpobject);
-	  repaint(kpobject);
+	  _new->take(i);
+	  _new->insert(0,kpobject);
 	}
     }      
+
+  LowerRaiseCmd *lrCmd = new LowerRaiseCmd(i18n("Lower Object(s)"),_objectList,_new,this);
+  lrCmd->execute();
+  _commands.addCommand(lrCmd);
 
   m_bModified = true;
 }
@@ -1400,16 +1413,26 @@ void KPresenterDoc::raiseObjs(int diffx,int diffy)
 {
   KPObject *kpobject = 0;
   
-  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
+  QList<KPObject> *_new = new QList<KPObject>;
+
+  for (unsigned int j = 0; j < _objectList->count();j++)
+    _new->append(_objectList->at(j));
+
+  _new->setAutoDelete(false);
+
+  for (int i = 0;i < static_cast<int>(_new->count());i++)
     {
       kpobject = objectList()->at(i);
       if (kpobject->isSelected())
 	{
-	  _objectList.take(i);
-	  _objectList.append(kpobject);
-	  repaint(kpobject);
+	  _new->take(i);
+	  _new->append(kpobject);
 	}
     }      
+
+  LowerRaiseCmd *lrCmd = new LowerRaiseCmd(i18n("Lower Object(s)"),_objectList,_new,this);
+  lrCmd->execute();
+  _commands.addCommand(lrCmd);
 
   m_bModified = true;
 }

@@ -73,6 +73,7 @@ class KPresenterView;
 #include "setoptionscmd.h"
 #include "chgclipcmd.h"
 #include "chgpixcmd.h"
+#include "lowraicmd.h"
 #include "commandhistory.h"
 
 #include <komlParser.h>
@@ -194,7 +195,7 @@ public:
 
   // get number of pages nad objects
   unsigned int getPageNums() {return _backgroundList.count();}
-  unsigned int objNums() {return _objectList.count();}
+  unsigned int objNums() {return _objectList->count();}
 
   // background
   void setBackColor(unsigned int,QColor,QColor,BCType);
@@ -244,7 +245,7 @@ public:
   
   // get list of pages and objects
   QList<KPBackGround> *backgroundList() {return &_backgroundList;}
-  QList<KPObject> *objectList() {return &_objectList;}
+  QList<KPObject> *objectList() {return _objectList;}
 
   // get - set raster
   unsigned int rastX() {return _rastX;}
@@ -329,6 +330,9 @@ public:
   void deletePage(int _page,DelPageMode _delPageMode);
   void insertPage(int _page,InsPageMode _insPageMode,InsertPos _insPos);
 
+  void setObjectList(QList<KPObject> *_list)
+    { _objectList->setAutoDelete(false); _objectList = _list; _objectList->setAutoDelete(false); }
+
 signals:
 
   // document modified
@@ -392,7 +396,7 @@ protected:
   QList<KPBackGround> _backgroundList;
 
   // list of objects
-  QList<KPObject> _objectList;
+  QList<KPObject> *_objectList;
 
   // screenpresentations
   bool _spInfinitLoop,_spManualSwitch;

@@ -94,6 +94,7 @@ void KPresenterShell::setDocument( KPresenterDoc *_doc )
   {
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
@@ -133,6 +134,7 @@ bool KPresenterShell::newDocument()
   {
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
@@ -177,6 +179,7 @@ bool KPresenterShell::openDocument( const char *_url, const char *_format )
   {    
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
+    m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
