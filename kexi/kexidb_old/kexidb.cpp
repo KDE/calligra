@@ -25,6 +25,7 @@
 
 KexiDB::KexiDB(QObject *parent, const char *name) : QObject(parent, name)
 {
+	kdDebug() << "KexiDB::KexiDB()" << endl;
 	m_manager = new KexiDBInterfaceManager(this, "manager");
 }
 
@@ -79,13 +80,13 @@ KexiDB::getDrivers() const
 }
 
 QStringList
-KexiDB::tables() const
+KexiDB::tables()
 {
 	return QStringList();
 }
 
 QStringList
-KexiDB::databases() const
+KexiDB::databases()
 {
 	return QStringList();
 }
@@ -101,17 +102,11 @@ KexiDB::escape(QString &)
 {
 	return QString::null;
 }
-		
-KexiDBResult*
-KexiDB::storeResult()
-{
-	return new KexiDBResult();
-}
 
 KexiDBResult*
-KexiDB::useResult()
+KexiDB::getResult()
 {
-	return new KexiDBResult();
+	return new KexiDBResult(this);
 }
 
 unsigned long

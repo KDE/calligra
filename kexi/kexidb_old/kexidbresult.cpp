@@ -20,10 +20,38 @@ Boston, MA 02111-1307, USA.
 
 #include "kexidbresult.h"
 
-KexiDBResult::KexiDBResult()
+#include <qvariant.h>
+
+KexiDBResult::KexiDBResult(QObject *parent) : QObject(parent, 0)
 {
+}
+
+QVariant
+KexiDBResult::value(unsigned int)
+{
+	return QVariant();
+}
+
+QVariant
+KexiDBResult::value(QString)
+{
+	return QVariant();
+}
+
+bool
+KexiDBResult::next()
+{
+	return false;
+}
+
+unsigned int
+KexiDBResult::numRows()
+{
+	return 0;
 }
 
 KexiDBResult::~KexiDBResult()
 {
 }
+
+#include "kexidbresult.moc"

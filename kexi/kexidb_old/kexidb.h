@@ -47,14 +47,13 @@ class KexiDB : public QObject
 		virtual bool load(QString file);
 
 		/*! hope thats ansi-compatilbe too */
-		virtual QStringList databases() const;
-		virtual QStringList tables() const;
+		virtual QStringList databases();
+		virtual QStringList tables();
 
 		virtual int query(QString statement);
 		virtual QString escape(QString &str);
 		
-		virtual KexiDBResult	*storeResult();
-		virtual KexiDBResult	*useResult();
+		virtual KexiDBResult	*getResult();
 
 		virtual unsigned long	affectedRows();
 

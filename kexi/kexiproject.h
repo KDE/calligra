@@ -50,6 +50,7 @@ public:
 	bool saveProject();
 	bool loadProject();
 	bool initDbConnection(const Credentials& cred);
+	bool initHostConnection(const Credentials &cred);
 	
 	KexiDB* db() { return m_db; };
 	KexiFormManager *formManager() {return m_formManager;}

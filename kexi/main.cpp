@@ -53,9 +53,9 @@ int main(int argc, char *argv[])
 
 	KexiApplication app;
 
-	KexiDB *db = new KexiDB(0);
-	QStringList drivers = db->getDrivers();
-	db->add("mySQL");
+//	KexiDB *db = new KexiDB(0);
+//	QStringList drivers = db->getDrivers();
+//	db->add("mySQL");
 	
 	return app.exec();
 }  

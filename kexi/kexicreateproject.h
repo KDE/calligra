@@ -54,7 +54,7 @@ class KexiCreateProject : public KWizard  {
 		KLineEdit		*m_dbUser;
 		KLineEdit		*m_dbPass;
 		
-		KListView		*m_connectionLog;
+		KListView		*m_databaseList;
 		
 		QPixmap			m_wpic;
 		

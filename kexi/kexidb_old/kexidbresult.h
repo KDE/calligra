@@ -21,12 +21,28 @@ Boston, MA 02111-1307, USA.
 #ifndef KEXIDBRESULT_H
 #define KEXIDBRESULT_H
 
-class KexiDBResult
+#include <qobject.h>
+
+class KexiDBResult : public QObject
 {
+	Q_OBJECT
+	
 	public:
-		KexiDBResult();
+		KexiDBResult(QObject *parent);
 		~KexiDBResult();
-		
+
+		/*! returns the value of "field" */
+		virtual QVariant	value(unsigned int field);
+		/*! returns the value of "field" */
+		virtual QVariant	value(QString);
+
+		/*! returns true as long as the table is not at the end
+		 *  use it in a while @code while(result->next())
+		 */
+		virtual bool		next();
+
+		/*! returns the numbers of rows in the result */
+		virtual unsigned int	numRows();
 };
 
 #endif

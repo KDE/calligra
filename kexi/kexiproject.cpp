@@ -164,19 +164,31 @@ KexiProject::initDbConnection(const Credentials &cred)
 		return true;
 	}
 }
-/*
-void 
-KexiProject::()
-{
-	QString driver = m_doc->getDriver();
-	QString host = m_doc->getHost();
-	QString name = m_doc->getName();
-	QString user = m_doc->getUser();
-	QString password = m_doc->getPassword();
-	m_actionSave->setEnabled(true);
-	m_docLoaded = true;
 
+bool 
+KexiProject::initHostConnection(const Credentials &cred)
+{
+	KexiDB *addDB = m_db->add(cred.driver);
+	if(addDB)
+	{
+		m_db = addDB;
+	}
+	else
+	{
+		return false;
+	}
+
+	if(!m_db->connect(cred.host, cred.user, cred.password))
+	{
+		m_cred = cred;
+		return false;
+	}
+	else
+	{
+		m_cred = cred;
+		kexi->mainWindow()->slotProjectModified();
+		return true;
+	}
 }
-*/
 
 #include "kexiproject.moc"

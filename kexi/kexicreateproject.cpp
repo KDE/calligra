@@ -79,8 +79,8 @@ QWidget *KexiCreateProject::generatePage0()
 	
 	connect(m_cEngine, SIGNAL(activated(const QString &)), this, SLOT(engineSelectionChanged(const QString &)));
 
-	QLabel *lName = new QLabel(i18n("Database Name:"), p0);
-	m_dbName = new KLineEdit(p0);
+//	QLabel *lName = new QLabel(i18n("Database Name:"), p0);
+//	m_dbName = new KLineEdit(p0);
 	
 	KTextBrowser *iEngine = new KTextBrowser(p0);
 	iEngine->setText("<i>no information avaible</i>");
@@ -101,10 +101,10 @@ QWidget *KexiCreateProject::generatePage0()
 	
 	g0->addMultiCellWidget(pic0,	0,	2,	0,	0);
 	g0->addWidget(lEngine,		0,	1);
-	g0->addWidget(m_cEngine,		0,	2);
-	g0->addWidget(lName,		1,	1);
-	g0->addWidget(m_dbName,		1,	2);
-	g0->addMultiCellWidget(iEngine,	2,	2,	1,	2);
+	g0->addWidget(m_cEngine,	0,	2);
+//	g0->addWidget(lName,		1,	1);
+//	g0->addWidget(m_dbName,		1,	2);
+	g0->addMultiCellWidget(iEngine,	1,	1,	1,	2);
 	
 //	#warning "TODO: don't load here!"
 	return p0;
@@ -150,11 +150,11 @@ QWidget *KexiCreateProject::generatePage2()
 	pic2->setPixmap(m_wpic);
 	
 	//QLabel *lLog = new QLabel(i18n("connection log"), p2);
-	m_connectionLog = new KListView(p2);
-	m_connectionLog->addColumn(i18n("Log Message"));
+	m_databaseList = new KListView(p2);
+	m_databaseList->addColumn(i18n("Databases"));
 	
 	g2->addWidget(pic2, 0, 0);
-	g2->addWidget(m_connectionLog, 0, 1);
+	g2->addWidget(m_databaseList, 0, 1);
 	
 	return p2;
 }
@@ -171,20 +171,25 @@ void KexiCreateProject::nextClicked(const QString &pageTitle)
 	{
 		kdDebug() << "it's time to connect to the db..." << endl;
 		
-		m_connectionLog->clear();
+		m_databaseList->clear();
 
 		Credentials projCred;
 		
 		projCred.host = m_dbHost->text();
-		projCred.database = m_dbName->text();
+//		projCred.database = m_dbName->text();
 //      projCred.port = <default> // ## Add Port
 		projCred.driver = m_cEngine->currentText();
 		projCred.user = m_dbUser->text();
 		projCred.password = m_dbPass->text();
 		
-		if(kexi->project()->initDbConnection(projCred))
+		if(kexi->project()->initHostConnection(projCred))
 		{
-			KListViewItem *i = new KListViewItem(m_connectionLog, i18n("1. connected to the database"));
+//			KListViewItem *i = new KListViewItem(m_connectionLog, i18n("1. connected to the database"));
+			QStringList databases = kexi->project()->db()->databases();
+			for(QStringList::Iterator it = databases.begin(); it != databases.end(); it++)
+			{
+				KListViewItem *i = new KListViewItem(m_databaseList, (*it));
+			}
 			kexi->mainWindow()->browser()->generateView();
 			setFinishEnabled(m_page2, true);
 		}
