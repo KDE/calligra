@@ -37,7 +37,7 @@ OLEFilter::OLEFilter(KoFilter *parent, const char *name) :
     store=0L;
     success=true;
     numPic=0;
-    m_nextPart = 0;
+    m_nextPart=0;
 }
 
 OLEFilter::~OLEFilter() {
@@ -67,7 +67,7 @@ const bool OLEFilter::filter(const QString &fileIn, const QString &fileOut,
 
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
-        kdError(30510) << "OLEFilter::filter(): Unable to open input file!" << endl;
+        kdError(s_area) << "OLEFilter::filter(): Unable to open input file!" << endl;
         in.close();
         return false;
     }
@@ -81,7 +81,7 @@ const bool OLEFilter::filter(const QString &fileIn, const QString &fileOut,
 
     docfile=new KLaola(olefile);
     if(!docfile->isOk()) {
-        kdError(30510) << "OLEFilter::filter(): Unable to read input file correctly!" << endl;
+        kdError(s_area) << "OLEFilter::filter(): Unable to read input file correctly!" << endl;
         delete [] olefile.data;
         olefile.data=0L;
         return false;
@@ -89,7 +89,7 @@ const bool OLEFilter::filter(const QString &fileIn, const QString &fileOut,
 
     store=new KoStore(fileOut, KoStore::Write);
     if(store->bad()) {
-        kdError(30510) << "OLEFilter::filter(): Unable to open output file!" << endl;
+        kdError(s_area) << "OLEFilter::filter(): Unable to open output file!" << endl;
         delete [] olefile.data;
         olefile.data=0L;
         delete store;
@@ -143,26 +143,15 @@ void OLEFilter::slotSavePart(
         // Now fetch out the root element from the resulting KoStore.
 
         KoStore storedPart(result, KoStore::Read);
-        storedPart.open("root");
-        length = storedPart.size();
     
         // It's not here, so let's generate one.
         id = m_path + '/' + QString::number(m_nextPart);
         m_nextPart++;
         partMap.insert(key, id);
         mimeMap.insert(key, mimeType);
-        if(!store->open(id))
-        {
-            success = false;
-            kdError(30510) << "OLEFilter::slotSavePart(): Could not open KoStore!" << endl;
-            return;
-        }
-        // Write it to the gzipped tar file
-        bool ret = store->write(storedPart.read(length));
-        if (!ret)
-            kdError(30510) << "OLEFilter::slotSavePart(): Could write to KoStore!" << endl;
+        if (store->embed(id, storedPart))
+            kdError(s_area) << "OLEFilter::slotSavePart(): Could not embed in KoStore!" << endl;
         unlink(result.local8Bit());
-        store->close();
     }
     //storageId = QFile::encodeName(id);
     storageId = (id);
@@ -195,13 +184,13 @@ void OLEFilter::slotSavePic(
         if(!store->open(id))
         {
             success = false;
-            kdError(30510) << "OLEFilter::slotSavePic(): Could not open KoStore!" << endl;
+            kdError(s_area) << "OLEFilter::slotSavePic(): Could not open KoStore!" << endl;
             return;
         }
         // Write it to the gzipped tar file
         bool ret = store->write(data, length);
         if (!ret)
-            kdError(30510) << "OLEFilter::slotSavePic(): Could write to KoStore!" << endl;
+            kdError(s_area) << "OLEFilter::slotSavePic(): Could not write to KoStore!" << endl;
         store->close();
     }
     //storageId = QFile::encodeName(id);
@@ -262,12 +251,13 @@ void OLEFilter::slotGetStream(const QString &name, myFile &stream) {
 }
 
 // The recursive method to do all the work
-void OLEFilter::convert(const QString &parentPath, const QString &dirname) {
+unsigned OLEFilter::convert(const QString &parentPath, const QString &dirname) {
 
     QList<OLENode> list=docfile->parseCurrentDir();
     OLENode *node;
     bool onlyDirs=true;
     unsigned part=0;
+    unsigned nextPart=0;
 
     // Search for the directories
     for(node=list.first(); node!=0; node=list.next()) {
@@ -277,13 +267,11 @@ void OLEFilter::convert(const QString &parentPath, const QString &dirname) {
                 // Go one level deeper, but don't increase the depth
                 // for ObjectPools.
                 if (node->name == "ObjectPool")
-                    convert(parentPath, node->name);
+                    nextPart=convert(parentPath, node->name);
                 else
-                    convert(parentPath + '/' + QString::number(part), node->name);
+                    nextPart=convert(parentPath + '/' + QString::number(part), node->name);
                 part++;
 
-                // Track the last part number used at this level.
-                m_nextPart = part;
                 docfile->leaveDir();
             }
         }
@@ -306,7 +294,7 @@ void OLEFilter::convert(const QString &parentPath, const QString &dirname) {
                 QArray<int> tmp;
 
                 // WinWord
-                // kdDebug(30510) << "OLEFilter::convert(): WinWord" << endl;
+                // kdDebug(s_area) << "OLEFilter::convert(): WinWord" << endl;
 
                 main.data=0L;
                 table0.data=0L;
@@ -334,7 +322,7 @@ void OLEFilter::convert(const QString &parentPath, const QString &dirname) {
             }
             else if(node->name=="Workbook") {
                 // Excel
-                // kdDebug(30510) << "OLEFilter::convert(): Excel" << endl;
+                // kdDebug(s_area) << "OLEFilter::convert(): Excel" << endl;
 
                 myFile workbook;
                 workbook.data=0L;
@@ -345,7 +333,7 @@ void OLEFilter::convert(const QString &parentPath, const QString &dirname) {
             }
             else if(node->name=="PowerPoint Document") {
                 // PowerPoint
-                // kdDebug(30510) << "OLEFilter::convert(): Power Point" << endl;
+                // kdDebug(s_area) << "OLEFilter::convert(): Power Point" << endl;
                 myFilter=new PowerPointFilter();
                 mimeType = "application/x-kpresenter";
             }
@@ -355,13 +343,14 @@ void OLEFilter::convert(const QString &parentPath, const QString &dirname) {
 
         if(myFilter==0L) {
             // unknown type
-            kdDebug(30510) << "OLEFilter::convert(): superunknown -> black hole sun ;)" << endl;
+            kdDebug(s_area) << "OLEFilter::convert(): superunknown -> black hole sun ;)" << endl;
             myFilter=new FilterBase();
         }
         // connect SIGNALs&SLOTs
         connectCommon(&myFilter);
 
         // Launch the filtering process...
+        m_nextPart = nextPart;
         success=myFilter->filter();
         // ...and fetch the file
         QCString file;
@@ -378,17 +367,20 @@ void OLEFilter::convert(const QString &parentPath, const QString &dirname) {
         slotPart(QFile::encodeName(dirname), tmp, mimeType);
         if(!store->open(tmp)) {
             success=false;
-            kdError(30510) << "OLEFilter::convert(): Could not open KoStore!" << endl;
-            return;
+            kdError(s_area) << "OLEFilter::convert(): Could not open KoStore!" << endl;
+            return part;
         }
 
         // Write it to the gzipped tar file
         bool ret = store->write(file.data(), file.length());
         if (!ret)
-            kdError(30510) << "OLEFilter::slotSavePic(): Could write to KoStore!" << endl;
+            kdError(s_area) << "OLEFilter::slotSavePic(): Could not write to KoStore!" << endl;
         store->close();
         delete myFilter;
     }
+
+    // Track the last part number used at this level.
+    return part;
 }
 
 void OLEFilter::connectCommon(FilterBase **myFilter) {

@@ -99,7 +99,7 @@ private:
     OLEFilter(const OLEFilter &);
     const OLEFilter &operator=(const OLEFilter &);
 
-    void convert(const QString &parentPath, const QString &dirname);
+    unsigned convert(const QString &parentPath, const QString &dirname);
     void connectCommon(FilterBase **myFilter);
 
     QMap<QString, QString> partMap;
@@ -113,5 +113,6 @@ private:
     KLaola *docfile;                 // used to split up the OLE 2 file
     KoStore *store;               // KOffice Storage structure
     bool success;
+    static const int s_area = 30510;
 };
 #endif // OLEFILTER_H
