@@ -23,6 +23,8 @@
 #include <kdebug.h>
 #include <koUnit.h>
 #include <koGlobal.h>
+#include <qcolor.h>
+
 typedef KGenericFactory<KontourImport, KoFilter> KontourImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonkontourimport, KontourImportFactory( "karbonkontourimport" ) );
 
@@ -79,6 +81,7 @@ void KontourImport::convert()
     outdoc.appendChild( karbondoc );
 	
 	QDomElement docElem = inpdoc.documentElement();
+	
 	QDomElement page = docElem.namedItem( "page" ).toElement();
 	QDomElement paper = page.namedItem( "layout" ).toElement();
     int ptPageHeight = paper.attribute( "height" ).toInt();
@@ -94,41 +97,49 @@ void KontourImport::convert()
     karbondoc.appendChild( layer );
     layer.setAttribute( "name", "Layer" );
     layer.setAttribute( "visible", "1" );
-	    
+		
 	QDomElement path = outdoc.createElement( "PATH" );
 	layer.appendChild( path );
 	
 	QDomElement stroke = outdoc.createElement( "STROKE" );
 	path.appendChild( stroke );
+	
 	QDomElement lay = page.namedItem( "layer" ).toElement();
 	QDomElement rect = lay.namedItem( "rectangle" ).toElement();
 	QDomElement poly = rect.namedItem( "polyline" ).toElement();
 	QDomElement gobject = poly.namedItem( "gobject" ).toElement();
+	
 	int lineWidth = gobject.attribute( "linewidth" ).toInt();
 	stroke.setAttribute( "lineWidth", lineWidth );
-	stroke.setAttribute( "lineJoin", "1" );
 	stroke.setAttribute( "lineCap", "0" );
+	stroke.setAttribute( "lineJoin", "0" );
 	stroke.setAttribute( "miterLimit", "10" );
 	
 	QDomElement color = outdoc.createElement( "COLOR" );
 	stroke.appendChild( color );
-	stroke.setAttribute( "v1", "0" );
-	stroke.setAttribute( "v2", "0" );
-	stroke.setAttribute( "v3", "0" );
+	QColor fgColor = gobject.attribute( "strokecolor" );
+	
+	color.setAttribute( "v1", fgColor.red() );
+	color.setAttribute( "v2", fgColor.green() );
+	color.setAttribute( "v3", fgColor.blue() );
+	color.setAttribute( "opacity", "1" );
+	color.setAttribute( "colorSpace", "0" );
+		
+	QDomElement fill = outdoc.createElement( "FILL" );	
+	path.appendChild( fill );	
 	
 	QDomElement segment = outdoc.createElement( "SEGMENTS");
 	QDomElement seg = docElem.namedItem( "seg" ).toElement();
 	int kind = seg.attribute( "kind" ).toInt();
 	path.appendChild( segment );
 	segment.setAttribute( "isClosed", kind );
-		
 	QDomElement move = outdoc.createElement( "MOVE" );
 	int x = rect.attribute( "x" ).toInt();
 	int y = rect.attribute( "y" ).toInt();
 	segment.appendChild( move );
 	move.setAttribute( "x", x );
 	move.setAttribute( "y", y );
-	
+			
 	QDomElement c = poly.firstChild().toElement();
 	for( ; !c.isNull(); c = c.nextSibling().toElement() )
 	{	
