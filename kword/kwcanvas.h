@@ -173,6 +173,7 @@ protected:
     virtual void contentsDragMoveEvent( QDragMoveEvent *e );
     virtual void contentsDragLeaveEvent( QDragLeaveEvent *e );
     virtual void contentsDropEvent( QDropEvent *e );
+    virtual void resizeEvent( QResizeEvent *e );
 
     void selectAllFrames( bool select );
     void selectFrame( int mx, int my, bool select );

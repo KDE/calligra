@@ -136,7 +136,7 @@ void KWCanvas::print( QPainter *painter, QPrinter *printer,
         painter->resetXForm();
         int pgNum = i - 1;
         int yOffset = pgNum * doc->ptPaperHeight();
-kdDebug() << "printing page " << pgNum << " yOffset=" << yOffset << endl;
+        kdDebug() << "printing page " << pgNum << " yOffset=" << yOffset << endl;
         QRect pageRect( 0, yOffset, doc->ptPaperWidth(), doc->ptPaperHeight() );
         painter->fillRect( pageRect, white );
 
@@ -1701,7 +1701,7 @@ void KWCanvas::doAutoScroll()
 
 void KWCanvas::slotContentsMoving( int cx, int cy )
 {
-    kdDebug() << "KWCanvas::slotContentsMoving " << cy << endl;
+    //kdDebug() << "KWCanvas::slotContentsMoving " << cy << endl;
     // Update our "formatted paragraphs needs" in the text framesets
     QListIterator<KWFrameSet> fit = doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -1714,6 +1714,12 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
     }
     m_gui->getVertRuler()->setOffset( 0, -getVertRulerPos(cy) );
     m_gui->getHorzRuler()->setOffset( -getHorzRulerPos(cx), 0 );
+}
+
+void KWCanvas::resizeEvent( QResizeEvent *e )
+{
+    slotContentsMoving( contentsX(), contentsY() );
+    QScrollView::resizeEvent( e );
 }
 
 /*================================================================*/

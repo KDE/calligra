@@ -844,13 +844,15 @@ void KWTextFrameSet::formatMore()
         viewsBottom = QMAX( viewsBottom, mapIt.data() );
 
     QTextParag *lastFormatted = m_lastFormatted;
-    kdDebug() << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
-              << " to=" << to << " viewsBottom=" << viewsBottom << " availableHeight=" << m_availableHeight << endl;
+    //kdDebug() << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
+    //          << " to=" << to << " viewsBottom=" << viewsBottom << " availableHeight=" << m_availableHeight << endl;
 
     // Stop if we have formatted everything or if we need more space
     // Otherwise, stop formatting after "to" paragraphs,
     // but make sure we format everything the views need
-    for ( int i = 0; lastFormatted && bottom <= m_availableHeight && ( i < to || bottom <= viewsBottom ) ; ++i )
+    for ( int i = 0;
+          lastFormatted && bottom + lastFormatted->rect().height() <= m_availableHeight &&
+          ( i < to || bottom <= viewsBottom ) ; ++i )
     {
         //kdDebug() << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
 	lastFormatted->format();
@@ -859,9 +861,9 @@ void KWTextFrameSet::formatMore()
     }
     m_lastFormatted = lastFormatted;
 
-    if ( bottom > m_availableHeight )
+    if ( lastFormatted && bottom + lastFormatted->rect().height() > m_availableHeight )
     {
-        kdDebug() << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " m_availableHeight=" << m_availableHeight << endl;
+        kdDebug() << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " next parag's height=" << lastFormatted->rect().height() << " m_availableHeight=" << m_availableHeight << endl;
         // #### KWFormatContext::makeLineLayout had much code about this,
         // especially for tables. TODO.
 
@@ -899,7 +901,7 @@ void KWTextFrameSet::formatMore()
     else
     {
 	interval = QMAX( 0, interval );
-        kdDebug() << "KWTextFrameSet::formatMore all formatted" << endl;
+        //kdDebug() << "KWTextFrameSet::formatMore all formatted" << endl;
     }
 }
 
@@ -910,12 +912,14 @@ void KWTextFrameSet::doChangeInterval()
 
 void KWTextFrameSet::updateViewArea( QWidget * w, int maxY )
 {
-    if ( maxY >= text->height() ) // Speedup
-        maxY = text->height();
+    //kdDebug() << "KWTextFrameSet::updateViewArea " << (void*)w << " " << w->name() << " maxY=" << maxY << " m_availableHeight=" << m_availableHeight << " text->height()=" << text->height() << endl;
+    if ( maxY >= m_availableHeight ) // Speedup
+        maxY = m_availableHeight;
     else
         // Convert to internal qtextdoc coordinates
         maxY = contentsToInternal( QPoint(0, maxY), true /* only care for Y */ ).y();
 
+    //kdDebug() << "KWTextFrameSet::updateViewArea maxY now " << maxY << endl;
     // Update map
     m_mapViewAreas.replace( w, maxY );
 
@@ -1968,7 +1972,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     int w = 1;
     QPoint p;
     KWFrame * frame = textFrameSet()->internalToContents( QPoint(x, y), p );
-    if ( frame )
+    if ( frame && m_currentFrame != frame )
     {
         m_currentFrame = frame;
         m_canvas->gui()->getView()->updatePageInfo();

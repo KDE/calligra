@@ -1033,19 +1033,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
             int index = formatElem.attribute( "pos" ).toInt() + offset;
             int len = formatElem.attribute( "len" ).toInt();
 
-            /* ARGL, finally I don't need this
-            QTextFormat * format = fc->format( &f );
-            if ( index < 0 )
-                index = 0;
-            if ( index > str->length() - 1 )
-                index = str->length() - 1;
-            if ( index + len > str->length() )
-                len = str->length() - 1 - index;
-
-            for ( int i = 0; i < len; ++i )
-                str->setFormat( i + index, format, true );
-            */
-            kdDebug() << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
+            //kdDebug() << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
             setFormat( index, len, &f );
         }
     }
