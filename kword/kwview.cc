@@ -459,7 +459,6 @@ void KWView::setupActions()
     connect( actionViewZoom, SIGNAL( activated( const QString & ) ),
              this, SLOT( viewZoom( const QString & ) ) );
     actionViewZoom->setEditable(true);
-    actionViewZoom->setComboWidth( 50 );
     changeZoomMenu( );
 
     // -------------- Insert menu
