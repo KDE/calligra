@@ -67,7 +67,6 @@ protected slots:
     void slotAddException();
     void slotRemoveException();
     void textChanged ( const QString & );
-
  private:
     QListBox *exceptionList;
     KoAutoFormatLineEdit *exceptionLine;
@@ -156,7 +155,7 @@ protected slots:
     void defaultBulletStyle();
 
     void slotRemoveCompletionEntry();
-
+    void slotCompletionWordSelected( const QString & );
 };
 #endif
 

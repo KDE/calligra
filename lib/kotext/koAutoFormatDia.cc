@@ -406,11 +406,15 @@ void KoAutoFormatDia::setupTab5()
     cbAllowAutoCompletion->setChecked( m_autoFormat.getConfigAutoCompletion());
 
     m_listCompletion = new QListBox( tab5 );
-    m_listCompletion->insertStringList(m_autoFormat.listCompletion());
+    QStringList list=m_autoFormat.listCompletion();
+    m_listCompletion->insertStringList(list);
+    connect( m_listCompletion, SIGNAL( selected ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
 
 
     pbRemoveCompletionEntry = new QPushButton(i18n( "Remove Completion Entry"), tab5  );
     connect( pbRemoveCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotRemoveCompletionEntry()));
+    if( list.count()==0 )
+        pbRemoveCompletionEntry->setEnabled( false );
 
 
     QLabel *lab=new QLabel( i18n("Min. word length:"), tab5);
@@ -434,7 +438,11 @@ void KoAutoFormatDia::setupTab5()
     cbAppendSpace->setText( i18n( "Append Space" ) );
     cbAppendSpace->resize( cbAppendSpace->sizeHint() );
     cbAppendSpace->setChecked( m_autoFormat.getConfigAppendSpace() );
+}
 
+void KoAutoFormatDia::slotCompletionWordSelected( const QString & word)
+{
+    pbRemoveCompletionEntry->setEnabled( !word.isEmpty() );
 }
 
 void KoAutoFormatDia::slotRemoveCompletionEntry()
@@ -444,6 +452,8 @@ void KoAutoFormatDia::slotRemoveCompletionEntry()
     {
         m_autoFormat.getCompletion()->removeItem( text );
         m_listCompletion->removeItem( m_listCompletion->currentItem () );
+        if( m_listCompletion->count()==0 )
+            pbRemoveCompletionEntry->setEnabled( false );
     }
 }
 
