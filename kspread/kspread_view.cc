@@ -987,8 +987,6 @@ void ViewPrivate::initActions()
       0, view, SLOT( transformPart() ), ac, "transform" );
   actions->transform->setToolTip(i18n("Rotate the contents of the cell."));
   actions->transform->setEnabled( FALSE );
-  QObject::connect( actions->transform, SIGNAL( activated() ),
-      view, SLOT( transformPart() ) );
 
   actions->sort = new KAction( i18n("&Sort..."),
       0, view, SLOT( sort() ), ac, "sort" );
