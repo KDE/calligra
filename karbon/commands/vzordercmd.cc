@@ -111,6 +111,7 @@ VZOrderCmd::execute()
 						litr.current()->upwards( *itr3.current() );
 					else
 						litr.current()->downwards( *itr3.current() );
+					itr3.current()->setState( VObject::selected );
 				}
 			}
 		}
