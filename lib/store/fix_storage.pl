@@ -158,9 +158,20 @@ chomp(my $cwd = `pwd`);
 system("rm -rf $tmpdir");
 mkdir $tmpdir || die "Couldn't create tmp directory: $!\n";
 
-# FIXME: This has to be changed as soon as we move to .zip
-print "Uncompressing the archive...\n";
-system("tar -C $tmpdir -xzf $ARGV[0]");
+
+print "Trying to detect the type of archive... ";
+my($mime) = `file -i -z $ARGV[0]`;
+
+if($mime =~ m,application/x-tar,) {
+  print "tar.gz\n";
+  print "Uncompressing the archive...\n";
+  system("tar -C $tmpdir -xzf $ARGV[0]");
+}
+elsif($mime =~ m,application/x-zip,) {
+  print "zip\n";
+  print "Uncompressing the archive...\n";
+  system("unzip -qq -d $tmpdir $ARGV[0]");
+}
 
 print "Browsing the directory structure...\n";
 @rootdir = explore($tmpdir);
