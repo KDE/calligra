@@ -936,10 +936,6 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 
     factory->addClient( d->m_activeView );
 
-    KParts::GUIActivateEvent ev( true );
-    QApplication::sendEvent( d->m_activePart, &ev );
-    QApplication::sendEvent( d->m_activeView, &ev );
-
     plugins = KParts::Plugin::pluginObjects( d->m_activeView );
     QListIterator<KParts::Plugin> pIt( plugins );
     for (; pIt.current(); ++pIt )
@@ -975,6 +971,11 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     }
     plugActionList( "toolbarlist", d->m_toolbarList );
 
+    // Send the GUIActivateEvent only now, since it might show/hide toolbars too
+    // (and this has priority over applyMainWindowSettings)
+    KParts::GUIActivateEvent ev( true );
+    QApplication::sendEvent( d->m_activePart, &ev );
+    QApplication::sendEvent( d->m_activeView, &ev );
   }
   else
   {
