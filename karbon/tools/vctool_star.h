@@ -94,8 +94,9 @@ VCToolStar::drawTemporaryObject( KarbonView* view )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
 
+	QPoint tl = view->canvasWidget()->contentsToViewport( m_tl );
 	VCCmdStar* cmd =
-		new VCCmdStar( m_part, m_tl.x(), m_tl.y(),
+		new VCCmdStar( m_part, tl.x(), tl.y(),
 			qRound( m_width / 2 ),
 			qRound( m_dialog->valueInnerR() *
 				m_width / ( m_dialog->valueOuterR() * 2 ) ),

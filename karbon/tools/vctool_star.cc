@@ -45,8 +45,7 @@ VCToolStar::eventFilter( KarbonView* view, QEvent* event )
 		drawTemporaryObject( view );
 
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
+		m_lp = view->canvasWidget()->viewportToContents( mouse_event->pos() );
 
 		recalcCoords();
 
@@ -66,8 +65,7 @@ VCToolStar::eventFilter( KarbonView* view, QEvent* event )
 		drawTemporaryObject( view );
 
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
+		m_lp = view->canvasWidget()->viewportToContents( mouse_event->pos() );
 
 		// did we drag the mouse?
 		if ( m_fp == m_lp )
@@ -192,8 +190,7 @@ VCToolStar::eventFilter( KarbonView* view, QEvent* event )
 	if ( event->type() == QEvent::MouseButtonPress )
 	{
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-		m_fp.setX( mouse_event->pos().x() );
-		m_fp.setY( mouse_event->pos().y() );
+		m_fp = view->canvasWidget()->viewportToContents( mouse_event->pos() );
 
 		// set initial object:
 		m_tl.setX( m_fp.x() );

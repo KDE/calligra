@@ -95,9 +95,11 @@ inline void
 VCToolEllipse::drawTemporaryObject( KarbonView* view )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
-	
+
+    QPoint tl = view->canvasWidget()->contentsToViewport( m_tl );
+    QPoint br = view->canvasWidget()->contentsToViewport( m_br );
 	VCCmdEllipse* cmd =
-		new VCCmdEllipse( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y() );
+		new VCCmdEllipse( m_part, tl.x(), tl.y(), br.x(), br.y() );
 
 	VPath* path = cmd->createPath();
 	path->setState( VObject::edit );
