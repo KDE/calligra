@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=Kontour RTF Export Filter
+X-KDE-Export=text/rtf
+X-KDE-Import=application/x-kontour
+X-KDE-Weight=1
+X-KDE-Library=libkountourrtfexport
+ServiceTypes=KOfficeFilter
