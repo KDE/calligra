@@ -145,6 +145,14 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
 }
 
 /*================================================================*/
+void KWordView::showEvent( QShowEvent *e )
+{
+    ContainerView::showEvent( e );
+    if ( gui && gui->getPaperWidget() )
+	gui->getPaperWidget()->setFocus();
+}
+
+/*================================================================*/
 KWordView::~KWordView()
 {
 }
@@ -3453,12 +3461,6 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
 
     if ( doc->getProcessingType() == KWordDocument::DTP )
 	paperWidget->setRuler2Frame( 0, 0 );
-
-    // HACK
-    if ( doc->viewCount() == 1 && !doc->loaded() ) {
-	QKeyEvent e( static_cast<QEvent::Type>( 6 ) /*QEvent::KeyPress*/ , Key_Delete, 0 ,0 );
-	paperWidget->keyPressEvent( &e );
-    }
 
     connect( r_horz, SIGNAL( tabListChanged( QList<KoTabulator>* ) ), paperWidget,
 	     SLOT( tabListChanged( QList<KoTabulator>* ) ) );

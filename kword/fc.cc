@@ -215,9 +215,9 @@ void KWFormatContext::enterNextParag()
     if ( parag != 0L ) {
 	parag->setPTYEnd( ptY );
 	parag = parag->getNext();
-	if ( parag == 0L ) {
-	    warning( "ERROR: Parag not found\n" );
-	    exit( 1 );
+	if ( !parag ) {
+	    qWarning( "ERROR: Parag not found! Strange things may happen" );
+	    return;
 	}
     } else
 	parag = dynamic_cast<KWTextFrameSet*>( pFrameSet )->getFirstParag();
@@ -641,6 +641,7 @@ void KWFormatContext::cursorGotoLine( unsigned int _textpos )
     } while ( ret );
 
     qWarning( "ERROR: Textpos behind content of parag! Strange things may happen now!" );
+    qWarning( "(If you just opened an empty document you can IGNORE this message!!!" );
 }
 
 /*================================================================*/
@@ -667,13 +668,13 @@ void KWFormatContext::cursorGotoPos( unsigned int _textpos )
 	    switch ( text[ pos ].attrib->getClassId() ) {
 	    case ID_KWCharImage: {
 		ptPos += ( ( KWCharImage* )text[ pos ].attrib )->getImage()->width();
-		specialHeight = QMAX( specialHeight, 
+		specialHeight = QMAX( specialHeight,
 				      (unsigned int)( (KWCharImage*) text[pos].attrib )->getImage()->height() );
 		pos++;
 	    } break;
 	    case ID_KWCharVariable: {
 		KWCharVariable *v = dynamic_cast<KWCharVariable*>( text[ pos ].attrib );
-		v->getVar()->setInfo( frameSet, frame, 
+		v->getVar()->setInfo( frameSet, frame,
 				      doc->getPageNum( ptY + doc->getPTPaperHeight() ), parag );
 		v->getVar()->recalc();
 		apply( *v->getFormat() );
@@ -846,7 +847,7 @@ int KWFormatContext::cursorGotoNextChar()
 	switch ( text[ pos ].attrib->getClassId() ) {
 	case ID_KWCharImage: {
 	    ptPos += ( ( KWCharImage* )text[ pos ].attrib )->getImage()->width();
-	    specialHeight = QMAX( specialHeight, 
+	    specialHeight = QMAX( specialHeight,
 				  (unsigned int)( (KWCharImage*) text[ pos ].attrib )->getImage()->height() );
 	    pos++;
 	} break;
@@ -925,7 +926,7 @@ int KWFormatContext::cursorGotoNextChar()
     if ( parag->getText()[ textPos ].c != KWSpecialChar &&
 	 parag->getText()[ textPos ].attrib == 0 ||
 	 (int)textPos - 1 >= 0 && parag->getText()[ textPos - 1 ].c != KWSpecialChar &&
-	 *( ( KWCharFormat* )parag->getText()[ textPos - 1 ].attrib ) == 
+	 *( ( KWCharFormat* )parag->getText()[ textPos - 1 ].attrib ) ==
 	 *( ( KWCharFormat* )parag->getText()[ textPos ].attrib ) )
 	return 1;
 
@@ -948,7 +949,7 @@ bool KWFormatContext::makeNextLineLayout( bool redrawBackgroundWhenAppendPage )
 	doc->checkNumberOfPages( this );
 	return FALSE;
     }
-    
+
     if ( lineEndPos == parag->getTextLen() ) {
 	if ( parag->getNext() == 0L || outOfFrame ) {
 	    ptY += getLineHeight();
@@ -971,7 +972,7 @@ bool KWFormatContext::makeNextLineLayout( bool redrawBackgroundWhenAppendPage )
 }
 
 /*================================================================*/
-bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs, 
+bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 				      bool redrawBackgroundWhenAppendPage )
 {
     if ( !pFrameSet->isVisible() )
@@ -1125,14 +1126,14 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 			    pFrame->getBRight().pt() ) - indent - _right && _broken )
 		break;
 	} else if ( c == KWSpecialChar && text[ textPos ].attrib->getClassId() == ID_KWCharVariable ) {
-	    if ( displayFont->getPTWidth( dynamic_cast<KWCharVariable*>( text[ textPos ].attrib )->getText() ) + 
+	    if ( displayFont->getPTWidth( dynamic_cast<KWCharVariable*>( text[ textPos ].attrib )->getText() ) +
 		 ptPos >=
 		 xShift + ( pFrame->width() -
 			    pFrame->getBLeft().pt() -
 			    pFrame->getBRight().pt() ) - indent - _right && _broken )
 		break;
 	} else if ( c == KWSpecialChar && text[ textPos ].attrib->getClassId() == ID_KWCharFootNote ) {
-	    if ( displayFont->getPTWidth( dynamic_cast<KWCharFootNote*>( text[ textPos ].attrib )->getText() ) + 
+	    if ( displayFont->getPTWidth( dynamic_cast<KWCharFootNote*>( text[ textPos ].attrib )->getText() ) +
 		 ptPos >=
 		 xShift + ( pFrame->width() -
 			    pFrame->getBLeft().pt() -
@@ -1159,13 +1160,13 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs,
 		int w = ( ( KWCharImage* )text[ textPos ].attrib )->getImage()->width();
 		ptPos += w;
 		tmpPTWidth += w;
-		specialHeight = QMAX( specialHeight, 
+		specialHeight = QMAX( specialHeight,
 				      (unsigned int)( (KWCharImage*)text[ textPos ].attrib )->getImage()->height() );
 		textPos++;
 	    } break;
 	    case ID_KWCharVariable: {
 		KWCharVariable *v = dynamic_cast<KWCharVariable*>( text[ textPos ].attrib );
-		v->getVar()->setInfo( frameSet, frame, 
+		v->getVar()->setInfo( frameSet, frame,
 				      doc->getPageNum( ptY + doc->getPTPaperHeight() ), parag );
 		v->getVar()->recalc();
 		apply( *v->getFormat() );

@@ -1634,3 +1634,9 @@ Reggie, 21.11.1999:
 -----------------
 - Shortcuts CTRL+B, CTRL+U, CTRL+I for bold, italic, underline works
 
+Reggie, 27.11.1999
+-----------------
+- Fixed getting initial foxus
+- Got rid of the hack which inserts a space if you open an empty documen
+  (not needed anymore)
+

@@ -51,6 +51,7 @@ class QDragLeaveEvent;
 class QDropEvent;
 class QCloseEvent;
 class QFocusEvent;
+class QShowEvent;
 class KWParag;
 class KWParagDia;
 class KWStyleManager;
@@ -182,7 +183,7 @@ public slots:
     virtual void extraStylist();
     virtual void extraOptions();
     virtual void extraCreateTemplate();
-    
+
     virtual void toolsEdit();
     virtual void toolsEditFrame();
     virtual void toolsCreateText();
@@ -283,6 +284,7 @@ protected:
     void mouseReleaseEvent( QMouseEvent *e );
     void mouseMoveEvent( QMouseEvent *e );
     void focusInEvent( QFocusEvent *e );
+    void showEvent( QShowEvent *e );
     virtual void dragEnterEvent( QDragEnterEvent *e );
     virtual void dragMoveEvent( QDragMoveEvent *e );
     virtual void dragLeaveEvent( QDragLeaveEvent *e );
@@ -403,7 +405,7 @@ protected:
     QAction *actionExtraStylist;
     QAction *actionExtraOptions;
     QAction *actionExtraCreateTemplate;
-    
+
     // text toolbar values
     QFont tbFont;
     QColor tbColor;

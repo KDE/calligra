@@ -312,7 +312,7 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 	if ( flags == KWFormat::All )
 	    format = document->getFormatCollection()->getFormat( _format );
 	else {
-	    KWFormat fmt( document, 
+	    KWFormat fmt( document,
 			  *( (KWCharFormat*)text.data()[ _pos + i ].attrib )->getFormat() );
 	    if ( flags & KWFormat::FontFamily )
 		fmt.setUserFont( document->findUserFont( _format.getUserFont()->getFontName() ) );
@@ -381,7 +381,8 @@ void KWParag::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 
 	    tmp2 = QString::fromUtf8( tmp2.latin1() );
 
-	    if ( text.size() == 1 && tmp2.length() > 0 ) text.remove( 0 );
+	    if ( text.size() == 1 && tmp2.length() > 0 ) 
+		text.remove( 0 );
 	    text.insert( text.size(), tmp2 );
 	} else if ( name == "HARDBRK" ) {
 	    KOMLParser::parseTag( tag.c_str(), name, lst );

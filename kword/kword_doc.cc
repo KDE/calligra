@@ -105,11 +105,11 @@ KWordDocument::KWordDocument(KoDocument* parent, const char* name )
     rastX = rastY = 10;
 
     // m_bEmpty = TRUE;
-    //    m_bEmpty = FALSE; // sorry, this leads to trouble at load    
-    // change it back when setModified() is called at every keyboard 
+    //    m_bEmpty = FALSE; // sorry, this leads to trouble at load
+    // change it back when setModified() is called at every keyboard
     // input. Lotzi Boloni
     setModified(TRUE);
-    
+
     applyStyleTemplate = 0;
     applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT |
 			 U_NUMBERING | U_ALIGN | U_TABS | U_SMART;
@@ -1745,7 +1745,7 @@ QString KWordDocument::configFile() const
 }
 
 /*================================================================*/
-void KWordDocument::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/ )
+void KWordDocument::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/ )
 {
 //     // Autsch.... that's an ugly hack!
 //     if ( !tmpShell ) {
@@ -2391,7 +2391,7 @@ void KWordDocument::drawMarker( KWFormatContext &_fc, QPainter *_painter, int xO
     _painter->drawLine( _fc.getPTPos() - xOffset + diffx1,
 			_fc.getPTY() - yOffset,
 			_fc.getPTPos() - xOffset + diffx2,
-			_fc.getPTY() + _fc.getLineHeight() - 
+			_fc.getPTY() + _fc.getLineHeight() -
 			_fc.getParag()->getParagLayout()->getLineSpacing().pt()
 			- yOffset );
 
@@ -2423,7 +2423,7 @@ void KWordDocument::updateAllViewportSizes()
     if ( !m_lstViews.isEmpty() ) {
 	for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
 	    if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() )
-		viewPtr->getGUI()->getPaperWidget()->resizeContents( getPTPaperWidth(), 
+		viewPtr->getGUI()->getPaperWidget()->resizeContents( getPTPaperWidth(),
 								     getPTPaperHeight() * pages );
 	}
     }
@@ -2871,7 +2871,8 @@ void KWordDocument::setFormat( KWFormat &_format, int flags )
 }
 
 /*================================================================*/
-void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page, KWFormat *_format, const QString &_mime )
+void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page, 
+			   KWFormat *_format, const QString &_mime )
 {
     QStrList strList;
     KWParag *firstParag = 0L, *parag = 0L, *parag2 = 0L, *calcParag = 0L;
@@ -3042,7 +3043,8 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 		for ( unsigned int i = 1; i < strList.count(); i++ ) {
 		    str = QString( strList.at( i ) );
 		    len = str.length();
-		    p = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ), this,
+		    p = new KWParag( dynamic_cast<KWTextFrameSet*>( getFrameSet( _fc->getFrameSet() - 1 ) ), 
+				     this,
 				     p, 0L, defaultParagLayout );
 		    if ( !calcParag )
 			calcParag = p;
@@ -3065,7 +3067,8 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 		_fc->cursorGotoLeft();
 		_fc->cursorGotoLeft();
 
-		KWParag *p = 0L, *prev = _fc->getParag(), *parag = firstParag->getNext(), *next = _fc->getParag()->getNext();
+		KWParag *p = 0L, *prev = _fc->getParag(), *parag = firstParag->getNext(), 
+		     *next = _fc->getParag()->getNext();
 
 		while ( parag ) {
 		    p = new KWParag( *parag );
@@ -3963,10 +3966,10 @@ void KWordDocument::checkNumberOfPages( KWFormatContext *fc )
 {
     // ### finish this stuff!
     return;
-    
+
     if ( processingType == DTP || fc->getParag()->getNext() || fc->getFrameSet() != 1 )
 	return;
-    
+
     int num = fc->getPage() - 1;
     if ( pages - 1 > num && pages > 1 ) {
 	pages = num + 1;
@@ -3983,7 +3986,7 @@ void KWordDocument::checkNumberOfPages( KWFormatContext *fc )
 	    f = fs->getFrame( i );
 	    if ( f && f->getPageNum() > num ) {
 		if ( canRemovePage( f->getPageNum(), f ) ) {
-		    qDebug( "remove page > %d, frame; %d", f->getPageNum(), i ); 
+		    qDebug( "remove page > %d, frame; %d", f->getPageNum(), i );
 		    fs->delFrame( i );
 		    changed = TRUE;
 		    del++;
@@ -4003,7 +4006,7 @@ bool KWordDocument::canRemovePage( int num, KWFrame *f )
 {
     KWFrameSet *fs = 0;
     KWFrame *frm = 0;
-    
+
     for ( fs = frames.first(); fs; fs = frames.next() ) {
 	if ( fs->getFrameInfo() != FI_BODY )
 	    continue;

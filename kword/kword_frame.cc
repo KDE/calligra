@@ -920,7 +920,6 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 		delete parags;
 		parags = new KWParag( this, doc, 0L, 0L, doc->getDefaultParagLayout() );
 		if ( doc->getNumFrameSets() == 0 ) {
-		    parags->insertText( 0, " " );
 		    KWFormat *format = new KWFormat( doc );
 		    format->setDefaults( doc );
 		    parags->setFormat( 0, 1, *format );
