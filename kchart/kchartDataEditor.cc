@@ -38,6 +38,11 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
 
 }
 
+// Set the data in the data editor.
+//
+// The data is taken from the KDChart data.  This method is never
+// called when the chart is a part of a spreadsheet.
+//
 void kchartDataEditor::setData( KoChart::Data* dat )
 {
     unsigned int rowsCount, colsCount;
@@ -50,11 +55,11 @@ void kchartDataEditor::setData( KoChart::Data* dat )
         colsCount = dat->usedCols();
     }
 
-    _widget->setUsedRows( dat->usedRows() );
-    _widget->setUsedCols( dat->usedCols() );
+    _widget->setUsedRows( rowsCount );
+    _widget->setUsedCols( colsCount );
 
-    for (unsigned int row = 0;row != rowsCount;row++)
-        for (unsigned int col = 0; col != colsCount; col++) {
+    for (unsigned int row = 0; row < rowsCount; row++)
+        for (unsigned int col = 0; col < colsCount; col++) {
             kdDebug(35001) << "Set dialog cell for " << row << "," << col << endl;
             KoChart::Value t = dat->cell(row,col);
             // fill it in from the part
@@ -71,6 +76,8 @@ void kchartDataEditor::setData( KoChart::Data* dat )
 }
 
 
+// Get the data from the data editor and put it into the chart.
+//
 void kchartDataEditor::getData( KoChart::Data* dat )
 {
     // Make sure that the data table is not smaller than the used data
