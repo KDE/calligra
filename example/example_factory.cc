@@ -2,6 +2,7 @@
 #include "example_part.h"
 #include <kaboutdata.h>
 #include <kinstance.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -32,16 +33,10 @@ ExampleFactory::~ExampleFactory()
     }
 }
 
-QObject* ExampleFactory::create( QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* ExampleFactory::createPart( QWidget *, const char *, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
-/*
-    if ( parent && !parent->inherits("KoDocument") )
-    {
-	kdDebug(31000) << "ExampleFactory: parent does not inherit KoDocument" << endl;
-	return 0;
-    }
-*/
-
+    // If classname is "KoDocument", our host is a koffice application
+    // otherwise, the host wants us as a simple part, so switch to readonly.
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
     ExamplePart *part = new ExamplePart( parent, name, !bWantKoDocument );
@@ -49,7 +44,9 @@ QObject* ExampleFactory::create( QObject* parent, const char* name, const char* 
     if ( !bWantKoDocument )
       part->setReadWrite( false );
 
+    // Tell the factory base class that we created the object (mandatory)
     emit objectCreated(part);
+
     return part;
 }
 
