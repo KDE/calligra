@@ -455,6 +455,9 @@ Tokens Formula::scan( const QString& expr )
   if( ex[0] != '=' )
     return tokens;
 
+  // but the scanner should not see this equal sign
+  ex.remove( 0, 1 );  
+    
   // force a terminator
   ex.append( QChar() );
 
