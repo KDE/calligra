@@ -98,7 +98,7 @@ public:
     void saveToStoreAsKOffice1Dot1(const Type pictureType, KoStore * store, QValueList<KoPictureKey> keys );
 
     /**
-     * Generate the &lt;PIXMAPS> or &lt;CLIPARTS> tag, that saves the key and the related
+     * Generate the &lt;PICTURES&gt;, &lt;PIXMAPS> or &lt;CLIPARTS> tag, that saves the key and the related
      * relative path in the store (e.g. pictures/picture1.png) for each picture.
      *
      * @param pictureType the type of the collection
@@ -112,11 +112,11 @@ public:
 
     typedef QMap<KoPictureKey, QString> StoreMap;
     /**
-     * Read the &lt;PIXMAPS> or &lt;CLIPARTS> tag, and save the result (key<->store-filename associations)
+     * Read the &lt;PICTURES&gt;, &lt;PIXMAPS> or &lt;CLIPARTS> tag, and save the result (key<->store-filename associations)
      * into the QMap. You may want to 'new' a QMap in loadXML, and to use and then delete
      * it in completeLoading (to save memory).
      *
-     * @param pixmapsElem the &lt;PIXMAPS> or &lt;CLIPARTS> element
+     * @param pixmapsElem the &lt;PICTURES&gt;, &lt;PIXMAPS> or &lt;CLIPARTS> element
      */
     StoreMap readXML( QDomElement &pixmapsElem );
 
