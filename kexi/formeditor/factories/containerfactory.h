@@ -20,7 +20,7 @@
 #ifndef CONTAINERFACTORY_H
 #define CONTAINERFACTORY_H
 
-#if !KDE_IS_VERSION(3,1,9) //TMP
+#if KDE_VERSION < KDE_MAKE_VERSION(3,1,9)
 # define KTabWidget QTabWidget
 #include <qtabwidget.h>
 #else
@@ -100,15 +100,15 @@ class KFORMEDITOR_EXPORT Grid : public QFrame
 		bool  m_preview;
 };
 
-class KFORMEDITOR_EXPORT MyTabWidget : public KTabWidget
+class KFORMEDITOR_EXPORT KFDTabWidget : public KTabWidget
 {
 	Q_OBJECT
 
 	public:
-		MyTabWidget(QWidget *parent, const char *name)
+		KFDTabWidget(QWidget *parent, const char *name)
 		 : KTabWidget(parent, name)
 		{}
-		~MyTabWidget() {;}
+		~KFDTabWidget() {;}
 
 		virtual QSize sizeHint() const
 		{

@@ -40,7 +40,7 @@
    <Separator/>
    <Action name="library_widget_SubForm"/>
    <Action name="library_widget_QGroupBox"/>
-   <Action name="library_widget_MyTabWidget"/>
+   <Action name="library_widget_KFDTabWidget"/>
    <Action name="library_widget_QWidgetStack"/>
    <Action name="library_widget_QFrame"/>
    <Separator/>
@@ -101,7 +101,7 @@
  <text>Containers</text>
    <Action name="library_widget_SubForm"/>
    <Action name="library_widget_QGroupBox"/>
-   <Action name="library_widget_MyTabWidget"/>
+   <Action name="library_widget_KFDTabWidget"/>
    <Action name="library_widget_QWidgetStack"/>
    <Action name="library_widget_QFrame"/>
 </ToolBar>

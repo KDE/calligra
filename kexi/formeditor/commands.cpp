@@ -63,15 +63,14 @@ PropertyCommand::setValue(const QVariant &value)
 void
 PropertyCommand::execute()
 {
-	m_buffer->m_undoing = true;
 	m_buffer->m_manager->activeForm()->resetSelection();
+	m_buffer->m_undoing = true;
 
 	QMap<QString, QVariant>::ConstIterator endIt = m_oldvalues.constEnd();
 	for(QMap<QString, QVariant>::ConstIterator it = m_oldvalues.constBegin(); it != endIt; ++it)
 	{
 		QWidget *widg = m_buffer->m_manager->activeForm()->objectTree()->lookup(it.key())->widget();
 		m_buffer->m_manager->activeForm()->setSelectedWidget(widg, true);
-		//m_buffer->setSelectedWidget(widg, true);
 	}
 
 	(*m_buffer)[m_property] = m_value;
@@ -81,11 +80,8 @@ PropertyCommand::execute()
 void
 PropertyCommand::unexecute()
 {
-	m_buffer->m_undoing = true;
 	m_buffer->m_manager->activeForm()->resetSelection();
-
-	(*m_buffer)[m_property] = m_oldvalues.begin().data();
-	m_buffer->m_undoing = false;
+	m_buffer->m_undoing = true;
 
 	QMap<QString, QVariant>::ConstIterator endIt = m_oldvalues.constEnd();
 	for(QMap<QString, QVariant>::ConstIterator it = m_oldvalues.constBegin(); it != endIt; ++it)
@@ -95,6 +91,9 @@ PropertyCommand::unexecute()
 		//m_buffer->setSelectedWidget(widg, true);
 		widg->setProperty(m_property, it.data());
 	}
+
+	(*m_buffer)[m_property] = m_oldvalues.begin().data();
+	m_buffer->m_undoing = false;
 }
 
 QString

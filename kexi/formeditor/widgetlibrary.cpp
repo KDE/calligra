@@ -228,7 +228,7 @@ WidgetLibrary::createWidget(const QCString &classname, QWidget *parent, const ch
 	if(!wfactory)
 		return 0;
 
-	return wfactory->factory()->create(classname, parent, name, c);
+	return wfactory->factory()->create(wfactory->className().local8Bit(), parent, name, c);
 }
 
 bool

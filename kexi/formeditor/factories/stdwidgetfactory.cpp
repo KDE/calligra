@@ -35,7 +35,7 @@
 #include <kdebug.h>
 #include <kdeversion.h>
 
-#if !KDE_IS_VERSION(3,1,9) //TMP
+#if KDE_VERSION < KDE_MAKE_VERSION(3,1,9)
 # include <qdatetimeedit.h>
 # define KTimeWidget QTimeEdit
 # define KDateWidget QDateEdit
@@ -263,10 +263,10 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	KFormDesigner::WidgetInfo *wDate = new KFormDesigner::WidgetInfo(this);
 	wDate->setPixmap("dateedit");
 	wDate->setClassName("KDateWidget");
-	#if KDE_IS_VERSION(3,1,9) //TMP
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
 	wDate->addAlternateClassName("QDateEdit");
 	wDate->setIncludeFileName("kdatewidget.h");
-	#endif
+#endif
 	wDate->setName(i18n("Date Widget"));
 	wDate->setNamePrefix(i18n("Widget name (see above)", "DateWidget"));
 	wDate->setDescription(i18n("A widget to input or display a date"));
@@ -275,10 +275,10 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	KFormDesigner::WidgetInfo *wTime = new KFormDesigner::WidgetInfo(this);
 	wTime->setPixmap("timeedit");
 	wTime->setClassName("KTimeWidget");
-	#if KDE_IS_VERSION(3,1,9) //TMP
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
 	wTime->addAlternateClassName("QTimeEdit");
 	wTime->setIncludeFileName("ktimewidget.h");
-	#endif
+#endif
 	wTime->setName(i18n("Time Widget"));
 	wTime->setNamePrefix(i18n("Widget name (see above)", "TimeWidget"));
 	wTime->setDescription(i18n("A widget to input or display a time"));
@@ -287,10 +287,10 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	KFormDesigner::WidgetInfo *wDateTime = new KFormDesigner::WidgetInfo(this);
 	wDateTime->setPixmap("datetimeedit");
 	wDateTime->setClassName("KDateTimeWidget");
-	#if KDE_IS_VERSION(3,1,9) //TMP
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
 	wDateTime->addAlternateClassName("QDateTimeEdit");
 	wDateTime->setIncludeFileName("kdatetimewidget.h");
-	#endif
+#endif
 	wDateTime->setName(i18n("Date/Time Widget"));
 	wDateTime->setNamePrefix(i18n("Widget name (see above)", "DateTimeWidget"));
 	wDateTime->setDescription(i18n("A widget to input or display a time and a date"));

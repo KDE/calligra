@@ -1066,7 +1066,10 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 			w = lib->createWidget(classname, parent, wname.latin1(), container);
 	}
 
-	if(!w)  return;
+	if(!w)  {
+		kdDebug() << "fffffffffffffffffffffffffffffffffffffffff" << endl;
+		return;
+	}
 	w->setStyle(&(container->widget()->style()));
 	w->show();
 
