@@ -39,6 +39,7 @@
 #include "form.h"
 #include "formmanager.h"
 #include "commands.h"
+#include "events.h"
 
 using namespace KFormDesigner;
 
@@ -175,7 +176,66 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
 
-			if(((mev->state() == ControlButton) || (mev->state() == ShiftButton)) && (!m_form->manager()->inserting())) // multiple selection mode
+			// we are drawing a connection
+			if(m_form->manager()->draggingConnection())
+			{
+				if(mev->button() != LeftButton)
+				{
+					m_form->manager()->resetCreatedConnection();
+					return true;
+				}
+				// First click, we select the sender and display menu to choose signal
+				if(m_form->manager()->createdConnection()->sender().isNull())
+				{
+					m_form->manager()->createdConnection()->setSender(m_moving->name());
+					m_form->manager()->createSignalMenu(m_moving);
+					if(m_form->formWidget())
+					{
+						m_form->formWidget()->initRect();
+						m_form->formWidget()->highlightWidgets(m_moving, 0/*, QPoint()*/);
+					}
+					return true;
+				}
+				// the user clicked outside the menu, we cancel the connection
+				if(m_form->manager()->createdConnection()->signal().isNull())
+				{
+					m_form->manager()->stopDraggingConnection();
+					return true;
+				}
+				// second click to choose the receiver
+				if(m_form->manager()->createdConnection()->receiver().isNull())
+				{
+					m_form->manager()->createdConnection()->setReceiver(m_moving->name());
+					m_form->manager()->createSlotMenu(m_moving);
+					//if(m_form->formWidget())
+					//	m_form->formWidget()->clearRect();
+					return true;
+				}
+				// the user clicked outside the menu, we cancel the connection
+				if(m_form->manager()->createdConnection()->slot().isNull())
+				{
+					m_form->manager()->stopDraggingConnection();
+					return true;
+				}
+			}
+			// we are inserting a widget or drawing a selection rect in the form
+			if((/*s == m_container &&*/ m_form->manager()->inserting()) || ((s == m_container) && !m_toplevel))
+			{
+				int tmpx,tmpy;
+				int gridX = Form::gridX();
+				int gridY = Form::gridY();
+				tmpx = int((float)mev->x()/((float)gridX)+0.5); // snap to grid
+				tmpx*=gridX;
+				tmpy = int((float)mev->y()/((float)gridY)+0.5);
+				tmpy*=gridX;
+
+				m_insertBegin = QPoint(tmpx, tmpy);
+				if(m_form->formWidget())
+					m_form->formWidget()->initRect();
+				return true;
+			}
+
+			if(((mev->state() == ControlButton) || (mev->state() == ShiftButton)) )//&& (!m_form->manager()->inserting())) // multiple selection mode
 			{
 				if(m_selected.findRef(m_moving) != -1) // widget is already selected
 				{
@@ -191,33 +251,16 @@ Container::eventFilter(QObject *s, QEvent *e)
 				else // the widget is not yet selected, we add it
 					setSelectedWidget(m_moving, true);
 			}
-			else if((m_selected.count() > 1)&& (!m_form->manager()->inserting())) // more than one widget selected
+			else if((m_selected.count() > 1))//&& (!m_form->manager()->inserting())) // more than one widget selected
 			{
 				if(m_selected.findRef(m_moving) == -1) // widget is not selected, it becomes the only selected widget
 					setSelectedWidget(m_moving, false);
 				// If the widget is already selected, we do nothing (to ease widget moving, etc.)
 			}
-			else if(!m_form->manager()->inserting())
+			else// if(!m_form->manager()->inserting())
 				setSelectedWidget(m_moving, false);
 
 			m_grab = QPoint(mev->x(), mev->y());
-
-			// we are inserting a widget or drawing a selection rect in the form
-			if((/*s == m_container &&*/ m_form->manager()->inserting()) || (!m_toplevel))
-			{
-				int tmpx,tmpy;
-				int gridX = Form::gridX();
-				int gridY = Form::gridY();
-				tmpx = int((float)mev->x()/((float)gridX)+0.5); // snap to grid
-				tmpx*=gridX;
-				tmpy = int((float)mev->y()/((float)gridY)+0.5);
-				tmpy*=gridX;
-
-				m_insertBegin = QPoint(tmpx, tmpy);
-				if(m_form->formWidget())
-					m_form->formWidget()->initRect();
-				return true;
-			}
 
 			if(s->inherits("QTabWidget")) // to allow changing page by clicking tab
 				return false;
@@ -268,6 +311,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 					for(w = list.next(); w; w = list.next())
 						setSelectedWidget(w, true);
 				}
+				return true;
 			}
 			if(mev->button() == RightButton) // Right-click -> context menu
 			{
@@ -331,7 +375,18 @@ Container::eventFilter(QObject *s, QEvent *e)
 				}
 				return true;
 			}
-			else if(s == m_container && !m_toplevel && mev->state() != ControlButton) // draw the selection rect
+			// Creating a connection, we highlight sender and receiver, and we draw a link between them
+			else if(m_form->manager()->draggingConnection() && !m_form->manager()->createdConnection()->sender().isNull())
+			{
+				ObjectTreeItem *tree = m_form->objectTree()->lookup(m_form->manager()->createdConnection()->sender());
+				if(!tree || !tree->widget())
+					return true;
+
+				//QPoint p = m_container->mapTo(m_form->toplevelContainer()->widget(), mev->pos());
+				if(m_form->formWidget() && (tree->widget() != s))
+					m_form->formWidget()->highlightWidgets(tree->widget(), ((QWidget*)s)/*, p*/);
+			}
+			else if(s == m_container && !m_toplevel && mev->state() != ControlButton && !m_form->manager()->draggingConnection()) // draw the selection rect
 			{
 				int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
 				int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
@@ -345,7 +400,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton)) // draw the insert rect for the copied widget
 			{
-				if(s == m_container)
+				if((s == m_container) || (m_form->selectedWidgets()->count() > 1))
 					return true;
 				m_insertRect.moveTopLeft(m_container->mapFromGlobal( mev->globalPos()));
 
@@ -519,7 +574,8 @@ void
 Container::widgetDeleted()
 {
 	m_container = 0;
-	delete this;
+	//delete this;
+	deleteLater();
 }
 
 void

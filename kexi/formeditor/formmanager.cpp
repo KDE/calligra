@@ -26,6 +26,7 @@
 #include <qobjectlist.h>
 #include <qstylefactory.h>
 #include <qmetaobject.h>
+#include <qregexp.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -57,6 +58,7 @@
 #include "commands.h"
 #include "extrawidgets.h"
 #include "pixmapcollection.h"
+#include "events.h"
 
 #include "formmanager.h"
 
@@ -72,8 +74,10 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 	m_editor = 0;
 	m_active = 0;
 	m_inserting = false;
+	m_drawingSlot = false;
 	m_count = 0;
 	m_collection = 0;
+	m_connection = 0;
 
 	m_domDoc.appendChild(m_domDoc.createElement("UI"));
 
@@ -105,9 +109,12 @@ FormManager::setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview)
 	if(editor)
 		editor->setBuffer(m_buffer);
 
-	connect(treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget *)));
-	connect(treeview, SIGNAL(selectionChanged(QWidget*)), this, SLOT(setSelWidget(QWidget*)));
-	connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), treeview, SLOT(renameItem(const QString&, const QString&)));
+	if(treeview)
+	{
+		connect(treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget *)));
+		connect(treeview, SIGNAL(selectionChanged(QWidget*)), this, SLOT(setSelWidget(QWidget*)));
+		connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), treeview, SLOT(renameItem(const QString&, const QString&)));
+	}
 }
 
 Actions
@@ -117,7 +124,13 @@ FormManager::createActions(KActionCollection *parent, KMainWindow *client)
 	m_client = client;
 
 	Actions actions = m_lib->createActions(parent, this, SLOT(insertWidget(const QString &)));
-	m_pointer = new KToggleAction(i18n("Pointer"), "mouse_pointer", KShortcut(0), this, SLOT(stopInsert()), parent, "pointer");
+
+	m_dragConnection = new KToggleAction(i18n("Connect Signals/Slots"), "drag", KShortcut(0), this, SLOT(startDraggingConnection()), parent, "drag_connection");
+	m_dragConnection->setExclusiveGroup("LibActionWidgets"); //to be exclusive with any 'widget' action
+	m_dragConnection->setChecked(false);
+	actions.append(m_dragConnection);
+
+	m_pointer = new KToggleAction(i18n("Pointer"), "mouse_pointer", KShortcut(0), this, SLOT(slotPointerClicked()), parent, "pointer");
 	m_pointer->setExclusiveGroup("LibActionWidgets"); //to be exclusive with any 'widget' action
 	m_pointer->setChecked(true);
 	actions.append(m_pointer);
@@ -153,6 +166,9 @@ FormManager::createActions(KActionCollection *parent, KMainWindow *client)
 void
 FormManager::insertWidget(const QString &classname)
 {
+	if(m_drawingSlot)
+		stopDraggingConnection();
+
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
@@ -180,6 +196,11 @@ FormManager::insertWidget(const QString &classname)
 void
 FormManager::stopInsert()
 {
+	if(m_drawingSlot)
+		stopDraggingConnection();
+	if(!m_inserting)
+		return;
+
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
@@ -195,6 +216,95 @@ FormManager::stopInsert()
 		form->m_cursors = 0;
 	}
 	m_inserting = false;
+	m_pointer->setChecked(true);
+}
+
+void
+FormManager::slotPointerClicked()
+{
+	if(m_inserting)
+		stopInsert();
+	else if(m_dragConnection)
+		stopDraggingConnection();
+}
+
+void
+FormManager::startDraggingConnection()
+{
+	if(m_inserting)
+		stopInsert();
+
+	// We set a Pointing hand cursor while drawing the connection
+	Form *form;
+	for(form = m_forms.first(); form; form = m_forms.next())
+	{
+		form->m_cursors = new QMap<QString, QCursor>();
+		form->m_mouseTrackers = new QStringList();
+		if (form->toplevelContainer())
+		{
+			form->toplevelContainer()->widget()->setCursor(QCursor(PointingHandCursor));
+			form->toplevelContainer()->widget()->setMouseTracking(true);
+		}
+		QObjectList *l = form->toplevelContainer()->widget()->queryList( "QWidget" );
+		for(QObject *o = l->first(); o; o = l->next())
+		{
+			QWidget *w = (QWidget*)o;
+			if( w->ownCursor() )
+			{
+				form->m_cursors->insert(w->name(), w->cursor());
+				w->setCursor(QCursor(PointingHandCursor ));
+			}
+			if(w->hasMouseTracking())
+				form->m_mouseTrackers->append(w->name());
+			w->setMouseTracking(true);
+		}
+		delete l;
+	}
+
+	m_connection = new Connection();
+	m_drawingSlot = true;
+	m_dragConnection->setChecked(true);
+}
+
+void
+FormManager::resetCreatedConnection()
+{
+	delete m_connection;
+	m_connection = new Connection();
+}
+
+void
+FormManager::stopDraggingConnection()
+{
+	if(!m_drawingSlot)
+		return;
+
+	if(m_active && m_active->formWidget())
+		m_active->formWidget()->clearRect();
+
+	Form *form;
+	for(form = m_forms.first(); form; form = m_forms.next())
+	{
+		form->toplevelContainer()->widget()->unsetCursor();
+		form->toplevelContainer()->widget()->setMouseTracking(false);
+		QObjectList *l = form->toplevelContainer()->widget()->queryList( "QWidget" );
+		for(QObject *o = l->first(); o; o = l->next())
+		{
+			QWidget *w = (QWidget*)o;
+			if( w->ownCursor())
+				w->setCursor( (*(form->m_cursors))[o->name()] ) ;
+			w->setMouseTracking( !form->m_mouseTrackers->grep(w->name()).isEmpty() );
+		}
+		delete l;
+		delete form->m_cursors;
+		form->m_cursors = 0;
+		delete form->m_mouseTrackers;
+		form->m_mouseTrackers = 0;
+	}
+
+	delete m_connection;
+	m_connection = 0;
+	m_drawingSlot = false;
 	m_pointer->setChecked(true);
 }
 
@@ -266,13 +376,17 @@ FormManager::activeForm() const
 void
 FormManager::deleteForm(Form *form)
 {
+	if (!form)
+		return;
 	if(m_forms.find(form) == -1)
 		m_preview.remove(form);
 	else
 		m_forms.remove(form);
 
-	if(m_forms.count() == 0)
+	if(m_forms.count() == 0) {
 		m_active = 0;
+		showPropertyBuffer(0);
+	}
 }
 
 void
@@ -374,12 +488,15 @@ FormManager::initForm(Form *form)
 
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget*)));
 	connect(form, SIGNAL(addedSelectedWidget(QWidget*)), m_buffer, SLOT(addWidget(QWidget*)));
-	connect(form, SIGNAL(selectionChanged(QWidget*)), m_treeview, SLOT(setSelWidget(QWidget*)));
-	connect(form, SIGNAL(addedSelectedWidget(QWidget*)), m_treeview, SLOT(addSelWidget(QWidget*)));
-	connect(form, SIGNAL(childAdded(ObjectTreeItem* )), m_treeview, SLOT(addItem(ObjectTreeItem*)));
-	connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
+	if(m_treeview)
+	{
+		connect(form, SIGNAL(selectionChanged(QWidget*)), m_treeview, SLOT(setSelWidget(QWidget*)));
+		connect(form, SIGNAL(addedSelectedWidget(QWidget*)), m_treeview, SLOT(addSelWidget(QWidget*)));
+		connect(form, SIGNAL(childAdded(ObjectTreeItem* )), m_treeview, SLOT(addItem(ObjectTreeItem*)));
+		connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
+		connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget*)));
+	}
 	connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), form, SLOT(changeName(const QString&, const QString&)));
-	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setWidget(QWidget*)));
 
 	windowChanged(form->toplevelContainer()->widget());
 }
@@ -515,6 +632,50 @@ FormManager::setInsertPoint(const QPoint &p)
 }
 
 void
+FormManager::createSignalMenu(QWidget *w)
+{
+	m_sigSlotMenu = new KPopupMenu();
+	m_sigSlotMenu->insertTitle(SmallIcon("connection"), i18n("Signals"));
+
+	QStrList list = w->metaObject()->signalNames(true);
+	QStrListIterator it(list);
+	for(; it.current() != 0; ++it)
+		m_sigSlotMenu->insertItem(*it);
+	connect(m_sigSlotMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChoosed(int)));
+
+	m_sigSlotMenu->exec(QCursor::pos());
+	delete m_sigSlotMenu;
+	m_sigSlotMenu = 0;
+}
+
+void
+FormManager::createSlotMenu(QWidget *w)
+{
+	m_sigSlotMenu = new KPopupMenu();
+	m_sigSlotMenu->insertTitle(SmallIcon("connection"), i18n("Slots"));
+
+	QString signalArg( m_connection->signal().remove( QRegExp(".*[(]|[)]") ) );
+
+	QStrList list = w->metaObject()->slotNames(true);
+	QStrListIterator it(list);
+	for(; it.current() != 0; ++it)
+	{
+		// we add the slot only if it is compatible with the signal
+		QString slotArg(*it);
+		slotArg = slotArg.remove( QRegExp(".*[(]|[)]") );
+		if(!signalArg.startsWith(slotArg, true)) // args not compatible
+			continue;
+
+		m_sigSlotMenu->insertItem(*it);
+	}
+	connect(m_sigSlotMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChoosed(int)));
+
+	m_sigSlotMenu->exec(QCursor::pos());
+	delete m_sigSlotMenu;
+	m_sigSlotMenu = 0;
+}
+
+void
 FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemove)
 {
 	m_menuWidget = w;
@@ -610,9 +771,23 @@ FormManager::buddyChoosed(int id)
 void
 FormManager::menuSignalChoosed(int id)
 {
-	if(!m_menuWidget)
-		return;
-	emit(createFormSlot(m_active, m_menuWidget->name(), m_popup->text(id)));
+	//if(!m_menuWidget)
+	//	return;
+	if(m_drawingSlot && m_sigSlotMenu)
+	{
+		if( m_connection->receiver().isNull() )
+			m_connection->setSignal(m_sigSlotMenu->text(id));
+		else
+		{
+			m_connection->setSlot(m_sigSlotMenu->text(id));
+			kdDebug() << "Finished creating the connection: sender=" << m_connection->sender() << "; signal=" << m_connection->signal() <<
+			  "; receiver=" << m_connection->receiver() << "; slot=" << m_connection->slot() << endl;
+			emit createdConnection(activeForm(), *m_connection);
+			stopDraggingConnection();
+		}
+	}
+	else if(m_menuWidget)
+		emit(createFormSlot(m_active, m_menuWidget->name(), m_popup->text(id)));
 }
 
 void

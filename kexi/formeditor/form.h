@@ -26,6 +26,7 @@
 #include <qobject.h>
 #include <qptrlist.h>
 #include <qpixmap.h>
+#include <qpoint.h>
 
 #include "resizehandle.h"
 
@@ -55,6 +56,7 @@ class KFORMEDITOR_EXPORT FormWidget
 		virtual void drawRect(const QRect& r, int type) = 0;
 		virtual void initRect() = 0;
 		virtual void clearRect() = 0;
+		virtual void highlightWidgets(QWidget *from, QWidget *to) = 0;//, const QPoint &p) = 0;
 };
 
 //! Helper: this widget is used to create form's surface
@@ -70,6 +72,7 @@ class KFORMEDITOR_EXPORT FormWidgetBase : public QWidget, public FormWidget
 		void drawRect(const QRect& r, int type);
 		void initRect();
 		void clearRect();
+		void highlightWidgets(QWidget *from, QWidget *to);//, const QPoint &p);
 
 	private:
 		QPixmap buffer; //!< stores grabbed entire form's area for redraw
@@ -263,6 +266,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		PixmapCollection	*m_pixcollection;
 		//! This map is used to store cursors before inserting (so we can restore it later)
 		QMap<QString, QCursor>  *m_cursors;
+		//!This string list is used to store the widgets which hasMouseTracking() == true (eg lineedits)
+		QStringList		*m_mouseTrackers;
 
 		FormWidget		*m_formWidget;
 

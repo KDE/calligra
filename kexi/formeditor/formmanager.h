@@ -43,6 +43,7 @@ class Form;
 class Container;
 class WidgetLibrary;
 class ObjectTreeView;
+class Connection;
 typedef QPtrList<KAction> Actions;
 
 //! A class to manage (create/load/save) Forms
@@ -92,6 +93,12 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  pasted widgets.
 		 */
 		void              setInsertPoint(const QPoint &p);
+
+		bool              draggingConnection() { return m_drawingSlot; }
+		Connection*       createdConnection() { return m_connection; }
+		void              resetCreatedConnection();
+		void              createSignalMenu(QWidget *w);
+		void              createSlotMenu(QWidget *w);
 
 		/*! \return The Form actually active and focused.
 		 */
@@ -164,6 +171,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void insertWidget(const QString &classname);
 		/*! Stopts the current widget insertion (ie unset the cursor ...). */
 		void stopInsert();
+		void slotPointerClicked();
+
+		void startDraggingConnection();
+		void stopDraggingConnection();
 
 		/*! Print to the command line the ObjectTree of the active Form (ie a line for each widget, with parent and name). */
 		void debugTree();
@@ -201,6 +212,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void dirty(KFormDesigner::Form *form);
 
 		void createFormSlot(Form *form, const QString &widget, const QString &signal);
+		void createdConnection(Form *form, Connection &connection);
 
 	private:
 		// Enum for menu items indexes
@@ -208,13 +220,13 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		ObjectPropertyBuffer	*m_buffer;
 		WidgetLibrary		*m_lib;
-		KexiPropertyEditor	*m_editor;
-		ObjectTreeView		*m_treeview;
+		QGuardedPtr<KexiPropertyEditor>  m_editor;
+		QGuardedPtr<ObjectTreeView>  m_treeview;
 		// Forms
 		QPtrList<Form>		m_forms;
 		QPtrList<Form>		m_preview;
 		int			m_count;
-		Form			*m_active;
+		QGuardedPtr<Form>	m_active;
 		QWidget			*m_parent;
 
 		// Copy/Paste
@@ -227,10 +239,15 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		bool			m_inserting;
 		QString			m_insertClass;
 
+		// Connection stuff
+		bool			m_drawingSlot;
+		Connection		*m_connection;
+		KPopupMenu		*m_sigSlotMenu;
+
 		// Actions
 		KActionCollection	*m_collection;
 		KMainWindow 		*m_client;
-		KToggleAction		*m_pointer;
+		KToggleAction		*m_pointer, *m_dragConnection;
 
 		//! Used to delayed widgets deletion
 		QTimer m_deleteWidgetLater_timer;

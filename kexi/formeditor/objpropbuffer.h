@@ -121,7 +121,7 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		void   updateOldValue(ObjectTreeItem *tree, const char *property);
 
 	private:
-		QWidget		*m_widget;
+		QGuardedPtr<QWidget> m_widget;
 		QStringList	m_properties;
 		QPtrList<QWidget> m_widgets;
 		bool		m_multiple;

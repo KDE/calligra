@@ -23,12 +23,17 @@
 #include <qobjectlist.h>
 #include <qtabwidget.h>
 #include <qpainter.h>
+#include <qlabel.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcommand.h>
 #include <kaction.h>
 #include <kmessagebox.h>
+#include <kpixmap.h>
+#include <kpixmapeffect.h>
+#include <kpixmapio.h>
+#include <kimageeffect.h>
 
 #include "container.h"
 #include "objecttree.h"
@@ -63,7 +68,7 @@ Form::Form(FormManager *manager, const char *name)
 void
 Form::createToplevel(QWidget *container, FormWidget *formWidget, const QString &classname)
 {
-	kdDebug() << "Form::createToplevel() container= "<< (container ? container->name() : "<NULL>") 
+	kdDebug() << "Form::createToplevel() container= "<< (container ? container->name() : "<NULL>")
 		<< " formWidget=" << formWidget << "className=" << name() << endl;
 
 	m_formWidget = formWidget;
@@ -170,7 +175,8 @@ void
 Form::formDeleted()
 {
 	m_manager->deleteForm(this);
-	delete this;
+	//delete this;
+	deleteLater();
 }
 
 void
@@ -197,6 +203,7 @@ Form::emitChildAdded(ObjectTreeItem *item)
 void
 Form::emitChildRemoved(ObjectTreeItem *item)
 {
+	m_tabstops.remove(item);
 	emit childRemoved(item);
 }
 
@@ -495,6 +502,69 @@ FormWidgetBase::clearRect()
 	p.end();
 
 	repaintAll(this);
+}
+
+void
+FormWidgetBase::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
+{
+	QPoint fromPoint, toPoint;
+	fromPoint = mapFrom(from->parentWidget(), from->pos());
+	if(to)
+		toPoint = mapFrom(to->parentWidget(), to->pos());
+
+	QPainter p;
+	p.begin(this, true);
+	bool unclipped = testWFlags( WPaintUnclipped );
+	setWFlags( WPaintUnclipped );
+
+	if (prev_rect.isValid()) {
+		//redraw prev. selection's rectangle
+		p.drawPixmap( QPoint(prev_rect.x(), prev_rect.y()), buffer, QRect(prev_rect.x(), prev_rect.y(), prev_rect.width(), prev_rect.height()));
+	}
+
+	p.setPen( QPen(Qt::red, 2) );
+
+	if(to)
+	{
+		QPixmap pix1 = QPixmap::grabWidget(from);
+		QPixmap pix2 = QPixmap::grabWidget(to);
+
+		/*if(from == this)
+			p.drawLine( point, mapFrom(to->parentWidget(), to->geometry().center()) );
+		else if(to == this)
+			p.drawLine( mapFrom(from->parentWidget(), from->geometry().center()), point);
+		else*/
+		p.drawLine( mapFrom(from->parentWidget(), from->geometry().center()), mapFrom(to->parentWidget(), to->geometry().center()) );
+
+		p.drawPixmap(fromPoint.x(), fromPoint.y(), pix1);
+		p.drawPixmap(toPoint.x(), toPoint.y(), pix2);
+
+		if(to == this)
+			p.drawRoundRect(2, 2, width()-4, height()-4, 4, 4);
+		else
+			p.drawRoundRect(toPoint.x(), toPoint.y(), to->width(), to->height(), 5, 5);
+	}
+
+	if(from == this)
+		p.drawRoundRect(2, 2, width()-4, height()-4, 4, 4);
+	else
+		p.drawRoundRect(fromPoint.x(),  fromPoint.y(), from->width(), from->height(), 5, 5);
+
+	if((to == this) || (from == this))
+		prev_rect = QRect(0, 0, buffer.width(), buffer.height());
+	else if(to)
+	{
+		prev_rect.setX( (fromPoint.x() < toPoint.x()) ? (fromPoint.x() - 5) : (toPoint.x() - 5) );
+		prev_rect.setY( (fromPoint.y() < toPoint.y()) ? (fromPoint.y() - 5) : (toPoint.y() - 5) );
+		prev_rect.setRight( (fromPoint.x() < toPoint.x()) ? (toPoint.x() + to->width() + 5) : (fromPoint.x() + from->width() + 5) );
+		prev_rect.setBottom( (fromPoint.y() < toPoint.y()) ? (toPoint.y() + to->height() + 5) : (fromPoint.y() + from->height() + 5) ) ;
+	}
+	else
+		prev_rect = QRect(fromPoint.x()- 5,  fromPoint.y() -5, from->width() + 10, from->height() + 10);
+
+	if (!unclipped)
+		clearWFlags( WPaintUnclipped );
+	p.end();
 }
 
 #include "form.moc"

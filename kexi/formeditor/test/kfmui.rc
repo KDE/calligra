@@ -16,6 +16,7 @@
    <text>&amp;Widgets</text>
    <Merge/>
    <Action name="pointer"/>
+   <Action name="drag_connection"/>
    <Separator/>
    <Action name="library_widget_QGroupBox"/>
    <Action name="library_widget_KTabWidget"/>
@@ -58,6 +59,7 @@
 <ToolBar name="widgets" fullWidth="false">
  <text>Widgets</text>
    <Action name="pointer"/>
+   <Action name="drag_connection"/>
    <Separator/>
    <Action name="library_widget_KLineEdit"/>
    <Action name="library_widget_QLabel"/>
