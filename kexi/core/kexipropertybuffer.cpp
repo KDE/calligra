@@ -25,6 +25,8 @@
 
 #include "kexipropertybuffer.h"
 
+KexiProperty KexiPropertyBuffer::m_nonConstNull;
+
 KexiPropertyBuffer::KexiPropertyBuffer(QObject *parent, const QString &type_name)
  : QObject(parent, type_name.latin1())
 	,QAsciiDict<KexiProperty>(101, false)

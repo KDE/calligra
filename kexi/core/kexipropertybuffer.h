@@ -51,7 +51,14 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, protected KexiPropert
 
 		/*! \return property named with \a name. If no such property is found,
 		 null property (KexiProperty::null) is returned. */
-		KexiProperty& property( const QCString& name ) { KexiProperty *p = find(name); return p ? *p : KexiProperty::null; }
+		KexiProperty& property( const QCString& name ) {
+			KexiProperty *p = find(name);
+			if (p) return *p;
+			m_nonConstNull.m_name = "";
+			return m_nonConstNull;
+		}
+
+		bool hasProperty( const QCString& name ) const { return find(name)!=0; }
 
 		/*! Equivalent to property(const QCString& name) */
 		KexiProperty& operator[] ( const QCString& name ) { return property(name); }
@@ -115,6 +122,8 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, protected KexiPropert
 		QString m_typeName;
 		KexiProperty::List m_list;
 		PixmapCollection  *m_collection;
+		
+		static KexiProperty m_nonConstNull;
 
 	friend class KexiProperty;
 };
