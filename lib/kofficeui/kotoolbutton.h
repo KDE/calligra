@@ -124,6 +124,7 @@ private:
 };
 
 
+// Parts of the code are from KToolBarButton
 class KoToolButton : public KToolBarButton
 {
     Q_OBJECT
@@ -158,6 +159,25 @@ public:
                   const char* name = 0L, const QString& txt = QString::null );
 
     virtual ~KoToolButton();
+
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+    virtual QSize minimumSize() const;
+
+public slots:
+    void colorSelected( const QColor& color );
+
+protected:
+    virtual void drawButton(QPainter *p);
+    virtual bool eventFilter( QObject* o, QEvent* e );
+
+private:
+    void init();
+    void fixWindowsStylePos( int& dx, int& dy );
+    bool hitArrow( const QPoint& pos );
+
+    QPopupMenu* m_popup;
+    bool m_arrowPressed;
 };
 
 #endif // _kotoolbutton_h_

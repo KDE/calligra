@@ -20,10 +20,13 @@
 #include <qapplication.h>
 #include <qtooltip.h>
 #include <qpainter.h>
+#include <qdrawutil.h>
 #include <qpixmap.h>
 #include <qstyle.h>
 #include <qpopupmenu.h>
 
+#include <kglobalsettings.h>
+#include <ktoolbar.h>
 #include <kotoolbutton.h>
 #include <kcolordrag.h>
 #include <klocale.h>
@@ -31,8 +34,11 @@
 #include <kdebug.h>
 
 namespace {
+    // For the KoColorPanel
     const int COLS = 15;
     const int TILESIZE = 16;
+    // For the KoToolButton
+    const int ARROW_WIDTH = 12;
 }
 
 KoColorPanel::KoColorPanel( QWidget* parent, const char* name ) :
@@ -292,7 +298,7 @@ void KoColorPanel::insertDefaultColors()
     updateGeometry();
     // we have to repaint the "old" current row explicitly due
     // to WStaticContents
-    repaint( 0, currentRow << 4, COLS << 4, 16 );
+    update( 0, currentRow << 4, COLS << 4, 16 );
 }
 
 void KoColorPanel::mousePressEvent( QMouseEvent* e )
@@ -303,10 +309,9 @@ void KoColorPanel::mousePressEvent( QMouseEvent* e )
 
 void KoColorPanel::mouseReleaseEvent( QMouseEvent* )
 {
-    if ( isVisible() && parentWidget() && parentWidget()->inherits( "QPopupMenu" ) ) {
+    if ( isVisible() && parentWidget() && parentWidget()->inherits( "QPopupMenu" ) )
         parentWidget()->close();
-        emit colorSelected( mapToColor( m_pressedPos ) );
-    }
+    emit colorSelected( mapToColor( m_pressedPos ) );
 }
 
 void KoColorPanel::mouseMoveEvent( QMouseEvent* e )
@@ -419,11 +424,11 @@ void KoColorPanel::keyPressEvent( QKeyEvent* e )
         else
             e->ignore();
     }
-    else if ( e->key() == Qt::Key_Return )
-        if ( isVisible() && parentWidget() && parentWidget()->inherits( "QPopupMenu" ) ) {
+    else if ( e->key() == Qt::Key_Return ) {
+        if ( isVisible() && parentWidget() && parentWidget()->inherits( "QPopupMenu" ) )
             parentWidget()->close();
-            emit colorSelected( mapToColor( m_focusPosition ) );
-        }
+        emit colorSelected( mapToColor( m_focusPosition ) );
+    }
     updateFocusPosition( newPos );
 }
 
@@ -642,18 +647,196 @@ void KoColorPopupProxy::slotMoreColors()
 
 KoToolButton::KoToolButton( const QString& icon, int id, QWidget* parent,
                             const char* name, const QString& txt, KInstance* _instance ) :
-    KToolBarButton( icon, id, parent, name, txt, _instance )
+    KToolBarButton( icon, id, parent, name, txt, _instance ), m_arrowPressed( false )
 {
+    init();
 }
 
 KoToolButton::KoToolButton( const QPixmap& pixmap, int id, QWidget* parent,
                             const char* name, const QString& txt ) :
-    KToolBarButton( pixmap, id, parent, name, txt )
+    KToolBarButton( pixmap, id, parent, name, txt ), m_arrowPressed( false )
 {
+    init();
 }
 
 KoToolButton::~KoToolButton()
 {
+}
+
+QSize KoToolButton::sizeHint() const
+{
+    return minimumSizeHint();
+}
+
+QSize KoToolButton::minimumSizeHint() const
+{
+    QSize size = KToolBarButton::minimumSizeHint();
+    size.setWidth( size.width() + ARROW_WIDTH );
+    return size;
+}
+
+QSize KoToolButton::minimumSize() const
+{
+    return minimumSizeHint();
+}
+
+void KoToolButton::colorSelected( const QColor& color )
+{
+    kdDebug() << "selected::: " << color.name() << endl;
+}
+
+void KoToolButton::drawButton(QPainter *_painter)
+{
+    QStyle::SFlags flags = QStyle::Style_Default;
+    QStyle::SCFlags active = QStyle::SC_None;
+    QStyle::SCFlags arrowActive = QStyle::SC_None;
+    QStyleOption opt;
+    QColorGroup cg( colorGroup() );
+
+    if ( isEnabled() ) {
+  	flags |= QStyle::Style_Enabled;
+        if ( KToolBarButton::isRaised() || m_arrowPressed )
+            flags |= QStyle::Style_Raised;
+    }
+    if ( isOn() )
+        flags |= QStyle::Style_On;
+
+    QStyle::SFlags arrowFlags = flags;
+
+    if ( isDown() && !m_arrowPressed ) {
+        flags  |= QStyle::Style_Down;
+        active |= QStyle::SC_ToolButton;
+    }
+    if ( m_arrowPressed )
+        arrowActive |= QStyle::SC_ToolButton;
+
+    // Draw styled toolbuttons
+    _painter->setClipRect( 0, 0, width() - ARROW_WIDTH, height() );
+    style().drawComplexControl( QStyle::CC_ToolButton, _painter, this, QRect( 0, 0, width() - ARROW_WIDTH, height() ), cg,
+                                flags, QStyle::SC_ToolButton, active, opt );
+    _painter->setClipRect( width() - ARROW_WIDTH, 0, ARROW_WIDTH, height() );
+    style().drawComplexControl( QStyle::CC_ToolButton, _painter, this, QRect( width(), 0, ARROW_WIDTH, height() ), cg,
+                                arrowFlags, QStyle::SC_ToolButton, arrowActive, opt );
+    _painter->setClipping( false );
+
+    // ...and the arrow indicating the popup
+    style().drawPrimitive( QStyle::PE_ArrowDown, _painter, QRect( width() - ARROW_WIDTH, 0, ARROW_WIDTH, height() ),
+                           cg, flags, opt );
+
+    if ( KToolBarButton::isRaised() || m_arrowPressed )
+        qDrawShadeLine( _painter, width() - ARROW_WIDTH, 0, width() - ARROW_WIDTH, height() - 1, colorGroup(), true );
+
+    int dx, dy;
+    QFont tmp_font( KGlobalSettings::toolBarFont() );
+    QFontMetrics fm( tmp_font );
+    QRect textRect;
+    int textFlags = 0;
+
+    if ( static_cast<KToolBar::IconText>( iconTextMode() ) == KToolBar::IconOnly ) { // icon only
+        QPixmap pixmap = iconSet().pixmap( QIconSet::Automatic,
+                                           isEnabled() ? ( KToolBarButton::isActive() ? QIconSet::Active : QIconSet::Normal ) :
+                                           QIconSet::Disabled, isOn() ? QIconSet::On : QIconSet::Off );
+        if ( !pixmap.isNull() ) {
+            dx = ( width() - ARROW_WIDTH - pixmap.width() ) / 2;
+            dy = ( height() - pixmap.height() ) / 2;
+            fixWindowsStylePos( dx, dy );
+            _painter->drawPixmap( dx, dy, pixmap );
+        }
+    }
+    else if ( static_cast<KToolBar::IconText>( iconTextMode() ) == KToolBar::IconTextRight ) { // icon and text (if any)
+        QPixmap pixmap = iconSet().pixmap( QIconSet::Automatic,
+                                           isEnabled() ? ( KToolBarButton::isActive() ? QIconSet::Active : QIconSet::Normal ) :
+                                           QIconSet::Disabled, isOn() ? QIconSet::On : QIconSet::Off );
+        if( !pixmap.isNull()) {
+            dx = 4;
+            dy = ( height() - pixmap.height() ) / 2;
+            fixWindowsStylePos( dx, dy );
+            _painter->drawPixmap( dx, dy, pixmap );
+        }
+
+        if (!textLabel().isNull()) {
+            textFlags = AlignVCenter | AlignLeft;
+            if ( !pixmap.isNull() )
+                dx = 4 + pixmap.width() + 2;
+            else
+                dx = 4;
+            dy = 0;
+            fixWindowsStylePos( dx, dy );
+            textRect = QRect( dx, dy, width() - dx, height() );
+        }
+    }
+    else if ( static_cast<KToolBar::IconText>( iconTextMode() ) == KToolBar::TextOnly ) {
+        if ( !textLabel().isNull() ) {
+            textFlags = AlignTop | AlignLeft;
+            dx = ( width() - ARROW_WIDTH - fm.width( textLabel() ) ) / 2;
+            dy = ( height() - fm.lineSpacing() ) / 2;
+            fixWindowsStylePos( dx, dy );
+            textRect = QRect( dx, dy, fm.width(textLabel()), fm.lineSpacing() );
+        }
+    }
+    else if ( static_cast<KToolBar::IconText>( iconTextMode() ) == KToolBar::IconTextBottom ) {
+        QPixmap pixmap = iconSet().pixmap( QIconSet::Automatic,
+                                           isEnabled() ? ( KToolBarButton::isActive() ? QIconSet::Active : QIconSet::Normal ) :
+                                           QIconSet::Disabled, isOn() ? QIconSet::On : QIconSet::Off );
+        if( !pixmap.isNull()) {
+            dx = ( width() - ARROW_WIDTH - pixmap.width() ) / 2;
+            dy = ( height() - fm.lineSpacing() - pixmap.height() ) / 2;
+            fixWindowsStylePos( dx, dy );
+            _painter->drawPixmap( dx, dy, pixmap );
+        }
+
+        if ( !textLabel().isNull() ) {
+            textFlags = AlignBottom | AlignHCenter;
+            dx = ( width() - ARROW_WIDTH - fm.width( textLabel() ) ) / 2;
+            dy = height() - fm.lineSpacing() - 4;
+            fixWindowsStylePos( dx, dy );
+            textRect = QRect( dx, dy, fm.width( textLabel() ), fm.lineSpacing() );
+        }
+    }
+
+    // Draw the text at the position given by textRect, and using textFlags
+    if (!textLabel().isNull() && !textRect.isNull()) {
+        _painter->setFont( KGlobalSettings::toolBarFont() );
+        if ( !isEnabled() )
+            _painter->setPen( palette().disabled().dark() );
+        else if( KToolBarButton::isRaised() )
+            _painter->setPen( KGlobalSettings::toolBarHighlightColor() );
+        else
+            _painter->setPen( colorGroup().buttonText() );
+        _painter->drawText( textRect, textFlags, textLabel() );
+    }
+}
+
+bool KoToolButton::eventFilter( QObject* o, QEvent* e )
+{
+    if ( e->type() == QEvent::MouseButtonPress ) {
+        m_arrowPressed = hitArrow( static_cast<QMouseEvent*>( e )->pos() );
+        if ( m_arrowPressed )
+            m_popup->popup( mapToGlobal( QPoint( 0, height() ) ) );
+    }
+    else if ( e->type() == QEvent::MouseButtonRelease )
+        m_arrowPressed = false;
+    return KToolBarButton::eventFilter( o, e );
+}
+
+void KoToolButton::init()
+{
+    m_popup = KoColorPanel::createColorPopup( KoColorPanel::CustomColors, Qt::yellow, this,
+                                              SLOT( colorSelected( const QColor& ) ),
+                                              this, "no-name" );
+}
+
+void KoToolButton::fixWindowsStylePos( int& dx, int& dy )
+{
+    if ( isDown() && !m_arrowPressed && style().styleHint( QStyle::SH_GUIStyle ) == WindowsStyle ) {
+        ++dx;
+        ++dy;
+    }
+}
+
+bool KoToolButton::hitArrow( const QPoint& pos )
+{
+    return QRect( width() - ARROW_WIDTH, 0, ARROW_WIDTH, height() ).contains( pos );
 }
 
 #include <kotoolbutton.moc>

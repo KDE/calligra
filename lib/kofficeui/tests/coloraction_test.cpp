@@ -24,12 +24,15 @@
 #include <qmenubar.h>
 
 #include <kdebug.h>
+#include <ktoolbar.h>
+#include <kiconloader.h>
 #include <kapplication.h>
 #include <kotoolbutton.h>
 #include <coloraction_test.h>
 
 #include <stdlib.h>
 #include <time.h>
+
 
 TopLevel::TopLevel( QWidget* parent, const char* name) : QMainWindow( parent, name )
 {
@@ -41,6 +44,7 @@ TopLevel::TopLevel( QWidget* parent, const char* name) : QMainWindow( parent, na
     QBoxLayout* l = new QHBoxLayout( w, 10 );
     QGroupBox* b1 = new QVGroupBox( QString::fromLatin1( "KoColorPanel 1" ), w );
     panel = new KoColorPanel( b1, "panel1" );
+    connect( panel, SIGNAL( colorSelected( const QColor& ) ), SLOT( slotColorSelected( const QColor& ) ) );
     //panel->insertDefaultColors();
     l->addWidget( b1 );
 
@@ -67,6 +71,10 @@ TopLevel::TopLevel( QWidget* parent, const char* name) : QMainWindow( parent, na
     file->insertItem( "Clear", this, SLOT( clearColors() ), CTRL+Key_C );
     file->insertSeparator();
     file->insertItem( "&Quit", qApp, SLOT( closeAllWindows() ), CTRL+Key_Q );
+
+    KToolBar* toolBar = new KToolBar( this );
+    addDockWindow( toolBar );
+    ( void ) new KoToolButton( "color_fill", 1, toolBar, "funky button", "Fill Color" );
 }
 
 void TopLevel::insertRandomColor()
