@@ -72,7 +72,7 @@
 #include "kptcommand.h"
 #include "kptrelation.h"
 #include "kptrelationdialog.h"
-
+#include "kptresourceuseview.h"
 #include "kptresourceview.h"
 #include "kptresourcedialog.h"
 #include "kptresource.h"
@@ -119,6 +119,9 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     m_resourceview = new KPTResourceView( this, m_tab );
     m_tab->addWidget(m_resourceview);
 
+    m_resourceuseview = new KPTResourceUseView( this, m_tab );
+    m_tab->addWidget(m_resourceuseview);
+
     m_reportview = new KPTReportView(this, m_tab);
     m_tab->addWidget(m_reportview);
 
@@ -148,6 +151,8 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     actionViewPert = new KAction(i18n("Network"), "pert_chart", 0, this, SLOT(slotViewPert()), actionCollection(), "view_pert");
     
     actionViewResources = new KAction(i18n("Resources"), "resources", 0, this, SLOT(slotViewResources()), actionCollection(), "view_resources");
+
+    actionViewResourceUse = new KAction(i18n("Resource use"), "resourceuse", 0, this, SLOT(slotViewResourceUse()), actionCollection(), "view_resourceuse");
 
     // ------ Insert
     actionAddTask = new KAction(i18n("Task..."), "add_task", 0, this,
@@ -323,6 +328,12 @@ void KPTView::slotViewResources() {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_resourceview);
 	m_resourceview->draw(getPart()->getProject());
+}
+
+void KPTView::slotViewResourceUse() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_tab->raiseWidget(m_resourceuseview);
+    m_resourceuseview->draw(getPart()->getProject());
 }
 
 void KPTView::slotProjectEdit() {
@@ -768,6 +779,9 @@ void KPTView::slotUpdate(bool calculate)
     	m_resourceview->draw(getProject());
 	    m_resourceview->show();
 	}
+	else if (m_tab->visibleWidget() == m_resourceuseview)
+	{
+	}
 	else if (m_tab->visibleWidget() == m_reportview)
 	{
 	}
@@ -822,6 +836,12 @@ void KPTView::slotAboutToShow(QWidget *widget) {
     	m_resourceview->draw(getPart()->getProject());
 	    m_resourceview->show();
 	}
+	else if (widget == m_resourceuseview)
+    {
+        //kdDebug()<<k_funcinfo<<"draw resourceview"<<endl;
+        m_resourceuseview->draw(getProject());
+        m_resourceuseview->show();
+    }
 	else if (widget == m_reportview)
 	{
         //kdDebug()<<k_funcinfo<<"draw reportview"<<endl;

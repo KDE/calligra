@@ -98,6 +98,14 @@ KPTDuration KPTDuration::operator/(int unit) const {
     return dur;
 }
 
+double KPTDuration::operator/(const KPTDuration &d) const {
+    if (d == zeroDuration) {
+        kdDebug()<<k_funcinfo<<"Devide by zero: "<<this->toString()<<endl;
+        return 0.0;
+    }
+    return (double)(m_ms) / (double)(d.m_ms);
+}
+
 bool KPTDuration::isCloseTo(const KPTDuration &d) const {
     Q_INT64 limit = 30000;
     Q_INT64 delta = m_ms - d.m_ms;

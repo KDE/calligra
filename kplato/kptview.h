@@ -43,6 +43,7 @@ namespace KPlato
 class KPTGanttView;
 class KPTPertView;
 class KPTResourceView;
+class KPTResourceUseView;
 class KPTReportView;
 class KPTPart;
 class KPTNode;
@@ -88,6 +89,7 @@ public slots:
     void slotViewGanttFloat();
     void slotViewPert();
     void slotViewResources();
+    void slotViewResourceUse();
     void slotAddTask();
     void slotAddSubTask();
     void slotAddMilestone();
@@ -138,8 +140,9 @@ private:
     KPTPertView *m_pertview;
     QHBoxLayout *m_pertlayout;
 	QWidgetStack *m_tab;
-	KPTResourceView *m_resourceview;
-	KPTReportView *m_reportview;
+    KPTResourceView *m_resourceview;
+    KPTResourceUseView *m_resourceuseview;
+    KPTReportView *m_reportview;
     QPtrList<QString> m_reportTemplateFiles;
 
     int m_viewGrp;
@@ -164,6 +167,7 @@ private:
     KToggleAction *actionViewGanttFloat;
     KAction *actionViewPert;
     KAction *actionViewResources;
+    KAction *actionViewResourceUse;
 
     // ------ Insert
     KAction *actionAddTask;

@@ -289,7 +289,7 @@ public:
 
     KPTCalendar *findCalendar(const QString &id) const;
 
-    KPTAppointment KPTResource::appointmentIntervals() const;
+    KPTAppointment appointmentIntervals() const;
     
 private:
     KPTProject *m_project;
@@ -401,6 +401,7 @@ public:
 
     KPTDateTime startTime() const;
     KPTDateTime endTime() const;
+    double maxLoad() const;
     
     const KPTDuration &repeatInterval() const {return m_repeatInterval;}
     void setRepeatInterval(KPTDuration ri) {m_repeatInterval=ri;}

@@ -699,6 +699,16 @@ void KPTAppointment::addInterval(const KPTDateTime &start, const KPTDuration &du
     addInterval(start, e, load);
 }
 
+double KPTAppointment::maxLoad() const {
+    double v = 0.0;
+    QPtrListIterator<KPTAppointmentInterval> it = m_intervals;
+    for (; it.current(); ++it) {
+        if (v < it.current()->load())
+            v = it.current()->load();
+    }
+    return v;
+}
+
 KPTDateTime KPTAppointment::startTime() const {
     KPTDateTime t;
     QPtrListIterator<KPTAppointmentInterval> it = m_intervals;

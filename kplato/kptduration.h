@@ -91,6 +91,7 @@ class KPTDuration {
         KPTDuration &operator=(const KPTDuration &d ) { m_ms = d.m_ms; return *this;}
         KPTDuration operator*(int unit) const; 
         KPTDuration operator/(int unit) const;
+        double operator/(const KPTDuration &d) const;
         
         KPTDuration operator+(KPTDuration &d) const
             {KPTDuration dur(*this); dur.add(d); return dur; }
