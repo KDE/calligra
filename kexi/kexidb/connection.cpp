@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+	/* This file is part of the KDE project
    Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
@@ -1673,24 +1673,34 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 	TableSchema *ts = m_tables_byname["kexi__objects"];
 	if (!ts)
 		return false;
-	if (newObject && sdata.id()<=0) {
+	if (newObject) {
 		FieldList *fl;
 		bool ok;
-		fl = ts->subList("o_type", "o_name", "o_caption", "o_desc");
-		ok = fl!=0;
-		if (ok && !insertRecord(*fl, QVariant(sdata.type()), QVariant(sdata.name()),
-		QVariant(sdata.caption()), QVariant(sdata.description()) ))
-			ok = false;
-		delete fl;
-		if (!ok)
-			return false;
-		//fetch newly assigned ID
-		int obj_id = lastInsertedAutoIncValue("o_id",*ts);
-		KexiDBDbg << "######## NEW obj_id == " << obj_id << endl;
-		if (obj_id<=0)
-			return false;
-		sdata.m_id = obj_id;
-		return true;
+		if (sdata.id()<=0) {//get new ID
+			fl = ts->subList("o_type", "o_name", "o_caption", "o_desc");
+			ok = fl!=0;
+			if (ok && !insertRecord(*fl, QVariant(sdata.type()), QVariant(sdata.name()),
+			QVariant(sdata.caption()), QVariant(sdata.description()) ))
+				ok = false;
+			delete fl;
+			if (!ok)
+				return false;
+			//fetch newly assigned ID
+			int obj_id = lastInsertedAutoIncValue("o_id",*ts);
+			KexiDBDbg << "######## NEW obj_id == " << obj_id << endl;
+			if (obj_id<=0)
+				return false;
+			sdata.m_id = obj_id;
+			return true;
+		} else {
+			fl = ts->subList("o_id", "o_type", "o_name", "o_caption", "o_desc");
+			ok = fl!=0;
+			if (ok && !insertRecord(*fl, QVariant(sdata.id()), QVariant(sdata.type()), QVariant(sdata.name()),
+				QVariant(sdata.caption()), QVariant(sdata.description()) ))
+				ok = false;
+			delete fl;
+			return ok;
+		}
 	}
 	//existing object:
 	return executeSQL(QString("update kexi__objects set o_type=%2, o_caption=%3, o_desc=%4 where o_id=%1")

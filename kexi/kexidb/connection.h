@@ -567,12 +567,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! Stores object's schema data (id, name, caption, help text)
 		 described by \a sdata on the backend. 
 		 If \a newObject is true, new entry is created, 
-		 and obtained, unique object identifier is assigned to \a sdata 
-		 (see SchemaData::id()).
+		 and (when sdata.id() was <=0), new, unique object identifier 
+		 is obtained and assigned to \a sdata (see SchemaData::id()).
 		 
-		 If \a newObject is false (or sdata.id() is >0), 
-		 it's expected that entry on the backend already exists,
-		 so it's updated (changes to identifier are not allowed).
+		 If \a newObject is false, it's expected that entry on the 
+		 backend already exists, so it's updated (changes to identifier are not allowed).
 		 \return true on success. */
 		bool storeObjectSchemaData( SchemaData &sdata, bool newObject );
 
