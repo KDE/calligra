@@ -175,7 +175,10 @@ QString KWString::toString(unsigned int _pos,unsigned int _len)
   if (_pos + _len <= _len_)
     {
       for (unsigned int i = _pos;i <= _len + _pos;i++)
-	str += _data_[i].c;
+	{
+	  if (static_cast<int>(i) > static_cast<int>(size() - 1)) break;
+	  str += _data_[i].c;
+	}
     }
 
   return QString(str);
@@ -280,6 +283,7 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 		    _format->load(parser,lst,_doc);
 		    for (unsigned int i = __pos;i < __pos + __len;i++)
 		      {
+			if (static_cast<int>(i) > static_cast<int>(size() - 1)) break;
 			freeChar(_data_[i]);
 			format = _doc->getFormatCollection()->getFormat(*_format);
 			_kwformat = new KWCharFormat(format);

@@ -545,3 +545,10 @@ Reggie, 22.12.1998:
 - Text of parags should be saved with <TEXT>Some Text here</TEXT> now and not with <TEXT value="Some Text here"/> anymore.
   The old version (<TEXT value="..."/>) is still supported for compatibility, but really shouldn't be used anymore.
   (Of course KWord itself saves text with <TEXT>...</TEXT> now too :-)
+
+Reggie, 23.12.1998:
+-------------------
+- Fixed a bug when loading framesets with no text (1 parag with textlen == 0)
+- Implemented loading/saving headers/footes (Kalle, I'll send you a mail with the new tags/attributes)
+- Some fixes
+- Different footer/header for first page and the rest of the doc start working now (there are still some problems)

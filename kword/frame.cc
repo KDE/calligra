@@ -315,10 +315,10 @@ void KWTextFrameSet::init()
   autoCreateNewFrame = true;
 
   parags = new KWParag(this,doc,0L,0L,doc->getDefaultParagLayout());
-  parags->insertText(0," ");
+  //parags->insertText(0," ");
   KWFormat *format = new KWFormat(doc);
   format->setDefaults(doc);
-  parags->setFormat(0,1,*format);
+  //parags->setFormat(0,1,*format);
 
 //   KWParag *p = parags;
 //   for (int i = 0;i < 500;i++)
@@ -540,7 +540,7 @@ void KWTextFrameSet::splitParag(KWParag *_parag,unsigned int _pos)
 void KWTextFrameSet::save(ostream &out)
 {
   out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType()) 
-      << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\">" << endl;
+      << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\"" << frameInfo << "\">" << endl;
 
   KWFrameSet::save(out);
 
@@ -800,7 +800,7 @@ void KWPictureFrameSet::setSize(KSize _imgSize)
 /*================================================================*/
 void KWPictureFrameSet::save(ostream &out)
 {
-  out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType()) << "\">" << endl;
+  out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType()) << "\" frameInfo=\"" << frameInfo << "\">" << endl;
 
   KWFrameSet::save(out);
 

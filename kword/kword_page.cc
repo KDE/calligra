@@ -936,7 +936,7 @@ void KWPage::recalcWholeText(bool _cursor = false)
 
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
-      if (doc->getFrameSet(i)->getFrameType() != FT_TEXT) continue;      
+      if (doc->getFrameSet(i)->getFrameType() != FT_TEXT || doc->getFrameSet(i)->getNumFrames() == 0) continue;      
       KWFormatContext _fc(doc,i + 1);
       _fc.init(doc->getFirstParag(i),painter,true);
 

@@ -52,7 +52,10 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCou
   if (_fromStart)
     {
       // Offset from the top of the page
-      ptY = document->getFrameSet(frameSet - 1)->getFrame(0)->top();
+      if (document->getFrameSet(frameSet - 1)->getNumFrames() > 0)
+	ptY = document->getFrameSet(frameSet - 1)->getFrame(0)->top();
+      else
+	ptY = 0;
       if (_frame != -1 && _page != -1 && doc->getFrameSet(frameSet - 1)->getFrameInfo() != FI_BODY)
 	{
 	  frame = _frame;
@@ -1042,7 +1045,6 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	    textPos++;
 	}
     }
-
     // Are we at the paragraphs end ?
     if ( textPos == parag->getTextLen())
     {
