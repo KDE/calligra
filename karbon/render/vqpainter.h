@@ -39,6 +39,7 @@ public:
 	virtual void begin();
 	virtual void end();
 	virtual void blit( const QRect & );
+	virtual void clear( const QColor & );
 
 	// matrix manipulation
 	virtual void setWorldMatrix( const QWMatrix & );

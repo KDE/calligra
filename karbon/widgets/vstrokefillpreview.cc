@@ -116,7 +116,7 @@ void
 VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 {
 	m_painter->begin();
-	m_painter->clear( paletteBackgroundColor().rgb() );
+	m_painter->clear( paletteBackgroundColor() );
 
 	VStroke stroke;
 	stroke.setLineWidth( 2.0 );

@@ -115,6 +115,7 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		// TODO : only update ROIs
 		KoRect r( 0, 0, viewport()->width(), viewport()->height() );
 		p->begin();
+		p->clear( Qt::white );
 		p->setZoomFactor( m_view->zoom() );
 		/*QWMatrix mat;
 		mat.scale( 1, -1 );
@@ -158,6 +159,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjec
 	if( drawVObjects )
 	{
 		p->begin();
+		p->clear( Qt::white );
 		p->setZoomFactor( m_view->zoom() );
 		/*QWMatrix mat;
 		mat.scale( 1, -1 );

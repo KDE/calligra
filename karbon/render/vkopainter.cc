@@ -139,7 +139,6 @@ VKoPainter::resize( unsigned int w, unsigned int h )
 void
 VKoPainter::begin()
 {
-	clear();
 }
 
 void
@@ -165,6 +164,21 @@ VKoPainter::blit( const QRect &r )
 	int height	= QMIN( m_height, r.x() + r.height() );
 	xlib_draw_rgb_32_image( m_target->handle(), gc, x, y, width - x, height - y,
 							XLIB_RGB_DITHER_NONE, m_buffer + (x * 4) + (y * m_width * 4), m_width * 4 );
+}
+
+void
+VKoPainter::clear()
+{
+	if ( m_buffer )
+		memset( m_buffer, qRgba( 255, 255, 255, 255 ), m_width * m_height * 4 );
+}
+
+void
+VKoPainter::clear( const QColor &c )
+{
+	unsigned int color = c.rgb();
+	if ( m_buffer )
+		memset( m_buffer, qRgba( qRed( color ), qGreen( color ), qBlue( color ), 100 ), m_width * m_height * 4 );
 }
 
 void
@@ -368,21 +382,6 @@ VKoPainter::restore()
 void
 VKoPainter::setRasterOp( Qt::RasterOp  )
 {
-}
-
-void
-VKoPainter::clear()
-{
-	if ( m_buffer )
-		memset( m_buffer, qRgba( 255, 255, 255, 255 ), m_width * m_height * 4 );
-}
-
-void
-VKoPainter::clear( unsigned int color )
-{
-	if ( m_buffer )
-		memset( m_buffer, qRgba( qRed( color ), qGreen( color ), qBlue( color ), 255 ),
-			m_width * m_height * 4 );
 }
 
 KoRect

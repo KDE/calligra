@@ -46,9 +46,9 @@ public:
 	virtual void resize( unsigned int w, unsigned int h );
 	virtual void begin();
 	virtual void end();
-	void clear();
-	void clear( unsigned int color );
 	virtual void blit( const QRect & );
+	void clear();
+	virtual void clear( const QColor & );
 
 	// matrix manipulation
 	virtual void setWorldMatrix( const QWMatrix & );

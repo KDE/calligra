@@ -51,6 +51,7 @@ public:
 	virtual void begin() = 0;
 	virtual void end() = 0;
 	virtual void blit( const QRect & ) = 0;
+	virtual void clear( const QColor & ) = 0;
 
 	// matrix manipulation
 	virtual void setWorldMatrix( const QWMatrix & ) = 0;

@@ -57,6 +57,13 @@ VQPainter::blit( const QRect & )
 }
 
 void
+VQPainter::clear( const QColor &c )
+{
+	m_painter->setBackgroundColor( c );
+	m_painter->eraseRect( 0, 0, m_width, m_height );
+}
+
+void
 VQPainter::begin()
 {
 	if( !m_painter->isActive() )
