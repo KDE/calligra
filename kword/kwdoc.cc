@@ -61,7 +61,7 @@
 #include <kglobalsettings.h>
 #include "kocommandhistory.h"
 
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
 #include <koSconfig.h>
 #endif
 
@@ -293,7 +293,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;
     m_pKSpellConfig=0;
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     m_pKOSpellConfig = 0;
 #endif
     m_hasTOC=false;
@@ -377,7 +377,7 @@ KWDocument::~KWDocument()
     delete m_tableStyleColl;
     delete m_tableTemplateColl;
     delete m_pKSpellConfig;
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     delete m_pKOSpellConfig;
 #endif
     delete m_viewMode;
@@ -388,7 +388,7 @@ void KWDocument::initConfig()
 {
   KConfig *config = KWFactory::global()->config();
   KSpellConfig ksconfig;
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
   KOSpellConfig kosconfig;
 #endif
   if( config->hasGroup("KSpell kword" ) )
@@ -400,7 +400,7 @@ void KWDocument::initConfig()
       ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
       ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
       ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
       kosconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
       kosconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
       kosconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
@@ -3720,7 +3720,7 @@ void KWDocument::setKSpellConfig(KSpellConfig _kspell)
   m_bgSpellCheck->setKSpellConfig(_kspell);;
 }
 
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
 void KWDocument::setKOSpellConfig(KOSpellConfig _kspell)
 {
   if(m_pKOSpellConfig==0)

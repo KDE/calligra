@@ -77,7 +77,7 @@ class KWViewMode;
 class KWFrameStyle;
 class KWTableStyle;
 
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
 class KOSpell;
 #endif
 
@@ -709,7 +709,7 @@ private:
     // Spell-checking
     struct {
 	KSpell *kspell;
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
         KOSpell *kospell;
 #endif
 	int spellCurrFrameSetNum;

@@ -65,7 +65,7 @@ class QFont;
 class QStringList;
 class QRect;
 
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
 class KOSpellConfig;
 #endif
 
@@ -579,7 +579,7 @@ public:
     void setKSpellConfig(KSpellConfig _kspell);
     KSpellConfig * getKSpellConfig()const {return m_pKSpellConfig;}
 
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     void setKOSpellConfig(KOSpellConfig _kspell);
     KOSpellConfig * getKOSpellConfig()const {return m_pKOSpellConfig;}
 #endif
@@ -977,7 +977,7 @@ private:
     KWVariableCollection *m_varColl;
     KWBgSpellCheck *m_bgSpellCheck;
     KSpellConfig *m_pKSpellConfig;
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     KOSpellConfig *m_pKOSpellConfig;
 #endif
     KoStyleCollection *m_styleColl;
