@@ -58,10 +58,10 @@
                         <cstring>protect</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Protect size and position</string>
+                        <string>Pro&amp;tect size and position</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+P</string>
+                        <string>Alt+T</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
