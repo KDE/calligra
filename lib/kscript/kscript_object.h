@@ -22,7 +22,7 @@
 
 #include <qshared.h>
 #include <qmap.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 #include "kscript_ptr.h"
@@ -130,7 +130,7 @@ private:
   Status m_status;
 
   SignalMap m_signals;
-  QList<KSObject> m_sender;
+  QPtrList<KSObject> m_sender;
 };
 
 class KSScriptObject : public KSObject

@@ -21,7 +21,7 @@
 #define KSCRIPTMENU_H
 
 #include <kaction.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qptrdict.h>
 #include <qstring.h>
 
@@ -41,7 +41,7 @@ protected slots:
     void slotActivated();
 
 private:
-    QList<KAction> m_actions;
+    QPtrList<KAction> m_actions;
     QPtrDict<QString> m_filenames;
     DCOPRef m_ref;
     KInstance* m_instance;

@@ -64,7 +64,7 @@ bool KSObject::destructor()
 	return TRUE;
 
     qDebug("KSObject::destructor %p", this);
-    QListIterator<KSObject> it( m_sender );
+    QPtrListIterator<KSObject> it( m_sender );
     for( ; it.current(); ++it )
 	it.current()->disconnect( this );
     m_sender.clear();

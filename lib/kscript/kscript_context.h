@@ -25,7 +25,7 @@
 
 #include <qshared.h>
 #include <qstring.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 class KSContext;
 class KSParseNode;
@@ -137,7 +137,7 @@ public:
   void popNamespace() { m_spaces.removeLast(); }
 
 private:
-  QList<KSNamespace> m_spaces;
+  QPtrList<KSNamespace> m_spaces;
 };
 
 
