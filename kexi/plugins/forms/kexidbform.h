@@ -21,7 +21,7 @@
 #ifndef KEXIDBFORM_H
 #define KEXIDBFORM_H
 
-#include "kexigradientwidget.h"
+#include <kexigradientwidget.h>
 
 #include <qpixmap.h>
 

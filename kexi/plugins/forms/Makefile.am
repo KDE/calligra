@@ -2,8 +2,7 @@ include $(top_srcdir)/kexi/Makefile.global
 
 kde_module_LTLIBRARIES = kexihandler_form.la kexidbwidgets.la
 
-kexihandler_form_la_SOURCES = kexigradientwidget.cpp \
-	kexidataprovider.cpp kexiformpart.cpp \
+kexihandler_form_la_SOURCES = kexidataprovider.cpp kexiformpart.cpp \
 	kexiformscrollview.cpp kexidbform.cpp kexiformview.cpp
 
 kexihandler_form_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module -no-undefined
@@ -14,7 +13,7 @@ kexihandler_form_la_LIBADD = ../../core/libkexicore.la \
   ../../formeditor/libkformdesigner.la
 
 kexidbwidgets_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) -module
-kexidbwidgets_la_SOURCES =  kexidbfactory.cpp kexilabel.cpp
+kexidbwidgets_la_SOURCES = kexidbfactory.cpp kexilabel.cpp
 kexidbwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la
 
 servicesdir=$(kde_servicesdir)/kformdesigner
