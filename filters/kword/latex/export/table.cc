@@ -1,7 +1,7 @@
 /*
 ** A program to convert the XML rendered by KWord into LATEX.
 **
-** Copyright (C) 2000 Robert JACOLIN
+** Copyright (C) 2000,2002 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -20,8 +20,9 @@
 */
 
 #include <kdebug.h>		/* for kdDebug stream */
+#include <qbitarray.h>
 #include "listtable.h"
-#include "texte.h"
+#include "textFrame.h"
 
 /*******************************************/
 /* Constructor                             */
@@ -57,8 +58,8 @@ EEnv Table::getCellFlow(int col)
 		Element* elt = at(row * getMaxRow() + col);
 		if(elt->getType() == ST_TEXT)
 		{
-			kdDebug() << ((Texte*) elt)->getFirstPara()->getEnv() << endl;
-			return ((Texte*) elt)->getFirstPara()->getEnv();
+			kdDebug() << ((TextFrame*) elt)->getFirstPara()->getEnv() << endl;
+			return ((TextFrame*) elt)->getFirstPara()->getEnv();
 		}
 	}
 	kdDebug() << "Default flow for cell" << endl;
@@ -76,8 +77,8 @@ double Table::getCellSize(int col)
 		Element* elt = at(row * getMaxRow() + col);
 		if(elt->getType() == ST_TEXT)
 		{
-			kdDebug() << "size : " << ((Texte*) elt)->getLeft() << endl;
-			return ((Texte*) elt)->getRight() - ((Texte*) elt)->getLeft();
+			kdDebug() << "size : " << ((TextFrame*) elt)->getLeft() << endl;
+			return ((TextFrame*) elt)->getRight() - ((TextFrame*) elt)->getLeft();
 		}
 	}
 	kdDebug() << "Default size for cell" << endl;
@@ -125,7 +126,7 @@ void Table::generate(QTextStream& out)
 	out << endl << "\\begin{tabular}";
 	generateTableHeader(out);
 	out << endl;
-	indent();
+	Config::instance()->indent();
 
 	int row= 0;
 	while(row <= getMaxRow())
@@ -133,7 +134,7 @@ void Table::generate(QTextStream& out)
 		generateTopLineBorder(out, row);
 		for(int col= 0; col <= getMaxCol(); col++)
 		{
-			writeIndent(out);
+			Config::instance()->writeIndent(out);
 	
 			/* Search the cell in the list */
 			elt = searchCell(row, col);
@@ -153,12 +154,12 @@ void Table::generate(QTextStream& out)
 				out << "&" << endl;
 		}
 		out << "\\\\" << endl;
-		writeIndent(out);
+		Config::instance()->writeIndent(out);
 		row = row + 1;
 	}
 	generateBottomLineBorder(out, row - 1);
 	out << "\\end{tabular}" << endl << endl;
-	desindent();
+	Config::instance()->desindent();
 	kdDebug() << "END OF GENERATINO OF A TABLE" << endl;
 }
 
@@ -168,8 +169,9 @@ void Table::generate(QTextStream& out)
 void Table::generateTopLineBorder(QTextStream& out, int row)
 {
 	Element* elt = 0;
-	bool border[getMaxCol()];
+	QBitArray border(getMaxCol());
 	bool fullLine = true;
+	
 	for(int index = 0; index <= getMaxCol(); index++)
 	{
 		/* Search the cell in the list */
@@ -179,11 +181,11 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 		/* If the element has a border display it here */
 		if(elt->hasTopBorder())
 		{
-			border[index] = true;
+			border[index] = 1;
 		}
 		else
 		{
-			border[index] = false;
+			border[index] = 0;
 			fullLine = false;
 		}
 	}
@@ -191,7 +193,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 	if(fullLine)
 	{
 		/* All column have a top border */
-		writeIndent(out);
+		Config::instance()->writeIndent(out);
 		out << "\\hline" << endl;
 	}
 	else
@@ -203,7 +205,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 			{
 				int begin = index;
 				int end = index;
-				while(border[index] == true && index < getMaxCol())
+				while(border[index] && index < getMaxCol())
 				{
 					index = index + 1;
 				}
@@ -221,7 +223,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 void Table::generateBottomLineBorder(QTextStream& out, int row)
 {
 	Element* elt = 0;
-	bool border[getMaxCol()];
+	QBitArray border(getMaxCol());
 	bool fullLine = true;
 
 	for(int index = 0; index <= getMaxCol(); index++)
@@ -232,11 +234,11 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
 		/* If the element has a border display it here */
 		if(elt->hasBottomBorder())
 		{
-			border[index] = true;
+			border[index] = 1;
 		}
 		else
 		{
-			border[index] = false;
+			border[index] = 0;
 			fullLine = false;
 		}
 	}
@@ -244,7 +246,7 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
 	if(fullLine)
 	{
 		/* All column have a top border */
-		writeIndent(out);
+		Config::instance()->writeIndent(out);
 		out << "\\hline" << endl;
 	}
 	else
@@ -256,7 +258,7 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
 			{
 				int begin = index;
 				int end = index;
-				while(border[index] == true && index <= getMaxCol())
+				while(border[index] && index <= getMaxCol())
 				{
 					index = index + 1;
 				}
@@ -318,5 +320,4 @@ void Table::generateTableHeader(QTextStream& out)
 	}
 	out << "}";
 }
-
 

@@ -326,9 +326,9 @@ void VariableZone::generate(QTextStream &out, int tab)
 		out << "\\today" << endl;
 	else
 	{
-		if(mustUseLatin1())
+		if(Config::instance()->mustUseLatin1())
 			display(escapeLatin1(getText()), out, tab);
-		else if(mustUseUnicode())
+		else if(Config::instance()->mustUseUnicode())
 			display(getText(), out, tab);
 	}
 	if(useFormat())
@@ -354,18 +354,18 @@ void VariableZone::display(QString texte, QTextStream& out, int tab)
 	while(end < (signed int) texte.length() && end != -1)
 	{
 		/* There are something to display */
-		if(mustUseUnicode())
+		if(Config::instance()->mustUseUnicode())
 			out << line.utf8() << endl;
-		else if(mustUseLatin1())
+		else if(Config::instance()->mustUseLatin1())
 			out << line << endl;
 		out.fill(tab);
 		index = end;
 		end = texte.find(' ', index + 60, false);
 		line = texte.mid(index, end - index);
 	}
-	if(mustUseUnicode())
+	if(Config::instance()->mustUseUnicode())
 		out << line.utf8();
-	else if(mustUseLatin1())
+	else if(Config::instance()->mustUseLatin1())
 		out << line;
 }
 

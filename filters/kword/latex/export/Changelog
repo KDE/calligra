@@ -1,4 +1,11 @@
-
+3 November 2002
+- features
+	o Convert picture in eps picture.
+	
+- internal
+	o Use the config class.
+	o Clean up the code.
+	
 12 September 2002
 - features
 	o Add a new option to choose the class.

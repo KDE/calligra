@@ -1,26 +1,24 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes)
-liblatexexport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined
-liblatexexport_la_LIBADD    = $(KOFFICE_LIBS) $(LIB_KFORMULA)
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(all_includes) $(LIBMAGICK_CPPFLAGS)
+libkwordlatexexport_la_LDFLAGS	= $(all_libraries) -module -avoid-version -no-undefined $(LIBMAGICK_RPATH)
+libkwordlatexexport_la_LIBADD    = $(KOFFICE_LIBS) $(LIB_KFORMULA) $(LIBMAGICK_LIBS)
 
 ####### Files
 
-kde_module_LTLIBRARIES = liblatexexport.la
+kde_module_LTLIBRARIES = libkwordlatexexport.la
 
-liblatexexport_la_SOURCES = anchor.cc config.cc document.cc element.cc fileheader.cc footnote.cc \
-format.cc formula.cc latexexport.cc latexexportdia.cc latexexportdia.skel \
-layout.cc listtable.cc para.cc \
-pixmap.cc table.cc texte.cc textformat.cc textzone.cc variableformat.cc variablezone.cc \
-xml2latexparser.cc xmlparser.cc
-# pictureformat.cc picturezone.cc
+libkwordlatexexport_la_SOURCES = anchor.cc config.cc document.cc element.cc fileheader.cc \
+																 footnote.cc format.cc formula.cc key.cc latexexport.cc \
+																 latexexportdia.cc latexexportdia.skel \
+																 layout.cc listtable.cc para.cc pixmapFrame.cc table.cc \
+																 textFrame.cc textformat.cc textzone.cc variableformat.cc \
+																 variablezone.cc xml2latexparser.cc xmlparser.cc
 
 noinst_HEADERS = anchor.h border.h config.h document.h element.h fileheader.h footnote.h \
-format.h formula.h latexexport.h latexexportdia.h \
-layout.h listtable.h para.h  \
-pixmap.h table.h texte.h textformat.h textzone.h variableformat.h variablezone.h \
-xml2latexparser.h xmlparser.h
-# pictureformat.h picturezone.h 
+								 format.h formula.h key.h latexexport.h latexexportdia.h layout.h \
+								 listtable.h para.h pixmapFrame.h table.h textFrame.h textformat.h \
+								 textzone.h variableformat.h variablezone.h xml2latexparser.h xmlparser.h
 
 ######## Debug
 #check_PROGRAMS = texlauncher

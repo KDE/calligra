@@ -321,9 +321,9 @@ void TextZone::generate(QTextStream &out)
 		generate_format_begin(out);
 
 	/* Display the text */
-	if(mustUseLatin1())
+	if(Config::instance()->mustUseLatin1())
 		display(escapeLatin1(_texte), out);
-	else if(mustUseUnicode())
+	else if(Config::instance()->mustUseUnicode())
 		display(_texte, out);
 
 	if(useFormat())
@@ -348,19 +348,19 @@ void TextZone::display(QString texte, QTextStream& out)
 	while(end < (signed int) texte.length() && end != -1)
 	{
 		/* There are something to display */
-		if(mustUseUnicode())
+		if(Config::instance()->mustUseUnicode())
 			out << line.utf8() << endl;
-		else if(mustUseLatin1())
+		else if(Config::instance()->mustUseLatin1())
 			out << line << endl;
-		writeIndent(out);
+		Config::instance()->writeIndent(out);
 		index = end;
 		end = texte.find(' ', index + 60, false);
 		line = texte.mid(index, end - index);
 	}
 	kdDebug() << line << endl;
-	if(mustUseUnicode())
+	if(Config::instance()->mustUseUnicode())
 		out << line.utf8();
-	else if(mustUseLatin1())
+	else if(Config::instance()->mustUseLatin1())
 		out << line;
 }
 
@@ -386,9 +386,9 @@ void TextZone::generate_format_begin(QTextStream & out)
 	if(getSize() != 11)
 	{
 		out << "\\fontsize{" << getSize() << "}{1}%" << endl;
-		writeIndent(out);
+		Config::instance()->writeIndent(out);
 		out << "\\selectfont" << endl;
-		writeIndent(out);
+		Config::instance()->writeIndent(out);
 	}
 
 	/* Color */
@@ -441,9 +441,9 @@ void TextZone::generate_format_end(QTextStream & out)
 	if(getSize() != 11)
 	{
 		out << "\\fontsize{11}{1}%" << endl;
-		writeIndent(out);
+		Config::instance()->writeIndent(out);
 		out << "\\selectfont" << endl;
-		writeIndent(out);
+		Config::instance()->writeIndent(out);
 	}
 
 	/* Bold, Italic or underlined */

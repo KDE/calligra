@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 Robert JACOLIN <rjacolin@ifrance.com>
+   Copyright (C) 2001,2002 Robert JACOLIN <rjacolin@ifrance.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -124,7 +124,7 @@ void LATEXExportDia::createDialog()
 
 	QBoxLayout *classLayout = new QVBoxLayout(page);
 
-	classList = new QComboBox(true, styleBox); // ## why not KComboBox? (completion etc.)
+	classList = new QComboBox(true, classBox); // ## why not KComboBox? (completion etc.)
 	classList->insertItem("article");
 	classList->insertItem("book");
 	classList->insertItem("letter");
@@ -137,52 +137,26 @@ void LATEXExportDia::createDialog()
 	mainLayout->activate();
 }
 
-/*QString LATEXExportDia::state()
-{
-	QString result;
-
-	if(newDocRBtn == docBox->selected())
-		result += "DOC";
-	else if(embededRBtn == docBox->selected())
-		result += "EMBEDED";
-
-	result += '-';
-
-	if(unicodeRBtn == langBox->selected())
-		result += "UNICODE";
-	else if(latin1RBtn == langBox->selected())
-		result += "LATIN1";
-	result += '-';
-
-	if(latexStyleRBtn == styleBox->selected())
-		result += "LATEX";
-	else if(kwordStyleRBtn == styleBox->selected())
-		result += "KWORD";
-	return result;
-}*/
-
 void LATEXExportDia::slotOk()
 {
 	hide();
-	//kdDebug() << "config : " << state() << endl;
 	kdDebug() << "LATEX FILTER --> BEGIN" << endl;
-	//Xml2LatexParser LATEXParser(_arrayIn, _fileOut, state());
-	Xml2LatexParser LATEXParser(_in, _fileOut /*,state()*/);
+	Config* config = Config::instance();
 	if(embededRBtn == docBox->selected())
-		LATEXParser.setEmbeded(true);
+		config->setEmbeded(true);
 	else
-		LATEXParser.setEmbeded(false);
+		config->setEmbeded(false);
 	if(unicodeRBtn == langBox->selected())
-		/*LATEXParser.useLatinEnc()*/;
-#warning "doesn't exist!"
+		config->useUnicodeEnc();
 	else
-		LATEXParser.useUnicodeEnc();
+		config->useLatin1Enc();
 	if(latexStyleRBtn == styleBox->selected())
-		LATEXParser.useLatexStyle();
+		config->useLatexStyle();
 	else
-		LATEXParser.useKwordStyle();
-	LATEXParser.setClass(classList->currentText());
-	
+		config->useKwordStyle();
+	config->setClass(classList->currentText());
+	kdDebug() << config->getClass() << endl;
+	Xml2LatexParser LATEXParser(_in, _fileOut, config);
 	LATEXParser.analyse();
 	kdDebug() << "---------- generate file -------------" << endl;
 	LATEXParser.generate();

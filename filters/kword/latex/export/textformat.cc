@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-#include "fileheader.h"		/* for the use of _fileHeader (color and underlined) */
+#include "fileheader.h"		/* for the use of FileHeader::instance() (color and underlined) */
 #include "textformat.h"
 
 /*******************************************/
@@ -152,7 +152,7 @@ void TextFormat::analyseUnderlined(const QDomNode balise)
 
 	setUnderlined(getAttr(balise, "value").toInt());
 	if(isUnderlined())
-		_fileHeader->useUnderline();
+		FileHeader::instance()->useUnderline();
 	kdDebug() << "Underlined ? " << isUnderlined() << endl;
 }
 
@@ -166,7 +166,7 @@ void TextFormat::analyseStrikeout(const QDomNode balise)
 	/* <STRIKEOUT value="1" /> */
 	setStrikeout(getAttr(balise, "value").toInt());
 	if(isStrikeout())
-		_fileHeader->useUnderline();
+		FileHeader::instance()->useUnderline();
 	kdDebug() << "Strikeout ? " << isUnderlined() << endl;
 }
 
@@ -214,7 +214,7 @@ void TextFormat::analyseColor(const QDomNode balise)
 	{
 		/* black color is default value */
 		setColor(red, green, blue);
-		_fileHeader->useColor();
+		FileHeader::instance()->useColor();
 	}
 }
 

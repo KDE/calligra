@@ -25,31 +25,14 @@
 
 #include "xml2latexparser.h"
 
-Xml2LatexParser::Xml2LatexParser(const KoStore* in, QString fileOut):
-		XmlParser(in), _file(fileOut), _in( in )
+Xml2LatexParser::Xml2LatexParser(const KoStore* in, QString fileOut, Config* config):
+		XmlParser(config, in), _file(fileOut), _in( in )
 {
 	//kdDebug() << fileIn.latin1() << endl;
 	kdDebug() << fileOut.latin1() << endl;
 	_filename = fileOut;
-	setFileHeader(_fileHeader);
+	//setFileHeader(_fileHeader);
 	setRoot(&_document);
-	_isEmbeded = false;
-	//analyse_config(config);
-}
-
-void Xml2LatexParser::analyse_config(QString config)
-{
-	kdDebug() << config << endl;
-	if(config.contains("EMBEDED") > 0)
-		_isEmbeded = true;
-	if(config.contains("LATEX") > 0)
-		useLatexStyle();
-	else if(config.contains("KWORD") > 0)
-		useKwordStyle();
-	if(config.contains("UNICODE") > 0)
-		useUnicodeEnc();
-	else if(config.contains("LATIN1") > 0)
-		useLatin1Enc();
 }
 
 void Xml2LatexParser::analyse()
@@ -58,9 +41,9 @@ void Xml2LatexParser::analyse()
 	balise = init();
 	//balise = getChild(balise, "DOC");
 	kdDebug() <<"HEADER -> PAPER" << endl;
-	_header.analysePaper(getChild(balise, "PAPER"));
+	FileHeader::instance()->analysePaper(getChild(balise, "PAPER"));
 	kdDebug() <<"HEADER -> ATTRIBUTES" << endl;
-	_header.analyseAttributs(getChild(balise, "ATTRIBUTES"));
+	FileHeader::instance()->analyseAttributs(getChild(balise, "ATTRIBUTES"));
 	kdDebug() <<"HEADER -> FRAMESETS" << endl;
 	_document.analyse(getChild(balise, "FRAMESETS"));
 	kdDebug() <<"HEADER -> END FRAMESETS" << endl;
@@ -78,9 +61,9 @@ void Xml2LatexParser::generate()
 	{
 		kdDebug() << "GENERATION" << endl;
 		_out.setDevice(&_file);
-		if(!isEmbeded())
-			_header.generate(_out);
-		_document.generate(_out, !isEmbeded());
+		if(!Config::instance()->isEmbeded())
+			FileHeader::instance()->generate(_out);
+		_document.generate(_out, !Config::instance()->isEmbeded());
 		_out << getDocument();
 		_file.close();
 	}

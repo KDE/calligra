@@ -146,7 +146,6 @@ void Layout::analyseBreakLine(const QDomNode balise)
 		useHardBreakAfter();
 }
 
-
 /*******************************************/
 /* analyseCounter                          */
 /*******************************************/
@@ -162,7 +161,7 @@ void Layout::analyseCounter(const QDomNode balise)
 	if(getCounterType() > TL_ARABIC && getCounterType() < TL_DISC_BULLET)
 	{
 		kdDebug() <<  getCounterType() << endl;
-		_fileHeader->useEnumerate();
+		FileHeader::instance()->useEnumerate();
 	}
 	setCounterDepth(getAttr(balise, "depth").toInt());
 	setCounterBullet(getAttr(balise, "bullet").toInt());

@@ -1,12 +1,7 @@
-
-/* BUGS : latex don't support alpha list with one command !!! the
- * command generated doesn't exist :))))
- */
-
 /*
 ** A program to convert the XML rendered by KWord into LATEX.
 **
-** Copyright (C) 2000 Robert JACOLIN
+** Copyright (C) 2000,2002 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -27,7 +22,7 @@
 #include <stdlib.h>		/* for atoi function */
 #include <kdebug.h>		/* for kdDebug() stream */
 #include "footnote.h"
-#include "texte.h"		/* for generate function (catch text footnote) */
+#include "textFrame.h"		/* for generate function (catch text footnote) */
 #include "document.h"
 
 Footnote::Footnote(Para* para): Format(para)

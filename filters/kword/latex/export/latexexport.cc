@@ -28,7 +28,7 @@
 #include "latexexportdia.h"
 
 typedef KGenericFactory<LATEXExport, KoFilter> LATEXExportFactory;
-K_EXPORT_COMPONENT_FACTORY( liblatexexport, LATEXExportFactory( "kwordlatexfilter" ) );
+K_EXPORT_COMPONENT_FACTORY( libkwordlatexexport, LATEXExportFactory( "kwordlatexfilter" ) );
 
 
 LATEXExport::LATEXExport(KoFilter *, const char *, const QStringList&) :
