@@ -114,11 +114,11 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 
         double dx = x2_x - x1_x;
         double dy = x2_y - x1_y;
-        int x = int( std::sqrt( dx * dx + dy * dy ) * ( d->m_mouseStart.x() < p.x() ? 1.0 : -1.0 ) );
+        int x = int( sqrt( dx * dx + dy * dy ) * ( d->m_mouseStart.x() < p.x() ? 1.0 : -1.0 ) );
 
         dx = y2_x - y1_x;
         dy = y2_y - y1_y;
-        int y = int( std::sqrt( dx * dx + dy * dy ) * ( d->m_mouseStart.y() < p.y() ? 1.0 : -1.0 ) );
+        int y = int( sqrt( dx * dx + dy * dy ) * ( d->m_mouseStart.y() < p.y() ? 1.0 : -1.0 ) );
 
         switch( d->m_gadget )
         {

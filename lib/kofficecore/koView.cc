@@ -63,7 +63,7 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
   //kdDebug(30003) << "KoView::KoView " << this << endl;
   d = new KoViewPrivate;
   d->m_doc = document;
-  PartBase::setPartObject( this );
+  KParts::PartBase::setPartObject( this );
 
   setFocusPolicy( StrongFocus );
 

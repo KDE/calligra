@@ -20,6 +20,8 @@
 #ifndef __ko_app_h__
 #define __ko_app_h__
 
+namespace std { };
+using namespace std;
 #include <kapp.h>
 
 #define KOAPP ((KoApplication *)KApplication::kApplication())

@@ -20,6 +20,8 @@
 #ifndef __ko_document_h__
 #define __ko_document_h__
 
+namespace std { };
+using namespace std;
 #include <qwmatrix.h>
 
 #include <kparts/part.h>
@@ -512,7 +514,7 @@ protected:
   void resetURL() { m_url = KURL(); }
 
   /// @internal
-  virtual void setModified() { ReadWritePart::setModified(); }
+  virtual void setModified() { KParts::ReadWritePart::setModified(); }
 
   /// @internal
   virtual void insertChild(QObject *o) { QObject::insertChild(o); }

@@ -73,7 +73,7 @@ public:
   {
     if ( !obj->isWidgetType() || obj->inherits( "KoFrame" ) )
       return false;
-    return PartManager::eventFilter( obj, ev );
+    return KParts::PartManager::eventFilter( obj, ev );
   }
 };
 
