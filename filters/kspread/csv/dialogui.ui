@@ -32,7 +32,7 @@
         </property>
         <widget class="QTable" row="1" column="0">
             <property name="name">
-                <cstring>m_table</cstring>
+                <cstring>m_sheet</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>

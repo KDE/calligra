@@ -109,8 +109,8 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     ElapsedTime t( "Filling data into document" );
 
     KSpreadCell *cell;
-    KSpreadSheet *table=ksdoc->createTable();
-    ksdoc->addTable(table);
+    KSpreadSheet *sheet=ksdoc->createSheet();
+    ksdoc->addSheet(sheet);
 
     int numRows = dialog->getRows();
     int numCols = dialog->getCols();
@@ -125,12 +125,12 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     QApplication::setOverrideCursor(Qt::waitCursor);
 
     int i;
-    double init = table->nonDefaultColumnFormat( 1 )->dblWidth();
+    double init = sheet->nonDefaultColumnFormat( 1 )->dblWidth();
     QMemArray<double> widths( numCols );
     for ( i = 0; i < numCols; ++i )
       widths[i] = init;
 
-    KSpreadCell * c = table->nonDefaultCell( 1, 1 );
+    KSpreadCell * c = sheet->nonDefaultCell( 1, 1 );
     QFontMetrics fm( c->textFont( 1, 1 ) );
 
     KSpreadStyle * s = ksdoc->styleManager()->defaultStyle();
@@ -151,7 +151,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
             switch (dialog->getHeader(col))
             {
              case CSVDialog::TEXT:
-              cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+              cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
               cell->setCellText( text, true );
               break;
              // ### TODO: put the code for the different numbers together (at least partially)
@@ -164,12 +164,12 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                         d = text.toDouble( &ok );
                     if ( !ok )
                     {
-                        cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setCellText( text, true );
                     }
                     else
                     {
-                        cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setNumber( d );
                     }
                     cell->setPrecision( 2 );
@@ -185,12 +185,12 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                     const double d = tmp.toDouble( &ok );
                     if ( !ok )
                     {
-                        cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setCellText( text, true );
                     }
                     else
                     {
-                        cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setNumber( d );
                     }
                     cell->setPrecision( 2 );
@@ -206,24 +206,24 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                     const double d = tmp.toDouble( &ok );
                     if ( !ok )
                     {
-                        cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setCellText( text,  true );
                     }
                     else
                     {
-                        cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+                        cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setNumber( d );
                     }
                     cell->setPrecision( 2 );
                     break;
                 }
              case CSVDialog::DATE:
-              cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+              cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
               cell->setCellText( text );
               cell->setFormatType( ShortDate_format );
               break;
              case CSVDialog::CURRENCY:
-              cell = table->nonDefaultCell( col + 1, row + 1, false, s );
+              cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
               cell->setCellText( text, false );
               cell->setFormatType( Money_format );
               cell->setPrecision( 2 );
@@ -237,7 +237,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     ElapsedTime t2( "Resizing columns" );
     for ( i = 0; i < numCols; ++i )
     {
-      ColumnFormat * c  = table->nonDefaultColumnFormat( i + 1 );
+      ColumnFormat * c  = sheet->nonDefaultColumnFormat( i + 1 );
       c->setDblWidth( widths[i] );
     }
 

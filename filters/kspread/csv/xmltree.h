@@ -29,7 +29,7 @@ class XMLTree
 
 public:
   // Create a tree.
-  // inputFileName is only used in order to name the table
+  // inputFileName is only used in order to name the sheet
   XMLTree(QDomDocument &qdoc);
   ~XMLTree();
 
@@ -48,6 +48,6 @@ public:
 private:
   int row, column;
   QDomDocument &root;
-  QDomElement doc, map, table;
+  QDomElement doc, map, sheet;
 };
 #endif // XMLTREE_H

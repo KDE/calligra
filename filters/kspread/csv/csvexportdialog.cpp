@@ -85,24 +85,24 @@ CSVExportDialog::~CSVExportDialog()
   kapp->setOverrideCursor(Qt::waitCursor);
 }
 
-void CSVExportDialog::fillTable( KSpreadMap * map )
+void CSVExportDialog::fillSheet( KSpreadMap * map )
 {
-  m_dialog->m_tableList->clear();
+  m_dialog->m_sheetList->clear();
   QCheckListItem * item;
 
-  QPtrListIterator<KSpreadTable> it( map->tableList() );
+  QPtrListIterator<KSpreadSheet> it( map->sheetList() );
   for( ; it.current(); ++it )
   {
-    item = new QCheckListItem( m_dialog->m_tableList,
-                               it.current()->tableName(),
+    item = new QCheckListItem( m_dialog->m_sheetList,
+                               it.current()->sheetName(),
                                QCheckListItem::CheckBox );
     item->setOn(true);
-    m_dialog->m_tableList->insertItem( item );
+    m_dialog->m_sheetList->insertItem( item );
   }
 
-  m_dialog->m_tableList->setSorting(1, true);
-  m_dialog->m_tableList->sort();
-  m_dialog->m_tableList->setSorting( -1 );
+  m_dialog->m_sheetList->setSorting(1, true);
+  m_dialog->m_sheetList->sort();
+  m_dialog->m_sheetList->setSorting( -1 );
 }
 
 QChar CSVExportDialog::getDelimiter() const
@@ -115,23 +115,23 @@ QChar CSVExportDialog::getTextQuote() const
   return m_textquote;
 }
 
-bool CSVExportDialog::printAlwaysTableDelimiter() const
+bool CSVExportDialog::printAlwaysSheetDelimiter() const
 {
   return m_dialog->m_delimiterAboveAll->isChecked();
 }
 
-QString CSVExportDialog::getTableDelimiter() const
+QString CSVExportDialog::getSheetDelimiter() const
 {
-  return m_dialog->m_tableDelimiter->text();
+  return m_dialog->m_sheetDelimiter->text();
 }
 
-bool CSVExportDialog::exportTable(QString const & tableName) const
+bool CSVExportDialog::exportSheet(QString const & sheetName) const
 {
-  for (QListViewItem * item = m_dialog->m_tableList->firstChild(); item; item = item->nextSibling())
+  for (QListViewItem * item = m_dialog->m_sheetList->firstChild(); item; item = item->nextSibling())
   {
     if (((QCheckListItem * ) item)->isOn())
     {
-      if ( ((QCheckListItem * ) item)->text() == tableName )
+      if ( ((QCheckListItem * ) item)->text() == sheetName )
         return true;
     }
   }
@@ -191,7 +191,7 @@ void CSVExportDialog::textquoteSelected( const QString & mark )
 
 void CSVExportDialog::selectionOnlyChanged( bool on )
 {
-  m_dialog->m_tableList->setEnabled( !on );
+  m_dialog->m_sheetList->setEnabled( !on );
   m_dialog->m_delimiterLineBox->setEnabled( !on );
 
   if ( on )

@@ -195,7 +195,7 @@
                             </property>
                         </column>
                         <property name="name">
-                            <cstring>m_tableList</cstring>
+                            <cstring>m_sheetList</cstring>
                         </property>
                     </widget>
                     <widget class="QLabel" row="1" column="0">
@@ -233,7 +233,7 @@
                             </property>
                             <widget class="QLineEdit" row="0" column="0">
                                 <property name="name">
-                                    <cstring>m_tableDelimiter</cstring>
+                                    <cstring>m_sheetDelimiter</cstring>
                                 </property>
                                 <property name="text">
                                     <string>********&lt;SHEETNAME&gt;********</string>

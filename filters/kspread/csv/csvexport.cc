@@ -148,7 +148,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
       kdError(30501) << "Dialog has not been created! Aborting!" << endl;
       return KoFilter::StupidError;
     }
-    expDialog->fillTable( ksdoc->map() );
+    expDialog->fillSheet( ksdoc->map() );
 
     if ( !expDialog->exec() )
     {
@@ -176,10 +176,10 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   }
 
 
-  // Now get hold of the table to export
-  // (Hey, this could be part of the dialog too, choosing which table to export....
+  // Now get hold of the sheet to export
+  // (Hey, this could be part of the dialog too, choosing which sheet to export....
   //  It's great to have parametrable filters... IIRC even MSOffice doesn't have that)
-  // Ok, for now we'll use the first table - my document has only one table anyway ;-)))
+  // Ok, for now we'll use the first sheet - my document has only one sheet anyway ;-)))
 
   bool first = true;
   QString str;
@@ -200,7 +200,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
       return KoFilter::StupidError;
     }
 
-    KSpreadSheet const * const sheet = view->activeTable();
+    KSpreadSheet const * const sheet = view->activeSheet();
 
     QRect selection = view->selection();
     int right       = selection.right();
@@ -231,31 +231,31 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   else
   {
     kdDebug(30501) << "Export as full mode" << endl;
-    QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
+    QPtrListIterator<KSpreadSheet> it( ksdoc->map()->sheetList() );
     for( ; it.current(); ++it )
     {
       KSpreadSheet const * const sheet = it.current();
 
-      if (expDialog && !expDialog->exportTable( sheet->tableName() ) )
+      if (expDialog && !expDialog->exportSheet( sheet->sheetName() ) )
       {
         continue;
       }
 
-      if ( !first || ( expDialog && expDialog->printAlwaysTableDelimiter() ) )
+      if ( !first || ( expDialog && expDialog->printAlwaysSheetDelimiter() ) )
       {
         if ( !first)
           str += m_eol;
 
 	QString name;
 	if (expDialog)
-	  name = expDialog->getTableDelimiter();
+	  name = expDialog->getSheetDelimiter();
 	else
 	  name = "********<SHEETNAME>********";
         const QString tname( i18n("<SHEETNAME>") );
         int pos = name.find( tname );
         if ( pos != -1 )
         {
-          name.replace( pos, tname.length(), sheet->tableName() );
+          name.replace( pos, tname.length(), sheet->sheetName() );
         }
         str += name;
         str += m_eol;

@@ -35,12 +35,12 @@ class CSVExportDialog : public KDialogBase
 
   QChar   getDelimiter() const;
   QChar   getTextQuote() const;
-  bool    exportTable( QString const & tableName ) const;
-  bool    printAlwaysTableDelimiter() const;
-  QString getTableDelimiter() const;  
+  bool    exportSheet( QString const & sheetName ) const;
+  bool    printAlwaysSheetDelimiter() const;
+  QString getSheetDelimiter() const;  
   bool    exportSelectionOnly() const;
 
-  void  fillTable( KSpreadMap * map );
+  void  fillSheet( KSpreadMap * map );
   QString getEndOfLine(void) const;
   QTextCodec* getCodec(void) const;
 

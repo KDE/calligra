@@ -77,7 +77,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
     m_formatList << i18n( "Decimal Point Number" );
     m_dialog->m_formatComboBox->insertStringList( m_formatList );
 
-    m_dialog->m_table->setReadOnly( true );
+    m_dialog->m_sheet->setReadOnly( true );
 
     fillTable();
 
@@ -85,7 +85,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
     resize( 600, 400 ); // Try to show as much as possible of the table view
     setMainWidget(m_dialog);
 
-    m_dialog->m_table->setSelectionMode( QTable::Multi );
+    m_dialog->m_sheet->setSelectionMode( QTable::Multi );
 
     connect(m_dialog->m_formatComboBox, SIGNAL(activated( const QString& )),
             this, SLOT(formatChanged( const QString& )));
@@ -97,7 +97,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
             this, SLOT(formatChanged ( const QString & ) ));
     connect(m_dialog->m_comboQuote, SIGNAL(activated(const QString &)),
             this, SLOT(textquoteSelected(const QString &)));
-    connect(m_dialog->m_table, SIGNAL(currentChanged(int, int)),
+    connect(m_dialog->m_sheet, SIGNAL(currentChanged(int, int)),
             this, SLOT(currentCellChanged(int, int)));
     connect(m_dialog->m_ignoreDuplicates, SIGNAL(stateChanged(int)),
             this, SLOT(ignoreDuplicatesChanged(int)));
@@ -124,9 +124,9 @@ void CSVDialog::fillTable( )
 
     kapp->setOverrideCursor(Qt::waitCursor);
 
-    for (row = 0; row < m_dialog->m_table->numRows(); ++row)
-        for (column = 0; column < m_dialog->m_table->numCols(); ++column)
-            m_dialog->m_table->clearCell(row, column);
+    for (row = 0; row < m_dialog->m_sheet->numRows(); ++row)
+        for (column = 0; column < m_dialog->m_sheet->numCols(); ++column)
+            m_dialog->m_sheet->clearCell(row, column);
 
     int maxColumn = 1;
     row = column = 1;
@@ -321,13 +321,13 @@ void CSVDialog::fillTable( )
       m_dialog->m_colEnd->setValue( maxColumn );
     
 
-    for (column = 0; column < m_dialog->m_table->numCols(); ++column)
+    for (column = 0; column < m_dialog->m_sheet->numCols(); ++column)
     {
-        const QString header = m_dialog->m_table->horizontalHeader()->label(column);
+        const QString header = m_dialog->m_sheet->horizontalHeader()->label(column);
         if ( m_formatList.find( header ) == m_formatList.end() )
-            m_dialog->m_table->horizontalHeader()->setLabel(column, i18n("Text"));
+            m_dialog->m_sheet->horizontalHeader()->setLabel(column, i18n("Text"));
 
-        m_dialog->m_table->adjustColumn(column);
+        m_dialog->m_sheet->adjustColumn(column);
     }
     fillComboBox();
 
@@ -337,29 +337,29 @@ void CSVDialog::fillTable( )
 void CSVDialog::fillComboBox()
 {
   if ( m_endRow == -1 )
-    m_dialog->m_rowEnd->setValue( m_dialog->m_table->numRows() );  
+    m_dialog->m_rowEnd->setValue( m_dialog->m_sheet->numRows() );  
   else
     m_dialog->m_rowEnd->setValue( m_endRow );
 
   if ( m_endCol == -1 )
-    m_dialog->m_colEnd->setValue( m_dialog->m_table->numCols() );
+    m_dialog->m_colEnd->setValue( m_dialog->m_sheet->numCols() );
   else
     m_dialog->m_colEnd->setValue( m_endCol );  
 
   m_dialog->m_rowEnd->setMinValue( 1 );
   m_dialog->m_colEnd->setMinValue( 1 );
-  m_dialog->m_rowEnd->setMaxValue( m_dialog->m_table->numRows() );
-  m_dialog->m_colEnd->setMaxValue( m_dialog->m_table->numCols() );
+  m_dialog->m_rowEnd->setMaxValue( m_dialog->m_sheet->numRows() );
+  m_dialog->m_colEnd->setMaxValue( m_dialog->m_sheet->numCols() );
 
   m_dialog->m_rowStart->setMinValue( 1 );
   m_dialog->m_colStart->setMinValue( 1 );
-  m_dialog->m_rowStart->setMaxValue( m_dialog->m_table->numRows() );
-  m_dialog->m_colStart->setMaxValue( m_dialog->m_table->numCols() );
+  m_dialog->m_rowStart->setMaxValue( m_dialog->m_sheet->numRows() );
+  m_dialog->m_colStart->setMaxValue( m_dialog->m_sheet->numCols() );
 }
 
 int CSVDialog::getRows()
 {
-  int rows = m_dialog->m_table->numRows();
+  int rows = m_dialog->m_sheet->numRows();
   if ( m_endRow >= 0 )
   {
     if ( rows > ( m_startRow + m_endRow ) )
@@ -371,7 +371,7 @@ int CSVDialog::getRows()
 
 int CSVDialog::getCols()
 {
-  int cols = m_dialog->m_table->numCols();
+  int cols = m_dialog->m_sheet->numCols();
   if ( m_endCol >= 0 )
   {
     if ( cols > ( m_startCol + m_endCol ) )
@@ -383,7 +383,7 @@ int CSVDialog::getCols()
 
 int CSVDialog::getHeader(int col)
 {
-    QString header = m_dialog->m_table->horizontalHeader()->label(col);
+    QString header = m_dialog->m_sheet->horizontalHeader()->label(col);
     
     if (header == i18n("Text"))
         return TEXT;
@@ -403,7 +403,7 @@ int CSVDialog::getHeader(int col)
 
 QString CSVDialog::getText(int row, int col)
 {
-    return m_dialog->m_table->text( row, col );
+    return m_dialog->m_sheet->text( row, col );
 }
 
 void CSVDialog::setText(int row, int col, const QString& text)
@@ -414,19 +414,19 @@ void CSVDialog::setText(int row, int col, const QString& text)
     if ( ( row > ( m_endRow - m_startRow ) && m_endRow > 0 ) || ( col > ( m_endCol - m_startCol ) && m_endCol > 0 ) )
       return;
 
-    if ( m_dialog->m_table->numRows() < row ) 
+    if ( m_dialog->m_sheet->numRows() < row ) 
     {
-        m_dialog->m_table->setNumRows( row + 5000 ); /* We add 5000 at a time to limit recalculations */
+        m_dialog->m_sheet->setNumRows( row + 5000 ); /* We add 5000 at a time to limit recalculations */
         m_adjustRows = true;
     }
 
-    if ( m_dialog->m_table->numCols() < col )
+    if ( m_dialog->m_sheet->numCols() < col )
     {
-        m_dialog->m_table->setNumCols( col );
+        m_dialog->m_sheet->setNumCols( col );
         m_adjustCols = true;
     }
 
-    m_dialog->m_table->setText( row - 1, col - 1, text );
+    m_dialog->m_sheet->setText( row - 1, col - 1, text );
 }
 
 /*
@@ -436,7 +436,7 @@ void CSVDialog::adjustRows(int iRows)
 {
     if (m_adjustRows) 
     {
-        m_dialog->m_table->setNumRows( iRows );
+        m_dialog->m_sheet->setNumRows( iRows );
         m_adjustRows = false;
     }
 }
@@ -445,7 +445,7 @@ void CSVDialog::adjustCols(int iCols)
 {
     if (m_adjustCols) 
     {  
-        m_dialog->m_table->setNumCols( iCols );
+        m_dialog->m_sheet->setNumCols( iCols );
         m_adjustCols = false;
 
         if ( m_endCol == -1 )
@@ -453,7 +453,7 @@ void CSVDialog::adjustCols(int iCols)
           if ( iCols > ( m_endCol - m_startCol ) )
             iCols = m_endCol - m_startCol;
 
-          m_dialog->m_table->setNumCols( iCols );
+          m_dialog->m_sheet->setNumCols( iCols );
         }
     }
 }
@@ -476,12 +476,12 @@ void CSVDialog::textChanged ( const QString & )
 void CSVDialog::formatChanged( const QString& newValue )
 {
     //kdDebug(30501) << "CSVDialog::formatChanged:" << newValue << endl;
-    for ( int i = 0; i < m_dialog->m_table->numSelections(); ++i )
+    for ( int i = 0; i < m_dialog->m_sheet->numSelections(); ++i )
     {
-        QTableSelection select ( m_dialog->m_table->selection( i ) );
+        QTableSelection select ( m_dialog->m_sheet->selection( i ) );
         for ( int j = select.leftCol(); j <= select.rightCol() ; ++j )
         {
-            m_dialog->m_table->horizontalHeader()->setLabel( j, newValue );
+            m_dialog->m_sheet->horizontalHeader()->setLabel( j, newValue );
             
         }
     }
@@ -549,7 +549,7 @@ bool CSVDialog::checkUpdateRange()
 
 void CSVDialog::currentCellChanged(int, int col)
 {
-    const QString header = m_dialog->m_table->horizontalHeader()->label(col);
+    const QString header = m_dialog->m_sheet->horizontalHeader()->label(col);
     m_dialog->m_formatComboBox->setCurrentText( header );
 }
 

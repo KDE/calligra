@@ -47,10 +47,10 @@ XMLTree::XMLTree(QDomDocument &qdoc) : root(qdoc)
   map = root.createElement("map");
   doc.appendChild(map);
 
-  table = root.createElement("table");
+  sheet = root.createElement("table");
 
-  table.setAttribute("name", "foobar");
-  map.appendChild(table);
+  sheet.setAttribute("name", "foobar");
+  map.appendChild(sheet);
 
   row = 1;
   column = 1;
@@ -148,7 +148,7 @@ bool XMLTree::cell( const QString & contents )
   text.appendChild(root.createTextNode(contents));
   e.appendChild(text);
 
-  table.appendChild(e);
+  sheet.appendChild(e);
 
   return true;
 }
