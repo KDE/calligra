@@ -95,6 +95,9 @@ public:
   void 	loadDialogSettings();
   void 	saveDialogSettings();
 
+  static QFont smallFont() { return m_smallFont; }
+  static QFont tinyFont() { return m_tinyFont; }
+
 
 protected:
 

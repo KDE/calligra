@@ -29,16 +29,18 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <kglobal.h>
 
 #include "colorframe.h"
 #include "colorslider.h"
 #include "colordialog.h"
+#include "kimageshop_config.h"
 
 ColorDialog::ColorDialog(QWidget *parent) : KFloatingDialog(parent)
 {
   setCaption(i18n("Color chooser"));
-  resize(260, 180);
-  setMinimumWidth(210);
+  resize(250, 160);
+  setMinimumWidth(200);
   setMinimumHeight(120);
   m_pBase = new ColorChooserWidget(this);
   m_pBase->slotSetFGColor(QColor(0, 0, 0));
@@ -58,16 +60,24 @@ ColorChooserWidget::ColorChooserWidget(QWidget *parent) : QWidget(parent)
   m_pColorFrame = new ColorFrame(this);
   m_pColorButton = new KDualColorButton(this);
   
+  QFont font = KGlobal::generalFont();
+  font.setPointSize( 10 );
+
   m_pGreyButton = new QPushButton("Grey", this);
+  m_pGreyButton->setFont(font);
   m_pGreyButton->setToggleButton(true);
   m_pRGBButton = new QPushButton("RGB", this);
   m_pRGBButton->setToggleButton(true);
+  m_pRGBButton->setFont(font);
   m_pHSBButton = new QPushButton("HSB", this);
   m_pHSBButton->setToggleButton(true);
+  m_pHSBButton->setFont(font);
   m_pCMYKButton = new QPushButton("CMYK", this);
   m_pCMYKButton->setToggleButton(true);
+  m_pCMYKButton->setFont(font);
   m_pLABButton = new QPushButton("LAB", this);
   m_pLABButton->setToggleButton(true);
+  m_pLABButton->setFont(font);
 
   connect(m_pGreyButton, SIGNAL(clicked()), this,
 		  SLOT(slotShowGrey()));
@@ -161,7 +171,6 @@ void ColorChooserWidget::slotColorFrameChanged(const QColor& c)
 	  m_pColorButton->slotSetBackground(c);
   
   m_pRGBWidget->slotSetColor(c);
-  m_pGreyWidget->slotSetColor(c);
 }
 
 void ColorChooserWidget::slotColorButtonFGChanged(const QColor& c)
@@ -273,17 +282,17 @@ void ColorChooserWidget::resizeEvent(QResizeEvent *e)
   int w = width();
   int h = height();
 
-  m_pLABButton->setGeometry(w-32, 0, 30, 18);
-  m_pCMYKButton->setGeometry(w-72, 0, 40, 18);
-  m_pHSBButton->setGeometry(w-102, 0, 30, 18);
-  m_pRGBButton->setGeometry(w-132, 0, 30, 18);
-  m_pGreyButton->setGeometry(w-162, 0, 30, 18);
+  m_pLABButton->setGeometry(w-30, 0, 28, 15);
+  m_pCMYKButton->setGeometry(w-66, 0, 36, 15);
+  m_pHSBButton->setGeometry(w-94, 0, 28, 15);
+  m_pRGBButton->setGeometry(w-122, 0, 28, 15);
+  m_pGreyButton->setGeometry(w-150, 0, 28, 15);
   
   m_pColorButton->setGeometry(2, 0, 40, 40);
   m_pColorFrame->setGeometry(2, h-24, w-4, 22);
-  m_pRGBWidget->setGeometry(42,20,w-44,h-46);
-  m_pGreyWidget->setGeometry(42,20,w-44,h-46);
-  //kdebug(KDEBUG_INFO, 0, "w: %d h: %d", w, h);
+  m_pRGBWidget->setGeometry(42,17,w-44,h-42);
+  m_pGreyWidget->setGeometry(42,17,w-44,h-42);
+  kdebug(KDEBUG_INFO, 0, "w: %d h: %d", w, h);
 }
 
 RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent)

@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 
   KImageShopAutoLoader loader("IDL:KImageShop/DocumentFactory:1.0", "KImageShop");
   KImageShopApp app(argc, argv);
-
+  
   app.exec();
 
   return 0;
