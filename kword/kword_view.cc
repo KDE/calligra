@@ -1145,7 +1145,7 @@ void KWordView::editFind()
     if ( searchDia ) return;
 
     searchDia = new KWSearchDia( this, "", m_pKWordDoc, gui->getPaperWidget(), this, searchEntry, replaceEntry, fontList );
-    searchDia->setCaption( i18n( "KWord - Search & Replace" ) );
+    searchDia->setCaption( i18n( "Search & Replace" ) );
     connect( searchDia, SIGNAL( closeClicked() ), this, SLOT( searchDiaClosed() ) );
     searchDia->show();
 }
@@ -1453,7 +1453,7 @@ void KWordView::formatParagraph()
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_SPACING | KWParagDia::PD_FLOW |
                                KWParagDia::PD_BORDERS |
                                KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, m_pKWordDoc );
-    paragDia->setCaption( i18n( "KWord - Paragraph settings" ) );
+    paragDia->setCaption( i18n( "Paragraph settings" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setLeftIndent( gui->getPaperWidget()->getLeftIndent() );
     paragDia->setFirstLineIndent( gui->getPaperWidget()->getFirstLineIndent() );
@@ -1542,7 +1542,7 @@ void KWordView::extraStylist()
     }
     styleManager = new KWStyleManager( this, m_pKWordDoc, fontList );
     connect( styleManager, SIGNAL( okClicked() ), this, SLOT( styleManagerOk() ) );
-    styleManager->setCaption( i18n( "KWord - Stylist" ) );
+    styleManager->setCaption( i18n( "Stylist" ) );
     styleManager->show();
 }
 
@@ -1660,7 +1660,7 @@ void KWordView::toolsTable()
                                gui->getPaperWidget()->tableCols(),
                                gui->getPaperWidget()->tableWidthMode(),
                                gui->getPaperWidget()->tableHeightMode() );
-    tableDia->setCaption( i18n( "KWord - Insert Table" ) );
+    tableDia->setCaption( i18n( "Insert Table" ) );
     tableDia->show();
 }
 

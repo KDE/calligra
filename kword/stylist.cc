@@ -236,7 +236,7 @@ void KWStyleManager::editStyle()
 
     editor = new KWStyleEditor( this, doc->paragLayoutList.at( lStyleList->currentItem() ), doc, fontList );
     connect( editor, SIGNAL( updateStyleList() ), this, SLOT( updateStyleList() ) );
-    editor->setCaption( i18n( "KWord - Stylist" ) );
+    editor->setCaption( i18n( "Stylist" ) );
     editor->show();
 }
 
@@ -516,7 +516,7 @@ void KWStyleEditor::changeSpacing()
         paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_SPACING, doc );
-    paragDia->setCaption( i18n( "KWord - Paragraph Spacing" ) );
+    paragDia->setCaption( i18n( "Paragraph Spacing" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setSpaceBeforeParag( style->getParagHeadOffset() );
     paragDia->setSpaceAfterParag( style->getParagFootOffset() );
@@ -535,7 +535,7 @@ void KWStyleEditor::changeAlign()
         paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_FLOW, doc );
-    paragDia->setCaption( i18n( "KWord - Paragraph Flow ( Alignment )" ) );
+    paragDia->setCaption( i18n( "Paragraph Flow ( Alignment )" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setFlow( style->getFlow() );
     paragDia->show();
@@ -550,7 +550,7 @@ void KWStyleEditor::changeBorders()
         paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_BORDERS, doc );
-    paragDia->setCaption( i18n( "KWord - Paragraph Borders" ) );
+    paragDia->setCaption( i18n( "Paragraph Borders" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setLeftBorder( style->getLeftBorder() );
     paragDia->setRightBorder( style->getRightBorder() );
@@ -568,7 +568,7 @@ void KWStyleEditor::changeNumbering()
         paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_NUMBERING, doc );
-    paragDia->setCaption( i18n( "KWord - Numbering" ) );
+    paragDia->setCaption( i18n( "Numbering" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setCounter( style->getCounter() );
     paragDia->show();
@@ -583,7 +583,7 @@ void KWStyleEditor::changeTabulators()
         paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_TABS, doc );
-    paragDia->setCaption( i18n( "KWord - Tabulators" ) );
+    paragDia->setCaption( i18n( "Tabulators" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->show();
 }
