@@ -47,6 +47,7 @@ public:
     QCheckBox *m_wordByWord;
     QComboBox *m_fontAttribute;
     QComboBox *m_language;
+    QCheckBox *m_hyphenation;
 };
 
 KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSuperScript, uint fontListCriteria)
@@ -198,6 +199,9 @@ void KoFontChooser::setupTab2()
     d->m_language->insertStringList( KoGlobal::listOfLanguages() );
     grid->addWidget( d->m_language, 9, 0 );
 
+    d->m_hyphenation = new QCheckBox( i18n("Auto Hyphenation"), grp );
+    grid->addWidget( d->m_hyphenation, 10,0);
+
     connect( d->m_strikeOut, SIGNAL(activated ( int )), this, SLOT( slotStrikeOutTypeChanged( int ) ) );
     connect( m_underlineColorButton, SIGNAL(clicked()), this, SLOT( slotUnderlineColor() ) );
     connect( m_underlining,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlining( int )));
@@ -207,7 +211,7 @@ void KoFontChooser::setupTab2()
     connect( d->m_wordByWord, SIGNAL(clicked()), this, SLOT( slotWordByWordClicked() ) );
     connect( d->m_fontAttribute,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeAttributeFont( int )));
     connect( d->m_language,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeLanguage( int )));
-
+    connect( d->m_hyphenation, SIGNAL( clicked()), this, SLOT( slotHyphenationClicked()));
 }
 
 void KoFontChooser::updatePositionButton()
@@ -355,6 +359,19 @@ void KoFontChooser::slotFontChanged(const QFont & f)
     m_newFont = f;
 }
 
+bool KoFontChooser::getHyphenation() const
+{
+    return d->m_hyphenation->isChecked();
+}
+void KoFontChooser::setHyphenation( bool _b)
+{
+    d->m_hyphenation->setChecked( _b);
+}
+
+void KoFontChooser::slotHyphenationClicked()
+{
+    m_changedFlags |= KoTextFormat::Hyphenation;
+}
 
 void KoFontChooser::slotStrikeOutTypeChanged( int _val)
 {
@@ -670,9 +687,7 @@ void KoFontChooser::slotChangeStrikeOutType( int /*i*/ )
 }
 
 KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
-                      bool _subscript, bool _superscript,
-                      bool _shadowText,
-                      bool _wordByWord,
+                      FontAttributeFlags flags,
                       const QColor & color,
                       const QColor & backGroundColor ,
                       const QColor & underlineColor,
@@ -688,8 +703,8 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
     : KDialogBase( parent, name, true,
                    i18n("Select Font"), Ok|Cancel|User1|Apply, Ok ),
       m_font(_font),
-      m_subscript( _subscript ),
-      m_superscript(_superscript ),
+      m_bSubscript( flags & FontAttributeSubscript ),
+      m_bSuperscript(flags & FontAttributeSuperScript ),
       m_color( color),
       m_backGroundColor( backGroundColor),
       m_underlineColor( underlineColor ),
@@ -697,10 +712,11 @@ KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
       m_underlineLineStyle( _underlineLine ),
       m_strikeOutLineStyle( _strikeOutLine ),
       m_strikeOutType( _strikeOutType),
-      m_shadowText( _shadowText),
+      m_bShadowText( flags & FontAttributeShadowText),
       m_relativeSize( _relativeSize ),
       m_offsetBaseLine( _offsetFromBaseLine),
-      m_wordByWord( _wordByWord ),
+      m_bWordByWord( flags & FontAttributeWordByWord ),
+      m_bHyphenation( flags & FontAttributeHyphenation),
       m_fontAttribute( _fontAttribute),
       m_language ( _language )
 {
@@ -726,7 +742,7 @@ void KoFontDia::slotOk()
 
 void KoFontDia::slotReset()
 {
-    m_chooser->setFont( m_font, m_subscript, m_superscript );
+    m_chooser->setFont( m_font, m_bSubscript, m_bSuperscript );
     m_chooser->setColor( m_color );
     m_chooser->setBackGroundColor(m_backGroundColor);
     m_chooser->setUnderlineColor( m_underlineColor );
@@ -736,8 +752,8 @@ void KoFontDia::slotReset()
 
     m_chooser->setStrikeOutlineType( m_strikeOutType);
     m_chooser->setStrikeOutLineStyle(m_strikeOutLineStyle);
-    m_chooser->setShadowText( m_shadowText);
-    m_chooser->setWordByWord( m_wordByWord );
+    m_chooser->setShadowText( m_bShadowText);
+    m_chooser->setWordByWord( m_bWordByWord );
     m_chooser->setRelativeTextSize( m_relativeSize);
     m_chooser->setOffsetFromBaseLine( m_offsetBaseLine );
     m_chooser->setFontAttribute( m_fontAttribute );

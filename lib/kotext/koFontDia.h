@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C)  2001 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,7 +49,6 @@ public:
     bool getSuperScript() const { return m_superScript->isChecked(); }
     bool getSubScript() const { return m_subScript->isChecked(); }
 
-
     QFont getNewFont() const { return m_newFont; }
     QColor color() const;
     QColor backGroundColor() const { return m_backGroundColor;}
@@ -73,6 +72,9 @@ public:
 
     bool getWordByWord()const;
     void setWordByWord( bool _b);
+
+    bool getHyphenation() const;
+    void setHyphenation( bool _b);
 
     QString getLanguage() const;
     void setLanguage( const QString & );
@@ -109,6 +111,7 @@ protected slots:
     void slotChangeAttributeFont( int );
     void slotWordByWordClicked();
     void slotChangeLanguage( int );
+    void slotHyphenationClicked();
 private:
     KFontChooser *m_chooseFont;
     QRadioButton *m_superScript;
@@ -137,10 +140,20 @@ class KoFontDia : public KDialogBase
 {
     Q_OBJECT
 public:
+
+    /**
+     * Flags for FontAttibute
+     */
+    enum FontAttributeFlags {
+        FontAttributeSubscript = 1,
+        FontAttributeSuperScript = 2,
+        FontAttributeShadowText = 4,
+        FontAttributeWordByWord = 8,
+        FontAttributeHyphenation = 16
+    };
+
     KoFontDia( QWidget* parent, const char* name, const QFont &_font,
-               bool _subscript, bool _superscript,
-               bool _shadowText,
-               bool _wordByWord,
+               FontAttributeFlags flags,
                const QColor & color,
 	       const QColor & backGroundColor,
                const QColor & underlineColor,
@@ -154,6 +167,7 @@ public:
                int _offsetFromBaseLine,
                bool _withSubSuperScript=true );
 
+    bool getHyphenation() const { return m_chooser->getHyphenation(); }
     bool getSuperScript() const { return m_chooser->getSuperScript(); }
     bool getSubScript() const { return m_chooser->getSubScript(); }
     QFont getNewFont() const { return m_chooser->getNewFont(); }
@@ -187,9 +201,9 @@ signals:
 private:
     KoFontChooser * m_chooser;
     QFont m_font;
-    bool m_subscript;
-    bool m_superscript;
-    bool m_strikeOut;
+    bool m_bSubscript;
+    bool m_bSuperscript;
+    bool m_bStrikeOut;
     QColor m_color;
     QColor m_backGroundColor;
     QColor m_underlineColor;
@@ -197,10 +211,11 @@ private:
     KoTextFormat::UnderlineLineStyle m_underlineLineStyle;
     KoTextFormat::StrikeOutLineStyle m_strikeOutLineStyle;
     KoTextFormat::StrikeOutLineType m_strikeOutType;
-    bool m_shadowText;
+    bool m_bShadowText;
     double m_relativeSize;
     int m_offsetBaseLine;
-    bool m_wordByWord;
+    bool m_bWordByWord;
+    bool m_bHyphenation;
     KoTextFormat::AttributeStyle m_fontAttribute;
     QString m_language;
 };

@@ -26,7 +26,7 @@
 #include "kostyle.h"
 #include <klocale.h>
 #include <kdebug.h>
-
+#include "koFontDia.h"
 //#define DEBUG_FORMATS
 //#define DEBUG_FORMAT_MORE
 
@@ -2316,7 +2316,7 @@ QString KoTextFormatInterface::language() const
     return currentFormat()->language();
 }
 
-KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscript, bool _superscript,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, KoTextFormat::AttributeStyle _fontAttribute, bool _shadowText, double _relativeTextSize, int _offsetFromBaseLine, bool _wordByWord, const QString &_lang, int flags)
+KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, int fontFlags,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, KoTextFormat::AttributeStyle _fontAttribute,  double _relativeTextSize, int _offsetFromBaseLine,  const QString &_lang, int flags)
 {
     KoTextFormat format( *currentFormat() );
     format.setFont( font );
@@ -2327,15 +2327,16 @@ KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, bool _subscri
     format.setUnderlineLineStyle (_underlineLineStyle);
     format.setStrikeOutLineStyle(_strikeOutStyle );
     format.setStrikeOutLineType ( _strikeOutType );
-    format.setShadowText( _shadowText);
+    format.setShadowText( fontFlags & KoFontDia::FontAttributeShadowText);
     format.setRelativeTextSize( _relativeTextSize);
     format.setOffsetFromBaseLine( _offsetFromBaseLine);
-    format.setWordByWord( _wordByWord );
+    format.setWordByWord( fontFlags & KoFontDia::FontAttributeWordByWord );
     format.setAttributeFont( _fontAttribute);
     format.setLanguage( _lang );
-    if(!_subscript)
+    format.setHyphenation( fontFlags & KoFontDia::FontAttributeHyphenation);
+    if(!(fontFlags & KoFontDia::FontAttributeSubscript))
     {
-        if(!_superscript)
+        if(!(fontFlags & KoFontDia::FontAttributeSuperScript))
             format.setVAlign(KoTextFormat::AlignNormal);
         else
             format.setVAlign(KoTextFormat::AlignSuperScript);

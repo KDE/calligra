@@ -643,7 +643,7 @@ void KoStyleFontTab::update()
     m_chooser->setRelativeTextSize( m_style->format().relativeTextSize());
     m_chooser->setOffsetFromBaseLine( m_style->format().offsetFromBaseLine());
     m_chooser->setLanguage( m_style->format().language());
-
+    m_chooser->setHyphenation( m_style->format().hyphenation());
 }
 
 void KoStyleFontTab::save()
@@ -675,6 +675,7 @@ void KoStyleFontTab::save()
     m_style->format().setOffsetFromBaseLine( m_chooser->getOffsetFromBaseLine());
 
     m_style->format().setLanguage( m_chooser->getLanguage());
+    m_style->format().setHyphenation( m_chooser->getHyphenation());
 }
 
 QString KoStyleFontTab::tabName()
