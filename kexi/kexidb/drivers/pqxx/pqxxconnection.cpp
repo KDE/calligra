@@ -57,6 +57,7 @@ void pqxxSqlConnection::escapeString( const QString& str, char *target )
 QString pqxxSqlConnection::escapeString( const QString& str) const
 {
 #warning TODO: need to implement string escaping
+    return QString::null;
 }
 
 //==================================================================================
@@ -64,6 +65,7 @@ QString pqxxSqlConnection::escapeString( const QString& str) const
 QCString pqxxSqlConnection::escapeString( const QCString& str) const
 {
 #warning TODO: need to implement string escaping
+    return QCString();
 }
 
 //==================================================================================
@@ -293,17 +295,14 @@ Q_ULLONG pqxxSqlConnection::drv_lastInsertRowID()
 
         if (theOid != pqxx::oid_none)
         {
-            return Q_ULLONG(theOid);
+            return (Q_ULLONG)theOid;
         }
         else
         {
             return 0;
         }
     }
-    else
-    {
-        return 0;
-    }
+    return 0;
 }
 
 #include "pqxxconnection.moc"
