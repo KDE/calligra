@@ -857,19 +857,33 @@ void KSpreadCanvas::extendCurrentSelection(QPoint cell)
   }
   else
   {
-    selectionAnchor = selectionInfo()->selectionAnchor();
+    if (!selectionInfo()->singleCellSelection())
+    {
+      selectionAnchor = selectionInfo()->selectionAnchor();
 
-    /* the selection simply becomes a box with the anchor and given cell as
-       opposite corners
-    */
-    int left, top, right, bottom;
-    left = QMIN(selectionAnchor.x(), cell.x());
-    top = QMIN(selectionAnchor.y(), cell.y());
-    right = QMAX(selectionAnchor.x(), cell.x());
-    bottom = QMAX(selectionAnchor.y(), cell.y());
-    QRect newSelection(QPoint(left, top), QPoint(right, bottom));
+      /* the selection simply becomes a box with the anchor and given cell as
+         opposite corners
+      */
+      int left, top, right, bottom;
+      left = QMIN(selectionAnchor.x(), cell.x());
+      top = QMIN(selectionAnchor.y(), cell.y());
+      right = QMAX(selectionAnchor.x(), cell.x());
+      bottom = QMAX(selectionAnchor.y(), cell.y());
+      QRect newSelection(QPoint(left, top), QPoint(right, bottom));
 
-    selectionInfo()->setSelection(newSelection, cell, table);
+      selectionInfo()->setSelection(newSelection, cell, table);
+    }
+    else
+    {
+      int left, top, right, bottom;
+      left = QMIN(selection().left(), cell.x());
+      top = QMIN(selection().top(), cell.y());
+      right = QMAX(selection().right(), cell.x());
+      bottom = QMAX(selection().bottom(), cell.y());
+      QRect newSelection(QPoint(left, top), QPoint(right, bottom));
+
+      selectionInfo()->setSelection(newSelection, cell, table);
+    }
   }
 }
 
