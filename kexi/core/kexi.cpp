@@ -224,6 +224,27 @@ void ObjectStatus::clearStatus()
 	description=QString::null;
 }
 
+QString ObjectStatus::singleStatusString() const { 
+	if (message.isEmpty() || description.isEmpty())
+		return message;
+	return message + " " + description;
+}
+
+void ObjectStatus::append( const ObjectStatus& otherStatus ) {
+	if (message.isEmpty()) {
+		message = otherStatus.message;
+		description = otherStatus.description;
+		return;
+	}
+	QString s = otherStatus.singleStatusString();
+	if (s.isEmpty())
+		return;
+	if (description.isEmpty()) {
+		description = s;
+		return;
+	}
+	description = description + " " + s;
+}
 
 //--------------------------------------------------------------------------------
 

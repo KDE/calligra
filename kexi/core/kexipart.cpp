@@ -238,7 +238,12 @@ KexiDB::SchemaData* Part::loadSchemaData(KexiDialogBase *dlg, const KexiDB::Sche
 
 bool Part::loadDataBlock( KexiDialogBase *dlg, QString &dataString, const QString& dataID)
 {
-	return dlg->loadDataBlock( dataString, dataID );
+	if (!dlg->loadDataBlock( dataString, dataID )) {
+		m_status = Kexi::ObjectStatus( i18n("Failed loading object's data."), i18n("Data identifier: \"%1\".").arg(dataID) );
+		m_status.append( *dlg );
+		return false;
+	}
+	return true;
 }
 
 //-------------------------------------------------------------------------

@@ -119,6 +119,8 @@ namespace Kexi
 			bool error() const;
 			void setStatus(const QString& message, const QString& description);
 			void clearStatus();
+			QString singleStatusString() const;
+			void append( const ObjectStatus& otherStatus );
 
 			QString message, description;
 	};

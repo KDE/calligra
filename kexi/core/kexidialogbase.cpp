@@ -496,19 +496,37 @@ bool KexiDialogBase::storeDataBlock_internal( const QString &dataString, int o_i
 		+ "," + drv->valueToSQL( KexiDB::Field::Text, dataID ) + ")" );
 }
 
+bool KexiDialogBase::loadDataBlock( QString &dataString, const QString& dataID )
+{
+	KexiDB::Connection *conn = m_parentWindow->project()->dbConnection();
+	if (!conn->querySingleString(
+		QString("select o_data from kexi__objectdata where o_id=") + QString::number(id())
+		+ " and " + KexiDB::sqlWhere(conn->driver(), KexiDB::Field::Text, "o_sub_id", dataID), 
+		dataString ))
+	{
+		setStatus(conn->errorMsg(), ""); 
+		return false;
+	}
+	return true;
+}
+
 bool KexiDialogBase::storeDataBlock( const QString &dataString, const QString& dataID )
 {
 	return storeDataBlock_internal(dataString, id(), dataID);
 }
 
-bool KexiDialogBase::loadDataBlock( QString &dataString, const QString& dataID )
+bool KexiDialogBase::removeDataBlock( QString &dataString, const QString& dataID)
 {
 	KexiDB::Connection *conn = m_parentWindow->project()->dbConnection();
-	KexiDB::Driver *drv = conn->driver();
-
-	return conn->querySingleString(
-		QString("select o_data from kexi__objectdata where o_id=") + QString::number(id())
-		+ " and " + KexiDB::sqlWhere(drv, KexiDB::Field::Text, "o_sub_id", dataID), dataString );
+	bool ok;
+	if (dataID.isEmpty())
+		ok = KexiDB::deleteRow(*conn, "kexi__objectdata", "o_id", QString::number(id()));
+	else
+		ok = KexiDB::deleteRow(*conn, "kexi__objectdata", 
+		"o_id", KexiDB::Field::Integer, id(), "o_sub_id", KexiDB::Field::Text, dataID);
+	if (!ok)
+		setStatus(conn->errorMsg(), ""); 
+	return ok;
 }
 
 void KexiDialogBase::activate()

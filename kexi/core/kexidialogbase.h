@@ -241,19 +241,30 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 
 		void dirtyChanged();
 
-		/*! Stores large string data \a dataString, block (e.g. xml form's representation) 
-		 at the backend. Block will be stored in "kexi__objectdata" table pointed by
+		/*! Loads large string data \a dataString block (e.g. xml form's representation), 
+		 indexed with optional \a dataID, from the database backend.
+		 \return true on success
+		 \sa storeDataBlock(). */
+		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null);
+
+		/*! Stores (potentially large) string data \a dataString, block (e.g. xml form's representation),
+		 at the database backend. Block will be stored in "kexi__objectdata" table pointed by
 		 this object's id and an optional \a dataID identifier. 
 		 If there is already such record in the table, it's simply overwritten.
 		 \return true on success
 		*/
 		bool storeDataBlock( const QString &dataString, const QString& dataID = QString::null );
 
-		/*! Loads large string data \a dataString, block (e.g. xml form's representation).
-		 \return true on success
+		/*! Removes (potentially large) string data (e.g. xml form's representation), 
+		 pointed by optional \a dataID, from the database backend.
+		 \return true on success. Does not fail if the block doe not exists.
+		 Note that if \a dataID is not specified, all data blocks for this dialog will be removed.
 		 \sa storeDataBlock(). */
-		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null);
+		bool removeDataBlock( QString &dataString, const QString& dataID = QString::null);
 
+		/*! @internal
+		 Used by KexiDialogBase::storeDataBlock() and by KexiViewBase::storeDataBlock().
+		*/
 		bool storeDataBlock_internal( const QString &dataString, int o_id, const QString& dataID );
 
 //		void setError(const QString& message, const QString& details);

@@ -167,6 +167,12 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 In this case, do not store schema object yourself (make deep copy if needed). */
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 
+		/*! Loads large string data \a dataString block (e.g. xml form's representation), 
+		 indexed with optional \a dataID, from the database backend.
+		 \return true on success
+		 \sa storeDataBlock(). */
+		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null);
+
 		/*! Tells this view to store data changes on the backend. 
 		 Called by KexiDialogBase::storeData().
 		 Default implementation:
@@ -177,10 +183,10 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 \sa storeNewData() */
 		virtual bool storeData(bool &cancel);
 
-		//luci:temporary copy from KexiDialogBase
-		/*! Stores large string data \a dataString, block (e.g. xml form's representation) 
-		 at the backend. Block will be stored in "kexi__objectdata" table pointed by
-		 this object's id and an optional \a subID identifier. 
+		/*! Stores (potentially large) string data \a dataString, block (e.g. xml form's representation),
+		 at the database backend. Block will be stored in "kexi__objectdata" table pointed by
+		 this object's id and an optional \a dataID identifier. 
+
 		 If dialog's id is not available (KexiDialogBase::id()), 
 		 then ID that was just created in storeNewData() is used
 		 (see description of m_newlyAssignedID member).
@@ -188,14 +194,13 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 \return true on success
 		*/
 		bool storeDataBlock( const QString &dataString, const QString &dataID = QString::null );
-//		bool storeDataBlock( const QString &dataString, const QString &id, const QString& subID = QString::null );
 
-		/*! Loads large string data \a dataString, block (e.g. xml form's representation).
-		 \return true on success
+		/*! Removes (potentially large) string data (e.g. xml form's representation), 
+		 pointed by optional \a dataID, from the database backend.
+		 \return true on success. Does not fail if the block doe not exists.
+		 Note that if \a dataID is not specified, all data blocks for this view will be removed.
 		 \sa storeDataBlock(). */
-		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null);
-//		bool loadDataBlock( QString &dataString, const QString &id, const QString& dataID = QString::null);
-
+		bool removeDataBlock( QString &dataString, const QString& dataID = QString::null);
 
 		void setViewWidget(QWidget* w);
 

@@ -167,6 +167,13 @@ bool KexiViewBase::storeData(bool &cancel)
 	return true;
 }
 
+bool KexiViewBase::loadDataBlock( QString &dataString, const QString& dataID )
+{
+	if (!m_dialog)
+		return false;
+	return m_dialog->loadDataBlock(dataString, dataID);
+}
+
 bool KexiViewBase::storeDataBlock( const QString &dataString, const QString &dataID )
 {
 	if (!m_dialog)
@@ -182,14 +189,12 @@ bool KexiViewBase::storeDataBlock( const QString &dataString, const QString &dat
 	return effectiveID>0 && m_dialog->storeDataBlock_internal( dataString, effectiveID, dataID );
 }
 
-//bool KexiViewBase::loadDataBlock( QString &dataString, const QString &id, const QString& dataID )
-bool KexiViewBase::loadDataBlock( QString &dataString, const QString& dataID )
+bool KexiViewBase::removeDataBlock( QString &dataString, const QString& dataID )
 {
 	if (!m_dialog)
 		return false;
-	return m_dialog->loadDataBlock(dataString, dataID);
+	return m_dialog->removeDataBlock(dataString, dataID);
 }
-
 
 bool KexiViewBase::eventFilter( QObject *o, QEvent *e )
 {
