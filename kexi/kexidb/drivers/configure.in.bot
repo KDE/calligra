@@ -1,49 +1,36 @@
-echo "=================================================================="
-echo "Kexi PostgreSQL driver status:"
-
-if test -z "$PG_INCDIR"; then
+if test -z "$PG_INCDIR" -o -z "$PG_LIBDIR"; then
   echo ""
-  echo "  +The PostgreSQL C-API (libpq) headers were not found"
-  echo "     These usually ship with PostgreSQL, but if you've installed from"
-  echo "     a distros package then these files may be part of a package"
+
+  if test -z "$PG_INCDIR"; then
+    echo "  + The PostgreSQL C-API (libpq) headers were not found"
+  fi
+
+  if test -z "$PG_LIBDIR"; then
+    echo "  + The PostgreSQL C-API (libpq) libs were not found"
+  fi
+  
+  echo "     The PostgreSQL C-API usually ship with PostgreSQL, but if you've installed"
+  echo "     from a distros package then these files may be part of a package"
   echo "     called postgresql-devel or libpq-devel"
+  
   all_tests=bad
-else
-  echo "  +The PostgreSQL C-API (libpq) headers were found"
 fi
 
-if test -z "$PG_LIBDIR"; then
+if test -z "$PQXX_INCDIR" -o -z "$PQXX_LIBDIR"; then
   echo ""
-  echo "  +The PostgreSQL C-API (libpq) libs were not found"
-  echo "     These usually ship with PostgreSQL, but if you've installed from"
-  echo "     a distros package then these files may be part of a package"
-  echo "     called postgresql-devel or libpq-devel"
-  all_tests=bad
-else
-  echo "  +The PostgreSQL C-API (libpq) libs were found"
-fi
 
-if test -z "$PQXX_INCDIR"; then
-  echo ""
-  echo "  +The PostgreSQL C++ API (libpqxx) headers were not found"
-  echo "     The libpqxx library can be downloaded from pqxx.tk or"
+  if test -z "$PQXX_INCDIR"; then
+    echo "  + The PostgreSQL C++ API (libpqxx) headers were not found"
+  fi
+
+  if test -z "$PQXX_LIBDIR"; then
+    echo "  + The PostgreSQL C++ API (libpqxx) libs were not found"
+  fi
+  
+  echo "     The PostgreSQL C++ API can be downloaded from pqxx.tk or"
   echo "     http://gborg.postgresql.org/project/libpqxx/projdisplay.php"
   echo "     Grab the latest version (>=2)"
   all_tests=bad
-else
-  echo "  +The PostgreSQL C++ API (libpqxx) headers were found"
-fi
-
-if test -z "$PQXX_LIBDIR"; then
-  echo ""
-  echo "  +The PostgreSQL C++ API (libpqxx) libs were not found"
-  echo "     The libpqxx library can be downloaded from pqxx.tk or"
-  echo "     http://gborg.postgresql.org/project/libpqxx/projdisplay.php"
-  echo "     Grab the latest version (>=2)"
-  all_tests=bad
-else
-  echo "  +The PostgreSQL C++ API (libpqxx) libs were found"
 fi 
-echo "=================================================================="
 
 
