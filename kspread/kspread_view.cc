@@ -61,7 +61,6 @@
 #include "kspread_view.h"
 #include "kspread_dlg_formula.h"
 #include "kspread_dlg_special.h"
-#include "kspread_dlg_goto.h"
 #include "kspread_dlg_replace.h"
 #include "kspread_dlg_sort.h"
 #include "kspread_dlg_anchor.h"
@@ -285,7 +284,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 				       actionCollection(), "editGlobalScripts" );
     m_editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this, SLOT( editLocalScripts() ), actionCollection(), "editLocalScripts" );
     m_reloadScripts = new KAction( i18n("Reload Scripts"), 0, this, SLOT( reloadScripts() ), actionCollection(), "reloadScripts" );
-    m_gotoCell = new KAction( i18n("Goto Cell..."),"goto", 0, this, SLOT( gotoCell() ), actionCollection(), "gotoCell" );
     m_showPageBorders = new KToggleAction( i18n("Show page borders"), 0, actionCollection(), "showPageBorders");
     connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this, SLOT( togglePageBorders( bool ) ) );
     m_replace = new KAction( i18n("Find and Replace..."), "find",CTRL + Key_F, this, SLOT( replace() ), actionCollection(), "replace" );
@@ -784,7 +782,6 @@ void KSpreadView::updateReadWrite( bool readwrite )
   m_hideTable->setEnabled( true );
   //  m_newView->setEnabled( true );
   m_pDoc->KXMLGUIClient::action( "newView" )->setEnabled( true );
-  m_gotoCell->setEnabled( true );
   m_oszi->setEnabled( true );
 }
 
@@ -1667,13 +1664,6 @@ void KSpreadView::consolidate()
 {
     KSpreadConsolidate* dlg = new KSpreadConsolidate( this, "Consolidate" );
     dlg->show();
-}
-
-void KSpreadView::gotoCell()
-{
-    KSpreadgoto* dlg = new KSpreadgoto( this, "GotoCell" );
-    dlg->show();
-
 }
 
 void KSpreadView::replace()

@@ -32,14 +32,20 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
 		QLineEdit::keyPressEvent( _ev );
 		return;
 	}
-
+        QString tmp;
+        int pos;
 	switch( _ev->key() ) {
 		case Key_Return:
 		case Key_Enter:
-			if ( text().upper().contains( ':' ) ) //Selection entered in location widget
-				m_pView->canvasWidget()->gotoLocation( KSpreadRange( text(), m_pView->doc()->map() ) );
+                        pos=text().find('!');
+                        if(pos!=-1)
+                                tmp=text().left(pos)+text().mid(pos).upper();
+                        else
+                                tmp=text().upper();
+                        if ( text().contains( ':' ) ) //Selection entered in location widget
+                                m_pView->canvasWidget()->gotoLocation( KSpreadRange( tmp, m_pView->doc()->map() ) );
 			else //Location entered in location widget
-				m_pView->canvasWidget()->gotoLocation( KSpreadPoint( text(), m_pView->doc()->map() ));
+				m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp, m_pView->doc()->map() ));
                         m_pView->canvasWidget()->setFocus();
 			_ev->accept();
 			break;

@@ -24,7 +24,7 @@ libkspread_la_SOURCES = kspread_canvas.cc \
 	kspread_dlg_formula.cc kspread_dlg_reference.cc\
         kspread_dlg_comment.cc kspread_dlg_angle.cc\
 	kspread_dlg_area.cc kspread_dlg_resize2.cc kspread_dlg_preference.cc\
-	kspread_dlg_special.cc kspread_dlg_goto.cc  kspread_dlg_replace.cc \
+	kspread_dlg_special.cc kspread_dlg_replace.cc \
 	kspread_dlg_sort.cc kspread_dlg_anchor.cc kspread_dlg_conditional.cc\
 	kspread_dlg_resize.cc kspread_factory.cc kspread_handler.cc \
 	kspread_events.cc kspread_dlg_show.cc kspread_dlg_series.cc \
@@ -47,7 +47,7 @@ noinst_HEADERS = kspread_shell.h kspread_doc.h \
         kspread_dlg_reference.h \
 	kspread_editors.h kspread_dlg_tabname.h kspread_dlg_formula.h \
 	kspread_dlg_reference.h kspread_dlg_area.h kspread_dlg_resize.h\
-	kspread_dlg_special.h kspread_dlg_goto.h kspread_dlg_replace.h \
+	kspread_dlg_special.h kspread_dlg_replace.h \
 	kspread_dlg_sort.h kspread_dlg_anchor.h kspread_dlg_series.h \
 	kspread_dlg_preference.h kspread_dlg_angle.h \
 	kspread_dlg_resize.h kspread_factory.h kspread_handler.h \
