@@ -357,4 +357,79 @@ void KoXmlWriter::addConfigItem( const QString & configName, short value )
     endElement();
 }
 
-//todo <value>datetime</value> and <value>base64Binary</value>
+void KoXmlWriter::addTextSpan( const QString& text )
+{
+    QMap<int, int> tabCache;
+    addTextSpan( text, tabCache );
+}
+
+void KoXmlWriter::addTextSpan( const QString& text, const QMap<int, int>& tabCache )
+{
+    uint len = text.length();
+    int nrSpaces = 0; // number of consecutive spaces
+    QString str;
+    str.reserve( len );
+    // Accumulate chars either in str or in nrSpaces (for spaces).
+    // Flush str when writing a subelement (for spaces or for another reason)
+    // Flush nrSpaces when encountering two or more consecutive spaces
+    for ( uint i = 0; i < len ; ++i ) {
+        QChar ch = text[i];
+        if ( ch != ' ' ) {
+            if ( nrSpaces > 0 ) {
+                // For the first space we use ' '.
+                // "it is good practice to use (text:s) for the second and all following SPACE characters in a sequence."
+                str += ' ';
+                --nrSpaces;
+                if ( nrSpaces > 0 ) { // there are more spaces
+                    if ( !str.isEmpty() )
+                        addTextNode( str );
+                    str = QString::null;
+                    startElement( "text:s" );
+                    if ( nrSpaces > 1 ) // it's 1 by default
+                        addAttribute( "text:c", nrSpaces );
+                    endElement();
+                }
+            }
+            nrSpaces = 0;
+        }
+        switch ( ch.unicode() ) {
+        case '\t':
+            if ( !str.isEmpty() )
+                addTextNode( str );
+            str = QString::null;
+            startElement( "text:tab" );
+            if ( tabCache.contains( i ) )
+                addAttribute( "text:tab-ref", tabCache[i] + 1 );
+            endElement();
+            break;
+        case '\n':
+            if ( !str.isEmpty() )
+                addTextNode( str );
+            str = QString::null;
+            startElement( "text:line-break" );
+            endElement();
+            break;
+        case ' ':
+            ++nrSpaces;
+            break;
+        default:
+            str += text[i];
+            break;
+        }
+    }
+    // either we still have text in str or we have spaces in nrSpaces
+    if ( nrSpaces > 0 ) {
+        str += ' ';
+        --nrSpaces;
+    }
+    if ( !str.isEmpty() ) {
+        addTextNode( str );
+    }
+    if ( nrSpaces > 0 ) { // there are more spaces
+        startElement( "text:s" );
+        if ( nrSpaces > 1 ) // it's 1 by default
+            addAttribute( "text:c", nrSpaces );
+        endElement();
+    }
+}
+

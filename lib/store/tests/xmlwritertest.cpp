@@ -30,7 +30,7 @@ void speedTest()
         writer.endDocument();
     }
     out.close();
-    qDebug( "writing %i XML elements using TagWriter: %i", numParagraphs, time.elapsed() );
+    qDebug( "writing %i XML elements using TagWriter: %i ms", numParagraphs, time.elapsed() );
 }
 
 int main( int argc, char** argv ) {
@@ -74,6 +74,24 @@ int main( int argc, char** argv ) {
     writer.endElement();
     writer.endElement();
     TEST_END( "textnode test", "<r>\n <a>\n  <b><c/>text</b>\n </a>\n</r>\n" );
+
+    TEST_BEGIN( 0, 0 );
+    writer.startElement( "p", false /*no indent*/ );
+    writer.addTextSpan( "   \t\n foo  " );
+    writer.endElement();
+    TEST_END( "textspan test", "<r>\n"
+              " <p> <text:s text:c=\"2\"/><text:tab/><text:line-break/> foo <text:s/></p>\n"
+              "</r>\n" );
+
+    TEST_BEGIN( 0, 0 );
+    writer.startElement( "p", false /*no indent*/ );
+    QMap<int, int> tabCache;
+    tabCache.insert( 3, 0 );
+    writer.addTextSpan( "   \t\n foo  ", tabCache );
+    writer.endElement();
+    TEST_END( "textspan with tabcache", "<r>\n"
+              " <p> <text:s text:c=\"2\"/><text:tab text:tab-ref=\"1\"/><text:line-break/> foo <text:s/></p>\n"
+              "</r>\n" );
 
     TEST_BEGIN( 0, 0 );
     writer.addManifestEntry( "foo/bar/blah", "mime/type" );

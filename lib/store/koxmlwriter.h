@@ -22,6 +22,7 @@
 
 #include <qstring.h>
 #include <qvaluestack.h>
+#include <qmap.h>
 class QIODevice;
 
 /**
@@ -53,6 +54,7 @@ public:
      *
      * Once done with writing the contents of the root element, you
      * will need to call endElement(); endDocument(); before destroying the KoXmlWriter.
+     * @note OASIS-specific
      */
     KoXmlWriter( QIODevice* dev, const char* rootElementName );
 
@@ -144,7 +146,7 @@ public:
      * and startElement( "b" ); endElement( "b" ); addTextNode( "foo" ) gives \<p\>\<b/\>foo\</p\>
      */
     void addTextNode( const char* cstr );
-    
+
     /**
      * This is quite a special-purpose method, not for everyday use.
      * It adds a complete element (with its attributes and child elements)
@@ -168,24 +170,45 @@ public:
      * This is equivalent to startElement/2*addAttribute/endElement
      * This API will probably have to change (or not be used anymore)
      * when we add support for encrypting/signing.
+     * @note OASIS-specific
      */
     void addManifestEntry( const QString& fullPath, const QString& mediaType );
 
     /**
      * Special helper for writing config item into settings.xml
+     * @note OASIS-specific
      */
     void addConfigItem( const QString & configName, const QString& value );
-
+    /// @note OASIS-specific
     void addConfigItem( const QString & configName, bool value );
-
+    /// @note OASIS-specific
     void addConfigItem( const QString & configName, int value );
-
+    /// @note OASIS-specific
     void addConfigItem( const QString & configName, double value );
-
+    /// @note OASIS-specific
     void addConfigItem( const QString & configName, long value );
-
+    /// @note OASIS-specific
     void addConfigItem( const QString & configName, short value );
 
+    // TODO addConfigItem for datetime and base64Binary
+
+    /**
+     * @brief Adds a text span as nods of the current element.
+     *
+     * Unlike KoXmlWriter::addTextNode it handles tabulations, linebreaks,
+     * and multiple spaces by using the appropriate OASIS tags.
+     *
+     * @param text the text to write
+     *
+     * @note OASIS-specific
+     */
+    void addTextSpan( const QString& text );
+    /**
+     * Overloaded version of addTextSpan which takes an additional tabCache map.
+     * @param tabCache optional map allowing to find a tab for a given character index
+     * @note OASIS-specific
+     */
+    void addTextSpan( const QString& text, const QMap<int, int>& tabCache );
 
     /**
      * @return the current indentation level.
