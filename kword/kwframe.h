@@ -60,6 +60,7 @@ class KWTextFrameSet;
 class KWFramePartMoveCommand;
 class KWordFrameSetIface;
 class DCOPObject;
+
 /**
  * This class represents a single frame.
  * A frame belongs to a frameset which states its contents.
@@ -125,36 +126,44 @@ public:
     SheetSide sheetSide()const { return m_sheetSide; }
     void setSheetSide( SheetSide ss ) { m_sheetSide = ss; }
 
-    /** What happens on new page (create a new frame and reconnect, no followup, make copy) */
+    /** What happens on new page 
+     * (create a new frame and reconnect, no followup, make copy) */
     enum NewFrameBehavior { Reconnect=0, NoFollowup=1, Copy=2 };
     NewFrameBehavior newFrameBehavior()const { return m_newFrameBehavior; }
     void setNewFrameBehavior( NewFrameBehavior nfb ) { m_newFrameBehavior = nfb; }
 
-    /** Drawing property: if isCopy, this frame is a copy of the previous frame in the frameset */
+    /** Drawing property: if isCopy, this frame is a copy of the previous frame in the frameset
+     */
     bool isCopy()const { return m_bCopy; }
     void setCopy( bool copy ) { m_bCopy = copy; }
 
-    /** Data stucture methods */
+    /** Data stucture methods
+     */
     KWFrameSet *frameSet() const { return m_frameSet; }
     void setFrameSet( KWFrameSet *fs ) { m_frameSet = fs; }
 
-    /** The page on which this frame is (0 based)*/
+    /** The page on which this frame is (0 based)
+     */
     int pageNum() const;
-    /** Same thing, but works if the frame hasn't been added to a frameset yet */
+    /** Same as pageNum(), but works if the frame hasn't been added to a frameset yet
+     */
     int pageNum( KWDocument* doc ) const;
 
-    /** The z-order of the frame, relative to the other frames on the same page */
+    /** The z-order of the frame, relative to the other frames on the same page
+     */
     void setZOrder( int z ) { m_zOrder = z; }
     int zOrder() const { return m_zOrder; }
 
-    /** For KWFrameSet::updateFrames only. Clear list of frames on top of this one. */
+    /** For KWFrameSet::updateFrames only. Clear list of frames on top of this one.
+     */
     void clearFramesOnTop() { m_framesOnTop.clear(); }
     /** For KWFrameSet::updateFrames only. Add a frame on top of this one.
      * Note that order doesn't matter in that list, it's for clipping only. */
     void addFrameOnTop( KWFrame* fot ) { m_framesOnTop.append( fot ); }
     const QPtrList<KWFrame>& framesOnTop() const { return m_framesOnTop; }
 
-    /** All borders can be custom drawn with their own colors etc. */
+    /** All borders can be custom drawn with their own colors etc.
+     */
     const KoBorder &leftBorder() const { return brd_left; }
     const KoBorder &rightBorder() const { return brd_right; }
     const KoBorder &topBorder() const { return brd_top; }
@@ -205,33 +214,44 @@ public:
     void setInternalY( double y ) { m_internalY = y; }
     double internalY() const { return m_internalY; }
 
-    /** set left margin size */
+    /** set left margin size
+     */
     void setBLeft( double b ) { bleft = b; }
-    /** set right margin size */
+    /** set right margin size
+     */
     void setBRight( double b ) { bright = b; }
-    /** set top margin size */
+    /** set top margin size
+     */
     void setBTop( double b ) { btop = b; }
-    /** set bottom margin size */
+    /** set bottom margin size
+     */
     void setBBottom( double b ) { bbottom = b; }
 
-    /** get left margin size */
+    /** get left margin size
+     */
     double bLeft()const { return bleft; }
-    /** get right margin size */
+    /** get right margin size
+     */
     double bRight()const { return bright; }
-    /** get top margin size */
+    /** get top margin size
+     */
     double bTop()const { return btop; }
-    /** get bottom margin size */
+    /** get bottom margin size
+     */
     double bBottom()const { return bbottom; }
 
     void setFrameMargins( double _left, double _top, double right, double bottom);
-    /** returns a copy of self */
+    /** returns a copy of self
+     */
     KWFrame *getCopy();
 
     void copySettings(KWFrame *frm);
 
-    /** create XML to describe yourself */
+    /** create XML to describe yourself
+     */
     void save( QDomElement &frameElem );
-    /** read attributes from XML. @p headerOrFooter if true some defaults are different */
+    /** read attributes from XML. @p headerOrFooter if true some defaults are different
+     */
     void load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersion );
 
     void setMinFrameHeight(double h) {m_minFrameHeight=h;}
@@ -264,8 +284,11 @@ private:
     QPtrList<KWFrame> m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
     KWFrameSet *m_frameSet;
 
-    // Prevent operator= and copy constructor
+    /** Prevent operator=
+     */
     KWFrame &operator=( const KWFrame &_frame );
+    /** Prevent copy constructor
+     */
     KWFrame ( const KWFrame &_frame );
 };
 
