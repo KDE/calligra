@@ -37,6 +37,7 @@
 #include "karbon_factory.h"
 #include "vtool.h"
 #include "vtoolcontroller.h"
+#include "vtypebuttonbox.h"
 
 #include "vtoolbox.h"
 #include "vstrokefillpreview.h"
@@ -71,6 +72,7 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 	insertLeft = true;
 
 	m_strokeFillPreview = new VStrokeFillPreview( part, this );
+	m_typeButtonBox = new VTypeButtonBox( part, this );
 
 	// setup tool collections
 	m_manipulationtools.resize( 10 );

@@ -23,6 +23,8 @@
 
 #include <qhbuttongroup.h>
 
+class KarbonPart;
+
 class VTypeButtonBox : public QHButtonGroup
 {
 	Q_OBJECT
@@ -35,7 +37,11 @@ public:
 		gradient = 2,
 		pattern = 3
  	};
-	VTypeButtonBox( QWidget* parent = 0L, const char* name = 0L);
+
+	VTypeButtonBox( KarbonPart *part, QWidget* parent = 0L, const char* name = 0L );
+
+private:
+	KarbonPart *m_part;
 };
 
 #endif
