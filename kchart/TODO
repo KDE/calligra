@@ -28,7 +28,7 @@ Item								   Prio Status
        Fixed by new KDChart version
   + 100004: Manual should describe stand-alone charting  	      2	----
             (see below also)
-  + 101007: Error in reading back axis labels.			      1 DONE
+  + 101007: Error in reading back axis labels.			      1 ----
       - Store row and column labels separately in the document		done
       - Load old type files without separately stored labels.		done
       - Fix labelText bug in save/load in KDChart			kdch
@@ -123,6 +123,8 @@ Item								   Prio Status
     - Maybe create a little combination widget that can change        2 --
       both font and color for a text item?
   + Font page should have a buttongroup				      2	----
+  + Bring back "line width" for line charts.			      1 ----
+	Used to be on the Line3d page.
 
 * Wizard
   + New data page?						     S1 ----
