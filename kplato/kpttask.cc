@@ -24,6 +24,8 @@
 #include "kptduration.h"
 #include "kptrelation.h"
 #include "kptdatetime.h"
+#include "kptpart.h"
+#include "kptconfig.h"
 
 #include <qdom.h>
 #include <qbrush.h>
@@ -478,7 +480,7 @@ KPTDateTime KPTTask::calculateForward(int use) {
             case KPTNode::FixedInterval: {
                 KPTDateTime st = m_constraintStartTime;
                 KPTDateTime end = m_constraintEndTime;
-                if (st.time().isNull() && end.time().isNull())
+                if (KPTPart::config().behavior().dateTimeUsage == KPTBehavior::Date)
                 {
                     end = end.addDays(1);
                 }
@@ -582,7 +584,7 @@ KPTDateTime KPTTask::calculateBackward(int use) {
             case KPTNode::FixedInterval: {
                 KPTDateTime st = m_constraintStartTime;
                 KPTDateTime end = m_constraintEndTime;
-                if (st.time().isNull() && end.time().isNull())
+                if (KPTPart::config().behavior().dateTimeUsage == KPTBehavior::Date)
                 {
                     end = end.addDays(1);
                 }
@@ -755,7 +757,7 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
             //kdDebug()<<"FixedInterval="<<m_constraintStartTime.toString()<<" "<<m_startTime.toString()<<endl;
             KPTDateTime st = m_constraintStartTime;
             KPTDateTime end = m_constraintEndTime;
-            if (st.time().isNull() && end.time().isNull())
+            if (KPTPart::config().behavior().dateTimeUsage == KPTBehavior::Date)
             {
                 end = end.addDays(1);
             }
@@ -970,7 +972,7 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
             //kdDebug()<<"FixedInterval="<<m_constraintEndTime.toString()<<" "<<m_endTime.toString()<<endl;
             KPTDateTime st = m_constraintStartTime;
             KPTDateTime end = m_constraintEndTime;
-            if (st.time().isNull() && end.time().isNull())
+            if (KPTPart::config().behavior().dateTimeUsage == KPTBehavior::Date)
             {
                 end = end.addDays(1);
             }
