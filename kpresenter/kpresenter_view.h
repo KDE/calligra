@@ -354,9 +354,7 @@ public slots:
 
     void spellCheckerDone( const QString & );
     void spellCheckerFinished( );
-    void spellCheckerIgnoreAll( const QString & );
     void startKSpell();
-    void spellCheckerReplaceAll( const QString &, const QString & );
     void spellAddAutoCorrect (const QString & originalword, const QString & newword);
     void spellCheckerMisspelling( const QString &, int );
     void spellCheckerCorrected( const QString &, int, const QString & );
