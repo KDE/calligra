@@ -231,6 +231,10 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_gridX = MM_TO_POINT( 10.0 );
     m_gridY = MM_TO_POINT( 10.0 );
 
+    oldGridX = m_gridX;
+    oldGridY = m_gridY;
+
+
     KPrPage *newpage=new KPrPage(this);
     m_pageList.insert( 0,newpage);
     emit sig_changeActivePage(newpage );
@@ -2208,27 +2212,25 @@ void KPresenterDoc::savePage( const QString &file, int pgnum )
 /*====================== replace objects =========================*/
 void KPresenterDoc::replaceObjs( bool createUndoRedo )
 {
-    KMacroCommand * macroCmd = new KMacroCommand( i18n("Set new Options") );
-    bool addMacroCommand=false;
+    KMacroCommand * macroCmd = 0L;
     QPtrListIterator<KPrPage> oIt(m_pageList);
     for (; oIt.current(); ++oIt )
       {
         KCommand *cmd=oIt.current()->replaceObjs( createUndoRedo, oldGridX,oldGridY,_txtBackCol, _otxtBackCol);
         if(cmd && createUndoRedo)
         {
+            if ( !macroCmd)
+                macroCmd = new KMacroCommand( i18n("Set new Options") );
             macroCmd->addCommand(cmd);
-            addMacroCommand=true;
         }
         else
             delete cmd;
     }
-    if(addMacroCommand)
+    if(macroCmd)
     {
         macroCmd->execute();
         addCommand(macroCmd);
     }
-    else
-        delete macroCmd;
 }
 
 /*========================= restore background ==================*/

@@ -2867,7 +2867,7 @@ void KPrPage::completeLoading( bool _clean, int lastObj )
 KCommand * KPrPage::replaceObjs( bool createUndoRedo, double _orastX,double _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol )
 {
     KPObject *kpobject = 0;
-    double ox, oy;
+    double ox=0, oy=0;
     QPtrList<KPObject> _objects;
     QValueList<KoPoint> _diffs;
     _objects.setAutoDelete( false );
