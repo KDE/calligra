@@ -622,25 +622,26 @@ static bool ProcessStoreFile ( QByteArray       &byteArrayIn,
 
 bool KWEFKWordLeader::loadKoStoreFile(const QString& fileName, QByteArray& array)
 {
-    if (m_filenameIn.isEmpty())
+    KoStoreDevice* subFile;
+
+    subFile=m_chain->storageFile(fileName,KoStore::Read);
+
+    if (!subFile)
     {
-        // We have no KoStore, so we cannot offer anything!
-        kdWarning (30508) << "No KoStore to get file from!" << endl;
+        kdError(30508) << "Could not get a device for sub-file: " << fileName << endl;
         return false;
     }
-
-    KoStore koStore (m_filenameIn, KoStore::Read); // TODO
-
-    if ( koStore.open ( fileName ) )
+    else if ( subFile->open ( IO_ReadOnly ) )
     {
-        array = koStore.read ( koStore.size () );
-        koStore.close ();
+        array = subFile->readAll();
+        subFile->close ();
     }
     else
     {
-        kdWarning (30508) << "Unable to open " << fileName << " sub-file in KoStore " << m_filenameIn << endl;
+        kdError(30508) << "Unable to open " << fileName << " sub-file" << endl;
         return false;
     }
+
     return true;
 }
 
@@ -652,7 +653,7 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     {
         return KoFilter::NotImplemented;
     }
-    
+
     if (!chain)
     {
         kdError(30508) << "'Chain' is NULL! Internal error of the filter system?" << endl;
@@ -660,10 +661,6 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     }
 
     m_chain=chain;
-
-    // We must save the input file name, as KoFilterChain::inputFile can only be called once!!
-    m_filenameIn=chain->inputFile();
-    kdDebug(30508) << "Setting m_filenameIn: " << m_filenameIn << endl;
 
     if ( !doOpenFile (chain->outputFile(),to) )
     {
@@ -679,7 +676,6 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
         return KoFilter::StupidError;
     }
 
-#if 0
     QByteArray byteArrayIn;
 
     KoStoreDevice* subFile;
@@ -728,46 +724,15 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
 
     if (!fileWasRead)
     {
-#else
-    KoStore koStoreIn (m_filenameIn, KoStore::Read);  // TODO
-    QByteArray byteArrayIn;
-
-    if ( koStoreIn.open ( "documentinfo.xml" ) )
-    {
-        byteArrayIn = koStoreIn.read ( koStoreIn.size () );
-        koStoreIn.close ();
-
-        kdDebug (30508) << "Processing Document Info..." << endl;
-        ProcessStoreFile (byteArrayIn, ProcessDocumentInfoTag, this);
-    }
-    else
-    {
-        // Note: we do not worry too much if we cannot open the document info!
-        kdWarning (30508) << "Unable to open documentinfo.xml sub-file!" << endl;
-    }
-
-    if ( koStoreIn.open ( "root" ) )
-    {
-        byteArrayIn = koStoreIn.read ( koStoreIn.size () );
-        koStoreIn.close ();
-
-        kdDebug (30508) << "Processing KWord File (KoStore)..." << endl;
-        ProcessStoreFile (byteArrayIn, ProcessDocTag, this);
-    }
-    else
-    {
-#endif
         // We were not able to open maindoc.xml
         // But perhaps we have an untarred, uncompressed file
         //  (it might happen with koconverter)
-        QFile file (m_filenameIn);
+        // FIXME: this does not work, because the filter system has already a destination!
+        QFile file (chain->inputFile());
         if (file.open (IO_ReadOnly))
         {
             byteArrayIn = file.readAll ();
             file.close ();
-
-            // Do *not* set m_filenameIn as we have not any KoStore
-            m_filenameIn=QString::null; // PROVISORY
 
             kdDebug (30508) << "Processing KWord File (QFile)..." << endl;
             ProcessStoreFile (byteArrayIn, ProcessDocTag, this);

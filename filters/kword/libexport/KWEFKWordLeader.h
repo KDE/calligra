@@ -61,7 +61,6 @@ class KWEFKWordLeader
         bool doCloseDocument (void);
     private:
         KWEFBaseWorker *m_worker;
-        QString m_filenameIn;
         KoFilterChain* m_chain;
 };
 
