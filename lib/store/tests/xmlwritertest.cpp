@@ -1,10 +1,9 @@
 #include "koxmlwriter.h"
+#include "xmlwritertest.h"
 
 #include <qapplication.h>
 #include <qfile.h>
 #include <qdatetime.h>
-#include <qbuffer.h>
-#include <qregexp.h>
 
 static const int numParagraphs = 30000;
 void speedTest()
@@ -36,39 +35,6 @@ void speedTest()
 
 int main( int argc, char** argv ) {
     QApplication app( argc, argv, QApplication::Tty );
-
-#define TEST_BEGIN(publicId,systemId) \
-    { \
-        QCString cstr; \
-        QBuffer buffer( cstr ); \
-        buffer.open( IO_WriteOnly ); \
-        { \
-            KoXmlWriter writer( &buffer ); \
-            writer.startDocument( "r", publicId, systemId ); \
-            writer.startElement( "r" )
-
-#define TEST_END(testname, expected) \
-            writer.endElement(); \
-            writer.endDocument(); \
-        } \
-        buffer.putch( '\0' ); /*null-terminate*/ \
-        QCString expectedFull( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" ); \
-        expectedFull += expected; \
-        if ( cstr == expectedFull ) \
-            qDebug( "%s OK", testname ); \
-        else { \
-            qDebug( "%s FAILED!", testname ); \
-            QCString s1 = cstr; \
-            QCString s2 = expectedFull; \
-            if ( s1.length() != s2.length() ) \
-                qDebug( "got length %d, expected %d", s1.length(), s2.length() ); \
-            s1.replace( QRegExp( "[x]{1000}" ), "[x]*1000" ); \
-            s2.replace( QRegExp( "[x]{1000}" ), "[x]*1000" ); \
-            qDebug( "%s", s1.data() ); \
-            qDebug( "Expected:\n%s", s2.data() ); \
-            return 1; /*exit*/ \
-        } \
-    }
 
     TEST_BEGIN( 0, 0 );
     TEST_END( "framework test", "<!DOCTYPE r>\n<r/>\n" );
