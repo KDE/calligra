@@ -1918,10 +1918,11 @@ void KSpreadCell::applyZoomedFont( QPainter &painter, int _col, int _row )
       if ( s->hasFeature( KSpreadStyle::SFontFlag, true ) )
       {
         uint flags = s->fontFlags();
-        tmpFont.setBold( flags && (uint) KSpreadStyle::FBold );
-        tmpFont.setUnderline( flags && (uint) KSpreadStyle::FUnderline );
-        tmpFont.setItalic( flags && (uint) KSpreadStyle::FItalic );
-        tmpFont.setStrikeOut( flags && (uint) KSpreadStyle::FStrike );
+
+        tmpFont.setBold( flags & (uint) KSpreadStyle::FBold );
+        tmpFont.setUnderline( flags & (uint) KSpreadStyle::FUnderline );
+        tmpFont.setItalic( flags & (uint) KSpreadStyle::FItalic );
+        tmpFont.setStrikeOut( flags & (uint) KSpreadStyle::FStrike );
       }
       if ( s->hasFeature( KSpreadStyle::SFontFamily, true ) )
         tmpFont.setFamily( s->fontFamily() );

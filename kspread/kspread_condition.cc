@@ -105,6 +105,8 @@ bool KSpreadConditions::currentCondition( KSpreadConditional & condition )
   for ( it = m_condList.begin(); it != m_condList.end(); ++it )
   {
     condition = *it;
+    kdDebug()<<"*it :"<< *( ( *it ).styleName )<<endl;
+    kdDebug()<<"*it style :"<<(  *it ).style <<endl;
 
     if ( condition.strVal1 && m_cell->value().isNumber() )
       continue;
