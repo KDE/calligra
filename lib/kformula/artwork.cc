@@ -98,7 +98,7 @@ const QChar rightCurlyBracket[] = {
 
 
 Artwork::Artwork(SymbolType t)
-    : type(t)
+    : baseline( -1 ), type(t)
 {
 }
 
@@ -123,6 +123,7 @@ void Artwork::calcSizes( const ContextStyle& style,
                          ContextStyle::TextStyle tstyle,
                          luPt parentSize )
 {
+    setBaseline( -1 );
     luPt mySize = style.getAdjustedSize( tstyle );
     switch (type) {
     case LeftSquareBracket:

@@ -32,14 +32,15 @@
 #include "contextstyle.h"
 #include "formulacursor.h"
 #include "formulaelement.h"
+#include "kformuladocument.h"
 #include "kformulamimesource.h"
 
 KFORMULA_NAMESPACE_BEGIN
 using namespace std;
 
 
-MimeSource::MimeSource(QDomDocument formula)
-        : document(formula)
+MimeSource::MimeSource(Document* doc, QDomDocument formula)
+        : formulaDocument( doc ), document(formula)
 {
     // The query for text/plain comes very often. So make sure
     // it's fast.
@@ -110,14 +111,15 @@ QByteArray MimeSource::encodedData ( const char *format ) const
     if (fmt=="image/ppm") {
 
 	//cerr << "asking image" << endl;
-        ContextStyle context;
+        ContextStyle& context = formulaDocument->getContextStyle( false );
         //context.setResolution(5, 5);
 
         rootElement->calcSizes(context);
         QRect rect(rootElement->getX(), rootElement->getY(),
                    rootElement->getWidth(), rootElement->getHeight());
 
-    	QPixmap pm(rect.width(),rect.height());
+    	QPixmap pm( context.layoutUnitToPixelX( rootElement->getWidth() ),
+                    context.layoutUnitToPixelY( rootElement->getHeight() ) );
 	pm.fill();
 	QPainter paint(&pm);
         rootElement->draw(paint, rect, context);
@@ -154,7 +156,7 @@ void MimeSource::cursorHasMoved( FormulaCursor* )
 
 const SymbolTable& MimeSource::getSymbolTable() const
 {
-    return table;
+    return formulaDocument->getContextStyle( false ).symbolTable();
 }
 
 KFORMULA_NAMESPACE_END

@@ -25,7 +25,6 @@
 #include <qdom.h>
 
 #include "kformulacontainer.h"
-#include "symboltable.h"
 
 KFORMULA_NAMESPACE_BEGIN
 class FormulaElement;
@@ -34,7 +33,7 @@ class FormulaElement;
 class MimeSource : public QMimeSource, public FormulaDocument
 {
 public:
-    MimeSource(QDomDocument formula);
+    MimeSource(Document* doc, QDomDocument formula);
     ~MimeSource();
 
     virtual const char* format ( int n = 0 ) const;
@@ -48,9 +47,10 @@ public:
 
 private:
 
+    Document* formulaDocument;
+
     QDomDocument document;
     QByteArray latexString;
-    SymbolTable table;
 
     FormulaElement* rootElement;
 };

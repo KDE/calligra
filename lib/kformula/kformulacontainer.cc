@@ -318,7 +318,7 @@ void Container::copy()
     if (cursor != 0) {
         QDomDocument formula = cursor->copy();
         QClipboard* clipboard = QApplication::clipboard();
-        clipboard->setData(new MimeSource(formula));
+        clipboard->setData(new MimeSource(document(), formula));
     }
 }
 

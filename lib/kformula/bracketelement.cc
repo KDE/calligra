@@ -114,11 +114,22 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
                        QMAX(left->getHeight(), right->getHeight())));
         //setMidline(getHeight() / 2);
 
-        left   ->setY((getHeight() - left   ->getHeight())/2);
-        right  ->setY((getHeight() - right  ->getHeight())/2);
-
         content->setY(getHeight() / 2 - content->axis( style, tstyle ));
         setBaseline(content->getBaseline() + content->getY());
+
+        if ( left->getBaseline() != -1 ) {
+            left->setY(getBaseline() - left->getBaseline());
+        }
+        else {
+            left->setY((getHeight() - left->getHeight())/2);
+        }
+        if ( right->getBaseline() != -1 ) {
+            right->setY(getBaseline() - right->getBaseline());
+        }
+        else {
+            right->setY((getHeight() - right->getHeight())/2);
+        }
+
 //         kdDebug() << "BracketElement::calcSizes" << endl
 //                   << "getHeight(): " << getHeight() << endl
 //                   << "left->getHeight():  " << left->getHeight() << endl

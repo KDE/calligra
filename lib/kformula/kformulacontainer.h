@@ -58,7 +58,13 @@ class SymbolTable;
  * the context in which the formulae exist.
  */
 class FormulaDocument {
+    // not allowed
+    FormulaDocument( const FormulaDocument& ) {}
+    FormulaDocument& operator=( const FormulaDocument& ) { return *this; }
 public:
+
+    FormulaDocument() {}
+    virtual ~FormulaDocument() {}
 
     virtual void elementRemoval(BasicElement* child) = 0;
     virtual void changed() = 0;

@@ -243,6 +243,12 @@ ContextStyle& Document::getContextStyle( bool edit )
     return impl->contextStyle;
 }
 
+const ContextStyle& Document::getContextStyle() const
+{
+    //impl->contextStyle.setEdit( false );
+    return impl->contextStyle;
+}
+
 void Document::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
     impl->contextStyle.setZoomAndResolution( zoom, dpiX, dpiY );
