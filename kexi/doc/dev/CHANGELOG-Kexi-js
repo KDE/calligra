@@ -320,7 +320,23 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 TODO: reuse KexiNameWidget in KexiNewProjectWizard!
 
 2004-03-08
-
+Table View
+	-'acceptsRowEditAfterCellAccepting' flag added
+Main Window
+	-closeDialog(), saveObject(), closeProject() methods have now 'cancelled'
+	 parameter, so they can tell you if user just cancelled operation or there was 
+	 rather a real error.
+	-Duplicate names are checked on new object saving; user is prompted for unique name.
+	-On dialog closing: 'Dirty' flag is cleared when user discards dialog saving
+KexiDB::Field
+	-Connection::findObjectSchemaData() added for looking for objects by type and name
+	-INDEXED flag added to KexiDB::Field (now you can declare field to be indexed 
+	 even without any constraint)
+	-More implied rules added for methods like setPrimaryKey()
+	-More docs added
+Alter Table Dialog
+	-most missing field properties are now visible in property editor
+	-Creating new table: table schema is (almost) created using current buffers' state
 
 2004-03-06
 2004-03-05
