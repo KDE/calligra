@@ -579,9 +579,6 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
             }
         }
         e = e.nextSibling().toElement();
-        if ( e.isNull() )
-            break;
-        i = 0;
         Variable::Iterator it;
         for ( it=varMap.begin(); it !=varMap.end();++it)
         {
@@ -590,6 +587,10 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
 
             it.key()->recalc();
         }
+
+        if ( e.isNull() )
+            break;
+        i = 0;
         if ( !lastParag->length() == 0 )
             lastParag = new KoTextParag( textDocument(), lastParag, 0 );
     }

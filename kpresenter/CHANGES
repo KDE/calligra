@@ -38,3 +38,4 @@ KPresenter 1.2beta1 -> 1.2 beta 2
 - Now we can create directly a style from a selection
 - Add support for protect content of text object
 - Now we can close polyline object
+- Fix save/load variable
