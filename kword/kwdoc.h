@@ -503,6 +503,11 @@ public:
 
     void refreshGUIButton();
 
+    void initConfig();
+    void saveConfig();
+    void initUnit();
+
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
     void newContentsSize();
@@ -535,10 +540,6 @@ protected:
     void loadFrameSets( QDomElement framesets );
     void loadStyleTemplates( QDomElement styles );
     void saveStyle( KWStyle *sty, QDomElement parentElem );
-
-    void initConfig();
-    void saveConfig();
-    void initUnit();
 
     DCOPObject *dcop;
 

@@ -94,6 +94,12 @@ k_dcop:
     virtual void setDisplayLink(bool b);
     virtual bool displayLink();
 
+    //init/save config
+    virtual void initConfig();
+    virtual void saveConfig();
+    virtual void initUnit();
+
+
 private:
     KWDocument *doc;
 

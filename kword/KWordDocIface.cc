@@ -305,3 +305,18 @@ QString KWordDocIface::customVariableValue(const QString & varname)const
         return doc->getVariableCollection()->getVariableValue( varname );
     return QString::null;
 }
+
+void KWordDocIface::initConfig()
+{
+    doc->initConfig();
+}
+
+void KWordDocIface::saveConfig()
+{
+    doc->saveConfig();
+}
+
+void KWordDocIface::initUnit()
+{
+    doc->initUnit();
+}
