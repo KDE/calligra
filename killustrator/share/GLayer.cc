@@ -32,7 +32,7 @@
 int GLayer::lastID = 1;
 
 GLayer::GLayer (const char* text) : visibleFlag (true), printableFlag (true), 
-  editableFlag (true), activeFlag (false) {
+  editableFlag (true) {
   if (text == NULL) {
     char buf[20];
 
@@ -73,9 +73,3 @@ void GLayer::setEditable (bool flag) {
   }
 }
 
-void GLayer::setActive (bool flag) {
-  if (activeFlag != flag) {
-    activeFlag = flag;
-    emit propertyChanged ();
-  }
-}

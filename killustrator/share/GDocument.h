@@ -27,6 +27,7 @@
 
 #include <set>
 #include <string>
+#include <vector>
 
 #include <qobject.h>
 #include <qlist.h>
@@ -34,6 +35,7 @@
 
 #include "Handle.h"
 #include "GObject.h"
+#include "GLayer.h"
 
 #include "koPageLayoutDia.h"
 
@@ -57,6 +59,31 @@ public:
 
   void setModified (bool flag = true);
   bool isModified () const { return modifyFlag; }
+
+  /*
+   * Layer management
+   */
+
+  // get an array with all layers of the document
+  const vector<GLayer*>& getLayers ();
+
+  // set the active layer where further actions take place
+  void setActiveLayer (GLayer *layer);
+
+  // retrieve the active layer
+  GLayer* activeLayer ();
+
+  // raise the given layer
+  void raiseLayer (GLayer *layer);
+
+  // lower the given layer
+  void lowerLayer (GLayer *layer);
+
+  // add a new layer on top of existing layers
+  GLayer* addLayer ();
+
+  // delete the given layer as well as all contained objects
+  void deleteLayer (GLayer *layer);
 
   void insertObject (GObject* obj);
   void selectObject (GObject* obj);
@@ -129,6 +156,9 @@ private:
   Rect selBox;
   bool selBoxIsValid;
   KoPageLayout pLayout;
+
+  vector<GLayer*> layers; // the array of all layers
+  GLayer* active_layer;     // the current layer
 
   static QString psPrologPath;
   static QDict<QString> fontMap;

@@ -68,6 +68,7 @@ ScriptDialog::ScriptDialog (QWidget* parent, const char* name) :
   vl->activate ();
   adjustSize ();
  
+  setMaximumWidth (300);
 //  setMinimumSize (430, 400);
 //  setMaximumSize (430, 400);
 }

@@ -34,7 +34,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 TransformationDialog.h koPageLayoutDia.h \
 		 MainView.h PStateManager.h OptionDialog.h \
 		 Preview.h units.h UnitBox.h ScriptDialog.h \
-		 GLayer.h LayerDialog.h
+		 GLayer.h LayerDialog.h LayerView.h
 
 libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  GOval.cc GClipart.cc GBezier.cc \
@@ -66,7 +66,7 @@ libkillu_a_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  TransformationDialog.cc koPageLayoutDia.cc \
 			  PStateManager.cc OptionDialog.cc \
 			  Preview.cc units.cc UnitBox.cc ScriptDialog.cc \
-			  GLayer.cc LayerDialog.cc
+			  GLayer.cc LayerDialog.cc LayerView.cc
 
 # just to make sure, automake makes them 
 BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
@@ -85,7 +85,7 @@ BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
 		TransformationDialog.moc koPageLayoutDia.moc \
 		PStateManager.moc OptionDialog.moc UnitBox.moc \
 		ScriptDialog.moc GLayer.moc LayerDialog.moc \
-		CommandHistory.moc
+		LayerView.moc CommandHistory.moc
 
 DISTCLEANFILES = $(BUILTSOURCES)
 
@@ -147,5 +147,6 @@ UnitBox.cc: UnitBox.moc
 ScriptDialog.cc: ScriptDialog.moc
 GLayer.cc: GLayer.moc
 LayerDialog.cc: LayerDialog.moc
+LayerView.cc: LayerView.moc
 
 

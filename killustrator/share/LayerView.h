@@ -22,39 +22,37 @@
 
 */
 
-#ifndef GLayer_h_
-#define GLayer_h_
+#ifndef LayerView_h_
+#define LayerView_h_
 
-#include "GObject.h"
+#include <qtableview.h>
+#include <qpixmap.h>
 
-class GLayer : public QObject {
-  Q_OBJECT
+#include <vector>
+#include "GLayer.h"
+#include "GDocument.h"
+
+class LayerView : public QTableView {
+    Q_OBJECT
 public:
-  GLayer (const char* text = 0L);
-  ~GLayer ();
+    LayerView (QWidget *parent = 0L, const char *name = 0);
+    ~LayerView ();
 
-  bool isVisible () const { return visibleFlag; }
-  bool isPrintable () const { return printableFlag; }
-  bool isEditable () const { return editableFlag; }
+    void setActiveDocument (GDocument* doc);
 
-  const char* name () const;
-  void setName (const char* text);
+protected:
+    void showLayers (const vector<GLayer*>& lvec);
 
-  void setVisible (bool flag);
-  void setPrintable (bool flag);
-  void setEditable (bool flag);
+    virtual int cellWidth (int col);
+    virtual int cellHeight (int row);
+    virtual void paintCell (QPainter *, int row, int col);
 
-signals:
-  void propertyChanged ();
-  void contentChanged ();
-  
+    virtual void mousePressEvent (QMouseEvent *event);
+
 private:
-  QString ident;    // layer identifier
-  bool visibleFlag, // layer is visible
-    printableFlag,  // layer is printable
-    editableFlag;   // layer is editable
-
-  static int lastID;
-};  
+    GDocument* document;
+    vector<GLayer*> layers;
+    QPixmap pixmaps[4];
+};
 
 #endif

@@ -22,17 +22,18 @@
 
 */
 
-#include <qlistview.h>
-
 #include <iostream.h>
 
 #include "LayerDialog.h"
 #include "LayerDialog.moc"
 
+#include "LayerView.h"
+
 #include <klocale.h>
 #include <kapp.h>
 #include <kbuttonbox.h>
 #include <kseparator.h>
+#include <kiconloader.h>
 
 #include <qpushbt.h>
 #include <qlayout.h>
@@ -40,43 +41,6 @@
 
 #include "GLayer.h"
 
-/*
-class LayerItem : public QListBoxItem {
-public:
-  LayerItem (GLayer* l);
-
-protected:
-  virtual void paint (QPainter *);
-  virtual int height (const QListBox *) const;
-  virtual int width (const QListBox *) const;
-
-private:
-  GLayer* layer;
-};
-
-LayerItem::LayerItem (GLayer *l) : QListBoxItem (), layer (l) {
-  setText (l->name ());
-}
-
-void LayerItem::paint (QPainter *p) {
-  QFontMetrics fm = p->fontMetrics ();
-  int y;
-  if (15 < fm.height ())
-    y = fm.ascent () + fm.leading () / 2;
-  else
-    y = 15 / 2 - fm.height () / 2 + fm.ascent ();
-  p->drawText (4 * 25 + 5, y, text ());
-}
-
-int LayerItem::width (const QListBox *box) const {
-  return box->fontMetrics ().width (text ()) + 6 + 4 * 25;
-}
-
-int LayerItem::height (const QListBox *box) const {
-  return QMAX (15, box->fontMetrics ().lineSpacing () + 1);
-}
-
-*/
 LayerDialog::LayerDialog (QWidget* parent, const char* name) : 
     QDialog (parent, name, false) {
   QPushButton* button;
@@ -84,31 +48,36 @@ LayerDialog::LayerDialog (QWidget* parent, const char* name) :
   document = 0L;
   setCaption (i18n ("Layers"));
 
+  KIconLoader* loader = kapp->getIconLoader ();
   QVBoxLayout *vl = new QVBoxLayout (this, 10);
 
-  listView = new QListView (this);
-  listView->setAllColumnsShowFocus (true);
-  listView->addColumn ("v", 15);
-  listView->addColumn ("p", 15);
-  listView->addColumn ("e", 15);
-  listView->addColumn ("a", 15);
-  listView->addColumn ("Name", 100);
-  QHeader* header = listView->header ();
-  header->setFixedHeight (1);
-  header->hide ();
-  vl->addWidget (listView, 1);
+  layerView = new LayerView (this);
+  vl->addWidget (layerView, 1);
+
+#define BUTTON_WIDTH  30 
+#define BUTTON_HEIGHT 20
 
   KButtonBox *bbox = new KButtonBox (this);
+  bbox->addStretch (0.5);
   button = bbox->addButton ("Up");
+  button->setPixmap (loader->loadIcon ("raiselayer.xpm"));
+  button->setGeometry (0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
   connect (button, SIGNAL (clicked ()), SLOT (upPressed ()));
   button = bbox->addButton ("Down");
+  button->setPixmap (loader->loadIcon ("lowerlayer.xpm"));
+  button->setGeometry (0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
   connect (button, SIGNAL (clicked ()), SLOT (downPressed ()));
   button = bbox->addButton ("New");
+  button->setPixmap (loader->loadIcon ("newlayer.xpm"));
+  button->setGeometry (0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
   connect (button, SIGNAL (clicked ()), SLOT (newPressed ()));
   button = bbox->addButton ("Delete");
+  button->setPixmap (loader->loadIcon ("deletelayer.xpm"));
+  button->setGeometry (0, 0, BUTTON_WIDTH, BUTTON_HEIGHT);
   connect (button, SIGNAL (clicked ()), SLOT (deletePressed ()));
+  bbox->addStretch (0.5);
 
-//  bbox->setMaximumHeight (bbox->sizeHint ().height ());
+  bbox->setFixedHeight (bbox->sizeHint ().height ());
   vl->addWidget (bbox);
 
   // a separator
@@ -120,45 +89,42 @@ LayerDialog::LayerDialog (QWidget* parent, const char* name) :
   bbox = new KButtonBox (this);
   bbox->addStretch (1);
   button = bbox->addButton (i18n ("Close"));
-  connect (button, SIGNAL (clicked ()), SLOT (closePressed ()));
+  connect (button, SIGNAL (clicked ()), SLOT (reject ()));
   button = bbox->addButton (i18n ("Help"));
   connect (button, SIGNAL (clicked ()), SLOT (helpPressed ()));
-//  bbox->setMaximumHeight (bbox->sizeHint ().height ());
+  bbox->setFixedHeight (bbox->sizeHint ().height ());
   vl->addWidget (bbox);
 
   vl->activate ();
   adjustSize ();
+
+  setMaximumWidth (300);
  }
 
 void LayerDialog::manageDocument (GDocument* doc) {
   document = doc;
-  QCheckListItem* item = new QCheckListItem (listView, "Layer #1");
-  item->setText (0, "1");
-  item->setText (1, "2");
-  item->setText (2, "3");
-  item->setText (3, "4");
-  item->setText (4, "Layer #1");
-  item = new QCheckListItem (listView, "Layer #2");
-  item->setText (0, "1");
-  item->setText (1, "2");
-  item->setText (2, "3");
-  item->setText (3, "4");
-  item->setText (4, "Layer #2");
+  layerView->setActiveDocument (doc);
 }
 
 void LayerDialog::upPressed () {
+  document->raiseLayer (document->activeLayer ());
+  layerView->setActiveDocument (document);
 }
 
 void LayerDialog::downPressed () {
+  document->lowerLayer (document->activeLayer ());
+  layerView->setActiveDocument (document);
 }
 
 void LayerDialog::newPressed () {
+    document->addLayer ();
+    // force update
+    layerView->setActiveDocument (document);
 }
 
 void LayerDialog::deletePressed () {
-}
-
-void LayerDialog::closePressed () {
+  document->deleteLayer (document->activeLayer ());
+  layerView->setActiveDocument (document);
 }
 
 void LayerDialog::helpPressed () {

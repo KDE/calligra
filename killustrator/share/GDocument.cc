@@ -88,6 +88,15 @@ void GDocument::initialize () {
       it.current ()->unref ();
     objects.clear ();
   }
+
+  if (! layers.empty ()) {
+      vector<GLayer*>::iterator i = layers.begin ();
+      for (; i != layers.end (); i++)
+	  delete *i;
+      layers.clear ();
+  }
+  active_layer = addLayer ();
+
   selBoxIsValid = false;
   emit changed ();
 }
@@ -669,5 +678,93 @@ bool GDocument::writePSProlog (ostream& os) {
     os << buf << '\n';
   }
   return true;
+}
+
+// get an array with all layers of the document
+const vector<GLayer*>& GDocument::getLayers () {
+    return layers;
+}
+
+// set the active layer where further actions take place
+void GDocument::setActiveLayer (GLayer *layer) {
+    vector<GLayer*>::iterator i = layers.begin ();
+    for (; i != layers.end (); i++) {
+	if (*i == layer) {
+	    active_layer = layer;
+	    break;
+	}
+    }
+}
+
+// retrieve the active layer
+GLayer* GDocument::activeLayer () {
+    return active_layer;
+}
+
+// raise the given layer
+void GDocument::raiseLayer (GLayer *layer) {
+    if (layer == layers.back ())
+	// layer is already on top
+	return;
+
+    vector<GLayer*>::iterator i = layers.begin ();
+    for (; i != layers.end (); i++) {
+	if (*i == layer) {
+	    vector<GLayer*>::iterator j = layers.erase (i);
+	    layers.insert (++j, layer);
+	    break;
+	}
+    }
+}
+
+// lower the given layer
+void GDocument::lowerLayer (GLayer *layer) {
+    if (layer == layers.front ())
+	// layer is already on top
+	return;
+
+    vector<GLayer*>::iterator i = layers.begin ();
+    for (; i != layers.end (); i++) {
+	if (*i == layer) {
+	    vector<GLayer*>::iterator j = layers.erase (i);
+	    layers.insert (--j, layer);
+	    break;
+	}
+    }
+}
+
+// add a new layer on top of existing layers
+GLayer* GDocument::addLayer () {
+    GLayer* layer = new GLayer ();
+    layers.push_back (layer);
+    return layer;
+}
+
+// delete the given layer as well as all contained objects
+void GDocument::deleteLayer (GLayer *layer) {
+    bool update = (active_layer == layer);
+
+    vector<GLayer*>::iterator i = layers.begin ();
+    for (; i != layers.end (); i++) {
+	if (*i == layer) {
+	    // remove the layer from the array
+	    vector<GLayer*>::iterator n = layers.erase (i);
+	    // and delete the layer
+	    delete layer;
+
+	    if (update) {
+		// the removed layer was the active layer !
+
+		if (n == layers.end ()) {
+		    // this was the upper layer, so the
+		    // the active layer to the last one
+		    active_layer = layers.back ();
+		}
+		else
+		    active_layer = *n;
+	    }
+	    break;
+	}
+    }
 }
 

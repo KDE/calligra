@@ -28,7 +28,7 @@
 #include <qdialog.h>
 #include "GDocument.h"
 
-class QListView;
+class LayerView;
 
 class LayerDialog : public QDialog {
   Q_OBJECT
@@ -42,11 +42,10 @@ private slots:
   void downPressed ();
   void newPressed ();
   void deletePressed ();
-  void closePressed ();
   void helpPressed ();
 
 private:
-  QListView* listView;
+  LayerView* layerView;
   GDocument* document;
 };
 
