@@ -140,9 +140,9 @@ KontourImport::convert()
 	QDomElement docElem = inpdoc.documentElement();    	
 	QDomElement lay;
 	if( docElem.attribute( "version" ).toInt() == 2 )
-		lay = docElem.namedItem( "layer" ).toElement();
+		lay = docElem;
 	else
-		lay = docElem.namedItem( "page" ).namedItem( "layer" ).toElement();
+		lay = docElem.namedItem( "page" ).toElement();
 
 	parseGroup( lay.firstChild().toElement() );
 
@@ -246,7 +246,7 @@ KontourImport::parseGroup( const QDomElement &e )
 			parseGObject( path, point );
 			m_document.append( path );	
 		}
-		else if( b.tagName() == "group" )
+		else if( b.tagName() == "group" || b.tagName() == "layer" )
 		{
 			parseGroup( b.toElement().firstChild().toElement() );
 		}
