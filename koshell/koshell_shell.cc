@@ -206,8 +206,11 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
       delete m_documentEntry;
     m_documentEntry = m_mapComponents[ _item ];
     KoDocument *doc = m_documentEntry->createDoc();
-    doc->initDoc();
-    setRootDocument( doc );
+    if (doc)
+    {
+        doc->initDoc();
+        setRootDocument( doc );
+    }
     m_documentEntry = 0L;
   }
   else if ( _grp == m_grpDocuments )
