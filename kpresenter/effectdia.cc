@@ -201,7 +201,6 @@ void EffectDia::slotEffectDiaOk()
 					  oldEffects, eff );
     effectCmd->execute();
     view->kPresenterDoc()->commands()->addCommand( effectCmd );
-    view->kPresenterDoc()->setModified( true );
     emit effectDiaOk();
 }
 

@@ -352,61 +352,50 @@ void Page::mousePressEvent( QMouseEvent *e )
             int num = getObjectAt( e->x(), e->y() );
             if ( num != -1 ) {
                 kpobject = objectList()->at( num );
+                bool state=!( e->state() & ShiftButton ) && !( e->state() & ControlButton ) && !kpobject->isSelected();
+                QPoint pnt = QCursor::pos();
                 if ( kpobject->getType() == OT_PICTURE ) {
                     mousePressed = false;
                     deSelectAllObj();
                     selectObj( kpobject );
-                    QPoint pnt = QCursor::pos();
                     picMenu->popup( pnt );
-                    modType = MT_NONE;
                 } else if ( kpobject->getType() == OT_CLIPART ) {
                     mousePressed = false;
                     deSelectAllObj();
                     selectObj( kpobject );
-                    QPoint pnt = QCursor::pos();
                     clipMenu->popup( pnt );
-                    modType = MT_NONE;
                 } else if ( kpobject->getType() == OT_TEXT ) {
-                    if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) && !kpobject->isSelected() )
+                    if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    QPoint pnt = QCursor::pos();
                     txtMenu->popup( pnt );
                     mousePressed = false;
-                    modType = MT_NONE;
                 } else if ( kpobject->getType() == OT_PIE ) {
-                    if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) && !kpobject->isSelected() )
+                    if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    QPoint pnt = QCursor::pos();
                     pieMenu->popup( pnt );
                     mousePressed = false;
-                    modType = MT_NONE;
                 } else if ( kpobject->getType() == OT_RECT ) {
-                    if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) && !kpobject->isSelected() )
+                    if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    QPoint pnt = QCursor::pos();
                     rectMenu->popup( pnt );
                     mousePressed = false;
-                    modType = MT_NONE;
                 } else if ( kpobject->getType() == OT_PART ) {
-                    if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) && !kpobject->isSelected() )
+                    if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    QPoint pnt = QCursor::pos();
                     partMenu->popup( pnt );
                     mousePressed = false;
-                    modType = MT_NONE;
                 } else {
-                    if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) && !kpobject->isSelected() )
+                    if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    QPoint pnt = QCursor::pos();
                     graphMenu->popup( pnt );
                     mousePressed = false;
-                    modType = MT_NONE;
                 }
+                modType = MT_NONE;
             } else {
                 QPoint pnt = QCursor::pos();
                 pageMenu->setItemEnabled( delPageId, view->kPresenterDoc()->getPageNums() > 1 );
@@ -533,7 +522,6 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                                                       QPoint( mx - firstX, my - firstY ),
                                                       _objects, view->kPresenterDoc() );
                 view->kPresenterDoc()->commands()->addCommand( moveByCmd );
-                view->kPresenterDoc()->setModified( true );
             } else
                 if ( (int)objectList()->count() - 1 >= 0 ) {
                     for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- ) {
@@ -555,7 +543,6 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
-                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -572,7 +559,6 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
-                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -589,7 +575,6 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
-                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -606,7 +591,6 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
-                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -623,7 +607,6 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
-                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -640,7 +623,6 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
-                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -657,7 +639,6 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
-                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -674,7 +655,6 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
-                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -4187,7 +4167,6 @@ void Page::scalePixmapToBeOrigIn( const QSize &origSize, const QSize &pgSize,
                                           obj, view->kPresenterDoc() );
     resizeCmd->execute();
     view->kPresenterDoc()->commands()->addCommand( resizeCmd );
-    view->kPresenterDoc()->setModified( true );
 }
 
 void Page::setTextBackground( KPTextObject *obj )
@@ -4273,7 +4252,6 @@ void Page::moveObject( int x, int y, bool key )
                                               QPoint( x, y ),
                                               _objects, view->kPresenterDoc() );
         view->kPresenterDoc()->commands()->addCommand( moveByCmd );
-        view->kPresenterDoc()->setModified( true );
     }
 }
 

@@ -1589,8 +1589,6 @@ void KTextEditCommandHistory::addCommand( KTextEditCommand *cmd )
         cmdAction=i18n("Formatting Text");
     }
     document->commands()->addCommand(new TextCmd(cmdAction, document, kptextobject));
-    // mark as modified
-    document->setModified(true);
 }
 
 KTextEditCursor *KTextEditCommandHistory::undo( KTextEditCursor *c )

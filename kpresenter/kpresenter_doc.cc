@@ -1060,7 +1060,6 @@ void KPresenterDoc::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _
     KPresenterChild* ch = new KPresenterChild( this, doc, _rect, _diffx, _diffy );
 
     insertChild( ch );
-    setModified( true );
 
     KPPartObject *kppartobject = new KPPartObject( ch );
     kppartobject->setOrig( _rect.x() + _diffx, _rect.y() + _diffy );
@@ -2551,8 +2550,6 @@ void KPresenterDoc::lowerObjs( int /*diffx*/, int /*diffy*/ )
     LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Lower Object( s )" ), _objectList, _new, this );
     lrCmd->execute();
     _commands.addCommand( lrCmd );
-
-    setModified(true);
 }
 
 /*========================= raise object =========================*/
@@ -2578,8 +2575,6 @@ void KPresenterDoc::raiseObjs( int /*diffx*/, int /*diffy*/ )
     LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Raise Object( s )" ), _objectList, _new, this );
     lrCmd->execute();
     _commands.addCommand( lrCmd );
-
-    setModified(true);
 }
 
 /*=================== insert a picture ==========================*/
@@ -2634,8 +2629,6 @@ void KPresenterDoc::insertClipart( QString filename, int diffx, int diffy )
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Clipart" ), kpclipartobject, this );
     insertCmd->execute();
     _commands.addCommand( insertCmd );
-
-    setModified(true);
 }
 
 /*======================= change picture ========================*/
@@ -2706,7 +2699,6 @@ void KPresenterDoc::insertLine( QRect r, QPen pen, LineEnd lb, LineEnd le, LineT
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
-    setModified(true);
 }
 
 /*===================== insert a rectangle =======================*/
@@ -2722,8 +2714,6 @@ void KPresenterDoc::insertRectangle( QRect r, QPen pen, QBrush brush, FillType f
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, this );
     insertCmd->execute();
     _commands.addCommand( insertCmd );
-
-    setModified(true);
 }
 
 /*===================== insert a circle or ellipse ===============*/
@@ -2739,8 +2729,6 @@ void KPresenterDoc::insertCircleOrEllipse( QRect r, QPen pen, QBrush brush, Fill
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, this );
     insertCmd->execute();
     _commands.addCommand( insertCmd );
-
-    setModified(true);
 }
 
 /*================================================================*/
@@ -2757,8 +2745,6 @@ void KPresenterDoc::insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QCo
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chord" ), kppieobject, this );
     insertCmd->execute();
     _commands.addCommand( insertCmd );
-
-    setModified(true);
 }
 
 /*===================== insert a textobject =====================*/
@@ -2778,8 +2764,6 @@ void KPresenterDoc::insertText( QRect r, int diffx, int diffy, QString text, KPr
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, this );
     insertCmd->execute();
     _commands.addCommand( insertCmd );
-
-    setModified(true);
 }
 
 /*======================= insert an autoform ====================*/
@@ -2796,8 +2780,6 @@ void KPresenterDoc::insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb,
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this );
     insertCmd->execute();
     _commands.addCommand( insertCmd );
-
-    setModified(true);
 }
 
 /*======================= set rasters ===========================*/
@@ -3208,8 +3190,6 @@ void KPresenterDoc::replaceObjs()
 						      _orastX, _orastY, _txtBackCol, _otxtBackCol, this );
     _commands.addCommand( setOptionsCmd );
     setOptionsCmd->execute();
-
-    setModified(true);
 }
 
 /*========================= restore background ==================*/
