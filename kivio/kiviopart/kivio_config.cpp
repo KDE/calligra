@@ -114,12 +114,12 @@ void KivioOptions::setGlobalStencilsBarVisual(KivioIconViewVisual v)
   saveGlobalConfig();
 }
 
-void KivioOptions::setDefaultPageLayout(TKPageLayout pl)
+void KivioOptions::setDefaultPageLayout(const TKPageLayout &pl)
 {
   defPageLayout = pl;
 }
 
-void KivioOptions::setGlobalDefaultPageLayout(TKPageLayout pl)
+void KivioOptions::setGlobalDefaultPageLayout(const TKPageLayout &pl)
 {
   globalDefPageLayout = pl;
   saveGlobalConfig();

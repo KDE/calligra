@@ -108,7 +108,7 @@ public:
   static KivioPage* find( int _id );
 
   TKPageLayout paperLayout()const { return m_pPageLayout; }
-  void setPaperLayout(TKPageLayout);
+  void setPaperLayout(const TKPageLayout&);
 
   void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, float, bool );
   void printContent( KivioPainter& painter );
@@ -132,7 +132,7 @@ public:
   KivioStencil *checkForStencil( KivioPoint *, int *, float, bool);
 
 
-  KivioLayer *curLayer() { return m_pCurLayer; }
+  KivioLayer *curLayer()const { return m_pCurLayer; }
   void setCurLayer( KivioLayer *pLayer ) { m_pCurLayer=pLayer; }
 
   QPtrList<KivioLayer> *layers() { return &m_lstLayers; }

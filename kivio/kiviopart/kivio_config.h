@@ -43,17 +43,17 @@ public:
   void save(QDomElement&);
   void load(const QDomElement&);
 
-  TKPageLayout defaultPageLayout() { return defPageLayout; }
-  TKPageLayout globalDefaultPageLayout() { return globalDefPageLayout; }
+  TKPageLayout defaultPageLayout()const  { return defPageLayout; }
+  TKPageLayout globalDefaultPageLayout()const { return globalDefPageLayout; }
 
-  void setDefaultPageLayout(TKPageLayout);
-  void setGlobalDefaultPageLayout(TKPageLayout);
+  void setDefaultPageLayout(const TKPageLayout&);
+  void setGlobalDefaultPageLayout(const TKPageLayout&);
 
   void setup(KivioView*);
   void paperLayoutSetup(KivioView*);
 
   void setGlobalStencilsBarVisual(KivioIconViewVisual);
-  KivioIconViewVisual stencilsBarVisual() { return globalDefStencilBarVisual; }
+  KivioIconViewVisual stencilsBarVisual()const { return globalDefStencilBarVisual; }
 
 private:
   TKPageLayout defPageLayout;
@@ -84,11 +84,11 @@ public:
     static KivioConfig *config() { return s_config; }
 
 public:
-    QPixmap *stencilBGPixmap() { return m_pStencilBGPixmap; }
-    QColor stencilBGColor() { return m_stencilBGColor; }
-    StencilBGType stencilBGType() { return m_stencilBGType; }
-    QPixmap *connectorTargetPixmap() { return m_pConnectorTargetPixmap; }
-    QPixmap *lockPixmap() { return m_pLockPixmap; }
+    QPixmap *stencilBGPixmap()const { return m_pStencilBGPixmap; }
+    QColor stencilBGColor()const { return m_stencilBGColor; }
+    StencilBGType stencilBGType()const { return m_stencilBGType; }
+    QPixmap *connectorTargetPixmap()const { return m_pConnectorTargetPixmap; }
+    QPixmap *lockPixmap()const { return m_pLockPixmap; }
 
 protected:
     static KivioConfig *s_config;
@@ -98,7 +98,7 @@ protected:
     QString m_stencilBGFile;            // Holds the bg pixmap filename of the stencil dock
     QColor m_stencilBGColor;            // Holds the color of the stencil dock bg
     QPixmap *m_pStencilBGPixmap;        // Holds the pixmap of the stencil dock bg.
-    
+
     QPixmap *m_pConnectorTargetPixmap;  // Holds the pixmap of the KivioConnectorObject
     QPixmap *m_pLockPixmap;             // Holds the pixmap of the lock pixmap
 };

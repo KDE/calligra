@@ -1526,7 +1526,7 @@ KivioRect KivioPage::getRectForAllStencils()
     return rTotal;
 }
 
-void KivioPage::setPaperLayout(TKPageLayout l)
+void KivioPage::setPaperLayout(const TKPageLayout &l)
 {
   m_pPageLayout = l;
   doc()->updateView(this);
