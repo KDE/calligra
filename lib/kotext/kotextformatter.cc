@@ -26,7 +26,7 @@
 /////// keep in sync with kotextformat.cc !
 //#define REF_IS_LU
 
-// Originally based on KoTextFormatterBaseBreakWords::format()
+// Originally based on QTextFormatterBreakWords::format()
 int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                              int start, const QMap<int, KoTextParagLineStart*> & )
 {

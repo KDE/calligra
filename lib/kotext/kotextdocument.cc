@@ -180,7 +180,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     // when the paragraph has a border though (see KoTextParag::paint).
     if ( parag->lineChanged() > -1 && !parag->hasBorder() )
     {
-        offsetY = zoomHandler->layoutUnitToPixelY( parag->lineY( parag->lineChanged() ) );
+        offsetY = zoomHandler->layoutUnitToPixelY( parag->lineY( parag->lineChanged() ) - parag->topMargin() );
         // Skip the lines that are not repainted by moving Top. The bottom doesn't change.
         rect.rTop() += offsetY;
     }
