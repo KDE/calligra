@@ -29,14 +29,16 @@
 class VSelectNodes : public VVisitor
 {
 public:
-	VSelectNodes( bool select = true )
+	VSelectNodes( bool select = true, bool exclusive = true )
 	{
 		m_select = select;
+		m_exclusive = exclusive;
 	}
 
-	VSelectNodes( const KoRect& rect, bool select = true )
+	VSelectNodes( const KoRect& rect, bool select = true, bool exclusive = true )
 	{
 		m_select = select;
+		m_exclusive = exclusive;
 		m_rect = rect;
 	}
 
@@ -45,7 +47,7 @@ public:
 
 private:
 	bool m_select;
-
+	bool m_exclusive;
 	KoRect m_rect;
 };
 

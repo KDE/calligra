@@ -29,7 +29,8 @@ void
 VSelectNodes::visitVPath( VPath& path )
 {
 	path.first();
-	path.first()->selectKnot( false );
+	if( m_exclusive )
+		path.first()->selectKnot( false );
 
 	// skip "begin":
 	while( path.next() )
@@ -81,7 +82,7 @@ VSelectNodes::visitVPath( VPath& path )
 
 				setSuccess();
 			}
-			else
+			else if( m_exclusive )
 				path.current()->selectKnot( !m_select );
 		}
 	}
