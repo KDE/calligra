@@ -22,8 +22,8 @@
 
 #include "kexiprojectdata.h"
 #include "kexipartmanager.h"
-#include "startup/KexiDBConnectionSet.h"
-#include "startup/KexiProjectSet.h"
+#include "kexidbconnectionset.h"
+#include "kexiprojectset.h"
 #include <kexidb/drivermanager.h>
 
 #include <qvalidator.h>

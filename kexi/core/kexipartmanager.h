@@ -55,7 +55,7 @@ namespace KexiPart
 /**
  * queries parts and dlopens them when needed, they aren't dlopened at startup tough
  */
-class Manager : public QObject
+class KEXICORE_EXPORT Manager : public QObject
 {
 	Q_OBJECT
 

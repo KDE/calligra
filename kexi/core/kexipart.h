@@ -112,6 +112,7 @@ class KEXICORE_EXPORT Part : public QObject
 
 	friend class Manager;
 	friend class KexiMainWindow;
+	friend class KexiMainWindowImpl;
 	friend class GUIClient;
 };
 

@@ -140,6 +140,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		QWidgetStack *m_stack;
 
 		friend class KexiMainWindow;
+		friend class KexiMainWindowImpl;
 		friend class KexiPart::Part;
 		friend class KexiInternalPart;
 };
