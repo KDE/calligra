@@ -352,12 +352,34 @@ void KisTabBar::renameTab()
 
     KisDlgRename dlg(imgName, this, "rename_dlg", true);
     dlg.resize(300, 60);
-    dlg.setCaption("Rename image");
+    dlg.setCaption(i18n("Rename image"));
     
     if (dlg.exec())
     {
-        QString newName = dlg.name();
-        m_pDoc->renameImage(imgName, newName);
+      QString newName = dlg.name();
+      // Have a different name ?
+      if ( newName != imgName )
+        {
+	  // Is the name already used
+	  bool exist=false;
+	  for ( it = tabsList.begin(); it != tabsList.end(); ++it ) 
+	    {
+	      if (*it == newName)
+	        exist=true;
+	    }
+	  if(exist)
+	    {
+                KMessageBox::error( this, i18n("This name is already used."));
+                // Recursion
+                renameTab();
+                return;
+            }
+	  else
+	    {
+	      QString newName = dlg.name();
+	      m_pDoc->renameImage(imgName, newName);
+	    }
+	}
     }    
 }
 

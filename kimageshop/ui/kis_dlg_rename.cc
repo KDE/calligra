@@ -55,6 +55,7 @@ KisDlgRename::KisDlgRename(QString oldname, QWidget *parent,
 
     QPushButton *pbCancel = new QPushButton( i18n( "Cancel" ), buttons );
     QObject::connect( pbCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
+    m_pEdit->setFocus();
 }
 
 

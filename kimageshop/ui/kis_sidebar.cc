@@ -33,7 +33,8 @@
 #include "kis_framebutton.h"
 
 
-KisSideBar::KisSideBar( QWidget* parent, const char* name ) : QWidget( parent, name )
+//KisSideBar::KisSideBar( QWidget* parent, const char* name ) : QWidget( parent, name )
+KisSideBar::KisSideBar( QWidget* parent, const char* name ) : KFloatingDialog( parent, name )
 {
     kdDebug() << "KisSideBar::KisSideBar" << endl; //jwc
 

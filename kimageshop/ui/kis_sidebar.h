@@ -29,6 +29,7 @@
 #include "kis_framebutton.h"
 #include "kis_color.h"
 #include "kis_global.h"
+#include "kfloatingdialog.h"
 
 class KDualColorButton;
 class KisKrayonWidget;
@@ -164,7 +165,8 @@ class DockFrame : public QFrame
   QList<KisFrameButton>  m_blst;
 };
 
-class KisSideBar : public QWidget
+//class KisSideBar : public QWidget
+class KisSideBar : public KFloatingDialog
 {
   Q_OBJECT
 
