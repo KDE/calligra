@@ -47,6 +47,7 @@
 #include "canvdetailheader.h"
 #include "canvdetailfooter.h"
 #include "canvdetail.h"
+#include "canvbox.h"
 
 //AddDetailFooterCommand
 
@@ -269,7 +270,7 @@ void AddReportItemCommand::execute()
     m_item->setSection(m_doc->templ->band(m_section, m_sectionLevel));
     m_item->updateGeomProps();
 
-    m_rc->selectItem(m_item, false);
+    m_doc->selectItem(m_item, false);
 
     m_item->show();
     m_doc->templ->band(m_section, m_sectionLevel)->items.append(m_item);
@@ -279,7 +280,34 @@ void AddReportItemCommand::unexecute()
 {
     if (m_item)
     {
-        m_rc->unselectItem(m_item);
+        m_doc->unselectItem(m_item);
         m_doc->templ->removeReportItem(m_item);
+    }
+}
+
+DeleteReportItemsCommand::DeleteReportItemsCommand( MyCanvas * doc, QPtrList< CanvasBox > & items )
+    :KNamedCommand(i18n("Delete Report Item(s)")), m_doc(doc), m_items(items)
+{
+}
+
+void DeleteReportItemsCommand::execute( )
+{
+    CanvasBox *b;
+
+    m_doc->unselectAll();
+
+    for (b = m_items.first(); b; b = m_items.next())
+    {
+        m_doc->templ->removeReportItem( b );
+    }
+}
+
+void DeleteReportItemsCommand::unexecute( )
+{
+    CanvasBox *b;
+    for (b = m_items.first(); b; b = m_items.next())
+    {
+        b->show();
+//        m_doc->templ->removeReportItem( b );
     }
 }

@@ -2,8 +2,16 @@
 <kpartgui name="kudesigner" version="1">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
-   <Action name="edit_undo"/>
-   <Action name="edit_redo"/>
+   <Action name="koffice_undo"/>
+   <Action name="koffice_redo"/>
+   <Separator/>
+   <Action name="edit_cut"/>
+   <Action name="edit_copy"/>
+   <Action name="edit_paste"/>
+   <Separator/>
+   <Action name="edit_select_all"/>
+   <Separator/>
+   <Action name="edit_delete"/>
  </Menu>
   <Menu name="sections"><text>Sec&amp;tions</text>
     <Action name="rheader"/>
@@ -25,6 +33,16 @@
     <Action name="line"/>
   </Menu>
 </MenuBar>
+<ToolBar fullWidth="false" name="edit_toolbar" position="top"><Text>Edit</Text>
+  <Action name="koffice_undo"/>
+  <Action name="koffice_redo"/>
+  <Separator/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <Separator/>
+  <Action name="edit_delete"/>
+ </ToolBar>
 <ToolBar name="sectionsToolBar" position="bottom" noMerge="1"><text>Sections</text>
     <Action name="rheader"/>
     <Action name="pheader"/>

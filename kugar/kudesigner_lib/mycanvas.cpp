@@ -67,3 +67,51 @@ void MyCanvas::setPlugin( KuDesignerPlugin * plugin )
     m_plugin = plugin;
 }
 
+void MyCanvas::unselectAll()
+{
+    CanvasBox *b;
+
+    for (b = selected.first(); b; b = selected.next())
+    {
+        b->setSelected(false);
+        setChanged(b->rect());
+    }
+
+    selected.clear();
+    update();
+}
+
+void MyCanvas::selectAll()
+{
+    for (QCanvasItemList::Iterator it=allItems().begin(); it!=allItems().end(); ++it)
+    {
+        if ( ((*it)->rtti() > 2001) && ((*it)->isVisible()) )
+        {
+            selectItem((CanvasBox*)(*it));
+        }
+    }
+}
+
+void MyCanvas::selectItem(CanvasBox *it, bool addToSelection)
+{
+    if (!it->isVisible())
+        return;
+    if (!addToSelection)
+        unselectAll();
+    selected.append(it);
+    it->setSelected(true);
+
+    emit itemSelected();
+/*    if (!selectionStarted)
+        finishSelection();*/
+}
+
+void MyCanvas::unselectItem(CanvasBox *it)
+{
+    selected.remove(it);
+    it->setSelected(false);
+}
+
+#ifndef PURE_QT
+#include "mycanvas.moc"
+#endif

@@ -85,9 +85,9 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
     connect(rc, SIGNAL(itemPlaced(int, int, int, int)), this, SLOT(placeItem(int, int, int, int)));
 }
 
-KudesignerView::~KudesignerView() 
+KudesignerView::~KudesignerView()
 {
-	delete pe;
+    delete pe;
 }
 
 void KudesignerView::paintEvent( QPaintEvent* ev )
@@ -106,6 +106,17 @@ void KudesignerView::paintEvent( QPaintEvent* ev )
 
 void KudesignerView::initActions()
 {
+    cutAction = KStdAction::cut(this, SLOT(cut()), actionCollection());
+    copyAction = KStdAction::copy(this, SLOT(copy()), actionCollection());
+    pasteAction = KStdAction::paste(this, SLOT(paste()), actionCollection());
+    selectAllAction = KStdAction::selectAll(this, SLOT(selectAll()), actionCollection());
+    deleteAction = new KAction(i18n("Delete"), "editdelete", 0, this,
+        SLOT(deleteItems()), actionCollection(), "edit_delete");
+    cutAction->setEnabled(false);
+    copyAction->setEnabled(false);
+    pasteAction->setEnabled(false);
+//    deleteAction->setEnabled(false);
+
     sectionsReportHeader = new KAction(i18n("Report Header"), "irh", 0, this,
         SLOT(slotAddReportHeader()), actionCollection(), "rheader");
     sectionsReportFooter = new KAction(i18n("Report Footer"), "irf", 0, this,
@@ -316,6 +327,21 @@ void KudesignerView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 void KudesignerView::placeItem( int x, int y, int band, int bandLevel )
 {
     m_doc->addCommand(new AddReportItemCommand(m_doc->canvas(), rc, x, y, (KuDesignerCanvasRtti)band, bandLevel) );
+}
+
+void KudesignerView::paste( )
+{
+}
+
+void KudesignerView::deleteItems( )
+{
+    if (m_doc->canvas()->selected.count() > 0)
+        m_doc->addCommand(new DeleteReportItemsCommand(m_doc->canvas(), m_doc->canvas()->selected));
+}
+
+void KudesignerView::selectAll( )
+{
+    m_doc->canvas()->selectAll();
 }
 
 #include "kudesigner_view.moc"

@@ -22,6 +22,7 @@
 
 #include <koDocument.h>
 #include <kcommand.h>
+#include <kocommandhistory.h>
 #include "plugin.h"
 
 class MyCanvas;
@@ -64,7 +65,7 @@ protected slots:
     void documentRestored();
 
 private:
-    KCommandHistory *history;
+    KoCommandHistory *history;
 
     MyCanvas *docCanvas;
 

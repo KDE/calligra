@@ -55,10 +55,6 @@ public:
     void clearRequest();
     bool requested();
 
-    void unselectAll();
-    void selectAll();
-    void selectItem(CanvasBox *it, bool addToSelection = true);
-    void unselectItem(CanvasBox *it);
     void finishSelection();
 
     void setPlugin(KuDesignerPlugin *plugin);
@@ -122,6 +118,8 @@ be unchecked. */
 
 public slots:
     void updateProperty(QString name, QString value);
+
+    void selectItem();
 };
 
 #endif

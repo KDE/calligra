@@ -44,6 +44,9 @@ public:
 protected slots:
     void cut();
     void copy();
+    void paste();
+    void deleteItems();
+    void selectAll();
     void slotAddItemNothing();
     void slotAddDetailFooter();
     void slotAddDetail();
@@ -88,6 +91,12 @@ private:
     KRadioAction* itemsSpecial;
     KRadioAction* itemsCalculated;
     KRadioAction* itemsLine;
+
+    KAction* cutAction;
+    KAction* copyAction;
+    KAction* pasteAction;
+    KAction* selectAllAction;
+    KAction* deleteAction;
 
     KActionCollection *itemsCollection;
     KActionCollection *sectionsCollection;

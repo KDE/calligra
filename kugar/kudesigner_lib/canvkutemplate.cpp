@@ -294,7 +294,7 @@ bool CanvasKugarTemplate::removeReportItem(QCanvasItem *item)
             ritem->section()->items.remove(ritem);
             qWarning("good");
         }
-        delete item;
+        //delete item;
 //        section = 0;
         canvas()->update();
 

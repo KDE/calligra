@@ -52,6 +52,7 @@ class CanvasBand;
 class CanvasReportItem;
 class ReportCanvas;
 class MyCanvas;
+class CanvasBox;
 
 class AddDetailFooterCommand: public KNamedCommand{
 public:
@@ -156,6 +157,17 @@ private:
     CanvasReportItem *m_item;
     KuDesignerCanvasRtti m_section;
     int m_sectionLevel;
+};
+
+class DeleteReportItemsCommand: public KNamedCommand{
+public:
+    DeleteReportItemsCommand(MyCanvas *doc, QPtrList<CanvasBox>& items);
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    MyCanvas *m_doc;
+    QPtrList<CanvasBox> m_items;
 };
 
 #endif

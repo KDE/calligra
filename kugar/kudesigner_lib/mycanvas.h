@@ -24,6 +24,7 @@ class CanvasKugarTemplate;
 class KuDesignerPlugin;
 
 class MyCanvas: public QCanvas{
+    Q_OBJECT
 public:
     MyCanvas(int w, int h);
     ~MyCanvas();
@@ -35,6 +36,12 @@ public:
     KuDesignerPlugin *plugin();
     void setPlugin(KuDesignerPlugin *plugin);
 
+    void unselectAll();
+    void selectAll();
+    void selectItem(CanvasBox *it, bool addToSelection = true);
+    void unselectItem(CanvasBox *it);
+//    void deleteSelected();
+
 protected:
    virtual void drawForeground ( QPainter & painter, const QRect & clip );
 
@@ -42,6 +49,9 @@ private:
 //    KudesignerDoc *m_doc;
     void scaleCanvas(int scale);
     KuDesignerPlugin *m_plugin;
+
+signals:
+    void itemSelected();
 };
 
 #endif
