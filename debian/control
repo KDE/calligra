@@ -1,5 +1,5 @@
 Source: koffice
-Build-Depends: automake, libtool, debhelper, libqt2.2-dev, kdelibs3-dev, jade, sgml-base, docbook, libpng2-dev, zlib1g-dev, libtiff3g-dev, docbook, gettext, docbook-stylesheets, xlibs-dev | xlib6g-dev
+Build-Depends: automake, libtool, debhelper, libqt2.2-dev (>= 2:2.2.2-0), kdelibs3-dev (>= 4:2.1-0), jade, sgml-base, docbook, libpng2-dev, zlib1g-dev, libtiff3g-dev, docbook, gettext, docbook-stylesheets, xlibs-dev | xlib6g-dev
 Section: x11
 Priority: optional
 Maintainer: Ivan E. Moore II <rkrusty@debian.org>
@@ -116,7 +116,7 @@ Description: KDE Office Workspace
 Package: task-koffice
 Architecture: all
 Section: x11
-Depends: koffice-libs, kformula, kchart, kword, kspread, killustrator, kpresenter, koshell, kivio, kdelibs3, kdebase-libs, libqt2.2
+Depends: koffice-libs, kformula, kchart, kword, kspread, killustrator, kpresenter, koshell, kivio, kdelibs3, kdebase-libs, libqt2.2 | libqt2.2-gl
 Suggests: kdebase
 Description: KDE Office Suite
  KDE Office Suite
