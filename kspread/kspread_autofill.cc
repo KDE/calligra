@@ -27,6 +27,9 @@
 #include <klocale.h>
 #include <math.h>
 #include <kconfig.h>
+#include <kdebug.h>
+#include <qregexp.h>
+
 QStringList *AutoFillSequenceItem::month = 0L;
 QStringList *AutoFillSequenceItem::day = 0L;
 QStringList *AutoFillSequenceItem::other = 0L;
@@ -574,7 +577,19 @@ void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpre
 		incre++;
 	      }
             else
-                cell->setCellText( _srcList.at( s )->text(), true );
+            {
+                QRegExp number("(\\d+)");
+                int pos =number.search(_srcList.at( s )->text());
+                if( pos )
+                {
+                    QString tmp=number.cap(1);
+                    int num=tmp.toInt();
+                    cell->setCellText(_srcList.at( s )->text().replace(number,QString::number(num+incre)));
+                    incre++;
+                }
+                else
+                    cell->setCellText( _srcList.at( s )->text(), true );
+            }
         }
         else
             cell->setCellText( "", true );
