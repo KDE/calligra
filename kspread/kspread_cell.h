@@ -211,11 +211,17 @@ public:
      * @param paintBorderBottom whether to draw the bottom border too.
      * @param drawCursor whether to draw the cursor and selection or not
      */
-    void paintCell( const KoRect& rect, QPainter &painter,
-                    KSpreadView* view, const KoPoint &coordinate,
-                    const QPoint &cellRef, 
+    void paintCell( const KoRect & rect, QPainter & painter,
+                    KSpreadView * view, const KoPoint & coordinate,
+                    const QPoint & cellRef, 
                     bool paintBorderRight,
                     bool paintBorderBottom,
+                    bool paintBorderLeft,
+                    bool paintBorderTop,
+                    QPen & rightPen, 
+                    QPen & bottomPen,
+                    QPen & leftPen,
+                    QPen & topPen,
                     bool drawCursor = true );
 
   /**
@@ -1001,7 +1007,10 @@ private:
     /* helper functions to the paintCell(...) function */
     void paintCellBorders( QPainter& painter, const KoRect &rect,
                            const KoRect &cellRect, const QPoint &cellRef,
-                           bool paintBorderRight, bool paintBorderBottom );
+                           bool paintBorderRight, bool paintBorderBottom,
+                           bool paintBorderLeft, bool paintBorderTop,
+                           QPen & rightPen, QPen & bottomPen,
+                           QPen & leftPen, QPen & topPen );
     void paintPageBorders( QPainter& painter, const KoRect &cellRect,
                            const QPoint &cellRef,
                            bool paintBorderRight, bool paintBorderBottom );
@@ -1015,16 +1024,21 @@ private:
                                 QColor &backgroundColor );
     void paintDefaultBorders( QPainter& painter, const KoRect &rect,
                               const KoRect &cellRect, const QPoint &cellRef,
-                              bool paintBorderRight, bool paintBorderBottom );
+                              bool paintBorderRight, bool paintBorderBottom,
+                              bool paintBorderLeft, bool paintBorderTop,
+                              QPen const & rightPen, QPen const & bottomPen,
+                              QPen const & leftPen, QPen const & topPen );
     void paintBackground( QPainter& painter, const KoRect &cellRect,
                           const QPoint &cellRef, bool selected,
                           QColor &backgroundColor );
     void paintObscuredCells( const KoRect& rect, QPainter& painter,
                              KSpreadView* view, const KoRect &cellRect,
                              const QPoint &cellRef,
-                             bool paintBorderRight, bool paintBorderBottom );
-    void paintCellDiagonalLines( QPainter& painter,
-                                 const KoRect &cellRect,
+                             bool paintBorderRight, bool paintBorderBottom,
+                             bool paintBorderLeft, bool paintBorderTop, 
+                             QPen & rightPen, QPen & bottomPen, 
+                             QPen & leftPen, QPen & topPen );
+    void paintCellDiagonalLines( QPainter& painter, const KoRect &cellRect,
                                  const QPoint &cellRef );
 
 

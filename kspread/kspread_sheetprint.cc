@@ -362,33 +362,114 @@ void KSpreadSheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
     double xpos;
     double ypos =  topLeft.y();
 
+    int regionBottom = printRect.bottom();
+    int regionRight  = printRect.right();
+    int regionLeft   = printRect.left();
+    int regionTop    = printRect.top();
+
     //Calculate the output rect
     KoPoint bottomRight( topLeft );
-    for ( int x = printRect.left(); x <= printRect.right(); x++ )
-        bottomRight.setX( bottomRight.x() +
-                          m_pSheet->columnFormat( x )->dblWidth() );
-    for ( int y = printRect.top(); y <= printRect.bottom(); y++ )
-        bottomRight.setY( bottomRight.y() +
-                          m_pSheet->rowFormat( y )->dblHeight() );
+    for ( int x = regionLeft; x <= regionRight; ++x )
+        bottomRight.setX( bottomRight.x()
+                          + m_pSheet->columnFormat( x )->dblWidth() );
+    for ( int y = regionTop; y <= regionBottom; ++y )
+        bottomRight.setY( bottomRight.y() 
+                          + m_pSheet->rowFormat( y )->dblHeight() );
     KoRect rect( topLeft, bottomRight );
 
-    for ( int y = printRect.top(); y <= printRect.bottom(); y++ )
+    for ( int y = regionTop; y <= regionBottom; ++y )
     {
         row_lay = m_pSheet->rowFormat( y );
         xpos = topLeft.x();
 
-        for ( int x = printRect.left(); x <= printRect.right(); x++ )
+        for ( int x = regionLeft; x <= regionRight; ++x )
         {
             col_lay = m_pSheet->columnFormat( x );
 
             cell = m_pSheet->cellAt( x, y );
 
-            bool paintBordersRight = ( x == printRect.right() );
-            bool paintBordersBottom = ( y == printRect.bottom() );
+            bool paintBordersBottom = false;
+            bool paintBordersRight = false;
+            bool paintBordersLeft = false;
+            bool paintBordersTop = false;
+            
+            QPen rightPen  = cell->effRightBorderPen( x, y );
+            QPen leftPen   = cell->effLeftBorderPen( x, y );
+            QPen bottomPen = cell->effBottomBorderPen( x, y );
+            QPen topPen    = cell->effTopBorderPen( x, y );
+            
+            // paint right border if rightmost cell or if the pen is more "worth" than the left border pen
+            // of the cell on the left or if the cell on the right is not painted. In the latter case get
+            // the pen that is of more "worth"
+            if ( x >= KS_colMax )
+              paintBordersRight = true;
+            else
+              if ( x == regionRight )
+              {
+                paintBordersRight = true;
+                if ( util_penCompare( rightPen, m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y ) ) < 0 )
+                  rightPen = m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+              }
+              else
+              {
+                if ( util_penCompare( rightPen, m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y ) ) > 0 )
+                  paintBordersRight = true;
+              }
+
+            // similiar for other borders...
+            // bottom border:
+            if ( y >= KS_rowMax )
+              paintBordersBottom = true;
+            else
+              if ( y == regionBottom )
+              {
+                paintBordersBottom = true;
+                if ( util_penCompare( bottomPen, m_pSheet->cellAt( x + 1, y )->effTopBorderPen( x + 1, y ) ) < 0 )
+                  rightPen = m_pSheet->cellAt( x + 1, y )->effTopBorderPen( x + 1, y );
+              }
+              else
+              {
+                if ( util_penCompare( bottomPen, m_pSheet->cellAt( x + 1, y )->effTopBorderPen( x + 1, y ) ) > 0 )
+                  paintBordersBottom = true;
+              }
+
+            // left border:
+            if ( x == 1 )
+              paintBordersLeft = true;
+            else
+              if ( x == regionLeft )
+              {
+                paintBordersLeft = true;
+                if ( util_penCompare( leftPen, m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y ) ) < 0 )
+                  leftPen = m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+              }
+              else
+              {
+                if ( util_penCompare( leftPen, m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y ) ) >= 0 )
+                  paintBordersLeft = true;
+              }
+
+            // top border:
+            if ( y == 1 )
+              paintBordersTop = true;
+            else
+              if ( y == regionTop )
+              {
+                paintBordersTop = true;
+                if ( util_penCompare( topPen, m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 ) ) < 0 )
+                  topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+              }
+              else
+              {
+                if ( util_penCompare( topPen, m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 ) ) >= 0 )
+                  paintBordersTop = true;          
+              }
 
             cell->paintCell( rect, painter, NULL,
                              KoPoint( xpos, ypos ), QPoint( x, y ),
-                             paintBordersRight, paintBordersBottom );
+                             paintBordersRight, paintBordersBottom,
+                             paintBordersLeft, paintBordersTop, 
+                             rightPen, bottomPen, leftPen, topPen );
 
             xpos += col_lay->dblWidth();
         }

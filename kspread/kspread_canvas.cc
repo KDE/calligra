@@ -3355,9 +3355,8 @@ QRect KSpreadCanvas::visibleCells()
 void KSpreadCanvas::paintUpdates()
 {
   if (activeTable() == NULL)
-  {
     return;
-  }
+ 
   QPainter painter(this);
 
   //Save clip region
@@ -3395,6 +3394,7 @@ void KSpreadCanvas::paintUpdates()
 
   int right  = range.right();
   int bottom = range.bottom();
+  KSpreadSheet * sheet = activeTable();
 
   for ( x = range.left(); x <= right; ++x )
   {
@@ -3402,18 +3402,97 @@ void KSpreadCanvas::paintUpdates()
     {
       if ( activeTable()->cellIsPaintDirty( QPoint( x, y ) ) )
       {
-        cell = activeTable()->cellAt( x, y );
+        cell = sheet->cellAt( x, y );
         cell->calc();
         cell->makeLayout( painter, x, y );
 
-        //Paint the right and/or bottom border, when the next cell is not to be painted
-        bool paintBordersRight = ( ( x != KS_colMax ) &&
-                                 ( !activeTable()->cellIsPaintDirty( QPoint( x + 1, y ) ) ) );
-        bool paintBordersBottom = ( ( y != KS_rowMax ) &&
-                                  ( !activeTable()->cellIsPaintDirty( QPoint( x, y + 1 ) ) ) );
+        bool paintBordersBottom = false;
+        bool paintBordersRight = false;
+        bool paintBordersLeft = false;
+        bool paintBordersTop = false;
+
+        QPen bottomPen( cell->effBottomBorderPen( x, y ) );
+        QPen rightPen( cell->effRightBorderPen( x, y ) );
+        QPen leftPen( cell->effLeftBorderPen( x, y ) );
+        QPen topPen( cell->effTopBorderPen( x, y ) );
+
+        // paint right border if rightmost cell or if the pen is more "worth" than the left border pen
+        // of the cell on the left or if the cell on the right is not painted. In the latter case get
+        // the pen that is of more "worth"
+        if ( x >= KS_colMax )
+          paintBordersRight = true;
+        else
+          if ( sheet->cellIsPaintDirty( QPoint( x + 1, y ) ) )
+          {
+            QPen pen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+            paintBordersRight = true;
+            if ( util_penCompare( rightPen, pen ) < 0 )
+              rightPen = pen;
+          }
+        else
+        {
+          paintBordersRight = true;          
+          if ( util_penCompare( rightPen, sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y ) ) < 0 )
+            rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+        }
+
+        // similiar for other borders...
+        // bottom border:
+        if ( y >= KS_rowMax )
+          paintBordersBottom = true;
+        else
+          if ( sheet->cellIsPaintDirty( QPoint( x, y + 1 ) ) )
+          {
+            if ( util_penCompare( bottomPen, sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 ) ) > 0 )
+              paintBordersBottom = true;
+          }
+        else
+        {
+          paintBordersBottom = true;          
+
+          if ( util_penCompare( bottomPen, sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 ) ) < 0 )
+            bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
+        }
+
+        // left border:
+        if ( x == 1 )
+          paintBordersLeft = true;
+        else
+          if ( sheet->cellIsPaintDirty( QPoint( x - 1, y ) ) )
+          {
+            QPen pen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+            paintBordersLeft = true;
+            if ( util_penCompare( leftPen, pen ) < 0 )
+              leftPen = pen;
+          }
+        else
+        {
+          paintBordersLeft = true;          
+          if ( util_penCompare( leftPen, sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y ) ) < 0 )
+            leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+        }
+
+        // top border:
+        if ( y == 1 )
+          paintBordersTop = true;
+        else
+          if ( sheet->cellIsPaintDirty( QPoint( x, y - 1 ) ) )
+          {
+            QPen pen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+            paintBordersTop = true;
+            if ( util_penCompare( topPen, pen ) < 0 )
+              topPen = pen;
+          }
+        else
+        {
+          paintBordersTop = true;          
+          if ( util_penCompare( topPen, sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 ) ) < 0 )
+            topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+        }
 
         cell->paintCell( unzoomedRect, painter, m_pView, dblCorner,
-                         QPoint( x, y ), paintBordersRight, paintBordersBottom );
+                         QPoint( x, y ), paintBordersRight, paintBordersBottom, paintBordersLeft, paintBordersTop,
+                         rightPen, bottomPen, leftPen, topPen );
 
       }
       dblCorner.setY( dblCorner.y() + activeTable()->rowFormat( y )->dblHeight( ) );

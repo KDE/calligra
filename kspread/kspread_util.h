@@ -184,6 +184,6 @@ QDomElement util_createElement( const QString & tagName, const QFont & font, QDo
 QDomElement util_createElement( const QString & tagname, const QPen & pen, QDomDocument & doc );
 QFont       util_toFont( QDomElement & element );
 QPen        util_toPen( QDomElement & element );
-
+int         util_penCompare( QPen const & pen1, QPen const & pen2 );
 
 #endif

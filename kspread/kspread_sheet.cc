@@ -2216,7 +2216,7 @@ void KSpreadSheet::removeColumn( int col, int nbCol, bool makeUndo )
         it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadSheet::ColumnRemove, name(), nbCol+1 );
 
     //update print settings
-    m_pPrint->insertColumn( col, nbCol );
+    m_pPrint->removeColumn( col, nbCol );
 
     refreshChart( QPoint( col, 1 ), true, KSpreadSheet::ColumnRemove );
     recalc();

@@ -45,6 +45,7 @@
 #include "kspread_sheetprint.h"
 #include "kspread_style_manager.h"
 #include "kspread_undo.h"
+#include "kspread_util.h"
 #include "kspread_view.h"
 #include "KSpreadDocIface.h"
 
@@ -801,7 +802,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     kdDebug(36001)<<"paintContent-------------------------------------\n";
     painter.save();
 
-//    painter.scale(zoomX, zoomY);
+    // painter.scale(zoomX, zoomY);
     paintContent( painter, rect, transparent, table, false );
 
     painter.restore();
@@ -836,7 +837,6 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
                                 right_col - left_col + 1,
                                 bottom_row - top_row + 1) );
 
-    kdDebug() << "PaintCellRegions" << endl;
     paintCellRegions(painter, rect, NULL, cellAreaList, table, drawCursor);
 }
 
@@ -890,8 +890,8 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   QPtrListIterator<KoDocumentChild> it( children() );
   for( ; it.current(); ++it )
   {
-//    if ( ((KSpreadChild*)it.current())->table() == table &&
-//         !m_pView->hasDocumentInWindow( it.current()->document() ) )
+    // if ( ((KSpreadChild*)it.current())->table() == table &&
+    //    !m_pView->hasDocumentInWindow( it.current()->document() ) )
     if ( ((KSpreadChild*)it.current())->table() == table)
       rgn -= it.current()->region( matrix );
   }
@@ -927,6 +927,7 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   }
 }
 
+
 void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
                              KSpreadView* view, const QRect &paintRegion,
                              const KSpreadSheet* table)
@@ -936,8 +937,7 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
      area actually onscreen.
   */
 
-
-  if (paintRegion.left() <= 0 || paintRegion.top() <= 0)
+  if ( paintRegion.left() <= 0 || paintRegion.top() <= 0 )
     return;
 
   /*
@@ -947,6 +947,7 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
     If inactive embedded, then there is no view and we alwas start at top/left,
     so the offset is 0.
   */
+
   KoPoint dblCorner;
   if ( view == 0L ) //Most propably we are embedded and inactive, so no offset
         dblCorner = KoPoint( table->dblColumnPos( paintRegion.left() ),
@@ -956,29 +957,109 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
                                view->canvasWidget()->xOffset(),
                              table->dblRowPos( paintRegion.top() ) -
                                view->canvasWidget()->yOffset() );
-  KoPoint dblCurrentCellPos = dblCorner;
+  KoPoint dblCurrentCellPos( dblCorner );
 
-  for ( int y = paintRegion.top();
-        y <= paintRegion.bottom() && dblCurrentCellPos.y() <= viewRegion.bottom();
-        y++ )
+  int regionBottom = paintRegion.bottom();
+  int regionRight  = paintRegion.right();
+  int regionLeft   = paintRegion.left();
+  int regionTop    = paintRegion.top();
+
+  for ( int y = regionTop; 
+        y <= regionBottom && dblCurrentCellPos.y() <= viewRegion.bottom();
+        ++y )
   {
-    const RowFormat* row_lay = table->rowFormat( y );
+    const RowFormat * row_lay = table->rowFormat( y );
     dblCurrentCellPos.setX( dblCorner.x() );
 
-    for ( int x = paintRegion.left();
-          x <= paintRegion.right() && dblCurrentCellPos.x() <= viewRegion.right();
-          x++ )
+    for ( int x = regionLeft;
+          x <= regionRight && dblCurrentCellPos.x() <= viewRegion.right();
+          ++x )
     {
       const ColumnFormat *col_lay = table->columnFormat( x );
       KSpreadCell* cell = table->cellAt( x, y );
 
       QPoint cellRef( x, y );
 
-      bool paintBordersRight = ( x == paintRegion.right() );
-      bool paintBordersBottom = ( y == paintRegion.bottom() );
+      bool paintBordersBottom = false;
+      bool paintBordersRight = false;
+      bool paintBordersLeft = false;
+      bool paintBordersTop = false;
+      
+      QPen rightPen( cell->effRightBorderPen( x, y ) );
+      QPen leftPen( cell->effLeftBorderPen( x, y ) );
+      QPen topPen( cell->effTopBorderPen( x, y ) );
+      QPen bottomPen( cell->effBottomBorderPen( x, y ) );
+
+      // paint right border if rightmost cell or if the pen is more "worth" than the left border pen
+      // of the cell on the left or if the cell on the right is not painted. In the latter case get
+      // the pen that is of more "worth"
+      if ( x >= KS_colMax )
+        paintBordersRight = true;
+      else
+        if ( x == regionRight )
+        {
+          paintBordersRight = true;
+          if ( util_penCompare( rightPen, table->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y ) ) < 0 )
+            rightPen = table->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+        }
+      else
+      {
+        if ( util_penCompare( rightPen, table->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y ) ) > 0 )
+          paintBordersRight = true;
+      }
+
+      // similiar for other borders...
+      // bottom border:
+      if ( y >= KS_rowMax )
+        paintBordersBottom = true;
+      else
+        if ( y == regionBottom )
+        {
+          paintBordersBottom = true;
+          if ( util_penCompare( bottomPen, table->cellAt( x + 1, y )->effTopBorderPen( x + 1, y ) ) < 0 )
+            rightPen = table->cellAt( x + 1, y )->effTopBorderPen( x + 1, y );
+        }
+      else
+      {
+        if ( util_penCompare( bottomPen, table->cellAt( x + 1, y )->effTopBorderPen( x + 1, y ) ) > 0 )
+          paintBordersBottom = true;
+      }
+
+      // left border:
+      if ( x == 1 )
+        paintBordersLeft = true;
+      else
+        if ( x == regionLeft )
+        {
+          paintBordersLeft = true;
+          if ( util_penCompare( leftPen, table->cellAt( x - 1, y )->effRightBorderPen( x - 1, y ) ) < 0 )
+            leftPen = table->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+        }
+      else
+      {
+        if ( util_penCompare( leftPen, table->cellAt( x - 1, y )->effRightBorderPen( x - 1, y ) ) >= 0 )
+          paintBordersLeft = true;
+      }
+
+      // top border:
+      if ( y == 1 )
+        paintBordersTop = true;
+      else
+        if ( y == regionTop )
+        {
+          paintBordersTop = true;
+          if ( util_penCompare( topPen, table->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 ) ) < 0 )
+            topPen = table->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+        }
+      else
+      {
+        if ( util_penCompare( topPen, table->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 ) ) >= 0 )
+          paintBordersTop = true;          
+      }
 
       cell->paintCell( viewRegion, painter, view, dblCurrentCellPos,
-                       cellRef, paintBordersRight, paintBordersBottom, false );
+                       cellRef, paintBordersRight, paintBordersBottom, paintBordersLeft,
+                       paintBordersTop, rightPen, bottomPen, leftPen, topPen, false );
 
       dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );
     }

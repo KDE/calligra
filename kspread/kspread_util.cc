@@ -1022,3 +1022,36 @@ KSpreadCell* KSpreadRangeIterator::next()
   }
   return cell;
 }
+
+int util_penCompare( QPen const & pen1, QPen const & pen2 )
+{
+  if ( pen1.style() == Qt::NoPen && pen2.style() == Qt::NoPen )
+    return 0;
+
+  if ( pen1.style() == Qt::NoPen )
+    return -1;
+
+  if ( pen2.style() == Qt::NoPen )
+    return 1;
+
+  if ( pen1.width() < pen2.width() )
+    return -1;
+  
+  if ( pen1.width() > pen2.width() )
+    return 1;
+
+  if ( pen1.style() < pen2.style() )
+    return -1;
+
+  if ( pen1.style() > pen2.style() )
+    return 1;
+
+  if ( pen1.color().name() < pen2.color().name() )
+    return -1;
+
+  if ( pen1.color().name() > pen2.color().name() )
+    return 1;
+
+  return 0;
+}
+
