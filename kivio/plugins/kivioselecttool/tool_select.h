@@ -59,37 +59,37 @@ public:
   virtual void deactivate();
   virtual void configure();
 
-  void select(QRect);
+  void select(const QRect&);
 
 signals:
   void operationDone();
 
 protected:
-    void mousePress(QPoint);
-    void mouseMove(QPoint);
-    void mouseRelease(QPoint);
+    void mousePress(const QPoint&);
+    void mouseMove(const QPoint&);
+    void mouseRelease(const QPoint&);
 
-    void leftDoubleClick(QPoint);
+    void leftDoubleClick(const QPoint&);
 
-    bool startResizing(QPoint);
-    bool startDragging(QPoint, bool);
-    bool startCustomDragging(QPoint, bool);
-    bool startRubberBanding(QPoint);
+    bool startResizing(const QPoint&);
+    bool startDragging(const QPoint&, bool);
+    bool startCustomDragging(const QPoint&, bool);
+    bool startRubberBanding(const QPoint&);
 
-    void continueDragging(QPoint);
-    void continueCustomDragging(QPoint);
-    void continueResizing(QPoint);
-    void continueRubberBanding(QPoint);
+    void continueDragging(const QPoint&);
+    void continueCustomDragging(const QPoint&);
+    void continueResizing(const QPoint&);
+    void continueRubberBanding(const QPoint&);
 
-    void endResizing(QPoint);
-    void endDragging(QPoint);
-    void endCustomDragging(QPoint);
-    void endRubberBanding(QPoint);
+    void endResizing(const QPoint&);
+    void endDragging(const QPoint&);
+    void endCustomDragging(const QPoint&);
+    void endRubberBanding(const QPoint&);
 
     void buildPopupMenu();
-    void showPopupMenu(QPoint);
+    void showPopupMenu(const QPoint&);
 
-    void changeMouseCursor(QPoint);
+    void changeMouseCursor(const QPoint&);
     int isOverResizeHandle( KivioStencil *pStencil, const float x, const float y );
     QPoint m_startPoint, m_releasePoint;
     TKPoint m_lastPoint;

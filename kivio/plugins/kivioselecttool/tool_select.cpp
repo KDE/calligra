@@ -126,7 +126,7 @@ void SelectTool::configure()
 /**
  * Selects all stencils inside a given rect
  */
-void SelectTool::select(QRect r)
+void SelectTool::select(const QRect &r)
 {
     // Calculate the start and end clicks in terms of page coordinates
     TKPoint startPoint = m_pCanvas->mapFromScreen( QPoint( r.x(), r.y() ) );
@@ -152,7 +152,7 @@ void SelectTool::select(QRect r)
     m_pView->activePage()->selectStencils( x, y, w, h );
 }
 
-void SelectTool::mousePress(QPoint pos)
+void SelectTool::mousePress(const QPoint &pos)
 {
     // Gets the list of keys held down and check if the shift key is one of them. If yes, set the flag
     XQueryKeymap( qt_xdisplay(), m_keys );
@@ -213,7 +213,7 @@ void SelectTool::mousePress(QPoint pos)
 /**
  * Tests if we should start rubber banding (always returns true).
  */
-bool SelectTool::startRubberBanding(QPoint pos)
+bool SelectTool::startRubberBanding(const QPoint &pos)
 {
     // We didn't find a stencil, so unselect everything if we aren't holding the shift key down
     if( !m_shiftKey )
@@ -229,7 +229,7 @@ bool SelectTool::startRubberBanding(QPoint pos)
 /**
  * Tests if we can start dragging a stencil.
  */
-bool SelectTool::startDragging(QPoint pos, bool onlySelected)
+bool SelectTool::startDragging(const QPoint &pos, bool onlySelected)
 {
     KivioPage *pPage = m_pCanvas->activePage();
     KivioPoint kPoint;
@@ -298,7 +298,7 @@ bool SelectTool::startDragging(QPoint pos, bool onlySelected)
     return true;
 }
 
-bool SelectTool::startCustomDragging(QPoint pos, bool selectedOnly )
+bool SelectTool::startCustomDragging(const QPoint &pos, bool selectedOnly )
 {
     KivioPage *pPage = m_pCanvas->activePage();
     KivioPoint kPoint;
@@ -355,7 +355,7 @@ bool SelectTool::startCustomDragging(QPoint pos, bool selectedOnly )
 /**
  * Tests if we can start resizing a stencil
  */
-bool SelectTool::startResizing(QPoint pos)
+bool SelectTool::startResizing(const QPoint &pos)
 {
     TKPoint pagePoint = m_pCanvas->mapFromScreen(pos);
     KivioSelectDragData *pData;
@@ -428,7 +428,7 @@ bool SelectTool::startResizing(QPoint pos)
 
 
 
-void SelectTool::mouseMove(QPoint pos)
+void SelectTool::mouseMove(const QPoint &pos)
 {
     switch( m_mode )
     {
@@ -456,7 +456,7 @@ void SelectTool::mouseMove(QPoint pos)
     m_lastPoint = m_pCanvas->mapFromScreen(pos);
 }
 
-void SelectTool::continueRubberBanding(QPoint pos)
+void SelectTool::continueRubberBanding(const QPoint &pos)
 {
     m_pCanvas->continueRectDraw( pos, KivioCanvas::Rubber );
 }
@@ -469,7 +469,7 @@ void SelectTool::continueRubberBanding(QPoint pos)
  * geometry of all the selected stencils.  We use that to calculate delta
  * movements and snap them to the grid.
  */
-void SelectTool::continueDragging(QPoint pos)
+void SelectTool::continueDragging(const QPoint &pos)
 {
     TKPoint pagePoint = m_pCanvas->mapFromScreen( pos );
 
@@ -500,7 +500,7 @@ void SelectTool::continueDragging(QPoint pos)
 
 	newX = p.x;
 	newY = p.y;
-	
+
 	// Now the guides override the grid so we attempt to snap to them
 	p.set( pData->rect.x() + dx + pStencil->w(), pData->rect.y() + dy + pStencil->h(), UnitPoint );
 	p = m_pCanvas->snapToGuides(p, snappedX, snappedY);
@@ -510,7 +510,7 @@ void SelectTool::continueDragging(QPoint pos)
 	if( snappedY==true ) {
 	   newY = p.y - pStencil->h();
 	}
-	
+
 	p.set( pData->rect.x() + dx, pData->rect.y() + dy, UnitPoint );
 	p = m_pCanvas->snapToGuides(p, snappedX, snappedY);
 	if( snappedX==true ) {
@@ -536,7 +536,7 @@ void SelectTool::continueDragging(QPoint pos)
     m_pView->updateToolBars();
 }
 
-void SelectTool::continueCustomDragging(QPoint pos)
+void SelectTool::continueCustomDragging(const QPoint &pos)
 {
     TKPoint pagePoint = m_pCanvas->mapFromScreen(pos);
     pagePoint = m_pCanvas->snapToGrid(pagePoint);
@@ -565,7 +565,7 @@ void SelectTool::continueCustomDragging(QPoint pos)
 }
 
 
-void SelectTool::continueResizing(QPoint pos)
+void SelectTool::continueResizing(const QPoint &pos)
 {
     TKPoint pagePoint = m_pCanvas->snapToGridAndGuides( m_pCanvas->mapFromScreen(pos) );
     KivioSelectDragData *pData = m_lstOldGeometry.first();
@@ -601,7 +601,7 @@ void SelectTool::continueResizing(QPoint pos)
     switch( m_resizeHandle )
     {
         case 1: // top left
-            if( m_pResizingStencil->protection()->testBit( kpWidth )==false && 
+            if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
 		m_pResizingStencil->protection()->testBit( kpHeight )==false )
             {
                 m_pResizingStencil->setX( sx + dx );
@@ -688,7 +688,7 @@ void SelectTool::continueResizing(QPoint pos)
 /**
  * Change the mouse cursor based on what it is over.
  */
-void SelectTool::changeMouseCursor(QPoint pos)
+void SelectTool::changeMouseCursor(const QPoint &pos)
 {
     TKPoint pagePoint = m_pCanvas->mapFromScreen(pos);
     KivioStencil *pStencil;
@@ -841,7 +841,7 @@ int SelectTool::isOverResizeHandle( KivioStencil *pStencil, const float x, const
 }
 
 
-void SelectTool::mouseRelease(QPoint pos)
+void SelectTool::mouseRelease(const QPoint &pos)
 {
     m_releasePoint = pos;
 
@@ -863,13 +863,13 @@ void SelectTool::mouseRelease(QPoint pos)
             endResizing(pos);
             break;
     }
-	
+
   	m_mode = stmNone;
 
     m_pView->doc()->updateView(m_pView->activePage());
 }
 
-void SelectTool::endRubberBanding(QPoint pos)
+void SelectTool::endRubberBanding(const QPoint &pos)
 {
    // End the rubber-band drawing
    m_pCanvas->endRectDraw();
@@ -887,7 +887,7 @@ void SelectTool::endRubberBanding(QPoint pos)
     m_pView->updateToolBars();
 }
 
-void SelectTool::endDragging(QPoint)
+void SelectTool::endDragging(const QPoint&)
 {
     m_pCanvas->drawSelectedStencilsXOR();
 
@@ -897,7 +897,7 @@ void SelectTool::endDragging(QPoint)
     m_lstOldGeometry.clear();
 }
 
-void SelectTool::endCustomDragging(QPoint)
+void SelectTool::endCustomDragging(const QPoint&)
 {
     m_customDragID = 0;
     m_pCanvas->drawSelectedStencilsXOR();
@@ -905,7 +905,7 @@ void SelectTool::endCustomDragging(QPoint)
     m_pCanvas->endUnclippedSpawnerPainter();
 }
 
-void SelectTool::endResizing(QPoint)
+void SelectTool::endResizing(const QPoint&)
 {
     // Undraw the last outline
     m_pCanvas->drawStencilXOR( m_pResizingStencil );
@@ -945,7 +945,7 @@ void SelectTool::buildPopupMenu()
 /**
  * Shows the popupmenu at a given point.
  */
-void SelectTool::showPopupMenu( QPoint pos )
+void SelectTool::showPopupMenu( const QPoint &pos )
 {
     m_pMenu->popup( pos );
 }
@@ -958,7 +958,7 @@ void SelectTool::showPopupMenu( QPoint pos )
  * it launches the text tool on the selected stencils and switches back
  * to this tool when it's done.
  */
-void SelectTool::leftDoubleClick( QPoint /*p*/ )
+void SelectTool::leftDoubleClick( const QPoint &/*p*/ )
 {
     if( m_pView->activePage()->selectedStencils()->count() <= 0 )
         return;
