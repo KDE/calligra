@@ -109,9 +109,8 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
         // Note that sx, sy, sw and sh are unused in this case. Not a problem, since it's about printing.
         // Note 2: we do not cache the QPixmap. As we are printing, the next time we will probably
         //   need again the screen version.
-        painter.drawPixmap(0, 0, QPixmap(m_originalImage));
+        painter.drawImage(0, 0, m_originalImage);
         painter.restore();
-
     }
     else
     {

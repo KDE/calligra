@@ -107,7 +107,7 @@ bool KoPictureShared::loadWmf(QIODevice* io)
     // For an extern file or in the storage, .wmf can mean a real Windows Meta File.
 
     QByteArray array ( io->readAll() );
-    
+
     if ((array[0]=='Q') && (array[1]=='P') &&(array[2]=='I') && (array[3]=='C'))
     {
         m_base=new KoPictureClipart();
@@ -413,5 +413,25 @@ QImage KoPictureShared::generateImage(const QSize& size)
 {
     if (m_base)
         return m_base->generateImage( size );
+    return QImage();
+}
+
+bool KoPictureShared::hasAlphaBuffer() const
+{
+   if (m_base)
+       return m_base->hasAlphaBuffer();
+   return false;
+}
+
+void KoPictureShared::setAlphaBuffer(bool enable)
+{
+    if (m_base)
+        m_base->setAlphaBuffer(enable);
+}
+
+QImage KoPictureShared::createAlphaMask(int conversion_flags) const
+{
+    if (m_base)
+        return m_base->createAlphaMask(conversion_flags);
     return QImage();
 }

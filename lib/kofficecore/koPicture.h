@@ -170,6 +170,10 @@ public:
      */
     QImage generateImage(const QSize& size);
 
+    bool hasAlphaBuffer() const;
+    void setAlphaBuffer(bool enable);
+    QImage createAlphaMask(int conversion_flags = 0) const;
+
 protected:
     /**
      * @internal

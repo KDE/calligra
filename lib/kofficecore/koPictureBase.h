@@ -21,6 +21,7 @@
 #define __koPictureBase_h__
 
 #include <qstring.h>
+#include <qimage.h>
 
 class QPainter;
 class QSize;
@@ -85,7 +86,7 @@ public:
     virtual bool load(QIODevice* io, const QString& extension);
 
     virtual bool load(const QByteArray& array, const QString& extension);
-    
+
     /**
      * save file
      * @param io QIODevice used for saving
@@ -110,12 +111,19 @@ public:
     virtual QString getMimeType(const QString& extension) const;
 
     bool isSlowResizeModeAllowed(void) const;
-    
+
     /**
      * Generate a QImage
      * (always in slow mode)
      */
     virtual QImage generateImage(const QSize& size);
+
+    virtual bool hasAlphaBuffer() const
+        { return false; }
+    virtual void setAlphaBuffer(bool enable)
+        { ; }
+    virtual QImage createAlphaMask(int conversion_flags = 0) const
+        { return QImage(); }
 };
 
 #endif /* __koPictureBase_h__ */

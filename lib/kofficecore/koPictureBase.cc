@@ -57,7 +57,6 @@ KoPictureType::Type KoPictureBase::getType(void) const
     return KoPictureType::TypeUnknown;
 }
 
-
 bool KoPictureBase::isNull(void) const
 {
     return true;    // A KoPictureBase is always null.

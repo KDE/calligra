@@ -249,3 +249,23 @@ QImage KoPicture::generateImage(const QSize& size)
         return m_sharedData->generateImage( size );
     return QImage();
 }
+
+bool KoPicture::hasAlphaBuffer() const
+{
+    if (m_sharedData)
+       return m_sharedData->hasAlphaBuffer();
+    return false;
+}
+
+void KoPicture::setAlphaBuffer(bool enable)
+{
+    if (m_sharedData)
+        m_sharedData->setAlphaBuffer(enable);
+}
+
+QImage KoPicture::createAlphaMask(int conversion_flags) const
+{
+    if (m_sharedData)
+        return m_sharedData->createAlphaMask(conversion_flags);
+    return QImage();
+}

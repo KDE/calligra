@@ -73,7 +73,7 @@ public:
     virtual QDragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
 
     virtual bool load(const QByteArray& array, const QString& extension);
-    
+
     virtual bool save(QIODevice* io);
 
     virtual QSize getOriginalSize(void) const;
@@ -87,6 +87,15 @@ public:
      * (always in slow mode)
      */
     virtual QImage generateImage(const QSize& size);
+
+    virtual bool hasAlphaBuffer() const
+        { return m_originalImage.hasAlphaBuffer(); }
+
+    virtual void setAlphaBuffer(bool enable)
+        { m_originalImage.setAlphaBuffer(enable); }
+
+    virtual QImage createAlphaMask(int conversion_flags = 0) const
+        { return m_originalImage.createAlphaMask(conversion_flags); }
 
 protected:
     QPixmap getPixmap(QImage& image);
