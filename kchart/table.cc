@@ -51,7 +51,7 @@ SheetTable::SheetTable( int cols, int rows, QWidget *parent,
         input = new QLineEdit(this);
         input->setFrame(false);
         input->resize( cellWidth()-2, cellHeight()-2 );
-        moveInput(0,0);
+        moveInput(0,0,0);
         input->setFocus();
         connect( input, SIGNAL(returnPressed()), this, SLOT(nextInput()) );
       }
@@ -140,17 +140,17 @@ void SheetTable::nextInput()
     int r = ( inRow + 1 ) % numRows();
     if ( !r )
         c = ( inCol + 1 ) % numCols();
-    moveInput( r, c );
+    moveInput( r, c,1 );
 }
   
-void SheetTable::moveInput( int row, int col )
+void SheetTable::moveInput( int row, int col,int initialization )
 {
     if ( col < 0 || row < 0 )
         return;
     if ( col == inCol && row == inRow )
         return;
 
-  if ( col == 0 && row == 0 ) {
+  if ( col == 0 && row == 0 && initialization == 0 ) {
         inCol = col;
         inRow = row;
     }
@@ -193,7 +193,7 @@ void SheetTable::mousePressEvent( QMouseEvent * e )
     {
       int col = findCol(e->pos().x());
       int row = findRow(e->pos().y());
-      moveInput( row, col );
+      moveInput( row, col,1 );
     }
 }
 
