@@ -157,8 +157,9 @@ QDomElement KWChild::save( QDomDocument& doc )
 /*================================================================*/
 KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-      imageCollection( this ), unit( "mm" ), // footNoteManager( this ), autoFormat( this ),
+      imageCollection( this ), unit( "mm" ), // footNoteManager( this ),
       history( actionCollection(), false ),
+      autoFormat(this),
       urlIntern(), pglChanged( TRUE )
 {
     m_lstViews.setAutoDelete( false );
@@ -1239,12 +1240,10 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
 #endif
 
-#if 0
     autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(C)", "©" ) );
     autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(c)", "©" ) );
     autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(R)", "®" ) );
     autoFormat.addAutoFormatEntry( KWAutoFormatEntry("(r)", "®" ) );
-#endif
 
     // do some sanity checking on document.
     for (int i = getNumFrameSets()-1; i>-1; i--) {

@@ -46,7 +46,7 @@ class KSpellConfig;
 #include "kwframe.h"
 //#include "variable.h"
 //#include "footnote.h"
-//#include "autoformat.h"
+#include "autoformat.h"
 #include <kcommand.h>
 
 #include <qlist.h>
@@ -266,7 +266,7 @@ public:
 //    void setNoteType( KWFootNoteManager::NoteType nt ) { footNoteManager.setNoteType( nt ); }
 //    KWFootNoteManager::NoteType getNoteType() const { return footNoteManager.getNoteType(); }
 
-//    KWAutoFormat &getAutoFormat() { return autoFormat; }
+    KWAutoFormat &getAutoFormat() { return autoFormat; }
 
     void setPageLayoutChanged( bool c ) { pglChanged = c; }
 
@@ -429,7 +429,7 @@ private:
     KCommandHistory history;
  //   QIntDict<KWVariableFormat> varFormats;
 //    KWFootNoteManager footNoteManager;
-//    KWAutoFormat autoFormat;
+    KWAutoFormat autoFormat;
 
     QString urlIntern;
     bool pglChanged;

@@ -25,11 +25,16 @@
 #include <qmap.h>
 #include <qvaluelist.h>
 
+
 class KWDocument;
-class KWFormatContext;
-class KWParag;
+//class KWFormatContext;
+//class KWParag;
+class KWTextParag;
 class KWString;
 struct KWChar;
+namespace Qt3 {
+class QTextFormat;
+};
 
 /******************************************************************/
 /* Class: KWAutoFormatEntry					  */
@@ -56,7 +61,7 @@ public:
     void setBold( bool b );
     void setItalic( bool b );
     void setUnderline( bool b );
-    void setVertAlign( KWFormat::VertAlign va );
+    //void setVertAlign( KWFormat::VertAlign va );
 
 
     QString getFind() const;
@@ -86,7 +91,7 @@ protected:
     QColor color;
     int size;
     bool bold, italic, underline;
-    KWFormat::VertAlign vertAlign;
+    //KWFormat::VertAlign vertAlign;
 
 };
 
@@ -126,13 +131,13 @@ public:
     };
 
     KWAutoFormat( KWDocument *_doc );
-
-    void startAutoFormat( KWParag *parag, KWFormatContext *fc );
-    bool doAutoFormat( KWParag *parag, KWFormatContext *fc );
-    void endAutoFormat( KWParag *parag, KWFormatContext *fc );
-    bool doTypographicQuotes( KWParag *parag, KWFormatContext *fc );
-    bool doUpperCase( KWParag *parag, KWFormatContext *fc );
-    void doSpellCheck( KWParag *parag, KWFormatContext *fc );
+                                           
+    void startAutoFormat( KWTextParag *parag/*, QTextFormat *fc*/ );
+    bool doAutoFormat( KWTextParag *parag/*,QTextFormat *fc*/ );
+    void endAutoFormat( KWTextParag *parag /*, QTextFormat *fc*/ );
+    bool doTypographicQuotes( KWTextParag *parag/*,QTextFormat *fc*/ );
+    bool doUpperCase( KWTextParag *parag/*, QTextFormat *fc*/ );
+    void doSpellCheck( KWTextParag *parag/*, QTextFormat *fc*/ );
 
     void setEnabled( bool e ) { enabled = e; }
     bool isEnabled() { return enabled; }

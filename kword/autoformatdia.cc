@@ -43,14 +43,15 @@
 /******************************************************************/
 
 /*================================================================*/
-KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWDocument *_doc, KWPage *_page )
+KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWDocument *_doc, KWCanvas *_canvas )
     : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel, Ok, parent, name, true),
       doc( _doc ),
       oBegin( doc->getAutoFormat().getConfigTypographicQuotes().begin ),
       oEnd( doc->getAutoFormat().getConfigTypographicQuotes().end ),
-      quotesChanged( false )
+      quotesChanged( false ),
+      m_autoFormat(doc->getAutoFormat())
 {
-    page = _page;
+    canvas = _canvas;
 
     setupTab1();
 //    setupTab2();
@@ -68,15 +69,20 @@ void KWAutoFormatDia::setupTab1()
     cbTypographicQuotes = new QCheckBox( tab1 );
     cbTypographicQuotes->setText( i18n( "Replace &Quotes by Typographical Quotes:" ) );
     cbTypographicQuotes->resize( cbTypographicQuotes->sizeHint() );
-    cbTypographicQuotes->setChecked( doc->getAutoFormat().getConfigTypographicQuotes().replace );
+
+    cbTypographicQuotes->setChecked( m_autoFormat.getConfigTypographicQuotes().replace );
 
     QHBox *quotes = new QHBox( tab1 );
     quotes->setSpacing( 5 );
     pbQuote1 = new QPushButton( quotes );
-    pbQuote1->setText( doc->getAutoFormat().getConfigTypographicQuotes().begin );
+
+    pbQuote1->setText( oBegin );
+
     pbQuote1->resize( pbQuote1->sizeHint() );
     pbQuote2 = new QPushButton( quotes );
-    pbQuote2->setText( doc->getAutoFormat().getConfigTypographicQuotes().end );
+
+    pbQuote2->setText(oEnd );
+
     pbQuote2->resize( pbQuote2->sizeHint() );
     ( void )new QWidget( quotes );
     quotes->setMaximumHeight( pbQuote1->sizeHint().height() );
@@ -90,7 +96,8 @@ void KWAutoFormatDia::setupTab1()
     cbUpperCase->setText( i18n( "Convert first letter from the first word of a sentence automatically\n"
                                 "to &Upper Case ( e.g. \"bla. this is a Test\" to \"bla. This is a Test\" )" ) );
     cbUpperCase->resize( cbUpperCase->sizeHint() );
-    cbUpperCase->setChecked( doc->getAutoFormat().getConfigUpperCase() );
+
+    cbUpperCase->setChecked( m_autoFormat.getConfigUpperCase() );
 
     ( void )new QWidget( tab1 );
 
@@ -98,8 +105,7 @@ void KWAutoFormatDia::setupTab1()
     cbUpperUpper->setText( i18n( "Convert two Upper &Case letters to one Upper Case and one Lower Case letter.\n"
                                  "( e.g. HEllo to Hello )" ) );
     cbUpperUpper->resize( cbUpperUpper->sizeHint() );
-    cbUpperUpper->setChecked( doc->getAutoFormat().getConfigUpperUpper() );
-
+    cbUpperUpper->setChecked( m_autoFormat.getConfigUpperUpper() );
     ( void )new QWidget( tab1 );
 }
 
@@ -114,8 +120,8 @@ void KWAutoFormatDia::setupTab2()
     entries->addColumn( i18n( "Find" ) );
     entries->addColumn( i18n( "Replace" ) );
 
-    QMap< QString, KWAutoFormatEntry >::Iterator it = doc->getAutoFormat().firstAutoFormatEntry();
-    for ( ; it != doc->getAutoFormat().lastAutoFormatEntry(); ++it )
+    QMap< QString, KWAutoFormatEntry >::Iterator it = m_autoFormat.firstAutoFormatEntry();
+    for ( ; it != m_autoFormat.lastAutoFormatEntry(); ++it )
         ( void )new QListViewItem( entries, it.key(), it.data().getReplace() );
 
     QVBox *buttons = new QVBox( tab2 );
@@ -135,15 +141,15 @@ bool KWAutoFormatDia::applyConfig()
     // iiiiiiiiigit - that's a hack!
     if ( quotesChanged )
     {
-        KWAutoFormat::TypographicQuotes tq = doc->getAutoFormat().getConfigTypographicQuotes();
+        KWAutoFormat::TypographicQuotes tq = m_autoFormat.getConfigTypographicQuotes();
         tq.replace = false;
-        doc->getAutoFormat().configTypographicQuotes( tq );
-        doc->getAutoFormat().setEnabled( true );
-        doc->recalcWholeText();
-        doc->getAutoFormat().setEnabled( false );
+        m_autoFormat.configTypographicQuotes( tq );
+        m_autoFormat.setEnabled( true );
+        //        doc->recalcWholeText();
+        m_autoFormat.setEnabled( false );
     }
 
-    KWAutoFormat::TypographicQuotes tq = doc->getAutoFormat().getConfigTypographicQuotes();
+    KWAutoFormat::TypographicQuotes tq = m_autoFormat.getConfigTypographicQuotes();
     tq.replace = cbTypographicQuotes->isChecked();
     tq.begin = pbQuote1->text()[ 0 ];
     tq.end = pbQuote2->text()[ 0 ];
@@ -156,6 +162,7 @@ bool KWAutoFormatDia::applyConfig()
     doc->updateAllViews( 0L );
     doc->updateAllCursors();
     doc->getAutoFormat().setEnabled( false );
+
     return true;
 }
 
@@ -171,7 +178,7 @@ void KWAutoFormatDia::slotOk()
 void KWAutoFormatDia::chooseQuote1()
 {
     QString f = font().family();
-    QChar c = doc->getAutoFormat().getConfigTypographicQuotes().begin;
+    QChar c = oBegin;
     if ( KCharSelectDia::selectChar( f, c, false ) )
     {
         pbQuote1->setText( c );
@@ -183,7 +190,7 @@ void KWAutoFormatDia::chooseQuote1()
 void KWAutoFormatDia::chooseQuote2()
 {
     QString f = font().family();
-    QChar c = doc->getAutoFormat().getConfigTypographicQuotes().end;
+    QChar c = oEnd;
     if ( KCharSelectDia::selectChar( f, c, false ) )
     {
         pbQuote2->setText( c );

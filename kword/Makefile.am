@@ -7,7 +7,7 @@ INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula -I$(top_srcdir)/qt3s
 bin_PROGRAMS = kword
 lib_LTLIBRARIES = libkwordpart.la kword.la
 
-libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc \
+libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
                 kwtextparag.cc kwstyle.cc \
 		paragdia.cc searchdia.cc \
                 imagecollection.cc image.cc \
@@ -16,7 +16,8 @@ libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc \
                 tabledia.cc insdia.cc deldia.cc docstruct.cc \
                 clipbrd_dnd.cc kwconfig.cc \
                 contents.cc  stylist.cc \
-                border.cc resizehandles.cc kwcommand.cc
+                border.cc resizehandles.cc kwcommand.cc \
+		autoformat.cc autoformatdia.cc
 
 libkwordpart_la_LDFLAGS = $(KDE_LDFLAGS) -avoid-version -module -no-undefined
 libkwordpart_la_LIBADD = ../lib/kofficeui/libkofficeui.la ../lib/kformula/libkformula.la ../qt3stuff/libqt3stuff.la -lkspell

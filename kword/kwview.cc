@@ -1474,9 +1474,9 @@ void KWView::extraSpelling()
 /*===============================================================*/
 void KWView::extraAutoFormat()
 {
-/*
+
     KWAutoFormatDia dia( this, "", doc, gui->canvasWidget() );
-    dia.show(); */
+    dia.show();
 }
 
 /*===============================================================*/

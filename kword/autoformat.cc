@@ -19,13 +19,14 @@
 
 #include "autoformat.h"
 #include "kwdoc.h"
+#include <qrichtext_p.h>
 
 /******************************************************************/
 /* Class: KWAutoFormatEntry					  */
 /******************************************************************/
 
 /*================================================================*/
-KWAutoFormatEntry::KWAutoFormatEntry(const QString& _find, 
+KWAutoFormatEntry::KWAutoFormatEntry(const QString& _find,
                                      const QString& _replace)
 {
     checkFamily = checkColor = checkSize = checkBold = checkItalic = checkUnderline = checkVertAlign = false;
@@ -35,7 +36,7 @@ KWAutoFormatEntry::KWAutoFormatEntry(const QString& _find,
     color = Qt::black;
     size = 12;
     bold = italic = underline = false;
-    vertAlign = KWFormat::VA_NORMAL;
+    //vertAlign = KWFormat::VA_NORMAL;
 }
 
 /*================================================================*/
@@ -129,49 +130,49 @@ void KWAutoFormatEntry::setUnderline( bool b )
 }
 
 /*================================================================*/
-void KWAutoFormatEntry::setVertAlign( KWFormat::VertAlign va )
+/*void KWAutoFormatEntry::setVertAlign( KWFormat::VertAlign va )
 {
     vertAlign = va;
-}
+    }*/
 
 /*================================================================*/
-QString KWAutoFormatEntry::getFind() const 
+QString KWAutoFormatEntry::getFind() const
 {
     return find;
 }
 
 /*================================================================*/
-QString KWAutoFormatEntry::getReplace() const 
+QString KWAutoFormatEntry::getReplace() const
 {
     return replace;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getCheckFamily() const 
+bool KWAutoFormatEntry::getCheckFamily() const
 {
     return checkFamily;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getCheckColor() const 
+bool KWAutoFormatEntry::getCheckColor() const
 {
     return checkColor;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getCheckSize() const 
+bool KWAutoFormatEntry::getCheckSize() const
 {
     return checkSize;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getCheckBold() const 
+bool KWAutoFormatEntry::getCheckBold() const
 {
     return checkBold;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getCheckItalic() const 
+bool KWAutoFormatEntry::getCheckItalic() const
 {
     return checkItalic;
 }
@@ -183,51 +184,52 @@ bool KWAutoFormatEntry::getCheckUnderline() const
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getCheckVertAlign() const 
+bool KWAutoFormatEntry::getCheckVertAlign() const
 {
     return checkVertAlign;
 }
 
 /*================================================================*/
-QString KWAutoFormatEntry::getFamily() const 
+QString KWAutoFormatEntry::getFamily() const
 {
     return family;
 }
 
 /*================================================================*/
-QColor KWAutoFormatEntry::getColor() const 
+QColor KWAutoFormatEntry::getColor() const
 {
     return color;
 }
 
 /*================================================================*/
-int KWAutoFormatEntry::getSize() const 
+int KWAutoFormatEntry::getSize() const
 {
     return size;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getBold() const 
+bool KWAutoFormatEntry::getBold() const
 {
     return bold;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getItalic() const 
+bool KWAutoFormatEntry::getItalic() const
 {
     return italic;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getUnderline() const 
+bool KWAutoFormatEntry::getUnderline() const
 {
     return underline;
 }
 
 /*================================================================*/
-bool KWAutoFormatEntry::getVertAlign() const 
+bool KWAutoFormatEntry::getVertAlign() const
 {
-    return vertAlign;
+    //    return vertAlign;
+    return false;
 }
 
 /******************************************************************/
@@ -246,8 +248,8 @@ KWAutoFormat::KWAutoFormat( KWDocument *_doc )
 }
 
 /*================================================================*/
-void KWAutoFormat::startAutoFormat( KWParag */*parag*/,
-				    KWFormatContext */*fc*/ )
+void KWAutoFormat::startAutoFormat( KWTextParag */*parag*//*,
+                                                   QTextFormat *fc*/ )
 {
     if ( !enabled )
 	return;
@@ -255,13 +257,14 @@ void KWAutoFormat::startAutoFormat( KWParag */*parag*/,
     lastWasDotSpace = false;
     lastWasUpper = false;
 
-    tmpBuffer = new KWString( doc );
-    spBuffer == QString::null;
+    /*    tmpBuffer = new KWString( doc );
+          spBuffer == QString::null;*/
 }
 
 /*================================================================*/
-bool KWAutoFormat::doAutoFormat( KWParag *parag, KWFormatContext *fc )
+bool KWAutoFormat::doAutoFormat( KWTextParag *parag/*, QTextFormat *fc*/ )
 {
+#if 0
     if ( !enabled )
 	return false;
 
@@ -299,16 +302,16 @@ bool KWAutoFormat::doAutoFormat( KWParag *parag, KWFormatContext *fc )
 
     if ( static_cast<int>( tmpBuffer->size() ) == maxlen )
 	tmpBuffer->clear();
-
+#endif
     return false;
 }
 
 /*================================================================*/
-void KWAutoFormat::doSpellCheck( KWParag *parag, KWFormatContext *fc )
+void KWAutoFormat::doSpellCheck( KWTextParag *parag/*, QTextFormat *fc*/ )
 {
     if ( !enabled || !doc->onLineSpellCheck() )
 	return;
-
+#if 0
     if ( isSeparator( parag->getKWString()->data()[ fc->getTextPos() ].c ) ) {
 	if ( !spBuffer.isEmpty() && spBegin ) {
 	    //qDebug( "spellcheck: %s", spBuffer.latin1() );
@@ -321,26 +324,27 @@ void KWAutoFormat::doSpellCheck( KWParag *parag, KWFormatContext *fc )
     if ( spBuffer.isEmpty() )
 	spBegin = &parag->getKWString()->data()[ fc->getTextPos() ];
     spBuffer += parag->getKWString()->data()[ fc->getTextPos() ].c;
+#endif
 }
 
 /*================================================================*/
-void KWAutoFormat::endAutoFormat( KWParag */*parag*/, KWFormatContext */*fc*/ )
+void KWAutoFormat::endAutoFormat( KWTextParag * /*parag*//*, QTextFormat *fc*/ )
 {
     if ( !enabled )
 	return;
 
-    if ( tmpBuffer )
+    /*    if ( tmpBuffer )
 	delete tmpBuffer;
     tmpBuffer = 0;
-    spBuffer = QString::null;
+    spBuffer = QString::null;*/
 }
 
 /*================================================================*/
-bool KWAutoFormat::doTypographicQuotes( KWParag *parag, KWFormatContext *fc )
+bool KWAutoFormat::doTypographicQuotes( KWTextParag *parag/*, QTextFormat *fc*/ )
 {
     if ( !enabled )
 	return false;
-
+#if 0
     if ( !typographicQuotes.replace ) {
 	if ( parag->getKWString()->data()[ fc->getTextPos() ].autoformat &&
 	     parag->getKWString()->data()[ fc->getTextPos() ].autoformat->type == AT_TypographicQuotes ) {
@@ -382,18 +386,18 @@ bool KWAutoFormat::doTypographicQuotes( KWParag *parag, KWFormatContext *fc )
 
 	return true;
     }
-
+#endif
     return false;
 }
 
 /*================================================================*/
-bool KWAutoFormat::doUpperCase( KWParag *parag, KWFormatContext *fc )
+bool KWAutoFormat::doUpperCase( KWTextParag *parag/*, QTextFormat *fc*/ )
 {
     if ( !enabled )
 	return false;
 
     bool converted = false;
-
+#if 0
     if ( convertUpperCase ) {
 	if ( lastWasDotSpace &&
 	     !isMark( parag->getKWString()->data()[ fc->getTextPos() ].c ) &&
@@ -459,8 +463,8 @@ bool KWAutoFormat::doUpperCase( KWParag *parag, KWFormatContext *fc )
 	else
 	    lastWasUpper = false;
     }
-
-    return converted;
+#endif
+    return /*converted*/true;
 }
 
 /*================================================================*/

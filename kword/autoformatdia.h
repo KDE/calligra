@@ -40,7 +40,7 @@ class KWAutoFormatDia : public KDialogBase
     Q_OBJECT
 
 public:
-    KWAutoFormatDia( QWidget *parent, const char *name, KWDocument *_doc, KWPage *_page );
+    KWAutoFormatDia( QWidget *parent, const char *name, KWDocument *_doc, KWCanvas *_canvas );
 
 protected:
     bool applyConfig();
@@ -58,8 +58,8 @@ protected:
     QChar oBegin, oEnd;
     bool quotesChanged;
 
-    KWPage *page;
-
+    KWCanvas *canvas;
+    KWAutoFormat m_autoFormat;
 protected slots:
     virtual void slotOk();
 
