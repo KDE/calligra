@@ -53,8 +53,7 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName, QObject* 
 KChartPart::~KChartPart()
 {
     kdDebug(35001) << "Part is going to be destroyed now!!!" << endl;
-    if( _params != 0 )
-        delete _params;
+    delete _params;
 }
 
 
@@ -183,7 +182,7 @@ void KChartPart::loadConfig( KConfig *conf )
     _params->setLineMarker(conf->readBoolEntry("lineMarker",_params->lineMarker()));
     _params->setThreeDBarDepth( conf->readDoubleNumEntry("_3d_depth",
                                                          _params->threeDBarDepth() ) );
-    _params->setThreeDBarAngle( conf->readDoubleNumEntry( "_3d_angle",
+    _params->setThreeDBarAngle( conf->readNumEntry( "_3d_angle",
                                                           _params->threeDBarAngle() ) );
 
     KDChartAxisParams leftparams = _params->axisParams( KDChartAxisParams::AxisPosLeft );
@@ -395,7 +394,14 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
         result=loadOldXML( doc );
     }
     if( result )
+    {
         result = loadData( doc, currentData );
+#if 0
+        bool retData = loadData( doc, currentData );
+        if ( !retData )
+            initRandomData();
+#endif
+    }
     return result;
 }
 

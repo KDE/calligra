@@ -27,7 +27,7 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
 
     QGridLayout *grid1 = new QGridLayout(this,2,2,15,15);
 
-    QVBoxLayout *lay1 = new QVBoxLayout( this );
+    QVBoxLayout *lay1 = new QVBoxLayout(  );
     lay1->setMargin( 5 );
     lay1->setSpacing( 10 );
 
