@@ -1,56 +1,222 @@
-<chapter id="KWordScreen"><title>The KWord Screen</title>
-<sect1 id="screenover"><title>Overview</title>
-<para>KWord, like most GUI based programs, divides the screen up into several areas. Each area of the screen is used to perform a group of similar features
-.  When you start the KWord screen, it is initially divided into 4 major areas:</para>
+<chapter id="kword-screen">
+<title>The &kword; Screen</title>
+
+<sect1 id="screen-overview">
+<title>Overview</title>
+
+<para>&kword;, like most <acronym>GUI</acronym> based programs, divides
+the screen up into several areas. Each area of the screen is used to
+perform a group of similar features .  When you start the &kword;
+screen, it is initially divided into 4 major areas:</para>
+
 <orderedlist numeration="arabic">
-<listitem><para><link linkend="kdeframe">The KDE titlebar</link> (which remains at the top of all programs run under KDE).</para></listitem>
-<listitem><para><link linkend="da">The Menu Bar</link>.</para></listitem>
-<listitem><para><link linkend="mb">an assortment of Toolbars</link>.</para></listitem>
-<listitem><para><link linkend="tb">and the Document Area</link>.</para></listitem>
+<listitem><para><link linkend="kde-frame">The &kde; titlebar</link>
+(which remains at the top of all programs run under
+&kde;).</para></listitem>
+
+<listitem><para><link linkend="da">The Menu
+Bar</link>.</para></listitem>
+
+<listitem><para><link linkend="mb">an assortment of
+Toolbars</link>.</para></listitem>
+
+<listitem><para><link linkend="tb">and the Document
+Area</link>.</para></listitem>
 </orderedlist>
-<screenshot><mediaobject><imageobject><imagedata fileref="screen.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
-<para><emphasis><anchor id="kdeframe"/>The KDE Titlebar.</emphasis></para>
-<para>The KDE Titlebar surrounds all applications run under KDE.  For more information, please see the KDE User Guide.</para>
+
+<screenshot>
+<mediaobject><imageobject>
+<imagedata fileref="screen.png" format="PNG"/></imageobject>
+</mediaobject></screenshot>
+
+<para><emphasis><anchor id="kde-frame"/>The KDE Titlebar.</emphasis></para>
+<para>The &kde; Titlebar surrounds all applications run under &kde;.
+For more information, please see the &kde; User Guide.</para>
+
 <para><emphasis><anchor id="mb"/>The menubar</emphasis></para>
-<para>The Menu Bar provides acess to all of &kword;'s functions and options.  Each part of the &kword; menubar is detailed in the section entitled: <link linkend="BasicMenubar">The Basic Menu Bar</link>.</para>
+
+<para>The Menu Bar provides access to all of &kword;'s functions and
+options.  Each part of the &kword; menubar is detailed in the section
+entitled: <link linkend="basic-menubar">The Basic Menu Bar</link>.</para>
+
 <para><emphasis><anchor id="tb"/>The Toolbars</emphasis></para>
-<para>The Tool bars provide shortcuts to commonly used functions.  &kword; uses 8 toolbars, with similar functions grouped together.</para>
+<para>The Tool bars provide shortcuts to commonly used functions.
+&kword; uses 8 toolbars, with similar functions grouped together.</para>
+
 <para><emphasis><anchor id="da"/>The Document Area.</emphasis></para>
 <para>The document area consists of:</para>
-<informaltable frame="none"><tgroup cols="2" align="left"><tbody>
-<row><entry></entry><entry><variablelist>
-<varlistentry><term>Horizontal and Vertical Rulers</term><listitem><para>The rulers can be used to help you layout your document.  For more information on Rulers, see <link linkend="Rulers">Using Rulers</link>.</para></listitem></varlistentry>
-<varlistentry><term>Scrollbar</term><listitem><para>The scrollbars are used to move through a &kword; document quickly.  The &kword; scroll bar functions similar to all scrollbars in KDE or Windows.</para></listitem></varlistentry>
-<varlistentry><term>Tab Selector</term><listitem><para>This is used to select and place tab stops in your document for easy formatting.  For more information on tab stops, see the section entitled <link linkend="TabStops">Using Tab Stops</link>.</para></listitem></varlistentry>
-<varlistentry><term>Document View</term><listitem><para>This is the area of the screen which is used to enter text.  It shows you the current status of your document, and allows you to adjust frames, select text, and cut and paste text.  </para></listitem></varlistentry>
-</variablelist></entry></row></tbody></tgroup></informaltable>
-<informaltable frame="none"><tgroup cols="2" align="left"><tbody>
-<row><entry></entry><entry><variablelist>
-<varlistentry><term><link linkend="charformattoolbar">Format Toolbar</link></term><listitem><para>This toolbar has commonly used features for formatting your text and paragraph borders. Features on this toolbar include boldface and italic text, superscripted text, and adding a border to your paragraph</para></listitem></varlistentry>
-<varlistentry><term><link linkend="filetoolbar">File Toolbar</link></term><listitem><para>This toolbar is used to load, save, print and start new documents</para></listitem></varlistentry>
-<varlistentry><term><link linkend="inserttoolBar">Insert Toolbar</link></term><listitem><para>This toolbar is used to add new text frames to your document.  You can also add graphics, tables or formulas to your document with this toolbar.</para></listitem></varlistentry>
-<varlistentry><term><link linkend="basicedittoolbar">Edit Toolbar</link></term><listitem><para>This toolbar is for common editing functions such as cut, paste, undo, redo, find and spellcheck</para></listitem></varlistentry>
-<varlistentry><term><link linkend="paragraphtoolbar">Paragraph Toolbar</link></term><listitem><para>This toolbar is used to insert pictures, clipart or special characters in your document.</para></listitem></varlistentry>
-<varlistentry><term><link linkend="TableEditToolbar">Table Toolbar</link></term><listitem><para>This toolbar is used to add or remove rows or columns from tables.</para></listitem></varlistentry>
-<varlistentry><term><link linkend="bordertoolbar">Borders Toolbar</link></term><listitem><para>This toolbar is used to add or remove borders surrounding paragraphs.</para></listitem></varlistentry>
-<varlistentry><term><link linkend="formulatoolbar">Formula Toolbar</link></term><listitem><para>This toolbar is used to add or remove formulas and their components.</para></listitem></varlistentry>
-</variablelist></entry></row></tbody></tgroup></informaltable>
+
+<variablelist>
+<varlistentry>
+<term>Horizontal and Vertical Rulers</term>
+<listitem>
+<para>The rulers can be used to help you layout your document.  For more
+information on Rulers, see <link linkend="rulers">Using
+Rulers</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Scrollbar</term>
+<listitem>
+<para>The scrollbars are used to move through a &kword; document
+quickly.  The &kword; scroll bar functions similar to all scrollbars in
+&kde; or &Windows;.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Tab Selector</term>
+<listitem>
+<para>This is used to select and place tab stops in your document for
+easy formatting.  For more information on tab stops, see the section
+entitled <link linkend="tab-stops">Using Tab Stops</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Document View</term>
+<listitem>
+<para>This is the area of the screen which is used to enter text.  It
+shows you the current status of your document, and allows you to adjust
+frames, select text, and cut and paste text.  </para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<variablelist>
+<varlistentry>
+<term><link linkend="char-format-toolbar">Format Toolbar</link></term>
+<listitem>
+<para>This toolbar has commonly used features for formatting your text
+and paragraph borders. Features on this toolbar include boldface and
+italic text, superscripted text, and adding a border to your
+paragraph</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="file-toolbar">File Toolbar</link></term>
+<listitem>
+<para>This toolbar is used to load, save, print and start new
+documents</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="insert-toolbar">Insert Toolbar</link></term>
+<listitem>
+<para>This toolbar is used to add new text frames to your document.  You
+can also add graphics, tables or formulas to your document with this
+toolbar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="basic-edit-toolbar">Edit Toolbar</link></term>
+<listitem>
+<para>This toolbar is for common editing functions such as cut, paste,
+undo, redo, find and spellcheck</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="paragraph-toolbar">Paragraph Toolbar</link></term>
+<listitem>
+<para>This toolbar is used to insert pictures, clipart or special
+characters in your document.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="table-edit-toolbar">Table Toolbar</link></term>
+<listitem>
+<para>This toolbar is used to add or remove rows or columns from
+tables.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="border-toolbar">Borders Toolbar</link></term>
+<listitem>
+<para>This toolbar is used to add or remove borders surrounding
+paragraphs.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><link linkend="formula-toolbar">Formula Toolbar</link></term>
+<listitem>
+<para>This toolbar is used to add or remove formulas and their
+components.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
 </sect1>
-<sect1 id="Rulers"><title>Using Rulers</title>
-<para>Along the left and top edges of the Document area, are a horizontal and a vertical ruler.</para>
+
+<sect1 id="rulers">
+<title>Using Rulers</title>
+
+<para>Along the left and top edges of the Document area, are a
+horizontal and a vertical ruler.</para>
+
 <para>These rulers measure from the top right edge of the page. </para>
-<para>Each ruler has a bright area surrounded by a dark area.  The bright area shows the size and location of the currently selected frame on that page.  As you change frames, the bright area changes to reflect the new frame's settings.</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="ruler.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+
+<para>Each ruler has a bright area surrounded by a dark area.  The
+bright area shows the size and location of the currently selected frame
+on that page.  As you change frames, the bright area changes to reflect
+the new frame's settings.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="ruler.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
 <para>The ruler can measure the page in 3 units of measure:</para>
+
 <orderedlist numeration="arabic">
-<listitem><para>Milimeters (mm)</para></listitem>
+<listitem><para>Millimeters (mm)</para></listitem>
 <listitem><para>Points (pt)</para></listitem>
 <listitem><para>Inches (in)</para></listitem>
 </orderedlist>
-<para>To change the units of the ruler, place the mouse cursor over one of the rulers (either one), and click with the right button on your mouse.</para>
-<para>Select your choice from the submenu.  You will notice both rulers change to the new unit of measure.</para>
-<para>You may also notice two verticle arrows (one pointed up, the other pointed down), on the right side of the bright area of the horizontal ruler. These are used to adjust the margin of a paragraph.  For more information, see the section entitled <link linkend="Formatpara">Formatting Paragraphs.</link></para>
-<para>Finally, you may see some black marks, which are not part of the ruler.  They may appear as L shaped, a Reverse-L, an Upside-down T, or an Upside-down T" with a dot in it.  These are location of tab stops.  For more information see the section entitled <link linkend="TabStops">Using Tab Stops</link>.</para>
-<tip><para>To quickly format the page layout, you can right mouse click on either ruler.  A small sub menu will appear.  Simply select Page Layout, and the Page Layout Dialog box will appear.</para></tip>
+
+<para>To change the units of the ruler, place the mouse cursor over one
+of the rulers (either one), and click with the
+<mousebutton>right</mousebutton> button on your mouse.</para>
+
+<para>Select your choice from the submenu.  You will notice both rulers
+change to the new unit of measure.</para>
+
+<para>You may also notice two vertical arrows (one pointed up, the other
+pointed down), on the right side of the bright area of the horizontal
+ruler. These are used to adjust the margin of a paragraph.  For more
+information, see the section entitled <link
+linkend="format-para">Formatting Paragraphs.</link></para>
+
+<para>Finally, you may see some black marks, which are not part of the
+ruler.  They may appear as L shaped, a Reverse-L, an Upside-down T, or
+an Upside-down T with a dot in it.  These are location of tab stops.
+For more information see the section entitled <link
+linkend="tab-stops">Using Tab Stops</link>.</para>
+
+<tip>
+<para>To quickly format the page layout, you can right mouse click on
+either ruler.  A small sub menu will appear.  Simply select Page Layout,
+and the Page Layout Dialog box will appear.</para>
+</tip>
+
+<note> 
+<para>If you don't want the rulers in your document area, they
+can be switched off.</para><para> Simply select <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure
+Kword</guimenuitem></menuchoice> from the Menu Bar.  Click on the
+<guibutton>Interface</guibutton> button.  The top checkbox will let you
+toggle the rulers on and off.</para> 
+</note>
+
 </sect1>
+
 </chapter>

@@ -1,191 +1,696 @@
-<sect1 id="Tables"><title>Tables</title>
-<para>Kword has the built in ability to generate simple tables.</para>
-<para>!!!!Need to add  more here -- Table formatting not implemented well!!!</para>
-<para>If you need more complicated functionality or you want more control over the look of your table, you can <link linkend="InsKspread">Imbed a KSpread Table</link> in your document.</para>
-<para>This section of the document will cover the formatting of tables <emphasis>created in KWord</emphasis></para>
-<sect2 id="tablenew"><title>Adding a new Table</title>
+<sect1 id="tables">
+<title>Tables</title>
+
+<para>&kword; has the built in ability to generate simple tables.</para>
+
+<para>!!!!Need to add  more here -- Table formatting not implemented
+well!!!</para>
+
+<para>If you need more complicated functionality or you want more
+control over the look of your table, you can <link
+linkend="insert-kspread">Imbed a &kspread; Table</link> in your
+document.</para>
+
+<para>This section of the document will cover the formatting of tables
+<emphasis>created in &kword;</emphasis></para>
+
+<sect2 id="table-new"><title>Adding a new Table</title>
+
 <para>You can create a table in KWord in one of three ways:</para>
+
 <itemizedlist>
-<listitem><para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Create Table</guimenuitem></menuchoice> from the Menu bar</para></listitem>
-<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F9</keycap></keycombo></para></listitem>
-<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="part-kspread" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+
+<listitem>
+<para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Create
+Table</guimenuitem></menuchoice> from the Menu bar</para>
+</listitem>
+<listitem> 
+<para>You can use the keyboard shortcut: <keycombo
+action="simul"><keycap>F9</keycap></keycombo></para> 
+</listitem>
+
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="part-kspread" format="PNG"/></imageobject></inlinemediaobject>
+on the toolbar.</para>
+</listitem>
+
 </itemizedlist>
-<para>This will open a dialog box."</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="instab1" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+
+<para>This will open a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="instab1" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
 <para>This dialog box is divided into two halves.</para>
-<para>The right half of the dialog box provides you a quick visual guide to how many rows and columns will be created in the table.  This is usefull for "counting" out your table.  You can not edit your table layout here.</para>
-<para>The left half of the dialog box consists of two drop down boxes, and two number selection boxes.</para>
-<para>The number selection box labled "Number of Rows", allows you to specify from 1 to 128 rows in the table.</para>
-<para>The number selection box labled "Number of Columns", allows you to specify from 1 to 128 columns in the table.</para>
-<para>While adjusting either of these two options, the preview box adjusts to your new settings.</para>
-<para>The drop down box labled "Cell Height", can be set to either of two options.</para>
-<variablelist><varlistentry><term>Automatic</term>
-<listitem><para>If this option is selected, KWord will set the cell height of each cell in the new table to a size appropriate based on the size of the current text.  KWord will not automatically provide additional space in each cell, because you draw a table larger (or smaller) than necessary.</para>
-<para>As an example, if you create a table with three rows, it does not matter if you "draw" the table as 1 inch tall, or 4 inches tall, the height of each cell will be based on the current text size.</para></listitem></varlistentry>
-<varlistentry><term>Manual</term>
-<listitem><para>When selected, calculate the cell height by dividing the user specified size of the table by the number of rows.</para>
-<para>If this is selected, and you create a table with 3 rows and "draw" the table 3 inches tall, each cell will be 1 inch in height.  If, you draw the table 1.5 inches tall, each cell will be 0.5 inches tall. </para></listitem></varlistentry></variablelist>
-<para>The drop down box labled "Cell Widths", can be set to either of two options.</para>
-<variablelist><varlistentry><term>Automatic</term>
-<listitem><para>If this option is selected, KWord will determins the width of each cell, by dividing the total width of the frame by the number of columns.  It is unaffected by the table size you have "drawn" on the document.</para></listitem></varlistentry>
-<varlistentry><term>Manual</term>
-<listitem><para>When selected, KWord determines the width of each cell, by dividing the width of the table you "draw" by the number of columns selected.</para>
-<para>As an example, if you create a table with 3 columns, and "draw" it 3 inches wide, each cell will be 1 inch in width.  If, however, you draw the same table 6 inches wide, each cell will be 2 inches wide.</para></listitem></varlistentry></variablelist>
-<para>To change the properties of the table, click on the tab labled "Properties".</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="instab2" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
-<para>!!!Not implemented yet!!!</para></sect2>
-<sect2 id="tabledel"><title>Deleting a Table</title>
-<para>To delete a table in KWord:</para>
-<orderedlist numeration="arabic">
-<listitem><para>Place the text cursor within any cell of the table you want to delete.</para>
-<warning><para>Be sure you have selected the correct table before continuing.  KWord will not ask for confirmation.</para></warning></listitem>
-<listitem><para>Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Delete Table</guimenuitem></menuchoice> from the Menu bar</para></listitem></orderedlist>
-<para>The table will be immedately deleted.</para></sect2>
-<sect2 id="tabirow"><title>Insert Row in Table</title>
+
+<para>The right half of the dialog box provides you a quick visual guide
+to how many rows and columns will be created in the table.  This is
+usefull for <quote>counting</quote> out your table.  You can not edit
+your table layout here.</para>
+
+<para>The left half of the dialog box consists of two drop down boxes,
+and two number selection boxes.</para>
+
+<para>The number selection box labled <guilabel>Number of
+Rows</guilabel>, allows you to specify from 1 to 128 rows in the
+table.</para>
+
+<para>The number selection box labled <guilabel>Number of
+Columns</guilabel>, allows you to specify from 1 to 128 columns in the
+table.</para>
+
+<para>While adjusting either of these two options, the preview box
+adjusts to your new settings.</para>
+
+<para>The drop down box labled <guilabel>Cell Height</guilabel>, can be
+set to either of two options.</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Automatic</guilabel></term>
+<listitem>
+<para>If this option is selected, &kword; will set the cell height of
+each cell in the new table to a size appropriate based on the size of
+the current text.  &kword; will not automatically provide additional
+space in each cell, because you draw a table larger (or smaller) than
+necessary.</para>
+<para>As an example, if you create a table with three rows, it does not
+matter if you <quote>draw</quote> the table as 1 inch tall, or 4 inches
+tall, the height of each cell will be based on the current text
+size.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Manual</guilabel></term>
+<listitem>
+<para>When selected, calculate the cell height by dividing the user
+specified size of the table by the number of rows.</para>
+<para>If this is selected, and you create a table with 3 rows and
+<quote>draw</quote> the table 3 inches tall, each cell will be 1 inch in
+height.  If you draw the table 1.5 inches tall, each cell will be 0.5
+inches tall. </para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>The drop down box labled <guilabel>Cell Widths</guilabel>, can be
+set to either of two options.</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Automatic</guilabel></term>
+<listitem>
+<para>If this option is selected, &kword; will determins the width of
+each cell, by dividing the total width of the frame by the number of
+columns.  It is unaffected by the table size you have
+<quote>drawn</quote> on the document.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Manual</guilabel></term>
+<listitem>
+<para>When selected, &kword; determines the width of each cell, by
+dividing the width of the table you <quote>draw</quote> by the number of
+columns selected.</para>
+<para>As an example, if you create a table with 3 columns, and
+<quote>draw</quote> it 3 inches wide, each cell will be 1 inch in width.
+If, however, you draw the same table 6 inches wide, each cell will be 2
+inches wide.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>To change the properties of the table, click on the tab labled
+<guilabel>Properties</guilabel>.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="instab2" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>!!!Not implemented yet!!!</para>
+
+</sect2>
+
+<sect2 id="table-delete">
+<title>Deleting a Table</title>
+
+<para>To delete a table in &kword;:</para>
+
+<procedure>
+<step>
+<para>Place the text cursor within any cell of the table you want to
+delete.</para>
+<warning>
+<para>Be sure you have selected the correct table before continuing.
+&kword; will not ask for confirmation.</para>
+</warning>
+</step>
+
+<step>
+<para>Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Delete
+Table</guimenuitem></menuchoice> from the Menu bar</para>
+</step>
+</procedure>
+
+<para>The table will be immedately deleted.</para>
+</sect2>
+
+<sect2 id="table-insert-row">
+<title>Insert Row in Table</title>
+
 <para>You can insert a row into any place in a table.</para>
+
 <para>To insert a row into a table:</para>
-<orderedlist numeration="arabic">
-<listitem><para>Place the text cursor within any cell of the table you want to add a row to.</para></listitem>
-<listitem><para>Select either:</para>
+
+<procedure>
+<step>
+<para>Place the text cursor within any cell of the table you want to add
+a row to.</para>
+</step>
+
+<step>
+<para>Select either:</para>
+
 <itemizedlist>
-<listitem><para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Insert Row</guimenuitem></menuchoice> from the Menu bar</para></listitem>
-<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="rowin" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
-</itemizedlist>
-<para>This will bring up a dialog box.</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="insrowdlg" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<listitem>
+<para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Insert
+Row</guimenuitem></menuchoice> from the Menu bar</para>
 </listitem>
-<listitem><para>The number selection box labled "Row", allows you to select any row within the table.  This number selection box limits you to the rows currently in the table.</para>
-<para>Select the row you want to use as a reference.</para></listitem>
-<listitem><para>Now select either "Before" or "After" as is appropriate.</para></listitem>
-<listitem><para>Click "OK" to add the row or click "Cancel" to not add any rows.</para></listitem></orderedlist></sect2>
-<sect2 id="tabicol"><title>Insert Column in Table</title>
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="rowin" format="PNG"/></imageobject></inlinemediaobject> on the
+toolbar.</para>
+</listitem>
+</itemizedlist>
+
+<para>This will bring up a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="insrowdlg" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+</step>
+
+<step>
+<para>The number selection box labled <guilabel>Row</guilabel>, allows
+you to select any row within the table.  This number selection box
+limits you to the rows currently in the table.</para>
+<para>Select the row you want to use as a reference.</para>
+</step>
+
+<step>
+<para>Now select either <guilabel>Before</guilabel> or
+<guilabel>After</guilabel>" as is appropriate.</para>
+</step>
+
+<step>
+<para>Click <guibutton>OK</guibutton> to add the row or click
+<guibutton>Cancel</guibutton> to not add any rows.</para>
+</step></procedure>
+</sect2>
+
+<sect2 id="table-insert-column">
+<title>Insert Column in Table</title>
+
 <para>To insert a column into a table:</para>
-<orderedlist numeration="arabic">
-<listitem><para>Place the text cursor within any cell of the table you want to add a row to.</para></listitem>
-<listitem><para>Select either:</para>
+
+<procedure>
+<step>
+<para>Place the text cursor within any cell of the table you want to add
+a row to.</para>
+</step>
+
+<step>
+<para>Select either:</para>
+
 <itemizedlist>
-<listitem><para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Insert Column</guimenuitem></menuchoice> from the Menu bar</para></listitem>
-<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="colin" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
-</itemizedlist>
-<para>This will bring up a dialog box.</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="inscoldlg" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<listitem>
+<para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Insert
+Column</guimenuitem></menuchoice> from the Menu bar</para>
 </listitem>
-<listitem><para>The number selection box labled "Column", allows you to select any column within the table.  This number selection box limits you to the columns currently in the table.</para>
-<para>Select the column you want to use as a reference.</para></listitem>
-<listitem><para>Now select either "Before" or "After" as is appropriate.</para></listitem>
-<listitem><para>Click "OK" to add the column or click "Cancel" to not add any columns.</para></listitem></orderedlist></sect2>
-<sect2 id="tabdrow"><title>Delete Row in Table</title>
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="colin" format="PNG"/></imageobject></inlinemediaobject> on the
+toolbar.</para>
+</listitem>
+</itemizedlist>
+
+<para>This will bring up a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="inscoldlg" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+</step>
+
+<step>
+<para>The number selection box labled <guilabel>Column</guilabel>,
+allows you to select any column within the table.  This number selection
+box limits you to the columns currently in the table.</para>
+
+<para>Select the column you want to use as a reference.</para>
+</step>
+
+<step>
+<para>Now select either <guilabel>Before</guilabel> or
+<guilabel>After</guilabel> as is appropriate.</para>
+</step>
+
+<step>
+<para>Click <guibutton>OK</guibutton> to add the column or click
+<guibutton>Cancel</guibutton> to not add any columns.</para>
+</step>
+</procedure>
+</sect2>
+
+<sect2 id="table-delete-row">
+<title>Delete Row in Table</title>
+
 <para>To delete a row from a table:</para>
-<orderedlist numeration="arabic">
-<listitem><para>Place the text cursor within any cell of the table you want to delete the row from.</para></listitem>
-<listitem><para>Select either:</para>
+
+<procedure>
+<step>
+<para>Place the text cursor within any cell of the table you want to
+delete the row from.</para>
+</step>
+
+<step>
+<para>Select either:
+</para>
+
 <itemizedlist>
-<listitem><para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Delete row</guimenuitem></menuchoice> from the Menu bar</para></listitem>
-<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="rowout" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+<listitem>
+<para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Delete
+row</guimenuitem></menuchoice> from the Menu bar</para>
+</listitem>
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="rowout" format="PNG"/></imageobject></inlinemediaobject> on the
+toolbar.</para>
+</listitem>
 </itemizedlist>
 <para>This will bring up a dialog box.</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="delrowdlg" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
-</listitem>
-<listitem><para>Select the row you want to delete in the number selection dialog.</para>
-<warning><para>Make sure you have selected the correct row before continuing.</para><para>KWord will not ask for verification before deleting the row.</para></warning></listitem>
-<listitem><para>Click "OK" to delete the row, or click "Cancel" to not delete any rows.</para></listitem></orderedlist></sect2>
-<sect2 id="tabdcol"><title>Delete Column in Table</title>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="delrowdlg" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+</step>
+<step>
+<para>Select the row you want to delete in the number selection
+dialog.</para>
+
+<warning>
+<para>Make sure you have selected the correct row before
+continuing.</para>
+<para>&kword; will not ask for verification before deleting the
+row.</para>
+</warning>
+</step>
+
+<step>
+<para>Click <guibutton>OK</guibutton> to delete the row, or click <guibutton>Cancel</guibutton> to not
+delete any rows.</para>
+</step>
+</procedure>
+
+</sect2>
+<sect2 id="table-delete-column">
+<title>Delete Column in Table</title>
+
 <para>To delete a column from a table:</para>
-<orderedlist numeration="arabic">
-<listitem><para>Place the text cursor within any cell of the table you want to delete the column from.</para></listitem>
-<listitem><para>Select either:</para>
+
+<procedure>
+<step>
+<para>Place the text cursor within any cell of the table you want to
+delete the column from.</para>
+</step>
+
+<step>
+<para>Select either:</para>
+
 <itemizedlist>
-<listitem><para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Delete Column</guimenuitem></menuchoice> from the Menu bar</para></listitem>
-<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="colout" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
-</itemizedlist>
-<para>This will bring up a dialog box.</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="delcoldlg" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<listitem>
+<para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Delete
+Column</guimenuitem></menuchoice> from the Menu bar</para>
 </listitem>
-<listitem><para>Select the column you want to delete in the number selection dialog.</para>
-<warning><para>Make sure you have selected the correct column before continuing.</para><para>KWord will not ask for verification before deleting the column</para></warning></listitem>
-<listitem><para>Click "OK" to delete the column, or click "Cancel" to not delete any column.</para></listitem></orderedlist></sect2>
-<sect2 id="tabjoin"><title>Join Cells in Table</title>
-<para>A table is traditionally made of a grid of rows and columns, with equal sized cells throughout the table.</para>
-<para>Sometimes you would like to spread text out over several cells in a table.  This is especially common with titles.</para>
-<para>KWord allows you to do this by "Joining" two (or more) adjacent cells of a table together.</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="joincell" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
-<para>This is an example of three cells joined together in the middle of a table.</para>
-<tip><para>You can join cells vertically, as well as horizontally.</para></tip>
-<para>To "join" several cells:</para>
-<orderedlist numeration="arabic">
-<listitem><para>You must be in Frame Edit Mode. To change to Frame Edit Mode, you can:</para>
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="colout" format="PNG"/></imageobject></inlinemediaobject> on the
+toolbar.</para>
+</listitem>
+</itemizedlist>
+
+<para>This will bring up a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="delcoldlg" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+</step>
+
+<step>
+<para>Select the column you want to delete in the number selection
+dialog.</para>
+
+<warning>
+<para>Make sure you have selected the correct column before
+continuing.</para>
+<para>&kword; will not ask for verification before deleting the
+column</para>
+</warning>
+</step>
+
+<step>
+<para>Click <guibutton>OK</guibutton> to delete the column, or click
+<guibutton>Cancel</guibutton> to not delete any column.</para>
+</step>
+</procedure>
+</sect2>
+
+<sect2 id="table-join-cells">
+<title>Join Cells in Table</title>
+
+<para>A table is traditionally made of a grid of rows and columns, with
+equal sized cells throughout the table.</para>
+
+<para>Sometimes you would like to spread text out over several cells in
+a table.  This is especially common with titles.</para>
+
+<para>&kword; allows you to do this by <quote>Joining</quote> two (or
+more) adjacent cells of a table together.</para> 
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="joincell" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>This is an example of three cells joined together in the middle of
+a table.</para>
+
+<tip>
+<para>You can join cells vertically, as well as horizontally.</para>
+</tip>
+
+<para>To <quote>join</quote> several cells:</para>
+
+<procedure>
+
+<step>
+<para>You must be in Frame Edit Mode. To change to Frame Edit Mode, you
+can:</para>
+
 <itemizedlist>
-<listitem><para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
-<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F5</keycap></keycombo></para></listitem>
-<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="framemode" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
-</itemizedlist></listitem>
-<listitem><para>Now select one of the two (or more) cells you want to join into one.  You can do this by clicking once in the cell with the left mouse button.</para></listitem>
-<listitem><para>Select another cell you want "joined", by holding down the <keycap>Ctrl</keycap> key and clicking with the left mouse button.</para>
-<para>Continue to select additional cells, until you have selected all the cells necessary.</para>
-<tip><para>If you have a number of cells in a row that you want to select, you can select them in two quick steps:</para>
+<listitem>
+<para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit
+Frames</guimenuitem></menuchoice> from the Menu bar</para>
+</listitem>
+<listitem>
+<para>You can use the keyboard shortcut:
+<keycombo><keycap>F5</keycap></keycombo></para>
+</listitem>
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="framemode" format="PNG"/></imageobject></inlinemediaobject> on
+the toolbar.</para>
+</listitem>
+</itemizedlist>
+</step>
+
+<step>
+<para>Now select one of the two (or more) cells you want to join into
+one.  You can do this by clicking once in the cell with the
+<mousebutton>left</mousebutton> mouse button.</para>
+</step>
+
+<step>
+<para>Select another cell you want <quote>joined</quote>", by holding
+down the &Ctrl; key and clicking with the
+<mousebutton>left</mousebutton> mouse button.</para>
+
+<para>Continue to select additional cells, until you have selected all
+the cells necessary.</para>
+
+<tip>
+<para>If you have a number of cells in a row that you want to select,
+you can select them in two quick steps:</para>
 <para>First click on one of the end cells.</para>
-<para>Now hold down the <keycap>Shift</keycap> key and click on the cell at the other end of the row or column you want to join.</para>
-<para>All cells between these two cells will be selected.</para></tip></listitem>
-<listitem><para>Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Join Cells</guimenuitem></menuchoice> from the Menu bar</para></listitem></orderedlist>
+<para>Now hold down the &Shift; key and click on the cell at the other
+end of the row or column you want to join.</para>
+<para>All cells between these two cells will be selected.</para>
+</tip>
+</step>
+
+<step>
+<para>Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Join
+Cells</guimenuitem></menuchoice> from the Menu bar</para>
+</step>
+</procedure>
+
 <para>The cells will now be joined.</para>
-<para>Any text in the right most frame will now be located in the joined frame.  Any text from any other frames will be hidden from view.</para></sect2>
-<sect2 id="tabsplit"><title>Split Cells in Table</title>
-<para>Joining several cells together into one larger cell, is not a one way action.</para>
-<para>If you decide that you do not want the previously joined cells to be joined any longer, you can "split" them back into individual cells again.</para>
-<para>To split previously joined cells: you must be in Frame Edit Mode.</para>
-<orderedlist numeration="arabic">
-<listitem><para>You must be in Frame Edit Mode. To change to Frame Edit Mode, you can:</para>
+
+<para>Any text in the right most frame will now be located in the joined
+frame.  Any text from any other frames will be hidden from view.</para>
+</sect2>
+
+<sect2 id="table-split-cells">
+<title>Split Cells in Table</title>
+
+<para>Joining several cells together into one larger cell, is not a one
+way action.</para>
+
+<para>If you decide that you do not want the previously joined cells to
+be joined any longer, you can "split" them back into individual cells
+again.</para>
+
+<para>To split previously joined cells: you must be in Frame Edit
+Mode.</para>
+
+<procedure>
+<step>
+<para>You must be in Frame Edit Mode. To change to Frame Edit Mode, you
+can:</para>
+
 <itemizedlist>
-<listitem><para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
-<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F5</keycap></keycombo></para></listitem>
-<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="framemode" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
-</itemizedlist></listitem>
-<listitem><para>Select the cell you want to split by clicking on it with the left mouse button.</para></listitem>
-<listitem><para>Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Split Cells</guimenuitem></menuchoice> from the Menu bar</para></listitem></orderedlist>
-<para>The cells will be restored to their previous state.  Any text in the original cell will be relocated to the rightmost cell.</para></sect2>
-<sect2 id="tabungroup"><title>Ungroup a Table</title><para>!!!Causes a crash at this point!!!</para></sect2>
-<sect2 id="tabformat"><title>Format a Table</title><para>!!!Not implemented!!!</para></sect2>
+<listitem>
+<para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit
+Frames</guimenuitem></menuchoice> from the Menu bar</para>
+</listitem>
+<listitem>
+<para>You can use the keyboard shortcut:
+<keycombo><keycap>F5</keycap></keycombo></para>
+</listitem>
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="framemode" format="PNG"/></imageobject></inlinemediaobject> on
+the toolbar.</para>
+</listitem>
+</itemizedlist>
+</step>
+<step>
+<para>Select the cell you want to split by clicking on it with the
+<mousebutton>left</mousebutton> mouse button.</para>
+</step>
+<step>
+<para>Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Split
+Cells</guimenuitem></menuchoice> from the Menu bar</para>
+</step>
+</procedure>
+
+<para>The cells will be restored to their previous state.  Any text in
+the original cell will be relocated to the rightmost cell.</para>
+
+</sect2>
+
+<sect2 id="table-ungroup">
+<title>Ungroup a Table</title>
+
+<para>!!!Causes a crash at this point!!!</para>
+
+</sect2>
+
+<sect2 id="table-format">
+<title>Format a Table</title>
+
+<para>!!!Not implemented!!!</para>
+
+</sect2>
+
 </sect1>
-<sect1 id="HeadFoot"><title>Headers/Footers</title>
-<para>With multi-page documents, you might want to provide certain information at the tops or bottoms of each page throughout the document.  They can provide the reader with important information and they tie your doocuments together. </para>
-<para>Fortunately, headers and footers are really just a special type of frame.  You can edit the text and data within the headers and footers</para>
-<para>You can toggle headers and footers independently at any time.</para>
-<para>If you are using a Wordprocessing template, the footers will be added below the margins you set under page setup.  The text within the main frames will be moved so the headers and/or footers do not overlap any text.</para>
-<para>If you are using a DTP template, the headers/footers will be placed at the margin edges, just like in the wordprocessing templates, but these frames are treated just like any other frame.  If the text frame below the Header/footer frame is set to wrap around text in overlapping frames, that will cause the text to move.</para>
-<para>You can toggle the headers by selecting <menuchoice> <guimenu>View</guimenu><guimenuitem>Headers.</guimenuitem></menuchoice> from the Menu bar.</para>
-<para>You can toggle the footers by selecting <menuchoice> <guimenu>View</guimenu><guimenuitem>Footers.</guimenuitem></menuchoice> from the Menu bar.</para>
+
+<sect1 id="headers-and-footers">
+<title>Headers/Footers</title>
+
+<para>With multi-page documents, you might want to provide certain
+information at the tops or bottoms of each page throughout the document.
+They can provide the reader with important information and they tie your
+doocuments together. </para>
+
+<para>Fortunately, headers and footers are really just a special type of
+frame.  You can edit the text and data within the headers and
+footers</para>
+
+<para>You can toggle headers and footers independently at any
+time.</para>
+
+<para>If you are using a Wordprocessing template, the footers will be
+added below the margins you set under page setup.  The text within the
+main frames will be moved so the headers and/or footers do not overlap
+any text.</para>
+
+<para>If you are using a <acronym>DTP</acronym> template, the
+headers/footers will be placed at the margin edges, just like in the
+wordprocessing templates, but these frames are treated just like any
+other frame.  If the text frame below the Header/footer frame is set to
+wrap around text in overlapping frames, that will cause the text to
+move.</para>
+
+<para>You can toggle the headers by selecting <menuchoice>
+<guimenu>View</guimenu><guimenuitem>Headers.</guimenuitem></menuchoice>
+from the Menu bar.</para>
+
+<para>You can toggle the footers by selecting <menuchoice>
+<guimenu>View</guimenu><guimenuitem>Footers.</guimenuitem></menuchoice>
+from the Menu bar.</para>
+
 </sect1>
-<sect1 id="tempcr"><title>Creating Templates/Saving a document as a template</title>
-<para>KWord commes with several pre-defined templates (both Wordprocessing and DTP templates), which are designed to get you started on your documents.</para>
-<para>If, however, you often use the same format for a document over and over, you may want to create a template which <emphasis>exactly</emphasis> matches your needs.</para>
-<para>You can create an unlimited number of templates in KWord, and you can organize them into categories for easy recall.</para>
-<para>You create these templates by first generating the layout in KWord based on one of the pre-defined templates, and then you save the file.  Instead of saving it as a traditional file, you save it as a template.</para>
-<para>What follows, is a step by step process to save the current document as a template.</para>
-<orderedlist numeration="arabic">
-<listitem><para>When the document is like you want, Select <menuchoice> <guimenu>Extra</guimenu><guimenuitem>Create Template From Document</guimenuitem></menuchoice> from the Menu bar.</para>
+
+<sect1 id="template-creation">
+<title>Creating Templates/Saving a document as a template</title>
+
+<para>&kword; commes with several pre-defined templates (both
+Wordprocessing and <acronym>DTP</acronym> templates), which are designed
+to get you started on your documents.</para>
+
+<para>If, however, you often use the same format for a document over and
+over, you may want to create a template which
+<emphasis>exactly</emphasis> matches your needs.</para>
+
+<para>You can create an unlimited number of templates in &kword;, and
+you can organize them into categories for easy recall.</para>
+
+<para>You create these templates by first generating the layout in
+&kword; based on one of the pre-defined templates, and then you save the
+file.  Instead of saving it as a traditional file, you save it as a
+template.</para>
+
+<para>What follows, is a step by step process to save the current
+document as a template.</para>
+
+<procedure>
+<step>
+<para>When the document is like you want, Select <menuchoice>
+<guimenu>Extra</guimenu><guimenuitem>Create Template From
+Document</guimenuitem></menuchoice> from the Menu bar.</para>
+
 <para>This brings up a dialog:</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="savetmpl1" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
-<para>This dialog helps you organize your templates into categories.</para>
-<para>As you can see, your templates will be saved into a subdirectory in your home directory.  You first need to create a Folder (which represents a subdirectory) within the "templates" directory.</para>
-<para>To create this folder:</para></listitem>
-<listitem><para>Place the mouse cursor over the line directory name (in this example: /home/mmcbride/.kde/share/apps/kword/templates/) and click with the right mouse button.</para>
-<para>This will bring up a submenu.</para></listitem>
-<listitem><para>Select Add Folder.</para><para>This will add another dialog to the screen.</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="savetmpl2" format="PNG" align="center"/></imageobject></mediaobject></screenshot></listitem>
-<listitem><para>Type in a name for the folder.  The name should be descriptive of the types of templates you will be placing within it.</para>
-<para>Click "Clear" to ???Not implemented yet???.</para>
-<para>Click "Cancel" to abort creating a new folder.</para>
-<para>Click "OK" to create this folder.</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="savetmpl3" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="savetmpl1" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>This dialog helps you organize your templates into
+categories.</para>
+</step>
+
+<step>
+<para>As you can see, your templates will be saved into a subdirectory
+in your home directory.  You first need to create a Folder (which
+represents a subdirectory) within the <filename
+class="directory">templates</filename> directory.</para>
+
+<substeps>
+<step>
+<para>To create this folder:</para>
+<para>Place the mouse cursor over the line directory name (in this
+example: <filename
+class="directory">/home/mmcbride/.kde/share/apps/kword/templates/</filename>)
+and click with the <mousebutton>right</mousebutton> mouse button.</para>
+
+<para>This will bring up a submenu.</para>
+</step>
+<step>
+<para>Select <guimenuitem>Add Folder</guimenuitem>.</para>
+
+<para>This will add another dialog to the screen.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="savetmpl2" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+</step>
+<step>
+<para>Type in a name for the folder.  The name should be descriptive of
+the types of templates you will be placing within it.</para>
+<para>Click <guibutton>Clear</guibutton> to ???Not implemented yet???.</para>
+<para>Click <guibutton>Cancel</guibutton> to abort creating a new folder.</para>
+<para>Click <guibutton>OK</guibutton> to create this folder.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="savetmpl3" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
 <para>The dialog box will now show your new folder.</para>
-<note><para>You do not need to create a new folder for each template.  The folders you create can be used to organize your templates.</para>
-<para>You must, however, have at least one folder.  You can not save any templates into the templates subdirectory.</para></note></listitem>
-<listitem><para>Select the newly created folder by clicking once on it with the left mouse button.</para></listitem>
-<listitem><para>Type the name of your new template in the blank entitled "Template Name".</para></listitem>
-<listitem><para>You now need to select a graphic to represent your template in the open document window.</para>
-<para>???Not implemented yet???</para></listitem>
-</orderedlist>
-<para>Once you have saved your template, the next time you open a document, you will see your new category/new template in the open file dialog.</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="savetmpl4" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
-<para>This is an example of a new category named "Newsletters", with a new template named "Monthly".</para>
+<note>
+<para>You do not need to create a new folder for each template.  The
+folders you create can be used to organize your templates.</para>
+<para>You must, however, have at least one folder.  You can not save any
+templates into the templates subdirectory.</para>
+</note>
+</step>
+</substeps>
+</step>
+<step>
+<para>Select the newly created folder by clicking once on it with the
+<mousebutton>left</mousebutton> mouse button.</para>
+</step>
+
+<step>
+<para>Type the name of your new template in the blank entitled
+<guilabel>Template Name</guilabel>.</para>
+</step>
+
+<step>
+<para>You now need to select a graphic to represent your template in the
+open document window.</para>
+<para>???Not implemented yet???</para></step>
+</procedure>
+
+<para>Once you have saved your template, the next time you open a
+document, you will see your new category/new template in the open file
+dialog.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="savetmpl4" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>This is an example of a new category named
+<guilabel>Newsletters</guilabel>, with a new template named
+<guilabel>Monthly</guilabel>.</para>
+
 </sect1> 

@@ -1,17 +1,17 @@
-<chapter id="Guides4"><title>Detailed Guides: More than just text</title>
+<chapter id="guides-4"><title>Detailed Guides: More than just text</title>
 <sect1 id="dg4intro"><title>Introduction</title><para></para></sect1>
-<sect1 id="Graphics"><title>Graphics</title><para></para>
-<sect2 id="InsGraphics"><title>Insert Pictures</title><para></para></sect2>
-<sect2 id="Insclipart"><title>Insert Clipart</title><para></para></sect2>
-<sect2 id="resizeGraphics"><title>Resize Graphics</title><para></para></sect2>
-<sect2 id="Movegraphics"><title>Move Graphics</title><para></para></sect2>
-<sect2 id="Delgraphics"><title>Delete Graphics</title><para></para></sect2>
+<sect1 id="graphics"><title>Graphics</title><para></para>
+<sect2 id="insert-graphics"><title>Insert Pictures</title><para></para></sect2>
+<sect2 id="insert-clipart"><title>Insert Clipart</title><para></para></sect2>
+<sect2 id="resize-Graphics"><title>Resize Graphics</title><para></para></sect2>
+<sect2 id="move-graphics"><title>Move Graphics</title><para></para></sect2>
+<sect2 id="delete-graphics"><title>Delete Graphics</title><para></para></sect2>
 </sect1>
-<sect1 id="TOC"><title>Insert Table of Contents</title><para></para></sect1>
-<sect1 id="DateTime"><title>Inserting Date and Time</title><para></para></sect1>
-<sect1 id="PgNumber"><title>Page Numbering </title><para></para></sect1>
+<sect1 id="toc"><title>Insert Table of Contents</title><para></para></sect1>
+<sect1 id="date-time"><title>Inserting Date and Time</title><para></para></sect1>
+<sect1 id="page-number"><title>Page Numbering </title><para></para></sect1>
 <sect1 id="variables"><title>Inserting Variables </title><para></para></sect1>
-<sect1 id="EndFoot"><title>Endnotes/Footnotes</title><para></para></sect1>
-<sect1 id="InsKspread"><title>Insert KOffice Data</title><para></para></sect1>
+<sect1 id="endnotes-and-footnotes"><title>Endnotes/Footnotes</title><para></para></sect1>
+<sect1 id="insert-kspread"><title>Insert KOffice Data</title><para></para></sect1>
 <sect1 id="formulas"><title>Formulas</title><para></para></sect1>
 </chapter>     
