@@ -67,7 +67,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     m_dialog = new KDialogBase(KJanusWidget::Plain, i18n("Related Words"),
         KDialogBase::Help|KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok);
     m_dialog->setHelp(QString::null, "thesaurus");
-    m_dialog->resize(500, 400);
+    m_dialog->resize(700, 500);
 
     m_no_match = i18n("(No match)");
     
@@ -107,20 +107,16 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     vbox->setSpacing(KDialog::spacingHint());
     
     QHBox *hbox = new QHBox(vbox);
-    hbox->setMargin(KDialog::marginHint());
     hbox->setSpacing(KDialog::spacingHint());
 
-    vbox_syn = new QVBox(hbox);
-    (void) new QLabel(i18n("Synonyms"), vbox_syn);
-    m_thes_syn = new QListBox(vbox_syn);
+    grpbox_syn = new QGroupBox( 1, Qt::Horizontal, i18n("Synonyms"), hbox);
+    m_thes_syn = new QListBox(grpbox_syn);
     
-    vbox_hyper = new QVBox(hbox);
-    (void) new QLabel(i18n("More General Words"), vbox_hyper);
-    m_thes_hyper = new QListBox(vbox_hyper);
+    grpbox_hyper = new QGroupBox( 1, Qt::Horizontal, i18n("More General Words"), hbox);
+    m_thes_hyper = new QListBox(grpbox_hyper);
 
-    vbox_hypo = new QVBox(hbox);
-    (void) new QLabel(i18n("More Specific Words"), vbox_hypo);
-    m_thes_hypo = new QListBox(vbox_hypo);
+    grpbox_hypo = new QGroupBox( 1, Qt::Horizontal, i18n("More Specific Words"), hbox);
+    m_thes_hypo = new QListBox(grpbox_hypo);
 
     // single click -- keep display unambiguous by removing other selections:
     
@@ -244,7 +240,7 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
         // not called from any application, but from KThesaurus
         m_replacement = false;
         m_dialog->showButtonOK(false);
-        m_dialog->setButtonCancelText(i18n("Close"));
+        m_dialog->setButtonCancelText(i18n("&Close"));
         m_replace->setEnabled(false);
         m_replace_label->setEnabled(false);
     } else {
@@ -546,21 +542,21 @@ void Thesaurus::findTermWordnet(const QString &term)
     
     // warning: order matters!
     // 0:    
-    m_combobox->insertItem(i18n("Synonyms/Hypernyms - ordered by frequency"));
-    m_combobox->insertItem(i18n("Synonyms - ordered by similariy of meaning (verbs only)"));
-    m_combobox->insertItem(i18n("Antonyms - words with opposite meanings"));
+    m_combobox->insertItem(i18n("Synonyms/Hypernyms - Ordered by Frequency"));
+    m_combobox->insertItem(i18n("Synonyms - Ordered by Similariy of Meaning (verbs only)"));
+    m_combobox->insertItem(i18n("Antonyms - Words with Opposite Meanings"));
     m_combobox->insertItem(i18n("Hyponyms - ...is a (kind of) %1").arg(m_edit->currentText()));
     m_combobox->insertItem(i18n("Meroyms - %1 has a...").arg(m_edit->currentText()));
     // 5:
     m_combobox->insertItem(i18n("Holonyms - ...has a %1").arg(m_edit->currentText()));
     m_combobox->insertItem(i18n("Attributes"));
-    m_combobox->insertItem(i18n("Cause to (for some verbs only)"));
+    m_combobox->insertItem(i18n("Cause To (for some verbs only)"));
     m_combobox->insertItem(i18n("Verb Entailment (for some verbs only)"));
-    m_combobox->insertItem(i18n("Familiarity & Polysemy count"));
+    m_combobox->insertItem(i18n("Familiarity & Polysemy Count"));
     // 10:
     m_combobox->insertItem(i18n("Verb Frames (examples of use)"));
     m_combobox->insertItem(i18n("List of Compound Words"));
-    m_combobox->insertItem(i18n("Overview of senses"));
+    m_combobox->insertItem(i18n("Overview of Senses"));
 
     /** NOT todo:
       * -Hypernym tree: layout is difficult, you can get the same information

@@ -24,6 +24,7 @@
 
 #include <qapplication.h>
 #include <qcombobox.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlistbox.h>
@@ -132,11 +133,11 @@ protected:
     QComboBox *m_combobox;
 
     // Thesaurus:
-    QVBox *vbox_syn;
+    QGroupBox *grpbox_syn;
     QListBox *m_thes_syn;
-    QVBox *vbox_hyper;
+    QGroupBox *grpbox_hyper;
     QListBox *m_thes_hyper;
-    QVBox *vbox_hypo;
+    QGroupBox *grpbox_hypo;
     QListBox *m_thes_hypo;
 };
 
