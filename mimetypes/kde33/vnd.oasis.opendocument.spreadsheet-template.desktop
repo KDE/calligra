@@ -4,7 +4,7 @@ Type=MimeType
 MimeType=application/vnd.oasis.opendocument.spreadsheet-template
 Patterns=*.ots;*.OTS
 Icon=spreadsheet
-Comment=OASIS Open Office SpreadSheet Template
+Comment=OASIS OpenDocument SpreadSheet Template
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.ots

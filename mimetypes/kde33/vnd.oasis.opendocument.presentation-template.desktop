@@ -4,7 +4,7 @@ Type=MimeType
 MimeType=application/vnd.oasis.opendocument.presentation-template
 Patterns=*.otp;*.OTP
 Icon=presentation
-Comment=OASIS Open Office Presentation Template
+Comment=OASIS OpenDocument Presentation Template
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.otp

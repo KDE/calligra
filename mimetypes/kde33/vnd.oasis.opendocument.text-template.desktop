@@ -4,7 +4,7 @@ Type=MimeType
 MimeType=application/vnd.oasis.opendocument.text-template
 Patterns=*.ott;*.OTT
 Icon=wordprocessing
-Comment=OASIS Open Office Text Template
+Comment=OASIS OpenDocument Text Template
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.ott

@@ -4,7 +4,7 @@ Type=MimeType
 MimeType=application/vnd.oasis.opendocument.chart
 Patterns=*.odc;*.ODC
 Icon=kchart_chrt
-Comment=OASIS Open Office Chart
+Comment=OASIS OpenDocument Chart
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.odc

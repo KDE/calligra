@@ -4,7 +4,7 @@ Type=MimeType
 MimeType=application/vnd.oasis.opendocument.image
 Patterns=*.odi;*.ODI
 Icon=krita_kra
-Comment=OASIS Open Office Image
+Comment=OASIS OpenDocument Image
 [Property::X-KDE-NativeExtension]
 Type=QString
 Value=.odi
