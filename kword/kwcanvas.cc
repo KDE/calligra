@@ -1807,16 +1807,19 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 {
                     QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
                     QPoint normalPoint = m_viewMode->viewToNormal( mousep );
-                    viewport()->setCursor( doc->getMouseCursor( normalPoint, true );
+                    viewport()->setCursor( doc->getMouseCursor( normalPoint, true ));
                 }
             } break;
             case QEvent::KeyRelease:
+            {
+                QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
                 if ( keyev->key() == Key_Control )
                 {
                     QPoint mousep = mapFromGlobal(QCursor::pos()) + QPoint( contentsX(), contentsY() );
                     QPoint normalPoint = m_viewMode->viewToNormal( mousep );
-                    viewport()->setCursor( doc->getMouseCursor( normalPoint, false );
+                    viewport()->setCursor( doc->getMouseCursor( normalPoint, false ));
                 }
+            }
             break;
             default:
                 break;
