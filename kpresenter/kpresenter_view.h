@@ -162,11 +162,12 @@ public:
     void updateRulerInProtectContentMode();
     QPtrList<KAction> listOfResultOfCheckWord( const QString &word );
 
+#ifdef HAVE_LIBKSPELL2
     /**
      * Returns the KPresenter global KSpell2 Broker object.
      */
     KSpell2::Broker *broker() const;
-
+#endif
 
 
 signals:

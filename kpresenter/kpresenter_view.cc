@@ -7072,10 +7072,11 @@ KCommand * KPresenterView::getPenCmd( const QString &name, QPen pen, LineEnd lb,
     return macro;
 }
 
+#ifdef HAVE_LIBKSPELL2
 Broker *KPresenterView::broker() const
 {
     return m_broker;
 }
-
+#endif
 
 #include "kpresenter_view.moc"
