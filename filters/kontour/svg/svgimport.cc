@@ -55,7 +55,7 @@ bool SVGImport::filterImport( const QString &file, KoDocument *doc,
                               const QString &from, const QString &to,
                               const QString & ) {
 
-    if( to != "application/x-killustrator" || from != "image/x-svg" )
+    if( to != "application/x-kontour" || from != "image/x-svg" )
         return false;
 
     pageLayout = NULL;

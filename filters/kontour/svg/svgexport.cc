@@ -41,7 +41,7 @@ SVGExport::~SVGExport( ) {
 
 bool SVGExport::filter( const QString &fileIn, const QString &fileOut,
                         const QString &from,   const QString &to, const QString & ) {
-    if( to != "image/x-svg" || from != "application/x-killustrator" )
+    if( to != "image/x-svg" || from != "application/x-kontour" )
     {
         kdWarning( 30514 ) << "Invalid mimetypes " << to << " " << from << endl;
         return false;
