@@ -31,7 +31,7 @@
 #include <kwdwriter.h>
 
 typedef KGenericFactory<HTMLImport, KoFilter> HTMLImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libhtmlimport, HTMLImportFactory( "kwordhtmlimportfilter" ) )
+K_EXPORT_COMPONENT_FACTORY( libhtmlimport, HTMLImportFactory( "kofficefilters" ) )
 
 
 HTMLImport::HTMLImport(KoFilter *, const char*, const QStringList &) :
