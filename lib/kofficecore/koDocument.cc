@@ -219,9 +219,9 @@ KAction *KoDocument::action( const QDomElement &element ) const
   return d->m_views.getFirst()->action( element );
 }
 
-QDomDocument KoDocument::document() const
+QDomDocument KoDocument::domDocument() const
 {
-  return d->m_views.getFirst()->document();
+  return d->m_views.getFirst()->domDocument();
 }
 
 void KoDocument::setManager( KParts::PartManager *manager )

@@ -110,7 +110,7 @@ public:
    * Returns the DOM document which describes the GUI of the
    * first view.
    */
-  virtual QDomDocument document() const;
+  virtual QDomDocument domDocument() const;
 
   virtual void setManager( KParts::PartManager *manager );
 
