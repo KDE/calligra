@@ -41,7 +41,7 @@ class ColorChangerTool : public KisTool
     QString toolName() { return QString("Colorchanger Tool"); }
     bool changeColors(int startx, int starty);
 
-    void setCursor();
+	virtual void setCursor();
     
   public slots:
 

@@ -54,7 +54,7 @@ class FillTool : public KisTool
     bool flood(int startX, int startY);
 
     // set custom cursor.
-    void setCursor();
+	virtual void setCursor();
     
   public slots:
     virtual void mousePress(QMouseEvent*); 

@@ -58,7 +58,7 @@ public:
   virtual void mouseMove( QMouseEvent *e );
   virtual void mouseRelease(QMouseEvent *e );
 
-  void setCursor();
+	virtual void setCursor();
 
 protected:
 

@@ -37,7 +37,7 @@ class ZoomTool : public KisTool
   virtual void mouseMove(QMouseEvent *e);
   virtual void mouseRelease(QMouseEvent *e);
 
-  void setCursor();
+	virtual void setCursor();
 };
 
 #endif //__zoomtool_h__
