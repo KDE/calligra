@@ -851,7 +851,15 @@ KSpreadPoint::KSpreadPoint( const QString & _str, KSpreadMap * _map,
         }
     }
     else
-        table = _table;
+    {
+        if ( _table != 0 )
+        {
+            table = _table;
+            tableName = _table->tableName();
+        }
+        else
+            table = 0;
+    }
 
     init( _str.mid( p ) );
 }
