@@ -181,56 +181,91 @@ if (mimeType != "application/x-kontour")
 }
 }
 
-void PptXml::gotSlide(
-    const Slide &slide)
+void PptXml::gotSlide(PptSlide &slide)
 {
-    static const unsigned pageHeight = 510;
-    QString xml_friendly;
-    unsigned i;
+	static const unsigned pageHeight = 510;
+ 	QString xml_friendly;
+ 	unsigned i;
+	bool 		bulletedList = false; 	//is this a bulleted list?
+	Q_UINT16 	type;				//type of text
+	QString 	align;				//align of text
+	QString 	height ;			//height of placeholder
+	
+    	m_pages += "  <PAGE/>\n";
+    	xml_friendly = *slide.GetTitleText();
 
-    m_pages += "  <PAGE/>\n";
-    xml_friendly = slide.title;
-    encode(xml_friendly);
-    m_titles += "  <Title title=\"" + xml_friendly + "\" />\n";
-    m_notes += "  <Note note=\"\" />\n";
-    m_text += "<OBJECT type=\"4\">\n"
-            " <ORIG x=\"30\" y=\"" +
-            QString::number(30 + m_y) +
-            "\"/>\n"
-            " <SIZE width=\"610\" height=\"43\"/>\n"
-            " <PEN width=\"1\" style=\"0\" color=\"#000000\"/>\n"
-            " <TEXTOBJ>\n"
-            "  <P align=\"4\">\n"
-            "   <TEXT family=\"utopia\" pointSize=\"36\" color=\"#000000\">";
-    m_text += xml_friendly;
-    m_text += "</TEXT>\n"
-            "  </P>\n"
-            " </TEXTOBJ>\n"
-            "</OBJECT>\n"
-            "<OBJECT type=\"4\">\n"
-            " <ORIG x=\"30\" y=\"" +
-            QString::number(130 + m_y) +
-            "\"/>\n"
-            " <SIZE width=\"610\" height=\"24\"/>\n"
-            " <PEN width=\"1\" style=\"0\" color=\"#000000\"/>\n"
-            " <TEXTOBJ>\n"
-            "  <P>\n"
-            "   <TEXT family=\"utopia\" pointSize=\"20\" color=\"#000000\">";
-    for (i = 0; i < slide.body.count(); i++)
-    {
-        xml_friendly = slide.body[i];
-        encode(xml_friendly);
-        m_text += xml_friendly;
-        if (i < slide.body.count() - 1)
-            m_text += "</TEXT>\n"
-                "  </P>\n"
-                "  <P>\n"
-                "   <TEXT family=\"utopia\" pointSize=\"20\" color=\"#000000\">";
-    }
-    m_text += "</TEXT>\n"
-            "  </P>\n"
-            " </TEXTOBJ>\n"
-            "</OBJECT>";
-    m_y += pageHeight;
+    	encode(xml_friendly);
+    	m_titles += "  <Title title=\"" + xml_friendly + "\" />\n";
+    	m_notes += "  <Note note=\"\" />\n";
+    	m_text += "<OBJECT type=\"4\">\n"
+ 		" <ORIG x=\"30\" y=\"" +
+            	QString::number(30 + m_y) +
+            	"\"/>\n"
+            	" <SIZE width=\"610\" height=\"43\"/>\n"
+            	" <PEN width=\"1\" style=\"0\" color=\"#000000\"/>\n"
+            	" <TEXTOBJ>\n"
+            	"  <P align=\"4\">\n"
+            	"   <TEXT family=\"utopia\" pointSize=\"36\" color=\"#000000\">";
+    	m_text += xml_friendly;
+    	m_text += "</TEXT>\n"
+            	"  </P>\n"
+            	" </TEXTOBJ>\n"
+            	"</OBJECT>\n";
+	type = slide.GetBodyType();
+	height = QString::number(24);		
+	align = QString::number(24);			
+	switch (type)
+	{
+	case TITLE_TEXT:
+	case CENTER_TITLE_TEXT:
+	case CENTER_BODY_TEXT:
+		height = QString::number(24);
+		align = QString::number(4);		//center
+		bulletedList = false;
+		break;
+	case NOTES_TEXT:
+		break;
+	case BODY_TEXT:
+	case OTHER_TEXT:
+	case HALF_BODY_TEXT:
+	case QUARTER_BODY_TEXT:
+		height = QString::number(268);
+		align = QString::number(1);		//left
+		bulletedList = true;
+		break;
+	}
+
+    	m_text += "<OBJECT type=\"4\">\n"
+            	" <ORIG x=\"30\" y=\"" +
+            	QString::number(130 + m_y) +
+            	"\"/>\n"
+            	" <SIZE width=\"610\" height=\""+ height +"\"/>\n"
+            	" <PEN width=\"1\" style=\"0\" color=\"#000000\"/>\n"
+            	" <TEXTOBJ>\n"
+            	"  <P align=\""+align+"\">\n";
+		if(bulletedList)
+            		m_text += "   <COUNTER numberingtype=\"0\" type=\"10\" depth=\"0\" />\n";
+           	m_text += "   <TEXT family=\"utopia\" pointSize=\"20\" color=\"#000000\">";
+
+    	for (i = 0; i < slide.GetBodyText().count(); i++)
+    	{
+        	xml_friendly = *slide.GetBodyText().at(i);
+        	encode(xml_friendly);
+        	m_text += xml_friendly;
+        	if (i < slide.GetBodyText().count() - 1)
+		{
+        		m_text += "</TEXT>\n"
+          			"  </P>\n"
+            			"  <P align=\"1\">\n";
+			if(bulletedList)
+            			m_text += "   <COUNTER numberingtype=\"0\" type=\"10\" depth=\"0\" />\n";
+           		m_text += "   <TEXT family=\"utopia\" pointSize=\"20\" color=\"#000000\">";
+		}
+ 	}		
+    	m_text += "</TEXT>\n"
+     		"  </P>\n"
+            	" </TEXTOBJ>\n"
+            	"</OBJECT>";
+    	m_y += pageHeight;
 }
 #include "pptxml.moc"

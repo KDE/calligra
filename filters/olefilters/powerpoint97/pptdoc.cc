@@ -38,11 +38,11 @@ PptDoc::PptDoc(
 PptDoc::~PptDoc()
 {
 }
-
+/*
 void PptDoc::gotSlide(
-    Powerpoint::Slide &slide)
+    PptSlide &slide)
 {
-    Slide ourSlide;
+ /*   Slide ourSlide;
     unsigned i;
 
     for (i = 0; i < slide.text.count(); i++)
@@ -55,25 +55,27 @@ void PptDoc::gotSlide(
         {
         case TITLE_TEXT:
         case CENTER_TITLE_TEXT:
-            ourSlide.title = data.join("\n");
-            break;
+        	ourSlide.title = data.join("\n");
+            	break;
         case NOTES_TEXT:
-            ourSlide.notes = data.join("\n");
-            break;
+            	ourSlide.notes = data.join("\n");
+            	break;
 	case BODY_TEXT:
 	case OTHER_TEXT:
 	case CENTER_BODY_TEXT:
 	case HALF_BODY_TEXT:
 	case QUARTER_BODY_TEXT:
-            for (j = 0; j < data.count(); j++)
-            {
-                ourSlide.body.append(data[j]);
-            }
-            break;
+		for (j = 0; j < data.count(); j++)
+		{
+			ourSlide.body.append(data[j]);
+            	}
+            	break;
         }
     }
-    gotSlide(ourSlide);
+
+    gotSlide(slide);
 }
+*/
 
 bool PptDoc::parse()
 {

@@ -27,12 +27,13 @@ DESCRIPTION
 Powerpoint::Powerpoint()
 {
 	mEditOffset = 0;
+	m_pptSlide = 0;
 }
 
 Powerpoint::~Powerpoint()
 {
     m_persistentReferences.clear();
-    m_slides.clear();
+    //m_slides.clear();
 }
 
 void Powerpoint::invokeHandler(
@@ -292,7 +293,7 @@ bool Powerpoint::parse(
     m_documentRef = 0;
     m_documentRefFound = false;
     m_persistentReferences.clear();
-    m_slides.clear();
+    m_slideList.clear();
     m_editDepth = 0;
 
     // Find the slide references.
@@ -312,14 +313,15 @@ bool Powerpoint::parse(
     else walkDocument();
     // We should have a complete list of slide persistent references.
     m_pass = PASS_GET_SLIDE_CONTENTS;
-    kdError(s_area) << "TOTAL SLIDES XXxx: " << m_slides.count() << endl;
+    kdError(s_area) << "TOTAL SLIDES XXxx: " << m_slideList.count() << endl;
 
-    for (i = 0; i < m_slides.count(); i++)
+     for (i = 0; i < m_slideList.count(); i++)
     {
-        m_slide = m_slides.at(i);
+        m_pptSlide = m_slideList.at(i);
         walkReference(i);
-        gotSlide(*m_slide);
+        gotSlide(*m_pptSlide);
     }
+
     return true;
 }
 
@@ -546,8 +548,8 @@ void Powerpoint::opMsod(
     case PASS_GET_SLIDE_CONTENTS:
         data = new char[bytes];
         operands.readRawBytes((char *)data, bytes);
-kdError() <<"       drgid: "<< m_slide->persistentReference << endl;
-        gotDrawing(m_slide->persistentReference, "msod", bytes, data);
+kdError() <<"       drgid: "<< m_pptSlide->GetPsrReference() << endl;
+        gotDrawing(m_pptSlide->GetPsrReference(), "msod", bytes, data);
         delete [] data;
         break;
     };
@@ -822,7 +824,7 @@ void Powerpoint::opSlidePersistAtom(
         data.slideId >> data.reserved;
 
      kdDebug(s_area) << "\nopSlidePersistAtom: " <<
-    		       "\n\tpsrReference: " << data.psrReference <<
+    	               "\n\tpsrReference: " << data.psrReference <<
 		       "\n\tflags: " << data.flags <<
 		       "\n\tnumberTexts: " << data.numberTexts <<
 		       "\n\tslideId: " << data.slideId <<
@@ -833,9 +835,10 @@ void Powerpoint::opSlidePersistAtom(
     case PASS_GET_SLIDE_REFERENCES:
     	if(data.slideId > 0)//if not master slide.. is there another way to tell???
 	{
-		m_slide = new Slide;
-		m_slide->persistentReference = data.psrReference;
-		m_slides.append(m_slide);
+		m_pptSlide = new PptSlide;
+		m_pptSlide->SetPsrReference(data.psrReference);
+		m_slideList.append(m_pptSlide);
+
 		kdDebug(s_area) << "slide: " << data.psrReference <<
 		" has texts: " << data.numberTexts << endl;
 	}
@@ -975,14 +978,22 @@ void Powerpoint::opTextBytesAtom(
      kdDebug(s_area) << "\nopTextBytesAtom: " <<
     		       "\n\tdata: " << data << endl;
 
-    SlideText *text;
+    //SlideText *text;
     switch (m_pass)
     {
     case PASS_GET_SLIDE_REFERENCES:
-        text = new SlideText;
-        text->type = m_textType;
-        text->data = data;
-        m_slide->text.append(text);
+        //text = new SlideText;
+        //text->type = m_textType;
+        //text->data = data;
+        //m_slide->text.append(text);
+	if(m_pptSlide)
+	{
+		m_pptSlide->AddText(data, m_textType);
+		kdDebug(s_area) << "Text Added: " << data << " type: " << m_textType << endl;
+	}
+	else
+	     	kdDebug(s_area) << "WEVE GOTS US AN ERROR!!!" << endl;
+
         break;
     case PASS_GET_SLIDE_CONTENTS:
         break;
@@ -1005,14 +1016,22 @@ void Powerpoint::opTextCharsAtom(
         data += tmp;
     }
 
-    SlideText *text;
+    //SlideText *text;
     switch (m_pass)
     {
     case PASS_GET_SLIDE_REFERENCES:
-        text = new SlideText;
-        text->type = m_textType;
-        text->data = data;
-        m_slide->text.append(text);
+        //text = new SlideText;
+        //text->type = m_textType;
+        //text->data = data;
+        //m_slide->text.append(text);
+	if(m_pptSlide)
+	{
+		m_pptSlide->AddText(data, m_textType);
+		kdDebug(s_area) << "Text Added: " << data << " type: " << m_textType << endl;
+	}
+	else
+	     	kdDebug(s_area) << "WEVE GOTS US AN ERROR!!!" << endl;
+
         break;
     case PASS_GET_SLIDE_CONTENTS:
         break;

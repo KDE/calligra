@@ -97,8 +97,7 @@ private:
         QString type,
         unsigned length,
         const char *data);
-    void gotSlide(
-        const Slide &slide);
+    void gotSlide(PptSlide &slide);
 };
 #endif
 

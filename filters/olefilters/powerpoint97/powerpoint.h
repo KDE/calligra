@@ -32,6 +32,7 @@ DESCRIPTION
 #include <qdatastream.h>
 #include <qptrlist.h>
 #include <qmap.h>
+#include <pptSlide.h>
 
 typedef Q_INT32 sint4; // signed 4-byte integral value
 typedef Q_INT16 sint2; // signed 4-byte integral value
@@ -45,6 +46,7 @@ typedef uint4 psrSize; // each record is preceeded by
 typedef uint2 psrInstance;
 typedef uint2 psrVersion;
 typedef uint4 psrReference; // Saved object reference
+//typedef QList<PptSlide> PptSlideList;
 
 class Powerpoint
 {
@@ -84,7 +86,7 @@ protected:
         unsigned length,
         const char *data) = 0;
     virtual void gotSlide(
-        Slide &slide) = 0;
+         PptSlide &slide) = 0;
 
 private:
     Powerpoint(const Powerpoint &);
@@ -97,19 +99,21 @@ public:
 
 private:
 
-    myFile m_mainStream;
-    unsigned m_documentRef;
-    bool m_documentRefFound;
+    myFile 		m_mainStream;
+    unsigned 	m_documentRef;
+    bool 		m_documentRefFound;
     QMap<unsigned, unsigned> m_persistentReferences;
-    unsigned m_editDepth;
+    unsigned 	m_editDepth;
     enum
     {
         PASS_GET_SLIDE_REFERENCES,
         PASS_GET_SLIDE_CONTENTS
     } m_pass;
     unsigned m_textType;
-    Slide *m_slide;
-    QPtrList<Slide> m_slides;
+    //Slide *m_slide;
+    //QPtrList<Slide> m_slides;
+    QPtrList<PptSlide>	m_slideList;
+    PptSlide*	m_pptSlide;
 
 struct PSR_CurrentUserAtom
 {
