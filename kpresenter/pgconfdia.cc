@@ -85,6 +85,9 @@ void PgConfDia::setupPageGeneral()
     penWidth->setSuffix( i18n(" pt") ); 
     penWidth->setRange( 1, 10, 1 );
     penWidth->setValue( m_doc->presPen().width() );
+    
+    QWidget* spacer = new QWidget( generalPage );
+    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );    
 }
 
 /*================================================================*/
@@ -116,6 +119,9 @@ void PgConfDia::setupPageSlides()
     
     QPushButton* deselectAllButton = new QPushButton( i18n( "Deselect All" ), buttonGroup );
     connect( deselectAllButton, SIGNAL( clicked() ), this, SLOT( deselectAllSlides() ) );    
+    
+    QWidget* spacer = new QWidget( buttonGroup );
+    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );    
 }
 
 /*================================================================*/
@@ -187,7 +193,5 @@ void PgConfDia::deselectAllSlides()
         item = item->nextSibling();
     }
 }
-
-
 
 #include <pgconfdia.moc>
