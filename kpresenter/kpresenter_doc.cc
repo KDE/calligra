@@ -916,13 +916,14 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
 
 bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
+
     //todo necessary for new format ?
     if ( saveOnlyPage == -1 ) {
         emit sigProgress( 0 );
     }
     if ( !store->open( "content.xml" ) )
         return false;
-
+    m_pictureCollection.assignUniqueIds();
     KoStoreDevice contentDev( store );
     KoXmlWriter contentWriter( &contentDev, "office:document-content" );
 

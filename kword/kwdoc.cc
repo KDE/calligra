@@ -2537,6 +2537,9 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
     if ( !store->open( "content.xml" ) )
         return false;
+
+    m_pictureCollection->assignUniqueIds();
+
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
     KoStoreDevice contentDev( store );
     KoXmlWriter contentWriter( &contentDev, "office:document-content" );
