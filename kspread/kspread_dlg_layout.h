@@ -235,6 +235,8 @@ public slots:
     void slotChangeWidthState();
     void slotChangeAngle(int);
     void slotStateChanged(int);
+    void slotChangeVerticalState();
+    void slotChangeMultiState();
 protected:
     QRadioButton *bottom;
     QRadioButton *top;
@@ -243,8 +245,8 @@ protected:
     QRadioButton *right;
     QRadioButton *center;
     QRadioButton *standard;
-    QRadioButton *multi;
-    QRadioButton *vertical;
+    QCheckBox *multi;
+    QCheckBox *vertical;
     KIntNumInput *width;
     KIntNumInput *height;
     CellLayoutDlg *dlg;

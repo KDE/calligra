@@ -2020,14 +2020,14 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
         bottom->setChecked(true);
 
     grp = new QButtonGroup( i18n("Text option"),this);
-    grp->setRadioButtonExclusive( TRUE );
+    //grp->setRadioButtonExclusive( false );
     grid2 = new QGridLayout(grp,2,1,15,7);
-    multi = new QRadioButton( i18n("Goto line automatically"), grp );
+    multi = new QCheckBox( i18n("Goto line automatically"),grp);
 
     grid2->addWidget(multi,0,0);
     multi->setChecked(dlg->bMultiRow);
 
-    vertical = new QRadioButton( i18n("Vertical text"), grp );
+    vertical = new QCheckBox( i18n("Vertical text"),grp);
     grid2->addWidget(vertical,1,0);
     vertical->setChecked(dlg->bVerticalText);
 
@@ -2090,11 +2090,30 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
 
     connect(defaultWidth , SIGNAL(clicked() ),this, SLOT(slotChangeWidthState()));
     connect(defaultHeight , SIGNAL(clicked() ),this, SLOT(slotChangeHeightState()));
+    connect(vertical , SIGNAL(clicked() ),this, SLOT(slotChangeVerticalState()));
+    connect(multi , SIGNAL(clicked() ),this, SLOT(slotChangeMultiState()));
     connect(angleRotation, SIGNAL(valueChanged(int)),this,SLOT(slotChangeAngle(int)));
     slotStateChanged(0);
     this->resize( 400, 400 );
+}
+
+void CellLayoutPagePosition::slotChangeMultiState()
+{
+if(vertical->isChecked())
+        {
+        vertical->setChecked(false);
+        }
+}
+
+void CellLayoutPagePosition::slotChangeVerticalState()
+{
+if(multi->isChecked())
+        {
+        multi->setChecked(false);
+        }
 
 }
+
 void CellLayoutPagePosition::slotStateChanged(int)
 {
 if(right->isChecked() || center->isChecked())
@@ -2414,11 +2433,11 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
 
     color = new KColorButton (tmpQGroupBox, "PushButton_1" );
-    grid2->addWidget(color,5,1);
+    grid2->addWidget(color,6,1);
 
     QLabel *tmpQLabel = new QLabel( tmpQGroupBox, "Label_6" );
     tmpQLabel->setText( i18n("Color") );
-    grid2->addWidget(tmpQLabel,5,0);
+    grid2->addWidget(tmpQLabel,6,0);
 
 
     QGridLayout *grid3 = new QGridLayout(tmpQGroupBox,2,2,0,7);
@@ -2447,7 +2466,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     style->insertItem(paintFormatPixmap(SolidLine),4);
     style->setBackgroundColor( colorGroup().background() );
 
-    grid2->addMultiCell(grid3,6,6,0,1);
+    grid2->addMultiCell(grid3,5,5,0,1);
     grid->addMultiCellWidget(tmpQGroupBox,0,3,1,1);
 
 
