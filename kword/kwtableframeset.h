@@ -86,6 +86,10 @@ public:
         void setRightBorder(KoBorder newBorder);
         void setTopBorder(KoBorder newBorder);
         void setBottomBorder(KoBorder newBorder);
+        /**
+         * set zorder for all frames in this cell
+         */
+        void setZOrder();
     private:
         KWTableFrameSet *m_table;
     };
@@ -321,6 +325,10 @@ public:
     KCommand *setProtectContent ( bool _protect );
 
     virtual KWTextFrameSet* nextTextObject( KWFrameSet * );
+    /**
+     * Sets zOrder for all cells in this table
+     */
+    void setZOrder();
 
 #ifndef NDEBUG
     virtual void printDebug( KWFrame * frame );

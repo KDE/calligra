@@ -2101,6 +2101,15 @@ KWTextFrameSet* KWTableFrameSet::nextTextObject( KWFrameSet *obj )
     return 0L;
 }
 
+void KWTableFrameSet::setZOrder()
+{
+    Cell *cell;
+    for( cell=m_cells.first();cell;cell=m_cells.next() ) {
+        cell->setZOrder();
+    }
+
+}
+
 #ifndef NDEBUG
 void KWTableFrameSet::printDebug( KWFrame * theFrame )
 {
@@ -2255,6 +2264,14 @@ void KWTableFrameSet::Cell::setBottomBorder(KoBorder newBorder) {
     f->setBottom(f->bottom() + diff);
 }
 
+void KWTableFrameSet::Cell::setZOrder()
+{
+    QPtrListIterator<KWFrame> frameIt = frameIterator();
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        (*frameIt)->setZOrder( kWordDocument()->maxZOrder( (*frameIt)->pageNum() ) + 1 );
+    }
+}
 
 KWTableFrameSetEdit::~KWTableFrameSetEdit()
 {

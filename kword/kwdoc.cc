@@ -1939,6 +1939,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
                 table->fromXML( elem, true, false /*don't apply names*/ );
                 table->moveBy( 20.0, 20.0 );
                 m_lstFrameSet.append( table );
+                table->setZOrder();
                 if ( macroCmd )
                     macroCmd->addCommand( new KWCreateTableCommand( QString::null, table ) );
                 fs = table;
