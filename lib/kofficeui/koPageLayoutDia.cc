@@ -253,19 +253,7 @@ KoHeadFoot KoPageLayoutDia::getHeadFoot()
 KoColumns KoPageLayoutDia::getColumns()
 {
     cl.columns = nColumns->value();
-
-    switch ( layout.unit ) {
-    case KoUnit::U_MM:
-        cl.ptColumnSpacing = MM_TO_POINT( nCSpacing->text().toDouble() );
-        break;
-    case KoUnit::U_PT:
-        cl.ptColumnSpacing = nCSpacing->text().toDouble();
-        break;
-    case KoUnit::U_INCH:
-        cl.ptColumnSpacing = INCH_TO_POINT( nCSpacing->text().toDouble() );
-        break;
-    }
-
+    cl.ptColumnSpacing=KoUnit::fromUserValue( nCSpacing->text().toDouble(),layout.unit  );
     return cl;
 }
 
@@ -702,17 +690,8 @@ void KoPageLayoutDia::setupTab3()
     grid3->addWidget( nCSpacing, 3, 0 );
 
     double columnSpacing = 0;
-    switch ( layout.unit ) {
-    case KoUnit::U_MM:
-        columnSpacing = POINT_TO_MM( cl.ptColumnSpacing ); // TODO rounding
-        break;
-    case KoUnit::U_PT:
-        columnSpacing = cl.ptColumnSpacing;
-        break;
-    case KoUnit::U_INCH:
-        columnSpacing = POINT_TO_INCH( cl.ptColumnSpacing );
-        break;
-    }
+    columnSpacing= KoUnit::userValue(cl.ptColumnSpacing , layout.unit );
+
     nCSpacing->setText( QString::number( columnSpacing ) );
     connect( nCSpacing, SIGNAL( textChanged( const QString & ) ),
              this, SLOT( nSpaceChanged( const QString & ) ) );
@@ -1145,18 +1124,7 @@ void KoPageLayoutDia::nColChanged( int _val )
 /*==================================================================*/
 void KoPageLayoutDia::nSpaceChanged( const QString &_val )
 {
-    switch ( layout.unit ) {
-    case KoUnit::U_MM:
-        cl.ptColumnSpacing = MM_TO_POINT( _val.toDouble() );
-        break;
-    case KoUnit::U_PT:
-        cl.ptColumnSpacing = _val.toDouble();
-        break;
-    case KoUnit::U_INCH:
-        cl.ptColumnSpacing = INCH_TO_POINT( _val.toDouble() );
-        break;
-    }
-
+    cl.ptColumnSpacing=KoUnit::fromUserValue( _val.toDouble(),layout.unit );
     updatePreview( layout );
 }
 
