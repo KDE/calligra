@@ -7210,8 +7210,8 @@ void KWView::deleteFrameSet( KWFrameSet * frameset)
 QPtrList<KAction> KWView::listOfResultOfCheckWord( const QString &word )
 {
     QPtrList<KAction> listAction;
-#if 0 //FIXME !!!!!!!
-    KOSpell *tmpSpell = new KOSpell( m_doc->getKOSpellConfig() );
+//not perfect, improve API!!!!
+    KOSpell *tmpSpell = KOSpell::createKoSpell( this, i18n( "Spell Checking" ), this,SLOT( spellCheckerReady() ) ,m_doc->getKOSpellConfig(), true,true /*FIXME !!!!!!!!!*/ );
     QStringList lst = tmpSpell->resultCheckWord(word );
     delete tmpSpell;
     if ( !lst.contains( word ) )
@@ -7227,9 +7227,6 @@ QPtrList<KAction> KWView::listOfResultOfCheckWord( const QString &word )
             }
         }
     }
-#else
-    Q_UNUSED( word );
-#endif
     return listAction;
 }
 
