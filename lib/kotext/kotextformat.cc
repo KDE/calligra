@@ -99,6 +99,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_lan
     d->m_relativeTextSize= 0.66;
     d->m_offsetFromBaseLine = 0;
     d->m_bWordByWord = false;
+    d->m_charStyle = 0L;
     m_attributeFont = ATT_NONE;
     ////
     generateKey();
@@ -161,6 +162,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     d->m_offsetFromBaseLine = f.d->m_offsetFromBaseLine;
     d->m_bWordByWord = f.d->m_bWordByWord;
     m_attributeFont = f.m_attributeFont;
+    d->m_charStyle = 0L;
     ////
     addRef();
     return *this;
@@ -822,6 +824,11 @@ int KoTextFormat::width( const QChar& ch ) const
 void KoTextFormat::applyCharStyle( KoCharStyle *_style )
 {
     d->m_charStyle = _style;
+}
+
+KoCharStyle *KoTextFormat::style() const
+{
+    return d->m_charStyle;
 }
 
 //static

@@ -270,6 +270,7 @@ public:
                      const KoTextParag* parag, int i ) const;
 
     void applyCharStyle( KoCharStyle *_style );
+    KoCharStyle *style() const;
     static QString underlineStyleToString( UnderlineLineStyle _lineType );
     static QString strikeOutStyleToString( StrikeOutLineStyle _lineType );
     static UnderlineLineStyle stringToUnderlineStyle( const QString & _str );
