@@ -592,12 +592,12 @@ void KisDoc::loadToolSettings(QDomElement& elem)
 	KisTool *p;
 
 	kdDebug() << "KisDoc::loadToolSettings\n";
-	assert(m_tools.size());
+	Q_ASSERT(m_tools.size());
 
 	while (!tool.isNull()) {
 		for (ktvector_size_type i = 0; i < m_tools.size(); i++) {
 			p = m_tools[i];
-			assert(p);
+			Q_ASSERT(p);
 
 			kdDebug() << "TAGNAME = " << tool.tagName() << endl;
 
@@ -945,7 +945,7 @@ bool KisDoc::isEmpty() const
 KisView *KisDoc::currentView()
 {
 	kdDebug() << "KisDoc::currentView m_current_view = " << m_current_view << endl;
-	return m_current_view; // ? m_current_view : dynamic_cast<KisView *>(views().getLast());
+	return m_current_view ? m_current_view : dynamic_cast<KisView *>(views().getLast());
 }
 
 
@@ -1334,7 +1334,7 @@ bool KisDoc::LayerToQtImage(QImage *qimg, KisView * /*pView*/, QRect & clipRect)
 */
 void KisDoc::setSelection(const QRect& r)
 {
-	assert(m_pSelection);
+	Q_ASSERT(m_pSelection);
 	m_pSelection -> setBounds(r);
 }
 
@@ -1546,26 +1546,14 @@ KoView* KisDoc::createViewInstance(QWidget* parent, const char *name)
 {
 	KisView *view;
 
-	kdDebug() << "createViewInstance\n";
-
-//	if (!m_current_view) {
-		kdDebug() << "Creating new view\n";
+	if ((view = currentView())) {
+		view -> reparent(parent, QPoint(0, 0));
+		view -> setName(name);
+	}
+	else {
 		view = m_current_view = new KisView(this, parent, name);
 		view -> setupTools();
-#if 0
 	}
-	else
-		kdDebug() << "NOT Creating new view\n";
-#endif
-
-
-	view -> updateReadWrite(false);
-
-	// undo-redo
-	QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
-			view, SLOT( slotUndoRedoChanged( QString, QString ) ) );
-	QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QStringList, QStringList ) ),
-			view, SLOT( slotUndoRedoChanged( QStringList, QStringList ) ) );
 
 	return view;
 }
@@ -1669,8 +1657,7 @@ ktvector KisDoc::getTools() const
 
 void KisDoc::setTools(const ktvector& tools)
 {
-	assert(tools.size());
-//	m_tools = tools;
+	Q_ASSERT(tools.size());
 
 	for (ktvector_size_type i = 0; i < m_tools.size(); i++) {
 		QObject::disconnect(m_tools[i]);
