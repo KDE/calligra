@@ -24,7 +24,12 @@ Kivio 1.3beta1 -> 1.3beta2
 - Improved diastencil support.
 - Added template support.
 
-Kivio 1.3beta2 -> 1.3rc1
--------------------------
+Kivio 1.3beta2 -> 1.3beta3
+---------------------------
 - Added more arrowheads
 - Added Kristof Borrey's Klipart Stencils
+
+Kivio 1.3beta3 -> 1.3rc1
+-------------------------
+- Fixed layout problem at start up when using a template
+- Fixed deletion of connected connectors
