@@ -340,13 +340,9 @@ public:
 		const KoPoint& b1 );
 
 	/**
-	 * Returns true if this segment intersects the line A0A1.
-	 */
-	bool intersects( const KoPoint& a0, const KoPoint& a1 ) const;
-
-	/**
 	 * Returns true, if this segment intersects the other segment.
 	 */
+	// TODO: Treats beziers as lines currently.
 	bool intersects( const VSegment& segment ) const;
 
 
@@ -355,7 +351,7 @@ public:
 	 * a number < 0 if it's right of the infinite line through the
 	 * previous segment's knot and the current knot.
 	 */
-	double isLeftOnOrRight( const KoPoint& p ) const
+	double pointIsLeft( const KoPoint& p ) const
 	{
 		return
 			( knot().x() - prev()->knot().x() ) *

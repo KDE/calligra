@@ -824,17 +824,6 @@ VSegment::linesIntersect(
 }
 
 bool
-VSegment::intersects( const KoPoint& a0, const KoPoint& a1 ) const
-{
-	if( !prev() )
-	{
-		return false;
-	}
-
-	return linesIntersect( a0, a1, prev()->knot(), knot() );
-}
-
-bool
 VSegment::intersects( const VSegment& segment ) const
 {
 	if(
@@ -846,7 +835,7 @@ VSegment::intersects( const VSegment& segment ) const
 
 
 	// FIXME: this just dumbs down beziers to lines!
-	return intersects( segment.prev()->knot(), segment.knot() );
+	return linesIntersect( segment.prev()->knot(), segment.knot(), prev()->knot(), knot() );
 }
 
 // TODO: Move this function into "userland"

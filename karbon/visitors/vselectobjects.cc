@@ -27,57 +27,83 @@
 void
 VSelectObjects::visitVComposite( VComposite& composite )
 {
-	// Never select a deleted object
+	// Never select a deleted object.
 	if( composite.state() == VObject::deleted )
 		return;
 
-	if( !m_rect.isEmpty() )
+
+	bool selected = false;
+
+
+	// Check if any of the rectangle corners is inside the composite.
+	// This should be the first test since it covers most intersection cases.
+	if(
+		composite.pointIsInside( m_rect.topLeft() ) ||
+		composite.pointIsInside( m_rect.topRight() ) ||
+		composite.pointIsInside( m_rect.bottomRight() ) ||
+		composite.pointIsInside( m_rect.bottomLeft() ) )
 	{
-		if( m_select )
+		selected = true;
+	}
+
+	// Check if selection rectangle intersects the composite.
+	if( !selected )
+	{
+		// Path for holding a helper segment.
+		VPath path( 0L );
+
+		path.moveTo( m_rect.topLeft() );
+		path.lineTo( m_rect.topRight() );
+
+		if( composite.intersects( *path.getLast() ) )
 		{
-			if( m_rect.intersects( composite.boundingBox() ) )
+			selected = true;
+		}
+		else
+		{
+			path.getFirst()->setKnot( m_rect.bottomRight() );
+
+			if( composite.intersects( *path.getLast() ) )
 			{
-				// extra intersection checks
-				VPathListIterator itr( composite.paths() );
+				selected = true;
+			}
+			else
+			{
+				path.getLast()->setKnot( m_rect.bottomLeft() );
 
-				for( itr.toFirst(); itr.current(); ++itr )
+				if( composite.intersects( *path.getLast() ) )
 				{
-					VPathIterator jtr( *( itr.current() ) );
-					bool found = false;
-					KoPoint r1 = m_rect.topLeft(), r2 = m_rect.topRight(), r3 = m_rect.bottomRight(), r4 = m_rect.bottomLeft();
-					while( jtr.current() && !found )
-					{
-						found |= jtr.current()->intersects( r1, r2 );
-						found |= jtr.current()->intersects( r2, r3 );
-						found |= jtr.current()->intersects( r3, r4 );
-						found |= jtr.current()->intersects( r4, r1 );
-						++jtr;
-					}
-					// One more chance, if bbox totally contained in selection
-					if( !found )
-						found = m_rect.contains( composite.boundingBox(), true );
+					selected = true;
+				}
+				else
+				{
+					path.getFirst()->setKnot( m_rect.topLeft() );
 
-					if( found )
+					if( composite.intersects( *path.getLast() ) )
 					{
-						m_selection.append( &composite );
-						setSuccess();
-						return;
+						selected = true;
 					}
 				}
 			}
 		}
-		else
+	}
+
+	// Check if composite is completely inside the selection rectangle.
+	if( !selected )
+	{
+		if( m_rect.contains( composite.boundingBox() ) )
 		{
-			if( m_rect.intersects( composite.boundingBox() ) )
-			{
-				composite.setState( VObject::normal );
-				m_selection.clear();
-				setSuccess();
-			}
+			selected = true;
 		}
 	}
-	else
-		visitVObject( composite );
+
+
+	if( selected )
+	{
+		m_selection.append( &composite );
+
+		setSuccess();
+	}
 }
 
 void

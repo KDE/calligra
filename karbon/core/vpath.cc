@@ -402,8 +402,85 @@ VPath::close()
 }
 
 bool
-VPath::isInside( const KoPoint& /*p*/ ) const
+VPath::pointIsInside( const KoPoint& p ) const
 {
+	// If the path is not closed, a point cannot be inside. If the point is
+	// not inside the boundingbox, it cannot be inside the path either.
+	if(
+		!isClosed() ||
+		!boundingBox().contains( p ) )
+	{
+		return false;
+	}
+
+
+	int windingNumber = 0;
+
+
+	// Ommit first segment.
+	VSegment* segment = getFirst()->next();
+
+	while( segment )
+	{
+		if( segment->prev()->knot().y() <= p.y() )
+		{
+			// Upward crossing.
+			if( segment->knot().y() > p.y() )
+			{
+				// Point is left.
+				if( segment->pointIsLeft( p ) > 0 )
+				{
+					// Valid up intersection.
+					++windingNumber;
+				}
+			}
+		}
+		else
+		{
+			// Downward crossing.
+			if( segment->knot().y() <= p.y() )
+			{
+				// Point is right.
+				if( segment->pointIsLeft( p ) < 0 )
+				{
+					// Valid down intersection.
+					--windingNumber;
+				}
+			}
+		}
+
+		segment = segment->next();
+	}
+
+
+	return static_cast<bool>( windingNumber );
+}
+
+bool
+VPath::intersects( const VSegment& s ) const
+{
+	// Check if path is empty and if boundingboxes intersect.
+	if(
+		isEmpty() ||
+		!boundingBox().intersects( s.boundingBox() ) )
+	{
+		return false;
+	}
+
+
+	// Ommit first segment.
+	VSegment* segment = getFirst()->next();
+
+	while( segment )
+	{
+		if( segment->intersects( s ) )
+		{
+			return true;
+		}
+
+		segment = segment->next();
+	}
+
 	return false;
 }
 
@@ -423,11 +500,11 @@ VPath::counterClockwise() const
 	}
 
 
-	VSegment* segment = m_first;
+	VSegment* segment = getFirst();
 
 	// We save the segment not the knot itself. Initialize it with the
 	// first segment:
-	const VSegment* bottomRight = m_first;
+	const VSegment* bottomRight = getFirst();
 
 	while( segment )
 	{
@@ -440,7 +517,7 @@ VPath::counterClockwise() const
 				bottomRight = segment;
 		}
 
-		segment = segment->m_next;
+		segment = segment->next();
 	}
 
 
@@ -448,13 +525,13 @@ VPath::counterClockwise() const
 	const VSegment* current;
 	const VSegment* next;
 
-	if( bottomRight == m_first )
-		current = m_last;
+	if( bottomRight == getFirst() )
+		current = getLast();
 	else
 		current = bottomRight;
 
-	if( bottomRight == m_last )
-		next = m_first->next();
+	if( bottomRight == getLast() )
+		next = getFirst()->next();
 	else
 		next = bottomRight->next();
 
@@ -475,14 +552,14 @@ VPath::revert()
 		return;
 
 	VPath list( parent() );
-	list.moveTo( m_last->knot() );
+	list.moveTo( getLast()->knot() );
 
-	VSegment* segment = m_last;
+	VSegment* segment = getLast();
 
-	while( segment->m_prev )
+	while( segment->prev() )
 	{
 		list.append( segment->revert() );
-		segment = segment->m_prev;
+		segment = segment->prev();
 	}
 
 	list.m_isClosed = isClosed();

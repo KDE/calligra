@@ -71,8 +71,15 @@ public:
 
 	/**
 	 * Returns true if point p is located inside this path.
+	 * The winding number test is used.
 	 */
-	bool isInside( const KoPoint& p ) const;
+	// TODO: currently treats beziers as lines.
+	bool pointIsInside( const KoPoint& p ) const;
+
+	/**
+	 * Returns true if the segment intersects this path.
+	 */
+	bool intersects( const VSegment& segment ) const;
 
 
 	/**

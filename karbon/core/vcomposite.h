@@ -141,7 +141,12 @@ public:
 	/**
 	 * Returns true if point p is located inside this composite.
 	 */
-	bool isInside( const KoPoint& p ) const;
+	bool pointIsInside( const KoPoint& p ) const;
+
+	/**
+	 * Returns true if the segment intersects this composite.
+	 */
+	bool intersects( const VSegment& segment ) const;
 
 
 	const VPathList& paths() const

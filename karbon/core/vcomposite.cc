@@ -233,7 +233,7 @@ VComposite::combinePath( const VPath& path )
 }
 
 bool
-VComposite::isInside( const KoPoint& p ) const
+VComposite::pointIsInside( const KoPoint& p ) const
 {
 	// Check if point is inside boundingbox.
 	if( !boundingBox().contains( p, true ) )
@@ -244,12 +244,32 @@ VComposite::isInside( const KoPoint& p ) const
 
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
-		if( itr.current()->isInside( p ) )
+		if( itr.current()->pointIsInside( p ) )
 			return true;
 	}
 
 	return false;
 }
+
+bool
+VComposite::intersects( const VSegment& segment ) const
+{
+	// Check if boundingboxes intersect.
+	if( !boundingBox().intersects( segment.boundingBox() ) )
+		return false;
+
+
+	VPathListIterator itr( m_paths );
+
+	for( itr.toFirst(); itr.current(); ++itr )
+	{
+		if( itr.current()->intersects( segment ) )
+			return true;
+	}
+
+	return false;
+}
+
 
 VFillRule
 VComposite::fillMode() const
