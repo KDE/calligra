@@ -116,6 +116,7 @@ class KPresenterDoc : public KoDocument
     Q_PROPERTY( QString picturePath READ picturePath WRITE setPicturePath )
     Q_PROPERTY( QString globalLanguage READ globalLanguage WRITE setGlobalLanguage )
     Q_PROPERTY( bool refreshSideBar READ refreshSideBar WRITE setRefreshSideBar )
+    Q_PROPERTY( QString globalHyphen READ globalHyphen WRITE setGlobalHyphen )
     Q_PROPERTY( double tabStopValue READ tabStopValue WRITE setTabStopValue )
     Q_PROPERTY( bool snapToGrid READ snapToGrid WRITE setSnapToGrid )
     Q_PROPERTY( bool backgroundSpellCheckEnabled READ backgroundSpellCheckEnabled WRITE enableBackgroundSpellCheck )
