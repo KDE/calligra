@@ -9,6 +9,7 @@
   <item find="1/4" replace="¼" />
   <item find="3/4" replace="¾" />
   <item find="A moins" replace="À moins" />
+  <item find="A propos" replace="À propos" />
   <item find="A t'on" replace="A-t-on" />
   <item find="A-t'il" replace="A-t-il" />
   <item find="Allemange" replace="Allemagne" />
@@ -64,6 +65,7 @@
   <item find="a conclut" replace="a conclu" />
   <item find="a conçut" replace="a conçu" />
   <item find="a investit" replace="a investi" />
+  <item find="a propos" replace="à propos" />
   <item find="a reçut" replace="a reçu" />
   <item find="a subit" replace="a subi" />
   <item find="a t'on" replace="a-t-on" />
@@ -225,6 +227,7 @@
   <item find="boitiers" replace="boîtiers" />
   <item find="bolc" replace="bloc" />
   <item find="bolcs" replace="blocs" />
+  <item find="bon grès mal grès" replace="bon gré mal gré" />
   <item find="bonour" replace="bonjour" />
   <item find="bosi" replace="bois" />
   <item find="boute en train" replace="boute-en-train" />
@@ -352,6 +355,10 @@
   <item find="côte d'ivoire" replace="Côte d'Ivoire" />
   <item find="danemark" replace="Danemark" />
   <item find="dannemark" replace="Danemark" />
+  <item find="de bon grès" replace="de bon gré" />
+  <item find="de mon plein grès" replace="de mon plein gré" />
+  <item find="de plein grès" replace="de plein gré" />
+  <item find="de son plein grès" replace="de son plein gré" />
   <item find="demandes-lui" replace="demande-lui" />
   <item find="demi heure" replace="demi-heure" />
   <item find="demie heure" replace="demi-heure" />
@@ -393,6 +400,7 @@
   <item find="elle conseil" replace="elle conseille" />
   <item find="elle même" replace="elle-même" />
   <item find="elle survie" replace="elle survit" />
+  <item find="elle transfert" replace="elle transfère" />
   <item find="elles mêmes" replace="elles-mêmes" />
   <item find="empiètement" replace="empiétement" />
   <item find="en fabricant" replace="en fabriquant" />
@@ -541,6 +549,7 @@
   <item find="il conseil" replace="il conseille" />
   <item find="il sans va" replace="il s'en va" />
   <item find="il survie" replace="il survit" />
+  <item find="il transfert" replace="il transfère" />
   <item find="imge" replace="image" />
   <item find="imobile" replace="immobile" />
   <item find="imobiles" replace="immobiles" />
@@ -582,6 +591,7 @@
   <item find="joaliers" replace="joailliers" />
   <item find="juillet" replace="Juillet" />
   <item find="jupiter" replace="Jupiter" />
+  <item find="jusqu'a" replace="jusqu'à" />
   <item find="jutse" replace="juste" />
   <item find="kioske" replace="kiosque" />
   <item find="l'adhérant" replace="l'adhérent" />
@@ -596,6 +606,7 @@
   <item find="language" replace="langage" />
   <item find="languages" replace="langages" />
   <item find="laors" replace="alors" />
+  <item find="le champs" replace="le champ" />
   <item find="le notre" replace="le nôtre" />
   <item find="le résidant" replace="le résident" />
   <item find="le souffre" replace="le soufre" />
@@ -980,8 +991,10 @@
   <item find="un adhérant" replace="un adhérent" />
   <item find="un anagramme" replace="une anagramme" />
   <item find="un apostrophe" replace="une apostrophe" />
+  <item find="un champs" replace="un champ" />
   <item find="un conseille" replace="un conseil" />
   <item find="un diagnostique" replace="un diagnostic" />
+  <item find="un ecchymose" replace="une ecchymose" />
   <item find="un emise" replace="une mise" />
   <item find="un escarre" replace="une escarre" />
   <item find="un espèce" replace="une espèce" />
@@ -992,6 +1005,7 @@
   <item find="un pronostique" replace="un pronostic" />
   <item find="un précédant" replace="un précédent" />
   <item find="un résidant" replace="un résident" />
+  <item find="un transfère" replace="un transfert" />
   <item find="un épistaxis" replace="une épistaxis" />
   <item find="un équivalant" replace="un équivalent" />
   <item find="un équivoque" replace="une équivoque" />
