@@ -1,16 +1,9 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
-kchart_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kchart_LDADD = libkchart.la
-
-libkchart_la_LDFLAGS = -avoid-version -module -no-undefined
-
-libkchart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
-
 ####### Files
 
 bin_PROGRAMS = kchart
-lib_LTLIBRARIES = libkchart.la
+lib_LTLIBRARIES = kchart.la libkchart.la
 
 libkchart_la_SOURCES = kchart_shell.cc kchart_part.cc \
 	kchart_view.cc kchart_factory.cc \
@@ -49,10 +42,19 @@ libkchart_la_SOURCES = kchart_shell.cc kchart_part.cc \
 	sheet.cc \
 	sheetdlg.cc \
 	table.cc
+libkchart_la_LDFLAGS = -avoid-version -module -no-undefined
+libkchart_la_LIBADD = ../lib/kofficeui/libkofficeui.la
 
+kchart_la_SOURCES = main.cc
+kchart_la_LDFLAGS = $(all_libraries) -avoid-version -module
+kchart_la_LIBADD = libkchart.la
 
+kchart_SOURCES = dummy.cc
+kchart_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kchart_LDADD = kchart.la
 
-kchart_SOURCES = main.cc
+dummy.cc:
+	echo > dummy.cc
 
 noinst_HEADERS =  kchart_shell.h kchart_part.h \
 		  kchart_view.h kchart_factory.h	\
@@ -89,8 +91,6 @@ METASOURCES = AUTO
 rcdir = $(kde_datadir)/kchart
 rc_DATA = kchart.rc
 
-
-
 kdelnk_DATA = kchart.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
@@ -109,5 +109,3 @@ SUBDIRS =  . toolbar pics
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc -o $(podir)/kchart.pot
-
-

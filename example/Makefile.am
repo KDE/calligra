@@ -1,28 +1,30 @@
 
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
-example_LDFLAGS = $(KDE_RPATH)
-example_LDADD = ../lib/kofficeui/libkofficeui.la ./libexample.la
-
-libexample_la_LDFLAGS = -module -avoid-version
-
-libexample_la_LIBADD = ../lib/kofficeui/libkofficeui.la
-
 ####### Files
 
 bin_PROGRAMS = example
-lib_LTLIBRARIES = libexample.la
+lib_LTLIBRARIES = example.la libexample.la
 
 libexample_la_SOURCES = example_shell.cc example_part.cc \
-	example_view.cc example_factory.cc
+                        example_view.cc example_factory.cc
+libexample_la_LDFLAGS = -module -avoid-version
+libexample_la_LIBADD = ../lib/kofficeui/libkofficeui.la
+libexample_la_METASOURCES = AUTO
 
-example_SOURCES = main.cc
+example_la_SOURCES = main.cc
+example_la_LDFLAGS = $(all_libraries) -module -avoid-version
+example_la_LIBADD = libexample.la
+
+example_SOURCES = dummy.cc
+example_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+example_LDADD = example.la
+
+dummy.cc:
+	echo > dummy.cc
 
 noinst_HEADERS =  example_shell.h example_part.h \
 		  example_view.h example_factory.h
-
-libexample_la_METASOURCES = example_shell.moc example_part.moc \
-			       example_view.moc example_factory.moc
 
 kdelnk_DATA = example.desktop
 kdelnkdir = $(kde_appsdir)/Office

@@ -5,13 +5,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 ####### Files
 
 bin_PROGRAMS = kword
-lib_LTLIBRARIES = libkword.la
-
-kword_LDFLAGS = $(KDE_RPATH)
-kword_LDADD = libkword.la
-
-libkword_la_LDFLAGS = $(KDE_LDFLAGS) -avoid-version -module -no-undefined
-libkword_la_LIBADD = ../lib/kofficeui/libkofficeui.la -lkspell -lkformula
+lib_LTLIBRARIES = kword.la libkword.la
 
 libkword_la_SOURCES = kword_doc.cc searchdia.cc char.cc kword_view.cc \
                 kword_shell.cc fc.cc font.cc format.cc kword_page.cc parag.cc \
@@ -22,8 +16,20 @@ libkword_la_SOURCES = kword_doc.cc searchdia.cc char.cc kword_view.cc \
                 kword_undo.cc clipbrd_dnd.cc footnote.cc footnotedia.cc \
 		autoformat.cc autoformatdia.cc variabledlgs.cc \
                 serialletter.cc contents.cc kword_factory.cc
+libkword_la_LDFLAGS = $(KDE_LDFLAGS) -avoid-version -module -no-undefined
+libkword_la_LIBADD = ../lib/kofficeui/libkofficeui.la -lkspell -lkformula
+libkword_la_METASOURCES = AUTO
 
-kword_SOURCES = main.cc
+kword_la_SOURCES = main.cc
+kword_la_LDFLAGS = $(all_libraries) -avoid-version -module
+kword_la_LIBADD = libkword.la
+
+kword_SOURCES = dummy.cc
+kword_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kword_LDADD = kword.la
+
+dummy.cc:
+	echo > dummy.cc
 
 noinst_HEADERS = char.h kword_doc.h kword_view.h kword_shell.h \
 		fc.h font.h format.h kword_page.h parag.h paraglayout.h \
@@ -33,8 +39,6 @@ noinst_HEADERS = char.h kword_doc.h kword_view.h kword_shell.h \
                 deldia.h variable.h docstruct.h kword_undo.h clipbrd_dnd.h \
                 footnote.h footnotedia.h autoformat.h autoformatdia.h \
                 variabledlgs.h serialletter.h contents.h kword_factory.h
-
-METASOURCES = AUTO
 
 kdelnk_DATA = kword.desktop
 kdelnkdir = $(kde_appsdir)/Office
