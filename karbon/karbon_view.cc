@@ -107,7 +107,7 @@
 
 #include <kdebug.h>
 
-#include "vunitspinbox.h"
+#include "koUnitWidgets.h"
 
 // TODO: only for testing
 #include "vsegment.h"
