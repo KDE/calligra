@@ -4402,17 +4402,20 @@ void KPrCanvas::exitEditMode()
 /*================================================================*/
 bool KPrCanvas::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, QSize *origSize, QSize *currentSize )
 {
+#if 0
     *origSize = obj->originalSize();
     *currentSize = m_view->zoomHandler()->zoomSize( obj->getSize() );
     return true;
     // Why was the old code so complex ? ;)
-#if 0
+    // Because obj is null. ;) (Toshitaka)
+#endif
+
     obj = 0;
     KPObject *kpobject = 0;
     for ( int i = 0; i < static_cast<int>( objectList().count() ); i++ ) {
         kpobject = objectList().at( i );
         if ( kpobject->isSelected() && kpobject->getType() == OT_PICTURE ) {
-            *currentSize = kpobject->getSize();
+            *currentSize = m_view->zoomHandler()->zoomSize( kpobject->getSize() );
 
             KPPixmapObject *o = (KPPixmapObject*)kpobject;
             /*
@@ -4425,8 +4428,7 @@ bool KPrCanvas::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, QSize *origSi
             */
             KPImage img = m_view->kPresenterDoc()->getImageCollection()->
                           findImage( o->getKey() );
-            if ( !img.isNull() )
-            {
+            if ( !img.isNull() ) {
                 obj = o;
                 *origSize = img.size();
                 return true;
@@ -4436,7 +4438,6 @@ bool KPrCanvas::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, QSize *origSi
     *origSize = QSize( -1, -1 );
     *currentSize = QSize( -1, -1 );
     return false;
-#endif
 }
 
 /*================================================================*/
