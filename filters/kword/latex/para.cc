@@ -125,7 +125,7 @@ void Para::analyse(const QDomNode balise)
 
 	/* Analyse of the parameters */
 	kdDebug() << "ANALYSE A PARAGRAPH" << endl;
-	
+
 	/* Analyse of the children markups */
 	for(int index= 0; index < getNbChild(balise); index++)
 	{
@@ -133,7 +133,7 @@ void Para::analyse(const QDomNode balise)
 		{
 			_texte =  getChild(getChild(getChild(balise, index), "#text"), 0).nodeValue();
 			kdDebug() << "TEXT : " << _texte << endl;
-			
+
 		}
 		else if(getChildName(balise, index).compare("NAME")== 0)
 		{
@@ -153,7 +153,7 @@ void Para::analyse(const QDomNode balise)
 			// IMPORTANT ==> police + style
 			kdDebug() << "FORMATS" << endl;
 			analyseFormats(getChild(balise, index));
-			
+
 		}
 		else if(getChildName(balise, index).compare("LAYOUT")== 0)
 		{
@@ -173,7 +173,7 @@ void Para::analyse(const QDomNode balise)
 void Para::analyseName(const QDomNode balise)
 {
 	//<NAME name="Footnote/Endnote_1">
-	
+
 	_name = new QString(getAttr(balise, "NAME"));
 }
 
@@ -186,7 +186,7 @@ void Para::analyseName(const QDomNode balise)
 void Para::analyseInfo(const QDomNode balise)
 {
 	//<INFO info="1">
-	
+
 	_info = (EP_INFO) getAttr(balise, "INFO").toInt();
 }
 
@@ -199,7 +199,7 @@ void Para::analyseInfo(const QDomNode balise)
 /*void Para::analyseBrk(const QDomNode balise)
 {
 	//<NAME name="Footnote/Endnote_1">
-	
+
 	_hardbrk = (EP_HARDBRK) getAttr(balise, "FRAME").toInt();
 }*/
 
@@ -229,11 +229,11 @@ void Para::analyseLayoutPara(const QDomNode balise)
 				((TextZone*) zone)->setLength(_currentPos - _texte.length());
 				((TextZone*) zone)->analyse();
 				if(_lines == 0)
-					_lines = new QList<Format>;
+					_lines = new QPtrList<Format>;
 				/* add the text */
 				_lines->append(zone);
 				_currentPos = _currentPos + ((TextZone*) zone)->getLength();
-			
+
 			}
 		}
 		/*else
@@ -287,7 +287,7 @@ void Para::analyseFormat(const QDomNode balise)
 					if(zone->getPos() != _currentPos)
 					{
 						if(_lines == 0)
-							_lines = new QList<Format>;
+							_lines = new QPtrList<Format>;
 							/* Create first a default format */
 						zoneFirst = new TextZone(_texte, this);
 						zoneFirst->setPos(_currentPos);
@@ -323,7 +323,7 @@ void Para::analyseFormat(const QDomNode balise)
 	if(zone->getPos() != _currentPos)
 	{
 		if(_lines == 0)
-			_lines = new QList<Format>;
+			_lines = new QPtrList<Format>;
 			/* Create first a default format */
 		zoneFirst = new TextZone(_texte, this);
 		zoneFirst->setPos(_currentPos);
@@ -334,11 +334,11 @@ void Para::analyseFormat(const QDomNode balise)
 		_lines->append(zoneFirst);
 		_currentPos = _currentPos + zoneFirst->getLength();
 	}
-	
+
 	if(zone != 0)
 	{
 		if(_lines == 0)
-			_lines = new QList<Format>;
+			_lines = new QPtrList<Format>;
 
 		/* add the text */
 		_lines->append(zone);
@@ -356,10 +356,10 @@ void Para::generate(QTextStream &out)
 {
 
 	kdDebug() << "  GENERATION PARA" << endl;
-	
+
 	if(getInfo() != EP_FOOTNOTE && getFrameType() != SS_HEADERS &&
 	   getFrameType() != SS_FOOTERS)
-	{	
+	{
 		/* We generate center, itemize tag and new page only for
 		 * parag not for footnote
 		 * If a parag. have a special format (begining)
@@ -385,7 +385,7 @@ void Para::generate(QTextStream &out)
 	if(getInfo() != EP_FOOTNOTE && getFrameType() != SS_HEADERS &&
 	   getFrameType() != SS_FOOTERS)
 	{
-		/* id than above : a parag. have a special format. (end) 
+		/* id than above : a parag. have a special format. (end)
 		 * only it's not a header, nor a footer nor a footnote/endnote
 		 */
 		generateFin(out);
@@ -402,14 +402,14 @@ void Para::generate(QTextStream &out)
 /*******************************************/
 void Para::generateDebut(QTextStream &out)
 {
-	/* Be careful we are in a table ! 
+	/* Be careful we are in a table !
 	 * You can't use directly environment, ...
 	 */
 	if(getFrameType() == SS_TABLE)
 	{
 		//int sizeCell = 5;
 		/* first number depends with the cell size (next number}
-		 * and with the number of characters in the para. 
+		 * and with the number of characters in the para.
 		 * It can be 20 char. / 5 cm  = 4 char / cm so */
 		/* nbLines = nb_char_para / (4 * cell size) + 1 */
 		//sizeCell = (_element->getRight() - _element->getLeft()) / 27;

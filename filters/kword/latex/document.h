@@ -22,7 +22,7 @@
 #ifndef __KWORD_DOCUMENT_H__
 #define __KWORD_DOCUMENT_H__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qtextstream.h>
 
 //#include "fileheader.h"		/* class header file.      */
@@ -45,14 +45,14 @@ enum EGenerate
  */
 class Document: public XmlParser
 {
-	QList<Element> _headers;
-	QList<Element> _footers;
-	QList<Element> _footnotes;
-	QList<Element> _formulas;
-	QList<Element> _corps;
+	QPtrList<Element> _headers;
+	QPtrList<Element> _footers;
+	QPtrList<Element> _footnotes;
+	QPtrList<Element> _formulas;
+	QPtrList<Element> _corps;
 
 	ListTable      _tables;
-	//QList<Element> _parts;
+	//QPtrList<Element> _parts;
 	EGenerate     _generation;
 
 	public:

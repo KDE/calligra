@@ -24,7 +24,7 @@
 
 #include <qstring.h>
 #include <qstack.h>		/* historic list */
-#include <qlist.h>		/* for list of format */
+#include <qptrlist.h>		/* for list of format */
 
 /*#include "listeformat.h"*/	/* children class contents the zone (italic, footnote,
 				   variable. */
@@ -62,7 +62,7 @@ class Para: public Layout
 	QString*       _name;
 	EP_INFO        _info;
 	//EP_HARDBRK     _hardbrk;
-	QList<Format>* _lines;
+	QPtrList<Format>* _lines;
 
 	/* TO MANAGE THE LIST */
 	/*Para*          _next;

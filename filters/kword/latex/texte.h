@@ -23,7 +23,7 @@
 #ifndef __KWORD_LATEXTEXT_H__
 #define __KWORD_LATEXTEXT_H__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include "element.h"
 #include "border.h"
 #include "para.h"
@@ -50,8 +50,8 @@ class Texte: public Element, Border
 	TSide   _sheetSide;
 
 	/* CHILD MARKUP */
-	QList<Para> _parags;
-	//QList<Para> _footnotes;
+	QPtrList<Para> _parags;
+	//QPtrList<Para> _footnotes;
 
 	/* USEFULL DATA */
 	EEnv      _lastEnv;
@@ -89,7 +89,7 @@ class Texte: public Element, Border
 		TNFrame getNewFrame   () const { return _newFrameBehaviour; }
 		TSide   getSheetSide  () const { return _sheetSide;         }
 		Para*   getFirstPara  () const { return _parags.getFirst(); }
-		EEnv    getNextEnv    (QList<Para>, const int);
+		EEnv    getNextEnv    (QPtrList<Para>, const int);
 		bool    isBeginEnum   (Para*, Para*);
 		bool    isCloseEnum   (Para*, Para*);
 

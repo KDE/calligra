@@ -112,7 +112,7 @@ void Table::append(Element* elt)
 	if(elt->getCol() > getMaxCol())
 		setMaxCol(elt->getCol());
 
-	QList<Element>::append(elt);
+	QPtrList<Element>::append(elt);
 }
 
 /*******************************************/

@@ -25,7 +25,7 @@
 
 #include <qregexp.h>
 #include <qmessagebox.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <applixwordimport.h>
 #include <applixwordimport.moc>
 #include <kdebug.h>
@@ -51,7 +51,7 @@ APPLIXWORDImport::APPLIXWORDImport (KoFilter *parent, const char *name) :
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-QString 
+QString
 APPLIXWORDImport::nextLine (QTextStream & stream)
 {
     QString s;
@@ -59,14 +59,14 @@ APPLIXWORDImport::nextLine (QTextStream & stream)
     // Read one Line
     s = stream.readLine();
 
-    m_instep += s.length(); 
-    if (m_instep > m_stepsize) 
-    { 
-        m_instep    = 0; 
-        m_progress += 2; 
-        emit sigProgress (m_progress) ; 
-    } 
- 
+    m_instep += s.length();
+    if (m_instep > m_stepsize)
+    {
+        m_instep    = 0;
+        m_progress += 2;
+        emit sigProgress (m_progress) ;
+    }
+
     return s;
 }
 
@@ -80,7 +80,7 @@ APPLIXWORDImport::nextLine (QTextStream & stream)
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-bool 
+bool
 APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
                           const QString &from,   const QString &to,
                           const QString &)
@@ -90,7 +90,7 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
         return false;
 
     QFile in(fileIn);
-    if (!in.open (IO_ReadOnly)) 
+    if (!in.open (IO_ReadOnly))
     {
         kdError(30502) << "Unable to open input file!" << endl;
         in.close();
@@ -110,7 +110,7 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
     str += "  <FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\" frameInfo=\"0\" removeable=\"0\">\n";
     str += "   <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"798\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\"/>\n";
 
- 
+
     QTextStream stream (&in);
 
     m_stepsize = in.size()/50;
@@ -121,7 +121,7 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
     int  pos, ok;
     char stylename[100];
     QString           mystr, textstr;
-    QList<t_mycolor>  mcol;
+    QPtrList<t_mycolor>  mcol;
     QStringList       mcoltxt;
 
     /**************************************************************************
@@ -360,7 +360,7 @@ APPLIXWORDImport::filter (const QString &fileIn, const QString &fileOut,
           str += textstr;
           str += "</TEXT>\n";
 
-          if (bold == 1 || underline == 1 || italic == 1 || fontsize != 12 || 
+          if (bold == 1 || underline == 1 || italic == 1 || fontsize != 12 ||
               colpos != -1 || !fontname.isEmpty())
 	  {
             str += "     <LAYOUT>\n";
@@ -638,7 +638,7 @@ APPLIXWORDImport::readTagLine (QTextStream &stream, QFile &in)
   int     ok, pos;
 
    // Read one line
-   mystr = nextLine (stream); 
+   mystr = nextLine (stream);
 
    // Delete whitespaces
    mystr.stripWhiteSpace();
@@ -653,7 +653,7 @@ APPLIXWORDImport::readTagLine (QTextStream &stream, QFile &in)
        pos = in.at ();
 
        // Read next line
-       mystrn = nextLine (stream); 
+       mystrn = nextLine (stream);
 
        // Is the new line a new tag line
        if (mystrn[0] == ' ')
@@ -762,12 +762,12 @@ APPLIXWORDImport::replaceSpecial (QString &textstr)
  *                                                                            *
  ******************************************************************************/
 int
-APPLIXWORDImport::readHeader (QTextStream &stream, QFile &in)  
+APPLIXWORDImport::readHeader (QTextStream &stream, QFile &in)
 {
   QString mystr;
   int     rueck;
-  int     vers[3] = { 0, 0, 0 }; 
-                       
+  int     vers[3] = { 0, 0, 0 };
+
     // Read Headline
     mystr = readTagLine (stream, in);
 

@@ -26,7 +26,7 @@
 #include <qfile.h>
 #include <qregexp.h>
 #include <qdatastream.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qarray.h>
 
 #include <qdom.h>
@@ -72,7 +72,7 @@ static void XMLEscape( QString &text )
 }
 
 WPImport::WPImport( KoFilter *parent, const char *name ):
-                     KoFilter(parent, name) 
+                     KoFilter(parent, name)
 {
   m_docstart = 0;
 
@@ -81,7 +81,7 @@ WPImport::WPImport( KoFilter *parent, const char *name ):
 // this is the main beast
 bool WPImport::filter(const QString &fileIn, const QString &fileOut,
                          const QString& from, const QString& to,
-                         const QString &) 
+                         const QString &)
 {
   // check for proper conversion
   if( to!= "application/x-kword" || from != "application/wordperfect" )
@@ -133,7 +133,7 @@ bool WPImport::filter(const QString &fileIn, const QString &fileOut,
   attr.setAttribute( "standardpage", 1 );
   attr.setAttribute( "hasHeader", 0 );
   attr.setAttribute( "hasFooter", 0 );
-  attr.setAttribute( "unit", "mm" ); 
+  attr.setAttribute( "unit", "mm" );
 
   QDomElement framesets = root.createElement( "FRAMESETS" );
   docElement.appendChild( framesets );
@@ -179,11 +179,11 @@ bool WPImport::filter(const QString &fileIn, const QString &fileOut,
   paperborders.setAttribute( "top", WPUToPoint( document.pagesettings.topmargin ) );
   paperborders.setAttribute( "bottom", WPUToPoint( document.pagesettings.bottommargin ) );
 
-  // prepare storage 
+  // prepare storage
   KoStore out=KoStore( QString(fileOut), KoStore::Write );
 
   // store output document
-  if( out.open( "root" ) ) 
+  if( out.open( "root" ) )
     {
       QCString cstring = root.toString().utf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
@@ -194,21 +194,21 @@ bool WPImport::filter(const QString &fileIn, const QString &fileOut,
     }
 
   // store document information
-  if( out.open("documentinfo.xml") ) 
+  if( out.open("documentinfo.xml") )
     {
       QDomDocument docinfo( "document-info" );
       QDomElement main = docinfo.createElement( "documentinfo" );
       docinfo.appendChild( main );
-      
+
       QDomElement author = docinfo.createElement( "author" );
       main.appendChild( author );
       QDomElement about = docinfo.createElement( "about" );
       main.appendChild( about );
-      
+
       QDomElement fullname = docinfo.createElement( "full-name" );
       fullname.appendChild( docinfo.createTextNode( document.summary.author ) );
       author.appendChild( fullname );
-      
+
       QDomElement title = docinfo.createElement( "title" );
       title.appendChild( docinfo.createTextNode( document.summary.desc_name ) );
       about.appendChild( title );
@@ -238,7 +238,7 @@ bool WPImport::readHeader()
 
   // check first 4 bytes, must be -1,WPC
   // or (in hex): 0xFF, 0x57, 0x50, 0x43
-  if( (header[0] != 0xFF) || (header[1] != 0x57) || 
+  if( (header[0] != 0xFF) || (header[1] != 0x57) ||
       (header[2] != 0x50) || (header[3] != 0x43) )
     return false;
 
@@ -266,7 +266,7 @@ bool WPImport::readHeader()
     }
 
   // look for packets in prefix area
-  for( long next_block = 16; next_block > 0; )  
+  for( long next_block = 16; next_block > 0; )
     {
       QArray<int> buf( 10 );
 
@@ -306,7 +306,7 @@ bool WPImport::readHeader()
     }
 
   // load all packets in prefix area
-  for( QListIterator<WPDocument::Packet> it( document.packets ); it; ++it )
+  for( QPtrListIterator<WPDocument::Packet> it( document.packets ); it; ++it )
     {
       WPDocument::Packet* p = it.current();
       stream.device()->at( p->pos );
@@ -316,7 +316,7 @@ bool WPImport::readHeader()
     }
 
   // process known packets
-  for( QListIterator<WPDocument::Packet> it( document.packets ); it; ++it )
+  for( QPtrListIterator<WPDocument::Packet> it( document.packets ); it; ++it )
     {
       WPDocument::Packet* p = it.current();
       if( p->data.size() > 0 )
@@ -357,7 +357,7 @@ bool WPImport::parseDocument()
       if( code == 0xFF ) break;
 
       // 0-31 control characters
-      if( code == Code_HardReturn ) 
+      if( code == Code_HardReturn )
 	handleFunction( Code_HardReturn, 0, data );
       if( code == Code_SoftReturn ) m_text.append( " " );
 
@@ -386,7 +386,7 @@ bool WPImport::parseDocument()
 	  int subfunction = readByte();
 	  long length = readByte() + ( readByte() << 8 );
 	  data.resize( length );
-	  for( int c=0 ; length && !stream.atEnd(); length--, c++ ) 
+	  for( int c=0 ; length && !stream.atEnd(); length--, c++ )
 	    data[c] = readByte();
 	  handleFunction( code, subfunction, data );
 	}
@@ -424,7 +424,7 @@ void WPImport::handleFunction( int function, int subfunction, QArray<int>& data 
   if( function == Code_AttributeOff )
     {
       int type = data[0];
-      QListIterator<WPDocument::TextFormat> it( document.formats );
+      QPtrListIterator<WPDocument::TextFormat> it( document.formats );
       for( it.toLast(); it.current(); --it )
 	{
 	  WPDocument::TextFormat *p = it.current();
@@ -461,7 +461,7 @@ void WPImport::handleFunction( int function, int subfunction, QArray<int>& data 
   if( ( function == Code_DefinitionGroup ) && ( subfunction == 1 ) )
     {
       document.pagesettings.columns = data[97] & 31; // bit 0-4
-      
+
       // just take space between second and first column
       if( document.pagesettings.columns > 1 )
 	{
@@ -475,10 +475,10 @@ void WPImport::handleFunction( int function, int subfunction, QArray<int>& data 
   if( ( function == Code_FontGroup ) && ( subfunction == 0 ) )
     {
 
-      // fix-up the last 
+      // fix-up the last
       if( document.colors.count() > 0 )
 	{
-	  QListIterator<WPDocument::FontColor> it( document.colors );
+	  QPtrListIterator<WPDocument::FontColor> it( document.colors );
 	  WPDocument::FontColor * p = it.toLast();
 	  p->len = m_text.length() - p->pos;
 	}
@@ -515,7 +515,7 @@ void WPImport::handlePacket( int type, QArray<int>& data )
     {
       bool WP51Marker = data[ data.size()-1] == 0xFF;
       int i;
-      
+
       QString desc_name;
 
       int limit = WP51Marker ? 94 : 67;
@@ -527,16 +527,16 @@ void WPImport::handlePacket( int type, QArray<int>& data )
       if( WP51Marker )
 	for( i = 94; (i < data.size() ) && (data[i]); i++)
 	  document.summary.desc_type.append( data[i] );
-      
+
       for( i++; (i < data.size() ) && (data[i]); i++)
 	document.summary.subject.append( data[i] );
-      
+
       for( i++; (i < data.size() ) && (data[i]); i++)
 	document.summary.author.append( data[i] );
-      
+
       for( i++; (i < data.size() ) && (data[i]); i++)
 	document.summary.typist.append( data[i] );
-      
+
       for( i++; (i < data.size() ) && (data[i]); i++)
 	document.summary.abstract.append( data[i] );
     }
@@ -572,7 +572,7 @@ void WPImport::writeParagraph()
 
   // handle character attribute as <FORMAT>
   // TODO supports for other attributes such as shadowed and outlined
-  for( QListIterator<WPDocument::TextFormat> i( document.formats ); i.current(); ++i )
+  for( QPtrListIterator<WPDocument::TextFormat> i( document.formats ); i.current(); ++i )
     {
       WPDocument::TextFormat* p = i.current();
       QDomElement format = root.createElement( "FORMAT" );
@@ -604,7 +604,7 @@ void WPImport::writeParagraph()
     }
 
   // handle font color in <FORMAT>
-  for(QListIterator<WPDocument::FontColor> j( document.colors ); j.current(); ++j )
+  for(QPtrListIterator<WPDocument::FontColor> j( document.colors ); j.current(); ++j )
     {
       WPDocument::FontColor* p = j.current();
       QDomElement format = root.createElement( "FORMAT" );
@@ -620,7 +620,7 @@ void WPImport::writeParagraph()
       color.setAttribute( "blue", p->blue );
     }
 
-  // handle paragraph layout 
+  // handle paragraph layout
   QDomElement layout = root.createElement( "LAYOUT" );
   para.appendChild( layout );
 
@@ -691,7 +691,7 @@ void WPImport::writeParagraph()
 // Reads 8-bit byte from stream and returns it as an integer
 int WPImport::readByte()
 {
-  Q_UINT8 c; 
+  Q_UINT8 c;
   stream >> c;
   return c;
 }

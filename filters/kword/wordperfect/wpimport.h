@@ -23,7 +23,7 @@
 #include <qstring.h>
 #include <qdatastream.h>
 #include <qobject.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qcstring.h>
 #include <qarray.h>
 #include <qdom.h>
@@ -81,9 +81,9 @@ typedef struct
     int major, minor;
   } Version;
   
-  QList<Packet> packets;
-  QList<TextFormat> formats;
-  QList<FontColor> colors;
+  QPtrList<Packet> packets;
+  QPtrList<TextFormat> formats;
+  QPtrList<FontColor> colors;
 
   Summary summary;
   PageSettings pagesettings;

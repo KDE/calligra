@@ -24,7 +24,7 @@
 #define __KWORD_TABLE_H__
 
 #include <qstring.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include "element.h"		/* Child class */
 #include "layout.h"		/* Cell flow   */
 
@@ -37,7 +37,7 @@
  * frame, ...). It use a special latex package.
  * The color table and the border of the tables is not yet supported.
  */
-class Table: public QList<Element>, public Element
+class Table: public QPtrList<Element>, public Element
 {
 	/* MARKUP DATA */
 	//QString _name;

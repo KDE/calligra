@@ -64,7 +64,7 @@ Texte::Texte()
 void Texte::analyse(const QDomNode balise)
 {
 	/* MARKUP TYPE : FRAMESET INFO = TEXTE, ENTETE CONNUE */
-	
+
 	/* Parameters Analyse */
 	Element::analyse(balise);
 
@@ -95,7 +95,7 @@ void Texte::analyse(const QDomNode balise)
 			}
 			kdDebug() << "PARA ADDED" << endl;
 		}
-		
+
 	}
 	kdDebug() << "END OF A FRAME ANALYSE" << endl;
 }
@@ -138,19 +138,19 @@ void Texte::analyseParamFrame(const QDomNode balise)
 	setLeftRed(getAttr(balise, "lRed").toInt());
 	setLeftGreen(getAttr(balise, "lGreen").toInt());
 	setLeftBlue(getAttr(balise, "lBlue").toInt());
-	
+
 	setRightRed(getAttr(balise, "rRed").toInt());
 	setRightGreen(getAttr(balise, "rGreen").toInt());
 	setRightBlue(getAttr(balise, "rBlue").toInt());
-	
+
 	setTopRed(getAttr(balise, "tRed").toInt());
 	setTopGreen(getAttr(balise, "tGreen").toInt());
 	setTopBlue(getAttr(balise, "tBlue").toInt());
-	
+
 	setBottomRed(getAttr(balise, "bRed").toInt());
 	setBottomGreen(getAttr(balise, "bGreen").toInt());
 	setBottomBlue(getAttr(balise, "bBlue").toInt());
-	
+
 	setLeftStyle(getAttr(balise, "lStyle").toInt());
 	setRightStyle(getAttr(balise, "rStyle").toInt());
 	setTopStyle(getAttr(balise, "tStyle").toInt());
@@ -191,7 +191,7 @@ void Texte::generate(QTextStream &out)
 	}
 	_lastEnv = ENV_NONE;
 	_lastTypeEnum = TL_NONE;
-	
+
 	Para* currentPara = _parags.first();
 	while( currentPara != 0)
 	{
@@ -203,7 +203,7 @@ void Texte::generate(QTextStream &out)
 			currentPara->generateBeginEnv(out);
 			_lastEnv = currentPara->getEnv();
 		}
-		
+
 		/* List managment */
 		if(isBeginEnum(lastPara, currentPara))
 		{
@@ -248,7 +248,7 @@ void Texte::generate(QTextStream &out)
 	}
 }
 
-EEnv Texte::getNextEnv(QList<Para> liste, const int pos)
+EEnv Texte::getNextEnv(QPtrList<Para> liste, const int pos)
 {
 	Para* index = 0;
 
