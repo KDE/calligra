@@ -11,11 +11,14 @@ SUBDIRS = .
 METASOURCES = AUTO
 
 kexidbtest_SOURCES = main.cpp
-kexidbtest_LDADD = $(LIB_QT) $(LIB_KDECORE) $(top_builddir)/kexi/kexidb/libkexidb.la $(top_builddir)/kexi/widget/libkexiextendedwidgets.la
+kexidbtest_LDADD = $(LIB_QT) $(LIB_KDECORE) $(top_builddir)/kexi/kexidb/libkexidb.la \
+ ../../kexidb/parser/libkexidbparser.la \
+ $(top_builddir)/kexi/widget/libkexiextendedwidgets.la
 kexidbtest_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 kexidbmysqlcursor_SOURCES = mysqlcursor.cpp
-kexidbmysqlcursor_LDADD = $(LIB_QT) $(LIB_KDECORE) $(top_builddir)/kexi/kexidb/libkexidb.la
+kexidbmysqlcursor_LDADD = $(LIB_QT) $(LIB_KDECORE) $(top_builddir)/kexi/kexidb/libkexidb.la \
+ ../../kexidb/parser/libkexidbparser.la
 kexidbmysqlcursor_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 #kexidbfirebirdcursor_SOURCES = firebirdcursor.cpp
