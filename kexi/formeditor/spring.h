@@ -33,7 +33,7 @@ class WidgetLibrary;
 
 }
 
-class KFORMEDITOR_EXPORT Spacer : public QWidget
+class KFORMEDITOR_EXPORT Spring : public QWidget
 {
 	Q_OBJECT
 	Q_ENUMS(SizeType)
@@ -47,12 +47,12 @@ class KFORMEDITOR_EXPORT Spacer : public QWidget
 		    Expanding = MinimumExpanding|MayShrink };
 
 	public:
-		Spacer(QWidget *parent, const char *name);
-		~Spacer() {;}
+		Spring(QWidget *parent, const char *name);
+		~Spring() {;}
 
 		static bool showProperty(const QString &name);
-		static void saveSpacer(KFormDesigner::ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout);
-		static void loadSpacer(QWidget *w, const QDomElement &el);
+		static void saveSpring(KFormDesigner::ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout);
+		static void loadSpring(QWidget *w, const QDomElement &el);
 
 		void setOrientation(Orientation orient);
 		Orientation orientation() const { return m_orient;}

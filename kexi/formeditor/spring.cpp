@@ -30,9 +30,9 @@
 #include "formIO.h"
 #include "widgetlibrary.h"
 
-#include "spacer.h"
+#include "spring.h"
 
-Spacer::Spacer(QWidget *parent, const char *name)
+Spring::Spring(QWidget *parent, const char *name)
   : QWidget(parent, name)
 {
 	m_edit = true;
@@ -41,15 +41,15 @@ Spacer::Spacer(QWidget *parent, const char *name)
 }
 
 void
-Spacer::setOrientation(Orientation orient)
+Spring::setOrientation(Orientation orient)
 {
 	SizeType type = sizeType();
 	m_orient = orient;
 	setSizeType(type);
 }
 
-Spacer::SizeType
-Spacer::sizeType() const
+Spring::SizeType
+Spring::sizeType() const
 {
 	if(m_orient == Vertical)
 		return (SizeType)sizePolicy().verData();
@@ -58,7 +58,7 @@ Spacer::sizeType() const
 }
 
 void
-Spacer::setSizeType(SizeType size)
+Spring::setSizeType(SizeType size)
 {
 	if(m_orient == Vertical)
 		setSizePolicy(QSizePolicy::Minimum, (QSizePolicy::SizeType)size);
@@ -67,7 +67,7 @@ Spacer::setSizeType(SizeType size)
 }
 
 void
-Spacer::paintEvent(QPaintEvent *ev)
+Spring::paintEvent(QPaintEvent *ev)
 {
 	if(!m_edit)
 		return;
@@ -80,7 +80,7 @@ Spacer::paintEvent(QPaintEvent *ev)
 }
 
 bool
-Spacer::showProperty(const QString &name)
+Spring::showProperty(const QString &name)
 {
 	if((name == "name") || (name == "sizeType") || (name == "orientation") || (name == "geometry"))
 		return true;
@@ -90,7 +90,7 @@ Spacer::showProperty(const QString &name)
 
 
 void
-Spacer::saveSpacer(KFormDesigner::ObjectTreeItem *item, QDomElement &parentNode, QDomDocument &domDoc, bool insideGridLayout)
+Spring::saveSpring(KFormDesigner::ObjectTreeItem *item, QDomElement &parentNode, QDomDocument &domDoc, bool insideGridLayout)
 {
 	QDomElement tclass = domDoc.createElement("spacer");
 	parentNode.appendChild(tclass);
@@ -121,7 +121,7 @@ Spacer::saveSpacer(KFormDesigner::ObjectTreeItem *item, QDomElement &parentNode,
 }
 
 void
-Spacer::loadSpacer(QWidget *w, const QDomElement &el)
+Spring::loadSpring(QWidget *w, const QDomElement &el)
 {
 	QString parentTag = el.parentNode().toElement().tagName();
 	if(parentTag == "hbox")
@@ -155,5 +155,5 @@ Spacer::loadSpacer(QWidget *w, const QDomElement &el)
 }
 
 
-#include "spacer.moc"
+#include "spring.moc"
 
