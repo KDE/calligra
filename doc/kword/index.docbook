@@ -68,7 +68,7 @@
 
 <abstract>
 <para>
-&kword; is a complete word-processing program. It is part of the
+&kword; is a complete word-processing and simple desktop publishing program. It is part of the
 &koffice; suite of utilities.
 </para>
 <para>
@@ -110,7 +110,7 @@ Environment.  Other applications in &koffice; include:
 </para>
 
 <itemizedlist>
-<listitem><para>&kspread; (A fully functional spreadsheet.)</para></listitem>
+<listitem><para>&kspread; (A spreadsheet application.)</para></listitem>
 <listitem><para>&kpresenter; (A presentation creator.)</para></listitem>
 <listitem><para>&kontour; (A vector drawing program.)</para></listitem>
 <listitem><para>&kivio; (A flowchart creator)</para></listitem>
@@ -205,7 +205,7 @@ download templates from the web, or use the current document to create a
 new template.</para>
 </listitem>
 <listitem>
-<para>&kword; provides automatic numbering of lists. <!--You are not
+<para>&kword; provides automatic numbering of lists and automatic bulleting of lists with any character or shape you want. <!--You are not
 limited to numbers or letters, you can define your own series for your
 special lists.--> </para>
 </listitem>
@@ -279,6 +279,16 @@ comments are stored in the &kword; file, and can be changed or deleted easily.</
 <listitem>
 <para>&kword; can merge data from an outside database to create mailinglists, form letters, invoices, etc.</para>
 </listitem>
+<listitem>
+<para>&kword; can load and save documents from other wordprocessing programs with an extensive list of filters.</para>
+</listitem>
+<listitem>
+<para>You can edit one document from multiple views.  This allows you to have several windows open on <emphasis>one document
+</emphasis>.  Edits in one window are immediatly updated in the other window.</para>
+</listitem>
+<listitem>
+<para>&kword; can surround your frames with borders and you can set the background color of each frame seperatly if you want..</para>
+</listitem>
 
 </itemizedlist>
 
@@ -302,8 +312,8 @@ the previous sections of the manual to find the instructions
 useful.</para>
 
 <para>To help determine what
-should read before starting to work with &kword;, I have prepared a suggested
-reading list for three levels of users.</para>
+should read before starting to work with &kword;, a suggested
+reading list for three levels of users is given below.</para>
 
 <para>If each of these sections is read <emphasis>before</emphasis>
  staring to use &kword;, using &kword; will be easier.</para>

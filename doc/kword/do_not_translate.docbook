@@ -8,22 +8,26 @@ I am still interested in any comments you have, but it still needs major work.</
 <para>If the section is listed as <emphasis>Checked</emphasis>, then the chapter has been reviewed a second time for content, flow and 
 crosslinking.  The section has been run through a spell checker, checkXML and meinproc and is correct
 as of the date included in the note.</para>
+<para>If the section is listed as <emphasis>Finished</emphasis>, then the chapter has received one final review, looking for any problems, 
+any changes to dialogs, any statements which no longer hold true. Furthermore, there are no outstanding questions or concerns with the 
+text in these sections. Unless I receive a bug report, comments or a notice that some aspect of the UI has
+changed, I will not review this section of the documentation again prior to the release of KWord 1.2.</para>
 
 <informaltable>
 <tgroup cols="3">
 <tbody>
 <row><entry>Introduction</entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Introduction </entry><entry>Checked (May 7, 2002)</entry></row>
-<row><entry></entry><entry>What parts of this guide should I read? </entry><entry>Checked (May 7, 2002)</entry></row>
+<row><entry></entry><entry>Introduction </entry><entry>Finished (June 29, 2002)</entry></row>
+<row><entry></entry><entry>What parts of this guide should I read? </entry><entry>Finished (June 29, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>Fundamentals </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Starting KWord </entry><entry>Checked (May 7, 2002)</entry></row>
-<row><entry></entry><entry>An Introduction to Templates </entry><entry>Checked (May 7, 2002)</entry></row>
-<row><entry></entry><entry>The difference between Text Oriented and Page Layout templates </entry><entry>Checked (May 7, 2002)</entry></row>
+<row><entry></entry><entry>Starting KWord </entry><entry>Finished (June 29, 2002)</entry></row>
+<row><entry></entry><entry>An Introduction to Templates </entry><entry>Finished (June 29, 2002)</entry></row>
+<row><entry></entry><entry>The difference between Text Oriented and Page Layout templates </entry><entry>Finished (June 29, 2002)</entry></row>
 <row><entry></entry></row>
 
-<row><entry>Step by Step Tutorial </entry><entry></entry><entry>Checked (May 7, 2002)</entry></row>
+<row><entry>Step by Step Tutorial </entry><entry></entry><entry>Finished (June 29, 2002)</entry></row>
 
 <row><entry></entry></row>
 
