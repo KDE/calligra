@@ -45,6 +45,7 @@ k_dcop:
     void setBright(int bright );
     void setSwapRGB(bool swapRGB );
     void setGrayscal( bool grayscal );
+    void loadImage( const QString & fileName );
 
 private:
     KPPixmapObject *obj;

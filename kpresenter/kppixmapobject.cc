@@ -80,6 +80,12 @@ DCOPObject* KPPixmapObject::dcopObject()
 }
 
 
+void KPPixmapObject::loadImage( const QString & fileName )
+{
+    image = imageCollection->loadPicture( fileName );
+}
+
+
 /*================================================================*/
 KPPixmapObject &KPPixmapObject::operator=( const KPPixmapObject & )
 {

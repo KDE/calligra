@@ -84,6 +84,8 @@ public:
     void setPictureGrayscal(bool _grayscal) { grayscal = _grayscal; }
     void setPictureBright(int _bright) { bright = _bright; }
     KoPicture picture() const { return image;}
+    void loadImage( const QString & fileName );
+
 protected:
     KPPixmapObject() {}
 

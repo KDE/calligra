@@ -79,3 +79,8 @@ void KPPixmapObjectIface::setGrayscal( bool grayscal )
 {
     obj->setPictureGrayscal(grayscal);
 }
+
+void KPPixmapObjectIface::loadImage( const QString & fileName )
+{
+    obj->loadImage(fileName);
+}

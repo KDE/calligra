@@ -1607,57 +1607,57 @@ PictureSettingCmd::PictureSettingCmd( const QString &_name, QPtrList<PictureSett
 			      PictureSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
 : KNamedCommand( _name ), oldSettings( _oldSettings ), objects( _objects )
 {
-objects.setAutoDelete( false );
-oldSettings.setAutoDelete( false );
-doc = _doc;
-newSettings = _newSettings;
+    objects.setAutoDelete( false );
+    oldSettings.setAutoDelete( false );
+    doc = _doc;
+    newSettings = _newSettings;
 
-QPtrListIterator<KPObject> it( objects );
-for ( ; it.current() ; ++it )
-it.current()->incCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 PictureSettingCmd::~PictureSettingCmd()
 {
-QPtrListIterator<KPObject> it( objects );
-for ( ; it.current() ; ++it )
-it.current()->decCmdRef();
-oldSettings.setAutoDelete( true );
-oldSettings.clear();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
+    oldSettings.setAutoDelete( true );
+    oldSettings.clear();
 }
 
 /*====================== execute =================================*/
 void PictureSettingCmd::execute()
 {
-QPtrListIterator<KPObject> it( objects );
-for ( ; it.current() ; ++it ) {
-KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( it.current() );
-if ( obj ) {
-    obj->setPictureMirrorType(newSettings.mirrorType);
-    obj->setPictureDepth(newSettings.depth);
-    obj->setPictureSwapRGB(newSettings.swapRGB);
-    obj->setPictureGrayscal(newSettings.grayscal);
-    obj->setPictureBright(newSettings.bright);
-}
-}
-doc->repaint( false );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it ) {
+        KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( it.current() );
+        if ( obj ) {
+            obj->setPictureMirrorType(newSettings.mirrorType);
+            obj->setPictureDepth(newSettings.depth);
+            obj->setPictureSwapRGB(newSettings.swapRGB);
+            obj->setPictureGrayscal(newSettings.grayscal);
+            obj->setPictureBright(newSettings.bright);
+        }
+    }
+    doc->repaint( false );
 }
 
 /*====================== unexecute ===============================*/
 void PictureSettingCmd::unexecute()
 {
-for ( unsigned int i = 0; i < objects.count(); ++i ) {
-KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( objects.at(i) );
-if ( obj ) {
-    obj->setPictureMirrorType(oldSettings.at( i )->mirrorType);
-    obj->setPictureDepth(oldSettings.at( i )->depth);
-    obj->setPictureSwapRGB(oldSettings.at( i )->swapRGB);
-    obj->setPictureGrayscal(oldSettings.at( i )->grayscal);
-    obj->setPictureBright(oldSettings.at( i )->bright);
-}
-}
-doc->repaint( false );
+    for ( unsigned int i = 0; i < objects.count(); ++i ) {
+        KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( objects.at(i) );
+        if ( obj ) {
+            obj->setPictureMirrorType(oldSettings.at( i )->mirrorType);
+            obj->setPictureDepth(oldSettings.at( i )->depth);
+            obj->setPictureSwapRGB(oldSettings.at( i )->swapRGB);
+            obj->setPictureGrayscal(oldSettings.at( i )->grayscal);
+            obj->setPictureBright(oldSettings.at( i )->bright);
+        }
+    }
+    doc->repaint( false );
 }
 
 /******************************************************************/
