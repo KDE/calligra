@@ -42,9 +42,9 @@ class CommandHistory;
 class UnitBox;
 class Gradient;
 class BrushCells;
-class FontSelector;
 
 class QRadioButton;
+class KFontChooser;
 
 class PropertyEditor : public QDialog {
   Q_OBJECT
@@ -104,8 +104,7 @@ private:
   BrushCells *brushCells;
   QSpinBox *gradientAngle;
 
-  // Font Tab
-  FontSelector* fontSelector;
-};
+    KFontChooser *fontChooser;
+ };
 
 #endif

@@ -521,8 +521,6 @@ QDomDocument GDocument::saveToXml () {
     QDomElement killustrator=document.createElement("killustaror");
     killustrator.setAttribute("editor", "KIllustrator");
     killustrator.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
-    killustrator.setAttribute ("comment",(const char *)comment);
-    killustrator.setAttribute ("keywords",(const char *)keywords);
     document.appendChild(killustrator);
 
     QDomElement head=document.createElement("head");
@@ -668,9 +666,6 @@ bool GDocument::readFromXml (const  QDomDocument &document) {
 
     if ( killustrator.attribute( "mime" ) != KILLUSTRATOR_MIMETYPE )
         return false;
-
-    comment=killustrator.attribute("comment");
-    keywords=killustrator.attribute("keywords");
 
     QDomElement head=killustrator.namedItem("head").toElement();
     setAutoUpdate (false);
@@ -983,22 +978,6 @@ void GDocument::getHelplines (vector<float>& hlines, vector<float>& vlines,
 // called from internal layer when visible flag was changed
 void GDocument::helplineStatusChanged () {
   emit gridChanged ();
-}
-
-void GDocument::setComment(QString s){
-  comment = s;
-}
-
-void GDocument::getComment(QString &s){
-  s = comment;
-}
-
-void GDocument::setKeywords(QString s){
-  keywords = s;
-}
-
-void GDocument::getKeywords(QString &s){
-  s = keywords;
 }
 
 void GDocument::selectNextObject () {

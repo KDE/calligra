@@ -32,8 +32,6 @@
 #include <qlist.h>
 #include <qstring.h>
 
-//#include "xmlutils/XmlWriter.h"
-//#include "xmlutils/XmlElement.h"
 #include <qdom.h>
 
 #include "Painter.h"
@@ -70,10 +68,10 @@ public:
   bool isModified () const { return modifyFlag; }
 
   void drawContents (QPainter& p, bool withBasePoints = false,
-		     bool outline = false);
+                     bool outline = false);
   void drawContentsInRegion (QPainter& p, const Rect& r,
-			     bool withBasePoints = false,
-			     bool outline = false);
+                             bool withBasePoints = false,
+                             bool outline = false);
 
   void invalidateClipRegions ();
 
@@ -132,12 +130,12 @@ public:
   GObject* findContainingObject (int x, int y);
 
   bool findNearestObject (const char* otype, int x, int y,
-			  float max_dist, GObject*& obj, int& pidx,
-			  bool all = false);
+                          float max_dist, GObject*& obj, int& pidx,
+                          bool all = false);
 
   bool findContainingObjects (int x, int y, QList<GObject>& olist);
   bool findObjectsContainedIn (const Rect& r, QList<GObject>& olist);
-	
+
   QDomDocument saveToXml();
   bool readFromXml (const QDomDocument &document);
   bool insertFromXml (const QDomDocument &document, list<GObject*>& newObjs);
@@ -158,15 +156,9 @@ public:
 
   void setHelplines (const std::vector<float>& hlines,
                      const std::vector<float>& vlines,
-		     bool snap);
+                     bool snap);
   void getHelplines (std::vector<float>& hlines, std::vector<float>& vlines,
-		     bool& snap);
-
-  void setComment(QString s);
-  void getComment(QString &s);
-
-  void setKeywords(QString s);
-  void getKeywords(QString &s);
+                     bool& snap);
 
 protected:
   void updateHandle ();
@@ -191,8 +183,6 @@ protected:
   bool autoUpdate;
   bool modifyFlag;
   QString filename;
-  QString comment;
-  QString keywords;
   int paperWidth, paperHeight; // pt
   std::vector<GLayer*> layers; // the array of all layers
   std::list<GObject*> selection;

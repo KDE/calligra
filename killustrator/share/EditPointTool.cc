@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,31 +15,30 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-#include <iostream.h>
-#include "EditPointTool.h"
-#include "EditPointTool.moc"
-#include "GDocument.h"
-#include "Canvas.h"
-#include "Coord.h"
-#include "CommandHistory.h"
-#include "EditPointCmd.h"
-#include "InsertPointCmd.h"
-#include "RemovePointCmd.h"
-#include "SplitLineCmd.h"
-#include "GPolyline.h"
-#include "GBezier.h"
+#include <EditPointTool.h>
+
 #include <qkeycode.h>
+#include <qcursor.h>
 #include <qbitmap.h>
-#include <kapp.h>
 #include <klocale.h>
-#include "version.h"
+
+#include <GDocument.h>
+#include <Canvas.h>
+#include <Coord.h>
+#include <CommandHistory.h>
+#include <EditPointCmd.h>
+#include <InsertPointCmd.h>
+#include <RemovePointCmd.h>
+#include <SplitLineCmd.h>
+#include <GPolyline.h>
+#include <GBezier.h>
 
 #define right_ptr_width 16
 #define right_ptr_height 16
@@ -62,12 +61,12 @@ EditPointTool::EditPointTool (CommandHistory* history) : Tool (history) {
   pointIdx = -1;
   mode = MovePoint;
   cursor = new QCursor (QBitmap (right_ptr_width,
-				 right_ptr_height,
-				 right_ptr_bits, true), 
-			QBitmap (right_ptrmsk_width,
-				 right_ptrmsk_height,
-				 right_ptrmsk_bits, true),
-			right_ptr_x_hot, right_ptr_y_hot);
+                                 right_ptr_height,
+                                 right_ptr_bits, true),
+                        QBitmap (right_ptrmsk_width,
+                                 right_ptrmsk_height,
+                                 right_ptrmsk_bits, true),
+                        right_ptr_x_hot, right_ptr_y_hot);
 }
 
 EditPointTool::~EditPointTool () {
@@ -94,18 +93,12 @@ void EditPointTool::setMode (Mode m) {
   }
 }
 
-void EditPointTool::processEvent (QEvent* e, GDocument *doc, 
-				  Canvas* canvas) {
+void EditPointTool::processEvent (QEvent* e, GDocument *doc,
+                                  Canvas* canvas) {
   if (doc->selectionIsEmpty ())
     return;
 
-  if (e->type () == 
-#if QT_VERSION >= 199
-      QEvent::MouseButtonPress
-#else
-      Event_MouseButtonPress
-#endif
-      ) {
+  if (e->type () == QEvent::MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
     //    canvas->snapPositionToGrid (xpos, ypos);
@@ -115,38 +108,32 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
     // for performance reasons check if an object from the selection
     // has to be edited
     for (list<GObject*>::iterator it = doc->getSelection ().begin ();
-	 it != doc->getSelection ().end (); it++) {
+         it != doc->getSelection ().end (); it++) {
       GObject* o = *it;
       int idx = o->getNeighbourPoint (Coord (xpos, ypos));
       if (idx != -1) {
-	obj = o;
-	pointIdx = idx;
-	startPos = Coord (xpos, ypos);
-	lastPos = startPos;
-	canvas->setCursor (*cursor);
-	break;
+        obj = o;
+        pointIdx = idx;
+        startPos = Coord (xpos, ypos);
+        lastPos = startPos;
+        canvas->setCursor (*cursor);
+        break;
       }
     }
     // if no currently selected object was found at the mouse position ...
     if (obj == 0L) {
       if ((obj = doc->findContainingObject (xpos, ypos)) != 0L) {
-	// select and edit this object
-	doc->unselectAllObjects ();
-	doc->selectObject (obj);
-	pointIdx = obj->getNeighbourPoint (Coord (xpos, ypos));
-	startPos = Coord (xpos, ypos);
-	lastPos = startPos;
-	canvas->setCursor (*cursor);
+        // select and edit this object
+        doc->unselectAllObjects ();
+        doc->selectObject (obj);
+        pointIdx = obj->getNeighbourPoint (Coord (xpos, ypos));
+        startPos = Coord (xpos, ypos);
+        lastPos = startPos;
+        canvas->setCursor (*cursor);
       }
     }
   }
-  else if (e->type () == 
-#if QT_VERSION >= 199
-	   QEvent::MouseMove
-#else
-	   Event_MouseMove
-#endif
-	   ) {
+  else if (e->type () == QEvent::MouseMove) {
     if (mode == InsertPoint)
       return;
 
@@ -159,41 +146,35 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       int pidx;
 
       for (list<GObject*>::iterator it = doc->getSelection ().begin ();
-	   it != doc->getSelection ().end (); it++) {
-	GObject* o = *it;
-	if ((pidx = o->getNeighbourPoint (Coord (xpos, ypos))) != -1) {
-	  if (mode == RemovePoint && o->isA ("GBezier")) {
-	    if (((GBezier *) o)->isEndPoint (pidx)) {
-	      isOver = true;
-	      break;
-	    }
-	  }
-	  else
-	    isOver = true;
-	}
+           it != doc->getSelection ().end (); it++) {
+        GObject* o = *it;
+        if ((pidx = o->getNeighbourPoint (Coord (xpos, ypos))) != -1) {
+          if (mode == RemovePoint && o->isA ("GBezier")) {
+            if (((GBezier *) o)->isEndPoint (pidx)) {
+              isOver = true;
+              break;
+            }
+          }
+          else
+            isOver = true;
+        }
       }
       if (isOver)
-	canvas->setCursor (*cursor);
+        canvas->setCursor (*cursor);
       else
-	canvas->setCursor (arrowCursor);
+        canvas->setCursor (arrowCursor);
     }
     else if (pointIdx != -1) {
       float dx = xpos - lastPos.x ();
       float dy = ypos - lastPos.y ();
       if (dx != 0 || dy != 0) {
-	obj->movePoint (pointIdx, dx, dy);
-	lastPos = Coord (xpos, ypos);
+        obj->movePoint (pointIdx, dx, dy);
+        lastPos = Coord (xpos, ypos);
       }
     }
   }
-  else if (e->type () == 
-#if QT_VERSION >= 199
-	   QEvent::MouseButtonRelease
-#else
-	   Event_MouseButtonRelease
-#endif
-	   ) {
-    if (obj == 0L) 
+  else if (e->type () == QEvent::MouseButtonRelease) {
+    if (obj == 0L)
       return;
 
     QMouseEvent *me = (QMouseEvent *) e;
@@ -201,15 +182,15 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
     canvas->snapPositionToGrid (xpos, ypos);
     if (mode == MovePoint) {
       if (pointIdx != -1) {
-	float dx = xpos - lastPos.x ();
-	float dy = ypos - lastPos.y ();
-	if (dx != 0 || dy != 0) 
-	  obj->movePoint (pointIdx, dx, dy);
-	
-	EditPointCmd *cmd = new EditPointCmd (doc, obj, pointIdx,
-					      xpos - startPos.x (), 
-					      ypos - startPos.y ());
-	history->addCommand (cmd);
+        float dx = xpos - lastPos.x ();
+        float dy = ypos - lastPos.y ();
+        if (dx != 0 || dy != 0)
+          obj->movePoint (pointIdx, dx, dy);
+
+        EditPointCmd *cmd = new EditPointCmd (doc, obj, pointIdx,
+                                              xpos - startPos.x (),
+                                              ypos - startPos.y ());
+        history->addCommand (cmd);
       }
     }
     else if (mode == InsertPoint && obj->inherits ("GPolyline")) {
@@ -217,47 +198,45 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       // compute the segment of intersection
       int idx = pline->containingSegment (xpos, ypos);
       if (idx != -1) {
-	if (obj->isA ("GBezier"))
-	  idx = (idx + 1) * 3;
-	else
-	  idx += 1;
-	InsertPointCmd *cmd = new InsertPointCmd (doc, pline, idx,
-						  xpos, ypos);
-	history->addCommand (cmd, true);
+        if (obj->isA ("GBezier"))
+          idx = (idx + 1) * 3;
+        else
+          idx += 1;
+        InsertPointCmd *cmd = new InsertPointCmd (doc, pline, idx,
+                                                  xpos, ypos);
+        history->addCommand (cmd, true);
       }
     }
     else if (mode == RemovePoint) {
       bool removable = true;
       if (pointIdx != -1 /*&& obj->inherits ("GPolyline")*/) {
-	if (obj->isA ("GBezier"))
-	  // we cannot remove control points of bezier curves
-	  removable = ((GBezier *) obj)->isEndPoint (pointIdx);
+        if (obj->isA ("GBezier"))
+          // we cannot remove control points of bezier curves
+          removable = ((GBezier *) obj)->isEndPoint (pointIdx);
 
-	if (removable) {
-	  GPolyline *pline = (GPolyline *) obj;
-	  RemovePointCmd *cmd = new RemovePointCmd (doc, pline, pointIdx);
-	  history->addCommand (cmd, true);
-	}
+        if (removable) {
+          GPolyline *pline = (GPolyline *) obj;
+          RemovePointCmd *cmd = new RemovePointCmd (doc, pline, pointIdx);
+          history->addCommand (cmd, true);
+        }
       }
     }
     else if (mode == Split) {
       if (pointIdx != -1) {
-	bool removable = true;
+        bool removable = true;
 
-	if (obj->isA ("GBezier"))
-	  // we cannot remove control points of bezier curves
-	  removable = ((GBezier *) obj)->isEndPoint (pointIdx);
+        if (obj->isA ("GBezier"))
+          // we cannot remove control points of bezier curves
+          removable = ((GBezier *) obj)->isEndPoint (pointIdx);
 
-	if (removable) {
-	  GPolyline *pline = (GPolyline *) obj;
-	  SplitLineCmd *cmd = new SplitLineCmd (doc, pline, pointIdx);
-	  history->addCommand (cmd, true);
-	}
+        if (removable) {
+          GPolyline *pline = (GPolyline *) obj;
+          SplitLineCmd *cmd = new SplitLineCmd (doc, pline, pointIdx);
+          history->addCommand (cmd, true);
+        }
       }
     }
-
     canvas->setCursor (arrowCursor);
-
     obj = 0L;
   }
 }
@@ -279,3 +258,5 @@ void EditPointTool::deactivate (GDocument* doc, Canvas* canvas) {
     canvas->showBasePoints (false);
   }
 }
+
+#include <EditPointTool.moc>

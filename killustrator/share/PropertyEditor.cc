@@ -34,13 +34,18 @@
 #include <kiconloader.h>
 #include <ktabctl.h>
 #include <kcolorbtn.h>
+#include <kfontdialog.h>
 
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qwidgetstack.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
 #include <qslider.h>
+#include <qlayout.h>
+#include <qvbox.h> // tmp
 
 #include "GText.h"
 #include "GPolygon.h"
@@ -53,7 +58,6 @@
 #include "GDocument.h"
 #include "GObject.h"
 #include "FloatSpinBox.h"
-#include "FontSelector.h"
 #include "CommandHistory.h"
 #include "Gradient.h"
 #include "BrushCells.h"
@@ -492,12 +496,10 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
 }
 
 QWidget* PropertyEditor::createFontWidget (QWidget* parent) {
-  QWidget* w;
 
-  w = new QWidget (parent);
-  fontSelector = new FontSelector (w, 0L, text);
-  fontSelector->move (10, 20);
-  w->adjustSize ();
+  // temporary layout hack :)
+  QVBox *w = new QVBox (parent);
+  fontChooser = new KFontChooser (w);
   return w;
 }
 
@@ -557,7 +559,7 @@ void PropertyEditor::applyPressed () {
       if (haveTextObjects) {
         GText::TextInfo tinfo;
         tinfo.mask = GText::TextInfo::Font | GText::TextInfo::Align;
-        tinfo.font = fontSelector->font ();
+        tinfo.font = fontChooser->font ();
         if (textAlign[0]->isOn ())
           tinfo.align = GText::TextInfo::AlignLeft;
         else if (textAlign[1]->isOn ())
@@ -575,7 +577,7 @@ void PropertyEditor::applyPressed () {
       // set default values
       GText::TextInfo tinfo;
       tinfo.mask = GText::TextInfo::Font;
-      tinfo.font = fontSelector->font ();
+      tinfo.font = fontChooser->font ();
 
       GObject::setDefaultOutlineInfo (oinfo);
       GObject::setDefaultFillInfo (finfo);
@@ -681,7 +683,7 @@ void PropertyEditor::readProperties () {
       if (object->isA ("GText")) {
         GText* tobj = (GText *) object;
         GText::TextInfo tInfo = tobj->getTextInfo ();
-        fontSelector->setFont (tInfo.font);
+        fontChooser->setFont (tInfo.font);
         switch (tInfo.align) {
         case GText::TextInfo::AlignCenter:
           textAlign[1]->setOn (true);
@@ -728,7 +730,7 @@ void PropertyEditor::readProperties () {
       // Font tab
       if (!haveObjects || haveTextObjects) {
         GText::TextInfo tInfo = GText::getDefaultTextInfo ();
-        fontSelector->setFont (tInfo.font);
+        fontChooser->setFont (tInfo.font);
       }
     }
 }

@@ -13,7 +13,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 Canvas.h \
 		 QwViewport.h GDocument.h \
 		 Coord.h PropertyEditor.h FloatSpinBox.h \
-                             FontSelector.h AlignmentDialog.h \
+                             AlignmentDialog.h \
 		 GridDialog.h PolygonConfigDialog.h PolygonPreview.h \
                  Command.h AlignCmd.h DistributeCmd.h InsertClipartCmd.h \
 		 TranslateCmd.h ScaleCmd.h RotateCmd.h \
@@ -35,7 +35,7 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 MainView.h PStateManager.h OptionDialog.h \
 		 Preview.h units.h UnitBox.h ScriptDialog.h \
 		 GLayer.h LayerDialog.h LayerView.h \
-		 DocumentInfo.h Gradient.h GradientShape.h \
+		 Gradient.h GradientShape.h \
 		 BrushCells.h PathTextTool.h \
 		 EllipseConfigDialog.h MyTabCtl.h HelplineDialog.h \
 		 GCurve.h ToCurveCmd.h BlendDialog.h BlendCmd.h \
@@ -51,7 +51,7 @@ libkillu_la_SOURCES = ScriptDialog.cc Handle.cc GObject.cc GPolyline.cc GPolygon
 			  Canvas.cc \
                           QwViewport.cc GDocument.cc \
 			  Coord.cc PropertyEditor.cc FloatSpinBox.cc \
-                                            FontSelector.cc AlignmentDialog.cc \
+                                            AlignmentDialog.cc \
 			  PolygonConfigDialog.cc PolygonPreview.cc \
 			  GridDialog.cc Command.cc DuplicateCmd.cc \
                           AlignCmd.cc DistributeCmd.cc InsertClipartCmd.cc \
@@ -75,7 +75,7 @@ libkillu_la_SOURCES = ScriptDialog.cc Handle.cc GObject.cc GPolyline.cc GPolygon
 			  PStateManager.cc OptionDialog.cc \
 			  Preview.cc units.cc UnitBox.cc \
 			  GLayer.cc LayerDialog.cc LayerView.cc \
-			  DocumentInfo.cc Gradient.cc GradientShape.cc \
+			  Gradient.cc GradientShape.cc \
 			  BrushCells.cc  \
 			  EllipseConfigDialog.cc MyTabCtl.cc \
 			  HelplineDialog.cc GCurve.cc ToCurveCmd.cc \
@@ -83,4 +83,3 @@ libkillu_la_SOURCES = ScriptDialog.cc Handle.cc GObject.cc GPolyline.cc GPolygon
 			  StartupScreen.cc filter_utils.cc
 
 METASOURCES =	AUTO
-

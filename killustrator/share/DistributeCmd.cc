@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,24 +15,23 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-#include <iostream.h>
-#include "DistributeCmd.h"
-#include "DistributeCmd.moc"
+#include <DistributeCmd.h>
+
 #include <klocale.h>
 
-#include "GDocument.h"
+#include <GDocument.h>
 
-DistributeCmd::DistributeCmd (GDocument* doc, HorizDistribution hdistrib, 
-			      VertDistribution vdistrib, 
-			      DistributionMode dmode) : 
-   ObjectManipCmd (doc, i18n("Distribute")) 
+DistributeCmd::DistributeCmd (GDocument* doc, HorizDistribution hdistrib,
+                              VertDistribution vdistrib,
+                              DistributionMode dmode) :
+   ObjectManipCmd (doc, i18n("Distribute"))
 {
   hDistrib = hdistrib;
   vDistrib = vdistrib;
@@ -45,11 +44,11 @@ void DistributeCmd::execute () {
   GObject *firstObj, *lastObj;
 
   if (mode == DMode_AtPage)
-    box = Rect (0, 0, document->getPaperWidth (), 
-		document->getPaperHeight ());
+    box = Rect (0, 0, document->getPaperWidth (),
+                document->getPaperHeight ());
   else
     box = document->boundingBoxForSelection ();
-  
+
   ObjectManipCmd::execute ();
 
   const list<GObject*>& objs = document->getSelection ();
@@ -59,14 +58,14 @@ void DistributeCmd::execute () {
   list<GObject*>::const_iterator it = objs.begin ();
 
   switch (hDistrib) {
-  case HDistrib_Left: 
+  case HDistrib_Left:
     xoff = (box.width () - lastObj->boundingBox ().width ()) /
       (document->selectionCount () - 1);
     xpos = box.left ();
     break;
   case HDistrib_Center:
     xoff = (box.width () - firstObj->boundingBox ().width () / 2 -
-	    lastObj->boundingBox ().width () / 2) /
+            lastObj->boundingBox ().width () / 2) /
       (document->selectionCount () - 1);
     xpos = box.left () + firstObj->boundingBox ().width () / 2;
     break;
@@ -74,7 +73,7 @@ void DistributeCmd::execute () {
     {
       float w = 0;
       for (; it != objs.end (); it++)
-	w += (*it)->boundingBox ().width ();
+        w += (*it)->boundingBox ().width ();
       xoff = (box.width () - w) / (document->selectionCount () - 1);
       xpos = box.left ();
       break;
@@ -89,26 +88,26 @@ void DistributeCmd::execute () {
   }
 
   switch (vDistrib) {
-  case VDistrib_Top: 
+  case VDistrib_Top:
     yoff = (box.height () - lastObj->boundingBox ().height ()) /
       (document->selectionCount () - 1);
     ypos = box.top ();
     break;
-  case VDistrib_Bottom: 
+  case VDistrib_Bottom:
     yoff = (box.height () - firstObj->boundingBox ().height ()) /
       (document->selectionCount () - 1);
     ypos = box.top () + firstObj->boundingBox ().height ();;
     break;
   case VDistrib_Center:
     yoff = (box.height () - firstObj->boundingBox ().height () / 2 -
-	    lastObj->boundingBox ().height () / 2) /
+            lastObj->boundingBox ().height () / 2) /
       (document->selectionCount () - 1);
     ypos = box.top () + firstObj->boundingBox ().height () / 2;
   case VDistrib_Distance:
     {
       float h = 0;
       for (; it != objs.end (); it++)
-	h += (*it)->boundingBox ().height ();
+        h += (*it)->boundingBox ().height ();
       yoff = (box.height () - h) / (document->selectionCount () - 1);
       ypos = box.top ();
       break;
@@ -121,9 +120,9 @@ void DistributeCmd::execute () {
     GObject *obj = *it;
     Rect obox = obj->boundingBox ();
     float dx = 0, dy = 0;
-    
+
     switch (hDistrib) {
-    case HDistrib_Left: 
+    case HDistrib_Left:
       dx = xpos - obox.left ();
       break;
     case HDistrib_Center:
@@ -139,10 +138,10 @@ void DistributeCmd::execute () {
     }
 
     switch (vDistrib) {
-    case VDistrib_Top: 
+    case VDistrib_Top:
       dy = ypos - obox.top ();
       break;
-    case VDistrib_Bottom: 
+    case VDistrib_Bottom:
       dy = ypos - obox.bottom ();
       break;
     case VDistrib_Center:
@@ -160,7 +159,7 @@ void DistributeCmd::execute () {
     obj->transform (matrix, true);
 
     switch (hDistrib) {
-    case HDistrib_Left: 
+    case HDistrib_Left:
     case HDistrib_Center:
     case HDistrib_Right:
       xpos += xoff;
@@ -172,9 +171,9 @@ void DistributeCmd::execute () {
       break;
     }
     switch (vDistrib) {
-    case VDistrib_Top: 
-    case VDistrib_Bottom: 
-    case VDistrib_Center: 
+    case VDistrib_Top:
+    case VDistrib_Bottom:
+    case VDistrib_Center:
       ypos += yoff;
       break;
     case VDistrib_Distance:
@@ -186,3 +185,4 @@ void DistributeCmd::execute () {
   }
 }
 
+#include <DistributeCmd.moc>

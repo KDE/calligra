@@ -265,7 +265,6 @@ private slots:
     void slotDeleteNode( bool );
     void slotSplitLine( bool );
     void slotLayers();
-  void slotDocumentInfo();
   void slotViewZoom (const QString&);
   void slotLoadPalette ();
 
@@ -292,7 +291,6 @@ protected:
 
     KAction* m_import;
     KAction* m_export;
-    KAction* m_docInfo;
     KAction* m_insertBitmap;
     KAction* m_insertClipart;
     KAction* m_copy;

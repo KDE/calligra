@@ -74,7 +74,6 @@
 #include "BlendCmd.h"
 #include "BlendDialog.h"
 #include "OptionDialog.h"
-#include "DocumentInfo.h"
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kapp.h>
@@ -135,7 +134,6 @@ void KIllustratorView::createMyGUI()
     // File menu
     m_import = new KAction( i18n("&Import..."), 0, this, SLOT( slotImport() ), actionCollection(), "import" );
     m_export = new KAction( i18n("&Export..."), 0, this, SLOT( slotExport() ), actionCollection(), "export" );
-    //    m_docInfo = new KAction( i18n("Document Info..."), 0, this, SLOT( slotDocumentInfo() ), actionCollection(), "documentInfo" );
 
     // Insert menu
     m_insertBitmap = new KAction( i18n("Insert &Bitmap..."), 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
@@ -1194,10 +1192,6 @@ void KIllustratorView::slotLayers()
         layerDialog = new LayerDialog ();
     layerDialog->manageDocument (m_pDoc->gdoc());
     layerDialog->show ();
-}
-
-void KIllustratorView::slotDocumentInfo () {
-    DocumentInfo::showInfo (m_pDoc->gdoc ());
 }
 
 void KIllustratorView::slotLoadPalette () {
