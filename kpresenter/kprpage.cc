@@ -2337,13 +2337,6 @@ void KPrPage::deletePage( )
     }
 
     deleteObjs( false );
-#if 0 //FIXME
-    for ( int i = 0; i < static_cast<int>( m_objectList.count() ); i++ ) {
-	kpobject = m_objectList.at( i );
-	if ( getPageOfObj( i, 0, 0 ) - 1 > _page )
-	    kpobject->setOrig( kpobject->getOrig().x(), kpobject->getOrig().y() - _h );
-    }
-#endif
 }
 
 void KPrPage::setBackColor( QColor backColor1, QColor backColor2, BCType bcType,

@@ -452,39 +452,36 @@ QDomDocument KPresenterDoc::saveXML()
     // Write "OBJECT" tag for every child
     QPtrListIterator<KoDocumentChild> chl( children() );
     for( ; chl.current(); ++chl ) {
-        //FIXME
-#if 0
         // Don't save children that are only in the undo/redo history
         // but not anymore in the presentation
-        for ( unsigned int j = 0; j < _objectList->count(); j++ )
-        {
-            kpobject = _objectList->at( j );
-            if ( saveOnlyPage != -1 ) {
-                int pg = getPageOfObj( j, 0, 0 ) - 1;
-                if ( saveOnlyPage != pg )
-                    continue;
-            }
-
-            if ( kpobject->getType() == OT_PART &&
-                 dynamic_cast<KPPartObject*>( kpobject )->getChild() == chl.current() )
+        for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
+            if ( saveOnlyPage != -1 &&
+                 i != saveOnlyPage )
+                continue;
+            QPtrListIterator<KPObject> oIt(m_pageList.at(i)->objectList());
+            for (; oIt.current(); ++oIt )
             {
-                QDomElement embedded=doc.createElement("EMBEDDED");
-                KPresenterChild* curr = (KPresenterChild*)chl.current();
-                embedded.appendChild(curr->save(doc, true));
-                QDomElement settings=doc.createElement("SETTINGS");
-                for ( unsigned int i = 0; i < _objectList->count(); i++ ) {
-                    kpobject = _objectList->at( i );
-                    if ( kpobject->getType() == OT_PART &&
-                         dynamic_cast<KPPartObject*>( kpobject )->getChild() == curr )
-                        settings.appendChild(kpobject->save( doc ));
+                int offset=i*m_pageList.at(i)->getZoomPageRect().height();
+                if ( oIt.current()->getType() == OT_PART &&
+                     dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == chl.current() )
+                {
+                    QDomElement embedded=doc.createElement("EMBEDDED");
+                    KPresenterChild* curr = (KPresenterChild*)chl.current();
+                    embedded.appendChild(curr->save(doc, true));
+                    QDomElement settings=doc.createElement("SETTINGS");
+                    QPtrListIterator<KPObject> setOIt(m_pageList.at(i)->objectList());
+                    for (; setOIt.current(); ++setOIt )
+                    {
+                        if ( setOIt.current()->getType() == OT_PART &&
+                             dynamic_cast<KPPartObject*>( setOIt.current() )->getChild() == curr )
+                            settings.appendChild(kpobject->save( doc,offset ));
+                    }
+                    embedded.appendChild(settings);
+                    presenter.appendChild(embedded);
                 }
-                embedded.appendChild(settings);
-                presenter.appendChild(embedded);
             }
         }
-#endif
     }
-
     makeUsedPixmapList();
 
     // Save the PIXMAPS and CLIPARTS list
