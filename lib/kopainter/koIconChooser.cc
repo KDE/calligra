@@ -22,6 +22,8 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
+#include <qhbox.h>
+#include <qlayout.h>
 
 KoPixmapWidget::KoPixmapWidget(const QPixmap &aPixmap, QWidget *parent, const char *name):
 QFrame(parent, name, WStyle_Customize | WStyle_NoBorder)
@@ -307,6 +309,49 @@ void KoIconChooser::calculateCells()
 void KoIconChooser::showFullPixmap(const QPixmap &pix, const QPoint &/*p*/)
 {
   mPixmapWidget = new KoPixmapWidget(pix, 0L);
+}
+
+KoPatternChooser::KoPatternChooser( const QPtrList<KoIconItem> &list, QWidget *parent, const char *name )
+ : QWidget( parent, name )
+{
+    // only serves as beautifier for the iconchooser
+    //frame = new QHBox( this );
+    //frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    chooser = new KoIconChooser( QSize(30,30), this, "pattern chooser" );
+
+	QObject::connect( chooser, SIGNAL(selected( KoIconItem * ) ),
+					            this, SIGNAL( selected( KoIconItem * )));
+
+	QPtrListIterator<KoIconItem> itr( list );
+	for( itr.toFirst(); itr.current(); ++itr )
+		chooser->addItem( itr.current() );
+
+	QVBoxLayout *mainLayout = new QVBoxLayout( this, 1, -1, "main layout" );
+	mainLayout->addWidget( chooser, 10 );
+}
+
+
+KoPatternChooser::~KoPatternChooser()
+{
+  delete chooser;
+  //delete frame;
+}
+
+// set the active pattern in the chooser - does NOT emit selected() (should it?)
+void KoPatternChooser::setCurrentPattern( KoIconItem *pattern )
+{
+    chooser->setCurrentItem( pattern );
+}
+
+void KoPatternChooser::addPattern( KoIconItem *pattern )
+{
+    chooser->addItem( pattern );
+}
+
+// return the active pattern
+KoIconItem *KoPatternChooser::currentPattern()
+{
+    return chooser->currentItem();
 }
 
 #include "koIconChooser.moc"

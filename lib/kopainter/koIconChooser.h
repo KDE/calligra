@@ -99,4 +99,26 @@ private:
   int                     mMargin;
 };
 
+// This is a first attempt at a pattern chooser widget abstraction which is at least
+// useful for two applications(karbon and krita). It is really a light version of
+// kis_patternchooser. (Rob)
+class KoPatternChooser : public QWidget
+{
+  Q_OBJECT
+public:
+  KoPatternChooser( const QPtrList<KoIconItem> &list, QWidget *parent, const char *name = 0 );
+  ~KoPatternChooser();
+
+  KoIconItem *currentPattern();
+  void setCurrentPattern( KoIconItem * );
+  void addPattern( KoIconItem * );
+ 
+private:
+  KoIconChooser *chooser;
+
+signals:
+  void selected( KoIconItem * );
+};
+
+
 #endif
