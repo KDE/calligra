@@ -54,10 +54,10 @@ VSelectNodes::visitVPath( VPath& path )
 					path.current()->prev() &&
 					path.current()->prev()->knotIsSelected() )
 				{
-					path.current()->selectPoint( 0, m_select );
-
-					//setSuccess();
+					path.current()->selectPoint( 0, true );
 				}
+				else
+					path.current()->selectPoint( 0, false );
 			}
 
 //			if( path.current()->type() == VSegment::curve 
