@@ -1318,8 +1318,11 @@ void RTFImport::parseField( RTFProperty * )
 		    {
 			hrefName += list[i].mid( 1, (list[i].length() - 2) );
 		    }
+		    else if (list[i].startsWith("http"))
+		    {
+			hrefName += list[i];
+		    }
 		}
-
 		node.addNode( "LINK" );
 		node.setAttribute( "linkName", fldrslt );
 		node.setAttribute( "hrefName", hrefName.utf8() );
