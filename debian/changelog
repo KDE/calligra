@@ -1,8 +1,8 @@
-koffice (2.0-20000810-1.0) experimental; urgency=low
+koffice (2.0-20000816-1.0) experimental; urgency=low
  
-  * more upstream fixes
+  * New upstream beta
  
- -- Ivan E. Moore II <rkrusty@debian.org>  Thu, 10 Aug 2000 02:30:00 -0700
+ -- Ivan E. Moore II <rkrusty@debian.org>  Wed, 16 Aug 2000 22:30:00 -0700
 
 koffice-cvs (2.0-20000521-1.0) experimental; urgency=low
  
