@@ -55,25 +55,6 @@ VDrawSelection::visitVComposite( VComposite &composite )
 		m_painter->strokePath();
 	}
 
-	// draw simplistic contour:
-	if( composite.state() == VObject::edit )
-	{
-		// Draw center node:
-		//if( m_drawCenterNode )
-		//{
-//			const KoPoint center = composite.boundingBox().center();
-
-//			m_painter->newPath();
-			//m_painter->setRasterOp( Qt::XorROP );
-//			m_painter->setPen( Qt::NoPen );
-//			m_painter->setBrush( Qt::yellow );
-
-//			m_painter->drawNode( center, 2 );
-
-//			m_painter->fillPath();
-		//}
-	}
-
 	// Draw nodes and control lines:
 	if( composite.state() == VObject::selected )
 	{
