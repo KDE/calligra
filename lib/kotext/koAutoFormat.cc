@@ -57,6 +57,8 @@ void KoAutoFormat::readConfig()
     m_convertUpperCase = config.readBoolEntry( "ConvertUpperCase", false );
     m_convertUpperUpper = config.readBoolEntry( "ConvertUpperUpper", false );
     m_advancedAutoCorrect= config.readBoolEntry( "AdvancedAutocorrect", true);
+    m_autoDetectUrl = config.readBoolEntry("AutoDetectUrl",false);
+
     QString begin = config.readEntry( "TypographicQuotesBegin", "«" );
     m_typographicQuotes.begin = begin[0];
     QString end = config.readEntry( "TypographicQuotesEnd", "»" );
@@ -134,6 +136,8 @@ void KoAutoFormat::saveConfig()
     config.writeEntry( "TypographicQuotesEnd", QString( m_typographicQuotes.end ) );
     config.writeEntry( "TypographicQuotesEnabled", m_typographicQuotes.replace );
     config.writeEntry( "AdvancedAutocorrect", m_advancedAutoCorrect);
+    config.writeEntry( "AutoDetectUrl",m_autoDetectUrl);
+
     config.setGroup( "AutoFormatEntries" );
     KoAutoFormatEntryMap::Iterator it = m_entries.begin();
 
@@ -213,6 +217,27 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
     if ( !m_convertUpperUpper && !m_convertUpperCase
          && !m_typographicQuotes.replace && m_entries.count()==0)
         return;
+
+    if( ch.isSpace())
+    {
+        if ( index > 0 )
+        {
+            if( m_autoDetectUrl)
+            {
+                QString word;
+                KoTextString *s = parag->string();
+                for ( int i = index - 1; i >= 0; --i )
+                {
+                    QChar ch = s->at( i ).c;
+                    if ( ch.isSpace() )
+                        break;
+                    word.prepend( ch );
+                }
+
+                doAutoDetectUrl( textEditCursor, parag,index, word, txtObj );
+            }
+        }
+    }
 
     //kdDebug() << "KoAutoFormat::doAutoFormat ch=" << QString(ch) << endl;
     //if ( !m_enabled )
@@ -447,6 +472,12 @@ void KoAutoFormat::configAdvancedAutocorrect( bool _aa)
 {
     m_advancedAutoCorrect = _aa;
 }
+
+void KoAutoFormat::configAutoDetectUrl(bool _au)
+{
+    m_autoDetectUrl=_au;
+}
+
 
 bool KoAutoFormat::isUpper( const QChar &c )
 {

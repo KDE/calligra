@@ -146,7 +146,7 @@ public:
      */
     void insert( QTextCursor * cursor, KoTextFormat * currentFormat, const QString &text,
                  bool checkNewLine, bool removeSelected, const QString & commandName,
-                 CustomItemsMap customItemsMap = CustomItemsMap() );
+                 CustomItemsMap customItemsMap = CustomItemsMap(),int selectionId=KoTextDocument::Standard );
     /**
      * Remove the text currently selected, including undo/redo creation/update.
      * @param cursor the caret position

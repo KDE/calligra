@@ -93,6 +93,8 @@ public:
     void configUpperCase( bool _uc );
     void configUpperUpper( bool _uu );
     void configAdvancedAutocorrect( bool _aa);
+    void configAutoDetectUrl(bool _au);
+
 
     TypographicQuotes getConfigTypographicQuotes() const
     { return m_typographicQuotes; }
@@ -104,6 +106,8 @@ public:
     bool getConfigAdvancedAutoCorrect() const
     { return m_advancedAutoCorrect;}
 
+    bool getConfigAutoDetectUrl() const
+    { return m_autoDetectUrl;}
 
     // Add/remove entries, called by the dialog
     void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
@@ -156,12 +160,15 @@ protected:
     void doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj );
     void buildMaxLen();
 
+    virtual void doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj ){;}
+
 private:
     KoDocument *m_doc;
 
     //bool m_enabled;
     bool m_configRead;
     bool m_convertUpperCase, m_convertUpperUpper,m_advancedAutoCorrect;
+    bool m_autoDetectUrl;
     TypographicQuotes m_typographicQuotes;
 
     typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;

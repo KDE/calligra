@@ -472,21 +472,21 @@ void KoTextObject::doKeyboardAction( QTextCursor * cursor, KoTextFormat * & /*cu
 void KoTextObject::insert( QTextCursor * cursor, KoTextFormat * currentFormat,
                              const QString &txt, bool checkNewLine,
                              bool removeSelected, const QString & commandName,
-                             CustomItemsMap customItemsMap )
+                             CustomItemsMap customItemsMap,int selectionId )
 {
     //kdDebug(32001) << "KoTextObject::insert txt=" << txt << endl;
     KoTextDocument *textdoc = textDocument();
     emit hideCursor();
-    if ( textdoc->hasSelection( KoTextDocument::Standard ) && removeSelected  ) {
+    if ( textdoc->hasSelection( selectionId ) && removeSelected  ) {
         //removeSelectedText( cursor );
         if( customItemsMap.isEmpty())
         {
-            emitNewCommand(replaceSelectionCommand( cursor, txt,KoTextDocument::Standard, commandName));
+            emitNewCommand(replaceSelectionCommand( cursor, txt,selectionId, commandName));
             return;
         }
         else
         {
-            removeSelectedTextCommand( cursor,KoTextDocument::Standard  );
+            removeSelectedTextCommand( cursor,selectionId  );
         }
     }
     QTextCursor c2 = *cursor;

@@ -59,7 +59,7 @@ public:
     KoTextView( KoTextObject *textobj );
     virtual ~KoTextView();
 
-    virtual KoTextViewIface* dcopObject();
+     virtual KoTextViewIface* dcopObject();
 
     /** Call this before deleting */
     /** don't remove selection when we made dnd between different frame*/

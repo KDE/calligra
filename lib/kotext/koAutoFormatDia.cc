@@ -197,6 +197,11 @@ void KoAutoFormatDia::setupTab1()
     cbUpperUpper->setChecked( m_autoFormat.getConfigUpperUpper() );
     ( void )new QWidget( tab1 );
 
+    cbDetectUrl=new QCheckBox( tab1 );
+    cbDetectUrl->setText( i18n( "Auto detect url" ) );
+    cbDetectUrl->resize( cbDetectUrl->sizeHint() );
+    cbDetectUrl->setChecked( m_autoFormat.getConfigAutoDetectUrl());
+    ( void )new QWidget( tab1 );
 
     slotChangeState(state);
 }
@@ -415,6 +420,7 @@ bool KoAutoFormatDia::applyConfig()
 
     m_docAutoFormat->configUpperCase( cbUpperCase->isChecked() );
     m_docAutoFormat->configUpperUpper( cbUpperUpper->isChecked() );
+    m_docAutoFormat->configAutoDetectUrl( cbDetectUrl->isChecked() );
 
     // Second tab
     m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );
