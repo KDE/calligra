@@ -1742,7 +1742,7 @@ bool KWTextFrameSet::isFrameEmpty( KWFrame * theFrame )
         return bottom < theFrame->internalY();
 
     kdWarning() << "KWTextFrameSet::isFrameEmpty called for frame " << theFrame << " which isn't a child of ours!" << endl;
-    if ( theFrame->frameSet() )
+    if ( theFrame->frameSet()!=0L && theFrame->frameSet()->getName()!=0L)
         kdDebug() << "(this is " << getName() << " and the frame belongs to " << theFrame->frameSet()->getName() << ")" << endl;
     return false;
 }
