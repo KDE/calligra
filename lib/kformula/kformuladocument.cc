@@ -665,6 +665,8 @@ void Document::createActions(KActionCollection* collection)
                                                   0, //CTRL + Key_I,
                                                   this, SLOT( textItalic() ),
                                                   collection, "formula_format_italic" );
+    impl->formatBoldAction->setEnabled( false );
+    impl->formatItalicAction->setEnabled( false );
 
     QStringList delimiter;
     delimiter.append(QString("("));
@@ -722,6 +724,7 @@ void Document::createActions(KActionCollection* collection)
                                          0, this, SLOT(fontFamily()),
                                          collection, "formula_fontfamily");
     impl->fontFamily->setItems( ff );
+    impl->fontFamily->setEnabled( false );
 
     impl->actionsCreated = true;
 }

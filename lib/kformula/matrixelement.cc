@@ -1486,6 +1486,7 @@ void MultilineElement::calcSizes( const ContextStyle& context,
     font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
     QFontMetrics fm( font );
     luPixel leading = context.ptToLayoutUnitPt( fm.leading() );
+    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle ) );
 
     uint count = content.count();
     luPixel height = -leading;
@@ -1499,7 +1500,7 @@ void MultilineElement::calcSizes( const ContextStyle& context,
         height += leading;
         line->setX( 0 );
         line->setY( height );
-        height += line->getHeight();
+        height += line->getHeight() + distY;
         width = QMAX( line->getWidth(), width );
     }
 
