@@ -30,7 +30,7 @@
 #include <klocale.h>
 
 static const char *description=I18N_NOOP("KOffice Illustration Tool");
-static const char *version="1.2";
+static const char *version="1.2.1";
 
 KAboutData *newKontourAboutData()
 {
