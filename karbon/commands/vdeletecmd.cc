@@ -28,7 +28,6 @@ VDeleteCmd::VDeleteCmd( VDocument* doc )
 	: VCommand( doc, i18n( "Delete Objects" ), "editdelete" )
 {
 	m_selection = document()->selection()->clone();
-	document()->selection()->clear();
 
 	if( m_selection->objects().count() == 1 )
 		setName( i18n( "Delete Object" ) );
@@ -49,6 +48,7 @@ VDeleteCmd::~VDeleteCmd()
 void
 VDeleteCmd::execute()
 {
+	document()->selection()->clear();
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
