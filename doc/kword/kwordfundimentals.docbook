@@ -1,5 +1,22 @@
-<chapter id="Fundimental">
-<title>Fundimentals</title>
+<chapter id="fundimental">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+<date>2000-10-21</date>
+<releaseinfo>1.01.00</releaseinfo>
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KControl</keyword>
+<keyword>Bell</keyword>
+<keyword>Settings</keyword>
+</keywordset>
+</chapterinfo><title>Fundimentals</title>
 
 <para>This next section is designed to show you how to start
 <application>KWord</application> and some basic but important concepts

@@ -33,7 +33,7 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup> 
 
-<date>2001-19-05</date>
+<date>2001-08-06</date>
 <releaseinfo>1.01.00</releaseinfo>
 
 <abstract>
@@ -113,6 +113,8 @@ table by subject</para></listitem>
 <listitem><para>Serial characters still not clear how/if that works.</para></listitem>
 <listitem><para>Ungrouping a table still causes a segfault.  Still need to write about that section.</para></listitem>
 <listitem><para>Variables editor not working on first pass through.</para></listitem>
+<listitem><para>Determine if "Side Head" dialog works under Frames->Frameset->Options.</para></listitem>
+<listitem><para>Determine if "Line Spacing" dropdown box works under Format->Paragraph->Indents and Spacing.</para></listitem>
 
 </itemizedlist>
 
@@ -314,7 +316,7 @@ easy.</para>
 <row><entry>Experience Level</entry><entry>Previous Experience</entry><entry>What you should read</entry></row>
 <row><entry>Novice</entry><entry>No previous computer expierience</entry>
 <entry><para><simplelist type="vert" columns="1">
-<member><link linkend="Fundimental">Fundimentals</link></member>
+<member><link linkend="fundimental">Fundimentals</link></member>
 <member><link linkend="Tutorial">Step by Step Tutorial</link></member>
 <member><link linkend="KWordScreen">The KWord Screen</link></member>
 <member><link linkend="Guides">Document Storage and Printing</link></member>
@@ -323,7 +325,7 @@ easy.</para>
 </simplelist></para></entry></row>
 <row><entry>Intermediate</entry><entry>Comfortable with other page based wordprocessors (Microsoft Word, Word Perfect and Applixware.)  </entry>
 <entry><para><simplelist type="vert" columns="1">
-<member><link linkend="Fundimental">Fundimentals</link></member>
+<member><link linkend="fundimental">Fundimentals</link></member>
 <member><link linkend="Tutorial">Step by Step Tutorial</link></member>
 </simplelist></para></entry></row>
 <row><entry>Advanced User</entry><entry>Comfortable with other frames based word processors (Frame Maker, etc).</entry>
