@@ -24,7 +24,7 @@
 
 #include "kexitableviewdata.h"
 
-#include "kexivalidator.h"
+#include <kexivalidator.h>
 
 #include <kexidb/field.h>
 #include <kexidb/queryschema.h>
@@ -34,6 +34,8 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+
+#include <qapplication.h>
 
 unsigned short KexiTableViewData::charTable[]=
 {
@@ -641,6 +643,8 @@ void KexiTableViewData::insertRow(KexiTableItem& item, uint index, bool repaint)
 void KexiTableViewData::clearInternal()
 {
 	clearRowEditBuffer();
+	qApp->processEvents( 1 );
+//TODO: this is time consuming: find better data model
 	KexiTableViewDataBase::clear();
 }
 

@@ -244,6 +244,9 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 - add own impl. (based on Qt) for date/time editor because:
 -- no focusSection(), etc. is available in current impl.
 -- frames cannot be easily removed
+-store last sorting column (and type) and load it on KexiTableView::setData()
+ (not it's only cleared)
+- replace KexiDB::RowData usage in KexiTableItem with something faster
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -262,6 +265,7 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 ==== Forms TODO ====
 -make forms db aware
 --add record navigator
+-add "datasheet view" to db-aware forms
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -396,6 +400,24 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 
 CCMAIL: dkite@shaw.ca
+
+2004-11-13
+Property Editor
+- fixed moving selection (esp. using Home key) 
+Query Designer
+- never ending story: fixed actions availability os switching back to design more
+- setting column aliases available using GUI
+- "caption" property hidden for KEXI_NO_UNFINISHED
+- wait cursor enabled for query executing
+Kexi Browser
+- CTRL+Enter shortcut handling fixed
+Main Window
+- property editor is shown before opening dialog (not after) 
+  to allow initialize proper size inside the dialog. 
+  E.g. this fixes column widths in query designer's view.
+Table View
+- sorting settings are cleared on setData()
+
 
 2004-11-12
 Kexi

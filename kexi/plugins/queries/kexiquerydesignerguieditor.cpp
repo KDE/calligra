@@ -240,7 +240,7 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
 		KexiPropertyBuffer *buf = d->buffers->at(r);
 		if (buf) {
 			QString tableName = (*buf)["table"].value().toString();
-			if (sortedTableNames.end() == qFind( sortedTableNames.begin(), 
+			if (tableName!="*" && sortedTableNames.end() == qFind( sortedTableNames.begin(), 
 				sortedTableNames.end(), tableName ))
 			{
 				//table not found: mark this line for later remove
@@ -807,6 +807,7 @@ void KexiQueryDesignerGuiEditor::slotTableAdded(KexiDB::TableSchema & /*t*/)
 		return;
 	updateColumnsData();
 	setDirty();
+	d->dataTable->setFocus();
 }
 
 void KexiQueryDesignerGuiEditor::slotTableHidden(KexiDB::TableSchema & /*t*/)

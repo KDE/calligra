@@ -20,6 +20,7 @@
  */
 
 #include <qtimer.h>
+#include <qapplication.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -124,7 +125,7 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 
 	const uint fcount = m_cursor->fieldCount();
 	m_cursor->moveFirst();
-	while (!m_cursor->eof()) {
+	for (int i=0;!m_cursor->eof();i++) {
 		KexiTableItem *item = new KexiTableItem(fcount);
 		m_cursor->storeCurrentRow(*item);
 /*		for (uint f=0; f<fcount; f++) {
@@ -132,6 +133,8 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 		}*/
 		tv_data->append( item );
 		m_cursor->moveNext();
+		if ((i % 100) == 0)
+			qApp->processEvents( 1 );
 	}
 //	if (m_cursor->moveFirst() && m_cursor->moveLast()) {
 //	}
