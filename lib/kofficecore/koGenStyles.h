@@ -134,7 +134,8 @@ public:
     enum { STYLE_PAGELAYOUT = 0,
            STYLE_USER = 1,
            STYLE_AUTO = 2,
-           STYLE_MASTER = 3 };
+           STYLE_MASTER = 3,
+           STYLE_LIST = 4 };
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),
      * but first you must define its properties and attributes.
