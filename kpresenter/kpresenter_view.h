@@ -345,6 +345,8 @@ public slots:
 
     void slotAutoComplete();
 
+    void removeComment();
+
 public:
     // create GUI
     virtual void createGUI();
@@ -802,6 +804,7 @@ private:
 
     KAction *actionInsertComment;
     KAction *actionEditComment;
+    KAction *actionRemoveComment;
 
 
     DCOPObject *dcop;

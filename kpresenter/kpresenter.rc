@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="48">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="49">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -544,6 +544,7 @@
  <Action name="edit_paste"/>
  <Separator/>
  <Action name="edit_comment"/>
+ <Action name="remove_comment"/>
  <ActionList name="datatools"/>
 </Menu>
 <Menu name="polygonobject_popup">

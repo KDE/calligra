@@ -2997,6 +2997,11 @@ void KPresenterView::setupActions()
     actionAddHelpLine = new KAction( i18n( "Add new help line..."), 0,
                                      this, SLOT(addHelpLine()),
                                      actionCollection(), "add_helpline");
+
+    actionRemoveComment = new KAction( i18n("Remove Comment"), 0,
+                                       this,SLOT(removeComment()),
+                                       actionCollection(), "remove_comment");
+
 }
 
 void KPresenterView::textSubScript()
@@ -5842,5 +5847,15 @@ void KPresenterView::addHelpLine()
     m_pKPresenterDoc->setModified( true );
     m_canvas->repaint( false );
 }
+
+void KPresenterView::removeComment()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit )
+    {
+        edit->removeComment();
+    }
+}
+
 
 #include <kpresenter_view.moc>
