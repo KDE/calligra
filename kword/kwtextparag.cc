@@ -256,7 +256,9 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->font().italic()) );
     }
-    if( !refFormat || curFormat->underline() != refFormat->underline() )
+    if( !refFormat || curFormat->underline() != refFormat->underline()
+        || curFormat->nbLineType() != refFormat->nbLineType()
+        || curFormat->textUnderlineColor() !=refFormat->textUnderlineColor())
     {
         elem = doc.createElement( "UNDERLINE" );
         formatElem.appendChild( elem );
@@ -284,6 +286,12 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             break;
         }
         elem.setAttribute( "styleline", strLineType );
+        if ( curFormat->textUnderlineColor().isValid() )
+        {
+            elem.setAttribute( "red", curFormat->textUnderlineColor().red() );
+            elem.setAttribute( "green", curFormat->textUnderlineColor().green() );
+            elem.setAttribute( "blue", curFormat->textUnderlineColor().blue() );
+        }
     }
     if( !refFormat || curFormat->font().strikeOut() != refFormat->font().strikeOut() )
     {
@@ -504,7 +512,6 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
         if ( elem.hasAttribute("styleline" ))
         {
             QString strLineType = elem.attribute("styleline");
-            kdDebug()<<" strLineType ********************************** :"<<strLineType<<endl;
             if ( strLineType =="solid")
                 format.setLineType( KoTextFormat::SOLID );
             else if ( strLineType =="dash" )
@@ -518,6 +525,7 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
             else
                 format.setLineType( KoTextFormat::SOLID );
         }
+
     }
     elem = formatElem.namedItem( "STRIKEOUT" ).toElement();
     if ( !elem.isNull() )
