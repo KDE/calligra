@@ -25,14 +25,19 @@
 #include <myfile.h>
 #include <properties.h>
 #include <qarray.h>
+#include <qobject.h>
 #include <qstring.h>
 #include <qdom.h>
 #include <qvector.h>
 
-class WinWordDoc: private Document
+class WinWordDoc:
+    public QObject, private Document
 {
+
+    Q_OBJECT
+
 public:
-    WinWordDoc(QDomDocument &part, const myFile &mainStream,
+    WinWordDoc(QCString &result, const myFile &mainStream,
                const myFile &table0Stream, const myFile &table1Stream,
                const myFile &dataStream);
     ~WinWordDoc();
@@ -40,7 +45,15 @@ public:
     const bool isOk() const { return m_success; }
 
     const bool convert();
-    const QDomDocument * const part();
+
+signals:
+    // See olefilter.h for information
+    void signalSavePic(
+        const QString &extension,
+        unsigned int length,
+        const char *data,
+        const QString &key,
+        QString &id);
 
 private:
     WinWordDoc(const WinWordDoc &);
@@ -56,6 +69,7 @@ private:
         DONE
     } m_phase;
     bool m_success;
+
 
     // Convert from Word text into XML-friendly text.
 
@@ -84,7 +98,9 @@ private:
     void gotTableEnd(unsigned tableNumber);
     void gotTableRow(unsigned tableNumber, unsigned rowNumber, const QString texts[], const PAP styles[], TAP &row);
 
-    QDomDocument m_part;
+    // This is where the result will end up!
+
+    QCString &m_result;
 
     // Word has a very flexible concept of columns: each row can vary the
     // edges of each column. We must map this onto a set of fixed-width columns
@@ -92,7 +108,7 @@ private:
     // the original Word cells. We accumulate all the known edges for a given
     // table in an array, and store the per-table arrays in a vector.
 
-    QVector< QArray<unsigned> > m_cellEdges;                                    
+    QVector< QArray<unsigned> > m_cellEdges;
     int cacheCellEdge(
         unsigned tableNumber,
         unsigned cellEdge);
@@ -104,6 +120,7 @@ private:
     // we will fill m_body instead.
 
     QString m_body;
+    QString m_pixmaps;
 
     // Page sizes, margins etc. all in points.
 

@@ -24,6 +24,7 @@
 */
 
 #include <kdebug.h>
+#include <msdrawing.h>
 #include <msword.h>
 #include <properties.h>
 #include <qtextcodec.h>
@@ -460,8 +461,9 @@ void MsWord::getAssociatedStrings()
     m_lastRevisedBy = data.strings[ibstAssocLastRevBy];
 }
 
-// Get the character property exceptions for a range of file positions by walking the BTEs.
-// The result is an array of CHPXs which start and end at the given range.
+// Get the character property exceptions for a range of file positions by
+// walking the BTEs. The result is an array of CHPXs which start and end at the
+// given range.
 void MsWord::getChpxs(U32 startFc, U32 endFc, CHPXarray &result)
 {
     // A bin table is a plex of BTEs.
@@ -547,6 +549,72 @@ void MsWord::getChpxs(const U8 *fkp, U32 startFc, U32 endFc, CHPXarray &result)
 
         result.resize(index + 1);
         result[index] = style;
+    }
+}
+
+// Get a piece of Office art by walking the FSPAs.
+
+void MsWord::getOfficeArt(
+    U32 anchorCp,
+    U32 *pictureId,
+    QString &pictureType,
+    U32 *pictureLength,
+    const U8 **pictureData)
+{
+    // A spa table is a plex of FSPAs.
+
+    Plex<FSPA, sizeof(FSPA)> fspas = Plex<FSPA, sizeof(FSPA)>(this);
+    U32 actualStartCp;
+    U32 actualEndCp;
+    FSPA data;
+
+    // Walk the FSPAs.
+
+    pictureType = "";
+    *pictureLength = 0;
+    *pictureData = 0L;
+    fspas.startIteration(m_tableStream + m_fib.fcPlcspaMom, m_fib.lcbPlcspaMom);
+    while (fspas.getNext(&actualStartCp, &actualEndCp, &data))
+    {
+        if (actualStartCp == anchorCp)
+        {
+            MsDrawing::MSOBLIPTYPE msType;
+
+            MsDrawing::getDrawing(
+                m_tableStream + m_fib.fcDggInfo,
+                m_fib.lcbDggInfo,
+                data.spid,
+                m_dataStream,
+                &msType,
+                pictureLength,
+                pictureData);
+            *pictureId = data.spid;
+
+            // Convert the Microsoft picture type to a common file extension.
+
+            switch (msType)
+            {
+            case MsDrawing::msoblipEMF:
+            case MsDrawing::msoblipWMF:
+                pictureType = "wmf";
+                break;
+            case MsDrawing::msoblipPICT:
+                pictureType = "pict";
+                break;
+            case MsDrawing::msoblipJPEG:
+                pictureType = "jpg";
+                break;
+            case MsDrawing::msoblipPNG:
+                pictureType = "png";
+                break;
+            case MsDrawing::msoblipDIB:
+                pictureType = "dib";
+                break;
+            default:
+                pictureType = "img";
+                break;
+            };
+        }
     }
 }
 
@@ -1492,6 +1560,21 @@ unsigned MsWord::read(const U8 *in, BTE *out)
     }
     return bytes;
 } // BTE
+
+unsigned MsWord::read(const U8 *in, FSPA *out)
+{
+    U32 shifterU32;
+    U16 shifterU16;
+    U8 shifterU8;
+    U8 *ptr;
+    unsigned bytes = 0;
+
+    ptr = (U8 *)out;
+    shifterU32 = shifterU16 = shifterU8 = 0;
+
+    bytes = MsWordGenerated::read(in + bytes, out);
+    return bytes;
+} // FSPA
 
 unsigned MsWord::read(const U8 *in, PCD *out)
 {

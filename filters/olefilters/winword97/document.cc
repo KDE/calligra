@@ -25,8 +25,10 @@ DESCRIPTION
 #include <kdebug.h>
 #include <document.h>
 #include <properties.h>
+#include <typeinfo>
 
 void Document::createAttributes(
+    const QString &text,
     const PAP &baseStyle,
     const CHPXarray &chpxs,
     Attributes &attributes)
@@ -35,17 +37,104 @@ void Document::createAttributes(
 
     runs = chpxs.size();
     attributes.baseStyle = baseStyle;
-    attributes.runs.resize(runs);
-
-    // Initialise each array entry with the base style, then apply the deltas.
-
+    attributes.runs.setAutoDelete(true);
     for (unsigned i = 0; i < runs; i++)
     {
-        attributes.runs[i].start = chpxs[i].startFc;
-        attributes.runs[i].end = chpxs[i].endFc;
-        attributes.runs[i].values = new Properties(*this);
-        attributes.runs[i].values->apply(baseStyle);
-        attributes.runs[i].values->apply(chpxs[i].data.ptr, chpxs[i].data.count);
+        Properties exceptionStyle = Properties(*this);
+        const CHP *chp;
+
+        // Initialise the entry with the base style, then apply the deltas.
+
+        exceptionStyle.apply(baseStyle);
+        exceptionStyle.apply(chpxs[i].data.ptr, chpxs[i].data.count);
+        chp = exceptionStyle.getChp();
+        if (!chp->fSpec)
+        {
+            // This is normal text.
+
+            Format *format = new Format;
+
+            format->start = chpxs[i].startFc;
+            format->end = chpxs[i].endFc;
+            format->values = new Properties(exceptionStyle);
+            attributes.runs.append(format);
+        }
+        else
+        if (chp->fObj)
+        {
+            // OLE2 and embedded objects.
+
+            if (chp->fOle2)
+            {
+                kdDebug(s_area) << "Document::createAttributes: OLE2 object" << endl;
+            }
+            else
+            {
+                kdDebug(s_area) << "Document::createAttributes: embedded object" << endl;
+            }
+
+            // TBD: replace with object support!
+
+            Format *format = new Format;
+
+            format->start = chpxs[i].startFc;
+            format->end = chpxs[i].endFc;
+            format->values = new Properties(exceptionStyle);
+            attributes.runs.append(format);
+        }
+        else
+        {
+            U32 cp = 0;
+            U32 pictureId;
+            QString pictureType;
+            U32 pictureLength = 0;
+            const U8 *pictureData;
+
+            // This is either a picture or an Office art object or...
+
+            switch (text[chpxs[i].startFc])
+            {
+            case 8:
+                cp = m_characterPosition + chpxs[i].startFc;
+                MsWord::getOfficeArt(
+                    cp,
+                    &pictureId,
+                    pictureType,
+                    &pictureLength,
+                    &pictureData);
+                break;
+            default:
+                kdError(s_area) << "Document::createAttributes: unsupported object type:" <<
+                    text[chpxs[i].startFc].unicode() << endl;
+                break;
+            }
+
+            if (pictureLength)
+            {
+                Image *image = new Image;
+
+                image->start = chpxs[i].startFc;
+                image->end = chpxs[i].endFc;
+                m_imageNumber++;
+                image->id = (unsigned)pictureId;
+                image->type = pictureType;
+                image->length = (unsigned)pictureLength;
+                image->data = (const char *)pictureData;
+                attributes.runs.append(image);
+            }
+            else
+            {
+                kdError(s_area) << "Document::createAttributes: cannot find picture:" <<
+                    cp << endl;
+
+                Format *format = new Format;
+
+                format->start = chpxs[i].startFc;
+                format->end = chpxs[i].endFc;
+                format->values = new Properties(exceptionStyle);
+                attributes.runs.append(format);
+            }
+        }
     }
 }
 
@@ -73,8 +162,9 @@ void Document::gotParagraph(
 {
     Attributes attributes;
 
-    createAttributes(pap, chpxs, attributes);
+    createAttributes(text, pap, chpxs, attributes);
     gotParagraph(text, attributes);
+    m_characterPosition += text.length();
 }
 
 void Document::gotHeadingParagraph(
@@ -84,8 +174,9 @@ void Document::gotHeadingParagraph(
 {
     Attributes attributes;
 
-    createAttributes(pap, chpxs, attributes);
+    createAttributes(text, pap, chpxs, attributes);
     gotHeadingParagraph(text, attributes);
+    m_characterPosition += text.length();
 }
 
 void Document::gotListParagraph(
@@ -95,8 +186,9 @@ void Document::gotListParagraph(
 {
     Attributes attributes;
 
-    createAttributes(pap, chpxs, attributes);
+    createAttributes(text, pap, chpxs, attributes);
     gotListParagraph(text, attributes);
+    m_characterPosition += text.length();
 }
 
 void Document::gotTableBegin()
@@ -109,16 +201,23 @@ void Document::gotTableBegin()
 void Document::gotTableEnd()
 {
     gotTableEnd(m_tableNumber);
+    m_characterPosition++;
 }
 
 void Document::gotTableRow(const QString texts[], const PAP styles[], TAP &row)
 {
     gotTableRow(m_tableNumber, m_tableRowNumber, texts, styles, row);
+    for (unsigned i = 0; i < row.itcMac; i++)
+    {
+        m_characterPosition += texts[i].length();
+    }
     m_tableRowNumber++;
 }
 
 void Document::parse()
 {
     m_tableNumber = 0;
+    m_characterPosition = 0;
+    m_imageNumber = 0;
     MsWord::parse();
 }

@@ -36,6 +36,7 @@ public:
     // Create an object with default properties.
 
     Properties(MsWord &document);
+    Properties(const Properties &original);
     ~Properties();
 
     // Modify the properties with style information from various sources...

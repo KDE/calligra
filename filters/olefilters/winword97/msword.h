@@ -40,7 +40,8 @@ class MsWord: public MsWordGenerated
 {
 public:
 
-    // Construction. Invoke with the OLE streams that comprise the Word document.
+    // Construction. Invoke with the OLE streams that comprise the Word
+    // document.
 
     MsWord(
         const U8 *mainStream,
@@ -164,6 +165,7 @@ public:
 
     static unsigned read(const U8 *in, FIB *out);
     unsigned read(const U8 *in, BTE *out);
+    unsigned read(const U8 *in, FSPA *out);
     unsigned read(const U8 *in, PCD *out);
     unsigned read(const U8 *in, PHE *out);
 
@@ -288,6 +290,18 @@ protected:
         const QString texts[],
         const PAP styles[],
         TAP &row) = 0;
+
+    // Office art access by anchor location. If no picture is found,
+    // the the length will be set to zero. The returned pictureId is
+    // guaranteed to be the same for pictures which appear multiple
+    // times in the document.
+
+    void getOfficeArt(
+        U32 anchorCp,
+        U32 *pictureId,
+        QString &pictureType,
+        U32 *pictureLength,
+        const U8 **pictureData);
 
 private:
     friend class Properties;

@@ -32,12 +32,14 @@ public:
     WordFilter(const myFile &mainStream, const myFile &table0Stream,
                const myFile &table1Stream, const myFile &dataStream);
     virtual ~WordFilter();
-    virtual const QDomDocument * const part();
     virtual const bool filter();
+    virtual bool plainString() const { return true; }
+    virtual QCString CString() const;
 
 private:
     WordFilter(const WordFilter &);
     const WordFilter &operator=(const WordFilter &);
+    QCString m_result;
 
     WinWordDoc *myDoc;
 };

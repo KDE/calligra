@@ -20,11 +20,12 @@
 #include <properties.h>
 #include <qregexp.h>
 #include <winworddoc.h>
+#include <typeinfo>
 #define DISABLE_FLOATING true
 #define ROW_SIZE 30
 
 WinWordDoc::WinWordDoc(
-    QDomDocument &part,
+    QCString &result,
     const myFile &mainStream,
     const myFile &table0Stream,
     const myFile &table1Stream,
@@ -34,11 +35,12 @@ WinWordDoc::WinWordDoc(
             table0Stream.data,
             table1Stream.data,
             dataStream.data),
-        m_part(part)
+        m_result(result)
 {
     m_phase = INIT;
     m_success = TRUE;
     m_body = QString("");
+    m_pixmaps = QString("");
     m_cellEdges.setAutoDelete(true);
 }
 
@@ -58,7 +60,7 @@ int WinWordDoc::cacheCellEdge(
     unsigned i;
     unsigned *data;
     unsigned index;
-    
+
     // Do we already know about this edge?
 
     data = edges->data();
@@ -187,9 +189,21 @@ const bool WinWordDoc::convert()
         }
         newstr.append(m_body);
         newstr.append(
-            "  </FRAMESETS>\n"
+            "  </FRAMESETS>\n");
+
+        // Do we have any images?
+
+        if (m_pixmaps.length())
+        {
+            newstr.append(
+                "  <PIXMAPS>\n");
+            newstr.append(m_pixmaps);
+            newstr.append(
+                "  </PIXMAPS>\n");
+        }
+        newstr.append(
             "</DOC>\n");
-        m_part.setContent(newstr);
+        m_result = newstr.utf8();
         m_phase = DONE;
     }
     return m_success;
@@ -219,49 +233,86 @@ void WinWordDoc::encode(QString &text)
 void WinWordDoc::generateFormats(Attributes &attributes)
 {
     QString formats = "";
-    unsigned i;
+    Run *run;
 
     formats.append("<FORMATS>\n");
-    for (i = 0; i < attributes.runs.size(); i++)
+    run = attributes.runs.first();
+    while (run)
     {
-        const CHP *chp = attributes.runs[i].values->getChp();
+        if (typeid(Format) == typeid(*run))
+        {
+            const CHP *chp = static_cast<Format *>(run)->values->getChp();
 
-        formats.append("<FORMAT id=\"1\" pos=\"");
-        formats.append(QString::number(attributes.runs[i].start));
-        formats.append("\" len=\"");
-        formats.append(QString::number(attributes.runs[i].end - attributes.runs[i].start));
-        formats.append("\">\n");
-        formats.append("<COLOR red=\"0\" green=\"0\" blue=\"0\"/>\n");
-        formats.append("<FONT name=\"times\"/>\n");
-        formats.append("<SIZE value=\"");
-        // TBD: where should we really get the size?
-        //formats.append(QString::number(chp->hps / 2));
-        formats.append(QString::number(12));
-        formats.append("\"/>\n");
-        if (chp->fBold)
-            formats.append("<WEIGHT value=\"75\"/>\n");
-        else
-            formats.append("<WEIGHT value=\"50\"/>\n");
-        if (chp->fItalic)
-            formats.append("<ITALIC value=\"1\"/>\n");
-        else
-            formats.append("<ITALIC value=\"0\"/>\n");
-        if (chp->kul != 0)
-            formats.append("<UNDERLINE value=\"1\"/>\n");
-        else
-            formats.append("<UNDERLINE value=\"0\"/>\n");
-        if (chp->iss != 0)
-        {
-            if (chp->iss == 1)
-                formats.append("<VERTALIGN value=\"2\"/>\n");
+            formats.append("<FORMAT id=\"1\" pos=\"");
+            formats.append(QString::number(run->start));
+            formats.append("\" len=\"");
+            formats.append(QString::number(run->end - run->start));
+            formats.append("\">\n");
+            formats.append("<COLOR red=\"0\" green=\"0\" blue=\"0\"/>\n");
+            formats.append("<FONT name=\"times\"/>\n");
+            formats.append("<SIZE value=\"");
+            // TBD: where should we really get the size?
+            //formats.append(QString::number(chp->hps / 2));
+            formats.append(QString::number(12));
+            formats.append("\"/>\n");
+            if (chp->fBold)
+                formats.append("<WEIGHT value=\"75\"/>\n");
             else
-                formats.append("<VERTALIGN value=\"1\"/>\n");
+                formats.append("<WEIGHT value=\"50\"/>\n");
+            if (chp->fItalic)
+                formats.append("<ITALIC value=\"1\"/>\n");
+            else
+                formats.append("<ITALIC value=\"0\"/>\n");
+            if (chp->kul != 0)
+                formats.append("<UNDERLINE value=\"1\"/>\n");
+            else
+                formats.append("<UNDERLINE value=\"0\"/>\n");
+            if (chp->iss != 0)
+            {
+                if (chp->iss == 1)
+                    formats.append("<VERTALIGN value=\"2\"/>\n");
+                else
+                    formats.append("<VERTALIGN value=\"1\"/>\n");
+            }
+            else
+            {
+                formats.append("<VERTALIGN value=\"0\"/>\n");
+            }
+            formats.append("</FORMAT>\n");
         }
         else
+        if (typeid(Image) == typeid(*run))
         {
-            formats.append("<VERTALIGN value=\"0\"/>\n");
+            Image *image = static_cast<Image *>(run);
+            QString ourKey;
+            QString uid;
+
+            // Send the picture to the outside world and get back the UID.
+
+            ourKey = "image" + QString::number(image->id) + "." + image->type;
+            emit signalSavePic(
+                    image->type,
+                    image->length,
+                    image->data,
+                    ourKey,
+                    uid);
+            formats.append("<FORMAT id=\"2\" pos=\"");
+            formats.append(QString::number(image->start));
+            formats.append("\">\n");
+            formats.append("<FILENAME value=\"");
+            formats.append(ourKey);
+            formats.append("\"/>\n");
+            formats.append("</FORMAT>\n");
+
+            // Add an entry to the list of pixmaps too.
+
+            m_pixmaps.append("<KEY key=\"");
+            m_pixmaps.append(ourKey);
+            m_pixmaps.append("\" name=\"");
+            m_pixmaps.append(uid);
+            m_pixmaps.append("\"/>\n");
         }
-        formats.append("</FORMAT>\n");
+        run = attributes.runs.next();
     }
     formats.append("</FORMATS>\n");
     m_body.append(formats);
@@ -588,10 +639,4 @@ char WinWordDoc::numberingType(unsigned nfc) const
     return numberingTypes[nfc];
 }
 
-const QDomDocument * const WinWordDoc::part()
-{
-    if (m_phase == DONE)
-        return &m_part;
-    else
-        return NULL;
-}
+#include <winworddoc.moc>

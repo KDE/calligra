@@ -46,6 +46,14 @@ Properties::Properties(MsWord &document) :
     memset(&m_tap, 0, sizeof(m_tap));
 }
 
+Properties::Properties(const Properties &original) :
+    m_document(original.m_document)
+{
+    m_pap = original.m_pap;
+    m_chp = original.m_chp;
+    m_tap = original.m_tap;
+}
+
 Properties::~Properties()
 {
 }
@@ -828,6 +836,11 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
             break;
         case sprmCPicLocation: // 0x6A03
             MsWordGenerated::read(in + bytes, &m_chp.fcPic_fcObj_lTagObj);
+            m_chp.fSpec = 1;
+            break;
+        case sprmCSymbol: // 0x6A09
+            MsWordGenerated::read(in + bytes, &m_chp.ftcSym);
+            MsWordGenerated::read(in + bytes + 2, &m_chp.xchSym[0]);
             m_chp.fSpec = 1;
             break;
         case sprmTTlp: // 0x740A

@@ -22,26 +22,33 @@
 
 WordFilter::WordFilter(const myFile &mainStream, const myFile &table0Stream,
                        const myFile &table1Stream, const myFile &dataStream) :
-                       FilterBase() {
+                       FilterBase()
+{
+    myDoc = new WinWordDoc(m_result, mainStream, table0Stream, table1Stream, dataStream);
 
-    myDoc=0L;
-    m_part=QDomDocument("word");
-    myDoc=new WinWordDoc(m_part, mainStream, table0Stream, table1Stream, dataStream);
+    // Hook up the embedded picture support.
+
+    connect(
+        myDoc,
+        SIGNAL(signalSavePic(const QString &, unsigned int, const char *, const QString &, QString &)),
+        this,
+        SIGNAL(signalSavePic(const QString &, unsigned int, const char *, const QString &, QString &)));
 }
 
-WordFilter::~WordFilter() {
-
+WordFilter::~WordFilter()
+{
     delete myDoc;
-    myDoc=0L;
+    myDoc = 0L;
 }
 
-const QDomDocument * const WordFilter::part() {
-    return myDoc->part();
+QCString WordFilter::CString() const
+{
+    return m_result;
 }
 
-const bool WordFilter::filter() {
-
-    m_success=myDoc->convert();
-    m_ready=true;
+const bool WordFilter::filter()
+{
+    m_success = myDoc->convert();
+    m_ready = true;
     return true;
 }

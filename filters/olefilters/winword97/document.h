@@ -28,7 +28,7 @@ DESCRIPTION
 #include <kdebug.h>
 #include <msword.h>
 #include <properties.h>
-#include <qarray.h>
+#include <qlist.h>
 
 class Document: private MsWord
 {
@@ -55,29 +55,58 @@ protected:
 
     void parse();
 
-    typedef struct
+    // We describe the data we return to a client in terms of a "run" of
+    // character data along with some properties. The properties may be
+    // formatting information or, in the case of embedded objects, data
+    // associated with the object. Thus, we have a base class called Run
+    // and a set of derivations for each specialisation...
+
+    class Run
     {
+    public:
         U32 start;
         U32 end;
+
+        // We need at least one virtual function to enable RTTI!
+
+        virtual ~Run() {};
+    };
+
+    // Specialisation for text formatting.
+
+    class Format: public Run
+    {
+    public:
         Properties *values;
-    } PropertyRun;
+    };
+
+    // Specialisation for embedded images/objects/etc.
+
+    class Image: public Run
+    {
+    public:
+        unsigned id;
+        QString type;
+        unsigned length;
+        const char *data;
+    };
 
     typedef struct
     {
         PAP baseStyle;
-        QArray<PropertyRun> runs;
+        QList<Run> runs;
     } Attributes;
 
     virtual void gotError(
         const QString &text) = 0;
     virtual void gotParagraph(
-        const QString &text, 
+        const QString &text,
         Attributes &style) = 0;
     virtual void gotHeadingParagraph(
-        const QString &text, 
+        const QString &text,
         Attributes &style) = 0;
     virtual void gotListParagraph(
-        const QString &text, 
+        const QString &text,
         Attributes &style) = 0;
     virtual void gotTableBegin(
         unsigned tableNumber) = 0;
@@ -96,12 +125,17 @@ private:
 
     static const int s_area = 30513;
 
+    // Parse context.
+
     unsigned m_tableNumber;
     unsigned m_tableRowNumber;
+    unsigned m_characterPosition;
+    unsigned m_imageNumber;
 
     // Character property handling.
 
     void createAttributes(
+        const QString &text,
         const PAP &style,
         const CHPXarray &chpxs,
         Attributes &style);
