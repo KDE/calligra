@@ -26,6 +26,7 @@
 #include <qguardedptr.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
+#include <ktextedit.h>
 
 #include <kdialogbase.h>
 
@@ -64,6 +65,7 @@ class KFORMEDITOR_EXPORT RichTextDialog : KDialogBase
 		void  changeColor(const QColor&);
 		void  buttonToggled(int);
 		void  cursorPositionChanged(int, int);
+		void  slotVerticalAlignmentChanged(KTextEdit::VerticalAlignment align);
 
 	private:
 		KToolBar  *m_toolbar;
@@ -71,7 +73,17 @@ class KFORMEDITOR_EXPORT RichTextDialog : KDialogBase
 		KFontCombo  *m_fcombo;
 		KColorCombo  *m_colCombo;
 };
+/*
+class KFORMEDITOR_EXPORT EditListViewDialog : KDialogBase
+{
+	Q_OBJECT
 
+	public:
+		EditListViewDialog(QListView *listview, QWidget *parent);
+		~EditListViewDialog(){;}
+
+};
+*/
 /**
  * this class holds properties of widgets
  */

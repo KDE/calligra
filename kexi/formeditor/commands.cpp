@@ -287,9 +287,9 @@ CreateLayoutCommand::CreateLayoutCommand(int layoutType, QtWidgetList &list, For
 	{
 		case Container::HBox:
 		case Container::Grid:
-			m_list = new HorWidgetList();
+			m_list = new HorWidgetList(); break;
 		case Container::VBox:
-			m_list = new VerWidgetList();
+			m_list = new VerWidgetList(); break;
 	}
 	for(QWidget *w = list.first(); w; w = list.next())
 		m_list->append(w);
@@ -341,12 +341,12 @@ CreateLayoutCommand::execute()
 		if(item && item->widget())
 		{
 			item->widget()->reparent(w, item->widget()->pos(), true);
+			item->eventEater()->setContainer(tree->container());
 			m_form->objectTree()->reparent(item->name(), m_name);
 		}
 	}
 
 	tree->container()->setLayout((Container::LayoutType)m_type);
-	tree->container()->layout()->setMargin(1);
 	tree->widget()->resize(tree->container()->layout()->sizeHint());
 	container->setSelectedWidget(w, false);
 	m_form->manager()->windowChanged(m_form->toplevelContainer()->widget());
@@ -366,6 +366,7 @@ CreateLayoutCommand::unexecute()
 		{
 			kdDebug() << m_form->objectTree()->lookup(m_containername) << endl;
 			item->widget()->reparent(parent->widget(), QPoint(0,0), true);
+			item->eventEater()->setContainer(parent->container());
 			item->widget()->setGeometry(m_pos[it.key()]);
 			m_form->objectTree()->reparent(item->name(), m_containername);
 		}

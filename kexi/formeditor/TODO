@@ -15,6 +15,8 @@
 * Create db-aware widget factory
 
 ****** Bugfixes/Changes : *****
+* Make ObjectTreeView handle multiple widgets
+* Select all widgets when pasted
 * Add a grouping ability to Widget
 * Make actions toggable (with KRadioAction)
 

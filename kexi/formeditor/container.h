@@ -125,6 +125,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		QLayout*        layout() const { return m_layout; }
 		//! \return the type of the layout associated to this Container's widget (see LayoutType enum).
 		LayoutType      layoutType() const { return m_layType; }
+		static QString  layoutTypeToString(int type);
+		static LayoutType stringToLayoutType(const QString &name);
 		int             layoutMargin() { return m_margin; }
 		int             layoutSpacing() { return m_spacing; }
 		/*! Sets this Container to use \a type of layout. The widget are inserted automatically in the layout

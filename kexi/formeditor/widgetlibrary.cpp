@@ -76,8 +76,8 @@ WidgetLibrary::createXML()
 	QDomDocument doc("kpartgui");
 	QDomElement root = doc.createElement("kpartgui");
 
-	root.setAttribute("name", "libgen");
-	root.setAttribute("version", "0.1");
+	root.setAttribute("name", "kformdesigner");
+	root.setAttribute("version", "0.3");
 	doc.appendChild(root);
 
 	QDomElement toolbar = doc.createElement("ToolBar");
@@ -89,13 +89,24 @@ WidgetLibrary::createXML()
 	QDomText ttext = doc.createTextNode("Widgets");
 	texttb.appendChild(ttext);
 
+	QDomElement menubar = doc.createElement("MenuBar");
+	toolbar.setAttribute("name", "widgets");
+	root.appendChild(menubar);
+
+	QDomElement Mtextb = doc.createElement("text");
+	toolbar.appendChild(Mtextb);
+	QDomText Mtext = doc.createTextNode("Widgets");
+	Mtextb.appendChild(Mtext);
+	QDomElement menu = doc.createElement("Menu");
+	menu.setAttribute("name", "widgets");
+
 	QDictIterator<Widget> it(m_widgets);
 	int i = 0;
 	for(; it.current(); ++it)
 	{
 
 		QDomElement action = doc.createElement("Action");
-		action.setAttribute("name", "library_widget" + QString::number(i));
+		action.setAttribute("name", "library_widget" + it.current()->className());
 		toolbar.appendChild(action);
 
 		i++;

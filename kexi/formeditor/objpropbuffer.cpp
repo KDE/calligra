@@ -294,8 +294,10 @@ ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
 	{
 		if((ev->type() == QEvent::Resize) || (ev->type() == QEvent::Move))
 		{
-			if(!(*this)["geometry"]);
+			/*if(!(this->find("geometry")));
+			{
 				return false;
+			}*/
 			if((*this)["geometry"]->value() == o->property("geometry")) // to avoid infinite recursion
 				return false;
 
@@ -495,7 +497,7 @@ ObjectPropertyBuffer::createLayoutProperty(Container *container)
 	QStringList list;
 	QString value;
 
-	switch(container->layoutType())
+	/*switch(container->layoutType())
 	{
 		case Container::NoLayout:
 		{
@@ -517,7 +519,8 @@ ObjectPropertyBuffer::createLayoutProperty(Container *container)
 			value = "Grid";
 			break;
 		}
-	}
+	}*/
+	value = Container::layoutTypeToString(container->layoutType());
 
 	list << "NoLayout" << "HBox" << "VBox" << "Grid";
 
@@ -553,11 +556,7 @@ ObjectPropertyBuffer::saveLayoutProperty(const QString &prop, const QVariant &va
 
 	if(prop == "layout")
 	{
-		Container::LayoutType type;
-		if(value == "NoLayout")    type = Container::NoLayout;
-		if(value == "HBox")        type = Container::HBox;
-		if(value == "VBox")        type = Container::VBox;
-		if(value == "Grid")        type = Container::Grid;
+		Container::LayoutType type = Container::stringToLayoutType(value.toString());
 
 		if(m_lastcom && m_lastcom->property() == "layout" && !m_undoing)
 			m_lastcom->setValue(value);

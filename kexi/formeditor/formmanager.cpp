@@ -75,7 +75,7 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 
 	m_popup->insertItem( i18n("&Lay out horizontally"), this, SLOT(layoutHBox()), 0, 301);
 	m_popup->insertItem( i18n("&Lay out vertically"), this, SLOT(layoutVBox()), 0, 302);
-	m_popup->insertItem( i18n("&Lay out grid"), this, SLOT(layoutGrid()), 0, 303);
+	m_popup->insertItem( i18n("&Lay out in a grid"), this, SLOT(layoutGrid()), 0, 303);
 	m_popup->insertSeparator(304);
 
 	m_treeview = 0;
@@ -439,8 +439,9 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemo
 	m_popup->setItemEnabled(201, enableRemove);
 
 	bool enableLayout = false;
-	if(container->form()->selectedWidgets()->count() > 1)
+	if((container->form()->selectedWidgets()->count() > 1) || (w == container->widget()))
 		enableLayout = true;
+
 	m_popup->setItemEnabled(301, enableLayout);
 	m_popup->setItemEnabled(302, enableLayout);
 	m_popup->setItemEnabled(303, enableLayout);
@@ -474,6 +475,15 @@ void
 FormManager::createLayout(int layoutType)
 {
 	QtWidgetList *list = m_active->selectedWidgets();
+	if(list->count() == 1)
+	{
+		ObjectTreeItem *item = m_active->objectTree()->lookup(list->first()->name());
+		if(!item || !item->container() || !(*m_buffer)["layout"])
+			return;
+		(*m_buffer)["layout"]->setValue(Container::layoutTypeToString(layoutType));
+		return;
+	}
+
 	QWidget *parent = list->first()->parentWidget();
 	for(QWidget *w = list->first(); w; w = list->next())
 	{

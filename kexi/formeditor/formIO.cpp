@@ -143,6 +143,12 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 	baseClass.appendChild(baseClassV);
 
 	saveWidget(form->objectTree(), uiElement, domDoc);
+
+	QDomElement layoutDefaults = domDoc.createElement("layoutDefaults");
+	layoutDefaults.setAttribute("spacing", QString::number(Form::defaultSpacing()));
+	layoutDefaults.setAttribute("margin", QString::number(Form::defaultMargin()));
+	uiElement.appendChild(layoutDefaults);
+
 	return 1;
 }
 

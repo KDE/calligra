@@ -47,9 +47,9 @@ namespace KFormDesigner {
 void installRecursiveEventFilter(QObject *object, QObject *container)
 {
 	kdDebug() << "Installing recursive event filter on widget " << object->name() << " of type " << object->className() << endl;
-	object->installEventFilter(container);
 	if(!object->isWidgetType())
 		return;
+	object->installEventFilter(container);
 	((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
 
 	if(!object->children())
@@ -171,12 +171,6 @@ Container::eventFilter(QObject *s, QEvent *e)
 			kdDebug() << "QEvent::MouseButtonPress this          = " << this->name() << endl;
 
 			m_moving = static_cast<QWidget*>(s);
-			/*if(!m_form->manager()->isTopLevel(m_moving) && m_moving->parentWidget() && m_moving->parentWidget()->isA("QWidgetStack"))
-			{
-				m_moving = m_moving->parentWidget();
-				if(m_moving->parentWidget() && m_moving->parentWidget()->inherits("QTabWidget"))
-						m_moving = m_moving->parentWidget();
-			}*/
 
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
 
@@ -187,7 +181,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				else
 					setSelectedWidget(m_moving, true);
 			}
-			else if((mev->button() == RightButton) && (m_selected.count() > 1))
+			else if(m_selected.count() > 1)
 			{
 				if(m_selected.findRef(m_moving) == -1)
 					setSelectedWidget(m_moving, true);
@@ -231,14 +225,10 @@ Container::eventFilter(QObject *s, QEvent *e)
 				int botx = (m_insertBegin.x() > mev->x()) ? m_insertBegin.x() :  mev->x();
 				int boty = (m_insertBegin.y() > mev->y()) ? m_insertBegin.y() : mev->y();
 				QRect r = QRect(QPoint(topx, topy), QPoint(botx, boty));
-				if(r.isEmpty())
-					return true;
 
 				QWidget *w=0;
 				QtWidgetList list;
-				/*TreeDict dict = *(m_form->objectTree()->dict());
-				TreeDictIterator it(dict);
-				for(; it.current(); ++it)*/
+
 				for(ObjectTreeItem *item = m_tree->children()->first(); item; item = m_tree->children()->next())
 				{
 					//w = it.current()->widget();
@@ -251,12 +241,14 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if(list.isEmpty())
 				{
 					setSelectedWidget(m_container, false);
-					return true;
 				}
-				setSelectedWidget(list.first(), false);
-				w = list.first();
-				for(w = list.next(); w; w = list.next())
-					setSelectedWidget(w, true);
+				else
+				{
+					setSelectedWidget(list.first(), false);
+					w = list.first();
+					for(w = list.next(); w; w = list.next())
+						setSelectedWidget(w, true);
+				}
 			}
 			if(mev->button() == RightButton)
 			{
@@ -321,13 +313,20 @@ Container::eventFilter(QObject *s, QEvent *e)
 				QWidget *w = m_moving;
 				if(!m_toplevel && w == m_container)
 					return false;
-				if((!m_moving) || (!m_moving->parentWidget()) || (m_moving->parentWidget()->inherits("QWidgetStack")))
+				if((!m_moving) || (!m_moving->parentWidget()))// || (m_moving->parentWidget()->inherits("QWidgetStack")))
 					return true;
 				int gridX = Form::gridX();
 				int gridY = Form::gridY();
 
 				for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 				{
+					if(w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
+					{
+						w = w->parentWidget();
+						if(w->parentWidget() && w->parentWidget()->inherits("QTabWidget"))
+							w = w->parentWidget();
+					}
+
 					int tmpx = ( ( w->x() + mev->x() - m_grab.x()) / gridX ) * gridX;
 					int tmpy = ( ( w->y() + mev->y() - m_grab.y()) / gridY ) * gridY;
 					if((tmpx != w->x()) ||(tmpy != w->y()))
@@ -732,6 +731,27 @@ Container::createGridLayout()
 		}
 	}
 	layout->activate();
+}
+
+QString
+Container::layoutTypeToString(int type)
+{
+	switch(type)
+	{
+		case HBox: return "HBox";
+		case VBox: return "VBox";
+		case Grid: return "Grid";
+		default:   return "NoLayout";
+	}
+}
+
+Container::LayoutType
+Container::stringToLayoutType(const QString &name)
+{
+	if(name == "HBox")        return HBox;
+	if(name == "VBox")        return VBox;
+	if(name == "Grid")        return Grid;
+	return NoLayout;
 }
 
 Container::~Container()
