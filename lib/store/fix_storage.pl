@@ -13,7 +13,8 @@ my @needFixing;
 
 # Walk the whole archive and collect information about the files
 # This creates one array, containing another array for every directory
-# we found (recursively).
+# we found (recursively). Additionally this array holding a directory
+# holds the name of the directory and the path.
 sub explore {
   my($path) = @_;
   my(@dir);
@@ -54,7 +55,7 @@ sub dumpTree {
   }
 }
 
-# Finds the files we have to fix
+# Finds the files where we have to fix part references (->maindoc.xml)
 sub findCandidates {
   my($dref, $currentdir, $parentdir) = @_;
   my @dir = @{$dref};
@@ -74,7 +75,8 @@ sub findCandidates {
   }
 }
 
-# No need to move around elements of the root directory
+# No need to move around elements of the root directory, these are handled
+# separately anyway. Therefore we call findCandidates only on subdirs
 sub findMainDocuments {
   foreach(@rootdir) {
     if(ref($_) eq 'ARRAY') {
@@ -83,7 +85,8 @@ sub findMainDocuments {
   }
 }
 
-# Walks through all the documents and fixes links
+# Walks through all the documents and fixes links. "Fixes" all the
+# candidates we found
 sub fixLinks {
   for my $item (@needFixing) {
     my $prefix = substr $item->[0], length($tmpdir)+1;
@@ -135,12 +138,23 @@ sub fixMainDocument {
   system("mv $tmpdir/tmp.xml $tmpdir/maindoc.xml");
 }
 
+# Tries to find "lost" files and correct the links in the part files.
+sub fixRemainingLink {
+}
+
+# Call fixRemainingLink for all the files we moved around
+sub fixRemainingLinks {
+  foreach(@needFixing) {
+    fixRemainingLink($_);
+  }
+}
+
 ##################################################
 # The execution starts here
 ##################################################
 if($#ARGV != 1) {
-    print "Script to convert current storages to KOffice 1.0 compatible ones.\n";
-    print "Usage: perl storage.pl <inputfile> <outputfile>\n";
+    print "Script to convert current storages to KOffice 1.0/1.1.x compatible ones.\n";
+    print "Usage: perl fix_storage.pl <inputfile> <outputfile>\n";
     exit(1);
 }
 
@@ -151,6 +165,7 @@ chomp(my $cwd = `pwd`);
 system("rm -rf $tmpdir");
 mkdir $tmpdir || die "Couldn't create tmp directory: $!\n";
 
+# FIXME: This has to be changed as soon as we move to .zip
 print "Uncompressing the archive...\n";
 system("tar -C $tmpdir -xzf $ARGV[0]");
 
@@ -167,6 +182,9 @@ print "Moving and fixing relative links...\n";
 fixLinks();
 removeOldFiles();
 fixMainDocument();
+
+# Now fix the remaining picture/clipart links by qualified guesses ;)
+fixRemainingLinks();
 
 print "Creating the archive...\n";
 chdir($tmpdir);
