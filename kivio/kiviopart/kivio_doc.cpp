@@ -543,7 +543,7 @@ void KivioDoc::slotDeleteStencilSet( DragBarButton *pBtn, QWidget *w, KivioStack
         // Check for a spawner.  If there is one, the set cannot be deleted
         if( checkStencilsForSpawner( pSpawner )==true )
         {
-            KMessageBox::error(NULL, i18n("Cannot delete stencil set because there are stencils using it's spawners"),
+            KMessageBox::error(NULL, i18n("Cannot delete stencil set because there are stencils using its spawners"),
                 i18n("Cannot Delete Stencil Set"));
             return;
         }
