@@ -38,7 +38,7 @@ QHBox(parent, name)
   ptMinVal = 1.0;
   ptMaxVal = 10.0;
   m_step = 1.0;
-  valueBox->setPrecision("2");
+  valueBox->setPrecision(2);
   valueBox->setRange(ptMinVal, ptMaxVal, m_step);
 
   unitCombo = new QComboBox(this, "unitCombo");
