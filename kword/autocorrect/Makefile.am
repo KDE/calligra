@@ -1,4 +1,4 @@
 
-scripts_DATA = en_US.xml
+scripts_DATA = *.xml
 scriptsdir = $(kde_datadir)/kword/autocorrect
 
