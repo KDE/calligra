@@ -194,7 +194,7 @@
   <Action name="screen_pencolor"/>
   <Action name="screen_penwidth"/>
  </ToolBar>
- <ToolBar position="top">
+ <ToolBar position="right">
   <Action name="colorbar"/>
  </ToolBar>
 </ToolBars>
