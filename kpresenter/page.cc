@@ -126,8 +126,8 @@ bool Page::eventFilter( QObject *o, QEvent *e )
 
     if ( !o || !e )
         return TRUE;
-
-    KCursor::autoHideEventFilter( o, e );
+    if ( m_currentTextObjectView  )
+        KCursor::autoHideEventFilter( o, e );
     switch ( e->type() )
     {
     case QEvent::AccelOverride:
