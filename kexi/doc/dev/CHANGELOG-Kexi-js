@@ -384,6 +384,18 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 CCMAIL: dkite@shaw.ca
 
+2005-01-14
+General
+- KEXI_REPORTS_SUPPORT compile-time define added
+Core
+- new Part Item added after saving to KexiProject object's structure
+  and removed from temporary list of unsaved items.
+
+2005-01-10
+Forms
+- KexiDataItemChangesListener added to allow signaling changes 
+  from widgets implementing KexiDataItemInterface 
+
 2005-01-08
 KexiDB
 - TableSchema: table names should be lower case to ease comparisons
