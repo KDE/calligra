@@ -24,6 +24,7 @@
 #include "kwtextframeset.h"
 #include <koVariable.h>
 #include <koparagcounter.h>
+#include "variable.h"
 #include <klocale.h>
 #include <kdebug.h>
 #include <assert.h>
@@ -482,7 +483,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
 
     QValueList<int> removeLenList;
     QValueList<int> removePosList;
-    
+
     KWDocument * doc = kwTextDocument()->textFrameSet()->kWordDocument();
     QDomElement formatsElem = attributes.namedItem( "FORMATS" ).toElement();
     if ( !formatsElem.isNull() )
@@ -537,10 +538,19 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                         kdDebug() << "KWTextParag::loadFormatting variable type=" << type << " key=" << key << endl;
                         KoVariableFormat * varFormat = key.isEmpty() ? 0 : doc->variableFormatCollection()->format( key.latin1() );
                         // If varFormat is 0 (no key specified), the default format will be used.
-                        KoVariable * var = KoVariable::createVariable( type, -1, doc->variableFormatCollection(), varFormat,kwTextDocument(),doc,doc->getVariableCollection() );
+                        KoVariable * var =0L;
+                        if ( type == VT_PGNUM)
+                        {
+                            var= new KWPgNumVariable( kwTextDocument(),0, doc->variableFormatCollection()->format( "NUMBER" ),doc->getVariableCollection(),doc  );
+                        }
+                        else
+                        {
+                            var =KoVariable::createVariable( type, -1, doc->variableFormatCollection(), varFormat,kwTextDocument(),doc,doc->getVariableCollection() );
+                        }
                         var->load( varElem );
                         KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont() );
                         setCustomItem( index, var, document()->formatCollection()->format( &f ) );
+
                         var->recalc();
                         if(len>1) {
                             removePosList.append(index+1);
