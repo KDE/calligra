@@ -2959,7 +2959,11 @@ void KWDocument::afterAppendPage( int pageNum )
         kdDebug(32002) << "KWDocument::afterAppendPage recalcFrames done" << endl;
 #endif
     }
-    // else: is there a call to updateAllFrames missing?
+    else
+    {
+        // Take into account the frames on the new page, and run updateFramesOnTopOrBelow (#73819)
+        updateAllFrames();
+    }
 
     recalcVariables( VT_PGNUM );
     emit pageNumChanged();
