@@ -547,7 +547,7 @@ KarbonView::ellipseTool()
 	{
 		m_currentTool->deactivate();
 		m_currentTool = m_ellipseTool;
-		m_currentTool->activate();
+		m_currentTool->activateAll();
 	}
 }
 
@@ -560,7 +560,7 @@ KarbonView::polygonTool()
 	{
 		m_currentTool->deactivate();
 		m_currentTool = m_polygonTool;
-		m_currentTool->activate();
+		m_currentTool->activateAll();
 	}
 }
 
@@ -573,7 +573,7 @@ KarbonView::rectangleTool()
 	{
 		m_currentTool->deactivate();
 		m_currentTool = m_rectangleTool;
-		m_currentTool->activate();
+		m_currentTool->activateAll();
 	}
 }
 
@@ -586,7 +586,7 @@ KarbonView::roundRectTool()
 	{
 		m_currentTool->deactivate();
 		m_currentTool = m_roundRectTool;
-		m_currentTool->activate();
+		m_currentTool->activateAll();
 	}
 }
 
@@ -597,7 +597,7 @@ KarbonView::selectTool()
 		m_toolOptionsDocker->show();
 	m_currentTool->deactivate();
 	m_currentTool = m_selectTool;
-	m_currentTool->activate();
+	m_currentTool->activateAll();
 	m_canvas->repaintAll();
 }
 
@@ -608,7 +608,7 @@ KarbonView::selectNodesTool()
 		m_toolOptionsDocker->show();
 	m_currentTool->deactivate();
 	m_currentTool = m_selectNodesTool;
-	m_currentTool->activate();
+	m_currentTool->activateAll();
 	m_canvas->repaintAll();
 }
 
@@ -619,7 +619,7 @@ KarbonView::rotateTool()
 		m_toolOptionsDocker->show();
 	m_currentTool->deactivate();
 	m_currentTool = m_rotateTool;
-	m_currentTool->activate();
+	m_currentTool->activateAll();
 	m_canvas->repaintAll();
 }
 
@@ -645,7 +645,7 @@ KarbonView::shearTool()
 		m_toolOptionsDocker->show();
 	m_currentTool->deactivate();
 	m_currentTool = m_shearTool;
-	m_currentTool->activate();
+	m_currentTool->activateAll();
 	m_canvas->repaintAll();
 }
 
@@ -658,7 +658,7 @@ KarbonView::sinusTool()
 	{
 		m_currentTool->deactivate();
 		m_currentTool = m_sinusTool;
-		m_currentTool->activate();
+		m_currentTool->activateAll();
 	}
 }
 
@@ -671,7 +671,7 @@ KarbonView::spiralTool()
 	{
 		m_currentTool->deactivate();
 		m_currentTool = m_spiralTool;
-		m_currentTool->activate();
+		m_currentTool->activateAll();
 	}
 }
 
@@ -684,7 +684,7 @@ KarbonView::starTool()
 	{
 		m_currentTool->deactivate();
 		m_currentTool = m_starTool;
-		m_currentTool->activate();
+		m_currentTool->activateAll();
 	}
 }
 
@@ -697,7 +697,7 @@ KarbonView::gradTool()
 	{
 		m_currentTool->deactivate();
 		m_currentTool = m_gradTool;
-		m_currentTool->activate();
+		m_currentTool->activateAll();
 	}
 }
 
@@ -708,13 +708,13 @@ KarbonView::polylineTool()
 	{
 		// Ends the current polyline and prepare for the next.
 		m_currentTool->deactivate();
-		m_currentTool->activate();
+		m_currentTool->activateAll();
 	}
 	else
 	{
 		m_currentTool->deactivate();
 		m_currentTool = m_polylineTool;
-		m_currentTool->activate();
+		m_currentTool->activateAll();
 	}
 }
 

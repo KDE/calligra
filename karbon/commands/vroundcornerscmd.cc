@@ -31,7 +31,6 @@ VRoundCornersCmd::VRoundCornersCmd( VDocument* doc, double radius )
 {
 	// Set members.
 	m_oldObjects = document()->selection()->clone();
-
 	m_radius = radius > 0.0 ? radius : 1.0;
 
 
@@ -56,6 +55,8 @@ VRoundCornersCmd::VRoundCornersCmd( VDocument* doc, double radius )
 		// No success:
 		else
 		{
+			// Don't consider this object in the future anymore.
+			m_oldObjects->take( *itr.current() );
 			delete( newObject );
 		}
 	}
@@ -220,7 +221,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	double length;
 	double param;
 
-	// begin:
+	// Begin step.
 	if(
 		path.isClosed() &&
 		!(
@@ -249,7 +250,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	}
 
 
-	// middle part:
+	// Middle step.
 	while(
 		path.current() &&
 		path.current()->next() )
@@ -303,7 +304,7 @@ VRoundCornersCmd::visitVPath( VPath& path )
 	}
 
 
-	// end:
+	// End step.
 	if( path.isClosed() )
 	{
 		if(

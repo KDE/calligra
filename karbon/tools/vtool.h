@@ -36,18 +36,19 @@ public:
 	VTool( KarbonView* view );
 
 	/**
-	 * Activate the tool. You should not reimplement this method, use doActivate instead.
+	 * Activates the tool and sets up some dockers and finally calls activate().
+	 * Do not reimplement this method but activate().
 	 */
-	virtual void activate();
+	virtual void activateAll();
 
 	/**
 	 * Called during the tool activation. A tool is supposed to set a mouse cursor and/or
 	 * the statusbar properly here.
 	 */
-	virtual void doActivate() {}
+	virtual void activate() {}
 
 	/**
-	 * DedoActivate the tool.
+	 * Deactivates the tool.
 	 */
 	virtual void deactivate() {}
 

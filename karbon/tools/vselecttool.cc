@@ -69,7 +69,7 @@ VSelectTool::~VSelectTool()
 }
 
 void
-VSelectTool::doActivate()
+VSelectTool::activate()
 {
 	//if( m_state == normal )
 		view()->statusMessage()->setText( i18n( "Select" ) );

@@ -35,12 +35,12 @@ VTool::VTool( KarbonView* view )
 	m_isDragging = false;
 }
 
-void VTool::activate()
+void VTool::activateAll()
 {
 	view()->toolOptionsDocker()->manageTool( this );
 	view()->contextHelpDocker()->manageTool( this );
 
-	doActivate();
+	activate();
 } 
 
 bool

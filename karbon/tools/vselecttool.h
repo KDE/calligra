@@ -50,7 +50,7 @@ public:
 	VSelectTool( KarbonView* view );
 	virtual ~VSelectTool();
 
-	virtual void doActivate();
+	virtual void activate();
 
 	virtual QWidget* optionsWidget() { return m_optionsWidget; }
 	virtual QString name() { return i18n( "Select tool" ); }

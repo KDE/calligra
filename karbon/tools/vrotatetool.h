@@ -31,7 +31,7 @@ public:
 	VRotateTool( KarbonView* view );
 	virtual ~VRotateTool();
 
-	virtual void doActivate();
+	virtual void activate();
 
 protected:
 	virtual void draw();

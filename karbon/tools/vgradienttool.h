@@ -32,7 +32,7 @@ public:
 	VGradientTool( KarbonView* view );
 	virtual ~VGradientTool();
 
-	virtual void doActivate();
+	virtual void activate();
 
 	virtual QString name() { return i18n( "Gradient tool" ); }
 	virtual QString contextHelp();

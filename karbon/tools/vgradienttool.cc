@@ -46,7 +46,7 @@ VGradientTool::~VGradientTool()
 }
 
 void
-VGradientTool::doActivate()
+VGradientTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Gradient" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );

@@ -50,7 +50,7 @@ VShapeTool::contextHelp()
 } 
 
 void
-VShapeTool::doActivate()
+VShapeTool::activate()
 {
 	view()->statusMessage()->setText( name() );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );

@@ -31,7 +31,7 @@ public:
 	VShearTool( KarbonView* view );
 	virtual ~VShearTool();
 
-	virtual void doActivate();
+	virtual void activate();
 
 protected:
 	virtual void draw();

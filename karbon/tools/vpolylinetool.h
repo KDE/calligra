@@ -19,17 +19,22 @@
 
 */
 
-#ifndef _VPOLYLINETOOL_H_
-#define _VPOLYLINETOOL_H_
+#ifndef __VPOLYLINETOOL_H__
+#define __VPOLYLINETOOL_H__
 
-#include <qstring.h>
+
 #include <qptrlist.h>
-#include "vtool.h"
+#include <qstring.h>
+
 #include "koPoint.h"
 
-class VComposite;
-class QWidget;
+#include "vtool.h"
+
+
 class QLabel;
+class QWidget;
+class VComposite;
+
 
 /**
  * The polyline tool.
@@ -41,51 +46,75 @@ class QLabel;
  * While dragging, when you press on CTRL, you edit the other vector, and when 
  * you press on SHIFT the current segment, the segment becames a line.
  */
+
 class VPolylineTool : public VTool
 {
 	public:
 		VPolylineTool( KarbonView* view );
 		~VPolylineTool(); 
 
-		virtual void        doActivate();
-		virtual void        deactivate();
+		virtual void activate();
+		virtual void deactivate();
 
-		virtual QString     name() { return "Polyline tool"; }
-		virtual QString     contextHelp();
+		virtual QString name() { return i18n( "Polyline Tool" ); }
+		virtual QString contextHelp();
 
 	protected:
-			/** Helper method: draws the polyline. */
-		void                draw();
-			/** Helper method: draws a bezier vector. */
-		void                drawBezierVector( KoPoint& start, KoPoint& end );
-		
-		virtual void        mouseMove();
-		virtual void        mouseButtonPress();
-		virtual void        mouseButtonRelease();
-		virtual void        mouseButtonDblClick();
-		virtual void        mouseDrag();
-		virtual void        mouseDragRelease();
-		virtual void        mouseDragShiftPressed();
-		virtual void        mouseDragCtrlPressed();
-		virtual void        mouseDragShiftReleased();
-		virtual void        mouseDragCtrlReleased();
+		/**
+		 * Helper method: draws the polyline.
+		 */
+		void draw();
 
-		virtual void        cancel();
-		virtual void        cancelStep();
-		virtual void        accept();
+		/**
+		 * Helper method: draws a bezier vector.
+		 */
+		void drawBezierVector( KoPoint& start, KoPoint& end );
 
-			/** The list of this polyline points. */
-		QPtrList<KoPoint>   bezierPoints;
-			/** The start of the last drawn vector. */
-		KoPoint             lastVectorStart;
-			/** The end of the last drawn vector. */
-		KoPoint             lastVectorEnd;
-			/** Indicates if shift is pressed. */
-		bool                shiftPressed;
-			/** Indicates if ctrl is pressed. */
-		bool                ctrlPressed;
-			/** Indicates if the polyline is to close. */
-		bool                m_close;
-}; // VPolylineTool
+		virtual void mouseMove();
+		virtual void mouseButtonPress();
+		virtual void mouseButtonRelease();
+		virtual void mouseButtonDblClick();
+		virtual void mouseDrag();
+		virtual void mouseDragRelease();
+		virtual void mouseDragShiftPressed();
+		virtual void mouseDragCtrlPressed();
+		virtual void mouseDragShiftReleased();
+		virtual void mouseDragCtrlReleased();
 
-#endif /* _VPOLYLINETOOL_H_ */
+		virtual void cancel();
+		virtual void cancelStep();
+		virtual void accept();
+
+		/**
+		 * The list of this polyline points.
+		 */
+		QPtrList<KoPoint> m_bezierPoints;
+
+		/**
+		 * The start of the last drawn vector.
+		 */
+		KoPoint m_lastVectorStart;
+
+		/**
+		 * The end of the last drawn vector.
+		 */
+		KoPoint m_lastVectorEnd;
+
+		/**
+		 * Indicates if shift is pressed.
+		 */
+		bool m_shiftPressed;
+
+		/**
+		 * Indicates if ctrl is pressed.
+		 */
+		bool m_ctrlPressed;
+
+		/**
+		 * Indicates if the polyline is to close.
+		 */
+		bool m_close;
+};
+
+#endif
+

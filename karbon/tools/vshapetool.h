@@ -39,7 +39,7 @@ public:
 	virtual QString name() { return m_name; }
 	virtual QString contextHelp();
 	
-	virtual void doActivate();
+	virtual void activate();
 
 protected:
 	virtual void draw();
