@@ -123,7 +123,8 @@ k_dcop:
     void changeHorizontalLine();
     void addWordToDictionary();
     void sortText();
-
+    void insertPage();
+    void createLinkedFrame();
 private:
     KWView *view;
 

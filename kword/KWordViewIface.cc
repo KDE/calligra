@@ -406,3 +406,13 @@ void KWordViewIface::sortText()
 {
     view->sortText();
 }
+
+void KWordViewIface::insertPage()
+{
+    view->insertPage();
+}
+
+void KWordViewIface::createLinkedFrame()
+{
+    view->createLinkedFrame();
+}
