@@ -27,12 +27,12 @@ class KexiDialogBase;
 
 namespace KexiPart
 {
-
 	class Info;
 	class Item;
+	class GUIClient;
 
 /**
- * the main class for kexi frontend parts like tables, queries, relations
+ * The main class for kexi frontend parts like tables, queries, relations
  */
 class KEXICORE_EXPORT Part : public QObject
 {
@@ -47,8 +47,9 @@ class KEXICORE_EXPORT Part : public QObject
 
 		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item) = 0;
 
-//		virtual void	execute(KexiMainWindow *win, const Item &i)=0;
-		virtual void	createGUIClient(KexiMainWindow *win)=0;
+		//! Creates GUICLient for this part, attached to \a win
+		//! This method is called from KexiMainWindow
+		GUIClient* createGUIClient(KexiMainWindow *win);
 
 		/*! i18n'd iunstance name usable for displaying in gui.
 		 @todo move this to Info class when the name could be moved as localised property 
@@ -56,6 +57,7 @@ class KEXICORE_EXPORT Part : public QObject
 		virtual QString instanceName() const = 0;
 		
 		Info		*info() { return m_info; }
+
 
 	protected:
 		friend class Manager;

@@ -23,6 +23,9 @@
 #include "kexipartitem.h"
 #include "kexidialogbase.h"
 
+#include "kexipartguiclient.h"
+#include "keximainwindow.h"
+
 #include <kiconloader.h>
 
 using namespace KexiPart;
@@ -35,6 +38,11 @@ Part::Part(QObject *parent, const char *name, const QStringList &)
 
 Part::~Part()
 {
+}
+
+GUIClient*
+Part::createGUIClient(KexiMainWindow *win) {
+	return new GUIClient(win, this, instanceName());
 }
 
 KexiDialogBase* Part::execute(KexiMainWindow *win, const KexiPart::Item &item)
@@ -50,6 +58,20 @@ KexiDialogBase* Part::execute(KexiMainWindow *win, const KexiPart::Item &item)
 	dlg->registerDialog();
 	return dlg;
 }
+
+
+//-------------------------------------------------------------------------
+
+
+GUIClient::GUIClient(KexiMainWindow *win, Part* part, const QString &i18nInstanceName)
+ : QObject(part, part->info()->objectName().latin1()), KXMLGUIClient(win)
+{
+	new KAction(i18nInstanceName+"...", part->info()->itemIcon(), 0, this, 
+		SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").latin1());
+		setXMLFile(QString("kexi")+part->info()->objectName()+"partui.rc");
+		win->guiFactory()->addClient(this);
+}
+
 
 #include "kexipart.moc"
 
