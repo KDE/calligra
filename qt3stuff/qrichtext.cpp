@@ -3054,8 +3054,8 @@ QTextParag::QTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool u
     visible = TRUE;
     list_val = -1;
     newLinesAllowed = FALSE;
-    splittedInside = FALSE;
     lastInFrame = FALSE;
+    movedDown = FALSE;
     defFormat = formatCollection()->defaultFormat();
     if ( !doc ) {
 	tabStopWidth = defFormat->width( 'x' ) * 8;
@@ -3255,6 +3255,7 @@ void QTextParag::move( int &dy )
 	i->ypos += dy;
     if ( p )
 	p->lastInFrame = FALSE;
+    movedDown = FALSE;
     if ( doc && doc->verticalBreak() ) {
 	const int oy = r.y();
 	int y = oy;
@@ -3264,6 +3265,7 @@ void QTextParag::move( int &dy )
 		p->lastInFrame = TRUE;
 		p->setChanged( TRUE );
 	    }
+	    movedDown = TRUE;
 	    int oh = r.height();
 	    r.setY( y );
 	    r.setHeight( oh );
@@ -3292,6 +3294,7 @@ void QTextParag::format( int start, bool doMove )
     r.setWidth( documentWidth() );
     if ( p )
 	p->lastInFrame = FALSE;
+    movedDown = FALSE;
  formatAgain:
     if ( doc ) {
 	for ( QTextCustomItem *i = floatingItems.first(); i; i = floatingItems.next() ) {
@@ -3329,7 +3332,6 @@ void QTextParag::format( int start, bool doMove )
     if ( !visible )
 	r.setHeight( 0 );
 
-    splittedInside = FALSE;
     if ( doc && doc->verticalBreak() ) {
 	const int oy = r.y();
 	int y = oy;
@@ -3339,6 +3341,7 @@ void QTextParag::format( int start, bool doMove )
 		p->lastInFrame = TRUE;
 		p->setChanged( TRUE );
 	    }
+	    movedDown = TRUE;
 	    int oh = r.height();
 	    r.setY( y );
 	    r.setHeight( oh );
@@ -3353,7 +3356,7 @@ void QTextParag::format( int start, bool doMove )
         bool makeInvalid = p && p->lastInFrame;
         //qDebug("moving. previous's lastInFrame (=makeInvalid): %d",makeInvalid);
 	while ( s && dy ) {
-	    if ( !s->isFullWidth() )
+	    if ( !s->isFullWidth() || s->movedDown )
 		makeInvalid = TRUE;
 	    if ( makeInvalid )
 		s->invalidate( 0 );

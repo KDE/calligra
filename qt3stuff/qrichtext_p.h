@@ -1085,6 +1085,7 @@ public:
     bool isVisible() const { return visible; }
 
     bool isLastInFrame() const { return lastInFrame; }
+    bool isMovedDown() const { return movedDown; }
 
     QTextParag *prev() const;
     QTextParag *next() const;
@@ -1223,7 +1224,7 @@ private:
     bool needPreProcess : 1;
     bool fullWidth : 1;
     bool newLinesAllowed : 1;
-    bool splittedInside : 1;
+    bool movedDown : 1;
     bool lastInFrame : 1;
     bool visible : 1;
     QMap<int, QTextParagSelection> selections;
