@@ -21,7 +21,7 @@
 #include "vgroup.h"
 
 VGroupIface::VGroupIface( VGroup *group )
-	: DCOPObject(), m_group( group )
+	: VObjectIface( group ), m_group( group )
 {
 }
 

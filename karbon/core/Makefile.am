@@ -16,6 +16,7 @@ noinst_HEADERS = \
 	vglobal.h \
 	vgradient.h \
 	vgroup.h \
+	vobject_iface.h \
 	vgroup_iface.h \
 	vimage.h \
 	vkarbonplugin.h \
@@ -42,6 +43,8 @@ libkarboncore_la_SOURCES = \
 	vglobal.cc \
 	vgradient.cc \
 	vgroup.cc \
+	vobject_iface.cc \
+	vobject_iface.skel \
 	vgroup_iface.cc \
 	vgroup_iface.skel \
 	vimage.cc \

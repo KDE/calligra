@@ -22,16 +22,14 @@
 
 #include <qptrlist.h>
 
-#include <dcopobject.h>
-#include <dcopref.h>
+#include "vobject_iface.h"
 
 class VGroup;
 
 //typedef QPtrList<VObject> VObjectList;
 //typedef QPtrListIterator<VObject> VObjectListIterator;
 
-
-class VGroupIface : public DCOPObject
+class VGroupIface : public VObjectIface
 {
 	K_DCOP
 
