@@ -307,6 +307,8 @@ void
 PixmapCollectionEditor::removeItem()
 {
 	QIconViewItem *item = m_iconView->currentItem();
+	if( !item )
+	  return;
 
 	int confirm = KMessageBox::questionYesNo(parentWidget(), QString("<qt>")+
 		i18n("Do you want to remove item \"%1\" from collection \"%2\"?")
