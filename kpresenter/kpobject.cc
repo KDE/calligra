@@ -1498,12 +1498,18 @@ QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles )
     KoGenStyle gradientStyle( KPresenterDoc::STYLE_GRADIENT /*no family name*/);
     gradientStyle.addAttribute( "draw:start-color", gColor1.name() );
     gradientStyle.addAttribute( "draw:end-color", gColor2.name() );
+
+    QString unbalancedx( "50%" );
+    QString unbalancedy( "50%" );
+
     if ( unbalanced )
     {
+        unbalancedx = QString( "%1%" ).arg( xfactor / 4 + 50 );
+        unbalancedy = QString( "%1%" ).arg( yfactor / 4 + 50 );
     }
-    else
-    {
-    }
+    gradientStyle.addAttribute( "draw:cx", unbalancedx );
+    gradientStyle.addAttribute( "draw:cy", unbalancedy );
+
     switch( gType )
     {
     case BCT_PLAIN:
@@ -1631,7 +1637,7 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
     if ( styleStack.hasAttribute( "draw:fill", QString::null, "graphic" ) )
     {
         const QString fill = styleStack.attribute( "draw:fill", QString::null, "graphic" );
-        kdDebug()<<" fill :"<<fill<<endl;
+        kdDebug()<<" load object gradient fill type :"<<fill<<endl;
         QBrush tmpBrush;
 
         if ( fill == "solid" )
