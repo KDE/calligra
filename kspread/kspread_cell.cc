@@ -1772,19 +1772,22 @@ bool KSpreadCell::calc( bool _makedepend )
     // If we got an error during evaluation ...
     if ( m_pCode )
     {
-      // Print out exception if any
-      if ( context.exception() )
-      {
-	QString tmp(i18n("Error in cell %1\n\n"));
-	tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
-	tmp += context.exception()->toString( context );
-	KMessageBox::error( (QWidget*)0L, tmp);
-      }
       m_bError = true;
       m_strFormularOut = "####";
       m_bValue = false;
       m_bBool = false;
       m_bDate =false;
+      m_bLayoutDirtyFlag = true;
+      DO_UPDATE;
+      // Print out exception if any
+      if ( context.exception() )
+      {
+	QString tmp(i18n("Error in cell %1\n\n"));
+        tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
+	tmp += context.exception()->toString( context );
+	KMessageBox::error( (QWidget*)0L, tmp);
+      }
+
     }
     // m_bLayoutDirtyFlag = true;
     m_bProgressFlag = false;
@@ -1793,8 +1796,8 @@ bool KSpreadCell::calc( bool _makedepend )
     {
 	SelectPrivate *s = (SelectPrivate*)m_pPrivate;
 	s->parse( m_strFormularOut );
+        DO_UPDATE;
     }
-    DO_UPDATE;
     return false;
   }
   else if ( context.value()->type() == KSValue::DoubleType )
