@@ -1160,6 +1160,10 @@ void KPresenterDoc::loadOasisHeaderFooter(QDomNode & drawPage, KoOasisContext & 
 
 void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 {
+    settingsWriter.startElement("config:config-item-map-indexed");
+    settingsWriter.addAttribute("config:name", "Views");
+    settingsWriter.startElement( "config:config-item-map-entry" );
+
     //ooimpress save it as this line.
     //<config:config-item config:name="SnapLinesDrawing" config:type="string">H2260V14397H7693H12415H15345H1424</config:config-item>
     QString helpLineOasis;
@@ -1206,10 +1210,13 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 
     //not define into oo spec
     settingsWriter.addConfigItem( "SnapLineIsVisible", showHelplines() );
+    settingsWriter.endElement();
+    settingsWriter.endElement();
 }
 
 void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
 {
+    kdDebug()<<"void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)**********\n";
     KoOasisSettings settings( settingsDoc );
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
