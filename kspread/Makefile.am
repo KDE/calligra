@@ -43,8 +43,8 @@ kdelnkdir = $(kde_datadir)/koffice/partlnk
 kdemime_DATA = x-kspread.kdelnk
 kdemimedir = $(kde_mimedir)/application
 
-py_DATA = KSpread.py KOffice.py KOStore.py OpenPartsUI.py OpenParts.py KOM.py
-pydir = $(kde_includes)/python
+// py_DATA = KSpread.py KOffice.py KOStore.py OpenPartsUI.py OpenParts.py KOM.py
+// pydir = $(kde_includes)/python
 
 SUBDIRS =  . pics scripts dtd filters toolbar
 
@@ -90,6 +90,7 @@ kspread_table.cc: kspread.h
 kspread_view.cc: kspread.h  kspread_table.h chart.h
 kspread_table.h: chart.h
 kspread_util.h: kspread.h
+
 KOM.py: KSpread.py
 KOStore.py: KSpread.py
 KOffice.py: KSpread.py
