@@ -103,8 +103,9 @@ void BracketElement::calcSizes(const ContextStyle& style, int parentSize)
     // height
     setHeight(QMAX(content->getHeight(),
                    QMAX(left->getHeight(), right->getHeight())));
+    setBaseline(-1);
     setMidline(getHeight() / 2);
-
+    
     left   ->setY((getHeight() - left   ->getHeight())/2);
     right  ->setY((getHeight() - right  ->getHeight())/2);
 

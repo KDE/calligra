@@ -129,6 +129,12 @@ void RootElement::calcSizes(const ContextStyle& style, int parentSize)
     setWidth(content->getWidth() + unit+unit/3+ rootOffset.x());
     setHeight(content->getHeight() + dist + rootOffset.y());
     setMidline(getHeight() - content->getHeight() + content->getMidline());
+    if (content->getBaseline() > -1) {
+        setBaseline(getHeight() - content->getHeight() + content->getBaseline());
+    }
+    else {
+        setBaseline(-1);
+    }
 
     content->setX(rootOffset.x() + unit+unit/3);
     content->setY(rootOffset.y() + dist);

@@ -280,7 +280,7 @@ IndexElement* KFormulaContainer::createIndexElement()
     IndexElement* element = new IndexElement;
     FormulaCursor* cursor = getActiveCursor();
     if (!cursor->isSelection()) {
-        cursor->moveLeft(SelectMovement);
+        cursor->moveLeft(SelectMovement | WordMovement);
     }
     return element;
 }

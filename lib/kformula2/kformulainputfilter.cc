@@ -5,7 +5,7 @@
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+   version 2.
  
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,20 +18,4 @@
    Boston, MA 02111-1307, USA.
 */
 
-
-#include "contextstyle.h"
-
-ContextStyle::ContextStyle()
-    : defaultFont("times"), nameFont("times"), numberFont("symbol"),
-      operatorFont("symbol"), symbolFont("symbol"),
-      defaultColor(Qt::black), numberColor(Qt::blue),
-      operatorColor(Qt::darkGreen), errorColor(Qt::darkRed),
-      emptyColor(Qt::blue)
-{
-    nameFont.setItalic(true);
-    distance = 5;
-    linearMovement = false;
-    baseSize = 18;
-    minimumSize = 8;
-    sizeReduction = 2;
-}
+#include "kformulainputfilter.moc"

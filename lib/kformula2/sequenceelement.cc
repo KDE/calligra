@@ -128,35 +128,55 @@ void SequenceElement::calcSizes(const ContextStyle& context, int parentSize)
     if (!isEmpty()) {
         int mySize = parentSize - relativeSize;
         int width = 0;
-        int toMidline = 0;
+        int toBaseline = 0;
+        int fromBaseline = 0;
         int fromMidline = 0;
 
         uint count = children.count();
+
+        // Let's do all normal elements that have a base line.
         for (uint i = 0; i < count; i++) {
             BasicElement* child = children.at(i);
             if (!child->isPhantom()) {
                 child->calcSizes(context, mySize);
                 child->setX(width);
                 width += child->getWidth();
-                toMidline = QMAX(toMidline, child->getMidline());
-                fromMidline = QMAX(fromMidline, child->getHeight()-child->getMidline());
+
+                if (child->getBaseline() > -1) {
+                    toBaseline = QMAX(toBaseline, child->getBaseline());
+                    fromBaseline = QMAX(fromBaseline, child->getHeight()-child->getBaseline());
+                    fromMidline = QMAX(fromMidline, child->getBaseline() - child->getMidline());
+                }
             }
             else {
                 child->setX(width);
-                child->setWidth(0);
-                child->setHeight(0);
-                child->setMidline(0);
             }
         }
+
+        bool noBaseline = toBaseline == 0;
+        
+        // Now all normal elements without a base line.
+        for (uint i = 0; i < count; i++) {
+            BasicElement* child = children.at(i);
+            if (!child->isPhantom()) {
+                if (child->getBaseline() == -1) {
+                    toBaseline = QMAX(toBaseline, child->getMidline()+fromMidline);
+                    fromBaseline = QMAX(fromBaseline, child->getHeight()-(child->getMidline()+fromMidline));
+                }
+            }
+        }
+
         setWidth(width);
-        setHeight(toMidline+fromMidline);
-        setMidline(toMidline);
+        setHeight(toBaseline+fromBaseline);
+        setBaseline(noBaseline ? -1 : toBaseline);
+        setMidline(toBaseline-fromMidline);
 
         setChildrenPositions();
     }
     else {
         setWidth(10);
         setHeight(10);
+        setBaseline(10);
         setMidline(5);
     }
 }
@@ -167,7 +187,12 @@ void SequenceElement::setChildrenPositions()
     uint count = children.count();
     for (uint i = 0; i < count; i++) {
         BasicElement* child = children.at(i);
-        child->setY(getMidline() - child->getMidline());
+        if (child->getBaseline() > -1) {
+            child->setY(getBaseline() - child->getBaseline());
+        }
+        else {
+            child->setY(getMidline() - child->getMidline());
+        }
     }
 }
 
@@ -199,7 +224,7 @@ void SequenceElement::draw(QPainter& painter, const ContextStyle& context,
     }
     else {
         painter.setBrush(Qt::NoBrush);
-        painter.setPen(Qt::blue);
+        painter.setPen(context.getEmptyColor());
         painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
     }
 }

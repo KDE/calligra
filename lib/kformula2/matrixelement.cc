@@ -202,6 +202,7 @@ void MatrixElement::calcSizes(const ContextStyle& style, int parentSize)
     setWidth(width);
     setHeight(height);
     setMidline(height/2);
+    setBaseline(-1);
 }
 
 /**

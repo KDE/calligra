@@ -279,16 +279,12 @@ public:
     int getWidth() const { return size.width(); }
     int getHeight() const { return size.height(); }
 
-    void setWidth(int width) { size.setWidth(width); }
-    void setHeight(int height) { size.setHeight(height); }
-    
-    void setMidline(int mline) { midline = mline; }
-
     /**
      * Our position inside our parent.
      */
     //QPoint getParentPosition() { return position; }
 
+    int getBaseline() const { return baseline; }
     int getMidline() const { return midline; }
 
 
@@ -309,6 +305,12 @@ public:
     static int getEvilDestructionCount() { return evilDestructionCount; }
     
 protected:
+
+    void setWidth(int width) { size.setWidth(width); }
+    void setHeight(int height) { size.setHeight(height); }
+    
+    void setBaseline(int line) { baseline = line; }
+    void setMidline(int mline) { midline = mline; }
 
     //Save/load support
     
@@ -375,8 +377,18 @@ private:
     QPoint position;
 
     /**
+     * The position of our base line from
+     * the upper border. A sequence aligns its elements
+     * along this line.
+     *
+     * There are elements (like matrix) that don't have a base line. It is
+     * -1 in this case. The alignment is done using the middle line.
+     */
+    int baseline;
+    
+    /**
      * The position of our middle line from
-     * the upper border.
+     * the upper border. The strike out position.
      */
     int midline;
 

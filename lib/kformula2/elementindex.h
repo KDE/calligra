@@ -35,7 +35,7 @@ typedef auto_ptr<ElementIndex> ElementIndexPtr;
  * A type that describes an index. You can get one of those
  * for each index from an element that owns indexes.
  *
- * This type is used to work on indexes in a generic way,
+ * This type is used to work on indexes in a generic way.
  */
 class ElementIndex {
 public:

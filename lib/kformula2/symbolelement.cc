@@ -30,10 +30,6 @@ SymbolElement::SymbolElement(SymbolType type, BasicElement* parent)
     : BasicElement(parent), symbol(type)
 {
     content = new SequenceElement(this);
-    //upper = new SequenceElement(this);
-    //upper->setRelativeSize(-2);
-    //lower = new SequenceElement(this);
-    //lower->setRelativeSize(-2);
     upper = 0;
     lower = 0;
 }
@@ -142,6 +138,14 @@ void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
                            lowerHeight + symbol.getHeight()/2);
     setHeight(toMidline + fromMidline);
     setMidline(toMidline);
+
+    if (content->getBaseline() > -1) {
+        setBaseline(content->getBaseline() - content->getMidline() + getMidline());
+    }
+    else {
+        setBaseline(-1);
+    }
+    
 
     symbol.setY(toMidline - symbol.getHeight()/2);
     content->setY(toMidline - content->getMidline());

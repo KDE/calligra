@@ -302,6 +302,13 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle, int parentSize)
     setWidth(width);
     setHeight(toMidline+fromMidline);
     setMidline(toMidline);
+    //cout << content->getBaseline() << " " << content->getMidline() << endl;
+    if (content->getBaseline() > -1) {
+        setBaseline(content->getBaseline() - content->getMidline() + getMidline());
+    }
+    else {
+        setBaseline(-1);
+    }
 }
 
 /**
@@ -336,8 +343,11 @@ void IndexElement::draw(QPainter& painter, const ContextStyle& contextStyle,
     }
 
     // Debug
+    //painter.setBrush(Qt::NoBrush);
     //painter.setPen(Qt::red);
     //painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
+    //painter.drawLine(myPos.x(), myPos.y()+getMidline(),
+    //                 myPos.x()+getWidth(), myPos.y()+getMidline());
 }
 
     

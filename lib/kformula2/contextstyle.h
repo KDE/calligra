@@ -27,6 +27,7 @@
 //Qt Include
 #include <qcolor.h>
 #include <qfont.h>
+#include <qstring.h>
 
 //Formula include
 
@@ -56,6 +57,7 @@ public:
     QColor getNumberColor()   const { return numberColor; }
     QColor getOperatorColor() const { return operatorColor; }
     QColor getErrorColor()    const { return errorColor; }
+    QColor getEmptyColor()    const { return emptyColor; }
 
     QFont getDefaultFont()    const { return defaultFont; }
     QFont getNameFont()       const { return nameFont; }
@@ -82,6 +84,7 @@ private:
     QColor numberColor;
     QColor operatorColor;
     QColor errorColor;
+    QColor emptyColor;
 
     /**
      * The basic distance. Used everywhere a non specific
@@ -109,6 +112,15 @@ private:
      * The amount the indexes are smaller that their parent.
      */
     int sizeReduction;
+
+    /**
+     * All characters that are valid as exponent chars inside a number.
+     * This used to be "Ee" but the symbol font has no "e" and some
+     * fortran numbers know the "D", too.
+     */
+    // Unfortunately this is not the right place to store this
+    // information. There is no ContextStyle while parsing.
+    //QString exponentChars;
 };
 
 #endif // __CONTEXTSTYLE_H

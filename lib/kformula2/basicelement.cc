@@ -30,8 +30,10 @@
 int BasicElement::evilDestructionCount = 0;
 
 BasicElement::BasicElement(BasicElement* p)
-        : parent(p), elementType(0)
+        : parent(p), baseline(0), midline(0), elementType(0)
 {
+    setWidth(0);
+    setHeight(0);
     evilDestructionCount++;
 }
 
