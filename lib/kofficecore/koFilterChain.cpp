@@ -485,7 +485,7 @@ KoStoreDevice* KoFilterChain::storageNewStreamHelper( KoStore** storage, KoStore
     if ( ( *storage )->bad() )
         return storageCleanupHelper( storage );
     if ( !( *storage )->open( name ) )
-        return storageCleanupHelper( storage );
+        return 0;
 
     *device = new KoStoreDevice( *storage );
     return *device;
@@ -586,7 +586,7 @@ KoStoreDevice* KoFilterChain::storageCreateFirstStream( const QString& streamNam
     }
 
     if ( !( *storage )->open( streamName ) )
-        return storageCleanupHelper( storage );
+        return 0;
 
     if ( *device ) {
         kdDebug( 30500 ) << "Uh-oh, we forgot to clean up the storage device!" << endl;
