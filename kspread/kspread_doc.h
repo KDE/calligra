@@ -595,7 +595,7 @@ public:
    */
   void emitEndOperation( QRect const & rect );
 
-  bool delayCalculation();
+  bool delayCalculation() const;
 
 
   void updateBorderButton();

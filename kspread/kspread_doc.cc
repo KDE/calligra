@@ -2013,7 +2013,7 @@ void KSpreadDoc::emitEndOperation( QRect const & rect )
   }
 }
 
-bool KSpreadDoc::delayCalculation()
+bool KSpreadDoc::delayCalculation() const
 {
    return d->delayCalculation;
 }
@@ -2055,12 +2055,12 @@ void KSpreadDoc::setDisplayTable(KSpreadSheet *_table )
     d->activeSheet = _table;
 }
 
-KSPLoadingInfo * KSpreadDoc::loadingInfo()const
+KSPLoadingInfo * KSpreadDoc::loadingInfo() const
 {
     return d->m_loadingInfo;
 }
 
-KSpreadSheet * KSpreadDoc::displayTable()const
+KSpreadSheet * KSpreadDoc::displayTable() const
 {
     return d->activeSheet;
 }
