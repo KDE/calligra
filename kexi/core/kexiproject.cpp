@@ -409,7 +409,7 @@ bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 		//js TODO check for errors
 		return false;
 	}
-	KexiDB::TransactionGuard tg( m_connection );
+	KexiDB::TransactionGuard tg( *m_connection );
 	if (!tg.transaction().active())
 		return false;
 	if (!m_connection->removeObject( item.identifier() )) {
@@ -429,6 +429,7 @@ bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 
 bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const QString& _newName )
 {
+	Kexi::WaitCursor wait;
 	clearError();
 	QString newName = _newName.stripWhiteSpace();
 	{
@@ -447,7 +448,7 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 	KexiPart::Part *part = findPartFor(item);
 	if (!part)
 		return false;
-	KexiDB::TransactionGuard tg( m_connection );
+	KexiDB::TransactionGuard tg( *m_connection );
 	if (!tg.transaction().active()) {
 		setError(m_connection);
 		return false;

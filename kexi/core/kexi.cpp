@@ -221,10 +221,22 @@ void DelayedCursorHandler::show() {
 DelayedCursorHandler _delayedCursorHandler;
 
 void Kexi::setWaitCursor() {
-	_delayedCursorHandler.start();
+	if (kapp->guiEnabled())
+		_delayedCursorHandler.start();
 }
 void Kexi::removeWaitCursor() {
-	_delayedCursorHandler.stop();
+	if (kapp->guiEnabled())
+		_delayedCursorHandler.stop();
+}
+
+WaitCursor::WaitCursor()
+{
+	setWaitCursor();
+}
+
+WaitCursor::~WaitCursor()
+{
+	removeWaitCursor();
 }
 
 //--------------------------------------------------------------------------------

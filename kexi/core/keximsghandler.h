@@ -37,8 +37,13 @@ class KEXICORE_EXPORT KexiMessageHandler
 		KexiMessageHandler(QWidget *parent = 0);
 		virtual ~KexiMessageHandler();
 
-		//! Use to block/unblock messages
-		void enableMessages(bool enable) { m_enableMessages = enable; }
+		/*! This method can be used to block/unblock messages.
+		 Sometimes you are receiving both lower- and higher-level messages,
+		 but you do not need to display two message boxes but only one (higher level with details).
+		 All you need is to call enableMessages(false) before action that can fail
+		 and restore messages by enableMessages(true) after the action. 
+		 See KexiMainWindowImpl::renameObject() implementation for example. */
+		inline void enableMessages(bool enable) { m_enableMessages = enable; }
 
 		virtual void showErrorMessage(const QString &title, const QString &details = QString::null) = 0;
 		virtual void showErrorMessage(const QString& msg, KexiDB::Object *obj) = 0;

@@ -19,6 +19,8 @@
 
 #include "kexiguimsghandler.h"
 
+#include "kexi.h"
+
 #include <kexidb/utils.h>
 
 #include <kmessagebox.h>
@@ -110,6 +112,10 @@ KexiGUIMessageHandler::showMessage(MessageType type,
 {
 	if (!m_enableMessages)
 		return;
+
+	//'wait' cursor is a nonsense now
+	Kexi::removeWaitCursor();
+
 	QString msg = title;
 	if (title.isEmpty())
 		msg = i18n("Unknown error");

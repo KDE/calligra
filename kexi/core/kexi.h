@@ -108,11 +108,28 @@ namespace Kexi
 			QGuardedPtr<KexiDB::Driver> m_drv;
 	};
 
-	/*! Sets "wait" cursor with 1 second delay. */
+	/*! Sets "wait" cursor with 1 second delay. 
+	 Does nothing if GUI is not GUI-aware. (see KApplication::guiEnabled()) */
 	KEXICORE_EXPORT void setWaitCursor();
+
 	/*! Remove "wait" cursor previously set with \a setWaitCursor(), 
-	 even if it's not yet visible. */
+	 even if it's not yet visible.
+	 Does nothing if GUI is not GUI-aware. (see KApplication::guiEnabled()) */
 	KEXICORE_EXPORT void removeWaitCursor();
+
+	/*! Helper class. Allocate it in yor code block as follows:
+	 <code>
+	 Kexi::WaitCursor wait;
+	 </code>
+	 .. and wait cursor will be visible (with a delay) until you're in this block. without 
+	 a need to call removeWaitCursor() before exiting the block.
+	 Does nothing if GUI is not GUI-aware. (see KApplication::guiEnabled()) */
+	class KEXICORE_EXPORT WaitCursor
+	{
+		public:
+			WaitCursor();
+			~WaitCursor();
+	};
 
 	/*! Helper class for storing object status. */
 	class KEXICORE_EXPORT ObjectStatus
