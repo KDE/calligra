@@ -33,7 +33,7 @@
 #include <koFilter.h>
 #include <koStore.h>
 
-#define KDEBUG_RTFFILTER 30505
+#define KDEBUG_RTFFILTER 30515
 #define O
 
 struct CodeTable {

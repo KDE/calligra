@@ -34,7 +34,7 @@
 #include <tagprocessing.h>
 #include <qvaluelist.h>
 
-#define KDEBUG_KWFILTER 30505
+#define KDEBUG_KWFILTER 30515
 #define INSERT_TABLE_IN_PARA 1
 #define TABLES_WITH_TITLES   0
 

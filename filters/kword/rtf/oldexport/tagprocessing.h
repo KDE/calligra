@@ -22,7 +22,7 @@
 #ifndef TAGPROCESSING_H
 #define TAGPROCESSING_H
 
-#define KDEBUG_TAGPROCESSING 30505
+#define KDEBUG_TAGPROCESSING 30515
 
 #include <iostream.h>
 #include <qdom.h>
