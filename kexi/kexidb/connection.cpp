@@ -69,12 +69,12 @@ QStringList KexiDB_kexiDBSystemTableNames;
 Connection::Connection( Driver *driver, const ConnectionData &conn_data )
 	: QObject()
 	,KexiDB::Object()
-	,m_driver(driver)
 	,m_data(conn_data)
+	,d(new ConnectionPrivate())
+	,m_driver(driver)
 	,m_is_connected(false)
 	,m_autoCommit(true)
 	,m_destructor_started(false)
-	,d(new ConnectionPrivate())
 {
 	m_tables.setAutoDelete(true);
 	m_tables_byname.setAutoDelete(false);//m_tables is owner, not me

@@ -596,13 +596,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 To avoid having deleted table object on its list. */
 		void removeMe(TableSchema *ts);
 				
-		Driver *m_driver;
 		ConnectionData m_data;
 		QString m_name;
-		bool m_is_connected : 1;
-		bool m_autoCommit : 1;
-		bool m_destructor_started : 1; //!< helper: true if destructor is started
-
 		QString m_usedDatabase; //!< database name that is opened now
 
 		//! Table schemas retrieved on demand with tableSchema()
@@ -622,6 +617,12 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 	friend class KexiDB::TableSchema; //!< for removeMe()
 
 		ConnectionPrivate *d;
+	private:
+		Driver *m_driver;
+		bool m_is_connected : 1;
+		bool m_autoCommit : 1;
+		bool m_destructor_started : 1; //!< helper: true if destructor is started
+	
 };
 
 } //namespace KexiDB

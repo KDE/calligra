@@ -42,7 +42,6 @@ MySqlConnection::MySqlConnection( Driver *driver, const ConnectionData &conn_dat
 	:Connection(driver,conn_data)
 	,m_mysql(0) {
 
-	m_is_connected=false;
 }
 
 
@@ -52,10 +51,6 @@ MySqlConnection::~MySqlConnection() {
 
 bool MySqlConnection::drv_connect()
 {
-	if (m_is_connected) {
-		setError(ERR_ALREADY_CONNECTED,i18n("Connection has already been opened"));
-		return false;
-	}
 	if (!(m_mysql = mysql_init(m_mysql)))
 		return false;
 
@@ -84,7 +79,6 @@ bool MySqlConnection::drv_connect()
                 m_data.port, socket.local8Bit(), 0);
         if(mysql_errno(m_mysql) == 0)
         {
-                m_is_connected = true;
                 return true;
         }
 	
@@ -96,10 +90,6 @@ bool MySqlConnection::drv_connect()
 
 bool MySqlConnection::drv_disconnect()
 {
-	if(m_is_connected)
-	{
-		mysql_close(m_mysql);
-	}
 	m_mysql = 0;
 
         KexiDBDrvDbg << "MySqlConnection::disconnect()" << endl;
@@ -131,11 +121,6 @@ bool MySqlConnection::drv_getDatabasesList( QStringList &list ) {
         KexiDBDrvDbg << "MySqlConnection::drv_getDatabasesList()" << endl;
 
 	list.clear();
-
-	if (!m_is_connected) {
-		setError(ERR_NO_CONNECTION,i18n("Database list cannot be retrieved: Connection not open"));
-		return false;
-	}
 
 	MYSQL_RES *res;
 
@@ -175,15 +160,13 @@ bool MySqlConnection::drv_dropDatabase( const QString &dbName) {
 }
                 
 bool MySqlConnection::drv_executeSQL( const QString& statement ) {
-        if (!m_is_connected) {
-                setError(ERR_NO_CONNECTION,i18n("Database command can't be executed, because there is no open connection"));
-                return false;
-        }
 
+//let kexidb do it! : 
+/*
 	if (statement.isEmpty()) {
 //add errormsg ?
 		return false;
-	}
+	}*/
 	
 	QCString queryStr=statement.utf8();
 	const char *query=queryStr;
