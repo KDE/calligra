@@ -6792,13 +6792,13 @@ void KPresenterView::extraArrangePopup()
 void KPresenterView::extraSendBackward()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->activePage()->raiseObjs(true);
+    m_canvas->activePage()->lowerObjs( true );
 }
 
 void KPresenterView::extraBringForward()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->activePage()->lowerObjs(true);
+    m_canvas->activePage()->raiseObjs( true );
 }
 
 void KPresenterView::applyAutoFormat()

@@ -163,6 +163,18 @@ void KPPresStructObjectItem::setObject( KPObject *o, int num, bool sticky,const 
     case OT_POLYGON:
       setPixmap( 0, KPBarIcon( "mini_polygon" ) );
       break;
+    case OT_CLOSED_LINE: {
+        QString _typeString = object->getTypeString();
+
+        if ( _typeString == i18n( "Closed Freehand" ) )
+            setPixmap( 0, KPBarIcon( "closed_freehand" ) );
+        else if ( _typeString == i18n( "Closed Polyline" ) )
+            setPixmap( 0, KPBarIcon( "closed_polyline" ) );
+        else if ( _typeString == i18n( "Closed Quadric Bezier Curve" ) )
+            setPixmap( 0, KPBarIcon( "closed_quadricbeziercurve" ) );
+        else if ( _typeString == i18n( "Closed Cubic Bezier Curve" ) )
+            setPixmap( 0, KPBarIcon( "closed_cubicbeziercurve" ) );
+    } break;
     case OT_GROUP:
       setPixmap( 0, KPBarIcon( "group" ) );
       break;
