@@ -125,7 +125,9 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
         penWidth = 1;
     pen.setAttribute("width", penWidth);
     pen.setAttribute("style", borderStyles[penStyle-1]);
-    pen.setAttribute("color", palette[xfs[xf]->sideBColor & 0x7f]);
+    pen.setAttribute("color", ((xfs[xf]->sideBColor ) & 0x7f) == 64 ?
+		     "#000000" : palette[(xfs[xf]->sideBColor  ) & 0x7f]);
+    /*palette[xfs[xf]->sideBColor & 0x7f]);*/
     border.appendChild(pen);
     f.appendChild(border);
   }
@@ -142,7 +144,11 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
         penWidth = 1;
     pen.setAttribute("width", penWidth);
     pen.setAttribute("style", borderStyles[penStyle-1]);
-    pen.setAttribute("color", palette[(xfs[xf]->sideBColor >> 7) & 0x7f]);
+    pen.setAttribute("color", ((xfs[xf]->sideBColor >>7 ) & 0x7f) == 64 ?
+		     "#000000" : palette[(xfs[xf]->sideBColor >>7 ) & 0x7f]);
+
+
+/*palette[(xfs[xf]->sideBColor >> 7) & 0x7f]);*/
     border.appendChild(pen);
     f.appendChild(border);
   }
@@ -159,7 +165,9 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
         penWidth = 1;
     pen.setAttribute("width", penWidth);
     pen.setAttribute("style", borderStyles[penStyle-1]);
-    pen.setAttribute("color", palette[xfs[xf]->topBColor & 0x7f]);
+    pen.setAttribute("color", ((xfs[xf]->topBColor ) & 0x7f) == 64 ?
+		     "#000000" : palette[(xfs[xf]->topBColor ) & 0x7f]);
+		     /*palette[xfs[xf]->topBColor & 0x7f]);*/
     border.appendChild(pen);
     f.appendChild(border);
   }
@@ -176,7 +184,10 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
         penWidth = 1;
     pen.setAttribute("width", penWidth);
     pen.setAttribute("style", borderStyles[penStyle-1]);
-    pen.setAttribute("color", palette[(xfs[xf]->topBColor >> 7) & 0x7f]);
+    pen.setAttribute("color",  ((xfs[xf]->topBColor >> 7) & 0x7f) == 64 ?
+		     "#000000" : palette[(xfs[xf]->topBColor >> 7) & 0x7f]);
+
+/*palette[(xfs[xf]->topBColor >> 7) & 0x7f]);*/
     border.appendChild(pen);
     f.appendChild(border);
   }
