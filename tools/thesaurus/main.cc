@@ -79,10 +79,15 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     m_edit_label = new QLabel(m_edit, i18n("&Search for:"), m_page);
     row1->addWidget(m_edit_label, 0);
     row1->addWidget(m_edit, 1);
-    m_back = new QPushButton("<", m_page);        // fixme: icon
+    //KGuiItem back = KStdGuiItem::back();
+    //KGuiItem forward = KStdGuiItem::forward();
+    // fixme: button's too wide
+    //m_back = new QPushButton(back.iconSet(), QString::null, m_page);
+    m_back = new QPushButton("<", m_page);
     QToolTip::add(m_back, i18n("Back"));
     row1->addWidget(m_back, 0);
-    m_forward = new QPushButton(">", m_page);    // fixme: icon
+    //m_forward = new QPushButton(forward.iconSet(), QString::null, m_page);
+    m_forward = new QPushButton(">", m_page);
     QToolTip::add(m_forward, i18n("Forward"));
     row1->addWidget(m_forward, 0);
 
