@@ -46,9 +46,9 @@ KWDeleteDia::KWDeleteDia( QWidget *parent, const char *name, KWTableFrameSet *_t
     m_toRemove.clear();
 
     setupTab1();
-    setButtonOKText(i18n("&Delete"), type == ROW ?
+    setButtonOK( KGuiItem( i18n("&Delete"), type == ROW ?
     	i18n("Delete the row from the table.") :
-    	i18n("Delete the column from the table."));
+    	i18n("Delete the column from the table.")) );
 
     setInitialSize( QSize(300, 150) );
 }
