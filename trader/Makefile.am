@@ -2,7 +2,7 @@
 INCLUDES  = $(KOFFICECORE_INCLUDES) $(MICO_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD     = $(LIB_KOFFICECORE) $(LIB_KOML) $(LIB_KSTORE) \
-	    -lkparts -lkpartsui -lkom $(LIB_KIO) $(LIBMICO)
+	    $(LIB_KFILE) -lkparts -lkpartsui -lkom $(LIB_KIO) $(LIBMICO)
 
 ####### Files
 
@@ -19,7 +19,7 @@ noinst_HEADERS = parse.h parse_tree.h y.tab.h lookup.h misc.h \
 idl_DATA =
 idl_HEADERS =
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) 
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS)
 
 SUBDIRS = data
 
@@ -31,7 +31,7 @@ parser:
 	flex lex.l
 	yacc -d yacc.y
 	flex -Pdep lex.dep.l
-	bison -p dep -b dep -d yacc.dep.y 
+	bison -p dep -b dep -d yacc.dep.y
 
 IDL_FLAGS = --query-server-for-narrow --relative-paths -I./ -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(idldir)
 
