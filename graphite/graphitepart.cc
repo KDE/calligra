@@ -28,12 +28,17 @@
 #include <graphiteshell.h>
 #include <graphitefactory.h>
 #include <graphitepart.h>
+#include <gcommand.h>
 
 
 GraphitePart::GraphitePart(QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parent, name, singleViewMode) {
 
-    KStdAction::cut(this, SLOT( edit_cut() ), actionCollection(), "edit_cut" );
+    KAction *undo=KStdAction::undo(this, SLOT(edit_undo()), actionCollection(), "edit_undo");
+    KAction *redo=KStdAction::redo(this, SLOT(edit_redo()), actionCollection(), "edit_redo");
+    history=new GCommandHistory(undo, redo);
+    
+    KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut" );
 }
 
 GraphitePart::~GraphitePart() {
@@ -104,6 +109,14 @@ void GraphitePart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/, bo
     for(int y=left; y<right; ++y)
         painter.drawLine(left*20, y*20, right*20, y*20);
     */
+}
+
+void GraphitePart::edit_undo() {
+    kdDebug(37001) << "GraphitePart: edit_undo called" << endl;
+}
+
+void GraphitePart::edit_redo() {
+    kdDebug(37001) << "GraphitePart: edit_redo called" << endl;
 }
 
 void GraphitePart::edit_cut() {

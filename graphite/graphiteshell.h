@@ -36,6 +36,7 @@ public:
     QString nativeFormatName() const;
 
 protected:
+    virtual void slotFilePrint();    
     virtual KoDocument *createDoc();
 };
 #endif

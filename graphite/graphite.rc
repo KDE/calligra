@@ -1,10 +1,14 @@
 <!DOCTYPE kpartgui><kpartgui name="graphite">
 <MenuBar>
  <Menu name="edit"><text>&amp;Edit</text>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
   <Action name="edit_cut"/>
  </Menu>
 </MenuBar>
 <ToolBar name="edit_bar" fullWidth="false">
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
   <Action name="edit_cut"/>
 </ToolBar>
 </kpartgui>

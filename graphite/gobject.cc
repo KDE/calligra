@@ -18,9 +18,7 @@
 */
 
 #include <qdom.h>
-
 #include <gobject.h>
-#include <kaction.h>
 
 
 GObject::~GObject() {

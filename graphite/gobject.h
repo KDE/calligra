@@ -46,8 +46,8 @@ class GObjectM9r;
 class GObject {
 
 public:
-    enum State { Visible, Handles, Rot_Handles, Deleted };   // all possible states
-    enum FillStyle { Brush, GradientFilled };           // all possible fill styles
+    enum State { Visible, Handles, Rot_Handles, Invisible, Deleted }; // all possible states
+    enum FillStyle { Brush, GradientFilled };  // all possible fill styles
     enum Position { First, Last, Current }; // where to insert the new child object
 
     virtual ~GObject();
@@ -79,7 +79,7 @@ public:
     // have to paint "invisible" (normally they are colored gray) objects
     virtual void draw(const QPainter &p, const QRegion &reg, const bool toPrinter=false) const = 0;
 
-    const int zoom() const { return m_zoom; }
+    const int &zoom() const { return m_zoom; }
     virtual void setZoom(const short &zoom=100); // don't forget to set it for all children!
     // Note: Check, if the zoom is equal to the last one - don't change it, then...
 
@@ -93,7 +93,7 @@ public:
     const QString &name() const { return m_name; }       // name of the object (e.g. "Line001")
     void setName(const QString &name) { m_name=name; }   // set the name
 
-    virtual const QPoint origin() const = 0;             // the origin coordinate of the obj
+    virtual const QPoint &origin() const = 0;             // the origin coordinate of the obj
     virtual void setOrigin(const QPoint &origin) = 0;
     virtual void moveX(const int &dx) = 0;
     virtual void moveY(const int &dy) = 0;
@@ -101,16 +101,16 @@ public:
     virtual void rotate(const QPoint &center, const double &angle) = 0;
     virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor) = 0;
 
-    const State state() const { return m_state; }               // what's the current state?
+    const State &state() const { return m_state; }               // what's the current state?
     virtual void setState(const State state) { m_state=state; } // set the state
 
-    const FillStyle fillStyle() const { return m_fillStyle; }
+    const FillStyle &fillStyle() const { return m_fillStyle; }
     virtual void setFillStyle(const FillStyle &fillStyle) { m_fillStyle=fillStyle; }
-    const QBrush brush() const { return m_brush; }         // Fill style (brush)
+    const QBrush &brush() const { return m_brush; }         // Fill style (brush)
     virtual void setBrush(const QBrush &brush) { m_brush=brush; }
-    const Gradient gradient() const { return m_gradient; } // Gradient filled
+    const Gradient &gradient() const { return m_gradient; } // Gradient filled
     virtual void setGradient(const Gradient &gradient) { m_gradient=gradient; }
-    const QPen pen() const { return m_pen; }               // Pen for the lines
+    const QPen &pen() const { return m_pen; }               // Pen for the lines
     virtual void setPen(const QPen &pen) { m_pen=pen; }
 
 signals:

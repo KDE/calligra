@@ -22,6 +22,7 @@
 #include <graphitefactory.h>
 #include <graphiteshell.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 
 GraphiteShell::GraphiteShell(const char *name)
@@ -33,6 +34,10 @@ GraphiteShell::~GraphiteShell() {
 
 QString GraphiteShell::nativeFormatName() const {
   return i18n("graphite");
+}
+
+void GraphiteShell::slotFilePrint() {
+    kdDebug(37001) << "GraphiteShell::slotFilePrint()" << endl;
 }
 
 KoDocument *GraphiteShell::createDoc() {

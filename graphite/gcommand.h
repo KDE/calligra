@@ -21,6 +21,7 @@
 #define gcommand_h
 
 #include <qlist.h>
+#include <qstring.h>
 
 class KAction;
 
@@ -30,13 +31,19 @@ class KAction;
 class GCommand {
 
 public:
-    virtual ~GCommand();
+    virtual ~GCommand() {}
 
     virtual void execute() = 0;
     virtual void unexecute() = 0;
 
+    const QString &name() const { return m_name; }
+    void setName(const QString &name) { m_name=name; }
+
 protected:
-    GCommand();
+    GCommand(const QString &name) : m_name(name) {}
+
+private:
+    QString m_name;
 };
 
 
@@ -46,7 +53,8 @@ protected:
 // a maximum redo limit (e.g. max. 50 undo / 30 redo commands).
 // The GCommandHistory keeps track of the "borders" and deletes
 // commands, if appropriate. It also activates/deactivates the
-// undo/redo actions in the menu.
+// undo/redo actions in the menu and changes the text according
+// to the name of the command.
 
 class GCommandHistory {
 
@@ -66,8 +74,10 @@ public:
 private:
     void clipCommands();  // ensures that the limits are kept
 
-    QList<GCommand> commands;
+    QList<GCommand> m_commands;
+    GCommand *m_present;
     KAction *m_undo, *m_redo;
     int m_undoLimit, m_redoLimit;
+    bool m_first;  // attention: this is the first command
 };
 #endif // gcommand_h

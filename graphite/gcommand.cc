@@ -18,25 +18,119 @@
 */
 
 #include <gcommand.h>
-//#include <kdebug.h>
+#include <kaction.h>
+#include <kdebug.h>
+#include <klocale.h>
+
 
 GCommandHistory::GCommandHistory(KAction *undo, KAction *redo) :
-    m_undo(undo), m_redo(redo), m_undoLimit(50), m_redoLimit(30) {
+    m_present(0L), m_undo(undo), m_redo(redo), m_undoLimit(50),
+    m_redoLimit(30), m_first(false) {
+
+    m_undo->setEnabled(false);
+    m_undo->setText(i18n("No Undo Possible"));
+    m_redo->setEnabled(false);
+    m_redo->setText(i18n("No Redo Possible"));
+    m_commands.setAutoDelete(true);
 }
 
 GCommandHistory::~GCommandHistory() {
 }
 
-void GCommandHistory::addCommand(GCommand */*command*/) {
-    // TODO
+void GCommandHistory::addCommand(GCommand *command) {
+
+    if(command==0L)
+	return;
+
+    int index;
+    if(m_present!=0L && (index=m_commands.findRef(m_present))!=-1) {
+	m_commands.insert(index+1, command);
+	m_present=command;
+	m_first=false;
+	m_undo->setEnabled(true);
+	m_undo->setText(i18n("Und&o: %1").arg(m_present->name()));
+	if(m_commands.next()!=0) {
+	    GCommand *tmp=m_commands.current();
+	    m_redo->setEnabled(true);
+	    m_redo->setText(i18n("Re&do: %1").arg(tmp->name()));
+	}
+	else {
+	    if(m_redo->isEnabled()) {
+		m_redo->setEnabled(false);
+		m_redo->setText(i18n("No Redo Possible"));
+	    }
+	}	
+	clipCommands();
+    }
+    else { // either this is the first time we add a Command or something has gone wrong
+	kdDebug(37001) << "Initializing the Command History" << endl;
+	m_commands.clear();
+	m_commands.append(command);
+	m_present=command;
+	m_undo->setEnabled(true);
+	m_undo->setText(i18n("Und&o: %1").arg(m_present->name()));
+	m_redo->setEnabled(false);
+	m_redo->setText(i18n("No Redo Possible"));
+	m_first=true;
+    }
 }
 
 void GCommandHistory::undo() {
-    // TODO
+
+    m_present->unexecute();
+    m_redo->setEnabled(true);
+    m_redo->setText(i18n("Re&do: %1").arg(m_present->name()));
+    if(m_commands.findRef(m_present)!=-1 && m_commands.prev()!=0) {
+	m_present=m_commands.current();
+	m_undo->setEnabled(true);
+	m_undo->setText(i18n("Und&o: %1").arg(m_present->name()));
+    }
+    else {
+	m_undo->setEnabled(false);
+	m_undo->setText(i18n("No Undo Possible"));
+	m_first=true;
+    }
 }
 
 void GCommandHistory::redo() {
-    // TODO
+
+    if(m_first) {
+	m_present->execute();
+	m_undo->setEnabled(true);
+	m_undo->setText(i18n("Und&o: %1").arg(m_present->name()));
+	m_first=false;
+	m_commands.first();
+	if(m_commands.next()!=0) {
+	    GCommand *tmp=m_commands.current();
+	    m_redo->setEnabled(true);
+	    m_redo->setText(i18n("Re&do: %1").arg(tmp->name()));
+	}
+	else {
+	    if(m_redo->isEnabled()) {
+		m_redo->setEnabled(false);
+		m_redo->setText(i18n("No Redo Possible"));
+	    }
+	}
+    }
+
+    if(m_commands.findRef(m_present)!=-1 && m_commands.next()!=0) {
+	m_present=m_commands.current();
+	m_present->execute();
+	m_undo->setEnabled(true);
+	m_undo->setText(i18n("Und&o: %1").arg(m_present->name()));	
+    }
+
+    if(m_commands.next()!=0) {
+	    GCommand *tmp=m_commands.current();
+	    m_redo->setEnabled(true);
+	    m_redo->setText(i18n("Re&do: %1").arg(tmp->name()));
+    }
+    else {
+	if(m_redo->isEnabled()) {
+	    m_redo->setEnabled(false);
+	    m_redo->setText(i18n("No Redo Possible"));
+	}
+    }
 }
 
 void GCommandHistory::setUndoLimit(const int &limit) {
@@ -56,5 +150,20 @@ void GCommandHistory::setRedoLimit(const int &limit) {
 }
 
 void GCommandHistory::clipCommands() {
-    // TODO
+
+    int count=m_commands.count();
+    if(count<m_undoLimit && count<m_redoLimit)
+	return;
+
+    int index=m_commands.findRef(m_present);
+    if(index>=m_undoLimit) {
+	for(int i=0; i<=(index-m_undoLimit); ++i)
+	    m_commands.removeFirst();
+	index=m_commands.findRef(m_present); // calculate the new
+	count=m_commands.count();            // values (redo-branch :)
+    }
+    if((index+m_redoLimit)<count) {
+	for(int i=0; i<(count-(index+m_redoLimit)); ++i)
+	    m_commands.removeLast();
+    }
 }

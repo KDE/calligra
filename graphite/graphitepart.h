@@ -25,7 +25,10 @@
 class QPainter;
 class QMouseEvent;
 class QKeyEvent;
+class KAction;
+
 class GraphiteView;
+class GCommandHistory;
 
 class GraphitePart : public KoDocument {
 
@@ -58,11 +61,14 @@ public:
     void keyReleaseEvent(QKeyEvent *e, GraphiteView *view);
 
 protected slots:
+    void edit_undo();
+    void edit_redo();
     void edit_cut();
 
 private:
     GraphitePart &operator=(const GraphitePart &rhs);
 
+    GCommandHistory *history;
     // TODO: Do we need isLoading() like in KSpread?
     // TODO: If an object is selected, store a pointer
     //       to it here and draw the handles after
