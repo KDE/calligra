@@ -12,14 +12,16 @@ kformviewer_SOURCES = \
  kformviewer_main.cc \
  kformviewer_shell.cc \
  kformviewer_doc.cc \
- kformviewer_view.cc
+ kformviewer_view.cc \
+ formobject.cc
 
 noinst_HEADERS = \
  kformviewer.h \
  kformviewer_main.h \
  kformviewer_shell.h \
  kformviewer_doc.h \
- kformviewer_view.h
+ kformviewer_view.h \
+ formobject.h
 
 METASOURCES = \
  kformviewer_main.moc \

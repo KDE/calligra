@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright (C) 1998, 1999 Michael Koch <m_koch@bigfoot.de>
  
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,13 +37,12 @@ public:
    *  @param _sizex Horizontal size of the object.
    *  @param _sizey Vertical size of the object.
    */
-  FormObject( int _posx, int _posy, int _sizex, int _sizey )
-  : m_posx( _posx ), m_posy( _posy ), m_sizex( _sizex ), m_sizey( _sizey ) { };
+  FormObject( int _posx, int _posy, int _sizex, int _sizey );
   
   /**
    *  Destructor.
    */
-  ~FormObject() { };
+  ~FormObject();
 
   /**
    *  Moves an object of a form to a new position.
@@ -51,8 +50,7 @@ public:
    *  @param _posx  Horizontal position of the object.
    *  @param _posy  Vertical position of the object.
    */
-  void move( int _posx, int _posy )
-  { m_posx = _posx; m_posy = _posy; };
+  void move( int _posx, int _posy );
 
   /**
    *  Resizes an object of a form.
@@ -60,8 +58,7 @@ public:
    *  @param _sizex Horizontal size of the object.
    *  @param _sizey Vertical size of the object.
    */
-  void resize( int _sizex, int _sizey )
-  { m_sizex = _sizex; m_sizey = _sizey; };
+  void resize( int _sizex, int _sizey );
 
   /**
    *  Creates a QT-object.
@@ -75,8 +72,7 @@ public:
 
 protected:
 
-  void setGeometry( QWidget* _widget )
-  { _widget->setGeometry( m_posx, m_posy, m_sizex, m_sizey ); };
+  void setGeometry( QWidget* _widget );
 
   int m_posx;
   int m_posy;
@@ -88,18 +84,10 @@ class FormButton : public FormObject
 {
 public:
 
-  FormButton( int _posx, int _posy, int _sizex, int _sizey, QString _title )
-  : FormObject( _posx, _posy, _sizex, _sizey ), m_title( _title ) { };
+  FormButton( int _posx, int _posy, int _sizex, int _sizey, QString _title );
+  ~FormButton();
 
-  ~FormButton() { };
-
-  virtual QWidget* create( QWidget* _parent = 0L, const char* _name = 0L )
-  {
-    QPushButton* button = new QPushButton( _parent, _name );
-    setGeometry( button );
-    button->setText( m_title );
-    return button;
-  };
+  virtual QWidget* create( QWidget* _parent = 0L, const char* _name = 0L );
 
 protected:
 
