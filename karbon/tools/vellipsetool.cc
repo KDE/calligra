@@ -34,13 +34,6 @@ void VEllipseTool::refreshUnit()
     m_dialog->refreshUnit();
 }
 
-void
-VEllipseTool::activate()
-{
-	view()->statusMessage()->setText( name() );
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
-}
-
 VPath*
 VEllipseTool::shape( bool interactive ) const
 {

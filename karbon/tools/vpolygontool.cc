@@ -28,13 +28,6 @@ VPolygonTool::~VPolygonTool()
 	delete( m_dialog );
 }
 
-void
-VPolygonTool::activate()
-{
-	view()->statusMessage()->setText( name() );
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
-}
-
 VPath*
 VPolygonTool::shape( bool interactive ) const
 {

@@ -35,13 +35,6 @@ VStarTool::~VStarTool()
 	delete( m_dialog );
 }
 
-void
-VStarTool::activate()
-{
-	view()->statusMessage()->setText( name() );
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
-}
-
 VPath*
 VStarTool::shape( bool interactive ) const
 {

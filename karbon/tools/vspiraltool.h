@@ -18,8 +18,6 @@ public:
 	VSpiralTool( KarbonView* view );
 	virtual ~VSpiralTool();
 
-	virtual void activate();
-
 	virtual VPath* shape( bool interactive = false ) const;
 
 	virtual void showDialog() const;

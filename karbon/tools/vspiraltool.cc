@@ -30,13 +30,6 @@ VSpiralTool::~VSpiralTool()
 	delete( m_dialog );
 }
 
-void
-VSpiralTool::activate()
-{
-	view()->statusMessage()->setText( name() );
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
-}
-
 VPath*
 VSpiralTool::shape( bool interactive ) const
 {

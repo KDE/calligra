@@ -35,13 +35,6 @@ void VRoundRectTool::refreshUnit()
     m_dialog->refreshUnit();
 }
 
-void
-VRoundRectTool::activate()
-{
-	view()->statusMessage()->setText( name() );
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
-}
-
 VPath*
 VRoundRectTool::shape( bool interactive ) const
 {

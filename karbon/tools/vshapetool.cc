@@ -24,6 +24,13 @@ VShapeTool::VShapeTool( KarbonView* view, const QString& name, bool polar )
 }
 
 void
+VShapeTool::activate()
+{
+	view()->statusMessage()->setText( name() );
+	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+}
+
+void
 VShapeTool::draw()
 {
 	VPainter* painter = view()->painterFactory()->editpainter();

@@ -34,13 +34,6 @@ void VSinusTool::refreshUnit()
     m_dialog->refreshUnit();
 }
 
-void
-VSinusTool::activate()
-{
-	view()->statusMessage()->setText( name() );
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
-}
-
 VPath*
 VSinusTool::shape( bool interactive ) const
 {

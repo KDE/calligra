@@ -18,8 +18,6 @@ public:
 	VRoundRectTool( KarbonView* view );
 	virtual ~VRoundRectTool();
 
-	virtual void activate();
-
 	virtual VPath* shape( bool interactive = false ) const;
 
 	virtual void showDialog() const;

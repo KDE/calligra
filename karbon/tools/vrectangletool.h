@@ -18,8 +18,6 @@ public:
 	VRectangleTool( KarbonView* view );
 	virtual ~VRectangleTool();
 
-	virtual void activate();
-
 	virtual VPath* shape( bool interactive = false ) const;
     void refreshUnit();
 private:

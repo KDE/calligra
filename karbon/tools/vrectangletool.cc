@@ -33,14 +33,6 @@ void VRectangleTool::refreshUnit()
     m_dialog->refreshUnit();
 }
 
-
-void
-VRectangleTool::activate()
-{
-	view()->statusMessage()->setText( name() );
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
-}
-
 VPath*
 VRectangleTool::shape( bool interactive ) const
 {

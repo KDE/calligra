@@ -18,8 +18,6 @@ public:
 	VEllipseTool( KarbonView* view );
 	virtual ~VEllipseTool();
 
-	virtual void activate();
-
 	virtual VPath* shape( bool interactive = false ) const;
     void refreshUnit();
 

@@ -16,8 +16,6 @@ class VPolygonTool : public VShapeTool
 public:
 	VPolygonTool( KarbonView* view );
 	virtual ~VPolygonTool();
-	
-	virtual void activate();
 
 	virtual VPath* shape( bool interactive = false ) const;
 

@@ -23,6 +23,8 @@ public:
 
 	const QString& name() const { return m_name; }
 
+	virtual void activate();
+
 protected:
 	virtual void showDialog() const {}
 

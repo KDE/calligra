@@ -18,8 +18,6 @@ public:
 	VSinusTool( KarbonView* view );
 	virtual ~VSinusTool();
 
-	virtual void activate();
-
 	virtual VPath* shape( bool interactive = false ) const;
 
 	virtual void showDialog() const;
