@@ -138,3 +138,8 @@ thanks .
 -change name in kspread_dlg_formula to correspond with kspread_interpreter
 (for example NO =>not etc ...)
 Now it works
+
+1999-11-11 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-bugfix Now changeref works
+-Now you can put and remove percent in a cell.

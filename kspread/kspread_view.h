@@ -174,7 +174,7 @@ public slots:
     void multiRow( bool b );
     void precisionMinus();
     void precisionPlus();
-    void percent();
+    void percent(bool b);
     void fontSelected( const QString &_font );
     void fontSizeSelected( int size );
     void bold( bool b );
@@ -324,7 +324,7 @@ private:
 
     KToggleAction* m_bold;
     KToggleAction* m_italic;
-    KAction* m_percent;
+    KToggleAction* m_percent;
     KAction* m_precplus;
     KAction* m_precminus;
     KAction* m_money;

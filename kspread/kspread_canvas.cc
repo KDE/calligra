@@ -945,6 +945,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     	// setgotohorz(true);
     	gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
     	showMarker();
+    	m_pView->updateEditWidget();
     	setFocus();
     	// m_pView->showFormulaToolBar(false);
     	break;
@@ -964,10 +965,11 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     	// setgotovert(true);
     	// setgotohorz(true);
 
-	tmp = tmp.setNum( QMAX( 0, markerRow() - 10 ) );
+	tmp = tmp.setNum( QMAX( 1, markerRow() - 10 ) );
 	tmp = m_pView->activeTable()->tableName() + "!" + util_columnLabel( markerColumn() ) + tmp;
 	hideMarker();
 	gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
+	m_pView->updateEditWidget();
 	showMarker();
     	break;
     	
@@ -990,6 +992,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	tmp = m_pView->activeTable()->tableName() + "!" + util_columnLabel( markerColumn() ) + tmp;
 	hideMarker();
 	gotoLocation( KSpreadPoint( tmp, m_pDoc->map() ) );
+	m_pView->updateEditWidget();
 	showMarker();
     	break;
 

@@ -167,8 +167,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( m_bold, SIGNAL( toggled( bool ) ), this, SLOT( bold( bool ) ) );
     m_italic = new KToggleAction( i18n("Italic"), KSBarIcon("italic"), 0, actionCollection(), "italic");
     connect( m_italic, SIGNAL( toggled( bool ) ), this, SLOT( italic( bool ) ) );
-    m_percent = new KAction( i18n("Percent format"), KSBarIcon("percent"), 0, this, SLOT( percent() ),
-			    actionCollection(), "percent");
+    /*m_percent = new KAction( i18n("Percent format"), KSBarIcon("percent"), 0, this, SLOT( percent() ),
+			    actionCollection(), "percent");*/
+    m_percent = new KToggleAction( i18n("Percent format"), KSBarIcon("percent"), 0, actionCollection(), "percent");
+    connect( m_percent, SIGNAL( toggled( bool ) ), this, SLOT( percent( bool ) ) );
     m_precplus = new KAction( i18n("Increase precision"), KSBarIcon("precplus"), 0, this,
 			      SLOT( precisionPlus() ), actionCollection(), "precplus");
     m_precminus = new KAction( i18n("Decrease precision"), KSBarIcon("precminus"), 0, this,
@@ -528,7 +530,10 @@ void KSpreadView::updateEditWidget()
     }
 
     m_multiRow->setChecked( cell->multiRow() );
-
+    if( cell->faktor()==100.0 && cell->postfix()=="%")
+    	m_percent->setChecked( TRUE );
+    else
+    	m_percent->setChecked( FALSE );
     m_toolbarLock = FALSE;
 }
 
@@ -770,7 +775,7 @@ void KSpreadView::deleteRow()
 
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
-	it.current()->changeNameCellRef(m_pCanvas->markerColumn(),KSpreadTable::RowRemove,m_pTable->name());
+	it.current()->changeNameCellRef(m_pCanvas->markerRow(),KSpreadTable::RowRemove,m_pTable->name());
 
     updateEditWidget();
 }
@@ -800,7 +805,7 @@ void KSpreadView::insertRow()
 	tbl->recalc(true);
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
-	it.current()->changeNameCellRef(m_pCanvas->markerColumn(),KSpreadTable::RowInsert,m_pTable->name());
+	it.current()->changeNameCellRef(m_pCanvas->markerRow(),KSpreadTable::RowInsert,m_pTable->name());
 
     updateEditWidget();
 }
@@ -1560,7 +1565,7 @@ void KSpreadView::slotInsertColumn()
 	tbl->recalc(true);
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
-	it.current()->changeNameCellRef(m_pCanvas->markerColumn(),KSpreadTable::ColumnInsert, m_pTable->name());
+	it.current()->changeNameCellRef( m_pHBorderWidget->markerColumn(),KSpreadTable::ColumnInsert, m_pTable->name());
 
     updateEditWidget();
 }
@@ -1573,7 +1578,7 @@ void KSpreadView::slotRemoveColumn()
 	tbl->recalc(true);
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
-	it.current()->changeNameCellRef(m_pCanvas->markerColumn(),KSpreadTable::ColumnRemove,m_pTable->name());
+	it.current()->changeNameCellRef( m_pHBorderWidget->markerColumn(),KSpreadTable::ColumnRemove,m_pTable->name());
 
     updateEditWidget();
 }
@@ -1620,7 +1625,7 @@ void KSpreadView::slotInsertRow()
 
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
-	it.current()->changeNameCellRef(m_pCanvas->markerColumn(),KSpreadTable::RowInsert,m_pTable->name());
+	it.current()->changeNameCellRef( m_pVBorderWidget->markerRow(),KSpreadTable::RowInsert,m_pTable->name());
 
     updateEditWidget();
 }
@@ -1634,7 +1639,7 @@ void KSpreadView::slotRemoveRow()
 	tbl->recalc(true);
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
-	it.current()->changeNameCellRef(m_pCanvas->markerColumn(),KSpreadTable::RowRemove,m_pTable->name());
+	it.current()->changeNameCellRef( m_pVBorderWidget->markerRow(),KSpreadTable::RowRemove,m_pTable->name());
 
     updateEditWidget();
 }
@@ -1890,8 +1895,10 @@ void KSpreadView::precisionMinus()
     m_pTable->setSelectionPrecision( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), -1 );
 }
 
-void KSpreadView::percent()
+void KSpreadView::percent( bool b )
 {
+   if ( m_toolbarLock )
+	return;
   if ( m_pTable != 0L )
     m_pTable->setSelectionPercent( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 }

@@ -818,10 +818,20 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker )
 	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
 	{
 	  it.current()->setDisplayDirtyFlag();
-	  it.current()->setFaktor( 100.0 );
-	  it.current()->setPrecision( 0 );
-	  it.current()->setPostfix( "%" );
-	  it.current()->setPrefix( "" );
+	  if(it.current()->faktor()==100.0 && it.current()->postfix()=="%")
+	  	{
+	  	it.current()->setFaktor( 1.0 );
+	  	it.current()->setPrecision( 0 );
+	  	it.current()->setPostfix( "" );
+	  	it.current()->setPrefix( "" );
+	  	}
+	  else
+		{
+		it.current()->setFaktor( 100.0 );
+	  	it.current()->setPrecision( 0 );
+	  	it.current()->setPostfix( "%" );
+	  	it.current()->setPrefix( "" );
+	  	}
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -840,10 +850,20 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker )
 	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
 	{
 	  it.current()->setDisplayDirtyFlag();
-	  it.current()->setFaktor( 100.0 );
-	  it.current()->setPrecision( 0 );
-	  it.current()->setPostfix( "%" );
-	  it.current()->setPrefix( "" );
+	  if(it.current()->faktor()==100.0 && it.current()->postfix()=="%")
+	  	{
+	  	it.current()->setFaktor( 1.0 );
+	  	it.current()->setPrecision( 0 );
+	  	it.current()->setPostfix( "" );
+	  	it.current()->setPrefix( "" );
+	  	}
+	  else
+		{
+		it.current()->setFaktor( 100.0 );
+	  	it.current()->setPrecision( 0 );
+	  	it.current()->setPostfix( "%" );
+	  	it.current()->setPrefix( "" );
+	  	}
 	  it.current()->clearDisplayDirtyFlag();
 	}
       }
@@ -877,12 +897,22 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker )
 		}
 
 		cell->setDisplayDirtyFlag();
-		cell->setFaktor( 100.0 );
-		cell->setPrecision( 0 );
-		cell->setPostfix( "%" );
-		cell->setPrefix( "" );
+		if(cell->faktor()==100.0 && cell->postfix()=="%" )
+			{
+			cell->setFaktor( 1.0 );
+			cell->setPrecision( 0 );
+			cell->setPostfix( "" );
+			cell->setPrefix( "" );
+			}
+		else
+			{
+			cell->setFaktor( 100.0 );
+			cell->setPrecision( 0 );
+			cell->setPostfix( "%" );
+			cell->setPrefix( "" );
+			}
 		cell->clearDisplayDirtyFlag();
-		//cout <<"value : "<<cell->text().ascii()<<endl;
+		
 	    }
 	
 	emit sig_updateView( this, r );
