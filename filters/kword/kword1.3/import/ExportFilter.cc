@@ -456,6 +456,23 @@ void OOWriterWorker::writeMetaXml(void)
         zipWriteData("</meta:print-date>\n");
     }
 
+    // ### TODO: put them in the right position
+
+    if ( m_numPages > 0 )
+    {
+        zipWriteData("  <meta:page-count>");
+        zipWriteData( escapeOOText( QString::number ( m_numPages ) ) );
+        zipWriteData("</meta:page-count>\n");
+    }
+
+    if ( true ) // ### TODO: any reasons not to generate it?
+    {
+        zipWriteData("  <meta:image-count>");
+        zipWriteData( escapeOOText( QString::number ( m_pictureNumber ) ) );
+        zipWriteData("</meta:image-count>\n");
+    }
+
+
     zipWriteData(" </office:meta>\n");
     zipWriteData("</office:document-meta>\n");
 
@@ -1271,7 +1288,7 @@ bool OOWriterWorker::doFullPaperFormat(const int format,
         || ( height < 1.0 ) )
     {
         kdWarning(30518) << "Page size problem: format: " << format << " width: " << width << " height: " << height << endl;
-        // Something is wrong with thepage size
+        // Something is wrong with the page size
         KoFormat newFormat = KoFormat ( format );
         if ( ( format < 0 ) || ( format > PG_LAST_FORMAT ) )
         {
