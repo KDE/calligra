@@ -1334,8 +1334,8 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
     }
     setUnit( _pageLayout.unit, unit );
 
-    setModified(true);
     repaint( false );
+    // don't setModified(true) here, since this is called on startup
 }
 
 /*==================== insert a new page =========================*/
