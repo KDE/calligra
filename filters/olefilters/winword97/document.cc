@@ -190,6 +190,10 @@ Document::Attributes::Attributes(
 {
     m_doc = doc;
     m_baseStyle.apply(baseStyle);
+    m_field.fieldType = FIELD_TYPE_UNKNOWN_KEYWORD;
+    m_field.start = 0;
+    m_field.separator = 0;
+    m_field.end = 0;
 }
 
 Document::Attributes::~Attributes()
