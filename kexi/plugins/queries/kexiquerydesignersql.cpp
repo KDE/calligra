@@ -55,19 +55,19 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWid
  , m_statusPixmapErr( DesktopIcon("button_cancel") )
  , m_statusPixmapInfo( DesktopIcon("info") )
 {
-	QSplitter *l = new QSplitter(this);
-	l->setOrientation(Vertical);
+	m_splitter = new QSplitter(this);
+	m_splitter->setOrientation(Vertical);
 //	m_history = new KexiQueryDesignerSQLHistory(l, "sqlh");
-	m_head = new KexiSectionHeader(i18n("SQL Query Text"), Vertical, l);
+	m_head = new KexiSectionHeader(i18n("SQL Query Text"), Vertical, m_splitter);
 	m_editor = new KexiQueryDesignerSQLEditor(mainWin, m_head, "sqle");
 	connect(m_editor, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 	addChildView(m_editor);
 	setViewWidget(m_editor);
-	l->setFocusProxy(m_editor);
+	m_splitter->setFocusProxy(m_editor);
 	setFocusProxy(m_editor);
 
-	QHBox *hbox = new QHBox(l);
-	l->setResizeMode(hbox, QSplitter::KeepSize);
+	QHBox *hbox = new QHBox(m_splitter);
+	m_splitter->setResizeMode(hbox, QSplitter::KeepSize);
 	hbox->setSpacing(0);
 	m_pixmapStatus = new QLabel(hbox);
 	m_pixmapStatus->setFixedWidth(m_statusPixmapOk.width()*3/2);
@@ -84,7 +84,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWid
 	setStatusOk();
 
 	QHBoxLayout *b = new QHBoxLayout(this);
-	b->addWidget(l);
+	b->addWidget(m_splitter);
 
 	plugSharedAction("querypart_check_query", this, SLOT(slotCheckQuery())); 
 //	connect(parent, SIGNAL(queryExecuted(QString, bool, const QString &)), m_history, SLOT(addEvent(QString, bool, const QString &)));
@@ -102,19 +102,34 @@ KexiQueryDesignerSQLView::~KexiQueryDesignerSQLView()
 void KexiQueryDesignerSQLView::setStatusOk()
 {
 	m_pixmapStatus->setPixmap(m_statusPixmapOk);
-	m_lblStatus->setText("<h2>"+i18n("The query is correct")+"</h2>");
+	setStatusText("<h2>"+i18n("The query is correct")+"</h2>");
 }
 
 void KexiQueryDesignerSQLView::setStatusError(const QString& msg)
 {
 	m_pixmapStatus->setPixmap(m_statusPixmapErr);
-	m_lblStatus->setText("<h2>"+i18n("The query is incorrect")+"</h2><p>"+msg+"</p>");
+	setStatusText("<h2>"+i18n("The query is incorrect")+"</h2><p>"+msg+"</p>");
 }
 
 void KexiQueryDesignerSQLView::setStatusEmpty()
 {
 	m_pixmapStatus->setPixmap(m_statusPixmapInfo);
-	m_lblStatus->setText(i18n("Please enter your query and execute \"Check query\" function to verify it."));
+	setStatusText(i18n("Please enter your query and execute \"Check query\" function to verify it."));
+}
+
+void KexiQueryDesignerSQLView::setStatusText(const QString& text)
+{
+	QSimpleRichText rt(text, m_lblStatus->font());
+	rt.setWidth(m_lblStatus->width());
+//	m_lblStatus->resize(m_lblStatus->width(), rt.height()+m_lblStatus->margin()*8);
+	QValueList<int> sz = m_splitter->sizes();
+	const int newHeight = rt.height()+m_lblStatus->margin()*2;
+	if (sz[1]<newHeight) {
+		sz[1] = newHeight;
+		m_splitter->setSizes(sz);
+	}
+	m_lblStatus->setText(text);
+//	m_lblStatus->adjustSize();
 }
 
 bool
@@ -188,9 +203,10 @@ void KexiQueryDesignerSQLView::slotCheckQuery()
 	KexiDB::Parser *parser = mainWin()->project()->sqlParser();
 	parser->parse( m_editor->text() );
 	KexiDB::QuerySchema *query = parser->query();
-	if (!query) {
+	if (!query || !parser->error().type().isEmpty()) {
 		KexiDB::ParserError err = parser->error();
 		setStatusError(err.error());
+		m_editor->jump(err.at());
 	}
 	else {
 		setStatusOk();

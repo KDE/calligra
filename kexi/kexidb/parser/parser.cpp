@@ -69,6 +69,7 @@ Parser::clear()
 //	delete m_table;
 //	m_table = 0;
 	setOperation(OP_None);
+	m_error = ParserError();
 }
 
 Parser::~Parser()
@@ -79,7 +80,7 @@ Parser::~Parser()
 
 ParserError::ParserError()
 {
-	m_isNull = true;
+//	m_isNull = true;
 }
 
 ParserError::ParserError(const QString &type, const QString &error, const QString &hint, int at)

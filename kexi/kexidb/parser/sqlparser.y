@@ -410,7 +410,7 @@
 		kdDebug() << "at character " << current << " near tooken " << ctoken << endl;
 		parser->setOperation(KexiDB::Parser::OP_Error);
 
-		if(strcmp(str, "syntax error") == 0)
+		if(parser->error().type().isEmpty() && strcmp(str, "syntax error") == 0)
 		{
 			kdDebug() << parser->statement() << endl;
 			QString ptrline = "";
@@ -712,7 +712,7 @@ USER_DEFINED_NAME
 			item->setTable(schema);
 		}
 
-		if(!item->isQueryAsterisk())
+		if(item->table() && !item->isQueryAsterisk())
 		{
 			KexiDB::Field *f = item->table()->field(item->name());
 			if(!f)

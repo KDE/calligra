@@ -46,14 +46,14 @@ class KEXI_DB_EXPORT ParserError
 		QString	type() { return m_type; }
 		QString	error() { return m_error; }
 		int	at() { return m_at; }
-		bool	isNull() { return m_isNull; }
+//		bool	isNull() { return m_isNull; }
 
 	private:
-		QString	m_type;
-		QString	m_error;
-		QString	m_hint;
-		int	m_at;
-		bool	m_isNull;
+		QString m_type;
+		QString m_error;
+		QString m_hint;
+		int m_at;
+//		bool	m_isNull;
 };
 
 

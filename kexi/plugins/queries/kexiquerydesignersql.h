@@ -27,6 +27,7 @@ class KexiQueryDesigner;
 class KexiQueryDesignerSQLEditor;
 class KexiQueryDesignerSQLHistory;
 class KexiSectionHeader;
+class QSplitter;
 
 /*! The KexiQueryDesignerSQLView class is a view containing SQL text editor 
  and SQL history widget splitted vertically. */
@@ -48,6 +49,7 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 		void setStatusOk();
 		void setStatusError(const QString& msg);
 		void setStatusEmpty();
+		void setStatusText(const QString& text);
 
 	protected slots:
 		void slotCheckQuery();
@@ -62,6 +64,7 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 		QLabel *m_pixmapStatus, *m_lblStatus;
 		KexiSectionHeader *m_head;
 		QPixmap m_statusPixmapOk, m_statusPixmapErr, m_statusPixmapInfo;
+		QSplitter *m_splitter;
 };
 
 #endif
