@@ -42,13 +42,14 @@ KexiKugarWrapper::KexiKugarWrapper(KexiView *view, KexiKugarHandlerItem* item,
 //	(new QVBoxLayout(this))->setAutoAdd(true);
 	m_part=KParts::ComponentFactory::createPartInstanceFromLibrary<KParts::ReadOnlyPart>(QFile::encodeName("libkugarpart"),
 			this,"embeddedKugarView",this,0,QStringList("template=/usr/src/kde3/koffice/kugar/samples/sample2.kut"));
-	gridLayout()->addWidget((QWidget*)m_part, 0, 0);
 	
 	m_part->openURL(path);
+	gridLayout()->addWidget(m_part->widget(), 0, 0);
+
 //	part->widget()->show();
 	setMinimumWidth(50);
 	setMinimumHeight(50);
-//	registerAs(DocumentWindow);
+	registerAs(DocumentWindow);
 }
 
 KexiKugarWrapper::~KexiKugarWrapper(){}
