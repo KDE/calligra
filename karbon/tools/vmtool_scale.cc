@@ -43,11 +43,12 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
+	QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
+
 	QRect rect =  part()->selection().boundingBox( view->zoomFactor() );
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty()
-		&& ( rect.contains( m_fp ) ) )
-//		part()->selection()->boundingBox().contains( p /* view->zoomFactor() */ ) ) )
+		&& ( rect.contains( fp ) ) )
 	{
 		// rotate operation
 		QWMatrix mat;
@@ -55,7 +56,8 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 		m_s1 = ( m_lp.x() - m_fp.x() ) / double( rect.width() / 2 );
 		m_s2 = ( m_lp.y() - m_fp.y() ) / double( rect.height() / 2 );
 		mat.scale( m_s1, m_s2 );
-		mat.translate( - m_fp.x() / view->zoomFactor(), - m_fp.y() / view->zoomFactor());
+		mat.translate(	- ( m_fp.x() + view->canvasWidget()->contentsX() ) / view->zoomFactor(),
+						- ( m_fp.y() + view->canvasWidget()->contentsY() ) / view->zoomFactor() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->selection();
@@ -104,17 +106,15 @@ VMToolScale::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
 
-		// adjust to real viewport contents instead of raw mouse coords:
-		//QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
-		//QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
+		QPoint fp;
+		fp.setX( view->canvasWidget()->viewportToContents( m_fp ).x() );
+		fp.setY( view->canvasWidget()->viewportToContents( m_fp ).y() );
 
 		part()->addCommand(
 			new VMCmdScale(
 				part(),
-				part()->selection(), m_fp / view->zoomFactor(), m_s1, m_s2 ),
+				part()->selection(), fp / view->zoomFactor(), m_s1, m_s2 ),
 			true );
-
-//			part()->repaintAllViews();
 
 		m_isDragging = false;
 
