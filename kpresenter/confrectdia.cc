@@ -66,7 +66,7 @@ void RectPreview::drawContents( QPainter* painter )
 
 /*==================== constructor ===============================*/
 ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
-    : KDialogBase( parent, name, true )
+    : KDialogBase( parent, name, true, i18n( "KPresenter - Configure Pie/Arc/Chord" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok )
 {
 
     // ------------------------ layout
@@ -100,6 +100,10 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
 
     hbox->addWidget( rectPreview );
 
+    setButtonText( KDialogBase::User1, i18n("Reset") );
+
+    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
+
     connect( this, SIGNAL( okClicked() ), this, SLOT( Apply() ) );
     connect( this, SIGNAL( applyClicked() ), this, SLOT( Apply() ) );
     connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
@@ -129,10 +133,21 @@ void ConfRectDia::setRnds( int _rx, int _ry )
 {
     xRnd = _rx;
     yRnd = _ry;
+    oldXRnd  = _rx;
+    oldYRnd = _ry;
+
     rectPreview->setRnds( xRnd, yRnd );
 
     eRndX->setValue( xRnd );
     eRndY->setValue( yRnd );
+}
+
+void ConfRectDia::slotReset()
+{
+    rectPreview->setRnds( oldXRnd, oldYRnd );
+
+    eRndX->setValue( oldXRnd );
+    eRndY->setValue( oldYRnd );
 }
 
 #include <confrectdia.moc>

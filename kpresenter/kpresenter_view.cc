@@ -959,6 +959,7 @@ void KPresenterView::extraConfigPie()
     confPieDia->setLength( m_canvas->activePage()->getPieLength( pieLength ) );
     confPieDia->setPenBrush( m_canvas->activePage()->getPen( pen ), m_canvas->activePage()->getBrush( brush ) );
     confPieDia->setCaption( i18n( "KPresenter - Configure Pie/Arc/Chord" ) );
+
     QObject::connect( confPieDia, SIGNAL( confPieDiaOk() ), this, SLOT( confPieOk() ) );
     m_canvas->setToolEditMode( TEM_MOUSE );
     confPieDia->exec();

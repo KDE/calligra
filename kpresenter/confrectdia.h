@@ -76,12 +76,13 @@ protected:
     QGroupBox *gSettings;
     RectPreview *rectPreview;
     int xRnd, yRnd;
+    int oldXRnd, oldYRnd;
 
 protected slots:
     void rndXChanged( int );
     void rndYChanged( int );
     void Apply() { emit confRectDiaOk(); }
-
+    void slotReset();
 signals:
     void confRectDiaOk();
 
