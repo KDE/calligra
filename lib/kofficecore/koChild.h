@@ -198,7 +198,7 @@ public:
   /**
    * @return the frame geometry including a border (6 pixels) as a point
    *         array with 4 points, one for each corner, transformed by given matrix.
-   */.
+   */
   virtual QPointArray framePointArray( const QWMatrix &matrix = QWMatrix() ) const;
 
   /**
