@@ -50,7 +50,7 @@
 
 #ifndef KEXI_NO_PRINT
 # include <kprinter.h>
-# include <kdeprint/driver.h>
+//# include <kdeprint/driver.h>
 #endif
 
 #include "kexitablerm.h"
@@ -894,7 +894,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 	p->setPen(pen);
 
 	//	If we are in the focus cell, draw indication
-	if(d->pCurrentItem == item && col == d->curCol) //js: && !d->recordIndicator)
+	if(d->pCurrentItem == item && col == d->curCol && m_data->columns[col].readOnly) //js: && !d->recordIndicator)
 	{
 		if (!hasFocus() && !viewport()->hasFocus()) {
 			QPen gray_pen(p->pen());
@@ -1049,6 +1049,13 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 			x = 5;
 			y_offset = 0;
 #endif
+			if(d->pCurrentItem == item && col == d->curCol && !m_data->columns[col].readOnly && viewport()->hasFocus()) //js: && !d->recordIndicator)
+			{
+				QRect bound=fontMetrics().boundingRect(x, y_offset, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, item->at(col).toString());
+				p->setPen(colorGroup().highlightedText());
+				p->fillRect(bound, colorGroup().highlight());
+			}
+
 			p->drawText(x, y_offset, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, item->at(col).toString());
 		}
 	}
@@ -2160,7 +2167,7 @@ void KexiTableView::inserted()
 
 #ifndef KEXI_NO_PRINT
 void
-KexiTableView::print(KPrinter &printer)
+KexiTableView::print(KPrinter &/*printer*/)
 {
 //	printer.setFullPage(true);
 #if 0
