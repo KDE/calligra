@@ -110,7 +110,7 @@ offers the default toolbar for creating a new chart, saving, loading
 and printing the chart. The second toolbar offers icons for editing
 the data, configuring the chart or using a configuration wizard.
 You can also switch between different chart types with the rest
-of the icons. Note that some of these types also have subtypes.
+of the icons. Note that some of these chart types also have subtypes.
 </para>
 <para>
 The menu offers all standard entries, including shortcut and
@@ -122,6 +122,127 @@ within &kspread; because all data is provided by the spreadsheet.
 As a standalone application the &dataeditor; is an important part
 of the application.
 </para>
+</sect1>
+<sect1 id="wizard">
+<title>Chart Wizard</title>
+<para>
+The wizard is actually a very useful part of &kchart; for quickly
+setting up some basic options like chart type and chart labelling
+in a few easy steps.
+</para>
+<para>
+You can run the wizard at any time, it will always preserve your data
+and other configuration. Also, you can change every single configuration
+you do with the wizard later as well, without losing anything. In fact
+the wizard is just a way to set some basic and important options
+in one go.
+</para>
+<para>
+To start the wizard simply click on the
+<inlinemediaobject><imageobject>
+<imagedata fileref="cr22-action-wizard.png" format="PNG"/>
+</imageobject></inlinemediaobject> icon in the toolbar.
+</para>
+<sect2 id="wizard-charttype">
+<title>Step 1 - Choosing the Chart Type</title>
+<screenshot>
+<screeninfo>Wizard Step 1 - Chart Type</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-wizard1.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The first step in the wizard is to actually choose the primary
+type of the chart. This selection has the most important
+impact on how your data will be presented. Thus it should
+be chosen well. You can change the type of the chart with the
+icons in the toolbar without losing any data or configuration
+later on. In fact it is even considered normal to test all the
+various chart types to find the best fitting.
+</para>
+<para>
+In this example we choose the line type. Depending on the
+chosen chart type different options are available in the
+following steps.
+</para>
+<para>
+After chosing the type you can get to the next step with
+the Next button. You can also choose Finish at any step
+if you are already comfortable with the setup done so far.
+</para>
+</sect2>
+<sect2 id="wizard-chartsubtype">
+<title>Step 2 - Choosing the Subtype</title>
+<screenshot>
+<screeninfo>Wizard Step 2 - Chart Sub Type</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-wizard2.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+In case the chosen chart type has various sub types you can
+choose it in the second step. If the chart type has no sub types,
+this step will be skipped automatically.
+</para>
+<para>
+If you deside to change the sub type later, you can do this
+in the appropriate configuration dialog which will be shown
+later.
+</para>
+<para>
+You can simply leave the default selection and go to the next
+step. Of course you can chose any desired sub type if you want.
+</para>
+</sect2>
+<sect2 id="wizard-labelsandlegend">
+<title>Step 3 - Labels and Legend, Fonts</title>
+<screenshot>
+<screeninfo>Wizard Step 3 - Labels and Legend</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-wizard3.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+In the third step you can set the text for the chart title,
+the axes and the legend. You can also configure the desired
+font in detail for each of these.
+</para>
+</sect2>
+<sect2 id="wizard-axes">
+<title>Step 4 - Axes</title>
+<screenshot>
+<screeninfo>Wizard Step 4 - Axes</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-wizard4.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The last step of the wizard lets you set various options for
+the axes and other options, depending on the chart type.
+</para>
+<para>
+You can either choose Finish to accept the options for your
+chart, go back and change various things or simply dismiss
+all options from the wizard by choosing Cancel.
+</para>
+<para>
+If you choose Finish all your choices in the wizard will
+be integrated in the chart and you can continue to enter
+some data and do some fine tuning of various options.
+</para>
+<para>
+Remember that the chart configuration dialog has many more
+options available, we will discuss these later.
+</para>
+</sect2>
 </sect1>
 <sect1 id="dataeditorinterface">
 <title>The &dataeditor;</title>
@@ -220,6 +341,10 @@ a chart. The available sub types depend on the chart type, in
 this case the line chart. Some chart types have no sub type
 at all in which case this configuration page is not shown.
 You also get a preview for each subtype.
+</para>
+<para>
+Remember that the chart type can be chosen from the toolbar while
+the subtype can be set through this configuration dialog.
 </para>
 </sect2>
 <sect2 id="config-titlefooter">
