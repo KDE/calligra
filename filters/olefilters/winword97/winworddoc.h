@@ -54,7 +54,7 @@ public:
 
     /////////////////////////////////////////////////////////////
     const PCD pcd(const long &pos);
-    const unsigned short numPCD() { return m_ptCount; }
+    const unsigned short numPCD() { return m_pcdCount; }
 
     const ATRD atrd(const long &pos);
     const unsigned short numATRD() { return m_atrdCount; }
@@ -96,7 +96,7 @@ private:
     // Stylesheet
     StyleSheet *m_styleSheet;
     // Piece table (pt), PCD stuff
-    long m_ptCPBase, m_ptSize, m_ptCount, m_ptPCDBase;
+    unsigned long m_pcdCount, m_pcdCPBase, m_pcdPCDBase;
     // ATRD
     unsigned long m_atrdBase, m_atrdCount;
     // BKF

@@ -22,9 +22,10 @@
 #ifndef STTBF_H
 #define STTBF_H
 
-#include <qstringlist.h>
 #include <qlist.h>
 #include <qarray.h>
+
+class QStringList;
 
 struct STTBF {
     unsigned short extraDataLen;

@@ -27,7 +27,6 @@
 #include <fib.h>
 #include <myfile.h>
 #include <paragraph.h>
-//#include <winworddoc.h>
 
 class WinWordDoc;
 

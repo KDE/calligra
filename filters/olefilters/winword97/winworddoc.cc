@@ -28,7 +28,7 @@ WinWordDoc::WinWordDoc(QDomDocument &part, const myFile &mainStream,
     m_ready=false;
     m_fib=0L;
     m_styleSheet=0L;
-    m_ptSize=-1;
+    m_pcdCount=0;
     m_atrdCount=0;
     m_bkfCount=0;
     m_bklCount=0;
@@ -168,27 +168,27 @@ const QDomDocument * const WinWordDoc::part() {
 
 const PCD WinWordDoc::pcd(const long &pos) {
 
-    PCD ret;
-    ret.ok=false;
+    PCD pcd;
+    pcd.ok=false;
 
-    if(m_ptSize==-1)
-        return ret;       // undefined, so don't call this one
+    if(m_pcdCount==0)
+        return pcd;       // undefined, so don't call this one
                           // before you call locatePieceTbl()!
 
-    long tmpPos=m_ptPCDBase+pos*8;
-    unsigned short *tmp=(unsigned short*)&ret;
+    long tmpPos=m_pcdPCDBase+pos*8;
+    unsigned short *tmp=(unsigned short*)&pcd;
 
     *tmp=read16(m_table.data+tmpPos);
-    ret.fc=read32(m_table.data+tmpPos+2);
-    if((ret.fc & 0x40000000) == 0x40000000) {
-        ret.fc=(ret.fc & 0xBFFFFFFF)/2;
-        ret.unicode=false;
+    pcd.fc=read32(m_table.data+tmpPos+2);
+    if((pcd.fc & 0x40000000) == 0x40000000) {
+        pcd.fc=(pcd.fc & 0xBFFFFFFF)/2;
+        pcd.unicode=false;
     }
     else
-        ret.unicode=true;
-    ret.prm=read16(m_table.data+tmpPos+6);
-    ret.ok=true;
-    return ret;
+        pcd.unicode=true;
+    pcd.prm=read16(m_table.data+tmpPos+6);
+    pcd.ok=true;
+    return pcd;
 }
 
 const ATRD WinWordDoc::atrd(const long &pos) {
@@ -419,7 +419,7 @@ void WinWordDoc::convertComplex() {
 
 const bool WinWordDoc::locatePCD() {
 
-    long tmp=m_fib->fcClx;
+    long tmp=m_fib->fcClx, size;
     QString r;
     bool found=false;
 
@@ -428,15 +428,15 @@ const bool WinWordDoc::locatePCD() {
 
     if(*(m_table.data+tmp)==2) {
         found=true;
-        m_ptCPBase=tmp+1;
-        m_ptSize=read32(m_table.data+m_ptCPBase);
-        m_ptCPBase+=4;
-        if((m_ptSize-4)%12!=0) {
+        ++tmp;
+        size=read32(m_table.data+tmp);
+        m_pcdCPBase=tmp+4;
+        if((size-4)%12!=0) {
             kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::locatePieceTbl(): Sumting Wong (inside joke(tm))");
             found=false;
         }
-        m_ptCount=static_cast<long>((m_ptSize-4)/12);
-        m_ptPCDBase=(m_ptCount+1)*4+m_ptCPBase;
+        m_pcdCount=static_cast<unsigned long>((size-4)/12);
+        m_pcdPCDBase=(m_pcdCount+1)*4+m_pcdCPBase;
     }
     else {
         m_success=false;

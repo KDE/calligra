@@ -22,7 +22,7 @@
 #ifndef ATRD_H
 #define ATRD_H
 
-#include <qstring.h>
+class QString;
 
 struct ATRD {
     short xstUsrInitl[10];
