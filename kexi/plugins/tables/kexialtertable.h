@@ -20,8 +20,10 @@
 #ifndef _KEXIALTERTABLE_H_
 #define _KEXIALTERTABLE_H_
 
-#include <kexidialogbase.h>
+#include "kexidialogbase.h"
+#include "kexiDB/kexidb.h"
 
+/*
 class QStringList;
 
 class KStatusBar;
@@ -46,6 +48,42 @@ class KexiAlterTable : public KexiDialogBase
 		KStatusBar* m_statusbar;
 		QString m_table;
 		QStringList m_fieldnames;
+};
+*/
+
+class KexiTableView;
+class KexiTableItem;
+class PropertyEditor;
+class PropertyEditorItem;
+
+class KexiAlterTable : public KexiDialogBase
+{
+	Q_OBJECT
+	public:
+		KexiAlterTable(KexiView *view, QWidget *parent, const QString &table, const char *name=0);
+
+		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
+
+	protected:
+		void initView();
+		void getFields();
+
+	protected slots:
+		void changeShownField(KexiTableItem* i, int);
+
+	private:
+		QString m_table;
+		KexiTableView* m_fieldTable;
+		PropertyEditor* m_propList;
+		KexiDBTableStruct m_tableFields;
+		PropertyEditorItem* m_nameItem;
+		PropertyEditorItem* m_datatypeItem;
+		PropertyEditorItem* m_lengthItem;
+		PropertyEditorItem* m_requiredItem;
+		PropertyEditorItem* m_defaultItem;
+		PropertyEditorItem* m_unsignedItem;
+		PropertyEditorItem* m_precisionItem;
+		PropertyEditorItem* m_autoIncItem;
 };
 
 #endif

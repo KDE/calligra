@@ -3,7 +3,7 @@ kde_module_LTLIBRARIES = kexihandler_table.la kexihandler_query.la kexihandler_r
 kexihandler_table_la_SOURCES = kexitablepart.cpp kexitablepartproxy.cpp kexialtertable.cpp
 kexihandler_table_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 kexihandler_table_la_LIBADD = ../core/libkexicore.la ../tableview/libkexidatatable.la \
-		../widget/libkexiextendedwidgets.la ../kexiDB/libkexidb.la
+		../widget/libkexiextendedwidgets.la ../kexiDB/libkexidb.la ../formeditor/libkformeditor.la
 
 kexihandler_query_la_SOURCES = kexiquerypart.cpp kexiquerydesigner.cpp kexiquerypartitem.cpp kexiquerypartproxy.cpp \
 				kexiquerydesignerguieditor.cpp kexiparameterlisteditor.ui kexiaddparamwidget.ui \
