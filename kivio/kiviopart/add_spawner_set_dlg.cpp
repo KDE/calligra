@@ -381,3 +381,4 @@ void AddSpawnerSetDlg::itemSelected( QListViewItem *pItem )
         m_ok->setEnabled(false);
     }
 }
+#include "add_spawner_set_dlg.moc"

@@ -620,3 +620,4 @@ void KivioTabBar::addHiddenTab(const QString & text)
 {
     pagehide.append( text );
 }
+#include "kivio_tabbar.moc"

@@ -158,3 +158,5 @@ bool KivioConfig::readUserConfig()
 
     return true;
 }
+#include "kivio_config.moc"
+

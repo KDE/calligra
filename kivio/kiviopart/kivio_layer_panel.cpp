@@ -503,3 +503,4 @@ void KivioLayerPanel::rightClick( QListViewItem *, const QPoint &, int )
 {
     toggleVisibility();
 }
+#include "kivio_layer_panel.moc"
