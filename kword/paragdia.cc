@@ -718,7 +718,8 @@ void KWParagDia::setupTab4()
         "<p>You can enter a string describing your custom counter, consisting of \n"
         " the following symbols. For now, this string may not contain any whitespace \n"
         " or additional text. This will change.</p>\n"
-        "<ul><li>\\arabic - arabic numbers (1, 2, 3, ...)</li><li>\\roman or \\Roman - lower or uppercase roman numbers</li>\n"
+        "<ul><li>\\arabic - arabic numbers (1, 2, 3, ...)</li>\n"
+	"<li>\\roman or \\Roman - lower or uppercase roman numbers</li>\n"
         "<li>\\alph or \\Alph - lower or uppercase latin letters</li></ul>\n"
         "<p>This will hopefully have more options in the future (like enumerated lists or greek letters).</p>" ));
     QWhatsThis::add( rCustom, custcountwt );
