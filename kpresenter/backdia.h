@@ -32,14 +32,13 @@
 
 class QLabel;
 class QComboBox;
-class QPushButton;
 class KColorButton;
 class QSlider;
 class KPBackGround;
 class QCheckBox;
 class QTabWidget;
 class KPrPage;
-class KSqueezedTextLabel;
+class KURLRequester;
 
 
 class BackPreview : public QFrame
@@ -90,10 +89,10 @@ protected:
     int getBackYFactor() const;
 private:
     QLabel *picPreview;
-	KSqueezedTextLabel *lPicName;
     QCheckBox *unbalanced;
     QComboBox *cType, *backCombo, *picView;
-    QPushButton *picChoose;
+    QLabel *picChooseLabel;
+    KURLRequester *picChoose;
     KColorButton *color1Choose, *color2Choose;
     QSlider *xfactor, *yfactor;
     BackPreview *preview;
@@ -115,7 +114,8 @@ private:
     KoPicture m_picture, m_oldpicture;
 
 private slots:
-    void selectPic();
+    void aboutToSelectPic();
+    void afterSelectPic( const QString & );
     void updateConfiguration();
 
     void Ok() { emit backOk( this, false ); }

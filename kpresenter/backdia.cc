@@ -25,7 +25,6 @@
 #include "kprpage.h"
 
 #include <qlabel.h>
-#include <qpushbutton.h>
 #include <qpainter.h>
 #include <qcombobox.h>
 #include <qslider.h>
@@ -40,7 +39,7 @@
 #include <kfiledialog.h>
 #include <kimageio.h>
 #include <kbuttonbox.h>
-#include <ksqueezedtextlabel.h>
+#include <kurlrequester.h>
 
 #include <koPicture.h>
 
@@ -186,17 +185,18 @@ BackDia::BackDia( QWidget* parent, const char* name,
     connect( picView, SIGNAL( activated( int ) ),
              this, SLOT( updateConfiguration() ) );
 
-    picChoose = new QPushButton( i18n( "Choose Picture..." ), picTab, "picChoose" );
-    connect( picChoose, SIGNAL( clicked() ),
-             this, SLOT( selectPic() ) );
+    picChooseLabel = new QLabel( i18n("&Location:"), picTab );
+    picChooseLabel->setFixedHeight( picChooseLabel->sizeHint().height() );
 
-    lPicName = new KSqueezedTextLabel( picTab, "picname" );
-    lPicName->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    if ( !backPic.isNull() )
-        lPicName->setText( backPic.getKey().filename() );
-    else
-        lPicName->setText( i18n( "No Picture" ) );
-    lPicName->setFixedHeight( lPicName->sizeHint().height() );
+    picChoose = new KURLRequester( picTab, "picChoose" );
+    picChoose->setFixedHeight( picChoose->sizeHint().height() );
+    picChoose->setMode( KFile::ExistingOnly );
+    connect( picChoose, SIGNAL( openFileDialog( KURLRequester * ) ),
+             SLOT( aboutToSelectPic() ) );
+    connect( picChoose, SIGNAL( urlSelected( const QString & ) ),
+             SLOT( afterSelectPic( const QString & ) ) );
+
+    picChooseLabel->setBuddy( picChoose );
 
     (void)new QWidget( picTab );
 
@@ -240,9 +240,9 @@ void BackDia::slotReset()
     m_picture=m_oldpicture;
 
     if ( !m_picture.isNull() )
-        lPicName->setText( m_picture.getKey().filename() );
+        picChoose->setURL( m_picture.getKey().filename() );
     else
-        lPicName->setText( i18n( "No Picture" ) );
+        picChoose->setURL( QString::null );
 
     picView->setCurrentItem( (int)oldBackPicView );
     unbalanced->setChecked( oldUnbalanced );
@@ -383,30 +383,24 @@ bool BackDia::useMasterBackground() const
     return m_useMasterBackground ? m_useMasterBackground->isChecked():false;
 }
 
-void BackDia::selectPic()
+void BackDia::aboutToSelectPic()
 {
     QStringList mimetypes;
     mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
     mimetypes += KoPictureFilePreview::clipartMimeTypes();
 
+    picChoose->fileDialog()->setMimeFilter( mimetypes );
+    picChoose->fileDialog()->setPreviewWidget( new KoPictureFilePreview( picChoose->fileDialog() ) );
+}
+
+void BackDia::afterSelectPic( const QString &url )
+{
     KoPicture picture;
-    KURL url;
+    picture.setKeyAndDownloadPicture(url, tabWidget);
 
-    KFileDialog fd( QString::null, QString::null, 0, 0, true );
-    fd.setMimeFilter( mimetypes );
-    fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
-
-    if ( fd.exec() == QDialog::Accepted )
-    {
-        url = fd.selectedURL();
-        picture.setKeyAndDownloadPicture(url, tabWidget);
-    }
-
-    // Dialog canceled or download unsuccessful
     if ( picture.isNull() )
         return;
 
-    lPicName->setText( url.prettyURL() );
     backCombo->setCurrentItem( 1 );
     m_picture=picture;
     picChanged = true;
