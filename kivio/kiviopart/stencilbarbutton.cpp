@@ -94,15 +94,14 @@ DragBarButton::DragBarButton( const QString& text, QWidget* parent, const char* 
   "xxxxxxxx"
   };
   m_pClosePix = new QPixmap(close_xpm);
-  
+
   QToolTip::add(this, text);
 }
 
 DragBarButton::~DragBarButton()
 {
   delete m_pClosePix;
-  if (m_pIcon)
-    delete m_pIcon;
+  delete m_pIcon;
 
   kdDebug(43000) << "DragBarButton - AHHHHHH I'M DYING!" << endl;
 }
@@ -134,7 +133,7 @@ void DragBarButton::drawButton( QPainter* paint )
     tw = sz.width();
     int x = m + pw + (tw!=0 && pw!=0 ?m:0);
     QString t = KStringHandler::rPixelSqueeze(text(), fm, width() - (x + m + 22));
-    
+
     style().drawItem( paint, QRect( x, 0, tw, height() ),
                       AlignLeft | AlignVCenter|ShowPrefix,
                       colorGroup(), isEnabled(),

@@ -757,7 +757,6 @@ ToolDockButton::ToolDockButton( QWidget* parent, const char* name )
 
 ToolDockButton::~ToolDockButton()
 {
-  if (pixmap)
     delete pixmap;
 }
 

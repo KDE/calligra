@@ -95,7 +95,7 @@ class KivioView : public KoView
     void addPage( KivioPage* );
     void removePage( KivioPage* );
     void setActivePage( KivioPage* );
-    KivioPage* activePage();
+    KivioPage* activePage() const;
 
     void setActiveSpawnerSet( KivioStencilSpawnerSet* );
     KivioStencilSpawnerSet *activeSpawnerSet();

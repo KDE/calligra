@@ -520,7 +520,7 @@ void KivioView::initActions()
   toggleShowRulers(true);
 
   updateButton();
-        
+
   m_setFontFamily->setFont( doc()->defaultFont().family() );
   m_setFontSize->setFontSize( doc()->defaultFont().pointSize() );
   m_setBold->setChecked( false );
@@ -853,7 +853,7 @@ void KivioView::viewZoom(int zoom)
   emit zoomChanged(zoom);
 }
 
-KivioPage* KivioView::activePage()
+KivioPage* KivioView::activePage() const
 {
   return m_pActivePage;
 }
@@ -1321,7 +1321,7 @@ void KivioView::updateToolBars()
 
         m_menuTextFormatAction->setEnabled( false );
         m_menuStencilConnectorsAction->setEnabled( false );
-    
+
         m_setFGColor->setCurrentColor(QColor(0, 0, 0));
         m_setBGColor->setCurrentColor(QColor(255, 255, 255));
         m_setTextColor->setCurrentColor(QColor(0, 0, 0));
@@ -1389,17 +1389,17 @@ void KivioView::updateToolBars()
       m_groupAction->setEnabled(false);
       m_alignAndDistribute->setEnabled(false);
     }
-    
+
     if(activePage()->selectedStencils()->count() > 0) {
       m_editCut->setEnabled(true);
       m_editCopy->setEnabled(true);
-      
+
       if(activePage()->checkForStencilTypeInSelection(kstGroup)) {
         m_ungroupAction->setEnabled(true);
       } else {
         m_ungroupAction->setEnabled(false);
       }
-      
+
       m_stencilToBack->setEnabled(true);
       m_stencilToFront->setEnabled(true);
     } else {
@@ -1686,7 +1686,7 @@ void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x, 
     } else {
       pStencil->setTextFont(doc()->defaultFont());
     }
-    
+
     // Unselect everything, then the stencil to the page, and select it
     m_pActivePage->unselectAllStencils();
     m_pActivePage->addStencil( pStencil );
@@ -1771,11 +1771,11 @@ void KivioView::exportPage()
 
    strList = QImageIO::outputFormats();
    QString last = Kivio::Config::lastFormat();
-   
+
    if(strList.remove(last.lower().local8Bit()) || strList.remove(last.upper().local8Bit())) {
      strList.insert(0, last.lower().local8Bit());
    }
-   
+
    pStr = static_cast<char*>(strList.first());
    while( pStr )
    {
@@ -1792,7 +1792,7 @@ void KivioView::exportPage()
    fileDlg.setOperationMode(KFileDialog::Saving);
    fileDlg.setMode(KFile::File);
    QString fileName;
-   
+
    if(fileDlg.exec() == QDialog::Accepted) {
      fileName = fileDlg.selectedFile();
    } else {
@@ -2231,7 +2231,7 @@ int KivioView::hTextAlign()
   } else if(m_textAlignLeft->isChecked()) {
     return Qt::AlignLeft;
   }
-  
+
   return Qt::AlignHCenter;
 }
 
@@ -2242,7 +2242,7 @@ int KivioView::vTextAlign()
   } else if(!m_textVAlignSub->isChecked() && m_textVAlignSuper->isChecked()) {
     return Qt::AlignTop;
   }
-  
+
   return Qt::AlignVCenter;
 }
 

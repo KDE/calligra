@@ -856,11 +856,8 @@ KivioDoc::~KivioDoc()
     delete dcop;
     delete m_commandHistory;
 
-    if( m_pLstSpawnerSets )
-    {
-        delete m_pLstSpawnerSets;
-        m_pLstSpawnerSets = NULL;
-    }
+    delete m_pLstSpawnerSets;
+    m_pLstSpawnerSets = NULL;
 
     s_docs->removeRef(this);
 }
