@@ -48,6 +48,36 @@ QString UndoWrapperCommand::name() const
   return undoAction->getName();
 }
 
+// ----- MergeCellsCommand -----
+
+MergeCellCommand::MergeCellCommand( KSpreadCell* c, int cs, int rs )
+{
+  cell = c;
+  colSpan = cs;
+  rowSpan = rs;
+  oldColSpan = cell->extraXCells();
+  oldRowSpan = cell->extraYCells();
+}
+  
+QString MergeCellCommand::name() const
+{
+  return i18n("Merge Cells");
+}
+
+void MergeCellCommand::execute()
+{
+  KSpreadSheet* sheet = cell->sheet();
+  if( !sheet ) return;
+  sheet->changeMergedCell( cell->column(), cell->row(), colSpan, rowSpan);
+}
+
+void MergeCellCommand::unexecute()
+{
+  KSpreadSheet* sheet = cell->sheet();
+  if( !sheet ) return;
+  sheet->changeMergedCell( cell->column(), cell->row(), oldColSpan, oldRowSpan);
+}
+
 // ----- RenameSheetCommand -----
 
 RenameSheetCommand::RenameSheetCommand( KSpreadSheet* s, QString name )

@@ -26,6 +26,7 @@
 
 class KSpreadDoc;
 class KSpreadSheet;
+class KSpreadCell;
 class KSpreadUndoAction;
 
 /** \page commands Commands
@@ -57,6 +58,7 @@ happens for the "redo".
 Alphabetical list of commands:
  
 \li AddSheetCommand
+\li MergeCellCommand
 \li RemoveSheetCommand
 \li RenameSheetCommand
 
@@ -83,6 +85,29 @@ public:
 protected:
   KSpreadUndoAction* undoAction;
 };
+
+
+/**
+ * Class MergeCellCommand implements a command for merging two or more cells
+ * into one cell.
+ */
+class MergeCellCommand : public KCommand
+{
+public:
+  MergeCellCommand( KSpreadCell* cell, int colSpan, int rowSpan );
+  
+  virtual void execute();
+  virtual void unexecute();
+  virtual QString name() const;
+  
+protected:
+  KSpreadCell* cell;
+  int colSpan;
+  int rowSpan;
+  int oldColSpan;
+  int oldRowSpan;
+};
+
 
 /**
  * Class RenameSheetCommand implements a command for renaming a sheet.
