@@ -39,7 +39,7 @@
 HelplineDialog::HelplineDialog (Canvas* c, QWidget* parent,
                                 const char* name) : KDialogBase(KDialogBase::Tabbed,
                                                                 i18n("Setup Helplines"),
-                                                                KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel,
+                                                                KDialogBase::Ok | KDialogBase::Cancel,
                                                                 KDialogBase::Ok, parent, name, true) {
   canvas = c;
   horizLines = canvas->getHorizHelplines ();
@@ -48,7 +48,6 @@ HelplineDialog::HelplineDialog (Canvas* c, QWidget* parent,
   createHorizLineWidget(addPage(i18n("Horizontal")));
   createVertLineWidget(addPage(i18n("Vertical")));
   initLists ();
-  connect (this, SIGNAL(applyClicked()), this, SLOT(applyPressed()));
 }
 
 void HelplineDialog::createHorizLineWidget (QWidget* parent) {
@@ -60,11 +59,12 @@ void HelplineDialog::createHorizLineWidget (QWidget* parent) {
     horizValue->setRange (-1000.0, 1000.0);
     horizValue->setStep (0.1);
     horizValue->setEditable (true);
+    horizValue->setValue(0.0);
     left->addWidget(horizValue);
 
     horizList = new QListBox (parent);
     horizList->setMultiSelection (false);
-    connect (horizList, SIGNAL(highlighted (int)),
+    connect (horizList, SIGNAL(highlighted(int)),
              this, SLOT(horizLineSelected(int)));
     left->addWidget(horizList);
     layout->addSpacing(KDialogBase::spacingHint()*2);
@@ -93,6 +93,7 @@ void HelplineDialog::createVertLineWidget (QWidget* parent) {
     vertValue->setRange (-1000.0, 1000.0);
     vertValue->setStep (0.1);
     vertValue->setEditable (true);
+    vertValue->setValue(0.0);
     left->addWidget(vertValue);
 
     vertList = new QListBox(parent);
@@ -123,24 +124,28 @@ void HelplineDialog::applyPressed () {
 }
 
 void HelplineDialog::initLists () {
-  QValueList<float>::Iterator i;
-  QString buf;
-  MeasurementUnit unit =
-    PStateManager::instance ()->defaultMeasurementUnit ();
+    QValueList<float>::Iterator i;
+    QString buf;
+    MeasurementUnit unit =
+        PStateManager::instance ()->defaultMeasurementUnit ();
 
-  for (i = horizLines.begin (); i != horizLines.end (); ++i) {
-    buf=QString::number(cvtPtToUnit (unit, *i), 'f', 3);
-    buf+=" ";
-    buf+=unitToString (unit);
-    horizList->insertItem (buf);
-  }
+    for (i = horizLines.begin (); i != horizLines.end (); ++i) {
+        buf=QString::number(cvtPtToUnit (unit, *i), 'f', 3);
+        buf+=" ";
+        buf+=unitToString (unit);
+        horizList->insertItem (buf);
+    }
+    if(!horizLines.isEmpty())
+        horizValue->setValue(horizLines[0]);
 
-  for (i = vertLines.begin (); i != vertLines.end (); ++i) {
-    buf=QString::number(cvtPtToUnit (unit, *i), 'f', 3);
-    buf+=" ";
-    buf+=unitToString (unit);
-    vertList->insertItem (buf);
-  }
+    for (i = vertLines.begin (); i != vertLines.end (); ++i) {
+        buf=QString::number(cvtPtToUnit (unit, *i), 'f', 3);
+        buf+=" ";
+        buf+=unitToString (unit);
+        vertList->insertItem (buf);
+    }
+    if(!vertLines.isEmpty())
+        vertValue->setValue(vertLines[0]);
 }
 
 void HelplineDialog::addHorizLine () {
@@ -157,7 +162,6 @@ void HelplineDialog::updateHorizLine () {
     if(horizLines.isEmpty())
         return;
     int idx = horizList->currentItem ();
-    kdDebug() << "updateHorizLine: idx=" << idx << endl;
     if (idx != -1) {
         float value = horizValue->getValue ();
         MeasurementUnit unit =
@@ -165,7 +169,9 @@ void HelplineDialog::updateHorizLine () {
         QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
         buf+=" ";
         buf+=unitToString (unit);
+        horizList->blockSignals(true);
         horizList->changeItem (buf, idx);
+        horizList->blockSignals(false);
         horizLines[idx] = value;
     }
 }
@@ -202,7 +208,9 @@ void HelplineDialog::updateVertLine () {
         QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
         buf+=" ";
         buf+=unitToString (unit);
+        vertList->blockSignals(true);
         vertList->changeItem (buf, idx);
+        vertList->blockSignals(false);
         vertLines[idx] = value;
     }
 }
@@ -218,11 +226,13 @@ void HelplineDialog::deleteVertLine () {
 }
 
 void HelplineDialog::horizLineSelected (int idx) {
-    horizValue->setValue (*horizLines.at(idx));
+    if(!horizLines.isEmpty())
+        horizValue->setValue(*horizLines.at(idx));
 }
 
 void HelplineDialog::vertLineSelected (int idx) {
-    vertValue->setValue (*vertLines.at(idx));
+    if(!vertLines.isEmpty())
+        vertValue->setValue (*vertLines.at(idx));
 }
 
 void HelplineDialog::setup (Canvas *c) {
