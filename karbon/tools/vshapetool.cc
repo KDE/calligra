@@ -203,6 +203,9 @@ VShapeTool::cancel()
 void
 VShapeTool::recalc()
 {
+	m_isSquare = shiftPressed();
+	m_isCentered = ctrlPressed();
+
 	// Calculate radius and angle:
 	if( m_isPolar )
 	{
