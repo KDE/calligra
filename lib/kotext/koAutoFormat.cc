@@ -33,11 +33,15 @@
 #include <qdom.h>
 #include <kglobal.h>
 #include <koDocument.h>
+#include "koVariable.h"
 /******************************************************************/
 /* Class: KoAutoFormat						  */
 /******************************************************************/
-KoAutoFormat::KoAutoFormat( KoDocument *_doc )
-    : m_doc( _doc ), m_configRead( false ),
+KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollection, KoVariableFormatCollection *_varFormatCollection )
+    : m_doc( _doc ),
+      m_varCollection(_varCollection),
+      m_varFormatCollection(_varFormatCollection),
+      m_configRead( false ),
       m_convertUpperCase( false ), m_convertUpperUpper( false ),
       m_typographicQuotes(), /*m_enabled( true ),*/
       m_maxlen( 0 )
@@ -432,6 +436,34 @@ void KoAutoFormat::doUpperCase( QTextCursor *textEditCursor, KoTextParag *parag,
         txtObj->emitShowCursor();
     }
 }
+
+void KoAutoFormat::doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj )
+{
+    if (word.find("http://")!=-1 || word.find("mailto:")!=-1
+        || word.find("ftp://")!=-1 || word.find("file:")!=-1)
+    {
+        unsigned int length = word.length();
+        int start = index - length;
+        QTextCursor cursor( parag->document() );
+        KoTextDocument * textdoc = parag->textDocument();
+        cursor.setParag( parag );
+        cursor.setIndex( start );
+        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        cursor.setIndex( start + length );
+        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+        KoVariable *var=new KoLinkVariable( textdoc, word, word ,m_varFormatCollection->format( "STRING" ), m_varCollection );
+
+        CustomItemsMap customItemsMap;
+        customItemsMap.insert( 0, var );
+        KoTextFormat * lastFormat = static_cast<KoTextFormat *>(parag->at( parag->length() - 1 )->format());
+        txtObj->insert( textEditCursor, lastFormat, KoTextObject::customItemChar(), false, true, i18n("Insert Variable"), customItemsMap,KoTextObject::HighlightSelection );
+        txtObj->emitHideCursor();
+        textEditCursor->gotoRight();
+        txtObj->emitShowCursor();
+    }
+
+}
+
 
 void KoAutoFormat::doSpellCheck( QTextCursor *,KoTextParag */*parag*/, int /*index*/, const QString & /*word*/ )
 {

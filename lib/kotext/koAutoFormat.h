@@ -31,6 +31,9 @@
 class KoDocument;
 class KoTextParag;
 class KoTextObject;
+class KoVariableCollection;
+class KoVariableFormatCollection;
+
 namespace Qt3 {
     class QTextCursor;
 }
@@ -65,7 +68,7 @@ public:
      * There is a single instance of KoAutoFormat per document
      * (and a temporary one in the auto-format dialog).
      */
-    KoAutoFormat( KoDocument *_doc );
+    KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollection, KoVariableFormatCollection *_varFormatCollection );
 
     /**
      * Called by edit widget when a character (@p ch) has been inserted
@@ -160,10 +163,12 @@ protected:
     void doTypographicQuotes( QTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj );
     void buildMaxLen();
 
-    virtual void doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj ){;}
+    void doAutoDetectUrl( QTextCursor *textEditCursor, KoTextParag *parag,int index, const QString & word, KoTextObject *txtObj );
 
 private:
     KoDocument *m_doc;
+    KoVariableCollection *m_varCollection;
+    KoVariableFormatCollection *m_varFormatCollection;
 
     //bool m_enabled;
     bool m_configRead;
