@@ -40,6 +40,7 @@ usr/share/icons/locolor/16x16/actions/int.png
 usr/share/icons/locolor/16x16/actions/lsub.png
 usr/share/icons/locolor/16x16/actions/lsup.png
 usr/share/icons/locolor/16x16/actions/matrix.png
+usr/share/icons/locolor/16x16/actions/onetwomatrix.png
 usr/share/icons/locolor/16x16/actions/paren.png
 usr/share/icons/locolor/16x16/actions/prod.png
 usr/share/icons/locolor/16x16/actions/rsub.png
@@ -54,6 +55,7 @@ usr/share/icons/hicolor/22x22/actions/int.png
 usr/share/icons/hicolor/22x22/actions/lsub.png
 usr/share/icons/hicolor/22x22/actions/lsup.png
 usr/share/icons/hicolor/22x22/actions/matrix.png
+usr/share/icons/hicolor/22x22/actions/onetwomatrix.png
 usr/share/icons/hicolor/22x22/actions/paren.png
 usr/share/icons/hicolor/22x22/actions/prod.png
 usr/share/icons/hicolor/22x22/actions/rsub.png
@@ -68,6 +70,7 @@ usr/share/icons/hicolor/32x32/actions/int.png
 usr/share/icons/hicolor/32x32/actions/lsub.png
 usr/share/icons/hicolor/32x32/actions/lsup.png
 usr/share/icons/hicolor/32x32/actions/matrix.png
+usr/share/icons/hicolor/32x32/actions/onetwomatrix.png
 usr/share/icons/hicolor/32x32/actions/paren.png
 usr/share/icons/hicolor/32x32/actions/prod.png
 usr/share/icons/hicolor/32x32/actions/rsub.png
