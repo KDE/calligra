@@ -17,9 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-// only for debug
-#include <iostream.h>
-
 #include "koUndo.h"
 
 KoCommandHistory::KoCommandHistory( int _number, int _maxundoredo )
@@ -139,8 +136,6 @@ QStringList KoCommandHistory::getUndoList()
     }
   }
 
-  cout << "UNDO-Items : " << list.count() << endl;
-
   return list;
 }
 
@@ -161,8 +156,6 @@ QStringList KoCommandHistory::getRedoList()
     }
   }
 
-  cout << "REDO-Items : " << list.count() << endl;
- 
   return list;
 }
 
