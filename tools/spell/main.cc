@@ -21,7 +21,6 @@
 #include "main.h"
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kspell.h>
 #include <kdebug.h>
 #include <kinstance.h>
 #include <kconfig.h>
@@ -93,11 +92,24 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
         {
             //kdDebug() << "SpellChecker::run - group found -" << endl;
             config->setGroup( groupName );
+
             kosconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
             kosconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
             kosconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
             kosconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
-            kosconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
+            kosconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KOS_E_ASCII));
+            kosconfig.setClient(config->readNumEntry ("KSpell_Client", KOS_CLIENT_ISPELL));
+            kosconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
+            kosconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
+            kosconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
+            kosconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
+
+            kosconfig.setIgnoreCase( config->readNumEntry( "KSpell_IgnoreCase", 0));
+            kosconfig.setIgnoreAccent( config->readNumEntry( "KSpell_IgnoreAccent", 0));
+            kosconfig.setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
+            kosconfig.setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
+            kosconfig.setSpellWordWithNumber( config->readNumEntry("KSpell_SpellWordWithNumber", false));
+
         }
     }
 
@@ -105,29 +117,7 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
     KOSpell::modalCheck( buffer, &kosconfig );
     *((QString*)data) = buffer;
 
-#if 0 //TODO fixme
-    // Read config
-    KSpellConfig ksconfig;
-    if ( instance() )
-    {
-        KConfig * config = instance()->config();
-        QCString gn( "KSpell " );
-        gn += instance()->instanceName(); // for compat reasons, and to avoid finding the group in kdeglobals (hmm...)
-        QString groupName = QString::fromLatin1( gn );
-        //kdDebug() << "Group: " << groupName << endl;
-        if ( config->hasGroup( groupName ) )
-        {
-            //kdDebug() << "SpellChecker::run - group found -" << endl;
-            config->setGroup( groupName );
-            ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
-            ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
-            ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
-            ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
-            ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
-            ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
-        }
-    }
-
+#if 0 //fixme
     // Call the spell checker
     KSpell::spellStatus status=(KSpell::spellStatus)KSpell::modalCheck( buffer, &ksconfig );
 
