@@ -133,6 +133,8 @@ KMainWindow* KexiSharedActionHost::mainWindow() const
 
 void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 {
+	if (!d)
+		return;
 	bool insideDialogBase = o && (o->inherits("KexiDialogBase") || 0!=Kexi::findParent<KexiDialogBase>(o, "KexiDialogBase"));
 
 	KexiActionProxy *p = o ? d->actionProxies[ o ] : 0;
