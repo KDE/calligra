@@ -2399,7 +2399,8 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 			curr2 += 4;
 			_step = 0;
 		    }
-		    bitBlt( this, _pix2.width() - dx - wid - _w, dy, &_pix2, _pix2.width() - dx - wid - _w, dy, _w, hei );
+		    bitBlt( this, _pix2.width() - dx - wid - _w, dy, &_pix2, _pix2.width() - dx - wid - _w, 
+			    dy, _w, hei );
 		}
 		_time.restart();
 	    }
@@ -2430,8 +2431,10 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 		{
 		    pix3 = QPixmap( _pix1 );
 		    QPixmap pix4( _pix2 );
-		    float dw = static_cast<float>( _step * ( ( pix3.width() - ( pix3.width() / 10 ) ) / ( 2 * _psteps ) ) );
-		    float dh = static_cast<float>( _step * ( ( pix3.height() - ( pix3.height() / 10 ) ) / ( 2 * _psteps ) ) );
+		    float dw = static_cast<float>( _step * ( ( pix3.width() - ( pix3.width() / 10 ) ) / 
+							     ( 2 * _psteps ) ) );
+		    float dh = static_cast<float>( _step * ( ( pix3.height() - ( pix3.height() / 10 ) ) / 
+							     ( 2 * _psteps ) ) );
 
 		    dw *= 2;
 		    dh *= 2;
@@ -2453,7 +2456,8 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 		if ( _step > _psteps && _step < _psteps * 2 )
 		{
 		    QPixmap pix4( _pix2 );
-		    int yy = ( _pix1.height() - pix3.height() ) / 2 - ( ( ( _pix1.height() - pix3.height() ) / 2 ) / _psteps ) * ( _step - _psteps );
+		    int yy = ( _pix1.height() - pix3.height() ) / 2 - ( ( ( _pix1.height() - pix3.height() ) / 2 ) / 
+									_psteps ) * ( _step - _psteps );
 
 		    bitBlt( &pix4, ( pix4.width() - pix3.width() ) / 2, yy,
 			    &pix3, 0, 0, pix3.width(), pix3.height() );
@@ -2466,7 +2470,8 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 		if ( _step > 2 * _psteps && _step < _psteps * 3 )
 		{
 		    QPixmap pix4( _pix2 );
-		    int xx = ( _pix1.width() - pix3.width() ) / 2 - ( ( ( _pix1.width() - pix3.width() ) / 2 ) / _psteps ) * ( _step - 2 * _psteps );
+		    int xx = ( _pix1.width() - pix3.width() ) / 2 - ( ( ( _pix1.width() - pix3.width() ) / 2 ) / 
+								      _psteps ) * ( _step - 2 * _psteps );
 		    int yy = ( ( ( _pix1.height() - pix3.height() ) / 2 ) / _psteps ) * ( _step - 2 * _psteps );
 
 		    bitBlt( &pix4, xx, yy, &pix3, 0, 0, pix3.width(), pix3.height() );
@@ -2479,7 +2484,8 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 		{
 		    QPixmap pix4( _pix2 );
 		    int xx = ( ( _pix1.width() - pix3.width() ) / _psteps ) * ( _step - 3 * _psteps );
-		    int yy = ( ( _pix1.height() - pix3.height() ) / 2 ) + ( ( ( _pix1.height() - pix3.height() ) / 2 ) / _psteps ) * ( _step - 3 * _psteps );
+		    int yy = ( ( _pix1.height() - pix3.height() ) / 2 ) + 
+			     ( ( ( _pix1.height() - pix3.height() ) / 2 ) / _psteps ) * ( _step - 3 * _psteps );
 
 		    bitBlt( &pix4, xx, yy, &pix3, 0, 0, pix3.width(), pix3.height() );
 		    QRect newRect( xx, yy, pix3.width(), pix3.height() );
@@ -3538,9 +3544,9 @@ void Page::dropEvent( QDropEvent *e )
 			f.close();
 		    }
 
-		    view->kPresenterDoc()->insertText( QRect( e->pos().x(), e->pos().y(), 250, 250 ), 
+		    view->kPresenterDoc()->insertText( QRect( e->pos().x(), e->pos().y(), 250, 250 ),
 						       diffx(), diffy(), text, view );
-		    
+		
 		    setCursor( c );
 		}
 	    }
@@ -3552,12 +3558,12 @@ void Page::dropEvent( QDropEvent *e )
 	QString text;
 	QTextDrag::decode( e, text );
 
-	view->kPresenterDoc()->insertText( QRect( e->pos().x(), e->pos().y(), 250, 250 ), 
+	view->kPresenterDoc()->insertText( QRect( e->pos().x(), e->pos().y(), 250, 250 ),
 					   diffx(), diffy(), text, view );
 	e->accept();
     } else
 	e->ignore();
-    
+
 }
 
 /*================================================================*/

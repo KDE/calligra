@@ -121,7 +121,7 @@ public:
 
 protected:
     void init();
-        
+
     KPresenterDoc *doc;
     KPresenterView *view;
     QString config;
@@ -145,7 +145,8 @@ class KPWebPresentationWizard : public QWizard
 
 public:
     KPWebPresentationWizard( const QString &_config, KPresenterDoc *_doc, KPresenterView *_view );
-
+    ~KPWebPresentationWizard();
+    
     static void createWebPresentation( const QString &_config, KPresenterDoc *_doc, KPresenterView *_view );
 
 protected:
@@ -190,7 +191,8 @@ class KPWebPresentationCreateDialog : public QDialog
 
 public:
     KPWebPresentationCreateDialog( KPresenterDoc *_doc, KPresenterView *_view, const KPWebPresentation &_webPres );
-
+    ~KPWebPresentationCreateDialog();
+    
     static void createWebPresentation( KPresenterDoc *_doc, KPresenterView *_view, const KPWebPresentation &_webPres );
 
     void start();
