@@ -105,3 +105,4 @@ Bugfixes:
 - Fix mouse move event + vertical alignment
 - Fix resize to height : Don't create command when it's not necessary.
 - Fix availableHeight + vertical alignment
+- Fix save variable.

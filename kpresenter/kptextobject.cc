@@ -2005,7 +2005,7 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent ) const
         KoTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
             text += p->toString() + "\n";
-            m_kptextobj->saveParagraph( domDoc, p, elem, 0, p->length()-1 );
+            m_kptextobj->saveParagraph( domDoc, p, elem, 0, p->length()-2 );
             p = p->next();
         }
         text += c2.parag()->toString( 0, c2.index() );
@@ -2148,17 +2148,13 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
             paragraph.appendChild( variable );
             static_cast<KoTextCustomItem *>( c.customItem() )->save(variable );
         }
-        else
-        {
-            if ( !lastFormat || c.format()->key() != lastFormat->key() ) {
-                if ( lastFormat )
-                    paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
-                lastFormat = static_cast<KoTextFormat*> (c.format());
-                tmpText=QString::null;
-            }
+        if ( !lastFormat || c.format()->key() != lastFormat->key() ) {
+            if ( lastFormat )
+                paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
+            lastFormat = static_cast<KoTextFormat*> (c.format());
+            tmpText=QString::null;
         }
-        tmpText+=c.c;
-
+        tmpText+=QString(c.c);
     }
     if ( lastFormat ) {
         paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
