@@ -585,6 +585,15 @@ RowFormat* KSpreadSheet::rowFormat( int _row )
     return d->defaultRowFormat;
 }
 
+KSpreadValue KSpreadSheet::value (int col, int row) const
+{
+  KSpreadCell *cell = d->cells.lookup (col, row);
+  if (cell)
+    return cell->value ();
+  KSpreadValue empty;
+  return empty;
+}
+
 KSpreadValue KSpreadSheet::valueRange (int col1, int row1,
     int col2, int row2) const
 {

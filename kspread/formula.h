@@ -28,6 +28,7 @@
 #include "kspread_value.h"
 
 class KLocale;
+class KSpreadCell;
 
 namespace KSpread
 {
@@ -235,7 +236,10 @@ class Formula
     /*
      * Creates a formula.
      */
-    Formula(KLocale *_locale);
+    Formula (KSpreadCell *_cell);
+    
+    /** create a formula without cell information */
+    Formula (KLocale *locale);
     
     /*
      * Destroys the formula.
@@ -286,7 +290,7 @@ class Formula
 
     /** return dependencies of this expression
     @param sheet  default sheet of references with no sheet information */
-    RangeList getDependencies (KSpreadSheet *sheet) const;
+    RangeList getDependencies () const;
     
     /**
      * Returns an assembler dump of the formula.

@@ -75,6 +75,11 @@ QString ValueFormatter::formatText (const KSpreadValue &value, KLocale *locale,
     FormatType fmtType, int precision, KSpreadFormat::FloatFormat floatFormat,
     const QString &prefix, const QString &postfix)
 {
+  //if we have an array, use its first element
+  if (value.isArray())
+    return formatText (value.element (0, 0), locale, fmtType, precision,
+        floatFormat, prefix, postfix);
+
   QString str;
   
   //step 1: determine formatting that will be used

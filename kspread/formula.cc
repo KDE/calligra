@@ -19,6 +19,7 @@
 
 #include "formula.h"
 
+#include "kspread_cell.h"
 #include "kspread_sheet.h"
 #include "kspread_value.h"
 
@@ -55,15 +56,13 @@
 
  /*
 TODO:
- - owner of formula: KSpreadCell
  - handle initial formula marker = (and +)
  - reuse constant already in the pool
  - reuse references already in the pool
- - cell and range reference
  - array/list for function arguments
  - conversion using KLocale
  - handle Intersection
- - cell reference is made relative
+ - cell reference is made relative (absolute now)
  - expression optimization (e.g. 1+2+A1 becomes 3+A1)
  - shared formula (different owner, same data)
  - relative internal representation (independent of owner)
@@ -77,8 +76,8 @@ class Opcode
 {
 public:
 
-  enum { Nop = 0, Load, Ref, Function, Add, Sub, Neg, Mul, Div, Pow, Concat,
-    Not, Equal, Less, Greater };
+  enum { Nop = 0, Load, Ref, Cell, Range, Function, Add, Sub, Neg, Mul, Div,
+    Pow, Concat, Not, Equal, Less, Greater };
 
   unsigned type;
   unsigned index;
@@ -94,6 +93,7 @@ public:
   Formula *formula;
   bool dirty;
   bool valid;
+  KSpreadCell *cell;
   KLocale *locale;
   QString expression;
   QValueVector<Opcode> codes;
@@ -369,10 +369,19 @@ static bool isIdentifier( QChar ch )
 
 // Constructor
 
+Formula::Formula(KSpreadCell *cell)
+{
+  d = new Private;
+  d->cell = cell;
+  d->locale = cell->locale();
+  clear();
+}
+
 Formula::Formula(KLocale *locale)
 {
   d = new Private;
   d->locale = locale;
+  d->cell = 0;
   clear();
 }
 
@@ -822,7 +831,12 @@ void Formula::compile( const Tokens& tokens ) const
     {
       syntaxStack.push( token );
       d->constants.append( KSpreadValue( token.text() ) );
-      d->codes.append( Opcode( Opcode::Ref, d->constants.count()-1 ) );
+      if (tokenType == Token::Cell)
+        d->codes.append( Opcode( Opcode::Cell, d->constants.count()-1 ) );
+      else if (tokenType == Token::Range)
+        d->codes.append( Opcode( Opcode::Range, d->constants.count()-1 ) );
+      else
+        d->codes.append( Opcode( Opcode::Ref, d->constants.count()-1 ) );
     }
 
     // are we entering a function ?
@@ -1087,9 +1101,13 @@ void Formula::compile( const Tokens& tokens ) const
   }
 }
 
-RangeList Formula::getDependencies (KSpreadSheet *sheet) const
+RangeList Formula::getDependencies () const
 {
   RangeList rl;
+  //nothing if we don't have a cell to work with
+  if (!d->cell)
+    return rl;
+  KSpreadSheet *sheet = d->cell->sheet();
   
   //perform lexical analysis
   //TODO: use parsed formula instead, when cell/range references are supported
@@ -1131,6 +1149,10 @@ KSpreadValue Formula::eval() const
   QValueStack<KSpreadValue> stack;
   unsigned index;
   KSpreadValue val1, val2;
+  QString c;
+  KSpreadSheet *sheet = 0;
+  if (d->cell)
+    sheet = d->cell->sheet();
   QValueVector<KSpreadValue> args;
 
 #if 0    
@@ -1274,10 +1296,32 @@ KSpreadValue Formula::eval() const
         break;
 
 
-      // reference: cell, range or function
+      case Opcode::Cell:
+        c = d->constants[index].asString();
+        val1 = KSpreadValue::empty();
+        if (sheet)
+        {
+          KSpreadPoint cell (c, sheet->map(), sheet);
+          if (cell.isValid())
+            val1 = cell.table->value (cell.column(), cell.row());
+        }
+        stack.push( val1 );
+        break;
+      
+      case Opcode::Range:
+        c = d->constants[index].asString();
+        val1 = KSpreadValue::empty();
+        if (sheet)
+        {
+          KSpreadRange range (c, sheet->map(), sheet);
+          if (range.isValid())
+            val1 = range.table->valueRange (range.startCol(), range.startRow(),
+                range.endCol(), range.endRow());
+        }
+        stack.push( val1 );
+        break;
+      
       case Opcode::Ref:
-        // FIXME check if there's such cell or range
-        // else assume function call
         val1 = d->constants[index];
         stack.push( val1 );
         break;

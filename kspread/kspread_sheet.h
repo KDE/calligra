@@ -411,6 +411,8 @@ public:
     KSpreadFormat* defaultFormat();
     const KSpreadFormat* defaultFormat() const;
 
+    /** retrieve a value */
+    KSpreadValue value (int col, int row) const;
     /** retrieve a range of values */
     KSpreadValue valueRange (int col1, int row1, int col2, int row2) const;
 
