@@ -38,17 +38,17 @@ public:
     ConfigReader() {}
     virtual ~ConfigReader() {}
 
-    void read( QFile& file );
+    bool read( QFile& file );
 
 protected:
 
-    virtual void parseLine( QString line ) =0;
+    virtual bool parseLine( QString line ) =0;
 
     int parseInt( QString s, bool* b=0 );
     QString parseAssignment( QString s, QString name );
 };
 
-void ConfigReader::read( QFile& file )
+bool ConfigReader::read( QFile& file )
 {
     QTextStream stream( &file );
     QString line;
@@ -60,9 +60,11 @@ void ConfigReader::read( QFile& file )
         }
         line = line.stripWhiteSpace();
         if ( line.length() > 0 ) {
-            parseLine( line );
+            if ( !parseLine( line ) )
+                return false;
         }
     }
+    return true;
 }
 
 int ConfigReader::parseInt( QString s, bool* b )
@@ -103,14 +105,14 @@ public:
 
 protected:
 
-    virtual void parseLine( QString line );
+    virtual bool parseLine( QString line );
 
 private:
     QMap<QChar, CharTableEntry>* table;
     QMap<QString, QChar>* entries;
 };
 
-void UnicodeReader::parseLine( QString line )
+bool UnicodeReader::parseLine( QString line )
 {
     QStringList fields = QStringList::split( ',', line );
     int id = -1;
@@ -137,6 +139,7 @@ void UnicodeReader::parseLine( QString line )
             ( *entries )[ name ] = id;
         }
     }
+    return true;
 }
 
 
@@ -147,7 +150,7 @@ public:
 
 protected:
 
-    virtual void parseLine( QString line );
+    virtual bool parseLine( QString line );
 
 private:
     QMap<QChar, CharTableEntry>* table;
@@ -156,14 +159,20 @@ private:
     uint index;
 };
 
-void FontReader::parseLine( QString line )
+bool FontReader::parseLine( QString line )
 {
     if ( !nameRead ) {
         QString fontName = parseAssignment( line, "name" );
         if ( !fontName.isNull() ) {
             nameRead = true;
+            QFont f( fontName );
+            QStringList fields = QStringList::split( '-', f.rawName() );
+            if ( ( fields.size() != 13 )||( fields[1].upper() != fontName.upper() ) ) {
+                kdDebug( DEBUGID ) << "Font '" << fontName << "' not found." << endl;
+                return false;
+            }
             index = fontTable->size();
-            fontTable->push_back( QFont( fontName ) );
+            fontTable->push_back( f );
         }
     }
     else {
@@ -174,6 +183,7 @@ void FontReader::parseLine( QString line )
             ( *table )[id].setFontChar( static_cast<char>( index ), static_cast<uchar>( pos ) );
         }
     }
+    return true;
 }
 
 
@@ -241,9 +251,9 @@ void SymbolTable::init()
             //kdDebug() << "SymbolTable::defaultInitUnicode " << *it << endl;
             QFile file( *it );
             if ( file.open( IO_ReadOnly ) ) {
-                anySuccess = true;
                 FontReader reader( &unicodeTable, &fontTable );
-                reader.read( file );
+                if ( reader.read( file ) )
+                    anySuccess = true;
             }
             else {
                 kdWarning( DEBUGID ) << "Error opening file '" << ( *it ).latin1() << "'." << endl;
