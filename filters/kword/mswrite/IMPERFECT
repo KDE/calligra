@@ -61,7 +61,7 @@ support expanding frames upwards for the footer (since we only know the bottom
 of the footer but not the top).
 
 In other words, AFAIK, the current KWord file format does not allow the
-specification of the exact position of each frame, like MS Write can.
+specification of the exact position of each frame.
 
 See my post "Specifying exact frame positions" to the koffice-devel mailinglist
 on 2002-01-27 and the number of responses I got to it.
