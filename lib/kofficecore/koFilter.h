@@ -34,7 +34,7 @@ class KoFilter : public QObject
 public:
     enum ConversionStatus { OK, StupidError, UsageError, CreationError, FileNotFound,
                             StorageCreationError, BadMimeType, BadConversionGraph,
-                            EmbeddedDocError, WrongFormat, NotImplemented };
+                            EmbeddedDocError, WrongFormat, NotImplemented, UserCancelled };
     virtual ~KoFilter();
 
     // convert the file from a "from" mimetype to the desitnation mimetype ("to")

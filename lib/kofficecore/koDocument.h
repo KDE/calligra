@@ -297,11 +297,6 @@ public:
   virtual void setTitleModified();
 
   /**
-   *  Sets whether a filter change this document.
-   */
-  virtual void changedByFilter( bool changed=true ) const;
-
-  /**
    *  @return true if the document is empty.
    */
   virtual bool isEmpty() const { return m_bEmpty; }

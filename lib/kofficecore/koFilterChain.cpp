@@ -17,6 +17,7 @@
 */
 
 #include <ktempfile.h>
+#include <kmimetype.h>
 #include <koFilterChain.h>
 #include <koQueryTrader.h>
 #include <koFilterManager.h>  // KoFilterManager::filterAvailable, private API
@@ -94,14 +95,16 @@ KoFilter::ConversionStatus KoFilterChain::invokeChain()
     m_state = Beginning;
     int count = m_chainLinks.count();
 
-    QPtrListIterator<ChainLink> it( m_chainLinks );
-    for ( ; count > 1 && it.current() && status == KoFilter::OK; ++it, --count ) {
-        status = it.current()->invokeFilter();
+    // No iterator here, as we need m_chainLinks.current() in outputDocument()
+    m_chainLinks.first();
+    for ( ; count > 1 && m_chainLinks.current() && status == KoFilter::OK;
+          m_chainLinks.next(), --count ) {
+        status = m_chainLinks.current()->invokeFilter();
         m_state = Middle;
         manageIO();
     }
 
-    if ( !it.current() ) {
+    if ( !m_chainLinks.current() ) {
         kdWarning( 35000 ) << "Huh?? Found a null pointer in the chain" << endl;
         return KoFilter::StupidError;
     }
@@ -111,17 +114,18 @@ KoFilter::ConversionStatus KoFilterChain::invokeChain()
             m_state |= End;
         else
             m_state = End;
-        status = it.current()->invokeFilter();
+        status = m_chainLinks.current()->invokeFilter();
         manageIO();
     }
 
     m_state = Done;
+    finalizeIO();
     return status;
 }
 
 QString KoFilterChain::chainOutput() const
 {
-    if ( m_state == Done )  // ###### FIXME: We need to check if we actually had a temp file!
+    if ( m_state == Done )
         return m_inputFile; // as we already called manageIO()
     return QString::null;
 }
@@ -191,12 +195,39 @@ KoStoreDevice* KoFilterChain::storageFile( const QString& name, KoStore::Mode mo
 
 KoDocument* KoFilterChain::inputDocument()
 {
-    return 0; // ###### TODO
+    if ( m_inputQueried ) {
+        kdWarning( 35000 ) << "You already asked for some source." << endl;
+        return 0;
+    }
+
+    if ( ( m_state & Beginning ) &&
+         static_cast<KoFilterManager::Direction>( filterManagerDirection() ) == KoFilterManager::Export &&
+         filterManagerKoDocument() ) {
+        m_inputQueried = true;
+        m_inputDocument = filterManagerKoDocument();
+    }
+    else if ( !m_inputDocument )
+        m_inputDocument = createDocument( inputFile() );
+
+    return m_inputDocument;
 }
 
 KoDocument* KoFilterChain::outputDocument()
 {
-    return 0; // ###### TODO
+    if ( m_outputQueried ) {
+        kdWarning( 35000 ) << "You already asked for some destination." << endl;
+        return 0;
+    }
+
+    if ( ( m_state & End ) &&
+         static_cast<KoFilterManager::Direction>( filterManagerDirection() ) == KoFilterManager::Import &&
+         filterManagerKoDocument() )
+        m_outputDocument = filterManagerKoDocument();
+    else
+        m_outputDocument = createDocument( m_chainLinks.current()->to() );
+
+    m_outputQueried = true;
+    return m_outputDocument;
 }
 
 void KoFilterChain::dump() const
@@ -262,7 +293,24 @@ void KoFilterChain::manageIO()
         }
     }
 
-    // ###### TODO: Assign/Delete documents!
+    if ( m_inputDocument != filterManagerKoDocument() )
+        delete m_inputDocument;
+    m_inputDocument = m_outputDocument;
+    m_outputDocument = 0;
+}
+
+void KoFilterChain::finalizeIO()
+{
+    // In case we export (to a file, of course) and the last
+    // filter chose to output a KoDocument we have to save it.
+    // Should be very rare, but well...
+    // Note: m_*input*Document as we already called manageIO()
+    if ( m_inputDocument &&
+         static_cast<KoFilterManager::Direction>( filterManagerDirection() ) == KoFilterManager::Export ) {
+        kdDebug( 35000 ) << "Saving the output document to the export file" << endl;
+        m_inputDocument->saveNativeFormat( filterManagerExportFile() );
+        m_inputFile = filterManagerExportFile();
+    }
 }
 
 bool KoFilterChain::createTempFile( KTempFile** tempFile, bool autoDelete )
@@ -355,6 +403,47 @@ KoStoreDevice* KoFilterChain::storageCleanupHelper( KoStore** storage )
     delete *storage;
     *storage = 0;
     return 0;
+}
+
+KoDocument* KoFilterChain::createDocument( const QString& file )
+{
+    KURL url;
+    url.setPath( file );
+    KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
+    if ( t->name() == KMimeType::defaultMimeType() ) {
+        kdError( 35000 ) << "No mimetype found for " << file << endl;
+        return 0;
+    }
+
+    KoDocument *doc = createDocument( QCString( t->name().latin1() ) );
+
+    if ( !doc || !doc->loadNativeFormat( file ) ) {
+        kdError( 35000 ) << "Couldn't load from the file" << endl;
+        delete doc;
+        return 0;
+    }
+    return doc;
+}
+
+KoDocument* KoFilterChain::createDocument( const QCString& mimeType )
+{
+    QString constraint( QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1'" ).arg( mimeType ) );
+    QValueList<KoDocumentEntry> entries = KoDocumentEntry::query( constraint );
+    if ( entries.isEmpty() ) {
+        kdError( 35000 ) << "Couldn't find a KOffice document entry for " << mimeType << endl;
+        return 0;
+    }
+
+    if ( entries.count() != 1 )
+        kdWarning( 35000 ) << "Huh?? Two document entries for the same mimetype?"
+                           << " Will take the first one." << endl;
+
+    KoDocument* doc = entries.first().createDoc();
+    if ( !doc ) {
+        kdError( 35000 ) << "Couldn't create the document" << endl;
+        return 0;
+    }
+    return doc;
 }
 
 

@@ -61,6 +61,7 @@ public:
 
 
     // #### "API" for the filter. Here it get hold of files, storages,...
+    // Note: Call that only once for your filter
     // Get the current file to read from
     QString inputFile();
     // Get the current file to write to
@@ -91,6 +92,7 @@ private:
     // storages,... and properly deletes them as soon as they are not
     // needed anymore.
     void manageIO();
+    void finalizeIO();
 
     bool createTempFile( KTempFile** tempFile, bool autoDelete = true );
 
@@ -100,6 +102,9 @@ private:
     KoStoreDevice* storageHelper( const QString& file, const QString& streamName,
                                   KoStore::Mode mode, KoStore** storage, KoStoreDevice** device );
     KoStoreDevice* storageCleanupHelper( KoStore** storage );
+
+    KoDocument* createDocument( const QString& file );
+    KoDocument* createDocument( const QCString& mimeType );
 
     // A small private helper class with represents one single filter
     // (one link of the chain)
@@ -111,6 +116,9 @@ private:
                    const QCString& from, const QCString& to );
 
         KoFilter::ConversionStatus invokeFilter();
+
+        QCString from() const { return m_from; }
+        QCString to() const { return m_to; }
 
         // debugging
         void dump() const;

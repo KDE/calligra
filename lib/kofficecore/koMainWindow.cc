@@ -1125,50 +1125,6 @@ QLabel * KoMainWindow::statusBarLabel()
   return d->statusBarLabel;
 }
 
-/*
-QString KoMainWindow::nativeFormatName()
-{
-    QString serviceType;
-
-    if ( rootDocument() )
-        serviceType = QString::fromLatin1( rootDocument()->nativeFormatMimeType() );
-    else
-        serviceType = QString::fromLatin1( KoDocument::readNativeFormatMimeType() );
-
-    if ( serviceType.isEmpty() )
-        return QString::null;
-
-    KMimeType::Ptr mimeType = KMimeType::mimeType( serviceType );
-
-    if ( !mimeType )
-        return QString::null;
-
-    return mimeType->comment();
-}
-*/
-
-/*
-QString KoMainWindow::nativeFormatPattern()
-{
-    QString serviceType;
-
-    if ( rootDocument() )
-        serviceType = QString::fromLatin1( rootDocument()->nativeFormatMimeType() );
-    else
-        serviceType = QString::fromLatin1( KoDocument::readNativeFormatMimeType() );
-
-    if ( serviceType.isEmpty() )
-        return QString::null;
-
-    KMimeType::Ptr mimeType = KMimeType::mimeType( serviceType );
-
-    if ( !mimeType )
-        return QString::null;
-
-    return *mimeType->patterns().begin();
-}
-*/
-
 void KoMainWindow::setMaxRecentItems(uint _number)
 {
         m_recent->setMaxItems( _number );

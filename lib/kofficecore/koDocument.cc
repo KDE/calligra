@@ -95,7 +95,6 @@ public:
     int m_autoSaveDelay; // in seconds, 0 to disable.
     bool modifiedAfterAutosave;
     bool m_bSingleViewMode;
-    mutable bool m_changed;
     int m_numOperations;
 };
 
@@ -161,7 +160,6 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
 
   d = new KoDocumentPrivate;
   m_bEmpty = TRUE;
-  d->m_changed=false;
   d->m_dcopObject = 0L;
   connect( &d->m_autoSaveTimer, SIGNAL( timeout() ), this, SLOT( slotAutoSave() ) );
   setAutoSave( s_defaultAutoSave );
@@ -271,7 +269,6 @@ bool KoDocument::saveFile()
   if ( outputMimeType != _native_format ) {
     kdDebug(30003) << "Saving to format " << outputMimeType << " in " << m_file << endl;
     // Not native format : save using export filter
-    d->m_changed=false;
     if ( !d->filterManager )
         d->filterManager = new KoFilterManager( this );
 
@@ -805,7 +802,6 @@ bool KoDocument::openFile()
      Q_ASSERT( d->m_views.isEmpty() );
   }
 
-  d->m_changed=false;
   QCString _native_format = nativeFormatMimeType();
   QString importedFile = m_file;
 
@@ -824,8 +820,8 @@ bool KoDocument::openFile()
       importedFile = d->filterManager->import( m_file, status );
       if ( status != KoFilter::OK )
           return false;
-      kdDebug(30003) << "KoDocument::openFile - importedFile " << importedFile
-                     << ", status: " << static_cast<int>( status ) << endl;
+      kdDebug(30003) << "KoDocument::openFile - importedFile '" << importedFile
+                     << "', status: " << static_cast<int>( status ) << endl;
   }
 
   QApplication::restoreOverrideCursor();
@@ -843,10 +839,6 @@ bool KoDocument::openFile()
           else if ( d->lastErrorMessage != "USER_CANCELED" )
               KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().prettyURL() ).arg( d->lastErrorMessage ) );
       }
-  }
-  else {
-      // The filter did it all. Ok if it changed something...
-      ok = d->m_changed;
   }
 
   if ( importedFile != m_file )
@@ -1092,12 +1084,6 @@ void KoDocument::setTitleModified()
     QPtrListIterator<KoMainWindow> it( d->m_shells );
     for (; it.current(); ++it )
         it.current()->updateCaption();
-}
-
-void KoDocument::changedByFilter( bool changed ) const
-{
-    kdDebug(30003) << "KoDocument::changedByFilter " << (changed ? "true" : "false") << ")" << endl;
-    d->m_changed=changed;
 }
 
 bool KoDocument::loadChildren( KoStore* )

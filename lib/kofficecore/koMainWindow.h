@@ -80,17 +80,6 @@ public:
 
     virtual KoView *rootView() const;
 
-    /**
-     * The pattern of the native file format, for example "*.ksp".
-    QString nativeFormatPattern();
-     */
-
-    /**
-     * The name of the native file format. Usually the name of
-     * your component, for example i18n("KSpread") or i18n("KWord").
-    QString nativeFormatName();
-     */
-
     virtual KParts::PartManager *partManager();
 
     /**
