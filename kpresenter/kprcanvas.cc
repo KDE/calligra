@@ -3216,6 +3216,8 @@ bool KPrCanvas::pNext( bool )
         QPixmap _pix1( desk.width(), desk.height() );
         drawCurrentPageInPix( _pix1 );
 
+        m_view->setPresentationDuration( currPresPage - 1 );
+
         currPresPage = *( ++slideListIterator );
         subPresStep = 0;
         //kdDebug(33001) << "Page::pNext going to page " << currPresPage << endl;
@@ -3261,8 +3263,6 @@ bool KPrCanvas::pNext( bool )
         }
 
         kPchangePages( this, _pix1, _pix2, _pageEffect, pageSpeedFakt() );
-
-        m_view->setPresentationDuration( currPresPage - 2 );
 
 
         if ( !spManualSwitch() )
@@ -3327,6 +3327,8 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
             repaint( false );
             return false;
         }
+        m_view->setPresentationDuration( currPresPage - 1);
+
         currPresPage = *( --slideListIterator );
 
         tmpObjs.clear();
@@ -3340,8 +3342,6 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
             tmpObjs.append(oIt.current());
         presStepList = doc->reorderPage( currPresPage - 1 );
         currPresStep = *( --presStepList.end() );
-
-        m_view->setPresentationDuration( currPresPage );
 
         return true;
     }
@@ -4919,6 +4919,9 @@ void KPrCanvas::slotGotoPage()
 {
     setCursor( blankCursor );
     int pg = currPresPage;
+    
+    m_view->setPresentationDuration( pg - 1 );
+
     pg = KPGotoPage::gotoPage( m_view->kPresenterDoc(), slideList, pg, this );
     gotoPage( pg );
 
@@ -4926,8 +4929,6 @@ void KPrCanvas::slotGotoPage()
         m_view->setCurrentTimer( 1 );
         setNextPageTimer( true );
     }
-
-    m_view->setPresentationDuration( pg - 1 );
 
     if ( presMenu->isItemChecked ( PM_DM ) )
         setCursor( KPresenterUtils::penCursor() );

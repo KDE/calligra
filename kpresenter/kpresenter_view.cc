@@ -5953,7 +5953,7 @@ void KPresenterView::setPresentationDuration( int _pgNum )
     if ( kPresenterDoc()->presentationDuration() )
     {
         // kdDebug(33001) << "KPresenterView::setPresentationDuration( " << _pgNum << " )" << endl;
-        *m_presentationDurationList.at( _pgNum ) = getPresentationDuration();
+        *m_presentationDurationList.at( _pgNum ) += getPresentationDuration();
         restartPresentationDuration();
     }
 }
