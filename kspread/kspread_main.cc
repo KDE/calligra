@@ -32,44 +32,16 @@
 #include "kspread_doc.h"
 #include "kspread.h"
 
-bool g_bWithGUI = true;
-
-QStringList g_openFiles;
-
 KOFFICE_DOCUMENT_FACTORY( KSpreadDoc, KSpreadFactory, KSpread::DocumentFactory_skel )
 typedef OPAutoLoader<KSpreadFactory> KSpreadAutoLoader;
 
 KSpreadApp::KSpreadApp( int &argc, char** argv ) : 
   KoApplication( argc, argv, "kspread" )
 {
-  m_pShell = 0L;
 }
 
 KSpreadApp::~KSpreadApp()
 {
-}
-
-void KSpreadApp::start()
-{
-  if ( g_bWithGUI )
-  {
-    if ( g_openFiles.count() == 0 )
-    {
-      m_pShell = new KSpreadShell;
-      m_pShell->show();
-      m_pShell->newDocument();
-    }
-    else
-    {
-      QStringList::Iterator it = g_openFiles.begin();
-      for( ; it != g_openFiles.end(); ++it )
-      {
-	m_pShell = new KSpreadShell;
-	m_pShell->show();
-	m_pShell->openDocument( *it, "" );
-      }
-    }
-  }
 }
 
 int main( int argc, char **argv )
@@ -78,16 +50,6 @@ int main( int argc, char **argv )
 
   KSpreadApp app( argc, argv );
 
-  int i = 1;
-  if ( strcmp( argv[i], "-s" ) == 0 || strcmp( argv[i], "--server" ) == 0 )
-  {
-    i++;
-    g_bWithGUI = false;
-  }
-
-  for( ; i < argc; i++ )
-    g_openFiles.append( (const char*)argv[i] );
-  
   app.exec();
 
   cerr << "============ BACK from event loop ===========" << endl;
