@@ -450,7 +450,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     QTimer::singleShot( 0, this, SLOT( initialPosition() ) );
 
-    initConfig();
 }
 
 KSpreadView::~KSpreadView()
@@ -492,6 +491,7 @@ if( config->hasGroup("Parameters" ))
 	_col= config->readColorEntry("GridColor",&_col);
 	m_pDoc->changeDefaultGridPenColor(_col);
 	m_pDoc->setShowMessageError(config->readBoolEntry( "Msg error" ,false) );
+	
 	m_pDoc->setShowCommentIndicator(config->readBoolEntry("Comment Indicator",true));
 
 	m_pDoc->setPaperFormat((KoFormat)config->readNumEntry("Default size page",1));
@@ -546,7 +546,9 @@ void KSpreadView::initialPosition()
 
     slotUpdateView( activeTable() );
     m_bLoading =true;
-    m_pDoc->setShowMessageError(false);
+
+    if ( koDocument()->isReadWrite() )
+      initConfig();
 }
 
 void KSpreadView::updateEditWidget()
