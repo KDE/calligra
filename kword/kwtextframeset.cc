@@ -424,7 +424,8 @@ void KWTextFrameSet::updateFrames()
     if ( !frames.isEmpty() )
     {
         kdDebug(32002) << "KWTextFrameSet::updateFrames " << this << " setWidth=" << frames.first()->width() << endl;
-        text->setWidth( frames.first()->width() ); // ## we need support for variable width....
+        text->setWidth( kWordDocument()->zoomItX( frames.first()->width() ) );
+        // ## we need support for variable width.... (could be done in adjustRMargin in fact)
     } else kdWarning(32002) << "KWTextFrameSet::update no frames" << endl;
 
     typedef QList<KWFrame> FrameList;
@@ -908,8 +909,9 @@ void KWTextFrameSet::formatMore()
         }
     }
     else
-        if ( frames.count() > 1 && !lastFormatted && bottom < m_availableHeight - frames.last()->height() )
+        if ( frames.count() > 1 && !lastFormatted && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
         {
+            kdDebug(32002) << "KWTextFrameSet::formatMore too much space (" << m_availableHeight << ") , trying to remove last frame" << endl;
             // Last frame is empty -> try removing last page
             if ( doc->canRemovePage( doc->getPages() - 1, frames.last() ) )
                 doc->removePage( doc->getPages() - 1 );
