@@ -683,8 +683,7 @@ void KSpreadView::updateEditWidget()
     state=cell->getFormatNumber( column,row) == KSpreadCell::Money;
     m_money->setChecked( state );
 
-    state= cell->comment(column,row).isEmpty();
-    m_removeComment->setEnabled( state );
+    m_removeComment->setEnabled( !cell->comment(column,row).isEmpty() );
 
     m_decreaseIndent->setEnabled(cell->getIndent(column,row)>0);
 
