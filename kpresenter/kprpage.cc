@@ -177,6 +177,7 @@ void KPrPage::pasteObjs( const QByteArray & data )
     m_doc->loadPastedObjs( clip_str,this );
     m_objectList.last()->moveBy( 20,20 );
     m_objectList.last()->setSelected( true );
+    m_doc->repaint(m_objectList.last());
     m_doc->setModified(true);
 }
 
