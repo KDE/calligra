@@ -40,7 +40,6 @@ PgConfDia::PgConfDia(QWidget* parent,const char* name,
   manualSwitch->resize(manualSwitch->sizeHint());
   manualSwitch->move(infinitLoop->x(),infinitLoop->y()+infinitLoop->height()+10);
   manualSwitch->setChecked(swMan);
-  connect(manualSwitch,SIGNAL(clicked()),this,SLOT(msClicked()));
 
   page = new QButtonGroup(this,"page");
   page->setFrameStyle(QFrame::Box|QFrame::Sunken);
@@ -62,6 +61,9 @@ PgConfDia::PgConfDia(QWidget* parent,const char* name,
   effectCombo->insertItem(i18n("Close horizontal"));
   effectCombo->insertItem(i18n("Close vertical"));
   effectCombo->insertItem(i18n("Close from all directions"));
+  effectCombo->insertItem(i18n("Open horizontal"));
+  effectCombo->insertItem(i18n("Open vertical"));
+  effectCombo->insertItem(i18n("Open from all directions"));
   effectCombo->resize(effectCombo->sizeHint());
   effectCombo->setCurrentItem((int)pageEffect);
   

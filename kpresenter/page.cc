@@ -1687,7 +1687,7 @@ void Page::drawPageInPix(QPixmap &_pix,int __diffy)
 void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 {
   QTime _time;
-  int _step = 0,_steps,_h,_w;
+  int _step = 0,_steps,_h,_w,_x,_y;
 
   switch (_effect)
     {
@@ -1766,6 +1766,80 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 	    if ((_pix2.width()/(2 * _steps)) * _step >= _pix2.width() / 2) break;
 	  }
       } break;
+    case PEF_OPEN_HORZ:
+      {
+	_steps = (int)(50000.0 / (float)kapp->desktop()->height());
+	_time.start();
+
+	for (;;)
+	  {
+	    kapp->processEvents();
+	    if (_time.elapsed() >= 1)
+	      {
+		_step++;
+		_h = (_pix2.height() / _steps) * _step;
+		_h = _h > _pix2.height() ? _pix2.height() : _h;
+
+		_y = _pix2.height() / 2;
+
+		bitBlt(this,0,_y - _h / 2,&_pix2,0,_y - _h / 2,width(),_h);
+	
+		_time.restart();
+	      }
+	    if ((_pix2.height() / _steps) * _step >= _pix2.height()) break;
+	  }
+      } break;
+    case PEF_OPEN_VERT:
+      {
+	_steps = (int)(50000.0 / (float)kapp->desktop()->height());
+	_time.start();
+
+	for (;;)
+	  {
+	    kapp->processEvents();
+	    if (_time.elapsed() >= 1)
+	      {
+		_step++;
+		_w = (_pix2.width() / _steps) * _step;
+		_w = _w > _pix2.width() ? _pix2.width() : _w;
+
+		_x = _pix2.width() / 2;
+
+		bitBlt(this,_x - _w / 2,0,&_pix2,_x - _w / 2,0,_w,height());
+	
+		_time.restart();
+	      }
+	    if ((_pix2.width() / _steps) * _step >= _pix2.width()) break;
+	  }
+      } break;
+    case PEF_OPEN_ALL:
+      {
+	_steps = (int)(50000.0 / (float)kapp->desktop()->height());
+	_time.start();
+
+	for (;;)
+	  {
+	    kapp->processEvents();
+	    if (_time.elapsed() >= 1)
+	      {
+		_step++;
+		_w = (_pix2.width() / _steps) * _step;
+		_w = _w > _pix2.width() ? _pix2.width() : _w;
+
+		_x = _pix2.width() / 2;
+
+		_h = (_pix2.height() / _steps) * _step;
+		_h = _h > _pix2.height() ? _pix2.height() : _h;
+
+		_y = _pix2.height() / 2;
+
+		bitBlt(this,_x - _w / 2,_y - _h / 2,&_pix2,_x - _w / 2,_y - _h / 2,_w,_h);
+	
+		_time.restart();
+	      }
+	    if ((_pix2.width() / _steps) * _step >= _pix2.width()) break;
+	  }
+      } break;
     }
 }
 
@@ -1806,6 +1880,26 @@ void Page::doObjEffects()
 		case EF_COME_BOTTOM:
 		  y_pos2 = min(y_pos2,objPtr->oy - diffy());
 		  break;
+		case EF_COME_LEFT_TOP:
+		  {
+		    x_pos1 = max(x_pos1,objPtr->ox - diffx() + objPtr->ow);
+		    y_pos1 = max(y_pos1,objPtr->oy - diffy() + objPtr->oh);
+		  } break;
+		case EF_COME_LEFT_BOTTOM:
+		  {
+		    x_pos1 = max(x_pos1,objPtr->ox - diffx() + objPtr->ow);
+		    y_pos2 = min(y_pos2,objPtr->oy - diffy());
+		  } break;
+		case EF_COME_RIGHT_TOP:
+		  {
+		    x_pos2 = min(x_pos2,objPtr->ox - diffx());
+		    y_pos1 = max(y_pos1,objPtr->oy - diffy() + objPtr->oh);
+		  } break;
+		case EF_COME_RIGHT_BOTTOM:
+		  {
+		    x_pos2 = min(x_pos2,objPtr->ox - diffx());
+		    y_pos2 = min(y_pos2,objPtr->oy - diffy());
+		  } break;
 		case EF_WIPE_LEFT:
 		  x_pos1 = max(x_pos1,objPtr->ow);
 		  break;
@@ -1894,6 +1988,54 @@ void Page::doObjEffects()
 			    x_pos2 = 0;
 			    drawObject(objPtr,screen,x_pos2,y_pos2,0,0,0,0);
 			    if (y_pos2 != 0) nothingHappens = false;
+			  }
+		      } break;
+		    case EF_COME_LEFT_TOP:
+		      {
+			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			  { 
+			    x_pos1 = _step_width * _step < objPtr->ox - diffx() + objPtr->ow ? 
+			      objPtr->ox - diffx() + objPtr->ow - _step_width * _step : 0;
+			    y_pos1 = _step_height * _step < objPtr->oy - diffy() + objPtr->oh ?
+			      objPtr->oy - diffy() + objPtr->oh - _step_height * _step : 0;
+			    drawObject(objPtr,screen,-x_pos1,-y_pos1,0,0,0,0);
+			    if (x_pos1 != 0 || y_pos1 != 0) nothingHappens = false;
+			  }
+		      } break;
+		    case EF_COME_LEFT_BOTTOM:
+		      {
+			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			  { 
+			    x_pos1 = _step_width * _step < objPtr->ox - diffx() + objPtr->ow ? 
+			      objPtr->ox - diffx() + objPtr->ow - _step_width * _step : 0;
+			    y_pos2 = _h - (_step_height * _step) + (objPtr->oy - diffy()) > objPtr->oy - diffy() ?
+			      _h - (_step_height * _step) : 0;
+			    drawObject(objPtr,screen,-x_pos1,y_pos2,0,0,0,0);
+			    if (x_pos1 != 0 || y_pos2 != 0) nothingHappens = false;
+			  }
+		      } break;
+		    case EF_COME_RIGHT_TOP:
+		      {
+			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			  { 
+			    x_pos2 = _w - (_step_width * _step) + (objPtr->ox - diffx()) > objPtr->ox - diffx() ?
+			      _w - (_step_width * _step) : 0;
+			    y_pos1 = _step_height * _step < objPtr->oy - diffy() + objPtr->oh ?
+			      objPtr->oy - diffy() + objPtr->oh - _step_height * _step : 0;
+			    drawObject(objPtr,screen,x_pos2,-y_pos1,0,0,0,0);
+			    if (x_pos2 != 0 || y_pos1 != 0) nothingHappens = false;
+			  }
+		      } break;
+		    case EF_COME_RIGHT_BOTTOM:
+		      {
+			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
+			  { 
+			    x_pos2 = _w - (_step_width * _step) + (objPtr->ox - diffx()) > objPtr->ox - diffx() ?
+			      _w - (_step_width * _step) : 0;
+			    y_pos2 = _h - (_step_height * _step) + (objPtr->oy - diffy()) > objPtr->oy - diffy() ?
+			      _h - (_step_height * _step) : 0;
+			    drawObject(objPtr,screen,x_pos2,y_pos2,0,0,0,0);
+			    if (x_pos2 != 0 || y_pos2 != 0) nothingHappens = false;
 			  }
 		      } break;
 		    case EF_WIPE_LEFT:

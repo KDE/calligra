@@ -39,7 +39,8 @@ enum Effect {EF_NONE = 0,EF_COME_RIGHT = 1,EF_COME_LEFT = 2,EF_COME_TOP = 3,EF_C
 	     EF_COME_RIGHT_BOTTOM = 6,EF_COME_LEFT_TOP = 7,EF_COME_LEFT_BOTTOM = 8,EF_WIPE_LEFT = 9,EF_WIPE_RIGHT = 10,\
 	     EF_WIPE_TOP = 11,EF_WIPE_BOTTOM = 12};
 enum Effect2 {EF2_NONE = 0,EF2T_PARA = 1};
-enum PageEffect {PEF_NONE = 0,PEF_CLOSE_HORZ = 1,PEF_CLOSE_VERT = 2,PEF_CLOSE_ALL = 3};
+enum PageEffect {PEF_NONE = 0,PEF_CLOSE_HORZ = 1,PEF_CLOSE_VERT = 2,PEF_CLOSE_ALL = 3,PEF_OPEN_HORZ = 4,PEF_OPEN_VERT = 5,\
+		 PEF_OPEN_ALL = 6};
 
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;
