@@ -149,7 +149,9 @@ void kchartEngine::computeSize() {
 
       if( params->yaxis )	{ /* XPG2 compatibility */
 	//cerr << "At least I am doing something\n";
-	sprintf( foo, do_ylbl_fractions ? QString( "%.0f" ): params->ylabel_fmt, tmp_highest );
+	
+		sprintf( foo, do_ylbl_fractions ? QString( "%.0f" ): params->ylabel_fmt, tmp_highest );
+		
 	lbl_len = ylbl_interval<1.0? strlen( price_to_str(tmp_highest,
 							  &nmrtr,
 							  &dmntr,
@@ -238,6 +240,8 @@ void kchartEngine::computeSize() {
 
 
 void kchartEngine::computeMinMaxValues() {
+  
+  bool set_neg=false;
   switch(params->stack_type) {
   case KCHARTSTACKTYPE_SUM:	// need to walk sideways
     qDebug("Sum stacktype");
@@ -268,6 +272,25 @@ void kchartEngine::computeMinMaxValues() {
       highest = MAX( highest, MAX(neg_set_sum,pos_set_sum) );
     }
     break;
+  case  KCHARTSTACKTYPE_PERCENT: // need to walk sideways
+    qDebug("Percent stacktype");
+    //bool set_neg=false;
+    for(int j=0; j<num_points; ++j ) 
+    {
+      
+      for(int i=0; i<num_sets; ++i )
+	if( CELLEXISTS( i, j ) )
+	  if( CELLVALUE( i, j ) < 0.0 )
+	    set_neg=true;
+	    
+    }
+     if(set_neg)
+     	lowest  = -100;
+     else
+     	lowest = 0;
+      highest = 100; //100%
+    break;
+    
   default:
     qDebug("Other stacktype");
     for(int i=0; i<num_sets; ++i ) {

@@ -37,6 +37,7 @@ kchartWizardSelectChartSubTypePage::kchartWizardSelectChartSubTypePage( QWidget*
     sum=new QRadioButton( i18n("Sum"), grp );
     beside=new QRadioButton( i18n("Beside"), grp );
     layer=new QRadioButton( i18n("Layer"), grp );
+    percent=new QRadioButton( i18n("Percent (only bar2D and bar3D)"), grp );
     switch((int)_chart->params()->stack_type)
         {
          case (int)KCHARTSTACKTYPE_DEPTH:
@@ -59,6 +60,11 @@ kchartWizardSelectChartSubTypePage::kchartWizardSelectChartSubTypePage( QWidget*
                  layer->setChecked(true);
                  break;
                  }
+          case (int)KCHARTSTACKTYPE_PERCENT:
+                {
+                 percent->setChecked(true);
+                 break;
+                }
           default:
                 {
                  cout <<"Error in stack_type\n";
@@ -201,6 +207,12 @@ if(chartSubType)
         {
         _chart->params()->stack_type = KCHARTSTACKTYPE_LAYER;
         }
+ else if(percent->isChecked())
+        {
+        _chart->params()->stack_type = KCHARTSTACKTYPE_PERCENT;
+        _chart->params()->ylabel_fmt = "%g %%";
+        }
+
  else
         {
         cout <<"Error in groupbutton\n";

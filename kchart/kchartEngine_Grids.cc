@@ -138,9 +138,9 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	char	*price_to_str( float, int*, int*, int*, const char* );
 	char	nmrtr[3+1], dmntr[3+1], whole[8];
 	char	all_whole = ylbl_interval<1.0? FALSE: TRUE;
-
 	char	*ylbl_str = price_to_str( tmp_y,&n,&d,&w,
 					  do_ylbl_fractions? QString::null: params->ylabel_fmt );
+					  
 	if( do_ylbl_fractions )	{
 	  sprintf( nmrtr, "%d", n );
 	  sprintf( dmntr, "%d", d );
@@ -242,7 +242,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	  setno = 0;
 	}
       }
-      while( ((i>0) && ((tmp_y += ylbl_interval) < highest)) ||
+      while( ((i>0) && ((tmp_y += ylbl_interval) <= highest)) ||
 	     ((i<0) && ((tmp_y -= ylbl_interval) > lowest)) );
     }
 

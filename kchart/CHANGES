@@ -27,3 +27,8 @@
 -Now ytitle2 works
 -Add new parameters ylabel2_fmt
 
+2000-01-13 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Add new type of bar chart : Percent bar chart
+But Pb for writing % in label for the moment it's not good
+-Bug fix

@@ -53,6 +53,13 @@ void kchartEngine::drawData() {
       qDebug("drawing combos");
       drawCombo();
       break;
+    
+    case KCHARTTYPE_3DPIE:
+    case KCHARTTYPE_2DPIE:
+    	cout <<"Not implemented\n";
+    	//qDebug("drawing pie");
+      	//drawPie();
+    	break;
     }
 }
 
@@ -135,6 +142,70 @@ void kchartEngine::drawBars() {
 			 params->threeD()? ExtColorShd[j][i]: ExtColor[j][i] );
     }
     break;
+    
+   
+    
+    case KCHARTSTACKTYPE_PERCENT:
+    {
+      float	lasty[num_points];
+      j = 0;
+	
+	float coef[num_points];
+	for(int j=0; j<num_points; ++j ) 
+		{
+      		float sum = 0.0;
+      		for(int i=0; i<num_sets; ++i )
+      			{
+			if( CELLEXISTS( i, j ) )
+	  			if( CELLVALUE( i, j ) < 0.0 )
+	    				sum -= CELLVALUE( i, j );
+	  			else
+	    				sum += CELLVALUE( i, j );
+	    		}
+	    	coef[j]=sum;
+	    	}
+      for( i=0; i<num_points; ++i ) {
+	struct BS	barset[num_sets];
+	float		lasty_pos = 0.0;
+	float		lasty_neg = 0.0;
+	int			k;
+
+	for( j=0, k=0; j<num_sets; ++j ) {
+	  if( CELLEXISTS( j, i ) ) 
+	   {
+	    if( CELLVALUE( j, i ) < 0.0 ) 
+	    	{
+	     	barset[k].y1 = lasty_neg;
+	      	barset[k].y2 = CELLVALUE( j, i )*100/coef[i] + lasty_neg;
+	      	lasty_neg    = barset[k].y2;
+	    	} 
+	    else {
+	      barset[k].y1 = lasty_pos;
+	      barset[k].y2 = CELLVALUE( j, i )*100/coef[i] + lasty_pos;
+	      lasty_pos    = barset[k].y2;
+	    }
+	    barset[k].clr   = ExtColor[j][i];
+	    barset[k].shclr = params->threeD()? ExtColorShd[j][i]: ExtColor[j][i];
+	    ++k;
+	  }
+	}
+	qsort( barset, k, sizeof(struct BS), barcmpr );
+
+	for( j=0; j<k; ++j ) {
+	  draw_3d_bar( p,
+		       PX(i+(params->do_bar()?1:0))-hlf_barwdth, PX(i+(params->do_bar()?1:0))+hlf_barwdth,
+		       PY(barset[j].y1), PY(barset[j].y2),
+		       xdepth_3D, ydepth_3D,
+		       barset[j].clr,
+		       barset[j].shclr );
+	}
+      }
+    }
+    break;
+	
+   case KCHARTSTACKTYPE_SUM:
+   	cout<<"Sorry, not implemented\n";
+	break;
   }
 }
 
@@ -265,7 +336,8 @@ void kchartEngine::drawArea() {
 			  ExtColor[j][i],
 			  params->threeD()? ExtColorShd[j][i]: ExtColor[j][i] );
       break;
-      
+    
+   
     case KCHARTSTACKTYPE_DEPTH:
     default:
       for( setno=num_sets-1; setno>=0; --setno )		// back sets first   PX, PY depth
@@ -483,3 +555,28 @@ void kchartEngine::draw3DCombo() {
       }
   }
 }
+
+
+/* try */
+void kchartEngine::drawPie() 
+{
+  float val[num_points];
+  char lbl2[num_points][10];
+  for(int j=0;j<num_points;j++)
+  	{
+  	sprintf( lbl2[j],"toto" );
+  	}
+  for(int i=1; i<num_points; ++i ) 
+  {
+  if( CELLEXISTS(i,1)) 
+	    {
+		val[i] = PY(CELLVALUE(i,1));
+	    }
+  }
+  
+  val[0]=50;
+  
+  
+  pie_gif( imagewidth,imageheight,p,params,num_points,lbl2[num_points][10],val);   
+}
+

@@ -53,7 +53,8 @@ public:
   void drawArea();
   void drawCombo();
   void draw3DCombo();
-  
+  /*try chart pie*/
+  void drawPie();
 
   // other stuff
 

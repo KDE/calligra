@@ -36,7 +36,7 @@ private:
   QRadioButton *sum;
   QRadioButton *beside;
   QRadioButton *layer;
-
+  QRadioButton *percent;
 };
 
 

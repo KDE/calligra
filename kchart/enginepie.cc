@@ -70,7 +70,7 @@ pie_gif( short			imagewidth,
 		 QPainter*      p,					// paint here
          KChartParameters*	params,				// all the parameters
          int			num_points,
-         char			*lbl[],				/* data labels */
+         char			*lbl2[],/* *lbl[] */				/* data labels */
          float			val[] )				/* data */
 {
     int			i;
@@ -100,7 +100,17 @@ pie_gif( short			imagewidth,
     int			do3Dx = 0,					// reserved for macro use
         do3Dy = 0;
 
+/* try */
+/*remove it when pie chart works */
+ char lbl[num_points][10];
+ for(int j=0;j<num_points;j++)
+  	{
+  	sprintf( lbl[j],"toto" );
+  	}
+
+
     //	GDCPIE_3d_angle = MOD_360(90-params->_3d_angle+360);
+    
     pie_3D_rad = TO_RAD( params->_3d_angle );
 
     xdepth_3D      = threeD? (int)( cos((double)MOD_2PI(M_PI_2-pie_3D_rad+2.0*M_PI)) * params->_3d_depth ): 0;
