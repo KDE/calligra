@@ -161,7 +161,7 @@ SetBackCmd::SetBackCmd( const QString &name, const KPBackGround::Settings &setti
 , m_settings( settings )
 , m_oldSettings( oldSettings )
 , m_useMasterBackground( useMasterBackground )
-, m_oldUseMasterBackground( page->useMasterBackground() )    
+, m_oldUseMasterBackground( page->useMasterBackground() )
 , m_takeGlobal( takeGlobal )
 , m_doc( doc )
 , m_page( page )
@@ -1562,8 +1562,6 @@ void ResizeCmd::unexecute()
 }
 
 
-// ###### TODO: this command can probably move to kotext
-// (it would take as additional arguments: KoDocument *, KoVariableCollection& varColl, KoStyleCollection&)
 KPrOasisPasteTextCommand::KPrOasisPasteTextCommand( KoTextDocument *d, int parag, int idx,
                                 const QCString & data )
     : KoTextDocCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data ), m_oldParagLayout( 0 )

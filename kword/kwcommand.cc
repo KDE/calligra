@@ -236,8 +236,6 @@ KoTextCursor * KWPasteTextCommand::unexecute( KoTextCursor *c )
     return c;
 }
 
-// ###### TODO: this command can probably move to kotext
-// (it would take as additional arguments: KoDocument *, KoVariableCollection& varColl, KoStyleCollection&)
 KWOasisPasteCommand::KWOasisPasteCommand( KoTextDocument *d, int parag, int idx,
                                 const QByteArray& data )
     : KoTextDocCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data ), m_oldParagLayout( 0 )
