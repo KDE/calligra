@@ -155,11 +155,15 @@ void GPage::drawContents (QPainter& p, bool withBasePoints, bool outline, bool w
 void GPage::drawContentsInRegion (QPainter& p, const Rect& , const Rect& rr,
                                       bool withBasePoints, bool outline, bool withEditMarks)
 {
-  for (QListIterator<GLayer> i(layers); i.current(); ++i)
+//  kdDebug(38000) << "Layers=" << layers << endl;
+  GLayer *i = layers.first(); 
+//  for (QListIterator<GLayer> i(layers); i.current(); ++i)
+  for(;i!=0;i=layers.next())
   {
-    if (! (*i)->isInternal () && (*i)->isVisible ())
+    kdDebug(38000) << "draw layer" << endl;
+    if (! i->isInternal () && i->isVisible ())
     {
-      const QList<GObject> &contents = (*i)->objects ();
+      const QList<GObject> &contents = i->objects ();
       QListIterator<GObject> oi(contents);
       for ( ; oi.current() ; ++oi)
       {
@@ -167,6 +171,7 @@ void GPage::drawContentsInRegion (QPainter& p, const Rect& , const Rect& rr,
             // intersects the active region
             //      const Rect& bbox = (*oi)->boundingBox ();
             //      if (r.intersects (bbox))
+	kdDebug(38000) << "draw object" << endl;
         if ((*oi)->intersects (rr))
           (*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline, withEditMarks);
       }

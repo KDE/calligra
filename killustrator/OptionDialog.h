@@ -28,6 +28,8 @@
 #include <kdialogbase.h>
 
 class QComboBox;
+class KColorButton;
+class QCheckBox;
 class UnitBox;
 
 class OptionDialog : public KDialogBase {
@@ -40,11 +42,16 @@ public:
 protected:
   void createGeneralWidget (QWidget* parent);
   void createEditWidget (QWidget* parent);
+  void createGridWidget (QWidget* parent);
 
 private:
   QComboBox* unit;
   UnitBox *horiz, *vert;
   UnitBox *smallStep, *bigStep;
+  
+  QCheckBox *gbutton, *sbutton;
+  UnitBox *hspinbox, *vspinbox;
+  KColorButton *cbutton;
 };
 
 #endif

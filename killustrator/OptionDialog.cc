@@ -29,6 +29,8 @@
 #include <qvgroupbox.h>
 #include <qhbox.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
+#include <kcolorbutton.h>
 
 #include <klocale.h>
 
@@ -40,7 +42,9 @@ OptionDialog::OptionDialog (QWidget* parent, const char* name) :
                 KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok,
                 parent, name, true) {
     createGeneralWidget(addPage(i18n("General")));
+    createGridWidget(addPage(i18n("Grid")));
     createEditWidget(addPage(i18n("Edit")));
+    
 }
 
 void OptionDialog::createGeneralWidget (QWidget* parent) {
@@ -120,6 +124,46 @@ void OptionDialog::createEditWidget (QWidget* parent) {
     vert->setValue (psm->duplicateYOffset ());
     smallStep->setValue (psm->smallStepSize ());
     bigStep->setValue (psm->bigStepSize ());
+}
+
+void OptionDialog::createGridWidget (QWidget* parent) {
+
+    QGridLayout *layout=new QGridLayout(parent, 3, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
+
+    QGroupBox *box=new QGroupBox(i18n("Distance"), parent);
+    layout->addMultiCellWidget(box, 0, 0, 0, 1);
+
+    QBoxLayout *vboxlayout=new QVBoxLayout(box, KDialogBase::marginHint(), KDialogBase::spacingHint());
+    vboxlayout->addSpacing(box->fontMetrics().height()/2);
+    QGridLayout *grid=new QGridLayout(vboxlayout, 2, 2);
+    QLabel* label = new QLabel(i18n("Horizontally"), box);
+    grid->addWidget(label, 0, 0);
+
+    hspinbox = new UnitBox(box);
+    hspinbox->setFormatString ("%-3.3f");
+    hspinbox->setEditable (true);
+    hspinbox->setRange (0, 1000);
+    grid->addWidget(hspinbox, 0, 1);
+
+    label=new QLabel(i18n("Vertically"), box);
+    grid->addWidget(label, 1, 0);
+
+    vspinbox = new UnitBox (box);
+    vspinbox->setFormatString ("%-3.3f");
+    vspinbox->setEditable (true);
+    vspinbox->setRange (0, 1000);
+    grid->addWidget(vspinbox, 1, 1);
+
+    gbutton = new QCheckBox(i18n("Snap To Grid"), parent);
+    layout->addWidget(gbutton, 1, 0);
+
+    sbutton = new QCheckBox(i18n("Show Grid"), parent);
+    layout->addWidget(sbutton, 1, 1);
+    
+    cbutton = new KColorButton(parent);
+    QLabel* clabel = new QLabel(i18n("Grid Color"), parent);
+    layout->addWidget(cbutton, 2, 1);
+    layout->addWidget(clabel, 2, 0);
 }
 
 int OptionDialog::setup ()

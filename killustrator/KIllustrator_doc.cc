@@ -78,22 +78,32 @@ KIllustratorDocument::~KIllustratorDocument()
 
 bool KIllustratorDocument::loadXML (QIODevice *, const QDomDocument &doc)
 {
-  if ( m_gdocument->readFromXml (doc)) {
+  if ( m_gdocument->readFromXml (doc))
+  {
+    kdDebug(38000) << "load embedded objects"<<endl;
     // now look for part objects in order to create the child list
-    QListIterator<GLayer> i(m_gdocument->activePage()->getLayers());
-    for ( ; i.current(); ++i) {
-      GLayer* layer = *i;
-      const QList<GObject>& contents = layer->objects ();
-      for (QListIterator<GObject> oi(contents); oi.current(); ++oi) {
-        if ((*oi)->isA ("GPart")) {
-          GPart *part = (GPart *) *oi;
-          insertChild (part->getChild ());
+    QListIterator<GPage> p(m_gdocument->getPages());
+    for ( ; p.current(); ++p)
+    { 
+      QListIterator<GLayer> i((*p)->getLayers());
+      for ( ; i.current(); ++i)
+      {
+        GLayer* layer = *i;
+        const QList<GObject>& contents = layer->objects ();
+        for (QListIterator<GObject> oi(contents); oi.current(); ++oi)
+        {
+          if ((*oi)->isA ("GPart"))
+  	  {
+	    kdDebug(38000) << "inserting object"<<endl;
+            GPart *part = (GPart *) *oi;
+            insertChild (part->getChild ());
+          }
         }
       }
+      return true;
     }
-    return true;
+    return false;
   }
-  return false;
 }
 
 bool KIllustratorDocument::loadChildren (KoStore* store)

@@ -32,10 +32,6 @@
 
 #include "filter/ImageExport.h"
 #include "filter/EPSExport.h"
-#include "filter/XfigImport.h"
-#include "filter/CmxImport.h"
-#include "filter/PSImport.h"
-#include "filter/SVGExport.h"
 
 #include <qstrlist.h>
 
@@ -67,34 +63,11 @@ void FilterManager::installDefaultFilters () {
                                            "Kai-Uwe Sattler",
                                            "1.0", 0L, filter));
   }
-  XfigImport* xfigFilter = new XfigImport ();
-  filters.insert ("Xfig", new FilterInfo (FilterInfo::FKind_Import,
-                                                  "Xfig Document", "fig",
-                                                  "Kai-Uwe Sattler",
-                                                  "0.1", xfigFilter, 0L));
   EPSExport* epsFilter = new EPSExport ();
   filters.insert ("EPS", new FilterInfo (FilterInfo::FKind_Export,
                                           "Encapsulated PostScript", "eps",
                                           "Kai-Uwe Sattler",
                                           "0.1", 0L, epsFilter));
-  SVGExport* svgFilter = new SVGExport ();
-  filters.insert ("SVG", new FilterInfo (FilterInfo::FKind_Export,
-                                          "Scalable Vector Graphics", "svg",
-                                          "Kai-Uwe Sattler",
-                                          "0.1", 0L, svgFilter));
-#if defined(not_yet)
-  CmxImport* cmxFilter = new CmxImport ();
-  filters.insert ("CMX", new FilterInfo (FilterInfo::FKind_Import,
-                                                  "Corel Exchange", "cmx",
-                                                  "Kai-Uwe Sattler",
-                                                  "0.1", cmxFilter, 0L));
-  PSImport* psFilter = new PSImport ();
-  if (psFilter->installed ())
-    filters.insert ("PS", new FilterInfo (FilterInfo::FKind_Import,
-                                          "Postscript", "ps",
-                                          "Kai-Uwe Sattler",
-                                          "0.1", psFilter, 0L));
-#endif
 }
 
 QString FilterManager::importFilters () {

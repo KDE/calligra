@@ -5,14 +5,8 @@ noinst_LTLIBRARIES = libfilter.la
 
 noinst_HEADERS = FilterManager.h \
 	ImageExport.h \
-	EPSExport.h \
-	XfigImport.h \
-	SVGExport.h \
-	PSImport.h
+	EPSExport.h
 
 libfilter_la_SOURCES = FilterManager.cc \
 	ImageExport.cc \
-	EPSExport.cc \
-	XfigImport.cc \
-	SVGExport.cc
-#	PSImport.cc
+	EPSExport.cc
