@@ -582,13 +582,13 @@ void KoAutoFormatDia::setupTab3()
     connect( pbClearFormat, SIGNAL(clicked()), SLOT(slotClearTextFormatEntry()));
     grid->setRowStretch( 2, 1 );
 
-
+    initTab3();
+    slotChangeAdvancedAutoCorrection();
     pbRemove->setEnabled(false);
     pbChangeFormat->setEnabled( false );
     pbAdd->setEnabled(false);
     pbClearFormat->setEnabled( false);
-    initTab3();
-    slotChangeAdvancedAutoCorrection();
+
 }
 
 void KoAutoFormatDia::initTab3()
@@ -619,16 +619,20 @@ void KoAutoFormatDia::slotChangeAdvancedAutoCorrection()
 {
     bool state = cbAdvancedAutoCorrection->isChecked();
     cbAutoCorrectionWithFormat->setEnabled( state );
-    pbClearFormat->setEnabled( state );
-    pbRemove->setEnabled( state );
-    pbChangeFormat->setEnabled( state );
-    pbAdd->setEnabled( state );
     pbSpecialChar2->setEnabled( state );
     pbSpecialChar1->setEnabled( state );
     m_replace->setEnabled( state);
     m_find->setEnabled( state);
     m_pListView->setEnabled( state);
+
+    state = state && !m_replace->text().isEmpty() && !m_find->text().isEmpty();
+    KoAutoFormatEntry * entry=m_docAutoFormat->findFormatEntry(m_find->text());
+    pbRemove->setEnabled(state && entry);
+    pbChangeFormat->setEnabled(state && entry);
+    pbClearFormat->setEnabled(state && entry);
+    pbAdd->setEnabled(state);
 }
+
 
 void KoAutoFormatDia::changeAutoformatLanguage(const QString & text)
 {
