@@ -748,7 +748,7 @@ void KPresenterView::savePicture( const QString& oldName, KoPicture& picture)
                     else
                     {
                         KMessageBox::error(this,
-                                   i18n("Error during saving. Couldn't open '%1' for writing").arg ( url.path() ),
+                                   i18n("Error during saving: could not open '%1' for writing.").arg ( url.path() ),
                                    i18n("Save Picture"));
                     }
                 }
@@ -772,12 +772,12 @@ void KPresenterView::savePicture( const QString& oldName, KoPicture& picture)
                         }
                         else
                             KMessageBox::error(this,
-                                   i18n("Error during saving. Couldn't open '%1' temporary file for writing").arg ( file.name() ),
+                                   i18n("Error during saving: could not open '%1' temporary file for writing.").arg ( file.name() ),
                                    i18n("Save Picture"));
                     }
                     else
                         KMessageBox::sorry( this, i18n(
-                            "Error during saving. Couldn't create temporary file: %1.").arg( strerror( tempFile.status() ) ),
+                            "Error during saving: could not create temporary file: %1.").arg( strerror( tempFile.status() ) ),
                             i18n("Save Picture") );
                 }
             }
