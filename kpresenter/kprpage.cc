@@ -3028,7 +3028,7 @@ bool KPrPage::haveASelectedPixmapObj() const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it ) {
-        if ( it.current()->isSelected() && 
+        if ( it.current()->isSelected() &&
             ( ( it.current()->getType() == OT_PICTURE )
             || ( it.current()->getType() == OT_CLIPART ) ) )
             return true;
@@ -3115,10 +3115,15 @@ KCommand *KPrPage::moveObject(KPresenterView *_view,int diffx,int diffy)
             createCommand=true;
         }
     }
-    if(createCommand)
+    if(createCommand) {
         moveByCmd = new MoveByCmd( i18n( "Move Objects" ),
                                    KoPoint( _view->zoomHandler()->unzoomItX (diffx),_view->zoomHandler()->unzoomItY( diffy) ),
                                    _objects, m_doc,this );
+	if ( m_doc->refreshSideBar()) {  //because it's a macro command
+	  int pos=m_doc->pageList().findRef(this);
+	  m_doc->updateSideBarItem(pos);
+	}
+    }
     return moveByCmd;
 }
 
@@ -3394,7 +3399,7 @@ KPPixmapObject * KPrPage::picViewOrigHelper() const
   QPtrListIterator<KPObject> it( m_objectList );
   for ( ; it.current() ; ++it )
   {
-      if ( it.current()->isSelected()&& 
+      if ( it.current()->isSelected()&&
             ( ( it.current()->getType() == OT_PICTURE )
             || ( it.current()->getType() == OT_CLIPART ) ) )
       {

@@ -809,7 +809,7 @@ void MoveByCmd::execute()
 	doc->repaint( oldRect );
 	doc->repaint( objects.at( i ) );
     }
-    if ( doc->refreshSideBar())
+    if ( doc->refreshSideBar()) //for redo
     {
         int pos=doc->pageList().findRef(m_page);
         doc->updateSideBarItem(pos);
