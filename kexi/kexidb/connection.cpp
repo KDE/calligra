@@ -1831,6 +1831,20 @@ bool Connection::setupKexiDBSystemSchema()
 	.addField( new Field("p_mime", Field::Text ) )
 	.addField( new Field("p_url", Field::Text ) );
 
+	TableSchema *t_final = newKexiDBSystemTableSchema("kexi__final");
+	t_final->addField( new Field("p_id", Field::Integer, 0, Field::Unsigned) )
+	.addField( new Field("property", Field::LongText ) )
+	.addField( new Field("value", Field::BLOB) );
+
+	TableSchema *t_useractions = newKexiDBSystemTableSchema("kexi__useractions");
+	t_useractions->addField( new Field("p_id", Field::Integer, 0, Field::Unsigned) )
+	.addField( new Field("scope", Field::Integer ) )
+	.addField( new Field("name", Field::LongText ) )
+	.addField( new Field("text", Field::LongText ) )
+	.addField( new Field("icon", Field::LongText ) )
+	.addField( new Field("method", Field::Integer ) )
+	.addField( new Field("arguments", Field::LongText) );
+
 	return true;
 }
 
