@@ -1542,6 +1542,12 @@ void KPresenterDoc::createPresentationAnimation(const QDomElement& element)
             QDomElement* ep = new QDomElement( e );
 	    m_loadingInfo->storePresentationHideAnimation( ep, name );
         }
+        else if ( tagName == "presentation:animation-group" )
+        {
+            kdDebug()<<" presentation:animation-group exist \n";
+            createPresentationAnimation( e );
+            kdDebug()<<" end presentation:animation-group exist\n";
+        }
     }
 }
 
