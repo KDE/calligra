@@ -244,6 +244,16 @@ void KoTextViewIface::showCursor()
     m_textView->showCursor();
 }
 
+int KoTextViewIface::cursorParagraph() const
+{
+    return m_textView->cursor()->parag()->paragId();
+}
+
+int KoTextViewIface::cursorIndex() const
+{
+    return m_textView->cursor()->index();
+}
+
 void KoTextViewIface::moveCursorLeft(bool select)
 {
   m_textView->moveCursor(KoTextView::MoveBackward,select);

@@ -80,6 +80,9 @@ k_dcop:
     void hideCursor();
     void showCursor();
 
+    int cursorParagraph() const;
+    int cursorIndex() const;
+
     void moveCursorLeft(bool select);
     void moveCursorRight(bool select);
     void moveCursorUp(bool select);
