@@ -89,7 +89,8 @@ public:
     KWFrame(KWFrameSet *fs, double left, double top, double width, double height,
             RunAround ra = RA_BOUNDINGRECT, double gap = MM_TO_POINT( 1.0 ));
     KWFrame(KWFrame * frame);
-    /* Destructor */
+    /** Destructor
+     */
     virtual ~KWFrame();
 
     /** a frame can be selected by the user clicking on it. The frame
@@ -108,7 +109,8 @@ public:
     void setRunAround( RunAround _ra ) { m_runAround = _ra; }
 
 
-    /** what should happen when the frame is full */
+    /** what should happen when the frame is full
+     */
     enum FrameBehavior { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
 
     FrameBehavior frameBehavior()const { return m_frameBehavior; }
@@ -170,7 +172,7 @@ public:
         [since it depends on the zoom] */
     KoRect outerKoRect() const;
 
-    /* Resize handles (in kwcanvas.h) are the dots that are drawn on selected
+    /** Resize handles (in kwcanvas.h) are the dots that are drawn on selected
        frames, this creates and deletes them */
     void createResizeHandles();
     void createResizeHandlesForPage(KWCanvas *canvas);
@@ -188,10 +190,10 @@ public:
     double innerHeight() const;
 
 
-    // The "internal Y" is the offset (in pt) of the real frame showed in this one
-    // ("real" means "the last that isn't a copy")
-    // This offset in pt is the sum of the height of the frames before that one.
-    // For text frames, this is equivalent to the layout units (after multiplication).
+    /** The "internal Y" is the offset (in pt) of the real frame showed in this one
+     * ("real" means "the last that isn't a copy")
+     * This offset in pt is the sum of the height of the frames before that one.
+     * For text frames, this is equivalent to the layout units (after multiplication). */
     void setInternalY( double y ) { m_internalY = y; }
     double internalY() const { return m_internalY; }
 
