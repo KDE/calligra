@@ -862,6 +862,8 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 	if (res) {
 		//we've current schema
 		tempData()->tableSchemaChangedInPreviousView = true;
+		//let project know the table is created
+		mainWin()->project()->emitTableCreated(*tempData()->table);
 	}
 	else {
 		delete tempData()->table;

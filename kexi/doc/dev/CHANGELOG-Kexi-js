@@ -392,14 +392,25 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 === 2004 LT TODO ===
 -improve sql parser
 -improve sql gui designer
---criteria
----add saving for criteria
 --totals (sum, avg)
 -simple docs
--add newly created table to tables list in query designer
 
 
 CCMAIL: dkite@shaw.ca
+
+2004-11-17
+Startup dialogs
+- win32: fixed problem with changing directory for a new db file
+Kexi Utils
+- string2Identifier() : non-latin1 characters converted to latin1
+  eg. 'oacute' to 'o'
+
+2004-11-16
+Relations Widget
+- fixed updating tables combo box on table adding
+- on new table creation, combo box is updated with a new item
+Main Window
+- fixed setting non-latin1 characters (e.g. db name) for the title
 
 2004-11-15
 Main Window

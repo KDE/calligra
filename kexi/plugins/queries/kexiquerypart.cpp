@@ -61,7 +61,12 @@ KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Ite
 		return new KexiQueryView(dialog->mainWin(), parent, "dataview");
 	}
 	else if (viewMode == Kexi::DesignViewMode) {
-		return new KexiQueryDesignerGuiEditor(dialog->mainWin(), parent, "guieditor");
+		KexiQueryDesignerGuiEditor* view = new KexiQueryDesignerGuiEditor(
+			dialog->mainWin(), parent, "guieditor");
+		//needed for updating tables combo box:
+		connect(dialog->mainWin()->project(), SIGNAL(tableCreated(KexiDB::TableSchema&)),
+			view, SLOT(slotTableCreated(KexiDB::TableSchema&)));
+		return view;
 	}
 	else if (viewMode == Kexi::TextViewMode) {
 		return new KexiQueryDesignerSQLView(dialog->mainWin(), parent, "sqldesigner");

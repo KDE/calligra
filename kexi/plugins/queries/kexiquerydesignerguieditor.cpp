@@ -595,16 +595,6 @@ void KexiQueryDesignerGuiEditor::showTablesAndConnectionsForQuery(KexiDB::QueryS
 	updateColumnsData();
 }
 
-
-/*static bool containsANDChain(KexiDB::BaseExpr* e)
-{
-	if (!e)
-		return false;
-	while (e->toBinary() && e->toBinary()->token()==AND)
-		e = e->toBinary()->right();
-	return false;
-}*/
-
 void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 {
 	const bool was_dirty = dirty();
@@ -1188,6 +1178,11 @@ void KexiQueryDesignerGuiEditor::slotPropertyChanged(KexiPropertyBuffer &buf, Ke
 			property.resetValue();
 		}
 	}
+}
+
+void KexiQueryDesignerGuiEditor::slotTableCreated(KexiDB::TableSchema &schema)
+{
+	d->relations->tableCreated(schema.name());
 }
 
 #include "kexiquerydesignerguieditor.moc"

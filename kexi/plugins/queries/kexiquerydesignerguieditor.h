@@ -133,6 +133,8 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 
 		void slotPropertyChanged(KexiPropertyBuffer &buf, KexiProperty &property);
 
+		void slotTableCreated(KexiDB::TableSchema& schema);
+
 	private:
 		KexiQueryDesignerGuiEditorPrivate *d;
 };
