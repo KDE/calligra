@@ -98,7 +98,6 @@ class KivioOptionsDialog : public KDialogBase
     int m_guidesIndex;
 
     QComboBox* m_unitCombo;
-    QCheckBox* m_bordersChBox;
     QCheckBox* m_marginsChBox;
     QCheckBox* m_rulersChBox;
     QLabel* m_layoutTxtLbl;

@@ -159,8 +159,6 @@ class KivioCanvas : public QWidget
 
     virtual void keyReleaseEvent( QKeyEvent * );
 
-    KoSize actualGridFrequency();
-
     void beginUnclippedPainter();
     void endUnclippedPainter();
 

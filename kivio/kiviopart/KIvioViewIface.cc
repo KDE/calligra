@@ -85,11 +85,6 @@ bool KIvioViewIface::isShowRulers()const
     return view->isShowRulers();
 }
 
-bool KIvioViewIface::isShowPageBorders()const
-{
-    return view->isShowPageBorders();
-}
-
 bool KIvioViewIface::isShowPageMargins()const
 {
     return view->isShowPageMargins();
@@ -113,11 +108,6 @@ int KIvioViewIface::topBorder() const
 int KIvioViewIface::bottomBorder() const
 {
     return view->bottomBorder();
-}
-
-void KIvioViewIface::togglePageBorders(bool b)
-{
-    view->togglePageBorders(b);
 }
 
 void KIvioViewIface::togglePageMargins(bool b)

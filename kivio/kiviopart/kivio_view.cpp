@@ -489,9 +489,6 @@ void KivioView::setupActions()
   m_hidePage = new KAction( i18n("Hide Page"),0 ,this,SLOT(hidePage()), actionCollection(), "hidePage" );
   m_exportPage = new KAction( i18n("Export Page..."),0,this,SLOT(exportPage()), actionCollection(), "exportPage");
 
-  showPageBorders = new KToggleAction( i18n("Show Page Borders"), BarIcon("view_pageborder",KivioFactory::global()), CTRL+Key_B, actionCollection(), "showPageBorders" );
-  connect( showPageBorders, SIGNAL(toggled(bool)), SLOT(togglePageBorders(bool)));
-
   showPageMargins = new KToggleAction( i18n("Show Page Margins"), "view_margins", 0, actionCollection(), "showPageMargins" );
   connect( showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
 
@@ -530,7 +527,6 @@ void KivioView::setupActions()
 
 void KivioView::initActions()
 {
-  togglePageBorders(true);
   togglePageMargins(true);
   toggleShowRulers(true);
 
@@ -548,7 +544,6 @@ void KivioView::updateReadWrite( bool readwrite )
     (*aIt)->setEnabled( readwrite );
   if ( !readwrite )
   {
-      showPageBorders->setEnabled( true );
       showPageMargins->setEnabled( true );
       showRulers->setEnabled( true );
       showGrid->setEnabled( true );
@@ -787,14 +782,6 @@ void KivioView::canvasZoomChanged()
 KivioPage* KivioView::activePage()
 {
   return m_pActivePage;
-}
-
-void KivioView::togglePageBorders(bool b)
-{
-  TOGGLE_ACTION("showPageBorders")->setChecked(b);
-  m_bShowPageBorders = b;
-
-  m_pCanvas->update();
 }
 
 void KivioView::togglePageMargins(bool b)

@@ -45,7 +45,6 @@ k_dcop:
     virtual bool isSnapGuides()const;
     virtual bool isShowGuides()const;
     virtual bool isShowRulers()const;
-    virtual bool isShowPageBorders()const;
     virtual bool isShowPageMargins()const;
 
 
@@ -54,7 +53,6 @@ k_dcop:
     virtual int topBorder() const;
     virtual int bottomBorder() const;
 
-    virtual void togglePageBorders(bool);
     virtual void togglePageMargins(bool);
     virtual void toggleShowRulers(bool);
     virtual void toggleShowGrid(bool);

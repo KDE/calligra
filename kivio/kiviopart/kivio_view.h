@@ -111,7 +111,6 @@ class KivioView : public KoView
     bool isSnapGuides()const { return m_bSnapGuides; }
     bool isShowGuides()const { return m_bShowGuides; }
     bool isShowRulers()const { return m_bShowRulers; }
-    bool isShowPageBorders()const { return m_bShowPageBorders; }
     bool isShowPageMargins()const { return m_bShowPageMargins; }
 
     virtual int leftBorder() const;
@@ -151,7 +150,6 @@ class KivioView : public KoView
   public slots:
     void paperLayoutDlg();
 
-    void togglePageBorders(bool);
     void togglePageMargins(bool);
     void toggleShowRulers(bool);
     void toggleShowGrid(bool);
@@ -320,7 +318,6 @@ class KivioView : public KoView
     KivioLayerPanel* m_pLayersPanel;
     KivioBirdEyePanel* m_pBirdEyePanel;
     KivioProtectionPanel* m_pProtectionPanel;
-    KToggleAction* showPageBorders;
     KToggleAction* showPageMargins;
     KToggleAction* showRulers;
     KToggleAction* showGrid;
@@ -330,7 +327,6 @@ class KivioView : public KoView
     KAction *m_editCopy;
     KAction* m_editCut;
     KAction* m_editPaste;
-    bool m_bShowPageBorders;
     bool m_bShowPageMargins;
     bool m_bShowRulers;
     bool m_bSnapGuides;

@@ -349,12 +349,11 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
     painter.restore();
   }
 
-  if (m_pView->isShowPageBorders()) {
-    painter.setPen(black);
-    painter.fillRect(pw, 3, 5, ph, gray);
-    painter.fillRect(3, ph, pw, 3, gray);
-    painter.drawRect(0, 0, pw, ph);
-  }
+  // Draw page borders
+  painter.setPen(black);
+  painter.fillRect(pw, 3, 5, ph, gray);
+  painter.fillRect(3, ph, pw, 3, gray);
+  painter.drawRect(0, 0, pw, ph);
 
   // Draw content
   KivioScreenPainter kpainter;
@@ -409,15 +408,6 @@ void KivioCanvas::setZoom(int zoom)
 
   emit zoomChanges();
   emit visibleAreaChanged();
-}
-
-KoSize KivioCanvas::actualGridFrequency()
-{
-  KoSize actual;
-  actual.setWidth(m_pView->zoomHandler()->zoomItX(m_pDoc->grid().freq.width()));
-  actual.setHeight(m_pView->zoomHandler()->zoomItY(m_pDoc->grid().freq.height()));
-
-  return actual;
 }
 
 bool KivioCanvas::event( QEvent* e )
@@ -1157,6 +1147,12 @@ KoPoint KivioCanvas::snapToGrid(KoPoint point)
 
   KoSize dist = m_pDoc->grid().snap;
   KoSize dxy = m_pDoc->grid().freq;
+  
+  if(m_pView->zoomHandler()->zoom() >= 150) {
+    dxy = dxy / 2;
+  } else if(m_pView->zoomHandler()->zoom() <= 50) {
+    dxy = dxy * 2;
+  }
 
   int dx = qRound(p.x() / dxy.width());
   int dy = qRound(p.y() / dxy.height());

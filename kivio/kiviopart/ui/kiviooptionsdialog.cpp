@@ -130,8 +130,6 @@ void KivioOptionsDialog::initPage()
   KPushButton* fontBtn = new KPushButton(i18n("Change..."), page);
   layoutBtn->setSizePolicy(QSizePolicy(
     QSizePolicy::Fixed, QSizePolicy::Fixed));
-  m_bordersChBox = new QCheckBox(i18n("Show page &borders"), page);
-  m_bordersChBox->setChecked(view->isShowPageBorders());
   m_marginsChBox = new QCheckBox(i18n("Show page &margins"), page);
   m_marginsChBox->setChecked(view->isShowPageMargins());
   m_rulersChBox = new QCheckBox(i18n("Show page &rulers"), page);
@@ -147,10 +145,9 @@ void KivioOptionsDialog::initPage()
   gl->addWidget(fontLbl, 2, 0);
   gl->addWidget(m_fontTxtLbl, 2, 1);
   gl->addWidget(fontBtn, 2, 2);
-  gl->addMultiCellWidget(m_bordersChBox, 3, 3, 0, 2);
-  gl->addMultiCellWidget(m_marginsChBox, 4, 4, 0, 2);
-  gl->addMultiCellWidget(m_rulersChBox, 5, 5, 0, 2);
-  gl->addMultiCell(new QSpacerItem(0, 0), 6, 6, 0, 2);
+  gl->addMultiCellWidget(m_marginsChBox, 3, 3, 0, 2);
+  gl->addMultiCellWidget(m_rulersChBox, 4, 4, 0, 2);
+  gl->addMultiCell(new QSpacerItem(0, 0), 5, 5, 0, 2);
 
   connect(layoutBtn, SIGNAL(clicked()), SLOT(pageLayoutDlg()));
   connect(fontBtn, SIGNAL(clicked()), SLOT(fontDlg()));
@@ -313,7 +310,6 @@ void KivioOptionsDialog::applyPage()
   view->doc()->setUnits(static_cast<KoUnit::Unit>(m_unitCombo->currentItem()));
   view->doc()->config()->setGlobalDefaultPageLayout(m_layout);
   view->doc()->setDefaultFont(m_font);
-  view->togglePageBorders(m_bordersChBox->isChecked());
   view->togglePageMargins(m_marginsChBox->isChecked());
   view->toggleShowRulers(m_rulersChBox->isChecked());
 }
@@ -362,7 +358,6 @@ void KivioOptionsDialog::defaultPage()
   m_font = KoGlobal::defaultFont();
   m_unitCombo->setCurrentItem(KoUnit::U_MM);
   setLayoutText(m_layout);
-  m_bordersChBox->setChecked(true);
   m_marginsChBox->setChecked(true);
   m_rulersChBox->setChecked(true);
 }
