@@ -24,9 +24,6 @@
 #include "koparagcounter.h"
 #include <kdebug.h>
 #include <kdeversion.h>
-#if ! KDE_IS_VERSION(3,1,90)
-#include <kdebugclasses.h>
-#endif
 #include "kocommand.h"
 #include "kooasiscontext.h"
 //#define DEBUG_PAINTING
