@@ -312,10 +312,12 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
 
 KWTextFrameSet * KWViewModeText::textFrameSet() const
 {
-    KWFrameSet * fs = m_doc->frameSet( 0 );
-    Q_ASSERT( fs );
-    Q_ASSERT( fs->type() == FT_TEXT );
-    if ( !fs || fs->type() != FT_TEXT )
+    KWFrame * f = m_doc->getFirstSelectedFrame();
+    KWFrameSet * fs = 0L;
+    if(f) fs = f->frameSet(); // selected frame
+
+    if ( !fs || fs->type() != FT_TEXT ) fs = m_doc->frameSet( 0 );  // fallback to frameset 0;
+    if ( !fs || fs->type() != FT_TEXT )                             // framset 0 also does not work..
         return 0L;
     return static_cast<KWTextFrameSet *>(fs);
 }
