@@ -347,7 +347,7 @@ protected:
     KToggleAction *actionBorderTop;
     KToggleAction *actionBorderBottom;
     KToggleAction *actionBorderOutline;
-    KSelectColorAction *actionBorderColor;
+    TKSelectColorAction *actionBorderColor;
     KSelectAction *actionBorderWidth;
     KSelectAction *actionBorderStyle;
     TKSelectColorAction *actionBackgroundColor;

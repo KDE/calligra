@@ -205,7 +205,7 @@ void KWView::initGui()
     //setNoteType(doc->getNoteType(), false);
 
     actionFormatColor->setColor( Qt::black );
-    actionBorderColor->setColor( Qt::black );
+    //actionBorderColor->setColor( Qt::black );
     //actionBackgroundColor->setColor( Qt::white );
 
     //refresh zoom combobox
@@ -504,8 +504,12 @@ void KWView::setupActions()
     for ( unsigned int i = 1; i < 10; i++ )
         lst << QString::number( i );
     actionBorderWidth->setItems( lst );
-    actionBorderColor = new KSelectColorAction( i18n( "Border Color" ), KColorAction::FrameColor,
-        0, this, SLOT( borderColor() ), actionCollection(), "border_color" );
+
+
+     actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color" );
+    connect(actionBorderColor,SIGNAL(activated()),SLOT(borderColor()));
+
+
     actionBackgroundColor = new TKSelectColorAction( i18n( "Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor");
     connect(actionBackgroundColor,SIGNAL(activated()),SLOT(backgroundColor() ));
 
