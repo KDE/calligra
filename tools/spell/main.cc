@@ -19,8 +19,6 @@
 
 #include "main.h"
 
-#include <qmessagebox.h>
-
 #include <klocale.h>
 #include <kspell.h>
 #include <kdebug.h>
