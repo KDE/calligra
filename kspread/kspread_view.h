@@ -221,6 +221,7 @@ public:
     void changeNbOfRecentFiles(int _nb);
 
     void updateBorderButton();
+    
     void removeTable( KSpreadSheet *_t );
     void insertTable( KSpreadSheet* table );
     QColor borderColor() const;
@@ -408,6 +409,11 @@ public slots:
 
     void moveTable( unsigned table, unsigned target );
 
+    /**
+     * Shows the sheet properties dialog.
+     */
+    void sheetProperties();
+        
     /**
      * Switch the active sheet to the name. This slot is connected to the tab bar
      * and activated when the user selects a new sheet in the tab bar.

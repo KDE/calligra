@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="15">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="16">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -79,12 +79,6 @@
     <Action name="resetPrintRange"/>
   </Menu>
   <Separator/>
-  <Menu name="Sheet"><text>&amp;Sheet</text>
-  <Action name="removeTable"/>
-  <Action name="hideTable"/>
-  <Action name="showTable"/>
-  </Menu>
-  <Separator/>
   <Action name="adjust"/>
   <Menu name="Row"><text>&amp;Row</text>
     <Action name="resizeRow"/>
@@ -97,6 +91,13 @@
     <Action name="equalizeCol"/>
     <Action name="hideColumn"/>
     <Action name="showColumn"/>
+  </Menu>
+  <Menu name="Sheet"><text>&amp;Sheet</text>
+  <Action name="removeTable"/>
+  <Action name="hideTable"/>
+  <Action name="showTable"/>
+  <Separator/>
+  <Action name="sheetProperties" />
   </Menu>
   <Separator/>
   <Action name="tableFormat"/>
@@ -233,5 +234,7 @@
   <Action name="removeTable"/>
   <Action name="hideTable"/>
   <Action name="showTable"/>
+  <Separator/>
+  <Action name="sheetProperties" />
 </Menu>
 </kpartgui>

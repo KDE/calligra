@@ -105,6 +105,8 @@
 #include "kspread_dlg_showColRow.h"
 #include "kspread_dlg_styles.h"
 #include "kspread_dlg_list.h"
+#include "sheet_properties.h"
+
 #include "kspread_undo.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
@@ -480,6 +482,7 @@ public:
     KAction* adjust;
 
     // sheet/workbook operations
+    KAction* sheetProperties;
     KAction* insertSheet;
     KAction* menuInsertSheet;
     KAction* removeSheet;
@@ -899,6 +902,10 @@ void ViewPrivate::initActions()
   actions->adjust->setToolTip(i18n("Adjusts row/column size so that the contents will fit."));
 
   // -- sheet/workbook actions --
+  actions->sheetProperties = new KAction( i18n("Sheet Properties..."),
+      0, view, SLOT( sheetProperties() ), ac, "sheetProperties" );
+  actions->sheetProperties->setToolTip(i18n("Modify current sheet's properties."));
+  
   actions->insertSheet = new KAction( i18n("Insert Sheet"),"inserttable",
       0, view, SLOT( insertTable() ), ac, "insertTable" );
   actions->insertSheet->setToolTip(i18n("Insert a new sheet."));
@@ -3542,6 +3549,43 @@ void KSpreadView::moveTable( unsigned table, unsigned target )
     d->tabBar->moveTab( table, target );
 }
 
+void KSpreadView::sheetProperties()
+{
+    // sanity check, shouldn't happen
+    if( d->workbook->isProtected() ) return;
+    if( d->activeSheet->isProtected() ) return;
+    
+    SheetPropertiesDialog* dlg = new SheetPropertiesDialog( this );
+    dlg->setAutoCalc( d->activeSheet->getAutoCalc() );
+    dlg->setShowGrid( d->activeSheet->getShowGrid() );
+    dlg->setShowPageBorders( d->activeSheet->isShowPageBorders() );
+    dlg->setShowFormula( d->activeSheet->getShowFormula() );
+    dlg->setHideZero( d->activeSheet->getHideZero() );
+    dlg->setShowFormulaIndicator( d->activeSheet->getShowFormulaIndicator() );
+    dlg->setColumnAsNumber( d->activeSheet->getShowColumnNumber() );
+    dlg->setLcMode( d->activeSheet->getLcMode() );
+    dlg->setCapitalizeFirstLetter( d->activeSheet->getFirstLetterUpper() );
+    
+    if( dlg->exec() )
+    {
+        d->activeSheet->setAutoCalc( dlg->autoCalc() );
+        d->activeSheet->setShowGrid( dlg->showGrid() );
+        d->activeSheet->setShowPageBorders( dlg->showPageBorders() );
+        d->activeSheet->setShowFormula( dlg->showFormula() );
+        d->activeSheet->setHideZero( dlg->hideZero() );
+        d->activeSheet->setShowFormulaIndicator( dlg->showFormulaIndicator() );
+        d->activeSheet->setShowColumnNumber( dlg->columnAsNumber() );
+        d->activeSheet->setLcMode( dlg->lcMode() );
+        d->activeSheet->setFirstLetterUpper( dlg->capitalizeFirstLetter() );    
+    
+        slotUpdateView( d->activeSheet );
+        
+        // FIXME create command & undo object
+    }
+    
+    delete dlg;
+}
+
 void KSpreadView::insertTable()
 {
   if ( d->workbook->isProtected() )
@@ -4835,7 +4879,7 @@ void KSpreadView::refreshView()
   int left = 0;
   if ( table->isRightToLeft() && d->doc->getShowVerticalScrollBar() )
     left = widthVScrollbar;
-
+    
   if (!d->doc->getShowHorizontalScrollBar())
     d->tabBar->setGeometry( left, height() - heightHScrollbar,
                             width(), heightHScrollbar );
