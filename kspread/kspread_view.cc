@@ -3598,6 +3598,8 @@ void KSpreadView::sheetProperties()
     if( d->workbook->isProtected() ) return;
     if( d->activeSheet->isProtected() ) return;
 
+    bool directionChanged = false;
+
     SheetPropertiesDialog* dlg = new SheetPropertiesDialog( this );
     dlg->setLayoutDirection( d->activeSheet->layoutDirection() );
     dlg->setAutoCalc( d->activeSheet->getAutoCalc() );
@@ -3613,6 +3615,10 @@ void KSpreadView::sheetProperties()
     if( dlg->exec() )
     {
         SheetPropertiesCommand* command = new SheetPropertiesCommand( d->doc, d->activeSheet );
+
+        if ( d->activeSheet->layoutDirection() != dlg->layoutDirection() )
+            directionChanged = true;
+
         command->setLayoutDirection( dlg->layoutDirection() );
         command->setAutoCalc( dlg->autoCalc() );
         command->setShowGrid( dlg->showGrid() );
@@ -3628,6 +3634,13 @@ void KSpreadView::sheetProperties()
     }
 
     delete dlg;
+
+    if ( directionChanged )
+    {
+        // the scrollbar remains reversed otherwise
+        d->horzScrollBar->setValue( d->horzScrollBar->maxValue() -
+                                            d->horzScrollBar->value() );
+    }
 }
 
 void KSpreadView::insertTable()
