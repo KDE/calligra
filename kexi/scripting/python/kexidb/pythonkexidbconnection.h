@@ -93,6 +93,7 @@ namespace Kross
             Py::Object rollbackTransaction(const Py::Tuple&);
             Py::Object defaultTransaction(const Py::Tuple&);
             Py::Object setDefaultTransaction(const Py::Tuple&);
+            Py::Object transactions(const Py::Tuple&);
     };
 
 }

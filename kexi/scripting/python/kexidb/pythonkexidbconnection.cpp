@@ -169,6 +169,9 @@ void PythonKexiDBConnection::init_type(void)
     add_varargs_method("setDefaultTransaction", &PythonKexiDBConnection::setDefaultTransaction,
         "None KexiDBConnection.setDefaultTransaction(KexiDBTransaction)\n"
     );
+    add_varargs_method("transactions", &PythonKexiDBConnection::transactions,
+        "list<KexiDBTraction> KexiDBConnection.transactions()\n"
+    );
 }
 
 bool PythonKexiDBConnection::accepts(PyObject* pyobj) const
@@ -545,4 +548,14 @@ Py::Object PythonKexiDBConnection::setDefaultTransaction(const Py::Tuple& args)
     return Py::None();
 }
 
+Py::Object PythonKexiDBConnection::transactions(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 0, 0);
+    PythonKexiDB::checkObject(d->connection);
+    Py::List transactionlist;
+    QValueList<KexiDB::Transaction> list = d->connection->transactions();
+    for(QValueList<KexiDB::Transaction>::Iterator it = list.begin(); it != list.end(); ++it)
+        transactionlist.append( Py::asObject(new PythonKexiDBTransaction(*it)) );
+    return transactionlist;
+}
 
