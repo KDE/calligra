@@ -185,7 +185,7 @@ void KPTextObject::resizeTextDocument( bool widthChanged, bool heightChanged )
         // prevents making a textobject less high than it currently is.
         textDocument()->setWidth( m_doc->zoomHandler()->ptToLayoutUnitPixX( innerWidth() ) );
         m_textobj->setLastFormattedParag( textDocument()->firstParag() );
-        m_textobj->formatMore();
+        m_textobj->formatMore( 2 );
     }
 }
 
@@ -347,10 +347,13 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                                       _zoomHandler->zoomItY( oh - 2 * pw ) );
             }
         }
-        /// #### Port this to KoBorder, see e.g. kword/kwframe.cc:590
-        // (so that the border gets drawn OUTSIDE of the object area)
-        _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX( ow - 2 * pw),
-                            _zoomHandler->zoomItY( oh - 2 * pw) );
+        if ( !editingTextObj || !onlyChanged )
+        {
+            /// #### Port this to KoBorder, see e.g. kword/kwframe.cc:590
+            // (so that the border gets drawn OUTSIDE of the object area)
+            _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX( ow - 2 * pw),
+                                _zoomHandler->zoomItY( oh - 2 * pw) );
+        }
     }
     else
         _painter->setBrush( Qt::NoBrush );
@@ -406,7 +409,7 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
         switch ( effect2 )
         {
         case EF2T_PARA:
-            kdDebug(33001) << "KPTextObject::draw onlyCurrStep=" << onlyCurrStep << " subPresStep=" << subPresStep << endl;
+            //kdDebug(33001) << "KPTextObject::draw onlyCurrStep=" << onlyCurrStep << " subPresStep=" << subPresStep << endl;
             drawParags( _painter, zoomHandler, cg, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
             break;
         default:
@@ -1143,7 +1146,7 @@ void KPTextObject::layout()
 {
     invalidate();
     // Get the thing going though, repainting doesn't call formatMore
-    m_textobj->formatMore();
+    m_textobj->formatMore( 2 );
 }
 
 void KPTextObject::invalidate()
@@ -1194,7 +1197,6 @@ void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, co
 
 void KPTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KPrCanvas* canvas )
 {
-    //kdDebug(33001) << "KPTextObject::drawCursor cursorVisible=" << cursorVisible << endl;
     KoZoomHandler *zh = m_doc->zoomHandler();
     QPoint origPix = zh->zoomPoint( orig+KoPoint(bLeft(), bTop()+alignVertical) );
     // Painter is already translated for diffx/diffy, but not for the object yet
@@ -1227,8 +1229,15 @@ void KPTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVis
     QColorGroup cg = QApplication::palette().active();
     cg.setColor( QColorGroup::Base, m_doc->txtBackCol() );
 
-    bool wasChanged = parag->hasChanged();
-    parag->setChanged( TRUE );      // To force the drawing to happen
+    // To force the drawing to happen:
+    bool wasChanged = cursor->parag()->hasChanged();
+    int oldLineChanged = cursor->parag()->lineChanged();
+    int line; // line number
+    cursor->parag()->lineStartOfChar( cursor->index(), 0, &line );
+    cursor->parag()->setChanged( false ); // not all changed, only from a given line
+    cursor->parag()->setLineChanged( line );
+    kdDebug(33001) << "KPTextObject::drawCursor cursorVisible=" << cursorVisible << " line=" << line << endl;
+
     uint drawingFlags = KoTextDocument::DrawSelections;
     if ( m_doc->backgroundSpellCheckEnabled() )
         drawingFlags |= KoTextDocument::DrawMisspelledLine;
@@ -1238,13 +1247,14 @@ void KPTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVis
         iPoint.x() - 5, iPoint.y(), clip.width(), clip.height(),
         pix, cg, m_doc->zoomHandler(),
         cursorVisible, cursor, drawingFlags );
-    parag->setChanged( wasChanged );      // Maybe we have more changes to draw!
+    if ( wasChanged )      // Maybe we have more changes to draw, than those in the small cliprect
+        cursor->parag()->setLineChanged( oldLineChanged ); // -1 = all
+    else
+        cursor->parag()->setChanged( false );
 
     // XIM Position
     QPoint ximPoint = vPoint;
     QFont f = parag->at( cursor->index() )->format()->font();
-    int line;
-    parag->lineStartOfChar( cursor->index(), 0, &line );
     canvas->setXimPosition( ximPoint.x() + origPix.x(), ximPoint.y() + origPix.y(),
                             0, cursorHeight - parag->lineSpacing( line ), &f );
 }
@@ -1320,7 +1330,7 @@ KCommand * KPTextObject::pasteKPresenter( KoTextCursor * cursor, const QCString 
     macroCmd->addCommand( new KoTextCommand( m_textobj, /*cmd, */QString::null ) );
     *cursor = *( cmd->execute( cursor ) );
 
-    m_textobj->formatMore();
+    m_textobj->formatMore( 2 );
     emit repaintChanged( this );
     m_textobj->emitEnsureCursorVisible();
     m_textobj->emitUpdateUI( true );
@@ -1391,7 +1401,7 @@ void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, 
             double pageBottom = p.ptHeight - p.ptBottom;
             double newBottom = QMIN( wantedPosition, pageBottom ); // don't grow bigger than the page
             newBottom = QMAX( newBottom, getRect().top() ); // avoid negative heights
-            //kdDebug() << k_funcinfo << " current bottom=" << getRect().bottom() << " newBottom=" << newBottom << endl;
+            //kdDebug(33001) << k_funcinfo << " current bottom=" << getRect().bottom() << " newBottom=" << newBottom << endl;
             if ( getRect().bottom() != newBottom )
             {
                 // We resize the text object, but skipping the KPTextObject::setSize code
@@ -1437,7 +1447,7 @@ KCommand * KPTextObject::textContentsToHeight()
 
     double textHeight = m_doc->zoomHandler()->layoutUnitPtToPt( textHeightLU );
     double lineSpacing = ( innerHeight() - textHeight ) /  numLines; // this gives the linespacing diff to apply, in pt
-    //kdDebug() << k_funcinfo << "lineSpacing=" << lineSpacing << endl;
+    //kdDebug(33001) << k_funcinfo << "lineSpacing=" << lineSpacing << endl;
 
     if ( KABS( innerHeight() - textHeight ) < 1e-5 ) // floating-point equality test
         return 0L; // nothing to do
@@ -1807,10 +1817,6 @@ void KPTextView::drawCursor( bool b )
         return;
     if ( !kpTextObject()->kPresenterDocument()->isReadWrite() )
         return;
-
-    // We repaint the whole object.
-    // TODO a kword-like painting method (many changes required though)
-    //kpTextObject()->kPresenterDocument()->repaint( kpTextObject() );
 
     QPainter painter( m_canvas );
     painter.translate( -m_canvas->diffx(), -m_canvas->diffy() );
