@@ -65,6 +65,8 @@
 	<ToolBar name="shapetools_toolbar" position="left" fullWidth="false">
 		<Text>Tools</Text>
 		<Action name="tool_select"/>
+		<Action name="tool_rotate"/>
+		<Action name="tool_scale"/>
 		<Action name="tool_ellipse"/>
 		<Action name="tool_polygon"/>
 		<Action name="tool_rectangle"/>

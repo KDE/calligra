@@ -8,53 +8,52 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
-#include "vmtool_select.h"
+#include "vmtool_scale.h"
 #include "vmcmd_transform.h"
 
 #include <math.h>
 
-const double deg2rad = 0.017453292519943295769;    // pi/180
+VMToolScale* VMToolScale::s_instance = 0L;
 
-VMToolSelect* VMToolSelect::s_instance = 0L;
-
-VMToolSelect::VMToolSelect( KarbonPart* part )
-	: VTool( part ), m_state( normal ), m_isDragging( false )
+VMToolScale::VMToolScale( KarbonPart* part )
+	: VTool( part ), m_isDragging( false )
 {
 }
 
-VMToolSelect::~VMToolSelect()
+VMToolScale::~VMToolScale()
 {
 }
 
-VMToolSelect*
-VMToolSelect::instance( KarbonPart* part )
+VMToolScale*
+VMToolScale::instance( KarbonPart* part )
 {
 	if ( s_instance == 0L )
 	{
-		s_instance = new VMToolSelect( part );
+		s_instance = new VMToolScale( part );
 	}
 
 	return s_instance;
 }
 
 void
-VMToolSelect::drawTemporaryObject( KarbonView* view )
+VMToolScale::drawTemporaryObject( KarbonView* view )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
 	painter.setRasterOp( Qt::NotROP );
 
+	QRect rect =  part()->selection().getFirst()->boundingBox( view->zoomFactor() );
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty()
-		&& ( m_state != normal ||
-			part()->selection().getFirst()->boundingBox( view->zoomFactor() ).contains( m_fp ) ) )
+		&& ( rect.contains( m_fp ) ) )
 //		part()->selection()->boundingBox().contains( p /* view->zoomFactor() */ ) ) )
 	{
-		if( m_state != moving )
-			m_state = moving;
-
-		// move operation
+		// rotate operation
 		QWMatrix mat;
-		mat.translate( m_lp.x() - m_fp.x(), m_lp.y() - m_fp.y() );
+		mat.translate( m_fp.x(), m_fp.y() );
+		m_s1 = ( m_lp.x() - m_fp.x() ) / double( rect.width() / 2 );
+		m_s2 = ( m_lp.y() - m_fp.y() ) / double( rect.height() / 2 );
+		mat.scale( m_s1, m_s2 );
+		mat.translate( - m_fp.x(), - m_fp.y() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->selection();
@@ -75,22 +74,10 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 				view->zoomFactor() );
 		}
 	}
-	else
-	{
-		painter.setPen( Qt::DotLine );
-
-		painter.moveTo( m_fp.x(), m_fp.y() );
-		painter.lineTo( m_lp.x(), m_fp.y() );
-		painter.lineTo( m_lp.x(), m_lp.y() );
-		painter.lineTo( m_fp.x(), m_lp.y() );
-		painter.lineTo( m_fp.x(), m_fp.y() );
-
-		m_state = normal;
-	}
 }
 
 bool
-VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
+VMToolScale::eventFilter( KarbonView* view, QEvent* event )
 {
 	if ( event->type() == QEvent::MouseMove && m_isDragging )
 	{
@@ -117,38 +104,13 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 		QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
 		QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
 
-		if( m_state == moving )
-		{
-			m_state = normal;
-			part()->addCommand(
-				new VMCmdTranslate(
-					part(),
-					part()->selection(),
-					qRound( view->zoomFactor() * lp.x() - fp.x() ),
-					qRound( view->zoomFactor() * lp.y() - fp.y() ) ),
-				true );
+		part()->addCommand(
+			new VMCmdScale(
+				part(),
+				part()->selection(), m_fp, m_s1, m_s2 ),
+			true );
 
 //			part()->repaintAllViews();
-		}
-		else
-		{
-			// erase old object:
-			drawTemporaryObject( view );
-
-			part()->deselectAllObjects();
-
-			part()->selectObjectsWithinRect(
-				QRect(
-					qRound( view->zoomFactor() * fp.x() ),
-					qRound( view->zoomFactor() * fp.y() ),
-					qRound( view->zoomFactor() * lp.x() ),
-					qRound( view->zoomFactor() * lp.y() ) ).normalize(),
-				view->zoomFactor(),
-				true );
-				
-			if( part()->selection().count() > 0  )
-				part()->repaintAllViews();
-		}
 
 		m_isDragging = false;
 

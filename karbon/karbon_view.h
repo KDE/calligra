@@ -53,6 +53,8 @@ protected slots:
 	void rectangleTool();
 	void roundRectTool();
 	void selectTool();
+	void rotateTool();
+	void scaleTool();
 	void sinusTool();
 	void spiralTool();
 	void starTool();
@@ -84,6 +86,8 @@ private:
 	KToggleAction* m_rectangleToolAction;
 	KToggleAction* m_roundRectToolAction;
 	KToggleAction* m_selectToolAction;
+	KToggleAction* m_rotateToolAction;
+	KToggleAction* m_scaleToolAction;
 	KToggleAction* m_sinusToolAction;
 	KToggleAction* m_spiralToolAction;
 	KToggleAction* m_starToolAction;

@@ -24,6 +24,8 @@
 #include "vctool_star.h"
 #include "vmtool_handle.h"
 #include "vmtool_select.h"
+#include "vmtool_rotate.h"
+#include "vmtool_scale.h"
 
 #include "vmcmd_delete.h"
 
@@ -157,6 +159,22 @@ KarbonView::selectTool()
 }
 
 void
+KarbonView::rotateTool()
+{
+	s_currentTool = VMToolRotate::instance( m_part );
+	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
+	m_rotateToolAction->setChecked( true );
+}
+
+void
+KarbonView::scaleTool()
+{
+	s_currentTool = VMToolScale::instance( m_part );
+	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
+	m_scaleToolAction->setChecked( true );
+}
+
+void
 KarbonView::sinusTool()
 {
 	s_currentTool = VCToolSinus::instance( m_part );
@@ -237,6 +255,12 @@ KarbonView::initActions()
 	m_selectToolAction = new KToggleAction(
 		i18n( "&Select Objects" ), "select", 0, this,
 		SLOT( selectTool() ), actionCollection(), "tool_select" );
+	m_rotateToolAction = new KToggleAction(
+		i18n( "&Rotate Objects" ), "star", 0, this,
+		SLOT( rotateTool() ), actionCollection(), "tool_rotate" );
+	m_scaleToolAction = new KToggleAction(
+		i18n( "&Scale Objects" ), "star", 0, this,
+		SLOT( scaleTool() ), actionCollection(), "tool_scale" );
 	m_spiralToolAction = new KToggleAction(
 		i18n( "S&piral" ), "spiral", 0, this,
 		SLOT( spiralTool() ), actionCollection(), "tool_spiral" );
@@ -250,6 +274,8 @@ KarbonView::initActions()
 	m_roundRectToolAction->setExclusiveGroup( "Tools" );
 	m_sinusToolAction->setExclusiveGroup( "Tools" );
 	m_selectToolAction->setExclusiveGroup( "Tools" );
+	m_rotateToolAction->setExclusiveGroup( "Tools" );
+	m_scaleToolAction->setExclusiveGroup( "Tools" );
 	m_spiralToolAction->setExclusiveGroup( "Tools" );
 	m_starToolAction->setExclusiveGroup( "Tools" );
 	// tools <-----
