@@ -1053,24 +1053,24 @@ void KWFrameSet::updateFrames( int flags )
 
                 // Floating frames are not "on top", they are "inside".
                 if ( frameSet->isFloating() ) {
-                    //kdDebug(32001) << "KWFrameSet::updateFrames frameset " << frameSet << " is floating" << endl;
+                    //kdDebug(32001) << "     frameset " << frameSet << " is floating" << endl;
                     continue;
                 }
 
-                //kdDebug(32001) << "KWFrameSet::updateFrames considering frameset " << frameSet << endl;
+                //kdDebug(32001) << "    considering frameset " << frameSet << " " << frameSet->getName() << endl;
 
                 QPtrListIterator<KWFrame> frameIt( frameSet->frameIterator() );
                 for ( ; frameIt.current(); ++frameIt )
                 {
                     KWFrame *frameMaybeOnTop = frameIt.current();
-                    // Is this frame over any of our frames ?
+                    // Is this frame on top or below any of our frames ?
                     QPtrListIterator<KWFrame> fIt( frameIterator() );
                     for ( ; fIt.current(); ++fIt )
                     {
                         if ( fIt.current() != frameMaybeOnTop ) // Skip identity case ;)
                         {
                             KWFrame *parentFrame = fIt.current();
-                            KWFrameSet *parentFrameset= parentFrame->frameSet();
+                            KWFrameSet *parentFrameset = parentFrame->frameSet(); // i.e. 'this', but not for a table's frames...
                             while (parentFrameset->isFloating()) {
                                 parentFrameset=parentFrameset->anchorFrameset();
                                 KWFrame *oldParentFrame = parentFrame;
@@ -1078,27 +1078,41 @@ void KWFrameSet::updateFrames( int flags )
                                 if(!parentFrame)
                                     parentFrame = oldParentFrame;
                             }
-                            //kdDebug(32001) << "KWFrameSet::updateFrames comparing our frame " << parentFrame << " (z:" << parentFrame->zOrder() << ") with frame " << frameMaybeOnTop << " (z:" << frameMaybeOnTop->zOrder() << ") from frameset " << frameSet << endl;
+                            //kdDebug(32001) << "        comparing our frame " << parentFrame << " (z:" << parentFrame->zOrder() << ") with frame " << frameMaybeOnTop << " (z:" << frameMaybeOnTop->zOrder() << ") from frameset " << frameSet << endl;
                             KoRect intersect = fIt.current()->intersect( frameMaybeOnTop->outerKoRect() );
                             if( !intersect.isEmpty() )
                             {
-#if 0
-                                kdDebug(32002)
-                                    << "KWFrameSet::updateFrames adding frame "
-                                    << frameMaybeOnTop << " (zorder: " << frameMaybeOnTop->zOrder() << ")"
-                                    << " on top of frame " << fIt.current() << " (zorder: " << fIt.current()->zOrder() << ")"
-                                    << "\n   intersect: " << intersect
-                                    << " (zoomed: " << m_doc->zoomRect( intersect ) << endl;
-#endif
+                                bool added = false;
 	                        if ( parentFrame->zOrder() < frameMaybeOnTop->zOrder() )
 	                        {
-
+                                    added = true;
                                     fIt.current()->addFrameOnTop( frameMaybeOnTop );
                                 } else
-                                    if ( parentFrame->zOrder() > frameMaybeOnTop->zOrder() )
+                                {
+                                    // Don't treat a frameset as 'below' its inline framesets.
+                                    // Same problem with table cells. In general we want to forbid that, if
+                                    // painting A leads to painting B, A is stored as 'below B'.
+                                    // This is where the infinite loop comes from, if B is transparent.
+                                    // (Note: we only forbid this for 'below', not for 'on top', to get
+                                    // proper clipping).
+                                    if ( !isPaintedBy( frameSet ) && parentFrame->zOrder() > frameMaybeOnTop->zOrder() )
                                     {
-					fIt.current()->addFrameBelow( frameMaybeOnTop );
+                                        added = true;
+                                        fIt.current()->addFrameBelow( frameMaybeOnTop );
                                     }
+                                }
+#if 0
+                                if ( added )
+                                {
+                                    kdDebug(32002)
+                                    << "          adding frame "
+                                    << frameMaybeOnTop << " (zorder: " << frameMaybeOnTop->zOrder() << ")"
+                                    << (  parentFrame->zOrder() < frameMaybeOnTop->zOrder() ? " on top of" : " below" )
+                                    << " frame " << fIt.current() << " parentFrame " << parentFrame << " (zorder: " << parentFrame->zOrder() << ")"
+                                    << "\n   intersect: " << intersect
+                                    << " (zoomed: " << m_doc->zoomRect( intersect ) << ")" << endl;
+                                }
+#endif
                             }
                         }
                     }
@@ -1133,12 +1147,30 @@ void KWFrameSet::updateFrames( int flags )
     }
 }
 
+bool KWFrameSet::isPaintedBy( KWFrameSet* fs ) const
+{
+    if ( fs == this )
+        return true;
+    if ( isFloating() )
+    {
+        KWFrameSet* parentFs = anchorFrameset();
+        if ( parentFs && parentFs->isPaintedBy( fs ) )
+            return true;
+    }
+    if ( getGroupManager() )
+    {
+        if ( getGroupManager()->isPaintedBy( fs ) )
+            return true;
+    }
+    return false;
+}
+
 const QPtrList<KWFrame> & KWFrameSet::framesInPage( int pageNum ) const
 {
     if ( pageNum < m_firstPage || pageNum >= (int)m_framesInPage.size() + m_firstPage )
     {
 #ifdef DEBUG_DTI
-        kdWarning() << getName() << " framesInPage called for pageNum=" << pageNum << ". "
+        kdWarning(32002) << getName() << " framesInPage called for pageNum=" << pageNum << ". "
                     << " Min value: " << m_firstPage
                     << " Max value: " << m_framesInPage.size() + m_firstPage - 1 << endl;
 #endif
@@ -1152,7 +1184,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGro
                                KWFrameSetEdit *edit, KWViewMode *viewMode )
 {
 #ifdef DEBUG_DRAW
-    kdDebug(32002) << "KWFrameSet::drawContents " << this << " " << getName()
+    kdDebug(32001) << "\nKWFrameSet::drawContents " << this << " " << getName()
                    << " onlyChanged=" << onlyChanged << " resetChanged=" << resetChanged
                    << " crect= " << crect
                    << endl;
@@ -1295,9 +1327,9 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
             // The double-buffer pixmap has (0,0) at outerCRect.topLeft(), so we need to
             // translate the double-buffer painter; drawFrameAndBorders will draw using view coordinates.
             doubleBufPainter->translate( -outerCRect.x(), -outerCRect.y() );
-//#ifdef DEBUG_DRAW
+#ifdef DEBUG_DRAW
 //            kdDebug(32001) << "  ... using double buffering. Portion covered: " << outerCRect << endl;
-//#endif
+#endif
         }
 
         // Transparency handling
@@ -1572,7 +1604,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
     QRect rc = painter->xForm( crect );
     KoRect clipKoRect = doc->unzoomRect(viewMode->viewToNormal(crect));
 #ifdef DEBUG_DRAW
-    kdDebug(32002) << "KWFrameSet::frameClipRegion rc initially " << rc << endl;
+    //kdDebug(32002) << "KWFrameSet::frameClipRegion rc initially " << rc << endl;
 #endif
 
     Q_ASSERT( frame );
@@ -1599,12 +1631,12 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         {
             QRect r = painter->xForm( viewMode->normalToView( (*fIt)->outerRect() ) );
 #ifdef DEBUG_DRAW
-            kdDebug(32002) << "frameClipRegion subtract rect "<< r << endl;
+            //kdDebug(32002) << "frameClipRegion subtract rect "<< r << endl;
 #endif
             reg -= r; // subtract
         }
 #ifdef DEBUG_DRAW
-        kdDebug(32002) << "KWFrameSet::frameClipRegion result:" << reg << endl;
+        //kdDebug(32002) << "KWFrameSet::frameClipRegion result:" << reg << endl;
 #endif
         return reg;
     } else return QRegion();
@@ -2096,8 +2128,15 @@ void KWPartFrameSet::printDebug()
 {
     KWFrameSet::printDebug();
     kdDebug() << " +-- Object Document: " << endl;
-    kdDebug() << "     Url : " << getChild()->document()->url().url()<<endl;
-    kdDebug() << "     Rectangle : " << getChild()->geometry().x() << "," << getChild()->geometry().y() << " " << getChild()->geometry().width() << "x" << getChild()->geometry().height() << endl;
+    if ( getChild() )
+    {
+        if ( getChild()->document() )
+            kdDebug() << "     Url : " << getChild()->document()->url().url()<<endl;
+        else
+            kdWarning() << "NO DOCUMENT" << endl;
+        kdDebug() << "     Rectangle : " << getChild()->geometry().x() << "," << getChild()->geometry().y() << " " << getChild()->geometry().width() << "x" << getChild()->geometry().height() << endl;
+    } else
+        kdWarning() << "NO CHILD" << endl;
 }
 
 #endif

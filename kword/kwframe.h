@@ -765,7 +765,9 @@ public:
 
     virtual KWTextFrameSet* nextTextObject( KWFrameSet * ) { return 0L;}
 
-    /** set z-order fior all frames */
+    bool isPaintedBy( KWFrameSet* fs ) const;
+
+    /** set z-order for all frames */
     virtual void setZOrder();
 
 signals:
