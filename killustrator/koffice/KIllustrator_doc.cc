@@ -76,7 +76,7 @@ bool KIllustratorDocument::load (istream& in, KoStore* )
   if ( m_gdocument->readFromXml (in)) {
 
     // now look for part objects in order to create the child list
-    vector<GLayer*>& layers = m_gdocument->getLayers();
+    vector<GLayer*>& layers = (vector<GLayer*>&) m_gdocument->getLayers();
     vector<GLayer*>::iterator i = layers.begin ();
     for (; i != layers.end (); i++) {
       GLayer* layer = *i;
