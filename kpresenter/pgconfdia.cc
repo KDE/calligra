@@ -111,7 +111,7 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     effectCombo->insertItem( i18n( "Blinds Vertical" ) );
     effectCombo->insertItem( i18n( "Box In" ) );
     effectCombo->insertItem( i18n( "Box Out" ) );
-    effectCombo->insertItem( i18n( "Checkboard Across" ) );
+    effectCombo->insertItem( i18n( "Checkboard Across" ) ); // TODO -> Checkerboard !
     effectCombo->insertItem( i18n( "Checkboard Down" ) );
     effectCombo->insertItem( i18n( "Cover Down" ) );
     effectCombo->insertItem( i18n( "Uncover Down" ) );
