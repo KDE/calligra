@@ -37,6 +37,8 @@
 #include <kinstance.h>
 #include <koFilterManager.h>
 #include <koTemplates.h>
+#include <koDocument.h>
+#include <kmainwindow.h>
 
 #include "koTemplateChooseDia.h"
 #include <kdebug.h>
@@ -204,6 +206,12 @@ KoTemplateChooseDia::~KoTemplateChooseDia()
     d=0L;
 }
 
+static bool cancelQuits() {
+    bool onlyDoc = !KoDocument::documentList() || KoDocument::documentList()->count() <= 1;
+    bool onlyMainWindow = !KMainWindow::memberList || KMainWindow::memberList->count() <= 1;
+    return onlyDoc && onlyMainWindow && kapp->instanceName() != "koshell"; // hack for koshell
+}
+
 /*================================================================*/
 // static
 KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* global, QString &file,
@@ -234,7 +242,7 @@ KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* global, Q
     }
 
     delete dlg;
-    if ( rt == Cancel && dialogType == Everything )
+    if ( rt == Cancel && dialogType == Everything && cancelQuits() )
         // The button says quit, so let's quit
         kapp->quit();
 
@@ -462,8 +470,8 @@ void KoTemplateChooseDia::setupDialog()
 	    return;
 	}
 
-
-	setButtonCancelText(i18n("&Quit"));
+	if ( cancelQuits() )
+	    setButtonCancelText(i18n("&Quit"));
 
 	d->tabWidget = new QTabWidget( d->m_mainwidget, "tabWidget" );
 	maingrid->addWidget( d->tabWidget, 0, 0 );
