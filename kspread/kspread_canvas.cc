@@ -543,8 +543,8 @@ void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool 
   KSpreadCell* cell = table->cellAt( x, y );
   if ( cell->isObscured() && cell->isObscuringForced() )
   {
-    x = cell->obscuringCellsRow();
-    y = cell->obscuringCellsColumn();
+    y = cell->obscuringCellsRow();
+    x = cell->obscuringCellsColumn();
   }
 
   int xpos = table->columnPos( x, this );
