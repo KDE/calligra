@@ -4079,9 +4079,8 @@ void KSpreadCell::setDisplayText( const QString& _text )
 
 void KSpreadCell::setLink( const QString& link, bool bold, bool italic )
 {
-  if( link.isEmpty() ) return;
-
   d->extra()->link = link;
+  if( link.isEmpty() ) return;
 
   QString t = d->strText;
   if( t.isEmpty() )
