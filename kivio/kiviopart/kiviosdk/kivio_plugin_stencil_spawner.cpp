@@ -50,6 +50,13 @@ KivioPluginStencilSpawner::~KivioPluginStencilSpawner()
     pNewStencil = NULL;
 }
 
+#ifndef RTLD_NOW
+#define RTLD_NOW	0
+#endif
+#ifndef RTLD_GLOBAL
+#define RTLD_GLOBAL	0
+#endif
+
 bool KivioPluginStencilSpawner::load( const QString &f )
 {
     const char *error;
@@ -67,7 +74,9 @@ bool KivioPluginStencilSpawner::load( const QString &f )
         return false;
     }
 
-    pNewStencil = pNewStencil = (NewStencilFunc)dlsym( m_handle, "NewStencil" );
+    pNewStencil = (NewStencilFunc)dlsym( m_handle, "NewStencil" );
+    if (!pNewStencil)
+	pNewStencil = (NewStencilFunc)dlsym( m_handle, "_NewStencil" );
     if( (error=dlerror())!=NULL )
     {
        kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " - dlsym failed for NewStencil(): " << error << endl;
@@ -76,7 +85,9 @@ bool KivioPluginStencilSpawner::load( const QString &f )
         return false;
     }
 
-    pGetIcon = pGetIcon = (GetIconFunc)dlsym( m_handle, "GetIcon" );
+    pGetIcon = (GetIconFunc)dlsym( m_handle, "GetIcon" );
+    if (!pGetIcon)
+	pGetIcon = (GetIconFunc)dlsym( m_handle, "_GetIcon" );
     if( (error=dlerror())!=NULL )
     {
        kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " - dlsym failed for GetIcon(): " << error << endl;
@@ -86,6 +97,8 @@ bool KivioPluginStencilSpawner::load( const QString &f )
     }
 
     pGetSpawnerInfo = (GetSpawnerInfoFunc)dlsym( m_handle, "GetSpawnerInfo" );
+    if (!pGetSpawnerInfo)
+	pGetSpawnerInfo = (GetSpawnerInfoFunc)dlsym( m_handle, "_GetSpawnerInfo" );
     if( (error=dlerror())!=NULL )
     {
        kdDebug() << "KivioPluginStencilSpawner::load() - " << f << " - dlsym failed for GetIcon(): " << error << endl;
