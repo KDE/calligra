@@ -33,6 +33,7 @@ class QPainter;
 class QPixmap;
 class KPGradientCollection;
 class QPicture;
+class DCOPObject;
 
 /******************************************************************/
 /* Class: KPBackGround						  */
@@ -45,6 +46,8 @@ public:
 		  KPClipartCollection *_clipartCollection, KPresenterDoc *_doc );
     virtual ~KPBackGround()
     {; }
+
+    virtual DCOPObject* dcopObject();
 
     virtual void setBackType( BackType _backType )
     { backType = _backType; }
@@ -137,6 +140,8 @@ protected:
     QSize ext;
     KPresenterDoc *doc;
     int footerHeight;
+
+    DCOPObject *dcop;
 
 };
 

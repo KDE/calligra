@@ -13,6 +13,8 @@
 /* Module: Background						  */
 /******************************************************************/
 
+#include "KPresenterBackgroundIface.h"
+
 #include "kpbackground.h"
 #include "kpresenter_doc.h"
 #include "qwmf.h"
@@ -46,6 +48,7 @@ KPBackGround::KPBackGround( KPPixmapCollection *_pixmapCollection, KPGradientCol
 			    KPClipartCollection *_clipartCollection, KPresenterDoc *_doc )
     : footerHeight( 0 )
 {
+    dcop = 0;
     backType = BT_COLOR;
     backView = BV_CENTER;
     backColor1 = Qt::white;
@@ -617,4 +620,13 @@ void KPBackGround::removeGradient()
 				       unbalanced, xfactor, yfactor);
 	gradient = 0;
     }
+}
+
+/*=============================================================*/
+DCOPObject* KPBackGround::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPresenterBackgroundIface( this );
+
+    return dcop;
 }

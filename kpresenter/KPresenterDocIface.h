@@ -20,6 +20,8 @@ k_dcop:
     virtual DCOPRef nextView();
     virtual int getNumObjects();
     virtual DCOPRef getObject( int num );
+    virtual int getNumPages();
+    virtual DCOPRef getPage( int num );
     
 private:
     KPresenterDoc *doc;

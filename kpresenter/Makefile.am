@@ -28,7 +28,8 @@ kpresenter_SOURCES = webpresentation.cc kpresenter_view.cc \
 	kpresenter_shell.cc kpresenter_factory.cc \
 	KPresenterDocIface_skel.cpp KPresenterDocIface.cc \
 	KPresenterViewIface_skel.cpp KPresenterViewIface.cc \
-	KPresenterObjectIface_skel.cpp KPresenterObjectIface.cc 
+	KPresenterObjectIface_skel.cpp KPresenterObjectIface.cc \
+	KPresenterBackgroundIface_skel.cpp KPresenterBackgroundIface.cc 
 
 noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		backdia.h page.h ktextobject.h styledia.h \
@@ -48,7 +49,8 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		rotatecmd.h lowraicmd.h pievaluecmd.h rectvaluecmd.h penbrushcmd.cc \
 		commandhistory.h preview.h gotopage.h webpresentation.h \
 		footer_header.h kpresenter_shell.h kpresenter_factory.h \
-		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h
+		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
+		KPresenterBackgroundIface.h
 
 METASOURCES =	kpresenter_doc.moc kpresenter_view.moc \
 		page.moc ktextobject.moc backdia.moc styledia.moc \
@@ -69,6 +71,9 @@ KPresenterViewIface_skel.cpp: KPresenterViewIface.kidl
 KPresenterObjectIface.kidl: KPresenterObjectIface.h
 	( dcopidl KPresenterObjectIface.h >KPresenterObjectIface.kidl; dcopidl2cpp --no-stub KPresenterObjectIface.kidl )
 KPresenterObjectIface_skel.cpp: KPresenterObjectIface.kidl
+KPresenterBackgroundIface.kidl: KPresenterBackgroundIface.h
+	( dcopidl KPresenterBackgroundIface.h >KPresenterBackgroundIface.kidl; dcopidl2cpp --no-stub KPresenterBackgroundIface.kidl )
+KPresenterBackgroundIface_skel.cpp: KPresenterBackgroundIface.kidl
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/KOffice

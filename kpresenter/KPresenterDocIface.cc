@@ -38,3 +38,14 @@ DCOPRef KPresenterDocIface::getObject( int num )
     return DCOPRef( kapp->dcopClient()->appId(), 
 		    doc->objectList()->at( num )->dcopObject()->objId() );
 }
+
+int KPresenterDocIface::getNumPages()
+{
+    return doc->getPageNums();
+}
+
+DCOPRef KPresenterDocIface::getPage( int num )
+{
+    return DCOPRef( kapp->dcopClient()->appId(), 
+		    doc->backgroundList()->at( num )->dcopObject()->objId() );
+}
