@@ -327,13 +327,13 @@ ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirror
     connect( m_swapRGBCheck, SIGNAL( toggled( bool ) ), this, SLOT( slotSwapRGBPicture( bool ) ) );
 
 
-    m_grayscalCheck = new QCheckBox( i18n( "Grayscal" ), gSettings );
+    m_grayscalCheck = new QCheckBox( i18n( "Grayscale" ), gSettings );
     connect( m_grayscalCheck, SIGNAL( toggled( bool ) ), this, SLOT( slotGrayscalPicture( bool ) ) );
 
 
     m_brightValue = new KIntNumInput( bright, gSettings );
     m_brightValue->setRange( -1000, 1000, 10 );
-    m_brightValue->setLabel( i18n( "Bright:" ) );
+    m_brightValue->setLabel( i18n( "Brightness:" ) );
     m_brightValue->setSuffix( i18n( " %" ) );
     connect( m_brightValue, SIGNAL( valueChanged( int ) ), this, SLOT( slotBrightValue( int ) ) );
 
