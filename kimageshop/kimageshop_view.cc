@@ -128,7 +128,10 @@ void KImageShopView::cleanUp()
   delete m_pVRuler;
   delete m_pCanvasView;
   delete m_pLayerDialog;
-  
+  delete m_pMoveTool;
+  delete m_pBrushTool;
+  delete m_pZoomTool;
+    
   KoViewIf::cleanUp();
 }
 
@@ -158,19 +161,46 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
     return true;
   }
 
-  // create and enable edit toolbar
+  CORBA::WString_var text;
+  OpenPartsUI::Pixmap_var pix;
+
+  // edit toolbar
   m_vToolBarEdit  = _factory->create(OpenPartsUI::ToolBarFactory::Transient);
   m_vToolBarEdit->enable(OpenPartsUI::Show);
+  m_vToolBarEdit->setFullWidth(false);
+  m_vToolBarEdit->setBarPos(OpenPartsUI::Top);
+
+  // undo
+  text = Q2C(i18n("Undo last action."));
+  pix = OPUIUtils::convertPixmap(*KPixmapCache::toolbarPixmap("undo.xpm"));
+  m_vToolBarEdit->insertButton2(pix, TBEDIT_REDO, SIGNAL( clicked() ), this, "slotEditUndo", true, text, -1 );
+
+  // redo
+  text = Q2C(i18n("Redo last action."));
+  pix = OPUIUtils::convertPixmap(*KPixmapCache::toolbarPixmap("redo.xpm"));
+  m_vToolBarEdit->insertButton2(pix, TBEDIT_UNDO, SIGNAL( clicked() ), this, "slotEditRedo", true, text, -1 );
+
+  // cut
+  text = Q2C(i18n("Cut"));
+  pix = OPUIUtils::convertPixmap(*KPixmapCache::toolbarPixmap("editcut.xpm"));
+  m_vToolBarEdit->insertButton2(pix, TBEDIT_CUT, SIGNAL( clicked() ), this, "slotEditCut", true, text, -1 );
+
+  // copy
+  text = Q2C(i18n("Copy"));
+  pix = OPUIUtils::convertPixmap(*KPixmapCache::toolbarPixmap("editcopy.xpm"));
+  m_vToolBarEdit->insertButton2(pix, TBEDIT_COPY, SIGNAL( clicked() ), this, "slotEditCopy", true, text, -1 );
+
+  // paste
+  text = Q2C(i18n("Paste"));
+  pix = OPUIUtils::convertPixmap(*KPixmapCache::toolbarPixmap("editpaste.xpm"));
+  m_vToolBarEdit->insertButton2(pix, TBEDIT_PASTE, SIGNAL( clicked() ), this, "slotEditPaste", true, text, -1 );
  
-  // create and enable tools toolbar
+  // tools toolbar
   m_vToolBarTools  = _factory->create(OpenPartsUI::ToolBarFactory::Transient);
   m_vToolBarTools->enable(OpenPartsUI::Show);
   m_vToolBarTools->setFullWidth(false);
   m_vToolBarTools->setBarPos(OpenPartsUI::Left);
 
-  CORBA::WString_var text;
-  OpenPartsUI::Pixmap_var pix;
-  
   // move tool
   text = Q2C( i18n( "Move layers and selections." ) );
   pix = OPUIUtils::convertPixmap(*KPixmapCache::toolbarPixmap("move.xpm"));
@@ -184,7 +214,7 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarTools->insertButton2(pix, TBTOOLS_ZOOMTOOL, SIGNAL(clicked()), this, "slotActivateZoomTool", true, text, -1);
   m_vToolBarTools->setToggle(TBTOOLS_ZOOMTOOL, true);
 
-  // paint brush
+  // paint tool
   text = Q2C(i18n("Paint using a brush."));
   pix = OPUIUtils::convertPixmap(*KPixmapCache::toolbarPixmap("paintbrush.xpm"));
   m_vToolBarTools->insertButton2(pix, TBTOOLS_BRUSHTOOL, SIGNAL(clicked()), this, "slotActivateBrushTool", true, text, -1);
@@ -222,12 +252,12 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
 
   text = Q2C( i18n( "&Undo" ) );
   pix = OPUIUtils::convertPixmap( ICON( "undo.xpm" ) );
-  m_idMenuEdit_Undo = m_vMenuEdit->insertItem3( pix, text, this, "editUndo", stdAccel.undo() );
+  m_idMenuEdit_Undo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditUndo", stdAccel.undo() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
 
   text = Q2C( i18n( "&Redo" ) );
   pix = OPUIUtils::convertPixmap( ICON( "redo.xpm" ) );
-  m_idMenuEdit_Redo = m_vMenuEdit->insertItem3( pix, text, this, "editRedo", stdAccel.redo() );
+  m_idMenuEdit_Redo = m_vMenuEdit->insertItem3( pix, text, this, "slotEditRedo", stdAccel.redo() );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
 
   // view menu
@@ -696,25 +726,25 @@ void KImageShopView::slotSetZoomFactor(float zoomFactor)
   m_ZoomFactor = zoomFactor;
 }
 
-void KImageShopView::editUndo()
+void KImageShopView::slotEditUndo()
 {
   m_pDoc->commandHistory()->undo();
 }
  
-void KImageShopView::editRedo()
+void KImageShopView::slotEditRedo()
 {
   m_pDoc->commandHistory()->redo();
 }
  
-void KImageShopView::editCut()
+void KImageShopView::slotEditCut()
 {
 }
  
-void KImageShopView::editCopy()
+void KImageShopView::slotEditCopy()
 {
 }
  
-void KImageShopView::editPaste()
+void KImageShopView::slotEditPaste()
 {
 }
 
@@ -744,14 +774,14 @@ void KImageShopView::changeUndo( QString _text, bool _enable )
     str.sprintf( i18n( "Undo: %s" ), _text.data() );
     text = Q2C( str );
     m_vMenuEdit->changeItemText( text, m_idMenuEdit_Undo );
-    m_vToolBarEdit->setItemEnabled( m_idMenuEdit_Undo, true );
+    m_vToolBarEdit->setItemEnabled( TBEDIT_UNDO, true );
   }
   else
   {
     text = Q2C( i18n( "No Undo possible" ) );
     m_vMenuEdit->changeItemText( text, m_idMenuEdit_Undo );
     m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
-    m_vToolBarEdit->setItemEnabled( m_idMenuEdit_Undo, false );
+    m_vToolBarEdit->setItemEnabled( TBEDIT_UNDO, false );
   }
 }
 
@@ -768,14 +798,14 @@ void KImageShopView::changeRedo( QString _text, bool _enable )
     str.sprintf( i18n( "Redo: %s" ), _text.data() );
     text = Q2C( str );
     m_vMenuEdit->changeItemText( text, m_idMenuEdit_Redo );
-    m_vToolBarEdit->setItemEnabled( m_idMenuEdit_Redo, true );
+    m_vToolBarEdit->setItemEnabled( TBEDIT_REDO, true );
   }
   else
   {
     text = Q2C( i18n( "No Redo possible" ) );
     m_vMenuEdit->changeItemText( text, m_idMenuEdit_Redo );
     m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
-    m_vToolBarEdit->setItemEnabled( m_idMenuEdit_Redo, false );
+    m_vToolBarEdit->setItemEnabled( TBEDIT_REDO, false );
   }
 }
 

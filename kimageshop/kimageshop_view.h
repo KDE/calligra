@@ -90,12 +90,18 @@ public slots:
 
   void slotSetZoomFactor(float);
 
+  virtual void slotEditUndo();
+  virtual void slotEditRedo();
+  virtual void slotEditCut();
+  virtual void slotEditCopy();
+  virtual void slotEditPaste();
+
   virtual void slotActivateMoveTool();
   virtual void slotActivateBrushTool();
   virtual void slotActivateZoomTool();
 
-  void changeUndo( QString, bool );
-  void changeRedo( QString, bool );
+  void changeUndo(QString, bool);
+  void changeRedo(QString, bool);
 
 protected:
 
@@ -112,12 +118,6 @@ protected:
   virtual void helpUsing();
 
   virtual void resizeEvent(QResizeEvent* _ev);
-
-  void editUndo();
-  void editRedo();
-  void editCut();
-  void editCopy();
-  void editPaste();
 
   void viewLayerDialog();
 
@@ -140,7 +140,8 @@ protected:
   
 private:
 
-  enum { TBTOOLS_MOVETOOL, TBTOOLS_BRUSHTOOL, TBTOOLS_ZOOMTOOL };
+  enum { TBTOOLS_MOVETOOL, TBTOOLS_BRUSHTOOL, TBTOOLS_ZOOMTOOL, TBEDIT_UNDO, TBEDIT_REDO,
+	 TBEDIT_COPY, TBEDIT_CUT, TBEDIT_PASTE };
 
   KImageShopDoc *m_pDoc; 
   LayerDialog   *m_pLayerDialog;

@@ -106,6 +106,7 @@ void KImageShopShell::setDocument( KImageShopDoc *_doc )
     m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
   }
 
+  opToolBar()->setFullWidth(false);
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
 }
@@ -145,6 +146,7 @@ bool KImageShopShell::newDocument()
     m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
   }
 
+  opToolBar()->setFullWidth(false);
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
 
@@ -189,6 +191,7 @@ bool KImageShopShell::openDocument( const char *_url, const char *_format )
     m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
   }
 
+  opToolBar()->setFullWidth(false);
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
 
@@ -298,6 +301,7 @@ void KImageShopShell::releaseDocument()
     m_pFileMenu->setItemEnabled( m_idMenuFile_Print, false );
   }
 
+  opToolBar()->setFullWidth(false);
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, false );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, false );
 }

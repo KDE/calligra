@@ -59,11 +59,11 @@ module KImageShop
 		slot void slotActivateBrushTool();
 
                 // edit menu
-                slot void editUndo();
-                slot void editRedo();
-		slot void editCut();
-		slot void editCopy();
-		slot void editPaste();
+                slot void slotEditUndo();
+                slot void slotEditRedo();
+		slot void slotEditCopy();
+		slot void slotEditCut();
+		slot void slotEditPaste();
 
                 // View menu
                 slot void viewLayerDialog();
