@@ -91,7 +91,6 @@ public:
 
     bool addTask( KPTNode* task, KPTNode* position );
     bool addSubTask( KPTNode* task, KPTNode* position );
-    bool deleteTask( KPTNode* task );
     bool canIndentTask(KPTNode* node);
     bool indentTask( KPTNode* node );
     bool canUnindentTask( KPTNode* node );

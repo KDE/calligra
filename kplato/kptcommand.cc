@@ -21,6 +21,7 @@
 #include "kptpart.h"
 #include "kptproject.h"
 #include "kptcalendar.h"
+#include "kptrelation.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -72,73 +73,91 @@ void KPTCalendarDeleteCmd::unexecute() {
         m_part->setCommandType(0);
 }
 
+KPTNodeDeleteCmd::KPTNodeDeleteCmd(KPTPart *part, KPTNode *node, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_node(node),
+       m_index(-1) {
+    
+    m_parent = node->getParent();
+    if (m_parent)
+        m_index = m_parent->findChildNode(node);
+    m_mine = false;
+}
+KPTNodeDeleteCmd::~KPTNodeDeleteCmd() {
+    if (m_mine)
+        delete m_node;
+}
+void KPTNodeDeleteCmd::execute() {
+    if (m_parent) {
+        //kdDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
+        m_parent->delChildNode(m_node, false/*take*/);
+        m_mine = true;
+        if (m_part)
+        if (m_part)
+            m_part->setCommandType(1);
+    }
+}
+void KPTNodeDeleteCmd::unexecute() {
+    if (m_parent) {
+        //kdDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
+        m_parent->insertChildNode(m_index, m_node);
+        m_mine = false;
+        if (m_part)
+            m_part->setCommandType(1);
+    }
+}
 
-KPTNodeAddCmd::KPTNodeAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *position,  QString name)
+KPTTaskAddCmd::KPTTaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *after,  QString name)
     : KNamedCommand(name),
       m_part(part),
       m_project(project),
       m_node(node),
-      m_position(position),
+      m_after(after),
       m_added(false) {
-    node->setDeleted(true);
 }
-
-void KPTNodeAddCmd::execute() {
-    m_node->setDeleted(false);
+KPTTaskAddCmd::~KPTTaskAddCmd() {
+    if (!m_added)
+        delete m_node;
+}
+void KPTTaskAddCmd::execute() {
+    //kdDebug()<<k_funcinfo<<m_node->name()<<endl;
+    m_project->addTask(m_node, m_after);
+    m_added = true;
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTTaskAddCmd::unexecute() {
+    m_node->getParent()->delChildNode(m_node, false/*take*/);
+    m_added = false;
     if (m_part)
         m_part->setCommandType(1);
 }
 
-void KPTNodeAddCmd::unexecute() {
-    m_node->setDeleted(true);
-    if (m_part)
-        m_part->setCommandType(1);
-}
-
-
-KPTNodeDeleteCmd::KPTNodeDeleteCmd(KPTPart *part, KPTNode *node, QString name)
+KPTSubtaskAddCmd::KPTSubtaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *parent,  QString name)
     : KNamedCommand(name),
       m_part(part),
-      m_node(node) {
+      m_project(project),
+      m_node(node),
+      m_parent(parent),
+      m_added(false) {
 }
-
-void KPTNodeDeleteCmd::execute() {
-    m_node->setDeleted(true);
-    if (m_part)
-        m_part->setCommandType(1);
+KPTSubtaskAddCmd::~KPTSubtaskAddCmd() {
+    if (!m_added)
+        delete m_node;
 }
-
-void KPTNodeDeleteCmd::unexecute() {
-    m_node->setDeleted(false);
-    if (m_part)
-        m_part->setCommandType(1);
-}
-
-
-KPTTaskAddCmd::KPTTaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *position,  QString name)
-    : KPTNodeAddCmd(part, project, node, position, name) {
-}
-
-void KPTTaskAddCmd::execute() {
-    if (!m_added && m_project) {
-        m_project->addTask(m_node, m_position);
-        m_added = true;
-    }
-    KPTNodeAddCmd::execute();
-}
-
-KPTSubtaskAddCmd::KPTSubtaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *position,  QString name)
-    : KPTNodeAddCmd(part, project, node, position, name) {   
-}
-
 void KPTSubtaskAddCmd::execute() {
-    if (!m_added && m_project) {
-        m_project->addSubTask(m_node, m_position);
-        m_added = true;
-    }
-    KPTNodeAddCmd::execute();
+    m_project->addSubTask(m_node, m_parent);
+    m_added = true;
+    if (m_part)
+        m_part->setCommandType(1);
 }
-
+void KPTSubtaskAddCmd::unexecute() {
+    m_parent->delChildNode(m_node, false/*take*/);
+    m_added = false;
+    if (m_part)
+        m_part->setCommandType(1);
+}
 
 KPTNodeModifyNameCmd::KPTNodeModifyNameCmd(KPTPart *part, KPTNode &node, QString nodename, QString name)
     : KNamedCommand(name),
@@ -344,5 +363,78 @@ void KPTNodeMoveDownCmd::unexecute() {
     }
     if (m_part)
         m_part->setCommandType(0);
+}
+
+KPTAddRelationCmd::KPTAddRelationCmd(KPTPart *part, KPTRelation *rel, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_rel(rel) {
+    
+    m_taken = true;
+}
+KPTAddRelationCmd::~KPTAddRelationCmd() {
+    if (m_taken)
+        delete m_rel;
+}
+void KPTAddRelationCmd::execute() {
+    //kdDebug()<<k_funcinfo<<m_rel->parent()<<" to "<<m_rel->child()<<endl;
+    m_taken = false;
+    m_rel->parent()->addDependChildNode(m_rel);
+    m_rel->child()->addDependParentNode(m_rel);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTAddRelationCmd::unexecute() {
+    m_taken = true;
+    m_rel->parent()->takeDependChildNode(m_rel);
+    m_rel->child()->takeDependParentNode(m_rel);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+
+KPTDeleteRelationCmd::KPTDeleteRelationCmd(KPTPart *part, KPTRelation *rel, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_rel(rel) {
+    
+    m_taken = false;
+}
+KPTDeleteRelationCmd::~KPTDeleteRelationCmd() {
+    if (m_taken)
+        delete m_rel;
+}
+void KPTDeleteRelationCmd::execute() {
+    //kdDebug()<<k_funcinfo<<m_rel->parent()<<" to "<<m_rel->child()<<endl;
+    m_taken = true;
+    m_rel->parent()->takeDependChildNode(m_rel);
+    m_rel->child()->takeDependParentNode(m_rel);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTDeleteRelationCmd::unexecute() {
+    m_taken = false;
+    m_rel->parent()->addDependChildNode(m_rel);
+    m_rel->child()->addDependParentNode(m_rel);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+
+KPTModifyTimingRelationCmd::KPTModifyTimingRelationCmd(KPTPart *part, KPTRelation *rel, TimingRelation type, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_rel(rel),
+      m_newtype(type) {
+    
+    m_oldtype = rel->timingRelation();
+}
+void KPTModifyTimingRelationCmd::execute() {
+    m_rel->setTimingRelation(m_newtype);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTModifyTimingRelationCmd::unexecute() {
+    m_rel->setTimingRelation(m_oldtype);
+    if (m_part)
+        m_part->setCommandType(1);
 }
 

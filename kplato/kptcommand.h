@@ -22,11 +22,13 @@
 
 #include <kcommand.h>
 #include "kptnode.h"
+#include "defs.h"
 
 class QString;
 class KPTProject;
 class KPTCalendar;
 class KPTPart;
+class KPTRelation;
 
 class KPTCalendarAddCmd : public KNamedCommand
 {
@@ -54,45 +56,52 @@ private:
     KPTCalendar *m_cal;
 };
 
-class KPTNodeAddCmd : public KNamedCommand
-{
-public:
-    KPTNodeAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *position, QString name=0);
-    void execute();
-    void unexecute();
-
-protected:
-    KPTPart *m_part;
-    KPTProject *m_project;
-    KPTNode *m_node;
-    KPTNode *m_position;
-    bool m_added;
-};
-
 class KPTNodeDeleteCmd : public KNamedCommand
 {
 public:
     KPTNodeDeleteCmd(KPTPart *part, KPTNode *node, QString name=0);
+    ~KPTNodeDeleteCmd();
     void execute();
     void unexecute();
 
 private:
     KPTPart *m_part;
     KPTNode *m_node;
+    KPTNode *m_parent;
+    int m_index;
+    bool m_mine;
 };
 
-class KPTTaskAddCmd : public KPTNodeAddCmd
+class KPTTaskAddCmd : public KNamedCommand
 {
 public:
-    KPTTaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *position,  QString name=0);
+    KPTTaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *after,  QString name=0);
+    ~KPTTaskAddCmd();
     void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTProject *m_project;
+    KPTNode *m_node;
+    KPTNode *m_after;
+    bool m_added;
 };
 
-class KPTSubtaskAddCmd : public KPTNodeAddCmd
+class KPTSubtaskAddCmd : public KNamedCommand
 {
 public:
-    KPTSubtaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *position,  QString name=0);
+    KPTSubtaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *parent,  QString name=0);
+    ~KPTSubtaskAddCmd();
     void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTProject *m_project;
+    KPTNode *m_node;
+    KPTNode *m_parent;
+    bool m_added;
 };
 
 
@@ -218,6 +227,48 @@ private:
     KPTPart *m_part;
     KPTNode &m_node;
     int m_oldindex, m_newindex;
+};
+
+class KPTAddRelationCmd : public KNamedCommand
+{
+public:
+    KPTAddRelationCmd(KPTPart *part, KPTRelation *rel, QString name=0);
+    ~KPTAddRelationCmd();
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTRelation *m_rel;
+    bool m_taken;
+};
+
+class KPTDeleteRelationCmd : public KNamedCommand
+{
+public:
+    KPTDeleteRelationCmd(KPTPart *part, KPTRelation *rel, QString name=0);
+    ~KPTDeleteRelationCmd();
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTRelation *m_rel;
+    bool m_taken;
+};
+
+class KPTModifyTimingRelationCmd : public KNamedCommand
+{
+public:
+    KPTModifyTimingRelationCmd(KPTPart *part, KPTRelation *rel, TimingRelation type, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTRelation *m_rel;
+    TimingRelation m_newtype;
+    TimingRelation m_oldtype;
 };
 
 #endif //KPTCOMMAND_H

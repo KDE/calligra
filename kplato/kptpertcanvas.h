@@ -68,7 +68,10 @@ protected:
 
 signals:
     void rightButtonPressed(KPTNode *node, const QPoint & point);
-    void updateView(bool claculate);
+    void updateView(bool calculate);
+    void addRelation(KPTNode *par, KPTNode *child);
+    void modifyRelation(KPTRelation *rel);
+
 
 private:
     QCanvas *m_canvas;

@@ -44,6 +44,14 @@ KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, TimingType tt, TimingR
     m_lag=KPTDuration();
 }
 
+KPTRelation::KPTRelation(KPTRelation *rel) {
+    m_parent=rel->parent();
+    m_child=rel->child();
+    m_timingType=rel->timingType();
+    m_timingRelation=rel->timingRelation();
+    m_lag=rel->lag();
+}
+
 KPTRelation::~KPTRelation() {
     //kdDebug()<<k_funcinfo<<"parent: "<<(m_parent ? m_parent->name():"none")<<" child: "<<(m_child ? m_child->name():"None")<<endl;
     if (m_parent)

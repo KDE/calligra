@@ -72,37 +72,32 @@ void KPTPertCanvas::draw(KPTProject& project)
     clear();
     updateContents();
 
-    if (!project.isDeleted()) {
-    
-        // First make node items
-        QPtrListIterator<KPTNode> nit(project.childNodeIterator());
-        for ( ; nit.current(); ++nit ) {
-            if (!nit.current()->isDeleted()) {
-                createChildItems(createNodeItem(nit.current()));
-            }
-        }
-    
-        // First all items with relations
-        QPtrDictIterator<KPTPertNodeItem> it(m_nodes);
-        for(; it.current(); ++it)
-        {
-            if (!(it.current()->hasParent()) && it.current()->hasChild())
-            {
-                m_rows.append(new QMemArray<bool>(1)); // New node always goes into new row, first column
-                it.current()->move(this, m_rows.count()-1, 0); // item also moves it's children
-            }
-        }
-        // now items without relations
-        for(it.toFirst(); it.current(); ++it)
-        {
-            if (!(it.current()->hasParent() || it.current()->hasChild()))
-            {
-                m_rows.append(new QMemArray<bool>(1)); // New node always goes into new row, first column
-                it.current()->move(this, m_rows.count()-1, 0);
-            }
-        }
-        drawRelations(); // done _after_ all nodes are drawn
+    // First make node items
+    QPtrListIterator<KPTNode> nit(project.childNodeIterator());
+    for ( ; nit.current(); ++nit ) {
+        createChildItems(createNodeItem(nit.current()));
     }
+
+    // First all items with relations
+    QPtrDictIterator<KPTPertNodeItem> it(m_nodes);
+    for(; it.current(); ++it)
+    {
+        if (!(it.current()->hasParent()) && it.current()->hasChild())
+        {
+            m_rows.append(new QMemArray<bool>(1)); // New node always goes into new row, first column
+            it.current()->move(this, m_rows.count()-1, 0); // item also moves it's children
+        }
+    }
+    // now items without relations
+    for(it.toFirst(); it.current(); ++it)
+    {
+        if (!(it.current()->hasParent() || it.current()->hasChild()))
+        {
+            m_rows.append(new QMemArray<bool>(1)); // New node always goes into new row, first column
+            it.current()->move(this, m_rows.count()-1, 0);
+        }
+    }
+    drawRelations(); // done _after_ all nodes are drawn
     QSize s = canvasSize();
     m_canvas->resize(s.width(), s.height());
     update();
@@ -110,8 +105,6 @@ void KPTPertCanvas::draw(KPTProject& project)
 
 KPTPertNodeItem *KPTPertCanvas::createNodeItem(KPTNode *node)
 {
-    if (node->isDeleted())
-        return 0;
     KPTPertNodeItem *item = m_nodes.find(node);
     if (!item)
     {
@@ -332,19 +325,11 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 					if (!par->node().legalToLink(&(item->node()))) {
                         KMessageBox::sorry(this, i18n("Cannot link these nodes"));
 					} else {
-						KPTRelationDialog *dia;
 						KPTRelation *rel = item->node().findRelation(&(par->node()));
 						if (rel)
-							dia = new KPTRelationDialog(rel, this);
+                            emit modifyRelation(rel);
 						else
-							dia = new KPTRelationDialog(&(par->node()), &(item->node()), this);
-
-						if (dia->exec())
-						{
-							//kdDebug()<<k_funcinfo<<" Linked node="<<item->node().name()<<" to "<<par->node().name()<<endl;
-							emit updateView(true);
-						}
-						delete dia;
+							emit addRelation(&(par->node()), &(item->node()));
 					}
 					break;
 				}

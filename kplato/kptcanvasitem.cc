@@ -668,6 +668,7 @@ KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNod
       m_node(node),
       m_view(0)
 {
+    m_drawn = false;
     KPTGanttViewSummaryItem *p = dynamic_cast<KPTGanttViewSummaryItem*>(parent);
     if (p)
         m_view = p->ganttView();
@@ -743,6 +744,7 @@ KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTTask *tas
       m_task(task),
       m_view()
 {
+    m_drawn = false;
     KPTGanttViewSummaryItem *p = dynamic_cast<KPTGanttViewSummaryItem*>(parent);
     if (p)
         m_view = p->ganttView();
@@ -818,6 +820,7 @@ KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttViewItem *parent, KPTTask *t
       m_task(task),
       m_view()
 {
+    m_drawn = false;
     KPTGanttViewSummaryItem *p = dynamic_cast<KPTGanttViewSummaryItem*>(parent);
     if (p)
         m_view = p->ganttView();

@@ -46,7 +46,7 @@ KPTTask::~KPTTask() {
 }
 
 int KPTTask::type() const {
-	if ( numChildren() > 0 && !allChildrenDeleted()) {
+	if ( numChildren() > 0) {
 	  return KPTNode::Type_Summarytask;
 	}
 	else if ( 0 == effort()->expected().seconds() ) {
@@ -203,8 +203,6 @@ bool KPTTask::load(QDomElement &element) {
 
 
 void KPTTask::save(QDomElement &element)  {
-    if (isDeleted())
-        return;
     QDomElement me = element.ownerDocument().createElement("task");
     element.appendChild(me);
 
@@ -330,8 +328,6 @@ int KPTTask::actualWork() {
 
 void KPTTask::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks/*, QPtrList<KPTNode> &milestones*/) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
-    if (isDeleted())
-         return;
     if (type() == KPTNode::Type_Summarytask) {
         summarytasks.append(this);
     } else {
@@ -348,8 +344,6 @@ void KPTTask::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<K
 
 KPTDateTime KPTTask::calculateForward(int use) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
-    if (isDeleted())
-        return earliestStart;
     if (m_visitedForward)
         return earliestStart + m_durationForward;
     // First, calculate all predecessors
@@ -409,8 +403,6 @@ KPTDateTime KPTTask::calculateForward(int use) {
 
 KPTDateTime KPTTask::calculateBackward(int use) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
-    if (isDeleted())
-        return latestFinish;
     if (m_visitedBackward)
         return latestFinish - m_durationBackward;
     // First, calculate all successors
@@ -646,8 +638,6 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
 }
 
 void KPTTask::adjustSummarytask() {
-    if (isDeleted())
-        return;
     if (type() == Type_Summarytask) {
         KPTDateTime start = latestFinish;
         KPTDateTime end = earliestStart;

@@ -25,6 +25,7 @@
 class KPTView;
 class KPTPertCanvas;
 class KPTNode;
+class KPTRelation;
 class QLayout;
 class QListViewItem;
 
@@ -34,7 +35,7 @@ class KPrinter;
 {
     Q_OBJECT
     
- public:
+public:
  
     KPTPertView( KPTView *view, QWidget *parent, QLayout *layout );
 
@@ -48,9 +49,15 @@ class KPrinter;
     void print(KPrinter &printer);
 
     KPTNode *currentNode();
- 
- public slots:
+
+public slots:
     void slotRMBPressed(KPTNode *node, const QPoint & point);
+    void slotAddRelation(KPTNode *par, KPTNode *child);
+    void slotModifyRelation(KPTRelation *rel);
+
+signals:
+    void addRelation(KPTNode *par, KPTNode *child);
+    void modifyRelation(KPTRelation *rel);
 
 private:
     void init(QLayout *layout);

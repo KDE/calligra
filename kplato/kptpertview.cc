@@ -23,6 +23,7 @@
 #include "kptpertcanvas.h"
 #include "kptpart.h"
 #include "kptproject.h"
+#include "kptrelation.h"
 
 #include <kdebug.h>
 
@@ -56,6 +57,9 @@ void KPTPertView::init(QLayout *layout)
     draw();
     connect(m_canvasview, SIGNAL(rightButtonPressed(KPTNode *, const QPoint &)), this, SLOT(slotRMBPressed(KPTNode *,const QPoint &)));
     connect(m_canvasview, SIGNAL(updateView(bool)), m_mainview, SLOT(slotUpdate(bool)));
+
+    connect(m_canvasview, SIGNAL(addRelation(KPTNode*, KPTNode*)), SLOT(slotAddRelation(KPTNode*, KPTNode*)));
+    connect(m_canvasview, SIGNAL(modifyRelation(KPTRelation*)), SLOT(slotModifyRelation(KPTRelation*)));
 }    
 
 void KPTPertView::draw() 
@@ -74,6 +78,18 @@ void KPTPertView::slotRMBPressed(KPTNode *node, const QPoint & point)
 	{
 		int id = menu->exec(point);
 	}
+}
+
+void KPTPertView::slotAddRelation(KPTNode* par, KPTNode* child)
+{
+    kdDebug()<<k_funcinfo<<endl;
+    emit addRelation(par, child);
+}
+
+void KPTPertView::slotModifyRelation(KPTRelation *rel)
+{
+    kdDebug()<<k_funcinfo<<endl;
+    emit modifyRelation(rel);
 }
 
 void KPTPertView::print(KPrinter &printer) {

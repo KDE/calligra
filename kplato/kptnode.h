@@ -115,11 +115,15 @@ public:
     // of the table-building node is the house-building node.
 
     int numDependChildNodes() const { return m_dependChildNodes.count(); }
+    /// Adds relation to both this node and @node
     virtual void addDependChildNode( KPTNode *node, TimingType t=START_ON_DATE,
 				     TimingRelation p=FINISH_START);
+    /// Adds relation to both this node and @node
     virtual void addDependChildNode( KPTNode *node, TimingType t,
 				     TimingRelation p, KPTDuration lag);
+    /// Adds relation only to this node
     virtual bool addDependChildNode( KPTRelation *relation);
+    /// Inserts relation to this node at index @index and appends relation to @node
     virtual void insertDependChildNode( unsigned int index, KPTNode *node,
 					TimingType t=START_ON_DATE,
 					TimingRelation p=FINISH_START);
@@ -132,17 +136,21 @@ public:
     QPtrList<KPTRelation> &dependChildNodes() { return m_dependChildNodes; }
 
     /**
-     * Takes the relation @rel.
+     * Takes the relation @rel from this node only.
      * Never deletes even when autoDelete = true.
      */
     void takeDependChildNode(KPTRelation *rel);
     
     int numDependParentNodes() const { return m_dependParentNodes.count(); }
+    /// Adds relation to both this node and @node
     virtual void addDependParentNode(KPTNode *node, TimingType t=START_ON_DATE,
 				     TimingRelation p=FINISH_START);
+    /// Adds relation to both this node and @node
     virtual void addDependParentNode( KPTNode *node, TimingType t,
 				      TimingRelation p, KPTDuration lag);
+    /// Adds relation only to this node
     virtual bool addDependParentNode( KPTRelation *relation);
+    /// Inserts relation to this node at index @index and appends relation to @node
     virtual void insertDependParentNode( unsigned int index, KPTNode *node,
 					 TimingType t=START_ON_DATE,
 					 TimingRelation p=FINISH_START);
@@ -155,7 +163,7 @@ public:
     QPtrList<KPTRelation> &dependParentNodes() { return m_dependParentNodes; }
     
     /**
-     * Takes the relation @rel.
+     * Takes the relation @rel from this node only.
      * Never deletes even when autoDelete = true.
      */
     void takeDependParentNode(KPTRelation *rel);
@@ -284,12 +292,6 @@ public:
     virtual int actualWork() { return 0; }
 
     virtual QPtrList<KPTAppointment> appointments(const KPTNode *node);
-
-    virtual bool isDeleted() const 
-        { return (!m_deleted && m_parent) ? m_parent->isDeleted() : m_deleted; }
-    
-    virtual void setDeleted(bool on) { m_deleted = on; }
-    bool allChildrenDeleted() const;
     
     virtual void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks) = 0;
     virtual KPTDateTime calculateForward(int /*use*/) = 0;

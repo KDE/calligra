@@ -77,7 +77,10 @@ private:
     KDGanttViewItem *findItem(KPTNode *node);
     KDGanttViewItem *findItem(KPTNode *node, KDGanttViewItem *item);
     KPTNode *getNode(KDGanttViewItem *item);
-    void removeDeleted(KDGanttViewItem *item);
+    bool isDrawn(KDGanttViewItem *item);
+    void setDrawn(KDGanttViewItem *item, bool state);
+    void resetDrawn(KDGanttViewItem *_item);
+    void removeNotDrawn(KDGanttViewItem *_item);
     void deleteItem(KDGanttViewItem *item);
     KDGanttViewItem *correctType(KDGanttViewItem *item, KPTNode *node);
     void correctPosition(KDGanttViewItem *item, KPTNode *node);

@@ -84,6 +84,7 @@ int KPTNode::mapNode(int id, KPTNode *node) {
 
 
 void KPTNode::delChildNode( KPTNode *node, bool remove) {
+    kdDebug()<<k_funcinfo<<"find="<<m_nodes.findRef(node)<<endl;
     if ( m_nodes.findRef(node) != -1 ) {
         if(remove)
             m_nodes.remove();
@@ -380,15 +381,6 @@ QString KPTNode::constraintToString() const {
     return QString();
 }
 
-bool KPTNode::allChildrenDeleted() const {
-    QPtrListIterator<KPTNode> it = m_nodes;
-    for (; it.current(); ++it) {
-        if (!it.current()->isDeleted())
-            return false;
-    }
-    return true;
-}
-
 void KPTNode::propagateEarliestStart(KPTDateTime &time) {
     earliestStart = time;
     QPtrListIterator<KPTNode> it = m_nodes;
@@ -452,14 +444,9 @@ KPTNode *KPTNode::siblingBefore() {
 
 KPTNode *KPTNode::childBefore(KPTNode *node) {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTNode *n;
     int index = m_nodes.findRef(node);
-    for (index--; index >= 0; index--) {
-        n = m_nodes.at(index);
-        if (!n->isDeleted()) {
-            //kdDebug()<<k_funcinfo<<node->name()<<": "<<n->name()<<endl;
-            return n;
-        }
+    if (index > 0){
+        return m_nodes.at(index-1);
     }
     return 0;
 }
@@ -473,13 +460,9 @@ KPTNode *KPTNode::siblingAfter() {
 
 KPTNode *KPTNode::childAfter(KPTNode *node) {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTNode *n;
     int index = m_nodes.findRef(node);
-    for (index++; index < m_nodes.count(); index++) {
-        n = m_nodes.at(index);
-        if (!n->isDeleted())
-            return n;
-    }
+    if (index < m_nodes.count()-1) {
+        return m_nodes.at(index+1);    }
     return 0;
 }
 
@@ -603,7 +586,7 @@ void KPTEffort::setType(QString type) {
 // Debugging
 #ifndef NDEBUG
 void KPTNode::printDebug(bool children, QCString indent) {
-    kdDebug()<<indent<<"  Unique node identity="<<m_id<<" isDeleted="<<isDeleted()<<endl;
+    kdDebug()<<indent<<"  Unique node identity="<<m_id<<endl;
     if (m_effort) m_effort->printDebug(indent);
     QString s = "  Constraint: " + constraintToString();
     kdDebug()<<indent<<s<<" ("<<constraintTime().toString()<<")"<<endl;

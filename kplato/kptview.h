@@ -39,6 +39,7 @@ class KPTReportView;
 class KPTPart;
 class KPTNode;
 class KPTProject;
+class KPTRelation;
 
 class DCOPObject;
 
@@ -68,7 +69,7 @@ public:
     virtual DCOPObject* dcopObject();
     
     void renameNode(KPTNode *node, QString name);
-    
+   
 public slots:
     void slotUpdate(bool calculate);
     void slotEditResource();
@@ -83,7 +84,9 @@ public slots:
     void slotAddMilestone();
     void slotProjectEdit();
     void slotConfigure();
-
+    void slotAddRelation(KPTNode *par, KPTNode *child);
+    void slotModifyRelation(KPTRelation *rel);
+  
 protected slots:
     void slotProjectCalendar();
     void slotProjectWorktime();

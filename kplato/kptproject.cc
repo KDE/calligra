@@ -67,8 +67,6 @@ int KPTProject::type() const { return KPTNode::Type_Project; }
 
 void KPTProject::calculate(KPTEffort::Use use) {
     //kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_startTime.toString()<<endl;
-    if (isDeleted())
-        return;
     // clear all resource appointments
     QPtrListIterator<KPTResourceGroup> git(m_resourceGroups);
     for ( ; git.current(); ++git ) {
@@ -114,8 +112,6 @@ KPTDuration *KPTProject::getFloat() {
 
 KPTDateTime KPTProject::calculateForward(int use) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
-    if (isDeleted())
-        return KPTDateTime();
     if (type() == KPTNode::Type_Project) {
         // Follow *parent* relations back and
         // calculate forwards following the child relations
@@ -145,8 +141,6 @@ KPTDateTime KPTProject::calculateForward(int use) {
 
 KPTDateTime KPTProject::calculateBackward(int use) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
-    if (isDeleted())
-        return KPTDateTime();
     if (type() == KPTNode::Type_Project) {
         // Follow *child* relations back and
         // calculate backwards following parent relation
@@ -175,8 +169,6 @@ KPTDateTime KPTProject::calculateBackward(int use) {
 }
 
 KPTDateTime &KPTProject::scheduleForward(KPTDateTime &earliest, int use) {
-    if (isDeleted())
-        return m_endTime;
     resetVisited();
     // First do summarytasks and their children
     QPtrListIterator<KPTNode> summarytasks(m_summarytasks);
@@ -194,8 +186,6 @@ KPTDateTime &KPTProject::scheduleForward(KPTDateTime &earliest, int use) {
 }
 
 KPTDateTime &KPTProject::scheduleBackward(KPTDateTime &latest, int use) {
-    if (isDeleted())
-        return m_startTime;
     resetVisited();
     // First do summarytasks and their children
     QPtrListIterator<KPTNode> ss(m_summarytasks);
@@ -213,8 +203,6 @@ KPTDateTime &KPTProject::scheduleBackward(KPTDateTime &latest, int use) {
 }
 
 void KPTProject::adjustSummarytask() {
-    if (isDeleted())
-        return;
     QPtrListIterator<KPTNode> it(m_summarytasks);
     for (; it.current(); ++it) {
         it.current()->adjustSummarytask();
@@ -357,8 +345,6 @@ bool KPTProject::load(QDomElement &element) {
 
 
 void KPTProject::save(QDomElement &element)  {
-    if (isDeleted())
-        return;
     QDomElement me = element.ownerDocument().createElement("project");
     element.appendChild(me);
 
@@ -478,23 +464,6 @@ bool KPTProject::addSubTask( KPTNode* task, KPTNode* position )
 	}
 	position->addChildNode(task);
     task->setId(mapNode(task));
-    return true;
-}
-
-bool KPTProject::deleteTask( KPTNode* task )
-{
-	if ( 0 == task ) {
-		// is always != 0. At least we would get the KPTProject, but you
-		// never know who might change that, so better be careful
-		return false;
-	}
-
-	if ( KPTNode::Type_Project == task->type() ) {
-		kdDebug()<<k_funcinfo<<"The root node cannot be deleted"<<endl;
-		return false;
-	}
-
-    task->setDeleted(true);
     return true;
 }
 

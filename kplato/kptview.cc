@@ -30,6 +30,8 @@
 #include "kptreportview.h"
 #include "kptdatetime.h"
 #include "kptcommand.h"
+#include "kptrelation.h"
+#include "kptrelationdialog.h"
 
 #include "kptresourceview.h"
 #include "kptresourcedialog.h"
@@ -190,6 +192,10 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
                         this, SLOT( slotPrintDebug() ), actionCollection(), "print_debug" );
     KAction* actPrintCalendarDebug = new KAction( i18n( "Print Calendar Debug" ), CTRL+SHIFT+Key_C,
                         this, SLOT( slotPrintCalendarDebug() ), actionCollection(), "print_calendar_debug" );
+
+    connect(m_pertview, SIGNAL(addRelation(KPTNode*, KPTNode*)), SLOT(slotAddRelation(KPTNode*, KPTNode*)));
+    connect(m_pertview, SIGNAL(modifyRelation(KPTRelation*)), SLOT(slotModifyRelation(KPTRelation*)));
+
 #endif
     // Necessary for the actions that are not plugged anywhere
     // Deprecated with KDE-3.1.
@@ -498,7 +504,16 @@ void KPTView::slotDeleteTask()
         kdDebug()<<k_funcinfo<<(node ? "Task is main project" : "No current task")<<endl;
         return;
     }
-    KPTNodeDeleteCmd *cmd = new KPTNodeDeleteCmd(getPart(), node, i18n("Delete Task"));
+    KMacroCommand *cmd = new KMacroCommand(i18n("Delete Task"));
+    cmd->addCommand(new KPTNodeDeleteCmd(getPart(), node));
+    QPtrListIterator<KPTRelation> it = node->dependChildNodes();
+    for (; it.current(); ++it) {
+        cmd->addCommand(new KPTDeleteRelationCmd(getPart(), it.current()));
+    }
+    it = node->dependParentNodes();
+    for (; it.current(); ++it) {
+        cmd->addCommand(new KPTDeleteRelationCmd(getPart(),it.current()));
+    }
     getPart()->addCommand(cmd);
 }
 
@@ -571,6 +586,36 @@ void KPTView::slotMoveTaskDown()
         KPTNodeMoveDownCmd *cmd = new KPTNodeMoveDownCmd(getPart(), *task, i18n("Move Task Down"));
         getPart()->addCommand(cmd);
     }
+}
+
+void KPTView::slotAddRelation(KPTNode *par, KPTNode *child) {
+    kdDebug()<<k_funcinfo<<endl;
+    KPTRelation *rel = new KPTRelation(par, child);
+    KPTAddRelationDialog *dia = new KPTAddRelationDialog(rel, this);
+    if (dia->exec()) {
+        getPart()->addCommand(new KPTAddRelationCmd(getPart(), rel, i18n("Add Relation")));
+    } else {
+        delete rel;
+    }
+    delete dia;
+}
+
+void KPTView::slotModifyRelation(KPTRelation *rel) {
+    kdDebug()<<k_funcinfo<<endl;
+    KPTRelation *relation = new KPTRelation(rel);
+    KPTModifyRelationDialog *dia = new KPTModifyRelationDialog(relation, this);
+    if (dia->exec()) {
+        if (dia->relationIsDeleted()) {
+            getPart()->addCommand(new KPTDeleteRelationCmd(getPart(), rel, i18n("Delete Relation")));
+        } else {
+            KPTModifyTimingRelationCmd *cmd = dia->buildCommand(getPart(), rel);
+            if (cmd) {
+                getPart()->addCommand(cmd);
+            }
+        }
+    }
+    delete dia;
+    delete relation;
 }
 
 void KPTView::slotEditResource() {

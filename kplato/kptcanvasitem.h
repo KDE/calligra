@@ -219,10 +219,13 @@ public:
     KDGanttViewItem *find(KPTNode *node);
     KDGanttViewItem *find(KDGanttViewItem *item, KPTNode *node);
     KDGanttView *ganttView() const { return m_view; }
-    
+    bool isDrawn() const { return m_drawn; }
+    void setDrawn(bool drawn) { m_drawn = drawn; }
+
 protected:
     KPTNode *m_node;  // can be KPTProject or KPTTask
     KDGanttView *m_view;
+    bool m_drawn;
 };
 
 /////////////////   KPTGanttViewTaskItem   ////////////////////
@@ -238,10 +241,13 @@ public:
     KDGanttViewItem *find(KPTNode *node);
     KDGanttViewItem *find(KDGanttViewItem *item, KPTNode *node);
     KDGanttView *ganttView() const { return m_view; }
-
+    bool isDrawn() const { return m_drawn; }
+    void setDrawn(bool drawn) { m_drawn = drawn; }
+    
 protected:
     KPTTask *m_task;
     KDGanttView *m_view;
+    bool m_drawn;
 };
 
 /////////////////   KPTGanttViewEventItem   ////////////////////
@@ -257,10 +263,13 @@ public:
     KDGanttViewItem *find(KPTNode *node);
     KDGanttViewItem *find(KDGanttViewItem *item, KPTNode *node);
     KDGanttView *ganttView() const { return m_view; }
-
+    bool isDrawn() const { return m_drawn; }
+    void setDrawn(bool drawn) { m_drawn = drawn; }
+    
 protected:
     KPTTask *m_task;
     KDGanttView *m_view;
+    bool m_drawn;
 };
 
 #endif

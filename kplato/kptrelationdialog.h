@@ -24,16 +24,40 @@
 
 class KPTNode;
 class KPTRelation;
+class KPTPart;
+class KPTModifyTimingRelationCmd;
+
 class QButtonGroup;
 
 
-class KPTRelationDialog : public KDialogBase 
+class KPTAddRelationDialog : public KDialogBase 
 {
     Q_OBJECT
 public:
-    KPTRelationDialog(KPTRelation *rel, QWidget *p=0, const char *n=0);
-    KPTRelationDialog(KPTNode *parentNode, KPTNode *childNode, QWidget *p=0, const char *n=0);
+    KPTAddRelationDialog(KPTRelation *rel, QWidget *p=0, const char *n=0);
+    
+protected slots:
+    void slotOk();
 
+protected:
+    void init();
+    
+private:
+    QButtonGroup *relationType;
+//    QButtonGroup *timingType;
+    KPTRelation *m_relation;
+};
+
+
+class KPTModifyRelationDialog : public KDialogBase 
+{
+    Q_OBJECT
+public:
+    KPTModifyRelationDialog(KPTRelation *rel, QWidget *p=0, const char *n=0);
+
+    KPTModifyTimingRelationCmd *buildCommand(KPTPart *part, KPTRelation *rel);
+    bool relationIsDeleted() { return m_deleted; }
+    
 protected slots:
     void slotOk();
     void slotUser1();
@@ -45,7 +69,7 @@ private:
     QButtonGroup *relationType;
 //    QButtonGroup *timingType;
     KPTRelation *m_relation;
-    KPTNode *m_parent, *m_child;
+    bool m_deleted;
 };
 
 

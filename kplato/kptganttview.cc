@@ -125,8 +125,9 @@ void KPTGanttView::drawChanges(KPTProject &project)
 {
     //kdDebug()<<k_funcinfo<<endl;
     m_gantt->setUpdateEnabled(false);
-    removeDeleted(m_gantt->firstChild());
+    resetDrawn(m_gantt->firstChild());
     updateChildren(&project); // don't draw project
+    removeNotDrawn(m_gantt->firstChild());
     
     m_taskLinks.clear();
     drawRelations();
@@ -165,16 +166,55 @@ KPTNode *KPTGanttView::getNode(KDGanttViewItem *item) {
     return 0;
 }
 
-void KPTGanttView::removeDeleted(KDGanttViewItem *item)
+bool KPTGanttView::isDrawn(KDGanttViewItem *item) {
+    if (item) {
+        if (item->type() == KDGanttViewItem::Event){
+            return static_cast<KPTGanttViewEventItem *>(item)->isDrawn();
+        } else if (item->type() == KDGanttViewItem::Task) {
+            return static_cast<KPTGanttViewTaskItem *>(item)->isDrawn();
+        } else if (item->type() == KDGanttViewItem::Summary) {
+            return static_cast<KPTGanttViewSummaryItem *>(item)->isDrawn();
+        } else {
+            kdWarning()<<k_funcinfo<<"Unknown item type: "<<item->type()<<endl;
+        }
+    }
+    return false;
+}
+
+void KPTGanttView::setDrawn(KDGanttViewItem *item, bool state) {
+    if (item) {
+        if (item->type() == KDGanttViewItem::Event){
+            static_cast<KPTGanttViewEventItem *>(item)->setDrawn(state);
+        } else if (item->type() == KDGanttViewItem::Task) {
+            static_cast<KPTGanttViewTaskItem *>(item)->setDrawn(state);
+        } else if (item->type() == KDGanttViewItem::Summary) {
+            static_cast<KPTGanttViewSummaryItem *>(item)->setDrawn(state);
+        } else {
+            kdWarning()<<k_funcinfo<<"Unknown item type: "<<item->type()<<endl;
+        }
+    }
+    return;
+}
+
+void KPTGanttView::resetDrawn(KDGanttViewItem *_item)
 {
-    KDGanttViewItem *nextItem;
+    KDGanttViewItem *nextItem, *item=_item;
     for (; item; item = nextItem) {
         nextItem = item->nextSibling();
-        KPTNode *n = getNode(item);
-        if (n->isDeleted()) {
-            deleteItem(item); // delete me and my children
+        setDrawn(item, false);
+        resetDrawn(item->firstChild()); // then my children
+    }
+}
+
+void KPTGanttView::removeNotDrawn(KDGanttViewItem *_item)
+{
+    KDGanttViewItem *nextItem, *item=_item;
+    for (; item; item = nextItem) {
+        nextItem = item->nextSibling();
+        if (!isDrawn(item)) {
+            deleteItem(item);
         } else {
-            removeDeleted(item->firstChild()); // check my children
+            removeNotDrawn(item->firstChild()); // then my children
         }
     }
 }
@@ -242,8 +282,6 @@ KDGanttViewItem *KPTGanttView::correctParent(KDGanttViewItem *item, KPTNode *nod
 void KPTGanttView::updateChildren(KPTNode *parentNode)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    if (parentNode->isDeleted())
-        return;
     QPtrListIterator<KPTNode> nit(parentNode->childNodeIterator());
     for (; nit.current(); ++nit )
     {
@@ -253,9 +291,7 @@ void KPTGanttView::updateChildren(KPTNode *parentNode)
 
 void KPTGanttView::updateNode(KPTNode *node)
 {
-    //kdDebug()<<k_funcinfo<<node->name()<<endl;
-    if (node->isDeleted())
-        return;
+    kdDebug()<<k_funcinfo<<node->name()<<endl;
     KDGanttViewItem *item = findItem(node);
     if (!item) {
         item = addNode(findItem(node->getParent()), node, findItem(node->siblingBefore()));
@@ -312,8 +348,6 @@ void KPTGanttView::modifyNode(KPTNode *node)
 void KPTGanttView::modifyProject(KDGanttViewItem *item, KPTNode *node)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    if (node->isDeleted())
-        return;
     item->setListViewText(node->name());
     KPTDateTime time = node->startTime();
     KPTDuration dur = node->duration();
@@ -322,14 +356,13 @@ void KPTGanttView::modifyProject(KDGanttViewItem *item, KPTNode *node)
     item->setStartTime(time);
     item->setEndTime(node->endTime());
     //item->setOpen(true);
+    setDrawn(item, true);
 
 }
 
 void KPTGanttView::modifySummaryTask(KDGanttViewItem *item, KPTTask *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    if (task->isDeleted())
-        return;
     item->setListViewText(task->name());
     KPTDateTime time = task->startTime();
     KPTDuration dur = task->duration();
@@ -344,13 +377,12 @@ void KPTGanttView::modifySummaryTask(KDGanttViewItem *item, KPTTask *task)
         item->setListViewText(3,  "  " + task->endTime().toString(Qt::ISODate));
         item->setListViewText(4, "  " +  task->getLatestFinish().toString(Qt::ISODate));
     }
+    setDrawn(item, true);
 }
 
 void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    if (task->isDeleted())
-        return;
     item->setListViewText(task->name());
     KPTDateTime time = task->startTime();
     KPTDuration dur = task->duration();
@@ -370,14 +402,12 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
         item->setListViewText(3,  "  " + task->endTime().toString(Qt::ISODate));
         item->setListViewText(4, "  " +  task->getLatestFinish().toString(Qt::ISODate));
     }
+    setDrawn(item, true);
 }
 
 void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    if (task->isDeleted()) {
-        return;
-    }
     item->setListViewText(task->name());
     item->setStartTime(task->startTime());
     //item->setOpen(true);
@@ -387,6 +417,7 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
         item->setListViewText(3,  "  " + task->endTime().toString(Qt::ISODate));
         item->setListViewText(4, "  " +  task->getLatestFinish().toString(Qt::ISODate));
     }
+    setDrawn(item, true);
 }
 
 KDGanttViewItem *KPTGanttView::addNode( KDGanttViewItem *parentItem, KPTNode *node, KDGanttViewItem *after)
@@ -413,8 +444,6 @@ KDGanttViewItem *KPTGanttView::addNode( KDGanttViewItem *parentItem, KPTNode *no
 KDGanttViewItem *KPTGanttView::addProject(KDGanttViewItem *parentItem, KPTNode *node, KDGanttViewItem *after)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    if (node->isDeleted())
-        return 0;
     KPTGanttViewSummaryItem *item;
     if ( parentItem) {
         item = new KPTGanttViewSummaryItem(parentItem, node);
@@ -437,8 +466,6 @@ KDGanttViewItem *KPTGanttView::addSubProject(KDGanttViewItem *parentItem, KPTNod
 KDGanttViewItem *KPTGanttView::addSummaryTask(KDGanttViewItem *parentItem, KPTTask *task, KDGanttViewItem *after)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    if (task->isDeleted())
-        return 0;
     // display summary item
     KPTGanttViewSummaryItem *item;
     if ( parentItem) {
@@ -456,8 +483,6 @@ KDGanttViewItem *KPTGanttView::addSummaryTask(KDGanttViewItem *parentItem, KPTTa
 KDGanttViewItem *KPTGanttView::addTask(KDGanttViewItem *parentItem, KPTTask *task, KDGanttViewItem *after)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    if (task->isDeleted())
-        return 0;
     // display task item
     KPTGanttViewTaskItem *item;
     if ( parentItem ) {
@@ -476,9 +501,6 @@ KDGanttViewItem *KPTGanttView::addTask(KDGanttViewItem *parentItem, KPTTask *tas
 KDGanttViewItem *KPTGanttView::addMilestone(KDGanttViewItem *parentItem, KPTTask *task, KDGanttViewItem *after)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    if (task->isDeleted()) {
-        return 0;
-    }
     KPTGanttViewEventItem *item;
     if ( parentItem ) {
         item = new KPTGanttViewEventItem(parentItem, task);
@@ -495,8 +517,6 @@ KDGanttViewItem *KPTGanttView::addMilestone(KDGanttViewItem *parentItem, KPTTask
 void KPTGanttView::drawChildren(KDGanttViewItem *parentItem, KPTNode &parentNode)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    if (parentNode.isDeleted())
-        return;
 	QPtrListIterator<KPTNode> nit(parentNode.childNodeIterator());
 	for ( nit.toLast(); nit.current(); --nit )
 	{
