@@ -14,6 +14,9 @@
  * ----------------------------------------------------------------------------- */
 
 /* Implementation : PYTHON */
+#include <config.h>
+
+#ifdef HAVE_PYTHON
 
 #define SWIGPYTHON
 /***********************************************************************
@@ -1763,3 +1766,5 @@ SWIGEXPORT(void) initkivioc(void) {
     SWIG_InstallConstants(d,_swig_const_table);
 
 }
+#endif // HAVE_PYTHON
+

@@ -1,6 +1,7 @@
 
 #include "kivio_py_stencil.h"
 
+KivioPage *page;
 #ifdef HAVE_PYTHON
 
 #include "kivio_common.h"
@@ -30,9 +31,6 @@
 extern "C" {
    void initkivioc(void);
 }
-
-KivioPage *page;
-
 
 KivioPyStencil::KivioPyStencil()
     : KivioStencil()
