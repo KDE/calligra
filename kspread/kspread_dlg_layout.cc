@@ -2832,7 +2832,7 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 void CellLayoutPagePattern::slotNotAnyColor()
 {
 b_notAnyColor=true;
-color->setColor(colorGroup().base());
+bgColorButton->setColor(colorGroup().base());
 current->setBackgroundColor(colorGroup().base());
 }
 
