@@ -425,7 +425,11 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
 void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, uint frameNumber, const KoRect& rect )
 {
     if ( frameNumber < headerFooter->getNumFrames() ) {
-        headerFooter->frame( frameNumber )->setRect( rect );
+        KWFrame* frame = headerFooter->frame( frameNumber );
+        frame->setRect( rect );
+#ifdef DEBUG_FRAMELAYOUT
+        kdDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter frame " << headerFooter->getName() << " " << frame << " resized to " << rect << " pagenum=" << frame->pageNum() << endl;
+#endif
     }
     else
     {

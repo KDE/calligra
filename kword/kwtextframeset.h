@@ -427,7 +427,7 @@ public:
 
     virtual KWordFrameSetIface* dcopObject();
 
-    void setFootNoteVariable( KWFootNoteVariable* var ) { m_footNoteVar = var; }
+    void setFootNoteVariable( KWFootNoteVariable* var );
     KWFootNoteVariable* footNoteVariable() const { return m_footNoteVar; }
 
     /** Create the first frame for this frameset.

@@ -2210,7 +2210,12 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
 bool KWTextFrameSet::isFrameEmpty( KWFrame * theFrame )
 {
     KoTextParag * lastParag = textDocument()->lastParag();
-    ensureFormatted( lastParag, false );
+    // The problem is that if we format things here, and don't emit afterFormatting,
+    // we won't resize autoresize frames properly etc. (e.g. endnotes)
+    // Testcase for this problem: werner's footnote-1.doc
+    //ensureFormatted( lastParag, false ); // maybe true here would do too? slow if maintextframeset though.
+    if ( !lastParag->isValid() )
+        return false; // we don't know yet
     int bottom = lastParag->rect().top() + lastParag->rect().height();
 
     if ( theFrame->frameSet() == this ) // safety check
@@ -2230,8 +2235,10 @@ bool KWTextFrameSet::canRemovePage( int num )
     //kdDebug() << "KWTextFrameSet(" << getName() << ")::canRemovePage " << num << endl;
 
     // No frame on that page ? ok for us then
-    if ( num < m_firstPage || num >= (int)m_framesInPage.size() + m_firstPage )
+    if ( num < m_firstPage || num >= (int)m_framesInPage.size() + m_firstPage ) {
+        //kdDebug() << "No frame on that page. Number of frames: " << getNumFrames() << endl;
         return true;
+    }
 
     QPtrListIterator<KWFrame> frameIt( framesInPage( num ) );
     for ( ; frameIt.current(); ++frameIt )
@@ -3610,16 +3617,20 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
 
 bool KWFootNoteFrameSet::isFootNote() const
 {
-    if ( !m_footNoteVar )
+    if ( !m_footNoteVar ) {
+        kdWarning() << k_funcinfo << " called too early? No footnote var." << endl;
         return false;
-    return (m_footNoteVar->noteType()==FootNote );
+    }
+    return ( m_footNoteVar->noteType() == FootNote );
 }
 
 bool KWFootNoteFrameSet::isEndNote() const
 {
-    if ( !m_footNoteVar )
+    if ( !m_footNoteVar ) {
+        kdWarning() << k_funcinfo << " called too early? No footnote var." << endl;
         return false;
-    return (m_footNoteVar->noteType()==EndNote );
+    }
+    return ( m_footNoteVar->noteType() == EndNote );
 }
 
 
@@ -3630,6 +3641,11 @@ void KWFootNoteFrameSet::createInitialFrame( int pageNum )
     frame->setFrameBehavior(KWFrame::AutoExtendFrame);
     frame->setNewFrameBehavior(KWFrame::NoFollowup);
     addFrame( frame );
+}
+
+void KWFootNoteFrameSet::setFootNoteVariable( KWFootNoteVariable* var )
+{
+     m_footNoteVar = var;
 }
 
 void KWFootNoteFrameSet::setCounterText( const QString& text )
@@ -3652,6 +3668,5 @@ KWordFrameSetIface* KWFootNoteFrameSet::dcopObject()
 
     return m_dcop;
 }
-
 
 #include "kwtextframeset.moc"

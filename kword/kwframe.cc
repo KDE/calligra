@@ -502,8 +502,8 @@ void KWFrame::load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVers
     // for old document we used the British spelling (newFrameBehaviour), so this is for backwards compatibility.
     defaultValue = static_cast<NewFrameBehavior>( KWDocument::getAttribute( frameElem, "newFrameBehaviour", defaultValue ) );
     m_newFrameBehavior = static_cast<NewFrameBehavior>( KWDocument::getAttribute( frameElem, "newFrameBehavior", defaultValue ) );
-    if (frameSet->isEndNote())
-        m_newFrameBehavior = NoFollowup; // KWFrameLayout does it
+    if ( frameSet->isFootEndNote() ) // note that isFootNote/isEndNote are not possible yet
+        m_newFrameBehavior = NoFollowup;
 
     KoBorder l, r, t, b;
     l.setPenWidth( KWDocument::getAttribute( frameElem, "lWidth", 0.0 ));
