@@ -439,6 +439,17 @@ void KoView::newView() {
     shell->show();
 }
 
+KoMainWindow * KoView::shell() const
+{
+    return dynamic_cast<KoMainWindow *>( topLevelWidget() );
+}
+
+KStatusBar * KoView::statusBar()
+{
+    KoMainWindow *mw = shell();
+    return mw ? mw->statusBar() : 0L;
+}
+
 DCOPObject *KoView::dcopObject()
 {
     if ( !d->m_dcopObject )

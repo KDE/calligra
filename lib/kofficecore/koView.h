@@ -34,9 +34,11 @@ class KAction;
 class KActionCollection;
 class QCustomEvent;
 class KoDocument;
+class KoMainWindow;
 class KoViewPrivate;
 class KoViewChild;
 class KoFrame;
+class KStatusBar;
 class KInstance;
 class DCOPObject;
 
@@ -245,6 +247,20 @@ public:
 
   virtual void setupPrinter( QPrinter &printer );
   virtual void print( QPrinter &printer );
+
+  /**
+   * @return the KoMainWindow in which this view is currently.
+   * NOTE: this could be 0L, if the main window isn't a koffice main window.
+   * (e.g. it can be any KParts application).
+   */
+  KoMainWindow * shell() const;
+
+  /**
+   * @return the statusbar of the KoMainWindow in which this view is currently.
+   * NOTE: this could be 0L, if the main window isn't a koffice main window.
+   * (e.g. it can be any KParts application).
+   */
+  KStatusBar * statusBar();
 
 public slots:
 

@@ -218,10 +218,6 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     createShellGUI();
     d->bMainWindowGUIBuilt = true;
 
-    // Status bar
-    d->statusBarLabel = new QLabel( statusBar() );
-    statusBar()->addWidget( d->statusBarLabel, 1, true );
-
     if ( !initialGeometrySet() )
     {
         // Default size
@@ -928,8 +924,13 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
   setUpdatesEnabled( true );
 }
 
-QLabel * KoMainWindow::statusBarLabel() const
+QLabel * KoMainWindow::statusBarLabel()
 {
+  if ( !d->statusBarLabel )
+  {
+    d->statusBarLabel = new QLabel( statusBar() );
+    statusBar()->addWidget( d->statusBarLabel, 1, true );
+  }
   return d->statusBarLabel;
 }
 
