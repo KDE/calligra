@@ -203,9 +203,7 @@ void kisView::setupDialogs()
   m_pColorDialog = new ColorDialog( this );
   m_pColorDialog->resize(254, 150);
   m_pColorDialog->move(521, 380);
-  m_pColorDialog->show();
-  m_dialog_color->setChecked(true);
-  //addDialog(m_pColorDialog);
+  m_pColorDialog->hide();
   connect( m_pColorDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   connect(m_pColorDialog, SIGNAL(fgColorChanged(const KColor&)), this, SLOT(slotSetFGColor(const KColor&)));
@@ -215,18 +213,14 @@ void kisView::setupDialogs()
   m_pLayerDialog = new LayerDialog( m_pDoc, this );
   m_pLayerDialog->resize( 205, 267 );
   m_pLayerDialog->move( 560, 22 );
-  m_pLayerDialog->show();
-  m_pLayerDialog->setFocus();
-  m_dialog_layer->setChecked(true);
-  //addDialog(m_pLayerDialog);
+  m_pLayerDialog->hide();
   connect( m_pLayerDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   // brush dialog
   m_pBrushDialog = new BrushDialog(this);
   m_pBrushDialog->resize(185, 158);
   m_pBrushDialog->move(523, 220);
-  m_pBrushDialog->show();
-  //addDialog(m_pBrushDialog);
+  m_pBrushDialog->hide();
   connect( m_pBrushDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   // brush
@@ -239,7 +233,6 @@ void kisView::setupDialogs()
   m_pGradientDialog->resize( 206, 185 );
   m_pGradientDialog->move( 200, 290 );
   m_pGradientDialog->hide();
-  //addDialog(m_pGradientDialog);
   connect( m_pGradientDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   // gradient editor dialog
@@ -247,7 +240,6 @@ void kisView::setupDialogs()
   m_pGradientEditorDialog->resize( 400, 200 );
   m_pGradientEditorDialog->move( 100, 190 );
   m_pGradientEditorDialog->hide();
-  //addDialog(m_pGradientEditorDialog);
   connect( m_pGradientEditorDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
 
   updateToolbarButtons();
@@ -645,7 +637,10 @@ void kisView::paste()
 void kisView::dialog_layer()
 {
   if (m_dialog_layer->isChecked())
+  {
     m_pLayerDialog->show();
+    m_pLayerDialog->setFocus();
+  }
   else
     m_pLayerDialog->hide();
 }
@@ -653,7 +648,10 @@ void kisView::dialog_layer()
 void kisView::dialog_color()
 {
   if (m_dialog_color->isChecked())
+  {
     m_pColorDialog->show();
+    m_pColorDialog->setFocus();
+  }
   else
     m_pColorDialog->hide();
 }
@@ -661,7 +659,10 @@ void kisView::dialog_color()
 void kisView::dialog_brush()
 {
   if (m_dialog_brush->isChecked())
+  {
     m_pBrushDialog->show();
+    m_pBrushDialog->setFocus();
+  }
   else
     m_pBrushDialog->hide();
 }
@@ -669,7 +670,10 @@ void kisView::dialog_brush()
 void kisView::dialog_gradient()
 {
   if (m_dialog_gradient->isChecked())
+  {
     m_pGradientDialog->show();
+    m_pGradientDialog->setFocus();
+  }
   else
     m_pGradientDialog->hide();
 }
@@ -678,7 +682,10 @@ void kisView::dialog_gradient()
 void kisView::dialog_gradienteditor()
 {
   if (m_dialog_gradienteditor->isChecked())
+  {
     m_pGradientEditorDialog->show();
+    m_pGradientEditorDialog->setFocus();
+  }
   else
     m_pGradientEditorDialog->hide();
 }
