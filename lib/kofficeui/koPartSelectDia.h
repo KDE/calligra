@@ -24,25 +24,14 @@
 
 #include "koPartSelectDia_data.h"
 
-#include <qstring.h>
-#include <qpixmap.h>
+#include <qvaluelist.h>
 
-#include <list>
-
-class KoBeListBoxItem : public QListBoxItem
-{
-public:
-  KoBeListBoxItem( const char *s, const QPixmap p ) : QListBoxItem(), pm(p)
-  { setText( s ); }
-protected:
-  virtual void paint( QPainter * );
-  virtual int height( const QListBox * ) const;
-  virtual int width( const QListBox * ) const;
-  virtual const QPixmap *pixmap() const { return &pm; }
-private:
-  QPixmap pm;
-};
-
+/**
+ * This dialog presents the user all available
+ * KOffice components ( KSpread,KWord etc ) with name
+ * and mini icon. The user may select one and
+ * the corresponding KoDocumentEntry is returned.
+ */
 class KoPartSelectDia : public DlgPartSelectData
 {
     Q_OBJECT
@@ -53,13 +42,15 @@ public:
     KoDocumentEntry result();
 
     /**
-     * @returns an empty string if no part was selected, or the name
-     *          of the server that implements the selected component.
+     * Convenience function for using the dialog.
+     *
+     * @returns the KoDocumentEntry of the selected KOffice components
+     *          or an empty entry.
      */
     static KoDocumentEntry selectPart();
 
-protected:
-    vector<KoDocumentEntry> m_lstEntries;
+private:
+    QValueList<KoDocumentEntry> m_lstEntries;
 };
 
 #endif // DlgPartSelect_included
