@@ -27,6 +27,7 @@
 #include <qdom.h>
 #include <qpainter.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <GradientShape.h>
 #include <GCurve.h>
@@ -296,8 +297,8 @@ void GPolygon::setSymmetricPolygon (const Coord& sp, const Coord& ep,
   float dx = (float) fabs (sp.x () - ep.x ());
   float dy = (float) fabs (sp.y () - ep.y ());
   float radius = (dx > dy ? dx / 2.0 : dy / 2.0);
-  float xoff = sp.x () + radius;
-  float yoff = sp.y () + radius;
+  float xoff = sp.x() + (sp.x() < ep.x() ? radius : -radius);
+  float yoff = sp.y() + (sp.y() < ep.y() ? radius : -radius);
   float xp, yp;
 
   points.append (new Coord (xoff, -radius + yoff));
