@@ -30,8 +30,6 @@
 
 #include <kdebug.h>
 
-#define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
-
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc )
     : KWFrameSet( _doc ), undoRedoInfo( this )
 {
@@ -174,7 +172,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
             // into the QTextDocument's coordinate system
             // (which doesn't have frames, borders, etc.)
             r.moveBy( -frame->left(), -frame->top() + totalHeight );   // portion of the frame to be drawn, in qrt coords
-            QRegion reg = frameClipRegion( p, frame );
+            QRegion reg = frameClipRegion( p, frame, crect );
             if ( !reg.isEmpty() )
             {
                 p->save();
@@ -228,12 +226,12 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             QPoint topLeft = cursor->topParag()->rect().topLeft();                    // in QRT coords
             int h = cursor->parag()->lineHeightOfChar( cursor->index() );             //
             QPoint real = p->xForm( internalToContents( topLeft ) );                  // from QRT to contents to viewport
-            QRect clip = p->xForm( QRect( real.x() + cursor->x() - 5, real.y() + cursor->y(), 10, h ) );  // very small clipping around the cursor
+            QRect clip = QRect( real.x() + cursor->x() - 5, real.y() + cursor->y(), 10, h );  // very small clipping around the cursor
 
             //kdDebug() << "KWTextFrameSet::drawCursor topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << "  real=(" << real.x() << "," << real.y() << ")" << endl;
             //kdDebug() << this << " Clip for cursor: " << DEBUGRECT(clip) << endl;
 
-            QRegion reg = frameClipRegion( p, frame ).intersect( clip );
+            QRegion reg = frameClipRegion( p, frame, clip );
             if ( !reg.isEmpty() )
             {
                 p->save();

@@ -387,7 +387,8 @@ public:
 protected:
 
     // Determine the clipping rectangle for drawing the contents of @p frame with @p painter
-    QRegion frameClipRegion( QPainter * painter, KWFrame *frame );
+    // in the rectangle delimited by @p crect.
+    QRegion frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect );
 
     KWDocument *doc;              // Document
     QList<KWFrame> frames;        // Our frames

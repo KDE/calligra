@@ -60,6 +60,8 @@ const QChar KWSpecialChar( static_cast<char>( 0 ) );
 
 #define KWBarIcon( x ) BarIcon( x, KWFactory::global() )
 
+#define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
+
 const unsigned int minFrameWidth=18;
 const unsigned int minFrameHeight=20;
 const unsigned int tableCellSpacing=3;

@@ -766,21 +766,25 @@ bool KWFrameSet::isVisible() const
 
 // This determines where to clip the painter to draw the contents of a given frame
 // It clips to the frame, and clips out any "on top" frame.
-QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame )
+QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect )
 {
     QRect rc = painter->xForm( *frame );
-    //kdDebug() << "KWTextFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame) << " clip region rect=" << DEBUGRECT(rc) << endl;
-    QRegion reg( rc );
-    QListIterator<KWFrame> fIt( m_framesOnTop );
-    for ( ; fIt.current() ; ++fIt )
+    rc &= painter->xForm( crect ); // intersect
+    //kdDebug() << "KWTextFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame) << " clip region rect=" << DEBUGRECT(rc) << " rc.isEmpty()=" << rc.isEmpty() << endl;
+    if ( !rc.isEmpty() )
     {
-        QRect r = painter->xForm( *fIt.current() );
-        r = QRect( r.x() - 1, r.y() - 1,  // ### plan for a one-pixel border. Maybe we should use the real border width.
-                   r.width() + 2, r.height() + 2 );
-        //kdDebug() << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
-        reg -= r; // subtract
-    }
-    return reg;
+        QRegion reg( rc );
+        QListIterator<KWFrame> fIt( m_framesOnTop );
+        for ( ; fIt.current() ; ++fIt )
+        {
+            QRect r = painter->xForm( *fIt.current() );
+            r = QRect( r.x() - 1, r.y() - 1,  // ### plan for a one-pixel border. Maybe we should use the real border width.
+                       r.width() + 2, r.height() + 2 );
+            //kdDebug() << "frameClipRegion subtract rect "<< DEBUGRECT(r) << endl;
+            reg -= r; // subtract
+        }
+        return reg;
+    } else return QRegion();
 }
 
 
@@ -863,7 +867,7 @@ void KWPictureFrameSet::drawContents( QPainter *painter, const QRect & crect,
 
     if ( r.size() != m_image.image().size() )
         m_image = m_image.scale( r.size() );
-    QRegion reg = frameClipRegion( painter, frames.first() ).intersect( crect );
+    QRegion reg = frameClipRegion( painter, frames.first(), crect );
     if ( !reg.isEmpty() )
     {
         painter->save();
@@ -910,21 +914,26 @@ void KWPartFrameSet::drawContents( QPainter * painter, const QRect & crect,
 {
     if (!onlyChanged)
     {
-        QPicture *pic = getPicture();
-        if ( !pic || frames.isEmpty() )
+        if ( !child || !child->document() || frames.isEmpty() )
+        {
+            //kdDebug() << "KWPartFrameSet::drawContents " << this << " aborting. child=" << child << " child->document()=" << child->document() << " frames.count()=" << frames.count() << endl;
             return;
+        }
         KWFrame *frame = frames.first();
-        QRegion reg = frameClipRegion( painter, frame ).intersect( crect );
+        QRegion reg = frameClipRegion( painter, frame, crect );
         if ( !reg.isEmpty() )
         {
+            //kdDebug() << "KWPartFrameSet::drawContents clipregion=" << DEBUGRECT(reg.boundingRect()) << endl;
             painter->save();
             QRect r = painter->viewport();
             painter->setClipRegion( reg );
-            painter->setWindow( -frame->x(), -frame->y(), r.width(), r.height() );
-            painter->drawPicture( *pic );
+            painter->setViewport( frame->x(), frame->y(), r.width(), r.height() );
+            // painter->translate( frame->x(), frame->y() ); // messes up the clip regions
+            QRect rframe( 0, 0, frames.first()->width(), frames.first()->height() );
+            child->document()->paintEverything( *painter, rframe, true, 0 );
             painter->setViewport( r );
             painter->restore();
-        }
+        } //else kdDebug() << "KWPartFrameSet::drawContents " << this << " no intersection" << endl;
     }
 }
 
