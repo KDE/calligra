@@ -41,7 +41,6 @@ public:
     virtual QWidget *canvas() { return m_canvas; }
 
 protected slots:
-    void slotViewNew();
     void slotViewZoom(int item);
 
     void recalcRulers(int x, int y);
