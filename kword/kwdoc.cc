@@ -1917,7 +1917,7 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameSet = fit.current();
-        // don't add tables! A table cell ( frameset ) _must_ not have more than one frame!
+        // don't add tables! A table cell ( frameset ) _must_ not have cells auto-added to them!
         if ( frameSet->getFrameType() == FT_TABLE ) continue;
 
         // KWFrameSet::addFrame triggers a reshuffle in the frames list (KWTextFrameSet::updateFrames)
@@ -1970,7 +1970,7 @@ bool KWDocument::canRemovePage( int num, KWFrame *f )
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameSet = fit.current();
-        if ( frameSet->getFrameInfo() != FI_BODY )
+        if ( frameSet->getFrameInfo() != FI_BODY ) // if header/footer/footnote
             continue;
         QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
