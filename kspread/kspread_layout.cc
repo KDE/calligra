@@ -25,6 +25,7 @@
 #include <stdio.h>
 
 #include <qdom.h>
+#include <qapplication.h>
 #include <kdebug.h>
 #include <koGlobal.h>
 
