@@ -996,7 +996,7 @@ void KWFrameSet::load( QDomElement &framesetElem, bool loadFrames )
                 rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) );
                 KWFrame * frame = new KWFrame(this, rect.x(), rect.y(), rect.width(), rect.height() );
                 frame->load( frameElem, isHeaderOrFooter(), m_doc->syntaxVersion() );
-                addFrame( frame );
+                addFrame( frame, false );
                 m_doc->progressItemLoaded();
             }
         }
