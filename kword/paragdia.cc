@@ -405,12 +405,11 @@ int KWParagDia::align() const
 /*================================================================*/
 void KWParagDia::setupTab1()
 {
-    kdDebug() << "KWParagDia::setupTab1" << endl;
-    tab1 = addPage( i18n( "Indent and Spacing" ) );
-    grid1 = new QGridLayout( tab1, 4, 2, 15, 7 );
+    QWidget *tab = addPage( i18n( "Indent and Spacing" ) );
+    QGridLayout *grid = new QGridLayout( tab, 4, 2, 15, 7 );
 
     // --------------- indent ---------------
-    indentFrame = new QGroupBox( i18n( "Indent" ), tab1 );
+    indentFrame = new QGroupBox( i18n( "Indent" ), tab );
     indentGrid = new QGridLayout( indentFrame, 4, 2, 15, 7 );
 
     lLeft = new QLabel( i18n("Left ( %1 ):").arg(doc->getUnit()), indentFrame );
@@ -463,10 +462,10 @@ void KWParagDia::setupTab1()
 
      // grid row spacing
     indentGrid->addRowSpacing( 0, 5 );
-    grid1->addWidget( indentFrame, 0, 0 );
+    grid->addWidget( indentFrame, 0, 0 );
 
     // --------------- spacing ---------------
-    spacingFrame = new QGroupBox( i18n( "Line Spacing" ), tab1 );
+    spacingFrame = new QGroupBox( i18n( "Line Spacing" ), tab );
     spacingGrid = new QGridLayout( spacingFrame, 3, 1, 15, 7 );
 
     cSpacing = new QComboBox( false, spacingFrame, "" );
@@ -493,14 +492,14 @@ void KWParagDia::setupTab1()
 
     // grid row spacing
     spacingGrid->addRowSpacing( 0, 5 );
-    grid1->addWidget( spacingFrame, 1, 0 );
+    grid->addWidget( spacingFrame, 1, 0 );
 
     cSpacing->setCurrentItem( 4 );
     cSpacing->setEnabled( false ); // TODO: handle 0.5 lines, 1 line etc
     eSpacing->setEnabled( true );
 
     // --------------- paragraph spacing ---------------
-    pSpaceFrame = new QGroupBox( i18n( "Paragraph Space" ), tab1 );
+    pSpaceFrame = new QGroupBox( i18n( "Paragraph Space" ), tab );
     pSpaceGrid = new QGridLayout( pSpaceFrame, 3, 2, 15, 7 );
 
     lBefore = new QLabel( i18n("Before ( %1 ):").arg(doc->getUnit()), pSpaceFrame );
@@ -537,90 +536,88 @@ void KWParagDia::setupTab1()
 
     // grid row spacing
     pSpaceGrid->addRowSpacing( 0, 5 );
-    grid1->addWidget( pSpaceFrame, 2, 0 );
+    grid->addWidget( pSpaceFrame, 2, 0 );
 
     // --------------- preview --------------------
-    prev1 = new KWPagePreview( tab1 );
-    grid1->addMultiCellWidget( prev1, 0, 3, 1, 1 );
+    prev1 = new KWPagePreview( tab );
+    grid->addMultiCellWidget( prev1, 0, 3, 1, 1 );
 
-    grid1->setColStretch( 1, 1 );
-    grid1->setRowStretch( 3, 1 );
+    grid->setColStretch( 1, 1 );
+    grid->setRowStretch( 3, 1 );
 }
 
 /*================================================================*/
 void KWParagDia::setupTab2()
 {
-    tab2 = addPage( i18n( "Aligns" ) );
+    QWidget *tab = addPage( i18n( "Aligns" ) );
+    QGridLayout *grid = new QGridLayout( tab, 6, 2, 15, 7 );
 
-    grid2 = new QGridLayout( tab2, 6, 2, 15, 7 );
+    lAlign = new QLabel( i18n( "Align:" ), tab );
+    grid->addWidget( lAlign, 0, 0 );
 
-    lAlign = new QLabel( i18n( "Align:" ), tab2 );
-    grid2->addWidget( lAlign, 0, 0 );
-
-    rLeft = new QRadioButton( i18n( "Left" ), tab2 );
-    grid2->addWidget( rLeft, 1, 0 );
+    rLeft = new QRadioButton( i18n( "Left" ), tab );
+    grid->addWidget( rLeft, 1, 0 );
     connect( rLeft, SIGNAL( clicked() ), this, SLOT( alignLeft() ) );
 
-    rCenter = new QRadioButton( i18n( "Center" ), tab2 );
-    grid2->addWidget( rCenter, 2, 0 );
+    rCenter = new QRadioButton( i18n( "Center" ), tab );
+    grid->addWidget( rCenter, 2, 0 );
     connect( rCenter, SIGNAL( clicked() ), this, SLOT( alignCenter() ) );
 
-    rRight = new QRadioButton( i18n( "Right" ), tab2 );
-    grid2->addWidget( rRight, 3, 0 );
+    rRight = new QRadioButton( i18n( "Right" ), tab );
+    grid->addWidget( rRight, 3, 0 );
     connect( rRight, SIGNAL( clicked() ), this, SLOT( alignRight() ) );
 
-    rJustify = new QRadioButton( i18n( "Justify" ), tab2 );
-    grid2->addWidget( rJustify, 4, 0 );
+    rJustify = new QRadioButton( i18n( "Justify" ), tab );
+    grid->addWidget( rJustify, 4, 0 );
     connect( rJustify, SIGNAL( clicked() ), this, SLOT( alignJustify() ) );
 
     clearAligns();
     rLeft->setChecked( true );
 
     // --------------- preview --------------------
-    prev2 = new KWPagePreview2( tab2 );
-    grid2->addMultiCellWidget( prev2, 0, 5, 1, 1 );
+    prev2 = new KWPagePreview2( tab );
+    grid->addMultiCellWidget( prev2, 0, 5, 1, 1 );
 
     // --------------- main grid ------------------
-    grid2->setColStretch( 1, 1 );
-    grid2->setRowStretch( 5, 1 );
+    grid->setColStretch( 1, 1 );
+    grid->setRowStretch( 5, 1 );
 }
 
 /*================================================================*/
 void KWParagDia::setupTab3()
 {
-    tab3 = addPage( i18n( "Borders" ) );
+    QWidget *tab = addPage( i18n( "Borders" ) );
+    QGridLayout *grid = new QGridLayout( tab, 8, 2, 15, 7 );
 
-    grid3 = new QGridLayout( tab3, 8, 2, 15, 7 );
+    lStyle = new QLabel( i18n( "Style:" ), tab );
+    grid->addWidget( lStyle, 0, 0 );
 
-    lStyle = new QLabel( i18n( "Style:" ), tab3 );
-    grid3->addWidget( lStyle, 0, 0 );
-
-    cStyle = new QComboBox( false, tab3 );
+    cStyle = new QComboBox( false, tab );
     cStyle->insertItem( i18n( "solid line" ) );
     cStyle->insertItem( i18n( "dash line ( ---- )" ) );
     cStyle->insertItem( i18n( "dot line ( **** )" ) );
     cStyle->insertItem( i18n( "dash dot line ( -*-* )" ) );
     cStyle->insertItem( i18n( "dash dot dot line ( -**- )" ) );
-    grid3->addWidget( cStyle, 1, 0 );
+    grid->addWidget( cStyle, 1, 0 );
     connect( cStyle, SIGNAL( activated( const QString & ) ), this, SLOT( brdStyleChanged( const QString & ) ) );
 
-    lWidth = new QLabel( i18n( "Width:" ), tab3 );
-    grid3->addWidget( lWidth, 2, 0 );
+    lWidth = new QLabel( i18n( "Width:" ), tab );
+    grid->addWidget( lWidth, 2, 0 );
 
-    cWidth = new QComboBox( false, tab3 );
+    cWidth = new QComboBox( false, tab );
     for( unsigned int i = 1; i <= 10; i++ )
         cWidth->insertItem(QString::number(i));
-    grid3->addWidget( cWidth, 3, 0 );
+    grid->addWidget( cWidth, 3, 0 );
     connect( cWidth, SIGNAL( activated( const QString & ) ), this, SLOT( brdWidthChanged( const QString & ) ) );
 
-    lColor = new QLabel( i18n( "Color:" ), tab3 );
-    grid3->addWidget( lColor, 4, 0 );
+    lColor = new QLabel( i18n( "Color:" ), tab );
+    grid->addWidget( lColor, 4, 0 );
 
-    bColor = new KColorButton( tab3 );
-    grid3->addWidget( bColor, 5, 0 );
+    bColor = new KColorButton( tab );
+    grid->addWidget( bColor, 5, 0 );
     connect( bColor, SIGNAL( changed( const QColor& ) ), this, SLOT( brdColorChanged( const QColor& ) ) );
 
-    QButtonGroup * bb = new QHButtonGroup( tab3 );
+    QButtonGroup * bb = new QHButtonGroup( tab );
     bb->setFrameStyle(QFrame::NoFrame);
     bLeft = new QPushButton(bb);
     bLeft->setPixmap( KWBarIcon( "borderleft" ) );
@@ -634,7 +631,7 @@ void KWParagDia::setupTab3()
     bBottom = new QPushButton(bb);
     bBottom->setPixmap( KWBarIcon( "borderbottom" ) );
     bBottom->setToggleButton( true );
-    grid3->addWidget( bb, 6, 0 );
+    grid->addWidget( bb, 6, 0 );
 
     connect( bLeft, SIGNAL( toggled( bool ) ), this, SLOT( brdLeftToggled( bool ) ) );
     connect( bRight, SIGNAL( toggled( bool ) ), this, SLOT( brdRightToggled( bool ) ) );
@@ -642,11 +639,11 @@ void KWParagDia::setupTab3()
     connect( bBottom, SIGNAL( toggled( bool ) ), this, SLOT( brdBottomToggled( bool ) ) );
 
 
-    prev3 = new KWBorderPreview( tab3 );
-    grid3->addMultiCellWidget( prev3, 0, 7, 1, 1 );
+    prev3 = new KWBorderPreview( tab );
+    grid->addMultiCellWidget( prev3, 0, 7, 1, 1 );
 
-    grid3->setRowStretch( 7, 1 );
-    grid3->setColStretch( 1, 1 );
+    grid->setRowStretch( 7, 1 );
+    grid->setColStretch( 1, 1 );
 
     m_bAfterInitBorder=false;
 }
@@ -654,52 +651,64 @@ void KWParagDia::setupTab3()
 /*================================================================*/
 void KWParagDia::setupTab4()
 {
-    tab4 = addPage( i18n( "Bullets/Numbers" ) );
+    QWidget *tab = addPage( i18n( "Bullets/Numbers" ) );
+    QGridLayout *grid = new QGridLayout( tab, 4, 2, 15, 7 );
 
-    grid4 = new QGridLayout( tab4, 4, 2, 15, 7 );
+    // What type of numbering is required?
+    gNumbering = new QButtonGroup( i18n("Numbering"), tab );
+    QGridLayout *ngrid = new QGridLayout( gNumbering, 1, 3, 15, 7 );
 
-    gType = new QGroupBox( i18n("Type"), tab4 );
-    tgrid = new QGridLayout( gType, 13, 3, 5, 5 );
+    QRadioButton *tmp;
+    tmp = new QRadioButton( i18n( "&None" ), gNumbering );
+    ngrid->addWidget( tmp, 0, 0 );
+    gNumbering->insert( tmp, Counter::NUM_NONE );
 
-    g1 = new QButtonGroup( gType );
-    g1->hide();
-    g1->setExclusive( true );
+    tmp = new QRadioButton( i18n( "&List Numbering" ), gNumbering );
+    ngrid->addWidget( tmp, 1, 0 );
+    gNumbering->insert( tmp, Counter::NUM_LIST );
 
-    rNone = new QRadioButton( i18n( "&No numbering" ), gType );
-    tgrid->addMultiCellWidget( rNone, 1, 1, 0, 2 );
-    g1->insert( rNone, 0 );
+    tmp = new QRadioButton( i18n( "&Chapter Numbering" ), gNumbering );
+    ngrid->addWidget( tmp, 2, 0 );
+    gNumbering->insert( tmp, Counter::NUM_CHAPTER );
 
-    rANums = new QRadioButton( i18n( "&Arabic Numbers ( 1, 2, 3, 4, ... )" ), gType );
-    tgrid->addMultiCellWidget( rANums, 2, 2, 0, 2 );
-    g1->insert( rANums, 1 );
+    connect( gNumbering, SIGNAL( clicked( int ) ), this, SLOT( numTypeChanged( int ) ) );
+    grid->addWidget( gNumbering, 0, 0 );
 
-    rLRNums = new QRadioButton( i18n( "&Lower Roman Numbers ( i, ii, iii, iv, ... )" ), gType );
-    tgrid->addMultiCellWidget( rLRNums, 3, 3, 0, 2 );
-    g1->insert( rLRNums, 4 );
+    // How should the numbers be displayed?
+    gStyle = new QButtonGroup( i18n("Style"), tab );
+    QGridLayout *tgrid = new QGridLayout( gStyle, 1, 9, 15, 7 );
 
-    rURNums = new QRadioButton( i18n( "&Upper Roman Numbers ( I, II, III, IV, ... )" ), gType );
-    tgrid->addMultiCellWidget( rURNums, 4, 4, 0, 2 );
-    g1->insert( rURNums, 5 );
+    tmp = new QRadioButton( i18n( "&Arabic Numbers ( 1, 2, 3, 4, ... )" ), gStyle );
+    tgrid->addMultiCellWidget( tmp, 0, 0, 0, 1 );
+    gStyle->insert( tmp, Counter::STYLE_NUM );
 
-    rLAlph = new QRadioButton( i18n( "L&ower Alphabetical ( a, b, c, d, ... )" ), gType );
-    tgrid->addMultiCellWidget( rLAlph, 5, 5, 0, 2 );
-    g1->insert( rLAlph, 2 );
+    tmp = new QRadioButton( i18n( "L&ower Alphabetical ( a, b, c, d, ... )" ), gStyle );
+    tgrid->addMultiCellWidget( tmp, 1, 1, 0, 1 );
+    gStyle->insert( tmp, Counter::STYLE_ALPHAB_L );
 
-    rUAlph = new QRadioButton( i18n( "U&pper Alphabetical ( A, B, C, D, ... )" ), gType );
-    tgrid->addMultiCellWidget( rUAlph, 6, 6, 0, 2 );
-    g1->insert( rUAlph, 3 );
+    tmp = new QRadioButton( i18n( "U&pper Alphabetical ( A, B, C, D, ... )" ), gStyle );
+    tgrid->addMultiCellWidget( tmp, 2, 2, 0, 1 );
+    gStyle->insert( tmp, Counter::STYLE_ALPHAB_U );
 
-    rCustom = new QRadioButton( i18n( "&Custom" ), gType );
-    tgrid->addWidget( rCustom, 7, 0 );
-    g1->insert( rCustom, 7 );
-    rCustom->setEnabled(false); // Not implemented
+    tmp = new QRadioButton( i18n( "&Lower Roman Numbers ( i, ii, iii, iv, ... )" ), gStyle );
+    tgrid->addMultiCellWidget( tmp, 3, 3, 0, 1 );
+    gStyle->insert( tmp, Counter::STYLE_ROM_NUM_L );
 
-    eCustomNum = new QLineEdit( gType );
+    tmp = new QRadioButton( i18n( "&Upper Roman Numbers ( I, II, III, IV, ... )" ), gStyle );
+    tgrid->addMultiCellWidget( tmp, 4, 4, 0, 1 );
+    gStyle->insert( tmp, Counter::STYLE_ROM_NUM_U );
+
+    tmp = new QRadioButton( i18n( "&Custom" ), gStyle );
+    tgrid->addWidget( tmp, 5, 0 );
+    gStyle->insert( tmp, Counter::STYLE_CUSTOM );
+    tmp->setEnabled(false); // Not implemented
+
+    eCustomNum = new QLineEdit( gStyle );
     eCustomNum->setEnabled( false );
-    tgrid->addMultiCellWidget( eCustomNum, 7, 7, 1, 2 );
-    connect( rCustom, SIGNAL( toggled(bool) ), eCustomNum, SLOT( setEnabled(bool) ));
+    tgrid->addWidget( eCustomNum, 5, 1 );
+    connect( tmp, SIGNAL( toggled(bool) ), eCustomNum, SLOT( setEnabled(bool) ));
     connect( eCustomNum, SIGNAL( textChanged(const QString&) ),
-             this, SLOT( counterDefChanged(const QString&) ) );
+             this, SLOT( numCounterDefChanged(const QString&) ) );
 
 
     QString custcountwt(i18n("<h1>Create custom counters</h1>\n"
@@ -709,127 +718,89 @@ void KWParagDia::setupTab4()
         "<ul><li>\\arabic - arabic numbers (1, 2, 3, ...)</li><li>\\roman or \\Roman - lower or uppercase roman numbers</li>\n"
         "<li>\\alph or \\Alph - lower or uppercase latin letters</li></ul>\n"
         "<p>This will hopefully have more options in the future (like enumerated lists or greek letters).</p>" ));
-    QWhatsThis::add( rCustom, custcountwt );
+    QWhatsThis::add( tmp, custcountwt );
     QWhatsThis::add( eCustomNum, custcountwt );
 
-    rDiscBullet = new QRadioButton( i18n( "&Disc Bullet" ), gType );
-    tgrid->addMultiCellWidget( rDiscBullet, 9, 9, 0, 2 );
-    g1->insert( rDiscBullet, 6 );
+    tmp = new QRadioButton( i18n( "&Disc Bullet" ), gStyle );
+    tgrid->addMultiCellWidget( tmp, 6, 6, 0, 1 );
+    gStyle->insert( tmp, Counter::STYLE_DISCBULLET );
 
-    rSquareBullet = new QRadioButton( i18n( "&Square Bullet" ), gType );
-    tgrid->addMultiCellWidget( rSquareBullet, 10, 10, 0, 2 );
-    g1->insert( rSquareBullet, 7 );
+    tmp = new QRadioButton( i18n( "&Square Bullet" ), gStyle );
+    tgrid->addMultiCellWidget( tmp, 7, 7, 0, 1 );
+    gStyle->insert( tmp, Counter::STYLE_SQUAREBULLET );
 
-    rCircleBullet = new QRadioButton( i18n( "&Circle Bullet" ), gType );
-    tgrid->addMultiCellWidget( rCircleBullet, 11, 11, 0, 2 );
-    g1->insert( rCircleBullet, 8 );
+    tmp = new QRadioButton( i18n( "&Circle Bullet" ), gStyle );
+    tgrid->addMultiCellWidget( tmp, 8, 8, 0, 1 );
+    gStyle->insert( tmp, Counter::STYLE_CIRCLEBULLET );
 
-    rBullets = new QRadioButton( i18n( "Custom Bullet" ), gType );
-    tgrid->addWidget( rBullets, 12, 0 );
-    g1->insert( rBullets, 9 );
+    tmp = new QRadioButton( i18n( "Custom Bullet" ), gStyle );
+    tgrid->addWidget( tmp, 9, 0 );
+    gStyle->insert( tmp, Counter::STYLE_CUSTOMBULLET );
 
-    bBullets = new QPushButton( gType );
-    tgrid->addWidget( bBullets, 12, 1 );
-    connect( bBullets, SIGNAL( clicked() ), this, SLOT( changeBullet() ) );
+    bBullets = new QPushButton( gStyle );
+    tgrid->addWidget( bBullets, 9, 1 );
+    connect( bBullets, SIGNAL( clicked() ), this, SLOT( numChangeBullet() ) );
+    connect( gStyle, SIGNAL( clicked( int ) ), this, SLOT( numStyleChanged( int ) ) );
+    grid->addWidget( gStyle, 1, 0 );
 
-    connect( g1, SIGNAL( clicked( int ) ), this, SLOT( typeChanged( int ) ) );
+    // Miscellaneous stuff.
+    gText = new QGroupBox( i18n("Other Settings"), tab );
+    QGridLayout *txtgrid = new QGridLayout( gText, 2, 4, 15, 7 );
 
-    tgrid->addRowSpacing( 0, 10 );
-    tgrid->setRowStretch( 8, 1 );
-    tgrid->setRowStretch( 12, 1 );
-    tgrid->setColStretch( 2, 10 );
+    QLabel *lcLeft = new QLabel( i18n( "Prefix Text" ), gText );
+    txtgrid->addWidget( lcLeft, 0, 0 );
 
-    grid4->addWidget( gType, 0, 0 );
-
-    gText = new QGroupBox( i18n("Text"), tab4 );
-    txtgrid = new QGridLayout( gText, 4, 2, 5, 5 );
-
-    lcLeft = new QLabel( i18n( "Left" ), gText );
-    txtgrid->addWidget( lcLeft, 1, 0 );
-
-    lcRight = new QLabel( i18n( "Right" ), gText );
-    txtgrid->addWidget( lcRight, 1, 1 );
+    QLabel *lcRight = new QLabel( i18n( "Suffix Text" ), gText );
+    txtgrid->addWidget( lcRight, 0, 1 );
 
     ecLeft = new QLineEdit( gText );
-    txtgrid->addWidget( ecLeft, 2, 0 );
-    connect( ecLeft, SIGNAL( textChanged( const QString & ) ), this, SLOT( leftTextChanged( const QString & ) ) );
+    txtgrid->addWidget( ecLeft, 1, 0 );
+    connect( ecLeft, SIGNAL( textChanged( const QString & ) ), this, SLOT( numLeftTextChanged( const QString & ) ) );
 
     ecRight = new QLineEdit( gText );
-    txtgrid->addWidget( ecRight, 2, 1 );
-    connect( ecRight, SIGNAL( textChanged( const QString & ) ), this, SLOT( rightTextChanged( const QString & ) ) );
+    txtgrid->addWidget( ecRight, 1, 1 );
+    connect( ecRight, SIGNAL( textChanged( const QString & ) ), this, SLOT( numRightTextChanged( const QString & ) ) );
 
-    txtgrid->addRowSpacing( 0, 10 );
-    txtgrid->setRowStretch( 3, 1 );
-
-    txtgrid->setColStretch( 0, 1 );
-    txtgrid->setColStretch( 1, 1 );
-
-    grid4->addWidget( gText, 1, 0 );
-
-    ///
-
-    gOther = new QGroupBox( i18n("Other Settings"), tab4 );
-    ogrid = new QGridLayout( gOther, 6, 2, 5, 5 );
-    g2 = new QButtonGroup( gOther );
-    g2->hide();
-    g2->setExclusive( true );
-    ogrid->addRowSpacing( 0, 10 );
-
-    lStart = new QLabel( i18n( "Start at ( 1, 2, ... ) :" ), gOther );
+    lStart = new QLabel( i18n( "Start at ( 1, 2, ... ) :" ), gText );
     lStart->setAlignment( AlignRight | AlignVCenter );
-    ogrid->addWidget( lStart, 1, 0 );
+    txtgrid->addWidget( lStart, 2, 0 );
 
     // TODO: make this a spinbox or a combo, with values depending on the type
     // of numbering.
-    eStart = new QLineEdit( gOther );
-    ogrid->addWidget( eStart, 1, 1 );
-    connect( eStart, SIGNAL( textChanged( const QString & ) ), this, SLOT( startChanged( const QString & ) ) );
+    eStart = new QLineEdit( gText );
+    txtgrid->addWidget( eStart, 2, 1 );
+    connect( eStart, SIGNAL( textChanged( const QString & ) ), this, SLOT( numStartChanged( const QString & ) ) );
 
-    rList = new QRadioButton( i18n( "&List Numbering" ), gOther );
-    ogrid->addMultiCellWidget( rList, 2, 2, 0, 1 );
-    g2->insert( rList, 0 );
-
-    rChapter = new QRadioButton( i18n( "&Chapter Numbering" ), gOther );
-    ogrid->addMultiCellWidget( rChapter, 3, 3, 0, 1 );
-    g2->insert( rChapter, 1 );
-
-    lDepth = new QLabel( i18n( "Depth:" ), gOther );
+    lDepth = new QLabel( i18n( "Depth:" ), gText );
     lDepth->setAlignment( AlignRight | AlignVCenter );
-    ogrid->addWidget( lDepth, 4, 0 );
+    txtgrid->addWidget( lDepth, 3, 0 );
 
-    sDepth = new QSpinBox( 0, 15, 1, gOther );
-    ogrid->addWidget( sDepth, 4, 1 );
-    connect( sDepth, SIGNAL( valueChanged( int ) ), this, SLOT( depthChanged( int ) ) );
+    sDepth = new QSpinBox( 0, 15, 1, gText );
+    txtgrid->addWidget( sDepth, 3, 1 );
+    connect( sDepth, SIGNAL( valueChanged( int ) ), this, SLOT( numDepthChanged( int ) ) );
+    grid->addWidget( gText, 2, 0 );
 
-    connect( g2, SIGNAL( clicked( int ) ), this, SLOT( numTypeChanged( int ) ) );
-
-    ogrid->setRowStretch( 5, 1 );
-    ogrid->setColStretch( 2, 1 );
-
-    grid4->addWidget( gOther, 2, 0 );
-
-    prev4 = new KWNumPreview( tab4 );
-    grid4->addMultiCellWidget( prev4, 0, 2, 1, 1 );
-    grid4->addColSpacing( 1, 100 );
-    grid4->setColStretch( 1, 1 );
+    // Add the preview.
+    prev4 = new KWNumPreview( tab );
+    grid->addMultiCellWidget( prev4, 0, 2, 1, 1 );
 }
 
 /*================================================================*/
 void KWParagDia::setupTab5()
 {
-    tab5 = addPage( i18n( "Tabulators" ) );
-    grid5 = new QGridLayout( tab5, 4, 2, 15, 7 );
+    QWidget *tab = addPage( i18n( "Tabulators" ) );
+    QGridLayout *grid = new QGridLayout( tab, 4, 2, 15, 7 );
 
-    lTab = new QLabel(  tab5 );
-    grid5->addWidget( lTab, 0, 0 );
+    lTab = new QLabel(  tab );
+    grid->addWidget( lTab, 0, 0 );
 
-    eTabPos = new QLineEdit( tab5 );
+    eTabPos = new QLineEdit( tab );
 
     if ( unit == U_PT )
         eTabPos->setValidator( new QIntValidator( eTabPos ) );
     else
         eTabPos->setValidator( new QDoubleValidator( eTabPos ) );
-    grid5->addWidget( eTabPos, 1, 0 );
+    grid->addWidget( eTabPos, 1, 0 );
 
     QString unitText;
     switch ( unit )
@@ -846,17 +817,17 @@ void KWParagDia::setupTab5()
       }
     lTab->setText(i18n( "Tabulator positions are given %1" ).arg(unitText));
 
-    KButtonBox * bbTabs = new KButtonBox( tab5 );
+    KButtonBox * bbTabs = new KButtonBox( tab );
     bAdd = bbTabs->addButton( i18n( "Add" ), false );
     bDel = bbTabs->addButton( i18n( "Delete" ), false );
     bModify = bbTabs->addButton( i18n( "Modify" ), false );
     bModify->setEnabled(false);
-    grid5->addWidget( bbTabs, 2, 0 );
+    grid->addWidget( bbTabs, 2, 0 );
 
-    lTabs = new QListBox( tab5 );
-    grid5->addWidget( lTabs, 3, 0 );
+    lTabs = new QListBox( tab );
+    grid->addWidget( lTabs, 3, 0 );
 
-    g3 = new QButtonGroup( "", tab5 );
+    g3 = new QButtonGroup( "", tab );
     tabGrid = new QGridLayout( g3, 5, 1, 15, 7 );
     g3->setExclusive( true );
 
@@ -879,8 +850,8 @@ void KWParagDia::setupTab5()
 
     tabGrid->setRowStretch( 4, 1 );
     tabGrid->setColStretch( 0, 1 );
-    grid5->addWidget( g3, 3, 1 );
-    grid5->setRowStretch( 3, 1 );
+    grid->addWidget( g3, 3, 1 );
+    grid->setRowStretch( 3, 1 );
     if(lTabs->count()==0)
       {
 	bDel->setEnabled(false);
@@ -1387,95 +1358,69 @@ void KWParagDia::brdColorChanged( const QColor & )
 }
 
 /*================================================================*/
-void KWParagDia::changeBullet()
+void KWParagDia::numChangeBullet()
 {
-  rBullets->setChecked(true);
-  typeChanged( g1->id(rBullets) );//activate CT_CUSTOMBULLET
-  QString f = m_counter.bulletFont;
-  if ( f.isEmpty() )
-    f = "symbol";
-  QChar c = m_counter.counterBullet;
+    gStyle->setButton( Counter::STYLE_CUSTOMBULLET );
+    numStyleChanged( Counter::STYLE_CUSTOMBULLET );
+    QString f = m_counter.bulletFont;
+    if ( f.isEmpty() )
+        f = "symbol";
+    QChar c = m_counter.counterBullet;
 
-  if ( KCharSelectDia::selectChar( f, c ) ) {
-    m_counter.bulletFont = f;
-    m_counter.counterBullet = c;
-    bBullets->setText( c );
-    if ( !f.isEmpty() )
-      bBullets->setFont( QFont( m_counter.bulletFont ) );
-    prev4->setCounter( m_counter );
-  }
+    if ( KCharSelectDia::selectChar( f, c ) )
+    {
+        m_counter.bulletFont = f;
+        m_counter.counterBullet = c;
+        bBullets->setText( c );
+        if ( !f.isEmpty() )
+            bBullets->setFont( QFont( m_counter.bulletFont ) );
+        prev4->setCounter( m_counter );
+    }
 }
 
 /*================================================================*/
-void KWParagDia::typeChanged( int _type )
+void KWParagDia::numStyleChanged( int _type )
 {
-  static const int buttongroup2CounterType[] = {
-      Counter::CT_NONE, Counter::CT_NUM, Counter::CT_ALPHAB_L, Counter::CT_ALPHAB_U,
-      Counter::CT_ROM_NUM_L, Counter::CT_ROM_NUM_U, Counter::CT_DISCBULLET,
-      Counter::CT_SQUAREBULLET, Counter::CT_CIRCLEBULLET, Counter::CT_CUSTOMBULLET,
-      Counter::CT_CUSTOM };
-
-  m_counter.counterType = static_cast<Counter::CounterType>(buttongroup2CounterType[_type]);
-  enableUIForCounterType();
-}
-
-void KWParagDia::enableUIForCounterType()
-{
-  switch( m_counter.counterType )
-  {
-      case Counter::CT_NONE:
-      case Counter::CT_DISCBULLET:
-      case Counter::CT_SQUAREBULLET:
-      case Counter::CT_CIRCLEBULLET:
-      case Counter::CT_CUSTOMBULLET:
-          gText->setEnabled( false );
-          gOther->setEnabled( false );
-          lDepth->setEnabled( false );
-          sDepth->setEnabled( false );
-          break;
-      default:
-          gText->setEnabled( true );
-          gOther->setEnabled( true );
-          lDepth->setEnabled( m_counter.numberingType == Counter::NT_CHAPTER );
-          sDepth->setEnabled( m_counter.numberingType == Counter::NT_CHAPTER );
-  }
-
+    m_counter.m_style = static_cast<Counter::Style>( _type );
 }
 
 /*================================================================*/
-void KWParagDia::counterDefChanged( const QString& _cd )
+void KWParagDia::numCounterDefChanged( const QString& _cd )
 {
     m_counter.customCounterDef = _cd;
 }
 
+
 /*================================================================*/
 void KWParagDia::numTypeChanged( int _ntype )
 {
-    m_counter.numberingType = static_cast<Counter::NumType>( _ntype );
-    lDepth->setEnabled( m_counter.numberingType == Counter::NT_CHAPTER );
-    sDepth->setEnabled( m_counter.numberingType == Counter::NT_CHAPTER );
+    m_counter.m_numbering = static_cast<Counter::Numbering>( _ntype );
+    gText->setEnabled( m_counter.m_numbering != Counter::NUM_NONE );
+    gStyle->setEnabled( m_counter.m_numbering != Counter::NUM_NONE );
+    lDepth->setEnabled( m_counter.m_numbering == Counter::NUM_LIST );
+    sDepth->setEnabled( m_counter.m_numbering == Counter::NUM_LIST );
 }
 
 /*================================================================*/
-void KWParagDia::leftTextChanged( const QString & _c )
+void KWParagDia::numLeftTextChanged( const QString & _c )
 {
     m_counter.counterLeftText = _c;
 }
 
 /*================================================================*/
-void KWParagDia::rightTextChanged( const QString & _c )
+void KWParagDia::numRightTextChanged( const QString & _c )
 {
     m_counter.counterRightText = _c;
 }
 
 /*================================================================*/
-void KWParagDia::startChanged( const QString & _c )
+void KWParagDia::numStartChanged( const QString & _c )
 {
-    m_counter.startCounter = _c.toInt(); // HACK
+    m_counter.m_startNumber = _c.toInt(); // HACK
 }
 
 /*================================================================*/
-void KWParagDia::depthChanged( int _val )
+void KWParagDia::numDepthChanged( int _val )
 {
     m_counter.counterDepth = _val;
 }
@@ -1486,37 +1431,9 @@ void KWParagDia::setCounter( Counter _counter )
     prev4->setCounter( _counter );
     m_counter = _counter;
 
-    switch ( m_counter.counterType ) {
-    case Counter::CT_NONE: rNone->setChecked( true );
-        break;
-    case Counter::CT_NUM: rANums->setChecked( true );
-        break;
-    case Counter::CT_ALPHAB_L: rLAlph->setChecked( true );
-        break;
-    case Counter::CT_ALPHAB_U: rUAlph->setChecked( true );
-        break;
-    case Counter::CT_ROM_NUM_L: rLRNums->setChecked( true );
-        break;
-    case Counter::CT_ROM_NUM_U: rURNums->setChecked( true );
-        break;
-    case Counter::CT_CIRCLEBULLET: rCircleBullet->setChecked( true );
-        break;
-    case Counter::CT_SQUAREBULLET: rSquareBullet->setChecked( true );
-        break;
-    case Counter::CT_DISCBULLET: rDiscBullet->setChecked( true );
-        break;
-    case Counter::CT_CUSTOMBULLET: rBullets->setChecked( true );
-        break;
-    case Counter::CT_CUSTOM: rCustom->setChecked( true );
-        break;
-    }
+    gNumbering->setButton( m_counter.m_numbering );
 
-    switch ( m_counter.numberingType ) {
-    case Counter::NT_LIST: rList->setChecked( true );
-        break;
-    case Counter::NT_CHAPTER: rChapter->setChecked( true );
-        break;
-    }
+    gStyle->setButton( m_counter.m_style );
 
     eCustomNum->setText( m_counter.customCounterDef );
 
@@ -1530,9 +1447,7 @@ void KWParagDia::setCounter( Counter _counter )
     sDepth->setValue( m_counter.counterDepth );
     // What we really need is a combobox filled with values depending on
     // the type of numbering - or a spinbox. (DF)
-    eStart->setText( QString::number(m_counter.startCounter) ); // HACK
-
-    enableUIForCounterType();
+    eStart->setText( QString::number( m_counter.m_startNumber ) ); // HACK
 }
 
 /*================================================================*/

@@ -20,40 +20,50 @@
 #ifndef contents_h
 #define contents_h
 
-#include <qstringlist.h>
+#include <qvaluelist.h>
 
 class KWDocument;
-class KWParag;
+//class KWParag;
 
+/**
+ * This class holds information about the table of contents of a given
+ * document.
+ * In particular, the list of paragraphs that form the TOC is kept here
+ * (to remove them before regenerating).
+ */
 class KWContents
 {
 public:
-    KWContents( KWDocument *doc_ );
+    KWContents( KWDocument *doc );
 
+    /**
+     * Regenerate table of contents
+     */
     void createContents();
-    void addParagName( const QString &n ) {
-	parags.append( n );
+
+    void addParagId( int i ) {
+	m_paragIds.append( i );
     }
-    void setEnd( KWParag *e ) {
+    /*void setEnd( KWParag *e ) {
 	end = e;
-    }
+    }*/
     bool hasContents() {
-	return end && !parags.isEmpty();
+	return !m_paragIds.isEmpty();
     }
-    bool numParags() {
+    /*bool numParags() {
 	return parags.count();
+    }*/
+    QValueList<int>::Iterator begin() {
+	return m_paragIds.begin();
     }
-    QStringList::Iterator begin() {
-	return parags.begin();
-    }
-    QStringList::Iterator ending() {
-	return parags.end();
+    QValueList<int>::Iterator end() {
+	return m_paragIds.end();
     }
 
 protected:
-    KWDocument *doc;
-    KWParag *end;
-    QStringList parags;
+    KWDocument *m_doc;
+    //KWParag *m_end;
+    QValueList<int> m_paragIds;
 
 };
 

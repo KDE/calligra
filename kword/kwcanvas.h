@@ -42,6 +42,12 @@ class QTimer;
 class KWGUI;
 class KWStyle;
 
+/**
+ * Class: KWCanvas
+ * This class is responsible for the rendering of the frames to
+ * the screen as well as the interaction with the user via mouse
+ * and keyboard. There is one per view.
+ */
 class KWCanvas : public QScrollView
 {
     Q_OBJECT
@@ -69,7 +75,7 @@ public:
 
     void setFrameBackgroundColor( const QBrush &backColor );
 
-    void femProps();
+    void editFrameProperties();
 
     // Mouse press
     void mpEditFrame( QMouseEvent *e, int mx, int my );

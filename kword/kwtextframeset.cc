@@ -564,6 +564,8 @@ void KWTextFrameSet::update()
             }
         }
     }
+    kdDebug() << "KWTextFrameSet::update m_availableHeight=" << m_availableHeight << endl;
+    ASSERT( m_availableHeight >= text->height() );
     frames.setAutoDelete( true );
 }
 
@@ -848,7 +850,6 @@ void KWTextFrameSet::doChangeInterval()
 
 void KWTextFrameSet::updateViewArea( QWidget * w, int maxY )
 {
-    ASSERT( m_availableHeight >= text->height() );
     if ( maxY >= text->height() ) // Speedup
         maxY = text->height();
     else
@@ -2114,13 +2115,13 @@ void KWTextFrameSetEdit::updateUI()
         m_canvas->gui()->getView()->showAlign( m_paragLayout.alignment );
     }
 
-    Counter::CounterType ctype = m_paragLayout.counter.counterType;
+    Counter::Style ctype = m_paragLayout.counter.m_style;
     if ( parag->counter() )
         m_paragLayout.counter = *parag->counter();
     else
-        m_paragLayout.counter.counterType = Counter::CT_NONE;
-    if ( m_paragLayout.counter.counterType != ctype )
-        m_canvas->gui()->getView()->showCounterType( m_paragLayout.counter.counterType );
+        m_paragLayout.counter.m_style = Counter::STYLE_NONE;
+    if ( m_paragLayout.counter.m_style != ctype )
+        m_canvas->gui()->getView()->showCounterStyle( m_paragLayout.counter.m_style );
 
     if(m_paragLayout.leftBorder!=parag->leftBorder() ||
        m_paragLayout.rightBorder!=parag->rightBorder() ||

@@ -234,28 +234,30 @@ protected:
     void updateBorders();
     void setActifItem(double value);
     bool findExistingValue(double val);
-    void enableUIForCounterType();
+//    void enableUIForCounterType();
 
-    QWidget *tab1, *tab2, *tab3, *tab4, *tab5;
-    QGridLayout *grid1, *grid2, *grid3, *grid4, *grid5, *indentGrid, *spacingGrid,
-        *pSpaceGrid, *tgrid, *txtgrid, *ogrid, *tabGrid;
-    QLineEdit *eLeft, *eRight, *eFirstLine, *eSpacing, *eBefore, *eAfter, *eTabPos;
-    QLabel *lLeft, *lRight, *lFirstLine, *lBefore, *lAfter, *lAlign, *lStyle, *lWidth, *lColor, *lDepth, *lcLeft, *lcRight, *lStart;
-    QGroupBox *indentFrame, *spacingFrame, *pSpaceFrame, *gType, *gText, *gOther;
-    QComboBox *cSpacing, *cStyle, *cWidth;
-    QRadioButton *rLeft, *rCenter, *rRight, *rJustify, *rANums, *rLRNums,
-        *rURNums, *rLAlph, *rUAlph, *rDiscBullet, *rSquareBullet, *rCircleBullet, *rBullets, *rCustom,
-        *rList, *rChapter, *rNone;
+    // Tab4 data.
+    QButtonGroup *gNumbering;
+    QButtonGroup *gStyle;
     QLineEdit *eCustomNum;
+    QLineEdit *ecLeft, *ecRight, *eStart;
+    QLabel *lStart;
+
+    QGridLayout *indentGrid, *spacingGrid,
+        *pSpaceGrid, *tabGrid;
+    QLineEdit *eLeft, *eRight, *eFirstLine, *eSpacing, *eBefore, *eAfter, *eTabPos;
+    QLabel *lLeft, *lRight, *lFirstLine, *lBefore, *lAfter, *lAlign, *lStyle, *lWidth, *lColor, *lDepth;
+    QGroupBox *indentFrame, *spacingFrame, *pSpaceFrame, *gText;
+    QComboBox *cSpacing, *cStyle, *cWidth;
+    QRadioButton *rLeft, *rCenter, *rRight, *rJustify;
     KWPagePreview *prev1;
     KWPagePreview2 *prev2;
     QPushButton *bLeft, *bRight, *bTop, *bBottom, *bBullets, *bFont, *bAdd, *bDel, *bModify;
     KWBorderPreview *prev3;
     KColorButton *bColor;
     QSpinBox *sDepth;
-    QButtonGroup *g1, *g2, *g3;
+    QButtonGroup *g2, *g3;
     KWNumPreview *prev4;
-    QLineEdit *ecLeft, *ecRight, *eStart;
     QListBox *lTabs;
     QLabel *lTab;
     QRadioButton *rtLeft, *rtCenter, *rtRight, *rtDecimal;
@@ -291,14 +293,16 @@ protected slots:
     void brdStyleChanged( const QString & );
     void brdWidthChanged( const QString & );
     void brdColorChanged( const QColor& );
-    void changeBullet();
-    void typeChanged( int );
-    void counterDefChanged( const QString& );
+
+    // Tab 4 slots.
+    void numChangeBullet();
+    void numStyleChanged( int );
+    void numCounterDefChanged( const QString& );
     void numTypeChanged( int );
-    void leftTextChanged( const QString & );
-    void rightTextChanged( const QString & );
-    void startChanged( const QString & );
-    void depthChanged( int );
+    void numLeftTextChanged( const QString & );
+    void numRightTextChanged( const QString & );
+    void numStartChanged( const QString & );
+    void numDepthChanged( int );
 
     void addClicked();
     void modifyClicked();
@@ -307,5 +311,3 @@ protected slots:
 };
 
 #endif
-
-

@@ -806,10 +806,10 @@ void KWView::showAlign( int align ) {
 }
 
 /*================================================================*/
-void KWView::showCounterType( Counter::CounterType c )
+void KWView::showCounterStyle( Counter::Style c )
 {
-    actionFormatEnumList->setChecked( c == Counter::CT_NUM );
-    actionFormatUnsortList->setChecked( c == Counter::CT_DISCBULLET );
+    actionFormatEnumList->setChecked( c == Counter::STYLE_NUM );
+    actionFormatUnsortList->setChecked( c == Counter::STYLE_DISCBULLET );
 }
 
 /*================================================================*/
@@ -1448,8 +1448,8 @@ void KWView::formatPage()
 void KWView::formatFrameSet()
 {
     if ( doc->getFirstSelectedFrame() )
-      gui->canvasWidget()->femProps();
-    else
+      gui->canvasWidget()->editFrameProperties();
+    else // TODO enable/disable the action depending on whether a frame is selected, instead
         KMessageBox::sorry( this,
                             i18n("Sorry, you have to select a frame first."),
                             i18n("Format Frameset"));
@@ -1955,9 +1955,9 @@ void KWView::textEnumList()
 {
     Counter c;
     if(actionFormatEnumList->isChecked())
-        c.counterType = Counter::CT_NUM;
+        c.m_style = Counter::STYLE_NUM;
     else
-        c.counterType = Counter::CT_NONE;
+        c.m_style = Counter::STYLE_NONE;
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setCounter( c );
@@ -1968,9 +1968,9 @@ void KWView::textUnsortList()
 {
     Counter c;
     if(actionFormatUnsortList->isChecked())
-        c.counterType = Counter::CT_DISCBULLET;
+        c.m_style = Counter::STYLE_DISCBULLET;
     else
-        c.counterType = Counter::CT_NONE;
+        c.m_style = Counter::STYLE_NONE;
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
         edit->setCounter( c );

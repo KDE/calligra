@@ -33,58 +33,92 @@ using namespace Qt3;
 class QDomDocument;
 class KWTextFrameSet;
 
-struct Counter
+class KWTextParag;
+
+class Counter
 {
-    Counter() {
-        counterType = CT_NONE;
-        startCounter = 1;
-        numberingType = NT_LIST;
-        counterDepth = 0;
-        counterRightText = '.';
-        numSubParag = -1;
-        //counterBullet = QChar( '·' );
-        //bulletFont = "symbol";
-    }
+public:
+    Counter();
 
-    enum CounterType { CT_NONE = 0, CT_NUM = 1, CT_ALPHAB_L = 2, CT_ALPHAB_U = 3,
-                       CT_ROM_NUM_L = 4, CT_ROM_NUM_U = 5, CT_CUSTOMBULLET = 6,
-		       CT_CUSTOM = 7, CT_CIRCLEBULLET = 8, CT_SQUAREBULLET = 9,
-		       CT_DISCBULLET = 10 };
-    enum NumType { NT_LIST = 0, NT_CHAPTER = 1 };
+    // Invalidate and return the current value of the counter either as
+    // a number or text.
+    void invalidate();
+    int number( const KWTextParag *paragraph );
+    QString text( const KWTextParag *paragraph );
 
-    CounterType counterType;
-    QString counterLeftText;
-    QString counterRightText;
-    // The first used number in the numbering.
-    int startCounter;
-    NumType numberingType;
-    QString bulletFont;
+    // Work out the width of the margin required for this counter.
+    int width( const KWTextParag *paragraph );
+
+    // Return our parent paragraph, if there is such a thing.
+    KWTextParag *parent( const KWTextParag *paragraph );
+
+    // XML support.
+    void load( QDomElement & element );
+    void save( QDomElement & element );
+
+    enum Numbering
+    {
+        NUM_NONE = 2,       // Unnumbered. Equivalent to there being
+        // no Counter structure associated with a
+        // paragraph.
+        NUM_LIST = 0,       // Numbered as a list item.
+        NUM_CHAPTER = 1     // Numbered as a heading.
+    };
+    enum Style
+    {
+        STYLE_NONE = 0,
+        STYLE_NUM = 1, STYLE_ALPHAB_L = 2, STYLE_ALPHAB_U = 3,
+        STYLE_ROM_NUM_L = 4, STYLE_ROM_NUM_U = 5, STYLE_CUSTOMBULLET = 6,
+        STYLE_CUSTOM = 7, STYLE_CIRCLEBULLET = 8, STYLE_SQUAREBULLET = 9,
+        STYLE_DISCBULLET = 10
+    };
+
+    Numbering m_numbering;
+    Style m_style;
 
     // The level of the numbering.
     // Depth of 0 means the major numbering. (1, 2, 3...)
     // Depth of 1 is 1.1, 1.2, 1.3 etc.
     unsigned int counterDepth;
 
-    QChar counterBullet; // for CT_CUSTOMBULLET
-    QString customCounterDef; // for CT_CUSTOM
+    // Starting number.
+    int m_startNumber;
 
-    // Cached data
+    QString counterLeftText;
+    QString counterRightText;
 
-    int numSubParag;
-    int counterMargin;
+    // The character and font for STYLE_CUSTOMBULLET.
+    QChar counterBullet;
+    QString bulletFont;
+
+    // For STYLE_CUSTOM.
+    QString customCounterDef;
 
     bool operator== ( const Counter & c2 ) const
     {
-        return (counterType==c2.counterType &&
+        return (m_style==c2.m_style &&
                 counterLeftText==c2.counterLeftText &&
                 counterRightText==c2.counterRightText &&
-                startCounter==c2.startCounter &&
-                numberingType==c2.numberingType &&
+                m_startNumber==c2.m_startNumber &&
+                m_numbering==c2.m_numbering &&
                 bulletFont==c2.bulletFont &&
                 counterDepth==c2.counterDepth &&
                 counterBullet==c2.counterBullet &&
                 customCounterDef==c2.customCounterDef);
+
     }
+
+private:
+
+    // The cached (calculated) number, text and width of the label for this paragraph.
+    // If either number is -1, or the text is null, the respective cached value is
+    // invalid.
+    struct
+    {
+        int number;
+        QString text;
+        int width;
+    } m_cache;
 };
 
 /**
@@ -148,30 +182,29 @@ public:
 
     // Counters and bullets
 /*
-    Counter::CounterType counterType() const { return m_counter.counterType; }
+    Counter::Style counterStyle() const { return m_counter.m_style; }
     QChar counterBullet() const { return m_counter.counterBullet; }
     unsigned int counterDepth() const { return m_counter.counterDepth; }
     int startCounter() const { return m_counter.startCounter; }
-    Counter::NumType numberingType() const { return m_counter.numberingType; }
+    Counter::Numbering counterNumbering() const { return m_counter.m_numbering; }
     QString bulletFont() const { return m_counter.bulletFont; }
     QString customCounterDef() { return m_counter.customCounterDef; }
 */
-    const Counter * counter() const { return m_counter; }
+    Counter *counter();
+    int widthLabel() const;
 /*
     void setCounterLeftText( const QString& _t ) { m_counter.counterLeftText = _t; setCounter( m_counter ); }
     void setCounterRightText( const QString& _t ) { m_counter.counterRightText = _t; setCounter( m_counter ); }
-    void setCounterType( Counter::CounterType _t ) { m_counter.counterType = _t; setCounter( m_counter ); }
+    void setCounterStyle( Counter::Style _t ) { m_counter.m_style = _t; setCounter( m_counter ); }
     void setCounterBullet( QChar _b ) { m_counter.counterBullet = _b; setCounter( m_counter ); }
     void setCounterDepth( unsigned int _d ) { m_counter.counterDepth = _d; setCounter( m_counter ); }
     void setStartCounter( int _c ) { m_counter.startCounter = _c; setCounter( m_counter ); }
-    void setNumberingType( Counter::NumType _t ) { m_counter.numberingType = _t; setCounter( m_counter ); }
+    void setCounterNumbering( Counter::Numbering _t ) { m_counter.m_numbering = _t; setCounter( m_counter ); }
     void setBulletFont( const QString& _f ) { m_counter.bulletFont = _f; setCounter( m_counter ); }
     void setCustomCounterDef( const QString& d_ ) { m_counter.customCounterDef = d_; setCounter( m_counter ); }
 */
     void setNoCounter();
     void setCounter( const Counter & counter );
-
-    QString paragraphCounterText( int n ) const;
 
     // Style
     QString styleName() const { return m_styleName; }
@@ -203,7 +236,6 @@ protected:
 
     virtual void drawLabel( QPainter* p, int x, int y, int w, int h, int base, const QColorGroup& cg );
     virtual void copyParagData( QTextParag *_parag );
-    int numberOfSubParagraph() const;
     void invalidateCounters();
     void checkItem( QStyleSheetItem * & item, const char * name );
 

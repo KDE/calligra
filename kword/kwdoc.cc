@@ -183,13 +183,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
                          U_NUMBERING | U_ALIGN | U_TABS | U_SMART;
     m_headerVisible = false;
     m_footerVisible = false;
-    _needRedraw = FALSE;
 
     m_lastStyle = 0L;
-//    cDisplayFont = 0L;
-
-//    userFontList.setAutoDelete( FALSE );
-//    displayFontList.setAutoDelete( FALSE );
     frames.setAutoDelete( TRUE );
     grpMgrs.setAutoDelete( TRUE );
  //   variables.setAutoDelete( FALSE );
@@ -1091,7 +1086,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     emit sigProgress(95);
 
-    // <CPARAGS>
+    // <CPARAGS>  (Ids of the parags that form the Table of Contents)
     QDomNodeList listCparags = word.elementsByTagName( "CPARAGS" );
     for (item = 0; item < listCparags.count(); item++)
     {
@@ -1099,9 +1094,9 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         QDomElement parag = cparag.namedItem( "PARAG" ).toElement();
         if ( !parag.isNull() )
         {
-            value = KWDocument::getAttribute( parag, "name", QString::null );
+            value = parag.attribute( "name", QString::null );
             if ( value != QString::null )
-                contents->addParagName( value );
+                contents->addParagId( value.toInt() );
         }
     }
 
@@ -1223,8 +1218,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         emit sig_insertObject( ch, frameset );
     }
 
-#if 0
-    if ( contents->numParags() > 0 ) {
+#if 0           // Not needed anymore
+    if ( contents->hasContents() ) {
         QString name = *( --contents->ending() );
         KWParag *p = ( (KWTextFrameSet*)getFrameSet( 0 ) )->getFirstParag();
         KWParag *end = p;
@@ -1621,20 +1616,25 @@ QDomDocument KWDocument::saveXML()
         images.append( it.current()->getFilename() );
     }
     out << etag << "</PIXMAPS>" << endl;
+#endif
 
+    // Write out the list of parags (id) that form the table of contents, see KWContents::createContents
     if ( contents->hasContents() ) {
-        out << otag << "<CPARAGS>" << endl;
-        QStringList::Iterator it = contents->begin();
-        for ( ; it != contents->ending(); ++it )
-            out << indent << "<PARAG name=\"" << correctQString( *it ) << "\"/>" << endl;
-        out << etag << "</CPARAGS>" << endl;
+        QDomElement cParags = doc.createElement( "CPARAGS" );
+        kwdoc.appendChild( cParags );
+        QValueList<int>::Iterator it = contents->begin();
+        for ( ; it != contents->end(); ++it )
+        {
+            QDomElement paragElem = doc.createElement( "PARAG" );
+            cParags.appendChild( paragElem );
+            paragElem.setAttribute( "name", QString::number( *it ) ); // write parag id
+        }
     }
+
 /*
     out << otag << "<SERIALL>" << endl;
     slDataBase->save( out );
     out << etag << "</SERIALL>" << endl; */
-
-#endif
 
     // Write "OBJECT" tag for every child
     QListIterator<KoDocumentChild> chl( children() );
@@ -2061,6 +2061,7 @@ void KWDocument::refreshAllFrames()
 /*================================================================*/
 void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppendPage*/ )
 {
+    kdDebug() << "KWDocument::appendPage" << endl;
     int thisPageNum  = pages-1;
     pages++;
 
@@ -2086,7 +2087,7 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
 
                 switch(frameSet->getFrameType()) {
                     case FT_TEXT:  {
-
+                        kdDebug() << "KWDocument::appendPage, copying text frame" << endl;
                         // make a new frame.
                         KWFrame *frm = new KWFrame(frame->getFrameSet(), frame->x(), frame->y() + ptPaperHeight(), frame->width(), frame->height(), frame->getRunAround(), frame->getRunAroundGap() );
                         frm->setBackgroundColor( QBrush( frame->getBackgroundColor() ) );

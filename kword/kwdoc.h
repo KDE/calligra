@@ -59,7 +59,6 @@ class KSpellConfig;
 #include <qdict.h>
 
 #include <qrichtext_p.h>
-#include <qstylesheet.h>
 
 /******************************************************************/
 /* Class: KWChild                                              */
@@ -225,9 +224,6 @@ public:
 
     bool canResize( KWFrameSet *frameset, KWFrame *frame, int page, int diff );
 
-    bool needRedraw() { return _needRedraw; }
-    void setNeedRedraw( bool _r ) { _needRedraw = _r; }
-
     void addGroupManager( KWGroupManager *gm ) { grpMgrs.append( gm ); }
     unsigned int getNumGroupManagers() { return grpMgrs.count(); }
     KWGroupManager *getGroupManager( int i ) { return grpMgrs.at( i ); }
@@ -311,8 +307,6 @@ public:
     int getSyntaxVersion( ) const { return syntaxVersion; };
 
     void updateFrameSizes( int oldZoom );
-
-    QStyleSheet *getStyleSheet() { return styleSheet; }
 
     static QString getAttribute(QDomElement &element, const char *attributeName, const QString &defaultValue)
       {
@@ -422,8 +416,6 @@ private:
 
  //   KWDisplayFont *cDisplayFont;
 
-    bool _needRedraw;
-
     QString unit;
 
     KCommandHistory history;
@@ -443,6 +435,8 @@ private:
     int slRecordNum;
 
     bool spellCheck;
+
+    // Holds information about the table of contents
     KWContents *contents;
 
     //KoMainWindow *tmpShell;
@@ -453,8 +447,6 @@ private:
     // When a document is written out, the syntax version in use will be recorded. When read back
     // in, this variable reflects that value.
     int syntaxVersion;
-
-    QStyleSheet *styleSheet;
 
     KSpellConfig *m_pKSpellConfig;
 

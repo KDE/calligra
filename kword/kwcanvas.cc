@@ -1273,7 +1273,7 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
 
 
 /*================================================================*/
-void KWCanvas::femProps()
+void KWCanvas::editFrameProperties()
 {
     KWFrame *frame=doc->getFirstSelectedFrame();
     if (frame)
@@ -1656,7 +1656,7 @@ void KWCanvas::printRTDebug()
         kdDebug() << "  Text: " << parag->richText() << endl;
         KWTextParag * p = static_cast<KWTextParag *>(parag);
         if ( p->counter() )
-            kdDebug() << "  Counter type=" << p->counter()->counterType << " depth=" << p->counter()->counterDepth << endl;
+            kdDebug() << "  Counter style=" << p->counter()->m_style << " depth=" << p->counter()->counterDepth << endl;
 
 /*        kdDebug() << "  Paragraph format=" << p->paragFormat() << endl;
         QTextString * s = parag->string();
