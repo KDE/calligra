@@ -610,7 +610,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     layout2->addItem( spacer );
 
     lFrameSList = new QListView( tab3, "lFrameSList" );
-    lFrameSList->addColumn( i18n("Nr") );
+    lFrameSList->addColumn( i18n("No.") );
     lFrameSList->addColumn( i18n("Frameset name") );
     lFrameSList->setAllColumnsShowFocus( true );
     lFrameSList->header()->setMovingEnabled( false );
