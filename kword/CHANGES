@@ -243,3 +243,12 @@ Crashes:
 - Fixed crash with bookmarks
 - Fixed several memory leaks
 - Fixed crash when we canceled create time/date variable.
+
+Changes between KWord-1.2-RC1 and KWord-1.2
+===========================================
+Layout:
+- Fixed layout of paragraph numbering in Right-To-Left mode.
+
+Crashes:
+- Fixed crash when removing pages (and the page number is shown in header/footer)
+
