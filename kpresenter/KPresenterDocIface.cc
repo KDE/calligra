@@ -57,3 +57,38 @@ int KPresenterDocIface::getPageOfObj( int obj, double faktor )
 {
     return doc->getPageOfObj( obj, 0, 0, faktor ) - 1;
 }
+
+double KPresenterDocIface::getIndentValue()
+{
+    return doc->getIndentValue();
+}
+
+void KPresenterDocIface::setIndentValue(double _ind)
+{
+    doc->setIndentValue(_ind);
+}
+
+bool KPresenterDocIface::dontCheckUpperWord()
+{
+    return doc->dontCheckUpperWord();
+}
+
+void KPresenterDocIface::setDontCheckUpperWord(bool _b)
+{
+    doc->setDontCheckUpperWord(_b);
+}
+
+bool KPresenterDocIface::dontCheckTitleCase()
+{
+    return doc->dontCheckTitleCase();
+}
+
+void KPresenterDocIface::setDontCheckTitleCase(bool _b)
+{
+    doc->setDontCheckTitleCase(_b);
+}
+
+int KPresenterDocIface::maxRecentFiles()
+{
+    return doc->maxRecentFiles();
+}

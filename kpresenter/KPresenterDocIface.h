@@ -39,6 +39,15 @@ k_dcop:
     virtual int getNumPages();
     virtual DCOPRef getPage( int num );
     int getPageOfObj( int obj, double faktor );
+    virtual double getIndentValue();
+    virtual void setIndentValue(double _ind);
+
+    virtual bool dontCheckUpperWord();
+    virtual void setDontCheckUpperWord(bool _b);
+
+    virtual bool dontCheckTitleCase();
+    virtual void setDontCheckTitleCase(bool _b);
+    virtual int maxRecentFiles();
 
 private:
     KPresenterDoc *doc;
