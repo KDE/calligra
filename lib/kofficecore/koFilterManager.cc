@@ -33,12 +33,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
+#include <ktempfile.h>
+/*
 #ifdef HAVE_PATHS_H
 #include <paths.h>
 #endif
 #ifndef _PATH_TMP
 #define _PATH_TMP "/tmp"
 #endif
+*/
 
 KoFilterManager* KoFilterManager::s_pSelf = 0;
 
@@ -170,10 +174,17 @@ const QString KoFilterManager::import( const QString & _url, const char *_native
         return _url;
     }
 
+    KTempFile tempFile; // create with default file prefix, extension and mode
+    if (tempFile.status() != 0)
+        return _url;
+    QString tempfname = tempFile.name();
+
+    /*
     char tempfname[256];
     sprintf(tempfname, _PATH_TMP"/kofficefilterXXXXXX");
     if (mkstemp(tempfname) == -1)
       return _url;
+    */
 
     unsigned int i=0;
     bool ok=false;
@@ -192,12 +203,19 @@ const QString KoFilterManager::prepareExport( const QString & _url, const char *
     exportFile=_url;
     native_format=_native_format;
 
+    KTempFile tempFile; // create with default file prefix, extension and mode
+    if (tempFile.status() != 0)
+        return _url;
+    tmpFile = tempFile.name();
+
+    /*
     char tempfname[256];
     int fildes;
     sprintf(tempfname, _PATH_TMP"/kofficefilterXXXXXX");
     if ((fildes = mkstemp(tempfname)) == -1 )
         return _url;
     tmpFile=tempfname;
+    */
 
     prepare=true;
     return tmpFile;
