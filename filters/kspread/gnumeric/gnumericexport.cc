@@ -354,10 +354,23 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, KSpreadCell 
         case SuperiorEqual:
         case InferiorEqual:
         case Different:
-            break;
+        {
+            QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
+            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->timeMin.toString() ) );
+            val.appendChild( tmp );
+        }
+        break;
         case Between:
         case DifferentTo:
-            break;
+        {
+            QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
+            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->timeMin.toString() ) );
+            val.appendChild( tmp );
+            tmp = gnumeric_doc.createElement( "gmr:Expression1" );
+            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->timeMax.toString() ) );
+            val.appendChild( tmp );
+        }
+        break;
         }
 
         break;
@@ -374,10 +387,23 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, KSpreadCell 
         case SuperiorEqual:
         case InferiorEqual:
         case Different:
-            break;
+        {
+            QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
+            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->dateMin.toString() ) );
+            val.appendChild( tmp );
+        }
+        break;
         case Between:
         case DifferentTo:
-            break;
+        {
+            QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
+            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->dateMin.toString() ) );
+            val.appendChild( tmp );
+            tmp = gnumeric_doc.createElement( "gmr:Expression1" );
+            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->dateMax.toString() ) );
+            val.appendChild( tmp );
+        }
+        break;
         }
 
         break;
