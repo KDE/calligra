@@ -636,7 +636,7 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 		bool relative;
 		char command = *(ptr++), lastCommand = ' ';
 
-		curx = cury = contrlx = contrly = 0.0;
+		subpathx = subpathy = curx = cury = contrlx = contrly = 0.0;
 		while( ptr < end )
 		{
 			if( *ptr == ' ' )

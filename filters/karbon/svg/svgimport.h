@@ -49,6 +49,7 @@ protected:
 			stroke.setType( VStroke::none ); // default is no stroke
 			stroke.setLineWidth( 1.0 );
 			fill.setColor( VColor( Qt::black ) );
+			fill.setFillRule( VFill::evenOdd );
 		}
 		VFill		fill;
 		VStroke		stroke;
