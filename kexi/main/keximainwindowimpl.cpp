@@ -394,8 +394,8 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 
 	//fix menus a bit more:
 #ifndef KEXI_SHOW_UNIMPLEMENTED
-	d->hideMenuItem("file", i18n("&Import"), true);
-	d->hideMenuItem("help", i18n( "&Report Bug..." ), true);
+//disabled (possible crash)	d->hideMenuItem("file", i18n("&Import"), true);
+//disabled (possible crash)	d->hideMenuItem("help", i18n( "&Report Bug..." ), true);
 #endif
 
 	if (!isFakingSDIApplication() && !d->final) {

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformpartinst" version="4">
+<kpartgui name="kexiformpartinst" version="5">
 
 <MenuBar>
   <Menu name="edit">
@@ -53,6 +53,7 @@
 <text>Format Toolbar</text>
    <Action name="formpart_align_menu"/>
    <Action name="formpart_adjust_size_menu"/>
+   <Action name="show_form_ui" />
 </ToolBar>
 <!-- ToolBar name="tools" fullWidth="false">
    <Action name="change_style"/>

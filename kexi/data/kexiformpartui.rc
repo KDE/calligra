@@ -1,8 +1,10 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformpart" version="3">
+<kpartgui name="kexiformpart" version="4">
 
-<!-- ToolBar moved to kexiformpartinstui.rc
-</ToolBar -->
+<ToolBar name="tools" fullWidth="false" noMerge="0">
+   <text>Tools Toolbar</text>
+   <Action name="show_form_ui"/>
+</ToolBar>
 
 </kpartgui>
 
