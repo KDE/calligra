@@ -29,44 +29,43 @@ class KIntSpinBox;
 class KarbonPart;
 class QLabel;
 
-class VSinusOptionsWidget : public QGroupBox
-{
-	Q_OBJECT
-
-public:
-	VSinusOptionsWidget( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
-
-	double width() const;
-	double height() const;
-	uint periods() const;
-	void setWidth( double value );
-	void setHeight( double value );
-	void setPeriods( uint value );
-	void refreshUnit ();
-private:
-	KDoubleNumInput* m_width;
-	KDoubleNumInput* m_height;
-	KIntSpinBox* m_periods;
-	KarbonPart*m_part;
-	QLabel *m_heightLabel;
-	QLabel *m_widthLabel;
-};
-
 class VSinusTool : public VShapeTool
 {
 public:
-	VSinusTool( KarbonView* view );
+	VSinusTool( KarbonView *view );
 	virtual ~VSinusTool();
 
-	virtual QWidget* optionsWidget() { return m_optionsWidget; }
+	virtual QWidget *optionsWidget() { return m_optionsWidget; }
 	virtual QString name() { return "Sinus tool"; }
 
-	virtual VComposite* shape( bool interactive = false ) const;
+	virtual VComposite *shape( bool interactive = false ) const;
 
     void refreshUnit();
 
 private:
-	VSinusOptionsWidget* m_optionsWidget;
+	class VSinusOptionsWidget : public QGroupBox
+	{
+	public:
+		VSinusOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char *name = 0L );
+
+		double width() const;
+		double height() const;
+		uint periods() const;
+		void setWidth( double value );
+		void setHeight( double value );
+		void setPeriods( uint value );
+		void refreshUnit();
+
+	private:
+		KDoubleNumInput		*m_width;
+		KDoubleNumInput		*m_height;
+		KIntSpinBox			*m_periods;
+		KarbonPart			*m_part;
+		QLabel				*m_heightLabel;
+		QLabel				*m_widthLabel;
+	};
+
+	VSinusOptionsWidget *m_optionsWidget;
 };
 
 #endif

@@ -116,4 +116,3 @@ VRectangleTool::shape( bool interactive ) const
 				m_d2 );
 }
 
-#include "vrectangletool.moc"

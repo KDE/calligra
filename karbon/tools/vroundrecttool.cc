@@ -139,4 +139,3 @@ VRoundRectTool::shape( bool interactive ) const
 				m_optionsWidget->round() );
 }
 
-#include "vroundrecttool.moc"

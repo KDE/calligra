@@ -32,14 +32,14 @@
 #include "karbon_part.h"
 
 
-VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part,QWidget* parent, const char* name )
+VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part,QWidget* parent, const char* name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part(part)
 {
 	// add width/height-input:
-	m_widthLabel =new QLabel( i18n( "Width:" ), this );
+	m_widthLabel = new QLabel( i18n( "Width:" ), this );
 	m_width = new KDoubleNumInput( 0, this );
 	m_width->setSuffix( m_part->getUnitName() );
-	m_heightLabel =new QLabel( i18n( "Height:" ), this );
+	m_heightLabel = new QLabel( i18n( "Height:" ), this );
 	m_height = new KDoubleNumInput( 0, this );
 	m_height->setSuffix( m_part->getUnitName() );
 	new QLabel( i18n( "Periods:" ), this );
@@ -50,42 +50,43 @@ VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part,QWidget* parent, cons
 }
 
 double
-VSinusOptionsWidget::width() const
+VSinusTool::VSinusOptionsWidget::width() const
 {
-	return KoUnit::ptFromUnit( m_width->value(), m_part->getUnit()) ;
+	return KoUnit::ptFromUnit( m_width->value(), m_part->getUnit() ) ;
 }
 
 double
-VSinusOptionsWidget::height() const
+VSinusTool::VSinusOptionsWidget::height() const
 {
-	return KoUnit::ptFromUnit( m_height->value(), m_part->getUnit()) ;
+	return KoUnit::ptFromUnit( m_height->value(), m_part->getUnit() ) ;
 }
 
 uint
-VSinusOptionsWidget::periods() const
+VSinusTool::VSinusOptionsWidget::periods() const
 {
 	return m_periods->value();
 }
 
 void
-VSinusOptionsWidget::setWidth( double value )
+VSinusTool::VSinusOptionsWidget::setWidth( double value )
 {
 	m_width->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
 }
 
 void
-VSinusOptionsWidget::setHeight( double value )
+VSinusTool::VSinusOptionsWidget::setHeight( double value )
 {
 	m_height->setValue( KoUnit::ptToUnit( value, m_part->getUnit() ) );
 }
 
 void
-VSinusOptionsWidget::setPeriods( uint value )
+VSinusTool::VSinusOptionsWidget::setPeriods( uint value )
 {
 	m_periods->setValue( value );
 }
 
-void VSinusOptionsWidget::refreshUnit ()
+void
+VSinusTool::VSinusOptionsWidget::refreshUnit ()
 {
 	m_width->setSuffix( m_part->getUnitName() );
 	m_height->setSuffix( m_part->getUnitName() );
@@ -106,7 +107,8 @@ VSinusTool::~VSinusTool()
 	delete( m_optionsWidget );
 }
 
-void VSinusTool::refreshUnit()
+void
+VSinusTool::refreshUnit()
 {
     m_optionsWidget->refreshUnit();
 }

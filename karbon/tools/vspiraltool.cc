@@ -30,7 +30,7 @@
 #include "vspiraltool.h"
 
 
-VSpiralOptionsWidget::VSpiralOptionsWidget( QWidget* parent, const char* name )
+VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( QWidget* parent, const char* name )
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name )
 {
 	new QLabel( i18n( "Radius:" ), this );
@@ -39,8 +39,8 @@ VSpiralOptionsWidget::VSpiralOptionsWidget( QWidget* parent, const char* name )
 	m_segments = new KIntSpinBox( this );
 	m_segments->setMinValue( 1 );
 	new QLabel( i18n( "Fade:" ), this );
-	m_fade = new KDoubleNumInput(0.0,this);
-	m_fade->setRange(0.0, 1.0 , 0.05);
+	m_fade = new KDoubleNumInput( 0.0, this );
+	m_fade->setRange( 0.0, 1.0, 0.05 );
 
 	new QLabel( i18n( "Orientation:" ), this );
 	m_clockwise = new KComboBox( false, this );
@@ -52,57 +52,51 @@ VSpiralOptionsWidget::VSpiralOptionsWidget( QWidget* parent, const char* name )
 }
 
 double
-VSpiralOptionsWidget::radius() const
+VSpiralTool::VSpiralOptionsWidget::radius() const
 {
 	return m_radius->value();
 }
 
 uint
-VSpiralOptionsWidget::segments() const
+VSpiralTool::VSpiralOptionsWidget::segments() const
 {
 	return m_segments->value();
 }
 
 double
-VSpiralOptionsWidget::fade() const
+VSpiralTool::VSpiralOptionsWidget::fade() const
 {
 	return m_fade->value();
 }
 
 bool
-VSpiralOptionsWidget::clockwise() const
+VSpiralTool::VSpiralOptionsWidget::clockwise() const
 {
-	if( m_clockwise->currentItem() == 0 )
-		return true;
-	else
-		return false;
+	return m_clockwise->currentItem() == 0;
 }
 
 void
-VSpiralOptionsWidget::setRadius( double value )
+VSpiralTool::VSpiralOptionsWidget::setRadius( double value )
 {
 	m_radius->setValue( value );
 }
 
 void
-VSpiralOptionsWidget::setSegments( uint value )
+VSpiralTool::VSpiralOptionsWidget::setSegments( uint value )
 {
 	m_segments->setValue( value );
 }
 
 void
-VSpiralOptionsWidget::setFade( double value )
+VSpiralTool::VSpiralOptionsWidget::setFade( double value )
 {
 	m_fade->setValue( value );
 }
 
 void
-VSpiralOptionsWidget::setClockwise( bool value )
+VSpiralTool::VSpiralOptionsWidget::setClockwise( bool value )
 {
-	if( value )
-		m_clockwise->setCurrentItem( 0 );
-	else
-		m_clockwise->setCurrentItem( 1 );
+	m_clockwise->setCurrentItem( value ? 0 : 1 );
 }
 
 VSpiralTool::VSpiralTool( KarbonView* view )
@@ -148,4 +142,3 @@ VSpiralTool::shape( bool interactive ) const
 				m_d2 );
 }
 
-#include "vspiraltool.moc"
