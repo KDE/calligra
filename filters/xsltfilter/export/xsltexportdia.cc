@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 
+#include <qcombobox.h>
 #include <kapplication.h>
 #include <qstringlist.h>
 #include <klocale.h>
@@ -52,6 +53,7 @@ XSLTExportDia::XSLTExportDia(const KoStore& in, const QCString &format, QWidget*
 	{
 		value = _config->readEntry( QString("Recent%1").arg(i) );
 		_recentList.append( value );
+		recentBox->insertItem(value);
 	}
 }
 
@@ -63,13 +65,21 @@ XSLTExportDia::~XSLTExportDia()
 	delete _in;
 	delete _config;
 }
-
+/**
+ * Called when thecancel button is clicked.
+ * Close the dialog box.
+ */
 void XSLTExportDia::cancelSlot()
 {
 	kdDebug() << "export cancelled" << endl;
 	reject();
 }
 
+/**
+ * Called when the choose button is clicked. A file dialog is open to allow to choose
+ * the xslt to use.
+ * Change the value of the current file.
+ */
 void XSLTExportDia::chooseSlot()
 {
 	
@@ -113,12 +123,47 @@ void XSLTExportDia::chooseSlot()
     }
 }
 
+/**
+ * Called when the user clic on an element in the recent list.
+ * Change the value of the current file.
+ */
+void XSLTExportDia::chooseRecentSlot()
+{
+	_currentFile = recentBox->currentText();
+}
+
+/**
+ * Called when teh user clic on an element in the common list of xslt sheet.
+ * Change the value of the current file.
+ */
+void XSLTExportDia::chooseCommonSlot()
+{
+	_currentFile = xsltList->currentText();
+}
+
+/**
+ * Called when the user clic on the ok button. The xslt sheet is put on the recent list which is
+ * saved, then the xslt processor is called to export the document.
+ */
 void XSLTExportDia::okSlot()
 {
 	hide();
 	kdDebug() << "XSLT FILTER --> BEGIN" << endl;
 	_in->open("root");
 	QString stylesheet = _currentFile.directory() + "/" + _currentFile.fileName();
+
+	/* Add the current file in the recent list if is not and save the list. */
+	if(_recentList.contains(stylesheet) == 0)
+	{
+		/* Remove the older stylesheet used */
+		_recentList.pop_back();
+		
+		/* Add the new */
+		_recentList.prepend(stylesheet);
+		
+		/* Save the new list */
+		
+	}
 
 	/* Save the input file in a temp file */
 	QByteArray array = _in->read(_in->size());

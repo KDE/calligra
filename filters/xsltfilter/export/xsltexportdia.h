@@ -48,8 +48,9 @@ public:
 public slots:
     virtual void cancelSlot();
     virtual void chooseSlot();
+	virtual void chooseRecentSlot();
+	virtual void chooseCommonSlot();
     virtual void okSlot();
-
 };
 
 #endif /* __XSLTEXPORTDIA_H__ */

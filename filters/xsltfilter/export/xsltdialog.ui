@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>410</width>
-            <height>350</height>
+            <width>373</width>
+            <height>389</height>
         </rect>
     </property>
     <property name="caption">
@@ -84,7 +84,32 @@
                     <property name="name">
                         <cstring>recentBox</cstring>
                     </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
                 </widget>
+                <spacer>
+                    <property name="name" stdset="0">
+                        <cstring>Spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Minimum</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
                 <widget class="QPushButton">
                     <property name="name">
                         <cstring>chooseBtn</cstring>
@@ -171,10 +196,27 @@
         <receiver>XSLTDialog</receiver>
         <slot>chooseSlot()</slot>
     </connection>
+    <connection>
+        <sender>recentBox</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>XSLTDialog</receiver>
+        <slot>chooseRecentSlot()</slot>
+    </connection>
+    <connection>
+        <sender>xsltList</sender>
+        <signal>selected(const QString&amp;)</signal>
+        <receiver>XSLTDialog</receiver>
+        <slot>chooseCommonSlot()</slot>
+    </connection>
 </connections>
+<includes>
+    <include location="local" impldecl="in implementation">xsltdialog.ui.h</include>
+</includes>
 <slots>
     <slot>cancelSlot()</slot>
+    <slot>chooseRecentSlot()</slot>
     <slot>chooseSlot()</slot>
+    <slot>chooseCommonSlot()</slot>
     <slot>okSlot()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
