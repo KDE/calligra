@@ -467,8 +467,8 @@ KWTableStyleCommand::KWTableStyleCommand( const QString &name, KWFrame *_frame, 
 
 KWTableStyleCommand::~KWTableStyleCommand()
 {
-    if (m_fsc) delete m_fsc;
-    if (m_sc) delete m_sc;
+    delete m_fsc;
+    delete m_sc;
 }
 
 void KWTableStyleCommand::execute()
