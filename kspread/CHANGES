@@ -265,3 +265,8 @@ installing in new cell when you choose Text or NoBorder parameter)
 -----------------------------------------------------
 -Add i18n where I forgot to install it
 -Now you can validate MultiRow in "Cell Layout"
+
+2000-01-07 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Bug fix : When you copy a value in a cell all is recalcing
+(bug that David Faure found. thanks)

@@ -1405,6 +1405,7 @@ void KSpreadView::paste()
 	return;
 
     m_pTable->paste( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_pTable->recalc(true);
     updateEditWidget();
 }
 
@@ -1415,6 +1416,8 @@ void KSpreadView::specialPaste()
 
     KSpreadspecial dlg( this, "Special Paste" );
     dlg.exec();
+    m_pTable->recalc(true);
+    updateEditWidget();
 }
 
 void KSpreadView::consolidate()
