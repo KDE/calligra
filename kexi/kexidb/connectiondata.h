@@ -46,6 +46,11 @@ class ConnectionDataBase
 		*/
 		QString connName;
 
+		/*! 
+		\brief The additional description for the connection
+		*/
+		QString description;
+
 		/*!
 		\brief Used for identifying a single piece of data in a set
 		

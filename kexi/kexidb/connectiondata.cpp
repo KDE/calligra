@@ -52,6 +52,7 @@ ConnectionData::ConnectionData()
 ConnectionData::ConnectionData(const ConnectionData& cd)
 : QObject()
 , ConnectionDataBase()
+, priv(0)
 {
 	static_cast<ConnectionData&>(*this) = static_cast<const ConnectionData&>(cd);//copy data members
 /*	if (&cd != this) {
@@ -68,6 +69,7 @@ ConnectionData::~ConnectionData()
 
 ConnectionData& ConnectionData::operator=(const ConnectionData& cd)
 {
+	delete priv;
 	static_cast<ConnectionDataBase&>(*this) = static_cast<const ConnectionDataBase&>(cd);//copy data members
 	priv = new ConnectionData::Private();
 	*priv = *cd.priv;

@@ -406,6 +406,8 @@ void DriverManager::drv_clearServerResult()
 
 QString DriverManager::possibleProblemsInfoMsg() const
 {
+	if (d_int->possibleProblems.isEmpty())
+		return QString::null;
 	QString str;
 	str.reserve(1024);
 	str = "<ul>";
