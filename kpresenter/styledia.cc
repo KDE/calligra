@@ -46,7 +46,6 @@
 #include <kpresenter_doc.h>
 #include <kpresenter_view.h>
 #include <koUnit.h>
-#include <knuminput.h>
 #include <kprcanvas.h>
 #include <kprcommand.h>
 
