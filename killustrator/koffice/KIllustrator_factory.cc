@@ -15,7 +15,7 @@ extern "C"
 KInstance* KIllustratorFactory::s_global = 0;
 
 KIllustratorFactory::KIllustratorFactory( QObject* parent, const char* name )
-    : KLibFactory( parent, name )
+    : KoFactory( parent, name )
 {
 }
 

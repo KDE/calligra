@@ -61,7 +61,7 @@ extern "C"
 KInstance* KPresenterFactory::s_global = 0;
 
 KPresenterFactory::KPresenterFactory( QObject* parent, const char* name )
-    : KLibFactory( parent, name )
+    : KoFactory( parent, name )
 {
 }
 

@@ -57,16 +57,27 @@ public:
 
 
 KoFilterManager* KoFilterManager::s_pSelf = 0;
+unsigned long KoFilterManager::s_refCnt = 0;
 
 KoFilterManager* KoFilterManager::self()
 {
     if( s_pSelf == 0 )
+    {
+      if ( s_refCnt == 0 ) // someone forgot to call incRef
+	  s_refCnt++;
+	
         s_pSelf = new KoFilterManager;
+    }
     return s_pSelf;
 }
 
 KoFilterManager::KoFilterManager() {
     d=new KoFilterManagerPrivate;
+}
+
+KoFilterManager::~KoFilterManager()
+{
+  delete d;
 }
 
 const QString KoFilterManager::fileSelectorList( const Direction &direction, const char *_format,
@@ -421,6 +432,26 @@ const bool KoFilterManager::export_() {
     return true;
 }
 
+void KoFilterManager::incRef()
+{
+  s_refCnt++;
+}
+
+void KoFilterManager::decRef()
+{
+  s_refCnt--;
+  if ( s_refCnt == 0 && s_pSelf )
+  {
+    delete s_pSelf;
+    s_pSelf = 0;
+  }
+}
+
+unsigned long KoFilterManager::refCnt()
+{
+  return s_refCnt;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // PreviewStack
 
@@ -476,4 +507,5 @@ void PreviewStack::change(const QString &ext) {
         }
     }
 }
+
 #include <koFilterManager.moc>

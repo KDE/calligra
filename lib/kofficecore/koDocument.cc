@@ -284,8 +284,14 @@ void KoDocument::insertChild( KoDocumentChild *child )
 
   d->m_children.append( child );
 
-  connect( child, SIGNAL( changed( KoDocumentChild * ) ),
-	   this, SIGNAL( childChanged( KoDocumentChild * ) ) );
+  connect( child, SIGNAL( changed( KoChild * ) ),
+	   this, SLOT( slotChildChanged( KoChild * ) ) );
+}
+
+void KoDocument::slotChildChanged( KoChild *c )
+{
+  assert( c->inherits( "KoDocumentChild" ) );
+  emit childChanged( static_cast<KoDocumentChild *>( c ) );
 }
 
 QList<KoDocumentChild> &KoDocument::children() const

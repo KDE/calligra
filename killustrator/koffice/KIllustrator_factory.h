@@ -1,11 +1,11 @@
 #ifndef KILLUSTRATOR_FACTORY_H
 #define KILLUSTRATOR_FACTORY_H
 
-#include <klibloader.h>
+#include <koFactory.h>
 
 class KInstance;
 
-class KIllustratorFactory : public KLibFactory
+class KIllustratorFactory : public KoFactory
 {
     Q_OBJECT
 public:

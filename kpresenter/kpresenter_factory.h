@@ -20,10 +20,10 @@
 #ifndef KPRESENTER_FACTORY_H
 #define KPRESENTER_FACTORY_H
 
-#include <klibloader.h>
+#include <koFactory.h>
 class KAboutData;
 
-class KPresenterFactory : public KLibFactory
+class KPresenterFactory : public KoFactory
 {
     Q_OBJECT
 public:

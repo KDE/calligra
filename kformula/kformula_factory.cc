@@ -36,7 +36,7 @@ KAboutData* KFormulaFactory::aboutData()
 
 
 KFormulaFactory::KFormulaFactory( QObject* parent, const char* name )
-    : KLibFactory( parent, name )
+    : KoFactory( parent, name )
 {
     s_global = new KInstance( "kformula" );
 }

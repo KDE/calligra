@@ -22,7 +22,7 @@ extern "C"
 KInstance* KSpreadFactory::s_global = 0;
 
 KSpreadFactory::KSpreadFactory( QObject* parent, const char* name )
-    : KLibFactory( parent, name )
+    : KoFactory( parent, name )
 {
     kdDebug(36001) << "KSpreadFactory::KSpreadFactory()" << endl;
     (void)global();

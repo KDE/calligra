@@ -25,7 +25,7 @@ extern "C"
 KInstance* KChartFactory::s_global = 0;
 
 KChartFactory::KChartFactory( QObject* parent, const char* name )
-    : KLibFactory( parent, name )
+    : KoFactory( parent, name )
 {
 }
 

@@ -20,11 +20,11 @@
 #ifndef KWORD_FACTORY_H
 #define KWORD_FACTORY_H
 
-#include <klibloader.h>
+#include <koFactory.h>
 
 class KAboutData;
 
-class KWordFactory : public KLibFactory
+class KWordFactory : public KoFactory
 {
     Q_OBJECT
 public:

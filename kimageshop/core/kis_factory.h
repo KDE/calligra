@@ -21,14 +21,14 @@
 #ifndef __kis_factory_h__
 #define __kis_factory_h__
 
-#include <klibloader.h>
+#include <koFactory.h>
 
 class KInstance;
 class KisPluginServer;
 class KisResourceServer;
 class KAboutData;
 
-class KisFactory : public KLibFactory
+class KisFactory : public KoFactory
 {
     Q_OBJECT
 public:

@@ -28,6 +28,9 @@ public:
 
   virtual int border() const;
 
+signals:
+  void geometryChanged();
+
 protected:
   virtual void paintEvent( QPaintEvent* );
   virtual void mousePressEvent( QMouseEvent* );

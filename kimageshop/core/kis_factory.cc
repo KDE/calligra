@@ -44,7 +44,7 @@ KisPluginServer* KisFactory::s_pserver = 0;
 KisResourceServer* KisFactory::s_rserver = 0;
 
 KisFactory::KisFactory( QObject* parent, const char* name )
-    : KLibFactory( parent, name )
+    : KoFactory( parent, name )
 {
   s_aboutData = new KAboutData( "kimageshop",
 								I18N_NOOP("KImageShop"),
@@ -59,7 +59,7 @@ KisFactory::KisFactory( QObject* parent, const char* name )
   (void)global();
   s_pserver = new KisPluginServer;
   s_rserver = new KisResourceServer;
-  
+
   KisLog::setLogFile(locateLocal("kis", "kimageshop.log", s_global));
   log() << "Starting KImageShop" << endl;
 }
@@ -107,7 +107,7 @@ KInstance* KisFactory::global()
 										KStandardDirs::kde_default("data") + "kimageshop/plugins/");
 	  s_global->dirs()->addResourceType("toolbars",
 										KStandardDirs::kde_default("data") + "koffice/toolbar/");
-      
+
     }
     return s_global;
 }

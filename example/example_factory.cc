@@ -19,7 +19,7 @@ static const char* version="0.1";
 KInstance* ExampleFactory::s_global = 0;
 
 ExampleFactory::ExampleFactory( QObject* parent, const char* name )
-    : KLibFactory( parent, name )
+    : KoFactory( parent, name )
 {
 }
 

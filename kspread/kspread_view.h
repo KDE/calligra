@@ -174,7 +174,6 @@ public slots:
     void editLocalScripts();
     void reloadScripts();
     void runLocalScript();
-    void newView();
     void togglePageBorders( bool );
     void toggleGrid( bool );
     void toggleFormular( bool);
@@ -389,7 +388,6 @@ private:
     KAction* m_editGlobalScripts;
     KAction* m_editLocalScripts;
     KAction* m_reloadScripts;
-    KAction* m_newView;
     KAction* m_gotoCell;
     KAction* m_replace;
     KAction* m_conditional;

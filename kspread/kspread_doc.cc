@@ -113,6 +113,8 @@ KSpreadDoc::KSpreadDoc( QObject* parent, const char* name, bool singleViewMode )
   // Make us scriptable if the document has a name
   if ( name )
       dcopObject();
+  
+  m_newView = new KAction( i18n("New View"), 0, this, SLOT( newView() ), actionCollection(), "newView" );
 }
 
 bool KSpreadDoc::initDoc()
@@ -924,6 +926,13 @@ void KSpreadDoc::changeAreaTableName(QString oldName,QString tableName)
     	if((*it2).table_name==oldName)
                    (*it2).table_name=tableName;
         }
+}
+
+void KSpreadDoc::newView()
+{
+    KoMainWindow* shell = createShell();
+    shell->setRootDocument( this );
+    shell->show();
 }
 
 #include "kspread_doc.moc"

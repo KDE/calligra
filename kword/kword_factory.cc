@@ -61,7 +61,7 @@ extern "C"
 KInstance* KWordFactory::s_global = 0;
 
 KWordFactory::KWordFactory( QObject* parent, const char* name )
-    : KLibFactory( parent, name )
+    : KoFactory( parent, name )
 {
 }
 

@@ -28,8 +28,8 @@ class PartResizeHandler : public EventHandler
 {
     Q_OBJECT
 public:
-    PartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoDocumentChild* child,
-		       KoDocumentChild::Gadget gadget, const QPoint& point );
+    PartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoChild* child,
+		       KoChild::Gadget gadget, const QPoint& point );
     ~PartResizeHandler();
 
 protected:
@@ -43,7 +43,7 @@ class PartMoveHandler : public EventHandler
 {
     Q_OBJECT
 public:
-    PartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoDocumentChild* child,
+    PartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoChild* child,
 		     const QPoint& point );
     ~PartMoveHandler();
 

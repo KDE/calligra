@@ -217,8 +217,8 @@ void KoFrame::mousePressEvent( QMouseEvent* ev )
   else
     d->m_mode = 0;
 
-  if ( d->m_state == Active )
-    d->m_mode = 0;
+  //  if ( d->m_state == Active )
+  //    d->m_mode = 0;
 
   kdDebug(30003) << "---- MODE=" << d->m_mode << endl;
 
@@ -293,7 +293,7 @@ void KoFrame::mouseMoveEvent( QMouseEvent* ev )
     int w = QMIN( QMAX( d->m_width - d->m_mousePressPos.x() + p.x(), minimumWidth() ), maximumWidth() );
     resize( w, d->m_height );
   }
-  else if ( d->m_state == Selected )
+  else if ( d->m_state == Selected || d->m_state == Active )
   {
     QRect r1( 0, 0, 5, 5 );
     QRect r2( 0, height() - 5, 5, 5 );
@@ -333,6 +333,8 @@ void KoFrame::resizeEvent( QResizeEvent* )
     d->m_view->setGeometry( 5, 5, width() - 10, height() - 10 );
   else
     d->m_view->setGeometry( 0, 0, width(), height() );
+
+  emit geometryChanged();
 }
 
 bool KoFrame::eventFilter( QObject* obj, QEvent* ev )

@@ -33,6 +33,7 @@ class QDomDocument;
 class KoStore;
 class KoMainWindow;
 
+class KoChild;
 class KoDocumentChild;
 class KoDocumentChildPicture;
 class KoView;
@@ -543,6 +544,9 @@ protected:
    * to set the url to KURL()
    */
   void resetURL() { m_url = KURL(); }
+
+private slots:
+  void slotChildChanged( KoChild *c );
 
 private:
 

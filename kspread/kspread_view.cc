@@ -268,7 +268,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 				       actionCollection(), "editGlobalScripts" );
     m_editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this, SLOT( editLocalScripts() ), actionCollection(), "editLocalScripts" );
     m_reloadScripts = new KAction( i18n("Reload Scripts"), 0, this, SLOT( reloadScripts() ), actionCollection(), "reloadScripts" );
-    m_newView = new KAction( i18n("New View"), 0, this, SLOT( newView() ), actionCollection(), "newView" );
     m_gotoCell = new KAction( i18n("Goto Cell..."), 0, this, SLOT( gotoCell() ), actionCollection(), "gotoCell" );
     m_showPageBorders = new KToggleAction( i18n("Show page borders"), 0, actionCollection(), "showPageBorders");
     connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this, SLOT( togglePageBorders( bool ) ) );
@@ -754,7 +753,8 @@ void KSpreadView::updateReadWrite( bool readwrite )
   m_undo->setEnabled( false );
   m_showTable->setEnabled( true );
   m_hideTable->setEnabled( true );
-  m_newView->setEnabled( true );
+  //  m_newView->setEnabled( true );
+  m_pDoc->KXMLGUIClient::action( "newView" )->setEnabled( true );
   m_gotoCell->setEnabled( true );
 //  m_help->setEnabled( true );
   m_oszi->setEnabled( true );
@@ -1666,14 +1666,6 @@ void KSpreadView::createAnchor()
   dlg->show();
 }
 
-
-void KSpreadView::newView()
-{
-    KoMainWindow* shell = m_pDoc->createShell();
-    shell->setRootDocument( m_pDoc );
-    shell->show();
-}
-
 bool KSpreadView::printDlg()
 {
     QPrinter prt;
@@ -1805,17 +1797,17 @@ int KSpreadView::leftBorder() const
 
 int KSpreadView::rightBorder() const
 {
-  return 20;
+ return /*20*/ 16;
 }
 
 int KSpreadView::topBorder() const
 {
-  return 30 + XBORDER_HEIGHT;
+ return /*30 + */XBORDER_HEIGHT;
 }
 
 int KSpreadView::bottomBorder() const
 {
-  return 20;
+ return /*20*/16;
 }
 
 void KSpreadView::resizeEvent( QResizeEvent * )

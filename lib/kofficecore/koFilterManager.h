@@ -142,6 +142,10 @@ public:
      */
     const bool export_();
 
+    static void incRef();
+    static void decRef();
+    static unsigned long refCnt();
+
     /**
      * Returns a pointer to the only instance of the KoFilterManager.
      * @return The pointer to the KoFilterManager instance
@@ -151,6 +155,7 @@ public:
 protected:
     KoFilterManager();
     KoFilterManager &operator=(const KoFilterManager &);
+    virtual ~KoFilterManager();
 
 private:
     /**
@@ -163,6 +168,7 @@ private:
 
     static KoFilterManager* s_pSelf;
     KoFilterManagerPrivate *d;
+    static unsigned long s_refCnt;
 };
 
 

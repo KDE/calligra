@@ -20,12 +20,12 @@
 #ifndef KGRAPH_FACTORY_H
 #define KGRAPH_FACTORY_H
 
-#include <klibloader.h>
+#include <koFactory.h>
 
 class KInstance;
 class KAboutData;
 
-class KGraphFactory : public KLibFactory {
+class KGraphFactory : public KoFactory {
 
     Q_OBJECT
 

@@ -27,6 +27,8 @@
 
 #include <komlParser.h>
 
+#include "koChild.h"
+
 class KoStore;
 class KoDocument;
 class KoDocumentChildPrivate;
@@ -34,13 +36,10 @@ class KoDocumentChildPrivate;
 /**
  *  Holds an embedded object.
  */
-class KoDocumentChild : public QObject
+class KoDocumentChild : public KoChild
 {
   Q_OBJECT
 public:
-  enum Gadget { NoGadget, TopLeft, TopMid, TopRight, MidLeft, MidRight,
-		BottomLeft, BottomMid, BottomRight, Move };
-
   KoDocumentChild( KoDocument* parent, KoDocument* doc, const QRect& geometry );
 
   /**
@@ -57,129 +56,11 @@ public:
    */
   virtual void setDocument( KoDocument *doc, const QRect &geometry );
 
-  /**
-   *  Sets a new geometry for this child document.
-   */
-  virtual void setGeometry( const QRect &rect );
-
-  /**
-   * @return the rectangle that would be used to display this
-   *         child document if the child is not rotated or
-   *         subject to some other geometric transformation.
-   *         The rectangle is in the coordinate system of the parent.
-   *
-   * @see #setGeometry
-   */
-  virtual QRect geometry() const;
-
   virtual KoDocument *document() const;
 
   virtual KoDocument *parentDocument() const;
 
-  /**
-   * @return the region of this child part relative to the
-   *         coordinate system of the parent.
-   *         The region is transformed with the passed
-   *         matrix.
-   */
-  virtual QRegion region( const QWMatrix& = QWMatrix() ) const;
-
-  /**
-   * @return the polygon which surrounds the child part. The points
-   *         are in coordinates of the parent.
-   *         The points are transformed with the
-   *         passed matrix.
-   */
-  virtual QPointArray pointArray( const QWMatrix &matrix = QWMatrix() ) const;
-
-  /**
-   * Tests wether the part contains a certain point. The point is
-   * in tghe corrdinate system of the parent.
-   */
-  virtual bool contains( const QPoint& ) const;
-
-  /**
-   * @return the effective bounding rect after all transformations.
-   *         The coordinates of the rectangle are in the coordinate system
-   *         of the parent.
-   */
-  virtual QRect boundingRect( const QWMatrix &matrix = QWMatrix() ) const;
-
-  /**
-   * Scales the content of the child part. However, that does not
-   * affect the size of the child part.
-   */
-  virtual void setScaling( double x, double y );
-
-  virtual double xScaling() const;
-
-  virtual double yScaling() const;
-
-  virtual void setShearing( double, double );
-
-  virtual double xShearing() const;
-
-  virtual double yShearing() const;
-
-  virtual void setRotation( double );
-
-  virtual double rotation() const;
-
-  virtual void setRotationPoint( const QPoint& pos );
-
-  virtual QPoint rotationPoint() const;
-
-  /**
-   * @return TRUE if the child part is an orthogonal rectangle relative
-   *         to its parents corrdinate system.
-   */
-  virtual bool isRectangle() const;
-	
-  /**
-   * Sets the clip region of the painter, so that only pixels of the
-   * child part can be drawn.
-   *
-   * @param combine tells wether the new clip region is an intersection
-   *        of the current region with the childs region or wether only
-   *        the childs region is set.
-   */
-  virtual void setClipRegion( QPainter& painter, bool combine = TRUE );
-
-  /**
-   * Transforms the painter (its worldmatrix and the clipping)
-   * in such a way, that the painter can be passed to the child part
-   * for drawing.
-   */
-  virtual void transform( QPainter& painter );
-
-  /**
-   * @return the contents rectangle that is visible.
-   *         This value depends on the scaling and the
-   *         geometry.
-   *
-   * @see scaling geomtry
-   */
-  virtual QRect contentRect() const;
-
-  virtual QRegion frameRegion( const QWMatrix& matrix, bool solid = FALSE ) const;
-
-  virtual QPointArray framePointArray( const QWMatrix &matrix = QWMatrix() ) const;
-
-  virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& matrix = QWMatrix() );
-
-  virtual Gadget gadgetHitTest( const QPoint& p, const QWMatrix& matrix );
-
-  virtual QWMatrix matrix() const;
-
-  virtual void lock();
-
-  virtual void unlock();
-
-  virtual QPointArray oldPointArray( const QWMatrix &matrix );
-
-  virtual void setTransparent( bool transparent );
-
-  virtual bool isTransparent() const;
+  virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
 
   /**
    * Can be empty (which is why it doesn't return a const KURL &)
@@ -202,7 +83,7 @@ public:
    *
    *  The OBJECT element is not added to the document. It is just created
    *  and returned.
-   *  
+   *
    *  Use this function if your application uses the DOM.
    *
    *  @return the element containing the OBJECT tag.
@@ -233,15 +114,7 @@ public:
 
   virtual bool isStoredExtern();
 
-signals:
-  void changed( KoDocumentChild *thisChild );
-
 protected:
-
-    virtual QPointArray pointArray( const QRect& r, const QWMatrix& matrix ) const;
-
-    virtual void updateMatrix();
-
   /**
    * Called if @ref #load finds a tag that it does not understand.
    *
@@ -251,8 +124,6 @@ protected:
   virtual bool loadTag( KOMLParser& parser, const string& tag, std::vector<KOMLAttrib>& lst2 );
 
 private:
-
-  virtual void init();
 
   /**
    *  Holds the source of this object, for example "file:/home/weis/image.gif"

@@ -252,6 +252,8 @@ public slots:
    */
    void paperLayoutDlg();
 
+   void newView();
+
 signals:
   // Document signals
   /**
@@ -446,6 +448,8 @@ protected:
    * This context is used to execute formulas of this table.
    */
   KSContext m_context;
+
+  KAction* m_newView;
 
   static QList<KSpreadDoc>* s_docs;
   static int s_docId;

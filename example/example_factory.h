@@ -1,12 +1,12 @@
 #ifndef EXAMPLE_FACTORY_H
 #define EXAMPLE_FACTORY_H
 
-#include <klibloader.h>
+#include <koFactory.h>
 
 class KInstance;
 class KAboutData;
 
-class ExampleFactory : public KLibFactory
+class ExampleFactory : public KoFactory
 {
     Q_OBJECT
 public:

@@ -25,11 +25,13 @@
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
 
+#include "koDocumentChild.h"
+#include "koChild.h"
+
 class KAction;
 class KActionCollection;
 class QCustomEvent;
 class KoDocument;
-class KoDocumentChild;
 class KoViewPrivate;
 class KoViewChild;
 class KoFrame;
@@ -259,18 +261,24 @@ private:
   KoViewPrivate *d;
 };
 
-class KoViewChild
+class KoViewChild : public KoChild
 {
+  Q_OBJECT
 public:
   KoViewChild( KoDocumentChild *child, KoFrame *frame );
   virtual ~KoViewChild();
 
-  QGuardedPtr<KoDocumentChild> documentChild() const { return m_child; }
-  QGuardedPtr<KoFrame> frame() const { return m_frame; }
+  KoDocumentChild *documentChild() const { return m_child; }
+  KoFrame *frame() const { return m_frame; }
 
+private slots:
+  void slotFrameGeometryChanged();
+  void slotDocGeometryChanged();
 private:
   QGuardedPtr<KoDocumentChild> m_child;
   QGuardedPtr<KoFrame> m_frame;
+  class KoViewChildPrivate;
+  KoViewChildPrivate *d;
 };
 
 #endif

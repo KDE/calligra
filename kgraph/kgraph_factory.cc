@@ -37,7 +37,7 @@ static const char *version="0.1";
 KInstance *KGraphFactory::s_global=0;
 
 KGraphFactory::KGraphFactory(QObject *parent, const char *name)
-                             : KLibFactory(parent, name) {
+                             : KoFactory(parent, name) {
 }
 
 KGraphFactory::~KGraphFactory() {

@@ -1,12 +1,12 @@
 #ifndef KSPREAD_FACTORY_H
 #define KSPREAD_FACTORY_H
 
-#include <klibloader.h>
+#include <koFactory.h>
 
 class KInstance;
 class KAboutData;
 
-class KSpreadFactory : public KLibFactory
+class KSpreadFactory : public KoFactory
 {
     Q_OBJECT
 public:

@@ -1,7 +1,9 @@
 #include "handler.h"
 #include "koView.h"
+#include "koFrame.h"
 #include <math.h>
 #include <qwmatrix.h>
+#include <kdebug.h>
 
 EventHandler::EventHandler( QObject* target )
 {
@@ -23,8 +25,8 @@ QObject* EventHandler::target()
 
 class PartResizeHandlerPrivate {
 public:
-    PartResizeHandlerPrivate( const QWMatrix& matrix, KoDocumentChild* child,
-			      KoDocumentChild::Gadget gadget, const QPoint& point ) :
+    PartResizeHandlerPrivate( const QWMatrix& matrix, KoChild* child,
+			      KoChild::Gadget gadget, const QPoint& point ) :
 	m_gadget(gadget), m_child(child), m_parentMatrix(matrix) {
 	
 	m_geometryStart = child->geometry();
@@ -38,18 +40,18 @@ public:
     }
     ~PartResizeHandlerPrivate() {}
 
-    KoDocumentChild::Gadget m_gadget;
+    KoChild::Gadget m_gadget;
     QPoint m_mouseStart;
     QRect m_geometryStart;
-    KoDocumentChild* m_child;
+    KoChild* m_child;
     QWMatrix m_invert;
     QWMatrix m_matrix;
     QWMatrix m_parentMatrix;
     QWMatrix m_invertParentMatrix;
 };
 
-PartResizeHandler::PartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoDocumentChild* child,
-				      KoDocumentChild::Gadget gadget, const QPoint& point )
+PartResizeHandler::PartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoChild* child,
+				      KoChild::Gadget gadget, const QPoint& point )
     : EventHandler( widget )
 {
     child->lock();
@@ -93,7 +95,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 
 	switch( d->m_gadget )
         {
-	case KoDocumentChild::TopLeft:
+	case KoChild::TopLeft:
 	    {
 		x = QMIN( d->m_geometryStart.width() - 1, x );
 		y = QMIN( d->m_geometryStart.height() - 1, y );
@@ -103,7 +105,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
-	case KoDocumentChild::TopMid:
+	case KoChild::TopMid:
 	    {
 		y = QMIN( d->m_geometryStart.height() - 1, y );
 
@@ -112,7 +114,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
-	case KoDocumentChild::TopRight:
+	case KoChild::TopRight:
 	    {
 		x = QMAX( -d->m_geometryStart.width() + 1, x );
 		y = QMIN( d->m_geometryStart.height() - 1, y );
@@ -122,7 +124,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
-	case KoDocumentChild::MidLeft:
+	case KoChild::MidLeft:
 	    {
 		x = QMIN( d->m_geometryStart.width() - 1, x );
 		
@@ -131,7 +133,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
-	case KoDocumentChild::MidRight:
+	case KoChild::MidRight:
 	    {
 		x = QMAX( -d->m_geometryStart.width() + 1, x );
 
@@ -140,7 +142,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
-	case KoDocumentChild::BottomLeft:
+	case KoChild::BottomLeft:
 	    {
 		x = QMIN( d->m_geometryStart.width() - 1, x );
 		y = QMAX( -d->m_geometryStart.height() + 1, y );
@@ -150,7 +152,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
-	case KoDocumentChild::BottomMid:
+	case KoChild::BottomMid:
 	    {
 		y = QMAX( -d->m_geometryStart.height() + 1, y );
 
@@ -159,7 +161,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
-	case KoDocumentChild::BottomRight:
+	case KoChild::BottomRight:
 	    {
 		x = QMAX( -d->m_geometryStart.width() + 1, x );
 		y = QMAX( -d->m_geometryStart.height() + 1, y );
@@ -182,7 +184,7 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 
 class PartMoveHandlerPrivate {
 public:
-    PartMoveHandlerPrivate( const QWMatrix& matrix, KoDocumentChild* child,
+    PartMoveHandlerPrivate( const QWMatrix& matrix, KoChild* child,
 			    const QPoint& point) : m_dragChild(child),
 						   m_parentMatrix(matrix) {					
 	m_invertParentMatrix = matrix.invert();
@@ -192,7 +194,7 @@ public:
     }
     ~PartMoveHandlerPrivate() {}
 
-    KoDocumentChild* m_dragChild;
+    KoChild* m_dragChild;
     QPoint m_mouseDragStart;
     QRect m_geometryDragStart;
     QPoint m_rotationDragStart;
@@ -200,7 +202,7 @@ public:
     QWMatrix m_parentMatrix;
 };
 
-PartMoveHandler::PartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoDocumentChild* child,
+PartMoveHandler::PartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoChild* child,
 				  const QPoint& point )
     : EventHandler( widget )
 {
@@ -259,23 +261,42 @@ bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
     {
 	QMouseEvent* e = (QMouseEvent*)ev;
 
-	KoDocumentChild::Gadget gadget = KoDocumentChild::NoGadget;
-	KoDocumentChild* child = m_view->selectedChild();
-	if (child )
+	KoChild *child = 0;
+	KoChild::Gadget gadget = KoChild::NoGadget;
+	KoDocumentChild* docChild = m_view->selectedChild();
+	if ( docChild )
+	{
+	    KoViewChild *viewChild = m_view->child( docChild->document() );
+	
+	    if ( viewChild )
+	      child = viewChild;
+	    else
+	      child = docChild;
+	
 	    gadget = child->gadgetHitTest( e->pos(), m_view->matrix() );
-	if ( gadget == KoDocumentChild::NoGadget )
+	}
+	if ( gadget == KoChild::NoGadget )
         {
-	    child = m_view->activeChild();
-	    if (child )
-		gadget = child->gadgetHitTest( e->pos(), m_view->matrix() );
+	    docChild = m_view->activeChild();
+	    if ( docChild )
+	    {
+	        KoViewChild *viewChild = m_view->child( docChild->document() );
+		
+		if ( viewChild )
+		  child = viewChild;
+		else
+		  child = docChild;
+		
+  		gadget = child->gadgetHitTest( e->pos(), m_view->matrix() );
+	    }
 	}
 	
-	if ( e->button() == LeftButton && gadget == KoDocumentChild::Move )
+	if ( e->button() == LeftButton && gadget == KoChild::Move )
         {
 	    (void)new PartMoveHandler( (QWidget*)target(), m_view->matrix(), child, e->pos() );
 	    return TRUE;
 	}
-	else if ( e->button() == LeftButton && gadget != KoDocumentChild::NoGadget )
+	else if ( e->button() == LeftButton && gadget != KoChild::NoGadget )
         {
 	    (void)new PartResizeHandler( (QWidget*)target(), m_view->matrix(), child, gadget, e->pos() );
 	    return TRUE;
@@ -285,36 +306,60 @@ bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
     }
     else if ( ev->type() == QEvent::MouseMove )
     {
+        QWidget *targetWidget = static_cast<QWidget *>( target() );
 	QMouseEvent* e = (QMouseEvent*)ev;
+	
+	bool retval = true;
 
-	KoDocumentChild* child = m_view->selectedChild();
-	KoDocumentChild::Gadget gadget = KoDocumentChild::NoGadget;
-	if ( child )
+	KoChild *child = 0;
+	KoDocumentChild* docChild = m_view->selectedChild();
+	KoChild::Gadget gadget = KoChild::NoGadget;
+	if ( docChild )
+	{
+	    KoViewChild *viewChild = m_view->child( docChild->document() );
+	
+	    if ( viewChild )
+	      child = viewChild;
+	    else
+	      child = docChild;
+	
 	    gadget = child->gadgetHitTest( e->pos(), m_view->matrix() );
-	if ( gadget == KoDocumentChild::NoGadget )
+	}
+	if ( gadget == KoChild::NoGadget )
         {
-	    child = m_view->activeChild();
-	    if (child )
-		gadget = child->gadgetHitTest( e->pos(), m_view->matrix() );
+	    docChild = m_view->activeChild();
+	    if ( docChild )
+	    {
+  	      KoViewChild *viewChild = m_view->child( docChild->document() );
+	
+	      if ( viewChild )
+	        child = viewChild;
+	      else
+	        child = docChild;
+		
+	      gadget = child->gadgetHitTest( e->pos(), m_view->matrix() );
+	    }
+	    retval = false;
 	}
 
-	if ( gadget == KoDocumentChild::TopLeft || gadget == KoDocumentChild::BottomRight )
-	    ((QWidget*)target())->setCursor( sizeFDiagCursor );
-	else if ( gadget == KoDocumentChild::TopRight || gadget == KoDocumentChild::BottomLeft )
-	    ((QWidget*)target())->setCursor( sizeBDiagCursor );	
-	else if ( gadget == KoDocumentChild::TopMid || gadget == KoDocumentChild::BottomMid )
-	    ((QWidget*)target())->setCursor( sizeVerCursor );
-	else if ( gadget == KoDocumentChild::MidLeft || gadget == KoDocumentChild::MidRight )
-	    ((QWidget*)target())->setCursor( sizeHorCursor );
-	else if ( gadget == KoDocumentChild::Move )
-	    ((QWidget*)target())->setCursor( pointingHandCursor );
+	if ( gadget == KoChild::TopLeft || gadget == KoChild::BottomRight )
+	    targetWidget->setCursor( sizeFDiagCursor );
+	else if ( gadget == KoChild::TopRight || gadget == KoChild::BottomLeft )
+	    targetWidget->setCursor( sizeBDiagCursor );	
+	else if ( gadget == KoChild::TopMid || gadget == KoChild::BottomMid )
+	    targetWidget->setCursor( sizeVerCursor );
+	else if ( gadget == KoChild::MidLeft || gadget == KoChild::MidRight )
+	    targetWidget->setCursor( sizeHorCursor );
+	else if ( gadget == KoChild::Move )
+	    targetWidget->setCursor( pointingHandCursor );
 	else
         {
-	    ((QWidget*)target())->setCursor( arrowCursor );
+	    targetWidget->setCursor( arrowCursor );
 	    return FALSE;
 	}
 	
-	return TRUE;
+	//	return TRUE;
+	return retval;
     }
 
     return FALSE;

@@ -1,12 +1,12 @@
 #ifndef KFORMULA_FACTORY_H
 #define KFORMULA_FACTORY_H
 
-#include <klibloader.h>
+#include <koFactory.h>
 #include <kaboutdata.h>
 
 class KInstance;
 
-class KFormulaFactory : public KLibFactory
+class KFormulaFactory : public KoFactory
 {
     Q_OBJECT
 public:

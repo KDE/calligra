@@ -7,12 +7,12 @@
 #ifndef KCHART_FACTORY_H
 #define KCHART_FACTORY_H
 
-#include <klibloader.h>
+#include <koFactory.h>
 
 class KInstance;
 class KAboutData;
 
-class KChartFactory : public KLibFactory
+class KChartFactory : public KoFactory
 {
     Q_OBJECT
 public:
@@ -22,7 +22,7 @@ public:
     virtual QObject* create( QObject* parent = 0, const char* name = 0, const char* classname = "QObject", const QStringList &args = QStringList() );
 
     static KInstance* global();
- 
+
     // _Creates_ a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
 
