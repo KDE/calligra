@@ -3865,21 +3865,27 @@ void Page::slotExitPres()
 /*================================================================*/
 void Page::drawingMode()
 {
-    presMenu->setItemChecked( PM_DM, true );
-    presMenu->setItemChecked( PM_SM, false );
-    drawMode = true;
-    setCursor( arrowCursor );
+    if(!presMenu->isItemChecked ( PM_DM ))
+    {
+        presMenu->setItemChecked( PM_DM, true );
+        presMenu->setItemChecked( PM_SM, false );
+        drawMode = true;
+        setCursor( arrowCursor );
+    }
 }
 
 /*================================================================*/
 void Page::switchingMode()
 {
-    presMenu->setItemChecked( PM_DM, false );
-    presMenu->setItemChecked( PM_SM, true );
-    drawMode = false; setCursor( blankCursor );
+    if(!presMenu->isItemChecked ( PM_SM ))
+    {
+        presMenu->setItemChecked( PM_DM, false );
+        presMenu->setItemChecked( PM_SM, true );
+        drawMode = false; setCursor( blankCursor );
 
-    if ( !spManualSwitch() )
-        view->autoScreenPresIntervalTimer();
+        if ( !spManualSwitch() )
+            view->autoScreenPresIntervalTimer();
+    }
 }
 
 /*================================================================*/
