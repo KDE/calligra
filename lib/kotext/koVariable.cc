@@ -1552,7 +1552,8 @@ void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, 
         p->setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
         p->fillRect( x, y,  zh->layoutUnitToPixelX( width ), h, cg.color( QColorGroup::Highlight ) );
     }
-    else if ( textDocument() && p->device()->devType() != QInternal::Printer )
+    else if ( textDocument() && p->device()->devType() != QInternal::Printer
+        && !textDocument()->drawingNoteVariable())
     {
         p->fillRect( x, y, zh->layoutUnitToPixelX( width ), h,  Qt::yellow);
         p->setPen( QPen( cg.color( QColorGroup::Highlight ), 0, Qt::DotLine ) );

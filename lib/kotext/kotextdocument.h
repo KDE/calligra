@@ -82,7 +82,8 @@ public:
     enum DrawingFlags {
         DrawMisspelledLine = 1,
         DrawFormattingChars = 2,
-        DrawSelections = 4
+        DrawSelections = 4,
+        DontDrawNoteVariable = 8
     };
     /** The main drawing method. Equivalent to KoTextDocument::draw, but reimplemented
      * for wysiwyg */
@@ -106,6 +107,9 @@ public:
     bool drawFormattingChars() const { return (m_drawingFlags & DrawFormattingChars); }
     /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagStringInternal */
     bool drawingMissingSpellLine() const { return (m_drawingFlags & DrawMisspelledLine); }
+
+    /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagStringInternal */
+    bool drawingNoteVariable() const { return (m_drawingFlags & DontDrawNoteVariable); }
 
 protected:
     void drawWithoutDoubleBuffer( QPainter *p, const QRect &rect, const QColorGroup &cg,

@@ -403,6 +403,8 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
     uint drawingFlags = KoTextDocument::DrawSelections;
     if ( m_doc->backgroundSpellCheckEnabled() && editMode )
         drawingFlags |= KoTextDocument::DrawMisspelledLine;
+    if ( !editMode )
+        drawingFlags |=KoTextDocument::DontDrawNoteVariable;
             //if ( m_doc->viewFormattingChars() )
             //    drawingFlags |= KoTextDocument::DrawFormattingChars;
 
