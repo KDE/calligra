@@ -911,7 +911,15 @@ KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/,
 bool
 KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 {
-	if( event->type() == QEvent::MouseMove )
+	if( event->type() == QEvent::Enter )
+	{
+		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
+		m_horizRuler->setMousePos( mouseEvent->pos().x(), mouseEvent->pos().y() );
+		m_vertRuler->setMousePos( mouseEvent->pos().x(), mouseEvent->pos().y() );
+		m_horizRuler->update();
+		m_vertRuler->update();
+	}
+	else if( event->type() == QEvent::MouseMove )
 	{
 		QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
 		m_horizRuler->setMousePos( mouseEvent->pos().x(), mouseEvent->pos().y() );
