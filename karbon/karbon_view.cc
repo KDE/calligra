@@ -141,9 +141,11 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_canvas = new VCanvas( this, this, p );
 	connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
 
-	m_horizRuler = new KoRuler( this, m_canvas->viewport(), Qt::Horizontal, part()->pageLayout(), KoRuler::F_INDENTS | KoRuler::F_TABS, part()->unit() );
+	m_horizRuler = new KoRuler( this, m_canvas->viewport(), Qt::Horizontal, part()->pageLayout(), 0, part()->unit() );
+	connect( m_horizRuler, SIGNAL( doubleClicked() ), this, SLOT( pageLayout() ) );
 	m_horizRuler->showMousePos( true );
 	m_vertRuler = new KoRuler( this, m_canvas->viewport(), Qt::Vertical, part()->pageLayout(), 0, part()->unit() );
+	connect( m_vertRuler, SIGNAL( doubleClicked() ), this, SLOT( pageLayout() ) );
 	m_vertRuler->showMousePos( true );
 
 	m_canvas->show();
@@ -888,8 +890,8 @@ KarbonView::pageLayout()
 void
 KarbonView::canvasContentsMoving( int x, int y )
 {
-	m_horizRuler->setOffset( x, 0 );
-	m_vertRuler->setOffset( 0, y );
+	m_horizRuler->setOffset( x - 20, 0 );
+	m_vertRuler->setOffset( 0, y - 20 );
 }
 
 void
