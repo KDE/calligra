@@ -141,7 +141,7 @@ void KoColorPanel::insertDefaultColors()
     insertColor(qRgb(   0 ,   255 ,     0 ), i18n( "Color", "Green" ), false);
     insertColor(qRgb( 255 ,   255 ,     0 ), i18n( "Color", "Yellow" ), false);
     insertColor(qRgb( 165 ,    42 ,    42 ), i18n( "Color", "Brown" ), false);
-    insertColor(qRgb( 139 ,     0 ,     0 ), i18n( "Color", "Darkred" ), false);
+    insertColor(qRgb( 139 ,     0 ,     0 ), i18n( "Color", "Dark Red" ), false);
     insertColor(qRgb( 255 ,   140 ,     0 ), i18n( "Color", "Dark Orange" ), false);
     insertColor(qRgb( 139 ,     0 ,   139 ), i18n( "Color", "Dark Magenta" ), false);
     insertColor(qRgb(   0 ,     0 ,   139 ), i18n( "Color", "Dark Blue" ), false);
@@ -150,23 +150,23 @@ void KoColorPanel::insertDefaultColors()
     insertColor(qRgb( 130 ,   127 ,     0 ), i18n( "Color", "Dark Yellow" ), false);
     insertColor(qRgb( 255 ,   255 ,   255 ), i18n( "Color", "White" ), false);
     // xgettext:no-c-format
-    insertColor(qRgb( 229 ,   229 ,   229 ), i18n( "Color", "Grey 90%" ), false);
+    insertColor(qRgb( 229 ,   229 ,   229 ), i18n( "Color", "Gray 90%" ), false);
     // xgettext:no-c-format
-    insertColor(qRgb( 204 ,   204 ,   204 ), i18n( "Color", "Grey 80%" ), false);
+    insertColor(qRgb( 204 ,   204 ,   204 ), i18n( "Color", "Gray 80%" ), false);
     // xgettext:no-c-format
-    insertColor(qRgb( 178 ,   178 ,   178 ), i18n( "Color", "Grey 70%" ), false);
+    insertColor(qRgb( 178 ,   178 ,   178 ), i18n( "Color", "Gray 70%" ), false);
     // xgettext:no-c-format
-    insertColor(qRgb( 153 ,   153 ,   153 ), i18n( "Color", "Grey 60%" ), false);
+    insertColor(qRgb( 153 ,   153 ,   153 ), i18n( "Color", "Gray 60%" ), false);
     // xgettext:no-c-format
-    insertColor(qRgb( 127 ,   127 ,   127 ), i18n( "Color", "Grey 50%" ), false);
+    insertColor(qRgb( 127 ,   127 ,   127 ), i18n( "Color", "Gray 50%" ), false);
     // xgettext:no-c-format
-    insertColor(qRgb( 102 ,   102 ,   102 ), i18n( "Color", "Grey 40%" ), false);
+    insertColor(qRgb( 102 ,   102 ,   102 ), i18n( "Color", "Gray 40%" ), false);
     // xgettext:no-c-format
-    insertColor(qRgb(  76 ,    76 ,    76 ), i18n( "Color", "Grey 30%" ), false);
+    insertColor(qRgb(  76 ,    76 ,    76 ), i18n( "Color", "Gray 30%" ), false);
     // xgettext:no-c-format
-    insertColor(qRgb(  51 ,    51 ,    51 ), i18n( "Color", "Grey 20%" ), false);
+    insertColor(qRgb(  51 ,    51 ,    51 ), i18n( "Color", "Gray 20%" ), false);
     // xgettext:no-c-format
-    insertColor(qRgb(  25 ,    25 ,    25 ), i18n( "Color", "Grey 10%" ), false);
+    insertColor(qRgb(  25 ,    25 ,    25 ), i18n( "Color", "Gray 10%" ), false);
     insertColor(qRgb(   0 ,     0 ,     0 ), i18n( "Color", "Black" ), false);
     insertColor(qRgb( 255 ,   255 ,   240 ), i18n( "Color", "Ivory" ), false);
     insertColor(qRgb( 255 ,   250 ,   250 ), i18n( "Color", "Snow" ), false);
@@ -203,7 +203,7 @@ void KoColorPanel::insertDefaultColors()
     insertColor(qRgb( 175 ,   238 ,   238 ), i18n( "Color", "Pale Turquoise" ), false);
     insertColor(qRgb( 255 ,   192 ,   203 ), i18n( "Color", "Pink" ), false);
     insertColor(qRgb( 238 ,   221 ,   130 ), i18n( "Color", "Light Goldenrod" ), false);
-    insertColor(qRgb( 211 ,   211 ,   211 ), i18n( "Color", "Light Grey" ), false);
+    insertColor(qRgb( 211 ,   211 ,   211 ), i18n( "Color", "Light Gray" ), false);
     insertColor(qRgb( 255 ,   182 ,   193 ), i18n( "Color", "Light Pink" ), false);
     insertColor(qRgb( 176 ,   224 ,   230 ), i18n( "Color", "Powder Blue" ), false);
     insertColor(qRgb( 127 ,   255 ,   212 ), i18n( "Color", "Aquamarine" ), false);
@@ -217,14 +217,14 @@ void KoColorPanel::insertDefaultColors()
     insertColor(qRgb( 221 ,   160 ,   221 ), i18n( "Color", "Plum" ), false);
     insertColor(qRgb( 190 ,   190 ,   190 ), i18n( "Color", "Gray" ), false);
     insertColor(qRgb( 222 ,   184 ,   135 ), i18n( "Color", "Burly Wood" ), false);
-    insertColor(qRgb( 135 ,   206 ,   250 ), i18n( "Color", "Light Skyblue" ), false);
+    insertColor(qRgb( 135 ,   206 ,   250 ), i18n( "Color", "Light Sky Blue" ), false);
     insertColor(qRgb( 255 ,   160 ,   122 ), i18n( "Color", "Light Salmon" ), false);
     insertColor(qRgb( 135 ,   206 ,   235 ), i18n( "Color", "Sky Blue" ), false);
     insertColor(qRgb( 210 ,   180 ,   140 ), i18n( "Color", "Tan" ), false);
     insertColor(qRgb( 238 ,   130 ,   238 ), i18n( "Color", "Violet" ), false);
     insertColor(qRgb( 244 ,   164 ,    96 ), i18n( "Color", "Sandy Brown" ), false);
     insertColor(qRgb( 233 ,   150 ,   122 ), i18n( "Color", "Dark Salmon" ), false);
-    insertColor(qRgb( 189 ,   183 ,   107 ), i18n( "Color", "Dark khaki" ), false);
+    insertColor(qRgb( 189 ,   183 ,   107 ), i18n( "Color", "Dark Khaki" ), false);
     insertColor(qRgb( 127 ,   255 ,     0 ), i18n( "Color", "Chartreuse" ), false);
     insertColor(qRgb( 169 ,   169 ,   169 ), i18n( "Color", "Dark Gray" ), false);
     insertColor(qRgb( 124 ,   252 ,     0 ), i18n( "Color", "Lawn Green" ), false);
@@ -232,7 +232,7 @@ void KoColorPanel::insertDefaultColors()
     insertColor(qRgb( 250 ,   128 ,   114 ), i18n( "Color", "Salmon" ), false);
     insertColor(qRgb( 240 ,   128 ,   128 ), i18n( "Color", "Light Coral" ), false);
     insertColor(qRgb(  64 ,   224 ,   208 ), i18n( "Color", "Turquoise" ), false);
-    insertColor(qRgb( 143 ,   188 ,   143 ), i18n( "Color", "Dark Seagreen" ), false);
+    insertColor(qRgb( 143 ,   188 ,   143 ), i18n( "Color", "Dark Sea Green" ), false);
     insertColor(qRgb( 218 ,   112 ,   214 ), i18n( "Color", "Orchid" ), false);
     insertColor(qRgb( 102 ,   205 ,   170 ), i18n( "Color", "Medium Aquamarine" ), false);
     insertColor(qRgb( 255 ,   127 ,    80 ), i18n( "Color", "Coral" ), false);
@@ -240,7 +240,7 @@ void KoColorPanel::insertDefaultColors()
     insertColor(qRgb( 218 ,   165 ,    32 ), i18n( "Color", "Goldenrod" ), false);
     insertColor(qRgb(  72 ,   209 ,   204 ), i18n( "Color", "Medium Turquoise" ), false);
     insertColor(qRgb( 188 ,   143 ,   143 ), i18n( "Color", "Rosy Brown" ), false);
-    insertColor(qRgb( 219 ,   112 ,   147 ), i18n( "Color", "Pale VioletRed" ), false);
+    insertColor(qRgb( 219 ,   112 ,   147 ), i18n( "Color", "Pale Violet Red" ), false);
     insertColor(qRgb(   0 ,   250 ,   154 ), i18n( "Color", "Medium Spring Green" ), false);
     insertColor(qRgb( 255 ,    99 ,    71 ), i18n( "Color", "Tomato" ), false);
     insertColor(qRgb( 0   ,   255 ,   127 ), i18n( "Color", "Spring Green" ), false);
@@ -251,14 +251,14 @@ void KoColorPanel::insertDefaultColors()
     insertColor(qRgb( 186 ,    85 ,   211 ), i18n( "Color", "Medium Orchid" ), false);
     insertColor(qRgb(  95 ,   158 ,   160 ), i18n( "Color", "Cadet Blue" ), false);
     insertColor(qRgb(   0 ,   206 ,   209 ), i18n( "Color", "Dark Turquoise" ), false);
-    insertColor(qRgb(   0 ,   191 ,   255 ), i18n( "Color", "Deep Skyblue" ), false);
-    insertColor(qRgb( 119 ,   136 ,   153 ), i18n( "Color", "Light Slate Grey" ), false);
+    insertColor(qRgb(   0 ,   191 ,   255 ), i18n( "Color", "Deep Sky Blue" ), false);
+    insertColor(qRgb( 119 ,   136 ,   153 ), i18n( "Color", "Light Slate Gray" ), false);
     insertColor(qRgb( 184 ,   134 ,    11 ), i18n( "Color", "Dark Goldenrod" ), false);
-    insertColor(qRgb( 123 ,   104 ,   238 ), i18n( "Color", "MediumSlate Blue" ), false);
-    insertColor(qRgb( 205 ,    92 ,    92 ), i18n( "Color", "IndianRed" ), false);
+    insertColor(qRgb( 123 ,   104 ,   238 ), i18n( "Color", "Medium Slate Blue" ), false);
+    insertColor(qRgb( 205 ,    92 ,    92 ), i18n( "Color", "Indian Red" ), false);
     insertColor(qRgb( 210 ,   105 ,    30 ), i18n( "Color", "Chocolate" ), false);
     insertColor(qRgb(  60 ,   179 ,   113 ), i18n( "Color", "Medium Sea Green" ), false);
-    insertColor(qRgb(  50 ,   205 ,    50 ), i18n( "Color", "Lime Ggreen" ), false);
+    insertColor(qRgb(  50 ,   205 ,    50 ), i18n( "Color", "Lime Green" ), false);
     insertColor(qRgb(  32 ,   178 ,   170 ), i18n( "Color", "Light Sea Green" ), false);
     insertColor(qRgb( 112 ,   128 ,   144 ), i18n( "Color", "Slate Gray" ), false);
     insertColor(qRgb(  30 ,   144 ,   255 ), i18n( "Color", "Dodger Blue" ), false);
@@ -280,7 +280,7 @@ void KoColorPanel::insertDefaultColors()
     insertColor(qRgb(  85 ,   107 ,    47 ), i18n( "Color", "Dark Olive Green" ), false);
     insertColor(qRgb(  34 ,   139 ,    34 ), i18n( "Color", "Forest Green" ), false);
     insertColor(qRgb( 139 ,    69 ,    19 ), i18n( "Color", "Saddle Brown" ), false);
-    insertColor(qRgb( 148 ,     0 ,   211 ), i18n( "Color", "Darkviolet" ), false);
+    insertColor(qRgb( 148 ,     0 ,   211 ), i18n( "Color", "Dark Violet" ), false);
     insertColor(qRgb( 178 ,    34 ,    34 ), i18n( "Color", "Fire Brick" ), false);
     insertColor(qRgb(  72 ,    61 ,   139 ), i18n( "Color", "Dark Slate Blue" ), false);
     insertColor(qRgb(  47 ,    79 ,    79 ), i18n( "Color", "Dark Slate Gray" ), false);
