@@ -166,6 +166,7 @@ void KexiQueryPart::initActions()
 KexiQueryPart::TempData::TempData(QObject* parent)
  : KexiDialogTempData(parent)
  , query(0)
+ , queryChangedInPreviousView(false)
 {
 }
 

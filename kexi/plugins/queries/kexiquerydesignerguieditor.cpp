@@ -45,7 +45,6 @@
 #include "kexi_utils.h"
 #include "kexisectionheader.h"
 #include "kexitableviewpropertybuffer.h"
-
 #include "widget/relations/kexirelationwidget.h"
 #include "widget/relations/kexirelationviewtable.h"
 
@@ -82,7 +81,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 //	m_dataTable->tableView()->addDropFilter("kexi/field");
 //	setFocusProxy(m_dataTable);
 
-	m_data = new KexiTableViewData();
+	m_data = new KexiTableViewData(); //just empty data
 	m_buffers = new KexiTableViewPropertyBuffer( this, m_dataTable->tableView() );
 	initTable();
 	m_dataTable->tableView()->setData(m_data);
@@ -113,7 +112,6 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 	connect(m_relations, SIGNAL(aboutConnectionRemove(KexiRelationViewConnection*)),
 		this, SLOT(slotAboutConnectionRemove(KexiRelationViewConnection*)));
 
-	kdDebug() << "KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor() data = " << m_data << endl;
 //	m_table = new KexiTableView(m_data, s, "designer");
 	QVBoxLayout *l = new QVBoxLayout(this);
 	l->addWidget(m_spl);
@@ -131,9 +129,11 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 //	m_spl->setResizeMode(m_head, QSplitter::FollowSizeHint);
 	m_spl->setSizes(QValueList<int>()<< 800<<400);
 
+/* moved to afterSwitchFrom
 	if (!m_dialog->neverSaved()) {
 		QTimer::singleShot(1,this,SLOT(loadLayout()));
 	}
+	*/
 }
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
@@ -427,9 +427,27 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled, bool &dont
 }
 
 bool
-KexiQueryDesignerGuiEditor::afterSwitchFrom(int /*mode*/, bool &/*cancelled*/)
+KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode, bool &cancelled)
 {
 //	restore();
+	if (mode==Kexi::NoViewMode) {
+		//this is not a SWITCH but fresh opening in this view mode
+		if (!m_dialog->neverSaved()) {
+			if (!loadLayout()) {
+				//err msg
+				parentDialog()->setStatus(i18n("Query definition loading failed."), i18n("Query data may be corrupted."));
+				return false;
+			}
+			//todo: load columns
+			//todo: load global query properties
+		}
+	}
+	else if (mode==Kexi::TextViewMode) {
+		//todo: generate layout
+		//todo: load global query properties
+	}
+	else if (mode==Kexi::DataViewMode) {
+	}
 	return true;
 }
 

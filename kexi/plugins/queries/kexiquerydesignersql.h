@@ -54,7 +54,9 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 		virtual void updateActions(bool activated);
 
 	protected slots:
-		void slotCheckQuery();
+		/*! Performs query checking (by text parsing). \return true and sets d->parsedQuery 
+		 to the new query schema object on success. */
+		bool slotCheckQuery();
 		void slotUpdateMode();
 		void slotTextChanged();
 //		void slotHistoryHeaderButtonClicked(const QString& buttonIdentifier);

@@ -62,6 +62,10 @@ class KexiQueryPart : public KexiPart::Part
 			public:
 				TempData(QObject* parent);
 				KexiDB::QuerySchema *query;
+				/*! true, if \a query member has changed in previous view. Used on view switching.
+				 We're checking this flag to see if we should rebuild internal structure for DesignViewMode
+				 of regenerate sql text in TextViewMode after switch from other view. */
+				bool queryChangedInPreviousView : 1;
 		};
 
 	protected:
