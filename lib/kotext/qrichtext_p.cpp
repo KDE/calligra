@@ -149,7 +149,7 @@ QTextFormat::QTextFormat( const QStyleSheetItem *style )
     dsc = fm.descent();
     missp = FALSE;
     ha = AlignNormal;
-    memset( widths, 0, 256 );
+    memset( widths, 0, 256 * sizeof( ushort ) );
     generateKey();
     addRef();
     updateStyleFlags();
@@ -172,7 +172,7 @@ QTextFormat::QTextFormat( const QFont &f, const QColor &c, QTextFormatCollection
     dsc = fm.descent();
     missp = FALSE;
     ha = AlignNormal;
-    memset( widths, 0, 256 );
+    memset( widths, 0, 256 * sizeof( ushort ) );
     generateKey();
     addRef();
     updateStyleFlags();
@@ -191,7 +191,7 @@ QTextFormat::QTextFormat( const QTextFormat &f )
     painter = f.painter;
     leftBearing = f.leftBearing;
     rightBearing = f.rightBearing;
-    memset( widths, 0, 256 );
+    memset( widths, 0, 256 * sizeof( ushort ) );
     hei = f.hei;
     asc = f.asc;
     dsc = f.dsc;
@@ -220,7 +220,7 @@ QTextFormat& QTextFormat::operator=( const QTextFormat &f )
     fm = f.fm;
     leftBearing = f.leftBearing;
     rightBearing = f.rightBearing;
-    memset( widths, 0, 256 );
+    memset( widths, 0, 256 * sizeof( ushort ) );
     hei = f.hei;
     asc = f.asc;
     dsc = f.dsc;
@@ -246,7 +246,7 @@ void QTextFormat::update()
     hei = fm.height();
     asc = fm.ascent();
     dsc = fm.descent();
-    memset( widths, 0, 256 );
+    memset( widths, 0, 256 * sizeof( ushort ) );
     generateKey();
     updateStyleFlags();
 }

@@ -111,6 +111,11 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
             tmpFormat.setPointSizeFloat( zh->layoutUnitToFontSize( tmpFormat.font().pointSize(), false /* TODO forPrint*/ ) );
             c->setFormat( &tmpFormat );
             pixelww = string->width( i );
+#ifdef DEBUG_FORMATTER
+            qDebug( "KoTextFormatter::format: char=%s, LU-size=%d, font-size=%d LU-width=%d pixel-width=%d format=%s",
+                    QString(c->c).latin1(), origFormat->font().pointSize(),
+                    tmpFormat.font().pointSize(), ww, pixelww, origFormat->key().latin1() );
+#endif
             c->setFormat( origFormat );
 	} else if ( c->c == '\t' ) {
 	    int nx = parag->nextTab( i, x );
@@ -346,7 +351,7 @@ int KoTextFormatter::format( QTextDocument *doc, QTextParag *parag,
             // More complex than that. It's the _space_ that has to grow/shrink
             pixelww -= pixelx - zh->layoutUnitToPixelX( x );
 #ifdef DEBUG_FORMATTER
-            qDebug("pixelww adjusted");
+            qDebug("pixelww adjusted. x=%d pixelx=%d", zh->layoutUnitToPixelX( x ), pixelx);
 #endif
 	} else {
 	    // Non-breakable character

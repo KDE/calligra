@@ -1483,7 +1483,8 @@ private:
     uint linkColor : 1;
     int leftBearing, rightBearing;
     VerticalAlignment ha;
-    uchar widths[ 256 ];
+    //uchar widths[ 256 ];
+    ushort widths[ 256 ];
     int hei, asc, dsc;
     QTextFormatCollection *collection;
     int ref;
