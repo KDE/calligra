@@ -8,7 +8,9 @@ class KWordDoc {
 public:
     KWordDoc();
     ~KWordDoc();
-    const QString kwdFile();
+
+    const QString kwdFile() const { return kwd; }
+    const bool isOk() const { return success; }
 
 private:
     QString kwd;

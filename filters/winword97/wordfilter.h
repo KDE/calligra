@@ -30,6 +30,7 @@ public:
     WordFilter(const myFile &mainStream, const myFile &table0Stream,
                const myFile &table1Stream, const myFile &dataStream);
     virtual ~WordFilter();
+    virtual const QString part();
 
 private:
     WordFilter(const WordFilter &);

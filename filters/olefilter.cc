@@ -226,9 +226,13 @@ void OLEFilter::convert(const QString &dirname) {
     }
 }
 
-void OLEFilter::connectCommon(FilterBase **myFilter) {
+// Reggie: Wenn Du diese Kommentare entfernst, tritt der Bug auf :(
+// Ich war mir nicht sicher, ob ein "connect" ausreichend ist - es sollte
+// eigentlich genügen. Ich habe nur in einer Datei in den libs "QObject::
+// connect" gesehen und dachte mir - schaden kann das nicht...
+void OLEFilter::connectCommon(FilterBase **) { // myFilter) {
 
-    QObject::connect(*myFilter, SIGNAL(signalSavePic(const char *, const char *,
+/*    QObject::connect(*myFilter, SIGNAL(signalSavePic(const char *, const char *,
                      const unsigned int, char **)), this, SLOT(slotSavePic(const char *,
                      const char *, const unsigned int, char **)));
     QObject::connect(*myFilter, SIGNAL(signalPart(const char *, const char *, char **)),
@@ -237,4 +241,5 @@ void OLEFilter::connectCommon(FilterBase **myFilter) {
                      SLOT(slotGetStream(const long &, myFile &)));
     QObject::connect(*myFilter, SIGNAL(signalGetStream(const QString &, myFile &)), this,
                      SLOT(slotGetStream(const QString &, myFile &)));
+*/
 }

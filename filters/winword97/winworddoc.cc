@@ -8,20 +8,13 @@ WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
     fib=0L;
     readFIB();
 
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((int)fib->wIdent));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->fcMin));
-    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->fcMac));
-
-    if(fib->fWhichTblStm==0) {
-        kdebug(KDEBUG_INFO, 31000, "Table 0");
+    if(fib->fWhichTblStm==0)
         table=table0Stream;
-    }
-    else {
-        kdebug(KDEBUG_INFO, 31000, "Table 1");
+    else
         table=table1Stream;
-    }
 
-    // more to come...
+    // print some debug info
+    FIBInfo();
 }
 
 WinWordDoc::~WinWordDoc() {
@@ -42,6 +35,44 @@ WinWordDoc::~WinWordDoc() {
         delete fib;
         fib=0L;
     }
+}
+
+void WinWordDoc::FIBInfo() {
+
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((unsigned int)fib->wIdent));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->nFib));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->nProduct));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->lid));
+    kdebug(KDEBUG_INFO, 31000, "some bits -----------------");
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fDot));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fGlsy));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fComplex));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fHasPic));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->cQuickSaves));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fEncrypted));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fWhichTblStm));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fReadOnlyRecommended));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fWriteReservation));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fExtChar));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fLoadOverride));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fFarEast));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fCrypto));
+    kdebug(KDEBUG_INFO, 31000, "--------------------------");
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->nFibBack));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->lKey));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->envr));
+    kdebug(KDEBUG_INFO, 31000, "bits - bits - bits -------");
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fMac));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fEmptySpecial));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fLoadOverridePage));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fFutureSavedUndo));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fWord97Saved));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->fSpare0));
+    kdebug(KDEBUG_INFO, 31000, "--------------------------");
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->chs));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((short)fib->chsTables));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->fcMin));
+    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)fib->fcMac));
 }
 
 void WinWordDoc::readFIB() {

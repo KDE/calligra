@@ -1,8 +1,7 @@
 #ifndef WINWORDDOC_H
 #define WINWORDDOC_H
 
-#include <string.h>
-#include "klaola.h"
+#include <qstring.h>
 #include "myfile.h"
 #include "fib.h"
 #include <kdebug.h>
@@ -16,6 +15,7 @@ public:
     ~WinWordDoc();
 
 private:
+    void FIBInfo();
     void readFIB();
     inline const unsigned short read16(const unsigned char *d);
     inline const unsigned long read32(const unsigned char *d);

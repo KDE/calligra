@@ -6,7 +6,3 @@ KWordDoc::KWordDoc() {
 
 KWordDoc::~KWordDoc() {
 }
-
-const QString KWordDoc::kwdFile() {
-    return kwd;
-}

@@ -3,6 +3,14 @@
 
 
 FilterBase::FilterBase() : QObject() {
+    ready=false;
+    success=true;
+}
+
+const bool FilterBase::filter() {
+    ready=true;
+    success=false;
+    return success;
 }
 
 const QString FilterBase::part() {

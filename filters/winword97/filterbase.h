@@ -14,7 +14,7 @@ public:
     FilterBase();
     virtual ~FilterBase() {}
 
-    virtual const bool filter() { return false; }
+    virtual const bool filter();
     virtual const QString part();
     virtual const QString extension() { return ".kwd"; }
 
@@ -35,8 +35,9 @@ protected slots:
     void slotFilterError();
 
 protected:
-    bool success;
-
+    bool success;      // ok, the filtering process was successful
+    bool ready;        // can't get file, because filtering was not
+                       // started yet - error :)
 private:
     FilterBase(const FilterBase &);
     const FilterBase &operator=(const FilterBase &);
