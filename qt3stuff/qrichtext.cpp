@@ -76,9 +76,7 @@ static double scale_factor( double v )
 
 static bool is_printer( QPainter *p )
 {
-    //if ( !p || !p->device() )
-	return FALSE;
-    //return p->device()->devType() == QInternal::Printer;
+    return p && p->device() && p->device()->devType() == QInternal::Printer;
 }
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2687,7 +2685,6 @@ int QTextFormat::width( const QChar &c ) const
 	    return fm_.width( c );
 	}
     }
-
     QFont f( fn );
     if ( ha != AlignNormal )
 	f.setPointSize( ( f.pointSize() * 2 ) / 3 );
@@ -4650,11 +4647,11 @@ int QTextFormatterBreakInWords::format( QTextDocument *doc,QTextParag *parag,
     if ( parag->next() && !doc->addMargins() )
 	m = QMAX( m, parag->next()->topMargin() );
     parag->setFullWidth( fullWidth );
-    if ( is_printer( parag->painter() ) ) {
+    /*if ( is_printer( parag->painter() ) ) {
 	QPaintDeviceMetrics metrics( parag->painter()->device() );
 	double yscale = scale_factor( metrics.logicalDpiY() );
 	m = (int)( (double)m * yscale );
-    }
+    }*/
     y += h + m;
     if ( !isWrapEnabled() )
 	minw = QMAX( minw, c->x + ww ); // #### Lars: Fix this for BiDi, please
@@ -4972,11 +4969,11 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     if ( parag->next() && !doc->addMargins() )
 	m = QMAX( m, parag->next()->topMargin() );
     parag->setFullWidth( fullWidth );
-    if ( is_printer( parag->painter() ) ) {
+    /*if ( is_printer( parag->painter() ) ) {
 	QPaintDeviceMetrics metrics( parag->painter()->device() );
 	double yscale = scale_factor( metrics.logicalDpiY() );
 	m = (int)( (double)m * yscale );
-    }
+    }*/
     //qDebug( "Adding h(%d) and bottomMargin(%d) to y(%d) => %d", h, m, y, y+h+m );
     y += h + m;
     //if ( doc && doc->addMargins() )
