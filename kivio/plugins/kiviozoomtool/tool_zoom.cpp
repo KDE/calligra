@@ -137,14 +137,14 @@ void ZoomTool::processEvent(QEvent* e)
         }
         break;
       case QEvent::MouseButtonRelease:
-  	    m_pCanvas->endRectDraw();
+        m_pCanvas->endRectDraw();
         m_bDrawRubber = false;
         m_bLockKeyboard = false;
         zoomRect(m_pCanvas->rect());
         break;
       case QEvent::MouseMove:
-  	    if (m_bDrawRubber)
-    	    m_pCanvas->continueRectDraw( ((QMouseEvent*)e)->pos(), KivioCanvas::Rubber );
+        if (m_bDrawRubber)
+          m_pCanvas->continueRectDraw( ((QMouseEvent*)e)->pos(), KivioCanvas::Rubber );
         break;
       default:
         break;
@@ -153,20 +153,20 @@ void ZoomTool::processEvent(QEvent* e)
     switch (e->type()) {
       case QEvent::MouseButtonPress:
         isHandMousePressed = true;
-        m_pCanvas->setUpdatesEnabled(false);
         mousePos = ((QMouseEvent*)e)->pos();
         break;
       case QEvent::MouseButtonRelease:
         isHandMousePressed = false;
-        m_pCanvas->setUpdatesEnabled(true);
         break;
       case QEvent::MouseMove:
         if (isHandMousePressed) {
+          m_pCanvas->setUpdatesEnabled(false);
           QPoint newPos = ((QMouseEvent*)e)->pos();
           mousePos -= newPos;
           m_pCanvas->scrollDx(-mousePos.x());
           m_pCanvas->scrollDy(-mousePos.y());
           mousePos = newPos;
+          m_pCanvas->setUpdatesEnabled(true);
         }
         break;
       default:
@@ -176,9 +176,6 @@ void ZoomTool::processEvent(QEvent* e)
 
 void ZoomTool::activateGUI(KXMLGUIFactory* factory)
 {
-  m_pToolBar = (KToolBar*)factory->container("ZoomToolBar",this);
-  if (m_pToolBar)
-    m_pToolBar->hide();
 }
 
 void ZoomTool::deactivateGUI( KXMLGUIFactory* )
@@ -187,16 +184,12 @@ void ZoomTool::deactivateGUI( KXMLGUIFactory* )
 
 void ZoomTool::activate()
 {
-  m_pToolBar = (KToolBar*)m_pView->factory()->container("ZoomToolBar",this);
-  m_pView->shell()->showToolbar("ZoomToolBar",true);
   m_pCurrent = m_pPlus;
 }
 
 void ZoomTool::deactivate()
 {
   kdDebug() << "ZoomTool DeActivate" << endl;
-  // Users think the comming and going of the zoom toolbar is annoying!
-  //m_pView->shell()->showToolbar("ZoomToolBar",false);
 
   m_pCurrent = 0L;
 
