@@ -2802,6 +2802,8 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor, int selectionId, 
     emit ensureCursorVisible();
     emit updateUI( true );
     emit showCursor();
+    if(selectionId==QTextDocument::Standard)
+        selectionChangedNotify();
     undoRedoInfo.clear();
 }
 
