@@ -60,7 +60,7 @@ KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const QStrin
   grid2->addWidget(preview,1,1);
 
   choose=new QComboBox(gb);
-  choose->resize( choose->sizeHint() );
+  //choose->resize( choose->sizeHint() );
   grid2->addWidget(choose,0,1);
 
   edit1=new QLineEdit(gb);
@@ -69,19 +69,19 @@ KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const QStrin
   edit1->setValidator( new KFloatValidator( edit1 ) );
 
   edit2=new QLineEdit(gb);
-  edit2->resize( edit2->sizeHint() );
+  //edit2->resize( edit2->sizeHint() );
   grid2->addWidget(edit2,0,3);
   edit2->setValidator( new KFloatValidator( edit2 ) );
 
   color=new KColorButton(gb);
-  color->resize( color->sizeHint() );
+  //color->resize( color->sizeHint() );
   color->setColor(Qt::black);
   grid2->addWidget(color,1,2);
 
 
   fontButton = new QPushButton( gb);
   fontButton->setText(i18n("Font"));
-  fontButton->resize( fontButton->sizeHint() );
+  //fontButton->resize( fontButton->sizeHint() );
   grid2->addWidget( fontButton,1,3);
 
 
@@ -104,6 +104,7 @@ KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const QStrin
 
   choose->insertStringList(list);
   choose->setCurrentItem(0);
+  choose->resize( choose->sizeHint() );
   edit1->setEnabled(false);
   edit2->setEnabled(false);
   connect(choose,SIGNAL(highlighted(const QString &)),this,SLOT(changeIndex(const QString &)));
