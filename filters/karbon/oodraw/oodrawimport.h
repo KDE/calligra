@@ -1,4 +1,3 @@
-// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (c) 2003 Rob Buis <buis@kde.org>
 
@@ -32,6 +31,8 @@
 #include <core/vcomposite.h>
 #include <core/vstroke.h>
 
+class KZip;
+
 class VGroup;
 
 class OoDrawImport : public KoFilter
@@ -44,6 +45,8 @@ public:
     virtual KoFilter::ConversionStatus convert( QCString const & from, QCString const & to );
 
 private:
+	void createDocumentInfo( QDomDocument &docinfo );
+
 	void createStyleMap( QDomDocument &docstyles );
 	void insertStyles( const QDomElement& styles );
 	void insertDraws( const QDomElement& styles );
@@ -60,6 +63,7 @@ private:
 	KoRect parseViewBox( const QDomElement& object );
 
 	KoFilter::ConversionStatus openFile();
+	KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc);
 
 	VDocument			m_document;
 	QDomDocument			m_content;
@@ -67,6 +71,8 @@ private:
 	QDomDocument			m_settings;
 	QDict<QDomElement>		m_styles, m_draws;
 	StyleStack			m_styleStack;
+	KZip * m_zip;
+
 };
 
 #endif

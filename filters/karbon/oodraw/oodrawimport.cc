@@ -1,4 +1,3 @@
-// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (c) 2003 Rob Buis <buis@kde.org>
 
@@ -32,6 +31,7 @@
 #include <koUnit.h>
 #include <koDocumentInfo.h>
 #include <koDocument.h>
+#include <ooutils.h>
 
 #include <kgenericfactory.h>
 #include <koFilterChain.h>
@@ -60,24 +60,35 @@ OoDrawImport::~OoDrawImport()
 {
 }
 
-KoFilter::ConversionStatus
-OoDrawImport::convert( QCString const & from, QCString const & to )
+KoFilter::ConversionStatus OoDrawImport::convert( QCString const & from, QCString const & to )
 {
-	kdDebug() << "Entering Oodraw Import filter: " << from << " - " << to << endl;
+    kdDebug() << "Entering Oodraw Import filter: " << from << " - " << to << endl;
 
-	if( from != "application/vnd.sun.xml.draw" || to != "application/x-karbon" )
-	{
-		kdWarning() << "Invalid mimetypes " << from << " " << to << endl;
-		return KoFilter::NotImplemented;
-	}
+    if( from != "application/vnd.sun.xml.draw" || to != "application/x-karbon" )
+    {
+        kdWarning() << "Invalid mimetypes " << from << " " << to << endl;
+        return KoFilter::NotImplemented;
+    }
 
-	KoFilter::ConversionStatus preStatus = openFile();
+    m_zip = new KZip(  m_chain->inputFile() );
 
-	if( preStatus != KoFilter::OK )
-		return preStatus;
+    if ( !m_zip->open( IO_ReadOnly ) )
+    {
+        kdError(30518) << "Couldn't open the requested file "<< m_chain->inputFile() << endl;
+        delete m_zip;
+        return KoFilter::FileNotFound;
+    }
 
+    KoFilter::ConversionStatus preStatus = openFile();
+
+    if( preStatus != KoFilter::OK )
+    {
+        m_zip->close();
+        delete m_zip;
+        return preStatus;
+    }
 /*QDomDocument docinfo;
-createDocumentInfo( docinfo );
+  createDocumentInfo( docinfo );
 
 // store document info
 KoStoreDevice* out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
@@ -88,91 +99,70 @@ QCString info = docinfo.toCString();
 // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
 out->writeBlock( info , info.length() );
 }*/
+    QDomDocument docinfo;
+    createDocumentInfo( docinfo );
+    // store document info
+    KoStoreDevice* out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
+    if( out )
+    {
+        QCString info = docinfo.toCString();
+        //kdDebug(30518) << " info :" << info << endl;
+        // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
+        out->writeBlock( info , info.length() );
+    }
 
-	convert();
-	QDomDocument outdoc = m_document.saveXML();
+    convert();
+    QDomDocument outdoc = m_document.saveXML();
 
-	// store document content
-	KoStoreDevice *out = m_chain->storageFile( "maindoc.xml", KoStore::Write );
-	if( out )
-	{
-		QCString content = outdoc.toCString();
-		kdDebug() << " content :" << content << endl;
-		out->writeBlock( content , content.length() );
-	}
+    // store document content
+    out = m_chain->storageFile( "maindoc.xml", KoStore::Write );
+    if( out )
+    {
+        QCString content = outdoc.toCString();
+        kdDebug() << " content :" << content << endl;
+        out->writeBlock( content , content.length() );
+    }
+    m_zip->close();
+    delete m_zip;
 
-	kdDebug() << "######################## OoDrawImport::convert done ####################" << endl;
-	return KoFilter::OK;
+    kdDebug() << "######################## OoDrawImport::convert done ####################" << endl;
+
+    return KoFilter::OK;
 }
+
+// Very related to OoWriterImport::createDocumentInfo
+void OoDrawImport::createDocumentInfo( QDomDocument &docinfo )
+{
+    docinfo = KoDocument::createDomDocument( "document-info" /*DTD name*/, "document-info" /*tag name*/, "1.1" );
+
+    OoUtils::createDocumentInfo(m_meta, docinfo);
+    //kdDebug(30518) << " meta-info :" << m_meta.toCString() << endl;
+}
+
 
 // Very related to OoWriterImport::openFile()
-KoFilter::ConversionStatus
-OoDrawImport::openFile()
+KoFilter::ConversionStatus OoDrawImport::openFile()
 {
-	KoStore *store = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
+    KoFilter::ConversionStatus status = loadAndParse( "content.xml", m_content );
+    if ( status != KoFilter::OK )
+    {
+        kdError(30518) << "Content.xml could not be parsed correctly! Aborting!" << endl;
+        return status;
+    }
 
-	if( !store )
-	{
-		kdWarning() << "Couldn't open the requested file." << endl;
-		return KoFilter::FileNotFound;
-	}
+    // We do not stop if the following calls fail.
+    QDomDocument styles;
+    loadAndParse( "styles.xml", styles );
+    loadAndParse( "meta.xml", m_meta );
+    loadAndParse( "settings.xml", m_settings );
 
-	if( !store->open( "content.xml" ) )
-	{
-		kdWarning() << "This file doesn't seem to be a valid OoDraw file" << endl;
-		delete store;
-		return KoFilter::WrongFormat;
-	}
+    emit sigProgress( 10 );
+    createStyleMap( styles );
 
-	QDomDocument styles;
-
-	m_content.setContent( store->device() );
-	store->close();
-
-	//kdDebug() << "m_content.toCString() :" << m_content.toCString() << endl;
-	kdDebug() << "File containing content loaded " << endl;
-
-	if( store->open( "styles.xml" ) )
-	{
-		styles.setContent( store->device() );
-		store->close();
-
-		//kdDebug() << "styles.toCString() :" << styles.toCString() << endl;
-		kdDebug() << "File containing styles loaded" << endl;
-	}
-	else
-		kdWarning() << "Style definitions do not exist!" << endl;
-
-	if( store->open( "meta.xml" ) )
-	{
-		m_meta.setContent( store->device() );
-		store->close();
-
-		kdDebug() << "File containing meta definitions loaded" << endl;
-	}
-	else
-		kdWarning() << "Meta definitions do not exist!" << endl;
-
-	if( store->open( "settings.xml" ) )
-	{
-		m_settings.setContent( store->device() );
-		store->close();
-
-		kdDebug() << "File containing settings loaded" << endl;
-	}
-	else
-		kdWarning() << "Settings do not exist!" << endl;
-
-	delete store;
-
-	emit sigProgress( 10 );
-	createStyleMap( styles );
-
-	return KoFilter::OK;
+    return KoFilter::OK;
 }
 
-void
-OoDrawImport::convert()
+void OoDrawImport::convert()
 {
 	m_document.saveAsPath( false );
 
@@ -223,6 +213,50 @@ OoDrawImport::convert()
 
 	parseGroup( 0L, dp );
     }
+}
+
+
+KoFilter::ConversionStatus OoDrawImport::loadAndParse(const QString& filename, QDomDocument& doc)
+{
+    kdDebug(30518) << "Trying to open " << filename << endl;
+
+    if (!m_zip)
+    {
+        kdError(30518) << "No ZIP file!" << endl;
+        return KoFilter::CreationError; // Should not happen
+    }
+
+    const KArchiveEntry* entry = m_zip->directory()->entry( filename );
+    if (!entry)
+    {
+        kdWarning(30518) << "Entry " << filename << " not found!" << endl;
+        return KoFilter::FileNotFound;
+    }
+    if (entry->isDirectory())
+    {
+        kdWarning(30518) << "Entry " << filename << " is a directory!" << endl;
+        return KoFilter::WrongFormat;
+    }
+    const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
+    QIODevice* io=f->device();
+    kdDebug(30518) << "Entry " << filename << " has size " << f->size() << endl;
+
+    // Error variables for QDomDocument::setContent
+    QString errorMsg;
+    int errorLine, errorColumn;
+    if ( !doc.setContent( io, &errorMsg, &errorLine, &errorColumn ) )
+    {
+        kdError(30518) << "Parsing error in " << filename << "! Aborting!" << endl
+            << " In line: " << errorLine << ", column: " << errorColumn << endl
+            << " Error message: " << errorMsg << endl;
+        delete io;
+        return KoFilter::ParsingError;
+    }
+    delete io;
+
+    kdDebug(30518) << "File " << filename << " loaded and parsed!" << endl;
+
+    return KoFilter::OK;
 }
 
 void
