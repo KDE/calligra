@@ -209,29 +209,6 @@ void KChartView::edit()
     connect(&ed,  SIGNAL(applyClicked(kchartDataEditor *)), 
 	    this, SLOT(applyEdit(kchartDataEditor *)));
 
-    // TODO: Replace following with passing document pointer to the
-    //       constructor of the dialog.
-#if 0
-    ed.setAxisLabelTextShort( ( (KChartPart*)koDocument() )->axisLabelTextShort() );
-    ed.setAxisLabelTextLong( ( (KChartPart*)koDocument() )->axisLabelTextLong() );
-#endif
-#if 0
-    // Set the legend in the editor.
-    QStringList  lst;
-    for( uint i =0; i < dat->rows(); i++ )
-        lst << params->legendText( i );
-    ed.setLegend(lst);
-#endif
-
-#if 0
-    // TODO: Following should be done in the init part of the dialog,
-    //       when doc pointer is passed in constructor.
-    QStringList *axisLabelTextLong = ( ( (KChartPart*)koDocument() )->axisLabelTextLong() );
-    if ( axisLabelTextLong ) {
-        QStringList lstLabel( *axisLabelTextLong );
-        ed.setXLabel( lstLabel );
-    }
-#endif
     // Execute the data editor.
     if ( ed.exec() != QDialog::Accepted ) {
         return;
@@ -241,12 +218,7 @@ void KChartView::edit()
     ed.getData(dat);
     ed.getRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
     ed.getColLabels(((KChartPart*)koDocument())->colLabelTexts());
-#if 0
-    ed.getLegend(params);
 
-    //TODO: Should be done in the destructor of the dialog.
-    ed.getXLabel(params );
-#endif
     kdDebug(35001) << "***After calling editor: cols =" << dat->cols()
 		   << " , rows = "     << dat->rows()
 		   << " , usedCols = " << dat->usedCols()

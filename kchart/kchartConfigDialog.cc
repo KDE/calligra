@@ -130,7 +130,6 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
             addTab( m_axespage, i18n( "&Axes" ) );
 
         } else if( m_params->chartType() != KDChartParams::Ring ) {
-	    // FIXME: I don't understand this tab.  /ingwa
             _parameterpiepage = new KChartParameterPieConfigPage(m_params,this );
             addTab( _parameterpiepage, i18n( "&Axes" ) );
 

@@ -25,32 +25,19 @@ public:
     void setColLabels(const QStringList &colLabels);
     void getColLabels(QStringList &colLabels);
 
-    // Old stuff, soon to be removed.
-    void getLegend(KChartParams* params);
-    void setLegend(const QStringList &legend);
-    void getXLabel(KChartParams* params);
-    void setXLabel(const QStringList &xlbl);
-
 private:
     void  addDocs();
 
 signals:
     void applyClicked(kchartDataEditor *ed);
 
-protected slots:
+private slots:
     void  slotApply();
     void  setRows(int rows);
     void  setCols(int cols);
 
 private:
-    // Data Editor, Old version.  Soon to be removed.
-#if 0
-    SheetDlg *_widget;
-#endif
-    QStringList *longLabels;
-    QStringList *shortLabels;
-
-    // Data Editor, TNG
+    // Widgets in the editor
     QTable      *m_table;
     QLabel      *m_rowsLA;
     QSpinBox    *m_rowsSB;

@@ -1,5 +1,16 @@
 2005-03-13  Inge Wallin  <inge@lysator.liu.se>
 
+	Clean out old cruft from the data editor.
+	*  kchartDataEditor.{h,cc} (setLegend): removed
+	(getLegend): removed
+	(setXLabel): removed
+	(getXLabel): removed
+	* kchart_part.h (axisLabelText{short,long}): removed
+	(m_longLabels, m_shortLabels): removed
+	* kchart_view.cc (edit): remove all stuff within #if 0 - #endif
+	
+	----------------------------------------------------------------
+
 	Fix problem with mixed plurals/singulars in chart names.
 	* kchart_view.cc (KChartView): Rename some actions.
 

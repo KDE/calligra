@@ -49,9 +49,6 @@ public:
 
     virtual void  setData( const KoChart::Data& data );
 
-    QStringList  *axisLabelTextLong()          { return &m_longLabels;  }
-    QStringList  *axisLabelTextShort()         { return &m_shortLabels; }
-
     bool showWizard();
     void initLabelAndLegend();
     void loadConfig(KConfig *conf);
@@ -65,20 +62,19 @@ public:
     QStringList     &colLabelTexts()           { return m_colLabels;  }
 
     // Save and load
-    virtual       QDomDocument saveXML();
-    virtual bool  loadXML( QIODevice *, const QDomDocument& doc );
-    virtual bool  loadOasis( const QDomDocument& doc,
-			     KoOasisStyles& oasisStyles,
-			     const QDomDocument& settings,
-			     KoStore *store );
-    virtual bool  saveOasis(KoStore*, KoXmlWriter*);
+    virtual QDomDocument  saveXML();
+    virtual bool          loadXML( QIODevice *, const QDomDocument& doc );
+    virtual bool          loadOasis( const QDomDocument& doc,
+				     KoOasisStyles& oasisStyles,
+				     const QDomDocument& settings,
+				     KoStore *store );
+    virtual bool          saveOasis(KoStore*, KoXmlWriter*);
 
     bool  m_bLoading; // FIXME: Kalle: get rid of that one :)
     bool  isLoading()        const             { return m_bLoading;        }
     bool  canChangeValue()   const             { return m_bCanChangeValue; }
     virtual void  setCanChangeValue(bool b )   { m_bCanChangeValue = b;    }
 
-    // FIXME: Remove this ugly thing.
     void  initTestChart();
 
 signals:
@@ -102,10 +98,6 @@ private:
     QStringList    m_rowLabels;
     QStringList    m_colLabels;
     KChartParams  *m_params;
-
-    //FIXME: To be deprecated:
-    QStringList    m_longLabels;
-    QStringList    m_shortLabels;
 
     // Auxiliary values that are part of the document, and thus will
     // be included in saved files.
