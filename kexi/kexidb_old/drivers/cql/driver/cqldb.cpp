@@ -23,7 +23,7 @@ Boston, MA 02111-1307, USA.
 
 #include "cqldb.h"
 
-K_EXPORT_COMPONENT_FACTORY(kexicqllinterface, KGenericFactory<CqlDB>( "libkexicqlinterface" ));
+K_EXPORT_COMPONENT_FACTORY(kexicqlinterface, KGenericFactory<CqlDB>( "kexicqlinterface" ));
 
 CqlDB::CqlDB(QObject *parent, const char *name, const QStringList &)
  : KexiDB(parent, name)
