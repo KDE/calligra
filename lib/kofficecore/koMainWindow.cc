@@ -130,6 +130,7 @@ public:
     m_dcopObject = 0;
     m_sendfile = 0;
     m_paCloseFile = 0L;
+    m_reloadfile = 0L;
   }
   ~KoMainWindowPrivate()
   {
@@ -169,6 +170,7 @@ public:
   KAction *m_paPrintPreview;
   KAction *m_sendfile;
   KAction *m_paCloseFile;
+  KAction *m_reloadfile;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
@@ -211,6 +213,10 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_sendfile = new KAction( i18n( "Send File..."), "mail_send", 0,
                     this, SLOT( slotEmailFile() ),
                     actionCollection(), "file_send_file");
+    d->m_reloadfile = new KAction( i18n( "Reload File"), 0,
+                    this, SLOT( slotReloadFile() ),
+                    actionCollection(), "file_reload_file");
+
     d->m_paDocInfo = new KAction( i18n( "&Document Information..." ), "documentinfo", 0,
                         this, SLOT( slotDocumentInfo() ),
                         actionCollection(), "file_documentinfo" );
@@ -436,7 +442,7 @@ void KoMainWindow::updateCaption()
   if ( !d->m_rootDoc )
     setCaption(QString::null);
   else if ( rootDocument()->isCurrent() )
-  {   
+  {
       QString caption;
       // Get caption from document info (title(), in about page)
       if ( rootDocument()->documentInfo() )
@@ -723,12 +729,12 @@ bool KoMainWindow::queryClose()
                 return false;
         }
     }
-    
+
     if ( d->m_rootDoc->queryCloseExternalChildren() == KMessageBox::Cancel )
     {
-        return false;   
+        return false;
     }
-    
+
     return true;
 }
 
@@ -1268,6 +1274,31 @@ void KoMainWindow::slotEmailFile()
        KMessageBox::detailedSorry (0, i18n("ERROR: File not found."),
                                    i18n("To send a file you must first have saved the file to the filesystem."),
                                    i18n("Error: File Not Found!"));
+}
+
+void KoMainWindow::slotReloadFile()
+{
+    KoDocument* pDoc = rootDocument();
+    if(!pDoc || pDoc->url().isEmpty() || !pDoc->isModified())
+        return;
+
+    bool bOk = KMessageBox::questionYesNo( this,
+                                      i18n("You will lost all your changes !\n"
+                                           "Do you want to continue?"),
+                                      i18n("Warning") ) == KMessageBox::Yes;
+    if ( !bOk )
+        return;
+
+    KURL url = pDoc->url();
+    if ( pDoc && !pDoc->isEmpty() )
+    {
+        setRootDocument( 0L ); // don't delete this shell when deleting the document
+        delete d->m_rootDoc;
+        d->m_rootDoc = 0L;
+    }
+    openDocument( url );
+    return;
+
 }
 
 #include <koMainWindow.moc>
