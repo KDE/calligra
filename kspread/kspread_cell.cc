@@ -2146,16 +2146,26 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     KSpreadCell* cell_l = m_pTable->cellAt( _col - 1, _row );
     KSpreadCell* cell_b = m_pTable->cellAt( _col, _row + 1 );
    
-    // Get the borders which meat at the respective corners.
+    // Fix the borders which meat at the top left corner
     QPen vert_pen = cell_t->leftBorderPen( _col, _row - 1 );
-    QPen horz_pen = cell_l->topBorderPen( _col - 1, _row );
     if ( vert_pen.style() != Qt::NoPen )
     {
+	QPen horz_pen = cell_l->topBorderPen( _col - 1, _row );
 	int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
 	_painter.setPen( vert_pen );
 	_painter.drawLine( _tx, _ty, _tx, _ty + bottom );
     }
-    
+
+    // Fix the borders which meat at the top right corner
+    vert_pen = cell_t->rightBorderPen( _col, _row - 1 );
+    if ( vert_pen.style() != Qt::NoPen )
+    {
+	QPen horz_pen = cell_r->topBorderPen( _col + 1, _row );
+	int bottom = ( QMAX( 0, -1 + (int)horz_pen.width() ) ) / 2 + 1;
+	_painter.setPen( vert_pen );
+	_painter.drawLine( _tx + w, _ty, _tx + w, _ty + bottom );
+    }
+
     //
     // Draw diagonal borders.
     //
