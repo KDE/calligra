@@ -1,16 +1,8 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiform" version="2">
+<kpartgui name="kexiformpart" version="3">
 
-<ToolBar name="widgets" fullWidth="false">
- <text>Widgets</text>
-   <Action name="library_widget_QButtonGroup"/>
-   <Action name="library_widget_QTabWidget"/>
-   <Action name="library_widget_QLabel"/>
-   <Action name="library_widget_KLineEdit"/>
-   <Action name="library_widget_QPushButton"/>
-   <Action name="library_widget_Spacer"/>
- <ActionList name="library_widgets" />
-</ToolBar>
+<!-- ToolBar moved to kexiformpartinstui.rc
+</ToolBar -->
 
 </kpartgui>
 

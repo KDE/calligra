@@ -71,13 +71,15 @@ void KexiFormPart::initPartActions(KActionCollection *collection)
 	//TODO
 
 	//guiClient()->setXMLFile("kexiformui.rc");
-	m_manager->createActions(collection, 0);
+//js	m_manager->createActions(collection, 0);
 }
 
 void KexiFormPart::initInstanceActions( KActionCollection *col )
 {
+	m_manager->createActions(col, 0);
+
 	//TODO
-	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), col, "tablepart_filter");
+//	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), col, "tablepart_filter");
 }
 
 KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,

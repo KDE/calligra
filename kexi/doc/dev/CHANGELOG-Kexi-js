@@ -307,7 +307,6 @@ TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where n
 
 
 === BETA 3 HOT TODO ===
-- add an option switch to enable forms
 - make SQL GUI designer working reasonable
 - make SQL text designer working again
 - implement query storage
@@ -319,6 +318,14 @@ HOT TODO:
 CC_MAIL: dkite@shaw.ca
 
 ===================== Kexi 0.1 Beta 3 =====================
+
+2004-04-30
+TableView:
+- dropdown button position properly updated when scrollview's x-offset is non-0
+Kexi Forms
+- toolbar moved from 'part-wide' area to 'part-instance' area
+
+[INFOSYSTEM 2004]
 
 ~~~~~~~~~~~~~~~~ beta3 pre2 ~~~~~~~~~~~~~~~~
 
