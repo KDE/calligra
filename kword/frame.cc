@@ -510,7 +510,7 @@ QDomElement KWFrameSet::save( QDomDocument &doc )
     QDomElement frameset = doc.createElement( "FRAMESET" );
     QDomElement f = doc.createElement( "FRAMES" );
     frameset.appendChild( f );
-    
+
     KWFrame *frame;
 
     for ( unsigned int i = 0; i < frames.count(); i++ ) {
@@ -557,13 +557,13 @@ bool KWFrameSet::load( QDomElement& element )
 
     QDomElement fs = element.namedItem( "FRAMES" );
     if ( !fs.isNull() ) {
-	QDomElement f = ps.firstChild().toElement();
+	QDomElement f = fs.firstChild().toElement();
+	KWFrame rect;
 	for( ; !f.isNull(); f = f.nextSibling().toElement() ) {
-	    KWFrame rect;
 	    KWParagLayout::Border l, r, t, b;
 	    float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
 	    unsigned int lpt = 0, rpt = 0, tpt = 0, bpt = 0, rapt = 0;
-	 
+	
 	    l.color = Qt::white;
 	    l.style = KWParagLayout::SOLID;
 	    l.ptWidth = 1;
@@ -609,7 +609,7 @@ bool KWFrameSet::load( QDomElement& element )
 		r.color = QColor( f.attribute( "rColor" ) );
 	    if ( f.hasAttribute( "rStyle" ) )
 		r.style = (KWParagLayout::BorderStyle) f.attribute( "rStyle" ).toInt();
-	    
+	
 	    if ( f.hasAttribute( "bWidth" ) )
 		b.ptWidth = f.attribute( "bWidth" ).toInt();
 	    if ( f.hasAttribute( "bColor" ) )
@@ -623,8 +623,8 @@ bool KWFrameSet::load( QDomElement& element )
 		t.color = QColor( f.attribute( "tColor" ) );
 	    if ( f.hasAttribute( "tStyle" ) )
 		t.style = (KWParagLayout::BorderStyle) f.attribute( "tStyle" ).toInt();
-	    
-	    if ( f.hasAttribute( "background-color" ) )	    
+	
+	    if ( f.hasAttribute( "background-color" ) )	
 		c = f.attribute( "background-color" );
 
 	    if ( f.hasAttribute( "border-left-mm" ) )
@@ -668,7 +668,7 @@ bool KWFrameSet::load( QDomElement& element )
     _frame->setBTop( KWUnit( tpt, tmm, tinch ) );
     _frame->setBBottom( KWUnit( bpt, bmm, binch ) );
     frames.append( _frame );
-     
+
     return true;
 }
 
@@ -1059,9 +1059,9 @@ bool KWTextFrameSet::load( QDomElement& element )
  	    }
  	}
     }
-    
+
     updateCounters();
-    
+
     return true;
 }	
 
@@ -1294,13 +1294,13 @@ bool KWPictureFrameSet::load( const QDomElement& element )
     if ( !img.isNull() ) {
 	doc->addImageRequest( img.attribute( "filename" ) );
     }
-    
+
     // 	    KWImage *_image = new KWImage();
     // 	    _image->load( parser, lst, doc );
     // 	    //setFileName( _image->getFilename() );
     // 	    doc->addImageRequest( _image->getFilename(), this );
     // 	    delete _image;
-    
+
     return true;
 }
 
