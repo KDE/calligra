@@ -92,6 +92,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_dcop = 0;
   m_pMap = 0L;
   m_bLoading = false;
+  m_numOperations = 0;
 
   m_defaultGridPen.setColor( lightGray );
   m_defaultGridPen.setWidth( 1 );
@@ -712,7 +713,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
     QValueList<QRect> cellAreaList;
     cellAreaList.append( QRect( left_col,
                                 top_row,
-                                right_col - left_col + 1, 
+                                right_col - left_col + 1,
                                 bottom_row - top_row + 1) );
 
     paintCellRegions(painter, rect, NULL, cellAreaList, table, drawCursor);
@@ -784,19 +785,21 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   {
     cellRegion = cellRegions[i];
 
-    PaintRegion(painter, unzoomedViewRect, view, cellRegion, table);
+//    PaintRegion(painter, unzoomedViewRect, view, cellRegion, table);
   }
 
   if ((view != NULL) && drawCursor && !(painter.device()->isExtDev()))
   {
     if (view->activeTable() == table)
     {
-      PaintNormalMarker(painter, unzoomedViewRect, view, table, view->selection());
+      //    PaintNormalMarker(painter, unzoomedViewRect, view, table, view->selection());
+      ;
     }
 
     if (view->selectionInfo()->getChooseTable() == table)
     {
-      PaintChooseRect(painter, unzoomedViewRect, view, table, view->selectionInfo()->getChooseRect());
+//      PaintChooseRect(painter, unzoomedViewRect, view, table, view->selectionInfo()->getChooseRect());
+      ;
     }
   }
 }
@@ -886,7 +889,7 @@ void KSpreadDoc::PaintChooseRect(QPainter& painter, const KoRect &viewRect,
 
     if ( paintTop )
     {
-      painter.drawLine( zoomItX( left ),  zoomItY( top ), 
+      painter.drawLine( zoomItX( left ),  zoomItY( top ),
                         zoomItX( right ), zoomItY( top ) );
     }
     if ( paintLeft )
@@ -981,7 +984,7 @@ void KSpreadDoc::PaintNormalMarker(QPainter& painter, const KoRect &viewRect,
 
 void KSpreadDoc::retrieveMarkerInfo( const QRect &marker,
                                      const KSpreadSheet* table,
-                                     KSpreadView* view, 
+                                     KSpreadView* view,
                                      const KoRect &viewRect,
                                      double positions[],
                                      bool paintSides[] )
@@ -1203,26 +1206,40 @@ void KSpreadDoc::emitBeginOperation(bool waitCursor)
 {
    KoDocument::emitBeginOperation(waitCursor);
    m_bDelayCalculation = true;
+   m_numOperations++;
 }
 
 void KSpreadDoc::emitEndOperation()
 {
    KSpreadSheet *t = NULL;
    CellBinding* b = NULL;
+   m_numOperations--;
 
-   m_bDelayCalculation = false;
-   for ( t = m_pMap->firstTable(); t != NULL; t = m_pMap->nextTable() )
+   if (m_numOperations <= 0)
    {
-      t->update();
+     m_numOperations = 0;
+     m_bDelayCalculation = false;
+     for ( t = m_pMap->firstTable(); t != NULL; t = m_pMap->nextTable() )
+     {
+       t->update();
 
-      for (b = t->firstCellBinding(); b != NULL; b = t->nextCellBinding())
-      {
-	b->cellChanged(NULL);
-      }
+       for (b = t->firstCellBinding(); b != NULL; b = t->nextCellBinding())
+       {
+         b->cellChanged(NULL);
+       }
+     }
+
    }
 
-   paintUpdates();
    KoDocument::emitEndOperation();
+
+   if (m_numOperations == 0)
+   {
+     /* do this after the parent class emitEndOperation because that allows updates
+        on the view again
+     */
+     paintUpdates();
+   }
 }
 
 

@@ -366,8 +366,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     setFocusProxy( m_pCanvas );
 
     connect( this, SIGNAL( invalidated() ), m_pCanvas, SLOT( update() ) );
-    connect( this, SIGNAL( regionInvalidated( const QRegion&, bool ) ),
-             m_pCanvas, SLOT( repaint( const QRegion&, bool ) ) );
 
     QObject::connect( m_pVertScrollBar, SIGNAL( valueChanged(int) ), m_pCanvas, SLOT( slotScrollVert(int) ) );
     QObject::connect( m_pHorzScrollBar, SIGNAL( valueChanged(int) ), m_pCanvas, SLOT( slotScrollHorz(int) ) );
@@ -2806,8 +2804,6 @@ void KSpreadView::addTable( KSpreadSheet *_t )
     QObject::connect( _t, SIGNAL( sig_removeChild( KSpreadChild* ) ), SLOT( slotRemoveChild( KSpreadChild* ) ) );
     QObject::connect( _t, SIGNAL( sig_maxColumn( int ) ), m_pCanvas, SLOT( slotMaxColumn( int ) ) );
     QObject::connect( _t, SIGNAL( sig_maxRow( int ) ), m_pCanvas, SLOT( slotMaxRow( int ) ) );
-    QObject::connect( _t, SIGNAL( sig_polygonInvalidated( const QPointArray& ) ),
-                      this, SLOT( repaintPolygon( const QPointArray& ) ) );
     if(m_bLoading)
         updateBorderButton();
 
@@ -2875,7 +2871,7 @@ void KSpreadView::setActiveTable( KSpreadSheet *_t,bool updateTable )
 
   if ( m_pTable == 0L )
   {
-    m_pDoc->emitBeginOperation(false);
+    m_pDoc->emitEndOperation();
     return;
   }
   m_pDoc->setDisplayTable( m_pTable );
@@ -2884,7 +2880,7 @@ void KSpreadView::setActiveTable( KSpreadSheet *_t,bool updateTable )
     m_pTabBar->setActiveTab( _t->tableName() );
     m_pVBorderWidget->repaint();
     m_pHBorderWidget->repaint();
-    m_pCanvas->repaint();
+    m_pTable->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
     m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
     m_pCanvas->slotMaxRow( m_pTable->maxRow() );
   }
@@ -2948,7 +2944,7 @@ void KSpreadView::changeTable( const QString& _name )
     //update visible area
     m_pVBorderWidget->repaint();
     m_pHBorderWidget->repaint();
-    m_pCanvas->repaint();
+    t->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
     m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
     m_pCanvas->slotMaxRow( m_pTable->maxRow() );
     m_pDoc->emitEndOperation();
@@ -3668,7 +3664,7 @@ void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
 
   m_pVBorderWidget->repaint();
   m_pHBorderWidget->repaint();
-  m_pCanvas->repaint();
+  m_pTable->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
 
   refreshView();
   m_pDoc->emitEndOperation();
@@ -4969,7 +4965,7 @@ void KSpreadView::slotUpdateView( KSpreadSheet *_table, const QRect& _rect )
         return;
 
     m_pDoc->emitBeginOperation(false);
-    m_pCanvas->updateCellRect( _rect );
+    m_pTable->setRegionPaintDirty( _rect );
     m_pDoc->emitEndOperation();
 }
 
@@ -5039,7 +5035,9 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
       m_pDoc->emitEndOperation();
       return;
     }
-    m_pCanvas->updateSelection( oldSelection, oldMarker );
+
+    m_pCanvas->setSelectionChangePaintDirty(m_pTable, oldSelection, newSelection);
+
     m_pVBorderWidget->update();
     m_pHBorderWidget->update();
     m_pDoc->emitEndOperation();
@@ -5257,19 +5255,6 @@ void KSpreadView::menuCalc(bool)
     m_pDoc->emitEndOperation();
 }
 
-void KSpreadView::repaintPolygon( const QPointArray& polygon )
-{
-  /* TODO - I think we need to axe this function -- shouldn't be using it */
-//    m_pDoc->emitBeginOperation(false);
-    QPointArray arr = polygon;
-    QWMatrix m = matrix()/*.invert()*/;
-
-    for( int i = 0; i < 4; ++i )
-        arr.setPoint( i, m.map( arr.point( i ) ) );
-
-    emit regionInvalidated( QRegion( arr ), TRUE );
-//    m_pDoc->emitEndOperation();
-}
 
 QWMatrix KSpreadView::matrix() const
 {

@@ -441,8 +441,16 @@ private:
    */
   void ExtendRectBorder(QRect& area);
 
-  void PaintRegion(QRect paintRegion, QRect viewRegion, QPainter &painter);
-  void PaintChooseRect(QRect view, QPainter& painter);
+  /* helpers for the paintUpdates function */
+  void paintChooseRect(QPainter& painter, const KoRect &viewRect);
+
+  void paintNormalMarker(QPainter& painter, const KoRect &viewRect);
+
+  void retrieveMarkerInfo( const QRect &marker, const KoRect &viewRect,
+                           double positions[], bool paintSides[] );
+
+
+
   bool formatKeyPress( QKeyEvent * _ev );
   double getDouble( KSpreadCell * cell );
   void convertToDouble( KSpreadCell * cell );
@@ -479,6 +487,16 @@ private:
   void processControlArrowKey(QKeyEvent *event);
 
   void updateChooseRect(const QPoint &newMarker, const QPoint &newAnchor);
+
+  /**
+   * This function sets the paint dirty flag for a selection change.  The idea
+   * here is that only the edges of the selection need to change (no matter whether
+   * its the real selection or the 'choose' selection).  This calculates which
+   * cells really should look different with the new selection rather than repainting
+   * the entire area
+   */
+  void setSelectionChangePaintDirty(KSpreadSheet* sheet,
+                                    QRect area1, QRect area2);
 };
 
 /**

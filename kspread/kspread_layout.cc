@@ -739,7 +739,7 @@ void KSpreadLayout::setFormatString( QString const & format, FormatType type )
   if ( format.isEmpty() )
   {
     clearProperty( PCustomFormat );
-    setNoFallBackProperties( PCustomFormat );    
+    setNoFallBackProperties( PCustomFormat );
   }
   else
   {
@@ -753,7 +753,7 @@ void KSpreadLayout::setFormatString( QString const & format, FormatType type )
     clearProperty( PFloatColor );
     clearProperty( PFloatFormat );
 
-    setNoFallBackProperties( PPrecision );    
+    setNoFallBackProperties( PPrecision );
     setNoFallBackProperties( PPrefix  );
     setNoFallBackProperties( PPostfix );
   }
@@ -2398,7 +2398,7 @@ namespace KSpreadCurrency_LNS
   // third column:  currency name (localized)
   // fourth column: displayed currency code (localized but maybe only in
   //                the country language it belongs to)
-  Money lMoney[] = { 
+  Money lMoney[] = {
     { "", "", "", ""}, // auto
     { "", "", "", ""}, // extension (codes imported)
     { "$", "", "Dollar", "$" }, // unspecified
@@ -2698,7 +2698,7 @@ namespace KSpreadCurrency_LNS
    public:
     CurrencyMap()
       : m_List(lMoney)
-    {      
+    {
     }
 
     QString getCode(int t) const
@@ -2740,7 +2740,7 @@ KSpreadCurrency::KSpreadCurrency()
 KSpreadCurrency::~KSpreadCurrency()
 {
 }
-  
+
 KSpreadCurrency::KSpreadCurrency(int index)
   : m_type( index ),
     m_code( gCurrencyMap.getCode( index ) )
@@ -2860,7 +2860,7 @@ QString KSpreadCurrency::getExportCode(currencyFormat format) const
     QString ret( "[$");
     ret += m_code;
     ret += "]";
-    
+
     return ret;
   }
 

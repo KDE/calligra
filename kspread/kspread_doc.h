@@ -523,6 +523,8 @@ protected:
     QStringList m_spellListIgnoreAll;
   KoUnit::Unit m_unit;
     KSpreadSheet *m_activeTable;
+
+  int m_numOperations;
 private:
 
   /* helper functions for painting */

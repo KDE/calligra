@@ -114,9 +114,9 @@ QRect KSpreadSelection::selectionHandleArea() const
   double width = cell->dblWidth( column );
   double height = cell->dblHeight( row );
 
-  QPoint rightBottom( m_pView->doc()->zoomItX( xpos + width ), 
+  QPoint rightBottom( m_pView->doc()->zoomItX( xpos + width ),
                       m_pView->doc()->zoomItY( ypos + height ) );
-  
+
   QRect handle( ( rightBottom.x() - 2 ),
                 ( rightBottom.y() - 2 ),
                 ( 5 ),
@@ -254,8 +254,8 @@ QRect KSpreadSelection::extendToMergedAreas(QRect area) const
     return area;
 
   else if ( !(cell->isObscured() && cell->isObscuringForced()) &&
-            (cell->extraXCells() + 1) == area.width() &&
-            (cell->extraYCells() + 1) == area.height())
+            (cell->extraXCells() + 1) >= area.width() &&
+            (cell->extraYCells() + 1) >= area.height())
   {
     /* if just a single cell is selected, we need to merge even when
        the obscuring isn't forced.  But only if this is the cell that

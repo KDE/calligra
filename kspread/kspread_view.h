@@ -395,7 +395,6 @@ protected slots:
     void slotListChoosePopupMenu( );
 
 protected slots:
-    void repaintPolygon( const QPointArray& );
 
     void slotChildSelected( KoDocumentChild* ch );
     void slotChildUnselected( KoDocumentChild* );

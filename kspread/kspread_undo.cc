@@ -82,6 +82,8 @@ void KSpreadUndo::undo()
 {
     if ( m_stckUndo.isEmpty() )
 	return;
+
+
     KSpreadUndoAction *a = m_stckUndo.pop();
     a->undo();
     m_stckRedo.push( a );
@@ -1114,7 +1116,7 @@ void KSpreadUndoCellLayout::undo()
     table->updateCell( cell, (*it2).col, (*it2).row );
   }
 
-  table->updateView(m_rctRect);
+  table->setRegionPaintDirty(m_rctRect);
   doc()->emitEndOperation();
 
   doc()->undoBuffer()->unlock();
@@ -1158,7 +1160,7 @@ void KSpreadUndoCellLayout::redo()
     table->updateCell( cell, (*it2).col, (*it2).row );
   }
 
-  table->updateView( m_rctRect );
+  table->setRegionPaintDirty( m_rctRect );
   doc()->emitEndOperation();
   doc()->undoBuffer()->unlock();
 }
@@ -1397,7 +1399,7 @@ void KSpreadUndoSort::undo()
 
   doc()->emitEndOperation();
 
-  table->updateView(m_rctRect);
+  table->setRegionPaintDirty(m_rctRect);
 
   doc()->undoBuffer()->unlock();
 }
@@ -1448,8 +1450,8 @@ void KSpreadUndoSort::redo()
       cell->setDisplayDirtyFlag();
       table->updateCell( cell, (*it2).col, (*it2).row );
     }
+    table->setRegionPaintDirty(m_rctRect);
     doc()->emitEndOperation();
-    table->updateView(m_rctRect);
     doc()->undoBuffer()->unlock();
 }
 
@@ -1706,7 +1708,7 @@ void KSpreadUndoResizeColRow::undo()
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
-           cl->setWidth((*it2).columnWidth);
+           cl->setWidth((int)(*it2).columnWidth);
         }
     }
     else if( util_isRowSelected( m_rctRect ) ) // complete row(s)
@@ -1715,7 +1717,7 @@ void KSpreadUndoResizeColRow::undo()
     for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
         {
            RowLayout *rw=table->rowLayout((*it2).rowNumber);
-           rw->setHeight((*it2).rowHeight);
+           rw->setHeight((int)(*it2).rowHeight);
         }
     }
     else // row and column
@@ -1724,13 +1726,13 @@ void KSpreadUndoResizeColRow::undo()
     for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
         {
            ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
-           cl->setWidth((*it2).columnWidth);
+           cl->setWidth((int)(*it2).columnWidth);
         }
     QValueList<rowSize>::Iterator it1;
     for ( it1 = m_lstRow.begin(); it1 != m_lstRow.end(); ++it1 )
         {
            RowLayout *rw=table->rowLayout((*it1).rowNumber);
-           rw->setHeight((*it1).rowHeight);
+           rw->setHeight((int)(*it1).rowHeight);
         }
     }
 
@@ -1750,7 +1752,7 @@ void KSpreadUndoResizeColRow::redo()
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
-           cl->setWidth((*it2).columnWidth);
+           cl->setWidth((int)(*it2).columnWidth);
         }
     }
     else if( util_isRowSelected( m_rctRect ) ) // complete row(s)
@@ -1759,7 +1761,7 @@ void KSpreadUndoResizeColRow::redo()
     for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
         {
            RowLayout *rw=table->rowLayout((*it2).rowNumber);
-           rw->setHeight((*it2).rowHeight);
+           rw->setHeight((int)(*it2).rowHeight);
         }
     }
     else // row and column
@@ -1768,13 +1770,13 @@ void KSpreadUndoResizeColRow::redo()
     for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
         {
            ColumnLayout *cl=table->columnLayout((*it2).columnNumber);
-           cl->setWidth((*it2).columnWidth);
+           cl->setWidth((int)(*it2).columnWidth);
         }
     QValueList<rowSize>::Iterator it1;
     for ( it1 = m_lstRedoRow.begin(); it1 != m_lstRedoRow.end(); ++it1 )
         {
            RowLayout *rw=table->rowLayout((*it1).rowNumber);
-           rw->setHeight((*it1).rowHeight);
+           rw->setHeight((int)(*it1).rowHeight);
         }
     }
 
@@ -2774,8 +2776,8 @@ void KSpreadUndoStyleCell::undo()
 	cell->setStyle((*it2).style);
 	cell->setAction((*it2).action);
       }
+    table->setRegionPaintDirty(m_selection);
     doc()->emitEndOperation();
-    table->updateView(m_selection);
     doc()->undoBuffer()->unlock();
 }
 
@@ -2797,8 +2799,8 @@ void KSpreadUndoStyleCell::redo()
 	cell->setStyle((*it2).style);
 	cell->setAction((*it2).action);
       }
+    table->setRegionPaintDirty(m_selection);
     doc()->emitEndOperation();
-    table->updateView(m_selection);
 
     doc()->undoBuffer()->unlock();
 }

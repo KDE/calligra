@@ -140,7 +140,9 @@ void ChartBinding::cellChanged( KSpreadCell* )
     m_child->chart()->setData( matrix );
 
     // Force a redraw of the chart on all views
-    table()->emit_polygonInvalidated( m_child->framePointArray() );
+
+    /** TODO - replace the call below with something that will repaint this chart */
+//    table()->emit_polygonInvalidated( m_child->framePointArray() );
 }
 
 /******************************************************************/
@@ -336,12 +338,12 @@ RowLayout* KSpreadSheet::rowLayout( int _row )
 
 void KSpreadSheet::setDefaultHeight( double height )
 {
-  m_pDefaultRowLayout->setHeight( height );
+  m_pDefaultRowLayout->setHeight( (int)height );
 }
 
 void KSpreadSheet::setDefaultWidth( double width )
 {
-  m_pDefaultColumnLayout->setWidth( width );
+  m_pDefaultColumnLayout->setWidth( (int)width );
 }
 
 int KSpreadSheet::leftColumn( int _xpos, double &_left,
@@ -5614,10 +5616,6 @@ void KSpreadSheet::refreshView(const QRect& rect)
     emit sig_updateView( this, tmp );
 }
 
-void KSpreadSheet::updateView(const QRect& rect)
-{
-    emit sig_updateView( this, rect );
-}
 
 void KSpreadSheet::changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY)
 {
@@ -6184,7 +6182,7 @@ void KSpreadSheet::printPage( QPainter &_painter, const QRect& page_range, const
         kdDebug(36001)<<tmp<<" offset "<<_childOffset.x()<<"/"<<_childOffset.y()<<endl;
 
         bound = it.current()->boundingRect();
-        if ( ( ( KSpreadChild* )it.current() )->table() == this && 
+        if ( ( ( KSpreadChild* )it.current() )->table() == this &&
              bound.intersects( zoomedView ) )
         {
             _painter.save();
@@ -6997,43 +6995,7 @@ void KSpreadSheet::updateCellArea( const QRect &cellArea )
   if ( doc()->isLoading() || doc()->delayCalculation() || (!getAutoCalc()))
     return;
 
-  KSpreadCell* cell = cellAt(cellArea.bottomRight());
-  // Get the size
-  double left = dblColumnPos( cellArea.left() );
-  double top = dblRowPos( cellArea.top() );
-  double right = dblColumnPos(cellArea.right()) + cell->extraWidth();
-  double bottom = dblRowPos(cellArea.bottom()) + cell->extraHeight();
-
-  // Need to calculate ?
-  for (int x = cellArea.left(); x <= cellArea.right(); x++)
-  {
-    for (int y = cellArea.top(); y <= cellArea.bottom(); y++)
-    {
-      cell = cellAt(x,y);
-
-      cell->calc();
-
-      // Need to make layout ?
-      cell->makeLayout( painter(), x, y );
-
-      // Perhaps the size changed now ?
-      right = QMAX( right, left + cell->extraWidth() );
-      bottom = QMAX( bottom, top + cell->extraHeight() );
-    }
-  }
-
-  // Force redraw
-  QPointArray arr( 4 );
-  arr.setPoint( 0, int( left ),  int( top ) );
-  arr.setPoint( 1, int( right ), int( top ) );
-  arr.setPoint( 2, int( right ), int( bottom ) );
-  arr.setPoint( 3, int( left ),  int( bottom ) );
-
-  // ##### Hmmmm, why not draw the cell directly ?
-  // That will be faster.
-  emit sig_polygonInvalidated( arr );
-
-  cell->clearDisplayDirtyFlag();
+  setRegionPaintDirty(cellArea);
 }
 
 void KSpreadSheet::updateCell( KSpreadCell */*cell*/, int _column, int _row )
@@ -7041,11 +7003,6 @@ void KSpreadSheet::updateCell( KSpreadCell */*cell*/, int _column, int _row )
   QRect cellArea(QPoint(_column, _row), QPoint(_column, _row));
 
   updateCellArea(cellArea);
-}
-
-void KSpreadSheet::emit_polygonInvalidated( const QPointArray& arr )
-{
-    emit sig_polygonInvalidated( arr );
 }
 
 void KSpreadSheet::emit_updateRow( RowLayout *_layout, int _row )
@@ -7130,7 +7087,8 @@ void KSpreadSheet::insertChild( KSpreadChild *_child )
     // m_lstChildren.append( _child );
     m_pDoc->insertChild( _child );
 
-    emit sig_polygonInvalidated( _child->framePointArray() );
+    /* TODO - handle this */
+//    emit sig_polygonInvalidated( _child->framePointArray() );
 }
 
 void KSpreadSheet::deleteChild( KSpreadChild* child )
@@ -7141,7 +7099,8 @@ void KSpreadSheet::deleteChild( KSpreadChild* child )
 
     delete child;
 
-    emit sig_polygonInvalidated( polygon );
+    /** TODO - handle this */
+//    emit sig_polygonInvalidated( polygon );
 }
 
 void KSpreadSheet::changeChildGeometry( KSpreadChild *_child, const QRect& _rect )
@@ -7825,6 +7784,17 @@ void KSpreadSheet::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
 
 void KSpreadSheet::setRegionPaintDirty(QRect region)
 {
+  QValueList<QRect>::iterator it = m_paintDirtyList.begin();
+
+  while (it != m_paintDirtyList.end())
+  {
+    if ((*it).contains(region))
+    {
+      return;
+    }
+    it++;
+  }
+
   m_paintDirtyList.append(region);
 }
 

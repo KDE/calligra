@@ -985,15 +985,9 @@ public:
      * used to refresh cells when you make redodelete
      */
     void refreshView(const QRect& rect);
-    /**
-     * Repaint cells in @p rect.
-     * Called by KSpreadUndoCellLayout::undo() and KSpreadUndoCellLayout::redo()
-     */
-    void updateView(const QRect& rect);
 
     void emit_updateRow( RowLayout *_layout, int _row );
     void emit_updateColumn( ColumnLayout *_layout, int _column );
-    void emit_polygonInvalidated( const QPointArray& );
 
     /**
      * Needed for @ref KSpreadCell::leftBorderPen and friends, since we can not
@@ -1158,7 +1152,7 @@ protected:
      * @param _page_range QRect defines a rectangle of cells which should be painted
      *                    to the device 'prn'.
      * @view KoRect defines the sourrounding rectangle which is the printing frame.
-     *                    
+     *
      * @param _childOffset KoPoint used to calculate the correct position of children,
      *                    if there are repeated columns/rows
      */

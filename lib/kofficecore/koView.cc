@@ -592,7 +592,7 @@ void KoView::endOperation()
    canvas()->setUpdatesEnabled(TRUE);
    d->m_inOperation = false;
 
-   canvas()->update();
+//   canvas()->update();
 }
 
 KoMainWindow * KoView::shell() const

@@ -380,6 +380,7 @@ void KSpreadCell::unobscure( KSpreadCell *cell )
 
 void KSpreadCell::clicked( KSpreadCanvas *_canvas )
 {
+
   if ( m_style == KSpreadCell::ST_Normal )
     return;
   else if ( m_style == KSpreadCell::ST_Select )
@@ -1859,16 +1860,15 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
     if ( painter.device()->isExtDev() || !drawCursor )
       selected = false;
   }
-  //Doing a calc() here is expensive and currently leads to crashes in some cases (circular)
-  //Please explain, where and why this is needed, if you reenable it (Philipp)
-  //calc();
 
   // Need to make a new layout ?
+
+  /* TODO - this needs to be taken out eventually - it is done in canvas::paintUpdates */
   if ( testFlag(Flag_LayoutDirty) )
     makeLayout( painter, cellRef.x(), cellRef.y() );
 
-  KoRect r2( coordinate.x(), coordinate.y(), cellRect.width(), cellRect.height() );
-  if ( !r2.intersects( rect ) )
+
+  if ( !cellRect.intersects( rect ) )
   {
     clearFlag( Flag_PaintingCell );
     return;
@@ -2036,7 +2036,7 @@ void KSpreadCell::paintBackground( QPainter& painter, const KoRect &cellRect,
   QColorGroup defaultColorGroup = QApplication::palette().active();
 
   QRect zoomedCellRect = table()->doc()->zoomRect( cellRect );
-  /* 
+  /*
      If this is not the KS_rowMax and/or KS_colMax, then we reduce width and/or height by one.
      This is due to the fact that the right/bottom most pixel is shared with the
      left/top most pixel of the following cell.
@@ -2046,12 +2046,12 @@ void KSpreadCell::paintBackground( QPainter& painter, const KoRect &cellRect,
    if( cellRef.x() != KS_colMax )
    {
      zoomedCellRect.setWidth( zoomedCellRect.width() - 1 );
-   } 
+   }
    if( cellRef.y() != KS_rowMax )
    {
      zoomedCellRect.setHeight( zoomedCellRect.height() - 1 );
-   } 
-  
+   }
+
   // Determine the correct background color
   if( selected )
   {
@@ -2097,7 +2097,7 @@ void KSpreadCell::paintBackground( QPainter& painter, const KoRect &cellRect,
 }
 
 void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
-                                       const KoRect &cellRect, 
+                                       const KoRect &cellRect,
                                        const QPoint &cellRef )
 {
   KSpreadDoc* doc = table()->doc();
@@ -2283,7 +2283,7 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
 
 void KSpreadCell::paintCommentIndicator( QPainter& painter,
-                                         const KoRect &cellRect, 
+                                         const KoRect &cellRect,
                                          const QPoint &cellRef )
 {
   KSpreadDoc* doc = table()->doc();
@@ -2315,7 +2315,7 @@ void KSpreadCell::paintFormulaIndicator( QPainter& painter,
                                          const KoRect &cellRect )
 {
   if( isFormula() &&
-      m_pTable->getShowFormulaIndicator() && 
+      m_pTable->getShowFormulaIndicator() &&
       cellRect.width() > 10.0 &&
       cellRect.height() > 10.0 )
   {
@@ -2341,7 +2341,7 @@ void KSpreadCell::paintMoreTextIndicator( QPainter& painter,
   //show  a red triangle when it's not possible to write all text in cell
   //don't print the red triangle if we're printing
 
-  if( testFlag( Flag_CellTooShort ) && 
+  if( testFlag( Flag_CellTooShort ) &&
       !painter.device()->isExtDev() &&
       cellRect.height() > 4.0  &&
       cellRect.width() > 4.0 )
@@ -2670,7 +2670,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   right_pen.setWidth( right_penWidth );
   top_pen.setWidth( top_penWidth );
   bottom_pen.setWidth( bottom_penWidth );
-  
+
   if ( left_pen.style() != Qt::NoPen && paintLeft)
   {
     int top = ( QMAX( 0, -1 + top_penWidth ) ) / 2 +
@@ -2779,7 +2779,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
   //
   QPen vert_pen, horz_pen;
   int vert_penWidth, horz_penWidth;
-  
+
   // Fix the borders which meet at the top left corner
   vert_pen = leftBorderPen( cellRef.x(), cellRef.y() - 1 );
   vert_penWidth = QMAX( 1, doc->zoomItX( vert_pen.width() ) );
@@ -2918,7 +2918,7 @@ void KSpreadCell::paintCellBorders( QPainter& painter, const KoRect& rect,
 }
 
 void KSpreadCell::paintCellDiagonalLines( QPainter& painter,
-                                          const KoRect &cellRect, 
+                                          const KoRect &cellRect,
                                           const QPoint &cellRef )
 {
   if ( !isObscuringForced() )
