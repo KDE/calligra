@@ -12,6 +12,7 @@
 #include <qdom.h>
 
 class TKColorPanel;
+class TKSelectColorActionPrivate;
 
 class TKColorPopupMenu : public KPopupMenu
 { Q_OBJECT
@@ -33,17 +34,16 @@ public:
     Color
   };
 
-  TKSelectColorAction( const QString& text, Type type, QObject* parent, const char* name );
+  TKSelectColorAction( const QString& text, Type type, QObject* parent, const char* name, bool menuDefaultColor=false);
   TKSelectColorAction( const QString& text, Type type,
                        QObject* receiver, const char* slot,
-                       QObject* parent, const char* name );
+                       QObject* parent, const char* name,bool menuDefaultColor=false );
 
   virtual ~TKSelectColorAction();
 
   QColor color() const { return m_pCurrentColor; }
 
   KPopupMenu* popupMenu() { return m_pMenu; }
-
 
 public slots:
   void setCurrentColor( const QColor& );
@@ -52,12 +52,14 @@ public slots:
 
 signals:
   void colorSelected( const QColor& );
+  void sig_defaultColor();
 
 protected slots:
   void selectColorDialog();
   void panelColorSelected( const QColor& );
   void panelReject();
   virtual void slotActivated();
+  void defaulColor();
 
 protected:
   void init();
@@ -74,7 +76,6 @@ protected:
   QColor m_pCurrentColor;
 
 private:
-  class TKSelectColorActionPrivate;
   TKSelectColorActionPrivate *d;
 };
 /****************************************************************************************/

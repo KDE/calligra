@@ -23,9 +23,21 @@ void TKColorPopupMenu::updateItemSize()
   styleChange(style());
 }
 /****************************************************************************************/
-TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, QObject* parent, const char* name )
+class TKSelectColorActionPrivate
+{
+public:
+  TKSelectColorActionPrivate()
+  {
+  }
+  bool defaultColorMenu;
+};
+
+
+TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, QObject* parent, const char* name, bool menuDefaultColor )
 : TKAction(parent,name)
 {
+    d=new TKSelectColorActionPrivate();
+    d->defaultColorMenu=menuDefaultColor;
   setText(text);
   m_type = type;
   init();
@@ -33,9 +45,11 @@ TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, QObjec
 
 TKSelectColorAction::TKSelectColorAction( const QString& text, Type type,
                                           QObject* receiver, const char* slot,
-                                          QObject* parent, const char* name )
+                                          QObject* parent, const char* name, bool menuDefaultColor)
 : TKAction(parent,name)
 {
+    d=new TKSelectColorActionPrivate();
+    d->defaultColorMenu=menuDefaultColor;
   setText(text);
   m_type = type;
   connect( this, SIGNAL( activated() ), receiver, slot );
@@ -79,6 +93,11 @@ void TKSelectColorAction::init()
     case Color:
       break;
   }
+  if(d->defaultColorMenu)
+  {
+      m_pMenu->insertSeparator();
+      m_pMenu->insertItem(i18n("Default Color"),this,SLOT(defaulColor()));
+  }
 
   connect(m_pStandardColor,SIGNAL(sizeChanged()),m_pMenu,SLOT(updateItemSize()));
   connect(m_pRecentColor,SIGNAL(sizeChanged()),m_pMenu,SLOT(updateItemSize()));
@@ -95,6 +114,11 @@ void TKSelectColorAction::initToolBarButton(TKToolBarButton* b)
   b->setDelayedPopup( popupMenu() );
   updatePixmap(b);
   updatePixmap();
+}
+
+void TKSelectColorAction::defaulColor()
+{
+    emit sig_defaultColor();
 }
 
 void TKSelectColorAction::updatePixmap()
