@@ -189,17 +189,17 @@ KexiPropertyEditor::showDefaultsButton( bool show )
 {
 	int y = viewportToContents(QPoint(0, itemRect(m_editItem).y())).y();
 	QRect geometry(columnWidth(0), y, columnWidth(1), m_editItem->height());
+	m_defaults->resize(geometry.height(), geometry.height());
 
 	if (!show) {
 		if (m_currentEditor->leavesTheSpaceForRevertButton()) {
-			geometry.setWidth(geometry.width()-geometry.height());
+			geometry.setWidth(geometry.width()-m_defaults->width());
 		}
 		m_currentEditor->resize(geometry.width(), geometry.height());
 		m_defaults->hide();
 		return;
 	}
 
-	m_defaults->resize(geometry.height(), geometry.height());
 	QPoint p = contentsToViewport(QPoint(0, geometry.y()));
 	m_defaults->move(geometry.x() + geometry.width() - m_defaults->width(), p.y());
 	m_currentEditor->move(m_currentEditor->x(), p.y());
@@ -321,7 +321,9 @@ KexiPropertyEditor::slotColumnSizeChanged(int section, int, int newS)
 			if(m_defaults->isVisible())
 				m_currentEditor->resize(newS - m_defaults->width(), m_currentEditor->height());
 			else
-				m_currentEditor->resize(newS, m_currentEditor->height());
+				m_currentEditor->resize(
+					newS-(m_currentEditor->leavesTheSpaceForRevertButton()?m_defaults->width():0),
+					m_currentEditor->height());
 		}
 	}
 }
@@ -336,7 +338,9 @@ KexiPropertyEditor::slotColumnSizeChanged(int section)
 		if(m_defaults->isVisible())
 			m_currentEditor->resize(columnWidth(1) - m_defaults->width(), m_currentEditor->height());
 		else
-			m_currentEditor->resize(columnWidth(1), m_currentEditor->height());
+			m_currentEditor->resize(
+				columnWidth(1)-(m_currentEditor->leavesTheSpaceForRevertButton()?m_defaults->width():0),
+				m_currentEditor->height());
 	}
 }
 
@@ -430,10 +434,15 @@ KexiPropertyEditor::resizeEvent(QResizeEvent *ev)
 		QRect r = itemRect(m_editItem);
 		if(r.y()) // r.y() == 0 if the item is not visible on the screen
 			m_defaults->move(r.x() + r.width() - m_defaults->width(), r.y());
-		if(m_currentEditor)
-			m_currentEditor->resize(columnWidth(1) - m_defaults->width(), m_currentEditor->height());
+//		if(m_currentEditor)
+//			m_currentEditor->resize(columnWidth(1) - m_defaults->width(), m_currentEditor->height());
 	}
-	
+
+	if(m_currentEditor) {
+		m_currentEditor->resize(
+			columnWidth(1)-((m_currentEditor->leavesTheSpaceForRevertButton()||m_defaults->isVisible()) ? m_defaults->width() : 0),
+			m_currentEditor->height());
+	}
 }
 
 KexiPropertyEditor::~KexiPropertyEditor()
