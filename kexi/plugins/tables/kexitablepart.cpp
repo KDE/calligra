@@ -51,10 +51,27 @@ KexiTablePart::KexiTablePart(QObject *parent, const char *name, const QStringLis
  : KexiPart::Part(parent, name, l)
 {
 	kdDebug() << "KexiTablePart::KexiTablePart()" << endl;
+	m_names["instance"] = i18n("Table");
+//	m_names["new"] = i18n("New Table...");
 }
 
 KexiTablePart::~KexiTablePart()
 {
+}
+
+void KexiTablePart::initPartActions(KActionCollection *col)
+{
+//this is automatic? -no
+//create child guicilent: guiClient()->setXMLFile("kexidatatableui.rc");
+
+	kdDebug()<<"INIT ACTIONS***********************************************************************"<<endl;
+	//TODO
+}
+
+void KexiTablePart::initInstanceActions( KActionCollection *col )
+{
+	//TODO
+	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), col, "tablepart_filter");
 }
 
 #if 0
@@ -99,11 +116,10 @@ KexiTablePart::createInstance(KexiMainWindow *win, const KexiPart::Item &item)
 	return t;
 }
 
-
-QString KexiTablePart::instanceName() const
+/*QString KexiTablePart::instanceName() const
 {
 	return i18n("Table");
-}
+}*/
 
 /*moved to Part:
 void

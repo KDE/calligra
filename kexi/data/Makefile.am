@@ -27,7 +27,8 @@ endif
 
 rcdir = $(kde_datadir)/kexi
 rc_DATA = kexiui.rc kexiformeditorui.rc kexiquerydesignerui.rc kexiquerypartui.rc \
-	kexitablepartui.rc kexirelationhandlerui.rc kexiformpartui.rc kexitableview.rc \
+	kexitablepartui.rc kexitablepartinstui.rc \
+	kexirelationhandlerui.rc kexiformpartui.rc kexitableview.rc \
 	kexirelationsview.rc kexikugarhandlerui.rc kexidatatableui.rc $(scriptrc)
 
 kde_conf_DATA = kexirc

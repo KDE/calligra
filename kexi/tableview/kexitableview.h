@@ -52,7 +52,7 @@ class KexiTableRM;
 class KexiTableItem;
 class KexiTableEdit;
 class KexiTableViewPrivate;
-//class KexiTableList;
+class KActionCollection;
 
 /*
 	this class provides a tablewidget ;)
@@ -65,6 +65,8 @@ public:
 	
 	KexiTableView(KexiTableViewData* data=0, QWidget* parent=0, const char* name=0);
 	~KexiTableView();
+
+	virtual void initActions(KActionCollection *col);
 
 	KexiTableViewData *data() const { return m_data; }
 

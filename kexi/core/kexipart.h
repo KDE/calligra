@@ -22,9 +22,11 @@
 #define KEXIPART_H
 
 #include <qobject.h>
+#include <qmap.h>
 
 class KexiMainWindow;
 class KexiDialogBase;
+class KActionCollection;
 
 namespace KexiPart
 {
@@ -46,28 +48,42 @@ class KEXICORE_EXPORT Part : public QObject
 
 		KexiDialogBase* execute(KexiMainWindow *win, const KexiPart::Item &item);
 
+		/*! i18n'd iunstance name usable for displaying in gui.
+		 @todo move this to Info class when the name could be moved as localised property 
+		 to service's .desktop file. */
+		QString instanceName() const { return m_names["instance"]; }
+		
+		inline Info *info() const { return m_info; }
+
+		inline GUIClient *guiClient() const { return m_guiClient; }
+
+		inline GUIClient *instanceGuiClient() const { return m_instanceGuiClient; }
+
+	protected:
 		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item) = 0;
 
 		//! Creates GUICLient for this part, attached to \a win
 		//! This method is called from KexiMainWindow
-		GUIClient* createGUIClient(KexiMainWindow *win);
+		void createGUIClient(KexiMainWindow *win);
 
-		/*! i18n'd iunstance name usable for displaying in gui.
-		 @todo move this to Info class when the name could be moved as localised property 
-		 to service's .desktop file. */
-		virtual QString instanceName() const = 0;
-		
-		Info		*info() { return m_info; }
+		virtual void initPartActions( KActionCollection *col ) {};
+		virtual void initInstanceActions( KActionCollection *col ) {};
 
+		inline void setInfo(Info *info) { m_info = info; }
 
-	protected:
-		friend class Manager;
-
-
-		void		setInfo(Info *info) { m_info = info; }
+		//! Set of i18n'd action names for, initialised on KexiPart::Part subclass ctor
+		//! The names are useful because the same action can have other name for each part
+		//! E.g. "New table" vs "New query" can have different forms for some languages...
+		QMap<QString,QString> m_names;
 
 	private:
-		Info	*m_info;
+		Info *m_info;
+		GUIClient *m_guiClient;
+		GUIClient *m_instanceGuiClient;
+
+	friend class Manager;
+	friend class KexiMainWindow;
+	friend class GUIClient;
 };
 
 }

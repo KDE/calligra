@@ -30,8 +30,7 @@ KexiActionProxy::KexiActionProxy(KexiMainWindow *main, QObject *receiver)
  , m_signal_parent( new QObject() )
 {
 	m_signals.setAutoDelete(true);
-	;
-
+	m_main->plugActionProxy( this );
 }
 
 KexiActionProxy::~KexiActionProxy()
@@ -65,7 +64,7 @@ void KexiMainWindow::plugAction(KexiActionProxy *proxy, const char *action_name)
 
 void KexiActionProxy::plugAction(const char *action_name, const char *slot)
 {
-	m_main->plugAction( this, action_name );
+//	m_main->plugActionProxy( this, action_name );
 	QPair<QSignal*,bool> *p = new QPair<QSignal*,bool>( new QSignal(m_signal_parent), true );
 	p->first->connect( m_receiver, slot );
 	m_signals.insert(action_name, p);

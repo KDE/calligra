@@ -50,7 +50,7 @@ class KEXICORE_EXPORT KexiActionProxy
 		QGuardedPtr<QObject> m_receiver;
 		QAsciiDict< QPair<QSignal*,bool> > m_signals;
 
-		QObject *m_signal_parent;
+		QObject *m_signal_parent; //!< it's just to have common parent for owned signals
 	friend class KexiMainWindow;
 };
 

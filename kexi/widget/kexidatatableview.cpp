@@ -24,12 +24,14 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kaction.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 
 #include "kexitableheader.h"
 #include "kexidatatableview.h"
+
 
 KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name)
  : KexiTableView(0, parent, name)
@@ -44,16 +46,27 @@ KexiDataTableView::KexiDataTableView(QWidget *parent, const char *name, KexiDB::
 	setData(cursor);
 }
 
+KexiDataTableView::~KexiDataTableView()
+{
+}
+
 void
 KexiDataTableView::init()
 {
 	m_cursor = 0;
+
 //	m_maxRecord = 0;
 //	m_records = 0;
 //	m_first = false;
 
 //	connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(slotMoving(int)));
 //	connect(verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotMoving(int)));
+}
+
+void KexiDataTableView::initActions(KActionCollection *col)
+{
+	KexiTableView::initActions(col);
+	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), col, "tablepart_filter");
 }
 
 bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
@@ -317,9 +330,5 @@ KexiDataTableView::recordInsertFinished(KexiDBUpdateRecord *ur)
 	kdDebug() << "KexiDataTableView::recordInsertFinished(): end" << endl;
 }
 #endif
-
-KexiDataTableView::~KexiDataTableView()
-{
-}
 
 #include "kexidatatableview.moc"

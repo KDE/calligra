@@ -23,6 +23,7 @@
 #include <qapplication.h>
 #include <qfile.h>
 #include <qtimer.h>
+#include <qobjectlist.h>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -39,6 +40,7 @@
 #include <kglobalsettings.h>
 
 #include "kexibrowser.h"
+#include "kexiactionproxy.h"
 #include "kexidialogbase.h"
 #include "kexipartmanager.h"
 #include "kexipart.h"
@@ -70,16 +72,27 @@ class KexiMainWindow::Private
 #endif
 		KexiBrowser *nav;
 		KexiDialogDict dialogs;
-		KXMLGUIClient *curDialogGUIClient;
+		KXMLGUIClient *curDialogGUIClient, *closedDialogGUIClient;
 		QGuardedPtr<KexiDialogBase> curDialog;
 
+//		QMap< QPair<QObject*,const char*>, KexiActionProxy*> actionProxies;
+//		QMap<QCString, KexiActionProxy*> actionProxies;
+		QMap<QObject*, KexiActionProxy*> actionProxies;
+
+		QAsciiDict<QPopupMenu> popups; //list of menu popups
+
 		QString appCaption; //<! original application's caption
+
 		//! project menu
 		KAction *action_save, *action_save_as, *action_close,
 		 *action_project_properties;
 		KActionMenu *action_open_recent, *action_show_other;
 		KAction *action_open_recent_more;
 		int action_open_recent_more_id;
+
+		//! edit menu
+		KAction *action_edit_remove, 
+			*action_edit_cut, *action_edit_copy, *action_edit_paste;
 		// view menu
 		KAction *action_view_nav;
 #ifndef KEXI_NO_CTXT_HELP
@@ -88,6 +101,8 @@ class KexiMainWindow::Private
 
 		KMdiToolViewAccessor* navToolWindow;
 
+		QWidget *focus_before_popup;
+
 		bool block_KMdiMainFrm_eventFilter : 1;
 	Private()
 		: dialogs(401)
@@ -95,8 +110,10 @@ class KexiMainWindow::Private
 		navToolWindow=0;
 		prj = 0;
 		curDialogGUIClient=0;
+		closedDialogGUIClient=0;
 		curDialog=0;
 		block_KMdiMainFrm_eventFilter=false;
+		focus_before_popup=0;
 	}
 };
 
@@ -132,9 +149,19 @@ KexiMainWindow::KexiMainWindow()
 //	connect(d->prj, SIGNAL(dbAvailable()), this, SLOT(initBrowser()));
 
 	restoreSettings();
-	
+
+	{//store menu popups list
+		QObjectList *l = queryList( "QPopupMenu" );
+		for (QObjectListIt it( *l ); it.current(); ++it ) {
+			kdDebug() << "name=" <<it.current()->name() << " cname="<<it.current()->className()<<endl;
+			d->popups.insert(it.current()->name(), static_cast<QPopupMenu*>(it.current()));
+		}
+		delete l;
+	}
+
 	if (!isFakingSDIApplication()) {
-		QPopupMenu *menu = (QPopupMenu*) child( "window", "KPopupMenu" );
+//		QPopupMenu *menu = (QPopupMenu*) child( "window", "KPopupMenu" );
+		QPopupMenu *menu = d->popups["window"];
 		unsigned int count = menuBar()->count();
 		if (menu)
 			setWindowMenu(menu);
@@ -166,6 +193,11 @@ void KexiMainWindow::setWindowMenu(QPopupMenu *menu)
 	QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
 }
 
+QPopupMenu* KexiMainWindow::findPopupMenu(const char *popupName)
+{
+	return d->popups[popupName];
+}
+
 void
 KexiMainWindow::initActions()
 {
@@ -194,10 +226,26 @@ KexiMainWindow::initActions()
 	d->action_close->setWhatsThis(i18n("Close the current project."));
 	KStdAction::quit( this, SLOT(slotQuit()), actionCollection(), "quit");
 
+	//EDIT MENU
+	d->action_edit_cut = KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
+	d->action_edit_copy = KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
+	d->action_edit_paste = KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
+	d->action_edit_remove = new KAction(i18n("Remove"), SmallIcon("button_cancel"), 0, this, 
+		SLOT(slotEditRemove()), actionCollection(), "edit_remove");
+
+	//VIEW MENU
+	d->action_view_nav = new KAction(i18n("Navigator"), "", ALT + Key_1,
+		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
+
+	new KAction(i18n("From File..."), "fileopen", 0, 
+		this, SLOT(slotImportFile()), actionCollection(), "import_file");
+	new KAction(i18n("From Server..."), "server", 0, 
+		this, SLOT(slotImportServer()), actionCollection(), "import_server");
+
 	//SETTINGS MENU
 	setStandardToolBarMenuEnabled( true );
-    KStdAction::keyBindings(this, SLOT( slotConfigureKeys() ), actionCollection() );
-    KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection() );
+	KStdAction::keyBindings(this, SLOT( slotConfigureKeys() ), actionCollection() );
+	KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection() );
 	(void*) KStdAction::preferences(this, SLOT(slotShowSettings()), actionCollection());
 
 	d->action_show_other = new KActionMenu(i18n("Other"), 
@@ -213,27 +261,69 @@ KexiMainWindow::initActions()
 	 actionCollection(), "kexi_settings");
 	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
 
-	//VIEW MENU
-	d->action_view_nav = new KAction(i18n("Navigator"), "", ALT + Key_1,
-		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
-
-	new KAction(i18n("From File..."), "fileopen", 0, 
-		this, SLOT(slotImportFile()), actionCollection(), "import_file");
-	new KAction(i18n("From Server..."), "server", 0, 
-		this, SLOT(slotImportServer()), actionCollection(), "import_server");
-
-
 	invalidateActions();
 }
 
 void KexiMainWindow::invalidateActions()
 {
-	stateChanged("project_opened",d->prj ? StateNoReverse : StateReverse);
-	
-//	d->action_show_nav->setEnabled(d->prj && d->nav);
+	invalidateProjectWideActions();
+	invalidateSharedActions();
+}
+
+void KexiMainWindow::invalidateSharedActions()
+{
+	//TODO: enabling is more complex...
+/*	d->action_edit_cut->setEnabled(true);
+	d->action_edit_copy->setEnabled(true);
+	d->action_edit_paste->setEnabled(true);*/
+
+//	isActionAvailable
+	QWidget * w = focusWidget();
+	if (w) {
+		KexiActionProxy *p = d->actionProxies[ w ];
+		setActionAvailable("edit_remove",p && p->isAvailable("edit_remove"));
+	}
+	/*d->action_edit_remove->setEnabled(true);
+	}
+	if (d->nav && d->nav->hasFocus()) {
+		d->action_edit_remove->setEnabled( d->nav->actionAvailable("edit_remove") );
+	}*/
+}
+
+void KexiMainWindow::invalidateProjectWideActions()
+{
+//	stateChanged("project_opened",d->prj ? StateNoReverse : StateReverse);
+
+	d->action_save->setEnabled(d->prj);
+	d->action_save_as->setEnabled(d->prj);
+	d->action_project_properties->setEnabled(d->prj);
+	d->action_close->setEnabled(d->prj);
+	d->action_view_nav->setEnabled(d->prj);
+
 #ifndef KEXI_NO_CTXT_HELP
 	d->action_show_helper->setEnabled(d->prj);
 #endif
+}
+
+void KexiMainWindow::setActionAvailable(const char *name, bool avail)
+{
+	KAction *act = actionCollection()->action(name);
+	if (!act)
+		return;
+	act->setEnabled(avail);
+}
+
+/*bool KexiMainWindow::isActionAvailable(const char *action_name)
+{
+//	KexiActionProxy *proxy = d->actionProxies[ QCString(action_name)+QCString().setNum((ulong)proxy->receiver()) ];
+	KexiActionProxy *proxy = d->actionProxies[ QCString(action_name)+QCString().setNum((ulong)proxy->receiver()) ];
+	return proxy && proxy->isAvailable(action_name);
+}*/
+
+void KexiMainWindow::plugActionProxy(KexiActionProxy *proxy)//, const char *action_name)
+{
+//	d->actionProxies[ QCString(action_name)+QCString().setNum((ulong)proxy->receiver()) ] = proxy;
+	d->actionProxies[ proxy->receiver() ] = proxy;
 }
 
 void KexiMainWindow::startup(KexiProjectData *projectData)
@@ -414,6 +504,7 @@ KexiMainWindow::initNavigator()
 		d->nav->installEventFilter(this);
 		d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
 		connect(d->nav,SIGNAL(executeItem(KexiPart::Item*)),this,SLOT(executeObject(KexiPart::Item*)));
+//		connect(d->nav,SIGNAL(actionAvailable(const char*,bool)),this,SLOT(actionAvailable(const char*,bool)));
 
 	}
 	if(d->prj->isConnected()) {
@@ -434,7 +525,10 @@ KexiMainWindow::initNavigator()
 
 			//load part - we need this to have GUI merged with part's actions
 			//js: FUTURE TODO - don't do that when DESIGN MODE is OFF 
-			(void)Kexi::partManager().part(it);
+			KexiPart::Part *p=Kexi::partManager().part(it);
+			if (!p) {
+				//TODO: js - OPTIONALLY: show error
+			}
 
 			//lookup project's objects (part items)
 			//js: FUTURE TODO - don't do that when DESIGN MODE is OFF 
@@ -455,7 +549,7 @@ KexiMainWindow::initNavigator()
 
 void KexiMainWindow::slotPartLoaded(KexiPart::Part* p)
 {
-	new KexiPart::GUIClient(this, p, p->instanceName());
+	p->createGUIClient(this); //new KexiPart::GUIClient(this, p, p->instanceName());
 }
 
 //! internal
@@ -607,13 +701,22 @@ KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
 	kdDebug() << "KexiMainWindow::activeWindowChanged() to = " << (dlg ? dlg->caption() : "") << endl;
 
-
 	KXMLGUIClient *client;
 
 	if (!dlg)
 		client=0;
 	else if ( dlg->isRegistered()) {
 		client=dlg->guiClient();
+		if (d->closedDialogGUIClient) {
+			if (client!=d->closedDialogGUIClient) {
+				//ooh, there is a client which dialog is already closed -- and we don't want it
+				guiFactory()->removeClient(d->closedDialogGUIClient);
+				d->closedDialogGUIClient=0;
+			}
+			else {
+//				d->closedDialogGUIClient=0;
+			}
+		}
 		if (client!=d->curDialogGUIClient) {
 			kdDebug()<<"KexiMainWindow::activeWindowChanged(): old gui client:"<<d->curDialogGUIClient<<" new gui client: "<<client<<endl;
 			if (d->curDialogGUIClient) {
@@ -621,7 +724,13 @@ KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 				d->curDialog->detachFromGUIClient();
 			}
 			if (client) {
-				guiFactory()->addClient(client);
+				if (d->closedDialogGUIClient) {
+					//ooh, there is a client which dialog is already closed -- BUT it is the same client as our
+					//so: give up
+				}
+				else {
+					guiFactory()->addClient(client);
+				}
 				dlg->attachToGUIClient();
 			}
 		} else {
@@ -636,7 +745,12 @@ KexiMainWindow::activeWindowChanged(KMdiChildView *v)
 	bool update_dlg_caption = dlg && dlg!=(KexiDialogBase*)d->curDialog && dlg->mdiParent();
 
 	d->curDialogGUIClient=client;
+	bool dialogChanged = (KexiDialogBase*)d->curDialog!=dlg;
 	d->curDialog=dlg;
+
+	if (dialogChanged) {
+		invalidateSharedActions();
+	}
 
 	//update caption...
 	if (update_dlg_caption) {
@@ -828,6 +942,34 @@ KexiMainWindow::slotProjectClose()
 {
 }
 
+void KexiMainWindow::slotEditCut()
+{
+}
+
+void KexiMainWindow::slotEditCopy()
+{
+}
+
+void KexiMainWindow::slotEditPaste()
+{
+}
+
+void KexiMainWindow::slotEditRemove()
+{
+	QWidget *w = focusWidget();
+	if (!w)
+		return;
+
+//	KexiActionProxy * proxy = d->actionProxies[ QPair<QObject*,const char *>(w, "edit_remove") ];
+	KexiActionProxy * proxy = d->actionProxies[ w ]; //QCString("edit_remove")+QCString().setNum((ulong)w) ];
+	if (!proxy)
+		return;
+	proxy->activateAction("edit_remove");
+/*	if (d->nav->hasFocus()) {
+		//TODO
+	}*/
+}
+
 void KexiMainWindow::slotImportFile() {
 }
 
@@ -902,8 +1044,18 @@ KexiMainWindow::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 	if (d->curDialogGUIClient==client) {
 		d->curDialogGUIClient=0;
 	}
-	if (client)
-		guiFactory()->removeClient(client);
+	if (client) {
+		if (d->closedDialogGUIClient && d->closedDialogGUIClient!=client) //sanity: ouch, it is not removed yet? - do it now
+			guiFactory()->removeClient(d->closedDialogGUIClient);
+		if (d->dialogs.isEmpty()) {//now there is no dialogs - remove client RIGHT NOW!
+			d->closedDialogGUIClient=0;
+			guiFactory()->removeClient(client);
+		}
+		else {
+			//remember this - and MAYBE remove later, if needed
+			d->closedDialogGUIClient=client; 
+		}
+	}
 	KMdiMainFrm::closeWindow(pWnd, layoutTaskBar);
 }
 
@@ -923,7 +1075,7 @@ void KexiMainWindow::attachWindow(KMdiChildView *pWnd,bool bShow,bool bAutomatic
 
 bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 {
-/*	kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
+//	kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
 	if (e->type()==QEvent::KeyPress) {
 		kdDebug() << "KEY EVENT" << endl;
 	}
@@ -932,17 +1084,48 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 	}
 	if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut) {
 		kdDebug() << "Focus EVENT" << endl;
+	}
+	if (e->type()==QEvent::WindowActivate) {
+		kdDebug() << "WindowActivate EVENT" << endl;
+	}
+/*	if (e->type()==QEvent::FocusOut) {//after leaving focus from the menu, put it on prev. focused widget
+		if (static_cast<QFocusEvent*>(e)->reason()==QFocusEvent::Popup && !obj->inherits("QMenuBar")) {
+			if (static_cast<QWidget*>(obj)->hasFocus())
+				d->focus_before_popup = static_cast<QWidget*>(obj);
+		}
+		else if (obj->inherits("QMenuBar") && d->focus_before_popup) {
+			d->focus_before_popup->setFocus();
+			d->focus_before_popup=0;
+			return true;
+		}
+	}
+	if (e->type()==QEvent::WindowDeactivate) {
+		if (static_cast<QWidget*>(obj)->hasFocus())
+			d->focus_before_popup = static_cast<QWidget*>(obj);
 	}*/
+	if (e->type()==QEvent::FocusIn && (!obj->inherits("KexiDialogBase"))) {
+		invalidateSharedActions();
+	}
+
 	//keep focus in main window:
 	if (obj==d->nav) {
 //		kdDebug() << "NAV" << endl;
 		if (e->type()==QEvent::FocusIn) {
 			return true;
+		} else if (e->type()==QEvent::WindowActivate && obj==d->focus_before_popup) {
+			d->focus_before_popup=0;
+			d->nav->setFocus();
+			return true;
 		} else if (e->type()==QEvent::FocusOut) {
-			//activate current child:
-			if (d->curDialog) {
-				d->curDialog->activate();
-				return true;
+			if (static_cast<QFocusEvent*>(e)->reason()==QFocusEvent::Tab) {
+				//activate current child:
+				if (d->curDialog) {
+					d->curDialog->activate();
+					return true;
+				}
+			}
+			else if (static_cast<QFocusEvent*>(e)->reason()==QFocusEvent::Popup) {
+
 			}
 		} else if (e->type()==QEvent::Hide) {
 			setFocus();

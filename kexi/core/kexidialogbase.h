@@ -20,6 +20,8 @@
 #ifndef KEXIDIALOGBASE_H
 #define KEXIDIALOGBASE_H
 
+#include "kexipartguiclient.h"
+
 #include <qguardedptr.h>
 
 #include <kmdichildview.h>
@@ -40,9 +42,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView
 		KexiDialogBase(KexiMainWindow *parent, const QString &caption);
 		~KexiDialogBase();
 		bool isRegistered();
-		virtual KXMLGUIClient* guiClient();
-		virtual void attachToGUIClient(); //JOWENN: make that protected perhaps
-		virtual void detachFromGUIClient(); //JOWENN: make that protected perhaps
+
 		void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
 
 		/*! \return main (top level) widget inside this dialog.
@@ -61,6 +61,9 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView
 		//! Kexi part used to create this window
 		inline KexiPart::Part* part() const { return m_part; }
 
+		//! Kexi part's gui client
+		inline KexiPart::GUIClient* guiClient() const { return m_part ? m_part->instanceGuiClient() : 0; }
+
 	public slots:
 //		virtual void detach();
 
@@ -68,6 +71,8 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView
 		void updateContextHelp();
 	protected:
 		void registerDialog();
+		virtual void attachToGUIClient(); //JOWENN: make that protected perhaps
+		virtual void detachFromGUIClient(); //JOWENN: make that protected perhaps
 	private:
 		KexiMainWindow *m_parentWindow;
 		bool m_isRegistered;

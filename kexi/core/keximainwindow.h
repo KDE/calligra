@@ -27,6 +27,7 @@
 class KexiProject;
 class KexiProjectData;
 class KexiBrowser;
+class KexiActionProxy;
 class KMdiChildView;
 class KexiDialogBase;
 class KToggleAction;
@@ -72,6 +73,10 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 
 		virtual bool eventFilter( QObject *obj, QEvent * e );
 
+		void plugActionProxy(KexiActionProxy *proxy); //, const char *action_name);
+
+		QPopupMenu* findPopupMenu(const char *popupName);
+
 	public slots:
 		/** Inherited from KMdiMainFrm: we need to do some tasks before child is closed */
 		virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true); 
@@ -97,9 +102,19 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		 */
 		void		storeSettings();
 		
-		/** Invalidates action availability for current appliacation state.
+		/** Invalidates availability of all actions for current application state.
 		*/
-		void		invalidateActions();
+		void invalidateActions();
+
+		/** Invalidates action availability for current application state.
+		 These actions are dependent on curently selected dialog.
+		*/
+		void invalidateSharedActions();
+
+		/** Invalidates action availability for current application state.
+		 These actions are only dependent on project availbility, not on curently selected dialog.
+		*/
+		void invalidateProjectWideActions();
 
 		/*! Opens project pointed by \a projectData, \return true on success.
 		 Application state (e.g. actions) is updated. */
@@ -149,7 +164,6 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		void		childClosed(KMdiChildView *dlg);
 
 		bool executeObject(KexiPart::Item *item);
-
 		//! for convenience
 		bool executeObject(const QString& mime, const QString& name);
 
@@ -163,6 +177,8 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		//! Shows an error message signaled by project's objects, connections, etc.
 		void showErrorMessage(const QString&,KexiDB::Object *obj);
 		void showErrorMessage(const QString &title, const QString &details = QString::null);
+
+		void setActionAvailable(const char *name, bool avail);
 
 		void slotViewNavigator();
 		void slotShowSettings();
@@ -178,6 +194,12 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		void slotProjectProperties();
 		void slotProjectClose();
 		void slotQuit();
+
+		void slotEditCut();
+		void slotEditCopy();
+		void slotEditPaste();
+		void slotEditRemove();
+
 		void slotImportFile();
 
 	private:

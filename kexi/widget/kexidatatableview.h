@@ -26,6 +26,7 @@
 
 class KexiTableItem;
 class QVariant;
+class KXMLGUIClient;
 
 namespace KexiDB {
 	class Cursor;
@@ -51,6 +52,8 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 		KexiDataTableView(QWidget *parent, const char *name, KexiDB::Cursor *cursor);
 
 		~KexiDataTableView();
+
+		virtual void initActions(KActionCollection *col);
 
 		/*! Fills table view with data using \a cursor. \return true on success.
 		*/
@@ -88,6 +91,8 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 	private:
 		//db stuff
 		KexiDB::Cursor	*m_cursor;
+
+//		KXMLGUIClient *m_guiClient;
 //		bool		m_first;
 //use m_record->database() instead:		KexiDB		*m_db;
 //js		int		m_maxRecord;

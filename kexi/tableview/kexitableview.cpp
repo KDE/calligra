@@ -73,6 +73,8 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	,m_owner(false)
 	,d( new KexiTableViewPrivate() )
 {
+//TODO:	setXMLFile("kexitableviewui.rc");
+	
 	setResizePolicy(Manual);
 	viewport()->setBackgroundMode(NoBackground);
 //	viewport()->setFocusPolicy(StrongFocus);
@@ -177,7 +179,10 @@ KexiTableView::~KexiTableView()
 	delete d;
 }
 
+void KexiTableView::initActions(KActionCollection *col)
+{
 
+}
 
 //! Setup navigator widget
 void KexiTableView::setupNavigator()

@@ -35,10 +35,14 @@ class KexiTablePart : public KexiPart::Part
 		~KexiTablePart();
 
 //		virtual void execute(KexiMainWindow *win, const KexiPart::Item &);
-		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item);
 //moved to Part:		virtual void createGUIClient(KexiMainWindow *win);
 
-		virtual QString instanceName() const;
+//		virtual QString instanceName() const;
+	protected:
+		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item);
+
+		virtual void initPartActions( KActionCollection *col );
+		virtual void initInstanceActions( KActionCollection *col );
 };
 
 #endif

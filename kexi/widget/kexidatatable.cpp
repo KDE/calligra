@@ -69,6 +69,7 @@ KexiDataTable::~KexiDataTable()
 void
 KexiDataTable::initActions()
 {
+//	m_view->initActions(guiClient()->actionCollection());
 //warning FIXME Move this to the table part
 /*
 	kdDebug()<<"INIT ACTIONS***********************************************************************"<<endl;

@@ -44,7 +44,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 		KexiDataTable(KexiMainWindow *win, KexiDB::Cursor *cursor, const QString &caption = QString::null);
 		~KexiDataTable();
 
-		void			setData(KexiDB::Cursor *cursor);
+		void setData(KexiDB::Cursor *cursor);
 
 		virtual QWidget* mainWidget();
 		KexiDataTableView* tableView() const { return m_view; }
@@ -62,7 +62,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 
 
 	private:
-		KexiDataTableView	*m_view;
+		KexiDataTableView *m_view;
 };
 
 #endif

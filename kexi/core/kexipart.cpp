@@ -33,6 +33,7 @@ using namespace KexiPart;
 
 Part::Part(QObject *parent, const char *name, const QStringList &)
 : QObject(parent, name)
+, m_guiClient(0)
 {
 	m_info = 0;
 }
@@ -41,9 +42,28 @@ Part::~Part()
 {
 }
 
-GUIClient*
-Part::createGUIClient(KexiMainWindow *win) {
-	return new GUIClient(win, this, instanceName());
+void Part::createGUIClient(KexiMainWindow *win)
+{
+	if (!m_guiClient) {
+		//create part's gui client
+		m_guiClient = new GUIClient(win, this, false);
+		//default actions for part's gui client:
+		KAction *act = new KAction(m_names["instance"]+"...", info()->itemIcon(), 0, this, 
+		SLOT(create()), this, (info()->objectName()+"part_create").latin1());
+		act->plug( win->findPopupMenu("create") );
+//		new KAction(m_names["instance"]+"...", info()->itemIcon(), 0, this, 
+//		SLOT(create()), m_guiClient->actionCollection(), (info()->objectName()+"part_create").latin1());
+		//let init specific actions for parts
+		initPartActions( m_guiClient->actionCollection() );
+		win->guiFactory()->addClient(m_guiClient); //this client is added premanently
+
+		//create part instance's gui client
+		m_instanceGuiClient = new GUIClient(win, this, true);
+		//default actions for part instance's gui client:
+		//NONE
+		//let init specific actions for part instances
+		initInstanceActions( m_instanceGuiClient->actionCollection() );
+	}
 }
 
 KexiDialogBase* Part::execute(KexiMainWindow *win, const KexiPart::Item &item)
@@ -70,14 +90,18 @@ KexiDialogBase* Part::execute(KexiMainWindow *win, const KexiPart::Item &item)
 //-------------------------------------------------------------------------
 
 
-GUIClient::GUIClient(KexiMainWindow *win, Part* part, const QString &i18nInstanceName)
+GUIClient::GUIClient(KexiMainWindow *win, Part* part, bool partInstanceClient)
  : QObject(part, part->info()->objectName().latin1()), KXMLGUIClient(win)
 {
-	new KAction(i18nInstanceName+"...", part->info()->itemIcon(), 0, this, 
-		SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").latin1());
-		setXMLFile(QString("kexi")+part->info()->objectName()+"partui.rc");
+	setXMLFile(QString("kexi")+part->info()->objectName()+"part"+(partInstanceClient?"inst":"")+"ui.rc");
 
-	win->guiFactory()->addClient(this);
+//	new KAction(part->m_names["new"], part->info()->itemIcon(), 0, this, 
+//		SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").latin1());
+
+//	new KAction(i18nInstanceName+"...", part->info()->itemIcon(), 0, this, 
+//		SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").latin1());
+
+//	win->guiFactory()->addClient(this);
 }
 
 

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="103">
+<kpartgui name="kexi" version="104">
 <MenuBar noMerge="0">
   <Menu name="file" noMerge="1">
     <text>&amp;Project</text>
@@ -33,6 +33,7 @@
   </Menu -->
   <Menu name="edit">
     <text>&amp;Edit</text>
+    <Action name="edit_remove"/>
     <DefineGroup name="edit_find"/>
     <Separator/>
     <Merge/>
@@ -101,6 +102,10 @@
   <Action name="project_new"/>
   <Action name="project_open"/>
   <Action name="project_save"/>
+  <Separator/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
 </ToolBar>
 
 <State name="project_opened">
@@ -109,6 +114,10 @@
     <Action name="project_saveas"/>
     <Action name="project_properties"/>
     <Action name="project_close"/>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="edit_paste"/>
+    <Action name="edit_remove"/>
     <Action name="view_navigator"/>
   </enable>
 </State>

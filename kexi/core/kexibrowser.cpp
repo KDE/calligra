@@ -35,13 +35,16 @@
 #include "kexidialogbase.h"
 #include "keximainwindow.h"
 
+
 //KexiBrowser::KexiBrowser(KexiMainWindow *parent, QString mime, KexiPart::Info *part )
 KexiBrowser::KexiBrowser(KexiMainWindow *parent )
  : KListView(parent,"KexiBrowser")
+ , KexiActionProxy(parent, this)
 {
-//	m_mime = mime;
-//	m_part = part;
 	m_parent = parent;
+//	m_ac = m_parent->actionCollection();
+//	KexiActionProxy ap;
+	plugAction("edit_remove",SLOT(slotRemove()));
 
 	setCaption(i18n("Navigator"));
 	setIcon(*parent->icon());
@@ -55,11 +58,13 @@ KexiBrowser::KexiBrowser(KexiMainWindow *parent )
 //	setResizeMode(QListView::LastColumn);
 
 	connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
-		SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
-	connect(this, SIGNAL(executed(QListViewItem*)), SLOT(slotExecuteItem(QListViewItem*)));
+		this, SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
+	connect(this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
 //js todo: ADD OPTION for enable this:
-//connect(this, SIGNAL(doubleClicked(QListViewItem*)), SLOT(slotExecuteItem(QListViewItem*)));
-	connect(this, SIGNAL(returnPressed(QListViewItem*)), SLOT(slotExecuteItem(QListViewItem*)));
+//connect(this, SIGNAL(doubleClicked(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
+	connect(this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotSelectionChanged(QListViewItem*)));
+	connect(this, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotClicked(QListViewItem*)));
+	connect(this, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
 
 /*	if(part)
 	{
@@ -78,6 +83,7 @@ KexiBrowser::addGroup(KexiPart::Info *info)
 //	item->setOpen(true);
 //	item->setSelectable(false);
 	m_baseItems.insert(info->mime().lower(), item);
+
 	kdDebug() << "KexiBrowser::addGroup()" << endl;
 //js: now it's executed by hand from keximainwindow:	slotItemListChanged(info);
 }
@@ -143,8 +149,13 @@ KexiBrowser::slotItemListChanged(KexiPart::Info *parent)
 #endif
 
 void
-KexiBrowser::slotContextMenu(KListView *, QListViewItem *, const QPoint &)
+KexiBrowser::slotContextMenu(KListView *list, QListViewItem *item, const QPoint &)
 {
+	if(!item)
+		return;
+//	KexiBrowserItem *bit = static_cast<KexiBrowserItem*>(item);
+//	if (bit
+
 #if 0
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(item);
 	if(!it)
@@ -210,6 +221,36 @@ KexiBrowser::slotExecuteItem(QListViewItem *vitem)
 //	info->instance()->execute(m_parent, it->name());
 	part->execute(m_parent, item);
 	*/
+}
+
+void
+KexiBrowser::slotSelectionChanged(QListViewItem* i)
+{
+	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(i);
+	bool gotitem = it && it->item();
+	setAvailable("edit_remove",gotitem);
+}
+
+void
+KexiBrowser::slotClicked(QListViewItem* i)
+{
+	//workaround for non-selectable item
+	if (!i || !static_cast<KexiBrowserItem*>(i)->item())
+		slotSelectionChanged(i);
+}
+
+/*bool KexiBrowser::actionAvailable(const char *name)
+{
+	if (qstrcmp(name,"edit_remove")==0)
+		return selectedItem() && static_cast<KexiBrowserItem*>(selectedItem())->item();
+
+	return false;
+}
+*/
+
+void KexiBrowser::slotRemove()
+{
+	kdDebug() << "KexiBrowser::slotRemove()" << endl;
 }
 
 #include "kexibrowser.moc"

@@ -1,0 +1,12 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexitablepartinst" version="1">
+
+<MenuBar>
+</MenuBar>
+
+<ToolBar name="table" fullWidth="false" noMerge="1">
+  <text>Table</text>
+  <Action name="tablepart_filter"/>
+</ToolBar>
+
+</kpartgui>

@@ -45,7 +45,6 @@ KexiDialogBase::~KexiDialogBase()
 {
 }
 
-
 void KexiDialogBase::registerDialog() {
 	m_parentWindow->registerChild(this);
 	m_isRegistered=true;
@@ -58,15 +57,16 @@ bool KexiDialogBase::isRegistered(){
 	return m_isRegistered;
 }
 
-KXMLGUIClient *KexiDialogBase::guiClient() {
-	return 0;
-}
-
 void KexiDialogBase::attachToGUIClient() {
+	if (!guiClient())
+		return;
 
 }
 
 void KexiDialogBase::detachFromGUIClient() {
+	if (!guiClient())
+		return;
+	//TODO
 }
 
 

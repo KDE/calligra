@@ -20,9 +20,9 @@
 #ifndef KEXIPARTGUICL_H
 #define KEXIPARTGUICL_H
 
-#include <kexipart.h>
+#include "kexipart.h"
 
-#include <qobject.h>
+#include <kxmlguiclient.h>
 
 class KexiMainWindow;
 class KexiDialogBase;
@@ -34,11 +34,15 @@ namespace KexiPart
 */
 class GUIClient : public QObject, public KXMLGUIClient
 {
-public:
-	GUIClient(KexiMainWindow *win, Part* part, const QString &i18nInstanceName);
-	virtual ~GUIClient() {};
+	public:
+		virtual ~GUIClient() {};
 
-	inline Part *part() { return static_cast<Part*>(QObject::parent()); }
+		inline Part *part() { return static_cast<Part*>(QObject::parent()); }
+
+	protected:
+		GUIClient(KexiMainWindow *win, Part* part, bool partInstanceClient);
+
+		friend class Part;
 };
 
 }
