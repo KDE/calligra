@@ -130,7 +130,7 @@ KWAnchor * KWTableFrameSet::createAnchor( KoTextDocument *txt, int frameNum )
     return new KWAnchor( txt, this, frameNum );
 }
 
-void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/,
+void KWTableFrameSet::createAnchors( KoTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/,
                                      bool repaint )
 {
     //kdDebug(32004) << "KWTableFrameSet::createAnchors" << endl;

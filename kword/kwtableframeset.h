@@ -541,7 +541,7 @@ public:
 protected:
     /* Overloaded methods, look for docu in kwframe.h */
     virtual void deleteAnchors();
-    virtual void createAnchors( KWTextParag * parag, int index, bool placeHolderExists = false, bool repaint = true );
+    virtual void createAnchors( KoTextParag * parag, int index, bool placeHolderExists = false, bool repaint = true );
     void addCellToArray( Cell* cell );
 
 private:
