@@ -71,6 +71,35 @@ from a combo box of recently used files.</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
+<guimenuitem>Reload</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Reloads the document.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Import...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens a document with any supported format.
+The document does not become the imported file.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Export...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Saves a document to any supported format.</action>
+The document does not become the exported file.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
 <guimenuitem>Create Template From Document...</guimenuitem>
 </menuchoice></term>
 <listitem><para>Create a &kspread; <link linkend="templates">template</link>
@@ -111,7 +140,7 @@ author.</action></para>
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Send File...</guimenuitem>
+<guimenuitem>Mail...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Send the file as an email attachment.</action></para>
 </listitem>
@@ -180,9 +209,10 @@ author.</action></para>
 <guimenu>Edit</guimenu>
 <guimenuitem>Cut</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Put selected item(s) into the clipboard.</action> If you then 
-do a <guimenuitem>Paste</guimenuitem> the item(s) will be moved from the 
-original location to the new one.
+<listitem><para><action>Put selected item(s) into the clipboard and remove
+them from the original location.</action> If you then 
+do a <guimenuitem>Paste</guimenuitem> the item(s) will be be inserted at
+the new location.
 </para></listitem>
 </varlistentry>
 
@@ -225,6 +255,29 @@ Paste</link> for more details.
 
 <varlistentry>
 <term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Paste with Insertion</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Move content of the paste area either to the right
+or down and paste item(s) from the clipboard to the selected cell(s).</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Fill</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Fills up the selected area with the values from the
+first item-set.</action> All four directions are supported. Note that the
+term "item-set" describes the first set of values seen in the fill direction.
+If the fill direction is Left then the first item-set is the last column of the
+selection.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>F</keycap></keycombo>
 </shortcut>
@@ -232,6 +285,30 @@ Paste</link> for more details.
 <guimenuitem>Find...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Find cell containing given text.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keysym>F3</keysym>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Find Next</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Find the next cell containing given text.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Shift;<keycap>F3</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Find Previous</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Find the previous cell containing given text.</action>
 </para></listitem>
 </varlistentry>
 
@@ -298,6 +375,15 @@ Validity Checking</link> for more details.
 </para></listitem>
 </varlistentry>
 
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Transform Object...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Rotate, scale or move the selected object.</action>
+</para></listitem>
+</varlistentry>
+
 </variablelist>
 </para>
 </sect1>
@@ -312,7 +398,8 @@ Validity Checking</link> for more details.
 <guimenu>View</guimenu>
 <guimenuitem>New View</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Open a new instance of &kspread;.</action>
+<listitem><para><action>Open a new instance of &kspread;
+with the same document.</action>
 </para></listitem>
 </varlistentry>
 
@@ -321,7 +408,7 @@ Validity Checking</link> for more details.
 <guimenu>View</guimenu>
 <guimenuitem>Close All Views</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Close all open instances of &kspread;.</action>
+<listitem><para><action>Close all open instances of &kspread;</action>
 </para></listitem>
 </varlistentry>
 
@@ -370,6 +457,17 @@ contains two or more views)
 <listitem><para><action>Toggle marking of printed page borders in the sheet 
 with red lines.
 </action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Show Comment Indicator</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggle marking of cell comments.</action>
+If a cell contains a comment and this option is selected, a small red triangle
+is shown in the upper right corner of the cell.
 </para></listitem>
 </varlistentry>
 
@@ -446,9 +544,18 @@ See the section
 <varlistentry>
 <term><menuchoice>
 <guimenu>Insert</guimenu>
+<guimenuitem>Special Character...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Insert a special character into the selected cell.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Insert</guimenu>
 <guimenuitem>Object...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>This feature is not yet fully implemented.</action>
+<listitem><para><action>Embed a KOffice document into the table.</action>
 </para></listitem>
 </varlistentry>
 
@@ -498,7 +605,7 @@ details.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Paper Layout...</guimenuitem>
+<guimenuitem>Page Layout...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Format printed page layout.</action>
 </para></listitem>
@@ -516,16 +623,7 @@ details.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Sheet</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Remove, hide or show worksheet.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Adjust Row and Column</guimenuitem>
+<guimenuitem>Adjust Row &amp; Column</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Set row and column sizes to show selected cell(s)
 properly.</action>
@@ -553,18 +651,62 @@ properly.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Default</guimenuitem>
+<guimenuitem>Sheet</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Set default format for selected cell(s).</action>
+<listitem><para><action>Remove, hide, show worksheet or configure
+advanced sheet properties.</action>
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Percent Format</guimenuitem>
+<guimenuitem>Style Manager...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Set percent format for selected cell(s).</action>
+<listitem><para><action>Create, Modify or delete cell format styles.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Style</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Apply a style to selected cell(s).</action>
+To manage styles use <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Style Manager...</guimenuitem>
+</menuchoice>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Create Style Form Cell...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Create a new style from the format of the
+selected cell.</action>
+To manage styles use <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Style Manager...</guimenuitem>
+</menuchoice>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Increase Indent</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Move text in selected cell(s) to the right.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Decrease Indent</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Move text in selected cell(s) to the left.</action>
 </para></listitem>
 </varlistentry>
 
@@ -585,33 +727,6 @@ cell(s).</action>
 </menuchoice></term>
 <listitem><para><action>Decrease displayed precision of numbers in selected 
 cell(s).</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Money Format</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Set money format for selected cell(s).</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Increase Indent</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Move text in selected cell(s) to the right.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Format</guimenu>
-<guimenuitem>Decrease Indent</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Move text in selected cell(s) to the left.</action>
 </para></listitem>
 </varlistentry>
 
@@ -645,20 +760,11 @@ cell(s).</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
-<guimenuitem>Sort Increasing</guimenuitem>
+<guimenuitem>Text to Columns</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Sort data in selected cells so that values are in 
-increasing order.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Data</guimenu>
-<guimenuitem>Sort Decreasing</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Sort data in selected cells so that values are in 
-decreasing order.</action>
+<listitem><para>This option attempts to interpret text in the selected cell(s) 
+as <acronym>CSV</acronym> data, placing each 
+item into a different cell in the row.
 </para></listitem>
 </varlistentry>
 
@@ -751,6 +857,16 @@ and Areas</link> for further details.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
+<guimenuitem>Subtotals...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Create different kinds of subtotals to a
+database.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Data</guimenu>
 <guimenuitem>Goal Seek</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Open the Goal Seek dialog box</action>. See
@@ -768,17 +884,6 @@ and Areas</link> for further details.
 </para></listitem>
 </varlistentry>
 
-<varlistentry>
-<term><menuchoice>
-<guimenu>Data</guimenu>
-<guimenuitem>Text to Columns</guimenuitem>
-</menuchoice></term>
-<listitem><para>This option attempts to interpret text in the selected cell(s) 
-as <acronym>CSV</acronym> data, placing each 
-item into a different cell in the row.
-</para></listitem>
-</varlistentry>
-
 </variablelist></para>
 </sect1>
 
@@ -792,6 +897,16 @@ item into a different cell in the row.
 <guimenuitem>Spelling...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Check spelling of words in the worksheet.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Protect Document</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+<action>Protect the whole document or a sheet with a password.</action>
 </para></listitem>
 </varlistentry>
 
