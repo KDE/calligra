@@ -1902,8 +1902,8 @@ void KPTextView::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, b
         var->recalc();
         cursor()->parag()->invalidate(0);
         cursor()->parag()->setChanged( true );
-
-        kpTextObject()->kPresenterDocument()->refreshMenuCustomVariable();
+        if ( var->type() == VT_CUSTOM)
+            kpTextObject()->kPresenterDocument()->refreshMenuCustomVariable();
         kpTextObject()->kPresenterDocument()->repaint( kpTextObject() );
     }
 }
