@@ -19,6 +19,7 @@
 */
 
 #undef Unsorted
+#include <kdeversion.h>
 #include <kaccel.h>
 #include <kmessagebox.h>
 #include <qclipboard.h>
@@ -89,6 +90,7 @@
 #include <kstdaccel.h>
 #include <koCommentDia.h>
 #include <koDocumentInfo.h>
+#include <kaccelgen.h>
 
 KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
@@ -606,6 +608,9 @@ void KWView::setupActions()
                                            actionCollection(), "format_style" );
     connect( actionFormatStyle, SIGNAL( activated( int ) ),
              this, SLOT( textStyleSelected( int ) ) );
+#if KDE_VERSION >= 305
+    actionFormatStyle->setRemoveAmpersandsInCombo( true );
+#endif
     updateStyleList();
 
     actionFormatDefault=new KAction( i18n( "Default Format" ), 0,
@@ -1586,14 +1591,25 @@ void KWView::showStyle( const QString & styleName )
 
 void KWView::updateStyleList()
 {
+    // Save current style - we have to assume the auto-accels won't change :}
     QString currentStyle = actionFormatStyle->currentText();
     QStringList lst;
     QPtrListIterator<KWStyle> styleIt( m_doc->styleCollection()->styleList() );
     for (; styleIt.current(); ++styleIt ) {
         lst << styleIt.current()->translatedName();
     }
-    actionFormatStyle->setItems( lst );
-    showStyle( currentStyle );
+    QStringList lstWithAccels;
+    // Generate unique accelerators for the menu items
+#if KDE_VERSION >= 305  // but only if the '&' will be removed from the combobox
+    KAccelGen::generate( lst, lstWithAccels );
+#else
+    lstWithAccels = lst;
+#endif
+    actionFormatStyle->setItems( lstWithAccels );
+    uint pos = 0;
+    for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++pos )
+        if ( (*it) == currentStyle )
+            actionFormatStyle->setCurrentItem( pos );
 }
 
 void KWView::editCut()

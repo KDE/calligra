@@ -61,8 +61,7 @@ public:
 
 
     /** Save the whole paragraph */
-    void save( QDomElement &parentElem, bool saveAnchorsFramesets = false )
-    { save( parentElem, 0, length()-2, saveAnchorsFramesets ); }
+    void save( QDomElement &parentElem, bool saveAnchorsFramesets = false );
 
     /** Save a portion of the paragraph */
     void save( QDomElement &parentElem, int from, int to, bool saveAnchorsFramesets = false );

@@ -295,6 +295,13 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
     return formatElem;
 }
 
+void KWTextParag::save( QDomElement &parentElem, bool saveAnchorsFramesets )
+{
+    // The QMAX below ensures that although we don't save the trailing space
+    // in the normal case, we do save it for empty paragraphs (#30336)
+    save( parentElem, 0, QMAX( 0, length()-2 ), saveAnchorsFramesets );
+}
+
 void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
                         int to /* default length()-2 */,
                         bool saveAnchorsFramesets /* default false */ )
