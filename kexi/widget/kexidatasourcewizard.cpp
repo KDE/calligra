@@ -43,8 +43,7 @@ KexiDataSourceWizard::KexiDataSourceWizard(KexiMainWindow *win, QWidget *parent,
 	m_fields = 0;
 	m_used = true;
 
-	if(!KexiDataSourceWizard_pic.pic)
-		KexiDataSourceWizard_pic.pic = new QPixmap(locate("data","kexi/pics/cp-wiz.png"));
+	(void)KexiDataSourceWizard::pixmap();
 
 	addPage(new KexiDSWelcome(this), "Form Wizard");
 	QWidget *wds = new KexiDSSource(win, this);
@@ -57,6 +56,8 @@ KexiDataSourceWizard::KexiDataSourceWizard(KexiMainWindow *win, QWidget *parent,
 QPixmap &
 KexiDataSourceWizard::pixmap()
 {
+	if (!KexiDataSourceWizard_pic.pic)
+		KexiDataSourceWizard_pic.pic = new QPixmap(locate("data","kexi/pics/cp-wiz.png"));
 	return *KexiDataSourceWizard_pic.pic;
 }
 
