@@ -464,10 +464,10 @@ static void SubProcessFormatOneTag(QDomNode myNode,
         // It can happen in a child of <STYLE>, just put secure values
         formatPos=0;
         formatLen=0;
-        kdDebug (30508) << "Missing formatting! Style? "
-                        << myNode.nodeName()
-                        << " = " << myNode.nodeValue()
-                        << endl;
+
+        // In syntax version 1 (KWord 0.8), the comment would be displayed for each paragraph, so do not show it.
+        if ( leader->m_syntaxVersion != 1 )
+            kdDebug (30508) << "Missing formatting for <FORMAT> (style or syntax version 1 ?)" << endl;
     }
 
     FormatData formatData(1, formatPos, formatLen);
