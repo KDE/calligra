@@ -1,3 +1,9 @@
+koffice-cvs (2.0-20000412-1.0) experimental; urgency=low
+
+  * new upstream beta version
+
+ -- Ivan E. Moore II <rkrusty@debian.org>  Fri, 12 May 2000 22:30:00 -0700
+
 koffice-cvs (2.0-20000308-1.0) experimental; urgency=low
  
   * new CVS version
