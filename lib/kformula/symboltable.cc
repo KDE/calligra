@@ -143,6 +143,7 @@ SymbolTable::SymbolTable()
     addEntry("\\bullet", static_cast<char>(183));
     addEntry("\\circ", static_cast<char>(176));
     addEntry("\\pm", static_cast<char>(177));
+    addEntry("\\cdot", static_cast<char>(215));
 
     addEntry("\\infty", static_cast<char>(165));
     addEntry("\\wp", static_cast<char>(195));
