@@ -703,11 +703,14 @@ void RTFImport::ignoreKeyword( RTFProperty * )
  */
 void RTFImport::setCodepage( RTFProperty * )
 {
+    QTextCodec* oldCodec = textCodec;
     QCString cp;
     cp.setNum( token.value );
     cp.prepend("CP");
     textCodec=QTextCodec::codecForName(cp);
     kdDebug(30515) << "\\ansicpg: asked: " << cp << " given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    if ( ! textCodec )
+        textCodec = oldCodec;
 }
 
 /**
@@ -715,8 +718,11 @@ void RTFImport::setCodepage( RTFProperty * )
  */
 void RTFImport::setMacCodepage( RTFProperty * )
 {
+    QTextCodec* oldCodec = textCodec;
     textCodec=QTextCodec::codecForName("Apple Roman");
     kdDebug(30515) << "\\mac " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    if ( ! textCodec )
+        textCodec = oldCodec;
 }
 
 /**
@@ -725,8 +731,11 @@ void RTFImport::setMacCodepage( RTFProperty * )
  */
 void RTFImport::setAnsiCodepage( RTFProperty * )
 {
+    QTextCodec* oldCodec = textCodec;
     textCodec=QTextCodec::codecForName("CP1252");
     kdDebug(30515) << "\\ansi " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    if ( ! textCodec )
+        textCodec = oldCodec;
 }
 
 /**
@@ -734,8 +743,11 @@ void RTFImport::setAnsiCodepage( RTFProperty * )
  */
 void RTFImport::setPcaCodepage( RTFProperty * )
 {
+    QTextCodec* oldCodec = textCodec;
     textCodec=QTextCodec::codecForName("IBM 850"); // Qt writes the name with a space
     kdDebug(30515) << "\\pca " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    if ( ! textCodec )
+        textCodec = oldCodec;
 }
 
 /**
@@ -743,8 +755,11 @@ void RTFImport::setPcaCodepage( RTFProperty * )
  */
 void RTFImport::setPcCodepage( RTFProperty * )
 {
+    QTextCodec* oldCodec = textCodec;
     textCodec=QTextCodec::codecForName("IBM 850"); // This is an approximation
     kdDebug(30515) << "\\pc (approximation) " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    if ( ! textCodec )
+        textCodec = oldCodec;
 }
 
 /**
