@@ -26,13 +26,18 @@
 #include <qregexp.h>
 #include <qtextstream.h>
 #include <kdebug.h>
+#include <kgenericfactory.h>
+
+#include <koFilterChain.h>
 
 #include <assert.h>
 #include <stdio.h>		// much better than iostream :)
 #include <stdarg.h>
 
 #include <mswriteimport.h>
-#include <mswriteimport.moc>
+
+typedef KGenericFactory<MSWRITE_PROJECT, KoFilter> MSWRITEImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libmswriteimport, MSWRITEImportFactory( "mswriteimport" ) );
 
 // kdDebug type functions
 //
@@ -958,8 +963,8 @@ int MSWRITE_PROJECT::imageEndWrite (void)
 }
 
 // constructor
-MSWRITE_PROJECT::MSWRITE_PROJECT (KoFilter *parent, const char *name)
-						: KoFilter(parent, name)
+MSWRITE_PROJECT::MSWRITE_PROJECT (KoFilter *, const char *, const QStringList&)
+						: KoFilter()
 {
 	pageBreak = false;
 	needAnotherParagraph = false;
@@ -983,21 +988,19 @@ MSWRITE_PROJECT::~MSWRITE_PROJECT ()
 }
 
 // front-end filter
-bool MSWRITE_PROJECT::filter (const QString &fileIn, const QString &fileOut,
-										const QString &prefixOut,
-										const QString &from, const QString &to,
-										const QString &)
+KoFilter::ConversionStatus MSWRITE_PROJECT::convert( const QCString& from, const QCString& to )
 {
 	if (to != "application/x-kword" || from != "application/x-mswrite")
-		return false;
+		return KoFilter::NotImplemented;
 
+        QString prefixOut = "tar:"; // ###### TODO
 	objectPrefix = prefixOut;
 	debug ("prefixOut: \"%s\"\n", (const char *) prefixOut.utf8 ());
 
-	if (openFiles (fileIn.utf8 (), fileOut.utf8 ()))
+	if (openFiles (m_chain->inputFile().utf8 (), m_chain->outputFile().utf8 ()))
 	{
 		error ("could not open files\n");
-		return false;
+		return KoFilter::FileNotFound;
 	}
 
 	// output version info of core lib
@@ -1007,8 +1010,10 @@ bool MSWRITE_PROJECT::filter (const QString &fileIn, const QString &fileOut,
 	if (MSWRITE_IMPORT_LIB::filter ())
 	{
 		error ("could not filter document\n");
-		return false;
+		return KoFilter::StupidError;
 	}
 
-	return true;
+	return KoFilter::OK;
 }
+
+#include <mswriteimport.moc>

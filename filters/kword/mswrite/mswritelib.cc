@@ -118,8 +118,8 @@ int MSWRITE_IMPORT_LIB::filter (void)
 		&MSWRITE_IMPORT_LIB::fontTableRead,
 		&MSWRITE_IMPORT_LIB::charInfoRead,
 		&MSWRITE_IMPORT_LIB::paraInfoRead,
-		&MSWRITE_IMPORT_LIB::documentFilter,	// the actual filter function
-	};
+		&MSWRITE_IMPORT_LIB::documentFilter	// the actual filter function
+	}
 
 	// go through list of functions (like this: f1() && f2() && f3() ...)
 	// (got this idea from some debian cron script!)
@@ -600,7 +600,7 @@ int MSWRITE_IMPORT_LIB::fontTableRead (void)
 {
 	// variable, holding file offset, for easy seeking
 	long offset;
-	
+
 	numFontTablePages = header.numPages - header.pnFontTable;
 
 	// allocate memory for fontTable

@@ -5,7 +5,7 @@ On i686, it takes 20 seconds to import a 200K (text-only) document,
 because 1.5MB of XML is generated.
 
 Of those 20 seconds, only 2 seconds are taken by my filter code --
-approximately the same time it takes for Word97 to fully import the
+approximately the same time it takes for KWord to fully import the
 entire document.
 
 The remaining time is taken, I assume, to process the excessive XML that

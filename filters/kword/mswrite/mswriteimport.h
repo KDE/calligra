@@ -151,20 +151,12 @@ private:
 	}
 
 public:
-	MSWRITE_PROJECT (KoFilter *parent, const char *name);
+	MSWRITE_PROJECT (KoFilter *parent, const char *name, const QStringList&);
 	MSWRITE_PROJECT ();
 
 	virtual ~MSWRITE_PROJECT ();
 
-	bool supportsEmbedding (void)
-	{
-		return true;
-	}
-
-	virtual bool filter (const QString &fileIn, const QString &fileOut,
-								const QString &prefixOut,
-								const QString &from, const QString &to,
-								const QString &config = QString::null);
+        virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 };
 
 #endif // MSWRITEIMPORT_H
