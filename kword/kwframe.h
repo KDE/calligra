@@ -680,7 +680,8 @@ public:
 
     virtual KWordFrameSetIface* dcopObject();
 
-    /** The type of frameset. Use this to differentiate between different instantiations of
+    /**
+     * The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
     virtual FrameSetType type() { return FT_PICTURE; }
@@ -691,9 +692,16 @@ public:
     KoPictureKey key() const { return m_image.getKey(); }
 
     void loadImage( const QString &fileName, const QSize &_imgSize );
+
+    /**
+     * @deprecated
+     * Size of image is now only needed at drawing time, not before anymore
+     */
     void setSize( const QSize & _imgSize );
 
-    /** Called when the user resizes a frame. */
+    /**
+     * Called when the user resizes a frame.
+     */
     virtual void resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize );
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
