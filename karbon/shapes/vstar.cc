@@ -207,6 +207,8 @@ VStar::init()
 		}
 	}
 	if( m_type == wheel || m_type == framed_star )
+	{
+		close();
 		for ( int i = m_edges - 1; i >= 0; --i )
 		{
 			double nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1.0 );
@@ -214,6 +216,7 @@ VStar::init()
 			p.setY( m_outerRadius * sin( nextOuterAngle ) );
 			lineTo( p );
 		}
+	}
 	close();
 
 	// translate path to center:
