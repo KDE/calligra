@@ -941,6 +941,9 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     QDomNode drawPage = body.namedItem( "draw:page" );
     if ( drawPage.isNull() ) // no slides? give up.
         return false;
+
+    QDomElement dp = drawPage.toElement();
+
     QString masterPageName = "Standard"; // use default layout as fallback
     QDomElement *master = oasisStyles.masterPages()[ masterPageName];
     Q_ASSERT( master );
@@ -974,9 +977,11 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     int pos = 0;
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling(), pos++ )
     {
+        dp = drawPage.toElement();
         kdDebug ()<<"insert new page "<<endl;
         KPrPage *newpage=new KPrPage(this);
         m_pageList.insert( pos,newpage);
+        m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
     }
 
     //todo load format
