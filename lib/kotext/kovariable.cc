@@ -718,7 +718,7 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
             key = "DATE" + dateFormat;
         }
     }
-    else if (afterText == "page-number")
+    else if (afterText == "page-number" || afterText == "page-count" )
     {
         type = VT_PGNUM;
         key = "NUMBER";
@@ -1594,7 +1594,11 @@ void KoPgNumVariable::load( QDomElement& elem )
 
 void KoPgNumVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
-    if ( m_subtype == VST_PGNUM_PREVIOUS || m_subtype ==VST_PGNUM_NEXT )
+    switch( m_subtype )
+    {
+    case VST_PGNUM_PREVIOUS:
+    case VST_PGNUM_NEXT:
+    case VST_PGNUM_CURRENT:
     {
         writer.startElement( "text:page-number" );
         if ( m_subtype == VST_PGNUM_PREVIOUS )
@@ -1605,14 +1609,28 @@ void KoPgNumVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context
         {
             writer.addAttribute( "text:select-page", "next" );
         }
+        else if ( m_subtype == VST_PGNUM_CURRENT )
+        {
+            writer.addAttribute( "text:select-page", "current" );
+        }
         writer.addTextNode( m_varValue.toInt() );
         writer.endElement();
     }
-    else if ( m_subtype == VST_CURRENT_SECTION )
+    break;
+    case VST_CURRENT_SECTION:
     {
         writer.startElement( "text:chapter" );
         writer.addTextNode( m_varValue.toString() );
         writer.endElement();
+    }
+    break;
+    case VST_PGNUM_TOTAL:
+    {
+        writer.startElement( "text:page-count" );
+        writer.addTextNode( m_varValue.toString() );
+        writer.endElement();
+    }
+    break;
     }
     kdDebug()<<" variable pgnum \n";
 }
@@ -1641,6 +1659,11 @@ void KoPgNumVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*cont
         // text:display attribute can be name, number (i.e. with prefix/suffix),
         // number-and-name, plain-number-and-name, plain-number
         // TODO: a special format class for this, so that it can be easily switched using the RMB
+    }
+    else if ( afterText == "page-count" )
+    {
+        m_subtype = VST_PGNUM_TOTAL;
+        m_varValue = QVariant( elem.text() );
     }
 }
 
