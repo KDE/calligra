@@ -124,7 +124,7 @@ KMacroCommand *KPTTaskDialog::buildCommand(KPTPart *part) {
     }
     KCommand *m = m_resourcesTab->buildCommand(part);
     if (m) {
-        kdDebug()<<k_funcinfo<<"ResourceTab modified"<<endl;
+        //kdDebug()<<k_funcinfo<<"ResourceTab modified"<<endl;
         cmd->addCommand(m);
         modified = true;
     }

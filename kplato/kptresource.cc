@@ -513,7 +513,7 @@ KPTResourceGroupRequest::~KPTResourceGroupRequest() {
 }
 
 void KPTResourceGroupRequest::addResourceRequest(KPTResourceRequest *request) {
-    kdDebug()<<k_funcinfo<<"Group: "<<m_group->name()<<endl;
+    //kdDebug()<<k_funcinfo<<"Group: "<<m_group->name()<<endl;
     request->setParent(this);
     m_resourceRequests.append(request);
     request->registerRequest();

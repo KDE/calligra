@@ -20,6 +20,7 @@
 #include "kptcommand.h"
 #include "kptpart.h"
 #include "kptproject.h"
+#include "kpttask.h"
 #include "kptcalendar.h"
 #include "kptrelation.h"
 
@@ -451,12 +452,14 @@ KPTAddResourceRequestCmd::~KPTAddResourceRequestCmd() {
         delete m_request;
 }
 void KPTAddResourceRequestCmd::execute() {
+    //kdDebug()<<k_funcinfo<<"group="<<m_group<<" req="<<m_request<<endl;
     m_group->addResourceRequest(m_request);
     m_mine = false;
     if (m_part)
         m_part->setCommandType(1);
 }
 void KPTAddResourceRequestCmd::unexecute() {
+    //kdDebug()<<k_funcinfo<<"group="<<m_group<<" req="<<m_request<<endl;
     m_group->takeResourceRequest(m_request);
     m_mine = true;
     if (m_part)
@@ -521,6 +524,52 @@ void KPTModifyEffortTypeCmd::execute() {
 }
 void KPTModifyEffortTypeCmd::unexecute() {
     m_effort->setType(static_cast<KPTEffort::Type>(m_oldvalue));
+    if (m_part)
+        m_part->setCommandType(1);
+}
+
+KPTAddResourceGroupRequestCmd::KPTAddResourceGroupRequestCmd(KPTPart *part, KPTTask &task, KPTResourceGroupRequest *request, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_task(task),
+      m_request(request) {
+      
+    m_mine = true;
+}
+void KPTAddResourceGroupRequestCmd::execute() {
+    //kdDebug()<<k_funcinfo<<"group="<<m_request<<endl;
+    m_task.addRequest(m_request);
+    m_mine = false;
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTAddResourceGroupRequestCmd::unexecute() {
+    //kdDebug()<<k_funcinfo<<"group="<<m_request<<endl;
+    m_task.takeRequest(m_request); // group should now be empty of resourceRequests
+    m_mine = true;
+    if (m_part)
+        m_part->setCommandType(1);
+}
+
+KPTRemoveResourceGroupRequestCmd::KPTRemoveResourceGroupRequestCmd(KPTPart *part, KPTTask &task, KPTResourceGroupRequest *request, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_task(task),
+      m_request(request) {
+      
+    m_mine = false;
+}
+void KPTRemoveResourceGroupRequestCmd::execute() {
+    //kdDebug()<<k_funcinfo<<"group="<<m_request<<endl;
+    m_task.takeRequest(m_request); // group should now be empty of resourceRequests
+    m_mine = true;
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTRemoveResourceGroupRequestCmd::unexecute() {
+    //kdDebug()<<k_funcinfo<<"group="<<m_request<<endl;
+    m_task.addRequest(m_request);
+    m_mine = false;
     if (m_part)
         m_part->setCommandType(1);
 }

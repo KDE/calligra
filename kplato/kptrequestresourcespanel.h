@@ -73,7 +73,8 @@ public:
     void ok(KPTTask &task);
 
     int numRequests();
-
+    bool isNull() const;
+    
     KPTResourceGroup *m_group;
     int m_units;
     QPtrList<KPTResourceTableItem> m_resources;

@@ -27,6 +27,7 @@
 
 class QString;
 class KPTProject;
+class KPTTask;
 class KPTCalendar;
 class KPTPart;
 class KPTRelation;
@@ -329,5 +330,34 @@ private:
     KPTEffort *m_effort;
     int m_oldvalue, m_newvalue;
 };
+
+class KPTAddResourceGroupRequestCmd : public KNamedCommand
+{
+public:
+    KPTAddResourceGroupRequestCmd(KPTPart *part, KPTTask &task, KPTResourceGroupRequest *request, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTTask &m_task;
+    KPTResourceGroupRequest *m_request;
+    bool m_mine;
+};
+
+class KPTRemoveResourceGroupRequestCmd : public KNamedCommand
+{
+public:
+    KPTRemoveResourceGroupRequestCmd(KPTPart *part, KPTTask &task, KPTResourceGroupRequest *request, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTTask &m_task;
+    KPTResourceGroupRequest *m_request;
+    bool m_mine;
+};
+
 
 #endif //KPTCOMMAND_H

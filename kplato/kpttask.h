@@ -72,6 +72,7 @@ public:
     void clearResourceRequests();
     void addRequest(KPTResourceGroup *group, int numResources);
     void addRequest(KPTResourceGroupRequest *request);
+    void takeRequest(KPTResourceGroupRequest *request);
     int units() const;
     int workUnits() const;
     void makeAppointments();

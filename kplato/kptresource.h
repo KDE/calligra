@@ -467,9 +467,11 @@ public:
     const QPtrList<KPTResourceGroupRequest> &requests() const { return m_requests; }
     void addRequest(KPTResourceGroupRequest *request) { m_requests.append(request); }
     void removeRequest(KPTResourceGroupRequest *request) { m_requests.removeRef(request); }
+    void takeRequest(KPTResourceGroupRequest *request) { m_requests.take(m_requests.findRef(request)); }
     KPTResourceGroupRequest *find(KPTResourceGroup *resource) const;
     KPTResourceRequest *find(KPTResource *resource) const;
-
+    bool isEmpty() { return m_requests.isEmpty(); }
+    
     bool load(QDomElement &element, KPTProject *project);
     void save(QDomElement &element);
 

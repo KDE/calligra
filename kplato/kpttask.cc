@@ -94,6 +94,16 @@ void KPTTask::addRequest(KPTResourceGroupRequest *request) {
     m_requests->addRequest(request);
 }
 
+void KPTTask::takeRequest(KPTResourceGroupRequest *request) {
+    if (m_requests) {
+        m_requests->takeRequest(request);
+        if (m_requests->isEmpty()) {
+            delete m_requests;
+            m_requests = 0;
+        }
+    }
+}
+
 int KPTTask::units() const {
     if (!m_requests)
         return 0;

@@ -134,6 +134,18 @@ int KPTGroupLVItem::numRequests() {
     return value;
 }
 
+bool KPTGroupLVItem::isNull() const {
+    //kdDebug()<<k_funcinfo<<endl;
+    QPtrListIterator<KPTResourceTableItem> it(m_resources);
+    for (; it.current(); ++it) {
+        if (it.current()->isChecked())
+            return false;
+    }
+    if (m_units > 0)
+        return false;
+    return true;
+}
+
 KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &task)
     : KPTTaskResourcesPanelBase(parent),
       m_task(task),
@@ -232,10 +244,17 @@ KCommand *KPTRequestResourcesPanel::buildCommand(KPTPart *part) {
             if (it.current()->isChecked() != it.current()->isOrigChecked()) {
                 if (!cmd) cmd = new KMacroCommand("");
                 if (it.current()->isChecked()) {
+                    if (!grp->m_request) {
+                        grp->m_request = new KPTResourceGroupRequest(grp->m_group, grp->m_units);
+                        cmd->addCommand(new KPTAddResourceGroupRequestCmd(part, m_task, grp->m_request));
+                    }
                     cmd->addCommand(new KPTAddResourceRequestCmd(part, grp->m_request, new KPTResourceRequest(it.current()->resource(), it.current()->units())));
                 } else {
                     if (grp->m_request && it.current()->request()) {
                         cmd->addCommand(new KPTRemoveResourceRequestCmd(part, grp->m_request, it.current()->request()));
+                        if (grp->isNull()) {
+                            cmd->addCommand(new KPTRemoveResourceGroupRequestCmd(part, m_task, grp->m_request));
+                        }
                     } else {
                         kdError()<<k_funcinfo<<"Remove failed"<<endl;
                     }
