@@ -75,8 +75,8 @@ class OpenCalcExport : public KoFilter
   void addText( QString const & text, QDomDocument & doc, 
                 QDomElement & parent );
 
-
   void createDefaultStyles();
+  QString convertFormula( QString const & formula ) const;
 };
 
 #endif

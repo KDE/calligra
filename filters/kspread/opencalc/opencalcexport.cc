@@ -26,6 +26,7 @@
 #include <qdatetime.h>
 #include <qdom.h>
 #include <qfile.h>
+#include <qregexp.h>
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -109,7 +110,6 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from,
 
 bool OpenCalcExport::writeFile( KSpreadDoc const * const ksdoc )
 {
-  kdDebug() << "writeFile()" << endl;
   KoStore * store = KoStore::createStore( m_chain->outputFile(), KoStore::Write, "", KoStore::Zip );
 
   if ( !store )
@@ -122,21 +122,16 @@ bool OpenCalcExport::writeFile( KSpreadDoc const * const ksdoc )
   else
     filesWritten |= contentXML;    
 
-  kdDebug() << "Content exported" << endl;
-
   // TODO: pass sheet number and cell number
   if ( !exportDocInfo( store, ksdoc ) )
     STOPEXPORT;
   else
     filesWritten |= metaXML;
 
-  kdDebug() << "Document Info exported" << endl;
   if ( !exportStyles( store, ksdoc ) )
     STOPEXPORT;
   else
     filesWritten |= stylesXML;
-
-  kdDebug() << "Styles exported" << endl;
 
   if ( !writeMetaFile( store, filesWritten ) )
     STOPEXPORT;
@@ -150,7 +145,6 @@ bool OpenCalcExport::writeFile( KSpreadDoc const * const ksdoc )
 
 bool OpenCalcExport::exportDocInfo( KoStore * store, KSpreadDoc const * const ksdoc )
 {
-  kdDebug() << "exportDocInfo()" << endl;
   if ( !store->open( "meta.xml" ) )
     return false;
 
@@ -225,7 +219,6 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, KSpreadDoc const * const ks
 
 bool OpenCalcExport::exportContent( KoStore * store, KSpreadDoc const * const ksdoc )
 {
-  kdDebug() << "exportContent()" << endl;
   if ( !store->open( "content.xml" ) )
     return false;
 
@@ -268,14 +261,11 @@ bool OpenCalcExport::exportContent( KoStore * store, KSpreadDoc const * const ks
   if ( !store->close() )
     return false;
 
-  kdDebug() << "exit exportContent()" << endl;
-
   return true;
 }
 
 bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpreadDoc const * const ksdoc )
 {
-  kdDebug() << "exportBody" << endl;
   QDomElement fontDecls  = doc.createElement( "office:font-decls" );
   QDomElement autoStyles = doc.createElement( "office:automatic-styles" );
   QDomElement body       = doc.createElement( "office:body" );
@@ -353,7 +343,6 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
 void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem, 
                                   KSpreadSheet const * const sheet, int row, int maxCols )
 {
-  kdDebug() << "exportCells" << endl;
   int i = 1;
   for ( ; i <= maxCols; ++i )
   {
@@ -367,11 +356,13 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
 
     if ( value.isBoolean() )
     {
+      kdDebug() << "Type: Boolean" << endl;
       cellElem.setAttribute( "table:value-type", "boolean" );
       cellElem.setAttribute( "table:boolean-value", ( value.asBoolean() ? "true" : "false" ) );
     }
     else if ( value.isNumber() )
     {
+      kdDebug() << "Type: Number" << endl;
       KSpreadFormat::FormatType type = cell->getFormatType( i, row );
 
       if ( ( type == KSpreadFormat::Percentage ) 
@@ -389,20 +380,20 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
 
     if ( cell->isFormula() )
     {
-      // TODO:
-      // QString formula( convertFormula( cell->text() ) );
-      // cellElem.setAttribute( "table:formula", formula );
+      kdDebug() << "Formula found" << endl;
+
+      QString formula( convertFormula( cell->text() ) );
+      cellElem.setAttribute( "table:formula", formula );
     }
 
     if ( !cell->isEmpty() )
     {
-      kdDebug() << "Writing cell content" << endl;
       QDomElement textElem = doc.createElement( "text:p" );
       textElem.appendChild( doc.createTextNode( cell->strOutText() ) );
 
       cellElem.appendChild( textElem );
     }
-    kdDebug() << "Cell: " << cell->strOutText() << endl;
+    kdDebug() << "Cell StrOut: " << cell->strOutText() << endl;
 
     rowElem.appendChild( cellElem );
   }
@@ -427,7 +418,6 @@ void OpenCalcExport::maxRowCols( KSpreadSheet const * const sheet,
 
 bool OpenCalcExport::exportStyles( KoStore * store, KSpreadDoc const * const ksdoc )
 {
-  kdDebug() << "exportStyles() begin" << endl;
   if ( !store->open( "styles.xml" ) )
     return false;
 
@@ -486,8 +476,6 @@ bool OpenCalcExport::exportStyles( KoStore * store, KSpreadDoc const * const ksd
 
   if ( !store->close() )
     return false;
-
-  kdDebug() << "exit exportStyles()" << endl;
 
   return true;
 }
@@ -820,6 +808,105 @@ void OpenCalcExport::convertPart( QString const & part, QDomDocument & doc,
     }
     ++i;
   }
+}
+
+void insertBracket( QString & s )
+{
+  QChar c;
+  uint i = s.length() - 1;
+  while ( i >= 0 )
+  {
+    c = s[i];
+    if ( !(c.isLetterOrNumber() || c == ' ' || c == '.' 
+           || c == '_') )
+    {
+      s.insert( i + 1, '[' );
+      return;
+    }
+    --i;
+  }
+}
+
+QString OpenCalcExport::convertFormula( QString const & formula ) const
+{
+  QString s;
+  QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
+  int n = exp.search( formula, 0 );
+  kdDebug() << "Exp: " << formula << ", n: " << n << ", Length: " << formula.length() 
+            << ", Matched length: " << exp.matchedLength() << endl;
+
+  bool inQuote1 = false;  
+  bool inQuote2 = false;  
+  int i = 0;
+  int l = (int) formula.length();
+  if ( l <= 0 )
+    return formula;
+  while ( i < l )
+  {
+    if ( ( n != -1 ) && ( n < i ) )
+    {
+      n = exp.search( formula, i );
+      kdDebug() << "Exp: " << formula.right( l - i ) << ", n: " << n << endl;
+    }
+    if ( formula[i] == '"' )
+    {
+      inQuote1 = !inQuote1;
+      s += formula[i];      
+      ++i;
+      continue;
+    }
+    if ( formula[i] == '\'' )
+    {
+      s += formula[i];
+      inQuote2 = !inQuote2;
+      ++i;
+      continue;
+    }
+    if ( inQuote1 || inQuote2 )
+    {
+      s += formula[i];
+      ++i;
+      continue;
+    }
+    if ( ( formula[i] == '=' ) && ( formula[i + 1] == '=' ) )
+    {
+      s += '=';
+      ++i;++i;
+      continue;
+    }
+    if ( formula[i] == '!' )
+    {
+      insertBracket( s );
+      s += '.';
+      ++i;
+      continue;
+    }
+    if ( n == i )
+    {
+      int ml = exp.matchedLength();
+      if ( formula[ i + ml ] == '!' )
+      {
+        kdDebug() << "No cell ref but table name" << endl;
+        s += formula[i];
+        ++i;
+        continue;
+      }
+      if ( ( i > 0 ) && ( formula[i - 1] != '!' ) )
+        s += "[.";
+      for ( int j = 0; j < ml; ++j )
+      {
+        s += formula[i];
+        ++i;
+      }
+      s += ']';
+      continue;
+    }
+
+    s += formula[i];
+    ++i;
+  }
+
+  return s;
 }
 
 bool OpenCalcExport::writeMetaFile( KoStore * store, uint filesWritten )
