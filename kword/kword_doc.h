@@ -102,9 +102,6 @@ public:
     static const int U_TABS = 512;
     static const int U_SMART = 1024;
 
-protected:
-    virtual bool hasToWriteMultipart();
-
 public:
     virtual bool initDoc();
     void initEmpty();

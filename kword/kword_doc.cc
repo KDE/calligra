@@ -648,14 +648,6 @@ KWordDocument::~KWordDocument()
 }
 
 /*================================================================*/
-bool KWordDocument::hasToWriteMultipart()
-{
-    //if ( m_lstChildren.count() == 0 ) return FALSE;
-
-    return TRUE;
-}
-
-/*================================================================*/
 bool KWordDocument::loadChildren( KoStore *_store )
 {
     QListIterator<KoDocumentChild> it( children() );
