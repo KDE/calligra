@@ -45,6 +45,7 @@
 
 static KivioStencilSpawnerInfo sinfo = KivioStencilSpawnerInfo("Ian Reinhart Geiser", "SML Connector", "SML Connector", "SML Based Connector", "0.1", "http://localhost/", "", "off");
 #include <kgenericfactory.h>
+
 K_EXPORT_COMPONENT_FACTORY( libsml_connector, KGenericFactory<KivioSMLConnectorFactory>("KivioSMLConnectorFactory" ) );
 
 KivioSMLConnectorFactory::KivioSMLConnectorFactory(QObject *parent, const char* name, const QStringList& args) :
@@ -256,9 +257,12 @@ void KivioSMLConnector::paintOutline( KivioIntraStencilData *pData )
 
 bool KivioSMLConnector::saveCustom( QDomElement &e, QDomDocument &doc )
 {
-   e.appendChild( saveArrowHeads(doc) );
+    e.appendChild( saveArrowHeads(doc) );
 
-   return true;
+    QDomElement type = doc.createElement("type");
+    XmlWriteString( type, "name", m_name );
+    e.appendChild( type );
+    return true;
 }
 
 bool KivioSMLConnector::loadCustom( const QDomElement &e )
@@ -274,7 +278,10 @@ bool KivioSMLConnector::loadCustom( const QDomElement &e )
       {
 	 loadArrowHeads( node.toElement() );
       }
-
+      else if ( name == "type" )
+      {
+      	loadPath(node.toElement());
+      }
       node = node.nextSibling();
    }
 
@@ -358,6 +365,12 @@ void KivioSMLConnector::drawOpenPath( KivioShape *pShape, KivioIntraStencilData 
   painter->drawOpenPath( pNewPoints );
 
   delete pNewPoints;
+}
+
+bool KivioSMLConnector::loadPath(const QString& file)
+{
+	kdDebug() << "Loading :" << file << endl;
+
 }
 
 #include "sml_connector.moc"
