@@ -474,7 +474,7 @@ bool KoAutoFormat::doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch )
     if( m_ignoreDoubleSpace && ch.isSpace() && index > 1 )
     {
         KoTextString *s = parag->string();
-        QChar ch = s->at( index -1 ).c;
+        QChar ch = s->at( index ).c;
         if ( ch.isSpace() )
             return true;
     }
