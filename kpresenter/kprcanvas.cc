@@ -6564,17 +6564,18 @@ void KPrCanvas::moveHelpPoint( const QPoint & newPos )
 
 void KPrCanvas::ensureVisible( int x, int y, int xmargin, int ymargin )
 {
-/*
-    kdDebug()<<" x :"<<x << " y :"<<y<<" xmargin :"<<xmargin<<" ymargin :"<<ymargin<<endl;
 
-    kdDebug()<<" DEBUGRECT ( visibleRect ) :"<<DEBUGRECT(visibleRect())<<endl;
-    kdDebug()<<" diffx :"<<diffx() <<" diffy') :" <<diffy()<<endl;
-*/
     int newy= (y+ymargin)-(visibleRect().bottom()+diffy());
 
     if( newy > 0)
     {
         m_view->getVScrollBar()->setValue(m_view->getVScrollBar()->value()+newy);
+    }
+    else
+    {
+        newy= (y )-(visibleRect().top()+diffy());
+        if( newy < 0)
+            m_view->getVScrollBar()->setValue(m_view->getVScrollBar()->value()+newy);
     }
 
     int newx= (x+xmargin)-(visibleRect().right()+diffx());
@@ -6582,4 +6583,11 @@ void KPrCanvas::ensureVisible( int x, int y, int xmargin, int ymargin )
     {
         m_view->getHScrollBar()->setValue(m_view->getHScrollBar()->value()+newx);
     }
+    else
+    {
+        newx= (x /*+xmargin*/)-(visibleRect().left()+diffx());
+        if( newx < 0)
+            m_view->getHScrollBar()->setValue(m_view->getHScrollBar()->value()+newx);
+    }
+
 }

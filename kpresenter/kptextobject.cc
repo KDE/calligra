@@ -981,16 +981,16 @@ void KPTextObject::removeHighlight ()
     m_textobj->removeHighlight();
 }
 
-void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas*/*_canvas*/ )
+void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas* m_canvas )
 {
     m_textobj->highlightPortion( parag, index, length );
-#if 0
-    QRect expose = canvas->viewMode()->normalToView( paragRect( parag ) );
-    canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
+    QRect expose = parag->rect();
+    QRect rect = m_doc->zoomHandler()->zoomRect( getRect() );
+    expose.moveBy( rect.x(), rect.y());
+    m_canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
                            (expose.top()+expose.bottom()) / 2,
                            (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
                            (expose.bottom()-expose.top()) / 2);
-#endif
 }
 
 KCommand * KPTextObject::pasteKPresenter( KoTextCursor * cursor, const QCString & data, bool removeSelected )
