@@ -25,7 +25,7 @@
 <!ATTLIST DOC	author CDATA #IMPLIED
 				email CDATA #IMPLIED
 				editor CDATA #IMPLIED
-				mime CDATA "application/x-kword">
+				mime CDATA "application/x-kpresenter">
 
 <!--	Describes the page format. Can have no or one PAPERBORDERS child that 
 		describes the margins.
@@ -39,9 +39,9 @@
 -->
 <!ELEMENT PAPER (PAPERBORDERS?)>
 <!ATTLIST PAPER	format CDATA #REQUIRED
-				width CDATA #REQUIRED
-				height CDATA #REQUIRED
-				orientation CDATA #REQUIRED>
+                width CDATA #REQUIRED
+                height CDATA #REQUIRED
+                orientation CDATA #REQUIRED>
 
 <!--	Describes the margins of the page.
 
@@ -69,21 +69,35 @@
 
 		Attributes:
 
-		type	the object type ??? what are those ???
+		type	0... picture
+                        1... line
+                        2... rect
+                        3... ellipse
+                        4... text
+                        5... autoform
+                        6... clipart
+                        7... undefined (never happens in a file)
+                        8... pie
+                        9... part
+                        10.. group
 -->
 <!ELEMENT OBJECT (ORIG|SIZE|SHADOW|EFFECTS|ANGLE|TEXTOBJ|PEN|BRUSH|RNDS|PRESNUM|FILLTYPE|GRADIENT)*>
 <!ATTLIST OBJECT		type	CDATA #REQUIRED>
 
-<!--	The position of an object on its page.
+<!--	The position of an object in the document.
+        Note that this is an absolute position, from the topleft corner
+        of the first page. The page on which the object is can be determined by
+        the formula: y / paper.height (in pt)
 
 		Attributes:
 
-		x		the x position on the page
-		y		the y position on the page
+		x		the x position
+		y		the y position
 -->
 <!ELEMENT ORIG EMPTY>
-<!ATTLIST ORIG	x		CDATA #REQUIRED
-				y		CDATA #REQUIRED>
+<!ATTLIST ORIG
+		x		CDATA #REQUIRED
+                y		CDATA #REQUIRED>
 
 
 <!--	The object's size.
@@ -94,8 +108,9 @@
 		height	the object's height
 -->
 <!ELEMENT SIZE EMPTY>
-<!ATTLIST SIZE	width	CDATA #REQUIRED
-				height	CDATA #REQUIRED>
+<!ATTLIST SIZE
+		width	CDATA #REQUIRED
+		height	CDATA #REQUIRED>
 
 
 <!--	The objects's shadow.
@@ -109,11 +124,12 @@
 		blue			blue value of the shadow
 -->
 <!ELEMENT SHADOW EMPTY>
-<!ATTLIST SHADOW		distance		CDATA #REQUIRED
-						direction		CDATA #REQUIRED
-						red				CDATA #REQUIRED
-						green			CDATA #REQUIRED
-						blue			CDATA #REQUIRED>
+<!ATTLIST SHADOW
+				distance		CDATA #REQUIRED
+                                direction		CDATA #REQUIRED
+				red			CDATA #REQUIRED
+				green			CDATA #REQUIRED
+				blue			CDATA #REQUIRED>
 
 <!--	The effects for moving from page to page.
 
@@ -123,15 +139,17 @@
 		effect2:		second effect
 -->
 <!ELEMENT EFFECTS EMPTY>
-<!ATTLIST EFFECTS		effect	CDATA #REQUIRED
-						effect2 CDATA #REQUIRED>
+<!ATTLIST EFFECTS
+		effect	CDATA #REQUIRED
+		effect2 CDATA #REQUIRED>
 
 
-<!--	The number of the presentation.
+<!--	The "step" number in which the object appears, while showing the presentation.
+        This is relative to the current page.
 
 		Attributes:
 
-		value	the number of the presentation
+		value	the "step" number in the presentation.
 -->
 <!ELEMENT PRESNUM EMPTY>
 <!ATTLIST PRESNUM value CDATA #REQUIRED>
@@ -151,96 +169,93 @@
 
 		Attributes:
 
-		objType			the type of the object ??? which ones are there???
+		lineSpacing	space between line, in pt
+		paragSpacing	space between parags, in pt
+		etc.
 -->
-<!ELEMENT TEXTOBJ (ENUMLISTTYPE|UNSORTEDLISTTYPE|PARAGRAPH)*>
-<!ATTLIST TEXTOBJ objType CDATA #REQUIRED>
+<!ELEMENT TEXTOBJ (ENUMLISTTYPE|UNSORTEDLISTTYPE|P)*>
+<!ATTLIST TEXTOBJ
+		lineSpacing CDATA #REQUIRED
+		paragSpacing CDATA #REQUIRED>
 
 <!ELEMENT ENUMLISTTYPE EMPTY>
-<!ATTLIST ENUMLISTTYPE	type	CDATA #REQUIRED
-						before	CDATA #IMPLIED
-						after	CDATA #IMPLIED
-						start	CDATA #REQUIRED
-						family	CDATA #REQUIRED
-						pointSize		CDATA #REQUIRED
-						bold	CDATA #IMPLIED
-						italic	CDATA #IMPLIED
-						underline		CDATA #IMPLIED
-						red		CDATA #IMPLIED
-						green	CDATA #IMPLIED
-						blue	CDATA #IMPLIED>
+<!ATTLIST ENUMLISTTYPE
+			type       CDATA #REQUIRED
+			before     CDATA #IMPLIED
+			after      CDATA #IMPLIED
+			start      CDATA #REQUIRED
+			family     CDATA #REQUIRED
+			pointSize  CDATA #REQUIRED
+			bold       CDATA #IMPLIED
+			italic     CDATA #IMPLIED
+			underline  CDATA #IMPLIED
+			red        CDATA #IMPLIED
+			green      CDATA #IMPLIED
+			blue       CDATA #IMPLIED>
 
 <!ELEMENT UNSORTEDLISTTYPE EMPTY>
-<!ATTLIST UNSORTEDLISTTYPE		family	CDATA #REQUIRED
-								pointSize		CDATA #REQUIRED
-								bold	CDATA #IMPLIED
-								italic	CDATA #IMPLIED
-								underline		CDATA #IMPLIED
-								red		CDATA #IMPLIED
-								green	CDATA #IMPLIED
-								blue	CDATA #IMPLIED
-								chr		CDATA #REQUIRED>
+<!ATTLIST UNSORTEDLISTTYPE
+			family	CDATA #REQUIRED
+			pointSize		CDATA #REQUIRED
+			bold	CDATA #IMPLIED
+			italic	CDATA #IMPLIED
+			underline		CDATA #IMPLIED
+			red		CDATA #IMPLIED
+			green	CDATA #IMPLIED
+			blue	CDATA #IMPLIED
+			chr		CDATA #REQUIRED>
 
-<!ELEMENT PARAGRAPH	(LINE)*>
-<!ATTLIST PARAGRAPH		horzAlign		CDATA #REQUIRED
-						depth			CDATA #REQUIRED
-						lineSpacing		CDATA #REQUIRED
-						distBefore		CDATA #REQUIRED
-						distAfter		CDATA #REQUIRED>
+<!--	Describes a paragraph in a text object
 
-<!ELEMENT LINE (OBJ)*>
+		Attributes:
 
-<!ELEMENT OBJ (TYPE|FONT|COLOR|VERTALIGN|TEXT)*>
+		align	1=left, 2=right, 4=center
+		type	0=normal, 1=bullet-list, 2=enum-list
+		depth	list depth
+-->
+<!ELEMENT P  (TEXT)*>
+<!ATTLIST P
+		align	CDATA #REQUIRED
+		type	CDATA #REQUIRED
+		depth	CDATA #REQUIRED>
 
-<!ELEMENT TYPE EMPTY>
-<!ATTLIST TYPE value CDATA #REQUIRED>
-
-<!ELEMENT FONT EMPTY>
-<!ATTLIST FONT	family	CDATA	#REQUIRED
-				pointSize		CDATA #REQUIRED
-				bold	CDATA	#REQUIRED
-				italic	CDATA	#REQUIRED
-				underline		CDATA #REQUIRED>
-
-<!ELEMENT COLOR EMPTY>
-<!ATTLIST COLOR	red		CDATA	#REQUIRED
-				green	CDATA	#REQUIRED
-				blue	CDATA	#REQUIRED>
-
-<!ELEMENT VERTALIGN EMPTY>
-<!ATTLIST VERTALIGN value CDATA #REQUIRED>
-
-<!ELEMENT TEXT EMPTY>
-<!ATTLIST TEXT value CDATA #REQUIRED>
+<!ELEMENT TEXT #PCDATA>
+<!ATTLIST TEXT
+		family	CDATA	#REQUIRED
+		pointSize	CDATA #REQUIRED
+		bold	CDATA	#REQUIRED
+		italic	CDATA	#REQUIRED
+		underline		CDATA #REQUIRED
+		color	CDATA	#REQUIRED>
 
 <!ELEMENT PEN EMPTY>
 <!ATTLIST PEN	red		CDATA	#REQUIRED
-				green	CDATA	#REQUIRED
-				blue	CDATA	#REQUIRED
-				width	CDATA	#REQUIRED
-				style	CDATA	#REQUIRED>
+		green	CDATA	#REQUIRED
+		blue	CDATA	#REQUIRED
+		width	CDATA	#REQUIRED
+		style	CDATA	#REQUIRED>
 
 <!ELEMENT BRUSH EMPTY>
 <!ATTLIST BRUSH	red		CDATA	#REQUIRED
-				green	CDATA	#REQUIRED
-				blue	CDATA	#REQUIRED
-				style	CDATA	#REQUIRED>
+		green	CDATA	#REQUIRED
+		blue	CDATA	#REQUIRED
+		style	CDATA	#REQUIRED>
 
 <!ELEMENT RNDS EMPTY>
 <!ATTLIST RNDS	x		CDATA	#REQUIRED
-				y		CDATA	#REQUIRED>
+		y		CDATA	#REQUIRED>
 
 <!ELEMENT FILLTYPE EMPTY>
 <!ATTLIST FILLTYPE value CDATA #REQUIRED>
 
 <!ELEMENT GRADIENT EMPTY>
 <!ATTLIST GRADIENT		red1	CDATA	#REQUIRED
-						green1	CDATA	#REQUIRED
-						blue1	CDATA	#REQUIRED
-						red2	CDATA	#REQUIRED
-						green2	CDATA	#REQUIRED
-						blue2	CDATA	#REQUIRED
-						type	CDATA	#REQUIRED>
+				green1	CDATA	#REQUIRED
+				blue1	CDATA	#REQUIRED
+				red2	CDATA	#REQUIRED
+				green2	CDATA	#REQUIRED
+				blue2	CDATA	#REQUIRED
+				type	CDATA	#REQUIRED>
 
 <!ELEMENT INFINITLOOP EMPTY>
 <!ATTLIST INFINITLOOP value CDATA #REQUIRED>
@@ -254,10 +269,10 @@
 
 <!ELEMENT BACKGROUND (PAGE)*>
 <!ATTLIST BACKGROUND	rastX	CDATA	#REQUIRED
-						rastY	CDATA	#REQUIRED
-						bred	CDATA	#REQUIRED
-						bgreen	CDATA	#REQUIRED
-						bblue	CDATA	#REQUIRED>
+			rastY	CDATA	#REQUIRED
+			bred	CDATA	#REQUIRED
+			bgreen	CDATA	#REQUIRED
+			bblue	CDATA	#REQUIRED>
 
 <!ELEMENT PAGE (BACKTYPE|BACKVIEW|BACKCOLOR1|BACKCOLOR2|BCTYPE|PGEFFECT)*>
 
@@ -275,11 +290,11 @@
 
 <!ELEMENT BACKCOLOR1 EMPTY>
 <!ATTLIST BACKCOLOR1	red		CDATA	#REQUIRED
-						green		CDATA	#REQUIRED
-						blue		CDATA	#REQUIRED>
+			green		CDATA	#REQUIRED
+			blue		CDATA	#REQUIRED>
 
 <!ELEMENT BACKCOLOR2 EMPTY>
 <!ATTLIST BACKCOLOR2	red		CDATA	#REQUIRED
-						green		CDATA	#REQUIRED
-						blue		CDATA	#REQUIRED>
+			green		CDATA	#REQUIRED
+			blue		CDATA	#REQUIRED>
 
