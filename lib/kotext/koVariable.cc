@@ -1130,6 +1130,61 @@ KoFieldVariable::KoFieldVariable( KoTextDocument *textdoc, int subtype, KoVariab
 
 QString KoFieldVariable::fieldCode()
 {
+    switch( m_subtype ) {
+    case VST_FILENAME:
+        return i18n("Filename");
+        break;
+    case VST_DIRECTORYNAME:
+        return i18n("Directory name");
+        break;
+    case VST_PATHFILENAME:
+        return i18n("Path filename");
+        break;
+    case VST_FILENAMEWITHOUTEXTENSION:
+        return i18n("Filename Without Extension");
+        break;
+    case VST_AUTHORNAME:
+        return i18n("Author name");
+        break;
+    case VST_EMAIL:
+        return i18n("Email");
+        break;
+    case VST_COMPANYNAME:
+        return i18n("Company Name");
+        break;
+
+    case VST_TELEPHONE:
+        return i18n("Telephone");
+        break;
+
+    case VST_FAX:
+        return i18n("Fax");
+        break;
+
+    case VST_COUNTRY:
+        return i18n("Country");
+        break;
+
+    case VST_POSTAL_CODE:
+        return i18n("Postal Code");
+        break;
+    case VST_CITY:
+        return i18n("City");
+        break;
+
+    case VST_STREET:
+        return i18n("Street");
+        break;
+    case VST_AUTHORTITLE:
+        return i18n("Author Title");
+        break;
+    case VST_TITLE:
+        return i18n("Title");
+        break;
+    case VST_ABSTRACT:
+        return i18n("Abstract");
+        break;
+    }
     return i18n("Field");
 }
 
