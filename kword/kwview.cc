@@ -1762,7 +1762,7 @@ void KWView::tableInsertCol()
                             i18n( "Insert Column" ) );
     } else {
         // value = 62 because a insert column = 60 +2 (border )see kwtableframeset.cc
-        if ( table->getBoundingRect().right() + 62 > static_cast<int>( doc->ptPaperWidth() ) )
+        if ( table->boundingRect().right() + 62 > static_cast<int>( doc->ptPaperWidth() ) )
         {
             KMessageBox::sorry( this,
                             i18n( "There is not enough space at the right of the table\n"
@@ -1878,7 +1878,7 @@ void KWView::tableJoinCells()
                                 i18n( "Join Cells" ) );
         }
         painter.end();
-        QRect r = table->getBoundingRect();
+        QRect r = table->boundingRect();
         r = QRect( r.x() - gui->canvasWidget()->contentsX(),
                    r.y() - gui->canvasWidget()->contentsY(),
                    r.width(), r.height() );
@@ -1917,7 +1917,7 @@ void KWView::tableSplitCells()
                             i18n("Split Cells") );
     }
     painter.end();
-    QRect r = table->getBoundingRect();
+    QRect r = table->boundingRect();
     r = QRect( r.x() - gui->canvasWidget()->contentsX(),
                r.y() - gui->canvasWidget()->contentsY(),
                r.width(), r.height() );
@@ -1946,7 +1946,7 @@ void KWView::tableUngroupTable()
                         i18n("Ungroup Table"), i18n("&Ungroup"));
         if (result == KMessageBox::Continue)
         {
-            QRect r = table->getBoundingRect();
+            QRect r = table->boundingRect();
             table->ungroup();
             r = QRect( r.x() - gui->canvasWidget()->contentsX(),
                        r.y() - gui->canvasWidget()->contentsY(),

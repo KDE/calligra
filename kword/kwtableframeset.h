@@ -105,10 +105,20 @@ public:
     */
     bool isTableHeader( Cell *cell );
 
-    /** put all the frames in the right location. */
-    void init( unsigned int x, unsigned int y,
-               unsigned int width, unsigned int height,
-               KWTblCellSize wid, KWTblCellSize hei );
+    /**
+     * Layout all cells:
+     *
+     *  setHeightMode() and setWidthMode() controls the layout process.
+     *  setBoundingRect() causes the layout to recalculated.
+     *  boundingRect() returns a QRect which outlines the whole of the table.
+     */
+    KWTblCellSize heightMode() { return m_heightMode; }
+    void setHeightMode( KWTblCellSize mode );
+    KWTblCellSize widthMode() { return m_widthMode; }
+    void setWidthMode( KWTblCellSize mode );
+    QRect boundingRect();
+    void setBoundingRect( QRect rect );
+
     /** resize and position all cells */
     void recalcCols();
     void recalcRows();
@@ -117,9 +127,6 @@ public:
     unsigned int getRows() { return m_rows; }
     /** returns the number of columns */
     unsigned int getCols() { return m_cols; }
-
-    /** returns a QRect which outlines the whole of the table. */
-    QRect getBoundingRect();
 
     /** returns the number of cells the table contains, this includes
      * temporary headers. */
@@ -199,6 +206,8 @@ public:
 
 protected:
     unsigned int m_rows, m_cols;
+    KWTblCellSize m_widthMode;
+    KWTblCellSize m_heightMode;
     QString m_name;
     bool m_showHeaderOnAllPages;
     bool m_hasTmpHeaders;

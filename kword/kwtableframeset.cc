@@ -104,6 +104,22 @@ void KWTableFrameSet::addCell( Cell *cell )
 }
 
 /*================================================================*/
+QRect KWTableFrameSet::boundingRect()
+{
+    QRect r1, r2;
+    KWFrame *first = getCell( 0, 0 )->getFrame( 0 );
+    assert(first);
+    KWFrame *last = getCell( m_rows - 1, m_cols - 1 )->getFrame( 0 );
+    assert(last);
+
+    r1 = QRect( first->x(), first->y(), first->width(), first->height() );
+    r2 = QRect( last->x(), last->y(), last->width(), last->height() );
+
+    r1 = r1.unite( r2 );
+    return QRect( r1 );
+}
+
+/*================================================================*/
 /* returns the cell that occupies row, col. */
 KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int col )
 {
@@ -135,47 +151,6 @@ KWTableFrameSet::Cell *KWTableFrameSet::getCellByPos( int mx, int my )
 bool KWTableFrameSet::isTableHeader( Cell *cell )
 {
     return cell->isRemoveableHeader() || ( cell->m_row == 0 );
-}
-
-/*================================================================*/
-void KWTableFrameSet::init( unsigned int x, unsigned int y, unsigned int width, unsigned int height,
-                           KWTblCellSize widthScaling, KWTblCellSize heightScaling )
-{
-    if ( widthScaling == TblAuto ) {
-        x = (int)m_doc->ptLeftBorder();
-        width = (int)( m_doc->ptPaperWidth() - ( m_doc->ptLeftBorder() + m_doc->ptRightBorder() ) );
-    }
-
-    double baseWidth = (width - (m_cols-1) * tableCellSpacing) / m_cols;
-    double baseHeight=0;
-    if(heightScaling!=TblAuto)
-        baseHeight = (height - (m_rows-1) * tableCellSpacing) / m_rows;
-
-    // I will create 1 mm margins, this will recalculate the actual size needed for the frame.
-    KWUnit oneMm;
-    oneMm.setMM( 1 );
-    double minBaseHeight = 22;// m_doc->getDefaultParagLayout()->getFormat().ptFontSize() + oneMm.pt() * 2; // TODO
-    if(baseHeight < minBaseHeight + oneMm.pt() * 2)
-        baseHeight =minBaseHeight + oneMm.pt() * 2;
-    if(baseWidth < minFrameWidth + oneMm.pt() * 2)
-        baseWidth = minFrameWidth +  oneMm.pt() * 2;
-    // cast them only one time up here..
-    unsigned int frameWidth = static_cast<unsigned int> (baseWidth + 0.5);
-    unsigned int frameHeight = static_cast<unsigned int> (baseHeight + 0.5);
-    // move/size the cells
-    // TBD: is there a reason why this cannot be done as a linear scan of the list?
-    for ( unsigned int i = 0; i < m_rows; i++ ) {
-        for ( unsigned int j = 0; j < m_cols; j++ ) {
-            KWFrame *frame = getCell( i, j )->getFrame( 0 );
-            frame->setBLeft( oneMm );
-            frame->setBRight( oneMm );
-            frame->setBTop( oneMm );
-            frame->setBBottom( oneMm );
-            frame->setNewFrameBehaviour( NoFollowup );
-            frame->setRect( x + j * (frameWidth + tableCellSpacing),
-                y + i * (frameHeight + tableCellSpacing), baseWidth, baseHeight );
-        }
-    }
 }
 
 /*================================================================*/
@@ -499,19 +474,56 @@ kdDebug() << "KWTableFrameSet::recalcRows : " << m_cells.count() << endl;
 }
 
 /*================================================================*/
-QRect KWTableFrameSet::getBoundingRect()
+void KWTableFrameSet::setBoundingRect( QRect rect )
 {
-    QRect r1, r2;
-    KWFrame *first = getCell( 0, 0 )->getFrame( 0 );
-    assert(first);
-    KWFrame *last = getCell( m_rows - 1, m_cols - 1 )->getFrame( 0 );
-    assert(last);
+    if ( m_widthMode == TblAuto )
+    {
+        rect.setX( (int)m_doc->ptLeftBorder() );
+        rect.setWidth( (int)( m_doc->ptPaperWidth() - ( m_doc->ptLeftBorder() + m_doc->ptRightBorder() ) ) );
+    }
 
-    r1 = QRect( first->x(), first->y(), first->width(), first->height() );
-    r2 = QRect( last->x(), last->y(), last->width(), last->height() );
+    double baseWidth = (rect.width() - (m_cols-1) * tableCellSpacing) / m_cols;
+    double baseHeight=0;
+    if( m_heightMode != TblAuto )
+        baseHeight = (rect.height() - (m_rows-1) * tableCellSpacing) / m_rows;
 
-    r1 = r1.unite( r2 );
-    return QRect( r1 );
+    // I will create 1 mm margins, this will recalculate the actual size needed for the frame.
+    KWUnit oneMm;
+    oneMm.setMM( 1 );
+    double minBaseHeight = 22;// m_doc->getDefaultParagLayout()->getFormat().ptFontSize() + oneMm.pt() * 2; // TODO
+    if(baseHeight < minBaseHeight + oneMm.pt() * 2)
+        baseHeight =minBaseHeight + oneMm.pt() * 2;
+    if(baseWidth < minFrameWidth + oneMm.pt() * 2)
+        baseWidth = minFrameWidth +  oneMm.pt() * 2;
+    // cast them only one time up here..
+    unsigned int frameWidth = static_cast<unsigned int> (baseWidth + 0.5);
+    unsigned int frameHeight = static_cast<unsigned int> (baseHeight + 0.5);
+    // move/size the cells
+    // TBD: is there a reason why this cannot be done as a linear scan of the list?
+    for ( unsigned int i = 0; i < m_rows; i++ ) {
+        for ( unsigned int j = 0; j < m_cols; j++ ) {
+            KWFrame *frame = getCell( i, j )->getFrame( 0 );
+            frame->setBLeft( oneMm );
+            frame->setBRight( oneMm );
+            frame->setBTop( oneMm );
+            frame->setBBottom( oneMm );
+            frame->setNewFrameBehaviour( NoFollowup );
+            frame->setRect( rect.x() + j * (frameWidth + tableCellSpacing),
+                rect.y() + i * (frameHeight + tableCellSpacing), baseWidth, baseHeight );
+        }
+    }
+}
+
+/*================================================================*/
+void KWTableFrameSet::setHeightMode( KWTblCellSize mode )
+{
+    m_heightMode = mode;
+}
+
+/*================================================================*/
+void KWTableFrameSet::setWidthMode( KWTblCellSize mode )
+{
+    m_widthMode = mode;
 }
 
 /*================================================================*/
@@ -651,7 +663,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
     unsigned int _rows = m_rows;
 
     QValueList<int> colStart;
-    QRect r = getBoundingRect();
+    QRect r = boundingRect();
 
     bool needFinetune=false;
     unsigned int copyFromRow=_idx-1;
@@ -743,7 +755,7 @@ void KWTableFrameSet::insertCol( unsigned int _idx )
 
     QList<int> h;
     h.setAutoDelete( true );
-    QRect r = getBoundingRect();
+    QRect r = boundingRect();
 
     for ( i = 0; i < m_cells.count(); i++ ) {
         Cell *cell = m_cells.at(i);
@@ -1200,8 +1212,8 @@ void KWTableFrameSet::validate()
     while (! misplacedCells.isEmpty()) {
         // append cell at bottom of table.
         Cell *cell = misplacedCells.take(0);
-        cell->getFrame(0)->setWidth(getBoundingRect().width());
-        cell->getFrame(0)->moveBy( getBoundingRect().left() -
+        cell->getFrame(0)->setWidth(boundingRect().width());
+        cell->getFrame(0)->moveBy( boundingRect().left() -
                                              cell->getFrame(0)->left(),
                                              bottom - cell->getFrame(0)->top() - tableCellSpacing);
         cell->m_row = m_rows++;
@@ -1254,85 +1266,106 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
             painter->setPen( lightGray );
 
             // Draw default borders using view settings except when printing, or disabled.
+#ifdef TABLES_HAD_PROPER_BORDER_SUPPORT
             QPen viewSetting( lightGray );
             if ( ( painter->device()->devType() == QInternal::Printer ) ||
                 !m_doc->getViewFrameBorders() )
             {
                 viewSetting.setColor( frame->getBackgroundColor().color() );
             }
+#else
+            painter->setPen( black );
+#endif // TABLES_HAD_PROPER_BORDER_SUPPORT
 
             // Draw borders either as the user defined them, or using the view settings.
             // Always draw right and bottom:
-        if ( frame->getRightBorder().ptWidth > 0 )
-        {
-            painter->setPen( Border::borderPen( frame->getRightBorder() ) );
-        }
-        else
-        {
-            painter->setPen( viewSetting );
-        }
-        int w = frame->getRightBorder().ptWidth;
-        if ( !( w & 1 ) )
-            w--;
-        w /= 2;
-        painter->drawLine( frameRect.right() - w, frameRect.y(),
-                            frameRect.right() - w, frameRect.bottom() + 1 );
-
-        if ( frame->getBottomBorder().ptWidth > 0 )
-        {
-            painter->setPen( Border::borderPen( frame->getBottomBorder() ) );
-        }
-        else
-        {
-            painter->setPen( viewSetting );
-        }
-        w = frame->getBottomBorder().ptWidth;
-        if ( !( w & 1 ) )
-            w--;
-        painter->drawLine( frameRect.x(), frameRect.bottom() - w,
-                            frameRect.right() + 1,
-                            frameRect.bottom() - w );
-
-        if ( cell->m_col == 0 ) // draw left only for 1st column.
-        {
-            if ( frame->getLeftBorder().ptWidth > 0 )
+#ifdef TABLES_HAD_PROPER_BORDER_SUPPORT
+            if ( frame->getRightBorder().ptWidth > 0 )
             {
-                painter->setPen( Border::borderPen( frame->getLeftBorder() ) );
+                painter->setPen( Border::borderPen( frame->getRightBorder() ) );
             }
             else
             {
                 painter->setPen( viewSetting );
             }
-            painter->drawLine( frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.y(),
-                                frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.bottom() + 1 );
-        }
+            int w = frame->getRightBorder().ptWidth;
+            if ( !( w & 1 ) )
+                w--;
+            w /= 2;
+            painter->drawLine( frameRect.right() - w, frameRect.y(),
+                                frameRect.right() - w, frameRect.bottom() + 1 );
 
-        if ( cell->m_row == 0 ) // draw top only for 1st row.
-        {
-            if ( frame->getTopBorder().ptWidth > 0 )
+            if ( frame->getBottomBorder().ptWidth > 0 )
             {
-                painter->setPen( Border::borderPen( frame->getTopBorder() ) );
+                painter->setPen( Border::borderPen( frame->getBottomBorder() ) );
             }
             else
             {
                 painter->setPen( viewSetting );
             }
-            painter->drawLine( frameRect.x(), frameRect.y() + frame->getTopBorder().ptWidth / 2,
+            w = frame->getBottomBorder().ptWidth;
+            if ( !( w & 1 ) )
+                w--;
+            painter->drawLine( frameRect.x(), frameRect.bottom() - w,
                                 frameRect.right() + 1,
-                                frameRect.y() + frame->getTopBorder().ptWidth / 2 );
-        }
-/*
-                painter->drawLine( frameRect.right() + 1, frameRect.y() - 1,
-                                frameRect.right() + 1, frameRect.bottom()  + 1 );
-                painter->drawLine( frameRect.x() - 1, frameRect.bottom() + 1,
-                                frameRect.right() + 1, frameRect.bottom() + 1 );
-                if ( cell->m_row == 0 ) // draw top only for 1st row
-                    painter->drawLine( frameRect.x() - 1, frameRect.y() - 1,
-                                    frameRect.right() + 1, frameRect.y() - 1 );
-                if ( cell->m_col == 0 ) // draw left only for 1st column
-                    painter->drawLine( frameRect.x() - 1, frameRect.y() - 1,
-                                    frameRect.x() - 1, frameRect.bottom() + 1 );
-*/
+                                frameRect.bottom() - w );
+#else
+            int startX;
+            int startY;
+            int endX;
+            int endY;
+
+            startX = frameRect.right() + 1;
+            startY = frameRect.y();
+            endX = startX;
+            endY = frameRect.bottom();
+//            painter->drawLine( startX, startY, endX, endY );
+painter->drawRect (frameRect);
+            startX = frameRect.x();
+            startY = frameRect.bottom();
+            endX = frameRect.right() + 1;
+            endY = startY;
+//            painter->drawLine( startX, startY, endX, endY );
+#endif // TABLES_HAD_PROPER_BORDER_SUPPORT
+
+//            if ( cell->m_col == 0 ) // draw left only for 1st column.
+            {
+#ifdef TABLES_HAD_PROPER_BORDER_SUPPORT
+                if ( frame->getLeftBorder().ptWidth > 0 )
+                {
+                    painter->setPen( Border::borderPen( frame->getLeftBorder() ) );
+                }
+                else
+                {
+                    painter->setPen( viewSetting );
+                }
+                painter->drawLine( frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.y(),
+                                    frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.bottom() + 1 );
+#else
+//                painter->drawLine( frameRect.x() - 1, frameRect.y() - 1,
+//                                frameRect.x() - 1, frameRect.bottom() + 1 );
+#endif // TABLES_HAD_PROPER_BORDER_SUPPORT
+            }
+
+//            if ( cell->m_row == 0 ) // draw top only for 1st row.
+            {
+#ifdef TABLES_HAD_PROPER_BORDER_SUPPORT
+                if ( frame->getTopBorder().ptWidth > 0 )
+                {
+                    painter->setPen( Border::borderPen( frame->getTopBorder() ) );
+                }
+                else
+                {
+                    painter->setPen( viewSetting );
+                }
+                painter->drawLine( frameRect.x(), frameRect.y() + frame->getTopBorder().ptWidth / 2,
+                                    frameRect.right() + 1,
+                                    frameRect.y() + frame->getTopBorder().ptWidth / 2 );
+#else
+//                painter->drawLine( frameRect.x() - 1, frameRect.y() - 1,
+//                                frameRect.right() + 1, frameRect.y() - 1 );
+#endif // TABLES_HAD_PROPER_BORDER_SUPPORT
+            }
         }
     }
     painter->restore();

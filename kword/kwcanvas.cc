@@ -954,18 +954,20 @@ void KWCanvas::mrCreateTable()
             }
             table->setName( _name );
             doc->addFrameSet( table );
+
+            // Create a set of cells with random-size frames.
             for ( unsigned int i = 0; i < m_table.rows; i++ ) {
                 for ( unsigned int j = 0; j < m_table.cols; j++ ) {
-                    KWTableFrameSet::Cell *_frameSet = new KWTableFrameSet::Cell( table, i, j );
-                    KWFrame *frame = new KWFrame(_frameSet, m_insRect.x(), m_insRect.y(), (doc->paperWidth() - m_insRect.x())/m_table.cols, m_insRect.height() );
-                    _frameSet->addFrame( frame );
+                    KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, i, j );
+                    KWFrame *frame = new KWFrame(cell, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
+                    cell->addFrame( frame );
                     frame->setFrameBehaviour(AutoExtendFrame);
                     frame->setNewFrameBehaviour(NoFollowup);
-//                    table->addCell( _frameSet, i, j );
                 }
             }
-            table->init( m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height(),
-                          m_table.width, m_table.height );
+            table->setHeightMode( m_table.height );
+            table->setWidthMode( m_table.width );
+            table->setBoundingRect( m_insRect );
             table->recalcRows();
         }
         doc->updateAllFrames();
