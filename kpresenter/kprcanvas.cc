@@ -3067,10 +3067,6 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
                                               KoGlobal::dpiX(), KoGlobal::dpiY() );
     doc->newZoomAndResolution(false,false);
 
-    QPtrListIterator<KPObject> oIt(doc->pageList().at( curPgNum-1 )->objectList());
-    for (; oIt.current(); ++oIt )
-        tmpObjs.append( oIt.current() );
-
     // add all selected slides
     m_presentationSlides.clear();
     QValueList<int> selected = doc->selectedSlides();
@@ -3098,6 +3094,10 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
             slide = m_presentationSlides[i];
             break;
         }
+
+    QPtrListIterator<KPObject> oIt(doc->pageList().at( slide-1 )->objectList());
+    for (; oIt.current(); ++oIt )
+        tmpObjs.append( oIt.current() );
 
     setCursor( blankCursor );
 
