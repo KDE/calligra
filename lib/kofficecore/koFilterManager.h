@@ -31,8 +31,8 @@ class KoDocument;
 /**
  *  @brief The class managing all the filters.
  *
- *  This class manages all filters for a KOffice application. Normally
- *  you won't have to use it, since KoMainWindow takes care of loading
+ *  This class manages all filters for a %KOffice application. Normally
+ *  you will not have to use it, since KoMainWindow takes care of loading
  *  and saving documents.
  *
  *  @ref KoFilter
@@ -56,7 +56,7 @@ public:
     KoFilterManager( KoDocument* document );
     /**
      * Create a filter manager for a filter which wants to embed something.
-     * The url it passes is the file to convert, obviously. You can't use
+     * The url it passes is the file to convert, obviously. You cannot use
      * the @ref import() method -- use @ref exp0rt() to convert the file to
      * the destination mimetype you prefer.
      *
@@ -64,9 +64,9 @@ public:
      * @param mimetypeHint The mimetype of the file you want to export. You have
      *        to specify this information only if the automatic detection will
      *        fail because e.g. you saved an embedded stream to a *.tmp file.
-     *        Most likely you don't have to care about that.
+     *        Most likely you do not have to care about that.
      * @param parentChain The parent filter chain of this filter manager. Used
-     *        to allow embedding for filters. Most likely you don't have to care.
+     *        to allow embedding for filters. Most likely you do not have to care.
      */
     KoFilterManager( const QString& url, const QCString& mimetypeHint = "",
                      KoFilterChain* const parentChain = 0 );
@@ -76,40 +76,41 @@ public:
     /**
      * Imports the passed URL and returns the resultant filename
      * (most likely some file in /tmp).
-     * The status vaiable signals the success/error of the conversion
+     * The @p status variable signals the success/error of the conversion
      * If the QString which is returned isEmpty() and the status is OK,
      * then we imported the file directly into the document.
      */
     QString import( const QString& url, KoFilter::ConversionStatus& status );
     /**
-     * Exports the given file/document to the specified URL/mimetype.
-     * If mimetype.isEmpty() then the closest matching KOffice part is searched
-     * and when the method returns "mimetype" contains this mimetype.
+     * @brief Exports the given file/document to the specified URL/mimetype.
+     *
+     * If @p mimeType is empty, then the closest matching KOffice part is searched
+     * and when the method returns @p mimeType contains this mimetype.
      * Oh, well, export is a C++ keyword ;)
      */
     KoFilter::ConversionStatus exp0rt( const QString& url, QCString& mimeType );
 
 
-    // ### Static API ###
+    // === Static API ===
     /**
      * Suitable for passing to @ref KFileDialog::setMimeFilter. The default mime
-     * gets set by the "users" of this method, as we don't have enough
+     * gets set by the "users" of this method, as we do not have enough
      * information here.
      */
     static QStringList mimeFilter( const QCString& mimetype, Direction direction );
 
     /**
-     * The same method as above but suited for KoShell.
-     * We don't need the mimetype, as we will simply use all available
-     * KOffice mimetypes. The Direction enum is omitted, as we only
+     * The same method as KoFilterManager::mimeFilter but suited for KoShell.
+     * We do not need the mimetype, as we will simply use all available
+     * %KOffice mimetypes. The Direction enum is omitted, as we only
      * call this for importing. When saving from KoShell we already
-     * know the KOffice part we're using.
+     * know the KOffice part we are using.
      */
     static QStringList mimeFilter();
 
     /**
      * Method used to check if that filter is available at all.
-     * Note: Slow, but cached
+     * @note Slow, but cached
      */
     static bool filterAvailable( KoFilterEntry::Ptr entry );
 
@@ -131,7 +132,7 @@ signals:
     void sigProgress( int );
 
 private:
-    // ### API for KoFilterChains ### (internal)
+    // === API for KoFilterChains === (internal)
     // The friend methods are private in KoFilterChain and
     // just forward calls to the methods here. Should be
     // pretty save.
@@ -157,7 +158,7 @@ private:
     KoDocument* m_document;
     KoFilterChain* const m_parentChain;
     QString m_importUrl, m_exportUrl;
-    QCString m_importUrlMimetypeHint;  // suggested mimetype
+    QCString m_importUrlMimetypeHint;  ///< suggested mimetype
     KOffice::Graph m_graph;
     Direction m_direction;
 
