@@ -4086,7 +4086,6 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
       {
         QString d = ref1->encodeFormula();
         ref1->setCellText(ref2->text(), true);
-        ref1->setAction(ref2->action());
         ref2->setCellText(ref2->decodeFormula(d), true);
         ref2->setCalcDirtyFlag();
         ref2->calc(false);
@@ -4096,7 +4095,6 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
         {
           QString d = ref2->encodeFormula();
           ref2->setCellText(ref1->text(), true);
-          ref2->setAction(ref1->action());
           ref1->setCellText(ref1->decodeFormula(d), true);
           ref1->setCalcDirtyFlag();
           ref1->calc(false);
@@ -4183,10 +4181,6 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
     bool vert = ref1->verticalText( ref1->column(), ref1->row() );
     ref1->setVerticalText( ref2->verticalText( ref2->column(), ref2->row() ) );
     ref2->setVerticalText(vert);
-
-    KSpreadCell::Style style = ref1->style();
-    ref1->setStyle( ref2->style() );
-    ref2->setStyle(style);
 
     bool print = ref1->getDontprintText( ref1->column(), ref1->row() );
     ref1->setDontPrintText( ref2->getDontprintText( ref2->column(), ref2->row() ) );

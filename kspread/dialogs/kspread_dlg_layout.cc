@@ -399,8 +399,6 @@ CellFormatDlg::CellFormatDlg( KSpreadView * _view, KSpreadSheet * _table,
   underline = obj->textFontUnderline( _left, _top );
   // Needed to initialize the font correctly ( bug in Qt )
   textFont = obj->textFont( _left, _top );
-  eStyle = obj->style();
-  actionText = obj->action();
   obj->currencyInfo( cCurrency );
 
   brushColor = obj->backGroundBrushColor( _left, _top );
@@ -473,8 +471,6 @@ CellFormatDlg::CellFormatDlg( KSpreadView * _view, KSpreadSheet * _table,
            c = m_table->getNextCellDown(c->column(), c->row()))
       {
         initParameters( c, x, c->row());
-        if ( eStyle != c->style() )
-          eStyle = KSpreadCell::ST_Undef;
       }
     }
     
@@ -492,8 +488,6 @@ CellFormatDlg::CellFormatDlg( KSpreadView * _view, KSpreadSheet * _table,
            c = m_table->getNextCellRight(c->column(), c->row()) )
       {
         initParameters( c, c->column(), c->row());
-        if ( eStyle != c->style() )
-          eStyle = KSpreadCell::ST_Undef;
       }
       }
   }
@@ -510,8 +504,6 @@ CellFormatDlg::CellFormatDlg( KSpreadView * _view, KSpreadSheet * _table,
           continue;
         
         initParameters( obj,x,y);
-        if ( eStyle != obj->style() )
-          eStyle = KSpreadCell::ST_Undef;
       }
     }
   }
@@ -2753,14 +2745,6 @@ KSpreadCell::Style CellFormatPageMisc::getStyle()
 
 void CellFormatPageMisc::applyFormat( KSpreadCell *_obj )
 {
-    if ( styleButton->currentItem() == idStyleNormal )
-      _obj->setStyle( KSpreadCell::ST_Normal );
-    else if ( styleButton->currentItem() == idStyleButton )
-      _obj->setStyle( KSpreadCell::ST_Button );
-    else if ( styleButton->currentItem() == idStyleSelect )
-      _obj->setStyle( KSpreadCell::ST_Select );
-    if ( actionText->isEnabled() )
-      _obj->setAction( actionText->text() );
     if ( dlg->bDontPrintText!=dontPrintText->isChecked())
       _obj->setDontPrintText(dontPrintText->isChecked());
 }

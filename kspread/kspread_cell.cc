@@ -99,13 +99,6 @@ public:
     // At the moment, it's used to store hyperlink
     QSimpleRichText *QML;
 
-    // Tells wether the cell is a button, combobox etc.
-    KSpreadCell::Style style;
-
-    // Used for example if the cell is displayed as a button.
-    // It tells which command has to be executed.
-    QString strAction;
-
     // position and dimension of displayed text
     double textX;
     double textY;
@@ -142,8 +135,6 @@ public:
     // list of cells that require this cell's value to be calculated
     QPtrList<KSpreadDependency> lstDependingOnMe;
     
-    KSpreadCellPrivate *cellPrivate;
-
     KSpreadConditions* conditions;
     KSpreadValidity * validity;
 
@@ -163,7 +154,6 @@ CellPrivate::CellPrivate()
   content= KSpreadCell::Text;
   value = KSpreadValue::empty();
   code = 0;
-  style = KSpreadCell::ST_Normal;
   QML = 0;
   
   conditions = 0;
@@ -187,8 +177,6 @@ CellPrivate::CellPrivate()
 
   lstDepends.setAutoDelete( true );
   lstDependingOnMe.setAutoDelete( true );
-
-  cellPrivate = 0;
 }
 
 
@@ -363,48 +351,6 @@ void KSpreadCell::setValue( const KSpreadValue& v )
     m_pTable->setRegionPaintDirty(cellRect());
 }
 
-KSpreadCell::Style KSpreadCell::style() const
-{
-    return d->style;
-}
-
-void KSpreadCell::setStyle( Style _s )
-{
-  if ( d->style == _s )
-    return;
-
-  d->style = _s;
-  setFlag(Flag_LayoutDirty);
-
-  delete d->cellPrivate;
-  d->cellPrivate = 0;
-
-  if ( _s != ST_Select )
-    return;
-
-  d->cellPrivate = new SelectPrivate( this );
-
-  SelectPrivate *s = (SelectPrivate*)d->cellPrivate;
-  if ( isFormula() )
-      s->parse( d->strFormulaOut );
-  else
-      s->parse( d->strText );
-  checkTextInput(); // is this necessary?
-  setFlag(Flag_LayoutDirty);
-
-  m_pTable->setRegionPaintDirty(cellRect());
-}
-
-QString KSpreadCell::action() const
-{
-    return d->strAction;
-}
-
-void KSpreadCell::setAction( const QString& action )
-{
-    d->strAction = action;
-}
-
 KSpreadCell* KSpreadCell::previousCell() const 
 { 
     return d->previousCell;
@@ -468,7 +414,6 @@ void KSpreadCell::copyFormat( int _column, int _row )
     setFactor( cell->factor( _column, _row ) );
     setMultiRow( cell->multiRow( _column, _row ) );
     setVerticalText( cell->verticalText( _column, _row ) );
-    setStyle( cell->style());
     setDontPrintText( cell->getDontprintText(_column, _row ) );
     setNotProtected( cell->notProtected(_column, _row ) );
     setHideAll(cell->isHideAll(_column, _row ) );
@@ -511,12 +456,6 @@ void KSpreadCell::copyContent( KSpreadCell* cell )
     else
       setCellText( cell->text() );
 
-    setAction( cell->action() );
-
-    delete d->cellPrivate;
-    d->cellPrivate = 0;
-    if ( cell->d->cellPrivate )
-        d->cellPrivate = cell->d->cellPrivate->copy( this );
 }
 
 void KSpreadCell::defaultStyle()
@@ -728,70 +667,7 @@ void KSpreadCell::unobscure( KSpreadCell * cell )
 
 void KSpreadCell::clicked( KSpreadCanvas * _canvas )
 {
-  if ( d->style == KSpreadCell::ST_Normal )
     return;
-  else if ( d->style == KSpreadCell::ST_Select )
-  {
-    // We do only show a menu if the user himself clicked
-    // on the cell.
-    if ( !_canvas )
-      return;
-
-    QPopupMenu *popup = new QPopupMenu( _canvas );
-    SelectPrivate *s = (SelectPrivate*) d->cellPrivate;
-
-    int id = 0;
-    QStringList::ConstIterator it = s->m_lstItems.begin();
-    for( ; it != s->m_lstItems.end(); ++it )
-        popup->insertItem( *it, id++ );
-    QObject::connect( popup, SIGNAL( activated( int ) ),
-                      s, SLOT( slotItemSelected( int ) ) );
-    RowFormat *rl = m_pTable->rowFormat( row() );
-    int tx = m_pTable->columnPos( column(), _canvas );
-    double ty = m_pTable->dblRowPos( row(), _canvas );
-    double h = rl->dblHeight( _canvas );
-    if ( d->extraYCells )
-      h = d->extraHeight;
-    ty += h;
-
-    QPoint p( tx, int( ty ) );
-    QPoint p2 = _canvas->mapToGlobal( p );
-    popup->popup( p2 );
-    //delete popup;
-    return;
-  }
-
-  if ( d->strAction.isEmpty() )
-    return;
-
-  KSContext context;
-  QPtrList<KSpreadDependency> lst;
-  lst.setAutoDelete( TRUE );
-  KSParseNode* code = m_pTable->doc()->interpreter()->parse( context, m_pTable, d->strAction, lst );
-  // Did a syntax error occur ?
-  if ( context.exception() )
-  {
-    kdDebug(36001) << "Failed action in cell " << name() << endl;
-    if (m_pTable->doc()->getShowMessageError())
-    {
-      QString tmp(i18n("Error in cell %1\n\n"));
-      tmp = tmp.arg( fullName() );
-      tmp += context.exception()->toString( context );
-      KMessageBox::error((QWidget*)0L , tmp);
-    }
-    return;
-  }
-
-  KSContext& context2 = m_pTable->doc()->context();
-  if ( !m_pTable->doc()->interpreter()->evaluate( context2, code, m_pTable, this ) )
-      // Print out exception if any
-      if ( context2.exception() &&m_pTable->doc()->getShowMessageError())
-      {
-          QString tmp(i18n("Error in cell %1\n\n"));
-          tmp = tmp.arg( fullName() );
-          tmp += context2.exception()->toString( context2 );
-          KMessageBox::error( (QWidget*)0L, tmp);
-      }
 }
 
 QString KSpreadCell::encodeFormula( bool _era, int _col, int _row )
@@ -1247,10 +1123,6 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     d->extraWidth = w;
     d->extraHeight = h;
 
-    // Some space for the little button of the combo box
-    if ( d->style == ST_Select )
-        w -= 16.0;
-
     // Do we need to break the line into multiple lines and are we allowed to
     // do so?
     int lines = 1;
@@ -1517,13 +1389,6 @@ void KSpreadCell::setOutputText()
        && !( m_pTable->isProtected() && isHideFormula( d->column, d->row ) ) )
   {
     d->strOutText = d->strText;
-  }
-  else if ( d->style == ST_Select )
-  {
-    // If this is a select box, find out about the selected item
-    // in the KSpreadPrivate data struct
-    SelectPrivate *s = (SelectPrivate*)d->cellPrivate;
-    d->strOutText = s->text();
   }
   else if ( d->value.isBoolean() )
   {
@@ -2130,11 +1995,6 @@ bool KSpreadCell::calc(bool delay)
     d->value.setError ( "####" );
 
     setFlag(Flag_LayoutDirty);
-    if ( d->style == ST_Select )
-    {
-        SelectPrivate *s = (SelectPrivate*)d->cellPrivate;
-        s->parse( d->strFormulaOut );
-    }
     return false;
   }
 
@@ -2184,11 +2044,6 @@ bool KSpreadCell::calc(bool delay)
 	  setFlag(Flag_DependancyError);
 	  d->value.setError( "####" );
           clearFlag(Flag_Progress);
-	  if ( d->style == ST_Select )
-          {
-	    SelectPrivate *s = (SelectPrivate*)d->cellPrivate;
-	    s->parse( d->strFormulaOut );
-	  }
 	  setFlag(Flag_LayoutDirty);
           clearFlag(Flag_CalcDirty);
 	  return false;
@@ -2218,11 +2073,6 @@ bool KSpreadCell::calc(bool delay)
     clearFlag(Flag_Progress);
     clearFlag(Flag_CalcDirty);
 
-    if ( d->style == ST_Select )
-    {
-        SelectPrivate *s = (SelectPrivate*)d->cellPrivate;
-        s->parse( d->strFormulaOut );
-    }
     return false;
   }
   else if ( context.value()->type() == KSValue::DoubleType )
@@ -2310,11 +2160,6 @@ bool KSpreadCell::calc(bool delay)
     else
       d->strFormulaOut=d->strFormulaOut;
     setFormatType(Text_format);
-  }
-  if ( d->style == ST_Select )
-  {
-      SelectPrivate *s = (SelectPrivate*)d->cellPrivate;
-      s->parse( d->strFormulaOut );
   }
 
   clearFlag(Flag_CalcDirty);
@@ -4389,21 +4234,6 @@ void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
     setFlag(Flag_TextFormatDirty);
   }
 
-  /**
-   *  Special handling for selection boxes
-   */
-  if ( d->style == ST_Select && !m_pTable->isLoading() )
-  {
-      SelectPrivate *s = (SelectPrivate*)d->cellPrivate;
-      if ( d->content == Formula )
-          s->parse( d->strFormulaOut );
-      else
-          s->parse( d->strText );
-      kdDebug(36001) << "SELECT " << s->text() << endl;
-      checkTextInput(); // is this necessary?
-      // setFlag(Flag_LayoutDirty);
-  }
-
   update();
 
   m_pTable->doc()->emitEndOperation( QRect( d->column, d->row, 1, 1 ) );
@@ -4750,9 +4580,7 @@ void KSpreadCell::checkTextInput()
 
     // Get the text from that cell (using result of formula if any)
     QString str = d->strText;
-    if ( d->style == ST_Select )
-        str = (static_cast<SelectPrivate*>(d->cellPrivate))->text();
-    else if ( isFormula() )
+    if ( isFormula() )
         str = d->strFormulaOut;
 
     // If the text is empty, we don't have a value
@@ -5055,9 +4883,6 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
     cell.setAttribute( "row", d->row - _y_offset );
     cell.setAttribute( "column", d->column - _x_offset );
 
-    if ( !action().isEmpty() )
-        cell.setAttribute( "action", action() );
-
     //
     // Save the formatting information
     //
@@ -5072,9 +4897,6 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         if ( extraYCells() )
             format.setAttribute( "rowspan", extraYCells() );
     }
-    if ( style() )
-        format.setAttribute( "style", (int) d->style );
-
 
     if ( d->conditions )
     {
@@ -5373,9 +5195,6 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
     d->column = cell.attribute( "column" ).toInt( &ok ) + _xshift;
     if ( !ok ) return false;
 
-    if ( cell.hasAttribute( "action" ) )
-        setAction( cell.attribute("action") );
-
     // Validation
     if ( d->row < 1 || d->row > KS_rowMax )
     {
@@ -5640,9 +5459,6 @@ bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
           clearFlag( Flag_CalcDirty );
       }
     }
-
-    if ( !f.isNull() && f.hasAttribute( "style" ) )
-        setStyle( (Style)f.attribute("style").toInt() );
 
     return true;
 }
@@ -5987,7 +5803,6 @@ KSpreadCell::~KSpreadCell()
     if ( d->previousCell )
         d->previousCell->setNextCell( d->nextCell );
 
-    delete d->cellPrivate;
     delete d->QML;
     delete d->validity;
     delete d->code;
@@ -6218,55 +6033,6 @@ bool KSpreadCell::testFlag( CellFlags flag ) const
   return ( m_flagsMask & (Q_UINT32)flag );
 }
 
-/***************************************************
- *
- * SelectPrivate
- *
- ***************************************************/
-
-void SelectPrivate::parse( const QString& _text )
-{
-    m_lstItems.clear();
-
-    if ( _text.isEmpty() )
-        return;
-
-    m_lstItems = QStringList::split( '\\', _text );
-
-    if ( m_iIndex != -1 && m_iIndex < (int)m_lstItems.count() )
-    { }
-    else if ( m_lstItems.count() > 0 )
-        m_iIndex = 0;
-    else
-        m_iIndex = -1;
-}
-
-void SelectPrivate::slotItemSelected( int _id )
-{
-    m_iIndex = _id;
-
-    m_pCell->setLayoutDirtyFlag( true );
-    m_pCell->checkTextInput(); // is this necessary ?
-
-    m_pCell->m_pTable->setRegionPaintDirty(m_pCell->cellRect());
-}
-
-QString SelectPrivate::text() const
-{
-    if ( m_iIndex == -1 )
-        return QString::null;
-
-    return m_lstItems[ m_iIndex ];
-}
-
-KSpreadCellPrivate* SelectPrivate::copy( KSpreadCell* cell )
-{
-    SelectPrivate* p = new SelectPrivate( cell );
-    p->m_lstItems = m_lstItems;
-    p->m_iIndex = m_iIndex;
-
-    return p;
-}
 
 #include "kspread_cell.moc"
 

@@ -2816,8 +2816,6 @@ void KSpreadUndoStyleCell::createListCell( QValueList<styleCell> &listCell, KSpr
 	  styleCell tmpStyleCell;
 	  tmpStyleCell.row = c->row();
 	  tmpStyleCell.col = col;
-	  tmpStyleCell.style = c->style();
-	  tmpStyleCell.action = c->action();
 	  listCell.append(tmpStyleCell);
         }
         c = table->getNextCellDown( col, c->row() );
@@ -2837,8 +2835,6 @@ void KSpreadUndoStyleCell::createListCell( QValueList<styleCell> &listCell, KSpr
 	  styleCell tmpStyleCell;
 	  tmpStyleCell.row = row;
 	  tmpStyleCell.col = c->column();
-	  tmpStyleCell.style = c->style();
-	  tmpStyleCell.action = c->action();
 	  listCell.append(tmpStyleCell);
         }
         c = table->getNextCellRight( c->column(), row );
@@ -2855,8 +2851,6 @@ void KSpreadUndoStyleCell::createListCell( QValueList<styleCell> &listCell, KSpr
           styleCell tmpStyleCell;
           tmpStyleCell.row = i;
           tmpStyleCell.col = j;
-          tmpStyleCell.style = cell->style();
-          tmpStyleCell.action = cell->action();
           listCell.append(tmpStyleCell);
         }
   }
@@ -2878,8 +2872,6 @@ void KSpreadUndoStyleCell::undo()
     for ( it2 = m_lstStyleCell.begin(); it2 != m_lstStyleCell.end(); ++it2 )
       {
 	KSpreadCell *cell = table->nonDefaultCell( (*it2).col, (*it2).row);
-	cell->setStyle((*it2).style);
-	cell->setAction((*it2).action);
       }
     table->setRegionPaintDirty(m_selection);
     table->updateView( m_selection );
@@ -2901,8 +2893,6 @@ void KSpreadUndoStyleCell::redo()
     for ( it2 = m_lstRedoStyleCell.begin(); it2 != m_lstRedoStyleCell.end(); ++it2 )
       {
 	KSpreadCell *cell = table->nonDefaultCell( (*it2).col, (*it2).row);
-	cell->setStyle((*it2).style);
-	cell->setAction((*it2).action);
       }
     table->setRegionPaintDirty(m_selection);
     table->updateView();

@@ -69,45 +69,6 @@ struct KSpreadValidity
  QDate  dateMax;
 };
 
-
-class KSpreadCellPrivate : public QObject
-{
-    Q_OBJECT
-public:
-    KSpreadCellPrivate( KSpreadCell* _cell ) { m_pCell = _cell; }
-    virtual ~KSpreadCellPrivate() { }
-
-    /**
-     * Used in @ref KSpreadCell::copyAll to make a copy
-     * of some cell.
-     */
-    virtual KSpreadCellPrivate* copy( KSpreadCell* cell ) = 0;
-
-protected:
-    KSpreadCell* m_pCell;
-};
-
-class SelectPrivate : public KSpreadCellPrivate
-{
-    Q_OBJECT
-public:
-    SelectPrivate( KSpreadCell* _cell ) : KSpreadCellPrivate( _cell ) { m_iIndex = -1; }
-    virtual ~SelectPrivate() { }
-
-    KSpreadCellPrivate* copy( KSpreadCell* cell );
-
-    QString text() const;
-
-    void parse( const QString& _text );
-
-    QStringList m_lstItems;
-    int m_iIndex;
-
-public slots:
-    void slotItemSelected( int _id );
-};
-
-
 class CellPrivate;
 
 
@@ -228,14 +189,6 @@ public:
      */
     void setValue( const KSpreadValue& value );
 
-    Style style() const;
-
-    void setStyle( Style s );
-    
-    QString action() const;
-
-    void setAction( const QString& action );
-    
     KSpreadCell* previousCell() const;
     KSpreadCell* nextCell() const;
     void setPreviousCell( KSpreadCell* c );
