@@ -91,8 +91,12 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       // easier to compare this list with the member vars list (compiler ensures order).
       m_sheetSide( AnySide ),
       m_runAround( _ra ),
+      m_runAroundSide( RA_BIGGEST ),
       m_frameBehavior( AutoExtendFrame ),
       m_newFrameBehavior( ( fs && fs->type() == FT_TEXT ) ? Reconnect : NoFollowup ),
+      m_bCopy( false ),
+      m_selected( false ),
+      m_drawFootNoteLine( false ),
       m_runAroundLeft( 1.0 ),
       m_runAroundRight( 1.0 ),
       m_runAroundTop( 1.0 ),
@@ -104,9 +108,6 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_minFrameHeight( 0 ),
       m_internalY( 0 ),
       m_zOrder( 0 ),
-      m_bCopy( false ),
-      m_selected( false ),
-      m_drawFootNoteLine( false ),
       m_backgroundColor( (fs && (fs->type() == FT_PICTURE || fs->type() == FT_PART)) ? QBrush( QColor(), Qt::NoBrush) : QBrush( QColor() ) ), // valid brush with invalid color ( default )
       m_borderLeft( QColor(), KoBorder::SOLID, 0 ),
       m_borderRight( QColor(), KoBorder::SOLID, 0 ),
@@ -480,10 +481,11 @@ void KWFrame::load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVers
     m_runAround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", RA_NO ) );
     QString str = frameElem.attribute( "runaroundSide" );
     if ( str == "left" )
-        setRunAroundSide( RA_LEFT );
+        m_runAroundSide = RA_LEFT;
     else if ( str == "right" )
-        setRunAroundSide( RA_RIGHT );
-    // default case: RA_BIGGEST, since it's 0
+        m_runAroundSide = RA_RIGHT;
+    else
+        m_runAroundSide = RA_BIGGEST;
 
     double runAroundGap = ( frameElem.hasAttribute( "runaroundGap" ) )
                           ? frameElem.attribute( "runaroundGap" ).toDouble()

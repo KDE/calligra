@@ -126,18 +126,17 @@ public:
         m_runAroundBottom = bottom;
     }
 
-    // Don't look at the implementation, it's about saving one byte ;)
-    RunAround runAround()const { return (RunAround)(m_runAround & 0x0f); }
-    void setRunAround( RunAround _ra ) { m_runAround = 16 * runAroundSide() + _ra; }
+    RunAround runAround()const { return m_runAround; }
+    void setRunAround( RunAround _ra ) { m_runAround = _ra; }
 
-    RunAroundSide runAroundSide() const { return (RunAroundSide)(m_runAround / 16); }
-    void setRunAroundSide( RunAroundSide rs ) { m_runAround = 16 * rs + runAround(); }
+    RunAroundSide runAroundSide() const { return m_runAroundSide; }
+    void setRunAroundSide( RunAroundSide rs ) { m_runAroundSide = rs; }
 
     /** what should happen when the frame is full
      */
     enum FrameBehavior { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
 
-    FrameBehavior frameBehavior()const { return (FrameBehavior)m_frameBehavior; }
+    FrameBehavior frameBehavior()const { return m_frameBehavior; }
     void setFrameBehavior( FrameBehavior fb ) { m_frameBehavior = fb; }
 
     /* Frame duplication properties */
@@ -146,7 +145,7 @@ public:
      *   AnySide, OddSide or EvenSide
      */
     enum SheetSide { AnySide=0, OddSide=1, EvenSide=2};
-    SheetSide sheetSide()const { return (SheetSide)m_sheetSide; }
+    SheetSide sheetSide()const { return m_sheetSide; }
     void setSheetSide( SheetSide ss ) { m_sheetSide = ss; }
 
     /** What happens on new page
@@ -308,19 +307,21 @@ public:
     bool drawFootNoteLine()const { return m_drawFootNoteLine; }
 
 private:
-    char /*SheetSide*/ m_sheetSide;
-    char /*RunAroundSide*/ m_runAround; // includes runaround side
-    FrameBehavior m_frameBehavior : 8;
-    NewFrameBehavior m_newFrameBehavior : 8;
+    SheetSide m_sheetSide : 2;
+    RunAround m_runAround : 2;
+    RunAroundSide m_runAroundSide : 2;
+    FrameBehavior m_frameBehavior : 2;
+    NewFrameBehavior m_newFrameBehavior : 2;
+    bool m_bCopy;
+    bool m_selected;
+    bool m_drawFootNoteLine;
+
     double m_runAroundLeft, m_runAroundRight, m_runAroundTop, m_runAroundBottom;
     double m_paddingLeft, m_paddingRight, m_paddingTop, m_paddingBottom;
     double m_minFrameHeight;
 
     double m_internalY;
     int m_zOrder;
-    bool m_bCopy;
-    bool m_selected;
-    bool m_drawFootNoteLine;
 
     QBrush m_backgroundColor;
     KoBorder m_borderLeft, m_borderRight, m_borderTop, m_borderBottom;
