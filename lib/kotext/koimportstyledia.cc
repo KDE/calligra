@@ -117,5 +117,16 @@ QString KoImportStyleDia::generateStyleName( const QString & templateName )
     return name;
 }
 
+KoStyle *KoImportStyleDia::findStyle( const QString & _name)
+{
+    QPtrListIterator<KoStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        if ( styleIt.current()->name() == _name ) {
+            return styleIt.current();
+        }
+    }
+    return 0L;
+}
 
 #include "koimportstyledia.moc"

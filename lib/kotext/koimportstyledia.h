@@ -46,6 +46,8 @@ protected:
 
     QString generateStyleName( const QString & templateName );
 
+    KoStyle *findStyle( const QString & _name);
+
     void initList();
 
     QListBox *m_listStyleName;
