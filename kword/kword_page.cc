@@ -15,6 +15,7 @@
 
 #include "kword_doc.h"
 #include "kword_page.h"
+#include "kword_page.moc"
 #include "kword_view.h"
 
 /******************************************************************/
@@ -168,6 +169,7 @@ void KWPage::paintEvent(QPaintEvent* e)
 void KWPage::keyPressEvent(QKeyEvent *e)
 {
   unsigned int oldPage = fc->getPage();
+  KWParag* oldParag = fc->getParag();
 
   XKeyboardControl kbdc;
   XKeyboardState kbds;
@@ -261,6 +263,11 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	if (oldPage != fc->getPage())
 	  gui->getVertRuler()->setOffset(0,-getVertRulerPos());
+	if (oldParag != fc->getParag() && fc->getParag())
+	  {	  
+	    gui->getHorzRuler()->setLeftIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTLeftIndent()));
+	    gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
+	  }
 
 	return;
 
@@ -338,6 +345,11 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	    if (oldPage != fc->getPage())
 	      gui->getVertRuler()->setOffset(0,-getVertRulerPos());
+	    if (oldParag != fc->getParag() && fc->getParag())
+	      {	  
+		gui->getHorzRuler()->setLeftIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTLeftIndent()));
+		gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
+	      }
 
 	    return;
 	  }
@@ -497,6 +509,11 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
   if (oldPage != fc->getPage())
     gui->getVertRuler()->setOffset(0,-getVertRulerPos());
+  if (oldParag != fc->getParag() && fc->getParag())
+    {	  
+      gui->getHorzRuler()->setLeftIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTLeftIndent()));
+      gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
+    }
 }
 
 /*================================================================*/

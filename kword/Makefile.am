@@ -19,7 +19,7 @@ noinst_HEADERS = char.h kword_main.h kword_doc.h kword_view.h kword.h kword_shel
 		fc.h font.h format.h kword_page.h parag.h paraglayout.h \
 		formatcollection.h paragdia.h
 
-SRCMETA =	kword_main.moc kword_view.moc kword_doc.moc kword_shell.moc paragdia.moc
+SRCMETA =	kword_main.moc kword_view.moc kword_doc.moc kword_shell.moc paragdia.moc kword_page.moc
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
 
@@ -66,3 +66,4 @@ parag.cc: parag.h
 paraglayout.cc: paraglayout.h
 formatcollection.cc: formatcollection.h
 paragdia.cc: paragdia.moc
+kword_page.cc: kword_page.moc

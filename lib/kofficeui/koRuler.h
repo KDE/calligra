@@ -16,6 +16,8 @@
 
 #include "koPageLayoutDia.h"
 
+#include "kapp.h"
+
 #include <qframe.h>
 #include <qwidget.h>
 #include <qpainter.h>
@@ -61,12 +63,19 @@ public:
   void setOffset(int _diffx,int _diffy)
     { diffx = _diffx; diffy = _diffy; repaint(false); }
 
+  void setLeftIndent(int _left)
+    { i_left = _left; repaint(false); }
+  void setFirstIndent(int _first)
+    { i_first = _first; repaint(false); }
+
 signals:
   void newPageLayout(KoPageLayout);
+  void newLeftIndent(int);
+  void newFirstIndent(int);
   void openPageLayoutDia();
 
 protected:
-  enum Action {A_NONE,A_BR_LEFT,A_BR_RIGHT,A_BR_TOP,A_BR_BOTTOM};
+  enum Action {A_NONE,A_BR_LEFT,A_BR_RIGHT,A_BR_TOP,A_BR_BOTTOM,A_LEFT_INDENT,A_FIRST_INDENT};
 
   void drawContents(QPainter *_painter)
     { if (orientation == HORIZONTAL) drawHorizontal(_painter); else drawVertical(_painter); }
@@ -89,6 +98,7 @@ protected:
   int diffx,diffy;
   bool showMPos;
   int mposX,mposY;
+  int i_left,i_first;
 
   int oldMx,oldMy;
   bool mousePressed;
@@ -96,7 +106,8 @@ protected:
   bool hasToDelete;
   QPixmap buffer;
   bool whileMovingBorderLeft,whileMovingBorderRight,whileMovingBorderTop,whileMovingBorderBottom;
-
+  QPixmap pmFirst,pmLeft;
+  
 };
 
 #endif

@@ -39,6 +39,8 @@ class KWordDocument_impl;
 
 class KWPage : public QWidget
 {
+  Q_OBJECT
+  
 public:
   KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui);
 
@@ -105,6 +107,12 @@ public:
   void recalcCursor();
 
   int getVertRulerPos();
+
+public slots:
+  void newLeftIndent(int _left)
+    { setLeftIndent(static_cast<float>(_left)); }
+  void newFirstIndent(int _first)
+    { setFirstLineIndent(static_cast<float>(_first)); }
 
 protected:
   unsigned int ptLeftBorder();

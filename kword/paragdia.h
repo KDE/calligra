@@ -93,7 +93,7 @@ public:
     { return atof(eBefore->text()); } 
   float getSpaceAfterParag()
     { return atof(eAfter->text()); } 
-  unsigned int  getLineSpacing()
+  unsigned int getLineSpacing()
     { return atoi(eSpacing->text()); } 
   
 

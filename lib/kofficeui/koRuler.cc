@@ -45,6 +45,10 @@ KoRuler::KoRuler(QWidget *_parent,QWidget *_canvas,Orientation _orientation,
   mposY = 0;
   hasToDelete = false;
   whileMovingBorderLeft = whileMovingBorderRight = whileMovingBorderTop = whileMovingBorderBottom = false;
+
+  QString pixdir = kapp->kde_datadir();
+  pmFirst.load(pixdir + "/koffice/pics/koRulerFirst.xpm");
+  pmLeft.load(pixdir + "/koffice/pics/koRulerLeft.xpm");
 }
 
 /*================================================================*/
@@ -145,6 +149,13 @@ void KoRuler::drawHorizontal(QPainter *_painter)
   p.drawLine(-diffx,1,-diffx,height() - 1);
   p.setPen(QPen(white));
   p.drawLine(-diffx - 1,1,-diffx - 1,height() - 1);
+
+  if (flags & F_INDENTS)
+    {
+      p.drawPixmap(static_cast<int>(i_first * 100 * _MM_TO_POINT) / 100 - pmFirst.size().width() / 2 + r.left(),2,pmFirst);
+      p.drawPixmap(static_cast<int>(i_left * 100 * _MM_TO_POINT) / 100 - pmLeft.size().width() / 2 + r.left(),
+		   height() - pmLeft.size().height() - 2,pmLeft);
+    }
 
   if (action == A_NONE && showMPos)
     {
@@ -276,6 +287,18 @@ void KoRuler::mousePressEvent(QMouseEvent *e)
 
       repaint(false);
     }
+  else if (action == A_FIRST_INDENT || action == A_LEFT_INDENT)
+    {
+      if (canvas)
+	{
+	  QPainter p;
+	  p.begin(canvas);
+	  p.setRasterOp(NotROP);
+	  p.setPen(QPen(black,1,SolidLine));
+	  p.drawLine(oldMx,0,oldMx,canvas->height());
+	  p.end();
+	}
+    }
 }
 
 /*================================================================*/
@@ -319,6 +342,37 @@ void KoRuler::mouseReleaseEvent(QMouseEvent *e)
       repaint(false);
       emit newPageLayout(layout);
     }
+  else if (action == A_FIRST_INDENT)
+    {
+      if (canvas)
+	{
+	  QPainter p;
+	  p.begin(canvas);
+	  p.setRasterOp(NotROP);
+	  p.setPen(QPen(black,1,SolidLine));
+	  p.drawLine(oldMx,0,oldMx,canvas->height());
+	  p.end();
+	}
+      
+      repaint(false);
+      emit newFirstIndent(i_first);
+    }
+  else if (action == A_LEFT_INDENT)
+    {
+      if (canvas)
+	{
+	  QPainter p;
+	  p.begin(canvas);
+	  p.setRasterOp(NotROP);
+	  p.setPen(QPen(black,1,SolidLine));
+	  p.drawLine(oldMx,0,oldMx,canvas->height());
+	  p.end();
+	}
+      
+      repaint(false);
+      emit newLeftIndent(i_left);
+      emit newFirstIndent(i_first);
+    }
 }
 
 /*================================================================*/
@@ -338,6 +392,8 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
   right = pw - right - diffx;
   int bottom = static_cast<int>(layout.bottom * _MM_TO_POINT * 100) / 100;
   bottom = ph - bottom - diffy;
+  int ip_left = static_cast<int>(static_cast<float>(i_left) * 100 * _MM_TO_POINT) / 100;
+  int ip_first = static_cast<int>(static_cast<float>(i_first) * 100 * _MM_TO_POINT) / 100;
 
   int mx = e->x();
   int my = e->y();
@@ -359,6 +415,19 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 	      {
 		setCursor(sizeHorCursor);
 		action = A_BR_RIGHT;
+	      }
+
+	    if (mx > left + ip_first - 5 && mx < left + ip_first + 5 &&
+		my >= 2 && my <= pmFirst.size().height() + 2)
+	      {
+		setCursor(ArrowCursor);
+		action = A_FIRST_INDENT;
+	      }
+	    else if (mx > left + ip_left - 5 && mx < left + ip_left + 5 &&
+		     my >=  height() - pmLeft.size().height() - 2 && my <= height() - 2)
+	      {
+		setCursor(ArrowCursor);
+		action = A_LEFT_INDENT;
 	      }
 	  }
 	else
@@ -394,6 +463,60 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      p.drawLine(mx,0,mx,canvas->height());
 		      p.end();
 		      layout.right = (static_cast<float>(pw - (mx + 1 + diffx)) * _POINT_TO_MM * 100) / 100;
+		      oldMx = e->x();
+		      oldMy = e->y();
+		      repaint(false);
+		    }
+		} break;
+	      case A_FIRST_INDENT:
+		{
+		  if (canvas)
+		    {
+		      QPainter p;
+		      p.begin(canvas);
+		      p.setRasterOp(NotROP);
+		      p.setPen(QPen(black,1,SolidLine));
+		      if (mx - left >= 0)
+			{
+			  p.drawLine(oldMx,0,oldMx,canvas->height());
+			  p.drawLine(mx,0,mx,canvas->height());
+			}
+		      else 
+			{
+			  p.end();
+			  return;
+			}
+		      p.end();
+		      i_first = static_cast<int>(static_cast<float>(mx - left) * 100 * _POINT_TO_MM) / 100;
+		      if (i_first < 0) i_first = 0;
+		      oldMx = e->x();
+		      oldMy = e->y();
+		      repaint(false);
+		    }
+		} break;
+	      case A_LEFT_INDENT:
+		{
+		  if (canvas)
+		    {
+		      QPainter p;
+		      p.begin(canvas);
+		      p.setRasterOp(NotROP);
+		      p.setPen(QPen(black,1,SolidLine));
+		      if (mx - left >= 0)
+			{
+			  p.drawLine(oldMx,0,oldMx,canvas->height());
+			  p.drawLine(mx,0,mx,canvas->height());
+			}
+		      else 
+			{
+			  p.end();
+			  return;
+			}
+		      p.end();
+		      int oldLeft = i_left;
+		      i_left = static_cast<int>(static_cast<float>(mx - left) * 100 * _POINT_TO_MM) / 100;
+		      if (i_left < 0) i_left = 0;
+		      else i_first += i_left - oldLeft;
 		      oldMx = e->x();
 		      oldMy = e->y();
 		      repaint(false);

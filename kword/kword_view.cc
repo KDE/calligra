@@ -355,7 +355,11 @@ void KWordView_impl::formatPage()
   KoHeadFoot hf;
   
   if (KoPageLayoutDia::pageLayout(pgLayout,hf,cl,FORMAT_AND_BORDERS | COLUMNS)) 
-    m_pKWordDoc->setPageLayout(pgLayout,cl);
+    {
+      m_pKWordDoc->setPageLayout(pgLayout,cl);
+      gui->getVertRuler()->setPageLayout(pgLayout);
+      gui->getHorzRuler()->setPageLayout(pgLayout);
+    }
 }
 
 /*===============================================================*/
@@ -1063,6 +1067,8 @@ void KWordView_impl::paragDiaOk()
   gui->getPaperWidget()->setSpaceBeforeParag(paragDia->getSpaceBeforeParag());
   gui->getPaperWidget()->setSpaceAfterParag(paragDia->getSpaceAfterParag());
   gui->getPaperWidget()->setLineSpacing(paragDia->getLineSpacing());
+  gui->getHorzRuler()->setLeftIndent(static_cast<int>(paragDia->getLeftIndent()));
+  gui->getHorzRuler()->setFirstIndent(static_cast<int>(paragDia->getFirstLineIndent()));
 }
 
 /*================================================================*/
@@ -1139,12 +1145,17 @@ KWordGUI::KWordGUI(QWidget *parent,bool __show,KWordDocument_impl *_doc,KWordVie
   KoColumns cols;
   doc->getPageLayout(layout,cols);
 
-  r_horz = new KoRuler(this,paperWidget,KoRuler::HORIZONTAL,layout,0);
+  r_horz = new KoRuler(this,paperWidget,KoRuler::HORIZONTAL,layout,KoRuler::F_INDENTS);
   r_vert = new KoRuler(this,paperWidget,KoRuler::VERTICAL,layout,0);
   connect(r_horz,SIGNAL(newPageLayout(KoPageLayout)),view,SLOT(newPageLayout(KoPageLayout)));
+  connect(r_horz,SIGNAL(newLeftIndent(int)),paperWidget,SLOT(newLeftIndent(int)));
+  connect(r_horz,SIGNAL(newFirstIndent(int)),paperWidget,SLOT(newFirstIndent(int)));
   connect(r_horz,SIGNAL(openPageLayoutDia()),view,SLOT(openPageLayoutDia()));
   connect(r_vert,SIGNAL(newPageLayout(KoPageLayout)),view,SLOT(newPageLayout(KoPageLayout)));
   connect(r_vert,SIGNAL(openPageLayoutDia()),view,SLOT(openPageLayoutDia()));
+
+  r_horz->setLeftIndent(static_cast<int>(paperWidget->getLeftIndent()));
+  r_horz->setFirstIndent(static_cast<int>(paperWidget->getFirstLineIndent()));
 
   r_horz->hide();
   r_vert->hide();

@@ -110,3 +110,7 @@ Reggie, 22.9.1998:
 - Fixed a bug in Key_Enter
 - Implemented more ruler stuff (this works great now :-)
 - Cleaned some GUI stuff
+
+Reggie, 23.9.1998:
+------------------
+- Indents are configuarble with the ruler now
