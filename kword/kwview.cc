@@ -173,6 +173,10 @@ void KWView::initGui()
     actionViewFrameBorders->setChecked( doc->getViewFrameBorders() );
     actionViewTableGrid->setChecked( doc->getViewTableGrid());
     actionViewFormattingChars->setChecked( doc->getViewFormattingChars());
+
+    actionViewHeader->setChecked(doc->isHeaderVisible());
+    actionViewFooter->setChecked(doc->isFooterVisible());
+
     //setNoteType(doc->getNoteType(), false);
 
     actionFormatColor->setColor( Qt::black );
