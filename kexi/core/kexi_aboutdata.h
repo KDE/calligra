@@ -28,24 +28,41 @@
 static const char *description =
 	I18N_NOOP("Database Management");
 
-static const char *version=VERSION;
+#ifdef OOPL_VERSION
+# include "oopl_aboutdata.h"
+#else //default
+ 	const QString APP_NAME = I18N_NOOP("Kexi");
+	static const char *version=VERSION;
+	const char **APP_LOGO = 0;
+#endif
 
 KAboutData *newKexiAboutData()
 {
-	KAboutData *aboutData=new KAboutData( "kexi", I18N_NOOP("Kexi"),
+	KAboutData *aboutData=new KAboutData( "kexi", APP_NAME,
 		version, description, KAboutData::License_LGPL,
-		I18N_NOOP("(c) 2002, Kexi Team"), 0, "http://www.koffice.org/kexi");
+		I18N_NOOP(	"(c) 2002, 2003, Kexi Team\n"
+					"(c) 2003, OpenOffice Polska Ltd.\n"), 
+		I18N_NOOP(	"This software is developed by Kexi Team - international group\n"
+					"of independent developers, with additional assistance and support\n"
+					"from OpenOffice Polska company.\n\n"
+					"Visit Company Home Page: http://www.openoffice.com.pl"),
+		"http://www.koffice.org/kexi"
+		,0 /*TODO: kexi bugs*/
+	);
 	aboutData->addAuthor("Lucijan Busch",I18N_NOOP("Developer & Maintainer"), "lucijan@kde.org");
 	aboutData->addAuthor("Peter Simonsson",I18N_NOOP("Developer"),"psn@linux.se");
 	aboutData->addAuthor("Joseph Wenninger", I18N_NOOP("Form Designer, UIModes & much more"), "jowenn@kde.org");
 	aboutData->addAuthor("Seth Kurzenberg",I18N_NOOP("CQL++, SQL assistance"),  "seth@cql.com");
 	aboutData->addAuthor("Laurent Montel", I18N_NOOP("Code cleanings"), "montell@club-internet.fr");
 	aboutData->addAuthor("Till Busch", I18N_NOOP("Buxfixes, Original Table Widget"), "till@bux.at");
+	aboutData->addAuthor("Jaroslaw Staniek / OpenOffice Polska", I18N_NOOP("Developer, Designer, commercially supported version, win32 port"), "js@iidea.pl");
 	aboutData->addCredit("Daniel Molkentin",I18N_NOOP("Initial design improvements"),  "molkentin@kde.org");
 	aboutData->addCredit("Kristof Borrey", I18N_NOOP("Icons and UI-Research"), "kristof.borrey@skynet.be");
 	aboutData->setTranslator(I18N_NOOP("_:NAME OF TRANSLATORS\nNames"), I18N_NOOP("_:EMAIL OF TRANSLATORS\ne-mail"));
 	aboutData->addCredit("Tomas Krassnig", I18N_NOOP("Coffie sponsoring"), "tkrass05@hak1.at");
-
+#ifdef OOPL_VERSION
+	aboutData->setProgramLogo(APP_LOGO);
+#endif
 	return aboutData;
 }
 
