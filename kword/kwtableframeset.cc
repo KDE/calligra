@@ -2146,7 +2146,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                         }
                         fs=tableFrame->getCell(row,col);
                         if(fs && fs->m_row != row) {
-                            col+=fs->m_cols-1;
+                            col+=fs->m_cols;
                             fs=0;
                         }
                     } while(fs==0);
