@@ -2645,11 +2645,17 @@ void KWView::newLeftIndent( double _leftIndent)
 /*================================================================*/
 void KWView::openPopupMenuEditText( const QPoint & _point )
 {
-  if(!koDocument()->isReadWrite() )
-    return;
-   KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>( gui->canvasWidget()->currentFrameSetEdit() );
+    if(!koDocument()->isReadWrite() )
+        return;
+    KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>( gui->canvasWidget()->currentFrameSetEdit() );
     if (edit)
         ((QPopupMenu*)factory()->container("text_popup",this))->popup(_point);
+    else
+    {
+        KWFormulaFrameSetEdit *formulaEdit = dynamic_cast<KWFormulaFrameSetEdit *>( gui->canvasWidget()->currentFrameSetEdit() );
+        if (formulaEdit)
+            ((QPopupMenu*)factory()->container("Formula",this))->popup(_point);
+    }
 }
 
 /*================================================================*/
