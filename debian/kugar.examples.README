@@ -1,8 +1,7 @@
 
-To view the samples, type a command similar to the following:
+Sample reports can be viewed simply by opening the approprite Kugar data
+file (*.kud).  For instance:
 
-  kugar -d sample1.kud -r sample1.kut
+  kugar sample1.kud
 
-For more information, see /usr/share/doc/kugar/README or type "man kugar".
-
- -- Ben Burton <bab@debian.org>  Mon,  9 Apr 2001 02:02:20 -0500
+ -- Ben Burton <bab@debian.org>  Sat, 10 May 2003 14:31:30 +1000

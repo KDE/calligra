@@ -6,6 +6,7 @@ koffice (1:1.2.90-1) unstable; urgency=low
   * Split koffice-libs into koffice-libs and koffice-data.
   * Moved import/export filters into app-specific packages where possible.
   * Build-Conflicts with python2.3-dev to ensure we build against python2.2.
+  * Karbon no longer crashes with shift/ctrl dragging (closes: #189056).
   * Karbon fixed on big-endian machines (closes: #189735).
   * Kivio group/ungroup no longer loses connectedness (closes: #110009).
   * Kivio zoom toolbar no longer vanishes (closes: #123011).

@@ -8,4 +8,8 @@ The documentation for each application is in the corresponding
 /usr/share/doc/<package>/ directory (for instance, /usr/share/doc/kword/,
 /usr/share/doc/kspread/ and so on).
 
- -- Ben Burton <bab@debian.org>, Fri,  6 Apr 2001 10:30:32 -0500
+Each application provides documentation in a docbook format that the KDE
+Help Centre can display.  For HTML documentation that can be read in any
+web browser, see the package koffice-doc-html.
+
+ -- Ben Burton <bab@debian.org>, Sat, 10 May 2003 14:31:30 +1000
