@@ -23,7 +23,7 @@ libkwordpart_la_SOURCES = kwcanvas.cc kwframe.cc \
                 contents.cc kwstylemanager.cc searchdia.cc \
                 resizehandles.cc kwcommand.cc \
 		KWordMailMergeDatabaseIface.skel kwordmailmergedatabaseiface.cc mailmerge.cc \
-		mailmerge_actions.cc \
+		mailmerge_actions.cc kweditpath.cc \
 		kweditpersonnalexpressiondia.cc \
 		splitcellsdia.cc kwinsertpicdia.cc \
 		KWordDocIface.skel KWordDocIface.cc \

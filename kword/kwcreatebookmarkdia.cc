@@ -101,7 +101,6 @@ KWSelectBookmarkDia::KWSelectBookmarkDia( const QStringList & _list, KWDocument 
 
     connect( m_pbDelete, SIGNAL(clicked()), this, SLOT(slotDeleteBookmark()));
 
-
     setFocus();
     slotSelectionChanged();
     resize( 300, 200);

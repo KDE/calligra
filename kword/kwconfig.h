@@ -129,6 +129,7 @@ class ConfigurePathPage : public QObject
 public:
     ConfigurePathPage( KWView *_view, QVBox *box, char *name = 0 );
     void slotDefault();
+    void apply();
 private slots:
     void slotModifyPath();
 private:

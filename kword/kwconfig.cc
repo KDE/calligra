@@ -41,6 +41,7 @@
 #include "kwviewmode.h"
 #include "kwcommand.h"
 #include "kwvariable.h"
+#include "kweditpath.h"
 
 #include <koVariable.h>
 #include <kformulaconfigpage.h>
@@ -50,6 +51,7 @@
 #include <klistview.h>
 #include <kstandarddirs.h>
 #include <kdeversion.h>
+#include <kdebug.h>
 
 // little helper stolen from kmail
 // (Note: KDialogBase should have version of the methods that take a QString for the icon name)
@@ -115,6 +117,7 @@ void KWConfig::slotApply()
     KMacroCommand *macro = 0L;
     m_spellPage->apply();
     m_interfacePage->apply();
+    m_pathPage->apply();
     KCommand * cmd = m_miscPage->apply();
     if ( cmd )
     {
@@ -875,9 +878,15 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
 
 void ConfigurePathPage::slotModifyPath()
 {
-    if ( m_pPathView->currentItem ())
+    QListViewItem *item = m_pPathView->currentItem ();
+    if ( item )
     {
-        //todo
+        KWEditPathDia * dlg = new KWEditPathDia( item->text( 1), 0L, "editpath");
+        if (dlg->exec() )
+        {
+            item->setText(1, dlg->newPath());
+        }
+        delete dlg;
     }
 }
 
@@ -886,6 +895,15 @@ void ConfigurePathPage::slotDefault()
     QListViewItem * item = m_pPathView->findItem(i18n("Personal Expression"), 0);
     if ( item )
         item->setText(1, KWFactory::global()->dirs()->resourceDirs("expression").join(";"));
+}
+
+void ConfigurePathPage::apply()
+{
+    QListViewItem * item = m_pPathView->findItem(i18n("Personal Expression"), 0);
+    if ( item )
+    {
+        m_pView->kWordDocument()->setPersonalExpressionPath(QStringList::split(QString(";"), item->text(1)));
+    }
 }
 
 #include "kwconfig.moc"
