@@ -182,7 +182,7 @@ class VHistoryTab : public QWidget
 	public slots:
 		void historyCleared();
 		void commandExecuted( VCommand* command );
-		void commandAdded( VCommand* command );
+		void slotCommandAdded( VCommand* command );
 		void removeFirstCommand();
 		void removeLastCommand();
 

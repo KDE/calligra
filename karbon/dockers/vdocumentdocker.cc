@@ -445,6 +445,7 @@ VHistoryItem::VHistoryItem( VCommand* command, VHistoryGroupItem* parent, QListV
 
 void VHistoryItem::init()
 {
+	kdDebug() << "In VHistoryItem::init() : " << m_command->name() << endl;
 	char buffer[64];
 	sprintf( buffer, "%064ld", ++g_lastKey );
 	m_key = buffer;
@@ -521,7 +522,7 @@ VHistoryTab::VHistoryTab( KarbonPart* part, QWidget* parent )
 	connect( m_history, SIGNAL( mouseButtonClicked( int, QListViewItem*, const QPoint&, int ) ), this, SLOT( commandClicked( int, QListViewItem*, const QPoint&, int ) ) );
 	connect( m_groupCommands, SIGNAL( stateChanged( int ) ), this, SLOT( groupingChanged( int ) ) );
 	connect( part->commandHistory(), SIGNAL( historyCleared() ), this, SLOT( historyCleared() ) );
-	connect( part->commandHistory(), SIGNAL( commandAdded( VCommand* ) ), this, SLOT( commandAdded( VCommand* ) ) );
+	connect( part->commandHistory(), SIGNAL( commandAdded( VCommand* ) ), this, SLOT( slotCommandAdded( VCommand* ) ) );
 	connect( part->commandHistory(), SIGNAL( commandExecuted( VCommand* ) ), this, SLOT( commandExecuted( VCommand* ) ) );
 	connect( part->commandHistory(), SIGNAL( firstCommandRemoved() ), this, SLOT( removeFirstCommand() ) );
 	connect( part->commandHistory(), SIGNAL( lastCommandRemoved() ), this, SLOT( removeLastCommand() ) );
@@ -576,7 +577,7 @@ void VHistoryTab::commandExecuted( VCommand* command )
 	}
 } // VHistoryTab::commandExecuted
 
-void VHistoryTab::commandAdded( VCommand* command )
+void VHistoryTab::slotCommandAdded( VCommand* command )
 {
 	if ( !command )
 		return;
@@ -584,13 +585,15 @@ void VHistoryTab::commandAdded( VCommand* command )
 	QListViewItem* last = m_history->firstChild();
 	while ( last && last->nextSibling() )
 		last = last->nextSibling();
-	if ( groupingEnabled() )
-		if ( ( last ) && last->text( 0 ) == command->name() )
+
+	if( groupingEnabled() )
+	{
+		if( ( last ) && last->text( 0 ) == command->name() )
 		{
-			if ( last->rtti() == 1002 )
+			if( last->rtti() == 1002 )
 			{
 				QListViewItem* prevSibling;
-				if ( m_history->childCount() > 1 )
+				if( m_history->childCount() > 1 )
 				{
 					prevSibling = m_history->firstChild();
 					while ( prevSibling->nextSibling() != last )
@@ -607,13 +610,14 @@ void VHistoryTab::commandAdded( VCommand* command )
 		}
 		else
 			m_history->setCurrentItem( new VHistoryItem( command, m_history, last ) );
+	}
 	else
 		m_history->setCurrentItem( new VHistoryItem( command, m_history, last ) );
 	
 	m_history->sort();
 	m_history->ensureItemVisible( m_history->currentItem() );
 	m_history->update();
-} // VHistoryTab::commandAdded
+} // VHistoryTab::slotCommandAdded
 
 void VHistoryTab::removeFirstCommand()
 {
