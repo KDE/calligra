@@ -2865,5 +2865,11 @@ void KWordView::printDebug() {
                 kdDebug() << "     Page "<< doc->getFrameSet(iFrameset)->getFrame(j)->getPageNum() << endl;
         }
     }
+    kdDebug() << "# Images: " << doc->getImageCollection()->iterator().count() <<endl;
+    QDictIterator<KWImage> it( doc->getImageCollection()->iterator() );
+    while ( it.current() ) {
+        kdDebug() << " + " << it.current()->getFilename() << ": "<<it.current()->refCount() <<endl;
+        ++it;
+    }
 }
 
