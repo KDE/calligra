@@ -115,7 +115,7 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 
 <chapter ID="Introduction"><title>Introduction</title>
 
-<sect1>
+<sect1 id="introduction">
 <title>Introduction</title>
 <para>KWord, is a full featured WYSIWYG (What You See Is What You Get) Wordprocessor/Desktop Publishing Program. </para>
 <para> KWord is part of the KOffice productivity suite for the K Dekstop Environment.  Other applications in KOffice include</para>
