@@ -47,8 +47,11 @@ protected:
 
   // dialog objects
   QPixmap pLogo;
-  QLabel *lLogo,*lInfo;
-  QString author,email,add;
+  QLabel *lLogo;
+  QLabel *lInfo;
+  QString author;
+  QString email;
+  QString add;
   QGridLayout *grid;
   QPushButton *bOk;
   KButtonBox *bbox;

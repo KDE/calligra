@@ -113,14 +113,33 @@ struct KoPageLayout
   KoOrientation orientation;
 
   // WARNING: using these values is obsolote!!!!!!!!!!!
-  double width,height;
-  double left,right,top,bottom;
+  double width;
+  double height;
+  double left;
+  double right;
+  double top;
+  double bottom;
 
   KoUnit unit;
 
-  unsigned int ptWidth,ptHeight,ptLeft,ptRight,ptTop,ptBottom;
-  float mmWidth,mmHeight,mmLeft,mmTop,mmRight,mmBottom;
-  float inchWidth,inchHeight,inchLeft,inchTop,inchRight,inchBottom;
+  unsigned int ptWidth;
+  unsigned int ptHeight;
+  unsigned int ptLeft;
+  unsigned int ptRight;
+  unsigned int ptTop;
+  unsigned int ptBottom;
+  float mmWidth;
+  float mmHeight;
+  float mmLeft;
+  float mmTop;
+  float mmRight;
+  float mmBottom;
+  float inchWidth;
+  float inchHeight;
+  float inchLeft;
+  float inchTop;
+  float inchRight;
+  float inchBottom;
 
 //   bool operator==(const KoPageLayout _l) {
 //     return (_l.format == format &&
@@ -158,7 +177,8 @@ struct KoColumns
 {
   int columns;
   unsigned int ptColumnSpacing;
-  float mmColumnSpacing,inchColumnSpacing;
+  float mmColumnSpacing;
+  float inchColumnSpacing;
 };
 
 // structure for KWord header-Footer
@@ -166,9 +186,12 @@ struct KoKWHeaderFooter
 {
   KoHFType header;
   KoHFType footer;
-  unsigned int ptHeaderBodySpacing,ptFooterBodySpacing;
-  float mmHeaderBodySpacing,mmFooterBodySpacing;
-  float inchHeaderBodySpacing,inchFooterBodySpacing;
+  unsigned int ptHeaderBodySpacing;
+  unsigned int ptFooterBodySpacing;
+  float mmHeaderBodySpacing;
+  float mmFooterBodySpacing;
+  float inchHeaderBodySpacing;
+  float inchFooterBodySpacing;
 };
 
 /**
@@ -202,7 +225,12 @@ protected:
   void drawContents(QPainter*);
 
   // vars
-  int pgWidth,pgHeight,pgX,pgY,pgW,pgH;
+  int pgWidth;
+  int pgHeight;
+  int pgX;
+  int pgY;
+  int pgW;
+  int pgH;
   int columns;
 
 };
@@ -246,23 +274,72 @@ protected:
   void updatePreview(KoPageLayout);
 
   // dialog objects
-  QGroupBox *formatFrame,*borderFrame;
-  QButtonGroup *gHeader,*gFooter;
-  QWidget *tab1,*tab2,*tab3,*tab4;
-  QGridLayout *grid1,*grid3,*formatGrid,*borderGrid,*grid2,*grid4,*footerGrid,*headerGrid;
-  QLabel *lpgFormat,*lpgOrientation,*lpgUnit,*lpgWidth,*lpgHeight,*lbrLeft,*lbrRight,*lbrTop,*lbrBottom;
-  QComboBox *cpgFormat,*cpgOrientation,*cpgUnit;
-  KRestrictedLine *epgWidth,*epgHeight,*ebrLeft,*ebrRight,*ebrTop,*ebrBottom;
-  KoPagePreview *pgPreview,*pgPreview2;
-  QLabel *lHeadLeft,*lHeadMid,*lHeadRight,*lHead;
-  QLineEdit *eHeadLeft,*eHeadMid,*eHeadRight;
-  QLabel *lFootLeft,*lFootMid,*lFootRight,*lFoot,*lMacros1,*lMacros2;
-  QLineEdit *eFootLeft,*eFootMid,*eFootRight;
+  QGroupBox *formatFrame;
+  QGroupBox *borderFrame;
+  QButtonGroup *gHeader;
+  QButtonGroup *gFooter;
+  QWidget *tab1;
+  QWidget *tab2;
+  QWidget *tab3;
+  QWidget *tab4;
+  QGridLayout *grid1;
+  QGridLayout *grid3;
+  QGridLayout *formatGrid;
+  QGridLayout *borderGrid;
+  QGridLayout *grid2;
+  QGridLayout *grid4;
+  QGridLayout *footerGrid;
+  QGridLayout *headerGrid;
+  QLabel *lpgFormat;
+  QLabel *lpgOrientation;
+  QLabel *lpgUnit;
+  QLabel *lpgWidth;
+  QLabel *lpgHeight;
+  QLabel *lbrLeft;
+  QLabel *lbrRight;
+  QLabel *lbrTop;
+  QLabel *lbrBottom;
+  QComboBox *cpgFormat;
+  QComboBox *cpgOrientation;
+  QComboBox *cpgUnit;
+  KRestrictedLine *epgWidth;
+  KRestrictedLine *epgHeight;
+  KRestrictedLine *ebrLeft;
+  KRestrictedLine *ebrRight;
+  KRestrictedLine *ebrTop;
+  KRestrictedLine *ebrBottom;
+  KoPagePreview *pgPreview;
+  KoPagePreview *pgPreview2;
+  QLabel *lHeadLeft;
+  QLabel *lHeadMid;
+  QLabel *lHeadRight;
+  QLabel *lHead;
+  QLineEdit *eHeadLeft;
+  QLineEdit *eHeadMid;
+  QLineEdit *eHeadRight;
+  QLabel *lFootLeft;
+  QLabel *lFootMid;
+  QLabel *lFootRight;
+  QLabel *lFoot;
+  QLabel *lMacros1;
+  QLabel *lMacros2;
+  QLineEdit *eFootLeft;
+  QLineEdit *eFootMid;
+  QLineEdit *eFootRight;
   QSpinBox *nColumns;
-  KRestrictedLine *nCSpacing,*nHSpacing,*nFSpacing;
-  QLabel *lColumns,*lCSpacing,*lHSpacing,*lFSpacing;
-  QRadioButton *rhSame,*rhFirst,*rhEvenOdd;
-  QRadioButton *rfSame,*rfFirst,*rfEvenOdd;
+  KRestrictedLine *nCSpacing;
+  KRestrictedLine *nHSpacing;
+  KRestrictedLine *nFSpacing;
+  QLabel *lColumns;
+  QLabel *lCSpacing;
+  QLabel *lHSpacing;
+  QLabel *lFSpacing;
+  QRadioButton *rhSame;
+  QRadioButton *rhFirst;
+  QRadioButton *rhEvenOdd;
+  QRadioButton *rfSame;
+  QRadioButton *rfFirst;
+  QRadioButton *rfEvenOdd;
 
   // layout
   KoPageLayout layout;
