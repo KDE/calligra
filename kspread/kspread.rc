@@ -184,7 +184,7 @@
   <Menu name="View"><text>View</text>
    <Action name="newView"/>
   </Menu>
-  <Menu name="Extra"><text>Extraww</text>
+  <Menu name="Extra"><text>Extra</text>
    <PluginAction name="qcalc_show" plugin="qcalc" major="1" minor="0"/>
   </Menu>
   <Menu name="Help"><text>Help</text>
