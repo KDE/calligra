@@ -854,6 +854,11 @@ void KWCanvas::mrEditFrame() // Can be called from KWCanvas and from KWResizeHan
                 doc->addCommand(cmd);
 
                 doc->frameChanged( frame, m_gui->getView() ); // repaint etc.
+                if(frame->getFrameSet()->isAHeader() || frame->getFrameSet()->isAFooter())
+                    {
+                        doc->recalcFrames();
+                        frame->updateResizeHandles();
+                    }
             }
             delete cmdMoveFrame; // Unused after all
             cmdMoveFrame = 0L;

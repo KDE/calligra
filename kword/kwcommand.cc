@@ -496,6 +496,10 @@ void KWFrameResizeCommand::execute()
         table->refreshSelectedCell();
         //repaintTableHeaders( table );
     }
+
+    if(frameSet->isAHeader() || frameSet->isAFooter())
+        m_pDoc->recalcFrames();
+
     if(frame->isSelected())
         frame->updateResizeHandles();
 
@@ -515,6 +519,8 @@ void KWFrameResizeCommand::unexecute()
         table->refreshSelectedCell();
         //repaintTableHeaders( table );
     }
+    if(frameSet->isAHeader() || frameSet->isAFooter())
+        m_pDoc->recalcFrames();
     if(frame->isSelected())
         frame->updateResizeHandles();
     //update frames
