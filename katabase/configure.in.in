@@ -39,4 +39,4 @@ AC_MSG_RESULT([headers $pgsql_incdir, libraries $pgsql_libdir])
 KATABASE_LIBS="-lpq++"
 AC_SUBST(KATABASE_LIBS)
 
-DO_NOT_COMPILE="$DO_NO_COMPILE katabase"
+DO_NOT_COMPILE="$DO_NOT_COMPILE katabase"
