@@ -196,7 +196,7 @@ QString KWDateVariable::text()
     if ( format )
         return format->convert( m_date );
     // make gcc happy
-    return QString();
+    return QString::null;
 }
 
 void KWDateVariable::save( QDomElement& parentElem )
@@ -265,7 +265,7 @@ QString KWTimeVariable::text()
     if ( format )
         return format->convert( m_time );
     // make gcc happy
-    return QString();
+    return QString::null;
 }
 
 void KWTimeVariable::save( QDomElement& parentElem )
@@ -340,6 +340,7 @@ void KWPgNumVariable::recalc()
 {
     if ( m_subtype == VST_PGNUM_CURRENT )
     {
+#if 0 // Made obsolete by the (more dynamic) code in drawFrame.
         KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
         if ( !parag ) // too early
             return;
@@ -349,6 +350,7 @@ void KWPgNumVariable::recalc()
         KWFrame * frame = fs->internalToNormal( iPoint, cPoint );
         if ( frame )
             m_pgNum = frame->pageNum() + 1;
+#endif
     }
     else
         m_pgNum = m_doc->getPages();
@@ -362,7 +364,7 @@ QString KWPgNumVariable::text()
     if ( format )
         return format->convert( m_pgNum );
     // make gcc happy
-    return QString();
+    return QString::null;
 }
 
 QStringList KWPgNumVariable::actionTexts()
@@ -371,13 +373,6 @@ QStringList KWPgNumVariable::actionTexts()
     lst << i18n( "Page Number" );
     lst << i18n( "Number Of Pages" );
     return lst;
-}
-
-void KWPgNumVariable::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
-{
-    if ( m_subtype == VST_PGNUM_CURRENT )
-        recalc();
-    KWVariable::draw( p, x, y,cx,cy, cw, ch, cg, selected );
 }
 
 /******************************************************************/

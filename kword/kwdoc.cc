@@ -353,79 +353,118 @@ void KWDocument::recalcFrames()
     int firstFootOffset = 0, evenFootOffset = 0, oddFootOffset = 0;
     KWTextFrameSet *firstHeader = 0L, *evenHeader = 0L, *oddHeader = 0L;
     KWTextFrameSet *firstFooter = 0L, *evenFooter = 0L, *oddFooter = 0L;
-    if ( isHeaderVisible() || isFooterVisible() ) {
-        QListIterator<KWFrameSet> fit = framesetsIterator();
-        for ( ; fit.current() ; ++fit )
-        {
-            KWFrameSet * fs = fit.current();
-            FrameInfo fi = fs->getFrameInfo();
-            if ( fi == FI_FIRST_HEADER && isHeaderVisible() ) {
-                firstHeader = dynamic_cast<KWTextFrameSet*>( fs );
-                firstHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
-                                                   fs->getFrame( 0 )->height());
-            }
-            if ( fi == FI_EVEN_HEADER && isHeaderVisible() ) {
-                evenHeader = dynamic_cast<KWTextFrameSet*>( fs );
-                evenHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
-                                                  fs->getFrame( 0 )->height());
-            }
-            if ( fi == FI_ODD_HEADER && isHeaderVisible() ) {
-                oddHeader = dynamic_cast<KWTextFrameSet*>( fs );
-                oddHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
-                                                 fs->getFrame( 0 )->height());
-            }
 
-            if ( fi == FI_FIRST_FOOTER && isFooterVisible() ) {
-                firstFooter = dynamic_cast<KWTextFrameSet*>( fs );
-                firstFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
-                                                   fs->getFrame( 0 )->height());
-            }
-            if ( fi == FI_EVEN_FOOTER && isFooterVisible() ) {
-                evenFooter = dynamic_cast<KWTextFrameSet*>( fs );
-                evenFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
-                                                  fs->getFrame( 0 )->height());
-            }
-            if ( fi == FI_ODD_FOOTER && isFooterVisible() ) {
-                oddFooter = dynamic_cast<KWTextFrameSet*>( fs );
-                oddFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
-                                                 fs->getFrame( 0 )->height());
-            }
+    // Lookup the various header / footer framesets into the variables above
+    // [Done in all cases, in order to hide unused framesets
+
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWFrameSet * fs = fit.current();
+        switch ( fs->getFrameInfo() ) {
+            case FI_FIRST_HEADER:
+                if ( isHeaderVisible() ) {
+                    firstHeader = dynamic_cast<KWTextFrameSet*>( fs );
+                    firstHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
+                                                       fs->getFrame( 0 )->height());
+                } else fs->setVisible( false );
+                break;
+            case FI_EVEN_HEADER:
+                if ( isHeaderVisible() ) {
+                    evenHeader = dynamic_cast<KWTextFrameSet*>( fs );
+                    evenHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
+                                                      fs->getFrame( 0 )->height());
+                } else fs->setVisible( false );
+                break;
+            case FI_ODD_HEADER:
+                if ( isHeaderVisible() ) {
+                    oddHeader = dynamic_cast<KWTextFrameSet*>( fs );
+                    oddHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
+                                                     fs->getFrame( 0 )->height());
+                } else fs->setVisible( false );
+                break;
+            case FI_FIRST_FOOTER:
+                if ( isFooterVisible() ) {
+                    firstFooter = dynamic_cast<KWTextFrameSet*>( fs );
+                    firstFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
+                                                       fs->getFrame( 0 )->height());
+                } else fs->setVisible( false );
+                break;
+            case FI_EVEN_FOOTER:
+                if ( isFooterVisible() ) {
+                    evenFooter = dynamic_cast<KWTextFrameSet*>( fs );
+                    evenFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
+                                                      fs->getFrame( 0 )->height());
+                } else fs->setVisible( false );
+                break;
+            case FI_ODD_FOOTER:
+                if ( isFooterVisible() ) {
+                    oddFooter = dynamic_cast<KWTextFrameSet*>( fs );
+                    oddFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
+                                                     fs->getFrame( 0 )->height());
+                } else fs->setVisible( false );
+            default: break;
         }
-        if ( isHeaderVisible() ) {
-            switch ( getHeaderType() ) {
+    }
+    // Now hide & forget the unused header/footer framesets (e.g. 'odd pages' if we are in 'all the same' mode etc.)
+    if ( isHeaderVisible() ) {
+        switch ( getHeaderType() ) {
             case HF_SAME:
+                evenHeader->setVisible( true );
+                oddHeader->setVisible( false );
+                firstHeader->setVisible( false );
+
                 oddHeader = evenHeader;
                 firstHeader = evenHeader;
                 oddHeadOffset = evenHeadOffset;
                 firstHeadOffset = evenHeadOffset;
                 break;
             case HF_FIRST_DIFF:
+                evenHeader->setVisible( true );
+                oddHeader->setVisible( false );
+                firstHeader->setVisible( true );
+
                 oddHeader = evenHeader;
                 oddHeadOffset = evenHeadOffset;
                 break;
             case HF_EO_DIFF:
+                evenHeader->setVisible( true );
+                oddHeader->setVisible( true );
+                firstHeader->setVisible( false );
+
                 firstHeader = oddHeader;
                 firstHeadOffset = oddHeadOffset;
                 break;
-            }
         }
-        if ( isFooterVisible() ) {
-            switch ( getFooterType() ) {
+    }
+    if ( isFooterVisible() ) {
+        switch ( getFooterType() ) {
             case HF_SAME:
+                evenFooter->setVisible( true );
+                oddFooter->setVisible( false );
+                firstFooter->setVisible( false );
+
                 oddFooter = evenFooter;
                 firstFooter = evenFooter;
                 oddFootOffset = evenFootOffset;
                 firstFootOffset = evenFootOffset;
                 break;
             case HF_FIRST_DIFF:
+                evenFooter->setVisible( true );
+                oddFooter->setVisible( false );
+                firstFooter->setVisible( true );
+
                 oddFooter = evenFooter;
                 oddFootOffset = evenFootOffset;
                 break;
             case HF_EO_DIFF:
+                evenFooter->setVisible( true );
+                oddFooter->setVisible( true );
+                firstFooter->setVisible( false );
+
                 firstFooter = oddFooter;
                 firstFootOffset = oddFootOffset;
                 break;
-            }
         }
     }
 

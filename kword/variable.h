@@ -229,12 +229,15 @@ public:
     enum { VST_PGNUM_CURRENT = 0, VST_PGNUM_TOTAL = 1 };
     static QStringList actionTexts();
 
+    // For the 'current page' variable. This is called by KWTextFrameSet::drawFrame.
+    void setPgNum( int pgNum ) { m_pgNum = pgNum; }
+    short int subtype() const { return m_subtype; }
+
     virtual void recalc();
     virtual QString text();
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
-    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected );
 protected:
     short int m_subtype;
     int m_pgNum;

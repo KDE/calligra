@@ -57,7 +57,8 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     else
         m_name = name;
     m_availableHeight = -1;
-    m_currentViewMode = 0;
+    m_currentViewMode = 0L;
+    //m_currentDrawnFrame = 0L;
     m_origFontSizes.setAutoDelete(true);
     textdoc = new KWTextDocument( this, 0, new KWTextFormatCollection( _doc ) );
     QTextFormatter * formatter = new QTextFormatterBreakWords;
@@ -149,7 +150,7 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint ) cons
     return 0;
 }
 
-KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) const
+KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint, QPoint hintNPoint ) const
 {
     int totalHeight = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
@@ -167,7 +168,9 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) con
         {
             nPoint.setX( iPoint.x() + offsetX );
             nPoint.setY( iPoint.y() + offsetY );
-            return frame;
+            if ( hintNPoint.isNull() || frame->getNewFrameBehaviour() != Copy || hintNPoint.y() <= nPoint.y() )
+                return frame;
+            // The above test uses hintNPoint only if specified, and if this frame isn't copied.
         }
         if ( frame->getNewFrameBehaviour() != Copy )
             copyFrame = 0L;
@@ -189,6 +192,25 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
                                 QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                 KWFrameSetEdit *edit )
 {
+    //m_currentDrawnFrame = frame;
+    if ( frame->getNewFrameBehaviour() == Copy ) // ## in theory we should test the behaviour of the previous frame. Bah.
+    {
+        // Update variables for each frame (e.g. for page-number)
+        // If more than KWPgNumVariable need this functionality, create an intermediary base class
+        QListIterator<QTextCustomItem> cit( textdoc->allCustomItems() );
+        for ( ; cit.current() ; ++cit )
+        {
+            KWPgNumVariable * var = dynamic_cast<KWPgNumVariable *>( cit.current() );
+            if ( var && var->subtype() == KWPgNumVariable::VST_PGNUM_CURRENT )
+            {
+                var->setPgNum( frame->pageNum() + 1 );
+                var->resize();
+                var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
+                var->paragraph()->setChanged( true );
+            }
+        }
+
+    }
     // Do we draw a cursor ?
     bool drawCursor = edit!=0L;
     QTextCursor * cursor = edit ? static_cast<KWTextFrameSetEdit *>(edit)->getCursor() : 0;
@@ -242,6 +264,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
         // for debugging :)
         //painter->setPen( QPen(Qt::blue, 1, DashLine) );  painter->drawRect( blank );
     }
+    //m_currentDrawnFrame = 0L;
 }
 
 void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWViewMode * viewMode )
@@ -670,19 +693,19 @@ void KWTextFrameSet::updateFrames()
 
     if ( !frames.isEmpty() )
     {
-        //kdDebug(32002) << "KWTextFrameSet::updateFrames " << this
-        //               << " setWidth=" << frames.first()->width() << endl;
+        kdDebug(32002) << "KWTextFrameSet::updateFrames " << this
+                       << " setWidth=" << frames.first()->width() << endl;
         int width = kWordDocument()->zoomItX( frames.first()->width() );
         // ## we need support for variable width.... (could be done in adjustRMargin in fact)
         if ( width != textdoc->width() )
             textdoc->setWidth( width );
     } else
     {
-        //kdDebug(32002) << "KWTextFrameSet::update no frames" << endl;
+        kdDebug(32002) << "KWTextFrameSet::update no frames" << endl;
         return; // No frames. This happens when the frameset is deleted (still exists for undo/redo)
     }
 
-    //kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
+    kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
     typedef QList<KWFrame> FrameList;
     QList<FrameList> frameList;
     frameList.setAutoDelete( true );
@@ -2822,7 +2845,10 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     y += parag->rect().y() + cursor->offsetY();
     int w = 1;
     QPoint p;
-    KWFrame * frame = textFrameSet()->internalToNormal( QPoint(x, y), p );
+    QPoint hintNPoint;
+    if ( m_currentFrame )
+        hintNPoint = frameSet()->kWordDocument()->zoomPoint( m_currentFrame->topLeft() );
+    KWFrame * frame = textFrameSet()->internalToNormal( QPoint(x, y), p, hintNPoint );
     if ( frame && m_currentFrame != frame )
     {
         m_currentFrame = frame;
@@ -2838,7 +2864,8 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint & nPoint,
     mightStartDrag = FALSE;
 
     QPoint iPoint;
-    if ( textFrameSet()->normalToInternal( nPoint, iPoint ) )
+    m_currentFrame = textFrameSet()->normalToInternal( nPoint, iPoint );
+    if ( m_currentFrame )
     {
         mousePos = iPoint;
         emit hideCursor();

@@ -63,7 +63,11 @@ public:
     // Convert the @p in the internal qtextdoc coordinates
     // into a point in the normal coordinate system.
     // Also returns the frame in which this point is.
-    KWFrame * internalToNormal( QPoint iPoint, QPoint & nPoint ) const;
+    //
+    // @param hintNPoint hint, in case of copied frames. If specified, its y
+    // value will be used as a minimum on the returned result, to prefer a frame
+    // over any of its copies (e.g. in the header/footer case).
+    KWFrame * internalToNormal( QPoint iPoint, QPoint & nPoint, QPoint hintNPoint = QPoint() ) const;
 
     // Return the available height in pixels (sum of all frames' height, with zoom applied)
     // Used to know if we need to create more pages.
@@ -193,6 +197,9 @@ public:
 
     // The viewmode that was passed to drawContents. Special hook for KWAnchor. Don't use.
     KWViewMode * currentViewMode() const { return m_currentViewMode; }
+    // The frame that we are currently drawing in drawFrame. Stored here since we can't pass it
+    // through QRT's drawing methods. Used by e.g. KWPgNumVariable.
+    //KWFrame * currentDrawnFrame() const { return m_currentDrawnFrame; }
 
 public slots:
     void formatMore();
@@ -268,6 +275,7 @@ private:
     QMap<QWidget *, int> m_mapViewAreas;       // Store the "needs" of each view
     QPtrDict<int> m_origFontSizes; // Format -> doc font size.    Maybe a key->fontsize dict would be better.
     KWViewMode * m_currentViewMode;            // The one while drawing. For KWAnchor. Don't use.
+    //KWFrame * m_currentDrawnFrame;             // The frame currently being drawn.
 };
 
 /**
