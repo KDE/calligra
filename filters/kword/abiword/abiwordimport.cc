@@ -117,7 +117,8 @@ class StackItem
 public:
     StackItem()
     {
-        propertyFontName="times"; //Default font
+        fontName="times"; //Default font
+        fontSize=0; //No explicit font size
         italic=false;
         bold=false;
         underline=false;
@@ -132,7 +133,8 @@ public:
 public:
     StackItemElementType elementType;
     QDomNode    stackNode,stackNode2;
-    QString     propertyFontName;
+    QString     fontName;
+    int         fontSize;
     int         pos; //Position
     bool        italic;
     bool        bold;
@@ -211,9 +213,9 @@ static void FillStandardLayout(QDomElement& layoutElement)
 bool StructureParser :: startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes)
 {
     //Warning: be careful that the element names can be lower case or upper case (not very XML)
-    kdDebug(30506) << indent << " <" << name << ">" << endl;
+    kdDebug(30506) << indent << " <" << name << ">" << endl; //DEBUG
     indent += "*"; //DEBUG
-    
+
     if (structureStack.isEmpty())
     {
         kdError(30506) << "Stack is empty!! Aborting! (in StructureParser::startElement)" << endl;
@@ -227,19 +229,28 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     //TODO: memory failure recovery
     if ((name=="c")||(name=="C"))
     {
-        // <c> tags can be nested in <p> elements or in other <c> elements
+        // <c> elements can be nested in <p> elements or in other <c> elements
         // AbiWord does not use it but explicitely allows external programs to write AbiWord files with nested <c> elements!
         if ((structureStack.current()->elementType==ElementTypeParagraph)
                 ||(structureStack.current()->elementType==ElementTypeContent))
         {
             QValueList<AbiProps> abiPropsList;
-            QString strFontStyle,strWeight,strDecoration,strColour,strTextPosition;
-            //TODO: initialize the QStrings with the previous values of the properties they represent!
+            // Initialize the QStrings with the previous values of the properties they represent!
+            QString strFontStyle(stackItem->italic?"italic":"");
+            QString strWeight(stackItem->bold?"bold":"");
+            QString strDecoration(stackItem->underline?"underline":"");
+            QString strTextPosition("old");
+            QString strColour("old");
+            QString strFontSize("old");
+            QString strFontFamily(stackItem->fontName);
+
             abiPropsList.append( AbiProps("font-style",&strFontStyle));
             abiPropsList.append( AbiProps("font-weight",&strWeight));
             abiPropsList.append( AbiProps("text-decoration",&strDecoration));
             abiPropsList.append( AbiProps("text-position",&strTextPosition));
             abiPropsList.append( AbiProps("color",&strColour));
+            abiPropsList.append( AbiProps("font-size",&strFontSize));
+            abiPropsList.append( AbiProps("font-family",&strFontFamily));
             kdDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
             // Treat the props attributes in the two available flavors: lower case and upper case.
             TreatAbiProps(attributes.value("props"),abiPropsList);
@@ -249,7 +260,6 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
             stackItem->stackNode2=nodeOut2; // <FORMATS>
             stackItem->pos=structureStack.current()->pos; //Propagate the position
 
-            // GRR/TODO: if we have nested <c> elements, the following code resets properties instead of keepimg the old unmodified ones!
             stackItem->italic=(strFontStyle=="italic");
             stackItem->bold=(strWeight=="bold");
             // underline is the only font-decoration available in KWord
@@ -262,16 +272,49 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
             {
                 stackItem->textPosition=2;
             }
-            else
+            else if (strTextPosition!="old")
             {
+                // we have any other new value, assume it means normal!
                 stackItem->textPosition=0;
             }
-            long int colour=strColour.toLong(NULL,16);
-            stackItem->red  =(colour&0xFF0000)>>16;
-            stackItem->green=(colour&0x00FF00)>>8;
-            stackItem->blue =(colour&0x0000FF);
-            // TODO: font-size (e.g. 10pt) and font-family (e.g. times)
-            // TODO: transform the font-family in a font we have on the system KWord will run.
+            if (!strColour.isEmpty() && (strColour!="old"))
+            {
+                // we have a new colour, so decode it!
+                long int colour=strColour.toLong(NULL,16);
+                stackItem->red  =(colour&0xFF0000)>>16;
+                stackItem->green=(colour&0x00FF00)>>8;
+                stackItem->blue =(colour&0x0000FF);
+            }
+            if (!strFontSize.isEmpty() && (strFontSize!="old"))
+            {
+                // TODO: font-size (e.g. 10pt)
+                int size=0;
+                int ch; // digit value of the character
+                for (int pos=0;;pos++)
+                {
+                    ch=strFontSize.at(pos).digitValue();
+                    if (ch==-1)
+                    {
+                        // Not a digit
+                        break;
+                    }
+                    else
+                    {
+                        size*=10;
+                        size+=ch;
+                    }
+                }
+                // TODO: verify that the unit of the font size is really "pt"
+                if (size>0)
+                {
+                    stackItem->fontSize=size;
+                }
+            }
+            if (!strFontFamily.isEmpty() && (strFontFamily!="old"))
+            {
+                // TODO: transform the font-family in a font we have on the system on which KWord runs.
+                stackItem->fontName=strFontFamily;
+            }
         }
         else
         {//we are not nested correctly, so consider it a parse error!
@@ -390,8 +433,15 @@ bool StructureParser :: characters ( const QString & ch )
 
         //Note: the <FONT> tag is mandatory for KWord
         QDomElement fontElementOut=nodeOut.ownerDocument().createElement("FONT");
-        fontElementOut.setAttribute("name",stackItem->propertyFontName); // Font name
+        fontElementOut.setAttribute("name",stackItem->fontName); // Font name
         formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+
+        if (stackItem->fontSize)
+        {
+            QDomElement fontElementOut=nodeOut.ownerDocument().createElement("SIZE");
+            fontElementOut.setAttribute("value",stackItem->fontSize);
+            formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        }
 
         if (stackItem->italic)
         {
