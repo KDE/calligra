@@ -30,3 +30,4 @@
 13. Fix the bug with Konqueror which means that the scrollbars don't get
     displayed until Konqueror is re-sized.
 14. Improve the error reporting - particularly about bad XML.
+15. Make kudesigner a real koffice application.
