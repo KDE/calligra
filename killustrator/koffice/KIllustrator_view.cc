@@ -98,38 +98,38 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
                                     KIllustratorDocument* doc) :
     KoView( doc, parent, name )
 {
-  setInstance( KIllustratorFactory::global() );
-  setXMLFile( "KIllustrator.rc" );
-  m_pDoc = doc;
-  m_bShowGUI = true;
-  m_bShowRulers = true;
-  mainWidget = 0L;
-  viewport = 0L;
-  layerDialog = 0L;
-  scriptDialog = 0L;
-  objMenu = 0L;
-  // restore default settings
-  PStateManager::instance ();
+    setInstance( KIllustratorFactory::global() );
+    setXMLFile( "KIllustrator.rc" );
+    m_pDoc = doc;
+    m_bShowGUI = true;
+    m_bShowRulers = true;
+    mainWidget = 0L;
+    viewport = 0L;
+    layerDialog = 0L;
+    scriptDialog = 0L;
+    objMenu = 0L;
+    // restore default settings
+    PStateManager::instance ();
 
-  kdDebug() << "connect doc" << endl;
-  /*
-  QObject::connect (m_pDoc,
-                    SIGNAL (partInserted (KIllustratorChild *, GPart *)),
-                    this,
-                    SLOT (insertPartSlot (KIllustratorChild *, GPart *)));
-  QObject::connect (m_pDoc,
-                    SIGNAL (childGeometryChanged (KIllustratorChild *)),
-                   this, SLOT(changeChildGeometrySlot (KIllustratorChild *)));
-  */
-  createGUI ();
+    //kdDebug() << "connect doc" << endl;
+    /*
+      QObject::connect (m_pDoc,
+      SIGNAL (partInserted (KIllustratorChild *, GPart *)),
+      this,
+      SLOT (insertPartSlot (KIllustratorChild *, GPart *)));
+      QObject::connect (m_pDoc,
+      SIGNAL (childGeometryChanged (KIllustratorChild *)),
+      this, SLOT(changeChildGeometrySlot (KIllustratorChild *)));
+    */
+    createMyGUI();
 }
 
 KIllustratorView::~KIllustratorView()
 {
-  kdDebug() << "~KIllustratorView ()" << endl;
+    //kdDebug() << "~KIllustratorView ()" << endl;
 }
 
-void KIllustratorView::createGUI()
+void KIllustratorView::createMyGUI()
 {
     setupCanvas ();
 
@@ -314,124 +314,124 @@ void KIllustratorView::setupPopups()
 
 void KIllustratorView::setupCanvas()
 {
-  QWidget *w = new QWidget (this);
-  w->resize (500, 500);
+    QWidget *w = new QWidget (this);
+    w->resize (500, 500);
 
-  grid = new QGridLayout (w, 2, 2);
+    grid = new QGridLayout (w, 2, 2);
 
-  MeasurementUnit mu = PStateManager::instance ()->defaultMeasurementUnit ();
-  hRuler = new Ruler (Ruler::Horizontal, mu, w);
-  vRuler = new Ruler (Ruler::Vertical, mu, w);
-  grid->addWidget (hRuler, 0, 1);
-  grid->addWidget (vRuler, 1, 0);
+    MeasurementUnit mu = PStateManager::instance ()->defaultMeasurementUnit ();
+    hRuler = new Ruler (Ruler::Horizontal, mu, w);
+    vRuler = new Ruler (Ruler::Vertical, mu, w);
+    grid->addWidget (hRuler, 0, 1);
+    grid->addWidget (vRuler, 1, 0);
 
-  viewport = new QwViewport (w);
+    viewport = new QwViewport (w);
 
-  canvas = new Canvas (m_pDoc->gdoc(), 72.0, viewport, viewport->portHole ());
-  QObject::connect (canvas, SIGNAL(sizeChanged ()),
-           viewport, SLOT(resizeScrollBars ()));
-  QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
-           hRuler, SLOT(updateVisibleArea (int, int)));
-  QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
-           vRuler, SLOT(updateVisibleArea (int, int)));
+    canvas = new Canvas (m_pDoc->gdoc(), 72.0, viewport, viewport->portHole ());
+    QObject::connect (canvas, SIGNAL(sizeChanged ()),
+                      viewport, SLOT(resizeScrollBars ()));
+    QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
+                      hRuler, SLOT(updateVisibleArea (int, int)));
+    QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
+                      vRuler, SLOT(updateVisibleArea (int, int)));
 
-  QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
-           hRuler, SLOT(setZoomFactor (float)));
-  QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
-           vRuler, SLOT(setZoomFactor (float)));
-  //  QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
-  //       this, SLOT(updateZoomFactor (float)));
-  //  QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
-  //       this, SLOT(showCursorPosition(int, int)));
-  QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
-           hRuler, SLOT(updatePointer(int, int)));
-  QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
-           vRuler, SLOT(updatePointer(int, int)));
-  QObject::connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
-           this, SLOT(popupForSelection (int, int)));
+    QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
+                      hRuler, SLOT(setZoomFactor (float)));
+    QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
+                      vRuler, SLOT(setZoomFactor (float)));
+    //  QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
+    //       this, SLOT(updateZoomFactor (float)));
+    //  QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
+    //       this, SLOT(showCursorPosition(int, int)));
+    QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
+                      hRuler, SLOT(updatePointer(int, int)));
+    QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
+                      vRuler, SLOT(updatePointer(int, int)));
+    QObject::connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
+                      this, SLOT(popupForSelection (int, int)));
 
-  // helpline creation
-  connect (hRuler, SIGNAL (drawHelpline(int, int, bool)),
-           canvas, SLOT(drawTmpHelpline(int, int, bool)));
-  connect (vRuler, SIGNAL (drawHelpline(int, int, bool)),
-           canvas, SLOT(drawTmpHelpline(int, int, bool)));
-  connect (hRuler, SIGNAL (addHelpline(int, int, bool)),
-           canvas, SLOT(addHelpline(int, int, bool)));
-  connect (vRuler, SIGNAL (addHelpline(int, int, bool)),
-           canvas, SLOT(addHelpline(int, int, bool)));
+    // helpline creation
+    connect (hRuler, SIGNAL (drawHelpline(int, int, bool)),
+             canvas, SLOT(drawTmpHelpline(int, int, bool)));
+    connect (vRuler, SIGNAL (drawHelpline(int, int, bool)),
+             canvas, SLOT(drawTmpHelpline(int, int, bool)));
+    connect (hRuler, SIGNAL (addHelpline(int, int, bool)),
+             canvas, SLOT(addHelpline(int, int, bool)));
+    connect (vRuler, SIGNAL (addHelpline(int, int, bool)),
+             canvas, SLOT(addHelpline(int, int, bool)));
 
-  setFocusPolicy (QWidget::StrongFocus);
-  setFocusProxy (canvas);
+    setFocusPolicy (QWidget::StrongFocus);
+    setFocusProxy (canvas);
 
-  grid->addWidget (viewport, 1, 1);
-  grid->setRowStretch (1, 20);
-  grid->setColStretch (1, 20);
+    grid->addWidget (viewport, 1, 1);
+    grid->setRowStretch (1, 20);
+    grid->setColStretch (1, 20);
 
-  tcontroller = new ToolController (this);
+    tcontroller = new ToolController (this);
 
-  SelectionTool* selTool;
-  tcontroller->registerTool (ID_TOOL_SELECT,
-                             selTool = new SelectionTool (&cmdHistory));
-  QObject::connect (selTool, SIGNAL(modeSelected(const char*)),
-                    this, SLOT(showCurrentMode(const char*)));
-  //  QObject::connect (selTool, SIGNAL(partSelected(GObject*)),
-  //                this, SLOT(activatePart(GObject*)));
-  tcontroller->registerTool (ID_TOOL_EDITPOINT,
-                             editPointTool = new EditPointTool (&cmdHistory));
-  QObject::connect (editPointTool, SIGNAL(modeSelected(const char*)),
-                    this, SLOT(showCurrentMode(const char*)));
-  Tool* tool;
-  tcontroller->registerTool (ID_TOOL_FREEHAND,
-                             tool = new FreeHandTool (&cmdHistory));
-  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                    this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (ID_TOOL_LINE,
-                             tool = new PolylineTool (&cmdHistory));
-  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                    this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (ID_TOOL_BEZIER,
-                             tool = new BezierTool (&cmdHistory));
-  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                    this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (ID_TOOL_RECTANGLE,
-                             tool = new RectangleTool (&cmdHistory));
-  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                    this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (ID_TOOL_POLYGON,
-                             tool = new PolygonTool (&cmdHistory));
-  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                    this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (ID_TOOL_ELLIPSE,
-                             tool = new OvalTool (&cmdHistory));
-  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                    this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (ID_TOOL_TEXT,
-                             tool = new TextTool (&cmdHistory));
-  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                    this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (ID_TOOL_ZOOM,
-                             tool = new ZoomTool (&cmdHistory));
-  QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                    this, SLOT(showCurrentMode(const char*)));
+    SelectionTool* selTool;
+    tcontroller->registerTool (ID_TOOL_SELECT,
+                               selTool = new SelectionTool (&cmdHistory));
+    QObject::connect (selTool, SIGNAL(modeSelected(const char*)),
+                      this, SLOT(showCurrentMode(const char*)));
+    //  QObject::connect (selTool, SIGNAL(partSelected(GObject*)),
+    //                this, SLOT(activatePart(GObject*)));
+    tcontroller->registerTool (ID_TOOL_EDITPOINT,
+                               editPointTool = new EditPointTool (&cmdHistory));
+    QObject::connect (editPointTool, SIGNAL(modeSelected(const char*)),
+                      this, SLOT(showCurrentMode(const char*)));
+    Tool* tool;
+    tcontroller->registerTool (ID_TOOL_FREEHAND,
+                               tool = new FreeHandTool (&cmdHistory));
+    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+                      this, SLOT(showCurrentMode(const char*)));
+    tcontroller->registerTool (ID_TOOL_LINE,
+                               tool = new PolylineTool (&cmdHistory));
+    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+                      this, SLOT(showCurrentMode(const char*)));
+    tcontroller->registerTool (ID_TOOL_BEZIER,
+                               tool = new BezierTool (&cmdHistory));
+    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+                      this, SLOT(showCurrentMode(const char*)));
+    tcontroller->registerTool (ID_TOOL_RECTANGLE,
+                               tool = new RectangleTool (&cmdHistory));
+    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+                      this, SLOT(showCurrentMode(const char*)));
+    tcontroller->registerTool (ID_TOOL_POLYGON,
+                               tool = new PolygonTool (&cmdHistory));
+    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+                      this, SLOT(showCurrentMode(const char*)));
+    tcontroller->registerTool (ID_TOOL_ELLIPSE,
+                               tool = new OvalTool (&cmdHistory));
+    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+                      this, SLOT(showCurrentMode(const char*)));
+    tcontroller->registerTool (ID_TOOL_TEXT,
+                               tool = new TextTool (&cmdHistory));
+    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+                      this, SLOT(showCurrentMode(const char*)));
+    tcontroller->registerTool (ID_TOOL_ZOOM,
+                               tool = new ZoomTool (&cmdHistory));
+    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
+                      this, SLOT(showCurrentMode(const char*)));
 
-  tcontroller->registerTool (ID_TOOL_PATHTEXT,
-                             tool = new PathTextTool (&cmdHistory));
-  QObject::connect (tool, SIGNAL(operationDone ()),
-                    this, SLOT (resetTools ()));
+    tcontroller->registerTool (ID_TOOL_PATHTEXT,
+                               tool = new PathTextTool (&cmdHistory));
+    QObject::connect (tool, SIGNAL(operationDone ()),
+                      this, SLOT (resetTools ()));
 
-  tcontroller->registerTool (ID_TOOL_INSERTPART,
-                             insertPartTool =
-                             new InsertPartTool (&cmdHistory));
-  QObject::connect (insertPartTool, SIGNAL(operationDone ()),
-                    this, SLOT (resetTools ()));
+    tcontroller->registerTool (ID_TOOL_INSERTPART,
+                               insertPartTool =
+                               new InsertPartTool (&cmdHistory));
+    QObject::connect (insertPartTool, SIGNAL(operationDone ()),
+                      this, SLOT (resetTools ()));
 
-  tcontroller->toolSelected( ID_TOOL_SELECT );
-  // m_idActiveTool = ID_TOOL_SELECT;
+    tcontroller->toolSelected( ID_TOOL_SELECT );
+    // m_idActiveTool = ID_TOOL_SELECT;
 
-  canvas->setToolController (tcontroller);
-  grid->activate ();
-  w->show ();
-  mainWidget = w;
+    canvas->setToolController (tcontroller);
+    grid->activate ();
+    w->show ();
+    mainWidget = w;
 }
 
 void KIllustratorView::showCurrentMode (const char* ) {
@@ -450,41 +450,41 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 
     QString label = i18n ("Undo");
     if (undoPossible)
-      label += " " + cmdHistory.getUndoName ();
+        label += " " + cmdHistory.getUndoName ();
     m_undo->setText( label );
 
     label = i18n ("Redo");
     if (redoPossible)
-      label += " " + cmdHistory.getRedoName ();
+        label += " " + cmdHistory.getRedoName ();
     m_redo->setText( label );
 }
 
 void KIllustratorView::resizeEvent (QResizeEvent* )
 {
     // ######## Torben
-  //  cout << "resizeEvent" << endl;
-  if ( mainWidget )
-  {
-      mainWidget->resize( width(), height() );
-      /* if ((KoViewIf::hasFocus () || mode () == KOffice::View::RootMode) &&
-         m_bShowGUI) */
-      {
-          if (m_bShowRulers)
-          {
-              // draw rulers
-              hRuler->show ();
-              vRuler->show ();
-          }
-          viewport->showScrollBars ();
-      }
-      /*      else
-      {
-          hRuler->hide ();
-          vRuler->hide ();
-          viewport->hideScrollBars ();
-          grid->activate ();
-          } */
-  }
+    kdDebug() << "resizeEvent++++++++++++++++++++++" << endl;
+    if ( mainWidget )
+    {
+        mainWidget->resize( width(), height() );
+        /* if ((KoViewIf::hasFocus () || mode () == KOffice::View::RootMode) &&
+           m_bShowGUI) */
+        {
+            if (m_bShowRulers)
+            {
+                // draw rulers
+                hRuler->show ();
+                vRuler->show ();
+            }
+            viewport->showScrollBars ();
+        }
+        /*      else
+                {
+                hRuler->hide ();
+                vRuler->hide ();
+                viewport->hideScrollBars ();
+                grid->activate ();
+                } */
+    }
 }
 
 void KIllustratorView::updateReadWrite( bool readwrite )
@@ -623,24 +623,24 @@ void KIllustratorView::resetTools()
 }
 
 // void KIllustratorView::activatePart (GObject *obj) {
-    /* if (obj->isA ("GPart")) {
-    GPart *part = (GPart *) obj;
-    cout << "setFramesToParts ..." << endl;
-    setFramesToParts ();
-    cout << "part->activate ..." << endl;
-    int xoff = 1, yoff = 1;
-    if (m_bShowRulers) {
-      xoff += 30;
-      yoff += 30;
-    }
+/* if (obj->isA ("GPart")) {
+   GPart *part = (GPart *) obj;
+   cout << "setFramesToParts ..." << endl;
+   setFramesToParts ();
+   cout << "part->activate ..." << endl;
+   int xoff = 1, yoff = 1;
+   if (m_bShowRulers) {
+   xoff += 30;
+   yoff += 30;
+   }
 
-    part->activate (xoff, yoff);
-    setFocusProxy (part->getView ());
-    QWidget::setFocusPolicy (QWidget::StrongFocus);
-    cout << "setFocus ..." << endl;
-    part->getView ()->setFocusPolicy (QWidget::StrongFocus);
-    part->getView ()->setFocus ();
-    } */
+   part->activate (xoff, yoff);
+   setFocusProxy (part->getView ());
+   QWidget::setFocusPolicy (QWidget::StrongFocus);
+   cout << "setFocus ..." << endl;
+   part->getView ()->setFocusPolicy (QWidget::StrongFocus);
+   part->getView ()->setFocus ();
+   } */
 // }
 
 
@@ -687,11 +687,11 @@ QString KIllustratorView::getExportFileName (FilterManager *filterMgr)
     QString filename;
 
     if (dlg->exec() == QDialog::Accepted) {
-      KURL url = dlg->selectedURL ();
-      if (!url.isLocalFile())
-         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
-      filename = url.path();
-      lastExportDir = url.directory();
+        KURL url = dlg->selectedURL ();
+        if (!url.isLocalFile())
+            KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+        filename = url.path();
+        lastExportDir = url.directory();
     }
 
     delete dlg;
@@ -710,10 +710,10 @@ void KIllustratorView::slotImport()
 #ifdef USE_QFD
     QString fname = QFileDialog::getOpenFileName (lastImportDir, filter, this);
 #else
-  KURL url = KFileDialog::getOpenURL( lastImportDir, filter, this );
-  if (!url.isLocalFile())
-      KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
-  QString fname = url.path();
+    KURL url = KFileDialog::getOpenURL( lastImportDir, filter, this );
+    if (!url.isLocalFile())
+        KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+    QString fname = url.path();
 #endif
     if (! fname.isEmpty ())
     {
@@ -779,46 +779,46 @@ void KIllustratorView::slotExport()
 void KIllustratorView::slotInsertBitmap()
 {
 #ifdef USE_QFD
-     QString fname = QFileDialog::getOpenFileName
-             ((const char *) lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
-                 "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
-                 "*.png | PNG Images\n"
-                 "*.xbm | X11 Bitmaps\n"
-                 "*.xpm | X11 Pixmaps"),
-             this);
-#else
-    KURL url = KFileDialog::getOpenURL
-                    (lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
+    QString fname = QFileDialog::getOpenFileName
+                    ((const char *) lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
                                                         "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
                                                         "*.png | PNG Images\n"
                                                         "*.xbm | X11 Bitmaps\n"
                                                         "*.xpm | X11 Pixmaps"),
                      this);
-  if (!url.isLocalFile())
-      KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
-  QString fname = url.path();
+#else
+    KURL url = KFileDialog::getOpenURL
+               (lastBitmapDir, i18n("*.gif *.GIF | GIF Images\n"
+                                    "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
+                                    "*.png | PNG Images\n"
+                                    "*.xbm | X11 Bitmaps\n"
+                                    "*.xpm | X11 Pixmaps"),
+                this);
+    if (!url.isLocalFile())
+        KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+    QString fname = url.path();
 #endif
     if (! fname.isEmpty ()) {
         QFileInfo finfo (fname);
         lastBitmapDir = finfo.dirPath ();
         InsertPixmapCmd *cmd = new InsertPixmapCmd (m_pDoc->gdoc(),
                                                     (const char *) fname);
-         cmdHistory.addCommand (cmd, true);
+        cmdHistory.addCommand (cmd, true);
     }
 }
 
 void KIllustratorView::slotInsertClipart()
 {
 #ifdef USE_QFD
-      QString fname = QFileDialog::getOpenFileName
-              (lastClipartDir,
-               i18n("*.wmf *.WMF | Windows Metafiles"), this);
+    QString fname = QFileDialog::getOpenFileName
+                    (lastClipartDir,
+                     i18n("*.wmf *.WMF | Windows Metafiles"), this);
 #else
-     KURL url = KFileDialog::getOpenURL( lastClipartDir,
-             i18n("*.wmf *.WMF | Windows Metafiles"), this);
-     if (!url.isLocalFile())
-         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
-     QString fname = url.path();
+    KURL url = KFileDialog::getOpenURL( lastClipartDir,
+                                        i18n("*.wmf *.WMF | Windows Metafiles"), this);
+    if (!url.isLocalFile())
+        KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
+    QString fname = url.path();
 #endif
     if ( !fname.isEmpty ())
     {
@@ -1049,7 +1049,7 @@ void KIllustratorView::slotBrushChosen( const QColor & c )
     fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::FillStyle;
     fInfo.color = c;
     fInfo.fstyle = fill ? GObject::FillInfo::SolidFill :
-        GObject::FillInfo::NoFill;
+                GObject::FillInfo::NoFill;
 
     if ( !m_pDoc->gdoc()->selectionIsEmpty () )
     {
@@ -1198,20 +1198,20 @@ void KIllustratorView::slotLayers()
 }
 
 void KIllustratorView::slotDocumentInfo () {
-  DocumentInfo::showInfo (m_pDoc->gdoc ());
+    DocumentInfo::showInfo (m_pDoc->gdoc ());
 }
 
 void KIllustratorView::slotLoadPalette () {
-  // TODO
+    // TODO
 }
 
 void KIllustratorView::slotViewZoom (const QString& s) {
-  QString z (s);
-  z = z.replace (QRegExp ("%"), "");
-  z = z.simplifyWhiteSpace ();
-  float zoom = z.toFloat () / 100.0;
-  if (zoom != canvas->getZoomFactor ())
-    canvas->setZoomFactor (zoom);
+    QString z (s);
+    z = z.replace (QRegExp ("%"), "");
+    z = z.simplifyWhiteSpace ();
+    float zoom = z.toFloat () / 100.0;
+    if (zoom != canvas->getZoomFactor ())
+        canvas->setZoomFactor (zoom);
 }
 
 #include "KIllustrator_view.moc"

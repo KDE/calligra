@@ -89,7 +89,7 @@ public:
     KIllustratorView (QWidget* parent, const char* name = 0, KIllustratorDocument* doc = 0 );
     ~KIllustratorView ();
 
-    void createGUI ();
+    void createMyGUI ();
 
     /**
      * Overloaded @ref MainView::activeDocument
@@ -348,7 +348,7 @@ protected:
     KToggleAction* m_splitLine;
   KSelectAction* m_viewZoom;
     QString lastOpenDir, lastSaveDir, lastBitmapDir, lastClipartDir,
-	    lastExportDir, lastImportDir, lastPaletteDir;
+            lastExportDir, lastImportDir, lastPaletteDir;
     QString lastExport;
 };
 
