@@ -209,15 +209,12 @@ void KoContextHelpPopup::setContextHelp( const QString& title, const QString& te
 
 void KoContextHelpPopup::mousePressEvent( QMouseEvent* e )
 {
-	m_mousePos = e->globalPos();
+	m_mousePos = e->globalPos() - pos();
 } // KoContextHelpPopup::mousePressEvent
 
 void KoContextHelpPopup::mouseMoveEvent( QMouseEvent* e )
 {
-	move( pos() + e->globalPos() - m_mousePos );
-	kdDebug() << m_mousePos.x() << endl;
-	m_mousePos = e->globalPos();
-	kdDebug() << m_mousePos.x() << endl;
+	move( e->globalPos() - m_mousePos );
 } // KoContextHelpPopup::mouseMoveEvent
 
 void KoContextHelpPopup::resizeEvent( QResizeEvent* )
