@@ -123,7 +123,7 @@ void KPLineObject::loadOasis(const QDomElement &element, const KoStyleStack & st
     }
     if ( styleStack.hasAttribute( "draw:marker-end" ) )
     {
-        QString type = styleStack.attribute( "draw:marker-start" );
+        QString type = styleStack.attribute( "draw:marker-end" );
         kdDebug()<<"type arrow end :"<<type<<endl;
         if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
              type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
