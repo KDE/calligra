@@ -58,7 +58,6 @@
 #include "kexi.h"
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
-#include "kexicreateitemdlg.h"
 
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiConnSelector.h"
