@@ -265,7 +265,7 @@ KexiMainWindow::selectProject(KexiDB::ConnectionData *cdata)
 	//dialog for selecting a project
 	KexiProjectSelectorDialog prjdlg( this, "prjdlg", cdata, true, false );
 	if (!prjdlg.projectSet() || prjdlg.projectSet()->error()) {
-		slotShowErrorMessageFor(i18n("Could not load list of available projects list for connection \"%1\"")
+		slotShowErrorMessageFor(i18n("Could not load list of available projects for connection \"%1\"")
 		.arg(cdata->serverInfoString()), prjdlg.projectSet());
 		return 0;
 	}

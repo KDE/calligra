@@ -107,7 +107,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 
 	//page: db title
 	m_db_title = new KexiDBTitlePage(this, "KexiDBTitlePage");
-	addPage(m_db_title, i18n("Select project title"));
+	addPage(m_db_title, i18n("Select project's caption"));
 		
 	//page: connection selector
 	m_conn_sel = new KexiConnSelectorWidget(conn_set, this, "KexiConnSelectorWidget");
