@@ -22,6 +22,9 @@ public:
 
     virtual QCString mimeType() const;
 
+    // (TODO) add a virtual CTOR which creates the objects for the
+    // ObjectPool from XML (=loading)
+
 protected slots:
     void a_editcut();   // a_ ... Action
 };

@@ -1,8 +1,8 @@
 
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
-kgraph_LDFLAGS = $(KDE_RPATH) 
-kgraph_LDADD = ../lib/kofficeui/libkofficeui.la libkgraph.la 
+kgraph_LDFLAGS = $(KDE_RPATH)
+kgraph_LDADD = ../lib/kofficeui/libkofficeui.la libkgraph.la
 
 libkgraph_la_LDFLAGS = -module -avoid-version
 
@@ -14,13 +14,13 @@ bin_PROGRAMS = kgraph
 lib_LTLIBRARIES = libkgraph.la
 
 libkgraph_la_SOURCES = kgraph_shell.cc kgraph_part.cc \
-	kgraph_view.cc kgraph_factory.cc
+    kgraph_view.cc kgraph_factory.cc
 
 kgraph_SOURCES = main.cc
 
-noinst_HEADERS =  kgraph_global.h \
-		  kgraph_shell.h kgraph_part.h \
-		  kgraph_view.h kgraph_factory.h
+noinst_HEADERS =  kgraph_global.h kgraph_shell.h \
+    kgraph_part.h kgraph_view.h kgraph_factory.h \
+    kgobject.h
 
 libkgraph_la_METASOURCES = AUTO
 
@@ -36,4 +36,4 @@ rcdir = $(kde_datadir)/kgraph
 # SUBDIRS =  . plugins pics dtd toolbar
 
 messages:
-#	$(XGETTEXT) *.cc -o $(podir)/kgraph.pot
+#   $(XGETTEXT) *.cc -o $(podir)/kgraph.pot

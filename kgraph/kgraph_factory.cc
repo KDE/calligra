@@ -49,8 +49,8 @@ QObject *KGraphFactory::create(QObject *parent, const char *name, const char *cl
 KInstance *KGraphFactory::global() {
     if (!s_global) {
         KAboutData *aboutData=new KAboutData("kgraph", I18N_NOOP("KGraph"),
-			      version, description, KAboutData::License_GPL, 
-			      "(c) 2000, Werner Trobin"); 
+                                             version, description, KAboutData::License_GPL,
+                                             "(c) 2000, Werner Trobin"); 
         aboutData->addAuthor("Werner Trobin", 0, "wtrobin@carinthia.com");     
         s_global=new KInstance(aboutData);
     }
