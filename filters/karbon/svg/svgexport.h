@@ -8,6 +8,7 @@
 #include <koFilter.h>
 
 #include "vvisitor.h"
+#include "vgradient.h"
 
 
 class QTextStream;
@@ -39,10 +40,14 @@ private:
 	virtual void visitVText( VText& text );
 
 	void getStroke( const VStroke& stroke );
+	void getColorStops( const QValueList<VGradient::VColorStop> &colorStops );
 	void getFill( const VFill& fill  );
-	void getHexColor( const VColor& color  );
+	void getGradient( const VGradient& grad );
+	void getHexColor( QTextStream *, const VColor& color  );
 
 	QTextStream* m_stream;
+	QTextStream* m_defs;
+	QTextStream* m_body;
 };
 
 #endif

@@ -18,6 +18,7 @@
 #include "vdashpattern.h"
 #include "vdocument.h"
 #include "vfill.h"
+#include "vgradient.h"
 #include "vgroup.h"
 #include "vlayer.h"
 #include "vpath.h"
@@ -63,6 +64,10 @@ SvgExport::convert( const QCString& from, const QCString& to )
 	QDomElement docNode = domIn.documentElement();
 
 	m_stream = new QTextStream( &fileOut );
+	QString body;
+	m_body = new QTextStream( &body, IO_ReadWrite );
+	QString defs;
+	m_defs = new QTextStream( &defs, IO_ReadWrite );
 
 
 	// load the document and export it:
@@ -70,10 +75,14 @@ SvgExport::convert( const QCString& from, const QCString& to )
 	doc.load( docNode );
 	doc.accept( *this );
 
+	*m_stream << defs;
+	*m_stream << body;
 
 	fileOut.close();
 
 	delete m_stream;
+	delete m_defs;
+	delete m_body;
 
 	return KoFilter::OK;
 }
@@ -88,15 +97,16 @@ SvgExport::visitVDocument( VDocument& document )
 	const KoRect& rect = document.selection()->boundingBox();
 
 	// standard header:
-	*m_stream <<
+	*m_defs <<
 		"<?xml version=\"1.0\" standalone=\"no\"?>\n" <<
 		"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" " <<
 		"\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">"
 	<< endl;
 
-	*m_stream <<
+	*m_defs <<
 		"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" <<
 		rect.right() << "\" height=\"" << rect.bottom() << "\">" << endl;
+	*m_defs << "<defs>" << endl;
 
 	// we dont need the selection anymore:
 	document.selection()->clear();
@@ -105,20 +115,21 @@ SvgExport::visitVDocument( VDocument& document )
 	VVisitor::visitVDocument( document );
 
 	// end tag:
-	*m_stream << "</svg>" << endl;
+	*m_defs << "</defs>" << endl;
+	*m_body << "</svg>" << endl;
 }
 
 void
 SvgExport::visitVPath( VPath& path )
 {
-	*m_stream << "<path";
+	*m_body << "<path";
 
 	VVisitor::visitVPath( path );
 
 	getFill( *( path.fill() ) );
 	getStroke( *( path.stroke() ) );
 
-	*m_stream << " />" << endl;
+	*m_body << " />" << endl;
 
 }
 
@@ -126,7 +137,7 @@ void
 SvgExport::visitVSegmentList( VSegmentList& segmentList )
 {
 
-	*m_stream << " d=\"";
+	*m_body << " d=\"";
 
 	// export segments:
 	VSegmentListIterator itr( segmentList );
@@ -135,7 +146,7 @@ SvgExport::visitVSegmentList( VSegmentList& segmentList )
 		switch( itr.current()->type() )
 		{
 			case VSegment::curve:
-				*m_stream << " C " <<
+				*m_body << " C " <<
 					itr.current()->ctrlPoint1().x() << " " <<
 					itr.current()->ctrlPoint1().y() << " " <<
 					itr.current()->ctrlPoint2().x() << " " <<
@@ -144,12 +155,12 @@ SvgExport::visitVSegmentList( VSegmentList& segmentList )
 					itr.current()->knot().y();
 			break;
 			case VSegment::line:
-				*m_stream << " L " <<
+				*m_body << " L " <<
 					itr.current()->knot().x() << " " <<
 					itr.current()->knot().y();
 			break;
 			case VSegment::begin:
-				*m_stream << " M " <<
+				*m_body << " M " <<
 					itr.current()->knot().x() << " " <<
 					itr.current()->knot().y();
 			break;
@@ -159,74 +170,121 @@ SvgExport::visitVSegmentList( VSegmentList& segmentList )
 	}
 
 	if( segmentList.isClosed() )
-		*m_stream << "Z";
+		*m_body << "Z";
 
-	*m_stream << "\"";
+	*m_body << "\"";
+}
+
+QString createUID()
+{
+	static unsigned int nr = 0;
+
+	return "defitem" + QString().setNum( nr++ );
+}
+
+void
+SvgExport::getColorStops( const QValueList<VGradient::VColorStop> &colorStops )
+{
+	QValueListConstIterator<VGradient::VColorStop> itr;
+	for( itr = colorStops.begin(); itr != colorStops.end(); ++itr )
+	{
+		*m_defs << "<stop stop-color=\"";
+		getHexColor( m_defs, (*itr).color );
+		*m_defs << "\" offset=\"";
+		*m_defs << QString().setNum( (*itr).rampPoint ) << "\" />" << endl;
+	}
+}
+
+void
+SvgExport::getGradient( const VGradient& grad )
+{
+	QString uid = createUID();
+	if( grad.type() == VGradient::linear )
+	{
+		// do linear grad
+		*m_defs << "<linearGradient id=\"" << uid << "\" ";
+		*m_defs << "gradientUnits=\"userSpaceOnUse\" ";
+		*m_defs << "x1=\"" << grad.origin().x() << "\" ";
+		*m_defs << "y1=\"" << grad.origin().y() << "\" ";
+		*m_defs << "x2=\"" << grad.vector().x() << "\" ";
+		*m_defs << "y2=\"" << grad.vector().y() << "\" ";
+		*m_defs << ">" << endl;
+
+		// color stops
+		getColorStops( grad.colorStops() );
+
+		*m_defs << "</linearGradient>" << endl;
+		*m_body << "url(#" << uid << ")";
+	}
 }
 
 void
 SvgExport::getFill( const VFill& fill )
 {
-	*m_stream << " fill=\"";
+	*m_body << " fill=\"";
 	if( fill.type() == VFill::none )
-		*m_stream << "none";
-	else // TODO : gradient fills
-		getHexColor( fill.color() );
-	*m_stream << "\"";
-	*m_stream << " fill-opacity=\"" << fill.color().opacity() << "\"";
+		*m_body << "none";
+	else if( fill.type() == VFill::grad )
+		getGradient( fill.gradient() );
+	else 
+		getHexColor( m_body, fill.color() );
+	*m_body << "\"";
+	*m_body << " fill-opacity=\"" << fill.color().opacity() << "\"";
 	if( fill.fillRule() == VFill::evenOdd )
-		*m_stream << " fill-rule=\"evenodd\"";
+		*m_body << " fill-rule=\"evenodd\"";
 	else
-		*m_stream << " fill-rule=\"nonzero\"";
+		*m_body << " fill-rule=\"nonzero\"";
 }
 
 void
 SvgExport::getStroke( const VStroke& stroke )
 {
-	*m_stream << " stroke=\"";
+	*m_body << " stroke=\"";
 	if( stroke.type() == VStroke::none )
-		*m_stream << "none";
-	else // TODO : gradient fills
-		getHexColor( stroke.color() );
-	*m_stream << "\"";
-	*m_stream << " stroke-opacity=\"" << stroke.color().opacity() << "\"";
+		*m_body << "none";
+	else if( stroke.type() == VStroke::grad )
+		getGradient( stroke.gradient() );
+	else
+		getHexColor( m_body, stroke.color() );
+	*m_body << "\"";
+	*m_body << " stroke-opacity=\"" << stroke.color().opacity() << "\"";
 
-	*m_stream << " stroke-width=\"" << stroke.lineWidth() << "\"";
+	*m_body << " stroke-width=\"" << stroke.lineWidth() << "\"";
 
 	if( stroke.lineCap() == VStroke::capButt )
-		*m_stream << " stroke-linecap=\"butt\"";
+		*m_body << " stroke-linecap=\"butt\"";
 	else if( stroke.lineCap() == VStroke::capRound )
-		*m_stream << " stroke-linecap=\"round\"";
+		*m_body << " stroke-linecap=\"round\"";
 	else if( stroke.lineCap() == VStroke::capSquare )
-			*m_stream << " stroke-linecap=\"square\"";
+			*m_body << " stroke-linecap=\"square\"";
 
 	if( stroke.lineJoin() == VStroke::joinMiter )
 	{
-		*m_stream << " stroke-linejoin=\"miter\"";
-		*m_stream << " stroke-miterlimit=\"" << stroke.miterLimit() << "\"";
+		*m_body << " stroke-linejoin=\"miter\"";
+		*m_body << " stroke-miterlimit=\"" << stroke.miterLimit() << "\"";
 	}
 	else if( stroke.lineJoin() == VStroke::joinRound )
-		*m_stream << " stroke-linejoin=\"round\"";
+		*m_body << " stroke-linejoin=\"round\"";
 	else if( stroke.lineJoin() == VStroke::joinBevel )
-			*m_stream << " stroke-linejoin=\"bevel\"";
+			*m_body << " stroke-linejoin=\"bevel\"";
 
 	// dash
 	if( stroke.dashPattern().array().count() > 0 )
 	{
-		*m_stream << " stroke-dashoffset=\"" << stroke.dashPattern().offset() << "\"";
-		*m_stream << " stroke-dasharray=\" ";
+		*m_body << " stroke-dashoffset=\"" << stroke.dashPattern().offset() << "\"";
+		*m_body << " stroke-dasharray=\" ";
 
 		QValueListConstIterator<float> itr;
 		for(itr = stroke.dashPattern().array().begin(); itr != stroke.dashPattern().array().end(); ++itr )
 		{
-			*m_stream << *itr << " ";
+			*m_body << *itr << " ";
 		}
-		*m_stream << "\"";
+		*m_body << "\"";
 	}
 }
 
 void
-SvgExport::getHexColor( const VColor& color )
+SvgExport::getHexColor( QTextStream *stream, const VColor& color )
 {
 	// Convert the various color-spaces to hex
 
@@ -266,7 +324,7 @@ SvgExport::getHexColor( const VColor& color )
 	//	Output.sprintf( "#%02x%02x%02x", int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ) );
 	//}
 
-	*m_stream << Output;
+	*stream << Output;
 }
 
 void
@@ -275,26 +333,26 @@ SvgExport::visitVText( VText& /*text*/ )
 /*
 	// TODO: set placement once karbon supports it
 
-	*m_stream << "<text";
+	*m_body << "<text";
 
 	if( !node.attribute( "size" ).isNull() )
 	{
-		*m_stream << " font-size=\"" << node.attribute( "size" ) << "\"";
+		*m_body << " font-size=\"" << node.attribute( "size" ) << "\"";
 	}
 
 	if( !node.attribute( "family" ).isNull() )
 	{
-		*m_stream << " font-family=\"" << node.attribute( "family" ) << "\"";
+		*m_body << " font-family=\"" << node.attribute( "family" ) << "\"";
 	}
 
 	if( !node.attribute( "bold" ).isNull() )
 	{
-		*m_stream << " font-weight=\"bold\"";
+		*m_body << " font-weight=\"bold\"";
 	}
 
 	if( !node.attribute( "italic" ).isNull() )
 	{
-		*m_stream << " font-style=\"italic\"";
+		*m_body << " font-style=\"italic\"";
 	}
 
 	QDomNodeList list = node.childNodes();
@@ -311,15 +369,15 @@ SvgExport::visitVText( VText& /*text*/ )
 		}
 	}
 
-	*m_stream << ">";
+	*m_body << ">";
 
 
 	if( !node.attribute( "text" ).isNull() )
 	{
-		*m_stream << node.attribute( "text" );
+		*m_body << node.attribute( "text" );
 	}
 
-	*m_stream << "</text>" << endl;
+	*m_body << "</text>" << endl;
 */
 }
 
