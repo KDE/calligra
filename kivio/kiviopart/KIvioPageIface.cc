@@ -20,11 +20,12 @@
 #include "KIvioPageIface.h"
 
 #include "kivio_page.h"
-
+#include "kivio_layer.h"
+#include <kapplication.h>
 #include <dcopclient.h>
 
 KIvioPageIface::KIvioPageIface( KivioPage *page_ )
-    : DCOPObject( page_ )
+    : DCOPObject( page_)
 {
     m_page = page_;
 }
@@ -80,3 +81,25 @@ void KIvioPageIface::unselectAllStencils()
     m_page->unselectAllStencils();
 }
 
+
+int KIvioPageIface::nbLayer() const
+{
+    return (int)(m_page->layers())->count();
+}
+
+DCOPRef KIvioPageIface::firstLayer()
+{
+    if ( m_page->firstLayer())
+        return DCOPRef( kapp->dcopClient()->appId(),
+                        m_page->firstLayer()->dcopObject()->objId() );
+    else
+        return DCOPRef();
+}
+
+DCOPRef KIvioPageIface::layerAt( int pos)
+{
+    if ( pos >= nbLayer() )
+        return DCOPRef();
+    return DCOPRef( kapp->dcopClient()->appId(),
+                    m_page->layerAt(pos)->dcopObject()->objId() );
+}

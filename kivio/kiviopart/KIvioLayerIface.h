@@ -17,39 +17,33 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KIVIO_PAGE_IFACE_H
-#define KIVIO_PAGE_IFACE_H
+#ifndef KIVIO_LAYER_IFACE_H
+#define KIVIO_LAYER_IFACE_H
 
 #include <dcopobject.h>
 #include <dcopref.h>
 #include <qstring.h>
 
-class KivioPage;
+class KivioLayer;
 
-class KIvioPageIface : virtual public DCOPObject
+class KIvioLayerIface : virtual public DCOPObject
 {
     K_DCOP
 public:
-    KIvioPageIface( KivioPage *page_ );
+    KIvioLayerIface( KivioLayer *layer_ );
 
 k_dcop:
-    DCOPRef firstLayer();
-    DCOPRef layerAt( int );
+    bool visible();
+    void setVisible( bool f );
 
-    bool isHidden();
-    void deleteSelectedStencils();
-    void groupSelectedStencils();
-    void ungroupSelectedStencils();
-    QString pageName()const;
-    void copy();
-    void cut();
-    void paste();
-    void selectAllStencils();
-    void unselectAllStencils();
-    int nbLayer() const;
+    bool connectable();
+    void setConnectable( bool f );
+
+    QString name() const;
+    void setName( const QString &n );
 
 private:
-    KivioPage *m_page;
+    KivioLayer *m_layer;
 
 };
 

@@ -21,12 +21,13 @@
 
 #include <qdom.h>
 #include <qptrlist.h>
-
+#include <qobject.h>
 class KivioConnectorPoint;
 class KivioConnectorTarget;
 class KivioPage;
 class KivioPainter;
 class KivioPoint;
+class DCOPObject;
 
 class QDomElement;
 
@@ -44,6 +45,7 @@ protected:
     QPtrList <KivioStencil> *m_pStencilList;
     QString m_name;
     KivioPage *m_pPage;
+    DCOPObject* m_dcop;
 
     KivioStencil *loadSMLStencil( const QDomElement & );
     KivioStencil *loadGroupStencil( const QDomElement & );
@@ -53,6 +55,8 @@ protected:
 public:
     KivioLayer( KivioPage * );
     virtual ~KivioLayer();
+
+    virtual DCOPObject* dcopObject();
 
     QPtrList<KivioStencil> *stencilList() { return m_pStencilList; }
 
@@ -84,13 +88,13 @@ public:
     KivioStencil *takeStencil() { return m_pStencilList->take(); }
     KivioStencil *currentStencil() { return m_pStencilList->current(); }
     KivioStencil *lastStencil() { return m_pStencilList->last(); }
-    
+
     KivioStencil *takeStencil( KivioStencil * );
 
     KivioConnectorTarget *connectPointToTarget( KivioConnectorPoint *, float );
-    
+
     int generateStencilIds( int );
-    
+
     void searchForConnections( KivioPage * );
 
 };

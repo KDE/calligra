@@ -17,40 +17,44 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KIVIO_PAGE_IFACE_H
-#define KIVIO_PAGE_IFACE_H
+#include "KIvioLayerIface.h"
 
-#include <dcopobject.h>
-#include <dcopref.h>
-#include <qstring.h>
+#include "kivio_layer.h"
 
-class KivioPage;
+#include <dcopclient.h>
 
-class KIvioPageIface : virtual public DCOPObject
+KIvioLayerIface::KIvioLayerIface( KivioLayer *layer_ )
+    : DCOPObject(  )
 {
-    K_DCOP
-public:
-    KIvioPageIface( KivioPage *page_ );
+    m_layer = layer_;
+}
 
-k_dcop:
-    DCOPRef firstLayer();
-    DCOPRef layerAt( int );
+bool KIvioLayerIface::visible()
+{
+    return m_layer->visible();
+}
 
-    bool isHidden();
-    void deleteSelectedStencils();
-    void groupSelectedStencils();
-    void ungroupSelectedStencils();
-    QString pageName()const;
-    void copy();
-    void cut();
-    void paste();
-    void selectAllStencils();
-    void unselectAllStencils();
-    int nbLayer() const;
+void KIvioLayerIface::setVisible( bool f )
+{
+    m_layer->setVisible( f );
+}
 
-private:
-    KivioPage *m_page;
+bool KIvioLayerIface::connectable()
+{
+    return m_layer->connectable();
+}
 
-};
+void KIvioLayerIface::setConnectable( bool f )
+{
+    m_layer->setConnectable( f );
+}
 
-#endif
+QString KIvioLayerIface::name() const
+{
+    return m_layer->name();
+}
+
+void KIvioLayerIface::setName( const QString &n )
+{
+    m_layer->setName( n );
+}

@@ -28,7 +28,7 @@
 #include "kivio_stencil_spawner.h"
 #include "kivio_stencil_spawner_info.h"
 #include "kivio_stencil_spawner_set.h"
-
+#include "KIvioLayerIface.h"
 #include "kivio_doc.h"
 #include "kivio_page.h"
 
@@ -38,7 +38,7 @@
 #include <kdebug.h>
 
 KivioLayer::KivioLayer( KivioPage *pPage )
-    : m_pStencilList(NULL)
+    :m_pStencilList(NULL)
 {
     m_pPage = pPage;
     m_name = i18n("Untitled Layer");
@@ -47,9 +47,16 @@ KivioLayer::KivioLayer( KivioPage *pPage )
     m_pStencilList->setAutoDelete(true);
 
     m_flags = 0;
-
+    m_dcop = 0;
     setVisible(true);
     setConnectable(false);
+}
+
+DCOPObject* KivioLayer::dcopObject()
+{
+    if ( !m_dcop )
+        m_dcop = new KIvioLayerIface( this );
+    return m_dcop;
 }
 
 KivioLayer::~KivioLayer()
@@ -59,6 +66,7 @@ KivioLayer::~KivioLayer()
         delete m_pStencilList;
         m_pStencilList = NULL;
     }
+    delete m_dcop;
 }
 
 bool KivioLayer::addStencil( KivioStencil *pStencil )
