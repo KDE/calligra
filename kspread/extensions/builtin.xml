@@ -1095,17 +1095,17 @@
     </Function>
 
     <Function>
-      <Name>ENT</Name>
+      <Name>INT</Name>
       <Type>Int</Type>
       <Parameter>
 	<Comment>A floating point value</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The ENT() function returns the integer part of the value.</Text>
-	<Syntax>ENT( x )</Syntax>
-	<Example>ENT(12.55) equals 12</Example>
-	<Example>ENT(15) equals 15</Example>
+	<Text>The INT() function returns the integer part of the value.</Text>
+	<Syntax>INT( x )</Syntax>
+	<Example>INT(12.55) equals 12</Example>
+	<Example>INT(15) equals 15</Example>
       </Help>
     </Function>
 

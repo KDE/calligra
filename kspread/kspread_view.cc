@@ -1866,6 +1866,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_copy->plug( m_pPopupColumn );
     m_paste->plug( m_pPopupColumn );
     m_specialPaste->plug( m_pPopupColumn );
+    m_pPopupColumn->insertSeparator();
     m_default->plug( m_pPopupColumn );
     m_areaName->plug( m_pPopupColumn );
 
@@ -1926,6 +1927,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_copy->plug( m_pPopupRow );
     m_paste->plug( m_pPopupRow );
     m_specialPaste->plug( m_pPopupRow );
+    m_pPopupRow->insertSeparator();
     m_default->plug( m_pPopupRow );
     m_areaName->plug( m_pPopupRow );
 
@@ -1987,6 +1989,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_copy->plug( m_pPopupMenu );
     m_paste->plug( m_pPopupMenu );
     m_specialPaste->plug( m_pPopupMenu );
+    m_pPopupMenu->insertSeparator();
     m_delete->plug( m_pPopupMenu );
     m_adjust->plug( m_pPopupMenu );
     m_default->plug( m_pPopupMenu );

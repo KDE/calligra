@@ -1100,11 +1100,11 @@ static bool kspreadfunc_STXT( KSContext& context )
 }
 */
 
-static bool kspreadfunc_ENT( KSContext& context )
+static bool kspreadfunc_INT( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "ENT", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "INT", true ) )
     return false;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
     return false;
@@ -2266,6 +2266,38 @@ static bool kspreadfunc_round( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_complex( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context,2, "COMPLEX",true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if(args[1]->doubleValue() ==0)
+        {
+        context.setValue( new KSValue(args[0]->doubleValue()));
+        return true;
+        }
+  QString tmp,tmp2;
+  tmp=tmp.setNum(args[0]->doubleValue());
+  if( args[1]->doubleValue() <0)
+        {
+        tmp=tmp+tmp2.setNum(args[1]->doubleValue())+"i";
+        }
+  else if (args[1]->doubleValue() >0)
+        {
+        tmp=tmp+"+"+tmp2.setNum(args[1]->doubleValue())+"i";
+        }
+  context.setValue( new KSValue(tmp));
+
+  return true;
+}
+
 
 static bool kspreadfunc_cell( KSContext& context )
 {
@@ -2405,7 +2437,9 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "mid", new KSValue( new KSBuiltinFunction( module, "mid", kspreadfunc_mid) ) );
   module->addObject( "len", new KSValue( new KSBuiltinFunction( module, "len", kspreadfunc_len) ) );
   module->addObject( "EXACT", new KSValue( new KSBuiltinFunction( module, "EXACT", kspreadfunc_EXACT) ) );
-  module->addObject( "ENT", new KSValue( new KSBuiltinFunction( module, "ENT",kspreadfunc_ENT) ) );
+  module->addObject( "INT", new KSValue( new KSBuiltinFunction( module, "INT",kspreadfunc_INT) ) );
+  //compatibility with kspread1.0
+  module->addObject( "ENT", new KSValue( new KSBuiltinFunction( module, "ENT",kspreadfunc_INT) ) );
   module->addObject( "PI", new KSValue( new KSBuiltinFunction( module, "PI",kspreadfunc_PI) ) );
   module->addObject( "rand", new KSValue( new KSBuiltinFunction( module, "rand",kspreadfunc_rand) ) );
   module->addObject( "REPT", new KSValue( new KSBuiltinFunction( module, "REPT",kspreadfunc_REPT) ) );
@@ -2466,6 +2500,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "HEX2BIN", new KSValue( new KSBuiltinFunction( module,"HEX2BIN",kspreadfunc_hex2bin) ) );
   module->addObject( "HEX2DEC", new KSValue( new KSBuiltinFunction( module,"HEX2DEC",kspreadfunc_hex2dec) ) );
   module->addObject( "HEX2OCT", new KSValue( new KSBuiltinFunction( module,"HEX2OCT",kspreadfunc_hex2oct) ) );
+  module->addObject( "COMPLEX", new KSValue( new KSBuiltinFunction( module,"COMPLEX",kspreadfunc_complex) ) );
   return module;
 }
 
