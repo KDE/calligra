@@ -401,15 +401,15 @@ void KivioView::setupActions()
   m_stencilToFront = new KAction( i18n("Bring to Front"), "bring_stencil_to_front", 0, this, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" );
   m_stencilToBack = new KAction( i18n("Send to Back"), "send_stencil_to_back", 0, this, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" );
 
-   m_menuTextFormatAction = new KAction(i18n("&Text..."), "text", 0, this, SLOT(textFormat()),
-    actionCollection(), "textFormat");
+  m_menuTextFormatAction = new KAction(i18n("&Text..."), 0, 0, this, SLOT(textFormat()),
+  actionCollection(), "textFormat");
 
-   m_menuStencilConnectorsAction = new KAction(i18n("&Stencils && Connectors..."), 0, 0, this, SLOT(stencilFormat()),
-    actionCollection(), "stencilFormat");
+  m_menuStencilConnectorsAction = new KAction(i18n("&Stencils && Connectors..."), 0, 0, this, SLOT(stencilFormat()),
+  actionCollection(), "stencilFormat");
 
-   m_arrowHeadsMenuAction = new KAction(i18n("&Arrowheads..."), 0, 0, this, SLOT(arrowHeadFormat()),
-    actionCollection(), "arrowHeadFormat");
-   m_arrowHeadsMenuAction->setWhatsThis(i18n("Arrowheads allow you to add an arrow to the beginning and/or end of a line."));
+  m_arrowHeadsMenuAction = new KAction(i18n("&Arrowheads..."), 0, 0, this, SLOT(arrowHeadFormat()),
+  actionCollection(), "arrowHeadFormat");
+  m_arrowHeadsMenuAction->setWhatsThis(i18n("Arrowheads allow you to add an arrow to the beginning and/or end of a line."));
 
   /* Create the fg color button */
   m_setFGColor = new TKSelectColorAction( i18n("Set Foreground Color"), TKSelectColorAction::LineColor, actionCollection(), "setFGColor" );
@@ -2041,14 +2041,6 @@ QPtrList<KAction> KivioView::groupActionList()
   QPtrList<KAction> tmp;
   tmp.append(m_groupAction);
   tmp.append(m_ungroupAction);
-  
-  return tmp;
-}
-
-QPtrList<KAction> KivioView::textActionList()
-{
-  QPtrList<KAction> tmp;
-  tmp.append(m_menuTextFormatAction);
   
   return tmp;
 }

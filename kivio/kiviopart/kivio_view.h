@@ -139,7 +139,6 @@ class KivioView : public KoView
     QPtrList<KAction> clipboardActionList();
     QPtrList<KAction> alignActionList();
     QPtrList<KAction> groupActionList();
-    QPtrList<KAction> textActionList();
     QPtrList<KAction> layerActionList();
 
   protected:

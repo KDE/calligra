@@ -25,6 +25,7 @@
 #include <koPoint.h>
 #include <klocale.h>
 #include <kactionclasses.h>
+#include <kozoomhandler.h>
 
 #include "kivio_view.h"
 #include "kivio_canvas.h"
@@ -153,14 +154,21 @@ void TextTool::text(QRect r)
 
 void TextTool::mousePress( QMouseEvent *e )
 {
-  if(e->button() == RightButton)
-  {
-    view()->pluginManager()->activateDefaultTool();
-    return;
-  }
-  if( startRubberBanding( e ) )
-  {
-    m_mode = stmDrawRubber;
+  if(e->button() == LeftButton) {
+    KoPoint pagePoint = view()->canvasWidget()->mapFromScreen(e->pos());
+    // Figure out how big 4 pixels is in terms of points
+    double threshold =  view()->zoomHandler()->unzoomItY(4);
+    int colType;
+    KivioPage *page = view()->activePage();
+    KivioStencil* stencil = page->checkForStencil( &pagePoint, &colType, threshold, false);
+    
+    if(stencil) {
+      QPtrList<KivioStencil> tmp;
+      tmp.append(stencil);
+      applyToolAction(&tmp);
+    } else if(startRubberBanding(e)) {
+      m_mode = stmDrawRubber;
+    }
   }
 }
 

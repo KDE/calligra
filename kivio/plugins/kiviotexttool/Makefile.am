@@ -4,7 +4,7 @@ lib_LTLIBRARIES =libkiviotexttool.la
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
 	-I$(top_srcdir)/kivio/kiviopart/tools\
-	$(KOFFICE_INCLUDES) $(all_includes)
+	$(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
 libkiviotexttool_la_METASOURCES = AUTO
 libkiviotexttool_la_SOURCES = \
 		plugin.cpp\
@@ -21,7 +21,7 @@ EXTRA_DIST = \
 		Text.sml\
 		Text.xpm
 libkiviotexttool_la_LDFLAGS = -module $(KDE_PLUGIN)
-libkiviotexttool_la_LIBADD = $(all_libraries) $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+libkiviotexttool_la_LIBADD = $(all_libraries) $(LIB_KOTEXT) $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviopart.la
 
 rc_DATA = kiviotexttool.rc
 rcdir = $(kde_datadir)/kivio/kpartplugins
