@@ -22,6 +22,7 @@
 #define KSPREADSTYLECLUSTER_H
 
 #include <qobject.h>
+#include <qvaluestack.h>
 
 #include <koffice_export.h>
 
@@ -50,6 +51,7 @@ class KSPREAD_EXPORT StyleCluster : public QObject
     
     KSpreadSheet* m_sheet;
     
+    void simplify(  QValueStack<StyleClusterQuad**> path );
   public:
     StyleCluster(KSpreadSheet* sheet);
 
