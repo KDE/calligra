@@ -638,7 +638,10 @@ void KPresenterView::insertPage()
         return;
 
     if (dia.radioCurrentDefault->isChecked())
-        extraDefaultTemplate();
+    {
+        QString file = locateLocal( "appdata", "default.kpr" );
+        m_pKPresenterDoc->savePage( file, currPg, true /*ignore stickies*/ );
+    }
 
     InsertPos pos = (InsertPos)dia.locationCombo->currentItem();
     int pg = m_pKPresenterDoc->insertNewPage( i18n("Insert new slide"), currPg, pos,
@@ -4103,15 +4106,15 @@ void KPresenterView::setupPopupMenus()
     rb_oalign = new QPopupMenu();
     Q_CHECK_PTR( rb_oalign );
     rb_oalign->insertItem( KPBarIcon("aoleft" ), this, SLOT( extraAlignObjLeft() ) );
-    rb_oalign->insertSeparator( -1 );
+    rb_oalign->insertSeparator();
     rb_oalign->insertItem( KPBarIcon("aocenterh" ), this, SLOT( extraAlignObjCenterH() ) );
-    rb_oalign->insertSeparator( -1 );
+    rb_oalign->insertSeparator();
     rb_oalign->insertItem( KPBarIcon("aoright" ), this, SLOT( extraAlignObjRight() ) );
-    rb_oalign->insertSeparator( -1 );
+    rb_oalign->insertSeparator();
     rb_oalign->insertItem( KPBarIcon("aotop" ) , this, SLOT( extraAlignObjTop() ) );
-    rb_oalign->insertSeparator( -1 );
+    rb_oalign->insertSeparator();
     rb_oalign->insertItem( KPBarIcon("aocenterv" ), this, SLOT( extraAlignObjCenterV() ) );
-    rb_oalign->insertSeparator( -1 );
+    rb_oalign->insertSeparator();
     rb_oalign->insertItem( KPBarIcon("aobottom" ), this, SLOT( extraAlignObjBottom() ) );
     rb_oalign->setMouseTracking( true );
     rb_oalign->setCheckable( false );
@@ -4120,19 +4123,19 @@ void KPresenterView::setupPopupMenus()
     rb_lbegin = new QPopupMenu();
     Q_CHECK_PTR( rb_lbegin );
     rb_lbegin->insertItem( KPBarIcon("line_normal_begin" ), this, SLOT( extraLineBeginNormal() ) );
-    rb_lbegin->insertSeparator( -1 );
+    rb_lbegin->insertSeparator();
     rb_lbegin->insertItem( KPBarIcon("line_arrow_begin" ), this, SLOT( extraLineBeginArrow() ) );
-    rb_lbegin->insertSeparator( -1 );
+    rb_lbegin->insertSeparator();
     rb_lbegin->insertItem( KPBarIcon("line_rect_begin" ), this, SLOT( extraLineBeginRect() ) );
-    rb_lbegin->insertSeparator( -1 );
+    rb_lbegin->insertSeparator();
     rb_lbegin->insertItem( KPBarIcon("line_circle_begin" ), this, SLOT( extraLineBeginCircle() ) );
-    rb_lbegin->insertSeparator( -1 );
+    rb_lbegin->insertSeparator();
     rb_lbegin->insertItem( KPBarIcon("line_line_arrow_begin" ), this, SLOT( extraLineBeginLineArrow() ) );
-    rb_lbegin->insertSeparator( -1 );
+    rb_lbegin->insertSeparator();
     rb_lbegin->insertItem( KPBarIcon("line_dimension_line_begin" ), this, SLOT( extraLineBeginDimensionLine() ) );
-    rb_lbegin->insertSeparator( -1 );
+    rb_lbegin->insertSeparator();
     rb_lbegin->insertItem( KPBarIcon("line_double_arrow_begin" ), this, SLOT( extraLineBeginDoubleArrow() ) );
-    rb_lbegin->insertSeparator( -1 );
+    rb_lbegin->insertSeparator();
     rb_lbegin->insertItem( KPBarIcon("line_double_line_arrow_begin" ), this, SLOT( extraLineBeginDoubleLineArrow() ) );
     rb_lbegin->setMouseTracking( true );
     rb_lbegin->setCheckable( false );
@@ -4141,19 +4144,19 @@ void KPresenterView::setupPopupMenus()
     rb_lend = new QPopupMenu();
     Q_CHECK_PTR( rb_lend );
     rb_lend->insertItem( KPBarIcon("line_normal_end" ), this, SLOT( extraLineEndNormal() ) );
-    rb_lend->insertSeparator( -1 );
+    rb_lend->insertSeparator();
     rb_lend->insertItem( KPBarIcon("line_arrow_end" ), this, SLOT( extraLineEndArrow() ) );
-    rb_lend->insertSeparator( -1 );
+    rb_lend->insertSeparator();
     rb_lend->insertItem( KPBarIcon("line_rect_end" ), this, SLOT( extraLineEndRect() ) );
-    rb_lend->insertSeparator( -1 );
+    rb_lend->insertSeparator();
     rb_lend->insertItem( KPBarIcon("line_circle_end" ), this, SLOT( extraLineEndCircle() ) );
-    rb_lend->insertSeparator( -1 );
+    rb_lend->insertSeparator();
     rb_lend->insertItem( KPBarIcon("line_line_arrow_end" ), this, SLOT( extraLineEndLineArrow() ) );
-    rb_lend->insertSeparator( -1 );
+    rb_lend->insertSeparator();
     rb_lend->insertItem( KPBarIcon("line_dimension_line_end" ), this, SLOT( extraLineEndDimensionLine() ) );
-    rb_lend->insertSeparator( -1 );
+    rb_lend->insertSeparator();
     rb_lend->insertItem( KPBarIcon("line_double_arrow_end" ), this, SLOT( extraLineEndDoubleArrow() ) );
-    rb_lend->insertSeparator( -1 );
+    rb_lend->insertSeparator();
     rb_lend->insertItem( KPBarIcon("line_double_line_arrow_end" ), this, SLOT( extraLineEndDoubleLineArrow() ) );
     rb_lend->setMouseTracking( true );
     rb_lend->setCheckable( false );
@@ -4162,15 +4165,15 @@ void KPresenterView::setupPopupMenus()
     rb_pstyle = new QPopupMenu();
     Q_CHECK_PTR( rb_pstyle );
     rb_pstyle->insertItem( KPBarIcon( "pen_style_solid" ), this, SLOT( extraPenStyleSolid() ) );
-    rb_pstyle->insertSeparator( -1 );
+    rb_pstyle->insertSeparator();
     rb_pstyle->insertItem( KPBarIcon( "pen_style_dash" ), this, SLOT( extraPenStyleDash() ) );
-    rb_pstyle->insertSeparator( -1 );
+    rb_pstyle->insertSeparator();
     rb_pstyle->insertItem( KPBarIcon( "pen_style_dot" ), this, SLOT( extraPenStyleDot() ) );
-    rb_pstyle->insertSeparator( -1 );
+    rb_pstyle->insertSeparator();
     rb_pstyle->insertItem( KPBarIcon( "pen_style_dashdot" ), this, SLOT( extraPenStyleDashDot() ) );
-    rb_pstyle->insertSeparator( -1 );
+    rb_pstyle->insertSeparator();
     rb_pstyle->insertItem( KPBarIcon( "pen_style_dashdotdot" ), this, SLOT( extraPenStyleDashDotDot() ) );
-    rb_pstyle->insertSeparator( -1 );
+    rb_pstyle->insertSeparator();
     rb_pstyle->insertItem( KPBarIcon( "pen_style_nopen" ), this, SLOT( extraPenStyleNoPen() ) );
     rb_pstyle->setMouseTracking( true );
     rb_pstyle->setCheckable( false );
@@ -4179,23 +4182,23 @@ void KPresenterView::setupPopupMenus()
     rb_pwidth = new QPopupMenu();
     Q_CHECK_PTR( rb_pwidth );
     rb_pwidth->insertItem( KPBarIcon( "pen_width1" ), this, SLOT( extraPenWidth1() ) );
-    rb_pwidth->insertSeparator( -1 );
+    rb_pwidth->insertSeparator();
     rb_pwidth->insertItem( KPBarIcon( "pen_width2" ), this, SLOT( extraPenWidth2() ) );
-    rb_pwidth->insertSeparator( -1 );
+    rb_pwidth->insertSeparator();
     rb_pwidth->insertItem( KPBarIcon( "pen_width3" ), this, SLOT( extraPenWidth3() ) );
-    rb_pwidth->insertSeparator( -1 );
+    rb_pwidth->insertSeparator();
     rb_pwidth->insertItem( KPBarIcon( "pen_width4" ), this, SLOT( extraPenWidth4() ) );
-    rb_pwidth->insertSeparator( -1 );
+    rb_pwidth->insertSeparator();
     rb_pwidth->insertItem( KPBarIcon( "pen_width5" ), this, SLOT( extraPenWidth5() ) );
-    rb_pwidth->insertSeparator( -1 );
+    rb_pwidth->insertSeparator();
     rb_pwidth->insertItem( KPBarIcon( "pen_width6" ), this, SLOT( extraPenWidth6() ) );
-    rb_pwidth->insertSeparator( -1 );
+    rb_pwidth->insertSeparator();
     rb_pwidth->insertItem( KPBarIcon( "pen_width7" ), this, SLOT( extraPenWidth7() ) );
-    rb_pwidth->insertSeparator( -1 );
+    rb_pwidth->insertSeparator();
     rb_pwidth->insertItem( KPBarIcon( "pen_width8" ), this, SLOT( extraPenWidth8() ) );
-    rb_pwidth->insertSeparator( -1 );
+    rb_pwidth->insertSeparator();
     rb_pwidth->insertItem( KPBarIcon( "pen_width9" ), this, SLOT( extraPenWidth9() ) );
-    rb_pwidth->insertSeparator( -1 );
+    rb_pwidth->insertSeparator();
     rb_pwidth->insertItem( KPBarIcon( "pen_width10" ), this, SLOT( extraPenWidth10() ) );
     rb_pwidth->setMouseTracking( true );
     rb_pwidth->setCheckable( false );
@@ -4204,11 +4207,11 @@ void KPresenterView::setupPopupMenus()
     m_arrangeObjectsPopup = new QPopupMenu();
     Q_CHECK_PTR(m_arrangeObjectsPopup);
     m_arrangeObjectsPopup->insertItem(KPBarIcon("lower"), this, SLOT(extraLower()));
-    m_arrangeObjectsPopup->insertSeparator(-1);
+    m_arrangeObjectsPopup->insertSeparator();
     m_arrangeObjectsPopup->insertItem(KPBarIcon("send_backward"), this, SLOT(extraSendBackward()));
-    m_arrangeObjectsPopup->insertSeparator(-1);
+    m_arrangeObjectsPopup->insertSeparator();
     m_arrangeObjectsPopup->insertItem(KPBarIcon("bring_forward"), this, SLOT(extraBringForward()));
-    m_arrangeObjectsPopup->insertSeparator(-1);
+    m_arrangeObjectsPopup->insertSeparator();
     m_arrangeObjectsPopup->insertItem(KPBarIcon("raise"), this, SLOT(extraRaise()));
     m_arrangeObjectsPopup->setMouseTracking(true);
     m_arrangeObjectsPopup->setCheckable(false);
@@ -4652,7 +4655,7 @@ void KPresenterView::updateObjectStatusBarItem()
                 );
         }
         else
-            m_sbObjectLabel->setText( i18n("%1 object selected", "%1 objects selected", nbSelected) );
+            m_sbObjectLabel->setText( i18n("1 object selected", "%n objects selected", nbSelected) );
     }
     else if ( sb && m_sbObjectLabel ) {
         removeStatusBarItem( m_sbObjectLabel );
@@ -6860,8 +6863,8 @@ void KPresenterView::duplicateObj()
     if (m_canvas->currentTextObjectView() && !m_canvas->isOneObjectSelected() )
         return;
 
-    KPrDuplicatObjDia *dlg= new KPrDuplicatObjDia(this,  m_pKPresenterDoc);
-    if ( dlg->exec())
+    KPrDuplicatObjDia *dlg= new KPrDuplicatObjDia(this, m_pKPresenterDoc);
+    if ( dlg->exec() )
     {
         int nbCopy= dlg->nbCopy();
         double angle = dlg->angle();
@@ -6883,7 +6886,6 @@ void KPresenterView::duplicateObj()
         }
     }
     delete dlg;
-
 }
 
 void KPresenterView::extraArrangePopup()

@@ -246,7 +246,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     oldGridX = m_gridX;
     oldGridY = m_gridY;
 
-
     KPrPage *newpage=new KPrPage(this);
     m_pageList.insert( 0,newpage);
     m_stickyPage=new KPrPage(this);
@@ -269,7 +268,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     _footer->setDrawEditRect( false );
     _footer->setDrawEmpty( false );
 
-
     saveOnlyPage = -1;
     m_maxRecentFiles = 10;
 
@@ -291,7 +289,6 @@ void KPresenterDoc::refreshMenuCustomVariable()
 {
     emit sig_refreshMenuCustomVariable();
 }
-
 
 void KPresenterDoc::slotDocumentRestored()
 {
@@ -420,8 +417,6 @@ void KPresenterDoc::initConfig()
     replaceObjs( false );
     zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     newZoomAndResolution(false,false);
-
-
 }
 
 DCOPObject* KPresenterDoc::dcopObject()
@@ -464,7 +459,6 @@ KPresenterDoc::~KPresenterDoc()
     tmpSoundFileList.setAutoDelete( true );
     tmpSoundFileList.clear();
 }
-
 
 void KPresenterDoc::addCommand( KCommand * cmd )
 {
@@ -556,9 +550,6 @@ QDomDocument KPresenterDoc::saveXML()
         emit sigProgress( 5 );
 
     QDomElement element=doc.createElement("BACKGROUND");
-#if 0
-    element.setAttribute("color", _txtBackCol.name());
-#endif
     element.appendChild(saveBackground( doc ));
     presenter.appendChild(element);
 
@@ -655,8 +646,7 @@ QDomDocument KPresenterDoc::saveXML()
         // Don't save children that are only in the undo/redo history
         // but not anymore in the presentation
         for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
-            if ( saveOnlyPage != -1 &&
-                 i != saveOnlyPage )
+            if ( saveOnlyPage != -1 && i != saveOnlyPage )
                 continue;
             double offset=i*m_pageList.at(i)->getPageRect().height();
             saveEmbeddedObject(m_pageList.at(i), chl.current(),doc,presenter,offset );
@@ -773,7 +763,7 @@ QDomElement KPresenterDoc::saveObjects( QDomDocument &doc )
         objects=m_pageList.at(i)->saveObjects( doc, objects, yoffset, m_zoomHandler, saveOnlyPage );
 
     }
-    if ( !_duplicatePage ) //don't copy sticky objetc when we duplicate page
+    if ( !_duplicatePage ) //don't copy sticky objects when we duplicate page
     {
         //offset = 0.0 when it's a sticky page.
         objects=m_stickyPage->saveObjects( doc, objects, /*yoffset*/0.0, m_zoomHandler, saveOnlyPage );
@@ -1232,12 +1222,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 green = elem.attribute("bgreen").toInt();
             if(elem.hasAttribute("bblue"))
                 blue = elem.attribute("bblue").toInt();
-#if 0
-            if(elem.hasAttribute("color"))
-                _txtBackCol.setNamedColor(elem.attribute("color"));
-            else
-                _txtBackCol.setRgb(red, green, blue);
-#endif
             loadBackground(elem);
         } else if(elem.tagName()=="HEADER") {
             if ( _clean /*don't reload header footer, header/footer was created at the beginning || !hasHeader()*/ ) {
@@ -1408,7 +1392,7 @@ void KPresenterDoc::loadBackground( const QDomElement &element )
     }
 }
 
-KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
+KCommand *KPresenterDoc::loadObjects( const QDomElement &element, bool paste )
 {
     ObjType t = OT_LINE;
     QDomElement obj=element.firstChild().toElement();
@@ -1438,7 +1422,7 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                 }
                 else if (m_pageWhereLoadObject && paste) {
                     kplineobject->setOrig(kplineobject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, this,m_pageWhereLoadObject );
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro=true;
                     //insertCmd->execute();
@@ -1651,7 +1635,8 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpQuadricBezierCurveObject->setOrig(kpQuadricBezierCurveObject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject, this, m_pageWhereLoadObject );
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject,
+                                                          this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro=true;
                 }
@@ -1674,7 +1659,8 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpCubicBezierCurveObject->setOrig(kpCubicBezierCurveObject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject, this, m_pageWhereLoadObject );
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject,
+                                                          this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro=true;
 
@@ -1698,7 +1684,7 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpPolygonObject->setOrig(kpPolygonObject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polygon" ), kpPolygonObject, this , m_pageWhereLoadObject);
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polygon" ), kpPolygonObject, this, m_pageWhereLoadObject);
                     macro->addCommand( insertCmd );
                     createMacro=true;
 
@@ -1721,7 +1707,8 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste ) {
                     kpClosedLinneObject->setOrig( kpClosedLinneObject->getOrig().x(), offset );
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert %1" ).arg(kpClosedLinneObject->getTypeString()), kpClosedLinneObject, this , m_pageWhereLoadObject );
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert %1" ).arg(kpClosedLinneObject->getTypeString()),
+                                                          kpClosedLinneObject, this , m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro = true;
 
@@ -2165,7 +2152,6 @@ void KPresenterDoc::insertPage( KPrPage *_page, int position)
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->skipToPage(position);
-
 }
 
 void KPresenterDoc::takePage(KPrPage *_page)
@@ -2285,10 +2271,12 @@ int KPresenterDoc::insertNewPage( const QString &cmdName, int _page, InsertPos _
     return _page;
 }
 
-void KPresenterDoc::savePage( const QString &file, int pgnum )
+void KPresenterDoc::savePage( const QString &file, int pgnum, bool ignore )
 {
     saveOnlyPage = pgnum;
+    _duplicatePage=ignore;
     saveNativeFormat( file );
+    _duplicatePage=false;
     saveOnlyPage = -1;
 }
 
@@ -2321,7 +2309,7 @@ void KPresenterDoc::restoreBackground( KPrPage *page )
     page->background()->reload();
 }
 
-KCommand * KPresenterDoc::loadPastedObjs( const QString &in,KPrPage* _page )
+KCommand * KPresenterDoc::loadPastedObjs( const QString &in, KPrPage* _page )
 {
     QDomDocument doc;
     doc.setContent( in );
@@ -2361,7 +2349,7 @@ void KPresenterDoc::deSelectObj(KPObject *obj)
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        ((KPresenterView*)it.current())->getCanvas()->deSelectObj(obj );
+        ((KPresenterView*)it.current())->getCanvas()->deSelectObj( obj );
 }
 
 void KPresenterDoc::setHeader( bool b )
@@ -2824,7 +2812,6 @@ void KPresenterDoc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
         }
     }
 }
-
 
 KPrPage * KPresenterDoc::stickyPage() const
 {
