@@ -1178,7 +1178,7 @@ void ViewPrivate::initActions()
       0, ac, "showCommentIndicator" );
   QObject::connect( actions->showCommentIndicator, SIGNAL( toggled( bool ) ),
       view, SLOT( showCommentIndicator( bool ) ) );
-  actions->showCommentIndicator->setToolTip(i18n("Show indicator for cells with comment."));
+  actions->showCommentIndicator->setToolTip(i18n("Show indicator for cells with comments."));
 
   actions->preference = new KAction( i18n("Configure KSpread..."),"configure",
       0, view, SLOT( preference() ), ac, "preference" );
