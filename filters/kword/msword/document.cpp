@@ -54,7 +54,7 @@ wvWare::U8 KWordCharacterHandler::nonRequiredHyphen()
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& mainFramesetElement )
     : m_mainDocument( mainDocument ), m_mainFramesetElement( mainFramesetElement ), m_index( 0 ),
       m_sectionNumber( 0 ), m_paragStyle( 0L ), m_charHandler( new KWordCharacterHandler ),
-      m_parser( wvWare::ParserFactory::createParser( fileName ) )
+      m_parser( wvWare::ParserFactory::createParser( fileName ) ), m_shadowTextFound( false )
 {
     if ( m_parser ) { // 0 in case of major error (e.g. unsupported format)
         m_parser->setSpecialCharacterHandler( m_charHandler );
@@ -104,6 +104,7 @@ void Document::processStyles()
         //kdDebug() << k_funcinfo << "style " << i << " " << style << endl;
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
+            m_shadowTextFound = false;
             QDomElement styleElem = m_mainDocument.createElement("STYLE");
             stylesElem.appendChild( styleElem );
 
@@ -112,7 +113,7 @@ void Document::processStyles()
             element.setAttribute( "value", name.string() );
             styleElem.appendChild( element );
 
-            //kdDebug() << k_funcinfo << "Style: " << name.string() << endl;
+            //kdDebug() << k_funcinfo << "Style " << i << ": " << name.string() << endl;
 
             const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
             if ( followingStyle && followingStyle != style )
@@ -123,9 +124,10 @@ void Document::processStyles()
                 styleElem.appendChild( element );
             }
 
-            writeLayout( styleElem, style->paragraphProperties() );
-
+            // It's important to do that one first, for m_shadowTextFound
             writeFormat( styleElem, &style->chp(), 0L /*all of it, no ref chp*/, 0, 0 );
+
+            writeLayout( styleElem, style->paragraphProperties() );
         }
         // KWord doesn't support character styles yet
     }
@@ -202,11 +204,13 @@ void Document::sectionEnd()
 
 void Document::paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties )
 {
+    //kdDebug() << "paragraphStart. style index:" << paragraphProperties->pap().istd << endl;
     m_formats = m_mainDocument.createElement( "FORMATS" );
     m_paragraphProperties = paragraphProperties;
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
     m_paragStyle = styles.styleByIndex( paragraphProperties->pap().istd );
     Q_ASSERT( m_paragStyle );
+    m_shadowTextFound = false;
 }
 
 void Document::paragraphEnd()
@@ -357,8 +361,10 @@ void Document::writeFormat( QDomElement& parentElement, const wvWare::Word97::CH
     // Shadow text. Only on/off. The properties are defined at the paragraph level (in KWord).
     if ( !refChp || refChp->fShadow != chp->fShadow ) {
         QDomElement weight( m_mainDocument.createElement( "SHADOWTEXT" ) );
-        weight.setAttribute( "value", "1" );
+        weight.setAttribute( "value", chp->fShadow ? "1" : "0" );
         format.appendChild( weight );
+        if ( chp->fShadow )
+            m_shadowTextFound = true;
     }
 
     if ( !format.firstChild().isNull() ) // Don't save an empty format tag
@@ -649,6 +655,17 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::ParagraphP
             parentElement.appendChild( counterElement );
         }
     }
-    // TODO: SHADOW - if any SHADOWTEXT was generated, generate <SHADOW> with hardcoded
-    // values that make it look like in MSWord.
+
+    if ( m_shadowTextFound )
+    {
+        // SHADOW - if any SHADOWTEXT was generated, generate <SHADOW> with hardcoded
+        // values that make it look like in MSWord.
+        QDomElement shadowElement = m_mainDocument.createElement( "SHADOW" );
+        shadowElement.setAttribute( "distance", 1 );
+        shadowElement.setAttribute( "direction", 5 ); // bottom right
+        shadowElement.setAttribute( "red", 190 );
+        shadowElement.setAttribute( "blue", 190 );
+        shadowElement.setAttribute( "green", 190 );
+        parentElement.appendChild( shadowElement );
+    }
 }

@@ -81,6 +81,7 @@ private:
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
     KWordCharacterHandler* m_charHandler;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
+    bool m_shadowTextFound;
 };
 
 #endif // DOCUMENT_H
