@@ -17,6 +17,6 @@ libkotext_la_LIBADD = $(LIB_KOFFICEUI) -lkspell
 
 METASOURCES = AUTO
 
-# include_HEADERS = \
-#	kozoomhandler.h kotextformat.h koparagcounter.h kostyle.h \
+# include_HEADERS = 
+#	kozoomhandler.h kotextformat.h koparagcounter.h kostyle.h 
 #	kotextdocument.h koBgSpellCheck.h koCommentDia.h
