@@ -185,9 +185,15 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
+void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
+{
+    //TODO
+}
+
 void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
     KP2DObject::loadOasis( element, context, info );
+    loadOasisPictureEffect( context );
     const QString href( element.attribute("xlink:href") );
     kdDebug()<<" href: "<<href<<endl;
     if ( !href.isEmpty() && href[0] == '#' )

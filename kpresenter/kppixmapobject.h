@@ -117,6 +117,7 @@ protected:
 
     QPixmap changePictureSettings( QPixmap _tmpPixmap );
     virtual void saveOasisPictureElement( KoGenStyle &styleobjectauto );
+    void loadOasisPictureEffect(KoOasisContext & context );
 
     /**
      * @internal
