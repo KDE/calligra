@@ -114,7 +114,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 
     int availableWidth = dw - initialRMargin; // 'w' in QRT
 #ifdef DEBUG_FORMATTER
-    kdDebug(32500) << "KoTextFormatter::format left=" << left << " initialHeight=" << initialHeight << " initialLMargin=" << initialLMargin << " initialRMargin=" << initialRMargin << " availableWidth=" << availableWidth << endl;
+    kdDebug(32500) << "KoTextFormatter::format left=" << left << " initialHeight=" << initialHeight << " initialLMargin=" << initialLMargin << " initialRMargin=" << initialRMargin << " availableWidth=" << availableWidth << " maxY=" << maxY << endl;
 #endif
     bool fullWidth = TRUE;
     //int marg = left + initialRMargin;
@@ -146,6 +146,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     //int tminw = marg;
     int tmpWused = 0;
     bool lastWasNonInlineCustom = FALSE;
+    bool abort = false;
 
     int align = parag->alignment();
     if ( align == Qt::AlignAuto && doc && doc->alignment() != Qt::AlignAuto )
@@ -208,6 +209,15 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
         }
         Q_ASSERT( ww >= 0 );
         c->width = ww;
+
+        // We're "aborting" the formatting. This still means we need to set the
+        // lineStart bools to false (trouble ahead, otherwise!), and while we're at
+        // it we also calculate the widths etc.
+        if ( abort ) {
+            x += ww;
+            c->x = x;
+            continue; // yeah, this seems a bit confusing :)
+        }
 
         //code from qt-3.1beta2
         if ( c->isCustom() && c->customItem()->ownLine() ) {
@@ -382,7 +392,12 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                         continue;
                     }
                     else // we're after maxY, time to stop. Hopefully KWord will create more pages...
-                        break;
+                    {
+#ifdef DEBUG_FORMATTER
+                        kdDebug(32500) << "We're after maxY, time to stop." << endl;
+#endif
+                        abort = true;
+                    }
                 }
                 // maxY not known -> keep going ('i' remains where it is)
                 // (that's the initial QRT behaviour)
@@ -446,9 +461,14 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 //tminw = marg;
                 tmpWused = 0;
                 // If we're after maxY, time to stop. Hopefully KWord will create more pages.
-                if ( maxY > -1 && parag->rect().y() + y >= maxY )
-                    break;
-                continue;
+                if ( maxY > -1 && parag->rect().y() + y >= maxY ) {
+#ifdef DEBUG_FORMATTER
+                    kdDebug(32500) << "We're after maxY, time to stop." << endl;
+#endif
+                    abort = true;
+                }
+                else
+                    continue;
             }
         } else if ( lineStart && ( isBreakable( string, i ) || parag->isNewLinesAllowed() && c->c == '\n' ) ) {
             // Breakable character
@@ -626,6 +646,23 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     //    minw = QMAX(minw, wused);
     //thisminw = minw;
     thiswused = wused;
+
+#ifdef DEBUG_FORMATTER
+    // Sanity checking
+    int numberOfLines = 0;
+    QString charPosList;
+    for ( int i = 0 ; i < len; ++i ) {
+        KoTextStringChar *chr = &string->at( i );
+        if ( i == 0 )
+            assert( chr->lineStart );
+        if ( chr->lineStart ) {
+            ++numberOfLines;
+            charPosList += QString::number(i) + " ";
+        }
+    }
+    kdDebug(32500) << parag->lineStartList().count() << " lines. " << numberOfLines << " chars with lineStart set: " << charPosList << endl;
+    assert( numberOfLines == (int)parag->lineStartList().count() );
+#endif
     return y;
 }
 
