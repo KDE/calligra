@@ -100,7 +100,10 @@ void KWTableFrameSet::updateFrames()
 
 void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &position )
 {
-    KoPoint currentPos = getCell( 0, 0 )->getFrame( 0 )->topLeft();
+    Cell * cell = getCell( 0, 0 );
+    ASSERT( cell );
+    if ( !cell ) return;
+    KoPoint currentPos = cell->getFrame( 0 )->topLeft();
     if ( currentPos != position )
     {
         kdDebug() << "KWTableFrameSet::moveFloatingFrame " << position.x() << "," << position.y() << endl;
@@ -126,18 +129,19 @@ QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
 
 KCommand * KWTableFrameSet::anchoredObjectCreateCommand( int /*frameNum*/ )
 {
-    return new KWCreateTableCommand( i18n("Create table"), kWordDocument(), this );
+    return new KWCreateTableCommand( i18n("Create table"), this );
 }
 
 KCommand * KWTableFrameSet::anchoredObjectDeleteCommand( int /*frameNum*/ )
 {
-    return new KWDeleteTableCommand( i18n("Delete table"), kWordDocument(), this );
+    return new KWDeleteTableCommand( i18n("Delete table"), this );
 }
 
 KWAnchor * KWTableFrameSet::createAnchor( KWTextDocument * textdoc, int frameNum )
 {
     // TODO make one rect per page, and replace m_anchor with a QList<KWAnchor>
     ASSERT( !m_anchor );
+    kdDebug() << "KWTableFrameSet::createAnchor" << endl;
     m_anchor = new KWAnchor( textdoc, this, frameNum );
     return m_anchor;
 }
@@ -153,6 +157,7 @@ void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeH
         if ( !placeHolderExists )
             parag->insert( index, QChar(' ') );
         parag->setCustomItem( index, m_anchor, 0 );
+        kdDebug() << "KWTableFrameSet::createAnchors setting anchor" << endl;
     }
     parag->setChanged( true );
     emit repaintChanged( m_anchorTextFs );
@@ -160,6 +165,7 @@ void KWTableFrameSet::createAnchors( KWTextParag * parag, int index, bool placeH
 
 void KWTableFrameSet::deleteAnchors()
 {
+    kdDebug() << "KWTableFrameSet::deleteAnchors m_anchor=" << m_anchor << endl;
     if ( m_anchor )
         deleteAnchor( m_anchor );
     m_anchor = 0L;

@@ -329,6 +329,7 @@ void KWFrameSet::setFloating()
         QTextParag* parag = 0L;
         int index = 0;
         QPoint cPoint( qRound( frames.first()->x() ), qRound( frames.first()->y() ) );
+        kdDebug() << "KWFrameSet::setFloating looking for pos at " << cPoint.x() << " " << cPoint.y() << endl;
         frameSet->findPosition( cPoint, parag, index );
         setAnchored( frameSet, parag->paragId(), index );
         frameSet->layout();
@@ -341,6 +342,7 @@ void KWFrameSet::setFloating()
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists /* = false */ )
 {
     ASSERT( textfs );
+    kdDebug() << "KWFrameSet::setAnchored " << textfs << " " << paragId << " " << index << " " << placeHolderExists << endl;
     if ( isFloating() )
         deleteAnchors();
     m_anchorTextFs = textfs;
@@ -357,6 +359,7 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs )
 
 void KWFrameSet::setFixed()
 {
+    kdDebug() << "KWFrameSet::setFixed" << endl;
     if ( isFloating() )
         deleteAnchors();
     m_anchorTextFs = 0L;
@@ -396,7 +399,8 @@ void KWFrameSet::deleteAnchor( KWAnchor * anchor )
     QTextCursor c( m_anchorTextFs->textDocument() );
     c.setParag( anchor->paragraph() );
     c.setIndex( anchor->index() );
-    c.parag()->at( anchor->index() )->loseCustomItem();
+    anchor->setDeleted( true );
+    c.parag()->at( c.index() )->loseCustomItem();
     c.remove(); // This deletes the character where the anchor was
     // We don't delete the anchor since it might be in a customitemmap in a text-insert command
     c.parag()->setChanged( true );
@@ -404,6 +408,7 @@ void KWFrameSet::deleteAnchor( KWAnchor * anchor )
 
 void KWFrameSet::deleteAnchors()
 {
+    kdDebug() << "KWFrameSet::deleteAnchors" << endl;
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {

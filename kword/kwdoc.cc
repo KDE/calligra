@@ -2560,7 +2560,7 @@ void KWDocument::deleteTable( KWTableFrameSet *table )
     }
     else
     {
-        KWDeleteTableCommand *cmd = new KWDeleteTableCommand( i18n("Delete table"), this, table );
+        KWDeleteTableCommand *cmd = new KWDeleteTableCommand( i18n("Delete table"), table );
         addCommand( cmd );
         cmd->execute();
     }

@@ -658,16 +658,13 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
 
         KWFrameSet * fs = theFrame->getFrameSet();
-        KWTableFrameSet *table = fs->getGroupManager();
-        bool f = false;
-        if(table)
-        {
-            f=table->isFloating();
-            floating->setEnabled( false );
-        }
-        else
-            f = theFrame->getFrameSet()->isFloating();
+        // parentFs is the table in case of a table, fs otherwise
+        KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
+        bool f = parentFs->isFloating();
         floating->setChecked( f );
+
+        if ( fs->getGroupManager() )
+            floating->setText( i18n( "Table is floating" ) );
 
         slotFloatingToggled( f );
 
@@ -888,19 +885,20 @@ bool KWFrameDia::applyChanges()
     {
         // The floating attribute applies to the whole frameset...
         KWFrameSet * fs = frame->getFrameSet();
+        KWFrameSet * parentFs = fs->getGroupManager() ? fs->getGroupManager() : fs;
 
         // Floating
-        if ( floating->isChecked() && !fs->isFloating() )
+        if ( floating->isChecked() && !parentFs->isFloating() )
         {
             // turn non-floating frame into floating frame
-            KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( i18n("Make Frame Floating"), frame->getFrameSet(), true );
+            KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( i18n("Make FrameSet Floating"), parentFs, true );
             doc->addCommand(cmd);
             cmd->execute();
         }
-        else if ( !floating->isChecked() && fs->isFloating() )
+        else if ( !floating->isChecked() && parentFs->isFloating() )
         {
             // turn floating-frame into non-floating frame
-            KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( i18n("Make Frame Non-Floating"), frame->getFrameSet(), false );
+            KWFrameSetFloatingCommand *cmd = new KWFrameSetFloatingCommand( i18n("Make FrameSet Non-Floating"), parentFs, false );
             doc->addCommand(cmd);
             cmd->execute();
         }

@@ -394,8 +394,8 @@ void KWTextParag::copyParagData( QTextParag *_parag )
 
 void KWTextParag::setCustomItem( int index, KWTextCustomItem * custom, QTextFormat * currentFormat )
 {
-    kdDebug() << "KWTextParag::setCustomItem " << index << "  " << (void*)custom
-              << "  currentFormat=" << (void*)currentFormat << endl;
+    kdDebug(32001) << "KWTextParag::setCustomItem " << index << "  " << (void*)custom
+                   << "  currentFormat=" << (void*)currentFormat << endl;
     if ( currentFormat )
         setFormat( index, 1, currentFormat );
     at( index )->setCustomItem( custom );
@@ -424,7 +424,7 @@ int KWTextParag::findCustomItem( const QTextCustomItem * custom ) const
         if ( ch.isCustom() && ch.customItem() == custom )
             return i;
     }
-    kdDebug() << "KWTextParag::findCustomItem custom item " << (void*)custom
+    kdWarning() << "KWTextParag::findCustomItem custom item " << (void*)custom
               << " not found in paragraph " << paragId() << endl;
     return 0;
 }

@@ -1052,7 +1052,7 @@ void KWCanvas::mrCreateTable()
         }
         else {
             KWTableFrameSet * table = createTable();
-            KWCreateTableCommand *cmd=new KWCreateTableCommand( i18n("Create table"), doc, table );
+            KWCreateTableCommand *cmd=new KWCreateTableCommand( i18n("Create table"), table );
             doc->addCommand(cmd);
             cmd->execute();
             emit docStructChanged(Tables);

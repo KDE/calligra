@@ -675,12 +675,15 @@ void KWFrameSetFloatingCommand::execute()
     {
         // Make frame(set) floating
         m_pFrameSet->setFloating();
+        // ## We might want to store a list of anchors in the command, and reuse them
+        // in execute/unexecute. Currently setFixed forgets the anchors and setFloating recreates new ones...
     }
     else
     {
         // Make frame(set) non-floating
         m_pFrameSet->setFixed();
     }
+    m_pFrameSet->kWordDocument()->updateAllFrames();
     m_pFrameSet->kWordDocument()->repaintAllViews();
 }
 
@@ -697,6 +700,7 @@ void KWFrameSetFloatingCommand::unexecute()
         // Make frame(set) non-floating again
         m_pFrameSet->setFixed();
     }
+    m_pFrameSet->kWordDocument()->updateAllFrames();
     m_pFrameSet->kWordDocument()->repaintAllViews();
 }
 
@@ -821,28 +825,29 @@ void KWUngroupTableCommand::unexecute()
 }
 
 
-KWDeleteTableCommand::KWDeleteTableCommand( const QString &name, KWDocument *_doc, KWTableFrameSet * _table ):
+KWDeleteTableCommand::KWDeleteTableCommand( const QString &name, KWTableFrameSet * _table ):
     KCommand(name),
-    m_pDoc(_doc),
     m_pTable(_table)
 {
+    ASSERT(m_pTable);
 }
 
 void KWDeleteTableCommand::execute()
 {
-    m_pDoc->removeFrameSet(m_pTable);
-    m_pDoc->refreshDocStructure(FT_TABLE);
-    m_pDoc->updateAllFrames();
-    m_pDoc->layout();
-    m_pDoc->repaintAllViews();
+    KWDocument * doc = m_pTable->kWordDocument();
+    doc->removeFrameSet(m_pTable);
+    doc->refreshDocStructure(FT_TABLE);
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
 }
 
 void KWDeleteTableCommand::unexecute()
 {
-    ASSERT(m_pTable);
-    m_pDoc->addFrameSet(m_pTable);
-    m_pDoc->refreshDocStructure(FT_TABLE);
-    m_pDoc->updateAllFrames();
-    m_pDoc->layout();
-    m_pDoc->repaintAllViews();
+    KWDocument * doc = m_pTable->kWordDocument();
+    doc->addFrameSet(m_pTable);
+    doc->refreshDocStructure(FT_TABLE);
+    doc->updateAllFrames();
+    doc->layout();
+    doc->repaintAllViews();
 }

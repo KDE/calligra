@@ -343,13 +343,12 @@ protected:
 class KWDeleteTableCommand : public KCommand
 {
 public:
-    KWDeleteTableCommand( const QString &name, KWDocument *_doc, KWTableFrameSet * _table) ;
+    KWDeleteTableCommand( const QString &name, KWTableFrameSet * _table) ;
     ~KWDeleteTableCommand() {}
 
     void execute();
     void unexecute();
 protected:
-    KWDocument *m_pDoc;
     KWTableFrameSet *m_pTable;
 };
 
@@ -360,8 +359,8 @@ protected:
 class KWCreateTableCommand : public KWDeleteTableCommand
 {
 public:
-    KWCreateTableCommand( const QString &name, KWDocument *_doc, KWTableFrameSet * _table)
-        : KWDeleteTableCommand( name, _doc, _table ) {}
+    KWCreateTableCommand( const QString &name, KWTableFrameSet * _table)
+        : KWDeleteTableCommand( name, _table ) {}
     ~KWCreateTableCommand() {}
 
     void execute() { KWDeleteTableCommand::unexecute(); }
