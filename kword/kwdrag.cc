@@ -83,37 +83,3 @@ int KWTextDrag::decodeFrameSetNumber( QMimeSource *e )
     else
         return -1;
 }
-
-/******************************************************************/
-/* Class: KWDrag                                                  */
-/******************************************************************/
-KWDrag::KWDrag( QWidget *dragSource, const char *name )
-    : QDragObject( dragSource, name )
-{
-}
-
-QByteArray KWDrag::encodedData( const char *mime ) const
-{
-    if ( strcmp( selectionMimeType(), mime ) == 0 )
-        return kword;
-    else
-        kdWarning() << "KWDrag: unsupported type " << mime << " requested" << endl;
-    return QByteArray();
-}
-
-bool KWDrag::canDecode( QMimeSource* e )
-{
-    return e->provides( selectionMimeType() );
-}
-
-const char* KWDrag::format( int i ) const
-{
-    if ( i == 0 )
-        return selectionMimeType();
-    else return 0;
-}
-
-const char * KWDrag::selectionMimeType()
-{
-    return "application/x-kword-selection";
-}

@@ -842,7 +842,7 @@ public:
 
     void loadPicture( const QString &fileName );
     void insertPicture( const KoPicture& picture );
-    
+
     /**
      * Reload a picture, which already exists in the picture collection
      * (if not, it gives a defaulft KoPicture() )

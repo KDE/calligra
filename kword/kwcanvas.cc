@@ -27,11 +27,14 @@
 #include "kwcommand.h"
 #include "kwtabletemplate.h"
 
+#include <qbuffer.h>
 #include <qtimer.h>
 #include <qclipboard.h>
 #include <qprogressdialog.h>
 #include <qobjectlist.h>
 
+#include <koStore.h>
+#include <koStoreDrag.h>
 #include <ktempfile.h>
 #include <klocale.h>
 #include <kcursor.h>
@@ -1789,17 +1792,43 @@ void KWCanvas::copySelectedFrames()
     QDomElement topElem = domDoc.createElement( "SELECTION" );
     domDoc.appendChild( topElem );
     bool foundOne = false;
+    QPtrList<KoDocumentChild> embeddedObjects;
+
+    KoStoreDrag *kd = new KoStoreDrag( "application/x-kword", 0L );
+    QByteArray arr;
+    QBuffer buffer(arr);
+    KoStore* store = KoStore::createStore( &buffer, KoStore::Write, "application/x-kword" );
+
+    QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    for ( ; fit.current() ; ++fit ) {
+        KWFrameSet * fs = fit.current();
+        if ( fs->isVisible() && fs->type() == FT_PART
+             && fs->frameIterator().getFirst()->isSelected() ) {
+            foundOne = true;
+            embeddedObjects.append( static_cast<KWPartFrameSet *>(fs)->getChild() );
+        }
+    }
+
+    // Save internal embedded objects first, since it might change their URL
+    int i = 0;
+    QValueList<KoPictureKey> savePictures;
+    QPtrListIterator<KoDocumentChild> chl( embeddedObjects );
+    for( ; chl.current(); ++chl ) {
+        KoDocument* childDoc = chl.current()->document();
+        if ( childDoc && !childDoc->isStoredExtern() )
+            (void) childDoc->saveToStore( store, QString::number( i++ ) );
+    }
 
     // We really need a selected-frames-list !
-    QPtrListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
+    fit = m_doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * fs = fit.current();
         if ( fs->isVisible() )
         {
-            if ( fs->type() == FT_PART )
-                continue; // pasteing embedded objects not yet implemented
             bool isTable = ( fs->type() == FT_TABLE );
+            if ( fs->type() == FT_PART )
+                continue;
             QPtrListIterator<KWFrame> frameIt = fs->frameIterator();
             KWFrame * firstFrame = frameIt.current();
             for ( ; frameIt.current(); ++frameIt )
@@ -1827,6 +1856,11 @@ void KWCanvas::copySelectedFrames()
                             // Frame saved alone -> remember which frameset it's part of
                             frameElem.setAttribute( "parentFrameset", fs->getName() );
                         }
+                        if ( fs->type() == FT_PICTURE ) {
+                            KoPictureKey key = static_cast<KWPictureFrameSet *>( fs )->key();
+                            if ( !savePictures.contains( key ) )
+                                savePictures.append( key );
+                        }
                     }
                     foundOne = true;
                     if ( isTable ) // Copy tables only once, even if they have many cells selected
@@ -1836,29 +1870,74 @@ void KWCanvas::copySelectedFrames()
         }
     }
 
-    if ( !foundOne )
+    if ( !foundOne ) {
+        delete store;
+        delete kd;
         return;
+    }
 
-    KWDrag *kd = new KWDrag( 0L );
-    kd->setKWord( domDoc.toCString() );
-    kdDebug(32001) << "KWCanvas::copySelectedFrames: " << domDoc.toCString() << endl;
+    if ( !embeddedObjects.isEmpty() )
+        m_doc->saveEmbeddedObjects( topElem, embeddedObjects );
+    if ( !savePictures.isEmpty() ) {
+        // Save picture list at the end of the main XML
+        topElem.appendChild( m_doc->pictureCollection()->saveXML( KoPictureCollection::CollectionPicture, domDoc, savePictures ) );
+        // Save the actual picture data into the store
+        m_doc->pictureCollection()->saveToStore( KoPictureCollection::CollectionPicture, store, savePictures );
+    }
+
+    if ( store->open( "root" ) )
+    {
+        QCString s = domDoc.toCString(); // this is already Utf8!
+        kdDebug(32001) << "KWCanvas::copySelectedFrames: " << s << endl;
+        (void)store->write( s.data(), s.size()-1 );
+        store->close();
+    }
+
+    // Maybe we need to also save styles, framestyles and tablestyles.
+
+    delete store;
+    kd->setEncodedData( arr );
     QApplication::clipboard()->setData( kd );
 }
 
 void KWCanvas::pasteFrames()
 {
     QMimeSource *data = QApplication::clipboard()->data();
-    QByteArray arr = data->encodedData( KWDrag::selectionMimeType() );
+    QByteArray arr = data->encodedData( KoStoreDrag::mimeType( "application/x-kword" ) );
     if ( !arr.size() )
         return;
-    QDomDocument domDoc;
-    domDoc.setContent( QCString( arr ) );
-    QDomElement topElem = domDoc.documentElement();
+    QBuffer buffer( arr );
+    KoStore* store = KoStore::createStore( &buffer, KoStore::Read );
+    if ( !store->bad() )
+    {
+        if ( store->open( "root" ) )
+        {
+            QString errorMsg;
+            int errorLine;
+            int errorColumn;
+            QDomDocument domDoc;
+            if ( !domDoc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn ) )
+            {
+                kdError (30003) << "Parsing Error! Aborting! (in KWCanvas::pasteFrames)" << endl
+                                << "  Line: " << errorLine << " Column: " << errorColumn << endl
+                                << "  Message: " << errorMsg << endl;
+                delete store;
+                return;
+            }
+            kdDebug() << domDoc.toCString() << endl;
+            QDomElement topElem = domDoc.documentElement();
 
-    KMacroCommand * macroCmd = new KMacroCommand( i18n( "Paste Frames" ) );
-    m_doc->pasteFrames( topElem, macroCmd );
-    m_doc->completePasting();
-    m_doc->addCommand( macroCmd );
+            KMacroCommand * macroCmd = new KMacroCommand( i18n( "Paste Frames" ) );
+            m_doc->pasteFrames( topElem, macroCmd );
+            m_doc->loadPictureMap( topElem );
+            store->close();
+            m_doc->loadImagesFromStore( store );
+            m_doc->insertEmbedded( store, topElem, macroCmd, 20.0 );
+            m_doc->completePasting();
+            m_doc->addCommand( macroCmd );
+        }
+    }
+    delete store;
 }
 
 KWTableFrameSet *KWCanvas::getTable()

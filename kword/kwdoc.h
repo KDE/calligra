@@ -379,7 +379,7 @@ public:
      */
     void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote = false, bool dontCreateFootNote = false);
 
-    void insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd );
+    void insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd, double offset );
     void completePasting();
 
     KoStyleCollection * styleCollection()const  { return m_styleColl;}
@@ -508,6 +508,8 @@ public:
 
     // This is used by loadFrameSets() and by KWCanvas to paste framesets
     KWFrameSet *loadFrameSet( QDomElement framesetElem, bool loadFrames = true , bool loadFootnote = true);
+    void loadEmbeddedObjects( QDomElement& word );
+    void saveEmbeddedObjects( QDomElement& parentElem, const QPtrList<KoDocumentChild>& childList );
     void loadEmbedded( const QDomElement &embedded );
 
     void recalcVariables( int type );

@@ -1107,7 +1107,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     QString value;
     QDomElement word = doc.documentElement();
-    unsigned item;
 
     value = KWDocument::getAttribute( word, "mime", QString::null );
     if ( value.isEmpty() )
@@ -1342,12 +1341,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     emit sigProgress(90);
 
     // <EMBEDDED>
-    QDomNodeList listEmbedded = word.elementsByTagName ( "EMBEDDED" );
-    for (item = 0; item < listEmbedded.count(); item++)
-    {
-        QDomElement embedded = listEmbedded.item( item ).toElement();
-        loadEmbedded( embedded );
-    }
+    loadEmbeddedObjects( word );
 
     emit sigProgress(100); // the rest is only processing, not loading
 
@@ -1501,6 +1495,16 @@ void KWDocument::startBackgroundSpellCheck()
         m_bgSpellCheck->startBackgroundSpellCheck();
     }
 
+}
+
+void KWDocument::loadEmbeddedObjects( QDomElement& word )
+{
+    QDomNodeList listEmbedded = word.elementsByTagName ( "EMBEDDED" );
+    for (unsigned int item = 0; item < listEmbedded.count(); item++)
+    {
+        QDomElement embedded = listEmbedded.item( item ).toElement();
+        loadEmbedded( embedded );
+    }
 }
 
 void KWDocument::loadEmbedded( const QDomElement &embedded )
@@ -1989,6 +1993,7 @@ void KWDocument::processPictureRequests()
     }
     m_textImageRequests.clear();
 
+    kdDebug() << k_funcinfo << m_pictureRequests.count() << " picture requests." << endl;
     QPtrListIterator<KWPictureFrameSet> it3( m_pictureRequests );
     for ( ; it3.current() ; ++it3 )
         it3.current()->setPicture( m_pictureCollection.findPicture( it3.current()->key() ) );
@@ -2064,7 +2069,7 @@ QString KWDocument::uniqueFramesetName( const QString& oldName )
     return newName;
 }
 
-void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool copyFootNote, bool loadFootNote )
+void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote, bool loadFootNote )
 {
     m_pasteFramesetsMap = new QMap<QString, QString>();
     //QPtrList<KWFrameSet> frameSetsToFinalize;
@@ -2073,6 +2078,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
     QDomElement elem = topElem.firstChild().toElement();
     for ( ; !elem.isNull() ; elem = elem.nextSibling().toElement() )
     {
+        kdDebug() << "pasteFrames: elem=" << elem.tagName() << endl;
         QDomElement frameElem;
         KWFrameSet * fs = 0L;
         if ( elem.tagName() == "FRAME" )
@@ -2108,8 +2114,18 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
                 break;
             }
             case FT_PART:
-                kdWarning(32001) << "Copying part objects isn't implemented yet" << endl;
+            {
+                ref |= Embedded;
+#if 0
+                KWPartFrameSet *part = new KWPartFrameSet( this, newName );
+                part->fromXML( elem, true, false /*don't apply names*/ );
+                part->moveBy( 20.0, 20.0 );
+                m_lstFrameSet.append( part );
+                part->setZOrder();
+                fs = part;
+#endif
                 break;
+            }
             default:
                 fs = loadFrameSet( elem, false, loadFootNote );
                 if ( fs )
@@ -2207,7 +2223,7 @@ void KWDocument::completePasting()
     m_pasteFramesetsMap = 0L;
 }
 
-void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd )
+void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd, double offset )
 {
     if ( !m_pasteFramesetsMap ) // may have been created by pasteFrames
         m_pasteFramesetsMap = new QMap<QString, QString>();
@@ -2239,6 +2255,11 @@ void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroComm
                     m_lstFrameSet.append( part );
                     kdDebug() << "KWDocument::insertEmbedded loading embedded object" << endl;
                     part->load( settings );
+                    if ( offset != 0 ) {
+                        QRect r = ch->geometry();
+                        r.moveBy( (int)offset, (int)offset );
+                        ch->setGeometry( r );
+                    }
                     part->setZOrder();
                     if ( macroCmd )
                     {
@@ -2458,14 +2479,24 @@ QDomDocument KWDocument::saveXML()
         }
     }
 
-    // Write "OBJECT" tag for every child
-    QPtrListIterator<KoDocumentChild> chl( children() );
+    // Save embedded objects
+    saveEmbeddedObjects( kwdoc, children() );
+    //necessary to recalcvariable date because new we are MODIFY/CREATE FILE date
+    recalcVariables(  VT_DATE );
+    return doc;
+}
+
+void KWDocument::saveEmbeddedObjects( QDomElement& parentElem, const QPtrList<KoDocumentChild>& childList )
+{
+    // Write "OBJECT" tag for every child, appending "EMBEDDING" tags to the main XML
+    QPtrListIterator<KoDocumentChild> chl( childList );
+    QDomDocument doc = parentElem.ownerDocument();
     for( ; chl.current(); ++chl ) {
         KWChild* curr = static_cast<KWChild*>(chl.current());
         if ( !curr->isDeleted() )
         {
             QDomElement embeddedElem = doc.createElement( "EMBEDDED" );
-            kwdoc.appendChild( embeddedElem );
+            parentElem.appendChild( embeddedElem );
 
             QDomElement objectElem = curr->save( doc, true );
             embeddedElem.appendChild( objectElem );
@@ -2474,21 +2505,8 @@ QDomDocument KWDocument::saveXML()
             embeddedElem.appendChild( settingsElem );
 
             curr->partFrameSet()->save( settingsElem );
-#if 0
-            QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-            for ( ; fit.current() ; ++fit )
-            {
-                KWFrameSet * fs = fit.current();
-                if ( !fs->isDeleted() && fs->type() == FT_PART &&
-                     static_cast<KWPartFrameSet*>( fs )->getChild() == curr )
-                    fs->save( settingsElem );
-            }
-#endif
         }
     }
-    //necessary to recalcvariable date because new we are MODIFY/CREATE FILE date
-    recalcVariables(  VT_DATE );
-    return doc;
 }
 
 void KWDocument::saveStyle( KWStyle *sty, QDomElement parentElem )

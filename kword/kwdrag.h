@@ -53,27 +53,4 @@ protected:
     int m_framesetNumber;
 };
 
-/**
- * More generic drag object, for anything else that can be represented as XML
- * (e.g. frames) and that doesn't have a text representation.
- */
-class KWDrag : public QDragObject
-{
-    Q_OBJECT
-
-public:
-    KWDrag( QWidget *dragSource = 0L, const char *name = 0L );
-
-    void setKWord( const QCString &_kword ) { kword = _kword; }
-
-    virtual QByteArray encodedData( const char *mime ) const;
-    virtual const char* format( int i ) const;
-
-    static bool canDecode( QMimeSource* e );
-
-    static const char * selectionMimeType();
-protected:
-    QCString kword; // The data in XML
-};
-
 #endif

@@ -91,6 +91,7 @@
 #include <klocale.h>
 #include <kimageio.h>
 #include <koPictureFilePreview.h>
+#include <koStoreDrag.h>
 #include "kwtextdocument.h"
 #include "kwcreatebookmarkdia.h"
 #include "kwimportstyledia.h"
@@ -99,6 +100,7 @@
 #include "kwinserthorizontallinedia.h"
 #include <qtabwidget.h>
 #include <qcheckbox.h>
+#include <qtimer.h>
 #include <qvbox.h>
 #undef Bool
 #include <kspell.h>
@@ -110,7 +112,6 @@
 #include <kformulamimesource.h>
 
 #include <stdlib.h>
-#include <qtimer.h>
 #include <kurldrag.h>
 #if HAVE_LIBASPELL
 #include <koSpell.h>
@@ -480,6 +481,10 @@ void KWView::setupActions()
                                       actionCollection(), "edit_delframe" );
     actionEditDelFrame->setToolTip( i18n( "Delete the currently selected frame." ) ); // #### there can be more than one frame selected (DF)
     actionEditDelFrame->setWhatsThis( i18n( "Delete the currently selected frame." ) );
+
+    actionCreateLinkedFrame = new KAction( i18n( "Create Linked Copy" ), 0, this, SLOT( createLinkedFrame() ), actionCollection(), "file_statistics" );
+    actionCreateLinkedFrame->setToolTip( ... );
+    actionCreateLinkedFrame->setWhatsThis( ... );
 
     actionRaiseFrame = new KAction( i18n( "Ra&ise Frame" ), "raise",
                                     CTRL +SHIFT+ Key_R, this, SLOT( raiseFrame() ),
@@ -1586,7 +1591,7 @@ void KWView::checkClipboard( QMimeSource *data, bool &providesImage, bool &provi
     providesFormula = formats.findIndex( KFormula::MimeSource::selectionMimeType() ) != -1;
     // providesKWordText is true for kword text and for plain text, we send both to KWTextFrameSetEdit::paste
     providesKWordText = formats.findIndex( KWTextDrag::selectionMimeType() ) != -1 || formats.findIndex( "text/plain" ) != -1;
-    providesKWord = formats.findIndex( KWDrag::selectionMimeType() ) != -1;
+    providesKWord = formats.findIndex( KoStoreDrag::mimeType("application/x-kword") ) != -1;
     //kdDebug() << "KWView::checkClipboard providesFormula=" << providesFormula << " providesKWordText=" << providesKWordText << " providesKWord=" << providesKWord << endl;
 }
 
@@ -6673,7 +6678,7 @@ void KWView::insertFile(const QString & path)
                     //kdDebug()<<k_funcinfo<<" Embedded: \n"<<embeddedDoc.toCString()<<endl;
                     if ( !macroCmd )
                         macroCmd = new KMacroCommand( i18n("Insert File") );
-                    m_doc->insertEmbedded( store, selElem, macroCmd );
+                    m_doc->insertEmbedded( store, selElem, macroCmd, 0 );
                 }
 
                 // insert paragraphs and inline framesets (we always have at least one paragraph)

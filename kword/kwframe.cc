@@ -1857,6 +1857,7 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
     KWFrameSet::load( attributes, loadFrames );
 
     QString defaultRatio="true";
+    // <PICTURE>
     QDomNode node=attributes.namedItem( "PICTURE" );
     if ( node.isNull() )
     {
@@ -1868,7 +1869,6 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
         }
     }
 
-    // <IMAGE>
     QDomElement image = node.toElement();
     if ( !image.isNull() ) {
         m_keepAspectRatio = image.attribute( "keepAspectRatio", defaultRatio ) == "true";
