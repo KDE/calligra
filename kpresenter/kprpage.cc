@@ -75,7 +75,7 @@ KPrPage::KPrPage(KPresenterDoc *_doc )
 
 KPrPage::~KPrPage()
 {
-    kdDebug()<<"Delete page :KPrPage::~KPrPage() \n";
+    kdDebug()<<"Delete page :KPrPage::~KPrPage() :"<<this<<endl;
     //delete object list.
     m_objectList.setAutoDelete( true );
     m_objectList.clear();

@@ -1932,9 +1932,6 @@ KPrDeletePageCmd::KPrDeletePageCmd( const QString &_name, int pos,KPrPage *_page
 
 KPrDeletePageCmd::~KPrDeletePageCmd()
 {
-    //todo
-    m_page->deletePage();
-    delete m_page;
 }
 
 void KPrDeletePageCmd::execute()
@@ -1961,7 +1958,6 @@ KPrInsertPageCmd::KPrInsertPageCmd( const QString &_name,int _pos, KPrPage *_pag
 
 KPrInsertPageCmd::~KPrInsertPageCmd()
 {
-    m_page->deletePage();
 }
 
 void KPrInsertPageCmd::execute()

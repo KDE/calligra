@@ -411,6 +411,9 @@ KPresenterDoc::~KPresenterDoc()
     delete m_pKSpellConfig;
     m_pageList.setAutoDelete( true );
     m_pageList.clear();
+    kdDebug()<<" delete m_deletedPageList \n";
+    m_deletedPageList.setAutoDelete( true );
+    m_deletedPageList.clear();
     tmpSoundFileList.setAutoDelete( true );
     tmpSoundFileList.clear();
 }
@@ -2031,6 +2034,12 @@ void KPresenterDoc::deletePage( int _page )
 
 void KPresenterDoc::insertPage( KPrPage *_page, int position)
 {
+    int pos=m_deletedPageList.findRef(_page);
+    if ( pos != -1 )
+        m_deletedPageList.take( pos);
+
+    if ( m_deletedPageList.findRef( _page ) )
+        m_deletedPageList.remove( _page );
     m_pageList.insert( position,_page);
     //active this page
     emit sig_changeActivePage(_page );
@@ -2044,6 +2053,9 @@ void KPresenterDoc::takePage(KPrPage *_page)
 {
     int pos=m_pageList.findRef(_page);
     m_pageList.take( pos);
+    m_deletedPageList.append( _page );
+
+
     //active previous page
     emit sig_changeActivePage(_page );
 

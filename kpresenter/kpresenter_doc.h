@@ -543,6 +543,7 @@ private:
     QValueList<KoPoint> m_helpPoints;
 
     QPtrList<KPrPage> m_pageList;
+    QPtrList<KPrPage> m_deletedPageList;
 
     QStringList m_spellListIgnoreAll;
 
