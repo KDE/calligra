@@ -2013,29 +2013,28 @@ void KPresenterView::penChosen()
         KPrPage *page = m_canvas->activePage();
         QPen e_pen = QPen(c, page->getPen(pen).width(), page->getPen(pen).style());
 
-        bool createMacro=false;
-        KMacroCommand *macro= new KMacroCommand(i18n( "Change Pen Color" ));
+        KMacroCommand *macro= 0L;
 
         KCommand *cmd=page->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
                                     PenCmd::Color, page->objectList() );
         if(cmd)
         {
+            macro= new KMacroCommand(i18n( "Change Pen Color" ));
             macro->addCommand(cmd);
-            createMacro=true;
         }
         cmd=stickyPage()->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
                           PenCmd::Color, page->objectList() );
         if(cmd)
         {
+            if (!macro )
+                macro= new KMacroCommand(i18n( "Change Pen Color" ));
             macro->addCommand(cmd);
-            createMacro=true;
         }
-        if(createMacro)
+        if(macro)
             m_pKPresenterDoc->addCommand(macro);
         else
         {
             pen.setColor( c );
-            delete macro;
 	}
     }
     else
@@ -2053,22 +2052,23 @@ void KPresenterView::brushChosen()
     if ( !edit )
     {
 	bool fill = true;
-        KMacroCommand *macro= new KMacroCommand(i18n( "Change Brush Color" ));
-        bool createMacro=false;
+        KMacroCommand *macro= 0L;
         KCommand *cmd=0L;
         cmd=m_canvas->activePage()->setBrushColor( c, fill );
         if(cmd)
         {
+            if ( !macro )
+                macro= new KMacroCommand(i18n( "Change Brush Color" ));
             macro->addCommand(cmd);
-            createMacro=true;
         }
         cmd=stickyPage()->setBrushColor( c, fill );
         if(cmd)
         {
+            if ( !macro )
+                macro= new KMacroCommand(i18n( "Change Brush Color" ));
             macro->addCommand(cmd);
-            createMacro=true;
         }
-        if(createMacro)
+        if(macro)
             m_pKPresenterDoc->addCommand(macro);
         else
         {
@@ -2076,7 +2076,6 @@ void KPresenterView::brushChosen()
 		brush.setColor( c );
 	    else
 		brush = NoBrush;
-            delete macro;
 	}
     }
     else
@@ -2176,29 +2175,27 @@ void KPresenterView::setExtraLineBegin(LineEnd lb)
     KPrPage *page=m_canvas->activePage();
     QPen e_pen = QPen(page->getPen(pen).color(), page->getPen(pen).width(), page->getPen(pen).style());
 
-    bool createMacro=false;
-    KMacroCommand *macro=new KMacroCommand(i18n("Change Line Begin"));
+    KMacroCommand *macro=0L;
 
     KCommand *cmd=page->setPen( e_pen, lb, page->getLineEnd( lineEnd ),
                                 PenCmd::LineBegin, page->objectList() );
     if(cmd)
     {
+        if ( !macro )
+            macro=new KMacroCommand(i18n("Change Line Begin"));
         macro->addCommand(cmd);
-        createMacro=true;
     }
     cmd=stickyPage()->setPen( e_pen, lb, page->getLineEnd( lineEnd ),
                               PenCmd::LineBegin, stickyPage()->objectList() );
     if(cmd)
     {
+        if ( !macro )
+            macro=new KMacroCommand(i18n("Change Line Begin"));
         macro->addCommand(cmd);
-        createMacro=true;
     }
-    if(createMacro)
+    if(macro)
         kPresenterDoc()->addCommand(macro);
     else
-        delete macro;
-
-    if ( !createMacro )
         lineBegin = lb;
 }
 
@@ -2256,29 +2253,27 @@ void KPresenterView::setExtraLineEnd(LineEnd le)
     KPrPage *page=m_canvas->activePage();
     QPen e_pen = QPen(page->getPen(pen).color(), page->getPen(pen).width(), page->getPen(pen).style());
 
-    bool createMacro=false;
-    KMacroCommand *macro=new KMacroCommand(i18n("Change Line End"));
+    KMacroCommand *macro=0L;
 
     KCommand *cmd=page->setPen( e_pen, page->getLineBegin( lineBegin ), le,
                                 PenCmd::LineEnd, page->objectList() );
     if(cmd)
     {
+        if (!macro )
+            macro=new KMacroCommand(i18n("Change Line End"));
         macro->addCommand(cmd);
-        createMacro=true;
     }
     cmd=stickyPage()->setPen( e_pen, page->getLineBegin( lineBegin ), le,
                               PenCmd::LineEnd, stickyPage()->objectList() );
     if(cmd)
     {
+        if (!macro )
+            macro=new KMacroCommand(i18n("Change Line End"));
         macro->addCommand(cmd);
-        createMacro=true;
     }
-    if(createMacro)
+    if(macro)
         kPresenterDoc()->addCommand(macro);
     else
-        delete macro;
-
-    if ( !createMacro )
         lineEnd = le;
 }
 
@@ -2324,29 +2319,28 @@ void KPresenterView::setExtraPenStyle( Qt::PenStyle style )
     KPrPage *page = m_canvas->activePage();
     QPen e_pen = QPen(page->getPen(pen).color(), page->getPen(pen).width(), style );
 
-    bool createMacro=false;
-    KMacroCommand *macro=new KMacroCommand(i18n("Change Pen Style"));
+    KMacroCommand *macro=0L;
 
     KCommand *cmd=page->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
                                 PenCmd::Style, page->objectList() );
     if(cmd)
     {
+        if ( !macro )
+            macro=new KMacroCommand(i18n("Change Pen Style"));
         macro->addCommand(cmd);
-        createMacro=true;
     }
     cmd=stickyPage()->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
                               PenCmd::Style, stickyPage()->objectList() );
     if(cmd)
     {
+        if ( !macro )
+            macro=new KMacroCommand(i18n("Change Pen Style"));
+
         macro->addCommand(cmd);
-        createMacro=true;
     }
-    if(createMacro)
+    if(macro)
         kPresenterDoc()->addCommand(macro);
     else
-        delete macro;
-
-    if ( !createMacro )
         pen = e_pen;
 }
 
@@ -2416,7 +2410,6 @@ void KPresenterView::setExtraPenWidth( unsigned int width )
     KPrPage *page=m_canvas->activePage();
     QPen e_pen = QPen(page->getPen(pen).color(), width, page->getPen(pen).style());
 
-    bool createMacro=false;
     KMacroCommand *macro=0L;
 
     KCommand *cmd=page->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
@@ -2435,11 +2428,10 @@ void KPresenterView::setExtraPenWidth( unsigned int width )
             macro=new KMacroCommand(i18n("Change Pen Width"));
 
         macro->addCommand(cmd);
-        createMacro=true;
     }
     if(macro)
         kPresenterDoc()->addCommand(macro);
-    if ( !macro )
+    else
         pen = e_pen;
 }
 
@@ -3552,7 +3544,6 @@ void KPresenterView::styleOk()
     ConfPictureDia *confPictureDia;
     ConfPolygonDia *confPolygonDia;
 
-    bool createMacro=false;
     KCommand *cmd;
     KMacroCommand *macro=0L;
 
@@ -3640,7 +3631,6 @@ void KPresenterView::styleOk()
         cmd = new ResizeCmd( i18n("Change Size"), rect.topLeft()-oldRect.topLeft(), rect.size() - oldRect.size(), m_canvas->getSelectedObj(), m_pKPresenterDoc );
         cmd->execute();
         macro->addCommand(cmd);
-        createMacro=true;
         if ( styleDia->isAllTextObject() )
         {
             bool state = styleDia->isProtectContent();
@@ -3898,25 +3888,24 @@ void KPresenterView::rotateOk()
 /*=================== shadow dialog ok ==========================*/
 void KPresenterView::shadowOk()
 {
-    bool createMacro=false;
-    KMacroCommand *macro=new KMacroCommand(i18n( "Change Shadow" ));
+    KMacroCommand *macro=0L;
 
     KCommand *cmd=m_canvas->activePage()->shadowObj(shadowDia->shadowDirection(),shadowDia->shadowDistance(),shadowDia->shadowColor());
     if( cmd)
     {
+        if ( !macro )
+            macro=new KMacroCommand(i18n( "Change Shadow" ));
         macro->addCommand(cmd);
-        createMacro=true;
     }
     cmd=stickyPage()->shadowObj(shadowDia->shadowDirection(),shadowDia->shadowDistance(),shadowDia->shadowColor());
     if( cmd)
     {
+        if ( !macro )
+            macro=new KMacroCommand(i18n( "Change Shadow" ));
         macro->addCommand(cmd);
-        createMacro=true;
     }
-    if(createMacro)
+    if(macro)
         kPresenterDoc()->addCommand(macro);
-    else
-        delete macro;
 }
 
 /*================================================================*/
@@ -5927,24 +5916,22 @@ void KPresenterView::changeCaseOfText()
     QPtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    bool createmacro=false;
     KoChangeCaseDia *caseDia=new KoChangeCaseDia( this,"change case" );
     if(caseDia->exec())
     {
-        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change Case of Text") );
+        KMacroCommand* macroCmd = 0L;
         for ( ; it.current() ; ++it )
         {
             KCommand *cmd = it.current()->setChangeCaseOfTextCommand(caseDia->getTypeOfCase());
             if (cmd)
             {
-                createmacro=true;
+                if ( !macroCmd )
+                    macroCmd = new KMacroCommand( i18n("Change Case of Text") );
                 macroCmd->addCommand(cmd);
             }
         }
-        if( createmacro )
+        if( macroCmd )
             m_pKPresenterDoc->addCommand(macroCmd);
-        else
-            delete macroCmd;
     }
     delete caseDia;
 }
@@ -6910,8 +6897,7 @@ void KPresenterView::extraBringForward()
 void KPresenterView::applyAutoFormat()
 {
     m_pKPresenterDoc->getAutoFormat()->readConfig();
-    KMacroCommand *macro = new KMacroCommand( i18n("Apply Autoformat"));
-    bool createmacro = false;
+    KMacroCommand *macro = 0L;
     m_switchPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     m_initSwitchPage=m_switchPage;
     QPtrList<KoTextObject> list=m_canvas->activePage()->objectText();
@@ -6925,7 +6911,8 @@ void KPresenterView::applyAutoFormat()
     KCommand * cmd2 = applyAutoFormatToCurrentPage( list );
     if ( cmd2 )
     {
-        createmacro = true;
+        if ( !macro )
+            macro = new KMacroCommand( i18n("Apply Autoformat"));
         macro->addCommand( cmd2 );
     }
 
@@ -6934,16 +6921,13 @@ void KPresenterView::applyAutoFormat()
         KCommand * cmd = applyAutoFormatToCurrentPage(m_canvas->activePage()->objectText());
         if ( cmd )
         {
-            createmacro = true;
+            if ( !macro )
+                macro = new KMacroCommand( i18n("Apply Autoformat"));
             macro->addCommand( cmd );
         }
     }
-    if ( createmacro )
-    {
+    if ( macro )
         m_pKPresenterDoc->addCommand(macro);
-    }
-    else
-        delete macro;
     m_switchPage=-1;
     m_initSwitchPage=-1;
 }
