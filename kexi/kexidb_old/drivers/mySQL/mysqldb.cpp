@@ -221,6 +221,7 @@ MySqlDB::query(QString statement)
 		throw KexiDBError(0, mysql_error(m_mysql));
 		return false;
 	}
+	return true;
 }
 
 bool
