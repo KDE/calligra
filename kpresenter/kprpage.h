@@ -107,9 +107,7 @@ public:
      * delete selected objects from m_objectList
      */
     KCommand * deleteSelectedObjects();
-#if 0 //not used
-    void removeObject( int pos);
-#endif
+
     void insertObject( KPObject *object, int pos );
     void completeLoading( bool _clean, int lastObj );
     /**
@@ -298,7 +296,7 @@ public:
      */
     QValueList<int> getEffectSteps() const;
 
-    bool isSlideSelected()const {return  m_selectedSlides;}
+    bool isSlideSelected() const {return  m_selectedSlides;}
     void slideSelected(bool _b){m_selectedSlides=_b;}
 
     void setInsPictureFile( const QString &_file ) { m_pictureFile = _file; }
@@ -370,8 +368,8 @@ public:
     bool saveOasisNote( KoXmlWriter &xmlWriter ) const;
     bool saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter ) const;
 
-    bool hasHeader()const { return m_bHasHeader; }
-    bool hasFooter()const { return m_bHasFooter; }
+    bool hasHeader() const { return m_bHasHeader; }
+    bool hasFooter() const { return m_bHasFooter; }
     void setHeader( bool b );
     void setFooter( bool b );
 

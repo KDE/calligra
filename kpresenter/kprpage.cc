@@ -773,12 +773,6 @@ void KPrPage::replaceObject( KPObject *oldObject, KPObject *newObject )
     m_objectList.insert( pos, newObject );
 }
 
-#if 0 // not used
-void KPrPage::removeObject( int pos)
-{
-    m_objectList.remove(pos);
-}
-#endif
 
 void KPrPage::insertObject( KPObject *object, int pos )
 {
@@ -1965,7 +1959,6 @@ int KPrPage::getPenBrushFlags( QPtrList<KPObject>list ) const
             {
                 flags = flags | StyleDia::SdPen | StyleDia::SdOther;
                 flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
-                flags = flags | StyleDia::SdEndBeginLine;
             }
             break;
             case OT_GROUP:
