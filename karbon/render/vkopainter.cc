@@ -1,6 +1,5 @@
 /* This file is part of the KDE project.
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -318,14 +317,11 @@ VKoPainter::fillPath()
 
 	if( m_fill && m_fill->type() != VFill::none )
 	{
-		ArtVpath *path;
-		path = art_bez_path_to_vec( m_path , 0.25 );
-
+		ArtVpath *path = art_bez_path_to_vec( m_path , 0.25 );
 		drawVPath( path );
 	}
 
 	m_index--;
-	//art_free( path );
 }
 
 void
@@ -338,13 +334,9 @@ VKoPainter::strokePath()
 	if( m_path[ m_index ].code != ART_END)
 		m_path[ m_index ].code = ART_END;
 
-	ArtVpath *path;
-	path = art_bez_path_to_vec( m_path , 0.25 );
-
-	//m_index = 0;
+	ArtVpath *path = art_bez_path_to_vec( m_path , 0.25 );
 
 	drawVPath( path );
-	//art_free( path );
 }
 
 void
