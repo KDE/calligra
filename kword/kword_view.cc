@@ -203,15 +203,13 @@ void KWordView::initGui()
 
     showFormulaToolbar( FALSE );
 
+    /*
+      The XML file does this for us now
     QWidget *tb = 0;
     if ( factory() )
       tb = factory()->container( "frame_toolbar", this );
     if ( tb )
       tb->hide();
-
-    /* ???
-    if ( ( (KoMainWindow*)shell() )->fileToolBar() )
-        ( (KoMainWindow*)shell() )->fileToolBar()->setBarPos( KToolBar::Left );
     */
 }
 

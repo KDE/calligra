@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="3">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="4">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
@@ -160,7 +160,7 @@
   <Action name="format_brdwidth"/>
   <Action name="format_brdstyle"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="frame_toolbar" position="top"><Text>Frame</Text>
+<ToolBar hidden="true" fullWidth="false" name="frame_toolbar" position="top"><Text>Frame</Text>
   <Action name="frame_brdleft"/>
   <Action name="frame_brdright"/>
   <Action name="frame_brdtop"/>
@@ -170,7 +170,7 @@
   <Action name="frame_brdstyle"/>
   <Action name="frame_backcolor"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="formula_toolbar" position="bottom"><Text>Formula</Text>
+<ToolBar hidden="true" fullWidth="false" name="formula_toolbar" position="bottom"><Text>Formula</Text>
   <Action name="formula_power"/>
   <Action name="formula_subscript"/>
   <Action name="formula_parentheses"/>
