@@ -1,6 +1,7 @@
 Changes after KPresenter 1.3
 ============================
 Fixes:
+- Fixed undo of delete and group command
 - Fixed possible crash in presentation mode if not all slides are shown
 - Fixed take tmp objects for redrawing in effect from the correct page
 - Fixed show the duration for the correct page if not all slides are shown

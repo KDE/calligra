@@ -576,16 +576,10 @@ QPtrList<KPObject> KPrPage::getSelectedObjects( bool withoutHeaderFooter ) const
 
 void KPrPage::groupObjects()
 {
-    QPtrList<KPObject> objs;
-    objs.setAutoDelete( false );
-    QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it ) {
-        if(it.current()->isSelected() && (it.current()!= m_doc->header() && it.current()!= m_doc->footer()))
-            objs.append( it.current() );
-    }
+    QPtrList<KPObject> objects( getSelectedObjects( true ) );
 
-    if ( objs.count() > 1 ) {
-        GroupObjCmd *groupObjCmd = new GroupObjCmd( i18n( "Group Objects" ), objs, m_doc,this );
+    if ( objects.count() > 1 ) {
+        GroupObjCmd *groupObjCmd = new GroupObjCmd( i18n( "Group Objects" ), objects, m_doc,this );
         m_doc->addCommand( groupObjCmd );
         groupObjCmd->execute();
     }

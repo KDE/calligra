@@ -148,6 +148,9 @@ public:
     ImageEffect getImageEffect(ImageEffect eff) const;
     KCommand * setImageEffect(ImageEffect eff, QVariant param1, QVariant param2, QVariant param3);
 
+    /**
+     * group selected objects.
+     */
     void groupObjects();
     KCommand * ungroupObjects();
     void raiseObjs( bool forward );

@@ -487,30 +487,31 @@ void EffectCmd::unexecute()
 GroupObjCmd::GroupObjCmd( const QString &_name,
                           const QPtrList<KPObject> &_objects,
                           KPresenterDoc *_doc, KPrPage *_page )
-    : KNamedCommand( _name ), objects( _objects )
+: KNamedCommand( _name )
+, m_objectsToGroup( _objects )
+, m_oldObjectList( _page->objectList() )
+, m_doc( _doc )
+, m_page( _page )  
 {
-    objects.setAutoDelete( false );
-    doc = _doc;
-    m_page=_page;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_oldObjectList );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
-    grpObj = new KPGroupObject( objects );
-    grpObj->incCmdRef();
+    m_groupObject = new KPGroupObject( m_objectsToGroup );
+    m_groupObject->incCmdRef();
 }
 
 GroupObjCmd::~GroupObjCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_oldObjectList );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
-    grpObj->decCmdRef();
+    m_groupObject->decCmdRef();
 }
 
 void GroupObjCmd::execute()
 {
-    KoRect r=KoRect();
-    QPtrListIterator<KPObject> it( objects );
+    KoRect r;
+    QPtrListIterator<KPObject> it( m_objectsToGroup );
     for ( ; it.current() ; ++it )
     {
         it.current()->setSelected( false );
@@ -519,42 +520,41 @@ void GroupObjCmd::execute()
         r |= it.current()->getBoundingRect();
     }
 
-    grpObj->setUpdateObjects( false );
-    grpObj->setOrig( r.x(), r.y() );
-    grpObj->setSize( r.width(), r.height() );
-    m_page->appendObject( grpObj );
-    grpObj->addToObjList();
-    grpObj->setUpdateObjects( true );
-    grpObj->setSelected( true );
-    doc->refreshGroupButton();
+    m_groupObject->setUpdateObjects( false );
+    m_groupObject->setOrig( r.x(), r.y() );
+    m_groupObject->setSize( r.width(), r.height() );
+    m_page->appendObject( m_groupObject );
+    m_groupObject->addToObjList();
+    m_groupObject->setUpdateObjects( true );
+    m_groupObject->setSelected( true );
+    m_doc->refreshGroupButton();
 
-    doc->repaint( false );
+    m_doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    // int pos = m_doc->pageList().findRef(m_page);
+    // m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
 }
 
 void GroupObjCmd::unexecute()
 {
-    grpObj->setUpdateObjects( false );
+    m_groupObject->setUpdateObjects( false );
 
-    m_page->takeObject( grpObj );
-    grpObj->removeFromObjList();
+    m_page->setObjectList( m_oldObjectList );
+    m_groupObject->removeFromObjList();
 
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_objectsToGroup );
     for ( ; it.current() ; ++it )
     {
-        m_page->appendObject( it.current() );
         it.current()->addToObjList();
         it.current()->setSelected( true );
     }
 
-    doc->refreshGroupButton();
+    m_doc->refreshGroupButton();
 
-    doc->repaint( false );
+    m_doc->repaint( false );
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    // int pos = m_doc->pageList().findRef(m_page);
+    // m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
 }
 
 UnGroupObjCmd::UnGroupObjCmd( const QString &_name,
