@@ -27,6 +27,13 @@
 #ifndef KSPREAD_VIEW
 #define KSPREAD_VIEW
 
+#include <qptrlist.h>
+#include <qpoint.h>
+#include <qstringlist.h>
+
+#include <koView.h>
+#include <koDocument.h>
+
 class QScrollBar;
 class QButton;
 
@@ -42,7 +49,7 @@ class KSpreadCell;
 class KSpreadLocationEditWidget;
 class KoDocumentEntry;
 class KSpreadSpell;
-class KSpreadMacroUndoAction;
+class KSpreadSelection;
 
 class DCOPObject;
 
@@ -50,19 +57,6 @@ namespace KSpread
 {
 class TabBar;
 };
-
-#include <qptrlist.h>
-#include <qpoint.h>
-#include <qguardedptr.h>
-#include <qstringlist.h>
-
-#include <koView.h>
-#include <koDocument.h>
-#include <kdatatool.h>
-#include <kglobalsettings.h>
-
-#include "kspread_selection.h"
-
 
 class ViewPrivate;
 
@@ -544,23 +538,6 @@ private:
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
     void updateButton(KSpreadCell *cell, int column, int row);
 
-    struct
-    {
-      KSpreadSpell *   kspell;
-      KSpreadSheet *  firstSpellTable;
-      KSpreadSheet *  currentSpellTable;
-      KSpreadCell  *  currentCell;
-      KSpreadMacroUndoAction *macroCmdSpellCheck;
-      unsigned int    spellCurrCellX;
-      unsigned int    spellCurrCellY;
-      unsigned int    spellStartCellX;
-      unsigned int    spellStartCellY;
-      unsigned int    spellEndCellX;
-      unsigned int    spellEndCellY;
-      bool            spellCheckSelection;
-        QStringList replaceAll;
-    } m_spell;
-
     bool spellSwitchToOtherTable();
     void spellCleanup();
 
@@ -571,7 +548,6 @@ private:
   void initializeAreaOperationActions();
   void initializeGlobalOperationActions();
   void initializeTableActions();
-  void initializeSpellChecking();
   void adjustMapActions( bool mode );
   void adjustActions( bool mode );
   void adjustActions( KSpreadSheet const * const table,

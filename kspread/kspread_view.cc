@@ -372,6 +372,24 @@ public:
     // the child for which the popup menu has been opened.
     KSpreadChild* popupChildObject;
 
+    // spell-check context
+    struct
+    {
+      KSpreadSpell *   kspell;
+      KSpreadSheet *  firstSpellTable;
+      KSpreadSheet *  currentSpellTable;
+      KSpreadCell  *  currentCell;
+      KSpreadMacroUndoAction *macroCmdSpellCheck;
+      unsigned int    spellCurrCellX;
+      unsigned int    spellCurrCellY;
+      unsigned int    spellStartCellX;
+      unsigned int    spellStartCellY;
+      unsigned int    spellEndCellX;
+      unsigned int    spellEndCellY;
+      bool            spellCheckSelection;
+      QStringList replaceAll;
+    } spell;
+
     // the tools
     struct ToolEntry
     {
@@ -890,6 +908,12 @@ void ViewPrivate::initActions()
       0, view, SLOT( adjust() ), ac, "adjust" );
   actions->adjust->setToolTip(i18n("Adjusts row/column size so that the contents will fit."));
 
+  // -- misc actions --
+
+  actions->spellChecking = KStdAction::spelling( view, SLOT( extraSpelling() ),
+      ac, "spelling" );
+  actions->spellChecking->setToolTip(i18n("Check the spelling."));
+
   // -- navigation actions --
 
   actions->gotoCell = new KAction( i18n("Goto Cell..."),"goto",
@@ -1020,7 +1044,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     d->popupRow    = 0;
     d->popupChild   = 0;
     d->popupListChoose = 0;
-    m_spell.kspell    = 0;
+    d->spell.kspell    = 0;
     // a few words to ignore when spell checking
 
     dcopObject(); // build it
@@ -1130,7 +1154,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     initializeAreaOperationActions();
     initializeGlobalOperationActions();
     initializeTableActions();
-    initializeSpellChecking();
 
     QPtrListIterator<KSpreadSheet> it( d->doc->map()->tableList() );
     for( ; it.current(); ++it )
@@ -1496,14 +1519,6 @@ void KSpreadView::initializeTableActions()
   d->actions->tableFormat->setToolTip(i18n("Set the worksheet formatting."));
 }
 
-void KSpreadView::initializeSpellChecking()
-{
-  d->actions->spellChecking = KStdAction::spelling( this, SLOT( extraSpelling() ),
-                                          actionCollection(), "spelling" );
-  d->actions->spellChecking->setToolTip(i18n("Check the spelling."));
-}
-
-
 KSpreadView::~KSpreadView()
 {
     //  ElapsedTime el( "~KSpreadView" );
@@ -1518,7 +1533,7 @@ KSpreadView::~KSpreadView()
         }*/
 
     delete d->selectionInfo;
-    delete m_spell.kspell;
+    delete d->spell.kspell;
 
     d->canvas->endChoose();
     d->activeSheet = 0; // set the active table to 0L so that when during destruction
@@ -1766,40 +1781,40 @@ void KSpreadView::recalcWorkSheet()
 
 void KSpreadView::extraSpelling()
 {
-  if ( m_spell.kspell )
+  if ( d->spell.kspell )
     return; // Already in progress
 
   if (d->activeSheet == 0L)
     return;
 
-  m_spell.macroCmdSpellCheck = 0L;
-  m_spell.firstSpellTable    = d->activeSheet;
-  m_spell.currentSpellTable  = m_spell.firstSpellTable;
+  d->spell.macroCmdSpellCheck = 0L;
+  d->spell.firstSpellTable    = d->activeSheet;
+  d->spell.currentSpellTable  = d->spell.firstSpellTable;
 
   QRect selection = d->selectionInfo->selection();
 
   // if nothing is selected, check every cell
   if (d->selectionInfo->singleCellSelection())
   {
-    m_spell.spellStartCellX = 0;
-    m_spell.spellStartCellY = 0;
-    m_spell.spellEndCellX   = 0;
-    m_spell.spellEndCellY   = 0;
-    m_spell.spellCheckSelection = false;
-    m_spell.currentCell     = d->activeSheet->firstCell();
+    d->spell.spellStartCellX = 0;
+    d->spell.spellStartCellY = 0;
+    d->spell.spellEndCellX   = 0;
+    d->spell.spellEndCellY   = 0;
+    d->spell.spellCheckSelection = false;
+    d->spell.currentCell     = d->activeSheet->firstCell();
   }
   else
   {
-    m_spell.spellStartCellX = selection.left();
-    m_spell.spellStartCellY = selection.top();
-    m_spell.spellEndCellX   = selection.right();
-    m_spell.spellEndCellY   = selection.bottom();
-    m_spell.spellCheckSelection = true;
-    m_spell.currentCell     = 0L;
+    d->spell.spellStartCellX = selection.left();
+    d->spell.spellStartCellY = selection.top();
+    d->spell.spellEndCellX   = selection.right();
+    d->spell.spellEndCellY   = selection.bottom();
+    d->spell.spellCheckSelection = true;
+    d->spell.currentCell     = 0L;
 
     // "-1" because X gets increased every time we go into spellCheckReady()
-    m_spell.spellCurrCellX = m_spell.spellStartCellX - 1;
-    m_spell.spellCurrCellY = m_spell.spellStartCellY;
+    d->spell.spellCurrCellX = d->spell.spellStartCellX - 1;
+    d->spell.spellCurrCellY = d->spell.spellStartCellY;
   }
 
   startKSpell();
@@ -1811,43 +1826,43 @@ void KSpreadView::startKSpell()
     if ( d->doc->getKSpellConfig() )
     {
         d->doc->getKSpellConfig()->setIgnoreList( d->doc->spellListIgnoreAll() );
-        d->doc->getKSpellConfig()->setReplaceAllList( m_spell.replaceAll );
+        d->doc->getKSpellConfig()->setReplaceAllList( d->spell.replaceAll );
 
     }
-    m_spell.kspell = new KSpreadSpell( this, i18n( "Spell Checking" ), this,
+    d->spell.kspell = new KSpreadSpell( this, i18n( "Spell Checking" ), this,
                                        SLOT( spellCheckerReady() ),
                                        d->doc->getKSpellConfig() );
 
-  m_spell.kspell->setIgnoreUpperWords( d->doc->dontCheckUpperWord() );
-  m_spell.kspell->setIgnoreTitleCase( d->doc->dontCheckTitleCase() );
+  d->spell.kspell->setIgnoreUpperWords( d->doc->dontCheckUpperWord() );
+  d->spell.kspell->setIgnoreTitleCase( d->doc->dontCheckTitleCase() );
 
-  QObject::connect( m_spell.kspell, SIGNAL( death() ),
+  QObject::connect( d->spell.kspell, SIGNAL( death() ),
                     this, SLOT( spellCheckerFinished() ) );
-  QObject::connect( m_spell.kspell, SIGNAL( misspelling( const QString &,
+  QObject::connect( d->spell.kspell, SIGNAL( misspelling( const QString &,
                                                          const QStringList &,
                                                          unsigned int) ),
                     this, SLOT( spellCheckerMisspelling( const QString &,
                                                          const QStringList &,
                                                          unsigned int) ) );
-  QObject::connect( m_spell.kspell, SIGNAL( corrected( const QString &,
+  QObject::connect( d->spell.kspell, SIGNAL( corrected( const QString &,
                                                        const QString &,
                                                        unsigned int) ),
                     this, SLOT( spellCheckerCorrected( const QString &,
                                                        const QString &,
                                                        unsigned int ) ) );
-  QObject::connect( m_spell.kspell, SIGNAL( done( const QString & ) ),
+  QObject::connect( d->spell.kspell, SIGNAL( done( const QString & ) ),
                     this, SLOT( spellCheckerDone( const QString & ) ) );
-  QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
+  QObject::connect( d->spell.kspell, SIGNAL( ignoreall (const QString & ) ),
                     this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
 
-  QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
+  QObject::connect( d->spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
 
 }
 
 void KSpreadView::spellCheckerReplaceAll( const QString &orig, const QString & replacement)
 {
-    m_spell.replaceAll.append( orig);
-    m_spell.replaceAll.append( replacement);
+    d->spell.replaceAll.append( orig);
+    d->spell.replaceAll.append( replacement);
 }
 
 
@@ -1863,22 +1878,22 @@ void KSpreadView::spellCheckerReady()
     d->canvas->setCursor( WaitCursor );
 
   // go on to the next cell
-  if (!m_spell.spellCheckSelection)
+  if (!d->spell.spellCheckSelection)
   {
     // if nothing is selected we have to check every cell
     // we use a different way to make it faster
-    while ( m_spell.currentCell )
+    while ( d->spell.currentCell )
     {
       // check text only
-      if ( m_spell.currentCell->value().isString() )
+      if ( d->spell.currentCell->value().isString() )
       {
-        m_spell.kspell->check( m_spell.currentCell->text(), true );
+        d->spell.kspell->check( d->spell.currentCell->text(), true );
 
         return;
       }
 
-      m_spell.currentCell = m_spell.currentCell->nextCell();
-      if ( m_spell.currentCell->isDefault() )
+      d->spell.currentCell = d->spell.currentCell->nextCell();
+      if ( d->spell.currentCell->isDefault() )
         kdDebug() << "checking default cell!!" << endl << endl;
     }
 
@@ -1892,39 +1907,39 @@ void KSpreadView::spellCheckerReady()
 
   // if something is selected:
 
-  ++m_spell.spellCurrCellX;
-  if (m_spell.spellCurrCellX > m_spell.spellEndCellX)
+  ++d->spell.spellCurrCellX;
+  if (d->spell.spellCurrCellX > d->spell.spellEndCellX)
   {
-    m_spell.spellCurrCellX = m_spell.spellStartCellX;
-    ++m_spell.spellCurrCellY;
+    d->spell.spellCurrCellX = d->spell.spellStartCellX;
+    ++d->spell.spellCurrCellY;
   }
 
   unsigned int y;
   unsigned int x;
 
-  for ( y = m_spell.spellCurrCellY; y <= m_spell.spellEndCellY; ++y )
+  for ( y = d->spell.spellCurrCellY; y <= d->spell.spellEndCellY; ++y )
   {
-    for ( x = m_spell.spellCurrCellX; x <= m_spell.spellEndCellX; ++x )
+    for ( x = d->spell.spellCurrCellX; x <= d->spell.spellEndCellX; ++x )
     {
-      KSpreadCell * cell = m_spell.currentSpellTable->cellAt( x, y );
+      KSpreadCell * cell = d->spell.currentSpellTable->cellAt( x, y );
 
       // check text only
       if (cell->isDefault() || !cell->value().isString())
         continue;
 
-      m_spell.spellCurrCellX = x;
-      m_spell.spellCurrCellY = y;
+      d->spell.spellCurrCellX = x;
+      d->spell.spellCurrCellY = y;
 
-      m_spell.kspell->check( cell->text(), true );
+      d->spell.kspell->check( cell->text(), true );
 
       return;
     }
-    m_spell.spellCurrCellX = m_spell.spellStartCellX;
+    d->spell.spellCurrCellX = d->spell.spellStartCellX;
   }
 
   // if the user selected something to be checked we are done
   // otherwise ask for checking the next table if any
-  if (m_spell.spellCheckSelection)
+  if (d->spell.spellCheckSelection)
   {
     // Done
     spellCleanup();
@@ -1944,20 +1959,20 @@ void KSpreadView::spellCleanup()
   if ( d->canvas )
     d->canvas->setCursor( ArrowCursor );
 
-  m_spell.kspell->cleanUp();
-  delete m_spell.kspell;
-  m_spell.kspell            = 0L;
-  m_spell.firstSpellTable   = 0L;
-  m_spell.currentSpellTable = 0L;
-  m_spell.currentCell       = 0L;
-  m_spell.replaceAll.clear();
+  d->spell.kspell->cleanUp();
+  delete d->spell.kspell;
+  d->spell.kspell            = 0L;
+  d->spell.firstSpellTable   = 0L;
+  d->spell.currentSpellTable = 0L;
+  d->spell.currentCell       = 0L;
+  d->spell.replaceAll.clear();
 
 
   KMessageBox::information( this, i18n( "Spell checking is complete." ) );
 
-  if ( m_spell.macroCmdSpellCheck )
-    d->doc->undoBuffer()->appendUndo( m_spell.macroCmdSpellCheck );
-  m_spell.macroCmdSpellCheck=0L;
+  if ( d->spell.macroCmdSpellCheck )
+    d->doc->undoBuffer()->appendUndo( d->spell.macroCmdSpellCheck );
+  d->spell.macroCmdSpellCheck=0L;
 }
 
 
@@ -1970,33 +1985,33 @@ bool KSpreadView::spellSwitchToOtherTable()
   // for optimization
   QPtrList<KSpreadSheet> tableList = d->map->tableList();
 
-  unsigned int curIndex = tableList.findRef(m_spell.currentSpellTable);
+  unsigned int curIndex = tableList.findRef(d->spell.currentSpellTable);
   ++curIndex;
 
   // last table? then start at the beginning
   if ( curIndex >= tableList.count() )
-    m_spell.currentSpellTable = tableList.first();
+    d->spell.currentSpellTable = tableList.first();
   else
-    m_spell.currentSpellTable = tableList.at(curIndex);
+    d->spell.currentSpellTable = tableList.at(curIndex);
 
   // if the current table is the first one again, we are done.
-  if ( m_spell.currentSpellTable == m_spell.firstSpellTable )
+  if ( d->spell.currentSpellTable == d->spell.firstSpellTable )
   {
-    setActiveTable( m_spell.firstSpellTable );
+    setActiveTable( d->spell.firstSpellTable );
     return false;
   }
 
-  if (m_spell.spellCheckSelection)
+  if (d->spell.spellCheckSelection)
   {
-    m_spell.spellEndCellX = m_spell.currentSpellTable->maxColumn();
-    m_spell.spellEndCellY = m_spell.currentSpellTable->maxRow();
+    d->spell.spellEndCellX = d->spell.currentSpellTable->maxColumn();
+    d->spell.spellEndCellY = d->spell.currentSpellTable->maxRow();
 
-    m_spell.spellCurrCellX = m_spell.spellStartCellX - 1;
-    m_spell.spellCurrCellY = m_spell.spellStartCellY;
+    d->spell.spellCurrCellX = d->spell.spellStartCellX - 1;
+    d->spell.spellCurrCellY = d->spell.spellStartCellY;
   }
   else
   {
-    m_spell.currentCell = m_spell.currentSpellTable->firstCell();
+    d->spell.currentCell = d->spell.currentSpellTable->firstCell();
   }
 
   if ( KMessageBox::questionYesNo( this,
@@ -2004,7 +2019,7 @@ bool KSpreadView::spellSwitchToOtherTable()
        != KMessageBox::Yes )
     return false;
 
-  setActiveTable( m_spell.currentSpellTable );
+  setActiveTable( d->spell.currentSpellTable );
 
   return true;
 }
@@ -2015,13 +2030,13 @@ void KSpreadView::spellCheckerMisspelling( const QString &,
                                            unsigned int )
 {
   // scroll to the cell
-  if ( !m_spell.spellCheckSelection )
+  if ( !d->spell.spellCheckSelection )
   {
-    m_spell.spellCurrCellX = m_spell.currentCell->column();
-    m_spell.spellCurrCellY = m_spell.currentCell->row();
+    d->spell.spellCurrCellX = d->spell.currentCell->column();
+    d->spell.spellCurrCellY = d->spell.currentCell->row();
   }
 
-  canvasWidget()->gotoLocation( m_spell.spellCurrCellX, m_spell.spellCurrCellY, activeTable() );
+  canvasWidget()->gotoLocation( d->spell.spellCurrCellX, d->spell.spellCurrCellY, activeTable() );
 }
 
 
@@ -2030,16 +2045,16 @@ void KSpreadView::spellCheckerCorrected( const QString & old, const QString & co
 {
   KSpreadCell * cell;
 
-  if (m_spell.spellCheckSelection)
+  if (d->spell.spellCheckSelection)
   {
-    cell = m_spell.currentSpellTable->cellAt( m_spell.spellCurrCellX,
-                                              m_spell.spellCurrCellY );
+    cell = d->spell.currentSpellTable->cellAt( d->spell.spellCurrCellX,
+                                              d->spell.spellCurrCellY );
   }
   else
   {
-    cell = m_spell.currentCell;
-    m_spell.spellCurrCellX = cell->column();
-    m_spell.spellCurrCellY = cell->row();
+    cell = d->spell.currentCell;
+    d->spell.spellCurrCellX = cell->column();
+    d->spell.spellCurrCellY = cell->row();
   }
 
   Q_ASSERT( cell );
@@ -2051,33 +2066,33 @@ void KSpreadView::spellCheckerCorrected( const QString & old, const QString & co
 
   KSpreadUndoSetText* undo = new KSpreadUndoSetText( d->doc, d->activeSheet,
                                                      content,
-                                                     m_spell.spellCurrCellX,
-                                                     m_spell.spellCurrCellY,
+                                                     d->spell.spellCurrCellX,
+                                                     d->spell.spellCurrCellY,
                                                      cell->formatType());
   content.replace( pos, old.length(), corr );
   cell->setCellText( content );
   d->editWidget->setText( content );
 
-  if ( !m_spell.macroCmdSpellCheck )
-      m_spell.macroCmdSpellCheck = new KSpreadMacroUndoAction( d->doc, i18n("Correct Misspelled Word") );
-  m_spell.macroCmdSpellCheck->addCommand( undo );
+  if ( !d->spell.macroCmdSpellCheck )
+      d->spell.macroCmdSpellCheck = new KSpreadMacroUndoAction( d->doc, i18n("Correct Misspelled Word") );
+  d->spell.macroCmdSpellCheck->addCommand( undo );
   d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
 void KSpreadView::spellCheckerDone( const QString & )
 {
-    int result = m_spell.kspell->dlgResult();
+    int result = d->spell.kspell->dlgResult();
 
-    m_spell.kspell->cleanUp();
-    delete m_spell.kspell;
-    m_spell.kspell = 0L;
+    d->spell.kspell->cleanUp();
+    delete d->spell.kspell;
+    d->spell.kspell = 0L;
 
     if ( result != KS_CANCEL && result != KS_STOP )
     {
-        if (m_spell.spellCheckSelection)
+        if (d->spell.spellCheckSelection)
         {
-            if ( (m_spell.spellCurrCellY <= m_spell.spellEndCellY)
-                 && (m_spell.spellCurrCellX <= m_spell.spellEndCellX) )
+            if ( (d->spell.spellCurrCellY <= d->spell.spellEndCellY)
+                 && (d->spell.spellCurrCellX <= d->spell.spellEndCellX) )
             {
                 startKSpell();
                 return;
@@ -2085,9 +2100,9 @@ void KSpreadView::spellCheckerDone( const QString & )
         }
         else
         {
-            if ( m_spell.currentCell )
+            if ( d->spell.currentCell )
             {
-                m_spell.currentCell = m_spell.currentCell->nextCell();
+                d->spell.currentCell = d->spell.currentCell->nextCell();
 
                 startKSpell();
 
@@ -2095,13 +2110,13 @@ void KSpreadView::spellCheckerDone( const QString & )
             }
         }
     }
-    m_spell.replaceAll.clear();
+    d->spell.replaceAll.clear();
 
-    if ( m_spell.macroCmdSpellCheck )
+    if ( d->spell.macroCmdSpellCheck )
     {
-        d->doc->undoBuffer()->appendUndo( m_spell.macroCmdSpellCheck );
+        d->doc->undoBuffer()->appendUndo( d->spell.macroCmdSpellCheck );
     }
-    m_spell.macroCmdSpellCheck=0L;
+    d->spell.macroCmdSpellCheck=0L;
 }
 
 void KSpreadView::spellCheckerFinished()
@@ -2109,11 +2124,11 @@ void KSpreadView::spellCheckerFinished()
   if (d->canvas)
     d->canvas->setCursor( ArrowCursor );
 
-  KSpell::spellStatus status = m_spell.kspell->status();
-  m_spell.kspell->cleanUp();
-  delete m_spell.kspell;
-  m_spell.kspell = 0L;
-  m_spell.replaceAll.clear();
+  KSpell::spellStatus status = d->spell.kspell->status();
+  d->spell.kspell->cleanUp();
+  delete d->spell.kspell;
+  d->spell.kspell = 0L;
+  d->spell.replaceAll.clear();
 
   bool kspellNotConfigured=false;
 
@@ -2128,11 +2143,11 @@ void KSpreadView::spellCheckerFinished()
     KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
   }
 
-  if (m_spell.macroCmdSpellCheck)
+  if (d->spell.macroCmdSpellCheck)
   {
-      d->doc->undoBuffer()->appendUndo( m_spell.macroCmdSpellCheck );
+      d->doc->undoBuffer()->appendUndo( d->spell.macroCmdSpellCheck );
   }
-  m_spell.macroCmdSpellCheck=0L;
+  d->spell.macroCmdSpellCheck=0L;
 
 
   if (kspellNotConfigured)
