@@ -24,6 +24,7 @@
 #include <kdebug.h>
 #include "koborder.h"
 #include <koVariable.h>
+#include <kcommand.h>
 
 KoTextViewIface::KoTextViewIface( KoTextView *_textview )
     : DCOPObject()
@@ -44,48 +45,56 @@ void KoTextViewIface::insertText( const QString &text )
 
 void KoTextViewIface::setBold(bool b)
 {
-    // ### leaks the commands away
-    m_textView->setBoldCommand(b);
+    KCommand *cmd=m_textView->setBoldCommand(b);
+    delete cmd;
 }
 
 void KoTextViewIface::setItalic(bool on)
 {
-    m_textView->setItalicCommand(on);
+    KCommand *cmd=m_textView->setItalicCommand(on);
+    delete cmd;
 }
 
 void KoTextViewIface::setUnderline(bool on)
 {
-    m_textView->setUnderlineCommand(on);
+    KCommand *cmd=m_textView->setUnderlineCommand(on);
+    delete cmd;
 }
 
 void KoTextViewIface::setDoubleUnderline(bool on)
 {
-    m_textView->setDoubleUnderlineCommand(on);
+    KCommand *cmd=m_textView->setDoubleUnderlineCommand(on);
+    delete cmd;
 }
 
 void KoTextViewIface::setStrikeOut(bool on)
 {
-    m_textView->setStrikeOutCommand(on);
+    KCommand *cmd=m_textView->setStrikeOutCommand(on);
+    delete cmd;
 }
 
 void KoTextViewIface::setPointSize( int s )
 {
-    m_textView->setPointSizeCommand(s);
+    KCommand *cmd=m_textView->setPointSizeCommand(s);
+    delete cmd;
 }
 
 void KoTextViewIface::setTextSubScript(bool on)
 {
-    m_textView->setTextSubScriptCommand(on);
+    KCommand *cmd=m_textView->setTextSubScriptCommand(on);
+    delete cmd;
 }
 
 void KoTextViewIface::setTextSuperScript(bool on)
 {
-    m_textView->setTextSuperScriptCommand(on);
+    KCommand *cmd=m_textView->setTextSuperScriptCommand(on);
+    delete cmd;
 }
 
 void KoTextViewIface::setDefaultFormat()
 {
-    m_textView->setDefaultFormatCommand();
+    KCommand *cmd=m_textView->setDefaultFormatCommand();
+    delete cmd;
 }
 
 QColor KoTextViewIface::textColor() const
@@ -105,34 +114,39 @@ QColor KoTextViewIface::textBackgroundColor()const
 
 void KoTextViewIface::setTextColor(const QColor &color)
 {
-    m_textView->setTextColorCommand(color);
+    KCommand *cmd=m_textView->setTextColorCommand(color);
+    delete cmd;
 }
 
 void KoTextViewIface::setTextBackgroundColor(const QColor &color)
 {
-    m_textView->setTextBackgroundColorCommand(color);
+    KCommand *cmd=m_textView->setTextBackgroundColorCommand(color);
+    delete cmd;
 }
 
 void KoTextViewIface::setAlign(int align)
 {
-    m_textView->setAlignCommand(align);
+    KCommand *cmd=m_textView->setAlignCommand(align);
+    delete cmd;
 }
 
 void KoTextViewIface::setAlign(const QString &align)
 {
+    KCommand *cmd=0L;
     if( align=="AlignLeft")
-        m_textView->setAlignCommand(Qt::AlignLeft);
+        cmd=m_textView->setAlignCommand(Qt::AlignLeft);
     else if (align=="AlignRight")
-        m_textView->setAlignCommand(Qt::AlignRight);
+        cmd=m_textView->setAlignCommand(Qt::AlignRight);
     else if (align=="AlignCenter")
-        m_textView->setAlignCommand(Qt::AlignCenter);
+        cmd=m_textView->setAlignCommand(Qt::AlignCenter);
     else if (align=="AlignJustify")
-        m_textView->setAlignCommand(Qt::AlignJustify);
+        cmd=m_textView->setAlignCommand(Qt::AlignJustify);
     else
     {
         kdDebug()<<"Align value not recognized...\n";
-        m_textView->setAlignCommand(Qt::AlignLeft);
+        cmd=m_textView->setAlignCommand(Qt::AlignLeft);
     }
+    delete cmd;
 }
 
 bool KoTextViewIface::isReadWrite() const
@@ -245,8 +259,6 @@ double KoTextViewIface::marginFirstLine() const
     return m_textView->cursor()->parag()->margin( QStyleSheetItem::MarginFirstLine);
 }
 
-
-
 void KoTextViewIface::setMarginFirstLine(double pt)
 {
     m_textView->cursor()->parag()->setMargin( QStyleSheetItem::MarginFirstLine,pt);
@@ -339,7 +351,6 @@ QColor KoTextViewIface::rightBorderColor() const
 {
     KoTextParag *parag= m_textView->cursor()->parag();
     return parag->rightBorder().color;
-
 }
 
 QColor KoTextViewIface::topBorderColor() const
@@ -357,24 +368,26 @@ QColor KoTextViewIface::bottomBorderColor() const
 
 void KoTextViewIface::changeCaseOfText( const QString & caseType)
 {
+    KCommand *cmd=0L;
     if( caseType.lower() == "uppercase" )
     {
-        m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::UpperCase );
+        cmd=m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::UpperCase );
     }
     else if( caseType.lower() =="lowercase" )
     {
-        m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::LowerCase );
+        cmd=m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::LowerCase );
     }
     else if( caseType.lower() =="titlecase" )
     {
-        m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::TitleCase );
+        cmd=m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::TitleCase );
     }
     else if( caseType.lower() =="togglecase" )
     {
-        m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::ToggleCase );
+        cmd=m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::ToggleCase );
     }
     else
         kdDebug()<<"Error in void KoTextViewIface::changeCaseOfText( const QString & caseType) parameter\n";
+    delete cmd;
 }
 
 bool KoTextViewIface::isALinkVariable() const
