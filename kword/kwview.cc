@@ -225,7 +225,8 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
              actionConvertToTextBox, SLOT(setEnabled(bool)));
     connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionAddPersonalExpression, SLOT(setEnabled(bool )));
-
+    connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
+             actionSortText, SLOT(setEnabled(bool )));
 
     connect( m_gui->canvasWidget(), SIGNAL(frameSelectedChanged()),
              this, SLOT(frameSelectedChanged()));
@@ -5481,6 +5482,7 @@ void KWView::slotFrameSetEditChanged()
     actionCreateStyleFromSelection->setEnabled( state && hasSelection);
     actionConvertToTextBox->setEnabled( state && hasSelection);
     actionAddPersonalExpression->setEnabled( state && hasSelection);
+    actionSortText->setEnabled( state && hasSelection);
     bool goodleftMargin=false;
     if(state)
         goodleftMargin=(edit->currentLeftMargin()>0);
@@ -6882,19 +6884,21 @@ void KWView::sortText()
     KWTextFrameSetEdit* edit = currentTextEdit();
     if ( edit && edit->textFrameSet()->hasSelection())
     {
-        edit->textFrameSet()->sortText();
-        QMimeSource *data = QApplication::clipboard()->data();
-        if ( data->provides( KWTextDrag::selectionMimeType() ) )
+        if ( edit->textFrameSet()->sortText() )
         {
-            QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
-            if ( arr.size() )
+            QMimeSource *data = QApplication::clipboard()->data();
+            if ( data->provides( KWTextDrag::selectionMimeType() ) )
             {
-                KCommand *cmd =edit->textFrameSet()->pasteKWord( edit->cursor(), QCString( arr ), true );
-                if ( cmd )
-                    m_doc->addCommand(cmd);
+                QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
+                if ( arr.size() )
+                {
+                    KCommand *cmd =edit->textFrameSet()->pasteKWord( edit->cursor(), QCString( arr ), true );
+                    if ( cmd )
+                        m_doc->addCommand(cmd);
+                }
             }
+            QApplication::clipboard()->clear();
         }
-        QApplication::clipboard()->clear();
     }
 }
 

@@ -2724,13 +2724,13 @@ QString KWTextFrameSet::copyTextParag( QDomElement & elem, int selectionId )
     return text;
 }
 
-void KWTextFrameSet::sortText()
+bool KWTextFrameSet::sortText()
 {
     KoTextCursor c1 = textDocument()->selectionStartCursor(KoTextDocument::Standard );
     KoTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
     QString text;
     if ( c1.parag() == c2.parag() )
-        return;
+        return false;
     else
     {
         //create list
@@ -2784,6 +2784,7 @@ void KWTextFrameSet::sortText()
         c2.setIndex( c2.parag()->length()-1 );
         textDocument()->setSelectionEnd( KoTextDocument::Standard, &c2 );
     }
+    return true;
 }
 
 

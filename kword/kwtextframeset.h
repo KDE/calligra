@@ -274,7 +274,7 @@ public:
     KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
 
     QString copyTextParag( QDomElement & elem, int selectionId );
-    void sortText();
+    bool sortText();
 
 signals:
     /** Tell the Edit object that this frame got deleted */
