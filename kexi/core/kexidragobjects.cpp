@@ -6,14 +6,19 @@
 
 /// implementation of KexiFieldDrag
               
-KexiFieldDrag::KexiFieldDrag(const QString& sourceType, const QString& source,const QString& field,
-                QWidget *parent, const char *name)
- : QStoredDrag("kexi/field", parent, name)
+KexiFieldDrag::KexiFieldDrag(const QString& source,const QString& field, QWidget *parent)
+ : QStoredDrag("kexi/field", parent)
 {
        QByteArray data;
-       QDataStream stream1(data,IO_WriteOnly);
-       stream1<<sourceType<<source<<field;		
-       setEncodedData(data);
+//       QDataStream stream1(data,IO_WriteOnly);
+ //      stream1 << source << field;
+	data = field.utf8();
+
+	setEncodedData(data);
+ 
+	kdDebug() << "KexiFieldDrag::KexiFieldDrag() data: " << QString(data) << endl;
+       
+	m_field = field;
 }
 
 
@@ -24,20 +29,22 @@ KexiFieldDrag::canDecode(QDragMoveEvent *e)
 }
 
 bool
-KexiFieldDrag::decode( QDropEvent* e, QString& sourceType, QString& source, QString& field )
+KexiFieldDrag::decode( QDropEvent* e, QString& sourceType)
 {
+	kdDebug() << "KexiFieldDrag::decode()" << endl;
 	QCString tmp;
         QByteArray payload = e->data("kexi/field");
         if(payload.size())
         {
                 e->accept();
-		QDataStream stream1(payload,IO_WriteOnly);
-		stream1>>sourceType;
-		stream1>>source;
-		stream1>>field;
-                kdDebug() << "KexiFieldDrag::decode() decoded: " << sourceType<<"/"<<source<<"/"<<field << endl;
-                return true;
-        }
+//		QDataStream stream1(payload,IO_WriteOnly);
+//		stream1>>sourceType;
+//		stream1>>source;
+//		stream1>>field;
+//              kdDebug() << "KexiFieldDrag::decode() decoded: " << sourceType<<"/"<<source<<"/"<<field << endl;
+//                return true;
+		sourceType = QString(payload);
+        	return true;
+	}
         return false;
 }
-

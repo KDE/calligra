@@ -82,8 +82,7 @@ KexiRelationViewTable::dragObject()
 	qDebug("KexiRelationViewTable::dragObject()");
 	if(selectedItem())
 	{
-		KexiFieldDrag *drag = new KexiFieldDrag(
-			"kexi/table",m_table,selectedItem()->text(1), this, "metaDrag");
+		KexiFieldDrag *drag = new KexiFieldDrag(m_table, selectedItem()->text(1), this);
 		return drag;
 	}
 
