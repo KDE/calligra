@@ -396,7 +396,7 @@ public:
      * For an "even pages header" frameset, the corresponding headerType setting
      * must be selected (i.e. different headers for even and odd pages).
      */
-    bool isVisible() const;
+    virtual bool isVisible();
 
     /** get the visibility of the frameset. */
     void setVisible( bool v ) { visible = v; }

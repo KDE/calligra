@@ -63,7 +63,7 @@ KWTableFrameSet::KWTableFrameSet( KWTableFrameSet &original ) :
     {
         Cell *cell = new Cell( this, *original.m_cells.at( i ) );
     }
-    m_doc->addGroupManager( this );
+    m_doc->addFrameSet( this );
 }
 
 /*================================================================*/
@@ -1231,6 +1231,22 @@ KWTableFrameSet::Cell::~Cell()
 bool KWTableFrameSet::Cell::isAboveOrLeftOf( unsigned row, unsigned col )
 {
     return ( m_row < row ) || ( ( m_row == row ) && ( m_col < col ) );
+}
+
+void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect, 
+        QColorGroup & cg, bool onlyChanged, bool resetChanged ) 
+{
+kdDebug() << "drawContents" << endl;
+    for (unsigned int i=0; i < m_cells.count() ; i++)
+        m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged );
+
+}
+bool KWTableFrameSet::isVisible()
+{
+    for (unsigned int i=0; i < m_cells.count() ; i++)
+        if(m_cells.at(i)->isVisible()) return true;
+
+    return false;
 }
 
 void KWTableFrameSetEdit::mousePressEvent( QMouseEvent * e )

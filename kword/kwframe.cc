@@ -732,7 +732,7 @@ bool KWFrameSet::hasSelectedFrame()
 }
 
 /*================================================================*/
-bool KWFrameSet::isVisible() const
+bool KWFrameSet::isVisible()
 {
     return ( visible &&
              !frames.isEmpty() &&

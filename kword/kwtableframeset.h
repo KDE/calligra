@@ -88,7 +88,7 @@ public:
     virtual ~KWTableFrameSet();
 
     virtual void drawContents( QPainter * painter, const QRect & crect,
-                               QColorGroup & cg, bool onlyChanged, bool resetChanged ) {}
+                               QColorGroup & cg, bool onlyChanged, bool resetChanged );
 
     // frameset management
     Cell *getCell( int i ) { return m_cells.at( i ); }
@@ -188,6 +188,8 @@ public:
 
     QString anchorType();
     QString anchorInstance();
+
+    virtual bool isVisible();
 
 protected:
     KWDocument *m_doc;

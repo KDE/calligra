@@ -2421,7 +2421,6 @@ void KWDocument::delGroupManager( KWTableFrameSet *g, bool deleteit )
 
 void KWDocument::addFrameSet( KWFrameSet *f )
 {
-kdDebug() << "addFrameSet" << endl;
   frames.append(f);
   //updateAllFrames();
   setModified( true );

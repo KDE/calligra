@@ -169,7 +169,7 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int cx, int cy, int cw, int ch, bool resetChanged )
 {
     QRect crect( cx, cy, cw, ch );
-    //kdDebug(32002) << "KWCanvas::drawDocument onlyFrameset=" << onlyFrameset << " crect: " << DEBUGRECT( crect ) << endl;
+    kdDebug(32002) << "KWCanvas::drawDocument onlyFrameset=" << onlyFrameset << " crect: " << DEBUGRECT( crect ) << endl;
     bool focus = hasFocus() || viewport()->hasFocus();
     if ( painter->device()->devType() == QInternal::Printer )
         focus = false;
@@ -183,16 +183,25 @@ void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int c
     QListIterator<KWFrameSet> fit = doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
+kdDebug() << "fs:" << endl;
         KWFrameSet * frameset = fit.current();
         if ( !onlyFrameset || (frameset == onlyFrameset) ) // Draw all, or draw only one
         {
+kdDebug() << "  --" << endl;
             if ( frameset->isVisible() )
             {
+kdDebug() << "  visible " << endl;
                 QColorGroup gb = QApplication::palette().active();
                 if ( focus && m_currentFrameSetEdit && frameset == m_currentFrameSetEdit->frameSet() )     // Currently edited frameset
+{
+kdDebug() << "  edit " << endl;
                     m_currentFrameSetEdit->drawContents( painter, crect, gb, onlyChanged, resetChanged );
+}
                 else
+{
+kdDebug() << "  paint " << endl;
                     frameset->drawContents( painter, crect, gb, onlyChanged, resetChanged );
+}
             }
         }
     }
