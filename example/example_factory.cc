@@ -23,7 +23,7 @@ ExampleFactory::~ExampleFactory()
 {
 }
 
-QObject* ExampleFactory::create( QObject* parent, const char* name, const char* classname )
+QObject* ExampleFactory::create( QObject* parent, const char* name, const char* /*classname*/ )
 {
     if ( parent && !parent->inherits("KoDocument") )
     {

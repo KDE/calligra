@@ -24,7 +24,7 @@ ASCIIImportFactory::~ASCIIImportFactory()
 {
 }
 
-QObject* ASCIIImportFactory::create( QObject* parent, const char* name, const char* classname )
+QObject* ASCIIImportFactory::create( QObject* parent, const char* name, const char* )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {

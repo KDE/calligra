@@ -24,7 +24,7 @@ CSVFilterFactory::~CSVFilterFactory()
 {
 }
 
-QObject* CSVFilterFactory::create( QObject* parent, const char* name, const char* classname )
+QObject* CSVFilterFactory::create( QObject* parent, const char* name, const char* )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {

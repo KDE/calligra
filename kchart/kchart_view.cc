@@ -121,6 +121,8 @@ void KChartView::edit()
 	  case QVariant::String:
 	    cerr << "A string in the table I cannot handle this yet\n";
 	    break;
+	  default:
+	      break;
 	  }
 	}
       }

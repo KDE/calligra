@@ -29,7 +29,7 @@ KChartFactory::~KChartFactory()
 {
 }
 
-QObject* KChartFactory::create( QObject* parent, const char* name, const char* classname )
+QObject* KChartFactory::create( QObject* parent, const char* name, const char*  )
 {
     if ( parent && !parent->inherits("KoDocument") ) {
 		qDebug("KChartFactory: parent does not inherit KoDocument");
