@@ -488,36 +488,37 @@ void KivioDoc::paintContent( KivioPainter& painter, const QRect& rect, bool tran
 
 void KivioDoc::printContent( KPrinter &prn )
 {
-    KivioScreenPainter p;
-    int from = prn.fromPage();
-    int to = prn.toPage();
-    int i;
-    KivioPage *pPage;
+  KivioScreenPainter p;
+  int from = prn.fromPage();
+  int to = prn.toPage();
+  int i;
+  KivioPage *pPage;
 
-    // ### HACK: disable zooming-when-printing if embedded parts are used.
-    // No koffice app supports zooming in paintContent currently.
-    // Disable in ALL cases now
-    bool doZoom = false;
-    int dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
-    int dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
+  // ### HACK: disable zooming-when-printing if embedded parts are used.
+  // No koffice app supports zooming in paintContent currently.
+  // Disable in ALL cases now
+  bool doZoom = false;
+  int dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
+  int dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
 
-    kdDebug() << "KivioDoc::printContent() - Printing from " << from << " to " << to << endl;
-    p.start(&prn);
+  kdDebug() << "KivioDoc::printContent() - Printing from " << from << " to " << to << endl;
+  p.start(&prn);
 
-    QPaintDeviceMetrics metrics( &prn );
-    p.painter()->scale( (double)metrics.logicalDpiX() / (double)dpiX,
-      (double)metrics.logicalDpiY() / (double)dpiY );
+  QPaintDeviceMetrics metrics( &prn );
+  p.painter()->scale( (double)metrics.logicalDpiX() / (double)dpiX,
+    (double)metrics.logicalDpiY() / (double)dpiY );
 
-    for( i=from; i<=to; i++ )
-    {
-        pPage = m_pMap->pageList().at(i-1);
-        pPage->printContent(p, dpiX, dpiY);
+  for( i=from; i<=to; i++ )
+  {
+    pPage = m_pMap->pageList().at(i-1);
+    pPage->printContent(p, dpiX, dpiY);
 
-        if( i<to )
-            prn.newPage();
+    if( i < to ) {
+      prn.newPage();
     }
+  }
 
-    p.stop();
+  p.stop();
 }
 
 /* TODO:

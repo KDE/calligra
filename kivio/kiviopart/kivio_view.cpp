@@ -532,8 +532,6 @@ void KivioView::initActions()
   updateButton();
 
   viewZoom(zoomHandler()->zoom());
-  //m_unitAct->setCurrentItem(m_pDoc->units());
-  //m_unitAct->activate(m_pDoc->units());
 }
 
 void KivioView::viewGUIActivated( bool active )
@@ -729,9 +727,6 @@ void KivioView::removePage()
       KivioRemovePageCommand *cmd = new KivioRemovePageCommand(i18n("Remove Page"), tbl);
       cmd->execute();
       doc()->addCommand( cmd );
-      //doc()->map()->removePage( tbl );
-      //removePage(tbl);
-      //delete tbl;
   }
 }
 
@@ -780,63 +775,8 @@ int KivioView::canvasYOffset() const
 
 void KivioView::print(KPrinter& ptr)
 {
-/***********
- * The old way of printing
- ***********/
-/*
-  KivioPage *pPage;
-  KivioPSPrinter p;
-  int i=0;
-  if ( m_pActivePage  )
-  {
-    p.start("/test.ps", m_pDoc->map()->pageList().count() );
-
-    // Iterate through all the pages
-    // FIXME: Make it adhere to those chosen in the dialog
-    pPage = m_pDoc->map()->firstPage();
-    while( pPage )
-    {
-        p.startPage( i+1 );
-        pPage->print( &p );
-        p.stopPage();
-
-        i++;
-        pPage = m_pDoc->map()->nextPage();
-    }
-
-    p.stop();
-*/
-    ptr.setFullPage(TRUE);
-
-    m_pDoc->printContent( ptr );
-
-
-/*
-    KivioScreenPainter sp;
-
-    ptr.setFullPage(TRUE);
-
-    sp.start(&ptr);
-
-    QRect r;
-    QPoint p0;
-
-    m_pActivePage->paintContent( sp, r, false, p0, 1.0f );
-
-    sp.stop();
-*/
-
-//  page->paintContent(painter,rect,transparent,p0,(float)zoom/100.0);
-
-
-
-//    prt.setFullPage( TRUE );
-//    QPainter painter;
-//    painter.begin( &prt );
-//    m_pActivePage->print( painter, &prt );
-//    painter.end();
-//  }
-//  return;
+  ptr.setFullPage(TRUE);
+  m_pDoc->printContent( ptr );
 }
 
 
@@ -1387,7 +1327,6 @@ void KivioView::slotSetStartArrowSize()
       return;
 
     float w,h;
-//    m_setStartArrowSize->size(w,h);
     KMacroCommand *macro = new KMacroCommand( i18n("Change Size of Begin Arrow"));
     bool createMacro = false;
     while( pStencil )
@@ -1417,7 +1356,6 @@ void KivioView::slotSetEndArrowSize()
       return;
 
     float w,h;
-//    m_setEndArrowSize->size(w,h);
     KMacroCommand *macro = new KMacroCommand( i18n("Change Size of End Arrow"));
     bool createMacro = false;
     while( pStencil )
@@ -1587,42 +1525,6 @@ void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner )
     m_pDoc->updateView(m_pActivePage);
 }
 
-/*
-void KivioView::gridSetup()
-{
-  GridSetupDialog* dlg = new GridSetupDialog(0,"GridSetupDialog", true);
-
-  KivioGridData d = m_pDoc->grid();
-  int unit = (int)d.freq.unit;
-  dlg->unitBox->setUnit(unit);
-  dlg->unitBox->activate();
-
-  dlg->showGrid->setChecked(d.isShow);
-  dlg->snapGrid->setChecked(d.isSnap);
-  dlg->gridColor->setColor(d.color);
-  dlg->freqX->setValue(d.freq.w,unit);
-  dlg->freqY->setValue(d.freq.h,unit);
-  dlg->distX->setValue(d.snap.w,unit);
-  dlg->distY->setValue(d.snap.h,unit);
-
-  if( dlg->exec() == QDialog::Accepted )
-  {
-    unit = dlg->unitBox->currentItem();
-
-    d.color = dlg->gridColor->color();
-    d.isShow =  dlg->showGrid->isChecked();
-    d.isSnap =  dlg->snapGrid->isChecked();
-    d.freq.set(dlg->freqX->value(unit),dlg->freqY->value(unit),unit);
-    d.snap.set(dlg->distX->value(unit),dlg->distY->value(unit),unit);
-
-    m_pDoc->setGrid(d);
-    updateToolBars();
-    m_pCanvas->repaint();
-  }
-
-  delete dlg;
-}
-*/
 void KivioView::alignStencilsDlg()
 {
   AlignDialog* dlg = new AlignDialog(0,"AlignDialog", true);
@@ -1716,8 +1618,15 @@ void KivioView::toggleBirdEyePanel(bool b)
 
 void KivioView::setupPrinter(KPrinter &p)
 {
-    p.setMinMax(1, m_pDoc->map()->pageList().count());
-    p.setFromTo(1, m_pDoc->map()->pageList().count());
+  p.setMinMax(1, m_pDoc->map()->pageList().count());
+  KoPageLayout pl = activePage()->paperLayout();
+  p.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pl.format ) ) );
+
+  if ( pl.orientation == PG_LANDSCAPE || pl.format == PG_SCREEN ) {
+    p.setOrientation( KPrinter::Landscape );
+  } else {
+    p.setOrientation( KPrinter::Portrait );
+  }
 }
 
 void KivioView::exportPage()
@@ -1738,8 +1647,6 @@ void KivioView::exportPage()
    }
 
    extList = extList + ")";
-
-   //KFileDialog fd( this, "Export To File", true );
 
    QString fileName = KFileDialog::getSaveFileName( "", extList );
    if( fileName.isEmpty()==true )
@@ -1905,7 +1812,7 @@ void KivioView::changeZoomMenu(int z)
       zs = (*it).replace( "%", "" );
       zs = zs.simplifyWhiteSpace();
       val = zs.toInt(&ok);
-      //zoom : limit inferior=10
+
       if(ok && val > 9  &&list.contains(val) == 0)
         list.append( val );
     }

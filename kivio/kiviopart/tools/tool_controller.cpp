@@ -26,7 +26,6 @@
 #include <ktoolbar.h>
 #include <kxmlguifactory.h>
 #include <kpopupmenu.h>
-#include <kdebug.h>
 
 ToolSelectAction::ToolSelectAction( QObject* parent, const char* name )
 :KActionMenu("",parent,name)
