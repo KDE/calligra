@@ -57,14 +57,8 @@ VFill::curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 )
 
 	QPointArray pa2( pa.cubicBezier() );
 
-// TODO: optimize + fix this (add pointarray, but ommit first point):
-	m_pa.resize( m_pa.size() + pa2.size() - 1 );
-	for( int i = 0; i < pa2.size() - 1; ++i )
-	{
-		m_pa.setPoint( m_pa.size() - pa2.size(),
-			qRound( m_zoomFactor * pa2.point( i + 1 ).x() ),
-			qRound( m_zoomFactor * pa2.point( i + 1 ).y() ) );
-	}
+	m_pa.resize( m_pa.size() + pa2.size() );
+	m_pa.putPoints( m_pa.size() - pa2.size(), pa2.size(), pa2 );
 
 	setPreviousPoint( p3 );
 }
