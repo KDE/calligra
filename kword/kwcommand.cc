@@ -50,9 +50,13 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
     //          << " firstParag=" << firstParag << " " << firstParag->paragId() << endl;
     cursor.setParag( firstParag );
     cursor.setIndex( m_idx );
+    c->setParag( firstParag );
+    c->setIndex( m_idx );
     QDomDocument domDoc;
     domDoc.setContent( m_data );
     QDomElement elem = domDoc.documentElement();
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
+    KWTextFrameSet * textFs = textdoc->textFrameSet();
     // We iterate twice over the list of paragraphs.
     // First time to gather the text,
     // second time to apply the character & paragraph formatting
@@ -60,32 +64,25 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
 
     QValueList<QDomElement> listParagraphs;
     QDomElement paragraph = elem.firstChild().toElement();
-    bool first = true;
     for ( ; !paragraph.isNull() ; paragraph = paragraph.nextSibling().toElement() )
     {
         if ( paragraph.tagName() == "PARAGRAPH" )
         {
             QString s = paragraph.namedItem( "TEXT" ).toElement().text();
-            if ( !first )
-                text += '\n';
-            else
-                first = false;
-            text += s;
+            //kdDebug() << "KWPasteTextCommand::execute Inserting text: '" << s << "'" << endl;
+            c->insert( s, false /*newline=linebreak, not new parag*/ );
+
+            if ( !paragraph.nextSibling().isNull() ) // Not for last parag
+            {
+                // Create new parag
+                // Lowlevel method:
+                c->splitAndInsertEmptyParag( FALSE, TRUE );
+                // Highlevel method:
+                //c->insert( "\n", true );
+            }
             listParagraphs.append( paragraph );
         }
     }
-    kdDebug() << "KWPasteTextCommand::execute Inserting text: '" << text << "'" << endl;
-    KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
-    KWTextFrameSet * textFs = textdoc->textFrameSet();
-    textFs->unzoom();
-
-    cursor.insert( text, true );
-
-    // Move cursor to the end
-    c->setParag( firstParag );
-    c->setIndex( m_idx );
-    for ( int i = 0; i < (int)text.length(); ++i )
-        c->gotoNextLetter();
 
     // Redo the parag lookup because if firstParag was empty, insert() has
     // shifted it down (side effect of splitAndInsertEmptyParag)
