@@ -418,7 +418,7 @@ void KoTemplateCreateDia::updatePixmap() {
     else if(d->m_custom->isChecked() && !d->m_customFile.isEmpty()) {
         if(d->m_customPixmap.isNull()) {
             // use the code in KoTemplate to load the image... hacky, I know :)
-            KoTemplate t("foo", "bar", d->m_customFile);
+            KoTemplate t("foo", "bar", QString::null, d->m_customFile);
             d->m_customPixmap=t.loadPicture();
         }
         if(!d->m_customPixmap.isNull())
