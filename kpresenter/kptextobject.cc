@@ -241,7 +241,7 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy,
         _painter->drawRect( penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
       else
         _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
-      
+
       drawTextObject( _painter, onlyChanged, cursor, resetChanged );
     }
     else
@@ -254,11 +254,11 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy,
       int xPos = -rr.x();
       br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
       rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
-      
+
       QWMatrix m;
       m.translate( pw / 2, ph / 2 );
       m.rotate( angle );
-      
+
       _painter->setWorldMatrix( m, true );
 
 
@@ -266,12 +266,12 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy,
         _painter->drawRect( rr.left() + xPos + penw, rr.top() + yPos + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
       else
         _painter->drawPixmap( rr.left() + xPos + penw, rr.top() + yPos + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
-      
+
       _painter->translate( rr.left() + xPos, rr.top() + yPos );
       drawTextObject( _painter, onlyChanged, cursor, resetChanged );
     }
     _painter->restore();
-    
+
     KPObject::draw( _painter, _diffx, _diffy );
 }
 
@@ -1099,6 +1099,16 @@ void KPTextView::doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int inde
 void KPTextView::startDrag()
 {
     kdDebug()<<"KPTextView::startDrag()\n";
+    textView()->dragStarted();
+    //m_canvas->dragStarted();
+    KPrTextDrag *drag = newDrag( m_page );
+    if ( !kpTextObject()->kPresenterDocument()->isReadWrite() )
+        drag->dragCopy();
+    else {
+        if ( drag->drag() && QDragObject::target() != m_page  ) {
+            textObject()->removeSelectedText( cursor() );
+        }
+    }
 }
 
 
@@ -1322,11 +1332,39 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent ) const
     kd->setPlain( text );
     kd->setKPresenter( domDoc.toCString() );
     kdDebug() << "KPTextView::newDrag " << domDoc.toCString() << endl;
-    kdDebug()<<" KPTextView::text plain :"<<text<<endl;
     return kd;
 }
 
+void KPTextView::dragEnterEvent( QDragEnterEvent *e )
+{
+    kdDebug()<<"KPTextView::dragEnterEvent( QDragEnterEvent * )\n";
+    if ( !kpTextObject()->kPresenterDocument()->isReadWrite() || !KPrTextDrag::canDecode( e ) )
+    {
+        e->ignore();
+        return;
+    }
+    e->acceptAction();
+}
+void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
+{
+    kdDebug()<<"    KPTextView::dragMoveEvent( QDragMoveEvent *, const QPoint & )\n";
+    if ( !kpTextObject()->kPresenterDocument()->isReadWrite() || !KPrTextDrag::canDecode( e ) )
+    {
+        e->ignore();
+        return;
+    }
 
+    QPoint iPoint;
+    iPoint=kpTextObject()->kPresenterDocument()->pixelToLayoutUnit( e->pos() - kpTextObject()->getOrig() );
+    textObject()->emitHideCursor();
+    placeCursor( iPoint );
+    textObject()->emitShowCursor();
+    e->acceptAction(); // here or out of the if ?
+}
+void KPTextView::dragLeaveEvent( QDragLeaveEvent * )
+{
+    kdDebug()<<"KPTextView::dragLeaveEvent( QDragLeaveEvent * )\n";
+}
 
 void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElement &parentElem,
                          int from /* default 0 */,

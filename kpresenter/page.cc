@@ -803,7 +803,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
     case INS_PIE:
         if ( !insRect.isNull() ) insertPie( insRect );
         break;
-    case INS_OBJECT: 
+    case INS_OBJECT:
     case INS_DIAGRAMM:
     case INS_TABLE:
     case INS_FORMULA: {
@@ -3421,7 +3421,11 @@ void Page::selectPrev()
 /*================================================================*/
 void Page::dragEnterEvent( QDragEnterEvent *e )
 {
-    if ( QTextDrag::canDecode( e ) ||
+    if ( m_currentTextObjectView )
+    {
+        m_currentTextObjectView->dragEnterEvent( e );
+    }
+    else if ( /*QTextDrag::canDecode( e ) ||*/
          QImageDrag::canDecode( e ) )
         e->accept();
     else
@@ -3429,14 +3433,20 @@ void Page::dragEnterEvent( QDragEnterEvent *e )
 }
 
 /*================================================================*/
-void Page::dragLeaveEvent( QDragLeaveEvent * /*e*/ )
+void Page::dragLeaveEvent( QDragLeaveEvent *e )
 {
+    if(m_currentTextObjectView)
+        m_currentTextObjectView->dragLeaveEvent( e );
 }
 
 /*================================================================*/
 void Page::dragMoveEvent( QDragMoveEvent *e )
 {
-    if ( QTextDrag::canDecode( e ) ||
+    if( m_currentTextObjectView)
+    {
+        m_currentTextObjectView->dragMoveEvent( e, QPoint() );
+    }
+    else if ( /*QTextDrag::canDecode( e ) ||*/
          QImageDrag::canDecode( e ) )
         e->accept();
     else
@@ -3527,7 +3537,13 @@ void Page::dropEvent( QDropEvent *e )
                 }
             }
         }
-    } else if ( QTextDrag::canDecode( e ) ) {
+    }
+    else if (m_currentTextObjectView)
+    {
+        //todo
+        //m_currentTextObjectView->dropEvent( e, normalPoint, docPoint );
+    }
+    else if ( QTextDrag::canDecode( e ) ) {
         setToolEditMode( TEM_MOUSE );
         deSelectAllObj();
 
