@@ -846,8 +846,7 @@ void KPresenterDoc::setPageEffect(unsigned int pageNum,PageEffect pageEffect)
 }
 
 /*===================== set pen and brush ========================*/
-bool KPresenterDoc::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,FillType ft,QColor g1,QColor g2,
-					  BCType gt,int diffx,int diffy)
+bool KPresenterDoc::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,FillType ft,QColor g1,QColor g2, BCType gt)
 {
   KPObject *kpobject = 0;
   bool ret = false;
@@ -925,7 +924,7 @@ bool KPresenterDoc::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,Fill
 }
 
 /*================================================================*/
-bool KPresenterDocument_impl::setPieSettings(PieType pieType,int angle,int len)
+bool KPresenterDoc::setPieSettings(PieType pieType,int angle,int len)
 {
   KPObject *kpobject = 0;
   bool ret = false;
@@ -1273,7 +1272,7 @@ BCType KPresenterDoc::getGType(BCType gt)
 }
 
 /*================================================================*/
-PieType KPresenterDocument_impl::getPieType(PieType pieType)
+PieType KPresenterDoc::getPieType(PieType pieType)
 {
   KPObject *kpobject = 0;
   
@@ -1288,7 +1287,7 @@ PieType KPresenterDocument_impl::getPieType(PieType pieType)
 }
 
 /*================================================================*/
-int KPresenterDocument_impl::getPieLength(int pieLength)
+int KPresenterDoc::getPieLength(int pieLength)
 {
   KPObject *kpobject = 0;
   
@@ -1303,7 +1302,7 @@ int KPresenterDocument_impl::getPieLength(int pieLength)
 }
 
 /*================================================================*/
-int KPresenterDocument_impl::getPieAngle(int pieAngle)
+int KPresenterDoc::getPieAngle(int pieAngle)
 {
   KPObject *kpobject = 0;
   
@@ -1476,7 +1475,7 @@ void KPresenterDoc::insertCircleOrEllipse(QPen pen,QBrush brush,FillType ft,QCol
 }
 
 /*================================================================*/
-void KPresenterDocument_impl::insertPie(QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
+void KPresenterDoc::insertPie(QPen pen,QBrush brush,FillType ft,QColor g1,QColor g2,
 					BCType gt,PieType pt,int _angle,int _len,LineEnd lb,LineEnd le,int diffx,int diffy)
 {
   KPPieObject *kppieobject = new KPPieObject(pen,brush,ft,g1,g2,gt,pt,_angle,_len,lb,le);

@@ -465,7 +465,7 @@ void KPresenterView::insertCircleOrEllipse()
 }
 
 /*==============================================================*/
-void KPresenterView_impl::insertPie()
+void KPresenterView::insertPie()
 {
   page->deSelectAllObj();
   m_pKPresenterDoc->insertPie(pen,brush,fillType,gColor1,gColor2,gType,pieType,pieAngle,pieLength,lineBegin,lineEnd,xOffset,yOffset);
@@ -533,7 +533,7 @@ void KPresenterView::extraPenBrush()
 }
 
 /*===============================================================*/
-void KPresenterView_impl::extraConfigPie()
+void KPresenterView::extraConfigPie()
 {
   if (confPieDia)
     {
@@ -1498,7 +1498,7 @@ void KPresenterView::insPageOk(int _page,InsPageMode _insPageMode,InsertPos _ins
 }
 
 /*===============================================================*/
-void KPresenterView_impl::confPieOk()
+void KPresenterView::confPieOk()
 {
   if (!m_pKPresenterDoc->setPieSettings(confPieDia->getType(),confPieDia->getAngle(),confPieDia->getLength()))
     {
