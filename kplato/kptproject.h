@@ -30,9 +30,6 @@
 #include <qptrlist.h>
 #include <qdict.h>
 
-#include <list>
-#include <algorithm>
-
 namespace KPlato
 {
 
@@ -52,21 +49,17 @@ public:
     KPTProject(KPTNode *parent = 0);
     ~KPTProject();
 
+    /// Returns the node type. Can be Type_Project or Type_Subproject.
     virtual int type() const;
 
     /**
-     * Calculate the whole project
+     * Calculate the whole project.
+     *
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      */
     void calculate(KPTEffort::Use use=KPTEffort::Use_Expected);
-    /**
-     * The expected Duration is the expected time to complete a Task, Project,
-     * etc. For an individual Task, this will calculate the expected duration
-     * by querying the Distribution of the Task. If the Distribution is a
-     * simple RiskNone, the value will equal the mode Duration, but for other
-     * Distributions like RiskHigh, the value will have to be calculated. For
-     * a Project or Subproject, the expected Duration is calculated by
-     * PERT/CPM.
-     */
+     
+    ///Returns the duration calculated as latestFinish - earliestStart.
     KPTDuration *getExpectedDuration();
 
     /**
@@ -106,8 +99,9 @@ public:
     bool canMoveTaskDown( KPTNode* node );
     bool moveTaskDown( KPTNode* node );
 
+    /// Returns the resourcegroup with identity id.
     KPTResourceGroup *group(QString id);
-
+    /// Returns the resource with identity id.
     KPTResource *resource(QString id);
 
     /**
@@ -126,10 +120,12 @@ public:
     KPTCalendar *defaultCalendar() { return m_defaultCalendar; }
     const QPtrList<KPTCalendar> &calendars() const { return m_calendars; }
     void addCalendar(KPTCalendar *calendar);
+    /// Returns the calendar with identity id.
     KPTCalendar *calendar(const QString id) const;
 
     /**
-     * Used eg. for estimation and calculation of effort, 
+     * Defines the length of days, weeks, months and years.
+     * Used for estimation and calculation of effort, 
      * and presentation in gantt chart.
      */    
     KPTStandardWorktime *standardWorktime() { return m_standardWorktime; }
@@ -142,31 +138,41 @@ public:
     void setUseDateOnly(bool on) { m_useDateOnly = on; }
     bool useDateOnly() { return m_useDateOnly; }
 
+    /// Find the node with identity id
     virtual KPTNode *findNode(const QString &id) const 
         { return (m_parent ? m_parent->findNode(id) : nodeIdDict.find(id)); }
+    /// Remove the node with identity id from the register
     virtual bool removeId(const QString &id) 
         { return (m_parent ? m_parent->removeId(id) : nodeIdDict.remove(id)); }
+    /// Insert the node with identity id
     virtual void insertId(const QString &id, const KPTNode *node)
         { m_parent ? m_parent->insertId(id, node) : nodeIdDict.insert(id, node); }
     
     KPTResourceGroup *findResourceGroup(const QString &id) const 
         { return resourceGroupIdDict.find(id); }
+    /// Remove the resourcegroup with identity id from the register
     bool removeResourceGroupId(const QString &id) 
         { return resourceGroupIdDict.remove(id); }
+    /// Insert the resourcegroup with identity id
     void insertResourceGroupId(const QString &id, const KPTResourceGroup* group) 
         { resourceGroupIdDict.insert(id, group); }
     
     KPTResource *findResource(const QString &id) const 
         { return resourceIdDict.find(id); }
+    /// Remove the resource with identity id from the register
     bool removeResourceId(const QString &id) 
         { return resourceIdDict.remove(id); }
+    /// Insert the resource with identity id
     void insertResourceId(const QString &id, const KPTResource *resource) 
         { resourceIdDict.insert(id, resource); }
 
+    /// Find the calendar with identity id
     virtual KPTCalendar *findCalendar(const QString &id) const 
         { return calendarIdDict.find(id); }
+    /// Remove the calendar with identity id from the register
     virtual bool removeCalendarId(const QString &id) 
         { return calendarIdDict.remove(id); }
+    /// Insert the calendar with identity id
     virtual void insertCalendarId(const QString &id, const KPTCalendar *calendar)
         { calendarIdDict.insert(id, calendar); }
     

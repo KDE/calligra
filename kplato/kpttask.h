@@ -43,16 +43,12 @@ public:
     KPTTask(KPTTask &task, KPTNode *parent = 0);
     ~KPTTask();
 
+    /// Return task type. Can be Type_Task, Type_Summarytask ot Type_Milestone.
     virtual int type() const;
 
     /**
-     * The expected Duration is the expected time to complete a Task, Project,
-     * etc. For an individual Task, this will calculate the expected duration
-     * by querying the Distribution of the Task. If the Distribution is a
-     * simple RiskNone, the value will equal the mode Duration, but for other
-     * Distributions like RiskHigh, the value will have to be calculated. For
-     * a Project or Subproject, the expected Duration is calculated by
-     * PERT/CPM.
+     * Returns the (previously) calculated duration.
+     * The caller must delete returned object.
      */
     KPTDuration *getExpectedDuration();
 
@@ -69,7 +65,7 @@ public:
     KPTDuration *getFloat();
 
     /**
-     * Return the resource request made to @group
+     * Return the resource request made to group
      * (There should be only one)
      */
     KPTResourceGroupRequest *resourceGroupRequest(KPTResourceGroup *group) const;
@@ -80,16 +76,17 @@ public:
     int units() const;
     int workUnits() const;
     void makeAppointments();
-    /// Calculates if the assigned resource is overbooked 
-    /// within the duration of this task
+    /**
+     * Calculates if the assigned resource is overbooked 
+     * within the duration of this task
+     */
     void calcResourceOverbooked();
     
     void setConstraint(KPTNode::ConstraintType type);
 
-    /**
-     * TODO: Load and save
-     */
+    /// Load from document
     virtual bool load(QDomElement &element);
+    /// Save to document
     virtual void save(QDomElement &element);
 
     /**
@@ -97,7 +94,8 @@ public:
      */
     virtual double plannedCost();
     /**
-     * Returns the planned cost for this task (or subtasks) upto date @dt
+     * Returns the planned cost for this task (or subtasks) 
+     * from start of task until date dt
      */
     virtual double plannedCost(QDateTime &dt);
     /**
@@ -109,39 +107,46 @@ public:
     int plannedWork(QDateTime &dt);
     int actualWork();
 
+    /**
+     * Sets up the lists used for calculation.
+     * This includes adding summarytasks relations to subtasks
+     * and lists for start- and endnodes.
+     */
     void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks);
     /**
-     * Calculate @ref m_durationForward from @ref earliestStart and
-     * return the resulting end time, 
+     * Calculates @ref m_durationForward from @ref earliestStart and
+     * returns the resulting end time, 
      * which will be used as the succesors @ref earliestStart.
      *
-     * If this task is a summarytask, all children are calculated first
-     * and the summary tasks duration and earliestStart is calculated 
-     * from the children.
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      */
     KPTDateTime calculateForward(int use);
     /**
-     * Calculate @ref m_durationBackward from @ref latestFinish and
-     * return the resulting start time, 
+     * Calculates @ref m_durationBackward from @ref latestFinish and
+     * returns the resulting start time, 
      * which will be used as the predecessors @ref latestFinish.
      *
-     * If this task is a summarytask, all children are calculated first
-     * and  the summary tasks duration and latestFinish is calculated 
-     * from the children.
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      */
     KPTDateTime calculateBackward(int use);
     /**
-     * Calculate @m_startTime, @ref m_endTime and @ref m_duration,
-     * scheduling the task within the limits of earliestStart and latestFinish.
-     * Return @ref m_endTime which can be used for scheduling the successor.
-     * Assumes @ref calculateForward() and calculateBackward() has been run.
+     * Schedules the task within the limits of earliestStart and latestFinish.
+     * Calculates @ref m_startTime, @ref m_endTime and @ref m_duration,
+     * Assumes @ref calculateForward() and @ref calculateBackward() has been run.
+     *
+     * @param latest The task is not scheduled to start earlier than this
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     * @return The tasks endtime which can be used for scheduling the successor.
      */
     KPTDateTime &scheduleForward(KPTDateTime &earliest, int use);
     /**
-     * Calculate @m_startTime, @ref m_endTime and @ref m_duration,
-     * scheduling the task within the limits of earliestStart and latestFinish.
-     * Return @ref m_startTime which can be used for scheduling the predecessor.
-     * Assumes @ref calculateForward() and calculateBackward() has been run.
+     * Schedules the task within the limits of earliestStart and latestFinish.
+     * Calculates @ref m_startTime, @ref m_endTime and @ref m_duration,
+     * Assumes @ref calculateForward() and @ref calculateBackward() has been run.
+     *
+     * @param latest The task is not scheduled to end later than this
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     * @return The tasks starttime which can be used for scheduling the predeccessor.
      */
     KPTDateTime &scheduleBackward(KPTDateTime &latest, int use);
     
@@ -152,34 +157,21 @@ public:
     void adjustSummarytask();
     
     /**
-     * Returns the duration from latestFinish of the 'latest subtask' 
-     * to @param time.
-     * Used to calculate diration of summarytasks.
-     */
-    KPTDuration summarytaskDurationForward(const KPTDateTime &time);
-     /// Returns the earliestStart of the 'earliest subtask'
-    KPTDateTime summarytaskEarliestStart();
-    /**
-     * Returns the duration from earliestStart of the 'earliest subtask' 
-     * to @param time.
-     * Used to calculate diration of summarytasks.
-     */
-    KPTDuration summarytaskDurationBackward(const KPTDateTime &time);
-     /// Returns the latestFinish of the 'latest subtask'
-    KPTDateTime summarytaskLatestFinish();
-
-    /**
      * Return the duration calculated on bases of the requested resources
      */
     KPTDuration calcDuration(const KPTDateTime &time, const KPTDuration &effort, bool backward);
 
+    // Proxy relations are relations to/from summarytasks. 
+    // These relations are distrubuted to the relevant tasks before calculation.
     void clearProxyRelations();
     void addParentProxyRelations(QPtrList<KPTRelation> &list);
     void addChildProxyRelations(QPtrList<KPTRelation> &list);
     void addParentProxyRelation(KPTNode *node, const KPTRelation *rel);
     void addChildProxyRelation(KPTNode *node, const KPTRelation *rel);
     
+    /// Check if this node has any dependent child nodes.
     bool isEndNode() const;
+    /// Check if this node has any dependent parent nodes
     bool isStartNode() const;
     
     /**

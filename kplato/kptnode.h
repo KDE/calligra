@@ -46,8 +46,8 @@ class KPTEffort;
 
 
 /**
- * This class represents any node in the project, a node can be a project to
- * a subproject and any task.
+ * This class represents any node in the project, a node can be a project or
+ * a subproject or any task.
  * This class is basically an abstract interface to make the design more OO.
  */
 class KPTNode {
@@ -88,11 +88,16 @@ public:
 
     virtual int type() const = 0;
 
+    /**
+     * Returns a pointer to the project node (main- or sub-project)
+     * Returns 0 if no project exists.
+     */
     virtual KPTNode *projectNode();
     
     // The load and save methods
     virtual bool load(QDomElement &element) = 0;
     virtual void save(QDomElement &element)  = 0;
+    /// Save my and my childrens relations.
     virtual void saveRelations(QDomElement &element);
 
     // simple child node management
@@ -135,19 +140,19 @@ public:
     QPtrList<KPTRelation> &dependChildNodes() { return m_dependChildNodes; }
 
     /**
-     * Takes the relation @rel from this node only.
+     * Takes the relation rel from this node only.
      * Never deletes even when autoDelete = true.
      */
     void takeDependChildNode(KPTRelation *rel);
     
     int numDependParentNodes() const { return m_dependParentNodes.count(); }
-    /// Adds relation to both this node and @node
+    /// Adds relation to both this node and node
     virtual void addDependParentNode(KPTNode *node, KPTRelation::Type p=KPTRelation::FinishStart);
-    /// Adds relation to both this node and @node
+    /// Adds relation to both this node and node
     virtual void addDependParentNode( KPTNode *node, KPTRelation::Type p, KPTDuration lag);
     /// Adds relation only to this node
     virtual bool addDependParentNode( KPTRelation *relation);
-    /// Inserts relation to this node at index @index and appends relation to @node
+    /// Inserts relation to this node at index and appends relation to node
     virtual void insertDependParentNode( unsigned int index, KPTNode *node, KPTRelation::Type p=KPTRelation::FinishStart);
     void delDependParentNode( KPTNode *node, bool remove=false);
     void delDependParentNode( KPTRelation *rel, bool remove=false);
@@ -158,7 +163,7 @@ public:
     QPtrList<KPTRelation> &dependParentNodes() { return m_dependParentNodes; }
     
     /**
-     * Takes the relation @rel from this node only.
+     * Takes the relation rel from this node only.
      * Never deletes even when autoDelete = true.
      */
     void takeDependParentNode(KPTRelation *rel);
@@ -188,20 +193,8 @@ public:
     void setEffort(KPTEffort* e) { m_effort = e; }
     KPTEffort* effort() const { return m_effort; }
 
-     /**
-     * Used for calculation of a project
-     * Reimplement in project nodes.
-     */
-    virtual void calculate() {;}
-
-     /**
-     * The expected Duration is the expected time to complete a Task, Project,
-     * etc. For an individual Task, this will calculate the expected duration
-     * by querying the Distribution of the Task. If the Distribution is a
-     * simple RiskNone, the value will equal the mode Duration, but for other
-     * Distributions like RiskHigh, the value will have to be calculated. For
-     * a Project or Subproject, the expected Duration is calculated by
-     * PERT/CPM.
+    /**
+     * Returns the (previously) calculated duration.
      */
     virtual KPTDuration *getExpectedDuration() = 0;
 
@@ -295,7 +288,7 @@ public:
     virtual double plannedCost() { return 0; }
     /**
      * Planned cost to date is the sum of all resources and other costs
-     * planned for this node up to the date @dt
+     * planned for this node up to the date dt
      */
     virtual double plannedCost(QDateTime &/*dt*/) { return 0; }
     /**
@@ -337,7 +330,10 @@ public:
     /**
      * Calculates and returns the duration of the node.
      * Uses the correct expected-, optimistic- or pessimistic effort
-     * dependent on @param use. 
+     * dependent on use.
+     * @param time Where to start calculation.
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     * @param Backward If true, time specifies when the task should end.
      */
     KPTDuration duration(const KPTDateTime &time, int use, bool backward);
     // Reimplement this
@@ -354,8 +350,9 @@ public:
     bool legalToLink(KPTNode *node);
     /// Check if node par can be linked to node child. (Reimplement)
     virtual bool legalToLink(KPTNode *par, KPTNode *child) { return false; }
-    
+    /// Check if this node has any dependent child nodes
     virtual bool isEndNode() const;
+    /// Check if this node has any dependent parent nodes
     virtual bool isStartNode() const;
     virtual void clearProxyRelations() {}
     virtual void addParentProxyRelations(QPtrList<KPTRelation> &list) {}
@@ -367,7 +364,9 @@ public:
 
     QPtrList<KPTAppointment> &appointments() { return m_appointments; }
 
+    /// Return appointments this node have with resource
     KPTAppointment *findAppointment(KPTResource *resource);
+    /// The total number of appointments
     int numAppointments() const { return m_appointments.count(); }
     /// Adds appointment to this node only (not to resource)
     virtual bool addAppointment(KPTAppointment *appointment);
@@ -379,13 +378,19 @@ public:
     /// removes appointment without deleting it (independent of setAutoDelete)
     void takeAppointment(KPTAppointment *appointment);
     
+    /// Find the node with my id
     virtual KPTNode *findNode() const { return findNode(m_id); }
+    /// Find the node with identity id
     virtual KPTNode *findNode(const QString &id) const
         { return (m_parent ? m_parent->findNode(id) : 0); }
+    /// Remove myself from the id register
     virtual bool removeId()  { return removeId(m_id); }
+    /// Remove the registered identity id
     virtual bool removeId(const QString &id)
         { return (m_parent ? m_parent->removeId(id) : false); }
+    /// Insert myself into the id register
     virtual void insertId(const QString &id) { insertId(id, this); }
+    /// Insert node with identity id into the register
     virtual void insertId(const QString &id, const KPTNode *node)
         { if (m_parent) m_parent->insertId(id, node); }
     
