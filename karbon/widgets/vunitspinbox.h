@@ -21,8 +21,25 @@
 #define __VNUMINPUT_H__
 
 #include <knuminput.h>
-#include <qvalidator.h>
+#include <knumvalidator.h>
 #include <koUnit.h>
+
+class VUnitDoubleSpinBox;
+
+class KoUnitDoubleValidator : public KDoubleValidator
+{
+public:
+	KoUnitDoubleValidator( VUnitDoubleSpinBox *spin, QObject *parent, const char *name = 0 );
+
+	virtual	QValidator::State validate( QString &, int & ) const;
+
+	void setUnit( KoUnit::Unit unit ) { m_unit = unit; }
+	KoUnit::Unit unit() const { return m_unit; }
+
+private:
+	KoUnit::Unit		m_unit;
+	VUnitDoubleSpinBox	*m_spin;
+};
 
 class VUnitDoubleSpinBox : public KDoubleSpinBox
 {
@@ -34,18 +51,7 @@ public:
 	void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
 private:
-	class VUnitDoubleValidator : public QValidator
-	{
-	public:
-		VUnitDoubleValidator( VUnitDoubleSpinBox *spin, QObject *parent, const char *name = 0 );
-
-		virtual	QValidator::State validate( QString &, int & ) const;
-
-		KoUnit::Unit		m_unit;
-		VUnitDoubleSpinBox	*m_spin;
-	};
-
-	VUnitDoubleValidator *m_validator;
+	KoUnitDoubleValidator *m_validator;
 };
 
 #endif

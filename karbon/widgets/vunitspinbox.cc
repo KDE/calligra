@@ -21,17 +21,18 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-VUnitDoubleSpinBox::VUnitDoubleValidator::VUnitDoubleValidator( VUnitDoubleSpinBox *spin, QObject *parent, const char *name )
-: QValidator( parent, name ), m_spin( spin )
+KoUnitDoubleValidator::KoUnitDoubleValidator( VUnitDoubleSpinBox *spin, QObject *parent, const char *name )
+: KDoubleValidator( parent, name ), m_spin( spin )
 {
 }
 
 QValidator::State
-VUnitDoubleSpinBox::VUnitDoubleValidator::validate( QString &s, int &pos ) const
+KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 {
 	QValidator::State result = Valid;
 	bool ok = false;
-	double value = s.toDouble( &ok );
+	QString s2 = s;
+	double value = s2.replace( ',', "." ).toDouble( &ok );
 	double newVal = -1;
 	if( !ok )
 	{
@@ -46,7 +47,7 @@ VUnitDoubleSpinBox::VUnitDoubleValidator::validate( QString &s, int &pos ) const
 		else if( s.at( pos - 2 ).isDigit() && ( s.endsWith( "m" ) || s.endsWith( "c" ) || s.endsWith( "i" ) || s.endsWith( "p" ) ) )
 			result = Intermediate;
 		else
-			newVal = value;
+			return KDoubleValidator::validate( s, pos );
 	}
 	if( newVal >= 0.0 )
 	{
@@ -60,7 +61,7 @@ VUnitDoubleSpinBox::VUnitDoubleValidator::validate( QString &s, int &pos ) const
 VUnitDoubleSpinBox::VUnitDoubleSpinBox( double lower, double upper, double step, double value, int precision, QWidget *parent, const char *name )
 	: KDoubleSpinBox( lower, upper, step, value, precision, parent, name )
 {
-	m_validator = new VUnitDoubleValidator( this, this );
+	m_validator = new KoUnitDoubleValidator( this, this );
 	setValidator( m_validator );
 	setAcceptLocalizedNumbers( true );
 }
@@ -74,8 +75,8 @@ VUnitDoubleSpinBox::setValidator( const QValidator *v )
 void
 VUnitDoubleSpinBox::setUnit( KoUnit::Unit unit )
 {
-	setValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value(), m_validator->m_unit ), unit ) );
-	m_validator->m_unit = unit;
+	setValue( KoUnit::ptToUnit( KoUnit::ptFromUnit( value(), m_validator->unit() ), unit ) );
+	m_validator->setUnit( unit );
 	setSuffix( KoUnit::unitName( unit ) );
 }
 
