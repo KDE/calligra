@@ -1444,6 +1444,20 @@ KCommand * KPTextObject::textContentsToHeight()
                          // (in case there's some bigger linespacing in use)
     if ( oneLine && m_textobj->textDocument()->firstParag()->kwLineSpacing() == lineSpacing)
         return 0L;
+
+    KoTextParag * startParag = m_textobj->textDocument()->firstParag();
+    KoTextParag * endParag = m_textobj->textDocument()->lastParag();
+    bool equal = true;
+    for ( ; startParag && startParag != endParag->next() ; startParag = startParag->next() )
+    {
+        if ( startParag->kwLineSpacing()!=lineSpacing)
+        {
+            equal = false;
+            break;
+        }
+    }
+    if ( equal )
+        return 0L;
     // Apply the new linespacing to the whole object
     m_textobj->textDocument()->selectAll( KoTextDocument::Temp );
     KCommand* cmd = m_textobj->setLineSpacingCommand( 0L, lineSpacing, KoTextDocument::Temp );
