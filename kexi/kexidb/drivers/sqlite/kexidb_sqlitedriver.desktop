@@ -26,5 +26,5 @@ ServiceTypes=Kexi/DBDriver
 Type=Service
 InitialPreference=8
 MimeType=text/plain
-X-Kexi-Location=LocalDB
-X-Kexi-DBFileMime=application/x-sqlite
+X-Kexi-DriverType=File
+X-Kexi-FileDBDriverMime=application/x-sqlite
