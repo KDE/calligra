@@ -20,6 +20,7 @@
 #include <kconfig.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <koUnitWidgets.h>
 #include <knuminput.h>
 #include <knumvalidator.h>
 #include <kspell.h>
@@ -104,6 +105,20 @@ KWConfig::KWConfig( KWView* parent )
   m_doc = parent->kWordDocument();
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
+  connect( m_interfacePage, SIGNAL( unitChanged( int ) ), SLOT( unitChanged( int ) ) );
+  unitChanged( parent->kWordDocument()->getUnit() );
+}
+
+void KWConfig::unitChanged( int u )
+{
+    KoUnit::Unit unit = static_cast<KoUnit::Unit>(u);
+    kdDebug() << k_funcinfo << unit << endl;
+    //m_spellPage->setUnit( unit );
+    m_interfacePage->setUnit( unit );
+    m_miscPage->setUnit( unit );
+    m_defaultDocPage->setUnit( unit );
+    //m_formulaPage->setUnit( unit );
+    //m_pathPage->setUnit( unit );
 }
 
 void KWConfig::openPage(int flags)
@@ -147,6 +162,7 @@ void KWConfig::slotApply()
     m_formulaPage->apply();
     if (macro)
         m_doc->addCommand( macro );
+    KWFactory::global()->config()->sync();
 }
 
 void KWConfig::slotDefault()
@@ -175,6 +191,8 @@ void KWConfig::slotDefault()
         break;
     }
 }
+
+////
 
 ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
     : QObject( box->parent(), name )
@@ -235,7 +253,6 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 {
     m_pView=_view;
     config = KWFactory::global()->config();
-    KoUnit::Unit unit = m_pView->kWordDocument()->getUnit();
     QVGroupBox* gbInterfaceGroup = new QVGroupBox( i18n("Interface"), box, "GroupBox" );
     gbInterfaceGroup->setMargin( KDialog::marginHint() );
     gbInterfaceGroup->setInsideSpacing( KDialog::spacingHint() );
@@ -248,6 +265,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     bool oldShowScrollBar = true;
     oldNbRecentFiles=10;
     int nbPagePerRow=4;
+    KoUnit::Unit unit = m_pView->kWordDocument()->getUnit();
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
@@ -260,6 +278,21 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
         oldPgUpDownMovesCaret = config->readBoolEntry( "PgUpDownMovesCaret", false );
         oldShowScrollBar = config->readBoolEntry("ShowScrollBar", true);
     }
+
+    QHBox *hbUnit = new QHBox(gbInterfaceGroup);
+    hbUnit->setSpacing(KDialog::spacingHint());
+    QLabel *unitLabel= new QLabel(i18n("&Units:"),hbUnit);
+
+    m_unitCombo = new QComboBox( hbUnit );
+    m_unitCombo->insertStringList( KoUnit::listOfUnitName() );
+    connect(m_unitCombo, SIGNAL(activated(int)), this, SIGNAL(unitChanged(int)));
+    unitLabel->setBuddy( m_unitCombo );
+    QString unitHelp = i18n("Select the unit type used every time a distance or width/height "
+                            "is displayed or entered. This one setting is for the whole of KWord: all dialogs, the rulers etc."
+                            "Note that KWord documents specify the unit which was used to create them, so this setting "
+                            "only affects this document and all documents that will be created later.");
+    QWhatsThis::add( unitLabel, unitHelp );
+    QWhatsThis::add( m_unitCombo, unitHelp );
 
     showStatusBar = new QCheckBox(i18n("Show &status bar"),gbInterfaceGroup);
     showStatusBar->setChecked(oldShowStatusBar);
@@ -274,45 +307,60 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
                          "move the text caret, as in other KDE applications. "
                          "If it is disabled, they move the scrollbars, as in most other word processors." ) );
 
-    recentFiles=new KIntNumInput( oldNbRecentFiles, gbInterfaceGroup );
+    QHBox* hbRecent = new QHBox( gbInterfaceGroup );
+    QLabel* labelRecent = new QLabel( i18n("Number of recent &files:"), hbRecent );
+    recentFiles=new KIntNumInput( oldNbRecentFiles, hbRecent );
     recentFiles->setRange(1, 20, 1);
-    recentFiles->setLabel(i18n("Number of recent &files:"));
+    labelRecent->setBuddy( recentFiles );
     QWhatsThis::add( recentFiles, i18n("The number of files remembered in the file open dialog and in the "
                     "recent files menu item") );
 
-    QString suffix = KoUnit::unitName( unit ).prepend(' ');
-    gridX=new KDoubleNumInput( recentFiles, KoUnit::ptToUnit( ptGridX, unit ), gbInterfaceGroup );
-    gridX->setRange(KoUnit::ptToUnit( 0.1, unit ),KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
-    gridX->setSuffix( suffix );
-    gridX->setLabel(i18n("&Horizontal grid size:"));
+    QHBox* hbGridX = new QHBox( gbInterfaceGroup );
+    QLabel* labelGridX = new QLabel( i18n("&Horizontal grid size:"), hbGridX );
+    gridX=new KoUnitDoubleSpinBox( hbGridX,
+                                   KoUnit::ptToUnit( 0.1, unit ),
+                                   KoUnit::ptToUnit( 50, unit ),
+                                   KoUnit::ptToUnit( 0.1, unit ),
+                                   KoUnit::ptToUnit( ptGridX, unit ),
+                                   unit );
+    labelGridX->setBuddy( gridX );
     QWhatsThis::add( gridX, i18n("The grid size on which frames, tabs and other content snaps while "
                     "moving and scaling") );
 
-    gridY=new KDoubleNumInput( gridX, KoUnit::ptToUnit( ptGridY, unit ), gbInterfaceGroup );
-    gridY->setRange(KoUnit::ptToUnit( 0.1, unit ), KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
-    //laurent kdoublenuminput changed !!!!
-    //setPrecision doen't work it return a value display * 10^precision !!!!
-    //perhaps it's normal in new API ....
+    QHBox* hbGridY = new QHBox( gbInterfaceGroup );
+    QLabel* labelGridY = new QLabel( i18n("&Vertical grid size:"), hbGridY );
+    gridY=new KoUnitDoubleSpinBox( hbGridY,
+                                   KoUnit::ptToUnit( 0.1, unit ),
+                                   KoUnit::ptToUnit( 50, unit ),
+                                   KoUnit::ptToUnit( 0.1, unit ),
+                                   KoUnit::ptToUnit( ptGridY, unit ),
+                                   unit );
+    labelGridY->setBuddy( gridY );
 
-    gridY->setLabel(i18n("&Vertical grid size:"));
     QWhatsThis::add( gridY, i18n("The grid size on which frames and other content snaps while "
                     "moving and scaling") );
-    gridY->setSuffix( suffix );
 
+    QHBox* hbIndent = new QHBox( gbInterfaceGroup );
+    QLabel* labelIdent = new QLabel( i18n("&Paragraph indent by toolbar buttons:"), hbIndent );
     double val = KoUnit::ptToUnit( ptIndent, unit );
-    indent = new KDoubleNumInput( gridY, val, gbInterfaceGroup );
-    indent->setRange(KoUnit::ptToUnit( 0.1, unit ), KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
-
-    indent->setSuffix( suffix );
-    indent->setLabel(i18n("&Paragraph indent by toolbar buttons:"));
+    indent = new KoUnitDoubleSpinBox( hbIndent,
+                                      KoUnit::ptToUnit( 0.1, unit ),
+                                      KoUnit::ptToUnit( 50, unit ),
+                                      KoUnit::ptToUnit( 0.1, unit ),
+                                      val,
+                                      unit );
+    labelIdent->setBuddy( indent );
     QWhatsThis::add( indent, i18n("Configure the indent width used when using the 'Increase' "
                     "or 'Decrease' indentation buttons on a paragraph.<p>The lower the value, "
                     "the more often the buttons will have to be pressed to gain the same "
                     "indentation.") );
 
-    m_nbPagePerRow=new KIntNumInput( indent, nbPagePerRow, gbInterfaceGroup );
+    QHBox* hbPagePerRow = new QHBox( gbInterfaceGroup );
+    QLabel* labelPagePerRow = new QLabel( i18n("Number of pa&ges per row in preview mode:" ), hbPagePerRow );
+    m_nbPagePerRow=new KIntNumInput( 0, nbPagePerRow, hbPagePerRow );
     m_nbPagePerRow->setRange(1, 10, 1);
-    m_nbPagePerRow->setLabel(i18n("Number of pa&ges per row in preview mode:"));
+    labelPagePerRow->setBuddy( m_nbPagePerRow );
+    hbPagePerRow->setStretchFactor( m_nbPagePerRow, 1 );
     QWhatsThis::add(m_nbPagePerRow , i18n("After selecting preview mode (via the \"View\" "
                     "menu, option \"Preview mode\") this is the amount of pages KWord will "
                     "position on one horizontal row") );
@@ -387,11 +435,31 @@ void ConfigureInterfacePage::apply()
         //we delete viewmode that we want to apply
         doc->switchViewMode( KWViewMode::create( doc->viewMode()->type(), doc ) ); // force a refresh
     }
+
+    config->setGroup( "Misc" );
+    KoUnit::Unit unit = static_cast<KoUnit::Unit>( m_unitCombo->currentItem() );
+    // It's already been set in the document, see unitChanged
+    config->writeEntry( "Units", KoUnit::unitName( unit ) );
+}
+
+void ConfigureInterfacePage::setUnit( KoUnit::Unit unit )
+{
+    m_unitCombo->blockSignals( true );
+    m_unitCombo->setCurrentItem( unit );
+    m_unitCombo->blockSignals( false );
+    // We need to set it in the doc immediately, because much code here uses doc->getUnit()
+    m_pView->kWordDocument()->setUnit( unit );
+
+    gridX->setUnit( unit );
+    gridY->setUnit( unit );
+    indent->setUnit( unit );
 }
 
 void ConfigureInterfacePage::slotDefault()
 {
     KWDocument * doc = m_pView->kWordDocument();
+    m_unitCombo->setCurrentItem( KoUnit::U_CM );
+    emit unitChanged( m_unitCombo->currentItem() );
     gridX->setValue( KoUnit::ptToUnit( 10, doc->getUnit() ) );
     gridY->setValue( KoUnit::ptToUnit( 10, doc->getUnit() ) );
     m_nbPagePerRow->setValue(4);
@@ -403,22 +471,21 @@ void ConfigureInterfacePage::slotDefault()
     showScrollBar->setChecked( true);
 }
 
+////
 
 ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
  : QObject( box->parent(), name )
 {
     m_pView=_view;
     config = KWFactory::global()->config();
-    KoUnit::Unit unit = m_pView->kWordDocument()->getUnit();
     QVGroupBox* gbMiscGroup = new QVGroupBox( i18n("Misc"), box, "GroupBox" );
     gbMiscGroup->setMargin( KDialog::marginHint() );
     gbMiscGroup->setInsideSpacing( KDialog::spacingHint() );
 
     m_oldNbRedo=30;
-    QString unitType=KoUnit::unitName(unit);
-    //#################"laurent
-    //don't load unitType from config file because unit is
-    //depend from kword file => unit can be different from config file
+
+    // Don't load the unit from config file because the unit can come from the kword file
+    // => unit can be different from config file
 
     if( config->hasGroup("Misc") )
     {
@@ -426,60 +493,11 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
         m_oldNbRedo=config->readNumEntry("UndoRedo",m_oldNbRedo);
     }
 
-    QHBox *lay = new QHBox(gbMiscGroup);
-    lay->setSpacing(KDialog::spacingHint());
-    QLabel *unitLabel= new QLabel(i18n("Units:"),lay);
-
-    QStringList listUnit;
-    listUnit << KoUnit::unitDescription( KoUnit::U_MM );
-    listUnit << KoUnit::unitDescription( KoUnit::U_INCH );
-    listUnit << KoUnit::unitDescription( KoUnit::U_PT );
-    listUnit << KoUnit::unitDescription( KoUnit::U_CM );
-    listUnit << KoUnit::unitDescription( KoUnit::U_DM );
-    listUnit << KoUnit::unitDescription( KoUnit::U_PI );
-    listUnit << KoUnit::unitDescription( KoUnit::U_DD );
-    listUnit << KoUnit::unitDescription( KoUnit::U_CC );
-
-
-    m_unit = new QComboBox( lay );
-    m_unit->insertStringList(listUnit);
-    m_oldUnit=0;
-    switch (KoUnit::unit( unitType ) )
-    {
-    case KoUnit::U_MM:
-        m_oldUnit=0;
-        break;
-    case KoUnit::U_INCH:
-        m_oldUnit=1;
-        break;
-    case KoUnit::U_PT:
-        m_oldUnit = 2;
-        break;
-    case KoUnit::U_CM:
-        m_oldUnit = 3;
-        break;
-    case KoUnit::U_DM:
-        m_oldUnit = 4;
-        break;
-    case KoUnit::U_PI:
-        m_oldUnit = 5;
-        break;
-    case KoUnit::U_DD:
-        m_oldUnit = 6;
-        break;
-    case KoUnit::U_CC:
-    default:
-        m_oldUnit = 7;
-    }
-    m_unit->setCurrentItem(m_oldUnit);
-    QString unitHelp = i18n("Select the unit type used every time a distance or width/height "
-                            "is displayed or entered. This one setting is for the whole of KWord.");
-    QWhatsThis::add( unitLabel, unitHelp);
-    QWhatsThis::add( m_unit, unitHelp);
-
-    m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, gbMiscGroup );
-    m_undoRedoLimit->setLabel(i18n("Undo/redo limit:"));
+    QHBox* hbUndoRedo = new QHBox( gbMiscGroup );
+    QLabel* labelUndoRedo = new QLabel( i18n("Undo/&redo limit:"), hbUndoRedo );
+    m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, hbUndoRedo );
     m_undoRedoLimit->setRange(1, 100, 1);
+    labelUndoRedo->setBuddy( m_undoRedoLimit );
     QWhatsThis::add( m_undoRedoLimit, i18n("Limit the amount of undo/redo actions remembered to save "
                                            "memory") );
 
@@ -517,7 +535,6 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
 
     m_cbViewFormattingBreak = new QCheckBox( i18n("View formatting break"), gbViewFormatting);
     m_cbViewFormattingBreak->setChecked(m_oldFormattingBreak);
-
 }
 
 ConfigureDefaultDocPage::~ConfigureDefaultDocPage()
@@ -529,47 +546,6 @@ KCommand *ConfigureMiscPage::apply()
 {
     KWDocument * doc = m_pView->kWordDocument();
     config->setGroup( "Misc" );
-    if(m_oldUnit!=m_unit->currentItem())
-    {
-        QString unitName;
-        m_oldUnit=m_unit->currentItem();
-        switch (m_oldUnit)
-        {
-            case 0:
-                unitName=KoUnit::unitName(KoUnit::U_MM  );
-                doc->setUnit( KoUnit::U_MM );
-                break;
-            case 1:
-                unitName=KoUnit::unitName(KoUnit::U_INCH  );
-                doc->setUnit( KoUnit::U_INCH );
-                break;
-            case 2:
-                doc->setUnit( KoUnit::U_PT );
-                unitName=KoUnit::unitName(KoUnit::U_PT );
-                break;
-            case 3:
-                doc->setUnit( KoUnit::U_CM );
-                unitName=KoUnit::unitName(KoUnit::U_CM );
-                break;
-            case 4:
-                doc->setUnit( KoUnit::U_DM );
-                unitName=KoUnit::unitName(KoUnit::U_DM );
-                break;
-            case 5:
-                doc->setUnit( KoUnit::U_PI );
-                unitName=KoUnit::unitName(KoUnit::U_PI );
-                break;
-        case 6:
-                doc->setUnit( KoUnit::U_DD );
-                unitName=KoUnit::unitName(KoUnit::U_DD );
-                break;
-            case 7:
-        default:
-                doc->setUnit( KoUnit::U_CC );
-                unitName=KoUnit::unitName(KoUnit::U_CC );
-        }
-        config->writeEntry("Units",unitName);
-    }
     int newUndo=m_undoRedoLimit->value();
     if(newUndo!=m_oldNbRedo)
     {
@@ -673,8 +649,13 @@ void ConfigureMiscPage::slotDefault()
    m_cbViewFormattingTabs->setChecked(true);
    m_cbViewFormattingBreak->setChecked(true);
    m_displayFieldCode->setChecked( false );
-   m_unit->setCurrentItem(0);
 }
+
+void ConfigureMiscPage::setUnit( KoUnit::Unit )
+{
+}
+
+////
 
 ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, char *name )
  : QObject( box->parent(), name )
@@ -688,21 +669,24 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
 
     double ptColumnSpacing=3;
     KoUnit::Unit unit = doc->getUnit();
-    QString unitType=KoUnit::unitName(unit);
     if( config->hasGroup("Document defaults") )
     {
         config->setGroup( "Document defaults" );
-        unitType=config->readEntry("Units",unitType);
         ptColumnSpacing=config->readDoubleNumEntry("ColumnSpacing",ptColumnSpacing);
         // loaded by kwdoc already defaultFont=config->readEntry("DefaultFont",defaultFont);
     }
 
-    QString suffix = unitType.prepend(' ');
-    columnSpacing=new KDoubleNumInput( KoUnit::ptToUnit( ptColumnSpacing, unit ), gbDocumentDefaults );
-    columnSpacing->setRange(KoUnit::ptToUnit( 0.1, unit ), KoUnit::ptToUnit( 50, unit ), KoUnit::ptToUnit( 0.1, unit ));
-    columnSpacing->setSuffix( suffix );
-    columnSpacing->setLabel(i18n("Default column spacing:"));
-    QWhatsThis::add( columnSpacing, i18n("When setting a document to use more than one column "
+
+    QHBox* hbColumnSpacing = new QHBox( gbDocumentDefaults );
+    QLabel* columnSpacingLabel = new QLabel( i18n("Default column spacing:"), hbColumnSpacing );
+    m_columnSpacing = new KoUnitDoubleSpinBox( hbColumnSpacing,
+                                               KoUnit::ptToUnit( 0.1, unit ),
+                                               KoUnit::ptToUnit( 50, unit ),
+                                               KoUnit::ptToUnit( 0.1, unit ),
+                                               KoUnit::ptToUnit( ptColumnSpacing, unit ),
+                                               unit );
+    columnSpacingLabel->setBuddy( m_columnSpacing );
+    QWhatsThis::add( m_columnSpacing, i18n("When setting a document to use more than one column "
                 "this distance will be used to separate the columns. This value is merely a default "
                 "setting as the column spacing can be changed per document") );
 
@@ -766,9 +750,11 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     gbDocumentSettings->setMargin( KDialog::marginHint() );
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
-    autoSave = new KIntNumInput( oldAutoSaveValue, gbDocumentSettings );
+    QHBox* hbAutoSave = new QHBox( gbDocumentSettings );
+    QLabel* labelAutoSave = new QLabel( i18n("Autosave every (min):"), hbAutoSave );
+    autoSave = new KIntNumInput( oldAutoSaveValue, hbAutoSave );
     autoSave->setRange(0, 60, 1);
-    autoSave->setLabel(i18n("Autosave every (min):"));
+    labelAutoSave->setBuddy(autoSave);
     QWhatsThis::add( autoSave, i18n("A backup copy of the current document is created when a change "
                     "has been made. The interval used to create backup documents is set here.") );
     autoSave->setSpecialValueText(i18n("No autosave"));
@@ -784,19 +770,24 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     m_createBackupFile = new QCheckBox( i18n("Create backup file"), gbDocumentSettings);
     m_createBackupFile->setChecked( m_oldBackupFile );
 
-    new QLabel(i18n("Starting page number:"), gbDocumentSettings);
+    QHBox* hbStartingPage = new QHBox( gbDocumentSettings );
+    QLabel* labelStartingPage = new QLabel(i18n("Starting page number:"), hbStartingPage);
 
     m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
-    m_variableNumberOffset=new KIntNumInput(gbDocumentSettings);
+    m_variableNumberOffset=new KIntNumInput(hbStartingPage);
     m_variableNumberOffset->setRange(1, 9999, 1, false);
     m_variableNumberOffset->setValue(m_oldStartingPage);
+    labelStartingPage->setBuddy( m_variableNumberOffset );
 
-
-    new QLabel(i18n("Tab stop (%1):").arg(doc->getUnitName()), gbDocumentSettings);
-    m_tabStopWidth = new KDoubleNumInput( gbDocumentSettings );
-    m_tabStopWidth->setRange( KoUnit::ptToUnit( MM_TO_POINT(2),unit ), KoUnit::ptToUnit( doc->ptPaperWidth(), unit ) , 0.1, false);
+    QHBox* hbTabStop = new QHBox( gbDocumentSettings );
+    new QLabel(i18n("Tab stop (%1):").arg(doc->getUnitName()), hbTabStop);
+    m_tabStopWidth = new KoUnitDoubleSpinBox( hbTabStop,
+                                              KoUnit::ptToUnit( MM_TO_POINT(2), unit ),
+                                              KoUnit::ptToUnit( doc->ptPaperWidth(), unit ),
+                                              0.1,
+                                              KoUnit::ptToUnit( m_oldTabStopWidth, unit ),
+                                              unit );
     m_oldTabStopWidth = doc->tabStopValue();
-    m_tabStopWidth->setValue( KoUnit::ptToUnit( m_oldTabStopWidth, doc->getUnit() ));
 
     QVGroupBox* gbDocumentCursor = new QVGroupBox( i18n("Cursor"), box );
     gbDocumentCursor->setMargin( KDialog::marginHint() );
@@ -813,10 +804,10 @@ KCommand *ConfigureDefaultDocPage::apply()
 {
     config->setGroup( "Document defaults" );
     KWDocument * doc = m_pView->kWordDocument();
-    int colSpacing=(int)KoUnit::ptFromUnit( columnSpacing->value(), doc->getUnit() );
-    if(colSpacing!=doc->defaultColumnSpacing())
+    double colSpacing = KoUnit::ptFromUnit( m_columnSpacing->value(), doc->getUnit() );
+    if ( colSpacing != doc->defaultColumnSpacing() )
     {
-        config->writeEntry( "ColumnSpacing",colSpacing , true, false, 'g', DBL_DIG /* 6 is not enough */ );
+        config->writeEntry( "ColumnSpacing", colSpacing , true, false, 'g', DBL_DIG );
         doc->setDefaultColumnSpacing(colSpacing);
     }
     config->writeEntry("DefaultFont",font->toString());
@@ -890,7 +881,7 @@ KCommand *ConfigureDefaultDocPage::apply()
 
 void ConfigureDefaultDocPage::slotDefault()
 {
-   columnSpacing->setValue(KoUnit::ptToUnit( 3, m_pView->kWordDocument()->getUnit() ));
+   m_columnSpacing->setValue(KoUnit::ptToUnit( 3, m_pView->kWordDocument()->getUnit() ));
    autoSave->setValue(KoDocument::defaultAutoSave()/60);
    m_variableNumberOffset->setValue(1);
    m_cursorInProtectedArea->setChecked(true);
@@ -916,6 +907,14 @@ void ConfigureDefaultDocPage::selectNewDefaultFont() {
     }
 }
 
+void ConfigureDefaultDocPage::setUnit( KoUnit::Unit unit )
+{
+    m_columnSpacing->setUnit( unit );
+    m_tabStopWidth->setUnit( unit );
+}
+
+////
+
 ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
  : QObject( box->parent(), name )
 {
@@ -929,7 +928,7 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
     m_pPathView = new KListView( gbPathGroup );
     m_pPathView->setResizeMode(QListView::NoColumn);
     m_pPathView->addColumn( i18n( "Type" ) );
-    m_pPathView->addColumn( i18n( "Path" ) );
+    m_pPathView->addColumn( i18n( "Path" ), 400 ); // not too big by default
     (void) new QListViewItem( m_pPathView, i18n("Personal Expression"), doc->personalExpressionPath().join(";") );
     (void) new QListViewItem( m_pPathView, i18n("Picture Path"),doc->picturePath() );
     (void) new QListViewItem( m_pPathView, i18n("Backup Path"),doc->backupPath() );

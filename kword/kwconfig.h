@@ -29,7 +29,7 @@ namespace KFormula {
 class KWView;
 class QCheckBox;
 class KIntNumInput;
-class KDoubleNumInput;
+class KoUnitDoubleSpinBox;
 class KSpellConfig;
 class KConfig;
 class QComboBox;
@@ -59,14 +59,20 @@ public:
     ConfigureInterfacePage( KWView *_view, QVBox *box, char *name = 0 );
     void apply();
     void slotDefault();
+    void setUnit( KoUnit::Unit unit );
+
+signals:
+    // For KWConfig
+    void unitChanged( int );
 private:
     KWView* m_pView;
-    KDoubleNumInput* gridX,*gridY;
-    KDoubleNumInput* indent;
+    KConfig* config;
+    QComboBox *m_unitCombo;
+    KoUnitDoubleSpinBox* gridX,*gridY;
+    KoUnitDoubleSpinBox* indent;
     KIntNumInput* recentFiles;
     QCheckBox *showStatusBar, *showScrollBar, *pgUpDownMovesCaret;
     int oldNbRecentFiles;
-    KConfig* config;
     KIntNumInput *m_nbPagePerRow;
 };
 
@@ -77,11 +83,10 @@ public:
     ConfigureMiscPage( KWView *_view, QVBox *box, char *name = 0 );
     KCommand* apply();
     void slotDefault();
+    void setUnit( KoUnit::Unit unit );
 private:
     KWView* m_pView;
     KConfig* config;
-    QComboBox *m_unit;
-    int m_oldUnit;
     KIntNumInput* m_undoRedoLimit;
     int m_oldNbRedo;
     bool m_oldFormattingEndParag, m_oldFormattingSpace, m_oldFormattingTabs, m_oldFormattingBreak;
@@ -98,6 +103,7 @@ public:
     ~ConfigureDefaultDocPage();
     KCommand* apply();
     void slotDefault();
+    void setUnit( KoUnit::Unit unit );
 public slots:
     void selectNewDefaultFont();
 private:
@@ -106,7 +112,7 @@ private:
     QFont *font;
     QLabel *fontName;
 
-    KDoubleNumInput* columnSpacing;
+    KoUnitDoubleSpinBox* m_columnSpacing;
 
     KIntNumInput* autoSave;
     int oldAutoSaveValue;
@@ -115,7 +121,7 @@ private:
     int m_oldStartingPage;
     bool m_oldBackupFile;
     KIntNumInput* m_variableNumberOffset;
-    KDoubleNumInput *m_tabStopWidth;
+    KoUnitDoubleSpinBox *m_tabStopWidth;
     QCheckBox *m_cursorInProtectedArea;
     QCheckBox *m_createBackupFile;
     QCheckBox *m_directInsertCursor;
@@ -152,6 +158,7 @@ public:
 public slots:
     void slotApply();
     void slotDefault();
+    void unitChanged( int );
 private:
     ConfigureSpellPage *m_spellPage;
     ConfigureInterfacePage *m_interfacePage;

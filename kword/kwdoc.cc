@@ -207,7 +207,7 @@ const int KWDocument::CURRENT_SYNTAX_VERSION = 3;
 
 KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-      m_unit( KoUnit::U_MM ),
+      m_unit( KoUnit::U_CM ),
       m_urlIntern()
 {
     dcop = 0;
@@ -605,8 +605,8 @@ bool KWDocument::initDoc()
     } else if ( ret == KoTemplateChooseDia::Empty ) {
         QString fileName( locate( "kword_template", "Normal/.source/PlainText.kwt" , KWFactory::global() ) );
         resetURL();
-        ok = loadNativeFormat( fileName );
         initUnit();
+        ok = loadNativeFormat( fileName );
         setEmpty();
     }
     setModified( FALSE );
@@ -615,13 +615,15 @@ bool KWDocument::initDoc()
 
 void KWDocument::initUnit()
 {
-    //load unit config after we load file.
-    //load it for new file or empty file
+    //load default unit setting - this is only used for new files (from templates) or empty files
     KConfig *config = KWFactory::global()->config();
     if(config->hasGroup("Misc") )
     {
         config->setGroup( "Misc" );
-        setUnit(KoUnit::unit( config->readEntry("Units",KoUnit::unitName(KoUnit::U_MM  ))));
+        if ( config->hasKey( "Units" ) )
+            setUnit( KoUnit::unit( config->readEntry("Units") ) );
+        else
+            setUnit( KoUnit::U_CM );
         setDefaultColumnSpacing( config->readDoubleNumEntry("ColumnSpacing", 3.0) );
     }
     m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
@@ -1194,7 +1196,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles 
     m_processingType = ( body.firstChild().toElement().tagName() == "text:page-sequence" )
                        ? DTP : WP;
 
-    // TODO settings (m_unit -> make app config?, spellcheck settings)
+    // TODO settings (m_unit, spellcheck settings)
     m_hasTOC = false; // TODO (during parsing)
     m_tabStop = MM_TO_POINT(15); // TODO
     // TODO m_initialEditing
@@ -1405,15 +1407,16 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         kdWarning() << "No <PAPER> tag! This is a mandatory tag! Expect weird page sizes..." << endl;
 
     // <ATTRIBUTES>
+    m_unit = KoUnit::U_CM;
     QDomElement attributes = word.namedItem( "ATTRIBUTES" ).toElement();
-    QString unitName;
     if ( !attributes.isNull() )
     {
         m_processingType = static_cast<ProcessingType>( KWDocument::getAttribute( attributes, "processing", 0 ) );
         //KWDocument::getAttribute( attributes, "standardpage", QString::null );
         m_headerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasHeader", 0 ) );
         m_footerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasFooter", 0 ) );
-        unitName = KWDocument::getAttribute( attributes, "unit", "mm" );
+        if ( attributes.hasAttribute( "unit" ) )
+            m_unit = KoUnit::unit( attributes.attribute( "unit" ) );
         m_hasTOC =  static_cast<bool>(KWDocument::getAttribute( attributes,"hasTOC", 0 ) );
         m_tabStop = KWDocument::getAttribute( attributes, "tabStopValue", MM_TO_POINT(15) );
         m_initialEditing = new InitialEditing();
@@ -1424,13 +1427,11 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         m_processingType = WP;
         m_headerVisible = false;
         m_footerVisible = false;
-        unitName = "mm";
         m_hasTOC = false;
         m_tabStop = MM_TO_POINT(15);
         delete m_initialEditing;
         m_initialEditing = 0L;
     }
-    m_unit = KoUnit::unit( unitName );
 
     setPageLayout( __pgLayout, __columns, __hf, false );
 

@@ -1076,7 +1076,7 @@ void KWView::setupActions()
                     "be used to position tabulators among others.<p>Uncheck this to disable "
                     "the rulers from being displayed." ) );
 
-    actionConfigureCompletion = new KAction( i18n( "&Configure Completion..." ), 0,
+    actionConfigureCompletion = new KAction( i18n( "Configure C&ompletion..." ), 0,
                         this, SLOT( configureCompletion() ),
                         actionCollection(), "configure_completion" );
     actionConfigureCompletion->setToolTip( i18n( "Change the words and options for autocompletion." ) );
