@@ -171,7 +171,7 @@ KPresenterDoc::KPresenterDoc( QObject* parent, const char* name )
     headerFooterEdit->hide();
 
     saveOnlyPage = -1;
-    
+
     QObject::connect( &_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
 		      this, SLOT( slotUndoRedoChanged( QString, QString ) ) );
 
@@ -409,7 +409,12 @@ void KPresenterDoc::saveObjects( ostream& out )
 	kpobject = objectList()->at( i );
 	if ( kpobject->getType() == OT_PART ) continue;
 	out << otag << "<OBJECT type=\"" << static_cast<int>( kpobject->getType() ) << "\">" << endl;
+	QPoint orig = kpobject->getOrig();
+	if ( saveOnlyPage != -1 )
+	    kpobject->moveBy( 0, -saveOnlyPage * getPageSize( 0, 0, 0 ).height() );
 	kpobject->save( out );
+	if ( saveOnlyPage != -1 )
+	    kpobject->setOrig( orig );
 	out << etag << "</OBJECT>" << endl;
     }
 }
@@ -3318,7 +3323,7 @@ void KPresenterDoc::savePage( const QString &file, int pgnum )
 {
     string str;
     tostrstream out( str );
-    
+
     saveOnlyPage = pgnum;
     saveToURL( file, "" );
     saveOnlyPage = -1;

@@ -25,6 +25,7 @@
 #include "kpgradient.h"
 
 class KPresenterView;
+class KPresenterDoc;
 
 /******************************************************************/
 /* Class: KPTextObject						  */
@@ -99,13 +100,15 @@ public:
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 
     virtual void activate( QWidget *_widget, int diffx, int diffy );
-    virtual void deactivate();
+    virtual void deactivate( KPresenterDoc *doc );
 
     virtual void zoom( float _fakt );
     virtual void zoomOrig();
 
     virtual void extendObject2Contents( KPresenterView *view );
 
+    void recalcPageNum( KPresenterDoc *doc );
+    
 protected:
     virtual void saveKTextObject( ostream& out );
     virtual void loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst );

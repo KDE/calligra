@@ -172,24 +172,21 @@ void KPBackGround::restore()
     if ( backType == BT_CLIPART )
 	setBackClipFilename( clipKey.filename, clipKey.lastModified );
 
-    if ( backType != BT_PICTURE && backPix )
-    {
+    if ( backType != BT_PICTURE && backPix ) {
 	pixmapCollection->removeRef( key );
 	backPix = 0L;
     }
 
-    if ( backType == BT_COLOR || backType == BT_CLIPART || backType == BT_PICTURE && backView == BV_CENTER )
-    {
-	if ( gradient )
-	{
+    if ( backType == BT_COLOR || backType == BT_CLIPART || 
+	 backType == BT_PICTURE && backView == BV_CENTER ) {
+	if ( gradient ) {
 	    gradientCollection->removeRef( backColor1, backColor2, bcType, ext, unbalanced, xfactor, yfactor );
 	    gradient = 0;
 	}
 	gradient = gradientCollection->getGradient( backColor1, backColor2, bcType, ext, unbalanced, xfactor, yfactor );
     }
 
-    if ( backType == BT_PICTURE && backView != BV_CENTER && gradient )
-    {
+    if ( backType == BT_PICTURE && backView != BV_CENTER && gradient ) {
 	gradientCollection->removeRef( backColor1, backColor2, bcType, ext, unbalanced, xfactor, yfactor );
 	gradient = 0;
     }
@@ -551,9 +548,13 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 	    doc->header()->setSize( ext.width(), 10 );
 	    //qDebug( "resize h" );
 	}
-
 	doc->header()->setOrig( _offset.x(), _offset.y() );
 
+	int pgnum = doc->backgroundList()->findRef( this );
+	if ( pgnum == -1 )
+	    pgnum = 0;
+	doc->header()->getKTextObject()->setPageNum( ++pgnum );
+	
 	int h = 0;
 	if ( doc->header()->getKTextObject()->isModified() ) {
 	    for ( int i = 0; i < doc->header()->getKTextObject()->paragraphs(); i++ )
@@ -589,6 +590,11 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 	}
 
 	doc->footer()->setOrig( _offset.x(), _offset.y() + ext.height() - footerHeight );
+
+	int pgnum = doc->backgroundList()->findRef( this );
+	if ( pgnum == -1 )
+	    pgnum = 0;
+	doc->footer()->getKTextObject()->setPageNum( ++pgnum );
 
 	doc->footer()->draw( _painter, 0, 0 );
 

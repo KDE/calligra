@@ -29,6 +29,7 @@
 #include <klocale.h>
 
 #include "kpresenter_view.h"
+#include "kpresenter_doc.h"
 
 /******************************************************************/
 /* Class: KPTextObject						  */
@@ -563,8 +564,9 @@ void KPTextObject::activate( QWidget *_widget, int diffx, int diffy )
 }
 
 /*========================== deactivate ==========================*/
-void KPTextObject::deactivate()
+void KPTextObject::deactivate( KPresenterDoc *doc )
 {
+    recalcPageNum( doc );
     ktextobject.recreate( 0, 0, QPoint( 0, 0 ), false );
     ktextobject.hide();
 }
@@ -958,4 +960,20 @@ QString KPTextObject::decode( const QString &_str )
     return QString( str );
 }
 
-
+/*================================================================*/
+void KPTextObject::recalcPageNum( KPresenterDoc *doc )
+{
+    int h = doc->getPageSize( 0, 0, 0 ).height();
+    int pgnum = -1;
+    for ( unsigned int i = 0; i < doc->getPageNums(); ++i ) {
+	if ( (int)orig.y() <= ( (int)i + 1 ) * h ) {
+	    pgnum = i + 1;
+	    break;
+	}
+    }
+    
+    if ( pgnum == -1 )
+	pgnum = doc->getPageNums();
+    
+    ktextobject.setPageNum( pgnum );
+}

@@ -63,6 +63,8 @@
   <Separator/>
   <Action name="text_con2hei"/>
   <Action name="text_obj2cont"/>
+  <Separator/>
+  <Action name="text_inspgnum"/>
  </Menu>
  <Menu name="Extra"><text>Extra</text>
   <Action name="extra_penbrush"/>
@@ -128,7 +130,7 @@
   <Separator/>
   <Action name="edit_delete"/>
  </ToolBar>
- <ToolBar position="bottom">
+ <ToolBar position="left">
   <Action name="insert_page"/>
   <Separator/>
   <Action name="insert_picture"/>
@@ -167,6 +169,8 @@
   <Action name="text_depthPlus"/>
   <Action name="text_depthMinus"/>
   <Action name="text_spacing"/>
+  <Separator/>
+  <Action name="text_inspgnum"/>
  </ToolBar>
  <ToolBar position="left">
   <Action name="extra_penbrush"/>

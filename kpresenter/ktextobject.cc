@@ -1341,6 +1341,7 @@ KTextObject::KTextObject( QWidget *parent, const char *name, ObjType ot,
 			  int c, int r, int __width )
     : QTableView( parent, name )
 {
+    currPageNum = 1;
     gap = 0;
     // init the objects
     _parent = parent;
@@ -1543,7 +1544,8 @@ QPicture* KTextObject::getPic( int _x, int _y, int _w, int _h, bool presMode, in
 }
 
 /*=================== get QPicture of the obj ====================*/
-void KTextObject::draw( QPainter &p, int _x, int _y, int _w, int _h, bool presMode, int from, int to, bool _clip, bool _drawempty )
+void KTextObject::draw( QPainter &p, int _x, int _y, int _w, int _h, bool presMode,
+			int from, int to, bool _clip, bool _drawempty )
 {
     p.save();
 
@@ -1704,8 +1706,7 @@ void KTextObject::clear( bool init )
 {
     _modified = true;
 
-    if ( init )
-    {
+    if ( init ) {
 	paragraphList.clear();
 	cellHeights.clear();
 
@@ -1725,9 +1726,7 @@ void KTextObject::clear( bool init )
 	repaint( false );
 	updateTableSize();
 	updateScrollBars();
-    }
-    else
-    {
+    } else {
 	paragraphList.clear();
 	cellHeights.clear();
 	setNumRows( 0 );
@@ -1747,20 +1746,16 @@ QString KTextObject::toASCII( bool linebreak, bool makelist )
     QString chr;
     QString space = "		       ";
 
-    for ( i = 0; i < paragraphs(); i++ )
-    {
+    for ( i = 0; i < paragraphs(); i++ ) {
 	txtParagraph = paragraphAt( i );
 
 	// TODO: Alignment
 
-	if ( makelist )
-	{
-	    switch ( objType() )
-	    {
+	if ( makelist ) {
+	    switch ( objType() ) {
 	    case PLAIN: break;
 	    case UNSORT_LIST: str += "- "; break;
-	    case ENUM_LIST:
-	    {
+	    case ENUM_LIST: {
 		if ( objEnumListType.type == NUMBER )
 		    chr.sprintf( "%s%d%s ", objEnumListType.before.data(), i+objEnumListType.start,
 				 objEnumListType.after.data() );
@@ -1773,15 +1768,11 @@ QString KTextObject::toASCII( bool linebreak, bool makelist )
 	    }
 	}
 
-	for ( j = 0; j < txtParagraph->lines(); j++ )
-	{
+	for ( j = 0; j < txtParagraph->lines(); j++ ) {
 	    txtLine = txtParagraph->lineAt( j );
-	    if ( j > 0 )
-	    {
-		if ( makelist )
-		{
-		    switch ( objType() )
-		    {
+	    if ( j > 0 ) {
+		if ( makelist ) {
+		    switch ( objType() ) {
 		    case PLAIN: break;
 		    case UNSORT_LIST: str += "	"; break;
 		    case ENUM_LIST: str += space.left( chr.length() ); break;
@@ -1790,8 +1781,7 @@ QString KTextObject::toASCII( bool linebreak, bool makelist )
 		}
 	    }
 
-	    for ( k = 0; k < txtLine->items(); k++ )
-	    {
+	    for ( k = 0; k < txtLine->items(); k++ ) {
 		txtObj = txtLine->itemAt( k );
 
 		str += txtObj->text();
@@ -1832,8 +1822,7 @@ void KTextObject::addText( QString text, QFont font, QColor color,
     QTextStream t( text, IO_ReadOnly );
     QString s = "", tmp;
 
-    while ( !t.eof() )
-    {
+    while ( !t.eof() ) {
 	tmp = t.readLine();
 	if ( !isValid( tmp ) ) tmp = " ";
 	tmp += "\n";
@@ -1842,13 +1831,10 @@ void KTextObject::addText( QString text, QFont font, QColor color,
 
     text = s;
 
-    if ( newParagraph || paragraphs() < 1 )
-    {
+    if ( newParagraph || paragraphs() < 1 ) {
 	txtParagraph = addParagraph();
 	txtParagraph->setHorzAlign( align );
-    }
-    else
-    {
+    } else {
 	txtParagraph = paragraphAt( paragraphs()-1 );
 	if ( txtParagraph->lineAt( txtParagraph->lines()-1 )->
 	     itemAt( txtParagraph->lineAt( txtParagraph->lines()-1 )->items()-1 )->type() == TxtObj::SEPARATOR )
@@ -1861,20 +1847,16 @@ void KTextObject::addText( QString text, QFont font, QColor color,
     txtObj->setColor( color );
     txtObj->setType( TxtObj::TEXT );
 
-    while ( true )
-    {
+    while ( true ) {
 	sp = text.find( QRegExp( "[ \x20\t ]" ) );
 	br = text.find( "\n" );
 
-	if ( br == -1 && sp == -1 ) break;
-	else
-	{
-	    if ( br == -1 || ( sp != -1 && sp < br ) )
-	    {
-		if ( isValid( text.left( sp ) ) )
-		{
-		    if ( !txtParagraph )
-		    {
+	if ( br == -1 && sp == -1 )
+	    break;
+	else {
+	    if ( br == -1 || ( sp != -1 && sp < br ) ) {
+		if ( isValid( text.left( sp ) ) ) {
+		    if ( !txtParagraph ) {
 			txtParagraph = addParagraph();
 			txtParagraph->setHorzAlign( align );
 		    }
@@ -1886,8 +1868,7 @@ void KTextObject::addText( QString text, QFont font, QColor color,
 		else
 		    txtObj = new TxtObj( "    ", font, color, TxtObj::NORMAL, TxtObj::SEPARATOR );
 
-		if ( !txtParagraph )
-		{
+		if ( !txtParagraph ) {
 		    txtParagraph = addParagraph();
 		    txtParagraph->setHorzAlign( align );
 		}
@@ -1899,15 +1880,10 @@ void KTextObject::addText( QString text, QFont font, QColor color,
 		txtObj->setType( TxtObj::TEXT );
 
 		text.remove( 0, sp+1 );
-	    }
-
-	    else if ( sp == -1 || ( br != -1 && br < sp ) )
-	    {
-		if ( isValid( text.left( br ) ) )
-		{
+	    } else if ( sp == -1 || ( br != -1 && br < sp ) ) {
+		if ( isValid( text.left( br ) ) ) {
 		    txtObj->append( text.left( br ) );
-		    if ( !txtParagraph )
-		    {
+		    if ( !txtParagraph ) {
 			txtParagraph = addParagraph();
 			txtParagraph->setHorzAlign( align );
 		    }
@@ -1926,10 +1902,8 @@ void KTextObject::addText( QString text, QFont font, QColor color,
 	}
     }
 
-    if ( text.length() > 0 && isValid( text ) )
-    {
-	if ( !txtParagraph )
-	{
+    if ( text.length() > 0 && isValid( text ) ) {
+	if ( !txtParagraph ) {
 	    txtParagraph = addParagraph();
 	    txtParagraph->setHorzAlign( align );
 	}
@@ -1937,8 +1911,7 @@ void KTextObject::addText( QString text, QFont font, QColor color,
 	txtParagraph->append( txtObj );
     }
 
-    if ( !txtParagraph )
-    {
+    if ( !txtParagraph ) {
 	txtParagraph = addParagraph();
 	txtParagraph->setHorzAlign( align );
     }
@@ -1946,8 +1919,7 @@ void KTextObject::addText( QString text, QFont font, QColor color,
     txtObj = new TxtObj( " ", font, color, TxtObj::NORMAL, TxtObj::SEPARATOR );
     txtParagraph->append( txtObj );
 
-    if ( _recalc )
-    {
+    if ( _recalc ) {
 	recalc();
 	repaint( true );
 	updateTableSize();
@@ -1966,10 +1938,8 @@ void KTextObject::openASCII( QString filename )
     QTextStream t( &f );
     QString s = "", tmp;
 
-    if ( f.open( IO_ReadOnly ) )
-    {
-	while ( !t.eof() )
-	{
+    if ( f.open( IO_ReadOnly ) ) {
+	while ( !t.eof() ) {
 	    tmp = t.readLine();
 	    if ( !isValid( tmp ) ) tmp = " ";
 	    tmp += "\n";
@@ -2010,8 +1980,7 @@ QString KTextObject::getPartOfText( TxtCursor *_from, TxtCursor *_to )
     int pos2 = _to->positionInLine();
     int i, j, fromLine, toLine, fromPos, toPos;
 
-    for ( i = para1; i <= para2; i++ )
-    {
+    for ( i = para1; i <= para2; i++ ) {
 	paragraphPtr = paragraphAt( i );
 
 	fromLine = 0;
@@ -2019,8 +1988,7 @@ QString KTextObject::getPartOfText( TxtCursor *_from, TxtCursor *_to )
 	if ( para1 == i ) fromLine = line1;
 	if ( para2 == i ) toLine = line2;
 
-	for ( j = fromLine; j <= toLine; j++ )
-	{
+	for ( j = fromLine; j <= toLine; j++ ) {
 	    linePtr = paragraphPtr->lineAt( j );
 
 	    fromPos = 0;
@@ -2039,15 +2007,13 @@ QString KTextObject::getPartOfText( TxtCursor *_from, TxtCursor *_to )
 /*====================== copy region =============================*/
 void KTextObject::copyRegion( bool hideSelection )
 {
-    if ( drawSelection && stopCursor.positionAbs() != startCursor.positionAbs() )
-    {
+    if ( drawSelection && stopCursor.positionAbs() != startCursor.positionAbs() ) {
 	QString buffer = getPartOfText( &startCursor, &stopCursor );
 
 	QClipboard *cb = QApplication::clipboard();
 	cb->setText( buffer.data() );
 
-	if ( hideSelection )
-	{
+	if ( hideSelection ) {
 	    drawSelection = false;
 	    redrawSelection( startCursor, stopCursor );
 	    startCursor.setPositionAbs( 0 );
@@ -2059,8 +2025,7 @@ void KTextObject::copyRegion( bool hideSelection )
 /*====================== cut region =============================*/
 void KTextObject::cutRegion()
 {
-    if ( drawSelection && stopCursor.positionAbs() != startCursor.positionAbs() )
-    {
+    if ( drawSelection && stopCursor.positionAbs() != startCursor.positionAbs() ) {
 	QString buffer = getPartOfText( &startCursor, &stopCursor );
 
 	QClipboard *cb = QApplication::clipboard();
@@ -2075,6 +2040,17 @@ void KTextObject::cutRegion()
 
 	_modified = true;
     }
+}
+
+/*=============================================================*/
+void KTextObject::insertPageNum()
+{
+    drawSelection = false;
+    redrawSelection( startCursor, stopCursor );
+    startCursor.setPositionAbs( 0 );
+    stopCursor.setPositionAbs( 0 );
+
+    insertText( "\\pn", txtCursor, currFont, currColor );
 }
 
 /*======================= paste from clipboard ===================*/
@@ -2097,8 +2073,7 @@ int KTextObject::items()
 {
     int _items = 0;
 
-    for ( int i = 0; i < static_cast<int>( paragraphs() ); i++ )
-    {
+    for ( int i = 0; i < static_cast<int>( paragraphs() ); i++ ) {
 	for ( int j = 0; j < static_cast<int>( paragraphAt( i )->lines() ); j++ )
 	    _items += paragraphAt( i )->lineAt( j )->items();
     }
@@ -3763,21 +3738,17 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
     paragraphPtr = paragraphList.at( row );
 
     // if the paragraph exists, draw it
-    if ( paragraphPtr )
-    {
+    if ( paragraphPtr ) {
 
 	if ( drawPic ) p = painter;
 	else p = new QPainter();
 
 
 	// object type
-	switch ( obType )
-	{
+	switch ( obType ) {
 	case PLAIN: case TABLE: break;
-	case ENUM_LIST:
-	{
-	    if ( !drawPic )
-	    {
+	case ENUM_LIST: {
+	    if ( !drawPic ) {
 		pix.resize( xstart + getLeftIndent( row ), paragraphPtr->height() );
 		pix.fill( backgroundColor() );
 		p->begin( &pix );
@@ -3798,20 +3769,18 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 	    else
 		p->setPen( allColor );
 	    if ( !paragraphPtr->isEmpty() )
-		p->drawText( 0, ( !drawPic ? 0 : y ) + paragraphPtr->lineAt( 0 )->ascent( paragraphPtr ) - fm.ascent(),
+		p->drawText( 0, ( !drawPic ? 0 : y ) + paragraphPtr->lineAt( 0 )->ascent( paragraphPtr ) -
+			     fm.ascent(),
 			     xstart + getLeftIndent( row ), fm.height() + paragraphPtr->getLineSpacing(),
 			     AlignLeft, chr );
 
-	    if ( !drawPic )
-	    {
+	    if ( !drawPic ) {
 		p->end();
 		painter->drawPixmap( 0, y, pix );
 	    }
 	} break;
-	case UNSORT_LIST:
-	{
-	    if ( !drawPic )
-	    {
+	case UNSORT_LIST: {
+	    if ( !drawPic ) {
 		pix.resize( xstart + getLeftIndent( row ), paragraphPtr->height() + paragraphPtr->getLineSpacing() );
 		pix.fill( backgroundColor() );
 		p->begin( &pix );
@@ -3829,8 +3798,7 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 			     ascent( paragraphPtr ) - fm.ascent(),
 			     xstart, fm.height() + paragraphPtr->getLineSpacing(), AlignLeft, _chr );
 
-	    if ( !drawPic )
-	    {
+	    if ( !drawPic ) {
 		p->end();
 		painter->drawPixmap( 0, y, pix );
 	    }
@@ -3838,21 +3806,17 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 	}
 
 	// draw lines
-	for ( i = 0; i < paragraphPtr->lines(); i++ )
-	{
+	for ( i = 0; i < paragraphPtr->lines(); i++ ) {
 	    linePtr = paragraphPtr->lineAt( i );
 	    x = !drawPic ? 0 : xstart + getLeftIndent( row );
 
 	    // check, if the line should be drawn
 	    if ( drawLine == -1 || drawParagraph == -1 ||
 		 !drawBelow && drawLine == static_cast<int>( i ) && drawParagraph == row ||
-		 drawBelow && ( row > drawParagraph || row == drawParagraph && static_cast<int>( i ) >= drawLine ) )
-	    {
-
-		if ( !drawPic )
-		{
-		    if ( w > 0 && linePtr->height( paragraphPtr ) > 0 )
-		    {
+		 drawBelow && ( row > drawParagraph ||
+				row == drawParagraph && static_cast<int>( i ) >= drawLine ) ) {
+		if ( !drawPic ) {
+		    if ( w > 0 && linePtr->height( paragraphPtr ) > 0 ) {
 			pix.resize( w - getLeftIndent( row ), linePtr->height( paragraphPtr ) );
 			pix.fill( backgroundColor() );
 			p->begin( &pix );
@@ -3860,8 +3824,7 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 		}
 
 		// alignment
-		switch ( paragraphPtr->horzAlign() )
-		{
+		switch ( paragraphPtr->horzAlign() ) {
 		case TxtParagraph::LEFT: w -= scrBar; break;
 		case TxtParagraph::CENTER: x += ( w - linePtr->width() ) / 2 - scrBar / 2; break;
 		case TxtParagraph::RIGHT: x += w - linePtr->width() - scrBar; break;
@@ -3870,8 +3833,7 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 
 		// draw all objects of the line
 		wid = 0;
-		for ( j = 0; j < linePtr->items(); wid += linePtr->itemAt( j )->textLength(), j++ )
-		{
+		for ( j = 0; j < linePtr->items(); wid += linePtr->itemAt( j )->textLength(), j++ ) {
 		    objPtr = linePtr->itemAt( j );
 		    len = objPtr->textLength();
 		    p->setFont( objPtr->font() );
@@ -3881,8 +3843,7 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 		    if ( drawCursor = !drawPic && !cursorDrawn && showCursor() &&
 			 static_cast<int>( txtCursor->positionParagraph() ) == row &&
 			 txtCursor->positionLine() == i && txtCursor->positionInLine() >= chars &&
-			 txtCursor->positionInLine() <= chars+len )
-		    {
+			 txtCursor->positionInLine() <= chars+len ) {
 			c1.setX( x + fm.width( objPtr->text().left( txtCursor->positionInLine() - chars ) ) );
 			c1.setY( !drawPic ? 0 : y );
 			c2.setX( c1.x() );
@@ -3896,13 +3857,17 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 			p->setPen( allColor );
 
 		    //debug( "%d", x );
-		    p->drawText(x,(!drawPic ? 0 : y) + linePtr->ascent(paragraphPtr), objPtr->text() );
+		    if ( drawPic && objPtr->text().contains( "\\pn" ) ) {
+			QString s = objPtr->text();
+			s.replace( QRegExp( "\\pn" ), QString::number( currPageNum ) );
+			s.remove( s.find( "\\" ), 1 );
+			p->drawText( x, y + linePtr->ascent( paragraphPtr ), s );
+		    } else
+			p->drawText( x, (!drawPic ? 0 : y) + linePtr->ascent( paragraphPtr ), objPtr->text() );
 
 		    // draw Cursor
-		    if ( drawCursor )
-		    {
-			if ( cursorChanged )
-			{
+		    if ( drawCursor ) {
+			if ( cursorChanged ) {
 			    emit fontChanged( ( QFont* )&p->font() );
 			    emit colorChanged( ( QColor* )&p->pen().color() );
 			    emit horzAlignChanged( paragraphPtr->horzAlign() );
@@ -3923,8 +3888,7 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 		    }
 
 		    // draw selection
-		    if ( selectionInObj( row, i, j ) )
-		    {
+		    if ( selectionInObj( row, i, j ) ) {
 			RasterOp ro = p->rasterOp();
 			p->setRasterOp( NotROP );
 			int sx, sw;
@@ -3937,13 +3901,17 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 					 Qt::black );
 			p->setRasterOp( ro );
 		    }
-
-		    x += objPtr->width();
+		    if ( drawPic && objPtr->text() == "\\pn" ) {
+			QString s = objPtr->text();
+			s.replace( QRegExp( "\\pn" ), QString::number( currPageNum ) );
+			s.remove( s.find( "\\" ), 1 );
+			x += QFontMetrics( objPtr->font() ).width( s );
+		    } else
+			x += objPtr->width();
 		    chars += len;
 		}
 
-		if ( !drawPic && p->isActive() )
-		{
+		if ( !drawPic && p->isActive() ) {
 		    p->end();
 		    painter->drawPixmap( xstart + getLeftIndent( row ), y, pix );
 		}
@@ -3955,8 +3923,7 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 	    chars = 0;
 	}
 
-	if ( !drawPic )
-	{
+	if ( !drawPic ) {
 	    delete p;
 	    //delete pix;
 	}

@@ -20,6 +20,7 @@
 #include "kpresenter_doc.h"
 #include "insertcmd.h"
 #include "kpobject.h"
+#include "kptextobject.h"
 
 #include <qpoint.h>
 #include <qrect.h>
@@ -49,6 +50,8 @@ void InsertCmd::execute()
 {
     doc->objectList()->append( object );
     object->addToObjList();
+    if ( object->getType() == OT_TEXT )
+	( (KPTextObject*)object )->recalcPageNum( doc );
     doc->repaint( object );
 }
 
@@ -56,8 +59,7 @@ void InsertCmd::execute()
 void InsertCmd::unexecute()
 {
     QRect oldRect = object->getBoundingRect( 0, 0 );
-    if ( doc->objectList()->findRef( object ) != -1 )
-    {
+    if ( doc->objectList()->findRef( object ) != -1 ) {
 	doc->objectList()->take( doc->objectList()->findRef( object ) );
 	object->removeFromObjList();
     }

@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -36,7 +36,7 @@ class QColor;
 class QFont;
 
 /******************************************************************/
-/* Class: KPFooterHeaderEditor                                    */
+/* Class: KPFooterHeaderEditor					  */
 /******************************************************************/
 
 class KPFooterHeaderEditor : public QVBox
@@ -60,18 +60,18 @@ protected:
     void setupFooter();
 
     void resizeEvent( QResizeEvent *e ) {
-        QVBox::resizeEvent( e );
-        htool2->updateRects( true );
-        ftool2->updateRects( true );
+	QVBox::resizeEvent( e );
+	htool2->updateRects( true );
+	ftool2->updateRects( true );
     }
     void closeEvent( QCloseEvent *e ) {
-        // this dialog must not get closed!!
-        if ( !_allowClose ) {
-            hide();
-            e->ignore();
-        } else {
-            QVBox::closeEvent( e );
-        }
+	// this dialog must not get closed!!
+	if ( !_allowClose ) {
+	    hide();
+	    e->ignore();
+	} else {
+	    QVBox::closeEvent( e );
+	}
     }
 
     QTabWidget *tabwidget;
@@ -82,8 +82,8 @@ protected:
     KPresenterDoc *doc;
     bool _allowClose;
 
-    int h_bold, h_italic, h_underline, h_color, h_aleft, h_acenter, h_aright, h_font, h_size;
-    int f_bold, f_italic, f_underline, f_color, f_aleft, f_acenter, f_aright, f_font, f_size;
+    int h_bold, h_italic, h_underline, h_color, h_aleft, h_acenter, h_aright, h_font, h_size, h_pgnum;
+    int f_bold, f_italic, f_underline, f_color, f_aleft, f_acenter, f_aright, f_font, f_size, f_pgnum;
 
 protected slots:
     void slotShowHeader();
@@ -102,6 +102,7 @@ protected slots:
     void headerAlignLeft();
     void headerAlignCenter();
     void headerAlignRight();
+    void headerInsertPageNum();
 
     void footerFont( const QString &f );
     void footerSize( const QString &s );
@@ -112,7 +113,8 @@ protected slots:
     void footerAlignLeft();
     void footerAlignCenter();
     void footerAlignRight();
-
+    void footerInsertPageNum();
+    
     void headerFontChanged( QFont *f );
     void headerColorChanged( QColor *c );
     void headerAlignChanged( TxtParagraph::HorzAlign ha );
@@ -121,6 +123,8 @@ protected slots:
     void footerColorChanged( QColor *c );
     void footerAlignChanged( TxtParagraph::HorzAlign ha );
 
+    void tabSelected( const QString &s );
+    
 };
 
 #endif

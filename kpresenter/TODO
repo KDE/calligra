@@ -21,7 +21,6 @@ MISSING FEATURES, todo :
 - use GM in all dialogs
 - Presentation structure editor/viewer (finish it)
 - Rewrite autoforms (using XML)
-- Insert pagenumber into txt objs
 - Group objects (finish: resizing is fucked up, set properties doesn´t work)
 - Possibility to print 1, 2 or 4 slides / page
 - When creating a template from current slide, make it working also if current slide

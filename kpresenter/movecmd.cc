@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -19,11 +19,12 @@
 
 #include "kpresenter_doc.h"
 #include "movecmd.h"
+#include "kptextobject.h"
 
 #include <qrect.h>
 
 /******************************************************************/
-/* Class: MoveByCmd                                               */
+/* Class: MoveByCmd						  */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
@@ -32,15 +33,20 @@ MoveByCmd::MoveByCmd( QString _name, QPoint _diff, QList<KPObject> &_objects, KP
 {
     objects.setAutoDelete( false );
     doc = _doc;
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->incCmdRef();
+    for ( unsigned int i = 0; i < objects.count(); i++ ) {
+	if ( objects.at( i )->getType() == OT_TEXT ) {
+	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
+	    doc->repaint( objects.at( i ) );
+	}
+	objects.at( i )->incCmdRef();
+    }
 }
 
 /*======================== destructor ============================*/
 MoveByCmd::~MoveByCmd()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->decCmdRef();
+	objects.at( i )->decCmdRef();
 }
 
 /*====================== execute =================================*/
@@ -48,12 +54,13 @@ void MoveByCmd::execute()
 {
     QRect oldRect;
 
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-    {
-        oldRect = objects.at( i )->getBoundingRect( 0, 0 );
-        objects.at( i )->moveBy( diff );
-        doc->repaint( oldRect );
-        doc->repaint( objects.at( i ) );
+    for ( unsigned int i = 0; i < objects.count(); i++ ) {
+	oldRect = objects.at( i )->getBoundingRect( 0, 0 );
+	objects.at( i )->moveBy( diff );
+	if ( objects.at( i )->getType() == OT_TEXT )
+	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
+	doc->repaint( oldRect );
+	doc->repaint( objects.at( i ) );
     }
 }
 
@@ -62,35 +69,42 @@ void MoveByCmd::unexecute()
 {
     QRect oldRect;
 
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-    {
-        oldRect = objects.at( i )->getBoundingRect( 0, 0 );
-        objects.at( i )->moveBy( -diff.x(), -diff.y() );
-        doc->repaint( oldRect );
-        doc->repaint( objects.at( i ) );
+    for ( unsigned int i = 0; i < objects.count(); i++ ) {
+	oldRect = objects.at( i )->getBoundingRect( 0, 0 );
+	objects.at( i )->moveBy( -diff.x(), -diff.y() );
+	if ( objects.at( i )->getType() == OT_TEXT )
+	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
+	doc->repaint( oldRect );
+	doc->repaint( objects.at( i ) );
     }
 }
 
 /******************************************************************/
-/* Class: MoveByCmd2                                              */
+/* Class: MoveByCmd2						  */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd2::MoveByCmd2( QString _name, QList<QPoint> &_diffs, QList<KPObject> &_objects, KPresenterDoc *_doc )
+MoveByCmd2::MoveByCmd2( QString _name, QList<QPoint> &_diffs, 
+			QList<KPObject> &_objects, KPresenterDoc *_doc )
     : Command( _name ), diffs( _diffs ), objects( _objects )
 {
     objects.setAutoDelete( false );
     diffs.setAutoDelete( true );
     doc = _doc;
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->incCmdRef();
+    for ( unsigned int i = 0; i < objects.count(); i++ ) {
+	if ( objects.at( i )->getType() == OT_TEXT ) {
+	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
+	    doc->repaint( objects.at( i ) );
+	}
+	objects.at( i )->incCmdRef();
+    }
 }
 
 /*======================== destructor ============================*/
 MoveByCmd2::~MoveByCmd2()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->decCmdRef();
+	objects.at( i )->decCmdRef();
 
     diffs.clear();
 }
@@ -100,12 +114,13 @@ void MoveByCmd2::execute()
 {
     QRect oldRect;
 
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-    {
-        oldRect = objects.at( i )->getBoundingRect( 0, 0 );
-        objects.at( i )->moveBy( *diffs.at( i ) );
-        doc->repaint( oldRect );
-        doc->repaint( objects.at( i ) );
+    for ( unsigned int i = 0; i < objects.count(); i++ ) {
+	oldRect = objects.at( i )->getBoundingRect( 0, 0 );
+	objects.at( i )->moveBy( *diffs.at( i ) );
+	if ( objects.at( i )->getType() == OT_TEXT )
+	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
+	doc->repaint( oldRect );
+	doc->repaint( objects.at( i ) );
     }
 }
 
@@ -114,11 +129,12 @@ void MoveByCmd2::unexecute()
 {
     QRect oldRect;
 
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-    {
-        oldRect = objects.at( i )->getBoundingRect( 0, 0 );
-        objects.at( i )->moveBy( -diffs.at( i )->x(), -diffs.at( i )->y() );
-        doc->repaint( oldRect );
-        doc->repaint( objects.at( i ) );
+    for ( unsigned int i = 0; i < objects.count(); i++ ) {
+	oldRect = objects.at( i )->getBoundingRect( 0, 0 );
+	objects.at( i )->moveBy( -diffs.at( i )->x(), -diffs.at( i )->y() );
+	if ( objects.at( i )->getType() == OT_TEXT )
+	    ( (KPTextObject*)objects.at( i ) )->recalcPageNum( doc );
+	doc->repaint( oldRect );
+	doc->repaint( objects.at( i ) );
     }
 }

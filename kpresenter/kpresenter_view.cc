@@ -817,7 +817,7 @@ void KPresenterView::extraOptions()
 /*===============================================================*/
 void KPresenterView::extraCreateTemplate()
 {
-    QPixmap pix( QSize( m_pKPresenterDoc->getPageSize( 0, 0, 0 ).width(), 
+    QPixmap pix( QSize( m_pKPresenterDoc->getPageSize( 0, 0, 0 ).width(),
 			m_pKPresenterDoc->getPageSize( 0, 0, 0 ).height() ) );
     pix.fill( Qt::white );
     int i = getCurrPgNum() - 1;
@@ -826,17 +826,17 @@ void KPresenterView::extraCreateTemplate()
     QWMatrix m;
     m.scale( 60.0 / (float)pix.width(), 45.0 / (float)pix.height() );
     pix = pix.xForm( m );
-    
+
     QString file = "/tmp/kpt";
     m_pKPresenterDoc->savePage( file, i );
-    
+
     KoTemplateCreateDia::createTemplate( this, file, pix,
 					 KPresenterFactory::global()->
 					 dirs()->resourceDirs( "kpresenter_template" ),
 					 "kpt" );
     system( QString( "rm %1" ).arg( file ).latin1() );
     KPresenterFactory::global()->dirs()->addResourceType("kpresenter_template",
-							 KStandardDirs::kde_default( "data" ) + 
+							 KStandardDirs::kde_default( "data" ) +
 							 "kpresenter/templates/");
 }
 
@@ -1166,6 +1166,13 @@ void KPresenterView::textBold()
 {
     tbFont.setBold( !tbFont.bold() );
     page->setTextFont( &tbFont );
+}
+
+/*===============================================================*/
+void KPresenterView::textInsertPageNum()
+{
+    if ( page->kTxtObj() )
+	page->kTxtObj()->insertPageNum();
 }
 
 /*===============================================================*/
@@ -1772,6 +1779,9 @@ void KPresenterView::setupActions()
 					    this, SLOT( textObjectToContents() ),
 					    actionCollection(), "text_obj2cont" );
 
+    actionTextInsertPageNum = new KAction( i18n( "&Insert Page Number" ), KPBarIcon( "pgnum" ), 0,
+					   this, SLOT( textInsertPageNum() ),
+					    actionCollection(), "text_inspgnum" );
 
     // ----------------- extra actions
 

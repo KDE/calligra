@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -20,11 +20,12 @@
 #include "kpresenter_doc.h"
 #include "resizecmd.h"
 #include "kpobject.h"
+#include "kptextobject.h"
 
 #include <qrect.h>
 
 /******************************************************************/
-/* Class: ResizeCmd                                               */
+/* Class: ResizeCmd						  */
 /******************************************************************/
 
 /*======================== constructor ===========================*/
@@ -50,6 +51,8 @@ void ResizeCmd::execute()
     oldRect = object->getBoundingRect( 0, 0 );
     object->moveBy( m_diff );
     object->resizeBy( r_diff );
+    if ( object->getType() == OT_TEXT )
+	( (KPTextObject*)object )->recalcPageNum( doc );
     doc->repaint( oldRect );
     doc->repaint( object );
 }
@@ -62,6 +65,8 @@ void ResizeCmd::unexecute()
     oldRect = object->getBoundingRect( 0, 0 );
     object->moveBy( -m_diff.x(), -m_diff.y() );
     object->resizeBy( -r_diff.width(), -r_diff.height() );
+    if ( object->getType() == OT_TEXT )
+	( (KPTextObject*)object )->recalcPageNum( doc );
     doc->repaint( oldRect );
     doc->repaint( object );
 }
@@ -74,11 +79,12 @@ void ResizeCmd::unexecute( bool _repaint )
     oldRect = object->getBoundingRect( 0, 0 );
     object->moveBy( -m_diff.x(), -m_diff.y() );
     object->resizeBy( -r_diff.width(), -r_diff.height() );
+    if ( object->getType() == OT_TEXT )
+	( (KPTextObject*)object )->recalcPageNum( doc );
 
-    if ( _repaint )
-    {
-        doc->repaint( oldRect );
-        doc->repaint( object );
+    if ( _repaint ) {
+	doc->repaint( oldRect );
+	doc->repaint( object );
     }
 }
 

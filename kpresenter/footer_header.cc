@@ -79,6 +79,18 @@ KPFooterHeaderEditor::KPFooterHeaderEditor( KPresenterDoc *_doc )
     resize( 600, 300 );
     htool2->updateRects( true );
     ftool2->updateRects( true );
+
+    connect( tabwidget, SIGNAL( selected( const QString & ) ),
+	     this, SLOT( tabSelected( const QString & ) ) );
+}
+
+/*================================================================*/
+void KPFooterHeaderEditor::tabSelected( const QString &s )
+{
+    if ( s == i18n( "&Header" ) )
+	doc->header()->getKTextObject()->setFocus();
+    else
+	doc->footer()->getKTextObject()->setFocus();
 }
 
 /*================================================================*/
@@ -186,11 +198,20 @@ void KPFooterHeaderEditor::setupHeader()
 			  SLOT( headerAlignRight() ), true, i18n( "Align Right" ) );
     htool2->setToggle( h_aright, true );
 
+    htool2->insertSeparator();
+
+    h_pgnum = 8;
+    htool2->insertButton( BarIcon( "pgnum" ), h_pgnum,
+			  SIGNAL( clicked() ), this,
+			  SLOT( headerInsertPageNum() ), true, i18n( "Insert Page Number" ) );
+        
     htool2->setMaximumHeight(tool1->maximumHeight());
     htool2->setMinimumHeight(tool1->maximumHeight());
 
-    connect( doc->header()->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), this, SLOT( headerFontChanged( QFont* ) ) );
-    connect( doc->header()->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), this, SLOT( headerColorChanged( QColor* ) ) );
+    connect( doc->header()->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), 
+	     this, SLOT( headerFontChanged( QFont* ) ) );
+    connect( doc->header()->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), 
+	     this, SLOT( headerColorChanged( QColor* ) ) );
     connect( doc->header()->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
 	     this, SLOT( headerAlignChanged( TxtParagraph::HorzAlign ) ) );
 
@@ -300,11 +321,20 @@ void KPFooterHeaderEditor::setupFooter()
 			  SLOT( footerAlignRight() ), true, i18n( "Align Right" ) );
     ftool2->setToggle( f_aright, true );
 
+    ftool2->insertSeparator();
+
+    f_pgnum = 8;
+    ftool2->insertButton( BarIcon( "pgnum" ), f_pgnum,
+			  SIGNAL( clicked() ), this,
+			  SLOT( footerInsertPageNum() ), true, i18n( "Insert Page Number" ) );
+
     ftool2->setMaximumHeight(tool1->maximumHeight());
     ftool2->setMinimumHeight(tool1->maximumHeight());
 
-    connect( doc->footer()->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), this, SLOT( footerFontChanged( QFont* ) ) );
-    connect( doc->footer()->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), this, SLOT( footerColorChanged( QColor* ) ) );
+    connect( doc->footer()->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), 
+	     this, SLOT( footerFontChanged( QFont* ) ) );
+    connect( doc->footer()->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), 
+	     this, SLOT( footerColorChanged( QColor* ) ) );
     connect( doc->footer()->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
 	     this, SLOT( footerAlignChanged( TxtParagraph::HorzAlign ) ) );
 
@@ -514,6 +544,12 @@ void KPFooterHeaderEditor::headerAlignRight()
 }
 
 /*================================================================*/
+void KPFooterHeaderEditor::headerInsertPageNum()
+{
+    doc->header()->getKTextObject()->insertPageNum();
+}
+
+/*================================================================*/
 void KPFooterHeaderEditor::footerFont( const QString &f )
 {
     QFont fn = doc->footer()->getKTextObject()->font();
@@ -700,4 +736,10 @@ void KPFooterHeaderEditor::setShowHeader( bool b )
 void KPFooterHeaderEditor::setShowFooter( bool b )
 {
     showFooter->setChecked( b );
+}
+
+/*================================================================*/
+void KPFooterHeaderEditor::footerInsertPageNum()
+{
+    doc->footer()->getKTextObject()->insertPageNum();
 }

@@ -173,8 +173,10 @@ void Page::drawBackground( QPainter *painter, QRect rect )
 		kpbackground->draw( painter, QPoint( getPageSize( i, _presFakt ).x(),
 						     getPageSize( i, _presFakt ).y() ), editMode );
 	    else
-		kpbackground->draw( painter, QPoint( getPageSize( i, _presFakt, false ).x() + view->kPresenterDoc()->getLeftBorder() * _presFakt,
-						     getPageSize( i, _presFakt, false ).y() + view->kPresenterDoc()->getTopBorder() * _presFakt ),
+		kpbackground->draw( painter, QPoint( getPageSize( i, _presFakt, false ).x() + 
+						     view->kPresenterDoc()->getLeftBorder() * _presFakt,
+						     getPageSize( i, _presFakt, false ).y() + 
+						     view->kPresenterDoc()->getTopBorder() * _presFakt ),
 				    editMode );
 	}
     }
@@ -229,7 +231,7 @@ void Page::mousePressEvent( QMouseEvent *e )
 	editNum = -1;
 	if ( kpobject->getType() == OT_TEXT ) {
 	    KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-	    kpobject->deactivate();
+	    kptextobject->deactivate( view->kPresenterDoc() );
 	    kptextobject->getKTextObject()->clearFocus();
 	    disconnect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ),
 			this, SLOT( toFontChanged( QFont* ) ) );
@@ -476,7 +478,8 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
 			}
 		    }
 		}
-		MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object( s )" ), QPoint( mx - firstX, my - firstY ),
+		MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object( s )" ), 
+						      QPoint( mx - firstX, my - firstY ),
 						      _objects, view->kPresenterDoc() );
 		view->kPresenterDoc()->commands()->addCommand( moveByCmd );
 	    } else
@@ -997,7 +1000,7 @@ void Page::keyPressEvent( QKeyEvent *e )
 	    editNum = -1;
 	    if ( kpobject->getType() == OT_TEXT ) {
 		KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-		kpobject->deactivate();
+		kptextobject->deactivate( view->kPresenterDoc() );
 		kptextobject->getKTextObject()->clearFocus();
 		disconnect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ),
 			    this, SLOT( toFontChanged( QFont* ) ) );
@@ -1593,11 +1596,11 @@ void Page::startScreenPresentation( bool zoom, int curPgNum )
 	editNum = -1;
 	if ( kpobject->getType() == OT_TEXT ) {
 	    KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-	    kpobject->deactivate();
+	    kptextobject->deactivate( view->kPresenterDoc() );
 	    kptextobject->getKTextObject()->clearFocus();
-	    disconnect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ), 
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ),
 			this, SLOT( toFontChanged( QFont* ) ) );
-	    disconnect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ), 
+	    disconnect( kptextobject->getKTextObject(), SIGNAL( colorChanged( QColor* ) ),
 			this, SLOT( toColorChanged( QColor* ) ) );
 	    disconnect( kptextobject->getKTextObject(), SIGNAL( horzAlignChanged( TxtParagraph::HorzAlign ) ),
 			this, SLOT( toAlignChanged( TxtParagraph::HorzAlign ) ) );
@@ -1611,12 +1614,12 @@ void Page::startScreenPresentation( bool zoom, int curPgNum )
     int i;
 
     if ( zoom ) {
-	float _presFaktW = static_cast<float>( width() ) / static_cast<float>( getPageSize( 0, 1.0, false ).width() ) > 
+	float _presFaktW = static_cast<float>( width() ) / static_cast<float>( getPageSize( 0, 1.0, false ).width() ) >
 			   0.0 ?
 			   static_cast<float>( width() ) / static_cast<float>( getPageSize( 0, 1.0, false ).width() ) : 1.0;
-	float _presFaktH = static_cast<float>( height() ) / static_cast<float>( getPageSize( 0, 1.0, false ).height() ) > 
+	float _presFaktH = static_cast<float>( height() ) / static_cast<float>( getPageSize( 0, 1.0, false ).height() ) >
 			   0.0 ?
-			   static_cast<float>( height() ) / static_cast<float>( getPageSize( 0, 1.0, false ).height() ) : 
+			   static_cast<float>( height() ) / static_cast<float>( getPageSize( 0, 1.0, false ).height() ) :
 			   1.0;
 	_presFakt = min(_presFaktW,_presFaktH);
     } else _presFakt = 1.0;
@@ -3232,7 +3235,7 @@ void Page::setToolEditMode( ToolEditMode _m, bool updateView )
 	editNum = -1;
 	if ( kpobject->getType() == OT_TEXT ) {
 	    KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-	    kpobject->deactivate();
+	    kptextobject->deactivate( view->kPresenterDoc() );
 	    kptextobject->getKTextObject()->clearFocus();
 	    disconnect( kptextobject->getKTextObject(), SIGNAL( fontChanged( QFont* ) ),
 			this, SLOT( toFontChanged( QFont* ) ) );
