@@ -32,7 +32,6 @@
 #include "LayerPanel.h"
 #include "tooldockbase.h"
 #include "tooldockmanager.h"
-#include "CanvasView.h"
 #include <GDocument.h>
 #include <Canvas.h>
 #include <Tool.h>
@@ -90,6 +89,7 @@
 #include <kxmlgui.h>
 #include <kparts/event.h>
 #include <GPart.h>
+#include <qlayout.h>
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
                                     KIllustratorDocument* doc) :
@@ -100,7 +100,6 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     m_pDoc = doc;
     m_bShowGUI = true;
     m_bShowRulers = true;
-    scrollview = 0L;
     objMenu = 0L;
     mParent = parent;
 
@@ -320,18 +319,32 @@ void KIllustratorView::setupCanvas()
 {
     MeasurementUnit mu = PStateManager::instance ()->defaultMeasurementUnit ();
     hRuler = new Ruler (Ruler::Horizontal, mu, this);
-    hRuler->setGeometry(20, 0, width()-20, 20);
+//    hRuler->setGeometry(20, 0, width()-20, 20);
     hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
     vRuler = new Ruler (Ruler::Vertical, mu, this);
-    vRuler->setGeometry(0, 20, 20, height()-20);
+//    vRuler->setGeometry(0, 20, 20, height()-20);
     vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
 
-    scrollview = new CanvasView(this);
-    scrollview->setGeometry(20, 20, width()-20, height()-20);
+    QScrollBar* vBar = new QScrollBar(QScrollBar::Vertical, this);
+    QScrollBar* hBar = new QScrollBar(QScrollBar::Horizontal, this);
 
-    canvas = new Canvas (m_pDoc->gdoc(), 72.0, scrollview, scrollview->viewport());
+    canvas = new Canvas (m_pDoc->gdoc(), 72.0, hBar, vBar, this);
+    canvas->centerPage();
     canvas->setCursor(Qt::crossCursor);
-    scrollview->addChild(canvas);
+//    canvas->setGeometry(20, 20, width()-20, height()-20);
+
+    QGridLayout* layout = new QGridLayout(this,3,3);
+    layout->addWidget(canvas,1,1);
+    layout->addWidget(hRuler,0,1);
+    layout->addWidget(vRuler,1,0);
+    layout->addMultiCellWidget(vBar,0,1,2,2);
+    layout->addMultiCellWidget(hBar,2,2,0,1);
+/*    layout->addWidget(vRuler,1,0);
+    layout->addWidget(canvasBase,1,1);
+    layout->addMultiCellLayout(tabLayout,2,2,0,1);*/
+
+    
+/*    scrollview->addChild(canvas);
     scrollview->viewport()->setBackgroundMode(QWidget::PaletteBackground);
     
     int x = scrollview->viewport()->width()-canvas->width();
@@ -342,9 +355,9 @@ void KIllustratorView::setupCanvas()
      y = 0;
     canvas->move(x/2,y/2);
     hRuler->updateVisibleArea (x/2, y/2);
-    vRuler->updateVisibleArea (x/2, y/2);
+    vRuler->updateVisibleArea (x/2, y/2);*/
     
-    mToolDockManager = new ToolDockManager(scrollview);
+    mToolDockManager = new ToolDockManager(canvas);
 
     //Layer Panel
     mLayerPanel = new LayerPanel(this);
@@ -354,8 +367,8 @@ void KIllustratorView::setupCanvas()
     connect(mLayerDockBase, SIGNAL(visibleChange(bool)), SLOT(slotLayersPanel(bool)));
     slotLayersPanel(false);
     
-    QObject::connect (canvas, SIGNAL(sizeChanged ()),
-                      scrollview, SLOT(updateScrollBars()));
+//    QObject::connect (canvas, SIGNAL(sizeChanged ()),
+//                      scrollview, SLOT(updateScrollBars()));
     QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
                       hRuler, SLOT(updateVisibleArea (int, int)));
     QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
@@ -374,8 +387,8 @@ void KIllustratorView::setupCanvas()
     QObject::connect (canvas, SIGNAL(rightButtonAtSelectionClicked (int, int)),
                       this, SLOT(popupForSelection (int, int)));
     
-    QObject::connect (scrollview, SIGNAL( viewportResize ()),
-                      this, SLOT( slotViewResize ()));
+//    QObject::connect (scrollview, SIGNAL( viewportResize ()),
+//                      this, SLOT( slotViewResize ()));
     
     connect(PStateManager::instance(), SIGNAL(settingsChanged()), this, SLOT(slotSettingsChanged()));
 
@@ -484,13 +497,13 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 }
 
 void KIllustratorView::resizeEvent(QResizeEvent* ) {
-    if(m_bShowRulers) {
+/*    if(m_bShowRulers) {
         hRuler->setGeometry(20, 0, width()-20, 20);
         vRuler->setGeometry(0, 20, 20, height()-20);
-        scrollview->setGeometry(20, 20, width()-20, height()-20);
+        canvas->setGeometry(20, 20, width()-20, height()-20);
     }
     else
-        scrollview->setGeometry(0, 0, width(), height());
+        canvas->setGeometry(0, 0, width(), height());*/
 }
 
 void KIllustratorView::updateReadWrite( bool /*readwrite*/ )
@@ -954,7 +967,7 @@ void KIllustratorView::slotAlignToGrid( bool b )
 
 void KIllustratorView::slotAlignToHelplines( bool b )
 {
-    canvas->alignToHelplines( b );
+//    canvas->alignToHelplines( b );
 }
 
 void KIllustratorView::slotTransformPosition()
@@ -1254,13 +1267,13 @@ void KIllustratorView::slotZoomOut()
 
 void KIllustratorView::slotViewResize()
  {
-  int x = scrollview->viewport()->width()-canvas->width();
+/*  int x = scrollview->viewport()->width()-canvas->width();
   int y = scrollview->viewport()->height()-canvas->height();
   if(x < 0)
    x = 0;
   if(y < 0)
    y = 0;
-  canvas->move(x/2,y/2);
+  canvas->move(x/2,y/2);*/
  }
 
 #include <KIllustrator_view.moc>

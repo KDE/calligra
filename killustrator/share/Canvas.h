@@ -4,6 +4,7 @@
 
   This file is part of KIllustrator.
   Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2000-2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -37,20 +38,31 @@ class QPixmap;
 class QPainter;
 class Rect;
 class QColor;
+class QSize;
+class QScrollBar;
 
 class Canvas : public QWidget {
   Q_OBJECT
 public:
-  Canvas (GDocument *doc, float res, QScrollView *sv, QWidget *parent = 0,
-          const char *name = 0);
+  Canvas (GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidget *parent = 0, const char *name = 0);
   ~Canvas ();
 
-  QWidget *viewport(void)const { return scrollview->viewport();};
-  QScrollView *scrollView(void)const { return scrollview;};
-
+  void setDocument (GDocument* doc);
+  GDocument* getDocument () const { return document; };
+  
   void setZoomFactor (float factor);
-  float getZoomFactor () const;
+  float getZoomFactor () const { return zoomFactor; };
 
+  float scaleFactor () const { return resolution * zoomFactor / 72.0; };
+  
+  int xOffset () const {return mXOffset; };
+  int yOffset () const {return mYOffset; };
+  
+  void centerPage();
+  
+/*
+  Helplines
+*/ 
   void setHorizHelplines(const QValueList<float>& lines);
   void setVertHelplines(const QValueList<float>& lines);
   const QValueList<float>& getHorizHelplines () const;
@@ -63,8 +75,11 @@ public:
   int indexOfVertHelpline (float pos);
   void updateHorizHelpline (int idx, float pos);
   void updateVertHelpline (int idx, float pos);
-  void updateHelplines ();
+  void updateHelplines (); 
 
+/*
+    GRID
+*/
   void showGrid (bool flag);
   bool showGrid () const { return gridIsOn; }
 
@@ -84,33 +99,34 @@ public:
 
   void setToolController (ToolController *tc);
 
-  void setDocument (GDocument* doc);
-  GDocument* getDocument ();
-
+  /* Printing */
   void setupPrinter( QPrinter &printer );
   void print( QPrinter &printer );
 
   void showBasePoints (bool flag = true);
   void setOutlineMode (bool flag);
 
-  float scaleFactor () const;
-
 protected:
-  bool eventFilter (QObject *, QEvent *);
-
+  QSize actualSize();
+  QSize actualPaperSizePt() const;
+  void updateScrollBars();
+  
   float snapXPositionToGrid (float pos);
   float snapYPositionToGrid (float pos);
 
   void saveGridProperties ();
   void readGridProperties ();
 
+  bool eventFilter (QObject *, QEvent *);
+  /* Events */
   void mousePressEvent (QMouseEvent *e);
   void mouseReleaseEvent (QMouseEvent *e);
   void mouseMoveEvent (QMouseEvent *e);
   void keyPressEvent (QKeyEvent *e);
   void paintEvent (QPaintEvent *e);
   void moveEvent (QMoveEvent *e);
-
+  void resizeEvent (QResizeEvent *e);
+  
   void addHorizHelpline (float pos);
   void addVertHelpline (float pos);
 
@@ -127,28 +143,32 @@ signals:
   void mousePositionChanged (int x, int y);
 
 public slots:
-  void updateView ();
   void updateRegion (const Rect& r);
   void ensureVisibility (bool flag);
   void calculateSize ();
   void updateGridInfos ();
-
+  
+  
   void addHelpline (int x, int y, bool horizH);
   void drawTmpHelpline (int x, int y, bool horizH);
 
 private slots:
   void retryUpdateRegion ();
+  void scrollX(int v);
+  void scrollY(int v);
 
 private:
   void propagateMouseEvent (QMouseEvent *e);
-  void propagateKeyEvent (QKeyEvent *e);
   void drawGrid (QPainter& p);
   void drawHelplines (QPainter& p);
-  void redrawView (bool repaintFlag = true);
 
-  QScrollView *scrollview;
-  QPixmap *pixmap;
+  QPixmap *buffer;
+  QScrollBar *hBar;
+  QScrollBar *vBar;
+
   int m_width, m_height;
+  int mXOffset, mYOffset;
+  int xPaper, yPaper;
   float resolution;
   float zoomFactor;
   GDocument *document;
@@ -162,6 +182,7 @@ private:
   bool outlineMode;
   int pendingRedraws;
   Rect regionForUpdate, region;
+
   QValueList<float> horizHelplines, vertHelplines;
   bool helplinesAreOn, helplinesSnapIsOn;
   float tmpHorizHelpline, tmpVertHelpline;

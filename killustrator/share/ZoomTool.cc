@@ -102,6 +102,7 @@ void ZoomTool::processMouseMoveEvent (QMouseEvent* e)
     painter.save();
     QPen pen(blue, 1, DotLine);
     painter.begin(canvas);
+    painter.translate(canvas->xOffset(), canvas->yOffset());
     painter.setPen(pen);
     float sfactor = canvas->scaleFactor();
     painter.scale(sfactor, sfactor);
@@ -167,7 +168,7 @@ void ZoomTool::zoomOut (Canvas* cnv)
 
 void ZoomTool::zoomRegion(int x1, int y1, int x2, int y2)
  {
-  if (x1 == x2 || y1 == y2)
+/*  if (x1 == x2 || y1 == y2)
    {
     zoomIn(canvas);
     return;
@@ -204,7 +205,7 @@ void ZoomTool::zoomRegion(int x1, int y1, int x2, int y2)
   y = canvas->y() + y1 + y/2;
   x = x * QMIN(zw,zh);
   y = y * QMIN(zw,zh);
-  canvas->scrollView()->center(x,y);
+  canvas->scrollView()->center(x,y);*/
  }
 
 int ZoomTool::insertZoomFactor (float z) {

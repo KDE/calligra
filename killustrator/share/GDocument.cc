@@ -144,7 +144,7 @@ void GDocument::drawContents (QPainter& p, bool withBasePoints, bool outline) {
     }
 }
 
-void GDocument::drawContentsInRegion (QPainter& p, const Rect& r,
+void GDocument::drawContentsInRegion (QPainter& p, const Rect& r, const Rect& rr,
                                       bool withBasePoints, bool outline) {
   for (QListIterator<GLayer> i(layers); i.current(); ++i) {
     if (! (*i)->isInternal () && (*i)->isVisible ()) {
@@ -155,7 +155,7 @@ void GDocument::drawContentsInRegion (QPainter& p, const Rect& r,
             // intersects the active region
             //      const Rect& bbox = (*oi)->boundingBox ();
             //      if (r.intersects (bbox))
-            if ((*oi)->intersects (r))
+            if ((*oi)->intersects (rr))
                 (*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline);
         }
     }

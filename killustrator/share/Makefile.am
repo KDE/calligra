@@ -34,12 +34,12 @@ noinst_HEADERS = Handle.h GObject.h GPolyline.h GPolygon.h GOval.h \
 		 TransformationDialog.h \
 		 MainView.h PStateManager.h OptionDialog.h \
 		 units.h UnitBox.h \
-		 GLayer.h LayerDialog.h LayerView.h \
+		 GLayer.h LayerView.h \
 		 Gradient.h GradientShape.h \
 		 BrushCells.h PathTextTool.h \
 		 EllipseConfigDialog.h HelplineDialog.h \
 		 GCurve.h ToCurveCmd.h BlendDialog.h BlendCmd.h \
-		 filter_utils.h CanvasView.h \
+		 filter_utils.h \
 		 LayerPanel.h
 
 libkillu_la_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
@@ -75,13 +75,13 @@ libkillu_la_SOURCES = Handle.cc GObject.cc GPolyline.cc GPolygon.cc \
 			  TransformationDialog.cc \
 			  PStateManager.cc OptionDialog.cc \
 			  units.cc UnitBox.cc \
-			  GLayer.cc LayerDialog.cc LayerView.cc \
+			  GLayer.cc LayerView.cc \
 			  Gradient.cc GradientShape.cc \
 			  BrushCells.cc  \
 			  EllipseConfigDialog.cc \
 			  HelplineDialog.cc GCurve.cc ToCurveCmd.cc \
 			  BlendDialog.cc BlendCmd.cc \
-			  filter_utils.cc CanvasView.cc \
+			  filter_utils.cc \
 			  LayerPanel.cc
 
 METASOURCES =	AUTO

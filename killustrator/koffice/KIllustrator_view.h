@@ -54,8 +54,8 @@ class EditPointTool;
 class InsertPartTool;
 class GPart;
 class FilterManager;
-class CanvasView;
 class QWidget;
+class QScrollBar;
 
 class KAction;
 class KToggleAction;
@@ -210,7 +210,7 @@ protected:
     bool m_bShowRulers;
 
     ToolController *tcontroller;
-    CanvasView *scrollview;
+    QScrollBar *hBar, *vBar;
     Canvas *canvas;
     Ruler *hRuler, *vRuler;
     KStatusBar *statusbar;

@@ -137,7 +137,7 @@ void GridDialog::setupGrid (Canvas* canvas)
     canvas->showGrid (dialog.showGrid ());
     canvas->snapToGrid (dialog.snapToGrid ());
     canvas->setGridColor (dialog.gridColor());
-    canvas->updateView ();
+    canvas->repaint ();
    }
  }
 

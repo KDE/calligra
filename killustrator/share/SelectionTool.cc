@@ -95,6 +95,7 @@ void SelectionTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
 void SelectionTool::processButtonReleaseForHelpline (QMouseEvent *,
   GDocument *, Canvas* canvas) {
+
   if (dragHorizHelpline != -1) {
     canvas->updateHelplines ();
     dragHorizHelpline = -1;
@@ -111,7 +112,8 @@ void SelectionTool::processButtonReleaseForHelpline (QMouseEvent *,
 
 void SelectionTool::processButtonPressForHelpline (QMouseEvent *me,
   GDocument *, Canvas* canvas) {
-  float xpos = me->x (), ypos = me->y ();
+  float xpos = me->x() / canvas->getZoomFactor();
+  float ypos = me->y() / canvas->getZoomFactor();
   dragHorizHelpline = canvas->indexOfHorizHelpline (ypos);
   if (dragHorizHelpline != -1) {
     if (ctype != C_Vert) {
@@ -131,7 +133,9 @@ void SelectionTool::processButtonPressForHelpline (QMouseEvent *me,
 
 void SelectionTool::processMouseMoveForHelpline (QMouseEvent *me,
   GDocument *, Canvas* canvas) {
-  float xpos = me->x (), ypos = me->y ();
+  float xpos = me->x() / canvas->getZoomFactor();
+  float ypos = me->y() / canvas->getZoomFactor();
+
   if (dragHorizHelpline != -1) {
     canvas->updateHorizHelpline (dragHorizHelpline, ypos);
   }
@@ -333,14 +337,15 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
    * S_Rubberband
    */
   else if (state == S_Rubberband) {
-    selPoint[1].x (me->x ());
-    selPoint[1].y (me->y ());
+    selPoint[1].x (me->x () / canvas->getZoomFactor());
+    selPoint[1].y (me->y () / canvas->getZoomFactor());
     canvas->repaint ();
     QPainter painter;
     painter.save ();
     QPen pen (blue, 1, DotLine);
     painter.begin (canvas);
     painter.setPen (pen);
+    painter.translate(canvas->xOffset(), canvas->yOffset());
     float sfactor = canvas->scaleFactor ();
     painter.scale (sfactor, sfactor);
     Rect selRect (selPoint[0], selPoint[1]);
@@ -472,11 +477,12 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
 }
 
 void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
-                                             Canvas* /*canvas*/) {
+                                             Canvas* canvas) {
   int hmask;
   GObject *obj = 0L;
 
-  float xpos = me->x (), ypos = me->y ();
+  float xpos = me->x() / canvas->getZoomFactor();
+  float ypos = me->y() / canvas->getZoomFactor();
   //  canvas->snapPositionToGrid (xpos, ypos);
 
   firstpos.x (xpos);
@@ -492,7 +498,7 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
    * S_Init
    */
   if (state == S_Init) {
-    obj = doc->findContainingObject (me->x (), me->y ());
+    obj = doc->findContainingObject (me->x () / canvas->getZoomFactor(), me->y () / canvas->getZoomFactor());
     if (obj) {
       // an object will be selected
       state = S_Pick;
@@ -506,8 +512,8 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
       // no object
       state = S_Rubberband;
       doc->unselectAllObjects ();
-      selPoint[0].x(me->x ()); selPoint[0].y(me->y ());
-      selPoint[1].x(me->x ()); selPoint[1].y(me->y ());
+      selPoint[0].x(me->x () / canvas->getZoomFactor()); selPoint[0].y(me->y () / canvas->getZoomFactor());
+      selPoint[1].x(me->x () / canvas->getZoomFactor()); selPoint[1].y(me->y () / canvas->getZoomFactor());
     }
   }
   /************
@@ -637,6 +643,7 @@ void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
 void SelectionTool::translate (GDocument* doc, Canvas* canvas,
                                float dx, float dy, bool snap,
                                bool permanent) {
+   
   if (snap) {
     const Rect& obox = origbox;
     Rect newbox = canvas->snapTranslatedBoxToGrid (obox.translate (dx, dy));
@@ -646,7 +653,8 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
     }
   }
   if (dx == 0 && dy == 0)  return;
-
+//  kdDebug(0) << "snap=" << snap << endl;
+//kdDebug(0) << "DX=" << dx << " DY=" << dy << endl;
   if (permanent) {
       QListIterator<GObject> it(doc->getSelection());
       for( ; it.current(); ++it)
@@ -921,12 +929,12 @@ void SelectionTool::activate (GDocument* doc, Canvas*canvas) {
         }
         emit modeSelected (msgbuf);
     }
-    canvas->updateView();
+    canvas->repaint();
 }
 
 void SelectionTool::deactivate (GDocument* doc, Canvas* canvas) {
   doc->handle ().show (false);
-  canvas->updateView ();
+  canvas->repaint ();
 }
 
 #include <SelectionTool.moc>

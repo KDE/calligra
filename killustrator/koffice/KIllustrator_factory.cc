@@ -51,6 +51,7 @@ KAboutData* KIllustratorFactory::aboutData()
                                  KAboutData::License_GPL,
                                  "(c) 1998-2000, Kai-Uwe Sattler");
     s_aboutData->addAuthor("Kai-Uwe Sattler", 0, "kus@iti.cs.uni-magdeburg.de");
+    s_aboutData->addAuthor("Igor Janssen", 0, "rm@linux.ru.net");
   }
   return s_aboutData;
 }

@@ -175,7 +175,7 @@ void KIllustratorDocument::paintContent( QPainter& painter, const QRect& rect, b
 
     if ( !transparent )
         painter.fillRect( rect, white );
-    m_gdocument->drawContentsInRegion( painter, r );
+    m_gdocument->drawContentsInRegion( painter, r, r );
 }
 
 GDocument* KIllustratorDocument::gdoc()

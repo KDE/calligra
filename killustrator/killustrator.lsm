@@ -5,7 +5,7 @@ Entered-date: 14JUL99
 Description: Vector graphics application for KDE.
 Keywords: Vector-graphics, Drawing,  KDE, Qt, X11
 Author: kus@iti.cs.uni-magdeburg.de (Kai-Uwe Sattler)
-Maintained-by: kus@iti.cs.uni-magdeburg.de (Kai-Uwe Sattler)
+Maintained-by: rm@linux.ru.net (Igor Janssen)
 Primary-site: ftp://ftp.kde.org/pub/kde/unstable/apps/office
 File1: killustrator-0.7.tar.gz
 Original-site: http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator.html

@@ -63,7 +63,7 @@ public:
 
   void drawContents (QPainter& p, bool withBasePoints = false,
                      bool outline = false);
-  void drawContentsInRegion (QPainter& p, const Rect& r,
+  void drawContentsInRegion (QPainter& p, const Rect& r, const Rect& rr,
                              bool withBasePoints = false,
                              bool outline = false);
 

@@ -4,6 +4,7 @@
 
   This file is part of KIllustrator.
   Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2000-2001 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,7 +23,7 @@
 
 */
 
-#include <Canvas.h>
+#include "Canvas.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -39,35 +40,49 @@
 #include <GDocument.h>
 #include <Handle.h>
 #include <ToolController.h>
-#include <qscrollview.h>
 #include <kconfig.h>
 #include <kapp.h>
+#include <kdebug.h>
 
 #include <GPolyline.h> // for NEAR_DISTANCE
 #include <GLayer.h>
 #include <SelectionTool.h>
 
-Canvas::Canvas (GDocument* doc, float res, QScrollView* sv, QWidget* parent,
-                const char* name) : QWidget (parent, name) {
-  
+Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidget *parent, const char *name)
+   : QWidget (parent, name)
+ {
   document = doc;
   resolution = res;
   zoomFactor = 1.0;
   drawBasePoints = false;
-  scrollview = sv;
+  hBar = hb;
+  vBar = vb;
 
   installEventFilter(this);
 
-  connect (document, SIGNAL (changed ()), this, SLOT (updateView ()));
+  vBar->setLineStep(1);
+  hBar->setLineStep(1);
+
+  vBar->setPageStep(10);
+  hBar->setPageStep(10);
+  
+  connect(vBar, SIGNAL(valueChanged(int)), SLOT(scrollY(int)));
+  connect(hBar, SIGNAL(valueChanged(int)), SLOT(scrollX(int)));
+
+  connect (document, SIGNAL (changed ()), this, SLOT (repaint ()));
   connect (document, SIGNAL (changed (const Rect&)),
            this, SLOT (updateRegion (const Rect&)));
   connect (document, SIGNAL (sizeChanged ()), this, SLOT (calculateSize ()));
   connect (&(document->handle ()), SIGNAL (handleChanged ()),
-           this, SLOT (updateView ()));
+           this, SLOT (repain ()));
   connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
 
-  pixmap = 0L;
+  buffer = new QPixmap();
+  xPaper = 0;
+  yPaper = 0;
 
+  updateScrollBars();
+  
   helplinesAreOn = helplinesSnapIsOn = false;
   tmpHorizHelpline = tmpVertHelpline = -1;
   mGridColor = blue;
@@ -76,6 +91,7 @@ Canvas::Canvas (GDocument* doc, float res, QScrollView* sv, QWidget* parent,
   updateGridInfos ();
 
   calculateSize ();
+  
   setFocusPolicy (StrongFocus);
   setMouseTracking (true);
   setBackgroundMode (NoBackground);
@@ -84,63 +100,422 @@ Canvas::Canvas (GDocument* doc, float res, QScrollView* sv, QWidget* parent,
   ensureVisibilityFlag = false;
   outlineMode = false;
   pendingRedraws = 0;
-}
+ }
 
-Canvas::~Canvas () {
-  if (pixmap != 0L)
-    delete pixmap;
-}
+Canvas::~Canvas()
+ {
+  if (buffer != 0L)
+    delete buffer;
+ }
+
+void Canvas::resizeEvent(QResizeEvent *e)
+ {
+  buffer->resize(size());
+  mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
+  mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
+  emit visibleAreaChanged(mXOffset, mYOffset);
+ }
+
+QSize Canvas::actualSize()
+ {
+  int w = width() + actualPaperSizePt().width();
+  int h = height() + actualPaperSizePt().height();
+  return QSize(w, h);
+ }
+
+QSize Canvas::actualPaperSizePt() const
+ {
+  int w = (int) (document->getPaperWidth () * resolution * zoomFactor / 72.0);
+  int h = (int) (document->getPaperHeight () * resolution * zoomFactor / 72.0);
+  return QSize(w, h);
+ }
+
+void Canvas::updateScrollBars()
+ {
+  hBar->setRange(-actualSize().width()/2,actualSize().width()/2);
+  vBar->setRange(-actualSize().height()/2,actualSize().height()/2);
+  
+  if(hBar->value() > hBar->maxValue() || hBar->value() < hBar->minValue())
+   hBar->setValue(0);
+
+  if(vBar->value() > vBar->maxValue() || vBar->value() < vBar->minValue())
+   vBar->setValue(0);
+ }
+
+void Canvas::scrollX(int v)
+ {
+  xPaper = v;
+  mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
+  repaint();
+  emit visibleAreaChanged((width() - actualPaperSizePt().width())/2-xPaper,(height() - actualPaperSizePt().height())/2 -yPaper);
+ }
+ 
+void Canvas::scrollY(int v)
+ {
+  yPaper = v;
+
+  mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
+  repaint();
+  emit visibleAreaChanged((width() - actualPaperSizePt().width())/2-xPaper,(height() - actualPaperSizePt().height())/2 -yPaper);
+ }
+
+void Canvas::centerPage()
+ {
+  hBar->setValue(0);
+  vBar->setValue(0);
+ }
+
+/*
+    Draw
+*/
+
+void Canvas::paintEvent (QPaintEvent* e)
+ {
+  pendingRedraws = 0;
+
+  QPainter p;
+  float s = scaleFactor ();
+
+  // setup the painter
+  p.begin (buffer);
+  p.setBackgroundColor(white);
+  buffer->fill (white);
+
+
+  // clear the canvas
+  
+  // draw the grid
+  if(gridIsOn)
+   drawGrid (p);
+  
+  p.save();
+  
+  int w = (int) (document->getPaperWidth () * resolution * zoomFactor / 72.0);
+  int h = (int) (document->getPaperHeight () * resolution * zoomFactor / 72.0);
+  p.setPen(Qt::black);
+  p.translate(mXOffset, mYOffset);
+  p.drawRect (0, 0, w, h);
+  p.setPen (QPen(Qt::darkGray, 2));
+  p.moveTo (w+1, 1);
+  p.lineTo (w+1, h+1);
+  p.moveTo(w, h+1);
+  p.lineTo (1, h+1);
+  p.setPen(Qt::black);
+
+  // next the document contents
+  p.scale (s, s);
+  document->drawContents (p, drawBasePoints, outlineMode);
+
+  // and finally the handle
+  if (! document->selectionIsEmpty ())
+   document->handle ().draw (p);
+  
+  p.restore();
+
+  // draw the help lines
+  if (helplinesAreOn)
+    drawHelplines (p);
+
+  p.end ();
+
+  const QRect& rect = e->rect ();
+  bitBlt (this, rect.x (), rect.y (), buffer,
+            rect.x (), rect.y (), rect.width (), rect.height ());
+ }
 
 void Canvas::ensureVisibility (bool flag) {
   ensureVisibilityFlag = flag;
 }
 
-void Canvas::calculateSize () {
-  m_width = (int) (document->getPaperWidth () * resolution *
-                 zoomFactor / 72.0) + 4;
-  m_height = (int) (document->getPaperHeight () * resolution *
-                  zoomFactor / 72.0 + 4);
-  resize (m_width, m_height);
-
-  if (pixmap != 0L)
-    delete pixmap;
-  pixmap = 0L;
-  if (zoomFactor < 3.0)
-    pixmap = new QPixmap (m_width, m_height);
-  //viewport->recalculateChildPosition (this);
-  updateView ();
+void Canvas::calculateSize ()
+ {
+  buffer->resize(size());
+  repaint();
   emit sizeChanged ();
-}
+ }
 
-void Canvas::setZoomFactor (float factor) {
+void Canvas::setZoomFactor (float factor)
+ {
   zoomFactor = factor;
-  calculateSize ();
   // recompute pixmaps of fill areas
   document->invalidateClipRegions ();
-  int x = scrollview->viewport()->width()-width();
-  int y = scrollview->viewport()->height()-height();
-  if(x < 0)
-   x = 0;
-  if(y < 0)
-   y = 0;
-  move(x/2,y/2);
-  updateView ();
+  updateScrollBars();
+  mXOffset = (width() - actualPaperSizePt().width())/2 - xPaper;
+  mYOffset = (height() - actualPaperSizePt().height())/2 - yPaper;
+  repaint();
   emit sizeChanged ();
-  emit zoomFactorChanged (zoomFactor, x/2 ,y/2);
+  emit visibleAreaChanged((width() - actualPaperSizePt().width())/2-xPaper,(height() - actualPaperSizePt().height())/2 -yPaper);
+//  emit zoomFactorChanged (zoomFactor, x/2 ,y/2);
+ }
+
+void Canvas::setToolController (ToolController* tc)
+ {
+  toolController = tc;
+ }
+
+/*******************[Events]*******/
+
+void Canvas::mousePressEvent (QMouseEvent* e)
+ {
+  propagateMouseEvent (e);
+ }
+
+void Canvas::mouseReleaseEvent (QMouseEvent* e)
+ {
+  propagateMouseEvent (e);
+ }
+
+void Canvas::mouseMoveEvent (QMouseEvent* e)
+ {
+  propagateMouseEvent (e);
+ }
+
+void Canvas::propagateMouseEvent (QMouseEvent *e) {
+  // transform position of the mouse pointer according to current
+  // zoom factor
+  QPoint new_pos (qRound (e->x() - mXOffset),
+                  qRound (e->y() - mYOffset));
+  QMouseEvent new_ev (e->type (), new_pos, e->button (), e->state ());
+  
+  emit mousePositionChanged (new_ev.x(), new_ev.y());
+
+  // ensure visibility
+  if (ensureVisibilityFlag) {
+    if (e->type () == QEvent::MouseButtonPress && e->button () == LeftButton)
+      dragging = true;
+    else if (e->type () == QEvent::MouseButtonRelease && e->button () == LeftButton)
+      dragging = false;
+    else if (e->type () == QEvent::MouseMove && dragging);
+//      scrollview->ensureVisible (e->x (), e->y (), 10, 10);
+  }
+
+  if (e->button () == RightButton &&
+      e->type () == QEvent::MouseButtonPress && ! toolController->getActiveTool ()->consumesRMBEvents ()) {
+    if (document->selectionIsEmpty ()) {
+      GObject* obj = document->findContainingObject (new_pos.x (),
+                                                     new_pos.y ());
+      if (obj) {
+        // pop up menu for the picked object
+        emit rightButtonAtObjectClicked (e->x (), e->y (), obj);
+      }
+      else {
+        emit rightButtonClicked (e->x (), e->y ());
+      }
+    }
+    else {
+      // pop up menu for the current selection
+      emit rightButtonAtSelectionClicked (e->x (), e->y ());
+    }
+    return;
+  }
+  else
+    if (toolController) {
+      // the tool controller processes the event
+      toolController->delegateEvent (&new_ev, document, this);
+    }
 }
 
-float Canvas::getZoomFactor () const {
-  return zoomFactor;
+void Canvas::keyPressEvent (QKeyEvent* e)
+ {
+  if (toolController)
+   {
+    toolController->delegateEvent (e, document, this);
+   }
+ }
+
+bool Canvas::eventFilter (QObject *o, QEvent *e)
+ {
+  if(e->type () == QEvent::KeyPress)
+   {
+    QKeyEvent *ke = (QKeyEvent *) e;
+    if (ke->key () == Key_Tab) {
+      if (toolController->getActiveTool ()->isA ("SelectionTool"))
+        ((SelectionTool *)
+         toolController->getActiveTool ())->processTabKeyEvent (document,
+                                                                this);
+    }
+    else
+      keyPressEvent (ke);
+    return true;
+  }
+  return QWidget::eventFilter(o, e);
+ }
+
+void Canvas::moveEvent(QMoveEvent *e) {
+    emit visibleAreaChanged (e->pos ().x (), e->pos ().y ());
 }
 
-void Canvas::showGrid (bool flag) {
+
+
+void Canvas::setDocument(GDocument* doc)
+ {
+  document = doc;
+  updateGridInfos ();
+  connect (document, SIGNAL (changed ()), this, SLOT (repaint ()));
+  connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
+ }
+
+void Canvas::showBasePoints (bool flag) {
+  drawBasePoints = flag;
+  repaint();
+}
+
+void Canvas::setOutlineMode (bool flag) {
+  if (outlineMode != flag) {
+    outlineMode = flag;
+    repaint();
+  }
+}
+
+void Canvas::retryUpdateRegion () {
+  updateRegion (region);
+}
+
+void Canvas::updateRegion (const Rect& reg)
+ {
+  if (pendingRedraws == 0 && document->selectionCount () > 1)
+   {
+    // we have to update a multiple selection, so we collect
+    // the update regions and redraw it in one call
+    pendingRedraws = document->selectionCount () - 1;
+    regionForUpdate = reg;
+    return;
+   }
+
+  Rect r = reg;
+
+  if (pendingRedraws > 0)
+   {
+    regionForUpdate = regionForUpdate.unite (r);
+    pendingRedraws--;
+    if (pendingRedraws > 0)
+      // not the last redraw call
+      return;
+    else
+      r = regionForUpdate;
+   }
+
+/*  QPainter p;
+  float s = scaleFactor ();*/
+
+  // compute the clipping region
+  QWMatrix m;
+  
+  QRect clip = m.map (QRect (int (r.left () + mXOffset), int (r.top () + mYOffset),
+                             int (r.width ()), int (r.height ())));
+   
+  kdDebug(0) << "("<< clip.left() << "," << clip.top() << ")-(" << clip.right() << "," << r.bottom() << ")" << endl;
+
+  
+
+  // setup the clip region
+  if (clip.x () <= 1) clip.setX (1);
+  if (clip.y () <= 1) clip.setY (1);
+
+//  int mw = (int) ((float) document->getPaperWidth () * s);
+//  int mh = (int) ((float) document->getPaperHeight () * s);
+
+  if (clip.right () >= width())
+    clip.setRight (width());
+  if (clip.bottom () >= height())
+    clip.setBottom (height());
+  repaint (clip, false);
+  /*
+  // setup the painter
+  p.begin (buffer);
+  p.setBackgroundColor(white);
+  //buffer->fill (white);
+  p.setClipRect (clip);
+
+  p.eraseRect (rr.left (), rr.top (), rr.width (), rr.height ());
+  
+//  p.fillRect(rr.left (), rr.top (), rr.width (), rr.height (),red);
+  
+  if(gridIsOn)
+   drawGrid (p);
+   
+  int w = (int) (document->getPaperWidth () * resolution * zoomFactor / 72.0);
+  int h = (int) (document->getPaperHeight () * resolution * zoomFactor / 72.0);
+  p.setPen(Qt::black);
+  p.translate((width()-w)/2-xPaper, (height()-h)/2-yPaper);
+  p.drawRect (0, 0, w, h);
+  p.setPen (QPen(Qt::darkGray, 2));
+  p.moveTo (w+1, 1);
+  p.lineTo (w+1, h+1);
+  p.moveTo(w, h+1);
+  p.lineTo (1, h+1);
+  p.setPen(Qt::black);
+  // clear the canvas
+  p.scale (s, s);
+  //  p.translate (1, 1);
+  
+
+  // draw the grid
+  
+
+  // draw the help lines
+//  if (helplinesAreOn)
+//    drawHelplines (p);
+
+  // next the document contents
+  document->drawContentsInRegion (p, r, rr, drawBasePoints, outlineMode);
+
+  // and finally the handle
+  if (! document->selectionIsEmpty ())
+    document->handle ().draw (p);
+
+  p.end ();
+  bitBlt (this, rr.x (), rr.y (), buffer,
+            rr.x (), rr.y (), rr.width (), rr.height ());*/
+ }
+
+/***********************[PRINTER]*************************/
+
+void Canvas::setupPrinter( QPrinter &printer )
+{
+  printer.setDocName (document->fileName ());
+  printer.setCreator ("KIllustrator");
+  switch (document->pageLayout ().format) {
+  case PG_DIN_A4:
+    printer.setPageSize (QPrinter::A4);
+    break;
+  case PG_DIN_A5:
+    printer.setPageSize (QPrinter::B5);
+    break;
+  case PG_US_LETTER:
+    printer.setPageSize (QPrinter::Letter);
+    break;
+  case PG_US_LEGAL:
+    printer.setPageSize (QPrinter::Legal);
+    break;
+  default:
+    break;
+  }
+  printer.setOrientation (document->pageLayout ().orientation == PG_PORTRAIT ?
+                          QPrinter::Portrait : QPrinter::Landscape);
+  printer.setFullPage(true);
+}
+
+void Canvas::print( QPrinter &printer )
+{
+    QPainter paint;
+    paint.begin (&printer);
+    paint.setClipping (false);
+    document->drawContents (paint);
+    paint.end ();
+}
+
+/*************************[GRID]*************************/
+
+void Canvas::showGrid (bool flag)
+ {
   if (gridIsOn != flag) {
     gridIsOn = flag;
-    updateView ();
+    repaint();
     emit gridStatusChanged ();
     saveGridProperties ();
   }
-}
+ }
 
 void Canvas::snapToGrid (bool flag) {
   if (gridSnapIsOn != flag) {
@@ -192,7 +567,8 @@ Rect Canvas::snapTranslatedBoxToGrid (const Rect& r) {
 Rect Canvas::snapScaledBoxToGrid (const Rect& r, int hmask) {
   float x1, x2, y1, y2;
 
-  if (helplinesSnapIsOn || gridSnapIsOn) {
+  if (helplinesSnapIsOn || gridSnapIsOn)
+   {
     x1 = snapXPositionToGrid (r.left ());
     x2 = snapXPositionToGrid (r.right ());
     y1 = snapYPositionToGrid (r.top ());
@@ -208,7 +584,7 @@ Rect Canvas::snapScaledBoxToGrid (const Rect& r, int hmask) {
     if (hmask & Handle::HPos_Bottom)
       retval.bottom (y2);
     return retval;
-  }
+   }
   else
     return r;
 }
@@ -237,7 +613,8 @@ float Canvas::snapXPositionToGrid (float pos) {
   return pos;
 }
 
-float Canvas::snapYPositionToGrid (float pos) {
+float Canvas::snapYPositionToGrid (float pos)
+ {
   bool snap = false;
 
   if (helplinesSnapIsOn) {
@@ -259,7 +636,7 @@ float Canvas::snapYPositionToGrid (float pos) {
     pos = vGridDistance * n;
   }
   return pos;
-}
+ }
 
 void Canvas::snapPositionToGrid (float& x, float& y) {
   bool snap = false;
@@ -297,342 +674,27 @@ void Canvas::snapPositionToGrid (float& x, float& y) {
   }
 }
 
-void Canvas::setToolController (ToolController* tc) {
-  toolController = tc;
-}
-
-void Canvas::propagateMouseEvent (QMouseEvent *e) {
-  // transform position of the mouse pointer according to current
-  // zoom factor
-  QPoint new_pos (qRound (e->x () * 72 / (resolution * zoomFactor)) - 1,
-                  qRound (e->y () * 72 / (resolution * zoomFactor)) - 1);
-  QMouseEvent new_ev (e->type (), new_pos, e->button (), e->state ());
-
-  emit mousePositionChanged (new_pos.x (), new_pos.y ());
-
-  // ensure visibility
-  if (ensureVisibilityFlag) {
-    if (e->type () == QEvent::MouseButtonPress && e->button () == LeftButton)
-      dragging = true;
-    else if (e->type () == QEvent::MouseButtonRelease && e->button () == LeftButton)
-      dragging = false;
-    else if (e->type () == QEvent::MouseMove && dragging)
-      scrollview->ensureVisible (e->x (), e->y (), 10, 10);
-  }
-
-  if (e->button () == RightButton &&
-      e->type () == QEvent::MouseButtonPress && ! toolController->getActiveTool ()->consumesRMBEvents ()) {
-    if (document->selectionIsEmpty ()) {
-      GObject* obj = document->findContainingObject (new_pos.x (),
-                                                     new_pos.y ());
-      if (obj) {
-        // pop up menu for the picked object
-        emit rightButtonAtObjectClicked (e->x (), e->y (), obj);
-      }
-      else {
-        emit rightButtonClicked (e->x (), e->y ());
-      }
-    }
-    else {
-      // pop up menu for the current selection
-      emit rightButtonAtSelectionClicked (e->x (), e->y ());
-    }
-    return;
-  }
-  else
-    if (toolController) {
-      // the tool controller processes the event
-      toolController->delegateEvent (&new_ev, document, this);
-    }
-}
-
-void Canvas::propagateKeyEvent (QKeyEvent *e) {
-  if (toolController) {
-    toolController->delegateEvent (e, document, this);
-  }
-}
-
-void Canvas::mousePressEvent (QMouseEvent* e) {
-  propagateMouseEvent (e);
-}
-
-void Canvas::mouseReleaseEvent (QMouseEvent* e) {
-  propagateMouseEvent (e);
-}
-
-void Canvas::mouseMoveEvent (QMouseEvent* e) {
-  propagateMouseEvent (e);
-}
-
-void Canvas::keyPressEvent (QKeyEvent* e) {
-  propagateKeyEvent (e);
-}
-
-void Canvas::paintEvent (QPaintEvent* e) {
-  const QRect& rect = e->rect ();
-  if (pixmap != 0L)
-    bitBlt (this, rect.x (), rect.y (), pixmap,
-            rect.x (), rect.y (), rect.width (), rect.height ());
-  else
-    // For large zoom levels there is no pixmap to copy. So we
-    // have to redraw the whole document, but without to call
-    // repaint !!!
-    redrawView (false);
-}
-
-void Canvas::moveEvent (QMoveEvent *e) {
-    emit visibleAreaChanged (e->pos ().x (), e->pos ().y ());
-}
-
-void Canvas::setDocument (GDocument* doc) {
-  document = doc;
-  updateGridInfos ();
-  connect (document, SIGNAL (changed ()), this, SLOT (updateView ()));
-  connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
-}
-
-GDocument* Canvas::getDocument () {
-  return document;
-}
-
-void Canvas::showBasePoints (bool flag) {
-  drawBasePoints = flag;
-  updateView ();
-}
-
-void Canvas::setOutlineMode (bool flag) {
-  if (outlineMode != flag) {
-    outlineMode = flag;
-    updateView ();
-  }
-}
-
-float Canvas::scaleFactor () const {
-  return resolution * zoomFactor / 72.0;
-}
-
-void Canvas::updateView () {
-  redrawView (true);
-}
-
-void Canvas::redrawView (bool repaintFlag) {
-  QPaintDevice *pdev;
-  pendingRedraws = 0;
-
-  QPainter p;
-  float s = scaleFactor ();
-  int w = document->getPaperWidth (), h = document->getPaperHeight ();
-
-  // setup the painter
-  pdev = (pixmap ? (QPaintDevice *) pixmap : (QPaintDevice *) this);
-  p.begin (pdev);
-  p.setBackgroundColor(white);
-  if (pixmap)
-    pixmap->fill (backgroundColor ());
-
-  p.scale (s, s);
-
-  // clear the canvas
-  //  p.translate (1, 1);
-  p.eraseRect (0, 0, w, h);
-
-  p.setPen(Qt::black);
-  p.drawRect (0, 0, w - 2, h - 2);
-  p.setPen (QPen(Qt::darkGray, 2));
-  p.moveTo (w-1, 0);
-  p.lineTo (w-1, h);
-  p.moveTo(w, h-1);
-  p.lineTo (0, h-1);
-  p.setPen(Qt::black);
-
-  // draw the grid
-  if (gridIsOn)
-    drawGrid (p);
-
-  // draw the help lines
-  if (helplinesAreOn)
-    drawHelplines (p);
-
-  // next the document contents
-  document->drawContents (p, drawBasePoints, outlineMode);
-
-  // and finally the handle
-  if (! document->selectionIsEmpty ())
-    document->handle ().draw (p);
-
-  p.end ();
-  // Don't repaint if called form paintEvent () !!
-  if (repaintFlag)
-    repaint ();
-}
-
-void Canvas::retryUpdateRegion () {
-  updateRegion (region);
-}
-
-void Canvas::updateRegion (const Rect& reg) {
-  if (pendingRedraws == 0 && document->selectionCount () > 1) {
-    // we have to update a multiple selection, so we collect
-    // the update regions and redraw it in one call
-    pendingRedraws = document->selectionCount () - 1;
-    regionForUpdate = reg;
-    return;
-  }
-
-  Rect r = reg;
-
-  if (pendingRedraws > 0) {
-    regionForUpdate = regionForUpdate.unite (r);
-    pendingRedraws--;
-    if (pendingRedraws > 0)
-      // not the last redraw call
-      return;
-    else
-      r = regionForUpdate;
-  }
-
-  QPainter p;
-  float s = scaleFactor ();
-
-  // compute the clipping region
-  QWMatrix m;
-  m.scale (s, s);
-
-  QRect clip = m.map (QRect (int (r.left ()), int (r.top ()),
-                             int (r.width ()), int (r.height ())));
-
-  QPaintDevice *pdev = (pixmap ? (QPaintDevice *) pixmap : (QPaintDevice *) this);
-  if (pdev->paintingActive ()) {
-    // this occurs only in KOffice, when a embedded part tries
-    // to draw in our canvas
-    region = reg;
-    QTimer::singleShot (50, this, SLOT(retryUpdateRegion ()));
-    return;
-  }
-
-  // setup the painter
-  p.begin (pdev);
-  p.setBackgroundColor (white);
-  // setup the clip region
-  if (clip.x () <= 1) clip.setX (1);
-  if (clip.y () <= 1) clip.setY (1);
-
-  int mw = (int) ((float) document->getPaperWidth () * s);
-  int mh = (int) ((float) document->getPaperHeight () * s);
-
-  if (clip.right () >= mw)
-    clip.setRight (mw);
-  if (clip.bottom () >= mh)
-    clip.setBottom (mh);
-
-  p.setClipRect (clip);
-
-  // clear the canvas
-  p.scale (s, s);
-  //  p.translate (1, 1);
-  p.eraseRect (r.left (), r.top (), r.width (), r.height ());
-
-  // draw the grid
-  if (gridIsOn)
-    drawGrid (p);
-
-  // draw the help lines
-  if (helplinesAreOn)
-    drawHelplines (p);
-
-  // next the document contents
-  document->drawContentsInRegion (p, r, drawBasePoints, outlineMode);
-
-  // and finally the handle
-  if (! document->selectionIsEmpty ())
-    document->handle ().draw (p);
-
-  p.end ();
-  repaint (clip, false);
-}
-
-void Canvas::drawHelplines (QPainter& p) {
-  int pw = document->getPaperWidth ();
-  int ph = document->getPaperHeight ();
-
-  QPen pen (blue, 0, DashLine);
-
-  p.save ();
-  p.setPen (pen);
-  QValueList<float>::Iterator i;
-  for (i=horizHelplines.begin(); i!=horizHelplines.end(); ++i) {
-    int hi = qRound (*i);
-    p.drawLine (0, hi, pw, hi);
-  }
-  for (i = vertHelplines.begin(); i!=vertHelplines.end(); ++i) {
-    int vi = qRound (*i);
-    p.drawLine (vi, 0, vi, ph);
-  }
-
-  if (tmpHorizHelpline != -1) {
-    int hi = qRound (tmpHorizHelpline);
-    p.drawLine (0, hi, pw, hi);
-  }
-
-  if (tmpVertHelpline != -1) {
-    int vi = qRound (tmpVertHelpline);
-    p.drawLine (vi, 0, vi, ph);
-  }
-  p.restore ();
-}
-
 void Canvas::drawGrid (QPainter& p) {
-  int pw = document->getPaperWidth ();
-  int ph = document->getPaperHeight ();
   float h, v;
-
-  QPen pen1 (mGridColor, 0, DotLine);
+  float hd = hGridDistance * zoomFactor;
+  float vd = vGridDistance * zoomFactor;
+  QPen pen1 (mGridColor, 0);
 
   p.save ();
   p.setPen (pen1);
-  for (h = hGridDistance; h < pw; h += hGridDistance) {
+  h = ((width() - actualPaperSizePt().width())/2 - xPaper) % (int)hd;
+  for (; h < width(); h += hd) {
     int hi = qRound (h);
-    p.drawLine (hi, 0, hi, ph);
+    p.drawLine (hi, 0, hi, height());
   }
-  for (v = vGridDistance; v < ph; v += vGridDistance) {
+  
+  v = ((height() - actualPaperSizePt().height())/2 - yPaper) % (int)vd;
+  
+  for (; v < height() ; v += vd) {
     int vi = qRound (v);
-    p.drawLine (0, vi, pw, vi);
+    p.drawLine (0, vi, width(), vi);
   }
   p.restore ();
-}
-
-void Canvas::setupPrinter( QPrinter &printer )
-{
-  printer.setDocName (document->fileName ());
-  printer.setCreator ("KIllustrator");
-  switch (document->pageLayout ().format) {
-  case PG_DIN_A4:
-    printer.setPageSize (QPrinter::A4);
-    break;
-  case PG_DIN_A5:
-    printer.setPageSize (QPrinter::B5);
-    break;
-  case PG_US_LETTER:
-    printer.setPageSize (QPrinter::Letter);
-    break;
-  case PG_US_LEGAL:
-    printer.setPageSize (QPrinter::Legal);
-    break;
-  default:
-    break;
-  }
-  printer.setOrientation (document->pageLayout ().orientation == PG_PORTRAIT ?
-                          QPrinter::Portrait : QPrinter::Landscape);
-  printer.setFullPage(true);
-}
-
-void Canvas::print( QPrinter &printer )
-{
-    QPainter paint;
-    paint.begin (&printer);
-    paint.setClipping (false);
-    document->drawContents (paint);
-    paint.end ();
 }
 
 void Canvas::readGridProperties () {
@@ -675,64 +737,117 @@ void Canvas::saveGridProperties () {
   config->sync ();
 }
 
-void Canvas::drawTmpHelpline (int x, int y, bool horizH) {
+
+
+
+
+void Canvas::updateGridInfos () {
+  document->getGrid (hGridDistance, vGridDistance, gridSnapIsOn);
+  document->getHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
+  if (helplinesAreOn != document->layerForHelplines ()->isVisible ())
+    showHelplines (document->layerForHelplines ()->isVisible ());
+  else {
+    saveGridProperties ();
+    emit gridStatusChanged ();
+  }
+}
+
+/***************************HELPLINES********************/
+
+void Canvas::drawHelplines (QPainter& p)
+ {
+  QPen pen (blue, 0);//, DashLine);
+
+  p.save ();
+  p.setPen (pen);
+  QValueList<float>::Iterator i;
+  for (i=horizHelplines.begin(); i!=horizHelplines.end(); ++i) {
+    int hi = qRound (*i * zoomFactor) + mYOffset;
+    p.drawLine (0, hi, width(), hi);
+  }
+  for (i = vertHelplines.begin(); i!=vertHelplines.end(); ++i) {
+    int vi = qRound (*i * zoomFactor) + mXOffset;
+    p.drawLine (vi, 0, vi, height());
+  }
+
+  if (tmpHorizHelpline != -1) {
+    int hi = qRound (tmpHorizHelpline * zoomFactor) + mYOffset;
+    p.drawLine (0, hi, width(), hi);
+  }
+
+  if (tmpVertHelpline != -1) {
+    int vi = qRound (tmpVertHelpline * zoomFactor) + mXOffset;
+    p.drawLine (vi, 0, vi, height());
+  }
+  p.restore ();
+ }
+
+void Canvas::drawTmpHelpline (int x, int y, bool horizH)
+ {
   float pos = -1;
   // convert into document coordinates
   // and add helpline
-  if (horizH) {
-    pos = (float) y / zoomFactor - this->y ();
+  if(horizH)
+   {
+    pos = float(y - mYOffset) / zoomFactor;
     tmpHorizHelpline = pos;
-  }
-  else {
-    pos = (float) x / zoomFactor - this->x ();
+   }
+  else
+   {
+    pos = float(x - mXOffset) / zoomFactor;
     tmpVertHelpline = pos;
-  }
+   }
   // it makes no sense to hide helplines yet
   showHelplines (true);
-  if (helplinesAreOn)
-    updateView ();
-}
+  if(helplinesAreOn)
+   repaint();
+ }
 
-void Canvas::addHelpline (int x, int y, bool horizH) {
+void Canvas::addHelpline (int x, int y, bool horizH)
+ {
   float pos = -1;
   tmpHorizHelpline = tmpVertHelpline = -1;
   // convert into document coordinates
   // and add helpline
-  if (horizH) {
-    pos = (float) y / zoomFactor - this->y ();
+  if (horizH)
+   {
+    pos = float(y - mYOffset) / zoomFactor;
     addHorizHelpline (pos);
-  }
-  else {
-    pos = (float) x / zoomFactor - this->x ();
+   }
+  else
+   {
+    pos = float(x - mXOffset) / zoomFactor;
     addVertHelpline (pos);
-  }
-}
+   }
+ }
 
-void Canvas::addHorizHelpline  (float pos) {
+void Canvas::addHorizHelpline(float pos)
+ {
   horizHelplines.append(pos);
   if (helplinesAreOn)
-    updateView ();
+   repaint();
   document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
-}
+ }
 
-void Canvas::addVertHelpline  (float pos) {
+void Canvas::addVertHelpline(float pos)
+ {
   vertHelplines.append(pos);
   if (helplinesAreOn)
-    updateView ();
+   repaint();
   document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
-}
+ }
 
 void Canvas::setHorizHelplines (const QValueList<float>& lines) {
   horizHelplines = lines;
   if (helplinesAreOn)
-    updateView ();
+    repaint();
   document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
 }
 
 void Canvas::setVertHelplines (const QValueList<float>& lines) {
   vertHelplines = lines;
   if (helplinesAreOn)
-    updateView ();
+    repaint();
   document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
 }
 
@@ -758,7 +873,7 @@ void Canvas::showHelplines (bool flag) {
   if (helplinesAreOn != flag) {
     helplinesAreOn = flag;
     document->layerForHelplines ()->setVisible (helplinesAreOn);
-    updateView ();
+    repaint();
     emit gridStatusChanged ();
     saveGridProperties ();
   }
@@ -790,43 +905,18 @@ int Canvas::indexOfVertHelpline (float pos) {
 
 void Canvas::updateHorizHelpline (int idx, float pos) {
   horizHelplines[idx] = pos;
-  updateView ();
+  repaint();
 }
 
 void Canvas::updateVertHelpline (int idx, float pos) {
   vertHelplines[idx] = pos;
-  updateView ();
+  repaint();
 }
 
 void Canvas::updateHelplines () {
   document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
 }
 
-void Canvas::updateGridInfos () {
-  document->getGrid (hGridDistance, vGridDistance, gridSnapIsOn);
-  document->getHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
-  if (helplinesAreOn != document->layerForHelplines ()->isVisible ())
-    showHelplines (document->layerForHelplines ()->isVisible ());
-  else {
-    saveGridProperties ();
-    emit gridStatusChanged ();
-  }
-}
 
-bool Canvas::eventFilter (QObject *o, QEvent *e) {
-  if (e->type () == QEvent::KeyPress) {
-    QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == Key_Tab) {
-      if (toolController->getActiveTool ()->isA ("SelectionTool"))
-        ((SelectionTool *)
-         toolController->getActiveTool ())->processTabKeyEvent (document,
-                                                                this);
-    }
-    else
-      keyPressEvent (ke);
-    return true;
-  }
-  return QWidget::eventFilter(o, e);
-}
 
 #include <Canvas.moc>
