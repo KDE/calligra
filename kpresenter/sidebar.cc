@@ -33,6 +33,7 @@
 #include "sidebar.h"
 #include "kpresenter_view.h"
 #include "page.h"
+#include <qapplication.h>
 
 class OutlineItem: public QCheckListItem
 {
