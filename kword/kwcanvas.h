@@ -150,6 +150,9 @@ public:
     //koruler position
     QPoint rulerPos(int x=-1, int y=-1);
 
+    //for KWTextFrameSetEdit
+    void dragStarted() { m_mousePressed = false; }
+
 protected:
     /** Set format changes on selection on current cursor */
     void setFormat( QTextFormat *, int flags);

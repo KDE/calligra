@@ -2638,14 +2638,19 @@ void KWTextFrameSetEdit::copy()
 
 void KWTextFrameSetEdit::startDrag()
 {
-    kdDebug() << "KWTextFrameSetEdit::startDrag" << endl;
     mightStartDrag = FALSE;
     inDoubleClick = FALSE;
+    m_canvas->dragStarted();
     KWDrag *drag = newDrag( m_canvas->viewport() );
     if ( !frameSet()->kWordDocument()->isReadWrite() )
         drag->dragCopy();
     else {
         if ( drag->drag() && QDragObject::target() != m_canvas && QDragObject::target() != m_canvas->viewport() ) {
+            //This is when dropping text _out_ of KWord. Since we have Move and Copy
+            //options (Copy being accessed by pressing CTRL), both are possible.
+            //But is that intuitive enough ? Doesn't the user expect a Copy in all cases ?
+            //Losing the selection when dropping out of kword seems quite unexpected to me.
+            //Undecided about this........
             textFrameSet()->removeSelectedText( cursor );
         }
     }
@@ -2768,13 +2773,11 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint & nPoint,
 void KWTextFrameSetEdit::mouseMoveEvent( QMouseEvent * e, const QPoint & nPoint, const KoPoint & )
 {
     if ( mightStartDrag ) {
-        kdDebug() << "KWTextFrameSetEdit::mouseMoveEvent mightStartDrag=true" << endl;
         dragStartTimer->stop();
         if ( ( e->pos() - dragStartPos ).manhattanLength() > QApplication::startDragDistance() )
             startDrag();
         return;
     }
-    kdDebug() << "KWTextFrameSetEdit::mouseMoveEvent normal case (no drag)" << endl;
     QPoint iPoint;
     if ( textFrameSet()->normalToInternal( nPoint, iPoint ) )
         mousePos = iPoint;
@@ -2939,7 +2942,6 @@ void KWTextFrameSetEdit::focusOutEvent()
 
 void KWTextFrameSetEdit::doAutoScroll( QPoint pos )
 {
-    kdDebug() << "KWTextFrameSetEdit::doAutoScroll mightStartDrag=" << mightStartDrag << endl;
     if ( mightStartDrag )
         return;
     QPoint iPoint;

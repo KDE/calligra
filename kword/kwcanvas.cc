@@ -1735,6 +1735,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
             case QEvent::FocusOut:
                 if ( m_currentFrameSetEdit )
                     m_currentFrameSetEdit->focusOutEvent();
+                m_mousePressed = false;
                 return TRUE;
             case QEvent::KeyPress:
             {
