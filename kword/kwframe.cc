@@ -396,7 +396,9 @@ void KWFrameSet::deleteAnchor( KWAnchor * anchor )
     QTextCursor c( m_anchorTextFs->textDocument() );
     c.setParag( anchor->paragraph() );
     c.setIndex( anchor->index() );
-    c.remove(); // This deletes the character _and_ the customitem( anchor )
+    c.parag()->at( anchor->index() )->loseCustomItem();
+    c.remove(); // This deletes the character where the anchor was
+    // We don't delete the anchor since it might be in a customitemmap in a text-insert command
     c.parag()->setChanged( true );
 }
 
