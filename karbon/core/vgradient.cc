@@ -172,11 +172,11 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 	if( radial )
 	{
 		gradientStyle.addAttribute( "draw:style", "radial" );
-		gradientStyle.addAttribute( "draw:cx", "50%" );
-		gradientStyle.addAttribute( "draw:cy", "50%" );
+		gradientStyle.addAttributePt( "svg:cx", m_origin.x() );
+		gradientStyle.addAttributePt( "svg:cy", m_origin.y() );
 		double dx = m_vector.x() - m_origin.x();
 		double dy = m_vector.y() - m_origin.y();
-		gradientStyle.addAttributePt( "draw:r",  sqrt( dx * dx + dy * dy ) );
+		gradientStyle.addAttributePt( "svg:r",  sqrt( dx * dx + dy * dy ) );
 	}
 	else
 	{
@@ -209,8 +209,6 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 		elementWriter.endElement();
 	}
 
-	elementWriter.startElement( "svg:stop" );
-	elementWriter.endElement();
 	QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
 	gradientStyle.addChildElement( "svg:stop", elementContents );
 	return mainStyles.lookup( gradientStyle, "gradient" );
@@ -219,32 +217,30 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 void
 VGradient::loadOasis( const QDomElement &object, KoStyleStack &stack )
 {
-	kdDebug()<<" loadOasis :" << endl;
 	m_type = object.attribute( "draw:style" ) == "radial" ? VGradient::radial : VGradient::linear;
 	if( m_type == VGradient::radial )
 	{
 		// TODO : find out whether Oasis works with boundingBox only?
-		m_origin.setX( object.attribute( "svg:cx", "0.0" ).toDouble() );
-		m_origin.setY( object.attribute( "svg:cy", "0.0" ).toDouble() );
-		double r = object.attribute( "svg:r", "0.0" ).toDouble();
+		m_origin.setX( KoUnit::parseValue( object.attribute( "svg:cx" ) ) );
+		m_origin.setY( KoUnit::parseValue( object.attribute( "svg:cy" ) ) );
+		double r = KoUnit::parseValue( object.attribute( "svg:r" ) );
 		m_vector.setX( m_origin.x() + r );
 		m_vector.setY( m_origin.y() );
 	}
 	else
 	{
-		m_origin.setX( object.attribute( "svg:x1", "0.0" ).toDouble() );
-		m_origin.setY( object.attribute( "svg:y1", "0.0" ).toDouble() );
-		m_vector.setX( object.attribute( "svg:x2", "0.0" ).toDouble() );
-		m_vector.setY( object.attribute( "svg:y2", "0.0" ).toDouble() );
+		m_origin.setX( KoUnit::parseValue( object.attribute( "svg:x1" ) ) );
+		m_origin.setY( KoUnit::parseValue( object.attribute( "svg:y1" ) ) );
+		m_vector.setX( KoUnit::parseValue( object.attribute( "svg:x2" ) ) );
+		m_vector.setY( KoUnit::parseValue( object.attribute( "svg:y2" ) ) );
 	}
+	m_focalPoint = m_origin;
 	if( object.attribute( "svg:spreadMethod" ) == "repeat" )
 		m_repeatMethod = VGradient::repeat;
 	else if( object.attribute( "svg:spreadMethod" ) == "reflect" )
 		m_repeatMethod = VGradient::reflect;
 	else
 		m_repeatMethod = VGradient::none;
-
-	kdDebug()<<" loadOasis :" << object.attribute( "draw:style" ) << endl;
 
 	m_colorStops.clear();
 
@@ -259,6 +255,7 @@ VGradient::loadOasis( const QDomElement &object, KoStyleStack &stack )
 			if( colorstop.tagName() == "svg:stop" )
 			{
 				VColor color( QColor( colorstop.attribute( "svg:color" ) ) );
+				color.setOpacity( colorstop.attribute( "svg:stop-opacity", "1.0" ).toDouble() );
 				addStop( color, colorstop.attribute( "svg:offset", "0.0" ).toDouble(), 0.5 );
 			}
 		}
