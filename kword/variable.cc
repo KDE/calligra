@@ -26,6 +26,7 @@
 
 #include <komlMime.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 #include <strstream>
 #include <fstream>
@@ -74,8 +75,7 @@ QString KWVariableDateFormat::convert( KWVariable *_var )
 	return QString();
     }
 
-    // for now...
-    return dynamic_cast<KWDateVariable*>( _var )->getDate().toString();
+    return KGlobal::locale()->formatDate( dynamic_cast<KWDateVariable*>( _var )->getDate() );
 }
 
 /******************************************************************/
@@ -96,8 +96,8 @@ QString KWVariableTimeFormat::convert( KWVariable *_var )
 	return QString();
     }
 
-    // for now...
-    return dynamic_cast<KWTimeVariable*>( _var )->getTime().toString();
+
+    return KGlobal::locale()->formatTime( dynamic_cast<KWTimeVariable*>( _var )->getTime() );
 }
 
 /******************************************************************/
