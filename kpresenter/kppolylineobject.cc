@@ -130,41 +130,6 @@ double KPPolylineObject::load(const QDomElement &element)
     return offset;
 }
 
-/*===================== get angle ================================*/
-float KPPolylineObject::getAngle( const QPoint &p1, const QPoint &p2 )
-{
-    float _angle = 0.0;
-
-    if ( p1.x() == p2.x() ) {
-        if ( p1.y() < p2.y() )
-            _angle = 270.0;
-        else
-            _angle = 90.0;
-    }
-    else {
-        float x1, x2, y1, y2;
-
-        if ( p1.x() <= p2.x() ) {
-            x1 = p1.x(); y1 = p1.y();
-            x2 = p2.x(); y2 = p2.y();
-        }
-        else {
-            x2 = p1.x(); y2 = p1.y();
-            x1 = p2.x(); y1 = p2.y();
-        }
-
-        float m = -( y2 - y1 ) / ( x2 - x1 );
-        _angle = atan( m ) * RAD_FACTOR;
-
-        if ( p1.x() < p2.x() )
-            _angle = 180.0 - _angle;
-        else
-            _angle = -_angle;
-    }
-
-    return _angle;
-}
-
 /*======================== paint =================================*/
 void KPPolylineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 			      bool drawingShadow, bool drawContour )
@@ -196,7 +161,7 @@ void KPPolylineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 
             QPoint point = (*it1);
             if ( startPoint != point ) {
-                float angle = getAngle( startPoint, point );
+                float angle = KoPoint::getAngle( startPoint, point );
                 drawFigure( lineBegin, _painter, _zoomHandler->unzoomPoint( startPoint ), pen2.color(), _w, angle,_zoomHandler );
 
                 break;
@@ -216,7 +181,7 @@ void KPPolylineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 
             QPoint point = (*it2);
             if ( endPoint != point ) {
-                float angle = getAngle( endPoint, point );
+                float angle = KoPoint::getAngle( endPoint, point );
                 drawFigure( lineEnd, _painter, _zoomHandler->unzoomPoint( endPoint ), pen2.color(), _w, angle,_zoomHandler );
 
                 break;

@@ -64,9 +64,8 @@ public:
     virtual void resizeBy( double _dx, double _dy );
 
 protected:
-    float getAngle( const QPoint &p1, const QPoint &p2 );
     virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
-		bool drawingShadow, bool drawContour = FALSE );
+			bool drawingShadow, bool drawContour = FALSE );
 
     void updatePoints( double _fx, double _fy );
 

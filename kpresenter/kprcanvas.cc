@@ -488,7 +488,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     p.setRasterOp( Qt::NotROP );
 
                     p.save();
-                    double _angle = getAngle( _oldEndPoint, m_dragStartPoint );
+                    double _angle = KoPoint::getAngle( _oldEndPoint, m_dragStartPoint );
                     //FIXME
                     drawFigure( L_SQUARE, &p, m_view->zoomHandler()->unzoomPoint( _oldEndPoint ),
                                 _pen.color(), _pen.width(), _angle,m_view->zoomHandler()  ); // erase old figure
@@ -501,7 +501,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     QPoint _oldSymmetricEndPoint = QPoint( p_x, p_y );
 
                     p.save();
-                    _angle = getAngle( _oldSymmetricEndPoint, m_dragStartPoint );
+                    _angle = KoPoint::getAngle( _oldSymmetricEndPoint, m_dragStartPoint );
                     drawFigure( L_SQUARE, &p, m_view->zoomHandler()->unzoomPoint( _oldSymmetricEndPoint ),
                                 _pen.color(), _pen.width(), _angle,m_view->zoomHandler() );  // erase old figure
                     p.restore();
@@ -1245,10 +1245,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		oldMy = e->y()+diffy();
 	    } break;
 	    case TEM_ROTATE: {
-		double angle = getAngle( KoPoint( e->x() + diffx(), e->y() + diffy() ),
-				      KoPoint( axisX, axisY ) );
-		double angle1 = getAngle( KoPoint( firstX, firstY ),
-				      KoPoint( axisX, axisY ) );
+		double angle = KoPoint::getAngle( KoPoint( e->x() + diffx(), e->y() + diffy() ),
+						  KoPoint( axisX, axisY ) );
+		double angle1 = KoPoint::getAngle( KoPoint( firstX, firstY ),
+						   KoPoint( axisX, axisY ) );
 
 		angle -= angle1;
 		angle -= startAngle;
@@ -4987,7 +4987,7 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
         p.setRasterOp( Qt::NotROP );
 
         p.save();
-        double _angle = getAngle( oldEndPoint, m_dragStartPoint );
+        double _angle = KoPoint::getAngle( oldEndPoint, m_dragStartPoint );
         drawFigure( L_SQUARE, &p, m_view->zoomHandler()->unzoomPoint( oldEndPoint ), _pen.color(),
                     _pen.width(), _angle,m_view->zoomHandler() ); // erase old figure
         p.restore();
@@ -4999,7 +4999,7 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
         m_dragSymmetricEndPoint = QPoint( p_x, p_y );
 
         p.save();
-        _angle = getAngle( m_dragSymmetricEndPoint, m_dragStartPoint );
+        _angle = KoPoint::getAngle( m_dragSymmetricEndPoint, m_dragStartPoint );
         drawFigure( L_SQUARE, &p, m_view->zoomHandler()->unzoomPoint( m_dragSymmetricEndPoint ),
                     _pen.color(), _pen.width(), _angle,m_view->zoomHandler() );  // erase old figure
         p.restore();
@@ -5008,7 +5008,7 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
 
 
         p.save();
-        _angle = getAngle( m_dragEndPoint, m_dragStartPoint );
+        _angle = KoPoint::getAngle( m_dragEndPoint, m_dragStartPoint );
         drawFigure( L_SQUARE, &p, m_view->zoomHandler()->unzoomPoint( m_dragEndPoint ),
                     _pen.color(), _pen.width(), _angle,m_view->zoomHandler() ); // draw new figure
         p.restore();
@@ -5020,7 +5020,7 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
         m_dragSymmetricEndPoint = QPoint( p_x, p_y );
 
         p.save();
-        _angle = getAngle( m_dragSymmetricEndPoint, m_dragStartPoint );
+        _angle = KoPoint::getAngle( m_dragSymmetricEndPoint, m_dragStartPoint );
         drawFigure( L_SQUARE, &p, m_view->zoomHandler()->unzoomPoint( m_dragSymmetricEndPoint ),
                     _pen.color(), _pen.width(), _angle,m_view->zoomHandler() ); // draw new figure
         p.restore();
@@ -5085,41 +5085,6 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
     }
 
     p.end();
-}
-
-/*===================== get angle ================================*/
-double KPrCanvas::getAngle( const QPoint &p1, const QPoint &p2 )
-{
-    double _angle = 0.0;
-
-    if ( p1.x() == p2.x() ) {
-        if ( p1.y() < p2.y() )
-            _angle = 270.0;
-        else
-            _angle = 90.0;
-    }
-    else {
-        double x1, x2, y1, y2;
-
-        if ( p1.x() <= p2.x() ) {
-            x1 = p1.x(); y1 = p1.y();
-            x2 = p2.x(); y2 = p2.y();
-        }
-        else {
-            x2 = p1.x(); y2 = p1.y();
-            x1 = p2.x(); y1 = p2.y();
-        }
-
-        double m = -( y2 - y1 ) / ( x2 - x1 );
-        _angle = atan( m ) * RAD_FACTOR;
-
-        if ( p1.x() < p2.x() )
-            _angle = 180.0 - _angle;
-        else
-            _angle = -_angle;
-    }
-
-    return _angle;
 }
 
 void KPrCanvas::drawPolygon( const KoPoint &startPoint, const KoPoint &endPoint )
@@ -5228,10 +5193,4 @@ KPObject *KPrCanvas::getSelectedObj()
         return obj;
     obj=m_view->kPresenterDoc()->stickyPage()->getSelectedObj();
     return obj;
-}
-
-double KPrCanvas::getAngle( const KoPoint& p1, const KoPoint& p2 )
-{
-    double a = atan2( p2.x() - p1.x(), p2.y() - p1.y() ) + M_PI;
-    return ( - ( a * 360 ) / ( 2 * M_PI ) - 90 );
 }

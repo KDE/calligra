@@ -105,45 +105,6 @@ double KPLineObject::load(const QDomElement &element)
     return offset;
 }
 
-/*===================== get angle ================================*/
-float KPLineObject::getAngle( const KoPoint &p1, const KoPoint &p2 )
-{
-    float _angle = 0.0;
-
-    if ( p1.x() == p2.x() )
-    {
-        if ( p1.y() < p2.y() )
-            _angle = 270.0;
-        else
-            _angle = 90.0;
-    }
-    else
-    {
-        float x1, x2, y1, y2;
-
-        if ( p1.x() <= p2.x() )
-        {
-            x1 = p1.x(); y1 = p1.y();
-            x2 = p2.x(); y2 = p2.y();
-        }
-        else
-        {
-            x2 = p1.x(); y2 = p1.y();
-            x1 = p2.x(); y1 = p2.y();
-        }
-
-        float m = -( y2 - y1 ) / ( x2 - x1 );
-        _angle = atan( m ) * RAD_FACTOR;
-
-        if ( p1.x() < p2.x() )
-            _angle = 180.0 - _angle;
-        else
-            _angle = -_angle;
-    }
-
-    return _angle;
-}
-
 /*======================== paint =================================*/
 void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 			  bool drawingShadow, bool drawContour )
@@ -229,7 +190,7 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
         KoPoint pnt2( _zoomHandler->zoomItX( ow - unzoom_diff2_height / 2 - _w / 2 ),
                       _zoomHandler->zoomItY( oh - unzoom_diff2_width / 2 - _w / 2 ) );
 
-        float _angle = getAngle( pnt1, pnt2 );
+        float _angle = KoPoint::getAngle( pnt1, pnt2 );
 
         if ( lineBegin != L_NORMAL )
         {
@@ -272,7 +233,7 @@ void KPLineObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
         KoPoint pnt2( _zoomHandler->zoomItX( ow - unzoom_diff2_height / 2 - _w / 2 ),
                       _zoomHandler->zoomItY( unzoom_diff2_width / 2 + _w / 2 ) );
 
-        float _angle = getAngle( pnt1, pnt2 );
+        float _angle = KoPoint::getAngle( pnt1, pnt2 );
 
         if ( lineBegin != L_NORMAL )
         {

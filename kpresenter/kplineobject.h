@@ -65,7 +65,6 @@ public:
     virtual double load(const QDomElement &element);
 
 protected:
-    float getAngle( const KoPoint &p1, const KoPoint &p2 );
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
 			bool drawingShadow, bool drawContour = FALSE );
 

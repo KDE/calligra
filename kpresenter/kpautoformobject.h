@@ -76,7 +76,6 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc,double offset );
     virtual double load(const QDomElement &element);
 protected:
-    float getAngle( const QPoint &p1, const QPoint &p2 );
     virtual void paint( QPainter *_painter, KoZoomHandler *_zoomHandler,
 			bool drawingShadow, bool drawContour = FALSE );
 

@@ -180,45 +180,6 @@ double KPAutoformObject::load(const QDomElement &element)
     return offset;
 }
 
-/*===================== get angle ================================*/
-float KPAutoformObject::getAngle( const QPoint &p1, const QPoint &p2 )
-{
-    float _angle = 0.0;
-
-    if ( p1.x() == p2.x() )
-    {
-        if ( p1.y() < p2.y() )
-            _angle = 270.0;
-        else
-            _angle = 90.0;
-    }
-    else
-    {
-        float x1, x2, y1, y2;
-
-        if ( p1.x() <= p2.x() )
-        {
-            x1 = p1.x(); y1 = p1.y();
-            x2 = p2.x(); y2 = p2.y();
-        }
-        else
-        {
-            x2 = p1.x(); y2 = p1.y();
-            x1 = p2.x(); y1 = p2.y();
-        }
-
-        float m = -( y2 - y1 ) / ( x2 - x1 );
-        _angle = atan( m ) * RAD_FACTOR;
-
-        if ( p1.x() < p2.x() )
-            _angle = 180.0 - _angle;
-        else
-            _angle = -_angle;
-    }
-
-    return _angle;
-}
-
 /*======================== paint =================================*/
 void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
 			      bool drawingShadow, bool drawContour )
@@ -324,7 +285,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
                 if ( lineBegin != L_NORMAL )
                 {
                     QPoint pnt1( pntArray2.at( 0 ) ), pnt2( pntArray2.at( 1 ) ), pnt3, pnt4( pntArray.at( 0 ) );
-                    float _angle = getAngle( pnt1, pnt2 );
+                    float _angle = KoPoint::getAngle( pnt1, pnt2 );
 
                     switch ( static_cast<int>( _angle ) )
                     {
@@ -360,7 +321,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
                 {
                     QPoint pnt1( pntArray2.at( pntArray2.size() - 1 ) ), pnt2( pntArray2.at( pntArray2.size() - 2 ) );
                     QPoint  pnt3, pnt4( pntArray.at( pntArray.size() - 1 ) );
-                    float _angle = getAngle( pnt1, pnt2 );
+                    float _angle = KoPoint::getAngle( pnt1, pnt2 );
 
                     switch ( ( int )_angle )
                     {

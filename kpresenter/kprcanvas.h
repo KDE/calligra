@@ -330,8 +330,6 @@ protected:
 
     void drawCubicBezierCurve( int _dx, int _dy );
     void endDrawCubicBezierCurve();
-    double getAngle( const QPoint &p1, const QPoint &p2 );
-    double getAngle( const KoPoint& p1, const KoPoint& p2 );
 
 #ifndef NDEBUG
     void printRTDebug( int info );
