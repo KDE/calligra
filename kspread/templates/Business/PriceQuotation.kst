@@ -28,8 +28,8 @@
    </format>
   </style>
  </styles>
- <map markerColumn="5" activeTable="Sheet1" markerRow="17" >
-  <table columnnumber="0" printZoom="1" borders="0" printPageLimitX="0" hide="0" printPageLimitY="0" hidezero="0" grid="0" firstletterupper="0" printFormulaIndicator="0" printGrid="0" showFormulaIndicator="1" showFormula="0" lcmode="0" name="Sheet1" borders1.2="1" printCommentIndicator="0" >
+ <map markerColumn="1" activeTable="Price Quotation" markerRow="1" >
+  <table columnnumber="0" printZoom="1" borders="0" printPageLimitX="0" hide="0" printPageLimitY="0" hidezero="0" grid="0" firstletterupper="0" printFormulaIndicator="0" printGrid="0" showFormulaIndicator="1" showFormula="0" lcmode="0" name="PriceQuotation" borders1.2="1" printCommentIndicator="0" >
    <paper format="A4" orientation="Portrait" >
     <borders right="20" left="20" bottom="20" top="20" />
     <head/>
@@ -1890,7 +1890,11 @@
     </format>
    </cell>
    <cell row="2" column="5" >
-    <format style-name="Default" />
+    <format parent="Default" >
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
     <text outStr="Valid until" dataType="Str" >Valid until</text>
    </cell>
    <cell row="1" column="5" >
@@ -2028,6 +2032,13 @@
     <format style-name="Default" />
     <text outStr="Bill To:" dataType="Str" >Bill To:</text>
    </cell>
+   <cell row="8" column="2" >
+    <format bgcolor="#ffffff" parent="Default" >
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
+   </cell>
    <cell row="6" column="1" >
     <format style-name="Default" />
     <text outStr="Fax" dataType="Str" >Fax</text>
@@ -2037,7 +2048,60 @@
     <text outStr="Phone" dataType="Str" >Phone</text>
    </cell>
    <cell row="4" column="2" >
-    <format style-name="Default" />
+    <format parent="Default" >
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+    </format>
+   </cell>
+   <cell row="14" column="2" >
+    <format parent="Default" >
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+    </format>
+   </cell>
+   <cell row="31" column="1" >
+    <format parent="Default" >
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+    </format>
+   </cell>
+   <cell row="31" column="2" >
+    <format parent="Default" >
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+    </format>
+   </cell>
+   <cell row="31" column="3" >
+    <format parent="Default" >
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+    </format>
+   </cell>
+   <cell row="32" column="5" >
+    <format parent="Default" >
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+    </format>
+   </cell>
+   <cell row="4" column="5" >
+    <format parent="Default" >
+     <top-border>
+      <pen width="1" style="1" color="#000000" />
+     </top-border>
+    </format>
+   </cell>
+   <cell row="14" column="5" >
+    <format parent="Default" >
+     <bottom-border>
+      <pen width="1" style="1" color="#000000" />
+     </bottom-border>
+    </format>
    </cell>
    <cell row="4" column="1" >
     <format style-name="Default" />
@@ -2208,26 +2272,6 @@
    <column width="60" column="3" >
     <format style-name="Default" />
    </column>
-  </table>
-  <table columnnumber="0" printZoom="1" borders="0" printPageLimitX="0" hide="0" printPageLimitY="0" hidezero="0" grid="1" firstletterupper="0" printFormulaIndicator="0" printGrid="0" showFormulaIndicator="1" showFormula="0" lcmode="0" name="Sheet2" borders1.2="1" printCommentIndicator="0" >
-   <paper format="A4" orientation="Portrait" >
-    <borders right="20" left="20" bottom="20" top="20" />
-    <head/>
-    <foot/>
-   </paper>
-   <printrange-rect left-rect="0" right-rect="0" top-rect="0" bottom-rect="0" />
-   <printrepeatcolumns right="0" left="0" />
-   <printrepeatrows bottom="0" top="0" />
-  </table>
-  <table columnnumber="0" printZoom="1" borders="0" printPageLimitX="0" hide="0" printPageLimitY="0" hidezero="0" grid="1" firstletterupper="0" printFormulaIndicator="0" printGrid="0" showFormulaIndicator="1" showFormula="0" lcmode="0" name="Sheet3" borders1.2="1" printCommentIndicator="0" >
-   <paper format="A4" orientation="Portrait" >
-    <borders right="20" left="20" bottom="20" top="20" />
-    <head/>
-    <foot/>
-   </paper>
-   <printrange-rect left-rect="0" right-rect="0" top-rect="0" bottom-rect="0" />
-   <printrepeatcolumns right="0" left="0" />
-   <printrepeatrows bottom="0" top="0" />
   </table>
  </map>
 </spreadsheet>
