@@ -96,6 +96,7 @@ KoVariable* KWVariableCollection::loadOasisField( KoTextDocument* textdoc, const
     const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
     if ( isTextNS )
     {
+        //kdDebug()<<" localName :"<<localName<<endl;
         if ( localName ==  "note" )
         {
             QString key = "STRING";
@@ -104,13 +105,15 @@ KoVariable* KWVariableCollection::loadOasisField( KoTextDocument* textdoc, const
         }
         else if ( localName == "table-count"  ||
                   localName == "object-count"  ||
-                  localName == "image-count"  ||
+                  localName == "picture-count"  ||
                   localName == "paragraph-count"  ||
                   localName == "word-count"  ||
                   localName == "character-count" ||
                   localName == "sentence-count" ||
                   localName == "line-count" ||
-                  localName == "frame-count" )
+                  localName == "frame-count"  ||
+                  localName == "non-whitespace-character-count" ||
+                  localName == "syllable-count")
         {
             QString key = "NUMBER";
             int type = VT_STATISTIC;

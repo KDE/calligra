@@ -2661,6 +2661,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter.endElement(); // office:settings
     settingsWriter.endElement(); // Root element
     settingsWriter.endDocument();
+
     delete &settingsWriter;
 
     if(!store->close())
