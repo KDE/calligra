@@ -1,5 +1,5 @@
 KDE_CXXFLAGS=-UQT_NO_COMPAT
-INCLUDES=$(all_includes) -I$(srcdir)/..
+INCLUDES=-I$(srcdir)/.. $(all_includes)
 check_PROGRAMS = richtext
 richtext_SOURCES = main.cpp richtext.cpp
 richtext_LDADD = ../libqt3stuff.la $(LIB_QT)
