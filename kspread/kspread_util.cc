@@ -252,7 +252,7 @@ QString util_customNumberFormat( KLocale * locale, double value,
 
 QString
 util_customTimeFormat( KLocale * locale, QTime const & time,
-                       KSpreadCell::FormatType fmtType, 
+                       KSpreadCell::FormatType fmtType,
                        QString const & formatString )
 {
   int h = time.hour();
@@ -262,7 +262,7 @@ util_customTimeFormat( KLocale * locale, QTime const & time,
   bool pm = (h > 12);
   QString AMPM( pm ? i18n( "PM" ) : i18n( "AM" ) );
 
-  bool setPM = ( ( formatString.find( "AM", 0, false ) != -1 ) 
+  bool setPM = ( ( formatString.find( "AM", 0, false ) != -1 )
                  || ( formatString.find( "PM", 0, false ) != -1 ) );
 
   if ( setPM && h > 12 )
@@ -281,7 +281,7 @@ util_customTimeFormat( KLocale * locale, QTime const & time,
   bool hourSeen = false;
   bool minSeen = false;
   bool secSeen = false;
-  
+
   while ( i < l )
   {
     if ( i + 1 < l )
@@ -306,7 +306,7 @@ util_customTimeFormat( KLocale * locale, QTime const & time,
       else
         result += QString::number( s );
       break;
-      
+
      case 'M':
      case 'm':
       if ( minSeen )
@@ -323,7 +323,7 @@ util_customTimeFormat( KLocale * locale, QTime const & time,
       else
         result += QString::number( m );
       break;
-      
+
      case 'H':
      case 'h':
       if ( hourSeen )
@@ -362,11 +362,11 @@ util_customTimeFormat( KLocale * locale, QTime const & time,
       else
         result += formatString[i];
       break;
-      
+
      default:
       result += formatString[i];
     }
-    
+
     ++i;
   }
 
@@ -467,7 +467,7 @@ QString util_durationFormat(KLocale * locale, const KSpreadDuration & m_Duration
 }
 */
 
-void appendDay( QString & tmp, QString const & formatString, int & pos, int l, 
+void appendDay( QString & tmp, QString const & formatString, int & pos, int l,
                 QDate const & date, bool & daySeen, bool & weekDaySeen )
 {
   int num = 1;
@@ -486,7 +486,7 @@ void appendDay( QString & tmp, QString const & formatString, int & pos, int l,
   if ( num > 2 )
   {
     weekDaySeen = true;
-    int weekDay = date.dayOfWeek();    
+    int weekDay = date.dayOfWeek();
     switch ( weekDay )
     {
      case 1:
@@ -518,7 +518,7 @@ void appendDay( QString & tmp, QString const & formatString, int & pos, int l,
       break;
     }
   }
-  else 
+  else
   {
     if ( daySeen )
     {
@@ -540,7 +540,7 @@ void appendDay( QString & tmp, QString const & formatString, int & pos, int l,
   pos += num - 1; // -1, because we increase it again at the end of the loop in util_dateFormat
 }
 
-void appendMonth( QString & tmp, QString const & formatString, int & pos, int l, 
+void appendMonth( QString & tmp, QString const & formatString, int & pos, int l,
                   QDate const & date, bool & monthSeen )
 {
   int num = 1;
@@ -558,7 +558,7 @@ void appendMonth( QString & tmp, QString const & formatString, int & pos, int l,
 
   if ( num > 2 )
   {
-    int month = date.month();    
+    int month = date.month();
     switch ( month )
     {
      case 1:
@@ -610,7 +610,7 @@ void appendMonth( QString & tmp, QString const & formatString, int & pos, int l,
       break;
     }
   }
-  else 
+  else
   {
     if ( monthSeen )
     {
@@ -629,11 +629,11 @@ void appendMonth( QString & tmp, QString const & formatString, int & pos, int l,
     }
   }
 
-  pos += num - 1; // -1, because we increase it again at the end of the loop in util_dateFormat  
+  pos += num - 1; // -1, because we increase it again at the end of the loop in util_dateFormat
 }
 
-void appendYear( QString & tmp, QString const & formatString, 
-                 int & pos, int l, QDate const & date, bool & yearSeen )
+void appendYear( QString & tmp, QString const & formatString,
+                 int & pos, int /*l*/, QDate const & date, bool & yearSeen )
 {
   if ( yearSeen )
   {
@@ -667,17 +667,13 @@ void appendYear( QString & tmp, QString const & formatString,
 
 QString util_customDateFormat( KLocale * locale, QDate const & date,
                                KSpreadCell::FormatType fmtType,
-                               QString const & formatString ) 
+                               QString const & formatString )
 {
   if ( !g_Init )
     init( locale );
 
   QString tmp;
 
-  QChar next1;
-  QChar next2;
-  QChar next3;
-  QChar next4;
 
   bool yearSeen    = false;
   bool monthSeen   = false;
@@ -695,12 +691,12 @@ QString util_customDateFormat( KLocale * locale, QDate const & date,
      case 'd':
       appendDay( tmp, formatString, i, l, date, daySeen, weekDaySeen );
       break;
-          
+
      case 'M':
      case 'm':
       appendMonth( tmp, formatString, i, l, date, monthSeen );
       break;
-          
+
      case 'Y':
      case 'y':
       appendYear( tmp, formatString, i, l, date, yearSeen );
@@ -711,7 +707,7 @@ QString util_customDateFormat( KLocale * locale, QDate const & date,
     }
 
     ++i;
-  }     
+  }
 
   return tmp;
 }
@@ -859,9 +855,9 @@ util_dateFormat(KLocale * locale, const QDate &date,
 }
 
 
-QString util_dateTimeFormat( KLocale * locale, double date, KSpreadCell::FormatType fmtType, QString const & format )
+QString util_dateTimeFormat( KLocale * /*locale*/, double /*date*/, KSpreadCell::FormatType /*fmtType*/, QString const & /*format*/ )
 {
-  
+    return QString::null;
 }
 
 int util_decodeColumnLabelText( const QString &_col )

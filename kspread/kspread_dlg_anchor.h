@@ -70,6 +70,9 @@ class fileAnchor : public QWidget
 public:
   fileAnchor( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
   QString apply();
+
+private slots:
+    void slotSelectRecentFile( const QString &_file );
 private:
     QString createLink();
     KSpreadView* m_pView;

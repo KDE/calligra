@@ -33,6 +33,10 @@
 #include <klineedit.h>
 #include <kseparator.h>
 #include <qcheckbox.h>
+#include <kdesktopfile.h>
+#include <krecentdocument.h>
+#include <qcombobox.h>
+
 
 KSpreadLinkDlg::KSpreadLinkDlg( KSpreadView* parent, const char* /*name*/ )
 :  KDialogBase(KDialogBase::IconList,i18n("Insert Link") ,
@@ -288,6 +292,15 @@ fileAnchor::fileAnchor( KSpreadView* _view,QWidget *parent , char *name )
 
   tmpQLabel = new QLabel( this);
   lay2->addWidget(tmpQLabel);
+  tmpQLabel->setText(i18n("Recent File:"));
+
+
+  QComboBox * recentFile = new QComboBox( this );
+  lay2->addWidget(recentFile);
+
+
+  tmpQLabel = new QLabel( this);
+  lay2->addWidget(tmpQLabel);
   tmpQLabel->setText(i18n("File location:"));
   //l_file = new QLineEdit( this );
   l_file = new KURLRequester( this );
@@ -301,6 +314,27 @@ fileAnchor::fileAnchor( KSpreadView* _view,QWidget *parent , char *name )
   italic=new QCheckBox(i18n("Italic"),this);
 
   lay2->addWidget(italic);
+
+  QStringList fileList = KRecentDocument::recentDocuments();
+  QStringList lst;
+  lst <<"";
+  for (QStringList::ConstIterator it = fileList.begin();it != fileList.end(); ++it)
+  {
+      KDesktopFile f(*it, true /* read only */);
+      if ( !f.readURL().isEmpty())
+          lst.append( f.readURL());
+  }
+  if ( lst.count()<= 1 )
+  {
+      recentFile->clear();
+      recentFile->insertItem( i18n("No Entries") );
+      recentFile->setEnabled( false );
+  }
+  else
+      recentFile->insertStringList( lst);
+
+  connect( recentFile , SIGNAL(highlighted ( const QString &)), this,  SLOT( slotSelectRecentFile( const QString & )));
+
 
   KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
   bar1->setFixedHeight( 10 );
@@ -318,6 +352,12 @@ QString fileAnchor::apply()
     }
   return createLink();
 }
+
+void fileAnchor::slotSelectRecentFile( const QString &_file )
+{
+    l_file->lineEdit()->setText(_file );
+}
+
 
 QString fileAnchor::createLink()
 {
