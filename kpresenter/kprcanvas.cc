@@ -4708,10 +4708,12 @@ void KPrCanvas::moveObject( int x, int y, bool key )
             kpobject = objectList().at( i );
             if ( kpobject->isSelected() ) {
                 p.begin( this );
+                kpobject->moveBy(m_view->zoomHandler()->unzoomItX(-diffx()),m_view->zoomHandler()->unzoomItY(-diffy()));
                 kpobject->setMove( true );
                 kpobject->draw( &p, m_view->zoomHandler() );
                 kpobject->moveBy( newPosX, newPosY );
                 kpobject->draw( &p, m_view->zoomHandler() );
+                kpobject->moveBy(m_view->zoomHandler()->unzoomItX(diffx()),m_view->zoomHandler()->unzoomItY(diffy()));
                 p.end();
 
                 kpobject->setMove( false );
@@ -4720,6 +4722,7 @@ void KPrCanvas::moveObject( int x, int y, bool key )
                 br.moveBy( -x, -y );
                 _repaint( br );
                 _repaint( kpobject );
+
             }
         }
     }
