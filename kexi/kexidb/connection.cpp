@@ -1624,6 +1624,12 @@ bool Connection::setupKexiDBSystemSchema()
 	TableSchema *t_db = newKexiDBSystemTableSchema("kexi__db");
 	t_db->addField( new Field("db_property", Field::Text, Field::NoConstraints, Field::NoOptions, 32 ) )
 	.addField( new Field("db_value", Field::LongText ) );
+
+	TableSchema *t_parts = newKexiDBSystemTableSchema("kexi__parts");
+	t_parts->addField( new Field("p_id", Field::Integer, Field::PrimaryKey | Field::AutoInc, Field::Unsigned) )
+	.addField( new Field("p_name", Field::Text) )
+	.addField( new Field("p_mime", Field::Text ) )
+	.addField( new Field("p_url", Field::Text ) );
 	
 	return true;
 }
