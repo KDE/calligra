@@ -85,6 +85,9 @@ protected:
 
 private:
     GGroup &operator=(const GGroup &rhs);
+
+    static QString tagChildren;
+    static QString tagGGroup;
 };
 
 

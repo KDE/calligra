@@ -673,6 +673,11 @@ protected:
       */
     void checkValue();
 
+    QDomElement createElement( const QString &tagName, const QFont &font, QDomDocument &doc ) const;
+    QDomElement createElement( const QString& tagname, const QPen& pen, QDomDocument &doc ) const;
+    QFont toFont(QDomElement &element) const;
+    QPen toPen(QDomElement &element) const;
+
     /**
      * This cells row.
      * If it is 0, this is the default cell and its row/column can

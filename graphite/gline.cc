@@ -25,6 +25,12 @@
 #include <gline.h>
 
 
+QString GLine::tagGLine=QString::fromLatin1("gline");
+QString GLine::tagStart=QString::fromLatin1("start");
+QString GLine::tagEnd=QString::fromLatin1("end");
+QString GLine::attrX=QString::fromLatin1("x");
+QString GLine::attrY=QString::fromLatin1("y");
+
 GLine::GLine(const QPoint &a, const QPoint &b, const QString &name) : GObject(name),
 								      m_a(a), m_b(b) {
 }
@@ -42,11 +48,6 @@ GLine::GLine(const QDomElement &element) :
 	return;
 
     bool ok;
-    static QString tagGLine=QString::fromLatin1("gline");
-    static QString tagStart=QString::fromLatin1("start");
-    static QString tagEnd=QString::fromLatin1("end");
-    static QString attrX=QString::fromLatin1("x");
-    static QString attrY=QString::fromLatin1("y");
 
     if(element.tagName()!=tagGLine) {
 	m_ok=false;
@@ -94,11 +95,6 @@ GLine *GLine::instantiate(const QDomElement &element) const {
 
 QDomElement GLine::save(QDomDocument &doc) const {
 
-    static QString tagGLine=QString::fromLatin1("gline");
-    static QString tagStart=QString::fromLatin1("start");
-    static QString tagEnd=QString::fromLatin1("end");
-    static QString attrX=QString::fromLatin1("x");
-    static QString attrY=QString::fromLatin1("y");
     QDomElement e=doc.createElement(tagGLine);
     QDomElement point=doc.createElement(tagStart);
     point.setAttribute(attrX, m_a.x());

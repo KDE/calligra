@@ -3959,7 +3959,8 @@ void KSpreadTable::paste( const QPoint &_marker, PasteMode sp, Operation op )
 
     QBuffer buffer( b );
     buffer.open( IO_ReadOnly );
-    QDomDocument doc( &buffer );
+    QDomDocument doc;
+    doc.setContent( &buffer );
     buffer.close();
 
     // TODO: Test for parsing errors

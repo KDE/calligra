@@ -64,8 +64,8 @@ protected:
     void initRandomData();
 
 private:
-    QDomElement createElement(QString tagName, QDomDocument doc, const QFont &font);
-    QFont toFont(QDomElement &element);
+    QDomElement createElement(const QString &tagName, const QFont &font, QDomDocument &doc) const;
+    QFont toFont(QDomElement &element) const;
     KChartData currentData;
     KChartParameters* _params;
 };

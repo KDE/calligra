@@ -29,6 +29,9 @@
 #include <kdebug.h>
 
 
+QString GGroup::tagChildren=QString::fromLatin1("children");
+QString GGroup::tagGGroup=QString::fromLatin1("ggroup");
+
 GGroup::GGroup(const QString &name) : GObject(name), m_iterator(0L) {
     m_iterator=new QListIterator<GObject>(m_members);
 }
@@ -58,7 +61,6 @@ GGroup::GGroup(const QDomElement &element) :
 	return;
 
     m_iterator=new QListIterator<GObject>(m_members);
-    static QString tagChildren=QString::fromLatin1("children");
 
     QDomElement children=element.namedItem(tagChildren).toElement();
     if(children.isNull()) {
@@ -167,8 +169,6 @@ const GObject *GGroup::current() const {
 
 QDomElement GGroup::save(QDomDocument &doc) const {
 
-    static QString tagGGroup=QString::fromLatin1("ggroup");
-    static QString tagChildren=QString::fromLatin1("children");
     QDomElement element=doc.createElement(tagGGroup);
     QDomElement children=doc.createElement(tagChildren);
 

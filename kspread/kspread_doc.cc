@@ -269,7 +269,8 @@ bool KSpreadDoc::load( istream& in, KoStore* store )
     buffer.close();
 
     buffer.open( IO_ReadOnly );
-    QDomDocument doc( &buffer );
+    QDomDocument doc;
+    doc.setContent( &buffer );
 
     bool b = loadXML( doc, store );
 

@@ -2967,7 +2967,7 @@ QDomElement KSpreadCell::saveBottomMostBorder( QDomDocument& doc, int _x_offset,
     cell.setAttribute( "row", m_iRow - _y_offset );
     cell.setAttribute( "column", m_iColumn - _x_offset );
 
-    cell.appendChild( doc.createElement( "pen", m_topBorderPen ) );
+    cell.appendChild( createElement( "pen", m_topBorderPen, doc ) );
 
     return cell;
 }
@@ -2978,7 +2978,7 @@ QDomElement KSpreadCell::saveRightMostBorder( QDomDocument& doc, int _x_offset, 
     cell.setAttribute( "row", m_iRow - _y_offset );
     cell.setAttribute( "column", m_iColumn - _x_offset );
 
-    cell.appendChild( doc.createElement( "pen", m_leftBorderPen ) );
+    cell.appendChild( createElement( "pen", m_leftBorderPen, doc ) );
 
     return cell;
 }
@@ -3005,7 +3005,7 @@ bool KSpreadCell::loadBottomMostBorder( const QDomElement& cell, int _xshift, in
 
     QDomElement pen = cell.namedItem( "pen" ).toElement();
     if ( !pen.isNull() )
-	setTopBorderPen( pen.toPen() );
+	setTopBorderPen( toPen(pen) );
 
     return true;
 }
@@ -3032,7 +3032,7 @@ bool KSpreadCell::loadRightMostBorder( const QDomElement& cell, int _xshift, int
 
     QDomElement pen = cell.namedItem( "pen" ).toElement();
     if ( !pen.isNull() )
-	setLeftBorderPen( pen.toPen() );
+	setLeftBorderPen( toPen(pen) );
 
     return true;
 }
@@ -3076,7 +3076,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   format.setAttribute( "faktor", m_dFaktor );
 
   if ( m_textFont != m_pTable->defaultCell()->textFont() )
-    format.appendChild( doc.createElement( "font", m_textFont ) );
+    format.appendChild( createElement( "font", m_textFont, doc ) );
   if ( textFontUnderline())
   	{
   	QDomElement underline = doc.createElement( "underline" );
@@ -3095,25 +3095,25 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
     {
 	m_textPen.setColor( textColor() );
     }    	
-    format.appendChild( doc.createElement( "pen", m_textPen ) );
+    format.appendChild( createElement( "pen", m_textPen, doc ) );
   }
   format.setAttribute( "brushcolor",m_backGroundBrush.color().name() );
   format.setAttribute( "brushstyle",(int)m_backGroundBrush.style());
 
   QDomElement left = doc.createElement( "left-border" );
-  left.appendChild( doc.createElement( "pen", m_leftBorderPen ) );
+  left.appendChild( createElement( "pen", m_leftBorderPen, doc ) );
   format.appendChild( left );
 
   QDomElement top = doc.createElement( "top-border" );
-  top.appendChild( doc.createElement( "pen", m_topBorderPen ) );
+  top.appendChild( createElement( "pen", m_topBorderPen, doc ) );
   format.appendChild( top );
 
   QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
-  fallDiagonal.appendChild( doc.createElement( "pen", m_fallDiagonalPen ) );
+  fallDiagonal.appendChild( createElement( "pen", m_fallDiagonalPen, doc ) );
   format.appendChild( fallDiagonal );
 
   QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
-  goUpDiagonal.appendChild( doc.createElement( "pen", m_goUpDiagonalPen ) );
+  goUpDiagonal.appendChild( createElement( "pen", m_goUpDiagonalPen, doc ) );
   format.appendChild( goUpDiagonal );
 
   if((m_firstCondition!=0)||(m_secondCondition!=0)||(m_thirdCondition!=0))
@@ -3127,7 +3127,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   		first.setAttribute("val1",m_firstCondition->val1);
   		first.setAttribute("val2",m_firstCondition->val2);
 	  	first.setAttribute("color",m_firstCondition->colorcond.name());
-	  	first.appendChild( doc.createElement( "font", m_firstCondition->fontcond ) );
+	  	first.appendChild( createElement( "font", m_firstCondition->fontcond, doc ) );
 
   		condition.appendChild(first);
   		}
@@ -3138,7 +3138,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   		second.setAttribute("val1",m_secondCondition->val1);
   		second.setAttribute("val2",m_secondCondition->val2);
 	  	second.setAttribute("color",m_secondCondition->colorcond.name());
- 		second.appendChild( doc.createElement( "font", m_secondCondition->fontcond ) );
+ 		second.appendChild( createElement( "font", m_secondCondition->fontcond, doc ) );
 
 
   		condition.appendChild(second);
@@ -3150,7 +3150,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   		third.setAttribute("val1",m_thirdCondition->val1);
   		third.setAttribute("val2",m_thirdCondition->val2);
 	  	third.setAttribute("color",m_thirdCondition->colorcond.name());
- 		third.appendChild( doc.createElement( "font", m_thirdCondition->fontcond ) );
+ 		third.appendChild( createElement( "font", m_thirdCondition->fontcond, doc ) );
 
 
   		condition.appendChild(third);
@@ -3326,11 +3326,11 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 
 	QDomElement pen = f.namedItem( "pen" ).toElement();
 	if ( !pen.isNull() )
-	    setTextPen( pen.toPen() );
+	    setTextPen( toPen(pen) );
 
 	QDomElement font = f.namedItem( "font" ).toElement();
 	if ( !font.isNull() )
-	    setTextFont( font.toFont() );
+	    setTextFont( toFont(font) );
 
   	QDomElement underline = f.namedItem( "underline" ).toElement();
 	if ( !underline.isNull() )
@@ -3357,7 +3357,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         {
 	    QDomElement pen = left.namedItem( "pen" ).toElement();
 	    if ( !pen.isNull() )
-		setLeftBorderPen( pen.toPen() );
+		setLeftBorderPen( toPen(pen) );
 	}
 
 	QDomElement top = f.namedItem( "top-border" ).toElement();
@@ -3365,7 +3365,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         {
 	    QDomElement pen = top.namedItem( "pen" ).toElement();
 	    if ( !pen.isNull() )
-		setTopBorderPen( pen.toPen() );
+		setTopBorderPen( toPen(pen) );
 	}
 
 	QDomElement fallDiagonal = f.namedItem( "fall-diagonal" ).toElement();
@@ -3373,7 +3373,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         {
 	    QDomElement pen = fallDiagonal.namedItem( "pen" ).toElement();
 	    if ( !pen.isNull() )
-		setFallDiagonalPen( pen.toPen() );
+		setFallDiagonalPen( toPen(pen) );
 	}
 
 	QDomElement goUpDiagonal = f.namedItem( "up-diagonal" ).toElement();
@@ -3381,7 +3381,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         {
 	    QDomElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
 	    if ( !pen.isNull() )
-		setGoUpDiagonalPen( pen.toPen() );
+		setGoUpDiagonalPen( toPen(pen) );
 	}
 
 
@@ -3419,7 +3419,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 			}
 		QDomElement font = first.namedItem( "font" ).toElement();
 		if ( !font.isNull() )
-	    		m_firstCondition->fontcond=font.toFont() ;
+	    		m_firstCondition->fontcond=toFont(font) ;
 		
   	 	}
   	 	
@@ -3448,7 +3448,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 			}
 		QDomElement font = second.namedItem( "font" ).toElement();
 		if ( !font.isNull() )
-	    		m_secondCondition->fontcond=font.toFont() ;
+	    		m_secondCondition->fontcond=toFont(font) ;
 		
   	 	}
   	 	
@@ -3477,7 +3477,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 			}
 		QDomElement font = third.namedItem( "font" ).toElement();
 		if ( !font.isNull() )
-	    		m_thirdCondition->fontcond=font.toFont() ;
+	    		m_thirdCondition->fontcond=toFont(font) ;
   	 	}
 
   	}
@@ -3719,6 +3719,66 @@ KSpreadCellPrivate* SelectPrivate::copy( KSpreadCell* cell )
     p->m_iIndex = m_iIndex;
 
     return p;
+}
+
+QDomElement KSpreadCell::createElement( const QString &tagName, const QFont &font, QDomDocument &doc ) const {
+
+    QDomElement e=doc.createElement( tagName );
+
+    e.setAttribute( "family", font.family() );
+    e.setAttribute( "size", font.pointSize() );
+    e.setAttribute( "weight", font.weight() );
+    if ( font.bold() )
+	e.setAttribute( "bold", "yes" );
+    if ( font.italic() )
+	e.setAttribute( "italic", "yes" );
+
+    return e;
+}
+
+QDomElement KSpreadCell::createElement( const QString& tagname, const QPen& pen, QDomDocument &doc ) const {
+
+    QDomElement e=doc.createElement( tagname );
+    e.setAttribute( "color", pen.color().name() );
+    e.setAttribute( "style", (int)pen.style() );
+    e.setAttribute( "width", (int)pen.width() );
+    return e;
+}
+
+QFont KSpreadCell::toFont(QDomElement &element) const {
+
+    QFont f;
+    f.setFamily( element.attribute( "family" ) );
+
+    bool ok;
+    f.setPointSize( element.attribute("size").toInt( &ok ) );
+    if ( !ok ) return QFont();
+
+    f.setWeight( element.attribute("weight").toInt( &ok ) );
+    if ( !ok ) return QFont();
+
+    if ( element.hasAttribute( "italic" ) )
+	f.setItalic( TRUE );
+
+    if ( element.hasAttribute( "bold" ) )
+	f.setBold( TRUE );
+
+    return f;
+}
+
+QPen KSpreadCell::toPen(QDomElement &element) const {
+
+  bool ok;
+  QPen p;
+  p.setStyle( (Qt::PenStyle)element.attribute("style").toInt( &ok ) );
+  if ( !ok ) return QPen();
+
+  p.setWidth( element.attribute("width").toInt( &ok ) );
+  if ( !ok ) return QPen();
+
+  p.setColor( QColor( element.attribute("color") ) );
+
+  return p;
 }
 
 #include "kspread_cell.moc"
