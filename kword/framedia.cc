@@ -728,6 +728,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     rExistingFrameset->setText( i18n("Select existing frameset to connect frame to:") );
     tabLayout->addWidget( rExistingFrameset );
     myGroup->insert(rExistingFrameset,1);
+    connect (rExistingFrameset, SIGNAL( toggled(bool)), this, SLOT(ensureValidFramesetSelected()));
 
     QHBoxLayout *layout2 = new QHBoxLayout( 0, 0, 6);
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -739,6 +740,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     lFrameSList->setAllColumnsShowFocus( true );
     lFrameSList->header()->setMovingEnabled( false );
     connect( lFrameSList, SIGNAL(selectionChanged ()),this,SLOT(selectExistingFrameset ()) );
+    connect (lFrameSList, SIGNAL( selectionChanged()), this, SLOT(ensureValidFramesetSelected()));
 
     layout2->addWidget( lFrameSList );
     tabLayout->addLayout( layout2 );
@@ -1212,6 +1214,10 @@ void KWFrameDia::slotKeepRatioToggled(bool on)
 {
     if ( !on || !sw || !sh) return;
     calcRatio();
+}
+void KWFrameDia::ensureValidFramesetSelected()
+{
+    enableButtonOK( rNewFrameset->isChecked() || rExistingFrameset->isChecked() && lFrameSList->selectedItem() != NULL);
 }
 
 void KWFrameDia::calcRatio()

@@ -105,6 +105,7 @@ protected slots:
     void slotUpdateWidthForHeight(double height);
     void slotUpdateHeightForWidth( double width );
     void slotKeepRatioToggled(bool on);
+    void ensureValidFramesetSelected();
 private:
     // TAB 1:
     QWidget *tab1;
