@@ -201,6 +201,9 @@ public:
     /** returns true if we have a cell occupying that position */
     bool contains( unsigned int mx, unsigned int my );
 
+    /** override save so we save in table style.. */
+    virtual void save( QDomElement &parentElem );
+
     virtual void zoom();
 
     QString anchorType();

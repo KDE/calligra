@@ -1386,6 +1386,11 @@ kdDebug() << "zoom table" << endl;
     }
 }
 
+void KWTableFrameSet::save( QDomElement &parentElem ) {
+    for (unsigned int i =0; i < m_cells.count(); i++) {
+        m_cells.at(i)->save(parentElem);
+    }
+}
 
 
 
@@ -1399,6 +1404,7 @@ KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned 
     m_cols = 1;
     setGroupManager( m_table );
     m_table->addCell( this );
+    name = QString("table cell %1,%2").arg(m_row).arg(m_col);
 }
 
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, const Cell &original ) :
@@ -1409,6 +1415,7 @@ KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, const Cell &original ) :
     m_col = original.m_col;
     m_rows = original.m_rows;
     m_cols = original.m_cols;
+    setName(original.name);
     setGroupManager( m_table );
     m_table->addCell( this );
 }

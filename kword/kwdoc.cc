@@ -1174,7 +1174,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         if(! getFrameSet(i)) {
             kdWarning () << "frameset " << i << " is NULL!!" << endl;
             frames.remove(i);
-        } else if(getFrameSet(i)->getFrameType()==FT_TABLE) {
+        } else if(false && getFrameSet(i)->getFrameType()==FT_TABLE) {
             static_cast<KWTableFrameSet *>( getFrameSet(i))->validate();
         } else if(! getFrameSet(i)->getFrame(0)) {
             kdWarning () << "frameset " << i << " has no frames" << endl;
@@ -1335,7 +1335,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
         QDomElement framesetElem = listFramesets.item( item ).toElement();
         FrameType frameType;
         FrameInfo frameInfo;
-        QString _name;
+        QString tableName;
         int _row, _col, _rows, _cols;
         bool removeable;
         bool _visible;
@@ -1343,7 +1343,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
 
         frameType = static_cast<FrameType>( KWDocument::getAttribute( framesetElem, "frameType", FT_BASE ) );
         frameInfo = static_cast<FrameInfo>( KWDocument::getAttribute( framesetElem, "frameInfo", FI_BODY ) );
-        _name = correctQString( KWDocument::getAttribute( framesetElem, "grpMgr", "" ) );
+        tableName = correctQString( KWDocument::getAttribute( framesetElem, "grpMgr", "" ) );
         _row = KWDocument::getAttribute( framesetElem, "row", 0 );
         _col = KWDocument::getAttribute( framesetElem, "col", 0 );
         if ( framesetElem.attribute( "removeable" ) != QString::null )
@@ -1365,12 +1365,11 @@ void KWDocument::loadFrameSets( QDomElement framesets )
         switch ( frameType ) {
             case FT_TEXT: {
                 KWTextFrameSet *fs;
-                if ( !_name.isEmpty() ) {
+                if ( !tableName.isEmpty() ) {
                     KWTableFrameSet *table = 0L;
                     for ( unsigned int i = 0; i < frames.count(); i++ ) {
                         KWFrameSet *f = frames.at(i);
-                        if(! f->isVisible()) continue;
-                        if(f->getName() == _name) {
+                        if(f->getName() == tableName) {
                             table = static_cast<KWTableFrameSet *> (f);
                             break;
                         }
@@ -1378,19 +1377,17 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                     if ( !table ) {
                         table = new KWTableFrameSet( this );
 
-                        table->setName( _name );
+                        table->setName( tableName );
                         addFrameSet( table );
                     }
-                    fs = new KWTableFrameSet::Cell( table, _row, _col );
-                    fs->setVisible( _visible );
-                    fs->setName( fsname );
-                    fs->load( framesetElem );
-                    fs->setFrameInfo( frameInfo );
-                    fs->setIsRemoveableHeader( removeable );
-                    KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)fs;
+                    KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, _row, _col );
+                    cell->setVisible( _visible );
+                    cell->setName( fsname );
+                    cell->load( framesetElem );
+                    cell->setFrameInfo( frameInfo );
+                    cell->setIsRemoveableHeader( removeable );
                     cell->m_rows = _rows;
                     cell->m_cols = _cols;
-//                    grpMgr->addCell( cell, _row, _col );
                 }
                 else
                 {
@@ -1400,7 +1397,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                     fs->load( framesetElem );
                     fs->setFrameInfo( frameInfo );
                     fs->setIsRemoveableHeader( removeable );
-                    frames.append( fs );
+                    addFrameSet( fs );
                 }
 
                 // Old file format had autoCreateNewFrame as a frameset attribute,
@@ -1874,7 +1871,7 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
     {
         KWFrameSet * frameSet = fit.current();
         // don't add tables! A table cell ( frameset ) _must_ not have more than one frame!
-        if ( frameSet->getGroupManager()) continue;
+        if ( frameSet->getFrameType() == FT_TABLE ) continue;
 
         // KWFrameSet::addFrame triggers a reshuffle in the frames list (KWTextFrameSet::updateFrames)
         // which destroys the iterators -> append the new frames at the end.
