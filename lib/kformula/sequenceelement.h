@@ -435,7 +435,7 @@ private:
 
     static ElementCreationStrategy* creationStrategy;
     
-    int singlePipe; //The key '|' produces one '|' not '| |', '||' produces '| |'
+    bool singlePipe; //The key '|' produces one '|' not '| |', '||' produces '| |'
 };
 
 

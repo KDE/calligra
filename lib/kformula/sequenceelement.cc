@@ -66,7 +66,7 @@ void SequenceElement::setCreationStrategy( ElementCreationStrategy* strategy )
 
 
 SequenceElement::SequenceElement(BasicElement* parent)
-        : BasicElement(parent), parseTree(0), textSequence(true),singlePipe(1)
+        : BasicElement(parent), parseTree(0), textSequence(true),singlePipe(true)
 {
     assert( creationStrategy != 0 );
     children.setAutoDelete(true);
@@ -1233,68 +1233,71 @@ KCommand* SequenceElement::input( Container* container, QChar ch )
     case '(': {
         BracketRequest r( container->document()->leftBracketChar(),
                           container->document()->rightBracketChar() );
-        singlePipe = 1;
+        singlePipe = true;
         return buildCommand( container, &r );
     }
     case '[': {
         BracketRequest r( LeftSquareBracket, RightSquareBracket );
-        singlePipe = 1;
+        singlePipe = true;
         return buildCommand( container, &r );
     }
     case '{': {
         BracketRequest r( LeftCurlyBracket, RightCurlyBracket );
-        singlePipe = 1;
+        singlePipe = true;
         return buildCommand( container, &r );
     }
     case '|': {	
-        if (singlePipe == 0) { // We have had 2 '|' in a row so we want brackets
+        if (!singlePipe) { // We have had 2 '|' in a row so we want brackets
 
           DirectedRemove rDelete( req_remove, beforeCursor ); //Delete the previous '|' we dont need it any more
           KCommand* command = buildCommand( container, &rDelete );
           command->execute();
           
           BracketRequest rBracket( LeftLineBracket , RightLineBracket);
-          singlePipe = 1;
+          singlePipe = true;  //the next '|' will be a single pipe again
           return buildCommand( container, &rBracket );    
         }
-        else if (singlePipe == 1) { // We really do only want 1 '|'
+        else { // We really do only want 1 '|'
           TextCharRequest r(ch);
-          singlePipe = 0;
+
+          //in case another '|' character is entered right after this one, '| |' brackets are made; see above
+          singlePipe = false;
+
           return buildCommand( container, &r );   
         }
     }
     case '^': {
         IndexRequest r( upperRightPos );
-        singlePipe = 1;
+        singlePipe = true;
         return buildCommand( container, &r );
     }
     case '_': {
         IndexRequest r( lowerRightPos );
-        singlePipe = 1;
+        singlePipe = true;
         return buildCommand( container, &r );
     }
     case ' ': {
         Request r( req_compactExpression );
-        singlePipe = 1;
+        singlePipe = true;
         return buildCommand( container, &r );
     }
     case '}': {
         Request r( req_addEmptyBox );
-        singlePipe = 1;
+        singlePipe = true;
         return buildCommand( container, &r );
     }
     case ']':
     case ')':
-        singlePipe = 1; 
+        singlePipe = true; 
         break;
     case '\\': {
         Request r( req_addNameSequence );
-        singlePipe = 1;
+        singlePipe = true;
         return buildCommand( container, &r );
     }
     default: {
         TextCharRequest r( ch );
-        singlePipe = 1;
+        singlePipe = true;
         return buildCommand( container, &r );
     }
     }
