@@ -9,6 +9,7 @@ KPresenter's homepage: http://www.koffice.org/kpresenter
 This is free software, released under GPL v2.
 Author: Lukas Tinkl <lukas@kde.org>, 2002
 
+$Id$
 """
 
 import os, sys
@@ -16,6 +17,7 @@ import fileinput
 import string
 from xml.dom.DOMImplementation import implementation
 from xml.dom import Document
+from xml.dom import Element
 from xml.dom.ext import PrettyPrint
 
 def getYDpi():
@@ -34,7 +36,7 @@ Y_OFFSET=510
 class MgpImporter:
   def __init__(self):
     "Constructor"
-    self.charset="iso8859-1"
+    self.charset="iso8859-1" #TODO - move this into a reset() method to deal with page defaults
     self.alignment="1"       #text alignment, left
     self.textColor="black"
     self.pageBuffer=""
@@ -55,7 +57,7 @@ class MgpImporter:
     self.backtype="0"
     self.backview="0"
     self.bctype="0"          #single color (0) or gradient (non 0)
-    self.color1="white"
+    self.color1="black"
     self.color2="white"
 
   def __setFontSize(self, command):
@@ -112,14 +114,17 @@ class MgpImporter:
     #xsize=tokens[1]
     #ysize=tokens[2]
     #numcolors=tokens[3] or "256"
-    dir=tokens[4] or "0"
     #zoomflag=tokens[5] or "0"
-    if (len(tokens[6:])>2):
+    
+    try:
+      dir=tokens[4]
+      self.color1=string.replace(tokens[6].strip(),'"', '') #strip quotes and \n
+      self.color2=string.replace(tokens[7].strip(),'"', '')
+    except:
+      self.bctype="0"
+      self.color1="black"
+      self.color2="white"
       return
-      #print "Unsupported number of gradients colors."
-    else:
-      color1=string.replace(tokens[6].strip(),'"', '') #strip quotes and \n
-      color2=string.replace(tokens[7].strip(),'"', '')
 
     if (dir=="0"): #vertical
       value="1"
@@ -127,10 +132,10 @@ class MgpImporter:
       value="2"
     elif (dir=="180"): #vertical, swapped colors
       value="1"
-      color1,color2=color2,color1
+      self.color1,self.color2=self.color2,self.color1
     elif (dir=="270"): #horizontal, swapped colors
       value="2"
-      color1,color2=color2,color1
+      self.color1,self.color2=self.color2,self.color1
     elif (dir=="45"): #diagonal 1 
       value="3"
     elif (dir=="135"): #diagonal 2
@@ -139,8 +144,6 @@ class MgpImporter:
       value="1"
 
     self.bctype=value
-    self.color1=color1
-    self.color2=color2
     
   def __setAlign(self,command):
     tokens=string.split(command,' ')
@@ -198,26 +201,10 @@ class MgpImporter:
       elem.setAttribute("height", "440")
       objElem.appendChild(elem)
 
-      textElem=self.document.createElement("TEXTOBJ") #text object
-
-      pElem=self.document.createElement("P") #paragraph
-      pElem.setAttribute("align", self.alignment) 
-
-      elem=self.document.createElement("NAME") #style name
-      elem.setAttribute("value", "Standard")   ###is this needed at all?
-      pElem.appendChild(elem)
-
-      elem=self.document.createElement("TEXT") #paragraph text
-      elem.setAttribute("VERTALIGN", "0")
-      elem.setAttribute("family", self.fontName)
-      elem.setAttribute("pointSize", str(self.fontSize))
-      elem.setAttribute("color", self.textColor)
-      text=self.document.createTextNode(self.pageBuffer)
-      elem.appendChild(text)
-      pElem.appendChild(elem)
-
-      textElem.appendChild(pElem)
-      objElem.appendChild(textElem)
+      self.textElem=self.document.createElement("TEXTOBJ") #text object
+      ### para
+      
+      objElem.appendChild(self.textElem)
       parent.appendChild(objElem)
 
     self.useDefaults=1
@@ -225,6 +212,24 @@ class MgpImporter:
 
   def __handleText(self,line):
     self.pageBuffer+=unicode(line, self.charset, 'ignore')
+    
+    pElem=self.document.createElement("P") #paragraph
+    pElem.setAttribute("align", self.alignment) 
+
+    elem=self.document.createElement("NAME") #style name
+    elem.setAttribute("value", "Standard")   ###is this needed at all?
+    pElem.appendChild(elem)
+
+    elem=self.document.createElement("TEXT") #paragraph text
+    elem.setAttribute("VERTALIGN", "0")
+    elem.setAttribute("family", self.fontName)
+    elem.setAttribute("pointSize", str(self.fontSize))
+    elem.setAttribute("color", self.textColor)
+    text=self.document.createTextNode(unicode(line, self.charset, 'ignore'))
+    elem.appendChild(text)
+    pElem.appendChild(elem)
+    self.textElem.appendChild(pElem)
+    
     #print "*** text: " + line
 
   def __setCharset(self,command):
@@ -254,7 +259,7 @@ class MgpImporter:
     
     parent.appendChild(paperElem)
 
-  def convert(self, fileIn, fileOut):
+  def convert(self, fileIn, fileOut=None):
     """Parses the Magicpoint document and returns a KPresenter XML document.
 
     fileIn: path to the input file
@@ -272,6 +277,8 @@ class MgpImporter:
     self.__setPaper(rootElem)
     bgElem=self.document.createElement("BACKGROUND")
     objsElem=self.document.createElement("OBJECTS")
+
+    self.textElem=self.document.createElement("TEXTOBJ")  #default text object
     
     for line in fileinput.input(fileIn):
       if (line.startswith('#') or line.startswith('%%')): #skip comments
@@ -317,13 +324,17 @@ class MgpImporter:
     rootElem.appendChild(bgElem)
     rootElem.appendChild(objsElem)
     self.document.appendChild(rootElem)
-    PrettyPrint(self.document)
+
+    if fileOut:
+      PrettyPrint(self.document, open(fileOut[0], "w"))
+    else:
+      PrettyPrint(self.document, sys.stdout)
 
 if __name__ == '__main__':
-  if (len(sys.argv)==1):
+  if (len(sys.argv)==1 or len(sys.argv)>3):
     print """Magicpoint to KPresenter converter, (c) Lukas Tinkl <lukas@kde.org>, 2002
     Usage: mgp2kpr infile.mgp [outfile.kpr]
     If you give only one parameter, it will output to stdout."""
   else:
     importer=MgpImporter()
-    importer.convert(sys.argv[1], sys.argv[2:] or sys.stdout)
+    importer.convert(sys.argv[1], sys.argv[2:])
