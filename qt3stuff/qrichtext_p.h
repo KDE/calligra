@@ -420,7 +420,12 @@ public:
 	doc = doc; parag = parag; idx = idx; ox = ox; oy = oy;
     }
 
-    QTextDocument *parent;
+    QTextDocument *parent; // obsolete?
+    
+    QTextParag *paragraph() const { return parag; }
+    void setParagraph( QTextParag * p ) { parag = p; }
+private:
+    QTextParag *parag;
 };
 
 #if defined(Q_TEMPLATEDLL)
@@ -1177,6 +1182,7 @@ public:
     int nextTab( int x );
     void setTabArray( int *a );
     void setTabStops( int tw );
+    int *tabArray() const { return tArray; }
 
     void setPainter( QPainter *p );
     QPainter *painter() const { return pntr; }
@@ -1229,7 +1235,7 @@ private:
     int numCustomItems;
     QRect docRect;
     QTextFormatter *pFormatter;
-    int *tabArray;
+    int *tArray;
     int tabStopWidth;
     QTextParagData *eData;
     QPainter *pntr;
@@ -2483,10 +2489,12 @@ inline int QTextParag::minimumWidth() const
 
 inline void QTextParag::setTabArray( int *a )
 {
+#if 0
     if ( doc )
 	doc->setTabArray( a );
     else
-	tabArray = a;
+#endif
+	tArray = a;
 }
 
 inline void QTextParag::setTabStops( int tw )

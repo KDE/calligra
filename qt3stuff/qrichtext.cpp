@@ -955,12 +955,16 @@ void QTextCursor::gotoHome()
 void QTextCursor::gotoEnd()
 {
     if ( doc && !doc->lastParag()->isValid() )
+    {
+        qDebug("Last parag, %d, is invalid - aborting gotoEnd() !",doc->lastParag()->paragId());
 	return;
+    }
 
     tmpIndex = -1;
     if ( doc )
 	string = doc->lastParag();
     idx = string->length() - 1;
+    qDebug("gotoEnd: going to parag %d, index %d",string->paragId(),idx);
 }
 
 void QTextCursor::gotoPageUp( int visibleHeight )
@@ -1126,9 +1130,9 @@ void QTextCursor::splitAndInsertEmptyParag( bool ind, bool updateIds )
 #if 0
 		s->addCustomItem();
 		string->removeCustomItem();
+#endif
 		doc->unregisterCustomItem( item, string );
 		doc->registerCustomItem( item, s );
-#endif
 	    }
 	}
 	string->truncate( idx );
@@ -2494,6 +2498,7 @@ void QTextDocument::registerCustomItem( QTextCustomItem *i, QTextParag *p )
 	flow_->registerFloatingItem( i, i->placement() == QTextCustomItem::PlaceRight );
 	p->registerFloatingItem( i );
     }
+    i->setParagraph( p );
     customItems.append( i );
 }
 
@@ -2502,6 +2507,7 @@ void QTextDocument::unregisterCustomItem( QTextCustomItem *i, QTextParag *p )
     flow_->unregisterFloatingItem( i );
     p->unregisterFloatingItem( i );
     customItems.removeRef( i );
+    i->setParagraph( 0L );
 }
 
 bool QTextDocument::focusNextPrevChild( bool next )
@@ -2969,7 +2975,7 @@ QTextParag::QTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool u
     : invalid( 0 ), p( pr ), n( nx ), doc( d ), align( -1 ), numSubParag( -1 ),
       tm( -1 ), bm( -1 ), lm( -1 ), rm( -1 ), flm( -1 ), tc( 0 ),
       numCustomItems( 0 ), pFormatter( 0 ),
-      tabArray( 0 ), tabStopWidth( 0 ), eData( 0 ), pntr( 0 )
+      tArray( 0 ), tabStopWidth( 0 ), eData( 0 ), pntr( 0 )
 {
     visible = TRUE;
     newLinesAllowed = FALSE;
@@ -3040,8 +3046,8 @@ QTextParag::~QTextParag()
 	delete pFormatter;
 	delete commandHistory;
     }
-    if ( tabArray )
-	delete [] tabArray;
+    if ( tArray )
+	delete [] tArray;
     delete eData;
     QMap<int, QTextParagLineStart*>::Iterator it = lineStarts.begin();
     for ( ; it != lineStarts.end(); ++it )
@@ -3137,6 +3143,8 @@ void QTextParag::join( QTextParag *s )
 	    QTextCustomItem * item = s->str->at( i ).customItem();
 	    str->at( i + start ).setCustomItem( item );
 	    s->str->at( i ).loseCustomItem();
+	    doc->unregisterCustomItem( item, s );
+	    doc->registerCustomItem( item, this );
 	}
     }
   }
@@ -3908,22 +3916,28 @@ void QTextParag::decDepth()
 int QTextParag::nextTab( int x )
 {
     if ( doc ) {
-	tabArray = doc->tabArray();
+#if 0
+	tArray = doc->tabArray();
+#endif
 	tabStopWidth = doc->tabStopWidth();
     }
-    if ( tabArray ) {
+    if ( tArray ) {
 	int i = 0;
-	while ( tabArray[ i ] ) {
-	    if ( tabArray[ i ] >= x ) {
+	while ( tArray[ i ] ) {
+	    if ( tArray[ i ] >= x ) {
+#if 0
 		if ( doc )
-		    tabArray = 0;
-		return tabArray[ i ];
+		    tArray = 0;
+#endif
+		return tArray[ i ];
 	    }
 	    ++i;
 	}
+#if 0
 	if ( doc )
-	    tabArray = 0;
-	return tabArray[ 0 ];
+	    tArray = 0;
+#endif
+	return tArray[ 0 ];
     } else {
 	int d;
 	if ( tabStopWidth != 0 )
