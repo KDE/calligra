@@ -117,7 +117,7 @@ void DocBookWorker::ProcessPictureData ( const Picture  &picture )
 {
     QByteArray byteArray;
 
-    if ( loadKoStoreFile ( picture.koStoreName,byteArray ) )
+    if ( loadSubFile ( picture.koStoreName,byteArray ) )
     {
         QFileInfo fileInfo (exportFileName);
         QDir dir ( fileInfo.dirPath () );

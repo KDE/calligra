@@ -131,7 +131,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 
     kdDebug(30503) << "Image " << anchor.picture.koStoreName << " will be written in " << strImageName << endl;
 
-    if (loadKoStoreFile(anchor.picture.koStoreName,image))
+    if (loadSubFile(anchor.picture.koStoreName,image))
     {
         QFile file(strImagePath);
 
