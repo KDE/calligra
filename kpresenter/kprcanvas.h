@@ -238,6 +238,8 @@ public:
 
     void ensureVisible( int x, int y, int xmargin, int ymargin );
 
+    KoRect objectSelectedBoundingRect() const;
+
 public slots:
     void exitEditMode();
 

@@ -3093,7 +3093,12 @@ void KPresenterView::setupActions()
     actionZoomMinus = new KAction( i18n( "Zoom Page Width" ), 0,
                                    this, SLOT( zoomPageWidth() ),
                                    actionCollection(), "zoom_page_width" );
-
+    actionZoomSelectedObject= new KAction( i18n( "Zoom Selected object" ), 0,
+                                   this, SLOT( zoomSelectedObject() ),
+                                   actionCollection(), "zoom_selected_object" );
+    actionZoomPageHeight= new KAction( i18n( "Zoom Page Height" ), 0,
+                                   this, SLOT( zoomPageHeight() ),
+                                   actionCollection(), "zoom_page_height" );
 }
 
 void KPresenterView::textSubScript()
@@ -6097,6 +6102,7 @@ void KPresenterView::openPopupMenuZoom( const QPoint & _point )
     //for the future or today :)
     if(!koDocument()->isReadWrite() )
         return;
+    actionZoomSelectedObject->setEnabled( m_canvas->isOneObjectSelected());
     static_cast<QPopupMenu*>(factory()->container("zoom_popup",this))->popup(_point);
 }
 
@@ -6134,6 +6140,28 @@ int KPresenterView::getZoomEntirePage()
     int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
                      qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
     return zoom;
+}
+
+void KPresenterView::zoomSelectedObject()
+{
+    if(  m_canvas->isOneObjectSelected())
+    {
+        KoRect rect=m_canvas->objectSelectedBoundingRect();
+        double height = zoomHandler()->resolutionY() * rect.height();
+        double width = zoomHandler()->resolutionX() * rect.width();
+        int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
+                         qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
+        viewZoom( QString::number(zoom ) );
+
+        m_canvas->setToolEditMode( TEM_MOUSE );
+    }
+}
+
+void KPresenterView::zoomPageHeight()
+{
+    int zoom = qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptHeight ) );
+    viewZoom( QString::number(zoom ) );
+    m_canvas->setToolEditMode( TEM_MOUSE );
 }
 
 #include <kpresenter_view.moc>

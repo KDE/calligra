@@ -364,6 +364,8 @@ public slots:
     void zoomPageWidth();
     void zoomEntirePage();
     void zoomPlus();
+    void zoomSelectedObject();
+    void zoomPageHeight();
 
 public:
     // create GUI
@@ -895,6 +897,9 @@ private:
     KAction *actionZoomPageWidth;
     KAction *actionZoomEntirePage;
     KAction *actionZoomPlus;
+    KAction *actionZoomSelectedObject;
+    KAction *actionZoomPageHeight;
+
 
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;

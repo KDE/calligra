@@ -1019,6 +1019,14 @@ void KPrCanvas::calcBoundingRect()
 
 }
 
+KoRect KPrCanvas::objectSelectedBoundingRect() const
+{
+  KoRect objBoundingRect=KoRect();
+
+  objBoundingRect = m_activePage->getBoundingRect( objBoundingRect, m_view->kPresenterDoc());
+  objBoundingRect = stickyPage()->getBoundingRect( objBoundingRect, m_view->kPresenterDoc());
+  return objBoundingRect;
+}
 
 /*=================== handle mouse released ======================*/
 void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
