@@ -90,7 +90,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         resizeObjNum = 0L;
         editNum = 0L;
 	rotateNum = 0L;
-        setBackgroundColor( white );
+        setBackgroundMode( Qt::NoBackground );
         m_view = _view;
         setupMenus();
         setMouseTracking( true );

@@ -1344,6 +1344,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         horz->setEnabled( false );
         m_bShowGUI = false;
         m_canvas->reparent( ( QWidget* )0L, 0, QPoint( 0, 0 ), FALSE );
+        m_canvas->setPaletteBackgroundColor( Qt::white );
         m_canvas->showFullScreen();
         m_canvas->setFocusPolicy( QWidget::StrongFocus );
         m_canvas->startScreenPresentation( _presFakt, pgNum );
@@ -1401,7 +1402,7 @@ void KPresenterView::screenStop()
         horz->setEnabled( true );
         m_bShowGUI = true;
         m_canvas->setMouseTracking( true );
-        m_canvas->setBackgroundColor( white );
+        m_canvas->setBackgroundMode( Qt::NoBackground );
 
 	if ( m_screenSaverWasEnabled )
 	{

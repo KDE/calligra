@@ -27,15 +27,17 @@
 
 class KPresenterDoc;
 class KPresenterView;
+
 class KURLRequester;
 class KColorButton;
+class KListView;
+class KIntNumInput;
+class KLineEdit;
+class KComboBox;
 
 class QVBox;
 class QHBox;
-class QLineEdit;
-class QSpinBox;
-class QComboBox;
-class QListView;
+
 class QListViewItem;
 class QCloseEvent;
 class KProgress;
@@ -79,6 +81,7 @@ public:
     { path = _path; }
     void setZoom( int _zoom )
     { zoom = _zoom; }
+    void setEncoding( const QString &_encoding ) { m_encoding = _encoding; }
 
     QString getAuthor()
     { return author; }
@@ -98,6 +101,7 @@ public:
     { return path; }
     int getZoom()
     { return zoom; }
+    QString getEncoding() { return m_encoding; }
 
     struct SlideInfo {
         int pageNumber; /* 0-based */
@@ -141,7 +145,7 @@ protected:
     QString path;
     ImageFormat imgFormat;
     int zoom;
-
+    QString m_encoding;
 };
 
 /******************************************************************/
@@ -173,14 +177,14 @@ protected:
     KPWebPresentation webPres;
 
     QHBox *page1, *page2, *page3;
-    QLineEdit *author, *title, *email;//, *path;
+    KLineEdit *author, *title, *email;//, *path;
     KColorButton *textColor, *titleColor, *backColor;
-    QComboBox *format;
-    QSpinBox *zoom;
+    KComboBox *format, *encoding;
+    KIntNumInput *zoom;
     KURLRequester *path;
     //QPushButton *choosePath;
-    QListView *slideTitles;
-    QLineEdit *slideTitle;
+    KListView *slideTitles;
+    KLineEdit *slideTitle;
 
 protected slots:
     virtual void finish();

@@ -33,10 +33,6 @@
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
-#include <qlineedit.h>
-#include <qlistview.h>
 #include <qfileinfo.h>
 #include <qframe.h>
 #include <qfont.h>
@@ -62,6 +58,9 @@
 #include <kcharsets.h>
 #include <kurlrequester.h>
 #include <klineedit.h>
+#include <klistview.h>
+#include <knuminput.h>
+#include <kcombobox.h>
 
 #include "koDocumentInfo.h"
 
@@ -92,7 +91,8 @@ KPWebPresentation::KPWebPresentation( const QString &_config, KPresenterDoc *_do
 KPWebPresentation::KPWebPresentation( const KPWebPresentation &webPres )
     : config( webPres.config ), author( webPres.author ), title( webPres.title ), email( webPres.email ),
       slideInfos( webPres.slideInfos ), backColor( webPres.backColor ), titleColor( webPres.titleColor ),
-      textColor( webPres.textColor ), path( webPres.path ), imgFormat( webPres.imgFormat ), zoom( webPres.zoom )
+      textColor( webPres.textColor ), path( webPres.path ), imgFormat( webPres.imgFormat ), zoom( webPres.zoom ),
+      m_encoding( webPres.m_encoding )
 {
     doc = webPres.doc;
     view = webPres.view;
@@ -132,6 +132,7 @@ void KPWebPresentation::loadConfig()
     path = cfg.readEntry( "Path", path );
     imgFormat = static_cast<ImageFormat>( cfg.readNumEntry( "ImageFormat", static_cast<int>( imgFormat ) ) );
     zoom = cfg.readNumEntry( "Zoom", zoom );
+    m_encoding = cfg.readEntry( "Encoding", m_encoding );
 }
 
 /*================================================================*/
@@ -154,6 +155,7 @@ void KPWebPresentation::saveConfig()
     cfg.writeEntry( "Path", path );
     cfg.writeEntry( "ImageFormat", static_cast<int>( imgFormat ) );
     cfg.writeEntry( "Zoom", zoom );
+    cfg.writeEntry( "Encoding", m_encoding );
 }
 
 /*================================================================*/
@@ -212,9 +214,10 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
         view->getCanvas()->drawPageInPix( pix, pgNum );
         filename = QString( "%1/pics/slide_%2.%3" ).arg( path ).arg( i + 1 ).arg( format );
         if ( zoom != 100 ) {
-            QWMatrix m;
-            m.scale( ( (float)zoom ) / 100.0, ( (float)zoom ) / 100.0 );
-            pix = pix.xForm( m ); // maybe we should use smoothScale ?
+            int _w = (int)( (double)rect.width() * ( (double)zoom / 100.0 ) );
+            int _h = (int)( (double)rect.height() * ( (double)zoom / 100.0 ) );
+            QImage _img( pix.convertToImage().smoothScale( _w, _h, QImage::ScaleFree ) );
+            pix.convertFromImage( _img );
         }
         pix.save( filename, format.upper().latin1() );   //lukas: provide the option to choose image quality
 
@@ -232,7 +235,8 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
     int p;
     QString format = imageFormat( imgFormat );
 
-    QString chsetName = QTextCodec::codecForLocale()->mimeName();
+    QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
+    QString chsetName = codec->mimeName();
 
     QString html;
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
@@ -304,6 +308,16 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
             html += "\n";
 
         html += "  </CENTER><BR><HR noshade>\n";
+
+        QPtrList<KPrPage> _tmpList( doc->getPageList() );
+        QString note = _tmpList.at(i)->noteText();
+        if ( !note.isEmpty() ) {
+            html += QString( "  <B>%1</B>\n" ).arg( i18n( "Note" ) );
+            html += "  <PRE>\n";
+            html += note;
+            html += "  </PRE>\n";
+        }
+
         html += "  <CENTER>\n";
         html += "    <B>"+ i18n("Author:") + " </B>";
         if ( !email.isEmpty() )
@@ -319,6 +333,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         QFile file( QString( "%1/html/slide_%2.html" ).arg( path ).arg( pgNum ) );
         file.open( IO_WriteOnly );
         QTextStream t( &file );
+        t.setCodec( codec );
         t << html;
         file.close();
 
@@ -333,7 +348,8 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
 {
     QString html;
 
-    QString chsetName = QTextCodec::codecForLocale()->mimeName();
+    QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
+    QString chsetName = codec->mimeName();
 
     html = QString( "<HTML><HEAD><TITLE>%1 - ").arg( title );
     html += i18n("Table of Contents");
@@ -375,6 +391,7 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
     QFile file( QString( "%1/index.html" ).arg( path ) );
     file.open( IO_WriteOnly );
     QTextStream t( &file );
+    t.setCodec( codec );
     t << html;
     file.close();
 
@@ -421,6 +438,7 @@ void KPWebPresentation::init()
     path = KGlobalSettings::documentPath() + "www";
 
     zoom = 100;
+    m_encoding = QTextCodec::codecForLocale()->name();
 }
 
 /******************************************************************/
@@ -494,9 +512,9 @@ void KPWebPresentationWizard::setupPage1()
     QLabel *label4 = new QLabel( i18n(" Path: "), row4 );
     label4->setAlignment( Qt::AlignVCenter );
 
-    author = new QLineEdit( webPres.getAuthor(), row1 );
-    title = new QLineEdit( webPres.getTitle(), row2 );
-    email = new QLineEdit( webPres.getEmail(), row3 );
+    author = new KLineEdit( webPres.getAuthor(), row1 );
+    title = new KLineEdit( webPres.getTitle(), row2 );
+    email = new KLineEdit( webPres.getEmail(), row3 );
 
     path=new KURLRequester( row4 );
     path->fileDialog()->setMode( KFile::Directory);
@@ -516,11 +534,11 @@ void KPWebPresentationWizard::setupPage1()
 void KPWebPresentationWizard::setupPage2()
 {
     page2 = new QHBox( this );
-    page2->setSpacing( 5 );
-    page2->setMargin( 5 );
+    page2->setSpacing( 6 );
+    page2->setMargin( 6 );
 
     QLabel *helptext = new QLabel( page2 );
-    helptext->setMargin( 5 );
+    helptext->setMargin( 6 );
     helptext->setBackgroundMode( PaletteLight );
     QString help = i18n("Here you can configure the style\n"
                         "of the web pages (colors). You also\n"
@@ -551,6 +569,7 @@ void KPWebPresentationWizard::setupPage2()
     QHBox *row3 = new QHBox( canvas );
     QHBox *row4 = new QHBox( canvas );
     QHBox *row5 = new QHBox( canvas );
+    QHBox *row6 = new QHBox( canvas );
 
     QLabel *label1 = new QLabel( i18n(" Text Color: "), row1 );
     label1->setAlignment( Qt::AlignVCenter );
@@ -562,20 +581,29 @@ void KPWebPresentationWizard::setupPage2()
     label4->setAlignment( Qt::AlignVCenter );
     QLabel *label5 = new QLabel( i18n(" Zoom: "), row5 );
     label5->setAlignment( Qt::AlignVCenter );
+    QLabel *label6 = new QLabel( i18n( "Default Encoding:" ), row6 );
+    label6->setAlignment( Qt::AlignVCenter );
 
     textColor = new KColorButton( webPres.getTextColor(), row1 );
     titleColor = new KColorButton( webPres.getTitleColor(), row2 );
     backColor = new KColorButton( webPres.getBackColor(), row3 );
-    format = new QComboBox( false, row4 );
+    format = new KComboBox( false, row4 );
     format->insertItem( "BMP", -1 );
     format->insertItem( "PNG", -1 );
     if ( KImageIO::canWrite( "JPEG" ) )
         format->insertItem( "JPEG", -1 );
     format->setCurrentItem( static_cast<int>( webPres.getImageFormat() ) );
-    zoom = new QSpinBox( 1, 1000, 1, row5 );
+
+    zoom = new KIntNumInput( webPres.getZoom(), row5 );
     zoom->setSuffix( " %" );
-    zoom->setValue( webPres.getZoom() );
-    zoom->setMaximumHeight( zoom->sizeHint().height() );
+    zoom->setRange( 1, 1000, 1 );
+
+    encoding = new KComboBox( false, row6 );
+    QStringList _strList = KGlobal::charsets()->availableEncodingNames();
+    encoding->insertStringList( _strList );
+    QString _name = webPres.getEncoding();
+    encoding->setCurrentItem( _strList.findIndex( _name.lower() ) );
+
 
     addPage( page2, i18n( "Style" ) );
 
@@ -609,11 +637,11 @@ void KPWebPresentationWizard::setupPage3()
     label->setMinimumWidth( label->sizeHint().width() );
     label->setMaximumWidth( label->sizeHint().width() );
 
-    slideTitle = new QLineEdit( row );
+    slideTitle = new KLineEdit( row );
     connect( slideTitle, SIGNAL( textChanged( const QString & ) ), this,
              SLOT( slideTitleChanged( const QString & ) ) );
 
-    slideTitles = new QListView( canvas );
+    slideTitles = new KListView( canvas );
     slideTitles->addColumn( i18n( "Slide No." ) );
     slideTitles->addColumn( i18n( "Slide Title" ) );
     connect( slideTitles, SIGNAL( selectionChanged( QListViewItem * ) ), this,
@@ -623,7 +651,7 @@ void KPWebPresentationWizard::setupPage3()
 
     QValueList<KPWebPresentation::SlideInfo> infos = webPres.getSlideInfos();
     for ( int i = infos.count() - 1; i >= 0; --i ) {
-        QListViewItem *item = new QListViewItem( slideTitles );
+        KListViewItem *item = new KListViewItem( slideTitles );
         item->setText( 0, QString::number( i + 1 ) );
         //kdDebug(33001) << "KPWebPresentationWizard::setupPage3 " << infos[ i ].slideTitle << endl;
         item->setText( 1, infos[ i ].slideTitle );
@@ -654,6 +682,7 @@ void KPWebPresentationWizard::finish()
     webPres.setImageFormat( static_cast<KPWebPresentation::ImageFormat>( format->currentItem() ) );
     webPres.setPath( path->lineEdit()->text() );
     webPres.setZoom( zoom->value() );
+    webPres.setEncoding( encoding->currentText() );
 
     close();
     KPWebPresentationCreateDialog::createWebPresentation( doc, view, webPres );
