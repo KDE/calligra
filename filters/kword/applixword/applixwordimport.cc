@@ -230,7 +230,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QCString& from, cons
          **********************************************************************/
         else if (mystr.startsWith ("<P "))
 	{
-	   sscanf ( (const char *) mystr.latin1(), "<P \"%s\"", stylename);
+	   sscanf ( (const char *) mystr.latin1(), "<P \"%99s\"", stylename);
            mystr.remove (0, 5+strlen(stylename));
            kdDebug()<<" Para  Name: "<< stylename<<endl;
            kdDebug()<<"       Rest: "<<mystr<<endl;
