@@ -74,7 +74,10 @@ KexiQueryPart::remove(KexiMainWindow *win, KexiPart::Item &item)
 		return false;
 	KexiDB::Connection *conn = win->project()->dbConnection();
 	KexiDB::QuerySchema *sch = conn->querySchema(item.identifier());
-	return conn->dropQuery( sch );
+	if (sch)
+		return conn->dropQuery( sch );
+	//last chance: just remove item
+	return conn->removeObject( item.identifier() );
 }
 
 KexiPart::DataSource *

@@ -99,17 +99,11 @@ bool KexiTablePart::remove(KexiMainWindow *win, KexiPart::Item &item)
 		return false;
 
 	KexiDB::Connection *conn = win->project()->dbConnection();
-	KexiDB::TableSchema *sch = conn->tableSchema(item.name());
-	if(!sch) {
-		//js TODO add error msg
-		return false;
-	}
-
-	if (!conn->dropTable( sch )) {
-		//js TODO add error msg
-		return false;
-	}
-	return true;
+	KexiDB::TableSchema *sch = conn->tableSchema(item.identifier());
+	if(sch)
+		return conn->dropTable( sch );
+	//last chance: just remove item
+	return conn->removeObject( item.identifier() );
 }
 
 KexiDB::SchemaData*

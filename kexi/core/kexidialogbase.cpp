@@ -475,66 +475,6 @@ tristate KexiDialogBase::storeData()
 	return true;
 }
 
-#if 0
-bool KexiDialogBase::storeDataBlock_internal( const QString &dataString, int o_id, const QString& dataID )
-{
-	if (o_id<=0)
-		return false;
-	KexiDB::Connection *conn = m_parentWindow->project()->dbConnection();
-	KexiDB::Driver *drv = conn->driver();
-	
-	QString sql = "select kexi__objectdata.o_id from kexi__objectdata where o_id=" + QString::number(o_id);
-	QString sql_sub = KexiDB::sqlWhere(drv, KexiDB::Field::Text, "o_sub_id", dataID);
-
-	bool ok, exists;
-	exists = conn->resultExists(sql + " and " + sql_sub, ok);
-	if (!ok)
-		return false;
-	if (exists) {
-		return conn->executeSQL( "update kexi__objectdata set o_data="
-			+ drv->valueToSQL( KexiDB::Field::BLOB, dataString )
-			+ " where o_id=" + QString::number(o_id) + " and " + sql_sub );
-	}
-	return conn->executeSQL( 
-		"insert into kexi__objectdata (o_id, o_data, o_sub_id) values ("
-		+ QString::number(o_id) +"," + drv->valueToSQL( KexiDB::Field::BLOB, dataString )
-		+ "," + drv->valueToSQL( KexiDB::Field::Text, dataID ) + ")" );
-}
-
-bool KexiDialogBase::loadDataBlock( QString &dataString, const QString& dataID )
-{
-	KexiDB::Connection *conn = m_parentWindow->project()->dbConnection();
-	if (!conn->querySingleString(
-		QString("select o_data from kexi__objectdata where o_id=") + QString::number(id())
-		+ " and " + KexiDB::sqlWhere(conn->driver(), KexiDB::Field::Text, "o_sub_id", dataID), 
-		dataString ))
-	{
-		setStatus(conn, ""); 
-		return false;
-	}
-	return true;
-}
-
-bool KexiDialogBase::storeDataBlock( const QString &dataString, const QString& dataID )
-{
-	return storeDataBlock_internal(dataString, id(), dataID);
-}
-
-bool KexiDialogBase::removeDataBlock( QString & /*dataString*/, const QString& dataID)
-{
-	KexiDB::Connection *conn = m_parentWindow->project()->dbConnection();
-	bool ok;
-	if (dataID.isEmpty())
-		ok = KexiDB::deleteRow(*conn, "kexi__objectdata", "o_id", QString::number(id()));
-	else
-		ok = KexiDB::deleteRow(*conn, "kexi__objectdata", 
-		"o_id", KexiDB::Field::Integer, id(), "o_sub_id", KexiDB::Field::Text, dataID);
-	if (!ok)
-		setStatus(conn, ""); 
-	return ok;
-}
-#endif
-
 void KexiDialogBase::activate()
 {
 	KexiViewBase *v = selectedView();

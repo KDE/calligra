@@ -390,6 +390,11 @@ TableView
 -- update width when number of digits in rows counter changes
 Main
 - preferences and configureToolbars actions ifdefed using KEXI_SHOW_UNIMPLEMENTED
+Plugins
+- Default implementation of Part::remove() added again. 
+  This is enough eg. for Form plugin.
+- table and query plugin: Connection::eemoveObject() is called even 
+  if object's could not be loaded, what allows to remove invalid objects.
 
 2004-10-22
 TableView

@@ -289,6 +289,14 @@ void Part::initInstanceActions()
 {
 }
 
+bool Part::remove(KexiMainWindow *win, KexiPart::Item &item)
+{
+	if (!win || !win->project() || !win->project()->dbConnection())
+		return false;
+	KexiDB::Connection *conn = win->project()->dbConnection();
+	return conn->removeObject( item.identifier() );
+}
+
 //-------------------------------------------------------------------------
 
 

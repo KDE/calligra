@@ -70,9 +70,9 @@ class KEXICORE_EXPORT Part : public QObject
 		 and it will be rolled back if you return false here.
 		 You shouldn't use by hand transactions here.
 		 
-		 Default implementation does nothing and returns true. */
-		virtual bool remove(KexiMainWindow * /*win*/, KexiPart::Item & /*item*/)
-			{ return true; }
+		 Default implementation just removes object from kexi__* system structures 
+		 at the database backend using KexiDB::Connection::removeObject(). */
+		virtual bool remove(KexiMainWindow *win, KexiPart::Item & item);
 
 		/*! Renames stored data pointed by \a item to \a newName 
 		 (example: table name is altered in the database). 

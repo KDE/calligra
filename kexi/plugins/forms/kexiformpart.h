@@ -49,8 +49,6 @@ class KexiFormPart : public KexiPart::Part
 		KexiFormPart(QObject *parent, const char *name, const QStringList &);
 		virtual ~KexiFormPart();
 
-		//virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
-
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog,
 			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 
