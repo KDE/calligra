@@ -1452,8 +1452,11 @@ void KoCustomVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*con
 
 void KoCustomVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
 {
-    kdWarning(32500) << "Not implemented: OASIS saving of custom variables" << endl;
-
+    //todo save value into meta:user-defined
+    writer.startElement( "text:user-defined" );
+    writer.addAttribute( "text:name", m_varValue.toString() );
+    writer.addTextNode( value() );
+    writer.endElement();
 }
 
 QString KoCustomVariable::value() const
@@ -2171,7 +2174,19 @@ QString KoNoteVariable::fieldCode()
 
 void KoNoteVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
-    // TODO
+    //todo save date
+    const QCString afterText( elem.tagName().latin1() );
+    QString note;
+    if (afterText == "office:annotation") {
+        QDomNode date = elem.namedItem( "dc:date" );
+        for ( QDomNode text = date.firstChild(); !text.isNull(); text = text.nextSibling() )
+        {
+            QDomElement t = text.toElement();
+            note += t.text() + "\n";
+        }
+        kdDebug()<<" note :"<<note<<endl;
+    }
+    m_varValue=QVariant( note  );
 }
 
 void KoNoteVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
