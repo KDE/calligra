@@ -29,6 +29,8 @@ DESCRIPTION
 
 #include <myfile.h>
 #include <qdatastream.h>
+#include <qlist.h>
+#include <qmap.h>
 #include <qobject.h>
 
 class Powerpoint:
@@ -70,8 +72,10 @@ private:
     typedef unsigned int U32;
 
     myFile m_mainStream;
+    QMap<unsigned, unsigned> m_persistentReferences;
+    QList<unsigned> m_slidePersists;
 
-    // Common Header (MSOBFH)
+    // Common Header.
 
     typedef struct
     {
@@ -95,6 +99,10 @@ private:
         QDataStream &operands);
     void walk(
         U32 mainStreamOffset);
+    void walkRecord(
+        U32 mainStreamOffset);
+    void walkReference(
+        U32 reference);
     void skip(
         U32 bytes,
         QDataStream &operands);
@@ -240,7 +248,7 @@ private:
     void opSrKinsoku(Header &op, U32 bytes, QDataStream &operands);
     void opSrKinsokuAtom(Header &op, U32 bytes, QDataStream &operands);
     void opSSDocInfoAtom(Header &op, U32 bytes, QDataStream &operands);
-    void opSslideLayoutAtom(Header &op, U32 bytes, QDataStream &operands);
+    void opSSSlideLayoutAtom(Header &op, U32 bytes, QDataStream &operands);
     void opSSSlideInfoAtom(Header &op, U32 bytes, QDataStream &operands);
     void opStyleTextPropAtom(Header &op, U32 bytes, QDataStream &operands);
     void opSubContainerCompleted(Header &op, U32 bytes, QDataStream &operands);

@@ -30,6 +30,8 @@ Powerpoint::Powerpoint()
 
 Powerpoint::~Powerpoint()
 {
+    m_persistentReferences.clear();
+    m_slidePersists.clear();
 }
 
 void Powerpoint::invokeHandler(
@@ -59,7 +61,7 @@ void Powerpoint::invokeHandler(
         { "CHARFORMATATOM",             4066,   0 /* &Powerpoint::opCharFormatAtom */ },
         { "CLIENTSIGNAL1",              6,      0 /* &Powerpoint::opClientSignal1 */ },
         { "CLIENTSIGNAL2",              7,      0 /* &Powerpoint::opClientSignal2 */ },
-        { "COLORSCHEMEATOM",            2032,   0 /* &Powerpoint::opColorSchemeAtom */ },
+        { "COLORSCHEMEATOM",            2032,   &Powerpoint::opColorSchemeAtom },
         { "COREPICT",                   4037,   0 /* &Powerpoint::opCorePict */ },
         { "COREPICTATOM",               4038,   0 /* &Powerpoint::opCorePictAtom */ },
         { "CSTRING",                    4026,   0 /* &Powerpoint::opCString */ },
@@ -67,12 +69,12 @@ void Powerpoint::invokeHandler(
         { "DATETIMEMCATOM",             4087,   0 /* &Powerpoint::opDateTimeMCAtom */ },
         { "DEFAULTRULERATOM",           4011,   0 /* &Powerpoint::opDefaultRulerAtom */ },
         { "DOCROUTINGSLIP",             1030,   0 /* &Powerpoint::opDocRoutingSlip */ },
-        { "DOCUMENT",                   1000,   0 /* &Powerpoint::opDocument */ },
+        { "DOCUMENT",                   1000,   &Powerpoint::opDocument },
         { "DOCUMENTATOM",               1001,   0 /* &Powerpoint::opDocumentAtom */ },
         { "DOCVIEWINFO",                1014,   0 /* &Powerpoint::opDocViewInfo */ },
         { "EMFORMATATOM",               4065,   0 /* &Powerpoint::opEmFormatAtom */ },
-        { "ENDDOCUMENT",                1002,   0 /* &Powerpoint::opEndDocument */ },
-        { "ENVIRONMENT",                1010,   0 /* &Powerpoint::opEnvironment */ },
+        { "ENDDOCUMENT",                1002,   &Powerpoint::opEndDocument },
+        { "ENVIRONMENT",                1010,   &Powerpoint::opEnvironment },
         { "EXAVIMOVIE",                 4102,   0 /* &Powerpoint::opExAviMovie */ },
         { "EXCDAUDIO",                  4110,   0 /* &Powerpoint::opExCDAudio */ },
         { "EXCDAUDIOATOM",              4114,   0 /* &Powerpoint::opExCDAudioAtom */ },
@@ -108,7 +110,7 @@ void Powerpoint::invokeHandler(
         { "EXWAVAUDIOEMBEDDED",         4111,   0 /* &Powerpoint::opExWAVAudioEmbedded */ },
         { "EXWAVAUDIOEMBEDDEDATOM",     4115,   0 /* &Powerpoint::opExWAVAudioEmbeddedAtom */ },
         { "EXWAVAUDIOLINK",             4112,   0 /* &Powerpoint::opExWAVAudioLink */ },
-        { "FONTCOLLECTION",             2005,   0 /* &Powerpoint::opFontCollection */ },
+        { "FONTCOLLECTION",             2005,   &Powerpoint::opFontCollection },
         { "FONTEMBEDDATA",              4024,   0 /* &Powerpoint::opFontEmbedData */ },
         { "FONTENTITYATOM",             4023,   0 /* &Powerpoint::opFontEntityAtom */ },
         { "FOOTERMCATOM",               4090,   0 /* &Powerpoint::opFooterMCAtom */ },
@@ -126,22 +128,22 @@ void Powerpoint::invokeHandler(
         { "GUIDELIST",                  2026,   0 /* &Powerpoint::opGuideList */ },
         { "HANDOUT",                    4041,   0 /* &Powerpoint::opHandout */ },
         { "HEADERMCATOM",               4089,   0 /* &Powerpoint::opHeaderMCAtom */ },
-        { "HEADERSFOOTERS",             4057,   0 /* &Powerpoint::opHeadersFooters */ },
-        { "HEADERSFOOTERSATOM",         4058,   0 /* &Powerpoint::opHeadersFootersAtom */ },
+        { "HEADERSFOOTERS",             4057,   &Powerpoint::opHeadersFooters },
+        { "HEADERSFOOTERSATOM",         4058,   &Powerpoint::opHeadersFootersAtom },
         { "INT4ARRAYATOM",              2031,   0 /* &Powerpoint::opInt4ArrayAtom */ },
         { "INTERACTIVEINFO",            4082,   0 /* &Powerpoint::opInteractiveInfo */ },
         { "INTERACTIVEINFOATOM",        4083,   0 /* &Powerpoint::opInteractiveInfoAtom */ },
         { "IRRATOM",                    2,      0 /* &Powerpoint::opIRRAtom */ },
-        { "LIST",                       2000,   0 /* &Powerpoint::opList */ },
+        { "LIST",                       2000,   &Powerpoint::opList },
         { "LISTPLACEHOLDER",            2017,   0 /* &Powerpoint::opListPlaceholder */ },
-        { "MAINMASTER",                 1016,   0 /* &Powerpoint::opMainMaster */ },
+        { "MAINMASTER",                 1016,   &Powerpoint::opMainMaster },
         { "MASTERTEXT",                 4068,   0 /* &Powerpoint::opMasterText */ },
         { "METAFILE",                   4033,   0 /* &Powerpoint::opMetaFile */ },
         { "NAMEDSHOW",                  1041,   0 /* &Powerpoint::opNamedShow */ },
         { "NAMEDSHOWS",                 1040,   0 /* &Powerpoint::opNamedShows */ },
         { "NAMEDSHOWSLIDES",            1042,   0 /* &Powerpoint::opNamedShowSlides */ },
-        { "NOTES",                      1008,   0 /* &Powerpoint::opNotes */ },
-        { "NOTESATOM",                  1009,   0 /* &Powerpoint::opNotesAtom */ },
+        { "NOTES",                      1008,   &Powerpoint::opNotes },
+        { "NOTESATOM",                  1009,   &Powerpoint::opNotesAtom },
         { "OEPLACEHOLDERATOM",          3011,   0 /* &Powerpoint::opOEPlaceholderAtom */ },
         { "OESHAPE",                    3008,   0 /* &Powerpoint::opOEShape */ },
         { "OESHAPEATOM",                3035,   0 /* &Powerpoint::opOEShapeAtom */ },
@@ -149,10 +151,10 @@ void Powerpoint::invokeHandler(
         { "OUTLINEVIEWINFO",            1031,   0 /* &Powerpoint::opOutlineViewInfo */ },
         { "PARAFORMATATOM",             4067,   0 /* &Powerpoint::opParaFormatAtom */ },
         { "PERSISTPTRFULLBLOCK",        6001,   0 /* &Powerpoint::opPersistPtrFullBlock */ },
-        { "PERSISTPTRINCREMENTALBLOCK", 6002,   0 /* &Powerpoint::opPersistPtrIncrementalBlock */ },
+        { "PERSISTPTRINCREMENTALBLOCK", 6002,   &Powerpoint::opPersistPtrIncrementalBlock },
         { "POWERPOINTSTATEINFOATOM",    10,     0 /* &Powerpoint::opPowerPointStateInfoAtom */ },
-        { "PPDRAWING",                  1036,   0 /* &Powerpoint::opPPDrawing */ },
-        { "PPDRAWINGGROUP",             1035,   0 /* &Powerpoint::opPPDrawingGroup */ },
+        { "PPDRAWING",                  1036,   &Powerpoint::opPPDrawing },
+        { "PPDRAWINGGROUP",             1035,   &Powerpoint::opPPDrawingGroup },
         { "PRINTOPTIONS",               6000,   0 /* &Powerpoint::opPrintOptions */ },
         { "PROGBINARYTAG",              5002,   0 /* &Powerpoint::opProgBinaryTag */ },
         { "PROGSTRINGTAG",              5001,   0 /* &Powerpoint::opProgStringTag */ },
@@ -166,12 +168,12 @@ void Powerpoint::invokeHandler(
         { "RUNARRAYATOM",               2029,   0 /* &Powerpoint::opRunArrayAtom */ },
         { "SCHEME",                     1012,   0 /* &Powerpoint::opScheme */ },
         { "SCHEMEATOM",                 1013,   0 /* &Powerpoint::opSchemeAtom */ },
-        { "SLIDE",                      1006,   0 /* &Powerpoint::opSlide */ },
-        { "SLIDEATOM",                  1007,   0 /* &Powerpoint::opSlideAtom */ },
+        { "SLIDE",                      1006,   &Powerpoint::opSlide },
+        { "SLIDEATOM",                  1007,   &Powerpoint::opSlideAtom },
         { "SLIDEBASE",                  1004,   0 /* &Powerpoint::opSlideBase */ },
         { "SLIDEBASEATOM",              1005,   0 /* &Powerpoint::opSlideBaseAtom */ },
         { "SLIDELIST",                  4084,   0 /* &Powerpoint::opSlideList */ },
-        { "SLIDELISTWITHTEXT",          4080,   0 /* &Powerpoint::opSlideListWithText */ },
+        { "SLIDELISTWITHTEXT",          4080,   &Powerpoint::opSlideListWithText },
         { "SLIDENUMBERMCATOM",          4056,   0 /* &Powerpoint::opSlideNumberMCAtom */ },
         { "SLIDEPERSIST",               1003,   0 /* &Powerpoint::opSlidePersist */ },
         { "SLIDEPERSISTATOM",           1011,   &Powerpoint::opSlidePersistAtom },
@@ -182,25 +184,25 @@ void Powerpoint::invokeHandler(
         { "SOUNDCOLLATOM",              2021,   0 /* &Powerpoint::opSoundCollAtom */ },
         { "SOUNDCOLLECTION",            2020,   0 /* &Powerpoint::opSoundCollection */ },
         { "SOUNDDATA",                  2023,   0 /* &Powerpoint::opSoundData */ },
-        { "SRKINSOKU",                  4040,   0 /* &Powerpoint::opSrKinsoku */ },
+        { "SRKINSOKU",                  4040,   &Powerpoint::opSrKinsoku },
         { "SRKINSOKUATOM",              4050,   0 /* &Powerpoint::opSrKinsokuAtom */ },
         { "SSDOCINFOATOM",              1025,   0 /* &Powerpoint::opSSDocInfoAtom */ },
-        { "SSLIDELAYOUTATOM",           1015,   0 /* &Powerpoint::opSslideLayoutAtom */ },
+        { "SSLIDELAYOUTATOM",           1015,   &Powerpoint::opSSSlideLayoutAtom },
         { "SSSLIDEINFOATOM",            1017,   0 /* &Powerpoint::opSSSlideInfoAtom */ },
-        { "STYLETEXTPROPATOM",          4001,   0 /* &Powerpoint::opStyleTextPropAtom */ },
+        { "STYLETEXTPROPATOM",          4001,   &Powerpoint::opStyleTextPropAtom },
         { "SUBCONTAINERCOMPLETED",      1,      0 /* &Powerpoint::opSubContainerCompleted */ },
         { "SUBCONTAINEREXCEPTION",      4,      0 /* &Powerpoint::opSubContainerException */ },
         { "SUMMARY",                    1026,   0 /* &Powerpoint::opSummary */ },
         { "TEXTBOOKMARKATOM",           4007,   0 /* &Powerpoint::opTextBookmarkAtom */ },
         { "TEXTBYTESATOM",              4008,   &Powerpoint::opTextBytesAtom },
         { "TEXTCHARSATOM",              4000,   &Powerpoint::opTextCharsAtom },
-        { "TEXTHEADERATOM",             3999,   0 /* &Powerpoint::opTextHeaderAtom */ },
+        { "TEXTHEADERATOM",             3999,   &Powerpoint::opTextHeaderAtom },
         { "TEXTRULERATOM",              4006,   0 /* &Powerpoint::opTextRulerAtom */ },
         { "TEXTSPECINFOATOM",           4010,   0 /* &Powerpoint::opTextSpecInfoAtom */ },
         { "TEXTURE",                    1027,   0 /* &Powerpoint::opTexture */ },
         { "TXCFSTYLEATOM",              4004,   0 /* &Powerpoint::opTxCFStyleAtom */ },
         { "TXINTERACTIVEINFOATOM",      4063,   0 /* &Powerpoint::opTxInteractiveInfoAtom */ },
-        { "TXMASTERSTYLEATOM",          4003,   0 /* &Powerpoint::opTxMasterStyleAtom */ },
+        { "TXMASTERSTYLEATOM",          4003,   &Powerpoint::opTxMasterStyleAtom },
         { "TXPFSTYLEATOM",              4005,   0 /* &Powerpoint::opTxPFStyleAtom */ },
         { "TXSISTYLEATOM",              4009,   0 /* &Powerpoint::opTxSIStyleAtom */ },
         { "TYPEFACE",                   4025,   0 /* &Powerpoint::opTypeFace */ },
@@ -260,8 +262,18 @@ bool Powerpoint::parse(
 
     stream.setByteOrder(QDataStream::LittleEndian); // Great, I love Qt !
     m_mainStream = mainStream;
+    m_persistentReferences.clear();
+    m_slidePersists.clear();
     walk(currentUser.length, stream);
     return true;
+}
+
+void Powerpoint::opColorSchemeAtom(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    skip(bytes, operands);
 }
 
 void Powerpoint::opCurrentUserAtom(
@@ -327,6 +339,187 @@ void Powerpoint::opCurrentUserAtom(
     walk(data.offsetToCurrentEdit);
 }
 
+void Powerpoint::opDocument(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
+void Powerpoint::opEndDocument(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
+void Powerpoint::opEnvironment(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
+void Powerpoint::opFontCollection(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
+void Powerpoint::opHeadersFooters(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
+void Powerpoint::opHeadersFootersAtom(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    skip(bytes, operands);
+}
+
+void Powerpoint::opList(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
+void Powerpoint::opMainMaster(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
+void Powerpoint::opNotes(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
+void Powerpoint::opNotesAtom(
+    Header &op,
+    U32 bytes,
+    QDataStream &operands)
+{
+    struct
+    {
+        S32 slideId;    // Id for the corresponding slide.
+        U16 flags;
+    } data;
+
+    operands >> data.slideId >> data.flags;
+    kdDebug(s_area) << "found notes for slide: " << data.slideId << endl;
+    skip(bytes - 6, operands);
+}
+
+void Powerpoint::opPersistPtrIncrementalBlock(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    struct
+    {
+        union
+        {
+            U32 info;
+            struct
+            {
+                U32 offsetNumber: 20;
+                U32 offsetCount: 12;
+            } fields;
+        } header;
+        U32 offset;
+    } data;
+    U32 length = 0;
+
+    while (length < bytes)
+    {
+        unsigned i;
+
+        operands >> data.header.info;
+        length += sizeof(data.header.info);
+        for (i = 0; i < data.header.fields.offsetCount; i++)
+        {
+            operands >> data.offset;
+            length += sizeof(data.offset);
+
+            // Create a record of this persistent reference.
+
+            kdDebug(s_area) << "persistent reference: " << i << ": " <<
+                data.offset << endl;
+            m_persistentReferences.insert(i, data.offset);
+        }
+    }
+}
+
+void Powerpoint::opPPDrawing(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
+void Powerpoint::opPPDrawingGroup(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
+void Powerpoint::opSlide(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
+void Powerpoint::opSlideAtom(
+    Header &op,
+    U32 bytes,
+    QDataStream &operands)
+{
+    struct
+    {
+        U8 layout[12];  // Slide layout descriptor.
+        S32 masterId;   // Id of the master of the slide. Zero for a master slide.
+        S32 notesId;    // Id for the corresponding notes slide. Zero if slide has no notes.
+        U16 flags;
+    } data;
+
+    Header tmp;
+    tmp.type = 1015;
+    tmp.length = sizeof(data.layout);
+    invokeHandler(tmp, tmp.length, operands);
+    operands >> data.masterId >> data.notesId >> data.flags;
+    skip(bytes - 22, operands);
+}
+
+void Powerpoint::opSlideListWithText(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
 void Powerpoint::opSlidePersistAtom(
     Header & /* op */,
     U32 bytes,
@@ -334,15 +527,52 @@ void Powerpoint::opSlidePersistAtom(
 {
     struct
     {
-        U32 psrReference;
-        U32 flags;
-        S32 numberTexts;
-        S32 slideId;
+        U32 psrReference;   // Logical reference to the slide persist object.
+        U32 flags;          // If bit 3 set then slide contains shapes other than placeholders.
+        S32 numberTexts;    // Number of placeholder texts stored with the persist object.
+        S32 slideId;        // Unique slide identifier, used for OLE link monikers for example.
         U32 reserved;
     } data;
 
     operands >> data.psrReference >> data.flags >> data.numberTexts >> data.slideId >> data.reserved;
+    m_slidePersists.append(new unsigned(data.psrReference));
     skip(bytes - sizeof(data), operands);
+}
+
+void Powerpoint::opSrKinsoku(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    walk(bytes, operands);
+}
+
+void Powerpoint::opSSSlideLayoutAtom(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    struct
+    {
+        U32 geom;
+        U8 id[8];
+    } data;
+    unsigned i;
+
+    operands >> data.geom;
+    for (i = 0; i < sizeof(data.id); i++)
+    {
+        operands >> data.id[i];
+    }
+    skip(bytes - sizeof(data), operands);
+}
+
+void Powerpoint::opStyleTextPropAtom(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    skip(bytes, operands);
 }
 
 void Powerpoint::opTextBytesAtom(
@@ -360,7 +590,6 @@ void Powerpoint::opTextBytesAtom(
         operands >> tmp;
         data += tmp;
     }
-    kdDebug(s_area) << "text: " << data << endl;
 }
 
 void Powerpoint::opTextCharsAtom(
@@ -378,7 +607,38 @@ void Powerpoint::opTextCharsAtom(
         operands >> tmp;
         data += tmp;
     }
-    kdDebug(s_area) << "text: " << data << endl;
+}
+
+void Powerpoint::opTextHeaderAtom(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    struct
+    {
+        U32 txType; // Type of text:
+                    //
+                    // 0 Title
+                    // 1 Body
+                    // 2 Notes
+                    // 3 Not Used
+                    // 4 Other (Text in a shape)
+                    // 5 Center body (subtitle in title slide)
+                    // 6 Center title (title in title slide)
+                    // 7 Half body (body in two-column slide)
+                    // 8 Quarter body (body in four-body slide)
+     } data;
+
+    operands >> data.txType;
+    skip(bytes - sizeof(data), operands);
+}
+
+void Powerpoint::opTxMasterStyleAtom(
+    Header & /* op */,
+    U32 bytes,
+    QDataStream &operands)
+{
+    skip(bytes, operands);
 }
 
 void Powerpoint::opUserEditAtom(
@@ -400,6 +660,15 @@ void Powerpoint::opUserEditAtom(
     operands >> data.lastSlideID  >> data.version >> data.offsetLastEdit >> data.offsetPersistDirectory;
     operands >> data.documentRef >> data.maxPersistWritten >> data.lastViewType;
     skip(bytes - sizeof(data), operands);
+
+    // Gather the persistent references. That should fill the list of references which
+    // we then use to look up our document.
+
+    walkRecord(data.offsetPersistDirectory);
+
+    // TBD: why do I need to subtract 1 here?
+
+    walkReference(data.documentRef - 1);
 
     // Now walk main stream starting at previous edit point.
 
@@ -449,9 +718,49 @@ void Powerpoint::walk(U32 mainStreamOffset)
 {
     U32 length = m_mainStream.length - mainStreamOffset;
     QByteArray a;
+
     a.setRawData((const char *)m_mainStream.data + mainStreamOffset, length);
     QDataStream stream(a, IO_ReadOnly);
     stream.setByteOrder(QDataStream::LittleEndian);
     walk(length, stream);
     a.resetRawData((const char *)m_mainStream.data + mainStreamOffset, length);
+}
+
+void Powerpoint::walkRecord(U32 mainStreamOffset)
+{
+    // First read what should be the next header using one stream.
+
+    U32 length = sizeof(Header);
+    QByteArray a;
+    Header op;
+
+    a.setRawData((const char *)m_mainStream.data + mainStreamOffset, length);
+    QDataStream stream1(a, IO_ReadOnly);
+    stream1.setByteOrder(QDataStream::LittleEndian);
+    stream1 >> op.opcode.info >> op.type >> op.length;
+    a.resetRawData((const char *)m_mainStream.data + mainStreamOffset, length);
+
+    // Armed with the length, parse in the usual way using a second stream.
+
+    length += op.length;
+    a.setRawData((const char *)m_mainStream.data + mainStreamOffset, length);
+    QDataStream stream2(a, IO_ReadOnly);
+    stream2.setByteOrder(QDataStream::LittleEndian);
+    walk(length, stream2);
+    a.resetRawData((const char *)m_mainStream.data + mainStreamOffset, length);
+}
+
+void Powerpoint::walkReference(U32 reference)
+{
+    if (m_persistentReferences.end() == m_persistentReferences.find(reference))
+    {
+        kdError(s_area) << "cannot find reference: " << reference << endl;
+    }
+    else
+    {
+        unsigned offset = m_persistentReferences[reference];
+        kdDebug(s_area) << "found reference: " << reference <<
+            " offset: " << offset << endl;
+        walkRecord(offset);
+    }
 }
