@@ -15,6 +15,7 @@ Kudesigner:
 - save position and size of the property editor
 - undo / redo
 - cut / copy / paste
+- DCOP interface
 
 - optimizations:
 -- create property editor widgets only once
