@@ -3234,7 +3234,10 @@ void KWView::setFrameStartEnd()
     {
         QRect r = m_doc->zoomRect( *edit->currentFrame() );
         r = m_gui->canvasWidget()->viewMode()->normalToView( r );
-        m_gui->getHorzRuler()->setFrameStartEnd(  r.left(), r.right() );
+
+        QPoint rulerTopLeft = m_gui->canvasWidget()->rulerPos();
+        m_gui->getHorzRuler()->setFrameStartEnd(  r.left()+rulerTopLeft.x()-canvasXOffset(), r.right()+rulerTopLeft.x()-canvasXOffset() );
+
     }
 
 }
