@@ -35,6 +35,7 @@
 #include <kaction.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <config.h>
 
 KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     : QScrollView( parent ), doc( d )
@@ -110,12 +111,27 @@ void KWCanvas::repaintAll( bool erase /* = false */ )
 
 void KWCanvas::print( QPainter *painter, KPrinter *printer )
 {
-    kdDebug(32001) << "KWCanvas::print from=" << printer->fromPage() << " to=" << printer->toPage() << endl;
+    int from = printer->fromPage();
+    int to = printer->toPage();
+    kdDebug(32001) << "KWCanvas::print from=" << from << " to=" << to << endl;
+    if ( !from && !to ) // 0, 0 means everything
+    {
+        from = printer->minPage();
+        to = printer->maxPage();
+    }
+#ifdef HAVE_KDEPRINT
+    if (  printer->currentPage() )
+    {
+        from = m_gui->getView()->currentPage() + 1;
+        to = from;
+        kdDebug() << "KWCanvas::print currentpage set -> printing " << from << endl;
+    }
+#endif
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
-                              printer->toPage() - printer->fromPage() + 2, this );
+                              to - from + 2, this );
     int j = 0;
     progress.setProgress( 0 );
-        for ( int i = printer->fromPage(); i <= printer->toPage(); i++ )
+        for ( int i = from; i <= to; i++ )
     {
         progress.setProgress( ++j );
         kapp->processEvents();
@@ -123,7 +139,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
         if ( progress.wasCancelled() )
             break;
 
-        if ( i > printer->fromPage() ) printer->newPage();
+        if ( i > from ) printer->newPage();
 
         painter->save();
         int pgNum = i - 1;

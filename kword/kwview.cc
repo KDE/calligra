@@ -116,6 +116,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     frmBrd.color = black;
     frmBrd.style = Border::SOLID;
     frmBrd.ptWidth = 1;
+    m_currentPage = 0;
 
     searchEntry = new KWSearchContext();
     replaceEntry = new KWSearchContext();
@@ -647,8 +648,8 @@ void KWView::updatePageInfo()
     KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
     if ( edit )
     {
-        int pgNum = edit->currentFrame()->pageNum() + 1;
-        statusBar()->changeItem( QString(" ")+i18n("Page %1/%2").arg(pgNum).arg(doc->getPages())+' ', statusPage );
+        m_currentPage = edit->currentFrame()->pageNum();
+        statusBar()->changeItem( QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(doc->getPages())+' ', statusPage );
         gui->getVertRuler()->setOffset( 0, -gui->canvasWidget()->getVertRulerPos() );
     }
 }
@@ -668,6 +669,9 @@ void KWView::clipboardDataChanged()
 /*=========================== file print =======================*/
 void KWView::setupPrinter( KPrinter &prt )
 {
+#ifdef HAVE_KDEPRINT
+    prt.setPageSelection( KPrinter::ApplicationSide );
+#endif
     prt.setMinMax( 1, doc->getPages() );
     bool makeLandscape = FALSE;
 

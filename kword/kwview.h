@@ -108,6 +108,8 @@ public:
 
     void initGui();
 
+    int currentPage() const { return m_currentPage; }
+
     /**
      * Overloaded from View
      */
@@ -427,6 +429,7 @@ protected:
     KSpell *kspell;
     KWTextParag *currParag;
     int currFrameSetNum;
+    int m_currentPage; // 0-based current page number
     int lastTextPos;
 
     // Statusbar items
