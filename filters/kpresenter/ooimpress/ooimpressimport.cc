@@ -991,9 +991,24 @@ double OoImpressImport::toPoint( QString value )
         return 0;
 }
 
+void OoImpressImport::appendTextObjectMargin(QDomDocument& /*doc*/, QDomElement&e)
+{
+    if( m_styleStack.hasAttribute("fo:padding-top"))
+        e.setAttribute("btoppt",toPoint( m_styleStack.attribute( "fo:padding-top")));
+    if( m_styleStack.hasAttribute("fo:padding-bottom"))
+        e.setAttribute("bbottompt",toPoint( m_styleStack.attribute( "fo:padding-bottom")));
+    if( m_styleStack.hasAttribute("fo:padding-left"))
+        e.setAttribute("bleftpt",toPoint( m_styleStack.attribute( "fo:padding-left")));
+    if( m_styleStack.hasAttribute("fo:padding-right"))
+        e.setAttribute("brightpt",toPoint( m_styleStack.attribute( "fo:padding-right")));
+}
+
+
 QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement& textBox )
 {
     QDomElement textObjectElement = doc.createElement( "TEXTOBJ" );
+    appendTextObjectMargin( doc, textObjectElement );
+
     //lukas: TODO the text box can have a style as well (presentation:style-name)!
     //percy: this should be fixed with the new StyleStack
 
