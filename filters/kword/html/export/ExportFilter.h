@@ -35,7 +35,8 @@ public:
     virtual bool doCloseFile(void); // Close file in normal conditions
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
-    virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
+    virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
+        const ValueListFormatData& paraFormatDataList);
     virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
     virtual bool doOpenTextFrameSet(void);
     virtual bool doCloseTextFrameSet(void);
@@ -52,12 +53,12 @@ public:
     inline void setXML (const bool flag ) { m_xml=flag; }
     inline void setUTF8 (const bool flag ) { m_utf8=flag; }
 private:
-    void ProcessParagraphData (const QString& paraText, ValueListFormatData& paraFormatDataList);
-    QString FormatDataToAbiProps(FormatData& formatData);
     QString escapeHtmlText(const QString& strText) const;
     QString escapeCssIdentifier(const QString& strText) const;
-    QString layoutToCss(LayoutData& layout) const;
-    void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
+    QString textFormatToCss(const TextFormatting& formatData) const;
+    QString layoutToCss(const LayoutData& layout) const;
+    void ProcessParagraphData ( const QString &paraText,
+     const ValueListFormatData &paraFormatDataList, QString &outputText);
     QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
 private:
     QIODevice* m_ioDevice;

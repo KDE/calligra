@@ -60,7 +60,8 @@ public:
     virtual bool doCloseFile(void); // Close file in normal conditions
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
-    virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
+    virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
+        const ValueListFormatData& paraFormatDataList);
     virtual bool doOpenTextFrameSet(void); // AbiWord's <section>
     virtual bool doCloseTextFrameSet(void); // AbiWord's </section>
     virtual bool doFullPaperFormat(const int format,
@@ -70,8 +71,8 @@ public:
     virtual bool doCloseStyles(void); // AbiWord's </styles>
     virtual bool doFullDefineStyle(LayoutData& layout); // AbiWord's <s></s>
 private:
-    void ProcessParagraphData (const QString& paraText, ValueListFormatData& paraFormatDataList);
-    QString FormatDataToAbiProps(FormatData& formatData);
+    void ProcessParagraphData (const QString& paraText, const ValueListFormatData& paraFormatDataList);
+    QString textFormatToAbiProps(const TextFormatting& formatData) const;
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
@@ -209,8 +210,9 @@ bool AbiWordWorker::doCloseStyles(void)
     return true;
 }
 
-QString AbiWordWorker::FormatDataToAbiProps(FormatData& formatData)
+QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatData) const
 {
+    // TODO: rename variable formatData
     QString strElement; // TODO: rename this variable
 
     // Font name
@@ -246,7 +248,8 @@ QString AbiWordWorker::FormatDataToAbiProps(FormatData& formatData)
     strElement+="; ";
 
     const int size=formatData.fontSize;
-    if (size>0)
+    if ((size>0)
+        && (size < 32767)) // PROVISORY/FIXME: we have a font size problem somewhere in processing styles
     {
         // We use absolute font sizes.
         strElement+="font-size: ";
@@ -254,43 +257,43 @@ QString AbiWordWorker::FormatDataToAbiProps(FormatData& formatData)
         strElement+="pt; ";
     }
 
-    if ( formatData.colour.isValid() )
+    if ( formatData.fgColor.isValid() )
     {
         // Give colour
         strElement+="color: ";
 
         // No leading # (unlike CSS2)
-        //We must have two hex digits for each colour channel!
-        const int red=formatData.colour.red();
+        // We must have two hex digits for each colour channel!
+        const int red=formatData.fgColor.red();
         strElement += QString::number((red&0xf0)>>4,16);
         strElement += QString::number(red&0x0f,16);
 
-        const int green=formatData.colour.green();
+        const int green=formatData.fgColor.green();
         strElement += QString::number((green&0xf0)>>4,16);
         strElement += QString::number(green&0x0f,16);
 
-        const int blue=formatData.colour.blue();
+        const int blue=formatData.fgColor.blue();
         strElement += QString::number((blue&0xf0)>>4,16);
         strElement += QString::number(blue&0x0f,16);
 
         strElement+="; ";
     }
-    if ( formatData.textbackgroundColour.isValid() )
+    if ( formatData.bgColor.isValid() )
     {
         // Give background colour
         strElement+="bgcolor: ";
 
-        // No trailing # (unlike CSS2)
-        //We must have two hex digits for each colour channel!
-        const int red=formatData.colour.red();
+        // No leading # (unlike CSS2)
+        // We must have two hex digits for each colour channel!
+        const int red=formatData.bgColor.red();
         strElement += QString::number((red&0xf0)>>4,16);
         strElement += QString::number(red&0x0f,16);
 
-        const int green=formatData.colour.green();
+        const int green=formatData.bgColor.green();
         strElement += QString::number((green&0xf0)>>4,16);
         strElement += QString::number(green&0x0f,16);
 
-        const int blue=formatData.colour.blue();
+        const int blue=formatData.bgColor.blue();
         strElement += QString::number((blue&0xf0)>>4,16);
         strElement += QString::number(blue&0x0f,16);
 
@@ -319,11 +322,11 @@ QString AbiWordWorker::FormatDataToAbiProps(FormatData& formatData)
 // out to the export file.
 
 void AbiWordWorker::ProcessParagraphData ( const QString &paraText,
-    ValueListFormatData &paraFormatDataList)
+    const ValueListFormatData &paraFormatDataList)
 {
     if ( paraText.length () > 0 )
     {
-        ValueListFormatData::Iterator  paraFormatDataIt;
+        ValueListFormatData::ConstIterator  paraFormatDataIt;
 
         QString partialText;
 
@@ -336,7 +339,7 @@ void AbiWordWorker::ProcessParagraphData ( const QString &paraText,
                 paraText.mid((*paraFormatDataIt).pos,(*paraFormatDataIt).len),
                 true,true);
 
-            if ((*paraFormatDataIt).missing)
+            if ((*paraFormatDataIt).text.missing)
             {
                 // It's just normal text, so we do not need a <c> element!
                 *m_streamOut << partialText;
@@ -344,7 +347,7 @@ void AbiWordWorker::ProcessParagraphData ( const QString &paraText,
             else
             { // Text with properties, so use a <c> element!
 
-                QString abiprops=FormatDataToAbiProps(*paraFormatDataIt);
+                QString abiprops=textFormatToAbiProps((*paraFormatDataIt).text);
 
                 // Erase the last semi-comma (as in CSS2, semi-commas only separate instructions and do not terminate them)
                 const int result=abiprops.findRev(";");
@@ -362,7 +365,8 @@ void AbiWordWorker::ProcessParagraphData ( const QString &paraText,
     }
 }
 
-bool AbiWordWorker::doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList)
+bool AbiWordWorker::doFullParagraph(const QString& paraText, const LayoutData& layout,
+    const ValueListFormatData& paraFormatDataList)
 {
     QString props;
     QString style;
@@ -446,7 +450,7 @@ bool AbiWordWorker::doFullParagraph(QString& paraText, LayoutData& layout, Value
     }
 
     // Add all AbiWord properties collected in the <FORMAT> element
-    props += FormatDataToAbiProps(layout.formatData);
+    props += textFormatToAbiProps(layout.formatData.text);
 
     *m_streamOut << "<p";
     if (!style.isEmpty())
@@ -503,7 +507,7 @@ bool AbiWordWorker::doFullDefineStyle(LayoutData& layout)
     }
 
     // Add all AbiWord properties collected in the <FORMAT> element
-    QString abiprops = FormatDataToAbiProps(layout.formatData);
+    QString abiprops = textFormatToAbiProps(layout.formatData.text);
 
     const int result=abiprops.findRev(";");
     if (result>=0)

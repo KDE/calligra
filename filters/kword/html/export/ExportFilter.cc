@@ -90,12 +90,97 @@ QString HtmlWorker::escapeCssIdentifier(const QString& strText) const
     return strReturn;
 }
 
-void HtmlWorker::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)
+QString HtmlWorker::textFormatToCss(const TextFormatting& formatData) const
+{
+    // TODO: as this method comes form the AbiWord filter,
+    //  verify that it is
+
+    // TODO: rename variable formatData
+    QString strElement; // TODO: rename this variable
+
+    // Font name
+    QString fontName = formatData.fontName;
+    if ( !fontName.isEmpty() )
+    {
+        strElement+="font-family: ";
+        strElement+=fontName; // TODO: add alternative font names
+        strElement+="; ";
+    }
+
+    // Font style
+    strElement+="font-style: ";
+    if ( formatData.italic )
+    {
+        strElement+="italic";
+    }
+    else
+    {
+        strElement+="normal";
+    }
+    strElement+="; ";
+
+    strElement+="font-weight: ";
+    if ( formatData.weight >= 75 )
+    {
+        strElement+="bold";
+    }
+    else
+    {
+        strElement+="normal";
+    }
+    strElement+="; ";
+
+    const int size=formatData.fontSize;
+    if ((size>0)
+        && (size < 32767)) // PROVISORY/FIXME: we have a font size problem somewhere in processing styles
+    {
+        // We use absolute font sizes.
+        strElement+="font-size: ";
+        strElement+=QString::number(size,10);
+        strElement+="pt; ";
+    }
+
+    if ( formatData.fgColor.isValid() )
+    {
+        // Give colour
+        strElement+="color: ";
+        strElement+=formatData.fgColor.name();
+        strElement+="; ";
+    }
+    if ( formatData.bgColor.isValid() )
+    {
+        // Give background colour
+        strElement+="bgcolor: ";
+        strElement+=formatData.bgColor.name();
+        strElement+="; ";
+    }
+
+    strElement+="text-decoration: ";
+    if ( formatData.underline )
+    {
+        strElement+="underline";
+    }
+    else if ( formatData.strikeout )
+    {
+        strElement+="line-through";
+    }
+    else
+    {
+        strElement+="none";
+    }
+    strElement+="; ";
+    return strElement;
+}
+
+
+
+void HtmlWorker::ProcessParagraphData (const QString &paraText,
+    const ValueListFormatData &paraFormatDataList, QString &outputText)
 {
     if (! paraText.isEmpty() )
     {
 
-        ValueListFormatData::Iterator  paraFormatDataIt;  //Warning: cannot use "->" with it!!
+        ValueListFormatData::ConstIterator  paraFormatDataIt;
 
         QString partialText;
 
@@ -106,7 +191,7 @@ void HtmlWorker::ProcessParagraphData ( QString &paraText, ValueListFormatData &
             //Retrieve text
             partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
 
-            if ((*paraFormatDataIt).missing)
+            if ((*paraFormatDataIt).text.missing)
             {   //Format is not issued from KWord. Therefore is only the layout
                 // So it is only the text
                 if (partialText==" ")
@@ -127,83 +212,22 @@ void HtmlWorker::ProcessParagraphData ( QString &paraText, ValueListFormatData &
             // Opening elements
             outputText+="<span style=\"";
 
-            // Font name
-            QString fontName = (*paraFormatDataIt).fontName;
-            if ( !fontName.isEmpty() )
-            {
-                outputText+="font-family: ";
-                outputText+=fontName; // TODO: add alternative font names
-                outputText+="; ";
-            }
+            outputText+=textFormatToCss((*paraFormatDataIt).text);
 
-            // Font style
-            outputText+="font-style: ";
-            if ( (*paraFormatDataIt).italic )
-            {
-                outputText+="italic";
-            }
-            else
-            {
-                outputText+="normal";
-            }
-            outputText+="; ";
-
-            outputText+="font-weight: ";
-            if ( (*paraFormatDataIt).weight >= 75 )
-            {
-                outputText+="bold";
-            }
-            else
-            {
-                outputText+="normal";
-            }
-            outputText+="; ";
-
-            const int size=(*paraFormatDataIt).fontSize;
-            if (size>0)
-            {
-                // We use absolute font sizes.
-                outputText+="font-size: ";
-                outputText+=QString::number(size,10);
-                outputText+="pt; ";
-            }
-
-            if ( (*paraFormatDataIt).colour.isValid() )
-            {
-                // Give colour
-                outputText+="color: ";
-                // QColor::name() does all the job :)
-                outputText+=(*paraFormatDataIt).colour.name();
-                outputText+="; ";
-            }
-
-            outputText+="text-decoration: ";
-            if ( (*paraFormatDataIt).underline )
-            {
-                outputText+="underline";
-            }
-            else if ( (*paraFormatDataIt).strikeout )
-            {
-                outputText+="line-through";
-            }
-            else
-            {
-                outputText+="none";
-            }
-            //outputText+="; ";
             outputText+="\">"; // close span opening tag
-            if ( 1==(*paraFormatDataIt).verticalAlignment )
+
+            if ( 1==(*paraFormatDataIt).text.verticalAlignment )
             {
                 outputText+="<sub>"; //Subscript
             }
-            if ( 2==(*paraFormatDataIt).verticalAlignment )
+            if ( 2==(*paraFormatDataIt).text.verticalAlignment )
             {
                 outputText+="<sup>"; //Superscript
             }
-            if (!(*paraFormatDataIt).linkName.isEmpty())
+            if (!(*paraFormatDataIt).text.linkName.isEmpty())
             {
                 outputText+="<a href=\"";
-                outputText+=escapeHtmlText((*paraFormatDataIt).linkReference);
+                outputText+=escapeHtmlText((*paraFormatDataIt).text.linkReference);
                 outputText+="\">";
             }
 
@@ -219,15 +243,15 @@ void HtmlWorker::ProcessParagraphData ( QString &paraText, ValueListFormatData &
             }
 
             // Closing elements
-            if (!(*paraFormatDataIt).linkName.isEmpty())
+            if (!(*paraFormatDataIt).text.linkName.isEmpty())
             {
                 outputText+="</a>";
             }
-            if ( 2==(*paraFormatDataIt).verticalAlignment )
+            if ( 2==(*paraFormatDataIt).text.verticalAlignment )
             {
                 outputText+="</sup>"; //Superscript
             }
-            if ( 1==(*paraFormatDataIt).verticalAlignment )
+            if ( 1==(*paraFormatDataIt).text.verticalAlignment )
             {
                 outputText+="</sub>"; //Subscript
             }
@@ -313,9 +337,10 @@ QString HtmlWorker::getStartOfListOpeningTag(const CounterData::Style typeList, 
     return strResult;
 }
 
-QString HtmlWorker::layoutToCss(LayoutData& layout) const
+QString HtmlWorker::layoutToCss(const LayoutData& layout) const
 {
     QString strElement; // TODO: rename this variable
+    
     // We do not set "left" explicitly, since KWord cannot do bi-di
     if (( layout.alignment== "right") || (layout.alignment=="center") || (layout.alignment=="justify"))
     {
@@ -337,73 +362,13 @@ QString HtmlWorker::layoutToCss(LayoutData& layout) const
         strElement+=QString("text-indent:%1pt;").arg(layout.indentFirst);
     }
 
-    // Font name
-    QString fontName = layout.formatData.fontName;
-    if ( !fontName.isEmpty() )
-    {
-        strElement+="font-family: ";
-        strElement+=fontName; // TODO: add alternative font names
-        strElement+="; ";
-    }
+    strElement+=textFormatToCss(layout.formatData.text);
 
-    // Font style
-    strElement+="font-style: ";
-    if ( layout.formatData.italic )
-    {
-        strElement+="italic";
-    }
-    else
-    {
-        strElement+="normal";
-    }
-    strElement+="; ";
-
-    strElement+="font-weight: ";
-    if ( layout.formatData.weight >= 75 )
-    {
-        strElement+="bold";
-    }
-    else
-    {
-        strElement+="normal";
-    }
-    strElement+="; ";
-
-    const int size=layout.formatData.fontSize;
-    if (size>0)
-    {
-        // We use absolute font sizes.
-        strElement+="font-size: ";
-        strElement+=QString::number(size,10);
-        strElement+="pt; ";
-    }
-
-    if ( layout.formatData.colour.isValid() )
-    {
-        // Give colour
-        strElement+="color: ";
-        // QColor::name() does all the job :)
-        strElement+=layout.formatData.colour.name();
-        strElement+="; ";
-    }
-
-    strElement+="text-decoration: ";
-    if ( layout.formatData.underline )
-    {
-        strElement+="underline";
-    }
-    else if ( layout.formatData.strikeout )
-    {
-        strElement+="line-through";
-    }
-    else
-    {
-        strElement+="none";
-    }
     return strElement;
 }
 
-bool HtmlWorker::doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList)
+bool HtmlWorker::doFullParagraph(const QString& paraText,
+    const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
     QString strParaText=paraText;
     QString strTag; // Tag that will be written.
@@ -477,11 +442,11 @@ bool HtmlWorker::doFullParagraph(QString& paraText, LayoutData& layout, ValueLis
     *m_streamOut << " class=\"" << escapeCssIdentifier(layout.styleName);
     *m_streamOut << "\" style=\"" << layoutToCss(layout) << "\">";
 
-    if ( 1==layout.formatData.verticalAlignment )
+    if ( 1==layout.formatData.text.verticalAlignment )
     {
         *m_streamOut << "<sub>"; //Subscript
     }
-    if ( 2==layout.formatData.verticalAlignment )
+    if ( 2==layout.formatData.text.verticalAlignment )
     {
         *m_streamOut << "<sup>"; //Superscript
     }
@@ -490,11 +455,11 @@ bool HtmlWorker::doFullParagraph(QString& paraText, LayoutData& layout, ValueLis
     ProcessParagraphData(strParaText, paraFormatDataList, strText);
     *m_streamOut << strText;
 
-    if ( 2==layout.formatData.verticalAlignment )
+    if ( 2==layout.formatData.text.verticalAlignment )
     {
         *m_streamOut << "</sup>"; //Superscript
     }
-    if ( 1==layout.formatData.verticalAlignment )
+    if ( 1==layout.formatData.text.verticalAlignment )
     {
         *m_streamOut << "</sub>"; //Subscript
     }
