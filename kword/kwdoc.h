@@ -707,6 +707,9 @@ public:
     void configureSpellChecker();
     void testAndCloseAllFrameSetProtectedContent();
 
+    KoPageLayout pageLayout() const;
+
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 

@@ -572,6 +572,10 @@ void KWDocument::initEmpty()
     setEmpty();
 }
 
+KoPageLayout KWDocument::pageLayout() const
+{
+    return m_pageLayout;
+}
 
 void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _cl, const KoKWHeaderFooter& _hf, bool updateViews )
 {
