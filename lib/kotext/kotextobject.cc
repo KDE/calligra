@@ -1311,7 +1311,13 @@ KCommand * KoTextObject::setShadowCommand( KoTextCursor * cursor,double dist, sh
     undoRedoInfo.clear();
     emit showCursor();
     emit updateUI( true );
-    return new KoTextCommand( this, /*cmd, */i18n("Change Shadow") );
+    KMacroCommand *macro = new KMacroCommand(i18n("Change Shadow"));
+    macro->addCommand( new KoTextCommand( this, /*cmd, */i18n("Change Shadow") ));
+
+    KCommand *cmd2= setShadowTextCommand( true );
+    if ( cmd2 )
+        macro->addCommand( cmd2 );
+    return macro;
 }
 
 KCommand * KoTextObject::setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, int selectionId )
