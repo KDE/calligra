@@ -1061,8 +1061,8 @@ void QTextCursor::splitAndInsertEmptyParag( bool ind, bool updateIds )
     QTextFormat *f = 0;
     if ( doc->useFormatCollection() ) {
 	f = string->at( idx )->format();
-	if ( idx == string->length() - 1 && idx > 0 )
-	    f = string->at( idx - 1 )->format();
+	//if ( idx == string->length() - 1 && idx > 0 )
+	//    f = string->at( idx - 1 )->format();
 	if ( f->isMisspelled() ) {
 	    f->removeRef();
 	    f = doc->formatCollection()->format( f->font(), f->color() );
@@ -1817,7 +1817,6 @@ bool QTextDocument::setSelectionEnd( int id, QTextCursor *cursor )
     bool hadEndParag = FALSE;
     bool hadOldStart = FALSE;
     bool hadOldEnd = FALSE;
-    QTextParag *lastParag = 0;
     bool leftSelection = FALSE;
     sel.swapped = FALSE;
     while ( TRUE ) {
@@ -1880,7 +1879,6 @@ bool QTextDocument::setSelectionEnd( int id, QTextCursor *cursor )
 	    inSelection = FALSE;
 
 	old = c;
-	lastParag = c.parag();
 	c.gotoRight();
 	if ( old == c || noSelectionAnymore )
 	    break;
@@ -2232,7 +2230,7 @@ bool QTextDocument::inSelection( int selId, const QPoint &pos ) const
 
 void QTextDocument::doLayout( QPainter *p, int w )
 {
-    withoutDoubleBuffer = (p != 0);
+    withoutDoubleBuffer = ( p != 0 );
     flow_->setWidth( w );
     cw = w;
     vw = w;
@@ -2873,8 +2871,7 @@ void QTextStringChar::setCustomItem( QTextCustomItem *i )
 
 void QTextStringChar::loseCustomItem() // setRegular() might be a better name
 {
-    if ( isCustom() )
-    {
+    if ( isCustom() ) {
 	QTextFormat *f = d.custom->format;
 	d.custom->custom = 0;
 	delete d.custom;
@@ -3116,8 +3113,7 @@ void QTextParag::join( QTextParag *s )
 	    s->str->at( i ).format()->addRef();
 	    str->setFormat( i + start, s->str->at( i ).format(), TRUE );
 	}
-	if ( s->str->at( i ).isCustom() )
-	{
+	if ( s->str->at( i ).isCustom() ) {
 	    QTextCustomItem * item = s->str->at( i ).customItem();
 	    str->at( i + start ).setCustomItem( item );
 	    s->str->at( i ).loseCustomItem();
@@ -3348,7 +3344,7 @@ void QTextParag::setFormat( int index, int len, QTextFormat *f, bool useCollecti
     if ( index > str->length() - 1 )
 	index = str->length() - 1;
     if ( index + len >= str->length() )
-	len = str->length() - 1 - index;
+	len = str->length() - index;
 
     QTextFormatCollection *fc = 0;
     if ( useCollection )
