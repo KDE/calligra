@@ -139,6 +139,8 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
 #else
     m_spell.kspell = 0;
 #endif
+    m_spell.macroCmdSpellCheck=0L;
+    m_spell.textIterator = 0L;
     m_border.left.color = white;
     m_border.left.setStyle (KoBorder::SOLID);
     m_border.left.setPenWidth( 0);
