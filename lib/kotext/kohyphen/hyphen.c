@@ -465,7 +465,7 @@ int hnj_hyphen_hyphenate (HyphenDict *dict,
 #endif
 	  /* This is a linear search because I tried a binary search and
 	     found it to be just a teeny bit slower. */
-	  for (k = 0; match[k]; k++)
+	  for (k = 0; match[k] && offset+k < word_size+1 ; k++)
 	    if (hyphens[offset + k] < match[k])
 	      hyphens[offset + k] = match[k];
 	}
