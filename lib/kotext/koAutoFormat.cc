@@ -1304,7 +1304,8 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
         for ( int i = index - 1; i >= 0; --i )
         {
             QChar ch = s->at( i ).c;
-            //if ( ch.isSpace() /*|| ch.isPunct()*/ || i==0)
+	    // It's necessary to stop at spaces - #99063
+            if ( ch.isSpace() /*|| ch.isPunct()*/ || i==0)
             {
                 if(i==0 && word.length()<m_maxFindLength)
                     word.prepend( ch );
