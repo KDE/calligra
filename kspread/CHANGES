@@ -684,3 +684,8 @@ enter cell pos or range.
 -Now you can write a table name with a space example "Table 1"
 -Now you use press Key_Home you go to beginning of the row
 and not at cell A1
+
+2000-06-25-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Now you can select with the mouse an area from bottom to top, from top
+to bottom, from right to left and from left to right. Now it works.

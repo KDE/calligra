@@ -308,7 +308,7 @@ void KSpreadCanvas::gotoLocation( const KSpreadRange & _range )
 		KMessageBox::error( this, i18n("Unknown table name %1" ).arg( _range.tableName ) );
                 return;
 	}
-
+        
 	gotoLocation( _range.range.left(), _range.range.top(), table, false );
 	gotoLocation( _range.range.right(), _range.range.bottom(), table, true );
 }
@@ -636,23 +636,35 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
   if ( m_eMouseAction == NoAction )
     return;
-
-  if ( col < m_iMouseStartColumn )
-     col = m_iMouseStartColumn;
-
-  if ( row < m_iMouseStartRow )
-     row = m_iMouseStartRow;
-
-
-  if ( row == selection.bottom() && col == selection.right() )
+  /*if ( row == selection.bottom() && col == selection.right() )
     return;
-
+  */
   hideMarker();
 
   // Set the new lower right corner of the selection
-  selection.setRight( col );
+  /*selection.setRight( col );
   selection.setBottom( row );
   table->setSelection( selection, this );
+  */
+  if ( col <= m_iMouseStartColumn )
+     {
+     selection.setLeft( col );
+     selection.setRight( m_iMouseStartColumn );
+     }
+  else
+     selection.setRight( col );
+  if ( row <= m_iMouseStartRow )
+     {
+     selection.setTop( row );
+     selection.setBottom( m_iMouseStartRow);
+     }
+  else
+     selection.setBottom( row );
+
+  table->setSelection( selection, this );
+
+  //kdDebug(36001)<<"left"<<selection.left()<<"right"<<selection.right()<<endl;
+  //kdDebug(36001)<<"top"<<selection.top()<<"bottom"<<selection.bottom()<<endl;
 
   // Scroll the table if necessary
   if ( _ev->pos().x() < 0 )
@@ -960,19 +972,34 @@ void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
   int row = table->topRow( _ev->pos().y(), ypos, this );
   int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
-  if ( col < m_iMouseStartColumn )
+  /*if ( col < m_iMouseStartColumn )
     col = m_iMouseStartColumn;
   if ( row < m_iMouseStartRow )
-    row = m_iMouseStartRow;
+    row = m_iMouseStartRow;*/
 
   // Noting changed ?
   QRect selection( table->chooseRect() );
-  if ( row == selection.bottom() && col == selection.right() )
+  /*if ( row == selection.bottom() && col == selection.right() )
     return;
-
+  */
   // Set the new lower right corner of the selection
-  selection.setRight( col );
-  selection.setBottom( row );
+  /*selection.setRight( col );
+  selection.setBottom( row );*/
+  if ( col <= m_iMouseStartColumn )
+     {
+     selection.setLeft( col );
+     selection.setRight( m_iMouseStartColumn );
+     }
+  else
+     selection.setRight( col );
+  if ( row <= m_iMouseStartRow )
+     {
+     selection.setTop( row );
+     selection.setBottom( m_iMouseStartRow);
+     }
+  else
+     selection.setBottom( row );
+
   table->setChooseRect( selection );
 
   // Scroll the table if neccessary
