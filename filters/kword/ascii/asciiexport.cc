@@ -21,12 +21,12 @@
 #include <asciiexport.moc>
 #include <kdebug.h>
 
-ASCIIExport::ASCIIExport(KoFilter *parent, QString name) :
+ASCIIExport::ASCIIExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
 }
 
-const bool ASCIIExport::filter(const QCString &fileIn, const QCString &fileOut,
-                               const QCString& from, const QCString& to,
+const bool ASCIIExport::filter(const QString &fileIn, const QString &fileOut,
+                               const QString& from, const QString& to,
                                const QString &) {
 
     if(to!="text/plain" || from!="application/x-kword")
@@ -55,7 +55,7 @@ const bool ASCIIExport::filter(const QCString &fileIn, const QCString &fileOut,
     int i = buf.find( "<TEXT>" );
     while ( i != -1 )
     {
-	k+=i;
+        k+=i;
         int j = buf.find( "</TEXT>", i );
         if ( j - ( i + 6 ) >= 0 )
         {
@@ -66,11 +66,11 @@ const bool ASCIIExport::filter(const QCString &fileIn, const QCString &fileOut,
             str += "\n";
         }
         i = buf.find( "<TEXT>", j );
-	if(k>step) {
-	    k=0;
-	    value+=2;
-	    emit sigProgress(value);
-	}
+        if(k>step) {
+            k=0;
+            value+=2;
+            emit sigProgress(value);
+        }
     }
 
     QFile out(fileOut);

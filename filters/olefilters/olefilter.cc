@@ -20,7 +20,7 @@
 #include <olefilter.h>
 #include <olefilter.moc>
 
-OLEFilter::OLEFilter(KoFilter *parent, QString name) :
+OLEFilter::OLEFilter(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
     olefile.data=0L;
     docfile=0L;
@@ -38,8 +38,8 @@ OLEFilter::~OLEFilter() {
     store=0L;
 }
 
-const bool OLEFilter::filter(const QCString &fileIn, const QCString &fileOut,
-                             const QCString &from, const QCString &to,
+const bool OLEFilter::filter(const QString &fileIn, const QString &fileOut,
+                             const QString &from, const QString &to,
                              const QString &) {
 
     if(to!="application/x-kword" &&
@@ -115,7 +115,7 @@ void OLEFilter::slotPart(const char *nameIN, char **nameOUT) {
     }
     unsigned int len=value.length();
     *nameOUT=new char[len+1];
-    strncpy(*nameOUT, (const char*)value, len);
+    strncpy(*nameOUT, QFile::encodeName(value), len);
     *(*nameOUT+len)='\0';
 }
 
@@ -255,7 +255,7 @@ void OLEFilter::convert(const QString &dirname) {
         file.close();
         // Get the name of the part (dirname==key)
         char *tmp=0L;
-        slotPart(dirname, &tmp);
+        slotPart(QFile::encodeName(dirname), &tmp);
         if(!store->open(tmp)) {
             success=false;
             kdError(30510) << "OLEFilter::convert(): Could not open KoStore!" << endl;

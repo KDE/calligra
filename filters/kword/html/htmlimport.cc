@@ -21,12 +21,12 @@
 #include <htmlimport.moc>
 #include <kdebug.h>
 
-HTMLImport::HTMLImport(KoFilter *parent, QString name) :
+HTMLImport::HTMLImport(KoFilter *parent, const char*name) :
                      KoFilter(parent, name) {
 }
 
-const bool HTMLImport::filter(const QCString &fileIn, const QCString &fileOut,
-                              const QCString& from, const QCString& to,
+const bool HTMLImport::filter(const QString &fileIn, const QString &fileOut,
+                              const QString& from, const QString& to,
                               const QString &) {
 
     if(to!="application/x-kword" || from!="text/html")
@@ -64,12 +64,12 @@ const bool HTMLImport::filter(const QCString &fileIn, const QCString &fileOut,
 
     for ( int i = 0 ;i < buflen ; ++i )
     {
-	++j;
-	if(j>step) {
-	    j=0;
-	    value+=2;
-	    emit sigProgress(value);
-	}
+        ++j;
+        if(j>step) {
+            j=0;
+            value+=2;
+            emit sigProgress(value);
+        }
         QChar c = buffer[ i ];
         if ( c == QChar( '\n' ) )
         {

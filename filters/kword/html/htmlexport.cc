@@ -25,12 +25,12 @@
 
 void mainFunc(const char*,const char*);
 
-HTMLExport::HTMLExport(KoFilter *parent, QString name) :
+HTMLExport::HTMLExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
 }
 
-const bool HTMLExport::filter(const QCString &fileIn, const QCString &fileOut,
-                              const QCString& from, const QCString& to,
+const bool HTMLExport::filter(const QString &fileIn, const QString &fileOut,
+                              const QString& from, const QString& to,
                               const QString &) {
 
     if(to!="text/html" || from!="application/x-kword")

@@ -28,12 +28,12 @@
 #include <asciiimport.moc>
 #include <kdebug.h>
 
-ASCIIImport::ASCIIImport(KoFilter *parent, QString name) :
+ASCIIImport::ASCIIImport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
 }
 
-const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
-                               const QCString& from, const QCString& to,
+const bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
+                               const QString& from, const QString& to,
                                const QString &) {
 
     if(to!="application/x-kword" || from!="text/plain")
@@ -41,9 +41,9 @@ const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
 
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
-	kdError(30502) << "Unable to open input file!" << endl;
-	in.close();
-	return false;
+        kdError(30502) << "Unable to open input file!" << endl;
+        in.close();
+        return false;
     }
 
     QString str;
@@ -67,9 +67,9 @@ const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
     int i=0;
     while(!stream.atEnd())
     {
-	++i;
+        ++i;
         QChar c;
-	stream >> c;
+        stream >> c;
         if ( c == QChar( '\n' ) )
         {
             str += "</TEXT>\n";
@@ -82,14 +82,14 @@ const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
         else if ( c == QChar( '>' ) )
             str += "&gt;";
         else if( c == QChar( '&' ) )
-	    str+="&amp;";
+            str+="&amp;";
         else
             str += c;
-	if(i>step) {
-	    i=0;
-	    value+=2;
-	    emit sigProgress(value);
-	}
+        if(i>step) {
+            i=0;
+            value+=2;
+            emit sigProgress(value);
+        }
     }
     emit sigProgress(100);
 

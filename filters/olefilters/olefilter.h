@@ -50,13 +50,13 @@ class OLEFilter : public KoFilter {
     Q_OBJECT
 
 public:
-    OLEFilter(KoFilter *parent, QString name);
+    OLEFilter(KoFilter *parent, const char *name);
     virtual ~OLEFilter();
 
-    virtual const bool filter(const QCString &fileIn, const QCString &fileOut,
-                              const QCString &from, const QCString &to,
+    virtual const bool filter(const QString &fileIn, const QString &fileOut,
+                              const QString &from, const QString &to,
                               const QString &config=QString::null);
-    
+
 protected slots:
     // [TODO] This slot creates a name for a Picture which should be
     // saved in the KOStore (==KOffice tar storage).
