@@ -84,9 +84,8 @@ bool ImageExport::exportToFile (GDocument* doc) {
   p.scale (RESOLUTION / 72.0, RESOLUTION / 72.0);
 
   // draw the objects
-  QListIterator<GObject> it = doc->getObjects ();
-  for (; it.current (); ++it) 
-    it.current ()->draw (p);
+  doc->drawContents (p);
+
   p.end ();
 
   // compute the bounding box

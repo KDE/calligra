@@ -566,6 +566,7 @@ void XfigImport::parseCompoundObject (istream& fin, GDocument* doc) {
  * Copy all parsed objects from the sorted list to the document.
  */
 void XfigImport::buildDocument (GDocument *doc) {
+  doc->setAutoUpdate (false);
   objList.sort (greater_than);
   list<pair<int, GObject*> >::iterator i = objList.begin ();
   for (; i != objList.end (); i++) {
@@ -573,6 +574,7 @@ void XfigImport::buildDocument (GDocument *doc) {
     obj->ref ();
     doc->insertObject (obj);
   }
+  doc->setAutoUpdate (true);
 }
 
 void XfigImport::setProperties (GObject* obj, int pen_color, int style, 

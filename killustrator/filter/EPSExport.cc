@@ -91,9 +91,7 @@ bool EPSExport::exportToFile (GDocument* doc) {
   }
 
   // write objects
-  QListIterator<GObject> it = doc->getObjects ();
-  for (; it.current (); ++it) 
-    it.current ()->writeToPS (epsStream);
+  doc->writeToPS (epsStream);
 
   epsStream << "%%EOF" << endl;
   return true;

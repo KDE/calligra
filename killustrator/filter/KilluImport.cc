@@ -45,12 +45,27 @@ bool KilluImport::importFromFile (GDocument *doc) {
     GGroup* group = new GGroup ();
     group->ref ();
     // now copy all objects to the group
+#ifdef NO_LAYERS
     QListIterator<GObject> iter = tmpDoc->getObjects ();
     for (; iter.current (); ++iter) {
       GObject* obj = iter.current ();
       obj->ref ();
       group->addObject (obj);
     }
+#else
+    for (vector<GLayer*>::const_iterator li = tmpDoc->getLayers ().begin (); 
+	 li != tmpDoc->getLayers ().end (); li++) {
+      if ((*li)->isVisible ()) {
+	list<GObject*>& contents = (*li)->objects ();
+	for (list<GObject*>::iterator oi = contents.begin ();
+	     oi != contents.end (); oi++) {
+	  GObject* obj = *oi;
+	  obj->ref ();
+	  group->addObject (obj);
+	}
+      }
+    }
+#endif
     doc->insertObject (group);
   }
   
