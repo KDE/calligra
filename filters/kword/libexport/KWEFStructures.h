@@ -316,6 +316,7 @@ class LayoutData
 public:
     LayoutData():indentFirst(0.0), indentLeft(-1.0), indentRight(-1.0), marginTop(-1.0), marginBottom(-1.0),
         lineSpacingType(10), lineSpacing(0.0), pageBreakBefore(false), pageBreakAfter(false),
+        keepLinesTogether(false),
         shadowDistance(0.0), shadowDirection(0)
         { }
 
@@ -339,6 +340,8 @@ public:
 
     bool        pageBreakBefore;
     bool        pageBreakAfter;
+    bool        keepLinesTogether;
+
     double      shadowDistance; // distance of <SHADOW>
     int         shadowDirection;// direction of <SHADOW>
     QColor      shadowColor;    // red, green, blue of <SHADOW>

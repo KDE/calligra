@@ -595,7 +595,7 @@ static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, KWEFKWordLe
     QString strBefore, strAfter;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "linesTogether",       "",     NULL                     );
+    attrProcessingList << AttrProcessing ( "linesTogether",       "bool", &layout->keepLinesTogether  );
     attrProcessingList << AttrProcessing ( "hardFrameBreak",      "bool", &layout->pageBreakBefore );
     attrProcessingList << AttrProcessing ( "hardFrameBreakAfter", "bool", &layout->pageBreakAfter  );
     ProcessAttributes (myNode, attrProcessingList);
