@@ -265,6 +265,9 @@ KexiFormPart::TempData::TempData(QObject* parent)
 {
 }
 
+KexiFormPart::TempData::~TempData()
+{
+}
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_form, KGenericFactory<KexiFormPart> )
 

@@ -34,9 +34,10 @@
 
 #include "kexidbform.h"
 
-//#define NO_DSWIZARD
+#define NO_DSWIZARD
 
-KexiDBForm::KexiDBForm(/*KexiFormPartItem &i,*/ KexiMainWindow *win, QWidget *parent, const char *name, KexiDB::Connection *conn, bool preview)
+KexiDBForm::KexiDBForm(/*KexiFormPartItem &i,*/ KexiMainWindow *win, QWidget *parent, 
+	const char *name, KexiDB::Connection *conn, bool preview)
  : KexiViewBase(win, parent, name)
 {
 	m_conn = conn;

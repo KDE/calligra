@@ -81,8 +81,9 @@ class KexiDBForm : public KexiViewBase, public KFormDesigner::FormWidget
 			return static_cast<KexiFormPart::TempData*>(parentDialog()->tempData()); }
 
 		KexiFormPart* formPart() const { return static_cast<KexiFormPart*>(part()); }
-		KFormDesigner::Form*   form() const;
-		void  setForm(KFormDesigner::Form *f);
+
+		KFormDesigner::Form* form() const;
+		void setForm(KFormDesigner::Form *f);
 
 	private:
 		QString m_ds;

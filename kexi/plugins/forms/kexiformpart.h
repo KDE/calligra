@@ -62,14 +62,13 @@ class KexiFormPart : public KexiPart::Part
 		{
 			public:
 				TempData(QObject* parent);
+				~TempData();
 				QGuardedPtr<KFormDesigner::Form> form;
 				QGuardedPtr<KFormDesigner::Form> previewForm;
 				QByteArray  tempForm;
 		};
 
 	protected:
-//		virtual void initPartActions( KActionCollection *col );
-//		virtual void initInstanceActions( int mode, KActionCollection *col );
 		virtual void initActions();
 
 	private:
