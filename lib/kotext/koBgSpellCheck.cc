@@ -293,8 +293,8 @@ void KoBgSpellCheck::spellCheckerFinished()
         kdWarning() << "ISpell/ASpell not configured correctly." << endl;
         if ( !m_bSpellCheckConfigure )
         {
-            configurateSpellChecker();
             m_bSpellCheckConfigure=true;
+            configurateSpellChecker();
         }
         return;
     }
