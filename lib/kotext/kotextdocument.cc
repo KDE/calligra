@@ -189,7 +189,10 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     if ( p->device()->devType() == QInternal::Printer )
 	useDoubleBuffer = FALSE;
     // Can't handle transparency using double-buffering, in case of rotation/scaling (due to bitBlt)
-    if ( !p->worldMatrix().isIdentity() && brush.style() != Qt::SolidPattern )
+    // The test on mat is almost like isIdentity(), but allows for translation.
+    QWMatrix mat = p->worldMatrix();
+    if ( ( mat.m11() != 1.0 || mat.m22() != 1.0 || mat.m12() != 0.0 || mat.m21() != 0.0 )
+         && brush.style() != Qt::SolidPattern )
         useDoubleBuffer = FALSE;
 
 #ifdef DEBUG_PAINTING
