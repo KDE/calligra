@@ -679,7 +679,17 @@ QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, F
     //</number:percentage-style>
     //TODO add decimal etc.
     QString format;
-
+    if ( _precision == -1 )
+        format="0.00";
+    else
+    {
+        QString tmp;
+        for ( int i = 0; i <_precision; i++ )
+        {
+            tmp+="0";
+        }
+        format = "0."+tmp;
+    }
     return KoOasisStyles::saveOasisPercentageStyle( mainStyles, format );
 }
 
