@@ -587,7 +587,7 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   fonts[2] = CORBA::string_dup( "Symbol" );
   fonts[3] = CORBA::string_dup( "Times" );
 
-  m_idComboLayout_Font = m_vToolBarLayout->insertCombo( fonts, 1, false, SIGNAL( activated( const char* ) ), this,
+  m_idComboLayout_Font = m_vToolBarLayout->insertCombo( fonts, 1, false, SIGNAL( activated( const QString & ) ), this,
 							"fontSelected", true, i18n("Font"),
 							120, -1, OpenPartsUI::AtBottom );
 
@@ -600,7 +600,7 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
     sprintf( buffer, "%i", sizes[i] );
     sizelist[i] = CORBA::string_dup( buffer );
   }
-  m_idComboLayout_FontSize = m_vToolBarLayout->insertCombo( sizelist, 2, true, SIGNAL( activated( const char* ) ),
+  m_idComboLayout_FontSize = m_vToolBarLayout->insertCombo( sizelist, 2, true, SIGNAL( activated( const QString & ) ),
 							    this, "fontSizeSelected", true,
 							    i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
 
