@@ -273,9 +273,9 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 					continue;
 				}
 
-				add(new KexiProperty(propertyName, 
+				add(new KexiProperty(propertyName,
 					meta->valueToKey(w->property(propertyName).toInt()),
-					new KexiProperty::ListData(QStringList::fromStrList(keys), 
+					new KexiProperty::ListData(QStringList::fromStrList(keys),
 						descList(QStringList::fromStrList(keys))),
 					desc)
 				);
@@ -299,8 +299,8 @@ ObjectPropertyBuffer::setWidget(QWidget *w)
 	QStringList list;
 	for(; strIt.current() != 0; ++strIt)
 		list.append(*strIt);
-	add(new KexiProperty("signals", "", 
-		new KexiProperty::ListData(list, descList(list)), 
+	add(new KexiProperty("signals", "",
+		new KexiProperty::ListData(list, descList(list)),
 		i18n("Events")));
 
 	if(m_manager->activeForm())
@@ -523,7 +523,7 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QWidget *ob
 			value = "AlignAuto";
 
 		list << "AlignAuto" << "AlignLeft" << "AlignRight" << "AlignHCenter" << "AlignJustify";
-		add(new KexiProperty("hAlign", value, 
+		add(new KexiProperty("hAlign", value,
 			new KexiProperty::ListData(list, descList(list)), i18n("Horizontal Alignment")));
 		updateOldValue(tree, "hAlign");
 		list.clear();
@@ -540,7 +540,7 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QWidget *ob
 			value = "AlignVCenter";
 
 		list << "AlignTop" << "AlignVCenter" << "AlignBottom";
-		add(new KexiProperty("vAlign", value, new KexiProperty::ListData(list, descList(list)), 
+		add(new KexiProperty("vAlign", value, new KexiProperty::ListData(list, descList(list)),
 			i18n("Vertical Alignment")));
 		updateOldValue(tree, "vAlign");
 	}
@@ -589,8 +589,13 @@ ObjectPropertyBuffer::saveAlignProperty(const QString &property)
 void
 ObjectPropertyBuffer::createLayoutProperty(Container *container)
 {
-	if (!m_manager->activeForm() || !m_manager->activeForm()->objectTree())
+	if (!m_manager->activeForm() || !m_manager->activeForm()->objectTree() || !container->widget())
 		return;
+	// special containers have no 'layout' property, as it should not be changed
+	QString className = container->widget()->className();
+	if((className == "HBox") || (className == "VBox") || (className == "Grid"))
+		return;
+
 	QStringList list;
 	QString value;
 
@@ -598,7 +603,7 @@ ObjectPropertyBuffer::createLayoutProperty(Container *container)
 
 	list << "NoLayout" << "HBox" << "VBox" << "Grid";
 
-	add(new KexiProperty("layout", value, new KexiProperty::ListData(list, descList(list)), 
+	add(new KexiProperty("layout", value, new KexiProperty::ListData(list, descList(list)),
 		i18n("Container's layout")));
 
 	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(container->widget()->name());

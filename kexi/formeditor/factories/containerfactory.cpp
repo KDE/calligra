@@ -101,8 +101,8 @@ HBox::paintEvent(QPaintEvent *)
 {
 	if(m_preview) return;
 	QPainter p(this);
-	p.setPen(QPen(red, 1, Qt::DashLine));
-	p.drawRect(0, 0, width()-1, height() - 1);
+	p.setPen(QPen(red, 2, Qt::DashLine));
+	p.drawRect(1, 1, width()-1, height() - 1);
 }
 
 VBox::VBox(QWidget *parent, const char *name)
@@ -114,8 +114,8 @@ VBox::paintEvent(QPaintEvent *)
 {
 	if(m_preview) return;
 	QPainter p(this);
-	p.setPen(QPen(blue, 1, Qt::DashLine));
-	p.drawRect(0, 0, width()-1, height() - 1);
+	p.setPen(QPen(blue, 2, Qt::DashLine));
+	p.drawRect(1, 1, width()-1, height() - 1);
 }
 
 Grid::Grid(QWidget *parent, const char *name)
@@ -127,8 +127,8 @@ Grid::paintEvent(QPaintEvent *)
 {
 	if(m_preview) return;
 	QPainter p(this);
-	p.setPen(QPen(darkGreen, 1, Qt::DashLine));
-	p.drawRect(0, 0, width()-1, height() - 1);
+	p.setPen(QPen(darkGreen, 2, Qt::DashLine));
+	p.drawRect(1, 1, width()-1, height() - 1);
 }
 
 ///////  Tab related KCommand (to allow tab creation/deletion undoing)

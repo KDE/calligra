@@ -97,7 +97,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 	QCString classname = container->className();
 	if((classname == "HBox") || (classname == "Grid") || (classname == "VBox"))
-		m_margin = 2; // those containers don't have frames, so little margin
+		m_margin = 4; // those containers don't have frames, so little margin
 	else
 		m_margin = m_form ? m_form->defaultMargin() : 0;
 	m_spacing = m_form ? m_form->defaultSpacing() : 0;
@@ -146,8 +146,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 			kdDebug() << "QEvent::MouseButtonPress this          = " << this->name() << endl;
 
 			m_moving = static_cast<QWidget*>(s);
-
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
+			m_grab = QPoint(mev->x(), mev->y());
 
 			// we are drawing a connection
 			if(m_form->manager()->isCreatingConnection())  {
@@ -208,8 +208,6 @@ Container::eventFilter(QObject *s, QEvent *e)
 					m_state = DrawingSelectionRect;
 				return true;
 			}
-
-			m_grab = QPoint(mev->x(), mev->y());
 
 			if(s->inherits("QTabWidget")) // to allow changing page by clicking tab
 				return false;
@@ -321,10 +319,14 @@ Container::eventFilter(QObject *s, QEvent *e)
 			else if( ( (mev->state() == Qt::LeftButton) || (mev->state() == (LeftButton|ControlButton|AltButton)) )
 			  && !m_form->manager()->isInserting() && (m_state != CopyingWidget)) // we are dragging the widget(s) to move it
 			{
-				if(!m_toplevel && m_moving == m_container) // no effect for form
+				if(!m_toplevel && m_moving == m_container) { // no effect for form
+					kdDebug() << "Cancelling move operation" << endl;
 					return false;
-				if((!m_moving) || (!m_moving->parentWidget()))// || (m_moving->parentWidget()->inherits("QWidgetStack")))
+				}
+				if((!m_moving) || (!m_moving->parentWidget())) {// || (m_moving->parentWidget()->inherits("QWidgetStack")))
+						kdDebug() << "m_moving == false kfffffffffffffffffff" << endl;
 						return true;
+				}
 
 				dragWidgets(mev);
 			}
@@ -933,8 +935,10 @@ Container::dragWidgets(QMouseEvent *mev)
 
 	for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 	{
-		if(w == m_container)
+		QString classname = m_container->className();
+		if((w == m_container) && (classname != "HBox") && (classname != "VBox") && (classname != "Grid"))
 			continue;
+
 		if(w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
 		{
 			w = w->parentWidget(); // widget is WidgetStack page
@@ -957,8 +961,11 @@ Container::dragWidgets(QMouseEvent *mev)
 
 	for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())
 	{
-		if(w == m_container)
+		// Don't move tab widget pages (or widget stack pages)
+		QString classname = m_container->className();
+		if((w == m_container) && (classname != "HBox") && (classname != "VBox") && (classname != "Grid"))
 			continue;
+
 		if(w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
 		{
 			w = w->parentWidget(); // widget is WidgetStack page
