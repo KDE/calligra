@@ -21,25 +21,36 @@
 #define KEXIRELATIONVIEW_H
 
 #include <qscrollview.h>
-#include <qptrlist.h>
+#include <qvaluelist.h>
+#include <qmap.h>
 #include <qdragobject.h>
+#include <qcstring.h>
 
 #include <qlistview.h>
-
-typedef QPtrList<QFrame> TableList;
 
 //class KListView;
 class QFrame;
 
 class KexiRelationViewTable;
 
-typedef struct Connection
+typedef struct RelationSource
 {
-	KexiRelationViewTable	*sourceTable;
-	KexiRelationViewTable	*receverTable;
-	QString			*sourceField;
-	QString			*receverField;
+	QString			table;
+	QRect			geometry;
+	KexiRelationViewTable	*columnView;
 };
+
+typedef struct SourceConnection
+{
+	QString	srcTable;
+	QString	rcvTable;
+	QString	srcField;
+	QString	rcvField;
+	QRect	geometry;
+};
+
+typedef QMap<QString, RelationSource> TableList;
+typedef QValueList<SourceConnection> ConnectionList;
 
 class KexiRelationView : public QScrollView
 {
@@ -50,12 +61,28 @@ class KexiRelationView : public QScrollView
 		~KexiRelationView();
 
 		void		addTable(QString table, QStringList columns);
-		void		addConnection(Connection con);
+		void		addConnection(SourceConnection con);
+
+	protected:
+		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
+		void		drawSource(QPainter *p, RelationSource src);
+		void		drawConnection(QPainter *p, SourceConnection *conn, bool paint=true);
+
+//		void		contentsMousePressEvent(QMouseEvent *ev);
+		void		contentsMouseReleaseEvent(QMouseEvent *ev);
+		void		contentsMouseMoveEvent(QMouseEvent *ev);
+
+		QRect		recalculateConnectionRect(SourceConnection *conn);
 
 	private:
 		int		m_tableCount;
+		
+		RelationSource	*m_floatingSource;
+		int		m_floatingX;
+		int		m_floatingY;
 
 		TableList	m_tables;
+		ConnectionList	m_connections;
 };
 
 class KexiRelationViewTable : public QListView
@@ -63,23 +90,30 @@ class KexiRelationViewTable : public QListView
 	Q_OBJECT
 	
 	public:
-		KexiRelationViewTable(QWidget *parent, QString table, QStringList fields, const char *name=0);
+		KexiRelationViewTable(KexiRelationView *parent, QString table, QStringList fields, const char *name=0);
 		~KexiRelationViewTable();
 
+		QString			table() { return m_table; };
+		int			globalY(QString item);
+
 	protected:
-		QDragObject	*dragObject();
+		QDragObject		*dragObject();
+		void			contentsDropEvent(QDropEvent *ev);
 
 	protected slots:
-		void		slotDropped(QDropEvent *e);
+		void			slotDropped(QDropEvent *e);
 
 	private:
-		QStringList	m_fieldList;
+		QStringList		m_fieldList;
+		QString			m_table;
+
+		KexiRelationView	*m_parent;
 };
 
 class KexiFieldMetaDrag : public QStoredDrag
 {
 	public:
-		KexiFieldMetaDrag(uchar meta, QWidget *parent=0, const char *name=0);
+		KexiFieldMetaDrag(QCString meta, QWidget *parent=0, const char *name=0);
 		~KexiFieldMetaDrag() { };
 		
 		static bool canDecode( QDragMoveEvent* e);
