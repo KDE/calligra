@@ -703,6 +703,7 @@ bool KoMainWindow::queryClose()
           }
           case KMessageBox::No :
               rootDocument()->removeAutoSaveFiles();
+              rootDocument()->setModified( false ); // Now when queryClose() is called by closeEvent it won't do anything.
               break;
           default : // case KMessageBox::Cancel :
               return false;
@@ -808,11 +809,8 @@ void KoMainWindow::slotFileClose()
 
 void KoMainWindow::slotFileQuit()
 {
-    if ( queryClose() )
-    {
-        setRootDocument( 0L );
-        close();
-    }
+    if (queryClose())
+        close(); // queryClose will also be called in this method but won't do anything because isModified==false.
 }
 
 void KoMainWindow::slotFilePrint()
