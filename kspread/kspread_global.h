@@ -25,7 +25,7 @@ enum Action { Stop, Warning, Information};
 enum Allow { Allow_All, Allow_Number, Allow_Text,Allow_Time,Allow_Date,Allow_Integer,Allow_TextLength};
 enum Series { Column,Row,Linear,Geometric };
 namespace KSpread {  // necessary due to QDock* enums (Werner)
-enum MoveTo { Bottom,Left,Top,Right };
+enum MoveTo { Bottom, Left, Top, Right, BottomFirst };
 }
 enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc};
 #endif

@@ -508,6 +508,7 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
   listType+=i18n("Top");
   listType+=i18n("Right");
   listType+=i18n("Left");
+  listType+=i18n("Bottom, First Cell");
   typeOfMove->insertStringList(listType);
   typeOfMove->setCurrentItem(0);
   msgError= new QCheckBox(i18n("&Show error message"),tmpQGroupBox);
@@ -580,6 +581,9 @@ switch( m_pView->doc()->getMoveToValue( ))
                 break;
         case  KSpread::Right:
                 typeOfMove->setCurrentItem(2);
+                break;
+        case  KSpread::BottomFirst:
+                typeOfMove->setCurrentItem(4);
                 break;
         default :
                 typeOfMove->setCurrentItem(0);
@@ -669,6 +673,9 @@ void miscParameters::apply()
             break;
         case 3:
             tmpMoveTo=KSpread::Left;
+            break;
+        case 4:
+            tmpMoveTo=KSpread::BottomFirst;
             break;
     }
     if(tmpMoveTo!=m_pView->doc()->getMoveToValue())

@@ -1527,6 +1527,17 @@ void KSpreadCanvas::moveDirection( KSpread::MoveTo direction, bool extendSelecti
       }
       destination = QPoint(QMIN(cursor.x() + offset, KS_colMax), cursor.y());
       break;
+    case KSpread::BottomFirst:
+      offset = cell->mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
+      rl = activeTable()->rowFormat( cursor.y() + offset );
+      while ( ((cursor.y() + offset) <= KS_rowMax) && rl->isHide())
+      {
+        ++offset;
+        rl = activeTable()->rowFormat( cursor.y() + offset );
+      }
+
+      destination = QPoint( 1, QMIN( cursor.y() + offset, KS_rowMax ) );
+      break;
   }
 
   gotoLocation(destination, activeTable(), extendSelection);
@@ -1547,28 +1558,32 @@ void KSpreadCanvas::processEnterKey(QKeyEvent* event)
   KSpread::MoveTo direction = m_pView->doc()->getMoveToValue();
 
   //if shift Button clicked inverse move direction
-  if(event->state() & Qt::ShiftButton)
+  if (event->state() & Qt::ShiftButton)
   {
     switch( direction )
     {
-    case KSpread::Bottom:
+     case KSpread::Bottom:
       direction = KSpread::Top;
       break;
-    case KSpread::Top:
+     case KSpread::Top:
       direction = KSpread::Bottom;
       break;
-    case KSpread::Left:
+     case KSpread::Left:
       direction = KSpread::Right;
       break;
-    case KSpread::Right:
+     case KSpread::Right:
       direction = KSpread::Left;
+      break;
+     case KSpread::BottomFirst:
+      direction = KSpread::BottomFirst;
+      break;
     }
   }
 
   /* never extend a selection with the enter key -- the shift key reverses
      direction, not extends the selection
   */
-    moveDirection(direction, false);
+  moveDirection(direction, false);
   return;
 }
 
