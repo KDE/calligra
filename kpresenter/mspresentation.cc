@@ -31,6 +31,7 @@
 #include "kprpage.h"
 
 #include <kio/netaccess.h>
+#include <ktempfile.h>
 
 #include <qdir.h>
 #include <qframe.h>
@@ -89,10 +90,8 @@ void KPMSPresentation::initCreation( KProgress *progressBar )
     progressBar->setProgress( ++p );
     kapp->processEvents();
 
-    QDir dirPath;
     for (int dirNum = 101; dirNum < 999; dirNum++) {
         slidePath = QString("/DCIM/%1MSPJP").arg(dirNum);
-        dirPath = QDir( path + slidePath );
         if (! KIO::NetAccess::exists(( path + slidePath), true, ( QWidget* )0L) )
             break;
     }
@@ -126,8 +125,13 @@ void KPMSPresentation::initCreation( KProgress *progressBar )
     QPixmap titleSlide( 1024, 768 );
     titleSlide.fill( backColour );
     QPainter painter( &titleSlide );
+
     //the second title is just blank, so create that now
-    titleSlide.save( path + slidePath + "/SPJT0002.JPG", "JPEG" );
+    KTempFile tmp;
+    QString filename = path + slidePath + "/SPJT0002.JPG";
+    titleSlide.save( tmp.name(), "JPEG" );
+    KIO::NetAccess::file_move( tmp.name(), filename, -1, true /*overwrite*/);
+
     p = progressBar->progress();
     progressBar->setProgress( ++p );
     kapp->processEvents();
@@ -137,7 +141,11 @@ void KPMSPresentation::initCreation( KProgress *progressBar )
     painter.setFont( textFont );
     painter.setPen( textColour );
     painter.drawText( titleSlide.rect(), Qt::AlignCenter | Qt::WordBreak, title );
-    titleSlide.save( path + slidePath + "/SPJT0001.JPG", "JPEG" );
+    filename = path + slidePath + "/SPJT0001.JPG";
+
+    KTempFile tmp2;
+    titleSlide.save( tmp2.name(), "JPEG" );
+    KIO::NetAccess::file_move( tmp2.name(), filename, -1, true /*overwrite*/);
 
     p = progressBar->progress();
     progressBar->setProgress( ++p );
@@ -155,8 +163,12 @@ void KPMSPresentation::createSlidesPictures( KProgress *progressBar )
         int pgNum = slideInfos[i].pageNumber;
         filename.sprintf("/SPJP%04i.JPG", i+3);
 
+        KTempFile tmp;
+
         view->getCanvas()->exportPage( pgNum, 1023, 767,
-                                       path + slidePath + filename, "JPEG" );
+                                       tmp.name(), "JPEG" );
+
+        KIO::NetAccess::file_move( tmp.name(), ( path + slidePath + filename ), -1, true /*overwrite*/);
 
         p = progressBar->progress();
         progressBar->setProgress( ++p );
@@ -167,18 +179,11 @@ void KPMSPresentation::createSlidesPictures( KProgress *progressBar )
 void KPMSPresentation::createIndexFile( KProgress *progressBar )
 {
     int p;
+    KTempFile sppFile;
 
-    // set up the header part of the SPP file
-    QFile sppFile;
-    sppFile.setName( (path + "/MSSONY/PJ/" + title + ".SPP") );
+    QString filenameStore = (path + "/MSSONY/PJ/" + title + ".SPP");
 
-    if (false == sppFile.open( IO_WriteOnly ) ) {
-        KMessageBox::error( 0, i18n( "The index file could not be opened for writing. Your "
-                                     "presentation needs to be regenerated" ) );
-        return;
-    }
-
-    QDataStream sppStream( &sppFile );
+    QDataStream sppStream( sppFile.file() );
     sppStream.setByteOrder(QDataStream::LittleEndian);
     p = progressBar->progress();
     progressBar->setProgress( ++p );
@@ -261,7 +266,7 @@ void KPMSPresentation::createIndexFile( KProgress *progressBar )
     kapp->processEvents();
 
     sppFile.close();
-
+    KIO::NetAccess::file_move( sppFile.name(), filenameStore, -1, true /*overwrite*/);
 }
 
 void KPMSPresentation::init()
