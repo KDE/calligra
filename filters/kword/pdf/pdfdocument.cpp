@@ -149,7 +149,8 @@ QSize PdfDocument::paperSize(KoFormat &format) const
     double best = 2;
     double width = w;
     double height = h;
-    for (uint i=0; i<PG_LAST_FORMAT; i++) {
+    for (uint i=0; i<22/*PG_LAST_FORMAT*/; i++) { // #### koffice 1.2
+        if ( i==PG_CUSTOM || i==PG_SCREEN ) continue; // #### koffice 1.2
         w = toPoint(KoPageFormat::width(KoFormat(i), orientation));
         h = toPoint(KoPageFormat::height(KoFormat(i), orientation));
         double v = fabs(min/w - 1) + fabs(max/h - 1);

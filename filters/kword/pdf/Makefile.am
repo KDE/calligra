@@ -6,7 +6,7 @@ kde_module_LTLIBRARIES = libpdfimport.la
 
 libpdfimport_la_SOURCES = misc.cpp FilterPage.cpp FilterDevice.cpp \
                           pdfdocument.cpp dialog.cpp pdfimport.cpp
-libpdfimport_la_LDFLAGS	= -module $(KDE_PLUGIN)
+libpdfimport_la_LDFLAGS	= $(KDE_PLUGIN)
 libpdfimport_la_LIBADD = $(KDE_RPATH) $(all_libraries) $(LIBKOFFICE) ./xpdf/xpdf/libxpdf.la ./xpdf/goo/libgoo.la
 
 METASOURCES = dialog.moc pdfimport.moc

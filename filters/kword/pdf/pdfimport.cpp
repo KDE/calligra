@@ -112,17 +112,18 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
 	titleTag.appendChild(titleText);
 
     // document
-    KoFormat format;
-    QSize size = doc->paperSize(format);
-    FilterData data(m_chain, size, format, doc->paperOrientation(),
-                    doc->nbPages());
+    KoPageLayout page;
+    QSize size = doc->paperSize(page.format);
+    kdDebug(30516) << "size=" << size << endl;
+    page.orientation = doc->paperOrientation();
+    FilterData data(m_chain, size, page, doc->nbPages());
 
     // treat pages
     doc->initDevice(data);
     for (uint i=1; i<=doc->nbPages(); i++) {
         if ( !range.inside(i) ) continue;
         doc->treatPage(i);
-        element = data.createElement("BOOKMARKITEM");
+        QDomElement element = data.createElement("BOOKMARKITEM");
         element.setAttribute("name", QString("page%1").arg(i));
         element.setAttribute("cursorIndexStart", 0); // ?
         element.setAttribute("cursorIndexEnd", 0); // ?
@@ -138,17 +139,18 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
     // save output
     KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
     if( !out ) {
-        kdError(30502) << "Unable to open output file!" << endl;
+        kdError(30516) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
-    QCString cstr = data.document.toCString();
-    out->writeBlock(cstr,cstr.length());
+    kdDebug(30516) << data.document().toCString() << endl;
+    QCString cstr = data.document().toCString();
+    out->writeBlock(cstr, cstr.length());
     out->close();
 
     out = m_chain->storageFile("documentinfo.xml", KoStore::Write);
-    if ( !out ) {
-		qWarning("WARNING: unable to write out doc info. continuing anyway");
-	} else {
+    if ( !out )
+        kdWarning(30516) << "unable to open doc info. continuing anyway\n";
+	else {
 		cstr = infoDocument.toCString();
 		out->writeBlock(cstr, cstr.length());
 		out->close();

@@ -22,6 +22,10 @@
 #include <qcolor.h>
 #include <qfont.h>
 #include <qdom.h>
+#include <qvaluevector.h>
+#include <qsize.h>
+
+#include <koGlobal.h>
 
 
 double toPoint(double mm);
@@ -33,7 +37,7 @@ class KoFilterChain;
 class FilterData
 {
  public:
-    FilterData(KoFilterChain *, QSize pageSize, KoFormat, KoPageOrientation,
+    FilterData(KoFilterChain *, QSize pageSize, KoPageLayout,
                uint nbPages);
 
     QDomElement createElement(const QString &name)
@@ -45,8 +49,10 @@ class FilterData
     KoFilterChain *chain() const { return _chain; }
     QDomDocument document() const { return _document; }
     uint imageIndex() const { return _imageIndex; }
+    uint textIndex() const { return _textIndex; }
     QDomElement bookmarks() const { return _bookmarks; }
     QDomElement pictures() const { return _pictures; }
+    void checkText();
 
     QDomElement createPictureFrameset(double left, double right,
                                       double top, double bottom)
@@ -56,11 +62,12 @@ class FilterData
  private:
     KoFilterChain *_chain;
     QDomDocument   _document;
-    uint           _imageIndex, _textIndex;
+    uint           _pageIndex, _imageIndex, _textIndex;
     bool           _needNewTextFrameset;
     double         _pageHeight;
     QDomElement    _mainElement, _framesets, _pictures, _bookmarks;
     QDomElement    _textFrameset, _mainTextFrameset, _lastMainLayout;
+    QSize          _pageSize;
 
     enum FramesetType { Text, Picture };
     QDomElement createFrameset(FramesetType, double left, double right,

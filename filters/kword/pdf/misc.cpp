@@ -20,6 +20,7 @@
 
 #include <math.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 #include "Link.h"
 #include "Catalog.h"
@@ -36,10 +37,11 @@ bool equal(double d1, double d2, double delta)
 }
 
 //-----------------------------------------------------------------------------
-FilterData::FilterData(KoFilterChain *chain, QSize pageSize, KoFormat format,
-                       KoOrientation orientation, uint nbPages)
+FilterData::FilterData(KoFilterChain *chain, QSize pageSize, KoPageLayout page,
+                       uint nbPages)
     : _chain(chain), _pageIndex(1), _imageIndex(1), _textIndex(1),
-      _needNewTextFrameset(false)
+      _needNewTextFrameset(false), _pageHeight(pageSize.height()),
+      _pageSize(pageSize)
 {
     _document = QDomDocument("DOC");
     _document.appendChild(
@@ -59,11 +61,11 @@ FilterData::FilterData(KoFilterChain *chain, QSize pageSize, KoFormat format,
     element.setAttribute("unit", "mm");
     _mainElement.appendChild(element);
 
-    QDomElement paper = data.document.createElement("PAPER");
-    paper.setAttribute("format", format);
+    QDomElement paper = _document.createElement("PAPER");
+    paper.setAttribute("format", page.format);
     paper.setAttribute("width", pageSize.width());
     paper.setAttribute("height", pageSize.height());
-    paper.setAttribute("orientation", orientation);
+    paper.setAttribute("orientation", page.orientation);
     paper.setAttribute("columns", 1);
     paper.setAttribute("pages", nbPages);
     paper.setAttribute("columnspacing", 2);
@@ -72,9 +74,9 @@ FilterData::FilterData(KoFilterChain *chain, QSize pageSize, KoFormat format,
     paper.setAttribute("spHeadBody", 9);
     paper.setAttribute("spFootBody", 9);
     paper.setAttribute("zoom", 100);
-    data.mainElement.appendChild(paper);
+    _mainElement.appendChild(paper);
 
-    element = data.document.createElement("PAPERBORDERS");
+    element = _document.createElement("PAPERBORDERS");
     element.setAttribute("left", 0);
     element.setAttribute("top", 0);
     element.setAttribute("right", 0);
@@ -82,44 +84,44 @@ FilterData::FilterData(KoFilterChain *chain, QSize pageSize, KoFormat format,
     paper.appendChild(element);
 
     // framesets
-    _framesets = document.createElement("FRAMESETS");
-    mainElement.appendChild(data.framesets);
+    _framesets = _document.createElement("FRAMESETS");
+    _mainElement.appendChild(_framesets);
 
     // main text frameset
-    _pageHeight = pageHeight;
     _mainTextFrameset = createFrameset(FilterData::Text, 0, pageSize.width(),
                                        0, pageSize.height());
+    _pageIndex = 0;
 
     // standard style
-    QDomElement styles = document.createElement("STYLES");
-    mainElement.appendChild(styles);
+    QDomElement styles = _document.createElement("STYLES");
+    _mainElement.appendChild(styles);
 
-    QDomElement style = document.createElement("STYLE");
+    QDomElement style = _document.createElement("STYLE");
     styles.appendChild(style);
 
-    QDomElement element = document.createElement("FORMAT");
-    FilterFont::defaultFont->format(document, element, 0, 0, true);
+    element = _document.createElement("FORMAT");
+    FilterFont::defaultFont->format(_document, element, 0, 0, true);
     style.appendChild(element);
 
-    element = data.document.createElement("NAME");
+    element = _document.createElement("NAME");
     element.setAttribute("value","Standard");
     style.appendChild(element);
 
-    element = data.document.createElement("FOLLOWING");
+    element = _document.createElement("FOLLOWING");
     element.setAttribute("name","Standard");
     style.appendChild(element);
 
     // pictures
-    _pictures = document.createElement("PICTURES");
-    mainElement.appendChild(_pictures);
+    _pictures = _document.createElement("PICTURES");
+    _mainElement.appendChild(_pictures);
 
     // treat pages
-    _bookmarks = document.createElement("BOOKMARKS");
-    mainElement.appendChild(_bookmarks);
+    _bookmarks = _document.createElement("BOOKMARKS");
+    _mainElement.appendChild(_bookmarks);
 }
 
 QDomElement FilterData::createFrameset(FramesetType type, double left,
-                                       double rught, double top, double bottom)
+                                       double right, double top, double bottom)
 {
     bool text = (type==Text);
     uint &index = (text ? _textIndex : _imageIndex);
@@ -130,7 +132,7 @@ QDomElement FilterData::createFrameset(FramesetType type, double left,
                     : QString("Picture %1")).arg(index);
     frameset.setAttribute("name", name);
     frameset.setAttribute("frameInfo", 0);
-    framesets.appendChild(frameset);
+    _framesets.appendChild(frameset);
 
     QDomElement frame = _document.createElement("FRAME");
     if (text) frame.setAttribute("autoCreateNewFrame", 0); // ?
@@ -138,32 +140,43 @@ QDomElement FilterData::createFrameset(FramesetType type, double left,
     frame.setAttribute("runaround", 0);
     frame.setAttribute("left", left);
     frame.setAttribute("right", right);
-    double offset = (pageIndex-1) * pageHeight;
+    double offset = (_pageIndex-1) * _pageHeight;
     frame.setAttribute("top", top + offset);
     frame.setAttribute("bottom", bottom + offset);
+    if ( text && index>1 ) frame.setAttribute("bkStyle", 0);
     frameset.appendChild(frame);
 
     if (text) _textFrameset = frameset;
     _needNewTextFrameset = !text;
+    kdDebug(30516) << "new frameset " << index << (text ? "text" : "image")
+                   << endl;
     index++;
     return frameset;
 }
 
+void FilterData::checkText()
+{
+    if (_needNewTextFrameset)
+        createFrameset(Text, 0, _pageSize.width(), 0, _pageSize.height());
+}
+
 void FilterData::newPage()
 {
+    _pageIndex++;
     _textFrameset = _mainTextFrameset;
     _needNewTextFrameset = false;
     if ( !_lastMainLayout.isNull() ) {
         QDomElement element = _document.createElement("PAGEBREAKING");
         element.setAttribute("hardFrameBreakAfter", "true");
-        _lastMainLayout.append(element);
+        _lastMainLayout.appendChild(element);
     }
     _lastMainLayout = QDomElement();
 }
 
-void FilterData::createParagraph(const QString &text,
-                                 const QValueVector<QDomElement> &layouts,
-                                 const QValueVector<QDomElement> &formats)
+QDomElement
+FilterData::createParagraph(const QString &text,
+                            const QValueVector<QDomElement> &layouts,
+                            const QValueVector<QDomElement> &formats)
 {
     QDomElement paragraph = _document.createElement("PARAGRAPH");
     _textFrameset.appendChild(paragraph);
@@ -188,6 +201,7 @@ void FilterData::createParagraph(const QString &text,
         for (uint i=0; i<formats.count(); i++)
             format.appendChild(formats[i]);
     }
+    return paragraph;
 }
 
 //-----------------------------------------------------------------------------

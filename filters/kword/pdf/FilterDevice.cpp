@@ -21,6 +21,7 @@
 #include <math.h>
 #include <qimage.h>
 #include <koFilterChain.h>
+#include <kdebug.h>
 
 #include "GfxState.h"
 #include "Link.h"
@@ -111,7 +112,7 @@ void FilterDevice::addImage()
         if ( !equal(_images[i].top, _image.top) ) continue;
         if ( !equal(_images[i].bottom, _image.bottom) ) continue;
         if ( (*_images[i].ptr)==(*_image.ptr) ) {
-            qDebug("image already there !");
+            kdDebug(30516) << "image already there !\n";
             delete _image.ptr;
             _image.ptr = 0;
             return;
@@ -149,7 +150,7 @@ void FilterDevice::addImage()
     key.setAttribute("year", 1970);
     key.setAttribute("filename", name);
     key.setAttribute("name", name);
-    _data.pictures.appendChild(key);
+    _data.pictures().appendChild(key);
 
     KoStoreDevice *sd = _data.chain()->storageFile(name, KoStore::Write);
     QImageIO io(sd, "PNG");
@@ -190,10 +191,6 @@ uint FilterDevice::initImage(GfxState *state, int width, int height,
           !equal(image.top, _image.bottom) ||
           !equal(image.mask, _image.mask)) ) addImage();
 
-    qDebug("  same=%i w=%i h=%i left=%f top=%f right=%f bottom=%f",
-           _image.ptr!=0, width, height, image.left,
-           image.top, image.right, image.bottom);
-
     uint offset = (_image.ptr ? _image.ptr->height() : 0);
     image.ptr = new QImage(width, offset + height, 32);
     image.ptr->setAlphaBuffer(withMask);
@@ -214,8 +211,10 @@ void FilterDevice::drawImage(GfxState *state, Object *, Stream *str,
                              int width, int height, GfxImageColorMap *colorMap,
                              int *maskColors, GBool inlineImg)
 {
-    qDebug("image kind=%i inline=%i maskColors=%i", str->getKind(), inlineImg,
-           maskColors!=0);
+    kdDebug(30516) << "image kind=" << str->getKind()
+                   << " inline=" << inlineImg
+                   << " maskColors=" << (maskColors!=0) << endl;
+
     uint offset = initImage(state, width, height, maskColors!=0);
 
     // read pixels
@@ -249,7 +248,9 @@ void FilterDevice::drawImageMask(GfxState *state, Object *, Stream *str,
                                  int width, int height, GBool invert,
                                  GBool inlineImg)
 {
-    qDebug("image mask ! kind=%i inline=%i", str->getKind(), inlineImg);
+    kdDebug(30516) << "image mask ! kind=" << str->getKind()
+                   << "inline=" << inlineImg << endl;
+
     uint offset = initImage(state, width, height, true);
 
     // read pixels

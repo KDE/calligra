@@ -83,7 +83,8 @@ void FilterPage::beginString(GfxState *state, double x0, double y0) {
     return;
   }
 
-  curStr = new FilterString(state, x0, y0, fontSize, _data.frameIndex);
+  _data.checkText();
+  curStr = new FilterString(state, x0, y0, fontSize, _data.textIndex());
 }
 
 void FilterPage::prepare()
@@ -273,10 +274,9 @@ void FilterPage::dump()
             const FilterBlock &b = _pars[i].blocks[k];
             text += b.text;
             QDomElement element = _data.createElement("FORMAT");
-            bool r = b.font->format(_data.document(), element, b.pos,
-                                    b.text.length());
-            if (b.link)
-                b.link->format(_data.document(), element, b.pos, b.linkText);
+            QDomDocument document = _data.document();
+            bool r = b.font->format(document, element, b.pos, b.text.length());
+            if (b.link) b.link->format(document, element, b.pos, b.linkText);
             if ( r || b.link ) formats.append(element);
         }
 
