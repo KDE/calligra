@@ -169,7 +169,7 @@ QString KivioStencilSpawnerSet::readTitle( const QString &dir )
    {
       kdDebug() << "KivioStencilSpawnerSet::readTitle() - Error opening stencil set description: " <<
 	 dir << "/desc" << endl;
-      return "";
+      return dir.right(dir.length() - dir.findRev('/')-1);
    }
 
    d.setContent(&f);
