@@ -202,7 +202,7 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
     page.m_pView = v;
     page.m_id = m_pKoolBar->insertItem( m_grpDocuments,
                                         DesktopIcon( m_documentEntry.service()->icon() ),
-                                        i18n("No name"),
+                                        i18n("Untitled"),
                                         this, SLOT( slotKoolBar( int, int ) ) );
     kdDebug() << " New page has id " << page.m_id << " doc is " << doc << endl;
 
@@ -233,23 +233,20 @@ void KoShellWindow::updateCaption()
         QString name;
         if ( rootDocument()->documentInfo() )
         {
-            KoDocumentInfoPage * page = rootDocument()->documentInfo()->page( QString::fromLatin1("about"));
-            if (page)
-                name = static_cast<KoDocumentInfoAbout *>(page)->title();
+            name = rootDocument()->documentInfo()->title();
         }
         if ( name.isEmpty() )
-          // Fall back to document URL
-          name = rootDocument()->url().fileName();
-
-        if ( !name.isEmpty() ) // else keep No name
+            // Fall back to document URL
+            name = rootDocument()->url().fileName();
+ 	
+        if ( !name.isEmpty() ) // else keep Untitled
         {
-          if ( name.length() > 20 )
-          {
-            name.truncate( 17 );
-            name += "...";
-          }
-
-          m_pKoolBar->renameItem( m_grpDocuments, (*it).m_id, name );
+	    if ( name.length() > 20 )
+	    {
+	        name.truncate( 17 );
+	        name += "...";
+	    }
+            m_pKoolBar->renameItem( m_grpDocuments, (*it).m_id, name );
         }
 
         return;
