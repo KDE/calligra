@@ -52,6 +52,7 @@
 #include "symboltable.h"
 #include "textelement.h"
 
+#include <assert.h>
 
 KFORMULA_NAMESPACE_BEGIN
 //using namespace std;

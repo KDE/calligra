@@ -53,6 +53,7 @@
 
 #include "kwformulaframe.h"
 
+#include <assert.h>
 
 #ifdef __GNUC__
 #undef k_funcinfo
