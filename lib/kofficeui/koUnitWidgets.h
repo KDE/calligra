@@ -104,9 +104,9 @@ public:
     double value( void ) const;
 
 private:
-    double m_lowerInPoints; //< lowest value in points
-    double m_upperInPoints; //< highest value in points
-    double m_stepInPoints;  //< step in points
+    double m_lowerInPoints; ///< lowest value in points
+    double m_upperInPoints; ///< highest value in points
+    double m_stepInPoints;  ///< step in points
 };
 
 /**
