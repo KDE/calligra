@@ -1826,7 +1826,9 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
     if ( painter.device()->isExtDev() || !drawCursor)
       selected = false;
   }
-  calc();
+  //Doing a calc() here is expensive and currently leads to crashes in some cases (circular)
+  //Please explain, where and why this is needed, if you reenable it (Philipp)
+  //calc();
 
   // Need to make a new layout ?
   if ( testFlag(Flag_LayoutDirty) )
@@ -1857,6 +1859,8 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
   paintingObscured++;
   paintObscuredCells( rect, painter, view, corner, cellRef );
   paintingObscured--;
+
+  paintPageBorders( painter, corner, cellRef, width, height );
 
   /* now print content, if this cell isn't obscured */
   if (!isObscured())
@@ -1890,9 +1894,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
     {
       paintText( painter, corner, cellRef, width, height );
     }
-  } /* if (!isObscured()) */
-
-  paintPageBorders( painter, corner, cellRef, width, height );
+  }
 
   if (isObscured() && paintingObscured == 0)
   {
@@ -1908,8 +1910,8 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
     for ( ; it != end; ++it ) {
       KSpreadCell *obscuringCell = *it;
       QPoint obscuringCellRef( obscuringCell->column(), obscuringCell->row() );
-      double x = m_pTable->columnPos( obscuringCell->column() );
-      double y = m_pTable->rowPos( obscuringCell->row() );
+      double x = m_pTable->dblColumnPos( obscuringCell->column() );
+      double y = m_pTable->dblRowPos( obscuringCell->row() );
       QPair<double,double> corner = qMakePair( x, y );
       painter.save();
 
