@@ -6380,7 +6380,7 @@ bool KSpreadSheet::loadXML( const QDomElement& table )
     }
     m_strName = testName;
 
-    kdDebug(36001)<<"KSpreadSheet::loadXML: table name="<<m_strName;
+    kdDebug(36001)<<"KSpreadSheet::loadXML: table name="<<m_strName<<endl;
     setName(m_strName.utf8());
     (dynamic_cast<KSpreadSheetIface*>(dcopObject()))->tableNameHasChanged();
 
