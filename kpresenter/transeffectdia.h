@@ -36,6 +36,7 @@ class QPushButton;
 class QCheckBox;
 class QSlider;
 class QString;
+class QComboBox;
 class KPBackGround;
 class KPObject;
 class KPPresStructObjectItem;
@@ -94,7 +95,7 @@ protected:
     KPEffectPreview *effectPreview;
 
     QListBox *effectList;
-    QSlider *speedSlider;
+    QComboBox *speedCombo;
 
     QCheckBox *automaticPreview;
     QPushButton *previewButton;

@@ -43,6 +43,7 @@
 #include <qwhatsthis.h>
 #include <qframe.h>
 #include <qlabel.h>
+#include <qcombobox.h>
 
 #include <kdebug.h>
 #include <kurlrequester.h>
@@ -199,14 +200,20 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     QBoxLayout* speedLayout = new QHBoxLayout( sp, KDialog::marginHint(), KDialog::spacingHint() );
     speedLayout->setAutoAdd( true );
 
-    new QLabel( i18n("Slow"), sp );
-    speedSlider = new QSlider( 1, 10, 1, 1, Qt::Horizontal, sp );
-    speedSlider->setValue( speed );
-    speedSlider->setTickmarks( QSlider::Below );
-    speedSlider->setTickInterval( 1 );
-    new QLabel( i18n("Fast"), sp );
+    speedCombo = new QComboBox( sp );
+    speedCombo->insertItem(i18n("Slow") );
+    speedCombo->insertItem(i18n("Medium") );
+    speedCombo->insertItem(i18n("Fast") );
 
-    connect( speedSlider, SIGNAL(valueChanged(int)), this, SLOT(speedChanged(int)) );
+
+    if ( speed == 1 )
+        speedCombo->setCurrentItem( 0 );
+    else if ( speed == 5 )
+        speedCombo->setCurrentItem( 1 );
+    else if ( speed == 10 )
+        speedCombo->setCurrentItem( 2 );
+
+    connect( speedCombo, SIGNAL(activated(int)), this, SLOT(speedChanged(int)) );
 
 
     QWidget* previewgrp = new QWidget( leftpart );
@@ -305,8 +312,12 @@ void KPTransEffectDia::effectChanged( int index )
 
 void KPTransEffectDia::speedChanged( int value )
 {
-    if( value <= 0 ) value = 1;
-    speed = static_cast<PresSpeed>(value);
+    if ( value == 0 )
+        speed = static_cast<PresSpeed>(1);
+    else if ( value == 1 )
+        speed = static_cast<PresSpeed>(5);
+    if ( value == 2 )
+        speed = static_cast<PresSpeed>(10);
 }
 
 void KPTransEffectDia::timeChanged( int value )
