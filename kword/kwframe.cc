@@ -1925,6 +1925,9 @@ KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString
         m_name = _doc->generateFramesetName( i18n( "Object %1" ) );
     else
         m_name = name;
+    m_cmdMoveChild=0L;
+    QObject::connect( m_child, SIGNAL( changed( KoChild * ) ),
+                      this, SLOT( slotChildChanged() ) );
 }
 
 KWPartFrameSet::~KWPartFrameSet()
@@ -1971,14 +1974,48 @@ void KWPartFrameSet::updateFrames()
     KWFrameSet::updateFrames();
 }
 
-void KWPartFrameSet::updateChildGeometry()
+void KWPartFrameSet::updateChildGeometry( KWViewMode* viewMode )
 {
     if( frames.isEmpty() ) // Deleted frameset
         return;
-    // Set the child geometry from the frame geometry, with no viewmode applied
-    // This is necessary e.g. before saving, but shouldn't be done while the part
-    // is being activated.
-    m_child->setGeometry( frames.first()->toQRect() );
+    if ( viewMode ) {
+        // We need to apply the viewmode conversion correctly (the child is in unzoomed view coords!)
+        QRect r = m_doc->zoomRect( *frames.first() ); // in normal coordinates.
+        KoRect childGeom = m_doc->unzoomRect( viewMode->normalToView( r ) );
+        m_child->setGeometry( childGeom.toQRect() ); // rounding problems. TODO: port KoChild to KoRect.
+        //m_child->setGeometry( viewMode->normalToView( m_doc->zoomRect( *frames.first() ) ) );
+    } else
+        m_child->setGeometry( frames.first()->toQRect() );
+}
+
+void KWPartFrameSet::slotChildChanged()
+{
+    // This is called when the KoDocumentChild is resized (using the KoFrame)
+    // We need to react on it in KWPartFrameSetEdit because the view-mode has to be taken into account
+    QPtrListIterator<KWFrame> listFrame = frameIterator();
+    KWFrame *frame = listFrame.current();
+    if ( frame )
+    {
+        // We need to apply the viewmode conversion correctly (the child is in unzoomed view coords!)
+        KoRect childGeom = KoRect::fromQRect( getChild()->geometry() );
+        // r is the rect in normal coordinates
+        QRect r(m_doc->viewMode()->viewToNormal( m_doc->zoomRect( childGeom ) ) );
+        frame->setLeft( r.left() / m_doc->zoomedResolutionX() );
+        frame->setTop( r.top() / m_doc->zoomedResolutionY() );
+        frame->setWidth( r.width() / m_doc->zoomedResolutionX() );
+        frame->setHeight( r.height() / m_doc->zoomedResolutionY() );
+        // ## TODO an undo/redo command (move frame)
+
+        //kdDebug(32001) << "KWPartFrameSet::slotChildChanged child's geometry " << getChild()->geometry()
+        //               << " frame set to " << *frame << endl;
+        m_doc->frameChanged( frame );
+        frame->updateResizeHandles();
+        //there is just a frame
+        if(m_cmdMoveChild)
+            m_cmdMoveChild->listFrameMoved().sizeOfEnd = frame->normalize();
+    }
+    else
+        kdDebug(32001) << "Frame not found!" << endl;
 }
 
 QDomElement KWPartFrameSet::save( QDomElement &parentElem, bool saveFrames )
@@ -1997,6 +2034,32 @@ void KWPartFrameSet::load( QDomElement &attributes, bool loadFrames )
     KWFrameSet::load( attributes, loadFrames );
 }
 
+void KWPartFrameSet::startEditing()
+{
+    kdDebug() << k_funcinfo << endl;
+    //create undo/redo move command
+    KWFrame* frame = frames.first();
+    if (!frame)
+        return;
+    FrameIndex index( frame );
+    FrameResizeStruct tmpMove;
+    tmpMove.sizeOfBegin = frame->normalize();
+    tmpMove.sizeOfEnd = KoRect();
+
+    if(!m_cmdMoveChild)
+        m_cmdMoveChild=new KWFramePartMoveCommand( i18n("Move Frame"), index, tmpMove );
+}
+
+void KWPartFrameSet::endEditing()
+{
+    kdDebug() << k_funcinfo << endl;
+    if( m_cmdMoveChild && m_cmdMoveChild->frameMoved() )
+        m_doc->addCommand(m_cmdMoveChild);
+    else
+        delete m_cmdMoveChild;
+    m_cmdMoveChild=0L;
+}
+
 
 KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * canvas )
 {
@@ -2006,12 +2069,11 @@ KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * canvas )
 KWPartFrameSetEdit::KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas )
     : KWFrameSetEdit( fs, canvas )
 {
-    m_cmdMoveChild=0L;
+    kdDebug() << "KWPartFrameSetEdit::KWPartFrameSetEdit **********************8" << endl;
     m_dcop=0L;
-    QObject::connect( partFrameSet()->getChild(), SIGNAL( changed( KoChild * ) ),
-                      this, SLOT( slotChildChanged() ) );
-    QObject::connect( m_canvas->gui()->getView() ,SIGNAL(activated( bool ))
-                      ,this,SLOT(slotChildActivated(bool) ) );
+    fs->startEditing();
+    QObject::connect( m_canvas->gui()->getView(), SIGNAL( activated( bool ) ),
+                      this, SLOT( slotChildActivated( bool ) ) );
 }
 
 KWPartFrameSetEdit::~KWPartFrameSetEdit()
@@ -2027,56 +2089,22 @@ DCOPObject* KWPartFrameSetEdit::dcopObject()
     return m_dcop;
 }
 
-
 void KWPartFrameSetEdit::slotChildActivated(bool b)
 {
-    //kdDebug() << "KWPartFrameSetEdit::slotChildActivated " << b << kdBacktrace();
-    //we store command when we desactivate child.
-    if( b)
-        return;
-    if(m_cmdMoveChild && m_cmdMoveChild->frameMoved())
-        partFrameSet()->kWordDocument()->addCommand(m_cmdMoveChild);
-    else
-        delete m_cmdMoveChild;
-    m_cmdMoveChild=0L;
+    kdDebug() << "KWPartFrameSetEdit::slotChildActivated " << b << endl;
+    //we store command when we deactivate the child.
+    if( !b )
+        partFrameSet()->endEditing();
+
 }
 
-void KWPartFrameSetEdit::slotChildChanged()
-{
-    kdDebug(32001) << "KWPartFrameSetEdit::slotChildChanged" << endl;
-    // This is called when the KoDocumentChild is resized (using the KoFrame)
-    // We need to react on it in KWPartFrameSetEdit because the view-mode has to be taken into account
-    QPtrListIterator<KWFrame>listFrame=partFrameSet()->frameIterator();
-    KWFrame *frame = listFrame.current();
-    if ( frame  )
-    {
-        // We need to apply the viewmode conversion correctly (the child is in unzoomed view coords!)
-        KoRect childGeom = KoRect::fromQRect( partFrameSet()->getChild()->geometry() );
-        // r is the rect in normal coordinates
-        QRect r(m_canvas->viewMode()->viewToNormal( frameSet()->kWordDocument()->zoomRect( childGeom ) ) );
-        frame->setLeft( r.left() / frameSet()->kWordDocument()->zoomedResolutionX() );
-        frame->setTop( r.top() / frameSet()->kWordDocument()->zoomedResolutionY() );
-        frame->setWidth( r.width() / frameSet()->kWordDocument()->zoomedResolutionX() );
-        frame->setHeight( r.height() / frameSet()->kWordDocument()->zoomedResolutionY() );
-        // ## TODO an undo/redo command (move frame)
-
-        kdDebug(32001) << "KWPartFrameSet::slotChildChanged child's geometry " << partFrameSet()->getChild()->geometry()
-                       << " frame set to " << *frame << endl;
-        partFrameSet()->kWordDocument()->frameChanged( frame );
-        //there is just a frame
-        if(m_cmdMoveChild)
-            m_cmdMoveChild->listFrameMoved().sizeOfEnd = frame->normalize();
-    }
-    else
-        kdDebug(32001) << "Frame not found!" << endl;
-}
-
+#if 0
 void KWPartFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const KoPoint & )
 {
     if ( e->button() != Qt::LeftButton )
         return;
 
-    //kdDebug() << "KWPartFrameSetEdit::mousePressEvent " << kdBacktrace() << endl;
+    kdDebug() << "KWPartFrameSetEdit::mousePressEvent " << kdBacktrace() << endl;
     // activate child part
     partFrameSet()->updateFrames();
     QPtrListIterator<KWFrame>listFrame = partFrameSet()->frameIterator();
@@ -2094,15 +2122,7 @@ void KWPartFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
     kdDebug(32001) << "Child activated. part=" << part << " child=" << partFrameSet()->getChild() << endl;
     view->partManager()->addPart( part, false );
     view->partManager()->setActivePart( part, view );
-
-    //create undo/redo move command
-    FrameIndex index( frame );
-    FrameResizeStruct tmpMove;
-    tmpMove.sizeOfBegin = frame->normalize();
-    tmpMove.sizeOfEnd = KoRect();
-
-    if(!m_cmdMoveChild)
-        m_cmdMoveChild=new KWFramePartMoveCommand( i18n("Move Frame"), index, tmpMove );
+    partFrameSet()->startEditing();
 }
 
 void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & )
@@ -2110,7 +2130,7 @@ void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, c
     /// ## Pretty useless since single-click does it now...
     //activate( m_canvas->gui()->getView() );
 }
-
+#endif
 
 class FormulaView : public KFormula::View {
 public:

@@ -894,7 +894,7 @@ public:
 
     KWChild *getChild() { return m_child; }
 
-    void updateChildGeometry();
+    void updateChildGeometry( KWViewMode* viewMode );
     virtual void updateFrames();
 
     virtual void drawFrameContents( KWFrame * frame, QPainter * p, const QRect & crect,
@@ -907,8 +907,15 @@ public:
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
 
-protected:
+    void startEditing();
+    void endEditing();
+
+private:
     KWChild *m_child;
+    KWFramePartMoveCommand *m_cmdMoveChild;
+
+private slots:
+    void slotChildChanged();
 };
 
 class KWPartFrameSetEdit :  public QObject, public KWFrameSetEdit
@@ -927,16 +934,12 @@ public:
     }
 
     // Events forwarded by the canvas (when being in "edit" mode)
-    virtual void mousePressEvent( QMouseEvent *, const QPoint &, const KoPoint & );
-    virtual void mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & );
-
-private:
-    KWFramePartMoveCommand *m_cmdMoveChild;
-    DCOPObject *m_dcop;
-
-protected slots:
-    void slotChildChanged();
+    //virtual void mousePressEvent( QMouseEvent *, const QPoint &, const KoPoint & );
+    //virtual void mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & );
+private slots:
     void slotChildActivated(bool);
+private:
+    DCOPObject *m_dcop;
 };
 
 /******************************************************************/

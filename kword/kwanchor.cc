@@ -77,7 +77,8 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 
     Q_ASSERT( x == xpos );
     Q_ASSERT( y == ypos );
-    //kdDebug() << "KWAnchor::draw x=" << x << " y=" << y << " xpos=" << xpos << " ypos=" << ypos << endl;
+    if ( x != xpos || y != ypos )
+        kdDebug() << "Warning: x=" << x << " y=" << y << " xpos=" << xpos << " ypos=" << ypos << endl;
 
     // The containing text-frameset.
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
@@ -97,6 +98,11 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 #endif
 
     crectLU = crectLU.intersect ( inlineFrameLU ); // KoTextParag::paintDefault could even do this
+
+
+#ifdef DEBUG_DRAWING
+    kdDebug(32001) << "               crect&frame in LU coordinates: " << DEBUGRECT( crectLU ) << endl;
+#endif
 
     // Convert crect to document coordinates, first topleft then bottomright
     QPoint topLeftLU = crectLU.topLeft();

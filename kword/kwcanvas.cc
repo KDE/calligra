@@ -1136,9 +1136,10 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
         if ( m_frameResized )
         {
             KWFrame *frame = m_doc->getFirstSelectedFrame();
+            KWFrameSet *fs = frame->frameSet();
             // If header/footer, resize the first frame
-            if ( frame->frameSet()->isHeaderOrFooter() )
-                frame = frame->frameSet()->frame( 0 );
+            if ( fs->isHeaderOrFooter() )
+                frame = fs->frame( 0 );
             Q_ASSERT( frame );
             if ( frame )
             {
@@ -1151,13 +1152,15 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
                 m_doc->addCommand(cmd);
 
                 m_doc->frameChanged( frame, m_gui->getView() ); // repaint etc.
-                if(frame->frameSet()->isAHeader() || frame->frameSet()->isAFooter())
+                if(fs->isAHeader() || fs->isAFooter())
                 {
                     m_doc->recalcFrames();
                     frame->updateResizeHandles();
                 }
                 // Especially useful for EPS images: set final size
-                frame->frameSet()->resizeFrame( frame, frame->width(), frame->height(), true );
+                fs->resizeFrame( frame, frame->width(), frame->height(), true );
+                if ( frame && fs->type() == FT_PART )
+                    static_cast<KWPartFrameSet *>( fs )->updateChildGeometry( viewMode() );
             }
             delete cmdMoveFrame; // Unused after all
             cmdMoveFrame = 0L;
@@ -1179,6 +1182,8 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
                         cmdMoveFrame->listFrameMoved().at(i)->sizeOfEnd = frame->normalize();
                         i++;
                     }
+                    if ( frame && fs->type() == FT_PART )
+                        static_cast<KWPartFrameSet *>( fs )->updateChildGeometry( viewMode() );
                 }
                 m_doc->addCommand(cmdMoveFrame);
                 m_doc->framesChanged( selectedFrames, m_gui->getView() ); // repaint etc.

@@ -2169,7 +2169,7 @@ QDomDocument KWDocument::saveXML()
         {
             // Set the child geometry from the frame geometry, with no viewmode applied
             // to prepare saving below with the correct geometry
-            static_cast<KWPartFrameSet *>(frameSet)->updateChildGeometry();
+            static_cast<KWPartFrameSet *>(frameSet)->updateChildGeometry( 0L );
         }
 
         // If picture frameset, make a note of the image it needs.
@@ -2510,6 +2510,7 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
     frame->setZOrder( maxZOrder( frame->pageNum(this) ) + 1 ); // make sure it's on top
     frameset->addFrame( frame );
     addFrameSet( frameset );
+    frameset->updateChildGeometry( viewMode() ); // set initial coordinates of 'ch' correctly
 
     KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n("Create Part Frame"), frame);
     addCommand(cmd);
