@@ -143,6 +143,10 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
     if ( !m_configRead )
         readConfig();
 
+    if ( !m_convertUpperUpper && !m_convertUpperCase
+         && !m_typographicQuotes.replace && m_entries.count()==0)
+        return;
+
     //if ( !m_enabled )
     //    return;
     // Auto-correction happens when pressing space, tab, CR, punct etc.
