@@ -53,7 +53,7 @@ class PasteTool : public KisTool
     be performed on selection and/or area pasted to */
     const KisSelection	*m_pSelection; 
     KisView     *m_pView;
-    QPoint 	m_dragStart;
+    QPoint 	    m_dragStart;
     bool        m_dragging;
     float       m_dragdist;
 };

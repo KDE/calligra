@@ -24,6 +24,7 @@
 #include "kis_doc.h"
 #include "kis_view.h"
 #include "kis_canvas.h"
+#include "kis_cursor.h"
 #include "kis_tool_select.h"
 
 SelectTool::SelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas )
@@ -37,6 +38,8 @@ SelectTool::SelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas )
       m_init  = true;
       m_dragStart = QPoint(-1,-1);
       m_dragEnd =   QPoint(-1,-1);
+      
+      m_Cursor = KisCursor::selectCursor();
 }
 
 SelectTool::~SelectTool()

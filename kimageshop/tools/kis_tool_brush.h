@@ -47,8 +47,8 @@ class BrushTool : public KisTool
  protected:
   QPoint 	m_dragStart;
   bool   	m_dragging;
-  const KisBrush  	*m_pBrush;
-  float         m_dragdist;
+  const     KisBrush  	*m_pBrush;
+  float     m_dragdist;
 };
 
 #endif //__brushtool_h__

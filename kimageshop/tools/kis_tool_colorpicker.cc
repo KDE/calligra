@@ -36,24 +36,16 @@ KisColor ColorPicker::pick(int x, int y)
     KisImage * img = m_pDoc->current();
     KisLayer *lay = img->getCurrentLayer();
     
-    if (!img)	return KisColor::white();
+    if (!img) return KisColor::white();
     if (!lay) return KisColor::white();
 
     // FIXME: Implement this for non-RGB modes.
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
 	return KisColor::white();
 
-#if 0
     int r = lay->pixel(0, x, y);
     int g = lay->pixel(1, x, y);
     int b = lay->pixel(2, x, y);
-#endif
-
-// jwc - stopgap - get color from imagePixmap instead
-
-    int r = 100;
-    int g = 100;
-    int b = 100;
         
     return KisColor(r, g,  b, cs_RGB);
 }
@@ -67,13 +59,11 @@ void ColorPicker::mousePress(QMouseEvent *e)
     && e->button() != QMouseEvent::RightButton)
         return;
 
-#if 0
     if( !img->getCurrentLayer()->visible() )
         return;
   
     if( !img->getCurrentLayer()->imageExtents().contains( e->pos() ))
         return;
-#endif
   
     if (e->button() == QMouseEvent::LeftButton)
         m_pView->slotSetFGColor(pick(e->pos().x(), e->pos().y()));

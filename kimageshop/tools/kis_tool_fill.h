@@ -1,5 +1,5 @@
 /*
- *  kis_tool_pen.h - part of KImageShop
+ *  colorpicker.h - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter
  *
@@ -18,46 +18,42 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __pentool_h__
-#define __pentool_h__
+#ifndef __filltool_h__
+#define __filltool_h__
 
 #include <qpoint.h>
+
+#include "kis_color.h"
 #include "kis_view.h"
-#include "kis_canvas.h"
 #include "kis_tool.h"
+#include "kis_layer.h"
 
-class KisBrush;
-
-class PenTool : public KisTool
+class Fill : public KisTool
 {
- public:
-    PenTool(KisDoc *doc, KisView *view, KisCanvas *canvas, const KisBrush *_brush);
-    ~PenTool();
+  public:
+    Fill(KisDoc *doc, KisView *view);
+    ~Fill();
   
-    QString toolName() { return QString("BrushTool"); }
+    QString toolName() { return QString("Fill"); }
+    bool flood(int startx, int starty);
 
-    void setBrush(const KisBrush *_brush);
-    bool paint(QPoint pos);
-
- public slots:
+  public slots:
     virtual void mousePress(QMouseEvent*); 
-    virtual void mouseMove(QMouseEvent*);
-    virtual void mouseRelease(QMouseEvent*);
-
- protected:
-    QPoint 	        m_dragStart;
-    bool   	        m_dragging;
-    float           m_dragdist;
-    const KisBrush  *m_pBrush;
-    KisView         *m_pView;
-    KisCanvas       *m_pCanvas;
-
-    QPen pen;
-    int  penW;
-    QPointArray polyline;
-    QPixmap *buffer;
   
-};
+  protected:
+    int checkTouching(KisLayer *lay, int x, int y, int r, int g, int b);
+    void drawFlood(KisLayer *lay, QRect & layerRect, int x, int y);
+    
+    // new colors (desired)
+    int nRed;
+    int nGreen;
+    int nBlue;
 
-#endif //__pentool_h__
+    // source colors (existing)
+    int sRed;
+    int sGreen;
+    int sBlue;
+    
+};
+#endif //__filltool_h__
 
