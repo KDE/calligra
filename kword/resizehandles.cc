@@ -42,54 +42,68 @@ KWResizeHandle::KWResizeHandle( KWCanvas * p, Direction d, KWFrame *frm )
         switch ( direction ) {
         case LeftUp:
         {
-            if ( !protect )
+            if ( protect )
                 setCursor( Qt::forbiddenCursor );
             else
                 setCursor( Qt::sizeFDiagCursor );
             break;
         }
         case Up:
-            if ( !protect )
+        {
+            if ( protect )
                 setCursor( Qt::forbiddenCursor );
             else
                 setCursor( Qt::sizeVerCursor );
             break;
+        }
         case RightUp:
-            if ( !protect )
+        {
+            if ( protect )
                 setCursor( Qt::forbiddenCursor );
             else
                 setCursor( Qt::sizeBDiagCursor );
             break;
+        }
         case Right:
-            if ( !protect )
+        {
+            if ( protect )
                 setCursor( Qt::forbiddenCursor );
             else
                 setCursor( Qt::sizeHorCursor );
             break;
+        }
         case RightDown:
-            if ( !protect )
+        {
+            if ( protect )
                 setCursor( Qt::forbiddenCursor );
             else
                 setCursor( Qt::sizeFDiagCursor );
             break;
+        }
         case Down:
+        {
             if (!protect )
                 setCursor( Qt::forbiddenCursor );
             else
                 setCursor( Qt::sizeVerCursor );
             break;
+        }
         case LeftDown:
-            if ( !protect )
+        {
+            if ( protect )
                 setCursor( Qt::forbiddenCursor );
             else
                 setCursor( Qt::sizeBDiagCursor );
             break;
+        }
         case Left:
-            if ( !protect )
+        {
+            if ( protect )
                 setCursor( Qt::forbiddenCursor );
             else
                 setCursor( Qt::sizeHorCursor );
             break;
+        }
         }
     }
 

@@ -149,24 +149,55 @@ QCursor KWFrame::getMouseCursor( const KoPoint & docPoint, bool table, QCursor d
 
     if ( !table ) {
         if ( mx >= x() && my >= y() && mx <= x() + 6 && my <= y() + 6 )
+        {
+            if ( frameSet()->isProtectSize() )
+                return Qt::forbiddenCursor;
             return Qt::sizeFDiagCursor;
+        }
         if ( mx >= x() && my >= y() + height() / 2 - 3 && mx <= x() + 6 && my <= y() + height() / 2 + 3 )
+        {
+            if ( frameSet()->isProtectSize() )
+                return Qt::forbiddenCursor;
             return Qt::sizeHorCursor;
+        }
         if ( mx >= x() && my >= y() + height() - 6 && mx <= x() + 6 && my <= y() + height() )
+        {
+            if ( frameSet()->isProtectSize() )
+                return Qt::forbiddenCursor;
             return Qt::sizeBDiagCursor;
+        }
         if ( mx >= x() + width() / 2 - 3 && my >= y() && mx <= x() + width() / 2 + 3 && my <= y() + 6 )
+        {
+            if ( frameSet()->isProtectSize() )
+                return Qt::forbiddenCursor;
             return Qt::sizeVerCursor;
+        }
         if ( mx >= x() + width() / 2 - 3 && my >= y() + height() - 6 && mx <= x() + width() / 2 + 3 &&
              my <= y() + height() )
+        {
+            if ( frameSet()->isProtectSize() )
+                return Qt::forbiddenCursor;
             return Qt::sizeVerCursor;
+        }
         if ( mx >= x() + width() - 6 && my >= y() && mx <= x() + width() && my <= y() + 6 )
+        {
+            if ( frameSet()->isProtectSize() )
+                return Qt::forbiddenCursor;
             return Qt::sizeBDiagCursor;
+        }
         if ( mx >= x() + width() - 6 && my >= y() + height() / 2 - 3 && mx <= x() + width() &&
              my <= y() + height() / 2 + 3 )
+        {
+            if ( frameSet()->isProtectSize() )
+                return Qt::forbiddenCursor;
             return Qt::sizeHorCursor;
+        }
         if ( mx >= x() + width() - 6 && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height() )
+        {
+            if ( frameSet()->isProtectSize() )
+                return Qt::forbiddenCursor;
             return Qt::sizeFDiagCursor;
-
+        }
         //if ( m_selected )
         //    return Qt::sizeAllCursor;
     } else { // Tables
