@@ -6,6 +6,7 @@ Changes after KPresenter 1.3
 - Fixed crash in infinite loop presentation mode when first slide is not shown
 - Fixed speed of automatic presentation (it was reversed) (#69260)
 - Fixed wrong positioning of text when using "Vertical Alignment" (#72224)
+- Fixed redrawing of lines in drawing mode in case of a repaint event
 
 Changes:
 - If a page is shown more than once during a presentation, add the time for

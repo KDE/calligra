@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2002-2004 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -317,6 +318,19 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             }
 
         }
+        else
+        {
+            if ( drawMode && m_drawModeLines.count() )
+            {
+                bufPainter.save();
+                bufPainter.setPen( m_view->kPresenterDoc()->presPen() );
+                for ( int i = 0; i < m_drawModeLines.count(); ++i )
+                {
+                  bufPainter.drawPolyline( m_drawModeLines[i] );
+                }
+                bufPainter.restore();
+            }
+        }
         bufPainter.end();
 
         bitBlt( this, paintEvent->rect().topLeft(), &buffer, paintEvent->rect() );
@@ -570,8 +584,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     KPObject *kpobject = 0;
 
-    oldMx = contentsPoint.x();
-    oldMy = contentsPoint.y();
+    m_savedMousePos = contentsPoint;
 
     QPoint rasterPoint=applyGrid( e->pos(), true );
 
@@ -1073,8 +1086,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             setToolEditMode( TEM_MOUSE );
         }
     } else {
-        oldMx = e->x();
-        oldMy = e->y();
         if ( e->button() == LeftButton ) {
             if ( presMenu->isVisible() ) {
                 presMenu->hide();
@@ -1083,6 +1094,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 if ( drawMode ) {
                     setCursor( KPresenterUtils::penCursor() );
                     drawLineInDrawMode = true;
+                    m_drawModeLineIndex = 0;
+                    m_drawModeLines.append( QPointArray() );
+                    m_drawModeLines[m_drawModeLines.count() - 1].putPoints( m_drawModeLineIndex++, 1, e->x(), e->y() );
                 }
                 else
                     m_view->screenNext();
@@ -1171,6 +1185,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
     if ( drawMode ) {
         drawLineInDrawMode = false;
+        m_drawModeLines[m_drawModeLines.count() - 1].putPoints( m_drawModeLineIndex++, 1, contentsPoint.x(), contentsPoint.y() );
         return;
     }
     bool state = m_view->kPresenterDoc()->snapToGrid();
@@ -1551,6 +1566,9 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 {
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
+    int oldMx = m_savedMousePos.x();
+    int oldMy = m_savedMousePos.y();
+    m_savedMousePos = contentsPoint;
     KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
     {
@@ -1658,9 +1676,6 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     }
 
                     resizeObject( modType, mx - oldMx, my - oldMy );
-
-                    oldMx = e->x()+diffx();
-                    oldMy = e->y()+diffy();
                 }
             } break;
             case TEM_ZOOM : {
@@ -2003,9 +2018,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         p.begin( this );
         p.setPen( m_view->kPresenterDoc()->presPen() );
         p.drawLine( oldMx, oldMy, e->x(), e->y() );
-        oldMx = e->x();
-        oldMy = e->y();
         p.end();
+        m_drawModeLines[m_drawModeLines.count() - 1].putPoints( m_drawModeLineIndex++, 1, e->x(), e->y() );
     }
 
     if ( !editMode && !drawMode && !presMenu->isVisible() && fillBlack )
@@ -2448,9 +2462,9 @@ bool KPrCanvas::exportPage( int nPage,
             if( !bLocalFile ){
                 if( res ){
 #if KDE_IS_VERSION(3,1,90)
-                    res = KIO::NetAccess::upload( this, tmpFile->name(), fileURL );
-#else
                     res = KIO::NetAccess::upload( tmpFile->name(), fileURL, this );
+#else
+                    res = KIO::NetAccess::upload( tmpFile->name(), fileURL );
 #endif
                 }
             }
@@ -3208,6 +3222,9 @@ bool KPrCanvas::pNext( bool )
 
     goingBack = false;
 
+    // clear drawed lines
+    m_drawModeLines.clear();
+
     //kdDebug(33001) << "\n-------\nKPrCanvas::pNext currPresStep=" << currPresStep << " subPresStep=" << subPresStep << endl;
 
     // First try to go one sub-step further, if any object requires it
@@ -3368,6 +3385,9 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
 {
     goingBack = true;
     subPresStep = 0;
+
+    // clear drawed lines
+    m_drawModeLines.clear();
 
     if ( (int)currPresStep > *presStepList.begin() ) {
         QValueList<int>::ConstIterator it = presStepList.find( currPresStep );
@@ -5022,6 +5042,9 @@ void KPrCanvas::slotGotoPage()
 void KPrCanvas::gotoPage( int pg )
 {
     if ( pg != static_cast<int>( currPresPage ) ) {
+        // clear drawed lines
+        m_drawModeLines.clear();
+
         currPresPage = pg;
         kdDebug(33001) << "Page::gotoPage currPresPage=" << currPresPage << endl;
         slideListIterator = slideList.find( currPresPage );
