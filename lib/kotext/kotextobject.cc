@@ -383,13 +383,14 @@ void KoTextObject::storeParagUndoRedoInfo( KoTextCursor * cursor, int selectionI
     undoRedoInfo.oldParagLayouts.clear();
     undoRedoInfo.text = " ";
     undoRedoInfo.index = 1;
-    if ( !textdoc->hasSelection( selectionId ) ) {
+    if ( cursor && !textdoc->hasSelection( selectionId ) ) {
         KoTextParag * p = cursor->parag();
         undoRedoInfo.id = p->paragId();
         undoRedoInfo.eid = p->paragId();
         undoRedoInfo.oldParagLayouts << p->paragLayout();
     }
     else{
+        Q_ASSERT( textdoc->hasSelection( selectionId ) );
         KoTextParag *start = textdoc->selectionStart( selectionId );
         KoTextParag *end = textdoc->selectionEnd( selectionId );
         undoRedoInfo.id = start->paragId();
@@ -989,8 +990,7 @@ KCommand *KoTextObject::setCounterCommand( KoTextCursor * cursor, const KoParagC
          curCounter && counter == *curCounter )
         return 0L;
     emit hideCursor();
-    if(cursor)
-        storeParagUndoRedoInfo( cursor, selectionId );
+    storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId ) && cursor) {
         cursor->parag()->setCounter( counter );
         setLastFormattedParag( cursor->parag() );
@@ -1034,8 +1034,7 @@ KCommand * KoTextObject::setAlignCommand( KoTextCursor * cursor, int align , int
         return 0L; // No change needed.
 
     emit hideCursor();
-    if(cursor)
-        storeParagUndoRedoInfo( cursor ,selectionId );
+    storeParagUndoRedoInfo( cursor ,selectionId );
     if ( !textdoc->hasSelection( selectionId ) &&cursor ) {
         cursor->parag()->setAlign(align);
         setLastFormattedParag( cursor->parag() );
@@ -1074,8 +1073,7 @@ KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, QStyleSheetIte
         return 0L; // No change needed.
 
     emit hideCursor();
-    if( cursor)
-        storeParagUndoRedoInfo( cursor, selectionId );
+    storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId )&&cursor ) {
         cursor->parag()->setMargin(m, margin);
         setLastFormattedParag( cursor->parag() );
@@ -1117,14 +1115,13 @@ KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double sp
     //kdDebug(32500) << "KoTextObject::setLineSpacing to value " << spacing << endl;
     //kdDebug(32500) << "Current spacing is " << cursor->parag()->kwLineSpacing() << endl;
     //kdDebug(32500) << "Comparison says " << ( cursor->parag()->kwLineSpacing() == spacing ) << endl;
-    //kdDebug(32500) << "hasSelection " << textdoc->hasSelection( KoTextDocument::Standard ) << endl;
+    //kdDebug(32500) << "hasSelection " << textdoc->hasSelection( selectionId ) << endl;
     if ( !textdoc->hasSelection( selectionId ) && cursor &&
          cursor->parag()->kwLineSpacing() == spacing )
         return 0L; // No change needed.
 
     emit hideCursor();
-    if(cursor)
-        storeParagUndoRedoInfo( cursor, selectionId );
+    storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId ) && cursor ) {
         cursor->parag()->setLineSpacing(spacing);
         setLastFormattedParag( cursor->parag() );
@@ -1165,8 +1162,7 @@ KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorde
         return 0L; // No change needed.
 
     emit hideCursor();
-    if(cursor)
-        storeParagUndoRedoInfo( cursor, selectionId );
+    storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId ) ) {
       cursor->parag()->setLeftBorder(leftBorder);
       cursor->parag()->setRightBorder(rightBorder);
@@ -1222,8 +1218,7 @@ KCommand * KoTextObject::setTabListCommand( KoTextCursor * cursor, const KoTabul
         return 0L; // No change needed.
 
     emit hideCursor();
-    if(cursor)
-        storeParagUndoRedoInfo( cursor, selectionId );
+    storeParagUndoRedoInfo( cursor, selectionId );
 
     if ( !textdoc->hasSelection( selectionId ) && cursor ) {
         cursor->parag()->setTabList( tabList );
@@ -1264,8 +1259,7 @@ KCommand * KoTextObject::setShadowCommand( KoTextCursor * cursor,double dist, sh
         return 0L; // No change needed.
 
     emit hideCursor();
-    if(cursor)
-        storeParagUndoRedoInfo( cursor, selectionId );
+    storeParagUndoRedoInfo( cursor, selectionId );
 
     if ( !textdoc->hasSelection( selectionId ) && cursor ) {
         cursor->parag()->setShadow( dist, direction, col );
@@ -1306,8 +1300,7 @@ KCommand * KoTextObject::setParagDirectionCommand( KoTextCursor * cursor, QChar:
         return 0L; // No change needed.
 
     emit hideCursor();
-    if(cursor)
-        storeParagUndoRedoInfo( cursor, selectionId );
+    storeParagUndoRedoInfo( cursor, selectionId );
 
     if ( !textdoc->hasSelection( selectionId ) && cursor ) {
         cursor->parag()->setDirection( d );
