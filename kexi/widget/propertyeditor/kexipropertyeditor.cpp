@@ -72,6 +72,7 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 
 	m_defaults = new KPushButton(viewport());
 	m_defaults->setFocusPolicy(QWidget::NoFocus);
+	setFocusPolicy(QWidget::ClickFocus);
 	m_defaults->setPixmap(SmallIcon("undo"));
 	QToolTip::add(m_defaults, i18n("Undo changes"));
 	m_defaults->hide();
