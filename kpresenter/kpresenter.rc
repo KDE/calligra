@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="76">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="77">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -177,6 +177,8 @@
   <Action name="view_zoom"/>
 </ToolBar>
 <ToolBar name="insertToolBar" position="top" fullWidth="false"><Text>Insert</Text>
+  <Action name="tools_mouse"/>
+  <Separator/>
   <Action name="tools_text"/>
   <Action name="tools_autoform"/>
   <Action name="tools_diagramm"/>
