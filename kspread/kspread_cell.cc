@@ -2370,10 +2370,23 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         // if ( m_pObscuringCell )
         // bg = m_pObscuringCell->bgColor( m_pObscuringCell->column(),
         // m_pObscuringCell->row() );
-        if ( bg.isValid() )
-            _painter.setBackgroundColor( bg );
+        if (! _painter.device()->isExtDev() )
+                {
+                if ( bg.isValid() )
+                        _painter.setBackgroundColor( bg );
+                else
+                        _painter.setBackgroundColor( defaultColorGroup.base() );
+                }
         else
-            _painter.setBackgroundColor( defaultColorGroup.base() );
+                {
+                //bad hack but there is a qt bug
+                //so I can print backgroundcolor
+                if( bg.isValid())
+                        {
+                        QBrush bb( bg );
+                        _painter.fillRect( _tx , _ty ,w ,h , bb );
+                        }
+                }
     }
 
     //
