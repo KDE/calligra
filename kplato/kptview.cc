@@ -40,7 +40,6 @@
 #include <qtabwidget.h>
 #include <qwidgetstack.h>
 #include <qtimer.h>
-#include <qfiledialog.h>
 
 #include <kiconloader.h>
 #include <kaction.h>
@@ -56,6 +55,7 @@
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <kcommand.h>
+#include <kfiledialog.h>
 
 #include "kptview.h"
 #include "kptfactory.h"
@@ -201,6 +201,9 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
                         this, SLOT( slotPrintDebug() ), actionCollection(), "print_debug" );
     KAction* actPrintCalendarDebug = new KAction( i18n( "Print Calendar Debug" ), CTRL+SHIFT+Key_C,
                         this, SLOT( slotPrintCalendarDebug() ), actionCollection(), "print_calendar_debug" );
+
+    KAction* actExportGantt = new KAction( i18n( "Export Gantt" ), CTRL+SHIFT+Key_G,
+                        this, SLOT( slotExportGantt() ), actionCollection(), "export_gantt" );
 
     connect(m_pertview, SIGNAL(addRelation(KPTNode*, KPTNode*)), SLOT(slotAddRelation(KPTNode*, KPTNode*)));
     connect(m_pertview, SIGNAL(modifyRelation(KPTRelation*)), SLOT(slotModifyRelation(KPTRelation*)));
@@ -658,7 +661,7 @@ void KPTView::slotExportGantt() {
     if (!m_ganttview) {
         return;
     }
-    QString fn = QFileDialog::getSaveFileName( QString::null, QString::null, this );
+    QString fn = KFileDialog::getSaveFileName( QString::null, QString::null, this );
     if (!fn.isEmpty()) {
         QFile f(fn);
         m_ganttview->exportGantt(&f);
