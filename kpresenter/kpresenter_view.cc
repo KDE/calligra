@@ -2857,7 +2857,6 @@ void KPresenterView::setupActions()
         else
             actionFormatNumber->insert( act );
     }
-
     actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ),  QApplication::reverseLayout() ?"format_decreaseindent" : "format_increaseindent",
 				       CTRL + Key_Plus, this, SLOT( textDepthPlus() ),
 				       actionCollection(), "text_depthPlus" );
@@ -7219,6 +7218,16 @@ void KPresenterView::refreshGroupButton()
     bool state=m_canvas->isOneObjectSelected();
     actionExtraGroup->setEnabled(state && m_canvas->numberOfObjectSelected()>1);
     actionExtraUnGroup->setEnabled(state && m_canvas->haveASelectedGroupObj());
+}
+
+void KPresenterView::closeTextObject()
+{
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if ( edit)
+    {
+        m_canvas->setToolEditMode( TEM_MOUSE );
+        m_canvas->deSelectAllObj();
+    }
 }
 
 

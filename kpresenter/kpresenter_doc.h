@@ -115,6 +115,8 @@ public:
     virtual bool initDoc() { return insertNewTemplate( true ); }
     void initEmpty();
 
+    virtual void addView( KoView *_view );
+
     // page layout
     void setPageLayout( const KoPageLayout &);
 

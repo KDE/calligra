@@ -578,6 +578,8 @@ public:
     void setZoomRect( const QRect & rect, bool drawRubber );
     void changeVerticalAlignmentStatus(VerticalAlignmentType _type );
 
+    void closeTextObject();
+
 protected slots:
     // dialog slots
     void backOk( bool );

@@ -3312,4 +3312,12 @@ void KPresenterDoc::refreshGroupButton()
         static_cast<KPresenterView*>(it.current())->refreshGroupButton();
 }
 
+void KPresenterDoc::addView( KoView *_view )
+{
+    KoDocument::addView( _view );
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+        static_cast<KPresenterView*>(it.current())->closeTextObject();
+}
+
 #include <kpresenter_doc.moc>
