@@ -57,9 +57,6 @@ class KexiTablePart : public KexiProjectPart
 		KexiProject			*m_project;
 		ItemList			*m_items;
 
-	signals:
-		void				itemListChanged(KexiProjectPart*);
-
 	public slots:
 		void				slotCreate();
 };

@@ -64,11 +64,7 @@ KexiBrowser::KexiBrowser(QWidget *parent, QString mime, KexiProjectPart *part, c
 	if(part)
 	{
 		connect(part, SIGNAL(itemListChanged(KexiProjectPart *)), this, SLOT(slotItemListChanged(KexiProjectPart *)));
-		
-//		if(mime != "kexi/db")
-//		{
-			slotItemListChanged(part);
-//		}
+		slotItemListChanged(part);
 	}
 
 }
@@ -77,10 +73,12 @@ void
 KexiBrowser::addGroup(KexiProjectPart *part)
 {
 	KexiBrowserItem *item = new KexiBrowserItem(this, part);
+	setRootIsDecorated(true);
 	
 	item->setPixmap(0, part->groupPixmap());
 	m_baseItems.insert(part->mime(), item);
 	slotItemListChanged(part);
+	kdDebug() << "KexiBrowser::addGroup(): Added " << part->mime() << " @ " << item << endl;
 }
 
 void
@@ -91,14 +89,12 @@ KexiBrowser::addItem(KexiProjectPartItem *item)
 	{
 		KexiBrowserItem *parent = m_baseItems.find(item->mime());
 		kdDebug() << "KexiBrowser::addItem() found " << item->mime() << " @ " << parent << endl;	
-		KexiBrowserItem *iview = new KexiBrowserItem(parent, item);
-		/*parent->*/insertItem(iview);
-	
+		(void*) new KexiBrowserItem(parent, item);
 	}
-	else if(m_baseItems.find(item->mime()))
+	else if(m_mime == item->mime())
 	{
 		kdDebug() << "KexiBrowser::addItem() adding as parent" << endl;
-		KexiBrowserItem *iview = new KexiBrowserItem(this, item);
+		(void*) new KexiBrowserItem(this, item);
 	}
 }
 

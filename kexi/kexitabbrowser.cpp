@@ -134,11 +134,12 @@ KexiTabBrowser::slotUpdateBrowsers()
 	
 	for(KexiProjectPart *part = plist->first(); part; part = plist->next())
 	{
-	kdDebug() << "KexiTabBrowser::slotUpdateBrowsers(): showing " << part->name() << endl;
+		kdDebug() << "KexiTabBrowser::slotUpdateBrowsers(): showing " << part->name() << endl;
+		
 		if(part->visible())
 		{
-			addBrowser(new KexiBrowser(m_stack, part->mime(), part), part->groupPixmap(), part->name());
 			m_db->addGroup(part);
+			addBrowser(new KexiBrowser(m_stack, part->mime(), part), part->groupPixmap(), part->name());
 			kdDebug() << "KexiTabBrowser::slotUpdateBrowsers(): added " << part->name() << endl;
 		}
 	}
