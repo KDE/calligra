@@ -146,21 +146,57 @@ void KPStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyl
     if ( lineBegin != L_NORMAL )
     {
         styleobjectauto.addProperty( "draw:marker-start", saveOasisMarkerStyle( mainStyles, lineBegin ) );
-        //mainStyles.addAttributePt( "draw:marker-start-width", ???? );
+        styleobjectauto.addProperty( "draw:marker-start-width", "0.25cm" );//value from ooimpress
     }
     if ( lineEnd != L_NORMAL )
     {
         styleobjectauto.addProperty( "draw:marker-end", saveOasisMarkerStyle( mainStyles, lineEnd ) );
-        //mainStyles.addAttributePt( "draw:marker-end-width", ???? );
+        styleobjectauto.addProperty( "draw:marker-end-width", "0.25cm" );
     }
 }
 
 QString KPStartEndLine::saveOasisMarkerStyle( KoGenStyles &mainStyles, LineEnd &_element )
 {
     KoGenStyle marker( KPresenterDoc::STYLE_MARKER /*, "graphic"*/ /*no name*/ );
-    //FIXME !!!!
-    marker.addAttribute( "svg:viewBox", "...." );
-    marker.addAttribute( "svg:d", "...." );
+    // value used from ooimpress filter I don't know if it's good
+    switch( _element )
+    {
+    case L_NORMAL:
+        //nothing
+        break;
+    case L_ARROW:
+        marker.addAttribute( "svg:viewBox", "0 0 20 30" );
+        marker.addAttribute( "svg:d", "m10 0-10 30h20z");
+        break;
+    case L_SQUARE:
+        marker.addAttribute( "svg:viewBox", "0 0 10 10" );
+        marker.addAttribute( "svg:d", "m0 0h10v10h-10z");
+        break;
+    case L_CIRCLE:
+        marker.addAttribute( "svg:viewBox", "0 0 1131 1131" );
+        marker.addAttribute( "svg:d", "m462 1118-102-29-102-51-93-72-72-93-51-102-29-102-13-105 13-102 29-106 51-102 72-89 93-72 102-50 102-34 106-9 101 9 106 34 98 50 93 72 72 89 51 102 29 106 13 102-13 105-29 102-51 102-72 93-93 72-98 51-106 29-101 13z" );
+        break;
+    case L_LINE_ARROW:
+        marker.addAttribute( "svg:viewBox", "0 0 1122 2243" );
+        marker.addAttribute( "svg:d", "m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z" );
+        break;
+    case L_DIMENSION_LINE:
+        marker.addAttribute( "svg:viewBox", "0 0 836 110" );
+        marker.addAttribute( "svg:d", "m0 0h278 278 280v36 36 38h-278-278-280v-36-36z" );
+        break;
+    case L_DOUBLE_ARROW:
+        marker.addAttribute( "svg:viewBox", "0 0 1131 1918" );
+        marker.addAttribute( "svg:d", "m737 1131h394l-564-1131-567 1131h398l-398 787h1131z" );
+        break;
+    case L_DOUBLE_LINE_ARROW:
+        //FIXME !!!!!!!!!!!!
+        // not defined into ooimpress filter.
+        //marker.addAttribute( "svg:viewBox", "...." );
+        //marker.addAttribute( "svg:d", "...." );
+        break;
+    }
+
+
     return mainStyles.lookup( marker, "marker" );
 }
 
