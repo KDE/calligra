@@ -24,7 +24,6 @@ KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent,
     : QLineEdit( _parent, "KSpreadLocationEditWidget" ),
       m_pView(_view)
 {
-  m_pView = _view;
 }
 
 void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
@@ -725,7 +724,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
   }
 
-  QRect selectionHandle = m_pView->selectionInfo()->getSelectionHandleArea(this);
+  QRect selectionHandle = m_pView->selectionInfo()->selectionHandleArea(this);
 
   // Test whether the mouse is over some anchor
   {
@@ -948,7 +947,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   QRect selection( selection() );
 
   // Did we click in the lower right corner of the marker/marked-area ?
-  if (selectionInfo()->getSelectionHandleArea(this).contains(_ev->pos()))
+  if (selectionInfo()->selectionHandleArea(this).contains(_ev->pos()))
   {
     processClickSelectionHandle(_ev);
     return;
@@ -1209,12 +1208,12 @@ void KSpreadCanvas::moveDirection(KSpread::MoveTo direction, bool extendSelectio
     /* if the cursor is unset, pretend we're starting at the regular cursor */
     if (cursor.x() == 0 || cursor.y() == 0)
     {
-      cursor = selectionInfo()->getCursorPosition();
+      cursor = selectionInfo()->cursorPosition();
     }
   }
   else
   {
-    cursor = selectionInfo()->getCursorPosition();
+    cursor = selectionInfo()->cursorPosition();
   }
 
   QPoint cellCorner = cursor;
@@ -2565,8 +2564,7 @@ void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
   ExtendRectBorder(area2);
 
   /* Prepare the painter */
-  QPainter painter;
-  painter.begin( this );
+  QPainter painter( this );
   painter.save();
 
   // Do the view transformation.
@@ -3252,8 +3250,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   if ( !table )
     return;
 
-  QPainter painter;
-  painter.begin( this );
+  QPainter painter( this );
   QPen pen;
   pen.setWidth( 1 );
   painter.setPen( pen );
@@ -3272,8 +3269,6 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   int top_row = table->topRow( _ev->rect().y(), ypos, m_pCanvas );
   int bottom_row = table->bottomRow( _ev->rect().bottom(), m_pCanvas );
   double dblYpos = (double)ypos;
-  int height = 0;
-
 
   QFont normalFont = painter.font();
   if (m_pCanvas->zoom() < 1)
@@ -3293,10 +3288,10 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     bool selected = ( highlighted && (util_isRowSelected(m_pView->selection())) );
     bool current  = ( !highlighted && y == m_pView->selection().top() );
 
-    RowLayout *row_lay = table->rowLayout( y );
+    const RowLayout *row_lay = table->rowLayout( y );
 
     //The width is the width of a column plus the delta between dblYpos and ypos
-    height = int( ( dblYpos - ypos ) + row_lay->dblHeight( m_pCanvas ) );
+    int height = int( ( dblYpos - ypos ) + row_lay->dblHeight( m_pCanvas ) );
 
     if ( selected )
     {
@@ -3360,7 +3355,7 @@ KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpread
 
 void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 {
-    KSpreadTable *table = m_pCanvas->activeTable();
+  const KSpreadTable *table = m_pCanvas->activeTable();
   assert( table );
 
   if(!m_pView->koDocument()->isReadWrite())
@@ -3800,8 +3795,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   if (!table )
     return;
 
-  QPainter painter;
-  painter.begin( this );
+  QPainter painter( this );
   QPen pen;
   pen.setWidth( 1 );
   painter.setPen( pen );
@@ -3819,8 +3813,6 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   int left_col = table->leftColumn( _ev->rect().x(), xpos, m_pCanvas );
   int right_col = table->rightColumn( _ev->rect().right(), m_pCanvas );
   double dblXpos = (double)xpos;
-  int width = 0;
-
 
   QFont normalFont = painter.font();
   QFont boldFont = normalFont;
@@ -3842,10 +3834,10 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
                       (!util_isRowSelected(m_pView->selection())) );
     bool current = ( !highlighted && x == m_pView->selection().left() );
 
-    ColumnLayout *col_lay = table->columnLayout( x );
+    const ColumnLayout *col_lay = table->columnLayout( x );
 
     //The width is the width of a column plus the delta between dblXpos and xpos
-    width = int( ( dblXpos-xpos ) + col_lay->dblWidth( m_pCanvas ) );
+    int width = int( ( dblXpos-xpos ) + col_lay->dblWidth( m_pCanvas ) );
 
     if ( selected )
     {

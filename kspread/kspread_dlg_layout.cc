@@ -63,22 +63,17 @@ void KSpreadPatternSelect::paintEvent( QPaintEvent *_ev )
 {
     QFrame::paintEvent( _ev );
 
-    QPainter painter;
-    QPen pen;
+    QPainter painter( this );
 
     if ( !undefined )
     {
-        pen=QPen( penColor,penWidth,penStyle);
-        painter.begin( this );
+        QPen pen( penColor, penWidth, penStyle);
         painter.setPen( pen );
         painter.drawLine( 6, height()/2, width() - 6,height()/2  );
-        painter.end();
     }
     else
     {
-        painter.begin( this );
         painter.fillRect( 2, 2, width() - 4, height() - 4, BDiagPattern );
-        painter.end();
     }
 }
 
@@ -2721,9 +2716,9 @@ void KSpreadBorder::mousePressEvent( QMouseEvent* _ev )
 }
 
 CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg )
-  : QWidget( parent )
+  : QWidget( parent ),
+    dlg( _dlg )
 {
-  dlg = _dlg;
   table = dlg->getTable();
 
   InitializeGrids();
@@ -2771,9 +2766,9 @@ void CellLayoutPageBorder::InitializeGrids()
 
   /* set up a layout box for most of the border setting buttons */
   tmpQGroupBox = new QGroupBox( this, "GroupBox_1" );
-  tmpQGroupBox->setFrameStyle( 49 );
+  tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
   tmpQGroupBox->setTitle( i18n("Border") );
-  tmpQGroupBox->setAlignment( 1 );
+  tmpQGroupBox->setAlignment( AlignLeft );
   grid2 = new QGridLayout(tmpQGroupBox,5,5,15,7);
   area=new KSpreadBorder(tmpQGroupBox,"area",dlg->oneCol,dlg->oneRow);
   grid2->addMultiCellWidget(area,1,3,1,3);
@@ -2795,9 +2790,9 @@ void CellLayoutPageBorder::InitializeGrids()
      below.*/
 
   tmpQGroupBox = new QGroupBox( this, "GroupBox_3" );
-  tmpQGroupBox->setFrameStyle( 49 );
+  tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
   tmpQGroupBox->setTitle( i18n("Preselect") );
-  tmpQGroupBox->setAlignment( 1 );
+  tmpQGroupBox->setAlignment( AlignLeft );
 
   grid2 = new QGridLayout(tmpQGroupBox,1,3,15,7);
 
@@ -2834,9 +2829,9 @@ void CellLayoutPageBorder::InitializeGrids()
 
   /* now set up the group box with the pattern selector */
   tmpQGroupBox = new QGroupBox( this, "GroupBox_10" );
-  tmpQGroupBox->setFrameStyle( 49 );
+  tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
   tmpQGroupBox->setTitle( i18n("Pattern") );
-  tmpQGroupBox->setAlignment( 1 );
+  tmpQGroupBox->setAlignment( AlignLeft );
 
   grid2 = new QGridLayout(tmpQGroupBox,6,2,15,7);
 
@@ -2848,7 +2843,7 @@ void CellLayoutPageBorder::InitializeGrids()
     name[7] = '0' + (i+1) / 10;
     name[8] = '0' + (i+1) % 10;
     pattern[i] = new KSpreadPatternSelect( tmpQGroupBox, name );
-    pattern[i]->setFrameStyle( 50 );
+    pattern[i]->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(pattern[i], i % 5, i / 5);
     /* this puts them in the pattern:
        1  6
@@ -2867,7 +2862,7 @@ void CellLayoutPageBorder::InitializeGrids()
   grid2->addWidget(tmpQLabel,6,0);
 
   /* tack on the 'customize' border pattern selector */
-  QGridLayout *grid3 = new QGridLayout(tmpQGroupBox,2,2,0,7);
+  QGridLayout *grid3 = new QGridLayout( 2, 2, 7 );
   customize  = new QCheckBox(i18n("Customize"),tmpQGroupBox);
   grid3->addWidget(customize,0,0);
   connect( customize, SIGNAL( clicked()), SLOT(cutomize_chosen_slot()) );
@@ -2897,16 +2892,16 @@ void CellLayoutPageBorder::InitializeGrids()
 
   /* Now the preview box is put together */
   tmpQGroupBox = new QGroupBox(this, "GroupBox_4" );
-  tmpQGroupBox->setFrameStyle( 49 );
+  tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
   tmpQGroupBox->setTitle( i18n("Preview") );
-  tmpQGroupBox->setAlignment( 1 );
+  tmpQGroupBox->setAlignment( AlignLeft );
 
   grid2 = new QGridLayout(tmpQGroupBox,1,1,14,7);
 
 
 
   preview = new KSpreadPatternSelect( tmpQGroupBox, "Pattern_preview" );
-  preview->setFrameStyle( 50 );
+  preview->setFrameStyle( QFrame::Panel | QFrame::Sunken );
   grid2->addWidget(preview,0,0);
 
   grid->addWidget(tmpQGroupBox,4,1);
@@ -3887,73 +3882,73 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 
     QGroupBox* tmpQGroupBox;
     tmpQGroupBox = new QGroupBox( this, "GroupBox_20" );
-    tmpQGroupBox->setFrameStyle( 49 );
+    tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
     tmpQGroupBox->setTitle( i18n("Pattern") );
-    tmpQGroupBox->setAlignment( 1 );
+    tmpQGroupBox->setAlignment( AlignLeft );
 
     QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,7,3,15,7);
 
     brush1 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_1" );
-    brush1->setFrameStyle( 50 );
+    brush1->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush1,0,0);
 
     brush2 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_2" );
-    brush2->setFrameStyle( 50 );
+    brush2->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush2,0,1);
 
     brush3 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_3" );
-    brush3->setFrameStyle( 50 );
+    brush3->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush3,0,2);
 
     brush4 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_4" );
-    brush4->setFrameStyle( 50 );
+    brush4->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush4,1,0);
 
     brush5 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_5" );
-    brush5->setFrameStyle( 50 );
+    brush5->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush5,1,1);
 
     brush6 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_6" );
-    brush6->setFrameStyle( 50 );
+    brush6->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush6,1,2);
 
     brush7 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_7" );
-    brush7->setFrameStyle( 50 );
+    brush7->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush7,2,0);
 
     brush8 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_8" );
-    brush8->setFrameStyle( 50 );
+    brush8->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush8,2,1);
 
     brush9 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_9" );
-    brush9->setFrameStyle( 50 );
+    brush9->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush9,2,2);
 
     brush10 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_10" );
-    brush10->setFrameStyle( 50 );
+    brush10->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush10,3,0);
 
     brush11 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_11" );
-    brush11->setFrameStyle( 50 );
+    brush11->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush11,3,1);
 
     brush12 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_12" );
-    brush12->setFrameStyle( 50 );
+    brush12->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush12,3,2);
 
     brush13 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_13" );
-    brush13->setFrameStyle( 50 );
+    brush13->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush13,4,0);
 
     brush14 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_14" );
-    brush14->setFrameStyle( 50 );
+    brush14->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush14,4,1);
 
     brush15 = new KSpreadBrushSelect( tmpQGroupBox, "Frame_15" );
-    brush15->setFrameStyle( 50 );
+    brush15->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(brush15,4,2);
 
-    QGridLayout *grid3=new QGridLayout(tmpQGroupBox,1,2);
+    QGridLayout *grid3 = new QGridLayout( 1, 2 );
     color = new KColorButton (tmpQGroupBox, "ColorButton_1" );
     grid3->addWidget(color,0,1);
 
@@ -3963,7 +3958,7 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 
     grid2->addMultiCell(grid3,5,5,0,2);
 
-    grid3=new QGridLayout(tmpQGroupBox,1,3);
+    grid3 = new QGridLayout( 1, 3 );
 
     tmpQLabel = new QLabel( tmpQGroupBox, "Label_2" );
     grid3->addWidget(tmpQLabel,0,0);
@@ -3995,13 +3990,13 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
 
     tmpQGroupBox = new QGroupBox( this, "GroupBox1" );
     tmpQGroupBox->setTitle( i18n("Preview") );
-    tmpQGroupBox->setFrameStyle( 49 );
-    tmpQGroupBox->setAlignment( 1 );
+    tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
+    tmpQGroupBox->setAlignment( AlignLeft );
 
     grid2 = new QGridLayout(tmpQGroupBox,1,1,14,4);
 
     current = new KSpreadBrushSelect( tmpQGroupBox, "Current" );
-    current->setFrameStyle( 50 );
+    current->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     grid2->addWidget(current,0,0);
     grid->addWidget( tmpQGroupBox,4,0);
 

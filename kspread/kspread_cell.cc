@@ -48,8 +48,8 @@ QChar KSpreadCell::decimal_point = '\0';
 
 KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
   : KSpreadLayout( _table ),
-    conditions(this),
-    m_bShrinkToSize(false)
+    conditions(this)
+    //    m_bShrinkToSize(false)
 {
   m_nextCell = 0;
   m_previousCell = 0;
@@ -4626,7 +4626,7 @@ void KSpreadCell::setStyle( Style _s )
       update();
 }
 
-QString KSpreadCell::testAnchor( int _x, int _y )
+QString KSpreadCell::testAnchor( int _x, int _y ) const
 {
   if ( !m_pQML )
     return QString::null;

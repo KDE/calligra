@@ -4486,42 +4486,21 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table,
 
     // Empty selection ?
     // Activate or deactivate some actions.
-    if ( m_selectionInfo->singleCellSelection() ||
-         util_isRowSelected(selection()) || util_isColumnSelected(selection()) )
-    {
-        m_tableFormat->setEnabled( FALSE );
-        m_mergeCell->setEnabled(false);
-        m_insertChartFrame->setEnabled(false);
-    }
-    else
-    {
-        m_tableFormat->setEnabled( TRUE );
-        m_mergeCell->setEnabled(true);
-        m_insertChartFrame->setEnabled(true);
-    }
+    bool colSelected = util_isColumnSelected( selection() );
+    bool rowSelected = util_isRowSelected( selection() );
 
-    if( util_isColumnSelected(selection()) )
-        {
-        m_resizeRow->setEnabled(false);
-        m_equalizeRow->setEnabled(false);
-        }
-    else
-        {
-        m_resizeRow->setEnabled(true);
-        m_equalizeRow->setEnabled(true);
-        }
+    m_resizeRow->setEnabled( !colSelected );
+    m_equalizeRow->setEnabled( !colSelected );
 
-    if( util_isRowSelected(selection()) )
-        {
-        m_resizeColumn->setEnabled(false);
-        m_equalizeColumn->setEnabled(false);
-        }
-    else
-        {
-        m_resizeColumn->setEnabled(true);
-        m_equalizeColumn->setEnabled(true);
-        }
+    m_resizeColumn->setEnabled( !rowSelected );
+    m_equalizeColumn->setEnabled( !rowSelected );
 
+    bool simpleSelection = m_selectionInfo->singleCellSelection() ||
+			   colSelected || rowSelected;
+
+    m_tableFormat->setEnabled( !simpleSelection );
+    m_mergeCell->setEnabled( !simpleSelection );
+    m_insertChartFrame->setEnabled( !simpleSelection );
 
     resultOfCalc();
     // Send some event around. This is read for example

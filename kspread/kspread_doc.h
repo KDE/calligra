@@ -323,12 +323,12 @@ public:
    */
   int syntaxVersion( ) const { return m_syntaxVersion; }
 
-  static QString getAttribute(QDomElement &element, const char *attributeName, const QString &defaultValue)
+  static QString getAttribute(const QDomElement &element, const char *attributeName, const QString &defaultValue)
   {
     return element.attribute( attributeName, defaultValue );
   }
 
-  static int getAttribute(QDomElement &element, const char *attributeName, int defaultValue)
+  static int getAttribute(const QDomElement &element, const char *attributeName, int defaultValue)
   {
     QString value;
     if ( ( value = element.attribute( attributeName ) ) != QString::null )
@@ -337,7 +337,7 @@ public:
 	return defaultValue;
   }
 
-  static double getAttribute(QDomElement &element, const char *attributeName, double defaultValue)
+  static double getAttribute(const QDomElement &element, const char *attributeName, double defaultValue)
   {
     QString value;
       if ( ( value = element.attribute( attributeName ) ) != QString::null )
@@ -473,8 +473,6 @@ protected:
    * This context is used to execute formulas of this table.
    */
   KSContext m_context;
-
-  //KAction* m_newView; obsolete - done in the libs (Werner)
 
   static QPtrList<KSpreadDoc>* s_docs;
   static int s_docId;

@@ -444,7 +444,7 @@ public:
     */
     bool updateChart(bool refresh=true);
 
-    QString testAnchor( int _x, int _y );
+    QString testAnchor( int _x, int _y ) const;
 
     /**
      * Called if the user clicks on a cell. If the cell is for example a button, then
@@ -454,7 +454,7 @@ public:
 
     /**
      * Starts calculating.
-     * @param: true if you want to check for delay condition in doc()
+     * @param delay true if you want to check for delay condition in doc()
      *         false if you really have to calculate the value right now
      *         e.g. if you sort with formula as key
      *
@@ -947,10 +947,12 @@ private:
 
     KSpreadConditions conditions;
 
+#if 0
     /**
      * if true: "Shrink to fit" for cell values
      */
     bool m_bShrinkToSize;
+#endif
 
     /**
     * Store the number of line when you used multirow

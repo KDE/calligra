@@ -1,3 +1,10 @@
+2002-07-16  Harri Porten  <porten@kde.org>
+
+	* kspread_dlg_layout.cc: warning free layouts, switched to using
+	enums for flags rather than hardcoded values
+	* kspread_cell.h: commented out m_bShrinkToSize. Any wants to put
+	it to use ?
+
 2002-04-05 Philipp Müller <philipp.mueller@gmx.de>
 	* fixed bug with dynamic headers/footers "<table> <page>" in localized version
 	* fixed bug with copy&paste of formulas (DEC2HEX))
@@ -7,7 +14,7 @@
 
 2002-01-10 Lukas Tinkl <lukas@kde.org>
 	* implemented 19 new statistical functions (BETADIST, GAMMADIST, POISSON, etc.)
-	
+
 2001-11-25  David Faure  <faure@kde.org>
 
 	* Implemented visual feedback during search & search-replace
@@ -1250,7 +1257,7 @@ Mon May  4 13:06:49 1998  Torben Weis  <weis@localhost>
 
 	* kspread_doc.cc (slotChangePaperLayout): Moved Page Layout Dialog
 	  to KSpreadDoc
-	
+
 	* (paperLayoutDlg): Use Reggies cool KoPageLayoutDia dialog
 
 Sat May  2 16:17:59 1998  Torben Weis  <weis@localhost>
@@ -1266,7 +1273,7 @@ Wed Apr 22 01:45:47 1998  Torben Weis  <weis@localhost>
 
 	* (resizeEvent): Embedded tables do no longer display
 	  scrollbars and additional widgets. They are only shown
-	  
+
 	* kspread_view.cc (KSpreadChildFrame): One can now
 	  embed child objects in the table.
 
@@ -1276,7 +1283,7 @@ Tue Apr 21 00:17:41 1998  Torben Weis  <weis@localhost>
 
 	* kspread_dlg_scripts.cc (updateList): Fixed path for
 	  global scripts.
-	  
+
 	* (slotRename): Bug fixes.
 
 	* kspread_table.cc (deleteColumn): Deleting rows and
@@ -1284,7 +1291,7 @@ Tue Apr 21 00:17:41 1998  Torben Weis  <weis@localhost>
 
 	* kspread_view.cc (insertRow): Inserting rows and columns
 	  works now.
-	
+
 	* (addTable): Can handle multiple tables.
 
 Mon Apr 20 02:10:29 1998  Torben Weis  <weis@localhost>

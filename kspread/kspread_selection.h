@@ -62,11 +62,11 @@ public:
   /**
    * @return the area that the 'handle' of the selection is located in painting coordinates.
    */
-  QRect getSelectionHandleArea(KSpreadCanvas* canvas);
+  QRect selectionHandleArea(KSpreadCanvas* canvas) const;
 
   void setSelection( QPoint marker, QPoint anchor, KSpreadTable* table );
 
-  void setMarker( QPoint _point, KSpreadTable* table );
+  void setMarker( const QPoint &point, KSpreadTable* table );
 
   /**
    * @return the 'anchor' point of the selection -- i.e. the fixed corner
@@ -93,7 +93,7 @@ public:
    *
    * You are probably wanting to use marker(), not this function
    */
-  QPoint getCursorPosition()const;
+  QPoint cursorPosition() const;
 
 
   void setChooseAnchor(QPoint chooseAnchor) { m_chooseAnchor = chooseAnchor; }

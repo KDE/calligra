@@ -91,10 +91,9 @@ bool KSpreadSelection::singleCellSelection() const
           (currentSelection.height() - 1 == cell->extraYCells()));
 }
 
-QRect KSpreadSelection::getSelectionHandleArea(KSpreadCanvas* canvas)
+QRect KSpreadSelection::selectionHandleArea(KSpreadCanvas* canvas) const
 {
-  KSpreadCell* cell = NULL;
-  int column, row, xpos, ypos, width, height;
+  int column, row;
 
   // complete rows/columns are selected, use the marker.
   if ( util_isRowSelected(selection()) ||
@@ -108,12 +107,12 @@ QRect KSpreadSelection::getSelectionHandleArea(KSpreadCanvas* canvas)
     column = selection().right();
     row = selection().bottom();
   }
-  cell = m_pView->activeTable()->cellAt(column, row);
+  KSpreadCell* cell = m_pView->activeTable()->cellAt(column, row);
 
-  xpos = m_pView->activeTable()->columnPos( column, canvas );
-  ypos = m_pView->activeTable()->rowPos( row, canvas );
-  width = cell->width( column, canvas ) + 1;
-  height = cell->height( row, canvas ) + 1; //+1, due to rounding issue at default height at 100% zoom
+  int xpos = m_pView->activeTable()->columnPos( column, canvas );
+  int ypos = m_pView->activeTable()->rowPos( row, canvas );
+  int width = cell->width( column, canvas ) + 1;
+  int height = cell->height( row, canvas ) + 1; //+1, due to rounding issue at default height at 100% zoom
 
   QRect handle( (xpos + width - (int)(2.0 * canvas->zoom())), (ypos + height - (int)(2.0 * canvas->zoom())),
                 (int) (5.0 * canvas->zoom()), (int)(5.0 * canvas->zoom()) );
@@ -152,9 +151,9 @@ void KSpreadSelection::setSelection( QPoint newMarker, QPoint newAnchor,
   m_pView->slotChangeSelection( table, oldSelection, oldMarker );
 }
 
-void KSpreadSelection::setMarker( QPoint _point, KSpreadTable* table )
+void KSpreadSelection::setMarker( const QPoint &point, KSpreadTable* table )
 {
-  QPoint topLeft(_point);
+  QPoint topLeft(point);
   KSpreadCell* cell = table->cellAt(topLeft);
   if (cell->isObscured() && cell->isObscuringForced())
   {
@@ -216,7 +215,7 @@ bool KSpreadSelection::setCursorPosition(QPoint position)
   return false;
 }
 
-QPoint KSpreadSelection::getCursorPosition()const
+QPoint KSpreadSelection::cursorPosition()const
 {
   return m_cursorPosition;
 }
