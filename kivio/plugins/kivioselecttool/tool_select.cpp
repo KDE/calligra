@@ -34,7 +34,6 @@
 #include "kivio_custom_drag_data.h"
 #include "kivio_layer.h"
 #include "kivio_stencil.h"
-#include <X11/Xlib.h>
 
 #include <kactionclasses.h>
 #include <kpopupmenu.h>
@@ -103,6 +102,12 @@ void SelectTool::processEvent( QEvent* e )
       if( m->button() == RightButton ) {
         showPopupMenu(m->globalPos());
       } else if( m->button() == LeftButton ) {
+        if(m->state() & ShiftButton) {
+          m_shiftKey = true;
+        } else {
+          m_shiftKey = false;
+        }
+        
         mousePress( m->pos() );
       }
 
@@ -170,13 +175,6 @@ void SelectTool::select(const QRect &r)
 
 void SelectTool::mousePress(const QPoint &pos)
 {
-  // Gets the list of keys held down and check if the shift key is one of them. If yes, set the flag
-  XQueryKeymap( qt_xdisplay(), m_keys );
-  if( !(m_keys[6] & 4 ) && !(m_keys[7] & 64) )
-    m_shiftKey = false;
-  else
-    m_shiftKey = true;
-
   // Last point is used for undrawing at the last position and calculating the distance the mouse has moved
   m_lastPoint = view()->canvasWidget()->mapFromScreen(pos);
   m_origPoint = m_lastPoint;
