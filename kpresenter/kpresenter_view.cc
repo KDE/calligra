@@ -1810,16 +1810,36 @@ void KPresenterView::textObjectToContents()
 void KPresenterView::penChosen()
 {
     QColor c = actionPenColor->color();
-    if ( !m_canvas->currentTextObjectView() ) {
+    if ( !m_canvas->currentTextObjectView() )
+    {
 	bool fill = true;
-
-	if ( !m_canvas->activePage()->setPenColor( c, fill ) ) {
+        KMacroCommand *macro= new KMacroCommand(i18n( "Change Brush" ));
+        bool createMacro=false;
+        KCommand *cmd=0L;
+        cmd=m_canvas->activePage()->setBrushColor( c, fill );
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
+        cmd=stickyPage()->setBrushColor( c, fill );
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
+        if(createMacro)
+            m_pKPresenterDoc->addCommand(macro);
+        else
+        {
 	    if ( fill )
 		pen.setColor( c );
 	    else
 		pen = NoPen;
 	}
-    } else {
+    }
+    else
+    {
 	tbColor = c;
 	m_canvas->setTextColor( tbColor );
     }
@@ -1833,8 +1853,24 @@ void KPresenterView::brushChosen()
     if ( !edit )
     {
 	bool fill = true;
-
-	if ( !m_canvas->activePage()->setBrushColor( c, fill ) )
+        KMacroCommand *macro= new KMacroCommand(i18n( "Change Brush" ));
+        bool createMacro=false;
+        KCommand *cmd=0L;
+        cmd=m_canvas->activePage()->setBrushColor( c, fill );
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
+        cmd=stickyPage()->setBrushColor( c, fill );
+        if(cmd)
+        {
+            macro->addCommand(cmd);
+            createMacro=true;
+        }
+        if(createMacro)
+            m_pKPresenterDoc->addCommand(macro);
+        else
         {
 	    if ( fill )
 		brush.setColor( c );
