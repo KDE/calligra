@@ -847,7 +847,7 @@ bool IndexElement::buildFromDom(QDomElement *elem)
 {
     // checking
     if (elem->tagName() != "INDEX") {
-        cerr << "Wrong tag name " << elem->tagName() << "for IndexElement.\n";
+        cerr << "Wrong tag name " << elem->tagName().latin1() << "for IndexElement.\n";
         return false;
     }
 

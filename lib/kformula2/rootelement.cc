@@ -415,7 +415,7 @@ bool RootElement::buildFromDom(QDomElement *elem)
 {
     // checking
     if (elem->tagName() != "ROOT") {
-        cerr << "Wrong tag name " << elem->tagName() << "for RootElement.\n";
+        cerr << "Wrong tag name " << elem->tagName().latin1() << "for RootElement.\n";
         return false;
     }
 

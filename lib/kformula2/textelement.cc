@@ -130,7 +130,7 @@ bool TextElement::buildFromDom(QDomElement *elem)
 {
     // checking
     if (elem->tagName() != "TEXT") {
-        cerr << "Wrong tag name " << elem->tagName() << "for TextElement.\n";
+        cerr << "Wrong tag name " << elem->tagName().latin1() << "for TextElement.\n";
         return false;
     }
 

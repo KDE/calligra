@@ -19,6 +19,7 @@
 */
 
 #include <iostream>
+#include <qstring.h>
 
 #include "contextstyle.h"
 #include "basicelement.h"
@@ -104,7 +105,7 @@ QDomElement BasicElement::getElementDom(QDomDocument *doc)
 bool BasicElement::buildFromDom(QDomElement *elem)
 {
     if (elem->tagName() != "BASIC") {
-        cerr << "Wrong tag name " << elem->tagName() << "for BasicElement.\n";
+        cerr << "Wrong tag name " << elem->tagName().latin1() << "for BasicElement.\n";
         return false;
     }
     QString sizeStr = elem->attribute("SIZE");

@@ -347,7 +347,7 @@ bool FractionElement::buildFromDom(QDomElement *elem)
 {
     // checking
     if (elem->tagName() != "FRACTION") {
-        cerr << "Wrong tag name " << elem->tagName() << "for FractionElement.\n";
+        cerr << "Wrong tag name " << elem->tagName().latin1() << "for FractionElement.\n";
         return false;
     }
 

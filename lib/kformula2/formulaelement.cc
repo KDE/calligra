@@ -93,7 +93,7 @@ bool FormulaElement::buildFromDom(QDomElement *elem)
         return false;
     }
     if (elem->tagName() != "FORMULA") {
-        cerr << "Wrong tag name " << elem->tagName() << "for FormulaElement.\n";
+        cerr << "Wrong tag name " << elem->tagName().latin1() << "for FormulaElement.\n";
         return false;
     }
 

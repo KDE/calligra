@@ -428,7 +428,7 @@ bool MatrixElement::buildFromDom(QDomElement *elem)
 {
     // checking
     if (elem->tagName() != "MATRIX") {
-        cerr << "Wrong tag name " << elem->tagName() << "for MatrixElement.\n";
+        cerr << "Wrong tag name " << elem->tagName().latin1() << "for MatrixElement.\n";
         return false;
     }
 

@@ -279,7 +279,7 @@ bool BracketElement::buildFromDom(QDomElement *elem)
 {
     // checking
     if (elem->tagName() != "BRACKET") {
-        cerr << "Wrong tag name " << elem->tagName() << "for BracketElement.\n";
+        cerr << "Wrong tag name " << elem->tagName().latin1() << "for BracketElement.\n";
         return false;
     }
 

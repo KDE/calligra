@@ -591,7 +591,7 @@ bool SequenceElement::buildFromDom(QDomElement *elem)
 {
     // checking
     if (elem->tagName() != "SEQUENCE") {
-        cerr << "Wrong tag name " << elem->tagName() << "for SequenceElement.\n";
+        cerr << "Wrong tag name " << elem->tagName().latin1() << "for SequenceElement.\n";
         return false;
     }
 

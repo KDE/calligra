@@ -69,7 +69,7 @@ bool OperatorElement::buildFromDom(QDomElement *elem)
 {
     // checking
     if (elem->tagName() != "OPERATOR") {
-        cerr << "Wrong tag name " << elem->tagName() << "for OperatorElement.\n";
+        cerr << "Wrong tag name " << elem->tagName().latin1() << "for OperatorElement.\n";
         return false;
     }
 

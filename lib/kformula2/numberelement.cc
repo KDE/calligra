@@ -44,7 +44,7 @@ bool NumberElement::buildFromDom(QDomElement *elem)
 {
     // checking
     if (elem->tagName() != "NUMBER") {
-        cerr << "Wrong tag name " << elem->tagName() << "for NumberElement.\n";
+        cerr << "Wrong tag name " << elem->tagName().latin1() << "for NumberElement.\n";
         return false;
     }
 

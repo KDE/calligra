@@ -544,7 +544,7 @@ bool SymbolElement::buildFromDom(QDomElement *elem)
 {
     // checking
     if (elem->tagName() != "SYMBOL") {
-        cerr << "Wrong tag name " << elem->tagName() << "for SymbolElement.\n";
+        cerr << "Wrong tag name " << elem->tagName().latin1() << "for SymbolElement.\n";
         return false;
     }
 
