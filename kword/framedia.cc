@@ -1647,8 +1647,15 @@ bool KWFrameDia::applyChanges()
                 for(KWFrame *f=allFrames.first();f; f=allFrames.next()) {
                     KWPictureFrameSet *fs = dynamic_cast<KWPictureFrameSet *> (f->frameSet());
                     if(fs) {
-                        fs->setKeepAspectRatio( cbAspectRatio->isChecked() );
-                        // TODO undo.
+                        if(fs->keepAspectRatio()!=cbAspectRatio->isChecked())
+                        {
+                            if(!macroCmd)
+                                macroCmd = new KMacroCommand( i18n("Frame Properties") );
+                            KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( QString::null,fs, KWFrameSetPropertyCommand::FSP_KEEPASPECTRATION, cbAspectRatio->isChecked()? "keepRatio" : "dontKeepRatio" );
+                            cmd->execute();
+
+                            macroCmd->addCommand(cmd);
+                        }
                     }
                 }
             }
