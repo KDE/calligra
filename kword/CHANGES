@@ -281,3 +281,13 @@ Reggie, 25.10.1998:
 -------------------
 - Implemented selecting multiple frames
 - Implemented moving frames
+
+Reggie, 26.10.1998:
+-------------------
+- Implemented resizing frames
+- Added a new property for framesets, which allows the user to say,
+  if a frameset should automatically add frames when the text of 
+  the frameset doesn't fit into the frames anymore
+- Started writing a dialog for configuring frames and framesets. Currently
+  it's possible to set the text run-around type for frames and the above
+  described property for framesets

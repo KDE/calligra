@@ -4,7 +4,7 @@
  </PAPER>
  <ATTRIBUTES processing="1" standardpage="1"/>
  <FRAMESETS>
-  <FRAMESET frameType="1">
+  <FRAMESET frameType="1" autoCreateNewFrame="0">
    <FRAME left="28" top="100" right="200" bottom="300" runaround="0"/>
    <FRAME left="200" top="400" right="300" bottom="510" runaround="0"/>
    <PARAGRAPH>
@@ -24,7 +24,7 @@
     </LAYOUT>
    </PARAGRAPH>
   </FRAMESET>
-  <FRAMESET frameType="1">
+  <FRAMESET frameType="1" autoCreateNewFrame="1">
    <FRAME left="28" top="42" right="300" bottom="600" runaround="1"/>
    <FRAME left="310" top="42" right="500" bottom="600" runaround="1"/>
    <PARAGRAPH>

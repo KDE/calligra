@@ -22,6 +22,7 @@
 #include "paraglayout.h"
 #include "char.h"
 #include "frame.h"
+#include "framedia.h"
 
 #include <qevent.h>
 #include <math.h>
@@ -157,6 +158,11 @@ public slots:
     { setMouseMode(MM_CREATE_TEXT); mmUncheckAll(); mm_menu->setItemChecked(mm_create_text,true); }
   void mmCreatePix()
     { setMouseMode(MM_CREATE_PIX); mmUncheckAll(); mm_menu->setItemChecked(mm_create_pix,true); }
+  void femProps();
+
+protected slots:
+  void frameDiaClosed()
+    { hiliteFrameSet = -1; recalcAll = true; recalcText(); recalcCursor(); recalcAll = false; }
 
 protected:
   unsigned int ptLeftBorder();
@@ -228,12 +234,16 @@ protected:
   bool recalcAll;
 
   MouseMode mouseMode;
-  QPopupMenu *mm_menu;
+  QPopupMenu *mm_menu,*frame_edit_menu;
   int mm_edit,mm_edit_frame,mm_create_text,mm_create_pix;
 
   int oldMx,oldMy;
   bool deleteMovingRect;
-  
+
+  int hiliteFrameSet;
+
+  KWFrameDia *frameDia;
+
 };
 
 #endif

@@ -399,6 +399,8 @@ void KWordDocument_impl::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& ls
   string tag;
   string name;
 
+  bool autoCreateNewFrame = true;
+
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
@@ -414,6 +416,8 @@ void KWordDocument_impl::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& ls
 	    {
 	      if ((*it).m_strName == "frameType")
 		frameType = static_cast<FrameType>(atoi((*it).m_strValue.c_str()));
+	      if ((*it).m_strName == "autoCreateNewFrame")
+		autoCreateNewFrame = atoi((*it).m_strValue.c_str());
 	    }
 
 	  switch (frameType)
@@ -422,6 +426,7 @@ void KWordDocument_impl::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& ls
 	      {
 		KWTextFrameSet *frame = new KWTextFrameSet(this);
 		frame->load(parser,lst);
+		frame->setAutoCreateNewFrame(autoCreateNewFrame);
 		frames.append(frame);
 	      } break;
 	    default: break;
@@ -700,6 +705,9 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 		       _fc.getLineHeight() + _fc.getParag()->getParagLayout()->getTopBorder().ptWidth +
 		       _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth + 
 		       _fc.getParag()->getParagLayout()->getTopBorder().ptWidth);
+
+  if (static_cast<int>(_fc.getPTY() + _fc.getLineHeight()) > getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->bottom())
+    cr = QRegion(0,0,0,0);
 
   QRegion visible(0,0,_w,_h);
 
@@ -1491,6 +1499,24 @@ QCursor KWordDocument_impl::getMouseCursor(unsigned int mx,unsigned int my)
     }
 
   return arrowCursor;
+}
+
+/*================================================================*/
+KWFrame *KWordDocument_impl::getFirstSelectedFrame()
+{
+  KWFrameSet *frameSet = 0L;
+
+  for (unsigned int i = 0;i < getNumFrameSets();i++)
+    {
+      frameSet = getFrameSet(i);
+      for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
+	{	
+	  if (frameSet->getFrame(j)->isSelected())
+	    return frameSet->getFrame(j);
+	}
+    }
+
+  return 0L;
 }
 
 /*================================================================*/

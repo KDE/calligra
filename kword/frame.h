@@ -30,7 +30,7 @@
 class KWordDocument_impl;
 
 enum FrameType {FT_BASE = 0,FT_TEXT = 1,FT_PICTURE = 2};
-enum RunAround {RA_NO = 0,RA_BOUNDUNGRECT = 1,RA_CONTUR = 2};
+enum RunAround {RA_NO = 0,RA_BOUNDINGRECT = 1,RA_CONTUR = 2};
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -171,13 +171,16 @@ public:
   virtual void save(ostream &out);
   virtual void load(KOMLParser&,vector<KOMLAttrib>&);
 
+  bool getAutoCreateNewFrame() { return autoCreateNewFrame; }
+  void setAutoCreateNewFrame(bool _auto) { autoCreateNewFrame = _auto; }
+
 protected:
   virtual void init();
 
   // pointer to the first parag of the list of parags
   KWParag *parags;
-
   KWParagLayout* defaultParagLayout;
+  bool autoCreateNewFrame;
 
 };
 

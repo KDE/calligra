@@ -258,6 +258,7 @@ protected:
      */
     unsigned short counters[8][8];
     bool compare_formats;
+    bool outOfFrame;
 };
 
 #endif

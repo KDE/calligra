@@ -63,6 +63,10 @@ KWPage::KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui)
 
   oldMx = oldMy = 0;
   deleteMovingRect = true;
+
+  hiliteFrameSet = -1;
+
+  frameDia = 0;
 }
 
 unsigned int KWPage::ptLeftBorder() { return doc->getPTLeftBorder(); }
@@ -146,6 +150,9 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 	    int mx = e->x() + xOffset;
 	    int my = e->y() + yOffset;
 
+	    if (doc->getProcessingType() == KWordDocument_impl::WP && doc->getFrameSet(mx,my) < 1)
+	      break;
+
 	    mx = (mx / doc->getRastX()) * doc->getRastX();
 	    my = (my / doc->getRastY()) * doc->getRastY();
 
@@ -185,13 +192,203 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 				}
 			    }
 			}
-		      deleteMovingRect = true;
-		      oldMx = mx; oldMy = my;
 		      p.end();
 		    }
 		} break;
+	      case SizeVerCursor:
+		{
+		  KWFrame *frame = doc->getFirstSelectedFrame();
+		  QPainter p;
+		  p.begin(this);
+		  p.setRasterOp(NotROP);
+		  p.setPen(black);
+		  p.setBrush(NoBrush);
+
+		  if (deleteMovingRect)
+		    p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+		  
+		  if (my < frame->top() + frame->height() / 2)
+		    {
+		      frame->setHeight(frame->height() + (oldMy - my)); 
+		      frame->moveBy(0,my - oldMy);
+		      if (frame->x() < 0 || 
+			  frame->y() < getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->right() > static_cast<int>(ptPaperWidth()) || 
+			  frame->bottom() > (getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) + 1) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX())
+			{
+			  frame->setHeight(frame->height() - (oldMy - my)); 
+			  frame->moveBy(0,-my + oldMy);
+			}
+		    }
+		  else
+		    {
+		      frame->setHeight(frame->height() + (my - oldMy)); 
+		      if (frame->x() < 0 || 
+			  frame->y() < getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->right() > static_cast<int>(ptPaperWidth()) || 
+			  frame->bottom() > (getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) + 1) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX())
+			frame->setHeight(frame->height() - (my - oldMy)); 
+		    }
+
+		  p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+		  p.end();		      
+		} break;
+	      case SizeHorCursor:
+		{
+		  KWFrame *frame = doc->getFirstSelectedFrame();
+		  QPainter p;
+		  p.begin(this);
+		  p.setRasterOp(NotROP);
+		  p.setPen(black);
+		  p.setBrush(NoBrush);
+
+		  if (deleteMovingRect)
+		    p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+		  
+		  if (mx < frame->left() + frame->width() / 2)
+		    {
+		      frame->setWidth(frame->width() + (oldMx - mx)); 
+		      frame->moveBy(mx - oldMx,0);
+		      if (frame->x() < 0 || 
+			  frame->y() < getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->right() > static_cast<int>(ptPaperWidth()) || 
+			  frame->bottom() > (getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) + 1) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX())
+			{
+			  frame->setWidth(frame->width() - (oldMx - mx)); 
+			  frame->moveBy(-mx + oldMx,0);
+			}
+		    }
+		  else
+		    {
+		      frame->setWidth(frame->width() + (mx - oldMx)); 
+		      if (frame->x() < 0 || 
+			  frame->y() < getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->right() > static_cast<int>(ptPaperWidth()) || 
+			  frame->bottom() > (getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) + 1) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX())
+			frame->setWidth(frame->width() - (mx - oldMx)); 
+		    }
+
+		  p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+		  p.end();		      
+		} break;
+	      case SizeFDiagCursor:
+		{
+		  KWFrame *frame = doc->getFirstSelectedFrame();
+		  QPainter p;
+		  p.begin(this);
+		  p.setRasterOp(NotROP);
+		  p.setPen(black);
+		  p.setBrush(NoBrush);
+
+		  if (deleteMovingRect)
+		    p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+		  
+		  if (mx < frame->left() + frame->width() / 2)
+		    {
+		      frame->setWidth(frame->width() + (oldMx - mx)); 
+		      frame->setHeight(frame->height() + (oldMy - my)); 
+		      frame->moveBy(mx - oldMx,my - oldMy);
+		      if (frame->x() < 0 || 
+			  frame->y() < getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->right() > static_cast<int>(ptPaperWidth()) || 
+			  frame->bottom() > (getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) + 1) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX())
+			{
+			  frame->setWidth(frame->width() - (oldMx - mx)); 
+			  frame->setHeight(frame->height() - (oldMy - my)); 
+			  frame->moveBy(-mx + oldMx,-my + oldMy);
+			}
+		    }
+		  else
+		    {
+		      frame->setWidth(frame->width() + (mx - oldMx)); 
+		      frame->setHeight(frame->height() + (my - oldMy)); 
+		      if (frame->x() < 0 || 
+			  frame->y() < getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->right() > static_cast<int>(ptPaperWidth()) || 
+			  frame->bottom() > (getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) + 1) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX())
+			{			
+			  frame->setWidth(frame->width() - (mx - oldMx)); 
+			  frame->setHeight(frame->height() - (my - oldMy)); 
+			}
+		    }
+
+		  p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+		  p.end();		      
+		} break;
+	      case SizeBDiagCursor:
+		{
+		  KWFrame *frame = doc->getFirstSelectedFrame();
+		  QPainter p;
+		  p.begin(this);
+		  p.setRasterOp(NotROP);
+		  p.setPen(black);
+		  p.setBrush(NoBrush);
+
+		  if (deleteMovingRect)
+		    p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+		  
+		  if (mx > frame->left() + frame->width() / 2)
+		    {
+		      frame->setWidth(frame->width() + (mx - oldMx)); 
+		      frame->setHeight(frame->height() + (oldMy - my)); 
+		      frame->moveBy(0,my - oldMy);
+		      if (frame->x() < 0 || 
+			  frame->y() < getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->right() > static_cast<int>(ptPaperWidth()) || 
+			  frame->bottom() > (getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) + 1) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX())
+			{
+			  frame->setWidth(frame->width() - (mx - oldMx)); 
+			  frame->setHeight(frame->height() - (oldMy - my)); 
+			  frame->moveBy(0,-my + oldMy);
+			}
+		    }
+		  else
+		    {
+		      frame->setWidth(frame->width() + (oldMx - mx)); 
+		      frame->setHeight(frame->height() + (my - oldMy)); 
+		      frame->moveBy(mx - oldMx,0);
+		      if (frame->x() < 0 || 
+			  frame->y() < getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->right() > static_cast<int>(ptPaperWidth()) || 
+			  frame->bottom() > (getPageOfRect(QRect(frame->x(),frame->y(),frame->width(),frame->height())) + 1) * 
+			  static_cast<int>(ptPaperHeight()) ||
+			  frame->height() < 2 * doc->getRastY() || frame->width() < 2 * doc->getRastX())
+			{			
+			  frame->setWidth(frame->width() - (oldMx - mx)); 
+			  frame->setHeight(frame->height() - (my - oldMy)); 
+			  frame->moveBy(-mx + oldMx,0);
+			}
+		    }
+
+		  p.drawRect(frame->x() - xOffset,frame->y() - yOffset,frame->width(),frame->height());
+		  p.end();		      
+		} break;
 	      default: break;
 	      }
+	    deleteMovingRect = true;
+	    oldMx = mx; oldMy = my;
 	  } break;
 	default: break;
 	}
@@ -340,6 +537,23 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	  {
 	    QPoint pnt(QCursor::pos());
 	    mm_menu->popup(pnt);
+	  }
+	else
+	  {
+	    switch (mouseMode)
+	      {
+	      case MM_EDIT_FRAME:
+		{
+		  oldMx = mx;
+		  oldMy = my;
+		  doc->deSelectAllFrames();
+		  doc->selectFrame(mx,my);
+		  repaint(false);
+		  QPoint pnt(QCursor::pos());
+		  frame_edit_menu->popup(pnt);
+		} break;
+	      default: break;
+	      }
 	  }
       } break;
     default: break;
@@ -1458,7 +1672,6 @@ void KWPage::drawBorders(QPainter &_painter,QRect v_area)
 {
   _painter.save();
   _painter.setBrush(NoBrush);
-  _painter.setPen(lightGray);
 
   KWFrameSet *frameset = 0;
   KWFrame *tmp;
@@ -1466,6 +1679,10 @@ void KWPage::drawBorders(QPainter &_painter,QRect v_area)
 
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
+      _painter.setPen(lightGray);
+      if (static_cast<int>(i) == hiliteFrameSet)
+	_painter.setPen(blue);
+
       frameset = doc->getFrameSet(i);
       for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 	{
@@ -1600,6 +1817,10 @@ void KWPage::setupMenus()
   mm_create_text = mm_menu->insertItem(i18n("Create Text-Frame"),this,SLOT(mmCreateText()));
   mm_create_pix = mm_menu->insertItem(i18n("Create Pixmap-Frame"),this,SLOT(mmCreatePix()));
   mm_menu->setCheckable(false);
+
+  frame_edit_menu = new QPopupMenu();
+  CHECK_PTR(frame_edit_menu);
+  frame_edit_menu->insertItem(i18n("Properties..."),this,SLOT(femProps()));
 }
 
 /*================================================================*/
@@ -1621,4 +1842,32 @@ int KWPage::getPageOfRect(QRect _rect)
     }
 
   return -1;
+}
+
+/*================================================================*/
+void KWPage::femProps()
+{
+  int mx = oldMx;
+  int my = oldMy;
+
+  if (frameDia)
+    {
+      frameDia->close();
+      disconnect(frameDia,SIGNAL(frameDiaClosed()),this,SLOT(frameDiaClosed()));
+      disconnect(frameDia,SIGNAL(applyButtonPressed()),this,SLOT(frameDiaClosed()));
+      disconnect(frameDia,SIGNAL(cancelButtonPressed()),this,SLOT(frameDiaClosed()));
+      disconnect(frameDia,SIGNAL(defaultButtonPressed()),this,SLOT(frameDiaClosed()));
+      delete frameDia;
+      frameDia = 0;
+    }
+
+  hiliteFrameSet = doc->getFrameSet(mx,my);
+  repaint(false);
+  frameDia = new KWFrameDia(0,"",doc->getFrameSet(doc->getFrameSet(mx,my)),doc->getFirstSelectedFrame());
+  connect(frameDia,SIGNAL(frameDiaClosed()),this,SLOT(frameDiaClosed()));
+  connect(frameDia,SIGNAL(applyButtonPressed()),this,SLOT(frameDiaClosed()));
+  connect(frameDia,SIGNAL(cancelButtonPressed()),this,SLOT(frameDiaClosed()));
+  connect(frameDia,SIGNAL(defaultButtonPressed()),this,SLOT(frameDiaClosed()));
+  frameDia->setCaption(i18n("KWord - Frame settings"));
+  frameDia->show();
 }

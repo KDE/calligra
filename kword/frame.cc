@@ -84,7 +84,7 @@ void KWFrame::addIntersect(QRect _r)
 /*================================================================*/
 int KWFrame::getLeftIndent(int _y,int _h)
 {
-  if (!runAround || intersections.isEmpty()) return 0;
+  if (runAround == RA_NO || intersections.isEmpty()) return 0;
 
   int _left = 0;
   QRect rect;
@@ -106,7 +106,7 @@ int KWFrame::getLeftIndent(int _y,int _h)
 /*================================================================*/
 int KWFrame::getRightIndent(int _y,int _h)
 {
-  if (!runAround || intersections.isEmpty()) return 0;
+  if (runAround == RA_NO|| intersections.isEmpty()) return 0;
 
   int _right = 0;
   QRect rect;
@@ -276,6 +276,8 @@ void KWTextFrameSet::init()
 
   parags = 0L;
 
+  autoCreateNewFrame = true;
+
   parags = new KWParag(this,doc,0L,0L,defaultParagLayout);
   parags->insertText(0," ");
   KWFormat *format = new KWFormat(doc);
@@ -386,7 +388,8 @@ void KWTextFrameSet::splitParag(KWParag *_parag,unsigned int _pos)
 /*================================================================*/
 void KWTextFrameSet::save(ostream &out)
 {
-  out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType()) << "\">" << endl;
+  out << otag << "<FRAMESET frameType=\"" << static_cast<int>(getFrameType()) 
+      << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\">" << endl;
 
   KWFrameSet::save(out);
 

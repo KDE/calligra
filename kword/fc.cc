@@ -35,6 +35,7 @@ KWFormatContext::KWFormatContext(KWordDocument_impl *_doc,unsigned int _frameSet
   frameSet = _frameSet;
   frame = 1;
   compare_formats = true;
+  outOfFrame = false;
 }
 
 KWFormatContext::~KWFormatContext()
@@ -44,6 +45,7 @@ KWFormatContext::~KWFormatContext()
 
 void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true, bool _fromStart = true )
 {
+  outOfFrame = false;
   specialHeight = 0;
   ptMaxAscender = 0;
   ptMaxDescender = 0;
@@ -654,8 +656,11 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
 {
     if ( lineEndPos == parag->getTextLen() )
     {
-	if ( parag->getNext() == 0L )
+	if ( parag->getNext() == 0L || outOfFrame)
+	  {
+	    outOfFrame = false;
 	    return FALSE;
+	  }
 	else
 	ptY += getLineHeight();
 	enterNextParag( _painter );
@@ -909,6 +914,12 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	}
 	else // append a page
 	{
+	    if (!dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getAutoCreateNewFrame())
+	      {
+		outOfFrame = true;
+		return false;
+	      }
+
 	    document->appendPage(page - 1,_painter);
 	    page++;
 	    frame++;
