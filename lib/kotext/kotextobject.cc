@@ -1380,19 +1380,22 @@ void KoTextObject::formatMore( bool emitAfterFormatting /* = true */ )
               m_lastFormatted && bottom + m_lastFormatted->rect().height() <= m_availableHeight &&
                   ( i < to || bottom <= viewsBottom ) ; ++i )
         {
+            Qt3::QTextParag* parag = m_lastFormatted;
 #ifdef DEBUG_FORMAT_MORE
-            kdDebug(32002) << "formatMore formatting id=" << m_lastFormatted->paragId() << endl;
+            kdDebug(32002) << "formatMore formatting id=" << parag->paragId() << endl;
 #endif
-            m_lastFormatted->format();
-            bottom = m_lastFormatted->rect().top() + m_lastFormatted->rect().height();
+            parag->format();
+            bottom = parag->rect().top() + parag->rect().height();
 #ifdef DEBUG_FORMAT_MORE
-            kdDebug() << "formatMore(inside) top=" << m_lastFormatted->rect().top()
-                      << " height=" << m_lastFormatted->rect().height()
+            kdDebug() << "formatMore(inside) top=" << parag->rect().top()
+                      << " height=" << parag->rect().height()
                       << " bottom=" << bottom << " m_lastFormatted(next parag) = " << m_lastFormatted->next() << endl;
 #endif
-            if (!m_lastFormatted->isValid())
-                kdWarning() << "PARAGRAPH " << m_lastFormatted->paragId() << " STILL INVALID AFTER FORMATTING" << endl;
-            m_lastFormatted = m_lastFormatted->next();
+            if ( parag != m_lastFormatted )
+                kdWarning() << "Some code changed m_lastFormatted during formatting! Was " << parag->paragId() << ", is now " << m_lastFormatted->paragId();
+            else if (!parag->isValid())
+                kdWarning() << "PARAGRAPH " << parag->paragId() << " STILL INVALID AFTER FORMATTING" << endl;
+            m_lastFormatted = parag->next();
         }
     }
     else // formatting was done previously, but not emit afterFormatting
