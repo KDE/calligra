@@ -508,13 +508,23 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	for ( int j = startSel; j < nSels; ++j ) {
 	    if ( i > selectionStarts[ j ] && i <= selectionEnds[ j ] ) {
 		if ( !doc || doc->invertSelectionText( j ) )
-		    painter.setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
+		    textColor = cg.color( QColorGroup::HighlightedText );
+		    painter.setPen( QPen( textColor ) );
 		if ( j == KoTextDocument::Standard )
 		    painter.fillRect( startX, lastY, bw, h, cg.color( QColorGroup::Highlight ) );
 		else
 		    painter.fillRect( startX, lastY, bw, h, doc ? doc->selectionColor( j ) : cg.color( QColorGroup::Highlight ) );
 	    }
 	}
+    }
+
+    if ( font.underline() )
+    {
+        int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
+        painter.setPen( QPen( textColor, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+        painter.drawLine( startX, y, startX + bw, y );
+        font.setUnderline( FALSE );
+	painter.setFont( font );
     }
 
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
