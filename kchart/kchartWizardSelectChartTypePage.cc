@@ -68,6 +68,7 @@ _chart( chart )
     addButton( i18n( "Ring" ), "chart_ring", KDChartParams::Ring );
     addButton(i18n("Hi-Lo-Close"), "chart_hiloclose", KDChartParams::HiLo );
     addButton(i18n("Polar"), "chart_polar", KDChartParams::Polar);
+    addButton(i18n("Box && Whisker "), "chart_bw", KDChartParams::BoxWhisker );
 
     QPushButton *current = ((QPushButton*)_typeBG->find( _chart->params()->chartType() ));
     if (current != NULL) {
