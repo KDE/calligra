@@ -27,6 +27,7 @@
 
 #include "kspread_cell.h"
 #include "kspread_sheet.h"
+#include "dependencies.h"
 
 namespace KSpread
 {
@@ -39,10 +40,12 @@ public:
   
   QListView *cellView;
   QListView *sheetView;
+  QListView* depView;
   
   
   void handleCell();
   void handleSheet();
+  void handleDep();
   
 };
 
@@ -79,7 +82,6 @@ void Inspector::Private::handleCell()
   new QListViewItem( cellView, "Name", cell->name() );
   new QListViewItem( cellView, "Full Name", cell->fullName() );
 
-  new QListViewItem( cellView, "Default", boolAsString( cell->isDefault() ) );
   new QListViewItem( cellView, "Empty", boolAsString( cell->isEmpty() ) );    
   new QListViewItem( cellView, "Formula", boolAsString( cell->isFormula() ) );
   new QListViewItem( cellView, "Text", cell->text() );
@@ -88,7 +90,9 @@ void Inspector::Private::handleCell()
   QTextStream ts( &str, IO_WriteOnly );
   ts << cell->value();
   new QListViewItem( cellView, "Value", str );
-  
+
+  new QListViewItem( cellView, "Link", cell->link() );
+      
   new QListViewItem( cellView, "Width", QString::number( cell->dblWidth() ) );
   new QListViewItem( cellView, "Height", QString::number( cell->dblHeight() ) );
 }
@@ -100,6 +104,31 @@ void Inspector::Private::handleSheet()
   
   new QListViewItem( sheetView, "Name", sheet->sheetName() ) ;
   new QListViewItem( sheetView, "Layout Direction", dirAsString( sheet->layoutDirection() ) );
+}
+
+void Inspector::Private::handleDep()
+{  
+  KSpreadPoint cellPoint;
+  cellPoint.table = sheet;
+  cellPoint.setRow( cell->row() );
+  cellPoint.setColumn( cell->column() );
+  
+  DependencyManager* manager = sheet->dependencies();
+  QValueList<KSpreadPoint> deps = manager->getDependants( cellPoint );
+  
+  depView->clear();
+  for( unsigned i = 0; i < deps.count(); i++ )
+  {
+    QString k1, k2;
+    
+    KSpreadPoint point = deps[i];
+    int row = point.row();
+    int column = point.column();
+    k1 = KSpreadCell::fullName( point.table, column, row );
+    
+    new QListViewItem( depView, k1, k2 );
+  }
+  
 }
 
 Inspector::Inspector( KSpreadCell* cell ):
@@ -125,8 +154,16 @@ Inspector::Inspector( KSpreadCell* cell ):
   d->sheetView->addColumn( "Key", 150 );
   d->sheetView->addColumn( "Value" );
   
+  QFrame* depPage = addPage( QString("Dependencies") );
+  QVBoxLayout* depLayout = new QVBoxLayout( depPage, 0 );
+  d->depView = new QListView( depPage );
+  depLayout->addWidget( d->depView );
+  d->depView->addColumn( "Cell", 150 );
+  d->depView->addColumn( "Content" );
+  
   d->handleCell();
   d->handleSheet();
+  d->handleDep();
   
   resize( 350, 400 );
 }  
