@@ -492,3 +492,11 @@ uint KPresenterDocIface::configNbMaxCompletionWord() const
     return doc->getAutoFormat()->getConfigNbMaxCompletionWord();
 }
 
+void KPresenterDocIface::setConfigAddCompletionWord( bool b )
+{
+    doc->getAutoFormat()->configAddCompletionWord( b );
+}
+bool KPresenterDocIface::configAddCompletionWord() const
+{
+    return doc->getAutoFormat()->getConfigAddCompletionWord();
+}

@@ -146,6 +146,8 @@ k_dcop:
     void setConfigNbMaxCompletionWord( uint val );
     uint configNbMaxCompletionWord() const;
 
+    void setConfigAddCompletionWord( bool b );
+    bool configAddCompletionWord() const;
 
 
 private:
