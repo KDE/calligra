@@ -35,13 +35,26 @@ class KexiRecordNavigatorPrivate
 {
 	public:
 		KexiRecordNavigatorPrivate() {}
+		KexiRecordNavigatorHandler *handler;
 };
+
+//--------------------------------------------------
+
+KexiRecordNavigatorHandler::KexiRecordNavigatorHandler()
+{
+}
+
+KexiRecordNavigatorHandler::~KexiRecordNavigatorHandler()
+{
+}
+
+//--------------------------------------------------
 
 KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const char *name)
  : QFrame(parent, name)
  , m_view(0)
  , m_isInsertingEnabled(true)
- , d( 0 )
+ , d( new KexiRecordNavigatorPrivate() )
 {
 	if (parent->inherits("QScrollView"))
 		setParentView( dynamic_cast<QScrollView*>(parent) );
@@ -68,6 +81,7 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	m_navBtnPrev->setFixedWidth(bw);
 	m_navBtnPrev->setFocusPolicy(NoFocus);
 	m_navBtnPrev->setIconSet( SmallIconSet("navigator_prev") );
+	m_navBtnPrev->setAutoRepeat(true);
 	QToolTip::add(m_navBtnPrev, i18n("Previous row"));
 	
 	navPanelLyr->addSpacing( 6 );
@@ -108,6 +122,7 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	m_navBtnNext->setFixedWidth(bw);
 	m_navBtnNext->setFocusPolicy(NoFocus);
 	m_navBtnNext->setIconSet( SmallIconSet("navigator_next") );
+	m_navBtnNext->setAutoRepeat(true);
 	QToolTip::add(m_navBtnNext, i18n("Next row"));
 	
 	navPanelLyr->addWidget( m_navBtnLast = new QToolButton(this) );
@@ -127,11 +142,11 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	navPanelLyr->addSpacing( 6 );
 	navPanelLyr->addStretch(10);
 
-	connect(m_navBtnPrev,SIGNAL(clicked()),this,SIGNAL(prevButtonClicked()));
-	connect(m_navBtnNext,SIGNAL(clicked()),this,SIGNAL(nextButtonClicked()));
-	connect(m_navBtnLast,SIGNAL(clicked()),this,SIGNAL(lastButtonClicked()));
-	connect(m_navBtnFirst,SIGNAL(clicked()),this,SIGNAL(firstButtonClicked()));
-	connect(m_navBtnNew,SIGNAL(clicked()),this,SIGNAL(newButtonClicked()));
+	connect(m_navBtnPrev,SIGNAL(clicked()),this,SLOT(slotPrevButtonClicked()));
+	connect(m_navBtnNext,SIGNAL(clicked()),this,SLOT(slotNextButtonClicked()));
+	connect(m_navBtnLast,SIGNAL(clicked()),this,SLOT(slotLastButtonClicked()));
+	connect(m_navBtnFirst,SIGNAL(clicked()),this,SLOT(slotFirstButtonClicked()));
+	connect(m_navBtnNew,SIGNAL(clicked()),this,SLOT(slotNewButtonClicked()));
 
 	setRecordCount(0);
 	setCurrentRecordNumber(0);
@@ -200,6 +215,8 @@ bool KexiRecordNavigator::eventFilter( QObject *o, QEvent *e )
 				m_view->setFocus();
 			setCurrentRecordNumber(r);
 			emit recordNumberEntered(r);
+			if (d->handler)
+				d->handler->moveToRecordRequested(r);
 			return ret;
 		}
 	}
@@ -333,6 +350,47 @@ void KexiRecordNavigator::setInsertingButtonVisible(bool set)
 		m_navBtnNew->show();
 	else
 		m_navBtnNew->hide();
+}
+
+void KexiRecordNavigator::slotPrevButtonClicked()
+{
+	emit prevButtonClicked();
+	if (d->handler)
+		d->handler->moveToPreviousRecordRequested();
+}
+
+void KexiRecordNavigator::slotNextButtonClicked()
+{
+	emit nextButtonClicked();
+	if (d->handler)
+		d->handler->moveToNextRecordRequested();
+}
+
+void KexiRecordNavigator::slotLastButtonClicked()
+{
+	emit lastButtonClicked();
+	if (d->handler)
+		d->handler->moveToLastRecordRequested();
+}
+
+void KexiRecordNavigator::slotFirstButtonClicked()
+{
+	emit firstButtonClicked();
+	if (d->handler)
+		d->handler->moveToFirstRecordRequested();
+}
+
+void KexiRecordNavigator::slotNewButtonClicked()
+{
+	emit newButtonClicked();
+	if (d->handler)
+		d->handler->addNewRecordRequested();
+}
+
+
+void KexiRecordNavigator::setRecordHandler(KexiRecordNavigatorHandler *handler)
+{
+	d->handler = handler;
 }
 
 #include "kexirecordnavigator.moc"
