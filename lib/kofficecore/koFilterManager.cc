@@ -349,7 +349,8 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
 {
     KURL url;
     url.setPath( _file );
-    QString file = QFile::encodeName( _file ); // The 8bit version of the filename
+    //QString file = QFile::encodeName( _file ); // The 8bit version of the filename
+    QString file = _file;			//less is sometimes more, Werner :)
 
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
     QString mimeType;
@@ -423,6 +424,7 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
         }
         if(vec[i].implemented.lower()=="file") {
             //kdDebug(s_area) << "XXXXXXXXXXX file XXXXXXXXXXXXXX" << endl;
+	    //kdDebug(s_area) << "file: " << file << endl;
             KTempFile tempFile; // create with default file prefix, extension and mode
             if (tempFile.status() != 0)
                 return QString::null;
@@ -435,6 +437,7 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
         }
         else if(vec[i].implemented.lower()=="qdom") {
             //kdDebug(s_area) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
+	    //kdDebug(s_area) << "file: " << file << endl;
             QDomDocument qdoc;
             ok=filter->filterImport( file, mimeType, qdoc, _native_format, d->config);
             if(ok) {
@@ -446,6 +449,7 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
         }
         else if(vec[i].implemented.lower()=="kodocument") {
             //kdDebug(s_area) << "XXXXXXXXXXX kodocument XXXXXXXXXXXXXX" << endl;
+	    //kdDebug(s_area) << "file: " << file << endl;
             ok=filter->filterImport( file, document, mimeType, _native_format, d->config);
             if(ok)
                 document->changedByFilter();
