@@ -27,6 +27,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <qbrush.h>
+#include <koStyleStack.h>
 
 KoOasisStyles::KoOasisStyles()
 {
@@ -1279,4 +1280,145 @@ QString KoOasisStyles::saveOasisHatchStyle( KoGenStyles& mainStyles, const QBrus
     }
 
     return mainStyles.lookup( hatchStyle, "hatch" );
+}
+
+QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill, KoOasisStyles & oasisStyles )
+{
+    QBrush tmpBrush;
+    if ( fill == "solid" )
+    {
+        tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 1 ) );
+        if ( styleStack.hasAttributeNS( KoXmlNS::draw, "fill-color" ) )
+            tmpBrush.setColor(styleStack.attributeNS( KoXmlNS::draw, "fill-color" ) );
+        if ( styleStack.hasAttributeNS( KoXmlNS::draw, "transparency" ) )
+        {
+            QString transparency = styleStack.attributeNS( KoXmlNS::draw, "transparency" );
+            if ( transparency == "94%" )
+            {
+                tmpBrush.setStyle(Qt::Dense1Pattern);
+            }
+            else if ( transparency == "88%" )
+            {
+                tmpBrush.setStyle(Qt::Dense2Pattern);
+            }
+            else if ( transparency == "63%" )
+            {
+                tmpBrush.setStyle(Qt::Dense3Pattern);
+
+            }
+            else if ( transparency == "50%" )
+            {
+                tmpBrush.setStyle(Qt::Dense4Pattern);
+
+            }
+            else if ( transparency == "37%" )
+            {
+                tmpBrush.setStyle(Qt::Dense5Pattern);
+
+            }
+            else if ( transparency == "12%" )
+            {
+                tmpBrush.setStyle(Qt::Dense6Pattern);
+
+            }
+            else if ( transparency == "6%" )
+            {
+                tmpBrush.setStyle(Qt::Dense7Pattern);
+
+            }
+            else
+                kdDebug()<<" transparency is not defined into kpresenter :"<<transparency<<endl;
+        }
+    }
+    else if ( fill == "hatch" )
+    {
+        QString style = styleStack.attributeNS( KoXmlNS::draw, "fill-hatch-name" );
+        kdDebug()<<" hatch style is  : "<<style<<endl;
+
+        //type not defined by default
+        //try to use style.
+        QDomElement* draw = oasisStyles.drawStyles()[style];
+        if ( draw)
+        {
+            kdDebug()<<"We have a style\n";
+            int angle = 0;
+            if( draw->hasAttributeNS( KoXmlNS::draw, "rotation" ))
+            {
+                angle = (draw->attributeNS( KoXmlNS::draw, "rotation", QString::null ).toInt())/10;
+                kdDebug()<<"angle :"<<angle<<endl;
+            }
+            if(draw->hasAttributeNS( KoXmlNS::draw, "color" ) )
+            {
+                //kdDebug()<<" draw:color :"<<draw->attributeNS( KoXmlNS::draw, "color", QString::null )<<endl;
+                tmpBrush.setColor(draw->attributeNS( KoXmlNS::draw, "color", QString::null ) );
+            }
+            if( draw->hasAttributeNS( KoXmlNS::draw, "distance" ))
+            {
+                //todo implemente it into kpresenter
+            }
+            if( draw->hasAttributeNS( KoXmlNS::draw, "display-name"))
+            {
+                //todo implement it into kpresenter
+            }
+            if( draw->hasAttributeNS( KoXmlNS::draw, "style" ))
+            {
+                //todo implemente it into kpresenter
+                QString styleHash = draw->attributeNS( KoXmlNS::draw, "style", QString::null );
+                if( styleHash == "single")
+                {
+                    switch( angle )
+                    {
+                    case 0:
+                    case 180:
+                        tmpBrush.setStyle(Qt::HorPattern );
+                        break;
+                    case 45:
+                    case 225:
+                        tmpBrush.setStyle(Qt::BDiagPattern );
+                        break;
+                    case 90:
+                    case 270:
+                        tmpBrush.setStyle(Qt::VerPattern );
+                        break;
+                    case 135:
+                    case 315:
+                        tmpBrush.setStyle(Qt::FDiagPattern );
+                        break;
+                    default:
+                        //todo fixme when we will have a kopaint
+                        kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
+                        break;
+                    }
+                }
+                else if( styleHash == "double")
+                {
+                    switch( angle )
+                    {
+                    case 0:
+                    case 180:
+                    case 90:
+                    case 270:
+                        tmpBrush.setStyle(Qt::CrossPattern );
+                        break;
+                    case 45:
+                    case 135:
+                    case 225:
+                    case 315:
+                        tmpBrush.setStyle(Qt::DiagCrossPattern );
+                        break;
+                    default:
+                        //todo fixme when we will have a kopaint
+                        kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
+                        break;
+                    }
+
+                }
+                else if( styleHash == "triple")
+                {
+                    kdDebug()<<" it is not implemented :( \n";
+                }
+            }
+        }
+    }
+    return tmpBrush;
 }

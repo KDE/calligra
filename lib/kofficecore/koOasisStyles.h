@@ -29,6 +29,7 @@ class KoGenStyles;
 class KoXmlWriter;
 class QBrush;
 class KoGenStyle;
+class KoStyleStack;
 
 /**
  * Repository of styles used during loading of OASIS/OOo file
@@ -89,6 +90,8 @@ public:
 
     static void saveOasisFillStyle( KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush );
     static QString saveOasisHatchStyle( KoGenStyles& mainStyles, const QBrush &brush );
+
+    static QBrush loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  KoOasisStyles & oasisStyles );
 
 protected:
     /// Add styles to styles map
