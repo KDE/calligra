@@ -422,6 +422,7 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
                 appendTextbox( doccontent, o, drawPage );
                 break;
             case 8: // pie, chord, arc
+                appendEllipse( doccontent, o, drawPage );
                 break;
             case 12: // polyline
                 break;
@@ -561,7 +562,12 @@ void OoImpressExport::appendRectangle( QDomDocument & doc, QDomElement & source,
 
 void OoImpressExport::appendEllipse( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
-    QDomElement ellipse = doc.createElement( "draw:ellipse" );
+    QDomElement size = source.namedItem( "SIZE" ).toElement();
+
+    double width = size.attribute( "width" ).toDouble();
+    double height = size.attribute( "height" ).toDouble();
+
+    QDomElement ellipse = doc.createElement( (width == height) ? "draw:circle" : "draw:ellipse" );
 
     // create the graphic style
     QString gs = m_styleFactory.createGraphicStyle( source );
