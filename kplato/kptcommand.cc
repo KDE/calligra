@@ -438,3 +438,90 @@ void KPTModifyTimingRelationCmd::unexecute() {
         m_part->setCommandType(1);
 }
 
+KPTAddResourceRequestCmd::KPTAddResourceRequestCmd(KPTPart *part, KPTResourceGroupRequest *group, KPTResourceRequest *request, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_group(group),
+      m_request(request) {
+    
+    m_mine = true;
+}
+KPTAddResourceRequestCmd::~KPTAddResourceRequestCmd() {
+    if (m_mine)
+        delete m_request;
+}
+void KPTAddResourceRequestCmd::execute() {
+    m_group->addResourceRequest(m_request);
+    m_mine = false;
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTAddResourceRequestCmd::unexecute() {
+    m_group->takeResourceRequest(m_request);
+    m_mine = true;
+    if (m_part)
+        m_part->setCommandType(1);
+}
+
+KPTRemoveResourceRequestCmd::KPTRemoveResourceRequestCmd(KPTPart *part,  KPTResourceGroupRequest *group, KPTResourceRequest *request, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_group(group),
+      m_request(request) {
+    
+    m_mine = false;
+    //kdDebug()<<k_funcinfo<<"group="<<group<<" req="<<request<<endl;
+}
+KPTRemoveResourceRequestCmd::~KPTRemoveResourceRequestCmd() {
+    if (m_mine)
+        delete m_request;
+}
+void KPTRemoveResourceRequestCmd::execute() {
+    m_group->takeResourceRequest(m_request);
+    m_mine = true;
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTRemoveResourceRequestCmd::unexecute() {
+    m_group->addResourceRequest(m_request);
+    m_mine = false;
+    if (m_part)
+        m_part->setCommandType(1);
+}
+
+KPTModifyEffortCmd::KPTModifyEffortCmd(KPTPart *part, KPTEffort *effort, KPTDuration oldvalue, KPTDuration newvalue, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_effort(effort),
+      m_oldvalue(oldvalue),
+      m_newvalue(newvalue) {
+}
+void KPTModifyEffortCmd::execute() {
+    m_effort->set(m_newvalue);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTModifyEffortCmd::unexecute() {
+    m_effort->set(m_oldvalue);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+
+KPTModifyEffortTypeCmd::KPTModifyEffortTypeCmd(KPTPart *part, KPTEffort *effort, int oldvalue, int newvalue, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_effort(effort),
+      m_oldvalue(oldvalue),
+      m_newvalue(newvalue) {
+}
+void KPTModifyEffortTypeCmd::execute() {
+    m_effort->setType(static_cast<KPTEffort::Type>(m_newvalue));
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTModifyEffortTypeCmd::unexecute() {
+    m_effort->setType(static_cast<KPTEffort::Type>(m_oldvalue));
+    if (m_part)
+        m_part->setCommandType(1);
+}
+

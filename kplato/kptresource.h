@@ -385,6 +385,7 @@ class KPTResourceRequest {
         int workUnits() const;
                 
         void registerRequest() { if (m_resource) m_resource->registerRequest(this); }
+        void unregisterRequest() { if (m_resource) m_resource->unregisterRequest(this); }
  
         void makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task) 
             { if (m_resource) m_resource->makeAppointment(start, duration, task); }
@@ -406,12 +407,9 @@ class KPTResourceGroupRequest {
 
         KPTResourceGroup *group() const { return m_group; }
         QPtrList<KPTResourceRequest> &resourceRequests() { return m_resourceRequests; }
-        void addResourceRequest(KPTResourceRequest *request) {
-            request->setParent(this);
-            m_resourceRequests.append(request);
-            request->registerRequest();
-        }
+        void addResourceRequest(KPTResourceRequest *request);
         void removeResourceRequest(KPTResourceRequest *request) { m_resourceRequests.removeRef(request); }
+        KPTResourceRequest *takeResourceRequest(KPTResourceRequest *request);
         KPTResourceRequest *find(KPTResource *resource) const;
 
         bool load(QDomElement &element, KPTProject *project);

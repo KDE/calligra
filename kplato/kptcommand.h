@@ -23,12 +23,15 @@
 #include <kcommand.h>
 #include "kptnode.h"
 #include "defs.h"
+#include "kptduration.h"
 
 class QString;
 class KPTProject;
 class KPTCalendar;
 class KPTPart;
 class KPTRelation;
+class KPTResourceGroupRequest;
+class KPTResourceRequest;
 
 class KPTCalendarAddCmd : public KNamedCommand
 {
@@ -269,6 +272,62 @@ private:
     KPTRelation *m_rel;
     TimingRelation m_newtype;
     TimingRelation m_oldtype;
+};
+
+class KPTAddResourceRequestCmd : public KNamedCommand
+{
+public:
+    KPTAddResourceRequestCmd(KPTPart *part, KPTResourceGroupRequest *group, KPTResourceRequest *request, QString name=0);
+    ~KPTAddResourceRequestCmd();
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTResourceGroupRequest *m_group;
+    KPTResourceRequest *m_request;
+    bool m_mine;
+};
+
+class KPTRemoveResourceRequestCmd : public KNamedCommand
+{
+public:
+    KPTRemoveResourceRequestCmd(KPTPart *part, KPTResourceGroupRequest *group, KPTResourceRequest *request, QString name=0);
+    ~KPTRemoveResourceRequestCmd();
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTResourceGroupRequest *m_group;
+    KPTResourceRequest *m_request;
+    bool m_mine;
+};
+
+class KPTModifyEffortCmd : public KNamedCommand
+{
+public:
+    KPTModifyEffortCmd(KPTPart *part, KPTEffort *effort, KPTDuration oldvalue, KPTDuration newvalue, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTEffort *m_effort;
+    KPTDuration m_oldvalue, m_newvalue;
+};
+
+class KPTModifyEffortTypeCmd : public KNamedCommand
+{
+public:
+    KPTModifyEffortTypeCmd(KPTPart *part, KPTEffort *effort, int oldvalue, int newvalue, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTEffort *m_effort;
+    int m_oldvalue, m_newvalue;
 };
 
 #endif //KPTCOMMAND_H

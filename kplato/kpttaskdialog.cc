@@ -122,7 +122,7 @@ KMacroCommand *KPTTaskDialog::buildCommand(KPTPart *part) {
         cmd->addCommand(new KPTNodeModifyConstraintTimeCmd(part, m_task, m_generalTab->dateTime()));
         modified = true;
     }
-    KMacroCommand *m = m_resourcesTab->buildCommand();
+    KCommand *m = m_resourcesTab->buildCommand(part);
     if (m) {
         kdDebug()<<k_funcinfo<<"ResourceTab modified"<<endl;
         cmd->addCommand(m);
@@ -136,6 +136,7 @@ KMacroCommand *KPTTaskDialog::buildCommand(KPTPart *part) {
 }
 
 void KPTTaskDialog::slotOk() {
+    m_resourcesTab->slotOk();
     accept();
 }
 

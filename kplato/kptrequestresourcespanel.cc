@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kcommand.h>
+#include <kptcommand.h>
 
 #include <qlistbox.h>
 #include <qpushbutton.h>
@@ -40,32 +40,28 @@
 #include <qdatetimeedit.h>
 
 
-KPTResourceTableItem::KPTResourceTableItem(KPTResource *resource, bool check) {
+KPTResourceTableItem::KPTResourceTableItem(KPTResource *resource, KPTResourceRequest *request, bool check) {
     m_resource = resource;
+    m_request = request;
     m_checked = check;
+    m_origChecked = check;
     m_checkitem = 0;
     m_units = 100;
+    m_origUnits = 100;
     //kdDebug()<<k_funcinfo<<"Added: '"<<resource->name()<<"' checked="<<m_checked<<endl;
 }
 
 KPTResourceTableItem::~KPTResourceTableItem() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<m_resource->name()<<endl;
 }
 
-void KPTResourceTableItem::clear() {
+void KPTResourceTableItem::update() {
     if (m_checkitem)
         m_checked = m_checkitem->isChecked();
 
     m_checkitem = 0;
+    //kdDebug()<<k_funcinfo<<m_resource->name()<<" checked="<<m_checked<<endl;
 }
-void KPTResourceTableItem::ok(KPTResourceGroupRequest *group) {
-    // assume old request is cleared, so we just create new one
-    if (m_checked) {
-        group->addResourceRequest(new KPTResourceRequest(m_resource, m_units));
-        //kdDebug()<<k_funcinfo<<"Resource request to "<<m_resource->name()<<" added"<<endl;
-    }
-}
-
 
 void KPTResourceTableItem::insert(QTable *table, int row) {
     //kdDebug()<<k_funcinfo<<endl;
@@ -85,23 +81,27 @@ KPTGroupLVItem::KPTGroupLVItem(QListView *parent, KPTResourceGroup *group, KPTTa
     if (m_request) {
         m_units = m_request->units();
     }
-    bool check = false;
     QPtrListIterator<KPTResource> it(group->resources());
     for (; it.current(); ++it) {
-        m_request  ? check =  m_request->find(it.current()) : check = false;
-        m_resources.append(new KPTResourceTableItem(it.current(), check));
+        //kdDebug()<<k_funcinfo<<"resource="<<it.current()->name()<<endl;
+        KPTResourceRequest *req=0;
+        if (m_request) {
+            req = m_request->find(it.current());
+        }
+        m_resources.append(new KPTResourceTableItem(it.current(), req, (bool)req));
     }
+    
+    m_resources.setAutoDelete(true);
 }
 
 KPTGroupLVItem::~KPTGroupLVItem() {
     //kdDebug()<<k_funcinfo<<m_group->name()<<endl;
-    m_resources.clear();
 }
 
-void KPTGroupLVItem::clear() {
+void KPTGroupLVItem::update() {
     QPtrListIterator<KPTResourceTableItem> it(m_resources);
     for (; it.current(); ++it) {
-        it.current()->clear();
+        it.current()->update();
     }
 }
 
@@ -122,19 +122,6 @@ void KPTGroupLVItem::insert(QTable *table) {
         }
     }
     table->adjustColumn(0);
-}
-
-void KPTGroupLVItem::ok(KPTTask &task) {
-    //kdDebug()<<k_funcinfo<<"numRequests="<<numRequests()<<endl;
-    // assume old requests are cleared, so we just create new ones
-    if (numRequests() > 0) {
-        KPTResourceGroupRequest *g = new KPTResourceGroupRequest(m_group, m_units);
-        QPtrListIterator<KPTResourceTableItem> it(m_resources);
-        for (; it.current(); ++it) {
-            it.current()->ok(g);
-        }
-        task.addRequest(g);
-    }
 }
 
 int KPTGroupLVItem::numRequests() {
@@ -179,6 +166,7 @@ KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &tas
         //kdDebug()<<k_funcinfo<<"Dayscale="<<m_worktime->durationDay().hours()<<endl;
     }
     effort->setValue(task.effort()->expected());
+    m_origEffort = task.effort()->expected();
     //kdDebug()<<k_funcinfo<<"effort="<<task.effort()->expected().toString()<<endl;
 
     //TODO: calc optimistic/pessimistic
@@ -186,7 +174,8 @@ KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &tas
     pessimisticValue->setValue(task.effort()->pessimisticRatio());
 
     effortType->setCurrentItem(task.effort()->type());
-
+    m_origEfforttype = task.effort()->type();
+    
     connect(groupList, SIGNAL(selectionChanged(QListViewItem*)),  SLOT(groupChanged(QListViewItem*)));
     connect(resourceTable, SIGNAL(valueChanged(int, int)), SLOT(resourceChanged(int, int)));
 //    connect(numUnits, SIGNAL(valueChanged(int)), SLOT(unitsChanged(int)));
@@ -207,7 +196,7 @@ void KPTRequestResourcesPanel::groupChanged(QListViewItem *item) {
         return;
 
     if (selectedGroup) {
-        selectedGroup->clear();
+        selectedGroup->update();
     }
     selectedGroup = grp;
 
@@ -232,34 +221,42 @@ void KPTRequestResourcesPanel::unitsChanged(int units) {
 }
 
 //FIXME
-KMacroCommand *KPTRequestResourcesPanel::buildCommand() {
-    slotOk();
-    return 0;
+KCommand *KPTRequestResourcesPanel::buildCommand(KPTPart *part) {
+    //kdDebug()<<k_funcinfo<<endl;
+    KMacroCommand *cmd = 0;
+    QListViewItem *item = groupList->firstChild();
+    for (; item; item = item->nextSibling()) {
+        KPTGroupLVItem *grp = static_cast<KPTGroupLVItem*>(item);
+        QPtrListIterator<KPTResourceTableItem> it = grp->resources();
+        for (; it.current(); ++it) {
+            if (it.current()->isChecked() != it.current()->isOrigChecked()) {
+                if (!cmd) cmd = new KMacroCommand("");
+                if (it.current()->isChecked()) {
+                    cmd->addCommand(new KPTAddResourceRequestCmd(part, grp->m_request, new KPTResourceRequest(it.current()->resource(), it.current()->units())));
+                } else {
+                    if (grp->m_request && it.current()->request()) {
+                        cmd->addCommand(new KPTRemoveResourceRequestCmd(part, grp->m_request, it.current()->request()));
+                    } else {
+                        kdError()<<k_funcinfo<<"Remove failed"<<endl;
+                    }
+                }
+            }
+        }
+    }
+    if (effort->value() != m_origEffort) {
+        if (!cmd) cmd = new KMacroCommand("");
+        cmd->addCommand(new KPTModifyEffortCmd(part, m_task.effort(), m_origEffort, effort->value()));
+    }
+    if (effortType->currentItem() != m_origEfforttype) {
+        if (!cmd) cmd = new KMacroCommand("");
+        cmd->addCommand(new KPTModifyEffortTypeCmd(part, m_task.effort(), m_origEfforttype, effortType->currentItem()));
+    }
+    return cmd;
 }
 
 void KPTRequestResourcesPanel::slotOk() {
     if (selectedGroup)
-        selectedGroup->clear();
-
-    m_task.clearResourceRequests();
-
-    QListViewItemIterator it(groupList);
-    for (; it.current(); ++it) {
-        KPTGroupLVItem *item = dynamic_cast<KPTGroupLVItem *>(it.current());
-        if (item)
-            item->ok(m_task);
-    }
-    m_task.effort()->set(effort->value());
-    switch(effortType->currentItem()) {
-        case 0: // work based
-            m_task.effort()->setType(KPTEffort::Type_WorkBased);
-            break;
-        case 1: // fixed duration
-            m_task.effort()->setType(KPTEffort::Type_FixedDuration);
-            break;
-        default:
-            break;
-    }
+        selectedGroup->update();
 }
 
 void KPTRequestResourcesPanel::sendChanged() {

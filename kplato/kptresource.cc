@@ -512,6 +512,19 @@ KPTResourceGroupRequest::~KPTResourceGroupRequest() {
     m_resourceRequests.clear();
 }
 
+void KPTResourceGroupRequest::addResourceRequest(KPTResourceRequest *request) {
+    kdDebug()<<k_funcinfo<<"Group: "<<m_group->name()<<endl;
+    request->setParent(this);
+    m_resourceRequests.append(request);
+    request->registerRequest();
+}
+
+KPTResourceRequest *KPTResourceGroupRequest::takeResourceRequest(KPTResourceRequest *request) {
+    if (request)
+        request->unregisterRequest();
+    return m_resourceRequests.take(m_resourceRequests.findRef(request)); 
+}
+
 KPTResourceRequest *KPTResourceGroupRequest::find(KPTResource *resource) const {
     QPtrListIterator<KPTResourceRequest> it(m_resourceRequests);
     for (; it.current(); ++it)

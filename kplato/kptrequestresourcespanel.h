@@ -21,7 +21,7 @@
 #define KPTREQUESTRESOURCESPANEL_H
 
 #include "kpttaskresourcespanelbase.h"
-
+#include "kptduration.h"
 
 #include <qlistview.h>
 #include <qstring.h>
@@ -34,22 +34,30 @@ class KPTResource;
 class KPTResourceGroupRequest;
 class KPTResourceRequest;
 class KPTStandardWorktime;
+class KCommand;
 class KMacroCommand;
+class KPTPart;
+class KPTDuration;
 
 class KPTResourceTableItem {
 public:
-    KPTResourceTableItem(KPTResource *resource, bool check = false);
+    KPTResourceTableItem(KPTResource *resource, KPTResourceRequest *request, bool check = false);
     ~KPTResourceTableItem() ;
 
-    void clear();
+    void update();
     void insert(QTable *table, int row);
     void ok(KPTResourceGroupRequest *group);
 
+    bool isChecked() const { return m_checked; }
+    bool isOrigChecked() const { return m_origChecked; }
+    KPTResource *resource() { return m_resource; }
+    KPTResourceRequest *request() { return m_request; }
     int numRequests() const { return m_checked ? 1 : 0; }
+    int units() const { return m_units; }
 
     KPTResource *m_resource;
-    int m_units;
-    bool m_checked;
+    int m_units, m_origUnits;
+    bool m_checked, m_origChecked;
     QCheckTableItem *m_checkitem;
     KPTResourceRequest *m_request;
 };
@@ -59,8 +67,9 @@ public:
     KPTGroupLVItem(QListView *parent, KPTResourceGroup *group, KPTTask &task);
     ~KPTGroupLVItem();
 
-    void clear();
+    void update();
     void insert(QTable *table);
+    const QPtrList<KPTResourceTableItem> &resources() const { return m_resources; }
     void ok(KPTTask &task);
 
     int numRequests();
@@ -77,7 +86,7 @@ class KPTRequestResourcesPanel : public KPTTaskResourcesPanelBase {
 public:
     KPTRequestResourcesPanel (QWidget *parent, KPTTask &task);
 
-    KMacroCommand *buildCommand();
+    KCommand *buildCommand(KPTPart *part);
     
 public slots:
 	void slotOk();
@@ -97,6 +106,9 @@ private:
     KPTStandardWorktime *m_worktime;
     KPTGroupLVItem *selectedGroup;
     bool m_blockChanged;
+    
+    KPTDuration m_origEffort;
+    int m_origEfforttype;
 };
 
 #endif
