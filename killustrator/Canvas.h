@@ -94,6 +94,8 @@ public:
   void showBasePoints (bool flag = true);
   void setOutlineMode (bool flag);
 
+  void setXimPosition(int x, int y, int w, int h);
+
 protected:
   QRect m_paperArea;
   QRect m_visibleArea;

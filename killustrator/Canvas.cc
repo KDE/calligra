@@ -904,4 +904,9 @@ void Canvas::addHelpline (int x, int y, bool horizH)
   }
 }
 
+void Canvas::setXimPosition(int x, int y, int w, int h)
+{
+  QWidget::setMicroFocusHint(x, y, w, h);
+}
+
 #include <Canvas.moc>

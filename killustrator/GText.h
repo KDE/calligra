@@ -99,6 +99,8 @@ public:
 
   bool isEmpty () const;
 
+  int global_posX, global_posY;
+
 public slots:
   void updateMatricesForPath ();
   void deletePathObject ();

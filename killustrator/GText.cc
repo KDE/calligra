@@ -183,6 +183,10 @@ void GText::drawSimpleText (QPainter& p, bool drawCursor) {
 
     p.setPen (black);
     p.drawLine (qRound (x1), qRound (y1), qRound (x1), qRound (y2));
+
+    QPoint pos = p.pos();
+    global_posX = pos.x();
+    global_posY = pos.y();
   }
 }
 

@@ -101,6 +101,9 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
             text->showCursor (true);
             doc->activePage()->insertObject (text);
         }
+
+        // XIM position
+        canvas->setXimPosition( text->global_posX, text->global_posY, 0, 0 );
     }
     else if (e->type () == QEvent::KeyPress) {
         QKeyEvent *ke = (QKeyEvent *) e;
@@ -178,6 +181,9 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas)
         if(changed) {
             text->setCursor (x, y);
         }
+
+        // XIM position
+        canvas->setXimPosition( text->global_posX, text->global_posY, 0, 0 );
     }
     return;
 }
