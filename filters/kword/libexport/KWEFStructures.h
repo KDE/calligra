@@ -51,9 +51,10 @@
 
 #include <koPictureKey.h>
 
-// FormatData is a container for data retrieved from the FORMAT tag
-// and its subtags to be used in the PARAGRAPH tag.
-
+/**
+ * TextFormatting is a container for data retrieved from the \<FORMAT\> tag
+ * and its subtags to be used in the \<PARAGRAPH\> tag.
+ */
 class TextFormatting
 {
     public:
@@ -84,19 +85,16 @@ class TextFormatting
 
         bool    italic;
 
-        // As doubled underlined was introduced late in KWord, we must use a compatibe way
-        // First with "underline", we check if an underline is wanted or not.
-        // Then with "underValue", we check the type of the underline (simple, double...)
-        bool    underline;       // underline? (If true, we do not know if simple or double or what else)
+        bool    underline;       ///< Any underline? (If true, we do not know if simple or double or what else)
 
-        QString    underlineValue; // "value" of the underline: single, double, bold-single...
-        QString    underlineStyle; // underline style: solid, dash, dot dash, ....
-        bool       underlineWord;  // true if word-by-word (i.e spaces aren't underlined)
-        QColor     underlineColor; // color of the line
+        QString    underlineValue; ///< "value" of the underline: single, double, bold-single...
+        QString    underlineStyle; ///< underline style: solid, dash, dot dash, ....
+        bool       underlineWord;  ///< true if word-by-word (i.e spaces are not underlined)
+        QColor     underlineColor; ///< color of the line
 
-        bool    strikeout;             // true if strikeout
-        QString strikeoutType;         // single, bold, double
-        QString strikeoutLineStyle;    // solid, dash, dot, ....
+        bool    strikeout;             ///< true if strikeout
+        QString strikeoutType;         ///< type of strikeout: single, bold, double
+        QString strikeoutLineStyle;    ///< type of the strikeout line: solid, dash, dot, ....
 
         int     weight;
         int     fontSize;
@@ -106,7 +104,7 @@ class TextFormatting
 
         QString fontAttribute;
 
-        bool    missing;   // true if the FormatData does not correspond to a real <FORMAT> element
+        bool    missing;   ///< true if this TextFormatting object does not correspond to a real \<FORMAT\> element
 };
 
 
@@ -115,12 +113,12 @@ class Picture
     public:
         Picture () {}
 
-        KoPictureKey key;      // Picture key: where the picture came from
-        QString koStoreName;   // Picture store name: filename within kwd archive
+        KoPictureKey key;      ///< Picture key: where the picture came from
+        QString koStoreName;   ///< Picture store name: filename within KWord archive
 };
 
 /**
- * For FRAME Tag.
+ * For \<FRAME\> Tag.
  * Look at kword.dtd for a complete description
  * of individuals class members
  */
@@ -191,7 +189,7 @@ class Table
 };
 
 
-//This is basically FRAMESET tag
+/// This is basically \<FRAMESET\> tag
 class FrameAnchor
 {
    public:
@@ -200,7 +198,7 @@ class FrameAnchor
 
       FrameAnchor ( const KoPictureKey& n  ) : key (n), type (-1) {}
 
-      KoPictureKey key; // KoPictureKey
+      KoPictureKey key; ///< Picture key
       int     type;
       FrameData   frame;
 
@@ -222,8 +220,8 @@ public:
      * Set parameters of a LINK element
      */
     void setLink(const QString& linkName, const QString& hrefName);
-    QString getLinkName(void) const; // Name of link (attribute "linkName" of <LINK>)
-    QString getHrefName(void) const; // Reference of link (attribute "hrefName" of <LINK>)
+    QString getLinkName(void) const; ///< Name of link (attribute "linkName" of \<LINK\>)
+    QString getHrefName(void) const; ///< Reference of link (attribute "hrefName" of \<LINK\>)
     /**
      * Set parameters of a PGNUM element
      */
@@ -284,7 +282,7 @@ public:
           text(other.text), frameAnchor(other.frameAnchor), variable(other.variable) {}
 public:
     int id;
-    int pos;    // Start of text to which this format applies
+    int pos;    ///< Start position of text to which this format applies
     int len;
 
     TextFormatting  text;
@@ -301,7 +299,7 @@ public:
 };
 
 
-// Counter structure, for LayoutData
+/// Counter structure, for LayoutData
 class CounterData
 {
 public:
@@ -311,9 +309,9 @@ public:
 
     enum Numbering
     {
-        NUM_LIST    = 0,   // Numbered as a list item
-        NUM_CHAPTER = 1,   // Numbered as a heading
-        NUM_NONE    = 2    // No counter
+        NUM_LIST    = 0,   ///< Numbered as a list item
+        NUM_CHAPTER = 1,   ///< Numbered as a heading
+        NUM_NONE    = 2    ///< No counter
     };
 
     enum Style
@@ -343,11 +341,11 @@ public:
     QString customFont;
     //QString custom;
 
-    QString text;   // text at the time of saving (no formatting info though)
+    QString text;   ///< text at the time of saving (no formatting info though)
 };
 
 
-// Border
+/// Border
 class BorderData
 {
 public:
@@ -359,7 +357,7 @@ public:
 };
 
 /**
-  * Tabulator (see also <TABULATOR> element in KWord's DTD)
+  * Tabulator (see also \<TABULATOR\> element in KWord's DTD)
   */
 class TabulatorData
 {
@@ -395,7 +393,7 @@ public:
     virtual ~TabulatorList(void) {}
 };
 
-// Paragraph layout
+/// Paragraph layout
 class LayoutData
 {
 public:
@@ -411,30 +409,30 @@ public:
 
     QString     styleName;
     QString     styleFollowing;
-    QString     alignment;      // left, right, center, justify
+    QString     alignment;      ///< left, right, center, justify
     CounterData counter;
     FormatData  formatData;
-    double      indentFirst;    // indentation correction of first line (can be negative!)
-    double      indentLeft;     // left indentation (a negative value means invalid)
-    double      indentRight;    // right indentation (a negative value means invalid)
-    double      marginTop;      // space before the paragraph  (a negative value means invalid)
-    double      marginBottom;   // space after the paragraph (a negative value means invalid)
+    double      indentFirst;    ///< indentation correction of first line (can be negative!)
+    double      indentLeft;     ///< left indentation (a negative value means invalid)
+    double      indentRight;    ///< right indentation (a negative value means invalid)
+    double      marginTop;      ///< space before the paragraph  (a negative value means invalid)
+    double      marginBottom;   ///< space after the paragraph (a negative value means invalid)
 
-    int         lineSpacingType;// 0=custom, 10=one line, 15=one and half lines, 20= 2 lines
-    double      lineSpacing;    // Space between lines in pt, if lineSpacingType==0
+    int         lineSpacingType;///< 0=custom, 10=one line, 15=one and half lines, 20= 2 lines \todo: document the other values
+    double      lineSpacing;    ///< Space between lines in pt, if lineSpacingType==0
 
     bool        pageBreakBefore;
     bool        pageBreakAfter;
     bool        keepLinesTogether;
 
-    double      shadowDistance; // distance of <SHADOW>
-    int         shadowDirection;// direction of <SHADOW>
-    QColor      shadowColor;    // red, green, blue of <SHADOW>
+    double      shadowDistance; ///< distance of \<SHADOW\>
+    int         shadowDirection;///< direction of \<SHADOW\>
+    QColor      shadowColor;    ///< red, green, blue of \<SHADOW\>
     BorderData  leftBorder;
     BorderData  rightBorder;
     BorderData  topBorder;
     BorderData  bottomBorder;
-    TabulatorList tabulatorList; // List of tabulators
+    TabulatorList tabulatorList; ///< List of tabulators
 };
 
 
@@ -462,14 +460,14 @@ struct HeaderFooterData
 typedef HeaderFooterData HeaderData;
 typedef HeaderFooterData FooterData;
 
-// data for FRAMESET which holds footnotes
+/// data for \<FRAMESET\> which holds footnotes
 struct FootnoteData
 {
     QString frameName;
     QValueList<ParaData> para;
 };
 
-// see <VARIABLESETTINGS> in the KWord DTD
+/// see \<VARIABLESETTINGS\> in the KWord DTD
 class VariableSettingsData
 {
 public:
