@@ -345,15 +345,15 @@ public:
 
     void updateTableHeaders( QList<KWGroupManager> &grpMgrs );
 
-    QIntDict<KWVariableFormat> &getVarFormats() const { return varFormats; }
+    QIntDict<KWVariableFormat> &getVarFormats() { return varFormats; }
 
     long int getPageNum( int bottom );
 
-    KWFootNoteManager &getFootNoteManager() const { return footNoteManager; }
+    KWFootNoteManager &getFootNoteManager() { return footNoteManager; }
     void setNoteType( KWFootNoteManager::NoteType nt ) { footNoteManager.setNoteType( nt ); }
     KWFootNoteManager::NoteType getNoteType() const { return footNoteManager.getNoteType(); }
 
-    KWAutoFormat &getAutoFormat() const { return autoFormat; }
+    KWAutoFormat &getAutoFormat() { return autoFormat; }
 
     void setPageLayoutChanged( bool c ) { pglChanged = c; }
 
@@ -364,7 +364,7 @@ public:
 
     void registerVariable( KWVariable *var );
     void unregisterVariable( KWVariable *var );
-    QList<KWVariable> *getVariables() const {
+    QList<KWVariable> *getVariables() {
         return &variables;
     }
 

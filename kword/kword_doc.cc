@@ -70,14 +70,12 @@
 KWordChild::KWordChild( KWordDocument *_wdoc, const QRect& _rect, KoDocument *_doc, int diffx, int diffy )
     : KoDocumentChild( _wdoc, _doc, QRect( _rect.left() + diffx, _rect.top() + diffy, _rect.width(), _rect.height() ) )
 {       
-  varFormats.setAutoDelete(true);
 }
 
 /*================================================================*/
 KWordChild::KWordChild( KWordDocument *_wdoc )
     : KoDocumentChild( _wdoc )
 {
-  varFormats.setAutoDelete(true); 
 }
 
 /*================================================================*/
@@ -180,6 +178,7 @@ KWordDocument::KWordDocument(QWidget *parentWidget, const char *widgetName, QObj
 {
     m_lstViews.setAutoDelete( FALSE );
     m_lstChildren.setAutoDelete( TRUE );
+    varFormats.setAutoDelete(true);    
 
     setInstance( KWordFactory::global() );
 
@@ -4111,7 +4110,7 @@ void KWordDocument::setVariableValue( const QString &name, const QString &value 
 }
 
 /*================================================================*/
-QString KWordDocument::getVariableValue( const QString &name )
+QString KWordDocument::getVariableValue( const QString &name ) const
 {
     return varValues[ name ];
 }

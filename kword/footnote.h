@@ -44,14 +44,14 @@ public:
 
     KWFootNoteManager( KWordDocument *_doc );
 
-    int getStart() { return start; }
+    int getStart() const { return start; }
     void setStart( int s ) { start = s; recalc(); }
 
     void recalc();
 
     int findStart( KWFormatContext *_fc );
 
-    bool showFootNotesSuperscript() { return superscript; }
+    bool showFootNotesSuperscript() const { return superscript; }
     void setShowFootNotesSuperscript( bool _s ) { superscript = _s; }
 
     void insertFootNote( KWFootNote *fn );
@@ -59,7 +59,7 @@ public:
     void insertFootNoteInternal( KWFootNote *fn )
     { footNotes.append( fn ); }
 
-    NoteType getNoteType() { return noteType; }
+    NoteType getNoteType() const { return noteType; }
     void setNoteType( NoteType nt ) { noteType = nt; }
 
     void save( QTextStream&out );
