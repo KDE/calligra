@@ -499,9 +499,6 @@ QString KoStore::toExternalNaming( const QString & _internalNaming )
 
 QString KoStore::expandEncodedPath( QString intern )
 {
-  if ( m_namingVersion == NAMING_VERSION_RAW )
-    return intern;
-
   QString result;
   int pos;
 
@@ -533,9 +530,6 @@ QString KoStore::expandEncodedPath( QString intern )
 
 QString KoStore::expandEncodedDirectory( QString intern )
 {
-  if ( m_namingVersion == NAMING_VERSION_RAW )
-    return intern;
-
   QString result;
   int pos;
   while ( ( pos = intern.find( '/' ) ) != -1 ) {
@@ -559,9 +553,4 @@ bool KoStore::enterDirectoryInternal( const QString& directory )
       return true;
     }
     return false;
-}
-
-void KoStore::disallowNameExpansion( void )
-{
-    m_namingVersion = NAMING_VERSION_RAW;
 }

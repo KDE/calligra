@@ -197,12 +197,6 @@ public:
   QIODevice::Offset at() const;
   bool atEnd() const;
 
-  /**
-   * Do not expand file and directory names
-   * Useful when using KoStore on non-KOffice files.
-   * (This method should be called just after the constructor)
-   */
-  void disallowNameExpansion( void );
 
 protected:
 
@@ -279,8 +273,7 @@ private:
   enum
   {
       NAMING_VERSION_2_1,
-      NAMING_VERSION_2_2,
-      NAMING_VERSION_RAW  // Never expand file and directory names
+      NAMING_VERSION_2_2
   } m_namingVersion;
 
   // Enter *one* single directory. Nothing like foo/bar/bleh allowed.
