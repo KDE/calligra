@@ -70,10 +70,10 @@ namespace Qt3 {
 
 class Q_EXPORT QTextView : public QScrollView
 {
-    Q_OBJECT
     friend class ::QTextEdit;
     friend class QTextBrowser;
 
+    Q_OBJECT
     Q_ENUMS( WordWrap WrapPolicy )
     Q_PROPERTY( TextFormat textFormat READ textFormat WRITE setTextFormat )
     Q_PROPERTY( QString text READ text WRITE setText )
