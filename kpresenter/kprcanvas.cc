@@ -1634,8 +1634,20 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		p.setRasterOp( NotROP );
 		if ( insRect.width() != 0 && insRect.height() != 0 )
 		    p.drawLine( insRect.topLeft(), insRect.bottomRight() );
-		insRect.setRight( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx() );
-		insRect.setBottom( ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
+
+                int right = ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx();
+                int bottom = ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy();
+                if ( e->state() & ShiftButton )
+                {
+                    int witdh = QABS( right -insRect.left() );
+                    int height = QABS( bottom - insRect.top() );
+                    if ( witdh > height )
+                        bottom = insRect.top();
+                    else if ( witdh < height )
+                        right = insRect.left();
+                }
+                insRect.setRight( right );
+                insRect.setBottom( bottom );
                 limitSizeOfObject();
 		p.drawLine( insRect.topLeft(), insRect.bottomRight() );
 		p.end();
