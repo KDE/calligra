@@ -21,14 +21,14 @@
 #define WINWORDDOC_H
 
 #include <document.h>
-#include <kdebug.h>
-#include <myfile.h>
 #include <properties.h>
 #include <qarray.h>
 #include <qobject.h>
 #include <qstring.h>
 #include <qdom.h>
 #include <qvector.h>
+
+class myFile;
 
 class WinWordDoc:
     public QObject, private Document
@@ -37,9 +37,12 @@ class WinWordDoc:
     Q_OBJECT
 
 public:
-    WinWordDoc(QCString &result, const myFile &mainStream,
-               const myFile &table0Stream, const myFile &table1Stream,
-               const myFile &dataStream);
+    WinWordDoc(
+        QCString &result,
+        const myFile &mainStream,
+        const myFile &table0Stream,
+        const myFile &table1Stream,
+        const myFile &dataStream);
     ~WinWordDoc();
 
     const bool isOk() const { return m_success; }
@@ -73,17 +76,10 @@ private:
     WinWordDoc(const WinWordDoc &);
     const WinWordDoc &operator=(const WinWordDoc &);
 
-    // The conversion is done in multiple passes. Which pass is this?
+    // The conversion is done exactly once. Has it already happened?
 
-    enum
-    {
-        INIT,
-        TEXT_PASS,
-        TABLE_PASS,
-        DONE
-    } m_phase;
+    bool m_isConverted;
     bool m_success;
-
 
     // Convert from Word text into XML-friendly text.
 
@@ -102,15 +98,32 @@ private:
 
     // Convert from Word character format to our own format.
 
-    void generateFormats(Attributes &attributes);
+    void generateFormats(
+        Attributes &attributes);
 
-    void gotError(const QString &text);
-    void gotParagraph(const QString &text, Attributes &attributes);
-    void gotHeadingParagraph(const QString &text, Attributes &attributes);
-    void gotListParagraph(const QString &text, Attributes &attributes);
-    void gotTableBegin(unsigned tableNumber);
-    void gotTableEnd(unsigned tableNumber);
-    void gotTableRow(unsigned tableNumber, unsigned rowNumber, const QString texts[], const MsWordGenerated::PAP styles[], MsWordGenerated::TAP &row);
+    void gotError(
+        const QString &text);
+    void gotParagraph(
+        const QString &text,
+        Attributes &style);
+    virtual void gotHeadingParagraph(
+        const QString &text,
+        Attributes &style);
+    virtual void gotListParagraph(
+        const QString &text,
+        Attributes &style);
+    virtual void gotTableBegin(
+        unsigned tableNumber);
+    virtual void gotTableEnd(
+        unsigned tableNumber);
+    virtual void gotTableRow(
+        unsigned tableNumber,
+        const QVector<QString> &texts,
+        QVector<Attributes> &styles,
+        MsWordGenerated::TAP &row);
+    void gotTableRow(
+        unsigned tableNumber, unsigned rowNumber, const QString texts[], const MsWordGenerated::PAP styles[],
+        MsWordGenerated::TAP &row);
 
     // This is where the result will end up!
 
@@ -129,11 +142,25 @@ private:
     unsigned computeCellEdge(
         MsWord::TAP &row,
         unsigned edge);
+    class TableRow
+    {
+    public:
+        TableRow(
+            const QVector<QString> &texts,
+            QVector<Attributes> &styles,
+            MsWordGenerated::TAP &row);
+        ~TableRow();
+        QValueList<Attributes> m_styles;
+        QStringList m_texts;
+        MsWordGenerated::TAP m_row;
+    };
+    QVector<TableRow> m_table;
 
     // Since there is no way to fill m_part incrementally with XML content,
     // we will fill m_body instead.
 
     QString m_body;
+    QString m_tables;
     QString m_pixmaps;
     QString m_embedded;
 

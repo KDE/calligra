@@ -197,13 +197,14 @@ void MsWord::decodeParagraph(
 
         if (properties.m_pap.fTtp)
         {
-            gotTableRow(m_tableText, m_tableStyle, properties.m_tap);
+            gotTableRow(m_tableText, m_tableStyle, m_tableRuns, properties.m_tap);
             m_tableColumn = 0;
         }
         else
         {
             m_tableText[m_tableColumn] = text;
             m_tableStyle[m_tableColumn] = properties.m_pap;
+            m_tableRuns[m_tableColumn] = chpxs;
             m_tableColumn++;
         }
         return;

@@ -291,6 +291,7 @@ protected:
     virtual void gotTableRow(
         const QString texts[],
         const PAP styles[],
+        const CHPXarray chpxs[],
         TAP &row) = 0;
 
     // Field types.
@@ -376,6 +377,7 @@ private:
     unsigned m_tableColumn;
     QString m_tableText[64];
     PAP m_tableStyle[64];
+    CHPXarray m_tableRuns[64];
 
     // Get the metadata for the file.
 

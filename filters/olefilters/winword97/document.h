@@ -29,6 +29,8 @@ DESCRIPTION
 #include <msword.h>
 #include <properties.h>
 #include <qlist.h>
+#include <qvector.h>
+
 class myFile;
 
 class Document: private MsWord
@@ -129,10 +131,9 @@ protected:
         unsigned tableNumber) = 0;
     virtual void gotTableRow(
         unsigned tableNumber,
-        unsigned rowNumber,
-        const QString texts[],
-        const PAP styles[],
-        TAP &row) = 0;
+        const QVector<QString> &texts,
+        QVector<Attributes> &styles,
+        MsWordGenerated::TAP &row) = 0;
 
 private:
 
@@ -143,7 +144,6 @@ private:
     // Parse context.
 
     unsigned m_tableNumber;
-    unsigned m_tableRowNumber;
     unsigned m_characterPosition;
     unsigned m_imageNumber;
 
@@ -284,6 +284,7 @@ private:
     void gotTableRow(
         const QString texts[],
         const PAP styles[],
+        const CHPXarray chpxs[],
         TAP &row);
 };
 #endif

@@ -342,7 +342,6 @@ void Document::gotListParagraph(
 void Document::gotTableBegin()
 {
     m_tableNumber++;
-    m_tableRowNumber = 0;
     gotTableBegin(m_tableNumber);
 }
 
@@ -352,14 +351,27 @@ void Document::gotTableEnd()
     m_characterPosition++;
 }
 
-void Document::gotTableRow(const QString texts[], const PAP styles[], TAP &row)
+void Document::gotTableRow(
+    const QString texts[],
+    const PAP styles[],
+    const CHPXarray chpxs[],
+    TAP &row)
 {
-    gotTableRow(m_tableNumber, m_tableRowNumber, texts, styles, row);
-    for (unsigned i = 0; i < row.itcMac; i++)
+    QVector<QString> outTexts(row.itcMac);
+    QVector<Attributes> outStyles(row.itcMac);
+    unsigned i;
+
+    for (i = 0; i < row.itcMac; i++)
     {
-        m_characterPosition += texts[i].length();
+        Attributes attributes;
+        QString cleantext = texts[i];
+
+        createAttributes(cleantext, styles[i], chpxs[i], attributes);
+        outStyles.insert(i, &attributes);
+        outTexts.insert(i, &cleantext);
+        m_characterPosition += cleantext.length();
     }
-    m_tableRowNumber++;
+    gotTableRow(m_tableNumber, outTexts, outStyles, row);
 }
 
 void Document::parse()
@@ -427,4 +439,3 @@ void Document::rewriteField(
         }
     }
 }
-

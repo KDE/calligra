@@ -41,12 +41,14 @@ WinWordDoc::WinWordDoc(
             dataStream),
         m_result(result)
 {
-    m_phase = INIT;
-    m_success = TRUE;
-    m_body = QString("");
-    m_pixmaps = QString("");
-    m_embedded = QString("");
+    m_isConverted = false;
+    m_success = true;
+    m_body = "";
+    m_tables = "";
+    m_pixmaps = "";
+    m_embedded = "";
     m_cellEdges.setAutoDelete(true);
+    m_table.setAutoDelete(true);
 }
 
 WinWordDoc::~WinWordDoc()
@@ -124,8 +126,28 @@ const bool WinWordDoc::convert()
     // We do the conversion in two passes, to allow all the tables to be turned into framesets
     // after the main frameset with the text.
 
-    if (m_phase == INIT)
+    if (!m_isConverted)
     {
+        m_body = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE DOC >\n"
+            "<DOC author=\"Reginald Stadlbauer and Torben Weis\" email=\"reggie@kde.org and weis@kde.org\" editor=\"KWord\" mime=\"application/x-kword\">\n"
+            " <PAPER format=\"1\" ptWidth=\"595\" ptHeight=\"841\" mmWidth =\"210\" mmHeight=\"297\" inchWidth =\"8.26772\" inchHeight=\"11.6929\" orientation=\"0\" columns=\"1\" ptColumnspc=\"2\" mmColumnspc=\"1\" inchColumnspc=\"0.0393701\" hType=\"0\" fType=\"0\" ptHeadBody=\"9\" ptFootBody=\"9\" mmHeadBody=\"3.5\" mmFootBody=\"3.5\" inchHeadBody=\"0.137795\" inchFootBody=\"0.137795\">\n"
+            "  <PAPERBORDERS mmLeft=\"10\" mmTop=\"15\" mmRight=\"10\" mmBottom=\"15\" ptLeft=\"");
+        m_body.append(QString::number(s_hMargin));
+        m_body.append("\" ptTop=\"");
+        m_body.append(QString::number(s_vMargin));
+        m_body.append("\" ptRight=\"");
+        m_body.append(QString::number(s_hMargin));
+        m_body.append("\" ptBottom=\"");
+        m_body.append(QString::number(s_vMargin));
+        m_body.append("\" inchLeft=\"0.393701\" inchTop=\"0.590551\" inchRight=\"0.393701\" inchBottom=\"0.590551\"/>\n"
+            " </PAPER>\n"
+            " <ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"0\" hasFooter=\"0\" unit=\"mm\"/>\n"
+            " <FOOTNOTEMGR>\n"
+            "  <START value=\"1\"/>\n"
+            "  <FORMAT superscript=\"1\" type=\"1\"/>\n"
+            "  <FIRSTPARAG ref=\"(null)\"/>\n"
+            " </FOOTNOTEMGR>\n"
+            " <FRAMESETS>\n");
         m_body.append(
             "  <FRAMESET frameType=\"1\" frameInfo=\"0\" removeable=\"0\" visible=\"1\">\n"
             "   <FRAME left=\"");
@@ -138,72 +160,21 @@ const bool WinWordDoc::convert()
         m_body.append(QString::number(s_height - s_vMargin));
         m_body.append("\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0");
         m_body.append("\" autoCreateNewFrame=\"1\" newFrameBehaviour=\"0\"/>\n");
-        m_phase = TEXT_PASS;
         parse();
         m_body.append(
             "  </FRAMESET>\n");
-        if (m_success)
-        {
-            m_phase = TABLE_PASS;
-            parse();
-        }
-    }
-
-    if (m_phase != DONE)
-    {
-        QString newstr;
-
-        newstr = QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE DOC >\n"
-            "<DOC author=\"Reginald Stadlbauer and Torben Weis\" email=\"reggie@kde.org and weis@kde.org\" editor=\"KWord\" mime=\"application/x-kword\">\n"
-            " <PAPER format=\"1\" ptWidth=\"595\" ptHeight=\"841\" mmWidth =\"210\" mmHeight=\"297\" inchWidth =\"8.26772\" inchHeight=\"11.6929\" orientation=\"0\" columns=\"1\" ptColumnspc=\"2\" mmColumnspc=\"1\" inchColumnspc=\"0.0393701\" hType=\"0\" fType=\"0\" ptHeadBody=\"9\" ptFootBody=\"9\" mmHeadBody=\"3.5\" mmFootBody=\"3.5\" inchHeadBody=\"0.137795\" inchFootBody=\"0.137795\">\n"
-            "  <PAPERBORDERS mmLeft=\"10\" mmTop=\"15\" mmRight=\"10\" mmBottom=\"15\" ptLeft=\"");
-        newstr.append(QString::number(s_hMargin));
-        newstr.append("\" ptTop=\"");
-        newstr.append(QString::number(s_vMargin));
-        newstr.append("\" ptRight=\"");
-        newstr.append(QString::number(s_hMargin));
-        newstr.append("\" ptBottom=\"");
-        newstr.append(QString::number(s_vMargin));
-        newstr.append("\" inchLeft=\"0.393701\" inchTop=\"0.590551\" inchRight=\"0.393701\" inchBottom=\"0.590551\"/>\n"
-            " </PAPER>\n"
-            " <ATTRIBUTES processing=\"0\" standardpage=\"1\" hasHeader=\"0\" hasFooter=\"0\" unit=\"mm\"/>\n"
-            " <FOOTNOTEMGR>\n"
-            "  <START value=\"1\"/>\n"
-            "  <FORMAT superscript=\"1\" type=\"1\"/>\n"
-            "  <FIRSTPARAG ref=\"(null)\"/>\n"
-            " </FOOTNOTEMGR>\n"
-            " <FRAMESETS>\n");
-        if (!m_success)
-        {
-            newstr.append(
-                "  <FRAMESET frameType=\"1\" frameInfo=\"0\" removeable=\"0\" visible=\"1\">\n"
-                "   <FRAME left=\"");
-            newstr.append(QString::number(s_hMargin));
-            newstr.append("\" top=\"");
-            newstr.append(QString::number(s_vMargin));
-            newstr.append("\" right=\"");
-            newstr.append(QString::number(s_width - s_hMargin));
-            newstr.append("\" bottom=\"");
-            newstr.append(QString::number(s_height - s_vMargin));
-            newstr.append("\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\"  lWidth=\"1\" lRed=\"255\" lGreen=\"255\" lBlue=\"255\" lStyle=\"0\"  rWidth=\"1\" rRed=\"255\" rGreen=\"255\" rBlue=\"255\" rStyle=\"0\"  tWidth=\"1\" tRed=\"255\" tGreen=\"255\" tBlue=\"255\" tStyle=\"0\"  bWidth=\"1\" bRed=\"255\" bGreen=\"255\" bBlue=\"255\" bStyle=\"0\" bkRed=\"255\" bkGreen=\"255\" bkBlue=\"255\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0");
-            newstr.append("\" autoCreateNewFrame=\"1\" newFrameBehaviour=\"0\"/>\n"
-                "   <PARAGRAPH>\n"
-                "    <TEXT>This filter is still crappy and it obviously was not able to convert your document.</TEXT>\n"
-                "   </PARAGRAPH>\n"
-                "  </FRAMESET>\n");
-        }
-        newstr.append(m_body);
-        newstr.append(
+        m_body.append(m_tables);
+        m_body.append(
             " </FRAMESETS>\n");
 
         // Do we have any images?
 
         if (m_pixmaps.length())
         {
-            newstr.append(
+            m_body.append(
                 "  <PIXMAPS>\n");
-            newstr.append(m_pixmaps);
-            newstr.append(
+            m_body.append(m_pixmaps);
+            m_body.append(
                 "  </PIXMAPS>\n");
         }
 
@@ -211,12 +182,12 @@ const bool WinWordDoc::convert()
 
         if (m_embedded.length())
         {
-            newstr.append(m_embedded);
+            m_body.append(m_embedded);
         }
-        newstr.append(
+        m_body.append(
             "</DOC>\n");
-        m_result = newstr.utf8();
-        m_phase = DONE;
+        m_result = m_body.utf8();
+        m_isConverted = true;
     }
     return m_success;
 }
@@ -242,7 +213,8 @@ void WinWordDoc::encode(QString &text)
   text.replace(QRegExp("'"), "&apos;");
 }
 
-void WinWordDoc::generateFormats(Attributes &attributes)
+void WinWordDoc::generateFormats(
+    Attributes &attributes)
 {
     QString formats = "";
     Run *run;
@@ -406,64 +378,58 @@ void WinWordDoc::generateFormats(Attributes &attributes)
     m_body.append(formats);
 }
 
-void WinWordDoc::gotError(const QString &text)
+void WinWordDoc::gotError(
+    const QString &text)
 {
-    if (m_phase == TEXT_PASS)
-    {
-        QString xml_friendly = text;
+    QString xml_friendly = text;
 
-        encode(xml_friendly);
-        m_body.append("<PARAGRAPH>\n<TEXT>");
-        m_body.append(xml_friendly);
-        m_body.append("</TEXT>\n</PARAGRAPH>\n");
-    }
+    encode(xml_friendly);
+    m_body.append("<PARAGRAPH>\n<TEXT>");
+    m_body.append(xml_friendly);
+    m_body.append("</TEXT>\n</PARAGRAPH>\n");
     m_success = false;
 }
 
 void WinWordDoc::gotParagraph(
     const QString &text,
-    Attributes &attributes)
+    Attributes &styles)
 {
-    if (m_phase == TEXT_PASS)
-    {
-        QString xml_friendly = text;
+    QString xml_friendly = text;
 
-        encode(xml_friendly);
-        m_body.append("<PARAGRAPH>\n<TEXT>");
-        m_body.append(xml_friendly);
-        m_body.append("</TEXT>\n");
-        generateFormats(attributes);
-        m_body.append("</PARAGRAPH>\n");
-    }
+    encode(xml_friendly);
+    m_body.append("<PARAGRAPH>\n<TEXT>");
+    m_body.append(xml_friendly);
+    m_body.append("</TEXT>\n");
+    generateFormats(styles);
+    m_body.append("</PARAGRAPH>\n");
 }
 
 void WinWordDoc::gotHeadingParagraph(
     const QString &text,
-    Attributes &attributes)
+    Attributes &styles)
 {
-    if (m_phase == TEXT_PASS)
-    {
-        QString xml_friendly = text;
+    QString xml_friendly = text;
 
-        encode(xml_friendly);
-        m_body.append("<PARAGRAPH>\n<TEXT>");
-        m_body.append(xml_friendly);
-        m_body.append("</TEXT>\n"
-            " <LAYOUT>\n"
-            "  <NAME value=\"Head ");
-        m_body.append(QString::number((int)attributes.baseStyle.istd));
-        m_body.append("\"/>\n  <COUNTER type=\"");
-        m_body.append(numberingType(attributes.baseStyle.anld.nfc));
-        m_body.append("\" depth=\"");
-        m_body.append(QString::number(attributes.baseStyle.istd - 1));
-        m_body.append("\" bullet=\"176\" start=\"1\" numberingtype=\"1\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n"
-            " </LAYOUT>\n");
-        generateFormats(attributes);
-        m_body.append("</PARAGRAPH>\n");
-    }
+    encode(xml_friendly);
+    m_body.append("<PARAGRAPH>\n<TEXT>");
+    m_body.append(xml_friendly);
+    m_body.append("</TEXT>\n"
+        " <LAYOUT>\n"
+        "  <NAME value=\"Head ");
+    m_body.append(QString::number((int)styles.baseStyle.istd));
+    m_body.append("\"/>\n  <COUNTER type=\"");
+    m_body.append(numberingType(styles.baseStyle.anld.nfc));
+    m_body.append("\" depth=\"");
+    m_body.append(QString::number(styles.baseStyle.istd - 1));
+    m_body.append("\" bullet=\"176\" start=\"1\" numberingtype=\"1\" lefttext=\"\" righttext=\"\" bulletfont=\"times\"/>\n"
+        " </LAYOUT>\n");
+    generateFormats(styles);
+    m_body.append("</PARAGRAPH>\n");
 }
 
-void WinWordDoc::gotListParagraph(const QString &text, Attributes &attributes)
+void WinWordDoc::gotListParagraph(
+    const QString &text,
+    Attributes &styles)
 {
     static const char *listStyle[6] =
     {
@@ -475,84 +441,63 @@ void WinWordDoc::gotListParagraph(const QString &text, Attributes &attributes)
         "Bullet List"
     };
 
-    if (m_phase == TEXT_PASS)
-    {
-        QString xml_friendly = text;
+    QString xml_friendly = text;
 
-        encode(xml_friendly);
-        m_body.append("<PARAGRAPH>\n<TEXT>");
-        m_body.append(xml_friendly);
-        m_body.append("</TEXT>\n"
-            " <LAYOUT>\n"
-            "  <NAME value=\"");
-        m_body.append(listStyle[attributes.baseStyle.anld.nfc]);
-        m_body.append("\"/>\n"
-            "  <FOLLOWING name=\"");
-        m_body.append(listStyle[attributes.baseStyle.anld.nfc]);
-        m_body.append("\"/>\n"
-            "  <COUNTER type=\"");
-        m_body.append(numberingType(attributes.baseStyle.anld.nfc));
-        m_body.append("\" depth=\"");
-        m_body.append(QString::number((int)attributes.baseStyle.ilvl));
-        m_body.append("\" bullet=\"183\" start=\"");
-        m_body.append(QString::number((int)attributes.baseStyle.anld.iStartAt));
-        m_body.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"symbol\"/>\n"
-            " </LAYOUT>\n");
-        generateFormats(attributes);
-        m_body.append("</PARAGRAPH>\n");
-    }
+    encode(xml_friendly);
+    m_body.append("<PARAGRAPH>\n<TEXT>");
+    m_body.append(xml_friendly);
+    m_body.append("</TEXT>\n"
+        " <LAYOUT>\n"
+        "  <NAME value=\"");
+    m_body.append(listStyle[styles.baseStyle.anld.nfc]);
+    m_body.append("\"/>\n"
+        "  <FOLLOWING name=\"");
+    m_body.append(listStyle[styles.baseStyle.anld.nfc]);
+    m_body.append("\"/>\n"
+        "  <COUNTER type=\"");
+    m_body.append(numberingType(styles.baseStyle.anld.nfc));
+    m_body.append("\" depth=\"");
+    m_body.append(QString::number((int)styles.baseStyle.ilvl));
+    m_body.append("\" bullet=\"183\" start=\"");
+    m_body.append(QString::number((int)styles.baseStyle.anld.iStartAt));
+    m_body.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"symbol\"/>\n"
+        " </LAYOUT>\n");
+    generateFormats(styles);
+    m_body.append("</PARAGRAPH>\n");
 }
 
 void WinWordDoc::gotTableBegin(
     unsigned tableNumber)
 {
-    if (m_phase == TEXT_PASS)
-    {
-        // Add an entry for the column computation data for this table.
+    // Add an entry for the column computation data for this table.
 
-        m_cellEdges.resize(tableNumber);
-        m_cellEdges.insert(tableNumber - 1, new QArray<unsigned>);
-        m_body.append("<PARAGRAPH>\n<TEXT>");
+    m_cellEdges.resize(tableNumber);
+    m_cellEdges.insert(tableNumber - 1, new QArray<unsigned>);
+    m_body.append("<PARAGRAPH>\n<TEXT>");
 
-        // This '0' will be replaced with the anchor character.
+    // This '0' will be replaced with the anchor character.
 
-        m_body.append('0');
-        m_body.append("</TEXT>\n<FORMATS>\n<FORMAT id=\"6\" pos=\"0\">\n");
-        m_body.append("<ANCHOR type=\"grpMgr\" instance=\"grpmgr_");
-        m_body.append(QString::number(tableNumber));
-        m_body.append("\"/>\n</FORMAT>\n</FORMATS>\n</PARAGRAPH>\n");
-    }
+    m_body.append('0');
+    m_body.append("</TEXT>\n<FORMATS>\n<FORMAT id=\"6\" pos=\"0\">\n");
+    m_body.append("<ANCHOR type=\"grpMgr\" instance=\"grpmgr_");
+    m_body.append(QString::number(tableNumber));
+    m_body.append("\"/>\n</FORMAT>\n</FORMATS>\n</PARAGRAPH>\n");
 }
 
 void WinWordDoc::gotTableEnd(
-    unsigned /*tableNumber*/)
+    unsigned tableNumber)
 {
-}
+    unsigned y;
 
-void WinWordDoc::gotTableRow(
-    unsigned tableNumber,
-    unsigned rowNumber,
-    const QString texts[],
-    const MsWordGenerated::PAP /*styles*/[],
-    MsWordGenerated::TAP &row)
-{
-    if (m_phase == TEXT_PASS)
+    for (y = 0; y < m_table.count(); y++)
     {
-        // Add the left and right edge of each cell to our array.
-
-        for (unsigned i = 0; i < row.itcMac; i++)
-        {
-            cacheCellEdge(tableNumber, computeCellEdge(row, i));
-            cacheCellEdge(tableNumber, computeCellEdge(row, i + 1));
-        }
-    }
-    if (m_phase == TABLE_PASS)
-    {
+        unsigned x;
+        MsWordGenerated::TAP row = m_table[y]->m_row;
         QString xml_friendly;
 
         // Create the XML for each cell in the row.
 
-        for (unsigned i = 0; i < row.itcMac; i++)
+        for (x = 0; x < row.itcMac; x++)
         {
             QString cell;
             unsigned left;
@@ -562,9 +507,9 @@ void WinWordDoc::gotTableRow(
             cell.append("<FRAMESET frameType=\"1\" frameInfo=\"0\" grpMgr=\"grpmgr_");
             cell.append(QString::number(tableNumber));
             cell.append("\" row=\"");
-            cell.append(QString::number(rowNumber));
+            cell.append(QString::number(y));
             cell.append("\" col=\"");
-            left = cacheCellEdge(tableNumber, computeCellEdge(row, i));
+            left = cacheCellEdge(tableNumber, computeCellEdge(row, x));
             cell.append(QString::number(left));
             cell.append("\" rows=\"");
             cell.append(QString::number(1));
@@ -573,9 +518,9 @@ void WinWordDoc::gotTableRow(
             // In cases where not all columns are present, ensure that the last
             // column spans the remainder of the table.
 
-            if ((int)i < row.itcMac - 1)
+            if ((int)x < row.itcMac - 1)
             {
-                right = cacheCellEdge(tableNumber, computeCellEdge(row, i + 1));
+                right = cacheCellEdge(tableNumber, computeCellEdge(row, x + 1));
             }
             else
             {
@@ -590,31 +535,53 @@ void WinWordDoc::gotTableRow(
             cellEdge = m_cellEdges[tableNumber - 1]->at(right);
             cell.append(QString::number(cellEdge));
             cell.append("\" top=\"");
-            cell.append(QString::number(ROW_SIZE + rowNumber * ROW_SIZE));
+            cell.append(QString::number(ROW_SIZE + y * ROW_SIZE));
             cell.append("\" bottom=\"");
-            cell.append(QString::number(2 * ROW_SIZE + rowNumber * ROW_SIZE));
+            cell.append(QString::number(2 * ROW_SIZE + y * ROW_SIZE));
             cell.append(
                 "\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\" "
                 "lWidth=\"1\" lStyle=\"0\" " +
-                colourType(row.rgtc[i].brcLeft.ico, "lRed", "lGreen", "lBlue") +
+                colourType(row.rgtc[x].brcLeft.ico, "lRed", "lGreen", "lBlue") +
                 "rWidth=\"1\" rStyle=\"0\" " +
-                colourType(row.rgtc[i].brcRight.ico, "rRed", "rGreen", "rBlue") +
+                colourType(row.rgtc[x].brcRight.ico, "rRed", "rGreen", "rBlue") +
                 "tWidth=\"1\" tStyle=\"0\" " +
-                colourType(row.rgtc[i].brcTop.ico, "tRed", "tGreen", "tBlue") +
+                colourType(row.rgtc[x].brcTop.ico, "tRed", "tGreen", "tBlue") +
                 "bWidth=\"1\" bStyle=\"0\" " +
-                colourType(row.rgtc[i].brcBottom.ico, "bRed", "bGreen", "bBlue") +
-                colourType(row.rgshd[i].icoBack, "bkRed", "bkGreen", "bkBlue", 8) +
+                colourType(row.rgtc[x].brcBottom.ico, "bRed", "bGreen", "bBlue") +
+                colourType(row.rgshd[x].icoBack, "bkRed", "bkGreen", "bkBlue", 8) +
                 "bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0");
             cell.append("\" autoCreateNewFrame=\"0\" newFrameBehaviour=\"1\"/>\n");
             cell.append("<PARAGRAPH>\n<TEXT>");
-            xml_friendly = texts[i];
+            xml_friendly = m_table[y]->m_texts[x];
             encode(xml_friendly);
             cell.append(xml_friendly);
             cell.append("</TEXT>\n </PARAGRAPH>\n");
             cell.append("</FRAMESET>\n");
-            m_body.append(cell);
+            m_tables.append(cell);
         }
     }
+    m_table.resize(0);
+}
+
+void WinWordDoc::gotTableRow(
+    unsigned tableNumber,
+    const QVector<QString> &texts,
+    QVector<Attributes> &styles,
+    MsWordGenerated::TAP &row)
+{
+    unsigned i;
+    TableRow *newRow = new TableRow(texts, styles, row);
+
+    // Add the left and right edge of each cell to our array.
+
+    for (i = 0; i < row.itcMac; i++)
+    {
+        cacheCellEdge(tableNumber, computeCellEdge(row, i));
+        cacheCellEdge(tableNumber, computeCellEdge(row, i + 1));
+    }
+    i = m_table.count();
+    m_table.resize(i + 1);
+    m_table.insert(i, newRow);
 }
 
 QString WinWordDoc::colourType(
@@ -706,6 +673,27 @@ char WinWordDoc::numberingType(unsigned nfc) const
     };
 
     return numberingTypes[nfc];
+}
+
+WinWordDoc::TableRow::TableRow(
+    const QVector<QString> &texts,
+    QVector<Attributes> &styles,
+    MsWordGenerated::TAP &row)
+{
+    m_texts.clear();
+    m_styles.clear();
+    for (int i = 0; i < row.itcMac; i++)
+    {
+        m_texts.append(*texts[i]);
+        m_styles.append(*styles[i]);
+    }
+    m_row = row;
+}
+
+WinWordDoc::TableRow::~TableRow()
+{
+//    m_styles.setAutoDelete(true);
+//    m_texts.setAutoDelete(true);
 }
 
 #include <winworddoc.moc>
