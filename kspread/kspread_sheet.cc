@@ -6446,9 +6446,8 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, KoStyleStack & styleSt
 
     if ( styleStack.hasAttribute( "style:row-height" ) )
     {
-        kdDebug()<<" properties style:row-height!!!!!!!!!!!!!!!!!!\n";
         height = KoUnit::parseValue( styleStack.attribute( "style:row-height" ) , -1 );
-        kdDebug()<<" height :"<<height<<endl;
+        kdDebug()<<" properties style:row-height : height :"<<height<<endl;
     }
     layout.loadOasisStyleProperties( styleStack, oasisStyles );
 
@@ -6460,6 +6459,17 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, KoStyleStack & styleSt
         if ( ok )
             number = n;
         kdDebug() << "Row repeated: " << number << endl;
+    }
+    bool collapse = false;
+    if ( row.hasAttribute( "table:visibility" ) )
+    {
+        QString visible = row.attribute( "table:visibility" );
+        kdDebug()<<" row.attribute( table:visibility ) "<<visible<<endl;
+        if ( visible == "collapse" )
+            collapse=true;
+        else
+            kdDebug()<<" visible row not implemented/supported : "<<visible<<endl;
+
     }
     kdDebug()<<" height !!!!!!!!!!!!!!!!!!!!!!! :"<<height<<endl;
     //code from opencalc filter, I don't know why it's necessary.
@@ -6485,6 +6495,8 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, KoStyleStack & styleSt
         {
             kdDebug() << "Setting row height to " << height << endl;
             rowL->setHeight( height );
+            if ( collapse )
+                rowL->setHide( true );
         }
         ++rowIndex;
     }
