@@ -198,7 +198,7 @@ void KWFrameDia::setupTab3ConnectTextFrames()
     {
       if (i == 0 && doc->getProcessingType() == KWordDocument::WP) continue;
       QString str;
-      str.sprintf("Frameset Nr. %d",i);
+      str.sprintf("Frameset Nr. %d",i + 1);
       lFrameSList->insertItem(str,-1);
     }
 

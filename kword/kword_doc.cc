@@ -1472,8 +1472,8 @@ int KWordDocument::getFrameSet(unsigned int mx,unsigned int my)
 
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
-      frameSet = getFrameSet(i);
-      if (frameSet->contains(mx,my)) return i;
+      frameSet = getFrameSet(getNumFrameSets() - 1 - i);
+      if (frameSet->contains(mx,my)) return getNumFrameSets() - 1 - i;
     }
   
   return -1;
