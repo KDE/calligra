@@ -3215,11 +3215,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
     {
-        if( m_paragDlg )
-        {
-            delete m_paragDlg;
-            m_paragDlg=0L;
-        }
+        delete m_paragDlg;
         m_paragDlg = new KoParagDia( this, "",
                                      KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                      KoParagDia::PD_BORDERS |

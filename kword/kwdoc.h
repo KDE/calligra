@@ -355,7 +355,7 @@ public:
     int getPages() const { return m_pages; }
 
     KoPictureCollection *pictureCollection() { return &m_pictureCollection; }
-    KoVariableFormatCollection *variableFormatCollection() { return m_varFormatCollection; }
+    KoVariableFormatCollection *variableFormatCollection()const { return m_varFormatCollection; }
 
     QPtrList <KWView> getAllViews() { return m_lstViews; }
 
