@@ -867,11 +867,14 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
             }
             delete dialog;
         }
+
         if ( ( rows != 0 ) && ( cols != 0 ) ) {
             KFCAddReplacing* command = new KFCAddReplacing( i18n( "Add Matrix" ), container );
             command->setElement( new MatrixElement( rows, cols ) );
             return command;
         }
+        else
+            return 0L;
     }
     case req_addIndex: {
         FormulaCursor* cursor = container->activeCursor();
