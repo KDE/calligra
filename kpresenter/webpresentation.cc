@@ -466,10 +466,10 @@ void KPWebPresentationWizard::setupPage1()
     QLabel *helptext = new QLabel( page1 );
     helptext->setMargin( 5 );
     helptext->setBackgroundMode( PaletteLight );
-    helptext->setText( i18n( "Enter here your Name, your Email\n"
-                             "Address and the Title of the Web-\n"
-                             "Presentation. Also enter the Path\n"
-                             "into which the Web-Presentation\n"
+    helptext->setText( i18n( "Enter here your name, your Email\n"
+                             "Address and the title of the web\n"
+                             "presentation. Also enter the path\n"
+                             "into which the web presentation\n"
                              "should be created. This must be a\n"
                              "directory." ) );
     helptext->setMaximumWidth( helptext->sizeHint().width() );
@@ -522,15 +522,15 @@ void KPWebPresentationWizard::setupPage2()
                         "which should be used for the slides.\n"
                         "PNG is a very optimized and well\n"
                         "compressed format, but may not be\n"
-                        "supported by some old Web-Browsers.\n"
+                        "supported by some old web browsers.\n"
                         "BMP is a picture format with a bad\n"
-                        "compression, but is supported also by\n"
-                        "old Web-Browsers.\n");
+                        "compression, but is supported by\n"
+                        "old web browsers.\n");
 
     if ( KImageIO::canWrite( "JPEG" ) )
         help += i18n("JPEG is a picture format with a quite good\n"
-                     "compression and which is also supported by\n"
-                     "all Web-Browsers.\n");
+                     "compression and which is supported by\n"
+                     "all web browsers.\n");
 
     help += i18n( "\n"
                   "Finally you also can specify the zoom\n"
@@ -890,7 +890,7 @@ void KPWebPresentationCreateDialog::saveConfig()
 
     if( !url.isLocalFile() )
     {
-      KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
+      KMessageBox::sorry( 0L, i18n( "Only local files are currently supported." ) );
       return;
     }
 
