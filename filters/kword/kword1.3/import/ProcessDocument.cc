@@ -254,10 +254,10 @@ static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     QValueList<AttrProcessing> attrProcessingList;
 
     attrProcessingList
-        << AttrProcessing ( "value",   "QString", &str )
-        << AttrProcessing ( "styleline", "QString",  &style )
+        << AttrProcessing ( "value",   str )
+        << AttrProcessing ( "styleline", style )
         << AttrProcessing ( "wordbyword", text->underlineWord )
-        << AttrProcessing ( "underlinecolor",   "QString", &strColor )
+        << AttrProcessing ( "underlinecolor",   strColor )
         ;
     ProcessAttributes (myNode, attrProcessingList);
 
@@ -284,8 +284,8 @@ static void ProcessStrikeoutTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     text->strikeoutWord = false;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ("value" , "QString",  &type );
-    attrProcessingList << AttrProcessing ("styleline" , "QString",  &linestyle );
+    attrProcessingList << AttrProcessing ("value" , type );
+    attrProcessingList << AttrProcessing ("styleline" , linestyle );
     attrProcessingList << AttrProcessing ( "wordbyword", text->strikeoutWord );
     ProcessAttributes (myNode, attrProcessingList);
 
@@ -313,7 +313,7 @@ void ProcessAnchorTag ( QDomNode       myNode,
     QString type;
     *instance = QString::null;
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "type",     "QString",  &type    )
+    attrProcessingList << AttrProcessing ( "type",     type    )
                        << AttrProcessing ( "instance", "QString",  instance );
     ProcessAttributes (myNode, attrProcessingList);
 
@@ -338,8 +338,8 @@ static void ProcessLinkTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
     QString linkName, hrefName;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ("linkName", "QString", &linkName) );
-    attrProcessingList.append ( AttrProcessing ("hrefName", "QString", &hrefName) );
+    attrProcessingList.append ( AttrProcessing ("linkName", linkName) );
+    attrProcessingList.append ( AttrProcessing ("hrefName", hrefName) );
     ProcessAttributes (myNode, attrProcessingList);
 
     variable->setLink(linkName, hrefName);
@@ -353,8 +353,8 @@ static void ProcessPgNumTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
     QString subtype, value;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ("subtype", "QString", &subtype) );
-    attrProcessingList.append ( AttrProcessing ("value",   "QString", &value  ) );
+    attrProcessingList.append ( AttrProcessing ("subtype", subtype) );
+    attrProcessingList.append ( AttrProcessing ("value",   value  ) );
     ProcessAttributes (myNode, attrProcessingList);
 
     variable->setPgNum(subtype, value);
@@ -366,9 +366,9 @@ static void ProcessTypeTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
     VariableData *variable = (VariableData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ("key",  "QString", &variable->m_key ) );
-    attrProcessingList.append ( AttrProcessing ("text", "QString", &variable->m_text) );
-    attrProcessingList.append ( AttrProcessing ("type", "int",     &variable->m_type) );
+    attrProcessingList.append ( AttrProcessing ("key",  variable->m_key ) );
+    attrProcessingList.append ( AttrProcessing ("text", variable->m_text) );
+    attrProcessingList.append ( AttrProcessing ("type", variable->m_type) );
     ProcessAttributes (myNode, attrProcessingList);
 }
 
@@ -379,8 +379,8 @@ static void ProcessFieldTag (QDomNode myNode, void *tagData, KWEFKWordLeader *)
     QString name, value;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ("subtype", "int", &subtype) );
-    attrProcessingList.append ( AttrProcessing ("value", "QString", &value ) );
+    attrProcessingList.append ( AttrProcessing ("subtype", subtype) );
+    attrProcessingList.append ( AttrProcessing ("value", value ) );
     ProcessAttributes (myNode, attrProcessingList);
 
     switch( subtype )
@@ -624,9 +624,9 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
     int formatLen = -1;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "id",  "int",  &formatId  );
-    attrProcessingList << AttrProcessing ( "pos", "int",  &formatPos );
-    attrProcessingList << AttrProcessing ( "len", "int",  &formatLen );
+    attrProcessingList << AttrProcessing ( "id",  formatId  );
+    attrProcessingList << AttrProcessing ( "pos", formatPos );
+    attrProcessingList << AttrProcessing ( "len", formatLen );
     ProcessAttributes (myNode, attrProcessingList);
 
     if ( ( formatId == -1 ) && ( leader->m_oldSyntax ) )
@@ -697,16 +697,16 @@ static void ProcessCounterTag ( QDomNode myNode, void *tagData, KWEFKWordLeader 
     CounterData *counter = (CounterData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "type",            "int",      &counter->style           );
-    attrProcessingList << AttrProcessing ( "depth",           "int",      &counter->depth           );
-    attrProcessingList << AttrProcessing ( "bullet",          "int",      &counter->customCharacter );
-    attrProcessingList << AttrProcessing ( "start",           "int",      &counter->start           );
-    attrProcessingList << AttrProcessing ( "numberingtype",   "int",      &counter->numbering       );
-    attrProcessingList << AttrProcessing ( "lefttext",        "QString",  &counter->lefttext        );
-    attrProcessingList << AttrProcessing ( "righttext",       "QString",  &counter->righttext       );
-    attrProcessingList << AttrProcessing ( "bulletfont",      "QString",  &counter->customFont      );
+    attrProcessingList << AttrProcessing ( "type",            "int", &counter->style           );
+    attrProcessingList << AttrProcessing ( "depth",           counter->depth           );
+    attrProcessingList << AttrProcessing ( "bullet",          counter->customCharacter );
+    attrProcessingList << AttrProcessing ( "start",           counter->start           );
+    attrProcessingList << AttrProcessing ( "numberingtype",   "int", &counter->numbering       );
+    attrProcessingList << AttrProcessing ( "lefttext",        counter->lefttext        );
+    attrProcessingList << AttrProcessing ( "righttext",       counter->righttext       );
+    attrProcessingList << AttrProcessing ( "bulletfont",      counter->customFont      );
     attrProcessingList << AttrProcessing ( "customdef" );
-    attrProcessingList << AttrProcessing ( "text",            "QString",  &counter->text            );
+    attrProcessingList << AttrProcessing ( "text",            counter->text            );
     attrProcessingList << AttrProcessing ( "display-levels" );
     attrProcessingList << AttrProcessing ( "align" );
     ProcessAttributes (myNode, attrProcessingList);
@@ -724,10 +724,10 @@ static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, KWEFKWor
     QValueList<AttrProcessing> attrProcessingList;
 
     attrProcessingList
-        << AttrProcessing ( "ptpos",     "double", &tabulator.m_ptpos   )
-        << AttrProcessing ( "type",      "int",    &tabulator.m_type    )
-        << AttrProcessing ( "filling",   "int",    &tabulator.m_filling )
-        << AttrProcessing ( "width",     "double", &tabulator.m_width   )
+        << AttrProcessing ( "ptpos",     tabulator.m_ptpos   )
+        << AttrProcessing ( "type",      tabulator.m_type    )
+        << AttrProcessing ( "filling",   tabulator.m_filling )
+        << AttrProcessing ( "width",     tabulator.m_width   )
         << AttrProcessing ( "alignchar" )
         ;
 
@@ -752,9 +752,9 @@ static void ProcessIndentsTag (QDomNode myNode, void *tagData, KWEFKWordLeader *
     LayoutData *layout = (LayoutData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ("first" , "double",  &layout->indentFirst );
-    attrProcessingList << AttrProcessing ("left"  , "double",  &layout->indentLeft  );
-    attrProcessingList << AttrProcessing ("right" , "double",  &layout->indentRight );
+    attrProcessingList << AttrProcessing ("first" , layout->indentFirst );
+    attrProcessingList << AttrProcessing ("left"  , layout->indentLeft  );
+    attrProcessingList << AttrProcessing ("right" , layout->indentRight );
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode, leader);
@@ -766,8 +766,8 @@ static void ProcessLayoutOffsetTag ( QDomNode myNode, void *tagData, KWEFKWordLe
     LayoutData *layout = (LayoutData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ("after" ,  "double",  &layout->marginBottom );
-    attrProcessingList << AttrProcessing ("before" , "double",  &layout->marginTop    );
+    attrProcessingList << AttrProcessing ("after" ,  layout->marginBottom );
+    attrProcessingList << AttrProcessing ("before" , layout->marginTop    );
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode, leader);
@@ -781,9 +781,9 @@ static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, KWEFKWordLe
     QString strBefore, strAfter;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "linesTogether",       "bool", &layout->keepLinesTogether  );
-    attrProcessingList << AttrProcessing ( "hardFrameBreak",      "bool", &layout->pageBreakBefore );
-    attrProcessingList << AttrProcessing ( "hardFrameBreakAfter", "bool", &layout->pageBreakAfter  );
+    attrProcessingList << AttrProcessing ( "linesTogether",       layout->keepLinesTogether  );
+    attrProcessingList << AttrProcessing ( "hardFrameBreak",      layout->pageBreakBefore );
+    attrProcessingList << AttrProcessing ( "hardFrameBreakAfter", layout->pageBreakAfter  );
     attrProcessingList << AttrProcessing ( "keepWithNext" ); // RTF import filter
     ProcessAttributes (myNode, attrProcessingList);
 
@@ -800,11 +800,11 @@ static void ProcessShadowTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *
     int blue=0;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "distance", "double", &layout->shadowDistance );
-    attrProcessingList << AttrProcessing ( "direction", "int",    &layout->shadowDirection );
-    attrProcessingList << AttrProcessing ( "red",      "int",    &red   );
-    attrProcessingList << AttrProcessing ( "green",    "int",    &green );
-    attrProcessingList << AttrProcessing ( "blue",     "int",    &blue  );
+    attrProcessingList << AttrProcessing ( "distance", layout->shadowDistance );
+    attrProcessingList << AttrProcessing ( "direction", layout->shadowDirection );
+    attrProcessingList << AttrProcessing ( "red",      red   );
+    attrProcessingList << AttrProcessing ( "green",    green );
+    attrProcessingList << AttrProcessing ( "blue",     blue  );
     ProcessAttributes (myNode, attrProcessingList);
 
     layout->shadowColor.setRgb(red,green,blue);
@@ -821,11 +821,11 @@ static void ProcessAnyBorderTag ( QDomNode myNode, void *tagData, KWEFKWordLeade
     int blue=0;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "red",   "int",    &red   );
-    attrProcessingList << AttrProcessing ( "green", "int",    &green );
-    attrProcessingList << AttrProcessing ( "blue",  "int",    &blue  );
-    attrProcessingList << AttrProcessing ( "style", "double", &border->style );
-    attrProcessingList << AttrProcessing ( "width", "int",    &border->width );
+    attrProcessingList << AttrProcessing ( "red",   red   );
+    attrProcessingList << AttrProcessing ( "green", green );
+    attrProcessingList << AttrProcessing ( "blue",  blue  );
+    attrProcessingList << AttrProcessing ( "style", border->style );
+    attrProcessingList << AttrProcessing ( "width", border->width );
     ProcessAttributes (myNode, attrProcessingList);
 
     border->color.setRgb(red,green,blue);
