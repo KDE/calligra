@@ -293,6 +293,58 @@ void AllowNoAttributes ( QDomNode )
 //          LAYOUT
 //            NAME value=
 
+// FormatData is a container for data retreived from the FORMAT tag
+// and its subtags to be used in the PARAGRAPH tag.
+
+class FormatData
+{
+    public:
+        FormatData ()
+        { init(); }
+        FormatData ( int p,
+                     int l  ) : pos (p), len (l), realLen (l)
+        { init(); }
+
+        QString fontName;
+
+        int  pos; // Start of text to which this format applies
+        int  len; // Len of text to which this format applies
+        int  realLen; //Real length of text (in case "len" is not the truth!)
+
+        int  weight;
+        int  fontSize;
+        QColor colour;
+        int  verticalAlignment;
+
+        bool italic;
+        bool underline;
+        bool strikeout;
+
+        bool missing;
+    private:
+        void init()
+        {
+            //Initialize member variables
+            // (initialize all variables, even those to 0!)
+            weight=0;
+            fontSize=-1;
+            colour=QColor();
+            verticalAlignment=0;
+            italic=false;
+            underline=false;
+            strikeout=false;
+            fontName=QString::null;
+            missing=false;
+        }
+};
+
+class ValueListFormatData : public QValueList<FormatData>
+{
+public:
+    ValueListFormatData (void) { }
+    virtual ~ValueListFormatData (void) { }
+};
+
 // Counter structure, for LayoutData
 class CounterData
 {
@@ -334,6 +386,7 @@ public:
     QString styleName;
     QString alignment;
     CounterData counter;
+    FormatData formatData;
 
     void init()
     {
@@ -386,77 +439,6 @@ static void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &, Class
 
     AllowNoSubtags (myNode);
 }
-
-static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, ClassExportFilterBase* exportFilter )
-{
-    LayoutData *layout = (LayoutData *) tagData;
-
-    AllowNoAttributes (myNode);
-
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "NAME",        ProcessLayoutNameTag, (void *) layout ) );
-    tagProcessingList.append ( TagProcessing ( "FOLLOWING",   NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "COUNTER",     ProcessCounterTag,    (void *) & layout->counter ) );
-    tagProcessingList.append ( TagProcessing ( "FORMAT",      NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "TABULATOR",   NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "FLOW",        ProcessLayoutFlowTag, (void *) layout ) );
-    tagProcessingList.append ( TagProcessing ( "INDENTS",     NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "OFFSETS",     NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "LINESPACING", NULL,                 NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "PAGEBREAKING",NULL,                 NULL            ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
-}
-
-// FormatData is a container for data retreived from the FORMAT tag
-// and its subtags to be used in the PARAGRAPH tag.
-class FormatData
-{
-    public:
-        FormatData ()
-        { init(); }
-        FormatData ( int p,
-                     int l  ) : pos (p), len (l), realLen (l)
-        { init(); }
-
-        QString fontName;
-
-        int  pos; // Start of text to which this format applies
-        int  len; // Len of text to which this format applies
-        int  realLen; //Real length of text (in case "len" is not the truth!)
-
-        int  weight;
-        int  fontSize;
-        QColor colour;
-        int  verticalAlignment;
-
-        bool italic;
-        bool underline;
-        bool strikeout;
-
-        bool missing;
-    private:
-        void init()
-        {
-            //Initialize member variables
-            // (initialize all variables, even those to 0!)
-            weight=0;
-            fontSize=-1;
-            colour=QColor();
-            verticalAlignment=0;
-            italic=false;
-            underline=false;
-            strikeout=false;
-            fontName=QString::null;
-            missing=false;
-        }
-};
-
-class ValueListFormatData : public QValueList<FormatData>
-{
-public:
-    ValueListFormatData (void) { }
-    virtual ~ValueListFormatData (void) { }
-};
 
 
 // FORMAT's subtags
@@ -567,17 +549,16 @@ static void ProcessVertAlignTag (QDomNode myNode, void* formatDataPtr , QString&
     formatData->verticalAlignment=value;
 }
 
-
-static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* exportFilter)
+static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* exportFilter)
 {
-    ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
+    FormatData *formatData = (FormatData*) tagData;
 
     int formatId (-1);
-    FormatData formatData (-1,-1);
+
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList.append ( AttrProcessing ( "id",  "int", (void *) &formatId       ) );
-    attrProcessingList.append ( AttrProcessing ( "pos", "int", (void *) &formatData.pos ) );
-    attrProcessingList.append ( AttrProcessing ( "len", "int", (void *) &formatData.len ) );
+    attrProcessingList.append ( AttrProcessing ( "pos", "int", (void *) &formatData->pos ) );
+    attrProcessingList.append ( AttrProcessing ( "len", "int", (void *) &formatData->len ) );
     ProcessAttributes (myNode, attrProcessingList);
 
     if ( formatId != 1 )
@@ -585,10 +566,10 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &, ClassEx
         kdError(30503) << "Unexpected FORMAT attribute id value " << formatId << "!" << endl;
     }
 
-    if ( formatData.pos == -1 || formatData.len == -1 )
+    if ( formatData->pos == -1 || formatData->len == -1 )
     {
-        formatData.pos = 0;
-        formatData.len = 0;
+        formatData->pos = 0;
+        formatData->len = 0;
 
         kdError(30503) << "Missing formatting!" << endl;
     }
@@ -596,11 +577,11 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &, ClassEx
     if ( 6 == formatId )
     {// <FORMAT id=6> have no length but has one character in <TEXT>
         //TODO: verifiy that KWord 0.9 still does it!
-        formatData.realLen=1;
+        formatData->realLen=1;
     }
     else
     {
-        formatData.realLen=formatData.len;
+        formatData->realLen=formatData->len;
     }
 
     QValueList<TagProcessing> tagProcessingList;
@@ -616,6 +597,38 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &, ClassEx
     QString strDummy;
 
     ProcessSubtags (myNode, tagProcessingList, strDummy, exportFilter);
+
+}
+
+static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, ClassExportFilterBase* exportFilter )
+{
+    LayoutData *layout = (LayoutData *) tagData;
+
+    AllowNoAttributes (myNode);
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList.append ( TagProcessing ( "NAME",        ProcessLayoutNameTag,     (void*) layout  ) );
+    tagProcessingList.append ( TagProcessing ( "FOLLOWING",   NULL,                     NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "COUNTER",     ProcessCounterTag,        (void*) & layout->counter ) );
+    tagProcessingList.append ( TagProcessing ( "FORMAT",      ProcessSingleFormatTag,   (void*) &layout->formatData ) );
+    tagProcessingList.append ( TagProcessing ( "TABULATOR",   NULL,                     NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "FLOW",        ProcessLayoutFlowTag,     (void*) layout  ) );
+    tagProcessingList.append ( TagProcessing ( "INDENTS",     NULL,                     NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "OFFSETS",     NULL,                     NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "LINESPACING", NULL,                     NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "PAGEBREAKING",NULL,                     NULL            ) );
+    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
+}
+
+static void ProcessFormatTag (QDomNode myNode, void *tagData, QString & strDummy, ClassExportFilterBase* exportFilter)
+{
+    // To use in <FORMATS> elements
+
+    ValueListFormatData *formatDataList = (ValueListFormatData *) tagData;
+
+    FormatData formatData (-1,-1);
+
+    ProcessSingleFormatTag(myNode,(void*) &formatData, strDummy, exportFilter);
 
     formatDataList->append (formatData);
 }
