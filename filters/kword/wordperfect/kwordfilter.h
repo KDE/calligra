@@ -17,47 +17,29 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __WPIMPORT_H
-#define __WPIMPORT_H
 
-#include <qstring.h>
-#include <qdatastream.h>
-#include <qobject.h>
-#include <qptrlist.h>
-#include <qcstring.h>
-#include <qarray.h>
-#include <qdom.h>
+#ifndef __WP_KWORDFILTER_H
+#define __WP_KWORDFILTER_H
 
-#include <koFilter.h>
-#include <koStore.h>
+#include "parser.h"
 
-class WPImport : public KoFilter
+namespace WP {
+
+class KWordFilter: public Parser
 {
-    Q_OBJECT
-
-
-  protected:
-
-    QString m_output;
 
   public:
 
-    WPImport(KoFilter *parent, const char *name, const QStringList&);
-    WPImport();
+    QString root;
+    QString documentInfo;
 
-    virtual ~WPImport() {}
-
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    KWordFilter();
+    bool parse( const QString& filename );
 
 };
-#endif // __WPIMPORT_H
 
 
+};
 
 
-
-
-
-
-
-
+#endif

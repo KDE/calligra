@@ -43,19 +43,20 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>29 Aug 2001</td>
+     <td>19 Dec 2001</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
      <td>
      <ul>
-       <li>only for WP 5.x document</li>
-       <li>import all text</li>
-       <li>font information: color</li>
+       <li>can import all text</li>
+       <li>support WP 5.x and WP 6/7/8 document</li>
+       <li>font information: size, typeface, color</li>
+       <li>WP extended character converted to Unicode</li>
        <li>character formatting: bold, italics, underline, strikeout, superscript, subscript</li>
        <li>paragraph layout: linespacing, justification</li>
-       <li>page settings: margins, multiple-columns</li>
+       <li>page settings: margins</li>
        <li>document summary: title, author, abstract</li>
      </ul>
      </td>
@@ -65,19 +66,29 @@
      <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
      <td>
      <ul>
-       <li>support for WP 6/7/8 document</li>
-       <li>font information</li>
        <li>header and footer</li>
-       <li>character formatting: shadowed, outline</li>
-       <li>not-equal-column-width/spacing (KWord limitation?)</li>
-       <li>proper handling of extended characters</li>
+       <li>multicolumn pages</li>
+       <li>styles</li>
+       <li>tables</li>
+       <li>...</li>
      </ul>
      </td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>History</font></b></td>
-     <td>-</td>
+     <td>
+     <dl>
+     <dt>19 Dec 2001
+     <dd>parser rewritten, support for WP 6/7/8,
+     WP extended characters, better performance
+     </dl>
+     <dl>
+     <dt>29 Aug 2001
+     <dd>first implementation, only for WP 5.x, can import
+     all text along with formatting, using QDom
+     </dl>
+     </td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
