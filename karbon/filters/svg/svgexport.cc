@@ -78,9 +78,9 @@ SvgExport::convert( const QCString& from, const QCString& to )
 		"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" <<
 	endl;
 	
-	// TODO: add width and height. But how?
+	// TODO: add width and height. Has to be supported by karbon first. For now use standard 600x800
 	s <<
-		"<svg xmlns=\"http://www.w3.org/2000/svg\">" <<
+		"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"800\">" <<
 	endl;
 
 	// parse dom-tree:
@@ -96,9 +96,8 @@ SvgExport::convert( const QCString& from, const QCString& to )
 		}
 	}
 	
-	s <<
-		"</svg>" <<
-	endl;
+	// end-tag
+	s << "</svg>" << endl;
 
 	fileOut.close();
 	return KoFilter::OK;
@@ -144,6 +143,7 @@ SvgExport::exportPath( QTextStream& s, const QDomElement& node )
 
 	s << "<path";
 	
+	// has to be set here since fillRule is specified in the <PATH> tag.
 	fill_rule = node.attribute( "fillRule" ).toInt();
 
 	QDomNodeList list = node.childNodes();
@@ -156,7 +156,19 @@ SvgExport::exportPath( QTextStream& s, const QDomElement& node )
 			if( e.tagName() == "SEGMENTS" )
 				exportSegments( s, e );
 			if( e.tagName() == "FILL" )
+			{
 				exportFill( s, e );
+
+				// i think this is right?
+				if( fill_rule == 0 )
+				{
+					s << " fill-rule=\"evenodd\"";
+				}
+				else
+				{
+					s << " fill-rule=\"nonzero\"";
+				}
+			}
 			if( e.tagName() == "STROKE" )
 				exportStroke( s, e );
 		}
@@ -179,8 +191,7 @@ SvgExport::exportSegments( QTextStream& s, const QDomElement& node )
 		{
 			QDomElement e = list.item( i ).toElement();
 
-			// TODO: CURVE1 CURVE2
-
+			// convert the varoius karbon curves to svg "C" curves
 			if( e.tagName() == "CURVE" )
 			{
 			s <<
@@ -241,12 +252,6 @@ void
 SvgExport::exportFill( QTextStream& s, const QDomElement& node )
 {
 
-	// maybe change this...
-	if( fill_rule == 1 )
-	{
-		s << " fill-rule=\"evenodd\"";
-	}
-
 	QDomNodeList list = node.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
 	{
@@ -256,9 +261,11 @@ SvgExport::exportFill( QTextStream& s, const QDomElement& node )
 
 			if( e.tagName() == "COLOR" )
 			{
-
-				if( !e.attribute( "colorSpace" ).isNull() )	// make sure getHexColor returns something
-				{						// shouldn't be needed really
+			
+				// make sure getHexColor returns something
+				// shouldn't be needed really
+				if( !e.attribute( "colorSpace" ).isNull() )
+				{
 					s << " fill=\"";
 					getHexColor( s, e );
 					s << "\"";
@@ -328,8 +335,11 @@ SvgExport::exportStroke( QTextStream& s, const QDomElement& node )
 
 			if( e.tagName() == "COLOR" )
 			{
-				if( !e.attribute( "colorSpace" ).isNull() )	// make sure getHexColor returns something
-				{						// shouldn't be needed really
+			
+				// make sure getHexColor returns something
+				// shouldn't be needed really
+				if( !e.attribute( "colorSpace" ).isNull() )
+				{
 					s << " stroke=\"";
 					getHexColor( s, e );
 					s << "\"";
@@ -365,17 +375,24 @@ void
 SvgExport::getHexColor( QTextStream& s, const QDomElement& node )
 {
 
+	// Convert the various color-spaces to hex
+
 	QString Output;
 
-	if( node.attribute( "colorSpace" ).toInt() == 0 ) // rgb
+	// rgb
+	if( node.attribute( "colorSpace" ).toInt() == 0 )
 	{
 		Output.sprintf( "#%02x%02x%02x", int( node.attribute( "v1" ).toFloat() * 255 ), int( node.attribute( "v2" ).toFloat() * 255 ), int( node.attribute( "v3" ).toFloat() * 255 ) );
 	}
-	else if( node.attribute( "colorSpace" ).toInt() == 1 ) // cmyk
+	
+	// cmyk
+	else if( node.attribute( "colorSpace" ).toInt() == 1 )
 	{
 		Output.sprintf( "#%02x%02x%02x", int( ( 1 - node.attribute( "v1" ).toFloat() - node.attribute( "v4" ).toFloat() ) * 255 ), int( ( 1 - node.attribute( "v2" ).toFloat() - node.attribute( "v4" ).toFloat() ) * 255 ), int( ( 1 - node.attribute( "v3" ).toFloat() - node.attribute( "v4" ).toFloat() ) * 255 ) );
 	}
-	else if( node.attribute( "colorSpace" ).toInt() == 2 ) // hsb
+	
+	// hsb
+	else if( node.attribute( "colorSpace" ).toInt() == 2 )
 	{
 		// maybe do this manually - or could it stay like this?
 		QColor hsvColor;
@@ -387,7 +404,9 @@ SvgExport::getHexColor( QTextStream& s, const QDomElement& node )
 
 		Output.sprintf( "#%02x%02x%02x", rComponent, gComponent, bComponent );
 	}
-	else if( node.attribute( "colorSpace" ).toInt() == 3 ) // grey
+	
+	// grey
+	else if( node.attribute( "colorSpace" ).toInt() == 3 )
 	{
 		Output.sprintf( "#%02x%02x%02x", int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ), int( node.attribute( "v" ).toFloat() * 255 ) );
 	}
@@ -399,6 +418,8 @@ SvgExport::getHexColor( QTextStream& s, const QDomElement& node )
 void
 SvgExport::exportText( QTextStream& s, const QDomElement& node )
 {
+
+	// TODO: set placement once karbon supports it
 
 	s << "<text";
 	
@@ -420,6 +441,20 @@ SvgExport::exportText( QTextStream& s, const QDomElement& node )
 	if( !node.attribute( "italic" ).isNull() )
 	{
 		s << " font-style=\"italic\"";
+	}
+	
+	QDomNodeList list = node.childNodes();
+	for( uint i = 0; i < list.count(); ++i )
+	{
+		if( list.item( i ).isElement() )
+		{
+			QDomElement e = list.item( i ).toElement();
+
+			if( e.tagName() == "FILL" )
+				exportFill( s, e );
+			if( e.tagName() == "STROKE" )
+				exportStroke( s, e );
+		}
 	}
 
 	s << ">";
