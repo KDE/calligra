@@ -134,7 +134,9 @@ KoCustomVariable *KoCustomVariablesListItem::getVariable() const
 
 void KoCustomVariablesListItem::applyValue()
 {
-    var->setValue( editWidget->text() );
+    QString newVal=editWidget->text();
+    if(var->value()!=newVal)
+        var->setValue( newVal );
 }
 
 /******************************************************************
