@@ -2061,7 +2061,8 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                 curHFSettings++; // one header/footer setting finished
             } else {
                 qDebug( "!!!Unknown element found: %s", tagName.latin1() );
-                return false;
+                // No reason to 'return false' here since it might be that
+                // this is just a never version of the document format...
             }
         }
         node = node.nextSibling();

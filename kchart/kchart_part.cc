@@ -75,8 +75,8 @@ void KChartPart::initRandomData()
     if (currentData.rows() == 0) {
         kdDebug(35001) << "Initialize with some data!!!" << endl;
         currentData.expand(4,4);
-	currentData.setUsedRows( 4 );
-	currentData.setUsedCols( 4 );
+        currentData.setUsedRows( 4 );
+        currentData.setUsedCols( 4 );
         for (row = 0;row < 4;row++)
             for (col = 0;col < 4;col++) {
                 KoChart::Value t( (double)row+col );
@@ -327,24 +327,169 @@ void KChartPart::saveConfig( KConfig *conf )
 
 QDomDocument KChartPart::saveXML()
 {
-    return _params->saveXML( false );
+    kdDebug(35001) << "kchart saveXML called" << endl;
+    QDomDocument doc = _params->saveXML( false );
+
+    // save the data values
+    QDomElement docRoot = doc.documentElement();
+    QDomElement data = doc.createElement( "data" );
+    docRoot.appendChild( data );
+
+    int cols = currentData.cols();
+    int rows = currentData.rows();
+    data.setAttribute( "cols", cols );
+    data.setAttribute( "rows", rows );
+    kdDebug(35001) << "      writing  " << cols << "," << rows << "  (cols,rows)." << endl;
+
+    for (int i=0; i!=rows; ++i) {
+        for (int j=0; j!=cols; ++j) {
+            QDomElement e = doc.createElement( "cell" );
+            data.appendChild( e );
+            QString valType;
+            KoChart::Value & cell( currentData.cell( i,j ) );
+            switch ( cell.valueType() ) {
+                case KoChart::Value::NoValue: valType = "NoValue";
+                              break;
+                case KoChart::Value::String:  valType = "String";
+                              break;
+                case KoChart::Value::Double:  valType = "Double";
+                              break;
+                case KoChart::Value::DateTime:valType = "DateTime";
+                              break;
+                default: {
+                    valType = "(unknown)";
+                    kdDebug(35001) << "ERROR: cell " << i << "," << j << " has unknown type." << endl;
+                }
+            }
+            e.setAttribute( "valType", valType );
+            kdDebug(35001) << "      cell " << i << "," << j << " saved with type '" << valType << "'." << endl;
+            switch ( cell.valueType() ) {
+                case KoChart::Value::String:  e.setAttribute( "value", cell.stringValue() );
+                              break;
+                case KoChart::Value::Double:  e.setAttribute( "value", QString::number( cell.doubleValue() ) );
+                              break;
+                case KoChart::Value::DateTime:e.setAttribute( "value", "" );
+                              break;
+                default: {
+                    e.setAttribute( "value", "" );
+                    if( KoChart::Value::NoValue != cell.valueType() )
+                        kdDebug(35001) << "ERROR: cell " << i << "," << j << " has unknown type." << endl;
+                }
+            }
+        }
+    }
+
+    return doc;
 }
 
 
 bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 {
+    kdDebug(35001) << "kchart loadXML called" << endl;
     bool result=_params->loadXML( doc );
     if(!result)
     {
         //try to load old file format
         result=loadOldXML( doc );
     }
+    if( result )
+        result = loadData( doc, currentData );
     return result;
 }
 
+
+bool KChartPart::loadData( const QDomDocument& doc, KoChart::Data& currentData )
+{
+    kdDebug(35001) << "kchart loadData called" << endl;
+
+    QDomElement chart = doc.documentElement();
+    QDomElement data = chart.namedItem("data").toElement();
+    bool ok;
+    int cols = data.attribute("cols").toInt(&ok);
+    kdDebug(35001) << "cols readed as:" << cols << endl;
+    if( !ok ){
+         return false;
+    }
+    int rows = data.attribute("rows").toInt(&ok);
+    if( !ok ){
+         return false;
+    }
+    kdDebug(35001) << rows << " x " << cols << endl;
+    currentData.expand(rows, cols);
+    kdDebug(35001) << "Expanded!" << endl;
+    QDomNode n = data.firstChild();
+    //QArray<int> tmpExp(rows*cols);
+    //QArray<bool> tmpMissing(rows*cols);
+
+    for (int i=0; i!=rows; i++) {
+        for (int j=0; j!=cols; j++) {
+            if (n.isNull()) {
+                kdDebug(35001) << "Some problems, there is less data than it should be!" << endl;
+                break;
+            }
+            QDomElement e = n.toElement();
+            if ( !e.isNull() && e.tagName() == "cell" ) {
+                // add the cell to the corresponding place...
+                KoChart::Value t;
+                if( e.hasAttribute("value") && e.hasAttribute("valType") ) {
+                    QString valueType = e.attribute("valType").lower();
+                    if( "string" == valueType ) {
+                        QString strVal = e.attribute("value");
+                        t = KoChart::Value( strVal );
+                    }
+                    else if( "double" == valueType ) {
+                        bool bOk;
+                        double val = e.attribute("value").toDouble(&ok);
+                        if( !bOk )
+                            val = 0.0;
+                        t = KoChart::Value( val );
+                    /*
+                    } else if( "datetime" == valueType ) {
+                        t = . . .
+                    */
+                    } else {
+                        t.clearValue();
+                        if( "novalue" != valueType )
+                            kdDebug(35001) << "ERROR: cell " << i << "," << j << " has unknown type '" << valueType << "'." << endl;
+                    }
+                } else
+                    t.clearValue();
+
+                currentData.setCell(i,j, t );
+
+		/*
+                if ( e.hasAttribute( "hide" ) ) {
+                    tmpMissing[cols*j+i] = (bool)e.attribute("hide").toInt( &ok );
+                    if( !ok )
+                        return false;
+                } else {
+                    tmpMissing[cols*j+i] = false;
+                }
+                if( e.hasAttribute( "dist" ) ) {
+                    tmpExp[cols*j+i] = e.attribute("dist").toInt( &ok );
+                    if ( !ok )
+                        return false;
+                } else {
+                    tmpExp[cols*j+i] = 0;
+                }
+		*/
+
+                n = n.nextSibling();
+            }
+        }
+    }
+    /*
+    _params->missing=tmpMissing;
+    _params->explode=tmpExp;
+    */
+    return true;
+}
+
+
+
 bool KChartPart::loadOldXML( const QDomDocument& doc )
 {
-    kdDebug(35001) << "kchart loadXML called" << endl;
+    kdDebug(35001) << "kchart loadOldXML called" << endl;
     // <spreadsheet>
     //  m_bLoading = true;
     if ( doc.doctype().name() != "chart" ) {
@@ -412,6 +557,8 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
     _params->missing=tmpMissing;
     _params->explode=tmpExp;
 #endif
+
+
 /*
   enum KChartType {
   KCHARTTYPE_LINE,
