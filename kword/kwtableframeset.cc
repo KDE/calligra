@@ -2413,22 +2413,20 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                     KWTableFrameSet* tableFrame=tableFrameSet();
                     int row=cell->m_row-1;
                     int col=cell->m_col;
-                    do {
-                        if(row < 0) {
-                            col--;
-                            row=tableFrame->getRows()-1;
-                        }
-                        if(col < 0) {
-                            col=tableFrame->getCols()-1;
-                            row=tableFrame->getRows()-1;
-                        }
-                        fs=tableFrame->getCell(row,col);
-                        if(fs && fs->m_row != static_cast<unsigned int>(row)) {
-                            col=fs->m_col -1;
-                            fs=0;
-                        }
-                    } while(fs==0);
-
+                    if (row < 0) {  // Wrap at top of table
+                        col--; // Goes to column on the left
+                        row=tableFrame->getRows()-1;
+                    }
+                    if (col < 0) { // It was the first column
+                        // Maybe exit the table instead?
+                        col=tableFrame->getCols()-1;
+                        row=tableFrame->getRows()-1;
+                    }
+                    fs=tableFrame->getCell(row,col);
+                    // Not needed. getCell gives us the right one already
+                    //if (fs && fs->m_row != static_cast<unsigned int>(row)) { // Merged cell
+                    //    fs=tableFrame->getCell( row - fs->m_rows + 1, col );
+                    //}
                 }
             }
             break;
@@ -2439,22 +2437,18 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                     KWTableFrameSet* tableFrame=tableFrameSet();
                     unsigned int row=cell->m_row+cell->m_rows;
                     unsigned int col=cell->m_col;
-                    do {
-                        if(row >= tableFrame->getRows()) {
-                            row=0;
-                            col++;
-                        }
-                        if(col >= tableFrame->getCols()) {
-                            col=0;
-                            row=0;
-                        }
-                        fs=tableFrame->getCell(row,col);
-                        if(fs && fs->m_row != row) {
-                            col+=fs->m_cols;
-                            fs=0;
-                        }
-                    } while(fs==0);
-
+                    if(row >= tableFrame->getRows()) { // Wrap at bottom of table
+                        row=0;
+                        col++; // Go to next column
+                    }
+                    if(col >= tableFrame->getCols()) { // It was the last one
+                        // Maybe exit the table instead?
+                        col=0;
+                        row=0;
+                    }
+                    fs=tableFrame->getCell(row,col);
+                    Q_ASSERT( fs );
+                    Q_ASSERT( fs->m_row == row ); // We can't end up in the middle of a merged cell here.
                 }
             }
             break;
@@ -2465,22 +2459,21 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 {
                     KWTableFrameSet* tableFrame=tableFrameSet();
                     int row=cell->m_row;
-                    int col=cell->m_col-cell->m_cols;
-                    do {
-                        if(col < 0) {
-                            col= (int)tableFrame->getCols() -1;
-                            row--;
-                        }
-                        if(row <0) {
-                            col= (int)tableFrame->getCols() -1;
-                            row= (int)tableFrame->getRows() -1;
-                        }
-                        fs=tableFrame->getCell(row,col);
-                        if(fs && (int)fs->m_row != row) {
-                            col+=fs->m_cols;
-                            fs=0;
-                        }
-                    } while(fs==0);
+                    int col=cell->m_col-1;
+                    if(col < 0) { // Wrap at first column
+                        col = (int)tableFrame->getCols()-1;
+                        row--; // Go up
+                    }
+                    if(row < 0) { // It was the first row
+                        // Maybe exit the table instead?
+                        col = (int)tableFrame->getCols()-1;
+                        row = (int)tableFrame->getRows()-1;
+                    }
+                    fs=tableFrame->getCell(row,col);
+                    // Not needed. getCell gives us the right one already
+                    //if(fs && (int)fs->m_col != col) { // Merged cell
+                    //    fs=tableFrame->getCell( row, col - fs->m_cols + 1 );
+                    //}
                 }
             }
             break;
@@ -2490,23 +2483,20 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 if(!cur->parag()->next()&&cur->index()==cur->parag()->string()->length()-1)
                 {
                     KWTableFrameSet* tableFrame=tableFrameSet();
-                    uint row=cell->m_row;
-                    uint col=cell->m_col+cell->m_cols;
-                    do {
-                        if(col >= tableFrame->getCols()) {
-                            col= 0;
-                            row++;
-                        }
-                        if(row >= tableFrame->getRows()) {
-                            col= 0;
-                            row= 0;
-                        }
-                        fs=tableFrame->getCell(row,col);
-                        if(fs && fs->m_row != row) {
-                            col+=fs->m_cols;
-                            fs=0;
-                        }
-                    } while(fs==0);
+                    unsigned int row=cell->m_row;
+                    unsigned int col=cell->m_col+cell->m_cols;
+                    if(col >= tableFrame->getCols()) { // Wrap after last column
+                        col = 0;
+                        row++; // Go down one row
+                    }
+                    if(row >= tableFrame->getRows()) { // It was the last row
+                        // Maybe exit the table instead?
+                        col = 0;
+                        row = 0;
+                    }
+                    fs=tableFrame->getCell(row,col);
+                    Q_ASSERT( fs );
+                    Q_ASSERT( fs->m_row == row ); // We can't end up in the middle of a merged cell here.
                 }
             }
             break;
