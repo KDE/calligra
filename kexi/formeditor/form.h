@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,6 +43,7 @@ class ObjectTree;
 class ObjectTreeItem;
 class ConnectionBuffer;
 typedef QPtrList<ObjectTreeItem> ObjectTreeList;
+typedef QPtrListIterator<ObjectTreeItem> ObjectTreeListIterator;
 typedef QPtrList<QWidget> WidgetList;
 
 //! Base (virtual) class for all form widgets
@@ -242,9 +243,11 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		void addCommand(KCommand *command, bool execute);
 
 		/*! \return A pointer to this Form tabstops list : it contains all the widget
-		that can have focus ( ie no labels, etc)
-		    in the order of the tabs.*/
+		 that can have focus ( ie no labels, etc)
+		 in the order of the tabs.*/
 		ObjectTreeList* tabStops() const { return &(d->tabstops); }
+
+		inline ObjectTreeListIterator tabStopsIterator() const { return ObjectTreeListIterator(d->tabstops); }
 
 		/*! Adds the widget at the end of tabstops list. Called on widget creation. */
 		void addWidgetToTabStops(ObjectTreeItem *c);

@@ -46,7 +46,7 @@
    <Separator/>
    <Action name="library_widget_KLineEdit"/>
    <Action name="library_widget_QLabel"/>
-   <Action name="library_widget_MyPicLabel"/>
+   <Action name="library_widget_KexiPictureLabel"/>
    <Action name="library_widget_KPushButton"/>
    <Action name="library_widget_QRadioButton"/>
    <Action name="library_widget_QCheckBox"/>
@@ -110,7 +110,7 @@
    <Separator/>
    <Action name="library_widget_KLineEdit"/>
    <Action name="library_widget_QLabel"/>
-   <Action name="library_widget_MyPicLabel"/>
+   <Action name="library_widget_KexiPictureLabel"/>
    <Action name="library_widget_KPushButton"/>
    <Action name="library_widget_QRadioButton"/>
    <Action name="library_widget_QCheckBox"/>

@@ -210,8 +210,8 @@ WidgetLibrary::createActions(KActionCollection *parent,  QObject *receiver, cons
 	QAsciiDictIterator<WidgetInfo> it(d->widgets);
 	for(; it.current(); ++it)
 	{
+//		kdDebug() << "WidgetLibrary::createActions():" << it.current()->className() << endl;
 		LibActionWidget *a = new LibActionWidget(it.current(), parent);
-//		kdDebug() << "WidgetLibrary::createActions(): action " << a << " added" << endl;
 		connect(a, SIGNAL(prepareInsert(const QString &)), receiver, slot);
 		actions.append(a);
 	}

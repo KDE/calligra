@@ -133,7 +133,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wPixLabel->setPixmap("pixmaplabel");
 	wPixLabel->setClassName("KexiPictureLabel");
 	wPixLabel->setName(i18n("Picture Label"));
-	wPixLabel->addAlternateClassName("QLabel");
+//! @todo Qt designer compatibility: maybe use this class when QLabel has a pixmap set...?
+	//wPixLabel->addAlternateClassName("QLabel");
 	wPixLabel->setSavingName("KexiPictureLabel");
 	wPixLabel->setNamePrefix(i18n("Widget name (see above)", "PictureLabel"));
 	wPixLabel->setDescription(i18n("A widget to display pixmaps"));
@@ -303,7 +304,7 @@ StdWidgetFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesi
 	QString text = container->form()->manager()->lib()->textForWidgetName(n, c);
 
 	if(c == "QLabel")
-		w = new QLabel(/*i18n("Label")*/text, p, n);
+		w = new QLabel(text, p, n);
 	else if(c == "KexiPictureLabel")
 		w = new KexiPictureLabel(DesktopIcon("image"), p, n);
 

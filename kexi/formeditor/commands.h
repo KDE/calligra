@@ -27,7 +27,6 @@
 
 #include <kcommand.h>
 
-typedef QPtrList<QWidget> WidgetList;
 class QWidget;
 class QRect;
 class QPoint;
@@ -37,6 +36,7 @@ class QDomDocument;
 
 namespace KFormDesigner {
 
+typedef QPtrList<QWidget> WidgetList;
 class Container;
 class Form;
 

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -171,11 +172,11 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 		form->autoAssignTabStops();
 	QDomElement tabStops = domDoc.createElement("tabstops");
 	uiElement.appendChild(tabStops);
-	for(ObjectTreeItem *it = form->tabStops()->first(); it; it = form->tabStops()->next())
+	for(ObjectTreeListIterator it( form->tabStopsIterator() ); it.current(); ++it)
 	{
 		QDomElement tabstop = domDoc.createElement("tabstop");
 		tabStops.appendChild(tabstop);
-		QDomText tabStopText = domDoc.createTextNode(it->name());
+		QDomText tabStopText = domDoc.createTextNode(it.current()->name());
 		tabstop.appendChild(tabStopText);
 	}
 
@@ -302,6 +303,8 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 		return 1;
 
 	int i = 0;
+	uint itemsNotFound = 0;
+//	ObjectTreeList newTabStops;
 	for(QDomNode n = tabStops.firstChild(); !n.isNull(); n = n.nextSibling(), i++)
 	{
 		QString name = n.toElement().text();
@@ -311,14 +314,18 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 			kdDebug() << "FormIO::loadFormFromDom ERROR : no ObjectTreeItem " << endl;
 			continue;
 		}
-		int index = form->tabStops()->findRef(item);
-		if((index != -1) && (index != i)) // the widget is not in the same place, so we move it
+		const int index = form->tabStops()->findRef(item);
+		/* Compute a real destination index: "a number of not found items so far". */
+		const int realIndex = i - itemsNotFound;
+		if((index != -1) && (index != realIndex)) // the widget is not in the same place, so we move it
 		{
 			form->tabStops()->remove(item);
-			form->tabStops()->insert(i, item);
+			form->tabStops()->insert(realIndex, item);
 		}
-		if(index == -1)
-			kdDebug() << "FormIO: error the item is not in list " << endl;
+		if(index == -1) {
+			itemsNotFound++;
+			kdDebug() << "FormIO: item '" << name << "' not in list" << endl;
+		}
 	}
 
 	// Load the form connections

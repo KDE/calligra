@@ -37,6 +37,7 @@ class ObjectTreeItem;
 class Container;
 class EventEater;
 typedef QPtrList<ObjectTreeItem> ObjectTreeList;
+typedef QPtrListIterator<ObjectTreeItem> ObjectTreeListIterator;
 typedef QDict<ObjectTreeItem> ObjectTreeDict;
 typedef QDictIterator<ObjectTreeItem> ObjectTreeDictIterator;
 typedef QMap<QString, QVariant> QVariantMap;
@@ -134,8 +135,9 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 		this dict, iterate on a copy. */
 		const ObjectTreeDict*	dict() { return &m_treeDict; }
 
-		void		addItem(ObjectTreeItem *parent, ObjectTreeItem *c);
-		void		removeItem(const QString &name);
+		void addItem(ObjectTreeItem *parent, ObjectTreeItem *c);
+		void removeItem(const QString &name);
+		void removeItem(ObjectTreeItem *c);
 
 		/*! Generates a new name with \a base as beginning (eg if base is "QLineEdit", it returns "QLineEdit1"). */
 		QString		genName(const QString &base);

@@ -188,14 +188,19 @@ void
 ObjectTree::removeItem(const QString &name)
 {
 	ObjectTreeItem *c = lookup(name);
+	removeItem(c);
+}
 
+void
+ObjectTree::removeItem(ObjectTreeItem *c)
+{
 	if (m_container && m_container->form())
 		m_container->form()->emitChildRemoved(c);
 
 	for(ObjectTreeItem *it = c->children()->first(); it; it = c->children()->next())
 		removeItem(it->name());
 
-	m_treeDict.remove(name);
+	m_treeDict.remove(c->name());
 	c->parent()->removeChild(c);
 	delete c;
 }
@@ -221,8 +226,11 @@ ObjectTree::genName(const QString &c)
 
 ObjectTree::~ObjectTree()
 {
-	for(ObjectTreeItem *it = children()->first(); it; it = children()->next())
-		removeItem(it->name());
+//	for(ObjectTreeItem *it = children()->first(); it; it = children()->next())
+//		removeItem(it->name());
+	while (children()->first()) {
+		removeItem(children()->first()->name());
+	}
 }
 
 }

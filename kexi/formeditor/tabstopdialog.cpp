@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -86,8 +87,10 @@ int TabStopDialog::exec(Form *form)
 
 	if(form->autoTabStops())
 		form->autoAssignTabStops();
-	for(ObjectTreeItem *it = form->tabStops()->last(); it; it = form->tabStops()->prev())
-		new ObjectTreeViewItem(m_treeview, it);
+	ObjectTreeListIterator it( form->tabStopsIterator() );
+	it.toLast();
+	for(;it.current(); --it)
+		new ObjectTreeViewItem(m_treeview, it.current());
 
 	m_check->setChecked(form->autoTabStops());
 

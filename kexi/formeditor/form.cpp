@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -412,8 +412,7 @@ Form::addWidgetToTabStops(ObjectTreeItem *c)
 			}
 		}
 	}
-
-	if(d->tabstops.findRef(c) == -1) // not yet in the list
+	else if(d->tabstops.findRef(c) == -1) // not yet in the list
 		d->tabstops.append(c);
 }
 
@@ -449,8 +448,10 @@ Form::autoAssignTabStops()
 
 		for(WidgetListIterator it2(hlist); it2.current() != 0; ++it2) {
 			ObjectTreeItem *tree = d->topTree->lookup(it2.current()->name());
-			if(tree)
+			if(tree) {
+				kdDebug() << "Form::autoAssignTabStops() adding " << tree->name() << endl;
 				d->tabstops.append(tree);
+			}
 		}
 
 		--it;

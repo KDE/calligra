@@ -41,7 +41,7 @@
 #include "commands.h"
 #include "events.h"
 
-namespace KFormDesigner {
+using namespace KFormDesigner;
 
 EventEater::EventEater(QWidget *widget, Container *container)
  : QObject(container)
@@ -120,6 +120,11 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 	}
 
 	connect(container, SIGNAL(destroyed()), this, SLOT(widgetDeleted()));
+}
+
+Container::~Container()
+{
+	kdDebug() << " Container being deleted this == " << name() << endl;
 }
 
 void
@@ -1011,13 +1016,6 @@ Container::dragWidgets(QMouseEvent *mev)
 			w->move(tmpx,tmpy);
 	}*/
 	m_state = MovingWidget;
-}
-
-Container::~Container()
-{
-	kdDebug() << " Container being deleted this == " << name() << endl;
-}
-
 }
 
 #include "container.moc"

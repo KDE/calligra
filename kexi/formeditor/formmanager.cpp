@@ -736,11 +736,10 @@ FormManager::createContextMenu(QWidget *w, Container *container/*, bool enableRe
 		sub->insertSeparator();
 
 		// We add al the widgets that can have focus
-		ObjectTreeList *list = container->form()->tabStops();
-		for(ObjectTreeItem *item = list->first(); item; item = list->next())
+		for(ObjectTreeListIterator it( container->form()->tabStopsIterator() ); it.current(); ++it)
 		{
-			int index = sub->insertItem(item->name());
-			if(item->widget() == buddy)
+			int index = sub->insertItem(it.current()->name());
+			if(it.current()->widget() == buddy)
 				sub->setItemChecked(index, true);
 		}
 
@@ -920,7 +919,8 @@ FormManager::editTabOrder()
 {
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
-	TabStopDialog dlg(m_active->widget()->topLevelWidget());
+	QWidget *topLevel = m_active->widget()->topLevelWidget();
+	TabStopDialog dlg(topLevel);
 	const bool oldAutoTabStops = m_active->autoTabStops();
 	if (dlg.exec(m_active) == QDialog::Accepted) {
 		//inform about changing "autoTabStop" setting
