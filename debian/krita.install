@@ -1,0 +1,14 @@
+usr/bin/krita
+usr/lib/kde3/libkrita*
+usr/lib/krita*
+usr/lib/libkritapart.*
+usr/share/applnk/Office/krita.desktop
+usr/share/apps/krayon/plugins/example.kisplugin
+usr/share/apps/krita/krita.rc
+usr/share/apps/krita/krita_readonly.rc
+usr/share/apps/krita/kpartplugins/scan-krita.rc
+usr/share/apps/krita/pics/*
+usr/share/apps/krita/patterns/*
+usr/share/apps/krita/images/*
+usr/share/apps/krita/brushes/*
+usr/share/apps/krita/dtd/krita.dtd

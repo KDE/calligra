@@ -11,6 +11,8 @@ usr/lib/libkopainter.so
 usr/lib/libkopainter.la
 usr/lib/libkoscript.so
 usr/lib/libkoscript.la
+usr/lib/libkospell.la
+usr/lib/libkospell.so
 usr/lib/libkotext.so
 usr/lib/libkotext.la
 usr/lib/libkstore.so
@@ -21,3 +23,9 @@ usr/lib/libkwmailmerge_interface.so
 usr/lib/libkwmailmerge_interface.la
 usr/lib/libkwmf.so
 usr/lib/libkwmf.la
+usr/lib/libkowmf.so
+usr/lib/libkowmf.la
+usr/lib/libkisp_example.so
+usr/lib/libkisp_example.la
+usr/lib/libkudesignercore.so
+usr/lib/libkudesignercore.la

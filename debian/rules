@@ -27,6 +27,12 @@ endif
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	INSTALL_PROGRAM += -s
 endif
+# These options are for distributed compiling
+# DEB_CONCURRENCY_LEVEL must always be >= 1
+DEB_CONCURRENCY_LEVEL   ?= 1
+do_parallel = -j$(DEB_CONCURRENCY_LEVEL)
+DEB_DISTCC_HOSTS        ?= localhost
+export DISTCC_HOSTS = $(DEB_DISTCC_HOSTS)
 
 ifeq ($(DEB_BUILD_GNU_TYPE),i386-linux)
   # Uncomment the following 2 lines to enable i686 optimziation
@@ -76,7 +82,7 @@ build-stamp: configure-stamp
 	dh_testdir
 
 	cd $(objdir) && \
-	$(MAKE)
+	$(MAKE) $(do_parallel)
 
 	touch build-stamp
 
@@ -155,12 +161,6 @@ install: build
 	  fi; \
 	done
 
-	# Fix the kivio straight_connector.ksp mess.
-	# This *must* come after all dh_installs have been done.
-	mv debian/kivio/usr/lib/kde3/straight_connector.ksp \
-	  debian/kivio/usr/lib/kde3/straight_connector_ksp.so
-	chmod a-x debian/kivio/usr/lib/kde3/straight_connector_ksp.so
-
 # This single target is used to build all the packages, all at once, or
 # one at a time. So keep in mind: any options passed to commands here will
 # affect _all_ packages. Anything you want to only affect one package
@@ -174,9 +174,9 @@ binary-common:
 	  case "$$pkg" in \
 	    kivio ) \
 	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/CHANGELOG ;; \
-	    kugar ) \
+	    kugar | krita ) \
 	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/ChangeLog ;; \
-	    kchart | kpresenter | kspread | kword ) \
+	    kchart | kpresenter | kspread | kword | kexi ) \
 	      DH_OPTIONS='' dh_installchangelogs -p$$pkg $$pkg/CHANGES ;; \
 	    * ) \
 	      DH_OPTIONS='' dh_installchangelogs -p$$pkg ;; \

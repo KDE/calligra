@@ -1,16 +1,16 @@
 usr/bin/kword
+usr/lib/kde3/kwmailmerge*
+usr/lib/kde3/libkwordpart.*
 usr/lib/kword.*
 usr/lib/libkwmailmerge_interface.so.*
-usr/lib/kde3/libkwordpart.*
-usr/lib/kde3/kwmailmerge*
 usr/share/applnk/Office/kword.desktop
 usr/share/apps/kword
 usr/share/doc/kde/HTML/en/kword/*.bz2
 usr/share/doc/kde/HTML/en/kword/*.docbook
 usr/share/doc/kde/HTML/en/kword/*.png
 usr/share/doc/kde/HTML/en/kword/common
-usr/share/icons/hicolor/16x16/apps/kword.png
-usr/share/icons/hicolor/32x32/apps/kword.png
-usr/share/icons/hicolor/48x48/apps/kword.png
+usr/share/icons/crystalsvg/16x16/apps/kword.png
+usr/share/icons/crystalsvg/32x32/apps/kword.png
+usr/share/icons/crystalsvg/48x48/apps/kword.png
 usr/share/services/kwserialletter*
 ../kword.xpm usr/share/pixmaps
