@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
 -                                                                             -
--   Filter API HOWTO   -   last changed on 991031                             -
+-   Filter API HOWTO   -   last changed on 991218                             -
 -                                                                             -
 -------------------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ Basically you have to...
     and asciiimport_factory.h (i.e. all the "ASCII", "Ascii", and "ascii"
     stuff has to be replaced by "YOURFILTER", "YourFilter", and "yourfilter" :)
 ... derive your "main-filter-class" from KoFilter. Look at asciiimport.cc and
-    asciiimport.h how this is done. Don't forget that you have to include or
+    asciiimport.h how this is done. Don't forget that you have to include _or_ 
     link the moc file. Otherwise the filter won't work! (the classname is
     needed during "incarnation" - all this info is stored in those nifty
     little moc files :) ).
