@@ -35,7 +35,7 @@ const bool HTMLExport::filter(const QCString &fileIn, const QCString &fileOut,
         return false;
 
     KoTarStore in=KoTarStore(QString(fileIn), KoStore::Read);
-    if(!in.open("root", "")) {
+    if(!in.open("root")) {
         kdError(30503) << "Unable to open input file!" << endl;
         in.close();
         return false;
