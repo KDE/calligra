@@ -23,6 +23,7 @@
 #include <klocale.h>
 #include <koUnit.h>
 #include <vglobal.h>
+#include <vdocument.h>
 #include <qdom.h>
 
 VEllipse::VEllipse( VObject* parent, VState state ) : VComposite( parent, state )
@@ -123,6 +124,12 @@ VEllipse::name() const
 void
 VEllipse::save( QDomElement& element ) const
 {
+	if( document()->saveAsPath() )
+	{
+		VComposite::save( element );
+		return;
+	}
+
 	if( state() != deleted )
 	{
 		QDomElement me = element.ownerDocument().createElement( "ELLIPSE" );
@@ -155,6 +162,9 @@ VEllipse::save( QDomElement& element ) const
 void
 VEllipse::load( const QDomElement& element )
 {
+	if( document()->saveAsPath() )
+		return VComposite::load( element );
+
 	setState( normal );
 
 	QDomNodeList list = element.childNodes();

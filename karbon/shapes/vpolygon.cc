@@ -26,6 +26,7 @@
 #include "vtransformcmd.h"
 #include <klocale.h>
 #include <koUnit.h>
+#include <vdocument.h>
 
 VPolygon::VPolygon( VObject* parent, VState state ) 
 	: VComposite( parent, state )
@@ -78,6 +79,12 @@ VPolygon::name() const
 void
 VPolygon::save( QDomElement& element ) const
 {
+	if( document()->saveAsPath() )
+	{
+		VComposite::save( element );
+		return;
+	}
+
 	if( state() != deleted )
 	{
 		QDomElement me = element.ownerDocument().createElement( "POLYGON" );
@@ -100,6 +107,9 @@ VPolygon::save( QDomElement& element ) const
 void
 VPolygon::load( const QDomElement& element )
 {
+	if( document()->saveAsPath() )
+		return VComposite::load( element );
+
 	setState( normal );
 
 	QDomNodeList list = element.childNodes();

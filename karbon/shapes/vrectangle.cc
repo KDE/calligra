@@ -93,7 +93,10 @@ void
 VRectangle::save( QDomElement& element ) const
 {
 	if( document()->saveAsPath() )
-		return VComposite::save( element );
+	{
+		VComposite::save( element );
+		return;
+	}
 
 	if( state() != deleted )
 	{

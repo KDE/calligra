@@ -28,6 +28,7 @@
 #include "vtransformcmd.h"
 #include <klocale.h>
 #include <koUnit.h>
+#include <vdocument.h>
 
 VStar::VStar( VObject* parent, VState state )
 	: VComposite( parent, state )
@@ -266,6 +267,12 @@ VStar::name() const
 void
 VStar::save( QDomElement& element ) const
 {
+	if( document()->saveAsPath() )
+	{
+		VComposite::save( element );
+		return;
+	}
+
 	if( state() != deleted )
 	{
 		QDomElement me = element.ownerDocument().createElement( "STAR" );
@@ -294,6 +301,9 @@ VStar::save( QDomElement& element ) const
 void
 VStar::load( const QDomElement& element )
 {
+	if( document()->saveAsPath() )
+		return VComposite::load( element );
+
 	setState( normal );
 
 	QDomNodeList list = element.childNodes();

@@ -28,6 +28,7 @@
 #include "vtransformcmd.h"
 #include <klocale.h>
 #include <koUnit.h>
+#include <vdocument.h>
 
 VSpiral::VSpiral( VObject* parent, VState state )
 	: VComposite( parent, state )
@@ -109,6 +110,12 @@ VSpiral::name() const
 void
 VSpiral::save( QDomElement& element ) const
 {
+	if( document()->saveAsPath() )
+	{
+		VComposite::save( element );
+		return;
+	}
+
 	if( state() != deleted )
 	{
 		QDomElement me = element.ownerDocument().createElement( "SPIRAL" );
@@ -136,6 +143,9 @@ VSpiral::save( QDomElement& element ) const
 void
 VSpiral::load( const QDomElement& element )
 {
+	if( document()->saveAsPath() )
+		return VComposite::load( element );
+
 	setState( normal );
 
 	QDomNodeList list = element.childNodes();

@@ -24,6 +24,7 @@
 
 #include "vglobal.h"
 #include <klocale.h>
+#include <vdocument.h>
 
 VPolyline::VPolyline( VObject* parent, VState state )
 	: VComposite( parent, state )
@@ -74,6 +75,12 @@ VPolyline::name() const
 void
 VPolyline::save( QDomElement& element ) const
 {
+	if( document()->saveAsPath() )
+	{
+		VComposite::save( element );
+		return;
+	}
+
 	if( state() != deleted )
 	{
 		QDomElement me = element.ownerDocument().createElement( "POLYLINE" );
@@ -90,6 +97,9 @@ VPolyline::save( QDomElement& element ) const
 void
 VPolyline::load( const QDomElement& element )
 {
+	if( document()->saveAsPath() )
+		return VComposite::load( element );
+
 	setState( normal );
 
 	QDomNodeList list = element.childNodes();

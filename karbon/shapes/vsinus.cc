@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <koUnit.h>
 #include <qdom.h>
+#include <vdocument.h>
 
 VSinus::VSinus( VObject* parent, VState state )
 	: VComposite( parent, state )
@@ -138,6 +139,12 @@ VSinus::name() const
 void
 VSinus::save( QDomElement& element ) const
 {
+	if( document()->saveAsPath() )
+	{
+		VComposite::save( element );
+		return;
+	}
+
 	if( state() != deleted )
 	{
 		QDomElement me = element.ownerDocument().createElement( "SINUS" );
@@ -160,6 +167,9 @@ VSinus::save( QDomElement& element ) const
 void
 VSinus::load( const QDomElement& element )
 {
+	if( document()->saveAsPath() )
+		return VComposite::load( element );
+
 	setState( normal );
 
 	QDomNodeList list = element.childNodes();
