@@ -74,7 +74,7 @@ public:
     QString m_templateName;
     QString m_fullTemplateName;
     KoTemplateChooseDia::ReturnType m_returnType;
-    QString m_file;
+    KURL m_file;
 
     QWidget *m_mainwidget;
 
@@ -87,7 +87,7 @@ public:
 
     QTabWidget *m_tabs;
     QDict<MyIconCanvas> canvasDict;
-    QMap<QString, QString> recentFilesMap;
+    QMap<QString, KURL> recentFilesMap;
 };
 
 /******************************************************************/
@@ -251,21 +251,23 @@ void KoTemplateChooseDia::setupDialog()
         // read file list
         QStringList lst;
         int i=1;
-        QString key=QString( "File%1" ).arg( i );
-        QString value=d->m_global->config()->readEntry( key, QString::null );
-        KURL url(value);
-        value=url.isLocalFile() ? url.path() : url.prettyURL();
-        QString squeezed=KStringHandler::csqueeze(value);
-        while( !squeezed.isNull() ) {
-            lst.append( squeezed );
-            d->recentFilesMap.insert(squeezed, value);
-            ++i;
-            key=QString( "File%1" ).arg( i );
+        QString value;
+        do {
+            QString key=QString( "File%1" ).arg( i );
             value=d->m_global->config()->readEntry( key, QString::null );
-            url=value;
-            value=url.isLocalFile() ? url.path() : url.prettyURL();
-            squeezed=KStringHandler::csqueeze(value);
-        }
+            if ( !value.isEmpty() ) {
+                KURL url(value);
+                KURL dir(url);
+                dir.setPath(url.directory());
+                QString dirurl = dir.isLocalFile() ? dir.path() : dir.prettyURL();
+                QString fname = KStringHandler::csqueeze(url.fileName(), 40); // Squeeze the filename as little as possible
+                QString squeezed = KStringHandler::csqueeze(dirurl, 40-fname.length()); // and the dir as much as possible :)
+                squeezed += fname;
+                lst.append( squeezed );
+                d->recentFilesMap.insert(squeezed, url);
+                ++i;
+            }
+        } while ( !value.isEmpty() );
 
         // set file
         if( lst.isEmpty() )
@@ -332,9 +334,9 @@ void KoTemplateChooseDia::openRecent()
     d->m_rbFile->setChecked( false );
     d->m_rbRecent->setChecked( true );
     d->m_rbEmpty->setChecked( false );
-    d->m_file=d->recentFilesMap[d->m_recent->currentText()];
+    d->m_file = d->recentFilesMap[d->m_recent->currentText()];
     enableButtonOK( false ); // because of that async stuff
-    enableButtonOK( KIO::NetAccess::exists( KURL( d->m_file ) ) );
+    enableButtonOK( KIO::NetAccess::exists( d->m_file ) );
 }
 
 /*================================================================*/
@@ -359,8 +361,8 @@ void KoTemplateChooseDia::chooseFile()
 
     // Use dir from currently selected file
     QString dir = QString::null;
-    if ( QFile::exists( d->m_file ) )
-        dir = QFileInfo( d->m_file ).absFilePath();
+    if ( d->m_file.isLocalFile() && QFile::exists( d->m_file.path() ) )
+        dir = QFileInfo( d->m_file.path() ).absFilePath();
 
     KFileDialog *dialog=new KFileDialog(dir, QString::null, 0L, "file dialog", true);
     dialog->setCaption( i18n("Open document") );
@@ -394,10 +396,7 @@ void KoTemplateChooseDia::chooseFile()
 
     if ( ok )
     {
-        if (local)
-            d->m_file=filename;
-        else
-            d->m_file=url;
+        d->m_file = u;
         slotOk();
     }
 }
@@ -433,7 +432,7 @@ void KoTemplateChooseDia::ok() {
     }
     else if ( d->m_dialogType!=OnlyTemplates && (d->m_rbFile->isChecked() || d->m_rbRecent->isChecked()) ) {
         d->m_returnType = File;
-        d->m_fullTemplateName = d->m_templateName = d->m_file;
+        d->m_fullTemplateName = d->m_templateName = d->m_file.isLocalFile() ? d->m_file.path() : d->m_file.url();
     }
     else if ( d->m_dialogType!=OnlyTemplates && d->m_rbEmpty->isChecked() )
         d->m_returnType = Empty;
