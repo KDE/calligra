@@ -20,7 +20,6 @@
 #include <qdom.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
-#include <qdatetime.h>
 #include <qregexp.h>
 
 #include <koPoint.h>
@@ -386,7 +385,7 @@ VComposite::load( const QDomElement& element )
 void
 VComposite::loadSvgPath( const QString &d )
 {
-	QTime s;s.start();
+	//QTime s;s.start();
 	parseSVG( d, true );
 	//kdDebug() << "Parsing time : " << s.elapsed() << endl;
 }

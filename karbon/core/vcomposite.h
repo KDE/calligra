@@ -193,16 +193,6 @@ public:
 
 	virtual void accept( VVisitor& visitor );
 
-
-	/// For svg path data parsing.
-	virtual void svgMoveTo( double x1, double y1, bool abs = true );
-	virtual void svgLineTo( double x1, double y1, bool abs = true );
-	virtual void svgCurveToCubic( double x1, double y1, double x2, double y2, double x, double y, bool abs = true );
-	virtual void svgClosePath();
-
-	void loadSvgPath( const QString & );
-	void saveSvgPath( QString & ) const;
-
 	void transform( const QString &transform );
 	static QWMatrix parseTransform( const QString &transform );
 
@@ -213,6 +203,15 @@ public:
 
 protected:
 	void writeTransform( QDomElement & ) const;
+
+	/// For svg path data parsing.
+	virtual void svgMoveTo( double x1, double y1, bool abs = true );
+	virtual void svgLineTo( double x1, double y1, bool abs = true );
+	virtual void svgCurveToCubic( double x1, double y1, double x2, double y2, double x, double y, bool abs = true );
+	virtual void svgClosePath();
+
+	void loadSvgPath( const QString & );
+	void saveSvgPath( QString & ) const;
 
 protected:
 	QWMatrix m_matrix;
