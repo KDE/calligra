@@ -158,8 +158,9 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     int ptSize = m_defaultFont.pointSize();
     if ( ptSize == -1 ) // specified with a pixel size ?
         ptSize = QFontInfo(m_defaultFont).pointSize();
+    //kdDebug() << "KPresenterDoc::KPresenterDoc[2] ptSize=" << ptSize << endl;
     // Ok, this is KPresenter. A default font of 10 makes no sense. Let's go for 20.
-    ptSize = QMIN( 20, ptSize );
+    ptSize = QMAX( 20, ptSize );
 
     // Zoom its size to layout units
     m_defaultFont.setPointSize( m_zoomHandler->ptToLayoutUnitPt( ptSize ) );
