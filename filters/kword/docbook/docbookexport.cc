@@ -2,7 +2,7 @@
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (c) 2000 ID-PRO Deutschland GmbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Wolf-Michael.Bolle@GMX.de>
-   Copyright (C) 2001 Nicolas GOUTTE
+   Copyright (C) 2001, 2002 Nicolas GOUTTE
    Copyright (c) 2001 IABG mbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
@@ -81,23 +81,15 @@ class DocBookWorker : public KWEFBaseWorker
 
         bool doFullDocumentInfo ( const KWEFDocumentInfo & );
 
-        bool doFullDocument ( const QValueList<ParaData> &paraList,
-                              QString                    &storeFileName,
-                              QString                    &exportFileName );
+        bool doFullDocument ( const QValueList<ParaData> &paraList );
 
     private:
-        void ProcessPictureData ( const Picture  &picture,
-                                  QString        &storeFileName,
-                                  QString        &exportFileName );
+        void ProcessPictureData ( const Picture  &picture );
 
-        void ProcessTableData ( const Table &table,
-                                QString     &storeFileName,
-                                QString     &exportFileName );
+        void ProcessTableData ( const Table &table );
 
         void ProcessParagraphData ( const ParaData &para,
-                                    QString         tag,
-                                    QString        &storeFileName,
-                                    QString        &exportFileName );
+                                    QString         tag );
 
         void CloseItemizedList     ( void );
         void CloseEnumeratedList   ( void );
@@ -114,6 +106,7 @@ class DocBookWorker : public KWEFBaseWorker
         QString  outputText;
         DocData  docData;
         QFile   *fileOut;
+        QString  exportFileName;
 };
 
 
@@ -121,22 +114,16 @@ class DocBookWorker : public KWEFBaseWorker
 // copy of the image file into *.sgml.d/pictures/*.* from KoStore
 // pictures/*.*, and creates the necessary DocBook tags for it.
 
-void DocBookWorker::ProcessPictureData ( const Picture  &picture,
-                                         QString        &storeFileName,
-                                         QString        &exportFileName )
+void DocBookWorker::ProcessPictureData ( const Picture  &picture )
 {
-#if 0
-    kdError (30507) << "DEBUG: ProcessPictureData (): picture " << picture.key
-                    << " is stored as " << picture.koStoreName << endl;
-#endif
+    QByteArray byteArray;
+    bool isImage = false;
 
-    KoStore store (storeFileName, KoStore::Read);
+    if ( m_kwordLeader )
+        isImage=m_kwordLeader->loadKoStoreFile ( picture.koStoreName,byteArray );
 
-    if ( store.open (picture.koStoreName) )
+    if ( isImage )
     {
-        QByteArray byteArray = store.read ( store.size () );
-        store.close ();
-
         QFileInfo fileInfo (exportFileName);
         QDir dir ( fileInfo.dirPath () );
         QString subDirName = fileInfo.fileName () + ".d";
@@ -197,8 +184,6 @@ void DocBookWorker::ProcessPictureData ( const Picture  &picture,
     else
     {
         kdError (30507) << "Unable to open KoStore file " << picture.koStoreName << "!" << endl;
-
-        store.close ();
     }
 }
 
@@ -206,9 +191,7 @@ void DocBookWorker::ProcessPictureData ( const Picture  &picture,
 // ProcessTableData () takes the table data and creates the necessary
 // DocBook tags for it.
 
-void DocBookWorker::ProcessTableData ( const Table &table,
-                                       QString     &storeFileName,
-                                       QString     &exportFileName )
+void DocBookWorker::ProcessTableData ( const Table &table )
 {
 #if 0
     kdError (30507) << "DEBUG: ProcessTableData ()" << endl;
@@ -255,7 +238,7 @@ void DocBookWorker::ProcessTableData ( const Table &table,
         tmpBuf = outputText;
         outputText = "";
 
-        doFullDocument ( *(*cellIt).paraList, storeFileName, exportFileName );
+        doFullDocument ( *(*cellIt).paraList );
 
         tableText += "        <ENTRY>" + outputText.replace ( QRegExp ( "\n" ), "" ) + "</ENTRY>\n";
 
@@ -289,9 +272,7 @@ void DocBookWorker::ProcessTableData ( const Table &table,
 // out to the export file.
 
 void DocBookWorker::ProcessParagraphData ( const ParaData &para,
-                                           QString         tag,
-                                           QString        &storeFileName,
-                                           QString        &exportFileName )
+                                           QString         tag )
 {
 #if !INSERT_TABLE_IN_PARA
     QValueList<AnchoredInsert> tmpAnchoredInsertList;
@@ -377,11 +358,11 @@ void DocBookWorker::ProcessParagraphData ( const ParaData &para,
                   switch ( (*formattingIt).frameAnchor.type )
                   {
                       case 2:
-                          ProcessPictureData ( (*formattingIt).frameAnchor.picture, storeFileName, exportFileName );
+                          ProcessPictureData ( (*formattingIt).frameAnchor.picture );
                           break;
 
                       case 6:
-                          ProcessTableData ( (*formattingIt).frameAnchor.table, storeFileName, exportFileName );
+                          ProcessTableData ( (*formattingIt).frameAnchor.table );
                           break;
 
                       default:
@@ -521,9 +502,7 @@ void DocBookWorker::OpenArticleUnlessHead1 ( void )
 }
 
 
-bool DocBookWorker::doFullDocument ( const QValueList<ParaData> &paraList,
-                                     QString                    &storeFileName,
-                                     QString                    &exportFileName )
+bool DocBookWorker::doFullDocument ( const QValueList<ParaData> &paraList )
 {
 #if 0
     kdError (30507) << "doFullDocument () - Begin" << endl;
@@ -556,7 +535,7 @@ bool DocBookWorker::doFullDocument ( const QValueList<ParaData> &paraList,
                         }
 
                         outputText += "<LISTITEM>\n";
-                        ProcessParagraphData (*paraIt, "PARA", storeFileName, exportFileName);
+                        ProcessParagraphData (*paraIt, "PARA" );
                         outputText += "</LISTITEM>\n";
                         break;
 
@@ -575,7 +554,7 @@ bool DocBookWorker::doFullDocument ( const QValueList<ParaData> &paraList,
                         }
 
                         outputText += "<LISTITEM>\n";
-                        ProcessParagraphData (*paraIt, "PARA", storeFileName, exportFileName);
+                        ProcessParagraphData (*paraIt, "PARA" );
                         outputText += "</LISTITEM>\n";
                         break;
 
@@ -593,7 +572,7 @@ bool DocBookWorker::doFullDocument ( const QValueList<ParaData> &paraList,
                         }
 
                         outputText += "<LISTITEM>\n";
-                        ProcessParagraphData (*paraIt, "PARA", storeFileName, exportFileName);
+                        ProcessParagraphData (*paraIt, "PARA" );
                         outputText += "</LISTITEM>\n";
                         break;
 
@@ -601,7 +580,7 @@ bool DocBookWorker::doFullDocument ( const QValueList<ParaData> &paraList,
                         kdError (30507) << "Unknown counter style " << (*paraIt).layout.counter.style << "!" << endl;
                         CloseLists ();
                         OpenArticleUnlessHead1 ();
-                        ProcessParagraphData (*paraIt, "PARA", storeFileName, exportFileName);
+                        ProcessParagraphData (*paraIt, "PARA" );
                 }
 
                 break;
@@ -615,7 +594,7 @@ bool DocBookWorker::doFullDocument ( const QValueList<ParaData> &paraList,
                         outputText += "<CHAPTER> <!-- Begin of Head 1 -->\n";
                         docData.head1 = true;
 
-                        ProcessParagraphData (*paraIt, "TITLE", storeFileName, exportFileName);
+                        ProcessParagraphData (*paraIt, "TITLE" );
                         break;
 
                     case 1:
@@ -624,7 +603,7 @@ bool DocBookWorker::doFullDocument ( const QValueList<ParaData> &paraList,
                         outputText += "<SECTION> <!-- Begin of Head 2 -->\n";
                         docData.head2 = true;
 
-                        ProcessParagraphData (*paraIt, "TITLE", storeFileName, exportFileName);
+                        ProcessParagraphData (*paraIt, "TITLE" );
                         break;
 
                     case 2:
@@ -633,7 +612,7 @@ bool DocBookWorker::doFullDocument ( const QValueList<ParaData> &paraList,
                         outputText += "<SECTION> <!-- Begin of Head 3 -->\n";
                         docData.head3 = true;
 
-                        ProcessParagraphData (*paraIt, "TITLE", storeFileName, exportFileName);
+                        ProcessParagraphData (*paraIt, "TITLE" );
                         break;
 
                     case 3:
@@ -642,14 +621,14 @@ bool DocBookWorker::doFullDocument ( const QValueList<ParaData> &paraList,
                         outputText += "<SECTION> <!-- Begin of Head 4 -->\n";
                         docData.head4 = true;
 
-                        ProcessParagraphData (*paraIt, "TITLE", storeFileName, exportFileName);
+                        ProcessParagraphData (*paraIt, "TITLE" );
                         break;
 
                     default:
                         kdError (30507) << "Unexpected chapter depth " << (*paraIt).layout.counter.depth << "!" << endl;
                         CloseLists ();
                         OpenArticleUnlessHead1 ();
-                        ProcessParagraphData (*paraIt, "PARA", storeFileName, exportFileName);
+                        ProcessParagraphData (*paraIt, "PARA" );
                 }
 
                 break;
@@ -657,7 +636,7 @@ bool DocBookWorker::doFullDocument ( const QValueList<ParaData> &paraList,
             default:
                 CloseLists ();
                 OpenArticleUnlessHead1 ();
-                ProcessParagraphData (*paraIt, "PARA", storeFileName, exportFileName);
+                ProcessParagraphData (*paraIt, "PARA" );
         }
     }
 
@@ -729,6 +708,8 @@ bool DocBookWorker::doOpenFile ( const QString &filenameOut, const QString &to )
         return false;
     }
 
+    exportFileName=filenameOut;
+
     return true;
 }
 
@@ -737,6 +718,7 @@ bool DocBookWorker::doCloseFile ( void )
 {
     if ( !fileOut ) return true;
 
+    // FIXME: the count is wrong, as a QChar can be transformed in many char
     fileOut->writeBlock ( (const char *) outputText.local8Bit (), outputText.length () );
     fileOut->close ();
     delete fileOut;
@@ -810,7 +792,7 @@ KoFilter::ConversionStatus DocBookExport::convert( const QCString& from, const Q
 
     DocBookWorker worker;
     KWEFKWordLeader leader (&worker);
-    leader.filter (m_chain->inputFile(), m_chain->outputFile(), from, to, "");
+    leader.convert (m_chain, from, to);
 
 #if 1
     kdError (30507) << "done here" << endl;
