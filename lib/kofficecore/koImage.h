@@ -3,17 +3,34 @@
 
 #include <qimage.h>
 #include <qshared.h>
-
-#include <kurl.h>
+#include <qstring.h>
+#include <qdatetime.h>
 
 class KoImagePrivate;
 
 class KoImage
 {
 public:
+    struct Key
+    {
+        Key() {}
+
+        Key( const QString &filename, const QDateTime &timestamp )
+            : m_filename( filename ), m_timestamp( timestamp ) {}
+
+        bool operator==( const Key &other ) const
+            { return m_filename == other.m_filename && m_timestamp == other.m_timestamp; }
+
+        bool operator<( const Key &other ) const
+            { return m_filename < other.m_filename && m_timestamp < other.m_timestamp; }
+
+        QString m_filename;
+        QDateTime m_timestamp;
+    };
+
     KoImage();
 
-    KoImage( const QString &key, const QImage &image, const KURL &url = KURL() );
+    KoImage( const Key &key, const QImage &image );
 
     KoImage( const KoImage &other );
 
@@ -25,13 +42,11 @@ public:
 
     QPixmap pixmap() const;
 
-    KURL url() const;
-
-    QString key() const;
+    Key key() const;
 
     bool isValid() const;
 
-    KoImage scaleImage( const QSize &size ) const;
+    KoImage scale( const QSize &size ) const;
 
 private:
     KoImagePrivate *d;
@@ -48,8 +63,7 @@ public:
     bool m_valid;
     QImage m_image;
     KoImage m_originalImage;
-    KURL m_url;
-    QString m_key;
+    KoImage::Key m_key;
     mutable QPixmap m_cachedPixmap;
 };
 
@@ -70,12 +84,7 @@ inline QPixmap KoImage::pixmap() const
     return d->m_cachedPixmap;
 }
 
-inline KURL KoImage::url() const
-{
-    return d->m_url;
-}
-
-inline QString KoImage::key() const
+inline KoImage::Key KoImage::key() const
 {
     return d->m_key;
 }

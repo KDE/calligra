@@ -11,22 +11,22 @@ public:
     KoImageCollection();
     ~KoImageCollection();
 
-    KoImage insertImage( const QString &key, const QImage &image, const KURL &url = KURL() );
+    KoImage insertImage( const KoImage::Key &key, const QImage &image );
 
-    KoImage image( const QString &key );
+    KoImage image( const KoImage::Key &key );
 
     // ### removeme
-    QMap<QString,KoImage> data() const { return m_images; }
+    QMap<KoImage::Key,KoImage> data() const { return m_images; }
 
 private:
-    QMap<QString,KoImage> m_images;
+    QMap<KoImage::Key,KoImage> m_images;
     class KoImageCollectionPrivate;
     KoImageCollectionPrivate *d;
 };
 
-inline KoImage KoImageCollection::image( const QString &key )
+inline KoImage KoImageCollection::image( const KoImage::Key &key )
 {
-    QMap<QString,KoImage>::ConstIterator it = m_images.find( key );
+    QMap<KoImage::Key,KoImage>::ConstIterator it = m_images.find( key );
     if ( it == m_images.end() )
         return KoImage();
 

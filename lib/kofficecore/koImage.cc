@@ -12,11 +12,10 @@ KoImage::KoImage()
     d->m_valid = false;
 }
 
-KoImage::KoImage( const QString &key, const QImage &image, const KURL &url )
+KoImage::KoImage( const Key &key, const QImage &image )
 {
     d = new KoImagePrivate;
     d->m_image = image.copy();
-    d->m_url = url;
     d->m_key = key;
 }
 
@@ -40,7 +39,7 @@ KoImage &KoImage::operator=( const KoImage &_other )
     return *this;
 }
 
-KoImage KoImage::scaleImage( const QSize &size ) const
+KoImage KoImage::scale( const QSize &size ) const
 {
     KoImage originalImage;
 
@@ -54,7 +53,7 @@ KoImage KoImage::scaleImage( const QSize &size ) const
 
     QImage scaledImg = originalImage.image().smoothScale( size.width(), size.height() );
 
-    KoImage result( d->m_key, scaledImg, d->m_url );
+    KoImage result( d->m_key, scaledImg );
     result.d->m_originalImage = originalImage;
 
     return result;

@@ -18,14 +18,14 @@ KoImageCollection::~KoImageCollection()
     delete d;
 }
 
-KoImage KoImageCollection::insertImage( const QString &key, const QImage &image, const KURL &url )
+KoImage KoImageCollection::insertImage( const KoImage::Key &key, const QImage &image )
 {
     // prevent double insertion
     KoImage koImg = KoImageCollection::image( key );
 
     if ( !koImg.isValid() )
     {
-        koImg = KoImage( key, image, url );
+        koImg = KoImage( key, image );
 
         m_images.insert( key, koImg );
     }
