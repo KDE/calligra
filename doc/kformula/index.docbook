@@ -61,7 +61,7 @@
 <para>&kformula; is used to write formulas. It doesn't evaluate
 anything. All it does is print them.</para>
 <para>&kformula; was designed for your editing pleasure. It makes it
-delightful to enter greek letters, fractions and all the stuff that
+delightful to enter Greek letters, fractions and all the stuff that
 makes a formula look like a formula.</para> 
 <para>But most of the time you won't want to use &kformula; itself.
 Instead you might choose to use it from within &kword; or any other
@@ -120,7 +120,7 @@ to enter a symbol.</para>
 	</mediaobject>
 </screenshot>
 
-<para> The Green's formula above can be printed to a &PostScript;
+<para> The Greens formula above can be printed to a &PostScript;
 file. To do that choose <menuchoice><guimenu>File</guimenu><guimenuitem>Print</guimenuitem>
 </menuchoice> and configure print as shown below:</para>
 
@@ -531,7 +531,9 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <guisubmenu>Add...</guisubmenu>
 <guimenuitem>Add upper index</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Adds a superscript to an existing element.</action></para></listitem>
+<listitem><para><action>Adds an upper index like so:         </action><inlinemediaobject><imageobject>
+	    <imagedata fileref="upper-index.png" format="PNG"/>
+	  </imageobject></inlinemediaobject></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -543,8 +545,14 @@ You can specify the number of rows and columns in this box.</action></para></lis
 <guisubmenu>Add...</guisubmenu>
 <guimenuitem>Add lower index</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Adds a subscript to an existing element.</action></para></listitem>
+<listitem><para><action>Adds a lower index:  </action><inlinemediaobject><imageobject>
+	    <imagedata fileref="lower-index.png" format="PNG"/>
+	  </imageobject></inlinemediaobject></para>
+<note><para> See the <link linkend="indices">Definite Integrals and
+Indices</link> section for details about indices.</para></note></listitem>
 </varlistentry>
+
+
 
 <varlistentry>
 <term><menuchoice>
@@ -720,7 +728,7 @@ as Sum, Integral, Exponent &etc;.</action></para></listitem>
 <guimenu>Settings</guimenu>
 <guimenuitem>Show symbol toolbar</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>This toogles the combo box that contains Del, the 
+<listitem><para><action>This toggles the combo box that contains Del, the 
 partial derivative symbol, limit arrows, 
 boolean operators and other mathematical symbols.</action></para></listitem>
 </varlistentry>
@@ -790,6 +798,36 @@ action="seq"><keycap>CTRL</keycap><keycap>Space</keycap></keycombo></userinput>
 now produces a thick space.
 </para>
 </sect2>
+
+<sect2>
+<title>Configuring Toolbars</title>
+<para>The <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Toolbars...</guimenuitem></menuchoice>
+Is not implemented at this time.</para>
+</sect2>
+
+<sect2>
+<title>Configuring &kformula;</title>
+<para>The <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure
+&kformula;...</guimenuitem></menuchoice> is where the font sizes are
+selected and additional fonts are installed.</para>
+
+<itemizedlist>
+<listitem>
+<para>The <guilabel>Formula</guilabel> section allows you to select fonts
+and font highlight colors.</para>
+</listitem>
+<listitem>
+
+<para>The <guilabel>Fonts</guilabel> section allows you to install
+additional fonts. See the <link linkend="additional-fonts">Additional
+Math Fonts</link> section.</para>
+</listitem>
+</itemizedlist>
+</sect2>
+
+
 
 <sect2>
 <title>The <guimenu>Help</guimenu> Menu</title>
@@ -862,7 +900,7 @@ the path integral about a closed contour. Below is the result of
 <para>The <menuchoice>
 <guimenu>Edit</guimenu>
 <guimenuitem>Edit Formula String</guimenuitem>
-</menuchoice> allows the user to edit the ascii formulas that have been copied from other applications,
+</menuchoice> allows the user to edit the ASCII formulas that have been copied from other applications,
 such as Scilab, and  transform them directly into mathematical type. An example will make this clear. Below 
 is a screenshot of <literal>INRIA</literal> Scilab.
 </para>
@@ -962,14 +1000,56 @@ matrix displays as <literal>()/()</literal>. This is not a valid array in C.</pa
 
 </sect1>
 
+<sect1 id="indices">
+<title>Definite Integrals and Indices</title>
+<sect2>
+<title>Definite Integrals</title>
+<para> A definite integral is made by using <keycombo
+action="simul">&Ctrl;<keycap>U</keycap></keycombo> for the upper limit
+of integration and <keycombo action="simul">&Ctrl;<keycap>L</keycap></keycombo>
+for the lower limit of integration.
+</para>
+
+<screenshot>
+<screeninfo>definite integral</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="definite_integral.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+<para>Reposition the cursor in front of the integral after making the
+first of the limits.</para>
+</sect2>
+
+<sect2>
+<title>Positioning Indices</title>
+<para>
+The upper or lower index can be positioned by highlighting the desired
+text. In this example, an arrow is needed above the P, in dP. Using <keycombo
+action="simul">&Ctrl;<keycap>U</keycap></keycombo> places the desired vector
+symbol in the wrong place; namely above the <quote>d</quote>.  
+<inlinemediaobject><imageobject> 
+	    <imagedata fileref="incorrect_index_location.png" format="PNG"/>
+	  </imageobject></inlinemediaobject>
+</para>
+ 
+<para>The problem is solved by
+	    highlighting only the P in  <inlinemediaobject><imageobject>
+	    <imagedata fileref="index_smear.png" format="PNG"/>
+	  </imageobject></inlinemediaobject>  and then entering <keycombo
+action="simul">&Ctrl;<keycap>U</keycap></keycombo>. Here is the correct
+	  result. <inlinemediaobject>
+          <imageobject>
+	    <imagedata fileref="correct_index_location.png" format="PNG"/>
+	  </imageobject>
+</inlinemediaobject>
+</para>
+</sect2>
+
+</sect1>
 </chapter>
 
-<chapter id="element-list">
-<title>Element list</title>
-
-<para>Every element has its peculiarities.</para>
-
-</chapter>
 
 <chapter id="fonts">
 <title>Mathematical Fonts</title>
@@ -1059,50 +1139,6 @@ installing</phrase></textobject>
 	</mediaobject>
 </screenshot>
 
-<para>Click on the tab <guilabel>Anti-Alias</guilabel> and then click
-on the <guibutton>Advanced</guibutton> button; make the following
-addition by configuring the box as shown below. Click on
-<guibutton>Add</guibutton> and your configuration should now appear in
-the match window. Then click on <guibutton>Ok</guibutton> to accept
-the change.</para>
-
-<screenshot>
-<screeninfo>Picture of the font installer installing</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="esstix-kfo1.png" format="PNG"/>
-	  </imageobject>
-<textobject><phrase>Picture of the font installer 
-installing</phrase></textobject>
-	</mediaobject>
-</screenshot>
-
-<para>
-After clicking on <guibutton>Ok</guibutton>, your <guilabel>Advanced</guilabel> 
-table should contain the Esstix font addition.
-Here it is at the top:</para>
-
-<screenshot>
-<screeninfo>The newly installed fonts</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="esstix-kfo2.png" format="PNG"/>
-	  </imageobject>
-<textobject><phrase>The newly installed fonts</phrase></textobject>
-	</mediaobject>
-</screenshot>
-
-<para>Save the changes; click on that button:</para>
-
-<screenshot>
-<screeninfo>Picture of advanced table</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="esstix-kfo3.png" format="PNG"/>
-	  </imageobject>
-<textobject><phrase>Picture of advanced table</phrase></textobject>
-	</mediaobject>
-</screenshot>
 
 <para>You should use the native <acronym>AFM</acronym> files. Set up
 your 
@@ -1119,7 +1155,8 @@ should be unchecked:</para>
 	</mediaobject>
 </screenshot>
 
-<para>Click on the <guibutton>Install</guibutton> button. The fonts
+<para>Return to the <menuchoice><guimenu>Fonts</guimenu></menuchoice>
+tab. Click on the <guibutton>Install</guibutton> button. The fonts
 will install. After this you must click on the
 <guibutton>Apply</guibutton> button. the following splash will
 appear:</para>
@@ -1135,15 +1172,33 @@ fonts</phrase></textobject>
 	</mediaobject>
 </screenshot>
 
-<para>Answer <guibutton>Yes</guibutton> to the <guilabel>Apply sytem
+<para>Answer <guibutton>Yes</guibutton> to the <guilabel>Apply system
 changes now</guilabel> dialog. You are done installing the esstix fonts.
 </para>
 
 </sect1>
 
-<sect1>
+<sect1 id="additional-fonts">
 <title>Additional Math Fonts</title>
-<para>Description for including additional math fonts goes here </para>
+<para>Additional math fonts can be installed with <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure
+Kformula...</guimenuitem></menuchoice><guilabel> Math Fonts </guilabel>
+</para>
+<screenshot>
+<screeninfo>Add math fonts;</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="additional_fonts1.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+<para>First install the desired fonts with the Font Installer, in
+&kcontrol;. This will make them available to your computer. Next enter
+the <guilabel> Math Fonts </guilabel> section and add them using the 
+<keysym>Right arrow</keysym>, as shown above. The Euclid Symbol fonts,
+that were added above, are now available in the <guilabel>Insert Symbol </guilabel>combo box.
+</para>
+
 </sect1>
 
 </chapter>
@@ -1152,6 +1207,7 @@ changes now</guilabel> dialog. You are done installing the esstix fonts.
 <title>Credits and Licenses</title>
 
 <para>&kformula; copyright Ulrich K&uuml;ttler</para>
+<para>Co-developer: Andrea Rizzi</para>
 
 <para>Documentation copyright 2002 Jonathan Drews
 <email>j.e.drews@att.net</email></para>
