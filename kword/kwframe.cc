@@ -368,6 +368,8 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
     frameBehaviour = static_cast<FrameBehaviour>( KWDocument::getAttribute( frameElem, "autoCreateNewFrame", AutoCreateNewFrame ) );
     // Old documents had no "NewFrameBehavior" for footers/headers -> default to Copy.
     NewFrameBehavior defaultValue = headerOrFooter ? Copy : Reconnect;
+    // for old document we used the American spelling of newFrameBehavior, so this is for backwards compatibility.
+    defaultValue = static_cast<NewFrameBehavior>( KWDocument::getAttribute( frameElem, "newFrameBehaviour", defaultValue ) );
     m_newFrameBehavior = static_cast<NewFrameBehavior>( KWDocument::getAttribute( frameElem, "newFrameBehavior", defaultValue ) );
 
     KoBorder l, r, t, b;
