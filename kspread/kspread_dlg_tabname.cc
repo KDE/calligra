@@ -58,7 +58,7 @@ KSpreadTableName::KSpreadTableName( KSpreadView* _parent, const char* _name, QSt
 
    connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
    connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
-   connect( m_pTableName, SIGNAL( returnPressed() ), this, SLOT( accept() ) );
+   connect( m_pTableName, SIGNAL( returnPressed() ), this, SLOT( slotOk() ) );
 }
 
 void KSpreadTableName::slotOk()
