@@ -787,7 +787,7 @@ public:
 
     void registerCustomItem( QTextCustomItem *i, QTextParag *p );
     void unregisterCustomItem( QTextCustomItem *i, QTextParag *p );
-    QList<QTextCustomItem> allCustomItems() const { return customItems; }
+    const QList<QTextCustomItem> & allCustomItems() const { return customItems; }
 
     void setFlow( QTextFlow *f );
     QTextFlow *flow() const { return flow_; }
