@@ -25,14 +25,9 @@
 #include <dcopclient.h>
 
 KPresenterDocIface::KPresenterDocIface( KPresenterDoc *doc_ )
-    : DCOPObject( doc_ )
+    : KoDocumentIface( doc_ )
 {
    doc = doc_;
-}
-
-QString KPresenterDocIface::url()
-{
-    return doc->url().url();
 }
 
 DCOPRef KPresenterDocIface::firstView()
