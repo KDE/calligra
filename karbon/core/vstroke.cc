@@ -83,6 +83,7 @@ VStroke::save( QDomElement& element ) const
 void
 VStroke::load( const QDomElement& element )
 {
+	m_type = none;
 	// load stroke parameters:
 	m_lineWidth = element.attribute( "lineWidth", "0.0" ).toDouble();
 	if( m_lineWidth < 0.0 )
@@ -123,6 +124,7 @@ VStroke::load( const QDomElement& element )
 			if( e.tagName() == "COLOR" )
 			{
 				m_color.load( e );
+				m_type = solid;
 			}
 			else if( e.tagName() == "DASHPATTERN" )
 			{
