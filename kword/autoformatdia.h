@@ -42,7 +42,7 @@ class KWAutoFormatDia : public KDialogBase
 public:
     KWAutoFormatDia( QWidget *parent, const char *name, KWAutoFormat * autoFormat );
     void addEntryList(const QString &key, KWAutoFormatEntry &_autoEntry);
-    void editEntryList(const QString &key, KWAutoFormatEntry &_autoEntry);
+    void editEntryList(const QString &key,const QString &newFindString, KWAutoFormatEntry &_autoEntry);
 protected:
     bool applyConfig();
     void setupTab1();

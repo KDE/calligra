@@ -164,10 +164,10 @@ void KWAutoFormatDia::addEntryList(const QString &key, KWAutoFormatEntry &_autoE
     m_autoFormat.addAutoFormatEntry( key, _autoEntry );
 }
 
-void KWAutoFormatDia::editEntryList(const QString &key, KWAutoFormatEntry &_autoEntry)
+void KWAutoFormatDia::editEntryList(const QString &key,const QString &newFindString, KWAutoFormatEntry &_autoEntry)
 {
     m_autoFormat.removeAutoFormatEntry( key );
-    m_autoFormat.addAutoFormatEntry( key, _autoEntry );
+    m_autoFormat.addAutoFormatEntry( newFindString, _autoEntry );
 }
 
 void KWAutoFormatDia::slotAddEntry()
@@ -325,7 +325,7 @@ void KWAutoFormatEditDia::slotOk()
     if(!replaceEntry)
         parentWidget->addEntryList(lineEditFind->text(), tmp);
     else
-        parentWidget->editEntryList(replaceEntryString, tmp);
+        parentWidget->editEntryList(replaceEntryString,lineEditFind->text() ,tmp);
     accept();
 }
 
