@@ -367,7 +367,7 @@ void KoNumPreview::drawContents( QPainter* painter )
 }
 
 
-KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine, QWidget * parent, const char * name )
+KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine, double _frameWidth,QWidget * parent, const char * name )
         : KoParagLayoutWidget( KoParagDia::PD_SPACING, parent, name ), m_unit( unit )
 {
     QString unitName = KoUnit::unitName( m_unit );
@@ -378,48 +378,65 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     // Any other way (in order to make the 2nd, the one with a single checkbox, a bit
     // smaller than the other 3) ? (DF)
 
+
     // --------------- indent ---------------
+    double frameWidth=_frameWidth;
+    QString length;
+    if(frameWidth==-1) {
+        frameWidth=9999;
+    } else {
+        frameWidth=KoUnit::userValue(frameWidth,m_unit);
+        length=i18n("Frame width : %1").arg(frameWidth);
+    }
+
     QGroupBox * indentFrame = new QGroupBox( i18n( "Indent" ), this );
-    QGridLayout * indentGrid = new QGridLayout( indentFrame, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout * indentGrid = new QGridLayout( indentFrame, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
+
+    QLabel * lLimit = new QLabel(length , indentFrame );
+    if(frameWidth!=-1)
+    {
+        lLimit->setAlignment( AlignRight );
+        indentGrid->addWidget( lLimit, 1,0 );
+    }
 
     QLabel * lLeft = new QLabel( i18n("Left (%1):").arg(unitName), indentFrame );
     lLeft->setAlignment( AlignRight );
-    indentGrid->addWidget( lLeft, 1, 0 );
+    indentGrid->addWidget( lLeft, 2, 0 );
 
     eLeft = new QLineEdit( indentFrame );
-    eLeft->setValidator( new QDoubleValidator( eLeft ) );
+    eLeft->setValidator( new KFloatValidator( 0,frameWidth,eLeft ) );
     eLeft->setText( i18n("0.00") );
     eLeft->setMaxLength( 5 );
     eLeft->setEchoMode( QLineEdit::Normal );
     eLeft->setFrame( true );
-    indentGrid->addWidget( eLeft, 1, 1 );
+    indentGrid->addWidget( eLeft, 2, 1 );
     connect( eLeft, SIGNAL( textChanged( const QString & ) ), this, SLOT( leftChanged( const QString & ) ) );
 
     QLabel * lRight = new QLabel( i18n("Right (%1):").arg(unitName), indentFrame );
     lRight->setAlignment( AlignRight );
-    indentGrid->addWidget( lRight, 2, 0 );
+    indentGrid->addWidget( lRight, 3, 0 );
 
     eRight = new QLineEdit( indentFrame );
-    eRight->setValidator( new QDoubleValidator( eRight ) );
+    eRight->setValidator( new KFloatValidator( 0,frameWidth,eRight ) );
     eRight->setText( i18n("0.00") );
     eRight->setMaxLength( 5 );
     eRight->setEchoMode( QLineEdit::Normal );
     eRight->setFrame( true );
-    indentGrid->addWidget( eRight, 2, 1 );
+    indentGrid->addWidget( eRight, 3, 1 );
     connect( eRight, SIGNAL( textChanged( const QString & ) ), this, SLOT( rightChanged( const QString & ) ) );
 
     QLabel * lFirstLine = new QLabel( i18n("First Line (%1):").arg(unitName), indentFrame );
     lFirstLine->setAlignment( AlignRight );
-    indentGrid->addWidget( lFirstLine, 3, 0 );
+    indentGrid->addWidget( lFirstLine, 4, 0 );
 
     eFirstLine = new QLineEdit( indentFrame );
-    eFirstLine->setValidator( new QDoubleValidator( eFirstLine ) );
+    eFirstLine->setValidator( new KFloatValidator( -9999,frameWidth,eFirstLine ) );
     eFirstLine->setText( i18n("0.00") );
     eFirstLine->setMaxLength( 5 );
     eFirstLine->setEchoMode( QLineEdit::Normal );
     eFirstLine->setFrame( true );
     connect( eFirstLine, SIGNAL( textChanged( const QString & ) ), this, SLOT( firstChanged( const QString & ) ) );
-    indentGrid->addWidget( eFirstLine, 3, 1 );
+    indentGrid->addWidget( eFirstLine, 4, 1 );
 
     // grid row spacing
     indentGrid->addRowSpacing( 0, 12 );
@@ -2061,7 +2078,7 @@ KoParagDia::KoParagDia( QWidget* parent, const char* name,
     if ( m_flags & PD_SPACING )
     {
         QVBox * page = addVBoxPage( i18n( "Indent and Spacing" ) );
-        m_indentSpacingWidget = new KoIndentSpacingWidget( unit, breakLine,page, "indent-spacing" );
+        m_indentSpacingWidget = new KoIndentSpacingWidget( unit, breakLine,_frameWidth,page, "indent-spacing" );
     }
     if ( m_flags & PD_ALIGN )
     {

@@ -63,7 +63,7 @@ KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrLi
     addTab( fontTab );
 
     KoStyleParagTab *newTab = new KoStyleParagTab( m_tabs );
-    newTab->setWidget( new KoIndentSpacingWidget( unit, true,newTab ) );
+    newTab->setWidget( new KoIndentSpacingWidget( unit, true,-1/*no limit*/,newTab ) );
     addTab( newTab );
 
     newTab = new KoStyleParagTab( m_tabs );
@@ -342,6 +342,8 @@ void KoStyleManager::moveUpStyle()
             // We have "prev" "p" and we want "p" "prev"
             m_changedStyles.insert( pos-1, p ); // "p" "prev" "p"
             m_changedStyles.take( pos+1 );      // Remove last "p"
+            m_origStyles.insert( pos-1, p ); // "p" "prev" "p"
+            m_origStyles.take( pos+1 );      // Remove last "p"
             break;
         }
     }
@@ -374,6 +376,8 @@ void KoStyleManager::moveDownStyle()
             // We have "p" "next" and we want "next" "p"
             m_changedStyles.insert( pos, next ); // "next", "p", "next"
             m_changedStyles.take( pos+2 );       // Remove last "next"
+            m_origStyles.insert( pos, next ); // "next", "p", "next"
+            m_origStyles.take( pos+2 );       // Remove last "next"
             break;
         }
     }
@@ -419,7 +423,7 @@ void KoStyleManager::apply() {
             removeStyleTemplate( orig );
             // Note that the style is never deleted (we'll need it for undo/redo purposes)
 
-        } else if(m_changedStyles.at(i) != m_origStyles.at(i)) {
+        } else /*if(m_changedStyles.at(i) != m_origStyles.at(i))*/ {
             kdDebug() << "update style " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
                                                 // simply updated style
             KoStyle *orig = m_origStyles.at(i);

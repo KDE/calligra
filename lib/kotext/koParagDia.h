@@ -92,7 +92,7 @@ class KoIndentSpacingWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine, QWidget * parent,const char * name = 0 );
+    KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine, double _frameWidth, QWidget * parent,const char * name = 0 );
     virtual ~KoIndentSpacingWidget() {}
 
     virtual void display( const KoParagLayout & lay );
