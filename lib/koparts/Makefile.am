@@ -19,3 +19,7 @@ include_HEADERS = container.h  handler.h  part.h    shell.h    view.h \
 libkparts_la_METASOURCES = container.moc  handler.moc  part.moc    shell.moc    view.moc \
 			   frame.moc      plugin.moc  toolbox.moc  \
 			kcoloractions.moc
+
+servicetype_DATA = kpart.desktop
+servicetypedir = $(kde_servicetypesdir)
+
