@@ -624,11 +624,11 @@ void KivioView::removePage()
 {
   if ( doc()->map()->count() <= 1 || m_pTabBar->listshow().count()<=1 ) {
     QApplication::beep();
-    KMessageBox::sorry( this, i18n("You cannot delete the only page of the document."), i18n("Remove page") );
+    KMessageBox::sorry( this, i18n("You cannot delete the only page of the document."), i18n("Remove Page") );
     return;
   }
   QApplication::beep();
-  int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove the active page.\nDo you want to continue?"),i18n("Remove page"));
+  int ret = KMessageBox::warningYesNo(this,i18n("You are going to remove the active page.\nDo you want to continue?"),i18n("Remove Page"));
 
   if ( ret == 3 ) {
       KivioPage* tbl = m_pActivePage;

@@ -356,7 +356,7 @@ void KivioTabBar::slotRename()
         if ( (newName.stripWhiteSpace()).isEmpty() ) // Page name is empty.
         {
             KNotifyClient::beep();
-            KMessageBox::information( this, i18n("Page name cannot be empty."), i18n("Change page name") );
+            KMessageBox::information( this, i18n("Page name cannot be empty."), i18n("Change Page Name") );
             // Recursion
             slotRename();
         }
@@ -366,7 +366,7 @@ void KivioTabBar::slotRename()
              if ( !page->setPageName( newName ) )
              {
                 KNotifyClient::beep();
-                KMessageBox::information( this, i18n("This name is already used."), i18n("Change page name") );
+                KMessageBox::information( this, i18n("This name is already used."), i18n("Change Page Name") );
                  // Recursion
                  slotRename();
              }

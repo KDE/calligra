@@ -42,7 +42,7 @@ public:
     virtual void rotate( float _angle );
 
     virtual ObjType getType() const { return OT_PART; }
-    virtual QString getTypeString() const { return i18n("Embedded object"); }
+    virtual QString getTypeString() const { return i18n("Embedded Object"); }
 
     virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
 		       SelectionMode selectionMode, bool drawContour = FALSE );
