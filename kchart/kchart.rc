@@ -17,6 +17,7 @@
 <ToolBar name="KChartToolBar"><Text>Chart</Text>
  <Action name="edit"/>
  <Action name="config"/>
+ <Action name="wizard"/>
  <Action name="piechart"/>
  <Action name="linechart"/>
  <Action name="areaschart"/>
