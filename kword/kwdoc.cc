@@ -62,7 +62,7 @@
 #include "kwfactory.h"
 #include "kwcommand.h"
 #include <kdebug.h>
-#include <assert.h>
+#include <kfontdialog.h>
 
 #include <kspell.h>
 
@@ -157,6 +157,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     // Get default font from KDE
     m_defaultFont = KGlobalSettings::generalFont();
     KGlobal::charsets()->setQFont(m_defaultFont, KGlobal::locale()->charset());
+    m_fontList = 0L;
 
     // Set no-op initial values (for setZoomAndResolution)
     m_zoomedResolutionX = 1;
@@ -742,6 +743,7 @@ KWDocument::~KWDocument()
     delete contents;
     delete m_autoFormat;
     delete m_commandHistory;
+    delete m_fontList;
 }
 
 /*================================================================*/
@@ -1712,6 +1714,16 @@ void KWDocument::insertObject( const QRect& rect, KoDocumentEntry& _e )
 /*================================================================*/
 void KWDocument::draw( QPaintDevice *, long int, long int, float )
 {
+}
+
+QStringList KWDocument::fontList()
+{
+    if ( !m_fontList )
+    {
+        m_fontList = new QStringList;
+        KFontChooser::getFontList(*m_fontList, false);
+    }
+    return *m_fontList;
 }
 
 KWStyle* KWDocument::findStyle( const QString & _name, bool noFallback )

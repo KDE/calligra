@@ -63,7 +63,7 @@ protected:
     QWidget *tab1;
     QGridLayout *grid1, *eofGrid, *onpGrid, *sideGrid;
     QGroupBox *endOfFrame, *onNewPage, *sideHeads;
-    QCheckBox *autofit, *aspectRatio, *floating;
+    QCheckBox *autofit, *aspectRatio;
     QRadioButton *rResizeFrame, *rAppendFrame, *rNoShow, *reconnect, *noFollowup, *copyRadio;
     QLabel *sideTitle1, *sideTitle2;
     QLineEdit *sideWidth, *sideGap;
@@ -91,6 +91,7 @@ protected:
     QGridLayout *grid4, *pGrid, *mGrid;
     QLabel *lx, *lml, *lmr, *lmt, *lmb, *ly, *lw, *lh;
     QLineEdit *sx, *sy, *sw, *sh, *sml, *smr, *smt, *smb;
+    QCheckBox *floating;
 
     KWFrame *frame;
     KWDocument *doc;
@@ -111,6 +112,7 @@ protected slots:
     void connectListSelected( QListViewItem * );
     void setFrameBehaviourInputOn();
     void setFrameBehaviourInputOff();
+    void slotFloatingToggled(bool);
 };
 
 #endif

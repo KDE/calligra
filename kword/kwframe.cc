@@ -23,6 +23,8 @@
 #include "kwframe.h"
 #include "defs.h"
 #include "kwutils.h"
+#include "kwtextframeset.h"
+#include "kwanchor.h"
 #include "resizehandles.h"
 
 #include <kformulacontainer.h>
@@ -57,7 +59,8 @@ KWFrame::KWFrame(KWFrameSet *fs, int left, int top, int width, int height, RunAr
       bright( 0 ),
       btop( 0 ),
       bbottom( 0 ),
-      frameSet( fs )
+      frameSet( fs ),
+      m_anchor( 0 )
 {
     //kdDebug() << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
     m_pageNum = fs ? fs->kWordDocument()->getPageOfRect( *this ) : 0;
@@ -220,6 +223,12 @@ KWFrame *KWFrame::getCopy() {
     return frm;
 }
 
+void KWFrame::deleteAnchor()
+{
+    delete m_anchor;
+    m_anchor = 0L;
+}
+
 /*================================================================*/
 /* Insert all resize handles                                      */
 /*================================================================*/
@@ -306,6 +315,9 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
     frameInfo = FI_BODY;
     current = 0;
     grpMgr = 0L;
+    m_anchorTextFs = 0L;
+    m_anchorParag = 0L;
+    m_anchorIndex = 0;
 }
 
 /*================================================================*/
@@ -471,7 +483,49 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
     painter->restore();
 }
 
-/*================================================================*/
+void KWFrameSet::setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int index )
+{
+    if ( isFloating() )
+        deleteAnchors();
+    ASSERT( parag );
+    m_anchorTextFs = textfs;
+    m_anchorParag = parag;
+    m_anchorIndex = index;
+    updateAnchors();
+}
+
+void KWFrameSet::setFixed()
+{
+    if ( isFloating() )
+        deleteAnchors();
+    m_anchorTextFs = 0L;
+    m_anchorParag = 0L;
+    m_anchorIndex = 0;
+}
+
+void KWFrameSet::updateAnchors()
+{
+    int index = m_anchorIndex;
+    QListIterator<KWFrame> frameIt = frameIterator();
+    for ( ; frameIt.current(); ++frameIt, ++index )
+    {
+        if ( ! frameIt.current()->anchor() )
+        {
+            // Anchor this frame, after the previous one
+            KWAnchor * anchor = new KWAnchor( m_anchorTextFs->textDocument(), frameIt.current() );
+            m_anchorParag->insert( index, QChar('@') /*whatever*/ );
+            m_anchorParag->setCustomItem( index, anchor, 0 );
+        }
+    }
+}
+
+void KWFrameSet::deleteAnchors()
+{
+    QListIterator<KWFrame> frameIt = frameIterator();
+    for ( ; frameIt.current(); ++frameIt )
+        frameIt.current()->deleteAnchor();
+}
+
 KWFrame * KWFrameSet::getFrame( int _x, int _y )
 {
     QListIterator<KWFrame> frameIt = frameIterator();

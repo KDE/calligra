@@ -178,11 +178,11 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     int rows=2;
     if(frameType == FT_FORMULA || frameType == FT_PICTURE) {
         rows++;
-        grid1 = new QGridLayout( tab1, rows, 1, 15, 7 );
+        grid1 = new QGridLayout( tab1, rows, 1, KDialog::marginHint(), KDialog::spacingHint() );
     }
     if(frameType == FT_TEXT){
         rows+=2;
-        grid1 = new QGridLayout( tab1, rows, 2, 15, 7 );
+        grid1 = new QGridLayout( tab1, rows, 2, KDialog::marginHint(), KDialog::spacingHint() );
     }
 
     rows--;
@@ -191,33 +191,6 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     grid1->setRowStretch( rows, 1 );
 
     grid1->addRowSpacing(rows,0);
-
-    floating = new QCheckBox (i18n("Frame is floating"), tab1);
-    if(frame && frame->getFrameSet())
-        floating->setChecked(frame->getFrameSet()->isAnchor());
-    floating->setEnabled(false);
-    if(frameType == FT_TEXT)
-        grid1->addMultiCellWidget(floating,0,0,0,1);
-    else
-        grid1->addWidget(floating,0,0);
-    /* ideally the following properties could be given to any floating frame:
-       Position: (y)
-        Top of frame
-        Top of paragraph
-        Above current line
-        At insertion point
-        Below current line
-        Bottom of paragraph
-        Bottom of frame
-        Absolute
-       Alignment: (x)
-        Left
-        Right
-        Center
-        Closest to binding
-        Further from binding
-        Absolute
-    */
 
     // formula frame
     if(frameType==FT_FORMULA) {
@@ -238,7 +211,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         endOfFrame = new QGroupBox(i18n("If text is too long for frame:"),tab1);
         grid1->addWidget( endOfFrame, 1, 0 );
 
-        eofGrid= new QGridLayout (endOfFrame,4,1,15,7);
+        eofGrid= new QGridLayout (endOfFrame,4,1,KDialog::marginHint(), KDialog::spacingHint());
         rAppendFrame = new QRadioButton( i18n( "Create a new page" ), endOfFrame );
         rAppendFrame->resize( rAppendFrame->sizeHint() );
         eofGrid->addWidget( rAppendFrame, 0, 0 );
@@ -279,7 +252,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         onNewPage = new QGroupBox(i18n("On new page creation:"),tab1);
         grid1->addWidget( onNewPage, 1, 1 );
 
-        onpGrid = new QGridLayout (onNewPage,3,1,15,7);
+        onpGrid = new QGridLayout (onNewPage,3,1,KDialog::marginHint(), KDialog::spacingHint());
         reconnect = new QRadioButton (i18n ("Reconnect frame to current flow"), onNewPage);
         reconnect->resize( reconnect->sizeHint() );
         connect( reconnect, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOn() ) );
@@ -317,7 +290,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         sideHeads->setEnabled(false);
         grid1->addWidget(sideHeads,2,0);
 
-        sideGrid = new QGridLayout (sideHeads,3,2,15,7);
+        sideGrid = new QGridLayout (sideHeads,3,2,KDialog::marginHint(), KDialog::spacingHint());
         sideTitle1 = new QLabel ( i18n("Size ( %1 ):").arg(doc->getUnitName()),sideHeads);
         sideTitle1->resize(sideTitle1->sizeHint());
         sideGrid->addWidget(sideTitle1,0,0);
@@ -369,11 +342,11 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
 
     tab2 =  addPage( i18n( "Text run around" ) );
 
-    grid2 = new QGridLayout( tab2, 3, 2, 15, 7 );
+    grid2 = new QGridLayout( tab2, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     runGroup = new QGroupBox( i18n( "Text in other frames will:" ), tab2 );
 
-    runGrid = new QGridLayout( runGroup, 4, 3, 15, 7 );
+    runGrid = new QGridLayout( runGroup, 4, 3, KDialog::marginHint(), KDialog::spacingHint() );
 
     QPixmap pixmap = KWBarIcon( "run_not" );
     lRunNo = new QLabel( runGroup );
@@ -497,7 +470,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     //kdDebug() << "setup tab 3 frameSet"<<endl;
     tab3 = addPage( i18n( "Connect text frames" ) );
 
-    grid3 = new QGridLayout( tab3, 3, 1, 15, 7 );
+    grid3 = new QGridLayout( tab3, 3, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
     lFrameSet = new QLabel( i18n( "Choose a frameset to which the current frame should be connected:" ), tab3 );
     lFrameSet->resize( lFrameSet->sizeHint() );
@@ -580,10 +553,35 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     //kdDebug() << "setup tab 4 geometry"<<endl;
 
     tab4 = addPage( i18n( "Geometry" ) );
-    grid4 = new QGridLayout( tab4, 3, 1, 15, 7 );
+    grid4 = new QGridLayout( tab4, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
+
+    floating = new QCheckBox (i18n("Frame is floating"), tab1);
+    connect( floating, SIGNAL( toggled(bool) ), this, SLOT( slotFloatingToggled(bool) ) );
+    int row = 0;
+    grid4->addMultiCellWidget( floating, row, row, 0, 1 );
+
+    /* ideally the following properties could be given to any floating frame:
+       Position: (y)
+        Top of frame
+        Top of paragraph
+        Above current line
+        At insertion point
+        Below current line
+        Bottom of paragraph
+        Bottom of frame
+        Absolute
+       Alignment: (x)
+        Left
+        Right
+        Center
+        Closest to binding
+        Further from binding
+        Absolute
+    */
+
 
     grp1 = new QGroupBox( i18n("Position in %1").arg(doc->getUnitName()), tab4 );
-    pGrid = new QGridLayout( grp1, 5, 2, 7, 7 );
+    pGrid = new QGridLayout( grp1, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     lx = new QLabel( i18n( "Left:" ), grp1 );
     lx->resize( lx->sizeHint() );
@@ -664,11 +662,10 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     pGrid->setColStretch( 0, 1 );
     pGrid->setColStretch( 1, 1 );
 
-    pGrid->activate();
-    grid4->addWidget( grp1, 0, 0 );
+    grid4->addWidget( grp1, ++row, 0 );
 
     grp2 = new QGroupBox( i18n("Margins in %1").arg(doc->getUnitName()), tab4 );
-    mGrid = new QGridLayout( grp2, 5, 2, 7, 7 );
+    mGrid = new QGridLayout( grp2, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     lml = new QLabel( i18n( "Left:" ), grp2 );
     lml->resize( lml->sizeHint() );
@@ -749,19 +746,17 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     mGrid->setColStretch( 1, 1 );
 
     mGrid->activate();
-    grid4->addWidget( grp2, 1, 0 );
+    grid4->addWidget( grp2, ++row, 0 );
 
-    grid4->addRowSpacing( 0, grp1->height() );
+    /*grid4->addRowSpacing( 0, grp1->height() );
     grid4->addRowSpacing( 1, grp2->height() );
     grid4->setRowStretch( 0, 0 );
-    grid4->setRowStretch( 1, 0 );
-    grid4->setRowStretch( 2, 1 );
+    grid4->setRowStretch( 1, 0 );*/
+    grid4->setRowStretch( row, 1 );
 
-    grid4->addColSpacing( 0, grp1->width() );
-    grid4->addColSpacing( 0, grp2->width() );
+    //grid4->addColSpacing( 0, grp1->width() );
+    //grid4->addColSpacing( 0, grp2->width() );
     grid4->setColStretch( 0, 1 );
-
-    grid4->activate();
 
     double l, r, t, b;
     doc->getFrameMargins( l, r, t, b );
@@ -873,146 +868,147 @@ void KWFrameDia::setFrameBehaviourInputOff() {
     }
 }
 
+void KWFrameDia::slotFloatingToggled(bool b)
+{
+    grp1->setEnabled( !b ); // Position doesn't make sense for a floating frame
+    // grp2->setEnabled( !b ); do margins make sense for floating frames ?
+}
+
 /*================================================================*/
 bool KWFrameDia::applyChanges()
 {
     //kdDebug() << "KWFrameDia::applyChanges"<<endl;
-    if(frame && frameType==FT_TEXT )
+    ASSERT(frame);
+    if ( !frame )
+        return false;
+
+    if ( tab1 && frameType==FT_TEXT )
     {
-        if ( tab1 )
+        // FrameBehaviour
+        if(rResizeFrame->isChecked())
         {
-            // FrameBehaviour
-            if(rResizeFrame->isChecked())
-            {
-                frame->setFrameBehaviour(AutoExtendFrame);
-            }
-            else if ( rAppendFrame->isChecked())
-            {
-                frame->setFrameBehaviour(AutoCreateNewFrame);
-            }
-            else
-            {
-                frame->setFrameBehaviour(Ignore);
-            }
+            frame->setFrameBehaviour(AutoExtendFrame);
+        }
+        else if ( rAppendFrame->isChecked())
+        {
+            frame->setFrameBehaviour(AutoCreateNewFrame);
+        }
+        else
+        {
+            frame->setFrameBehaviour(Ignore);
         }
 
         // NewFrameBehaviour
-        if ( tab1 )
+        if(reconnect->isChecked())
         {
-            if(reconnect->isChecked())
-            {
-                frame->setNewFrameBehaviour(Reconnect);
+            frame->setNewFrameBehaviour(Reconnect);
+        }
+        else if ( noFollowup->isChecked())
+        {
+            frame->setNewFrameBehaviour(NoFollowup);
+        }
+        else
+        {
+            frame->setNewFrameBehaviour(Copy);
+        }
+
+        QString str = lFrameSList->currentItem() ? lFrameSList->currentItem()->text( 0 ) : QString::null;
+        QString name = QString::null;
+        if ( str[ 0 ] == '*' ) {
+            str.remove( 0, 1 );
+            name = eFrameSetName->text();
+            if ( name.isEmpty() )
+                name = i18n( "Frameset %d" ).arg( doc->getNumFrameSets() + 1 );
+            bool same = FALSE;
+            for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
+                if ( doc->getFrameSet( i )->getName() == name ) {
+                    same = TRUE;
+                    break;
+                }
             }
-            else if ( noFollowup->isChecked())
-            {
-                frame->setNewFrameBehaviour(NoFollowup);
-            }
-            else
-            {
-                frame->setNewFrameBehaviour(Copy);
+            if ( same ) {
+                KMessageBox::sorry( this,
+                                    i18n( "A new frameset with the name '%1'\n"
+                                          "can not be made because a frameset with that name\n"
+                                          "already exists. Please enter another name or select\n"
+                                          "an existing frameset from the list.").arg(name));
+                eFrameSetName->setText(oldFrameName);
+                return false;
             }
         }
-    }
+        int _num = str.toInt() - 1;
 
+        // delete frame from frameset
+        if ( frame->getFrameSet() &&
+             ! (static_cast<unsigned int>( _num ) < doc->getNumFrameSets() &&
+                frame->getFrameSet() == doc->getFrameSet(_num))) {
+            if ( frame->getFrameSet()->getNumFrames() > 1 )
+                frame->getFrameSet()->delFrame( frame, FALSE );
+            else {
+                frame->getFrameSet()->delFrame( frame, FALSE );
+                doc->delFrameSet( frame->getFrameSet() );
+            }
+        }
 
-    int currFS = -1;
+        if(frame->getFrameSet() == 0L) { // if there is no frameset (anymore)
+            // attach frame to frameset
+            if ( static_cast<unsigned int>( _num ) < doc->getNumFrameSets() ) {
+                doc->getFrameSet( _num )->addFrame( frame );
+            } else { // create a new frameset
+                kdDebug() << "KWFrameDia::applyChanges creating a new frameset" << endl;
+                KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
+                _frameSet->setName( name );
+                _frameSet->addFrame( frame );
+                doc->addFrameSet( _frameSet );
+                KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create text frame"), doc, frame) ;
+                doc->addCommand(cmd);
+            }
+        }
+    } // end of 'tab1 and text frame'
 
-    if (frame && frameType==FT_TEXT)
+    if ( tab1 )
     {
-        if ( tab1 ) {
-            QString str = lFrameSList->currentItem() ? lFrameSList->currentItem()->text( 0 ) : QString::null;
-            QString name = QString::null;
-            if ( str[ 0 ] == '*' ) {
-                str.remove( 0, 1 );
-                name = eFrameSetName->text();
-                if ( name.isEmpty() )
-                    name = i18n( "Frameset %d" ).arg( doc->getNumFrameSets() + 1 );
-                bool same = FALSE;
-                for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
-                    if ( doc->getFrameSet( i )->getName() == name ) {
-                        same = TRUE;
-                        break;
-                    }
-                }
-                if ( same ) {
-                    KMessageBox::sorry( this,
-                                        i18n( "A new frameset with the name '%1'\n"
-                                              "can not be made because a frameset with that name\n"
-                                              "already exists. Please enter another name or select\n"
-                                              "an existing frameset from the list.").arg(name));
-                    eFrameSetName->setText(oldFrameName);
-                    return false;
-                }
-            }
-            int _num = str.toInt() - 1;
-
-            // delete frame from frameset
-            if ( frame->getFrameSet() &&
-                 ! (static_cast<unsigned int>( _num ) < doc->getNumFrameSets() &&
-                    frame->getFrameSet() == doc->getFrameSet(_num))) {
-                if ( frame->getFrameSet()->getNumFrames() > 1 )
-                    frame->getFrameSet()->delFrame( frame, FALSE );
-                else {
-                    frame->getFrameSet()->delFrame( frame, FALSE );
-                    doc->delFrameSet( frame->getFrameSet() );
-                }
-            }
-
-            if(frame->getFrameSet() == 0L) { // if there is no frameset (anymore)
-                // attach frame to frameset
-                if ( static_cast<unsigned int>( _num ) < doc->getNumFrameSets() ) {
-                    doc->getFrameSet( _num )->addFrame( frame );
-                    currFS = _num;
-                } else { // create a new frameset
-                    kdDebug() << "KWFrameDia::applyChanges creating a new frameset" << endl;
-                    KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
-                    _frameSet->setName( name );
-                    _frameSet->addFrame( frame );
-                    doc->addFrameSet( _frameSet );
-                    KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create text frame"), doc, frame) ;
-                    doc->addCommand(cmd);
-                    updateFrames();
-                    return true;
-                }
-                doc->updateAllFrames();
-            }
+        // Floating
+        if ( floating->isChecked() && !frame->getFrameSet()->isFloating() )
+        {
+            // ### turn non-floating frame into floating frame (but where to insert the anchor ??)
+        }
+        else if ( !floating->isChecked() && frame->getFrameSet()->isFloating() )
+        {
+            // ## turn floating-frame into non-floating frame (should be easier)
         }
     }
-
-    if ( frame )
+    if ( tab2 )
     {
         // Run around
-        if ( tab2 )
-        {
-            if ( rRunNo->isChecked() )
-                frame->setRunAround( RA_NO );
-            else if ( rRunBounding->isChecked() )
-                frame->setRunAround( RA_BOUNDINGRECT );
-            else if ( rRunContur->isChecked() )
-                frame->setRunAround( RA_SKIP );
+        if ( rRunNo->isChecked() )
+            frame->setRunAround( RA_NO );
+        else if ( rRunBounding->isChecked() )
+            frame->setRunAround( RA_BOUNDINGRECT );
+        else if ( rRunContur->isChecked() )
+            frame->setRunAround( RA_SKIP );
 
-            frame->setRunAroundGap( KWUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() ) );
-        }
-
-        if ( doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
-                                                ( doc->processingType() == KWDocument::WP &&
-                                                  doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
-            if ( oldX != sx->text().toDouble() || oldY != sy->text().toDouble() || oldW != sw->text().toDouble() || oldH != sh->text().toDouble() ) {
-                unsigned int px = static_cast<uint>( KWUnit::fromUserValue( QMAX( sx->text().toDouble(), 0 ), doc->getUnit() ) );
-                unsigned int py = static_cast<uint>( KWUnit::fromUserValue( QMAX( sy->text().toDouble(), 0 ), doc->getUnit() ) );
-                unsigned int pw = static_cast<uint>( KWUnit::fromUserValue( QMAX( sw->text().toDouble(), 0 ), doc->getUnit() ) );
-                unsigned int ph = static_cast<uint>( KWUnit::fromUserValue( QMAX( sh->text().toDouble(), 0 ), doc->getUnit() ) );
-                doc->setFrameCoords( px, py, pw, ph );
-            }
-        }
-
-        double u1, u2, u3, u4;
-        u1=KWUnit::fromUserValue( QMAX(sml->text().toDouble(),0), doc->getUnit() );
-        u2=KWUnit::fromUserValue( QMAX(smr->text().toDouble(),0), doc->getUnit() );
-        u3=KWUnit::fromUserValue( QMAX(smt->text().toDouble(),0), doc->getUnit() );
-        u4=KWUnit::fromUserValue( QMAX(smb->text().toDouble(),0), doc->getUnit() );
-        doc->setFrameMargins( u1, u2, u3, u4 );
+        frame->setRunAroundGap( KWUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() ) );
     }
+
+    if ( doc->isOnlyOneFrameSelected() && ( doc->processingType() == KWDocument::DTP ||
+                                            ( doc->processingType() == KWDocument::WP &&
+                                              doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
+        if ( oldX != sx->text().toDouble() || oldY != sy->text().toDouble() || oldW != sw->text().toDouble() || oldH != sh->text().toDouble() ) {
+            unsigned int px = static_cast<uint>( KWUnit::fromUserValue( QMAX( sx->text().toDouble(), 0 ), doc->getUnit() ) );
+            unsigned int py = static_cast<uint>( KWUnit::fromUserValue( QMAX( sy->text().toDouble(), 0 ), doc->getUnit() ) );
+            unsigned int pw = static_cast<uint>( KWUnit::fromUserValue( QMAX( sw->text().toDouble(), 0 ), doc->getUnit() ) );
+            unsigned int ph = static_cast<uint>( KWUnit::fromUserValue( QMAX( sh->text().toDouble(), 0 ), doc->getUnit() ) );
+            doc->setFrameCoords( px, py, pw, ph );
+        }
+    }
+
+    double u1, u2, u3, u4;
+    u1=KWUnit::fromUserValue( QMAX(sml->text().toDouble(),0), doc->getUnit() );
+    u2=KWUnit::fromUserValue( QMAX(smr->text().toDouble(),0), doc->getUnit() );
+    u3=KWUnit::fromUserValue( QMAX(smt->text().toDouble(),0), doc->getUnit() );
+    u4=KWUnit::fromUserValue( QMAX(smb->text().toDouble(),0), doc->getUnit() );
+    doc->setFrameMargins( u1, u2, u3, u4 );
 
     updateFrames();
     return true;
@@ -1044,7 +1040,6 @@ void KWFrameDia::slotOk()
     }
 }
 
-/*================================================================*/
 void KWFrameDia::connectListSelected( QListViewItem *item )
 {
     if ( !item )
@@ -1057,3 +1052,4 @@ void KWFrameDia::connectListSelected( QListViewItem *item )
     } else
         eFrameSetName->setEnabled( FALSE );
 }
+

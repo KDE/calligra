@@ -28,15 +28,6 @@
 #include <kdebug.h>
 #include <qdom.h>
 
-#undef getPointBasedAttribute
-#define getPointBasedAttribute(struc, attribute, element, attributeName, defaultValue) \
-do \
-{ \
-    struc pt##attribute = KWDocument::getAttribute( element, attributeName, defaultValue ); \
-    struc mm##attribute = POINT_TO_MM( struc pt##attribute ); \
-    struc inch##attribute = POINT_TO_INCH( struc pt##attribute ); \
-} while (0)
-
 KWTextParag::KWTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds)
     : QTextParag( d, pr, nx, updateIds )
 {
@@ -391,7 +382,8 @@ void KWTextParag::copyParagData( QTextParag *_parag )
 
 void KWTextParag::setCustomItem( int index, QTextCustomItem * custom, QTextFormat * currentFormat )
 {
-    setFormat( index, 1, currentFormat );
+    if ( currentFormat )
+        setFormat( index, 1, currentFormat );
     at( index )->setCustomItem( custom );
     addCustomItem();
     document()->registerCustomItem( custom, this );

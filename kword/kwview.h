@@ -245,12 +245,6 @@ public slots:
 
     void configure();
 
-    void slotInsertObject( KWChild *_child, KWPartFrameSet *_kwpf );
-    void slotUpdateChildGeometry( KWChild *_child );
-    void paragDiaOk();
-    void styleManagerOk();
-    void fontDiaOk();
-    void openPageLayoutDia()  { formatPage(); }
     void newPageLayout( KoPageLayout _layout );
     void newLeftIndent( double _leftIndent);
     void newFirstIndent( double _firstIndent);
@@ -390,9 +384,6 @@ protected:
     KAction *actionExtraCreateTemplate;
 
     KAction *actionConfigure;
-
-    // text toolbar values
-    QStringList fontList;
 
     KWGUI *gui;
 

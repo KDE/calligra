@@ -82,7 +82,6 @@
 #include <kimageio.h>
 #include <kcoloractions.h>
 #include <tkcoloractions.h>
-#include <kfontdialog.h>
 #include <kstddirs.h>
 #include <kparts/event.h>
 #include <kformuladocument.h>
@@ -124,19 +123,14 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     setInstance( KWFactory::global() );
     setXMLFile( "kword.rc" );
 
-    //QObject::connect( doc, SIGNAL( sig_insertObject( KWChild*, KWPartFrameSet* ) ),
-    //                  this, SLOT( slotInsertObject( KWChild*, KWPartFrameSet* ) ) );
     QObject::connect( this, SIGNAL( embeddImage( const QString & ) ),
                       this, SLOT( insertPicture( const QString & ) ) ); /////// # wrong one ! should create a picture frame (TODO)
 
-    KFontChooser::getFontList(fontList, false); // Shouldn't this be in the doc, or not at all ?
     setKeyCompression( TRUE );
     setAcceptDrops( TRUE );
     createKWGUI();
     initConfig();
 
-    connect( doc, SIGNAL( sig_updateChildGeometry( KWChild* ) ),
-             this, SLOT( slotUpdateChildGeometry( KWChild* ) ) );
     connect( doc, SIGNAL( pageNumChanged() ),
              this, SLOT( updatePageInfo() ) );
 
@@ -156,6 +150,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
              actionEditCopy, SLOT(setEnabled(bool)) );
 
     gui->canvasWidget()->updateCurrentFormat();
+    updateButtons();
     setFocusProxy( gui->canvasWidget() );
 }
 
@@ -245,7 +240,7 @@ void KWView::initGui()
             static_cast<QLabel *>(it.current())->show();
         delete l;
         statusBar()->show();
-        kdDebug() << "KWView::setupActions statusbar is now " << statusBar() << endl;
+        //kdDebug() << "KWView::setupActions statusbar is now " << statusBar() << endl;
     }
 
     updatePageInfo();
@@ -776,7 +771,7 @@ void KWView::print( KPrinter &prt )
     QPaintDeviceMetrics metrics( &prt );
     //doc->setZoomAndResolution( 100, metrics.logicalDpiX(), metrics.logicalDpiY(), false );
     doc->setZoomAndResolution( 100, 300, 300, false );
-    kdDebug() << "KWView::print zoom&res set" << endl;
+    //kdDebug() << "KWView::print zoom&res set" << endl;
 
     bool serialLetter = FALSE;
 #if 0
@@ -837,7 +832,7 @@ void KWView::print( KPrinter &prt )
         doc->setPageLayout( oldPGLayout, cl, hf );
 
     doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
-    kdDebug() << "KWView::print zoom&res reset" << endl;
+    //kdDebug() << "KWView::print zoom&res reset" << endl;
 
     gui->canvasWidget()->setUpdatesEnabled(true);
     gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
@@ -1539,50 +1534,16 @@ void KWView::insertContents()
 /*===============================================================*/
 void KWView::formatFont()
 {
-    kdDebug(32002) << "KWView::formatFont" << endl;
+    //kdDebug(32002) << "KWView::formatFont" << endl;
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit) // TODO disable action if not text frameset
     {
         KWFontDia *fontDia = new KWFontDia( this, "",edit->textFont(),actionFormatSub->isChecked(), actionFormatSuper->isChecked());
-        connect( fontDia, SIGNAL( okClicked() ), this, SLOT( fontDiaOk() ) );
-
         fontDia->show();
+        edit->setFont(fontDia->getNewFont(),fontDia->getSubScript(),fontDia->getSuperScript());
         delete fontDia;
     }
     gui->canvasWidget()->setFocus();
-
-#if 0
-    QFont tmpFont = tbFont;
-
-    if ( KFontDialog::getFont( tmpFont ) ) {
-        tbFont = tmpFont;
-        format.setUserFont( doc->findUserFont( tbFont.family() ) );
-        format.setPTFontSize( tbFont.pointSize() );
-        format.setWeight( tbFont.weight() );
-        format.setItalic( tbFont.italic() );
-        format.setUnderline( tbFont.underline() );
-        actionFormatFontFamily->setFont( tbFont.family() );
-        actionFormatFontSize->setFontSize( tbFont.pointSize() );
-        actionFormatBold->setChecked( tbFont.bold() );
-        actionFormatItalic->setChecked( tbFont.italic() );
-        actionFormatUnderline->setChecked( tbFont.underline() );
-        if ( gui ) {
-            gui->canvasWidget()->formatChanged( format );
-        }
-    }
-#endif
-}
-
-/*===============================================================*/
-void KWView::fontDiaOk()
-{
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if (!edit)
-        return;
-    const KWFontDia * fontDia = static_cast<const KWFontDia*>(sender());
-    if ( edit )
-        edit->setFont(fontDia->getNewFont(),fontDia->getSubScript(),fontDia->getSuperScript());
-
 }
 
 /*===============================================================*/
@@ -1592,17 +1553,63 @@ void KWView::formatParagraph()
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit) // TODO disable action if not text frameset
     {
-        KWParagDia *paragDia = new KWParagDia( this, "", fontList,
+        KWParagDia *paragDia = new KWParagDia( this, "", doc->fontList(),
                                                KWParagDia::PD_SPACING | KWParagDia::PD_ALIGN |
                                                KWParagDia::PD_BORDERS |
                                                KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, doc );
         paragDia->setCaption( i18n( "Paragraph settings" ) );
-        connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
 
         // Initialize the dialog from the current paragraph's settings
         KWParagLayout lay = static_cast<KWTextParag *>(edit->getCursor()->parag())->paragLayout();
         paragDia->setParagLayout( lay );
         paragDia->show();
+
+        // TODO a macro command with all the changes in it !
+        // undo should do all in one step.
+        if(paragDia->isLeftMarginChanged())
+        {
+            edit->setMargin( QStyleSheetItem::MarginLeft, paragDia->leftIndent() );
+            gui->getHorzRuler()->setLeftIndent( KWUnit::userValue( paragDia->leftIndent(), doc->getUnit() ) );
+        }
+
+        if(paragDia->isRightMarginChanged())
+        {
+            edit->setMargin( QStyleSheetItem::MarginRight, paragDia->rightIndent() );
+            //koRuler doesn't support setRightIndent
+            //gui->getHorzRuler()->setRightIndent( KWUnit::userValue( paragDia->rightIndent(), doc->getUnit() ) );
+        }
+        if(paragDia->isSpaceBeforeChanged())
+            edit->setMargin( QStyleSheetItem::MarginTop, paragDia->spaceBeforeParag() );
+
+        if(paragDia->isSpaceAfterChanged())
+            edit->setMargin( QStyleSheetItem::MarginBottom, paragDia->spaceAfterParag() );
+
+        if(paragDia->isFirstLineChanged())
+        {
+            edit->setMargin( QStyleSheetItem::MarginFirstLine, paragDia->firstLineIndent());
+            gui->getHorzRuler()->setFirstIndent(
+                KWUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), doc->getUnit() ) );
+        }
+
+        if(paragDia->isAlignChanged())
+            edit->setAlign( paragDia->align() );
+
+        if(paragDia->isBulletChanged())
+            edit->setCounter( paragDia->counter() );
+
+        if(paragDia->listTabulatorChanged())
+            edit->setTabList( paragDia->tabListTabulator() );
+
+        if(paragDia->isLineSpacingChanged())
+            edit->setLineSpacing( paragDia->lineSpacing() );
+
+        if(paragDia->isBorderChanged())
+            edit->setBorders( paragDia->leftBorder(), paragDia->rightBorder(),
+                              paragDia->topBorder(), paragDia->bottomBorder() );
+
+        if ( paragDia->isPageBreakingChanged() )
+            edit->setPageBreaking( paragDia->linesTogether() );
+
         delete paragDia;
     }
 
@@ -1695,8 +1702,7 @@ void KWView::extraAutoFormat()
 void KWView::extraStylist()
 {
   //doc->setSelection(false);
-    KWStyleManager * styleManager = new KWStyleManager( this, doc, fontList );
-    connect( styleManager, SIGNAL( okClicked() ), this, SLOT( styleManagerOk() ) );
+    KWStyleManager * styleManager = new KWStyleManager( this, doc, doc->fontList() );
     styleManager->setCaption( i18n( "Stylist" ) );
     styleManager->show();
     delete styleManager;
@@ -2570,71 +2576,6 @@ void KWView::borderShowValues()
 }
 
 /*================================================================*/
-void KWView::slotInsertObject( KWChild *, KWPartFrameSet * )
-{
-}
-
-/*================================================================*/
-void KWView::slotUpdateChildGeometry( KWChild */*_child*/ )
-{
-}
-
-/*================================================================*/
-void KWView::paragDiaOk()
-{
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if (!edit) return;
-    // #### eeeeeek ! We should pass the KWParagDia * as argument.
-    const KWParagDia * paragDia = static_cast<const KWParagDia*>(sender());
-
-    // TODO a macro command with all the changes in it !
-    // undo should do all in one step.
-    if(paragDia->isLeftMarginChanged())
-    {
-	edit->setMargin( QStyleSheetItem::MarginLeft, paragDia->leftIndent() );
-	gui->getHorzRuler()->setLeftIndent( KWUnit::userValue( paragDia->leftIndent(), doc->getUnit() ) );
-    }
-
-    if(paragDia->isRightMarginChanged())
-    {
-	edit->setMargin( QStyleSheetItem::MarginRight, paragDia->rightIndent() );
-	//koRuler doesn't support setRightIndent
-	//gui->getHorzRuler()->setRightIndent( KWUnit::userValue( paragDia->rightIndent(), doc->getUnit() ) );
-    }
-    if(paragDia->isSpaceBeforeChanged())
-        edit->setMargin( QStyleSheetItem::MarginTop, paragDia->spaceBeforeParag() );
-
-    if(paragDia->isSpaceAfterChanged())
-        edit->setMargin( QStyleSheetItem::MarginBottom, paragDia->spaceAfterParag() );
-
-    if(paragDia->isFirstLineChanged())
-    {
-	edit->setMargin( QStyleSheetItem::MarginFirstLine, paragDia->firstLineIndent());
-	gui->getHorzRuler()->setFirstIndent(
-            KWUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), doc->getUnit() ) );
-    }
-
-    if(paragDia->isAlignChanged())
-        edit->setAlign( paragDia->align() );
-
-    if(paragDia->isBulletChanged())
-        edit->setCounter( paragDia->counter() );
-
-    if(paragDia->listTabulatorChanged())
-        edit->setTabList( paragDia->tabListTabulator() );
-
-    if(paragDia->isLineSpacingChanged())
-        edit->setLineSpacing( paragDia->lineSpacing() );
-
-    if(paragDia->isBorderChanged())
-        edit->setBorders( paragDia->leftBorder(), paragDia->rightBorder(),
-                          paragDia->topBorder(), paragDia->bottomBorder() );
-
-    if ( paragDia->isPageBreakingChanged() )
-        edit->setPageBreaking( paragDia->linesTogether() );
-}
-
-/*================================================================*/
 void KWView::tabListChanged( const KoTabulatorList & tabList )
 {
     if(!doc->isReadWrite())
@@ -2645,10 +2586,6 @@ void KWView::tabListChanged( const KoTabulatorList & tabList )
     edit->setTabList( tabList );
 }
 
-/*================================================================*/
-void KWView::styleManagerOk()
-{
-}
 
 /*================================================================*/
 void KWView::newPageLayout( KoPageLayout _layout )
@@ -2985,10 +2922,10 @@ KWGUI::KWGUI( QWidget *parent, KWDocument *_doc, KWView *_view )
     connect( r_horz, SIGNAL( newLeftIndent( double ) ), view, SLOT( newLeftIndent( double ) ) );
     connect( r_horz, SIGNAL( newFirstIndent( double ) ), view, SLOT( newFirstIndent( double ) ) );
 
-    connect( r_horz, SIGNAL( openPageLayoutDia() ), view, SLOT( openPageLayoutDia() ) );
+    connect( r_horz, SIGNAL( openPageLayoutDia() ), view, SLOT( formatPage() ) );
     connect( r_horz, SIGNAL( unitChanged( QString ) ), this, SLOT( unitChanged( QString ) ) );
     connect( r_vert, SIGNAL( newPageLayout( KoPageLayout ) ), view, SLOT( newPageLayout( KoPageLayout ) ) );
-    connect( r_vert, SIGNAL( openPageLayoutDia() ), view, SLOT( openPageLayoutDia() ) );
+    connect( r_vert, SIGNAL( openPageLayoutDia() ), view, SLOT( formatPage() ) );
     connect( r_vert, SIGNAL( unitChanged( QString ) ), this, SLOT( unitChanged( QString ) ) );
 
     r_horz->setUnit( doc->getUnitName() );

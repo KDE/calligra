@@ -41,6 +41,8 @@ class KWFrameSet;
 class KWResizeHandle;
 class KWTableFrameSet;
 class KWTextDocument;
+class KWTextFrameSet;
+class KWTextParag;
 class KWView;
 class QCursor;
 class QPainter;
@@ -144,6 +146,9 @@ public:
     KWFrameSet *getFrameSet() const { return frameSet; }
     void setFrameSet( KWFrameSet *fs ) { frameSet = fs; }
 
+    KWAnchor *anchor() const { return m_anchor; }
+    void deleteAnchor();
+
     bool isMostRight() { return mostRight; }
     void setMostRight( bool _mr ) { mostRight = _mr; }
 
@@ -217,6 +222,8 @@ private:
 
     QList<KWResizeHandle> handles;
     KWFrameSet *frameSet;
+
+    KWAnchor *m_anchor;
 
     KWFrame &operator=( const KWFrame &_frame );
     KWFrame ( const KWFrame &_frame );
@@ -387,9 +394,12 @@ public:
     void setCurrent( int i ) { current = i; }
     int getCurrent() { return current; }
 
-    /** Make this frameset anchored (floating) */
-    void setAnchor( KWAnchor * anchor ) { m_anchor = anchor; /* TODO... */ }
-    bool isAnchor(){return m_anchor!=0L;}
+    /** Make this frameset floating, with the anchor at @p parag,@p index in the text frameset @p textfs */
+    void setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int index );
+    /** Make this frameset fixed, i.e. not anchored */
+    void setFixed();
+    /** Return true if this frameset is floating, false if it's fixed */
+    bool isFloating() { return m_anchorParag && m_anchorTextFs; }
 
     /** make this frameset part of a groupmanager
      * @see KWTableFrameSet
@@ -433,6 +443,9 @@ protected:
     // in the rectangle delimited by @p crect.
     QRegion frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect );
 
+    void deleteAnchors();
+    void updateAnchors();
+
     KWDocument *m_doc;            // Document
     QList<KWFrame> frames;        // Our frames
     QList<KWFrame> m_framesOnTop; // List of frames on top of us, those we shouldn't overwrite
@@ -442,7 +455,9 @@ protected:
     KWTableFrameSet *grpMgr;
     bool removeableHeader, visible;
     QString name;
-    KWAnchor * m_anchor;
+    KWTextFrameSet* m_anchorTextFs;
+    KWTextParag* m_anchorParag;
+    int m_anchorIndex;
 };
 
 /******************************************************************/
