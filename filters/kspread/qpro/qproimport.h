@@ -20,28 +20,17 @@
 #ifndef QPROIMPORT_H
 #define QPROIMPORT_H
 
-#include <qstring.h>
-#include <qtextstream.h>
-#include <qfile.h>
-#include <qobject.h>
-
-#include <kdebug.h>
-#include <kglobal.h>
-#include <klocale.h>
 #include <koFilter.h>
-#include <koStore.h>
-
-// #include <xmltree.h>
-
-#include <kspread_table.h>
 #include <qpro/tablenames.h>
+
+class KSpreadTable;
 
 class QpImport : public KoFilter {
 
     Q_OBJECT
 
 public:
-    QpImport(KoFilter* parent, const char* name);
+    QpImport(KoFilter* parent, const char* name, const QStringList&);
     virtual ~QpImport() {}
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );

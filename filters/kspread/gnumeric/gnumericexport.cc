@@ -21,15 +21,13 @@
 
 #include <gnumericexport.h>
 #include <kdebug.h>
-#include <klocale.h>
 #include <kmessagebox.h>
+#include <kgenericfactory.h>
 #include <koFilterChain.h>
-#include <qdom.h>
-#include <qstring.h>
-#include <qfile.h>
 #include <qapplication.h>
 #include <qptrlist.h>
 #include <qsortedlist.h>
+#include <qfile.h>
 
 #include <kspread_map.h>
 #include <kspread_table.h>
@@ -38,6 +36,9 @@
 #include <koDocumentInfo.h>
 
 #include <zlib.h>
+
+typedef KGenericFactory<GNUMERICExport, KoFilter> GNUMERICExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libgnumericexport, GNUMERICExportFactory( "gnumericexport" ) );
 
 class Cell {
  public:
@@ -55,7 +56,7 @@ class Cell {
 
 
 
-GNUMERICExport::GNUMERICExport(KoFilter *, const char *) :
+GNUMERICExport::GNUMERICExport(KoFilter *, const char *, const QStringList&) :
                      KoFilter() {
 }
 

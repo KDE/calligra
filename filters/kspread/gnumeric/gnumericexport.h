@@ -20,25 +20,17 @@
 #ifndef GNUMERICEXPORT_TEST_H
 #define GNUMERICEXPORT_TEST_H
 
-#include <koStore.h>
 #include <koFilter.h>
 #include <qdom.h>
 
-#include <kspread_map.h>
-#include <kspread_table.h>
-#include <kspread_doc.h>
-
-
-class QCString;
-class QString;
-class KoDocument;
+class KSpreadCell;
 
 class GNUMERICExport : public KoFilter {
 
     Q_OBJECT
 
 public:
-    GNUMERICExport(KoFilter *parent, const char*name);
+    GNUMERICExport(KoFilter *parent, const char*name, const QStringList&);
     virtual ~GNUMERICExport() {}
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );

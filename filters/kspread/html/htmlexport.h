@@ -23,16 +23,12 @@
 
 #include <koFilter.h>
 
-class QCString;
-class QString;
-class KoDocument;
-
 class HTMLExport : public KoFilter {
 
     Q_OBJECT
 
 public:
-    HTMLExport(KoFilter *parent, const char*name);
+    HTMLExport(KoFilter *parent, const char*name, const QStringList&);
     virtual ~HTMLExport() {}
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );

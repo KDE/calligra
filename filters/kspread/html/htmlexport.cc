@@ -19,22 +19,21 @@
 */
 
 #include <htmlexport.h>
-#include <kdebug.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <koFilterChain.h>
+
 #include <qregexp.h>
-#include <qdom.h>
-#include <qstring.h>
 #include <qfile.h>
-#include <qapplication.h>
-#include <qptrlist.h>
-#include <qsortedlist.h>
+
+#include <kdebug.h>
+#include <kgenericfactory.h>
+#include <koFilterChain.h>
+#include <koDocumentInfo.h>
 
 #include <kspread_map.h>
 #include <kspread_table.h>
 #include <kspread_doc.h>
-#include <koDocumentInfo.h>
+
+typedef KGenericFactory<HTMLExport, KoFilter> HTMLExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkspreadhtmlexport, HTMLExportFactory( "htmlexport" ) );
 
 class Cell {
  public:
@@ -51,7 +50,7 @@ class Cell {
 };
 
 
-HTMLExport::HTMLExport(KoFilter *, const char *) :
+HTMLExport::HTMLExport(KoFilter *, const char *, const QStringList&) :
                      KoFilter() {
 }
 

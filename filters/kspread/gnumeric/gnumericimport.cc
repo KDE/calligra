@@ -20,11 +20,14 @@
 /* GNUmeric import filter by Phillip Ezolt 6-2-2001*/
 /* phillipezolt@hotmail.com */
 
-#include <gnumericimport.h>
-#include <qmessagebox.h>
-#include <kmessagebox.h>
-#include <koFilterChain.h>
 #include <qdict.h>
+#include <qfile.h>
+
+#include <gnumericimport.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
+#include <kgenericfactory.h>
+#include <koFilterChain.h>
 
 // hehe >:->
 #include <kspread_doc.h>
@@ -34,7 +37,10 @@
 
 #include <zlib.h>
 
-GNUMERICFilter::GNUMERICFilter(KoFilter *, const char*) :
+typedef KGenericFactory<GNUMERICFilter, KoFilter> GNUMERICFilterFactory;
+K_EXPORT_COMPONENT_FACTORY( libgnumericimport, GNUMERICFilterFactory( "gnumericimport" ) );
+
+GNUMERICFilter::GNUMERICFilter(KoFilter *, const char*, const QStringList&) :
                      KoFilter() {
 }
 
@@ -544,7 +550,6 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString& from, const 
     }
 
 
-    const char* m;
     QString UncompressedContents="";
 
     QDomDocument doc( "gnumeric" );

@@ -20,25 +20,14 @@
 #ifndef GNUMERICFILTER_H
 #define GNUMERICFILTER_H
 
-#include <qstring.h>
-#include <qtextstream.h>
-#include <qfile.h>
-#include <qobject.h>
-
-#include <kdebug.h>
-#include <kglobal.h>
-#include <klocale.h>
 #include <koFilter.h>
-#include <koStore.h>
-
-//#include <xmltree.h>
 
 class GNUMERICFilter : public KoFilter {
 
     Q_OBJECT
 
 public:
-    GNUMERICFilter(KoFilter *parent, const char *name);
+    GNUMERICFilter(KoFilter *parent, const char *name, const QStringList&);
     virtual ~GNUMERICFilter() {}
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );

@@ -20,8 +20,9 @@
 
 #include <strstream.h>
 
-#include <qmessagebox.h>
+#include <kdebug.h>
 #include <kmessagebox.h>
+#include <kgenericfactory.h>
 #include <koFilterChain.h>
 
 #include <kspread_doc.h>
@@ -33,6 +34,9 @@
 #include <qproformula.h>
 #include <qpro/stream.h>
 #include <qpro/record_factory.h>
+
+typedef KGenericFactory<QpImport, KoFilter> QPROImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libqproimport, QPROImportFactory( "kspreadqprofilter" ) );
 
 // ---------------------------------------------------------------
 
@@ -68,7 +72,7 @@ QpTableList::table(unsigned pIdx)
 
 // ---------------------------------------------------------------
 
-QpImport::QpImport( KoFilter*, const char* )
+QpImport::QpImport( KoFilter*, const char*, const QStringList& )
  : KoFilter()
 {
 //cout << "Hooray - in QpImport::QpImport" << endl; // ???
