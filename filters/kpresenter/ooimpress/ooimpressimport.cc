@@ -55,6 +55,12 @@ OoImpressImport::OoImpressImport( KoFilter *, const char *, const QStringList & 
 
 OoImpressImport::~OoImpressImport()
 {
+    QDictIterator<animationList> it( m_animations ); // See QDictIterator
+    for( ; it.current(); ++it )
+    {
+        delete it.current()->element;
+    }
+    m_animations.clear();
 }
 
 KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCString const & to )
@@ -2064,37 +2070,42 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
 
 void OoImpressImport::createPresentationAnimation(const QDomElement& element)
 {
+    int order = 0;
   for ( QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement e = n.toElement();
         QCString tagName = e.tagName().latin1();
-        if ( tagName == "presentation:show-shape")
+        if ( tagName == "presentation:show-shape" && e.hasAttribute( "draw:shape-id" ) )
         {
-            Q_ASSERT( e.hasAttribute( "draw:shape-id" ) );
             QString name = e.attribute( "draw:shape-id" );
             //kdDebug()<<" insert animation style : name :"<<name<<endl;
+            animationList *lst = new animationList;
             QDomElement* ep = new QDomElement( e );
-            m_animations.insert( name, ep );
+            lst->element = ep;
+            lst->order = order;
+            m_animations.insert( name, lst );
+            ++order;
         }
     }
 }
 
-QDomNode OoImpressImport::findAnimationByObjectID(const QString & id)
+QDomNode OoImpressImport::findAnimationByObjectID(const QString & id,  int & order)
 {
     //kdDebug()<<"QDomNode OoImpressImport::findAnimationByObjectID(const QString & id) :"<<id<<endl;
     if (m_animations.isEmpty() )
         return QDomNode();
 
-    QDomElement *animation = m_animations[id];
+    animationList *animation = m_animations[id];
     //kdDebug()<<"QDomElement *animation = m_animations[id]; :"<<animation<<endl;
     if ( !animation )
         return QDomNode();
-    for (QDomNode node = *animation; !node.isNull(); node = node.nextSibling())
+    for (QDomNode node = *( animation->element ); !node.isNull(); node = node.nextSibling())
     {
         QDomElement e = node.toElement();
+        order = animation->order;
         //kdDebug()<<"e.tagName() :"<<e.tagName()<<" e.attribute(draw:shape-id) :"<<e.attribute("draw:shape-id")<<endl;
         if (e.tagName()=="presentation:show-shape" && e.attribute("draw:shape-id")==id)
-            return node;
+                return node;
     }
 
     return QDomNode();
@@ -2104,7 +2115,8 @@ QDomNode OoImpressImport::findAnimationByObjectID(const QString & id)
 void OoImpressImport::appendObjectEffect(QDomDocument& doc, QDomElement& e, const QDomElement& object,
                                          QDomElement& sound)
 {
-    QDomElement origEffect = findAnimationByObjectID(object.attribute("draw:id")).toElement();
+    int order = 0;
+    QDomElement origEffect = findAnimationByObjectID(object.attribute("draw:id"), order).toElement();
 
     if (origEffect.isNull())
         return;
@@ -2157,6 +2169,10 @@ void OoImpressImport::appendObjectEffect(QDomDocument& doc, QDomElement& e, cons
     QDomElement effElem = doc.createElement("EFFECTS");
     effElem.setAttribute("effect", effVal);
     e.appendChild(effElem);
+
+    QDomElement presNum = doc.createElement( "PRESNUM" );
+    presNum.setAttribute("value", order);
+    e.appendChild( presNum );
 
     // sound effect
     QDomElement origSoundEff = origEffect.namedItem("presentation:sound").toElement();
