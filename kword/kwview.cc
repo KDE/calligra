@@ -60,7 +60,6 @@
 #include "kwcommand.h"
 #include "fontdia.h"
 #include "counter.h"
-#include "kwzoomdia.h"
 
 #include <koMainWindow.h>
 #include <koDocument.h>
@@ -331,7 +330,7 @@ void KWView::setupActions()
                                         actionCollection(), "view_zoom" );
     connect( actionViewZoom, SIGNAL( activated( const QString & ) ),
              this, SLOT( viewZoom( const QString & ) ) );
-
+    actionViewZoom->setEditable(true);
     changeZoomMenu( );
 
     // -------------- Insert menu
@@ -1262,18 +1261,18 @@ void KWView::changeZoomMenu( int zoom )
     {
         QValueList<int> list;
         QString z;
+        int val;
+        bool ok;
         QStringList itemsList = actionViewZoom->items();
-        //remove item "other..."
-        itemsList.remove(itemsList.last());
         for (QStringList::Iterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
         {
             z = (*it).replace( QRegExp( "%" ), "" );
             z = z.simplifyWhiteSpace();
-            list.append( z.toInt() );
+            val=z.toInt(&ok);
+            //zoom : limit inferior=10
+            if(ok && val>9 &&list.contains(val)==0)
+                list.append( val );
         }
-        //don't add value which exists
-        if(list.contains(zoom)==0)
-            list.append(zoom);
 
         qHeapSort( list );
 
@@ -1295,7 +1294,6 @@ void KWView::changeZoomMenu( int zoom )
           lst << "450%";
           lst << "500%";
     }
-    lst << i18n("other...");
     actionViewZoom->setItems( lst );
 }
 
@@ -1385,25 +1383,24 @@ void KWView::setNoteType( KWFootNoteManager::NoteType nt, bool change)
 void KWView::viewZoom( const QString &s )
 {
     QString z( s );
-    if(z== i18n("other..."))
-    {
-        int val=0;
-        if(KWZoomDia::selectZoom( val))
-        {
-            changeZoomMenu( val );
-            showZoom( val );
-            setZoom( val );
-        }
-    }
-    else
-    {
-        z = z.replace( QRegExp( "%" ), "" );
-        z = z.simplifyWhiteSpace();
-        int zoom = z.toInt();
-        if ( zoom != doc->zoom() ) {
-            setZoom( zoom );
-        }
-    }
+    bool ok=false;
+
+    z = z.replace( QRegExp( "%" ), "" );
+    z = z.simplifyWhiteSpace();
+    int zoom = z.toInt(&ok);
+    //bad value
+    if(!ok)
+        zoom=doc->zoom();
+    else if(zoom<10) //zoom should be >10
+        zoom=doc->zoom();
+    //refresh menu
+    changeZoomMenu( zoom );
+    //refresh menu item
+    showZoom(zoom);
+    //apply zoom if zoom!=doc->zoom()
+    if(zoom != doc->zoom() )
+        setZoom( zoom );
+
     gui->canvasWidget()->setFocus();
 
 }
