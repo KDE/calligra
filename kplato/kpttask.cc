@@ -356,10 +356,19 @@ KPTDateTime KPTTask::calculateForward(int use) {
     QPtrListIterator<KPTRelation> it = dependParentNodes();
     for (; it.current(); ++it) {
         KPTDateTime time = it.current()->parent()->calculateForward(use);
-        if (it.current()->timingRelation() != FINISH_START) {
-            time = it.current()->parent()->getEarliestStart();
+        switch (it.current()->timingRelation()) {
+            case START_START:
+                time = it.current()->parent()->getEarliestStart() + it.current()->lag();
+                break;
+            case FINISH_FINISH:
+                // I can't finisg later than my predeccessor, so
+                // I can't start later than it's latestfinish - my duration
+                time -= duration(time + it.current()->lag(), use, true);
+                break;
+            default:
+                time += it.current()->lag();
+                break;
         }
-        time += it.current()->lag();
         if (time > earliestStart)
             earliestStart = time;
     }
@@ -408,10 +417,19 @@ KPTDateTime KPTTask::calculateBackward(int use) {
     QPtrListIterator<KPTRelation> it = dependChildNodes();
     for (; it.current(); ++it) {
         KPTDateTime time = it.current()->child()->calculateBackward(use);
-        if (it.current()->timingRelation() != FINISH_START) {
-            time = it.current()->child()->getLatestFinish();
+        switch (it.current()->timingRelation()) {
+            case START_START:
+                // I can't start before my successor, so
+                // I can't finish later than it's starttime + my duration
+                time += duration(time -  it.current()->lag(), use, false);
+                break;
+            case FINISH_FINISH:
+                time = it.current()->parent()->getLatestFinish() -  it.current()->lag();
+                break;
+            default:
+                time -= it.current()->lag();
+                break;
         }
-        time -= it.current()->lag();
         if (time < latestFinish)
             latestFinish = time;
     }
@@ -462,10 +480,19 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
         // schedule the predecessors
         KPTDateTime earliest = it.current()->parent()->getEarliestStart();
         KPTDateTime time = it.current()->parent()->scheduleForward(earliest, use);
-        if (it.current()->timingRelation() != FINISH_START) {
-            time = it.current()->parent()->startTime();
+        switch (it.current()->timingRelation()) {
+            case START_START:
+                time = it.current()->parent()->startTime() + it.current()->lag();
+                break;
+            case FINISH_FINISH:
+                // I can't end before my predecessor, so
+                // I can't start before it's endtime - my duration
+                time -= duration(time + it.current()->lag(), use, true);
+                break;
+            default:
+                time += it.current()->lag();
+                break;
         }
-        time += it.current()->lag();
         if (time > m_startTime)
             m_startTime = time;
     }
@@ -542,7 +569,19 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
         if (it.current()->timingRelation() != FINISH_START) {
             time = it.current()->child()->endTime();
         }
-        time -= it.current()->lag();
+        switch (it.current()->timingRelation()) {
+            case START_START:
+                // I can't start before my successor, so
+                // I can't finish later than it's starttime + my duration
+                time += duration(time - it.current()->lag(), use, false);
+                break;
+            case FINISH_FINISH:
+                time = it.current()->parent()->endTime() - it.current()->lag();
+                break;
+            default:
+                time -= it.current()->lag();
+                break;
+        }
         if (time < m_endTime)
             m_endTime = time;
     }
