@@ -30,6 +30,7 @@
 #include "Painter.h"
 
 #include <stdio.h>
+#include <iostream.h>
 
 #define MARKER_WIDTH 11
 #define MARKER_HEIGHT 6
@@ -182,7 +183,7 @@ void Ruler::drawRuler () {
   Painter p;
   char buf[10];
 
-  if (! isVisible ())
+  if (! buffer)
     return;
 
   int step = (int) (10.0 * zoom);
@@ -259,9 +260,9 @@ void Ruler::show () {
 }
 
 void Ruler::hide () {
-  QWidget::hide ();
   if (orientation == Horizontal)
-    setFixedHeight (0);
+    setFixedHeight (1);
   else
-    setFixedWidth (0);
+    setFixedWidth (1);
+  QWidget::hide ();
 }
