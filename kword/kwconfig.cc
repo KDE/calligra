@@ -111,25 +111,25 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     int m_iGridX=10;
     int m_iGridY=10;
     double ptIndent = MM_TO_POINT(10.0);
-    int m_iNumOfRecentFile=10;
     bool m_bShowRuler=true;
-    int m_iAutoSave=1;
+
+    oldNbRecentFiles=10;
+    oldAutoSaveValue=1;
+
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
         m_iGridX=config->readNumEntry("GridX",10);
         m_iGridY=config->readNumEntry("GridY",10);
         ptIndent = config->readDoubleNumEntry("Indent", MM_TO_POINT(10.0));
-        m_iNumOfRecentFile=config->readNumEntry("NbRecentFile",10);
+        oldNbRecentFiles=config->readNumEntry("NbRecentFile",10);
         m_bShowRuler=config->readBoolEntry("Rulers",true);
-        m_iAutoSave=config->readNumEntry("AutoSave",1);
+        oldAutoSaveValue=config->readNumEntry("AutoSave",1);
     }
-    oldAutoSaveValue=m_iAutoSave;
     gridX=new KIntNumInput(m_iGridX, tmpQGroupBox , 10);
     gridX->setRange(1, 50, 1);
     gridX->setLabel(i18n("X grid space"));
     lay1->addWidget(gridX);
-
 
     gridY=new KIntNumInput(m_iGridY, tmpQGroupBox , 10);
     gridY->setRange(1, 50, 1);
@@ -157,9 +157,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     indent->setLabel(i18n("1 is a unit name", "Indent in %1").arg(unitText));
     lay1->addWidget(indent);
 
-
-    oldNbRecentFiles=m_iNumOfRecentFile;
-    recentFiles=new KIntNumInput(m_iNumOfRecentFile, tmpQGroupBox , 10);
+    recentFiles=new KIntNumInput(oldNbRecentFiles, tmpQGroupBox , 10);
     recentFiles->setRange(1, 20, 1);
     recentFiles->setLabel(i18n("Number of recent file:"));
     lay1->addWidget(recentFiles);
@@ -168,7 +166,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     showRuler->setChecked(m_bShowRuler);
     lay1->addWidget(showRuler);
 
-    autoSave = new KIntNumInput( m_iAutoSave, tmpQGroupBox , 10);
+    autoSave = new KIntNumInput( oldAutoSaveValue, tmpQGroupBox , 10);
     autoSave->setRange(0, 60, 1);
     autoSave->setLabel(i18n("Auto save (min):"));
     autoSave->setSpecialValueText(i18n("No auto save"));
