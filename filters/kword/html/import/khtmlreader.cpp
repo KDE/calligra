@@ -56,7 +56,7 @@ bool KHTMLReader::filter(KURL url) {
 	_html->setPluginsEnabled(false);
 	_html->setJavaEnabled(false);
 	if (_html->openURL(url) == false) {
-		qWarning("openURL returned false");
+		kdWarning() << "openURL returned false" << endl;
 		return false;
 	}
 
@@ -136,7 +136,7 @@ void KHTMLReader::completed() {
 	DOM::Node docbody=list.item(0);
 
 	if (docbody.isNull()) {
-		qWarning("no <BODY>, giving up");
+		kdWarning() << "no <BODY>, giving up" << endl;
 		_it_worked=false;
 		return;
 	}
@@ -149,7 +149,7 @@ void KHTMLReader::completed() {
 	if (!dochead.isNull())
 		parse_head(dochead);
 	else
-		qWarning("WARNING: no html <HEAD> section");
+		kdWarning() << "WARNING: no html <HEAD> section" << endl;
 
 	_writer->cleanUpParagraph(state()->paragraph);
         _it_worked=_writer->writeDoc();
@@ -273,13 +273,13 @@ void KHTMLReader::parseStyle(DOM::Element e) {
 	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
 
      // debugging code.
-     qWarning("e.style()");
+     kdDebug() << "e.style()" << endl;
      for (unsigned int i=0;i<s1.length();i++) {
-        qWarning(QString("%1: %2").arg(s1.item(i).string()).arg(s1.getPropertyValue(s1.item(i)).string()));
+        kdDebug() << QString("%1: %2").arg(s1.item(i).string()).arg(s1.getPropertyValue(s1.item(i)).string()) << endl;
      }
-     qWarning("override style");
+     kdDebug() << "override style" << endl;
      for (unsigned int i=0;i<s2.length();i++) {
-        qWarning(QString("%1: %2").arg(s2.item(i).string()).arg(s2.getPropertyValue(s2.item(i)).string()));
+        kdDebug() << QString("%1: %2").arg(s2.item(i).string()).arg(s2.getPropertyValue(s2.item(i)).string()) << endl;
      }
 #endif
 }

@@ -245,7 +245,7 @@ void KWDWriter::finishTable(int tableno,QRect rect) {
 	      QDomElement e=fetchTableCell(tableno,currow,curcol);
 	      if (e.isNull()) {
 	              // a missing cell !
-	              qWarning(QString("creating %1 %2").arg(currow).arg(curcol).latin1());
+	              kdDebug() << QString("creating %1 %2").arg(currow).arg(curcol).latin1() << endl;
 	              createTableCell(tableno,currow,curcol,1,
 		      			QRect(x+step_x*curcol,y+step_y*currow,step_x,step_y)
 				);
@@ -257,7 +257,7 @@ void KWDWriter::finishTable(int tableno,QRect rect) {
 	      QDomElement ee=e.firstChild().toElement(); // the frame in the frameset
 	          int cs=e.attribute("cols").toInt();
 	          int rs=e.attribute("cols").toInt();
-	          qWarning("resizing");
+	          kdDebug() << "resizing" << endl;
 	          addRect(ee,QRect(x+step_x*curcol,0,step_x*cs,step_y*rs));
 	      }
 	      if (curcol==0) currow_inc=e.attribute("rows").toInt();
@@ -390,7 +390,7 @@ QDomElement KWDWriter::layoutAttribute(QDomElement paragraph, QString name, QStr
 void KWDWriter::addText(QDomElement paragraph, QString text, int format_id) {
 	QDomNode temp=paragraph.elementsByTagName("TEXT").item(0).firstChild();
 	QDomText currentText=temp.toText();
-	if (temp.isNull()) { qWarning("no text"); exit(0); }
+	if (temp.isNull()) { kdDebug() << "no text" << endl; return; }
 	int oldLength=currentText.data().length();
 	currentText.setData(currentText.data()+text);
 	int newLength=text.length();
@@ -403,13 +403,13 @@ void KWDWriter::addText(QDomElement paragraph, QString text, int format_id) {
 QString KWDWriter::getText(QDomElement paragraph) {
 	QDomNode temp=paragraph.elementsByTagName("TEXT").item(0).firstChild();
 	QDomText currentText=temp.toText();
-	if (temp.isNull()) { qWarning("no text"); exit(0); }
+	if (temp.isNull()) { kdWarning() << "no text" << endl; }
 	return currentText.data();
 }
 
 
 QDomElement KWDWriter::startFormat(QDomElement paragraph) {
-        if (paragraph.isNull()) { qWarning("startFormat on empty paragraph"); exit(0); }
+        if (paragraph.isNull()) { kdWarning() << "startFormat on empty paragraph" << endl; }
 	QDomElement format=_doc->createElement("FORMAT");
 	paragraph.elementsByTagName("FORMATS").item(0).appendChild(format);
 	return format;
@@ -418,8 +418,8 @@ QDomElement KWDWriter::startFormat(QDomElement paragraph) {
 
 QDomElement KWDWriter::startFormat(QDomElement paragraph, QDomElement formatToClone) {
 	QDomElement format=formatToClone.cloneNode().toElement();
-	if (format.isNull()) { qWarning("startFormat: null format cloned"); exit(0); }
-        if (paragraph.isNull()) { qWarning("startFormat on empty paragraph"); exit(0); }
+	if (format.isNull()) { kdWarning() << "startFormat: null format cloned" << endl; }
+        if (paragraph.isNull()) { kdWarning() << "startFormat on empty paragraph" << endl; }
 
 	format.removeAttribute("len");
 	format.removeAttribute("pos");
@@ -439,7 +439,7 @@ QDomElement KWDWriter::currentFormat(QDomElement paragraph, bool start_new_one) 
 	if (e.isNull()) {
 	   // no current format, start a new one
 	   if (start_new_one) return startFormat(paragraph);
-	   else { qWarning("warning: returning null format"); }
+	   else { kdWarning() << "warning: returning null format" << endl; }
 	}
 	if (!e.attribute("len").isNull()) {
 	   // current format already has length, clone it.
@@ -451,7 +451,7 @@ QDomElement KWDWriter::currentFormat(QDomElement paragraph, bool start_new_one) 
 
 void KWDWriter::cleanUpParagraph(QDomElement paragraph) {
 	QDomElement e=paragraph.elementsByTagName("FORMATS").item(0).toElement();
-	if (e.isNull()) { qWarning("cleanup : no valid paragraph"); exit(0); }
+	if (e.isNull()) { kdWarning() << "cleanup : no valid paragraph" << endl; return; }
 	for (QDomElement k=e.firstChild().toElement();!k.isNull();k=k.nextSibling().toElement()) {
 	     if (k.attribute("len",QString::null).isNull()) {
 	         e.removeChild(k);
@@ -481,7 +481,7 @@ QDomElement KWDWriter::docroot() {
 
 bool KWDWriter::writeDoc() {
 	QCString str=_doc->toCString();
-	qWarning(str);
+	kdWarning() << str << endl;
 
 	if (!_store->open("root")) {
 	    return false;
@@ -491,7 +491,7 @@ bool KWDWriter::writeDoc() {
 	}
 
 	if (!_store->open("documentinfo.xml")) {
-		qWarning("WARNING: unable to write out doc info. continuing anyway");
+		kdWarning() << "WARNING: unable to write out doc info. continuing anyway" << endl;
 	} else {
 		str=_docinfo->toCString();
 		_store->write((const char *)str, str.length());
