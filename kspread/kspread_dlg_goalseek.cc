@@ -247,6 +247,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
       m_sourceEdit->selectAll();
       m_sourceEdit->setFocus();
 
+      m_pView->slotUpdateView( m_pView->activeTable() );
       return;
     }
 
@@ -257,6 +258,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
       m_targetEdit->selectAll();
       m_targetEdit->setFocus();
 
+      m_pView->slotUpdateView( m_pView->activeTable() );
       return;
     }
 
@@ -268,6 +270,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
       m_targetValueEdit->selectAll();
       m_targetValueEdit->setFocus();
 
+      m_pView->slotUpdateView( m_pView->activeTable() );
       return;
     }
 
@@ -280,6 +283,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
       m_sourceEdit->selectAll();
       m_sourceEdit->setFocus();
 
+      m_pView->slotUpdateView( m_pView->activeTable() );
       return;
     }
 
@@ -289,6 +293,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
       m_targetEdit->selectAll();
       m_targetEdit->setFocus();
 
+      m_pView->slotUpdateView( m_pView->activeTable() );
       return;
     }
 
@@ -303,7 +308,6 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
 
     m_restored = false;
 
-    pDoc->emitBeginOperation();
     startCalc( m_sourceCell->value().asFloat(), goal );
     m_pView->slotUpdateView( m_pView->activeTable() );
 
