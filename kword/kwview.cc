@@ -19,7 +19,6 @@
 */
 
 #undef Unsorted
-#include <kdeversion.h>
 #include <kaccel.h>
 #include <kmessagebox.h>
 #include <qclipboard.h>

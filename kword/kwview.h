@@ -21,6 +21,7 @@
 #define kwview_h
 
 #include <kprinter.h>
+#include <kdeversion.h>
 #include <qbrush.h>
 
 #include "koborder.h"
