@@ -39,6 +39,7 @@ Until beta2:
 - added Greek to EURO() function
 - new function category: Engineering
 - added support with templates
+- added support for changing row/col and table of named areas
 
 new functions added:
  ISBLANK, CHAR, CODE, VALUE, DOLLAR, CONCATENATE, FIXED, T, TEXT, SUBSTITUTE,

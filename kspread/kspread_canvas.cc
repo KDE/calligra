@@ -3131,13 +3131,14 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   QFont boldFont = normalFont;
   boldFont.setBold( TRUE );
 
-  //several cells selected but not just a cell merged
-  bool area= !(table->singleCellSelection());
+  //  several cells selected but not just a cell merged
+  bool area = !(table->singleCellSelection());
 
   for ( int y = top_row; y <= bottom_row; y++ )
   {
     bool highlighted = ( area && y >= selection.top() && y <= selection.bottom() );
     bool selected = ( highlighted && (table->isRowSelected()) );
+    bool current  = ( !highlighted && y == selection.top() );
 
     RowLayout *row_lay = table->rowLayout( y );
 
@@ -3171,7 +3172,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 
     if ( selected )
       painter.setPen( colorGroup().highlightedText() );
-    else if ( highlighted )
+    else if ( highlighted || current )
       painter.setFont( boldFont );
     int len = painter.fontMetrics().width(buffer );
     if(!row_lay->isHide())
@@ -3678,13 +3679,14 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   extraCell.setCoords(m_pCanvas->markerColumn(),m_pCanvas->markerRow(),
   m_pCanvas->markerColumn()+cell->extraXCells(),m_pCanvas->markerRow()+cell->extraYCells());
 
-  //several cells selected but not just a cell merged
-  bool area=( selection.left()!=0 && extraCell!=selection );
+  // several cells selected but not just a cell merged
+  bool area = ( selection.left()!=0 && extraCell!=selection );
 
   for ( int x = left_col; x <= right_col; x++ )
   {
     bool highlighted = ( area && x >= selection.left() && x <= selection.right());
     bool selected = ( highlighted && table->isColumnSelected() && (!table->isRowSelected()) );
+    bool current = ( !highlighted && x == selection.left() );
 
     ColumnLayout *col_lay = table->columnLayout( x );
 
@@ -3715,7 +3717,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 
     if ( selected )
       painter.setPen( colorGroup().highlightedText() );
-    else if ( highlighted )
+    else if ( highlighted || current )
       painter.setFont( boldFont );
     if(!m_pView->activeTable()->getShowColumnNumber())
     {

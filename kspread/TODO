@@ -10,6 +10,10 @@ Others bugs not in BT system (Report by - taken by):
         (especially multirow cells) are in visible rect
 	--(John) I've done updates on this, does anyone think this is still
 	         a big problem?
+        No, I think you fixed it. So Bug #41068 can be closed
+        But something else: put something like setZoom( 0.75 ) in 
+        the KSpreadView contructor and then mark a big area - this takes forever
+        on slow machines.
 		 
 - MultiRow cells will only be drawn if obscuring is forced!
 
@@ -35,7 +39,7 @@ Other things: (please add the things you are working on!)
 - more chart types
 - Styles
 - background spell check
-- links to other kspread files
+- links to cells in other kspread files
 - much more formulas (financial, database...)
 - Scrollbar that supports jumping one row/column forward or back
 - Named areas with something like "=x+5" ("='x'+5" works already)
@@ -82,8 +86,7 @@ Philipp
 Norbert
 =======
 
-- vacation for two weeks - maybe I have time to play with zooming - but anyone else
-  could take this, too.
+- still undecided...
 
 Ariya
 =====
