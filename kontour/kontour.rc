@@ -49,6 +49,8 @@
    <Action name="styles"/>
    <Action name="addStyle"/>
    <Action name="deleteStyle"/>
+   <Separator/>
+   <Action name="dashEdit"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
    <Action name="showLayerPanel"/>

@@ -24,11 +24,35 @@
 
 #include "DashEditDialog.h"
 
+#include <qlayout.h>
+#include <qlabel.h>
+
 #include <klocale.h>
 
 DashEditDialog::DashEditDialog(KontourView *aView, GDocument *aGDoc, QWidget *parent, const char *name):
-KDialogBase(KDialogBase::TreeList, i18n("Dashes Manager"), Ok|Apply|Cancel, Ok, parent, name, true)
+KDialogBase(KDialogBase::Plain, i18n("Dashes Manager"), Ok|Apply|Cancel, Ok, parent, name, true)
 {
+  mView = aView;
+  mGDoc = aGDoc;
+  createWidget(plainPage());
+}
+
+void DashEditDialog::slotApply()
+{
+
+}
+
+void DashEditDialog::slotOk()
+{
+
+}
+
+void DashEditDialog::createWidget(QWidget *parent)
+{
+  QLabel *mNumLabel =  new QLabel(i18n("Number"), parent);
+
+  QGridLayout *layout = new QGridLayout(parent, 2, 3);
+  layout->addWidget(mNumLabel, 0, 0);
 }
 
 #include "DashEditDialog.moc"

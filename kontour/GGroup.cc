@@ -107,7 +107,7 @@ void GGroup::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool out
     o->draw(p, tmpMatrix * m, false, outline);
 }
 
-int GGroup::getNeighbourPoint(const KoPoint &p)
+int GGroup::getNeighbourPoint(const KoPoint &p, const double distance)
 {
   return -1;
 }

@@ -25,14 +25,14 @@
 
 #include "GPath.h"
 
+#include <cstdlib>     // for abs
+
 #include <qdom.h>
 
 #include <klocale.h>
 #include <koVectorPath.h>
 #include <koPainter.h>
-
 #include <kdebug.h>
-#include <stdlib.h> // for abs
 
 #include "kontour_global.h"
 #include "GDocument.h"
@@ -49,7 +49,7 @@ GSegment::~GSegment()
 {
 }
 
-const KoPoint &GSegment::point(int i) const
+KoPoint &GSegment::point(int i)
 {
   return points[i];
 }
@@ -94,6 +94,34 @@ QDomElement GMove::writeToXml(QDomDocument &document)
 }
 
 double GMove::length() const
+{
+  return 0.0;
+}
+
+/*        GClose      */
+
+GClose::GClose()
+{
+  points.resize(0);
+}
+
+GClose::GClose(const QDomElement &element)
+{
+  points.resize(0);
+}
+
+const char GClose::type() const
+{
+  return 'z';
+}
+
+QDomElement GClose::writeToXml(QDomDocument &document)
+{
+  QDomElement close = document.createElement("z");
+  return close;
+}
+
+double GClose::length() const
 {
   return 0.0;
 }
@@ -173,10 +201,9 @@ double GCubicBezier::length() const
 
 /*******************[GPath]*********************/
 
-GPath::GPath(bool aClosed):
+GPath::GPath():
 GObject()
 {
-  mClosed = aClosed;
   segments.setAutoDelete(true);
 }
 
@@ -214,12 +241,7 @@ GObject(obj)
 
 GObject *GPath::copy() const
 {
-  return new GPath(this);
-}
-
-void GPath::closed(bool aClosed)
-{
-  mClosed = aClosed;
+  return new GPath(*this);
 }
 
 void GPath::beginTo(const double x, const double y)
@@ -237,6 +259,12 @@ void GPath::moveTo(const double x, const double y)
   seg->point(0, KoPoint(x, y));
   segments.append(seg);
   calcBoundingBox();
+}
+
+void GPath::close()
+{
+  GClose *seg = new GClose;
+  segments.append(seg);
 }
 
 void GPath::lineTo(const double x, const double y)
@@ -326,16 +354,12 @@ void GPath::arcTo(const double x1, const double y1, const double x2, const doubl
 
 QString GPath::typeName() const
 {
-  if(mClosed)
-    return i18n("Closed Path");
-  else
-    return i18n("Path");
+  return i18n("Path");
 }
 
 QDomElement GPath::writeToXml(QDomDocument &document)
 {
   QDomElement path = document.createElement("path");
-  path.setAttribute("closed", mClosed);
   path.appendChild(GObject::writeToXml(document));
   for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
     path.appendChild((*seg)->writeToXml(document));
@@ -348,14 +372,19 @@ void GPath::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outl
   setBrush(p);
   KoVectorPath *v = new KoVectorPath;
   KoPoint c, c1, c2;
+  KoPoint b;
 
   for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
   {
     GSegment *s = *seg;
     if(s->type() == 'm')
     {
-      c = s->point(0).transform(tmpMatrix * m);
-      v->moveTo(c.x(), c.y());
+      b = s->point(0).transform(tmpMatrix * m);
+      v->moveTo(b.x(), b.y());
+    }
+    else if(s->type() == 'z')
+    {
+      v->lineTo(b.x(), b.y());
     }
     else if(s->type() == 'l')
     {
@@ -406,13 +435,111 @@ void GPath::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outl
   }
 }
 
-int GPath::getNeighbourPoint(const KoPoint &point)
+int GPath::getNeighbourPoint(const KoPoint &point, const double distance)
 {
+  int v = 0;
+  KoPoint c;
+  for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
+  {
+    GSegment *s = *seg;
+    if(s->type() == 'm')
+    {
+      c = s->point(0);
+      c = c.transform(tmpMatrix);
+      if(c.isNear(point, distance))
+        return v;
+      v++;
+    }
+    else if(s->type() == 'l')
+    {
+      c = s->point(0);
+      c = c.transform(tmpMatrix);
+      if(c.isNear(point, distance))
+        return v;
+      v++;
+    }
+    else if(s->type() == 'c')
+    {
+      c = s->point(0);
+      c = c.transform(tmpMatrix);
+      if(c.isNear(point, distance))
+        return v;
+      v++;
+      c = s->point(1);
+      c = c.transform(tmpMatrix);
+      if(c.isNear(point, distance))
+        return v;
+      v++;
+      c = s->point(2);
+      c = c.transform(tmpMatrix);
+      if(c.isNear(point, distance))
+        return v;
+      v++;
+    }
+  }
   return -1;
 }
 
 void GPath::movePoint(int idx, double dx, double dy, bool ctrlPressed)
 {
+  int v = 0;
+  KoPoint c;
+  for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
+  {
+    GSegment *s = *seg;
+    if(s->type() == 'm')
+    {
+      if(v == idx)
+      {
+        c = s->point(0);
+	c = c.transform(tmpMatrix);
+	c.setX(c.x() + dx);
+	c.setY(c.y() + dy);
+	c = c.transform(iMatrix);
+	s->point(0, c);
+      }
+      v++;
+    }
+    else if(s->type() == 'l')
+    {
+      if(v == idx)
+      {
+        c = s->point(0);
+	c = c.transform(tmpMatrix);
+	c.setX(c.x() + dx);
+	c.setY(c.y() + dy);
+	c = c.transform(iMatrix);
+	s->point(0, c);
+      }
+      v++;
+    }
+    else if(s->type() == 'c')
+    {
+      if(v == idx)
+      {
+        c = s->point(0);
+	c = c.transform(tmpMatrix);
+	c.setX(c.x() + dx);
+	c.setY(c.y() + dy);
+	c = c.transform(iMatrix);
+	s->point(0, c);
+	c = s->point(1);
+	c = c.transform(tmpMatrix);
+	c.setX(c.x() + dx);
+	c.setY(c.y() + dy);
+	c = c.transform(iMatrix);
+	s->point(1, c);
+	c = s->point(2);
+	c = c.transform(tmpMatrix);
+	c.setX(c.x() + dx);
+	c.setY(c.y() + dy);
+	c = c.transform(iMatrix);
+	s->point(2, c);
+      }
+      v += 3;
+    }
+  }
+  calcBoundingBox();
 }
 
 void GPath::removePoint(int idx)

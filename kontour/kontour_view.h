@@ -149,6 +149,7 @@ public slots:
   void slotStyles(const QString &s);
   void slotAddStyle();
   void slotDeleteStyle();
+  void slotDashEdit();
   void slotShowLayerPanel(bool b);
   void slotShowOutlinePanel(bool b);
   void slotShowPaintPanel(bool b);
@@ -224,6 +225,7 @@ private:
   KSelectAction       *m_styles;
   KAction             *m_addStyle;
   KAction             *m_deleteStyle;
+  KAction             *m_dashEdit;
 
   KToggleAction       *m_showLayerPanel;
   KToggleAction       *m_showOutlinePanel;

@@ -150,7 +150,7 @@ void GPolygon::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool o
   }
 }
 
-int GPolygon::getNeighbourPoint(const KoPoint &p)
+int GPolygon::getNeighbourPoint(const KoPoint &p, const double distance)
 {
   return -1;
 }
@@ -233,7 +233,7 @@ void GPolygon::calcBoundingBox()
 
 GPath *GPolygon::convertToPath() const
 {
-  GPath *path = new GPath(true);
+  GPath *path = new GPath();
   double a = 2.0 * Kontour::pi / static_cast<double>(mVertex);
   double caa = mAAngle;
   double cab = mBAngle;

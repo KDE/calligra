@@ -60,7 +60,7 @@ GObject::GObject(const QDomElement &element)
   mStyle = new GStyle(element.namedItem("style").toElement());
   tMatrix = toMatrix(element.namedItem("matrix").toElement());
   iMatrix = tMatrix.invert();
-  initTmpMatrix();
+  tmpMatrix = tMatrix;
 }
 
 GObject::GObject(const GObject &obj)
@@ -125,7 +125,8 @@ QDomElement GObject::writeToXml(QDomDocument &document)
 void GObject::drawNode(KoPainter *p, int x, int y, bool active)
 {
 // TODO Fix!
-  p->fillAreaRGB(QRect(x - 3, y - 3, 7, 7), KoColor::black());
+  p->fillAreaRGB(QRect(x - 2, y - 3, 5, 7), KoColor::black());
+  p->fillAreaRGB(QRect(x - 3, y - 2, 7, 5), KoColor::black());
   p->fillAreaRGB(QRect(x - 2, y - 2, 5, 5), KoColor::magenta());
 }
 
@@ -169,10 +170,10 @@ void GObject::ttransform(const QWMatrix &m)
 
 GObject *GObject::objectFactory(const QDomElement &element)
 {
-  if(element.tagName() == "oval")
-    return new GOval(element);
-  else if(element.tagName() == "rect")
+  if(element.tagName() == "rect")
     return new GRect(element);
+  else if(element.tagName() == "oval")
+    return new GOval(element);
   else if(element.tagName() == "polygon")
     return new GPolygon(element);
   else if(element.tagName() == "path")

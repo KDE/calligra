@@ -38,18 +38,21 @@ PathTool::PathTool(QString aId, ToolController *tc):
 Tool(aId, tc)
 {
   ToolSelectAction *zoom = new ToolSelectAction(actionCollection(), "ToolAction");
-  KRadioAction *mT1 = new KRadioAction(i18n("Path"), "linetool", 0, actionCollection());
+  KRadioAction *mT1 = new KRadioAction(i18n("Curve"), "linetool", 0, actionCollection());
   mT1->setExclusiveGroup("PathTool");
-  KRadioAction *mT2 = new KRadioAction(i18n("Path"),"beziertool", 0, actionCollection());
+  KRadioAction *mT2 = new KRadioAction(i18n("Line"),"beziertool", 0, actionCollection());
   mT2->setExclusiveGroup("PathTool");
-  KRadioAction *mT3 = new KRadioAction(i18n("Path"), "beziertool", 0, actionCollection());
+  KRadioAction *mT3 = new KRadioAction(i18n("Polyline"), "beziertool", 0, actionCollection());
   mT3->setExclusiveGroup("PathTool");
-  KRadioAction *mT4 = new KRadioAction(i18n("Path"),"linetool", 0, actionCollection());
+  KRadioAction *mT4 = new KRadioAction(i18n("Bezier"),"linetool", 0, actionCollection());
   mT4->setExclusiveGroup("PathTool");
+  KRadioAction *mT5 = new KRadioAction(i18n("Spiral"),"linetool", 0, actionCollection());
+  mT5->setExclusiveGroup("PathTool");
   zoom->insert(mT1);
   zoom->insert(mT2);
   zoom->insert(mT3);
   zoom->insert(mT4);
+  zoom->insert(mT5);
 }
 
 void PathTool::activate()

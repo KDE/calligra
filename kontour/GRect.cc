@@ -122,7 +122,7 @@ void GRect::calcBoundingBox()
   adjustBBox(mBBox);
 }
 
-int GRect::getNeighbourPoint(const KoPoint &p)
+int GRect::getNeighbourPoint(const KoPoint &p, const double distance)
 {
 /*  for(int i = 1; i >= 0; i--)
   {
@@ -152,7 +152,7 @@ bool GRect::contains(const KoPoint &p)
 
 GPath *GRect::convertToPath() const
 {
-  GPath *path = new GPath(true);
+  GPath *path = new GPath();
   double rx = 0.5 * mXRoundness * mSX;
   double ry = 0.5 * mYRoundness * mSY;
   if(mXRoundness != 0.0 && mYRoundness != 0.0)

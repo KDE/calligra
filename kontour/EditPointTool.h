@@ -27,9 +27,11 @@
 #define __EditPointTool_h__
 
 #include "Tool.h"
+#include <koPoint.h>
 
 class GPage;
 class Canvas;
+class GObject;
 
 class EditPointTool : public Tool
 {
@@ -48,6 +50,12 @@ protected:
   void processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas *canvas);
 
 private:
+  enum Mode {MovePoint, InsertPoint, RemovePoint, Join, Split};
+  Mode         mode;
+  GObject     *obj;
+  int          pointIdx;
+  KoPoint      mStartPoint;
+  KoPoint      mLastPoint;
 };
 
 #endif

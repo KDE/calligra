@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Jansen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,28 +23,27 @@
 
 */
 
-#ifndef EditPointCmd_h_
-#define EditPointCmd_h_
+#ifndef __MovePointCmd_h__
+#define __MovePointCmd_h__
 
-#include <Command.h>
+#include "Command.h"
 
-class GDocument;
 class GObject;
 
-class EditPointCmd : public Command {
+class MovePointCmd : public Command
+{
 public:
-  EditPointCmd (GDocument* doc, GObject* o, int idx,
-                float dx, float dy);
-  ~EditPointCmd ();
+  MovePointCmd(GDocument *aGDoc, GObject *o, int idx, double dx, double dy);
+  ~MovePointCmd();
 
-  void execute ();
-  void unexecute ();
+  void execute();
+  void unexecute();
 
 private:
-  GDocument* document;
-  GObject* obj;
-  int index;
-  float xoff, yoff;
+  GObject        *obj;
+  int             index;
+  double          xoff;
+  double          yoff;
 };
 
 #endif

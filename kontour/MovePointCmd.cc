@@ -2,8 +2,9 @@
 
   $Id$
 
-  This file is part of KIllustrator.
+  This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
+  Copyright (C) 2002 Igor Jansen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -22,34 +23,33 @@
 
 */
 
-#include "EditPointCmd.h"
+#include "MovePointCmd.h"
 
 #include <klocale.h>
 
-#include <GDocument.h>
-#include <GObject.h>
+#include "GObject.h"
 
-EditPointCmd::EditPointCmd (GDocument* doc, GObject* o,
-                            int idx, float dx, float dy)
-  : Command(i18n("Edit Point"))
+MovePointCmd::MovePointCmd(GDocument *aGDoc, GObject *o, int idx, double dx, double dy):
+Command(aGDoc, i18n("Move Point"))
 {
-  document = doc;
   obj = o;
-  obj->ref ();
+  obj->ref();
   index = idx;
   xoff = dx;
   yoff = dy;
 }
 
-EditPointCmd::~EditPointCmd () {
-  obj->unref ();
+MovePointCmd::~MovePointCmd()
+{
+  obj->unref();
 }
 
-void EditPointCmd::execute () {
-  obj->movePoint (index, xoff, yoff);
+void MovePointCmd::execute()
+{
+  obj->movePoint(index, xoff, yoff);
 }
 
-void EditPointCmd::unexecute () {
-  obj->movePoint (index, -xoff, -yoff);
+void MovePointCmd::unexecute()
+{
+  obj->movePoint(index, -xoff, -yoff);
 }
-

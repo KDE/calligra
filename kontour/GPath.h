@@ -45,7 +45,7 @@ public:
 
   virtual const char type() const = 0;
 
-  const KoPoint &point(int i) const;
+  KoPoint &point(int i);
   void point(int i, const KoPoint &c);
   void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
 
@@ -76,6 +76,24 @@ public:
 };
 
 /**
+ * Close segment.
+ *
+ */
+
+class GClose : public GSegment
+{
+public:
+  GClose();
+  GClose(const QDomElement &element);
+
+  const char type() const;
+
+  QDomElement writeToXml(QDomDocument &document);
+
+  double length() const;
+};
+
+/**
  * Line segment.
  *
  */
@@ -92,7 +110,6 @@ public:
 
   double length() const;
 };
-
 
 /**
  * Cubic Bezier segment.
@@ -117,18 +134,16 @@ class GPath : public GObject
 {
   Q_OBJECT
 public:
-  GPath(bool aClosed = false);
+  GPath();
   GPath(const QDomElement &element);
   GPath(const GPath &obj);
 
   virtual GObject *copy() const;
 
-  bool closed() const {return mClosed; }
-  void closed(bool aClosed);
-
-  /* Construct path */
+  // Construct path
   void beginTo(const double x, const double y);
   void moveTo(const double x, const double y);
+  void close();
   void lineTo(const double x, const double y);
   void curveTo(const double x, const double y, const double x1, const double y1, const double x2, const double y2);
   void arcTo(const double x1, const double y1, const double x2, const double y2, const double r);
@@ -137,7 +152,7 @@ public:
   QDomElement writeToXml(QDomDocument &document);
   void draw(KoPainter *p, const QWMatrix &m, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
 
-  int getNeighbourPoint(const KoPoint &point);
+  int getNeighbourPoint(const KoPoint &point, const double distance);
   void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
   void removePoint(int idx);
   bool contains(const KoPoint &p);
@@ -148,7 +163,6 @@ public:
 
 private:
   QPtrList<GSegment> segments;
-  bool mClosed;
 };
 
 #endif

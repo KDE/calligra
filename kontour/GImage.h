@@ -47,7 +47,7 @@ public:
   QDomElement writeToXml(QDomDocument &document);
   void draw(KoPainter *p, const QWMatrix &m, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
 
-  int getNeighbourPoint(const KoPoint &point);
+  int getNeighbourPoint(const KoPoint &point, const double distance);
   void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
   void removePoint(int idx);
   bool contains(const KoPoint &p);

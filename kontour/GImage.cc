@@ -110,7 +110,7 @@ void GImage::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool out
   p->drawImage(mImage, style()->fillOpacity(), mm);
 }
 
-int GImage::getNeighbourPoint(const KoPoint &p)
+int GImage::getNeighbourPoint(const KoPoint &p, const double distance)
 {
   return -1;
 }

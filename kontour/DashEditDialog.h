@@ -29,6 +29,7 @@
 
 class KontourView;
 class GDocument;
+class QSpinBox;
 
 class DashEditDialog : public KDialogBase
 {
@@ -36,6 +37,16 @@ class DashEditDialog : public KDialogBase
 public:
   DashEditDialog(KontourView *aView, GDocument *aGDoc, QWidget *parent = 0L, const char *name = 0L);
 
+protected slots:
+  void slotApply();
+  void slotOk();
+
+private:
+  void createWidget(QWidget *parent);
+
+private:
+  KontourView      *mView;
+  GDocument        *mGDoc;
 };
 
 #endif

@@ -40,8 +40,10 @@ public:
   void processEvent(QEvent *e);
 
 private:
+  enum Mode{Curve, Line, Polyline, Bezier, Spiral};
   enum State{S_Init, S_Resize};
-  State state;
+  Mode           mode;
+  State          state;
 };
 
 #endif

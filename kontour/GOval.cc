@@ -153,7 +153,7 @@ void GOval::calcBoundingBox()
   segPoint[1].setY(y);
 }
 
-int GOval::getNeighbourPoint(const KoPoint &p)
+int GOval::getNeighbourPoint(const KoPoint &p, const double distance)
 {
   for(int i = 1; i >= 0; i--)
   {
@@ -190,7 +190,7 @@ bool GOval::contains(const KoPoint &p)
 
 GPath *GOval::convertToPath() const
 {
-  GPath *path = new GPath(true);
+  GPath *path = new GPath();
   path->beginTo(-1.0, 0.0);
   path->arcTo(-1.0, 1.0, 0.0, 1.0, 1.0);
   path->arcTo(1.0, 1.0, 1.0, 0.0, 1.0);

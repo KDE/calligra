@@ -157,7 +157,7 @@ public:
    * Control points.
    *
    */
-  virtual int getNeighbourPoint(const KoPoint &point) = 0;
+  virtual int getNeighbourPoint(const KoPoint &point, const double distance) = 0;
   virtual void movePoint(int idx, double dx, double dy, bool ctrlPressed = false) = 0;
   virtual void removePoint(int idx) = 0;
 

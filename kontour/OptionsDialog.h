@@ -42,6 +42,7 @@ class OptionsDialog : public KDialogBase
   Q_OBJECT
 public:
   OptionsDialog(KontourView *aView, GDocument *aGDoc, QWidget* parent = 0L, const char* name = 0L);
+
 protected:
   void createGeneralWidget(QWidget *parent);
   void createEditWidget(QWidget *parent);
