@@ -321,12 +321,12 @@ void ThumbBar::removeItem( int pos )
     int page = 0;
     bool change = false;
     QIconViewItem *itemToDelete = 0;
-    
+
     for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() ) {
         if ( page == pos ) {
             itemToDelete = it;
             if ( it->nextItem() )
-                it = it->nextItem(); 
+                it = it->nextItem();
                 change = true;
         }
         if ( change ) {
@@ -334,8 +334,7 @@ void ThumbBar::removeItem( int pos )
         }
         page++;
     }
-    if ( itemToDelete )
-        delete itemToDelete;
+    delete itemToDelete;
 }
 
 QPixmap ThumbBar::getSlideThumb(int slideNr) const
@@ -493,12 +492,12 @@ void Outline::removeItem( int pos )
     kdDebug()<< "Outline::removeItem" << endl;
     int page = 0;
     bool updatePageNum = false;
-    
+
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it ) {
         if ( page == pos ) {
             kdDebug() << "Page " << it.current()->text(0) << " removed" << endl;
-            if ( it.current()->nextSibling()) 
+            if ( it.current()->nextSibling())
                 updatePageNum = true;
             delete it.current();
         }

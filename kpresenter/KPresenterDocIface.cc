@@ -819,3 +819,13 @@ void KPresenterDocIface::setCursorInProtectedArea( bool b )
     doc->setCursorInProtectedArea(b);
 }
 
+void KPresenterDocIface::setRefreshSideBar( bool _b )
+{
+    doc->setRefreshSideBar( _b );
+}
+
+bool KPresenterDocIface::refreshSideBar()const
+{
+    return doc->refreshSideBar();
+}
+

@@ -404,6 +404,9 @@ public:
 
     void insertFile(const QString & file );
 
+    void setRefreshSideBar( bool _b ) { m_refreshSideBar = _b;}
+    bool refreshSideBar()const  { return m_refreshSideBar;}
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -542,6 +545,7 @@ protected:
     KoVariableFormatCollection *m_varFormatCollection;
     KPrVariableCollection *m_varColl;
     QColor m_gridColor;
+    bool m_refreshSideBar;
 private:
     QValueList<double> m_horizHelplines;
     QValueList<double> m_vertHelplines;

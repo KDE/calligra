@@ -455,10 +455,12 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     QGridLayout *grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
 
     m_oldNbRedo=30;
+    m_oldRefreshSideBar = false;
     if( config->hasGroup("Misc") )
     {
         config->setGroup( "Misc" );
         m_oldNbRedo=config->readNumEntry("UndoRedo",m_oldNbRedo);
+        m_oldRefreshSideBar = config->readBoolEntry("RefreshSideBar",false);
     }
 
     m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
@@ -504,6 +506,17 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     resolutionY->setRange( KoUnit::ptToUnit(10.0 , doc->getUnit()), KoUnit::ptToUnit(rect.width() , doc->getUnit()), 1, false);
 
     grid->addWidget(resolutionY , 3,0);
+
+
+    tmpQGroupBox = new QGroupBox( box, "GroupBox" );
+    tmpQGroupBox->setTitle(i18n("SideBar"));
+
+    grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
+
+    cbSideBarRefresh = new QCheckBox( i18n("Refresh SideBar item"), tmpQGroupBox);
+    cbSideBarRefresh->setChecked(m_oldRefreshSideBar);
+    grid->addWidget(cbSideBarRefresh, 0, 0);
+
 }
 
 KCommand * ConfigureMiscPage::apply()
@@ -517,6 +530,14 @@ KCommand * ConfigureMiscPage::apply()
         doc->setUndoRedoLimit(newUndo);
         m_oldNbRedo=newUndo;
     }
+    bool res = cbSideBarRefresh->isChecked();
+    if(res!=m_oldRefreshSideBar)
+    {
+        config->writeEntry("RefreshSideBar",res);
+        doc->setRefreshSideBar(res);
+        m_oldRefreshSideBar=res;
+    }
+
     KMacroCommand * macroCmd=0L;
     bool b=m_displayLink->isChecked();
     bool b_new=doc->getVariableCollection()->variableSetting()->displayLink();

@@ -99,7 +99,8 @@ private:
     QCheckBox* m_displayLink, *m_displayComment, *m_underlineLink;
     KDoubleNumInput * resolutionY, * resolutionX;
     KDoubleNumInput *m_rotation;
-
+    QCheckBox *cbSideBarRefresh;
+    bool m_oldRefreshSideBar;
 };
 
 class ConfigureDefaultDocPage : public QObject

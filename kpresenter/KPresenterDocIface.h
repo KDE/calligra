@@ -238,6 +238,9 @@ k_dcop:
     bool cursorInProtectedArea()const;
     void setCursorInProtectedArea( bool b );
 
+    void setRefreshSideBar( bool _b );
+    bool refreshSideBar()const;
+
 
 private:
     KPresenterDoc *doc;

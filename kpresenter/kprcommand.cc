@@ -417,8 +417,11 @@ void DeleteCmd::execute()
     }
     if(textObj)
         doc->updateRuler();
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos);
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos);
+    }
 }
 
 /*====================== unexecute ===============================*/
@@ -430,8 +433,12 @@ void DeleteCmd::unexecute()
 	objects.at( i )->addToObjList();
 	doc->repaint( objects.at( i ) );
     }
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos);
+    if ( doc->refreshSideBar())
+    {
+
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos);
+    }
 }
 
 
@@ -702,8 +709,11 @@ void InsertCmd::execute()
     if ( object->getType() == OT_TEXT )
 	( (KPTextObject*)object )->recalcPageNum( doc,m_page );
     doc->repaint( object );
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos);
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos);
+    }
 }
 
 /*====================== unexecute ===============================*/
@@ -718,8 +728,12 @@ void InsertCmd::unexecute()
             doc->terminateEditing( (KPTextObject*)object );
     }
     doc->repaint( oldRect );
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos);
+    if ( doc->refreshSideBar())
+    {
+
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos);
+    }
 }
 
 /******************************************************************/
@@ -811,8 +825,11 @@ void MoveByCmd::execute()
 	doc->repaint( oldRect );
 	doc->repaint( objects.at( i ) );
     }
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos);
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos);
+    }
 }
 
 /*====================== unexecute ===============================*/
@@ -832,8 +849,11 @@ void MoveByCmd::unexecute()
 	doc->repaint( oldRect );
 	doc->repaint( objects.at( i ) );
     }
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos);
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos);
+    }
 }
 
 /******************************************************************/
