@@ -386,6 +386,21 @@ void KWTextParag::setCustomItem( int index, QTextCustomItem * custom, QTextForma
     invalidate( 0 );
 }
 
+void KWTextParag::setTabList( const KoTabulatorList &tabList )
+{
+    m_layout.setTabList( tabList );
+#if 0 // needs a change in QRT
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
+    KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
+    int * tabs = new int( tabList.count() ); // will be deleted by ~QTextParag
+    KoTabulatorList::Iterator it = tabList.begin();
+    for ( int i = 0; it != tabList.end() ; ++it, ++i )
+        tabs[i] = doc->zoomItX( (*it).ptPos );
+    delete [] tabArray();
+    setTabArray( tabs );
+#endif
+}
+
 //static
 QDomElement KWTextParag::saveFormat( QDomDocument & doc, QTextFormat * curFormat, QTextFormat * refFormat, int pos, int len )
 {

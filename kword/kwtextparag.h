@@ -152,7 +152,7 @@ public:
     void setCustomItem( int index, QTextCustomItem * custom, QTextFormat * currentFormat );
 
     KoTabulatorList tabList() const { return m_layout.tabList(); }
-    void setTabList( const KoTabulatorList &tabList ) { m_layout.setTabList( tabList ); }
+    void setTabList( const KoTabulatorList &tabList );
 
     void printRTDebug();
 
