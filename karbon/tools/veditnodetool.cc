@@ -61,11 +61,8 @@ VEditNodeTool::drawTemporaryObject()
 	KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
 	KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
 
-	KoRect rect = view()->part()->document().selection()->boundingBox();
-
-	kdDebug() << " x: " << rect.x() << " y: " << rect.y() << " rect.width: " << rect.width() << " rect.height: " << rect.height() << endl;
 	if( view()->part()->document().selection()->objects().count() > 0 &&
-		( m_state != normal || rect.contains( fp * ( 1.0 /  view()->zoom() ) ) ) )
+		( m_state != normal || view()->part()->document().selection()->checkNode( lp ) ) )
 	{
 		if( m_state == normal )
 			m_state = moving;
@@ -216,6 +213,7 @@ VEditNodeTool::eventFilter( QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		//m_activeNode = view()->part()->document().selection()->node( lp );
+		view()->part()->document().selection()->deselectNodes();
 
 		// draw initial object:
 		drawTemporaryObject();

@@ -236,6 +236,12 @@ VSelection::node( const QPoint& point ) const
 }
 
 void
+VSelection::deselectNodes()
+{
+	m_segments.clear();
+}
+
+void
 VSelection::selectNodes()
 {
 	VNodeSelector op;
@@ -253,12 +259,22 @@ VSelection::selectNodes()
 bool
 VSelection::checkNode( const KoPoint &p )
 {
-	QPtrListIterator<VSegment> itr( m_segments );
+	VNodeSelector op( p );
+	VObjectListIterator itr = m_objects;
+	for( ; itr.current(); ++itr )
+	{
+		op.visit( *itr.current() );
+		if( op.result().count() > 0 )
+			return true;
+	}
+
+	return false;
+	/*QPtrListIterator<VSegment> itr( m_segments );
 	for( itr.toFirst(); itr.current(); ++itr )
 		if( itr.current()->checkNode( p ) )
 			return true;
 
-	return false;
+	return false;*/
 }
 
 bool

@@ -187,7 +187,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 				else
 					painter->setBrush( Qt::NoBrush );
 
-				if( jtr.current()->type() == VSegment::curve  )
+				if( jtr.current()->type() == VSegment::curve )
 				{
 					if( jtr.current()->isSelected() )
 					{
@@ -210,9 +210,9 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 							painter->fillPath();
 						}
 
-					//if( jtr.current()->ctrlPointFixing() == VSegment::none ||
-					//	jtr.current()->ctrlPointFixing() == VSegment::first )
-					//{
+					if( jtr.current()->ctrlPointFixing() == VSegment::none ||
+						jtr.current()->ctrlPointFixing() == VSegment::first )
+					{
 						painter->newPath();
 						painter->setRasterOp( Qt::NotROP );
 						painter->setBrush( Qt::blue.light() );
@@ -231,11 +231,10 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 							jtr.current()->ctrlPoint2().y() + 2 / zoomFactor ) );
 
 						painter->fillPath();
-					//}
-
+					}
 
 					painter->newPath();
-				painter->setRasterOp( Qt::NotROP );
+					painter->setRasterOp( Qt::NotROP );
 
 					painter->moveTo( KoPoint(
 							jtr.current()->knot().x() - 2 / zoomFactor,

@@ -513,12 +513,17 @@ void
 VSegment::transform( const QWMatrix& m )
 {
 	// only transform if node is selected
+	if( m_isSelected[ 2 ] )
+	{
+		setKnot( m_point[ 2 ].transform( m ) );
+		setCtrlPoint1( m_point[ 0 ].transform( m ) );
+		setCtrlPoint2( m_point[ 1 ].transform( m ) );
+		return;
+	}
 	if( m_isSelected[ 0 ] )
 		setCtrlPoint1( m_point[ 0 ].transform( m ) );
 	if( m_isSelected[ 1 ] )
 		setCtrlPoint2( m_point[ 1 ].transform( m ) );
-	if( m_isSelected[ 2 ] )
-		setKnot( m_point[ 2 ].transform( m ) );
 }
 
 void
@@ -547,8 +552,8 @@ VSegment::selectNode( const KoPoint &p )
 bool
 VSegment::selectNode( const KoRect &r )
 {
-	m_isSelected[ 0 ] =	r.contains( m_point[ 0 ] );
-	m_isSelected[ 1 ] =	r.contains( m_point[ 1 ] );
+	m_isSelected[ 0 ] =	false;//r.contains( m_point[ 0 ] );
+	m_isSelected[ 1 ] =	false;//r.contains( m_point[ 1 ] );
 	m_isSelected[ 2 ] =	r.contains( m_point[ 2 ] );
 
 	return m_isSelected[ 0 ] || m_isSelected[ 1 ] || m_isSelected[ 2 ];

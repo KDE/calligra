@@ -99,6 +99,7 @@ public:
 	bool selectNode( const KoPoint &p );
 	bool checkNode( const KoPoint &p );
 	void selectNodes();
+	void deselectNodes();
 
 private:
 	/**

@@ -17,7 +17,7 @@ VNodeSelector::visitVSegmentList( VSegmentList& segmentList )
 			segmentList.current()->selectNode();
 		else if( !m_point.isNull() )
 		{
-			bool selected =	segmentList.current()->selectNode( m_point );
+			bool selected =	segmentList.current()->checkNode( m_point );
 			if( selected )
 				m_segments.append( segmentList.current() );
 		}
