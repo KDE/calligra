@@ -4,7 +4,7 @@ libkexicore_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 	kexidialogbase.cpp kexibrowseritem.cpp kexiworkspaceMDI.cpp kexicreateprojectpage.cpp \
 	kexicreateproject.cpp kexibrowser.cpp kexiview.cpp \
 	kexicreateprojectpageengine.cpp kexicreateprojectpagelocation.cpp kexicreateprojectpagedb.cpp \
-	kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp kexicreateprojectpageauth.h \
+	kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp \
 	KexiViewIface.skel KexiViewIface.cpp KexiProjectIface.skel \
 	kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp \
 	kexiprojecthandlerproxy.cpp kexiprojecthandleritem.cpp \
