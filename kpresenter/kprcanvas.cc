@@ -1307,13 +1307,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     } break;
     case INS_TEXT: {
         if ( !insRect.isNull() ) {
-            if ( m_drawSymetricObject )
-            {
-                m_drawSymetricObject = false;
-                insRect.moveBy( -insRect.width(), -insRect.height());
-                insRect.setSize( 2*insRect.size() );
-            }
-
+            rectSymetricalObjet();
             KPTextObject* kptextobject = insertTextObject( insRect );
             setToolEditMode( TEM_MOUSE );
 
@@ -1361,12 +1355,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     }break;
     case INS_LINE: {
         if ( insRect.width() != 0 && insRect.height() != 0 ) {
-            if ( m_drawSymetricObject )
-            {
-                m_drawSymetricObject = false;
-                insRect.moveBy( -insRect.width(), -insRect.height());
-                insRect.setSize( 2*insRect.size() );
-            }
+            rectSymetricalObjet();
             if ( insRect.top() == insRect.bottom() ) {
                 bool reverse = insRect.left() > insRect.right();
                 insRect = insRect.normalize();
@@ -1392,36 +1381,21 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     case INS_RECT:
         if ( !insRect.isNull() )
         {
-            if ( m_drawSymetricObject )
-            {
-                m_drawSymetricObject = false;
-                insRect.moveBy( -insRect.width(), -insRect.height());
-                insRect.setSize( 2*insRect.size() );
-            }
+            rectSymetricalObjet();
             insertRect( insRect );
         }
         break;
     case INS_ELLIPSE:
         if ( !insRect.isNull() )
         {
-            if ( m_drawSymetricObject )
-            {
-                m_drawSymetricObject = false;
-                insRect.moveBy( -insRect.width(), -insRect.height());
-                insRect.setSize( 2*insRect.size() );
-            }
-        insertEllipse( insRect );
+            rectSymetricalObjet();
+            insertEllipse( insRect );
         }
         break;
     case INS_PIE:
         if ( !insRect.isNull() )
         {
-            if ( m_drawSymetricObject )
-            {
-                m_drawSymetricObject = false;
-                insRect.moveBy( -insRect.width(), -insRect.height());
-                insRect.setSize( 2*insRect.size() );
-            }
+            rectSymetricalObjet();
             insertPie( insRect );
         }
         break;
@@ -1430,13 +1404,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     case INS_TABLE:
     case INS_FORMULA: {
         if ( !insRect.isNull() ) {
-            if ( m_drawSymetricObject )
-            {
-                m_drawSymetricObject = false;
-                insRect.moveBy( -insRect.width(), -insRect.height());
-                insRect.setSize( 2*insRect.size() );
-            }
-
+            rectSymetricalObjet();
             KPPartObject *kpPartObject = insertObject( insRect );
             setToolEditMode( TEM_MOUSE );
 
@@ -1453,12 +1421,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         bool reverse = insRect.left() > insRect.right() || insRect.top() > insRect.bottom();
         if ( !insRect.isNull() )
         {
-            if ( m_drawSymetricObject )
-            {
-                m_drawSymetricObject = false;
-                insRect.moveBy( -insRect.width(), -insRect.height());
-                insRect.setSize( 2*insRect.size() );
-            }
+            rectSymetricalObjet();
             insertAutoform( insRect, reverse );
         }
         setToolEditMode( TEM_MOUSE );
@@ -7310,4 +7273,14 @@ void KPrCanvas::alignObjBottom()
 bool KPrCanvas::canMoveOneObject() const
 {
     return (m_activePage->canMoveOneObject() || stickyPage()->canMoveOneObject());
+}
+
+void KPrCanvas::rectSymetricalObjet()
+{
+    if ( m_drawSymetricObject )
+    {
+        m_drawSymetricObject = false;
+        insRect.moveBy( -insRect.width(), -insRect.height());
+        insRect.setSize( 2*insRect.size() );
+    }
 }
