@@ -574,6 +574,8 @@ public:
     		delete m_firstCondition;
     	m_firstCondition=0;
     	}
+    	
+    void conditionAlign(QPainter &painter,int _col,int _row);
 protected:
 
     /**

@@ -291,3 +291,7 @@ and put the old condition when you active dialog.
 -Improved : Relational cell attribut
 Now parameter are setting when you open conditional dialog.
 Reduce memory to store condition.
+
+2000-02-11 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-bug fix

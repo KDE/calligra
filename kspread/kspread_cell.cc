@@ -1299,6 +1299,78 @@ switch( a )
     break;
   }
 }
+
+void KSpreadCell::conditionAlign(QPainter &_paint,int _col,int _row)
+{
+int a = m_eAlign;
+RowLayout *rl = m_pTable->rowLayout( _row );
+ColumnLayout *cl = m_pTable->columnLayout( _col );
+
+int w = cl->width();
+int h = rl->height();
+KSpreadConditional *tmpCondition=0;
+
+
+if(conditionIsTrue)
+        {
+        switch(numberOfCond)
+		{	
+		case 0:
+			tmpCondition=m_firstCondition;
+			break;
+		case 1:
+			tmpCondition=m_secondCondition;
+			break;
+		case 2:
+			tmpCondition=m_thirdCondition;
+			break;
+		}
+	_paint.setFont( tmpCondition->fontcond );
+	}
+else
+	{
+	_paint.setFont( m_textFont );	
+	}
+QFontMetrics fm = _paint.fontMetrics();
+m_iOutTextWidth = fm.width( m_strOutText );
+m_iOutTextHeight = fm.ascent() + fm.descent();
+m_fmAscent=fm.ascent();
+
+switch( m_eAlignY )
+  {
+  case KSpreadCell::Top:
+    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+    break;
+  case KSpreadCell::Bottom:
+    m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
+    break;
+  case KSpreadCell::Middle:
+    m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+    break;
+  }
+if ( a == KSpreadCell::Undefined )
+  {
+    if ( m_bValue )
+      a = KSpreadCell::Right;
+    else
+      a = KSpreadCell::Left;
+  }
+
+switch( a )
+  {
+  case KSpreadCell::Left:
+    m_iTextX = leftBorderWidth( _col, _row) + BORDER_SPACE;
+    break;
+  case KSpreadCell::Right:
+    m_iTextX = w - BORDER_SPACE - m_iOutTextWidth - rightBorderWidth( _col, _row );
+    break;
+  case KSpreadCell::Center:
+    m_iTextX = ( w - m_iOutTextWidth ) / 2;
+    break;
+  }
+}
+
+
 /*
 bool KSpreadCell::makeDepend( const char *_p, KSpreadDepend ** _dep, bool _second )
 {
@@ -1824,7 +1896,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
 	_painter.setPen( m_textPen.color() );
 	}
     //_painter.setFont( m_textFont );
-
+    conditionAlign(_painter,_col,_row);
     if ( !m_bMultiRow )
       _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
     else
@@ -1986,12 +2058,12 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
 			tmpCondition=m_thirdCondition;
 			break;
 		}
-
+	
         _painter.setFont( tmpCondition->fontcond );
       	}
       else
         _painter.setFont( m_textFont );
-
+      conditionAlign(_painter,_col,_row);     
       _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
     }
 }

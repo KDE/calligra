@@ -199,8 +199,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 			      SLOT( precisionPlus() ), actionCollection(), "precplus");
     m_precminus = new KAction( i18n("Decrease precision"), KSBarIcon("precminus"), 0, this,
 			      SLOT( precisionMinus() ), actionCollection(), "precminus");
-    /*m_money = new KAction( i18n("Money format"), KSBarIcon("money"), 0, this, SLOT( moneyFormat() ),
-			    actionCollection(), "money");*/
     m_money = new KToggleAction( i18n("Money format"), KSBarIcon("money"), 0, actionCollection(), "money");
     connect( m_money, SIGNAL( toggled( bool ) ), this, SLOT( moneyFormat( bool ) ) );
     m_alignLeft = new KToggleAction( i18n("Align left"), KSBarIcon("left"), 0, actionCollection(), "left");
@@ -270,7 +268,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_formulaSubscript = new KAction( i18n("Formula Subscript"), KSBarIcon("index3"), 0, this, SLOT( formulaSubscript() ),
 				      actionCollection(), "formulaSubscript" );
     m_formulaParantheses = new KAction( i18n("Formula Parentheses"), KSBarIcon("bra"), 0, this, SLOT( formulaParentheses() ),
-					actionCollection(), "formulaParantheses" );
+					actionCollection(), "formulaParentheses" );
     m_formulaAbsValue = new KAction( i18n("Formula Abs Value"), KSBarIcon("abs"), 0, this, SLOT( formulaAbsValue() ),
 				     actionCollection(), "formulaAbsValue" );
     m_formulaBrackets = new KAction( i18n("Formula Brackets"), KSBarIcon("brackets"), 0, this, SLOT( formulaBrackets() ),
@@ -290,7 +288,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_formulaSum = new KAction( i18n("Formula Sum"), KSBarIcon("sum"), 0, this, SLOT( formulaSum() ),
 				actionCollection(), "formulaSum" );
     m_formulaProduct = new KAction( i18n("Formula Product"), KSBarIcon("product"), 0, this, SLOT( formulaProduct() ),
-				    actionCollection(), "formulaProduct" );
+				    actionCollection(), "formulaProduct");
     m_formulaSelection = new KSelectAction( i18n("Formula Selection"), 0, actionCollection(), "formulaSelection" );
     QStringList lst;
     lst.append( "sum");
