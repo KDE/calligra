@@ -74,6 +74,7 @@ void UngroupCmd::execute () {
 	// and insert it into the object list at the former position
 	// of the group object
 	document->insertObjectAtIndex (obj, pos + offs);
+	document->selectObject (obj);
       }
       // remove the group object
       document->deleteObject (group);

@@ -603,6 +603,7 @@ void KIllustrator::menuCallback (int item) {
       document->initialize ();
       cmdHistory.reset ();
       setFileCaption (UNNAMED_FILE);
+      tcontroller->toolSelected (0);
     }
     break;
   case ID_FILE_OPEN: 
@@ -615,6 +616,7 @@ void KIllustrator::menuCallback (int item) {
 	document->initialize ();
 	openURL ((const char *)fname);
 	cmdHistory.reset ();
+	tcontroller->toolSelected (0);
       }
       break;
     }
