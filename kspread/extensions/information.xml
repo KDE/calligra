@@ -5,6 +5,19 @@
     <GroupName>Information</GroupName>
 
     <Function>
+      <Name>INFO</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Type of information</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The INFO() returns information about the current operating environment. Parameter type specifies what type of information you want to return. It is one of the following: "directory" returns path of the current directory, "release" returns version of KSpread as text.</Text>
+	<Syntax>INFO(type)</Syntax>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>ISBLANK</Name>
       <Type>Boolean</Type>
       <Parameter>

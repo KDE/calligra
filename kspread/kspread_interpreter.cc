@@ -136,6 +136,7 @@ bool kspreadfunc_xor( KSContext& context );
 bool kspreadfunc_if( KSContext& context );
 
 // defined in kspread_functions_information.cc
+bool kspreadfunc_info( KSContext& context );
 bool kspreadfunc_isblank( KSContext& context );
 bool kspreadfunc_islogic( KSContext& context );
 bool kspreadfunc_isempty( KSContext& context );
@@ -577,6 +578,7 @@ static const functionEntry funcTab[] = {
   { "NOT", kspreadfunc_not },
 
   // information
+  { "INFO", kspreadfunc_info },
   { "ISBLANK", kspreadfunc_isblank },
   { "ISLOGIC", kspreadfunc_islogic },
   { "ISEMPTY", kspreadfunc_isempty },

@@ -12,6 +12,34 @@
 #include <math.h>
 #include <float.h>
 
+#include <qdir.h>
+#include <config.h>
+
+// Function: INFO
+bool kspreadfunc_info( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "INFO", true ) )
+    return false;
+
+  if( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+
+  QString type = args[0]->stringValue().lower();
+
+  QString result;
+
+  if( type == "directory" )
+    result = QDir::currentDirPath();
+
+  if( type == "release" )
+    result = VERSION;
+
+  context.setValue( new KSValue( result) );
+  return true;
+}
+
 // Function: ISBLANK
 bool kspreadfunc_isblank( KSContext& context )
 {
