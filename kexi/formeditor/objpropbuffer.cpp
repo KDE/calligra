@@ -232,10 +232,12 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 	if(!tree)  return;
 
 	int count = 0;
+	//pList.sort();
 	QStrListIterator it(pList);
 	// We go through the list of properties
 	for(; it.current() != 0; ++it)
 	{
+//		kdDebug() << "ObjectPropertyBuffer::setWidget(): property: " << *it << endl;
 		count = w->metaObject()->findProperty(*it, true);
 		const QMetaProperty *meta = w->metaObject()->property(count, true);
 		if(meta->designable(w))
@@ -250,14 +252,16 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 				if(QString(meta->name()) == QString("alignment"))
 				{
 					createAlignProperty(meta, w);
-					break;
+					continue;
 				}
 				else
 				{
-					QStringList values = descList(QStringList::fromStrList(keys));
-
-					add(new KexiProperty(meta->name(), meta->valueToKey(w->property(meta->name()).toInt()),
-						QStringList::fromStrList(keys), values, desc));
+					add(new KexiProperty(meta->name(), 
+						meta->valueToKey(w->property(meta->name()).toInt()),
+						new KexiProperty::ListData(QStringList::fromStrList(keys), 
+							descList(QStringList::fromStrList(keys))),
+						desc)
+					);
 				}
 			}
 			else
@@ -279,7 +283,9 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 	QStringList list;
 	for(; strIt.current() != 0; ++strIt)
 		list.append(*strIt);
-	add(new KexiProperty("signals", "", list, descList(list), i18n("Events")));
+	add(new KexiProperty("signals", "", 
+		new KexiProperty::ListData(list, descList(list)), 
+		i18n("Events")));
 
 	if(m_manager->activeForm())
 	{
@@ -546,7 +552,8 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QWidget *ob
 			value = "AlignAuto";
 
 		list << "AlignAuto" << "AlignLeft" << "AlignRight" << "AlignHCenter" << "AlignJustify";
-		add(new KexiProperty("hAlign", value, list, descList(list), i18n("Horizontal Alignment")));
+		add(new KexiProperty("hAlign", value, 
+			new KexiProperty::ListData(list, descList(list)), i18n("Horizontal Alignment")));
 		updateOldValue(tree, "hAlign");
 		list.clear();
 	}
@@ -562,7 +569,8 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QWidget *ob
 			value = "AlignVCenter";
 
 		list << "AlignTop" << "AlignVCenter" << "AlignBottom";
-		add(new KexiProperty("vAlign", value, list, descList(list), i18n("Vertical Alignment")));
+		add(new KexiProperty("vAlign", value, new KexiProperty::ListData(list, descList(list)), 
+			i18n("Vertical Alignment")));
 		updateOldValue(tree, "vAlign");
 	}
 
@@ -619,7 +627,8 @@ ObjectPropertyBuffer::createLayoutProperty(Container *container)
 
 	list << "NoLayout" << "HBox" << "VBox" << "Grid";
 
-	add(new KexiProperty("layout", value, list, descList(list), i18n("Container's layout")));
+	add(new KexiProperty("layout", value, new KexiProperty::ListData(list, descList(list)), 
+		i18n("Container's layout")));
 
 	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(container->widget()->name());
 	updateOldValue(tree, "layout");

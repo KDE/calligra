@@ -47,12 +47,13 @@ class Connection;
 typedef QPtrList<KAction> ActionList;
 
 //! A class to manage (create/load/save) Forms
-/** This is Form Designer's top class, which is used by external APIs to access FormDesigner. This is the class you have to use
-   to integrate FormDesigner into another program.\n
-   It deals with creating, saving and loading Form, as well as widget insertion and copying.\n
-   It also ensures all the components (ObjectTreeView, Form and PropertyEditor) are synced, and link them.\n
-   It holds the WidgetLibrary, the ObjectPropertyBuffer, links to ObjectTreeView and PropertyEditor, as well as the copied widget
-   and the insert state.
+/** This is Form Designer's main class, which is used by external APIs to access FormDesigner. 
+   This is the class you have to use to integrate FormDesigner into another program.
+   It deals with creating, saving and loading Form, as well as widget insertion and copying.
+   It also ensures all the components (ObjectTreeView, Form and PropertyEditor) are synced, 
+   and link them.
+   It holds the WidgetLibrary, the ObjectPropertyBuffer, links to ObjectTreeView and PropertyEditor, 
+   as well as the copied widget and the insert state.
  **/
 class KFORMEDITOR_EXPORT FormManager : public QObject
 {
