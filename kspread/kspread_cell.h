@@ -637,6 +637,8 @@ protected:
 
     QString createFormat( double value, int col, int row );
     QString createFractionFormat( double value );
+    QString createDateFormat( );
+    QString createTimeFormat( );
     void checkFormat( bool formular = false );
 
     /**

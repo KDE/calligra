@@ -42,7 +42,11 @@ public:
     enum formatNumber { Number=0,Money=10,Percentage=25,Scientific=30,ShortDate=35,TextDate=36, Time=50,
     SecondeTime=51,fraction_half=70,fraction_quarter=71,fraction_eighth=72,fraction_sixteenth=73,
      fraction_tenth=74,fraction_hundredth=75,fraction_one_digit=76,
-     fraction_two_digits=77,fraction_three_digits=78};
+     fraction_two_digits=77,fraction_three_digits=78,
+     date_format1=200,date_format2=201,date_format3=202,date_format4=203,
+     date_format5=204,date_format6=205,date_format7=206,date_format8=207,
+     date_format9=208,date_format10=209,date_format11=210,date_format12=211,
+     date_format13=212,date_format14=213,date_format15=214,date_format16=215};
 
     enum Properties{ PAlign  = 0x01,
 		     PAlignY = 0x02,

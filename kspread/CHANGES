@@ -841,3 +841,8 @@ is red)
 -Move m_rotateAngle code and  FormatNumber code to kspread_layout.cc
 =>now undo works for formatnumber and rotate.
 
+
+2000-07-28-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Now format works
+-You can put different date format.

@@ -920,17 +920,15 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
     else if( isDate() )
     {
-	if( m_eFormatNumber == ShortDate)
-	    m_strOutText = KGlobal::locale()->formatDate(m_Date,true);
-	else if( m_eFormatNumber == TextDate )
-	    m_strOutText=KGlobal::locale()->formatDate(m_Date,false);
+        m_strOutText=createDateFormat();
     }
     else if( isTime() )
     {
-	if( m_eFormatNumber == Time )
+        m_strOutText=createTimeFormat();
+        /*if( m_eFormatNumber == Time )
 	    m_strOutText = KGlobal::locale()->formatTime(m_Time,false);
 	else if(m_eFormatNumber == SecondeTime )
-	    m_strOutText = KGlobal::locale()->formatTime(m_Time,true);
+	    m_strOutText = KGlobal::locale()->formatTime(m_Time,true);*/
     }
     else if ( isValue()  )
     {
@@ -1284,6 +1282,22 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
 	break;
     case ShortDate:
     case TextDate :
+    case date_format1:
+    case date_format2:
+    case date_format3:
+    case date_format4:
+    case date_format5:
+    case date_format6:
+    case date_format7:
+    case date_format8:
+    case date_format9:
+    case date_format10:
+    case date_format11:
+    case date_format12:
+    case date_format13:
+    case date_format14:
+    case date_format15:
+    case date_format16:
 	break;
     case fraction_half:
     case fraction_quarter:
@@ -1414,6 +1428,116 @@ QString KSpreadCell::createFractionFormat(double value)
     }
 
     return tmp;
+}
+
+QString KSpreadCell::createDateFormat( )
+{
+QString tmp,tmp2;
+if(m_eFormatNumber==ShortDate)
+        tmp = KGlobal::locale()->formatDate(m_Date,true);
+else if(m_eFormatNumber==TextDate)
+        tmp=KGlobal::locale()->formatDate(m_Date,false);
+else if(m_eFormatNumber==date_format1)/*18-Feb-99*/
+        {
+        tmp=tmp2.setNum(m_Date.day());
+        tmp=tmp+"-"+KGlobal::locale()->monthName(m_Date.month(), true)+"-";
+        tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
+        }
+else if(m_eFormatNumber==date_format2) /*18-Feb-1999*/
+        {
+        tmp=tmp2.setNum(m_Date.day());
+        tmp=tmp+"-"+KGlobal::locale()->monthName(m_Date.month(), true)+"-";
+        tmp=tmp+tmp2.setNum(m_Date.year());
+        }
+else if(m_eFormatNumber==date_format3) /*18-Feb*/
+        {
+        tmp=tmp2.setNum(m_Date.day());
+        tmp=tmp+"-"+KGlobal::locale()->monthName(m_Date.month(), true);
+        }
+else if(m_eFormatNumber==date_format4) /*18-5*/
+        {
+        tmp=tmp2.setNum(m_Date.day());
+        tmp=tmp+"-"+tmp2.setNum(m_Date.month());
+        }
+else if(m_eFormatNumber==date_format5) /*18/5/00*/
+        {
+        tmp=tmp2.setNum(m_Date.day());
+        tmp=tmp+"/"+tmp2.setNum(m_Date.month())+"/";
+        tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
+        }
+else if(m_eFormatNumber==date_format6) /*18/5/1999*/
+        {
+        tmp=tmp2.setNum(m_Date.day());
+        tmp=tmp+"/"+tmp2.setNum(m_Date.month())+"/";
+        tmp=tmp+tmp2.setNum(m_Date.year());
+        }
+else if(m_eFormatNumber==date_format7) /*Feb-99*/
+        {
+        tmp=KGlobal::locale()->monthName(m_Date.month(), true)+"-";
+        tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
+        }
+else if(m_eFormatNumber==date_format8) /*February-99*/
+        {
+        tmp=KGlobal::locale()->monthName(m_Date.month())+"-";
+        tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
+        }
+else if(m_eFormatNumber==date_format9) /*February-1999*/
+        {
+        tmp=KGlobal::locale()->monthName(m_Date.month())+"-";
+        tmp=tmp+tmp2.setNum(m_Date.year());
+        }
+else if(m_eFormatNumber==date_format10) /*F-99*/
+        {
+        tmp=KGlobal::locale()->monthName(m_Date.month()).at(0)+"-";
+        tmp=tmp+tmp2.setNum(m_Date.year()).right(2);
+        }
+else if(m_eFormatNumber==date_format11) /*18/Feb*/
+        {
+        tmp=tmp2.setNum(m_Date.day())+"/";
+        tmp+=KGlobal::locale()->monthName(m_Date.month(),true);
+        }
+else if(m_eFormatNumber==date_format12) /*18/2*/
+        {
+        tmp=tmp2.setNum(m_Date.day())+"/";
+        tmp+=tmp2.setNum(m_Date.month());
+        }
+else if(m_eFormatNumber==date_format13) /*18/Feb/1999*/
+        {
+        tmp=tmp2.setNum(m_Date.day());
+        tmp=tmp+"/"+KGlobal::locale()->monthName(m_Date.month(),true)+"/";
+        tmp=tmp+tmp2.setNum(m_Date.year());
+        }
+else if(m_eFormatNumber==date_format14) /*2000/Feb/18*/
+        {
+        tmp=tmp2.setNum(m_Date.year());
+        tmp=tmp+"/"+KGlobal::locale()->monthName(m_Date.month(),true)+"/";
+        tmp=tmp+tmp2.setNum(m_Date.day());
+        }
+else if(m_eFormatNumber==date_format15) /*2000-Feb-18*/
+        {
+        tmp=tmp2.setNum(m_Date.year());
+        tmp=tmp+"-"+KGlobal::locale()->monthName(m_Date.month(),true)+"-";
+        tmp=tmp+tmp2.setNum(m_Date.day());
+        }
+else if(m_eFormatNumber==date_format16) /*2000-2-18*/
+        {
+        tmp=tmp2.setNum(m_Date.year());
+        tmp=tmp+"-"+tmp2.setNum(m_Date.month())+"-";
+        tmp=tmp+tmp2.setNum(m_Date.day());
+        }
+else
+        tmp = KGlobal::locale()->formatDate(m_Date,true);
+return tmp;
+}
+
+QString KSpreadCell::createTimeFormat( )
+{
+QString tmp;
+if( m_eFormatNumber == Time )
+        tmp = KGlobal::locale()->formatTime(m_Time,false);
+else if(m_eFormatNumber == SecondeTime )
+        tmp = KGlobal::locale()->formatTime(m_Time,true);
+return tmp;
 }
 
 void KSpreadCell::verifyCondition()
@@ -1914,8 +2038,9 @@ bool KSpreadCell::calc( bool _makedepend )
     // m_strFormularOut.sprintf( "%f", m_dValue );
     m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
     if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
-        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate)
-        m_eFormatNumber=Number;
+        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate
+        ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
+        setFormatNumber(Number);
   }
   else if ( context.value()->type() == KSValue::IntType )
   {
@@ -1927,8 +2052,9 @@ bool KSpreadCell::calc( bool _makedepend )
     // m_strFormularOut.sprintf( "%f", m_dValue );
     m_strFormularOut = KGlobal::locale()->formatNumber( m_dValue );
     if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
-        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate)
-        m_eFormatNumber=Number;
+        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate
+        ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
+        setFormatNumber(Number);
   }
   else if ( context.value()->type() == KSValue::BoolType )
   {
@@ -1940,8 +2066,9 @@ bool KSpreadCell::calc( bool _makedepend )
     // (David): i18n'ed True and False - hope it's ok
     m_strFormularOut = context.value()->boolValue() ? i18n("True") : i18n("False");
     if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
-        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate)
-        m_eFormatNumber=Number;
+        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate
+        ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
+        setFormatNumber(Number);
   }
   else if ( context.value()->type() == KSValue::TimeType )
   {
@@ -1955,7 +2082,7 @@ bool KSpreadCell::calc( bool _makedepend )
     if( m_eFormatNumber != SecondeTime)
         {
         m_strFormularOut = KGlobal::locale()->formatTime(m_Time,false);
-        m_eFormatNumber = Time;
+        setFormatNumber(Time);
         }
     else
         {
@@ -1969,14 +2096,15 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bDate =true;
     m_bTime=false;
     m_Date=context.value()->dateValue();
-    if( m_eFormatNumber != TextDate)
+    if( m_eFormatNumber != TextDate
+    && !(m_eFormatNumber>=200 &&m_eFormatNumber<=215))
         {
-        m_eFormatNumber = ShortDate;
+        setFormatNumber(ShortDate);
         m_strFormularOut = KGlobal::locale()->formatDate(m_Date,true);
         }
     else
         {
-        m_strFormularOut = KGlobal::locale()->formatDate(m_Date,false);
+        m_strFormularOut = createDateFormat();
         }
   }
   else
@@ -1987,8 +2115,9 @@ bool KSpreadCell::calc( bool _makedepend )
     m_bTime=false;
     m_strFormularOut = context.value()->toString( context );
     if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
-        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate)
-        m_eFormatNumber=Number;
+        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate
+        ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
+        setFormatNumber(Number);
   }
 
   if ( m_style == ST_Select )
@@ -3384,8 +3513,9 @@ void KSpreadCell::checkValue()
         {
 	m_dValue = atof( ptext );
         if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
-        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate)
-                m_eFormatNumber=Number;
+        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate
+        ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
+                setFormatNumber(Number);
         return;
         }
     QString tmp;
@@ -3404,7 +3534,7 @@ void KSpreadCell::checkValue()
                         {
                         m_bValue=true;
                         m_dValue=val;
-                        m_eFormatNumber=Money;
+                        setFormatNumber(Money);
                         m_strText=tmp.setNum(m_dValue);
                         setFaktor(1.0);
                         setPrecision(2);
@@ -3420,7 +3550,7 @@ void KSpreadCell::checkValue()
                         {
                         m_bValue=true;
                         m_dValue=val;
-                        m_eFormatNumber=Money;
+                        setFormatNumber(Money);
                         m_strText=tmp.setNum(m_dValue);
                         setFaktor(1.0);
                         setPrecision(2);
@@ -3471,7 +3601,7 @@ void KSpreadCell::checkValue()
         m_bTime = true;
         m_dValue = 0;
         if( m_eFormatNumber!=SecondeTime)
-                m_eFormatNumber=Time;
+                setFormatNumber(Time);
         m_Time=tmpTime;
         m_strText=KGlobal::locale()->formatTime(m_Time,true);
         return;
@@ -3482,8 +3612,9 @@ void KSpreadCell::checkValue()
         {
         m_bDate = true;
         m_dValue = 0;
-        if( m_eFormatNumber!=TextDate)
-                m_eFormatNumber=ShortDate;
+        if( m_eFormatNumber!=TextDate &&
+        !(m_eFormatNumber>=200&&m_eFormatNumber<=215))
+                setFormatNumber(ShortDate);
         m_Date=tmpDate;
         m_strText=KGlobal::locale()->formatDate(m_Date,true); //short format date
         return;
@@ -3491,8 +3622,9 @@ void KSpreadCell::checkValue()
     checkFormat();
     //make default format
     if(m_eFormatNumber==Time ||m_eFormatNumber==SecondeTime
-        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate)
-        m_eFormatNumber=Number;
+        ||m_eFormatNumber==TextDate ||  m_eFormatNumber==ShortDate
+        ||(m_eFormatNumber>=200 && m_eFormatNumber<=215))
+        setFormatNumber(Number);
     /* if ( old_value != bValue )
 	displayDirtyFlag = TRUE; */
 }
@@ -3515,7 +3647,7 @@ void KSpreadCell::checkFormat(bool _formular)
                 {
                 m_bValue=true;
                 m_dValue=val;
-                m_eFormatNumber=Percentage;
+                setFormatNumber(Percentage);
                 m_dValue/=100.0;
                 m_strText=tmp.setNum(m_dValue);
                 setFaktor(100.0);
@@ -3534,7 +3666,7 @@ void KSpreadCell::checkFormat(bool _formular)
                 {
                 m_dValue=val;
                 m_bValue = true;
-                m_eFormatNumber=Scientific;
+                setFormatNumber(Scientific);
                 m_strText= QString::number(val, 'f',8);
 
                 int i = m_strText.length();
@@ -3699,7 +3831,8 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 	    text.appendChild( doc.createCDATASection( m_strText ) );
 	    cell.appendChild( text );
 	}
-	else if( (getFormatNumber(m_iColumn,m_iRow)==ShortDate || getFormatNumber(m_iColumn,m_iRow)==TextDate)&& m_bDate )
+	else if( (getFormatNumber(m_iColumn,m_iRow)==ShortDate || getFormatNumber(m_iColumn,m_iRow)==TextDate
+        || (getFormatNumber(m_iColumn,m_iRow)>=200 && getFormatNumber(m_iColumn,m_iRow)<=215))&& m_bDate )
         {
 	    QDomElement text = doc.createElement( "text" );
 	    QString tmp;
@@ -3922,7 +4055,8 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
             setCellText( pasteOperation( t, m_strText, op ), false );
         }
 	// A date
-        else if( getFormatNumber(m_iColumn,m_iRow) == ShortDate || getFormatNumber(m_iColumn,m_iRow) == TextDate)
+        else if( getFormatNumber(m_iColumn,m_iRow) == ShortDate || getFormatNumber(m_iColumn,m_iRow) == TextDate
+        || (getFormatNumber(m_iColumn,m_iRow)>=200 && getFormatNumber(m_iColumn,m_iRow)<=215))
         {
 	    int pos;
 	    int pos1;

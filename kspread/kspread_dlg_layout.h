@@ -193,6 +193,8 @@ public:
 public slots:
     void slotChangeState();
     void makeformat();
+    void makeDateFormat();
+    void init();
     void slotChangeValue(int);
 protected:
     QLineEdit* postfix;

@@ -676,7 +676,8 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
         else if(dlg->formatNumber==KSpreadCell::Scientific)
                 scientific->setChecked(true);
         else if(dlg->formatNumber==KSpreadCell::TextDate ||
-        dlg->formatNumber==KSpreadCell::ShortDate)
+        dlg->formatNumber==KSpreadCell::ShortDate
+        ||((int)(dlg->formatNumber)>=200 && (int)(dlg->formatNumber)<=217))
                 date->setChecked(true);
         else if(dlg->formatNumber==KSpreadCell::Time ||
         dlg->formatNumber==KSpreadCell::SecondeTime)
@@ -741,15 +742,7 @@ else if(date->isChecked())
         prefix->setEnabled(false);
         postfix->setEnabled(false);
         listFormat->setEnabled(true);
-        list+=KGlobal::locale()->formatDate(QDate::currentDate(),true);
-        list+=KGlobal::locale()->formatDate(QDate::currentDate(),false);
-        listFormat->insertStringList(list);
-        if( dlg->formatNumber==KSpreadCell::ShortDate )
-                listFormat->setCurrentItem(0);
-        else if(dlg->formatNumber==KSpreadCell::TextDate)
-                listFormat->setCurrentItem(1);
-        else
-                listFormat->setCurrentItem(0);
+        init();
         }
 else if(fraction->isChecked())
         {
@@ -802,9 +795,232 @@ else if(time->isChecked())
         else
                 listFormat->setCurrentItem(0);
         }
-makeformat();
+if( date->isChecked())
+        makeDateFormat();
+else
+        makeformat();
 }
 
+void CellLayoutPageFloat::makeDateFormat()
+{
+QString tmp,tmp2;
+if( listFormat->currentItem()==0)
+        tmp=KGlobal::locale()->formatDate(dlg->m_date,true);
+else if(listFormat->currentItem()==1)
+        tmp=KGlobal::locale()->formatDate(dlg->m_date,false);
+else if(listFormat->currentItem()==2)/*18-Feb-99*/
+        {
+        tmp=tmp2.setNum(dlg->m_date.day());
+        tmp=tmp+"-"+KGlobal::locale()->monthName(dlg->m_date.month(), true)+"-";
+        tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
+
+        }
+else if(listFormat->currentItem()==3) /*18-Feb-1999*/
+        {
+        tmp=tmp2.setNum(dlg->m_date.day());
+        tmp=tmp+"-"+KGlobal::locale()->monthName(dlg->m_date.month(), true)+"-";
+        tmp=tmp+tmp2.setNum(dlg->m_date.year());
+        }
+else if(listFormat->currentItem()==4) /*18-Feb*/
+        {
+        tmp=tmp2.setNum(dlg->m_date.day());
+        tmp=tmp+"-"+KGlobal::locale()->monthName(dlg->m_date.month(), true);
+        }
+else if(listFormat->currentItem()==5) /*18-5*/
+        {
+        tmp=tmp2.setNum(dlg->m_date.day());
+        tmp=tmp+"-"+tmp2.setNum(dlg->m_date.month());
+        }
+else if(listFormat->currentItem()==6) /*18/5/00*/
+        {
+        tmp=tmp2.setNum(dlg->m_date.day());
+        tmp=tmp+"/"+tmp2.setNum(dlg->m_date.month())+"/";
+        tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
+        }
+else if(listFormat->currentItem()==7) /*18/5/1999*/
+        {
+        tmp=tmp2.setNum(dlg->m_date.day());
+        tmp=tmp+"/"+tmp2.setNum(dlg->m_date.month())+"/";
+        tmp=tmp+tmp2.setNum(dlg->m_date.year());
+        }
+else if(listFormat->currentItem()==8) /*Feb-99*/
+        {
+        tmp=KGlobal::locale()->monthName(dlg->m_date.month(), true)+"-";
+        tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
+        }
+else if(listFormat->currentItem()==9) /*February-99*/
+        {
+        tmp=KGlobal::locale()->monthName(dlg->m_date.month())+"-";
+        tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
+        }
+else if(listFormat->currentItem()==10) /*February-1999*/
+        {
+        tmp=KGlobal::locale()->monthName(dlg->m_date.month())+"-";
+        tmp=tmp+tmp2.setNum(dlg->m_date.year());
+        }
+else if(listFormat->currentItem()==11) /*F-99*/
+        {
+        tmp=KGlobal::locale()->monthName(dlg->m_date.month()).at(0)+"-";
+        tmp=tmp+tmp2.setNum(dlg->m_date.year()).right(2);
+        }
+else if(listFormat->currentItem()==12) /*18/Feb*/
+        {
+        tmp=tmp2.setNum(dlg->m_date.day())+"/";
+        tmp+=KGlobal::locale()->monthName(dlg->m_date.month(),true);
+        }
+else if(listFormat->currentItem()==13) /*18/2*/
+        {
+        tmp=tmp2.setNum(dlg->m_date.day())+"/";
+        tmp+=tmp2.setNum(dlg->m_date.month());
+        }
+else if(listFormat->currentItem()==14) /*18/Feb/1999*/
+        {
+        tmp=tmp2.setNum(dlg->m_date.day());
+        tmp=tmp+"/"+KGlobal::locale()->monthName(dlg->m_date.month(),true)+"/";
+        tmp=tmp+tmp2.setNum(dlg->m_date.year());
+        }
+else if(listFormat->currentItem()==15) /*2000/Feb/18*/
+        {
+        tmp=tmp2.setNum(dlg->m_date.year());
+        tmp=tmp+"/"+KGlobal::locale()->monthName(dlg->m_date.month(),true)+"/";
+        tmp=tmp+tmp2.setNum(dlg->m_date.day());
+        }
+else if(listFormat->currentItem()==16) /*2000-Feb-18*/
+        {
+        tmp=tmp2.setNum(dlg->m_date.year());
+        tmp=tmp+"-"+KGlobal::locale()->monthName(dlg->m_date.month(),true)+"-";
+        tmp=tmp+tmp2.setNum(dlg->m_date.day());
+        }
+else if(listFormat->currentItem()==17) /*2000-2-18*/
+        {
+        tmp=tmp2.setNum(dlg->m_date.year());
+        tmp=tmp+"-"+tmp.setNum(dlg->m_date.month(),true)+"-";
+        tmp=tmp+tmp2.setNum(dlg->m_date.day());
+        }
+exampleLabel->setText(tmp);
+}
+
+
+void CellLayoutPageFloat::init()
+{
+QStringList list;
+QString tmp;
+QString tmp2;
+list+=KGlobal::locale()->formatDate(QDate::currentDate(),true);
+list+=KGlobal::locale()->formatDate(QDate::currentDate(),false);
+/*18-Feb-00*/
+tmp=tmp2.setNum(18);
+tmp+="-"+KGlobal::locale()->monthName(2, true)+"-";
+tmp+=tmp2.setNum(2000).right(2);
+list+=tmp;
+/*18-Feb-1999*/
+tmp=tmp2.setNum(18);
+tmp+="-"+KGlobal::locale()->monthName(2, true)+"-";
+tmp+=tmp2.setNum(2000);
+list+=tmp;
+/*18-Feb*/
+tmp=tmp2.setNum(18);
+tmp=tmp+"-"+KGlobal::locale()->monthName(2, true);
+list+=tmp;
+/*18-2*/
+tmp=tmp2.setNum(18);
+tmp=tmp+"-"+tmp2.setNum(2);
+list+=tmp;
+/*18/2/00*/
+tmp=tmp2.setNum(18);
+tmp=tmp+"/"+tmp2.setNum(2)+"/";
+tmp=tmp+tmp2.setNum(2000).right(2);
+list+=tmp;
+/*18/5/1999*/
+tmp=tmp2.setNum(18);
+tmp=tmp+"/"+tmp2.setNum(2)+"/";
+tmp=tmp+tmp2.setNum(2000);
+list+=tmp;
+/*Feb-99*/
+tmp=KGlobal::locale()->monthName(2, true)+"-";
+tmp=tmp+tmp2.setNum(2000).right(2);
+list+=tmp;
+/*February-99*/
+tmp=KGlobal::locale()->monthName(2)+"-";
+tmp=tmp+tmp2.setNum(2000).right(2);
+list+=tmp;
+/*February-1999*/
+tmp=KGlobal::locale()->monthName(2)+"-";
+tmp=tmp+tmp2.setNum(2000);
+list+=tmp;
+/*F-99*/
+tmp=KGlobal::locale()->monthName(2).at(0)+"-";
+tmp=tmp+tmp2.setNum(2000).right(2);
+list+=tmp;
+/*18/Feb*/
+tmp=tmp2.setNum(18)+"/";
+tmp+=KGlobal::locale()->monthName(2,true);
+list+=tmp;
+/*18/2*/
+tmp=tmp2.setNum(18)+"/";
+tmp+=tmp2.setNum(2);
+list+=tmp;
+/*18/Feb/1999*/
+tmp=tmp2.setNum(18);
+tmp=tmp+"/"+KGlobal::locale()->monthName(2,true)+"/";
+tmp=tmp+tmp2.setNum(2000);
+list+=tmp;
+/*2000/Feb/18*/
+tmp=tmp2.setNum(2000);
+tmp=tmp+"/"+KGlobal::locale()->monthName(2,true)+"/";
+tmp=tmp+tmp2.setNum(18);
+list+=tmp;
+/*2000-Feb-18*/
+tmp=tmp2.setNum(2000);
+tmp=tmp+"-"+KGlobal::locale()->monthName(2,true)+"-";
+tmp=tmp+tmp2.setNum(18);
+list+=tmp;
+/*2000-2-18*/
+tmp=tmp.setNum(2000);
+tmp=tmp+"-"+tmp2.setNum(2)+"-";
+tmp=tmp+tmp2.setNum(18);
+list+=tmp;
+listFormat->insertStringList(list);
+if( dlg->formatNumber==KSpreadCell::ShortDate )
+        listFormat->setCurrentItem(0);
+else if(dlg->formatNumber==KSpreadCell::TextDate)
+        listFormat->setCurrentItem(1);
+else if(dlg->formatNumber==KSpreadCell::date_format1)
+        listFormat->setCurrentItem(2);
+else if(dlg->formatNumber==KSpreadCell::date_format2)
+        listFormat->setCurrentItem(3);
+else if(dlg->formatNumber==KSpreadCell::date_format3)
+        listFormat->setCurrentItem(4);
+else if(dlg->formatNumber==KSpreadCell::date_format4)
+        listFormat->setCurrentItem(5);
+else if(dlg->formatNumber==KSpreadCell::date_format5)
+        listFormat->setCurrentItem(6);
+else if(dlg->formatNumber==KSpreadCell::date_format6)
+        listFormat->setCurrentItem(7);
+else if(dlg->formatNumber==KSpreadCell::date_format7)
+        listFormat->setCurrentItem(8);
+else if(dlg->formatNumber==KSpreadCell::date_format8)
+        listFormat->setCurrentItem(9);
+else if(dlg->formatNumber==KSpreadCell::date_format9)
+        listFormat->setCurrentItem(10);
+else if(dlg->formatNumber==KSpreadCell::date_format10)
+        listFormat->setCurrentItem(11);
+else if(dlg->formatNumber==KSpreadCell::date_format11)
+        listFormat->setCurrentItem(12);
+else if(dlg->formatNumber==KSpreadCell::date_format12)
+        listFormat->setCurrentItem(13);
+else if(dlg->formatNumber==KSpreadCell::date_format13)
+        listFormat->setCurrentItem(14);
+else if(dlg->formatNumber==KSpreadCell::date_format14)
+        listFormat->setCurrentItem(15);
+else if(dlg->formatNumber==KSpreadCell::date_format15)
+        listFormat->setCurrentItem(16);
+else if(dlg->formatNumber==KSpreadCell::date_format16)
+        listFormat->setCurrentItem(17);
+else
+        listFormat->setCurrentItem(0);
+
+}
 void CellLayoutPageFloat::makeformat()
 {
 QString tmp;
@@ -817,10 +1033,7 @@ else if(dlg->m_bDate)
         {
         if(date->isChecked())
                 {
-                if( listFormat->currentItem()==0)
-                        exampleLabel->setText(KGlobal::locale()->formatDate(dlg->m_date,true));
-                else if(listFormat->currentItem()==1)
-                        exampleLabel->setText(KGlobal::locale()->formatDate(dlg->m_date,false));
+                makeDateFormat();
                 }
         else
                 exampleLabel->setText(dlg->cellText);
@@ -1080,6 +1293,38 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
                 _obj->setFormatNumber(KSpreadCell::ShortDate );
         else if(listFormat->currentItem()==1)
                 _obj->setFormatNumber(KSpreadCell::TextDate );
+        else if(listFormat->currentItem()==2)
+                _obj->setFormatNumber(KSpreadCell::date_format1 );
+        else if(listFormat->currentItem()==3)
+                _obj->setFormatNumber(KSpreadCell::date_format2 );
+        else if(listFormat->currentItem()==4)
+                _obj->setFormatNumber(KSpreadCell::date_format3 );
+        else if(listFormat->currentItem()==5)
+                _obj->setFormatNumber(KSpreadCell::date_format4 );
+        else if(listFormat->currentItem()==6)
+                _obj->setFormatNumber(KSpreadCell::date_format5 );
+        else if(listFormat->currentItem()==7)
+                _obj->setFormatNumber(KSpreadCell::date_format6 );
+        else if(listFormat->currentItem()==8)
+                _obj->setFormatNumber(KSpreadCell::date_format7 );
+        else if(listFormat->currentItem()==9)
+                _obj->setFormatNumber(KSpreadCell::date_format8 );
+        else if(listFormat->currentItem()==10)
+                _obj->setFormatNumber(KSpreadCell::date_format9 );
+        else if(listFormat->currentItem()==11)
+                _obj->setFormatNumber(KSpreadCell::date_format10 );
+        else if(listFormat->currentItem()==12)
+                _obj->setFormatNumber(KSpreadCell::date_format11 );
+        else if(listFormat->currentItem()==13)
+                _obj->setFormatNumber(KSpreadCell::date_format12 );
+        else if(listFormat->currentItem()==14)
+                _obj->setFormatNumber(KSpreadCell::date_format13 );
+        else if(listFormat->currentItem()==15)
+                _obj->setFormatNumber(KSpreadCell::date_format14 );
+        else if(listFormat->currentItem()==16)
+                _obj->setFormatNumber(KSpreadCell::date_format15 );
+        else if(listFormat->currentItem()==17)
+                _obj->setFormatNumber(KSpreadCell::date_format16 );
         }
     else if(time->isChecked())
         {
