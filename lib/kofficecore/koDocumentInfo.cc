@@ -17,13 +17,13 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <config.h>
 #include <koDocumentInfo.h>
 #include <koDocument.h>
 #include <qdom.h>
 #include <qobjectlist.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kofficeversion.h>
 #include <koApplication.h>
 #include <koStoreDevice.h>
 #include <koxmlwriter.h>
@@ -109,7 +109,7 @@ bool KoDocumentInfo::saveOasis( KoStore* store )
     xmlWriter.startElement( "office:meta" );
 
     xmlWriter.startElement( "meta:generator");
-    xmlWriter.addTextNode( QString( "KOffice/%1" ).arg( VERSION ) );
+    xmlWriter.addTextNode( QString( "KOffice/%1" ).arg( KOFFICE_VERSION_STRING ) );
     xmlWriter.endElement();
     QStringList lst = pages();
     QStringList::ConstIterator it = lst.begin();
