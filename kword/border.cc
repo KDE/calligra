@@ -31,7 +31,7 @@ bool Border::operator!=( const Border _brd ) const {
     return ( style != _brd.style || color != _brd.color || ptWidth != _brd.ptWidth );
 }
 
-static Border::BorderStyle Border::getStyle(const QString &style) {
+Border::BorderStyle Border::getStyle(const QString &style) {
     if ( style == i18n( "dash line ( ---- )" ) )
         return Border::DASH;
     if ( style == i18n( "dot line ( **** )" ) )
@@ -44,3 +44,4 @@ static Border::BorderStyle Border::getStyle(const QString &style) {
     // default
     return Border::SOLID;
 }
+
