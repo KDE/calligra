@@ -68,7 +68,6 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     m_mainview( view ),
 	m_currentItem(0),
     m_taskView(0),
-    m_showSlack(false),
     m_firstTime(true)
 {
 
@@ -76,13 +75,7 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     
     m_gantt = new KDGanttView(this, "Gantt view");
     m_gantt->setLinkItemsEnabled(true);
-    // For test, we need "slack functinallity" in KDGantt...
-    if (m_showSlack) {
-        m_gantt->addColumn("Earliest start");
-        m_gantt->addColumn("Start");
-        m_gantt->addColumn("End");
-        m_gantt->addColumn("Latest finish");
-    }
+    m_showProgress = true; //FIXME
     m_gantt->setHeaderVisible(true);
     m_gantt->setScale(KDGanttView::Day);
     m_gantt->setShowLegendButton(false);
@@ -387,12 +380,6 @@ void KPTGanttView::modifySummaryTask(KDGanttViewItem *item, KPTTask *task)
     item->setStartTime(time);
     item->setEndTime(task->endTime());
     //item->setOpen(true);
-    if (m_showSlack) { // Test
-        item->setListViewText(1, "  " +  task->getEarliestStart().toString(Qt::ISODate));
-        item->setListViewText(2, "  " +  task->startTime().toString(Qt::ISODate));
-        item->setListViewText(3,  "  " + task->endTime().toString(Qt::ISODate));
-        item->setListViewText(4, "  " +  task->getLatestFinish().toString(Qt::ISODate));
-    }
     setDrawn(item, true);
 }
 
@@ -407,18 +394,18 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
     item->setStartTime(time);
     item->setEndTime(task->endTime());
     //item->setOpen(true);
-    if (m_showSlack) { // Test
-        item->setListViewText(1, "  " +  task->getEarliestStart().toString(Qt::ISODate));
-        item->setListViewText(2, "  " +  task->startTime().toString(Qt::ISODate));
-        item->setListViewText(3,  "  " + task->endTime().toString(Qt::ISODate));
-        item->setListViewText(4, "  " +  task->getLatestFinish().toString(Qt::ISODate));
-    }
     item->setText(task->name());
+    if (m_showProgress) {
+        item->setProgress(task->progress().percentFinished);
+    }
     //TODO i18n
     QString w="Name: " + task->name();
-    w += "\nStart: " + task->startTime().toString();
-    w += "\nEnd  : " + task->endTime().toString();
-    w += "\nFloat: ";
+    w += "\n"; w += "Start: " + task->startTime().toString();
+    w += "\n"; w += "End  : " + task->endTime().toString();
+    if (m_showProgress) {
+        w += "\n"; w += "Progress (%): " + QString().setNum(task->progress().percentFinished);
+    }
+    w += "\n"; w += "Float: ";
     if (task->getEarliestStart() != task->startTime())
         w += QString("%1h").arg((double)(task->getEarliestStart().secsTo(task->startTime()))/(double(2600)), 0, 'f', 1);
     else if (task->getLatestFinish() != task->endTime())
@@ -429,15 +416,15 @@ void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
     QString sts;
     bool ok = true;
     if (task->resourceError()) {
-        sts += "\nNo resource assigned";
+        sts += "\n"; sts += "No resource assigned";
         ok = false;
     }
     if (task->resourceOverbooked()) {
-        sts += "\nResource overbooked";
+        sts += "\n"; sts += "Resource overbooked";
         ok = false;
     }
     if (task->schedulingError()) {
-        sts += "\nScheduling conflict";
+        sts += "\n"; sts += "Scheduling conflict";
         ok = false;
     }
     if (ok) {
@@ -458,17 +445,11 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
     item->setListViewText(task->name());
     item->setStartTime(task->startTime());
     //item->setOpen(true);
-    if (m_showSlack) { // Test
-        item->setListViewText(1, "  " +  task->getEarliestStart().toString(Qt::ISODate));
-        item->setListViewText(2, "  " +  task->startTime().toString(Qt::ISODate));
-        item->setListViewText(3,  "  " + task->endTime().toString(Qt::ISODate));
-        item->setListViewText(4, "  " +  task->getLatestFinish().toString(Qt::ISODate));
-    }
     item->setText(task->name());
     //TODO i18n
     QString w="Name: " + task->name();
-    w += "\nTime: " + task->startTime().toString();
-    w += "\nFloat: ";
+    w += "\n"; w += "Time: " + task->startTime().toString();
+    w += "\n"; w += "Float: ";
     if (task->getEarliestStart() != task->startTime())
         w += QString("%1h").arg((double)(task->getEarliestStart().secsTo(task->startTime()))/(double(2600)), 0, 'f', 1);
     else if (task->getLatestFinish() != task->endTime())
@@ -478,11 +459,11 @@ void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
 
     bool ok = true;
     if (task->schedulingError()) {
-        w += "\nScheduling conflict";
+        w += "\n"; w += "Scheduling conflict";
         ok = false;
     }
     if (ok) {
-        QColor c(green);
+        QColor c(blue);
         item->setColors(c,c,c);
     } else {
         QColor c(yellow);

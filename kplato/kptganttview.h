@@ -145,7 +145,7 @@ private:
     KDGanttViewItem *m_currentItem;
     KDGanttView *m_gantt;
     KPTTaskAppointmentsView *m_taskView;
-    bool m_showSlack;
+    bool m_showProgress;
     bool m_firstTime;
     QPtrList<KDGanttViewTaskLink> m_taskLinks;
 };
