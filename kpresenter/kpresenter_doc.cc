@@ -2602,7 +2602,8 @@ void KPresenterDoc::saveStyle( KoStyle *sty, QDomElement parentElem )
 
 void KPresenterDoc::startBackgroundSpellCheck()
 {
-    if(backgroundSpellCheckEnabled())
+    //don't start spell checking when document is embedded in konqueror
+    if(backgroundSpellCheckEnabled() && isReadWrite())
     {
         if(m_initialActivePage->objectText().count()>0)
         {
