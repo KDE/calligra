@@ -13,7 +13,6 @@
 class QLineEdit;
 class QListBox;
 class QPushButton;
-class KColorButton;
 
 class KChartParams;
 
@@ -28,16 +27,12 @@ public:
     void initList();
 
 public slots:
-    void changeIndex(int index);
     void changeLabelFont();
-    void activeColorButton();
 private:
     KChartParams* _params;
     QLineEdit *font;
     QListBox *list;
-    QListBox *listColor;
     QPushButton *fontButton;
-    KColorButton *colorButton;
     QFont xTitle;
     QFont yTitle;
     QFont label;
@@ -50,8 +45,6 @@ private:
     QButton::ToggleState yAxisIsRelative;
     QButton::ToggleState xAxisIsRelative;
     QButton::ToggleState legendIsRelative;
-    KChartColorArray extColor;
-    uint index;
     KoChart::Data *data;
 };
 #endif

@@ -54,7 +54,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
 
     if(flags & KC_COLORS )
     {
-        _colorpage = new KChartColorConfigPage( this );
+        _colorpage = new KChartColorConfigPage( _params,  this, dat );
         addTab( _colorpage, i18n( "&Colors" ) );
     }
     else if( flags & KC_FONT )
@@ -83,7 +83,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     }
     else if( flags & KC_ALL )
     {
-        _colorpage = new KChartColorConfigPage( this );
+        _colorpage = new KChartColorConfigPage( _params,  this, dat );
         addTab( _colorpage, i18n( "&Colors" ) );
         _parameterfontpage = new KChartFontConfigPage(_params,this, dat );
         addTab( _parameterfontpage, i18n( "&Font" ) );

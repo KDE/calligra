@@ -41,28 +41,12 @@ KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
   fontButton->resize( fontButton->sizeHint() );
   grid->addWidget( fontButton,2,1);
 
-  listColor = new QListBox(this);
-  listColor->resize( listColor->sizeHint() );
-  grid->addMultiCellWidget(listColor,0,4,2,2);
-  colorButton = new KColorButton( this);
+    connect( fontButton, SIGNAL(clicked()), this, SLOT(changeLabelFont()));
+    connect( list, SIGNAL(doubleClicked ( QListBoxItem * )), this, SLOT(changeLabelFont()));
 
-  colorButton->resize( colorButton->sizeHint() );
-  grid->addWidget( colorButton,2,3);
-  grid->addColSpacing(0,list->width());
-  grid->addColSpacing(2,listColor->width());
-  //grid->addColSpacing(3,list->width());
-
-  initList();
-  connect( fontButton, SIGNAL(clicked()), this, SLOT(changeLabelFont()));
-  connect( listColor, SIGNAL(highlighted(int )), this, SLOT(changeIndex(int)));
-  connect( list, SIGNAL(doubleClicked ( QListBoxItem * )), this, SLOT(changeLabelFont()));
-  connect( listColor, SIGNAL(doubleClicked ( QListBoxItem * )), this, SLOT(activeColorButton()));
+    initList();
 }
 
-void KChartFontConfigPage::activeColorButton()
-{
-    colorButton->animateClick();
-}
 
 void KChartFontConfigPage::initList()
 {
@@ -76,30 +60,7 @@ void KChartFontConfigPage::initList()
   }
   list->insertItem(i18n("Label"));
   list->setCurrentItem(0);
-  //int num=0;
-  bool noEnough=false;
-  //init index
-  index=0;
-  //num <12 because there are 12 colors
 
-
-  QStringList lst;
-  for(uint i =0;i<data->rows();i++)
-  {
-      if(i<_params->maxDataColor())
-          listColor->insertItem(_params->legendText( i ).isEmpty() ? i18n("Series %1").arg(i+1) :_params->legendText( i ) );
-      else
-      {
-          if( !noEnough )
-          {
-              listColor->insertItem(i18n("Not enough color"));
-              noEnough = true;
-          }
-      }
-      extColor.setColor(i,_params->dataColor(i));
-  }
-  listColor->setCurrentItem(0);
-  colorButton->setColor( extColor.color(index));
 
   // PENDING(kalle) Assign legend colors
   //   for( QStringList::Iterator it = _params->legend.begin();
@@ -125,19 +86,6 @@ void KChartFontConfigPage::initList()
 }
 
 
-void KChartFontConfigPage::changeIndex(int newindex)
-{
-    if(index>_params->maxDataColor())
-        colorButton->setEnabled(false);
-    else
-    {
-        if(!colorButton->isEnabled())
-            colorButton->setEnabled(true);
-        extColor.setColor(index,colorButton->color());
-        colorButton->setColor(extColor.color(newindex));
-        index=newindex;
-    }
-}
 
 void KChartFontConfigPage::changeLabelFont()
 {
@@ -286,12 +234,4 @@ void KChartFontConfigPage::apply()
 //     _params->setXTitleFont(xtitle);
 //     _params->setYTitleFont(ytitle);
 
-  extColor.setColor(index,colorButton->color());
-  // PENDING(kalle) Adapt
-  //   for(unsigned int i=0;i<extColor.count();i++)
-//     _params->ExtColor.setColor(i,extColor.color(i));
-
-  for(uint i =0;i<data->rows();i++)
-      if(i<_params->maxDataColor())
-          _params->setDataColor(i,extColor.color(i));
 }

@@ -7,6 +7,10 @@
 
 #include <qwidget.h>
 #include <kcolorbutton.h>
+#include "kchartcolorarray.h"
+#include "kchartDataEditor.h"
+class KListBox;
+class KChartParams;
 
 // PENDING(kalle) Make this dynamic.
 #define NUMDATACOLORS 6
@@ -16,7 +20,8 @@ class KChartColorConfigPage : public QWidget
     Q_OBJECT
 
 public:
-    KChartColorConfigPage( QWidget* parent );
+    KChartColorConfigPage( KChartParams* params, QWidget* parent, KoChart::Data *dat );
+    void apply();
 
     void setBackgroundColor( QColor color );
     QColor backgroundColor() const;
@@ -24,10 +29,6 @@ public:
     QColor gridColor() const;
     void setLineColor( QColor color );
     QColor lineColor() const;
-    void setPlotColor( QColor color );
-    QColor plotColor() const;
-    void setVolColor( QColor color );
-    QColor volColor() const;
     void setTitleColor( QColor color );
     QColor titleColor() const;
     void setXTitleColor( QColor color );
@@ -47,11 +48,17 @@ public:
 /*     void setDataColor( uint dataset, QColor color ); */
 /*     QColor dataColor( uint dataset ) const; */
 
+private slots:
+    void activeColorButton();
+    void changeIndex( int );
+
 private:
+    void initDataColorList();
+
+    KChartParams* _params;
+
     KColorButton* _gridCB;
     KColorButton* _lineCB;
-    KColorButton* _plotCB;
-    KColorButton* _volCB;
     KColorButton* _xtitleCB;
     KColorButton* _ytitleCB;
     KColorButton* _ytitle2CB;
@@ -60,6 +67,11 @@ private:
     KColorButton* _ylabel2CB;
     //KColorButton* _edgeCB;
 //    KColorButton* _dataCB[NUMDATACOLORS];
+    KListBox* _dataColorLB;
+    KColorButton* _dataColorCB;
+    KChartColorArray extColor;
+    uint index;
+    KoChart::Data *data;
 };
 
 
@@ -86,29 +98,6 @@ inline QColor KChartColorConfigPage::lineColor() const
     return _lineCB->color();
 }
 
-
-inline void KChartColorConfigPage::setPlotColor( QColor color )
-{
-    _plotCB->setColor( color );
-}
-
-
-inline QColor KChartColorConfigPage::plotColor() const
-{
-    return _plotCB->color();
-}
-
-
-inline void KChartColorConfigPage::setVolColor( QColor color )
-{
-    _volCB->setColor( color );
-}
-
-
-inline QColor KChartColorConfigPage::volColor() const
-{
-    return _volCB->color();
-}
 
 inline void KChartColorConfigPage::setXTitleColor( QColor color )
 {
