@@ -36,6 +36,7 @@
 #include <qbuttongroup.h>
 #include <qcombobox.h>
 #include <qlayout.h>
+#include <qhgroupbox.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -85,24 +86,17 @@ void KSpreadPaperLayout::initGeneralOptions( QWidget * tab, QVBoxLayout * vbox )
 {
     KSpreadSheetPrint* print = m_pSheet->print();
 
-    QGroupBox *group = new QGroupBox( i18n("General Options"), tab );
+    QHGroupBox *group = new QHGroupBox( i18n("General Options"), tab );
     vbox->addWidget( group );
-
-    QHBoxLayout *optionsHbox = new QHBoxLayout( group,
-                                                2 * KDialog::marginHint(),
-                                                KDialog::spacingHint() );
 
     pPrintGrid = new QCheckBox ( i18n("Print &grid"), group );
     pPrintGrid->setChecked( print->printGrid() );
-    optionsHbox->addWidget( pPrintGrid );
 
     pPrintCommentIndicator = new QCheckBox ( i18n("Print &comment indicator"), group );
     pPrintCommentIndicator->setChecked( print->printCommentIndicator() );
-    optionsHbox->addWidget( pPrintCommentIndicator );
 
     pPrintFormulaIndicator = new QCheckBox ( i18n("Print &formula indicator"), group );
     pPrintFormulaIndicator->setChecked( print->printFormulaIndicator() );
-    optionsHbox->addWidget( pPrintFormulaIndicator );
 }
 
 void KSpreadPaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
@@ -110,9 +104,11 @@ void KSpreadPaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
     KSpreadSheetPrint* print = m_pSheet->print();
 
     QGroupBox *rangeGroup = new QGroupBox( i18n("Ranges"), tab );
+    rangeGroup->setColumnLayout( 0, Qt::Vertical );
+    rangeGroup->setMargin( KDialog::marginHint() );
     vbox->addWidget( rangeGroup );
 
-    QGridLayout *grid = new QGridLayout( rangeGroup, 3, 2, 2*KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( rangeGroup->layout(), 3, 2, KDialog::spacingHint() );
 
     QLabel *pPrintRange = new QLabel ( i18n("Print range:"), rangeGroup );
     grid->addWidget( pPrintRange, 0, 0 );
@@ -160,10 +156,11 @@ void KSpreadPaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     KSpreadSheetPrint* print = m_pSheet->print();
 
     QButtonGroup *zoomGroup = new QButtonGroup( i18n("Scale Printout"), tab );
+    zoomGroup->setColumnLayout( 0, Qt::Vertical );
+    zoomGroup->setMargin( KDialog::marginHint() );
     vbox->addWidget( zoomGroup );
 
-    QGridLayout *grid = new QGridLayout( zoomGroup, 2, 6,
-                                         2 * KDialog::marginHint(),
+    QGridLayout *grid = new QGridLayout( zoomGroup->layout(), 2, 6,
                                          KDialog::spacingHint() );
 
     m_rScalingZoom = new QRadioButton ( i18n("Zoom:"), zoomGroup );
