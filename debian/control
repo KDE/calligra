@@ -28,7 +28,7 @@ Package: kchart
 Architecture: any
 Section: x11
 Replaces: koffice-common
-Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
+Depends: ${shlibs:Depends}
 Suggests: kdebase
 Description: KDE Office Suite - KChart
  KDE Office Suite - KChart
@@ -38,7 +38,7 @@ Description: KDE Office Suite - KChart
 Package: kformula
 Architecture: any
 Section: x11
-Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
+Depends: ${shlibs:Depends}
 Suggests: kdebase
 Description: KDE Office Suite - KFormula
  KDE Office Suite - KFormula
@@ -48,7 +48,7 @@ Description: KDE Office Suite - KFormula
 Package: kivio
 Architecture: any
 Section: graphics
-Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
+Depends: ${shlibs:Depends}
 Suggests: kdebase
 Description: KDE Office Suite - Kivio
  KDE Office Suite - Kivio
@@ -62,7 +62,7 @@ Package: kspread
 Architecture: any
 Section: x11
 Replaces: koffice-common
-Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
+Depends: ${shlibs:Depends}
 Suggests: kdebase
 Description: KDE Office Suite - KSpread
  KDE Office Suite - KSpread
@@ -73,7 +73,7 @@ Package: killustrator
 Architecture: any
 Section: graphics
 Replaces: koffice-common
-Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
+Depends: ${shlibs:Depends}
 Suggests: kdebase
 Description: KDE Office Suite - KIllustrator
  KDE Office Suite - KIllustrator
@@ -84,7 +84,7 @@ Package: kpresenter
 Architecture: any
 Section: x11
 Replaces: koffice-common
-Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
+Depends: ${shlibs:Depends}
 Suggests: kdebase
 Description: KDE Office Suite - KPresenter
  KDE Office Suite - KPresenter
@@ -95,7 +95,7 @@ Package: kword
 Architecture: any
 Section: x11
 Replaces: koffice-common
-Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
+Depends: ${shlibs:Depends}
 Suggests: kdebase
 Description: KDE Office Suite - KWord
  KDE Office Suite - KWord
@@ -106,7 +106,7 @@ Package: krayon
 Architecture: any
 Section: graphics
 Replaces: koffice-common
-Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
+Depends: ${shlibs:Depends}
 Suggests: kdebase
 Description: KDE Office Suite - Krayon
  KDE Office Suite - Krayon
@@ -117,7 +117,7 @@ Package: koshell
 Architecture: any
 Section: x11
 Replaces: koffice-libs (<< 2.0.1-0)
-Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
+Depends: ${shlibs:Depends}
 Recommends: kchart, kformula, kword, kspread, killustrator, kpresenter, kivio, krayon
 Suggests: kdebase
 Description: KDE Office Workspace
